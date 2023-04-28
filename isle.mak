@@ -32,8 +32,8 @@ NULL=nul
 # Begin Project
 # PROP Target_Last_Scanned "isle - Win32 Debug"
 CPP=cl.exe
-MTL=mktyplib.exe
 RSC=rc.exe
+MTL=mktyplib.exe
 
 !IF  "$(CFG)" == "isle - Win32 Release"
 
@@ -55,6 +55,7 @@ ALL : "$(OUTDIR)\isle.exe"
 CLEAN : 
 	-@erase "$(INTDIR)\define.obj"
 	-@erase "$(INTDIR)\isle.obj"
+	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
 	-@erase "$(OUTDIR)\isle.exe"
 
@@ -72,6 +73,7 @@ CPP_SBRS=.\.
 MTL_PROJ=/nologo /D "NDEBUG" /win32 
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
+RSC_PROJ=/l 0x409 /fo"$(INTDIR)/isle.res" /d "NDEBUG" 
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -89,6 +91,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
 LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
+	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj"
 
 "$(OUTDIR)\isle.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -116,6 +119,7 @@ ALL : "$(OUTDIR)\isle.exe"
 CLEAN : 
 	-@erase "$(INTDIR)\define.obj"
 	-@erase "$(INTDIR)\isle.obj"
+	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
@@ -137,6 +141,7 @@ CPP_SBRS=.\.
 MTL_PROJ=/nologo /D "_DEBUG" /win32 
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
+RSC_PROJ=/l 0x409 /fo"$(INTDIR)/isle.res" /d "_DEBUG" 
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -154,6 +159,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
 LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
+	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj"
 
 "$(OUTDIR)\isle.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -213,6 +219,7 @@ SOURCE=.\app\isle.cpp
 DEP_CPP_ISLE_=\
 	".\app\define.h"\
 	".\app\isle.h"\
+	".\app\res\resource.h"\
 	".\lib\define.h"\
 	".\lib\legoanimationmanager.h"\
 	".\lib\legobuildingmanager.h"\
@@ -253,41 +260,32 @@ DEP_CPP_ISLE_=\
 # Begin Source File
 
 SOURCE=.\app\main.cpp
-DEP_CPP_MAIN_=\
-	".\app\define.h"\
-	".\app\isle.h"\
-	".\lib\define.h"\
-	".\lib\legoanimationmanager.h"\
-	".\lib\legobuildingmanager.h"\
-	".\lib\legogamestate.h"\
-	".\lib\legoinputmanager.h"\
-	".\lib\legomodelpresenter.h"\
-	".\lib\legoomni.h"\
-	".\lib\legopartpresenter.h"\
-	".\lib\legoroi.h"\
-	".\lib\legovideomanager.h"\
-	".\lib\legoworldpresenter.h"\
-	".\lib\mxatomid.h"\
-	".\lib\mxbackgroundaudiomanager.h"\
-	".\lib\mxdsaction.h"\
-	".\lib\mxomnicreateflags.h"\
-	".\lib\mxomnicreateparam.h"\
-	".\lib\mxpalette.h"\
-	".\lib\mxrect32.h"\
-	".\lib\mxstreamcontroller.h"\
-	".\lib\mxstreamer.h"\
-	".\lib\mxstring.h"\
-	".\lib\mxticklemanager.h"\
-	".\lib\mxtimer.h"\
-	".\lib\mxtransitionmanager.h"\
-	".\lib\mxvariabletable.h"\
-	".\lib\mxvideoparam.h"\
-	".\lib\mxvideoparamflags.h"\
-	
 
-"$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
+"$(INTDIR)\main.obj" : $(SOURCE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\app\res\isle.rc
+
+!IF  "$(CFG)" == "isle - Win32 Release"
+
+
+"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+   $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "app\res" /d "NDEBUG" $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "isle - Win32 Debug"
+
+
+"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+   $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "app\res" /d "_DEBUG" $(SOURCE)
+
+
+!ENDIF 
 
 # End Source File
 # End Target

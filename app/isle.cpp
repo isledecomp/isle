@@ -5,6 +5,7 @@
 #include "../lib/mxdirectdraw.h"
 #include "../lib/mxdsaction.h"
 #include "../lib/mxomni.h"
+#include "res/resource.h"
 
 RECT windowRect = {0, 0, 640, 480};
 
@@ -42,10 +43,10 @@ Isle::Isle()
   m_videoParam.flags().Enable16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
   m_windowHandle = NULL;
-  m_cursor1 = NULL;
-  m_cursor2 = NULL;
-  m_cursor3 = NULL;
-  m_cursor4 = NULL;
+  m_cursorArrow = NULL;
+  m_cursorBusy = NULL;
+  m_cursorNo = NULL;
+  m_cursorCurrent = NULL;
 
   LegoOmni::CreateInstance();
 }
@@ -242,10 +243,10 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
   }
 }
 
-BOOL Isle::setupMediaPath()
+BOOL Isle::setupLegoOmni()
 {
   char mediaPath[256];
-  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 0x100);
+  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
 
   MxOmniCreateParam createParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags());
 
@@ -256,6 +257,26 @@ BOOL Isle::setupMediaPath()
   }
 
   return FALSE;
+}
+
+void Isle::setupCursor(WPARAM wParam)
+{
+  switch (wParam) {
+  case 0:
+    m_cursorCurrent = m_cursorArrow;
+    break;
+  case 1:
+    m_cursorCurrent = m_cursorBusy;
+    break;
+  case 2:
+    m_cursorCurrent = m_cursorNo;
+    break;
+  case 0xB:
+    m_cursorCurrent = NULL;
+    break;
+  }
+
+  SetCursor(m_cursorCurrent);
 }
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -364,6 +385,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_TIMER:
   case WM_LBUTTONDOWN:
   case WM_LBUTTONUP:
+  case 0x5400:
   {
 
     NotificationId type = NONE;
@@ -386,8 +408,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       break;
     case WM_SETCURSOR:
       if (g_isle) {
-        HCURSOR hCursor = g_isle->m_cursor4;
-        if (g_isle->m_cursor2 == hCursor || g_isle->m_cursor3 == hCursor || hCursor == NULL) {
+        HCURSOR hCursor = g_isle->m_cursorCurrent;
+        if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
           SetCursor(hCursor);
           return 0;
         }
@@ -403,8 +425,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       break;
     case 0x5400:
       if (g_isle) {
-        // FIXME: Untangle
-        //FUN_00402e80(g_isle,wParam);
+        g_isle->setupCursor(wParam);
         return 0;
       }
     }
@@ -453,12 +474,12 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   wndclass.style = CS_HREDRAW | CS_VREDRAW;
   wndclass.lpfnWndProc = WndProc;
   wndclass.cbWndExtra = 0;
-  wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCE(105));
-  wndclass.hCursor = LoadCursorA(hInstance, MAKEINTRESOURCE(102));
-  m_cursor4 = wndclass.hCursor;
-  m_cursor1 = wndclass.hCursor;
-  m_cursor2 = LoadCursorA(hInstance, MAKEINTRESOURCE(104));
-  m_cursor3 = LoadCursorA(hInstance, MAKEINTRESOURCE(103));
+  wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCE(APP_ICON));
+  wndclass.hCursor = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_ARROW));
+  m_cursorCurrent = wndclass.hCursor;
+  m_cursorArrow = wndclass.hCursor;
+  m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_BUSY));
+  m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_NO));
   wndclass.hInstance = hInstance;
   wndclass.hbrBackground = GetStockObject(BLACK_BRUSH);
   wndclass.lpszClassName = WNDCLASS_NAME;
@@ -500,7 +521,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
 
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
   UpdateWindow(m_windowHandle);
-  if (!setupMediaPath()) {
+  if (!setupLegoOmni()) {
     return FAILURE;
   }
 

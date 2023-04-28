@@ -18,11 +18,13 @@ public:
 
   void tick(BOOL sleepIfNotNextFrame);
 
-  BOOL setupMediaPath();
+  BOOL setupLegoOmni();
   void loadConfig();
   void setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
                        BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
                        BOOL wideViewAngle, char *deviceId);
+
+  void setupCursor(WPARAM wParam);
 
 //private:
 
@@ -62,12 +64,12 @@ public:
   BOOL m_windowActive;
   HWND m_windowHandle;
   BOOL m_drawCursor;
-  HCURSOR m_cursor1;
+  HCURSOR m_cursorArrow;
 
   // 80
-  HCURSOR m_cursor2;
-  HCURSOR m_cursor3;
-  HCURSOR m_cursor4;
+  HCURSOR m_cursorBusy;
+  HCURSOR m_cursorNo;
+  HCURSOR m_cursorCurrent;
 
 };
 

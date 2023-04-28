@@ -7,6 +7,9 @@
 
 BOOL findExistingInstance(void)
 {
+  // FIXME: temp
+  return 1;
+
   HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
   if (hWnd) {
     if (SetForegroundWindow(hWnd)) {
