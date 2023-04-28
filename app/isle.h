@@ -1,0 +1,74 @@
+#ifndef ISLE_H
+#define ISLE_H
+
+#include <Windows.h>
+
+#include "../lib/define.h"
+#include "../lib/mxvideoparam.h"
+
+class Isle
+{
+public:
+  Isle();
+  ~Isle();
+
+  static void close();
+
+  MxResult setupWindow(HINSTANCE hInstance);
+
+  void tick(BOOL sleepIfNotNextFrame);
+
+  BOOL setupMediaPath();
+  void loadConfig();
+  void setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
+                       BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
+                       BOOL wideViewAngle, char *deviceId);
+
+//private:
+
+  // 0
+  LPSTR m_hdPath;
+  LPSTR m_cdPath;
+  LPSTR m_deviceId;
+  LPSTR m_savePath;
+
+  // 10
+  BOOL m_fullScreen;
+  BOOL m_flipSurfaces;
+  BOOL m_backBuffersInVram;
+  BOOL m_using8bit;
+
+  // 20
+  BOOL m_using16bit;
+  int m_unk24;
+  BOOL m_use3dSound;
+  BOOL m_useMusic;
+
+  // 30
+  BOOL m_useJoystick;
+  int m_joystickIndex;
+  BOOL m_wideViewAngle;
+  int m_islandQuality;
+
+  // 40
+  int m_islandTexture;
+  int m_gameStarted;
+  long m_frameDelta;
+
+  // 4c
+  MxVideoParam m_videoParam;
+
+  // 70
+  BOOL m_windowActive;
+  HWND m_windowHandle;
+  BOOL m_drawCursor;
+  HCURSOR m_cursor1;
+
+  // 80
+  HCURSOR m_cursor2;
+  HCURSOR m_cursor3;
+  HCURSOR m_cursor4;
+
+};
+
+#endif // ISLE_H
