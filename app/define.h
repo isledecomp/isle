@@ -12,6 +12,6 @@ extern unsigned char g_mousemoved;
 extern int _DAT_00410050;
 extern int _DAT_00410064;
 extern int _DAT_004101bc;
-extern int _last_frame_time;
+extern long g_lastFrameTime;
 
 #endif // DEFINE_H

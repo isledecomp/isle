@@ -568,14 +568,14 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
     if (!Timer()) return;
 
     long currentTime = Timer()->GetRealTime();
-    if (currentTime < _last_frame_time) {
-      _last_frame_time = -this->m_frameDelta;
+    if (currentTime < g_lastFrameTime) {
+      g_lastFrameTime = -this->m_frameDelta;
     }
-    if (this->m_frameDelta + _last_frame_time < currentTime) {
+    if (this->m_frameDelta + g_lastFrameTime < currentTime) {
       if (!Lego()->vtable40()) {
         TickleManager()->vtable08();
       }
-      _last_frame_time = currentTime;
+      g_lastFrameTime = currentTime;
 
       if (_DAT_004101bc == 0) {
         return;

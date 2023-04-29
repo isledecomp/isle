@@ -11,4 +11,4 @@ unsigned char g_mousemoved = 0;
 int _DAT_00410050 = 0;
 int _DAT_00410064 = 0;
 int _DAT_004101bc = 200;
-int _last_frame_time = 0;
+long g_lastFrameTime = 0;
