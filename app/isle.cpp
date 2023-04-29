@@ -39,7 +39,8 @@ Isle::Isle()
   rect.m_right = 639;
   rect.m_bottom = 479;
 
-  m_videoParam = MxVideoParam(rect, NULL, 1, MxVideoParamFlags());
+  MxVideoParamFlags f;
+  m_videoParam = MxVideoParam(rect, NULL, 1, f);
   m_videoParam.flags().Enable16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
   m_windowHandle = NULL;
@@ -481,7 +482,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_BUSY));
   m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_NO));
   wndclass.hInstance = hInstance;
-  wndclass.hbrBackground = GetStockObject(BLACK_BRUSH);
+  wndclass.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
   wndclass.lpszClassName = WNDCLASS_NAME;
 
   if (!RegisterClassA(&wndclass)) {
