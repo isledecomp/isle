@@ -298,8 +298,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                    (windowRect.right - windowRect.left) + 1,
                    (windowRect.bottom - windowRect.top) + 1, TRUE);
       }
-      // FIXME: Untangle
-      //g_isle->m_windowActive = wParam;
+      g_isle->m_windowActive = wParam;
     }
     return DefWindowProcA(hWnd,WM_ACTIVATEAPP,wParam,lParam);
   case WM_CLOSE:
