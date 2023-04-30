@@ -249,9 +249,7 @@ BOOL Isle::setupLegoOmni()
   char mediaPath[256];
   GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
 
-  MxOmniCreateParam createParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags());
-
-  if (Lego()->Create(createParam) != FAILURE) {
+  if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
     VariableTable()->SetVariable("ACTOR_01", "");
     TickleManager()->vtable1c(VideoManager(), 10);
     return TRUE;
