@@ -1,15 +1,16 @@
 #ifndef MXSTRING_H
 #define MXSTRING_H
 
-class MxString
+#include "mxcore.h"
+
+class MxString : public MxCore
 {
 public:
+  __declspec(dllexport) virtual ~MxString();
 
 private:
-  int m_unk00;
-  int m_unk04;
-  int m_unk08;
-  int m_unk0c;
+  char *m_data;
+  unsigned short m_length;
 
 };
 

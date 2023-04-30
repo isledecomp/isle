@@ -32,8 +32,8 @@ NULL=nul
 # Begin Project
 # PROP Target_Last_Scanned "isle - Win32 Debug"
 CPP=cl.exe
-RSC=rc.exe
 MTL=mktyplib.exe
+RSC=rc.exe
 
 !IF  "$(CFG)" == "isle - Win32 Release"
 
@@ -57,6 +57,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
+	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(OUTDIR)\isle.exe"
 
 "$(OUTDIR)" :
@@ -92,7 +93,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
-	"$(INTDIR)\main.obj"
+	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\mxomnicreateparambase.obj"
 
 "$(OUTDIR)\isle.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -121,6 +123,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
+	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase "$(OUTDIR)\isle.exe"
@@ -160,7 +163,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
-	"$(INTDIR)\main.obj"
+	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\mxomnicreateparambase.obj"
 
 "$(OUTDIR)\isle.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -233,11 +237,13 @@ DEP_CPP_ISLE_=\
 	".\lib\legoworldpresenter.h"\
 	".\lib\mxatomid.h"\
 	".\lib\mxbackgroundaudiomanager.h"\
+	".\lib\mxcore.h"\
 	".\lib\mxdirectdraw.h"\
 	".\lib\mxdsaction.h"\
 	".\lib\mxomni.h"\
 	".\lib\mxomnicreateflags.h"\
 	".\lib\mxomnicreateparam.h"\
+	".\lib\mxomnicreateparambase.h"\
 	".\lib\mxpalette.h"\
 	".\lib\mxrect32.h"\
 	".\lib\mxstreamcontroller.h"\
@@ -260,8 +266,39 @@ DEP_CPP_ISLE_=\
 # Begin Source File
 
 SOURCE=.\app\main.cpp
+DEP_CPP_MAIN_=\
+	".\app\define.h"\
+	".\app\isle.h"\
+	".\lib\define.h"\
+	".\lib\legoanimationmanager.h"\
+	".\lib\legobuildingmanager.h"\
+	".\lib\legogamestate.h"\
+	".\lib\legoinputmanager.h"\
+	".\lib\legomodelpresenter.h"\
+	".\lib\legoomni.h"\
+	".\lib\legopartpresenter.h"\
+	".\lib\legoroi.h"\
+	".\lib\legovideomanager.h"\
+	".\lib\legoworldpresenter.h"\
+	".\lib\mxatomid.h"\
+	".\lib\mxbackgroundaudiomanager.h"\
+	".\lib\mxdsaction.h"\
+	".\lib\mxomnicreateflags.h"\
+	".\lib\mxomnicreateparam.h"\
+	".\lib\mxpalette.h"\
+	".\lib\mxrect32.h"\
+	".\lib\mxstreamcontroller.h"\
+	".\lib\mxstreamer.h"\
+	".\lib\mxstring.h"\
+	".\lib\mxticklemanager.h"\
+	".\lib\mxtimer.h"\
+	".\lib\mxtransitionmanager.h"\
+	".\lib\mxvariabletable.h"\
+	".\lib\mxvideoparam.h"\
+	".\lib\mxvideoparamflags.h"\
+	
 
-"$(INTDIR)\main.obj" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -286,6 +323,27 @@ SOURCE=.\app\res\isle.rc
 
 
 !ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\lib\mxomnicreateparambase.cpp
+DEP_CPP_MXOMN=\
+	".\lib\mxomnicreateflags.h"\
+	".\lib\mxomnicreateparam.h"\
+	".\lib\mxomnicreateparambase.h"\
+	".\lib\mxpalette.h"\
+	".\lib\mxrect32.h"\
+	".\lib\mxstring.h"\
+	".\lib\mxvariabletable.h"\
+	".\lib\mxvideoparam.h"\
+	".\lib\mxvideoparamflags.h"\
+	
+
+"$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMN) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
 
 # End Source File
 # End Target
