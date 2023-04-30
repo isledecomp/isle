@@ -355,31 +355,27 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd, WM_NCPAINT, wParam, lParam);
   case WM_DISPLAYCHANGE:
-    /* FIXME: Untangle
-    if (g_isle && VideoManager() && g_isle->m_fullScreen && ((pLVar7 = VideoManager(), *(int *)(pLVar7 + 0x74) != 0 && (pLVar7 = VideoManager(), *(int *)(*(int *)(pLVar7 + 0x74) + 0x880) != 0))) {
+    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
       if (_DAT_00410054 == 0) {
-        unsigned char bVar1 = FALSE;
-        if (LOWORD(lParam) == _DAT_00410058 && HIWORD(lParam) == _DAT_0041005c && _DAT_00410060 == wParam) {
-          bVar1 = TRUE;
+        unsigned char valid = FALSE;
+        if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
+          valid = TRUE;
         }
         if (_DAT_00410050 == 0) {
-          if (!bVar1) {
+          if (!valid) {
             _DAT_00410050 = 1;
             Lego()->vtable38();
             VideoManager()->DisableRMDevice();
           }
-        }
-        else if (bVar1) {
+        } else if (valid) {
           _DAT_00410064 = 1;
         }
-      }
-      else {
+      } else {
         _DAT_00410054 = 0;
-        _DAT_00410060 = wParam;
+        g_targetDepth = wParam;
       }
-    }*/
-    return DefWindowProcA(hWnd,WM_DISPLAYCHANGE,wParam,lParam);
-
+    }
+    return DefWindowProcA(hWnd, WM_DISPLAYCHANGE, wParam, lParam);
   case WM_SETCURSOR:
   case WM_KEYDOWN:
   case WM_MOUSEMOVE:
