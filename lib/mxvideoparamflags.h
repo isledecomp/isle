@@ -10,7 +10,8 @@ public:
     FLIP_SURFACES = 0x2,
     BACK_BUFFERS = 0x4,
     ENABLE_16BIT = 0x20,
-    WIDE_VIEW_ANGLE = 0x40
+    WIDE_VIEW_ANGLE = 0x40,
+    UNKNOWN3 = 0x80
   };
 
   enum HighFlags
@@ -23,65 +24,57 @@ public:
 
   inline void EnableFullScreen(BOOL e)
   {
-    if (e) {
-      m_flags1 |= FULL_SCREEN;
-    } else {
-      m_flags1 &= ~FULL_SCREEN;
-    }
+    m_flags1 = (m_flags1 ^ (e << 0)) & FULL_SCREEN ^ m_flags1;
   }
 
   inline void EnableFlipSurfaces(BOOL e)
   {
-    if (e) {
-      m_flags1 |= FLIP_SURFACES;
-    } else {
-      m_flags1 &= ~FLIP_SURFACES;
-    }
+    m_flags1 = (m_flags1 ^ (e << 1)) & FLIP_SURFACES ^ m_flags1;
   }
 
   inline void EnableBackBuffers(BOOL e)
   {
-    if (e) {
-      m_flags1 |= BACK_BUFFERS;
-    } else {
-      m_flags1 &= ~BACK_BUFFERS;
-    }
+    m_flags1 = (m_flags1 ^ ((!e) << 2)) & BACK_BUFFERS ^ m_flags1;
+  }
+
+  inline void SetUnknown3(BOOL e)
+  {
+    m_flags1 = (m_flags1 ^ (e << 7)) & UNKNOWN3 ^ m_flags1;
+  }
+
+  inline void Set8Bit()
+  {
+    m_flags1 &= ~ENABLE_16BIT;
+  }
+
+  inline void Set16Bit()
+  {
+    m_flags1 |= ENABLE_16BIT;
   }
 
   inline void Enable16Bit(BOOL e)
   {
-    if (e) {
-      m_flags1 |= ENABLE_16BIT;
-    } else {
-      m_flags1 &= ~ENABLE_16BIT;
-    }
+    m_flags1 = ((e << 5) ^ m_flags1) & ENABLE_16BIT ^ m_flags1;
   }
 
   inline void EnableWideViewAngle(BOOL e)
   {
-    if (e) {
-      m_flags1 |= WIDE_VIEW_ANGLE;
-    } else {
-      m_flags1 &= ~WIDE_VIEW_ANGLE;
-    }
+    m_flags1 = (m_flags1 ^ (e << 6)) & WIDE_VIEW_ANGLE ^ m_flags1;
   }
 
   inline void EnableUnknown1(BOOL e)
   {
-    if (e) {
-      m_flags2 |= UNKNOWN1;
-    } else {
-      m_flags2 &= ~UNKNOWN1;
-    }
+    m_flags2 = (m_flags2 ^ ((!e) << 0)) & UNKNOWN1 ^ m_flags2;
   }
 
   inline void EnableUnknown2(BOOL e)
   {
-    if (e) {
-      m_flags2 |= UNKNOWN2;
-    } else {
-      m_flags2 &= ~UNKNOWN2;
-    }
+    m_flags2 = (m_flags2 ^ (e << 1)) & UNKNOWN2 ^ m_flags2;
+  }
+
+  inline void EnableUnknown2()
+  {
+    m_flags2 |= UNKNOWN2;
   }
 
 private:
