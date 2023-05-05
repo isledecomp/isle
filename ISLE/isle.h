@@ -3,8 +3,8 @@
 
 #include <Windows.h>
 
-#include "../lib/define.h"
-#include "../lib/mxvideoparam.h"
+#include "mxresult.h"
+#include "mxvideoparam.h"
 
 class Isle
 {

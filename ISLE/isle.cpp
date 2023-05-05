@@ -1,10 +1,10 @@
 #include "isle.h"
 
 #include "define.h"
-#include "../lib/legoomni.h"
-#include "../lib/mxdirectdraw.h"
-#include "../lib/mxdsaction.h"
-#include "../lib/mxomni.h"
+#include "legoomni.h"
+#include "mxdirectdraw.h"
+#include "mxdsaction.h"
+#include "mxomni.h"
 #include "res/resource.h"
 
 RECT windowRect = {0, 0, 640, 480};
