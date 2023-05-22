@@ -31,9 +31,6 @@ BOOL startDirectSound(void)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-  // TEMP: Load our recompiled library if available
-  LoadLibraryA("LEGO2");
-
   // Look for another instance, if we find one, bring it to the foreground instead
   if (!findExistingInstance()) {
     return 0;
