@@ -19,7 +19,7 @@ long MxCore::Notify(MxParam &p)
   return 0;
 }
 
-long MxCore::FUN_10001f70()
+long MxCore::Tickle()
 {
   return 0;
 }

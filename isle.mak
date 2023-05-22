@@ -422,12 +422,8 @@ DEP_CPP_MXCOR=\
 # Begin Source File
 
 SOURCE=.\LEGO1\dllmain.cpp
-DEP_CPP_DLLMA=\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	
 
-"$(INTDIR)\dllmain.obj" : $(SOURCE) $(DEP_CPP_DLLMA) "$(INTDIR)"
+"$(INTDIR)\dllmain.obj" : $(SOURCE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -499,6 +495,9 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
 	
+NODEP_CPP_ISLE_=\
+	".\LEGO1\define.h"\
+	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
@@ -542,6 +541,9 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	
+NODEP_CPP_MAIN_=\
+	".\LEGO1\define.h"\
 	
 
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"

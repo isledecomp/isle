@@ -109,7 +109,7 @@ void Isle::close()
       }
 
       Timer()->GetRealTime();
-      TickleManager()->vtable08();
+      TickleManager()->Tickle();
     }
   }
 }
@@ -568,7 +568,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
     }
     if (this->m_frameDelta + g_lastFrameTime < currentTime) {
       if (!Lego()->vtable40()) {
-        TickleManager()->vtable08();
+        TickleManager()->Tickle();
       }
       g_lastFrameTime = currentTime;
 

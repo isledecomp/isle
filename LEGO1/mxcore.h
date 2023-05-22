@@ -11,7 +11,7 @@ public:
   __declspec(dllexport) MxCore();
   __declspec(dllexport) virtual ~MxCore();
   __declspec(dllexport) virtual long Notify(MxParam &p);
-  virtual long FUN_10001f70();
+  virtual long Tickle();
   virtual const char *GetClassName() const;
   virtual MxBool IsClass(const char *name) const;
 
