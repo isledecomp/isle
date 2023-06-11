@@ -22,7 +22,7 @@ jobs:
       run: |
         mkdir dx5sdk
         cd dx5sdk
-        wget https://archive.org/download/idx5sdk/idx5sdk.exe
+        C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
         cd cdrom
