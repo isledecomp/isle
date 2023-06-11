@@ -1,0 +1,62 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/checkout@v3
+      with:
+        repository: 'itsmattkc/msvc420'
+        path: msvc420
+
+    - name: Restore cached DX5 SDK
+      id: cache-dx5
+      uses: actions/cache/restore@v3
+      with:
+        path: dx5sdk
+        key: dx5sdk
+
+    - name: Download DX5 SDK
+      if: steps.cache-dx5.outputs.cache-hit != 'true'
+      run: |
+        cd dx5sdk
+        C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
+        7z x .\idx5sdk.exe
+        7z x .\DX5SDK.EXE
+        cd cdrom
+        
+    - name: Cache DX5 SDK
+      if: steps.cache-dx5.outputs.cache-hit != 'true'
+      id: save-dx5
+      uses: actions/cache/save@v3
+      with:
+        path: dx5sdk
+        key: dx5sdk
+        
+    - name: Setup DX5 SDK
+      run: |
+        cd dx5sdk
+        cd cdrom
+        .\SETUP.EXE /s
+        
+    - name: Build
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        mkdir Release
+        .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
+      
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: Win32
+        path: Release

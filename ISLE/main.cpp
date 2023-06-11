@@ -19,7 +19,7 @@ BOOL findExistingInstance(void)
 
 BOOL startDirectSound(void)
 {
-  LPDIRECTSOUND lpDS;
+  LPDIRECTSOUND lpDS = 0;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
   if (ret == DS_OK && lpDS != NULL) {
     lpDS->Release();
