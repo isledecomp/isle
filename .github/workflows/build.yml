@@ -20,7 +20,6 @@ jobs:
           
     - name: Set up DX5 SDK
       run: |
-        mkdir -p dx5sdk
         cd dx5sdk
         C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
@@ -31,7 +30,7 @@ jobs:
     - name: Build
       run: |
         ./msvc420/BIN/VCVARS32.BAT x86
-        mkdir -p Release
+        mkdir Release
         nmake /f isle.mak CFG="ISLE - Win32 Release"
       
     - name: Upload Artifact
