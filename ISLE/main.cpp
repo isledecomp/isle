@@ -103,10 +103,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         DispatchMessageA(&msg);
       }
 
-      if (_DAT_00410064 != 0) {
-        _DAT_00410064 = 0;
+      if (g_reqEnableRMDevice) {
+        g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
-        _DAT_00410050 = 0;
+        g_rmDisabled = 0;
         Lego()->vtable3c();
       }
 

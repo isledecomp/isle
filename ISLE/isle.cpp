@@ -329,7 +329,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     if (wParam == 0xf060 && g_closed == 0) {
       if (g_isle) {
-        if (_DAT_00410050 != 0) {
+        if (g_rmDisabled) {
           ShowWindow(g_isle->m_windowHandle, SW_RESTORE);
         }
         PostMessageA(g_isle->m_windowHandle, 0x10, 0, 0);
@@ -359,14 +359,14 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
           valid = TRUE;
         }
-        if (_DAT_00410050 == 0) {
+        if (!g_rmDisabled) {
           if (!valid) {
-            _DAT_00410050 = 1;
+            g_rmDisabled = 1;
             Lego()->vtable38();
             VideoManager()->DisableRMDevice();
           }
         } else if (valid) {
-          _DAT_00410064 = 1;
+          g_reqEnableRMDevice = 1;
         }
       } else {
         _DAT_00410054 = 0;
@@ -572,12 +572,12 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
       }
       g_lastFrameTime = currentTime;
 
-      if (_DAT_004101bc == 0) {
+      if (g_startupDelay == 0) {
         return;
       }
 
-      _DAT_004101bc--;
-      if (_DAT_004101bc != 0) {
+      g_startupDelay--;
+      if (g_startupDelay != 0) {
         return;
       }
 

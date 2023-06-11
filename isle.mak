@@ -51,15 +51,16 @@ NULL=nul
 OUTDIR=.\LEGO1\Release
 INTDIR=.\LEGO1\Release
 
-ALL : "$(OUTDIR)\LEGO1.dll"
+ALL : ".\Release\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
-	-@erase "$(OUTDIR)\LEGO1.dll"
-	-@erase "$(OUTDIR)\LEGO1.exp"
-	-@erase "$(OUTDIR)\LEGO1.lib"
-	-@erase "$(OUTDIR)\LEGO1.map"
+	-@erase ".\Release\LEGO1.DLL"
+	-@erase ".\Release\LEGO1.EXP"
+	-@erase ".\Release\LEGO1.LIB"
+	-@erase ".\Release\LEGO1.MAP"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -105,17 +106,19 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /map /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
+# SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib /nologo /subsystem:windows /dll /incremental:no\
- /pdb:"$(OUTDIR)/LEGO1.pdb" /map:"$(INTDIR)/LEGO1.map" /machine:I386\
- /out:"$(OUTDIR)/LEGO1.dll" /implib:"$(OUTDIR)/LEGO1.lib" 
+ /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /machine:I386\
+ /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxcore.obj"
 
-"$(OUTDIR)\LEGO1.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -135,19 +138,20 @@ LINK32_OBJS= \
 OUTDIR=.\LEGO1\Debug
 INTDIR=.\LEGO1\Debug
 
-ALL : "$(OUTDIR)\LEGO1.dll"
+ALL : ".\Debug\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
-	-@erase "$(OUTDIR)\LEGO1.dll"
 	-@erase "$(OUTDIR)\LEGO1.exp"
-	-@erase "$(OUTDIR)\LEGO1.ilk"
 	-@erase "$(OUTDIR)\LEGO1.lib"
 	-@erase "$(OUTDIR)\LEGO1.map"
 	-@erase "$(OUTDIR)\LEGO1.pdb"
+	-@erase ".\Debug\LEGO1.DLL"
+	-@erase ".\Debug\LEGO1.ILK"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -193,17 +197,19 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /map /debug /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
+# SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib /nologo /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/LEGO1.pdb" /map:"$(INTDIR)/LEGO1.map" /debug /machine:I386\
- /out:"$(OUTDIR)/LEGO1.dll" /implib:"$(OUTDIR)/LEGO1.lib" 
+ /out:"Debug/LEGO1.DLL" /implib:"$(OUTDIR)/LEGO1.lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxcore.obj"
 
-"$(OUTDIR)\LEGO1.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -223,7 +229,7 @@ LINK32_OBJS= \
 OUTDIR=.\ISLE\Release
 INTDIR=.\ISLE\Release
 
-ALL : "$(OUTDIR)\ISLE.exe"
+ALL : "LEGO1 - Win32 Release" ".\Release\ISLE.EXE"
 
 CLEAN : 
 	-@erase "$(INTDIR)\define.obj"
@@ -231,7 +237,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
-	-@erase "$(OUTDIR)\ISLE.exe"
+	-@erase ".\Release\ISLE.EXE"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -278,21 +284,22 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /machine:I386 /LIBPATH:"ISLE\EXT"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /pdb:"Release/ISLE.PDB" /machine:I386 /out:"Release/ISLE.EXE" /LIBPATH:"ISLE/ext"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows\
- /incremental:no /pdb:"$(OUTDIR)/ISLE.pdb" /machine:I386\
- /out:"$(OUTDIR)/ISLE.exe" /LIBPATH:"ISLE\EXT" 
+ /incremental:no /pdb:"Release/ISLE.PDB" /machine:I386 /out:"Release/ISLE.EXE"\
+ /LIBPATH:"ISLE/ext" 
 LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxomnicreateparambase.obj"
+	"$(INTDIR)\mxomnicreateparambase.obj" \
+	".\Release\LEGO1.LIB"
 
-"$(OUTDIR)\ISLE.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+".\Release\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -312,7 +319,7 @@ LINK32_OBJS= \
 OUTDIR=.\ISLE\Debug
 INTDIR=.\ISLE\Debug
 
-ALL : "$(OUTDIR)\ISLE.exe"
+ALL : "LEGO1 - Win32 Debug" ".\Debug\ISLE.EXE"
 
 CLEAN : 
 	-@erase "$(INTDIR)\define.obj"
@@ -322,9 +329,9 @@ CLEAN :
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
-	-@erase "$(OUTDIR)\ISLE.exe"
-	-@erase "$(OUTDIR)\ISLE.ilk"
-	-@erase "$(OUTDIR)\ISLE.pdb"
+	-@erase ".\Debug\ISLE.EXE"
+	-@erase ".\Debug\ISLE.ILK"
+	-@erase ".\Debug\ISLE.PDB"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -371,21 +378,22 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /debug /machine:I386 /LIBPATH:"ISLE\EXT"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /pdb:"Debug/ISLE.PDB" /debug /machine:I386 /out:"Debug/ISLE.EXE" /LIBPATH:"ISLE/ext"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows\
- /incremental:yes /pdb:"$(OUTDIR)/ISLE.pdb" /debug /machine:I386\
- /out:"$(OUTDIR)/ISLE.exe" /LIBPATH:"ISLE\EXT" 
+ /incremental:yes /pdb:"Debug/ISLE.PDB" /debug /machine:I386\
+ /out:"Debug/ISLE.EXE" /LIBPATH:"ISLE/ext" 
 LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxomnicreateparambase.obj"
+	"$(INTDIR)\mxomnicreateparambase.obj" \
+	".\LEGO1\Debug\LEGO1.lib"
 
-"$(OUTDIR)\ISLE.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+".\Debug\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -424,6 +432,48 @@ DEP_CPP_MXCOR=\
 SOURCE=.\LEGO1\dllmain.cpp
 
 "$(INTDIR)\dllmain.obj" : $(SOURCE) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\legoomni.cpp
+DEP_CPP_LEGOO=\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxticklemanager.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	
+
+"$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -495,9 +545,6 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
 	
-NODEP_CPP_ISLE_=\
-	".\LEGO1\define.h"\
-	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
@@ -541,9 +588,6 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
-	
-NODEP_CPP_MAIN_=\
-	".\LEGO1\define.h"\
 	
 
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
@@ -1004,6 +1048,24 @@ SOURCE=.\LEGO1\mxvideoparamflags.h
 !ENDIF 
 
 # End Source File
+################################################################################
+# Begin Project Dependency
+
+# Project_Dep_Name "LEGO1"
+
+!IF  "$(CFG)" == "ISLE - Win32 Release"
+
+"LEGO1 - Win32 Release" : 
+   $(MAKE) /$(MAKEFLAGS) /F ".\isle.mak" CFG="LEGO1 - Win32 Release" 
+
+!ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
+
+"LEGO1 - Win32 Debug" : 
+   $(MAKE) /$(MAKEFLAGS) /F ".\isle.mak" CFG="LEGO1 - Win32 Debug" 
+
+!ENDIF 
+
+# End Project Dependency
 # End Target
 # End Project
 ################################################################################
