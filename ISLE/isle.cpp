@@ -119,15 +119,17 @@ BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   HKEY hKey;
   DWORD valueType;
 
+  BOOL out = FALSE;
+  unsigned long size = outSize;
   if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &outSize) == ERROR_SUCCESS) {
+    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
       if (RegCloseKey(hKey) == ERROR_SUCCESS) {
-        return TRUE;
+        out = TRUE;
       }
     }
   }
 
-  return FALSE;
+  return out;
 }
 
 int readRegBool(LPCSTR name, BOOL *out)
@@ -234,8 +236,8 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
   m_videoParam.flags().EnableBackBuffers(backBuffers);
   m_videoParam.flags().EnableUnknown1(param_6);
   m_videoParam.flags().SetUnknown3(param_7);
-  m_videoParam.flags().EnableUnknown2();
   m_videoParam.flags().EnableWideViewAngle(wideViewAngle);
+  m_videoParam.flags().EnableUnknown2();
   m_videoParam.SetDeviceName(deviceId);
   if (using8bit) {
     m_videoParam.flags().Set8Bit();

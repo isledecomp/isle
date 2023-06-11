@@ -3,8 +3,7 @@
 Isle *g_isle = 0;
 int g_closed = 0;
 
-const char *WNDCLASS_NAME = "Lego Island MainNoM App";
-const char *WINDOW_TITLE = "LEGO®";
+const char *WINDOW_TITLE = "LEGOÂ®";
 
 unsigned char g_mousedown = 0;
 unsigned char g_mousemoved = 0;
