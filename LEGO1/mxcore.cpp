@@ -19,6 +19,12 @@ long MxCore::Notify(MxParam &p)
   return 0;
 }
 
+// FIXME: based on another call, this might be an integer (100edf3c), or whatever undefined4 is
+long MxCore::NotificationManager()
+{
+	return 0;
+}
+
 long MxCore::Tickle()
 {
   return 0;
