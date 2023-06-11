@@ -10,7 +10,7 @@ extern const char *WINDOW_TITLE;
 extern unsigned char g_mousedown;
 extern unsigned char g_mousemoved;
 extern int g_rmDisabled;
-extern int _DAT_00410054;
+extern int g_targetDepthSet;
 extern int g_targetWidth;
 extern int g_targetHeight;
 extern unsigned int g_targetDepth;
