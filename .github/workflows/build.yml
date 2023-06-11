@@ -22,10 +22,10 @@ jobs:
       id: cache-dx5
       uses: actions/cache/restore@v3
       with:
-        path: C:\dxsdk
+        path: dx5sdk
         key: dx5sdk
 
-    - name: Setup DX5 SDK
+    - name: Download DX5 SDK
       if: steps.cache-dx5.outputs.cache-hit != 'true'
       run: |
         cd dx5sdk
@@ -33,16 +33,21 @@ jobs:
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
         cd cdrom
-        .\SETUP.EXE /s
         
     - name: Cache DX5 SDK
       if: steps.cache-dx5.outputs.cache-hit != 'true'
       id: save-dx5
       uses: actions/cache/save@v3
       with:
-        path: C:\dxsdk
+        path: dx5sdk
         key: dx5sdk
-              
+        
+    - name: Setup DX5 SDK
+      run: |
+        cd dx5sdk
+        cd cdrom
+        .\SETUP.EXE /s
+        
     - name: Build
       shell: cmd
       run: |
