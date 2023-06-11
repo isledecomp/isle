@@ -17,13 +17,22 @@ jobs:
       with:
         repository: 'itsmattkc/msvc420'
         path: msvc420
-          
-    - name: Set up DX5 SDK
+
+    - name: Cache DX5 SDK
+      id: cache-dx5
+      uses: actions/cache@v3
+      with:
+        path: C:\dxsdk
+        key: dx5sdk
+
+    - name: Setup DX5 SDK
+      if: steps.cache-dx5.outputs.cache-hit != 'true'
       run: |
         cd dx5sdk
         C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
+        cd dx5sdk
         cd cdrom
         .\SETUP.EXE /s
               
