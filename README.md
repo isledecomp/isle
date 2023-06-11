@@ -6,7 +6,7 @@ This is a **work-in-progress** decompilation of LEGO Island version 1.1. It aims
 
 ## Status
 
-*TODO: A progress bar showing the percentage progress of this decompilation.*
+![](https://geps.dev/progress/9)
 
 Currently `ISLE.EXE` is completely decompiled, however there are some known inaccuracies. It should work if you pair it with the original game's `LEGO1.DLL` (and other files), however small things may not work correctly yet. Work on decompiling `LEGO1.DLL` has only just started and currently it is too incomplete to be usable.
 
