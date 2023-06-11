@@ -1,9 +1,9 @@
 #include "define.h"
 
-Isle *g_isle = 0; // A variable of the Isle class.
+Isle *g_isle = 0;
 int g_closed = 0; // Set to 1 when the window is closed.
 
-const char *WINDOW_TITLE = "LEGO®"; // The title of the window.
+const char *WINDOW_TITLE = "LEGO®";
 
 unsigned char g_mousedown = 0; // 0 if the left mouse button is released, 1 if it is being pressed.
 unsigned char g_mousemoved = 0; // 0 if the mouse is not moving, 1 if it is moving.
