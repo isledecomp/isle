@@ -250,7 +250,7 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 BOOL Isle::setupLegoOmni()
 {
   char mediaPath[256];
-  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
+  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256); // <- Checks the win.ini file? (The game was released in 1997, but this method has been incorrect since 1990) 
 
   if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
     VariableTable()->SetVariable("ACTOR_01", "");
@@ -501,7 +501,10 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
     AdjustWindowRectEx(&windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
     height = windowRect.bottom - windowRect.top;
     width = windowRect.right - windowRect.left;
-    dwStyle = WS_CAPTION | WS_SYSMENU;
+    dwStyle = WS_CAPTION | WS_SYSMENU; // <- Causes the white bar in full screen mode
+    // Change to WS_POPUP to remove title bar and fix the bug from full screen mode.
+    // Known to occur on Windows 10. May occur on Windows 11 also.
+    // Can also be fixed using LEGO Island Rebuilder.
     x = windowRect.left;
     y = windowRect.top;
   }
