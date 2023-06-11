@@ -119,15 +119,17 @@ BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   HKEY hKey;
   DWORD valueType;
 
+  BOOL out = FALSE;
+  unsigned long size = outSize;
   if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &outSize) == ERROR_SUCCESS) {
+    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
       if (RegCloseKey(hKey) == ERROR_SUCCESS) {
-        return TRUE;
+        out = TRUE;
       }
     }
   }
 
-  return FALSE;
+  return out;
 }
 
 int readRegBool(LPCSTR name, BOOL *out)
