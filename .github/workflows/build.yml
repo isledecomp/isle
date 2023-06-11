@@ -29,9 +29,9 @@ jobs:
               
     - name: Build
       run: |
-        ./msvc420/BIN/VCVARS32.BAT x86
+        ./msvc420/bin/VCVARS32.BAT x86
         mkdir Release
-        nmake /f isle.mak CFG="ISLE - Win32 Release"
+        ./msvc420/bin/NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
