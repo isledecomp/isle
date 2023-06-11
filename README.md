@@ -1,7 +1,7 @@
 # LEGO Island Decompilation
 
 [Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
-  
+
 This is a **work-in-progress** decompilation of LEGO Island version 1.1. It aims to be relatively faithful, but not byte accurate. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
 
 ## Status
@@ -51,4 +51,4 @@ Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab
 
 ### SmartHeap
 
-Both `ISLE.EXE` and `LEGO1.DLL` were originally statically linked with [SmartHeap](http://www.microquill.com/smartheap/sh_tspec.htm), a drop-in replacement for malloc/free that presumably provides better heap memory management on the old low-memory (16MB) systems this game was designed for. Unfortunately, acquiring SmartHeap legally is expensive, and the chances of acquiring the exact same version used by Mindscape in the late 90s is very low. Since it's a drop-in binary-compatible replacement, this decomp can just stick with the standard malloc/free functions while still achieving matching assembly on a per-function level, however the resulting binaries will never be byte accurate as a result of this. If you notice significant size disparities, particularly in ISLE.EXE, the lack of statically linked SmartHeap libraries is why.
+Both `ISLE.EXE` and `LEGO1.DLL` were originally statically linked with [SmartHeap](https://web.archive.org/web/20220121205400/https://www.microquill.com/smartheap/sh_tspec.htm), a drop-in replacement for malloc/free that presumably provides better heap memory management on the old low-memory (16MB) systems this game was designed for. Unfortunately, acquiring SmartHeap legally is expensive, and the chances of acquiring the exact same version used by Mindscape in the late 90s is very low. Since it's a drop-in binary-compatible replacement, this decomp can just stick with the standard malloc/free functions while still achieving matching assembly on a per-function level, however the resulting binaries will never be byte accurate as a result of this. If you notice significant size disparities, particularly in ISLE.EXE, the lack of statically linked SmartHeap libraries is why.
