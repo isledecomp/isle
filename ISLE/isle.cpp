@@ -234,8 +234,8 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
   m_videoParam.flags().EnableBackBuffers(backBuffers);
   m_videoParam.flags().EnableUnknown1(param_6);
   m_videoParam.flags().SetUnknown3(param_7);
-  m_videoParam.flags().EnableUnknown2();
   m_videoParam.flags().EnableWideViewAngle(wideViewAngle);
+  m_videoParam.flags().EnableUnknown2();
   m_videoParam.SetDeviceName(deviceId);
   if (using8bit) {
     m_videoParam.flags().Set8Bit();
