@@ -15,7 +15,7 @@ extern int g_targetWidth;
 extern int g_targetHeight;
 extern unsigned int g_targetDepth;
 extern int _DAT_00410064;
-extern int _DAT_004101bc;
+extern int g_startDelayTimer;
 extern long g_lastFrameTime;
 
 #endif // DEFINE_H
