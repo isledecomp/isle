@@ -18,9 +18,9 @@ jobs:
         repository: 'itsmattkc/msvc420'
         path: msvc420
 
-    - name: Cache DX5 SDK
+    - name: Restore cached DX5 SDK
       id: cache-dx5
-      uses: actions/cache@v3
+      uses: actions/cache/restore@v3
       with:
         path: C:\dxsdk
         key: dx5sdk
@@ -34,6 +34,14 @@ jobs:
         7z x .\DX5SDK.EXE
         cd cdrom
         .\SETUP.EXE /s
+        
+    - name: Cache DX5 SDK
+      if: steps.cache-dx5.outputs.cache-hit != 'true'
+      id: save-dx5
+      uses: actions/cache/save@v3
+      with:
+        path: C:\dxsdk
+        key: dx5sdk
               
     - name: Build
       shell: cmd
