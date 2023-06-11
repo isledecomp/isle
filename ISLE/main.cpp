@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window = g_isle->m_windowHandle;
   }
 
-  // Load accelerator (don't know what this does)
+  // Load accelerator (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
   LoadAcceleratorsA(hInstance, "AppAccel");
 
   MSG msg;
