@@ -1,4 +1,4 @@
-name: ISO
+name: Build
 
 on:
   push:
@@ -22,11 +22,11 @@ jobs:
       run: |
         mkdir dx5sdk
         cd dx5sdk
-        wget https://ia800700.us.archive.org/9/items/idx5sdk/idx5sdk.exe
+        wget https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
         cd cdrom
-        .\SETUP.EXE  
+        .\SETUP.EXE /s
               
     - name: Build
       run: |
