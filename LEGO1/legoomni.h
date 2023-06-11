@@ -1,10 +1,10 @@
 #ifndef LEGOOMNI_H
 #define LEGOOMNI_H
 
-#include "define.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsaction.h"
 #include "mxomnicreateparam.h"
+#include "mxresult.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
@@ -80,6 +80,8 @@ private:
   int m_unk68;
   int m_unk6c;
   LegoInputManager *m_inputMgr;
+
+  static LegoOmni *m_instance;
 
 };
 

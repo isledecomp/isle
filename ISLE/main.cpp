@@ -19,7 +19,7 @@ BOOL findExistingInstance(void)
 
 BOOL startDirectSound(void)
 {
-  LPDIRECTSOUND lpDS;
+  LPDIRECTSOUND lpDS = 0;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
   if (ret == DS_OK && lpDS != NULL) {
     lpDS->Release();
@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window = g_isle->m_windowHandle;
   }
 
-  // Load accelerator (don't know what this does)
+  // Load accelerator (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
   LoadAcceleratorsA(hInstance, "AppAccel");
 
   MSG msg;
@@ -103,10 +103,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         DispatchMessageA(&msg);
       }
 
-      if (_DAT_00410064 != 0) {
-        _DAT_00410064 = 0;
+      if (g_reqEnableRMDevice) {
+        g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
-        _DAT_00410050 = 0;
+        g_rmDisabled = 0;
         Lego()->vtable3c();
       }
 

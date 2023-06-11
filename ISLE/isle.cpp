@@ -119,15 +119,17 @@ BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   HKEY hKey;
   DWORD valueType;
 
+  BOOL out = FALSE;
+  unsigned long size = outSize;
   if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &outSize) == ERROR_SUCCESS) {
+    if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
       if (RegCloseKey(hKey) == ERROR_SUCCESS) {
-        return TRUE;
+        out = TRUE;
       }
     }
   }
 
-  return FALSE;
+  return out;
 }
 
 int readRegBool(LPCSTR name, BOOL *out)
@@ -234,8 +236,8 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
   m_videoParam.flags().EnableBackBuffers(backBuffers);
   m_videoParam.flags().EnableUnknown1(param_6);
   m_videoParam.flags().SetUnknown3(param_7);
-  m_videoParam.flags().EnableUnknown2();
   m_videoParam.flags().EnableWideViewAngle(wideViewAngle);
+  m_videoParam.flags().EnableUnknown2();
   m_videoParam.SetDeviceName(deviceId);
   if (using8bit) {
     m_videoParam.flags().Set8Bit();
@@ -324,18 +326,18 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_ENTERMENULOOP:
     return DefWindowProcA(hWnd,WM_ENTERMENULOOP,wParam,lParam);
   case WM_SYSCOMMAND:
-    if (wParam == 0xf140) {
+    if (wParam == SC_SCREENSAVE) {
       return 0;
     }
-    if (wParam == 0xf060 && g_closed == 0) {
+    if (wParam == SC_CLOSE && g_closed == 0) {
       if (g_isle) {
-        if (_DAT_00410050 != 0) {
+        if (g_rmDisabled) {
           ShowWindow(g_isle->m_windowHandle, SW_RESTORE);
         }
-        PostMessageA(g_isle->m_windowHandle, 0x10, 0, 0);
+        PostMessageA(g_isle->m_windowHandle, WM_CLOSE, 0, 0);
         return 0;
       }
-    } else if (g_isle && g_isle->m_fullScreen && (wParam == 0xf010 || wParam == 0xf100)) {
+    } else if (g_isle && g_isle->m_fullScreen && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
       return 0;
     }
     return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
@@ -359,14 +361,14 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
           valid = TRUE;
         }
-        if (_DAT_00410050 == 0) {
+        if (!g_rmDisabled) {
           if (!valid) {
-            _DAT_00410050 = 1;
+            g_rmDisabled = 1;
             Lego()->vtable38();
             VideoManager()->DisableRMDevice();
           }
         } else if (valid) {
-          _DAT_00410064 = 1;
+          g_reqEnableRMDevice = 1;
         }
       } else {
         _DAT_00410054 = 0;
@@ -572,12 +574,12 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
       }
       g_lastFrameTime = currentTime;
 
-      if (_DAT_004101bc == 0) {
+      if (g_startupDelay == 0) {
         return;
       }
 
-      _DAT_004101bc--;
-      if (_DAT_004101bc != 0) {
+      g_startupDelay--;
+      if (g_startupDelay != 0) {
         return;
       }
 
