@@ -32,7 +32,6 @@ jobs:
         C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
-        cd dx5sdk
         cd cdrom
         .\SETUP.EXE /s
               
