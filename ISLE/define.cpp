@@ -14,4 +14,4 @@ int g_targetHeight = 480; // isle.cpp checks if the screen resolution is 640x480
 unsigned int g_targetDepth = 16; // Also checked along with g_targetWidth and g_targetHeight to check if it is correct.
 int g_reqEnableRMDevice = 0; // Set to 1 if "RM" is enabled.
 int g_startupDelay = 200; // How many frames to wait for LEGO1 to initialize/freeze before doing anything else on startup.
-long g_lastFrameTime = 0; // Set to the value of currentTime during the call of the tick function.
+long g_lastFrameTime = 0; // Set to the value of currentTime during the call of the tick function of isle.cpp
