@@ -324,18 +324,18 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_ENTERMENULOOP:
     return DefWindowProcA(hWnd,WM_ENTERMENULOOP,wParam,lParam);
   case WM_SYSCOMMAND:
-    if (wParam == 0xf140) {
+    if (wParam == SC_SCREENSAVE) {
       return 0;
     }
-    if (wParam == 0xf060 && g_closed == 0) {
+    if (wParam == SC_CLOSE && g_closed == 0) {
       if (g_isle) {
         if (g_rmDisabled) {
           ShowWindow(g_isle->m_windowHandle, SW_RESTORE);
         }
-        PostMessageA(g_isle->m_windowHandle, 0x10, 0, 0);
+        PostMessageA(g_isle->m_windowHandle, WM_CLOSE, 0, 0);
         return 0;
       }
-    } else if (g_isle && g_isle->m_fullScreen && (wParam == 0xf010 || wParam == 0xf100)) {
+    } else if (g_isle && g_isle->m_fullScreen && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
       return 0;
     }
     return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
