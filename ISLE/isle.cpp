@@ -571,13 +571,14 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
         TickleManager()->Tickle();
       }
       g_lastFrameTime = currentTime;
-
-      if (_DAT_004101bc == 0) {
+      
+      /* hacky start delay. */
+      if (g_startDelayTimer == 0) {
         return;
       }
-
-      _DAT_004101bc--;
-      if (_DAT_004101bc != 0) {
+      /* could change to --g_startDelayTimer, but will mess with assembly. */
+      g_startDelayTimer--;
+      if (g_startDelayTimer != 0) {
         return;
       }
 
