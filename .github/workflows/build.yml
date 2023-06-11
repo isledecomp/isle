@@ -28,8 +28,9 @@ jobs:
         .\SETUP.EXE /s
               
     - name: Build
+      shell: cmd
       run: |
-        ./msvc420/bin/VCVARS32.BAT x86
+        call ./msvc420/bin/VCVARS32.BAT x86
         mkdir Release
         ./msvc420/bin/NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
       
