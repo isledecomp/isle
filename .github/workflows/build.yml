@@ -1,0 +1,41 @@
+name: ISO
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/checkout@v3
+      with:
+        repository: 'itsmattkc/msvc420'
+        path: msvc420
+          
+    - name: Set up DX5 SDK
+      run: |
+        mkdir dx5sdk
+        cd dx5sdk
+        wget https://ia800700.us.archive.org/9/items/idx5sdk/idx5sdk.exe
+        7z x .\idx5sdk.exe
+        7z x .\DX5SDK.EXE
+        cd cdrom
+        .\SETUP.EXE  
+              
+    - name: Build
+      run: |
+        ./msvc420/BIN/VCVARS32.BAT x86
+        mkdir Release
+        nmake /f isle.mak CFG="ISLE - Win32 Release"
+      
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: Win32
+        path: Release
