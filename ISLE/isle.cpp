@@ -91,9 +91,8 @@ void Isle::close()
     //ViewManager::RemoveAll
     //          (*(ViewManager **)(*(int *)(*(int *)(pLVar4 + 0x68) + 8) + 0x88), NULL);
 
-    MxAtomId id;
     long local_88 = 0;
-    Lego()->RemoveWorld(id, local_88);
+    Lego()->RemoveWorld(ds.m_atomId, local_88);
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
