@@ -447,6 +447,7 @@ SOURCE=.\LEGO1\legoomni.cpp
 DEP_CPP_LEGOO=\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
@@ -460,6 +461,8 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
@@ -531,6 +534,7 @@ DEP_CPP_ISLE_=\
 	".\ISLE\res\resource.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
@@ -545,6 +549,8 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdirectdraw.h"\
 	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
 	".\LEGO1\mxomni.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
@@ -577,6 +583,7 @@ DEP_CPP_MAIN_=\
 	".\ISLE\isle.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
@@ -590,6 +597,8 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
