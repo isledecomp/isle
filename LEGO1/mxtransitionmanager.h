@@ -6,7 +6,7 @@ class MxVideoPresenter;
 class MxTransitionManager
 {
 public:
-  void SetWaitIndicator(MxVideoPresenter *videoPresenter);
+  __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *videoPresenter);
 };
 
 #endif // MXTRANSITIONMANAGER_H

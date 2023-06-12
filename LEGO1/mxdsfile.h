@@ -4,7 +4,14 @@
 class MxDSFile
 {
 public:
-  __declspec(dllexport) long Close();
+  __declspec(dllexport) MxDSFile(const char *,unsigned long);
+  __declspec(dllexport) virtual ~MxDSFile();
+  __declspec(dllexport) virtual long Close();
+  __declspec(dllexport) virtual unsigned long GetBufferSize();
+  __declspec(dllexport) virtual unsigned long GetStreamBuffersNum();
+  __declspec(dllexport) virtual long Open(unsigned long);
+  __declspec(dllexport) virtual long Read(unsigned char *,unsigned long);
+  __declspec(dllexport) virtual long Seek(long,int);
 };
 
 #endif // MXDSFILE_H

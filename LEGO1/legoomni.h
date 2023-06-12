@@ -3,6 +3,8 @@
 
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsaction.h"
+#include "mxdsfile.h"
+#include "mxdsobject.h"
 #include "mxomnicreateparam.h"
 #include "mxresult.h"
 #include "mxstreamer.h"
@@ -11,6 +13,7 @@
 #include "mxtransitionmanager.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legoentity.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legomodelpresenter.h"
@@ -19,14 +22,18 @@
 #include "legoworldpresenter.h"
 #include "legovideomanager.h"
 
-class MxBackgroundAudioManager;
+class LegoSoundManager;
+class MxEventManager;
+class MxMusicManager;
+class MxNotificationManager;
+class MxSoundManager;
 
 class LegoOmni
 {
 public:
   __declspec(dllexport) void CreateBackgroundAudio();
   __declspec(dllexport) void RemoveWorld(const MxAtomId &p1, long p2);
-
+  __declspec(dllexport) static int GetCurrPathInfo(class LegoPathBoundary * *,int &);
   __declspec(dllexport) static void CreateInstance();
   __declspec(dllexport) static LegoOmni *GetInstance();
 
@@ -85,16 +92,28 @@ private:
 
 };
 
-__declspec(dllexport) LegoOmni *Lego();
-__declspec(dllexport) MxBackgroundAudioManager *BackgroundAudioManager();
-__declspec(dllexport) MxTickleManager *TickleManager();
-__declspec(dllexport) LegoVideoManager *VideoManager();
-__declspec(dllexport) MxVariableTable *VariableTable();
-__declspec(dllexport) LegoGameState *GameState();
-__declspec(dllexport) MxTimer *Timer();
-__declspec(dllexport) MxStreamer *Streamer();
-__declspec(dllexport) LegoInputManager *InputManager();
-__declspec(dllexport) MxTransitionManager *TransitionManager();
+__declspec(dllexport) MxBackgroundAudioManager * BackgroundAudioManager();
+__declspec(dllexport) MxDSObject * CreateStreamObject(MxDSFile *,short);
+__declspec(dllexport) MxEventManager * EventManager();
+__declspec(dllexport) LegoGameState * GameState();
+__declspec(dllexport) const char * GetNoCD_SourceName();
+__declspec(dllexport) LegoInputManager * InputManager();
+__declspec(dllexport) LegoOmni * Lego();
+__declspec(dllexport) MxSoundManager * MSoundManager();
+__declspec(dllexport) void MakeSourceName(char *, const char *);
+__declspec(dllexport) MxMusicManager * MusicManager();
+__declspec(dllexport) MxNotificationManager * NotificationManager();
+__declspec(dllexport) LegoEntity * PickEntity(long,long);
+__declspec(dllexport) LegoROI * PickROI(long,long);
+__declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
+__declspec(dllexport) LegoSoundManager * SoundManager();
+__declspec(dllexport) long Start(MxDSAction *);
+__declspec(dllexport) MxStreamer * Streamer();
+__declspec(dllexport) MxTickleManager * TickleManager();
+__declspec(dllexport) MxTimer * Timer();
+__declspec(dllexport) MxTransitionManager * TransitionManager();
+__declspec(dllexport) MxVariableTable * VariableTable();
+__declspec(dllexport) LegoVideoManager * VideoManager();
 
 __declspec(dllexport) long Start(MxDSAction *a);
 

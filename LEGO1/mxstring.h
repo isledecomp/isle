@@ -6,7 +6,9 @@
 class MxString : public MxCore
 {
 public:
+  __declspec(dllexport) MxString(const MxString &);
   __declspec(dllexport) virtual ~MxString();
+  __declspec(dllexport) const MxString &operator=(const char *);
 
 private:
   char *m_data;

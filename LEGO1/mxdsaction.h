@@ -7,8 +7,8 @@ class MxDSAction
 {
 public:
   __declspec(dllexport) MxDSAction();
+  __declspec(dllexport) virtual ~MxDSAction();
 
-  int m_unk00;
   int m_unk04;
   int m_unk08;
   int m_unk0c;

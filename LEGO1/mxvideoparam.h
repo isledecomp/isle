@@ -10,7 +10,9 @@ class MxVideoParam
 {
 public:
   __declspec(dllexport) MxVideoParam();
+  __declspec(dllexport) MxVideoParam(MxVideoParam &);
   __declspec(dllexport) MxVideoParam(MxRect32 &rect, MxPalette *pal, unsigned long p3, MxVideoParamFlags &flags);
+  __declspec(dllexport) MxVideoParam &operator=(const MxVideoParam &);
   __declspec(dllexport) ~MxVideoParam();
 
   __declspec(dllexport) void SetDeviceName(char *id);
