@@ -57,6 +57,7 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
+	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase ".\Release\LEGO1.DLL"
 	-@erase ".\Release\LEGO1.EXP"
 	-@erase ".\Release\LEGO1.LIB"
@@ -116,7 +117,8 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legoomni.obj" \
-	"$(INTDIR)\mxcore.obj"
+	"$(INTDIR)\mxcore.obj" \
+	"$(INTDIR)\mxcriticalsection.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -144,6 +146,7 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
+	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase "$(OUTDIR)\LEGO1.exp"
@@ -207,7 +210,8 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legoomni.obj" \
-	"$(INTDIR)\mxcore.obj"
+	"$(INTDIR)\mxcore.obj" \
+	"$(INTDIR)\mxcriticalsection.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -443,6 +447,7 @@ SOURCE=.\LEGO1\legoomni.cpp
 DEP_CPP_LEGOO=\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
@@ -456,6 +461,8 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
@@ -474,6 +481,19 @@ DEP_CPP_LEGOO=\
 	
 
 "$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxcriticalsection.cpp
+DEP_CPP_MXCRI=\
+	".\LEGO1\mxcriticalsection.h"\
+	
+
+"$(INTDIR)\mxcriticalsection.obj" : $(SOURCE) $(DEP_CPP_MXCRI) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
