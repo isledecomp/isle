@@ -52,7 +52,7 @@ public:
     m_flags1 |= ENABLE_16BIT;
   }
 
-  inline void Enable16Bit(BOOL e)
+  inline void Enable16Bit(unsigned char e)
   {
     m_flags1 = ((e << 5) ^ m_flags1) & ENABLE_16BIT ^ m_flags1;
   }
