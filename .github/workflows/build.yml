@@ -23,11 +23,9 @@ jobs:
     - name: Download DX5 SDK
       if: steps.cache-kit.outputs.cache-hit != 'true'
       run: |
-        cd dx5sdk
         curl -LO https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
-        cd cdrom
 
     - name: Setup MSVC 4.20
       if: steps.cache-kit.outputs.cache-hit != 'true'
@@ -37,7 +35,6 @@ jobs:
     - name: Setup DX5 SDK
       if: steps.cache-kit.outputs.cache-hit != 'true'
       run: |
-        cd dx5sdk
         move cdrom c:\islekit\dx5sdk
 
     - name: Cache kit

@@ -16,9 +16,9 @@ LEGO Island was compiled with Microsoft Visual C++ 4.20, so that's what this dec
 
 ### Assembling Kit
 
-Pick a directory without spaces to use as the root of your kit. Set this as the `ISLE_KIT_ROOT` in your preferred shell (on Windows, for instance `set ISLE_KIT_ROOT=X:/path/to/kit`).
+Pick a directory without spaces to use as the root of your kit. Set this as the `ISLE_KIT_ROOT` in your preferred shell (on Windows' CMD for instance, `set ISLE_KIT_ROOT=X:/path/to/kit`).
 
-Clone [MSVC420](https://github.com/itsmattkc/msvc420) to your kit root.
+Clone [MSVC420](https://github.com/itsmattkc/msvc420) to [kit root]/msvc420.
 
 Install the DirectX 5 SDK, changing the location to [kit root]/dx5sdk.
 
