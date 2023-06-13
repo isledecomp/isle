@@ -1,0 +1,8 @@
+#!/bin/bash
+# Helper wrapper to use the Linux MSVC4.2 toolchain
+# This requires ISLE_KIT_ROOT to be set properly.
+
+cmake \
+	--toolchain cmake/Toolchain/msvc42-linux.cmake \
+	-DCMAKE_CROSSCOMPILING_EMULATOR=/usr/bin/wine \
+	$@

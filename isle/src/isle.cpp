@@ -5,7 +5,7 @@
 #include "mxdirectdraw.h"
 #include "mxdsaction.h"
 #include "mxomni.h"
-#include "res/resource.h"
+#include "resource.h"
 
 RECT windowRect = {0, 0, 640, 480};
 

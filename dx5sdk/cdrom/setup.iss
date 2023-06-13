@@ -17,7 +17,7 @@ Result=1
 [SdSetupTypeEx-0]
 Result=Compact
 [SdAskDestPath-0]
-szDir=C:\dxsdk
+szDir=C:\islekit\dxsdk
 Result=1
 [SdSelectFolder-0]
 szFolder=Microsoft DirectX 5 SDK

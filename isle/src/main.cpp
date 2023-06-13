@@ -1,5 +1,5 @@
-#include <DSOUND.H>
-#include <Windows.h>
+#include <dsound.h>
+#include <windows.h>
 
 #include "define.h"
 #include "isle.h"

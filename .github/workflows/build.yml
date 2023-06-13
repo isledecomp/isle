@@ -13,50 +13,51 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v3
-      with:
-        repository: 'itsmattkc/msvc420'
-        path: msvc420
-
-    - name: Restore cached DX5 SDK
-      id: cache-dx5
+    - name: Restore cached kit
+      id: cache-kit
       uses: actions/cache/restore@v3
       with:
-        path: dx5sdk
-        key: dx5sdk
+        path: C:\islekit
+        key: islekit
 
     - name: Download DX5 SDK
-      if: steps.cache-dx5.outputs.cache-hit != 'true'
+      if: steps.cache-kit.outputs.cache-hit != 'true'
       run: |
         cd dx5sdk
-        C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
+        curl -LO https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
         cd cdrom
+
+    - name: Setup MSVC 4.20
+      if: steps.cache-kit.outputs.cache-hit != 'true'
+      run: |
+        git clone --depth 1 https://github.com/itsmattkc/msvc420 c:\islekit\msvc420
         
-    - name: Cache DX5 SDK
-      if: steps.cache-dx5.outputs.cache-hit != 'true'
+    - name: Setup DX5 SDK
+      if: steps.cache-kit.outputs.cache-hit != 'true'
+      run: |
+        cd dx5sdk
+        move cdrom c:\islekit\dx5sdk
+
+    - name: Cache kit
+      if: steps.cache-kit.outputs.cache-hit != 'true'
       id: save-dx5
       uses: actions/cache/save@v3
       with:
-        path: dx5sdk
-        key: dx5sdk
-        
-    - name: Setup DX5 SDK
-      run: |
-        cd dx5sdk
-        cd cdrom
-        .\SETUP.EXE /s
-        
+        path: C:\islekit
+        key: islekit
+
     - name: Build
       shell: cmd
       run: |
-        call .\msvc420\bin\VCVARS32.BAT x86
-        mkdir Release
-        .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
+        set ISLE_KIT_ROOT=C:/islekit
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+        cmake -GNinja -Bbuild --toolchain cmake/Toolchain/msvc42.cmake -DCMAKE_BUILD_TYPE=Release
+        cmake --build build -j 1
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
         name: Win32
-        path: Release
+        path: build/isle/isle.exe
