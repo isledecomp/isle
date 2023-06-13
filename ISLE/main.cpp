@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
   // Throw error if sound unavailable
   if (!soundReady) {
-    MessageBoxA(NULL, "\"LEGO® Island\" is not detecting a DirectSound compatible sound card.  Please quit all other applications and try again.",
+    MessageBoxA(NULL, "\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other applications and try again.",
       "Lego Island Error",0);
     return 0;
   }
@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
   // Create window
   if (g_isle->setupWindow(hInstance) != SUCCESS) {
-    MessageBoxA(NULL, "\"LEGO® Island\" failed to start.  Please quit all other applications and try again.", "LEGO® Island Error",0);
+    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error",0);
     return 0;
   }
 
