@@ -32,9 +32,9 @@ void LegoNavController::GetDefaults(int *p_mouseDeadzone, float *p_movementMaxSp
 }
 
 void LegoNavController::SetDefaults(int p_mouseDeadzone, float p_movementMaxSpeed, float p_turnMaxSpeed,
-                                                float p_movementMaxAccel, float p_turnMaxAccel, float p_movementDecel,
-                                                float p_turnDecel, float p_movementMinAccel, float p_turnMinAccel,
-                                                float p_rotationSensitivity, MxBool p_turnUseVelocity)
+                                    float p_movementMaxAccel, float p_turnMaxAccel, float p_movementDecel,
+                                    float p_turnDecel, float p_movementMinAccel, float p_turnMinAccel,
+                                    float p_rotationSensitivity, MxBool p_turnUseVelocity)
 {
   g_mouseDeadzone = p_mouseDeadzone;
   g_movementMaxSpeed = p_movementMaxSpeed;
