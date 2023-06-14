@@ -356,7 +356,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProcA(hWnd, WM_NCPAINT, wParam, lParam);
   case WM_DISPLAYCHANGE:
     if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
-      if (_DAT_00410054 == 0) {
+      if (!g_waitingForTargetDepth) {
         unsigned char valid = FALSE;
         if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
           valid = TRUE;
@@ -371,7 +371,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
           g_reqEnableRMDevice = 1;
         }
       } else {
-        _DAT_00410054 = 0;
+        g_waitingForTargetDepth = 0;
         g_targetDepth = wParam;
       }
     }
