@@ -55,6 +55,7 @@ ALL : ".\Release\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
@@ -125,6 +126,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
@@ -162,6 +164,7 @@ ALL : ".\Debug\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
@@ -236,6 +239,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /out:"Debug/LEGO1.DLL" /implib:"$(OUTDIR)/LEGO1.lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
@@ -675,6 +679,21 @@ DEP_CPP_MXOMNICR=\
 	
 
 "$(INTDIR)\mxomnicreateflags.obj" : $(SOURCE) $(DEP_CPP_MXOMNICR) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\legonavcontroller.cpp
+DEP_CPP_LEGON=\
+	".\LEGO1\legonavcontroller.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	
+
+"$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
