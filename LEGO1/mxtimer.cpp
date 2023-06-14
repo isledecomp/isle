@@ -7,14 +7,14 @@ long MxTimer::s_LastTimeTimerStarted = 0;
 
 MxTimer::MxTimer()
 {
-  this->m_isRunning = FALSE;
+  this->m_isRunning = MX_FALSE;
   MxTimer::s_LastTimeCalculated = timeGetTime();
   this->m_startTime = MxTimer::s_LastTimeCalculated;
 }
 
 void MxTimer::Start()
 {
-  this->m_isRunning = TRUE;
+  this->m_isRunning = MX_TRUE;
   MxTimer::s_LastTimeTimerStarted = timeGetTime();
 }
 
@@ -22,7 +22,7 @@ void MxTimer::Stop()
 {
   long elapsed = this->GetRealTime();
   long startTime = elapsed - MxTimer::s_LastTimeTimerStarted;
-  this->m_isRunning = FALSE;
+  this->m_isRunning = MX_FALSE;
   // this feels very stupid but it's what the assembly does
   this->m_startTime = this->m_startTime + startTime - 5;
 }
