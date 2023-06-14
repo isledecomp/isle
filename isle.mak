@@ -507,9 +507,41 @@ DEP_CPP_MXCRI=\
 
 SOURCE=.\LEGO1\legonavcontroller.cpp
 DEP_CPP_LEGON=\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legoutil.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxticklemanager.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
