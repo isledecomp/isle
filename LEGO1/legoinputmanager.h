@@ -7,7 +7,7 @@ __declspec(dllexport) enum NotificationId
   KEYDOWN = 0x7,
   MOUSEUP = 0x8,
   MOUSEDOWN = 0x9,
-  MOUSEMOVE = 0x10,
+  MOUSEMOVE = 0xA,
   TIMER = 0xF
 };
 
