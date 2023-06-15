@@ -5,7 +5,8 @@
 class MxOmniCreateParamBase
 {
 public:
-  ~MxOmniCreateParamBase();
+  ~MxOmniCreateParamBase() {
+  }
   virtual void vtable00(){}
 
 };
