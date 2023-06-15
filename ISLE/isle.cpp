@@ -390,7 +390,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
     case WM_KEYDOWN:
-      if (lParam & 0x40000000) {
+      if (HIWORD(lParam) & KF_REPEAT) {
         return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
       }
       keyCode = wParam;
