@@ -14,7 +14,7 @@ float g_turnMinAccel = 15.0f;
 float g_movementDecel = 50.0f;
 float g_turnDecel = 50.0f;
 float g_turnSensitivity = 0.4f;
-MxBool g_turnUseVelocity = 0;
+MxBool g_turnUseVelocity = MX_FALSE;
 
 void LegoNavController::GetDefaults(int *p_mouseDeadzone, float *p_movementMaxSpeed, float *p_turnMaxSpeed,
                                     float *p_movementMaxAccel, float *p_turnMaxAccel, float *p_movementDecel,
@@ -120,7 +120,7 @@ void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
     ResetToDefault();
   }
 
-  if (p_accel != 0)
+  if (p_accel != MX_FALSE)
   {
     this->m_targetTurnSpeed = CalculateNewTargetSpeed(p_hPos, this->m_hMax / 2, this->m_turnMaxSpeed);
     this->m_targetMovementSpeed = CalculateNewTargetSpeed(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxSpeed);
