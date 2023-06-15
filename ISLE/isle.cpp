@@ -250,7 +250,7 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 BOOL Isle::setupLegoOmni()
 {
   char mediaPath[256];
-  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
+  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
   if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
     VariableTable()->SetVariable("ACTOR_01", "");
