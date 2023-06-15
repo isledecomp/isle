@@ -30,20 +30,21 @@ MxVideoParam &MxVideoParam::operator=(const MxVideoParam &other)
   return *this;
 }
 
-// TODO: this doesn't match exactly, something weird with the conditional on id
 void MxVideoParam::SetDeviceName(char *id)
 {
   if (this->m_deviceId != 0)
     free(this->m_deviceId);
 
-  if (id == 0)
-  {
-    this->m_deviceId = 0;
-  }
-  else
+  if (id != 0)
   {
     this->m_deviceId = (char *)malloc(strlen(id) + 1);
-    strcpy(this->m_deviceId, id);
+
+    if (this->m_deviceId != 0) {
+      strcpy(this->m_deviceId, id);
+    }
+  }
+  else {
+    this->m_deviceId = 0;
   }
 }
 
