@@ -26,7 +26,7 @@ jobs:
         key: dx5sdk
 
     - name: Download DX5 SDK
-      if: steps.cache-dx5.outputs.cache-hit != 'true'
+      if: ${{ !steps.cache-dx5.outputs.cache-hit }}
       run: |
         cd dx5sdk
         C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
@@ -34,8 +34,7 @@ jobs:
         7z x .\DX5SDK.EXE
 
     - name: Cache DX5 SDK
-      if: steps.cache-dx5.outputs.cache-hit != 'true'
-      id: save-dx5
+      if: ${{ !steps.cache-dx5.outputs.cache-hit }}
       uses: actions/cache/save@v3
       with:
         path: dx5sdk
@@ -54,16 +53,52 @@ jobs:
         mkdir Release
         .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
 
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.26.4'  # Selected a particular version to avoid a look-up
+
+    - name: Build (CMake)
+      shell: cmd
+      run: |
+        call .\msvc420\bin\VCVARS32.BAT x86
+        cmake -S . -B cmake-build -DCMAKE_INSTALL_PREFIX=cmake-files -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"
+        cmake --build cmake-build
+        cmake --install cmake-build
+
+    - name: Restore cached LEGO(c) binaries
+      id: cache-lego-binaries
+      uses: actions/cache/restore@v3
+      with:
+        path: lego-binaries
+        key: lego-binaries
+
+    - name: Download LEGO(c) island binares
+      if: ${{ !steps.cache-lego-binaries.outputs.cache-hit }}
+      run: |
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=lego-binaries
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=lego-binaries
+
+    - name: Cache LEGO(c) binaries
+      if: ${{ !steps.cache-lego-binaries.outputs.cache-hit }}
+      uses: actions/cache/save@v3
+      with:
+        path: lego-binaries
+        key: lego-binaries
+
     - name: Summarize Accuracy
       shell: cmd
       run: |
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
-        pip install capstone
-        pip install colorama
-        python3 tools/reccmp/reccmp.py -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
-        python3 tools/reccmp/reccmp.py -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
-      
+        pip install -r tools/reccmp/requirements.txt
+        python3 tools/reccmp/reccmp.py -H ISLEPROGRESS.HTML lego-binaries/ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
+        python3 tools/reccmp/reccmp.py -H LEGO1PROGRESS.HTML lego-binaries/LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
+
+    - name: Summarize Accuracy (CMake)
+      shell: cmd
+      run: |
+        python3 tools/reccmp/reccmp.py -H cmake-files/ISLEPROGRESS.HTML lego-binaries/ISLE.EXE cmake-files/ISLE.EXE cmake-files/ISLE.PDB .
+        python3 tools/reccmp/reccmp.py -H cmake-files/LEGO1PROGRESS.HTML lego-binaries/LEGO1.DLL cmake-files/LEGO1.DLL cmake-files/LEGO1.PDB .
+
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -72,3 +107,4 @@ jobs:
           Release
           ISLEPROGRESS.HTML
           LEGO1PROGRESS.HTML
+          cmake-files
