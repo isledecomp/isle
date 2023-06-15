@@ -62,9 +62,9 @@ LegoNavController::LegoNavController()
   this->m_targetTurnSpeed = 0.0f;
   this->m_movementAccel = 0.0f;
   this->m_turnAccel = 0.0f;
-  this->m_trackDefault = 0;
-  this->m_unk5D = 0;
-  this->m_unk6C = 0;
+  this->m_trackDefault = MX_FALSE;
+  this->m_unk5D = MX_FALSE;
+  this->m_unk6C = MX_FALSE;
   this->m_unk64 = 0;
   this->m_unk68 = 0;
   this->m_unk60 = 0;
@@ -115,7 +115,7 @@ void LegoNavController::ResetToDefault()
 
 void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 {
-  if (this->m_trackDefault != 0)
+  if (this->m_trackDefault != MX_FALSE)
   {
     ResetToDefault();
   }
