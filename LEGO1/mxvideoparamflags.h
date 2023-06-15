@@ -1,6 +1,8 @@
 #ifndef MXVIDEOPARAMFLAGS_H
 #define MXVIDEOPARAMFLAGS_H
 
+#include <windows.h>
+
 class MxVideoParamFlags
 {
 public:
