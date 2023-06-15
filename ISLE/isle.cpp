@@ -342,13 +342,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
   case WM_EXITMENULOOP:
-    return DefWindowProcA(hWnd,WM_EXITMENULOOP,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_EXITMENULOOP, wParam, lParam);
   case WM_MOVING:
     if (g_isle && g_isle->m_fullScreen) {
       GetWindowRect(hWnd, (LPRECT) lParam);
       return 0;
     }
-    return DefWindowProcA(hWnd,WM_MOVING,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_MOVING, wParam, lParam);
   case WM_NCPAINT:
     if (g_isle && g_isle->m_fullScreen) {
       return 0;
@@ -391,7 +391,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg) {
     case WM_KEYDOWN:
       if (lParam & 0x40000000) {
-        return DefWindowProcA(hWnd,WM_KEYDOWN,wParam,lParam);
+        return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
       }
       keyCode = wParam;
       type = KEYDOWN;
