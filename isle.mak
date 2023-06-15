@@ -59,6 +59,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdirectdraw.obj"
 	-@erase ".\Release\LEGO1.DLL"
 	-@erase ".\Release\LEGO1.EXP"
 	-@erase ".\Release\LEGO1.LIB"
@@ -108,11 +109,11 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ddraw.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib /nologo /subsystem:windows /dll /incremental:no\
+ odbccp32.lib ddraw.lib /nologo /subsystem:windows /dll /incremental:no\
  /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /machine:I386\
  /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB" 
 LINK32_OBJS= \
@@ -120,7 +121,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxcriticalsection.obj"
+	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdirectdraw.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -150,6 +152,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legoomni.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdirectdraw.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase "$(OUTDIR)\LEGO1.exp"
@@ -203,11 +206,11 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ddraw.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib /nologo /subsystem:windows /dll /incremental:yes\
+ odbccp32.lib ddraw.lib /nologo /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/LEGO1.pdb" /map:"$(INTDIR)/LEGO1.map" /debug /machine:I386\
  /out:"Debug/LEGO1.DLL" /implib:"$(OUTDIR)/LEGO1.lib" 
 LINK32_OBJS= \
@@ -215,7 +218,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
 	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxcriticalsection.obj"
+	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdirectdraw.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -515,6 +519,34 @@ DEP_CPP_LEGON=\
 "$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxdirectdraw.cpp
+
+!IF  "$(CFG)" == "LEGO1 - Win32 Release"
+
+DEP_CPP_MXDIR=\
+	".\LEGO1\mxdirectdraw.h"\
+	
+
+"$(INTDIR)\mxdirectdraw.obj" : $(SOURCE) $(DEP_CPP_MXDIR) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+
+DEP_CPP_MXDIR=\
+	".\LEGO1\mxdirectdraw.h"\
+	
+
+"$(INTDIR)\mxdirectdraw.obj" : $(SOURCE) $(DEP_CPP_MXDIR) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
 
 # End Source File
 # End Target
