@@ -595,7 +595,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
 
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
@@ -604,7 +604,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
       } else {
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         if (Start(&ds) != SUCCESS) {
