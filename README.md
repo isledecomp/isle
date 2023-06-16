@@ -14,7 +14,7 @@ Currently `ISLE.EXE` is completely decompiled, however there are some known inac
 
 LEGO Island was compiled with Microsoft Visual C++ 4.20, so that's what this decompilation targets. However it should compile with NMAKE on newer versions of Visual Studio too.
 
-### Recommended Instructions:
+### Recommended Instructions
 
 These instructions use the development IDE from Visual C++ 4.20. By modern standards, it can be a little clunky to use, especially on newer versions of Windows, however it's still relatively straightforward. If you prefer a command line process that can fit into a modern workflow/IDE, see the instructions below.
 
