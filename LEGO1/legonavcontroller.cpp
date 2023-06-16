@@ -84,6 +84,7 @@ LegoNavController::LegoNavController()
 //   this->m_hMax = p_hMax;
 //   this->m_vMax = p_vMax;
 
+//   Probably checks for MxVideoParamFlags: FULL_SCREEN
 //   if ((videoManager->m_unk44 & 0x01) != 0)
 //   {
 //     this->m_hMax = 640;
