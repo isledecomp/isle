@@ -72,9 +72,17 @@ LegoNavController::LegoNavController()
   MxTimer *timer = Timer();
   this->m_time = timer->GetTime();
 
+  // TODO: InputManager()
   // LegoInputManager* inputManager = InputManager();
   // inputManager->Register(this);
 }
+
+// TODO: InputManager()
+// LegoNavController::~LegoNavController()
+// {
+//   LegoInputManager* inputManager = InputManager();
+//   inputManager->UnRegister(this);
+// }
 
 // TODO: VideoManager()
 // void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
