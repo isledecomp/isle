@@ -69,14 +69,8 @@ LegoNavController::LegoNavController()
   this->m_unk68 = 0;
   this->m_unk60 = 0;
 
-  // TODO: Timer(), InputManager()
-  // MxTimer* timer = Timer();
-  // if (timer[0xc] == 0) {
-  //   assign to this->m_Timer
-  // }
-  // else {
-  //   assign to this->m_Timer
-  // }
+  MxTimer *timer = Timer();
+  this->m_time = timer->GetTime();
 
   // LegoInputManager* inputManager = InputManager();
   // inputManager->Register(this);

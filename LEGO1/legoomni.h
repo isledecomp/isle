@@ -5,6 +5,7 @@
 #include "mxdsaction.h"
 #include "mxdsfile.h"
 #include "mxdsobject.h"
+#include "mxomni.h"
 #include "mxomnicreateparam.h"
 #include "mxresult.h"
 #include "mxstreamer.h"
@@ -28,7 +29,7 @@ class MxMusicManager;
 class MxNotificationManager;
 class MxSoundManager;
 
-class LegoOmni
+class LegoOmni : public MxOmni
 {
 public:
   __declspec(dllexport) void CreateBackgroundAudio();
@@ -70,22 +71,6 @@ private:
   int m_unk24;
   int m_unk28;
   int m_unk2c;
-  int m_unk30;
-  int m_unk34;
-  int m_unk38;
-  int m_unk3c;
-  int m_unk40;
-  int m_unk44;
-  int m_unk48;
-  int m_unk4c;
-  int m_unk50;
-  int m_unk54;
-  int m_unk58;
-  int m_unk5c;
-  int m_unk60;
-  int m_unk64;
-  int m_unk68;
-  int m_unk6c;
   LegoInputManager *m_inputMgr;
 
   static LegoOmni *m_instance;
@@ -110,7 +95,6 @@ __declspec(dllexport) LegoSoundManager * SoundManager();
 __declspec(dllexport) long Start(MxDSAction *);
 __declspec(dllexport) MxStreamer * Streamer();
 __declspec(dllexport) MxTickleManager * TickleManager();
-__declspec(dllexport) MxTimer * Timer();
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) LegoVideoManager * VideoManager();

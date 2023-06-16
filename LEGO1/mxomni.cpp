@@ -1,5 +1,12 @@
 #include "mxomni.h"
 
+MxOmni *MxOmni::m_instance = NULL;
+
+MxOmni *MxOmni::GetInstance()
+{
+  return m_instance;
+}
+
 MxResult MxOmni::Create(const MxOmniCreateParam &p)
 {
   if (p.CreateFlags().CreateTimer())
@@ -12,4 +19,9 @@ MxResult MxOmni::Create(const MxOmniCreateParam &p)
   }
 
   return SUCCESS;
+}
+
+MxTimer* Timer()
+{
+  return MxOmni::GetInstance()->GetTimer();
 }

@@ -46,7 +46,7 @@ private:
   float m_turnDecel;
   float m_turnSensitivity;
   MxBool m_turnUseVelocity;
-  MxTimer *m_Timer;
+  int m_time;
   MxBool m_trackDefault;
   MxBool m_unk5D;
   char m_unk5E[2];

@@ -503,6 +503,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomni.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
@@ -724,6 +725,7 @@ DEP_CPP_LEGON=\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomni.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\

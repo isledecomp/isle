@@ -25,6 +25,10 @@ public:
 private:
   char padding[0x3c];
   MxTimer* m_Timer;
+
+  static MxOmni *m_instance;
 };
+
+__declspec(dllexport) MxTimer * Timer();
 
 #endif // MXOMNI_H
