@@ -17,6 +17,8 @@ public:
   virtual ~MxDirectDraw();
   virtual void vtable04();
   virtual void vtable08();
+  virtual void vtable0c();
+  virtual char * ErrorToString(HRESULT);
 
 private:
   IDirectDraw *m_ddraw; // +0xc
