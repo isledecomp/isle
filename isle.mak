@@ -60,6 +60,7 @@ CLEAN :
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdsobject.obj"
 	-@erase "$(INTDIR)\mxomni.obj"
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
@@ -131,6 +132,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdsobject.obj" \
 	"$(INTDIR)\mxomni.obj" \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
@@ -169,6 +171,7 @@ CLEAN :
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdsobject.obj"
 	-@erase "$(INTDIR)\mxomni.obj"
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
@@ -244,6 +247,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdsobject.obj" \
 	"$(INTDIR)\mxomni.obj" \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
@@ -578,10 +582,14 @@ DEP_CPP_MXOMN=\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxomni.obj" : $(SOURCE) $(DEP_CPP_MXOMN) "$(INTDIR)"
@@ -594,7 +602,11 @@ DEP_CPP_MXOMN=\
 
 SOURCE=.\LEGO1\mxvideoparam.cpp
 DEP_CPP_MXVID=\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxvideoparam.obj" : $(SOURCE) $(DEP_CPP_MXVID) "$(INTDIR)"
@@ -625,8 +637,12 @@ DEP_CPP_MXOMNI=\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxomnicreateparam.obj" : $(SOURCE) $(DEP_CPP_MXOMNI) "$(INTDIR)"
@@ -698,6 +714,22 @@ DEP_CPP_LEGON=\
 
 
 # End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxdsobject.cpp
+DEP_CPP_MXDSO=\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdsobject.h"\
+	
+
+"$(INTDIR)\mxdsobject.obj" : $(SOURCE) $(DEP_CPP_MXDSO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
 # End Target
 ################################################################################
 # Begin Target
@@ -728,6 +760,9 @@ DEP_CPP_DEFIN=\
 # Begin Source File
 
 SOURCE=.\ISLE\isle.cpp
+
+!IF  "$(CFG)" == "ISLE - Win32 Release"
+
 DEP_CPP_ISLE_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
@@ -773,11 +808,48 @@ DEP_CPP_ISLE_=\
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
+!ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
+
+DEP_CPP_ISLE_=\
+	".\ISLE\define.h"\
+	".\ISLE\isle.h"\
+	".\ISLE\res\resource.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdirectdraw.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomni.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	
+
+"$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\ISLE\main.cpp
+
+!IF  "$(CFG)" == "ISLE - Win32 Release"
+
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
@@ -819,6 +891,36 @@ DEP_CPP_MAIN_=\
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
+
+!ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
+
+DEP_CPP_MAIN_=\
+	".\ISLE\define.h"\
+	".\ISLE\isle.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	
+
+"$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
 
 # End Source File
 ################################################################################

@@ -91,7 +91,7 @@ void Isle::close()
     //          (*(ViewManager **)(*(int *)(*(int *)(pLVar4 + 0x68) + 8) + 0x88), NULL);
 
     long local_88 = 0;
-    Lego()->RemoveWorld(ds.m_atomId, local_88);
+    Lego()->RemoveWorld(ds.GetAtomId(), local_88);
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
@@ -595,18 +595,18 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
 
-        ds.m_atomId = stream->atom;
-        ds.m_unk24 = 0xFFFF;
-        ds.m_unk1c = 0;
+        ds.SetAtomId(stream->atom);
+        ds.SetUnknown24(0xFFFF);
+        ds.SetUnkown1c(0);
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
         if (Start(&ds) != SUCCESS) {
           return;
         }
       } else {
-        ds.m_atomId = stream->atom;
-        ds.m_unk24 = 0xFFFF;
-        ds.m_unk1c = 0;
+        ds.SetAtomId(stream->atom);
+        ds.SetUnknown24(0xFFFF);
+        ds.SetUnkown1c(0);
         if (Start(&ds) != SUCCESS) {
           return;
         }
