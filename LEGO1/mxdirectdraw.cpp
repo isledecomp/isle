@@ -61,7 +61,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
   if (!result)
   {
     memset(&ddsd, 0, sizeof(ddsd));
-    ddsd.dwSize = 108;
+    ddsd.dwSize = sizeof(ddsd);
 
     pDDraw->GetDisplayMode(&ddsd);
     dwRGBBitCount = ddsd.ddpfPixelFormat.dwRGBBitCount;
