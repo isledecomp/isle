@@ -9,7 +9,7 @@ HRESULT MxDirectDraw::SetEntries()
 {
   HRESULT ret;
 
-  if (m_unk848) {
+  if (m_paletteIndexed8) {
     if (m_ddpal) {
       ret = m_ddpal->SetEntries(0, 0, 256, m_pal1);
       if (ret != DD_OK) {
@@ -112,7 +112,7 @@ HRESULT MxDirectDraw::FUN_1009e750()
 {
   HRESULT ret;
 
-  if (m_fullScreen && m_unk848) {
+  if (m_fullScreen && m_paletteIndexed8) {
     if (m_ddpal) {
       ret = m_ddpal->SetEntries(0, 0, 256, m_pal0);
       if (ret != DD_OK) {
