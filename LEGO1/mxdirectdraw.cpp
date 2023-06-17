@@ -85,7 +85,7 @@ int MxDirectDraw::Pause(int param_1)
       return 0;
     }
 
-    if (m_unk84c) {
+    if (m_fullScreen) {
       if (!FlipToGDISurface()) {
         return 0;
       }
@@ -112,7 +112,7 @@ HRESULT MxDirectDraw::FUN_1009e750()
 {
   HRESULT ret;
 
-  if (m_unk84c && m_unk848) {
+  if (m_fullScreen && m_unk848) {
     if (m_ddpal) {
       ret = m_ddpal->SetEntries(0, 0, 256, m_pal0);
       if (ret != DD_OK) {
