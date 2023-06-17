@@ -5,6 +5,7 @@
 #include "mxdsaction.h"
 #include "mxdsfile.h"
 #include "mxdsobject.h"
+#include "mxomni.h"
 #include "mxomnicreateparam.h"
 #include "mxresult.h"
 #include "mxstreamer.h"
