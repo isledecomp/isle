@@ -32,6 +32,4 @@ private:
 
 };
 
-BOOL DAT_10100c70 = 0;
-
 #endif // MXDIRECTDRAW_H

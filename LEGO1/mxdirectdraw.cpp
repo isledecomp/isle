@@ -2,6 +2,9 @@
 
 #include "mxdirectdraw.h"
 
+int g_paletteIndexed8 = 0;
+BOOL DAT_10100c70 = 0;
+
 HRESULT MxDirectDraw::SetEntries()
 {
   HRESULT ret;
@@ -49,11 +52,24 @@ void MxDirectDraw::FUN_1009e830(char *error_msg, HRESULT ret)
 
 int MxDirectDraw::GetPrimaryBitDepth()
 {
+  DWORD dwRGBBitCount;
   LPDIRECTDRAW pDDraw;
+  DDSURFACEDESC ddsd;
 
-  DirectDrawCreate(NULL, &pDDraw, NULL);
+  HRESULT result = DirectDrawCreate(NULL, &pDDraw, NULL);
+  dwRGBBitCount = 0;
+  if (!result)
+  {
+    memset(&ddsd, 0, sizeof(ddsd));
+    ddsd.dwSize = 108;
 
-  return 0;
+    pDDraw->GetDisplayMode(&ddsd);
+    dwRGBBitCount = ddsd.ddpfPixelFormat.dwRGBBitCount;
+    g_paletteIndexed8 = (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) != 0;
+    pDDraw->Release();
+  }
+
+  return dwRGBBitCount;
 }
 
 int MxDirectDraw::Pause(int param_1)
