@@ -24,14 +24,12 @@ private:
   PALETTEENTRY m_pal0[256]; // +0x2c
   PALETTEENTRY m_pal1[256]; // +0x42c
   HWND hWindow; // +0x83c
-  long m_unk848;
-  long m_unk84c;
+  BOOL m_paletteIndexed8;
+  BOOL m_fullScreen;
   void (*m_unk85c)(char *, HRESULT, long); // error handler or logger?
   long m_unk864;
   long m_unk86c;
 
 };
-
-BOOL DAT_10100c70 = 0;
 
 #endif // MXDIRECTDRAW_H

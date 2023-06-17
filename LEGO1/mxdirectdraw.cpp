@@ -2,11 +2,14 @@
 
 #include "mxdirectdraw.h"
 
+BOOL g_paletteIndexed8 = 0;
+BOOL DAT_10100c70 = 0;
+
 HRESULT MxDirectDraw::SetEntries()
 {
   HRESULT ret;
 
-  if (m_unk848) {
+  if (m_paletteIndexed8) {
     if (m_ddpal) {
       ret = m_ddpal->SetEntries(0, 0, 256, m_pal1);
       if (ret != DD_OK) {
@@ -49,11 +52,24 @@ void MxDirectDraw::FUN_1009e830(char *error_msg, HRESULT ret)
 
 int MxDirectDraw::GetPrimaryBitDepth()
 {
+  DWORD dwRGBBitCount;
   LPDIRECTDRAW pDDraw;
+  DDSURFACEDESC ddsd;
 
-  DirectDrawCreate(NULL, &pDDraw, NULL);
+  HRESULT result = DirectDrawCreate(NULL, &pDDraw, NULL);
+  dwRGBBitCount = 0;
+  if (!result)
+  {
+    memset(&ddsd, 0, sizeof(ddsd));
+    ddsd.dwSize = sizeof(ddsd);
 
-  return 0;
+    pDDraw->GetDisplayMode(&ddsd);
+    dwRGBBitCount = ddsd.ddpfPixelFormat.dwRGBBitCount;
+    g_paletteIndexed8 = (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) != 0;
+    pDDraw->Release();
+  }
+
+  return dwRGBBitCount;
 }
 
 int MxDirectDraw::Pause(int param_1)
@@ -69,7 +85,7 @@ int MxDirectDraw::Pause(int param_1)
       return 0;
     }
 
-    if (m_unk84c) {
+    if (m_fullScreen) {
       if (!FlipToGDISurface()) {
         return 0;
       }
@@ -96,7 +112,7 @@ HRESULT MxDirectDraw::FUN_1009e750()
 {
   HRESULT ret;
 
-  if (m_unk84c && m_unk848) {
+  if (m_fullScreen && m_paletteIndexed8) {
     if (m_ddpal) {
       ret = m_ddpal->SetEntries(0, 0, 256, m_pal0);
       if (ret != DD_OK) {
