@@ -2,7 +2,7 @@
 
 #include "mxdirectdraw.h"
 
-int g_paletteIndexed8 = 0;
+BOOL g_paletteIndexed8 = 0;
 BOOL DAT_10100c70 = 0;
 
 HRESULT MxDirectDraw::SetEntries()
