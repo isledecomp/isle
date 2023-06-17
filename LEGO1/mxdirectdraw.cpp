@@ -57,7 +57,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
   DDSURFACEDESC ddsd;
 
   HRESULT result = DirectDrawCreate(NULL, &pDDraw, NULL);
-  dwRGBBitCount = 0;
+  dwRGBBitCount = 8;
   if (!result)
   {
     memset(&ddsd, 0, sizeof(ddsd));
