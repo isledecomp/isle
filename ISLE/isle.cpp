@@ -87,8 +87,7 @@ void Isle::close()
 
     VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
-    long local_88 = 0;
-    Lego()->RemoveWorld(ds.GetAtomId(), local_88);
+    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetUnknown1c());
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();

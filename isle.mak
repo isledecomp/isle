@@ -57,6 +57,7 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
@@ -129,6 +130,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
@@ -168,6 +170,7 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
@@ -244,6 +247,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
@@ -284,6 +288,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
+	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase ".\Release\ISLE.EXE"
 
@@ -344,6 +349,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
 	".\Release\LEGO1.LIB"
 
@@ -374,6 +380,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
+	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
@@ -438,6 +445,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
 	".\LEGO1\Debug\LEGO1.lib"
 
@@ -737,6 +745,19 @@ DEP_CPP_MXDSO=\
 
 
 # End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxatomid.cpp
+DEP_CPP_MXATO=\
+	".\LEGO1\mxatomid.h"\
+	
+
+"$(INTDIR)\mxatomid.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
 # End Target
 ################################################################################
 # Begin Target
@@ -858,9 +879,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
-	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
 	".\LEGO1\viewmanager.h"\
 	
 
@@ -960,9 +979,7 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
-	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
 	".\LEGO1\viewmanager.h"\
 	
 
@@ -1445,6 +1462,19 @@ SOURCE=.\LEGO1\mxvideoparamflags.h
 !ENDIF 
 
 # End Project Dependency
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxatomid.cpp
+DEP_CPP_MXATO=\
+	".\LEGO1\mxatomid.h"\
+	
+
+"$(INTDIR)\mxatomid.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
 # End Target
 # End Project
 ################################################################################

@@ -3,6 +3,28 @@
 #include <string.h>
 #include <stdlib.h>
 
+MxDSObject::MxDSObject()
+{
+  // The following code yields 100% matching assembly if m_unk24 is declared as (signed) short.
+  // However, in other areas m_unk24 (notably, ISLE.EXE) is treated as unsigned short.
+  // this->m_unk0c = 0;
+  // this->m_unk10 = 0;
+  // this->m_unk14 = 0;
+  // this->m_name = NULL;
+  // this->m_unk24 = -1;
+  // this->m_unk1c = -1;
+  // this->m_unk28 = 0;
+
+  // Assembly not matching but m_unk24 is unsigned short (probably correct)
+  this->m_unk0c = 0;
+  this->m_unk10 = 0;
+  this->m_unk14 = 0;
+  this->m_name = NULL;
+  this->m_unk24 = 0xFFFF;
+  this->m_unk1c = -1;
+  this->m_unk28 = 0;
+}
+
 void MxDSObject::SetObjectName(const char *p_name)
 {
   // TODO: instead of the expected CMP EAX,ESI we get CMP ESI,EAX
