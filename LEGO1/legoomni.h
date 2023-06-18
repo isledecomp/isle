@@ -28,6 +28,7 @@ class MxMusicManager;
 class MxNotificationManager;
 class MxSoundManager;
 
+// class LegoOmni : public MxOmni
 class LegoOmni
 {
 public:
@@ -48,7 +49,7 @@ public:
   virtual void vtable1c();
   virtual void vtable20();
   virtual void vtable24(MxDSAction &ds);
-  virtual int vtable28(MxDSAction &ds);
+  virtual MxBool vtable28(MxDSAction &ds);
   virtual void vtable2c();
   virtual void vtable30();
   virtual void vtable34();
@@ -56,6 +57,7 @@ public:
   virtual void vtable3c();
   virtual unsigned char vtable40();
 
+  LegoVideoManager *GetVideoManager() { return m_videoMgr; }
   LegoInputManager *GetInputManager() { return m_inputMgr; }
 
 private:
@@ -69,7 +71,7 @@ private:
   int m_unk20;
   int m_unk24;
   int m_unk28;
-  int m_unk2c;
+  LegoVideoManager *m_videoMgr;
   int m_unk30;
   int m_unk34;
   int m_unk38;
