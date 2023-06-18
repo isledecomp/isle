@@ -485,6 +485,8 @@ SOURCE=.\LEGO1\dllmain.cpp
 
 SOURCE=.\LEGO1\legoomni.cpp
 DEP_CPP_LEGOO=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -519,6 +521,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
@@ -782,6 +785,8 @@ DEP_CPP_ISLE_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
 	".\ISLE\res\resource.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -817,6 +822,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"

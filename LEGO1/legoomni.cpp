@@ -11,3 +11,8 @@ LegoOmni *Lego()
 {
   return LegoOmni::GetInstance();
 }
+
+LegoVideoManager *VideoManager()
+{
+  return LegoOmni::GetInstance()->GetVideoManager();
+}

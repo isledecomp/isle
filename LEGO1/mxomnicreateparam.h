@@ -11,7 +11,7 @@
 class MxOmniCreateParam : public MxOmniCreateParamBase
 {
 public:
-  __declspec(dllexport) MxOmniCreateParam(const char *mediaPath, HWND windowHandle, MxVideoParam &vparam, MxOmniCreateFlags flags);
+  __declspec(dllexport) MxOmniCreateParam(const char *mediaPath, struct HWND__ *windowHandle, MxVideoParam &vparam, MxOmniCreateFlags flags);
   // virtual void vtable00(); seems to be a destructor
 
   const MxOmniCreateFlags& CreateFlags() const { return this->m_createFlags; }
