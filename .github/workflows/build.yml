@@ -58,8 +58,8 @@ jobs:
     - name: Summarize Accuracy
       shell: cmd
       run: |
-        C:\msys64\usr\bin\wget.exe -O ISLE.EXE https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FISLE.EXE
-        C:\msys64\usr\bin\wget.exe -O LEGO1.DLL https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FLEGO1.DLL
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
         pip install capstone
         python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
         python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
