@@ -69,6 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   }
 
   // Load accelerator (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
+  // This might indicate that this executable is derived from one of the samples in the VC6 Samples. (F.e. Samples/Com/Fundametals/TutSamp/ExeSkel/ExeSkel.Cpp)
   LoadAcceleratorsA(hInstance, "AppAccel");
 
   MSG msg;
