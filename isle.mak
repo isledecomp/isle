@@ -824,7 +824,19 @@ DEP_CPP_ISLE_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
 	".\ISLE\res\resource.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
@@ -840,10 +852,16 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
@@ -863,6 +881,8 @@ SOURCE=.\ISLE\main.cpp
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -896,6 +916,7 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
@@ -907,7 +928,19 @@ DEP_CPP_MAIN_=\
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
@@ -921,9 +954,16 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxticklemanager.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
