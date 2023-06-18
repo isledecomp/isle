@@ -56,12 +56,12 @@ jobs:
         .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
 
     - name: Summarize Accuracy
-      shell: bash
+      shell: cmd
       run: |
         C:\msys64\usr\bin\wget.exe https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FISLE.EXE
         C:\msys64\usr\bin\wget.exe https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FLEGO1.DLL
-        python3 $GITHUB_WORKSPACE/tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
-        python3 $GITHUB_WORKSPACE/tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
+        python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
+        python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
