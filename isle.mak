@@ -708,6 +708,8 @@ DEP_CPP_MXOMNICR=\
 
 SOURCE=.\LEGO1\legonavcontroller.cpp
 DEP_CPP_LEGON=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -744,6 +746,7 @@ DEP_CPP_LEGON=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
@@ -837,6 +840,8 @@ SOURCE=.\ISLE\main.cpp
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -855,6 +860,7 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxomni.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
@@ -870,6 +876,7 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
