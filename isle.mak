@@ -485,6 +485,8 @@ SOURCE=.\LEGO1\dllmain.cpp
 
 SOURCE=.\LEGO1\legoomni.cpp
 DEP_CPP_LEGOO=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -518,6 +520,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
@@ -578,10 +581,14 @@ DEP_CPP_MXOMN=\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxomni.obj" : $(SOURCE) $(DEP_CPP_MXOMN) "$(INTDIR)"
@@ -625,8 +632,12 @@ DEP_CPP_MXOMNI=\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxomnicreateparam.obj" : $(SOURCE) $(DEP_CPP_MXOMNI) "$(INTDIR)"
@@ -644,8 +655,12 @@ DEP_CPP_MXOMNIC=\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
 	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMNIC)\
@@ -732,6 +747,8 @@ DEP_CPP_ISLE_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
 	".\ISLE\res\resource.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -767,6 +784,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
