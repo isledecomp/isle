@@ -54,6 +54,14 @@ jobs:
         call .\msvc420\bin\VCVARS32.BAT x86
         mkdir Release
         .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
+
+    - name: Summarize Accuracy
+      shell: bash
+      run: |
+        wget https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FISLE.EXE
+        wget https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FLEGO1.DLL
+        python3 $GITHUB_WORKSPACE/tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
+        python3 $GITHUB_WORKSPACE/tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
