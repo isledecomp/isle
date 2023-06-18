@@ -60,6 +60,7 @@ jobs:
       run: |
         C:\msys64\usr\bin\wget.exe https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FISLE.EXE
         C:\msys64\usr\bin\wget.exe https://archive.org/download/LEGO_Island/LEGO_ISLANDI.ISO/DATA%2Fdisk%2FLEGO1.DLL
+        pip install capstone
         python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
         python3 %GITHUB_WORKSPACE%/tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
       
