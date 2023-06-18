@@ -57,9 +57,18 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\vc40.pdb"
+	-@erase "$(INTDIR)\mxomni.obj"
+	-@erase "$(INTDIR)\mxomnicreateflags.obj"
+	-@erase "$(INTDIR)\mxomnicreateparam.obj"
+	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
+	-@erase "$(INTDIR)\mxstring.obj"
+	-@erase "$(INTDIR)\mxtimer.obj"
+	-@erase "$(INTDIR)\mxvideoparam.obj"
+	-@erase "$(INTDIR)\mxvideoparamflags.obj"
 	-@erase ".\Release\LEGO1.DLL"
 	-@erase ".\Release\LEGO1.EXP"
 	-@erase ".\Release\LEGO1.LIB"
@@ -72,7 +81,7 @@ CPP=cl.exe
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /MT /W3 /GX /Zi /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"Release/LEGO1.PCH" /YX /c
 CPP_PROJ=/nologo /MT /W3 /GX /Zi /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS"\
- /Fp"Release/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ /Fp"Release/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c
 CPP_OBJS=.\LEGO1\Release/
 CPP_SBRS=.\.
 
@@ -113,15 +122,24 @@ LINK32=link.exe
 # SUBTRACT LINK32 /pdb:none /map
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib /nologo /subsystem:windows /dll /incremental:no\
+ odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:no\
  /pdb:"Release/LEGO1.PDB" /debug /machine:I386 /out:"Release/LEGO1.DLL"\
- /implib:"Release/LEGO1.LIB" 
+ /implib:"Release/LEGO1.LIB"
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxcriticalsection.obj"
+	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxomni.obj" \
+	"$(INTDIR)\mxomnicreateflags.obj" \
+	"$(INTDIR)\mxomnicreateparam.obj" \
+	"$(INTDIR)\mxomnicreateparambase.obj" \
+	"$(INTDIR)\mxstring.obj" \
+	"$(INTDIR)\mxtimer.obj" \
+	"$(INTDIR)\mxvideoparam.obj" \
+	"$(INTDIR)\mxvideoparamflags.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -149,8 +167,17 @@ CLEAN :
 	-@erase "$(INTDIR)\dllmain.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxomni.obj"
+	-@erase "$(INTDIR)\mxomnicreateflags.obj"
+	-@erase "$(INTDIR)\mxomnicreateparam.obj"
+	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
+	-@erase "$(INTDIR)\mxstring.obj"
+	-@erase "$(INTDIR)\mxtimer.obj"
+	-@erase "$(INTDIR)\mxvideoparam.obj"
+	-@erase "$(INTDIR)\mxvideoparamflags.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase "$(OUTDIR)\LEGO1.exp"
@@ -166,7 +193,7 @@ CPP=cl.exe
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"Debug/LEGO1.PCH" /YX /c
 CPP_PROJ=/nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS"\
- /Fp"Debug/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ /Fp"Debug/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c
 CPP_OBJS=.\LEGO1\Debug/
 CPP_SBRS=.\.
 
@@ -207,15 +234,24 @@ LINK32=link.exe
 # SUBTRACT LINK32 /pdb:none /map
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib /nologo /subsystem:windows /dll /incremental:yes\
+ odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/LEGO1.pdb" /debug /machine:I386 /out:"Debug/LEGO1.DLL"\
- /implib:"$(OUTDIR)/LEGO1.lib" 
+ /implib:"$(OUTDIR)/LEGO1.lib"
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxcriticalsection.obj"
+	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxomni.obj" \
+	"$(INTDIR)\mxomnicreateflags.obj" \
+	"$(INTDIR)\mxomnicreateparam.obj" \
+	"$(INTDIR)\mxomnicreateparambase.obj" \
+	"$(INTDIR)\mxstring.obj" \
+	"$(INTDIR)\mxtimer.obj" \
+	"$(INTDIR)\mxvideoparam.obj" \
+	"$(INTDIR)\mxvideoparamflags.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -256,7 +292,7 @@ CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /W3 /GX /Zi /O2 /I "LEGO1" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"Release/ISLE.PCH" /YX /c
 CPP_PROJ=/nologo /ML /W3 /GX /Zi /O2 /I "LEGO1" /D "WIN32" /D "NDEBUG" /D\
- "_WINDOWS" /Fp"Release/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "_WINDOWS" /Fp"Release/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c
 CPP_OBJS=.\ISLE\Release/
 CPP_SBRS=.\.
 
@@ -300,7 +336,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows\
  /incremental:no /pdb:"Release/ISLE.PDB" /debug /machine:I386\
- /out:"Release/ISLE.EXE" /LIBPATH:"ISLE/ext" 
+ /out:"Release/ISLE.EXE" /LIBPATH:"ISLE/ext"
 LINK32_OBJS= \
 	"$(INTDIR)\define.obj" \
 	"$(INTDIR)\isle.obj" \
@@ -350,7 +386,7 @@ CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "LEGO1" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"Debug/ISLE.PCH" /YX /c
 CPP_PROJ=/nologo /MLd /W3 /Gm /GX /Zi /Od /I "LEGO1" /D "WIN32" /D "_DEBUG" /D\
- "_WINDOWS" /Fp"Debug/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "_WINDOWS" /Fp"Debug/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c
 CPP_OBJS=.\ISLE\Debug/
 CPP_SBRS=.\.
 
@@ -451,6 +487,8 @@ SOURCE=.\LEGO1\dllmain.cpp
 
 SOURCE=.\LEGO1\legoomni.cpp
 DEP_CPP_LEGOO=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -484,6 +522,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
@@ -500,6 +539,163 @@ DEP_CPP_MXCRI=\
 	
 
 "$(INTDIR)\mxcriticalsection.obj" : $(SOURCE) $(DEP_CPP_MXCRI) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxautolocker.cpp
+DEP_CPP_MXAUT=\
+	".\LEGO1\mxautolocker.h"\
+	".\LEGO1\mxcriticalsection.h"\
+
+
+"$(INTDIR)\mxautolocker.obj" : $(SOURCE) $(DEP_CPP_MXAUT) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxtimer.cpp
+DEP_CPP_MXTIM=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxtimer.h"\
+
+
+"$(INTDIR)\mxtimer.obj" : $(SOURCE) $(DEP_CPP_MXTIM) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxomni.cpp
+DEP_CPP_MXOMN=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxomni.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+
+
+"$(INTDIR)\mxomni.obj" : $(SOURCE) $(DEP_CPP_MXOMN) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxvideoparam.cpp
+DEP_CPP_MXVID=\
+	".\LEGO1\mxvideoparam.h"\
+
+
+"$(INTDIR)\mxvideoparam.obj" : $(SOURCE) $(DEP_CPP_MXVID) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxvideoparamflags.cpp
+DEP_CPP_MXVIDE=\
+	".\LEGO1\mxvideoparamflags.h"\
+
+
+"$(INTDIR)\mxvideoparamflags.obj" : $(SOURCE) $(DEP_CPP_MXVIDE) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxomnicreateparam.cpp
+DEP_CPP_MXOMNI=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+
+
+"$(INTDIR)\mxomnicreateparam.obj" : $(SOURCE) $(DEP_CPP_MXOMNI) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxomnicreateparambase.cpp
+DEP_CPP_MXOMNIC=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+
+
+"$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMNIC)\
+ "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxstring.cpp
+DEP_CPP_MXSTR=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxstring.h"\
+
+
+"$(INTDIR)\mxstring.obj" : $(SOURCE) $(DEP_CPP_MXSTR) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxomnicreateflags.cpp
+DEP_CPP_MXOMNICR=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+
+
+"$(INTDIR)\mxomnicreateflags.obj" : $(SOURCE) $(DEP_CPP_MXOMNICR) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -553,6 +749,8 @@ DEP_CPP_ISLE_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
 	".\ISLE\res\resource.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoanimationmanager.h"\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
@@ -588,6 +786,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
 "$(INTDIR)\isle.obj" : $(SOURCE) $(DEP_CPP_ISLE_) "$(INTDIR)"
@@ -668,7 +867,7 @@ SOURCE=.\ISLE\res\isle.rc
 # Begin Source File
 
 SOURCE=.\LEGO1\mxomnicreateparambase.cpp
-DEP_CPP_MXOMN=\
+DEP_CPP_MXOMNIC=\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
@@ -682,7 +881,8 @@ DEP_CPP_MXOMN=\
 	".\LEGO1\mxvideoparamflags.h"\
 	
 
-"$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMN) "$(INTDIR)"
+"$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMNIC)\
+ "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 

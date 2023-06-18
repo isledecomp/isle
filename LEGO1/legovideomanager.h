@@ -1,16 +1,18 @@
 #ifndef LEGOVIDEOMANAGER_H
 #define LEGOVIDEOMANAGER_H
 
+#include "lego3dmanager.h"
+
+// class LegoVideoManager : public MxVideoManager
 class LegoVideoManager
 {
 public:
   __declspec(dllexport) int EnableRMDevice();
-
   __declspec(dllexport) int DisableRMDevice();
-
   __declspec(dllexport) void EnableFullScreenMovie(unsigned char a, unsigned char b);
-
   __declspec(dllexport) void MoveCursor(int x, int y);
+
+  inline Lego3DManager *Get3DManager() { return this->m_3dManager; }
 
   int m_unk00;
   int m_unk04;
@@ -38,11 +40,10 @@ public:
   int m_unk5c;
   int m_unk60;
   int m_unk64;
-  int m_unk68;
+  Lego3DManager *m_3dManager;
   int m_unk6c;
   int m_unk70;
   int *m_unk74;
-
 };
 
 #endif // LEGOVIDEOMANAGER_H

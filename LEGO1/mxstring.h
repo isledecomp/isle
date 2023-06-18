@@ -10,6 +10,8 @@ public:
   __declspec(dllexport) virtual ~MxString();
   __declspec(dllexport) const MxString &operator=(const char *);
 
+  MxString();
+
 private:
   char *m_data;
   unsigned short m_length;

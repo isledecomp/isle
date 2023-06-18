@@ -88,10 +88,7 @@ void Isle::close()
       InputManager()->QueueEvent(KEYDOWN, 0, 0, 0, 0x20);
     }
 
-    // FIXME: Untangle
-    //VideoManager()->GetViewManager()->RemoveAll(NULL);
-    //ViewManager::RemoveAll
-    //          (*(ViewManager **)(*(int *)(*(int *)(pLVar4 + 0x68) + 8) + 0x88), NULL);
+    VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
     long local_88 = 0;
     Lego()->RemoveWorld(ds.m_atomId, local_88);
@@ -105,7 +102,7 @@ void Isle::close()
     } while (lVar8 == 0);
 
     while (Lego()) {
-      if (Lego()->vtable28(ds) != 0) {
+      if (Lego()->vtable28(ds) != MX_FALSE) {
         break;
       }
 
