@@ -35,14 +35,14 @@ BOOL StartDirectSound(void)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
   // Look for another instance, if we find one, bring it to the foreground instead
-  if (!findExistingInstance()) {
+  if (!FindExistingInstance()) {
     return 0;
   }
 
   // Attempt to create DirectSound instance
   BOOL soundReady = FALSE;
   for (int i = 0; i < 20; i++) {
-    if (startDirectSound()) {
+    if (StartDirectSound()) {
       soundReady = TRUE;
       break;
     }
