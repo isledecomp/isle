@@ -1,6 +1,6 @@
 # LEGO Island Decompilation
 
-[Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
+[Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Contributing](https://github.com/isledecomp/isle/blob/master/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
   
 This is a **work-in-progress** decompilation of LEGO Island version 1.1. It aims to be relatively faithful, but not byte accurate. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
 
@@ -14,7 +14,7 @@ Currently `ISLE.EXE` is completely decompiled, however there are some known inac
 
 LEGO Island was compiled with Microsoft Visual C++ 4.20, so that's what this decompilation targets. However it should compile with NMAKE on newer versions of Visual Studio too.
 
-### Recommended Instructions:
+### Recommended Instructions
 
 These instructions use the development IDE from Visual C++ 4.20. By modern standards, it can be a little clunky to use, especially on newer versions of Windows, however it's still relatively straightforward. If you prefer a command line process that can fit into a modern workflow/IDE, see the instructions below.
 
@@ -42,6 +42,10 @@ For some users, this may be preferable to using an obsolete graphical IDE. Any m
 Simply place the compiled `ISLE.EXE` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Unless you're a developer, disregard the compiled `LEGO1.DLL` for now as it is too incomplete to be usable. Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys point to the correct location for the asset files.
 
 Ideally, this decompilation should be paired with version 1.1. It may work on 1.0 too, however this is not guaranteed.
+
+## Contributing
+
+If you're interested in helping/contributing to this project, check out the [CONTRIBUTING](https://github.com/isledecomp/isle/blob/master/CONTRIBUTING.md) page.
 
 ## Additional Information
 

@@ -12,6 +12,9 @@ public:
   __declspec(dllexport) virtual long Open(unsigned long);
   __declspec(dllexport) virtual long Read(unsigned char *,unsigned long);
   __declspec(dllexport) virtual long Seek(long,int);
+private:
+  char m_unknown[0x70];
+  unsigned long m_buffersize;
 };
 
 #endif // MXDSFILE_H

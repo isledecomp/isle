@@ -1,7 +1,7 @@
 #ifndef MXCRITICALSECTION_H
 #define MXCRITICALSECTION_H
 
-#include <Windows.h>
+#include "legoinc.h"
 
 class MxCriticalSection
 {

@@ -1,7 +1,9 @@
 #ifndef MXATOMID_H
 #define MXATOMID_H
 
-enum LookupMode;
+enum LookupMode
+{
+};
 
 class MxAtomId
 {

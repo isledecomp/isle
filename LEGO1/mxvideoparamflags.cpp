@@ -1,5 +1,6 @@
 #include "mxvideoparamflags.h"
 
+// OFFSET: LEGO1 0x100bec40
 MxVideoParamFlags::MxVideoParamFlags()
 {
   // TODO: convert to EnableXXX function calls

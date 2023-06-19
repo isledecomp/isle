@@ -1,11 +1,12 @@
-#include <DSOUND.H>
-#include <Windows.h>
+#include <dsound.h>
+#include <windows.h>
 
 #include "define.h"
 #include "isle.h"
 #include "legoomni.h"
 
-BOOL findExistingInstance(void)
+// OFFSET: ISLE 0x401ca0
+BOOL FindExistingInstance(void)
 {
   HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
   if (hWnd) {
@@ -17,9 +18,10 @@ BOOL findExistingInstance(void)
   return 1;
 }
 
-BOOL startDirectSound(void)
+// OFFSET: ISLE 0x401ce0
+BOOL StartDirectSound(void)
 {
-  LPDIRECTSOUND lpDS = 0;
+  LPDIRECTSOUND lpDS = NULL;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
   if (ret == DS_OK && lpDS != NULL) {
     lpDS->Release();
@@ -29,17 +31,18 @@ BOOL startDirectSound(void)
   return FALSE;
 }
 
+// OFFSET: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
   // Look for another instance, if we find one, bring it to the foreground instead
-  if (!findExistingInstance()) {
+  if (!FindExistingInstance()) {
     return 0;
   }
 
   // Attempt to create DirectSound instance
   BOOL soundReady = FALSE;
   for (int i = 0; i < 20; i++) {
-    if (startDirectSound()) {
+    if (StartDirectSound()) {
       soundReady = TRUE;
       break;
     }
@@ -49,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   // Throw error if sound unavailable
   if (!soundReady) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other applications and try again.",
-      "Lego Island Error",0);
+      "Lego Island Error", MB_OK);
     return 0;
   }
 
@@ -57,8 +60,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   g_isle = new Isle();
 
   // Create window
-  if (g_isle->setupWindow(hInstance) != SUCCESS) {
-    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error",0);
+  if (g_isle->SetupWindow(hInstance) != SUCCESS) {
+    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }
 
@@ -68,7 +71,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window = g_isle->m_windowHandle;
   }
 
-  // Load accelerator (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
+  // Load accelerators (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
+  // This line may actually be here because it's in DFVIEW, an example project that ships with
+  // MSVC420, and was such a clean example of a Win32 app, that it was later adapted
+  // into an "ExeSkeleton" sample for MSVC600. It's quite possible Mindscape derived
+  // this app from that example since they no longer had the luxury of the
+  // MFC AppWizard which we know they used for the frontend used during development (ISLEMFC.EXE, MAIN.EXE, et al.)
   LoadAcceleratorsA(hInstance, "AppAccel");
 
   MSG msg;
@@ -76,12 +84,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   while (!g_closed) {
     while (!PeekMessageA(&msg, NULL, 0, 0, PM_NOREMOVE)) {
       if (g_isle) {
-        g_isle->tick(1);
+        g_isle->Tick(1);
       }
     }
 
     if (g_isle) {
-      g_isle->tick(1);
+      g_isle->Tick(1);
     }
 
     if (g_closed) {
@@ -121,7 +129,7 @@ LAB_00401bc7:
         }
       } else if (g_mousemoved) {
         if (g_isle) {
-          g_isle->tick(0);
+          g_isle->Tick(0);
         }
         goto LAB_00401bc7;
       }

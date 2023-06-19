@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// OFFSET: LEGO1 0x100ae200
 MxString::MxString()
 {
   // Set string to one char in length and set that char to null terminator
@@ -11,6 +12,7 @@ MxString::MxString()
 }
 
 // TODO: this *mostly* matches, again weird with the comparison
+// OFFSET: LEGO1 0x100ae510
 const MxString &MxString::operator=(const char *param)
 {
   if (this->m_data != param)
@@ -24,6 +26,7 @@ const MxString &MxString::operator=(const char *param)
   return *this;
 }
 
+// OFFSET: LEGO1 0x100ae420
 MxString::~MxString()
 {
   free(this->m_data);

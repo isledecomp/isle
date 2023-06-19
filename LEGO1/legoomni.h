@@ -1,35 +1,23 @@
 #ifndef LEGOOMNI_H
 #define LEGOOMNI_H
 
+#include "legoentity.h"
+#include "legoinputmanager.h"
+#include "legogamestate.h"
+#include "legonavcontroller.h"
+#include "legoroi.h"
+#include "legovideomanager.h"
+#include "mxatomid.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsaction.h"
 #include "mxdsfile.h"
 #include "mxdsobject.h"
-#include "mxomnicreateparam.h"
-#include "mxresult.h"
-#include "mxstreamer.h"
-#include "mxticklemanager.h"
-#include "mxtimer.h"
+#include "mxomni.h"
 #include "mxtransitionmanager.h"
-#include "legoanimationmanager.h"
-#include "legobuildingmanager.h"
-#include "legoentity.h"
-#include "legogamestate.h"
-#include "legoinputmanager.h"
-#include "legomodelpresenter.h"
-#include "legopartpresenter.h"
-#include "legoroi.h"
-#include "legoworldpresenter.h"
-#include "legovideomanager.h"
 
 class LegoSoundManager;
-class MxEventManager;
-class MxMusicManager;
-class MxNotificationManager;
-class MxSoundManager;
 
-// class LegoOmni : public MxOmni
-class LegoOmni
+class LegoOmni : public MxOmni
 {
 public:
   __declspec(dllexport) void CreateBackgroundAudio();
@@ -38,15 +26,15 @@ public:
   __declspec(dllexport) static void CreateInstance();
   __declspec(dllexport) static LegoOmni *GetInstance();
 
-  virtual ~LegoOmni();
+  LegoOmni();
+  virtual ~LegoOmni(); // vtable+00
 
-  virtual void vtable04();
-  virtual void vtable08();
-  virtual void vtable0c();
-  virtual void vtable10();
-  virtual void vtable14();
-  virtual MxResult Create(const MxOmniCreateParam &p);
-  virtual void vtable1c();
+  virtual long Notify(MxParam &p); // vtable+04
+  virtual const char *GetClassName() const; // vtable+0c
+  virtual MxBool IsClass(const char *name) const; // vtable+10;
+  virtual void Init(); // vtable+14
+  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
+  virtual void Destroy(); // vtable+1c
   virtual void vtable20();
   virtual void vtable24(MxDSAction &ds);
   virtual MxBool vtable28(MxDSAction &ds);
@@ -57,40 +45,20 @@ public:
   virtual void vtable3c();
   virtual unsigned char vtable40();
 
-  LegoVideoManager *GetVideoManager() { return m_videoMgr; }
+  LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoInputManager *GetInputManager() { return m_inputMgr; }
 
 private:
-  int m_unk04;
-  int m_unk08;
-  int m_unk0c;
-  int m_unk10;
-  int m_unk14;
-  int m_unk18;
-  int m_unk1c;
-  int m_unk20;
-  int m_unk24;
-  int m_unk28;
-  LegoVideoManager *m_videoMgr;
-  int m_unk30;
-  int m_unk34;
-  int m_unk38;
-  int m_unk3c;
-  int m_unk40;
-  int m_unk44;
-  int m_unk48;
-  int m_unk4c;
-  int m_unk50;
-  int m_unk54;
-  int m_unk58;
-  int m_unk5c;
-  int m_unk60;
-  int m_unk64;
   int m_unk68;
   int m_unk6c;
-  LegoInputManager *m_inputMgr;
-
-  static LegoOmni *m_instance;
+  LegoInputManager *m_inputMgr; // 0x70
+  char m_unk74[0x10];
+  LegoNavController *m_navController; // 0x84
+  char m_unk88[0x14];
+  LegoGameState *m_gameState; // 0x9c
+  char m_unka0[0x94];
+  MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
+  MxTransitionManager *m_transitionManager; // 0x138
 
 };
 
@@ -112,7 +80,6 @@ __declspec(dllexport) LegoSoundManager * SoundManager();
 __declspec(dllexport) long Start(MxDSAction *);
 __declspec(dllexport) MxStreamer * Streamer();
 __declspec(dllexport) MxTickleManager * TickleManager();
-__declspec(dllexport) MxTimer * Timer();
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) LegoVideoManager * VideoManager();
