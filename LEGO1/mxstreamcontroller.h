@@ -1,6 +1,8 @@
 #ifndef MXSTREAMCONTROLLER_H
 #define MXSTREAMCONTROLLER_H
 
+#include "mxatomid.h"
+
 class MxStreamController
 {
 public:

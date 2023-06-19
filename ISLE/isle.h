@@ -1,7 +1,7 @@
 #ifndef ISLE_H
 #define ISLE_H
 
-#include <Windows.h>
+#include <windows.h>
 
 #include "mxresult.h"
 #include "mxvideoparam.h"
@@ -12,21 +12,21 @@ public:
   Isle();
   ~Isle();
 
-  static void close();
+  static void Close();
 
-  MxResult setupWindow(HINSTANCE hInstance);
+  MxResult SetupWindow(HINSTANCE hInstance);
 
-  void tick(BOOL sleepIfNotNextFrame);
+  void Tick(BOOL sleepIfNotNextFrame);
 
-  BOOL setupLegoOmni();
-  void loadConfig();
-  void setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
+  BOOL SetupLegoOmni();
+  void LoadConfig();
+  void SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
                        BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
                        BOOL wideViewAngle, char *deviceId);
 
-  void setupCursor(WPARAM wParam);
+  void SetupCursor(WPARAM wParam);
 
-//private:
+// private:
 
   // 0
   LPSTR m_hdPath;

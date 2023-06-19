@@ -43,6 +43,10 @@ Simply place the compiled `ISLE.EXE` into LEGO Island's install folder (usually 
 
 Ideally, this decompilation should be paired with version 1.1. It may work on 1.0 too, however this is not guaranteed.
 
+## Contributing
+
+If you're interested in helping/contributing to this project, check out the [CONTRIBUTING](https://github.com/isledecomp/isle/blob/master/CONTRIBUTING.md) page.
+
 ## Additional Information
 
 ### Which version of LEGO Island do I have?

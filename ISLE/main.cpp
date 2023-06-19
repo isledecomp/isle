@@ -1,11 +1,12 @@
-#include <DSOUND.H>
-#include <Windows.h>
+#include <dsound.h>
+#include <windows.h>
 
 #include "define.h"
 #include "isle.h"
 #include "legoomni.h"
 
-BOOL findExistingInstance(void)
+// OFFSET: ISLE 0x401ca0
+BOOL FindExistingInstance(void)
 {
   HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
   if (hWnd) {
@@ -17,9 +18,10 @@ BOOL findExistingInstance(void)
   return 1;
 }
 
-BOOL startDirectSound(void)
+// OFFSET: ISLE 0x401ce0
+BOOL StartDirectSound(void)
 {
-  LPDIRECTSOUND lpDS = 0;
+  LPDIRECTSOUND lpDS = NULL;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
   if (ret == DS_OK && lpDS != NULL) {
     lpDS->Release();
@@ -29,6 +31,7 @@ BOOL startDirectSound(void)
   return FALSE;
 }
 
+// OFFSET: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
   // Look for another instance, if we find one, bring it to the foreground instead
@@ -49,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   // Throw error if sound unavailable
   if (!soundReady) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other applications and try again.",
-      "Lego Island Error",0);
+      "Lego Island Error", MB_OK);
     return 0;
   }
 
@@ -57,8 +60,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   g_isle = new Isle();
 
   // Create window
-  if (g_isle->setupWindow(hInstance) != SUCCESS) {
-    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error",0);
+  if (g_isle->SetupWindow(hInstance) != SUCCESS) {
+    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }
 
@@ -76,12 +79,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   while (!g_closed) {
     while (!PeekMessageA(&msg, NULL, 0, 0, PM_NOREMOVE)) {
       if (g_isle) {
-        g_isle->tick(1);
+        g_isle->Tick(1);
       }
     }
 
     if (g_isle) {
-      g_isle->tick(1);
+      g_isle->Tick(1);
     }
 
     if (g_closed) {
@@ -121,7 +124,7 @@ LAB_00401bc7:
         }
       } else if (g_mousemoved) {
         if (g_isle) {
-          g_isle->tick(0);
+          g_isle->Tick(0);
         }
         goto LAB_00401bc7;
       }

@@ -1,8 +1,7 @@
 #ifndef MXOMNICREATEPARAM_H
 #define MXOMNICREATEPARAM_H
 
-#include <Windows.h>
-
+#include "legoinc.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparambase.h"
 #include "mxstring.h"
@@ -12,7 +11,6 @@ class MxOmniCreateParam : public MxOmniCreateParamBase
 {
 public:
   __declspec(dllexport) MxOmniCreateParam(const char *mediaPath, struct HWND__ *windowHandle, MxVideoParam &vparam, MxOmniCreateFlags flags);
-  // virtual void vtable00(); seems to be a destructor
 
   const MxOmniCreateFlags& CreateFlags() const { return this->m_createFlags; }
 
