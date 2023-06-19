@@ -84,6 +84,7 @@ Isle::~Isle()
 void Isle::Close()
 {
   MxDSAction ds;
+  ds.SetUnknown24(0xFFFE);
 
   if (Lego()) {
     GameState()->Save(0);
