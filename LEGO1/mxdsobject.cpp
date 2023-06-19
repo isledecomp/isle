@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+// OFFSET: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
   // The following code yields 100% matching assembly if m_unk24 is declared as (signed) short.
@@ -25,6 +26,7 @@ MxDSObject::MxDSObject()
   this->m_unk28 = 0;
 }
 
+// OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {
   // TODO: instead of the expected CMP EAX,ESI we get CMP ESI,EAX
@@ -45,3 +47,9 @@ void MxDSObject::SetObjectName(const char *p_name)
   }
 }
 
+// OFFSET: ISLE 0x00401c40
+// OFFSET: LEGO1 0x10005530
+void MxDSObject::SetAtomId(MxAtomId p_atomId)
+{
+  this->m_atomId = p_atomId;
+}
