@@ -125,19 +125,23 @@ def get_recompiled_address(filename, line):
     # Convert filename to Wine path
     filename = get_wine_path(filename)
 
-  print('Looking for ' + filename + ' line ' + str(line))
+  #print('Looking for ' + filename + ' line ' + str(line))
 
   addr = None
   found = False
 
   for i, s in enumerate(line_dump):
-    if s.startswith('  ' + filename):
-      lines = line_dump[i + 2].split()
-      if line == int(lines[0]):
-        # Found address
-        addr = int(lines[1], 16)
-        found = True
-        break
+    try:
+      sourcepath = s.split()[0]
+      if os.path.isfile(sourcepath) and os.path.samefile(sourcepath, filename):
+        lines = line_dump[i + 2].split()
+        if line == int(lines[0]):
+          # Found address
+          addr = int(lines[1], 16)
+          found = True
+          break
+    except IndexError:
+      pass
 
   if found:
     # Find size of function
