@@ -1,7 +1,7 @@
 #ifndef MXOMNICREATEPARAM_H
 #define MXOMNICREATEPARAM_H
 
-#include <Windows.h>
+#include <windows.h>
 
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparambase.h"

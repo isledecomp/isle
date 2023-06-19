@@ -1,5 +1,5 @@
-#include <DSOUND.H>
-#include <Windows.h>
+#include <dsound.h>
+#include <windows.h>
 
 #include "define.h"
 #include "isle.h"
@@ -21,7 +21,7 @@ BOOL findExistingInstance(void)
 // OFFSET: ISLE 0x401ce0
 BOOL startDirectSound(void)
 {
-  LPDIRECTSOUND lpDS = 0;
+  LPDIRECTSOUND lpDS = NULL;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
   if (ret == DS_OK && lpDS != NULL) {
     lpDS->Release();
@@ -52,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   // Throw error if sound unavailable
   if (!soundReady) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" is not detecting a DirectSound compatible sound card.  Please quit all other applications and try again.",
-      "Lego Island Error",0);
+      "Lego Island Error", MB_OK);
     return 0;
   }
 
@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
   // Create window
   if (g_isle->setupWindow(hInstance) != SUCCESS) {
-    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error",0);
+    MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }
 

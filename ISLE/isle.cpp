@@ -254,7 +254,7 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 BOOL Isle::setupLegoOmni()
 {
   char mediaPath[256];
-  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
+  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
   if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
     VariableTable()->SetVariable("ACTOR_01", "");
@@ -348,13 +348,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
   case WM_EXITMENULOOP:
-    return DefWindowProcA(hWnd,WM_EXITMENULOOP,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_EXITMENULOOP, wParam, lParam);
   case WM_MOVING:
     if (g_isle && g_isle->m_fullScreen) {
       GetWindowRect(hWnd, (LPRECT) lParam);
       return 0;
     }
-    return DefWindowProcA(hWnd,WM_MOVING,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_MOVING, wParam, lParam);
   case WM_NCPAINT:
     if (g_isle && g_isle->m_fullScreen) {
       return 0;
@@ -396,8 +396,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
     case WM_KEYDOWN:
-      if (lParam & 0x40000000) {
-        return DefWindowProcA(hWnd,WM_KEYDOWN,wParam,lParam);
+      // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
+      // to be what the assembly is actually doing
+      if (lParam & (KF_REPEAT << 16)) {
+        return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
       }
       keyCode = wParam;
       type = KEYDOWN;
@@ -603,7 +605,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
 
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
@@ -612,7 +614,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
       } else {
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         if (Start(&ds) != SUCCESS) {
