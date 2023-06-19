@@ -1,6 +1,8 @@
 #ifndef MXTICKLEMANAGER_H
 #define MXTICKLEMANAGER_H
 
+#include "mxcore.h"
+
 class MxTickleManager : public MxCore
 {
 public:

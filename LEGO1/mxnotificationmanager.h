@@ -1,0 +1,9 @@
+#ifndef MXNOTIFICATIONMANAGER_H
+#define MXNOTIFICATIONMANAGER_H
+
+class MxNotificationManager
+{
+  
+};
+
+#endif // MXNOTIFICATIONMANAGER_H
