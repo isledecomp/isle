@@ -288,7 +288,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxdsobject.obj"
+	-@erase "$(INTDIR)\mx.obj"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Release\ISLE.EXE"
 	-@erase ".\Release\ISLE.PDB"
@@ -350,7 +350,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxdsobject.obj" \
+	"$(INTDIR)\mx.obj" \
 	".\Release\LEGO1.LIB"
 
 ".\Release\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -380,7 +380,7 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxdsobject.obj"
+	-@erase "$(INTDIR)\mx.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Debug\ISLE.EXE"
@@ -444,7 +444,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxdsobject.obj" \
+	"$(INTDIR)\mx.obj" \
 	".\LEGO1\Debug\LEGO1.lib"
 
 ".\Debug\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -484,6 +484,9 @@ DEP_CPP_MXCOR=\
 # Begin Source File
 
 SOURCE=.\LEGO1\dllmain.cpp
+
+!IF  "$(CFG)" == "LEGO1 - Win32 Release"
+
 DEP_CPP_DLLMA=\
 	".\LEGO1\legoinc.h"\
 	
@@ -491,6 +494,18 @@ DEP_CPP_DLLMA=\
 "$(INTDIR)\dllmain.obj" : $(SOURCE) $(DEP_CPP_DLLMA) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
+
+!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+
+DEP_CPP_DLLMA=\
+	".\LEGO1\legoinc.h"\
+	
+
+"$(INTDIR)\dllmain.obj" : $(SOURCE) $(DEP_CPP_DLLMA) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
 
 # End Source File
 ################################################################################
@@ -1458,12 +1473,15 @@ SOURCE=.\LEGO1\mxvideoparamflags.h
 ################################################################################
 # Begin Source File
 
-SOURCE=.\ISLE\mxdsobject.cpp
-NODEP_CPP_MXDSO=\
-	".\ISLE\mxdsobject.h"\
+SOURCE=.\ISLE\mx.cpp
+DEP_CPP_MX_CP=\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxdsobject.h"\
 	
 
-"$(INTDIR)\mxdsobject.obj" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\mx.obj" : $(SOURCE) $(DEP_CPP_MX_CP) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
