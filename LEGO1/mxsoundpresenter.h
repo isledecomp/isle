@@ -1,0 +1,4 @@
+class MxSoundPresenter : public MxAudioPresenter
+{
+	
+}

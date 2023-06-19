@@ -1,7 +1,9 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
-class LegoWorld
+#include "legoentity.h"
+
+class LegoWorld : public LegoEntity
 {
 public:
   __declspec(dllexport) LegoWorld();

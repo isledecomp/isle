@@ -1,0 +1,4 @@
+class LegoLoopingAnimPresenter : public LegoAnimPresenter
+{
+  
+}
