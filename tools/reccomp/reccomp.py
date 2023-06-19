@@ -88,6 +88,9 @@ print()
 def get_recompiled_address(filename, line):
   global line_dump, sym_dump
 
+  def get_wine_path(fn):
+    return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
+
   # Load source lines from PDB
   if not line_dump:
     call = ['cvdump', '-l', '-s']
@@ -95,7 +98,7 @@ def get_recompiled_address(filename, line):
     if os.name != 'nt':
       # Run cvdump through wine and convert path to Windows-friendly wine path
       call.insert(0, 'wine')
-      call.append(subprocess.check_output(['winepath', '-w', syms]).strip())
+      call.append(get_wine_path(syms))
     else:
       call.append(syms)
 
@@ -104,7 +107,7 @@ def get_recompiled_address(filename, line):
   # Find requested filename/line in PDB
   if os.name != 'nt':
     # Convert filename to Wine path
-    filename = subprocess.check_output(['winepath', '-w', filename]).decode('utf-8').strip()
+    filename = get_wine_path(filename)
 
   #print('Looking for ' + filename + ' line ' + str(line))
 
