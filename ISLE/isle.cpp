@@ -396,7 +396,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
     case WM_KEYDOWN:
-      if (HIWORD(lParam) & KF_REPEAT) {
+      // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
+      // to be what the assembly is actually doing
+      if (lParam & (KF_REPEAT << 16)) {
         return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
       }
       keyCode = wParam;
