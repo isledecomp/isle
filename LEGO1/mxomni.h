@@ -9,8 +9,7 @@
 #include "mxomnicreateflags.h"
 #include "mxtimer.h"
 
-
-class MxOmni
+class MxOmni : public MxCore
 {
 public:
   __declspec(dllexport) static void DestroyInstance();
@@ -27,15 +26,27 @@ public:
   MxTimer* GetTimer() const { return this->m_Timer; } 
 
 private:
-  static MxOmni* m_instance; // INCORRECT, PLACEHOLDER
-  char m_unknown[0x10];
-  MxVariableTable* m_variabletable; //0x20
-  MxTickleManager* m_ticklemanager; //0x24
-  MxNotificationManager* m_notificationmanager; //0x28
-  char m_unknown2[0x4]; //0x2C
-  MxSoundManager* m_soundmanager; //0x30
-  MxMusicManager* m_musicmanager; //0x34
-  MxEventManager* m_eventmanager; //0x38
-  MxTimer* m_Timer; //0x3C
+  static MxOmni* m_instance;
+
+  MxString m_mediaPath; // 0x8
+  HWND *m_windowHandle; // 0x18;
+  MxObjectFactory *m_objectFactory; // 0x1C
+  MxVariableTable* m_variableTable; //0x20
+  MxTickleManager* m_tickleManager; //0x24
+  MxNotificationManager* m_notificationManager; //0x28
+  MxVideoManager *m_videoManager; //0x2C
+  MxSoundManager* m_soundManager; //0x30
+  MxMusicManager* m_musicManager; //0x34
+  MxEventManager* m_eventManager; //0x38
+  MxTimer* m_timer; //0x3C
   MxStreamer* m_streamer; //0x40
+
+  char unknown44[0x4]; // 0x44
+
+  MxCriticalSection m_criticalsection; // 0x48
+
+  char unknown64[0x4]; // 0x64
+
 };
+
+#endif // MXOMNI_H
