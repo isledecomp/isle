@@ -610,7 +610,7 @@ void Isle::Tick(BOOL sleepIfNotNextFrame)
 
         ds.SetAtomId(stream->atom);
         ds.SetUnknown24(0xFFFF);
-        ds.SetUnkown1c(0);
+        ds.SetUnknown1c(0);
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
         if (Start(&ds) != SUCCESS) {
@@ -619,7 +619,7 @@ void Isle::Tick(BOOL sleepIfNotNextFrame)
       } else {
         ds.SetAtomId(stream->atom);
         ds.SetUnknown24(0xFFFF);
-        ds.SetUnkown1c(0);
+        ds.SetUnknown1c(0);
         if (Start(&ds) != SUCCESS) {
           return;
         }
