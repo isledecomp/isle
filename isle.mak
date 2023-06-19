@@ -566,7 +566,6 @@ DEP_CPP_LEGOO=\
 
 SOURCE=.\LEGO1\mxcriticalsection.cpp
 DEP_CPP_MXCRI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
 
@@ -580,7 +579,6 @@ DEP_CPP_MXCRI=\
 
 SOURCE=.\LEGO1\mxautolocker.cpp
 DEP_CPP_MXAUT=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxautolocker.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
@@ -667,7 +665,6 @@ DEP_CPP_MXVID=\
 
 SOURCE=.\LEGO1\mxvideoparamflags.cpp
 DEP_CPP_MXVIDE=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxvideoparamflags.h"\
 	
 
@@ -681,7 +678,6 @@ DEP_CPP_MXVIDE=\
 
 SOURCE=.\LEGO1\mxomnicreateparam.cpp
 DEP_CPP_MXOMNI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
@@ -705,7 +701,6 @@ DEP_CPP_MXOMNI=\
 
 SOURCE=.\LEGO1\mxomnicreateparambase.cpp
 DEP_CPP_MXOMNIC=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
@@ -877,7 +872,6 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
@@ -929,9 +923,6 @@ DEP_CPP_ISLE_=\
 # Begin Source File
 
 SOURCE=.\ISLE\main.cpp
-
-!IF  "$(CFG)" == "ISLE - Win32 Release"
-
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
@@ -982,6 +973,7 @@ DEP_CPP_MAIN_=\
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
+<<<<<<< HEAD
 !ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
 
 DEP_CPP_MAIN_=\
@@ -1033,23 +1025,28 @@ DEP_CPP_MAIN_=\
 
 !ENDIF 
 
+=======
+>>>>>>> master
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\ISLE\res\isle.rc
+DEP_RSC_ISLE_R=\
+	".\ISLE\res\resource.h"\
+	
 
 !IF  "$(CFG)" == "ISLE - Win32 Release"
 
 
-"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\isle.res" : $(SOURCE) $(DEP_RSC_ISLE_R) "$(INTDIR)"
    $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "ISLE\res" /d "NDEBUG" $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
 
 
-"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\isle.res" : $(SOURCE) $(DEP_RSC_ISLE_R) "$(INTDIR)"
    $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "ISLE\res" /d "_DEBUG" $(SOURCE)
 
 

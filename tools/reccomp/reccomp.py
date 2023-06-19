@@ -89,85 +89,148 @@ class Bin:
     self.file.seek(self.get_addr(offset))
     return self.file.read(size)
 
-line_dump = None
-
-origfile = Bin(original)
-recompfile = Bin(recomp)
-
 class RecompiledInfo:
   addr = None
   size = None
   name = None
 
-print()
+def get_wine_path(fn):
+  return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
 
-def get_recompiled_address(filename, line):
-  global line_dump, sym_dump
+def get_unix_path(fn):
+  return subprocess.check_output(['winepath', fn]).decode('utf-8').strip()
 
-  def get_wine_path(fn):
-    return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
+# Declare a class that parses the output of cvdump for fast access later
+class SymInfo:
+  funcs = {}
+  lines = {}
 
-  # Load source lines from PDB
-  if not line_dump:
+  def __init__(self, pdb, file):
     call = [os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'cvdump.exe'), '-l', '-s']
 
     if os.name != 'nt':
       # Run cvdump through wine and convert path to Windows-friendly wine path
       call.insert(0, 'wine')
-      call.append(get_wine_path(syms))
+      call.append(get_wine_path(pdb))
     else:
-      call.append(syms)
+      call.append(pdb)
+
+    print('Parsing %s...' % pdb)
 
     line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
 
-  # Find requested filename/line in PDB
-  if os.name != 'nt':
-    # Convert filename to Wine path
-    filename = get_wine_path(filename)
+    current_section = None
 
-  #print('Looking for ' + filename + ' line ' + str(line))
+    for i, line in enumerate(line_dump):
+      if line.startswith('***'):
+        current_section = line[4:]
 
-  addr = None
-  found = False
+      if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
+        addr = int(line[26:34], 16)
 
-  for i, s in enumerate(line_dump):
-    try:
-      sourcepath = s.split()[0]
-      if os.path.isfile(sourcepath) and os.path.samefile(sourcepath, filename):
-        lines = line_dump[i + 2].split()
-        if line == int(lines[0]):
-          # Found address
-          addr = int(lines[1], 16)
-          found = True
-          break
-    except IndexError:
-      pass
+        info = RecompiledInfo()
+        info.addr = addr + recompfile.imagebase + recompfile.textvirt
+        info.size = int(line[41:49], 16)
+        info.name = line[77:]
 
-  if found:
-    # Find size of function
-    for i, s in enumerate(line_dump):
-      if 'S_GPROC32' in s:
-        if int(s[26:34], 16) == addr:
-          obj = RecompiledInfo()
-          obj.addr = addr + recompfile.imagebase + recompfile.textvirt
-          obj.size = int(s[41:49], 16)
-          obj.name = s[77:]
+        self.funcs[addr] = info
+      elif current_section == 'LINES' and line.startswith('  ') and not line.startswith('   '):
+        sourcepath = line.split()[0]
 
-          return obj
+        if os.name != 'nt':
+          # Convert filename to Unix path for file compare
+          sourcepath = get_unix_path(sourcepath)
+
+        if sourcepath not in self.lines:
+          self.lines[sourcepath] = {}
+
+        j = i + 2
+        while True:
+          ll = line_dump[j].split()
+          if len(ll) == 0:
+            break
+
+          k = 0
+          while k < len(ll):
+            linenum = int(ll[k + 0])
+            address = int(ll[k + 1], 16)
+            if linenum not in self.lines[sourcepath]:
+              self.lines[sourcepath][linenum] = address
+            k += 2
+
+          j += 1
+
+  def get_recompiled_address(self, filename, line):
+    addr = None
+    found = False
+
+    #print('Looking for ' + filename + ' line ' + str(line))
+
+    for fn in self.lines:
+      # Sometimes a PDB is compiled with a relative path while we always have
+      # an absolute path. Therefore we must
+      if os.path.samefile(fn, filename):
+        filename = fn
+        break
+
+    if filename in self.lines and line in self.lines[fn]:
+      addr = self.lines[fn][line]
+
+      if addr in self.funcs:
+        return self.funcs[addr]
+      else:
+        print('Failed to find function symbol with address: %s' % hex(addr))
+    else:
+      print('Failed to find function symbol with filename and line: %s:%s' % (filename, str(line)))
+
+origfile = Bin(original)
+recompfile = Bin(recomp)
+syminfo = SymInfo(syms, recompfile)
+
+print()
 
 md = Cs(CS_ARCH_X86, CS_MODE_32)
+
+def sanitize(file, mnemonic, op_str):
+  if mnemonic == 'call' or mnemonic == 'jmp':
+    # Filter out "calls" because the offsets we're not currently trying to
+    # match offsets. As long as there's a call in the right place, it's
+    # probably accurate.
+    op_str = ''
+  else:
+    # Filter out dword ptrs where the pointer is to an offset
+    try:
+      start = op_str.index('dword ptr [') + 11
+      end = op_str.index(']', start)
+
+      # This will throw ValueError if not hex
+      inttest = int(op_str[start:end], 16)
+
+      op_str = op_str[0:start] + op_str[end:]
+    except ValueError:
+      pass
+
+    # Use heuristics to filter out any args that look like offsets
+    words = op_str.split(' ')
+    for i, word in enumerate(words):
+      try:
+        inttest = int(word, 16)
+        if inttest >= file.imagebase + file.textvirt:
+          words[i] = ''
+      except ValueError:
+        pass
+    op_str = ' '.join(words)
+
+  return mnemonic, op_str
 
 def parse_asm(file, addr, size):
   asm = []
   data = file.read(addr, size)
   for i in md.disasm(data, 0):
-    if i.mnemonic == 'call':
-      # Filter out "calls" because the offsets we're not currently trying to
-      # match offsets. As long as there's a call in the right place, it's
-      # probably accurate.
-      asm.append(i.mnemonic)
-    else:
-      asm.append("%s %s" % (i.mnemonic, i.op_str))
+    # Use heuristics to disregard some differences that aren't representative
+    # of the accuracy of a function (e.g. global offsets)
+    mnemonic, op_str = sanitize(file, i.mnemonic, i.op_str)
+    asm.append("%s %s" % (mnemonic, op_str))
   return asm
 
 function_count = 0
@@ -197,9 +260,8 @@ for subdir, dirs, files in os.walk(source):
             find_open_bracket = srcfile.readline()
             line_no += 1
 
-          recinfo = get_recompiled_address(srcfilename, line_no)
+          recinfo = syminfo.get_recompiled_address(srcfilename, line_no)
           if not recinfo:
-            print('Failed to find recompiled address of ' + hex(addr))
             continue
 
           origasm = parse_asm(origfile, addr, recinfo.size)
@@ -207,7 +269,7 @@ for subdir, dirs, files in os.walk(source):
 
           diff = difflib.SequenceMatcher(None, origasm, recompasm)
           ratio = diff.ratio()
-          print('%s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
+          print('  %s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
 
           function_count += 1
           total_accuracy += ratio
