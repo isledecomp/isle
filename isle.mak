@@ -80,9 +80,9 @@ CLEAN :
 
 CPP=cl.exe
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"Release/LEGO1.PCH" /YX /c
+# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
 CPP_PROJ=/nologo /MT /W3 /GX /Zi /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS"\
- /Fp"Release/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ /Fp"$(INTDIR)/LEGO1.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\LEGO1\Release/
 CPP_SBRS=.\.
 
@@ -119,11 +119,9 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /debug /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /debug /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
- advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:no\
  /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /debug /machine:I386\
@@ -195,9 +193,9 @@ CLEAN :
 
 CPP=cl.exe
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"Debug/LEGO1.PCH" /YX /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
 CPP_PROJ=/nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS"\
- /Fp"Debug/LEGO1.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ /Fp"$(INTDIR)/LEGO1.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\LEGO1\Debug/
 CPP_SBRS=.\.
 
@@ -234,11 +232,9 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
 # SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
- advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
- odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/LEGO1.pdb" /map:"$(INTDIR)/LEGO1.map" /debug /machine:I386\
@@ -296,9 +292,9 @@ CLEAN :
 
 CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /W3 /GX /Zi /O2 /I "LEGO1" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"Release/ISLE.PCH" /YX /c
+# ADD CPP /nologo /W3 /GX /Zi /O2 /I "LEGO1" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
 CPP_PROJ=/nologo /ML /W3 /GX /Zi /O2 /I "LEGO1" /D "WIN32" /D "NDEBUG" /D\
- "_WINDOWS" /Fp"Release/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "_WINDOWS" /Fp"$(INTDIR)/ISLE.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\ISLE\Release/
 CPP_SBRS=.\.
 
@@ -337,7 +333,7 @@ BSC32_SBRS= \
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /pdb:"Release/ISLE.PDB" /debug /machine:I386 /out:"Release/ISLE.EXE" /LIBPATH:"ISLE/ext"
-# SUBTRACT LINK32 /pdb:none /map
+# SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows\
@@ -390,9 +386,9 @@ CLEAN :
 
 CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "LEGO1" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"Debug/ISLE.PCH" /YX /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "LEGO1" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
 CPP_PROJ=/nologo /MLd /W3 /Gm /GX /Zi /Od /I "LEGO1" /D "WIN32" /D "_DEBUG" /D\
- "_WINDOWS" /Fp"Debug/ISLE.PCH" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "_WINDOWS" /Fp"$(INTDIR)/ISLE.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\ISLE\Debug/
 CPP_SBRS=.\.
 
@@ -431,7 +427,7 @@ BSC32_SBRS= \
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows /pdb:"Debug/ISLE.PDB" /debug /machine:I386 /out:"Debug/ISLE.EXE" /LIBPATH:"ISLE/ext"
-# SUBTRACT LINK32 /pdb:none /map
+# SUBTRACT LINK32 /pdb:none
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib lego1.lib dsound.lib /nologo /subsystem:windows\
@@ -609,11 +605,7 @@ DEP_CPP_MXOMN=\
 
 SOURCE=.\LEGO1\mxvideoparam.cpp
 DEP_CPP_MXVID=\
-	".\LEGO1\mxpalette.h"\
-	".\LEGO1\mxrect32.h"\
-	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxvideoparam.obj" : $(SOURCE) $(DEP_CPP_MXVID) "$(INTDIR)"

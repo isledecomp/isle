@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from capstone import *
 import difflib
 import struct
@@ -36,9 +38,24 @@ if len(positional_args) != 5:
   print_usage()
 
 original = positional_args[1]
+if not os.path.isfile(original):
+  print('Invalid input: Original binary does not exist')
+  sys.exit(1)
+
 recomp = positional_args[2]
+if not os.path.isfile(recomp):
+  print('Invalid input: Recompiled binary does not exist')
+  sys.exit(1)
+
 syms = positional_args[3]
+if not os.path.isfile(syms):
+  print('Invalid input: Symbols PDB does not exist')
+  sys.exit(1)
+
 source = positional_args[4]
+if not os.path.isdir(source):
+  print('Invalid input: Source directory does not exist')
+  sys.exit(1)
 
 # Declare a class that can automatically convert virtual executable addresses
 # to file addresses
