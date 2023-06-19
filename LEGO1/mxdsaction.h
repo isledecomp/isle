@@ -35,12 +35,6 @@ public:
   int m_unk88;
   int m_unk8c;
   int m_unk90;
-
-  void setAtomId(MxAtomId &atomId)
-  {
-    this->m_atomId = atomId;
-  }
-
 };
 
 #endif // MXDSACTION_H
