@@ -32,8 +32,7 @@ jobs:
         C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
-        cd cdrom
-        
+
     - name: Cache DX5 SDK
       if: steps.cache-dx5.outputs.cache-hit != 'true'
       id: save-dx5
@@ -41,13 +40,13 @@ jobs:
       with:
         path: dx5sdk
         key: dx5sdk
-        
+
     - name: Setup DX5 SDK
       run: |
         cd dx5sdk
         cd cdrom
         .\SETUP.EXE /s
-        
+
     - name: Build
       shell: cmd
       run: |

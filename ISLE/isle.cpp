@@ -54,7 +54,7 @@ Isle::Isle()
 Isle::~Isle()
 {
   if (LegoOmni::GetInstance()) {
-    close();
+    Close();
     MxOmni::DestroyInstance();
   }
 
@@ -76,7 +76,7 @@ Isle::~Isle()
 }
 
 // OFFSET: ISLE 0x401260
-void Isle::close()
+void Isle::Close()
 {
   MxDSAction ds;
 
@@ -111,7 +111,7 @@ void Isle::close()
 }
 
 // OFFSET: ISLE 0x402740
-BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
+BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
   HKEY hKey;
   DWORD valueType;
@@ -130,11 +130,11 @@ BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 }
 
 // OFFSET: ISLE 0x4027b0
-int readRegBool(LPCSTR name, BOOL *out)
+int ReadRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
 
-  BOOL read = readReg(name, buffer, 0x100);
+  BOOL read = ReadReg(name, buffer, sizeof(buffer));
   if (read) {
     if (strcmp("YES", buffer) == 0) {
       *out = TRUE;
@@ -150,11 +150,11 @@ int readRegBool(LPCSTR name, BOOL *out)
 }
 
 // OFFSET: ISLE 0x402880
-int readRegInt(LPCSTR name, int *out)
+int ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (readReg(name, buffer, 0x100)) {
+  if (ReadReg(name, buffer, sizeof(buffer))) {
     *out = atoi(buffer);
     return TRUE;
   }
@@ -163,13 +163,11 @@ int readRegInt(LPCSTR name, int *out)
 }
 
 // OFFSET: ISLE 0x4028d0
-void Isle::loadConfig()
+void Isle::LoadConfig()
 {
-  #define BUFFER_SIZE 1024
+  char buffer[1024];
 
-  char buffer[BUFFER_SIZE];
-
-  if (!readReg("diskpath", buffer, BUFFER_SIZE)) {
+  if (!ReadReg("diskpath", buffer, sizeof(buffer))) {
     strcpy(buffer, MxOmni::GetHD());
   }
 
@@ -177,7 +175,7 @@ void Isle::loadConfig()
   strcpy(m_hdPath, buffer);
   MxOmni::SetHD(m_hdPath);
 
-  if (!readReg("cdpath", buffer, BUFFER_SIZE)) {
+  if (!ReadReg("cdpath", buffer, sizeof(buffer))) {
     strcpy(buffer, MxOmni::GetCD());
   }
 
@@ -185,22 +183,22 @@ void Isle::loadConfig()
   strcpy(m_cdPath, buffer);
   MxOmni::SetCD(m_cdPath);
 
-  readRegBool("Flip Surfaces", &m_flipSurfaces);
-  readRegBool("Full Screen", &m_fullScreen);
-  readRegBool("Wide View Angle", &m_wideViewAngle);
-  readRegBool("3DSound", &m_use3dSound);
-  readRegBool("Music", &m_useMusic);
-  readRegBool("UseJoystick", &m_useJoystick);
-  readRegInt("JoystickIndex", &m_joystickIndex);
-  readRegBool("Draw Cursor", &m_drawCursor);
+  ReadRegBool("Flip Surfaces", &m_flipSurfaces);
+  ReadRegBool("Full Screen", &m_fullScreen);
+  ReadRegBool("Wide View Angle", &m_wideViewAngle);
+  ReadRegBool("3DSound", &m_use3dSound);
+  ReadRegBool("Music", &m_useMusic);
+  ReadRegBool("UseJoystick", &m_useJoystick);
+  ReadRegInt("JoystickIndex", &m_joystickIndex);
+  ReadRegBool("Draw Cursor", &m_drawCursor);
 
   int backBuffersInVRAM;
-  if (readRegBool("Back Buffers in Video RAM",&backBuffersInVRAM)) {
+  if (ReadRegBool("Back Buffers in Video RAM",&backBuffersInVRAM)) {
     m_backBuffersInVram = !backBuffersInVRAM;
   }
 
   int bitDepth;
-  if (readRegInt("Display Bit Depth", &bitDepth)) {
+  if (ReadRegInt("Display Bit Depth", &bitDepth)) {
     if (bitDepth == 8) {
       m_using8bit = TRUE;
     } else if (bitDepth == 16) {
@@ -208,29 +206,29 @@ void Isle::loadConfig()
     }
   }
 
-  if (!readReg("Island Quality", buffer, BUFFER_SIZE)) {
+  if (!ReadReg("Island Quality", buffer, sizeof(buffer))) {
     strcpy(buffer, "1");
   }
   m_islandQuality = atoi(buffer);
 
-  if (!readReg("Island Texture", buffer, BUFFER_SIZE)) {
+  if (!ReadReg("Island Texture", buffer, sizeof(buffer))) {
     strcpy(buffer, "1");
   }
   m_islandTexture = atoi(buffer);
 
-  if (readReg("3D Device ID", buffer, BUFFER_SIZE)) {
+  if (ReadReg("3D Device ID", buffer, sizeof(buffer))) {
     m_deviceId = new char[strlen(buffer) + 1];
     strcpy(m_deviceId, buffer);
   }
 
-  if (readReg("savepath", buffer, BUFFER_SIZE)) {
+  if (ReadReg("savepath", buffer, sizeof(buffer))) {
     m_savePath = new char[strlen(buffer) + 1];
     strcpy(m_savePath, buffer);
   }
 }
 
 // OFFSET: ISLE 0x401560
-void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
+void Isle::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
                            BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
                            BOOL wideViewAngle, char *deviceId)
 {
@@ -251,10 +249,10 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 }
 
 // OFFSET: ISLE 0x4013b0
-BOOL Isle::setupLegoOmni()
+BOOL Isle::SetupLegoOmni()
 {
   char mediaPath[256];
-  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, 256);
+  GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
   if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
     VariableTable()->SetVariable("ACTOR_01", "");
@@ -266,7 +264,7 @@ BOOL Isle::setupLegoOmni()
 }
 
 // OFFSET: ISLE 0x402e80
-void Isle::setupCursor(WPARAM wParam)
+void Isle::SetupCursor(WPARAM wParam)
 {
   switch (wParam) {
   case 0:
@@ -348,13 +346,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
   case WM_EXITMENULOOP:
-    return DefWindowProcA(hWnd,WM_EXITMENULOOP,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_EXITMENULOOP, wParam, lParam);
   case WM_MOVING:
     if (g_isle && g_isle->m_fullScreen) {
       GetWindowRect(hWnd, (LPRECT) lParam);
       return 0;
     }
-    return DefWindowProcA(hWnd,WM_MOVING,wParam,lParam);
+    return DefWindowProcA(hWnd, WM_MOVING, wParam, lParam);
   case WM_NCPAINT:
     if (g_isle && g_isle->m_fullScreen) {
       return 0;
@@ -396,8 +394,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
     case WM_KEYDOWN:
-      if (lParam & 0x40000000) {
-        return DefWindowProcA(hWnd,WM_KEYDOWN,wParam,lParam);
+      // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
+      // to be what the assembly is actually doing
+      if (lParam & (KF_REPEAT << 16)) {
+        return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
       }
       keyCode = wParam;
       type = KEYDOWN;
@@ -428,7 +428,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       break;
     case 0x5400:
       if (g_isle) {
-        g_isle->setupCursor(wParam);
+        g_isle->SetupCursor(wParam);
         return 0;
       }
     }
@@ -457,14 +457,14 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // OFFSET: ISLE 0x4023e0
-MxResult Isle::setupWindow(HINSTANCE hInstance)
+MxResult Isle::SetupWindow(HINSTANCE hInstance)
 {
   WNDCLASSA wndclass;
   ZeroMemory(&wndclass, sizeof(WNDCLASSA));
 
-  loadConfig();
+  LoadConfig();
 
-  setupVideoFlags(m_fullScreen, m_flipSurfaces, m_backBuffersInVram, m_using8bit,
+  SetupVideoFlags(m_fullScreen, m_flipSurfaces, m_backBuffersInVram, m_using8bit,
                   m_using16bit, m_unk24, FALSE, m_wideViewAngle, m_deviceId);
 
   MxOmni::SetSound3D(m_use3dSound);
@@ -525,7 +525,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
 
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
   UpdateWindow(m_windowHandle);
-  if (!setupLegoOmni()) {
+  if (!SetupLegoOmni()) {
     return FAILURE;
   }
 
@@ -565,7 +565,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
 }
 
 // OFFSET: ISLE 0x402c20
-void Isle::tick(BOOL sleepIfNotNextFrame)
+void Isle::Tick(BOOL sleepIfNotNextFrame)
 {
   if (this->m_windowActive) {
     if (!Lego()) return;
@@ -603,7 +603,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
 
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
@@ -612,7 +612,7 @@ void Isle::tick(BOOL sleepIfNotNextFrame)
           return;
         }
       } else {
-        ds.m_atomId = stream->atom;
+        ds.setAtomId(stream->atom);
         ds.m_unk24 = 0xFFFF;
         ds.m_unk1c = 0;
         if (Start(&ds) != SUCCESS) {

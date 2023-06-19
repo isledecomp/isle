@@ -280,7 +280,6 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Release\ISLE.EXE"
 	-@erase ".\Release\ISLE.PDB"
@@ -342,7 +341,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxomnicreateparambase.obj" \
 	".\Release\LEGO1.LIB"
 
 ".\Release\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -372,7 +370,6 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Debug\ISLE.EXE"
@@ -436,7 +433,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxomnicreateparambase.obj" \
 	".\LEGO1\Debug\LEGO1.lib"
 
 ".\Debug\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -603,7 +599,11 @@ DEP_CPP_MXOMN=\
 
 SOURCE=.\LEGO1\mxvideoparam.cpp
 DEP_CPP_MXVID=\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
 	
 
 "$(INTDIR)\mxvideoparam.obj" : $(SOURCE) $(DEP_CPP_MXVID) "$(INTDIR)"
@@ -869,30 +869,6 @@ SOURCE=.\ISLE\res\isle.rc
 ################################################################################
 # Begin Source File
 
-SOURCE=.\LEGO1\mxomnicreateparambase.cpp
-DEP_CPP_MXOMNIC=\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxomnicreateflags.h"\
-	".\LEGO1\mxomnicreateparam.h"\
-	".\LEGO1\mxomnicreateparambase.h"\
-	".\LEGO1\mxpalette.h"\
-	".\LEGO1\mxrect32.h"\
-	".\LEGO1\mxstring.h"\
-	".\LEGO1\mxvariabletable.h"\
-	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
-	
-
-"$(INTDIR)\mxomnicreateparambase.obj" : $(SOURCE) $(DEP_CPP_MXOMNIC)\
- "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
 SOURCE=.\LEGO1\legoanimationmanager.h
 
 !IF  "$(CFG)" == "ISLE - Win32 Release"
@@ -1134,18 +1110,6 @@ SOURCE=.\LEGO1\mxomnicreateflags.h
 # Begin Source File
 
 SOURCE=.\LEGO1\mxomnicreateparam.h
-
-!IF  "$(CFG)" == "ISLE - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\LEGO1\mxomnicreateparambase.h
 
 !IF  "$(CFG)" == "ISLE - Win32 Release"
 

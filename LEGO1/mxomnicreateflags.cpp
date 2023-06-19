@@ -1,5 +1,6 @@
 #include "mxomnicreateflags.h"
 
+// OFFSET: LEGO1 0x100b0a30
 MxOmniCreateFlags::MxOmniCreateFlags()
 {
   this->CreateObjectFactory(MX_TRUE);
