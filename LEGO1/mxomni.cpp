@@ -1,5 +1,6 @@
 #include "mxomni.h"
 
+// OFFSET: LEGO1 0x100af0c0
 MxResult MxOmni::Create(const MxOmniCreateParam &p)
 {
   if (p.CreateFlags().CreateTimer())

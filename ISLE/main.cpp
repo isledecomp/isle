@@ -5,6 +5,7 @@
 #include "isle.h"
 #include "legoomni.h"
 
+// OFFSET: ISLE 0x401ca0
 BOOL findExistingInstance(void)
 {
   HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
@@ -17,6 +18,7 @@ BOOL findExistingInstance(void)
   return 1;
 }
 
+// OFFSET: ISLE 0x401ce0
 BOOL startDirectSound(void)
 {
   LPDIRECTSOUND lpDS = NULL;
@@ -29,6 +31,7 @@ BOOL startDirectSound(void)
   return FALSE;
 }
 
+// OFFSET: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
   // Look for another instance, if we find one, bring it to the foreground instead

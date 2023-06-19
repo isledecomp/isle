@@ -54,6 +54,15 @@ jobs:
         mkdir Release
         .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
 
+    - name: Summarize Accuracy
+      shell: cmd
+      run: |
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
+        pip install capstone
+        python3 tools/reccomp/reccomp.py ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
+        python3 tools/reccomp/reccomp.py LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
+      
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
