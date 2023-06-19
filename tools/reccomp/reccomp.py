@@ -125,7 +125,7 @@ def get_recompiled_address(filename, line):
     # Convert filename to Wine path
     filename = get_wine_path(filename)
 
-  #print('Looking for ' + filename + ' line ' + str(line))
+  print('Looking for ' + filename + ' line ' + str(line))
 
   addr = None
   found = False
@@ -218,4 +218,5 @@ for subdir, dirs, files in os.walk(source):
       except UnicodeDecodeError:
         break
 
-print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
+if function_count > 0:
+  print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
