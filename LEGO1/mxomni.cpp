@@ -65,3 +65,9 @@ long MxOmni::Notify(MxParam &p)
   // FIXME: Stub
   return 0;
 }
+
+// OFFSET: LEGO1 0x100aced0
+MxTimer *Timer()
+{
+  return MxOmni::GetInstance()->GetTimer();
+}

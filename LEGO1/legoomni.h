@@ -80,7 +80,6 @@ __declspec(dllexport) LegoSoundManager * SoundManager();
 __declspec(dllexport) long Start(MxDSAction *);
 __declspec(dllexport) MxStreamer * Streamer();
 __declspec(dllexport) MxTickleManager * TickleManager();
-__declspec(dllexport) MxTimer * Timer();
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) LegoVideoManager * VideoManager();

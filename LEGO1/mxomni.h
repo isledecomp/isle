@@ -58,7 +58,8 @@ protected:
   MxCriticalSection m_criticalsection; // 0x48
 
   int m_unk64; // 0x64
-
 };
+
+__declspec(dllexport) MxTimer * Timer();
 
 #endif // MXOMNI_H
