@@ -6,7 +6,7 @@
 #include "legoomni.h"
 
 // OFFSET: ISLE 0x401ca0
-BOOL findExistingInstance(void)
+BOOL FindExistingInstance(void)
 {
   HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
   if (hWnd) {
@@ -19,7 +19,7 @@ BOOL findExistingInstance(void)
 }
 
 // OFFSET: ISLE 0x401ce0
-BOOL startDirectSound(void)
+BOOL StartDirectSound(void)
 {
   LPDIRECTSOUND lpDS = NULL;
   HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
