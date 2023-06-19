@@ -71,7 +71,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window = g_isle->m_windowHandle;
   }
 
-  // Load accelerator (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
+  // Load accelerators (this call actually achieves nothing - there is no "AppAccel" resource in the original - but we'll keep this for authenticity)
+  // This line may actually be here because it's in DFVIEW, an example project that ships with
+  // MSVC420, and was such a clean example of a Win32 app, that it was later adapted
+  // into an "ExeSkeleton" sample for MSVC600. It's quite possible Mindscape derived
+  // this app from that example since they no longer had the luxury of the
+  // MFC AppWizard which we know they used for the frontend used during development (ISLEMFC.EXE, MAIN.EXE, et al.)
   LoadAcceleratorsA(hInstance, "AppAccel");
 
   MSG msg;
