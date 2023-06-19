@@ -17,7 +17,7 @@ public:
   inline void SetUnkown1c(int p_unk1c) { this->m_unk1c = p_unk1c; }
   inline void SetUnknown24(unsigned short p_unk24) { this->m_unk24 = p_unk24; }
 
-  void SetAtomId(MxAtomId id);
+  void SetAtomId(MxAtomId p_atomId);
 
 private:
   int m_unk08;
