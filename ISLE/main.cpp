@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   g_isle = new Isle();
 
   // Create window
-  if (g_isle->setupWindow(hInstance) != SUCCESS) {
+  if (g_isle->SetupWindow(hInstance) != SUCCESS) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }
@@ -79,12 +79,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   while (!g_closed) {
     while (!PeekMessageA(&msg, NULL, 0, 0, PM_NOREMOVE)) {
       if (g_isle) {
-        g_isle->tick(1);
+        g_isle->Tick(1);
       }
     }
 
     if (g_isle) {
-      g_isle->tick(1);
+      g_isle->Tick(1);
     }
 
     if (g_closed) {
@@ -124,7 +124,7 @@ LAB_00401bc7:
         }
       } else if (g_mousemoved) {
         if (g_isle) {
-          g_isle->tick(0);
+          g_isle->Tick(0);
         }
         goto LAB_00401bc7;
       }
