@@ -7,8 +7,6 @@
 #include "mxomni.h"
 #include "res/resource.h"
 
-RECT windowRect = {0, 0, 640, 480};
-
 // OFFSET: ISLE 0x401000
 Isle::Isle()
 {
@@ -303,9 +301,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_ACTIVATEAPP:
     if (g_isle) {
       if ((wParam != 0) && (g_isle->m_fullScreen)) {
-        MoveWindow(hWnd, windowRect.left, windowRect.top,
-                   (windowRect.right - windowRect.left) + 1,
-                   (windowRect.bottom - windowRect.top) + 1, TRUE);
+        MoveWindow(hWnd, g_windowRect.left, g_windowRect.top,
+                   (g_windowRect.right - g_windowRect.left) + 1,
+                   (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
       }
       g_isle->m_windowActive = wParam;
     }
@@ -324,10 +322,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
     MINMAXINFO *mmi = (MINMAXINFO *) lParam;
 
-    mmi->ptMaxTrackSize.x = (windowRect.right - windowRect.left) + 1;
-    mmi->ptMaxTrackSize.y = (windowRect.bottom - windowRect.top) + 1;
-    mmi->ptMinTrackSize.x = (windowRect.right - windowRect.left) + 1;
-    mmi->ptMinTrackSize.y = (windowRect.bottom - windowRect.top) + 1;
+    mmi->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
+    mmi->ptMinTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMinTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
 
     return 0;
   }
@@ -498,21 +496,21 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   int x, y, width, height;
 
   if (!m_fullScreen) {
-    AdjustWindowRectEx(&windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
+    AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-    height = windowRect.bottom - windowRect.top;
-    width = windowRect.right - windowRect.left;
+    height = g_windowRect.bottom - g_windowRect.top;
+    width = g_windowRect.right - g_windowRect.left;
 
     y = CW_USEDEFAULT;
     x = CW_USEDEFAULT;
     dwStyle = WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
   } else {
-    AdjustWindowRectEx(&windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
-    height = windowRect.bottom - windowRect.top;
-    width = windowRect.right - windowRect.left;
+    AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
+    height = g_windowRect.bottom - g_windowRect.top;
+    width = g_windowRect.right - g_windowRect.left;
     dwStyle = WS_CAPTION | WS_SYSMENU;
-    x = windowRect.left;
-    y = windowRect.top;
+    x = g_windowRect.left;
+    y = g_windowRect.top;
   }
 
   m_windowHandle = CreateWindowExA(WS_EX_APPWINDOW, WNDCLASS_NAME, WINDOW_TITLE, dwStyle,
@@ -522,7 +520,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   }
 
   if (m_fullScreen) {
-    MoveWindow(m_windowHandle, windowRect.left, windowRect.top, (windowRect.right - windowRect.left) + 1, (windowRect.bottom - windowRect.top) + 1, TRUE);
+    MoveWindow(m_windowHandle, g_windowRect.left, g_windowRect.top, (g_windowRect.right - g_windowRect.left) + 1, (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
   }
 
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
@@ -558,7 +556,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
     }
   }
   if (m_fullScreen) {
-    MoveWindow(m_windowHandle, windowRect.left, windowRect.top, (windowRect.right - windowRect.left) + 1, (windowRect.bottom - windowRect.top) + 1, TRUE);
+    MoveWindow(m_windowHandle, g_windowRect.left, g_windowRect.top, (g_windowRect.right - g_windowRect.left) + 1, (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
   }
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
   UpdateWindow(m_windowHandle);

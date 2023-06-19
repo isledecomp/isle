@@ -109,7 +109,7 @@ def get_recompiled_address(filename, line):
 
   # Load source lines from PDB
   if not line_dump:
-    call = [os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'cvdump'), '-l', '-s']
+    call = [os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'cvdump.exe'), '-l', '-s']
 
     if os.name != 'nt':
       # Run cvdump through wine and convert path to Windows-friendly wine path

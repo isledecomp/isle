@@ -72,7 +72,6 @@ CLEAN :
 	-@erase ".\Release\LEGO1.DLL"
 	-@erase ".\Release\LEGO1.EXP"
 	-@erase ".\Release\LEGO1.LIB"
-	-@erase ".\Release\LEGO1.MAP"
 	-@erase ".\Release\LEGO1.PDB"
 
 "$(OUTDIR)" :
@@ -119,13 +118,13 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /debug /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
-# SUBTRACT LINK32 /pdb:none
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /pdb:"Release/LEGO1.PDB" /debug /machine:I386 /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB"
+# SUBTRACT LINK32 /pdb:none /map
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:no\
- /pdb:"Release/LEGO1.PDB" /map:"Release/LEGO1.MAP" /debug /machine:I386\
- /out:"Release/LEGO1.DLL" /implib:"Release/LEGO1.LIB" 
+ /pdb:"Release/LEGO1.PDB" /debug /machine:I386 /out:"Release/LEGO1.DLL"\
+ /implib:"Release/LEGO1.LIB" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
@@ -183,7 +182,6 @@ CLEAN :
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase "$(OUTDIR)\LEGO1.exp"
 	-@erase "$(OUTDIR)\LEGO1.lib"
-	-@erase "$(OUTDIR)\LEGO1.map"
 	-@erase "$(OUTDIR)\LEGO1.pdb"
 	-@erase ".\Debug\LEGO1.DLL"
 	-@erase ".\Debug\LEGO1.ILK"
@@ -232,13 +230,13 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /map /debug /machine:I386 /out:"Debug/LEGO1.DLL"
-# SUBTRACT LINK32 /pdb:none
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"Debug/LEGO1.DLL"
+# SUBTRACT LINK32 /pdb:none /map
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib\
  odbccp32.lib winmm.lib /nologo /subsystem:windows /dll /incremental:yes\
- /pdb:"$(OUTDIR)/LEGO1.pdb" /map:"$(INTDIR)/LEGO1.map" /debug /machine:I386\
- /out:"Debug/LEGO1.DLL" /implib:"$(OUTDIR)/LEGO1.lib" 
+ /pdb:"$(OUTDIR)/LEGO1.pdb" /debug /machine:I386 /out:"Debug/LEGO1.DLL"\
+ /implib:"$(OUTDIR)/LEGO1.lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
