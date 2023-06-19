@@ -147,7 +147,7 @@ void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
     this->m_targetTurnSpeed = CalculateNewTargetSpeed(p_hPos, this->m_hMax / 2, this->m_turnMaxSpeed);
     this->m_targetMovementSpeed = CalculateNewTargetSpeed(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxSpeed);
     this->m_turnAccel = CalculateNewAccel(p_hPos, this->m_hMax / 2, this->m_turnMaxAccel, (int)this->m_turnMinAccel);
-    this->m_movementAccel = CalculateNewAccel(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxAccel, (int)this->m_turnMinAccel);
+    this->m_movementAccel = CalculateNewAccel(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxAccel, (int)this->m_movementMinAccel);
   }
   else
   {
