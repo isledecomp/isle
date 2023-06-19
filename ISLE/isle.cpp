@@ -7,8 +7,7 @@
 #include "mxomni.h"
 #include "res/resource.h"
 
-RECT windowRect = {0, 0, 640, 480};
-
+// OFFSET: ISLE 0x401000
 Isle::Isle()
 {
   m_hdPath = NULL;
@@ -51,6 +50,7 @@ Isle::Isle()
   LegoOmni::CreateInstance();
 }
 
+// OFFSET: ISLE 0x4011a0
 Isle::~Isle()
 {
   if (LegoOmni::GetInstance()) {
@@ -75,6 +75,7 @@ Isle::~Isle()
   }
 }
 
+// OFFSET: ISLE 0x401260
 void Isle::close()
 {
   MxDSAction ds;
@@ -109,6 +110,7 @@ void Isle::close()
   }
 }
 
+// OFFSET: ISLE 0x402740
 BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
   HKEY hKey;
@@ -127,6 +129,7 @@ BOOL readReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   return out;
 }
 
+// OFFSET: ISLE 0x4027b0
 int readRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
@@ -146,6 +149,7 @@ int readRegBool(LPCSTR name, BOOL *out)
   return FALSE;
 }
 
+// OFFSET: ISLE 0x402880
 int readRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
@@ -158,6 +162,7 @@ int readRegInt(LPCSTR name, int *out)
   return FALSE;
 }
 
+// OFFSET: ISLE 0x4028d0
 void Isle::loadConfig()
 {
   #define BUFFER_SIZE 1024
@@ -224,6 +229,7 @@ void Isle::loadConfig()
   }
 }
 
+// OFFSET: ISLE 0x401560
 void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
                            BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
                            BOOL wideViewAngle, char *deviceId)
@@ -244,6 +250,7 @@ void Isle::setupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
   }
 }
 
+// OFFSET: ISLE 0x4013b0
 BOOL Isle::setupLegoOmni()
 {
   char mediaPath[256];
@@ -258,6 +265,7 @@ BOOL Isle::setupLegoOmni()
   return FALSE;
 }
 
+// OFFSET: ISLE 0x402e80
 void Isle::setupCursor(WPARAM wParam)
 {
   switch (wParam) {
@@ -278,6 +286,7 @@ void Isle::setupCursor(WPARAM wParam)
   SetCursor(m_cursorCurrent);
 }
 
+// OFFSET: ISLE 0x401d20
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   if (!g_isle) {
@@ -292,9 +301,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_ACTIVATEAPP:
     if (g_isle) {
       if ((wParam != 0) && (g_isle->m_fullScreen)) {
-        MoveWindow(hWnd, windowRect.left, windowRect.top,
-                   (windowRect.right - windowRect.left) + 1,
-                   (windowRect.bottom - windowRect.top) + 1, TRUE);
+        MoveWindow(hWnd, g_windowRect.left, g_windowRect.top,
+                   (g_windowRect.right - g_windowRect.left) + 1,
+                   (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
       }
       g_isle->m_windowActive = wParam;
     }
@@ -313,10 +322,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
     MINMAXINFO *mmi = (MINMAXINFO *) lParam;
 
-    mmi->ptMaxTrackSize.x = (windowRect.right - windowRect.left) + 1;
-    mmi->ptMaxTrackSize.y = (windowRect.bottom - windowRect.top) + 1;
-    mmi->ptMinTrackSize.x = (windowRect.right - windowRect.left) + 1;
-    mmi->ptMinTrackSize.y = (windowRect.bottom - windowRect.top) + 1;
+    mmi->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
+    mmi->ptMinTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMinTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
 
     return 0;
   }
@@ -447,6 +456,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   return DefWindowProcA(hWnd,uMsg,wParam,lParam);
 }
 
+// OFFSET: ISLE 0x4023e0
 MxResult Isle::setupWindow(HINSTANCE hInstance)
 {
   WNDCLASSA wndclass;
@@ -486,21 +496,21 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   int x, y, width, height;
 
   if (!m_fullScreen) {
-    AdjustWindowRectEx(&windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
+    AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-    height = windowRect.bottom - windowRect.top;
-    width = windowRect.right - windowRect.left;
+    height = g_windowRect.bottom - g_windowRect.top;
+    width = g_windowRect.right - g_windowRect.left;
 
     y = CW_USEDEFAULT;
     x = CW_USEDEFAULT;
     dwStyle = WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
   } else {
-    AdjustWindowRectEx(&windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
-    height = windowRect.bottom - windowRect.top;
-    width = windowRect.right - windowRect.left;
+    AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
+    height = g_windowRect.bottom - g_windowRect.top;
+    width = g_windowRect.right - g_windowRect.left;
     dwStyle = WS_CAPTION | WS_SYSMENU;
-    x = windowRect.left;
-    y = windowRect.top;
+    x = g_windowRect.left;
+    y = g_windowRect.top;
   }
 
   m_windowHandle = CreateWindowExA(WS_EX_APPWINDOW, WNDCLASS_NAME, WINDOW_TITLE, dwStyle,
@@ -510,7 +520,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   }
 
   if (m_fullScreen) {
-    MoveWindow(m_windowHandle, windowRect.left, windowRect.top, (windowRect.right - windowRect.left) + 1, (windowRect.bottom - windowRect.top) + 1, TRUE);
+    MoveWindow(m_windowHandle, g_windowRect.left, g_windowRect.top, (g_windowRect.right - g_windowRect.left) + 1, (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
   }
 
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
@@ -546,7 +556,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
     }
   }
   if (m_fullScreen) {
-    MoveWindow(m_windowHandle, windowRect.left, windowRect.top, (windowRect.right - windowRect.left) + 1, (windowRect.bottom - windowRect.top) + 1, TRUE);
+    MoveWindow(m_windowHandle, g_windowRect.left, g_windowRect.top, (g_windowRect.right - g_windowRect.left) + 1, (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
   }
   ShowWindow(m_windowHandle, SW_SHOWNORMAL);
   UpdateWindow(m_windowHandle);
@@ -554,6 +564,7 @@ MxResult Isle::setupWindow(HINSTANCE hInstance)
   return SUCCESS;
 }
 
+// OFFSET: ISLE 0x402c20
 void Isle::tick(BOOL sleepIfNotNextFrame)
 {
   if (this->m_windowActive) {
