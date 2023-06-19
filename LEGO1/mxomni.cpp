@@ -66,7 +66,8 @@ long MxOmni::Notify(MxParam &p)
   return 0;
 }
 
-MxTimer* Timer()
+// OFFSET: LEGO1 0x100aced0
+MxTimer *Timer()
 {
   return MxOmni::GetInstance()->GetTimer();
 }
