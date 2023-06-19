@@ -1,5 +1,6 @@
 #include "mxvideoparam.h"
 
+// OFFSET: LEGO1 0x100bec70
 MxVideoParam::MxVideoParam()
 {
   this->m_flags = MxVideoParamFlags();
@@ -13,6 +14,7 @@ MxVideoParam::MxVideoParam()
   this->m_deviceId = 0;
 }
 
+// OFFSET: LEGO1 0x100becf0
 MxVideoParam &MxVideoParam::operator=(const MxVideoParam &other)
 {
   m_flags = MxVideoParamFlags();
@@ -30,6 +32,7 @@ MxVideoParam &MxVideoParam::operator=(const MxVideoParam &other)
   return *this;
 }
 
+// OFFSET: LEGO1 0x100bed70
 void MxVideoParam::SetDeviceName(char *id)
 {
   if (this->m_deviceId != 0)
@@ -48,6 +51,7 @@ void MxVideoParam::SetDeviceName(char *id)
   }
 }
 
+// OFFSET: LEGO1 0x100bed50
 MxVideoParam::~MxVideoParam()
 {
   if (this->m_deviceId != 0)
