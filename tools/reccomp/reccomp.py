@@ -10,11 +10,13 @@ import sys
 def print_usage():
   print('Usage: %s [options] <original-binary> <recompiled-binary> <recompiled-pdb> <decomp-dir>\n' % sys.argv[0])
   print('\t-v, --verbose <offset>\t\t\tPrint assembly diff for specific function (original file\'s offset)')
+  print('\t-h, --html <output-file>\t\t\tGenerate searchable HTML summary of status and diffs')
   sys.exit(1)
 
 positional_args = []
 verbose = None
 skip = False
+html = None
 
 for i, arg in enumerate(sys.argv):
   if skip:
@@ -27,6 +29,9 @@ for i, arg in enumerate(sys.argv):
 
     if flag == 'v' or flag == '-verbose':
       verbose = int(sys.argv[i + 1], 16)
+      skip = True
+    elif flag == 'h' or flag == '-html':
+      html = sys.argv[i + 1]
       skip = True
     else:
       print('Unknown flag: %s' % arg)
@@ -100,13 +105,16 @@ def get_wine_path(fn):
 def get_unix_path(fn):
   return subprocess.check_output(['winepath', fn]).decode('utf-8').strip()
 
+def get_file_in_script_dir(fn):
+  return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
+
 # Declare a class that parses the output of cvdump for fast access later
 class SymInfo:
   funcs = {}
   lines = {}
 
   def __init__(self, pdb, file):
-    call = [os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'cvdump.exe'), '-l', '-s']
+    call = [get_file_in_script_dir('cvdump.exe'), '-l', '-s']
 
     if os.name != 'nt':
       # Run cvdump through wine and convert path to Windows-friendly wine path
@@ -192,23 +200,31 @@ print()
 md = Cs(CS_ARCH_X86, CS_MODE_32)
 
 def sanitize(file, mnemonic, op_str):
+  offsetplaceholder = '<OFFSET>'
+
   if mnemonic == 'call' or mnemonic == 'jmp':
     # Filter out "calls" because the offsets we're not currently trying to
     # match offsets. As long as there's a call in the right place, it's
     # probably accurate.
-    op_str = ''
+    op_str = offsetplaceholder
   else:
+    def filter_out_ptr(ptype, op_str):
+      try:
+        ptrstr = ptype + ' ptr ['
+        start = op_str.index(ptrstr) + len(ptrstr)
+        end = op_str.index(']', start)
+
+        # This will throw ValueError if not hex
+        inttest = int(op_str[start:end], 16)
+
+        return op_str[0:start] + offsetplaceholder + op_str[end:]
+      except ValueError:
+        return op_str
+
     # Filter out dword ptrs where the pointer is to an offset
-    try:
-      start = op_str.index('dword ptr [') + 11
-      end = op_str.index(']', start)
-
-      # This will throw ValueError if not hex
-      inttest = int(op_str[start:end], 16)
-
-      op_str = op_str[0:start] + op_str[end:]
-    except ValueError:
-      pass
+    op_str = filter_out_ptr('dword', op_str)
+    op_str = filter_out_ptr('word', op_str)
+    op_str = filter_out_ptr('byte', op_str)
 
     # Use heuristics to filter out any args that look like offsets
     words = op_str.split(' ')
@@ -216,7 +232,7 @@ def sanitize(file, mnemonic, op_str):
       try:
         inttest = int(word, 16)
         if inttest >= file.imagebase + file.textvirt:
-          words[i] = ''
+          words[i] = offsetplaceholder
       except ValueError:
         pass
     op_str = ' '.join(words)
@@ -230,11 +246,15 @@ def parse_asm(file, addr, size):
     # Use heuristics to disregard some differences that aren't representative
     # of the accuracy of a function (e.g. global offsets)
     mnemonic, op_str = sanitize(file, i.mnemonic, i.op_str)
-    asm.append("%s %s" % (mnemonic, op_str))
+    if op_str is None:
+      asm.append(mnemonic)
+    else:
+      asm.append("%s %s" % (mnemonic, op_str))
   return asm
 
 function_count = 0
 total_accuracy = 0
+htmlinsert = []
 
 for subdir, dirs, files in os.walk(source):
   for file in files:
@@ -274,15 +294,42 @@ for subdir, dirs, files in os.walk(source):
           function_count += 1
           total_accuracy += ratio
 
-          if verbose == addr:
+          if verbose == addr or html:
             udiff = difflib.unified_diff(origasm, recompasm)
-            for line in udiff:
-              print(line)
-            print()
-            print()
+
+            if verbose == addr:
+              for line in udiff:
+                print(line)
+              print()
+              print()
+
+            if html:
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
 
       except UnicodeDecodeError:
         break
+
+def gen_html(html, data):
+  templatefile = open(get_file_in_script_dir('template.html'), 'r')
+  if not templatefile:
+    print('Failed to find HTML template file, can\'t generate HTML summary')
+    return
+
+  templatedata = templatefile.read()
+  templatefile.close()
+
+  templatedata = templatedata.replace('/* INSERT DATA HERE */', ','.join(data), 1)
+
+  htmlfile = open(html, 'w')
+  if not htmlfile:
+    print('Failed to write to HTML file %s' % html)
+    return
+
+  htmlfile.write(templatedata)
+  htmlfile.close()
+
+if html:
+  gen_html(html, htmlinsert)
 
 if function_count > 0:
   print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
