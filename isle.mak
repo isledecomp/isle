@@ -539,7 +539,6 @@ DEP_CPP_LEGOO=\
 
 SOURCE=.\LEGO1\mxcriticalsection.cpp
 DEP_CPP_MXCRI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
 
@@ -553,7 +552,6 @@ DEP_CPP_MXCRI=\
 
 SOURCE=.\LEGO1\mxautolocker.cpp
 DEP_CPP_MXAUT=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxautolocker.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
@@ -640,7 +638,6 @@ DEP_CPP_MXVID=\
 
 SOURCE=.\LEGO1\mxvideoparamflags.cpp
 DEP_CPP_MXVIDE=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxvideoparamflags.h"\
 	
 
@@ -654,7 +651,6 @@ DEP_CPP_MXVIDE=\
 
 SOURCE=.\LEGO1\mxomnicreateparam.cpp
 DEP_CPP_MXOMNI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
@@ -678,7 +674,6 @@ DEP_CPP_MXOMNI=\
 
 SOURCE=.\LEGO1\mxomnicreateparambase.cpp
 DEP_CPP_MXOMNIC=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
@@ -821,7 +816,6 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
@@ -873,9 +867,6 @@ DEP_CPP_ISLE_=\
 # Begin Source File
 
 SOURCE=.\ISLE\main.cpp
-
-!IF  "$(CFG)" == "ISLE - Win32 Release"
-
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
@@ -925,78 +916,27 @@ DEP_CPP_MAIN_=\
 "$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
-
-DEP_CPP_MAIN_=\
-	".\ISLE\define.h"\
-	".\ISLE\isle.h"\
-	".\LEGO1\lego3dmanager.h"\
-	".\LEGO1\lego3dview.h"\
-	".\LEGO1\legoentity.h"\
-	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\legoinputmanager.h"\
-	".\LEGO1\legonavcontroller.h"\
-	".\LEGO1\legoomni.h"\
-	".\LEGO1\legoroi.h"\
-	".\LEGO1\legovideomanager.h"\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsfile.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxeventmanager.h"\
-	".\LEGO1\mxmusicmanager.h"\
-	".\LEGO1\mxnotificationmanager.h"\
-	".\LEGO1\mxobjectfactory.h"\
-	".\LEGO1\mxomni.h"\
-	".\LEGO1\mxomnicreateflags.h"\
-	".\LEGO1\mxomnicreateparam.h"\
-	".\LEGO1\mxomnicreateparambase.h"\
-	".\LEGO1\mxpalette.h"\
-	".\LEGO1\mxrect32.h"\
-	".\LEGO1\mxresult.h"\
-	".\LEGO1\mxsoundmanager.h"\
-	".\LEGO1\mxstreamcontroller.h"\
-	".\LEGO1\mxstreamer.h"\
-	".\LEGO1\mxstring.h"\
-	".\LEGO1\mxticklemanager.h"\
-	".\LEGO1\mxtimer.h"\
-	".\LEGO1\mxtransitionmanager.h"\
-	".\LEGO1\mxvariabletable.h"\
-	".\LEGO1\mxvideomanager.h"\
-	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
-	".\LEGO1\viewmanager.h"\
-	
-
-"$(INTDIR)\main.obj" : $(SOURCE) $(DEP_CPP_MAIN_) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\ISLE\res\isle.rc
+DEP_RSC_ISLE_R=\
+	".\ISLE\res\resource.h"\
+	
 
 !IF  "$(CFG)" == "ISLE - Win32 Release"
 
 
-"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\isle.res" : $(SOURCE) $(DEP_RSC_ISLE_R) "$(INTDIR)"
    $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "ISLE\res" /d "NDEBUG" $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "ISLE - Win32 Debug"
 
 
-"$(INTDIR)\isle.res" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\isle.res" : $(SOURCE) $(DEP_RSC_ISLE_R) "$(INTDIR)"
    $(RSC) /l 0x409 /fo"$(INTDIR)/isle.res" /i "ISLE\res" /d "_DEBUG" $(SOURCE)
 
 
