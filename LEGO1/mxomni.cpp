@@ -15,6 +15,7 @@ MxOmni::~MxOmni()
   Destroy();
 }
 
+// OFFSET: LEGO1 0x100af080
 void MxOmni::Init()
 {
   m_windowHandle = NULL;
