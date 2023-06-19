@@ -267,12 +267,6 @@ BOOL Isle::SetupLegoOmni()
   return FALSE;
 }
 
-// OFFSET: ISLE 0x00401c40
-void MxDSObject::SetAtomId(MxAtomId p_atomId)
-{
-  this->m_atomId = p_atomId;
-}
-
 // OFFSET: ISLE 0x402e80
 void Isle::SetupCursor(WPARAM wParam)
 {
