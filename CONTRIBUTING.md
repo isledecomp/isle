@@ -15,7 +15,7 @@ To access the Ghidra repository, use the following details:
 
 ## Code Style
 
-In general, we're not exhaustively strict about coding style, but there are some preferable guidelines to follow:
+In general, we're not exhaustively strict about coding style, but there are some preferable guidelines to follow that have been adopted from what we know about the original codebase:
 
 - Indent: 2 spaces
 - `PascalCase` for classes and function names.
