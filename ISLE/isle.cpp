@@ -1,7 +1,12 @@
 #include "isle.h"
 
 #include "define.h"
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
+#include "legomodelpresenter.h"
 #include "legoomni.h"
+#include "legopartpresenter.h"
+#include "legoworldpresenter.h"
 #include "mxdirectdraw.h"
 #include "mxdsaction.h"
 #include "mxomni.h"

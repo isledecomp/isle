@@ -1,17 +1,15 @@
 #include "legoomni.h"
 
-LegoOmni *LegoOmni::m_instance = NULL;
-
 // OFFSET: LEGO1 0x1005ad10
 LegoOmni *LegoOmni::GetInstance()
 {
-  return m_instance;
+  return (LegoOmni *) m_instance;
 }
 
 // OFFSET: LEGO1 0x10015700
 LegoOmni *Lego()
 {
-  return LegoOmni::GetInstance();
+  return (LegoOmni *) MxOmni::GetInstance();
 }
 
 // OFFSET: LEGO1 0x10015720

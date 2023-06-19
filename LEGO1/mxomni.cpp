@@ -10,12 +10,12 @@ MxOmni *MxOmni::GetInstance()
 }
 
 // OFFSET: LEGO1 0x100af0c0
-MxResult MxOmni::Create(const MxOmniCreateParam &p)
+MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
   if (p.CreateFlags().CreateTimer())
   {
     MxTimer *timer = new MxTimer();
-    this->m_Timer = timer;
+    this->m_timer = timer;
 
     if (timer == NULL)
       return FAILURE;

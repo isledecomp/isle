@@ -1,13 +1,20 @@
 #ifndef MXOMNI_H
 #define MXOMNI_H
 
-#include "mxvariabletable.h"
-#include "mxticklemanager.h"
-#include "legoomni.h"
-#include "mxresult.h"
-#include "mxomnicreateparam.h"
+#include "mxcriticalsection.h"
+#include "mxeventmanager.h"
+#include "mxmusicmanager.h"
+#include "mxnotificationmanager.h"
+#include "mxobjectfactory.h"
 #include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxresult.h"
+#include "mxsoundmanager.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
 #include "mxtimer.h"
+#include "mxvariabletable.h"
+#include "mxvideomanager.h"
 
 class MxOmni : public MxCore
 {
@@ -21,11 +28,16 @@ public:
   __declspec(dllexport) static void SetHD(const char *s);
   __declspec(dllexport) static void SetSound3D(unsigned char);
   
-  MxResult MxOmni::Create(const MxOmniCreateParam &p);
+  virtual ~MxOmni();
 
-  MxTimer* GetTimer() const { return this->m_Timer; } 
+  virtual long Notify(MxParam &p); // vtable+04
+  virtual void Init(); // vtable+14
+  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
+  virtual void Destroy(); // vtable+1c
 
-private:
+  MxTimer* GetTimer() const { return this->m_timer; }
+
+protected:
   static MxOmni* m_instance;
 
   MxString m_mediaPath; // 0x8
