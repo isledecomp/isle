@@ -90,7 +90,6 @@ class Bin:
     return self.file.read(size)
 
 line_dump = None
-sym_dump = None
 
 origfile = Bin(original)
 recompfile = Bin(recomp)
@@ -110,7 +109,7 @@ def get_recompiled_address(filename, line):
 
   # Load source lines from PDB
   if not line_dump:
-    call = ['cvdump', '-l', '-s']
+    call = [os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'cvdump'), '-l', '-s']
 
     if os.name != 'nt':
       # Run cvdump through wine and convert path to Windows-friendly wine path
@@ -119,7 +118,7 @@ def get_recompiled_address(filename, line):
     else:
       call.append(syms)
 
-    line_dump = subprocess.check_output(call, cwd=os.path.dirname(os.path.abspath(sys.argv[0]))).decode('utf-8').split('\r\n')
+    line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
 
   # Find requested filename/line in PDB
   if os.name != 'nt':
@@ -129,6 +128,7 @@ def get_recompiled_address(filename, line):
   #print('Looking for ' + filename + ' line ' + str(line))
 
   addr = None
+  found = False
 
   for i, s in enumerate(line_dump):
     if s.startswith('  ' + filename):
@@ -136,14 +136,14 @@ def get_recompiled_address(filename, line):
       if line == int(lines[0]):
         # Found address
         addr = int(lines[1], 16)
+        found = True
         break
 
-  if addr:
+  if found:
     # Find size of function
     for i, s in enumerate(line_dump):
       if 'S_GPROC32' in s:
         if int(s[26:34], 16) == addr:
-
           obj = RecompiledInfo()
           obj.addr = addr + recompfile.imagebase + recompfile.textvirt
           obj.size = int(s[41:49], 16)
@@ -171,7 +171,7 @@ total_accuracy = 0
 
 for subdir, dirs, files in os.walk(source):
   for file in files:
-    srcfilename = os.path.join(subdir, file)
+    srcfilename = os.path.join(os.path.abspath(subdir), file)
     srcfile = open(srcfilename, 'r')
     line_no = 0
 
@@ -203,7 +203,7 @@ for subdir, dirs, files in os.walk(source):
 
           diff = difflib.SequenceMatcher(None, origasm, recompasm)
           ratio = diff.ratio()
-          print('%s (%s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), ratio * 100))
+          print('%s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
 
           function_count += 1
           total_accuracy += ratio

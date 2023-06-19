@@ -58,7 +58,6 @@ jobs:
     - name: Summarize Accuracy
       shell: cmd
       run: |
-        dir /s /b
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
         pip install capstone
