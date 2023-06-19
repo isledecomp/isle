@@ -1,8 +1,7 @@
 #ifndef MXOMNICREATEPARAM_H
 #define MXOMNICREATEPARAM_H
 
-#include <windows.h>
-
+#include "legoinc.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparambase.h"
 #include "mxstring.h"

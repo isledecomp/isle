@@ -1,5 +1,8 @@
 #include "mxvideoparam.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 // OFFSET: LEGO1 0x100bec70
 MxVideoParam::MxVideoParam()
 {

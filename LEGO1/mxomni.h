@@ -53,11 +53,11 @@ protected:
   MxTimer* m_timer; //0x3C
   MxStreamer* m_streamer; //0x40
 
-  char unknown44[0x4]; // 0x44
+  int m_unk44; // 0x44
 
   MxCriticalSection m_criticalsection; // 0x48
 
-  char unknown64[0x4]; // 0x64
+  int m_unk64; // 0x64
 
 };
 

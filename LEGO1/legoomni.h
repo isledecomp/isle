@@ -26,6 +26,7 @@ public:
   __declspec(dllexport) static void CreateInstance();
   __declspec(dllexport) static LegoOmni *GetInstance();
 
+  LegoOmni();
   virtual ~LegoOmni(); // vtable+00
 
   virtual long Notify(MxParam &p); // vtable+04

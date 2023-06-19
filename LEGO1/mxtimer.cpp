@@ -1,6 +1,6 @@
 #include "mxtimer.h"
 
-#include <windows.h>
+#include "legoinc.h"
 
 // 0x10101414
 long MxTimer::s_LastTimeCalculated = 0;
