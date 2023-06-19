@@ -2,9 +2,13 @@
 
 #include "mxdirectdraw.h"
 
+// 0x10100c68
 BOOL g_paletteIndexed8 = 0;
+
+// 0x10100c70
 BOOL DAT_10100c70 = 0;
 
+// OFFSET: LEGO1 0x1009e7a0
 HRESULT MxDirectDraw::SetEntries()
 {
   HRESULT ret;
@@ -22,6 +26,7 @@ HRESULT MxDirectDraw::SetEntries()
   return 1;
 }
 
+// OFFSET: LEGO1 0x1009e7f0
 HRESULT MxDirectDraw::FlipToGDISurface()
 {
   HRESULT ret;
@@ -37,6 +42,7 @@ HRESULT MxDirectDraw::FlipToGDISurface()
   return 1;
 }
 
+// OFFSET: LEGO1 0x1009e830
 void MxDirectDraw::FUN_1009e830(char *error_msg, HRESULT ret)
 {
   if (!DAT_10100c70) {
@@ -50,6 +56,7 @@ void MxDirectDraw::FUN_1009e830(char *error_msg, HRESULT ret)
   DAT_10100c70 = 0;
 }
 
+// OFFSET: LEGO1 0x1009d570
 int MxDirectDraw::GetPrimaryBitDepth()
 {
   DWORD dwRGBBitCount;
@@ -72,6 +79,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
   return dwRGBBitCount;
 }
 
+// OFFSET: LEGO1 0x1009e6a0
 int MxDirectDraw::Pause(int param_1)
 {
   if (param_1) {
@@ -107,7 +115,7 @@ int MxDirectDraw::Pause(int param_1)
   return 0;
 }
 
-
+// OFFSET: LEGO1 0x1009e750
 HRESULT MxDirectDraw::FUN_1009e750()
 {
   HRESULT ret;
@@ -125,6 +133,7 @@ HRESULT MxDirectDraw::FUN_1009e750()
   return 1;
 }
 
+// OFFSET: LEGO1 0x1009e880
 char * MxDirectDraw::ErrorToString(HRESULT error)
 {
   switch(error) {
