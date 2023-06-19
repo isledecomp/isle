@@ -27,7 +27,13 @@ private:
   char *m_name;
   int m_unk1c;
   MxAtomId m_atomId;
-  unsigned short m_unk24;
+  // So far, implementing MxDSObject::MxDSObject correctly required that m_unk24 is declared a (signed) short. 
+  // Most of the other game's code appears to treat it as unsigned short, however.
+  // This union is a workaround until we have figured this out.
+  union {
+    unsigned short m_unk24;
+    short m_unk24signed;
+  };
   unsigned short m_unk26;
   int m_unk28;
 };
