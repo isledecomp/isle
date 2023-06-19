@@ -288,8 +288,6 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxcore.obj"
-	-@erase "$(INTDIR)\mxdsobject.obj"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Release\ISLE.EXE"
 	-@erase ".\Release\ISLE.PDB"
@@ -351,8 +349,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxdsobject.obj" \
 	".\Release\LEGO1.LIB"
 
 ".\Release\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -382,8 +378,6 @@ CLEAN :
 	-@erase "$(INTDIR)\isle.obj"
 	-@erase "$(INTDIR)\isle.res"
 	-@erase "$(INTDIR)\main.obj"
-	-@erase "$(INTDIR)\mxcore.obj"
-	-@erase "$(INTDIR)\mxdsobject.obj"
 	-@erase "$(INTDIR)\vc40.idb"
 	-@erase "$(INTDIR)\vc40.pdb"
 	-@erase ".\Debug\ISLE.EXE"
@@ -447,8 +441,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\isle.obj" \
 	"$(INTDIR)\isle.res" \
 	"$(INTDIR)\main.obj" \
-	"$(INTDIR)\mxcore.obj" \
-	"$(INTDIR)\mxdsobject.obj" \
 	".\LEGO1\Debug\LEGO1.lib"
 
 ".\Debug\ISLE.EXE" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -1459,36 +1451,6 @@ SOURCE=.\LEGO1\mxvideoparamflags.h
 !ENDIF 
 
 # End Project Dependency
-################################################################################
-# Begin Source File
-
-SOURCE=.\LEGO1\mxdsobject.cpp
-DEP_CPP_MXDSO=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsobject.h"\
-	
-
-"$(INTDIR)\mxdsobject.obj" : $(SOURCE) $(DEP_CPP_MXDSO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
-################################################################################
-# Begin Source File
-
-SOURCE=.\LEGO1\mxcore.cpp
-DEP_CPP_MXCOR=\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	
-
-"$(INTDIR)\mxcore.obj" : $(SOURCE) $(DEP_CPP_MXCOR) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-# End Source File
 # End Target
 # End Project
 ################################################################################
