@@ -134,7 +134,7 @@ int readRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
 
-  BOOL read = readReg(name, buffer, 0x100);
+  BOOL read = readReg(name, buffer, sizeof(buffer));
   if (read) {
     if (strcmp("YES", buffer) == 0) {
       *out = TRUE;
@@ -154,7 +154,7 @@ int readRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (readReg(name, buffer, 0x100)) {
+  if (readReg(name, buffer, sizeof(buffer))) {
     *out = atoi(buffer);
     return TRUE;
   }
@@ -165,11 +165,9 @@ int readRegInt(LPCSTR name, int *out)
 // OFFSET: ISLE 0x4028d0
 void Isle::loadConfig()
 {
-  #define BUFFER_SIZE 1024
+  char buffer[1024];
 
-  char buffer[BUFFER_SIZE];
-
-  if (!readReg("diskpath", buffer, BUFFER_SIZE)) {
+  if (!readReg("diskpath", buffer, sizeof(buffer))) {
     strcpy(buffer, MxOmni::GetHD());
   }
 
@@ -177,7 +175,7 @@ void Isle::loadConfig()
   strcpy(m_hdPath, buffer);
   MxOmni::SetHD(m_hdPath);
 
-  if (!readReg("cdpath", buffer, BUFFER_SIZE)) {
+  if (!readReg("cdpath", buffer, sizeof(buffer))) {
     strcpy(buffer, MxOmni::GetCD());
   }
 
@@ -208,22 +206,22 @@ void Isle::loadConfig()
     }
   }
 
-  if (!readReg("Island Quality", buffer, BUFFER_SIZE)) {
+  if (!readReg("Island Quality", buffer, sizeof(buffer))) {
     strcpy(buffer, "1");
   }
   m_islandQuality = atoi(buffer);
 
-  if (!readReg("Island Texture", buffer, BUFFER_SIZE)) {
+  if (!readReg("Island Texture", buffer, sizeof(buffer))) {
     strcpy(buffer, "1");
   }
   m_islandTexture = atoi(buffer);
 
-  if (readReg("3D Device ID", buffer, BUFFER_SIZE)) {
+  if (readReg("3D Device ID", buffer, sizeof(buffer))) {
     m_deviceId = new char[strlen(buffer) + 1];
     strcpy(m_deviceId, buffer);
   }
 
-  if (readReg("savepath", buffer, BUFFER_SIZE)) {
+  if (readReg("savepath", buffer, sizeof(buffer))) {
     m_savePath = new char[strlen(buffer) + 1];
     strcpy(m_savePath, buffer);
   }
