@@ -29,7 +29,6 @@ MxDSObject::MxDSObject()
 // OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {
-  // TODO: instead of the expected CMP EAX,ESI we get CMP ESI,EAX
   if (p_name != this->m_name)
   {
     free(this->m_name);
