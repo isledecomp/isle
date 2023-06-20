@@ -1,6 +1,8 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
+class ViewROI;
+
 class ViewManager
 {
 public:

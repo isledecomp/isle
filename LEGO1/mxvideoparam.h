@@ -25,7 +25,7 @@ private:
   int m_right;
   int m_bottom;
   MxPalette *m_palette;
-  BOOL m_backBuffers;
+  int m_backBuffers;
   MxVideoParamFlags m_flags;
   int m_unk1c;
   char *m_deviceId;

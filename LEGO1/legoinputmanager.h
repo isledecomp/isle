@@ -1,14 +1,16 @@
 #ifndef LEGOINPUTMANAGER_H
 #define LEGOINPUTMANAGER_H
 
+#include "mxcore.h"
+
 __declspec(dllexport) enum NotificationId
 {
-  NONE = 0x0,
-  KEYDOWN = 0x7,
-  MOUSEUP = 0x8,
-  MOUSEDOWN = 0x9,
-  MOUSEMOVE = 0x10,
-  TIMER = 0xF
+  NONE = 0,
+  KEYDOWN = 7,
+  MOUSEUP = 8,
+  MOUSEDOWN = 9,
+  MOUSEMOVE = 10,
+  TIMER = 15
 };
 
 class LegoInputManager
