@@ -137,15 +137,17 @@ int Isle::ReadRegBool(LPCSTR name, BOOL *out)
   if (read) {
     if (strcmp("YES", buffer) == 0) {
       *out = TRUE;
-      return TRUE;
+      return read;
     }
 
     if (strcmp("NO", buffer) == 0) {
       *out = FALSE;
-      return TRUE;
+      return read;
     }
+
+    read = FALSE;
   }
-  return FALSE;
+  return read;
 }
 
 // OFFSET: ISLE 0x402880
