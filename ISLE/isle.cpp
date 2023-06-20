@@ -37,13 +37,7 @@ Isle::Isle()
   m_frameDelta = 10;
   m_windowActive = 1;
 
-  MxRect32 rect;
-  rect.m_left = 0;
-  rect.m_top = 0;
-  rect.m_right = 639;
-  rect.m_bottom = 479;
-
-  m_videoParam = MxVideoParam(rect, NULL, 1, MxVideoParamFlags());
+  m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
   m_videoParam.flags().Enable16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
   m_windowHandle = NULL;
