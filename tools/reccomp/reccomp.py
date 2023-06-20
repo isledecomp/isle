@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 from capstone import *
 import difflib
 import struct
@@ -7,60 +8,37 @@ import subprocess
 import os
 import sys
 
-def print_usage():
-  print('Usage: %s [options] <original-binary> <recompiled-binary> <recompiled-pdb> <decomp-dir>\n' % sys.argv[0])
-  print('\t-v, --verbose <offset>\t\t\tPrint assembly diff for specific function (original file\'s offset)')
-  print('\t-h, --html <output-file>\t\t\tGenerate searchable HTML summary of status and diffs')
-  sys.exit(1)
+parser = argparse.ArgumentParser(allow_abbrev=False)
+parser.add_argument('original', metavar='original-binary', help='An original LEGO\N{Copyright Sign} binary')
+parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
+parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
+parser.add_argument('decomp_dir', metavar='decomp-dir-pdb', help='The recompiled source tree')
+parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
+parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
 
-positional_args = []
+args = parser.parse_args()
+
+skip = args.verbose or args.html
 verbose = None
-skip = False
-html = None
+if args.verbose:
+  verbose = int(args.verbose, 16)
+html = args.html
 
-for i, arg in enumerate(sys.argv):
-  if skip:
-    skip = False
-    continue
-
-  if arg.startswith('-'):
-    # A flag rather than a positional arg
-    flag = arg[1:]
-
-    if flag == 'v' or flag == '-verbose':
-      verbose = int(sys.argv[i + 1], 16)
-      skip = True
-    elif flag == 'h' or flag == '-html':
-      html = sys.argv[i + 1]
-      skip = True
-    else:
-      print('Unknown flag: %s' % arg)
-      print_usage()
-  else:
-    positional_args.append(arg)
-
-if len(positional_args) != 5:
-  print_usage()
-
-original = positional_args[1]
+original = args.original
 if not os.path.isfile(original):
-  print('Invalid input: Original binary does not exist')
-  sys.exit(1)
+  parser.error('Invalid input: Original binary does not exist')
 
-recomp = positional_args[2]
+recomp = args.recompiled
 if not os.path.isfile(recomp):
-  print('Invalid input: Recompiled binary does not exist')
-  sys.exit(1)
+  parser.error('Invalid input: Recompiled binary does not exist')
 
-syms = positional_args[3]
+syms = args.pdb
 if not os.path.isfile(syms):
-  print('Invalid input: Symbols PDB does not exist')
-  sys.exit(1)
+  parser.error('Invalid input: Symbols PDB does not exist')
 
-source = positional_args[4]
+source = args.decomp_dir
 if not os.path.isdir(source):
-  print('Invalid input: Source directory does not exist')
-  sys.exit(1)
+  parser.error('Invalid input: Source directory does not exist')
 
 # Declare a class that can automatically convert virtual executable addresses
 # to file addresses
