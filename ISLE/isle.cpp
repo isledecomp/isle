@@ -153,7 +153,7 @@ int Isle::ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (Isle::ReadReg(name, buffer, sizeof(buffer))) {
+  if (ReadReg(name, buffer, sizeof(buffer))) {
     *out = atoi(buffer);
     return TRUE;
   }
