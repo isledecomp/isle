@@ -155,12 +155,12 @@ int Isle::ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (ReadReg(name, buffer, sizeof(buffer))) {
+  BOOL read = ReadReg(name, buffer, sizeof(buffer));
+  if (read) {
     *out = atoi(buffer);
-    return TRUE;
   }
 
-  return FALSE;
+  return read;
 }
 
 // OFFSET: ISLE 0x4028d0
