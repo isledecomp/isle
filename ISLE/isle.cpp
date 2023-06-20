@@ -290,7 +290,7 @@ void Isle::SetupCursor(WPARAM wParam)
   case 7:
   case 8:
   case 9:
-  case 0xa:
+  case 0xA:
     break;
   }
 
