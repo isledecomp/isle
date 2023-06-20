@@ -252,16 +252,18 @@ void Isle::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 // OFFSET: ISLE 0x4013b0
 BOOL Isle::SetupLegoOmni()
 {
+  BOOL result = FALSE;
   char mediaPath[256];
   GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
-  if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
+  BOOL failure = Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) == FAILURE;
+  if (!failure) {
     VariableTable()->SetVariable("ACTOR_01", "");
     TickleManager()->vtable1c(VideoManager(), 10);
-    return TRUE;
+    result = TRUE;
   }
 
-  return FALSE;
+  return result;
 }
 
 // OFFSET: ISLE 0x402e80
