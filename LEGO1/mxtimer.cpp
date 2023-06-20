@@ -19,8 +19,8 @@ MxTimer::MxTimer()
 // OFFSET: LEGO1 0x100ae160
 void MxTimer::Start()
 {
-  this->m_isRunning = MX_TRUE;
   MxTimer::s_LastTimeTimerStarted = timeGetTime();
+  this->m_isRunning = MX_TRUE;
 }
 
 // OFFSET: LEGO1 0x100ae180
