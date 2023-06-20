@@ -1,14 +1,12 @@
-#ifndef RACESTANDS2ENTITY_H
-#define RACESTANDS2ENTITY_H
-
-#include "buildingentity.h"
+#ifndef MXCOMPOSITEMEDIAPRESENTER_H
+#define MXCOMPOSITEMEDIAPRESENTER_H
 
 class MxCompositeMediaPresenter
 {
-  // OFFSET ISLE1 0x10073ea0
+public:
   MxCompositeMediaPresenter();
   
-  // Size is 0x50
+  // SIZE 0x50
 };
 
-#endif // RACESTANDS2ENTITY_H
+#endif // MXCOMPOSITEMEDIAPRESENTER_H

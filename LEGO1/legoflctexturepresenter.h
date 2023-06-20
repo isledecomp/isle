@@ -1,5 +1,12 @@
+#ifndef LEGOFLCTEXTUREPRESENTER_H
+#define LEGOFLCTEXTUREPRESENTER_H
+
+#include "mxflcpresenter.h"
+
 class LegoFlcTexturePresenter : public MxFlcPresenter
 {
-	// OFFSET LEGO1 0x1005de80
-	LegoFlcTexturePresenter();
-}
+public:
+  LegoFlcTexturePresenter();
+};
+
+#endif // LEGOFLCTEXTUREPRESENTER_H

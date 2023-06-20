@@ -1,9 +1,15 @@
+#ifndef DUNEBUGGY_H
+#define DUNEBUGGY_H
+
+#include "islepathactor.h"
+
 class DuneBuggy : public IslePathActor
 {
-	// VTABLE 100d8f98
-	
-	// OFFSET LEGO1 0x10067bb0
-	DuneBuggy()
-	
-	// Size 0x16c
-}
+public:
+  DuneBuggy();
+  
+  // VTABLE 0x100d8f98
+  // SIZE 0x16c
+};
+
+#endif // DUNEBUGGY_H

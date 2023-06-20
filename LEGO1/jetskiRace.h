@@ -1,9 +1,11 @@
 #ifndef JETSKIRACE_H
 #define JETSKIRACE_H
 
+#include "legorace.h"
+
 class JetskiRace : public LegoRace
 {
-  // OFFSET: LEGO1 0x10015aa0
+public:
   JetskiRace();
 };
 

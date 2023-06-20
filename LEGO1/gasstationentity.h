@@ -1,4 +1,11 @@
+#ifndef GASSTATIONENTITY_H
+#define GASSTATIONENTITY_H
+
+#include "buildingentity.h"
+
 class GasStationEntity : public BuildingEntity
 {
-	// Size 0x68
-}
+  // SIZE 0x68
+};
+
+#endif // GASSTATIONENTITY_H

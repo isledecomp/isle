@@ -1,4 +1,11 @@
+#ifndef LEGOTEXTUREPRESENTER_H
+#define LEGOTEXTUREPRESENTER_H
+
+#include "mxmediapresenter.h"
+
 class LegoTexturePresenter : public MxMediaPresenter
 {
-	// Size 0x54
-}
+  // SIZE 0x54
+};
+
+#endif // LEGOTEXTUREPRESENTER_H

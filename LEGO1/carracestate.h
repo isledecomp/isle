@@ -5,7 +5,6 @@
 
 class CarRaceState : public RaceState
 {
-  // No constructor
 };
 
 #endif // CARRACESTATE_H

@@ -1,9 +1,15 @@
+#ifndef ANIMSTATE_H
+#define ANIMSTATE_H
+
+#include "legostate.h"
+
 class AnimState : public LegoState
 {
-	// VTABLE 100d8d80
-	
-	// OFFSET LEGO1 0x10064ff0
-	AnimState();
-	
-	// Size 0x1c
-}
+public:
+  AnimState();
+  
+  // VTABLE 0x100d8d80
+  // SIZE 0x1c
+};
+
+#endif // ANIMSTATE_H

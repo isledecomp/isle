@@ -1,8 +1,15 @@
+#ifndef MXEVENTPRESENTER_H
+#define MXEVENTPRESENTER_H
+
+#include "mxmediapresenter.h"
+
 class MxEventPresenter : public MxMediaPresenter
 {
-	// OFFSET LEGO1 0x100c2b70
-	MxEventPresenter();
-	
-	// OFFSET LEGO1 0x100c2da0
-	Init();
-}
+public:
+  MxEventPresenter();
+  
+private:
+  void Init();
+};
+
+#endif // MXEVENTPRESENTER_H

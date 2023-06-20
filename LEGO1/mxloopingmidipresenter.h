@@ -1,4 +1,11 @@
-class MxLoopingMIDIPresenter : public MxMidiPresenter
+#ifndef MXLOOPINGMIDIPRESENTER_H
+#define MXLOOPINGMIDIPRESENTER_H
+
+#include "mxmidipresenter.h"
+
+class MxLoopingMIDIPresenter : public MxMIDIPresenter
 {
-	// Size 0x58
-}
+  // SIZE 0x58
+};
+
+#endif // MXLOOPINGMIDIPRESENTER_H

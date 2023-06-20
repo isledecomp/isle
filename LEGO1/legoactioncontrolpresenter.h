@@ -1,4 +1,11 @@
+#ifndef LEGOACTIONCONTROLPRESENTER_H
+#define LEGOACTIONCONTROLPRESENTER_H
+
+#include "mxmediapresenter.h"
+
 class LegoActionControlPresenter : public MxMediaPresenter
 {
-  // Size 0x68
-}
+  // SIZE 0x68
+};
+
+#endif // LEGOACTIONCONTROLPRESENTER_H

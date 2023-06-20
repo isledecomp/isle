@@ -1,4 +1,11 @@
+#ifndef HOSPITALENTITY_H
+#define HOSPITALENTITY_H
+
+#include "buildingentity.h"
+
 class HospitalEntity : public BuildingEntity
 {
-	// Size 0x68
-}
+  // SIZE 0x68
+};
+
+#endif // HOSPITALENTITY_H

@@ -1,4 +1,11 @@
+#ifndef LEGO3DWAVEPRESENTER_H
+#define LEGO3DWAVEPRESENTER_H
+
+#include "legowavepresenter.h"
+
 class Lego3DWavePresenter : public LegoWavePresenter
 {
-	// Size 0xa0
-}
+  // SIZE 0xa0
+};
+
+#endif // LEGO3DWAVEPRESENTER_H

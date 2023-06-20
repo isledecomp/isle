@@ -1,8 +1,15 @@
+#ifndef MXLOOPINGFLXPRESENTER_H
+#define MXLOOPINGFLXPRESENTER_H
+
+#include "mxflcpresenter.h"
+
 class MxLoopingFlcPresenter : public MxFlcPresenter
 {
-	// OFFSET LEGO1 0x100b4310
-	MxLoopingFlcPresenter();
-	
-	// OFFSET LEGO1 0x100b4410
-	Init();
-}
+public:
+  MxLoopingFlcPresenter();
+  
+private:
+  void Init();
+};
+
+#endif // MXLOOPINGFLXPRESENTER_H

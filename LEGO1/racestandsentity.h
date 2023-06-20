@@ -5,7 +5,7 @@
 
 class RaceStandsEntity : public BuildingEntity
 {
-  // Size is 0x68
+  // SIZE 0x68
 };
 
 #endif // RACESTANDSENTITY_H

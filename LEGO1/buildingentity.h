@@ -5,7 +5,7 @@
 
 class BuildingEntity : public LegoEntity
 {
-  // OFFSET LEGO1 0x10014e20
+public:
   BuildingEntity();
 };
 

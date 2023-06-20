@@ -1,7 +1,14 @@
+#ifndef JUKEBOXENTITY_H
+#define JUKEBOXENTITY_H
+
+#include "legoentity.h"
+
 class JukeBoxEntity : public LegoEntity
 {
-	// VTABLE 100da8a0
-	
-	// OFFSET LEGO1 0x10085bc0
-	JukeBoxEntity();
-}
+public:
+  JukeBoxEntity();
+
+  // VTABLE 0x100da8a0
+};
+
+#endif // JUKEBOXENTITY_H

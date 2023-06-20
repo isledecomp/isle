@@ -1,10 +1,17 @@
+#ifndef LEGOHIDEANIMPRESENTER_H
+#define LEGOHIDEANIMPRESENTER_H
+
+#include "legoloopinganimpresenter.h"
+
 class LegoHideAnimPresenter : public LegoLoopingAnimPresenter
 {
-	// VTABLE 0x100d9278
-	
-	// OFFSET LEGO1 0x1006d7e0
-	LegoHideAnimPresenter();
-	
-	// OFFSET LEGO1 0x1006da50
-	void Init();
-}
+public:
+  LegoHideAnimPresenter();
+  
+private:
+  void Init();
+
+  // VTABLE 0x100d9278
+};
+
+#endif // LEGOHIDEANIMPRESENTER_H

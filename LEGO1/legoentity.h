@@ -6,8 +6,7 @@
 class LegoEntity : public MxEntity
 {
 public:
-	// OFFSET LEGO1 100105f0
-	LegoEntity();
+  LegoEntity();
   __declspec(dllexport) virtual ~LegoEntity();
 
   virtual const char* GetClassName() const { return "LegoEntity"; }

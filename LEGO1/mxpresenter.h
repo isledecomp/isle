@@ -1,6 +1,9 @@
 #ifndef MXPRESENTER_H
 #define MXPRESENTER_H
 
+class MxStreamController;
+class MxDSAction;
+
 class MxPresenter
 {
 protected:

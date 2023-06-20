@@ -5,7 +5,6 @@
 
 class LegoState : public MxCore
 {
-	// LegoState() = delete;
 };
 
 #endif // LEGOSTATE_H

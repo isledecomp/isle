@@ -1,9 +1,15 @@
+#ifndef HOSPITALSTATE_H
+#define HOSPITALSTATE_H
+
+#include "legostate.h"
+
 class HospitalState : public LegoState
 {
-	// OFFSET LEGO1 0x10076370
-	HospitalState();
-	
-	// VTABLE 0x100d97a0
-	
-	// Size 0x18
-}
+public:
+  HospitalState();
+  
+  // VTABLE 0x100d97a0	
+  // SIZE 0x18
+};
+
+#endif // HOSPITALSTATE_H

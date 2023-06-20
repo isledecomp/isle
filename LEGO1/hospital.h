@@ -1,7 +1,14 @@
+#ifndef HOSPITAL_H
+#define HOSPITAL_H
+
+#include "legoworld.h"
+
 class Hospital : public LegoWorld
 {
-	// OFFSET LEGO1 0x100745e0
-	Hospital();
-	
-	// size 0x300
-}
+public:
+  Hospital();
+  
+  // SIZE 0x300
+};
+
+#endif // HOSPITAL_H

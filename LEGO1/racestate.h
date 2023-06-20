@@ -5,7 +5,7 @@
 
 class RaceState : public LegoState
 {
-  // OFFSET: LEGO1 0x10015f30
+public:
   RaceState();
 };
 

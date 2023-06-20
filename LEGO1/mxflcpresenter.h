@@ -1,5 +1,12 @@
+#ifndef MXFLCPRESENTER_H
+#define MXFLCPRESENTER_H
+
+#include "mxvideopresenter.h"
+
 class MxFlcPresenter : public MxVideoPresenter
 {
-	// OFFSET LEGO1 0x100b3310
-	MxFlcPresenter();
-}
+public:
+  MxFlcPresenter();
+};
+
+#endif // MXFLCPRESENTER_H

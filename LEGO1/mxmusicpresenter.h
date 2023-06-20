@@ -1,5 +1,12 @@
+#ifndef MXMUSICPRESENTER_H
+#define MXMUSICPRESENTER_H
+
+#include "mxaudiopresenter.h"
+
 class MxMusicPresenter : public MxAudioPresenter
 {
-	// OFFSET LEGO1 0x100c22c0
-	MxMusicPresenter();
-}
+public:
+  MxMusicPresenter();
+};
+
+#endif // MXMUSICPRESENTER_H

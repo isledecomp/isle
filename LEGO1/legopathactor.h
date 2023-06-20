@@ -1,7 +1,14 @@
+#ifndef LEGOPATHACTOR_H
+#define LEGOPATHACTOR_H
+
+#include "legoentity.h"
+
 class LegoPathActor : public LegoEntity
 {
-	// OFFSET LEGO1 0x1002d700
-	LegoPathActor();
-	
-	// Size 0x154
-}
+public:
+  LegoPathActor();
+  
+  // SIZE 0x154
+};
+
+#endif // LEGOPATHACTOR_H

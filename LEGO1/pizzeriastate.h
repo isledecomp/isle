@@ -1,12 +1,14 @@
-#ifndef JETSKIRACE_H
-#define JETSKIRACE_H
+#ifndef PIZZERIASTATE_H
+#define PIZZERIASTATE_H
+
+#include "legostate.h"
 
 class PizzeriaState : public LegoState
 {
-  // OFFSET: LEGO1 0x10015aa0
+public:
   PizzeriaState();
   
-  // Size 0xb4
+  // SIZE 0xb4
 };
 
-#endif // JETSKIRACE_H
+#endif // PIZZERIASTATE_H

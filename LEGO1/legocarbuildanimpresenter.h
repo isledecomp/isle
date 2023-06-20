@@ -1,5 +1,12 @@
+#ifndef LEGOCARBUILDANIMPRESENTER_H
+#define LEGOCARBUILDANIMPRESENTER_H
+
+#include "legoanimpresenter.h"
+
 class LegoCarBuildAnimPresenter : public LegoAnimPresenter
 {
-	// OFFSET LEGO1 0x10078400
-	LegoCarBuildAnimPresenter();
-}
+public:
+  LegoCarBuildAnimPresenter();
+};
+
+#endif // LEGOCARBUILDANIMPRESENTER_H

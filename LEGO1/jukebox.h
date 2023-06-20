@@ -1,14 +1,14 @@
-#ifndef RACESTANDS2ENTITY_H
-#define RACESTANDS2ENTITY_H
+#ifndef JUKEBOX_H
+#define JUKEBOX_H
 
-#include "buildingentity.h"
+#include "legoentity.h"
 
 class JukeBox : public LegoEntity
 {
-  // OFFSET ISLE1 0x1005d66
+public:
   JukeBox();
   
-  // Size is 0x50
+  // SIZE 0x50
 };
 
-#endif // RACESTANDS2ENTITY_H
+#endif // JUKEBOX_H

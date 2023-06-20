@@ -1,9 +1,15 @@
+#ifndef INFOCENTERSTATE_H
+#define INFOCENTERSTATE_H
+
+#include "legostate.h"
+
 class InfoCenterState : public LegoState
 {
-	// VTABLE 0x100d93a8
-	
-	// OFFSET LEGO1 0x10071600
-	InfoCenterState();
-	
-	// Size 0x94
-}
+public:
+  InfoCenterState();
+  
+  // VTABLE 0x100d93a8
+  // SIZE 0x94
+};
+
+#endif // INFOCENTERSTATE_H

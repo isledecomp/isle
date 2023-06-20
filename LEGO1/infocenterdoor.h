@@ -1,9 +1,14 @@
+#ifndef INFOCENTERDOOR_H
+#define INFOCENTERDOOR_H
+
 #include "legoworld.h"
 
 class InfoCenterDoor : public LegoWorld
 {
-	// OFFSET LEGO1 0x10037730
-	InfoCenterDoor();
-	
-	// Size 0xfc
-}
+public:
+  InfoCenterDoor();
+  
+  // SIZE 0xfc
+};
+
+#endif // INFOCENTERDOOR_H

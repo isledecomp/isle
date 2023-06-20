@@ -5,10 +5,10 @@
 
 class ActlState : public LegoState
 {
-  // OFFSET LEGO1 0x100334b0
-	ActlState();
+public:
+  ActlState();
 
-  // size is 0x26c
+  // SIZE 0x26c
 };
 
 #endif // ACTLSTATE_H

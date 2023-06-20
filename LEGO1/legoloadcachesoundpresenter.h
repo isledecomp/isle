@@ -1,15 +1,17 @@
 #ifndef LEGOLOADCACHESOUNDPRESENTER_H
 #define LEGOLOADCACHESOUNDPRESENTER_H
 
+#include "mxwavepresenter.h"
+
 class LegoLoadCacheSoundPresenter : public MxWavePresenter
 {
-	// OFFSET LEGO1 0x10018340
-	LegoLoadCacheSoundPresenter();
+public:
+  LegoLoadCacheSoundPresenter();
 
-  // OFFSET LEGO1 0x100184e0
-  Init()
+private:
+  void Init();
 
-	// Size 0x90
+  // SIZE 0x90
 };
 
 #endif // LEGOLOADCACHESOUNDPRESENTER_H

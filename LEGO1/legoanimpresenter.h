@@ -1,10 +1,17 @@
+#ifndef LEGOANIMPRESENTER_H
+#define LEGOANIMPRESENTER_H
+
+#include "mxvideopresenter.h"
+
 class LegoAnimPresenter : public MxVideoPresenter
 {
-  // VTABLE 0x100d90c8
-
-  // OFFSET LEGO1 0x10068420
+public:
   LegoAnimPresenter();
   
-  // OFFSET LEGO1 0x100686f0
+private:
   void Init();
-}
+
+  // VTABLE 0x100d90c8
+};
+
+#endif // LEGOANIMPRESENTER_H

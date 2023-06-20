@@ -1,9 +1,15 @@
+#ifndef RADIOSTATE_H
+#define RADIOSTATE_H
+
+#include "legostate.h"
+
 class RadioState : public LegoState
 {
-	// VTABLE 0x100d6d28
-	
-	// OFFSET LEGO1 0x1002ce10
-	RadioState()
-	
-	// Size 0x30
-}
+public:
+  RadioState();
+  
+  // VTABLE 0x100d6d28
+  // SIZE 0x30
+};
+
+#endif // RADIOSTATE_H

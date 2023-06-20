@@ -5,7 +5,6 @@
 
 class HelicopterState : public LegoState
 {
-	// HelicopterState() = delete;
 };
 
 #endif // HELICOPTERSTATE_H

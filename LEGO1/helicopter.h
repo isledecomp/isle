@@ -5,10 +5,8 @@
 
 class Helicopter : public IslePathActor
 {
-	// OFFSET LEGO1 0x10001e60
-	Helicopter();
-
-	// At last size 0x230
+public:
+  Helicopter();
 };
 
 #endif // HELICOPTER_H

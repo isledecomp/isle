@@ -5,10 +5,10 @@
 
 class Pizzeria : public IsleActor
 {
-  // OFFSET LEGO1 0x100334b0
-	ActlState();
+public:
+  Pizzeria();
 
-  // size is 0x84
+  // SIZE 0x84
 };
 
 #endif // PIZZERIASTATE_H

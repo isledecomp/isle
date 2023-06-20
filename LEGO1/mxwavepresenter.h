@@ -1,7 +1,14 @@
+#ifndef MXWAVEPRESENTER_H
+#define MXWAVEPRESENTER_H
+
+#include "mxsoundpresenter.h"
+
 class MxWavePresenter : public MxSoundPresenter
 {
-	// OFFSET LEGO1 0x100b1ad0
-	void Init();
-	
-	// Size 0x6c
-}
+private:
+  void Init();
+  
+  // SIZE 0x6c
+};
+
+#endif // MXWAVEPRESENTER_H

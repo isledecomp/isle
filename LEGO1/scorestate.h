@@ -1,4 +1,11 @@
+#ifndef SCORESTATE_H
+#define SCORESTATE_H
+
+#include "legostate.h"
+
 class ScoreState : public LegoState
 {
-	// Size 0xc
-}
+  // SIZE 0xc
+};
+
+#endif // SCORESTATE_H
