@@ -12,7 +12,7 @@ public:
   Isle();
   ~Isle();
 
-  static void Close();
+  void Close();
 
   MxResult SetupWindow(HINSTANCE hInstance);
 
