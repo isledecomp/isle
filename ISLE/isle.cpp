@@ -110,7 +110,7 @@ void Isle::Close()
 }
 
 // OFFSET: ISLE 0x402740
-BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
+BOOL Isle::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
   HKEY hKey;
   DWORD valueType;
@@ -129,7 +129,7 @@ BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 }
 
 // OFFSET: ISLE 0x4027b0
-int ReadRegBool(LPCSTR name, BOOL *out)
+int Isle::ReadRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
 
@@ -149,11 +149,11 @@ int ReadRegBool(LPCSTR name, BOOL *out)
 }
 
 // OFFSET: ISLE 0x402880
-int ReadRegInt(LPCSTR name, int *out)
+int Isle::ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (ReadReg(name, buffer, sizeof(buffer))) {
+  if (Isle::ReadReg(name, buffer, sizeof(buffer))) {
     *out = atoi(buffer);
     return TRUE;
   }
