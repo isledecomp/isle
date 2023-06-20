@@ -1,25 +1,14 @@
 #ifndef MXDSACTION_H
 #define MXDSACTION_H
 
-#include "mxatomid.h"
+#include "mxdsobject.h"
 
-class MxDSAction
+class MxDSAction : public MxDSObject
 {
 public:
   __declspec(dllexport) MxDSAction();
   __declspec(dllexport) virtual ~MxDSAction();
 
-  int m_unk04;
-  int m_unk08;
-  int m_unk0c;
-  int m_unk10;
-  int m_unk14;
-  int m_unk18;
-  int m_unk1c;
-  MxAtomId m_atomId;
-  unsigned short m_unk24;
-  unsigned short m_unk26;
-  int m_unk28;
   int m_unk2c;
   int m_unk30;
   int m_unk34;
@@ -46,12 +35,6 @@ public:
   int m_unk88;
   int m_unk8c;
   int m_unk90;
-
-  void setAtomId(MxAtomId &atomId)
-  {
-    this->m_atomId = atomId;
-  }
-
 };
 
 #endif // MXDSACTION_H

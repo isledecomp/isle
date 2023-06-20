@@ -98,6 +98,7 @@ class RecompiledInfo:
   addr = None
   size = None
   name = None
+  start = None
 
 def get_wine_path(fn):
   return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
@@ -136,9 +137,14 @@ class SymInfo:
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
 
+        debug_offs = line_dump[i + 2]
+        debug_start = int(debug_offs[22:30], 16)
+        debug_end = int(debug_offs[43:], 16)
+
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
-        info.size = int(line[41:49], 16)
+        info.start = debug_start
+        info.size = debug_end - debug_start
         info.name = line[77:]
 
         self.funcs[addr] = info
@@ -284,27 +290,32 @@ for subdir, dirs, files in os.walk(source):
           if not recinfo:
             continue
 
-          origasm = parse_asm(origfile, addr, recinfo.size)
-          recompasm = parse_asm(recompfile, recinfo.addr, recinfo.size)
+          if recinfo.size:
+            origasm = parse_asm(origfile, addr + recinfo.start, recinfo.size)
+            recompasm = parse_asm(recompfile, recinfo.addr + recinfo.start, recinfo.size)
 
-          diff = difflib.SequenceMatcher(None, origasm, recompasm)
-          ratio = diff.ratio()
+            diff = difflib.SequenceMatcher(None, origasm, recompasm)
+            ratio = diff.ratio()
+          else:
+            ratio = 0
+
           print('  %s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
 
           function_count += 1
           total_accuracy += ratio
 
-          if verbose == addr or html:
-            udiff = difflib.unified_diff(origasm, recompasm)
+          if recinfo.size:
+            if verbose == addr or html:
+              udiff = difflib.unified_diff(origasm, recompasm)
 
-            if verbose == addr:
-              for line in udiff:
-                print(line)
-              print()
-              print()
+              if verbose == addr:
+                for line in udiff:
+                  print(line)
+                print()
+                print()
 
-            if html:
-              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
+              if html:
+                htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
 
       except UnicodeDecodeError:
         break

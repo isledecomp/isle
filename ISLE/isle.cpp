@@ -84,6 +84,7 @@ Isle::~Isle()
 void Isle::Close()
 {
   MxDSAction ds;
+  ds.SetUnknown24(0xFFFE);
 
   if (Lego()) {
     GameState()->Save(0);
@@ -93,8 +94,7 @@ void Isle::Close()
 
     VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
-    long local_88 = 0;
-    Lego()->RemoveWorld(ds.m_atomId, local_88);
+    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetUnknown1c());
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
@@ -608,18 +608,18 @@ void Isle::Tick(BOOL sleepIfNotNextFrame)
           return;
         }
 
-        ds.setAtomId(stream->atom);
-        ds.m_unk24 = 0xFFFF;
-        ds.m_unk1c = 0;
+        ds.SetAtomId(stream->atom);
+        ds.SetUnknown24(0xFFFF);
+        ds.SetUnknown1c(0);
         VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
         if (Start(&ds) != SUCCESS) {
           return;
         }
       } else {
-        ds.setAtomId(stream->atom);
-        ds.m_unk24 = 0xFFFF;
-        ds.m_unk1c = 0;
+        ds.SetAtomId(stream->atom);
+        ds.SetUnknown24(0xFFFF);
+        ds.SetUnknown1c(0);
         if (Start(&ds) != SUCCESS) {
           return;
         }
