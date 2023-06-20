@@ -12,8 +12,13 @@ public:
   __declspec(dllexport) MxAtomId &operator=(const MxAtomId &id);
   __declspec(dllexport) ~MxAtomId();
 
-  char *m_internal;
+  MxAtomId()
+  {
+    this->m_internal = 0;
+  };
 
+private:
+  char *m_internal;
 };
 
 #endif // MXATOMID_H
