@@ -7,8 +7,10 @@ class Isle;
 
 extern Isle *g_isle;
 extern int g_closed;
+// 0x4101c4
 #define WNDCLASS_NAME "Lego Island MainNoM App"
-extern const char *WINDOW_TITLE;
+// 0x4101dc
+#define WINDOW_TITLE "LEGO\xAE"
 extern unsigned char g_mousedown;
 extern unsigned char g_mousemoved;
 extern RECT g_windowRect;
