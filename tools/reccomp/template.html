@@ -115,18 +115,25 @@
         }
       }
 
-      function filter(text) {
+      const filterOptions = { text: '', hidePerfect: false };
+
+      function filter() {
         closeAllDiffs();
 
-        var ltext = text.toLowerCase();
+        var ltext = filterOptions.text.toLowerCase();
 
         const collection = document.getElementsByClassName("funcrow");
         var searchCount = 0;
         for (var ele of collection) {
           var eledata = data[ele.dataset.index];
-          if (text == ''
+
+          const textOk = (ltext == ''
             || eledata.address.toLowerCase().includes(ltext)
-            || eledata.name.toLowerCase().includes(ltext)) {
+            || eledata.name.toLowerCase().includes(ltext));
+
+          const perfOk = (!filterOptions.hidePerfect || (eledata.matching < 1));
+
+          if (textOk && perfOk) {
             ele.style.display = '';
             searchCount++;
           } else {
@@ -219,8 +226,15 @@
 
         var search = document.getElementById('search');
         search.addEventListener('input', function (evt) {
-          filter(search.value);
+          filterOptions.text = search.value;
+          filter();
         });
+
+        const cbHidePerfect = document.getElementById('cbHidePerfect');
+        cbHidePerfect.addEventListener('change', evt => {
+          filterOptions.hidePerfect = evt.target.checked;
+          filter();
+        })
 
         sortByColumn(0);
       });
@@ -230,7 +244,10 @@
     <div class="main">
       <h1>Decompilation Status</h1>
       <input id="search" type="search" placeholder="Search for offset or function name...">
-      <br>
+      <div>
+        <label for="cbHidePerfect">Hide 100% match</label>
+        <input type="checkbox" id="cbHidePerfect" />
+      </div>
       <br>
       <table id="listing">
         <tr id='listingheader'><th style='width: 20%'>Address</th><th style="width:60%">Name</th><th style='width: 20%'>Matching</th></tr>
