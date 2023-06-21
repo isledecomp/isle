@@ -9,7 +9,7 @@ import os
 import sys
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
-  description='Compare an original EXE with a recompiled EXE + PDB.')
+  description='Recomp Compare: compare an original EXE with a recompiled EXE + PDB.')
 parser.add_argument('original', metavar='original-binary', help='The original binary')
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
@@ -24,7 +24,7 @@ if args.verbose:
   try:
     verbose = int(args.verbose, 16)
   except ValueError:
-    parser.error('verbose argument must be hexadecimal')
+    parser.error('invalid verbose argument')
 html = args.html
 
 original = args.original
