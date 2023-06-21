@@ -67,6 +67,12 @@
       #sortind {
         margin: 0 0.5em;
       }
+
+      .filters {
+        font-size: 10pt;
+        text-align: center;
+        margin: 0.5em 0 1em 0;
+      }
     </style>
     <script>
       var data = [/* INSERT DATA HERE */];
@@ -244,11 +250,10 @@
     <div class="main">
       <h1>Decompilation Status</h1>
       <input id="search" type="search" placeholder="Search for offset or function name...">
-      <div>
+      <div class="filters">
         <label for="cbHidePerfect">Hide 100% match</label>
         <input type="checkbox" id="cbHidePerfect" />
       </div>
-      <br>
       <table id="listing">
         <tr id='listingheader'><th style='width: 20%'>Address</th><th style="width:60%">Name</th><th style='width: 20%'>Matching</th></tr>
       </table>
