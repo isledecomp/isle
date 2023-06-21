@@ -60,8 +60,8 @@ jobs:
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
         pip install capstone
-        python3 tools/reccomp/reccomp.py -h ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
-        python3 tools/reccomp/reccomp.py -h LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
+        python3 tools/reccmp/reccmp.py -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB ISLE
+        python3 tools/reccmp/reccmp.py -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB LEGO1
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
