@@ -4,6 +4,7 @@
 class MxRect32
 {
 public:
+  MxRect32() { }
   MxRect32(int p_left, int p_top, int p_right, int p_bottom)
   {
     this->m_left = p_left;
