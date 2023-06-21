@@ -12,7 +12,11 @@ public:
   Isle();
   ~Isle();
 
-  static void Close();
+  void Close();
+
+  BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize);
+  int ReadRegBool(LPCSTR name, BOOL *out);
+  int ReadRegInt(LPCSTR name, int *out);
 
   MxResult SetupWindow(HINSTANCE hInstance);
 

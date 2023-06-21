@@ -37,13 +37,7 @@ Isle::Isle()
   m_frameDelta = 10;
   m_windowActive = 1;
 
-  MxRect32 rect;
-  rect.m_left = 0;
-  rect.m_top = 0;
-  rect.m_right = 639;
-  rect.m_bottom = 479;
-
-  m_videoParam = MxVideoParam(rect, NULL, 1, MxVideoParamFlags());
+  m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
   m_videoParam.flags().Enable16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
   m_windowHandle = NULL;
@@ -116,7 +110,7 @@ void Isle::Close()
 }
 
 // OFFSET: ISLE 0x402740
-BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
+BOOL Isle::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
   HKEY hKey;
   DWORD valueType;
@@ -135,7 +129,7 @@ BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 }
 
 // OFFSET: ISLE 0x4027b0
-int ReadRegBool(LPCSTR name, BOOL *out)
+int Isle::ReadRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
 
@@ -143,28 +137,30 @@ int ReadRegBool(LPCSTR name, BOOL *out)
   if (read) {
     if (strcmp("YES", buffer) == 0) {
       *out = TRUE;
-      return TRUE;
+      return read;
     }
 
     if (strcmp("NO", buffer) == 0) {
       *out = FALSE;
-      return TRUE;
+      return read;
     }
+
+    read = FALSE;
   }
-  return FALSE;
+  return read;
 }
 
 // OFFSET: ISLE 0x402880
-int ReadRegInt(LPCSTR name, int *out)
+int Isle::ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
-  if (ReadReg(name, buffer, sizeof(buffer))) {
+  BOOL read = ReadReg(name, buffer, sizeof(buffer));
+  if (read) {
     *out = atoi(buffer);
-    return TRUE;
   }
 
-  return FALSE;
+  return read;
 }
 
 // OFFSET: ISLE 0x4028d0
@@ -256,16 +252,18 @@ void Isle::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
 // OFFSET: ISLE 0x4013b0
 BOOL Isle::SetupLegoOmni()
 {
+  BOOL result = FALSE;
   char mediaPath[256];
   GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
-  if (Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) != FAILURE) {
+  BOOL failure = Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) == FAILURE;
+  if (!failure) {
     VariableTable()->SetVariable("ACTOR_01", "");
     TickleManager()->vtable1c(VideoManager(), 10);
-    return TRUE;
+    result = TRUE;
   }
 
-  return FALSE;
+  return result;
 }
 
 // OFFSET: ISLE 0x402e80
@@ -283,6 +281,14 @@ void Isle::SetupCursor(WPARAM wParam)
     break;
   case 0xB:
     m_cursorCurrent = NULL;
+  case 3:
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 0xA:
     break;
   }
 

@@ -12,15 +12,16 @@ long MxTimer::s_LastTimeTimerStarted = 0;
 MxTimer::MxTimer()
 {
   this->m_isRunning = MX_FALSE;
-  MxTimer::s_LastTimeCalculated = timeGetTime();
-  this->m_startTime = MxTimer::s_LastTimeCalculated;
+  m_startTime = timeGetTime();
+  // yeah this is somehow what the asm is
+  s_LastTimeCalculated = m_startTime;
 }
 
 // OFFSET: LEGO1 0x100ae160
 void MxTimer::Start()
 {
+  s_LastTimeTimerStarted = this->GetRealTime();
   this->m_isRunning = MX_TRUE;
-  MxTimer::s_LastTimeTimerStarted = timeGetTime();
 }
 
 // OFFSET: LEGO1 0x100ae180
