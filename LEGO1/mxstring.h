@@ -11,6 +11,10 @@ public:
   __declspec(dllexport) const MxString &operator=(const char *);
 
   MxString();
+  MxString(const char *);
+  void ToUpperCase();
+  void ToLowerCase();
+  const MxString &operator=(MxString *);
 
 private:
   char *m_data;
