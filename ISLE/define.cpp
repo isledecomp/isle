@@ -38,6 +38,3 @@ int g_startupDelay = 200;
 
 // 0x4101c0
 long g_lastFrameTime = 0;
-
-// 0x4101dc
-const char *WINDOW_TITLE = "LEGO\xAE";
