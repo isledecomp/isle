@@ -8,15 +8,14 @@ import subprocess
 import os
 import sys
 
-parser = argparse.ArgumentParser(allow_abbrev=False, add_help=False,
+parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Compare an original EXE with a recompiled EXE + PDB.')
 parser.add_argument('original', metavar='original-binary', help='The original binary')
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
 parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
 parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
-parser.add_argument('--html', '-h', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
-parser.add_argument('--help', action='help', help='Show this help message and exit')
+parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
 
 args = parser.parse_args()
 
