@@ -7,6 +7,7 @@ class Pizza : public IsleActor
 {
 public:
   Pizza();
+  ~Pizza();
   
   // VTABLE 100d7380
   // SIZE 0x9c

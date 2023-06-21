@@ -1,10 +1,12 @@
 #ifndef MXPRESENTER_H
 #define MXPRESENTER_H
 
+#include "mxcore.h"
+
 class MxStreamController;
 class MxDSAction;
 
-class MxPresenter
+class MxPresenter : public MxCore
 {
 protected:
   __declspec(dllexport) virtual void DoneTickle();

@@ -1,7 +1,9 @@
 #ifndef MXCOMPOSITEMEDIAPRESENTER_H
 #define MXCOMPOSITEMEDIAPRESENTER_H
 
-class MxCompositeMediaPresenter
+#include "mxcompositepresenter.h"
+
+class MxCompositeMediaPresenter : public MxCompositePresenter
 {
 public:
   MxCompositeMediaPresenter();

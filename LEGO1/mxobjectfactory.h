@@ -1,7 +1,9 @@
 #ifndef MXOBJECTFACTORY_H
 #define MXOBJECTFACTORY_H
 
-class MxObjectFactory
+#include "mxcore.h"
+
+class MxObjectFactory : public MxCore
 {
 
 };

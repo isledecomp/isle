@@ -1,7 +1,9 @@
 #ifndef LEGOANIMATIONMANAGER_H
 #define LEGOANIMATIONMANAGER_H
 
-class LegoAnimationManager
+#include "mxcore.h"
+
+class LegoAnimationManager : public MxCore
 {
 public:
   LegoAnimationManager();

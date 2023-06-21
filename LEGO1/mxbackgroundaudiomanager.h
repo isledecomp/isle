@@ -1,7 +1,9 @@
 #ifndef MXBACKGROUNDAUDIOMANAGER_H
 #define MXBACKGROUNDAUDIOMANAGER_H
 
-class MxBackgroundAudioManager
+#include "mxcore.h"
+
+class MxBackgroundAudioManager : public MxCore
 {
 public:
   __declspec(dllexport) void Enable(unsigned char p);

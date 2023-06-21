@@ -1,7 +1,9 @@
 #ifndef MXVIDEOPRESENTER_H
 #define MXVIDEOPRESENTER_H
 
-class MxVideoPresenter
+#include "mxmediapresenter.h"
+
+class MxVideoPresenter : public MxMediaPresenter
 {
 
 };

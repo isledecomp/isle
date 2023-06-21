@@ -5,6 +5,8 @@
 
 class HospitalEntity : public BuildingEntity
 {
+  virtual int FUN_10015270(); // Return is unknown 4-byte value
+
   // SIZE 0x68
 };
 

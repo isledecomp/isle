@@ -5,6 +5,8 @@
 
 class IsleActor : public LegoEntity
 {
+  virtual const char* GetClassName() const;
+  virtual MxBool IsClass(const char *name) const;
 };
 
 #endif // ISLEACTOR_H

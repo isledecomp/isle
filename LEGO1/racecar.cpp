@@ -1,0 +1,7 @@
+#include "racecar.h"
+
+// OFFSET: LEGO1 0x10028200
+RaceCar::RaceCar()
+{
+  // TODO
+}

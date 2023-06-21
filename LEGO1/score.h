@@ -7,7 +7,7 @@ class Score : public LegoWorld
 {
 public:
   Score();
-  
+
   // SIZE 0x104
 };
 

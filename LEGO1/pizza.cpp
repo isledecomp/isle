@@ -5,3 +5,9 @@ Pizza::Pizza()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x10038100
+Pizza::~Pizza()
+{
+  // TODO
+}

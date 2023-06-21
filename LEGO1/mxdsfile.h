@@ -1,7 +1,9 @@
 #ifndef MXDSFILE_H
 #define MXDSFILE_H
 
-class MxDSFile
+#include "mxdssource.h"
+
+class MxDSFile : public MxDSSource
 {
 public:
   __declspec(dllexport) MxDSFile(const char *,unsigned long);

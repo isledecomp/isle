@@ -14,6 +14,7 @@
 #include "mxdsobject.h"
 #include "mxomni.h"
 #include "mxtransitionmanager.h"
+#include "isle.h"
 
 class LegoSoundManager;
 
@@ -54,7 +55,10 @@ private:
   LegoInputManager *m_inputMgr; // 0x70
   char m_unk74[0x10];
   LegoNavController *m_navController; // 0x84
-  char m_unk88[0x14];
+  Isle* m_isle; // 0x88
+  // LegoPlantManager* m_plantManager // 0x90
+  // LegoBuildingManager* m_legoBuildingManager // 0x98
+  char m_unk88[0x10];
   LegoGameState *m_gameState; // 0x9c
   char m_unka0[0x94];
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134

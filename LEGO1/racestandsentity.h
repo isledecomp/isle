@@ -5,6 +5,9 @@
 
 class RaceStandsEntity : public BuildingEntity
 {
+  // NOTE(Cydra): Starts transition
+  int FUN_10015450(); // Return is unknown 4-byte value
+
   // SIZE 0x68
 };
 
