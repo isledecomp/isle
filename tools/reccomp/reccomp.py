@@ -8,37 +8,41 @@ import subprocess
 import os
 import sys
 
-parser = argparse.ArgumentParser(allow_abbrev=False)
-parser.add_argument('original', metavar='original-binary', help='An original LEGO\N{Copyright Sign} binary')
+parser = argparse.ArgumentParser(allow_abbrev=False, add_help=False,
+  description='Compare an original EXE with a recompiled EXE + PDB.')
+parser.add_argument('original', metavar='original-binary', help='The original binary')
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
-parser.add_argument('decomp_dir', metavar='decomp-dir-pdb', help='The recompiled source tree')
+parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
 parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
-parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--html', '-h', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--help', action='help', help='Show this help message and exit')
 
 args = parser.parse_args()
 
-skip = args.verbose or args.html
 verbose = None
 if args.verbose:
-  verbose = int(args.verbose, 16)
+  try:
+    verbose = int(args.verbose, 16)
+  except ValueError:
+    parser.error('verbose argument must be hexadecimal')
 html = args.html
 
 original = args.original
 if not os.path.isfile(original):
-  parser.error('Invalid input: Original binary does not exist')
+  parser.error('Original binary does not exist')
 
 recomp = args.recompiled
 if not os.path.isfile(recomp):
-  parser.error('Invalid input: Recompiled binary does not exist')
+  parser.error('Recompiled binary does not exist')
 
 syms = args.pdb
 if not os.path.isfile(syms):
-  parser.error('Invalid input: Symbols PDB does not exist')
+  parser.error('Symbols PDB does not exist')
 
 source = args.decomp_dir
 if not os.path.isdir(source):
-  parser.error('Invalid input: Source directory does not exist')
+  parser.error('Source directory does not exist')
 
 # Declare a class that can automatically convert virtual executable addresses
 # to file addresses
