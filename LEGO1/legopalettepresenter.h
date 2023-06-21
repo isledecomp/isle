@@ -7,6 +7,7 @@ class LegoPalettePresenter : public MxVideoPresenter
 {
 public:
   LegoPalettePresenter();
+  virtual ~LegoPalettePresenter(); // vtable+0x0
 
 private:
   void Init();

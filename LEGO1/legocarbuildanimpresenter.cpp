@@ -5,3 +5,9 @@ LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x10078680
+LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
+{
+  // TODO
+}

@@ -5,3 +5,9 @@ RaceCar::RaceCar()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x10028420
+RaceCar::~RaceCar()
+{
+  // TODO
+}

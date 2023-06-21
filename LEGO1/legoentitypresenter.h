@@ -7,6 +7,7 @@ class LegoEntityPresenter : public MxCompositePresenter
 {
 public:
   LegoEntityPresenter();
+  virtual ~LegoEntityPresenter(); // vtable+0x0
 
 private:
   void Init();

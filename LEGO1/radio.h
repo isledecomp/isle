@@ -5,6 +5,9 @@
 
 class Radio : public MxCore
 {
+public:
+  virtual ~Radio();
+
   // VTABLE 0x100d6d10
 };
 

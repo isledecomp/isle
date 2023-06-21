@@ -8,6 +8,8 @@ class Pizzeria : public IsleActor
 public:
   Pizzeria();
 
+  virtual int FUN_10017a50(int param_1); // Return is unknown 4-byte value
+
   // SIZE 0x84
 };
 

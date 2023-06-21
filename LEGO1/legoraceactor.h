@@ -1,7 +1,9 @@
 #ifndef LEGORACEACTOR_H
 #define LEGORACEACTOR_H
 
-class LegoRaceActor
+#include "legoanimactor.h"
+
+class LegoRaceActor : public LegoAnimActor
 {
 
 };

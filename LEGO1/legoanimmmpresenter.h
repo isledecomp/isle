@@ -10,7 +10,6 @@ public:
 
   // VTABLE 0x100d7de8
   // SIZE 0x74
-}
-
+};
 
 #endif // LEGOANIMMMPRESENTER_H

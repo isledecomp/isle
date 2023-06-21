@@ -5,3 +5,17 @@ Act2Brick::Act2Brick()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x1007a470
+Act2Brick::~Act2Brick()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1007a7f0
+long Act2Brick::Tickle()
+{
+  // TODO
+
+  return 0;
+}

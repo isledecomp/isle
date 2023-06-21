@@ -9,6 +9,12 @@ ElevatorBottom::ElevatorBottom()
   // TODO
 }
 
+// OFFSET: LEGO1 0x10018060
+ElevatorBottom::~ElevatorBottom()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x10017f20
 const char *ElevatorBottom::GetClassName() const
 {
@@ -18,5 +24,7 @@ const char *ElevatorBottom::GetClassName() const
 // OFFSET: LEGO1 0x10017f30
 MxBool ElevatorBottom::IsClass(const char *name) const
 {
+  // TODO
+
   return MxBool();
 }

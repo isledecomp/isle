@@ -8,6 +8,9 @@ class MxWavePresenter : public MxSoundPresenter
 private:
   void Init();
   
+  virtual void FUN_100b2300(int param_1);
+  virtual void FUN_100b2440(int param_1);
+  virtual void FUN_100b2470(int param_1);
   // SIZE 0x6c
 };
 
