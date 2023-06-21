@@ -35,9 +35,8 @@ void MxDSObject::SetObjectName(const char *p_name)
   }
 }
 
-// This function exists both inlined and @ LEGO1 0x10005530
 // OFFSET: LEGO1 0x10005530
-// void MxDSObject::SetAtomId(MxAtomId p_atomId)
-// {
-//   this->m_atomId = p_atomId;
-// }
+void MxDSObject::SetAtomId(MxAtomId p_atomId)
+{
+  this->m_atomId = p_atomId;
+}
