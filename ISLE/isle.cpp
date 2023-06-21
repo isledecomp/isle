@@ -1,10 +1,8 @@
 #include "isle.h"
 
-#include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legomodelpresenter.h"
-#include "legoomni.h"
 #include "legopartpresenter.h"
 #include "legoworldpresenter.h"
 #include "mxdirectdraw.h"
@@ -573,68 +571,4 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
   UpdateWindow(m_windowHandle);
 
   return SUCCESS;
-}
-
-// OFFSET: ISLE 0x402c20
-void Isle::Tick(BOOL sleepIfNotNextFrame)
-{
-  if (this->m_windowActive) {
-    if (!Lego()) return;
-    if (!TickleManager()) return;
-    if (!Timer()) return;
-
-    long currentTime = Timer()->GetRealTime();
-    if (currentTime < g_lastFrameTime) {
-      g_lastFrameTime = -this->m_frameDelta;
-    }
-    if (this->m_frameDelta + g_lastFrameTime < currentTime) {
-      if (!Lego()->vtable40()) {
-        TickleManager()->Tickle();
-      }
-      g_lastFrameTime = currentTime;
-
-      if (g_startupDelay == 0) {
-        return;
-      }
-
-      g_startupDelay--;
-      if (g_startupDelay != 0) {
-        return;
-      }
-
-      LegoOmni::GetInstance()->CreateBackgroundAudio();
-      BackgroundAudioManager()->Enable(this->m_useMusic);
-
-      MxStreamController *stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", 0);
-      MxDSAction ds;
-
-      if (!stream) {
-        stream = Streamer()->Open("\\lego\\scripts\\nocd", 0);
-        if (!stream) {
-          return;
-        }
-
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(-1);
-        ds.SetUnknown1c(0);
-        VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
-
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-      } else {
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(-1);
-        ds.SetUnknown1c(0);
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-        this->m_gameStarted = 1;
-      }
-      return;
-    }
-    if (sleepIfNotNextFrame == 0) return;
-  }
-
-  Sleep(0);
 }
