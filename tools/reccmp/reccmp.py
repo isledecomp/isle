@@ -9,7 +9,7 @@ import os
 import sys
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
-  description='Recomp Compare: compare an original EXE with a recompiled EXE + PDB.')
+  description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
 parser.add_argument('original', metavar='original-binary', help='The original binary')
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
