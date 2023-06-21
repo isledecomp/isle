@@ -281,6 +281,14 @@ void Isle::SetupCursor(WPARAM wParam)
     break;
   case 0xB:
     m_cursorCurrent = NULL;
+  case 3:
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 0xA:
     break;
   }
 
