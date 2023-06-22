@@ -1,9 +1,10 @@
 #include <dsound.h>
-#include <windows.h>
 
+#include "legoinc.h"
 #include "define.h"
-#include "isle.h"
+
 #include "legoomni.h"
+#include "isle.h"
 
 // OFFSET: ISLE 0x401ca0
 BOOL FindExistingInstance(void)
