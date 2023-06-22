@@ -118,14 +118,23 @@ class SymInfo:
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
 
-        debug_offs = line_dump[i + 2]
-        debug_start = int(debug_offs[22:30], 16)
-        debug_end = int(debug_offs[43:], 16)
+
 
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
-        info.start = debug_start
-        info.size = debug_end - debug_start
+
+        use_dbg_offs = False
+        if use_dbg_offs:
+          debug_offs = line_dump[i + 2]
+          debug_start = int(debug_offs[22:30], 16)
+          debug_end = int(debug_offs[43:], 16)
+
+          info.start = debug_start
+          info.size = debug_end - debug_start
+        else:
+          info.start = 0
+          info.size = int(line[41:49], 16)
+
         info.name = line[77:]
 
         self.funcs[addr] = info
