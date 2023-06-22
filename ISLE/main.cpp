@@ -90,14 +90,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     if (g_isle) {
-      g_isle->Tick(1);
+      g_isle->Tick(0);
     }
 
-    if (g_closed) {
-      break;
-    }
-
-    do {
+    while (!g_closed) {
       if (!PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE)) {
         break;
       }
@@ -134,7 +130,7 @@ LAB_00401bc7:
         }
         goto LAB_00401bc7;
       }
-    } while (!g_closed);
+    }
   }
 
   DestroyWindow(window);
