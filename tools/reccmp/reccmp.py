@@ -198,7 +198,14 @@ md = Cs(CS_ARCH_X86, CS_MODE_32)
 def sanitize(file, mnemonic, op_str):
   offsetplaceholder = '<OFFSET>'
 
-  if mnemonic == 'call' or mnemonic == 'jmp':
+  op_str_is_number = False
+  try:
+    int(op_str, 16)
+    op_str_is_number = True
+  except ValueError:
+    pass
+
+  if (mnemonic == 'call' or mnemonic == 'jmp') and op_str_is_number:
     # Filter out "calls" because the offsets we're not currently trying to
     # match offsets. As long as there's a call in the right place, it's
     # probably accurate.
