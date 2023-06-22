@@ -20,16 +20,12 @@ public:
   inline MxVideoParamFlags &flags() { return m_flags; }
 
 private:
-  int m_left;
-  int m_top;
-  int m_right;
-  int m_bottom;
+  MxRect32 m_rect;
   MxPalette *m_palette;
-  int m_backBuffers;
+  unsigned int m_backBuffers;
   MxVideoParamFlags m_flags;
   int m_unk1c;
   char *m_deviceId;
-
 };
 
 #endif // MXVIDEOPARAM_H
