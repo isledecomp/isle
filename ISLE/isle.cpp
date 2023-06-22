@@ -487,12 +487,12 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
   wndclass.style = CS_HREDRAW | CS_VREDRAW;
   wndclass.lpfnWndProc = WndProc;
   wndclass.cbWndExtra = 0;
-  wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCE(APP_ICON));
-  wndclass.hCursor = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_ARROW));
+  wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCEA(APP_ICON));
+  wndclass.hCursor = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_ARROW));
   m_cursorCurrent = wndclass.hCursor;
   m_cursorArrow = wndclass.hCursor;
-  m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_BUSY));
-  m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCE(ISLE_NO));
+  m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_BUSY));
+  m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_NO));
   wndclass.hInstance = hInstance;
   wndclass.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
   wndclass.lpszClassName = WNDCLASS_NAME;
@@ -501,31 +501,36 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
     return FAILURE;
   }
 
-  DWORD dwStyle;
-  int width, height, x, y;
-
-  if (!m_fullScreen) {
+  if (m_fullScreen) {
     AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-    height = g_windowRect.bottom - g_windowRect.top;
-    width = g_windowRect.right - g_windowRect.left;
-
-    y = CW_USEDEFAULT;
-    x = CW_USEDEFAULT;
-    dwStyle = WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
+    m_windowHandle = CreateWindowExA(
+      WS_EX_APPWINDOW,
+      WNDCLASS_NAME,
+      WINDOW_TITLE,
+      WS_CAPTION | WS_SYSMENU,
+      g_windowRect.left,
+      g_windowRect.top,
+      g_windowRect.right - g_windowRect.left + 1,
+      g_windowRect.bottom - g_windowRect.top + 1,
+      NULL, NULL, hInstance, NULL
+    );
   } else {
     AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
 
-    height = g_windowRect.bottom - g_windowRect.top;
-    width = g_windowRect.right - g_windowRect.left;
-
-    dwStyle = WS_CAPTION | WS_SYSMENU;
-    x = g_windowRect.left;
-    y = g_windowRect.top;
+    m_windowHandle = CreateWindowExA(
+      WS_EX_APPWINDOW,
+      WNDCLASS_NAME,
+      WINDOW_TITLE,
+      WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX,
+      CW_USEDEFAULT,
+      CW_USEDEFAULT,
+      g_windowRect.right - g_windowRect.left + 1,
+      g_windowRect.bottom - g_windowRect.top + 1,
+      NULL, NULL, hInstance, NULL
+    );
   }
 
-  m_windowHandle = CreateWindowExA(WS_EX_APPWINDOW, WNDCLASS_NAME, WINDOW_TITLE, dwStyle,
-                           x, y, width + 1, height + 1, NULL, NULL, hInstance, NULL);
   if (!m_windowHandle) {
     return FAILURE;
   }
