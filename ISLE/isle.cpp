@@ -488,9 +488,7 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
   wndclass.lpfnWndProc = WndProc;
   wndclass.cbWndExtra = 0;
   wndclass.hIcon = LoadIconA(hInstance, MAKEINTRESOURCEA(APP_ICON));
-  wndclass.hCursor = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_ARROW));
-  m_cursorCurrent = wndclass.hCursor;
-  m_cursorArrow = wndclass.hCursor;
+  wndclass.hCursor = m_cursorArrow = m_cursorCurrent = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_ARROW));
   m_cursorBusy = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_BUSY));
   m_cursorNo = LoadCursorA(hInstance, MAKEINTRESOURCEA(ISLE_NO));
   wndclass.hInstance = hInstance;
