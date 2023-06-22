@@ -28,7 +28,7 @@ public:
   inline void SetBackBuffers(BOOL e)   { m_flags1.bit2 = e; }
   inline void Set_f1bit3(BOOL e)       { m_flags1.bit3 = e; }
   inline void Set_f1bit4(BOOL e)       { m_flags1.bit4 = e; }
-  inline void Set16Bit(BOOL e)         { m_flags1.bit5 = e; }
+  inline void Set16Bit(BYTE e)         { m_flags1.bit5 = e; }
   inline void SetWideViewAngle(BOOL e) { m_flags1.bit6 = e; }
   inline void Set_f1bit7(BOOL e)       { m_flags1.bit7 = e; }
   inline void Set_f2bit0(BOOL e)       { m_flags2.bit0 = e; }
