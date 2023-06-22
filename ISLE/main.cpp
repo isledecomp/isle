@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   g_isle = new Isle();
 
   // Create window
-  if (g_isle->SetupWindow(hInstance) != SUCCESS) {
+  if (g_isle->SetupWindow(hInstance, lpCmdLine) != SUCCESS) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }

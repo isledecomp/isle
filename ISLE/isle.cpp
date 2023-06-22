@@ -466,7 +466,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // OFFSET: ISLE 0x4023e0
-MxResult Isle::SetupWindow(HINSTANCE hInstance)
+MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
   WNDCLASSA wndclass;
   ZeroMemory(&wndclass, sizeof(WNDCLASSA));
@@ -502,7 +502,7 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
   }
 
   DWORD dwStyle;
-  int x, y, width, height;
+  int width, height, x, y;
 
   if (!m_fullScreen) {
     AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
@@ -515,8 +515,10 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
     dwStyle = WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
   } else {
     AdjustWindowRectEx(&g_windowRect, WS_CAPTION | WS_SYSMENU, 0, WS_EX_APPWINDOW);
+
     height = g_windowRect.bottom - g_windowRect.top;
     width = g_windowRect.right - g_windowRect.left;
+
     dwStyle = WS_CAPTION | WS_SYSMENU;
     x = g_windowRect.left;
     y = g_windowRect.top;
@@ -543,12 +545,15 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
   GameState()->SerializeScoreHistory(1);
 
   int iVar10;
-  if (m_islandQuality == 0) {
-    iVar10 = 1;
-  } else if (m_islandQuality == 1) {
-    iVar10 = 2;
-  } else {
-    iVar10 = 100;
+  switch (m_islandQuality) {
+    case 0:
+      iVar10 = 1;
+      break;
+    case 1:
+      iVar10 = 2;
+      break;
+    default:
+      iVar10 = 100;
   }
 
   int uVar1 = (m_islandTexture == 0);
@@ -560,8 +565,8 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
   LegoAnimationManager::configureLegoAnimationManager(m_islandQuality);
   if (LegoOmni::GetInstance()) {
     if (LegoOmni::GetInstance()->GetInputManager()) {
-      LegoOmni::GetInstance()->GetInputManager()->m_unk00[0xCD] = m_useJoystick;
-      LegoOmni::GetInstance()->GetInputManager()->m_unk00[0x67] = m_joystickIndex;
+      LegoOmni::GetInstance()->GetInputManager()->m_useJoystick = m_useJoystick;
+      LegoOmni::GetInstance()->GetInputManager()->m_joystickIndex = m_joystickIndex;
     }
   }
   if (m_fullScreen) {

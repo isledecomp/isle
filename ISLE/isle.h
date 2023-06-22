@@ -20,7 +20,7 @@ public:
   int ReadRegBool(LPCSTR name, BOOL *out);
   int ReadRegInt(LPCSTR name, int *out);
 
-  MxResult SetupWindow(HINSTANCE hInstance);
+  MxResult SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine);
 
   void Tick(BOOL sleepIfNotNextFrame);
 
