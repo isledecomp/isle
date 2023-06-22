@@ -1,8 +1,7 @@
 #ifndef ISLE_H
 #define ISLE_H
 
-#include <windows.h>
-
+#include "legoinc.h"
 #include "define.h"
 
 #include "legoomni.h"

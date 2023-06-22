@@ -1,7 +1,7 @@
 #ifndef DEFINE_H
 #define DEFINE_H
 
-#include <Windows.h>
+#include "legoinc.h"
 
 class Isle;
 
