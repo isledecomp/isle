@@ -259,6 +259,10 @@ function_count = 0
 total_accuracy = 0
 htmlinsert = []
 
+# Generate basename of original file, used in locating OFFSET lines
+basename = os.path.basename(os.path.splitext(original)[0])
+pattern = '// OFFSET:'
+
 for subdir, dirs, files in os.walk(source):
   for file in files:
     srcfilename = os.path.join(os.path.abspath(subdir), file)
@@ -273,9 +277,14 @@ for subdir, dirs, files in os.walk(source):
         if not line:
           break
 
-        if line.startswith('// OFFSET:'):
-          par = line[10:].strip().split()
+        line = line.strip()
+
+        if line.startswith(pattern):
+          par = line[len(pattern):].strip().split()
           module = par[0]
+          if module != basename:
+            continue
+
           addr = int(par[1], 16)
 
           find_open_bracket = line
