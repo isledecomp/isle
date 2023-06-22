@@ -20,7 +20,10 @@ public:
   __declspec(dllexport) void Register(MxCore *);
   __declspec(dllexport) void UnRegister(MxCore *);
 
-  int m_unk00[0x400];
+  char m_pad00[0x19C];
+  int m_joystickIndex;
+  char m_pad200[0x194];
+  MxBool m_useJoystick;
 };
 
 #endif // LEGOINPUTMANAGER_H
