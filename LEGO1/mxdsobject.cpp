@@ -34,9 +34,3 @@ void MxDSObject::SetObjectName(const char *p_name)
     }
   }
 }
-
-// OFFSET: LEGO1 0x10005530
-void MxDSObject::SetAtomId(MxAtomId p_atomId)
-{
-  this->m_atomId = p_atomId;
-}

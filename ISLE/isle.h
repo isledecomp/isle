@@ -79,9 +79,6 @@ public:
 
 };
 
-// OFFSET: ISLE 0x401c40
-inline void MxDSObject::SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
-
 // OFFSET: ISLE 0x402c20
 inline void Isle::Tick(BOOL sleepIfNotNextFrame)
 {

@@ -493,9 +493,6 @@ DEP_CPP_DLLMA=\
 # Begin Source File
 
 SOURCE=.\LEGO1\legoomni.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGOO=\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
@@ -544,45 +541,13 @@ DEP_CPP_LEGOO=\
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGOO=\
-	".\LEGO1\lego3dmanager.h"\
-	".\LEGO1\lego3dview.h"\
-	".\LEGO1\legoentity.h"\
-	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\legoinputmanager.h"\
-	".\LEGO1\legonavcontroller.h"\
-	".\LEGO1\legoomni.h"\
-	".\LEGO1\legoroi.h"\
-	".\LEGO1\legovideomanager.h"\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsfile.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxeventmanager.h"\
-	".\LEGO1\mxomni.h"\
-	".\LEGO1\mxtimer.h"\
-	".\LEGO1\viewmanager.h"\
-	
-
-"$(INTDIR)\legoomni.obj" : $(SOURCE) $(DEP_CPP_LEGOO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
-
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxcriticalsection.cpp
 DEP_CPP_MXCRI=\
+	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
 
@@ -596,6 +561,7 @@ DEP_CPP_MXCRI=\
 
 SOURCE=.\LEGO1\mxautolocker.cpp
 DEP_CPP_MXAUT=\
+	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxautolocker.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
@@ -773,9 +739,6 @@ DEP_CPP_MXOMNICR=\
 # Begin Source File
 
 SOURCE=.\LEGO1\legonavcontroller.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGON=\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
@@ -824,40 +787,6 @@ DEP_CPP_LEGON=\
 "$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGON=\
-	".\LEGO1\lego3dmanager.h"\
-	".\LEGO1\lego3dview.h"\
-	".\LEGO1\legoentity.h"\
-	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\legoinputmanager.h"\
-	".\LEGO1\legonavcontroller.h"\
-	".\LEGO1\legoomni.h"\
-	".\LEGO1\legoroi.h"\
-	".\LEGO1\legoutil.h"\
-	".\LEGO1\legovideomanager.h"\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsfile.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxeventmanager.h"\
-	".\LEGO1\mxomni.h"\
-	".\LEGO1\mxtimer.h"\
-	".\LEGO1\viewmanager.h"\
-	
-
-"$(INTDIR)\legonavcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGON) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -984,28 +913,21 @@ SOURCE=.\ISLE\main.cpp
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
-	".\ISLE\res\resource.h"\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
-	".\LEGO1\legoanimationmanager.h"\
-	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
-	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
 	".\LEGO1\legoomni.h"\
-	".\LEGO1\legopartpresenter.h"\
 	".\LEGO1\legoroi.h"\
 	".\LEGO1\legovideomanager.h"\
-	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxdirectdraw.h"\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\

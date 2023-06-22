@@ -17,7 +17,9 @@ public:
   inline void SetUnknown1c(int p_unk1c) { this->m_unk1c = p_unk1c; }
   inline void SetUnknown24(short p_unk24) { this->m_unk24 = p_unk24; }
 
-  void SetAtomId(MxAtomId p_atomId);
+  // OFFSET: ISLE 0x401c40
+  // OFFSET: LEGO1 0x10005530
+  inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
 private:
   int m_unk08;
