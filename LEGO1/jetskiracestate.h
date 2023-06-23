@@ -7,7 +7,6 @@ class JetskiRaceState : public RaceState
 {
   // VTABLE 0x100d4fa8
   // SIZE 0x2c
-}
-
+};
 
 #endif // JETSKIRACESTATE_H
