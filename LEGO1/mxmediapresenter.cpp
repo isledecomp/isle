@@ -1,6 +1,6 @@
 #include "mxmediapresenter.h"
 
-// OFFSET: LEGO1 0x100f074c
+// 0x100f074c
 static char* g_mxMediaPresenterClassName = "MxMediaPresenter";
 
 // OFFSET: LEGO1 0x100d4ce0
@@ -23,6 +23,20 @@ MxBool MxMediaPresenter::IsClass(const char *name) const
   // TODO
 
   return MxBool();
+}
+
+// OFFSET: LEGO1 0x100b5d90
+void MxMediaPresenter::VTable0x20()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b5e10
+unsigned int MxMediaPresenter::VTable0x24()
+{
+  // TODO
+
+  return 0;
 }
 
 // OFFSET: LEGO1 0x100b5ef0

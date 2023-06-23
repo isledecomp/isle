@@ -3,9 +3,13 @@
 
 #include "legoentity.h"
 
+#ifndef undefined4
+#define undefined4 int
+#endif
+
 class InfoCenterEntity : public LegoEntity
 {
-  virtual int FUN_100150c0(); // Return is unknown 4-byte value
+  virtual undefined4 VTable0x50(); // vtable+0x50
 };
 
 #endif // INFOCENTERENTITY_H

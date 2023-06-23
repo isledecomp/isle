@@ -10,8 +10,8 @@ public:
   virtual const char *GetClassName() const; // vtable+0xc, override MxCore
   virtual MxBool IsClass(const char *name) const; // vtable+0x10, override MxCore
 
-  virtual void __fastcall FUN_100b5d90(int* param); // vtable+0x20, override MxPresenter
-  virtual int __fastcall FUN_100b5e10(int param); // vtable+0x24, override MxPresenter
+  virtual void VTable0x20(); // vtable+0x20, override MxPresenter
+  virtual unsigned int VTable0x24(); // vtable+0x24, override MxPresenter
   virtual void DoneTickle(); // vtable+0x2c, override MxPresenter
   virtual long StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c, override
   virtual void EndAction(); // vtable+0x40, override MxPresenter

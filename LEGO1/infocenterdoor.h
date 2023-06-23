@@ -8,6 +8,7 @@ class InfoCenterDoor : public LegoWorld
 public:
   InfoCenterDoor();
   
+  // VTABLE 0x100d72d8
   // SIZE 0xfc
 };
 

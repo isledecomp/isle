@@ -7,7 +7,7 @@ MxSmkPresenter::MxSmkPresenter()
 }
 
 // OFFSET: LEGO1 0x100b38d0
-void __fastcall MxSmkPresenter::Init()
+void MxSmkPresenter::Init()
 {
   // TODO
 }

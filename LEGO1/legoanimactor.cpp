@@ -1,6 +1,6 @@
 #include "legoanimactor.h"
 
-// OFFSET: LEGO1 0x100f057c
+// 0x100f057c
 static char* g_legoAnimActorClassName = "LegoAnimActor";
 
 // OFFSET: LEGO1 0x1000fb90
@@ -18,5 +18,7 @@ const char *LegoAnimActor::GetClassName() const
 // OFFSET: LEGO1 0x1000fbb0
 MxBool LegoAnimActor::IsClass(const char *name) const
 {
+  // TODO
+
   return MxBool();
 }

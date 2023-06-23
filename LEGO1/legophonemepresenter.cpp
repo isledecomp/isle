@@ -1,6 +1,6 @@
 #include "legophonemepresenter.h"
 
-// OFFSET: LEGO1 0x100f064c
+// 0x100f064c
 static char* g_legoPhonemePresenterClassName = "LegoPhonemePresenter";
 
 // OFFSET: LEGO1 0x1004e340
@@ -13,4 +13,10 @@ LegoPhonemePresenter::~LegoPhonemePresenter()
 const char *LegoPhonemePresenter::GetClassName() const
 {
   return g_legoPhonemePresenterClassName;
+}
+
+// OFFSET: LEGO1 0x1004e840
+void LegoPhonemePresenter::VTable0x6c()
+{
+  // TODO
 }

@@ -9,8 +9,9 @@ public:
   MxSmkPresenter();
   
 private:
-  void __fastcall Init();
+  void Init();
   
+  // VTABLE 0x100dc348
   // SIZE 0x720
 };
 

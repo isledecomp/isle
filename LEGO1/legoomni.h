@@ -15,6 +15,8 @@
 #include "mxomni.h"
 #include "mxtransitionmanager.h"
 #include "isle.h"
+#include "legobuildingmanager.h"
+#include "legoplantmanager.h"
 
 class LegoSoundManager;
 
@@ -48,6 +50,9 @@ public:
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoInputManager *GetInputManager() { return m_inputMgr; }
+  Isle *GetIsle() { return m_isle; }
+  LegoBuildingManager *GetLegoBuildingManager() { return m_buildingManager; }
+  LegoPlantManager *GetLegoPlantManager() { return m_plantManager; }
 
 private:
   int m_unk68;
@@ -56,9 +61,10 @@ private:
   char m_unk74[0x10];
   LegoNavController *m_navController; // 0x84
   Isle* m_isle; // 0x88
-  // LegoPlantManager* m_plantManager // 0x90
-  // LegoBuildingManager* m_legoBuildingManager // 0x98
-  char m_unk88[0x10];
+  char m_unk8c[0x4];
+  LegoPlantManager* m_plantManager; // 0x90
+  char m_unk94[0x4];
+  LegoBuildingManager* m_buildingManager; // 0x98
   LegoGameState *m_gameState; // 0x9c
   char m_unka0[0x94];
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
@@ -89,5 +95,9 @@ __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) LegoVideoManager * VideoManager();
 
 __declspec(dllexport) long Start(MxDSAction *a);
+
+LegoBuildingManager* BuildingManager();
+Isle* GetIsle();
+LegoPlantManager* PlantManager();
 
 #endif // LEGOOMNI_H

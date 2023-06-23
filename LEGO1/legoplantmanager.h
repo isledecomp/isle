@@ -7,21 +7,11 @@ class LegoPlantManager : public MxCore
 {
 public:
   LegoPlantManager();
-  virtual ~LegoPlantManager();
-  
-  // OFFSET: LEGO1 0x100157e0
-  LegoPlantManager* GetInstance()
-  {
-    LegoOmni* legoOmni = LegoOmni::GetInstance();
+  virtual ~LegoPlantManager(); // vtable+0x0
 
-    return legoOmni->m_plantManager;
-  }
+  virtual const char* GetClassName() const; // vtable+0xc
 
-  // Virtual Functions
-  virtual const char* GetClassName() const;
-
-  // Member Functions
-  void FUN_10026d70(int param_1, int param_2);
+  void UnknownFunction1(int param_1, int param_2);
 
 private:
   void Init();

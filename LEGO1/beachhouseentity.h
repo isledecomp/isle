@@ -3,9 +3,13 @@
 
 #include "buildingentity.h"
 
+#ifndef undefined4
+#define undefined4 int
+#endif
+
 class BeachHouseEntity : public BuildingEntity
 {
-  virtual int FUN_100153b(); // Return is undefined 4-byte value
+  virtual undefined4 VTable0x50(); // vtable+0x50
 
   // VTABLE 0x100d4a18
   // SIZE 0x68

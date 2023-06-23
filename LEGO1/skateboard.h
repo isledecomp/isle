@@ -3,12 +3,16 @@
 
 #include "islepathactor.h"
 
+#ifndef undefined4
+#define undefined4 int
+#endif
+
 class SkateBoard : public IslePathActor
 {
 public:
   SkateBoard();
 
-  virtual int __fastcall FUN_100100e0(int* param_1); // Return is undefined 4-byte value
+  virtual undefined4 VTable0xcc(); // vtable+0xcc
 
   // VTABLE 0x100d55f0
 };

@@ -1,6 +1,6 @@
 #include "legocontrolmanager.h"
 
-// OFFSET: LEGO1 0x100f31b8
+// 0x100f31b8
 static char* g_legoControlManagerClassName = "LegoControlManager";
 
 // OFFSET: LEGO1 0x10028d60

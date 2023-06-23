@@ -1,6 +1,6 @@
 #include "legojetski.h"
 
-// OFFSET: LEGO1 0x100f053c
+// 0x100f053c
 static char* g_legoJetskiClassName = "LegoJetski";
 
 // OFFSET: LEGO1 0x10013e80

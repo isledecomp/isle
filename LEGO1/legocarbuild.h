@@ -3,17 +3,21 @@
 
 #include "legoworld.h"
 
+#ifndef undefined4
+#define undefined4 int
+#endif
+
 class LegoCarBuild : public LegoWorld
 {
 public:
   LegoCarBuild();
 
-  virtual void FUN_10025e70(int param_1);
-  virtual void FUN_100256c0(char param_1);
-  virtual void __fastcall FUN_10022fc0(int* param_1);
-  virtual void FUN_10023500(float* param_1, float* param_2);
-  virtual void FUN_10023570(float* param_1, float* param_2);
-  virtual void FUN_10023620(float* param_1, float* param_2);
+  virtual undefined4 VTable0x64(); // vtable+0x64
+  virtual void VTable0x68(char param_1); // vtable+0x68
+  virtual void VTable0x6c(); // vtable+0x6c
+  virtual void VTable0x74(float* param_1, float* param_2); // vtable+0x74
+  virtual void VTable0x78(float* param_1, float* param_2); // vtable+0x78
+  virtual void VTable0x7c(float* param_1, float* param_2); // vtable+0x7c
 };
 
 #endif // LEGOCARBUILD_H

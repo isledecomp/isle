@@ -6,11 +6,13 @@
 class LegoPhonemePresenter : public MxFlcPresenter
 {
 public:
-  virtual ~LegoPhonemePresenter();
+  virtual ~LegoPhonemePresenter(); // vtable+0x0
 
-  virtual const char* GetClassName() const;
+  virtual const char* GetClassName() const; // vtable+0xc
 
-  virtual void FUN_1004e840(int param_1);
+  virtual void VTable0x6c(); // vtable+0x6c
+
+  // VTABLE 0x100d8040
 };
 
 #endif // LEGOPHONEMEPRESENTER_H

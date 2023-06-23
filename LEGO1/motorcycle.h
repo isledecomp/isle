@@ -8,8 +8,8 @@ class Motorcycle : public IslePathActor
 public:
   Motorcycle();
 
-  virtual void __fastcall FUN_10035c50(int* param_1);
-  virtual void __fastcall FUN_10035bc0(int* param_1);
+  virtual void VTable0xcc(); // vtable+0xcc
+  virtual void VTable0xe4(); // vtable+0xe4
 
   // VTABLE 0x100d7090
   // SIZE 0x16c

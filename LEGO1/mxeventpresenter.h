@@ -10,6 +10,8 @@ public:
   
 private:
   void Init();
+
+  // VTABLE 0x100dca88
 };
 
 #endif // MXEVENTPRESENTER_H

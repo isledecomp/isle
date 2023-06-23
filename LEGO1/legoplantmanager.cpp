@@ -1,6 +1,6 @@
 #include "legoplantmanager.h"
 
-// OFFSET: LEGO1 0x100f318c
+// 0x100f318c
 static char* g_LegoPlantManagerName = "LegoPlantManager";
 
 // OFFSET: LEGO1 0x10026220
@@ -19,6 +19,12 @@ LegoPlantManager::~LegoPlantManager()
 const char *LegoPlantManager::GetClassName() const
 {
   return g_LegoPlantManagerName;
+}
+
+// OFFSET: LEGO1 0x10026d70
+void LegoPlantManager::UnknownFunction1(int param_1, int param_2)
+{
+  // TODO
 }
 
 // OFFSET: LEGO1 0x10026330

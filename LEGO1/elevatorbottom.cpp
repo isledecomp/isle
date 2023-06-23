@@ -28,3 +28,17 @@ MxBool ElevatorBottom::IsClass(const char *name) const
 
   return MxBool();
 }
+
+// OFFSET: LEGO1 0x10017f10
+undefined4 ElevatorBottom::VTable0x5c()
+{
+  // TODO
+
+  return 1;
+}
+
+// OFFSET: LEGO1 0x100182c0
+void ElevatorBottom::VTable0x68(undefined1 param_1)
+{
+  // TODO
+}

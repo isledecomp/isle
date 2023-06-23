@@ -6,16 +6,12 @@
 class LegoCacheSound : public MxCore
 {
 public:
-  // OFFSET: LEGO1 0x100064d0
   LegoCacheSound();
+  virtual ~LegoCacheSound(); // vtable+0x0
 
-  // OFFSET: LEGO1 0x10006630
-  ~LegoCacheSound();
-
-  void FUN_10006920(int param_1);
+  virtual void VTable0x18(); // vtable+0x18
 
 private:
-  // OFFSET: LEGO1 0x100066d0
   void Init();
 
   // VTABLE 0x100d4718

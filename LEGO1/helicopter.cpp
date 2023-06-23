@@ -1,6 +1,6 @@
 #include "helicopter.h"
 
-// OFFSET: LEGO1 0x100f0130
+// 0x100f0130
 static char* g_helicopterClassName = "Helicopter";
 
 // OFFSET: LEGO1 0x10001e60
@@ -27,4 +27,16 @@ MxBool Helicopter::IsClass(const char *name) const
   // TODO
 
   return MxBool();
+}
+
+// OFFSET: LEGO1 0x10003ee0
+void Helicopter::VTable0x70(float param_1)
+{
+  // TODO
+}
+
+// OFFSET:LEGO1 0x10003360
+void Helicopter::VTable0xe4()
+{
+  // TODO
 }

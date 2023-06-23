@@ -5,3 +5,9 @@ JukeBoxEntity::JukeBoxEntity()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x10085dd0
+JukeBoxEntity::~JukeBoxEntity()
+{
+  // TODO
+}

@@ -3,11 +3,16 @@
 
 #include "buildingentity.h"
 
+#ifndef undefined4
+#define undefined4 int
+#endif
+
 class RaceStandsEntity : public BuildingEntity
 {
   // NOTE(Cydra): Starts transition
-  int FUN_10015450(); // Return is unknown 4-byte value
+  undefined4 VTable0x50(); // vtable+0x50
 
+  // VTABLE 0x100d48a8
   // SIZE 0x68
 };
 

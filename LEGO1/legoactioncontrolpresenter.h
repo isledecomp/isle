@@ -5,9 +5,10 @@
 
 class LegoActionControlPresenter : public MxMediaPresenter
 {
-  void FUN_10043e20(char param_1);
-  void FUN_100b54f0(char param_1);
+public:
+  void VTable0x5c(char param); // vtable+0x5c
 
+  // VTABLE 0x100d5118
   // SIZE 0x68
 };
 
