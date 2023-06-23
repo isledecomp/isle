@@ -3,8 +3,8 @@
 #include "legoinc.h"
 #include "define.h"
 
-#include "legoomni.h"
 #include "isle.h"
+#include "legoomni.h"
 
 // OFFSET: ISLE 0x401ca0
 BOOL FindExistingInstance(void)

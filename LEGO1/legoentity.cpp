@@ -9,6 +9,12 @@ LegoEntity::LegoEntity()
   // TODO
 }
 
+// OFFSET: LEGO1 0x1000c290
+LegoEntity::~LegoEntity()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x1000c2f0
 const char *LegoEntity::GetClassName() const
 {
@@ -33,6 +39,12 @@ undefined4 LegoEntity::VTable0x18(undefined4 param)
 
 // OFFSET: LEGO1 0x10010810
 void LegoEntity::VTable0x1c()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10010e10
+void LegoEntity::VTable0x20(char *param)
 {
   // TODO
 }
