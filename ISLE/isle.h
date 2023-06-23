@@ -88,7 +88,6 @@ public:
 
 };
 
-
 extern LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 // OFFSET: ISLE 0x4023e0
@@ -210,63 +209,69 @@ inline MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 // OFFSET: ISLE 0x402c20
 inline void Isle::Tick(BOOL sleepIfNotNextFrame)
 {
-  if (this->m_windowActive) {
-    if (!Lego()) return;
-    if (!TickleManager()) return;
-    if (!Timer()) return;
+  if (!this->m_windowActive) {
+    Sleep(0);
+    return;
+  }
 
-    long currentTime = Timer()->GetRealTime();
-    if (currentTime < g_lastFrameTime) {
-      g_lastFrameTime = -this->m_frameDelta;
+  if (!Lego()) return;
+  if (!TickleManager()) return;
+  if (!Timer()) return;
+
+  long currentTime = Timer()->GetRealTime();
+  if (currentTime < g_lastFrameTime) {
+    g_lastFrameTime = -this->m_frameDelta;
+  }
+
+  if (this->m_frameDelta + g_lastFrameTime < currentTime) {
+    if (!Lego()->vtable40()) {
+      TickleManager()->Tickle();
     }
-    if (this->m_frameDelta + g_lastFrameTime < currentTime) {
-      if (!Lego()->vtable40()) {
-        TickleManager()->Tickle();
-      }
-      g_lastFrameTime = currentTime;
+    g_lastFrameTime = currentTime;
 
-      if (g_startupDelay == 0) {
-        return;
-      }
-
-      g_startupDelay--;
-      if (g_startupDelay != 0) {
-        return;
-      }
-
-      LegoOmni::GetInstance()->CreateBackgroundAudio();
-      BackgroundAudioManager()->Enable(this->m_useMusic);
-
-      MxStreamController *stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", 0);
-      MxDSAction ds;
-
-      if (!stream) {
-        stream = Streamer()->Open("\\lego\\scripts\\nocd", 0);
-        if (!stream) {
-          return;
-        }
-
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(-1);
-        ds.SetUnknown1c(0);
-        VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
-
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-      } else {
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(-1);
-        ds.SetUnknown1c(0);
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-        this->m_gameStarted = 1;
-      }
+    if (g_startupDelay == 0) {
       return;
     }
-    if (sleepIfNotNextFrame == 0) return;
+
+    g_startupDelay--;
+    if (g_startupDelay != 0) {
+      return;
+    }
+
+    LegoOmni::GetInstance()->CreateBackgroundAudio();
+    BackgroundAudioManager()->Enable(this->m_useMusic);
+
+    MxStreamController *stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", 0);
+    MxDSAction ds;
+
+    if (!stream) {
+      stream = Streamer()->Open("\\lego\\scripts\\nocd", 0);
+      if (!stream) {
+        return;
+      }
+
+      ds.SetAtomId(stream->atom);
+      ds.SetUnknown24(-1);
+      ds.SetUnknown1c(0);
+      VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
+
+      if (Start(&ds) != SUCCESS) {
+        return;
+      }
+    } else {
+      ds.SetAtomId(stream->atom);
+      ds.SetUnknown24(-1);
+      ds.SetUnknown1c(0);
+      if (Start(&ds) != SUCCESS) {
+        return;
+      }
+      this->m_gameStarted = 1;
+    }
+    return;
   }
+
+  if (sleepIfNotNextFrame == 0)
+    return;
 
   Sleep(0);
 }
