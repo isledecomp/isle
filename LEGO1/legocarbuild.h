@@ -11,7 +11,10 @@ class LegoCarBuild : public LegoWorld
 {
 public:
   LegoCarBuild();
+  virtual ~LegoCarBuild();
 
+  virtual long Notify(MxParam &p); // vtable+0x4
+  virtual long Tickle(); // vtable+0x8
   virtual undefined4 VTable0x64(); // vtable+0x64
   virtual void VTable0x68(char param_1); // vtable+0x68
   virtual void VTable0x6c(); // vtable+0x6c

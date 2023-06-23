@@ -7,6 +7,7 @@ class BuildingEntity : public LegoEntity
 {
 public:
   BuildingEntity();
+  virtual ~BuildingEntity(); // vtable+0x0
 };
 
 #endif // BUILDINGENTITY_H

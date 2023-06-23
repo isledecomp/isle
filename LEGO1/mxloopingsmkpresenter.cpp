@@ -6,6 +6,12 @@ MxLoopingSmkPresenter::MxLoopingSmkPresenter()
   // TODO
 }
 
+// OFFSET: LEGO1 0x100b4950
+MxLoopingSmkPresenter::~MxLoopingSmkPresenter()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x100b49b0
 void MxLoopingSmkPresenter::Init()
 {

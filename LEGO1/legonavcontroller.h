@@ -18,7 +18,7 @@ public:
                                                 float p_rotationSensitivity, MxBool p_turnUseVelocity);
 
   LegoNavController();
-  // virtual ~LegoNavController();
+  // virtual ~LegoNavController(); // vtable+0x0
 
   // void SetControlMax(int p_hMax, int p_vMax);
   void ResetToDefault();

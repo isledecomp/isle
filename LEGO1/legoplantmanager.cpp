@@ -15,6 +15,14 @@ LegoPlantManager::~LegoPlantManager()
   // TODO
 }
 
+// OFFSET: LEGO1 0x10026e00
+long LegoPlantManager::Tickle()
+{
+  // TODO
+
+  return 0;
+}
+
 // OFFSET: LEGO1 0x10026290
 const char *LegoPlantManager::GetClassName() const
 {

@@ -15,7 +15,10 @@ class GasStation : public LegoWorld
 {
 public:
   GasStation();
+  virtual ~GasStation(); // vtable+0x0
   
+  virtual long Notify(MxParam &p); // vtable+0x4
+  virtual long Tickle(); // vtable+0x8
   undefined VTable0x64(undefined4 param); // vtable+0x64
 
   // VTABLE 0x100d4650

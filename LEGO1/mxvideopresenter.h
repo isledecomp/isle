@@ -5,7 +5,8 @@
 
 class MxVideoPresenter : public MxMediaPresenter
 {
-
+public:
+  virtual void EndAction(); // vtable+0x40, override MxPresenter
 };
 
 #endif // MXVIDEOPRESENTER_H

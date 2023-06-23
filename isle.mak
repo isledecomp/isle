@@ -76,6 +76,7 @@ CLEAN :
 	-@erase "$(INTDIR)\hospital.obj"
 	-@erase "$(INTDIR)\hospitalentity.obj"
 	-@erase "$(INTDIR)\hospitalstate.obj"
+	-@erase "$(INTDIR)\infocenter.obj"
 	-@erase "$(INTDIR)\infocenterdoor.obj"
 	-@erase "$(INTDIR)\infocenterentity.obj"
 	-@erase "$(INTDIR)\infocenterstate.obj"
@@ -139,12 +140,14 @@ CLEAN :
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\mxpresenter.obj"
 	-@erase "$(INTDIR)\mxsmkpresenter.obj"
+	-@erase "$(INTDIR)\mxsoundmanager.obj"
 	-@erase "$(INTDIR)\mxstillpresenter.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
 	-@erase "$(INTDIR)\mxtransitionmanager.obj"
 	-@erase "$(INTDIR)\mxvideoparam.obj"
 	-@erase "$(INTDIR)\mxvideoparamflags.obj"
+	-@erase "$(INTDIR)\mxvideopresenter.obj"
 	-@erase "$(INTDIR)\mxwavepresenter.obj"
 	-@erase "$(INTDIR)\pizza.obj"
 	-@erase "$(INTDIR)\pizzeria.obj"
@@ -242,6 +245,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\hospital.obj" \
 	"$(INTDIR)\hospitalentity.obj" \
 	"$(INTDIR)\hospitalstate.obj" \
+	"$(INTDIR)\infocenter.obj" \
 	"$(INTDIR)\infocenterdoor.obj" \
 	"$(INTDIR)\infocenterentity.obj" \
 	"$(INTDIR)\infocenterstate.obj" \
@@ -305,12 +309,14 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
 	"$(INTDIR)\mxpresenter.obj" \
 	"$(INTDIR)\mxsmkpresenter.obj" \
+	"$(INTDIR)\mxsoundmanager.obj" \
 	"$(INTDIR)\mxstillpresenter.obj" \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxtransitionmanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
 	"$(INTDIR)\mxvideoparamflags.obj" \
+	"$(INTDIR)\mxvideopresenter.obj" \
 	"$(INTDIR)\mxwavepresenter.obj" \
 	"$(INTDIR)\pizza.obj" \
 	"$(INTDIR)\pizzeria.obj" \
@@ -374,6 +380,7 @@ CLEAN :
 	-@erase "$(INTDIR)\hospital.obj"
 	-@erase "$(INTDIR)\hospitalentity.obj"
 	-@erase "$(INTDIR)\hospitalstate.obj"
+	-@erase "$(INTDIR)\infocenter.obj"
 	-@erase "$(INTDIR)\infocenterdoor.obj"
 	-@erase "$(INTDIR)\infocenterentity.obj"
 	-@erase "$(INTDIR)\infocenterstate.obj"
@@ -437,12 +444,14 @@ CLEAN :
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
 	-@erase "$(INTDIR)\mxpresenter.obj"
 	-@erase "$(INTDIR)\mxsmkpresenter.obj"
+	-@erase "$(INTDIR)\mxsoundmanager.obj"
 	-@erase "$(INTDIR)\mxstillpresenter.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
 	-@erase "$(INTDIR)\mxtransitionmanager.obj"
 	-@erase "$(INTDIR)\mxvideoparam.obj"
 	-@erase "$(INTDIR)\mxvideoparamflags.obj"
+	-@erase "$(INTDIR)\mxvideopresenter.obj"
 	-@erase "$(INTDIR)\mxwavepresenter.obj"
 	-@erase "$(INTDIR)\pizza.obj"
 	-@erase "$(INTDIR)\pizzeria.obj"
@@ -542,6 +551,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\hospital.obj" \
 	"$(INTDIR)\hospitalentity.obj" \
 	"$(INTDIR)\hospitalstate.obj" \
+	"$(INTDIR)\infocenter.obj" \
 	"$(INTDIR)\infocenterdoor.obj" \
 	"$(INTDIR)\infocenterentity.obj" \
 	"$(INTDIR)\infocenterstate.obj" \
@@ -605,12 +615,14 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
 	"$(INTDIR)\mxpresenter.obj" \
 	"$(INTDIR)\mxsmkpresenter.obj" \
+	"$(INTDIR)\mxsoundmanager.obj" \
 	"$(INTDIR)\mxstillpresenter.obj" \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxtransitionmanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
 	"$(INTDIR)\mxvideoparamflags.obj" \
+	"$(INTDIR)\mxvideopresenter.obj" \
 	"$(INTDIR)\mxwavepresenter.obj" \
 	"$(INTDIR)\pizza.obj" \
 	"$(INTDIR)\pizzeria.obj" \
@@ -1393,6 +1405,7 @@ DEP_CPP_MXWAV=\
 SOURCE=.\LEGO1\pizza.cpp
 DEP_CPP_PIZZA=\
 	".\LEGO1\isleactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
@@ -1411,6 +1424,7 @@ DEP_CPP_PIZZA=\
 SOURCE=.\LEGO1\pizzeria.cpp
 DEP_CPP_PIZZE=\
 	".\LEGO1\isleactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
@@ -1497,6 +1511,7 @@ DEP_CPP_POLICES=\
 SOURCE=.\LEGO1\racecar.cpp
 DEP_CPP_RACEC=\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1617,6 +1632,7 @@ DEP_CPP_SCORE=\
 SOURCE=.\LEGO1\skateboard.cpp
 DEP_CPP_SKATE=\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1636,6 +1652,7 @@ DEP_CPP_SKATE=\
 SOURCE=.\LEGO1\towtrack.cpp
 DEP_CPP_TOWTR=\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1671,6 +1688,7 @@ DEP_CPP_TOWTRA=\
 SOURCE=.\LEGO1\act2brick.cpp
 DEP_CPP_ACT2B=\
 	".\LEGO1\act2brick.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1707,6 +1725,7 @@ DEP_CPP_ACT3_=\
 SOURCE=.\LEGO1\act3shark.cpp
 DEP_CPP_ACT3S=\
 	".\LEGO1\act3shark.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoanimactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
@@ -1743,6 +1762,7 @@ SOURCE=.\LEGO1\ambulance.cpp
 DEP_CPP_AMBUL=\
 	".\LEGO1\ambulance.h"\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1812,6 +1832,7 @@ SOURCE=.\LEGO1\bike.cpp
 DEP_CPP_BIKE_=\
 	".\LEGO1\bike.h"\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1862,6 +1883,7 @@ SOURCE=.\LEGO1\dunebuggy.cpp
 DEP_CPP_DUNEB=\
 	".\LEGO1\dunebuggy.h"\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -1951,6 +1973,7 @@ SOURCE=.\LEGO1\helicopter.cpp
 DEP_CPP_HELIC=\
 	".\LEGO1\helicopter.h"\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -2038,6 +2061,7 @@ DEP_CPP_HOSPITA=\
 
 SOURCE=.\LEGO1\infocenterentity.cpp
 DEP_CPP_INFOCE=\
+	".\LEGO1\buildingentity.h"\
 	".\LEGO1\infocenterentity.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\mxbool.h"\
@@ -2090,6 +2114,7 @@ DEP_CPP_ISLE_=\
 SOURCE=.\LEGO1\isleactor.cpp
 DEP_CPP_ISLEA=\
 	".\LEGO1\isleactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
@@ -2107,6 +2132,7 @@ DEP_CPP_ISLEA=\
 SOURCE=.\LEGO1\islepathactor.cpp
 DEP_CPP_ISLEP=\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -2126,6 +2152,7 @@ SOURCE=.\LEGO1\jetski.cpp
 DEP_CPP_JETSK=\
 	".\LEGO1\islepathactor.h"\
 	".\LEGO1\jetski.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -2209,6 +2236,7 @@ DEP_CPP_LEGOA=\
 
 SOURCE=.\LEGO1\legoanimactor.cpp
 DEP_CPP_LEGOAN=\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoanimactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
@@ -2430,6 +2458,7 @@ DEP_CPP_LEGOH=\
 
 SOURCE=.\LEGO1\legojetski.cpp
 DEP_CPP_LEGOJ=\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoanimactor.h"\
 	".\LEGO1\legocarraceactor.h"\
 	".\LEGO1\legoentity.h"\
@@ -2512,6 +2541,7 @@ DEP_CPP_LEGOP=\
 
 SOURCE=.\LEGO1\legopathactor.cpp
 DEP_CPP_LEGOPA=\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\mxbool.h"\
@@ -2649,6 +2679,7 @@ DEP_CPP_LEGOWO=\
 SOURCE=.\LEGO1\motorcycle.cpp
 DEP_CPP_MOTOR=\
 	".\LEGO1\islepathactor.h"\
+	".\LEGO1\legoactor.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legopathactor.h"\
 	".\LEGO1\motorcycle.h"\
@@ -2797,6 +2828,112 @@ DEP_CPP_MXDSF=\
 "$(INTDIR)\mxdsfile.obj" : $(SOURCE) $(DEP_CPP_MXDSF) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxvideopresenter.cpp
+
+!IF  "$(CFG)" == "LEGO1 - Win32 Release"
+
+DEP_CPP_MXVIDEO=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxmediapresenter.h"\
+	".\LEGO1\mxpresenter.h"\
+	".\LEGO1\mxvideopresenter.h"\
+	
+
+"$(INTDIR)\mxvideopresenter.obj" : $(SOURCE) $(DEP_CPP_MXVIDEO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+
+DEP_CPP_MXVIDEO=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxmediapresenter.h"\
+	".\LEGO1\mxpresenter.h"\
+	".\LEGO1\mxvideopresenter.h"\
+	
+
+"$(INTDIR)\mxvideopresenter.obj" : $(SOURCE) $(DEP_CPP_MXVIDEO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxsoundmanager.cpp
+
+!IF  "$(CFG)" == "LEGO1 - Win32 Release"
+
+DEP_CPP_MXSOU=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxsoundmanager.h"\
+	
+
+"$(INTDIR)\mxsoundmanager.obj" : $(SOURCE) $(DEP_CPP_MXSOU) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+
+DEP_CPP_MXSOU=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxsoundmanager.h"\
+	
+
+"$(INTDIR)\mxsoundmanager.obj" : $(SOURCE) $(DEP_CPP_MXSOU) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\infocenter.cpp
+
+!IF  "$(CFG)" == "LEGO1 - Win32 Release"
+
+DEP_CPP_INFOCENT=\
+	".\LEGO1\infocenter.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legoworld.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxentity.h"\
+	
+
+"$(INTDIR)\infocenter.obj" : $(SOURCE) $(DEP_CPP_INFOCENT) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+
+DEP_CPP_INFOCENT=\
+	".\LEGO1\infocenter.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legoworld.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxentity.h"\
+	
+
+"$(INTDIR)\infocenter.obj" : $(SOURCE) $(DEP_CPP_INFOCENT) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
 
 # End Source File
 # End Target

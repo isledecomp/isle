@@ -1,9 +1,9 @@
 #ifndef ISLEACTOR_H
 #define ISLEACTOR_H
 
-#include "legoentity.h"
+#include "legoactor.h"
 
-class IsleActor : public LegoEntity
+class IsleActor : public LegoActor
 {
   virtual const char* GetClassName() const; // vtable+0xc
   virtual MxBool IsClass(const char *name) const; // vtable+0x10

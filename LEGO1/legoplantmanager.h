@@ -9,6 +9,7 @@ public:
   LegoPlantManager();
   virtual ~LegoPlantManager(); // vtable+0x0
 
+  virtual long Tickle(); // vtable+0x8
   virtual const char* GetClassName() const; // vtable+0xc
 
   void UnknownFunction1(int param_1, int param_2);

@@ -8,6 +8,7 @@ class LegoControlManager : public MxCore
 public:
   virtual ~LegoControlManager(); // vtable+0x0
 
+  virtual long Tickle(); // vtable+0x8
   virtual const char* GetClassName() const; // vtable+0xc
   virtual MxBool IsClass(const char *name) const; // vtable+0x10
 

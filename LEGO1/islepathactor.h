@@ -12,6 +12,7 @@ class IslePathActor : public LegoPathActor
 public:
   IslePathActor();
 
+  virtual void Destroy(); // vtable+0x1c
   virtual void VTable0xec(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, void*, char); // vtable+0xec
   
   // VTABLE 0x100d4398

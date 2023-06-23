@@ -1,13 +1,15 @@
 #ifndef LEGOPATHACTOR_H
 #define LEGOPATHACTOR_H
 
-#include "legoentity.h"
+#include "legoactor.h"
 
-class LegoPathActor : public LegoEntity
+class LegoPathActor : public LegoActor
 {
 public:
   LegoPathActor();
   
+  virtual void Destroy(); // vtable+0x1c
+
   // SIZE 0x154
 };
 

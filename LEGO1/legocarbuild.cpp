@@ -6,6 +6,28 @@ LegoCarBuild::LegoCarBuild()
   // TODO
 }
 
+// OFFSET: LEGO1 0x10022a80
+LegoCarBuild::~LegoCarBuild()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10024050
+long LegoCarBuild::Notify(MxParam &p)
+{
+  // TODO
+
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100238b0
+long LegoCarBuild::Tickle()
+{
+  // TODO
+
+  return 0;
+}
+
 // OFFSET: LEGO1 0x10025e70
 undefined4 LegoCarBuild::VTable0x64()
 {

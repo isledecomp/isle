@@ -1,7 +1,9 @@
 #ifndef LEGOMODELPRESENTER_H
 #define LEGOMODELPRESENTER_H
 
-class LegoModelPresenter
+#include "mxvideopresenter.h"
+
+class LegoModelPresenter : public MxVideoPresenter
 {
 public:
   __declspec(dllexport) static void configureLegoModelPresenter(int param_1);

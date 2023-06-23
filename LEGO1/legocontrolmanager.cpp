@@ -9,6 +9,14 @@ LegoControlManager::~LegoControlManager()
   // TODO
 }
 
+// OFFSET: LEGO1 0x10029600
+long LegoControlManager::Tickle()
+{
+  // TODO
+
+  return 0;
+}
+
 // OFFSET: LEGO1 0x10028cb0
 const char *LegoControlManager::GetClassName() const
 {

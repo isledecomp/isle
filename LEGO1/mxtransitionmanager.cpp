@@ -1,5 +1,17 @@
 #include "mxtransitionmanager.h"
 
+// OFFSET: LEGO1 0x1004ba00
+MxTransitionManager::MxTransitionManager()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004ba00
+MxTransitionManager::~MxTransitionManager()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x1004bac0
 long MxTransitionManager::Tickle()
 {

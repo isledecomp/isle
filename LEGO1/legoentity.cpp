@@ -12,7 +12,7 @@ LegoEntity::LegoEntity()
 // OFFSET: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {
-  // TODO
+  Destroy();
 }
 
 // OFFSET: LEGO1 0x1000c2f0
@@ -38,7 +38,7 @@ undefined4 LegoEntity::VTable0x18(undefined4 param)
 }
 
 // OFFSET: LEGO1 0x10010810
-void LegoEntity::VTable0x1c()
+void LegoEntity::Destroy()
 {
   // TODO
 }

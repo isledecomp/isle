@@ -7,6 +7,7 @@ class MxLoopingSmkPresenter : public MxSmkPresenter
 {
 public:
   MxLoopingSmkPresenter();
+  virtual ~MxLoopingSmkPresenter(); // vtable+0x0
   
 private:
   void Init();
