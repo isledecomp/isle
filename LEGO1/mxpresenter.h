@@ -17,7 +17,7 @@ public:
   virtual void VTable0x18(); // vtable+0x18
   virtual void VTable0x1c(); // vtable+0x1c
   virtual void VTable0x20(); // vtable+0x20
-  virtual void VTable0x24(); // vtable+0x24
+  virtual unsigned int VTable0x24(); // vtable+0x24
   virtual void VTable0x28(); // vtable+0x28
 protected:
   __declspec(dllexport) virtual void DoneTickle(); // vtable+0x2c

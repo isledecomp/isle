@@ -88,9 +88,11 @@ void MxPresenter::VTable0x20()
 }
 
 // OFFSET: LEGO1 0x1000bea0
-void MxPresenter::VTable0x24()
+unsigned int MxPresenter::VTable0x24()
 {
   // TODO
+
+  return 0;
 }
 
 // OFFSET: LEGO1 0x1000bec0
