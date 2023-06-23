@@ -118,14 +118,23 @@ class SymInfo:
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
 
-        debug_offs = line_dump[i + 2]
-        debug_start = int(debug_offs[22:30], 16)
-        debug_end = int(debug_offs[43:], 16)
+
 
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
-        info.start = debug_start
-        info.size = debug_end - debug_start
+
+        use_dbg_offs = False
+        if use_dbg_offs:
+          debug_offs = line_dump[i + 2]
+          debug_start = int(debug_offs[22:30], 16)
+          debug_end = int(debug_offs[43:], 16)
+
+          info.start = debug_start
+          info.size = debug_end - debug_start
+        else:
+          info.start = 0
+          info.size = int(line[41:49], 16)
+
         info.name = line[77:]
 
         self.funcs[addr] = info
@@ -189,7 +198,14 @@ md = Cs(CS_ARCH_X86, CS_MODE_32)
 def sanitize(file, mnemonic, op_str):
   offsetplaceholder = '<OFFSET>'
 
-  if mnemonic == 'call' or mnemonic == 'jmp':
+  op_str_is_number = False
+  try:
+    int(op_str, 16)
+    op_str_is_number = True
+  except ValueError:
+    pass
+
+  if (mnemonic == 'call' or mnemonic == 'jmp') and op_str_is_number:
     # Filter out "calls" because the offsets we're not currently trying to
     # match offsets. As long as there's a call in the right place, it's
     # probably accurate.
@@ -243,6 +259,10 @@ function_count = 0
 total_accuracy = 0
 htmlinsert = []
 
+# Generate basename of original file, used in locating OFFSET lines
+basename = os.path.basename(os.path.splitext(original)[0])
+pattern = '// OFFSET:'
+
 for subdir, dirs, files in os.walk(source):
   for file in files:
     srcfilename = os.path.join(os.path.abspath(subdir), file)
@@ -257,9 +277,14 @@ for subdir, dirs, files in os.walk(source):
         if not line:
           break
 
-        if line.startswith('// OFFSET:'):
-          par = line[10:].strip().split()
+        line = line.strip()
+
+        if line.startswith(pattern):
+          par = line[len(pattern):].strip().split()
           module = par[0]
+          if module != basename:
+            continue
+
           addr = int(par[1], 16)
 
           find_open_bracket = line

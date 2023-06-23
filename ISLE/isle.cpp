@@ -1,10 +1,8 @@
 #include "isle.h"
 
-#include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legomodelpresenter.h"
-#include "legoomni.h"
 #include "legopartpresenter.h"
 #include "legoworldpresenter.h"
 #include "mxdirectdraw.h"
@@ -38,7 +36,7 @@ Isle::Isle()
   m_windowActive = 1;
 
   m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
-  m_videoParam.flags().Enable16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
+  m_videoParam.flags().Set16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
   m_windowHandle = NULL;
   m_cursorArrow = NULL;
@@ -78,7 +76,7 @@ Isle::~Isle()
 void Isle::Close()
 {
   MxDSAction ds;
-  ds.SetUnknown24(0xFFFE);
+  ds.SetUnknown24(-2);
 
   if (Lego()) {
     GameState()->Save(0);
@@ -230,22 +228,22 @@ void Isle::LoadConfig()
 
 // OFFSET: ISLE 0x401560
 void Isle::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
-                           BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
+                           BOOL using8bit, BOOL using16bit, BOOL param_6, BOOL param_7,
                            BOOL wideViewAngle, char *deviceId)
 {
-  m_videoParam.flags().EnableFullScreen(fullScreen);
-  m_videoParam.flags().EnableFlipSurfaces(flipSurfaces);
-  m_videoParam.flags().EnableBackBuffers(backBuffers);
-  m_videoParam.flags().EnableUnknown1(param_6);
-  m_videoParam.flags().SetUnknown3(param_7);
-  m_videoParam.flags().EnableWideViewAngle(wideViewAngle);
-  m_videoParam.flags().EnableUnknown2();
+  m_videoParam.flags().SetFullScreen(fullScreen);
+  m_videoParam.flags().SetFlipSurfaces(flipSurfaces);
+  m_videoParam.flags().SetBackBuffers(!backBuffers);
+  m_videoParam.flags().Set_f2bit0(!param_6);
+  m_videoParam.flags().Set_f1bit7(param_7);
+  m_videoParam.flags().SetWideViewAngle(wideViewAngle);
+  m_videoParam.flags().Set_f2bit1(1);
   m_videoParam.SetDeviceName(deviceId);
   if (using8bit) {
-    m_videoParam.flags().Set8Bit();
+    m_videoParam.flags().Set16Bit(0);
   }
-  if (m_using16bit) {
-    m_videoParam.flags().Set16Bit();
+  if (using16bit) {
+    m_videoParam.flags().Set16Bit(1);
   }
 }
 
@@ -573,68 +571,4 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance)
   UpdateWindow(m_windowHandle);
 
   return SUCCESS;
-}
-
-// OFFSET: ISLE 0x402c20
-void Isle::Tick(BOOL sleepIfNotNextFrame)
-{
-  if (this->m_windowActive) {
-    if (!Lego()) return;
-    if (!TickleManager()) return;
-    if (!Timer()) return;
-
-    long currentTime = Timer()->GetRealTime();
-    if (currentTime < g_lastFrameTime) {
-      g_lastFrameTime = -this->m_frameDelta;
-    }
-    if (this->m_frameDelta + g_lastFrameTime < currentTime) {
-      if (!Lego()->vtable40()) {
-        TickleManager()->Tickle();
-      }
-      g_lastFrameTime = currentTime;
-
-      if (g_startupDelay == 0) {
-        return;
-      }
-
-      g_startupDelay--;
-      if (g_startupDelay != 0) {
-        return;
-      }
-
-      LegoOmni::GetInstance()->CreateBackgroundAudio();
-      BackgroundAudioManager()->Enable(this->m_useMusic);
-
-      MxStreamController *stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", 0);
-      MxDSAction ds;
-
-      if (!stream) {
-        stream = Streamer()->Open("\\lego\\scripts\\nocd", 0);
-        if (!stream) {
-          return;
-        }
-
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(0xFFFF);
-        ds.SetUnknown1c(0);
-        VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
-
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-      } else {
-        ds.SetAtomId(stream->atom);
-        ds.SetUnknown24(0xFFFF);
-        ds.SetUnknown1c(0);
-        if (Start(&ds) != SUCCESS) {
-          return;
-        }
-        this->m_gameStarted = 1;
-      }
-      return;
-    }
-    if (sleepIfNotNextFrame == 0) return;
-  }
-
-  Sleep(0);
 }
