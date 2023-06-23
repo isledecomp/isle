@@ -27,7 +27,7 @@ public:
   BOOL SetupLegoOmni();
   void LoadConfig();
   void SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
-                       BOOL using8bit, BOOL m_using16bit, BOOL param_6, BOOL param_7,
+                       BOOL using8bit, BOOL using16bit, BOOL param_6, BOOL param_7,
                        BOOL wideViewAngle, char *deviceId);
 
   void SetupCursor(WPARAM wParam);
