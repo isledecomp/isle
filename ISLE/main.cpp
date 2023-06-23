@@ -125,9 +125,9 @@ LAB_00401bc7:
           g_mousemoved = FALSE;
         }
       } else if (g_mousemoved) {
-               if (g_isle) {
+        if (g_isle) {
           g_isle->Tick(0);
-       }
+        }
         goto LAB_00401bc7;
       }
     }
