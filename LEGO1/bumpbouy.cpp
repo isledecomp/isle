@@ -1,6 +1,6 @@
 #include "bumpbouy.h"
 
-// OFFSET: LEGO1 0x100f0394
+// 0x100f0394
 static char* g_bumpBouyString = "BumpBouy";
 
 // OFFSET: LEGO1 0x100274e0

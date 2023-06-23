@@ -11,7 +11,7 @@ const char *MxEntity::GetClassName() const
   return g_mxEntityClassName;
 }
 
-// OFFSET: LEG01 0x1000c190
+// OFFSET: LEGO1 0x1000c190
 MxBool MxEntity::IsClass(const char *name) const
 {
   // TODO

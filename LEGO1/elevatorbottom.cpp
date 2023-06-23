@@ -1,6 +1,6 @@
 #include "elevatorbottom.h"
 
-// OFFSET: LEGO1 0x100f04ac
+// 0x100f04ac
 static char* g_elevatorBottomClassName = "ElevatorBottom";
 
 // OFFSET: LEGO1 0x10017e90
