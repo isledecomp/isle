@@ -270,10 +270,8 @@ inline void Isle::Tick(BOOL sleepIfNotNextFrame)
     return;
   }
 
-  if (sleepIfNotNextFrame == 0)
-    return;
-
-  Sleep(0);
+  if (sleepIfNotNextFrame != 0)
+    Sleep(0);
 }
 
 #endif // ISLE_H
