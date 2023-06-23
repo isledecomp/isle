@@ -1,0 +1,7 @@
+*.MD    text eol=lf diff=markdown
+*.cpp   text eol=lf diff=cpp
+*.h     text eol=lf diff=cpp
+*.py    text eol=lf diff=python
+*.html  text eol=lf diff=html
+*.mdp   binary
+*.mak   text eol=crlf
