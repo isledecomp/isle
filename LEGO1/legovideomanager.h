@@ -13,6 +13,7 @@ public:
   __declspec(dllexport) void MoveCursor(int x, int y);
 
   inline Lego3DManager *Get3DManager() { return this->m_3dManager; }
+  void SetSkyColor(float r, float g, float b);
 
   int m_unk00;
   int m_unk04;

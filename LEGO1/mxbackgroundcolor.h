@@ -12,7 +12,9 @@ public:
 protected:
   MxString m_name;
   MxString m_colorString;
-
+  float r;
+  float g;
+  float b;
 };
 
 #endif // MXBACKGROUNDCOLOR_H
