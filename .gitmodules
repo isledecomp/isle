@@ -1,0 +1,3 @@
+[submodule "nmake2"]
+	path = nmake2
+	url = https://github.com/theR4K/nmake4premake.git
