@@ -8,6 +8,7 @@ class MxStreamer
 public:
   __declspec(dllexport) MxStreamController *Open(const char *name, unsigned short p);
   __declspec(dllexport) long Close(const char *p);
+  const char* GetClassName();
 
 };
 

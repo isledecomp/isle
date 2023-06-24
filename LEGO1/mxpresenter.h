@@ -1,6 +1,9 @@
 #ifndef MXPRESENTER_H
 #define MXPRESENTER_H
 
+#include "mxstreamcontroller.h"
+#include "mxdsaction.h"
+
 class MxPresenter
 {
 protected:
