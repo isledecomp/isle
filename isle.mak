@@ -66,8 +66,11 @@ CLEAN :
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
+	-@erase "$(INTDIR)\mxpalette.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
+	-@erase "$(INTDIR)\mxunknown100dc6b0.obj"
+	-@erase "$(INTDIR)\mxvideomanager.obj"
 	-@erase "$(INTDIR)\mxvideoparam.obj"
 	-@erase "$(INTDIR)\mxvideoparamflags.obj"
 	-@erase "$(INTDIR)\vc40.pdb"
@@ -140,8 +143,11 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
+	"$(INTDIR)\mxpalette.obj" \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
+	"$(INTDIR)\mxunknown100dc6b0.obj" \
+	"$(INTDIR)\mxvideomanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
 	"$(INTDIR)\mxvideoparamflags.obj"
 
@@ -180,8 +186,11 @@ CLEAN :
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
 	-@erase "$(INTDIR)\mxomnicreateparambase.obj"
+	-@erase "$(INTDIR)\mxpalette.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
+	-@erase "$(INTDIR)\mxunknown100dc6b0.obj"
+	-@erase "$(INTDIR)\mxvideomanager.obj"
 	-@erase "$(INTDIR)\mxvideoparam.obj"
 	-@erase "$(INTDIR)\mxvideoparamflags.obj"
 	-@erase "$(INTDIR)\vc40.idb"
@@ -256,8 +265,11 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
 	"$(INTDIR)\mxomnicreateparambase.obj" \
+	"$(INTDIR)\mxpalette.obj" \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
+	"$(INTDIR)\mxunknown100dc6b0.obj" \
+	"$(INTDIR)\mxvideomanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
 	"$(INTDIR)\mxvideoparamflags.obj"
 
@@ -530,6 +542,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -614,6 +627,7 @@ DEP_CPP_MXOMN=\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -777,6 +791,7 @@ DEP_CPP_LEGON=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -814,6 +829,59 @@ DEP_CPP_MXATO=\
 	
 
 "$(INTDIR)\mxatomid.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxunknown100dc6b0.cpp
+DEP_CPP_MXUNK=\
+	".\LEGO1\legoinc.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
+	
+
+"$(INTDIR)\mxunknown100dc6b0.obj" : $(SOURCE) $(DEP_CPP_MXUNK) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxvideomanager.cpp
+DEP_CPP_MXVIDEO=\
+	".\LEGO1\legoinc.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideomanager.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	
+
+"$(INTDIR)\mxvideomanager.obj" : $(SOURCE) $(DEP_CPP_MXVIDEO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxpalette.cpp
+DEP_CPP_MXPAL=\
+	".\LEGO1\mxpalette.h"\
+	
+
+"$(INTDIR)\mxpalette.obj" : $(SOURCE) $(DEP_CPP_MXPAL) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -894,6 +962,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -949,6 +1018,7 @@ DEP_CPP_MAIN_=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
 	".\LEGO1\mxvideoparam.h"\
