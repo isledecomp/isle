@@ -21,6 +21,9 @@ public:
   // OFFSET: LEGO1 0x10005530
   inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
+  //FIXME: put this in the correct position
+  const char* GetClassName();
+
 private:
   int m_unk08;
   short m_unk0c;

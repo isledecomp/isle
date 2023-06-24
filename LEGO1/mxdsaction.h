@@ -9,6 +9,8 @@ public:
   __declspec(dllexport) MxDSAction();
   __declspec(dllexport) virtual ~MxDSAction();
 
+  const char* GetClassName();
+
   int m_unk2c;
   int m_unk30;
   int m_unk34;

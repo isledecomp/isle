@@ -3,7 +3,8 @@
 
 class MxObjectFactory
 {
-
+public:
+  const char* GetClassName();
 };
 
 #endif MXOBJECTFACTORY_H

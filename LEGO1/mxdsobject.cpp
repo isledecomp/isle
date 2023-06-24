@@ -15,6 +15,10 @@ MxDSObject::MxDSObject()
   this->m_unk28 = 0;
 }
 
+const char* MxDSObject::GetClassName() {
+  return "MxDSObject";
+}
+
 // OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {

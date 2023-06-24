@@ -6,6 +6,7 @@
 class MxStreamController
 {
 public:
+  const char* GetClassName();
   int m_unk00;
   int m_unk04;
   int m_unk08;

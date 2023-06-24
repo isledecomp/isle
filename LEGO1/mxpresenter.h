@@ -13,6 +13,8 @@ public:
   __declspec(dllexport) virtual void EndAction();
   __declspec(dllexport) virtual long StartAction(MxStreamController *, MxDSAction *);
   __declspec(dllexport) virtual long Tickle();
+
+  const char* GetClassName();
 };
 
 #endif // MXPRESENTER_H
