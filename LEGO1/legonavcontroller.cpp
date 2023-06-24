@@ -100,22 +100,18 @@ LegoNavController::LegoNavController()
 //   inputManager->UnRegister(this);
 // }
 
-// TODO: VideoManager()
 // OFFSET: LEGO1 0x10054ca0
-// void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
-// {
-//   LegoVideoManager* videoManager = VideoManager();
+void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
+{
+  this->m_hMax = p_hMax;
+  this->m_vMax = p_vMax;
 
-//   this->m_hMax = p_hMax;
-//   this->m_vMax = p_vMax;
-
-//   Probably checks for MxVideoParamFlags: FULL_SCREEN
-//   if ((videoManager->m_unk44 & 0x01) != 0)
-//   {
-//     this->m_hMax = 640;
-//     this->m_vMax = 480;
-//   }
-// }
+  if (VideoManager()->GetVideoParam().flags().GetFullScreen())
+  {
+    this->m_hMax = 640;
+    this->m_vMax = 480;
+  }
+}
 
 // OFFSET: LEGO1 0x10054cd0
 void LegoNavController::ResetToDefault()

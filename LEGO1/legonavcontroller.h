@@ -20,7 +20,7 @@ public:
   LegoNavController();
   // virtual ~LegoNavController();
 
-  // void SetControlMax(int p_hMax, int p_vMax);
+  void SetControlMax(int p_hMax, int p_vMax);
   void ResetToDefault();
   void SetTargets(int p_hPos, int p_vPos, MxBool p_accel);
   float CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed);
