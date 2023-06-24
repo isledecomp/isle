@@ -11,8 +11,10 @@ LegoBackgroundColor::LegoBackgroundColor(const char* name, const char* colorStri
 }
 
 
-
+// OFFSET: LEGO1 0x1003c070
 void LegoBackgroundColor::SetColorString(const char* colorString)
 {
-
+  m_colorString.operator=(colorString);
+  m_colorString.ToLowerCase();
+  // WIP
 }

@@ -143,7 +143,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
-	"$(INTDIR)\mxvideoparamflags.obj"
+	"$(INTDIR)\mxvideoparamflags.obj" \
+	"$(INTDIR)\mxbackgroundcolor.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -259,7 +261,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxstring.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
-	"$(INTDIR)\mxvideoparamflags.obj"
+	"$(INTDIR)\mxvideoparamflags.obj" \
+	"$(INTDIR)\mxbackgroundcolor.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -814,6 +818,32 @@ DEP_CPP_MXATO=\
 	
 
 "$(INTDIR)\mxatomid.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxbackgroundcolor.cpp
+DEP_CPP_MXATO=\
+	".\LEGO1\mxbackgroundcolor.h"\
+	
+
+"$(INTDIR)\mxbackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\legobackgroundcolor.cpp
+DEP_CPP_MXATO=\
+	".\LEGO1\legobackgroundcolor.h"\
+	
+
+"$(INTDIR)\legobackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 

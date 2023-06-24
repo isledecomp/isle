@@ -11,9 +11,7 @@ public:
   virtual void SetColorString(const char* colorString);
 protected:
   MxString m_name;
-  short m_unknown;
   MxString m_colorString;
-  short m_unknown2;
 
 };
 
