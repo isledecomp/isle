@@ -5,6 +5,8 @@
 
 class IsleActor : public LegoActor
 {
+public:
+  virtual long Notify(MxParam &p); // vtable+0x4
   virtual const char* GetClassName() const; // vtable+0xc
   virtual MxBool IsClass(const char *name) const; // vtable+0x10
 

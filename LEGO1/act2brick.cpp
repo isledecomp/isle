@@ -12,6 +12,14 @@ Act2Brick::~Act2Brick()
   // TODO
 }
 
+// OFFSET: LEGO1 0x1007a8c0
+long Act2Brick::Notify(MxParam &p)
+{
+  // TODO
+
+  return 0;
+}
+
 // OFFSET: LEGO1 0x1007a7f0
 long Act2Brick::Tickle()
 {

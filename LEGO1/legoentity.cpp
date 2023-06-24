@@ -15,6 +15,14 @@ LegoEntity::~LegoEntity()
   Destroy();
 }
 
+// OFFSET: LEGO1 0x100114f0
+long LegoEntity::Notify(MxParam &p)
+{
+  // TODO
+
+  return 0;
+}
+
 // OFFSET: LEGO1 0x1000c2f0
 const char *LegoEntity::GetClassName() const
 {

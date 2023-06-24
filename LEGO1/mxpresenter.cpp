@@ -9,6 +9,18 @@ void MxPresenter::DoneTickle()
   // TODO
 }
 
+// OFFSET: LEGO1 0x100b4d50
+void MxPresenter::Init()
+{
+  m_unk0x8 = 0;
+  m_action = NULL;
+  m_unk0x18 = 0;
+  m_unk0x3c = 0;
+  m_unk0xc = 0;
+  m_unk0x10 = 0;
+  m_unk0x14 = 0;
+}
+
 // OFFSET: LEGO1 0x100b4fc0
 void MxPresenter::ParseExtra()
 {

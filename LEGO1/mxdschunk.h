@@ -5,7 +5,8 @@
 
 class MxDSChunk : public MxCore
 {
-
+public:
+  virtual ~MxDSChunk();
 };
 
 #endif // MXDSCHUNK_H

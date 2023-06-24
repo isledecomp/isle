@@ -3,6 +3,8 @@
 
 #include "mxcore.h"
 
+#include "mxcriticalsection.h"
+
 class MxStreamController;
 class MxDSAction;
 
@@ -27,6 +29,15 @@ public:
   __declspec(dllexport) virtual long StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   __declspec(dllexport) virtual void Enable(unsigned char); // vtable+0x54
+
+  int m_unk0x8;
+  int m_unk0xc;
+  int m_unk0x10;
+  int m_unk0x14;
+  int m_unk0x18;
+  MxDSAction* m_action; // 0
+  MxCriticalSection m_criticalSection;
+  int m_unk0x3c;
 
   // VTABLE 0x100d4d38
 };
