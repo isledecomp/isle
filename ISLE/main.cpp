@@ -141,6 +141,9 @@ LAB_00401bc7:
 // OFFSET: ISLE 0x401d20
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+  NotificationId type;
+  unsigned char keyCode = 0;
+
   if (!g_isle) {
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   }
@@ -235,77 +238,64 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd, WM_DISPLAYCHANGE, wParam, lParam);
   case WM_SETCURSOR:
-  case WM_KEYDOWN:
-  case WM_MOUSEMOVE:
-  case WM_TIMER:
-  case WM_LBUTTONDOWN:
-  case WM_LBUTTONUP:
-  case 0x5400:
-  {
-
-    NotificationId type = NONE;
-    unsigned char keyCode = 0;
-
-    switch (uMsg) {
-    case WM_KEYDOWN:
-      // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
-      // to be what the assembly is actually doing
-      if (lParam & (KF_REPEAT << 16)) {
-        return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
-      }
-      keyCode = wParam;
-      type = KEYDOWN;
-      break;
-    case WM_MOUSEMOVE:
-      g_mousemoved = 1;
-      type = MOUSEMOVE;
-      break;
-    case WM_TIMER:
-      type = TIMER;
-      break;
-    case WM_SETCURSOR:
-      if (g_isle) {
-        HCURSOR hCursor = g_isle->m_cursorCurrent;
-        if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
-          SetCursor(hCursor);
-          return 0;
-        }
-      }
-      break;
-    case WM_LBUTTONDOWN:
-      g_mousedown = 1;
-      type = MOUSEDOWN;
-      break;
-    case WM_LBUTTONUP:
-      g_mousedown = 0;
-      type = MOUSEUP;
-      break;
-    case 0x5400:
-      if (g_isle) {
-        g_isle->SetupCursor(wParam);
+    if (g_isle) {
+      HCURSOR hCursor = g_isle->m_cursorCurrent;
+      if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
+        SetCursor(hCursor);
         return 0;
       }
     }
-
-    if (g_isle) {
-      if (InputManager()) {
-        InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
-      }
-      if (g_isle && g_isle->m_drawCursor && type == MOUSEMOVE) {
-        unsigned short x = LOWORD(lParam);
-        unsigned short y = HIWORD(lParam);
-        if (639 < x) {
-          x = 639;
-        }
-        if (479 < y) {
-          y = 479;
-        }
-        VideoManager()->MoveCursor(x,y);
-      }
+    break;
+  case WM_KEYDOWN:
+    // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
+    // to be what the assembly is actually doing
+    if (lParam & (KF_REPEAT << 16)) {
+      return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
     }
-    return 0;
-  }
+    keyCode = wParam;
+    type = KEYDOWN;
+    break;
+  case WM_MOUSEMOVE:
+    g_mousemoved = 1;
+    type = MOUSEMOVE;
+    break;
+  case WM_TIMER:
+    type = TIMER;
+    break;
+  case WM_LBUTTONDOWN:
+    g_mousedown = 1;
+    type = MOUSEDOWN;
+    break;
+  case WM_LBUTTONUP:
+    g_mousedown = 0;
+    type = MOUSEUP;
+    break;
+  case 0x5400:
+    if (g_isle) {
+      g_isle->SetupCursor(wParam);
+      return 0;
+    }
+    break;
+  default:
+    return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   }
 
-  return DefWindowProcA(hWnd,uMsg,wParam,lParam);
+  if (g_isle) {
+    if (InputManager()) {
+      InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
+    }
+    if (g_isle && g_isle->m_drawCursor && type == MOUSEMOVE) {
+      unsigned int x = LOWORD(lParam);
+      unsigned int y = HIWORD(lParam);
+      if (639 < x) {
+        x = 639;
+      }
+      if (479 < y) {
+        y = 479;
+      }
+      VideoManager()->MoveCursor(x,y);
+    }
+  }
+
+  return 0;
 }
