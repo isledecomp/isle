@@ -2,6 +2,7 @@
 #define MXUNKNOWN100DC6B0_H
 
 #include "mxcore.h"
+#include "mxresult.h"
 #include "mxcriticalsection.h"
 
 class MxUnknown100dc6b0 : public MxCore
@@ -9,7 +10,7 @@ class MxUnknown100dc6b0 : public MxCore
 public:
   MxUnknown100dc6b0();
 
-  int Reset();
+  MxResult Reset();
 
 private:
   int m_unk08;

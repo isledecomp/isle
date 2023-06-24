@@ -4,6 +4,7 @@
 #include <ddraw.h>
 
 #include "mxcore.h"
+#include "mxresult.h"
 
 class MxPalette : public MxCore
 {
@@ -11,7 +12,7 @@ public:
   __declspec(dllexport) unsigned char operator==(MxPalette &);
   __declspec(dllexport) void Detach();
 
-  int GetEntries(LPPALETTEENTRY p_entries);
+  MxResult GetEntries(LPPALETTEENTRY p_entries);
 
 private:
   LPDIRECTDRAWPALETTE m_pDirectDrawPalette;
