@@ -72,3 +72,35 @@ MxTimer *Timer()
 {
   return MxOmni::GetInstance()->GetTimer();
 }
+
+void MxOmni::DestroyInstance()
+{
+    // FIXME: Stub
+}
+
+const char* MxOmni::GetCD()
+{
+    // FIXME: Stub
+    return 0;
+}
+
+const char* MxOmni::GetHD()
+{
+    // FIXME: Stub
+    return 0;
+}
+
+void MxOmni::SetCD(const char* s)
+{
+    // FIXME: Stub
+}
+
+void MxOmni::SetHD(const char* s)
+{
+    // FIXME: Stub
+}
+
+void MxOmni::SetSound3D(unsigned char)
+{
+    // FIXME: Stub
+}

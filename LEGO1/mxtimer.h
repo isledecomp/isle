@@ -13,7 +13,7 @@ public:
 
   __declspec(dllexport) long GetRealTime();
 
-  long GetTime() inline
+  inline long GetTime()
   {
     if (this->m_isRunning)
       return s_LastTimeCalculated;

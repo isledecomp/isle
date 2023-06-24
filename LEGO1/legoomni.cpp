@@ -144,3 +144,48 @@ unsigned char LegoOmni::vtable40()
   // FIXME: Stub
   return 0;
 }
+
+void LegoOmni::CreateInstance()
+{
+  // FIXME: Stub
+}
+
+MxStreamer* Streamer()
+{
+  // FIXME: Stub
+  return 0;
+}
+
+MxTickleManager* TickleManager()
+{
+  // FIXME: Stub
+  return 0;
+}
+
+MxTransitionManager* TransitionManager()
+{
+  // FIXME: Stub
+  return 0;
+}
+
+MxVariableTable* VariableTable()
+{
+  // FIXME: Stub
+  return 0;
+}
+
+long Start(MxDSAction* a)
+{
+  // FIXME: Stub
+  return 0;
+}
+
+void LegoOmni::CreateBackgroundAudio()
+{
+  // FIXME: Stub
+}
+
+void LegoOmni::RemoveWorld(const MxAtomId& p1, long p2)
+{
+  // FIXME: Stub
+}
