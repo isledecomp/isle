@@ -10,7 +10,7 @@ class MxUnknown100dc6b0 : public MxCore
 public:
   MxUnknown100dc6b0();
 
-  MxResult Reset();
+  MxResult Init();
 
 private:
   int m_unk08;
