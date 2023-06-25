@@ -55,10 +55,14 @@ ALL : ".\Release\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legobackgroundcolor.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\legoutil.obj"
+	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
+	-@erase "$(INTDIR)\mxbackgroundcolor.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\mxdsobject.obj"
@@ -132,10 +136,14 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /implib:"Release/LEGO1.LIB" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\legoutil.obj" \
+	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
+	"$(INTDIR)\mxbackgroundcolor.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
 	"$(INTDIR)\mxdsobject.obj" \
@@ -149,11 +157,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxunknown100dc6b0.obj" \
 	"$(INTDIR)\mxvideomanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
-	"$(INTDIR)\mxvideoparamflags.obj" \
-	"$(INTDIR)\mxbackgroundcolor.obj" \
-	"$(INTDIR)\legobackgroundcolor.obj" \
-	"$(INTDIR)\legoutil.obj" \
-	"$(INTDIR)\legovideomanager.obj"
+	"$(INTDIR)\mxvideoparamflags.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -179,10 +183,14 @@ ALL : ".\Debug\LEGO1.DLL"
 
 CLEAN : 
 	-@erase "$(INTDIR)\dllmain.obj"
+	-@erase "$(INTDIR)\legobackgroundcolor.obj"
 	-@erase "$(INTDIR)\legonavcontroller.obj"
 	-@erase "$(INTDIR)\legoomni.obj"
+	-@erase "$(INTDIR)\legoutil.obj"
+	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
+	-@erase "$(INTDIR)\mxbackgroundcolor.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\mxdsobject.obj"
@@ -258,10 +266,14 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  /implib:"$(OUTDIR)/LEGO1.lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\dllmain.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legonavcontroller.obj" \
 	"$(INTDIR)\legoomni.obj" \
+	"$(INTDIR)\legoutil.obj" \
+	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
+	"$(INTDIR)\mxbackgroundcolor.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
 	"$(INTDIR)\mxdsobject.obj" \
@@ -275,11 +287,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxunknown100dc6b0.obj" \
 	"$(INTDIR)\mxvideomanager.obj" \
 	"$(INTDIR)\mxvideoparam.obj" \
-	"$(INTDIR)\mxvideoparamflags.obj" \
-	"$(INTDIR)\mxbackgroundcolor.obj" \
-	"$(INTDIR)\legobackgroundcolor.obj" \
-	"$(INTDIR)\legoutil.obj" \
-	"$(INTDIR)\legovideomanager.obj"
+	"$(INTDIR)\mxvideoparamflags.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -598,8 +606,6 @@ DEP_CPP_MXAUT=\
 SOURCE=.\LEGO1\mxtimer.cpp
 DEP_CPP_MXTIM=\
 	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
-	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxtimer.h"\
 	
 
@@ -653,8 +659,11 @@ DEP_CPP_MXOMN=\
 SOURCE=.\LEGO1\mxvideoparam.cpp
 DEP_CPP_MXVID=\
 	".\LEGO1\legoinc.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
@@ -692,6 +701,7 @@ DEP_CPP_MXOMNI=\
 	".\LEGO1\mxomnicreateparambase.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -716,6 +726,7 @@ DEP_CPP_MXOMNIC=\
 	".\LEGO1\mxomnicreateparambase.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
@@ -748,7 +759,6 @@ DEP_CPP_MXSTR=\
 
 SOURCE=.\LEGO1\mxomnicreateflags.cpp
 DEP_CPP_MXOMNICR=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	
 
@@ -845,23 +855,28 @@ DEP_CPP_MXATO=\
 # Begin Source File
 
 SOURCE=.\LEGO1\mxbackgroundcolor.cpp
-DEP_CPP_MXATO=\
+DEP_CPP_MXBAC=\
 	".\LEGO1\mxbackgroundcolor.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxstring.h"\
 	
 
-"$(INTDIR)\mxbackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+"$(INTDIR)\mxbackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXBAC) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 # End Source File
 ################################################################################
 # Begin Source File
+
 SOURCE=.\LEGO1\mxunknown100dc6b0.cpp
 DEP_CPP_MXUNK=\
 	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	
 
@@ -874,14 +889,62 @@ DEP_CPP_MXUNK=\
 # Begin Source File
 
 SOURCE=.\LEGO1\legobackgroundcolor.cpp
-DEP_CPP_MXATO=\
+DEP_CPP_LEGOB=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legobackgroundcolor.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinc.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legonavcontroller.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legoutil.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
+	".\LEGO1\mxbackgroundcolor.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxeventmanager.h"\
+	".\LEGO1\mxmusicmanager.h"\
+	".\LEGO1\mxnotificationmanager.h"\
+	".\LEGO1\mxobjectfactory.h"\
+	".\LEGO1\mxomni.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxsoundmanager.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxticklemanager.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideomanager.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
-"$(INTDIR)\legobackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+"$(INTDIR)\legobackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_LEGOB) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 # End Source File
 ################################################################################
 # Begin Source File
+
 SOURCE=.\LEGO1\mxvideomanager.cpp
 DEP_CPP_MXVIDEO=\
 	".\LEGO1\legoinc.h"\
@@ -890,6 +953,7 @@ DEP_CPP_MXVIDEO=\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
@@ -906,27 +970,52 @@ DEP_CPP_MXVIDEO=\
 # Begin Source File
 
 SOURCE=.\LEGO1\legoutil.cpp
-DEP_CPP_MXATO=\
+DEP_CPP_LEGOU=\
 	".\LEGO1\legoutil.h"\
 	
 
-"$(INTDIR)\legoutil.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+"$(INTDIR)\legoutil.obj" : $(SOURCE) $(DEP_CPP_LEGOU) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\legovideomanager.cpp
-DEP_CPP_MXATO=\
+DEP_CPP_LEGOV=\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legoinc.h"\
 	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideomanager.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
 	
 
-"$(INTDIR)\legovideomanager.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+"$(INTDIR)\legovideomanager.obj" : $(SOURCE) $(DEP_CPP_LEGOV) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 # End Source File
 ################################################################################
 # Begin Source File
+
 SOURCE=.\LEGO1\mxpalette.cpp
 DEP_CPP_MXPAL=\
+	".\LEGO1\mxbool.h"\
+	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxresult.h"\
 	
 
 "$(INTDIR)\mxpalette.obj" : $(SOURCE) $(DEP_CPP_MXPAL) "$(INTDIR)"
@@ -1030,21 +1119,28 @@ SOURCE=.\ISLE\main.cpp
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
+	".\ISLE\res\resource.h"\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
 	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
 	".\LEGO1\legoroi.h"\
 	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxdirectdraw.h"\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\
