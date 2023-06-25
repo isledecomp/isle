@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 from capstone import *
 import difflib
 import struct
@@ -7,60 +8,40 @@ import subprocess
 import os
 import sys
 
-def print_usage():
-  print('Usage: %s [options] <original-binary> <recompiled-binary> <recompiled-pdb> <decomp-dir>\n' % sys.argv[0])
-  print('\t-v, --verbose <offset>\t\t\tPrint assembly diff for specific function (original file\'s offset)')
-  print('\t-h, --html <output-file>\t\t\tGenerate searchable HTML summary of status and diffs')
-  sys.exit(1)
+parser = argparse.ArgumentParser(allow_abbrev=False,
+  description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
+parser.add_argument('original', metavar='original-binary', help='The original binary')
+parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
+parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
+parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
+parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
+parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
 
-positional_args = []
+args = parser.parse_args()
+
 verbose = None
-skip = False
-html = None
+if args.verbose:
+  try:
+    verbose = int(args.verbose, 16)
+  except ValueError:
+    parser.error('invalid verbose argument')
+html = args.html
 
-for i, arg in enumerate(sys.argv):
-  if skip:
-    skip = False
-    continue
-
-  if arg.startswith('-'):
-    # A flag rather than a positional arg
-    flag = arg[1:]
-
-    if flag == 'v' or flag == '-verbose':
-      verbose = int(sys.argv[i + 1], 16)
-      skip = True
-    elif flag == 'h' or flag == '-html':
-      html = sys.argv[i + 1]
-      skip = True
-    else:
-      print('Unknown flag: %s' % arg)
-      print_usage()
-  else:
-    positional_args.append(arg)
-
-if len(positional_args) != 5:
-  print_usage()
-
-original = positional_args[1]
+original = args.original
 if not os.path.isfile(original):
-  print('Invalid input: Original binary does not exist')
-  sys.exit(1)
+  parser.error('Original binary does not exist')
 
-recomp = positional_args[2]
+recomp = args.recompiled
 if not os.path.isfile(recomp):
-  print('Invalid input: Recompiled binary does not exist')
-  sys.exit(1)
+  parser.error('Recompiled binary does not exist')
 
-syms = positional_args[3]
+syms = args.pdb
 if not os.path.isfile(syms):
-  print('Invalid input: Symbols PDB does not exist')
-  sys.exit(1)
+  parser.error('Symbols PDB does not exist')
 
-source = positional_args[4]
+source = args.decomp_dir
 if not os.path.isdir(source):
-  print('Invalid input: Source directory does not exist')
-  sys.exit(1)
+  parser.error('Source directory does not exist')
 
 # Declare a class that can automatically convert virtual executable addresses
 # to file addresses
@@ -137,14 +118,23 @@ class SymInfo:
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
 
-        debug_offs = line_dump[i + 2]
-        debug_start = int(debug_offs[22:30], 16)
-        debug_end = int(debug_offs[43:], 16)
+
 
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
-        info.start = debug_start
-        info.size = debug_end - debug_start
+
+        use_dbg_offs = False
+        if use_dbg_offs:
+          debug_offs = line_dump[i + 2]
+          debug_start = int(debug_offs[22:30], 16)
+          debug_end = int(debug_offs[43:], 16)
+
+          info.start = debug_start
+          info.size = debug_end - debug_start
+        else:
+          info.start = 0
+          info.size = int(line[41:49], 16)
+
         info.name = line[77:]
 
         self.funcs[addr] = info
@@ -208,7 +198,14 @@ md = Cs(CS_ARCH_X86, CS_MODE_32)
 def sanitize(file, mnemonic, op_str):
   offsetplaceholder = '<OFFSET>'
 
-  if mnemonic == 'call' or mnemonic == 'jmp':
+  op_str_is_number = False
+  try:
+    int(op_str, 16)
+    op_str_is_number = True
+  except ValueError:
+    pass
+
+  if (mnemonic == 'call' or mnemonic == 'jmp') and op_str_is_number:
     # Filter out "calls" because the offsets we're not currently trying to
     # match offsets. As long as there's a call in the right place, it's
     # probably accurate.
@@ -262,6 +259,10 @@ function_count = 0
 total_accuracy = 0
 htmlinsert = []
 
+# Generate basename of original file, used in locating OFFSET lines
+basename = os.path.basename(os.path.splitext(original)[0])
+pattern = '// OFFSET:'
+
 for subdir, dirs, files in os.walk(source):
   for file in files:
     srcfilename = os.path.join(os.path.abspath(subdir), file)
@@ -276,9 +277,14 @@ for subdir, dirs, files in os.walk(source):
         if not line:
           break
 
-        if line.startswith('// OFFSET:'):
-          par = line[10:].strip().split()
+        line = line.strip()
+
+        if line.startswith(pattern):
+          par = line[len(pattern):].strip().split()
           module = par[0]
+          if module != basename:
+            continue
+
           addr = int(par[1], 16)
 
           find_open_bracket = line

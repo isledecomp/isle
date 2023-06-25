@@ -46,7 +46,11 @@ public:
   virtual unsigned char vtable40();
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
+  LegoSoundManager *GetSoundManager() { return (LegoSoundManager *)m_soundManager;}
+  MxBackgroundAudioManager *GetBackgroundAudioManager() { return m_bkgAudioManager; }
   LegoInputManager *GetInputManager() { return m_inputMgr; }
+  LegoGameState *GetGameState() { return m_gameState; }
+  LegoNavController *GetNavController() { return m_navController; }
 
 private:
   int m_unk68;

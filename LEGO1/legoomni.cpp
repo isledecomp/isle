@@ -24,10 +24,41 @@ LegoOmni *Lego()
   return (LegoOmni *) MxOmni::GetInstance();
 }
 
+// OFFSET: LEGO1 0x10015710
+LegoSoundManager *SoundManager()
+{
+  return LegoOmni::GetInstance()->GetSoundManager();
+}
+
+
 // OFFSET: LEGO1 0x10015720
 LegoVideoManager *VideoManager()
 {
   return LegoOmni::GetInstance()->GetVideoManager();
+}
+
+// OFFSET: LEGO1 0x10015730
+MxBackgroundAudioManager *BackgroundAudioManager()
+{
+  return LegoOmni::GetInstance()->GetBackgroundAudioManager();
+}
+
+// OFFSET: LEGO1 0x10015740
+LegoInputManager *InputManager()
+{
+  return LegoOmni::GetInstance()->GetInputManager();
+}
+
+// OFFSET: LEGO1 0x10015760
+LegoGameState *GameState()
+{
+  return LegoOmni::GetInstance()->GetGameState();
+}
+
+// OFFSET: LEGO1 0x10015780
+LegoNavController *NavController()
+{
+  return LegoOmni::GetInstance()->GetNavController();
 }
 
 // OFFSET: LEGO1 0x1005b5f0
