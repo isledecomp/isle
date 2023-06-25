@@ -16,35 +16,42 @@ LegoBackgroundColor::LegoBackgroundColor(const char *name, const char *colorStri
 // OFFSET: LEGO1 0x1003c070
 void LegoBackgroundColor::SetColorString(const char *colorString)
 {
+
   m_colorString.operator=(colorString);
   m_colorString.ToLowerCase();
+
+  float converted_b;
+  float converted_g;
+  float converted_r;
   LegoVideoManager *videomanager = VideoManager();
+
   if (videomanager && colorString)
   {
-    char *colorStringCopy = (char *)malloc(strlen(colorString) + 1);
+    int length = strlen(colorString) + 1;
+    char *colorStringCopy = (char *)malloc(length);
     strcpy(colorStringCopy, colorString);
     char *colorStringSplit = strtok(colorStringCopy, Delimiter);
     if (!strcmp(colorStringSplit, set))
     {
       // set it
-      char *red = strtok(0, Delimiter);
-      if (red)
-        r = atoi(red) * 0.01;
+
+      //TODO: I think this is in BGR because of the order of local variables
       char *blue = strtok(0, Delimiter);
       if (blue)
         b = atoi(blue) * 0.01;
       char *green = strtok(0, Delimiter);
       if (green)
         g = atoi(green) * 0.01;
+      char *red = strtok(0, Delimiter);
+      if (red)
+        r = atoi(red) * 0.01;
     }
     else if (!strcmp(colorStringSplit, reset))
     {
       // reset it
-      float converted_r;
-      float converted_b;
-      float converted_g;
-      ConvertColor(this->r, this->g, this->b, &converted_r, &converted_g, &converted_b);
-      videomanager->SetSkyColor(converted_r, converted_g, converted_b);
+
+      ConvertColor(this->b, this->g, this->r, &converted_b, &converted_g, &converted_r);
+      videomanager->SetSkyColor(converted_b, converted_g, converted_r);
     }
     free(colorStringCopy);
   }
