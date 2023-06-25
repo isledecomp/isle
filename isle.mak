@@ -153,6 +153,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxbackgroundcolor.obj" \
 	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legoutil.obj" \
+	"$(INTDIR)\legovideomanager.obj"
 
 ".\Release\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -278,6 +279,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxbackgroundcolor.obj" \
 	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legoutil.obj" \
+	"$(INTDIR)\legovideomanager.obj"
 
 ".\Debug\LEGO1.DLL" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -906,6 +908,16 @@ DEP_CPP_MXATO=\
 	
 
 "$(INTDIR)\legoutil.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\legovideomanager.cpp
+DEP_CPP_MXATO=\
+	".\LEGO1\legovideomanager.h"\
+	
+
+"$(INTDIR)\legovideomanager.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
 # End Source File
 ################################################################################
 # Begin Source File
