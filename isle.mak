@@ -850,6 +850,9 @@ DEP_CPP_MXATO=\
 	
 
 "$(INTDIR)\mxbackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXATO) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 # End Source File
 ################################################################################
 # Begin Source File
