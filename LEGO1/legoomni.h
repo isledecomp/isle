@@ -30,8 +30,15 @@ public:
   virtual ~LegoOmni(); // vtable+00
 
   virtual long Notify(MxParam &p); // vtable+04
-  virtual const char *GetClassName() const; // vtable+0c
-  virtual MxBool IsClass(const char *name) const; // vtable+10;
+
+  // OFFSET: LEGO1 0x10058aa0
+  inline virtual const char *GetClassName() const { return "LegoOmni"; }; // vtable+0c
+
+  // OFFSET: LEGO1 0x10058ab0
+  inline virtual MxBool IsClass(const char *name) const {
+    return !strcmp(name, LegoOmni::GetClassName()) || MxOmni::IsClass(name);
+  }; // vtable+10;
+
   virtual void Init(); // vtable+14
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c

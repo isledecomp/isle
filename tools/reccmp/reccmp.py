@@ -7,6 +7,7 @@ import struct
 import subprocess
 import os
 import sys
+import colorama
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
@@ -16,16 +17,22 @@ parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recomp
 parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
 parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
 parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--no-color', '-n', action='store_true', help='Do not color the output')
 
 args = parser.parse_args()
 
+colorama.init()
+
 verbose = None
+found_verbose_target = False
 if args.verbose:
   try:
     verbose = int(args.verbose, 16)
   except ValueError:
     parser.error('invalid verbose argument')
 html = args.html
+
+plain = args.no_color
 
 original = args.original
 if not os.path.isfile(original):
@@ -287,6 +294,13 @@ for subdir, dirs, files in os.walk(source):
 
           addr = int(par[1], 16)
 
+          # Verbose flag handling
+          if verbose:
+            if addr == verbose:
+              found_verbose_target = True
+            else:
+              continue
+
           find_open_bracket = line
           while '{' not in find_open_bracket:
             find_open_bracket = srcfile.readline()
@@ -305,23 +319,53 @@ for subdir, dirs, files in os.walk(source):
           else:
             ratio = 0
 
-          print('  %s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
+          percenttext = "%.2f%%" % (ratio * 100)
+          if not plain:
+            if ratio == 1.0:
+              percenttext = colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
+            elif ratio > 0.8:
+              percenttext = colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
+            else:
+              percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
+
+          if not verbose:
+            print('  %s (%s / %s) is %s similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), percenttext))
 
           function_count += 1
           total_accuracy += ratio
 
           if recinfo.size:
-            if verbose == addr or html:
-              udiff = difflib.unified_diff(origasm, recompasm)
+            udiff = difflib.unified_diff(origasm, recompasm, n=10)
 
-              if verbose == addr:
+            # If verbose, print the diff for that funciton to the output
+            if verbose:
+              if ratio == 1.0:
+                print("%s: %s 100%% match.\n\nOK!" % (hex(addr), recinfo.name))
+              else:
                 for line in udiff:
-                  print(line)
-                print()
-                print()
+                  if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
+                    # Skip unneeded parts of the diff for the brief view
+                    pass
+                  elif line.startswith("+"):
+                    if plain:
+                      print(line)
+                    else:
+                      print(colorama.Fore.GREEN + line)
+                  elif line.startswith("-"):
+                    if plain:
+                      print(line)
+                    else:
+                      print(colorama.Fore.RED + line)
+                  else:
+                    print(line)
+                  if not plain:
+                    print(colorama.Style.RESET_ALL, end='')
 
-              if html:
-                htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
+                print("\n%s is only %s similar to the original, diff above" % (recinfo.name, percenttext))
+
+            # If html, record the diffs to an HTML file
+            if html:
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
 
       except UnicodeDecodeError:
         break
@@ -348,5 +392,9 @@ def gen_html(html, data):
 if html:
   gen_html(html, htmlinsert)
 
-if function_count > 0:
-  print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
+if verbose:
+  if not found_verbose_target:
+    print('Failed to find the function with address %s' % hex(verbose))
+else:
+  if function_count > 0:
+    print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
