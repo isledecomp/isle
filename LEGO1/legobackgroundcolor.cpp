@@ -20,9 +20,9 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
   m_colorString.operator=(colorString);
   m_colorString.ToLowerCase();
 
+  float converted_r;
   float converted_b;
   float converted_g;
-  float converted_r;
   LegoVideoManager *videomanager = VideoManager();
 
   if (videomanager && colorString)
@@ -33,9 +33,7 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
     char *colorStringSplit = strtok(colorStringCopy, Delimiter);
     if (!strcmp(colorStringSplit, set))
     {
-      // set it
-
-      //TODO: I think this is in BGR because of the order of local variables
+      //TODO: the names of these variables are incorrect as I can't figure out what color format ConvertColor() uses
       char *blue = strtok(0, Delimiter);
       if (blue)
         b = atoi(blue) * 0.01;
@@ -50,8 +48,8 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
     {
       // reset it
 
-      ConvertColor(this->b, this->g, this->r, &converted_b, &converted_g, &converted_r);
-      videomanager->SetSkyColor(converted_b, converted_g, converted_r);
+      ConvertColor(this->b, this->g, this->r, &converted_r, &converted_g, &converted_b);
+      videomanager->SetSkyColor(converted_r, converted_g, converted_b);
     }
     free(colorStringCopy);
   }

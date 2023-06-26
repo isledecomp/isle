@@ -6,13 +6,17 @@ class MxBackgroundColor
 {
 public:
   __declspec(dllexport) MxBackgroundColor(const char *, const char *);
-    MxBackgroundColor(){}
-  virtual MxString* GetColorString();
-  virtual void SetColorString(const char* colorString);
+  MxBackgroundColor() {}
+  virtual MxString *GetColorString();
+  virtual void SetColorString(const char *colorString);
   virtual ~MxBackgroundColor();
+
 protected:
   MxString m_name;
   MxString m_colorString;
+  float b;
+  float g;
+  float r;
 };
 
 #endif // MXBACKGROUNDCOLOR_H
