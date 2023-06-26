@@ -68,18 +68,6 @@ long LegoOmni::Notify(MxParam &p)
   return 0;
 }
 
-// OFFSET: LEGO1 0x10058aa0
-const char *LegoOmni::GetClassName() const
-{
-  return "LegoOmni";
-}
-
-// OFFSET: LEGO1 0x10058ab0
-MxBool LegoOmni::IsClass(const char *name) const
-{
-  return strcmp("LegoOmni", name) == 0;
-}
-
 // OFFSET: LEGO1 0x10058bd0
 void LegoOmni::Init()
 {

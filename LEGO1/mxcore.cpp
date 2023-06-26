@@ -1,7 +1,5 @@
 #include "mxcore.h"
 
-#include <string.h>
-
 // 0x1010141c
 unsigned int g_mxcoreCount = 0;
 
@@ -27,16 +25,4 @@ long MxCore::Notify(MxParam &p)
 long MxCore::Tickle()
 {
   return 0;
-}
-
-// OFFSET: LEGO1 0x100144c0
-const char *MxCore::GetClassName() const
-{
-  return "MxCore";
-}
-
-// OFFSET: LEGO1 0x100140d0
-MxBool MxCore::IsClass(const char *name) const
-{
-  return strcmp(name, "MxCore") == 0;
 }
