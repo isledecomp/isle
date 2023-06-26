@@ -214,14 +214,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
       int targetWidth = LOWORD(lParam);
       int targetHeight = HIWORD(lParam);
+      int targetDepth = wParam;
 
       if (g_waitingForTargetDepth) {
         g_waitingForTargetDepth = 0;
-        g_targetDepth = wParam;
+        g_targetDepth = targetDepth;
       }
       else {
         BOOL valid = FALSE;
-        if (g_targetDepth == wParam && targetWidth == g_targetWidth && targetHeight == g_targetHeight) {
+        if (targetWidth == g_targetWidth && targetHeight == g_targetHeight && g_targetDepth == targetDepth) {
           valid = TRUE;
         }
 

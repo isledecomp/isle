@@ -18,7 +18,7 @@ extern int g_rmDisabled;
 extern int g_waitingForTargetDepth;
 extern int g_targetWidth;
 extern int g_targetHeight;
-extern unsigned int g_targetDepth;
+extern int g_targetDepth;
 extern int g_reqEnableRMDevice;
 extern int g_startupDelay;
 extern long g_lastFrameTime;
