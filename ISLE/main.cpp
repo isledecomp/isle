@@ -221,7 +221,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       }
       else {
         BOOL valid = FALSE;
-        if (targetWidth == g_targetWidth && targetHeight == g_targetHeight && g_targetDepth == wParam) {
+        if (g_targetDepth == wParam && targetWidth == g_targetWidth && targetHeight == g_targetHeight) {
           valid = TRUE;
         }
 
