@@ -288,12 +288,12 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
     }
     if (g_isle && g_isle->m_drawCursor && type == MOUSEMOVE) {
-      unsigned int x = LOWORD(lParam);
-      unsigned int y = HIWORD(lParam);
-      if (639 < x) {
+      int x = LOWORD(lParam);
+      int y = HIWORD(lParam);
+      if (x >= 640) {
         x = 639;
       }
-      if (479 < y) {
+      if (y >= 480) {
         y = 479;
       }
       VideoManager()->MoveCursor(x,y);
