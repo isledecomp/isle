@@ -144,6 +144,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   NotificationId type;
   unsigned char keyCode = 0;
 
+  MINMAXINFO *mmi = (MINMAXINFO *) lParam;
+
   if (!g_isle) {
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   }
@@ -175,8 +177,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_GETMINMAXINFO:
   {
-    MINMAXINFO *mmi = (MINMAXINFO *) lParam;
-
     mmi->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
     mmi->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
     mmi->ptMinTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
