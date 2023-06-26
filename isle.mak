@@ -61,7 +61,9 @@ CLEAN :
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdsfile.obj"
 	-@erase "$(INTDIR)\mxdsobject.obj"
+	-@erase "$(INTDIR)\mxioinfo.obj"
 	-@erase "$(INTDIR)\mxomni.obj"
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
@@ -138,7 +140,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdsfile.obj" \
 	"$(INTDIR)\mxdsobject.obj" \
+	"$(INTDIR)\mxioinfo.obj" \
 	"$(INTDIR)\mxomni.obj" \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
@@ -181,7 +185,9 @@ CLEAN :
 	-@erase "$(INTDIR)\mxautolocker.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
+	-@erase "$(INTDIR)\mxdsfile.obj"
 	-@erase "$(INTDIR)\mxdsobject.obj"
+	-@erase "$(INTDIR)\mxioinfo.obj"
 	-@erase "$(INTDIR)\mxomni.obj"
 	-@erase "$(INTDIR)\mxomnicreateflags.obj"
 	-@erase "$(INTDIR)\mxomnicreateparam.obj"
@@ -260,7 +266,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxautolocker.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
+	"$(INTDIR)\mxdsfile.obj" \
 	"$(INTDIR)\mxdsobject.obj" \
+	"$(INTDIR)\mxioinfo.obj" \
 	"$(INTDIR)\mxomni.obj" \
 	"$(INTDIR)\mxomnicreateflags.obj" \
 	"$(INTDIR)\mxomnicreateparam.obj" \
@@ -886,6 +894,32 @@ DEP_CPP_MXPAL=\
 
 
 # End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxioinfo.cpp
+DEP_CPP_MXIOI=\
+	".\LEGO1\mxioinfo.h"\
+	
+
+"$(INTDIR)\mxioinfo.obj" : $(SOURCE) $(DEP_CPP_MXIOI) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxdsfile.cpp
+DEP_CPP_MXDSF=\
+	".\LEGO1\mxdsfile.h"\
+	
+
+"$(INTDIR)\mxdsfile.obj" : $(SOURCE) $(DEP_CPP_MXDSF) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
 # End Target
 ################################################################################
 # Begin Target
@@ -982,21 +1016,28 @@ SOURCE=.\ISLE\main.cpp
 DEP_CPP_MAIN_=\
 	".\ISLE\define.h"\
 	".\ISLE\isle.h"\
+	".\ISLE\res\resource.h"\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legoanimationmanager.h"\
+	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
 	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
 	".\LEGO1\legoomni.h"\
+	".\LEGO1\legopartpresenter.h"\
 	".\LEGO1\legoroi.h"\
 	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxdirectdraw.h"\
 	".\LEGO1\mxdsaction.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdsobject.h"\
