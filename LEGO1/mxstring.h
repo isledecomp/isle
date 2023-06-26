@@ -16,7 +16,7 @@ public:
   void ToLowerCase();
   const MxString &operator=(MxString *);
 
-  inline const char *Data() const { return m_data; }
+  inline const char *GetData() const { return m_data; }
 
 private:
   char *m_data;

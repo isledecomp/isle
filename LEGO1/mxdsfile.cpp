@@ -1,9 +1,13 @@
 #include "mxdsfile.h"
 
-#include "stdio.h"
+#include <stdio.h>
 
 #define SI_MAJOR_VERSION 2
 #define SI_MINOR_VERSION 2
+
+#define FCC_OMNI 0x494e4d4f
+#define FCC_MxHd 0x6448784d
+#define FCC_MxOf 0x664f784d
 
 // OFFSET: LEGO1 0x100cc4b0
 MxDSFile::MxDSFile(const char *filename, unsigned long skipReadingChunks)
@@ -24,7 +28,7 @@ long MxDSFile::Open(unsigned long uStyle)
   // No idea what's stopping this one matching, but I'm pretty
   // confident it has the correct behavior.
   memset(&m_io, 0, sizeof(MXIOINFO));
-  if (m_io.Open(m_filename.Data(), uStyle) != 0) {
+  if (m_io.Open(m_filename.GetData(), uStyle) != 0) {
     return -1;
   }
 
@@ -62,11 +66,11 @@ long MxDSFile::ReadChunks()
   _MMCKINFO childChunk;
   char tempBuffer[80];
   
-  topChunk.fccType = 0x494e4d4f;
+  topChunk.fccType = FCC_OMNI;
   if (m_io.Descend(&topChunk, NULL, MMIO_FINDRIFF) != 0) {
     return -1;
   }
-  childChunk.ckid = 0x6448784d;
+  childChunk.ckid = FCC_MxHd;
   if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
     return -1;
   }
@@ -74,7 +78,7 @@ long MxDSFile::ReadChunks()
   m_io.Read((char*)&m_header, 0xc);
   if ((m_header.majorVersion == SI_MAJOR_VERSION) && (m_header.minorVersion == SI_MINOR_VERSION))
   {
-    childChunk.ckid = 0x664f784d;
+    childChunk.ckid = FCC_MxOf;
     if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
       return -1;
     }
@@ -87,7 +91,7 @@ long MxDSFile::ReadChunks()
   else
   {
     sprintf(tempBuffer, "Wrong SI file version. %d.%d expected.", SI_MAJOR_VERSION, SI_MINOR_VERSION);
-    MessageBoxA(NULL, tempBuffer, NULL, 0x10);
+    MessageBoxA(NULL, tempBuffer, NULL, MB_ICONERROR);
     return -1;
   }
 }
