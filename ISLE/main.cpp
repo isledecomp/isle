@@ -144,7 +144,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   NotificationId type;
   unsigned char keyCode = 0;
 
-  MINMAXINFO *mmi = (MINMAXINFO *) lParam;
+  MINMAXINFO *mmi = (MINMAXINFO*) lParam;
 
   if (!g_isle) {
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
@@ -176,14 +176,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_GETMINMAXINFO:
-  {
     mmi->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
     mmi->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
     mmi->ptMinTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
     mmi->ptMinTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
-
     return 0;
-  }
   case WM_ENTERMENULOOP:
     return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_SYSCOMMAND:
@@ -217,23 +214,29 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_DISPLAYCHANGE:
     if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
-      if (!g_waitingForTargetDepth) {
-        unsigned char valid = FALSE;
-        if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
-          valid = TRUE;
-        }
-        if (!g_rmDisabled) {
-          if (!valid) {
-            g_rmDisabled = 1;
-            Lego()->vtable38();
-            VideoManager()->DisableRMDevice();
-          }
-        } else if (valid) {
-          g_reqEnableRMDevice = 1;
-        }
-      } else {
+      int targetWidth = LOWORD(lParam);
+      int targetHeight = HIWORD(lParam);
+
+      if (g_waitingForTargetDepth) {
         g_waitingForTargetDepth = 0;
         g_targetDepth = wParam;
+      }
+      else {
+        unsigned char valid = FALSE;
+        if (targetWidth == g_targetWidth && targetHeight == g_targetHeight && g_targetDepth == wParam) {
+          valid = TRUE;
+        }
+
+        if (g_rmDisabled) {
+          if (valid) {
+             g_reqEnableRMDevice = 1;
+          }
+        }
+        else if (!valid) {
+          g_rmDisabled = 1;
+          Lego()->vtable38();
+          VideoManager()->DisableRMDevice();
+        }
       }
     }
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
