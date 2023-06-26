@@ -150,9 +150,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
   switch (uMsg) {
   case WM_PAINT:
-    return DefWindowProcA(hWnd, WM_PAINT, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_ACTIVATE:
-    return DefWindowProcA(hWnd, WM_ACTIVATE, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_ACTIVATEAPP:
     if (g_isle) {
       if ((wParam != 0) && (g_isle->m_fullScreen)) {
@@ -162,7 +162,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       }
       g_isle->m_windowActive = wParam;
     }
-    return DefWindowProcA(hWnd,WM_ACTIVATEAPP,wParam,lParam);
+    return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_CLOSE:
     if (!g_closed && g_isle) {
       if (g_isle) {
@@ -172,7 +172,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       g_closed = TRUE;
       return 0;
     }
-    return DefWindowProcA(hWnd,WM_CLOSE,wParam,lParam);
+    return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_GETMINMAXINFO:
   {
     MINMAXINFO *mmi = (MINMAXINFO *) lParam;
@@ -185,7 +185,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
   }
   case WM_ENTERMENULOOP:
-    return DefWindowProcA(hWnd,WM_ENTERMENULOOP,wParam,lParam);
+    return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_SYSCOMMAND:
     if (wParam == SC_SCREENSAVE) {
       return 0;
@@ -201,20 +201,20 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     } else if (g_isle && g_isle->m_fullScreen && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
       return 0;
     }
-    return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
+    return DefWindowProcA(hWnd,uMsg,wParam,lParam);
   case WM_EXITMENULOOP:
-    return DefWindowProcA(hWnd, WM_EXITMENULOOP, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_MOVING:
     if (g_isle && g_isle->m_fullScreen) {
       GetWindowRect(hWnd, (LPRECT) lParam);
       return 0;
     }
-    return DefWindowProcA(hWnd, WM_MOVING, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_NCPAINT:
     if (g_isle && g_isle->m_fullScreen) {
       return 0;
     }
-    return DefWindowProcA(hWnd, WM_NCPAINT, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_DISPLAYCHANGE:
     if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
       if (!g_waitingForTargetDepth) {
@@ -236,7 +236,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         g_targetDepth = wParam;
       }
     }
-    return DefWindowProcA(hWnd, WM_DISPLAYCHANGE, wParam, lParam);
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_SETCURSOR:
     if (g_isle) {
       HCURSOR hCursor = g_isle->m_cursorCurrent;
@@ -250,7 +250,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
     // to be what the assembly is actually doing
     if (lParam & (KF_REPEAT << 16)) {
-      return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
+      return DefWindowProcA(hWnd, uMsg, wParam, lParam);
     }
     keyCode = wParam;
     type = KEYDOWN;
