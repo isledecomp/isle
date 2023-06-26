@@ -4,22 +4,27 @@
 void ConvertColor(float h, float s, float v, float *r_out, float *b_out, float *g_out)
 {
   double calc; // st7
-  if (s <= 0.5)
-    calc = (v + 1.0) * s;
-  else
+  double v11;
+  int hue_index;
+  double v9;
+  double v12;
+  double v13;
+  if (s >= 0.5)
     calc = (1.0 - v) * s + v;
-  if (calc < 0.0)
+  else
+    calc = (v + 1.0) * s;
+  if (calc <= 0.0)
   {
     *g_out = 0.0;
     *b_out = 0.0;
     *r_out = 0.0;
     return;
   }
-  double v11 = s * 2.0 - calc;
-  int hue_index = h * 6.0;
-  double v9 = (calc - v11) / calc * (hue_index - hue_index) * calc;
-  double v12 = v11 + v9;
-  double v13 = calc - v9;
+  v11 = s * 2.0 - calc;
+  hue_index = h * 6.0;
+  v9 = (h * 6.0 - (float)hue_index) * ((calc - v11) / calc) * calc;
+  v12 = v11 + v9;
+  v13 = calc - v9;
   switch (hue_index)
   {
   case 0:
