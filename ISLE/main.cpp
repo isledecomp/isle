@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   g_isle = new Isle();
 
   // Create window
-  if (g_isle->SetupWindow(hInstance) != SUCCESS) {
+  if (g_isle->SetupWindow(hInstance, lpCmdLine) != SUCCESS) {
     MessageBoxA(NULL, "\"LEGO\xAE Island\" failed to start.  Please quit all other applications and try again.", "LEGO\xAE Island Error", MB_OK);
     return 0;
   }
@@ -90,14 +90,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     if (g_isle) {
-      g_isle->Tick(1);
+      g_isle->Tick(0);
     }
 
-    if (g_closed) {
-      break;
-    }
-
-    do {
+    while (!g_closed) {
       if (!PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE)) {
         break;
       }
@@ -134,10 +130,182 @@ LAB_00401bc7:
         }
         goto LAB_00401bc7;
       }
-    } while (!g_closed);
+    }
   }
 
   DestroyWindow(window);
 
   return msg.wParam;
+}
+
+// OFFSET: ISLE 0x401d20
+LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  if (!g_isle) {
+    return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+  }
+
+  switch (uMsg) {
+  case WM_PAINT:
+    return DefWindowProcA(hWnd, WM_PAINT, wParam, lParam);
+  case WM_ACTIVATE:
+    return DefWindowProcA(hWnd, WM_ACTIVATE, wParam, lParam);
+  case WM_ACTIVATEAPP:
+    if (g_isle) {
+      if ((wParam != 0) && (g_isle->m_fullScreen)) {
+        MoveWindow(hWnd, g_windowRect.left, g_windowRect.top,
+                   (g_windowRect.right - g_windowRect.left) + 1,
+                   (g_windowRect.bottom - g_windowRect.top) + 1, TRUE);
+      }
+      g_isle->m_windowActive = wParam;
+    }
+    return DefWindowProcA(hWnd,WM_ACTIVATEAPP,wParam,lParam);
+  case WM_CLOSE:
+    if (!g_closed && g_isle) {
+      if (g_isle) {
+        delete g_isle;
+      }
+      g_isle = NULL;
+      g_closed = TRUE;
+      return 0;
+    }
+    return DefWindowProcA(hWnd,WM_CLOSE,wParam,lParam);
+  case WM_GETMINMAXINFO:
+  {
+    MINMAXINFO *mmi = (MINMAXINFO *) lParam;
+
+    mmi->ptMaxTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMaxTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
+    mmi->ptMinTrackSize.x = (g_windowRect.right - g_windowRect.left) + 1;
+    mmi->ptMinTrackSize.y = (g_windowRect.bottom - g_windowRect.top) + 1;
+
+    return 0;
+  }
+  case WM_ENTERMENULOOP:
+    return DefWindowProcA(hWnd,WM_ENTERMENULOOP,wParam,lParam);
+  case WM_SYSCOMMAND:
+    if (wParam == SC_SCREENSAVE) {
+      return 0;
+    }
+    if (wParam == SC_CLOSE && g_closed == 0) {
+      if (g_isle) {
+        if (g_rmDisabled) {
+          ShowWindow(g_isle->m_windowHandle, SW_RESTORE);
+        }
+        PostMessageA(g_isle->m_windowHandle, WM_CLOSE, 0, 0);
+        return 0;
+      }
+    } else if (g_isle && g_isle->m_fullScreen && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
+      return 0;
+    }
+    return DefWindowProcA(hWnd,WM_SYSCOMMAND,wParam,lParam);
+  case WM_EXITMENULOOP:
+    return DefWindowProcA(hWnd, WM_EXITMENULOOP, wParam, lParam);
+  case WM_MOVING:
+    if (g_isle && g_isle->m_fullScreen) {
+      GetWindowRect(hWnd, (LPRECT) lParam);
+      return 0;
+    }
+    return DefWindowProcA(hWnd, WM_MOVING, wParam, lParam);
+  case WM_NCPAINT:
+    if (g_isle && g_isle->m_fullScreen) {
+      return 0;
+    }
+    return DefWindowProcA(hWnd, WM_NCPAINT, wParam, lParam);
+  case WM_DISPLAYCHANGE:
+    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
+      if (!g_waitingForTargetDepth) {
+        unsigned char valid = FALSE;
+        if (LOWORD(lParam) == g_targetWidth && HIWORD(lParam) == g_targetHeight && g_targetDepth == wParam) {
+          valid = TRUE;
+        }
+        if (!g_rmDisabled) {
+          if (!valid) {
+            g_rmDisabled = 1;
+            Lego()->vtable38();
+            VideoManager()->DisableRMDevice();
+          }
+        } else if (valid) {
+          g_reqEnableRMDevice = 1;
+        }
+      } else {
+        g_waitingForTargetDepth = 0;
+        g_targetDepth = wParam;
+      }
+    }
+    return DefWindowProcA(hWnd, WM_DISPLAYCHANGE, wParam, lParam);
+  case WM_SETCURSOR:
+  case WM_KEYDOWN:
+  case WM_MOUSEMOVE:
+  case WM_TIMER:
+  case WM_LBUTTONDOWN:
+  case WM_LBUTTONUP:
+  case 0x5400:
+  {
+
+    NotificationId type = NONE;
+    unsigned char keyCode = 0;
+
+    switch (uMsg) {
+    case WM_KEYDOWN:
+      // While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
+      // to be what the assembly is actually doing
+      if (lParam & (KF_REPEAT << 16)) {
+        return DefWindowProcA(hWnd, WM_KEYDOWN, wParam, lParam);
+      }
+      keyCode = wParam;
+      type = KEYDOWN;
+      break;
+    case WM_MOUSEMOVE:
+      g_mousemoved = 1;
+      type = MOUSEMOVE;
+      break;
+    case WM_TIMER:
+      type = TIMER;
+      break;
+    case WM_SETCURSOR:
+      if (g_isle) {
+        HCURSOR hCursor = g_isle->m_cursorCurrent;
+        if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
+          SetCursor(hCursor);
+          return 0;
+        }
+      }
+      break;
+    case WM_LBUTTONDOWN:
+      g_mousedown = 1;
+      type = MOUSEDOWN;
+      break;
+    case WM_LBUTTONUP:
+      g_mousedown = 0;
+      type = MOUSEUP;
+      break;
+    case 0x5400:
+      if (g_isle) {
+        g_isle->SetupCursor(wParam);
+        return 0;
+      }
+    }
+
+    if (g_isle) {
+      if (InputManager()) {
+        InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
+      }
+      if (g_isle && g_isle->m_drawCursor && type == MOUSEMOVE) {
+        unsigned short x = LOWORD(lParam);
+        unsigned short y = HIWORD(lParam);
+        if (639 < x) {
+          x = 639;
+        }
+        if (479 < y) {
+          y = 479;
+        }
+        VideoManager()->MoveCursor(x,y);
+      }
+    }
+    return 0;
+  }
+  }
+
+  return DefWindowProcA(hWnd,uMsg,wParam,lParam);
 }

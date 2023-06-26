@@ -26,7 +26,10 @@ public:
 
   virtual void VTable0x38(); // vtable0x38
 
-  int m_unk00[0x400];
+  char m_pad00[0x19C];
+  int m_joystickIndex;
+  char m_pad200[0x194];
+  MxBool m_useJoystick;
 };
 
 #endif // LEGOINPUTMANAGER_H
