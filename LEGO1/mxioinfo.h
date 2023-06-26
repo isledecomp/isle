@@ -13,7 +13,7 @@ public:
   void Close(long arg);
   LONG Seek(LONG lOffset, int iOrigin);
   unsigned long Read(HPSTR pch, LONG cch);
-  void SetBuffer(LPSTR pchBuffer, LONG cchBuffer);
+  void SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
   unsigned short Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend);
 
   MMIOINFO m_info;
