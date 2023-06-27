@@ -99,7 +99,7 @@ long MxDSFile::ReadChunks()
 // OFFSET: LEGO1 0x100cc7b0
 long MxDSFile::Seek(long lOffset, int iOrigin)
 {
-  return (m_position = m_io.Seek(lOffset, iOrigin)) == 0xFFFFFFFF ? -1 : 0;
+  return (m_position = m_io.Seek(lOffset, iOrigin)) == -1 ? -1 : 0;
 }
 
 // OFFSET: LEGO1 0x100cc7e0
