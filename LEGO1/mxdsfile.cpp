@@ -27,26 +27,28 @@ long MxDSFile::Open(unsigned long uStyle)
 {
   // No idea what's stopping this one matching, but I'm pretty
   // confident it has the correct behavior.
+  long longResult = 1;
   memset(&m_io, 0, sizeof(MXIOINFO));
+
   if (m_io.Open(m_filename.GetData(), uStyle) != 0) {
     return -1;
   }
 
-  m_io.SetBuffer(NULL, 0);
+  m_io.SetBuffer(NULL, 0, 0);
   m_position = 0;
 
-  long longResult = 1;
-  if (m_skipReadingChunks == 0)
-  {
+  if (m_skipReadingChunks == 0) {
     longResult = ReadChunks();
   }
-  if (longResult != 0)
-  {
+
+  if (longResult != 0) {
     Close(); // vtable + 0x18
-    return longResult;
   }
-  Seek(0, 0); // vtable + 0x24
-  return 0;
+  else {
+    Seek(0, 0); // vtable + 0x24
+  }
+
+  return longResult;
 }
 
 // OFFSET: LEGO1 0x100cc780

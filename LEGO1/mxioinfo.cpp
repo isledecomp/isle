@@ -37,7 +37,7 @@ LONG MXIOINFO::Seek(LONG lOffset, int iOrigin)
 }
 
 // OFFSET: LEGO1 0x100ccbc0
-void MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer)
+void MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk)
 {
   
 }
