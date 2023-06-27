@@ -7,7 +7,7 @@ class MxAutoLocker
 {
   public:
     MxAutoLocker(MxCriticalSection* cs);
-    virtual ~MxAutoLocker();
+    ~MxAutoLocker();
   private:
     MxCriticalSection* m_criticalSection;
 };
