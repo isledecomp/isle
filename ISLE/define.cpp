@@ -28,7 +28,7 @@ int g_targetWidth = 640;
 int g_targetHeight = 480;
 
 // 0x410060
-unsigned int g_targetDepth = 16;
+int g_targetDepth = 16;
 
 // 0x410064
 int g_reqEnableRMDevice = 0;
