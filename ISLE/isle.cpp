@@ -449,7 +449,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // OFFSET: ISLE 0x4023e0
-inline MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
+MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
   WNDCLASSA wndclass;
   ZeroMemory(&wndclass, sizeof(WNDCLASSA));
@@ -683,8 +683,6 @@ void Isle::LoadConfig()
   }
 }
 
-
-
 // OFFSET: ISLE 0x402c20
 inline void Isle::Tick(BOOL sleepIfNotNextFrame)
 {
@@ -752,7 +750,6 @@ inline void Isle::Tick(BOOL sleepIfNotNextFrame)
   if (sleepIfNotNextFrame != 0)
     Sleep(0);
 }
-
 
 // OFFSET: ISLE 0x402e80
 void Isle::SetupCursor(WPARAM wParam)
