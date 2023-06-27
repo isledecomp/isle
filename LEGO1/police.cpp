@@ -1,18 +1,18 @@
 #include "police.h"
 
-// OFFSET: LEGO1 0x1005e130
+// OFFSET: LEGO1 0x1005e130 STUB
 Police::Police()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x1005e320
+// OFFSET: LEGO1 0x1005e320 STUB
 Police::~Police()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x1005e480
+// OFFSET: LEGO1 0x1005e480 STUB
 long Police::Notify(MxParam &p)
 {
   // TODO

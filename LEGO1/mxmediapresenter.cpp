@@ -1,9 +1,6 @@
 #include "mxmediapresenter.h"
 
-// 0x100f074c
-static char* g_mxMediaPresenterClassName = "MxMediaPresenter";
-
-// OFFSET: LEGO1 0x100d4ce0
+// OFFSET: LEGO1 0x100d4ce0 STUB
 long MxMediaPresenter::Tickle()
 {
   // TODO
@@ -11,41 +8,31 @@ long MxMediaPresenter::Tickle()
   return 0;
 }
 
-// OFFSET: LEGO1 0x100d4ce4
-const char *MxMediaPresenter::GetClassName() const
-{
-  return g_mxMediaPresenterClassName;
-}
-
-// OFFSET: LEGO1 0x1000c5d0
-MxBool MxMediaPresenter::IsClass(const char *name) const
-{
-  // TODO
-
-  return MxBool();
-}
-
-// OFFSET: LEGO1 0x100b5d90
+// OFFSET: LEGO1 0x100b5d90 STUB
 void MxMediaPresenter::VTable0x20()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b5e10
-unsigned int MxMediaPresenter::VTable0x24()
+// OFFSET: LEGO1 0x100b5e10 STUB
+void MxMediaPresenter::VTable0x24()
 {
   // TODO
-
-  return 0;
 }
 
-// OFFSET: LEGO1 0x100b5ef0
+// OFFSET: LEGO1 0x1000c5b0 STUB
+void MxMediaPresenter::InitVirtual()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b5ef0 STUB
 void MxMediaPresenter::DoneTickle()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b5700
+// OFFSET: LEGO1 0x100b5700 STUB
 long MxMediaPresenter::StartAction(MxStreamController *, MxDSAction *)
 {
   // TODO
@@ -53,14 +40,20 @@ long MxMediaPresenter::StartAction(MxStreamController *, MxDSAction *)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100b5bc0
+// OFFSET: LEGO1 0x100b5bc0 STUB
 void MxMediaPresenter::EndAction()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b6030
+// OFFSET: LEGO1 0x100b6030 STUB
 void MxMediaPresenter::Enable(unsigned char param)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b5f10 STUB
+void MxMediaPresenter::VTable0x58(undefined4 param)
 {
   // TODO
 }

@@ -7,6 +7,7 @@ class Act3 : public LegoWorld
 {
 public:
   Act3();
+  virtual ~Act3();
 
   // VTABLE 0x100d9628
 };

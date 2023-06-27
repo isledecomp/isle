@@ -1,16 +1,17 @@
 #include "mxvideomanager.h"
 
-// OFFSET: LEGO1 0x100be2a0
+// OFFSET: LEGO1 0x100be2a0 STUB
 MxVideoManager::~MxVideoManager()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100bea90
+// OFFSET: LEGO1 0x100bea90 STUB
 long MxVideoManager::Tickle()
 {
   // TODO
-    return 0;
+  
+  return 0;
 }
 
 // OFFSET: LEGO1 0x100be1f0

@@ -1,18 +1,18 @@
 #include "score.h"
 
-// OFFSET: LEGO1 0x10001000
+// OFFSET: LEGO1 0x10001000 STUB
 Score::Score()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x10001200
+// OFFSET: LEGO1 0x10001200 STUB
 Score::~Score()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x10001410
+// OFFSET: LEGO1 0x10001410 STUB
 long Score::Notify(MxParam &p)
 {
   // TODO

@@ -1,6 +1,6 @@
 #include "legopathactor.h"
 
-// OFFSET: LEGO1 0x1002d700
+// OFFSET: LEGO1 0x1002d700 STUB
 LegoPathActor::LegoPathActor()
 {
   Destroy();
@@ -8,7 +8,7 @@ LegoPathActor::LegoPathActor()
   // TODO
 }
 
-// OFFSET: LEGO1 0x10053900
+// OFFSET: LEGO1 0x10053900 STUB
 void LegoPathActor::Destroy()
 {
   // TODO

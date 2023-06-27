@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 #include "mxstreamcontroller.h"
+#include "mxresult.h"
 
 class MxStreamer : public MxCore
 {

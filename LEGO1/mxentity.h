@@ -12,8 +12,18 @@ class MxAtomId;
 class MxEntity : public MxCore
 {
 public:
-  virtual const char* GetClassName() const; // vtable+0xc
-  virtual MxBool IsClass(const char *name) const; // vtable+0x10
+  // OFFSET: LEGO1 0x1000c180
+  inline virtual const char* GetClassName() const // vtable+0xc
+  {
+    // 0x100f0070
+    return "MxEntity";
+  };
+
+  // OFFSET: LEGO1 0x1000c190
+  inline virtual MxBool IsClass(const char *name) const // vtable+0x10
+  {
+    return !strcmp(name, MxEntity::GetClassName()) || MxCore::IsClass(name);
+  };
 
   virtual undefined4 VTable0x14(undefined4 param_1, MxAtomId* param_2); // vtable+0x14
 

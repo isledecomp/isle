@@ -286,7 +286,7 @@ for subdir, dirs, files in os.walk(source):
 
         line = line.strip()
 
-        if line.startswith(pattern):
+        if line.startswith(pattern) and not line.endswith("STUB"):
           par = line[len(pattern):].strip().split()
           module = par[0]
           if module != basename:

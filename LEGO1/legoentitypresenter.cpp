@@ -1,18 +1,18 @@
 #include "legoentitypresenter.h"
 
-// OFFSET: LEGO1 0x10053440
+// OFFSET: LEGO1 0x10053440 STUB
 LegoEntityPresenter::LegoEntityPresenter()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100535d0
+// OFFSET: LEGO1 0x100535d0 STUB
 LegoEntityPresenter::~LegoEntityPresenter()
 {
   // TODO
 }
 
-// OFFSET: LEG01 0x100535c0
+// OFFSET: LEG01 0x100535c0 STUB
 void LegoEntityPresenter::Init()
 {
   // TODO

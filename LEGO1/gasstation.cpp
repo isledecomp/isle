@@ -1,18 +1,18 @@
 #include "gasstation.h"
 
-// OFFSET: LEGO1 0x100046a0
+// OFFSET: LEGO1 0x100046a0 STUB
 GasStation::GasStation()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100048c0
+// OFFSET: LEGO1 0x100048c0 STUB
 GasStation::~GasStation()
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x10004a60
+// OFFSET: LEGO1 0x10004a60 STUB
 long GasStation::Notify(MxParam &p)
 {
   // TODO
@@ -20,7 +20,7 @@ long GasStation::Notify(MxParam &p)
   return 0;
 }
 
-// OFFSET: LEGO1 0x10005c90
+// OFFSET: LEGO1 0x10005c90 STUB
 long GasStation::Tickle()
 {
   // TODO
@@ -28,7 +28,7 @@ long GasStation::Tickle()
   return 0;
 }
 
-// OFFSET: LEGO1 0x10005e70
+// OFFSET: LEGO1 0x10005e70 STUB
 undefined GasStation::VTable0x64(undefined4 param)
 {
   // TODO

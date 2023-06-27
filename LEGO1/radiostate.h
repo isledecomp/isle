@@ -7,6 +7,21 @@ class RadioState : public LegoState
 {
 public:
   RadioState();
+
+  // OFFSET: LEGO1 0x1002cf60
+  inline virtual const char *GetClassName() const // vtable+0x0c
+  { 
+    // 0x100f04f8
+    return "RadioState";
+  }; 
+
+  // OFFSET: LEGO1 0x1002cf70
+  inline virtual MxBool IsClass(const char *name) const // vtable+0x10
+  {
+    return !strcmp(name, RadioState::GetClassName()) || LegoState::IsClass(name);
+  };
+
+  virtual MxBool VTable0x14(); // vtable+0x14
   
   // VTABLE 0x100d6d28
   // SIZE 0x30
