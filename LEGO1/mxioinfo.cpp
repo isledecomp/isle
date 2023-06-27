@@ -9,7 +9,7 @@ MXIOINFO::MXIOINFO()
 // OFFSET: LEGO1 0x100cc820
 MXIOINFO::~MXIOINFO()
 {
-  m_info.cchBuffer = 0;
+  Close(0);
 }
 
 // OFFSET: LEGO1 0x100cc830
