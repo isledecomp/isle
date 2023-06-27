@@ -6,7 +6,7 @@ Generally, decompilation is a fairly advanced skill. If you aren't already famil
 
 ## Ghidra Server
 
-For documenting the original binaries and generating pseudocode that we decompile with, we primarily use [Ghidra](https://ghidra-sre.org/) (it's free and open source). To help with collaboration, we have a shared Ghidra repository with all of our current work. It is available to the public but read-only; to contribute to it yourself, you'll need approval from a current maintainer.
+For documenting the original binaries and generating pseudocode that we decompile with, we primarily use [Ghidra](https://ghidra-sre.org/) (it's free and open source). To help with collaboration, we have a shared Ghidra repository with all of our current work. You are free to check it out and mess around with it locally, however to prevent sabotage, you will need to request permission before you can push back to the server (ask in the Matrix room).
 
 To access the Ghidra repository, use the following details:
 
@@ -21,6 +21,7 @@ In general, we're not exhaustively strict about coding style, but there are some
 - `PascalCase` for classes and function names.
 - `m_camelCase` for member variables.
 - `g_camelCase` for global variables.
+- `p_camelCase` for function parameters.
 
 ## Kinds of Contributions
 
