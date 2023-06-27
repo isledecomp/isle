@@ -5,9 +5,7 @@
 #define SI_MAJOR_VERSION 2
 #define SI_MINOR_VERSION 2
 
-#define FCC_OMNI 0x494e4d4f
-#define FCC_MxHd 0x6448784d
-#define FCC_MxOf 0x664f784d
+#define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
 
 // OFFSET: LEGO1 0x100cc4b0
 MxDSFile::MxDSFile(const char *filename, unsigned long skipReadingChunks)
@@ -68,11 +66,11 @@ long MxDSFile::ReadChunks()
   _MMCKINFO childChunk;
   char tempBuffer[80];
   
-  topChunk.fccType = FCC_OMNI;
+  topChunk.fccType = FOURCC('O', 'M', 'N', 'I');
   if (m_io.Descend(&topChunk, NULL, MMIO_FINDRIFF) != 0) {
     return -1;
   }
-  childChunk.ckid = FCC_MxHd;
+  childChunk.ckid = FOURCC('M', 'x', 'H', 'd');
   if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
     return -1;
   }
@@ -80,7 +78,7 @@ long MxDSFile::ReadChunks()
   m_io.Read((char*)&m_header, 0xc);
   if ((m_header.majorVersion == SI_MAJOR_VERSION) && (m_header.minorVersion == SI_MINOR_VERSION))
   {
-    childChunk.ckid = FCC_MxOf;
+    childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
     if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
       return -1;
     }
