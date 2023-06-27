@@ -77,6 +77,8 @@ jobs:
 
     - name: Upload Continuous Release
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         curl -fLOSs https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh
         ./upload.sh \
