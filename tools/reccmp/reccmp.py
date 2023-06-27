@@ -372,7 +372,7 @@ for subdir, dirs, files in os.walk(source):
             # If html, record the diffs to an HTML file
             if html:
               escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
-              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), escape))
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), escaped))
 
       except UnicodeDecodeError:
         break
