@@ -448,7 +448,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   return 0;
 }
 
-
 // OFFSET: ISLE 0x4023e0
 inline MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
