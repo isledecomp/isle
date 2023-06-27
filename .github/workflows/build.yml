@@ -82,7 +82,7 @@ jobs:
         ./upload.sh \
           Release/ISLE.EXE \
           Release/LEGO1.DLL \
-          Release/ISLEPROGRESS.HTML \
-          Release/ISLEPROGRESS.SVG \
-          Release/LEGO1PROGRESS.HTML \
-          Release/LEGO1PROGRESS.SVG
+          ISLEPROGRESS.HTML \
+          ISLEPROGRESS.SVG \
+          LEGO1PROGRESS.HTML \
+          LEGO1PROGRESS.SVG
