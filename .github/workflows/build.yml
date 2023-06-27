@@ -61,8 +61,8 @@ jobs:
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL
         pip install capstone
         pip install colorama
-        python3 tools/reccmp/reccmp.py -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
-        python3 tools/reccmp/reccmp.py -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
+        python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
+        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -72,3 +72,5 @@ jobs:
           Release
           ISLEPROGRESS.HTML
           LEGO1PROGRESS.HTML
+          ISLEPROGRESS.SVG
+          LEGO1PROGRESS.SVG
