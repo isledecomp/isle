@@ -33,22 +33,20 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
     char *colorStringSplit = strtok(colorStringCopy, Delimiter);
     if (!strcmp(colorStringSplit, set))
     {
-      //TODO: the names of these variables are incorrect as I can't figure out what color format ConvertColor() uses
-      char *blue = strtok(0, Delimiter);
-      if (blue)
-        b = atoi(blue) * 0.01;
-      char *green = strtok(0, Delimiter);
-      if (green)
-        g = atoi(green) * 0.01;
-      char *red = strtok(0, Delimiter);
-      if (red)
-        r = atoi(red) * 0.01;
+      char *hue = strtok(0, Delimiter);
+      if (hue)
+        h = atoi(hue) * 0.01;
+      char *sat = strtok(0, Delimiter);
+      if (sat)
+        s = atoi(sat) * 0.01;
+      char *val = strtok(0, Delimiter);
+      if (val)
+        v = atoi(val) * 0.01;
     }
     else if (!strcmp(colorStringSplit, reset))
     {
       // reset it
-
-      ConvertColor(this->b, this->g, this->r, &converted_r, &converted_g, &converted_b);
+      ConvertHSVToRGB(this->h, this->s, this->v, &converted_r, &converted_g, &converted_b);
       videomanager->SetSkyColor(converted_r, converted_g, converted_b);
     }
     free(colorStringCopy);
