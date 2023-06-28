@@ -7,7 +7,7 @@
 class MxDSObject : public MxCore
 {
 public:
-  __declspec(dllexport) void SetObjectName(const char *);
+  __declspec(dllexport) void SetObjectName(const char *p_objectName);
 
   MxDSObject();
   virtual ~MxDSObject();
@@ -25,7 +25,7 @@ public:
   virtual unsigned int CalculateUnk08(); // vtable+18;
   virtual void Parse(char **p_source, unsigned short p_unk24); // vtable+1c;
 
-  void SetUnknown10(const char *p_unk10);
+  void SetSourceName(const char *p_sourceName);
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }
@@ -40,9 +40,9 @@ public:
 private:
   unsigned int m_unk08;
   short m_unk0c;
-  char* m_unk10;
+  char* m_sourceName;
   int m_unk14;
-  char *m_name;
+  char *m_objectName;
   int m_unk1c;
   MxAtomId m_atomId;
   short m_unk24;

@@ -7,9 +7,9 @@
 MxDSObject::MxDSObject()
 {
   this->m_unk0c = 0;
-  this->m_unk10 = NULL;
+  this->m_sourceName = NULL;
   this->m_unk14 = 0;
-  this->m_name = NULL;
+  this->m_objectName = NULL;
   this->m_unk24 = -1;
   this->m_unk1c = -1;
   this->m_unk28 = 0;
@@ -18,16 +18,16 @@ MxDSObject::MxDSObject()
 // OFFSET: LEGO1 0x100bf7e0
 MxDSObject::~MxDSObject()
 {
-  delete[] m_name;
-  delete[] m_unk10;
+  delete[] m_objectName;
+  delete[] m_sourceName;
 }
 
 // OFFSET: LEGO1 0x100bf870
 void MxDSObject::CopyFrom(MxDSObject &p_dsObject)
 {
-  this->SetUnknown10(p_dsObject.m_unk10);
+  this->SetSourceName(p_dsObject.m_sourceName);
   this->m_unk14 = p_dsObject.m_unk14;
-  this->SetObjectName(p_dsObject.m_name);
+  this->SetObjectName(p_dsObject.m_objectName);
   this->m_unk1c = p_dsObject.m_unk1c;
   this->m_unk24 = p_dsObject.m_unk24;
   this->m_atomId = p_dsObject.m_atomId;
@@ -47,39 +47,39 @@ MxDSObject &MxDSObject::operator=(MxDSObject &p_dsObject)
 // OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {
-  if (p_name != this->m_name)
+  if (p_name != this->m_objectName)
   {
-    delete[] this->m_name;
+    delete[] this->m_objectName;
 
     if (p_name) {
-      this->m_name = new char[strlen(p_name) + 1];
+      this->m_objectName = new char[strlen(p_name) + 1];
 
-      if (this->m_name) {
-        strcpy(this->m_name, p_name);
+      if (this->m_objectName) {
+        strcpy(this->m_objectName, p_name);
       }
     }
     else {
-      this->m_name = NULL;
+      this->m_objectName = NULL;
     }
   }
 }
 
 // OFFSET: LEGO1 0x100bf950
-void MxDSObject::SetUnknown10(const char *p_unk10)
+void MxDSObject::SetSourceName(const char *p_sourceName)
 {
-  if (p_unk10 != this->m_unk10)
+  if (p_sourceName != this->m_sourceName)
   {
-    delete[] this->m_unk10;
+    delete[] this->m_sourceName;
 
-    if (p_unk10) {
-      this->m_unk10 = new char[strlen(p_unk10) + 1];
+    if (p_sourceName) {
+      this->m_sourceName = new char[strlen(p_sourceName) + 1];
 
-      if (this->m_unk10) {
-        strcpy(this->m_unk10, p_unk10);
+      if (this->m_sourceName) {
+        strcpy(this->m_sourceName, p_sourceName);
       }
     }
     else {
-      this->m_unk10 = NULL;
+      this->m_sourceName = NULL;
     }
   }
 }
@@ -95,15 +95,15 @@ unsigned int MxDSObject::CalculateUnk08()
 {
   unsigned int unk08;
 
-  if (this->m_unk10)
-    unk08 = strlen(this->m_unk10) + 3;
+  if (this->m_sourceName)
+    unk08 = strlen(this->m_sourceName) + 3;
   else
     unk08 = 3;
 
   unk08 += 4;
 
-  if (this->m_name)
-    unk08 += strlen(this->m_name) + 1;
+  if (this->m_objectName)
+    unk08 += strlen(this->m_objectName) + 1;
   else
     unk08++;
 
@@ -115,13 +115,13 @@ unsigned int MxDSObject::CalculateUnk08()
 // OFFSET: LEGO1 0x100bfa20
 void MxDSObject::Parse(char **p_source, unsigned short p_unk24)
 {
-  this->SetUnknown10(*p_source);
-  *p_source += strlen(this->m_unk10) + 1;
+  this->SetSourceName(*p_source);
+  *p_source += strlen(this->m_sourceName) + 1;
   this->m_unk14 = *(int*) *p_source;
   *p_source += 4;
 
   this->SetObjectName(*p_source);
-  *p_source += strlen(this->m_name) + 1;
+  *p_source += strlen(this->m_objectName) + 1;
   this->m_unk1c = *(int*) *p_source;
   *p_source += 4;
 
