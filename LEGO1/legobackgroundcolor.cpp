@@ -17,7 +17,7 @@ LegoBackgroundColor::LegoBackgroundColor(const char *name, const char *colorStri
 void LegoBackgroundColor::SetColorString(const char *colorString)
 {
   m_name = colorString;
-  m_colorString.ToLowerCase();
+  m_string.ToLowerCase();
 
   float converted_r;
   float converted_b;

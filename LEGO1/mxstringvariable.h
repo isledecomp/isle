@@ -8,13 +8,13 @@ class MxStringVariable
 public:
   __declspec(dllexport) MxStringVariable(const char *, const char *);
   MxStringVariable() {}
-  virtual MxString *GetColorString();
-  virtual void SetColorString(const char *colorString);
+  virtual MxString *GetString();
+  virtual void SetString(const char *colorString);
   virtual ~MxStringVariable();
 
 protected:
   MxString m_name;
-  MxString m_colorString;
+  MxString m_string;
 };
 
 #endif // MXSTRINGVARIABLE_H
