@@ -1,7 +1,7 @@
 #ifndef ISLE_H
 #define ISLE_H
 
-#include "legoinc.h"
+#include <windows.h>
 
 #include "mxresult.h"
 #include "mxvideoparam.h"

@@ -117,7 +117,7 @@ void LegoOmni::vtable24(MxDSAction &ds)
 MxBool LegoOmni::vtable28(MxDSAction &ds)
 {
   // FIXME: Stub
-  return MX_TRUE;
+  return TRUE;
 }
 
 void LegoOmni::vtable2c()

@@ -101,7 +101,7 @@ void IsleApp::Close()
     } while (lVar8 == 0);
 
     while (Lego()) {
-      if (Lego()->vtable28(ds) != MX_FALSE) {
+      if (Lego()->vtable28(ds) != FALSE) {
         break;
       }
 

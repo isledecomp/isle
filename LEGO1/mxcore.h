@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-#include "mxbool.h"
+#include "mxtypes.h"
 
 class MxParam;
 
@@ -16,12 +16,10 @@ public:
   virtual long Tickle(); // vtable+08
 
   // OFFSET: LEGO1 0x100144c0
-  inline virtual const char *GetClassName() const { return "MxCore"; }; // vtable+0c
+  inline virtual const char *ClassName() const { return "MxCore"; }; // vtable+0c
 
   // OFFSET: LEGO1 0x100140d0
-  inline virtual MxBool IsClass(const char *name) const {
-    return !strcmp(name, MxCore::GetClassName());
-  }; // vtable+10
+  inline virtual MxBool IsA(const char *name) const { return !strcmp(name, MxCore::ClassName()); }; // vtable+10
 
 private:
   unsigned int m_id;

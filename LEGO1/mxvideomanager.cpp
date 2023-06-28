@@ -28,7 +28,7 @@ int MxVideoManager::Init()
   this->m_unk58 = NULL;
   this->m_unk5c = 0;
   this->m_videoParam.SetPalette(NULL);
-  this->m_unk60 = MX_FALSE;
+  this->m_unk60 = FALSE;
   return 0;
 }
 

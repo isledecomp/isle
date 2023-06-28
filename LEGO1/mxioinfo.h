@@ -1,8 +1,10 @@
 #ifndef MXIOINFO_H
 #define MXIOINFO_H
 
-#include "legoinc.h"
+#include <windows.h>
+
 #include "mmsystem.h"
+
 class MXIOINFO
 {
 public:

@@ -2,8 +2,8 @@
 #define LEGONAVCONTROLLER_H
 
 #include "mxcore.h"
-#include "mxbool.h"
 #include "mxtimer.h"
+#include "mxtypes.h"
 
 class LegoNavController : public MxCore
 {
