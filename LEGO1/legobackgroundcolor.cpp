@@ -16,8 +16,7 @@ LegoBackgroundColor::LegoBackgroundColor(const char *name, const char *colorStri
 // OFFSET: LEGO1 0x1003c070
 void LegoBackgroundColor::SetColorString(const char *colorString)
 {
-
-  m_colorString.operator=(colorString);
+  m_name = colorString;
   m_colorString.ToLowerCase();
 
   float converted_r;
@@ -28,7 +27,7 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
   if (videomanager && colorString)
   {
     int length = strlen(colorString) + 1;
-    char *colorStringCopy = (char *)malloc(length);
+    char *colorStringCopy = new char[length];
     strcpy(colorStringCopy, colorString);
     char *colorStringSplit = strtok(colorStringCopy, Delimiter);
     if (!strcmp(colorStringSplit, set))
@@ -49,6 +48,6 @@ void LegoBackgroundColor::SetColorString(const char *colorString)
       ConvertHSVToRGB(this->h, this->s, this->v, &converted_r, &converted_g, &converted_b);
       videomanager->SetSkyColor(converted_r, converted_g, converted_b);
     }
-    free(colorStringCopy);
+    delete[] colorStringCopy;
   }
 }

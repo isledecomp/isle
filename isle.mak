@@ -62,7 +62,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
-	-@erase "$(INTDIR)\mxbackgroundcolor.obj"
+	-@erase "$(INTDIR)\MxStringVariable.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\mxdsfile.obj"
@@ -146,7 +146,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
-	"$(INTDIR)\mxbackgroundcolor.obj" \
+	"$(INTDIR)\MxStringVariable.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
 	"$(INTDIR)\mxdsfile.obj" \
@@ -196,7 +196,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\mxatomid.obj"
 	-@erase "$(INTDIR)\mxautolocker.obj"
-	-@erase "$(INTDIR)\mxbackgroundcolor.obj"
+	-@erase "$(INTDIR)\MxStringVariable.obj"
 	-@erase "$(INTDIR)\mxcore.obj"
 	-@erase "$(INTDIR)\mxcriticalsection.obj"
 	-@erase "$(INTDIR)\mxdsfile.obj"
@@ -282,7 +282,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\mxatomid.obj" \
 	"$(INTDIR)\mxautolocker.obj" \
-	"$(INTDIR)\mxbackgroundcolor.obj" \
+	"$(INTDIR)\MxStringVariable.obj" \
 	"$(INTDIR)\mxcore.obj" \
 	"$(INTDIR)\mxcriticalsection.obj" \
 	"$(INTDIR)\mxdsfile.obj" \
@@ -971,7 +971,7 @@ DEP_CPP_LEGOB=\
 	".\LEGO1\legovideomanager.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbackgroundcolor.h"\
+	".\LEGO1\MxStringVariable.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxdsaction.h"\
@@ -1014,15 +1014,15 @@ DEP_CPP_LEGOB=\
 ################################################################################
 # Begin Source File
 
-SOURCE=.\LEGO1\mxbackgroundcolor.cpp
+SOURCE=.\LEGO1\MxStringVariable.cpp
 DEP_CPP_MXBAC=\
-	".\LEGO1\mxbackgroundcolor.h"\
+	".\LEGO1\MxStringVariable.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxtypes.h"\
 	
 
-"$(INTDIR)\mxbackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_MXBAC) "$(INTDIR)"
+"$(INTDIR)\MxStringVariable.obj" : $(SOURCE) $(DEP_CPP_MXBAC) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 

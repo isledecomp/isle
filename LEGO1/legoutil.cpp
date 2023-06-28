@@ -10,7 +10,7 @@ void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, floa
   double v12;
   double v13;
   if (s > 0.5f)
-    calc = ((1.0f - v) * s + v); //
+    calc = (1.0f - v) * s + v;
   else
     calc = (v + 1.0) * s;
   if (calc <= 0.0)
