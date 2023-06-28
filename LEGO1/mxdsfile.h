@@ -6,7 +6,7 @@
 class MxDSFile : public MxDSSource
 {
 public:
-  __declspec(dllexport) MxDSFile(const char *,unsigned long);
+  __declspec(dllexport) MxDSFile(const char *filename, unsigned long skipReadingChunks);
   __declspec(dllexport) virtual ~MxDSFile(); // vtable+0x0
   __declspec(dllexport) virtual long Open(unsigned long); // vtable+0x14
   __declspec(dllexport) virtual long Close(); // vtable+0x18
@@ -15,8 +15,29 @@ public:
   __declspec(dllexport) virtual unsigned long GetBufferSize(); // vtable+0x28
   __declspec(dllexport) virtual unsigned long GetStreamBuffersNum();  // vtable+0x2c
 private:
-  char m_unknown[0x70];
-  unsigned long m_buffersize;
+  long ReadChunks();
+  struct ChunkHeader {
+    ChunkHeader()
+      : majorVersion(0)
+      , minorVersion(0)
+      , bufferSize(0)
+      , streamBuffersNum(0)
+    {}
+
+    unsigned short majorVersion;
+    unsigned short minorVersion;
+    unsigned long bufferSize;
+    short streamBuffersNum;
+    short reserved;
+  };
+
+  MxString m_filename;
+  MXIOINFO m_io;
+  ChunkHeader m_header;
+
+  // If false, read chunks immediately on open, otherwise
+  // skip reading chunks until ReadChunks is explicitly called.
+  unsigned long m_skipReadingChunks;
 };
 
 #endif // MXDSFILE_H
