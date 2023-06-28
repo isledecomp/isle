@@ -63,6 +63,8 @@ jobs:
         pip install colorama
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
         python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
+        convert ISLEPROGRESS.SVG ISLEPROGRESS.PNG
+        convert LEGO1PROGRESS.SVG LEGO1PROGRESS.PNG
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -74,6 +76,8 @@ jobs:
           LEGO1PROGRESS.HTML
           ISLEPROGRESS.SVG
           LEGO1PROGRESS.SVG
+          ISLEPROGRESS.PNG
+          LEGO1PROGRESS.PNG
 
     - name: Upload Continuous Release
       shell: bash
@@ -86,5 +90,7 @@ jobs:
           Release/LEGO1.DLL \
           ISLEPROGRESS.HTML \
           ISLEPROGRESS.SVG \
+          ISLEPROGRESS.PNG \
           LEGO1PROGRESS.HTML \
+          LEGO1PROGRESS.PNG \
           LEGO1PROGRESS.SVG
