@@ -429,7 +429,7 @@ def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
   templatedata = templatedata[0:percentstart] + str(progwidth) + templatedata[percentend + 1:]
 
   # Replace percentage statistic
-  templatedata = templatedata.replace('{percent}', '%.2f%%' % (total_statistic * 100), 1)
+  templatedata = templatedata.replace('{percent}', '%.2f%%' % (total_statistic * 100), 2)
 
   svgfile = open(svg, 'w')
   if not svgfile:
