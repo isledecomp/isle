@@ -8,16 +8,50 @@
    version="1.1"
    id="svg5"
    xml:space="preserve"
+   sodipodi:docname="template.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs>
-        <clipPath id="progBarCutoff">
-          <rect width="{progbar:127.18422}" height="8.6508904" x="21.074554" y="134.86963" />
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview26"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="1.6046875"
+     inkscape:cx="239.29893"
+     inkscape:cy="319.68841"
+     inkscape:window-width="2560"
+     inkscape:window-height="1379"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" /><defs
+     id="defs5">
+        <clipPath
+   id="progBarCutoff">
+          <rect
+   width="{progbar:127.18422}"
+   height="8.6508904"
+   x="21.074554"
+   y="134.86963"
+   id="rect2" />
         </clipPath>
       </defs><rect
-     x="0" y="0" width="100%" height="100%" fill="#0d1117" /><g
+     x="0"
+     y="0"
+     width="100%"
+     height="100%"
+     fill="#0d1117"
+     id="rect7" /><g
      id="g1273"
-     transform="translate(-3.9577451e-7,-0.93505135)"><image
+     transform="matrix(1.2683581,0,0,1.2683581,-22.720982,-24.134879)"><image
        width="84.666664"
        height="84.666664"
        preserveAspectRatio="none"
@@ -44,11 +78,11 @@
          x="21.074554"
          y="134.86963" /><text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:white;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
          x="76.841347"
          y="140.70638"
          id="text2152"><tspan
-           style="font-size:4.23333px;fill:white;fill-opacity:1;stroke-width:1.05833"
+           style="font-size:4.23333px;fill:#ffffff;fill-opacity:1;stroke-width:1.05833"
            x="76.841347"
            y="140.70638"
            id="tspan2150">{percent}</tspan></text><rect
@@ -60,15 +94,15 @@
          y="134.86963"
          clip-path="url(#progBarCutoff)" /><text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
          x="76.841347"
          y="140.70638"
-         id="text2152"
+         id="text18"
          clip-path="url(#progBarCutoff)"><tspan
-           style="font-size:4.23333px;fill:black;fill-opacity:1;stroke-width:1.05833"
+           style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:1.05833"
            x="76.841347"
            y="140.70638"
-           id="tspan2150">{percent}</tspan></text></g><text
+           id="tspan16">{percent}</tspan></text></g><text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
        x="46.947659"
