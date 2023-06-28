@@ -80,7 +80,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        /c/msys64/usr/bin/pacman -Sy mingw-w64-x86_64-inkscape
+        /c/msys64/usr/bin/pacman -Sy --noconfirm mingw-w64-x86_64-inkscape
         /c/msys64/mingw64/bin/inkscape -w 1024 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
         /c/msys64/mingw64/bin/inkscape -w 1024 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
 
