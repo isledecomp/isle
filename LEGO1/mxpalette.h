@@ -3,9 +3,9 @@
 
 #include <ddraw.h>
 
-#include "mxbool.h"
 #include "mxcore.h"
 #include "mxresult.h"
+#include "mxtypes.h"
 
 class MxPalette : public MxCore
 {
