@@ -63,10 +63,6 @@ jobs:
         pip install colorama
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
         python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
-
-        #pacman -Sy mingw-w64-x86_64-inkscape
-        inkscape -w 1024 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
-        inkscape -w 1024 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -78,14 +74,16 @@ jobs:
           LEGO1PROGRESS.HTML
           ISLEPROGRESS.SVG
           LEGO1PROGRESS.SVG
-          ISLEPROGRESS.PNG
-          LEGO1PROGRESS.PNG
 
     - name: Upload Continuous Release
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        pacman -Sy mingw-w64-x86_64-inkscape
+        inkscape -w 1024 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
+        inkscape -w 1024 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
+
         curl -fLOSs https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh
         ./upload.sh \
           Release/ISLE.EXE \
