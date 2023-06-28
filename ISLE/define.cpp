@@ -1,7 +1,7 @@
 #include "define.h"
 
 // 0x410030
-Isle *g_isle = 0;
+IsleApp *g_isle = 0;
 
 // 0x410034
 unsigned char g_mousedown = 0;

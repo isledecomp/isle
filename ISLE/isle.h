@@ -6,11 +6,11 @@
 #include "mxresult.h"
 #include "mxvideoparam.h"
 
-class Isle
+class IsleApp
 {
 public:
-  Isle();
-  ~Isle();
+  IsleApp();
+  ~IsleApp();
 
   void Close();
 

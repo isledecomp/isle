@@ -3,9 +3,9 @@
 
 #include "legoinc.h"
 
-class Isle;
+class IsleApp;
 
-extern Isle *g_isle;
+extern IsleApp *g_isle;
 extern int g_closed;
 // 0x4101c4
 #define WNDCLASS_NAME "Lego Island MainNoM App"

@@ -15,7 +15,7 @@
 #include "res/resource.h"
 
 // OFFSET: ISLE 0x401000
-Isle::Isle()
+IsleApp::IsleApp()
 {
   m_hdPath = NULL;
   m_cdPath = NULL;
@@ -52,7 +52,7 @@ Isle::Isle()
 }
 
 // OFFSET: ISLE 0x4011a0
-Isle::~Isle()
+IsleApp::~IsleApp()
 {
   if (LegoOmni::GetInstance()) {
     Close();
@@ -77,7 +77,7 @@ Isle::~Isle()
 }
 
 // OFFSET: ISLE 0x401260
-void Isle::Close()
+void IsleApp::Close()
 {
   MxDSAction ds;
   ds.SetUnknown24(-2);
@@ -112,7 +112,7 @@ void Isle::Close()
 }
 
 // OFFSET: ISLE 0x4013b0
-BOOL Isle::SetupLegoOmni()
+BOOL IsleApp::SetupLegoOmni()
 {
   BOOL result = FALSE;
   char mediaPath[256];
@@ -129,7 +129,7 @@ BOOL Isle::SetupLegoOmni()
 }
 
 // OFFSET: ISLE 0x401560
-void Isle::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
+void IsleApp::SetupVideoFlags(BOOL fullScreen, BOOL flipSurfaces, BOOL backBuffers,
                            BOOL using8bit, BOOL using16bit, BOOL param_6, BOOL param_7,
                            BOOL wideViewAngle, char *deviceId)
 {
@@ -178,7 +178,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   }
 
   // Create global app instance
-  g_isle = new Isle();
+  g_isle = new IsleApp();
 
   // Create window
   if (g_isle->SetupWindow(hInstance, lpCmdLine) != SUCCESS) {
@@ -449,7 +449,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 // OFFSET: ISLE 0x4023e0
-MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
+MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
   WNDCLASSA wndclass;
   ZeroMemory(&wndclass, sizeof(WNDCLASSA));
@@ -565,7 +565,7 @@ MxResult Isle::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 }
 
 // OFFSET: ISLE 0x402740
-BOOL Isle::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
+BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
   HKEY hKey;
   DWORD valueType;
@@ -584,7 +584,7 @@ BOOL Isle::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 }
 
 // OFFSET: ISLE 0x4027b0
-int Isle::ReadRegBool(LPCSTR name, BOOL *out)
+int IsleApp::ReadRegBool(LPCSTR name, BOOL *out)
 {
   char buffer[256];
 
@@ -606,7 +606,7 @@ int Isle::ReadRegBool(LPCSTR name, BOOL *out)
 }
 
 // OFFSET: ISLE 0x402880
-int Isle::ReadRegInt(LPCSTR name, int *out)
+int IsleApp::ReadRegInt(LPCSTR name, int *out)
 {
   char buffer[256];
 
@@ -619,7 +619,7 @@ int Isle::ReadRegInt(LPCSTR name, int *out)
 }
 
 // OFFSET: ISLE 0x4028d0
-void Isle::LoadConfig()
+void IsleApp::LoadConfig()
 {
   char buffer[1024];
 
@@ -684,7 +684,7 @@ void Isle::LoadConfig()
 }
 
 // OFFSET: ISLE 0x402c20
-inline void Isle::Tick(BOOL sleepIfNotNextFrame)
+inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 {
   if (!this->m_windowActive) {
     Sleep(0);
@@ -752,7 +752,7 @@ inline void Isle::Tick(BOOL sleepIfNotNextFrame)
 }
 
 // OFFSET: ISLE 0x402e80
-void Isle::SetupCursor(WPARAM wParam)
+void IsleApp::SetupCursor(WPARAM wParam)
 {
   switch (wParam) {
   case 0:
