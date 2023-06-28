@@ -14,7 +14,9 @@ public:
   MxString(const char *);
   void ToUpperCase();
   void ToLowerCase();
-  const MxString &operator=(MxString *);
+  MxString&  operator=(MxString *);
+  MxString   operator+(const char *);
+  MxString& operator+=(const char *);
 
   inline const char *GetData() const { return m_data; }
 
