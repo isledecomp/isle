@@ -61,12 +61,12 @@
        x="58.13345"
        y="51.967873" /><text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.7px;font-family:mono;-inkscape-font-specification:mono;text-align:center;text-anchor:middle;fill:#ffffff;stroke:#ffffff;stroke-width:2.64583"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.7px;font-family:mono;-inkscape-font-specification:mono;text-align:center;text-anchor:middle;fill:#ffffff;stroke:#ffffff;stroke-width:2.64583"
        x="84.666656"
        y="118.35877"
        id="text740"><tspan
          id="tspan738"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:mono;-inkscape-font-specification:mono;text-align:center;text-anchor:middle;stroke:none;stroke-width:2.64583"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:mono;-inkscape-font-specification:mono;text-align:center;text-anchor:middle;stroke:none;stroke-width:2.64583"
          x="84.666656"
          y="118.35877">{name}</tspan></text><g
        id="g1250"
@@ -78,7 +78,7 @@
          x="21.074554"
          y="134.86963" /><text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
          x="76.841347"
          y="140.70638"
          id="text2152"><tspan
@@ -94,7 +94,7 @@
          y="134.86963"
          clip-path="url(#progBarCutoff)" /><text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
          x="76.841347"
          y="140.70638"
          id="text18"
@@ -104,7 +104,7 @@
            y="140.70638"
            id="tspan16">{percent}</tspan></text></g><text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:mono;-inkscape-font-specification:mono;text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
        x="46.947659"
        y="129.67447"
        id="text1260"><tspan
