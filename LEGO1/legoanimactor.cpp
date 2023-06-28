@@ -10,13 +10,13 @@ const char* GetClassNameInternal()
 }
 
 // OFFSET: LEGO1 0x1000fb90 STUB
-const char *LegoAnimActor::GetClassName() const
+const char *LegoAnimActor::ClassName() const
 {
   return GetClassNameInternal();
 }
 
 // OFFSET: LEGO1 0x1000fbb0 STUB
-MxBool LegoAnimActor::IsClass(const char *name) const
+MxBool LegoAnimActor::IsA(const char *name) const
 {
   // TODO
 

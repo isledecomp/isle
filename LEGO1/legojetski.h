@@ -6,8 +6,8 @@
 class LegoJetski : public LegoJetskiRaceActor
 {
 public:
-  virtual const char* GetClassName() const;
-  virtual MxBool IsClass(const char *name) const;
+  virtual const char* ClassName() const;
+  virtual MxBool IsA(const char *name) const;
 
   // VTABLE 0x100d5a40
 };

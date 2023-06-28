@@ -22,16 +22,16 @@ public:
   __declspec(dllexport) virtual ~MxPresenter(); // vtable+0x0
 
   // OFFSET: LEGO1 0x1000bfe0
-  inline virtual const char *MxPresenter::GetClassName() const // vtable+0xc
+  inline virtual const char *MxPresenter::ClassName() const // vtable+0xc
   {
     // 0x100f0740
     return "MxPresenter";
   }
 
   // OFFSET: LEGO1 0x1000bff0
-  inline virtual MxBool MxPresenter::IsClass(const char *name) const // vtable+0x10
+  inline virtual MxBool MxPresenter::IsA(const char *name) const // vtable+0x10
   {
-    return !strcmp(name, MxPresenter::GetClassName()) || MxCore::IsClass(name);
+    return !strcmp(name, MxPresenter::ClassName()) || MxCore::IsA(name);
   }
 
   __declspec(dllexport) virtual long Tickle(); // vtable+0x8

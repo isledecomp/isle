@@ -18,8 +18,8 @@ public:
   virtual ~ElevatorBottom(); // vtable+0x0
 
   virtual long Notify(MxParam &p); // vtable+0x4
-  virtual const char* GetClassName() const; // vtable+0xc
-  virtual MxBool IsClass(const char *name) const; // vtable+0x10
+  virtual const char* ClassName() const; // vtable+0xc
+  virtual MxBool IsA(const char *name) const; // vtable+0x10
 
   virtual undefined4 VTable0x5c(); // vtable+0x5c
   virtual void VTable0x68(undefined1 param_1); // vtable+0x68

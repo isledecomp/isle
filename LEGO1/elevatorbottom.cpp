@@ -24,13 +24,13 @@ long ElevatorBottom::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10017f20 STUB
-const char *ElevatorBottom::GetClassName() const
+const char *ElevatorBottom::ClassName() const
 {
   return g_elevatorBottomClassName;
 }
 
 // OFFSET: LEGO1 0x10017f30 STUB
-MxBool ElevatorBottom::IsClass(const char *name) const
+MxBool ElevatorBottom::IsA(const char *name) const
 {
   // TODO
 

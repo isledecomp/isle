@@ -24,7 +24,7 @@ long LegoPlantManager::Tickle()
 }
 
 // OFFSET: LEGO1 0x10026290 STUB
-const char *LegoPlantManager::GetClassName() const
+const char *LegoPlantManager::ClassName() const
 {
   return g_LegoPlantManagerName;
 }

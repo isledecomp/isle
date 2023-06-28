@@ -12,16 +12,16 @@ public:
   virtual long Notify(MxParam &p); // vtable+0x4, MxCore override
 
   // OFFSET: LEGO1 0x100b6210
-  inline virtual const char *GetClassName() const // vtable+0x0c
+  inline virtual const char *ClassName() const // vtable+0x0c
   { 
     // 0x100f0774
     return "MxCompositePresenter";
   }; 
 
   // OFFSET: LEGO1 0x100b6220
-  inline virtual MxBool IsClass(const char *name) const // vtable+0x10
+  inline virtual MxBool IsA(const char *name) const // vtable+0x10
   {
-    return !strcmp(name, MxCompositePresenter::GetClassName()) || MxPresenter::IsClass(name);
+    return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
   };
 
   virtual long StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c

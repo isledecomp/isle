@@ -16,13 +16,13 @@ Helicopter::~Helicopter()
 }
 
 // OFFSET: LEGO1 0x10003070 STUB
-const char *Helicopter::GetClassName() const
+const char *Helicopter::ClassName() const
 {
   return g_helicopterClassName;
 }
 
 // OFFSET: LEGO1 0x10003080 STUB
-MxBool Helicopter::IsClass(const char *name) const
+MxBool Helicopter::IsA(const char *name) const
 {
   // TODO
 

@@ -10,7 +10,7 @@ LegoPhonemePresenter::~LegoPhonemePresenter()
 }
 
 // OFFSET: LEGO1 0x1004e310 STUB
-const char *LegoPhonemePresenter::GetClassName() const
+const char *LegoPhonemePresenter::ClassName() const
 {
   return g_legoPhonemePresenterClassName;
 }

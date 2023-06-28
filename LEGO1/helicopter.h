@@ -9,8 +9,8 @@ public:
   Helicopter();
   virtual ~Helicopter(); // vtable+0x0
 
-  virtual const char* GetClassName() const; // vtable+0xc
-  virtual MxBool IsClass(const char *name) const; // vtable+0x10
+  virtual const char* ClassName() const; // vtable+0xc
+  virtual MxBool IsA(const char *name) const; // vtable+0x10
 
   virtual void VTable0x70(float param_1); // vtable+0x70
   virtual void VTable0xe4(); // vtable+0xe4

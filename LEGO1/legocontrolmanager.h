@@ -9,8 +9,8 @@ public:
   virtual ~LegoControlManager(); // vtable+0x0
 
   virtual long Tickle(); // vtable+0x8
-  virtual const char* GetClassName() const; // vtable+0xc
-  virtual MxBool IsClass(const char *name) const; // vtable+0x10
+  virtual const char* ClassName() const; // vtable+0xc
+  virtual MxBool IsA(const char *name) const; // vtable+0x10
 
   // VTABLE 0x100d6a80
 };

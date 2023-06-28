@@ -16,15 +16,15 @@ public:
   virtual long Notify(MxParam &p); // vtable+0x4
 
   // OFFSET: LEGO1 0x1000c2f0
-  inline const char *LegoEntity::GetClassName() const // vtable+0xc
+  inline const char *LegoEntity::ClassName() const // vtable+0xc
   {
     return "LegoEntity";
   }
 
   // OFFSET: LEGO1 0x1000c300
-  inline MxBool LegoEntity::IsClass(const char *name) const // vtable+0x10
+  inline MxBool LegoEntity::IsA(const char *name) const // vtable+0x10
   {
-    return !strcmp(name, LegoEntity::GetClassName()) || MxEntity::IsClass(name);
+    return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
   }
 
   virtual undefined4 VTable0x18(undefined4 param); // vtable+0x18

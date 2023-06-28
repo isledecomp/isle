@@ -6,8 +6,8 @@
 class BumpBouy
 {
 public:
-  virtual const char* GetClassName() const; // vtable+0xc
-  virtual MxBool IsClass(const char *name) const; // vtable+0x10
+  virtual const char* ClassName() const; // vtable+0xc
+  virtual MxBool IsA(const char *name) const; // vtable+0x10
 };
 
 #endif // BUMPBOUY_H

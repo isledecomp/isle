@@ -18,13 +18,13 @@ long LegoControlManager::Tickle()
 }
 
 // OFFSET: LEGO1 0x10028cb0 STUB
-const char *LegoControlManager::GetClassName() const
+const char *LegoControlManager::ClassName() const
 {
   return g_legoControlManagerClassName;
 }
 
 // OFFSET: LEGO1 0x10028cc0 STUB
-MxBool LegoControlManager::IsClass(const char *name) const
+MxBool LegoControlManager::IsA(const char *name) const
 {
   // TODO
 

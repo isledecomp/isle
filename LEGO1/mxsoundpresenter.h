@@ -7,16 +7,16 @@ class MxSoundPresenter : public MxAudioPresenter
 {
 public:
   // OFFSET: LEGO1 0x1000d4a0
-  inline virtual const char *GetClassName() const // vtable+0x0c
+  inline virtual const char *ClassName() const // vtable+0x0c
   { 
     // 0x100f07a0
     return "MxSoundPresenter";
   }; 
 
   // OFFSET: LEGO1 0x1000d4b0
-  inline virtual MxBool IsClass(const char *name) const // vtable+0x10
+  inline virtual MxBool IsA(const char *name) const // vtable+0x10
   {
-    return !strcmp(name, MxSoundPresenter::GetClassName()) || MxAudioPresenter::IsClass(name);
+    return !strcmp(name, MxSoundPresenter::ClassName()) || MxAudioPresenter::IsA(name);
   };
 
   virtual undefined4 VTable0x34(); // vtable+0x34

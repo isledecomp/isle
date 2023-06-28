@@ -8,7 +8,7 @@ class LegoPhonemePresenter : public MxFlcPresenter
 public:
   virtual ~LegoPhonemePresenter(); // vtable+0x0
 
-  virtual const char* GetClassName() const; // vtable+0xc
+  virtual const char* ClassName() const; // vtable+0xc
 
   virtual void VTable0x6c(); // vtable+0x6c
 

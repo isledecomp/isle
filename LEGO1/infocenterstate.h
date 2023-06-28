@@ -10,16 +10,16 @@ public:
   virtual ~InfoCenterState();
 
   // OFFSET: LEGO1 0x10071840
-  inline virtual const char *GetClassName() const // vtable+0x0c
+  inline virtual const char *ClassName() const // vtable+0x0c
   { 
     // 0x100f04dc
     return "InfoCenterState";
   }; 
 
   // OFFSET: LEGO1 0x10071850
-  inline virtual MxBool IsClass(const char *name) const // vtable+0x10
+  inline virtual MxBool IsA(const char *name) const // vtable+0x10
   {
-    return !strcmp(name, InfoCenterState::GetClassName()) || LegoState::IsClass(name);
+    return !strcmp(name, InfoCenterState::ClassName()) || LegoState::IsA(name);
   };
 
   virtual MxBool VTable0x14();
