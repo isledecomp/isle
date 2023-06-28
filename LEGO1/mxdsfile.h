@@ -5,6 +5,7 @@
 #include "mxstring.h"
 #include "mxioinfo.h"
 #include "mxdssource.h"
+
 class MxDSFile : public MxDSSource
 {
 public:

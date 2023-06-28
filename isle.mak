@@ -500,11 +500,8 @@ DEP_CPP_MXCOR=\
 # Begin Source File
 
 SOURCE=.\LEGO1\dllmain.cpp
-DEP_CPP_DLLMA=\
-	".\LEGO1\legoinc.h"\
-	
 
-"$(INTDIR)\dllmain.obj" : $(SOURCE) $(DEP_CPP_DLLMA) "$(INTDIR)"
+"$(INTDIR)\dllmain.obj" : $(SOURCE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
@@ -518,7 +515,6 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legonavcontroller.h"\
 	".\LEGO1\legoomni.h"\
@@ -526,7 +522,6 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\legovideomanager.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxdsaction.h"\
@@ -552,6 +547,7 @@ DEP_CPP_LEGOO=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
@@ -599,10 +595,9 @@ DEP_CPP_MXAUT=\
 
 SOURCE=.\LEGO1\mxtimer.cpp
 DEP_CPP_MXTIM=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxtimer.obj" : $(SOURCE) $(DEP_CPP_MXTIM) "$(INTDIR)"
@@ -755,8 +750,8 @@ DEP_CPP_MXSTR=\
 
 SOURCE=.\LEGO1\mxomnicreateflags.cpp
 DEP_CPP_MXOMNICR=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxomnicreateflags.obj" : $(SOURCE) $(DEP_CPP_MXOMNICR) "$(INTDIR)"
@@ -773,7 +768,6 @@ DEP_CPP_LEGON=\
 	".\LEGO1\lego3dview.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legonavcontroller.h"\
 	".\LEGO1\legoomni.h"\
@@ -782,7 +776,6 @@ DEP_CPP_LEGON=\
 	".\LEGO1\legovideomanager.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxdsaction.h"\
@@ -808,6 +801,7 @@ DEP_CPP_LEGON=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
@@ -873,13 +867,12 @@ DEP_CPP_MXUNK=\
 
 SOURCE=.\LEGO1\mxvideomanager.cpp
 DEP_CPP_MXVIDEO=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
@@ -1021,6 +1014,7 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
 	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\

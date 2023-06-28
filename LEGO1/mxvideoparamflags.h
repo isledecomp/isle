@@ -1,7 +1,7 @@
 #ifndef MXVIDEOPARAMFLAGS_H
 #define MXVIDEOPARAMFLAGS_H
 
-#include "legoinc.h"
+#include <windows.h>
 
 // Must be union with struct for match.
 typedef union {
