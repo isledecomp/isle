@@ -20,10 +20,11 @@ public:
   virtual unsigned long GetBufferSize() = 0;
   virtual unsigned long GetStreamBuffersNum() = 0;
   virtual long GetLengthInDWords();
+  virtual char* GetBuffer();
 
 protected:
   unsigned long m_lengthInDWords;
-  void* m_pBuffer;
+  char* m_pBuffer;
   long m_position;
 };
 

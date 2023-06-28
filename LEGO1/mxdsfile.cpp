@@ -84,7 +84,7 @@ long MxDSFile::ReadChunks()
     }
     unsigned long* pLengthInDWords = &m_lengthInDWords;
     m_io.Read((char *)pLengthInDWords, 4);
-    m_pBuffer = malloc(*pLengthInDWords * 4);
+    m_pBuffer = (char*)malloc(*pLengthInDWords * 4);
     m_io.Read((char*)m_pBuffer, *pLengthInDWords * 4);
     return 0;
   }

@@ -12,3 +12,9 @@ long MxDSSource::GetLengthInDWords()
 {
   return m_lengthInDWords;
 }
+
+// OFFSET: LEGO1 0x100c0000
+char* MxDSSource::GetBuffer()
+{
+  return m_pBuffer;
+}
