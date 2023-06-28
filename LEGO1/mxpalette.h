@@ -3,6 +3,7 @@
 
 #include <ddraw.h>
 
+#include "mxbool.h"
 #include "mxcore.h"
 #include "mxresult.h"
 
@@ -15,9 +16,11 @@ public:
   MxResult GetEntries(LPPALETTEENTRY p_entries);
 
 private:
-  LPDIRECTDRAWPALETTE m_pDirectDrawPalette;
+  MxCore *m_attached;
+  LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];
-  // there's a bit more here
+  MxBool m_overrideSkyColor;
+  PALETTEENTRY m_skyColor;
 };
 
 #endif // MXPALETTE_H
