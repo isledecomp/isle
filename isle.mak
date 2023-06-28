@@ -34,7 +34,7 @@ NULL=nul
 !ENDIF 
 ################################################################################
 # Begin Project
-# PROP Target_Last_Scanned "isle - Win32 Debug"
+# PROP Target_Last_Scanned "ISLE - Win32 Debug"
 
 !IF  "$(CFG)" == "LEGO1 - Win32 Release"
 
@@ -487,8 +487,8 @@ LINK32_OBJS= \
 
 SOURCE=.\LEGO1\mxcore.cpp
 DEP_CPP_MXCOR=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxcore.obj" : $(SOURCE) $(DEP_CPP_MXCOR) "$(INTDIR)"
@@ -566,7 +566,6 @@ DEP_CPP_LEGOO=\
 
 SOURCE=.\LEGO1\mxcriticalsection.cpp
 DEP_CPP_MXCRI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
 
@@ -580,7 +579,6 @@ DEP_CPP_MXCRI=\
 
 SOURCE=.\LEGO1\mxautolocker.cpp
 DEP_CPP_MXAUT=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxautolocker.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	
@@ -610,9 +608,7 @@ DEP_CPP_MXTIM=\
 
 SOURCE=.\LEGO1\mxomni.cpp
 DEP_CPP_MXOMN=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxeventmanager.h"\
@@ -632,6 +628,7 @@ DEP_CPP_MXOMN=\
 	".\LEGO1\mxstring.h"\
 	".\LEGO1\mxticklemanager.h"\
 	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideomanager.h"\
@@ -649,12 +646,11 @@ DEP_CPP_MXOMN=\
 
 SOURCE=.\LEGO1\mxvideoparam.cpp
 DEP_CPP_MXVID=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
@@ -670,7 +666,6 @@ DEP_CPP_MXVID=\
 
 SOURCE=.\LEGO1\mxvideoparamflags.cpp
 DEP_CPP_MXVIDE=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxvideoparamflags.h"\
 	
 
@@ -684,8 +679,6 @@ DEP_CPP_MXVIDE=\
 
 SOURCE=.\LEGO1\mxomnicreateparam.cpp
 DEP_CPP_MXOMNI=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
@@ -694,6 +687,7 @@ DEP_CPP_MXOMNI=\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
@@ -709,8 +703,6 @@ DEP_CPP_MXOMNI=\
 
 SOURCE=.\LEGO1\mxomnicreateparambase.cpp
 DEP_CPP_MXOMNIC=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxomnicreateflags.h"\
 	".\LEGO1\mxomnicreateparam.h"\
@@ -719,6 +711,7 @@ DEP_CPP_MXOMNIC=\
 	".\LEGO1\mxrect32.h"\
 	".\LEGO1\mxresult.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxvariabletable.h"\
 	".\LEGO1\mxvideoparam.h"\
 	".\LEGO1\mxvideoparamflags.h"\
@@ -735,9 +728,9 @@ DEP_CPP_MXOMNIC=\
 
 SOURCE=.\LEGO1\mxstring.cpp
 DEP_CPP_MXSTR=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxstring.obj" : $(SOURCE) $(DEP_CPP_MXSTR) "$(INTDIR)"
@@ -821,9 +814,9 @@ DEP_CPP_LEGON=\
 SOURCE=.\LEGO1\mxdsobject.cpp
 DEP_CPP_MXDSO=\
 	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxdsobject.obj" : $(SOURCE) $(DEP_CPP_MXDSO) "$(INTDIR)"
@@ -849,11 +842,10 @@ DEP_CPP_MXATO=\
 
 SOURCE=.\LEGO1\mxunknown100dc6b0.cpp
 DEP_CPP_MXUNK=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxtypes.h"\
 	".\LEGO1\mxunknown100dc6b0.h"\
 	
 
@@ -890,10 +882,10 @@ DEP_CPP_MXVIDEO=\
 
 SOURCE=.\LEGO1\mxpalette.cpp
 DEP_CPP_MXPAL=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxpalette.h"\
 	".\LEGO1\mxresult.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxpalette.obj" : $(SOURCE) $(DEP_CPP_MXPAL) "$(INTDIR)"
@@ -906,7 +898,6 @@ DEP_CPP_MXPAL=\
 
 SOURCE=.\LEGO1\mxioinfo.cpp
 DEP_CPP_MXIOI=\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\mxioinfo.h"\
 	
 
@@ -920,13 +911,12 @@ DEP_CPP_MXIOI=\
 
 SOURCE=.\LEGO1\mxdsfile.cpp
 DEP_CPP_MXDSF=\
-	".\LEGO1\legoinc.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdsfile.h"\
 	".\LEGO1\mxdssource.h"\
 	".\LEGO1\mxioinfo.h"\
 	".\LEGO1\mxstring.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxdsfile.obj" : $(SOURCE) $(DEP_CPP_MXDSF) "$(INTDIR)"
@@ -939,9 +929,9 @@ DEP_CPP_MXDSF=\
 
 SOURCE=.\LEGO1\mxdssource.cpp
 DEP_CPP_MXDSS=\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdssource.h"\
+	".\LEGO1\mxtypes.h"\
 	
 
 "$(INTDIR)\mxdssource.obj" : $(SOURCE) $(DEP_CPP_MXDSS) "$(INTDIR)"
@@ -976,7 +966,6 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\legobuildingmanager.h"\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legogamestate.h"\
-	".\LEGO1\legoinc.h"\
 	".\LEGO1\legoinputmanager.h"\
 	".\LEGO1\legomodelpresenter.h"\
 	".\LEGO1\legonavcontroller.h"\
@@ -987,7 +976,6 @@ DEP_CPP_ISLE_=\
 	".\LEGO1\legoworldpresenter.h"\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxbool.h"\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
 	".\LEGO1\mxdirectdraw.h"\
@@ -1473,7 +1461,6 @@ SOURCE=.\LEGO1\mxatomid.h
 SOURCE=.\ISLE\define.cpp
 DEP_CPP_DEFIN=\
 	".\ISLE\define.h"\
-	".\LEGO1\legoinc.h"\
 	
 
 "$(INTDIR)\define.obj" : $(SOURCE) $(DEP_CPP_DEFIN) "$(INTDIR)"
