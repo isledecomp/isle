@@ -63,6 +63,13 @@ jobs:
         pip install colorama
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB . | tee ISLEPROGRESS.TXT
         python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
+
+        # Compare with current master
+        curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT
+        curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT
+
+        diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT
+        diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
