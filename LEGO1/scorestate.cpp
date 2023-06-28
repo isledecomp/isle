@@ -3,7 +3,7 @@
 // OFFSET: LEGO1 0x1000de20
 MxBool ScoreState::VTable0x14()
 {
-  return MX_FALSE;
+  return FALSE;
 }
 
 // OFFSET: LEGO1 0x1000de30 STUB

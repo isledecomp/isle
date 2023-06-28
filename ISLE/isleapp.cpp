@@ -1,4 +1,4 @@
-#include "isle.h"
+#include "isleapp.h"
 #include "define.h"
 
 #include <dsound.h>

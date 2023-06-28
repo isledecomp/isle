@@ -15,5 +15,5 @@ InfoCenterState::~InfoCenterState()
 // OFFSET: LEGO1 0x10071830
 MxBool InfoCenterState::VTable0x14()
 {
-  return MX_FALSE;
+  return FALSE;
 }

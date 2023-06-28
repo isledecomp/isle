@@ -9,5 +9,5 @@ Act3State::Act3State()
 // OFFSET: LEGO1 0x100d4fdc
 MxBool Act3State::VTable0x14()
 {
-  return MX_FALSE;
+  return FALSE;
 }

@@ -9,5 +9,5 @@ RadioState::RadioState()
 // OFFSET: LEGO1 0x1002cf50
 MxBool RadioState::VTable0x14()
 {
-  return MX_FALSE;
+  return FALSE;
 }

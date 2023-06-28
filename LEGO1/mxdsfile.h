@@ -2,6 +2,8 @@
 #define MXDSFILE_H
 
 #include "mxdssource.h"
+#include "mxioinfo.h"
+#include "mxstring.h"
 
 class MxDSFile : public MxDSSource
 {

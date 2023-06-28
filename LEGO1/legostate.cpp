@@ -3,13 +3,13 @@
 // OFFSET: LEGO1 0x10005f90
 MxBool LegoState::VTable0x14()
 {
-  return MX_TRUE;
+  return TRUE;
 }
 
 // OFFSET: LEGO1 0x10005fa0
 MxBool LegoState::VTable0x18()
 {
-  return MX_FALSE;
+  return FALSE;
 }
 
 // OFFSET: LEGO1 0x10005fb0 STUB

@@ -1,7 +1,7 @@
 #ifndef BUMPBOUY_H
 #define BUMPBOUY_H
 
-#include "mxbool.h"
+#include "mxtypes.h"
 
 class BumpBouy
 {
