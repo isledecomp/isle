@@ -13,6 +13,7 @@ public:
   __declspec(dllexport) unsigned char operator==(MxPalette &);
   __declspec(dllexport) void Detach();
 
+  MxPalette();
   MxResult GetEntries(LPPALETTEENTRY p_entries);
 
 private:
