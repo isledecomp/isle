@@ -10,6 +10,22 @@ public:
   __declspec(dllexport) void SetObjectName(const char *);
 
   MxDSObject();
+  virtual ~MxDSObject();
+
+  MxDSObject &operator=(MxDSObject &p_dsObject);
+  void CopyFrom(MxDSObject &p_dsObject);
+
+    // OFFSET: LEGO1 0x100bf730
+  inline virtual const char *ClassName() const { return "MxDSObject"; }; // vtable+0c
+
+  // OFFSET: LEGO1 0x100bf740
+  inline virtual MxBool IsA(const char *name) const { return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name); }; // vtable+10;
+
+  virtual int unk14(); // vtable+14;
+  virtual unsigned int CalculateUnk08(); // vtable+18;
+  virtual void Parse(char **p_source, unsigned short p_unk24); // vtable+1c;
+
+  void SetUnknown10(const char *p_unk10);
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }
@@ -22,7 +38,7 @@ public:
   inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
 private:
-  int m_unk08;
+  unsigned int m_unk08;
   short m_unk0c;
   char* m_unk10;
   int m_unk14;
