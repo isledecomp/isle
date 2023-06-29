@@ -85,6 +85,13 @@ LegoNavController *NavController()
   return LegoOmni::GetInstance()->GetNavController();
 }
 
+// OFFSET: LEGO1 0x10015900
+MxTransitionManager *TransitionManager()
+{
+  return LegoOmni::GetInstance()->GetTransitionManager();
+}
+
+
 // OFFSET: LEGO1 0x1005b5f0
 long LegoOmni::Notify(MxParam &p)
 {

@@ -71,6 +71,7 @@ public:
   LegoPlantManager *GetLegoPlantManager() { return m_plantManager; }
   LegoGameState *GetGameState() { return m_gameState; }
   LegoNavController *GetNavController() { return m_navController; }
+  MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
 
 private:
   int m_unk68;
