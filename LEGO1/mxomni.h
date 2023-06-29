@@ -36,9 +36,16 @@ public:
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   static void SetInstance(MxOmni* instance);
-
+  MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
+  MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }
+  MxTickleManager* GetTickleManager() const { return this->m_tickleManager; }
   MxTimer* GetTimer() const { return this->m_timer; }
-
+  MxStreamer* GetStreamer() const { return this->m_streamer; }
+  MxSoundManager* GetSoundManager() const { return this->m_soundManager; }
+  MxVideoManager* GetVideoManager() const { return this->m_videoManager; }
+  MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
+  MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
+  MxEventManager* GetEventManager() const { return this->m_eventManager; }
 protected:
   static MxOmni* m_instance;
 
@@ -61,7 +68,12 @@ protected:
 
   unsigned char m_unk64; // 0x64
 };
-
+__declspec(dllexport) MxTickleManager * TickleManager();
 __declspec(dllexport) MxTimer * Timer();
+__declspec(dllexport) MxStreamer * Streamer();
+__declspec(dllexport) MxSoundManager * MSoundManager();
+__declspec(dllexport) MxVariableTable * VariableTable();
+__declspec(dllexport) MxMusicManager * MusicManager();
+__declspec(dllexport) MxEventManager * EventManager();
 
 #endif // MXOMNI_H

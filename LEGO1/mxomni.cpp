@@ -83,8 +83,62 @@ long MxOmni::Notify(MxParam &p)
   return 0;
 }
 
+// OFFSET: LEGO1 0x100acea0
+MxObjectFactory *ObjectFactory()
+{
+  return MxOmni::GetInstance()->GetObjectFactory();
+}
+
+// OFFSET: LEGO1 0x100aceb0
+MxNotificationManager *NotificationManager()
+{
+  return MxOmni::GetInstance()->GetNotificationManager();
+}
+
+// OFFSET: LEGO1 0x100acec0
+MxTickleManager *TickleManager()
+{
+  return MxOmni::GetInstance()->GetTickleManager();
+}
+
 // OFFSET: LEGO1 0x100aced0
 MxTimer *Timer()
 {
   return MxOmni::GetInstance()->GetTimer();
+}
+
+// OFFSET: LEGO1 0x100acef0
+MxStreamer* Streamer()
+{
+  return MxOmni::GetInstance()->GetStreamer();
+} 
+
+// OFFSET: LEGO1 0x100acf00
+MxSoundManager* MSoundManager()
+{
+  return MxOmni::GetInstance()->GetSoundManager();
+}
+
+// OFFSET: LEGO1 0x100acf10
+MxVideoManager* MVideoManager()
+{
+  return MxOmni::GetInstance()->GetVideoManager();
+}
+
+// OFFSET: LEGO1 0x100acf20
+MxVariableTable* VariableTable()
+{
+  return MxOmni::GetInstance()->GetVariableTable();
+}
+
+// OFFSET: LEGO1 0x100acf30
+MxMusicManager* MusicManager()
+{
+  return MxOmni::GetInstance()->GetMusicManager();
+}
+
+// OFFSET: LEGO1 0x100acf40
+MxEventManager* EventManager()
+{
+  return MxOmni::GetInstance()->GetEventManager();
 }
