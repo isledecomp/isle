@@ -6,7 +6,7 @@ MxPalette::MxPalette()
   this->m_overrideSkyColor = FALSE;
   this->m_attached = NULL;
   GetDefaultPalette(this->m_entries);
-  this->m_skyColor = this->m_entries[0x8d];
+  this->m_skyColor = this->m_entries[141];
   // FIXME: Incomplete
 }
 
