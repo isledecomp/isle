@@ -76,15 +76,15 @@ class Bin:
 
     # Read ImageBase
     self.file.seek(0xB4)
-    self.imagebase = struct.unpack('i', self.file.read(4))[0]
+    self.imagebase, = struct.unpack('<i', self.file.read(4))
 
     # Read .text VirtualAddress
     self.file.seek(0x184)
-    self.textvirt = struct.unpack('i', self.file.read(4))[0]
+    self.textvirt, = struct.unpack('<i', self.file.read(4))
 
     # Read .text PointerToRawData
     self.file.seek(0x18C)
-    self.textraw = struct.unpack('i', self.file.read(4))[0]
+    self.textraw, = struct.unpack('<i', self.file.read(4))
     logger.debug('... Parsing finished')
 
   def __del__(self):
