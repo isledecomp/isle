@@ -16,6 +16,18 @@ MxPalette::~MxPalette()
   delete m_attached;  // yes this matches more
 }
 
+// OFFSET: LEGO1 100bf0b0
+MxPalette* MxPalette::Clone()
+{
+  // FIXME: doesnt match
+  MxPalette *pal = (MxPalette *) malloc(0x414);
+  if(pal != NULL) {
+    GetEntries(pal->m_entries);
+    pal->m_overrideSkyColor = m_overrideSkyColor;
+  }
+  return pal;
+}
+
 // OFFSET: LEGO1 0x100bf150
 MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 {

@@ -16,6 +16,7 @@ public:
 
   MxPalette();
   ~MxPalette();
+  MxPalette* Clone();
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
 
