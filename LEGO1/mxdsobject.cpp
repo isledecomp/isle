@@ -47,8 +47,7 @@ MxDSObject &MxDSObject::operator=(MxDSObject &p_dsObject)
 // OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {
-  if (p_name != this->m_objectName)
-  {
+  if (p_name != this->m_objectName) {
     delete[] this->m_objectName;
 
     if (p_name) {
