@@ -37,6 +37,24 @@ LegoVideoManager *VideoManager()
   return LegoOmni::GetInstance()->GetVideoManager();
 }
 
+// OFFSET: LEGO1 0x100157f0
+LegoBuildingManager *BuildingManager()
+{
+  return LegoOmni::GetInstance()->GetLegoBuildingManager();
+}
+
+// OFFSET: LEGO1 0x10015790
+Isle *GetIsle()
+{
+  return LegoOmni::GetInstance()->GetIsle();
+}
+
+// OFFSET: LEGO1 0x100157e0
+LegoPlantManager *PlantManager()
+{
+  return LegoOmni::GetInstance()->GetLegoPlantManager();
+}
+
 // OFFSET: LEGO1 0x10015730
 MxBackgroundAudioManager *BackgroundAudioManager()
 {

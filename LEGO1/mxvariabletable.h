@@ -3,6 +3,8 @@
 
 class MxVariable;
 
+// VTABLE 0x100dc1c8
+// SIZE 0x28
 class MxVariableTable
 {
 public:

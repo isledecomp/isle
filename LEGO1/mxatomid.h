@@ -15,7 +15,7 @@ public:
   MxAtomId()
   {
     this->m_internal = 0;
-  };
+  }
 
 private:
   char *m_internal;

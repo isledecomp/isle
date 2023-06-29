@@ -4,9 +4,14 @@
 #include "mxvideomanager.h"
 #include "lego3dmanager.h"
 
+// VTABLE 0x100d9c88
+// SIZE 0x590
 class LegoVideoManager : public MxVideoManager
 {
 public:
+  LegoVideoManager();
+  virtual ~LegoVideoManager() override;
+
   __declspec(dllexport) int EnableRMDevice();
   __declspec(dllexport) int DisableRMDevice();
   __declspec(dllexport) void EnableFullScreenMovie(unsigned char a, unsigned char b);
