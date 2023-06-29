@@ -8,8 +8,8 @@ const char *reset = "reset";
 // OFFSET: LEGO1 0x1003bfb0
 LegoBackgroundColor::LegoBackgroundColor(const char *name, const char *colorString)
 {
-  this->m_name.operator=(name);
-  this->m_name.ToUpperCase();
+  m_name = name;
+  m_name.ToUpperCase();
   SetColorString(colorString);
 }
 
