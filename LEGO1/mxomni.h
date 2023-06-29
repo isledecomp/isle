@@ -35,6 +35,7 @@ public:
   virtual void Init(); // vtable+14
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
+  static void SetInstance(MxOmni* instance);
 
   MxTimer* GetTimer() const { return this->m_timer; }
 
