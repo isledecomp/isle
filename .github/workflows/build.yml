@@ -46,25 +46,18 @@ jobs:
         cd cdrom
         .\SETUP.EXE /s
 
-    - name: Build
-      shell: cmd
-      run: |
-        call .\msvc420\bin\VCVARS32.BAT x86
-        mkdir Release
-        .\msvc420\bin\NMAKE.EXE /f isle.mak CFG="ISLE - Win32 Release"
-
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
         cmake-version: '3.26.4'  # Selected a particular version to avoid a look-up
 
-    - name: Build (CMake)
+    - name: Build
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        cmake -S . -B cmake-build -DCMAKE_INSTALL_PREFIX=cmake-files -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"
-        cmake --build cmake-build
-        cmake --install cmake-build
+        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=Release -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"
+        cmake --build build
+        cmake --install build
 
     - name: Restore cached original binaries
       id: cache-original-binaries
