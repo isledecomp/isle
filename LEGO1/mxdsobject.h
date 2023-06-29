@@ -18,10 +18,10 @@ public:
   void CopyFrom(MxDSObject &p_dsObject);
 
     // OFFSET: LEGO1 0x100bf730
-  inline virtual const char *ClassName() const { return "MxDSObject"; }; // vtable+0c
+  inline virtual const char *ClassName() const override { return "MxDSObject"; }; // vtable+0c
 
   // OFFSET: LEGO1 0x100bf740
-  inline virtual MxBool IsA(const char *name) const { return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name); }; // vtable+10;
+  inline virtual MxBool IsA(const char *name) const override { return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name); }; // vtable+10;
 
   virtual int unk14(); // vtable+14;
   virtual unsigned int CalculateUnk08(); // vtable+18;
