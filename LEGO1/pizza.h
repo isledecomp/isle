@@ -3,14 +3,14 @@
 
 #include "isleactor.h"
 
+// VTABLE 0x100d7380
+// SIZE 0x9c
 class Pizza : public IsleActor
 {
 public:
   Pizza();
-  ~Pizza();
-  
-  // VTABLE 100d7380
-  // SIZE 0x9c
+  virtual ~Pizza() override;
+
 };
 
 #endif // PIZZA_H

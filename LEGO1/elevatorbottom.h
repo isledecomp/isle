@@ -3,28 +3,28 @@
 
 #include "legoworld.h"
 
-#ifndef undefined4
-#define undefined4 int
-#endif
-
-#ifndef undefined1
-#define undefined1 char
-#endif
-
+// VTABLE 0x100d5f20
 class ElevatorBottom : public LegoWorld
 {
 public:
   ElevatorBottom();
-  virtual ~ElevatorBottom(); // vtable+0x0
+  virtual ~ElevatorBottom() override; // vtable+0x0
 
-  virtual long Notify(MxParam &p); // vtable+0x4
-  virtual const char* ClassName() const; // vtable+0xc
-  virtual MxBool IsA(const char *name) const; // vtable+0x10
+  virtual long Notify(MxParam &p) override; // vtable+0x4
 
-  virtual undefined4 VTable0x5c(); // vtable+0x5c
-  virtual void VTable0x68(undefined1 param_1); // vtable+0x68
+  // OFFSET: LEGO1 0x10017f20
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f04ac
+    return "ElevatorBottom";
+  }
 
-  // VTABLE 0x100d5f20
+  // OFFSET: LEGO1 0x10017f30
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, ElevatorBottom::ClassName()) || LegoWorld::IsA(name);
+  }
+
 };
 
 #endif // ELEVATORBOTTOM_H

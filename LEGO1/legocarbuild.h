@@ -3,24 +3,29 @@
 
 #include "legoworld.h"
 
-#ifndef undefined4
-#define undefined4 int
-#endif
-
+// VTABLE 0x100d6658
+// SIZE 0x34c
 class LegoCarBuild : public LegoWorld
 {
 public:
   LegoCarBuild();
-  virtual ~LegoCarBuild();
+  virtual ~LegoCarBuild() override;
 
-  virtual long Notify(MxParam &p); // vtable+0x4
-  virtual long Tickle(); // vtable+0x8
-  virtual undefined4 VTable0x64(); // vtable+0x64
-  virtual void VTable0x68(char param_1); // vtable+0x68
-  virtual void VTable0x6c(); // vtable+0x6c
-  virtual void VTable0x74(float* param_1, float* param_2); // vtable+0x74
-  virtual void VTable0x78(float* param_1, float* param_2); // vtable+0x78
-  virtual void VTable0x7c(float* param_1, float* param_2); // vtable+0x7c
+  virtual long Notify(MxParam &p) override; // vtable+0x4
+  virtual long Tickle() override; // vtable+0x8
+
+  // OFFSET: LEGO1 0x10022940
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f0504
+    return "LegoCarBuild";
+  }
+
+  // OFFSET: LEGO1 0x10022950
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, LegoCarBuild::ClassName()) || LegoWorld::IsA(name);
+  }
 };
 
 #endif // LEGOCARBUILD_H

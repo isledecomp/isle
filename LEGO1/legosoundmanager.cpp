@@ -11,3 +11,10 @@ LegoSoundManager::~LegoSoundManager()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x1002a3a0 STUB
+long LegoSoundManager::Tickle()
+{
+  // TODO
+  return 0;
+}

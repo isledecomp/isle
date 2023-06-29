@@ -5,6 +5,8 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
+// VTABLE 0x100d85b8
+// SIZE 0x70
 class LegoNavController : public MxCore
 {
 public:
@@ -19,6 +21,19 @@ public:
 
   LegoNavController();
   // virtual ~LegoNavController(); // vtable+0x0
+
+  // OFFSET: LEGO1 0x10054b80
+  inline const char *ClassName() const override // vtable+0xc
+  {
+    // 0x100f66d8
+    return "LegoNavController";
+  }
+
+  // OFFSET: LEGO1 0x10054b90
+  inline MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, LegoNavController::ClassName()) || MxCore::IsA(name);
+  }
 
   void SetControlMax(int p_hMax, int p_vMax);
   void ResetToDefault();

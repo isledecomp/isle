@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100dc078
 class MxNotificationManager : public MxCore
 {
 public:
@@ -11,7 +12,6 @@ public:
   virtual long Tickle(); // vtable+0x8
 
   // 0x10: MxCriticalSection
-  // VTABLE 0x100dc078
 };
 
 #endif // MXNOTIFICATIONMANAGER_H

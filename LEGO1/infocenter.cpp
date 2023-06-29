@@ -1,19 +1,19 @@
 #include "infocenter.h"
 
 // OFFSET: LEGO1 0x1006ea20 STUB
-InfoCenter::InfoCenter()
+Infocenter::Infocenter()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x1006ec90 STUB
-InfoCenter::~InfoCenter()
+Infocenter::~Infocenter()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x1006ef10 STUB
-long InfoCenter::Notify(MxParam &p)
+long Infocenter::Notify(MxParam &p)
 {
   // TODO
 
@@ -21,7 +21,7 @@ long InfoCenter::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10070af0 STUB
-long InfoCenter::Tickle()
+long Infocenter::Tickle()
 {
   // TODO
 

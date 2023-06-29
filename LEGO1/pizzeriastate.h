@@ -3,14 +3,13 @@
 
 #include "legostate.h"
 
+// VTABLE 0x100d5ee8
+// SIZE 0xb4
 class PizzeriaState : public LegoState
 {
 public:
   PizzeriaState();
-  
-  virtual undefined4 VTable0x1c(undefined4 param);
 
-  // SIZE 0xb4
 };
 
 #endif // PIZZERIASTATE_H

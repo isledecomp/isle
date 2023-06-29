@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-#include "mxresult.h"
+#include "mxtypes.h"
 #include "mxvideoparam.h"
 
 class IsleApp

@@ -3,16 +3,24 @@
 
 #include "mxflcpresenter.h"
 
+// VTABLE 0x100d8040
+// SIZE 0x88
 class LegoPhonemePresenter : public MxFlcPresenter
 {
 public:
-  virtual ~LegoPhonemePresenter(); // vtable+0x0
+  LegoPhonemePresenter();
+  virtual ~LegoPhonemePresenter() override; // vtable+0x0
 
-  virtual const char* ClassName() const; // vtable+0xc
+  // OFFSET: LEGO1 0x1004e310
+  inline const char *ClassName() const override // vtable+0xc
+  {
+    // 0x100f064c
+    return "LegoPhonemePresenter";
+  }
 
-  virtual void VTable0x6c(); // vtable+0x6c
+private:
+  void Init();
 
-  // VTABLE 0x100d8040
 };
 
 #endif // LEGOPHONEMEPRESENTER_H

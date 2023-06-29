@@ -3,16 +3,23 @@
 
 #include "buildingentity.h"
 
-#ifndef undefined4
-#define undefined4 int
-#endif
-
+// VTABLE 0x100d5258
+// SIZE 0x68
 class GasStationEntity : public BuildingEntity
 {
-  virtual undefined4 VTable0x50(); // vtable+0x50
+public:
+  // OFFSET: LEGO1 0x1000eb20
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f0348
+    return "GasStationEntity";
+  }
 
-  // VTABLE 0x100d5258
-  // SIZE 0x68
+  // OFFSET: LEGO1 0x1000eb30
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, GasStationEntity::ClassName()) || BuildingEntity::IsA(name);
+  }
 };
 
 #endif // GASSTATIONENTITY_H

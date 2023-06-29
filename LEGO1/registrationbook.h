@@ -3,16 +3,16 @@
 
 #include "legoworld.h"
 
+// VTABLE 0x100d9928
+// SIZE 0x2d0
 class RegistrationBook : public LegoWorld
 {
 public:
   RegistrationBook();
-  virtual ~RegistrationBook(); // vtable+0x0
+  virtual ~RegistrationBook() override; // vtable+0x0
 
-  virtual long Notify(MxParam &p); // vtable+0x4
-  virtual void VTable0x68(char param_1); // vtable+0x68
+  virtual long Notify(MxParam &p) override; // vtable+0x4
 
-  // VTABLE 0x100d9928
 };
 
 #endif // REGISTRATIONBOOK_H

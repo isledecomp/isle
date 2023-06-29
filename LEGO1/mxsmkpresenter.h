@@ -3,6 +3,8 @@
 
 #include "mxvideopresenter.h"
 
+// VTABLE 0x100dc348
+// SIZE 0x720
 class MxSmkPresenter : public MxVideoPresenter
 {
 public:
@@ -11,8 +13,6 @@ public:
 private:
   void Init();
   
-  // VTABLE 0x100dc348
-  // SIZE 0x720
 };
 
 #endif // MXSMKPRESENTER_H

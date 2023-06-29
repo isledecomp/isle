@@ -3,29 +3,26 @@
 
 #include "legostate.h"
 
+// VTABLE 0x100d46e0
+// SIZE 0x24
 class GasStationState : public LegoState
 {
 public:
   GasStationState();
 
   // OFFSET: LEGO1 0x100061d0
-  inline virtual const char *ClassName() const // vtable+0x0c
+  inline virtual const char *ClassName() const override // vtable+0x0c
   { 
     // 0x100f0174
     return "GasStationState";
-  }; 
+  }
 
   // OFFSET: LEGO1 0x100061e0
-  inline virtual MxBool IsA(const char *name) const // vtable+0x10
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
   {
     return !strcmp(name, GasStationState::ClassName()) || LegoState::IsA(name);
-  };
+  }
 
-  virtual undefined4 VTable0x1c(undefined4 param);
-
-  // field 0x8 is prob MxResult
-  // field 0xc is prob MxResult
-  // field 0x10 is prob MxResult
 };
 
 #endif // GASSTATIONSTATE_H

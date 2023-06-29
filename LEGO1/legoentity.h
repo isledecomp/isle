@@ -3,44 +3,34 @@
 
 #include "mxentity.h"
 
-#ifndef undefined1
-#define undefined1 char
-#endif
-
+// VTABLE 0x100d4858
 class LegoEntity : public MxEntity
 {
 public:
-  LegoEntity();
-  __declspec(dllexport) virtual ~LegoEntity(); // vtable+0x0
+  // Inlined at 0x100853f7
+  inline LegoEntity()
+  {
+    // TODO
+  }
 
-  virtual long Notify(MxParam &p); // vtable+0x4
+  __declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
+
+  virtual long Notify(MxParam &p) override; // vtable+0x4
 
   // OFFSET: LEGO1 0x1000c2f0
-  inline const char *LegoEntity::ClassName() const // vtable+0xc
+  inline const char *ClassName() const override // vtable+0xc
   {
+    // 0x100f0064
     return "LegoEntity";
   }
 
   // OFFSET: LEGO1 0x1000c300
-  inline MxBool LegoEntity::IsA(const char *name) const // vtable+0x10
+  inline MxBool IsA(const char *name) const override // vtable+0x10
   {
     return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
   }
 
-  virtual undefined4 VTable0x18(undefined4 param); // vtable+0x18
-  virtual void Destroy(); // vtable+0x1c
-  virtual void VTable0x20(char* param); // vtable+0x20
-  virtual void VTable0x24(undefined4 param_1, undefined1 param_2, undefined1 param_3); // vtable+0x24
-  virtual void VTable0x28(undefined4 param_1, undefined4 param2); // vtable+0x28
-  virtual void VTable0x2c(undefined1 param); // vtable+0x2c
-  virtual void VTable0x30(undefined4 param); // vtable+0x30
-  virtual void VTable0x34(undefined1 param); // vtable+0x34
-  virtual void VTable0x38(); // vtable+0x38
-  virtual void VTable0x3c(); // vtable+0x3c
-  virtual void VTable0x40(); // vtable+0x40
-  virtual void VTable0x44(); // vtable+0x44
-  virtual void VTable0x48(undefined4 param); // vtable+0x48
-  virtual void VTable0x4c(); // vtable+0x4c
+  virtual void Destroy() override; // vtable+0x1c
 
 };
 

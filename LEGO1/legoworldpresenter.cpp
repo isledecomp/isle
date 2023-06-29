@@ -12,14 +12,8 @@ LegoWorldPresenter::~LegoWorldPresenter()
   // TODO
 }
 
-// OFFSET: LEGO1 0x10066ac0 STUB
-void LegoWorldPresenter::VTable0x1c()
-{
-  // TODO
-}
-
-// OFFSET: LEGO1 0x10067a70 STUB
-void LegoWorldPresenter::VTable0x60(undefined4 param)
+// OFFSET: LEGO1 0x100665b0 STUB
+void LegoWorldPresenter::configureLegoWorldPresenter(int param_1)
 {
   // TODO
 }

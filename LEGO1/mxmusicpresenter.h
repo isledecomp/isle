@@ -3,6 +3,7 @@
 
 #include "mxaudiopresenter.h"
 
+// VTABLE 0x100dc9b8
 class MxMusicPresenter : public MxAudioPresenter
 {
 public:

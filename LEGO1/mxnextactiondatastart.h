@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100dc9a0
 class MxNextActionDataStart : public MxCore
 {
   

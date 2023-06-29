@@ -3,16 +3,29 @@
 
 #include "legoworld.h"
 
-class InfoCenterDoor : public LegoWorld
+// VTABLE 0x100d72d8
+// SIZE 0xfc
+class InfocenterDoor : public LegoWorld
 {
 public:
-  InfoCenterDoor();
-  virtual ~InfoCenterDoor(); // vtable+0x0
+  InfocenterDoor();
+  virtual ~InfocenterDoor(); // vtable+0x0
   
-  virtual long Notify(MxParam &p); // vtable+0x4
+  virtual long Notify(MxParam &p) override; // vtable+0x4
 
-  // VTABLE 0x100d72d8
-  // SIZE 0xfc
+  // OFFSET: LEGO1 0x100377b0
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f049c
+    return "InfocenterDoor";
+  }
+
+  // OFFSET: LEGO1 0x100377c0
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, InfocenterDoor::ClassName()) || LegoWorld::IsA(name);
+  }
+
 };
 
 #endif // INFOCENTERDOOR_H

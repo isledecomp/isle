@@ -3,18 +3,26 @@
 
 #include "legoworld.h"
 
+// VTABLE 0x100d6fb8
+// SIZE 0x140
+// Radio at 0x12c
 class Isle : public LegoWorld
 {
 public:
   Isle();
 
-  virtual void VTable0x50(); // vtable+0x50
-  virtual int  VTable0x64(); // vtable+0x64
-  virtual void VTable0x6c(int* param); // vtable+0x6c
+  // OFFSET: LEGO1 0x10030910
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f0458
+    return "Isle";
+  }
 
-  // VTABLE 0x100d6fb8
-  // SIZE 0x140
-  // Radio at 0x12c
+  // OFFSET: LEGO1 0x10030920
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, Isle::ClassName()) || LegoWorld::IsA(name);
+  }
 };
 
 #endif // ISLE_H

@@ -20,6 +20,8 @@
 
 class LegoSoundManager;
 
+// VTABLE 0x100d8638
+// SIZE: 0x140
 class LegoOmni : public MxOmni
 {
 public:
@@ -35,10 +37,17 @@ public:
   virtual long Notify(MxParam &p); // vtable+04
 
   // OFFSET: LEGO1 0x10058aa0
-  inline virtual const char *ClassName() const { return "LegoOmni"; }; // vtable+0c
+  inline virtual const char *ClassName() const // vtable+0c
+  {
+    // 0x100f671c
+    return "LegoOmni";
+  }
 
   // OFFSET: LEGO1 0x10058ab0
-  inline virtual MxBool IsA(const char *name) const { return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name); }; // vtable+10;
+  inline virtual MxBool IsA(const char *name) const // vtable+10
+  {
+    return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name);
+  }
 
   virtual void Init(); // vtable+14
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
@@ -78,6 +87,7 @@ private:
   char m_unka0[0x94];
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
   MxTransitionManager *m_transitionManager; // 0x138
+  int m_unk13c;
 
 };
 

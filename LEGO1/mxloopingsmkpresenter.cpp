@@ -1,9 +1,9 @@
 #include "mxloopingsmkpresenter.h"
 
-// OFFSET: LEGO1 0x100b48b0 STUB
+// OFFSET: LEGO1 0x100b48b0
 MxLoopingSmkPresenter::MxLoopingSmkPresenter()
 {
-  // TODO
+  Init();
 }
 
 // OFFSET: LEGO1 0x100b4950 STUB

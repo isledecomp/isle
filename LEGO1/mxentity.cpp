@@ -1,11 +1,13 @@
 #include "mxentity.h"
 
-#include "mxatomid.h"
-
-// OFFSET: LEGO1 0x10001070 STUB
-undefined4 MxEntity::VTable0x14(undefined4 param_1, MxAtomId *param_2)
+// OFFSET: LEGO1 0x1001d190 STUB
+MxEntity::MxEntity()
 {
   // TODO
+}
 
-  return undefined4();
+// OFFSET: LEGO1 0x1000c110 STUB
+MxEntity::~MxEntity()
+{
+  // TODO
 }

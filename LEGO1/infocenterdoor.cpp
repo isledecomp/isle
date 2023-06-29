@@ -1,19 +1,19 @@
 #include "infocenterdoor.h"
 
 // OFFSET: LEGO1 0x10037730 STUB
-InfoCenterDoor::InfoCenterDoor()
+InfocenterDoor::InfocenterDoor()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x100378f0 STUB
-InfoCenterDoor::~InfoCenterDoor()
+InfocenterDoor::~InfocenterDoor()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x100379e0 STUB
-long InfoCenterDoor::Notify(MxParam &p)
+long InfocenterDoor::Notify(MxParam &p)
 {
   // TODO
 

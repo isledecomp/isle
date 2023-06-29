@@ -3,6 +3,7 @@
 
 #include "mxstreamprovider.h"
 
+// VTABLE 0x100dd0d0
 class MxRAMStreamProvider : public MxStreamProvider
 {
 

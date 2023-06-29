@@ -3,22 +3,26 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100d6758
+// SIZE 0x2c
 class LegoPlantManager : public MxCore
 {
 public:
   LegoPlantManager();
-  virtual ~LegoPlantManager(); // vtable+0x0
+  virtual ~LegoPlantManager() override; // vtable+0x0
 
-  virtual long Tickle(); // vtable+0x8
-  virtual const char* ClassName() const; // vtable+0xc
+  virtual long Tickle() override; // vtable+0x8
 
-  void UnknownFunction1(int param_1, int param_2);
+  // OFFSET: LEGO1 0x10026290
+  inline const char *ClassName() const override // vtable+0xc
+  {
+    // 0x100f318c
+    return "LegoPlantManager";
+  }
 
 private:
   void Init();
   
-  // VTABLE 0x100d6758
-  // SIZE 0x2c
 };
 
 #endif // LEGOPLANTMANAGER_H

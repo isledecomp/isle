@@ -27,11 +27,3 @@ long GasStation::Tickle()
 
   return 0;
 }
-
-// OFFSET: LEGO1 0x10005e70 STUB
-undefined GasStation::VTable0x64(undefined4 param)
-{
-  // TODO
-
-  return undefined();
-}

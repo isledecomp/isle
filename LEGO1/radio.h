@@ -3,12 +3,12 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100d6d10
 class Radio : public MxCore
 {
 public:
-  virtual ~Radio();
+  virtual ~Radio() override;
 
-  // VTABLE 0x100d6d10
 };
 
 #endif // RADIO_H

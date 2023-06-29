@@ -1,9 +1,9 @@
 #include "legopalettepresenter.h"
 
-// OFFSET: LEGO1 0x10079e50 STUB
+// OFFSET: LEGO1 0x10079e50
 LegoPalettePresenter::LegoPalettePresenter()
 {
-  // TODO
+  Init();
 }
 
 // OFFSET: LEGO1 0x1007a070 STUB

@@ -1,7 +1,13 @@
 #include "legoloadcachesoundpresenter.h"
 
-// OFFSET: LEGO1 0x10018340 STUB
+// OFFSET: LEGO1 0x10018340
 LegoLoadCacheSoundPresenter::LegoLoadCacheSoundPresenter()
+{
+  Init();
+}
+
+// OFFSET: LEGO1 0x10018480 STUB
+LegoLoadCacheSoundPresenter::~LegoLoadCacheSoundPresenter()
 {
   // TODO
 }

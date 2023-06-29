@@ -1,14 +1,16 @@
 #ifndef MXEVENTMANAGER_H
 #define MXEVENTMANAGER_H
 
-#include "mxcore.h"
+#include "mxunknown100dc6b0.h"
 
-class MxEventManager : public MxCore
+// VTABLE 0x100dc900
+// SIZE 0x2c
+class MxEventManager : public MxUnknown100dc6b0
 {
 public:
-  virtual ~MxEventManager();
+  MxEventManager();
+  virtual ~MxEventManager() override;
 
-  // VTABLE 0x100c0360
 };
 
 #endif // MXEVENTMANAGER_H

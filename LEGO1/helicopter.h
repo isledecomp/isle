@@ -3,19 +3,27 @@
 
 #include "islepathactor.h"
 
+// VTABLE 0x100d40f8
+// SIZE 0x230
 class Helicopter : public IslePathActor
 {
 public:
   Helicopter();
   virtual ~Helicopter(); // vtable+0x0
 
-  virtual const char* ClassName() const; // vtable+0xc
-  virtual MxBool IsA(const char *name) const; // vtable+0x10
+  // OFFSET: LEGO1 0x10003070
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f0130
+    return "Helicopter";
+  }
 
-  virtual void VTable0x70(float param_1); // vtable+0x70
-  virtual void VTable0xe4(); // vtable+0xe4
+  // OFFSET: LEGO1 0x10003080
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, Helicopter::ClassName()) || IslePathActor::IsA(name);
+  }
 
-  // VTABLE 0x100d40f8
 };
 
 #endif // HELICOPTER_H

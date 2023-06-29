@@ -11,17 +11,3 @@ LegoWorld::~LegoWorld()
 {
   // TODO
 }
-
-// OFFSET: LEGO1 0x10022080 STUB
-long LegoWorld::Tickle()
-{
-  // TODO
-
-  return 0;
-}
-
-// OFFSET: LEGO1 0x1001e9d0 STUB
-void LegoWorld::Destroy()
-{
-  // TODO
-}

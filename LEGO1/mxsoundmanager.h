@@ -3,12 +3,15 @@
 
 #include "mxcore.h"
 
-class MxSoundManager : public MxCore
+// VTABLE 0x100dc128
+// SIZE 0x3c
+// Base vtables are: MxCore -> 0x100dc6b0 -> 0x100dc6e0 -> MxSoundManager
+class MxSoundManager
 {
 public:
-  virtual ~MxSoundManager(); // vtable+0x0
+  MxSoundManager();
+  virtual ~MxSoundManager() override; // vtable+0x0
 
-  // VTABLE 0x100dc128
 };
 
 #endif // MXSOUNDMANAGER_H

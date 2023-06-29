@@ -4,6 +4,8 @@
 #include "mxunknown100dc6b0.h"
 #include "mxvideoparam.h"
 
+// VTABLE 0x100dc810
+// SIZE 0x64
 class MxVideoManager : public MxUnknown100dc6b0
 {
 public:

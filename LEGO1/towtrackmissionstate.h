@@ -3,6 +3,8 @@
 
 #include "legostate.h"
 
+// VTABLE 0x100d7fd8
+// SIZE 0x28
 class TowTrackMissionState : LegoState
 {
 public:
@@ -21,10 +23,6 @@ public:
     return !strcmp(name, TowTrackMissionState::ClassName()) || LegoState::IsA(name);
   };
 
-  virtual undefined4 VTable0x1c(undefined4 param); // vtable+0x1c
-
-  // VTABLE 0x100d7fd8
-  // SIZE 0x28
 };
 
 #endif // TOWTRACKMISSIONSTATE_H

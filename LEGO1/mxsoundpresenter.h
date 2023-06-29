@@ -3,6 +3,7 @@
 
 #include "mxaudiopresenter.h"
 
+// VTABLE 0x100d4b08
 class MxSoundPresenter : public MxAudioPresenter
 {
 public:
@@ -19,8 +20,6 @@ public:
     return !strcmp(name, MxSoundPresenter::ClassName()) || MxAudioPresenter::IsA(name);
   };
 
-  virtual undefined4 VTable0x34(); // vtable+0x34
-  virtual void InitVirtual(); // vtable+0x38
 };
 
 #endif // MXSOUNDPRESENTER_H
