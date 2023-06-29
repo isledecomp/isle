@@ -14,6 +14,8 @@ public:
   __declspec(dllexport) void Detach();
 
   MxPalette();
+  ~MxPalette();
+  void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
 
 private:
