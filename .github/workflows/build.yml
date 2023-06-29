@@ -87,6 +87,7 @@ jobs:
 
     - name: Upload Continuous Release
       shell: bash
+      if: github.event_name == 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |

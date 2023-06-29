@@ -2,9 +2,10 @@
 #define MXUNKNOWN100DC6B0_H
 
 #include "mxcore.h"
-#include "mxresult.h"
 #include "mxcriticalsection.h"
+#include "mxtypes.h"
 
+// VTABLE 0x100dc6b0
 class MxUnknown100dc6b0 : public MxCore
 {
 public:

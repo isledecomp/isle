@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100d86d8
 class MxTickleManager : public MxCore
 {
 public:
