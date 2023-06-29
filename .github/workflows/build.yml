@@ -56,8 +56,10 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
-        cmake --build build
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake --build .
 
     - name: Restore cached original binaries
       id: cache-original-binaries
