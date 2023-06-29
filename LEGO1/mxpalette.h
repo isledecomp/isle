@@ -15,13 +15,13 @@ public:
   __declspec(dllexport) void Detach();
 
   MxPalette();
-  ~MxPalette();
+  virtual ~MxPalette();
+
   MxPalette* Clone();
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
 
 private:
-  MxCore *m_attached;
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];
   MxBool m_overrideSkyColor;

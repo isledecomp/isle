@@ -4,16 +4,17 @@
 MxPalette::MxPalette()
 {
   this->m_overrideSkyColor = FALSE;
-  this->m_attached = NULL;
+  this->m_palette = NULL;
   GetDefaultPalette(this->m_entries);
   this->m_skyColor = this->m_entries[141];
-  // FIXME: Incomplete
 }
 
 // OFFSET: LEGO1 100bef90
 MxPalette::~MxPalette()
 {
-  delete m_attached;  // yes this matches more
+  if (m_palette) {
+    m_palette->Release();
+  }
 }
 
 // OFFSET: LEGO1 100bf0b0
@@ -55,5 +56,5 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 // OFFSET: LEGO1 0x100bf330
 void MxPalette::Detach()
 {
-  this->m_attached = NULL;
+  this->m_palette = NULL;
 }
