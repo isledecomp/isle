@@ -127,6 +127,7 @@ add_library(lego1 SHARED
   LEGO1/mxmidipresenter.cpp
   LEGO1/mxmusicpresenter.cpp
   LEGO1/mxnotificationmanager.cpp
+  LEGO1/mxobjectfactory.cpp
   LEGO1/mxomni.cpp
   LEGO1/mxomnicreateflags.cpp
   LEGO1/mxomnicreateparam.cpp

@@ -1,0 +1,45 @@
+#include "mxobjectfactory.h"
+
+#include "mxpresenter.h"
+#include "mxcompositepresenter.h"
+#include "mxvideopresenter.h"
+#include "mxflcpresenter.h"
+#include "mxsmkpresenter.h"
+#include "mxstillpresenter.h"
+#include "mxwavepresenter.h"
+#include "mxmidipresenter.h"
+#include "mxeventpresenter.h"
+#include "mxloopingflcpresenter.h"
+#include "mxloopingsmkpresenter.h"
+#include "mxloopingmidipresenter.h"
+
+#include "decomp.h"
+
+DECOMP_STATIC_ASSERT(sizeof(MxObjectFactory) == 56); // 100af1db
+
+// OFFSET: LEGO1 0x100b0d80
+MxObjectFactory::MxObjectFactory()
+{
+#define X(V) this->m_id##V = MxAtomId(#V, LookupMode_Exact);
+  FOR_MXOBJECTFACTORY_OBJECTS(X)
+#undef X
+}
+
+// OFFSET: LEGO1 0x100b12c0
+MxCore *MxObjectFactory::Create(const char *name)
+{
+  MxAtomId atom(name, LookupMode_Exact);
+
+  if (0) {
+#define X(V) } else if (this->m_id##V == atom) { return new V;
+  FOR_MXOBJECTFACTORY_OBJECTS(X)
+#undef X
+  } else {
+    return NULL;
+  }
+}
+
+// OFFSET: LEGO1 0x100b1a30 STUB
+void MxObjectFactory::vtable18(void *) {
+  // FIXME
+}
