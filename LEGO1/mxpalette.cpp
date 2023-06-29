@@ -27,18 +27,16 @@ MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 {
   HDC hdc = GetDC((HWND) NULL);
-  PALETTEENTRY *src;
-
-  if ((rasterCaps & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
-    GetSystemPaletteEntries(hdc, 0, 256, p_entries);
-    count = 256 - 2 * 10;
-    src = &g_defaultPalette[10];
-    p_entries += 10;
-  } else {
-    src = g_defaultPalette;
-    count = 256;
+  int rasterCaps = GetDeviceCaps(hdc, RASTERCAPS);
+  if ((rasterCaps & RC_PALETTE) != 0) {
+    int paletteSize = GetDeviceCaps(hdc, SIZEPALETTE);
+    if (paletteSize == 256) {
+      GetSystemPaletteEntries(hdc, 0, 256, p_entries);
+      p_entries += 10;
+      memcpy(p_entries, this->m_entries, sizeof(this->m_entries));
+    }
   }
-  memcpy(dest, p_entries, count * sizeof(PALETTEENTRY));
+  
   ReleaseDC((HWND) NULL, hdc);
 }
 
