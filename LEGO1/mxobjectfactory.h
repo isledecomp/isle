@@ -1,7 +1,10 @@
 #ifndef MXOBJECTFACTORY_H
 #define MXOBJECTFACTORY_H
 
-class MxObjectFactory
+#include "mxcore.h"
+
+// VTABLE 0x100dc220
+class MxObjectFactory : public MxCore
 {
 
 };

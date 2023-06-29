@@ -4,8 +4,10 @@
 #include <ddraw.h>
 
 #include "mxcore.h"
-#include "mxresult.h"
+#include "mxtypes.h"
 
+// VTABLE 0x100dc848
+// SIZE 0x414
 class MxPalette : public MxCore
 {
 public:

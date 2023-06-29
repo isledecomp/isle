@@ -4,13 +4,15 @@
 #include "mxcore.h"
 #include "mxatomid.h"
 
+// VTABLE 0x100dc868
+// SIZE 0x2c
 class MxDSObject : public MxCore
 {
 public:
   __declspec(dllexport) void SetObjectName(const char *p_objectName);
 
   MxDSObject();
-  virtual ~MxDSObject();
+  virtual ~MxDSObject() override;
 
   MxDSObject &operator=(MxDSObject &p_dsObject);
   void CopyFrom(MxDSObject &p_dsObject);
