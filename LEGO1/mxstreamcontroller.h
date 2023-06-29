@@ -8,7 +8,6 @@
 class MxStreamController : public MxCore
 {
 public:
-
   // OFFSET: LEGO1 0x100c0f10
   inline virtual const char *ClassName() const override // vtable+0xc
   {
@@ -22,8 +21,6 @@ public:
     return !strcmp(name, MxStreamController::ClassName()) || MxCore::IsA(name);
   }
 
-  int m_unk00;
-  int m_unk04;
   int m_unk08;
   int m_unk0c;
   int m_unk10;
