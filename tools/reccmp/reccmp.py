@@ -209,9 +209,12 @@ class SymInfo:
     for fn in self.lines:
       # Sometimes a PDB is compiled with a relative path while we always have
       # an absolute path. Therefore we must
-      if os.path.samefile(fn, filename):
-        filename = fn
-        break
+      try:
+        if os.path.samefile(fn, filename):
+          filename = fn
+          break
+      except FileNotFoundError as e:
+        continue
 
     if filename in self.lines and line in self.lines[fn]:
       addr = self.lines[fn][line]
