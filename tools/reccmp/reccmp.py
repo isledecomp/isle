@@ -90,16 +90,38 @@ class Bin:
     return self.file.read(size)
 
 class RecompiledInfo:
-  addr = None
-  size = None
-  name = None
-  start = None
+  def __init__(self):
+    self.addr = None
+    self.size = None
+    self.name = None
+    self.start = None
 
-def get_wine_path(fn):
-  return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
+class WinePathConverter:
+  def __init__(self, unix_cwd):
+    self.unix_cwd = unix_cwd
+    self.win_cwd = self._call_winepath_unix2win(self.unix_cwd)
 
-def get_unix_path(fn):
-  return subprocess.check_output(['winepath', fn]).decode('utf-8').strip()
+  def get_wine_path(self, unix_fn: str) -> str:
+    if unix_fn.startswith('./'):
+      return self.win_cmd + '\\' + unix_fn[2:].replace('/', '\\')
+    if unix_fn.startswith(self.unix_cwd):
+      return self.win_cwd + '\\' + unix_fn.removeprefix(self.unix_cwd).replace('/', '\\').lstrip('\\')
+    return self._call_winepath_unix2win(unix_fn)
+
+  def get_unix_path(self, win_fn: str) -> str:
+    if win_fn.startswith('.\\') or win_fn.startswith('./'):
+      return self.unix_cwd + '/' + win_fn[2:].replace('\\', '/')
+    if win_fn.startswith(self.win_cwd):
+      return self.unix_cwd + '/' + win_fn.removeprefix(self.win_cwd).replace('\\', '/')
+    return self._call_winepath_win2unix(win_fn)
+
+  @staticmethod
+  def _call_winepath_unix2win(fn: str) -> str:
+    return subprocess.check_output(['winepath', '-w', fn], text=True).strip()
+
+  @staticmethod
+  def _call_winepath_win2unix(fn: str) -> str:
+    return subprocess.check_output(['winepath', fn], text=True).strip()
 
 def get_file_in_script_dir(fn):
   return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
@@ -109,13 +131,13 @@ class SymInfo:
   funcs = {}
   lines = {}
 
-  def __init__(self, pdb, file):
+  def __init__(self, pdb, file, wine_path_converter):
     call = [get_file_in_script_dir('cvdump.exe'), '-l', '-s']
 
-    if os.name != 'nt':
+    if wine_path_converter:
       # Run cvdump through wine and convert path to Windows-friendly wine path
       call.insert(0, 'wine')
-      call.append(get_wine_path(pdb))
+      call.append(wine_path_converter.get_wine_path(pdb))
     else:
       call.append(pdb)
 
@@ -155,9 +177,9 @@ class SymInfo:
       elif current_section == 'LINES' and line.startswith('  ') and not line.startswith('   '):
         sourcepath = line.split()[0]
 
-        if os.name != 'nt':
+        if wine_path_converter:
           # Convert filename to Unix path for file compare
-          sourcepath = get_unix_path(sourcepath)
+          sourcepath = wine_path_converter.get_unix_path(sourcepath)
 
         if sourcepath not in self.lines:
           self.lines[sourcepath] = {}
@@ -201,9 +223,12 @@ class SymInfo:
     else:
       print('Failed to find function symbol with filename and line: %s:%s' % (filename, str(line)))
 
+wine_path_converter = None
+if os.name != 'nt':
+  wine_path_converter = WinePathConverter(source)
 origfile = Bin(original)
 recompfile = Bin(recomp)
-syminfo = SymInfo(syms, recompfile)
+syminfo = SymInfo(syms, recompfile, wine_path_converter)
 
 print()
 
