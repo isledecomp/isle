@@ -2,9 +2,11 @@
 #define LEGONAVCONTROLLER_H
 
 #include "mxcore.h"
-#include "mxbool.h"
 #include "mxtimer.h"
+#include "mxtypes.h"
 
+// VTABLE 0x100d85b8
+// SIZE 0x70
 class LegoNavController : public MxCore
 {
 public:
@@ -18,9 +20,22 @@ public:
                                                 float p_rotationSensitivity, MxBool p_turnUseVelocity);
 
   LegoNavController();
-  // virtual ~LegoNavController();
+  // virtual ~LegoNavController(); // vtable+0x0
 
-  // void SetControlMax(int p_hMax, int p_vMax);
+  // OFFSET: LEGO1 0x10054b80
+  inline const char *ClassName() const override // vtable+0xc
+  {
+    // 0x100f66d8
+    return "LegoNavController";
+  }
+
+  // OFFSET: LEGO1 0x10054b90
+  inline MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, LegoNavController::ClassName()) || MxCore::IsA(name);
+  }
+
+  void SetControlMax(int p_hMax, int p_vMax);
   void ResetToDefault();
   void SetTargets(int p_hPos, int p_vPos, MxBool p_accel);
   float CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed);

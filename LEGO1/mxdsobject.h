@@ -4,20 +4,38 @@
 #include "mxcore.h"
 #include "mxatomid.h"
 
+// VTABLE 0x100dc868
+// SIZE 0x2c
 class MxDSObject : public MxCore
 {
 public:
   __declspec(dllexport) void SetObjectName(const char *);
 
   MxDSObject();
+  virtual ~MxDSObject() override;
+
+  // OFFSET: LEGO1 0x100bf730
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x10101400
+    return "MxDSObject";
+  }
+
+  // OFFSET: LEGO1 0x100bf740
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name);
+  }
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }
 
   inline void SetUnknown1c(int p_unk1c) { this->m_unk1c = p_unk1c; }
-  inline void SetUnknown24(unsigned short p_unk24) { this->m_unk24 = p_unk24; }
+  inline void SetUnknown24(short p_unk24) { this->m_unk24 = p_unk24; }
 
-  void SetAtomId(MxAtomId p_atomId);
+  // OFFSET: ISLE 0x401c40
+  // OFFSET: LEGO1 0x10005530
+  inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
 private:
   int m_unk08;
@@ -27,13 +45,7 @@ private:
   char *m_name;
   int m_unk1c;
   MxAtomId m_atomId;
-  // So far, implementing MxDSObject::MxDSObject correctly required that m_unk24 is declared a (signed) short. 
-  // Most of the other game's code appears to treat it as unsigned short, however.
-  // This union is a workaround until we have figured this out.
-  union {
-    unsigned short m_unk24;
-    short m_unk24signed;
-  };
+  short m_unk24;
   unsigned short m_unk26;
   int m_unk28;
 };

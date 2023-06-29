@@ -1,7 +1,7 @@
 #include "define.h"
 
 // 0x410030
-Isle *g_isle = 0;
+IsleApp *g_isle = 0;
 
 // 0x410034
 unsigned char g_mousedown = 0;
@@ -28,7 +28,7 @@ int g_targetWidth = 640;
 int g_targetHeight = 480;
 
 // 0x410060
-unsigned int g_targetDepth = 16;
+int g_targetDepth = 16;
 
 // 0x410064
 int g_reqEnableRMDevice = 0;
@@ -38,6 +38,3 @@ int g_startupDelay = 200;
 
 // 0x4101c0
 long g_lastFrameTime = 0;
-
-// 0x4101dc
-const char *WINDOW_TITLE = "LEGO\xAE";
