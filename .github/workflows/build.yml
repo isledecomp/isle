@@ -29,7 +29,7 @@ jobs:
       if: ${{ !steps.cache-dx5.outputs.cache-hit }}
       run: |
         cd dx5sdk
-        C:\msys64\usr\bin\wget.exe https://archive.org/download/idx5sdk/idx5sdk.exe
+        curl -fLOSs https://archive.org/download/idx5sdk/idx5sdk.exe
         7z x .\idx5sdk.exe
         7z x .\DX5SDK.EXE
 
@@ -66,39 +66,43 @@ jobs:
         cmake --build cmake-build
         cmake --install cmake-build
 
-    - name: Restore cached LEGO(c) binaries
-      id: cache-lego-binaries
+    - name: Restore cached original binaries
+      id: cache-original-binaries
       uses: actions/cache/restore@v3
       with:
-        path: lego-binaries
-        key: lego-binaries
+        path: legobin
+        key: legobin
 
-    - name: Download LEGO(c) island binares
-      if: ${{ !steps.cache-lego-binaries.outputs.cache-hit }}
+    - name: Download original island binares
+      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
       run: |
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=lego-binaries
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=lego-binaries
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
 
-    - name: Cache LEGO(c) binaries
-      if: ${{ !steps.cache-lego-binaries.outputs.cache-hit }}
+    - name: Cache original binaries
+      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
       uses: actions/cache/save@v3
       with:
-        path: lego-binaries
-        key: lego-binaries
+        path: legobin
+        key: legobin
 
     - name: Summarize Accuracy
-      shell: cmd
+      shell: bash
       run: |
         pip install -r tools/reccmp/requirements.txt
-        python3 tools/reccmp/reccmp.py -H ISLEPROGRESS.HTML lego-binaries/ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB .
-        python3 tools/reccmp/reccmp.py -H LEGO1PROGRESS.HTML lego-binaries/LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB .
+        python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML legobin/ISLE.EXE Release/ISLE.EXE Release/ISLE.PDB . | tee ISLEPROGRESS.TXT
+        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL Release/LEGO1.DLL Release/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
 
-    - name: Summarize Accuracy (CMake)
-      shell: cmd
+    - name: Compare Accuracy With Current Master
+      shell: bash
       run: |
-        python3 tools/reccmp/reccmp.py -H cmake-files/ISLEPROGRESS.HTML lego-binaries/ISLE.EXE cmake-files/ISLE.EXE cmake-files/ISLE.PDB .
-        python3 tools/reccmp/reccmp.py -H cmake-files/LEGO1PROGRESS.HTML lego-binaries/LEGO1.DLL cmake-files/LEGO1.DLL cmake-files/LEGO1.PDB .
+        # Compare with current master
+        curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT
+        curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT
 
+        diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
+        diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+      
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -107,4 +111,31 @@ jobs:
           Release
           ISLEPROGRESS.HTML
           LEGO1PROGRESS.HTML
-          cmake-files
+          ISLEPROGRESS.SVG
+          LEGO1PROGRESS.SVG
+
+    - name: Upload Continuous Release
+      shell: bash
+      if: github.event_name == 'push'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Convert SVGs to PNG
+        INKSCAPE_DIR=inkscape-1.2.2_2022-12-09_732a01da63-x64
+        curl -fLOSs https://inkscape.org/gallery/item/37364/$INKSCAPE_DIR.7z
+        7z x $INKSCAPE_DIR.7z
+        $INKSCAPE_DIR/bin/inkscape -w 512 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
+        $INKSCAPE_DIR/bin/inkscape -w 512 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
+
+        curl -fLOSs https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh
+        ./upload.sh \
+          Release/ISLE.EXE \
+          Release/LEGO1.DLL \
+          ISLEPROGRESS.HTML \
+          ISLEPROGRESS.TXT \
+          ISLEPROGRESS.SVG \
+          ISLEPROGRESS.PNG \
+          LEGO1PROGRESS.HTML \
+          LEGO1PROGRESS.TXT \
+          LEGO1PROGRESS.PNG \
+          LEGO1PROGRESS.SVG
