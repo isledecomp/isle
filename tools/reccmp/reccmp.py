@@ -6,6 +6,7 @@ from capstone import *
 import difflib
 import struct
 import subprocess
+import logging
 import os
 import sys
 import colorama
@@ -24,7 +25,13 @@ parser.add_argument('--svg', '-S', metavar='<file>', help='Generate SVG graphic 
 parser.add_argument('--svg-icon', metavar='icon', help='Icon to use in SVG (PNG)')
 parser.add_argument('--print-rec-addr', action='store_true', help='Print addresses of recompiled functions too')
 
+parser.set_defaults(loglevel=logging.INFO)
+parser.add_argument('--debug', action='store_const', const=logging.DEBUG, dest='loglevel', help='Print script debug information')
+
 args = parser.parse_args()
+
+logging.basicConfig(level=args.loglevel, format='[%(levelname)s] %(message)s')
+logger = logging.getLogger(__name__)
 
 colorama.init()
 
@@ -61,6 +68,7 @@ svg = args.svg
 # to file addresses
 class Bin:
   def __init__(self, filename):
+    logger.debug('Parsing headers of "%s"... ', filename)
     self.file = open(filename, 'rb')
 
     #HACK: Strictly, we should be parsing the header, but we know where
@@ -77,6 +85,7 @@ class Bin:
     # Read .text PointerToRawData
     self.file.seek(0x18C)
     self.textraw = struct.unpack('i', self.file.read(4))[0]
+    logger.debug('... Parsing finished')
 
   def __del__(self):
     if self.file:
@@ -141,11 +150,13 @@ class SymInfo:
     else:
       call.append(pdb)
 
-    print('Parsing %s...' % pdb)
-
+    logger.info('Parsing %s ...', pdb)
+    logger.debug('Command = %r', call)
     line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
 
     current_section = None
+
+    logger.debug('Parsing output of cvdump.exe ...')
 
     for i, line in enumerate(line_dump):
       if line.startswith('***'):
@@ -153,8 +164,6 @@ class SymInfo:
 
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
-
-
 
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
@@ -200,11 +209,13 @@ class SymInfo:
 
           j += 1
 
+    logger.debug('... Parsing output of cvdump.exe finished')
+
   def get_recompiled_address(self, filename, line):
     addr = None
     found = False
 
-    #print('Looking for ' + filename + ' line ' + str(line))
+    logger.debug('Looking for %s:%d', filename, line)
 
     for fn in self.lines:
       # Sometimes a PDB is compiled with a relative path while we always have
@@ -222,9 +233,9 @@ class SymInfo:
       if addr in self.funcs:
         return self.funcs[addr]
       else:
-        print('Failed to find function symbol with address: %s' % hex(addr))
+        logger.error('Failed to find function symbol with address: 0x%x', addr)
     else:
-      print('Failed to find function symbol with filename and line: %s:%s' % (filename, str(line)))
+      logger.error('Failed to find function symbol with filename and line: %s:%d', filename, line)
 
 wine_path_converter = None
 if os.name != 'nt':
