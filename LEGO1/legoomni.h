@@ -84,7 +84,7 @@ private:
   char m_unk94[0x4];
   LegoBuildingManager* m_buildingManager; // 0x98
   LegoGameState *m_gameState; // 0x9c
-  char m_unka0[0x94];
+  MxDSAction m_action;
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
   MxTransitionManager *m_transitionManager; // 0x138
   int m_unk13c;
