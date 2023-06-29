@@ -4,12 +4,28 @@
 #include "mxcore.h"
 #include "mxatomid.h"
 
+// VTABLE 0x100dc868
+// SIZE 0x2c
 class MxDSObject : public MxCore
 {
 public:
   __declspec(dllexport) void SetObjectName(const char *);
 
   MxDSObject();
+  virtual ~MxDSObject() override;
+
+  // OFFSET: LEGO1 0x100bf730
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x10101400
+    return "MxDSObject";
+  }
+
+  // OFFSET: LEGO1 0x100bf740
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name);
+  }
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }

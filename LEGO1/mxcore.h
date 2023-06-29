@@ -7,6 +7,8 @@
 
 class MxParam;
 
+// VTABLE 0x100dc0f8
+// SIZE 0x8
 class MxCore
 {
 public:
@@ -16,10 +18,17 @@ public:
   virtual long Tickle(); // vtable+08
 
   // OFFSET: LEGO1 0x100144c0
-  inline virtual const char *ClassName() const { return "MxCore"; }; // vtable+0c
+  inline virtual const char *ClassName() const // vtable+0c
+  {
+    // 0x100f007c
+    return "MxCore";
+  }
 
   // OFFSET: LEGO1 0x100140d0
-  inline virtual MxBool IsA(const char *name) const { return !strcmp(name, MxCore::ClassName()); }; // vtable+10
+  inline virtual MxBool IsA(const char *name) const // vtable+10
+  {
+    return !strcmp(name, MxCore::ClassName());
+  }
 
 private:
   unsigned int m_id;

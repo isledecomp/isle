@@ -15,6 +15,12 @@ MxDSObject::MxDSObject()
   this->m_unk28 = 0;
 }
 
+// OFFSET: LEGO1 0x100bf7e0
+MxDSObject::~MxDSObject()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char *p_name)
 {

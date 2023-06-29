@@ -8,6 +8,10 @@ typedef short MxS16;
 typedef unsigned int MxU32;
 typedef int MxS32;
 
+typedef unsigned long MxResult;
+const MxResult SUCCESS = 0;
+const MxResult FAILURE = 0xFFFFFFFFL;
+
 typedef unsigned char MxBool;
 
 #ifndef TRUE
@@ -18,4 +22,8 @@ typedef unsigned char MxBool;
 #define FALSE 0
 #endif
 
-#endif MXTYPE_H
+#if defined(_MSC_VER) && _MSC_VER <= 1200 // 1200 corresponds to VC6.0 but "override" was probably added even later
+#define override
+#endif
+
+#endif // MXTYPE_H

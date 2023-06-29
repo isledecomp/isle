@@ -1,9 +1,9 @@
-#ifndef ISLE_H
-#define ISLE_H
+#ifndef ISLEAPP_H
+#define ISLEAPP_H
 
 #include <windows.h>
 
-#include "mxresult.h"
+#include "mxtypes.h"
 #include "mxvideoparam.h"
 
 class IsleApp
@@ -73,4 +73,4 @@ public:
   HCURSOR m_cursorCurrent;
 };
 
-#endif // ISLE_H
+#endif // ISLEAPP_H

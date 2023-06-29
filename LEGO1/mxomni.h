@@ -8,7 +8,6 @@
 #include "mxobjectfactory.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
-#include "mxresult.h"
 #include "mxsoundmanager.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
@@ -16,6 +15,8 @@
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
 
+// VTABLE 0x100dc168
+// SIZE 0x68
 class MxOmni : public MxCore
 {
 public:
