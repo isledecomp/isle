@@ -3,11 +3,26 @@
 
 #include "mxdsobject.h"
 
+// VTABLE 0x100dc098
+// SIZE 0x94
 class MxDSAction : public MxDSObject
 {
 public:
   __declspec(dllexport) MxDSAction();
   __declspec(dllexport) virtual ~MxDSAction();
+
+  // OFFSET: LEGO1 0x100ad980
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x101013f4
+    return "MxDSAction";
+  }
+
+  // OFFSET: LEGO1 0x100ad990
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxDSAction::ClassName()) || MxDSObject::IsA(name);
+  }
 
   int m_unk2c;
   int m_unk30;

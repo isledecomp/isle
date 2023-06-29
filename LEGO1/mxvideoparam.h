@@ -4,8 +4,8 @@
 #include <ddraw.h>
 
 #include "mxpalette.h"
-#include "mxbool.h"
 #include "mxrect32.h"
+#include "mxtypes.h"
 #include "mxvariabletable.h"
 #include "mxvideoparamflags.h"
 

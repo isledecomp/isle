@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import base64
 from capstone import *
 import difflib
 import struct
 import subprocess
 import os
 import sys
+import colorama
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
@@ -14,18 +16,28 @@ parser.add_argument('original', metavar='original-binary', help='The original bi
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
 parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
-parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
-parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--total', '-T', metavar='<count>', help='Total number of expected functions (improves total accuracy statistic)')
+parser.add_argument('--verbose', '-v', metavar='<offset>', help='Print assembly diff for specific function (original file\'s offset)')
+parser.add_argument('--html', '-H', metavar='<file>', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--no-color', '-n', action='store_true', help='Do not color the output')
+parser.add_argument('--svg', '-S', metavar='<file>', help='Generate SVG graphic of progress')
+parser.add_argument('--svg-icon', metavar='icon', help='Icon to use in SVG (PNG)')
+parser.add_argument('--print-rec-addr', action='store_true', help='Print addresses of recompiled functions too')
 
 args = parser.parse_args()
 
+colorama.init()
+
 verbose = None
+found_verbose_target = False
 if args.verbose:
   try:
     verbose = int(args.verbose, 16)
   except ValueError:
     parser.error('invalid verbose argument')
 html = args.html
+
+plain = args.no_color
 
 original = args.original
 if not os.path.isfile(original):
@@ -42,6 +54,8 @@ if not os.path.isfile(syms):
 source = args.decomp_dir
 if not os.path.isdir(source):
   parser.error('Source directory does not exist')
+
+svg = args.svg
 
 # Declare a class that can automatically convert virtual executable addresses
 # to file addresses
@@ -279,13 +293,20 @@ for subdir, dirs, files in os.walk(source):
 
         line = line.strip()
 
-        if line.startswith(pattern):
+        if line.startswith(pattern) and not line.endswith("STUB"):
           par = line[len(pattern):].strip().split()
           module = par[0]
           if module != basename:
             continue
 
           addr = int(par[1], 16)
+
+          # Verbose flag handling
+          if verbose:
+            if addr == verbose:
+              found_verbose_target = True
+            else:
+              continue
 
           find_open_bracket = line
           while '{' not in find_open_bracket:
@@ -305,23 +326,58 @@ for subdir, dirs, files in os.walk(source):
           else:
             ratio = 0
 
-          print('  %s (%s / %s) is %.2f%% similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), ratio * 100))
+          percenttext = "%.2f%%" % (ratio * 100)
+          if not plain:
+            if ratio == 1.0:
+              percenttext = colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
+            elif ratio > 0.8:
+              percenttext = colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
+            else:
+              percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
+
+          if not verbose:
+            if args.print_rec_addr:
+              addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
+            else:
+              addrs = hex(addr)
+            print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
 
           function_count += 1
           total_accuracy += ratio
 
           if recinfo.size:
-            if verbose == addr or html:
-              udiff = difflib.unified_diff(origasm, recompasm)
+            udiff = difflib.unified_diff(origasm, recompasm, n=10)
 
-              if verbose == addr:
+            # If verbose, print the diff for that funciton to the output
+            if verbose:
+              if ratio == 1.0:
+                print("%s: %s 100%% match.\n\nOK!" % (hex(addr), recinfo.name))
+              else:
                 for line in udiff:
-                  print(line)
-                print()
-                print()
+                  if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
+                    # Skip unneeded parts of the diff for the brief view
+                    pass
+                  elif line.startswith("+"):
+                    if plain:
+                      print(line)
+                    else:
+                      print(colorama.Fore.GREEN + line)
+                  elif line.startswith("-"):
+                    if plain:
+                      print(line)
+                    else:
+                      print(colorama.Fore.RED + line)
+                  else:
+                    print(line)
+                  if not plain:
+                    print(colorama.Style.RESET_ALL, end='')
 
-              if html:
-                htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n')))
+                print("\n%s is only %s similar to the original, diff above" % (recinfo.name, percenttext))
+
+            # If html, record the diffs to an HTML file
+            if html:
+              escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), escaped))
 
       except UnicodeDecodeError:
         break
@@ -345,8 +401,63 @@ def gen_html(html, data):
   htmlfile.write(templatedata)
   htmlfile.close()
 
+def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
+  templatefile = open(get_file_in_script_dir('template.svg'), 'r')
+  if not templatefile:
+    print('Failed to find SVG template file, can\'t generate SVG summary')
+    return
+
+  templatedata = templatefile.read()
+  templatefile.close()
+
+  # Replace icon
+  if args.svg_icon:
+    iconfile = open(args.svg_icon, 'rb')
+    templatedata = templatedata.replace('{icon}', base64.b64encode(iconfile.read()).decode('utf-8'), 1)
+    iconfile.close()
+
+  # Replace name
+  templatedata = templatedata.replace('{name}', name, 1)
+
+  # Replace implemented statistic
+  templatedata = templatedata.replace('{implemented}', '%.2f%% (%i/%i)' % (implemented_funcs / total_funcs * 100, implemented_funcs, total_funcs), 1)
+
+  # Replace accuracy statistic
+  templatedata = templatedata.replace('{accuracy}', '%.2f%%' % (raw_accuracy / implemented_funcs * 100), 1)
+
+  # Generate progress bar width
+  total_statistic = raw_accuracy / total_funcs
+  percenttemplate = '{progbar'
+  percentstart = templatedata.index(percenttemplate)
+  percentend = templatedata.index('}', percentstart)
+  progwidth = float(templatedata[percentstart + len(percenttemplate) + 1:percentend]) * total_statistic
+  templatedata = templatedata[0:percentstart] + str(progwidth) + templatedata[percentend + 1:]
+
+  # Replace percentage statistic
+  templatedata = templatedata.replace('{percent}', '%.2f%%' % (total_statistic * 100), 2)
+
+  svgfile = open(svg, 'w')
+  if not svgfile:
+    print('Failed to write to SVG file %s' % svg)
+    return
+
+  svgfile.write(templatedata)
+  svgfile.close()
+
 if html:
   gen_html(html, htmlinsert)
 
-if function_count > 0:
-  print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
+if verbose:
+  if not found_verbose_target:
+    print('Failed to find the function with address %s' % hex(verbose))
+else:
+  implemented_funcs = function_count
+
+  if args.total:
+    function_count = int(args.total)
+
+  if function_count > 0:
+    print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
+
+    if svg:
+      gen_svg(svg, os.path.basename(original), args.svg_icon, implemented_funcs, function_count, total_accuracy)
