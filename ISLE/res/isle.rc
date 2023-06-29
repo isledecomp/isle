@@ -1,9 +1,9 @@
 #include "resource.h"
 
-ISLE_ARROW 	CURSOR 	"ISLE/res/arrow.cur"
-ISLE_NO 		CURSOR 	"ISLE/res/no.cur"
-ISLE_BUSY 	CURSOR 	"ISLE/res/busy.cur"
-APP_ICON 		ICON 		"ISLE/res/isle.ico"
+ISLE_ARROW 	CURSOR 	"arrow.cur"
+ISLE_NO 		CURSOR 	"no.cur"
+ISLE_BUSY 	CURSOR 	"busy.cur"
+APP_ICON 		ICON 		"isle.ico"
 
 1 VERSIONINFO
 FILEVERSION 1,1,0,0
