@@ -98,6 +98,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legoanimationmanager.obj"
 	-@erase "$(INTDIR)\legoanimmmpresenter.obj"
 	-@erase "$(INTDIR)\legoanimpresenter.obj"
+	-@erase "$(INTDIR)\legobackgroundcolor.obj"
 	-@erase "$(INTDIR)\legobuildingmanager.obj"
 	-@erase "$(INTDIR)\legocachesound.obj"
 	-@erase "$(INTDIR)\legocameracontroller.obj"
@@ -124,6 +125,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legosoundmanager.obj"
 	-@erase "$(INTDIR)\legostate.obj"
 	-@erase "$(INTDIR)\legotexturepresenter.obj"
+	-@erase "$(INTDIR)\legoutil.obj"
 	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\legoworld.obj"
 	-@erase "$(INTDIR)\legoworldpresenter.obj"
@@ -177,6 +179,7 @@ CLEAN :
 	-@erase "$(INTDIR)\mxstillpresenter.obj"
 	-@erase "$(INTDIR)\mxstreamer.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
+	-@erase "$(INTDIR)\mxstringvariable.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
 	-@erase "$(INTDIR)\mxtransitionmanager.obj"
 	-@erase "$(INTDIR)\mxunknown100dc6b0.obj"
@@ -303,6 +306,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legoanimationmanager.obj" \
 	"$(INTDIR)\legoanimmmpresenter.obj" \
 	"$(INTDIR)\legoanimpresenter.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legobuildingmanager.obj" \
 	"$(INTDIR)\legocachesound.obj" \
 	"$(INTDIR)\legocameracontroller.obj" \
@@ -329,6 +333,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legosoundmanager.obj" \
 	"$(INTDIR)\legostate.obj" \
 	"$(INTDIR)\legotexturepresenter.obj" \
+	"$(INTDIR)\legoutil.obj" \
 	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\legoworld.obj" \
 	"$(INTDIR)\legoworldpresenter.obj" \
@@ -382,6 +387,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxstillpresenter.obj" \
 	"$(INTDIR)\mxstreamer.obj" \
 	"$(INTDIR)\mxstring.obj" \
+	"$(INTDIR)\mxstringvariable.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxtransitionmanager.obj" \
 	"$(INTDIR)\mxunknown100dc6b0.obj" \
@@ -474,6 +480,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legoanimationmanager.obj"
 	-@erase "$(INTDIR)\legoanimmmpresenter.obj"
 	-@erase "$(INTDIR)\legoanimpresenter.obj"
+	-@erase "$(INTDIR)\legobackgroundcolor.obj"
 	-@erase "$(INTDIR)\legobuildingmanager.obj"
 	-@erase "$(INTDIR)\legocachesound.obj"
 	-@erase "$(INTDIR)\legocameracontroller.obj"
@@ -500,6 +507,7 @@ CLEAN :
 	-@erase "$(INTDIR)\legosoundmanager.obj"
 	-@erase "$(INTDIR)\legostate.obj"
 	-@erase "$(INTDIR)\legotexturepresenter.obj"
+	-@erase "$(INTDIR)\legoutil.obj"
 	-@erase "$(INTDIR)\legovideomanager.obj"
 	-@erase "$(INTDIR)\legoworld.obj"
 	-@erase "$(INTDIR)\legoworldpresenter.obj"
@@ -553,6 +561,7 @@ CLEAN :
 	-@erase "$(INTDIR)\mxstillpresenter.obj"
 	-@erase "$(INTDIR)\mxstreamer.obj"
 	-@erase "$(INTDIR)\mxstring.obj"
+	-@erase "$(INTDIR)\mxstringvariable.obj"
 	-@erase "$(INTDIR)\mxtimer.obj"
 	-@erase "$(INTDIR)\mxtransitionmanager.obj"
 	-@erase "$(INTDIR)\mxunknown100dc6b0.obj"
@@ -681,6 +690,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legoanimationmanager.obj" \
 	"$(INTDIR)\legoanimmmpresenter.obj" \
 	"$(INTDIR)\legoanimpresenter.obj" \
+	"$(INTDIR)\legobackgroundcolor.obj" \
 	"$(INTDIR)\legobuildingmanager.obj" \
 	"$(INTDIR)\legocachesound.obj" \
 	"$(INTDIR)\legocameracontroller.obj" \
@@ -707,6 +717,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\legosoundmanager.obj" \
 	"$(INTDIR)\legostate.obj" \
 	"$(INTDIR)\legotexturepresenter.obj" \
+	"$(INTDIR)\legoutil.obj" \
 	"$(INTDIR)\legovideomanager.obj" \
 	"$(INTDIR)\legoworld.obj" \
 	"$(INTDIR)\legoworldpresenter.obj" \
@@ -760,6 +771,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\mxstillpresenter.obj" \
 	"$(INTDIR)\mxstreamer.obj" \
 	"$(INTDIR)\mxstring.obj" \
+	"$(INTDIR)\mxstringvariable.obj" \
 	"$(INTDIR)\mxtimer.obj" \
 	"$(INTDIR)\mxtransitionmanager.obj" \
 	"$(INTDIR)\mxunknown100dc6b0.obj" \
@@ -2502,9 +2514,6 @@ DEP_CPP_LEGOT=\
 # Begin Source File
 
 SOURCE=.\LEGO1\legoworld.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGOW=\
 	".\LEGO1\legoentity.h"\
 	".\LEGO1\legoworld.h"\
@@ -2516,22 +2525,6 @@ DEP_CPP_LEGOW=\
 "$(INTDIR)\legoworld.obj" : $(SOURCE) $(DEP_CPP_LEGOW) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGOW=\
-	".\LEGO1\legoentity.h"\
-	".\LEGO1\legoworld.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxentity.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\legoworld.obj" : $(SOURCE) $(DEP_CPP_LEGOW) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -2714,9 +2707,6 @@ DEP_CPP_MXFLC=\
 # Begin Source File
 
 SOURCE=.\LEGO1\mxloopingsmkpresenter.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXLOO=\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
@@ -2731,25 +2721,6 @@ DEP_CPP_MXLOO=\
 "$(INTDIR)\mxloopingsmkpresenter.obj" : $(SOURCE) $(DEP_CPP_MXLOO) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXLOO=\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxloopingsmkpresenter.h"\
-	".\LEGO1\mxmediapresenter.h"\
-	".\LEGO1\mxpresenter.h"\
-	".\LEGO1\mxsmkpresenter.h"\
-	".\LEGO1\mxtypes.h"\
-	".\LEGO1\mxvideopresenter.h"\
-	
-
-"$(INTDIR)\mxloopingsmkpresenter.obj" : $(SOURCE) $(DEP_CPP_MXLOO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
@@ -3345,9 +3316,6 @@ DEP_CPP_MXDSS=\
 # Begin Source File
 
 SOURCE=.\LEGO1\act3state.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_ACT3ST=\
 	".\LEGO1\act3state.h"\
 	".\LEGO1\legostate.h"\
@@ -3358,30 +3326,12 @@ DEP_CPP_ACT3ST=\
 "$(INTDIR)\act3state.obj" : $(SOURCE) $(DEP_CPP_ACT3ST) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_ACT3ST=\
-	".\LEGO1\act3state.h"\
-	".\LEGO1\legostate.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\act3state.obj" : $(SOURCE) $(DEP_CPP_ACT3ST) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\helicopterstate.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_HELICO=\
 	".\LEGO1\helicopterstate.h"\
 	".\LEGO1\legostate.h"\
@@ -3392,30 +3342,12 @@ DEP_CPP_HELICO=\
 "$(INTDIR)\helicopterstate.obj" : $(SOURCE) $(DEP_CPP_HELICO) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_HELICO=\
-	".\LEGO1\helicopterstate.h"\
-	".\LEGO1\legostate.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\helicopterstate.obj" : $(SOURCE) $(DEP_CPP_HELICO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\jukeboxstate.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_JUKEBOX=\
 	".\LEGO1\jukeboxstate.h"\
 	".\LEGO1\legostate.h"\
@@ -3426,30 +3358,12 @@ DEP_CPP_JUKEBOX=\
 "$(INTDIR)\jukeboxstate.obj" : $(SOURCE) $(DEP_CPP_JUKEBOX) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_JUKEBOX=\
-	".\LEGO1\jukeboxstate.h"\
-	".\LEGO1\legostate.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\jukeboxstate.obj" : $(SOURCE) $(DEP_CPP_JUKEBOX) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\legoact2state.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGOAC=\
 	".\LEGO1\legoact2state.h"\
 	".\LEGO1\legostate.h"\
@@ -3460,30 +3374,12 @@ DEP_CPP_LEGOAC=\
 "$(INTDIR)\legoact2state.obj" : $(SOURCE) $(DEP_CPP_LEGOAC) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGOAC=\
-	".\LEGO1\legoact2state.h"\
-	".\LEGO1\legostate.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\legoact2state.obj" : $(SOURCE) $(DEP_CPP_LEGOAC) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\legopathcontroller.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGOPATH=\
 	".\LEGO1\legopathcontroller.h"\
 	".\LEGO1\mxcore.h"\
@@ -3493,29 +3389,12 @@ DEP_CPP_LEGOPATH=\
 "$(INTDIR)\legopathcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGOPATH) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGOPATH=\
-	".\LEGO1\legopathcontroller.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\legopathcontroller.obj" : $(SOURCE) $(DEP_CPP_LEGOPATH) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\legovideomanager.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_LEGOV=\
 	".\LEGO1\lego3dmanager.h"\
 	".\LEGO1\lego3dview.h"\
@@ -3536,40 +3415,12 @@ DEP_CPP_LEGOV=\
 "$(INTDIR)\legovideomanager.obj" : $(SOURCE) $(DEP_CPP_LEGOV) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_LEGOV=\
-	".\LEGO1\lego3dmanager.h"\
-	".\LEGO1\lego3dview.h"\
-	".\LEGO1\legovideomanager.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxpalette.h"\
-	".\LEGO1\mxrect32.h"\
-	".\LEGO1\mxtypes.h"\
-	".\LEGO1\mxunknown100dc6b0.h"\
-	".\LEGO1\mxvariabletable.h"\
-	".\LEGO1\mxvideomanager.h"\
-	".\LEGO1\mxvideoparam.h"\
-	".\LEGO1\mxvideoparamflags.h"\
-	".\LEGO1\viewmanager.h"\
-	
-
-"$(INTDIR)\legovideomanager.obj" : $(SOURCE) $(DEP_CPP_LEGOV) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxbackgroundaudiomanager.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXBAC=\
 	".\LEGO1\mxbackgroundaudiomanager.h"\
 	".\LEGO1\mxcore.h"\
@@ -3580,30 +3431,12 @@ DEP_CPP_MXBAC=\
  "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXBAC=\
-	".\LEGO1\mxbackgroundaudiomanager.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxbackgroundaudiomanager.obj" : $(SOURCE) $(DEP_CPP_MXBAC)\
- "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdiskstreamprovider.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDISK=\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdiskstreamprovider.h"\
@@ -3614,30 +3447,12 @@ DEP_CPP_MXDISK=\
 "$(INTDIR)\mxdiskstreamprovider.obj" : $(SOURCE) $(DEP_CPP_MXDISK) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDISK=\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdiskstreamprovider.h"\
-	".\LEGO1\mxstreamprovider.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdiskstreamprovider.obj" : $(SOURCE) $(DEP_CPP_MXDISK) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSA=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3649,31 +3464,12 @@ DEP_CPP_MXDSA=\
 "$(INTDIR)\mxdsaction.obj" : $(SOURCE) $(DEP_CPP_MXDSA) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSA=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsaction.obj" : $(SOURCE) $(DEP_CPP_MXDSA) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsanim.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSAN=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3687,33 +3483,12 @@ DEP_CPP_MXDSAN=\
 "$(INTDIR)\mxdsanim.obj" : $(SOURCE) $(DEP_CPP_MXDSAN) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSAN=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsanim.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsanim.obj" : $(SOURCE) $(DEP_CPP_MXDSAN) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsevent.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSE=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3727,33 +3502,12 @@ DEP_CPP_MXDSE=\
 "$(INTDIR)\mxdsevent.obj" : $(SOURCE) $(DEP_CPP_MXDSE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSE=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsevent.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsevent.obj" : $(SOURCE) $(DEP_CPP_MXDSE) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsmediaaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSM=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3766,32 +3520,12 @@ DEP_CPP_MXDSM=\
 "$(INTDIR)\mxdsmediaaction.obj" : $(SOURCE) $(DEP_CPP_MXDSM) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSM=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsmediaaction.obj" : $(SOURCE) $(DEP_CPP_MXDSM) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsmultiaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSMU=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3804,32 +3538,12 @@ DEP_CPP_MXDSMU=\
 "$(INTDIR)\mxdsmultiaction.obj" : $(SOURCE) $(DEP_CPP_MXDSMU) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSMU=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmultiaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsmultiaction.obj" : $(SOURCE) $(DEP_CPP_MXDSMU) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsobjectaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSOB=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3843,33 +3557,12 @@ DEP_CPP_MXDSOB=\
 "$(INTDIR)\mxdsobjectaction.obj" : $(SOURCE) $(DEP_CPP_MXDSOB) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSOB=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdsobjectaction.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsobjectaction.obj" : $(SOURCE) $(DEP_CPP_MXDSOB) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsparallelaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSP=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3883,33 +3576,12 @@ DEP_CPP_MXDSP=\
 "$(INTDIR)\mxdsparallelaction.obj" : $(SOURCE) $(DEP_CPP_MXDSP) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSP=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmultiaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdsparallelaction.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsparallelaction.obj" : $(SOURCE) $(DEP_CPP_MXDSP) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsselectaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSSE=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3924,34 +3596,12 @@ DEP_CPP_MXDSSE=\
 "$(INTDIR)\mxdsselectaction.obj" : $(SOURCE) $(DEP_CPP_MXDSSE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSSE=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmultiaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdsparallelaction.h"\
-	".\LEGO1\mxdsselectaction.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsselectaction.obj" : $(SOURCE) $(DEP_CPP_MXDSSE) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsserialaction.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSSER=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -3965,33 +3615,12 @@ DEP_CPP_MXDSSER=\
 "$(INTDIR)\mxdsserialaction.obj" : $(SOURCE) $(DEP_CPP_MXDSSER) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSSER=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmultiaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdsserialaction.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsserialaction.obj" : $(SOURCE) $(DEP_CPP_MXDSSER) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdssound.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSSO=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -4005,33 +3634,12 @@ DEP_CPP_MXDSSO=\
 "$(INTDIR)\mxdssound.obj" : $(SOURCE) $(DEP_CPP_MXDSSO) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSSO=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdssound.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdssound.obj" : $(SOURCE) $(DEP_CPP_MXDSSO) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdsstill.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSST=\
 	".\LEGO1\mxatomid.h"\
 	".\LEGO1\mxcore.h"\
@@ -4045,33 +3653,12 @@ DEP_CPP_MXDSST=\
 "$(INTDIR)\mxdsstill.obj" : $(SOURCE) $(DEP_CPP_MXDSST) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSST=\
-	".\LEGO1\mxatomid.h"\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdsaction.h"\
-	".\LEGO1\mxdsmediaaction.h"\
-	".\LEGO1\mxdsobject.h"\
-	".\LEGO1\mxdsstill.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdsstill.obj" : $(SOURCE) $(DEP_CPP_MXDSST) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxdssubscriber.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXDSSU=\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxdssubscriber.h"\
@@ -4081,29 +3668,12 @@ DEP_CPP_MXDSSU=\
 "$(INTDIR)\mxdssubscriber.obj" : $(SOURCE) $(DEP_CPP_MXDSSU) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
-
-DEP_CPP_MXDSSU=\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxdssubscriber.h"\
-	".\LEGO1\mxtypes.h"\
-	
-
-"$(INTDIR)\mxdssubscriber.obj" : $(SOURCE) $(DEP_CPP_MXDSSU) "$(INTDIR)"
-   $(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
 
 # End Source File
 ################################################################################
 # Begin Source File
 
 SOURCE=.\LEGO1\mxloopingflcpresenter.cpp
-
-!IF  "$(CFG)" == "LEGO1 - Win32 Release"
-
 DEP_CPP_MXLOOP=\
 	".\LEGO1\mxcore.h"\
 	".\LEGO1\mxcriticalsection.h"\
@@ -4119,24 +3689,96 @@ DEP_CPP_MXLOOP=\
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-!ELSEIF  "$(CFG)" == "LEGO1 - Win32 Debug"
+# End Source File
+################################################################################
+# Begin Source File
 
-DEP_CPP_MXLOOP=\
-	".\LEGO1\mxcore.h"\
-	".\LEGO1\mxcriticalsection.h"\
-	".\LEGO1\mxflcpresenter.h"\
-	".\LEGO1\mxloopingflcpresenter.h"\
-	".\LEGO1\mxmediapresenter.h"\
-	".\LEGO1\mxpresenter.h"\
-	".\LEGO1\mxtypes.h"\
-	".\LEGO1\mxvideopresenter.h"\
+SOURCE=.\LEGO1\legoutil.cpp
+DEP_CPP_LEGOU=\
+	".\LEGO1\legoutil.h"\
 	
 
-"$(INTDIR)\mxloopingflcpresenter.obj" : $(SOURCE) $(DEP_CPP_MXLOOP) "$(INTDIR)"
+"$(INTDIR)\legoutil.obj" : $(SOURCE) $(DEP_CPP_LEGOU) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
 
 
-!ENDIF 
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\legobackgroundcolor.cpp
+DEP_CPP_LEGOBA=\
+	".\LEGO1\isle.h"\
+	".\LEGO1\lego3dmanager.h"\
+	".\LEGO1\lego3dview.h"\
+	".\LEGO1\legobackgroundcolor.h"\
+	".\LEGO1\legobuildingmanager.h"\
+	".\LEGO1\legoentity.h"\
+	".\LEGO1\legogamestate.h"\
+	".\LEGO1\legoinputmanager.h"\
+	".\LEGO1\legonavcontroller.h"\
+	".\LEGO1\legoomni.h"\
+	".\LEGO1\legoplantmanager.h"\
+	".\LEGO1\legoroi.h"\
+	".\LEGO1\legoutil.h"\
+	".\LEGO1\legovideomanager.h"\
+	".\LEGO1\legoworld.h"\
+	".\LEGO1\mxatomid.h"\
+	".\LEGO1\mxbackgroundaudiomanager.h"\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxcriticalsection.h"\
+	".\LEGO1\mxdsaction.h"\
+	".\LEGO1\mxdsfile.h"\
+	".\LEGO1\mxdsobject.h"\
+	".\LEGO1\mxdssource.h"\
+	".\LEGO1\mxentity.h"\
+	".\LEGO1\mxeventmanager.h"\
+	".\LEGO1\mxioinfo.h"\
+	".\LEGO1\mxmusicmanager.h"\
+	".\LEGO1\mxnotificationmanager.h"\
+	".\LEGO1\mxobjectfactory.h"\
+	".\LEGO1\mxomni.h"\
+	".\LEGO1\mxomnicreateflags.h"\
+	".\LEGO1\mxomnicreateparam.h"\
+	".\LEGO1\mxomnicreateparambase.h"\
+	".\LEGO1\mxpalette.h"\
+	".\LEGO1\mxrect32.h"\
+	".\LEGO1\mxsoundmanager.h"\
+	".\LEGO1\mxstreamcontroller.h"\
+	".\LEGO1\mxstreamer.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\MxStringVariable.h"\
+	".\LEGO1\mxticklemanager.h"\
+	".\LEGO1\mxtimer.h"\
+	".\LEGO1\mxtransitionmanager.h"\
+	".\LEGO1\mxtypes.h"\
+	".\LEGO1\mxunknown100dc6b0.h"\
+	".\LEGO1\mxvariabletable.h"\
+	".\LEGO1\mxvideomanager.h"\
+	".\LEGO1\mxvideoparam.h"\
+	".\LEGO1\mxvideoparamflags.h"\
+	".\LEGO1\viewmanager.h"\
+	
+
+"$(INTDIR)\legobackgroundcolor.obj" : $(SOURCE) $(DEP_CPP_LEGOBA) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\LEGO1\mxstringvariable.cpp
+DEP_CPP_MXSTRI=\
+	".\LEGO1\mxcore.h"\
+	".\LEGO1\mxstring.h"\
+	".\LEGO1\MxStringVariable.h"\
+	".\LEGO1\mxtypes.h"\
+	
+
+"$(INTDIR)\mxstringvariable.obj" : $(SOURCE) $(DEP_CPP_MXSTRI) "$(INTDIR)"
+   $(CPP) $(CPP_PROJ) $(SOURCE)
+
 
 # End Source File
 # End Target
