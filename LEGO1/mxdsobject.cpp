@@ -66,8 +66,7 @@ void MxDSObject::SetObjectName(const char *p_name)
 // OFFSET: LEGO1 0x100bf950
 void MxDSObject::SetSourceName(const char *p_sourceName)
 {
-  if (p_sourceName != this->m_sourceName)
-  {
+  if (p_sourceName != this->m_sourceName) {
     delete[] this->m_sourceName;
 
     if (p_sourceName) {
