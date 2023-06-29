@@ -1,13 +1,37 @@
 #include "mxstreamer.h"
 
-MxStreamController* MxStreamer::Open(const char* name, unsigned short p)
+// OFFSET: LEGO1 0x100b91d0 STUB
+MxStreamer::~MxStreamer()
 {
-  // FIXME: Stub
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b9b60 STUB
+long MxStreamer::Notify(MxParam &p)
+{
+  // TODO
+
   return 0;
 }
 
+// OFFSET: LEGO1 0x100b9190 STUB
+MxResult MxStreamer::VTable0x14()
+{
+  // TODO
+
+  return MxResult();
+}
+
+// OFFSET: LEGO1 0x100B92C0 STUB
+MxStreamController* MxStreamer::Open(const char* name, unsigned short p)
+{
+  // TODO
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100B9570 STUB
 long MxStreamer::Close(const char* p)
 {
-  // FIXME: Stub
+  // TODO
   return 0;
 }

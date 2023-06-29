@@ -1,8 +1,11 @@
 #ifndef MXVIDEOPARAM_H
 #define MXVIDEOPARAM_H
 
+#include <ddraw.h>
+
 #include "mxpalette.h"
 #include "mxrect32.h"
+#include "mxtypes.h"
 #include "mxvariabletable.h"
 #include "mxvideoparamflags.h"
 
@@ -18,6 +21,9 @@ public:
   __declspec(dllexport) void SetDeviceName(char *id);
 
   inline MxVideoParamFlags &flags() { return m_flags; }
+
+  inline void SetPalette(MxPalette *p_palette) { this->m_palette = p_palette; }
+  inline MxPalette *GetPalette() { return this->m_palette; }
 
 private:
   MxRect32 m_rect;

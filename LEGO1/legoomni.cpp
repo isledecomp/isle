@@ -15,13 +15,20 @@ LegoOmni::~LegoOmni()
 // OFFSET: LEGO1 0x1005ad10
 LegoOmni *LegoOmni::GetInstance()
 {
-  return (LegoOmni *) m_instance;
+  return (LegoOmni *)MxOmni::GetInstance();
+}
+
+// OFFSET: LEGO1 0x1005ac90
+void LegoOmni::CreateInstance()
+{
+  MxOmni::DestroyInstance();
+  MxOmni::SetInstance(new LegoOmni());
 }
 
 // OFFSET: LEGO1 0x10015700
 LegoOmni *Lego()
 {
-  return (LegoOmni *) MxOmni::GetInstance();
+  return (LegoOmni *)MxOmni::GetInstance();
 }
 
 // OFFSET: LEGO1 0x10015710
@@ -30,11 +37,28 @@ LegoSoundManager *SoundManager()
   return LegoOmni::GetInstance()->GetSoundManager();
 }
 
-
 // OFFSET: LEGO1 0x10015720
 LegoVideoManager *VideoManager()
 {
   return LegoOmni::GetInstance()->GetVideoManager();
+}
+
+// OFFSET: LEGO1 0x100157f0
+LegoBuildingManager *BuildingManager()
+{
+  return LegoOmni::GetInstance()->GetLegoBuildingManager();
+}
+
+// OFFSET: LEGO1 0x10015790
+Isle *GetIsle()
+{
+  return LegoOmni::GetInstance()->GetIsle();
+}
+
+// OFFSET: LEGO1 0x100157e0
+LegoPlantManager *PlantManager()
+{
+  return LegoOmni::GetInstance()->GetLegoPlantManager();
 }
 
 // OFFSET: LEGO1 0x10015730
@@ -61,23 +85,18 @@ LegoNavController *NavController()
   return LegoOmni::GetInstance()->GetNavController();
 }
 
+// OFFSET: LEGO1 0x10015900
+MxTransitionManager *TransitionManager()
+{
+  return LegoOmni::GetInstance()->GetTransitionManager();
+}
+
+
 // OFFSET: LEGO1 0x1005b5f0
 long LegoOmni::Notify(MxParam &p)
 {
   // FIXME: Stub
   return 0;
-}
-
-// OFFSET: LEGO1 0x10058aa0
-const char *LegoOmni::GetClassName() const
-{
-  return "LegoOmni";
-}
-
-// OFFSET: LEGO1 0x10058ab0
-MxBool LegoOmni::IsClass(const char *name) const
-{
-  return strcmp("LegoOmni", name) == 0;
 }
 
 // OFFSET: LEGO1 0x10058bd0
@@ -111,7 +130,7 @@ void LegoOmni::vtable24(MxDSAction &ds)
 MxBool LegoOmni::vtable28(MxDSAction &ds)
 {
   // FIXME: Stub
-  return MX_TRUE;
+  return TRUE;
 }
 
 void LegoOmni::vtable2c()
