@@ -1,6 +1,15 @@
 
 #include "mxdirectdraw.h"
 
+//TODO: make commonn place for defines like that
+#ifndef _countof
+#define _countof(arr) sizeof(arr) / sizeof(arr[0])
+#endif
+
+#ifndef DDSCAPS_3DDEVICE
+#define DDSCAPS_3DDEVICE 0x00002000l
+#endif
+
 // OFFSET: LEGO1 10100C68
 extern BOOL g_is_PALETTEINDEXED8 = 0;
 
@@ -189,10 +198,11 @@ void MxDirectDraw::DestroyButNotDirectDraw()
   }
 }
 
-// OFFSET: LEGO1 0x1009E880
+// OFFSET: LEGO1 0x1009E880 STUB
 const char* MxDirectDraw::ErrorToString(HRESULT error)
 {
   //TODO
+  return NULL;
 }
 
 
@@ -938,7 +948,7 @@ void MxDirectDraw::unk1()
 
     // clear backBuffer
     line = (byte*)ddsd.lpSurface;
-    for (int j = 0; j < ddsd.dwHeight; i++)
+    for (unsigned int j = 0; j < ddsd.dwHeight; i++)
     {
       memset(line, 0, ddsd.dwWidth);
       line += ddsd.lPitch;

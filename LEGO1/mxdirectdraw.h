@@ -34,7 +34,7 @@ public:
     GUID* p_guid;
     Mode* m_mode_ARRAY;
     int count;
-    DDCAPS_DX5 m_ddcaps;
+    DDCAPS m_ddcaps;
     void* a_178;
 
     ~DeviceModesInfo()
