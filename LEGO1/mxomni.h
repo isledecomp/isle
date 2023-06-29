@@ -47,7 +47,7 @@ public:
   MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
   MxEventManager* GetEventManager() const { return this->m_eventManager; }
 protected:
-  static MxOmni* m_instance;
+  static MxOmni* g_instance;
 
   MxString m_mediaPath; // 0x8
   HWND *m_windowHandle; // 0x18;

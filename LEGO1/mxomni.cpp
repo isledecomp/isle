@@ -1,7 +1,7 @@
 #include "mxomni.h"
 
 // 0x101015b0
-MxOmni *MxOmni::m_instance = NULL;
+MxOmni *MxOmni::g_instance = NULL;
 
 // OFFSET: LEGO1 0x100aef10
 MxOmni::MxOmni()
@@ -36,23 +36,23 @@ void MxOmni::Init()
 // OFFSET: LEGO1 0x100b0690
 void MxOmni::DestroyInstance()
 {
-  if (m_instance != NULL)
+  if (g_instance != NULL)
   {
-    delete m_instance;
-    m_instance = NULL;
+    delete g_instance;
+    g_instance = NULL;
   }
 }
 
 // OFFSET: LEGO1 0x100b0680
 MxOmni *MxOmni::GetInstance()
 {
-  return m_instance;
+  return g_instance;
 }
 
 // OFFSET: LEGO1 0x100af0b0
 void MxOmni::SetInstance(MxOmni *instance)
 {
-  m_instance = instance;
+  g_instance = instance;
 }
 
 // OFFSET: LEGO1 0x100af0c0
