@@ -15,14 +15,14 @@ public:
   virtual long Tickle() override; // vtable+0x8, override MxCore
 
   // OFFSET: LEGO1 0x1000c5c0
-  inline virtual const char *MxMediaPresenter::ClassName() const override // vtable+0xc
+  inline virtual const char *ClassName() const override // vtable+0xc
   {
     // 0x100f074c
     return "MxMediaPresenter";
   }
 
   // OFFSET: LEGO1 0x1000c5d0
-  inline virtual MxBool MxMediaPresenter::IsA(const char *name) const override // vtable+0x10
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
   {
     return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);
   }
