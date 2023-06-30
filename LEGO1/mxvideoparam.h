@@ -18,6 +18,13 @@ public:
   __declspec(dllexport) MxVideoParam &operator=(const MxVideoParam &);
   __declspec(dllexport) ~MxVideoParam();
 
+#ifdef __MINGW32__
+  __declspec(dllexport) MxVideoParam(const MxRect32 &rect, MxPalette *pal, unsigned long p3, const MxVideoParamFlags &flags)
+  : MxVideoParam((MxRect32 &)rect, pal, p3, (MxVideoParamFlags &)flags)
+  {
+  }
+#endif
+
   __declspec(dllexport) void SetDeviceName(char *id);
 
   inline MxVideoParamFlags &flags() { return m_flags; }
