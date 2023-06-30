@@ -3,6 +3,8 @@
 
 #include "mxsmkpresenter.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100dc540
 // SIZE 0x724
 class MxLoopingSmkPresenter : public MxSmkPresenter
@@ -17,9 +19,10 @@ public:
     // 0x10101e08
     return "MxLoopingSmkPresenter";
   }
-  
+
 private:
   void Init();
+  undefined4 m_unk720;
 };
 
 #endif // MXLOOPINGSMKPRESENTER_H
