@@ -1,10 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -61,6 +57,19 @@ jobs:
         cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
         cmake --build .
 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: Win32
+        path: |
+          build/ISLE.EXE
+          build/LEGO1.DLL
+          
+  compare:
+    needs: build
+    runs-on: windows-latest
+    steps:
+
     - name: Restore cached original binaries
       id: cache-original-binaries
       uses: actions/cache/restore@v3
@@ -101,29 +110,44 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
-        name: Win32
-        path: |
-          build/ISLE.EXE
-          build/LEGO1.DLL
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@master
-      with:
         name: Accuracy Report
         path: |
           ISLEPROGRESS.*
           LEGO1PROGRESS.*
+          
+  upload:
+    needs: [build, compare]
+    runs-on: windows-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        INKSCAPE_DIR: inkscape-1.2.2_2022-12-09_732a01da63-x64
+    steps:
+
+    - name: Restore Inkscpae
+      id: cache-inkscape
+      uses: actions/cache/restore@v3
+      with:
+        path: ${{ env.INKSCAPE_DIR }}
+        key: ${{ env.INKSCAPE_DIR }}
+
+    - name: Download Inkscape
+      if: ${{ !steps.cache-inkscape.outputs.cache-hit }}
+      run: |
+        curl -fLOSs https://inkscape.org/gallery/item/37364/$INKSCAPE_DIR.7z
+        7z x $INKSCAPE_DIR.7z
+
+    - name: Cache Inkscape
+      if: ${{ !steps.cache-inkscape.outputs.cache-hit }}
+      uses: actions/cache/save@v3
+      with:
+        path: ${{ env.INKSCAPE_DIR }}
+        key: ${{ env.INKSCAPE_DIR }}
 
     - name: Upload Continuous Release
       shell: bash
-      if: github.event_name == 'push'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Convert SVGs to PNG
-        INKSCAPE_DIR=inkscape-1.2.2_2022-12-09_732a01da63-x64
-        curl -fLOSs https://inkscape.org/gallery/item/37364/$INKSCAPE_DIR.7z
-        7z x $INKSCAPE_DIR.7z
+        # Convert SVGs to PNG        
         $INKSCAPE_DIR/bin/inkscape -w 512 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
         $INKSCAPE_DIR/bin/inkscape -w 512 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
 
