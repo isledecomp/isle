@@ -145,6 +145,7 @@ jobs:
       with:
         packages: inkscape
         version: 1.0
+        execute_install_scripts: true
 
     - name: Upload Continuous Release
       env:
