@@ -131,6 +131,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         INKSCAPE_DIR: inkscape-1.2.2_2022-12-09_732a01da63-x64
     steps:
+    - uses: actions/checkout@v3
+      with:
+        repository: 'probonopd/uploadtool'
+    
     - uses: actions/download-artifact@master
       with:
        name: Win32
@@ -167,7 +171,6 @@ jobs:
         $INKSCAPE_DIR/bin/inkscape -w 512 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
         $INKSCAPE_DIR/bin/inkscape -w 512 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
 
-        curl -fLOSs https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh
         ./upload.sh \
           build/ISLE.EXE \
           build/LEGO1.DLL \
