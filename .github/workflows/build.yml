@@ -63,12 +63,20 @@ jobs:
         name: Win32
         path: |
           build/ISLE.EXE
+          build/ISLE.PDB
           build/LEGO1.DLL
+          build/LEGO1.PDB
           
   compare:
     needs: build
     runs-on: windows-latest
     steps:
+    - uses: actions/checkout@master
+
+    - uses: actions/download-artifact@master
+      with:
+       name: Win32
+       path: build
 
     - name: Restore cached original binaries
       id: cache-original-binaries
@@ -123,6 +131,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         INKSCAPE_DIR: inkscape-1.2.2_2022-12-09_732a01da63-x64
     steps:
+    - uses: actions/download-artifact@master
+      with:
+       name: Win32
+       path: build
+       
+    - uses: actions/download-artifact@master
+      with:
+       name: Accuracy Report
 
     - name: Restore Inkscpae
       id: cache-inkscape
