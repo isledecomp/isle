@@ -1,5 +1,8 @@
 #include "legoanimationmanager.h"
 
+// 0x100f74f8
+int g_legoAnimationManagerConfig = 1;
+
 // OFFSET: LEGO1 0x1005eb60 STUB
 LegoAnimationManager::LegoAnimationManager()
 {
@@ -31,4 +34,10 @@ long LegoAnimationManager::Tickle()
 void LegoAnimationManager::Init()
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x1005eb50
+void LegoAnimationManager::configureLegoAnimationManager(int param_1)
+{
+  g_legoAnimationManagerConfig = param_1;
 }

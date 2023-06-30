@@ -97,6 +97,11 @@ jobs:
 
         diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
         diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+
+    - name: Test Exports
+      shell: bash
+      run: |
+        python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master

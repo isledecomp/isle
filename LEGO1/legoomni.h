@@ -5,6 +5,7 @@
 #include "legoinputmanager.h"
 #include "legogamestate.h"
 #include "legonavcontroller.h"
+#include "legopathboundary.h"
 #include "legoroi.h"
 #include "legovideomanager.h"
 #include "mxatomid.h"
@@ -27,7 +28,7 @@ class LegoOmni : public MxOmni
 public:
   __declspec(dllexport) void CreateBackgroundAudio();
   __declspec(dllexport) void RemoveWorld(const MxAtomId &p1, long p2);
-  __declspec(dllexport) static int GetCurrPathInfo(class LegoPathBoundary * *,int &);
+  __declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary **,int &);
   __declspec(dllexport) static void CreateInstance();
   __declspec(dllexport) static LegoOmni *GetInstance();
 
@@ -99,7 +100,6 @@ __declspec(dllexport) const char * GetNoCD_SourceName();
 __declspec(dllexport) LegoInputManager * InputManager();
 __declspec(dllexport) LegoOmni * Lego();
 __declspec(dllexport) void MakeSourceName(char *, const char *);
-__declspec(dllexport) MxNotificationManager * NotificationManager();
 __declspec(dllexport) LegoEntity * PickEntity(long,long);
 __declspec(dllexport) LegoROI * PickROI(long,long);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));

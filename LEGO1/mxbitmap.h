@@ -1,6 +1,8 @@
 #ifndef MXBITMAP_H
 #define MXBITMAP_H
 
+#include "mxpalette.h"
+
 class MxBitmap
 {
 public:
