@@ -154,8 +154,8 @@ jobs:
     - name: Download Inkscape
       if: ${{ !steps.cache-inkscape.outputs.cache-hit }}
       run: |
-        curl -fLOSs https://inkscape.org/gallery/item/37364/$INKSCAPE_DIR.7z
-        7z x $INKSCAPE_DIR.7z
+        curl -fLOSs https://inkscape.org/gallery/item/37364/$env:INKSCAPE_DIR.7z
+        7z x $env:INKSCAPE_DIR.7z
 
     - name: Cache Inkscape
       if: ${{ !steps.cache-inkscape.outputs.cache-hit }}
@@ -168,8 +168,8 @@ jobs:
       shell: bash
       run: |
         # Convert SVGs to PNG        
-        $INKSCAPE_DIR/bin/inkscape -w 512 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
-        $INKSCAPE_DIR/bin/inkscape -w 512 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
+        $env:INKSCAPE_DIR/bin/inkscape -w 512 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
+        $env:INKSCAPE_DIR/bin/inkscape -w 512 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
 
         ./upload.sh \
           build/ISLE.EXE \
