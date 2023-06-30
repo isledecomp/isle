@@ -71,6 +71,7 @@ public:
   LegoPlantManager *GetLegoPlantManager() { return m_plantManager; }
   LegoGameState *GetGameState() { return m_gameState; }
   LegoNavController *GetNavController() { return m_navController; }
+  MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
 
 private:
   int m_unk68;
@@ -84,7 +85,7 @@ private:
   char m_unk94[0x4];
   LegoBuildingManager* m_buildingManager; // 0x98
   LegoGameState *m_gameState; // 0x9c
-  char m_unka0[0x94];
+  MxDSAction m_action;
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
   MxTransitionManager *m_transitionManager; // 0x138
   int m_unk13c;
@@ -93,26 +94,19 @@ private:
 
 __declspec(dllexport) MxBackgroundAudioManager * BackgroundAudioManager();
 __declspec(dllexport) MxDSObject * CreateStreamObject(MxDSFile *,short);
-__declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) LegoGameState * GameState();
 __declspec(dllexport) const char * GetNoCD_SourceName();
 __declspec(dllexport) LegoInputManager * InputManager();
 __declspec(dllexport) LegoOmni * Lego();
-__declspec(dllexport) MxSoundManager * MSoundManager();
 __declspec(dllexport) void MakeSourceName(char *, const char *);
-__declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
 __declspec(dllexport) LegoEntity * PickEntity(long,long);
 __declspec(dllexport) LegoROI * PickROI(long,long);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
 __declspec(dllexport) LegoSoundManager * SoundManager();
 __declspec(dllexport) long Start(MxDSAction *);
-__declspec(dllexport) MxStreamer * Streamer();
-__declspec(dllexport) MxTickleManager * TickleManager();
 __declspec(dllexport) MxTransitionManager * TransitionManager();
-__declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) LegoVideoManager * VideoManager();
-
 __declspec(dllexport) long Start(MxDSAction *a);
 
 LegoBuildingManager* BuildingManager();

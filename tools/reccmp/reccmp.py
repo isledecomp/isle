@@ -16,12 +16,13 @@ parser.add_argument('original', metavar='original-binary', help='The original bi
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
 parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
-parser.add_argument('--total', '-T', metavar='total-func-count', help='Total number of expected functions (improves total accuracy statistic)')
-parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
-parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--total', '-T', metavar='<count>', help='Total number of expected functions (improves total accuracy statistic)')
+parser.add_argument('--verbose', '-v', metavar='<offset>', help='Print assembly diff for specific function (original file\'s offset)')
+parser.add_argument('--html', '-H', metavar='<file>', help='Generate searchable HTML summary of status and diffs')
 parser.add_argument('--no-color', '-n', action='store_true', help='Do not color the output')
-parser.add_argument('--svg', '-S', metavar='output-svg', help='Generate SVG graphic of progress')
-parser.add_argument('--svg-icon', metavar='svg-icon', help='Icon to use in SVG (PNG)')
+parser.add_argument('--svg', '-S', metavar='<file>', help='Generate SVG graphic of progress')
+parser.add_argument('--svg-icon', metavar='icon', help='Icon to use in SVG (PNG)')
+parser.add_argument('--print-rec-addr', action='store_true', help='Print addresses of recompiled functions too')
 
 args = parser.parse_args()
 
@@ -335,7 +336,11 @@ for subdir, dirs, files in os.walk(source):
               percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
 
           if not verbose:
-            print('  %s (%s / %s) is %s similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), percenttext))
+            if args.print_rec_addr:
+              addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
+            else:
+              addrs = hex(addr)
+            print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
 
           function_count += 1
           total_accuracy += ratio

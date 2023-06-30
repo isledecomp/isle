@@ -32,7 +32,7 @@ public:
   // OFFSET: LEGO1 0x10054b90
   inline MxBool IsA(const char *name) const override // vtable+0x10
   {
-    return !strcmp(name, LegoNavController::ClassName()) || MxCore::IsA(name);
+    return !strcmp(name, ClassName()) || MxCore::IsA(name);
   }
 
   void SetControlMax(int p_hMax, int p_vMax);
