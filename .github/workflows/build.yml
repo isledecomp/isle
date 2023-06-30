@@ -141,13 +141,9 @@ jobs:
       with:
         name: Accuracy Report
        
-    - uses: awalsh128/cache-apt-pkgs-action@latest
+    - uses: tecolicom/actions-use-apt-tools@v1
       with:
-        packages: inkscape
-        version: 1.0
-        execute_install_scripts: true
-
-    - run: sudo apt install inkscape
+        tools: inkscape
 
     - name: Upload Continuous Release
       env:
