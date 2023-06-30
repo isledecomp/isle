@@ -28,8 +28,9 @@ public:
   __declspec(dllexport) static void SetCD(const char *p_cd);
   __declspec(dllexport) static void SetHD(const char *p_hd);
   __declspec(dllexport) static void SetSound3D(MxBool p_3dsound);
-  
-  virtual ~MxOmni();
+
+  MxOmni();
+  virtual ~MxOmni() override;
 
   virtual long Notify(MxParam &p); // vtable+04
   virtual void Init(); // vtable+14
