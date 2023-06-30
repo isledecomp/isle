@@ -50,6 +50,7 @@ add_library(lego1 SHARED
   LEGO1/legoanimmmpresenter.cpp
   LEGO1/legoanimpresenter.cpp
   LEGO1/legobackgroundcolor.cpp
+  LEGO1/legobackgroundcolor.cpp
   LEGO1/legobuildingmanager.cpp
   LEGO1/legocachesound.cpp
   LEGO1/legocameracontroller.cpp
@@ -80,6 +81,7 @@ add_library(lego1 SHARED
   LEGO1/legosoundmanager.cpp
   LEGO1/legostate.cpp
   LEGO1/legotexturepresenter.cpp
+  LEGO1/legoutil.cpp
   LEGO1/legovideomanager.cpp
   LEGO1/legoworld.cpp
   LEGO1/legoworldpresenter.cpp
@@ -136,6 +138,7 @@ add_library(lego1 SHARED
   LEGO1/mxstillpresenter.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
+  LEGO1/mxstringvariable.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxunknown100dc6b0.cpp
