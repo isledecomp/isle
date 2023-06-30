@@ -27,7 +27,7 @@ public:
 
   virtual long Tickle() override; // vtable+0x8
 
-  char m_pad00[0x19C];
+  char m_pad00[0x15c];
   int m_joystickIndex;
   char m_pad200[0x194];
   MxBool m_useJoystick;
