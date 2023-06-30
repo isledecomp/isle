@@ -1,5 +1,9 @@
 #include "mxpresenter.h"
 
+#include "decomp.h"
+
+DECOMP_STATIC_ASSERT(sizeof(MxPresenter) == 64);
+
 // OFFSET: LEGO1 0x1000bee0 STUB
 void MxPresenter::DoneTickle()
 {

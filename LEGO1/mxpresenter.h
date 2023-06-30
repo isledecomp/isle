@@ -5,20 +5,17 @@
 
 #include "mxcriticalsection.h"
 
+#include "decomp.h"
+
 class MxStreamController;
 class MxDSAction;
-
-#ifndef undefined4
-#define undefined4 int
-#endif
-
-#ifndef undefined
-#define undefined int
-#endif
 
 class MxPresenter : public MxCore
 {
 public:
+  MxPresenter() {
+    Init();
+  }
   __declspec(dllexport) virtual ~MxPresenter(); // vtable+0x0
 
   // OFFSET: LEGO1 0x1000bfe0
