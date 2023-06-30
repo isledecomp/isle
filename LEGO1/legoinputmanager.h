@@ -3,7 +3,7 @@
 
 #include "mxpresenter.h"
 
-__declspec(dllexport) enum NotificationId
+enum NotificationId
 {
   NONE = 0,
   KEYDOWN = 7,
