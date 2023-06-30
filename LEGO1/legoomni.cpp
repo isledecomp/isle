@@ -164,24 +164,6 @@ unsigned char LegoOmni::vtable40()
   return 0;
 }
 
-MxStreamer* Streamer()
-{
-  // FIXME: Stub
-  return 0;
-}
-
-MxTickleManager* TickleManager()
-{
-  // FIXME: Stub
-  return 0;
-}
-
-MxVariableTable* VariableTable()
-{
-  // FIXME: Stub
-  return 0;
-}
-
 long Start(MxDSAction* a)
 {
   // FIXME: Stub

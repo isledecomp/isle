@@ -112,6 +112,9 @@ project "isle"
     filter { "action:nmake2" }
         --flag /ML or /MLd
         staticruntime "libc"
+		
+	filter { "configurations:Release", "action:nmake2" }
+        linkoptions { "/incremental:no" }
 
     filter { "action:not nmake2" }
         --flag /MT or /MTd
@@ -142,6 +145,6 @@ project "lego1"
     files { addSrcFiles("LEGO1") }
 
     filter { "platforms:win*" }
-        links { "kernel32", "dsound", "advapi32", "user32", "Gdi32", "Winmm" }
+        links { "kernel32", "dsound", "advapi32", "user32", "Gdi32", "Winmm" }		
 
     filter {}
