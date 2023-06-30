@@ -118,7 +118,7 @@ project "isle"
         staticruntime "on"
 
     filter { "platforms:win*" }
-        links { "dsound", "advapi32", "user32", "gdi32", "winmm" }
+        links { "kernel32", "dsound", "advapi32", "user32", "gdi32", "winmm" }
         --flag language for rc.exe
         resoptions { "/l 0x409" }
 
@@ -142,6 +142,6 @@ project "lego1"
     files { addSrcFiles("LEGO1") }
 
     filter { "platforms:win*" }
-        links { "dsound", "advapi32", "user32", "Gdi32", "Winmm" }
+        links { "kernel32", "dsound", "advapi32", "user32", "Gdi32", "Winmm" }
 
     filter {}
