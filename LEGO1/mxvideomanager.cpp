@@ -32,6 +32,12 @@ int MxVideoManager::Init()
   return 0;
 }
 
+// OFFSET: LEGO1 0x100bea60 STUB
+void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x100bebe0
 long MxVideoManager::RealizePalette(MxPalette *p_palette)
 {

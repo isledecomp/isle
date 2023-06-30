@@ -53,8 +53,17 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
   ReleaseDC((HWND) NULL, hdc);
 }
 
+// OFFSET: LEGO1 0x100bf340
+MxBool MxPalette::operator==(MxPalette &)
+{
+  // TODO
+  return FALSE;
+
+}
+
 // OFFSET: LEGO1 0x100bf330
 void MxPalette::Detach()
 {
   this->m_palette = NULL;
 }
+  

@@ -1,6 +1,8 @@
 #ifndef LEGOPARTPRESENTER_H
 #define LEGOPARTPRESENTER_H
 
+#include "mxmediapresenter.h"
+
 // VTABLE 0x100d4df0
 // SIZE 0x54 (from inlined construction at 0x10009fac)
 class LegoPartPresenter : public MxMediaPresenter

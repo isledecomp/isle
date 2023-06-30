@@ -1,5 +1,11 @@
 #include "legoomni.h"
 
+// 0x100f4588
+char *g_nocdSourceName = NULL;
+
+// 0x101020e8
+void (*g_omniUserMessage)(const char *,int);
+
 // OFFSET: LEGO1 0x10058a00
 LegoOmni::LegoOmni()
 {
@@ -10,6 +16,44 @@ LegoOmni::LegoOmni()
 LegoOmni::~LegoOmni()
 {
   Destroy();
+}
+
+// OFFSET: LEGO1 0x1005b560 STUB
+void LegoOmni::CreateBackgroundAudio()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1005af10 STUB
+void LegoOmni::RemoveWorld(const MxAtomId &p1, long p2)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1005b400 STUB
+int LegoOmni::GetCurrPathInfo(LegoPathBoundary **,int &)
+{
+  // TODO
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100b6ff0 STUB
+void MakeSourceName(char *, const char *)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b7210
+void SetOmniUserMessage(void (*p_userMsg)(const char *,int))
+{
+  g_omniUserMessage = p_userMsg;
+}
+
+// OFFSET: LEGO1 0x100acf50 STUB
+long Start(MxDSAction *)
+{
+  // TODO
+  return 0;
 }
 
 // OFFSET: LEGO1 0x1005ad10
@@ -67,6 +111,13 @@ MxBackgroundAudioManager *BackgroundAudioManager()
   return LegoOmni::GetInstance()->GetBackgroundAudioManager();
 }
 
+// OFFSET: LEGO1 0x100c0280 STUB
+MxDSObject *CreateStreamObject(MxDSFile *,short)
+{
+  // TODO
+  return NULL;
+}
+
 // OFFSET: LEGO1 0x10015740
 LegoInputManager *InputManager()
 {
@@ -91,12 +142,31 @@ MxTransitionManager *TransitionManager()
   return LegoOmni::GetInstance()->GetTransitionManager();
 }
 
+// OFFSET: LEGO1 0x10053430
+const char *GetNoCD_SourceName()
+{
+  return g_nocdSourceName;
+}
 
 // OFFSET: LEGO1 0x1005b5f0
 long LegoOmni::Notify(MxParam &p)
 {
   // FIXME: Stub
   return 0;
+}
+
+// OFFSET: LEGO1 0x1003dd70 STUB
+LegoROI *PickROI(long,long)
+{
+  // TODO
+  return NULL;
+}
+
+// OFFSET: LEGO1 0x1003ddc0 STUB
+LegoEntity *PickEntity(long,long)
+{
+  // TODO
+  return NULL;
 }
 
 // OFFSET: LEGO1 0x10058bd0
