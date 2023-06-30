@@ -147,6 +147,8 @@ jobs:
         version: 1.0
         execute_install_scripts: true
 
+    - run: sudo apt install inkscape
+
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
