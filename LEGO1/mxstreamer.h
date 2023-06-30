@@ -15,7 +15,7 @@ public:
   __declspec(dllexport) long Close(const char *p);
 
   virtual long Notify(MxParam &p) override; // vtable+0x4
-  virtual MxResult VTable0x14() override; // vtable+0x14
+  virtual MxResult VTable0x14(); // vtable+0x14
 };
 
 #endif // MXSTREAMER_H
