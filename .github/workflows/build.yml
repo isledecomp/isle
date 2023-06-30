@@ -148,8 +148,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         # Convert SVGs to PNG        
-        rsvg-convert -w 512 -h 384 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
-        rsvg-convert -w 512 -h 384 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
+        rsvg-convert -w 400 -h 300 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
+        rsvg-convert -w 400 -h 300 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
 
         ./upload.sh \
           build/ISLE.EXE \
