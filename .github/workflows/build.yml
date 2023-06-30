@@ -69,7 +69,7 @@ jobs:
           
   compare:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
 
@@ -88,8 +88,8 @@ jobs:
     - name: Download original island binares
       if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
       run: |
-        wget https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
-        wget https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
 
     - name: Cache original binaries
       if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
