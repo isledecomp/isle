@@ -1,5 +1,3 @@
-#pragma comment(lib, "ddraw")
-
 #include "mxdirectdraw.h"
 
 // 0x10100c68
