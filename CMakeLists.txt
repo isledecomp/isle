@@ -123,6 +123,7 @@ add_library(lego1 SHARED
   LEGO1/mxloopingflcpresenter.cpp
   LEGO1/mxloopingsmkpresenter.cpp
   LEGO1/mxmediapresenter.cpp
+  LEGO1/mxmidipresenter.cpp
   LEGO1/mxmusicpresenter.cpp
   LEGO1/mxnotificationmanager.cpp
   LEGO1/mxomni.cpp
