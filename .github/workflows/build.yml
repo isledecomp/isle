@@ -137,6 +137,10 @@ jobs:
        name: Win32
        path: build
        
+    - uses: actions/download-artifact@master
+      with:
+        name: Accuracy Report
+       
     - uses: awalsh128/cache-apt-pkgs-action@latest
       with:
         packages: inkscape
