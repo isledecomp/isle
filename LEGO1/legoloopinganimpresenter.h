@@ -18,7 +18,7 @@ public:
   // OFFSET: LEGO1 0x1000c9b0
   inline MxBool IsA(const char *name) const override // vtable+0x10
   {
-    return !strcmp(name, LegoLoopingAnimPresenter::ClassName()) || LegoAnimPresenter::IsA(name);
+    return !strcmp(name, ClassName()) || LegoAnimPresenter::IsA(name);
   }
 };
 
