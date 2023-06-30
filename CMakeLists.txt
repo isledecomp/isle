@@ -175,7 +175,7 @@ if (ISLE_BUILD_LIB)
     LEGO1/towtrack.cpp
     LEGO1/towtrackmissionstate.cpp
     LEGO1/mxstringvariable.cpp
-    LEGO1/legobackbackground.cpp
+    LEGO1/legobackbackgroundcolor.cpp
   )
 
   # Link libraries
