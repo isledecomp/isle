@@ -9,4 +9,4 @@ class MxObjectFactory : public MxCore
 
 };
 
-#endif MXOBJECTFACTORY_H
+#endif // MXOBJECTFACTORY_H

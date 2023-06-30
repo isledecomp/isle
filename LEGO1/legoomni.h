@@ -63,6 +63,10 @@ public:
   virtual void vtable3c();
   virtual unsigned char vtable40();
 
+#if defined(__MINGW32__)
+  virtual MxResult Create(const MxOmniCreateParam &p); // vtable+18
+#endif
+
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoSoundManager *GetSoundManager() { return (LegoSoundManager *)m_soundManager;}
   MxBackgroundAudioManager *GetBackgroundAudioManager() { return m_bkgAudioManager; }
