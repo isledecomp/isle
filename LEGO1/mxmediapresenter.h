@@ -3,6 +3,8 @@
 
 #include "mxpresenter.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100d4cd8
 class MxMediaPresenter : public MxPresenter
 {
@@ -27,6 +29,10 @@ public:
     return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
+  undefined4 m_unk40;
+  undefined4 m_unk44;
+  undefined4 m_unk48;
+  undefined4 m_unk4c;
 private:
   void Init();
 

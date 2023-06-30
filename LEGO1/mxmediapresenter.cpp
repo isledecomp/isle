@@ -1,5 +1,7 @@
 #include "mxmediapresenter.h"
 
+DECOMP_STATIC_ASSERT(sizeof(MxMediaPresenter) == 80);
+
 // OFFSET: LEGO1 0x100b5d10 STUB
 long MxMediaPresenter::Tickle()
 {
