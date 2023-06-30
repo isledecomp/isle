@@ -173,9 +173,8 @@ float LegoNavController::CalculateNewAccel(int p_pos, int p_center, float p_maxA
 
   result = Abs(diff) * p_maxAccel / p_center;
 
-  if (result < p_minAccel) {
+  if (result < p_minAccel)
     result = (float) p_minAccel;
-  }
 
   return result;
 }
