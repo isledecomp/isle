@@ -11,7 +11,7 @@ public:
 
   // OFFSET: LEGO1 0x100060d0
   inline virtual const char *ClassName() const override // vtable+0x0c
-  { 
+  {
     // 0x100f01b8
     return "LegoState";
   }
@@ -21,6 +21,8 @@ public:
   {
     return !strcmp(name, LegoState::ClassName()) || MxCore::IsA(name);
   }
+
+  virtual MxBool VTable0x14();
 
 };
 
