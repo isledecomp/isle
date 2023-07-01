@@ -114,6 +114,11 @@ jobs:
 
         diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
         diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+
+    - name: Test Exports
+      shell: bash
+      run: |
+        python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
       
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -146,6 +151,7 @@ jobs:
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
         # Convert SVGs to PNG        
         rsvg-convert -w 400 -h 300 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
@@ -156,3 +162,6 @@ jobs:
           build/LEGO1.DLL \
           ISLEPROGRESS.* \
           LEGO1PROGRESS.*
+        
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/

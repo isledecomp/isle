@@ -1,5 +1,14 @@
 #include "mxomni.h"
 
+// 0x101015b8
+char g_hdPath[1024];
+
+// 0x101019b8
+char g_cdPath[1024];
+
+// 0x10101db8
+MxBool g_use3dSound;
+
 // 0x101015b0
 MxOmni *MxOmni::g_instance = NULL;
 
@@ -42,6 +51,43 @@ void MxOmni::DestroyInstance()
     g_instance = NULL;
   }
 }
+
+// OFFSET: LEGO1 0x100b0900
+const char *MxOmni::GetHD()
+{
+  return g_hdPath;
+}
+
+// OFFSET: LEGO1 0x100b0940
+const char *MxOmni::GetCD()
+{
+  return g_cdPath;
+}
+
+// OFFSET: LEGO1 0x100b0980
+MxBool MxOmni::IsSound3D()
+{
+  return g_use3dSound;
+}
+
+// OFFSET: LEGO1 0x100b0910
+void MxOmni::SetHD(const char *p_hd)
+{
+  strcpy(g_hdPath, p_hd);
+}
+
+// OFFSET: LEGO1 0x100b0950
+void MxOmni::SetCD(const char *p_cd)
+{
+  strcpy(g_cdPath, p_cd);
+}
+
+// OFFSET: LEGO1 0x100b0990
+void MxOmni::SetSound3D(MxBool p_3dsound)
+{
+  g_use3dSound = p_3dsound;
+}
+
 
 // OFFSET: LEGO1 0x100b0680
 MxOmni *MxOmni::GetInstance()

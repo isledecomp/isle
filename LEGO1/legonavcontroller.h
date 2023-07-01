@@ -40,6 +40,7 @@ public:
   void SetTargets(int p_hPos, int p_vPos, MxBool p_accel);
   float CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed);
   float CalculateNewAccel(int p_pos, int p_center, float p_maxAccel, int p_minAccel);
+  float CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time);
 
 private:
   int m_hMax;

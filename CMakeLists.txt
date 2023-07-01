@@ -3,7 +3,179 @@ cmake_minimum_required(VERSION 2.8...3.5 FATAL_ERROR)
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-option(ISLE_BUILD_LIB "Build LEGO1.DLL library" ON)
+
+add_library(lego1 SHARED
+  LEGO1/act1state.cpp
+  LEGO1/act2brick.cpp
+  LEGO1/act2policestation.cpp
+  LEGO1/act3.cpp
+  LEGO1/act3shark.cpp
+  LEGO1/act3state.cpp
+  LEGO1/ambulance.cpp
+  LEGO1/ambulancemissionstate.cpp
+  LEGO1/animstate.cpp
+  LEGO1/beachhouseentity.cpp
+  LEGO1/bike.cpp
+  LEGO1/buildingentity.cpp
+  LEGO1/bumpbouy.cpp
+  LEGO1/carrace.cpp
+  LEGO1/dllmain.cpp
+  LEGO1/dunebuggy.cpp
+  LEGO1/elevatorbottom.cpp
+  LEGO1/gasstation.cpp
+  LEGO1/gasstationentity.cpp
+  LEGO1/gasstationstate.cpp
+  LEGO1/helicopter.cpp
+  LEGO1/helicopterstate.cpp
+  LEGO1/historybook.cpp
+  LEGO1/hospital.cpp
+  LEGO1/hospitalentity.cpp
+  LEGO1/hospitalstate.cpp
+  LEGO1/infocenter.cpp
+  LEGO1/infocenterdoor.cpp
+  LEGO1/infocenterentity.cpp
+  LEGO1/infocenterstate.cpp
+  LEGO1/isle.cpp
+  LEGO1/isleactor.cpp
+  LEGO1/islepathactor.cpp
+  LEGO1/jetski.cpp
+  LEGO1/jetskirace.cpp
+  LEGO1/jukebox.cpp
+  LEGO1/jukeboxentity.cpp
+  LEGO1/jukeboxstate.cpp
+  LEGO1/legoact2state.cpp
+  LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoanimactor.cpp
+  LEGO1/legoanimationmanager.cpp
+  LEGO1/legoanimmmpresenter.cpp
+  LEGO1/legoanimpresenter.cpp
+  LEGO1/legobackgroundcolor.cpp
+  LEGO1/legobackgroundcolor.cpp
+  LEGO1/legobuildingmanager.cpp
+  LEGO1/legocachesound.cpp
+  LEGO1/legocameracontroller.cpp
+  LEGO1/legocarbuild.cpp
+  LEGO1/legocarbuildanimpresenter.cpp
+  LEGO1/legocontrolmanager.cpp
+  LEGO1/legoentity.cpp
+  LEGO1/legoentitypresenter.cpp
+  LEGO1/legoflctexturepresenter.cpp
+  LEGO1/legogamestate.cpp
+  LEGO1/legohideanimpresenter.cpp
+  LEGO1/legoinputmanager.cpp
+  LEGO1/legojetski.cpp
+  LEGO1/legoloadcachesoundpresenter.cpp
+  LEGO1/legolocomotionanimpresenter.cpp
+  LEGO1/legomodelpresenter.cpp
+  LEGO1/legonavcontroller.cpp
+  LEGO1/legoomni.cpp
+  LEGO1/legopalettepresenter.cpp
+  LEGO1/legopartpresenter.cpp
+  LEGO1/legopathactor.cpp
+  LEGO1/legopathcontroller.cpp
+  LEGO1/legopathpresenter.cpp
+  LEGO1/legophonemepresenter.cpp
+  LEGO1/legoplantmanager.cpp
+  LEGO1/legorace.cpp
+  LEGO1/legoroi.cpp
+  LEGO1/legosoundmanager.cpp
+  LEGO1/legostate.cpp
+  LEGO1/legotexturepresenter.cpp
+  LEGO1/legoutil.cpp
+  LEGO1/legovideomanager.cpp
+  LEGO1/legoworld.cpp
+  LEGO1/legoworldpresenter.cpp
+  LEGO1/motorcycle.cpp
+  LEGO1/mxatomid.cpp
+  LEGO1/mxaudiopresenter.cpp
+  LEGO1/mxautolocker.cpp
+  LEGO1/mxbackgroundaudiomanager.cpp
+  LEGO1/mxbitmap.cpp
+  LEGO1/mxcompositemediapresenter.cpp
+  LEGO1/mxcompositepresenter.cpp
+  LEGO1/mxcontrolpresenter.cpp
+  LEGO1/mxcore.cpp
+  LEGO1/mxcriticalsection.cpp
+  LEGO1/mxdirectdraw.cpp
+  LEGO1/mxdiskstreamcontroller.cpp
+  LEGO1/mxdiskstreamprovider.cpp
+  LEGO1/mxdsaction.cpp
+  LEGO1/mxdsanim.cpp
+  LEGO1/mxdschunk.cpp
+  LEGO1/mxdsevent.cpp
+  LEGO1/mxdsfile.cpp
+  LEGO1/mxdsmediaaction.cpp
+  LEGO1/mxdsmultiaction.cpp
+  LEGO1/mxdsobject.cpp
+  LEGO1/mxdsobjectaction.cpp
+  LEGO1/mxdsparallelaction.cpp
+  LEGO1/mxdsselectaction.cpp
+  LEGO1/mxdsserialaction.cpp
+  LEGO1/mxdssound.cpp
+  LEGO1/mxdssource.cpp
+  LEGO1/mxdsstill.cpp
+  LEGO1/mxdssubscriber.cpp
+  LEGO1/mxentity.cpp
+  LEGO1/mxeventmanager.cpp
+  LEGO1/mxeventpresenter.cpp
+  LEGO1/mxflcpresenter.cpp
+  LEGO1/mxioinfo.cpp
+  LEGO1/mxloopingflcpresenter.cpp
+  LEGO1/mxloopingsmkpresenter.cpp
+  LEGO1/mxmediapresenter.cpp
+  LEGO1/mxmusicpresenter.cpp
+  LEGO1/mxnotificationmanager.cpp
+  LEGO1/mxomni.cpp
+  LEGO1/mxomnicreateflags.cpp
+  LEGO1/mxomnicreateparam.cpp
+  LEGO1/mxomnicreateparambase.cpp
+  LEGO1/mxpalette.cpp
+  LEGO1/mxpresenter.cpp
+  LEGO1/mxscheduler.cpp
+  LEGO1/mxsmkpresenter.cpp
+  LEGO1/mxsoundmanager.cpp
+  LEGO1/mxsoundpresenter.cpp
+  LEGO1/mxstillpresenter.cpp
+  LEGO1/mxstreamer.cpp
+  LEGO1/mxstring.cpp
+  LEGO1/mxstringvariable.cpp
+  LEGO1/mxtimer.cpp
+  LEGO1/mxtransitionmanager.cpp
+  LEGO1/mxunknown100dc6b0.cpp
+  LEGO1/mxvariabletable.cpp
+  LEGO1/mxvideomanager.cpp
+  LEGO1/mxvideoparam.cpp
+  LEGO1/mxvideoparamflags.cpp
+  LEGO1/mxvideopresenter.cpp
+  LEGO1/mxwavepresenter.cpp
+  LEGO1/pizza.cpp
+  LEGO1/pizzamissionstate.cpp
+  LEGO1/pizzeria.cpp
+  LEGO1/pizzeriastate.cpp
+  LEGO1/police.cpp
+  LEGO1/policeentity.cpp
+  LEGO1/policestate.cpp
+  LEGO1/racecar.cpp
+  LEGO1/racestandsentity.cpp
+  LEGO1/racestate.cpp
+  LEGO1/radio.cpp
+  LEGO1/radiostate.cpp
+  LEGO1/realtimeview.cpp
+  LEGO1/registrationbook.cpp
+  LEGO1/score.cpp
+  LEGO1/scorestate.cpp
+  LEGO1/skateboard.cpp
+  LEGO1/towtrack.cpp
+  LEGO1/towtrackmissionstate.cpp
+  LEGO1/viewmanager.cpp
+)
+
+# Link libraries
+target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+
+# Make sure filenames are ALL CAPS
+set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
+set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 
 if (ISLE_BUILD_APP)
   add_executable(isle WIN32
@@ -15,173 +187,12 @@ if (ISLE_BUILD_APP)
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
 
-  # Link DSOUND, WINMM, and our fake LEGO1 lib (TODO: replace with real once all exports are implemented)
-  target_link_libraries(isle PRIVATE dsound winmm "${CMAKE_SOURCE_DIR}/ISLE/ext/lego1.lib")
+  # Link DSOUND, WINMM, and LEGO1
+  target_link_libraries(isle PRIVATE dsound winmm lego1)
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
-endif()
-
-if (ISLE_BUILD_LIB)
-  add_library(lego1 SHARED
-    LEGO1/act1state.cpp
-    LEGO1/act2brick.cpp
-    LEGO1/act2policestation.cpp
-    LEGO1/act3.cpp
-    LEGO1/act3shark.cpp
-    LEGO1/act3state.cpp
-    LEGO1/ambulance.cpp
-    LEGO1/ambulancemissionstate.cpp
-    LEGO1/animstate.cpp
-    LEGO1/beachhouseentity.cpp
-    LEGO1/bike.cpp
-    LEGO1/buildingentity.cpp
-    LEGO1/bumpbouy.cpp
-    LEGO1/carrace.cpp
-    LEGO1/dllmain.cpp
-    LEGO1/dunebuggy.cpp
-    LEGO1/elevatorbottom.cpp
-    LEGO1/gasstation.cpp
-    LEGO1/gasstationentity.cpp
-    LEGO1/gasstationstate.cpp
-    LEGO1/helicopter.cpp
-    LEGO1/helicopterstate.cpp
-    LEGO1/historybook.cpp
-    LEGO1/hospital.cpp
-    LEGO1/hospitalentity.cpp
-    LEGO1/hospitalstate.cpp
-    LEGO1/infocenter.cpp
-    LEGO1/infocenterdoor.cpp
-    LEGO1/infocenterentity.cpp
-    LEGO1/infocenterstate.cpp
-    LEGO1/isle.cpp
-    LEGO1/isleactor.cpp
-    LEGO1/islepathactor.cpp
-    LEGO1/jetski.cpp
-    LEGO1/jetskirace.cpp
-    LEGO1/jukebox.cpp
-    LEGO1/jukeboxentity.cpp
-    LEGO1/jukeboxstate.cpp
-    LEGO1/legoact2state.cpp
-    LEGO1/legoactioncontrolpresenter.cpp
-    LEGO1/legoanimactor.cpp
-    LEGO1/legoanimationmanager.cpp
-    LEGO1/legoanimmmpresenter.cpp
-    LEGO1/legoanimpresenter.cpp
-    LEGO1/legobuildingmanager.cpp
-    LEGO1/legocachesound.cpp
-    LEGO1/legocameracontroller.cpp
-    LEGO1/legocarbuild.cpp
-    LEGO1/legocarbuildanimpresenter.cpp
-    LEGO1/legocontrolmanager.cpp
-    LEGO1/legoentity.cpp
-    LEGO1/legoentitypresenter.cpp
-    LEGO1/legoflctexturepresenter.cpp
-    LEGO1/legohideanimpresenter.cpp
-    LEGO1/legoinputmanager.cpp
-    LEGO1/legojetski.cpp
-    LEGO1/legoloadcachesoundpresenter.cpp
-    LEGO1/legolocomotionanimpresenter.cpp
-    LEGO1/legonavcontroller.cpp
-    LEGO1/legoomni.cpp
-    LEGO1/legopalettepresenter.cpp
-    LEGO1/legopathactor.cpp
-    LEGO1/legopathcontroller.cpp
-    LEGO1/legopathpresenter.cpp
-    LEGO1/legophonemepresenter.cpp
-    LEGO1/legoplantmanager.cpp
-    LEGO1/legorace.cpp
-    LEGO1/legosoundmanager.cpp
-    LEGO1/legostate.cpp
-    LEGO1/legotexturepresenter.cpp
-    LEGO1/legovideomanager.cpp
-    LEGO1/legoworld.cpp
-    LEGO1/legoworldpresenter.cpp
-    LEGO1/motorcycle.cpp
-    LEGO1/mxatomid.cpp
-    LEGO1/mxaudiopresenter.cpp
-    LEGO1/mxautolocker.cpp
-    LEGO1/mxbackgroundaudiomanager.cpp
-    LEGO1/mxcompositemediapresenter.cpp
-    LEGO1/mxcompositepresenter.cpp
-    LEGO1/mxcontrolpresenter.cpp
-    LEGO1/mxcore.cpp
-    LEGO1/mxcriticalsection.cpp
-    LEGO1/mxdiskstreamcontroller.cpp
-    LEGO1/mxdiskstreamprovider.cpp
-    LEGO1/mxdsaction.cpp
-    LEGO1/mxdsanim.cpp
-    LEGO1/mxdschunk.cpp
-    LEGO1/mxdsevent.cpp
-    LEGO1/mxdsfile.cpp
-    LEGO1/mxdsmediaaction.cpp
-    LEGO1/mxdsmultiaction.cpp
-    LEGO1/mxdsobject.cpp
-    LEGO1/mxdsobjectaction.cpp
-    LEGO1/mxdsparallelaction.cpp
-    LEGO1/mxdsselectaction.cpp
-    LEGO1/mxdsserialaction.cpp
-    LEGO1/mxdssound.cpp
-    LEGO1/mxdssource.cpp
-    LEGO1/mxdsstill.cpp
-    LEGO1/mxdssubscriber.cpp
-    LEGO1/mxentity.cpp
-    LEGO1/mxeventmanager.cpp
-    LEGO1/mxeventpresenter.cpp
-    LEGO1/mxflcpresenter.cpp
-    LEGO1/mxioinfo.cpp
-    LEGO1/mxloopingflcpresenter.cpp
-    LEGO1/mxloopingsmkpresenter.cpp
-    LEGO1/mxmediapresenter.cpp
-    LEGO1/mxmusicpresenter.cpp
-    LEGO1/mxnotificationmanager.cpp
-    LEGO1/mxomni.cpp
-    LEGO1/mxomnicreateflags.cpp
-    LEGO1/mxomnicreateparam.cpp
-    LEGO1/mxomnicreateparambase.cpp
-    LEGO1/mxpalette.cpp
-    LEGO1/mxpresenter.cpp
-    LEGO1/mxsmkpresenter.cpp
-    LEGO1/mxsoundmanager.cpp
-    LEGO1/mxsoundpresenter.cpp
-    LEGO1/mxstillpresenter.cpp
-    LEGO1/mxstreamer.cpp
-    LEGO1/mxstring.cpp
-    LEGO1/mxtimer.cpp
-    LEGO1/mxtransitionmanager.cpp
-    LEGO1/mxunknown100dc6b0.cpp
-    LEGO1/mxvideomanager.cpp
-    LEGO1/mxvideoparam.cpp
-    LEGO1/mxvideoparamflags.cpp
-    LEGO1/mxvideopresenter.cpp
-    LEGO1/mxwavepresenter.cpp
-    LEGO1/pizza.cpp
-    LEGO1/pizzamissionstate.cpp
-    LEGO1/pizzeria.cpp
-    LEGO1/pizzeriastate.cpp
-    LEGO1/police.cpp
-    LEGO1/policeentity.cpp
-    LEGO1/policestate.cpp
-    LEGO1/racecar.cpp
-    LEGO1/racestandsentity.cpp
-    LEGO1/racestate.cpp
-    LEGO1/radio.cpp
-    LEGO1/radiostate.cpp
-    LEGO1/registrationbook.cpp
-    LEGO1/score.cpp
-    LEGO1/scorestate.cpp
-    LEGO1/skateboard.cpp
-    LEGO1/towtrack.cpp
-    LEGO1/towtrackmissionstate.cpp
-  )
-
-  # Link libraries
-  target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
-
-  # Make sure filenames are ALL CAPS
-  set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
-  set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 endif()
 
 if (MSVC)

@@ -24,10 +24,10 @@ public:
   __declspec(dllexport) static const char *GetCD();
   __declspec(dllexport) static const char *GetHD();
   __declspec(dllexport) static MxOmni *GetInstance();
-  __declspec(dllexport) static unsigned char IsSound3D();
-  __declspec(dllexport) static void SetCD(const char *s);
-  __declspec(dllexport) static void SetHD(const char *s);
-  __declspec(dllexport) static void SetSound3D(unsigned char);
+  __declspec(dllexport) static MxBool IsSound3D();
+  __declspec(dllexport) static void SetCD(const char *p_cd);
+  __declspec(dllexport) static void SetHD(const char *p_hd);
+  __declspec(dllexport) static void SetSound3D(MxBool p_3dsound);
   
   virtual ~MxOmni();
 
@@ -75,5 +75,6 @@ __declspec(dllexport) MxSoundManager * MSoundManager();
 __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
+__declspec(dllexport) MxNotificationManager * NotificationManager();
 
 #endif // MXOMNI_H
