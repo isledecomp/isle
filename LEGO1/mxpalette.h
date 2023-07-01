@@ -17,6 +17,7 @@ public:
   MxPalette();
   virtual ~MxPalette();
 
+  void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
   MxPalette* Clone();
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);

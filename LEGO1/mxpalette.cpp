@@ -17,6 +17,24 @@ MxPalette::~MxPalette()
   }
 }
 
+// OFFSET: LEGO1 0x100bf390
+void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
+{
+  // FIXME: incomplete
+  HDC hdc = GetDC(NULL);
+  unsigned int rastercaps = GetDeviceCaps(hdc, RASTERCAPS);
+  int sizepalettecaps;
+  if ((rastercaps & RC_PALETTE) != 0) {
+    sizepalettecaps = GetDeviceCaps(hdc, SIZEPALETTE);
+    if(sizepalettecaps = 256) {
+      GetSystemPaletteEntries(hdc,0,10,p_entries);
+      GetSystemPaletteEntries(hdc,246,10,p_entries + 0xf6);
+      ReleaseDC(NULL, hdc);
+    }
+  }
+  // FIXME: we get g_defaultPalette here, we need to define that, then we cna do the memcpy's
+}
+
 // OFFSET: LEGO1 100bf0b0
 MxPalette* MxPalette::Clone()
 {
