@@ -1,5 +1,9 @@
 #include "legoinputmanager.h"
 
+#include "decomp.h"
+
+DECOMP_STATIC_ASSERT(sizeof(LegoInputManager) == 824); // 0x10059085
+
 // OFFSET: LEGO1 0x1005b790 STUB
 LegoInputManager::LegoInputManager()
 {
