@@ -47,11 +47,11 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 }
 
 // OFFSET: LEGO1 0x100bcd10
-long MxBitmap::Read(const char *filename)
+long MxBitmap::Read(const char *p_filename)
 {
   MxResult result = FAILURE;
   HANDLE handle = CreateFileA(
-    filename,
+    p_filename,
     GENERIC_READ,
     FILE_SHARE_READ,
     NULL,

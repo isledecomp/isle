@@ -17,7 +17,7 @@ public:
   virtual int vtable18(BITMAPINFOHEADER *p_bmiHeader);
   virtual int vtable1c(int p_width, int p_height, MxPalette *p_palette, int);
   virtual MxResult LoadFile(HANDLE p_handle);
-  __declspec(dllexport) virtual long Read(const char *); // vtable+24
+  __declspec(dllexport) virtual long Read(const char *p_filename); // vtable+24
   virtual int vtable28(int);
   virtual void vtable2c(int, int, int, int, int, int, int);
   virtual void vtable30(int, int, int, int, int, int, int);
