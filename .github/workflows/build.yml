@@ -146,8 +146,6 @@ jobs:
       with:
         name: Accuracy Report
         
-    - run: sudo apt install -y librsvg2-bin
-       
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
