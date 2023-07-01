@@ -29,7 +29,7 @@ public:
 
   virtual long Tickle() override; // vtable+0x8
 
-  undefined m_pad00[0x15c];
+  undefined m_pad40[0x15c];
   int m_joystickIndex;
   undefined m_pad200[0x194];
   MxBool m_useJoystick;
