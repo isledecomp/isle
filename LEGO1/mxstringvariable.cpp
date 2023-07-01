@@ -1,4 +1,4 @@
-#include "MxStringVariable.h"
+#include "mxstringvariable.h"
 #include "mxstring.h"
 
 //FIXME: Figure out what exactly this class is used for. It is used in LegoGameState::LegoGameState when loading the background color, and for loading the "fsmovie" variable
