@@ -1,6 +1,7 @@
 #ifndef LEGOOMNI_H
 #define LEGOOMNI_H
 
+#include "compat.h"
 #include "legoentity.h"
 #include "legoinputmanager.h"
 #include "legogamestate.h"
@@ -51,7 +52,7 @@ public:
   }
 
   virtual void Init(); // vtable+14
-  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
+  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   virtual void vtable20();
   virtual void vtable24(MxDSAction &ds);
@@ -62,10 +63,6 @@ public:
   virtual void vtable38();
   virtual void vtable3c();
   virtual unsigned char vtable40();
-
-#if defined(__MINGW32__)
-  virtual MxResult Create(const MxOmniCreateParam &p); // vtable+18
-#endif
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoSoundManager *GetSoundManager() { return (LegoSoundManager *)m_soundManager;}

@@ -176,18 +176,11 @@ void LegoOmni::Init()
 }
 
 // OFFSET: LEGO1 0x10058e70
-MxResult LegoOmni::Create(MxOmniCreateParam &p)
+MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
   // FIXME: Stub
   return SUCCESS;
 }
-
-#if defined(__MINGW32__)
-MxResult LegoOmni::Create(const MxOmniCreateParam &p)
-{
-  return Create((MxOmniCreateParam &)p);
-}
-#endif
 
 void LegoOmni::Destroy()
 {
