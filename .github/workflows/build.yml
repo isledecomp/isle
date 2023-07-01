@@ -153,10 +153,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
-        # Convert SVGs to PNG        
-        rsvg-convert -w 400 -h 300 ISLEPROGRESS.SVG -o ISLEPROGRESS.PNG
-        rsvg-convert -w 400 -h 300 LEGO1PROGRESS.SVG -o LEGO1PROGRESS.PNG
-
         ./upload.sh \
           build/ISLE.EXE \
           build/LEGO1.DLL \
