@@ -29,7 +29,7 @@ public:
 
   virtual int unk14(); // vtable+14;
   virtual unsigned int CalculateUnk08(); // vtable+18;
-  virtual void Parse(char **p_source, MxU16 p_unk24); // vtable+1c;
+  virtual void Parse(char **p_source, MxS16 p_unk24); // vtable+1c;
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }
