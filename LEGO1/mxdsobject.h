@@ -1,6 +1,8 @@
 #ifndef MXDSOBJECT_H
 #define MXDSOBJECT_H
 
+#include "decomp.h"
+
 #include "mxcore.h"
 #include "mxatomid.h"
 #include "mxdstypes.h"
@@ -43,16 +45,15 @@ protected:
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 
 private:
-  unsigned int m_unk08;
-  MxS16 m_type;
+  undefined4 m_unk08;
+  MxU16 m_type;
   char* m_sourceName;
-  int m_unk14;
+  undefined4 m_unk14;
   char *m_objectName;
-  int m_unk1c;
+  undefined4 m_unk1c;
   MxAtomId m_atomId;
   MxS16 m_unk24;
-  MxU16 m_unk26;
-  int m_unk28;
+  undefined4 m_unk28;
 };
 
 #endif // MXDSOBJECT_H
