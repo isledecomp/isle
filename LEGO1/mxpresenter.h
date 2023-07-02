@@ -47,7 +47,7 @@ public:
   __declspec(dllexport) virtual long StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   virtual void VTable0x44(undefined4 param); // vtable+0x44
-  virtual unsigned char MxPresenter::VTable0x48(unsigned char param); // vtable+0x48
+  virtual unsigned char VTable0x48(unsigned char param); // vtable+0x48
   virtual undefined4 VTable0x4c(); // vtable+0x4c
   virtual undefined VTable0x50(undefined4, undefined4); // vtable+0x50
   __declspec(dllexport) virtual void Enable(unsigned char); // vtable+0x54

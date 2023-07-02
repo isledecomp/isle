@@ -22,7 +22,7 @@
 class MxObjectFactory : public MxCore
 {
 public:
-  MxObjectFactor();
+  MxObjectFactory();
   virtual MxCore *Create(const char *name); // vtable 0x14
   virtual void vtable18(void *); // vtable 0x18
 private:
