@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 #include "mxatomid.h"
+#include "mxdstypes.h"
 
 // VTABLE 0x100dc868
 // SIZE 0x2c
@@ -39,9 +40,11 @@ public:
   // OFFSET: LEGO1 0x10005530
   inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
+  inline void SetType(MxDSType p_type) { this->m_type = p_type; }
+
 private:
   unsigned int m_unk08;
-  MxS16 m_unk0c;
+  MxS16 m_type;
   char* m_sourceName;
   int m_unk14;
   char *m_objectName;

@@ -6,7 +6,7 @@
 // OFFSET: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
-  this->m_unk0c = 0;
+  this->SetType(MxDSType_Object);
   this->m_sourceName = NULL;
   this->m_unk14 = 0;
   this->m_objectName = NULL;
