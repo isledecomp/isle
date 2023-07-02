@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 
 import pathlib
 import subprocess
@@ -54,9 +55,24 @@ result = subprocess.run(["cmake", "--build", ".", "-j", "1"], cwd="build")
 
 def require_original():
   if not pathlib.Path("original/LEGO1.DLL").exists():
-    print("Could not find original/LEGO1.DLL to compare results against. "
-      "Please obtain a copy the game and place its LEGO1.dll into the `original` folder.")
-    exit(1)
+    print("Couldn't find original/LEGO1.DLL. Downloading a copy...")
+    url1 = "https://legoisland.org/download/ISLE.EXE"
+    r1 = requests.get(url1, stream=True)
+    if r1.status_code == 200:
+      with open("original/ISLE.EXE", 'wb') as f:
+        for chunk in r1.iter_content(chunk_size=8192):
+            f.write(chunk)
+    url2 = "https://legoisland.org/download/LEGO1.DLL"
+    r2 = requests.get(url2, stream=True)
+    if r2.status_code == 200:
+      with open("original/LEGO1.DLL", 'wb') as f:
+        for chunk in r2.iter_content(chunk_size=8192):
+            f.write(chunk)
+    else:
+        print("Failed to find or download LEGO1.DLL.")
+        print("Please obtain a copy from the original game and place it in `original/`")
+        exit(1)
+    print("Downloaded LEGO1.DLL to `original/`.")
 
 # If the build succeeded, run the decompiler
 if result.returncode == 0:

@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 
 import pathlib
 import subprocess
@@ -70,6 +71,7 @@ subprocess.run(["cmake"] + cmake_args, cwd="build")
 # Create a folder for the original binaries
 if not pathlib.Path("original/LEGO1.DLL").exists():
   pathlib.Path("original").mkdir(parents=True, exist_ok=True)
-  print("Please obtain a copy of the original game and place its "
-       "ISLE.EXE and LEGO1.DLL into the `original` folder if you plan "
-     "on contributing so that the assembly diff tools can compare against them.")
+  print("\nIf you plan on contributing, place a copy of the original game's "
+    "ISLE.EXE and LEGO1.DLL into the `original/` folder so that the assembly "
+    "diff tools can compare against them. If you do not, build.py will download "
+    "a copy of these files for you.")
