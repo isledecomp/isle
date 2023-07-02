@@ -103,6 +103,8 @@ if set_compiler_paths:
   cmake_cmd += [f"-DCMAKE_TOOLCHAIN_FILE={cmake_toolchain_file}"]
   with cmake_toolchain_file.open("w") as f:
     print(textwrap.dedent(f"""\
+      set(CMAKE_SYSTEM_NAME "Windows")
+
       set(CMAKE_C_COMPILER "{cl_path}")
       set(CMAKE_CXX_COMPILER "{cl_path}")
       set(CMAKE_RC_COMPILER "{rc_path}")
