@@ -59,10 +59,10 @@ MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_entries)
 {
   // FIXME: doesnt match
   MxResult ret = SUCCESS;
-  this->m_entries[0x8d].peRed = p_entries->peRed;
-  this->m_entries[0x8d].peGreen = p_entries->peGreen;
-  this->m_entries[0x8d].peBlue = p_entries->peBlue;
-  this->m_skyColor = this->m_entries[0x8d];
+  this->m_entries[141].peRed = p_entries->peRed;
+  this->m_entries[141].peGreen = p_entries->peGreen;
+  this->m_entries[141].peBlue = p_entries->peBlue;
+  this->m_skyColor = this->m_entries[141];
   return ret;
 }
 
