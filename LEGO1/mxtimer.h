@@ -3,6 +3,8 @@
 
 #include "mxcore.h"
 
+// VTABLE 0x100dc0e0
+// SIZE 0x10
 class MxTimer : public MxCore
 {
 public:
@@ -11,9 +13,9 @@ public:
   void Start();
   void Stop();
 
-  __declspec(dllexport) long GetRealTime();
+  __declspec(dllexport) MxLong GetRealTime();
 
-  long GetTime() inline
+  inline MxLong GetTime()
   {
     if (this->m_isRunning)
       return s_LastTimeCalculated;
@@ -22,10 +24,10 @@ public:
   }
 
 private:
-  long m_startTime;
+  MxLong m_startTime;
   MxBool m_isRunning;
-  static long s_LastTimeCalculated;
-  static long s_LastTimeTimerStarted;
+  static MxLong s_LastTimeCalculated;
+  static MxLong s_LastTimeTimerStarted;
 };
 
 #endif // MXTIMER_H

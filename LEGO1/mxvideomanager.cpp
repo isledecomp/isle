@@ -1,5 +1,19 @@
 #include "mxvideomanager.h"
 
+// OFFSET: LEGO1 0x100be2a0 STUB
+MxVideoManager::~MxVideoManager()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100bea90 STUB
+MxLong MxVideoManager::Tickle()
+{
+  // TODO
+  
+  return 0;
+}
+
 // OFFSET: LEGO1 0x100be1f0
 MxVideoManager::MxVideoManager()
 {
@@ -18,8 +32,14 @@ int MxVideoManager::Init()
   return 0;
 }
 
+// OFFSET: LEGO1 0x100bea60 STUB
+void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x100bebe0
-long MxVideoManager::RealizePalette(MxPalette *p_palette)
+MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
 {
   PALETTEENTRY paletteEntries[256];
 

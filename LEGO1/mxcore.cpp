@@ -16,13 +16,13 @@ MxCore::~MxCore()
 }
 
 // OFFSET: LEGO1 0x100ae1f0
-long MxCore::Notify(MxParam &p)
+MxLong MxCore::Notify(MxParam &p)
 {
   return 0;
 }
 
 // OFFSET: LEGO1 0x10001f70
-long MxCore::Tickle()
+MxLong MxCore::Tickle()
 {
   return 0;
 }

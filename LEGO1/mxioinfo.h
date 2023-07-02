@@ -2,8 +2,9 @@
 #define MXIOINFO_H
 
 #include <windows.h>
+#include <mmsystem.h>
 
-#include "mmsystem.h"
+#include "mxtypes.h"
 
 class MXIOINFO
 {
@@ -11,14 +12,14 @@ public:
   MXIOINFO();
   __declspec(dllexport) ~MXIOINFO();
 
-  unsigned short Open(const char *filename, DWORD fdwOpen);
-  unsigned short Close(long arg);
-  LONG Seek(LONG lOffset, int iOrigin);
-  unsigned long Read(HPSTR pch, LONG cch);
-  unsigned short SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
-  unsigned short Flush(UINT);
-  unsigned short Advance(UINT);
-  unsigned short Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned short fuDescend);
+  MxU16 Open(const char *filename, DWORD fdwOpen);
+  MxU16 Close(MxLong arg);
+  MxLong Seek(LONG lOffset, int iOrigin);
+  MxLong Read(HPSTR pch, LONG cch);
+  MxU16 SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
+  MxU16 Flush(UINT);
+  MxU16 Advance(UINT);
+  MxU16 Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, MxU16 fuDescend);
 
   // The following is the MMIOINFO struct but with h_mmio set to type HFILE.
 

@@ -15,10 +15,10 @@ MXIOINFO::~MXIOINFO()
 }
 
 // OFFSET: LEGO1 0x100cc830
-unsigned short MXIOINFO::Open(const char *filename, DWORD fdwOpen)
+MxU16 MXIOINFO::Open(const char *filename, DWORD fdwOpen)
 {
   OFSTRUCT _unused;
-  unsigned short result = 0;
+  MxU16 result = 0;
 
   m_lBufOffset = 0;
   m_lDiskOffset = 0;
@@ -57,9 +57,9 @@ unsigned short MXIOINFO::Open(const char *filename, DWORD fdwOpen)
 }
 
 // OFFSET: LEGO1 0x100cc8e0
-unsigned short MXIOINFO::Close(long arg)
+MxU16 MXIOINFO::Close(MxLong arg)
 {
-  unsigned short result = 0;
+  MxU16 result = 0;
 
   if (m_hmmio) {
     result = Flush(0);
@@ -79,9 +79,9 @@ unsigned short MXIOINFO::Close(long arg)
 }
 
 // OFFSET: LEGO1 0x100cc930
-unsigned long MXIOINFO::Read(HPSTR pch, LONG cch)
+MxLong MXIOINFO::Read(HPSTR pch, LONG cch)
 {
-  unsigned long bytes_read = 0;
+  MxLong bytes_read = 0;
 
   if (m_pchBuffer) {
 
@@ -121,9 +121,9 @@ unsigned long MXIOINFO::Read(HPSTR pch, LONG cch)
 }
 
 // OFFSET: LEGO1 0x100cca00
-LONG MXIOINFO::Seek(LONG lOffset, int iOrigin)
+MxLong MXIOINFO::Seek(LONG lOffset, int iOrigin)
 {
-  LONG result = -1;
+  MxLong result = -1;
 
   // If buffered I/O
   if (m_pchBuffer) {
@@ -222,9 +222,9 @@ LONG MXIOINFO::Seek(LONG lOffset, int iOrigin)
 }
 
 // OFFSET: LEGO1 0x100ccbc0
-unsigned short MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk)
+MxU16 MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk)
 {
-  unsigned short result = Flush(0);
+  MxU16 result = Flush(0);
 
   if (m_dwFlags & MMIO_ALLOCBUF) {
     m_dwFlags &= ~MMIO_ALLOCBUF;
@@ -240,9 +240,9 @@ unsigned short MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk)
 }
 
 // OFFSET: LEGO1 0x100ccc10
-unsigned short MXIOINFO::Flush(UINT fuFlush)
+MxU16 MXIOINFO::Flush(UINT fuFlush)
 {
-  unsigned short result = 0;
+  MxU16 result = 0;
 
   // if buffer is dirty
   if (m_dwFlags & MMIO_DIRTY) {
@@ -286,9 +286,9 @@ unsigned short MXIOINFO::Flush(UINT fuFlush)
 }
 
 // OFFSET: LEGO1 0x100ccd00
-unsigned short MXIOINFO::Advance(UINT fuAdvance)
+MxU16 MXIOINFO::Advance(UINT fuAdvance)
 {
-  unsigned short result = 0;
+  MxU16 result = 0;
   DWORD rwmode = m_dwFlags & MMIO_RWMODE;
 
   if (m_pchBuffer) {
@@ -356,7 +356,7 @@ unsigned short MXIOINFO::Advance(UINT fuAdvance)
 }
 
 // OFFSET: LEGO1 0x100cce60
-unsigned short MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned short fuDescend)
+MxU16 MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned short fuDescend)
 {
   unsigned short result = 0;
   

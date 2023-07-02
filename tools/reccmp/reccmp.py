@@ -6,6 +6,7 @@ from capstone import *
 import difflib
 import struct
 import subprocess
+import logging
 import os
 import sys
 import colorama
@@ -16,14 +17,21 @@ parser.add_argument('original', metavar='original-binary', help='The original bi
 parser.add_argument('recompiled', metavar='recompiled-binary', help='The recompiled binary')
 parser.add_argument('pdb', metavar='recompiled-pdb', help='The PDB of the recompiled binary')
 parser.add_argument('decomp_dir', metavar='decomp-dir', help='The decompiled source tree')
-parser.add_argument('--total', '-T', metavar='total-func-count', help='Total number of expected functions (improves total accuracy statistic)')
-parser.add_argument('--verbose', '-v', metavar='offset', help='Print assembly diff for specific function (original file\'s offset)')
-parser.add_argument('--html', '-H', metavar='output-file', help='Generate searchable HTML summary of status and diffs')
+parser.add_argument('--total', '-T', metavar='<count>', help='Total number of expected functions (improves total accuracy statistic)')
+parser.add_argument('--verbose', '-v', metavar='<offset>', help='Print assembly diff for specific function (original file\'s offset)')
+parser.add_argument('--html', '-H', metavar='<file>', help='Generate searchable HTML summary of status and diffs')
 parser.add_argument('--no-color', '-n', action='store_true', help='Do not color the output')
-parser.add_argument('--svg', '-S', metavar='output-svg', help='Generate SVG graphic of progress')
-parser.add_argument('--svg-icon', metavar='svg-icon', help='Icon to use in SVG (PNG)')
+parser.add_argument('--svg', '-S', metavar='<file>', help='Generate SVG graphic of progress')
+parser.add_argument('--svg-icon', metavar='icon', help='Icon to use in SVG (PNG)')
+parser.add_argument('--print-rec-addr', action='store_true', help='Print addresses of recompiled functions too')
+
+parser.set_defaults(loglevel=logging.INFO)
+parser.add_argument('--debug', action='store_const', const=logging.DEBUG, dest='loglevel', help='Print script debug information')
 
 args = parser.parse_args()
+
+logging.basicConfig(level=args.loglevel, format='[%(levelname)s] %(message)s')
+logger = logging.getLogger(__name__)
 
 colorama.init()
 
@@ -60,6 +68,7 @@ svg = args.svg
 # to file addresses
 class Bin:
   def __init__(self, filename):
+    logger.debug('Parsing headers of "%s"... ', filename)
     self.file = open(filename, 'rb')
 
     #HACK: Strictly, we should be parsing the header, but we know where
@@ -67,15 +76,16 @@ class Bin:
 
     # Read ImageBase
     self.file.seek(0xB4)
-    self.imagebase = struct.unpack('i', self.file.read(4))[0]
+    self.imagebase, = struct.unpack('<i', self.file.read(4))
 
     # Read .text VirtualAddress
     self.file.seek(0x184)
-    self.textvirt = struct.unpack('i', self.file.read(4))[0]
+    self.textvirt, = struct.unpack('<i', self.file.read(4))
 
     # Read .text PointerToRawData
     self.file.seek(0x18C)
-    self.textraw = struct.unpack('i', self.file.read(4))[0]
+    self.textraw, = struct.unpack('<i', self.file.read(4))
+    logger.debug('... Parsing finished')
 
   def __del__(self):
     if self.file:
@@ -89,16 +99,38 @@ class Bin:
     return self.file.read(size)
 
 class RecompiledInfo:
-  addr = None
-  size = None
-  name = None
-  start = None
+  def __init__(self):
+    self.addr = None
+    self.size = None
+    self.name = None
+    self.start = None
 
-def get_wine_path(fn):
-  return subprocess.check_output(['winepath', '-w', fn]).decode('utf-8').strip()
+class WinePathConverter:
+  def __init__(self, unix_cwd):
+    self.unix_cwd = unix_cwd
+    self.win_cwd = self._call_winepath_unix2win(self.unix_cwd)
 
-def get_unix_path(fn):
-  return subprocess.check_output(['winepath', fn]).decode('utf-8').strip()
+  def get_wine_path(self, unix_fn: str) -> str:
+    if unix_fn.startswith('./'):
+      return self.win_cmd + '\\' + unix_fn[2:].replace('/', '\\')
+    if unix_fn.startswith(self.unix_cwd):
+      return self.win_cwd + '\\' + unix_fn.removeprefix(self.unix_cwd).replace('/', '\\').lstrip('\\')
+    return self._call_winepath_unix2win(unix_fn)
+
+  def get_unix_path(self, win_fn: str) -> str:
+    if win_fn.startswith('.\\') or win_fn.startswith('./'):
+      return self.unix_cwd + '/' + win_fn[2:].replace('\\', '/')
+    if win_fn.startswith(self.win_cwd):
+      return self.unix_cwd + '/' + win_fn.removeprefix(self.win_cwd).replace('\\', '/')
+    return self._call_winepath_win2unix(win_fn)
+
+  @staticmethod
+  def _call_winepath_unix2win(fn: str) -> str:
+    return subprocess.check_output(['winepath', '-w', fn], text=True).strip()
+
+  @staticmethod
+  def _call_winepath_win2unix(fn: str) -> str:
+    return subprocess.check_output(['winepath', fn], text=True).strip()
 
 def get_file_in_script_dir(fn):
   return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
@@ -108,21 +140,23 @@ class SymInfo:
   funcs = {}
   lines = {}
 
-  def __init__(self, pdb, file):
+  def __init__(self, pdb, file, wine_path_converter):
     call = [get_file_in_script_dir('cvdump.exe'), '-l', '-s']
 
-    if os.name != 'nt':
+    if wine_path_converter:
       # Run cvdump through wine and convert path to Windows-friendly wine path
       call.insert(0, 'wine')
-      call.append(get_wine_path(pdb))
+      call.append(wine_path_converter.get_wine_path(pdb))
     else:
       call.append(pdb)
 
-    print('Parsing %s...' % pdb)
-
+    logger.info('Parsing %s ...', pdb)
+    logger.debug('Command = %r', call)
     line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
 
     current_section = None
+
+    logger.debug('Parsing output of cvdump.exe ...')
 
     for i, line in enumerate(line_dump):
       if line.startswith('***'):
@@ -130,8 +164,6 @@ class SymInfo:
 
       if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
         addr = int(line[26:34], 16)
-
-
 
         info = RecompiledInfo()
         info.addr = addr + recompfile.imagebase + recompfile.textvirt
@@ -154,9 +186,9 @@ class SymInfo:
       elif current_section == 'LINES' and line.startswith('  ') and not line.startswith('   '):
         sourcepath = line.split()[0]
 
-        if os.name != 'nt':
+        if wine_path_converter:
           # Convert filename to Unix path for file compare
-          sourcepath = get_unix_path(sourcepath)
+          sourcepath = wine_path_converter.get_unix_path(sourcepath)
 
         if sourcepath not in self.lines:
           self.lines[sourcepath] = {}
@@ -177,18 +209,23 @@ class SymInfo:
 
           j += 1
 
+    logger.debug('... Parsing output of cvdump.exe finished')
+
   def get_recompiled_address(self, filename, line):
     addr = None
     found = False
 
-    #print('Looking for ' + filename + ' line ' + str(line))
+    logger.debug('Looking for %s:%d', filename, line)
 
     for fn in self.lines:
       # Sometimes a PDB is compiled with a relative path while we always have
       # an absolute path. Therefore we must
-      if os.path.samefile(fn, filename):
-        filename = fn
-        break
+      try:
+        if os.path.samefile(fn, filename):
+          filename = fn
+          break
+      except FileNotFoundError as e:
+        continue
 
     if filename in self.lines and line in self.lines[fn]:
       addr = self.lines[fn][line]
@@ -196,13 +233,16 @@ class SymInfo:
       if addr in self.funcs:
         return self.funcs[addr]
       else:
-        print('Failed to find function symbol with address: %s' % hex(addr))
+        logger.error('Failed to find function symbol with address: 0x%x', addr)
     else:
-      print('Failed to find function symbol with filename and line: %s:%s' % (filename, str(line)))
+      logger.error('Failed to find function symbol with filename and line: %s:%d', filename, line)
 
+wine_path_converter = None
+if os.name != 'nt':
+  wine_path_converter = WinePathConverter(source)
 origfile = Bin(original)
 recompfile = Bin(recomp)
-syminfo = SymInfo(syms, recompfile)
+syminfo = SymInfo(syms, recompfile, wine_path_converter)
 
 print()
 
@@ -292,7 +332,7 @@ for subdir, dirs, files in os.walk(source):
 
         line = line.strip()
 
-        if line.startswith(pattern):
+        if line.startswith(pattern) and not line.endswith("STUB"):
           par = line[len(pattern):].strip().split()
           module = par[0]
           if module != basename:
@@ -335,7 +375,11 @@ for subdir, dirs, files in os.walk(source):
               percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
 
           if not verbose:
-            print('  %s (%s / %s) is %s similar to the original' % (recinfo.name, hex(addr), hex(recinfo.addr), percenttext))
+            if args.print_rec_addr:
+              addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
+            else:
+              addrs = hex(addr)
+            print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
 
           function_count += 1
           total_accuracy += ratio

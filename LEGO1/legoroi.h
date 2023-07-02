@@ -4,8 +4,8 @@
 class LegoROI
 {
 public:
-  __declspec(dllexport) void SetDisplayBB(int);
-  __declspec(dllexport) static void configureLegoROI(int param_1);
+  __declspec(dllexport) void SetDisplayBB(int p_displayBB);
+  __declspec(dllexport) static void configureLegoROI(int p_roi);
 };
 
 #endif // LEGOROI_H
