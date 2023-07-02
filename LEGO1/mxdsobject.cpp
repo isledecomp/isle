@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
+
 // OFFSET: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
