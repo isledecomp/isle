@@ -13,7 +13,7 @@ MxDiskStreamController::~MxDiskStreamController()
 }
 
 // OFFSET: LEGO1 0x100c8640 STUB
-long MxDiskStreamController::Tickle()
+MxLong MxDiskStreamController::Tickle()
 {
   // TODO
 

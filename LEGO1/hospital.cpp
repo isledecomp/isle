@@ -13,7 +13,7 @@ Hospital::~Hospital()
 }
 
 // OFFSET: LEGO1 0x10074990 STUB
-long Hospital::Notify(MxParam &p)
+MxLong Hospital::Notify(MxParam &p)
 {
   // TODO
 

@@ -19,13 +19,13 @@ unsigned short MXIOINFO::Open(const char *filename, DWORD fdwOpen)
 }
 
 // OFFSET: LEGO1 0x100cc8e0
-void MXIOINFO::Close(long arg)
+void MXIOINFO::Close(MxLong arg)
 {
   
 }
 
 // OFFSET: LEGO1 0x100cc930
-unsigned long MXIOINFO::Read(HPSTR pch, LONG cch)
+MxULong MXIOINFO::Read(HPSTR pch, LONG cch)
 {
   return 0;
 }

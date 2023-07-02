@@ -8,7 +8,7 @@ MxScheduler *MxScheduler::GetInstance()
 }
 
 // OFFSET: LEGO1 0x100bf500
-void MxScheduler::StartMultiTasking(unsigned long)
+void MxScheduler::StartMultiTasking(MxULong)
 {
   // Intentionally empty
 }

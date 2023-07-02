@@ -15,7 +15,7 @@ LegoAnimationManager::~LegoAnimationManager()
 }
 
 // OFFSET: LEGO1 0x100619f0 STUB
-long LegoAnimationManager::Notify(MxParam &p)
+MxLong LegoAnimationManager::Notify(MxParam &p)
 {
   // TODO
 
@@ -23,7 +23,7 @@ long LegoAnimationManager::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10061cc0 STUB
-long LegoAnimationManager::Tickle()
+MxLong LegoAnimationManager::Tickle()
 {
   // TODO
 

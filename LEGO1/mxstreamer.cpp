@@ -14,14 +14,14 @@ MxStreamController *MxStreamer::Open(const char *name, unsigned short p)
 }
 
 // OFFSET: LEGO1 0x100b9570 STUB
-long MxStreamer::Close(const char *p)
+MxLong MxStreamer::Close(const char *p)
 {
   // TODO
   return 0;
 }
 
 // OFFSET: LEGO1 0x100b9b60 STUB
-long MxStreamer::Notify(MxParam &p)
+MxLong MxStreamer::Notify(MxParam &p)
 {
   // TODO
 

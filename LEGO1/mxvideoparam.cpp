@@ -17,7 +17,7 @@ MxVideoParam::MxVideoParam()
 }
 
 // OFFSET: LEGO1 0x100beca0
-MxVideoParam::MxVideoParam(COMPAT_CONST MxRect32 &p_rect, MxPalette *p_pal, unsigned long p_backBuffers, COMPAT_CONST MxVideoParamFlags &p_flags)
+MxVideoParam::MxVideoParam(COMPAT_CONST MxRect32 &p_rect, MxPalette *p_pal, MxULong p_backBuffers, COMPAT_CONST MxVideoParamFlags &p_flags)
 {
   this->m_rect.m_left = p_rect.m_left;
   this->m_rect.m_top = p_rect.m_top;

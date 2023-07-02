@@ -7,7 +7,7 @@ MxNotificationManager::~MxNotificationManager()
 }
 
 // OFFSET: LEGO1 0x100ac800 STUB
-long MxNotificationManager::Tickle()
+MxLong MxNotificationManager::Tickle()
 {
   // TODO
 

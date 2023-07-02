@@ -12,7 +12,7 @@ public:
   Police();
   virtual ~Police() override; // vtable+0x0
   
-  virtual long Notify(MxParam &p) override; // vtable+0x4
+  virtual MxLong Notify(MxParam &p) override; // vtable+0x4
   
 };
 

@@ -13,7 +13,7 @@ Act2Brick::~Act2Brick()
 }
 
 // STUB OFFSET: LEGO1 0x1007a8c0 STUB
-long Act2Brick::Notify(MxParam &p)
+MxLong Act2Brick::Notify(MxParam &p)
 {
   // TODO
 
@@ -21,7 +21,7 @@ long Act2Brick::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x1007a7f0 STUB
-long Act2Brick::Tickle()
+MxLong Act2Brick::Tickle()
 {
   // TODO
 

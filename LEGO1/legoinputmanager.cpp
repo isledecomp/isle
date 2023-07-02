@@ -17,7 +17,7 @@ LegoInputManager::~LegoInputManager()
 }
 
 // OFFSET: LEGO1 0x1005c740 STUB
-void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, long p3, long p4, unsigned char p5)
+void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5)
 {
   // TODO
 }
@@ -35,7 +35,7 @@ void LegoInputManager::UnRegister(MxCore *)
 }
 
 // OFFSET: LEGO1 0x1005b8b0 STUB
-long LegoInputManager::Tickle()
+MxLong LegoInputManager::Tickle()
 {
   // TODO
 

@@ -95,7 +95,7 @@ void IsleApp::Close()
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
 
-    long lVar8;
+    MxLong lVar8;
     do {
       lVar8 = Streamer()->Close(NULL);
     } while (lVar8 == 0);
@@ -571,7 +571,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   DWORD valueType;
 
   BOOL out = FALSE;
-  unsigned long size = outSize;
+  MxULong size = outSize;
   if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
     if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
       if (RegCloseKey(hKey) == ERROR_SUCCESS) {
@@ -695,7 +695,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
   if (!TickleManager()) return;
   if (!Timer()) return;
 
-  long currentTime = Timer()->GetRealTime();
+  MxLong currentTime = Timer()->GetRealTime();
   if (currentTime < g_lastFrameTime) {
     g_lastFrameTime = -this->m_frameDelta;
   }
