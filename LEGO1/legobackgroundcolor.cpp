@@ -4,40 +4,40 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 
-const char *Delimiter = "\t";
+const char *delimiter = "\t";
 const char *set = "set";
 const char *reset = "reset";
 
 // OFFSET: LEGO1 0x1003bfb0
-LegoBackgroundColor::LegoBackgroundColor(const char *name, const char *colorString)
+LegoBackgroundColor::LegoBackgroundColor(const char *p_name, const char *p_colorString)
 {
-  m_name = name;
+  m_name = p_name;
   m_name.ToUpperCase();
-  SetColorString(colorString);
+  SetColorString(p_colorString);
 }
 
 // OFFSET: LEGO1 0x1003c070
-void LegoBackgroundColor::SetColorString(const char *colorString)
+void LegoBackgroundColor::SetColorString(const char *p_colorString)
 {
-  m_string = colorString;
+  m_string = p_colorString;
   m_string.ToLowerCase();
 
   LegoVideoManager *videomanager = VideoManager();
-  if (!videomanager || !colorString)
+  if (!videomanager || !p_colorString)
     return;
 
   float converted_r, converted_g, converted_b;
-  char *colorStringCopy = strcpy(new char[strlen(colorString) + 1], colorString);
-  char *colorStringSplit = strtok(colorStringCopy, Delimiter);
+  char *colorStringCopy = strcpy(new char[strlen(p_colorString) + 1], p_colorString);
+  char *colorStringSplit = strtok(colorStringCopy, delimiter);
 
   if (!strcmp(colorStringSplit, set)) {
-    colorStringSplit = strtok(0, Delimiter);
+    colorStringSplit = strtok(0, delimiter);
     if (colorStringSplit)
       h = (float) (atoi(colorStringSplit) * 0.01);
-    colorStringSplit = strtok(0, Delimiter);
+    colorStringSplit = strtok(0, delimiter);
     if (colorStringSplit)
       s = (float) (atoi(colorStringSplit) * 0.01);
-    colorStringSplit = strtok(0, Delimiter);
+    colorStringSplit = strtok(0, delimiter);
     if (colorStringSplit)
       v = (float) (atoi(colorStringSplit) * 0.01);
 
