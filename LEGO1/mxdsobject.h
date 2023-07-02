@@ -27,14 +27,14 @@ public:
   // OFFSET: LEGO1 0x100bf740
   inline virtual MxBool IsA(const char *name) const override { return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name); }; // vtable+10;
 
-  virtual int unk14(); // vtable+14;
-  virtual unsigned int CalculateUnk08(); // vtable+18;
+  virtual undefined4 unk14(); // vtable+14;
+  virtual MxU32 CalculateUnk08(); // vtable+18;
   virtual void Parse(char **p_source, MxS16 p_unk24); // vtable+1c;
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
-  inline int GetUnknown1c() { return this->m_unk1c; }
+  inline undefined4 GetUnknown1c() { return this->m_unk1c; }
 
-  inline void SetUnknown1c(int p_unk1c) { this->m_unk1c = p_unk1c; }
+  inline void SetUnknown1c(undefined4 p_unk1c) { this->m_unk1c = p_unk1c; }
   inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
 
   // OFFSET: ISLE 0x401c40
@@ -45,7 +45,7 @@ protected:
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 
 private:
-  undefined4 m_unk08;
+  MxU32 m_unk08;
   MxU16 m_type;
   char* m_sourceName;
   undefined4 m_unk14;

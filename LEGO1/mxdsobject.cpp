@@ -85,15 +85,15 @@ void MxDSObject::SetSourceName(const char *p_sourceName)
 }
 
 // OFFSET: LEGO1 0x100bf9c0
-int MxDSObject::unk14()
+undefined4 MxDSObject::unk14()
 {
   return 10;
 }
 
 // OFFSET: LEGO1 0x100bf9d0
-unsigned int MxDSObject::CalculateUnk08()
+MxU32 MxDSObject::CalculateUnk08()
 {
-  unsigned int unk08;
+  MxU32 unk08;
 
   if (this->m_sourceName)
     unk08 = strlen(this->m_sourceName) + 3;
