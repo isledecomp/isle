@@ -14,8 +14,8 @@ public:
 
   MxU16 Open(const char *filename, DWORD fdwOpen);
   MxU16 Close(MxLong arg);
+  MxLong Read(void *pch, LONG cch);
   MxLong Seek(LONG lOffset, int iOrigin);
-  MxLong Read(HPSTR pch, LONG cch);
   MxU16 SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
   MxU16 Flush(UINT);
   MxU16 Advance(UINT);

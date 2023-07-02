@@ -1,4 +1,7 @@
 #include "mxioinfo.h"
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MXIOINFO, sizeof(MMIOINFO));
 
 // OFFSET: LEGO1 0x100cc800
 MXIOINFO::MXIOINFO()
@@ -24,8 +27,7 @@ MxU16 MXIOINFO::Open(const char *filename, DWORD fdwOpen)
   m_lDiskOffset = 0;
 
   // Cast of fdWOpen to u16 forces the `movzx` instruction
-  //m_hmmio = OpenFile(filename, &_unused, (unsigned short)fdwOpen);
-  m_hmmio = OpenFile(filename, &_unused, fdwOpen);
+  m_hmmio = OpenFile(filename, &_unused, (MxU16)fdwOpen);
   
   if (m_hmmio != HFILE_ERROR) {
     m_dwFlags = fdwOpen;
@@ -79,7 +81,7 @@ MxU16 MXIOINFO::Close(MxLong arg)
 }
 
 // OFFSET: LEGO1 0x100cc930
-MxLong MXIOINFO::Read(HPSTR pch, LONG cch)
+MxLong MXIOINFO::Read(void *pch, LONG cch)
 {
   MxLong bytes_read = 0;
 
@@ -365,7 +367,7 @@ MxU16 MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned
 
   if (!fuDescend) {
     pmmcki->dwFlags = 0;
-    if (Read((char *)pmmcki, 8) != 8) {
+    if (Read(pmmcki, 8) != 8) {
       result = MMIOERR_CANNOTREAD;
     } else {
       if (m_pchBuffer) {
@@ -375,7 +377,7 @@ MxU16 MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned
       }
 
       if (pmmcki->ckid == FOURCC_RIFF || pmmcki->ckid == FOURCC_LIST) {
-        if (Read((char *)&pmmcki->fccType, 4) != 4) {
+        if (Read(&pmmcki->fccType, 4) != 4) {
           result = MMIOERR_CANNOTREAD;
         }
       }
@@ -393,7 +395,7 @@ MxU16 MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned
 
     // This loop is... something
     do {
-      if (Read((char *)&tmp, 8) != 8) {
+      if (Read(&tmp, 8) != 8) {
         // If the first read fails, report read error. Else EOF.
         result = read_ok ? MMIOERR_CHUNKNOTFOUND : MMIOERR_CANNOTREAD;
         running = FALSE;
@@ -411,7 +413,7 @@ MxU16 MXIOINFO::Descend(MMCKINFO *pmmcki, const MMCKINFO *pmmckiParent, unsigned
         } else {
           if ((fuDescend == MMIO_FINDLIST && tmp.ckid == FOURCC_LIST) ||
               (fuDescend == MMIO_FINDRIFF && tmp.ckid == FOURCC_RIFF)) {
-            if (Read((char *)&tmp.fccType, 4) != 4) {
+            if (Read(&tmp.fccType, 4) != 4) {
               result = MMIOERR_CANNOTREAD;
             } else {
               if (pmmcki->fccType != tmp.fccType)
