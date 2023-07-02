@@ -351,7 +351,8 @@ for subdir, dirs, files in os.walk(source):
             # If verbose, print the diff for that funciton to the output
             if verbose:
               if ratio == 1.0:
-                print("%s: %s 100%% match.\n\nOK!" % (hex(addr), recinfo.name))
+                ok_text = "OK!" if plain else (colorama.Fore.GREEN + "✨ OK! ✨" + colorama.Style.RESET_ALL)
+                print("%s: %s 100%% match.\n\n%s\n\n" % (hex(addr), recinfo.name, ok_text))
               else:
                 for line in udiff:
                   if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
