@@ -21,7 +21,7 @@ public:
   MxPalette* Clone();
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
-
+  MxResult SetSkyColor(LPPALETTEENTRY p_entries);
 private:
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];
