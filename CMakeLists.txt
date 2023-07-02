@@ -235,3 +235,27 @@ if (MSVC)
     set_property(TARGET lego1 PROPERTY JOB_POOL_LINK msvc_lego1)
   endif()
 endif()
+
+find_package(Python COMPONENTS Interpreter)
+set(ORIGINAL_LEGO1 "" CACHE FILEPATH "Path to original LEGO1.DLL")
+set(ORIGINAL_ISLE "" CACHE FILEPATH "Path to original ISLE.EXE")
+
+if(Python_Interpreter_FOUND)
+  function(compare_recompiled_html TARGET ORIGINAL)
+    if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+      set(open_browser_cmd "cmd" "/c" "start")
+    elseif(CMAKE_SYSTEM_HOST_NAME MATCHES "Linux")
+      set(open_browser_cmd "open")
+    else()
+      set(open_browser_cmd "xdg-open")
+    endif()
+    if(EXISTS "${ORIGINAL}")
+      add_custom_target(compare-${TARGET}
+        "${Python_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/tools/reccmp/reccmp.py" "${ORIGINAL}" "$<TARGET_FILE:${TARGET}>" "$<TARGET_PDB_FILE:${TARGET}>" "${PROJECT_SOURCE_DIR}" --html "${PROJECT_BINARY_DIR}/${TARGET}.html"
+        COMMAND ${open_browser_cmd} "${PROJECT_BINARY_DIR}/${TARGET}.html"
+      )
+    endif()
+  endfunction()
+  compare_recompiled_html(lego1 "${ORIGINAL_LEGO1}")
+  compare_recompiled_html(isle "${ORIGINAL_ISLE}")
+endif()
