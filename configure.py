@@ -36,9 +36,20 @@ if not args.modern_compiler and not compilerdir.exists():
   url = "https://github.com/itsmattkc/MSVC420/archive/refs/heads/master.zip"
   print("Downloading MSVC420...")
   r = requests.get(url, stream=True)
-  print(f"Unzipping MSVC420 to {compilerdir}/...")
   z = zipfile.ZipFile(io.BytesIO(r.content))
-  z.extractall(path=str(compilerdir))
+  print(f"Unzipping MSVC420 to {compilerdir}/...")
+  for name in z.namelist():
+    info = z.getinfo(name)
+    # Remove the MSVC420-master prefix
+    extract_name = name.split("/", 1)[1]
+    if not extract_name:
+      continue
+    fullpath = compilerdir / extract_name
+    if info.is_dir():
+      fullpath.mkdir(parents=True, exist_ok=True)
+    else:
+      with fullpath.open("wb") as f:
+        f.write(z.read(name))
 
 # Run cmake in the build folder
 cmake_cmd = [
@@ -63,8 +74,8 @@ if shutil.which("ninja") is None:
   if not ninjadir.exists():
     print("Downloading Ninja...")
     r = requests.get(ninja_urls[sys], stream=True)
-    print(f"Unzipping Ninja to {ninjadir}/...")
     z = zipfile.ZipFile(io.BytesIO(r.content))
+    print(f"Unzipping Ninja to {ninjadir}/...")
     z.extractall(path=str(ninjadir))
 
   specific_ninja = ninjadir / ("ninja" + ".exe" if sys == "Windows" else "")
@@ -76,7 +87,7 @@ extra_include_dirs = []
 extra_library_dirs = []
 
 if set_compiler_paths:
-  full_compiler_path = compilerdir / "MSVC420-master"
+  full_compiler_path = compilerdir
   cl_path = (full_compiler_path / "bin" / "CL.EXE").as_posix()
   link_path = (full_compiler_path / "bin" / "LINK.EXE").as_posix()
   rc_path = (full_compiler_path / "bin" / "RC.EXE").as_posix()
