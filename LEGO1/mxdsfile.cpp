@@ -23,16 +23,15 @@ MxDSFile::~MxDSFile()
 // OFFSET: LEGO1 0x100cc590
 long MxDSFile::Open(unsigned long uStyle)
 {
-  // No idea what's stopping this one matching, but I'm pretty
-  // confident it has the correct behavior.
+  MXIOINFO& io = m_io;
   long longResult = 1;
-  memset(&m_io, 0, sizeof(MXIOINFO));
+  memset(&io, 0, sizeof(MXIOINFO));
 
-  if (m_io.Open(m_filename.GetData(), uStyle) != 0) {
+  if (io.Open(m_filename.GetData(), uStyle) != 0) {
     return -1;
   }
 
-  m_io.SetBuffer(NULL, 0, 0);
+  io.SetBuffer(NULL, 0, 0);
   m_position = 0;
 
   if (m_skipReadingChunks == 0) {
