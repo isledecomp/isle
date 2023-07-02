@@ -1,10 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -61,6 +57,27 @@ jobs:
         cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
         cmake --build .
 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: Win32
+        path: |
+          build/ISLE.EXE
+          build/ISLE.PDB
+          build/LEGO1.DLL
+          build/LEGO1.PDB
+          
+  compare:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: actions/download-artifact@master
+      with:
+       name: Win32
+       path: build
+
     - name: Restore cached original binaries
       id: cache-original-binaries
       uses: actions/cache/restore@v3
@@ -106,27 +123,34 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
-        name: Win32
-        path: |
-          build/ISLE.EXE
-          build/LEGO1.DLL
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@master
-      with:
         name: Accuracy Report
         path: |
           ISLEPROGRESS.*
           LEGO1PROGRESS.*
-
+          
+  upload:
+    needs: [build, compare]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        repository: 'probonopd/uploadtool'
+    
+    - uses: actions/download-artifact@master
+      with:
+       name: Win32
+       path: build
+       
+    - uses: actions/download-artifact@master
+      with:
+        name: Accuracy Report
+        
     - name: Upload Continuous Release
-      shell: bash
-      if: github.event_name == 'push'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
-        curl -fLOSs https://raw.githubusercontent.com/probonopd/uploadtool/master/upload.sh
         ./upload.sh \
           build/ISLE.EXE \
           build/LEGO1.DLL \
