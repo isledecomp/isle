@@ -5,4 +5,5 @@ ISLE.EXE
 LEGO1.DLL
 build/
 original/
-compiler/
+tools/msvc42/
+tools/ninja/
