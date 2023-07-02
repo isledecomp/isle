@@ -12,11 +12,15 @@ public:
   __declspec(dllexport) ~MXIOINFO();
 
   unsigned short Open(const char *filename, DWORD fdwOpen);
-  void Close(long arg);
+  unsigned short Close(long arg);
   LONG Seek(LONG lOffset, int iOrigin);
   unsigned long Read(HPSTR pch, LONG cch);
-  void SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
+  unsigned short SetBuffer(LPSTR pchBuffer, LONG cchBuffer, UINT fuBuffer);
   unsigned short Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend);
+  unsigned short Flush(int arg);
+  unsigned short Something(UINT flags);
+
+  inline LONG GetCurrentOffset() { return _llseek((HFILE)m_info.hmmio, 0, SEEK_CUR); }
 
   MMIOINFO m_info;
 };
