@@ -571,7 +571,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
   DWORD valueType;
 
   BOOL out = FALSE;
-  MxULong size = outSize;
+  DWORD size = outSize;
   if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Mindscape\\LEGO Island", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
     if (RegQueryValueExA(hKey, name, NULL, &valueType, (LPBYTE) outValue, &size) == ERROR_SUCCESS) {
       if (RegCloseKey(hKey) == ERROR_SUCCESS) {
