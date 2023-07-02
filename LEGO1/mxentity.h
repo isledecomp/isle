@@ -23,6 +23,8 @@ public:
     return !strcmp(name, MxEntity::ClassName()) || MxCore::IsA(name);
   }
 
+  virtual void Destroy(); // vtable+0x1c
+
   // 0x8: MxResult
   // 0xc MxAtomId
 };

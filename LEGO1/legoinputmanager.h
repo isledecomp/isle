@@ -1,9 +1,9 @@
 #ifndef LEGOINPUTMANAGER_H
 #define LEGOINPUTMANAGER_H
 
-#include "mxcore.h"
+#include "mxpresenter.h"
 
-__declspec(dllexport) enum NotificationId
+enum NotificationId
 {
   NONE = 0,
   KEYDOWN = 7,
@@ -15,7 +15,7 @@ __declspec(dllexport) enum NotificationId
 
 // VTABLE 0x100d8760
 // SIZE 0x338
-class LegoInputManager
+class LegoInputManager : public MxPresenter
 {
 public:
   LegoInputManager();
@@ -27,7 +27,7 @@ public:
 
   virtual long Tickle() override; // vtable+0x8
 
-  char m_pad00[0x19C];
+  char m_pad00[0x15c];
   int m_joystickIndex;
   char m_pad200[0x194];
   MxBool m_useJoystick;

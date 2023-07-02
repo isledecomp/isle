@@ -2,7 +2,8 @@
 #define LEGOBACKGROUNDCOLOR_H
 #include "mxstring.h"
 #include "mxcore.h"
-#include "MxStringVariable.h"
+#include "mxstringvariable.h"
+
 class LegoBackgroundColor : public MxStringVariable
 {
 public:

@@ -10,7 +10,7 @@ public:
   MxStringVariable() {}
   virtual MxString *GetString();
   virtual void SetString(const char *colorString);
-  virtual ~MxStringVariable();
+  virtual void Destroy();
 
 protected:
   MxString m_name;
