@@ -2,11 +2,15 @@
 #define MXTYPE_H
 
 typedef unsigned char MxU8;
-typedef char MxS8;
+typedef signed char MxS8;
 typedef unsigned short MxU16;
-typedef short MxS16;
+typedef signed short MxS16;
 typedef unsigned int MxU32;
-typedef int MxS32;
+typedef signed int MxS32;
+typedef unsigned __int64 MxU64;
+typedef signed __int64 MxS64;
+typedef float MxFloat;
+typedef double MxDouble;
 
 // On MSVC, a long is 32-bit, but on GCC/Clang, it's 64-bit. LEGO Island obviously
 // assumes the former in all cases, which could become an issue in the future.
