@@ -22,8 +22,8 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
 {
   // FIXME: incomplete
   HDC hdc = GetDC(NULL);
-  MxU32 rastercaps = GetDeviceCaps(hdc, RASTERCAPS);
-  MxS32 sizepalettecaps;
+  int rastercaps = GetDeviceCaps(hdc, RASTERCAPS);
+  int sizepalettecaps;
   if ((rastercaps & RC_PALETTE) != 0) {
     sizepalettecaps = GetDeviceCaps(hdc, SIZEPALETTE);
     if(sizepalettecaps = 256) {
@@ -70,7 +70,7 @@ MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_entries)
 void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 {
   HDC hdc = GetDC((HWND) NULL);
-  MxS32 rasterCaps = GetDeviceCaps(hdc, RASTERCAPS);
+  int rasterCaps = GetDeviceCaps(hdc, RASTERCAPS);
   LPPALETTEENTRY src;
   MxS32 count;
   
