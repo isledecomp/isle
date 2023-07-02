@@ -112,7 +112,7 @@ MxBackgroundAudioManager *BackgroundAudioManager()
 }
 
 // OFFSET: LEGO1 0x100c0280 STUB
-MxDSObject *CreateStreamObject(MxDSFile *,short)
+MxDSObject *CreateStreamObject(MxDSFile *,MxS16)
 {
   // TODO
   return NULL;

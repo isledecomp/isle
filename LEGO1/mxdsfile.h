@@ -41,11 +41,11 @@ private:
       , streamBuffersNum(0)
     {}
 
-    unsigned short majorVersion;
-    unsigned short minorVersion;
+    MxU16 majorVersion;
+    MxU16 minorVersion;
     MxULong bufferSize;
-    short streamBuffersNum;
-    short reserved;
+    MxS16 streamBuffersNum;
+    MxS16 reserved;
   };
 
   MxString m_filename;

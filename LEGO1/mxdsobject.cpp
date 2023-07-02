@@ -111,7 +111,7 @@ unsigned int MxDSObject::CalculateUnk08()
 }
 
 // OFFSET: LEGO1 0x100bfa20
-void MxDSObject::Parse(char **p_source, unsigned short p_unk24)
+void MxDSObject::Parse(char **p_source, MxU16 p_unk24)
 {
   this->SetSourceName(*p_source);
   *p_source += strlen(this->m_sourceName) + 1;

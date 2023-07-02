@@ -7,7 +7,7 @@ MxStreamer::~MxStreamer()
 }
 
 // OFFSET: LEGO1 0x100b92c0 STUB
-MxStreamController *MxStreamer::Open(const char *name, unsigned short p)
+MxStreamController *MxStreamer::Open(const char *name, MxU16 p)
 {
   // TODO
   return NULL;

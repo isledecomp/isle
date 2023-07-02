@@ -13,7 +13,7 @@ MXIOINFO::~MXIOINFO()
 }
 
 // OFFSET: LEGO1 0x100cc830
-unsigned short MXIOINFO::Open(const char *filename, DWORD fdwOpen)
+MxU16 MXIOINFO::Open(const char *filename, DWORD fdwOpen)
 {
   return 0;
 }
@@ -43,7 +43,7 @@ void MXIOINFO::SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk)
 }
 
 // OFFSET: LEGO1 0x100cce60
-unsigned short MXIOINFO::Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend)
+MxU16 MXIOINFO::Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend)
 {
   return 0;
 }

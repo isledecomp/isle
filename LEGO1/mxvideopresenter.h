@@ -8,9 +8,11 @@
 class MxVideoPresenter : public MxMediaPresenter
 {
 public:
-  MxVideoPresenter() {
+  MxVideoPresenter()
+  {
     Init();
   }
+
   // OFFSET: LEGO1 0x1000c820
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -29,9 +31,9 @@ public:
   undefined4 m_unk50;
   undefined4 m_unk54;
   undefined4 m_unk58;
-  short m_unk5c;
+  undefined2 m_unk5c;
   unsigned char m_flags;
-  int m_unk60;
+  undefined4 m_unk60;
 };
 
 #endif // MXVIDEOPRESENTER_H

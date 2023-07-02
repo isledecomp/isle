@@ -95,7 +95,7 @@ private:
 };
 
 __declspec(dllexport) MxBackgroundAudioManager * BackgroundAudioManager();
-__declspec(dllexport) MxDSObject * CreateStreamObject(MxDSFile *,short);
+__declspec(dllexport) MxDSObject * CreateStreamObject(MxDSFile *,MxS16);
 __declspec(dllexport) LegoGameState * GameState();
 __declspec(dllexport) const char * GetNoCD_SourceName();
 __declspec(dllexport) LegoInputManager * InputManager();

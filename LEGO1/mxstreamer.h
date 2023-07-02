@@ -11,7 +11,7 @@ class MxStreamer : public MxCore
 public:
   virtual ~MxStreamer() override;
 
-  __declspec(dllexport) MxStreamController *Open(const char *name, unsigned short p);
+  __declspec(dllexport) MxStreamController *Open(const char *name, MxU16 p);
   __declspec(dllexport) MxLong Close(const char *p);
 
   virtual MxLong Notify(MxParam &p) override; // vtable+0x4

@@ -27,13 +27,13 @@ MxResult LegoGameState::Save(MxULong p)
 }
 
 // OFFSET: LEGO1 0x1003a2e0
-void LegoGameState::SerializePlayersInfo(short p)
+void LegoGameState::SerializePlayersInfo(MxS16 p)
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x1003cdd0
-void LegoGameState::SerializeScoreHistory(short p)
+void LegoGameState::SerializeScoreHistory(MxS16 p)
 {
   // TODO
 }
