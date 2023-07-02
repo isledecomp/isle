@@ -10,15 +10,16 @@
 class MxDSObject : public MxCore
 {
 public:
-  __declspec(dllexport) void SetObjectName(const char *p_objectName);
-
   MxDSObject();
   virtual ~MxDSObject() override;
 
-  MxDSObject &operator=(MxDSObject &p_dsObject);
   void CopyFrom(MxDSObject &p_dsObject);
+  MxDSObject &operator=(MxDSObject &p_dsObject);
 
-    // OFFSET: LEGO1 0x100bf730
+  __declspec(dllexport) void SetObjectName(const char *p_objectName);
+  void SetSourceName(const char *p_sourceName);
+
+  // OFFSET: LEGO1 0x100bf730
   inline virtual const char *ClassName() const override { return "MxDSObject"; }; // vtable+0c
 
   // OFFSET: LEGO1 0x100bf740
@@ -27,8 +28,6 @@ public:
   virtual int unk14(); // vtable+14;
   virtual unsigned int CalculateUnk08(); // vtable+18;
   virtual void Parse(char **p_source, MxU16 p_unk24); // vtable+1c;
-
-  void SetSourceName(const char *p_sourceName);
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline int GetUnknown1c() { return this->m_unk1c; }
@@ -40,6 +39,7 @@ public:
   // OFFSET: LEGO1 0x10005530
   inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
 
+protected:
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 
 private:
