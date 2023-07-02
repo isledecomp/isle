@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8...3.5 FATAL_ERROR)
 
 project(isle CXX)
 
+link_directories("$ENV{LIB}")
+include_directories("$ENV{INCLUDE}")
+
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 
 add_library(lego1 SHARED
@@ -176,10 +179,6 @@ target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
 # Includes
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
 
-# Add VC420 directories
-target_include_directories(lego1 PRIVATE "$ENV{INCLUDE}")
-target_link_directories(lego1 PRIVATE "$ENV{LIB}")
-
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
 set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
@@ -193,10 +192,6 @@ if (ISLE_BUILD_APP)
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
-
-  # Add VC420 directories
-  target_include_directories(isle PRIVATE "$ENV{INCLUDE}")
-  target_link_directories(isle PRIVATE "$ENV{LIB}")
 
   # Link DSOUND, WINMM, and LEGO1
   target_link_libraries(isle PRIVATE dsound winmm lego1)
