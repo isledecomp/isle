@@ -22,11 +22,11 @@ public:
   LegoInputManager();
   virtual ~LegoInputManager() override;
 
-  __declspec(dllexport) void QueueEvent(NotificationId id, unsigned char p2, long p3, long p4, unsigned char p5);
+  __declspec(dllexport) void QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5);
   __declspec(dllexport) void Register(MxCore *);
   __declspec(dllexport) void UnRegister(MxCore *);
 
-  virtual long Tickle() override; // vtable+0x8
+  virtual MxLong Tickle() override; // vtable+0x8
 
   undefined m_pad40[0x15c];
   int m_joystickIndex;

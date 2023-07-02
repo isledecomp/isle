@@ -13,7 +13,7 @@ Police::~Police()
 }
 
 // OFFSET: LEGO1 0x1005e480 STUB
-long Police::Notify(MxParam &p)
+MxLong Police::Notify(MxParam &p)
 {
   // TODO
 

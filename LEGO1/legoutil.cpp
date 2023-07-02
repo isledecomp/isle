@@ -1,11 +1,13 @@
 #include "legoutil.h"
 
+#include "mxtypes.h"
+
 // OFFSET: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, float *g_out)
 {
   double calc;
   double p;
-  long hue_index;
+  MxLong hue_index;
   double v9;
   double v12;
   double v13;

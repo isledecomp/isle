@@ -31,7 +31,7 @@ public:
     return !strcmp(name, MxPresenter::ClassName()) || MxCore::IsA(name);
   }
 
-  __declspec(dllexport) virtual long Tickle() override; // vtable+0x8
+  __declspec(dllexport) virtual MxLong Tickle() override; // vtable+0x8
   virtual void VTable0x14(); // vtable+0x14
   virtual void VTable0x18(); // vtable+0x18
   virtual void VTable0x1c(); // vtable+0x1c
@@ -44,7 +44,7 @@ protected:
 public:
   virtual undefined4 VTable0x34(); // vtable+0x34
   virtual void InitVirtual(); // vtable+0x38
-  __declspec(dllexport) virtual long StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c
+  __declspec(dllexport) virtual MxLong StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   virtual void VTable0x44(undefined4 param); // vtable+0x44
   virtual unsigned char VTable0x48(unsigned char param); // vtable+0x48

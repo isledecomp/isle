@@ -9,7 +9,7 @@ class MxNotificationManager : public MxCore
 public:
   virtual ~MxNotificationManager(); // vtable+0x0
 
-  virtual long Tickle(); // vtable+0x8
+  virtual MxLong Tickle(); // vtable+0x8
 
   // 0x10: MxCriticalSection
 };

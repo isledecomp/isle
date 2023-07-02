@@ -13,7 +13,7 @@ RegistrationBook::~RegistrationBook()
 }
 
 // OFFSET: LEGO1 0x100770e0 STUB
-long RegistrationBook::Notify(MxParam &p)
+MxLong RegistrationBook::Notify(MxParam &p)
 {
   // TODO
 

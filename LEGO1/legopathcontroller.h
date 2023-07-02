@@ -11,7 +11,7 @@ public:
   LegoPathController();
   virtual ~LegoPathController() override;
 
-  virtual long Tickle() override; // vtable+08
+  virtual MxLong Tickle() override; // vtable+08
 
   // OFFSET: LEGO1 0x10045110
   inline const char *ClassName() const override // vtable+0xc

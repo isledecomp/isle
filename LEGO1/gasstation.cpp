@@ -13,7 +13,7 @@ GasStation::~GasStation()
 }
 
 // OFFSET: LEGO1 0x10004a60 STUB
-long GasStation::Notify(MxParam &p)
+MxLong GasStation::Notify(MxParam &p)
 {
   // TODO
 
@@ -21,7 +21,7 @@ long GasStation::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10005c90 STUB
-long GasStation::Tickle()
+MxLong GasStation::Tickle()
 {
   // TODO
 

@@ -28,7 +28,7 @@ class LegoOmni : public MxOmni
 {
 public:
   __declspec(dllexport) void CreateBackgroundAudio();
-  __declspec(dllexport) void RemoveWorld(const MxAtomId &p1, long p2);
+  __declspec(dllexport) void RemoveWorld(const MxAtomId &p1, MxLong p2);
   __declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary **,int &);
   __declspec(dllexport) static void CreateInstance();
   __declspec(dllexport) static LegoOmni *GetInstance();
@@ -36,7 +36,7 @@ public:
   LegoOmni();
   virtual ~LegoOmni(); // vtable+00
 
-  virtual long Notify(MxParam &p); // vtable+04
+  virtual MxLong Notify(MxParam &p); // vtable+04
 
   // OFFSET: LEGO1 0x10058aa0
   inline virtual const char *ClassName() const // vtable+0c
@@ -101,14 +101,14 @@ __declspec(dllexport) const char * GetNoCD_SourceName();
 __declspec(dllexport) LegoInputManager * InputManager();
 __declspec(dllexport) LegoOmni * Lego();
 __declspec(dllexport) void MakeSourceName(char *, const char *);
-__declspec(dllexport) LegoEntity * PickEntity(long,long);
-__declspec(dllexport) LegoROI * PickROI(long,long);
+__declspec(dllexport) LegoEntity * PickEntity(MxLong,MxLong);
+__declspec(dllexport) LegoROI * PickROI(MxLong,MxLong);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
 __declspec(dllexport) LegoSoundManager * SoundManager();
-__declspec(dllexport) long Start(MxDSAction *);
+__declspec(dllexport) MxLong Start(MxDSAction *);
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
-__declspec(dllexport) long Start(MxDSAction *a);
+__declspec(dllexport) MxLong Start(MxDSAction *a);
 
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();

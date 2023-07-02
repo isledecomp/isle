@@ -8,7 +8,7 @@
 class Act2PoliceStation : public LegoEntity
 {
 public:
-  virtual long Notify(MxParam &p) override; // vtable+0x4
+  virtual MxLong Notify(MxParam &p) override; // vtable+0x4
 
   // OFFSET: LEGO1 0x1000e200
   inline virtual const char *ClassName() const override // vtable+0x0c

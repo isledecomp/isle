@@ -13,14 +13,14 @@ LegoGameState::~LegoGameState()
 }
 
 // OFFSET: LEGO1 0x10039c60
-long LegoGameState::Load(unsigned long)
+MxResult LegoGameState::Load(MxULong)
 {
   // TODO
   return 0;
 }
 
 // OFFSET: LEGO1 0x10039980
-long LegoGameState::Save(unsigned long p)
+MxResult LegoGameState::Save(MxULong p)
 {
   // TODO
   return 0;

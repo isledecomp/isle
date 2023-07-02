@@ -32,7 +32,7 @@ public:
   MxOmni();
   virtual ~MxOmni() override;
 
-  virtual long Notify(MxParam &p); // vtable+04
+  virtual MxLong Notify(MxParam &p); // vtable+04
   virtual void Init(); // vtable+14
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c

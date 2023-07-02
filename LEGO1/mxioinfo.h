@@ -2,8 +2,9 @@
 #define MXIOINFO_H
 
 #include <windows.h>
+#include <mmsystem.h>
 
-#include "mmsystem.h"
+#include "mxtypes.h"
 
 class MXIOINFO
 {
@@ -12,9 +13,9 @@ public:
   __declspec(dllexport) ~MXIOINFO();
 
   unsigned short Open(const char *filename, DWORD fdwOpen);
-  void Close(long arg);
+  void Close(MxLong arg);
   LONG Seek(LONG lOffset, int iOrigin);
-  unsigned long Read(HPSTR pch, LONG cch);
+  MxULong Read(HPSTR pch, LONG cch);
   void SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
   unsigned short Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend);
 

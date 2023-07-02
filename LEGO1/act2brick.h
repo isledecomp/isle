@@ -11,8 +11,8 @@ public:
   Act2Brick();
   virtual ~Act2Brick() override; // vtable+0x0
 
-  virtual long Notify(MxParam &p) override; // vtable+0x4
-  virtual long Tickle() override; // vtable+0x08
+  virtual MxLong Notify(MxParam &p) override; // vtable+0x4
+  virtual MxLong Tickle() override; // vtable+0x08
 
   // OFFSET: LEGO1 0x1007a360
   inline virtual const char *ClassName() const override // vtable+0x0c

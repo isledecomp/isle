@@ -13,7 +13,7 @@ Score::~Score()
 }
 
 // OFFSET: LEGO1 0x10001410 STUB
-long Score::Notify(MxParam &p)
+MxLong Score::Notify(MxParam &p)
 {
   // TODO
 

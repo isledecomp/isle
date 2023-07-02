@@ -14,7 +14,7 @@ public:
     Init();
   }
 
-  virtual long Tickle() override; // vtable+0x8, override MxCore
+  virtual MxLong Tickle() override; // vtable+0x8, override MxCore
 
   // OFFSET: LEGO1 0x1000c5c0
   inline virtual const char *ClassName() const override // vtable+0xc

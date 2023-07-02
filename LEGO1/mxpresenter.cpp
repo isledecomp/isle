@@ -34,7 +34,7 @@ MxPresenter::~MxPresenter()
 }
 
 // OFFSET: LEGO1 0x100b5200 STUB
-long MxPresenter::Tickle()
+MxLong MxPresenter::Tickle()
 {
   // TODO
 
@@ -42,7 +42,7 @@ long MxPresenter::Tickle()
 }
 
 // OFFSET: LEGO1 0x100b4d80 STUB
-long MxPresenter::StartAction(MxStreamController *, MxDSAction *)
+MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *)
 {
   // TODO
 
