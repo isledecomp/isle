@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxWavePresenter) == 108);
+DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 
 // OFFSET: LEGO1 0x100b1ad0
 void MxWavePresenter::Init()

@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxSmkPresenter) == 1824);
+DECOMP_SIZE_ASSERT(MxSmkPresenter, 0x720);
 
 // OFFSET: LEGO1 0x100b3650 STUB
 MxSmkPresenter::MxSmkPresenter()

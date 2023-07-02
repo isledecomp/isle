@@ -2,4 +2,4 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxStillPresenter) == 108);
+DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);

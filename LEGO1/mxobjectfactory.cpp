@@ -15,7 +15,7 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxObjectFactory) == 56); // 100af1db
+DECOMP_SIZE_ASSERT(MxObjectFactory, 0x38); // 100af1db
 
 // OFFSET: LEGO1 0x100b0d80
 MxObjectFactory::MxObjectFactory()

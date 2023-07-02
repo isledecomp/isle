@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxMIDIPresenter) == 88);
+DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
 
 // OFFSET: LEGO1 0x100c25e0
 MxMIDIPresenter::MxMIDIPresenter() {

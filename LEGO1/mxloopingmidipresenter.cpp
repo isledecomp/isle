@@ -2,4 +2,4 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxLoopingMIDIPresenter) == 88);
+DECOMP_SIZE_ASSERT(MxLoopingMIDIPresenter, 0x58);

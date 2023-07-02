@@ -2,4 +2,4 @@
 
 #include "decomp.h"
 
-DECOMP_STATIC_ASSERT(sizeof(MxAudioPresenter) == 84);
+DECOMP_SIZE_ASSERT(MxAudioPresenter, 0x54);
