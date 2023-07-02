@@ -11,10 +11,13 @@ void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, floa
   double v9;
   double v12;
   double v13;
+
+  double s_dbl = s;
+
   if (s > 0.5f)
     calc = (1.0f - v) * s + v;
   else
-    calc = (v + 1.0) * s;
+    calc = (v + 1.0) * s_dbl;
   if (calc <= 0.0)
   {
     *g_out = 0.0f;
@@ -22,7 +25,7 @@ void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, floa
     *r_out = 0.0f;
     return;
   }
-  p = s * 2.0 - calc;
+  p = s * 2.0f - calc;
   hue_index = h * 6.0;
   v9 = (h * 6.0 - (float)hue_index) * ((calc - p) / calc) * calc;
   v12 = p + v9;
