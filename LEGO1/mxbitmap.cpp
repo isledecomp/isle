@@ -14,15 +14,75 @@ MxBitmap::MxBitmap()
 // OFFSET: LEGO1 0x100bca10
 MxBitmap::~MxBitmap()
 {
-  if (this->m_info != NULL) {
+  if (this->m_info != NULL)
     delete m_info;
-  }
-  if (this->m_data != NULL) {
+  if (this->m_data != NULL)
     delete m_data;
-  }
-  if (this->m_palette != NULL) {
+  if (this->m_palette != NULL)
     delete m_palette;  
-  }
+}
+
+// OFFSET: LEGO1 0x100bcc40 STUB
+int MxBitmap::vtable14(int)
+{
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100bcba0 STUB
+int MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
+{
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100bcaa0 STUB
+int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
+{
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100bcd60 STUB
+MxResult MxBitmap::LoadFile(HANDLE p_handle)
+{
+  return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x100bcd10
+long MxBitmap::Read(const char *p_filename)
+{
+  MxResult result = FAILURE;
+  HANDLE handle = CreateFileA(
+    p_filename,
+    GENERIC_READ,
+    FILE_SHARE_READ,
+    NULL,
+    OPEN_EXISTING,
+    FILE_ATTRIBUTE_NORMAL,
+    NULL
+  );
+
+  if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle))
+    result = SUCCESS;
+
+  if (handle)
+    CloseHandle(handle);
+
+  return result;
+}
+
+// OFFSET: LEGO1 0x1004e0d0
+int MxBitmap::vtable28(int)
+{
+  return -1;
+}
+
+// OFFSET: LEGO1 0x100ce70 STUB
+void MxBitmap::vtable2c(int, int, int, int, int, int, int)
+{
+}
+
+// OFFSET: LEGO1 0x100d020 STUB
+void MxBitmap::vtable30(int, int, int, int, int, int, int)
+{
 }
 
 // OFFSET: LEGO1 0x100bd1c0
@@ -51,24 +111,19 @@ MxPalette *MxBitmap::CreatePalette()
   return pal;
 }
 
-// OFFSET: LEGO1 0x100bcd10
-long MxBitmap::Read(const char *filename)
+// OFFSET: LEGO1 0x100bd280 STUB
+void MxBitmap::vtable38(void*)
 {
-  HANDLE handle;
-  int unk1;
-  MxResult ret = FAILURE;
-
-  handle = CreateFileA(filename,GENERIC_READ,FILE_SHARE_READ,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,(HANDLE)NULL);
-  if(handle != (HANDLE)INVALID_HANDLE_VALUE) {  // INVALID_HANDLE_VALUE = -1, or 0xffffffff
-		// FIXME: line 16. iVar gets changed in this line
-    if(unk1 == 0) {
-      ret = SUCCESS;
-    }
-  }
-  if(handle != (HANDLE)NULL) {
-    CloseHandle(handle);
-  }
-
-  return ret;
 }
 
+// OFFSET: LEGO1 0x100bd2d0 STUB
+int MxBitmap::vtable3c(MxBool)
+{
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100bd3e0 STUB
+int MxBitmap::vtable40(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
+{
+  return 0;
+}

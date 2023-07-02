@@ -1,9 +1,8 @@
 #ifndef LEGOINPUTMANAGER_H
 #define LEGOINPUTMANAGER_H
 
-#include "mxpresenter.h"
-
 #include "decomp.h"
+#include "mxpresenter.h"
 
 enum NotificationId
 {
