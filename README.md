@@ -6,7 +6,7 @@ This is a **work-in-progress** decompilation of LEGO Island version 1.1. It aims
 
 ## Status
 
-<img src="https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.PNG" width="50%"><img src="https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.PNG" width="50%">
+<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
 
 Currently `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching, however we anticipate they will as more of the overall codebase is implemented.
 

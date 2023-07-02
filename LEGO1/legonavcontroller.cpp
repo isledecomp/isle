@@ -106,8 +106,7 @@ void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
   this->m_hMax = p_hMax;
   this->m_vMax = p_vMax;
 
-  if (VideoManager()->GetVideoParam().flags().GetFullScreen())
-  {
+  if (VideoManager()->GetVideoParam().flags().GetFullScreen()) {
     this->m_hMax = 640;
     this->m_vMax = 480;
   }
@@ -134,19 +133,15 @@ void LegoNavController::ResetToDefault()
 void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 {
   if (this->m_trackDefault != FALSE)
-  {
     ResetToDefault();
-  }
 
-  if (p_accel != FALSE)
-  {
+  if (p_accel != FALSE) {
     this->m_targetTurnSpeed = CalculateNewTargetSpeed(p_hPos, this->m_hMax / 2, this->m_turnMaxSpeed);
     this->m_targetMovementSpeed = CalculateNewTargetSpeed(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxSpeed);
     this->m_turnAccel = CalculateNewAccel(p_hPos, this->m_hMax / 2, this->m_turnMaxAccel, (int)this->m_turnMinAccel);
     this->m_movementAccel = CalculateNewAccel(this->m_vMax - p_vPos, this->m_vMax / 2, this->m_movementMaxAccel, (int)this->m_movementMinAccel);
   }
-  else
-  {
+  else {
     this->m_targetTurnSpeed = 0.0f;
     this->m_targetMovementSpeed = 0.0f;
     this->m_movementAccel = this->m_movementDecel;
@@ -179,9 +174,28 @@ float LegoNavController::CalculateNewAccel(int p_pos, int p_center, float p_maxA
   result = Abs(diff) * p_maxAccel / p_center;
 
   if (result < p_minAccel)
-  {
-    result = (float)p_minAccel;
-  }
+    result = (float) p_minAccel;
 
   return result;
+}
+
+// OFFSET: LEGO1 0x10054fe0
+float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time)
+{
+  float newVel = p_currentVel;
+
+  float velDiff = p_targetVel - p_currentVel;
+  int vSign = velDiff > 0 ? 1 : -1;
+
+  if (Abs(velDiff) > this->m_zeroThreshold) {
+    float deltaVel = p_accel * p_time;
+    newVel = p_currentVel + (deltaVel * vSign);
+
+    if (vSign > 0)
+      newVel = Min(newVel, p_targetVel);
+    else
+      newVel = Max(newVel, p_targetVel);
+  }
+
+  return newVel;
 }

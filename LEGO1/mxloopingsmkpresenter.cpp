@@ -1,5 +1,9 @@
 #include "mxloopingsmkpresenter.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxLoopingSmkPresenter, 0x724);
+
 // OFFSET: LEGO1 0x100b48b0
 MxLoopingSmkPresenter::MxLoopingSmkPresenter()
 {

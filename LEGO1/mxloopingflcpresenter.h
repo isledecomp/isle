@@ -3,6 +3,8 @@
 
 #include "mxflcpresenter.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100dc480
 // SIZE 0x6c
 class MxLoopingFlcPresenter : public MxFlcPresenter
@@ -17,9 +19,10 @@ public:
     // 0x10101e20
     return "MxLoopingFlcPresenter";
   }
-  
+
 private:
   void Init();
+  undefined4 m_unk68;
 };
 
 #endif // MXLOOPINGFLCPRESENTER_H

@@ -13,7 +13,7 @@ HistoryBook::~HistoryBook()
 }
 
 // OFFSET: LEGO1 0x10082680 STUB
-long HistoryBook::Notify(MxParam &p)
+MxLong HistoryBook::Notify(MxParam &p)
 {
   // TODO
 

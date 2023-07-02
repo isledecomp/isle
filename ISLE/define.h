@@ -1,6 +1,7 @@
 #ifndef DEFINE_H
 #define DEFINE_H
 
+#include <mxtypes.h>
 #include <windows.h>
 
 class IsleApp;
@@ -21,6 +22,6 @@ extern int g_targetHeight;
 extern int g_targetDepth;
 extern int g_reqEnableRMDevice;
 extern int g_startupDelay;
-extern long g_lastFrameTime;
+extern MxLong g_lastFrameTime;
 
 #endif // DEFINE_H

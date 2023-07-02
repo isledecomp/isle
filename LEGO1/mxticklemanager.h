@@ -9,7 +9,7 @@ class MxTickleManager : public MxCore
 public:
   virtual ~MxTickleManager();
 
-  virtual long Tickle();
+  virtual MxLong Tickle();
   virtual const char *ClassName() const;
   virtual MxBool IsA(const char *name) const;
   virtual void vtable14();

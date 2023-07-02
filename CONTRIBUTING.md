@@ -30,6 +30,7 @@ In general, we're not exhaustively strict about coding style, but there are some
 - `m_camelCase` for member variables.
 - `g_camelCase` for global variables.
 - `p_camelCase` for function parameters.
+- Instead of C++ primitives (e.g. `int`, `long`, etc.), use types in `mxtypes.h` instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
 
 ## Questions?
 

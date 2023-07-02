@@ -25,7 +25,7 @@ void LegoOmni::CreateBackgroundAudio()
 }
 
 // OFFSET: LEGO1 0x1005af10 STUB
-void LegoOmni::RemoveWorld(const MxAtomId &p1, long p2)
+void LegoOmni::RemoveWorld(const MxAtomId &p1, MxLong p2)
 {
   // TODO
 }
@@ -50,7 +50,7 @@ void SetOmniUserMessage(void (*p_userMsg)(const char *,int))
 }
 
 // OFFSET: LEGO1 0x100acf50 STUB
-long Start(MxDSAction *)
+MxLong Start(MxDSAction *)
 {
   // TODO
   return 0;
@@ -112,7 +112,7 @@ MxBackgroundAudioManager *BackgroundAudioManager()
 }
 
 // OFFSET: LEGO1 0x100c0280 STUB
-MxDSObject *CreateStreamObject(MxDSFile *,short)
+MxDSObject *CreateStreamObject(MxDSFile *,MxS16)
 {
   // TODO
   return NULL;
@@ -149,21 +149,21 @@ const char *GetNoCD_SourceName()
 }
 
 // OFFSET: LEGO1 0x1005b5f0
-long LegoOmni::Notify(MxParam &p)
+MxLong LegoOmni::Notify(MxParam &p)
 {
   // FIXME: Stub
   return 0;
 }
 
 // OFFSET: LEGO1 0x1003dd70 STUB
-LegoROI *PickROI(long,long)
+LegoROI *PickROI(MxLong,MxLong)
 {
   // TODO
   return NULL;
 }
 
 // OFFSET: LEGO1 0x1003ddc0 STUB
-LegoEntity *PickEntity(long,long)
+LegoEntity *PickEntity(MxLong,MxLong)
 {
   // TODO
   return NULL;
@@ -176,7 +176,7 @@ void LegoOmni::Init()
 }
 
 // OFFSET: LEGO1 0x10058e70
-MxResult LegoOmni::Create(MxOmniCreateParam &p)
+MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
   // FIXME: Stub
   return SUCCESS;

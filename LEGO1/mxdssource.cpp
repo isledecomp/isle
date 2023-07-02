@@ -8,7 +8,7 @@ void MxDSSource::SomethingWhichCallsRead(void* pUnknownObject)
 }
 
 // OFFSET: LEGO1 0x100bfff0
-long MxDSSource::GetLengthInDWords()
+MxLong MxDSSource::GetLengthInDWords()
 {
   return m_lengthInDWords;
 }

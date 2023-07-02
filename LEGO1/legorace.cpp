@@ -13,7 +13,7 @@ LegoRace::~LegoRace()
 }
 
 // OFFSET: LEGO1 0x10015e00 STUB
-long LegoRace::Notify(MxParam &p)
+MxLong LegoRace::Notify(MxParam &p)
 {
   // TODO
 

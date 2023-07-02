@@ -37,4 +37,4 @@ int g_reqEnableRMDevice = 0;
 int g_startupDelay = 200;
 
 // 0x4101c0
-long g_lastFrameTime = 0;
+MxLong g_lastFrameTime = 0;

@@ -25,7 +25,7 @@ public:
 
   virtual int unk14(); // vtable+14;
   virtual unsigned int CalculateUnk08(); // vtable+18;
-  virtual void Parse(char **p_source, unsigned short p_unk24); // vtable+1c;
+  virtual void Parse(char **p_source, MxU16 p_unk24); // vtable+1c;
 
   void SetSourceName(const char *p_sourceName);
 
@@ -33,7 +33,7 @@ public:
   inline int GetUnknown1c() { return this->m_unk1c; }
 
   inline void SetUnknown1c(int p_unk1c) { this->m_unk1c = p_unk1c; }
-  inline void SetUnknown24(short p_unk24) { this->m_unk24 = p_unk24; }
+  inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
 
   // OFFSET: ISLE 0x401c40
   // OFFSET: LEGO1 0x10005530
@@ -41,14 +41,14 @@ public:
 
 private:
   unsigned int m_unk08;
-  short m_unk0c;
+  MxS16 m_unk0c;
   char* m_sourceName;
   int m_unk14;
   char *m_objectName;
   int m_unk1c;
   MxAtomId m_atomId;
-  short m_unk24;
-  unsigned short m_unk26;
+  MxS16 m_unk24;
+  MxU16 m_unk26;
   int m_unk28;
 };
 

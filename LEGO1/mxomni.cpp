@@ -123,7 +123,7 @@ void MxOmni::Destroy()
 }
 
 // OFFSET: LEGO1 0x100b07f0
-long MxOmni::Notify(MxParam &p)
+MxLong MxOmni::Notify(MxParam &p)
 {
   // FIXME: Stub
   return 0;

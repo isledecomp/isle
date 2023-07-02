@@ -9,11 +9,12 @@ class MxVideoPresenter;
 class MxTransitionManager : public MxCore
 {
 public:
-  virtual ~MxTransitionManager(); // vtable+0x0
+  MxTransitionManager();
+  virtual ~MxTransitionManager() override; // vtable+0x0
 
   __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *videoPresenter);
 
-  virtual long Tickle(); // vtable+0x8
+  virtual MxLong Tickle(); // vtable+0x8
 };
 
 #endif // MXTRANSITIONMANAGER_H

@@ -1,5 +1,9 @@
 #include "legoinputmanager.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(LegoInputManager, 0x338); // 0x10059085
+
 // OFFSET: LEGO1 0x1005b790 STUB
 LegoInputManager::LegoInputManager()
 {
@@ -13,7 +17,7 @@ LegoInputManager::~LegoInputManager()
 }
 
 // OFFSET: LEGO1 0x1005c740 STUB
-void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, long p3, long p4, unsigned char p5)
+void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5)
 {
   // TODO
 }
@@ -31,7 +35,7 @@ void LegoInputManager::UnRegister(MxCore *)
 }
 
 // OFFSET: LEGO1 0x1005b8b0 STUB
-long LegoInputManager::Tickle()
+MxLong LegoInputManager::Tickle()
 {
   // TODO
 

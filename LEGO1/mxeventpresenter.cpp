@@ -1,5 +1,9 @@
 #include "mxeventpresenter.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxEventPresenter, 0x54);
+
 // OFFSET: LEGO1 0x100c2b70
 MxEventPresenter::MxEventPresenter()
 {
@@ -12,8 +16,8 @@ MxEventPresenter::~MxEventPresenter()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100c2da0 STUB
+// OFFSET: LEGO1 0x100c2da0
 void MxEventPresenter::Init()
 {
-  // TODO
+  m_unk50 = 0;
 }
