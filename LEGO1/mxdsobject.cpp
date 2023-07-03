@@ -3,10 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
+
 // OFFSET: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
-  this->m_unk0c = 0;
+  this->SetType(MxDSType_Object);
   this->m_sourceName = NULL;
   this->m_unk14 = 0;
   this->m_objectName = NULL;
@@ -83,15 +85,15 @@ void MxDSObject::SetSourceName(const char *p_sourceName)
 }
 
 // OFFSET: LEGO1 0x100bf9c0
-int MxDSObject::unk14()
+undefined4 MxDSObject::unk14()
 {
   return 10;
 }
 
 // OFFSET: LEGO1 0x100bf9d0
-unsigned int MxDSObject::CalculateUnk08()
+MxU32 MxDSObject::CalculateUnk08()
 {
-  unsigned int unk08;
+  MxU32 unk08;
 
   if (this->m_sourceName)
     unk08 = strlen(this->m_sourceName) + 3;
@@ -111,16 +113,16 @@ unsigned int MxDSObject::CalculateUnk08()
 }
 
 // OFFSET: LEGO1 0x100bfa20
-void MxDSObject::Parse(char **p_source, MxU16 p_unk24)
+void MxDSObject::Parse(char **p_source, MxS16 p_unk24)
 {
   this->SetSourceName(*p_source);
   *p_source += strlen(this->m_sourceName) + 1;
-  this->m_unk14 = *(int*) *p_source;
+  this->m_unk14 = *(undefined4*) *p_source;
   *p_source += 4;
 
   this->SetObjectName(*p_source);
   *p_source += strlen(this->m_objectName) + 1;
-  this->m_unk1c = *(int*) *p_source;
+  this->m_unk1c = *(undefined4*) *p_source;
   *p_source += 4;
 
   this->m_unk24 = p_unk24;
