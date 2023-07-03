@@ -1,4 +1,5 @@
 #include "legogamestate.h"
+#include "legoomni.h"
 
 // OFFSET: LEGO1 0x10039550
 LegoGameState::LegoGameState()
@@ -39,7 +40,19 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 }
 
 // OFFSET: LEGO1 0x10039f00
-void LegoGameState::SetSavePath(char *p)
+void LegoGameState::SetSavePath(char *p_savePath)
 {
-  // TODO
+  if (m_savePath != NULL)
+  {
+    delete[] m_savePath;
+  }
+  if (p_savePath)
+  {
+    m_savePath = new char[strlen(p_savePath) + 1];
+    strcpy(m_savePath, p_savePath);
+  }
+  else
+  {
+    m_savePath = NULL;
+  }
 }
