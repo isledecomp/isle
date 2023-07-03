@@ -11,7 +11,7 @@
 class MxPalette : public MxCore
 {
 public:
-  __declspec(dllexport) MxBool operator==(MxPalette &);
+  __declspec(dllexport) MxBool operator==(MxPalette *p_palette);
   __declspec(dllexport) void Detach();
 
   MxPalette();
@@ -19,6 +19,7 @@ public:
 
   void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
   MxPalette* Clone();
+  MxPalette* FromBitmapPalette(RGBQUAD* p_bmp);
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
   MxResult SetSkyColor(LPPALETTEENTRY p_entries);

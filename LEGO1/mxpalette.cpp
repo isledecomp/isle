@@ -47,6 +47,17 @@ MxPalette* MxPalette::Clone()
   return pal;
 }
 
+// OFFSET: LEGO1 0x100beed0
+MxPalette* MxPalette::FromBitmapPalette(RGBQUAD* p_bmp)
+{
+  // FIXME: Incomplete
+  this->m_overrideSkyColor = FALSE;
+  ApplySystemEntriesToPalette(this->m_entries);
+  memcpy(this->m_entries + 10, &p_bmp[10], 246);
+  this->m_skyColor = this->m_entries[141];
+  return this;
+}
+
 // OFFSET: LEGO1 0x100bf150
 MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 {
@@ -89,11 +100,24 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 }
 
 // OFFSET: LEGO1 0x100bf340
-MxBool MxPalette::operator==(MxPalette &)
+MxBool MxPalette::operator==(MxPalette *p_palette)
 {
-  // TODO
-  return FALSE;
-
+  // FIXME: ok, idk what is happening here: trying memcpy in different ways showed 0.00% match. Here is literally what it does.
+  // My guess is that memcpy doesn't break its loop when something is incorrect, and this function is only intended to check
+  // the RGB and memcpy does everything? The paramater 'rhs' in ghidra suggests it was likely some memcmp. For now,
+  // this is literally down to instruction swap.
+  int i = 0;
+  PALETTEENTRY *our = this->m_entries;
+  PALETTEENTRY *their = p_palette->m_entries;
+  do {
+    if(our->peRed != their->peRed) return FALSE;
+    if(our->peGreen != their->peGreen) return FALSE;
+    if(our->peBlue != their->peBlue) return FALSE;
+    their += 1;
+    our += 1;
+    i += 1;
+  } while (i < 256);
+  return TRUE;
 }
 
 // OFFSET: LEGO1 0x100bf330
