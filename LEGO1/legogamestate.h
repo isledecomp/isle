@@ -13,6 +13,9 @@ public:
   __declspec(dllexport) void SerializePlayersInfo(MxS16 p);
   __declspec(dllexport) void SerializeScoreHistory(MxS16 p);
   __declspec(dllexport) void SetSavePath(char *p);
+
+private:
+  char *m_SavePath;
 };
 
 #endif // LEGOGAMESTATE_H
