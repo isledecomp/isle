@@ -15,7 +15,7 @@ public:
   __declspec(dllexport) void SetSavePath(char *p);
 
 private:
-  char *m_SavePath;
+  char *m_savePath;
 };
 
 #endif // LEGOGAMESTATE_H

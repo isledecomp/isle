@@ -40,19 +40,19 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 }
 
 // OFFSET: LEGO1 0x10039f00
-void LegoGameState::SetSavePath(char *p_SavePath)
+void LegoGameState::SetSavePath(char *p_savePath)
 {
-  if (m_SavePath != NULL)
+  if (m_savePath != NULL)
   {
-    delete[] m_SavePath;
+    delete[] m_savePath;
   }
-  if (p_SavePath)
+  if (p_savePath)
   {
-    m_SavePath = new char[strlen(p_SavePath) + 1];
-    strcpy(m_SavePath, p_SavePath);
+    m_savePath = new char[strlen(p_savePath) + 1];
+    strcpy(m_savePath, p_savePath);
   }
   else
   {
-    m_SavePath = NULL;
+    m_savePath = NULL;
   }
 }
