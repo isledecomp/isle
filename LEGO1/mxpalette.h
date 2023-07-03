@@ -18,7 +18,7 @@ public:
   virtual ~MxPalette();
 
   void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
-  MxPalette* Clone();
+  MxPalette& Clone();
   MxPalette* FromBitmapPalette(RGBQUAD* p_bmp);
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);

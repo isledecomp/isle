@@ -35,16 +35,13 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
   // FIXME: we get g_defaultPalette here, we need to define that, then we cna do the memcpy's
 }
 
-// OFFSET: LEGO1 100bf0b0
-MxPalette* MxPalette::Clone()
+// OFFSET: LEGO1 0x100bf0b0
+MxPalette& MxPalette::Clone()
 {
-  // FIXME: doesnt match
-  MxPalette *pal = (MxPalette *) malloc(0x414);
-  if(pal != NULL) {
-    GetEntries(pal->m_entries);
-    pal->m_overrideSkyColor = m_overrideSkyColor;
-  }
-  return pal;
+  MxPalette *result = new MxPalette;
+  this->GetEntries(result->m_entries);
+  result->m_overrideSkyColor = this->m_overrideSkyColor;
+  return *result;
 }
 
 // OFFSET: LEGO1 0x100beed0
