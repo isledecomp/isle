@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 2.8...3.5 FATAL_ERROR)
 
 project(isle CXX)
 
-link_directories("$ENV{LIB}")
-include_directories("$ENV{INCLUDE}")
-
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 
 add_library(lego1 SHARED

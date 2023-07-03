@@ -1,10 +1,12 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
-import pathlib
-import subprocess
 import argparse
+import pathlib
 import re
 import requests
+import subprocess
+
+ISLE_PATH = pathlib.Path(__file__).parents[0]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--inspect", metavar='<offset>',
@@ -16,6 +18,7 @@ parser.add_argument("-s", "--status", action="store_true",
 parser.add_argument("--inspect-shim", nargs=2, metavar=('<file>', '<line>'),
   help="Inspect the assembly diff of the function spanning <line> in <file>. "
   "Intended to be invoked by IDE commands.")
+parser.add_argument("-B", dest="builddir", default=ISLE_PATH / "build", type=pathlib.Path, help="build directory")
 args = parser.parse_args()
 
 # Figure out what offset to pass to the reccmp tool if any
@@ -44,17 +47,18 @@ def get_inspect_offset():
   return None
 
 # If the build directory doesn't exist yet, run configure.py
-if not pathlib.Path("build").exists():
+if not args.builddir.exists():
   print("Not configured yet, please run configure.py first.")
   exit(1)
 
 # Run cmake, with no parallel build because that does not play nice the
 # MSVC420 compiler the original game was built with thanks to the different
 # threads contending over the pdb file.
-result = subprocess.run(["cmake", "--build", ".", "-j", "1"], cwd="build")
+result = subprocess.run(["cmake", "--build", ".", "-j", "1"], cwd=str(args.builddir))
 
 def require_original():
-  if not pathlib.Path("original/LEGO1.DLL").exists():
+  if not (ISLE_PATH / "original/LEGO1.DLL").exists():
+    (ISLE_PATH / "original").mkdir(parents=True, exist_ok=True)
     print("Couldn't find original/LEGO1.DLL. Downloading a copy...")
     url1 = "https://legoisland.org/download/ISLE.EXE"
     r1 = requests.get(url1, stream=True)
