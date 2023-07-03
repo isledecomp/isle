@@ -11,7 +11,7 @@
 class MxPalette : public MxCore
 {
 public:
-  __declspec(dllexport) MxBool operator==(MxPalette *p_palette);
+  __declspec(dllexport) MxBool operator==(MxPalette &);
   __declspec(dllexport) void Detach();
 
   MxPalette();

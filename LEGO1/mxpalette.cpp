@@ -100,23 +100,18 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 }
 
 // OFFSET: LEGO1 0x100bf340
-MxBool MxPalette::operator==(MxPalette *p_palette)
+MxBool MxPalette::operator==(MxPalette &other)
 {
-  // FIXME: ok, idk what is happening here: trying memcpy in different ways showed 0.00% match. Here is literally what it does.
-  // My guess is that memcpy doesn't break its loop when something is incorrect, and this function is only intended to check
-  // the RGB and memcpy does everything? The paramater 'rhs' in ghidra suggests it was likely some memcmp. For now,
-  // this is literally down to instruction swap.
-  int i = 0;
-  PALETTEENTRY *our = this->m_entries;
-  PALETTEENTRY *their = p_palette->m_entries;
-  do {
-    if(our->peRed != their->peRed) return FALSE;
-    if(our->peGreen != their->peGreen) return FALSE;
-    if(our->peBlue != their->peBlue) return FALSE;
-    their += 1;
-    our += 1;
-    i += 1;
-  } while (i < 256);
+  int i;
+  for (i = 0; i < 256; i++)
+  {
+    if (this->m_entries[i].peRed != other.m_entries[i].peRed)
+      return FALSE;
+    if (this->m_entries[i].peGreen != other.m_entries[i].peGreen)
+      return FALSE;
+    if (this->m_entries[i].peBlue != other.m_entries[i].peBlue)
+      return FALSE;
+  }
   return TRUE;
 }
 
