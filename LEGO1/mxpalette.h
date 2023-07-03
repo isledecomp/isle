@@ -11,18 +11,18 @@
 class MxPalette : public MxCore
 {
 public:
-  __declspec(dllexport) MxBool operator==(MxPalette *p_palette);
+  __declspec(dllexport) MxBool operator==(MxPalette &);
   __declspec(dllexport) void Detach();
 
   MxPalette();
   virtual ~MxPalette();
 
   void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
-  MxPalette* Clone();
+  MxPalette& Clone();
   MxPalette* FromBitmapPalette(RGBQUAD* p_bmp);
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
-  MxResult SetSkyColor(LPPALETTEENTRY p_entries);
+  MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
 private:
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];

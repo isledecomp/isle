@@ -35,16 +35,13 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
   // FIXME: we get g_defaultPalette here, we need to define that, then we cna do the memcpy's
 }
 
-// OFFSET: LEGO1 100bf0b0
-MxPalette* MxPalette::Clone()
+// OFFSET: LEGO1 0x100bf0b0
+MxPalette& MxPalette::Clone()
 {
-  // FIXME: doesnt match
-  MxPalette *pal = (MxPalette *) malloc(0x414);
-  if(pal != NULL) {
-    GetEntries(pal->m_entries);
-    pal->m_overrideSkyColor = m_overrideSkyColor;
-  }
-  return pal;
+  MxPalette *result = new MxPalette;
+  this->GetEntries(result->m_entries);
+  result->m_overrideSkyColor = this->m_overrideSkyColor;
+  return *result;
 }
 
 // OFFSET: LEGO1 0x100beed0
@@ -66,15 +63,21 @@ MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 }
 
 // OFFSET: LEGO1 0x100bf2d0
-MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_entries)
+MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
 {
-  // FIXME: doesnt match
-  MxResult ret = SUCCESS;
-  this->m_entries[141].peRed = p_entries->peRed;
-  this->m_entries[141].peGreen = p_entries->peGreen;
-  this->m_entries[141].peBlue = p_entries->peBlue;
-  this->m_skyColor = this->m_entries[141];
-  return ret;
+  int status = 0;
+  LPDIRECTDRAWPALETTE palette = this->m_palette;
+  if ( palette )
+  {
+    this->m_entries[141].peRed = p_sky_color->peRed;
+    this->m_entries[141].peGreen = p_sky_color->peGreen;
+    this->m_entries[141].peBlue = p_sky_color->peBlue;
+    this->m_skyColor = this->m_entries[141];
+    
+    if ( palette->SetEntries(0, 141, 1, &this->m_skyColor) )
+      status = -1;
+  }
+  return status;
 }
 
 // OFFSET: LEGO1 0x100bf420
@@ -100,23 +103,18 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 }
 
 // OFFSET: LEGO1 0x100bf340
-MxBool MxPalette::operator==(MxPalette *p_palette)
+MxBool MxPalette::operator==(MxPalette &other)
 {
-  // FIXME: ok, idk what is happening here: trying memcpy in different ways showed 0.00% match. Here is literally what it does.
-  // My guess is that memcpy doesn't break its loop when something is incorrect, and this function is only intended to check
-  // the RGB and memcpy does everything? The paramater 'rhs' in ghidra suggests it was likely some memcmp. For now,
-  // this is literally down to instruction swap.
-  int i = 0;
-  PALETTEENTRY *our = this->m_entries;
-  PALETTEENTRY *their = p_palette->m_entries;
-  do {
-    if(our->peRed != their->peRed) return FALSE;
-    if(our->peGreen != their->peGreen) return FALSE;
-    if(our->peBlue != their->peBlue) return FALSE;
-    their += 1;
-    our += 1;
-    i += 1;
-  } while (i < 256);
+  int i;
+  for (i = 0; i < 256; i++)
+  {
+    if (this->m_entries[i].peRed != other.m_entries[i].peRed)
+      return FALSE;
+    if (this->m_entries[i].peGreen != other.m_entries[i].peGreen)
+      return FALSE;
+    if (this->m_entries[i].peBlue != other.m_entries[i].peBlue)
+      return FALSE;
+  }
   return TRUE;
 }
 
