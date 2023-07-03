@@ -22,7 +22,7 @@ public:
   MxPalette* FromBitmapPalette(RGBQUAD* p_bmp);
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
-  MxResult SetSkyColor(LPPALETTEENTRY p_entries);
+  MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
 private:
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];

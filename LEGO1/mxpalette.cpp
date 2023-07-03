@@ -66,15 +66,21 @@ MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 }
 
 // OFFSET: LEGO1 0x100bf2d0
-MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_entries)
+MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
 {
-  // FIXME: doesnt match
-  MxResult ret = SUCCESS;
-  this->m_entries[141].peRed = p_entries->peRed;
-  this->m_entries[141].peGreen = p_entries->peGreen;
-  this->m_entries[141].peBlue = p_entries->peBlue;
-  this->m_skyColor = this->m_entries[141];
-  return ret;
+  int status = 0;
+  LPDIRECTDRAWPALETTE palette = this->m_palette;
+  if ( palette )
+  {
+    this->m_entries[141].peRed = p_sky_color->peRed;
+    this->m_entries[141].peGreen = p_sky_color->peGreen;
+    this->m_entries[141].peBlue = p_sky_color->peBlue;
+    this->m_skyColor = this->m_entries[141];
+    
+    if ( palette->SetEntries(0, 141, 1, &this->m_skyColor) )
+      status = -1;
+  }
+  return status;
 }
 
 // OFFSET: LEGO1 0x100bf420
