@@ -367,16 +367,57 @@ void MxPalette::Detach()
 }
   
 // OFFSET: LEGO1 0x100bf170
-MxResult MxPalette::SetPalette(LPPALETTEENTRY p_palette)
+MxResult MxPalette::SetPalette(LPPALETTEENTRY p_entries)
 {
-  int i = 0;
-  MxResult ret = SUCCESS;
-  if (this->m_palette != NULL) {
-    for(int i = 0; i <= 10; i++) {
+  MxS32 i;
+  MxResult status = 0;
+
+  if ( this->m_palette )
+  {
+    for ( i = 0; i < 10; i++ )
       this->m_entries[i].peFlags = 0x80;
+    for ( i = 10; i < 136; i++ )
+    {
+      this->m_entries[i].peFlags = 68;
+      this->m_entries[i].peRed = p_entries[i].peRed;
+      this->m_entries[i].peGreen = p_entries[i].peGreen;
+      this->m_entries[i].peBlue = p_entries[i].peBlue;
     }
+    for ( i = 136; i < 140; i++ )
+    {
+      this->m_entries[i].peFlags = 132;
+      this->m_entries[i].peRed = p_entries[i].peRed;
+      this->m_entries[i].peGreen = p_entries[i].peGreen;
+      this->m_entries[i].peBlue = p_entries[i].peBlue;
+    }
+    if ( !this->m_overrideSkyColor )
+    {
+      this->m_entries[140].peFlags = 0x44;
+      this->m_entries[140].peRed = p_entries[140].peRed;
+      this->m_entries[140].peGreen = p_entries[140].peGreen;
+      this->m_entries[140].peBlue = p_entries[140].peBlue;
+      this->m_entries[141].peFlags = 0x84;
+      this->m_entries[141].peRed = p_entries[141].peRed;
+      this->m_entries[141].peGreen = p_entries[141].peGreen;
+      this->m_entries[141].peBlue = p_entries[141].peBlue;
+    }
+
+    for ( i = 142; i < 246; i++ )
+    {
+      this->m_entries[i].peFlags = 132;
+      this->m_entries[i].peRed = p_entries[i].peRed;
+      this->m_entries[i].peGreen = p_entries[i].peGreen;
+      this->m_entries[i].peBlue = p_entries[i].peBlue;
+    }
+
+    for ( i = 246; i < 256; i++ )
+      this->m_entries[i].peFlags = 0x80;
+    
+    if ( this->m_palette->SetEntries(0, 0, 256, this->m_entries) )
+      status = -1;
   }
-  return ret;
+
+  return status;
 }
 
 // OFFSET: LEGO1 0x100bf2d0
