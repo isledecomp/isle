@@ -5,10 +5,10 @@
 
 enum LookupMode
 {
-    LookupMode_Exact = 0,
-    LookupMode_LowerCase = 1,
-    LookupMode_UpperCase = 2,
-    LookupMode_LowerCase2 = 3
+  LookupMode_Exact = 0,
+  LookupMode_LowerCase = 1,
+  LookupMode_UpperCase = 2,
+  LookupMode_LowerCase2 = 3
 };
 
 class MxAtomId
