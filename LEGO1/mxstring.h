@@ -23,7 +23,7 @@ public:
 
 private:
   char *m_data;
-  unsigned short m_length;
+  MxU16 m_length;
 
 };
 

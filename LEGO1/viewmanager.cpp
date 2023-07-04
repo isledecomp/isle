@@ -1,6 +1,7 @@
 #include "viewmanager.h"
 
-void ViewManager::RemoveAll(ViewROI*)
+// OFFSET: LEGO1 0x100a64d0 STUB
+void ViewManager::RemoveAll(ViewROI *)
 {
-  // FIXME: Stub
+  // TODO
 }

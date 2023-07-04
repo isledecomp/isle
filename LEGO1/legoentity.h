@@ -15,7 +15,7 @@ public:
 
   __declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
 
-  virtual long Notify(MxParam &p) override; // vtable+0x4
+  virtual MxLong Notify(MxParam &p) override; // vtable+0x4
 
   // OFFSET: LEGO1 0x1000c2f0
   inline const char *ClassName() const override // vtable+0xc

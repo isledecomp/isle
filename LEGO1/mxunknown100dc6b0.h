@@ -10,6 +10,7 @@ class MxUnknown100dc6b0 : public MxCore
 {
 public:
   MxUnknown100dc6b0();
+  virtual ~MxUnknown100dc6b0() override;
 
   MxResult Init();
 

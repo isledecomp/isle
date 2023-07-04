@@ -11,3 +11,9 @@ MxEntity::~MxEntity()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x10001070 STUB
+void MxEntity::Destroy()
+{
+  // TODO
+}

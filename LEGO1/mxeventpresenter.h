@@ -3,6 +3,8 @@
 
 #include "mxmediapresenter.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100dca88
 // SIZE 0x54
 class MxEventPresenter : public MxMediaPresenter
@@ -23,9 +25,10 @@ public:
   {
     return !strcmp(name, MxEventPresenter::ClassName()) || MxMediaPresenter::IsA(name);
   }
-  
+
 private:
   void Init();
+  undefined4 m_unk50;
 
 };
 

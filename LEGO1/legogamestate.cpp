@@ -1,22 +1,58 @@
 #include "legogamestate.h"
+#include "legoomni.h"
 
-long LegoGameState::Save(unsigned long p)
+// OFFSET: LEGO1 0x10039550
+LegoGameState::LegoGameState()
 {
-  // FIXME: Stub
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10039720
+LegoGameState::~LegoGameState()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10039c60
+MxResult LegoGameState::Load(MxULong)
+{
+  // TODO
   return 0;
 }
 
-void LegoGameState::SerializePlayersInfo(short p)
+// OFFSET: LEGO1 0x10039980
+MxResult LegoGameState::Save(MxULong p)
 {
-  // FIXME: Stub
+  // TODO
+  return 0;
 }
 
-void LegoGameState::SerializeScoreHistory(short p)
+// OFFSET: LEGO1 0x1003a2e0
+void LegoGameState::SerializePlayersInfo(MxS16 p)
 {
-  // FIXME: Stub
+  // TODO
 }
 
-void LegoGameState::SetSavePath(char* p)
+// OFFSET: LEGO1 0x1003cdd0
+void LegoGameState::SerializeScoreHistory(MxS16 p)
 {
-  // FIXME: Stub
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10039f00
+void LegoGameState::SetSavePath(char *p_savePath)
+{
+  if (m_savePath != NULL)
+  {
+    delete[] m_savePath;
+  }
+  if (p_savePath)
+  {
+    m_savePath = new char[strlen(p_savePath) + 1];
+    strcpy(m_savePath, p_savePath);
+  }
+  else
+  {
+    m_savePath = NULL;
+  }
 }

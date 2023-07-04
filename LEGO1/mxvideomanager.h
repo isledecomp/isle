@@ -11,10 +11,10 @@ class MxVideoManager : public MxUnknown100dc6b0
 public:
   virtual ~MxVideoManager();
 
-  virtual long Tickle(); // vtable+0x8
+  virtual MxLong Tickle(); // vtable+0x8
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
-  __declspec(dllexport) virtual long RealizePalette(MxPalette *); // vtable+0x30
+  __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
 
   MxVideoManager();
 

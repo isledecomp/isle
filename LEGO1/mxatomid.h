@@ -1,8 +1,14 @@
 #ifndef MXATOMID_H
 #define MXATOMID_H
 
+#include "mxtypes.h"
+
 enum LookupMode
 {
+  LookupMode_Exact = 0,
+  LookupMode_LowerCase = 1,
+  LookupMode_UpperCase = 2,
+  LookupMode_LowerCase2 = 3
 };
 
 class MxAtomId
@@ -15,6 +21,11 @@ public:
   MxAtomId()
   {
     this->m_internal = 0;
+  }
+
+  inline MxBool operator ==(const MxAtomId &other) const
+  {
+    return this->m_internal == other.m_internal;
   }
 
 private:

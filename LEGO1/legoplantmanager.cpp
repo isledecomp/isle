@@ -13,7 +13,7 @@ LegoPlantManager::~LegoPlantManager()
 }
 
 // OFFSET: LEGO1 0x10026e00 STUB
-long LegoPlantManager::Tickle()
+MxLong LegoPlantManager::Tickle()
 {
   // TODO
 

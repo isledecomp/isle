@@ -10,7 +10,7 @@ class LegoSoundManager : public MxSoundManager
 public:
   LegoSoundManager();
   virtual ~LegoSoundManager() override;
-  virtual long Tickle() override; // vtable+08
+  virtual MxLong Tickle() override; // vtable+08
 
 private:
   void Init();
