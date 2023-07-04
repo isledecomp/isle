@@ -1,19 +1,19 @@
-#ifndef MXFILE_H
-#define MXFILE_H
+#ifndef LEGOSTREAM_H
+#define LEGOSTREAM_H
 
 #include "decomp.h"
 #include "mxtypes.h"
 
 #include <iosfwd>
 
-#define MXFILE_MODE_READ 1
-#define MXFILE_MODE_WRITE 2
+#define LEGOSTREAM_MODE_READ 1
+#define LEGOSTREAM_MODE_WRITE 2
 
-class MxFile
+class LegoStream
 {
 public:
-  MxFile() : m_mode(0) {}
-  inline virtual ~MxFile() {};
+  LegoStream() : m_mode(0) {}
+  inline virtual ~LegoStream() {};
 
   virtual MxResult Read(char* buffer, MxU32 size) = 0;
   virtual MxResult Write(char* buffer, MxU32 size) = 0;
@@ -34,11 +34,11 @@ protected:
   MxU8 m_mode;
 };
 
-class MxSystemFile : public MxFile
+class LegoFileStream : public LegoStream
 {
 public:
-  MxSystemFile();
-  virtual ~MxSystemFile();
+  LegoFileStream();
+  virtual ~LegoFileStream();
 
   MxResult Read(char* buffer, MxU32 size) override;
   MxResult Write(char* buffer, MxU32 size) override;
@@ -51,11 +51,11 @@ private:
   FILE *m_hFile;
 };
 
-class MxMemoryFile : public MxFile
+class LegoMemoryStream : public LegoStream
 {
 public:
-  MxMemoryFile(char* buffer);
-  ~MxMemoryFile() {}
+  LegoMemoryStream(char* buffer);
+  ~LegoMemoryStream() {}
 
   MxResult Read(char* buffer, MxU32 size) override;
   MxResult Write(char* buffer, MxU32 size) override;
@@ -67,4 +67,4 @@ private:
   MxU32 m_offset;
 };
 
-#endif // MXFILE_H
+#endif // LEGOSTREAM_H

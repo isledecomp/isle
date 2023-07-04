@@ -80,6 +80,7 @@ add_library(lego1 SHARED
   LEGO1/legoroi.cpp
   LEGO1/legosoundmanager.cpp
   LEGO1/legostate.cpp
+  LEGO1/legostream.cpp
   LEGO1/legotexturepresenter.cpp
   LEGO1/legoutil.cpp
   LEGO1/legovideomanager.cpp
@@ -118,7 +119,6 @@ add_library(lego1 SHARED
   LEGO1/mxentity.cpp
   LEGO1/mxeventmanager.cpp
   LEGO1/mxeventpresenter.cpp
-  LEGO1/mxfile.cpp
   LEGO1/mxflcpresenter.cpp
   LEGO1/mxioinfo.cpp
   LEGO1/mxloopingflcpresenter.cpp
