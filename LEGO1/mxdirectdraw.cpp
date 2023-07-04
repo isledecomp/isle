@@ -899,15 +899,9 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 // OFFSET: LEGO1 0x1009D9D0
 BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
-  int i;
   Mode mode = { width, height, bpp };
+  int i;
 
-  if (m_pCurrentDeviceModesList->count <= 0)
-  {
-    return FALSE;
-  }
-
-  // TODO: find way to mach original
   for (i = 0; i < m_pCurrentDeviceModesList->count; i++)
   {
     if (m_pCurrentDeviceModesList->m_mode_ARRAY[i] == mode)
@@ -1103,15 +1097,11 @@ BOOL MxDirectDraw::SetPaletteEntries(
 
   if (paletteEntryCount != 0)
   {
-    // actually both of this 'if' statements is not needed(may be it created from for some how)
-    if (paletteEntryCount > 10)
+    for (i = 10; (i < paletteEntryCount) && (i < 246); i++)
     {
-      for (i = 10; (i < paletteEntryCount) && (i < 246); i++)
-      {
-        m_paletteEntries[i].peRed = pPaletteEntries[i].peRed;
-        m_paletteEntries[i].peGreen = pPaletteEntries[i].peGreen;
-        m_paletteEntries[i].peBlue = pPaletteEntries[i].peBlue;
-      }
+	  m_paletteEntries[i].peRed = pPaletteEntries[i].peRed;
+	  m_paletteEntries[i].peGreen = pPaletteEntries[i].peGreen;
+	  m_paletteEntries[i].peBlue = pPaletteEntries[i].peBlue;
     }
   }
 
@@ -1188,8 +1178,11 @@ void MxDirectDraw::unk1()
   HRESULT result;
   byte* line;
   DDSURFACEDESC ddsd;
+  int i;
+  unsigned int j;
+  int count = m_bFlipSurfaces ? 2 : 1;
 
-  for (int i = 0; i < m_bFlipSurfaces ? 2 : 1; i++)
+  for (i = 0; count > i; i++)
   {
     memset(&ddsd, 0, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
@@ -1209,7 +1202,7 @@ void MxDirectDraw::unk1()
 
     // clear backBuffer
     line = (byte*)ddsd.lpSurface;
-    for (unsigned int j = 0; j < ddsd.dwHeight; i++)
+    for (j = ddsd.dwHeight - 1; j ; j--)
     {
       memset(line, 0, ddsd.dwWidth);
       line += ddsd.lPitch;
