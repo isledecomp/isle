@@ -1,5 +1,7 @@
 #include "mxpalette.h"
 
+LPPALETTEENTRY g_defaultPalette;
+
 // OFFSET: LEGO1 0x100bee30
 MxPalette::MxPalette()
 {
@@ -32,16 +34,17 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
       ReleaseDC(NULL, hdc);
     }
   }
-  // FIXME: we get g_defaultPalette here, we need to define that, then we cna do the memcpy's
+  memcpy(p_entries, g_defaultPalette, 10);
+  memcpy(p_entries + 0xf6, p_entries + 0xf6, 10);
 }
 
 // OFFSET: LEGO1 0x100bf0b0
-MxPalette& MxPalette::Clone()
+MxPalette* MxPalette::Clone()
 {
   MxPalette *result = new MxPalette;
   this->GetEntries(result->m_entries);
   result->m_overrideSkyColor = this->m_overrideSkyColor;
-  return *result;
+  return result;
 }
 
 // OFFSET: LEGO1 0x100beed0
@@ -53,31 +56,6 @@ MxPalette* MxPalette::FromBitmapPalette(RGBQUAD* p_bmp)
   memcpy(this->m_entries + 10, &p_bmp[10], 246);
   this->m_skyColor = this->m_entries[141];
   return this;
-}
-
-// OFFSET: LEGO1 0x100bf150
-MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
-{
-  memcpy(p_entries, this->m_entries, sizeof(this->m_entries));
-  return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x100bf2d0
-MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
-{
-  int status = 0;
-  LPDIRECTDRAWPALETTE palette = this->m_palette;
-  if ( palette )
-  {
-    this->m_entries[141].peRed = p_sky_color->peRed;
-    this->m_entries[141].peGreen = p_sky_color->peGreen;
-    this->m_entries[141].peBlue = p_sky_color->peBlue;
-    this->m_skyColor = this->m_entries[141];
-    
-    if ( palette->SetEntries(0, 141, 1, &this->m_skyColor) )
-      status = -1;
-  }
-  return status;
 }
 
 // OFFSET: LEGO1 0x100bf420
@@ -102,6 +80,13 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
   ReleaseDC((HWND) NULL, hdc);
 }
 
+// OFFSET: LEGO1 0x100bf150
+MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
+{
+  memcpy(p_entries, this->m_entries, sizeof(this->m_entries));
+  return SUCCESS;
+}
+
 // OFFSET: LEGO1 0x100bf340
 MxBool MxPalette::operator==(MxPalette &other)
 {
@@ -124,3 +109,33 @@ void MxPalette::Detach()
   this->m_palette = NULL;
 }
   
+// OFFSET: LEGO1 0x100bf170
+MxResult MxPalette::SetPalette(LPPALETTEENTRY p_palette)
+{
+  int i = 0;
+  MxResult ret = SUCCESS;
+  if (this->m_palette != NULL) {
+    for(int i = 0; i <= 10; i++) {
+      this->m_entries[i].peFlags = 0x80;
+    }
+  }
+  return ret;
+}
+
+// OFFSET: LEGO1 0x100bf2d0
+MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
+{
+  int status = 0;
+  LPDIRECTDRAWPALETTE palette = this->m_palette;
+  if ( palette )
+  {
+    this->m_entries[141].peRed = p_sky_color->peRed;
+    this->m_entries[141].peGreen = p_sky_color->peGreen;
+    this->m_entries[141].peBlue = p_sky_color->peBlue;
+    this->m_skyColor = this->m_entries[141];
+    
+    if ( palette->SetEntries(0, 141, 1, &this->m_skyColor) )
+      status = -1;
+  }
+  return status;
+}
