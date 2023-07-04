@@ -282,20 +282,20 @@ MxPalette::~MxPalette()
 // OFFSET: LEGO1 0x100bf390
 void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
 {
-  HDC hdc = GetDC(NULL);
-  int rastercaps = GetDeviceCaps(hdc, RASTERCAPS);
-  int sizepalettecaps;
-  if ((rastercaps & RC_PALETTE) != 0) {
-    sizepalettecaps = GetDeviceCaps(hdc, SIZEPALETTE);
-    if(sizepalettecaps = 256) {
-      GetSystemPaletteEntries(hdc,0,10,p_entries);
-      GetSystemPaletteEntries(hdc,246,10,p_entries + 0xf6);
-      ReleaseDC(NULL, hdc);
-    }
+  HDC hdc;
+
+  hdc = GetDC(0);
+  if ( (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256 )
+  {
+    GetSystemPaletteEntries(hdc, 0, 10, p_entries);
+    GetSystemPaletteEntries(hdc, 246, 10, &p_entries[246]);
   }
-  memcpy(p_entries, g_defaultPalette, 10);
-  memcpy(p_entries + 0xf6, g_defaultPalette + 0xf6, 10);
-  ReleaseDC(NULL, hdc);
+  else
+  {
+    memcpy(p_entries, g_defaultPaletteEntries, sizeof(PALETTEENTRY) * 10);
+    memcpy(&p_entries[246], &g_defaultPaletteEntries[246], sizeof(PALETTEENTRY) * 10);
+  }
+  ReleaseDC(0, hdc);
 }
 
 // OFFSET: LEGO1 0x100bf0b0
@@ -322,7 +322,7 @@ MxPalette* MxPalette::FromBitmapPalette(RGBQUAD* p_bmp)
 void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 {
   HDC DC;
-  
+
   DC = GetDC(0);
   if ( (GetDeviceCaps(DC, 38) & 0x100) != 0 && GetDeviceCaps(DC, 104) == 256 )
   {
