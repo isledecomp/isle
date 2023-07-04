@@ -24,7 +24,7 @@ void EnableResizing(HWND hwnd, BOOL flag)
     if (dwStyle & WS_THICKFRAME)
     {
       SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) ^ WS_THICKFRAME);
-    }
+}
   }
   else
   {
@@ -89,7 +89,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
     dwRGBBitCount = ddsd.ddpfPixelFormat.dwRGBBitCount;
     g_is_PALETTEINDEXED8 = (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) != 0;
     pDDraw->Release();
-  }
+}
 
   return dwRGBBitCount;
 }
@@ -832,10 +832,10 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
       &m_pPalette,
       NULL);
     if (result != DD_OK)
-    {
+{
       Error("CreatePalette failed", result);
-      return 0;
-    }
+  return 0;
+}
     result = m_pBackBuffer->SetPalette(m_pPalette); // TODO: add FIX_BUGS define and fix this
     result = m_pFrontBuffer->SetPalette(m_pPalette);
     if (result != DD_OK)

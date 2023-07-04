@@ -13,7 +13,7 @@ ElevatorBottom::~ElevatorBottom()
 }
 
 // OFFSET: LEGO1 0x10018150 STUB
-long ElevatorBottom::Notify(MxParam &p)
+MxLong ElevatorBottom::Notify(MxParam &p)
 {
   // TODO
 

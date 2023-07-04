@@ -13,7 +13,7 @@ public:
 
   // OFFSET: LEGO1 0x100b6210
   inline virtual const char *ClassName() const override // vtable+0x0c
-  { 
+  {
     // 0x100f0774
     return "MxCompositePresenter";
   }
@@ -24,6 +24,9 @@ public:
     return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
+  undefined m_unk40;
+  undefined4 *m_unk44;
+  undefined4 m_unk48;
 };
 
 #endif // MXCOMPOSITEPRESENTER_H

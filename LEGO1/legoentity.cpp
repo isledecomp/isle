@@ -7,7 +7,7 @@ LegoEntity::~LegoEntity()
 }
 
 // OFFSET: LEGO1 0x100114f0 STUB
-long LegoEntity::Notify(MxParam &p)
+MxLong LegoEntity::Notify(MxParam &p)
 {
   // TODO
 

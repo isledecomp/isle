@@ -3,6 +3,8 @@
 
 #include "mxvideopresenter.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100dc2c0
 // SIZE 0x68
 class MxFlcPresenter : public MxVideoPresenter
@@ -23,6 +25,8 @@ public:
   {
     return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
   }
+
+  undefined4 m_unk64;
 };
 
 #endif // MXFLCPRESENTER_H

@@ -8,7 +8,7 @@
 #define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
 
 // OFFSET: LEGO1 0x100cc4b0
-MxDSFile::MxDSFile(const char *filename, unsigned long skipReadingChunks)
+MxDSFile::MxDSFile(const char *filename, MxULong skipReadingChunks)
 {
   m_filename = filename;
   m_skipReadingChunks = skipReadingChunks;
@@ -21,18 +21,17 @@ MxDSFile::~MxDSFile()
 }
 
 // OFFSET: LEGO1 0x100cc590
-long MxDSFile::Open(unsigned long uStyle)
+MxLong MxDSFile::Open(MxULong uStyle)
 {
-  // No idea what's stopping this one matching, but I'm pretty
-  // confident it has the correct behavior.
-  long longResult = 1;
-  memset(&m_io, 0, sizeof(MXIOINFO));
+  MXIOINFO& io = m_io;
+  MxLong longResult = 1;
+  memset(&io, 0, sizeof(MXIOINFO));
 
-  if (m_io.Open(m_filename.GetData(), uStyle) != 0) {
+  if (io.Open(m_filename.GetData(), uStyle) != 0) {
     return -1;
   }
 
-  m_io.SetBuffer(NULL, 0, 0);
+  io.SetBuffer(NULL, 0, 0);
   m_position = 0;
 
   if (m_skipReadingChunks == 0) {
@@ -50,7 +49,7 @@ long MxDSFile::Open(unsigned long uStyle)
 }
 
 // OFFSET: LEGO1 0x100cc780
-long MxDSFile::Read(unsigned char *pch, unsigned long cch)
+MxLong MxDSFile::Read(unsigned char *pch, MxULong cch)
 {
   if (m_io.Read((char*)pch, cch) != cch)
     return -1;
@@ -60,7 +59,7 @@ long MxDSFile::Read(unsigned char *pch, unsigned long cch)
 }
 
 // OFFSET: LEGO1 0x100cc620
-long MxDSFile::ReadChunks()
+MxLong MxDSFile::ReadChunks()
 {
   _MMCKINFO topChunk;
   _MMCKINFO childChunk;
@@ -82,7 +81,7 @@ long MxDSFile::ReadChunks()
     if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
       return -1;
     }
-    unsigned long* pLengthInDWords = &m_lengthInDWords;
+    MxULong* pLengthInDWords = &m_lengthInDWords;
     m_io.Read((char *)pLengthInDWords, 4);
     m_pBuffer = malloc(*pLengthInDWords * 4);
     m_io.Read((char*)m_pBuffer, *pLengthInDWords * 4);
@@ -97,25 +96,25 @@ long MxDSFile::ReadChunks()
 }
 
 // OFFSET: LEGO1 0x100cc7b0
-long MxDSFile::Seek(long lOffset, int iOrigin)
+MxLong MxDSFile::Seek(MxLong lOffset, int iOrigin)
 {
   return (m_position = m_io.Seek(lOffset, iOrigin)) == -1 ? -1 : 0;
 }
 
 // OFFSET: LEGO1 0x100cc7e0
-unsigned long MxDSFile::GetBufferSize()
+MxULong MxDSFile::GetBufferSize()
 {
   return m_header.bufferSize;
 }
 
 // OFFSET: LEGO1 0x100cc7f0
-unsigned long MxDSFile::GetStreamBuffersNum()
+MxULong MxDSFile::GetStreamBuffersNum()
 {
   return m_header.streamBuffersNum;
 }
 
 // OFFSET: LEGO1 0x100cc740
-long MxDSFile::Close()
+MxLong MxDSFile::Close()
 {
   m_io.Close(0);
   m_position = -1;

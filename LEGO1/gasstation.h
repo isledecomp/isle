@@ -12,8 +12,8 @@ public:
   GasStation();
   virtual ~GasStation() override; // vtable+0x0
   
-  virtual long Notify(MxParam &p) override; // vtable+0x4
-  virtual long Tickle() override; // vtable+0x8
+  virtual MxLong Notify(MxParam &p) override; // vtable+0x4
+  virtual MxLong Tickle() override; // vtable+0x8
 
   // OFFSET: LEGO1 0x10004780
   inline virtual const char *ClassName() const override // vtable+0x0c

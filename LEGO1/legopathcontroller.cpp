@@ -13,7 +13,7 @@ LegoPathController::~LegoPathController()
 }
 
 // OFFSET: LEGO1 0x10045c10 STUB
-long LegoPathController::Tickle()
+MxLong LegoPathController::Tickle()
 {
   // TODO
   return 0;

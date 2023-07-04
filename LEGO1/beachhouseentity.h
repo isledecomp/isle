@@ -8,7 +8,7 @@
 class BeachHouseEntity : public BuildingEntity
 {
 public:
-  virtual long Notify(MxParam &p) override; // vtable+04
+  virtual MxLong Notify(MxParam &p) override; // vtable+04
 
   // OFFSET: LEGO1 0x1000ee80
   inline virtual const char *ClassName() const override // vtable+0x0c

@@ -56,7 +56,7 @@ public:
   // 40
   int m_islandTexture;
   int m_gameStarted;
-  long m_frameDelta;
+  MxLong m_frameDelta;
 
   // 4c
   MxVideoParam m_videoParam;

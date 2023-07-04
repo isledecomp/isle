@@ -13,7 +13,7 @@ LegoControlManager::~LegoControlManager()
 }
 
 // OFFSET: LEGO1 0x10029600 STUB
-long LegoControlManager::Tickle()
+MxLong LegoControlManager::Tickle()
 {
   // TODO
 

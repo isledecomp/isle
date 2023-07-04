@@ -13,9 +13,15 @@ MxTransitionManager::~MxTransitionManager()
 }
 
 // OFFSET: LEGO1 0x1004bac0 STUB
-long MxTransitionManager::Tickle()
+MxLong MxTransitionManager::Tickle()
 {
   // TODO
 
   return 0;
+}
+
+// OFFSET: LEGO1 0x1004c470 STUB
+void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
+{
+  // TODO
 }

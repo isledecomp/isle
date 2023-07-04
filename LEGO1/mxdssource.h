@@ -26,19 +26,19 @@ public:
     return !strcmp(name, MxDSSource::ClassName()) || MxCore::IsA(name);
   }
 
-  virtual long Open(unsigned long) = 0;
-  virtual long Close() = 0;
+  virtual MxLong Open(MxULong) = 0;
+  virtual MxLong Close() = 0;
   virtual void SomethingWhichCallsRead(void* pUnknownObject);
-  virtual long Read(unsigned char *, unsigned long) = 0;
-  virtual long Seek(long, int) = 0;
-  virtual unsigned long GetBufferSize() = 0;
-  virtual unsigned long GetStreamBuffersNum() = 0;
-  virtual long GetLengthInDWords();
+  virtual MxLong Read(unsigned char *, MxULong) = 0;
+  virtual MxLong Seek(MxLong, int) = 0;
+  virtual MxULong GetBufferSize() = 0;
+  virtual MxULong GetStreamBuffersNum() = 0;
+  virtual MxLong GetLengthInDWords();
 
 protected:
-  unsigned long m_lengthInDWords;
+  MxULong m_lengthInDWords;
   void* m_pBuffer;
-  long m_position;
+  MxLong m_position;
 };
 
 #endif // MXDSSOURCE_H

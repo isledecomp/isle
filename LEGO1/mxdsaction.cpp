@@ -4,9 +4,10 @@
 MxDSAction::MxDSAction()
 {
   // TODO
+  this->SetType(MxDSType_Action);
 }
 
-// OFFSET: LEGO1 0x100ada80
+// OFFSET: LEGO1 0x100ada80 STUB
 MxDSAction::~MxDSAction()
 {
   // TODO
