@@ -22,7 +22,6 @@ MxPalette::~MxPalette()
 // OFFSET: LEGO1 0x100bf390
 void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
 {
-  // FIXME: incomplete
   HDC hdc = GetDC(NULL);
   int rastercaps = GetDeviceCaps(hdc, RASTERCAPS);
   int sizepalettecaps;
@@ -35,7 +34,8 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
     }
   }
   memcpy(p_entries, g_defaultPalette, 10);
-  memcpy(p_entries + 0xf6, p_entries + 0xf6, 10);
+  memcpy(p_entries + 0xf6, g_defaultPalette + 0xf6, 10);
+  ReleaseDC(NULL, hdc);
 }
 
 // OFFSET: LEGO1 0x100bf0b0
@@ -63,20 +63,11 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 {
   HDC hdc = GetDC((HWND) NULL);
   int rasterCaps = GetDeviceCaps(hdc, RASTERCAPS);
-  LPPALETTEENTRY src;
-  MxS32 count;
   
   if ((rasterCaps & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
     GetSystemPaletteEntries(hdc, 0, 256, p_entries);
-    count = 256 - 2 * 10;
-    src = (LPPALETTEENTRY) &m_palette[10];
-    p_entries += 10;
-  } else {
-    src = (LPPALETTEENTRY) m_palette;
-    count = 256;
+    memcpy(p_entries - 10, g_defaultPalette - 10, 236);
   }
-  void* dest;
-  memcpy(dest, p_entries, count * sizeof(PALETTEENTRY));
   ReleaseDC((HWND) NULL, hdc);
 }
 
