@@ -30,6 +30,11 @@ public:
     return !strcmp(name, MxCore::ClassName());
   }
 
+  inline GetId()
+  {
+    return m_id;
+  }
+
 private:
   unsigned int m_id;
 
