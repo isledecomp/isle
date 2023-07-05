@@ -431,16 +431,16 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
 {
   MxResult status = 0;
-  LPDIRECTDRAWPALETTE palette = this->m_palette;
-  if ( palette )
+  if ( this->m_palette != NULL )
   {
     this->m_entries[141].peRed = p_sky_color->peRed;
     this->m_entries[141].peGreen = p_sky_color->peGreen;
     this->m_entries[141].peBlue = p_sky_color->peBlue;
     this->m_skyColor = this->m_entries[141];
-    
-    if ( palette->SetEntries(0, 141, 1, &this->m_skyColor) )
+    if ( this->m_palette->SetEntries(0, 141, 1, &this->m_skyColor) )
+    {
       status = -1;
+    }
   }
   return status;
 }
