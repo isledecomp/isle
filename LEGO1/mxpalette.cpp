@@ -373,7 +373,7 @@ void MxPalette::Detach()
 }
   
 // OFFSET: LEGO1 0x100bf170
-MxResult MxPalette::SetPalette(LPPALETTEENTRY p_entries)
+MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 {
   MxS32 i;
   MxResult status = 0;
