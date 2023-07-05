@@ -271,6 +271,24 @@ MxPalette::MxPalette()
   this->m_skyColor = this->m_entries[141];
 }
 
+// OFFSET: LEGO1 0x100BEED0
+MxPalette::MxPalette(const RGBQUAD *p_colors)
+{
+  this->m_overrideSkyColor = FALSE;
+  this->m_palette = NULL;
+  GetDefaultPalette(this->m_entries);
+
+  for ( int i = 10; i < 246; i++ )
+  {
+    this->m_entries[i].peRed = p_colors[i].rgbRed;
+    this->m_entries[i].peGreen = p_colors[i].rgbGreen;
+    this->m_entries[i].peBlue = p_colors[i].rgbBlue;
+    this->m_entries[i].peFlags = 0;
+  }
+
+  this->m_skyColor = this->m_entries[141];
+}
+
 // OFFSET: LEGO1 100bef90
 MxPalette::~MxPalette()
 {
@@ -305,17 +323,6 @@ MxPalette* MxPalette::Clone()
   this->GetEntries(result->m_entries);
   result->m_overrideSkyColor = this->m_overrideSkyColor;
   return result;
-}
-
-// OFFSET: LEGO1 0x100beed0
-MxPalette* MxPalette::FromBitmapPalette(RGBQUAD* p_bmp)
-{
-  // FIXME: Incomplete
-  this->m_overrideSkyColor = FALSE;
-  ApplySystemEntriesToPalette(this->m_entries);
-  memcpy(this->m_entries + 10, &p_bmp[10], 246);
-  this->m_skyColor = this->m_entries[141];
-  return this;
 }
 
 // OFFSET: LEGO1 0x100bf420
