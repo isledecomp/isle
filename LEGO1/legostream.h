@@ -15,10 +15,10 @@ public:
   LegoStream() : m_mode(0) {}
   inline virtual ~LegoStream() {};
 
-  virtual MxResult Read(char* buffer, MxU32 size) = 0;
-  virtual MxResult Write(char* buffer, MxU32 size) = 0;
-  virtual MxResult Tell(MxU32* offset) = 0;
-  virtual MxResult Seek(MxU32 offset) = 0;
+  virtual MxResult Read(char* p_buffer, MxU32 p_size) = 0;
+  virtual MxResult Write(char* p_buffer, MxU32 p_size) = 0;
+  virtual MxResult Tell(MxU32* p_offset) = 0;
+  virtual MxResult Seek(MxU32 p_offset) = 0;
 
   virtual MxBool IsWriteMode();
   virtual MxBool IsReadMode();
@@ -40,12 +40,12 @@ public:
   LegoFileStream();
   virtual ~LegoFileStream();
 
-  MxResult Read(char* buffer, MxU32 size) override;
-  MxResult Write(char* buffer, MxU32 size) override;
-  MxResult Tell(MxU32* offset) override;
-  MxResult Seek(MxU32 offset) override;
+  MxResult Read(char* p_buffer, MxU32 p_size) override;
+  MxResult Write(char* p_buffer, MxU32 p_size) override;
+  MxResult Tell(MxU32* p_offset) override;
+  MxResult Seek(MxU32 p_offset) override;
 
-  MxResult Open(const char* filename, OpenFlags mode);
+  MxResult Open(const char* p_filename, OpenFlags p_mode);
 
 private:
   FILE *m_hFile;
@@ -54,13 +54,13 @@ private:
 class LegoMemoryStream : public LegoStream
 {
 public:
-  LegoMemoryStream(char* buffer);
+  LegoMemoryStream(char* p_buffer);
   ~LegoMemoryStream() {}
 
-  MxResult Read(char* buffer, MxU32 size) override;
-  MxResult Write(char* buffer, MxU32 size) override;
-  MxResult Tell(MxU32* offset) override;
-  MxResult Seek(MxU32 offset) override;
+  MxResult Read(char* p_buffer, MxU32 p_size) override;
+  MxResult Write(char* p_buffer, MxU32 p_size) override;
+  MxResult Tell(MxU32* p_offset) override;
+  MxResult Seek(MxU32 p_offset) override;
 
 private:
   char *m_buffer;

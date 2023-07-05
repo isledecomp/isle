@@ -31,25 +31,25 @@ LegoFileStream::~LegoFileStream()
 }
 
 // OFFSET: LEGO1 0x100992c0
-MxResult LegoFileStream::Read(char* buffer, MxU32 size)
+MxResult LegoFileStream::Read(char* p_buffer, MxU32 p_size)
 {
   if (m_hFile == NULL)
     return FAILURE;
 
-  return (fread(buffer, 1, size, m_hFile) == size) ? SUCCESS : FAILURE;
+  return (fread(p_buffer, 1, p_size, m_hFile) == p_size) ? SUCCESS : FAILURE;
 }
 
 // OFFSET: LEGO1 0x10099300
-MxResult LegoFileStream::Write(char* buffer, MxU32 size)
+MxResult LegoFileStream::Write(char* p_buffer, MxU32 p_size)
 {
   if (m_hFile == NULL)
     return FAILURE;
 
-  return (fwrite(buffer, 1, size, m_hFile) == size) ? SUCCESS : FAILURE;
+  return (fwrite(p_buffer, 1, p_size, m_hFile) == p_size) ? SUCCESS : FAILURE;
 }
 
 // OFFSET: LEGO1 0x10099340
-MxResult LegoFileStream::Tell(MxU32* offset)
+MxResult LegoFileStream::Tell(MxU32* p_offset)
 {
   if (m_hFile == NULL)
     return FAILURE;
@@ -58,21 +58,21 @@ MxResult LegoFileStream::Tell(MxU32* offset)
   if (got == -1)
     return FAILURE;
 
-  *offset = got;
+  *p_offset = got;
   return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x10099370
-MxResult LegoFileStream::Seek(MxU32 offset)
+MxResult LegoFileStream::Seek(MxU32 p_offset)
 {
   if (m_hFile == NULL)
     return FAILURE;
 
-  return (fseek(m_hFile, offset, 0) == 0) ? SUCCESS : FAILURE;
+  return (fseek(m_hFile, p_offset, 0) == 0) ? SUCCESS : FAILURE;
 }
 
 // OFFSET: LEGO1 0x100993a0
-MxResult LegoFileStream::Open(const char* filename, OpenFlags mode)
+MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 {
   char modeString[4];
 
@@ -80,62 +80,62 @@ MxResult LegoFileStream::Open(const char* filename, OpenFlags mode)
     fclose(m_hFile);
   
   modeString[0] = '\0';
-  if (mode & ReadBit)
+  if (p_mode & ReadBit)
   {
     m_mode = LEGOSTREAM_MODE_READ;
     strcat(modeString, "r");
   }
 
-  if (mode & WriteBit)
+  if (p_mode & WriteBit)
   {
     if (m_mode != LEGOSTREAM_MODE_READ)
       m_mode = LEGOSTREAM_MODE_WRITE;
     strcat(modeString, "w");
   }
 
-  if ((mode & 4) != 0)
+  if ((p_mode & 4) != 0)
     strcat(modeString, "b");
   else
     strcat(modeString, "t");
 
-  return (m_hFile = fopen(filename, modeString)) ? SUCCESS : FAILURE;
+  return (m_hFile = fopen(p_filename, modeString)) ? SUCCESS : FAILURE;
 }
 
 // OFFSET: LEGO1 0x10099080
-LegoMemoryStream::LegoMemoryStream(char* buffer)
+LegoMemoryStream::LegoMemoryStream(char* p_buffer)
   : LegoStream()
 {
-  m_buffer = buffer;
+  m_buffer = p_buffer;
   m_offset = 0;
 }
 
 // OFFSET: LEGO1 0x10099160
-MxResult LegoMemoryStream::Read(char* buffer, MxU32 size)
+MxResult LegoMemoryStream::Read(char* p_buffer, MxU32 p_size)
 {
-  memcpy(buffer, m_buffer + m_offset, size);
-  m_offset += size;
+  memcpy(p_buffer, m_buffer + m_offset, p_size);
+  m_offset += p_size;
   return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x10099190
-MxResult LegoMemoryStream::Write(char* buffer, MxU32 size)
+MxResult LegoMemoryStream::Write(char* p_buffer, MxU32 p_size)
 {
-  memcpy(m_buffer + m_offset, buffer, size);
-  m_offset += size;
+  memcpy(m_buffer + m_offset, p_buffer, p_size);
+  m_offset += p_size;
   return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100994a0
-MxResult LegoMemoryStream::Tell(MxU32* offset)
+MxResult LegoMemoryStream::Tell(MxU32* p_offset)
 {
-  *offset = m_offset;
+  *p_offset = m_offset;
   return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100994b0
-MxResult LegoMemoryStream::Seek(MxU32 offset)
+MxResult LegoMemoryStream::Seek(MxU32 p_offset)
 {
-  m_offset = offset;
+  m_offset = p_offset;
   return SUCCESS;
 }
 
