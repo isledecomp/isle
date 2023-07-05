@@ -141,11 +141,11 @@ add_library(lego1 SHARED
   LEGO1/mxstillpresenter.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
-  LEGO1/mxstringvariable.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxunknown100dc6b0.cpp
   LEGO1/mxunknown100dc6e0.cpp
+  LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvideomanager.cpp
   LEGO1/mxvideoparam.cpp

@@ -1,8 +1,22 @@
 #include "mxvariabletable.h"
 
-// OFFSET: LEGO1 0x100b73a0
-void MxVariableTable::SetVariable(const char *key, const char *value)
+// OFFSET: LEGO1 0x100b7370
+int MxVariableTable::KeyChecksum(MxVariable *p_var)
 {
+  const char *str = p_var->GetKey()->GetData();
+  int value = 0;
+  
+  for (int i = 0; str[i]; i++) {
+    value += (int)str[i];
+  }
+
+  return value;
+}
+
+// OFFSET: LEGO1 0x100b73a0
+void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
+{
+  MxVariable *var = new MxVariable();
   // TODO
 }
 
