@@ -875,9 +875,8 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
   Mode mode = { width, height, bpp };
-  int i;
 
-  for (i = 0; i < m_pCurrentDeviceModesList->count; i++)
+  for (int i = 0; i < m_pCurrentDeviceModesList->count; i++)
   {
     if (m_pCurrentDeviceModesList->m_mode_ARRAY[i] == mode)
     {
@@ -1154,11 +1153,10 @@ void MxDirectDraw::unk1()
   HRESULT result;
   byte* line;
   DDSURFACEDESC ddsd;
-  int i;
-  unsigned int j;
+  int j;
   int count = m_bFlipSurfaces ? 2 : 1;
 
-  for (i = 0; count > i; i++)
+  for (int i = 0; i < count; i++)
   {
     memset(&ddsd, 0, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
@@ -1178,10 +1176,10 @@ void MxDirectDraw::unk1()
 
     // clear backBuffer
     line = (byte*)ddsd.lpSurface;
-    for (j = ddsd.dwHeight - 1; j ; j--)
+    for (j = ddsd.dwHeight; j-- ;)
     {
-      memset(line, 0, ddsd.dwWidth);
-      line += ddsd.lPitch;
+	  memset(line, 0, ddsd.dwWidth);
+	  line += ddsd.lPitch;
     }
 
     m_pBackBuffer->Unlock(ddsd.lpSurface);
