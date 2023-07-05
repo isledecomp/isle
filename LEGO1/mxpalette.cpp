@@ -278,7 +278,7 @@ MxPalette::MxPalette(const RGBQUAD *p_colors)
   this->m_palette = NULL;
   GetDefaultPalette(this->m_entries);
 
-  for ( int i = 10; i < 246; i++ )
+  for ( MxS32 i = 10; i < 246; i++ )
   {
     this->m_entries[i].peRed = p_colors[i].rgbRed;
     this->m_entries[i].peGreen = p_colors[i].rgbGreen;
@@ -354,8 +354,7 @@ MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 // OFFSET: LEGO1 0x100bf340
 MxBool MxPalette::operator==(MxPalette &other)
 {
-  int i;
-  for (i = 0; i < 256; i++)
+  for (MxS32 i = 0; i < 256; i++)
   {
     if (this->m_entries[i].peRed != other.m_entries[i].peRed)
       return FALSE;
@@ -430,7 +429,7 @@ MxResult MxPalette::SetPalette(LPPALETTEENTRY p_entries)
 // OFFSET: LEGO1 0x100bf2d0
 MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
 {
-  int status = 0;
+  MxResult status = 0;
   LPDIRECTDRAWPALETTE palette = this->m_palette;
   if ( palette )
   {
