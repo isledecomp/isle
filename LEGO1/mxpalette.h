@@ -22,7 +22,7 @@ public:
   MxPalette* Clone();
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
-  MxResult SetPalette(LPPALETTEENTRY p_palette);
+  MxResult SetEntries(LPPALETTEENTRY p_palette);
   MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
 private:
   LPDIRECTDRAWPALETTE m_palette;
