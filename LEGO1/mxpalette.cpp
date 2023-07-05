@@ -443,3 +443,18 @@ MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
   }
   return status;
 }
+
+// OFFSET: LEGO1 0x100BF490
+void MxPalette::Reset(MxBool p_ignoreSkyColor)
+{
+  if ( this->m_palette != NULL )
+  {
+    GetDefaultPalette(this->m_entries);
+    if ( !p_ignoreSkyColor )
+    {
+      this->m_entries[140] = this->m_entries[141] = this->m_skyColor;
+    }
+    SetEntries(this->m_entries);
+    this->m_palette->SetEntries(0, 0, 256, this->m_entries);
+  }
+}
