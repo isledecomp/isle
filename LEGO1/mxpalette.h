@@ -25,6 +25,7 @@ public:
   MxResult SetEntries(LPPALETTEENTRY p_palette);
   MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
   void Reset(MxBool p_ignoreSkyColor);
+  LPDIRECTDRAWPALETTE CreateNativePalette();
 private:
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];

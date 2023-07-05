@@ -1,4 +1,5 @@
 #include "mxpalette.h"
+#include "mxomni.h"
 
 PALETTEENTRY g_defaultPaletteEntries[256] =
 {
@@ -457,4 +458,32 @@ void MxPalette::Reset(MxBool p_ignoreSkyColor)
     SetEntries(this->m_entries);
     this->m_palette->SetEntries(0, 0, 256, this->m_entries);
   }
+}
+
+// OFFSET: LEGO1 0x100BF000
+LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
+{
+  MxS32 i;
+  if ( this->m_palette == NULL )
+  {
+    for (i = 0; i < 10; i++)
+      this->m_entries[i].peFlags = 0x80;
+    for (i = 10; i < 136; i++)
+      this->m_entries[i].peFlags = 0x44;
+    for (i = 136; i < 140; i++)
+      this->m_entries[i].peFlags = 0x84;
+    this->m_entries[140].peFlags = 0x84;
+    this->m_entries[141].peFlags = 0x44;
+    for (i = 142; i < 246; i++)
+      this->m_entries[i].peFlags = 0x84;
+    for (i = 246; i < 256; i++)
+      this->m_entries[i].peFlags = 0x80;
+
+    if (MVideoManager() && MVideoManager()->GetDirectDraw())
+    {
+      MVideoManager()->GetDirectDraw()->CreatePalette(4, this->m_entries, &this->m_palette, NULL);
+    }
+  }
+
+  return this->m_palette;
 }
