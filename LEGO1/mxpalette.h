@@ -15,6 +15,7 @@ public:
   __declspec(dllexport) void Detach();
 
   MxPalette();
+  MxPalette(const RGBQUAD *);
   virtual ~MxPalette();
 
   void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
