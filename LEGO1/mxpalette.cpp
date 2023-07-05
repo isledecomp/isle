@@ -276,7 +276,7 @@ MxPalette::MxPalette(const RGBQUAD *p_colors)
 {
   this->m_overrideSkyColor = FALSE;
   this->m_palette = NULL;
-  GetDefaultPalette(this->m_entries);
+  ApplySystemEntriesToPalette(this->m_entries);
 
   for ( MxS32 i = 10; i < 246; i++ )
   {
