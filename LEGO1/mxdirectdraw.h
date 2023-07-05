@@ -37,18 +37,7 @@ public:
     DDCAPS m_ddcaps;
     void* a_178;
 
-    ~DeviceModesInfo()
-    {
-      if (p_guid != NULL)
-      {
-        free(p_guid);
-      }
-
-      if (m_mode_ARRAY != NULL)
-      {
-        free(m_mode_ARRAY);
-      }
-    }
+    ~DeviceModesInfo();
   };
 
 

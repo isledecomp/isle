@@ -1,10 +1,7 @@
 
 #include "mxdirectdraw.h"
+#include "decomp.h"
 
-//TODO: make commonn place for defines like that
-#ifndef _countof
-#define _countof(arr) sizeof(arr) / sizeof(arr[0])
-#endif
 
 #ifndef DDSCAPS_3DDEVICE
 #define DDSCAPS_3DDEVICE 0x00002000l
@@ -29,6 +26,20 @@ void EnableResizing(HWND hwnd, BOOL flag)
   else
   {
     SetWindowLong(hwnd, GWL_STYLE, dwStyle);
+  }
+}
+
+// OFFSET: LEGO1 0x1009EFD0
+MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
+{
+  if (p_guid != NULL)
+  {
+    free(p_guid);
+  }
+
+  if (m_mode_ARRAY != NULL)
+  {
+    free(m_mode_ARRAY);
   }
 }
 
@@ -1038,49 +1049,54 @@ BOOL MxDirectDraw::SetPaletteEntries(
   int paletteEntryCount,
   BOOL fullscreen)
 {
-  HRESULT result;
+  int reservedLowEntryCount = 10;
+  int reservedHighEntryCount = 10;
+  int arraySize = _countof(m_paletteEntries);
   HDC hdc;
   int i;
 
   if (g_is_PALETTEINDEXED8)
   {
     hdc = GetDC(NULL);
-    GetSystemPaletteEntries(hdc, 0, _countof(m_paletteEntries), m_paletteEntries);
+    GetSystemPaletteEntries(hdc, 0, arraySize, m_paletteEntries);
     ReleaseDC(NULL, hdc);
   }
 
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < reservedLowEntryCount; i++)
   {
     m_paletteEntries[i].peFlags = 0x80;
   }
 
-  for (i = 10; i < 142; i++)
+  for (i = reservedLowEntryCount; i < 142; i++)
   {
     m_paletteEntries[i].peFlags = 0x44;
   }
 
-  for (i = 142; i < 246; i++)
+  for (i = 142; i < arraySize - reservedHighEntryCount; i++)
   {
     m_paletteEntries[i].peFlags = 0x84;
   }
 
-  for (i = 246; i < 256; i++)
+  for (i = arraySize - reservedHighEntryCount; i < arraySize; i++)
   {
     m_paletteEntries[i].peFlags = 0x80;
   }
 
   if (paletteEntryCount != 0)
   {
-    for (i = 10; (i < paletteEntryCount) && (i < 246); i++)
+    for (i = reservedLowEntryCount; 
+	(i < paletteEntryCount) && (i < arraySize - reservedHighEntryCount); 
+	i++)
     {
-      m_paletteEntries[i].peRed = pPaletteEntries[i].peRed;
+      m_paletteEntries[i].peRed   = pPaletteEntries[i].peRed;
       m_paletteEntries[i].peGreen = pPaletteEntries[i].peGreen;
-      m_paletteEntries[i].peBlue = pPaletteEntries[i].peBlue;
+      m_paletteEntries[i].peBlue  = pPaletteEntries[i].peBlue;
     }
   }
   
   if (m_pPalette != NULL)
   {
+	HRESULT result;
     result = m_pPalette->SetEntries(0, 0, _countof(m_paletteEntries), m_paletteEntries);
     if (result != DD_OK)
     {
