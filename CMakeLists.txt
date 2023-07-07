@@ -183,7 +183,6 @@ if (ISLE_USE_SMARTHEAP)
   target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
   target_link_libraries(lego1 PRIVATE SHLW32MT)
-  target_link_options(lego1 PRIVATE /NODEFAULTLIB:LIBCMT)
 endif()
 
 # Link libraries
@@ -208,7 +207,6 @@ if (ISLE_BUILD_APP)
     target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
     target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
     target_link_libraries(isle PRIVATE SHLW32MT)
-    target_link_options(isle PRIVATE /NODEFAULTLIB:LIBCMT)
   endif()
 
   # Link DSOUND, WINMM, and LEGO1
