@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8...3.5 FATAL_ERROR)
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ON)
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
@@ -174,6 +175,14 @@ add_library(lego1 SHARED
   LEGO1/viewmanager.cpp
 )
 
+if (ISLE_USE_SMARTHEAP)
+  target_compile_definitions(lego1 PRIVATE USE_SMARTHEAP)
+  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+  target_link_libraries(lego1 PRIVATE SHLW32MT)
+  target_link_options(lego1 PRIVATE /NODEFAULTLIB:LIBCMT)
+endif()
+
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
 
@@ -190,6 +199,14 @@ if (ISLE_BUILD_APP)
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
+  if (ISLE_USE_SMARTHEAP)
+    target_compile_definitions(isle PRIVATE USE_SMARTHEAP)
+    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+    target_link_libraries(isle PRIVATE SHLW32MT)
+    target_link_options(isle PRIVATE /NODEFAULTLIB:LIBCMT)
+  endif()
 
   # Link DSOUND, WINMM, and LEGO1
   target_link_libraries(isle PRIVATE dsound winmm lego1)
