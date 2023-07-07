@@ -112,8 +112,8 @@ jobs:
         curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT
         curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT
 
-        diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
-        diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+        diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
+        diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
 
     - name: Test Exports
       shell: bash
