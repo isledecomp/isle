@@ -18,7 +18,7 @@ public:
   inline MxLong GetTime()
   {
     if (this->m_isRunning)
-      return s_LastTimeCalculated;
+      return s_LastTimeTimerStarted;
     else
       return s_LastTimeCalculated - this->m_startTime;
   }
