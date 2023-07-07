@@ -45,8 +45,8 @@ jobs:
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
-        # Use 2.8 for maximum backwards compatibility
-        cmake-version: '2.8.x'
+        # Use minimum supported version
+        cmake-version: '3.0.x'
 
     - name: Build
       shell: cmd
