@@ -15,15 +15,17 @@ public:
   __declspec(dllexport) void Detach();
 
   MxPalette();
+  MxPalette(const RGBQUAD *);
   virtual ~MxPalette();
 
   void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
   MxPalette* Clone();
-  MxPalette* FromBitmapPalette(RGBQUAD* p_bmp);
   void GetDefaultPalette(LPPALETTEENTRY p_entries);
   MxResult GetEntries(LPPALETTEENTRY p_entries);
-  MxResult SetPalette(LPPALETTEENTRY p_palette);
+  MxResult SetEntries(LPPALETTEENTRY p_palette);
   MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
+  void Reset(MxBool p_ignoreSkyColor);
+  LPDIRECTDRAWPALETTE CreateNativePalette();
 private:
   LPDIRECTDRAWPALETTE m_palette;
   PALETTEENTRY m_entries[256];
