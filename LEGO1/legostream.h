@@ -9,6 +9,7 @@
 #define LEGOSTREAM_MODE_READ 1
 #define LEGOSTREAM_MODE_WRITE 2
 
+// VTABLE 0x100d7d80
 class LegoStream
 {
 public:
@@ -34,6 +35,7 @@ protected:
   MxU8 m_mode;
 };
 
+// VTABLE 0x100db730
 class LegoFileStream : public LegoStream
 {
 public:
@@ -51,6 +53,7 @@ private:
   FILE *m_hFile;
 };
 
+// VTABLE 0x100db710
 class LegoMemoryStream : public LegoStream
 {
 public:

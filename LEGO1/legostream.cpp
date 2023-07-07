@@ -4,6 +4,13 @@
 #include <cstdio>
 #include <string>
 
+// Very likely but not certain sizes.
+// The classes are only used on the stack in functions we have not 100% matched
+// yet, we can confirm the size once we have.
+DECOMP_SIZE_ASSERT(LegoStream, 0x8);
+DECOMP_SIZE_ASSERT(LegoFileStream, 0xC);
+DECOMP_SIZE_ASSERT(LegoMemoryStream, 0x10);
+
 // OFFSET: LEGO1 0x10045ae0
 MxBool LegoStream::IsWriteMode()
 {
