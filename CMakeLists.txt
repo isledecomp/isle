@@ -80,6 +80,7 @@ add_library(lego1 SHARED
   LEGO1/legoroi.cpp
   LEGO1/legosoundmanager.cpp
   LEGO1/legostate.cpp
+  LEGO1/legostream.cpp
   LEGO1/legotexturepresenter.cpp
   LEGO1/legoutil.cpp
   LEGO1/legovideomanager.cpp
