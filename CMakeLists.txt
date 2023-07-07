@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.0...3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ON)
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
