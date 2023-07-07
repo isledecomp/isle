@@ -2,6 +2,7 @@
 #define MXSTREAMPROVIDER_H
 
 #include "mxcore.h"
+#include "mxdsfile.h"
 
 // VTABLE 0x100dd100
 class MxStreamProvider : public MxCore
@@ -18,6 +19,10 @@ public:
   {
     return !strcmp(name, MxStreamProvider::ClassName()) || MxCore::IsA(name);
   }
+
+private:
+  void *m_pLookup;
+  MxDSFile* m_pFile;
 };
 
 #endif // MXSTREAMPROVIDER_H
