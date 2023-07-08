@@ -12,8 +12,10 @@ public:
   virtual MxLong Tickle();
   virtual const char *ClassName() const;
   virtual MxBool IsA(const char *name) const;
-  virtual void vtable14();
-  virtual void vtable18();
+  // May be Register(obj, milliseconds);
+  virtual void vtable14(MxCore *p_unk1, int p_unk2);
+  // May be Unregister(obj);
+  virtual void vtable18(MxCore *p_unk1);
   virtual void vtable1c(void *v, int p);
   virtual void vtable20();
 };

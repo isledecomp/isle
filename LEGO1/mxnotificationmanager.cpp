@@ -1,21 +1,21 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxcore.h"
 #include "mxnotificationmanager.h"
+#include "mxparam.h"
 #include "mxtypes.h"
 
-// OFFSET: LEGO1 0x100ac220 STUB
-MxNotification::MxNotification(MxCore *p_destination, void *p_vtable)
+// OFFSET: LEGO1 0x100ac220
+MxNotification::MxNotification(MxCore *p_destination, MxParam *p_param)
 {
   m_destination = p_destination;
-  // TODO: Call p_vtable+0x4, assign result to m_param.
-  m_param = NULL;
+  m_param = p_param->Clone();
 }
 
-// OFFSET: LEGO1 0x100ac240 STUB
+// OFFSET: LEGO1 0x100ac240
 MxNotification::~MxNotification()
 {
-  // TODO
-  //delete m_param;
+  delete m_param;
 }
 
 // OFFSET: LEGO1 0x100ac250
@@ -35,10 +35,7 @@ MxNotificationManager::~MxNotificationManager()
   delete m_queue;
   m_queue = NULL;
 
-  MxTickleManager *tickleManager = TickleManager();
-  // TODO
-  //tickleManager->Unregister(this);
-  tickleManager->vtable18();
+  TickleManager()->vtable18(this);
 }
 
 // OFFSET: LEGO1 0x100ac800
@@ -77,10 +74,7 @@ MxResult MxNotificationManager::Create(int p_unk1, int p_unk2)
     result = FAILURE;
   }
   else {
-    MxTickleManager *tickleManager = TickleManager();
-    // TODO
-    //tickleManager->Register(this, 10);
-    tickleManager->vtable14();
+    TickleManager()->vtable14(this, 10);
   }
 
   return result;
@@ -122,7 +116,7 @@ void MxNotificationManager::FlushPending(MxCore *p_listener)
 }
 
 // OFFSET: LEGO1 0x100ac6c0
-MxResult MxNotificationManager::Send(MxCore *p_listener, void *p_vtable)
+MxResult MxNotificationManager::Send(MxCore *p_listener, MxParam *p_param)
 {
   MxAutoLocker lock(&m_lock);
 
@@ -135,7 +129,7 @@ MxResult MxNotificationManager::Send(MxCore *p_listener, void *p_vtable)
       return FAILURE;
     }
     else {
-      MxNotification *notif = new MxNotification(p_listener, p_vtable);
+      MxNotification *notif = new MxNotification(p_listener, p_param);
       if (notif != NULL) {
         m_queue->push_back(notif);
         return SUCCESS;
