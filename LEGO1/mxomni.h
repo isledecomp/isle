@@ -47,6 +47,9 @@ public:
   MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
   MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
   MxEventManager* GetEventManager() const { return this->m_eventManager; }
+
+  // FIXME: put this in the correct spot, just a hack for LegoInputManager
+  HWND* GetWindowHandle() const { return this->m_windowHandle; }
 protected:
   static MxOmni* g_instance;
 

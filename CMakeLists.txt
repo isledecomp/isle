@@ -177,8 +177,9 @@ add_library(lego1 SHARED
   LEGO1/viewmanager.cpp
 )
 
+target_include_directories(lego1 PRIVATE "dx5sdk/inc")
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound winmm "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dinput.lib" "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dxguid.lib")
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -192,10 +193,10 @@ if (ISLE_BUILD_APP)
   )
 
   # Include LEGO1 headers in ISLE
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "dx5sdk/inc")
 
   # Link DSOUND, WINMM, and LEGO1
-  target_link_libraries(isle PRIVATE dsound winmm lego1)
+  target_link_libraries(isle PRIVATE dsound winmm lego1 "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dinput.lib" "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dxguid.lib")
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
