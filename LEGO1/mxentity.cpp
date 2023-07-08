@@ -1,19 +1,15 @@
 #include "mxentity.h"
 
-// OFFSET: LEGO1 0x1001d190 STUB
+// OFFSET: LEGO1 0x1001d190
 MxEntity::MxEntity()
 {
-  // TODO
+  // FIXME: This won't match because of m_atom. How would it access m_internal?
+  this->m_atom = NULL;
+  this->m_mxEntityId = -1;
 }
 
-// OFFSET: LEGO1 0x1000c110 STUB
+// OFFSET: LEGO1 0x1000c110
 MxEntity::~MxEntity()
 {
-  // TODO
-}
-
-// OFFSET: LEGO1 0x10001070 STUB
-void MxEntity::Destroy()
-{
-  // TODO
+  *this->m_atom;
 }
