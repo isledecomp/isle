@@ -12,6 +12,8 @@ class Pizza : public IsleActor
 public:
   Pizza();
   virtual ~Pizza() override;
+
+  Pizza* Unk1002c7b0(undefined4 p_param);
 private:
   undefined4 m_unk80;
   undefined4 m_unk84;
