@@ -13,11 +13,11 @@ Pizza::Pizza()
 }
 
 // OFFSET: LEGO1 0x1002c7cf STUB
-Pizza* Unk1002c7b0(undefined4 p_param)
-{
-  // FIXME: Stub, a switch function. I think it adjusts some metadata based on a state. We'll understand this more once we get into Pizzeria
-  return new Pizza;
-}
+// MxS32 IsleActor::Notify(MxParam *)
+// {
+//   // TODO
+//   return 0;
+// }
 
 // OFFSET: LEGO1 0x10038100
 Pizza::~Pizza()
@@ -28,8 +28,8 @@ Pizza::~Pizza()
 
 
 // OFFSET: LEGO1 0x100388a0 STUB
-Pizza* Unk100388a0(undefined4* p_param)
+MxResult Pizza::Tickle()
 {
-  // FIXME: Stub, Looks like this function adjusts (or makes?) a new Pizza based on the game state, perhaps PizzaMissionState?
-  return new Pizza;
+  // TODO
+  return SUCCESS;
 }
