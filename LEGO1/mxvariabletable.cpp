@@ -1,13 +1,19 @@
 #include "mxvariabletable.h"
 
+MxS8 MxVariableTable::Compare(MxVariable *p_var0, MxVariable *p_var1)
+{
+  return strcmp(p_var0->GetKey()->GetData(),
+                p_var1->GetKey()->GetData());
+}
+
 // OFFSET: LEGO1 0x100b7370
-int MxVariableTable::KeyChecksum(MxVariable *p_var)
+MxU32 MxVariableTable::Hash(MxVariable *p_var)
 {
   const char *str = p_var->GetKey()->GetData();
-  int value = 0;
+  MxU32 value = 0;
   
   for (int i = 0; str[i]; i++) {
-    value += (int)str[i];
+    value += str[i];
   }
 
   return value;
@@ -16,7 +22,12 @@ int MxVariableTable::KeyChecksum(MxVariable *p_var)
 // OFFSET: LEGO1 0x100b73a0
 void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
 {
-  MxVariable *var = new MxVariable();
+  MxHashTableCursor<MxVariable> cursor(this);
+  MxVariable *var = new MxVariable(p_key, p_value);
+
+  if (cursor.Find(var)) {
+    delete var;
+  }
   // TODO
 }
 
@@ -27,8 +38,19 @@ void MxVariableTable::SetVariable(MxVariable *var)
 }
 
 // OFFSET: LEGO1 0x100b78f0
-const char *MxVariableTable::GetVariable(const char *key)
+const char *MxVariableTable::GetVariable(const char *p_key)
 {
-  // TODO
-  return 0;
+  const char *value = NULL;
+  MxHashTableCursor<MxVariable> cursor(this);
+  MxVariable *var = new MxVariable(p_key);
+  
+  MxBool found = cursor.Find(var);
+  delete var;
+  
+  if (found) {
+    cursor.GetMatch(&var);
+    value = var->GetValue()->GetData();
+  }
+
+  return value;
 }
