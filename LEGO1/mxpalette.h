@@ -28,9 +28,9 @@ public:
   LPDIRECTDRAWPALETTE CreateNativePalette();
 private:
   LPDIRECTDRAWPALETTE m_palette;
-  PALETTEENTRY m_entries[256];
-  MxBool m_overrideSkyColor;
-  PALETTEENTRY m_skyColor;
+  PALETTEENTRY m_entries[256]; // 0xc
+  MxBool m_overrideSkyColor; // 0x40c
+  PALETTEENTRY m_skyColor; // 0x40d
 };
 
 #endif // MXPALETTE_H
