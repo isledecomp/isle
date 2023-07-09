@@ -10,11 +10,22 @@
 class MxNotification
 {
 public:
-  MxCore *m_destination;
-  MxParam *m_param;
-
-  MxNotification(MxCore *p_destination, MxParam *p_param);
+  MxNotification(MxCore *p_target, MxParam *p_param);
   ~MxNotification();
+
+  inline MxCore *GetTarget()
+  {
+    return m_target;
+  }
+
+  inline MxParam *GetParam()
+  {
+    return m_param;
+  }
+
+private:
+  MxCore *m_target; // 0x0
+  MxParam *m_param; // 0x4
 };
 
 // VTABLE 0x100dc078
@@ -30,7 +41,7 @@ private:
 
 public:
   MxNotificationManager();
-  virtual ~MxNotificationManager(); // vtable+0x0
+  virtual ~MxNotificationManager(); // vtable+0x0 (scalar deleting destructor)
 
   virtual long Tickle(); // vtable+0x8
   // TODO: Where does this method come from?

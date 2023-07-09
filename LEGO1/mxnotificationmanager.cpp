@@ -5,10 +5,13 @@
 #include "mxparam.h"
 #include "mxtypes.h"
 
+DECOMP_SIZE_ASSERT(MxNotification, 0x8);
+DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
+
 // OFFSET: LEGO1 0x100ac220
-MxNotification::MxNotification(MxCore *p_destination, MxParam *p_param)
+MxNotification::MxNotification(MxCore *p_target, MxParam *p_param)
 {
-  m_destination = p_destination;
+  m_target = p_target;
   m_param = p_param->Clone();
 }
 
@@ -54,7 +57,7 @@ long MxNotificationManager::Tickle()
     while (m_sendList->size() != 0) {
       MxNotification *notif = m_sendList->front();
       m_sendList->pop_front();
-      notif->m_destination->Notify(*notif->m_param);
+      notif->GetTarget()->Notify(*notif->GetParam());
       delete notif;
     }
 
