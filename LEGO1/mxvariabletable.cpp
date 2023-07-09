@@ -40,7 +40,7 @@ void MxVariableTable::SetVariable(MxVariable *var)
 // OFFSET: LEGO1 0x100b78f0
 const char *MxVariableTable::GetVariable(const char *p_key)
 {
-  const char *value = NULL;
+  const char *value = "";
   MxHashTableCursor<MxVariable> cursor(this);
   MxVariable *var = new MxVariable(p_key);
   

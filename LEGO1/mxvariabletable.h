@@ -32,7 +32,7 @@ public:
   MxHashTable()
   {
     m_size = 128;
-    m_table = new MxHashTableNode<T>[128];
+    m_table = new MxHashTableNode<T>*[128];
   }
 
   ~MxHashTable()
@@ -46,7 +46,7 @@ public:
 //private:
   int m_used; // +0x8
   void (*m_unkc)(void *); // +0xc
-  MxHashTableNode<T> *m_table; // +0x10
+  MxHashTableNode<T> **m_table; // +0x10
   int m_size; // +0x14
   int m_unk18;
   int m_unk1c;
@@ -67,12 +67,12 @@ public:
   MxBool Find(T *p_obj)
   {
     MxU32 hash = m_hashTable->Hash(p_obj);
-    int bucket = hash / m_hashTable->m_size;
+    int bucket = hash % m_hashTable->m_size;
 
-    MxHashTableNode<T> *t = &m_hashTable->m_table[bucket];
+    MxHashTableNode<T> *t = m_hashTable->m_table[bucket];
 
     while (t) {
-      if (t->m_hash == hash && !m_hashTable->Compare(p_obj, t->m_obj))
+      if (t->m_hash == hash && !m_hashTable->Compare(t->m_obj, p_obj))
         m_match = t;
       t = t->m_next;
     }
