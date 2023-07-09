@@ -1,6 +1,7 @@
 #ifndef MXDSMEDIAACTION_H
 #define MXDSMEDIAACTION_H
 
+#include "decomp.h"
 #include "mxdsaction.h"
 
 // VTABLE 0x100dcd40
@@ -23,7 +24,15 @@ public:
   {
     return !strcmp(name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(name);
   }
-
+private:
+  undefined* m_unk98;
+  undefined* m_unk9c;
+  undefined* m_unka0;
+  undefined* m_unka4;
+  undefined* m_unka8;
+  undefined* m_unkb4;
+  undefined* m_unkb0;
+  undefined* m_unkac;
 };
 
 #endif // MXDSMEDIAACTION_H
