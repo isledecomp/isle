@@ -25,7 +25,8 @@ public:
     return !strcmp(name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(name);
   }
 private:
-  MxS32 m_lastField; // 0xbc
+  MxS32 m_unkb8;
+  MxLong m_lastField; // 0xbc
 };
 
 
