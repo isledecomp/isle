@@ -25,14 +25,15 @@ public:
     return !strcmp(name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(name);
   }
 private:
-  undefined* m_unk98;
-  undefined* m_unk9c;
-  undefined* m_unka0;
-  undefined* m_unka4;
-  undefined* m_unka8;
-  undefined* m_unkb4;
-  undefined* m_unkb0;
-  undefined* m_unkac;
+  MxS32* m_unk94;
+  MxS32* m_unk98;
+  MxS32* m_unk9c;
+  MxS32* m_unka0;
+  MxS32* m_unka4;
+  MxS32* m_unka8;
+  MxS32* m_unkac;
+  MxS32* m_unkb0;
+  MxS32* m_unkb4;
 };
 
 #endif // MXDSMEDIAACTION_H

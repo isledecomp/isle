@@ -8,9 +8,9 @@ MxDSMediaAction::MxDSMediaAction()
   this->m_unka0 = 0;
   this->m_unka4 = 0;
   this->m_unka8 = 0;
-  *this->m_unkb4 = 0xffffffff;
+  this->m_unkb4 = (int*) 0xffffffff;
   this->m_unkb0 = 0;
-  *this->m_unkac = 1;
+  this->m_unkac = (int*) 1;
   this->SetType(MxDSType_MediaAction);
 }
 
