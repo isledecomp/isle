@@ -9,6 +9,8 @@
 #define LEGOSTREAM_MODE_READ 1
 #define LEGOSTREAM_MODE_WRITE 2
 
+class MxVariableTable;
+
 // VTABLE 0x100d7d80
 class LegoStream
 {
@@ -16,8 +18,8 @@ public:
   LegoStream() : m_mode(0) {}
   inline virtual ~LegoStream() {};
 
-  virtual MxResult Read(char* p_buffer, MxU32 p_size) = 0;
-  virtual MxResult Write(char* p_buffer, MxU32 p_size) = 0;
+  virtual MxResult Read(void* p_buffer, MxU32 p_size) = 0;
+  virtual MxResult Write(const void* p_buffer, MxU32 p_size) = 0;
   virtual MxResult Tell(MxU32* p_offset) = 0;
   virtual MxResult Seek(MxU32 p_offset) = 0;
 
@@ -31,6 +33,9 @@ public:
     BinaryBit = 4,
   };
 
+  static MxResult __stdcall WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName);
+  static int __stdcall ReadVariable(LegoStream* p_stream, MxVariableTable* p_to);
+
 protected:
   MxU8 m_mode;
 };
@@ -42,8 +47,8 @@ public:
   LegoFileStream();
   virtual ~LegoFileStream();
 
-  MxResult Read(char* p_buffer, MxU32 p_size) override;
-  MxResult Write(char* p_buffer, MxU32 p_size) override;
+  MxResult Read(void* p_buffer, MxU32 p_size) override;
+  MxResult Write(const void* p_buffer, MxU32 p_size) override;
   MxResult Tell(MxU32* p_offset) override;
   MxResult Seek(MxU32 p_offset) override;
 
@@ -60,8 +65,8 @@ public:
   LegoMemoryStream(char* p_buffer);
   ~LegoMemoryStream() {}
 
-  MxResult Read(char* p_buffer, MxU32 p_size) override;
-  MxResult Write(char* p_buffer, MxU32 p_size) override;
+  MxResult Read(void* p_buffer, MxU32 p_size) override;
+  MxResult Write(const void* p_buffer, MxU32 p_size) override;
   MxResult Tell(MxU32* p_offset) override;
   MxResult Seek(MxU32 p_offset) override;
 

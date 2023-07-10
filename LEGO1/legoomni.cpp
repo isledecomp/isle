@@ -1,4 +1,5 @@
 #include "legoomni.h"
+#include "legoobjectfactory.h"
 
 // 0x100f4588
 char *g_nocdSourceName = NULL;
@@ -175,10 +176,13 @@ void LegoOmni::Init()
   // FIXME: Stub
 }
 
-// OFFSET: LEGO1 0x10058e70
+// OFFSET: LEGO1 0x10058e70 STUB
 MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
-  // FIXME: Stub
+  MxOmni::Create(p);
+
+  m_objectFactory = new LegoObjectFactory();
+  m_gameState = new LegoGameState();
   return SUCCESS;
 }
 
