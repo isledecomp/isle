@@ -202,8 +202,7 @@ set_property(TARGET lego1dll PROPERTY SUFFIX ".DLL")
 # Add the data tester application which uses the classes decomped so far to
 # read / write / inspect save files.
 if (ISLE_BUILD_CLI)
-  add_executable(cli)
-  target_sources(cli PRIVATE
+  add_executable(cli
     CLI/main.cpp
   )
   target_link_libraries(cli lego1core winmm)
