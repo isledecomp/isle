@@ -31,9 +31,9 @@ private:
   MxS32* m_unka0;
   MxS32* m_unka4;
   MxS32* m_unka8;
-  MxS32* m_unkac;
+  MxS32 m_unkac;
   MxS32* m_unkb0;
-  MxS32* m_unkb4;
+  MxS32 m_unkb4;
 };
 
 #endif // MXDSMEDIAACTION_H
