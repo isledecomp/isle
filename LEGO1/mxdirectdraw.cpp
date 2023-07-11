@@ -34,12 +34,12 @@ MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
 {
   if (p_guid != NULL)
   {
-    free(p_guid);
+    delete p_guid;
   }
 
   if (m_mode_ARRAY != NULL)
   {
-    free(m_mode_ARRAY);
+    delete m_mode_ARRAY;
   }
 }
 
