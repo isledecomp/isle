@@ -30,7 +30,7 @@ public:
     return !strcmp(name, MxCore::ClassName());
   }
 
-  inline GetId()
+  inline int GetId()
   {
     return m_id;
   }
