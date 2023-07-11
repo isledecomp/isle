@@ -1209,7 +1209,7 @@ void MxDirectDraw::unk1()
 }
 
 // OFFSET: LEGO1 0x1009D920
-void MxDirectDraw::unk2()
+void MxDirectDraw::FUN_1009D920()
 {
   RestoreOriginalPaletteEntries();
   if (m_pDirectDraw != NULL)
