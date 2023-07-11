@@ -34,17 +34,17 @@ private:
   MxList<MxNotification *> *m_queue; // 0x8
   MxList<MxNotification *> *m_sendList; // 0xc
   MxCriticalSection m_lock; // 0x10
-  int m_unk2c; // 0x2c
-  MxList<unsigned int> m_listenerIds; // 0x30
+  MxS32 m_unk2c; // 0x2c
+  MxList<MxU32> m_listenerIds; // 0x30
   MxBool m_active; // 0x3c
 
 public:
   MxNotificationManager();
   virtual ~MxNotificationManager(); // vtable+0x0 (scalar deleting destructor)
 
-  virtual long Tickle(); // vtable+0x8
+  virtual MxResult Tickle(); // vtable+0x8
   // TODO: Where does this method come from?
-  virtual MxResult Create(int p_unk1, int p_unk2); // vtable+0x14
+  virtual MxResult Create(MxS32 p_unk1, MxS32 p_unk2); // vtable+0x14
   void Register(MxCore *p_listener);
   void Unregister(MxCore *p_listener);
   MxResult Send(MxCore *p_listener, MxParam *p_param);

@@ -2,6 +2,7 @@
 #define MXPARAM_H
 
 #include "mxomnicreateparambase.h"
+#include "mxtypes.h"
 
 class MxCore;
 
@@ -9,12 +10,12 @@ class MxCore;
 class MxParam : public MxOmniCreateParamBase
 {
 public:
-  inline MxParam(int p_type, MxCore *p_sender) : MxOmniCreateParamBase(), m_type(p_type), m_sender(p_sender){}
+  inline MxParam(MxS32 p_type, MxCore *p_sender) : MxOmniCreateParamBase(), m_type(p_type), m_sender(p_sender){}
 
   virtual ~MxParam(){}; // vtable+0x0 (scalar deleting destructor)
   virtual MxParam *Clone(); // vtable+0x4
 
-  inline int GetType() const
+  inline MxS32 GetType() const
   {
     return m_type;
   }
@@ -25,7 +26,7 @@ public:
   }
 
 private:
-  int m_type; // 0x4
+  MxS32 m_type; // 0x4
   MxCore *m_sender; // 0x8
 };
 

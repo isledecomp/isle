@@ -30,13 +30,13 @@ public:
     return !strcmp(name, MxCore::ClassName());
   }
 
-  inline int GetId()
+  inline MxU32 GetId()
   {
     return m_id;
   }
 
 private:
-  unsigned int m_id;
+  MxU32 m_id;
 
 };
 
