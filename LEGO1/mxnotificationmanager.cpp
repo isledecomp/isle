@@ -43,7 +43,7 @@ MxNotificationManager::~MxNotificationManager()
   delete m_queue;
   m_queue = NULL;
 
-  TickleManager()->vtable18(this);
+  TickleManager()->Unregister(this);
 }
 
 // OFFSET: LEGO1 0x100ac800
@@ -82,7 +82,7 @@ MxResult MxNotificationManager::Create(MxS32 p_unk1, MxS32 p_unk2)
     result = FAILURE;
   }
   else {
-    TickleManager()->vtable14(this, 10);
+    TickleManager()->Register(this, 10);
   }
 
   return result;
