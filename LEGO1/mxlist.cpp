@@ -2,4 +2,5 @@
 
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(MxList<unsigned int>, 0xc);
+// Can't use DECOMP_SIZE_ASSERT due to STL type size changes.
+//DECOMP_SIZE_ASSERT(MxList<unsigned int>, 0xc);

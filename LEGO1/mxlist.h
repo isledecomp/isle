@@ -1,12 +1,11 @@
 #ifndef MXLIST_H
 #define MXLIST_H
 
+#include "stlcompat.h"
 #ifndef ISLE_COMPAT
-#include <STL.H>
 #define LIST_T List<T>
 #else
-#include <list>
-#define LIST_T std::list<T>
+#define LIST_T list<T>
 #endif
 
 template <class T>
