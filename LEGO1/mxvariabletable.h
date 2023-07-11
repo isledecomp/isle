@@ -41,6 +41,23 @@ public:
     delete[] m_slots;
   }
 
+  // for convenience
+  inline int GetBucket(int hash) {
+    return hash % m_numSlots;
+  }
+
+  inline void _NodeInsert(MxHashTableNode<T> *p_node) {
+    int bucket = GetBucket(p_node->m_hash);
+    
+    p_node->m_next = m_slots[bucket];
+    
+    if (m_slots[bucket])
+      m_slots[bucket]->m_prev = p_node;
+
+    m_slots[bucket] = p_node;
+    m_numKeys++;
+  }
+
   // OFFSET: LEGO1 0x100b7ab0
   void Resize()
   {
@@ -51,37 +68,26 @@ public:
 
     switch (m_option) {
       case 1: // flat increase by x
-        m_numSlots = old_size + (int)m_increaseAmount;
+        m_numSlots = old_size + m_increaseAmount;
         break;
       case 2: // increase by a factor of x
-        m_numSlots = (int)(old_size * m_increaseFactor);
+        m_numSlots = old_size * m_increaseFactor;
         break;
     }
 
     MxHashTableNode<T> **new_table = new MxHashTableNode<T>*[m_numSlots];
     // FIXME: order? m_numKeys set after `rep stosd`
     m_slots = new_table;
-    m_numKeys = 0;
     memset(m_slots, 0, sizeof(MxHashTableNode<T> *) * m_numSlots);
-    
+    m_numKeys = 0;
 
-    for (MxU32 i = 0; i < old_size; i++) {
+    for (int i = 0; i != old_size; i++) {
       MxHashTableNode<T> *t = old_table[i];
       
       while (t) {
         MxHashTableNode<T> *next = t->m_next;
-        int new_bucket = t->m_hash % m_numSlots;
-
-        t->m_next = m_slots[new_bucket];
-
-        // If the new bucket is not empty, make the reshuffled node
-        // the new head of the bucket.
-        if (m_slots[new_bucket])
-          m_slots[new_bucket]->m_prev = t;
-        
-        m_slots[new_bucket] = t;
+        _NodeInsert(t);
         t = next;
-        m_numKeys++;
       }
     }
 
@@ -90,29 +96,24 @@ public:
 
   void Add(T* p_newobj)
   {
+    if (m_option && ((m_numKeys + 1) / m_numSlots) > m_autoResizeRatio)
+      Resize();
+
     MxU32 hash = Hash(p_newobj);
     MxHashTableNode<T> *node = new MxHashTableNode<T>(p_newobj, hash);
 
-    int bucket = node->m_hash % m_numSlots;
-    
-    node->m_next = m_slots[bucket];
-    
-    if (m_slots[bucket])
-      m_slots[bucket]->m_prev = node;
-
-    m_slots[bucket] = node;
-    m_numKeys++;
+    _NodeInsert(node);
   }
 
   virtual MxS8 Compare(T*, T*);
   virtual MxU32 Hash(T*);
 
 //private:
-  int m_numKeys; // +0x8
+  MxU32 m_numKeys; // +0x8
   void (*m_customDestructor)(T*); // +0xc
   MxHashTableNode<T> **m_slots; // +0x10
   MxU32 m_numSlots; // +0x14
-  int m_autoResizeRatio;
+  MxU32 m_autoResizeRatio;
   int m_option; // +0x1c
   // FIXME: or FIXME? This qword is used as an integer or double depending
   // on the value of m_option. Hard to say whether this is how the devs
@@ -136,7 +137,7 @@ public:
   MxBool Find(T *p_obj)
   {
     MxU32 hash = m_table->Hash(p_obj);
-    int bucket = hash % m_table->m_numSlots;
+    int bucket = m_table->GetBucket(hash);
 
     MxHashTableNode<T> *t = m_table->m_slots[bucket];
 
@@ -165,7 +166,7 @@ public:
       m_match->m_prev->m_next = m_match->m_next;
     } else {
       // No "prev" node, so move "next" to the head of the list.
-      int bucket = m_match->m_hash % m_table->m_numSlots;
+      int bucket = m_table->GetBucket(m_match->m_hash);
       m_table->m_slots[bucket] = m_match->m_next;
     }
 

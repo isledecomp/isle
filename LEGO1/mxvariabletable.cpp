@@ -29,14 +29,10 @@ void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
   if (cursor.Find(var)) {
     delete var;
     cursor.GetMatch(&var);
-    var->SetValue(p_value);  
+    var->SetValue(p_value);
   } else {
-    if (m_option && m_numKeys / m_numSlots > m_autoResizeRatio)
-      Resize();
-
     Add(var);
   }
-  // TODO
 }
 
 // OFFSET: LEGO1 0x100b7740
@@ -47,9 +43,6 @@ void MxVariableTable::SetVariable(MxVariable *var)
 
   if (found)
     cursor.DeleteMatch();
-  
-  if (m_option && m_numKeys / m_numSlots > m_autoResizeRatio)
-    Resize();
 
   Add(var);
 }
