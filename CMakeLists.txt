@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8...3.5 FATAL_ERROR)
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+option(BUILD_COMPAT "Compatibility for modern compilers" OFF)
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
@@ -226,4 +227,8 @@ if (MSVC)
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
+endif()
+
+if (BUILD_COMPAT)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D \"ISLE_COMPAT\"")
 endif()
