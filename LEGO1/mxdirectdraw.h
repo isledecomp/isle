@@ -123,8 +123,8 @@ private:
     SIZE& textSizeOnSurface);
   BOOL TextToTextSurface1(const char* text);
   BOOL TextToTextSurface2(const char* lpString);
-  void unk1();
-  void unk2();
+  void FUN_1009E020();
+  void FUN_1009D920();
 };
 
 #endif // MXDIRECTDRAW_H
