@@ -1164,7 +1164,7 @@ BOOL MxDirectDraw::TextToTextSurface2(const char* text)
 }
 
 // OFFSET: LEGO1 0x1009E020
-void MxDirectDraw::unk1()
+void MxDirectDraw::FUN_1009E020()
 {
   HRESULT result;
   byte* line;
