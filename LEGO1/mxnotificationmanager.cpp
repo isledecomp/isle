@@ -1,9 +1,12 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxcore.h"
+#include "mxlist.h"
 #include "mxnotificationmanager.h"
 #include "mxparam.h"
 #include "mxtypes.h"
+
+#include "decomp.h"
 
 DECOMP_SIZE_ASSERT(MxNotification, 0x8);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
@@ -44,7 +47,7 @@ MxNotificationManager::~MxNotificationManager()
 // OFFSET: LEGO1 0x100ac800
 long MxNotificationManager::Tickle()
 {
-  m_sendList = new List<MxNotification *>();
+  m_sendList = new MxList<MxNotification *>();
   if (m_sendList == NULL) {
     return FAILURE;
   }
@@ -71,7 +74,7 @@ long MxNotificationManager::Tickle()
 MxResult MxNotificationManager::Create(int p_unk1, int p_unk2)
 {
   MxResult result = SUCCESS;
-  m_queue = new List<MxNotification *>();
+  m_queue = new MxList<MxNotification *>();
 
   if (m_queue == NULL) {
     result = FAILURE;
@@ -86,12 +89,10 @@ MxResult MxNotificationManager::Create(int p_unk1, int p_unk2)
 // OFFSET: LEGO1 0x100acd20
 void MxNotificationManager::Register(MxCore *p_listener)
 {
-  unsigned int listenerId;
-  List<unsigned int>::iterator it;
   MxAutoLocker lock(&m_lock);
 
-  listenerId = p_listener->GetId();
-  it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
+  unsigned int listenerId = p_listener->GetId();
+  MxList<unsigned int>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
   if (it != m_listenerIds.end())
     return;
 
@@ -103,8 +104,7 @@ void MxNotificationManager::Unregister(MxCore *p_listener)
 {
   MxAutoLocker lock(&m_lock);
 
-  unsigned int listenerId = p_listener->GetId();
-  List<unsigned int>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
+  MxList<unsigned int>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
 
   if (it != m_listenerIds.end()) {
     m_listenerIds.erase(it);
@@ -127,7 +127,7 @@ MxResult MxNotificationManager::Send(MxCore *p_listener, MxParam *p_param)
     return FAILURE;
   }
   else {
-    List<unsigned int>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+    MxList<unsigned int>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
     if (it == m_listenerIds.end()) {
       return FAILURE;
     }

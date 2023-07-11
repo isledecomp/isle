@@ -1,10 +1,9 @@
 #ifndef MXNOTIFICATIONMANAGER_H
 #define MXNOTIFICATIONMANAGER_H
 
-#include <STL.H>
-
 #include "mxcore.h"
 #include "mxcriticalsection.h"
+#include "mxlist.h"
 #include "mxtypes.h"
 
 class MxNotification
@@ -32,11 +31,11 @@ private:
 class MxNotificationManager : public MxCore
 {
 private:
-  List<MxNotification *> *m_queue; // 0x8
-  List<MxNotification *> *m_sendList; // 0xc
+  MxList<MxNotification *> *m_queue; // 0x8
+  MxList<MxNotification *> *m_sendList; // 0xc
   MxCriticalSection m_lock; // 0x10
   int m_unk2c; // 0x2c
-  List<unsigned int> m_listenerIds; // 0x30
+  MxList<unsigned int> m_listenerIds; // 0x30
   MxBool m_active; // 0x3c
 
 public:
