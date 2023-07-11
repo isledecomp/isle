@@ -1,5 +1,6 @@
 #include "mxvariabletable.h"
 
+// OFFSET: LEGO1 0x100b7330
 MxS8 MxVariableTable::Compare(MxVariable *p_var0, MxVariable *p_var1)
 {
   return strcmp(p_var0->GetKey()->GetData(),
@@ -27,6 +28,13 @@ void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
 
   if (cursor.Find(var)) {
     delete var;
+    cursor.GetMatch(&var);
+    var->SetValue(p_value);  
+  } else {
+    if (m_option && m_numKeys / m_numSlots > m_autoResizeRatio)
+      Resize();
+
+    Add(var);
   }
   // TODO
 }
@@ -34,7 +42,16 @@ void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
 // OFFSET: LEGO1 0x100b7740
 void MxVariableTable::SetVariable(MxVariable *var)
 {
-  // TODO
+  MxHashTableCursor<MxVariable> cursor(this);
+  MxBool found = cursor.Find(var);
+
+  if (found)
+    cursor.DeleteMatch();
+  
+  if (m_option && m_numKeys / m_numSlots > m_autoResizeRatio)
+    Resize();
+
+  Add(var);
 }
 
 // OFFSET: LEGO1 0x100b78f0
