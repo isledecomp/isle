@@ -221,7 +221,9 @@
 
           addrCel.innerHTML = addrCel.dataset.value = element.address;
           nameCel.innerHTML = nameCel.dataset.value = element.name;
-          matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%';
+
+          var effectiveNote = (element.matching == 1 && element.diff != '') ? '*' : '';
+          matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%' + effectiveNote;
           matchCel.dataset.value = element.matching;
 
           row.classList.add('funcrow');
