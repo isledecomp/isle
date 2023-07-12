@@ -3,6 +3,8 @@
 
 #include "mxtypes.h"
 
+#include <stdio.h>
+
 enum LookupMode
 {
   LookupMode_Exact = 0,
@@ -26,6 +28,11 @@ public:
   inline MxBool operator ==(const MxAtomId &other) const
   {
     return this->m_internal == other.m_internal;
+  }
+
+  inline const char* Get() const
+  {
+    return this->m_internal;
   }
 
 private:

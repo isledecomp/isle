@@ -1,5 +1,7 @@
 #include "mxobjectfactory.h"
 
+#include <stdio.h>
+
 #include "mxpresenter.h"
 #include "mxcompositepresenter.h"
 #include "mxvideopresenter.h"
@@ -26,20 +28,25 @@ MxObjectFactory::MxObjectFactory()
 }
 
 // OFFSET: LEGO1 0x100b12c0
-MxCore *MxObjectFactory::Create(const char *name)
+void *MxObjectFactory::Create(const char *p_name)
 {
-  MxAtomId atom(name, LookupMode_Exact);
+  MxAtomId atom(p_name, LookupMode_Exact);
 
   if (0) {
 #define X(V) } else if (this->m_id##V == atom) { return new V;
   FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
   } else {
+    {
+      // TODO: Remove block later. For debugging purposes while spinning things up.
+      printf("Debug|Tried to create unknown object type: %s\n", p_name);
+      exit(0);
+    }
     return NULL;
   }
 }
 
 // OFFSET: LEGO1 0x100b1a30 STUB
-void MxObjectFactory::vtable18(void *) {
+void MxObjectFactory::Destroy(void *p_object) {
   // FIXME
 }

@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 3.0...3.5 FATAL_ERROR)
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+option(ISLE_BUILD_CLI "Build save data test CLI" ON)
 
-add_library(lego1 SHARED
+set(ALL_SOURCES
   LEGO1/act1state.cpp
   LEGO1/act2brick.cpp
   LEGO1/act2policestation.cpp
@@ -68,6 +69,7 @@ add_library(lego1 SHARED
   LEGO1/legolocomotionanimpresenter.cpp
   LEGO1/legomodelpresenter.cpp
   LEGO1/legonavcontroller.cpp
+  LEGO1/legoobjectfactory.cpp
   LEGO1/legoomni.cpp
   LEGO1/legopalettepresenter.cpp
   LEGO1/legopartpresenter.cpp
@@ -177,12 +179,35 @@ add_library(lego1 SHARED
   LEGO1/viewmanager.cpp
 )
 
+# The static library which CLI can also include
+# (the CLI needs to access non-DLL-exported parts of the codebase so it can't
+#  just link to the DLL)
+add_library(lego1core STATIC ${ALL_SOURCES})
+
+# Includes
+target_include_directories(lego1core PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
+# Main shared DLL
+add_library(lego1dll SHARED ${ALL_SOURCES})
+
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+target_link_libraries(lego1dll
+  PRIVATE ddraw dsound winmm
+  PUBLIC lego1core)
 
 # Make sure filenames are ALL CAPS
-set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
-set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
+set_property(TARGET lego1dll PROPERTY OUTPUT_NAME LEGO1)
+set_property(TARGET lego1dll PROPERTY SUFFIX ".DLL")
+
+# Add the data tester application which uses the classes decomped so far to
+# read / write / inspect save files.
+if (ISLE_BUILD_CLI)
+  add_executable(cli
+    CLI/main.cpp
+  )
+  target_link_libraries(cli lego1core winmm)
+  target_include_directories(cli PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+endif()
 
 if (ISLE_BUILD_APP)
   add_executable(isle WIN32
@@ -195,7 +220,7 @@ if (ISLE_BUILD_APP)
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
 
   # Link DSOUND, WINMM, and LEGO1
-  target_link_libraries(isle PRIVATE dsound winmm lego1)
+  target_link_libraries(isle PRIVATE dsound winmm lego1dll)
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
@@ -207,8 +232,14 @@ if (MSVC)
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
 
-  target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
-  target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  target_compile_options(lego1dll PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  target_compile_options(lego1core PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  if (ISLE_BUILD_APP)
+    target_compile_options(isle PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  endif()
+  if (ISLE_BUILD_CLI)
+    target_compile_options(cli PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  endif()
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
   set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")

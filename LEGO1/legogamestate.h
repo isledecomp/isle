@@ -3,6 +3,10 @@
 
 #include "mxtypes.h"
 
+class LegoState;
+class MxVariable;
+class MxString;
+
 class LegoGameState
 {
 public:
@@ -14,8 +18,27 @@ public:
   __declspec(dllexport) void SerializeScoreHistory(MxS16 p);
   __declspec(dllexport) void SetSavePath(char *p);
 
+  LegoState *GetState(char *p_stateName);
+  LegoState *CreateState(char *p_stateName);
+
+  void GetFileSavePath(MxString *p_outPath, MxULong p_slotn);
+
+private:
+  void RegisterState(LegoState *p_state);
+
 private:
   char *m_savePath;
+  MxS16 m_stateCount;
+  MxU16 padding1;
+  LegoState **m_stateArray;
+  MxU8 m_someModeSwitch;
+  MxU8 padding2[3];
+  MxU32 m_someEnumState;
+  MxU32 unk1;
+  MxVariable *m_backgroundColor;
+  MxVariable *m_tempBackgroundColor;
+  MxVariable *m_fsMovieVariable;
+  MxU16 m_secondThingWritten;
 };
 
 #endif // LEGOGAMESTATE_H

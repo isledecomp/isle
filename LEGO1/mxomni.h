@@ -78,4 +78,6 @@ __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
 
+MxObjectFactory *ObjectFactory();
+
 #endif // MXOMNI_H

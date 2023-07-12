@@ -75,6 +75,9 @@ public:
   LegoNavController *GetNavController() { return m_navController; }
   MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
 
+  // Not in original game
+  inline void DebugSetGameState(LegoGameState *p_gs) { m_gameState = p_gs; }
+
 private:
   int m_unk68;
   int m_unk6c;

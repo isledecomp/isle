@@ -16,5 +16,5 @@ void MxVariableTable::SetVariable(MxVariable *var)
 const char *MxVariableTable::GetVariable(const char *key)
 {
   // TODO
-  return 0;
+  return "";
 }
