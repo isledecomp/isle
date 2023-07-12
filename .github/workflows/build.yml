@@ -46,7 +46,7 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
         # Use minimum supported version
-        cmake-version: '3.0.x'
+        cmake-version: '3.13.x'
 
     - name: Build
       shell: cmd
