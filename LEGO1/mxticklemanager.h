@@ -12,8 +12,8 @@ public:
   virtual MxLong Tickle();
   virtual const char *ClassName() const;
   virtual MxBool IsA(const char *name) const;
-  virtual void vtable14();
-  virtual void vtable18();
+  virtual void Register(MxCore *p_listener, int p_milliseconds);
+  virtual void Unregister(MxCore *p_listener);
   virtual void vtable1c(void *v, int p);
   virtual void vtable20();
 };
