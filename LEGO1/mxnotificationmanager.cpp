@@ -1,7 +1,6 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxcore.h"
-#include "mxlist.h"
 #include "mxnotificationmanager.h"
 #include "mxparam.h"
 #include "mxtypes.h"
@@ -49,7 +48,7 @@ MxNotificationManager::~MxNotificationManager()
 // OFFSET: LEGO1 0x100ac800
 MxResult MxNotificationManager::Tickle()
 {
-  m_sendList = new MxList<MxNotification *>();
+  m_sendList = new MxNotificationPtrList();
   if (m_sendList == NULL) {
     return FAILURE;
   }
@@ -76,7 +75,7 @@ MxResult MxNotificationManager::Tickle()
 MxResult MxNotificationManager::Create(MxS32 p_unk1, MxS32 p_unk2)
 {
   MxResult result = SUCCESS;
-  m_queue = new MxList<MxNotification *>();
+  m_queue = new MxNotificationPtrList();
 
   if (m_queue == NULL) {
     result = FAILURE;
@@ -94,7 +93,7 @@ void MxNotificationManager::Register(MxCore *p_listener)
   MxAutoLocker lock(&m_lock);
 
   MxU32 listenerId = p_listener->GetId();
-  MxList<MxU32>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
+  MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
   if (it != m_listenerIds.end())
     return;
 
@@ -106,7 +105,7 @@ void MxNotificationManager::Unregister(MxCore *p_listener)
 {
   MxAutoLocker lock(&m_lock);
 
-  MxList<MxU32>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+  MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
 
   if (it != m_listenerIds.end()) {
     m_listenerIds.erase(it);
@@ -129,7 +128,7 @@ MxResult MxNotificationManager::Send(MxCore *p_listener, MxParam *p_param)
     return FAILURE;
   }
   else {
-    MxList<MxU32>::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+    MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
     if (it == m_listenerIds.end()) {
       return FAILURE;
     }

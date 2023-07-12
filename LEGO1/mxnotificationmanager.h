@@ -3,8 +3,9 @@
 
 #include "mxcore.h"
 #include "mxcriticalsection.h"
-#include "mxlist.h"
 #include "mxtypes.h"
+
+#include "stlcompat.h"
 
 class MxNotification
 {
@@ -27,15 +28,21 @@ private:
   MxParam *m_param; // 0x4
 };
 
+class MxIdList : public List<MxU32>
+{};
+
+class MxNotificationPtrList : public List<MxNotification *>
+{};
+
 // VTABLE 0x100dc078
 class MxNotificationManager : public MxCore
 {
 private:
-  MxList<MxNotification *> *m_queue; // 0x8
-  MxList<MxNotification *> *m_sendList; // 0xc
+  MxNotificationPtrList *m_queue; // 0x8
+  MxNotificationPtrList *m_sendList; // 0xc
   MxCriticalSection m_lock; // 0x10
   MxS32 m_unk2c; // 0x2c
-  MxList<MxU32> m_listenerIds; // 0x30
+  MxIdList m_listenerIds; // 0x30
   MxBool m_active; // 0x3c
 
 public:
