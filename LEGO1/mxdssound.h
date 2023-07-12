@@ -2,6 +2,7 @@
 #define MXDSSOUND_H
 
 #include "mxdsmediaaction.h"
+#include "mxtypes.h"
 
 // VTABLE 0x100dcdd0
 // SIZE 0xc0
@@ -23,6 +24,9 @@ public:
   {
     return !strcmp(name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(name);
   }
+private:
+  MxS32 m_unkb8;
+  MxLong m_lastField; // 0xbc
 };
 
 
