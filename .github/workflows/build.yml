@@ -45,8 +45,8 @@ jobs:
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
-        # Use 2.8 for maximum backwards compatibility
-        cmake-version: '2.8.x'
+        # Use minimum supported version
+        cmake-version: '3.0.x'
 
     - name: Build
       shell: cmd
@@ -112,8 +112,8 @@ jobs:
         curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT
         curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT
 
-        diff -u ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
-        diff -u LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
+        diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
+        diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
 
     - name: Test Exports
       shell: bash

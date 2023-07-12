@@ -2,6 +2,25 @@
 #define MXDISKSTREAMPROVIDER_H
 
 #include "mxstreamprovider.h"
+#include "mxthread.h"
+#include "mxcriticalsection.h"
+
+class MxDiskStreamProvider;
+
+// VTABLE 0x100dd130
+class MxDiskStreamProviderThread : public MxThread
+{
+public:
+  // Only inlined, no offset
+  inline MxDiskStreamProviderThread()
+    : MxThread()
+    , m_target(NULL) {}
+
+  MxResult Run() override;
+
+private:
+  MxDiskStreamProvider *m_target;
+};
 
 // VTABLE 0x100dd138
 class MxDiskStreamProvider : public MxStreamProvider
@@ -23,6 +42,20 @@ public:
   {
     return !strcmp(name, MxDiskStreamProvider::ClassName()) || MxStreamProvider::IsA(name);
   }
+
+  MxResult WaitForWorkToComplete();
+
+  void PerformWork();
+
+private:
+  MxDiskStreamProviderThread m_thread;
+  MxSemaphore m_busySemaphore;
+  byte m_remainingWork;
+  byte m_unk1;
+  MxCriticalSection m_criticalSection;
+  byte unk2[4];
+  void* unk3;
+  void *unk4;
 };
 
 #endif // MXDISKSTREAMPROVIDER_H
