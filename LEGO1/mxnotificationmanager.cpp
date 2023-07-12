@@ -5,8 +5,8 @@
 #include "mxparam.h"
 #include "mxtypes.h"
 
+#include "compat.h"
 #include "decomp.h"
-#include "stlcompat.h"
 
 DECOMP_SIZE_ASSERT(MxNotification, 0x8);
 // Can't use DECOMP_SIZE_ASSERT due to STL type size changes.

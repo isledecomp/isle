@@ -5,7 +5,7 @@
 #include "mxcriticalsection.h"
 #include "mxtypes.h"
 
-#include "stlcompat.h"
+#include "compat.h"
 
 class MxNotification
 {

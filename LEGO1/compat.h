@@ -11,4 +11,17 @@
 #define COMPAT_CONST
 #endif
 
+#define MSVC420_VERSION 1020
+
+// STL compatibility.
+#if defined(_MSC_VER) && (_MSC_VER <= MSVC420_VERSION)
+#include <STL.H>
+#else
+#include <algorithm>
+#include <list>
+using namespace std;
+template <class T>
+using List = list<T>;
+#endif
+
 #endif // ISLECOMPAT_H
