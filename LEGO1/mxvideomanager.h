@@ -21,10 +21,10 @@ public:
   int Init();
 
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
-
+  inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
 private:
   MxVideoParam m_videoParam;
-  int m_unk50;
+  LPDIRECTDRAW m_pDirectDraw;
   LPDIRECTDRAWSURFACE m_unk54;
   void* m_unk58;
   int m_unk5c;
