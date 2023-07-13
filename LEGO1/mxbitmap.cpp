@@ -122,8 +122,13 @@ int MxBitmap::vtable3c(MxBool)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100bd3e0 STUB
-int MxBitmap::vtable40(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
+// OFFSET: LEGO1 0x100bd3e0
+MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
 {
-  return 0;
+  // Compression fix?
+  if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {
+    p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
+  }
+
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_unk18, SRCCOPY);
 }
