@@ -1,0 +1,31 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Configure decomp with standard setup",
+			"type": "shell",
+			"group": "build",
+			"command": "configure.py"
+		},
+		{
+			"label": "Build decomp",
+			"type": "shell",
+			"group": "build",
+			"command": "build.py"
+		},
+		{
+			"label": "Build decomp and print overall status",
+			"type": "shell",
+			"group": "build",
+			"command": "build.py --status"
+		},
+		{
+			"label": "Build decomp and inspect function by cursor",
+			"type": "shell",
+			"group": "build",
+			"command": "build.py --inspect-shim ${file} ${lineNumber}"
+		}
+	]
+}

@@ -4,3 +4,6 @@ Release/
 ISLE.EXE
 LEGO1.DLL
 build/
+original/
+tools/msvc42/
+tools/ninja/

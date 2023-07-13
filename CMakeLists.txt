@@ -180,6 +180,9 @@ add_library(lego1 SHARED
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
 
+# Includes
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
 set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
