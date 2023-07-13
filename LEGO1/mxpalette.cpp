@@ -1,6 +1,7 @@
 #include "mxpalette.h"
 #include "mxomni.h"
 
+// GLOBAL: LEGO1 0x10102188 1024
 PALETTEENTRY g_defaultPaletteEntries[256] =
 {
   { 0u, 0u, 0u, 0u },
@@ -261,6 +262,7 @@ PALETTEENTRY g_defaultPaletteEntries[256] =
   { 255u, 255u, 255u, 0u }
 };
 
+// GLOBAL: LEGO1 0x10102188 1024
 LPPALETTEENTRY g_defaultPalette;
 
 // OFFSET: LEGO1 0x100bee30
