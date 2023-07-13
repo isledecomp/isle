@@ -56,8 +56,8 @@ public:
   {
     // Save a reference to the current table
     // so we can walk nodes and re-insert
-    MxHashTableNode<T> **old_table = m_slots;
     MxU32 old_size = m_numSlots;
+    MxHashTableNode<T> **old_table = m_slots;
 
     switch (m_resizeOption) {
       case HASH_TABLE_OPT_EXPAND_ADD:
@@ -156,10 +156,10 @@ public:
     return m_match != NULL;
   }
 
-  void GetMatch(T **p_obj)
+  void GetMatch(T*& p_obj)
   {
     if (m_match) {
-      *p_obj = m_match->m_obj;
+      p_obj = m_match->m_obj;
     }
   }
 

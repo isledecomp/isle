@@ -28,7 +28,7 @@ void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
 
   if (cursor.Find(var)) {
     delete var;
-    cursor.GetMatch(&var);
+    cursor.GetMatch(var);
     var->SetValue(p_value);
   } else {
     MxHashTable<MxVariable>::Add(var);
@@ -68,7 +68,7 @@ const char *MxVariableTable::GetVariable(const char *p_key)
   delete var;
   
   if (found) {
-    cursor.GetMatch(&var);
+    cursor.GetMatch(var);
     value = var->GetValue()->GetData();
   }
 
