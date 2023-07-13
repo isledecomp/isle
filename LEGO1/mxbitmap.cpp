@@ -129,7 +129,6 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
   if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
-  // TODO: 0xcc0020 is probably a common raster code variable
-  // see https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt#parameters
-  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_unk18, 0xcc0020);
+
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_unk18, SRCCOPY);
 }
