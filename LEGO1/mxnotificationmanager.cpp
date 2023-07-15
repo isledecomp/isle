@@ -92,12 +92,11 @@ void MxNotificationManager::Register(MxCore *p_listener)
 {
   MxAutoLocker lock(&m_lock);
 
-  MxU32 listenerId = p_listener->GetId();
-  MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), listenerId);
+  MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
   if (it != m_listenerIds.end())
     return;
 
-  m_listenerIds.push_back(listenerId);
+  m_listenerIds.push_back(p_listener->GetId());
 }
 
 // OFFSET: LEGO1 0x100acdf0
