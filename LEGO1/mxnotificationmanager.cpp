@@ -9,8 +9,7 @@
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(MxNotification, 0x8);
-// Can't use DECOMP_SIZE_ASSERT due to STL type size changes.
-//DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
+DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
 // OFFSET: LEGO1 0x100ac220
 MxNotification::MxNotification(MxCore *p_target, MxParam *p_param)
