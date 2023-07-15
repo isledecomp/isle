@@ -33,11 +33,6 @@ void MxVariableTable::SetVariable(const char *p_key, const char *p_value)
   } else {
     MxHashTable<MxVariable>::Add(var);
   }
-
-  // create new var object here?
-
-  // Resize inlined
-  // Add not
 }
 
 // OFFSET: LEGO1 0x100b7740
@@ -50,11 +45,6 @@ void MxVariableTable::SetVariable(MxVariable *var)
     cursor.DeleteMatch();
 
   MxHashTable<MxVariable>::Add(var);
-
-  // we already have the new variable to add.
-
-  // Resize not
-  // Add inlined
 }
 
 // OFFSET: LEGO1 0x100b78f0
