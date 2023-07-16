@@ -1,7 +1,5 @@
 #include "mxobjectfactory.h"
 
-#include <stdio.h>
-
 #include "mxpresenter.h"
 #include "mxcompositepresenter.h"
 #include "mxvideopresenter.h"
