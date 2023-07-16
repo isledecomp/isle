@@ -179,10 +179,13 @@ add_library(lego1 SHARED
 )
 
 if (ISLE_USE_SMARTHEAP)
-  target_compile_options(lego1 PRIVATE "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
-  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
-  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
-  target_link_libraries(lego1 PRIVATE SHLW32MT)
+  add_library(SmartHeap::SmartHeap STATIC IMPORTED)
+  set_target_properties(SmartHeap::SmartHeap PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap"
+    INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
+
+  target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
 endif()
 
 # Link libraries
@@ -203,10 +206,7 @@ if (ISLE_BUILD_APP)
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
 
   if (ISLE_USE_SMARTHEAP)
-    target_compile_options(isle PRIVATE "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
-    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
-    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
-    target_link_libraries(isle PRIVATE SHLW32MT)
+    target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
   endif()
 
   # Link DSOUND, WINMM, and LEGO1
