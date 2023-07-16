@@ -23,7 +23,7 @@ MxVideoManager::MxVideoManager()
 // OFFSET: LEGO1 0x100be320
 int MxVideoManager::Init()
 {
-  this->m_unk50 = 0;
+  this->m_pDirectDraw = NULL;
   this->m_unk54 = NULL;
   this->m_unk58 = NULL;
   this->m_unk5c = 0;
