@@ -7,7 +7,7 @@ MxBitmap::MxBitmap()
   this->m_bmiHeader = NULL;
   this->m_paletteData = NULL;
   this->m_data = NULL;
-  this->m_unk18 = FALSE;
+  this->m_bmiColorsProvided = FALSE;
   this->m_palette = NULL;
 }
 
@@ -93,10 +93,10 @@ MxPalette *MxBitmap::CreatePalette()
   MxPalette *ppal;
   MxBool success = FALSE;
 
-  if(this->m_unk18 == FALSE) {
+  if(this->m_bmiColorsProvided == FALSE) {
     // ppal = MxPalette::FromBitmapPalette(this->m_paletteData);
   } else {
-    if(this->m_unk18 != TRUE) {
+    if(this->m_bmiColorsProvided != TRUE) {
       if(!success && pal != NULL) {
         delete pal;
         pal = NULL;
@@ -130,5 +130,5 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
 
-  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_unk18, SRCCOPY);
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_bmiColorsProvided, SRCCOPY);
 }

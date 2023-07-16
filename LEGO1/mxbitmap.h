@@ -31,7 +31,7 @@ private:
   BITMAPINFOHEADER *m_bmiHeader;
   RGBQUAD *m_paletteData;
   LPVOID *m_data;
-  MxBool m_unk18;
+  MxBool m_bmiColorsProvided; // 0x18
   MxPalette *m_palette;
 };
 
