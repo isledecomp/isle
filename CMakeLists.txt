@@ -68,6 +68,7 @@ add_library(lego1 SHARED
   LEGO1/legolocomotionanimpresenter.cpp
   LEGO1/legomodelpresenter.cpp
   LEGO1/legonavcontroller.cpp
+  LEGO1/legoobjectfactory.cpp
   LEGO1/legoomni.cpp
   LEGO1/legopalettepresenter.cpp
   LEGO1/legopartpresenter.cpp

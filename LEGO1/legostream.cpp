@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <string>
 
+#include "mxvariabletable.h"
+
 // Very likely but not certain sizes.
 // The classes are only used on the stack in functions we have not 100% matched
 // yet, we can confirm the size once we have.
@@ -38,7 +40,7 @@ LegoFileStream::~LegoFileStream()
 }
 
 // OFFSET: LEGO1 0x100992c0
-MxResult LegoFileStream::Read(char* p_buffer, MxU32 p_size)
+MxResult LegoFileStream::Read(void* p_buffer, MxU32 p_size)
 {
   if (m_hFile == NULL)
     return FAILURE;
@@ -47,7 +49,7 @@ MxResult LegoFileStream::Read(char* p_buffer, MxU32 p_size)
 }
 
 // OFFSET: LEGO1 0x10099300
-MxResult LegoFileStream::Write(char* p_buffer, MxU32 p_size)
+MxResult LegoFileStream::Write(const void* p_buffer, MxU32 p_size)
 {
   if (m_hFile == NULL)
     return FAILURE;
@@ -117,7 +119,7 @@ LegoMemoryStream::LegoMemoryStream(char* p_buffer)
 }
 
 // OFFSET: LEGO1 0x10099160
-MxResult LegoMemoryStream::Read(char* p_buffer, MxU32 p_size)
+MxResult LegoMemoryStream::Read(void* p_buffer, MxU32 p_size)
 {
   memcpy(p_buffer, m_buffer + m_offset, p_size);
   m_offset += p_size;
@@ -125,7 +127,7 @@ MxResult LegoMemoryStream::Read(char* p_buffer, MxU32 p_size)
 }
 
 // OFFSET: LEGO1 0x10099190
-MxResult LegoMemoryStream::Write(char* p_buffer, MxU32 p_size)
+MxResult LegoMemoryStream::Write(const void* p_buffer, MxU32 p_size)
 {
   memcpy(m_buffer + m_offset, p_buffer, p_size);
   m_offset += p_size;
@@ -146,4 +148,65 @@ MxResult LegoMemoryStream::Seek(MxU32 p_offset)
   return SUCCESS;
 }
 
+// OFFSET: LEGO1 0x10039f70
+MxResult LegoStream::WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName)
+{
+  MxResult result = FAILURE;
+  const char *variableValue = p_from->GetVariable(p_variableName);
+  if (variableValue != NULL)
+  {
+    MxU8 length = strlen(p_variableName);
+    if (p_stream->Write((char*)&length, 1) == SUCCESS)
+    {
+      if (p_stream->Write(p_variableName, length) == SUCCESS)
+      {
+        length = strlen(variableValue);
+        if (p_stream->Write((char*)&length, 1) == SUCCESS)
+          result = p_stream->Write((char *)variableValue, length);
+      }
+    }
+  }
+  return result;
+}
 
+// This is a pointer to the end of the global variable name table, which has
+// the text "END_OF_VARIABLES" in it.
+// TODO: make s_endOfVariables reference the actual end of the variable array.
+// OFFSET: LEGO1 0x100f3e50
+const char *s_endOfVariables = "END_OF_VARIABLES";
+
+// 95% match, just some instruction ordering differences on the call to
+// MxVariableTable::SetVariable at the end.
+// OFFSET: LEGO1 0x1003a080
+int LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
+{
+  int result = 1;
+  MxU8 length;
+  if (p_stream->Read((char*)&length, 1) == SUCCESS)
+  {
+    char nameBuffer[256];
+    if (p_stream->Read(nameBuffer, length) == SUCCESS)
+    {
+      nameBuffer[length] = '\0';
+      if (strcmp(nameBuffer, s_endOfVariables) == 0)
+      {
+        // 2 -> "This was the last entry, done reading."
+        result = 2;
+      }
+      else
+      {
+        if (p_stream->Read((char*)&length, 1) == SUCCESS)
+        {
+          char valueBuffer[256];
+          if (p_stream->Read(valueBuffer, length) == SUCCESS)
+          {
+            result = 0;
+            valueBuffer[length] = '\0';
+            p_to->SetVariable(nameBuffer, valueBuffer);
+          }
+        }
+      }
+    }
+  }
+  return result;
+}

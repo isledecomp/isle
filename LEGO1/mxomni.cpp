@@ -104,6 +104,14 @@ void MxOmni::SetInstance(MxOmni *instance)
 // OFFSET: LEGO1 0x100af0c0
 MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
+  if (p.CreateFlags().CreateObjectFactory())
+  {
+    MxObjectFactory *factory = new MxObjectFactory();
+    this->m_objectFactory = factory;
+
+    if (factory == NULL)
+      return FAILURE;
+  }
   if (p.CreateFlags().CreateTimer())
   {
     MxTimer *timer = new MxTimer();
