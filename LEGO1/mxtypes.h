@@ -39,8 +39,4 @@ typedef MxU8 MxBool;
 #define FALSE 0
 #endif
 
-#if defined(_MSC_VER) && _MSC_VER <= 1200 // 1200 corresponds to VC6.0 but "override" was probably added even later
-#define override
-#endif
-
 #endif // MXTYPE_H
