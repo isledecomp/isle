@@ -10,6 +10,7 @@ import logging
 import os
 import sys
 import colorama
+import re
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
@@ -248,9 +249,21 @@ print()
 
 md = Cs(CS_ARCH_X86, CS_MODE_32)
 
-def sanitize(file, mnemonic, op_str):
-  offsetplaceholder = '<OFFSET>'
+class OffsetPlaceholderGenerator:
+  def __init__(self):
+    self.counter = 0
+    self.replacements = {}
 
+  def get(self, addr):
+    if addr in self.replacements:
+      return self.replacements[addr]
+    else:
+      self.counter += 1
+      replacement = '<OFFSET%d>' % self.counter
+      self.replacements[addr] = replacement
+      return replacement
+
+def sanitize(file, placeholderGenerator, mnemonic, op_str):
   op_str_is_number = False
   try:
     int(op_str, 16)
@@ -262,7 +275,7 @@ def sanitize(file, mnemonic, op_str):
     # Filter out "calls" because the offsets we're not currently trying to
     # match offsets. As long as there's a call in the right place, it's
     # probably accurate.
-    op_str = offsetplaceholder
+    op_str = placeholderGenerator.get(int(op_str, 16))
   else:
     def filter_out_ptr(ptype, op_str):
       try:
@@ -273,7 +286,7 @@ def sanitize(file, mnemonic, op_str):
         # This will throw ValueError if not hex
         inttest = int(op_str[start:end], 16)
 
-        return op_str[0:start] + offsetplaceholder + op_str[end:]
+        return op_str[0:start] + placeholderGenerator.get(inttest) + op_str[end:]
       except ValueError:
         return op_str
 
@@ -288,7 +301,7 @@ def sanitize(file, mnemonic, op_str):
       try:
         inttest = int(word, 16)
         if inttest >= file.imagebase + file.textvirt:
-          words[i] = offsetplaceholder
+          words[i] = placeholderGenerator.get(inttest)
       except ValueError:
         pass
     op_str = ' '.join(words)
@@ -298,18 +311,76 @@ def sanitize(file, mnemonic, op_str):
 def parse_asm(file, addr, size):
   asm = []
   data = file.read(addr, size)
+  placeholderGenerator = OffsetPlaceholderGenerator()
   for i in md.disasm(data, 0):
     # Use heuristics to disregard some differences that aren't representative
     # of the accuracy of a function (e.g. global offsets)
-    mnemonic, op_str = sanitize(file, i.mnemonic, i.op_str)
+    mnemonic, op_str = sanitize(file, placeholderGenerator, i.mnemonic, i.op_str)
     if op_str is None:
       asm.append(mnemonic)
     else:
       asm.append("%s %s" % (mnemonic, op_str))
   return asm
 
+REGISTER_LIST = set([
+  'eax', 'ebx', 'ecx', 'edx', 'edi', 'esi', 'ebp', 'esp',
+  'ax', 'bx', 'cx', 'dx', 'di', 'si', 'bp', 'sp',
+])
+WORDS = re.compile(r'\w+')
+
+def get_registers(line: str):
+  to_replace = []
+  # use words regex to find all matching positions:
+  for match in WORDS.finditer(line):
+    reg = match.group(0)
+    if reg in REGISTER_LIST:
+      to_replace.append((reg, match.start()))
+  return to_replace
+
+def replace_register(lines: list[str], start_line: int, reg: str, replacement: str):
+  for i in range(start_line, len(lines)):
+    lines[i] = lines[i].replace(reg, replacement)
+
+# Is it possible to make new_asm the same as original_asm by swapping registers?
+def can_resolve_register_differences(original_asm, new_asm):
+  # Swapping ain't gonna help if the lengths are different
+  if len(original_asm) != len(new_asm):
+    return False
+
+  # Make copies so we don't modify the original
+  original_asm = original_asm.copy()
+  new_asm = new_asm.copy()
+
+  # Look for the mismatching lines
+  for i in range(len(original_asm)):
+    new_line = new_asm[i]
+    original_line = original_asm[i]
+    if new_line != original_line:
+      # Find all the registers to replace
+      to_replace = get_registers(original_line)
+
+      for j in range(len(to_replace)):
+        (reg, reg_index) = to_replace[j]
+        replacing_reg = new_line[reg_index:reg_index + len(reg)]
+        if replacing_reg in REGISTER_LIST:
+          if replacing_reg != reg:
+            # Do a three-way swap replacing in all the subsequent lines
+            temp_reg = "&" * len(reg)
+            replace_register(new_asm, i, replacing_reg, temp_reg)
+            replace_register(new_asm, i, reg, replacing_reg)
+            replace_register(new_asm, i, temp_reg, reg)
+        else:
+          # No replacement to do, different code, bail out
+          return False
+  # Check if the lines are now the same
+  for i in range(len(original_asm)):
+    if new_asm[i] != original_asm[i]:
+      return False
+  return True
+
 function_count = 0
 total_accuracy = 0
+total_effective_accuracy = 0
 htmlinsert = []
 
 # Generate basename of original file, used in locating OFFSET lines
@@ -356,23 +427,40 @@ for subdir, dirs, files in os.walk(source):
           if not recinfo:
             continue
 
+          # The effective_ratio is the ratio when ignoring differing register 
+          # allocation vs the ratio is the true ratio.
+          ratio = 0.0
+          effective_ratio = 0.0
           if recinfo.size:
             origasm = parse_asm(origfile, addr + recinfo.start, recinfo.size)
             recompasm = parse_asm(recompfile, recinfo.addr + recinfo.start, recinfo.size)
 
             diff = difflib.SequenceMatcher(None, origasm, recompasm)
             ratio = diff.ratio()
+            effective_ratio = ratio
+
+            if ratio != 1.0:
+              # Check whether we can resolve register swaps which are actually
+              # perfect matches modulo compiler entropy.
+              if can_resolve_register_differences(origasm, recompasm):
+                effective_ratio = 1.0
           else:
             ratio = 0
 
-          percenttext = "%.2f%%" % (ratio * 100)
+          percenttext = "%.2f%%" % (effective_ratio * 100)
           if not plain:
-            if ratio == 1.0:
+            if effective_ratio == 1.0:
               percenttext = colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
-            elif ratio > 0.8:
+            elif effective_ratio > 0.8:
               percenttext = colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
             else:
               percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
+
+          if effective_ratio == 1.0 and ratio != 1.0:
+            if plain:
+              percenttext += "*"
+            else:
+              percenttext += colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
 
           if not verbose:
             if args.print_rec_addr:
@@ -383,14 +471,21 @@ for subdir, dirs, files in os.walk(source):
 
           function_count += 1
           total_accuracy += ratio
+          total_effective_accuracy += effective_ratio
 
           if recinfo.size:
             udiff = difflib.unified_diff(origasm, recompasm, n=10)
 
             # If verbose, print the diff for that funciton to the output
             if verbose:
-              if ratio == 1.0:
-                print("%s: %s 100%% match.\n\nOK!" % (hex(addr), recinfo.name))
+              if effective_ratio == 1.0:
+                ok_text = "OK!" if plain else (colorama.Fore.GREEN + "✨ OK! ✨" + colorama.Style.RESET_ALL)
+                if ratio == 1.0:
+                  print("%s: %s 100%% match.\n\n%s\n\n" %
+                        (hex(addr), recinfo.name, ok_text))
+                else:
+                  print("%s: %s Effective 100%% match. (Differs in register allocation only)\n\n%s (still differs in register allocation)\n\n" %
+                        (hex(addr), recinfo.name, ok_text))
               else:
                 for line in udiff:
                   if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
@@ -416,7 +511,7 @@ for subdir, dirs, files in os.walk(source):
             # If html, record the diffs to an HTML file
             if html:
               escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
-              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(ratio), escaped))
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(effective_ratio), escaped))
 
       except UnicodeDecodeError:
         break
@@ -496,7 +591,8 @@ else:
     function_count = int(args.total)
 
   if function_count > 0:
-    print('\nTotal accuracy %.2f%% across %i functions' % (total_accuracy / function_count * 100, function_count))
+    print('\nTotal effective accuracy %.2f%% across %i functions (%.2f%% actual accuracy)' %
+          (total_effective_accuracy / function_count * 100, function_count, total_accuracy / function_count * 100))
 
     if svg:
-      gen_svg(svg, os.path.basename(original), args.svg_icon, implemented_funcs, function_count, total_accuracy)
+      gen_svg(svg, os.path.basename(original), args.svg_icon, implemented_funcs, function_count, total_effective_accuracy)
