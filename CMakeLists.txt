@@ -204,6 +204,7 @@ if (ISLE_BUILD_APP)
 
   if (ISLE_USE_SMARTHEAP)
     target_compile_definitions(isle PRIVATE USE_SMARTHEAP)
+    target_compile_options(isle PRIVATE "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
     target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
     target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
     target_link_libraries(isle PRIVATE SHLW32MT)
