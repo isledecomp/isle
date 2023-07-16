@@ -114,24 +114,91 @@ MxResult __stdcall WriteEndOfVariables(LegoStream *p_stream)
   return FAILURE;
 }
 
-struct SaveData3
+struct LegoSaveDataEntry3
 {
-  
+  char *m_name;
+  void *m_pSomething1;
+  void *m_pSomething2;
+  int m_savePart1;
+  int m_savePart2;
+  MxU8 m_savePart3;
+  MxU8 padding1[3];
+  MxU8 unk1[24];
+  MxU8 m_frameOffsetInDwords;
+  int *m_pFrameData;
+  MxU8 m_currentFrame;
+  MxU8 padding2[3];
+  MxU8 unk2[8];
+  MxU8 m_savePart5;
+  MxU8 padding3[3];
+  MxU8 unk3[20];
+  MxU8 m_savePart6;
+  MxU8 padding4[3];
+  MxU8 unk4[44];
+  MxU8 m_savePart7;
+  MxU8 padding5[3];
+  MxU8 unk5[20];
+  MxU8 m_savePart8;
+  MxU8 padding6[3];
+  MxU8 unk6[68];
+  MxU8 m_savePart9;
+  MxU8 padding7[3];
+  MxU8 unk7[20];
+  MxU8 m_savePart10;
+  MxU8 padding8[3];
 };
 
-DECOMP_SIZE_ASSERT(SaveData3, 0x108);
+DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
 
-MxResult WriteSaveData3(void* p_unusedThis, LegoStream* p_stream)
+// OFFSET: LEGO1 0x10104f20
+LegoSaveDataEntry3 g_saveData3[66];
+
+// Some Mx singleton which is in 0x8C of LegoOmni
+class UnknownWritingSaveData3 {
+  MxResult WriteSaveData3(LegoStream *p_stream);
+};
+
+// Match except for swapped registers
+// OFFSET: LEGO1 0x10083310
+MxResult UnknownWritingSaveData3::WriteSaveData3(LegoStream *p_stream)
 {
   MxResult result = FAILURE;
 
-
-
+  // This should probably be a for loop but I can't figure out how to
+  // make it match as a for loop.
+  LegoSaveDataEntry3 *entry = g_saveData3;
+  const LegoSaveDataEntry3 *end = &g_saveData3[66];
+  while (true)
+  {
+    if (p_stream->Write(&entry->m_savePart1, 4) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart2, 4) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart3, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_currentFrame, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart5, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart6, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart7, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart8, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart9, 1) != SUCCESS)
+      break;
+    if (p_stream->Write(&entry->m_savePart10, 1) != SUCCESS)
+      break;
+    if (++entry >= end)
+    {
+      result = SUCCESS;
+      break;
+    }
+  }
   return result;
 }
 
-// TODO: Not decomp accurate, but trying to work towards writing a functional
-// save file.
 // OFFSET: LEGO1 0x10039980 STUB
 MxResult LegoGameState::Save(MxULong p_slot)
 {
@@ -170,7 +237,6 @@ MxResult LegoGameState::Save(MxULong p_slot)
 
           // TODO: Calls down to more aggregate writing functions
           
-          printf("Debug|Saved as much as implemented so far.\n");
           return SUCCESS;
         }
       }
