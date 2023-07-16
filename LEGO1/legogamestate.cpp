@@ -102,7 +102,9 @@ ColorStringStruct g_colorSaveData[43] = {
   {"c_chseaty0", "lego white"},
 };
 
-// Move this into the appropriate header
+// NOTE: This offset = the end of the variables table, the last entry
+// in that table is a special entry, the string "END_OF_VARIABLES"
+// OFFSET: LEGO1 0x100f3e50
 extern const char *s_endOfVariables;
 
 // OFFSET: LEGO1 0x1003a020
