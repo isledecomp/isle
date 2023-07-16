@@ -135,6 +135,7 @@ add_library(lego1 SHARED
   LEGO1/mxomnicreateparam.cpp
   LEGO1/mxomnicreateparambase.cpp
   LEGO1/mxpalette.cpp
+  LEGO1/mxparam.cpp
   LEGO1/mxpresenter.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
