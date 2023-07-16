@@ -179,7 +179,6 @@ add_library(lego1 SHARED
 )
 
 if (ISLE_USE_SMARTHEAP)
-  target_compile_definitions(lego1 PRIVATE USE_SMARTHEAP)
   target_compile_options(lego1 PRIVATE "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
   target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
@@ -204,7 +203,6 @@ if (ISLE_BUILD_APP)
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
 
   if (ISLE_USE_SMARTHEAP)
-    target_compile_definitions(isle PRIVATE USE_SMARTHEAP)
     target_compile_options(isle PRIVATE "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
     target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
     target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")

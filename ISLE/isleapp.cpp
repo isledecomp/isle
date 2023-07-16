@@ -1,7 +1,3 @@
-#ifdef USE_SMARTHEAP
-#include <smrtheap.hpp>
-#endif
-
 #include "isleapp.h"
 #include "define.h"
 
