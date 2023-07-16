@@ -262,7 +262,6 @@ PALETTEENTRY g_defaultPaletteEntries[256] =
   { 255u, 255u, 255u, 0u }
 };
 
-LPPALETTEENTRY g_defaultPalette;
 
 // OFFSET: LEGO1 0x100bee30
 MxPalette::MxPalette()
