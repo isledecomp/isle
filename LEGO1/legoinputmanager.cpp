@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "legoomni.h"
+#include "mxautolocker.h"
 
 //DECOMP_SIZE_ASSERT(LegoInputManager, 0x338); // 0x10059085
 
@@ -47,7 +48,7 @@ void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, MxLong p3
 // OFFSET: LEGO1 0x1005c470 STUB
 void LegoInputManager::Register(MxCore *)
 {
-  // TODO
+  MxAutoLocker* autolocker = new MxAutoLocker(&m_criticalsection);
 }
 
 // OFFSET: LEGO1 0x1005c5c0 STUB
@@ -67,7 +68,7 @@ void LegoInputManager::UnRegister(MxCore *)
 void LegoInputManager::Destroy() 
 {
   ReleaseDX();
-
+  // `scalar_deleting_destructor'
   if (m_unknown_classptr68 != NULL) delete[] m_unknown_classptr68;
   if (m_controlManager != NULL) delete[] m_controlManager;
   return;

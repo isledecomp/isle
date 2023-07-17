@@ -190,6 +190,7 @@ if (ISLE_USE_SMARTHEAP)
   target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
 endif()
 
+target_include_directories(lego1 PRIVATE "dx5sdk/inc")
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound winmm "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dinput.lib" "${CMAKE_SOURCE_DIR}/dx5sdk/lib/dxguid.lib")
 
