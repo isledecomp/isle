@@ -88,13 +88,18 @@ void MxBitmap::vtable30(int, int, int, int, int, int, int)
 // OFFSET: LEGO1 0x100bd1c0
 MxPalette *MxBitmap::CreatePalette()
 {
-  // FIXME: This function needs MxPalette to be completed. Also INFERRING usage of MxBool
-  MxPalette *pal = NULL;
+  // FIXME: doesn't match
+  MxPalette *pal;
   MxPalette *ppal;
-  MxBool success = FALSE;
+  MxBool success;
 
+  pal = NULL;
+  success = FALSE;
   if(this->m_bmiColorsProvided == FALSE) {
-    // ppal = MxPalette::FromBitmapPalette(this->m_paletteData);
+    ppal = new MxPalette(this->m_paletteData);
+    if (ppal != NULL) {
+      pal = ppal;
+    }
   } else {
     if(this->m_bmiColorsProvided != TRUE) {
       if(!success && pal != NULL) {
@@ -102,7 +107,7 @@ MxPalette *MxBitmap::CreatePalette()
         pal = NULL;
       }
     }
-    //.pal = MxPalette::Clone(this->m_palette);
+   pal = this->m_palette->Clone();
   }
   if(pal != NULL) {
     success = TRUE;
