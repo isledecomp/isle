@@ -12,13 +12,17 @@ public:
   MXIOINFO();
   __declspec(dllexport) ~MXIOINFO();
 
-  MxU16 Open(const char *filename, DWORD fdwOpen);
-  void Close(MxLong arg);
-  LONG Seek(LONG lOffset, int iOrigin);
-  MxULong Read(HPSTR pch, LONG cch);
-  void SetBuffer(LPSTR pchBuffer, LONG cchBuffer, LONG unk);
-  MxU16 Descend(LPMMCKINFO pmmcki, const MMCKINFO *pmmckiParent, UINT fuDescend);
+  MxU16 Open(const char *, MxULong);
+  MxU16 Close(MxLong);
+  MxLong Read(void *, MxLong);
+  MxLong Seek(MxLong, int);
+  MxU16 SetBuffer(char *, MxLong, MxLong);
+  MxU16 Flush(MxU16);
+  MxU16 Advance(MxU16);
+  MxU16 Descend(MMCKINFO *, const MMCKINFO *, MxU16);
 
+  // NOTE: In MXIOINFO, the `hmmio` member of MMIOINFO is used like
+  // an HFILE (int) instead of an HMMIO (WORD).
   MMIOINFO m_info;
 };
 
