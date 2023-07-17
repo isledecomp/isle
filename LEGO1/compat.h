@@ -11,4 +11,24 @@
 #define COMPAT_CONST
 #endif
 
+#define MSVC420_VERSION 1020
+
+// STL compatibility.
+#if defined(_MSC_VER) && _MSC_VER <= MSVC420_VERSION
+#include <STL.H>
+#else
+#include <algorithm>
+#include <list>
+using namespace std;
+template <class T>
+using List = list<T>;
+#endif
+
+// We use `override` so newer compilers can tell us our vtables are valid,
+// however this keyword was added in C++11, so we define it as empty for
+// compatibility with older compilers.
+#if defined(_MSC_VER) && _MSC_VER <= 1200 // 1200 corresponds to VC6.0 but "override" was probably added even later
+#define override
+#endif
+
 #endif // ISLECOMPAT_H
