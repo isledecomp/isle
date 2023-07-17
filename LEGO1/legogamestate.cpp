@@ -5,6 +5,7 @@
 #include "mxstring.h"
 #include "legostream.h"
 #include "mxomni.h"
+#include "decomp.h"
 
 // OFFSET: LEGO1 0x10039550 STUB
 LegoGameState::LegoGameState()
@@ -124,30 +125,30 @@ struct LegoSaveDataEntry3
   int m_savePart1;
   int m_savePart2;
   MxU8 m_savePart3;
-  MxU8 padding1[3];
-  MxU8 unk1[24];
+  undefined padding1[3];
+  undefined unk1[24];
   MxU8 m_frameOffsetInDwords;
   int *m_pFrameData;
   MxU8 m_currentFrame;
-  MxU8 padding2[3];
-  MxU8 unk2[8];
+  undefined padding2[3];
+  undefined unk2[8];
   MxU8 m_savePart5;
-  MxU8 padding3[3];
-  MxU8 unk3[20];
+  undefined padding3[3];
+  undefined unk3[20];
   MxU8 m_savePart6;
-  MxU8 padding4[3];
-  MxU8 unk4[44];
+  undefined padding4[3];
+  undefined unk4[44];
   MxU8 m_savePart7;
-  MxU8 padding5[3];
-  MxU8 unk5[20];
+  undefined padding5[3];
+  undefined unk5[20];
   MxU8 m_savePart8;
-  MxU8 padding6[3];
-  MxU8 unk6[68];
+  undefined padding6[3];
+  undefined unk6[68];
   MxU8 m_savePart9;
-  MxU8 padding7[3];
-  MxU8 unk7[20];
+  undefined padding7[3];
+  undefined unk7[20];
   MxU8 m_savePart10;
-  MxU8 padding8[3];
+  undefined padding8[3];
 };
 
 DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
@@ -206,7 +207,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 {
   MxResult result;
   InfocenterState *infocenterState = (InfocenterState *)GameState()->GetState("InfocenterState");
-  if (infocenterState == NULL || infocenterState->GetSomething(0) == 0)
+  if (infocenterState == NULL || infocenterState->GetInfocenterBufferElement(0) == 0)
   {
     result = SUCCESS;
   }

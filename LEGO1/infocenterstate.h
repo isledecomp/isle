@@ -3,6 +3,8 @@
 
 #include "legostate.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100d93a8
 // SIZE 0x94
 class InfocenterState : public LegoState
@@ -24,36 +26,34 @@ public:
     return !strcmp(name, InfocenterState::ClassName()) || LegoState::IsA(name);
   }
 
-  inline MxU32 GetSomething(int p_index) { return m_buffer[p_index]; }
-  inline void SetSomething(int p_index, MxU32 p_value) { m_buffer[p_index] = p_value; }
+  inline MxU32 GetInfocenterBufferElement(int p_index) { return m_buffer[p_index]; }
 
 private:
   // Size: 0xC
   struct SomeStruct
   {
-    MxU32 unk1;
-    MxU16 unk2;
-    MxU16 unk3;
-    MxU16 unk4;
-    MxU16 padding;
+    undefined4 unk1;
+    undefined2 unk2;
+    undefined2 unk3;
+    undefined2 unk4;
   };
 
-  MxU16 unk1;
-  MxU16 unk2;
-  MxU32 unk3;
-  MxU32 padding1;
+  undefined2 unk1;
+  undefined2 unk2;
+  undefined4 unk3;
+  undefined4 padding1;
   void *unk4;
-  MxU16 unk5;
-  MxU16 unk6;
-  MxU16 unk7;
-  MxU16 padding2;
+  undefined2 unk5;
+  undefined2 unk6;
+  undefined2 unk7;
+  undefined2 padding2;
   void *unk8;
-  MxU16 unk9;
-  MxU16 unk10;
-  MxU16 unk11;
-  MxU16 padding3;
+  undefined2 unk9;
+  undefined2 unk10;
+  undefined2 unk11;
+  undefined2 padding3;
   SomeStruct unk12[6];
-  MxU32 unk13;
+  undefined4 unk13;
   MxU32 m_buffer[7];
 };
 
