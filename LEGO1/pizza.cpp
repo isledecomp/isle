@@ -12,22 +12,13 @@ Pizza::Pizza()
   this->m_unk90 = 0x80000000;
 }
 
-// OFFSET: LEGO1 0x1002c7cf STUB
-// MxS32 IsleActor::Notify(MxParam *)
-// {
-//   // TODO
-//   return 0;
-// }
-
 // OFFSET: LEGO1 0x10038100
 Pizza::~Pizza()
 {
-  // FIXME: some vtable call from tickle manager, unimplemented atm
-  delete this;
+  TickleManager()->Unregister(this);
 }
 
-
-// OFFSET: LEGO1 0x100388a0 STUB
+// OFFSET: LEGO1 0x100388a0
 MxResult Pizza::Tickle()
 {
   // TODO

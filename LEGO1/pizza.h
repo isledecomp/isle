@@ -1,9 +1,10 @@
 #ifndef PIZZA_H
 #define PIZZA_H
 
-#include "decomp.h"
 #include "isleactor.h"
 #include "mxcore.h"
+#include "mxomni.h"
+#include "mxticklemanager.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d7380
@@ -31,12 +32,12 @@ public:
     return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
   }
 private:
-  undefined4 m_unk80;
-  undefined4 m_unk84;
-  undefined4 m_unk88;
-  undefined4 m_unk8c;
-  undefined4 m_unk90;
-  undefined4 m_unk98;
+  MxS32 m_unk80;
+  MxS32 m_unk84;
+  MxS32 m_unk88;
+  MxS32 m_unk8c;
+  MxS32 m_unk90;
+  MxS32 m_unk98;
 };
 
 #endif // PIZZA_H
