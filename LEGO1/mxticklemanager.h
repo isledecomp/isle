@@ -12,7 +12,6 @@ class MxTickleClient
 {
 public:
   MxTickleClient(MxCore *p_client, MxTime p_interval);
-  ~MxTickleClient(){}
 
   inline MxCore *GetClient() const
   {
