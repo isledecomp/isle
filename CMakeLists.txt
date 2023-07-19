@@ -147,6 +147,7 @@ add_library(lego1 SHARED
   LEGO1/mxstring.cpp
   LEGO1/mxstringvariable.cpp
   LEGO1/mxthread.cpp
+  LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxunknown100dc6b0.cpp
