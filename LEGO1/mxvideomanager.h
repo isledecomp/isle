@@ -2,7 +2,7 @@
 #define MXVIDEOMANAGER_H
 
 #include "mxunknown100dc6b0.h"
-#include "mxunknown100dc768.h"
+#include "mxdisplaysurface.h"
 #include "mxvideoparam.h"
 
 // VTABLE 0x100dc810
@@ -27,7 +27,7 @@ private:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
   LPDIRECTDRAWSURFACE m_unk54;
-  MxUnknown100dc768 *m_100dc768;
+  MxDisplaySurface *m_displaySurface;
   int m_unk5c;
   MxBool m_unk60;
 };

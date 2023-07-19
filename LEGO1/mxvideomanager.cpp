@@ -25,7 +25,7 @@ int MxVideoManager::Init()
 {
   this->m_pDirectDraw = NULL;
   this->m_unk54 = NULL;
-  this->m_100dc768 = NULL;
+  this->m_displaySurface = NULL;
   this->m_unk5c = 0;
   this->m_videoParam.SetPalette(NULL);
   this->m_unk60 = FALSE;
@@ -48,7 +48,7 @@ MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
   if (p_palette && this->m_videoParam.GetPalette()) {
     p_palette->GetEntries(paletteEntries);
     this->m_videoParam.GetPalette()->SetEntries(paletteEntries);
-    this->m_100dc768->vtable20(this->m_videoParam.GetPalette());
+    this->m_displaySurface->vtable20(this->m_videoParam.GetPalette());
   }
 
   this->m_criticalSection.Leave();

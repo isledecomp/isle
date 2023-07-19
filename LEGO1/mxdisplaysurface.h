@@ -1,5 +1,5 @@
-#ifndef MXUNKNOWN100DC768_H
-#define MXUNKNOWN100DC768_H
+#ifndef MXDISPLAYSURFACE_H
+#define MXDISPLAYSURFACE_H
 
 #include "mxcore.h"
 #include "mxpalette.h"
@@ -7,11 +7,11 @@
 #include "decomp.h"
 
 // VTABLE 0x100dc768
-class MxUnknown100dc768 : public MxCore
+class MxDisplaySurface : public MxCore
 {
 public:
-  MxUnknown100dc768();
-  virtual ~MxUnknown100dc768() override;
+  MxDisplaySurface();
+  virtual ~MxDisplaySurface() override;
 
   virtual undefined4 vtable14(undefined4, undefined4, undefined4, undefined4);
   virtual undefined4 vtable18(undefined4);
@@ -28,4 +28,4 @@ public:
   virtual undefined4 vtable44(undefined4, undefined4*, undefined4, undefined4);
 };
 
-#endif // MXUNKNOWN100DC768_H
+#endif // MXDISPLAYSURFACE_H
