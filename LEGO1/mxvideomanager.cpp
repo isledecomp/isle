@@ -48,7 +48,7 @@ MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
   if (p_palette && this->m_videoParam.GetPalette()) {
     p_palette->GetEntries(paletteEntries);
     this->m_videoParam.GetPalette()->SetEntries(paletteEntries);
-    this->m_displaySurface->vtable20(this->m_videoParam.GetPalette());
+    this->m_displaySurface->SetPalette(this->m_videoParam.GetPalette());
   }
 
   this->m_criticalSection.Leave();
