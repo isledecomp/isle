@@ -25,6 +25,8 @@ typedef int MxLong;
 typedef unsigned int MxULong;
 #endif
 
+typedef MxS32 MxTime;
+
 typedef MxLong MxResult;
 const MxResult SUCCESS = 0;
 const MxResult FAILURE = -1;

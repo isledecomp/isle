@@ -29,16 +29,18 @@ MxTickleManager::~MxTickleManager()
   }
 }
 
+// TODO: Match.
 // OFFSET: LEGO1 0x100bdde0
 MxResult MxTickleManager::Tickle()
 {
   MxTime time = Timer()->GetTime();
 
   MxTickleClientPtrList::iterator it = m_clients.begin();
+
   while (it != m_clients.end()) {
     MxTickleClient *client = *it;
     if ((client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) == 0) {
-      if (client->GetLastUpdateTime() != time && time <= client->GetLastUpdateTime())
+      if (client->GetLastUpdateTime() >= time)
         client->SetLastUpdateTime(-client->GetTickleInterval());
 
       if ((client->GetTickleInterval() + client->GetLastUpdateTime()) < time) {

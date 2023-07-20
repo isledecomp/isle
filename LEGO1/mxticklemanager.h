@@ -6,8 +6,6 @@
 
 #include "compat.h"
 
-typedef MxS32 MxTime;
-
 class MxTickleClient
 {
 public:
