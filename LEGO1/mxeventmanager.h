@@ -11,6 +11,8 @@ public:
   MxEventManager();
   virtual ~MxEventManager() override;
 
+private:
+  void Init();
 };
 
 #endif // MXEVENTMANAGER_H
