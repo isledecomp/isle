@@ -16,7 +16,9 @@ public:
   MxDisplaySurface();
   virtual ~MxDisplaySurface() override;
 
-  virtual MxResult Init(MxVideoParam *p_videoParam, LPDIRECTDRAWSURFACE p_surface1, LPDIRECTDRAWSURFACE p_surface2, LPDIRECTDRAWCLIPPER p_clipper);
+  void Reset();
+
+  virtual MxResult Init(MxVideoParam &p_videoParam, LPDIRECTDRAWSURFACE p_ddSurface1, LPDIRECTDRAWSURFACE p_ddSurface2, LPDIRECTDRAWCLIPPER p_ddClipper);
   virtual MxResult Create(MxVideoParam *p_videoParam);
   virtual void Clear();
   virtual void SetPalette(MxPalette *p_palette);
@@ -26,9 +28,18 @@ public:
   virtual MxBool vtable30(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool);
   virtual undefined4 vtable34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
   virtual void Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
-  virtual undefined4 vtable3c(undefined4*);
-  virtual undefined4 vtable40(undefined4);
+  virtual void GetDC(HDC *p_hdc);
+  virtual void ReleaseDC(HDC p_hdc);
   virtual undefined4 vtable44(undefined4, undefined4*, undefined4, undefined4);
+
+private:
+  MxVideoParam m_videoParam;
+  LPDIRECTDRAWSURFACE m_ddSurface1;
+  LPDIRECTDRAWSURFACE m_ddSurface2;
+  LPDIRECTDRAWCLIPPER m_ddClipper;
+  MxBool m_initialized;
+  DDSURFACEDESC m_surfaceDesc;
+  MxU16 *m_16bitPal;
 };
 
 #endif // MXDISPLAYSURFACE_H
