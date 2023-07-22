@@ -39,9 +39,8 @@ MxResult MxDisplaySurface::Init(MxVideoParam &p_videoParam, LPDIRECTDRAWSURFACE 
   memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
   this->m_surfaceDesc.dwSize = sizeof(this->m_surfaceDesc);
 
-  if (this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc)) {
+  if (this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc))
     result = FAILURE;
-  }
 
   return result;
 }
