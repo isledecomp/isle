@@ -15,8 +15,6 @@ public:
   Pizza();
   virtual ~Pizza() override;
 
-  // TODO: IsleActor::Notify
-  // virtual MxS32 IsleActor::Notify(MxParam *) override; // vtable+04
   virtual MxResult Tickle() override; // vtable+08
 
   // OFFSET: LEGO1 0x10037f90
@@ -32,11 +30,12 @@ public:
     return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
   }
 private:
+  MxS32 m_unk7c;
   MxS32 m_unk80;
   MxS32 m_unk84;
   MxS32 m_unk88;
   MxS32 m_unk8c;
-  MxS32 m_unk90;
+  MxU32 m_unk90;
   MxS32 m_unk98;
 };
 
