@@ -1,5 +1,7 @@
 #include "mxdisplaysurface.h"
 
+DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
+
 // OFFSET: LEGO1 0x100ba500
 MxDisplaySurface::MxDisplaySurface()
 {

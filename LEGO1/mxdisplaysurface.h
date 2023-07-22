@@ -10,6 +10,7 @@
 #include "decomp.h"
 
 // VTABLE 0x100dc768
+// SIZE 0xac
 class MxDisplaySurface : public MxCore
 {
 public:
