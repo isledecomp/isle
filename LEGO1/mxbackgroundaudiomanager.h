@@ -4,6 +4,7 @@
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxtypes.h"
+#include "mxnotificationmanager.h"
 
 // VTABLE 0x100d9fe8
 // SIZE 0x150
@@ -39,8 +40,8 @@ private:
   MxS32 m_unk13c;
   MxS32 m_unk140;
   MxS32 m_unk144;
-  MxS8 m_unk148;
-  MxS32 m_unk14c;
+  MxS16 m_unk148;
+  MxAtomId m_unk14c;
 };
 
 #endif // MXBACKGROUNDAUDIOMANAGER_H

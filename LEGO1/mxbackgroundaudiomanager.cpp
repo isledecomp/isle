@@ -3,15 +3,13 @@
 // OFFSET: LEGO1 0x1007ea90
 MxBackgroundAudioManager::MxBackgroundAudioManager()
 {
-  // TODO
-  m_unk14c = 0;
   NotificationManager()->Register(this);
   m_unka0 = 0;
   m_unk138 = 0;
-  m_unk148 = 0;
   m_unk13c = 0;
   m_unk140 = 0;
   m_unk144 = 0;
+  m_unk148 = 0;
   m_musicEnabled = FALSE;
 }
 
