@@ -1,6 +1,8 @@
 #ifndef MXATOMID_H
 #define MXATOMID_H
 
+#include "mxbinarytree.h"
+#include "mxstring.h"
 #include "mxtypes.h"
 
 enum LookupMode
@@ -11,6 +13,7 @@ enum LookupMode
   LookupMode_LowerCase2 = 3
 };
 
+// SIZE 0x4
 class MxAtomId
 {
 public:
@@ -28,8 +31,11 @@ public:
     return this->m_internal == other.m_internal;
   }
 
+  // TODO: belongs here?
+  TreeValue *try_to_open(const char *, LookupMode);
+  
 private:
-  char *m_internal;
+  const char *m_internal;
 };
 
 #endif // MXATOMID_H

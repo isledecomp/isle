@@ -38,7 +38,7 @@ void MxOmni::Init()
   m_eventManager = NULL;
   m_timer = NULL;
   m_streamer = NULL;
-  m_unk44 = NULL;
+  m_atomIdTree = NULL;
   m_unk64 = NULL;
 }
 
@@ -104,6 +104,8 @@ void MxOmni::SetInstance(MxOmni *instance)
 // OFFSET: LEGO1 0x100af0c0
 MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
+  m_atomIdTree = new MxBinaryTree();
+
   if (p.CreateFlags().CreateTimer())
   {
     MxTimer *timer = new MxTimer();
@@ -151,6 +153,12 @@ MxTickleManager *TickleManager()
 MxTimer *Timer()
 {
   return MxOmni::GetInstance()->GetTimer();
+}
+
+// OFFSET: LEGO1 0x100acee0
+MxBinaryTree *AtomIdTree()
+{
+  return MxOmni::GetInstance()->GetAtomIdTree();
 }
 
 // OFFSET: LEGO1 0x100acef0

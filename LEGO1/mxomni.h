@@ -14,6 +14,7 @@
 #include "mxtimer.h"
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
+#include "mxbinarytree.h"
 
 // VTABLE 0x100dc168
 // SIZE 0x68
@@ -47,6 +48,7 @@ public:
   MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
   MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
   MxEventManager* GetEventManager() const { return this->m_eventManager; }
+  MxBinaryTree* GetAtomIdTree() const { return this->m_atomIdTree; }
 protected:
   static MxOmni* g_instance;
 
@@ -63,7 +65,7 @@ protected:
   MxTimer* m_timer; //0x3C
   MxStreamer* m_streamer; //0x40
 
-  int m_unk44; // 0x44
+  MxBinaryTree *m_atomIdTree; // 0x44
 
   MxCriticalSection m_criticalsection; // 0x48
 
@@ -78,5 +80,6 @@ __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
 MxVideoManager * MVideoManager();
+MxBinaryTree *AtomIdTree();
 
 #endif // MXOMNI_H

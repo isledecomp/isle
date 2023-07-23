@@ -92,6 +92,7 @@ add_library(lego1 SHARED
   LEGO1/mxaudiopresenter.cpp
   LEGO1/mxautolocker.cpp
   LEGO1/mxbackgroundaudiomanager.cpp
+  LEGO1/mxbinarytree.cpp
   LEGO1/mxbitmap.cpp
   LEGO1/mxcompositemediapresenter.cpp
   LEGO1/mxcompositepresenter.cpp
