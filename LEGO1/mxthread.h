@@ -1,6 +1,7 @@
 #ifndef MXTHREAD_H
 #define MXTHREAD_H
 
+#include "compat.h"
 #include "mxtypes.h"
 #include "mxsemaphore.h"
 

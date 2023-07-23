@@ -1,7 +1,9 @@
 #ifndef MXENTITY_H
 #define MXENTITY_H
 
+#include "mxatomid.h"
 #include "mxcore.h"
+#include "mxtypes.h"
 
 // VTABLE 0x100d5390
 class MxEntity : public MxCore
@@ -22,11 +24,9 @@ public:
   {
     return !strcmp(name, MxEntity::ClassName()) || MxCore::IsA(name);
   }
-
-  virtual void Destroy(); // vtable+0x1c
-
-  // 0x8: MxResult
-  // 0xc MxAtomId
+private:
+  MxS32 m_mxEntityId; // 0x8
+  MxAtomId m_atom; // 0xc
 };
 
 #endif // MXENTITY_H

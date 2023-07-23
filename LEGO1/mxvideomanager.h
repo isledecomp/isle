@@ -2,6 +2,7 @@
 #define MXVIDEOMANAGER_H
 
 #include "mxunknown100dc6b0.h"
+#include "mxdisplaysurface.h"
 #include "mxvideoparam.h"
 
 // VTABLE 0x100dc810
@@ -21,12 +22,12 @@ public:
   int Init();
 
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
-
+  inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
 private:
   MxVideoParam m_videoParam;
-  int m_unk50;
+  LPDIRECTDRAW m_pDirectDraw;
   LPDIRECTDRAWSURFACE m_unk54;
-  void* m_unk58;
+  MxDisplaySurface *m_displaySurface;
   int m_unk5c;
   MxBool m_unk60;
 };
