@@ -3,8 +3,8 @@
 // OFFSET: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
 {
-  // FIXME: doesnt match
-  this->m_unk154 = FALSE;
+  this->m_pLegoWorld = NULL;
+  this->m_unk13c = 0x40c00000;
   this->m_fourcc = 0x3f800000;
   this->m_unk158 = 0;
 }

@@ -2,6 +2,7 @@
 #define LEGOPATHACTOR_H
 
 #include "legoactor.h"
+#include "mxtypes.h"
 
 // VTABLE 0x100d6e28
 // SIZE 0x154 (from inlined construction at 0x1000a346)
@@ -25,6 +26,8 @@ public:
     return !strcmp(name, LegoPathActor::ClassName()) || LegoActor::IsA(name);
   }
 
+  // TODO: the types. Pizza needs this as public:
+  MxS32 m_unk13c;
 };
 
 #endif // LEGOPATHACTOR_H

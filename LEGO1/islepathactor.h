@@ -2,6 +2,7 @@
 #define ISLEPATHACTOR_H
 
 #include "legopathactor.h"
+#include "legoworld.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d4398
@@ -26,7 +27,7 @@ public:
   }
 
 private:
-  MxBool m_unk154;
+  LegoWorld* m_pLegoWorld; // 0x154
   MxS32 m_unk158;
   MxS32 m_fourcc;  // 0x15c
 };
