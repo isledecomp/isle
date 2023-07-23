@@ -4,16 +4,17 @@
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 
-// OFFSET: LEGO1 0x1000bee0 STUB
+// OFFSET: LEGO1 0x1000bee0
 void MxPresenter::DoneTickle()
 {
-  // TODO
+  m_unk0xc |= 1 << m_someFlag;
+  m_someFlag = 0;
 }
 
 // OFFSET: LEGO1 0x100b4d50
 void MxPresenter::Init()
 {
-  m_unk0x8 = 0;
+  m_someFlag = 0;
   m_action = NULL;
   m_unk0x18 = 0;
   m_unk0x3c = 0;
@@ -70,36 +71,36 @@ void MxPresenter::VTable0x14()
 void MxPresenter::VTable0x18()
 {
   ParseExtra();
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = 2;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = 2;
 }
 
 // OFFSET: LEGO1 0x1000be60
 void MxPresenter::VTable0x1c()
 {
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = 3;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = 3;
 }
 
 // OFFSET: LEGO1 0x1000be80
 void MxPresenter::VTable0x20()
 {
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = 4;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = 4;
 }
 
 // OFFSET: LEGO1 0x1000bea0
 void MxPresenter::VTable0x24()
 {
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = 5;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = 5;
 }
 
 // OFFSET: LEGO1 0x1000bec0
 void MxPresenter::VTable0x28()
 {
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = 6;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = 6;
 }
 
 // OFFSET: LEGO1 0x1000bf70
@@ -116,8 +117,8 @@ void MxPresenter::InitVirtual()
 // OFFSET: LEGO1 0x1000bf90
 void MxPresenter::VTable0x44(undefined4 param)
 {
-  m_unk0xc |= 1 << (unsigned char)m_unk0x8;
-  m_unk0x8 = param;
+  m_unk0xc |= 1 << (unsigned char)m_someFlag;
+  m_someFlag = param;
 }
 
 // OFFSET: LEGO1 0x1000bfb0
