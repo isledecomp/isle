@@ -155,7 +155,7 @@ float LegoNavController::CalculateNewTargetSpeed(int p_pos, int p_center, float 
   float result;
   int diff = p_pos - p_center;
 
-  if (diff < this->m_mouseDeadzone)
+  if (diff > this->m_mouseDeadzone)
     result = (diff - m_mouseDeadzone) * p_maxSpeed / (p_center - m_mouseDeadzone);
   else if (diff < -m_mouseDeadzone)
     result = (diff + m_mouseDeadzone) * p_maxSpeed / (p_center - m_mouseDeadzone);
