@@ -3,6 +3,12 @@
 // 0x101013f0
 TreeNode *MxBinaryTree::g_Node_Nil = NULL;
 
+// OFFSET: LEGO1 0x100ad170
+TreeValue::~TreeValue()
+{
+  // nothing.
+}
+
 inline void MxBinaryTree::LeftRotate(TreeNode *x)
 {
   TreeNode *y = x->m_child1;
@@ -14,22 +20,21 @@ inline void MxBinaryTree::LeftRotate(TreeNode *x)
   y->m_parent = x->m_parent;
 
   if (m_root->m_parent != x) {
-    if (x == x->m_parent->m_child0) {
-      x->m_parent->m_child0 = y;
-      y->m_child0 = x; //?
-      x->m_parent = y; //?
-    } else {
+    if (x != x->m_parent->m_child0) {
       x->m_parent->m_child1 = y;
-      y->m_child1 = x; //?
-      x->m_parent = y; //?
+      y->m_child0 = x;
+      x->m_parent = y;
+    } else {
+      x->m_parent->m_child0 = y;
+      y->m_child0 = x;
+      x->m_parent = y;
     }
   } else {
-    // ?
+    m_root->m_parent->m_child0 = y;
     y->m_child0 = x;
     x->m_parent = y;
   }
 }
-
 
 inline void MxBinaryTree::RightRotate(TreeNode *x)
 {
@@ -42,17 +47,17 @@ inline void MxBinaryTree::RightRotate(TreeNode *x)
   y->m_parent = x->m_parent;
 
   if (m_root->m_parent != x) {
-    if (x == x->m_parent->m_child1) {
-      x->m_parent->m_child1 = y;
-      y->m_child1 = x; //?
-      x->m_parent = y; //?
-    } else {
+    if (x != x->m_parent->m_child1) {
       x->m_parent->m_child0 = y;
-      y->m_child0 = x; //?
-      x->m_parent = y; //?
+      y->m_child1 = x;
+      x->m_parent = y;
+    } else {
+      x->m_parent->m_child1 = y;
+      y->m_child1 = x;
+      x->m_parent = y;
     }
   } else {
-    //?
+    m_root->m_parent->m_child1 = y;
     y->m_child1 = x;
     x->m_parent = y;
   }
@@ -93,26 +98,24 @@ void mini_walk(TreeNode* &p_node)
 }
 
 // OFFSET: LEGO1 0x100ad4d0
-void MxBinaryTree::FUN_100ad4d0(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_parent, TreeValue *&p_value)
+void MxBinaryTree::Insert(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_parent, TreeValue *&p_value)
 {
-  TreeNode *node = new TreeNode(p_parent, NODE_COLOR_RED);
+  TreeNode *node = newTreeNode(p_parent, NODE_COLOR_RED);
   node->m_child0 = g_Node_Nil;
   node->m_child1 = g_Node_Nil;
   
   // TODO: ???
-  if (node->m_value) {
+  if (&node->m_value)
     node->m_value = p_value;
-  }
 
-  this->m_p3++; // node count?
+  this->m_nodeCount++;
 
   // if tree is NOT empty
   // if param_2 is tree_nil (always true I think?)
   //
-  if (this->m_root != p_parent
+  if (m_root != p_parent
       && p_leaf == MxBinaryTree::g_Node_Nil
-      && strcmp(p_value->m_str.GetData(),
-                p_parent->m_value->m_str.GetData()) <= 0) {
+      && TreeValueCompare(p_value, p_parent->m_value)) {
     p_parent->m_child1 = node;
     
     if (m_root->m_child1 == p_parent)
@@ -120,8 +123,9 @@ void MxBinaryTree::FUN_100ad4d0(TreeNode **p_output, TreeNode *p_leaf, TreeNode 
   } else {
     p_parent->m_child0 = node;
 
-    if (m_root != p_parent && m_root->m_child0 == p_parent) {
-      m_root->m_child0 = p_parent;
+    if (m_root != p_parent) {
+      if (m_root->m_child0 == p_parent)
+        m_root->m_child0 = node;
     } else {
       m_root->m_parent = node;
       m_root->m_child1 = node;
@@ -129,7 +133,7 @@ void MxBinaryTree::FUN_100ad4d0(TreeNode **p_output, TreeNode *p_leaf, TreeNode 
   }
 
   // LAB_100ad593
-  // rebalance??
+  // rebalance the tree
   TreeNode *cur = node;
   while (m_root->m_parent != cur) {
     TreeNode *parent = cur->m_parent;
@@ -137,12 +141,10 @@ void MxBinaryTree::FUN_100ad4d0(TreeNode **p_output, TreeNode *p_leaf, TreeNode 
     if (parent->m_color != NODE_COLOR_RED)
       break;
 
-    TreeNode *grandparent = parent->m_parent;
-    TreeNode *uncle = grandparent->m_child0;
-
+    TreeNode *uncle = parent->m_parent->m_child0;
     if (uncle == parent) {
       // wrong uncle
-      uncle = grandparent->m_child1;
+      uncle = parent->m_parent->m_child1;
 
       if (uncle->m_color != NODE_COLOR_RED) {
         
@@ -150,23 +152,6 @@ void MxBinaryTree::FUN_100ad4d0(TreeNode **p_output, TreeNode *p_leaf, TreeNode 
         if (parent->m_child1 == cur) {
           cur = parent;
           LeftRotate(cur);
-          // rotate.
-          /*
-          parent->m_child1 = parent->m_child1->m_child0;
-          
-          // 100ad5e2
-          if (parent->m_child1 != g_Node_Nil)
-            parent->m_child1->m_parent = cur;
-
-          parent->m_child1->m_parent = grandparent;
-          if (m_root->m_parent == cur || grandparent->m_child0 == cur)
-            grandparent->m_child1 = parent;
-          else
-            grandparent->m_child0 = parent;
-
-          parent->m_child0 = cur;
-          grandparent->m_child0 = parent;
-          */
         }
 
         // LAB_100ad60f
@@ -210,10 +195,7 @@ TreeNode *MxBinaryTree::Search(TreeValue*& p_value)
   TreeNode *t_node = node_match->m_parent;
   
   while (t_node != g_Node_Nil) {
-    int result = strcmp(t_node->m_value->m_str.GetData(), p_value->m_str.GetData());
-
-    if (result <= 0) {
-      // if strings equal or less than search string
+    if (!TreeValueCompare(t_node->m_value, p_value)) {
       // closest match?
       // it either does match or is where we will insert the new node.
       node_match = t_node;

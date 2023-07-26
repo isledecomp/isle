@@ -33,6 +33,8 @@ public:
 
   // TODO: belongs here?
   TreeValue *try_to_open(const char *, LookupMode);
+  void Destroy();
+  void Clear();
   
 private:
   const char *m_internal;

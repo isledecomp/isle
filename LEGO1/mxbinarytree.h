@@ -15,6 +15,7 @@ public:
     m_str = p_str;
     m_t0 = 0;
   }
+  ~TreeValue();
 
   void RefCountInc();
   void RefCountDec();
@@ -27,18 +28,27 @@ public:
 // SIZE 0x14
 class TreeNode {
 public:
-  TreeNode(TreeNode *p_parent, int p_color)
-  {
-    m_parent = p_parent;
-    m_color = p_color;
-  }
-
   TreeNode *m_child0; // +0 // string sorts after
   TreeNode *m_parent; // +4 // parent node
   TreeNode *m_child1; // +8 // string sorts before
   TreeValue *m_value; // +c
   int m_color; // +10 // BLACK or RED.
 };
+
+// TODO: helper to avoid using a non-default constructor
+inline TreeNode *newTreeNode(TreeNode *p_parent, int p_color)
+{
+  TreeNode *t = new TreeNode();
+  t->m_parent = p_parent;
+  t->m_color = p_color;
+  return t;
+}
+
+// OFFSET: LEGO1 0x100ad120
+inline int TreeValueCompare(TreeValue *&p_val0, TreeValue *&p_val1)
+{
+  return strcmp(p_val0->m_str.GetData(), p_val1->m_str.GetData()) > 0;
+}
 
 // SIZE 0x10
 class MxBinaryTree
@@ -49,23 +59,23 @@ public:
   MxBinaryTree()
   {
     if (!g_Node_Nil) {
-      g_Node_Nil = new TreeNode(NULL, NODE_COLOR_BLACK);
+      g_Node_Nil = newTreeNode(NULL, NODE_COLOR_BLACK);
       g_Node_Nil->m_child0 = NULL;
       g_Node_Nil->m_child1 = NULL;
     }
 
-    m_root = new TreeNode(g_Node_Nil, NODE_COLOR_RED);
+    m_root = newTreeNode(g_Node_Nil, NODE_COLOR_RED);
   }
 
   void LeftRotate(TreeNode *);
   void RightRotate(TreeNode *);
-  void FUN_100ad4d0(TreeNode **, TreeNode *, TreeNode *, TreeValue *&);
+  void Insert(TreeNode **, TreeNode *, TreeNode *, TreeValue *&);
   TreeNode *Search(TreeValue *&);
 
   int m_p0; // +0
   TreeNode *m_root; // +4
   int m_p2; // +8
-  int m_p3; // +c
+  int m_nodeCount; // +c
 };
 
 #endif //MXBINARYTREE_H
