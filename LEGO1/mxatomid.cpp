@@ -54,13 +54,15 @@ void MxAtomId::Destroy()
 // OFFSET: LEGO1 0x100ad1c0
 MxAtomId &MxAtomId::operator=(const MxAtomId &atomId)
 {
-  // TODO
-  const char *temp = m_internal;
   if (m_internal)
     Destroy();
 
-  if (atomId.m_internal && MxOmni::GetInstance() && AtomIdTree())
-    try_to_open(temp, LookupMode_Exact);
+  if (atomId.m_internal && MxOmni::GetInstance() && AtomIdTree()) {
+    TreeValue *value = try_to_open(atomId.m_internal, LookupMode_Exact);
+    value->RefCountInc();
+  }
+
+  m_internal = atomId.m_internal;
 
   return *this;
 }
@@ -87,24 +89,34 @@ TreeValue *MxAtomId::try_to_open(const char *p_str, LookupMode p_mode)
   // should NOT inline
   node = tree->Search(value);
   
-  // pointer reuse???
-  TreeNode *ptr_reuse = node;
+  TreeNode *t;
 
   // is the node an exact match?
   if (tree->m_root == node || TreeValueCompare(value, node->m_value)) {
-    ptr_reuse = tree->m_root;
-  }
-
-  ptr_reuse = ptr_reuse->m_child0;
-  if (ptr_reuse == AtomIdTree()->m_root) {
-    delete value;
-    value = ptr_reuse->m_value;
+    t = tree->m_root;
   } else {
-
+    t = node;
   }
 
-  // LAB_100ad42b
+  if (t->m_child0 != AtomIdTree()->m_root) {
+    delete value;
+    value = node->m_value;
+  } else {
+    // repeat?
+    node = tree->Search(value);
+    TreeNode *pOutput;
 
+    // TODO: this is all wrong, but I wanted to see if
+    // just slapping an approximation of the code down would reveal
+    // the answer.
+    if (AtomIdTree()->m_p2) {
+      tree->Insert(&pOutput, pOutput, node, value);  
+    } else {
+      tree->Insert(&pOutput, pOutput, AtomIdTree()->m_root, value);  
+    }
+    
+    // LAB_100ad42b
+  }
 
   return value;
 }

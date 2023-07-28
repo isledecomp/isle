@@ -47,6 +47,11 @@ inline TreeNode *newTreeNode(TreeNode *p_parent, int p_color)
 // OFFSET: LEGO1 0x100ad120
 inline int TreeValueCompare(TreeValue *&p_val0, TreeValue *&p_val1)
 {
+  // For strcmp, a result greater than 0 means that b > a.
+  // So: for this function, return TRUE if:
+  // * string values are non-equal
+  // * string values are in order: p_val0 < p_val1
+
   return strcmp(p_val0->m_str.GetData(), p_val1->m_str.GetData()) > 0;
 }
 

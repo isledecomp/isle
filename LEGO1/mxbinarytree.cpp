@@ -9,7 +9,7 @@ TreeValue::~TreeValue()
   // nothing.
 }
 
-inline void MxBinaryTree::LeftRotate(TreeNode *x)
+inline void MxBinaryTree::RightRotate(TreeNode *x)
 {
   TreeNode *y = x->m_child1;
   x->m_child1 = y->m_child0;
@@ -36,7 +36,7 @@ inline void MxBinaryTree::LeftRotate(TreeNode *x)
   }
 }
 
-inline void MxBinaryTree::RightRotate(TreeNode *x)
+inline void MxBinaryTree::LeftRotate(TreeNode *x)
 {
   TreeNode *y = x->m_child0;
   x->m_child0 = y->m_child1;
@@ -63,38 +63,47 @@ inline void MxBinaryTree::RightRotate(TreeNode *x)
   }
 }
 
+inline TreeNode *minimum(TreeNode *p_node)
+{
+  // horrible. but it has to be this way to
+  // force a non-branching JMP to repeat the loop.
+  while (1) {
+    if (p_node->m_child1 == MxBinaryTree::g_Node_Nil)
+      break;
+    p_node = p_node->m_child1;
+  }
+
+  return p_node;
+}
+
 // OFFSET: LEGO1 0x100ad480
 void mini_walk(TreeNode* &p_node)
 {
+  // I think this is checking whether this is the tree "root" node
+  // i.e. MxBinaryTree->m_root
+  // The actual root is m_root->parent. There is an intentional loop here.
+  // If it is the "root" node, return the minimum value of the tree.
+  // We have a reference to it at m_root->m_child1.
+
   if (p_node->m_color == NODE_COLOR_RED
       && p_node->m_parent->m_parent == p_node) {
     p_node = p_node->m_child1;
     return;
   }
 
-  TreeNode *t = p_node->m_child0;
-  if (t != MxBinaryTree::g_Node_Nil) {
-    
-    // wonky
-    while (1) {
-      if (t->m_child1 == MxBinaryTree::g_Node_Nil)
-        break;
-      t = t->m_child1;
-    }
-    
-    p_node = t;
+  // successor?
+  if (p_node->m_child0 != MxBinaryTree::g_Node_Nil) {
+    p_node = minimum(p_node->m_child0);
     return;
   }
 
-  TreeNode *u = p_node->m_parent;
-  TreeNode *v = p_node;
-  while (u != v) {
-    p_node = u;
-    v = u;
-    u = u->m_parent;
+  // p_node->m_child0 *is* NIL, so go up a level and try it
+  TreeNode *y = p_node->m_parent;
+  while (p_node == y->m_child0) {
+    p_node = y;
+    y = y->m_parent;
   }
 
-  p_node = u;
 }
 
 // OFFSET: LEGO1 0x100ad4d0
@@ -119,14 +128,17 @@ void MxBinaryTree::Insert(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_par
     p_parent->m_child1 = node;
     
     if (m_root->m_child1 == p_parent)
+      // Set the tree minimum.
       m_root->m_child1 = node;
   } else {
     p_parent->m_child0 = node;
 
     if (m_root != p_parent) {
       if (m_root->m_child0 == p_parent)
+        // Set the tree maximum.
         m_root->m_child0 = node;
     } else {
+      // Set the tree minimum and top node.
       m_root->m_parent = node;
       m_root->m_child1 = node;
     }
@@ -151,20 +163,6 @@ void MxBinaryTree::Insert(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_par
         // 100ad5d3
         if (parent->m_child1 == cur) {
           cur = parent;
-          LeftRotate(cur);
-        }
-
-        // LAB_100ad60f
-        cur->m_parent->m_color = NODE_COLOR_BLACK;
-        cur->m_parent->m_parent->m_color = NODE_COLOR_RED;
-        RightRotate(cur->m_parent->m_parent);
-        continue;
-      }
-    } else {
-      // LAB_100ad67f
-      if (uncle->m_color != NODE_COLOR_RED) {
-        if (parent->m_child0 == cur) {
-          cur = parent;
           RightRotate(cur);
         }
 
@@ -172,6 +170,20 @@ void MxBinaryTree::Insert(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_par
         cur->m_parent->m_color = NODE_COLOR_BLACK;
         cur->m_parent->m_parent->m_color = NODE_COLOR_RED;
         LeftRotate(cur->m_parent->m_parent);
+        continue;
+      }
+    } else {
+      // LAB_100ad67f
+      if (uncle->m_color != NODE_COLOR_RED) {
+        if (parent->m_child0 == cur) {
+          cur = parent;
+          LeftRotate(cur);
+        }
+
+        // LAB_100ad60f
+        cur->m_parent->m_color = NODE_COLOR_BLACK;
+        cur->m_parent->m_parent->m_color = NODE_COLOR_RED;
+        RightRotate(cur->m_parent->m_parent);
         continue;
       }
     }
