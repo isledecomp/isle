@@ -1,5 +1,10 @@
 #include "mxbitmap.h"
 
+// The way that the BITMAPFILEHEADER structure ensures the file type is by ensuring it is "BM", which is literally just 0x424d.
+// Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
+// GLOBAL: LEGO1 0x10102184
+WORD g_bitmapSignature = 0x424d;
+
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
 {
@@ -40,10 +45,52 @@ int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100bcd60 STUB
+// OFFSET: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
-  return SUCCESS;
+  void* lpBuffer;
+  MxS32 height;
+  MxBool operation_ret;
+  MxResult result = FAILURE;
+  DWORD bytesRead;
+  BITMAPFILEHEADER hdr;
+
+  operation_ret = ReadFile(p_handle, &hdr, 14, &bytesRead, NULL);
+  if ((operation_ret != 0) && (hdr.bfType == g_bitmapSignature)) {
+    this->m_info = new BITMAPINFO;
+    if(this->m_info != NULL) {
+      operation_ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
+      if ((operation_ret != 0) && ((this->m_info->bmiHeader).biBitCount == 8)) {
+        lpBuffer = (void*) malloc(hdr.bfSize - 1078);
+        this->m_data = (LPVOID*) lpBuffer;
+        if (this->m_data != NULL) {
+          operation_ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - 1078, &bytesRead, NULL);
+          if(operation_ret != 0) {
+            this->m_bmiHeader = &this->m_info->bmiHeader;
+            this->m_paletteData = this->m_info->bmiColors;
+            if((this->m_info->bmiHeader).biSizeImage == 0) {
+              if ((this->m_info->bmiHeader).biHeight < 1) {
+                this->m_info->bmiHeader.biHeight *= -1;
+              }
+              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & 0xfffffffc) * this->m_info->bmiHeader.biHeight;
+            }
+            result = SUCCESS;
+          }
+        }
+      }
+    }
+  } // TODO: g_bitmapSignature
+  if (result != SUCCESS) {
+    if (this->m_info != NULL) {
+      delete this->m_info;
+      this->m_info = NULL;
+    }
+    if (this->m_data != NULL) {
+      delete this->m_data;
+      this->m_data = NULL;
+    }
+  }
+  return result;
 }
 
 // OFFSET: LEGO1 0x100bcd10
@@ -80,7 +127,7 @@ void MxBitmap::vtable2c(int, int, int, int, int, int, int)
 {
 }
 
-// OFFSET: LEGO1 0x100d020 STUB
+// OFFSET: LEGO1 0x100bd020 STUB
 void MxBitmap::vtable30(int, int, int, int, int, int, int)
 {
 }
@@ -107,7 +154,7 @@ MxPalette *MxBitmap::CreatePalette()
         pal = NULL;
       }
     }
-   pal = this->m_palette->Clone();
+    pal = this->m_palette->Clone();
   }
   if(pal != NULL) {
     success = TRUE;
