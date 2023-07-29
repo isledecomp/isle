@@ -49,6 +49,7 @@ int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
   void* lpBuffer;
+  BITMAPINFO *infoHdr;
   MxS32 height;
   MxBool operation_ret;
   MxResult result = FAILURE;
@@ -57,9 +58,10 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 
   operation_ret = ReadFile(p_handle, &hdr, 14, &bytesRead, NULL);
   if ((operation_ret != 0) && (hdr.bfType == g_bitmapSignature)) {
-    this->m_info = new BITMAPINFO;
-    if(this->m_info != NULL) {
-      operation_ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
+    infoHdr = (BITMAPINFO*) malloc(1064);
+    this->m_info = infoHdr;
+    if(infoHdr != NULL) {
+      operation_ret = ReadFile(p_handle, infoHdr, 1064, &bytesRead, NULL);
       if ((operation_ret != 0) && ((this->m_info->bmiHeader).biBitCount == 8)) {
         lpBuffer = (void*) malloc(hdr.bfSize - 1078);
         this->m_data = (LPVOID*) lpBuffer;
@@ -69,17 +71,18 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
             this->m_bmiHeader = &this->m_info->bmiHeader;
             this->m_paletteData = this->m_info->bmiColors;
             if((this->m_info->bmiHeader).biSizeImage == 0) {
-              if ((this->m_info->bmiHeader).biHeight < 1) {
-                this->m_info->bmiHeader.biHeight *= -1;
+              height = (this->m_info->bmiHeader).biHeight;
+              if (height < 1) {
+                height *= -1;
               }
-              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & 0xfffffffc) * this->m_info->bmiHeader.biHeight;
+              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & 0xfffffffc) * height;
             }
             result = SUCCESS;
           }
         }
       }
     }
-  } // TODO: g_bitmapSignature
+  }
   if (result != SUCCESS) {
     if (this->m_info != NULL) {
       delete this->m_info;
