@@ -37,16 +37,8 @@ void MxAtomId::Destroy()
   TreeValue *p = &value;
 
   // 100ad052
-  MxBinaryTree *tree = AtomIdTree();
-  TreeNode *root = tree->m_root;
-
   // should inline Search but NOT TreeValueCompare
-  TreeNode *node = tree->Search(p);
-  
-  TreeNode *ass = node;
-  if (node == root->m_parent || TreeValueCompare(p, node->m_value)) {
-    ass = root->m_parent;
-  }
+  TreeNode *node = AtomIdTree()->Find(p);
 
   node->m_value->RefCountDec();
 }
@@ -71,7 +63,6 @@ MxAtomId &MxAtomId::operator=(const MxAtomId &atomId)
 TreeValue *MxAtomId::try_to_open(const char *p_str, LookupMode p_mode)
 {
   TreeValue *value = new TreeValue(p_str);
-  TreeNode *node;
 
   switch (p_mode) {
     case LookupMode_LowerCase:
@@ -84,22 +75,13 @@ TreeValue *MxAtomId::try_to_open(const char *p_str, LookupMode p_mode)
   }
 
   // LAB_100ad2a1
-  MxBinaryTree *tree = AtomIdTree();
-  // get the closest node that matches the given value
-  // should NOT inline
-  node = tree->Search(value);
+  TreeNode *node = AtomIdTree()->Find(value);
   
-  TreeNode *t;
-
-  // is the node an exact match?
-  if (tree->m_root == node || TreeValueCompare(value, node->m_value)) {
-    t = tree->m_root;
-  } else {
-    t = node;
-  }
-
-  if (t->m_child0 != AtomIdTree()->m_root) {
-    delete value;
+  MxBinaryTree *tree = AtomIdTree();
+  if (node->m_child0 != tree->m_root) {
+    // unnecessary check?
+    if (value)
+      delete value;
     value = node->m_value;
   } else {
     // repeat?

@@ -3,11 +3,13 @@
 // 0x101013f0
 TreeNode *MxBinaryTree::g_Node_Nil = NULL;
 
+/*
 // OFFSET: LEGO1 0x100ad170
 TreeValue::~TreeValue()
 {
   // nothing.
 }
+*/
 
 inline void MxBinaryTree::RightRotate(TreeNode *x)
 {
@@ -76,8 +78,9 @@ inline TreeNode *minimum(TreeNode *p_node)
   return p_node;
 }
 
+
 // OFFSET: LEGO1 0x100ad480
-void mini_walk(TreeNode* &p_node)
+void Successor(TreeNode* &p_node)
 {
   // I think this is checking whether this is the tree "root" node
   // i.e. MxBinaryTree->m_root
@@ -91,7 +94,6 @@ void mini_walk(TreeNode* &p_node)
     return;
   }
 
-  // successor?
   if (p_node->m_child0 != MxBinaryTree::g_Node_Nil) {
     p_node = minimum(p_node->m_child0);
     return;
@@ -103,8 +105,8 @@ void mini_walk(TreeNode* &p_node)
     p_node = y;
     y = y->m_parent;
   }
-
 }
+
 
 // OFFSET: LEGO1 0x100ad4d0
 void MxBinaryTree::Insert(TreeNode **p_output, TreeNode *p_leaf, TreeNode *p_parent, TreeValue *&p_value)
@@ -231,4 +233,25 @@ void TreeValue::RefCountDec()
 {
   if (m_t0)
     m_t0--;
+}
+
+// OFFSET: LEGO1 0x100af6d0 STUB
+MxBinaryTree::~MxBinaryTree()
+{
+}
+
+// OFFSET: LEGO1 0x100af7a0
+void somethingWithNode(TreeNode*& p_node)
+{
+  // TODO
+  if (p_node->m_child1 != MxBinaryTree::g_Node_Nil) {
+    p_node = minimum(p_node->m_child1);
+    return;
+  }
+
+  while (p_node->m_parent->m_child0 == p_node)
+      p_node = p_node->m_parent;
+
+  if (p_node->m_child1 == p_node->m_parent)
+    p_node = p_node->m_parent;
 }

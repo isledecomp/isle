@@ -15,7 +15,6 @@ public:
     m_str = p_str;
     m_t0 = 0;
   }
-  ~TreeValue();
 
   void RefCountInc();
   void RefCountDec();
@@ -71,16 +70,30 @@ public:
 
     m_root = newTreeNode(g_Node_Nil, NODE_COLOR_RED);
   }
+  ~MxBinaryTree();
 
   void LeftRotate(TreeNode *);
   void RightRotate(TreeNode *);
   void Insert(TreeNode **, TreeNode *, TreeNode *, TreeValue *&);
   TreeNode *Search(TreeValue *&);
+  TreeNode *Find(TreeValue *&);
 
   int m_p0; // +0
   TreeNode *m_root; // +4
   int m_p2; // +8
   int m_nodeCount; // +c
 };
+
+inline TreeNode *MxBinaryTree::Find(TreeValue *&p_value)
+{
+  TreeNode *node = Search(p_value);
+  
+  // we should only get the root back if the tree is empty.
+  if (m_root == node || TreeValueCompare(p_value, node->m_value)) {
+    node = m_root; // ??
+  }
+
+  return node->m_child0;
+}
 
 #endif //MXBINARYTREE_H
