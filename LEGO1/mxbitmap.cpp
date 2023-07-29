@@ -33,10 +33,45 @@ int MxBitmap::vtable14(int)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100bcba0 STUB
+// OFFSET: LEGO1 0x100bcba0
 int MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
 {
-  return 0;
+  BITMAPINFO* bmi;
+  LPVOID *data;
+  MxResult result = FAILURE;
+  int height;
+  int width;
+
+  bmi = new BITMAPINFO;
+  width = p_bmiHeader->biWidth;
+  height = p_bmiHeader->biHeight;
+  this->m_info = bmi;
+  if (bmi != NULL) {
+    data = (LPVOID*) malloc((width + 3U & 0xfffffffc) * height);
+    this->m_data = (LPVOID*) data;
+    if(data != NULL) {
+      bmi = this->m_info;
+      for (width = 0x10a; width != 0; width--) {
+        (bmi->bmiHeader).biSize = p_bmiHeader->biSize;
+        p_bmiHeader = (BITMAPINFOHEADER*)&p_bmiHeader->biWidth;
+        bmi = (BITMAPINFO*)&(bmi->bmiHeader).biWidth;
+      }
+      result = SUCCESS;
+      this->m_bmiHeader = &this->m_info->bmiHeader;
+      this->m_paletteData = this->m_info->bmiColors;
+    }
+  }
+  if (result != SUCCESS) {
+    if (this->m_info != NULL) {
+      delete this->m_info;
+      this->m_info = NULL;
+    }
+    if (this->m_data != NULL) {
+      delete this->m_data;
+      this->m_data = NULL;
+    }
+  }
+  return result;
 }
 
 // OFFSET: LEGO1 0x100bcaa0 STUB
@@ -125,7 +160,7 @@ int MxBitmap::vtable28(int)
   return -1;
 }
 
-// OFFSET: LEGO1 0x100ce70 STUB
+// OFFSET: LEGO1 0x100bce70 STUB
 void MxBitmap::vtable2c(int, int, int, int, int, int, int)
 {
 }
