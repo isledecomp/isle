@@ -3,7 +3,7 @@
 // The way that the BITMAPFILEHEADER structure ensures the file type is by ensuring it is "BM", which is literally just 0x424d.
 // Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
 // GLOBAL: LEGO1 0x10102184
-WORD g_bitmapSignature = 0x424d;
+DWORD g_bitmapSignature = 0x424d;
 
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
@@ -72,26 +72,24 @@ int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
 // OFFSET: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
-  void* lpBuffer;
-  BITMAPINFO *infoHdr;
+  LPVOID* lpBuffer;
   MxS32 height;
-  MxBool operation_ret;
+  MxBool ret;
   MxResult result = FAILURE;
   DWORD bytesRead;
   BITMAPFILEHEADER hdr;
 
-  operation_ret = ReadFile(p_handle, &hdr, 14, &bytesRead, NULL);
-  if ((operation_ret != 0) && (hdr.bfType == g_bitmapSignature)) {
-    infoHdr = (BITMAPINFO*) malloc(1064);
-    this->m_info = infoHdr;
-    if(infoHdr != NULL) {
-      operation_ret = ReadFile(p_handle, infoHdr, 1064, &bytesRead, NULL);
-      if ((operation_ret != 0) && ((this->m_info->bmiHeader).biBitCount == 8)) {
-        lpBuffer = (void*) malloc(hdr.bfSize - 1078);
-        this->m_data = (LPVOID*) lpBuffer;
+  ret = ReadFile(p_handle, &hdr, 14, &bytesRead, NULL);
+  if (ret && (hdr.bfType == g_bitmapSignature)) {
+    this->m_info = (BITMAPINFO*) malloc(1064);
+    if(this->m_info != NULL) {
+      ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
+      if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
+        lpBuffer = (LPVOID*) malloc(hdr.bfSize - 1078);
+        this->m_data = lpBuffer;
         if (this->m_data != NULL) {
-          operation_ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - 1078, &bytesRead, NULL);
-          if(operation_ret != 0) {
+          ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - 1078, &bytesRead, NULL);
+          if(ret != 0) {
             this->m_bmiHeader = &this->m_info->bmiHeader;
             this->m_paletteData = this->m_info->bmiColors;
             if((this->m_info->bmiHeader).biSizeImage == 0) {
