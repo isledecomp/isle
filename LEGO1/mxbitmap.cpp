@@ -39,19 +39,15 @@ MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
   MxResult result = FAILURE;
   int width = p_bmiHeader->biWidth;
   int height = p_bmiHeader->biHeight;
-  BITMAPINFO* bmi = new BITMAPINFO;
-  void *data;
 
-  this->m_info = bmi;
-  if (bmi != NULL) {
-    data = malloc((width + 3U & 0xfffffffc) * height);
-    this->m_data = (LPVOID*) data;
-    if(data != NULL) {
-      bmi = this->m_info;
-      memcpy(bmi, p_bmiHeader, 0x10a);
-      result = SUCCESS;
+  this->m_info = (BITMAPINFO*) malloc(0x428);
+  if (this->m_info != NULL) {
+    this->m_data = (LPVOID*) malloc((width + 3 & -4) * height);
+    if(this->m_data != NULL) {
+      memcpy(&this->m_info->bmiHeader, p_bmiHeader, 266);
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
+      result = SUCCESS;
     }
   }
   if (result != SUCCESS) {
