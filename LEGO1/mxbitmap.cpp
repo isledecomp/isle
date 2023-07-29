@@ -34,28 +34,21 @@ int MxBitmap::vtable14(int)
 }
 
 // OFFSET: LEGO1 0x100bcba0
-int MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
+MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
 {
-  BITMAPINFO* bmi;
-  LPVOID *data;
   MxResult result = FAILURE;
-  int height;
-  int width;
+  int width = p_bmiHeader->biWidth;
+  int height = p_bmiHeader->biHeight;
+  BITMAPINFO* bmi = new BITMAPINFO;
+  void *data;
 
-  bmi = new BITMAPINFO;
-  width = p_bmiHeader->biWidth;
-  height = p_bmiHeader->biHeight;
   this->m_info = bmi;
   if (bmi != NULL) {
-    data = (LPVOID*) malloc((width + 3U & 0xfffffffc) * height);
+    data = malloc((width + 3U & 0xfffffffc) * height);
     this->m_data = (LPVOID*) data;
     if(data != NULL) {
       bmi = this->m_info;
-      for (width = 0x10a; width != 0; width--) {
-        (bmi->bmiHeader).biSize = p_bmiHeader->biSize;
-        p_bmiHeader = (BITMAPINFOHEADER*)&p_bmiHeader->biWidth;
-        bmi = (BITMAPINFO*)&(bmi->bmiHeader).biWidth;
-      }
+      memcpy(bmi, p_bmiHeader, 0x10a);
       result = SUCCESS;
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
