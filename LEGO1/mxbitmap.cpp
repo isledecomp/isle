@@ -79,7 +79,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
   DWORD bytesRead;
   BITMAPFILEHEADER hdr;
 
-  ret = ReadFile(p_handle, &hdr, 14, &bytesRead, NULL);
+  ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
     this->m_info = (BITMAPINFO*) malloc(1064);
     if(this->m_info != NULL) {
@@ -208,4 +208,29 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
   }
 
   return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_bmiColorsProvided, SRCCOPY);
+}
+
+// OFFSET: LEGO1 0x100bd450
+MxResult ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
+{
+  MxPalette* local_pal;
+  MxResult ret = FAILURE;
+  PALETTEENTRY entries[256];
+  MxResult opret;
+
+  if(p_palette == NULL) {
+    local_pal = new MxPalette;
+    opret = local_pal->GetEntries(entries);
+    if(opret != 0) {
+      delete local_pal;
+      return ret;
+    }
+  } else {
+    opret = p_palette->GetEntries(entries);
+    if(opret != 0) return ret;
+  }
+
+  // FIXME/TODO: the loop here, possibly memcpy
+  ret = SUCCESS;
+  return ret;
 }
