@@ -3,9 +3,11 @@
 
 #include "mxstring.h"
 
-// TODO: enum instead?
-#define NODE_COLOR_RED   0
-#define NODE_COLOR_BLACK 1
+enum RBNodeColor
+{
+  RBNodeColor_Red = 0,
+  RBNodeColor_Black = 1,
+};
 
 // SIZE 0x14
 class TreeValue {
@@ -31,27 +33,16 @@ public:
   TreeNode *m_parent; // +4 // parent node
   TreeNode *m_child1; // +8 // string sorts before
   TreeValue *m_value; // +c
-  int m_color; // +10 // BLACK or RED.
+  RBNodeColor m_color; // +10 // BLACK or RED.
 };
 
 // TODO: helper to avoid using a non-default constructor
-inline TreeNode *newTreeNode(TreeNode *p_parent, int p_color)
+inline TreeNode *newTreeNode(TreeNode *p_parent, RBNodeColor p_color)
 {
   TreeNode *t = new TreeNode();
   t->m_parent = p_parent;
   t->m_color = p_color;
   return t;
-}
-
-// OFFSET: LEGO1 0x100ad120
-inline int TreeValueCompare(TreeValue *&p_val0, TreeValue *&p_val1)
-{
-  // For strcmp, a result greater than 0 means that b > a.
-  // So: for this function, return TRUE if:
-  // * string values are non-equal
-  // * string values are in order: p_val0 < p_val1
-
-  return strcmp(p_val0->m_str.GetData(), p_val1->m_str.GetData()) > 0;
 }
 
 // SIZE 0x10
@@ -63,18 +54,23 @@ public:
   MxBinaryTree()
   {
     if (!g_Node_Nil) {
-      g_Node_Nil = newTreeNode(NULL, NODE_COLOR_BLACK);
+      g_Node_Nil = newTreeNode(NULL, RBNodeColor_Black);
       g_Node_Nil->m_child0 = NULL;
       g_Node_Nil->m_child1 = NULL;
     }
 
-    m_root = newTreeNode(g_Node_Nil, NODE_COLOR_RED);
+    m_root = newTreeNode(g_Node_Nil, RBNodeColor_Red);
   }
   ~MxBinaryTree();
 
   void LeftRotate(TreeNode *);
   void RightRotate(TreeNode *);
   void Insert(TreeNode **, TreeNode *, TreeNode *, TreeValue *&);
+  void Successor(TreeNode* &p_node);
+  void Predecessor(TreeNode *&p_node);
+  int TreeValueCompare(TreeValue *&p_val0, TreeValue *&p_val1);
+  TreeNode *minimum(TreeNode *p_node);
+  TreeNode *maximum(TreeNode *p_node);
   TreeNode *Search(TreeValue *&);
   TreeNode *Find(TreeValue *&);
 
@@ -83,6 +79,17 @@ public:
   int m_p2; // +8
   int m_nodeCount; // +c
 };
+
+// OFFSET: LEGO1 0x100ad120
+inline int MxBinaryTree::TreeValueCompare(TreeValue *&p_val0, TreeValue *&p_val1)
+{
+  // For strcmp, a result greater than 0 means that b > a.
+  // So: for this function, return TRUE if:
+  // * string values are non-equal
+  // * string values are in order: p_val0 < p_val1
+
+  return strcmp(p_val0->m_str.GetData(), p_val1->m_str.GetData()) > 0;
+}
 
 inline TreeNode *MxBinaryTree::Find(TreeValue *&p_value)
 {
