@@ -159,7 +159,7 @@ void MxDirectDraw::Destroy()
 {
   DestroyButNotDirectDraw();
 
-  unk2();
+  FUN_1009D920();
 
   if (m_pDirectDraw != NULL)
   {
