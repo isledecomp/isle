@@ -23,7 +23,7 @@ public:
   }
 
 private:
-  undefined unk04_[0x68];
+  undefined unk68[0x10];
 
 };
 
