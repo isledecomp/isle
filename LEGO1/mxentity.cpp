@@ -16,5 +16,5 @@ MxResult MxEntity::SetEntityId(MxS32 p_id, const MxAtomId &p_atom)
 {
   this->m_mxEntityId = p_id;
   this->m_atom = p_atom;
-  return FALSE;
+  return SUCCESS;
 }
