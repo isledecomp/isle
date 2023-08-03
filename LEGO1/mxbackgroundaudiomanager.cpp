@@ -31,9 +31,12 @@ void MxBackgroundAudioManager::Stop()
 // OFFSET: LEGO1 0x1007f5f0
 void MxBackgroundAudioManager::Enable(MxBool p)
 {
- if ((this->m_musicEnabled != p) && (this->m_musicEnabled = p, !p)) {
-   Stop();
- }
+  if (this->m_musicEnabled != p) {
+    this->m_musicEnabled = p;
+    if (!p) {
+      Stop();
+    }
+  }
 }
 
 // OFFSET: LEGO1 0x1007f650
