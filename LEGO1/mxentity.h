@@ -26,6 +26,8 @@ public:
   {
     return !strcmp(name, MxEntity::ClassName()) || MxCore::IsA(name);
   }
+
+  virtual MxResult SetEntityId(MxS32 p_id, const MxAtomId &p_atom); // vtable+0x14
 private:
   MxS32 m_mxEntityId; // 0x8
   MxAtomId m_atom; // 0xc
