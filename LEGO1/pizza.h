@@ -30,12 +30,14 @@ public:
     return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
   }
 private:
+  MxS32 m_unk78;
   MxS32 m_unk7c;
   MxS32 m_unk80;
   MxS32 m_unk84;
   MxS32 m_unk88;
   MxS32 m_unk8c;
   MxU32 m_unk90;
+  MxS32 m_unk94;
   MxS32 m_unk98;
 };
 
