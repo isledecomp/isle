@@ -808,7 +808,7 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 
   DDSURFACEDESC ddsd;
 
-  unk1();
+  FUN_1009E020();
 
   if (!GetDDSurfaceDesc(&ddsd, m_pBackBuffer))
   {
