@@ -19,7 +19,7 @@ Pizza::Pizza()
 // OFFSET: LEGO1 0x10038100
 Pizza::~Pizza()
 {
-  TickleManager()->Unregister(this);
+  TickleManager()->UnregisterClient(this);
 }
 
 // OFFSET: LEGO1 0x100388a0
