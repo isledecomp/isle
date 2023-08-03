@@ -1,5 +1,7 @@
 #include "islepathactor.h"
 
+DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
+
 // OFFSET: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
 {

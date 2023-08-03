@@ -20,6 +20,10 @@ public:
   {
     return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
   }
+
+private:
+  undefined unk68[0x10];
+
 };
 
 #endif // LEGOACTOR_H

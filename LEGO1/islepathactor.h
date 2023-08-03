@@ -6,7 +6,7 @@
 #include "mxtypes.h"
 
 // VTABLE 0x100d4398
-// SIZE >= 0x230
+// SIZE 0x160
 class IslePathActor : public LegoPathActor
 {
 public: 

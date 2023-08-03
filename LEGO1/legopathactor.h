@@ -27,7 +27,9 @@ public:
   }
 
   // TODO: the types. Pizza needs this as public:
+  undefined unk78[0xc4];
   MxS32 m_unk13c;
+  undefined unk140[0x14];
 };
 
 #endif // LEGOPATHACTOR_H
