@@ -343,13 +343,14 @@ def replace_register(lines: list[str], start_line: int, reg: str, replacement: s
 
 # Is it possible to make new_asm the same as original_asm by swapping registers?
 def can_resolve_register_differences(original_asm, new_asm):
+  # Split the ASM on spaces to get more granularity, and so
+  # that we don't modify the original arrays passed in.
+  original_asm = [part for line in original_asm for part in line.split()]
+  new_asm = [part for line in new_asm for part in line.split()]
+
   # Swapping ain't gonna help if the lengths are different
   if len(original_asm) != len(new_asm):
     return False
-
-  # Make copies so we don't modify the original
-  original_asm = original_asm.copy()
-  new_asm = new_asm.copy()
 
   # Look for the mismatching lines
   for i in range(len(original_asm)):
