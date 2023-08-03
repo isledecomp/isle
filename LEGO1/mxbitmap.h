@@ -24,7 +24,7 @@ public:
   __declspec(dllexport) virtual MxPalette *CreatePalette(); // vtable+34
   virtual void vtable38(void*);
   virtual int vtable3c(MxBool);
-  virtual MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
+  virtual MxResult CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
 
 private:
   BITMAPINFO *m_info; // 0x8
