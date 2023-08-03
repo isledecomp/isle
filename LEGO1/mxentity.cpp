@@ -12,9 +12,9 @@ MxEntity::~MxEntity()
 }
 
 // OFFSET: LEGO1 0x10001070
-MxResult MxEntity::SetEntityId(MxS32 p_id, MxAtomId *p_atom)
+MxResult MxEntity::SetEntityId(MxS32 p_id, const MxAtomId &p_atom)
 {
   this->m_mxEntityId = p_id;
-  // FIXME: MxAtomId operator call, probably it will be return whatever the comparison is for comparing this->m_atom to the p_atom
+  this->m_atom = p_atom;
   return FALSE;
 }

@@ -15,7 +15,4 @@ MxEventManager::~MxEventManager()
 // OFFSET: LEGO1 0x100c0450
 void MxEventManager::Init()
 {
-  // huh?
-  // imagine if the devs actually put this here to troll us
-  return;
 }
