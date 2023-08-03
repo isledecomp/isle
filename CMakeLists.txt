@@ -46,6 +46,7 @@ add_library(lego1 SHARED
   LEGO1/jukeboxstate.cpp
   LEGO1/legoact2state.cpp
   LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoanimactor.cpp
   LEGO1/legoanimationmanager.cpp
   LEGO1/legoanimmmpresenter.cpp

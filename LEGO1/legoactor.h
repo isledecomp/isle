@@ -1,6 +1,7 @@
 #ifndef LEGOACTOR_H
 #define LEGOACTOR_H
 
+#include "decomp.h"
 #include "legoentity.h"
 
 // VTABLE 0x100d6d68
@@ -20,6 +21,10 @@ public:
   {
     return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
   }
+
+private:
+  undefined unk04_[0x68];
+
 };
 
 #endif // LEGOACTOR_H
