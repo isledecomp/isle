@@ -1,5 +1,7 @@
 #include "legoentity.h"
 
+DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
+
 // OFFSET: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {

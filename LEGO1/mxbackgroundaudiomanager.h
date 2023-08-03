@@ -2,6 +2,9 @@
 #define MXBACKGROUNDAUDIOMANAGER_H
 
 #include "mxcore.h"
+#include "mxdsaction.h"
+#include "mxtypes.h"
+#include "mxnotificationmanager.h"
 
 // VTABLE 0x100d9fe8
 // SIZE 0x150
@@ -25,6 +28,20 @@ public:
   }
 
   __declspec(dllexport) void Enable(unsigned char p);
+private:
+  void Stop();
+  void Init();
+
+  MxBool m_musicEnabled; // 0x8
+  MxDSAction m_action1; // 0xc
+  MxS32 m_unka0;
+  MxDSAction m_action2; // 0xa4
+  MxS32 m_unk138;
+  MxS32 m_unk13c;
+  MxS32 m_unk140;
+  MxS32 m_unk144;
+  MxS16 m_unk148;
+  MxAtomId m_unk14c;
 };
 
 #endif // MXBACKGROUNDAUDIOMANAGER_H

@@ -1,6 +1,7 @@
 Debug/
 Release/
 *.ncb
+/.vs
 ISLE.EXE
 LEGO1.DLL
 build/

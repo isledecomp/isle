@@ -1,11 +1,13 @@
 #ifndef MXENTITY_H
 #define MXENTITY_H
 
+#include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d5390
+// SIZE 0x68 or less
 class MxEntity : public MxCore
 {
 public:
@@ -29,6 +31,7 @@ public:
 private:
   MxS32 m_mxEntityId; // 0x8
   MxAtomId m_atom; // 0xc
+  undefined m_unk10[0x58];
 };
 
 #endif // MXENTITY_H

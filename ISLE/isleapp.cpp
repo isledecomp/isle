@@ -121,7 +121,7 @@ BOOL IsleApp::SetupLegoOmni()
   BOOL failure = Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) == FAILURE;
   if (!failure) {
     VariableTable()->SetVariable("ACTOR_01", "");
-    TickleManager()->vtable1c(VideoManager(), 10);
+    TickleManager()->SetClientTickleInterval(VideoManager(), 10);
     result = TRUE;
   }
 
