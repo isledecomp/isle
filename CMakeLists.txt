@@ -4,6 +4,7 @@ project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
@@ -195,6 +196,12 @@ if (ISLE_USE_SMARTHEAP)
   target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
 endif()
 
+# Use internal DirectX 5 if required
+if (ISLE_USE_DX5)
+  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
+
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
 
@@ -211,6 +218,12 @@ if (ISLE_BUILD_APP)
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
+  # Use internal DirectX 5 if required
+  if (ISLE_USE_DX5)
+    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+  endif()
 
   if (ISLE_USE_SMARTHEAP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
