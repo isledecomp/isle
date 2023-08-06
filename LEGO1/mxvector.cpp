@@ -12,12 +12,6 @@ DECOMP_SIZE_ASSERT(MxVector4, 0x8);
 DECOMP_SIZE_ASSERT(MxVector3Data, 0x14);
 DECOMP_SIZE_ASSERT(MxVector4Data, 0x18);
 
-// OFFSET: LEGO1 0x10002060
-void MxVector2::SetData(float *p_data)
-{
-  m_data = p_data;
-}
-
 // OFFSET: LEGO1 0x100020a0
 const float *MxVector2::GetData() const
 {
