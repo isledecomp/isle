@@ -357,7 +357,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_DISPLAYCHANGE:
-    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
+    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D() && VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
       int targetWidth = LOWORD(lParam);
       int targetHeight = HIWORD(lParam);
       int targetDepth = wParam;

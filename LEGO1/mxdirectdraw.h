@@ -3,11 +3,11 @@
 #define MXDIRECTDRAW_H
 
 #include <ddraw.h>
-#include <Windows.h>
+#include <windows.h>
 
 extern BOOL g_is_PALETTEINDEXED8;
 
-//size 0x880
+// SIZE 0x880
 class MxDirectDraw
 {
 public:
