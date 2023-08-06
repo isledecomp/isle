@@ -2,6 +2,7 @@
 #define MXDSACTION_H
 
 #include "mxdsobject.h"
+#include "mxvector.h"
 #include "mxomni.h"
 
 // VTABLE 0x100dc098
@@ -25,30 +26,18 @@ public:
     return !strcmp(name, MxDSAction::ClassName()) || MxDSObject::IsA(name);
   }
 private:
-  MxLong m_unk2c;
-  MxLong m_unk30;
-  MxLong m_unk34;
-  MxLong* m_unk38;
-  MxLong m_unk3c;
-  MxLong m_unk40;
-  MxLong m_unk44;
-  MxLong m_unk48;
-  MxLong m_unk4c;
-  MxLong m_unk50;
-  MxLong m_unk54;
-  MxLong m_unk58;
-  MxLong m_unk5c;
-  MxLong m_unk60;
-  MxLong m_unk64;
-  MxLong m_unk68;
-  MxLong m_unk6c;
-  MxLong m_unk70;
-  MxLong m_unk74;
-  MxLong m_unk78;
-  MxLong* m_unk7c;
-  MxLong m_unk80;
-  MxLong m_unk84;
-  MxLong m_unk88;
+  undefined4 m_unk2c;
+  DWORD m_flags;
+  DWORD m_startTime;
+  LONG m_duration;
+  MxS32 m_loopCount;
+  MxVector3Data m_location;
+  MxVector3Data m_direction;
+  MxVector3Data m_up;
+  undefined4 *m_unk7c;
+  undefined2 m_unk80;
+  undefined4 m_unk84;
+  undefined4 m_unk88;
   MxOmni* m_omni; // 0x8c
   MxS32 m_someTimingField; // 0x90
 };

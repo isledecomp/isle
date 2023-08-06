@@ -11,6 +11,9 @@
 #define COMPAT_CONST
 #endif
 
+// DIsable "nonstandard extension used : 'bool'" warning spam
+#pragma warning( disable : 4237 )
+
 #define MSVC420_VERSION 1020
 
 // STL compatibility.
