@@ -1,7 +1,7 @@
 #include "mxdsaction.h"
 
-#include "float.h"
-#include "limits.h"
+#include <float.h>
+#include <limits.h>
 
 // OFFSET: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
