@@ -43,7 +43,7 @@ public:
   void FUN_100ADE60(MxU16 p_length, void *p_data);
 
 private:
-  undefined4 m_sizeOnDisk;
+  MxU32 m_sizeOnDisk;
   DWORD m_flags;
   DWORD m_startTime;
   MxLong m_duration;
