@@ -122,8 +122,8 @@ void MxDSObject::Deserialize(char **p_source, MxS16 p_unk24)
 
   this->SetObjectName(*p_source);
   *p_source += strlen(this->m_objectName) + 1;
-  this->m_objectId = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
+  this->m_objectId = *(MxU32*) *p_source;
+  *p_source += sizeof(MxU32);
 
   this->m_unk24 = p_unk24;
 }
