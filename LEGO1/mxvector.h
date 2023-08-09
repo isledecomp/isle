@@ -136,7 +136,7 @@ class MxVector3Data : public MxVector3
 public:
   inline MxVector3Data() : MxVector3(storage) {}
   inline MxVector3Data(float p_x, float p_y, float p_z)
-    : MxVector3(&x)
+    : MxVector3(storage)
     , x(p_x), y(p_y), z(p_z)
     {}
 
