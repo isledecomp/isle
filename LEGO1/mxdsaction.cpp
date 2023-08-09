@@ -61,7 +61,7 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   // this->m_direction.SetVector(p_dsAction.m_direction.GetData());
   // this->m_up.SetVector(p_dsAction.m_up.GetData());
 
-  ConcatData(p_dsAction.m_unkLength, p_dsAction.m_unkData);
+  AppendData(p_dsAction.m_unkLength, p_dsAction.m_unkData);
   this->m_unk84 = p_dsAction.m_unk84;
   this->m_unk88 = p_dsAction.m_unk88;
   this->m_omni = p_dsAction.m_omni;
@@ -125,7 +125,7 @@ void MxDSAction::Deserialize(char **p_source, MxS16 p_unk24)
   MxU16 unkLength = *(MxU16*) *p_source;
   *p_source += sizeof(MxU16);
   if (unkLength) {
-    ConcatData(unkLength, *p_source);
+    AppendData(unkLength, *p_source);
     *p_source += unkLength;
   }
 }
@@ -193,7 +193,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
     if (!this->m_unkData || !strncmp("XXX", this->m_unkData, 3)) {
       delete this->m_unkData;
       this->m_unkLength = 0;
-      ConcatData(unkLength, unkData);
+      AppendData(unkLength, unkData);
     }
   }
 }
@@ -223,7 +223,7 @@ MxLong MxDSAction::GetCurrentTime()
 }
 
 // OFFSET: LEGO1 0x100ade60
-void MxDSAction::ConcatData(MxU16 p_unkLength, void *p_unkData)
+void MxDSAction::AppendData(MxU16 p_unkLength, const char *p_unkData)
 {
   if (this->m_unkData == p_unkData || !p_unkData)
     return;
