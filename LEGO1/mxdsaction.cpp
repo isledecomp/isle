@@ -3,13 +3,18 @@
 #include <float.h>
 #include <limits.h>
 
+#define TWOCC(a, b) (((a) << 0) | ((b) << 8))
+
+// OFFSET: LEGO1 0x10101410
+MxU16 g_unkSep = TWOCC(',', ' ');
+
 // OFFSET: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
   this->m_flags = 32;
   this->m_startTime = INT_MIN;
-  this->m_unk7c = NULL;
-  this->m_unk80 = 0;
+  this->m_unkData = NULL;
+  this->m_unkLength = 0;
   this->m_duration = INT_MIN;
   this->m_loopCount = -1;
 
@@ -39,7 +44,7 @@ MxDSAction::MxDSAction()
 // OFFSET: LEGO1 0x100ada80
 MxDSAction::~MxDSAction()
 {
-  delete this->m_unk7c;
+  delete this->m_unkData;
 }
 
 // OFFSET: LEGO1 0x100adaf0
@@ -56,7 +61,7 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   // this->m_direction.SetVector(p_dsAction.m_direction.GetData());
   // this->m_up.SetVector(p_dsAction.m_up.GetData());
 
-  FUN_100ADE60(p_dsAction.m_unk80, p_dsAction.m_unk7c);
+  ConcatData(p_dsAction.m_unkLength, p_dsAction.m_unkData);
   this->m_unk84 = p_dsAction.m_unk84;
   this->m_unk88 = p_dsAction.m_unk88;
   this->m_omni = p_dsAction.m_omni;
@@ -79,7 +84,7 @@ MxU32 MxDSAction::GetSizeOnDisk()
 {
   MxU32 totalSizeOnDisk;
 
-  totalSizeOnDisk = MxDSObject::GetSizeOnDisk() + 90 + this->m_unk80;
+  totalSizeOnDisk = MxDSObject::GetSizeOnDisk() + 90 + this->m_unkLength;
   this->m_sizeOnDisk = totalSizeOnDisk - MxDSObject::GetSizeOnDisk();
 
   return totalSizeOnDisk;
@@ -117,11 +122,11 @@ void MxDSAction::Deserialize(char **p_source, MxS16 p_unk24)
   this->m_up[2] = *(double*) *p_source;
   *p_source += sizeof(double);
 
-  MxU16 extralen = *(MxU16*) *p_source;
+  MxU16 unkLength = *(MxU16*) *p_source;
   *p_source += sizeof(MxU16);
-  if (extralen) {
-    FUN_100ADE60(extralen, *p_source);
-    *p_source += extralen;
+  if (unkLength) {
+    ConcatData(unkLength, *p_source);
+    *p_source += unkLength;
   }
 }
 
@@ -182,14 +187,14 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
     this->m_up[2] = p_dsAction.m_up[2];
 
   // TODO
-  if (p_dsAction.m_unk80 &&
-      p_dsAction.m_unk7c &&
-      *p_dsAction.m_unk7c &&
-      !strncmp("XXX", (const char*) p_dsAction.m_unk7c, 3))
-  {
-    delete this->m_unk7c;
-    this->m_unk80 = 0;
-    FUN_100ADE60(p_dsAction.m_unk80, p_dsAction.m_unk7c);
+  MxU16 unkLength = p_dsAction.m_unkLength;
+  char *unkData = p_dsAction.m_unkData;
+  if (unkLength && unkData) {
+    if (!this->m_unkData || !strncmp("XXX", this->m_unkData, 3)) {
+      delete this->m_unkData;
+      this->m_unkLength = 0;
+      ConcatData(unkLength, unkData);
+    }
   }
 }
 
@@ -217,8 +222,30 @@ MxLong MxDSAction::GetCurrentTime()
   return Timer()->GetTime() - this->m_someTimingField;
 }
 
-// OFFSET: LEGO1 0x100ade60 STUB
-void MxDSAction::FUN_100ADE60(MxU16 p_length, void *p_data)
+// OFFSET: LEGO1 0x100ade60
+void MxDSAction::ConcatData(MxU16 p_unkLength, void *p_unkData)
 {
-  // TOOD
+  if (this->m_unkData == p_unkData || !p_unkData)
+    return;
+
+  if (this->m_unkLength) {
+    char *concat = new char[p_unkLength + this->m_unkLength + sizeof(g_unkSep)];
+    memcpy(concat, this->m_unkData, this->m_unkLength);
+
+    *(MxU16*) &concat[this->m_unkLength] = g_unkSep;
+    memcpy(&concat[this->m_unkLength + sizeof(g_unkSep)], p_unkData, p_unkLength);
+
+    this->m_unkLength += p_unkLength + sizeof(g_unkSep);
+    delete this->m_unkData;
+    this->m_unkData = concat;
+  }
+  else {
+    char *copy = new char[p_unkLength];
+    this->m_unkData = copy;
+
+    if (copy) {
+      this->m_unkLength = p_unkLength;
+      memcpy(copy, p_unkData, p_unkLength);
+    }
+  }
 }

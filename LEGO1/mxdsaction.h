@@ -40,7 +40,7 @@ public:
   virtual MxLong GetSomeTimingField(); // vtable+3c;
   virtual MxLong GetCurrentTime(); // vtable+40;
 
-  void FUN_100ADE60(MxU16 p_length, void *p_data);
+  void ConcatData(MxU16 p_unkLength, void *p_unkData);
 
 private:
   MxU32 m_sizeOnDisk;
@@ -51,8 +51,8 @@ private:
   MxVector3Data m_location;
   MxVector3Data m_direction;
   MxVector3Data m_up;
-  undefined4 *m_unk7c;
-  MxU16 m_unk80;
+  char *m_unkData;
+  MxU16 m_unkLength;
   undefined4 m_unk84;
   undefined4 m_unk88;
   MxOmni* m_omni; // 0x8c
