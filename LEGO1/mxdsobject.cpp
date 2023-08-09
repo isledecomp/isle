@@ -13,7 +13,7 @@ MxDSObject::MxDSObject()
   this->m_unk14 = 0;
   this->m_objectName = NULL;
   this->m_unk24 = -1;
-  this->m_unk1c = -1;
+  this->m_objectId = -1;
   this->m_unk28 = 0;
 }
 
@@ -30,7 +30,7 @@ void MxDSObject::CopyFrom(MxDSObject &p_dsObject)
   this->SetSourceName(p_dsObject.m_sourceName);
   this->m_unk14 = p_dsObject.m_unk14;
   this->SetObjectName(p_dsObject.m_objectName);
-  this->m_unk1c = p_dsObject.m_unk1c;
+  this->m_objectId = p_dsObject.m_objectId;
   this->m_unk24 = p_dsObject.m_unk24;
   this->m_atomId = p_dsObject.m_atomId;
   this->m_unk28 = p_dsObject.m_unk28;
@@ -91,39 +91,39 @@ undefined4 MxDSObject::unk14()
 }
 
 // OFFSET: LEGO1 0x100bf9d0
-MxU32 MxDSObject::CalculateUnk08()
+MxU32 MxDSObject::GetSizeOnDisk()
 {
-  MxU32 unk08;
+  MxU32 sizeOnDisk;
 
   if (this->m_sourceName)
-    unk08 = strlen(this->m_sourceName) + 3;
+    sizeOnDisk = strlen(this->m_sourceName) + 3;
   else
-    unk08 = 3;
+    sizeOnDisk = 3;
 
-  unk08 += 4;
+  sizeOnDisk += 4;
 
   if (this->m_objectName)
-    unk08 += strlen(this->m_objectName) + 1;
+    sizeOnDisk += strlen(this->m_objectName) + 1;
   else
-    unk08++;
+    sizeOnDisk++;
 
-  unk08 += 4;
-  this->m_unk08 = unk08;
-  return unk08;
+  sizeOnDisk += 4;
+  this->m_sizeOnDisk = sizeOnDisk;
+  return sizeOnDisk;
 }
 
 // OFFSET: LEGO1 0x100bfa20
-void MxDSObject::Parse(char **p_source, MxS16 p_unk24)
+void MxDSObject::Deserialize(char **p_source, MxS16 p_unk24)
 {
   this->SetSourceName(*p_source);
   *p_source += strlen(this->m_sourceName) + 1;
   this->m_unk14 = *(undefined4*) *p_source;
-  *p_source += 4;
+  *p_source += sizeof(undefined4);
 
   this->SetObjectName(*p_source);
   *p_source += strlen(this->m_objectName) + 1;
-  this->m_unk1c = *(undefined4*) *p_source;
-  *p_source += 4;
+  this->m_objectId = *(MxU32*) *p_source;
+  *p_source += sizeof(MxU32);
 
   this->m_unk24 = p_unk24;
 }

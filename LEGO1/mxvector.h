@@ -60,6 +60,8 @@ public:
   virtual void SetVector(MxVector2 *other);
   virtual void SetVector(float *other);
 
+  inline float& operator[](size_t idx) { return m_data[idx]; }
+  inline const float operator[](size_t idx) const { return m_data[idx]; }
 protected:
   float *m_data;
 };

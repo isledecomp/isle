@@ -90,7 +90,7 @@ void IsleApp::Close()
 
     VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
-    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetUnknown1c());
+    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
@@ -729,7 +729,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 
       ds.SetAtomId(stream->atom);
       ds.SetUnknown24(-1);
-      ds.SetUnknown1c(0);
+      ds.SetObjectId(0);
       VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
       if (Start(&ds) != SUCCESS) {
@@ -738,7 +738,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
     } else {
       ds.SetAtomId(stream->atom);
       ds.SetUnknown24(-1);
-      ds.SetUnknown1c(0);
+      ds.SetObjectId(0);
       if (Start(&ds) != SUCCESS) {
         return;
       }
