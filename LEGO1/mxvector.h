@@ -152,8 +152,8 @@ public:
   void CopyFrom(MxVector3Data *p_other) {
     EqualsImpl(p_other->m_data);
 
-    float *src = this->storage;
-    float *dest = p_other->storage;
+    float *dest = this->storage;
+    float *src = p_other->storage;
     for (size_t i = sizeof(storage) / sizeof(float); i > 0; --i)
       *dest++ = *src++; 
   }
