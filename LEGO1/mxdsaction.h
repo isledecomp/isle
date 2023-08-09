@@ -40,7 +40,7 @@ public:
   virtual MxLong GetSomeTimingField(); // vtable+3c;
   virtual MxLong GetCurrentTime(); // vtable+40;
 
-  void ConcatData(MxU16 p_unkLength, void *p_unkData);
+  void AppendData(MxU16 p_unkLength, const char *p_unkData);
 
 private:
   MxU32 m_sizeOnDisk;
