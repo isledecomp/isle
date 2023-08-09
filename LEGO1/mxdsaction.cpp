@@ -51,10 +51,9 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   this->m_duration = p_dsAction.m_duration;
   this->m_loopCount = p_dsAction.m_loopCount;
 
-  // TODO
-  // this->m_location.SetVector(p_dsAction.m_location.GetData());
-  // this->m_direction.SetVector(p_dsAction.m_direction.GetData());
-  // this->m_up.SetVector(p_dsAction.m_up.GetData());
+  this->m_location.CopyFrom(&p_dsAction.m_location);
+  this->m_direction.CopyFrom(&p_dsAction.m_direction);
+  this->m_up.CopyFrom(&p_dsAction.m_up);
 
   FUN_100ADE60(p_dsAction.m_unk80, p_dsAction.m_unk7c);
   this->m_unk84 = p_dsAction.m_unk84;
