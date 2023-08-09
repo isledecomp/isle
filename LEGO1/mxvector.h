@@ -134,7 +134,7 @@ public:
 class MxVector3Data : public MxVector3
 {
 public:
-  inline MxVector3Data() : MxVector3(&x) {}
+  inline MxVector3Data() : MxVector3(storage) {}
   inline MxVector3Data(float p_x, float p_y, float p_z)
     : MxVector3(&x)
     , x(p_x), y(p_y), z(p_z)
@@ -164,7 +164,7 @@ public:
 class MxVector4Data : public MxVector4
 {
 public:
-  inline MxVector4Data() : MxVector4(&x) {}
+  inline MxVector4Data() : MxVector4(storage) {}
   union {
     float storage[4];
     struct {
