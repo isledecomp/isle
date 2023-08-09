@@ -5,7 +5,7 @@
 
 #define TWOCC(a, b) (((a) << 0) | ((b) << 8))
 
-// OFFSET: LEGO1 0x10101410
+// GLOBAL OFFSET: LEGO1 0x10101410
 MxU16 g_unkSep = TWOCC(',', ' ');
 
 // OFFSET: LEGO1 0x100ad810
