@@ -3,8 +3,6 @@
 #include <float.h>
 #include <limits.h>
 
-#define TWOCC(a, b) (((a) << 0) | ((b) << 8))
-
 // GLOBAL OFFSET: LEGO1 0x10101410
 MxU16 g_unkSep = TWOCC(',', ' ');
 
