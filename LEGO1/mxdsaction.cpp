@@ -3,6 +3,8 @@
 #include <float.h>
 #include <limits.h>
 
+DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
+
 // GLOBAL OFFSET: LEGO1 0x10101410
 MxU16 g_unkSep = TWOCC(',', ' ');
 
@@ -42,7 +44,7 @@ MxDSAction::MxDSAction()
 // OFFSET: LEGO1 0x100ada80
 MxDSAction::~MxDSAction()
 {
-  delete this->m_unkData;
+  delete[] this->m_unkData;
 }
 
 // OFFSET: LEGO1 0x100adaf0
@@ -188,7 +190,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   char *unkData = p_dsAction.m_unkData;
   if (unkLength && unkData) {
     if (!this->m_unkData || !strncmp("XXX", this->m_unkData, 3)) {
-      delete this->m_unkData;
+      delete[] this->m_unkData;
       this->m_unkLength = 0;
       AppendData(unkLength, unkData);
     }
@@ -233,7 +235,7 @@ void MxDSAction::AppendData(MxU16 p_unkLength, const char *p_unkData)
     memcpy(&concat[this->m_unkLength + sizeof(g_unkSep)], p_unkData, p_unkLength);
 
     this->m_unkLength += p_unkLength + sizeof(g_unkSep);
-    delete this->m_unkData;
+    delete[] this->m_unkData;
     this->m_unkData = concat;
   }
   else {
