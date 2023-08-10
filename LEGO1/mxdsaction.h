@@ -55,7 +55,7 @@ private:
   MxU16 m_unk80;
   undefined4 m_unk84;
   undefined4 m_unk88;
-  MxOmni* m_omni; // 0x8c
+  MxOmni *m_omni; // 0x8c
   MxLong m_someTimingField; // 0x90
 };
 
