@@ -57,8 +57,8 @@ public:
   virtual void DivScalar(float *p_value);
 
   // vtable + 0x6C
-  virtual void SetVector(MxVector2 *other);
-  virtual void SetVector(float *other);
+  virtual void SetVector(MxVector2 *p_other);
+  virtual void SetVector(float *p_other);
 
   inline float& operator[](size_t idx) { return m_data[idx]; }
   inline const float operator[](size_t idx) const { return m_data[idx]; }
@@ -134,12 +134,29 @@ public:
 class MxVector3Data : public MxVector3
 {
 public:
-  inline MxVector3Data() : MxVector3(&x) {}
+  inline MxVector3Data() : MxVector3(storage) {}
   inline MxVector3Data(float p_x, float p_y, float p_z)
-    : MxVector3(&x)
+    : MxVector3(storage)
     , x(p_x), y(p_y), z(p_z)
     {}
-  float x, y, z;
+
+  union {
+    float storage[3];
+    struct {
+      float x;
+      float y;
+      float z;
+    };
+  };
+
+  void CopyFrom(MxVector3Data &p_other) {
+    EqualsImpl(p_other.m_data);
+
+    float *dest = this->storage;
+    float *src = p_other.storage;
+    for (size_t i = sizeof(storage) / sizeof(float); i > 0; --i)
+      *dest++ = *src++; 
+  }
 };
 
 // VTABLE 0x100d41e8
@@ -147,8 +164,16 @@ public:
 class MxVector4Data : public MxVector4
 {
 public:
-  inline MxVector4Data() : MxVector4(&x) {}
-  float x, y, z, w;
+  inline MxVector4Data() : MxVector4(storage) {}
+  union {
+    float storage[4];
+    struct {
+      float x;
+      float y;
+      float z;
+      float w;
+    };
+  };
 };
 
 #endif // MXVECTOR_H
