@@ -90,7 +90,7 @@ void IsleApp::Close()
 
     VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
-    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetUnknown1c());
+    Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
     Lego()->vtable24(ds);
     TransitionManager()->SetWaitIndicator(NULL);
     Lego()->vtable3c();
@@ -121,7 +121,7 @@ BOOL IsleApp::SetupLegoOmni()
   BOOL failure = Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags())) == FAILURE;
   if (!failure) {
     VariableTable()->SetVariable("ACTOR_01", "");
-    TickleManager()->vtable1c(VideoManager(), 10);
+    TickleManager()->SetClientTickleInterval(VideoManager(), 10);
     result = TRUE;
   }
 
@@ -357,7 +357,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return DefWindowProcA(hWnd, uMsg, wParam, lParam);
   case WM_DISPLAYCHANGE:
-    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->m_unk74 && VideoManager()->m_unk74[0x220]) {
+    if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D() && VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
       int targetWidth = LOWORD(lParam);
       int targetHeight = HIWORD(lParam);
       int targetDepth = wParam;
@@ -729,7 +729,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 
       ds.SetAtomId(stream->atom);
       ds.SetUnknown24(-1);
-      ds.SetUnknown1c(0);
+      ds.SetObjectId(0);
       VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
       if (Start(&ds) != SUCCESS) {
@@ -738,7 +738,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
     } else {
       ds.SetAtomId(stream->atom);
       ds.SetUnknown24(-1);
-      ds.SetUnknown1c(0);
+      ds.SetObjectId(0);
       if (Start(&ds) != SUCCESS) {
         return;
       }

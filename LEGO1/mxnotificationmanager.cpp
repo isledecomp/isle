@@ -41,7 +41,7 @@ MxNotificationManager::~MxNotificationManager()
   delete m_queue;
   m_queue = NULL;
 
-  TickleManager()->Unregister(this);
+  TickleManager()->UnregisterClient(this);
 }
 
 // OFFSET: LEGO1 0x100ac800
@@ -80,7 +80,7 @@ MxResult MxNotificationManager::Create(MxS32 p_unk1, MxS32 p_unk2)
     result = FAILURE;
   }
   else {
-    TickleManager()->Register(this, 10);
+    TickleManager()->RegisterClient(this, 10);
   }
 
   return result;
@@ -111,10 +111,52 @@ void MxNotificationManager::Unregister(MxCore *p_listener)
   }
 }
 
-// OFFSET: LEGO1 0x100ac990 STUB
+// OFFSET: LEGO1 0x100ac990
 void MxNotificationManager::FlushPending(MxCore *p_listener)
 {
-  // TODO
+  MxNotificationPtrList pending;
+  MxNotification *notif;
+
+  {
+    MxAutoLocker lock(&m_lock);
+
+    // Find all notifications from, and addressed to, p_listener.
+    if (m_sendList != NULL) {
+      MxNotificationPtrList::iterator it = m_sendList->begin();
+      while (it != m_sendList->end()) {
+        notif = *it;
+        if ((notif->GetTarget()->GetId() == p_listener->GetId()) ||
+            (notif->GetParam()->GetSender()) && (notif->GetParam()->GetSender()->GetId() == p_listener->GetId())) {
+          m_sendList->erase(it++);
+          pending.push_back(notif);
+        }
+        else {
+          it++;
+        }
+      }
+    }
+
+    MxNotificationPtrList::iterator it = m_queue->begin();
+    while (it != m_queue->end()) {
+      notif = *it;
+      if ((notif->GetTarget()->GetId() == p_listener->GetId()) ||
+          (notif->GetParam()->GetSender()) && (notif->GetParam()->GetSender()->GetId() == p_listener->GetId())) {
+        m_queue->erase(it++);
+        pending.push_back(notif);
+      }
+      else {
+        it++;
+      }
+    }
+  }
+
+  // Deliver those notifications.
+  while (pending.size() != 0) {
+    notif = pending.front();
+    pending.pop_front();
+    notif->GetTarget()->Notify(*notif->GetParam());
+    delete notif;
+  }
 }
 
 // OFFSET: LEGO1 0x100ac6c0

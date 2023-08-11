@@ -5,8 +5,6 @@
 #define SI_MAJOR_VERSION 2
 #define SI_MINOR_VERSION 2
 
-#define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
-
 // OFFSET: LEGO1 0x100cc4b0
 MxDSFile::MxDSFile(const char *filename, MxULong skipReadingChunks)
 {

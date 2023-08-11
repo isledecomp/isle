@@ -24,10 +24,9 @@ These instructions will outline how to compile this repository into an accurate 
 You will need the following software installed:
 
 - Microsoft Visual C++ 4.2. This can be found on many abandonware sites, but the installer can be a little iffy on modern versions of Windows. For convenience, I made a [portable version](https://github.com/itsmattkc/msvc420) that can be downloaded and used quickly instead.
-- DirectX 5 SDK. Similarly, this can be found on many abandonware sites.
 - [CMake](https://cmake.org/). A copy is often included with the "Desktop development with C++" workload in newer versions of Visual Studio, however it can also be installed as a standalone app.
 
-#### Compiling From Command Line
+#### Compiling
 
 1. Open a Command Prompt (`cmd`).
 1. From Visual C++ 4.2, run `BIN/VCVARS32.BAT x86` to populate the path and other environment variables for compiling with MSVC.
@@ -37,6 +36,7 @@ You will need the following software installed:
 ```
 cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 ```
+  - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
   - Replace `<path-to-source>` with the source repository. Can be `..` if your build folder is inside the source repository.
   - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. `Debug` builds are not recommended because they are unlikely to be compatible with the retail `LEGO1.DLL`, which is currently the only way to really use this decomp.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).

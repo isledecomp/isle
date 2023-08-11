@@ -9,18 +9,18 @@ const char *g_set = "set";
 const char *g_reset = "reset";
 
 // OFFSET: LEGO1 0x1003bfb0
-LegoBackgroundColor::LegoBackgroundColor(const char *p_name, const char *p_colorString)
+LegoBackgroundColor::LegoBackgroundColor(const char *p_key, const char *p_value)
 {
-  m_name = p_name;
-  m_name.ToUpperCase();
-  SetColorString(p_colorString);
+  m_key = p_key;
+  m_key.ToUpperCase();
+  SetValue(p_value);
 }
 
 // OFFSET: LEGO1 0x1003c070
-void LegoBackgroundColor::SetColorString(const char *p_colorString)
+void LegoBackgroundColor::SetValue(const char *p_colorString)
 {
-  m_string = p_colorString;
-  m_string.ToLowerCase();
+  m_value = p_colorString;
+  m_value.ToLowerCase();
 
   LegoVideoManager *videomanager = VideoManager();
   if (!videomanager || !p_colorString)

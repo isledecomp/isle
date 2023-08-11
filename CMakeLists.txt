@@ -4,6 +4,7 @@ project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
@@ -45,7 +46,9 @@ add_library(lego1 SHARED
   LEGO1/jukeboxentity.cpp
   LEGO1/jukeboxstate.cpp
   LEGO1/legoact2state.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoanimactor.cpp
   LEGO1/legoanimationmanager.cpp
   LEGO1/legoanimmmpresenter.cpp
@@ -101,6 +104,7 @@ add_library(lego1 SHARED
   LEGO1/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
+  LEGO1/mxdisplaysurface.cpp
   LEGO1/mxdsaction.cpp
   LEGO1/mxdsanim.cpp
   LEGO1/mxdschunk.cpp
@@ -125,6 +129,7 @@ add_library(lego1 SHARED
   LEGO1/mxloopingflcpresenter.cpp
   LEGO1/mxloopingmidipresenter.cpp
   LEGO1/mxloopingsmkpresenter.cpp
+  LEGO1/mxmatrix.cpp
   LEGO1/mxmediapresenter.cpp
   LEGO1/mxmidipresenter.cpp
   LEGO1/mxmusicpresenter.cpp
@@ -145,13 +150,15 @@ add_library(lego1 SHARED
   LEGO1/mxstillpresenter.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
-  LEGO1/mxstringvariable.cpp
   LEGO1/mxthread.cpp
+  LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxunknown100dc6b0.cpp
   LEGO1/mxunknown100dc6e0.cpp
+  LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
+  LEGO1/mxvector.cpp
   LEGO1/mxvideomanager.cpp
   LEGO1/mxvideoparam.cpp
   LEGO1/mxvideoparamflags.cpp
@@ -189,6 +196,12 @@ if (ISLE_USE_SMARTHEAP)
   target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
 endif()
 
+# Use internal DirectX 5 if required
+if (ISLE_USE_DX5)
+  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
+
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
 
@@ -205,6 +218,12 @@ if (ISLE_BUILD_APP)
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
+  # Use internal DirectX 5 if required
+  if (ISLE_USE_DX5)
+    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+  endif()
 
   if (ISLE_USE_SMARTHEAP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
