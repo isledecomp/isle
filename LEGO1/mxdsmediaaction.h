@@ -12,6 +12,9 @@ public:
   MxDSMediaAction();
   virtual ~MxDSMediaAction() override;
 
+  void CopyFrom(MxDSMediaAction &p_dsMediaAction);
+  MxDSMediaAction &operator=(MxDSMediaAction &p_dsMediaAction);
+
   // OFFSET: LEGO1 0x100c8be0
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -24,16 +27,21 @@ public:
   {
     return !strcmp(name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(name);
   }
+
+  virtual MxU32 GetSizeOnDisk(); // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
+
+  void CopyMediaSrcPath(const char *p_mediaSrcPath);
 private:
-  MxS32* m_unk94;
-  MxS32* m_unk98;
-  MxS32* m_unk9c;
-  MxS32* m_unka0;
-  MxS32* m_unka4;
-  MxS32* m_unka8;
-  MxS32 m_unkac;
-  MxS32* m_unkb0;
-  MxS32 m_unkb4;
+  MxU32 m_sizeOnDisk;
+  char *m_mediaSrcPath;
+  undefined4 m_unk9c;
+  undefined4 m_unka0;
+  MxS32 m_framesPerSecond;
+  MxS32 m_mediaFormat;
+  MxS32 m_paletteManagement;
+  MxLong m_sustainTime;
+  undefined4 m_unkb4;
 };
 
 #endif // MXDSMEDIAACTION_H

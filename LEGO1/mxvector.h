@@ -9,7 +9,7 @@ class MxVector2
 {
 public:
   // OFFSET: LEGO1 0x1000c0f0
-  inline MxVector2(float* p_data) : m_data(p_data) {}
+  inline MxVector2(float* p_data) { this->SetData(p_data); }
 
   // vtable + 0x00 (no virtual destructor)
   virtual void AddScalarImpl(float p_value) = 0;
@@ -21,7 +21,9 @@ public:
   virtual void MullVectorImpl(float *p_value) = 0;
   virtual void DivScalarImpl(float *p_value) = 0;
   virtual float DotImpl(float *p_a, float *p_b) const = 0;
-  virtual void SetData(float *p_data);
+
+  // OFFSET: LEGO1 0x10002060
+  virtual void SetData(float *p_data) { this->m_data = p_data; }
 
   // vtable + 0x20
   virtual void EqualsImpl(float *p_data) = 0;
@@ -55,9 +57,11 @@ public:
   virtual void DivScalar(float *p_value);
 
   // vtable + 0x6C
-  virtual void SetVector(MxVector2 *other);
-  virtual void SetVector(float *other);
+  virtual void SetVector(MxVector2 *p_other);
+  virtual void SetVector(float *p_other);
 
+  inline float& operator[](size_t idx) { return m_data[idx]; }
+  inline const float operator[](size_t idx) const { return m_data[idx]; }
 protected:
   float *m_data;
 };
@@ -130,12 +134,29 @@ public:
 class MxVector3Data : public MxVector3
 {
 public:
-  inline MxVector3Data() : MxVector3(&x) {}
+  inline MxVector3Data() : MxVector3(storage) {}
   inline MxVector3Data(float p_x, float p_y, float p_z)
-    : MxVector3(&x)
+    : MxVector3(storage)
     , x(p_x), y(p_y), z(p_z)
     {}
-  float x, y, z;
+
+  union {
+    float storage[3];
+    struct {
+      float x;
+      float y;
+      float z;
+    };
+  };
+
+  void CopyFrom(MxVector3Data &p_other) {
+    EqualsImpl(p_other.m_data);
+
+    float *dest = this->storage;
+    float *src = p_other.storage;
+    for (size_t i = sizeof(storage) / sizeof(float); i > 0; --i)
+      *dest++ = *src++; 
+  }
 };
 
 // VTABLE 0x100d41e8
@@ -143,8 +164,16 @@ public:
 class MxVector4Data : public MxVector4
 {
 public:
-  inline MxVector4Data() : MxVector4(&x) {}
-  float x, y, z, w;
+  inline MxVector4Data() : MxVector4(storage) {}
+  union {
+    float storage[4];
+    struct {
+      float x;
+      float y;
+      float z;
+      float w;
+    };
+  };
 };
 
 #endif // MXVECTOR_H

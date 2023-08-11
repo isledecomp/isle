@@ -2,6 +2,7 @@
 #include "mxdirectdraw.h"
 #include "decomp.h"
 
+DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880);
 
 #ifndef DDSCAPS_3DDEVICE
 #define DDSCAPS_3DDEVICE 0x00002000l
@@ -100,7 +101,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
     dwRGBBitCount = ddsd.ddpfPixelFormat.dwRGBBitCount;
     g_is_PALETTEINDEXED8 = (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) != 0;
     pDDraw->Release();
-}
+  }
 
   return dwRGBBitCount;
 }
@@ -738,7 +739,7 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 
     EnableResizing(m_hWndMain, FALSE);
 
-	if (!m_bIsOnPrimaryDevice)
+	  if (!m_bIsOnPrimaryDevice)
     {
       lpDD = NULL;
       result = DirectDrawCreate(0, &lpDD, 0);
@@ -1096,7 +1097,7 @@ BOOL MxDirectDraw::SetPaletteEntries(
   
   if (m_pPalette != NULL)
   {
-	HRESULT result;
+	  HRESULT result;
     result = m_pPalette->SetEntries(0, 0, _countof(m_paletteEntries), m_paletteEntries);
     if (result != DD_OK)
     {
@@ -1194,12 +1195,11 @@ void MxDirectDraw::FUN_1009E020()
     line = (byte*)ddsd.lpSurface;
     for (j = ddsd.dwHeight; j-- ;)
     {
-	  memset(line, 0, ddsd.dwWidth);
-	  line += ddsd.lPitch;
+      memset(line, 0, ddsd.dwWidth);
+      line += ddsd.lPitch;
     }
 
     m_pBackBuffer->Unlock(ddsd.lpSurface);
-
 
     if (m_bFlipSurfaces)
     {
