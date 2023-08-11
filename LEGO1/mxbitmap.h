@@ -22,7 +22,7 @@ public:
   virtual void vtable2c(int, int, int, int, int, int, int);
   virtual void vtable30(int, int, int, int, int, int, int);
   __declspec(dllexport) virtual MxPalette *CreatePalette(); // vtable+34
-  virtual void vtable38(void*);
+  virtual void ImportPalette(MxPalette* p_palette);
   virtual int vtable3c(MxBool);
   virtual MxResult CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
 

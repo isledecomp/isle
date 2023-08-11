@@ -63,6 +63,32 @@ MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
   return result;
 }
 
+
+// OFFSET: LEGO1 0x100bd450
+MxResult ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
+{
+  MxPalette* local_pal;
+  MxResult ret = FAILURE;
+  PALETTEENTRY entries[256];
+  MxResult opret;
+
+  if(p_palette == NULL) {
+    local_pal = new MxPalette;
+    opret = local_pal->GetEntries(entries);
+    if(opret != 0) {
+      delete local_pal;
+      return ret;
+    }
+  } else {
+    opret = p_palette->GetEntries(entries);
+    if(opret != 0) return ret;
+  }
+
+  // FIXME/TODO: the loop here, possibly memcpy
+  ret = SUCCESS;
+  return ret;
+}
+
 // OFFSET: LEGO1 0x100bcaa0 STUB
 int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
 {
@@ -188,9 +214,16 @@ MxPalette *MxBitmap::CreatePalette()
   return pal;
 }
 
-// OFFSET: LEGO1 0x100bd280 STUB
-void MxBitmap::vtable38(void*)
+// OFFSET: LEGO1 0x100bd280
+void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
+  if (this->m_bmiColorsProvided) {
+    ImportColorsToPalette(this->m_paletteData, p_palette);
+  }
+  if (this->m_palette != NULL) {
+    delete this->m_palette;
+  }
+  this->m_palette = p_palette->Clone();
 }
 
 // OFFSET: LEGO1 0x100bd2d0 STUB
@@ -208,29 +241,4 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
   }
 
   return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_bmiColorsProvided, SRCCOPY);
-}
-
-// OFFSET: LEGO1 0x100bd450
-MxResult ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
-{
-  MxPalette* local_pal;
-  MxResult ret = FAILURE;
-  PALETTEENTRY entries[256];
-  MxResult opret;
-
-  if(p_palette == NULL) {
-    local_pal = new MxPalette;
-    opret = local_pal->GetEntries(entries);
-    if(opret != 0) {
-      delete local_pal;
-      return ret;
-    }
-  } else {
-    opret = p_palette->GetEntries(entries);
-    if(opret != 0) return ret;
-  }
-
-  // FIXME/TODO: the loop here, possibly memcpy
-  ret = SUCCESS;
-  return ret;
 }
