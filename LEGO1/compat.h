@@ -18,13 +18,11 @@
 
 // STL compatibility.
 #if defined(_MSC_VER) && _MSC_VER <= MSVC420_VERSION
-#include <STL.H>
+#include "mxstl.h"
 #else
 #include <algorithm>
 #include <list>
 using namespace std;
-template <class T>
-using List = list<T>;
 #endif
 
 // We use `override` so newer compilers can tell us our vtables are valid,

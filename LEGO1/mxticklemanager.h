@@ -53,7 +53,7 @@ private:
   MxU16 m_flags; // 0xc
 };
 
-class MxTickleClientPtrList : public List<MxTickleClient *>
+class MxTickleClientPtrList : public list<MxTickleClient *>
 {};
 
 // VTABLE 0x100d86d8
