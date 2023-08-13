@@ -105,7 +105,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 
   ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
-    this->m_info = (BITMAPINFO*) malloc(1064);
+    this->m_info = new BITMAPINFO;
     if(this->m_info) {
       ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
       if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
