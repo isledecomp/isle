@@ -46,8 +46,12 @@ private:
   MxU32 m_sizeOnDisk;
   DWORD m_flags;
   DWORD m_startTime;
+
+protected:
   MxLong m_duration;
   MxS32 m_loopCount;
+
+private:
   MxVector3Data m_location;
   MxVector3Data m_direction;
   MxVector3Data m_up;

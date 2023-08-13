@@ -47,6 +47,14 @@ MxDSStreamingAction *MxDSStreamingAction::CopyFrom(MxDSStreamingAction &p_dsStre
   return this;
 }
 
+// OFFSET: LEGO1 0x100cd090
+MxBool MxDSStreamingAction::HasId(MxU32 p_objectId)
+{
+  if (this->m_internalAction)
+    return this->m_internalAction->HasId(p_objectId);
+  return FALSE;
+}
+
 // OFFSET: LEGO1 0x100cd1e0
 MxResult MxDSStreamingAction::Init()
 {
@@ -67,4 +75,17 @@ void MxDSStreamingAction::SetInternalAction(MxDSAction *p_dsAction)
   if (this->m_internalAction)
     delete this->m_internalAction;
   this->m_internalAction = p_dsAction;
+}
+
+// OFFSET: LEGO1 0x100cd2d0
+void MxDSStreamingAction::FUN_100CD2D0()
+{
+  if (this->m_duration == -1)
+    return;
+
+  MxLong duration = this->m_duration / this->m_loopCount;
+  this->m_loopCount--;
+    
+  this->m_duration -= duration;
+  this->m_unka8 += duration;
 }

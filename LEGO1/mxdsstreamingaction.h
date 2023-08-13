@@ -16,8 +16,11 @@ public:
 
   MxDSStreamingAction *CopyFrom(MxDSStreamingAction &p_dsStreamingAction);
 
+  virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
+
   MxResult Init();
   void SetInternalAction(MxDSAction *p_dsAction);
+  void FUN_100CD2D0();
 
 private:
   MxU32 m_unk94;
@@ -25,7 +28,7 @@ private:
   MxS32 m_unk9c;
   MxDSBuffer *m_unka0;
   MxDSBuffer *m_unka4;
-  undefined4 m_unka8;
+  MxLong m_unka8;
   undefined2 m_unkac;
   MxDSAction *m_internalAction;
 };
