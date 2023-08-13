@@ -19,11 +19,11 @@ MxBitmap::MxBitmap()
 // OFFSET: LEGO1 0x100bca10
 MxBitmap::~MxBitmap()
 {
-  if (this->m_info != NULL)
+  if (this->m_info)
     delete m_info;
-  if (this->m_data != NULL)
+  if (this->m_data)
     delete m_data;
-  if (this->m_palette != NULL)
+  if (this->m_palette)
     delete m_palette;  
 }
 
@@ -37,27 +37,25 @@ int MxBitmap::vtable14(int)
 MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
 {
   MxResult result = FAILURE;
-  int width = p_bmiHeader->biWidth;
-  int height = p_bmiHeader->biHeight;
+  MxU32 width = p_bmiHeader->biWidth;
+  MxU32 height = p_bmiHeader->biHeight;
 
-  this->m_info = (BITMAPINFO*) malloc(0x428);
-  if (this->m_info != NULL) {
-    this->m_data = (LPVOID*) malloc((width + 3 & -4) * height);
-    if(this->m_data != NULL) {
-      memcpy(&this->m_info->bmiHeader, p_bmiHeader, 266);
+  this->m_info = new BITMAPINFO;
+  if (this->m_info) {
+    this->m_data = (LPVOID*) malloc((sizeof(width + 3U & -4) * height));
+    if(this->m_data) {
+      memcpy(&this->m_info->bmiHeader, p_bmiHeader, sizeof(BITMAPINFO));
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
       result = SUCCESS;
     }
   }
   if (result != SUCCESS) {
-    if (this->m_info != NULL) {
+    if (this->m_info) {
       delete this->m_info;
-      this->m_info = NULL;
     }
-    if (this->m_data != NULL) {
+    if (this->m_data) {
       delete this->m_data;
-      this->m_data = NULL;
     }
   }
   return result;
@@ -99,8 +97,8 @@ int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
   LPVOID* lpBuffer;
-  MxS32 height;
-  MxBool ret;
+  MxU32 height;
+  BOOL ret;
   MxResult result = FAILURE;
   DWORD bytesRead;
   BITMAPFILEHEADER hdr;
@@ -108,12 +106,12 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
   ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
     this->m_info = (BITMAPINFO*) malloc(1064);
-    if(this->m_info != NULL) {
+    if(this->m_info) {
       ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
       if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
         lpBuffer = (LPVOID*) malloc(hdr.bfSize - 1078);
         this->m_data = lpBuffer;
-        if (this->m_data != NULL) {
+        if (this->m_data) {
           ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - 1078, &bytesRead, NULL);
           if(ret != 0) {
             this->m_bmiHeader = &this->m_info->bmiHeader;
@@ -121,9 +119,9 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
             if((this->m_info->bmiHeader).biSizeImage == 0) {
               height = (this->m_info->bmiHeader).biHeight;
               if (height < 1) {
-                height *= -1;
+                height = -height;
               }
-              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & 0xfffffffc) * height;
+              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & -4) * height;
             }
             result = SUCCESS;
           }
@@ -132,13 +130,11 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
     }
   }
   if (result != SUCCESS) {
-    if (this->m_info != NULL) {
+    if (this->m_info) {
       delete this->m_info;
-      this->m_info = NULL;
     }
-    if (this->m_data != NULL) {
+    if (this->m_data) {
       delete this->m_data;
-      this->m_data = NULL;
     }
   }
   return result;
@@ -186,7 +182,6 @@ void MxBitmap::vtable30(int, int, int, int, int, int, int)
 // OFFSET: LEGO1 0x100bd1c0
 MxPalette *MxBitmap::CreatePalette()
 {
-  // FIXME: doesn't match
   MxPalette *pal;
   MxPalette *ppal;
   MxBool success;
@@ -195,19 +190,18 @@ MxPalette *MxBitmap::CreatePalette()
   success = FALSE;
   if(this->m_bmiColorsProvided == FALSE) {
     ppal = new MxPalette(this->m_paletteData);
-    if (ppal != NULL) {
+    if (ppal) {
       pal = ppal;
     }
   } else {
     if(this->m_bmiColorsProvided != TRUE) {
-      if(!success && pal != NULL) {
+      if(!success && pal) {
         delete pal;
-        pal = NULL;
       }
     }
     pal = this->m_palette->Clone();
   }
-  if(pal != NULL) {
+  if(pal) {
     success = TRUE;
   }
 
@@ -220,7 +214,7 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
   if (this->m_bmiColorsProvided) {
     ImportColorsToPalette(this->m_paletteData, p_palette);
   }
-  if (this->m_palette != NULL) {
+  if (this->m_palette) {
     delete this->m_palette;
   }
   this->m_palette = p_palette->Clone();
