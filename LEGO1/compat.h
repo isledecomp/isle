@@ -14,6 +14,11 @@
 // DIsable "nonstandard extension used : 'bool'" warning spam
 #pragma warning( disable : 4237 )
 
+// Disable "identifier was truncated to '255' characters" warning.
+// Impossible to avoid this if using STL map or set.
+// This removes most (but not all) occurrences of the warning.
+#pragma warning( disable : 4786 )
+
 #define MSVC420_VERSION 1020
 
 // STL compatibility.
@@ -22,6 +27,7 @@
 #else
 #include <algorithm>
 #include <list>
+#include <set>
 using namespace std;
 #endif
 

@@ -2,6 +2,7 @@
 #define MXATOMID_H
 
 #include "mxtypes.h"
+#include "mxatomidcounter.h"
 
 enum LookupMode
 {
@@ -27,9 +28,13 @@ public:
   {
     return this->m_internal == other.m_internal;
   }
+  void Clear();
 
 private:
-  char *m_internal;
+  MxAtomIdCounter* GetCounter(const char *, LookupMode);
+  void Destroy();
+
+  const char *m_internal;
 };
 
 #endif // MXATOMID_H
