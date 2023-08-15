@@ -1,4 +1,7 @@
 #include "mxbitmap.h"
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxBITMAPINFO, 1064);
 
 // The way that the BITMAPFILEHEADER structure ensures the file type is by ensuring it is "BM", which is literally just 0x424d.
 // Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
@@ -34,17 +37,19 @@ int MxBitmap::vtable14(int)
 }
 
 // OFFSET: LEGO1 0x100bcba0
-MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
+MxResult MxBitmap::vtable18(MxBITMAPINFO *p_info)
 {
   MxResult result = FAILURE;
-  MxU32 width = p_bmiHeader->biWidth;
-  MxU32 height = p_bmiHeader->biHeight;
+  MxLong width  = p_info->bmiHeader.biWidth;
+  MxLong height = p_info->bmiHeader.biHeight;
+  // ((width + 3) & -4) clamps width to nearest 4-byte boundary
+  MxLong size = ((width + 3) & -4) * height;
 
-  this->m_info = new BITMAPINFO;
+  this->m_info = new MxBITMAPINFO;
   if (this->m_info) {
-    this->m_data = (LPVOID*) malloc((sizeof(width + 3U & -4) * height));
+    this->m_data = (LPVOID*) new MxU8[size];
     if(this->m_data) {
-      memcpy(&this->m_info->bmiHeader, p_bmiHeader, sizeof(BITMAPINFO));
+      memcpy(this->m_info, p_info, sizeof(MxBITMAPINFO));
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
       result = SUCCESS;
@@ -53,9 +58,11 @@ MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
   if (result != SUCCESS) {
     if (this->m_info) {
       delete this->m_info;
+      this->m_info = NULL;
     }
     if (this->m_data) {
       delete this->m_data;
+      this->m_data = NULL;
     }
   }
   return result;
@@ -63,26 +70,27 @@ MxResult MxBitmap::vtable18(BITMAPINFOHEADER *p_bmiHeader)
 
 
 // OFFSET: LEGO1 0x100bd450
-MxResult ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
+MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
 {
-  MxPalette* local_pal;
   MxResult ret = FAILURE;
   PALETTEENTRY entries[256];
-  MxResult opret;
 
-  if(p_palette == NULL) {
-    local_pal = new MxPalette;
-    opret = local_pal->GetEntries(entries);
-    if(opret != 0) {
-      delete local_pal;
+  if (p_palette) {
+    if (p_palette->GetEntries(entries))
       return ret;
-    }
   } else {
-    opret = p_palette->GetEntries(entries);
-    if(opret != 0) return ret;
+    MxPalette local_pal;
+    if (local_pal.GetEntries(entries))
+      return ret;
   }
 
-  // FIXME/TODO: the loop here, possibly memcpy
+  for (int i = 0; i < 256; i++) {
+    p_rgbquad[i].rgbRed      = entries[i].peRed;
+    p_rgbquad[i].rgbGreen    = entries[i].peGreen;
+    p_rgbquad[i].rgbBlue     = entries[i].peBlue;
+    p_rgbquad[i].rgbReserved = 0;
+  }
+
   ret = SUCCESS;
   return ret;
 }
@@ -105,14 +113,14 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 
   ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
-    this->m_info = new BITMAPINFO;
+    this->m_info = new MxBITMAPINFO;
     if(this->m_info) {
-      ret = ReadFile(p_handle, this->m_info, 1064, &bytesRead, NULL);
+      ret = ReadFile(p_handle, this->m_info, sizeof(MxBITMAPINFO), &bytesRead, NULL);
       if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
-        lpBuffer = (LPVOID*) malloc(hdr.bfSize - 1078);
+        lpBuffer = (LPVOID*) malloc(hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER)));
         this->m_data = lpBuffer;
         if (this->m_data) {
-          ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - 1078, &bytesRead, NULL);
+          ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER)), &bytesRead, NULL);
           if(ret != 0) {
             this->m_bmiHeader = &this->m_info->bmiHeader;
             this->m_paletteData = this->m_info->bmiColors;
@@ -211,13 +219,20 @@ MxPalette *MxBitmap::CreatePalette()
 // OFFSET: LEGO1 0x100bd280
 void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
-  if (this->m_bmiColorsProvided) {
-    ImportColorsToPalette(this->m_paletteData, p_palette);
+  // This is weird but it matches. Maybe m_bmiColorsProvided had more
+  // potential values than just true/false at some point?
+  switch (this->m_bmiColorsProvided) {
+    case FALSE:
+      ImportColorsToPalette(this->m_paletteData, p_palette);
+      break;
+    
+    case TRUE:
+      if (this->m_palette) {
+        delete this->m_palette;
+      }
+      this->m_palette = p_palette->Clone();
+      break;
   }
-  if (this->m_palette) {
-    delete this->m_palette;
-  }
-  this->m_palette = p_palette->Clone();
 }
 
 // OFFSET: LEGO1 0x100bd2d0 STUB
@@ -234,5 +249,5 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
 
-  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, this->m_info, this->m_bmiColorsProvided, SRCCOPY);
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, (BITMAPINFO*)this->m_info, this->m_bmiColorsProvided, SRCCOPY);
 }
