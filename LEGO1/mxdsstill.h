@@ -11,6 +11,9 @@ public:
   MxDSStill();
   virtual ~MxDSStill() override;
 
+  void CopyFrom(MxDSStill &p_dsStill);
+  MxDSStill &operator=(MxDSStill &p_dsStill);
+
   // OFFSET: LEGO1 0x100c9930
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -23,6 +26,8 @@ public:
   {
     return !strcmp(name, MxDSStill::ClassName()) || MxDSMediaAction::IsA(name);
   }
+
+  virtual MxDSAction *Clone(); // vtable+2c;
 };
 
 #endif // MXDSSTILL_H
