@@ -15,6 +15,14 @@ public:
   virtual ~MxDSStreamingAction();
 
   MxDSStreamingAction *CopyFrom(MxDSStreamingAction &p_dsStreamingAction);
+  MxDSStreamingAction &operator=(MxDSAction &p_dsAction) {
+    MxDSAction::operator=(p_dsAction);
+    return *this; 
+  }
+  MxDSStreamingAction &operator=(MxDSStreamingAction &p_dsStreamingAction) {
+    MxDSAction::operator=(p_dsStreamingAction);
+    return *this; 
+  }
 
   virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
 

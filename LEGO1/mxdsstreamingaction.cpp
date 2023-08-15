@@ -7,7 +7,7 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSAction &p_dsAction, MxU32 p_offset)
 {
   Init();
 
-  MxDSAction::operator=(p_dsAction);
+  *this = p_dsAction;
   this->m_unk94 = p_offset;
   this->m_bufferOffset = p_offset;
 }
@@ -34,7 +34,7 @@ MxDSStreamingAction::~MxDSStreamingAction()
 // OFFSET: LEGO1 0x100cd220
 MxDSStreamingAction *MxDSStreamingAction::CopyFrom(MxDSStreamingAction &p_dsStreamingAction)
 {
-  MxDSAction::operator=(p_dsStreamingAction);
+  *this = p_dsStreamingAction;
   this->m_unk94 = p_dsStreamingAction.m_unk94;
   this->m_bufferOffset = p_dsStreamingAction.m_bufferOffset;
   this->m_unk9c = p_dsStreamingAction.m_unk9c;
