@@ -9,8 +9,10 @@ class MxDSAnim : public MxDSMediaAction
 {
 public:
   MxDSAnim();
-
   virtual ~MxDSAnim() override;
+
+  void CopyFrom(MxDSAnim &p_dsAnim);
+  MxDSAnim &operator=(MxDSAnim &p_dsAnim);
 
   // OFFSET: LEGO1 0x100c9060
   inline virtual const char *ClassName() const override // vtable+0x0c
@@ -24,6 +26,8 @@ public:
   {
     return !strcmp(name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(name);
   }
+
+  virtual MxDSAction *Clone(); // vtable+2c;
 };
 
 #endif // MXDSANIM_H
