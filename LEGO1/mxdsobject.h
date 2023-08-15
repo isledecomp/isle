@@ -42,6 +42,7 @@ public:
 
 protected:
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
+  inline MxDSType GetType() { return (MxDSType) this->m_type; }
 
 private:
   MxU32 m_sizeOnDisk;
