@@ -95,10 +95,49 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
   return ret;
 }
 
-// OFFSET: LEGO1 0x100bcaa0 STUB
-int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int)
+// OFFSET: LEGO1 0x100bcaa0
+int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_option)
 {
-  return 0;
+  MxResult ret = FAILURE;
+  MxLong size = ((p_width + 3) & -4) * p_height;
+
+  m_info = new MxBITMAPINFO;
+  if (m_info) {
+    m_data = (LPVOID*) new MxU8[size];
+    if (m_data) {
+      m_bmiHeader = &m_info->bmiHeader;
+      m_paletteData = m_info->bmiColors;
+      memset(&m_info->bmiHeader, 0, sizeof(m_info->bmiHeader));
+
+      m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
+      m_bmiHeader->biWidth = p_width;
+      m_bmiHeader->biHeight = p_height;
+      m_bmiHeader->biPlanes = 1;
+      m_bmiHeader->biBitCount = 8;
+      m_bmiHeader->biCompression = 0;
+      m_bmiHeader->biSizeImage = size;
+
+      if (!ImportColorsToPalette(m_paletteData, p_palette)) {
+        if (!vtable3c(p_option)) {
+          ret = SUCCESS;
+        }
+      }
+    }
+  }
+
+  if (ret) {
+    if (m_info) {
+      delete m_info;
+      m_info = NULL;
+    }
+
+    if (m_data) {
+      delete[] m_data;
+      m_data = NULL;
+    }
+  }
+
+  return ret;
 }
 
 // OFFSET: LEGO1 0x100bcd60
@@ -235,10 +274,51 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
   }
 }
 
-// OFFSET: LEGO1 0x100bd2d0 STUB
-int MxBitmap::vtable3c(MxBool)
+// OFFSET: LEGO1 0x100bd2d0
+int MxBitmap::vtable3c(MxBool p_option)
 {
-  return 0;
+  MxResult ret = FAILURE;
+  MxPalette *pal = NULL;
+
+  if (m_bmiColorsProvided == p_option) {
+    // no change: do nothing.
+    ret = SUCCESS;
+  } else {
+    // TODO: Another switch used for this boolean value? Is it not a bool?
+    switch (p_option) {
+      case 0:
+        ImportColorsToPalette(m_paletteData, m_palette);
+        if (m_palette)
+          delete m_palette;
+
+        m_palette = NULL;
+        break;
+
+      case 1:
+        pal = NULL;
+        pal = new MxPalette(m_paletteData);
+        if (pal) {
+          m_palette = pal;
+
+          // TODO: what is this? zeroing out top half of palette?
+          MxU16 *buf = (MxU16*)m_paletteData;
+          for (MxU16 i = 0; i < 256; i++) {
+            buf[i] = i;
+          }
+
+          m_bmiColorsProvided = p_option;
+          ret = SUCCESS;
+        }
+        break;
+    }
+  }
+
+  // If we were unsuccessful overall but did manage to alloc
+  // the MxPalette, free it.
+  if (ret && pal)
+    delete pal;
+
+  return ret;
 }
 
 // OFFSET: LEGO1 0x100bd3e0
