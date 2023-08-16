@@ -118,6 +118,7 @@ add_library(lego1 SHARED
   LEGO1/mxdsparallelaction.cpp
   LEGO1/mxdsselectaction.cpp
   LEGO1/mxdsserialaction.cpp
+  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssound.cpp
   LEGO1/mxdssource.cpp
   LEGO1/mxdsstill.cpp
