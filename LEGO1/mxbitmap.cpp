@@ -96,7 +96,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 }
 
 // OFFSET: LEGO1 0x100bcaa0
-int MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_option)
+MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_option)
 {
   MxResult ret = FAILURE;
   MxLong size = ((p_width + 3) & -4) * p_height;
@@ -275,7 +275,7 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 }
 
 // OFFSET: LEGO1 0x100bd2d0
-int MxBitmap::vtable3c(MxBool p_option)
+MxResult MxBitmap::vtable3c(MxBool p_option)
 {
   MxResult ret = FAILURE;
   MxPalette *pal = NULL;

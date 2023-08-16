@@ -29,7 +29,7 @@ public:
 
   virtual int vtable14(int);
   virtual MxResult vtable18(MxBITMAPINFO *p_info);
-  virtual int vtable1c(int p_width, int p_height, MxPalette *p_palette, int);
+  virtual MxResult vtable1c(int p_width, int p_height, MxPalette *p_palette, int);
   virtual MxResult LoadFile(HANDLE p_handle);
   __declspec(dllexport) virtual MxLong Read(const char *p_filename); // vtable+24
   virtual int vtable28(int);
@@ -37,7 +37,7 @@ public:
   virtual void vtable30(int, int, int, int, int, int, int);
   __declspec(dllexport) virtual MxPalette *CreatePalette(); // vtable+34
   virtual void ImportPalette(MxPalette* p_palette);
-  virtual int vtable3c(MxBool);
+  virtual MxResult vtable3c(MxBool);
   virtual MxResult CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
 
 private:
