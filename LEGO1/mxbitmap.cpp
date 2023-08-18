@@ -15,7 +15,7 @@ MxBitmap::MxBitmap()
   this->m_bmiHeader = NULL;
   this->m_paletteData = NULL;
   this->m_data = NULL;
-  this->m_bmiColorsProvided = FALSE;
+  this->m_bitDepth = LOWCOLOR;
   this->m_palette = NULL;
 }
 
@@ -96,7 +96,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 }
 
 // OFFSET: LEGO1 0x100bcaa0
-MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_option)
+MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_bitDepth)
 {
   MxResult ret = FAILURE;
   MxLong size = ((p_width + 3) & -4) * p_height;
@@ -118,7 +118,7 @@ MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int
       m_bmiHeader->biSizeImage = size;
 
       if (!ImportColorsToPalette(m_paletteData, p_palette)) {
-        if (!vtable3c(p_option)) {
+        if (!vtable3c(p_bitDepth)) {
           ret = SUCCESS;
         }
       }
@@ -235,13 +235,13 @@ MxPalette *MxBitmap::CreatePalette()
 
   pal = NULL;
   success = FALSE;
-  if(this->m_bmiColorsProvided == FALSE) {
+  if(this->m_bitDepth == LOWCOLOR) {
     ppal = new MxPalette(this->m_paletteData);
     if (ppal) {
       pal = ppal;
     }
   } else {
-    if(this->m_bmiColorsProvided != TRUE) {
+    if(this->m_bitDepth != HIGHCOLOR) {
       if(!success && pal) {
         delete pal;
       }
@@ -260,12 +260,12 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
   // This is weird but it matches. Maybe m_bmiColorsProvided had more
   // potential values than just true/false at some point?
-  switch (this->m_bmiColorsProvided) {
-    case FALSE:
+  switch (this->m_bitDepth) {
+    case LOWCOLOR:
       ImportColorsToPalette(this->m_paletteData, p_palette);
       break;
     
-    case TRUE:
+    case HIGHCOLOR:
       if (this->m_palette) {
         delete this->m_palette;
       }
@@ -275,17 +275,17 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 }
 
 // OFFSET: LEGO1 0x100bd2d0
-MxResult MxBitmap::vtable3c(MxBool p_option)
+MxResult MxBitmap::vtable3c(MxBool p_bitDepth)
 {
   MxResult ret = FAILURE;
   MxPalette *pal = NULL;
 
-  if (m_bmiColorsProvided == p_option) {
+  if (m_bitDepth == p_bitDepth) {
     // no change: do nothing.
     ret = SUCCESS;
   } else {
     // TODO: Another switch used for this boolean value? Is it not a bool?
-    switch (p_option) {
+    switch (p_bitDepth) {
       case 0:
         ImportColorsToPalette(m_paletteData, m_palette);
         if (m_palette)
@@ -306,7 +306,7 @@ MxResult MxBitmap::vtable3c(MxBool p_option)
             buf[i] = i;
           }
 
-          m_bmiColorsProvided = p_option;
+          m_bitDepth = p_bitDepth;
           ret = SUCCESS;
         }
         break;
@@ -329,5 +329,5 @@ MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest,
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
 
-  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, (BITMAPINFO*)this->m_info, this->m_bmiColorsProvided, SRCCOPY);
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, (BITMAPINFO*)this->m_info, this->m_bitDepth, SRCCOPY);
 }
