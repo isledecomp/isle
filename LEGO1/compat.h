@@ -14,17 +14,21 @@
 // DIsable "nonstandard extension used : 'bool'" warning spam
 #pragma warning( disable : 4237 )
 
+// Disable "identifier was truncated to '255' characters" warning.
+// Impossible to avoid this if using STL map or set.
+// This removes most (but not all) occurrences of the warning.
+#pragma warning( disable : 4786 )
+
 #define MSVC420_VERSION 1020
 
 // STL compatibility.
 #if defined(_MSC_VER) && _MSC_VER <= MSVC420_VERSION
-#include <STL.H>
+#include "mxstl.h"
 #else
 #include <algorithm>
 #include <list>
+#include <set>
 using namespace std;
-template <class T>
-using List = list<T>;
 #endif
 
 // We use `override` so newer compilers can tell us our vtables are valid,

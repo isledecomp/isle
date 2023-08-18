@@ -92,6 +92,7 @@ add_library(lego1 SHARED
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxatomid.cpp
+  LEGO1/mxatomidcounter.cpp
   LEGO1/mxaudiopresenter.cpp
   LEGO1/mxautolocker.cpp
   LEGO1/mxbackgroundaudiomanager.cpp
@@ -117,6 +118,7 @@ add_library(lego1 SHARED
   LEGO1/mxdsparallelaction.cpp
   LEGO1/mxdsselectaction.cpp
   LEGO1/mxdsserialaction.cpp
+  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssound.cpp
   LEGO1/mxdssource.cpp
   LEGO1/mxdsstill.cpp

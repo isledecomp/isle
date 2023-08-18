@@ -28,10 +28,10 @@ private:
   MxParam *m_param; // 0x4
 };
 
-class MxIdList : public List<MxU32>
+class MxIdList : public list<MxU32>
 {};
 
-class MxNotificationPtrList : public List<MxNotification *>
+class MxNotificationPtrList : public list<MxNotification *>
 {};
 
 // VTABLE 0x100dc078

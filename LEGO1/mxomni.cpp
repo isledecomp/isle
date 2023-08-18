@@ -38,7 +38,7 @@ void MxOmni::Init()
   m_eventManager = NULL;
   m_timer = NULL;
   m_streamer = NULL;
-  m_unk44 = NULL;
+  m_atomIdCounterSet = NULL;
   m_unk64 = NULL;
 }
 
@@ -104,6 +104,8 @@ void MxOmni::SetInstance(MxOmni *instance)
 // OFFSET: LEGO1 0x100af0c0
 MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
+  m_atomIdCounterSet = new MxAtomIdCounterSet();
+
   if (p.CreateFlags().CreateVariableTable())
   {
     MxVariableTable *variableTable = new MxVariableTable();
@@ -129,6 +131,40 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
 void MxOmni::Destroy()
 {
   // FIXME: Stub
+
+  /*
+  // TODO: private members
+  if (m_notificationManager) {
+    while (m_notificationManager->m_queue->size()) {
+      m_notificationManager->Tickle();
+    }
+  }
+
+  m_notificationManager->m_active = 0;
+  */
+
+  delete m_eventManager;
+  delete m_soundManager;
+  delete m_musicManager;
+  delete m_videoManager;
+  delete m_streamer;
+  delete m_timer;
+  delete m_objectFactory;
+  delete m_variableTable;
+  delete m_notificationManager;
+  delete m_tickleManager;
+
+  // There could be a tree/iterator function that does this inline
+  if (m_atomIdCounterSet) {
+    while (!m_atomIdCounterSet->empty()) {
+      // Pop each node and delete its value
+      MxAtomIdCounterSet::iterator begin = m_atomIdCounterSet->begin();
+      MxAtomIdCounter *value = *begin;
+      m_atomIdCounterSet->erase(begin);
+      delete value;
+    }
+    delete m_atomIdCounterSet;
+  }
 }
 
 // OFFSET: LEGO1 0x100b07f0
@@ -160,6 +196,12 @@ MxTickleManager *TickleManager()
 MxTimer *Timer()
 {
   return MxOmni::GetInstance()->GetTimer();
+}
+
+// OFFSET: LEGO1 0x100acee0
+MxAtomIdCounterSet *AtomIdCounterSet()
+{
+  return MxOmni::GetInstance()->GetAtomIdCounterSet();
 }
 
 // OFFSET: LEGO1 0x100acef0
