@@ -58,7 +58,3 @@ If you're interested in helping/contributing to this project, check out the [CON
 ### Which version of LEGO Island do I have?
 
 Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have.
-
-### SmartHeap
-
-Both `ISLE.EXE` and `LEGO1.DLL` were originally statically linked with [SmartHeap](http://www.microquill.com/smartheap/sh_tspec.htm), a drop-in replacement for malloc/free that presumably provides better heap memory management on the old low-memory (16MB) systems this game was designed for. Unfortunately, acquiring SmartHeap legally is expensive, and the chances of acquiring the exact same version used by Mindscape in the late 90s is very low. Since it's a drop-in binary-compatible replacement, this decomp can just stick with the standard malloc/free functions while still achieving matching assembly on a per-function level, however the resulting binaries will never be byte accurate as a result of this. If you notice significant size disparities, particularly in ISLE.EXE, the lack of statically linked SmartHeap libraries is why.
