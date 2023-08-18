@@ -55,8 +55,8 @@ protected:
   __declspec(dllexport) void Init();
 public:
 
-  MxS32 m_someFlag; // 0x8
-  MxU32 m_unk0xc;
+  MxS32 m_currentTickleFlag; // 0x8
+  MxU32 m_previousTickleFlags;
   undefined4 m_unk0x10;
   undefined4 m_unk0x14;
   undefined4 m_unk0x18;

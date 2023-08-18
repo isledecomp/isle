@@ -7,18 +7,18 @@ DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 // OFFSET: LEGO1 0x1000bee0
 void MxPresenter::DoneTickle()
 {
-  m_unk0xc |= 1 << m_someFlag;
-  m_someFlag = 0;
+  m_previousTickleFlags |= 1 << m_currentTickleFlag;
+  m_currentTickleFlag = 0;
 }
 
 // OFFSET: LEGO1 0x100b4d50
 void MxPresenter::Init()
 {
-  m_someFlag = 0;
+  m_currentTickleFlag = 0;
   m_action = NULL;
   m_unk0x18 = 0;
   m_unk0x3c = 0;
-  m_unk0xc = 0;
+  m_previousTickleFlags = 0;
   m_unk0x10 = 0;
   m_unk0x14 = 0;
 }
@@ -71,36 +71,36 @@ void MxPresenter::VTable0x14()
 void MxPresenter::VTable0x18()
 {
   ParseExtra();
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = 2;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = 2;
 }
 
 // OFFSET: LEGO1 0x1000be60
 void MxPresenter::VTable0x1c()
 {
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = 3;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = 3;
 }
 
 // OFFSET: LEGO1 0x1000be80
 void MxPresenter::VTable0x20()
 {
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = 4;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = 4;
 }
 
 // OFFSET: LEGO1 0x1000bea0
 void MxPresenter::VTable0x24()
 {
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = 5;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = 5;
 }
 
 // OFFSET: LEGO1 0x1000bec0
 void MxPresenter::VTable0x28()
 {
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = 6;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = 6;
 }
 
 // OFFSET: LEGO1 0x1000bf70
@@ -117,14 +117,14 @@ void MxPresenter::InitVirtual()
 // OFFSET: LEGO1 0x1000bf90
 void MxPresenter::VTable0x44(undefined4 param)
 {
-  m_unk0xc |= 1 << (unsigned char)m_someFlag;
-  m_someFlag = param;
+  m_previousTickleFlags |= 1 << (unsigned char)m_currentTickleFlag;
+  m_currentTickleFlag = param;
 }
 
 // OFFSET: LEGO1 0x1000bfb0
 unsigned char MxPresenter::VTable0x48(unsigned char param)
 {
-  return m_unk0xc & (1 << param);
+  return m_previousTickleFlags & (1 << param);
 }
 
 // OFFSET: LEGO1 0x1000bfc0
