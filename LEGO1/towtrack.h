@@ -10,6 +10,20 @@ class TowTrack : public IslePathActor
 {
 public:
   TowTrack();
+
+  // OFFSET: LEGO1 0x1004c7c0
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f03b8
+    return "TowTrack";
+  }
+
+  // OFFSET: LEGO1 0x1004c7d0
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, TowTrack::ClassName()) || IslePathActor::IsA(name);
+  }
+
 private:
   // TODO: TowTrack field types
   undefined m_unk160[0x4];

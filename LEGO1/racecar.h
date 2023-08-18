@@ -10,6 +10,20 @@ class RaceCar : public IslePathActor
 public:
   RaceCar();
   virtual ~RaceCar() override; // vtable+0x0
+
+  // OFFSET: LEGO1 0x10028270
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x100f03e0
+    return "RaceCar";
+  }
+
+  // OFFSET: LEGO1 0x10028280
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, RaceCar::ClassName()) || IslePathActor::IsA(name);
+  }
+
 };
 
 #endif // RACECAR_H
