@@ -231,7 +231,7 @@ MxPalette *MxBitmap::CreatePalette()
 {
   MxPalette *pal;
   MxPalette *ppal;
-  MxBool success;
+  MxResult success;
 
   pal = NULL;
   success = FALSE;
