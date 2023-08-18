@@ -36,7 +36,7 @@ private:
   MxS32 m_unk84;
   MxS32 m_unk88;
   MxS32 m_unk8c;
-  MxU32 m_unk90;
+  MxFloat m_unk90;
   MxS32 m_unk94;
   MxS32 m_unk98;
 };
