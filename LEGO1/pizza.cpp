@@ -13,7 +13,7 @@ Pizza::Pizza()
   this->m_unk88 = 0;
   this->m_unk8c = -1;
   this->m_unk98 = 0;
-  this->m_unk90 = 0;
+  this->m_unk90 = 0.0;
 }
 
 // OFFSET: LEGO1 0x10038100

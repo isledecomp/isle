@@ -22,7 +22,20 @@ public:
   {
     return !strcmp(name, Ambulance::ClassName()) || IslePathActor::IsA(name);
   }
-
+private:
+  // TODO: Ambulance fields
+  undefined m_unk160[4];
+  MxS32 m_unk164;
+  MxS16 m_unk168;
+  MxS16 m_unk16a;
+  MxS16 m_unk16c;
+  MxS16 m_unk16e;
+  MxS16 m_unk170;
+  MxS16 m_unk172;
+  MxS32 m_unk174;
+  MxS32 m_unk178;
+  MxFloat m_unk17c;
+  undefined m_unk180[4];
 };
 
 #endif // AMBULANCE_H
