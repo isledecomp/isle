@@ -1,5 +1,9 @@
 #include "dunebuggy.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c);
+
 // OFFSET: LEGO1 0x10067bb0
 DuneBuggy::DuneBuggy()
 {

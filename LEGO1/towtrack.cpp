@@ -1,5 +1,9 @@
 #include "towtrack.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(TowTrack, 0x180);
+
 // OFFSET: LEGO1 0x1004c720
 TowTrack::TowTrack()
 {

@@ -1,5 +1,9 @@
 #include "skateboard.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(SkateBoard, 0x168);
+
 // OFFSET: LEGO1 0x1000fd40
 SkateBoard::SkateBoard()
 {

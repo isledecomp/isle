@@ -1,5 +1,9 @@
 #include "ambulance.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(Ambulance, 0x184);
+
 // OFFSET: LEGO1 0x10035ee0
 Ambulance::Ambulance()
 {

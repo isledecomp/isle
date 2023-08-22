@@ -1,5 +1,9 @@
 #include "bike.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(Bike, 0x164);
+
 // OFFSET: LEGO1 0x10076670
 Bike::Bike()
 {
