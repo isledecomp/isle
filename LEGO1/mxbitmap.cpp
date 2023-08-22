@@ -233,8 +233,8 @@ void MxBitmap::vtable30(int, int, int, int, int, int, int)
 // OFFSET: LEGO1 0x100bd1c0
 MxPalette *MxBitmap::CreatePalette()
 {
-  MxPalette *palette = NULL;
   MxBool success = FALSE;
+  MxPalette *palette = NULL;
 
   switch (this->m_bitDepth) {
     case LOWCOLOR:
