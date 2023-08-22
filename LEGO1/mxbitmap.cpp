@@ -229,30 +229,29 @@ void MxBitmap::vtable30(int, int, int, int, int, int, int)
 // OFFSET: LEGO1 0x100bd1c0
 MxPalette *MxBitmap::CreatePalette()
 {
-  MxPalette *pal;
-  MxPalette *ppal;
-  MxResult success;
+  MxPalette *palette = NULL;
+  MxBool success = FALSE;
 
-  pal = NULL;
-  success = FALSE;
-  if(this->m_bitDepth == LOWCOLOR) {
-    ppal = new MxPalette(this->m_paletteData);
-    if (ppal) {
-      pal = ppal;
-    }
-  } else {
-    if(this->m_bitDepth != HIGHCOLOR) {
-      if(!success && pal) {
-        delete pal;
-      }
-    }
-    pal = this->m_palette->Clone();
-  }
-  if(pal) {
-    success = TRUE;
+  switch (this->m_bitDepth) {
+    case LOWCOLOR:
+      palette = new MxPalette(this->m_paletteData);
+      if (palette)
+        success = TRUE;
+      break;
+
+    case HIGHCOLOR:
+      palette = this->m_palette->Clone();
+      if (palette)
+        success = TRUE;
+      break;
   }
 
-  return pal;
+  if (!success && palette) {
+    delete palette;
+    palette = NULL;
+  }
+
+  return palette;
 }
 
 // OFFSET: LEGO1 0x100bd280
