@@ -6,7 +6,7 @@ DECOMP_SIZE_ASSERT(MxBITMAPINFO, 1064);
 // The way that the BITMAPFILEHEADER structure ensures the file type is by ensuring it is "BM", which is literally just 0x424d.
 // Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
 // GLOBAL: LEGO1 0x10102184
-DWORD g_bitmapSignature = 0x424d;
+undefined2 g_bitmapSignature = 0x424d;
 
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
@@ -143,12 +143,13 @@ MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int
 // OFFSET: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
-  LPVOID* lpBuffer;
-  MxU32 height;
   BOOL ret;
+  LPVOID* lpBuffer;
+  MxLong height;
   MxResult result = FAILURE;
   DWORD bytesRead;
   BITMAPFILEHEADER hdr;
+  MxLong size;
 
   ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
@@ -156,16 +157,17 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
     if(this->m_info) {
       ret = ReadFile(p_handle, this->m_info, sizeof(MxBITMAPINFO), &bytesRead, NULL);
       if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
-        lpBuffer = (LPVOID*) malloc(hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER)));
+        size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
+        lpBuffer = (LPVOID*) new MxU8[size];
         this->m_data = lpBuffer;
-        if (this->m_data) {
-          ret = ReadFile(p_handle, lpBuffer, hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER)), &bytesRead, NULL);
-          if(ret != 0) {
+        if (lpBuffer) {
+          ret = ReadFile(p_handle, lpBuffer, size, &bytesRead, NULL);
+          if(ret) {
             this->m_bmiHeader = &this->m_info->bmiHeader;
             this->m_paletteData = this->m_info->bmiColors;
             if((this->m_info->bmiHeader).biSizeImage == 0) {
               height = (this->m_info->bmiHeader).biHeight;
-              if (height < 1) {
+              if (height <= 0L) {
                 height = -height;
               }
               (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & -4) * height;
@@ -179,9 +181,11 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
   if (result != SUCCESS) {
     if (this->m_info) {
       delete this->m_info;
+      this->m_info = NULL;
     }
     if (this->m_data) {
       delete this->m_data;
+      this->m_data = NULL;
     }
   }
   return result;
