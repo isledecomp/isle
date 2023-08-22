@@ -1,7 +1,5 @@
 #include "racecar.h"
 
-#include "decomp.h"
-
 DECOMP_SIZE_ASSERT(RaceCar, 0x164);
 
 // OFFSET: LEGO1 0x10028200

@@ -26,7 +26,7 @@ public:
 
 private:
   // TODO: TowTrack field types
-  undefined m_unk160[0x4];
+  undefined m_unk154[0x8];
   MxS32 m_unk164;
   MxS16 m_unk168;
   MxS16 m_unk16a;

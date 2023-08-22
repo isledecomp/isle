@@ -1,7 +1,5 @@
 #include "jetski.h"
 
-#include "decomp.h"
-
 DECOMP_SIZE_ASSERT(Jetski, 0x164);
 
 // OFFSET: LEGO1 0x1007e3b0

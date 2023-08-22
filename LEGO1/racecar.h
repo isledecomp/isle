@@ -1,6 +1,7 @@
 #ifndef RACECAR_H
 #define RACECAR_H
 
+#include "decomp.h"
 #include "islepathactor.h"
 
 // VTABLE 0x100d6918
@@ -23,7 +24,9 @@ public:
   {
     return !strcmp(name, RaceCar::ClassName()) || IslePathActor::IsA(name);
   }
-
+private:
+  // TODO: RaceCar fields
+  undefined m_unk160[4];
 };
 
 #endif // RACECAR_H

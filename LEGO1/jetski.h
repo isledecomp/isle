@@ -1,6 +1,7 @@
 #ifndef JETSKI_H
 #define JETSKI_H
 
+#include "decomp.h"
 #include "islepathactor.h"
 
 // VTABLE 0x100d9ec8
@@ -22,7 +23,9 @@ public:
   {
     return !strcmp(name, Jetski::ClassName()) || IslePathActor::IsA(name);
   }
-
+private:
+  // TODO: Jetski fields
+  undefined m_unk160[4];
 };
 
 
