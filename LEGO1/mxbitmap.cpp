@@ -30,10 +30,42 @@ MxBitmap::~MxBitmap()
     delete m_palette;  
 }
 
-// OFFSET: LEGO1 0x100bcc40 STUB
-int MxBitmap::vtable14(int)
+// OFFSET: LEGO1 0x100bcc40
+MxResult MxBitmap::vtable14(MxBitmap *p_bitmap)
 {
-  return 0;
+  MxLong height;
+  MxResult result = FAILURE;
+  MxLong size;
+
+  this->m_info = new MxBITMAPINFO;
+  if(this->m_info) {
+    height = p_bitmap->m_bmiHeader->biHeight;
+    if (height <= 0L) {
+      height = -height;
+    }
+    size = (p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height;
+    this->m_data = (LPVOID*) new MxU8[size];
+    if(this->m_data) {
+      memcpy(this->m_info, p_bitmap->m_info, sizeof(MxBITMAPINFO));
+      memcpy(this->m_bmiHeader, p_bitmap->m_bmiHeader, sizeof(MxBITMAPINFO));
+      memcpy(this->m_paletteData, p_bitmap->m_paletteData, sizeof(MxBITMAPINFO));
+      memcpy(this->m_data, p_bitmap->m_data, sizeof(MxBITMAPINFO));
+      result = SUCCESS;
+      this->m_bmiHeader = &this->m_info->bmiHeader;
+      this->m_paletteData = this->m_info->bmiColors;
+    }
+  }
+  if (result != SUCCESS) {
+    if (this->m_info) {
+      delete this->m_info;
+      this->m_info = NULL;
+    }
+    if (this->m_data) {
+      delete this->m_data;
+      this->m_data = NULL;
+    }
+  }
+  return result;
 }
 
 // OFFSET: LEGO1 0x100bcba0

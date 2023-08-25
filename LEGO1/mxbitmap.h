@@ -31,7 +31,7 @@ public:
   __declspec(dllexport) MxBitmap();
   __declspec(dllexport) virtual ~MxBitmap(); // vtable+00
 
-  virtual int vtable14(int);
+  virtual MxResult vtable14(MxBitmap *p_bitmap);
   virtual MxResult vtable18(MxBITMAPINFO *p_info);
   virtual MxResult vtable1c(int p_width, int p_height, MxPalette *p_palette, int);
   virtual MxResult LoadFile(HANDLE p_handle);
