@@ -35,7 +35,6 @@ MxResult MxBitmap::vtable14(MxBitmap *p_bitmap)
 {
   MxLong height;
   MxResult result = FAILURE;
-  MxLong size;
 
   this->m_info = new MxBITMAPINFO;
   if(this->m_info) {
@@ -43,13 +42,16 @@ MxResult MxBitmap::vtable14(MxBitmap *p_bitmap)
     if (height <= 0L) {
       height = -height;
     }
-    size = (p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height;
-    this->m_data = (LPVOID*) new MxU8[size];
+    this->m_data = (LPVOID*) new MxU8[(p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height];
     if(this->m_data) {
       memcpy(this->m_info, p_bitmap->m_info, sizeof(MxBITMAPINFO));
-      memcpy(this->m_bmiHeader, p_bitmap->m_bmiHeader, sizeof(MxBITMAPINFO));
-      memcpy(this->m_paletteData, p_bitmap->m_paletteData, sizeof(MxBITMAPINFO));
-      memcpy(this->m_data, p_bitmap->m_data, sizeof(MxBITMAPINFO));
+
+      height = p_bitmap->m_bmiHeader->biHeight;
+      if (height <= 0L) {
+        height = -height;
+      }
+      memcpy(this->m_data, p_bitmap->m_data, (p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height);
+
       result = SUCCESS;
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
