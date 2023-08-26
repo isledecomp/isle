@@ -31,18 +31,18 @@ public:
   __declspec(dllexport) MxBitmap();
   __declspec(dllexport) virtual ~MxBitmap(); // vtable+00
 
-  virtual MxResult vtable14(MxBitmap *p_bitmap);
-  virtual MxResult vtable18(MxBITMAPINFO *p_info);
-  virtual MxResult vtable1c(int p_width, int p_height, MxPalette *p_palette, int);
-  virtual MxResult LoadFile(HANDLE p_handle);
+  virtual MxResult ImportBitmap(MxBitmap *p_bitmap); // vtable+14
+  virtual MxResult ImportBitmapInfo(MxBITMAPINFO *p_info); // vtable+18
+  virtual MxResult SetSize(int p_width, int p_height, MxPalette *p_palette, int); // vtable+1c
+  virtual MxResult LoadFile(HANDLE p_handle); // vtable+20
   __declspec(dllexport) virtual MxLong Read(const char *p_filename); // vtable+24
   virtual int vtable28(int);
   virtual void vtable2c(int, int, int, int, int, int, int);
   virtual void vtable30(int, int, int, int, int, int, int);
   __declspec(dllexport) virtual MxPalette *CreatePalette(); // vtable+34
-  virtual void ImportPalette(MxPalette* p_palette);
-  virtual MxResult vtable3c(MxBool);
-  virtual MxResult CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
+  virtual void ImportPalette(MxPalette* p_palette); // vtable+38
+  virtual MxResult SetBitDepth(MxBool); // vtable+3c
+  virtual MxResult StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
 
 private:
   MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);

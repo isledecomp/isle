@@ -31,7 +31,7 @@ MxBitmap::~MxBitmap()
 }
 
 // OFFSET: LEGO1 0x100bcc40
-MxResult MxBitmap::vtable14(MxBitmap *p_bitmap)
+MxResult MxBitmap::ImportBitmap(MxBitmap *p_bitmap)
 {
   MxLong height;
   MxResult result = FAILURE;
@@ -71,7 +71,7 @@ MxResult MxBitmap::vtable14(MxBitmap *p_bitmap)
 }
 
 // OFFSET: LEGO1 0x100bcba0
-MxResult MxBitmap::vtable18(MxBITMAPINFO *p_info)
+MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO *p_info)
 {
   MxResult result = FAILURE;
   MxLong width  = p_info->bmiHeader.biWidth;
@@ -130,7 +130,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 }
 
 // OFFSET: LEGO1 0x100bcaa0
-MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int p_bitDepth)
+MxResult MxBitmap::SetSize(int p_width, int p_height, MxPalette *p_palette, int p_bitDepth)
 {
   MxResult ret = FAILURE;
   MxLong size = ((p_width + 3) & -4) * p_height;
@@ -152,7 +152,7 @@ MxResult MxBitmap::vtable1c(int p_width, int p_height, MxPalette *p_palette, int
       m_bmiHeader->biSizeImage = size;
 
       if (!ImportColorsToPalette(m_paletteData, p_palette)) {
-        if (!vtable3c(p_bitDepth)) {
+        if (!SetBitDepth(p_bitDepth)) {
           ret = SUCCESS;
         }
       }
@@ -312,7 +312,7 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 }
 
 // OFFSET: LEGO1 0x100bd2d0
-MxResult MxBitmap::vtable3c(MxBool p_bitDepth)
+MxResult MxBitmap::SetBitDepth(MxBool p_bitDepth)
 {
   MxResult ret = FAILURE;
   MxPalette *pal = NULL;
@@ -359,7 +359,7 @@ MxResult MxBitmap::vtable3c(MxBool p_bitDepth)
 }
 
 // OFFSET: LEGO1 0x100bd3e0
-MxResult MxBitmap::CopyColorData(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
+MxResult MxBitmap::StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
 {
   // Compression fix?
   if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {
