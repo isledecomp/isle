@@ -12,6 +12,8 @@ class MxDeviceModeFinder;
 class MxDirect3D : public MxDirectDraw
 {
 public:
+  MxDirect3D();
+
   inline MxDeviceModeFinder *GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
 
 private:
