@@ -40,6 +40,12 @@ public:
   virtual MxLong GetSomeTimingField(); // vtable+3c;
   virtual MxLong GetCurrentTime(); // vtable+40;
 
+  inline char *GetUnkData() { return m_unkData; }
+  inline MxU16 GetUnkLength() const { return m_unkLength; }
+  inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
+  inline DWORD GetFlags() const { return m_flags; }
+  inline void SetFlags(DWORD p_flags) { m_flags = p_flags; }
+
   void AppendData(MxU16 p_unkLength, const char *p_unkData);
 
 private:

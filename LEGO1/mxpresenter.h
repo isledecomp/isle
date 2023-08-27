@@ -1,14 +1,16 @@
 #ifndef MXPRESENTER_H
 #define MXPRESENTER_H
 
+#include "mxtypes.h"
 #include "mxcore.h"
+#include "mxdsaction.h"
+#include "mxomni.h"
 
 #include "mxcriticalsection.h"
 
 #include "decomp.h"
 
 class MxStreamController;
-class MxDSAction;
 
 class MxPresenter : public MxCore
 {
@@ -50,21 +52,26 @@ public:
   virtual unsigned char VTable0x48(unsigned char param); // vtable+0x48
   virtual undefined4 VTable0x4c(); // vtable+0x4c
   virtual undefined VTable0x50(undefined4, undefined4); // vtable+0x50
-  __declspec(dllexport) virtual void Enable(unsigned char); // vtable+0x54
+  __declspec(dllexport) virtual void Enable(MxBool); // vtable+0x54
 protected:
   __declspec(dllexport) void Init();
 public:
+
+  void FUN_100b5120(MxOmni *p_omni);
+  MxBool ActionIsEnabled();
 
   undefined4 m_unk0x8;
   undefined4 m_unk0xc;
   undefined4 m_unk0x10;
   undefined4 m_unk0x14;
   undefined4 m_unk0x18;
-  MxDSAction* m_action; // 0
-  MxCriticalSection m_criticalSection;
+  MxDSAction* m_action; // 0x1c
+  MxCriticalSection m_criticalSection; // 0x20
   undefined4 m_unk0x3c;
 
   // VTABLE 0x100d4d38
 };
+
+MxBool FUN_100b7050(char *, char *, char *);
 
 #endif // MXPRESENTER_H

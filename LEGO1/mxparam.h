@@ -3,8 +3,7 @@
 
 #include "mxomnicreateparambase.h"
 #include "mxtypes.h"
-
-class MxCore;
+#include "mxcore.h"
 
 // VTABLE 0x100d56e0
 class MxParam : public MxOmniCreateParamBase
