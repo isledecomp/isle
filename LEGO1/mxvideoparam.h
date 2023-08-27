@@ -24,12 +24,16 @@ public:
   inline MxVideoParamFlags &flags() { return m_flags; }
 
   inline void SetPalette(MxPalette *p_palette) { this->m_palette = p_palette; }
+  inline void SetBackBuffers(MxU32 p_backBuffers) { this->m_backBuffers = p_backBuffers; }
+
+  inline MxRect32 &GetRect() { return this->m_rect; }
   inline MxPalette *GetPalette() { return this->m_palette; }
+  inline MxU32 GetBackBuffers() { return this->m_backBuffers; }
 
 private:
   MxRect32 m_rect;
   MxPalette *m_palette;
-  unsigned int m_backBuffers;
+  MxU32 m_backBuffers;
   MxVideoParamFlags m_flags;
   int m_unk1c;
   char *m_deviceId;
