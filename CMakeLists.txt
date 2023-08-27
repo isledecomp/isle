@@ -132,6 +132,7 @@ add_library(lego1 SHARED
   LEGO1/mxloopingmidipresenter.cpp
   LEGO1/mxloopingsmkpresenter.cpp
   LEGO1/mxmatrix.cpp
+  LEGO1/mxmediamanager.cpp
   LEGO1/mxmediapresenter.cpp
   LEGO1/mxmidipresenter.cpp
   LEGO1/mxmusicpresenter.cpp
@@ -156,7 +157,6 @@ add_library(lego1 SHARED
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
-  LEGO1/mxunknown100dc6b0.cpp
   LEGO1/mxunknown100dc6e0.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp

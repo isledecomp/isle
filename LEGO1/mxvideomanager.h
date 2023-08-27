@@ -1,13 +1,13 @@
 #ifndef MXVIDEOMANAGER_H
 #define MXVIDEOMANAGER_H
 
-#include "mxunknown100dc6b0.h"
 #include "mxdisplaysurface.h"
+#include "mxmediamanager.h"
 #include "mxvideoparam.h"
 
 // VTABLE 0x100dc810
 // SIZE 0x64
-class MxVideoManager : public MxUnknown100dc6b0
+class MxVideoManager : public MxMediaManager
 {
 public:
   virtual ~MxVideoManager();

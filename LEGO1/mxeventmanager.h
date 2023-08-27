@@ -1,11 +1,11 @@
 #ifndef MXEVENTMANAGER_H
 #define MXEVENTMANAGER_H
 
-#include "mxunknown100dc6b0.h"
+#include "mxmediamanager.h"
 
 // VTABLE 0x100dc900
 // SIZE 0x2c
-class MxEventManager : public MxUnknown100dc6b0
+class MxEventManager : public MxMediaManager
 {
 public:
   MxEventManager();
