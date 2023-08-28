@@ -1,5 +1,7 @@
 #include "legophonemepresenter.h"
 
+DECOMP_SIZE_ASSERT(LegoPhonemePresenter, 0x88);
+
 // OFFSET: LEGO1 0x1004e180
 LegoPhonemePresenter::LegoPhonemePresenter()
 {
