@@ -5,7 +5,7 @@ class MxRect32
 {
 public:
   MxRect32() { }
-  MxRect32(int p_left, int p_top, int p_right, int p_bottom)
+  MxRect32(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom)
   {
     this->m_left = p_left;
     this->m_top = p_top;
@@ -13,10 +13,10 @@ public:
     this->m_bottom = p_bottom;
   }
 
-  int m_left;
-  int m_top;
-  int m_right;
-  int m_bottom;
+  MxS32 m_left;
+  MxS32 m_top;
+  MxS32 m_right;
+  MxS32 m_bottom;
 };
 
 #endif // MXRECT32_H

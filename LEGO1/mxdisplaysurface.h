@@ -20,7 +20,7 @@ public:
   void Reset();
 
   virtual MxResult Init(MxVideoParam &p_videoParam, LPDIRECTDRAWSURFACE p_ddSurface1, LPDIRECTDRAWSURFACE p_ddSurface2, LPDIRECTDRAWCLIPPER p_ddClipper);
-  virtual MxResult Create(MxVideoParam *p_videoParam);
+  virtual MxResult Create(MxVideoParam &p_videoParam);
   virtual void Clear();
   virtual void SetPalette(MxPalette *p_palette);
   virtual void vtable24(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);

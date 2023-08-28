@@ -38,6 +38,7 @@ public:
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   static void SetInstance(MxOmni* instance);
+  HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
   MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }
   MxTickleManager* GetTickleManager() const { return this->m_tickleManager; }
@@ -53,7 +54,7 @@ protected:
   static MxOmni* g_instance;
 
   MxString m_mediaPath; // 0x8
-  HWND *m_windowHandle; // 0x18;
+  HWND m_windowHandle; // 0x18;
   MxObjectFactory *m_objectFactory; // 0x1C
   MxVariableTable* m_variableTable; //0x20
   MxTickleManager* m_tickleManager; //0x24
