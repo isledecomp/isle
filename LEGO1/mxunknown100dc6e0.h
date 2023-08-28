@@ -1,10 +1,10 @@
 #ifndef MXUNKNOWN100DC6E0_H
 #define MXUNKNOWN100DC6E0_H
 
-#include "mxunknown100dc6b0.h"
+#include "mxmediamanager.h"
 
 // VTABLE 0x100dc6e0
-class MxUnknown100dc6e0 : public MxUnknown100dc6b0
+class MxUnknown100dc6e0 : public MxMediaManager
 {
 public:
   MxUnknown100dc6e0();
