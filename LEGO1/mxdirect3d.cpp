@@ -22,5 +22,5 @@ void MxDirect3D::Clear()
     this->m_pDirect3d->Release();
     this->m_pDirect3d = NULL;
   }
-  Destroy();
+  MxDirectDraw::DestroyButNotDirectDraw();
 }
