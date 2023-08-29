@@ -13,7 +13,6 @@ float g_userMaxLod = 3.6f;
 // 0x1010104c
 float g_partsThreshold = 1000.0f;
 
-
 // OFFSET: LEGO1 0x100a5e00
 float RealtimeView::GetUserMaxLOD()
 {
