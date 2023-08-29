@@ -102,6 +102,7 @@ add_library(lego1 SHARED
   LEGO1/mxcontrolpresenter.cpp
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
+  LEGO1/mxdirect3d.cpp
   LEGO1/mxdirectdraw.cpp
   LEGO1/mxdirect3d.cpp
   LEGO1/mxdiskstreamcontroller.cpp
@@ -206,7 +207,7 @@ if (ISLE_USE_DX5)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid winmm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)

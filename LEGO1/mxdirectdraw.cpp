@@ -1,8 +1,8 @@
-
 #include "mxdirectdraw.h"
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880);
+DECOMP_SIZE_ASSERT(MxDirectDraw::DeviceModesInfo, 0x17c);
 
 #ifndef DDSCAPS_3DDEVICE
 #define DDSCAPS_3DDEVICE 0x00002000l
@@ -28,6 +28,12 @@ void EnableResizing(HWND hwnd, BOOL flag)
   {
     SetWindowLong(hwnd, GWL_STYLE, dwStyle);
   }
+}
+
+// OFFSET: LEGO1 0x1009efb0
+MxDirectDraw::DeviceModesInfo::DeviceModesInfo()
+{
+  memset(this, 0, sizeof(*this));
 }
 
 // OFFSET: LEGO1 0x1009EFD0
