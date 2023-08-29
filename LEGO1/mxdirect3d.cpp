@@ -67,6 +67,7 @@ void MxDirect3D::Destroy()
 
   // This should get deleted by MxDirectDraw::Destroy
   if (m_pCurrentDeviceModesList) {
+    // delete m_pCurrentDeviceModesList; // missing?
     m_pCurrentDeviceModesList = NULL;
   }
 
@@ -129,10 +130,15 @@ MxDeviceModeFinder::~MxDeviceModeFinder()
 }
 
 // OFFSET: LEGO1 0x1009c070 STUB
-BOOL MxDirect3D::FUN_1009c070()
+BOOL MxDeviceEnumerate::FUN_1009c070()
 {
-  //DirectDrawCreate()
-  //BuildErrorString("GetCaps failed: %s\n", xxx);
+  // TODO
+  // HRESULT ret = DirectDrawCreate();
+  HRESULT ret = 0;
+  if (ret) {
+    MxDirect3D::BuildErrorString("GetCaps failed: %s\n",
+                                 EnumerateErrorToString(ret));
+  }
   //IDirect3D2_EnumDevices
   return TRUE;
 }
@@ -148,13 +154,14 @@ void MxDirect3D::BuildErrorString(const char *p_format, char *p_msg)
 // OFFSET: LEGO1 0x1009c6c0
 MxResult MxDeviceEnumerate::_DoEnumerate()
 {
+  // TODO: what does ECX refer to in this context?
   if (m_unk010_flag)
     return FAILURE;
 
   HRESULT ret = DirectDrawEnumerate(EnumerateCallback, this);
   if (ret) {
     MxDirect3D::BuildErrorString("DirectDrawEnumerate returned error %s\n",
-                                 MxDirect3D::D3DErrorToString(ret));
+                                 EnumerateErrorToString(ret));
     return FAILURE;
   }
 
@@ -165,11 +172,12 @@ MxResult MxDeviceEnumerate::_DoEnumerate()
 // OFFSET: LEGO1 0x1009c710 STUB
 BOOL FAR PASCAL EnumerateCallback(GUID FAR *, LPSTR, LPSTR, LPVOID)
 {
+  // TODO
   return FALSE;
 }
 
 // OFFSET: LEGO1 0x1009c730 STUB
-char *MxDirect3D::D3DErrorToString(HRESULT p_error)
+char *MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
   // TODO: This is a list of error messages, similar to the function in
   // MxDirectDraw, except that this one now contains the Direct3D errors.

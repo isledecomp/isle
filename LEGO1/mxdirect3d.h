@@ -18,18 +18,21 @@ public:
   MxDirectDraw::DeviceModesInfo *m_deviceInfo; // +0xe0
 };
 
+// VTABLE 0x100db814 (or 0x100d9cc8?)
 // SIZE 0x198
 class MxDeviceEnumerate
 {
 public:
   MxDeviceEnumerate();
-  MxResult _DoEnumerate();
+  virtual MxResult _DoEnumerate();
+  BOOL FUN_1009c070();
 
-  undefined4 m_unk000;
+  static char *EnumerateErrorToString(HRESULT p_error);
+
   undefined4 m_unk004;
   undefined4 m_unk008;
   undefined4 m_unk00c;
-  BOOL m_unk010_flag; // +0x20
+  MxBool m_unk010_flag; // +0x10
 
   undefined4 m_unknown[97];
 };
@@ -59,11 +62,8 @@ public:
 
   BOOL CreateIDirect3D();
   BOOL D3DSetMode();
-  BOOL FUN_1009c070();
-  MxResult _DoEnumerate();
 
   static void BuildErrorString(const char *, char *);
-  static char *D3DErrorToString(HRESULT p_error);
 
 private:
   MxDeviceModeFinder *m_pDeviceModeFinder; // +0x880
