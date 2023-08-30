@@ -1,4 +1,3 @@
-
 #ifndef MXDIRECTDRAW_H
 #define MXDIRECTDRAW_H
 
@@ -7,6 +6,7 @@
 
 extern BOOL g_is_PALETTEINDEXED8;
 
+// VTABLE 0x100db818
 // SIZE 0x880
 class MxDirectDraw
 {
@@ -37,11 +37,12 @@ public:
     DDCAPS m_ddcaps;
     void* a_178;
 
+    DeviceModesInfo();
     ~DeviceModesInfo();
   };
 
 
-private:
+protected:
   BOOL m_bOnlySoftRender;
   BOOL m_bFlipSurfaces;
   IDirectDraw* m_pDirectDraw;
@@ -94,7 +95,7 @@ public:
   virtual void DestroyButNotDirectDraw();
   virtual const char* ErrorToString(HRESULT error);
 
-private:
+protected:
   BOOL CacheOriginalPaletteEntries();
   HRESULT CreateDDSurface(
     LPDDSURFACEDESC a2,
