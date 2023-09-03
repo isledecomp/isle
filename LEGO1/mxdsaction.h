@@ -47,8 +47,8 @@ public:
 
   void AppendData(MxU16 p_unkLength, const char *p_unkData);
 
-  MxU32 GetFlags() { return this->m_flags; } 
-  void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
+  inline MxU32 GetFlags() { return this->m_flags; } 
+  inline void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
 
 private:
   MxU32 m_sizeOnDisk;
