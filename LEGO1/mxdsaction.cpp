@@ -94,8 +94,8 @@ void MxDSAction::Deserialize(char **p_source, MxS16 p_unk24)
 {
   MxDSObject::Deserialize(p_source, p_unk24);
 
-  this->m_flags = *(DWORD*) *p_source;
-  *p_source += sizeof(DWORD);
+  this->m_flags = *(MxU32*) *p_source;
+  *p_source += sizeof(MxU32);
   this->m_startTime = *(DWORD*) *p_source;
   *p_source += sizeof(DWORD);
   this->m_duration = *(MxLong*) *p_source;

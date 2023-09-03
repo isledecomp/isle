@@ -10,6 +10,11 @@
 class MxDSAction : public MxDSObject
 {
 public:
+  enum
+  {
+    Flag_Enabled = 0x20,
+  };
+
   __declspec(dllexport) MxDSAction();
   __declspec(dllexport) virtual ~MxDSAction();
 
@@ -42,9 +47,12 @@ public:
 
   void AppendData(MxU16 p_unkLength, const char *p_unkData);
 
+  MxU32 GetFlags() { return this->m_flags; } 
+  void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
+
 private:
   MxU32 m_sizeOnDisk;
-  DWORD m_flags;
+  MxU32 m_flags;
   DWORD m_startTime;
 
 protected:
