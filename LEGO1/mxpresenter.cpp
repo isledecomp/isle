@@ -143,7 +143,6 @@ void MxPresenter::Unk5Tickle()
   m_currentTickleState = TickleState_Done;
 }
 
-
 // OFFSET: LEGO1 0x1000bee0
 void MxPresenter::DoneTickle()
 {
