@@ -1,10 +1,6 @@
 #ifndef MXCRITICALSECTION_H
 #define MXCRITICALSECTION_H
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-
 #include <windows.h>
 
 class MxCriticalSection
