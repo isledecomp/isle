@@ -1,6 +1,10 @@
 #ifndef MX_SEMAPHORE_H
 #define MX_SEMAPHORE_H
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include "mxtypes.h"
 #include <windows.h>
 

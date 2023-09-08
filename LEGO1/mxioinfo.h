@@ -1,6 +1,10 @@
 #ifndef MXIOINFO_H
 #define MXIOINFO_H
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <windows.h>
 #include <mmsystem.h>
 

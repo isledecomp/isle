@@ -1,6 +1,10 @@
 #ifndef MXVIDEOPARAMFLAGS_H
 #define MXVIDEOPARAMFLAGS_H
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <windows.h>
 
 // Must be union with struct for match.
