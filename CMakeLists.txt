@@ -46,8 +46,8 @@ add_library(lego1 SHARED
   LEGO1/jukeboxentity.cpp
   LEGO1/jukeboxstate.cpp
   LEGO1/legoact2state.cpp
-  LEGO1/legoactor.cpp
   LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoactor.cpp
   LEGO1/legoanimactor.cpp
   LEGO1/legoanimationmanager.cpp
@@ -102,6 +102,7 @@ add_library(lego1 SHARED
   LEGO1/mxcontrolpresenter.cpp
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
+  LEGO1/mxdirect3d.cpp
   LEGO1/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
@@ -118,10 +119,10 @@ add_library(lego1 SHARED
   LEGO1/mxdsparallelaction.cpp
   LEGO1/mxdsselectaction.cpp
   LEGO1/mxdsserialaction.cpp
-  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssound.cpp
   LEGO1/mxdssource.cpp
   LEGO1/mxdsstill.cpp
+  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssubscriber.cpp
   LEGO1/mxentity.cpp
   LEGO1/mxeventmanager.cpp
@@ -205,7 +206,7 @@ if (ISLE_USE_DX5)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid winmm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
