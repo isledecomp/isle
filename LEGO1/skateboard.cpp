@@ -1,4 +1,5 @@
 #include "skateboard.h"
+#include "mxomni.h"
 
 #include "decomp.h"
 

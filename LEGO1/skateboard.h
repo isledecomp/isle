@@ -3,7 +3,6 @@
 
 #include "decomp.h"
 #include "islepathactor.h"
-#include "mxomni.h"
 
 // VTABLE 0x100d55f0
 // SIZE 0x168

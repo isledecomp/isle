@@ -26,7 +26,7 @@ public:
     return !strcmp(name, LegoPathActor::ClassName()) || LegoActor::IsA(name);
   }
 protected:
-  // TODO: the types. IslePathActor-inherited classes (pizza, jetski, etc.) needs these as public:
+  // TODO: the types
   undefined unk78[0xc4];
   MxFloat m_unk13c;
   MxS32 m_unk140;
