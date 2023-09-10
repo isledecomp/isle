@@ -144,10 +144,15 @@ BOOL MxDeviceEnumerate::FUN_1009c070()
 }
 
 // OFFSET: LEGO1 0x1009c4c0
-void MxDirect3D::BuildErrorString(const char *p_format, char *p_msg)
+void MxDirect3D::BuildErrorString(const char *p_format, ...)
 {
+  va_list args;
   char buf[512];
-  vsprintf(buf, p_format, p_msg);
+
+  va_start(args, p_format);
+  vsprintf(buf, p_format, args);
+  va_end(args);
+  
   OutputDebugString(buf);
 }
 
@@ -177,7 +182,7 @@ BOOL FAR PASCAL EnumerateCallback(GUID FAR *, LPSTR, LPSTR, LPVOID)
 }
 
 // OFFSET: LEGO1 0x1009c730 STUB
-char *MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
+char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
   // TODO: This is a list of error messages, similar to the function in
   // MxDirectDraw, except that this one now contains the Direct3D errors.

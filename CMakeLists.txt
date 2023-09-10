@@ -46,8 +46,8 @@ add_library(lego1 SHARED
   LEGO1/jukeboxentity.cpp
   LEGO1/jukeboxstate.cpp
   LEGO1/legoact2state.cpp
-  LEGO1/legoactor.cpp
   LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoactor.cpp
   LEGO1/legoanimactor.cpp
   LEGO1/legoanimationmanager.cpp
@@ -102,8 +102,8 @@ add_library(lego1 SHARED
   LEGO1/mxcontrolpresenter.cpp
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
-  LEGO1/mxdirectdraw.cpp
   LEGO1/mxdirect3d.cpp
+  LEGO1/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
   LEGO1/mxdisplaysurface.cpp
@@ -119,10 +119,10 @@ add_library(lego1 SHARED
   LEGO1/mxdsparallelaction.cpp
   LEGO1/mxdsselectaction.cpp
   LEGO1/mxdsserialaction.cpp
-  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssound.cpp
   LEGO1/mxdssource.cpp
   LEGO1/mxdsstill.cpp
+  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssubscriber.cpp
   LEGO1/mxentity.cpp
   LEGO1/mxeventmanager.cpp

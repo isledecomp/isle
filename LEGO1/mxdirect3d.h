@@ -27,7 +27,7 @@ public:
   virtual MxResult _DoEnumerate();
   BOOL FUN_1009c070();
 
-  static char *EnumerateErrorToString(HRESULT p_error);
+  char *EnumerateErrorToString(HRESULT p_error);
 
   undefined4 m_unk004;
   undefined4 m_unk008;
@@ -63,7 +63,7 @@ public:
   BOOL CreateIDirect3D();
   BOOL D3DSetMode();
 
-  static void BuildErrorString(const char *, char *);
+  static void BuildErrorString(const char *, ...);
 
 private:
   MxDeviceModeFinder *m_pDeviceModeFinder; // +0x880
