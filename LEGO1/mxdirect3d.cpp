@@ -182,7 +182,7 @@ BOOL FAR PASCAL EnumerateCallback(GUID FAR *, LPSTR, LPSTR, LPVOID)
 }
 
 // OFFSET: LEGO1 0x1009c730 STUB
-char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
+char *MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
   // TODO: This is a list of error messages, similar to the function in
   // MxDirectDraw, except that this one now contains the Direct3D errors.
