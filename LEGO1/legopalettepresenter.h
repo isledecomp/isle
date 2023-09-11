@@ -1,6 +1,7 @@
 #ifndef LEGOPALETTEPRESENTER_H
 #define LEGOPALETTEPRESENTER_H
 
+#include "decomp.h"
 #include "mxvideopresenter.h"
 
 // VTABLE 0x100d9aa0
@@ -27,7 +28,7 @@ public:
 private:
   void Init();
 
-  MxS32 m_unk64;
+  undefined4 m_unk64;
 };
 
 
