@@ -9,8 +9,11 @@ MxLong MxMediaPresenter::Tickle()
   return 0;
 }
 
-// OFFSET: LEGO1 0x100b54e0 STUB
+// OFFSET: LEGO1 0x100b54e0
 void MxMediaPresenter::Init()
 {
-  // TODO
+  this->m_unk40 = NULL;
+  this->m_unk44 = NULL;
+  this->m_unk48 = NULL;
+  this->m_unk4c = NULL;
 }
