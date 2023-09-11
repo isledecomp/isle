@@ -1,5 +1,7 @@
 #include "legopalettepresenter.h"
 
+DECOMP_SIZE_ASSERT(LegoPalettePresenter, 0x68)
+
 // OFFSET: LEGO1 0x10079e50
 LegoPalettePresenter::LegoPalettePresenter()
 {
@@ -12,8 +14,8 @@ LegoPalettePresenter::~LegoPalettePresenter()
   // TODO
 }
 
-// OFFSET: LEGO1 0x1007a0d0 STUB
+// OFFSET: LEGO1 0x1007a0d0
 void LegoPalettePresenter::Init()
 {
-  // TODO
+  this->m_unk64 = 0;
 }

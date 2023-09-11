@@ -27,6 +27,7 @@ public:
 private:
   void Init();
 
+  MxS32 m_unk64;
 };
 
 
