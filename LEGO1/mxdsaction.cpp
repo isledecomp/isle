@@ -13,8 +13,8 @@ MxDSAction::MxDSAction()
 {
   this->m_flags = 32;
   this->m_startTime = INT_MIN;
-  this->m_unkData = NULL;
-  this->m_unkLength = 0;
+  this->m_extraData = NULL;
+  this->m_extraLength = 0;
   this->m_duration = INT_MIN;
   this->m_loopCount = -1;
 
@@ -44,7 +44,7 @@ MxDSAction::MxDSAction()
 // OFFSET: LEGO1 0x100ada80
 MxDSAction::~MxDSAction()
 {
-  delete[] this->m_unkData;
+  delete[] this->m_extraData;
 }
 
 // OFFSET: LEGO1 0x100adaf0
@@ -60,7 +60,7 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   this->m_direction.CopyFrom(p_dsAction.m_direction);
   this->m_up.CopyFrom(p_dsAction.m_up);
 
-  AppendData(p_dsAction.m_unkLength, p_dsAction.m_unkData);
+  AppendData(p_dsAction.m_extraLength, p_dsAction.m_extraData);
   this->m_unk84 = p_dsAction.m_unk84;
   this->m_unk88 = p_dsAction.m_unk88;
   this->m_omni = p_dsAction.m_omni;
@@ -83,7 +83,7 @@ MxU32 MxDSAction::GetSizeOnDisk()
 {
   MxU32 totalSizeOnDisk;
 
-  totalSizeOnDisk = MxDSObject::GetSizeOnDisk() + 90 + this->m_unkLength;
+  totalSizeOnDisk = MxDSObject::GetSizeOnDisk() + 90 + this->m_extraLength;
   this->m_sizeOnDisk = totalSizeOnDisk - MxDSObject::GetSizeOnDisk();
 
   return totalSizeOnDisk;
@@ -186,13 +186,13 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
     this->m_up[2] = p_dsAction.m_up[2];
 
   // TODO
-  MxU16 unkLength = p_dsAction.m_unkLength;
-  char *unkData = p_dsAction.m_unkData;
-  if (unkLength && unkData) {
-    if (!this->m_unkData || !strncmp("XXX", this->m_unkData, 3)) {
-      delete[] this->m_unkData;
-      this->m_unkLength = 0;
-      AppendData(unkLength, unkData);
+  MxU16 extraLength = p_dsAction.m_extraLength;
+  char *extraData = p_dsAction.m_extraData;
+  if (extraLength && extraData) {
+    if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
+      delete[] this->m_extraData;
+      this->m_extraLength = 0;
+      AppendData(extraLength, extraData);
     }
   }
 }
@@ -222,29 +222,29 @@ MxLong MxDSAction::GetCurrentTime()
 }
 
 // OFFSET: LEGO1 0x100ade60
-void MxDSAction::AppendData(MxU16 p_unkLength, const char *p_unkData)
+void MxDSAction::AppendData(MxU16 p_extraLength, const char *p_extraData)
 {
-  if (this->m_unkData == p_unkData || !p_unkData)
+  if (this->m_extraData == p_extraData || !p_extraData)
     return;
 
-  if (this->m_unkLength) {
-    char *concat = new char[p_unkLength + this->m_unkLength + sizeof(g_unkSep)];
-    memcpy(concat, this->m_unkData, this->m_unkLength);
+  if (this->m_extraLength) {
+    char *concat = new char[p_extraLength + this->m_extraLength + sizeof(g_unkSep)];
+    memcpy(concat, this->m_extraData, this->m_extraLength);
 
-    *(MxU16*) &concat[this->m_unkLength] = g_unkSep;
-    memcpy(&concat[this->m_unkLength + sizeof(g_unkSep)], p_unkData, p_unkLength);
+    *(MxU16*) &concat[this->m_extraLength] = g_unkSep;
+    memcpy(&concat[this->m_extraLength + sizeof(g_unkSep)], p_extraData, p_extraLength);
 
-    this->m_unkLength += p_unkLength + sizeof(g_unkSep);
-    delete[] this->m_unkData;
-    this->m_unkData = concat;
+    this->m_extraLength += p_extraLength + sizeof(g_unkSep);
+    delete[] this->m_extraData;
+    this->m_extraData = concat;
   }
   else {
-    char *copy = new char[p_unkLength];
-    this->m_unkData = copy;
+    char *copy = new char[p_extraLength];
+    this->m_extraData = copy;
 
     if (copy) {
-      this->m_unkLength = p_unkLength;
-      memcpy(copy, p_unkData, p_unkLength);
+      this->m_extraLength = p_extraLength;
+      memcpy(copy, p_extraData, p_extraLength);
     }
   }
 }

@@ -31,17 +31,17 @@ void MxPresenter::ParseExtra()
 {
 
   MxAutoLocker lock(&m_criticalSection);
-  MxU32 len = m_action->GetUnkLength();
-  char *unk_data = m_action->GetUnkData();
+  MxU32 len = m_action->GetExtraLength();
+  char *extraData = m_action->GetExtraData();
 
   if (len) {
     len &= MAXWORD;
-    char t_actionData[512];
-    memcpy(t_actionData, unk_data, len);
-    t_actionData[len] = '\0';
+    char extraCopy[512];
+    memcpy(extraCopy, extraData, len);
+    extraCopy[len] = '\0';
 
     char t_worldValue[512];
-    if (KeyValueStringParse(t_worldValue, g_strWORLD, t_actionData)) {
+    if (KeyValueStringParse(t_worldValue, g_strWORLD, extraCopy)) {
       char *token = strtok(t_worldValue, g_parseExtraTokens);
       char t_token[256];
       strcpy(t_token, token);
@@ -51,8 +51,7 @@ void MxPresenter::ParseExtra()
 
       int result = MxOmni::GetInstance()->vtable0x30(t_token, val, this);
       
-      // TODO: magic number for flag
-      m_action->SetFlags(m_action->GetFlags() | 128);
+      m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Parsed);
       
       if (result)
         SendTo_unkPresenter(MxOmni::GetInstance());
