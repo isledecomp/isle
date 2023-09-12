@@ -42,6 +42,55 @@ void MxOmni::Init()
   m_unk64 = NULL;
 }
 
+// OFFSET: LEGO1 0x100b0090 STUB
+void MxOmni::vtable0x20()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b00c0 STUB
+void MxOmni::DeleteObject()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b09a0 STUB
+void MxOmni::DoesEntityExist()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b00e0 STUB
+void MxOmni::vtable0x2c()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100aefb0 STUB
+int MxOmni::vtable0x30(char*, int, MxCore*)
+{
+  // TODO
+  return 0;
+}
+
+// OFFSET: LEGO1 0x100aefc0 STUB
+void MxOmni::NotifyCurrentEntity()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b09d0 STUB
+void MxOmni::StartTimer()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b0a00 STUB
+void MxOmni::vtable0x3c()
+{
+  // TODO
+}
+
 // OFFSET: LEGO1 0x100b0690
 void MxOmni::DestroyInstance()
 {

@@ -49,6 +49,9 @@ public:
 
   inline MxU32 GetFlags() { return this->m_flags; } 
   inline void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
+  inline char *GetUnkData() { return m_unkData; }
+  inline MxU16 GetUnkLength() const { return m_unkLength; }
+  inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
 private:
   MxU32 m_sizeOnDisk;

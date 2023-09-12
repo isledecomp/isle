@@ -43,6 +43,42 @@ void MakeSourceName(char *, const char *)
   // TODO
 }
 
+// OFFSET: LEGO1 0x100b7050
+MxBool KeyValueStringParse(char *p_outputValue, char *p_key, char *p_source)
+{
+  MxBool didMatch = FALSE;
+
+  MxS16 len = strlen(p_source);
+  char *temp = new char[len + 1];
+  strcpy(temp, p_source);
+
+  char *token = strtok(temp, ", \t\r\n:");
+  while (token) {
+    len -= (strlen(token) + 1);
+
+    if (strcmpi(token, p_key) == 0) {
+      if (p_outputValue && len > 0) {
+        char *cur = &token[strlen(p_key)];
+        cur++;
+        while (*cur != ',') {
+          if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r')
+            break;
+          *p_outputValue++ = *cur++;
+        }
+        *p_outputValue = '\0';
+      }
+
+      didMatch = TRUE;
+      break;
+    }
+
+    token = strtok(NULL, ", \t\r\n:");
+  }
+
+  delete[] temp;
+  return didMatch;
+}
+
 // OFFSET: LEGO1 0x100b7210
 void SetOmniUserMessage(void (*p_userMsg)(const char *,int))
 {

@@ -4,6 +4,7 @@
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxcriticalsection.h"
+#include "mxomni.h"
 
 #include "decomp.h"
 
@@ -68,6 +69,7 @@ public:
 
 protected:
   __declspec(dllexport) void Init();
+  void SendTo_unkPresenter(MxOmni *);
 
 private:
   MxS32 m_currentTickleState; // 0x8
@@ -77,7 +79,7 @@ private:
   undefined4 m_unk0x18;
   MxDSAction* m_action; // 0
   MxCriticalSection m_criticalSection;
-  undefined4 m_unk0x3c;
+  MxPresenter *m_unkPresenter; // 0x3c
 };
 
 #endif // MXPRESENTER_H
