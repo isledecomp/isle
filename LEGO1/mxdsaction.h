@@ -13,6 +13,7 @@ public:
   enum
   {
     Flag_Enabled = 0x20,
+    Flag_Parsed = 0x80,
   };
 
   __declspec(dllexport) MxDSAction();
@@ -45,10 +46,13 @@ public:
   virtual MxLong GetSomeTimingField(); // vtable+3c;
   virtual MxLong GetCurrentTime(); // vtable+40;
 
-  void AppendData(MxU16 p_unkLength, const char *p_unkData);
+  void AppendData(MxU16 p_extraLength, const char *p_extraData);
 
   inline MxU32 GetFlags() { return this->m_flags; } 
   inline void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
+  inline char *GetExtraData() { return m_extraData; }
+  inline MxU16 GetExtraLength() const { return m_extraLength; }
+  inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
 private:
   MxU32 m_sizeOnDisk;
@@ -63,8 +67,8 @@ private:
   MxVector3Data m_location;
   MxVector3Data m_direction;
   MxVector3Data m_up;
-  char *m_unkData;
-  MxU16 m_unkLength;
+  char *m_extraData;
+  MxU16 m_extraLength;
   undefined4 m_unk84;
   undefined4 m_unk88;
   MxOmni *m_omni; // 0x8c

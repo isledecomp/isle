@@ -37,6 +37,14 @@ public:
   virtual void Init(); // vtable+14
   virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
+  virtual void vtable0x20(); // vtable+20
+  virtual void DeleteObject(); // vtable+24
+  virtual void DoesEntityExist(); // vtable+28
+  virtual void vtable0x2c(); // vtable+2c
+  virtual int vtable0x30(char*, int, MxCore*); // vtable+30
+  virtual void NotifyCurrentEntity(); // vtable+34
+  virtual void StartTimer(); // vtable+38
+  virtual void vtable0x3c(); // vtable+3c
   static void SetInstance(MxOmni* instance);
   HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
