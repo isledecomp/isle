@@ -30,6 +30,8 @@ public:
     m_count = 0;
     m_customDestructor = Destroy;
   }
+  // OFFSET: LEGO1 0x1001cdd0
+  virtual ~MxListParent() {}
 
   // OFFSET: LEGO1 0x1001cd30
   static void Destroy(T *) {};
@@ -60,12 +62,13 @@ protected:
 };
 
 template <class T>
-// OFFSET: LEGO1 0x1001cfe0
+// OFFSET: LEGO1 0x1001ce20
 MxList<T>::~MxList()
 {
-  MxListEntry<T> *t = m_first;
+  for (MxListEntry<T> *t = m_first;;) {
+    if (!t)
+      break;
 
-  while (t) {
     MxListEntry<T> *next = t->m_next;
     m_customDestructor(t->m_obj);
     delete t;
