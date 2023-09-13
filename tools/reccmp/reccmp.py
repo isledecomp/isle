@@ -463,11 +463,12 @@ for subdir, dirs, files in os.walk(source):
             else:
               percenttext += colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
 
+          if args.print_rec_addr:
+            addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
+          else:
+            addrs = hex(addr)
+
           if not verbose:
-            if args.print_rec_addr:
-              addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
-            else:
-              addrs = hex(addr)
             print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
 
           function_count += 1
@@ -477,16 +478,16 @@ for subdir, dirs, files in os.walk(source):
           if recinfo.size:
             udiff = difflib.unified_diff(origasm, recompasm, n=10)
 
-            # If verbose, print the diff for that funciton to the output
+            # If verbose, print the diff for that function to the output
             if verbose:
               if effective_ratio == 1.0:
                 ok_text = "OK!" if plain else (colorama.Fore.GREEN + "✨ OK! ✨" + colorama.Style.RESET_ALL)
                 if ratio == 1.0:
                   print("%s: %s 100%% match.\n\n%s\n\n" %
-                        (hex(addr), recinfo.name, ok_text))
+                        (addrs, recinfo.name, ok_text))
                 else:
                   print("%s: %s Effective 100%% match. (Differs in register allocation only)\n\n%s (still differs in register allocation)\n\n" %
-                        (hex(addr), recinfo.name, ok_text))
+                        (addrs, recinfo.name, ok_text))
               else:
                 for line in udiff:
                   if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
