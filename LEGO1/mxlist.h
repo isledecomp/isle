@@ -5,13 +5,14 @@
 #include "mxcore.h"
 
 template <class T>
+// SIZE 0xc
 class MxListEntry
 {
 public:
-  MxListEntry<T>() {}
-  MxListEntry<T>(T *p_obj) {
+  MxListEntry() {}
+  MxListEntry(T *p_obj, MxListEntry *p_prev) {
     m_obj = p_obj;
-    m_prev = NULL;
+    m_prev = p_prev;
     m_next = NULL;
   }
 
@@ -38,7 +39,6 @@ public:
 
   // OFFSET: LEGO1 0x1001cd20
   virtual MxS8 Compare(T *, T *) = 0;
-
 protected:
   MxU32 m_count;                   // +0x8
   void (*m_customDestructor)(T *); // +0xc
@@ -56,6 +56,8 @@ public:
   }
 
   virtual ~MxList();
+
+  void Append(T*);
 protected:
   MxListEntry<T> *m_first; // +0x10
   MxListEntry<T> *m_last;  // +0x14
@@ -78,6 +80,21 @@ MxList<T>::~MxList()
   m_count = 0;
   m_last = NULL;
   m_first = NULL;
+}
+
+template <class T>
+inline void MxList<T>::Append(T *p_newobj)
+{
+  MxListEntry<T> *currentLast = this->m_last;
+  MxListEntry<T> *newEntry = new MxListEntry<T>(p_newobj, currentLast);
+
+  if (currentLast)
+    currentLast->m_next = newEntry;
+  else
+    this->m_first = newEntry;
+    
+  this->m_last = newEntry;
+  this->m_count++;
 }
 
 #endif // MXLIST_H
