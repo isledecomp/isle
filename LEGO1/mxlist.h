@@ -101,6 +101,18 @@ public:
     m_list->m_count--;
     m_match = NULL;
   }
+
+  MxBool Next(T*& p_obj) {
+    if (!m_match)
+      m_match = m_list->m_first;
+    else
+      m_match = m_match->m_next;
+
+    if (m_match)
+      p_obj = m_match->m_obj;
+
+    return m_match != NULL;
+  }
 private:
   MxList<T> *m_list;
   MxListEntry<T> *m_match;

@@ -1,5 +1,6 @@
 #include "mxmediamanager.h"
 #include "mxautolocker.h"
+#include "mxpresenter.h"
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
@@ -76,10 +77,13 @@ void MxMediaManager::RemovePresenter(MxPresenter &p_presenter)
     cursor.Detach();
 }
 
-// OFFSET: LEGO1 0x100b8ac0 STUB
+// OFFSET: LEGO1 0x100b8ac0
 void MxMediaManager::StopPresenters()
 {
   MxAutoLocker lock(&this->m_criticalSection);
-  
-  // Call EndAction on all presenters in list
+  MxPresenter *presenter;
+  MxPresenterListCursor cursor(this->m_presenters);
+
+  while (cursor.Next(presenter))
+    presenter->EndAction();
 }
