@@ -4,6 +4,8 @@
 
 DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
 
+typedef MxListCursorChildChild<MxPresenter> MxPresenterListCursor;
+
 // OFFSET: LEGO1 0x100b84c0
 MxMediaManager::MxMediaManager()
 {
@@ -64,12 +66,14 @@ void MxMediaManager::AddPresenter(MxPresenter &p_presenter)
   this->m_presenters->Append(&p_presenter);
 }
 
-// OFFSET: LEGO1 0x100b8980 STUB
+// OFFSET: LEGO1 0x100b8980
 void MxMediaManager::RemovePresenter(MxPresenter &p_presenter)
 {
   MxAutoLocker lock(&this->m_criticalSection);
+  MxPresenterListCursor cursor(this->m_presenters);
 
-  // Remove element from m_presenters
+  if (cursor.Find(&p_presenter))
+    cursor.Detach();
 }
 
 // OFFSET: LEGO1 0x100b8ac0 STUB
