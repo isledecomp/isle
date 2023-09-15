@@ -25,7 +25,13 @@ void MxAudioManager::LockedReinitialize(MxS8 p_skipTeardown)
   Init();
   this->m_criticalSection.Leave();
 
-  if (p_skipTeardown) {
+  if (!p_skipTeardown) {
     Teardown();
   }
+}
+
+// OFFSET: LEGO1 0x100b8e90
+void MxAudioManager::Reinitialize()
+{
+  LockedReinitialize(0);
 }

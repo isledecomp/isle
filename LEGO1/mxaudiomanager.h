@@ -11,6 +11,7 @@ public:
   virtual ~MxAudioManager() override;
 
   void LockedReinitialize(MxS8);
+  void Reinitialize();
 protected:
   void Init();
 
