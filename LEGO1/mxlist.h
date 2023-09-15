@@ -60,9 +60,13 @@ public:
   void Append(T*);
 
   friend class MxListCursor<T>;
+
 protected:
   MxListEntry<T> *m_first; // +0x10
   MxListEntry<T> *m_last;  // +0x14
+
+private:
+  void _DeleteEntry(MxListEntry<T> *match);
 };
 
 // VTABLE 0x100d6488
@@ -136,6 +140,26 @@ inline void MxList<T>::Append(T *p_newobj)
 }
 
 template <class T>
+inline void MxList<T>::_DeleteEntry(MxListEntry<T> *match)
+{
+  MxListEntry<T> **pPrev = &match->m_prev;
+  MxListEntry<T> **pNext = &match->m_next;
+
+  if (match->m_prev)
+    match->m_prev->m_next = *pNext;
+  else
+    m_first = *pNext;
+
+  if (*pNext)
+    (*pNext)->m_prev = *pPrev;
+  else
+    m_last = *pPrev;
+
+  delete match;
+  m_count--;
+}
+
+template <class T>
 inline MxBool MxListCursor<T>::Find(T *p_obj)
 {
   for (m_match = m_list->m_first;
@@ -148,21 +172,7 @@ inline MxBool MxListCursor<T>::Find(T *p_obj)
 template <class T>
 inline void MxListCursor<T>::Detach()
 {
-  MxListEntry<T> *m_prev = m_match->m_prev;
-  MxListEntry<T> *m_next = m_match->m_next;
-
-  if (m_prev)
-    m_prev->m_next = m_next;
-  else 
-    m_list->m_first = m_next;
-
-  if (m_next)
-    m_next->m_prev = m_prev;
-  else
-    m_list->m_last = m_prev;
-
-  delete m_match;
-  m_list->m_count--;
+  m_list->_DeleteEntry(m_match);
   m_match = NULL;
 }
 
