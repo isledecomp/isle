@@ -7,10 +7,10 @@ class MxPoint32
 {
 public:
   MxPoint32() { }
-  MxPoint32(MxS32 x, MxS32 y)
+  MxPoint32(MxS32 p_x, MxS32 p_y)
   {
-    this->m_x = x;
-    this->m_y = y;
+    this->m_x = p_x;
+    this->m_y = p_y;
   }
 
   MxS32 m_x;
