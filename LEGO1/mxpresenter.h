@@ -2,6 +2,7 @@
 #define MXPRESENTER_H
 
 #include "mxcore.h"
+#include "mxpoint32.h"
 #include "mxdsaction.h"
 #include "mxcriticalsection.h"
 #include "mxomni.h"
@@ -74,9 +75,8 @@ protected:
 private:
   MxS32 m_currentTickleState; // 0x8
   MxU32 m_previousTickleStates;
-  undefined4 m_unk0x10;
-  undefined4 m_unk0x14;
-  undefined4 m_unk0x18;
+  MxPoint32 m_location;
+  MxS32 m_locationZ;
   MxDSAction* m_action; // 0
   MxCriticalSection m_criticalSection;
   MxPresenter *m_unkPresenter; // 0x3c
