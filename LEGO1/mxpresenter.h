@@ -77,7 +77,7 @@ private:
   undefined4 m_unk0x10;
   undefined4 m_unk0x14;
   undefined4 m_unk0x18;
-  MxDSAction* m_action; // 0
+  MxDSAction *m_action; // 0
   MxCriticalSection m_criticalSection;
   MxPresenter *m_unkPresenter; // 0x3c
 };
