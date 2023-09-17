@@ -39,6 +39,7 @@ public:
 
   // OFFSET: LEGO1 0x1001cd20
   virtual MxS8 Compare(T *, T *) = 0;
+  
 protected:
   MxU32 m_count;                   // +0x8
   void (*m_customDestructor)(T *); // +0xc
@@ -82,6 +83,7 @@ public:
   MxBool Find(T *p_obj);
   void Detach();
   MxBool Next(T*& p_obj);
+
 private:
   MxList<T> *m_list;
   MxListEntry<T> *m_match;

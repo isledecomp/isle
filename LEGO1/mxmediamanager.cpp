@@ -17,11 +17,13 @@ MxMediaManager::MxMediaManager()
 MxMediaManager::~MxMediaManager()
 {
   Destroy();
+  Destroy();
 }
 
 // OFFSET: LEGO1 0x100b85d0
 MxResult MxMediaManager::Init()
 {
+  this->m_presenters = NULL;
   this->m_presenters = NULL;
   this->m_thread = NULL;
   return SUCCESS;

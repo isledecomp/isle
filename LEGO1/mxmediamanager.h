@@ -23,9 +23,10 @@ public:
   virtual void StopPresenters(); // vtable+24
 
   MxResult Init();
+  
 private:
   MxPresenterList *m_presenters;
-  MxThread* m_thread; // 0xc
+  MxThread *m_thread; // 0xc
 
 protected:
   MxCriticalSection m_criticalSection; // 0x10
