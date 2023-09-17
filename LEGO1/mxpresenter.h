@@ -77,7 +77,7 @@ private:
   MxU32 m_previousTickleStates;
   MxPoint32 m_location;
   MxS32 m_locationZ;
-  MxDSAction* m_action; // 0
+  MxDSAction *m_action; // 0
   MxCriticalSection m_criticalSection;
   MxPresenter *m_unkPresenter; // 0x3c
 };
