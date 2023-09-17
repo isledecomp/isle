@@ -1,6 +1,7 @@
 #ifndef MXAUDIOMANAGER_H
 #define MXAUDIOMANAGER_H
 
+#include "decomp.h"
 #include "mxmediamanager.h"
 
 // VTABLE 0x100dc6e0
@@ -10,12 +11,15 @@ public:
   MxAudioManager();
   virtual ~MxAudioManager() override;
 
-  void LockedReinitialize(MxS8);
   void Reinitialize();
+
+private:
+  void LockedReinitialize(MxBool);
+
 protected:
   void Init();
 
-  int m_unk2c;
+  undefined4 m_unk2c;
 };
 
 #endif // MXAUDIOMANAGER_H
