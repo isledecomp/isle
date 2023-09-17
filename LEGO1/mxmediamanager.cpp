@@ -17,7 +17,6 @@ MxMediaManager::MxMediaManager()
 MxMediaManager::~MxMediaManager()
 {
   Destroy();
-  Destroy();
 }
 
 // OFFSET: LEGO1 0x100b85d0

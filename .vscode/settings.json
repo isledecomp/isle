@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "xmemory": "cpp",
+        "list": "cpp",
+        "xutility": "cpp",
+        "xhash": "cpp",
+        "algorithm": "cpp",
+        "deque": "cpp",
+        "functional": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "queue": "cpp",
+        "set": "cpp",
+        "stack": "cpp",
+        "type_traits": "cpp",
+        "unordered_map": "cpp",
+        "utility": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xtree": "cpp"
+    }
+}
