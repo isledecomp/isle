@@ -23,7 +23,6 @@ MxMediaManager::~MxMediaManager()
 MxResult MxMediaManager::Init()
 {
   this->m_presenters = NULL;
-  this->m_presenters = NULL;
   this->m_thread = NULL;
   return SUCCESS;
 }
