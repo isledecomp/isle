@@ -83,6 +83,7 @@ public:
   MxBool Find(T *p_obj);
   void Detach();
   MxBool Next(T*& p_obj);
+  void Reset() { m_match = NULL; }
 
 private:
   MxList<T> *m_list;

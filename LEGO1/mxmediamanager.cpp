@@ -27,9 +27,21 @@ MxResult MxMediaManager::Init()
   return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b8790 STUB
+// OFFSET: LEGO1 0x100b8790
 MxResult MxMediaManager::Tickle()
 {
+  MxAutoLocker lock(&this->m_criticalSection);
+  MxPresenter *presenter;
+  MxPresenterListCursor cursor(this->m_presenters);
+
+  while (cursor.Next(presenter))
+    presenter->Tickle();
+
+  cursor.Reset();
+
+  while (cursor.Next(presenter))
+    presenter->VTable0x4c();
+
   return SUCCESS;
 }
 
