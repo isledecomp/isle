@@ -242,7 +242,7 @@ undefined4 MxPresenter::PutData()
 }
 
 // OFFSET: LEGO1 0x1000bfd0
-MxBool MxPresenter::IsHit(MxS32 p_x, MxS32 p_u)
+MxBool MxPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
   return FALSE;
 }
