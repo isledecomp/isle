@@ -59,7 +59,7 @@ public:
   virtual ~MxList();
 
   void Append(T*);
-  inline MxU32 GetCount() { return m_count; }
+  MxU32 GetCount() { return m_count; }
 
   friend class MxListCursor<T>;
 
