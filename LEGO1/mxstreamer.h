@@ -1,21 +1,77 @@
 #ifndef MXSTREAMER_H
 #define MXSTREAMER_H
 
+#include <list>
+
+#include "decomp.h"
 #include "mxcore.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
+class MxStreamerSubClass1
+{
+public:
+  inline MxStreamerSubClass1(undefined4 size);
+
+  ~MxStreamerSubClass1() { delete [] m_buffer; }
+
+  undefined4 GetSize() { return m_size; }
+
+  void SetBuffer(undefined *p_buf) { m_buffer = p_buf; }
+
+private:
+  undefined *m_buffer;
+  undefined4 m_size;
+  undefined4 m_unk08;
+};
+
+class MxStreamerSubClass2 : public MxStreamerSubClass1
+{
+public:
+  inline MxStreamerSubClass2() : MxStreamerSubClass1(0x40) {}
+};
+
+class MxStreamerSubClass3 : public MxStreamerSubClass1
+{
+public:
+  inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
+};
+
 // VTABLE 0x100dc710
+// SIZE 0x2c
 class MxStreamer : public MxCore
 {
 public:
+  MxStreamer();
   virtual ~MxStreamer() override;
 
   __declspec(dllexport) MxStreamController *Open(const char *name, MxU16 p);
   __declspec(dllexport) MxLong Close(const char *p);
 
   virtual MxLong Notify(MxParam &p) override; // vtable+0x4
-  virtual MxResult VTable0x14(); // vtable+0x14
+
+  // OFFSET: LEGO1 0x100b9000
+  inline virtual const char *ClassName() const override // vtable+0x0c
+  {
+    // 0x1010210c
+    return "MxStreamer";
+  }
+
+  // OFFSET: LEGO1 0x100b9010
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxStreamer::ClassName()) || MxCore::IsA(name);
+  }
+
+  virtual MxResult Init(); // vtable+0x14
+
+  MxStreamController *GetOpenStream(const char *p_name);
+
+private:
+  list<MxStreamController *> m_openStreams; // 0x8
+  MxStreamerSubClass2 m_subclass1; // 0x14
+  MxStreamerSubClass3 m_subclass2; // 0x20
+
 };
 
 #endif // MXSTREAMER_H

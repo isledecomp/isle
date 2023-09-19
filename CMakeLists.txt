@@ -154,6 +154,7 @@ add_library(lego1 SHARED
   LEGO1/mxsoundmanager.cpp
   LEGO1/mxsoundpresenter.cpp
   LEGO1/mxstillpresenter.cpp
+  LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
   LEGO1/mxthread.cpp

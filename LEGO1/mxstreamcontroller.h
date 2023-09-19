@@ -2,6 +2,7 @@
 #define MXSTREAMCONTROLLER_H
 
 #include "mxatomid.h"
+#include "mxcriticalsection.h"
 #include "mxcore.h"
 
 // VTABLE 0x100dc968
@@ -21,13 +22,9 @@ public:
     return !strcmp(name, MxStreamController::ClassName()) || MxCore::IsA(name);
   }
 
-  int m_unk08;
-  int m_unk0c;
-  int m_unk10;
-  int m_unk14;
-  int m_unk18;
-  int m_unk1c;
-  int m_unk20;
+  MxBool IsStillInUse();
+
+  MxCriticalSection m_criticalSection;
   MxAtomId atom;
   int m_unk28;
   int m_unk2c;
