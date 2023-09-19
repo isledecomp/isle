@@ -19,11 +19,10 @@ void MxPresenter::Init()
 {
   m_currentTickleState = TickleState_Idle;
   m_action = NULL;
-  m_unk0x18 = 0;
+  m_location = MxPoint32(0, 0);
+  m_locationZ = 0;
   m_unkPresenter = NULL;
   m_previousTickleStates = 0;
-  m_unk0x10 = 0;
-  m_unk0x14 = 0;
 }
 
 // OFFSET: LEGO1 0x100b4fc0
@@ -116,15 +115,25 @@ MxLong MxPresenter::Tickle()
       break;
   }
 
-  return 0;
+  return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b4d80 STUB
-MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *)
+// OFFSET: LEGO1 0x100b4d80
+MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
 {
-  // TODO
+  MxAutoLocker lock(&this->m_criticalSection);
 
-  return 0;
+  this->m_action = p_action;
+
+  const MxVector3Data& location = this->m_action->GetLocation();
+  MxS32 previousTickleState = this->m_currentTickleState;
+
+  this->m_location = MxPoint32(location[0], location[1]);
+  this->m_locationZ = location[2];
+  this->m_previousTickleStates |= 1 << (unsigned char)previousTickleState;
+  this->m_currentTickleState = TickleState_Ready;
+
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b4e40 STUB
