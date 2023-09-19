@@ -67,7 +67,7 @@ public:
   virtual ~MxHashTable();
 
   void Resize();
-  void MxHashTable::Add(T* );
+  void Add(T* );
 
   virtual MxS8 Compare(T*, T*) = 0;
 
