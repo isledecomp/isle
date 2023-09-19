@@ -2,6 +2,7 @@
 #define MXDSSELECTACTION_H
 
 #include "mxdsparallelaction.h"
+#include "decomp.h"
 
 // VTABLE 0x100dcfc8
 // SIZE 0xb0
@@ -23,6 +24,12 @@ public:
   {
     return !strcmp(name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(name);
   }
+
+  undefined4 m_unk0x9c;
+  undefined4 m_unk0xa0;
+  undefined4 m_unk0xa4;
+  undefined4 m_unk0xa8;
+  undefined4 m_unk0xac;
 
 };
 

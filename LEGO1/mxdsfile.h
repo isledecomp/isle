@@ -4,6 +4,7 @@
 #include "mxdssource.h"
 #include "mxioinfo.h"
 #include "mxstring.h"
+#include "mxtypes.h"
 
 // VTABLE 0x100dc890
 class MxDSFile : public MxDSSource
@@ -27,7 +28,7 @@ public:
 
   __declspec(dllexport) virtual MxLong Open(MxULong); // vtable+0x14
   __declspec(dllexport) virtual MxLong Close(); // vtable+0x18
-  __declspec(dllexport) virtual MxLong Read(unsigned char *,MxULong); // vtable+0x20
+  __declspec(dllexport) virtual MxResult Read(void *,MxULong); // vtable+0x20
   __declspec(dllexport) virtual MxLong Seek(MxLong,int); // vtable+0x24
   __declspec(dllexport) virtual MxULong GetBufferSize(); // vtable+0x28
   __declspec(dllexport) virtual MxULong GetStreamBuffersNum();  // vtable+0x2c

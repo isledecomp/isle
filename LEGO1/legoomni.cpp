@@ -1,5 +1,7 @@
 #include "legoomni.h"
 
+#include "mxdsobject.h"
+
 // 0x100f4588
 char *g_nocdSourceName = NULL;
 
@@ -147,10 +149,38 @@ MxBackgroundAudioManager *BackgroundAudioManager()
   return LegoOmni::GetInstance()->GetBackgroundAudioManager();
 }
 
-// OFFSET: LEGO1 0x100c0280 STUB
-MxDSObject *CreateStreamObject(MxDSFile *,MxS16)
+// OFFSET: LEGO1 0x100c0280
+MxDSObject *CreateStreamObject(MxDSFile *p_file, MxS16 p_ofs)
 {
-  // TODO
+  char *buf;
+  _MMCKINFO tmp_chunk;
+
+  if (p_file->Seek(((MxLong*)p_file->GetBuffer())[p_ofs], 0)) {
+    return NULL;
+  }
+
+  if (p_file->Read(&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
+    if (p_file->Read(&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
+
+      buf = new char[tmp_chunk.cksize];
+      if (!buf) {
+        return NULL;
+      }
+
+      if (p_file->Read(buf, tmp_chunk.cksize) != 0) {
+        return NULL;
+      }
+
+      // Save a copy so we can clean up properly, because
+      // this function will alter the pointer value.
+      char *copy = buf;
+      MxDSObject *obj = DeserializeDSObjectDispatch(&buf, -1);
+      delete[] copy;
+      return obj;
+    }
+    return NULL;
+  }
+
   return NULL;
 }
 

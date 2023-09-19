@@ -1,5 +1,7 @@
 #include "mxdsmultiaction.h"
 
+DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
+
 // OFFSET: LEGO1 0x100c9b90
 MxDSMultiAction::MxDSMultiAction()
 {
