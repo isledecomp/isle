@@ -20,7 +20,7 @@ void MxPresenter::Init()
   m_currentTickleState = TickleState_Idle;
   m_action = NULL;
   m_location = MxPoint32(0, 0);
-  m_locationZ = 0;
+  m_displayZ = 0;
   m_unkPresenter = NULL;
   m_previousTickleStates = 0;
 }
@@ -129,7 +129,7 @@ MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
   MxS32 previousTickleState = this->m_currentTickleState;
 
   this->m_location = MxPoint32(location[0], location[1]);
-  this->m_locationZ = location[2];
+  this->m_displayZ = location[2];
   this->m_previousTickleStates |= 1 << (unsigned char)previousTickleState;
   this->m_currentTickleState = TickleState_Ready;
 
@@ -236,13 +236,13 @@ MxBool MxPresenter::HasTickleStatePassed(TickleState p_tickleState)
 }
 
 // OFFSET: LEGO1 0x1000bfc0
-undefined4 MxPresenter::VTable0x4c()
+undefined4 MxPresenter::PutData()
 {
   return 0;
 }
 
 // OFFSET: LEGO1 0x1000bfd0
-undefined MxPresenter::VTable0x50(undefined4, undefined4)
+MxBool MxPresenter::IsHit(MxS32 p_x, MxS32 p_u)
 {
-  return 0;
+  return FALSE;
 }

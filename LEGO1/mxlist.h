@@ -59,6 +59,7 @@ public:
   virtual ~MxList();
 
   void Append(T*);
+  inline MxU32 GetCount() { return m_count; }
 
   friend class MxListCursor<T>;
 
@@ -83,6 +84,8 @@ public:
   MxBool Find(T *p_obj);
   void Detach();
   MxBool Next(T*& p_obj);
+  void SetValue(T *p_obj);
+  void Head() { m_match = m_list->m_first; }
   void Reset() { m_match = NULL; }
 
 private:
@@ -191,6 +194,13 @@ inline MxBool MxListCursor<T>::Next(T*& p_obj)
     p_obj = m_match->m_obj;
 
   return m_match != NULL;
+}
+
+template <class T>
+inline void MxListCursor<T>::SetValue(T *p_obj)
+{
+  if (m_match)
+    m_match->m_obj = p_obj;
 }
 
 #endif // MXLIST_H

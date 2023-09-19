@@ -62,11 +62,13 @@ public:
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   virtual void SetTickleState(TickleState p_tickleState); // vtable+0x44
   virtual MxBool HasTickleStatePassed(TickleState p_tickleState); // vtable+0x48
-  virtual undefined4 VTable0x4c(); // vtable+0x4c
-  virtual undefined VTable0x50(undefined4, undefined4); // vtable+0x50
+  virtual undefined4 PutData(); // vtable+0x4c
+  virtual MxBool IsHit(MxS32 p_x, MxS32 p_y); // vtable+0x50
   __declspec(dllexport) virtual void Enable(MxBool p_enable); // vtable+0x54
 
   MxBool IsEnabled();
+
+  inline MxS32 GetDisplayZ() { return this->m_displayZ; }
 
 protected:
   __declspec(dllexport) void Init();
@@ -76,7 +78,7 @@ private:
   MxS32 m_currentTickleState; // 0x8
   MxU32 m_previousTickleStates;
   MxPoint32 m_location;
-  MxS32 m_locationZ;
+  MxS32 m_displayZ;
   MxDSAction *m_action; // 0
   MxCriticalSection m_criticalSection;
   MxPresenter *m_unkPresenter; // 0x3c
