@@ -1,5 +1,7 @@
 #include "mxdsserialaction.h"
 
+DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
+
 // OFFSET: LEGO1 0x100ca9d0
 MxDSSerialAction::MxDSSerialAction()
 {

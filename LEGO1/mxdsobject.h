@@ -56,4 +56,6 @@ private:
   undefined4 m_unk28;
 };
 
+MxDSObject *DeserializeDSObjectDispatch(char **, MxS16);
+
 #endif // MXDSOBJECT_H

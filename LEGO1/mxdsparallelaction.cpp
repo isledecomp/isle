@@ -1,5 +1,7 @@
 #include "mxdsparallelaction.h"
 
+DECOMP_SIZE_ASSERT(MxDSParallelAction, 0x9c)
+
 // OFFSET: LEGO1 0x100cae80
 MxDSParallelAction::MxDSParallelAction()
 {
