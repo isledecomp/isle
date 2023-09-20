@@ -24,4 +24,6 @@ public:
   virtual MxS8 Compare(MxPresenter *, MxPresenter *); // +0x14
 };
 
+typedef MxListCursorChildChild<MxPresenter> MxPresenterListCursor;
+
 #endif // MXPRESENTERLIST_H

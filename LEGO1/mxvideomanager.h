@@ -2,6 +2,7 @@
 #define MXVIDEOMANAGER_H
 
 #include "mxdisplaysurface.h"
+#include "mxregion.h"
 #include "mxmediamanager.h"
 #include "mxvideoparam.h"
 
@@ -19,16 +20,18 @@ public:
 
   MxVideoManager();
 
-  int Init();
+  MxResult Init();
+  void SortPresenterList();
+  void UpdateRegion();
 
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
   inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
 private:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
-  LPDIRECTDRAWSURFACE m_unk54;
+  LPDIRECTDRAWSURFACE m_pDDSurface;
   MxDisplaySurface *m_displaySurface;
-  int m_unk5c;
+  MxRegion *m_region;
   MxBool m_unk60;
 };
 

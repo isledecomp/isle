@@ -5,8 +5,6 @@
 
 DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
 
-typedef MxListCursorChildChild<MxPresenter> MxPresenterListCursor;
-
 // OFFSET: LEGO1 0x100b84c0
 MxMediaManager::MxMediaManager()
 {
@@ -40,7 +38,7 @@ MxResult MxMediaManager::Tickle()
   cursor.Reset();
 
   while (cursor.Next(presenter))
-    presenter->VTable0x4c();
+    presenter->PutData();
 
   return SUCCESS;
 }
