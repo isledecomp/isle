@@ -2,6 +2,8 @@
 
 #include "mxthread.h"
 
+DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
+
 // OFFSET: LEGO1 0x100d0f30
 MxResult MxDiskStreamProviderThread::Run()
 {
@@ -15,7 +17,11 @@ MxResult MxDiskStreamProviderThread::Run()
 // OFFSET: LEGO1 0x100d0f70
 MxDiskStreamProvider::MxDiskStreamProvider()
 {
-  // TODO
+  this->m_unk54 = NULL;
+  this->m_unk4 = malloc(0xc);
+  this->m_unk5 = NULL;
+  this->m_remainingWork = 0;
+  this->m_unk1 = 0;
 }
 
 // OFFSET: LEGO1 0x100d1240

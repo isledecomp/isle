@@ -1,6 +1,7 @@
 #ifndef MXDISKSTREAMPROVIDER_H
 #define MXDISKSTREAMPROVIDER_H
 
+#include "decomp.h"
 #include "mxstreamprovider.h"
 #include "mxthread.h"
 #include "mxcriticalsection.h"
@@ -48,14 +49,16 @@ public:
   void PerformWork();
 
 private:
-  MxDiskStreamProviderThread m_thread;
-  MxSemaphore m_busySemaphore;
-  byte m_remainingWork;
-  byte m_unk1;
-  MxCriticalSection m_criticalSection;
-  byte unk2[4];
-  void* unk3;
-  void *unk4;
+  MxDiskStreamProviderThread m_thread; // 0x10
+  MxSemaphore m_busySemaphore; // 0x2c
+  byte m_remainingWork; // 0x34
+  byte m_unk1; // 0x35
+  byte m_unk36[2];
+  MxCriticalSection m_criticalSection; // 0x38
+  undefined m_unk54; // 0x54
+  byte m_unk55[3];
+  void* m_unk4;
+  void *m_unk5;
 };
 
 #endif // MXDISKSTREAMPROVIDER_H
