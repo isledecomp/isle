@@ -2,7 +2,7 @@
 #define MXDSMULTIACTION_H
 
 #include "mxdsaction.h"
-#include "decomp.h"
+#include "mxdsactionlist.h"
 
 // VTABLE 0x100dcef0
 // SIZE 0x9c
@@ -25,8 +25,12 @@ public:
     return !strcmp(name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(name);
   }
 
-  undefined4 m_unk0x94;
-  undefined4 m_unk0x98;
+  virtual undefined4 unk14(); // vtable+14;
+  virtual MxU32 GetSizeOnDisk(); // vtable+18;
+
+private:
+  MxU32 m_sizeOnDisk;
+  MxDSActionList *m_actions;
 };
 
 #endif // MXDSMULTIACTION_H
