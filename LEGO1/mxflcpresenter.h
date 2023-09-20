@@ -26,7 +26,7 @@ public:
     return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
   }
 
-  undefined4 m_unk64;
+  undefined4 *m_unk64;
 };
 
 #endif // MXFLCPRESENTER_H
