@@ -32,7 +32,7 @@ public:
   undefined4 m_unk54;
   undefined4 m_unk58;
   undefined2 m_unk5c;
-  unsigned char m_flags;
+  unsigned char m_flags; // 0x5e
   undefined4 m_unk60;
 };
 

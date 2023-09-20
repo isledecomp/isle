@@ -4,14 +4,18 @@
 
 DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 
-// OFFSET: LEGO1 0x100b3310 STUB
+// OFFSET: LEGO1 0x100b3310
 MxFlcPresenter::MxFlcPresenter()
 {
-  // TODO
+  this->m_flags &= 0xfd;
+  this->m_flags &= 0xfb;
+  this->m_unk64 = 0;
 }
 
-// OFFSET: LEGO1 0x100b3420 STUB
+// OFFSET: LEGO1 0x100b3420
 MxFlcPresenter::~MxFlcPresenter()
 {
-  // TODO
+  if(this->m_unk64) {
+    delete this->m_unk64;
+  }
 }
