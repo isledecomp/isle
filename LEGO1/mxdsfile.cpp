@@ -47,7 +47,7 @@ MxLong MxDSFile::Open(MxULong uStyle)
 }
 
 // OFFSET: LEGO1 0x100cc780
-MxResult MxDSFile::Read(void *p_buf, MxULong p_nbytes)
+MxResult MxDSFile::Read(unsigned char *p_buf, MxULong p_nbytes)
 {
   if (m_io.Read(p_buf, p_nbytes) != p_nbytes)
     return FAILURE;

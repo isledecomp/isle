@@ -29,7 +29,7 @@ public:
   virtual MxLong Open(MxULong) = 0;
   virtual MxLong Close() = 0;
   virtual void SomethingWhichCallsRead(void* pUnknownObject);
-  virtual MxResult Read(void *, MxULong) = 0;
+  virtual MxResult Read(unsigned char *, MxULong) = 0;
   virtual MxLong Seek(MxLong, int) = 0;
   virtual MxULong GetBufferSize() = 0;
   virtual MxULong GetStreamBuffersNum() = 0;

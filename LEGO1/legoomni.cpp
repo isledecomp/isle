@@ -159,15 +159,15 @@ MxDSObject *CreateStreamObject(MxDSFile *p_file, MxS16 p_ofs)
     return NULL;
   }
 
-  if (p_file->Read(&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
-    if (p_file->Read(&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
+  if (p_file->Read((MxU8*)&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
+    if (p_file->Read((MxU8*)&tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
 
       buf = new char[tmp_chunk.cksize];
       if (!buf) {
         return NULL;
       }
 
-      if (p_file->Read(buf, tmp_chunk.cksize) != 0) {
+      if (p_file->Read((MxU8*)buf, tmp_chunk.cksize) != 0) {
         return NULL;
       }
 
