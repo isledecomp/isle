@@ -2,6 +2,7 @@
 #define MXDSSERIALACTION_H
 
 #include "mxdsmultiaction.h"
+#include "decomp.h"
 
 // VTABLE 0x100dcf38
 // SIZE 0xa8
@@ -23,6 +24,10 @@ public:
   {
     return !strcmp(name, MxDSSerialAction::ClassName()) || MxDSMultiAction::IsA(name);
   }
+
+  undefined4 m_unk0x9c;
+  undefined4 m_unk0xa0;
+  undefined4 m_unk0xa4;
 };
 
 #endif // MXDSSERIALACTION_H
