@@ -18,7 +18,7 @@ MxDSMultiAction::~MxDSMultiAction()
 // OFFSET: LEGO1 0x100ca5e0
 undefined4 MxDSMultiAction::unk14()
 {
-  undefined4 result = MxDSObject::unk14();
+  undefined4 result = MxDSAction::unk14();
 
   MxDSActionListCursor cursor(this->m_actions);
   MxDSAction *action;
