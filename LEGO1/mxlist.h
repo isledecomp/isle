@@ -60,6 +60,7 @@ public:
 
   void Append(T*);
   MxU32 GetCount() { return m_count; }
+  void SetDestroy(void (*p_customDestructor)(T *)) { this->m_customDestructor = p_customDestructor; }
 
   friend class MxListCursor<T>;
 
