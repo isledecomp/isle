@@ -109,6 +109,7 @@ add_library(lego1 SHARED
   LEGO1/mxdiskstreamprovider.cpp
   LEGO1/mxdisplaysurface.cpp
   LEGO1/mxdsaction.cpp
+  LEGO1/mxdsactionlist.cpp
   LEGO1/mxdsanim.cpp
   LEGO1/mxdschunk.cpp
   LEGO1/mxdsevent.cpp
