@@ -31,8 +31,6 @@ public:
 private:
   MxU32 m_sizeOnDisk;
   MxDSActionList *m_actions;
-
-  static void DestroyListElement(MxDSAction *p_action);
 };
 
 #endif // MXDSMULTIACTION_H

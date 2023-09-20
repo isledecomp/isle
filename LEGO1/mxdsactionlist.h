@@ -12,12 +12,15 @@ class MxDSActionList : public MxList<MxDSAction>
 {
 public:
   MxDSActionList() {
-    unk18 = 0;
+    this->m_unk18 = 0;
   }
 
   virtual MxS8 Compare(MxDSAction *, MxDSAction *); // +0x14
 
-  undefined unk18;
+  static void Destroy(MxDSAction *p_action);
+
+private:
+  undefined m_unk18;
 };
 
 typedef MxListCursorChild<MxDSAction> MxDSActionListCursor;

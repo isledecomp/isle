@@ -5,14 +5,7 @@ MxDSMultiAction::MxDSMultiAction()
 {
   this->SetType(MxDSType_MultiAction);
   this->m_actions = new MxDSActionList;
-  this->m_actions->SetDestroy(MxDSMultiAction::DestroyListElement);
-}
-
-// OFFSET: LEGO1 0x100c9cb0
-void MxDSMultiAction::DestroyListElement(MxDSAction *p_action)
-{
-  if (p_action)
-    delete p_action;
+  this->m_actions->SetDestroy(MxDSActionList::Destroy);
 }
 
 // OFFSET: LEGO1 0x100ca060
