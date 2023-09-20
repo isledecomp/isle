@@ -29,11 +29,12 @@ public:
   virtual MxLong Open(MxULong) = 0;
   virtual MxLong Close() = 0;
   virtual void SomethingWhichCallsRead(void* pUnknownObject);
-  virtual MxLong Read(unsigned char *, MxULong) = 0;
+  virtual MxResult Read(unsigned char *, MxULong) = 0;
   virtual MxLong Seek(MxLong, int) = 0;
   virtual MxULong GetBufferSize() = 0;
   virtual MxULong GetStreamBuffersNum() = 0;
   virtual MxLong GetLengthInDWords();
+  virtual void* GetBuffer(); // 0x34
 
 protected:
   MxULong m_lengthInDWords;

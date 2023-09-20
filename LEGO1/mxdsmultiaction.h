@@ -2,6 +2,7 @@
 #define MXDSMULTIACTION_H
 
 #include "mxdsaction.h"
+#include "decomp.h"
 
 // VTABLE 0x100dcef0
 // SIZE 0x9c
@@ -23,6 +24,9 @@ public:
   {
     return !strcmp(name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(name);
   }
+
+  undefined4 m_unk0x94;
+  undefined4 m_unk0x98;
 };
 
 #endif // MXDSMULTIACTION_H
