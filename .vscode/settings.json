@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "xutility": "cpp",
+        "functional": "cpp",
+        "xhash": "cpp"
+    }
+}
