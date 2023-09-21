@@ -15,7 +15,7 @@ MxVideoManager::~MxVideoManager()
 }
 
 // OFFSET: LEGO1 0x100bea90
-MxLong MxVideoManager::Tickle()
+MxResult MxVideoManager::Tickle()
 {
   MxAutoLocker lock(&this->m_criticalSection);
 
