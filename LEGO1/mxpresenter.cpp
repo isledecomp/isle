@@ -79,7 +79,7 @@ MxPresenter::~MxPresenter()
 }
 
 // OFFSET: LEGO1 0x100b5200
-MxLong MxPresenter::Tickle()
+MxResult MxPresenter::Tickle()
 {
   MxAutoLocker lock(&this->m_criticalSection);
 

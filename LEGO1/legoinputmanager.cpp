@@ -35,7 +35,7 @@ void LegoInputManager::UnRegister(MxCore *)
 }
 
 // OFFSET: LEGO1 0x1005b8b0 STUB
-MxLong LegoInputManager::Tickle()
+MxResult LegoInputManager::Tickle()
 {
   // TODO
 
