@@ -29,7 +29,7 @@ public:
   MxPresenter() { Init(); }
 
   __declspec(dllexport) virtual ~MxPresenter(); // vtable+0x0
-  __declspec(dllexport) virtual MxLong Tickle() override; // vtable+0x8
+  __declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x8
 
   // OFFSET: LEGO1 0x1000bfe0
   inline virtual const char *ClassName() const override// vtable+0xc

@@ -21,7 +21,7 @@ MxLong Infocenter::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10070af0 STUB
-MxLong Infocenter::Tickle()
+MxResult Infocenter::Tickle()
 {
   // TODO
 

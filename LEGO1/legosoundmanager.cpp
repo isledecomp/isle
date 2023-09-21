@@ -13,7 +13,7 @@ LegoSoundManager::~LegoSoundManager()
 }
 
 // OFFSET: LEGO1 0x1002a3a0 STUB
-MxLong LegoSoundManager::Tickle()
+MxResult LegoSoundManager::Tickle()
 {
   // TODO
   return 0;

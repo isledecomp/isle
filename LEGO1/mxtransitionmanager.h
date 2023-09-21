@@ -14,7 +14,7 @@ public:
 
   __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *videoPresenter);
 
-  virtual MxLong Tickle(); // vtable+0x8
+  virtual MxResult Tickle(); // vtable+0x8
 };
 
 #endif // MXTRANSITIONMANAGER_H
