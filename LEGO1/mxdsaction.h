@@ -12,6 +12,7 @@ class MxDSAction : public MxDSObject
 public:
   enum
   {
+    Flag_Looping = 0x01,
     Flag_Enabled = 0x20,
     Flag_Parsed = 0x80,
   };
@@ -54,6 +55,8 @@ public:
   inline MxU16 GetExtraLength() const { return m_extraLength; }
   inline const MxVector3Data &GetLocation() const { return m_location; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
+
+  inline MxBool const IsLooping() { return this->m_flags & Flag_Looping; }
 
 private:
   MxU32 m_sizeOnDisk;

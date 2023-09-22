@@ -84,4 +84,6 @@ private:
   MxPresenter *m_unkPresenter; // 0x3c
 };
 
+char *PresenterNameDispatch(MxDSAction *);
+
 #endif // MXPRESENTER_H

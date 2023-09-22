@@ -32,6 +32,8 @@ public:
   virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
 
   void CopyMediaSrcPath(const char *p_mediaSrcPath);
+
+  inline MxS32 const GetMediaFormat() { return this->m_mediaFormat; }
 private:
   MxU32 m_sizeOnDisk;
   char *m_mediaSrcPath;

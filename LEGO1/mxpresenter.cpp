@@ -2,6 +2,8 @@
 #include "mxautolocker.h"
 #include "mxparam.h"
 #include "legoomni.h"
+#include "mxdsanim.h"
+#include "mxdssound.h"
 #include <string.h>
 
 #include "decomp.h"
@@ -153,6 +155,63 @@ void MxPresenter::Enable(MxBool p_enable)
     else
       this->m_action->SetFlags(flags & ~MxDSAction::Flag_Enabled);
   }
+}
+
+// OFFSET: LEGO1 0x100b5310
+char *PresenterNameDispatch(MxDSAction *p_action)
+{
+  char *name = p_action->GetSourceName();
+  MxS32 format;
+
+  if (!name || strlen(name) == 0) {
+    switch (p_action->GetType()) {
+      case MxDSType_Anim:
+        format = ((MxDSAnim*)p_action)->GetMediaFormat();
+        switch (format) {
+          case FOURCC(' ', 'F', 'L', 'C'):
+            name = !p_action->IsLooping() ?
+              "MxFlcPresenter" :
+              "MxLoopingFlcPresenter";
+            break;
+          case FOURCC(' ', 'S', 'M', 'K'):
+            name = !p_action->IsLooping() ?
+              "MxSmkPresenter" :
+              "MxLoopingSmkPresenter";
+            break;
+        }
+        break;
+
+      case MxDSType_Sound:
+        format = ((MxDSSound*)p_action)->GetMediaFormat();
+        switch(format) {
+          case FOURCC(' ', 'M', 'I', 'D'):
+            name = !p_action->IsLooping() ?
+              "MxMIDIPresenter" :
+              "MxLoopingMIDIPresenter";
+            break;
+          case FOURCC(' ', 'W', 'A', 'V'):
+            name = "MxWavePresenter";
+            break;
+        }
+        break;
+
+      case MxDSType_SerialAction:
+      case MxDSType_ParallelAction:
+      case MxDSType_SelectAction:
+        name = "MxCompositePresenter";
+        break;
+
+      case MxDSType_Event:
+        name = "MxEventPresenter";
+        break;
+
+      case MxDSType_Still:
+        name = "MxStillPresenter";
+        break;
+    }
+  }
+
+  return name;
 }
 
 // OFFSET: LEGO1 0x100b54c0

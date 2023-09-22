@@ -40,7 +40,8 @@ public:
   inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
   inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
 
-protected:
+  inline char *GetSourceName() { return this->m_sourceName; }
+
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
   inline MxDSType GetType() { return (MxDSType) this->m_type; }
 
