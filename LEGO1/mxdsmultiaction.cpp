@@ -39,7 +39,6 @@ MxDSMultiAction &MxDSMultiAction::operator=(MxDSMultiAction &p_dsMultiAction)
   return *this;
 }
 
-
 // OFFSET: LEGO1 0x100ca290
 void MxDSMultiAction::SetSomeTimingField(MxLong p_someTimingField)
 {
