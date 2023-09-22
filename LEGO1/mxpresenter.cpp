@@ -158,23 +158,23 @@ void MxPresenter::Enable(MxBool p_enable)
 }
 
 // OFFSET: LEGO1 0x100b5310
-char *PresenterNameDispatch(MxDSAction *p_action)
+char *PresenterNameDispatch(const MxDSAction &p_action)
 {
-  char *name = p_action->GetSourceName();
+  char *name = p_action.GetSourceName();
   MxS32 format;
 
   if (!name || strlen(name) == 0) {
-    switch (p_action->GetType()) {
+    switch (p_action.GetType()) {
       case MxDSType_Anim:
-        format = ((MxDSAnim*)p_action)->GetMediaFormat();
+        format = ((MxDSAnim&)p_action).GetMediaFormat();
         switch (format) {
           case FOURCC(' ', 'F', 'L', 'C'):
-            name = !p_action->IsLooping() ?
+            name = !p_action.IsLooping() ?
               "MxFlcPresenter" :
               "MxLoopingFlcPresenter";
             break;
           case FOURCC(' ', 'S', 'M', 'K'):
-            name = !p_action->IsLooping() ?
+            name = !p_action.IsLooping() ?
               "MxSmkPresenter" :
               "MxLoopingSmkPresenter";
             break;
@@ -182,10 +182,10 @@ char *PresenterNameDispatch(MxDSAction *p_action)
         break;
 
       case MxDSType_Sound:
-        format = ((MxDSSound*)p_action)->GetMediaFormat();
+        format = ((MxDSSound&)p_action).GetMediaFormat();
         switch(format) {
           case FOURCC(' ', 'M', 'I', 'D'):
-            name = !p_action->IsLooping() ?
+            name = !p_action.IsLooping() ?
               "MxMIDIPresenter" :
               "MxLoopingMIDIPresenter";
             break;

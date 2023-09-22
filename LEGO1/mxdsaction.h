@@ -56,7 +56,7 @@ public:
   inline const MxVector3Data &GetLocation() const { return m_location; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
-  inline MxBool const IsLooping() { return this->m_flags & Flag_Looping; }
+  inline MxBool IsLooping() const { return this->m_flags & Flag_Looping; }
 
 private:
   MxU32 m_sizeOnDisk;
