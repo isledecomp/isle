@@ -44,3 +44,29 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 
   return totalSizeOnDisk;
 }
+
+// OFFSET: LEGO1 0x100ca7b0
+void MxDSMultiAction::Deserialize(char **p_source, MxS16 p_unk24)
+{
+  MxDSAction::Deserialize(p_source, p_unk24);
+
+  MxU32 extraFlag = *(MxU32*)(*p_source + 4) & 1;
+  *p_source += 12;
+
+  MxU32 count = *(MxU32*) *p_source;
+  *p_source += sizeof(count);
+
+  if (count) {
+    while (count--) {
+      MxU32 extraFlag = *(MxU32*)(*p_source + 4) & 1;
+      *p_source += 8;
+
+      MxDSAction *action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk24);
+      *p_source += extraFlag;
+
+      this->m_actions->Append(action);
+    }
+  }
+
+  *p_source += extraFlag;
+}

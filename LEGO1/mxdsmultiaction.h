@@ -27,6 +27,7 @@ public:
 
   virtual undefined4 unk14(); // vtable+14;
   virtual MxU32 GetSizeOnDisk(); // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
 
 private:
   MxU32 m_sizeOnDisk;
