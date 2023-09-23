@@ -17,6 +17,28 @@ MxDSMultiAction::~MxDSMultiAction()
     delete this->m_actions;
 }
 
+// OFFSET: LEGO1 0x100ca0d0
+void MxDSMultiAction::CopyFrom(MxDSMultiAction &p_dsMultiAction)
+{
+  this->m_actions->DeleteAll();
+
+  MxDSActionListCursor cursor(p_dsMultiAction.m_actions);
+  MxDSAction *action;
+  while (cursor.Next(action))
+    this->m_actions->Append(action->Clone());
+}
+
+// OFFSET: LEGO1 0x100ca260
+MxDSMultiAction &MxDSMultiAction::operator=(MxDSMultiAction &p_dsMultiAction)
+{
+  if (this == &p_dsMultiAction)
+    return *this;
+
+  MxDSAction::operator=(p_dsMultiAction);
+  this->CopyFrom(p_dsMultiAction);
+  return *this;
+}
+
 // OFFSET: LEGO1 0x100ca5e0
 undefined4 MxDSMultiAction::unk14()
 {

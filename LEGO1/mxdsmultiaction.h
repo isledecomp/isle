@@ -12,6 +12,9 @@ public:
   MxDSMultiAction();
   virtual ~MxDSMultiAction() override;
 
+  void CopyFrom(MxDSMultiAction &p_dsMultiAction);
+  MxDSMultiAction &operator=(MxDSMultiAction &p_dsMultiAction);
+
   // OFFSET: LEGO1 0x100c9f50
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
