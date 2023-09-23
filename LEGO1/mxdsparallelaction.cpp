@@ -55,7 +55,6 @@ MxLong MxDSParallelAction::GetDuration()
       continue;
 
     MxLong duration = action->GetDuration();
-
     if (duration == -1) {
       this->m_duration = -1;
       break;
