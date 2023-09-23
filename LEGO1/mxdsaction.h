@@ -54,7 +54,7 @@ public:
   inline void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
   inline char *GetExtraData() { return m_extraData; }
   inline MxU16 GetExtraLength() const { return m_extraLength; }
-  inline DWORD GetStartTime() const { return m_startTime; }
+  inline MxLong GetStartTime() const { return m_startTime; }
   inline const MxVector3Data &GetLocation() const { return m_location; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
