@@ -34,6 +34,7 @@ public:
   void CopyMediaSrcPath(const char *p_mediaSrcPath);
 
   inline MxS32 GetMediaFormat() const { return this->m_mediaFormat; }
+  inline MxLong GetSustainTime() const { return this->m_sustainTime; }
 private:
   MxU32 m_sizeOnDisk;
   char *m_mediaSrcPath;
