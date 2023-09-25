@@ -39,6 +39,8 @@ public:
 
 private:
   MxU32 m_sizeOnDisk;
+
+protected:
   MxDSActionList *m_actions;
 };
 
