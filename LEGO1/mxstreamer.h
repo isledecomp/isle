@@ -68,7 +68,7 @@ public:
   // OFFSET: LEGO1 0x100b9010
   inline virtual MxBool IsA(const char *p_name) const override // vtable+0x10
   {
-    return !strcmp(name, MxStreamer::ClassName()) || MxCore::IsA(name);
+    return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);
   }
 
   virtual MxResult Init(); // vtable+0x14
