@@ -49,15 +49,16 @@ void MxOmni::vtable0x20()
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
-void MxOmni::DeleteObject()
+void MxOmni::DeleteObject(MxDSAction &ds)
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x100b09a0 STUB
-void MxOmni::DoesEntityExist()
+MxBool MxOmni::DoesEntityExist(MxDSAction &ds)
 {
   // TODO
+  return FALSE;
 }
 
 // OFFSET: LEGO1 0x100b00e0 STUB

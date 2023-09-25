@@ -2,6 +2,7 @@
 #define MXOMNI_H
 
 #include "mxcriticalsection.h"
+#include "mxdsaction.h"
 #include "mxeventmanager.h"
 #include "mxmusicmanager.h"
 #include "mxnotificationmanager.h"
@@ -33,13 +34,13 @@ public:
   MxOmni();
   virtual ~MxOmni() override;
 
-  virtual MxLong Notify(MxParam &p); // vtable+04
+  virtual MxLong Notify(MxParam &p) override; // vtable+04
   virtual void Init(); // vtable+14
-  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
+  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   virtual void vtable0x20(); // vtable+20
-  virtual void DeleteObject(); // vtable+24
-  virtual void DoesEntityExist(); // vtable+28
+  virtual void DeleteObject(MxDSAction &ds); // vtable+24
+  virtual MxBool DoesEntityExist(MxDSAction &ds); // vtable+28
   virtual void vtable0x2c(); // vtable+2c
   virtual int vtable0x30(char*, int, MxCore*); // vtable+30
   virtual void NotifyCurrentEntity(); // vtable+34

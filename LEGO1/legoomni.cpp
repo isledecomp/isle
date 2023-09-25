@@ -253,48 +253,49 @@ void LegoOmni::Destroy()
   // FIXME: Stub
 }
 
-void LegoOmni::vtable20()
+void LegoOmni::vtable0x20()
 {
   // FIXME: Stub
 }
 
-void LegoOmni::vtable24(MxDSAction &ds)
+void LegoOmni::DeleteObject(MxDSAction &ds)
 {
   // FIXME: Stub
 }
 
-MxBool LegoOmni::vtable28(MxDSAction &ds)
+MxBool LegoOmni::DoesEntityExist(MxDSAction &ds)
 {
   // FIXME: Stub
   return TRUE;
 }
 
-void LegoOmni::vtable2c()
+void LegoOmni::vtable0x2c()
 {
   // FIXME: Stub
 }
 
-void LegoOmni::vtable30()
+int LegoOmni::vtable0x30(char*, int, MxCore*)
+{
+  // FIXME: Stub
+  return 0;
+}
+
+void LegoOmni::NotifyCurrentEntity()
 {
   // FIXME: Stub
 }
 
-void LegoOmni::vtable34()
+void LegoOmni::StartTimer()
 {
   // FIXME: Stub
 }
 
-void LegoOmni::vtable38()
+void LegoOmni::vtable0x3c()
 {
   // FIXME: Stub
 }
 
-void LegoOmni::vtable3c()
-{
-  // FIXME: Stub
-}
-
-unsigned char LegoOmni::vtable40()
+MxBool LegoOmni::vtable40()
 {
   // FIXME: Stub
   return 0;
