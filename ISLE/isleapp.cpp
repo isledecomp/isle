@@ -91,9 +91,9 @@ void IsleApp::Close()
     VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
 
     Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
-    Lego()->vtable24(ds);
+    Lego()->DeleteObject(ds);
     TransitionManager()->SetWaitIndicator(NULL);
-    Lego()->vtable3c();
+    Lego()->vtable0x3c();
 
     MxLong lVar8;
     do {
@@ -101,7 +101,7 @@ void IsleApp::Close()
     } while (lVar8 == 0);
 
     while (Lego()) {
-      if (Lego()->vtable28(ds) != FALSE) {
+      if (Lego()->DoesEntityExist(ds)) {
         break;
       }
 
@@ -232,7 +232,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
         g_rmDisabled = 0;
-        Lego()->vtable3c();
+        Lego()->vtable0x3c();
       }
 
       if (g_closed) {
@@ -379,7 +379,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         else if (!valid) {
           g_rmDisabled = 1;
-          Lego()->vtable38();
+          Lego()->StartTimer();
           VideoManager()->DisableRMDevice();
         }
       }

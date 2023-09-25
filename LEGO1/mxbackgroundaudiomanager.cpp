@@ -1,5 +1,7 @@
 #include "mxbackgroundaudiomanager.h"
 
+#include "mxomni.h"
+
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
 // OFFSET: LEGO1 0x1007ea90

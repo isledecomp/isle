@@ -2,8 +2,10 @@
 #define MXDSACTION_H
 
 #include "mxdsobject.h"
+#include "mxtypes.h"
 #include "mxvector.h"
-#include "mxomni.h"
+
+class MxOmni;
 
 // VTABLE 0x100dc098
 // SIZE 0x94
@@ -40,7 +42,7 @@ public:
   virtual MxU32 GetSizeOnDisk(); // vtable+18;
   virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
   virtual MxLong GetDuration(); // vtable+24;
-  virtual void SetDuration(LONG p_duration); // vtable+28;
+  virtual void SetDuration(MxLong p_duration); // vtable+28;
   virtual MxDSAction *Clone(); // vtable+2c;
   virtual void MergeFrom(MxDSAction &p_dsAction); // vtable+30;
   virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
