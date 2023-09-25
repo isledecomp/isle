@@ -59,6 +59,7 @@ public:
   virtual ~MxList();
 
   void Append(T*);
+  void DeleteAll();
   MxU32 GetCount() { return m_count; }
   void SetDestroy(void (*p_customDestructor)(T *)) { this->m_customDestructor = p_customDestructor; }
 
@@ -115,6 +116,12 @@ public:
 template <class T>
 // OFFSET: LEGO1 0x1001ce20
 MxList<T>::~MxList()
+{
+  DeleteAll();
+}
+
+template <class T>
+inline void MxList<T>::DeleteAll()
 {
   for (MxListEntry<T> *t = m_first;;) {
     if (!t)

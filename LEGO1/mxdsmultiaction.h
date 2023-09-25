@@ -12,6 +12,9 @@ public:
   MxDSMultiAction();
   virtual ~MxDSMultiAction() override;
 
+  void CopyFrom(MxDSMultiAction &p_dsMultiAction);
+  MxDSMultiAction &operator=(MxDSMultiAction &p_dsMultiAction);
+
   // OFFSET: LEGO1 0x100c9f50
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -27,6 +30,12 @@ public:
 
   virtual undefined4 unk14(); // vtable+14;
   virtual MxU32 GetSizeOnDisk(); // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
+  virtual void SetAtomId(MxAtomId p_atomId); // vtable+20;
+  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual void MergeFrom(MxDSAction &p_dsAction); // vtable+30;
+  virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
+  virtual void SetSomeTimingField(MxLong p_someTimingField); // vtable+38;
 
 private:
   MxU32 m_sizeOnDisk;

@@ -76,6 +76,8 @@ private:
   undefined4 m_unk84;
   undefined4 m_unk88;
   MxOmni *m_omni; // 0x8c
+
+protected:
   MxLong m_someTimingField; // 0x90
 };
 
