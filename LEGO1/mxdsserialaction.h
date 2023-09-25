@@ -12,6 +12,9 @@ public:
   MxDSSerialAction();
   virtual ~MxDSSerialAction() override;
 
+  void CopyFrom(MxDSSerialAction &p_dsSerialAction);
+  MxDSSerialAction &operator=(MxDSSerialAction &p_dsSerialAction);
+
   // OFFSET: LEGO1 0x100caad0
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -25,7 +28,12 @@ public:
     return !strcmp(name, MxDSSerialAction::ClassName()) || MxDSMultiAction::IsA(name);
   }
 
-  undefined4 m_unk0x9c;
+  virtual MxLong GetDuration(); // vtable+24;
+  virtual void SetDuration(MxLong p_duration); // vtable+28;
+  virtual MxDSAction *Clone(); // vtable+2c;
+
+private:
+  MxDSActionListCursor *m_cursor;
   undefined4 m_unk0xa0;
   undefined4 m_unk0xa4;
 };
