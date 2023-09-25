@@ -78,8 +78,10 @@ MxLong MxStreamer::Close(const char *p)
 MxStreamController *MxStreamer::GetOpenStream(const char *p_name)
 {
   for (list<MxStreamController *>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+    MxStreamController *c = *it;
+    MxAtomId &atom = c->atom;
     if (p_name) {
-      if (!strcmp(((*it)->atom.GetInternal()), p_name)) {
+      if (!strcmp(atom.GetInternal(), p_name)) {
        return *it;
       }
     }
