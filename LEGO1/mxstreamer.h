@@ -8,6 +8,8 @@
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
+// NOTE: This feels like some kind of templated class, maybe something from the
+//       STL. But I haven't figured out what yet (it's definitely not a vector).
 class MxStreamerSubClass1
 {
 public:
