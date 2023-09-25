@@ -1,5 +1,7 @@
 #include "mxstreamer.h"
 
+#include <algorithm>
+
 #include "legoomni.h"
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
@@ -88,6 +90,18 @@ MxStreamController *MxStreamer::GetOpenStream(const char *p_name)
   }
 
   return NULL;
+}
+
+
+// OFFSET: LEGO1 0x100b9930
+MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController *stream)
+{
+  if (find(m_openStreams.begin(), m_openStreams.end(), stream) == m_openStreams.end()) {
+    m_openStreams.push_back(stream);
+    return SUCCESS;
+  }
+
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100b9b60

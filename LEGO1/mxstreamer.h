@@ -67,6 +67,8 @@ public:
 
   MxStreamController *GetOpenStream(const char *p_name);
 
+  MxResult AddStreamControllerToOpenList(MxStreamController *p_stream);
+
 private:
   list<MxStreamController *> m_openStreams; // 0x8
   MxStreamerSubClass2 m_subclass1; // 0x14
