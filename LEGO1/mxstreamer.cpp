@@ -3,6 +3,8 @@
 #include <algorithm>
 
 #include "legoomni.h"
+#include "mxdiskstreamcontroller.h"
+#include "mxramstreamcontroller.h"
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 
@@ -41,18 +43,36 @@ MxStreamer::~MxStreamer()
 }
 
 // OFFSET: LEGO1 0x100b92c0
-MxStreamController *MxStreamer::Open(const char *name, MxU16 p_lookupType)
+MxStreamController *MxStreamer::Open(const char *p_name, MxU16 p_lookupType)
 {
   // TODO
+  MxStreamController *stream = NULL;
 
-  MxStreamController *c = GetOpenStream(name);
+  if (!GetOpenStream(p_name)) {
+    switch (p_lookupType) {
+    case e_DiskStream:
+      stream = new MxDiskStreamController();
+      break;
+    case e_RAMStream:
+      stream = new MxRAMStreamController();
+      break;
+    }
 
-  return NULL;
+    if (!stream
+      || stream->Open(p_name) != SUCCESS
+      || AddStreamControllerToOpenList(stream) != SUCCESS) {
+      delete stream;
+      stream = NULL;
+    }
+  }
+
+  return stream;
 }
 
-// OFFSET: LEGO1 0x100b9570
+// OFFSET: LEGO1 0x100b9570 STUB
 MxLong MxStreamer::Close(const char *p)
 {
+  // TODO: Incomplete
   MxDSAction ds;
 
   ds.SetUnknown24(-2);
@@ -63,7 +83,7 @@ MxLong MxStreamer::Close(const char *p)
     if (!p || !strcmp(p, c->atom.GetInternal())) {
       m_openStreams.erase(it);
 
-      if (c->IsStillInUse()) {
+      if (!c->CanBeDeleted()) {
         // TODO: Send notification to `c`
       } else {
         delete c;

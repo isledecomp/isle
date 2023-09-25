@@ -42,11 +42,17 @@ public:
 class MxStreamer : public MxCore
 {
 public:
-  MxStreamer();
-  virtual ~MxStreamer() override;
+  enum OpenMode
+  {
+    e_DiskStream,
+    e_RAMStream
+  };
 
-  __declspec(dllexport) MxStreamController *Open(const char *name, MxU16 p);
-  __declspec(dllexport) MxLong Close(const char *p);
+  MxStreamer();
+  virtual ~MxStreamer() override; // vtable+0x0
+
+  __declspec(dllexport) MxStreamController *Open(const char *p_name, MxU16 p_openMode);
+  __declspec(dllexport) MxLong Close(const char *p_name);
 
   virtual MxLong Notify(MxParam &p) override; // vtable+0x4
 
@@ -58,7 +64,7 @@ public:
   }
 
   // OFFSET: LEGO1 0x100b9010
-  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  inline virtual MxBool IsA(const char *p_name) const override // vtable+0x10
   {
     return !strcmp(name, MxStreamer::ClassName()) || MxCore::IsA(name);
   }
