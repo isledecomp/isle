@@ -39,10 +39,22 @@ int LegoOmni::GetCurrPathInfo(LegoPathBoundary **,int &)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100b6ff0 STUB
-void MakeSourceName(char *, const char *)
+// OFFSET: LEGO1 0x100b6ff0
+void MakeSourceName(char *p_output, const char *p_input)
 {
-  // TODO
+  const char *cln = strchr(p_input, ':');
+  if (cln) {
+    p_input = cln + 1;
+  }
+
+  strcpy(p_output, p_input);
+
+  strlwr(p_output);
+
+  char *extLoc = strstr(p_output, ".si");
+  if (extLoc) {
+    *extLoc = 0;
+  }
 }
 
 // OFFSET: LEGO1 0x100b7050
