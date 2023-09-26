@@ -1,4 +1,5 @@
 #include "mxdsstreamingaction.h"
+#include "mxdsbuffer.h"
 
 DECOMP_SIZE_ASSERT(MxDSStreamingAction, 0xb4)
 
@@ -22,7 +23,6 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSStreamingAction &p_dsStreamingActio
 // OFFSET: LEGO1 0x100cd150
 MxDSStreamingAction::~MxDSStreamingAction()
 {
-  // TODO: Implement MxDSBuffer
   if (this->m_unka0)
     delete this->m_unka0;
   if (this->m_unka4)
