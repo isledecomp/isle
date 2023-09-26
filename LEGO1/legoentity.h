@@ -2,6 +2,7 @@
 #define LEGOENTITY_H
 
 #include "mxentity.h"
+#include "extra.h"
 
 // VTABLE 0x100d4858
 // SIZE 0x68 (probably)
@@ -31,7 +32,16 @@ public:
     return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
   }
 
+  virtual void vtable18(); // vtable+0x18
   virtual void Destroy() override; // vtable+0x1c
+  virtual void ParseAction(char *); // vtable+0x20
+
+protected:
+  // For tokens from the extra string that look like this:
+  // "Action:openram;\lego\scripts\Race\CarRaceR;0"
+  ExtraActionType m_actionType; // 0x5c
+  char *m_actionArgString; // 0x60
+  MxS32 m_actionArgNumber; // 0x64
 
 };
 

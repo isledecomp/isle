@@ -85,5 +85,6 @@ private:
 };
 
 char *PresenterNameDispatch(const MxDSAction &);
+extern char *g_parseExtraTokens;
 
 #endif // MXPRESENTER_H
