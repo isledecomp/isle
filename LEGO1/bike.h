@@ -1,6 +1,7 @@
 #ifndef BIKE_H
 #define BIKE_H
 
+#include "decomp.h"
 #include "islepathactor.h"
 
 // VTABLE 0x100d9808
@@ -22,7 +23,9 @@ public:
   {
     return !strcmp(name, Bike::ClassName()) || IslePathActor::IsA(name);
   }
-
+private:
+  // TODO: Bike fields
+  undefined m_unk160[4];
 };
 
 

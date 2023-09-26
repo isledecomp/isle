@@ -14,39 +14,11 @@ jobs:
         repository: 'itsmattkc/msvc420'
         path: msvc420
 
-    - name: Restore cached DX5 SDK
-      id: cache-dx5
-      uses: actions/cache/restore@v3
-      with:
-        path: dx5sdk
-        key: dx5sdk
-
-    - name: Download DX5 SDK
-      if: ${{ !steps.cache-dx5.outputs.cache-hit }}
-      run: |
-        cd dx5sdk
-        curl -fLOSs https://archive.org/download/idx5sdk/idx5sdk.exe
-        7z x .\idx5sdk.exe
-        7z x .\DX5SDK.EXE
-
-    - name: Cache DX5 SDK
-      if: ${{ !steps.cache-dx5.outputs.cache-hit }}
-      uses: actions/cache/save@v3
-      with:
-        path: dx5sdk
-        key: dx5sdk
-
-    - name: Setup DX5 SDK
-      run: |
-        cd dx5sdk
-        cd cdrom
-        .\SETUP.EXE /s
-
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
         # Use minimum supported version
-        cmake-version: '3.0.x'
+        cmake-version: '3.13.x'
 
     - name: Build
       shell: cmd
@@ -131,7 +103,7 @@ jobs:
   upload:
     needs: [build, compare]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
     - uses: actions/checkout@v3
       with:

@@ -36,33 +36,33 @@ public:
   LegoOmni();
   virtual ~LegoOmni(); // vtable+00
 
-  virtual MxLong Notify(MxParam &p); // vtable+04
+  virtual MxLong Notify(MxParam &p) override; // vtable+04
 
   // OFFSET: LEGO1 0x10058aa0
-  inline virtual const char *ClassName() const // vtable+0c
+  inline virtual const char *ClassName() const override // vtable+0c
   {
     // 0x100f671c
     return "LegoOmni";
   }
 
   // OFFSET: LEGO1 0x10058ab0
-  inline virtual MxBool IsA(const char *name) const // vtable+10
+  inline virtual MxBool IsA(const char *name) const override // vtable+10
   {
     return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name);
   }
 
-  virtual void Init(); // vtable+14
-  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
-  virtual void Destroy(); // vtable+1c
-  virtual void vtable20();
-  virtual void vtable24(MxDSAction &ds);
-  virtual MxBool vtable28(MxDSAction &ds);
-  virtual void vtable2c();
-  virtual void vtable30();
-  virtual void vtable34();
-  virtual void vtable38();
-  virtual void vtable3c();
-  virtual unsigned char vtable40();
+  virtual void Init() override; // vtable+14
+  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
+  virtual void Destroy() override; // vtable+1c
+  virtual void vtable0x20() override;
+  virtual void DeleteObject(MxDSAction &ds) override;
+  virtual MxBool DoesEntityExist(MxDSAction &ds) override;
+  virtual void vtable0x2c() override;
+  virtual int vtable0x30(char*, int, MxCore*) override;
+  virtual void NotifyCurrentEntity() override;
+  virtual void StartTimer() override;
+  virtual void vtable0x3c() override;
+  virtual MxBool vtable40();
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoSoundManager *GetSoundManager() { return (LegoSoundManager *)m_soundManager;}
@@ -113,5 +113,6 @@ __declspec(dllexport) MxLong Start(MxDSAction *a);
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
+MxBool KeyValueStringParse(char *, char *, char *);
 
 #endif // LEGOOMNI_H

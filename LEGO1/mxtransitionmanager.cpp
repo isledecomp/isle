@@ -13,7 +13,7 @@ MxTransitionManager::~MxTransitionManager()
 }
 
 // OFFSET: LEGO1 0x1004bac0 STUB
-MxLong MxTransitionManager::Tickle()
+MxResult MxTransitionManager::Tickle()
 {
   // TODO
 

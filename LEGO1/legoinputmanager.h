@@ -26,7 +26,7 @@ public:
   __declspec(dllexport) void Register(MxCore *);
   __declspec(dllexport) void UnRegister(MxCore *);
 
-  virtual MxLong Tickle() override; // vtable+0x8
+  virtual MxResult Tickle() override; // vtable+0x8
 
   undefined m_pad40[0x15c];
   int m_joystickIndex;

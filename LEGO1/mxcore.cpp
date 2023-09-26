@@ -22,7 +22,7 @@ MxLong MxCore::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10001f70
-MxLong MxCore::Tickle()
+MxResult MxCore::Tickle()
 {
   return 0;
 }

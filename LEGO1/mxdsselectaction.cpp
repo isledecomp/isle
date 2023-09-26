@@ -1,5 +1,7 @@
 #include "mxdsselectaction.h"
 
+DECOMP_SIZE_ASSERT(MxDSSelectAction, 0xb0)
+
 // OFFSET: LEGO1 0x100cb2b0
 MxDSSelectAction::MxDSSelectAction()
 {

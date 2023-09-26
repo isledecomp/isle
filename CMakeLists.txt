@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.0...3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
   LEGO1/act1state.cpp
@@ -45,6 +47,8 @@ add_library(lego1 SHARED
   LEGO1/jukeboxstate.cpp
   LEGO1/legoact2state.cpp
   LEGO1/legoactioncontrolpresenter.cpp
+  LEGO1/legoactor.cpp
+  LEGO1/legoactor.cpp
   LEGO1/legoanimactor.cpp
   LEGO1/legoanimationmanager.cpp
   LEGO1/legoanimmmpresenter.cpp
@@ -88,6 +92,8 @@ add_library(lego1 SHARED
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxatomid.cpp
+  LEGO1/mxatomidcounter.cpp
+  LEGO1/mxaudiomanager.cpp
   LEGO1/mxaudiopresenter.cpp
   LEGO1/mxautolocker.cpp
   LEGO1/mxbackgroundaudiomanager.cpp
@@ -97,11 +103,15 @@ add_library(lego1 SHARED
   LEGO1/mxcontrolpresenter.cpp
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
+  LEGO1/mxdirect3d.cpp
   LEGO1/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
+  LEGO1/mxdisplaysurface.cpp
   LEGO1/mxdsaction.cpp
+  LEGO1/mxdsactionlist.cpp
   LEGO1/mxdsanim.cpp
+  LEGO1/mxdsbuffer.cpp
   LEGO1/mxdschunk.cpp
   LEGO1/mxdsevent.cpp
   LEGO1/mxdsfile.cpp
@@ -115,6 +125,7 @@ add_library(lego1 SHARED
   LEGO1/mxdssound.cpp
   LEGO1/mxdssource.cpp
   LEGO1/mxdsstill.cpp
+  LEGO1/mxdsstreamingaction.cpp
   LEGO1/mxdssubscriber.cpp
   LEGO1/mxentity.cpp
   LEGO1/mxeventmanager.cpp
@@ -124,6 +135,8 @@ add_library(lego1 SHARED
   LEGO1/mxloopingflcpresenter.cpp
   LEGO1/mxloopingmidipresenter.cpp
   LEGO1/mxloopingsmkpresenter.cpp
+  LEGO1/mxmatrix.cpp
+  LEGO1/mxmediamanager.cpp
   LEGO1/mxmediapresenter.cpp
   LEGO1/mxmidipresenter.cpp
   LEGO1/mxmusicpresenter.cpp
@@ -134,22 +147,26 @@ add_library(lego1 SHARED
   LEGO1/mxomnicreateparam.cpp
   LEGO1/mxomnicreateparambase.cpp
   LEGO1/mxpalette.cpp
+  LEGO1/mxparam.cpp
   LEGO1/mxpresenter.cpp
+  LEGO1/mxpresenterlist.cpp
+  LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmkpresenter.cpp
   LEGO1/mxsoundmanager.cpp
   LEGO1/mxsoundpresenter.cpp
   LEGO1/mxstillpresenter.cpp
+  LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
-  LEGO1/mxstringvariable.cpp
   LEGO1/mxthread.cpp
+  LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
-  LEGO1/mxunknown100dc6b0.cpp
-  LEGO1/mxunknown100dc6e0.cpp
+  LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
+  LEGO1/mxvector.cpp
   LEGO1/mxvideomanager.cpp
   LEGO1/mxvideoparam.cpp
   LEGO1/mxvideoparamflags.cpp
@@ -177,8 +194,24 @@ add_library(lego1 SHARED
   LEGO1/viewmanager.cpp
 )
 
+if (ISLE_USE_SMARTHEAP)
+  add_library(SmartHeap::SmartHeap STATIC IMPORTED)
+  set_target_properties(SmartHeap::SmartHeap PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap"
+    INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
+
+  target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
+endif()
+
+# Use internal DirectX 5 if required
+if (ISLE_USE_DX5)
+  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
+
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid winmm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -193,6 +226,16 @@ if (ISLE_BUILD_APP)
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+
+  # Use internal DirectX 5 if required
+  if (ISLE_USE_DX5)
+    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+  endif()
+
+  if (ISLE_USE_SMARTHEAP)
+    target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
+  endif()
 
   # Link DSOUND, WINMM, and LEGO1
   target_link_libraries(isle PRIVATE dsound winmm lego1)

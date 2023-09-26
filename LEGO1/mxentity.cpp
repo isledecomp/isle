@@ -1,19 +1,22 @@
 #include "mxentity.h"
 
-// OFFSET: LEGO1 0x1001d190 STUB
+DECOMP_SIZE_ASSERT(MxEntity, 0x68)
+
+// OFFSET: LEGO1 0x1001d190
 MxEntity::MxEntity()
 {
-  // TODO
+  this->m_mxEntityId = -1;
 }
 
-// OFFSET: LEGO1 0x1000c110 STUB
+// OFFSET: LEGO1 0x1000c110
 MxEntity::~MxEntity()
 {
-  // TODO
 }
 
-// OFFSET: LEGO1 0x10001070 STUB
-void MxEntity::Destroy()
+// OFFSET: LEGO1 0x10001070
+MxResult MxEntity::SetEntityId(MxS32 p_id, const MxAtomId &p_atom)
 {
-  // TODO
+  this->m_mxEntityId = p_id;
+  this->m_atom = p_atom;
+  return SUCCESS;
 }

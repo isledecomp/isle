@@ -1,6 +1,7 @@
 #ifndef DUNEBUGGY_H
 #define DUNEBUGGY_H
 
+#include "decomp.h"
 #include "islepathactor.h"
 
 // VTABLE 0x100d8f98
@@ -22,7 +23,11 @@ public:
   {
     return !strcmp(name, DuneBuggy::ClassName()) || IslePathActor::IsA(name);
   }
-  
+private:
+  // TODO: Double check DuneBuggy field types
+  undefined4 m_unk160;
+  MxFloat m_unk164;
+  undefined4 m_unk168;
 };
 
 #endif // DUNEBUGGY_H

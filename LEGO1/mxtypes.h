@@ -25,6 +25,8 @@ typedef int MxLong;
 typedef unsigned int MxULong;
 #endif
 
+typedef MxS32 MxTime;
+
 typedef MxLong MxResult;
 const MxResult SUCCESS = 0;
 const MxResult FAILURE = -1;
@@ -39,8 +41,7 @@ typedef MxU8 MxBool;
 #define FALSE 0
 #endif
 
-#if defined(_MSC_VER) && _MSC_VER <= 1200 // 1200 corresponds to VC6.0 but "override" was probably added even later
-#define override
-#endif
+#define TWOCC(a, b) (((a) << 0) | ((b) << 8))
+#define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
 
 #endif // MXTYPE_H

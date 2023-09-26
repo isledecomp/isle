@@ -1,6 +1,7 @@
 #ifndef LEGOSTREAM_H
 #define LEGOSTREAM_H
 
+#include "compat.h"
 #include "decomp.h"
 #include "mxtypes.h"
 

@@ -1,12 +1,12 @@
 #ifndef MXSOUNDMANAGER_H
 #define MXSOUNDMANAGER_H
 
-#include "mxunknown100dc6e0.h"
+#include "mxaudiomanager.h"
 
 // VTABLE 0x100dc128
 // SIZE 0x3c
-// Base vtables are: MxCore -> 0x100dc6b0 -> 0x100dc6e0 -> MxSoundManager
-class MxSoundManager : public MxUnknown100dc6e0
+// Base vtables are: MxCore -> 0x100dc6b0 -> MxAudioManager -> MxSoundManager
+class MxSoundManager : public MxAudioManager
 {
 public:
   MxSoundManager();

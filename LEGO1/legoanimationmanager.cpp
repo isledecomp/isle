@@ -23,7 +23,7 @@ MxLong LegoAnimationManager::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x10061cc0 STUB
-MxLong LegoAnimationManager::Tickle()
+MxResult LegoAnimationManager::Tickle()
 {
   // TODO
 
