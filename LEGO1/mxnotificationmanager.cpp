@@ -8,17 +8,6 @@
 #include "compat.h"
 #include "decomp.h"
 
-// OFFSET: LEGO1 0x100ac320 TEMPLATE
-// list<unsigned int,allocator<unsigned int> >::~list<unsigned int,allocator<unsigned int> >
-
-// FIXME: Example of template compare functionality, remove before merging.
-#include "mxstl.h"
-#include <iostream>
-void make_a_list() {
-  List<unsigned int> l;
-  cout << l.size();
-}
-
 DECOMP_SIZE_ASSERT(MxNotification, 0x8);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
