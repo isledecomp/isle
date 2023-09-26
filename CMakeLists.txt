@@ -111,6 +111,7 @@ add_library(lego1 SHARED
   LEGO1/mxdsaction.cpp
   LEGO1/mxdsactionlist.cpp
   LEGO1/mxdsanim.cpp
+  LEGO1/mxdsbuffer.cpp
   LEGO1/mxdschunk.cpp
   LEGO1/mxdsevent.cpp
   LEGO1/mxdsfile.cpp
@@ -149,12 +150,14 @@ add_library(lego1 SHARED
   LEGO1/mxparam.cpp
   LEGO1/mxpresenter.cpp
   LEGO1/mxpresenterlist.cpp
+  LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmkpresenter.cpp
   LEGO1/mxsoundmanager.cpp
   LEGO1/mxsoundpresenter.cpp
   LEGO1/mxstillpresenter.cpp
+  LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
   LEGO1/mxthread.cpp

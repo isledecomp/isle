@@ -28,7 +28,10 @@ public:
   {
     return this->m_internal == other.m_internal;
   }
+
   void Clear();
+
+  const char *GetInternal() const { return m_internal; }
 
 private:
   MxAtomIdCounter* GetCounter(const char *, LookupMode);
