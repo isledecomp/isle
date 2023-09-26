@@ -15,7 +15,7 @@ MxStreamController::~MxStreamController()
 }
 
 // OFFSET: LEGO1 0x100c20d0 STUB
-MxBool MxStreamController::CanBeDeleted()
+MxBool MxStreamController::FUN_100c20d0(MxDSObject &p_obj)
 {
   // TODO
   return TRUE;

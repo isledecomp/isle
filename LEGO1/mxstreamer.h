@@ -5,6 +5,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+#include "mxparam.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
@@ -37,6 +38,24 @@ class MxStreamerSubClass3 : public MxStreamerSubClass1
 {
 public:
   inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
+};
+
+class MxStreamerNotification : public MxParam
+{
+public:
+  inline MxStreamerNotification(MxS32 p_type, MxCore *p_sender, MxStreamController *p_ctrlr) : MxParam(p_type, p_sender)
+  {
+    m_controller = p_ctrlr;
+  }
+
+  virtual ~MxStreamerNotification() override {}
+
+  virtual MxParam *Clone() override;
+
+  MxStreamController *GetController() { return m_controller; }
+
+private:
+  MxStreamController *m_controller;
 };
 
 // VTABLE 0x100dc710

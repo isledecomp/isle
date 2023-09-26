@@ -5,6 +5,7 @@
 #include "mxatomid.h"
 #include "mxcriticalsection.h"
 #include "mxcore.h"
+#include "mxdsobject.h"
 
 // VTABLE 0x100dc968
 // SIZE 0x64
@@ -30,7 +31,7 @@ public:
 
   virtual MxResult Open(const char *p_filename); // vtable+0x14
 
-  MxBool CanBeDeleted();
+  MxBool FUN_100c20d0(MxDSObject &p_obj);
 
   MxCriticalSection m_criticalSection;
   MxAtomId atom;
