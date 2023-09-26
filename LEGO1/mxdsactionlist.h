@@ -26,12 +26,12 @@ private:
 typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;
 
 // OFFSET: LEGO1 0x100c9cc0 TEMPLATE
-// MxListParent<MxDSAction*>::Compare
+// MxListParent<MxDSAction *>::Compare
 
 // OFFSET: LEGO1 0x100c9d20 TEMPLATE
-// MxListParent<MxDSAction*>::Destroy
+// MxListParent<MxDSAction *>::Destroy
 
 // OFFSET: LEGO1 0x100c9d30 TEMPLATE
-// MxList<MxDSAction*>::~MxList<MxDSAction*>
+// MxList<MxDSAction *>::~MxList<MxDSAction *>
 
 #endif // MXDSACTIONLIST_H
