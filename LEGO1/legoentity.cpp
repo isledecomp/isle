@@ -2,11 +2,9 @@
 
 #include "legoomni.h"
 #include "legoutil.h"
+#include "define.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
-
-// 0x10102040
-char *g_strACTION = "ACTION";
 
 // OFFSET: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()

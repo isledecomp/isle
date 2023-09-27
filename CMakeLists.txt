@@ -21,6 +21,7 @@ add_library(lego1 SHARED
   LEGO1/buildingentity.cpp
   LEGO1/bumpbouy.cpp
   LEGO1/carrace.cpp
+  LEGO1/define.cpp
   LEGO1/dllmain.cpp
   LEGO1/dunebuggy.cpp
   LEGO1/elevatorbottom.cpp

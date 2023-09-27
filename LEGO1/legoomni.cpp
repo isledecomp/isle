@@ -58,7 +58,7 @@ void MakeSourceName(char *p_output, const char *p_input)
 }
 
 // OFFSET: LEGO1 0x100b7050
-MxBool KeyValueStringParse(char *p_outputValue, char *p_key, char *p_source)
+MxBool KeyValueStringParse(char *p_outputValue, const char *p_key, const char *p_source)
 {
   MxBool didMatch = FALSE;
 

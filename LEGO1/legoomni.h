@@ -113,6 +113,6 @@ __declspec(dllexport) MxLong Start(MxDSAction *a);
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
-MxBool KeyValueStringParse(char *, char *, char *);
+MxBool KeyValueStringParse(char *, const char *, const char *);
 
 #endif // LEGOOMNI_H
