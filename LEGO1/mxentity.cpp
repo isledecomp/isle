@@ -1,6 +1,8 @@
 #include "mxentity.h"
 
-// DECOMP_SIZE_ASSERT(MxEntity, 0x68)
+// Size subject to change. It's not clear yet which members belong to
+// MxEntity and which belong only the subclasses.
+DECOMP_SIZE_ASSERT(MxEntity, 0x5c)
 
 // OFFSET: LEGO1 0x1001d190
 MxEntity::MxEntity()
