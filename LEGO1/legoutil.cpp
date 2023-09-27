@@ -2,6 +2,36 @@
 
 #include "mxtypes.h"
 
+#include <string.h>
+
+// OFFSET: LEGO1 0x1003e300
+ExtraActionType MatchActionString(const char *p_str) {
+  ExtraActionType result = ExtraActionType_unknown;
+
+  if (!strcmpi("openram", p_str))
+    result = ExtraActionType_openram;
+  else if (!strcmpi("opendisk", p_str))
+    result = ExtraActionType_opendisk;
+  else if (!strcmpi("close", p_str))
+    result = ExtraActionType_close;
+  else if (!strcmpi("start", p_str))
+    result = ExtraActionType_start;
+  else if (!strcmpi("stop", p_str))
+    result = ExtraActionType_stop;
+  else if (!strcmpi("run", p_str))
+    result = ExtraActionType_run;
+  else if (!strcmpi("exit", p_str))
+    result = ExtraActionType_exit;
+  else if (!strcmpi("enable", p_str))
+    result = ExtraActionType_enable;
+  else if (!strcmpi("disable", p_str))
+    result = ExtraActionType_disable;
+  else if (!strcmpi("notify", p_str))
+    result = ExtraActionType_notify;
+
+  return result;
+}
+
 // OFFSET: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, float *g_out)
 {
