@@ -33,7 +33,7 @@ public:
   }
 
   virtual void vtable18(); // vtable+0x18
-  virtual void Destroy() override; // vtable+0x1c
+  virtual void Destroy(); // vtable+0x1c
   virtual void ParseAction(char *); // vtable+0x20
 
 protected:
