@@ -26,6 +26,8 @@ public:
 
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
   inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
+  inline MxDisplaySurface *GetDisplaySurface() { return this->m_displaySurface; }
+  inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
 private:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
@@ -33,6 +35,8 @@ private:
   MxDisplaySurface *m_displaySurface;
   MxRegion *m_region;
   MxBool m_unk60;
+  undefined m_pad61[84];
+  MxBool m_unke4;
 };
 
 #endif // MXVIDEOMANAGER_H

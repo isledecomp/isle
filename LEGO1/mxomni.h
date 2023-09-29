@@ -92,4 +92,6 @@ __declspec(dllexport) MxNotificationManager * NotificationManager();
 MxVideoManager * MVideoManager();
 MxAtomIdCounterSet* AtomIdCounterSet();
 
+void SetAppCursor(WPARAM p_wparam); // OFFSET: LEGO 0x1003ef40
+
 #endif // MXOMNI_H
