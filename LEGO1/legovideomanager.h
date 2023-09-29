@@ -23,6 +23,7 @@ public:
   inline MxDirect3D *GetDirect3D() { return this->m_direct3d; }
 
   void SetSkyColor(float r, float g, float b);
+  inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
 
 private:
   undefined4 m_unk64;
@@ -30,6 +31,8 @@ private:
   undefined4 m_unk6c;
   undefined4 m_unk70;
   MxDirect3D *m_direct3d;
+  undefined m_pad78[0x6c];
+  MxBool m_unke4;
 };
 
 #endif // LEGOVIDEOMANAGER_H

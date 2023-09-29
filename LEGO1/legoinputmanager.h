@@ -31,11 +31,7 @@ public:
   undefined m_pad40[0x48];
 
   MxBool m_unk88;
-  MxU8 m_unk89;
-  MxU8 m_unk8a;
-  MxU8 m_unk8b;
-
-  undefined m_pad8c[0x110];
+  undefined m_unk89[0x113];
 
   // 0x19C
   int m_joystickIndex;
@@ -45,9 +41,9 @@ public:
   // 0x334
   MxBool m_useJoystick;
 
-  MxU8 m_unk335;
+  undefined m_unk335;
   MxBool m_unk336;
-  MxU8 m_unk337;
+  undefined m_unk337;
 };
 
 #endif // LEGOINPUTMANAGER_H
