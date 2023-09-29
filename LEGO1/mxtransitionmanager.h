@@ -30,7 +30,6 @@ public:
         return !strcmp(name, MxTransitionManager::ClassName()) || MxCore::IsA(name);
     }
 
-    // OFFSET: LEGO1 0x1004baa0
     virtual MxResult GetDDrawSurfaceFromVideoManager(); // vtable+0x14
 
     enum TransitionType {
@@ -42,8 +41,7 @@ public:
         WINDOWS,
         BROKEN // Unknown what this is supposed to be, it locks the game up
     };
-
-    // OFFSET: LEGO1 0x1004bb70
+    
     MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxU8 p_unk, MxBool p_playMusicInAnim);
 
 private:
