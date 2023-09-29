@@ -1,5 +1,10 @@
 #include "legogamestate.h"
 #include "legoomni.h"
+#include "decomp.h"
+
+// Based on the highest dword offset (0x42c) referenced in the constructor.
+// There may be other members that come after.
+DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
 // OFFSET: LEGO1 0x10039550
 LegoGameState::LegoGameState()

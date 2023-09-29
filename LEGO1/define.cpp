@@ -1,11 +1,5 @@
 #include "define.h"
 
-// 0x100f3be8
-const char *g_str_enable = "enable";
-
-// 0x100f3bf4
-const char *g_str_disable = "disable";
-
 // 0x10101eac
 const char *g_parseExtraTokens = ":;";
 

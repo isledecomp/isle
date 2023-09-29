@@ -6,6 +6,7 @@
 #include "legobackgroundcolor.h"
 #include "legofullscreenmovie.h"
 
+// SIZE 0x430 (at least)
 class LegoGameState
 {
 public:
@@ -18,11 +19,12 @@ public:
   __declspec(dllexport) void SetSavePath(char *p);
 
 private:
-  char *m_savePath;
-  undefined m_unk[20];
+  char *m_savePath; // 0x0
+  undefined m_unk04[20];
   LegoBackgroundColor *m_backgroundColor; // 0x18
   LegoBackgroundColor *m_tempBackgroundColor; // 0x1c
   LegoFullScreenMovie *m_fullScreenMovie; // 0x20
+  undefined m_unk24[1036];
 };
 
 #endif // LEGOGAMESTATE_H
