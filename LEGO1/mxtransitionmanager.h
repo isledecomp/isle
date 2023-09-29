@@ -45,8 +45,7 @@ public:
 
 private:
   undefined m_pad00[0x20];
-  MxU8 m_unk20;
-  undefined m_pad21[0x03];
+  undefined m_pad20[0x04];
   TransitionType m_transitionType;
   LPDIRECTDRAWSURFACE m_ddSurface;
   MxU16 m_animationTimer;
