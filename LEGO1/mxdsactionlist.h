@@ -34,13 +34,4 @@ typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;
 // OFFSET: LEGO1 0x100c9d30 TEMPLATE
 // MxList<MxDSAction *>::~MxList<MxDSAction *>
 
-// OFFSET: LEGO1 0x100c9d20 TEMPLATE
-// MxListParent<MxDSAction>::Destroy
-
-// OFFSET: LEGO1 0x100c9cd0 TEMPLATE
-// MxListParent<MxDSAction>::~MxListParent<MxDSAction>
-
-// OFFSET: LEGO1 0x100c9d30 TEMPLATE
-// MxList<MxDSAction>::~MxList<MxDSAction>
-
 #endif // MXDSACTIONLIST_H
