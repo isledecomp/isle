@@ -1,5 +1,6 @@
 #include "legoutil.h"
 
+#include "mxomni.h"
 #include "mxtypes.h"
 
 #include <string.h>
@@ -100,4 +101,10 @@ void ConvertHSVToRGB(float h, float s, float v, float *r_out, float *b_out, floa
   default:
     return;
   }
+}
+
+// OFFSET: LEGO1 0x1003ef40
+void SetAppCursor(WPARAM p_wparam)
+{
+  PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);
 }

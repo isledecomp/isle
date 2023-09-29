@@ -92,6 +92,4 @@ __declspec(dllexport) MxNotificationManager * NotificationManager();
 MxVideoManager * MVideoManager();
 MxAtomIdCounterSet* AtomIdCounterSet();
 
-void SetAppCursor(WPARAM p_wparam);
-
 #endif // MXOMNI_H
