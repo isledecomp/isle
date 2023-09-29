@@ -289,9 +289,3 @@ MxEventManager* EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
 }
-
-// OFFSET: LEGO1 0x1003ef40
-void SetAppCursor(WPARAM p_wparam)
-{
-    PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);
-}

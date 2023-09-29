@@ -1,4 +1,5 @@
 #include "mxtransitionmanager.h"
+#include "legoutil.h"
 #include "legovideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);

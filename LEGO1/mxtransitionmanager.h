@@ -5,7 +5,6 @@
 #include "mxvideopresenter.h"
 #include "legoomni.h"
 
-
 // VTABLE 0x100d7ea0
 class MxTransitionManager : public MxCore
 {
