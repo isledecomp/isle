@@ -16,7 +16,8 @@ public:
 
   __declspec(dllexport) int EnableRMDevice();
   __declspec(dllexport) int DisableRMDevice();
-  __declspec(dllexport) void EnableFullScreenMovie(unsigned char a, unsigned char b);
+  void EnableFullScreenMovie(MxBool p_enable);
+  __declspec(dllexport) void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
   __declspec(dllexport) void MoveCursor(int x, int y);
 
   inline Lego3DManager *Get3DManager() { return this->m_3dManager; }

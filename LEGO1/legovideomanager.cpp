@@ -27,8 +27,14 @@ int LegoVideoManager::DisableRMDevice()
   return 0;
 }
 
+// OFFSET: LEGO1 0x1007c300
+void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
+{
+  EnableFullScreenMovie(p_enable, 1);
+}
+
 // OFFSET: LEGO1 0x1007c310 STUB
-void LegoVideoManager::EnableFullScreenMovie(unsigned char a, unsigned char b)
+void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 {
   // TODO
 }

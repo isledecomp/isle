@@ -5,6 +5,17 @@
 LegoGameState::LegoGameState()
 {
   // TODO
+  m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_backgroundColor);
+
+  m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_tempBackgroundColor);
+
+  m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
+  VariableTable()->SetVariable(m_fullScreenMovie);
+
+  VariableTable()->SetVariable("lightposition", "2");
+  SerializeScoreHistory(1);
 }
 
 // OFFSET: LEGO1 0x10039720
