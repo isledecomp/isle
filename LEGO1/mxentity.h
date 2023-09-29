@@ -31,7 +31,7 @@ public:
 private:
   MxS32 m_mxEntityId; // 0x8
   MxAtomId m_atom; // 0xc
-  undefined m_unk10[0x58];
+  undefined m_unk10[76];
 };
 
 #endif // MXENTITY_H

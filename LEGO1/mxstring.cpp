@@ -1,6 +1,10 @@
 #include "mxstring.h"
+#include "decomp.h"
+
 #include <stdlib.h>
 #include <string.h>
+
+DECOMP_SIZE_ASSERT(MxString, 0x10)
 
 // OFFSET: LEGO1 0x100ae200
 MxString::MxString()

@@ -21,6 +21,7 @@
 #include "legoplantmanager.h"
 
 class LegoSoundManager;
+class MxTransitionManager;
 
 // VTABLE 0x100d8638
 // SIZE: 0x140
@@ -113,6 +114,6 @@ __declspec(dllexport) MxLong Start(MxDSAction *a);
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
-MxBool KeyValueStringParse(char *, char *, char *);
+MxBool KeyValueStringParse(char *, const char *, const char *);
 
 #endif // LEGOOMNI_H

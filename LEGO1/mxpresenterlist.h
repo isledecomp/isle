@@ -35,4 +35,13 @@ typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
 // OFFSET: LEGO1 0x1001ce20 TEMPLATE
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
 
+// OFFSET: LEGO1 0x1001cd30 TEMPLATE
+// MxListParent<MxPresenter>::Destroy
+
+// OFFSET: LEGO1 0x1001cdd0 TEMPLATE
+// MxListParent<MxPresenter>::~MxListParent<MxPresenter>
+
+// OFFSET: LEGO1 0x1001ce20 TEMPLATE
+// MxList<MxPresenter>::~MxList<MxPresenter>
+
 #endif // MXPRESENTERLIST_H

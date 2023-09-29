@@ -7,14 +7,9 @@
 #include <string.h>
 
 #include "decomp.h"
+#include "define.h"
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
-
-// 0x10101eac
-char *g_parseExtraTokens = ":;";
-
-// 0x10101edc
-char *g_strWORLD = "WORLD";
 
 // OFFSET: LEGO1 0x100b4d50
 void MxPresenter::Init()
