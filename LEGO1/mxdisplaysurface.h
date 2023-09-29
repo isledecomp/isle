@@ -33,6 +33,8 @@ public:
   virtual void ReleaseDC(HDC p_hdc);
   virtual undefined4 vtable44(undefined4, undefined4*, undefined4, undefined4);
 
+  inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }
+
 private:
   MxVideoParam m_videoParam;
   LPDIRECTDRAWSURFACE m_ddSurface1;

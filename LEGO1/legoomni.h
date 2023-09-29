@@ -21,6 +21,7 @@
 #include "legoplantmanager.h"
 
 class LegoSoundManager;
+class MxTransitionManager;
 
 // VTABLE 0x100d8638
 // SIZE: 0x140

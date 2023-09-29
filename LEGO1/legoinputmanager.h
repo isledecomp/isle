@@ -28,10 +28,22 @@ public:
 
   virtual MxResult Tickle() override; // vtable+0x8
 
-  undefined m_pad40[0x15c];
+  undefined m_pad40[0x48];
+
+  MxBool m_unk88;
+  undefined m_unk89[0x113];
+
+  // 0x19C
   int m_joystickIndex;
-  undefined m_pad200[0x194];
+
+  undefined m_pad1a0[0x194];
+
+  // 0x334
   MxBool m_useJoystick;
+
+  undefined m_unk335;
+  MxBool m_unk336;
+  undefined m_unk337;
 };
 
 #endif // LEGOINPUTMANAGER_H
