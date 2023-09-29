@@ -17,11 +17,9 @@ MxResult MxDiskStreamProviderThread::Run()
 // OFFSET: LEGO1 0x100d0f70
 MxDiskStreamProvider::MxDiskStreamProvider()
 {
-  this->m_unk54 = NULL;
-  this->m_unk4 = malloc(0xc);
-  this->m_unk5 = NULL;
+  this->m_pFile = NULL;
   this->m_remainingWork = 0;
-  this->m_unk1 = 0;
+  this->m_unk35 = 0;
 }
 
 // OFFSET: LEGO1 0x100d1240
@@ -37,7 +35,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
   while (m_remainingWork != 0)
   {
     m_busySemaphore.Wait(INFINITE);
-    if (m_unk1 != 0)
+    if (m_unk35 != 0)
       PerformWork();
   }
   return SUCCESS;
