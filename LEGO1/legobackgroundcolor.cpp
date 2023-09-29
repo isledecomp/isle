@@ -3,6 +3,9 @@
 #include "legoomni.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(LegoBackgroundColor, 0x30)
 
 const char *g_delimiter = "\t";
 const char *g_set = "set";

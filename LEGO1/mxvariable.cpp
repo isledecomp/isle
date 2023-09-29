@@ -1,5 +1,8 @@
 #include "mxvariable.h"
 #include "mxstring.h"
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxVariable, 0x24)
 
 // OFFSET: LEGO1 0x1003bea0
 MxString *MxVariable::GetValue()

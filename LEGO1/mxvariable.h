@@ -4,7 +4,8 @@
 #include "mxstring.h"
 #include "mxcore.h"
 
-//VTABLE: 0x100d74a8
+// VTABLE 0x100d7498
+// SIZE 0x24
 class MxVariable
 {
 public:
