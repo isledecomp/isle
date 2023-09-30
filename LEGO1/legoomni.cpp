@@ -1,6 +1,6 @@
 #include "legoomni.h"
 
-#include "mxdsobject.h"
+#include "mxdsfile.h"
 
 // 0x100f4588
 char *g_nocdSourceName = NULL;

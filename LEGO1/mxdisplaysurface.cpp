@@ -1,5 +1,7 @@
 #include "mxdisplaysurface.h"
+
 #include "mxomni.h"
+#include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 

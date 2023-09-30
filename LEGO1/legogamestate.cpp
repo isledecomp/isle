@@ -1,5 +1,7 @@
 #include "legogamestate.h"
+
 #include "legoomni.h"
+#include "mxvariabletable.h"
 #include "decomp.h"
 
 // Based on the highest dword offset (0x42c) referenced in the constructor.

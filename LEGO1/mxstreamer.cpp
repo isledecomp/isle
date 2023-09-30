@@ -1,10 +1,11 @@
 #include "mxstreamer.h"
 
-#include <algorithm>
-
 #include "legoomni.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxramstreamcontroller.h"
+#include "mxnotificationmanager.h"
+
+#include <algorithm>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 
