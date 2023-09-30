@@ -31,6 +31,7 @@ public:
   {
     return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
   }
+
 private:
   MxS32 m_unk78;
   MxS32 m_unk7c;
@@ -41,7 +42,6 @@ private:
   MxU32 m_unk90;
   MxS32 m_unk94;
   undefined m_unk98;
-  undefined m_unk99[3];
 };
 
 #endif // PIZZA_H
