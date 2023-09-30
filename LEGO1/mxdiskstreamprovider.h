@@ -1,6 +1,7 @@
 #ifndef MXDISKSTREAMPROVIDER_H
 #define MXDISKSTREAMPROVIDER_H
 
+#include "decomp.h"
 #include "mxstreamprovider.h"
 #include "mxthread.h"
 #include "mxcriticalsection.h"
@@ -20,6 +21,32 @@ public:
 
 private:
   MxDiskStreamProvider *m_target;
+};
+
+// TODO
+struct MxDiskStreamListNode {
+  MxDiskStreamListNode *m_unk00;
+  MxDiskStreamListNode *m_unk04;
+  undefined4 m_unk08;
+};
+
+// TODO
+struct MxDiskStreamList {
+  inline MxDiskStreamList() {
+    undefined unk;
+    this->m_unk00 = unk;
+
+    MxDiskStreamListNode *node = new MxDiskStreamListNode();
+    node->m_unk00 = node;
+    node->m_unk04 = node;
+    
+    this->m_head = node;
+    this->m_count = 0;
+  }
+
+  undefined m_unk00;
+  MxDiskStreamListNode *m_head;
+  MxU32 m_count;
 };
 
 // VTABLE 0x100dd138
@@ -48,14 +75,12 @@ public:
   void PerformWork();
 
 private:
-  MxDiskStreamProviderThread m_thread;
-  MxSemaphore m_busySemaphore;
-  byte m_remainingWork;
-  byte m_unk1;
-  MxCriticalSection m_criticalSection;
-  byte unk2[4];
-  void* unk3;
-  void *unk4;
+  MxDiskStreamProviderThread m_thread; // 0x10
+  MxSemaphore m_busySemaphore; // 0x2c
+  undefined m_remainingWork; // 0x34
+  undefined m_unk35; // 0x35
+  MxCriticalSection m_criticalSection; // 0x38
+  MxDiskStreamList m_list;
 };
 
 #endif // MXDISKSTREAMPROVIDER_H

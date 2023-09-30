@@ -65,6 +65,7 @@ add_library(lego1 SHARED
   LEGO1/legoentity.cpp
   LEGO1/legoentitypresenter.cpp
   LEGO1/legoflctexturepresenter.cpp
+  LEGO1/legofullscreenmovie.cpp
   LEGO1/legogamestate.cpp
   LEGO1/legohideanimpresenter.cpp
   LEGO1/legoinputmanager.cpp
