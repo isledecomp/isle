@@ -33,14 +33,14 @@ public:
   }
 
 private:
-  MxS32 m_unk78;
-  MxS32 m_unk7c;
-  MxS32 m_unk80;
-  MxS32 m_unk84;
-  MxS32 m_unk88;
-  MxS32 m_unk8c;
-  MxU32 m_unk90;
-  MxS32 m_unk94;
+  undefined4 m_unk78;
+  undefined4 m_unk7c;
+  undefined4 m_unk80;
+  undefined4 m_unk84;
+  undefined4 m_unk88;
+  undefined4 m_unk8c;
+  undefined4 m_unk90;
+  undefined4 m_unk94;
   undefined m_unk98;
 };
 
