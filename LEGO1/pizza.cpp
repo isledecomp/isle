@@ -5,7 +5,7 @@ DECOMP_SIZE_ASSERT(Pizza, 0x9c);
 // OFFSET: LEGO1 0x10037ef0
 Pizza::Pizza()
 {
-  // FIXME: This inherits from LegoActor, probably why this isn't matching
+  this->m_unk7c = 0;
   this->m_unk80 = 0;
   this->m_unk84 = 0;
   this->m_unk88 = 0;
