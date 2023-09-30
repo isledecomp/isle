@@ -1,6 +1,8 @@
 #ifndef PIZZA_H
 #define PIZZA_H
 
+#include "decomp.h"
+
 #include "isleactor.h"
 #include "mxcore.h"
 #include "mxomni.h"
@@ -38,7 +40,8 @@ private:
   MxS32 m_unk8c;
   MxU32 m_unk90;
   MxS32 m_unk94;
-  MxS32 m_unk98;
+  undefined m_unk98;
+  undefined m_unk99[3];
 };
 
 #endif // PIZZA_H

@@ -1,7 +1,5 @@
 #include "pizza.h"
 
-#include "decomp.h"
-
 DECOMP_SIZE_ASSERT(Pizza, 0x9c);
 
 // OFFSET: LEGO1 0x10037ef0
