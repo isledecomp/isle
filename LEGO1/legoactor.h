@@ -9,6 +9,8 @@
 class LegoActor : public LegoEntity
 {
 public:
+  LegoActor();
+
   // OFFSET: LEGO1 0x1002d210
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
