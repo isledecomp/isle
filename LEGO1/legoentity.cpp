@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 // OFFSET: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {
-  Destroy();
+  Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x100114f0 STUB
@@ -20,6 +20,26 @@ MxLong LegoEntity::Notify(MxParam &p)
   return 0;
 }
 
+// OFFSET: LEGO1 0x100105f0
+void LegoEntity::Reset()
+{
+  float value = 0.0f;
+  m_vec1.EqualsScalar(&value);
+
+  value = 0.0f;
+  m_vec2.EqualsScalar(&value);
+
+  m_unk50 = 0;
+  m_unk54 = 0;
+  m_unk58 = 0;
+  m_actionArgString = NULL;
+  m_unk10 = 0;
+  m_unk11 = 0;
+  m_actionType = ExtraActionType_unknown;
+  m_actionArgNumber = -1;
+  m_unk59 = 4;
+}
+
 // OFFSET: LEGO1 0x100107e0 STUB
 void LegoEntity::vtable18()
 {
@@ -27,9 +47,14 @@ void LegoEntity::vtable18()
 }
 
 // OFFSET: LEGO1 0x10010810 STUB
-void LegoEntity::Destroy()
+void LegoEntity::Destroy(MxBool)
 {
-  // TODO
+  if (m_unk54) {
+    // TODO
+  }
+
+  delete[] m_actionArgString;
+  Reset();
 }
 
 // OFFSET: LEGO1 0x10010e10
