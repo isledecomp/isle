@@ -42,6 +42,14 @@ public:
 
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, undefined p_unk, MxBool p_playMusicInAnim);
 
+  void FUN_1004bcf0();
+  void FUN_1004bd10();
+  void FUN_1004bed0();
+  void FUN_1004c170();
+  void FUN_1004c270();
+  void FUN_1004c3e0();
+
+
 private:
   undefined m_pad00[0x20];
   undefined m_pad20[0x04];

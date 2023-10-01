@@ -16,12 +16,39 @@ MxTransitionManager::~MxTransitionManager()
   // TODO
 }
 
-// OFFSET: LEGO1 0x1004bac0 STUB
+// OFFSET: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
-  // TODO
+  MxS32 speed = this->m_animationSpeed;
+  MxULong storedTime = this->m_systemTime;
+  MxULong realTime = timeGetTime();
 
-  return 0;
+  if (speed + storedTime <= realTime) {
+    storedTime = timeGetTime();
+    this->m_systemTime = storedTime;
+
+    switch (this->m_transitionType) {
+      case NO_ANIMATION:
+        FUN_1004bcf0();
+        return SUCCESS;
+      case DISSOLVE:
+        FUN_1004bd10();
+        return SUCCESS;
+      case PIXELATION:
+        FUN_1004bed0();
+        return SUCCESS;
+      case SCREEN_WIPE:
+        FUN_1004c170();
+        return SUCCESS;
+      case WINDOWS:
+        FUN_1004c270();
+        return SUCCESS;
+      case BROKEN:
+        FUN_1004c3e0();
+    }
+    return SUCCESS;
+  }
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1004c470 STUB
@@ -53,7 +80,7 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
 
       // TODO: This part of the function is mangled and I can't make out what it's doing right now
 
-      MxU32 time = timeGetTime();
+      MxULong time = timeGetTime();
       this->m_systemTime = time;
 
       this->m_animationSpeed = p_speed;
@@ -72,4 +99,40 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
       return SUCCESS;
   }
   return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1004bcf0 STUB
+void MxTransitionManager::FUN_1004bcf0()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004bd10 STUB
+void MxTransitionManager::FUN_1004bd10()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004bed0 STUB
+void MxTransitionManager::FUN_1004bed0()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c170 STUB
+void MxTransitionManager::FUN_1004c170()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c270 STUB
+void MxTransitionManager::FUN_1004c270()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c3e0 STUB
+void MxTransitionManager::FUN_1004c3e0()
+{
+  // TODO
 }
