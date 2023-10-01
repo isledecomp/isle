@@ -7,7 +7,7 @@
 #include "mxtypes.h"
 
 // VTABLE 0x100d5390
-// SIZE 0x68 or less
+// SIZE 0x10
 class MxEntity : public MxCore
 {
 public:
@@ -31,7 +31,6 @@ public:
 private:
   MxS32 m_mxEntityId; // 0x8
   MxAtomId m_atom; // 0xc
-  undefined m_unk10[76];
 };
 
 #endif // MXENTITY_H
