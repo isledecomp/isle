@@ -1,6 +1,8 @@
 #ifndef MXCONTROLPRESENTER_H
 #define MXCONTROLPRESENTER_H
 
+#include "decomp.h"
+
 #include "mxcompositepresenter.h"
 
 // VTABLE 0x100d7b88
@@ -22,7 +24,15 @@ public:
   {
     return !strcmp(name, MxControlPresenter::ClassName()) || MxCompositePresenter::IsA(name);
   }
-
+private:
+  MxS16 m_unk4c;
+  MxS16 m_unk4e;
+  undefined m_unk50;
+  undefined m_unk51;
+  MxS16 m_unk52;
+  MxS16 m_unk54;
+  undefined2 m_unk56;
+  MxS32 m_unk58;
 };
 
 
