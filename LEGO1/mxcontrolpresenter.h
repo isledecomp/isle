@@ -25,14 +25,12 @@ public:
     return !strcmp(name, MxControlPresenter::ClassName()) || MxCompositePresenter::IsA(name);
   }
 private:
-  MxS16 m_unk4c;
+  undefined2 m_unk4c;
   MxS16 m_unk4e;
   undefined m_unk50;
-  undefined m_unk51;
-  MxS16 m_unk52;
-  MxS16 m_unk54;
-  undefined2 m_unk56;
-  MxS32 m_unk58;
+  undefined2 m_unk52;
+  undefined2 m_unk54;
+  undefined4 m_unk58;
 };
 
 
