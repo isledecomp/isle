@@ -19,6 +19,8 @@ public:
 
   void Reset();
 
+  static void FUN_100ba640(MxDisplaySurface *p_displaySurface);
+
   virtual MxResult Init(MxVideoParam &p_videoParam, LPDIRECTDRAWSURFACE p_ddSurface1, LPDIRECTDRAWSURFACE p_ddSurface2, LPDIRECTDRAWCLIPPER p_ddClipper);
   virtual MxResult Create(MxVideoParam &p_videoParam);
   virtual void Clear();

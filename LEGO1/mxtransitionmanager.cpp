@@ -98,10 +98,18 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
   return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1004bcf0 STUB
-void MxTransitionManager::FUN_1004bcf0()
+// OFFSET: LEGO1 0x1004bc30 STUB
+void MxTransitionManager::EndTransition(MxBool p_unk)
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x1004bcf0
+void MxTransitionManager::FUN_1004bcf0()
+{
+  LegoVideoManager *videoManager = VideoManager();
+  MxDisplaySurface::FUN_100ba640(videoManager->GetDisplaySurface());
+  EndTransition(TRUE);
 }
 
 // OFFSET: LEGO1 0x1004bd10 STUB

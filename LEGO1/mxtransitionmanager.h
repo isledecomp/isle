@@ -42,6 +42,8 @@ public:
 
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, undefined p_unk, MxBool p_playMusicInAnim);
 
+  void MxTransitionManager::EndTransition(MxBool p_unk);
+
   void FUN_1004bcf0();
   void FUN_1004bd10();
   void FUN_1004bed0();
