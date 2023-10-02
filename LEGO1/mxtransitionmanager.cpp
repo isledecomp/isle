@@ -19,34 +19,31 @@ MxTransitionManager::~MxTransitionManager()
 // OFFSET: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
-  MxS32 speed = this->m_animationSpeed;
-  MxULong storedTime = this->m_systemTime;
-  MxULong realTime = timeGetTime();
-
-  if (speed + storedTime <= realTime) {
-    storedTime = timeGetTime();
-    this->m_systemTime = storedTime;
-
-    switch (this->m_transitionType) {
-      case NO_ANIMATION:
-        FUN_1004bcf0();
-        return SUCCESS;
-      case DISSOLVE:
-        FUN_1004bd10();
-        return SUCCESS;
-      case PIXELATION:
-        FUN_1004bed0();
-        return SUCCESS;
-      case SCREEN_WIPE:
-        FUN_1004c170();
-        return SUCCESS;
-      case WINDOWS:
-        FUN_1004c270();
-        return SUCCESS;
-      case BROKEN:
-        FUN_1004c3e0();
-    }
+  if (this->m_animationSpeed + this->m_systemTime > timeGetTime()) {
     return SUCCESS;
+  }
+
+  this->m_systemTime = timeGetTime();
+
+  switch (this->m_transitionType) {
+    case NO_ANIMATION:
+      FUN_1004bcf0();
+      break;
+    case DISSOLVE:
+      FUN_1004bd10();
+      break;
+    case PIXELATION:
+      FUN_1004bed0();
+      break;
+    case SCREEN_WIPE:
+      FUN_1004c170();
+      break;
+    case WINDOWS:
+      FUN_1004c270();
+      break;
+    case BROKEN:
+      FUN_1004c3e0();
+      break;
   }
   return SUCCESS;
 }
