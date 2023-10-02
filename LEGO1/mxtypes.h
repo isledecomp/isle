@@ -44,4 +44,19 @@ typedef MxU8 MxBool;
 #define TWOCC(a, b) (((a) << 0) | ((b) << 8))
 #define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
 
+// Must be union with struct for match.
+typedef union {
+  struct {
+    MxU8 bit0: 1;
+    MxU8 bit1: 1;
+    MxU8 bit2: 1;
+    MxU8 bit3: 1;
+    MxU8 bit4: 1;
+    MxU8 bit5: 1;
+    MxU8 bit6: 1;
+    MxU8 bit7: 1;
+  };
+  // BYTE all; // ?
+} flag_bitfield;
+
 #endif // MXTYPE_H
