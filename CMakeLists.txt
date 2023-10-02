@@ -162,6 +162,7 @@ add_library(lego1 SHARED
   LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstring.cpp
+  LEGO1/mxstringlist.cpp
   LEGO1/mxthread.cpp
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp

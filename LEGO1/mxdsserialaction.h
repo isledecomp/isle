@@ -28,9 +28,9 @@ public:
     return !strcmp(name, MxDSSerialAction::ClassName()) || MxDSMultiAction::IsA(name);
   }
 
-  virtual MxLong GetDuration(); // vtable+24;
-  virtual void SetDuration(MxLong p_duration); // vtable+28;
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxLong GetDuration() override; // vtable+24;
+  virtual void SetDuration(MxLong p_duration) override; // vtable+28;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 
 private:
   MxDSActionListCursor *m_cursor;
