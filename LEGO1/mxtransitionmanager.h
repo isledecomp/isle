@@ -89,6 +89,11 @@ public:
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_unk, MxBool p_playMusicInAnim);
 
 private:
+  void EndTransition(MxBool);
+  void Transition_Dissolve();
+  void FUN_1004c4d0(DDSURFACEDESC*);
+  void FUN_1004c580(DDSURFACEDESC*);
+
   MxTransitionManagerUnknownSubclass1 *m_unk08;
   undefined4 m_unk0c;
   undefined4 m_unk10;
@@ -102,7 +107,8 @@ private:
   TransitionType m_transitionType;
   LPDIRECTDRAWSURFACE m_ddSurface;
   MxU16 m_animationTimer;
-  undefined m_pad36[0x8c2];
+  undefined2 m_pad36[640]; // 0x36
+  undefined2 m_pad536[480]; // 0x536
   MxULong m_systemTime;
   MxS32 m_animationSpeed;
 };

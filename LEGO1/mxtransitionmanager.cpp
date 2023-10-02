@@ -4,6 +4,9 @@
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
+// 0x100f4378
+RECT g_rect_100f4378 = {0, 0, 640, 480};
+
 // OFFSET: LEGO1 0x1004b8d0
 MxTransitionManager::MxTransitionManager()
 {
@@ -38,8 +41,102 @@ MxResult MxTransitionManager::Tickle()
   return 0;
 }
 
+// OFFSET: LEGO1 0x1004bc30 STUB
+void MxTransitionManager::EndTransition(MxBool)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004bd10
+void MxTransitionManager::Transition_Dissolve()
+{
+  // If the animation is finished
+  if (m_animationTimer == 40) {
+    m_animationTimer = 0;
+    EndTransition(TRUE);
+    return;
+  }
+
+  // If we are starting the animation
+  if (m_animationTimer == 0) {
+    // Populate
+    for (int i = 0; i < 640; i++) {
+      m_pad36[i] = i;
+    }
+
+    // Randomize (sorta)
+    for (i = 0; i < 640; i++) {
+      int swap_ofs = rand() % 640;
+      undefined2 t = m_pad36[i];
+      m_pad36[i] = m_pad36[swap_ofs];
+      m_pad36[swap_ofs] = t;
+    }
+
+    for (i = 0; i < 480; i++) {
+      m_pad536[i] = rand() % 640;
+    }
+  }
+
+  // Else run one tick of the animation
+  DDSURFACEDESC ddsd;
+  memset(&ddsd, 0, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  }
+
+  if (res == DD_OK) {
+    FUN_1004c4d0(&ddsd);
+
+    for (int i = 0; i < 640; i++) {
+      if (m_animationTimer * 16 > m_pad36[i])
+        continue;
+
+      if (m_animationTimer * 16 + 15 < m_pad36[i])
+        continue;
+
+      for (int j = 0; j < 480; j++) {
+        int jt = (m_pad536[j] + i) % 640;
+
+        if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
+          MxU8 *pix = (MxU8*)ddsd.lpSurface;
+          pix[j * ddsd.lPitch + jt] = 0;
+        } else {
+          MxU16 *pix = (MxU16*)ddsd.lpSurface;
+          pix[j * ddsd.lPitch + jt] = 0;
+        }
+      }
+    }
+
+    FUN_1004c580(&ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+
+    if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
+      LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
+      surf->BltFast(NULL, NULL, m_ddSurface, &g_rect_100f4378, 0x10);
+    }
+
+    m_animationTimer++;
+  }
+}
+
 // OFFSET: LEGO1 0x1004c470 STUB
 void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c4d0 STUB
+void MxTransitionManager::FUN_1004c4d0(DDSURFACEDESC *ddsc)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c580 STUB
+void MxTransitionManager::FUN_1004c580(DDSURFACEDESC *ddsc)
 {
   // TODO
 }
