@@ -232,7 +232,7 @@ undefined4 MxDisplaySurface::vtable44(undefined4, undefined4*, undefined4, undef
 }
 
 // OFFSET: LEGO1 0x100ba640 STUB
-void MxDisplaySurface::FUN_100ba640(MxDisplaySurface *p_displaySurface)
+void MxDisplaySurface::FUN_100ba640()
 {
   // TODO
 }

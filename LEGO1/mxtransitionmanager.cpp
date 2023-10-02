@@ -108,7 +108,7 @@ void MxTransitionManager::EndTransition(MxBool p_unk)
 void MxTransitionManager::FUN_1004bcf0()
 {
   LegoVideoManager *videoManager = VideoManager();
-  MxDisplaySurface::FUN_100ba640(videoManager->GetDisplaySurface());
+  videoManager->GetDisplaySurface()->FUN_100ba640();
   EndTransition(TRUE);
 }
 
