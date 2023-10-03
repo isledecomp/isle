@@ -110,11 +110,11 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
   PALETTEENTRY entries[256];
 
   if (p_palette) {
-    if (p_palette->GetEntries(entries))
+    if (!p_palette->GetEntries(entries))
       return ret;
   } else {
     MxPalette local_pal;
-    if (local_pal.GetEntries(entries))
+    if (!local_pal.GetEntries(entries))
       return ret;
   }
 
