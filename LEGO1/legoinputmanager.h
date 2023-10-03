@@ -66,8 +66,8 @@ public:
   MxS32 m_joyid;
   MxS32 m_joystickIndex;
   JOYCAPS m_joyCaps;
-  MxU8 m_joystickIndex2;
   MxBool m_useJoystick;
+  MxBool m_unk0x335;
   MxBool m_unk0x336;
 };
 

@@ -26,8 +26,8 @@ LegoInputManager::LegoInputManager()
   m_unk0x195 = 0;
   m_joyid = (UINT) -1;
   m_joystickIndex = -1;
-  m_joystickIndex2 = 0;
   m_useJoystick = FALSE;
+  m_unk0x335 = 0;
   m_unk0x336 = 0;
   m_unk0x74 = 0x19;
   m_timeout = 1000;
@@ -99,7 +99,7 @@ MxResult LegoInputManager::GetJoystickId()
 {
   JOYINFOEX joyinfoex;
 
-  if (m_joystickIndex2 != JOYSTICKID1) {
+  if (m_useJoystick != FALSE) {
     MxS32 joyid = m_joystickIndex;
     if (joyid >= 0) {
       joyinfoex.dwSize = 0x34;
@@ -127,9 +127,9 @@ MxResult LegoInputManager::GetJoystickId()
 // OFFSET: LEGO1 0x1005c320
 MxResult LegoInputManager::GetJoystickState(MxU32 *joystick_x, MxU32 *joystick_y, DWORD *buttons_state, MxU32 *pov_position)
 {
-  if (m_joystickIndex2 != JOYSTICKID1) {
+  if (m_useJoystick != FALSE) {
     if (m_joyid < 0 && GetJoystickId() == -1) {
-      m_joystickIndex2 = 0;
+      m_useJoystick = FALSE;
       return FAILURE;
     }
 
