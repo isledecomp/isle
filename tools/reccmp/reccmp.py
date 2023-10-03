@@ -10,6 +10,7 @@ import logging
 import os
 import sys
 import colorama
+import html
 import re
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
@@ -43,7 +44,7 @@ if args.verbose:
     verbose = int(args.verbose, 16)
   except ValueError:
     parser.error('invalid verbose argument')
-html = args.html
+html_path = args.html
 
 plain = args.no_color
 
@@ -140,6 +141,7 @@ def get_file_in_script_dir(fn):
 class SymInfo:
   funcs = {}
   lines = {}
+  names = {}
 
   def __init__(self, pdb, file, wine_path_converter):
     call = [get_file_in_script_dir('cvdump.exe'), '-l', '-s']
@@ -183,6 +185,7 @@ class SymInfo:
 
         info.name = line[77:]
 
+        self.names[info.name] = info
         self.funcs[addr] = info
       elif current_section == 'LINES' and line.startswith('  ') and not line.startswith('   '):
         sourcepath = line.split()[0]
@@ -237,6 +240,14 @@ class SymInfo:
         logger.error('Failed to find function symbol with address: 0x%x', addr)
     else:
       logger.error('Failed to find function symbol with filename and line: %s:%d', filename, line)
+
+  def get_recompiled_address_from_name(self, name):
+    logger.debug('Looking for %s', name)
+
+    if name in self.names:
+        return self.names[name]
+    else:
+        logger.error('Failed to find function symbol with name: %s', name)
 
 wine_path_converter = None
 if os.name != 'nt':
@@ -343,13 +354,14 @@ def replace_register(lines: list[str], start_line: int, reg: str, replacement: s
 
 # Is it possible to make new_asm the same as original_asm by swapping registers?
 def can_resolve_register_differences(original_asm, new_asm):
+  # Split the ASM on spaces to get more granularity, and so
+  # that we don't modify the original arrays passed in.
+  original_asm = [part for line in original_asm for part in line.split()]
+  new_asm = [part for line in new_asm for part in line.split()]
+
   # Swapping ain't gonna help if the lengths are different
   if len(original_asm) != len(new_asm):
     return False
-
-  # Make copies so we don't modify the original
-  original_asm = original_asm.copy()
-  new_asm = new_asm.copy()
 
   # Look for the mismatching lines
   for i in range(len(original_asm)):
@@ -418,14 +430,24 @@ for subdir, dirs, files in os.walk(source):
             else:
               continue
 
-          find_open_bracket = line
-          while '{' not in find_open_bracket:
-            find_open_bracket = srcfile.readline()
-            line_no += 1
+          if line.endswith("TEMPLATE"):
+              line = srcfile.readline()
+              line_no += 1
+              # Name comes after // comment
+              name = line[2:].strip()
 
-          recinfo = syminfo.get_recompiled_address(srcfilename, line_no)
-          if not recinfo:
-            continue
+              recinfo = syminfo.get_recompiled_address_from_name(name)
+              if not recinfo:
+                continue
+          else:
+              find_open_bracket = line
+              while '{' not in find_open_bracket:
+                find_open_bracket = srcfile.readline()
+                line_no += 1
+
+              recinfo = syminfo.get_recompiled_address(srcfilename, line_no)
+              if not recinfo:
+                continue
 
           # The effective_ratio is the ratio when ignoring differing register 
           # allocation vs the ratio is the true ratio.
@@ -462,11 +484,12 @@ for subdir, dirs, files in os.walk(source):
             else:
               percenttext += colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
 
+          if args.print_rec_addr:
+            addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
+          else:
+            addrs = hex(addr)
+
           if not verbose:
-            if args.print_rec_addr:
-              addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
-            else:
-              addrs = hex(addr)
             print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
 
           function_count += 1
@@ -476,16 +499,16 @@ for subdir, dirs, files in os.walk(source):
           if recinfo.size:
             udiff = difflib.unified_diff(origasm, recompasm, n=10)
 
-            # If verbose, print the diff for that funciton to the output
+            # If verbose, print the diff for that function to the output
             if verbose:
               if effective_ratio == 1.0:
                 ok_text = "OK!" if plain else (colorama.Fore.GREEN + "✨ OK! ✨" + colorama.Style.RESET_ALL)
                 if ratio == 1.0:
                   print("%s: %s 100%% match.\n\n%s\n\n" %
-                        (hex(addr), recinfo.name, ok_text))
+                        (addrs, recinfo.name, ok_text))
                 else:
                   print("%s: %s Effective 100%% match. (Differs in register allocation only)\n\n%s (still differs in register allocation)\n\n" %
-                        (hex(addr), recinfo.name, ok_text))
+                        (addrs, recinfo.name, ok_text))
               else:
                 for line in udiff:
                   if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
@@ -509,14 +532,14 @@ for subdir, dirs, files in os.walk(source):
                 print("\n%s is only %s similar to the original, diff above" % (recinfo.name, percenttext))
 
             # If html, record the diffs to an HTML file
-            if html:
+            if html_path:
               escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
-              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), recinfo.name, str(effective_ratio), escaped))
+              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), html.escape(recinfo.name), str(effective_ratio), escaped))
 
       except UnicodeDecodeError:
         break
 
-def gen_html(html, data):
+def gen_html(html_path, data):
   templatefile = open(get_file_in_script_dir('template.html'), 'r')
   if not templatefile:
     print('Failed to find HTML template file, can\'t generate HTML summary')
@@ -527,9 +550,9 @@ def gen_html(html, data):
 
   templatedata = templatedata.replace('/* INSERT DATA HERE */', ','.join(data), 1)
 
-  htmlfile = open(html, 'w')
+  htmlfile = open(html_path, 'w')
   if not htmlfile:
-    print('Failed to write to HTML file %s' % html)
+    print('Failed to write to HTML file %s' % html_path)
     return
 
   htmlfile.write(templatedata)
@@ -578,8 +601,8 @@ def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
   svgfile.write(templatedata)
   svgfile.close()
 
-if html:
-  gen_html(html, htmlinsert)
+if html_path:
+  gen_html(html_path, htmlinsert)
 
 if verbose:
   if not found_verbose_target:

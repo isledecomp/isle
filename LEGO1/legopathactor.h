@@ -2,6 +2,7 @@
 #define LEGOPATHACTOR_H
 
 #include "legoactor.h"
+#include "mxtypes.h"
 
 // VTABLE 0x100d6e28
 // SIZE 0x154 (from inlined construction at 0x1000a346)
@@ -24,7 +25,15 @@ public:
   {
     return !strcmp(name, LegoPathActor::ClassName()) || LegoActor::IsA(name);
   }
-
+protected:
+  // TODO: the types
+  undefined unk78[0xc4];
+  MxFloat m_unk13c;
+  MxS32 m_unk140;
+  MxS32 m_unk144;
+  undefined m_unk148;
+  MxS32 m_unk14c;
+  MxFloat m_unk150;
 };
 
 #endif // LEGOPATHACTOR_H

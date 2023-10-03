@@ -1,33 +1,38 @@
 #ifndef MXVIDEOMANAGER_H
 #define MXVIDEOMANAGER_H
 
-#include "mxunknown100dc6b0.h"
+#include "mxdisplaysurface.h"
+#include "mxregion.h"
+#include "mxmediamanager.h"
 #include "mxvideoparam.h"
 
 // VTABLE 0x100dc810
 // SIZE 0x64
-class MxVideoManager : public MxUnknown100dc6b0
+class MxVideoManager : public MxMediaManager
 {
 public:
   virtual ~MxVideoManager();
 
-  virtual MxLong Tickle(); // vtable+0x8
+  virtual MxResult Tickle(); // vtable+0x8
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
   __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
 
   MxVideoManager();
 
-  int Init();
+  MxResult Init();
+  void SortPresenterList();
+  void UpdateRegion();
 
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
   inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
+  inline MxDisplaySurface *GetDisplaySurface() { return this->m_displaySurface; }
 private:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
-  LPDIRECTDRAWSURFACE m_unk54;
-  void* m_unk58;
-  int m_unk5c;
+  LPDIRECTDRAWSURFACE m_pDDSurface;
+  MxDisplaySurface *m_displaySurface;
+  MxRegion *m_region;
   MxBool m_unk60;
 };
 

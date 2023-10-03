@@ -3,7 +3,8 @@
 
 #include "decomp.h"
 #include "mxpresenter.h"
-#include "legocontrolmanager.h"
+#include "mxlist.h"
+
 #include <dinput.h>
 
 enum NotificationId
@@ -16,6 +17,8 @@ enum NotificationId
   TIMER = 15
 };
 
+class LegoControlManager;
+
 // VTABLE 0x100d8760
 // SIZE 0x338
 class LegoInputManager : public MxPresenter
@@ -27,48 +30,45 @@ public:
   __declspec(dllexport) void QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5);
   __declspec(dllexport) void Register(MxCore *);
   __declspec(dllexport) void UnRegister(MxCore *);
+
+  virtual MxResult Tickle() override; // vtable+0x8
+
   void Destroy();
-  MxS32 GetJoystickState(unsigned int* something_x, unsigned int* something_y, DWORD* buttons_state, unsigned int* pov_position);
   void CreateAndAcquireKeyboard(HWND hwnd);
-  MxS32 GetJoystickId();
   void ReleaseDX();
+  MxResult GetJoystickId();
+  MxResult GetJoystickState(MxU32 *joystick_x, MxU32 *joystick_y, DWORD *buttons_state, MxU32 *pov_position);
   void SetTimer();
   void KillTimer();
 
-  //virtual MxLong Tickle() override; // vtable+0x8
-  MxCriticalSection m_criticalsection;                // 0x40
-  MxS32 m_unknown5C;                                  // 0x5C
-  MxS32* m_unknown60;                                 // 0x60
-  MxS32* m_unknown64;                                 // 0x64
-  void* m_unknown_classptr68;                         // 0x68
-  MxS32 m_unknown6C;                                  // 0x6C
-  MxS32 m_unknown70;                                  // 0x70
-  MxS32 m_unknown74;                                  // 0x74
-  UINT m_timer;                                       // 0x78
-  UINT m_timeout;                                     // 0x7C
-  MxU8 m_unknown80;                                   // 0x80
-  MxBool m_bool81;                                    // 0x81
-  MxU8 m_unknown82;                                   // 0x82
-  MxU8 m_unknown83;                                   // 0x83
-  LegoControlManager* m_controlManager;               // 0x84
-  MxBool m_bool88;                                    // 0x88
-  MxU8 m_unknown89[3];                                // 0x89
-  IDirectInputA* m_directinputInterface;              // 0x8C
-  IDirectInputDeviceA* m_directinputDeviceInterface;  // 0x90
-  MxU8 m_unused94;                                    // 0x94
-  MxU8 m_unknown95[3];                                // 0x95
-  void* m_unknown98;                                  // 0x98
-  MxU8 m_unknown9C[0xF8];                             // 0x9C
-  MxBool m_unknown195;                                // 0x195
-  MxU8 m_unknown196[2];                               // 0x196
-  UINT m_joyid;                                       // 0x198
-  UINT m_unknown19C;                                  // 0x19C
-  JOYCAPSA m_joyCapsA;                                // 0x1a0
-  MxU8 m_joystickIndex;                               // 0x334
-  MxBool m_useJoystick;                               // 0x335
-  MxU8 m_unknown336;                                  // 0x336
-  MxU8 m_unknown337;                                  // 0x337
-  MxU8 m_unknown338;                                  // 0x338
+//private:
+  MxCriticalSection m_criticalSection;
+  MxList<undefined4> *m_unk0x5c; // list or hash table
+  undefined4 m_unk0x60;
+  undefined4 m_unk0x64;
+  MxList<undefined4> *m_unk0x68; // list or hash table
+  undefined4 m_unk0x6c;
+  undefined4 m_unk0x70;
+  undefined4 m_unk0x74;
+  UINT m_timer;
+  UINT m_timeout;
+  undefined m_unk0x80;
+  undefined m_unk0x81;
+  LegoControlManager* m_controlManager;
+  MxBool m_unk0x88;
+  IDirectInput *m_directInput;
+  IDirectInputDevice *m_directInputDevice;
+  undefined m_unk0x94;
+  undefined4 m_unk0x98;
+  undefined m_unk0x9c[0xF8];
+  undefined m_unk0x194;
+  MxBool m_unk0x195;
+  MxS32 m_joyid;
+  MxS32 m_joystickIndex;
+  JOYCAPS m_joyCaps;
+  MxU8 m_joystickIndex2;
+  MxBool m_useJoystick;
+  MxBool m_unk0x336;
 };
 
 #endif // LEGOINPUTMANAGER_H

@@ -2,7 +2,9 @@
 #define LEGOVIDEOMANAGER_H
 
 #include "mxvideomanager.h"
+#include "mxdirect3d.h"
 #include "lego3dmanager.h"
+#include "decomp.h"
 
 // VTABLE 0x100d9c88
 // SIZE 0x590
@@ -14,17 +16,24 @@ public:
 
   __declspec(dllexport) int EnableRMDevice();
   __declspec(dllexport) int DisableRMDevice();
-  __declspec(dllexport) void EnableFullScreenMovie(unsigned char a, unsigned char b);
+  void EnableFullScreenMovie(MxBool p_enable);
+  __declspec(dllexport) void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
   __declspec(dllexport) void MoveCursor(int x, int y);
 
   inline Lego3DManager *Get3DManager() { return this->m_3dManager; }
-  void SetSkyColor(float r, float g, float b);
+  inline MxDirect3D *GetDirect3D() { return this->m_direct3d; }
 
-  int m_unk64;
+  void SetSkyColor(float r, float g, float b);
+  inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
+
+private:
+  undefined4 m_unk64;
   Lego3DManager *m_3dManager;
-  int m_unk6c;
-  int m_unk70;
-  int *m_unk74;
+  undefined4 m_unk6c;
+  undefined4 m_unk70;
+  MxDirect3D *m_direct3d;
+  undefined m_pad78[0x6c];
+  MxBool m_unke4;
 };
 
 #endif // LEGOVIDEOMANAGER_H
