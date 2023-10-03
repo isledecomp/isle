@@ -5,7 +5,7 @@
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
 // 0x100f4378
-RECT g_rect_100f4378 = {0, 0, 640, 480};
+RECT g_fullScreenRect = {0, 0, 640, 480};
 
 // OFFSET: LEGO1 0x1004b8d0
 MxTransitionManager::MxTransitionManager()
@@ -120,7 +120,7 @@ void MxTransitionManager::Transition_Dissolve()
 
     if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
       LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
-      surf->BltFast(NULL, NULL, m_ddSurface, &g_rect_100f4378, 0x10);
+      surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, 0x10);
     }
 
     m_animationTimer++;
