@@ -22,6 +22,8 @@ public:
 
 private:
   void Init();
+  void Destroy(MxBool);
+
   undefined4 m_unk68;
 };
 
