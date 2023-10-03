@@ -213,7 +213,7 @@ if (ISLE_USE_DX5)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
