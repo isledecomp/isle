@@ -58,7 +58,6 @@ public:
   MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
   MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
   MxEventManager* GetEventManager() const { return this->m_eventManager; }
-
   MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
 protected:
   static MxOmni* g_instance;
