@@ -83,8 +83,8 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
     tickleManager->RegisterClient(this, p_speed);
 
     LegoInputManager *inputManager = InputManager();
-    inputManager->m_unk88 = TRUE;
-    inputManager->m_unk336 = FALSE;
+    inputManager->m_unk0x88 = TRUE;
+    inputManager->m_unk0x336 = FALSE;
 
     LegoVideoManager *videoManager = VideoManager();
     videoManager->SetUnkE4(FALSE);
