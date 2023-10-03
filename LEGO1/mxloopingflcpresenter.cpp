@@ -4,10 +4,10 @@
 
 DECOMP_SIZE_ASSERT(MxLoopingFlcPresenter, 0x6c);
 
-// OFFSET: LEGO1 0x100b4310 STUB
+// OFFSET: LEGO1 0x100b4310
 MxLoopingFlcPresenter::MxLoopingFlcPresenter()
 {
-  // TODO
+  Init();
 }
 
 // OFFSET: LEGO1 0x100b43b0 STUB
@@ -16,8 +16,8 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b4410 STUB
+// OFFSET: LEGO1 0x100b4410
 void MxLoopingFlcPresenter::Init()
 {
-  // TODO
+  this->m_unk68 = 0;
 }
