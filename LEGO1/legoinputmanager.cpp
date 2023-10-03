@@ -24,7 +24,7 @@ LegoInputManager::LegoInputManager()
   m_directInputDevice = NULL;
   m_unk0x94 = 0;
   m_unk0x195 = 0;
-  m_joyid = (UINT) -1;
+  m_joyid = -1;
   m_joystickIndex = -1;
   m_useJoystick = FALSE;
   m_unk0x335 = 0;
