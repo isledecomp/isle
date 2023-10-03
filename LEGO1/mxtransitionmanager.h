@@ -91,8 +91,8 @@ public:
 private:
   void EndTransition(MxBool);
   void Transition_Dissolve();
-  void FUN_1004c4d0(DDSURFACEDESC*);
-  void FUN_1004c580(DDSURFACEDESC*);
+  void FUN_1004c4d0(DDSURFACEDESC &);
+  void FUN_1004c580(DDSURFACEDESC &);
 
   MxTransitionManagerUnknownSubclass1 *m_unk08;
   undefined4 m_unk0c;

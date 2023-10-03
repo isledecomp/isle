@@ -90,7 +90,7 @@ void MxTransitionManager::Transition_Dissolve()
   }
 
   if (res == DD_OK) {
-    FUN_1004c4d0(&ddsd);
+    FUN_1004c4d0(ddsd);
 
     for (int i = 0; i < 640; i++) {
       // Select 16 columns on each tick
@@ -115,7 +115,7 @@ void MxTransitionManager::Transition_Dissolve()
       }
     }
 
-    FUN_1004c580(&ddsd);
+    FUN_1004c580(ddsd);
     m_ddSurface->Unlock(ddsd.lpSurface);
 
     if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
@@ -134,13 +134,13 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
 }
 
 // OFFSET: LEGO1 0x1004c4d0 STUB
-void MxTransitionManager::FUN_1004c4d0(DDSURFACEDESC *ddsc)
+void MxTransitionManager::FUN_1004c4d0(DDSURFACEDESC &ddsc)
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x1004c580 STUB
-void MxTransitionManager::FUN_1004c580(DDSURFACEDESC *ddsc)
+void MxTransitionManager::FUN_1004c580(DDSURFACEDESC &ddsc)
 {
   // TODO
 }
