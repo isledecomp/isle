@@ -4,6 +4,9 @@
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
+// 0x100f4378
+RECT g_fullScreenRect = {0, 0, 640, 480};
+
 // OFFSET: LEGO1 0x1004b8d0
 MxTransitionManager::MxTransitionManager()
 {
@@ -38,8 +41,106 @@ MxResult MxTransitionManager::Tickle()
   return 0;
 }
 
+// OFFSET: LEGO1 0x1004bc30 STUB
+void MxTransitionManager::EndTransition(MxBool)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004bd10
+void MxTransitionManager::Transition_Dissolve()
+{
+  // If the animation is finished
+  if (m_animationTimer == 40) {
+    m_animationTimer = 0;
+    EndTransition(TRUE);
+    return;
+  }
+
+  // If we are starting the animation
+  if (m_animationTimer == 0) {
+    // Generate the list of columns in order...
+    for (MxS32 i = 0; i < 640; i++) {
+      m_columnOrder[i] = i;
+    }
+
+    // ...then shuffle the list (to ensure that we hit each column once)
+    for (i = 0; i < 640; i++) {
+      MxS32 swap = rand() % 640;
+      MxU16 t = m_columnOrder[i];
+      m_columnOrder[i] = m_columnOrder[swap];
+      m_columnOrder[swap] = t;
+    }
+
+    // For each scanline, pick a random X offset
+    for (i = 0; i < 480; i++) {
+      m_randomShift[i] = rand() % 640;
+    }
+  }
+
+  // Run one tick of the animation
+  DDSURFACEDESC ddsd;
+  memset(&ddsd, 0, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  }
+
+  if (res == DD_OK) {
+    FUN_1004c4d0(ddsd);
+
+    for (MxS32 i = 0; i < 640; i++) {
+      // Select 16 columns on each tick
+      if (m_animationTimer * 16 > m_columnOrder[i])
+        continue;
+
+      if (m_animationTimer * 16 + 15 < m_columnOrder[i])
+        continue;
+
+      for (MxS32 j = 0; j < 480; j++) {
+        // Shift the chosen column a different amount at each scanline.
+        // We use the same shift for that scanline each time.
+        // By the end, every pixel gets hit.
+        MxS32 ofs = (m_randomShift[j] + i) % 640;
+
+        // Set the chosen pixel to black
+        if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
+          ((MxU8*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
+        } else {
+          ((MxU16*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
+        }
+      }
+    }
+
+    FUN_1004c580(ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+
+    if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
+      LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
+      surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, 0x10);
+    }
+
+    m_animationTimer++;
+  }
+}
+
 // OFFSET: LEGO1 0x1004c470 STUB
 void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c4d0 STUB
+void MxTransitionManager::FUN_1004c4d0(DDSURFACEDESC &ddsc)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c580 STUB
+void MxTransitionManager::FUN_1004c580(DDSURFACEDESC &ddsc)
 {
   // TODO
 }
