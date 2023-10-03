@@ -13,7 +13,7 @@ MxLoopingFlcPresenter::MxLoopingFlcPresenter()
 // OFFSET: LEGO1 0x100b43b0 STUB
 MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 {
-  Destroy(true);
+  Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x100b4410
