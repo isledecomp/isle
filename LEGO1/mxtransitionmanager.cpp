@@ -59,25 +59,26 @@ void MxTransitionManager::Transition_Dissolve()
 
   // If we are starting the animation
   if (m_animationTimer == 0) {
-    // Populate
+    // Generate the list of columns in order...
     for (int i = 0; i < 640; i++) {
-      m_pad36[i] = i;
+      m_columnOrder[i] = i;
     }
 
-    // Randomize (sorta)
+    // ...then shuffle the list (to ensure that we hit each column once)
     for (i = 0; i < 640; i++) {
-      int swap_ofs = rand() % 640;
-      undefined2 t = m_pad36[i];
-      m_pad36[i] = m_pad36[swap_ofs];
-      m_pad36[swap_ofs] = t;
+      int swap = rand() % 640;
+      MxU16 t = m_columnOrder[i];
+      m_columnOrder[i] = m_columnOrder[swap];
+      m_columnOrder[swap] = t;
     }
 
+    // For each scanline, pick a random X offset
     for (i = 0; i < 480; i++) {
-      m_pad536[i] = rand() % 640;
+      m_randomShift[i] = rand() % 640;
     }
   }
 
-  // Else run one tick of the animation
+  // Run one tick of the animation
   DDSURFACEDESC ddsd;
   memset(&ddsd, 0, sizeof(ddsd));
   ddsd.dwSize = sizeof(ddsd);
@@ -92,21 +93,24 @@ void MxTransitionManager::Transition_Dissolve()
     FUN_1004c4d0(&ddsd);
 
     for (int i = 0; i < 640; i++) {
-      if (m_animationTimer * 16 > m_pad36[i])
+      // Select 16 columns on each tick
+      if (m_animationTimer * 16 > m_columnOrder[i])
         continue;
 
-      if (m_animationTimer * 16 + 15 < m_pad36[i])
+      if (m_animationTimer * 16 + 15 < m_columnOrder[i])
         continue;
 
       for (int j = 0; j < 480; j++) {
-        int jt = (m_pad536[j] + i) % 640;
+        // Shift the chosen column a different amount at each scanline.
+        // We use the same shift for that scanline each time.
+        // By the end, every pixel gets hit.
+        int ofs = (m_randomShift[j] + i) % 640;
 
+        // Set the chosen pixel to black
         if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
-          MxU8 *pix = (MxU8*)ddsd.lpSurface;
-          pix[j * ddsd.lPitch + jt] = 0;
+          ((MxU8*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
         } else {
-          MxU16 *pix = (MxU16*)ddsd.lpSurface;
-          pix[j * ddsd.lPitch + jt] = 0;
+          ((MxU16*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
         }
       }
     }

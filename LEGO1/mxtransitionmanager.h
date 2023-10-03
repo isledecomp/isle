@@ -107,8 +107,8 @@ private:
   TransitionType m_transitionType;
   LPDIRECTDRAWSURFACE m_ddSurface;
   MxU16 m_animationTimer;
-  undefined2 m_pad36[640]; // 0x36
-  undefined2 m_pad536[480]; // 0x536
+  MxU16 m_columnOrder[640]; // 0x36
+  MxU16 m_randomShift[480]; // 0x536
   MxULong m_systemTime;
   MxS32 m_animationSpeed;
 };
