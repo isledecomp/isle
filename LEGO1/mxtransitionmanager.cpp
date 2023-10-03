@@ -60,13 +60,13 @@ void MxTransitionManager::Transition_Dissolve()
   // If we are starting the animation
   if (m_animationTimer == 0) {
     // Generate the list of columns in order...
-    for (int i = 0; i < 640; i++) {
+    for (MxS32 i = 0; i < 640; i++) {
       m_columnOrder[i] = i;
     }
 
     // ...then shuffle the list (to ensure that we hit each column once)
     for (i = 0; i < 640; i++) {
-      int swap = rand() % 640;
+      MxS32 swap = rand() % 640;
       MxU16 t = m_columnOrder[i];
       m_columnOrder[i] = m_columnOrder[swap];
       m_columnOrder[swap] = t;
@@ -92,7 +92,7 @@ void MxTransitionManager::Transition_Dissolve()
   if (res == DD_OK) {
     FUN_1004c4d0(ddsd);
 
-    for (int i = 0; i < 640; i++) {
+    for (MxS32 i = 0; i < 640; i++) {
       // Select 16 columns on each tick
       if (m_animationTimer * 16 > m_columnOrder[i])
         continue;
@@ -100,11 +100,11 @@ void MxTransitionManager::Transition_Dissolve()
       if (m_animationTimer * 16 + 15 < m_columnOrder[i])
         continue;
 
-      for (int j = 0; j < 480; j++) {
+      for (MxS32 j = 0; j < 480; j++) {
         // Shift the chosen column a different amount at each scanline.
         // We use the same shift for that scanline each time.
         // By the end, every pixel gets hit.
-        int ofs = (m_randomShift[j] + i) % 640;
+        MxS32 ofs = (m_randomShift[j] + i) % 640;
 
         // Set the chosen pixel to black
         if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
