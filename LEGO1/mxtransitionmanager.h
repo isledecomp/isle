@@ -45,6 +45,7 @@ public:
 private:
   void EndTransition(MxBool p_notifyWorld);
   void Transition_Dissolve();
+  void Transition_Wipe();
   void SubmitCopyRect(DDSURFACEDESC &);
   void SetupCopyRect(DDSURFACEDESC &);
 
