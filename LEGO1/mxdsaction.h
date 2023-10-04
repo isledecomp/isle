@@ -18,6 +18,7 @@ public:
     Flag_Bit3 = 0x04,
     Flag_Enabled = 0x20,
     Flag_Parsed = 0x80,
+    Flag_Bit9 = 0x200,
   };
 
   __declspec(dllexport) MxDSAction();
@@ -52,16 +53,18 @@ public:
 
   void AppendData(MxU16 p_extraLength, const char *p_extraData);
 
-  inline MxU32 GetFlags() { return this->m_flags; } 
-  inline void SetFlags(MxU32 m_flags) { this->m_flags = m_flags; }
+  inline MxU32 GetFlags() { return m_flags; } 
+  inline void SetFlags(MxU32 p_flags) { m_flags = p_flags; }
   inline char *GetExtraData() { return m_extraData; }
   inline MxU16 GetExtraLength() const { return m_extraLength; }
   inline MxLong GetStartTime() const { return m_startTime; }
+  inline MxS32 GetLoopCount() { return m_loopCount; }
+  inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
   inline const MxVector3Data &GetLocation() const { return m_location; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
-  inline MxBool IsLooping() const { return this->m_flags & Flag_Looping; }
-  inline MxBool IsBit3() const { return this->m_flags & Flag_Bit3; }
+  inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
+  inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
 
 private:
   MxU32 m_sizeOnDisk;

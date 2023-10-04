@@ -3,6 +3,9 @@
 
 #include "decomp.h"
 #include "mxpresenter.h"
+#include "mxlist.h"
+
+#include <dinput.h>
 
 enum NotificationId
 {
@@ -13,6 +16,8 @@ enum NotificationId
   MOUSEMOVE = 10,
   TIMER = 15
 };
+
+class LegoControlManager;
 
 // VTABLE 0x100d8760
 // SIZE 0x338
@@ -28,22 +33,42 @@ public:
 
   virtual MxResult Tickle() override; // vtable+0x8
 
-  undefined m_pad40[0x48];
+  void Destroy();
+  void CreateAndAcquireKeyboard(HWND hwnd);
+  void ReleaseDX();
+  MxResult GetJoystickId();
+  MxResult GetJoystickState(MxU32 *joystick_x, MxU32 *joystick_y, DWORD *buttons_state, MxU32 *pov_position);
+  void SetTimer();
+  void KillTimer();
 
-  MxBool m_unk88;
-  undefined m_unk89[0x113];
-
-  // 0x19C
-  int m_joystickIndex;
-
-  undefined m_pad1a0[0x194];
-
-  // 0x334
+//private:
+  MxCriticalSection m_criticalSection;
+  MxList<undefined4> *m_unk0x5c; // list or hash table
+  undefined4 m_unk0x60;
+  undefined4 m_unk0x64;
+  MxList<undefined4> *m_unk0x68; // list or hash table
+  undefined4 m_unk0x6c;
+  undefined4 m_unk0x70;
+  undefined4 m_unk0x74;
+  UINT m_timer;
+  UINT m_timeout;
+  undefined m_unk0x80;
+  undefined m_unk0x81;
+  LegoControlManager* m_controlManager;
+  MxBool m_unk0x88;
+  IDirectInput *m_directInput;
+  IDirectInputDevice *m_directInputDevice;
+  undefined m_unk0x94;
+  undefined4 m_unk0x98;
+  undefined m_unk0x9c[0xF8];
+  undefined m_unk0x194;
+  MxBool m_unk0x195;
+  MxS32 m_joyid;
+  MxS32 m_joystickIndex;
+  JOYCAPS m_joyCaps;
   MxBool m_useJoystick;
-
-  undefined m_unk335;
-  MxBool m_unk336;
-  undefined m_unk337;
+  MxBool m_unk0x335;
+  MxBool m_unk0x336;
 };
 
 #endif // LEGOINPUTMANAGER_H

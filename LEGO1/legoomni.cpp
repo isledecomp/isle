@@ -312,3 +312,9 @@ MxBool LegoOmni::vtable40()
   // FIXME: Stub
   return 0;
 }
+
+// OFFSET: LEGO1 0x100157a0
+LegoWorld *GetCurrentWorld()
+{
+  return LegoOmni::GetInstance()->GetCurrentWorld();
+}
