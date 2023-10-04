@@ -3,8 +3,10 @@
 #include "legovideomanager.h"
 #include "legoinputmanager.h"
 #include "legoutil.h"
-#include "mxticklemanager.h"
+#include "legoworld.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxparam.h"
+#include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 

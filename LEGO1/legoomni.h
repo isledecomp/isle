@@ -16,6 +16,7 @@ class LegoPlantManager;
 class LegoROI;
 class LegoSoundManager;
 class LegoVideoManager;
+class LegoWorld;
 class MxAtomId;
 class MxBackgroundAudioManager;
 class MxDSFile;
