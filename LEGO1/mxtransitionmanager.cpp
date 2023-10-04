@@ -41,10 +41,24 @@ MxResult MxTransitionManager::Tickle()
   return 0;
 }
 
-// OFFSET: LEGO1 0x1004bc30 STUB
-void MxTransitionManager::EndTransition(MxBool)
+// OFFSET: LEGO1 0x1004bc30
+void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 {
-  // TODO
+  if (m_transitionType != NOT_TRANSITIONING) {
+    m_transitionType = NOT_TRANSITIONING;
+
+    m_unk20.bit0 = FALSE;
+
+    TickleManager()->UnregisterClient(this);
+
+    if (p_notifyWorld) {
+      LegoWorld *world = GetCurrentWorld();
+
+      if (world) {
+        world->Notify(MxParam(0x18, this));
+      }
+    }
+  }
 }
 
 // OFFSET: LEGO1 0x1004bd10
