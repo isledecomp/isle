@@ -69,6 +69,7 @@ public:
   MxBool IsEnabled();
 
   inline MxS32 GetDisplayZ() { return this->m_displayZ; }
+  inline MxDSAction *GetAction() { return this->m_action; }
 
 protected:
   __declspec(dllexport) void Init();
