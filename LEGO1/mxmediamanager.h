@@ -7,6 +7,8 @@
 #include "mxpresenterlist.h"
 #include "mxtypes.h"
 
+#include <dsound.h>
+
 // VTABLE 0x100dc6b0
 // SIZE 0x2c
 class MxMediaManager : public MxCore
