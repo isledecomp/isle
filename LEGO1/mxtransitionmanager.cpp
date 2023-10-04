@@ -192,6 +192,45 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
   return FAILURE;
 }
 
+// OFFSET: LEGO1 0x1004c170
+void MxTransitionManager::Transition_Wipe()
+{
+  // If the animation is finished
+  if (m_animationTimer == 240) {
+    m_animationTimer = 0;
+    EndTransition(TRUE);
+    return;
+  }
+
+  DDSURFACEDESC ddsd;
+  memset(&ddsd, 0, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  }
+
+  if (res == DD_OK) {
+    SubmitCopyRect(ddsd);
+
+    // For each of the 240 animation ticks, blank out two scanlines
+    // starting at the top of the screen.
+    // (dwRGBBitCount / 8) will tell how many bytes are used per pixel.
+    MxU8 *line = (MxU8*)ddsd.lpSurface + 2*ddsd.lPitch*m_animationTimer;
+    memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
+
+    line += ddsd.lPitch;
+    memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
+
+    SetupCopyRect(ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+
+    m_animationTimer++;
+  }
+}
+
 // OFFSET: LEGO1 0x1004c470 STUB
 void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
 {
