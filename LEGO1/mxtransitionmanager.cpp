@@ -47,7 +47,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
   if (m_transitionType != NOT_TRANSITIONING) {
     m_transitionType = NOT_TRANSITIONING;
 
-    m_unk20.bit0 = FALSE;
+    m_copyFlags.bit0 = FALSE;
 
     TickleManager()->UnregisterClient(this);
 
