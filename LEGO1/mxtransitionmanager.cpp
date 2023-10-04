@@ -154,7 +154,7 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
 
       MxDSAction *action = m_waitIndicator->GetAction();
       action->SetLoopCount(10000);
-      action->SetFlags(action->GetFlags() | 0x200);
+      action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit9);
     }
 
     MxU32 time = timeGetTime();
