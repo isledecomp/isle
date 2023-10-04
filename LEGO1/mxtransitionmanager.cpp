@@ -231,10 +231,10 @@ void MxTransitionManager::Transition_Wipe()
   }
 }
 
-// OFFSET: LEGO1 0x1004c470 STUB
-void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
+// OFFSET: LEGO1 0x1004c470
+void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *p_videoPresenter)
 {
-  // TODO
+  m_waitIndicator = p_videoPresenter;
 }
 
 // OFFSET: LEGO1 0x1004c4d0
