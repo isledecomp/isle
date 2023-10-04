@@ -57,6 +57,8 @@ public:
   inline char *GetExtraData() { return m_extraData; }
   inline MxU16 GetExtraLength() const { return m_extraLength; }
   inline MxLong GetStartTime() const { return m_startTime; }
+  inline MxS32 GetLoopCount() { return m_loopCount; }
+  inline void SetLoopCount(MxS32 m_loopCount) { this->m_loopCount = m_loopCount; }
   inline const MxVector3Data &GetLocation() const { return m_location; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
