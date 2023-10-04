@@ -89,7 +89,7 @@ public:
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_unk, MxBool p_playMusicInAnim);
 
 private:
-  void EndTransition(MxBool);
+  void EndTransition(MxBool p_notifyWorld);
   void Transition_Dissolve();
   void FUN_1004c4d0(DDSURFACEDESC &);
   void FUN_1004c580(DDSURFACEDESC &);
@@ -109,8 +109,8 @@ private:
   MxU16 m_animationTimer;
   MxU16 m_columnOrder[640]; // 0x36
   MxU16 m_randomShift[480]; // 0x536
-  MxULong m_systemTime;
-  MxS32 m_animationSpeed;
+  MxULong m_systemTime; // 0x8f8
+  MxS32 m_animationSpeed; // 0x8fc
 };
 
 #endif // MXTRANSITIONMANAGER_H
