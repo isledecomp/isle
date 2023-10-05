@@ -336,7 +336,7 @@ void MxTransitionManager::SetupCopyRect(DDSURFACEDESC &ddsc)
   }
 
   // Setup display surface
-  if ((m_waitIndicator->GetAction()->GetFlags() & 0x10) != 0)
+  if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::Flag_Bit5) != 0)
   {
     MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
     MxBool unkbool = FALSE;
