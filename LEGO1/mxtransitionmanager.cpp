@@ -5,7 +5,7 @@
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
 DECOMP_HOOK_START_CLS(MxTransitionManager);
-DECOMP_HOOK_EXPORT_CLS(0x1004bb70, MxTransitionManager, void, SubmitCopyRect, (DDSURFACEDESC&));
+DECOMP_HOOK_EXPORT_CLS(0x1004bb70, MxTransitionManager, void, SubmitCopyRect, (LPDDSURFACEDESC));
 DECOMP_HOOK_END_CLS(MxTransitionManager);
 
 // 0x100f4378
@@ -275,7 +275,7 @@ void MxTransitionManager::SubmitCopyRect(LPDDSURFACEDESC ddsc)
 
   DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
-  const char *src = (const char*)m_copyBuffer;
+  const char *src = (const char *)m_copyBuffer;
 
   LONG copyPitch;
   copyPitch = ((m_copyRect.right - m_copyRect.left) + 1) * bytesPerPixel;
