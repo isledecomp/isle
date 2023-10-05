@@ -47,19 +47,19 @@ MxResult MxTransitionManager::Tickle()
       FUN_1004bcf0();
       break;
     case DISSOLVE:
-      FUN_1004bd10();
+      Transition_Dissolve();
       break;
     case PIXELATION:
-      FUN_1004bed0();
+      Transition_Pixelation();
       break;
     case SCREEN_WIPE:
-      FUN_1004c170();
+      Transition_Wipe();
       break;
     case WINDOWS:
-      FUN_1004c270();
+      Transition_Windows();
       break;
     case BROKEN:
-      FUN_1004c3e0();
+      Transition_Broken();
       break;
   }
   return SUCCESS;
@@ -225,20 +225,20 @@ void MxTransitionManager::FUN_1004bcf0()
 }
 
 // OFFSET: LEGO1 0x1004bed0 STUB
-void MxTransitionManager::FUN_1004bed0()
+void MxTransitionManager::Transition_Pixelation()
 {
   // TODO
 }
 
 
 // OFFSET: LEGO1 0x1004c270 STUB
-void MxTransitionManager::FUN_1004c270()
+void MxTransitionManager::Transition_Windows()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x1004c3e0 STUB
-void MxTransitionManager::FUN_1004c3e0()
+void MxTransitionManager::Transition_Broken()
 {
   // TODO
 }
