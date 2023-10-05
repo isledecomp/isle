@@ -29,7 +29,7 @@ void MxVideoPresenter::VTable0x70()
 // OFFSET: LEGO1 0x1000c740
 MxVideoPresenter::~MxVideoPresenter()
 {
-  // TODO
+  Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x1000c7a0 STUB
@@ -66,6 +66,12 @@ MxS32 MxVideoPresenter::GetHeight()
 
 // OFFSET: LEGO1 0x100b2760 STUB
 void MxVideoPresenter::Init()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100b27b0 STUB
+void MxVideoPresenter::Destroy(MxBool)
 {
   // TODO
 }

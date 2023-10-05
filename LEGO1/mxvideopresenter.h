@@ -29,6 +29,7 @@ public:
   }
 
   void Init();
+  void Destroy(MxBool);
 
   virtual void InitVirtual() override; // vtable+0x38
 
