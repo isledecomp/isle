@@ -12,7 +12,7 @@ public:
   MxTransitionManager();
   virtual ~MxTransitionManager() override; // vtable+0x0
 
-  __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *videoPresenter);
+  __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *p_waitIndicator);
 
   virtual MxResult Tickle(); // vtable+0x8
 
@@ -40,7 +40,7 @@ public:
     BROKEN // Unknown what this is supposed to be, it locks the game up
   };
 
-  MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, undefined p_unk, MxBool p_playMusicInAnim);
+  MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_doCopy, MxBool p_playMusicInAnim);
 
   void MxTransitionManager::EndTransition(MxBool p_unk);
 
@@ -53,14 +53,27 @@ public:
 
 
 private:
-  undefined m_pad00[0x20];
-  undefined m_pad20[0x04];
+  void EndTransition(MxBool p_notifyWorld);
+  void Transition_Dissolve();
+  void Transition_Wipe();
+  void SubmitCopyRect(LPDDSURFACEDESC ddsc);
+  void SetupCopyRect(LPDDSURFACEDESC ddsc);
+
+  MxVideoPresenter *m_waitIndicator;
+  RECT m_copyRect;
+  void *m_copyBuffer;
+
+  flag_bitfield m_copyFlags;
+  undefined4 m_unk24;
+  flag_bitfield m_unk28;
+
   TransitionType m_transitionType;
   LPDIRECTDRAWSURFACE m_ddSurface;
   MxU16 m_animationTimer;
-  undefined m_pad36[0x8c2];
-  MxULong m_systemTime;
-  MxS32 m_animationSpeed;
+  MxU16 m_columnOrder[640]; // 0x36
+  MxU16 m_randomShift[480]; // 0x536
+  MxULong m_systemTime; // 0x8f8
+  MxS32 m_animationSpeed; // 0x8fc
 };
 
 #endif // MXTRANSITIONMANAGER_H

@@ -3,20 +3,7 @@
 
 #include <windows.h>
 
-// Must be union with struct for match.
-typedef union {
-  struct {
-    BYTE bit0: 1;
-    BYTE bit1: 1;
-    BYTE bit2: 1;
-    BYTE bit3: 1;
-    BYTE bit4: 1;
-    BYTE bit5: 1;
-    BYTE bit6: 1;
-    BYTE bit7: 1;
-  };
-  // BYTE all; // ?
-} flag_bitfield;
+#include "mxtypes.h"
 
 class MxVideoParamFlags
 {

@@ -8,7 +8,7 @@ class MxDSAction;
 
 // VTABLE 0x100dced8
 // SIZE 0x1c
-class MxDSActionList : public MxList<MxDSAction>
+class MxDSActionList : public MxList<MxDSAction*>
 {
 public:
   MxDSActionList() {
@@ -23,15 +23,15 @@ private:
   undefined m_unk18;
 };
 
-typedef MxListCursorChild<MxDSAction> MxDSActionListCursor;
+typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;
+
+// OFFSET: LEGO1 0x100c9cc0 TEMPLATE
+// MxListParent<MxDSAction *>::Compare
 
 // OFFSET: LEGO1 0x100c9d20 TEMPLATE
-// MxListParent<MxDSAction>::Destroy
-
-// OFFSET: LEGO1 0x100c9cd0 TEMPLATE
-// MxListParent<MxDSAction>::~MxListParent<MxDSAction>
+// MxListParent<MxDSAction *>::Destroy
 
 // OFFSET: LEGO1 0x100c9d30 TEMPLATE
-// MxList<MxDSAction>::~MxList<MxDSAction>
+// MxList<MxDSAction *>::~MxList<MxDSAction *>
 
 #endif // MXDSACTIONLIST_H
