@@ -44,7 +44,7 @@ MxResult MxTransitionManager::Tickle()
 
   switch (this->m_transitionType) {
     case NO_ANIMATION:
-      FUN_1004bcf0();
+      Transition_None();
       break;
     case DISSOLVE:
       Transition_Dissolve();
@@ -217,7 +217,7 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
 }
 
 // OFFSET: LEGO1 0x1004bcf0
-void MxTransitionManager::FUN_1004bcf0()
+void MxTransitionManager::Transition_None()
 {
   LegoVideoManager *videoManager = VideoManager();
   videoManager->GetDisplaySurface()->FUN_100ba640();

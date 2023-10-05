@@ -45,13 +45,12 @@ public:
 
 private:
   void EndTransition(MxBool p_notifyWorld);
+  void Transition_None();
   void Transition_Dissolve();
   void Transition_Pixelation();
   void Transition_Wipe();
   void Transition_Windows();
   void Transition_Broken();
-
-  void FUN_1004bcf0();
 
   void SubmitCopyRect(LPDDSURFACEDESC ddsc);
   void SetupCopyRect(LPDDSURFACEDESC ddsc);
