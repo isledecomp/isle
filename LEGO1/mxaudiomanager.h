@@ -11,18 +11,20 @@ public:
   MxAudioManager();
   virtual ~MxAudioManager() override;
 
-  virtual MxResult InitPresenters(); // vtable+14
-  virtual void Destroy(); // vtable+18
+  virtual MxResult InitPresenters() override; // vtable+14
+  virtual void Destroy() override; // vtable+18
+  virtual MxS32 GetVolume(); // vtable+28
+  virtual void SetVolume(MxS32 p_volume); // vtable+2c
 
 private:
-  void LockedReinitialize(MxBool);
+  void LockedReinitialize(MxBool p_skipDestroy);
 
   static MxS32 g_unkCount;
 
 protected:
   void Init();
 
-  undefined4 m_unk2c;
+  MxS32 m_volume; // 0x2c
 };
 
 #endif // MXAUDIOMANAGER_H
