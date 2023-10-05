@@ -14,25 +14,31 @@ typedef unsigned int undefined4;
 
 #ifdef ISLE_BUILD_PATCH
 
+// Function called to add a patch to the list of patches
 void DecompPatchAdd(void *origFunc, void *newFunc);
 
-#define DECOMP_METHOD_HOOK(origFunc, cls, method, retv, args) \
-namespace _DecompPatchHook_##__COUNTER__ \
-{ \
-  class DecompPatchHook \
+// Class decomp hook macros
+#define DECOMP_HOOK_DECL_CLS() \
+  static void _ExportHooks()
+
+#define DECOMP_HOOK_START_CLS(cls) \
+  void cls::_ExportHooks() {
+#define DECOMP_HOOK_END_CLS(cls) \
+  } static struct _ExportHooks_##cls { _ExportHooks_##cls () { cls::_ExportHooks(); } } _exportHooks_##cls
+
+#define DECOMP_HOOK_EXPORT_CLS(origFunc, cls, retv, method, args) \
   { \
-  public: \
-    DecompPatchHook() \
-    { \
-      retv(cls :: *method) args = cls::method; \
-      DecompPatchAdd((void*)origFunc, (void*)&_patchHook); \
-    } \
-  } _patchHook; \
-}
+    retv(cls :: * _ourFunc ) args = cls::method; \
+    DecompPatchAdd((void*)origFunc, (void*)*((DWORD*)& _ourFunc )); \
+  }
 
 #else
 
 #define DECOMP_METHOD_HOOK()
+
+#define DECOMP_HOOK_DECL_EXPORT()
+#define DECOMP_HOOK_DEFN_EXPORT()
+#define DECOMP_HOOK_EXPORT()
 
 #endif
 

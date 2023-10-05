@@ -4,6 +4,10 @@
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
+DECOMP_HOOK_START_CLS(MxTransitionManager);
+DECOMP_HOOK_EXPORT_CLS(0x1004bb70, MxTransitionManager, void, SubmitCopyRect, (DDSURFACEDESC&));
+DECOMP_HOOK_END_CLS(MxTransitionManager);
+
 // 0x100f4378
 RECT g_fullScreenRect = {0, 0, 640, 480};
 
@@ -153,7 +157,6 @@ MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, MxS32 p_speed,
                                               MxBool p_doCopy, MxBool p_playMusicInAnim)
 {
-  Beep(750, 300);
   if (this->m_transitionType == NOT_TRANSITIONING) {
     if (!p_playMusicInAnim) {
       MxBackgroundAudioManager *backgroundAudioManager = BackgroundAudioManager();
@@ -192,8 +195,6 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
   }
   return FAILURE;
 }
-
-DECOMP_METHOD_HOOK(0x1004bb70, MxTransitionManager, StartTransition, MxResult, (MxTransitionManager::TransitionType, MxS32, MxBool, MxBool));
 
 // OFFSET: LEGO1 0x1004c170
 void MxTransitionManager::Transition_Wipe()
@@ -253,7 +254,7 @@ void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
 
   DWORD bytesPerPixel = ddsc.ddpfPixelFormat.dwRGBBitCount / 8;
 
-  const char *src = (const char *)m_copyBuffer;
+  const char *src = (const char*)m_copyBuffer;
 
   LONG copyPitch;
   copyPitch = ((m_copyRect.right - m_copyRect.left) + 1) * bytesPerPixel;

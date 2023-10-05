@@ -156,14 +156,20 @@ BOOL StartDirectSound(void);
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 #ifdef ISLE_BUILD_PATCH
-  // Load LEGO1_PATCH.DLL
   {
-    HMODULE hModule = LoadLibraryA("LEGO1_PATCH.DLL");
-    if (hModule) {
+    // Find the imported LEGO1.DLL module
+    HMODULE hLego1Module = GetModuleHandleA("LEGO1.DLL");
+    if (!hLego1Module) {
+      return 1;
+    }
+
+    // Load LEGO1_PATCH.DLL
+    HMODULE hPatchModule = LoadLibraryA("LEGO1_PATCH.DLL");
+    if (hPatchModule) {
       typedef void (*PatchFunc)(void*);
-      PatchFunc patchFunc = (PatchFunc)GetProcAddress(hModule, "Patch");
+      PatchFunc patchFunc = (PatchFunc)GetProcAddress(hPatchModule, "Patch");
       if (patchFunc) {
-        void *root = (char*)VideoManager - 0x10015720;
+        void *root = (char*)hLego1Module - 0x10000000;
         patchFunc(root);
       }
     }

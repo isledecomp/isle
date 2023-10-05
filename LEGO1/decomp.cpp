@@ -58,32 +58,11 @@ public:
       BYTE *location = (BYTE*)((DWORD)root + (DWORD)node->origFunc);
       BYTE *newFunction = (BYTE*)node->newFunc;
 
-      /*
       DWORD dwOldProtection;
       VirtualProtect(location, 5, PAGE_EXECUTE_READWRITE, &dwOldProtection);
       location[0] = 0xE9; //jmp
       *((DWORD*)(location + 1)) = (DWORD)(((DWORD)newFunction - (DWORD)location) - 5);
       VirtualProtect(location, 5, dwOldProtection, &dwOldProtection);
-      */
-
-      BYTE code[5];
-      code[0] = 0xE9; //jmp
-      *((DWORD*)(code + 1)) = (DWORD)(((DWORD)newFunction - (DWORD)location) - 5);
-
-      char buffer[256];
-      sprintf(buffer, "location %p, newFunction %p, origFunc %p, root %p", location, newFunction, node->origFunc, root);
-      MessageBoxA(NULL, buffer, "DecompPatchList", MB_ICONERROR);
-
-      static HANDLE hProcess = GetCurrentProcess();
-      DWORD written = 0;
-      if (WriteProcessMemory(hProcess, location, code, sizeof(code), &written) == FALSE || written != sizeof(code))
-      {
-        // Print error reason
-        sprintf(buffer, "WriteProcessMemory failed: %d", GetLastError());
-        MessageBoxA(NULL, buffer, "DecompPatchList", MB_ICONERROR);
-
-        MessageBoxA(NULL, "Patch failed", "DecompPatchList", MB_ICONERROR);
-      }
     }
   }
 } decompPatchList;

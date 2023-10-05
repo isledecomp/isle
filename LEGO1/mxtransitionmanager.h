@@ -9,6 +9,8 @@
 class MxTransitionManager : public MxCore
 {
 public:
+  DECOMP_HOOK_DECL_CLS();
+
   MxTransitionManager();
   virtual ~MxTransitionManager() override; // vtable+0x0
 
