@@ -153,6 +153,7 @@ MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
 MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, MxS32 p_speed,
                                               MxBool p_doCopy, MxBool p_playMusicInAnim)
 {
+  Beep(750, 300);
   if (this->m_transitionType == NOT_TRANSITIONING) {
     if (!p_playMusicInAnim) {
       MxBackgroundAudioManager *backgroundAudioManager = BackgroundAudioManager();
@@ -192,10 +193,7 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
   return FAILURE;
 }
 
-void Test()
-{
-  MxResult (MxTransitionManager:: * pfTarget)(MxTransitionManager::TransitionType, MxS32, MxBool, MxBool) = MxTransitionManager::StartTransition;
-}
+DECOMP_METHOD_HOOK(0x1004bb70, MxTransitionManager, StartTransition, MxResult, (MxTransitionManager::TransitionType, MxS32, MxBool, MxBool));
 
 // OFFSET: LEGO1 0x1004c170
 void MxTransitionManager::Transition_Wipe()

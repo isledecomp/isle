@@ -14,18 +14,25 @@ typedef unsigned int undefined4;
 
 #ifdef ISLE_BUILD_PATCH
 
-class PatchHook
-{
-public:
-  PatchHook(void *p_ourFunc, void *p_origFunc);
-};
+void DecompPatchAdd(void *origFunc, void *newFunc);
 
-#define PATCH_HOOK(ourFunc, origFunc) \
-  static PatchHook _patchHook_##__COUNTER__ ((void *)ourFunc, (void *)origFunc)
+#define DECOMP_METHOD_HOOK(origFunc, cls, method, retv, args) \
+namespace _DecompPatchHook_##__COUNTER__ \
+{ \
+  class DecompPatchHook \
+  { \
+  public: \
+    DecompPatchHook() \
+    { \
+      retv(cls :: *method) args = cls::method; \
+      DecompPatchAdd((void*)origFunc, (void*)&_patchHook); \
+    } \
+  } _patchHook; \
+}
 
 #else
 
-#define PATCH_HOOK(ourFunc, origFunc)
+#define DECOMP_METHOD_HOOK()
 
 #endif
 
