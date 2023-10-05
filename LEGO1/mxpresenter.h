@@ -68,6 +68,8 @@ public:
 
   MxBool IsEnabled();
 
+  inline MxS32 GetCurrentTickleState() { return this->m_currentTickleState; }
+  inline MxPoint32 GetLocation() { return this->m_location; }
   inline MxS32 GetDisplayZ() { return this->m_displayZ; }
   inline MxDSAction *GetAction() { return this->m_action; }
 

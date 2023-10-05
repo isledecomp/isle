@@ -24,6 +24,8 @@ public:
 
 protected:
   MxThread();
+
+public:
   virtual ~MxThread();
 
 private:
