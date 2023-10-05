@@ -1,6 +1,6 @@
 #include "mxmidimanager.h"
 #include "mxomni.h"
-#include <Windows.h>
+#include <windows.h>
 
 DECOMP_SIZE_ASSERT(MxMIDIManager, 0x58);
 
@@ -13,7 +13,7 @@ MxMIDIManager::MxMIDIManager()
 // OFFSET: LEGO1 0x100c0630
 MxMIDIManager::~MxMIDIManager()
 {
-  LockedReinitialize(1);
+  LockedReinitialize(TRUE);
 }
 
 // OFFSET: LEGO1 0x100c0b20
@@ -91,18 +91,19 @@ void MxMIDIManager::Destroy()
 // OFFSET: LEGO1 0x100c09a0
 MxS32 MxMIDIManager::CalculateVolume(MxS32 p_volume)
 {
-  int result = (p_volume * 0xffff) / 100;
+  MxS32 result = (p_volume * 0xffff) / 100;
   return (result << 0x10) | result;
 }
 
 // OFFSET: LEGO1 0x100c07f0
 void MxMIDIManager::SetMIDIVolume()
 {
-  int result = (this->m_volume * this->m_multiplier) / 0x64;
+  MxS32 result = (this->m_volume * this->m_multiplier) / 0x64;
   HMIDISTRM streamHandle = this->m_MIDIStreamH;
+
   if (streamHandle)
   {
-    int volume = CalculateVolume(result);
+    MxS32 volume = CalculateVolume(result);
     midiOutSetVolume(streamHandle, volume);
   }
 }
@@ -133,20 +134,20 @@ MxResult MxMIDIManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_noRegister
 
       if (this->m_thread)
       {
-        if (this->m_thread->Start(0, 0) == FALSE)
+        if (this->m_thread->Start(0, 0) == SUCCESS)
         {
-          status = FALSE;
+          status = SUCCESS;
         }
       }
     }
     else
     {
       TickleManager()->RegisterClient(this, p_frequencyMS);
-      status = FALSE;
+      status = SUCCESS;
     }
   }
 
-  if (status != FALSE)
+  if (status != SUCCESS)
   {
     Destroy();
   }
@@ -155,5 +156,6 @@ MxResult MxMIDIManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_noRegister
   {
     this->m_criticalSection.Leave();
   }
+
   return status;
 }

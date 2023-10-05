@@ -12,24 +12,24 @@ public:
   MxMIDIManager();
   virtual ~MxMIDIManager() override;
 
-  void DeinitializeMIDI();
-  MxS32 CalculateVolume(MxS32 p_volume);
-  void SetMIDIVolume();
-
-  virtual void Destroy();                                                   // vtable+18
-  virtual void SetVolume(MxS32 p_volume);                                   // vtable+2c
+  virtual void Destroy() override; // vtable+18
+  virtual void SetVolume(MxS32 p_volume) override; // vtable+2c
   virtual MxResult StartMIDIThread(MxU32 p_frequencyMS, MxU8 p_noRegister); // vtable+30
 
 private:
   void LockedReinitialize(MxBool p_skipDestroy);
+  void DeinitializeMIDI();
+
+  MxS32 CalculateVolume(MxS32 p_volume);
+  void SetMIDIVolume();
 
   HMIDISTRM m_MIDIStreamH;  // 0x30
   MxBool m_MIDIInitialized; // 0x34
-  MxU32 m_unk38;            // 0x38
-  MxU32 m_unk3c;            // 0x3c
-  MxU32 m_unk40;            // 0x40
-  MxU32 m_unk44;            // 0x44
-  MxU32 m_unk48;            // 0x48
+  undefined4 m_unk38;       // 0x38
+  undefined4 m_unk3c;       // 0x3c
+  undefined4 m_unk40;       // 0x40
+  undefined4 m_unk44;       // 0x44
+  undefined4 m_unk48;       // 0x48
   MIDIHDR *m_MIDIHdrP;      // 0x4c
   MxS32 m_multiplier;       // 0x50
   DWORD m_MIDIVolume;       // 0x54
