@@ -252,9 +252,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *p_waitIndicator)
     if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::TickleState_Streaming) {
       m_waitIndicator->Tickle();
     }
-  }
-  else
-  {
+  } else {
     // Disable copy rect
     m_copyFlags.bit0 = FALSE;
   }
