@@ -12,4 +12,21 @@ typedef unsigned char undefined;
 typedef unsigned short undefined2;
 typedef unsigned int undefined4;
 
+#ifdef ISLE_BUILD_PATCH
+
+class PatchHook
+{
+public:
+  PatchHook(void *p_ourFunc, void *p_origFunc);
+};
+
+#define PATCH_HOOK(ourFunc, origFunc) \
+  static PatchHook _patchHook_##__COUNTER__ ((void *)ourFunc, (void *)origFunc)
+
+#else
+
+#define PATCH_HOOK(ourFunc, origFunc)
+
+#endif
+
 #endif // DECOMP_H

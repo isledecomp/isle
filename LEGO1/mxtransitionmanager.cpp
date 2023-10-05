@@ -192,6 +192,11 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
   return FAILURE;
 }
 
+void Test()
+{
+  MxResult (MxTransitionManager:: * pfTarget)(MxTransitionManager::TransitionType, MxS32, MxBool, MxBool) = MxTransitionManager::StartTransition;
+}
+
 // OFFSET: LEGO1 0x1004c170
 void MxTransitionManager::Transition_Wipe()
 {

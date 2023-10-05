@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(isle CXX)
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+option(ISLE_BUILD_PATCH "Build patching into ISLE.EXE and LEGO1.DLL (requires ISLE_BUILD_APP)" OFF)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
@@ -219,6 +220,22 @@ target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
 set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 
+# Forward ISLE_BUILD_PATCH
+if (ISLE_BUILD_PATCH)
+  target_sources(lego1 PRIVATE LEGO1/decomp.cpp)
+
+  target_compile_definitions(lego1 PRIVATE ISLE_BUILD_PATCH)
+
+  # Copy LEGO1.DLL to LEGO1_PATCH.DLL after LEGO1.DLL is built
+  # This is a crappy hack, but when building the patcher, we want
+  # ISLE.EXE to import the original LEGO1.DLL, then load LEGO1_PATCH.DLL
+  # (our DLL) manually
+  add_custom_command(
+    TARGET lego1 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:lego1> $<TARGET_FILE_DIR:lego1>/LEGO1_PATCH.DLL
+  )
+endif()
+
 if (ISLE_BUILD_APP)
   add_executable(isle WIN32
     ISLE/res/isle.rc
@@ -245,6 +262,11 @@ if (ISLE_BUILD_APP)
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
+
+  # Forward ISLE_BUILD_PATCH
+  if (ISLE_BUILD_PATCH)
+    target_compile_definitions(isle PRIVATE ISLE_BUILD_PATCH)
+  endif()
 endif()
 
 if (MSVC)

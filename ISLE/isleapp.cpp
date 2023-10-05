@@ -155,6 +155,21 @@ BOOL StartDirectSound(void);
 // OFFSET: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+#ifdef ISLE_BUILD_PATCH
+  // Load LEGO1_PATCH.DLL
+  {
+    HMODULE hModule = LoadLibraryA("LEGO1_PATCH.DLL");
+    if (hModule) {
+      typedef void (*PatchFunc)(void*);
+      PatchFunc patchFunc = (PatchFunc)GetProcAddress(hModule, "Patch");
+      if (patchFunc) {
+        void *root = (char*)VideoManager - 0x10015720;
+        patchFunc(root);
+      }
+    }
+  }
+#endif
+
   // Look for another instance, if we find one, bring it to the foreground instead
   if (!FindExistingInstance()) {
     return 0;
