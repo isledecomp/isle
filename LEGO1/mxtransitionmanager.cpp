@@ -291,7 +291,7 @@ void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
   m_copyBuffer = NULL;
 }
 
-// OFFSET: LEGO1 0x1004c580 STUB
+// OFFSET: LEGO1 0x1004c580
 void MxTransitionManager::SetupCopyRect(DDSURFACEDESC &ddsc)
 {
   // Check if the copy rect is setup
@@ -304,39 +304,38 @@ void MxTransitionManager::SetupCopyRect(DDSURFACEDESC &ddsc)
 
   // Check if wait indicator has started
   if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::TickleState_Streaming) {
-    MxS32 left = m_waitIndicator->GetLocation().m_x;
-    MxS32 top = m_waitIndicator->GetLocation().m_y;
-
+    // Setup the copy rect
+    DWORD copyPitch = (ddsc.ddpfPixelFormat.dwRGBBitCount / 8) * (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
     DWORD bytesPerPixel = ddsc.ddpfPixelFormat.dwRGBBitCount / 8;
-    DWORD copyPitch = bytesPerPixel * (m_copyRect.right - m_copyRect.left + 1);
 
-    m_copyRect.left = left;
-    m_copyRect.top = top;
+    m_copyRect.left = m_waitIndicator->GetLocation().m_x;
+    m_copyRect.top = m_waitIndicator->GetLocation().m_y;
 
     MxS32 height = m_waitIndicator->GetHeight();
     MxS32 width = m_waitIndicator->GetWidth();
 
-    m_copyRect.right = left + width - 1;
-    m_copyRect.bottom = top + height - 1;
+    m_copyRect.right = m_copyRect.left + width - 1;
+    m_copyRect.bottom = m_copyRect.top + height - 1;
 
-    const char *src;
-    char *copyBuffer;
+    // Allocate the copy buffer
+    const char *src = (const char*)ddsc.lpSurface + m_copyRect.top * ddsc.lPitch + bytesPerPixel * m_copyRect.left;
 
-    src = (const char*)ddsc.lpSurface + m_copyRect.top * ddsc.lPitch + bytesPerPixel * m_copyRect.left;
-    copyBuffer = (char*)malloc(bytesPerPixel * (m_copyRect.right - m_copyRect.left + 1) * (m_copyRect.bottom - m_copyRect.top + 1));
-
-    this->m_copyBuffer = copyBuffer;
-    if (!copyBuffer)
+    m_copyBuffer = malloc(bytesPerPixel * width * height);
+    if (!m_copyBuffer)
       return;
 
-    for (LONG i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++)
+    // Copy into the copy buffer
+    char *dst = (char*)m_copyBuffer;
+
+    for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++)
     {
-      memcpy(copyBuffer, src, copyPitch);
-      copyBuffer += copyPitch;
+      memcpy(dst, src, copyPitch);
       src += ddsc.lPitch;
+      dst += copyPitch;
     }
   }
 
+  // Setup display surface
   if ((m_waitIndicator->GetAction()->GetFlags() & 0x10) != 0)
   {
     MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
