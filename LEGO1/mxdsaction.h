@@ -16,6 +16,7 @@ public:
   {
     Flag_Looping = 0x01,
     Flag_Bit3 = 0x04,
+    Flag_Bit5 = 0x10,
     Flag_Enabled = 0x20,
     Flag_Parsed = 0x80,
     Flag_Bit9 = 0x200,

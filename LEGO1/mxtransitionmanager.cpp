@@ -104,7 +104,7 @@ void MxTransitionManager::Transition_Dissolve()
   }
 
   if (res == DD_OK) {
-    SubmitCopyRect(ddsd);
+    SubmitCopyRect(&ddsd);
 
     for (MxS32 i = 0; i < 640; i++) {
       // Select 16 columns on each tick
@@ -129,7 +129,7 @@ void MxTransitionManager::Transition_Dissolve()
       }
     }
 
-    SetupCopyRect(ddsd);
+    SetupCopyRect(&ddsd);
     m_ddSurface->Unlock(ddsd.lpSurface);
 
     if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
@@ -213,7 +213,7 @@ void MxTransitionManager::Transition_Wipe()
   }
 
   if (res == DD_OK) {
-    SubmitCopyRect(ddsd);
+    SubmitCopyRect(&ddsd);
 
     // For each of the 240 animation ticks, blank out two scanlines
     // starting at the top of the screen.
@@ -224,21 +224,42 @@ void MxTransitionManager::Transition_Wipe()
     line += ddsd.lPitch;
     memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
 
-    SetupCopyRect(ddsd);
+    SetupCopyRect(&ddsd);
     m_ddSurface->Unlock(ddsd.lpSurface);
 
     m_animationTimer++;
   }
 }
 
-// OFFSET: LEGO1 0x1004c470 STUB
-void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *videoPresenter)
+// OFFSET: LEGO1 0x1004c470
+void MxTransitionManager::SetWaitIndicator(MxVideoPresenter *p_waitIndicator)
 {
-  // TODO
+  // End current wait indicator
+  if (m_waitIndicator != NULL) {
+    m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::Flag_Parsed);
+    m_waitIndicator->EndAction();
+    m_waitIndicator = NULL;
+  }
+
+  // Check if we were given a new wait indicator
+  if (p_waitIndicator != NULL) {
+    // Setup the new wait indicator
+    m_waitIndicator = p_waitIndicator;
+
+    LegoVideoManager *videoManager = VideoManager();
+    videoManager->RemovePresenter(*m_waitIndicator);
+
+    if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::TickleState_Streaming) {
+      m_waitIndicator->Tickle();
+    }
+  } else {
+    // Disable copy rect
+    m_copyFlags.bit0 = FALSE;
+  }
 }
 
 // OFFSET: LEGO1 0x1004c4d0
-void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
+void MxTransitionManager::SubmitCopyRect(LPDDSURFACEDESC ddsc)
 {
   // Check if the copy rect is setup
   if (m_copyFlags.bit0 == FALSE || m_waitIndicator == NULL || m_copyBuffer == NULL) {
@@ -248,7 +269,7 @@ void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
   // Copy the copy rect onto the surface
   char *dst;
 
-  DWORD bytesPerPixel = ddsc.ddpfPixelFormat.dwRGBBitCount / 8;
+  DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
   const char *src = (const char *)m_copyBuffer;
 
@@ -256,12 +277,12 @@ void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
   copyPitch = ((m_copyRect.right - m_copyRect.left) + 1) * bytesPerPixel;
 
   LONG y;
-  dst = (char *)ddsc.lpSurface + (ddsc.lPitch * m_copyRect.top) + (bytesPerPixel * m_copyRect.left);
+  dst = (char *)ddsc->lpSurface + (ddsc->lPitch * m_copyRect.top) + (bytesPerPixel * m_copyRect.left);
 
   for (y = 0; y < m_copyRect.bottom - m_copyRect.top + 1; ++y) {
     memcpy(dst, src, copyPitch);
     src += copyPitch;
-    dst += ddsc.lPitch;
+    dst += ddsc->lPitch;
   }
 
   // Free the copy buffer
@@ -269,8 +290,60 @@ void MxTransitionManager::SubmitCopyRect(DDSURFACEDESC &ddsc)
   m_copyBuffer = NULL;
 }
 
-// OFFSET: LEGO1 0x1004c580 STUB
-void MxTransitionManager::SetupCopyRect(DDSURFACEDESC &ddsc)
+// OFFSET: LEGO1 0x1004c580
+void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
 {
-  // TODO
+  // Check if the copy rect is setup
+  if (m_copyFlags.bit0 == FALSE || m_waitIndicator == NULL) {
+    return;
+  }
+
+  // Tickle wait indicator
+  m_waitIndicator->Tickle();
+
+  // Check if wait indicator has started
+  if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::TickleState_Streaming) {
+    // Setup the copy rect
+    DWORD copyPitch = (ddsc->ddpfPixelFormat.dwRGBBitCount / 8) * (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
+    DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
+
+    m_copyRect.left = m_waitIndicator->GetLocation().m_x;
+    m_copyRect.top = m_waitIndicator->GetLocation().m_y;
+
+    MxS32 height = m_waitIndicator->GetHeight();
+    MxS32 width = m_waitIndicator->GetWidth();
+
+    m_copyRect.right = m_copyRect.left + width - 1;
+    m_copyRect.bottom = m_copyRect.top + height - 1;
+
+    // Allocate the copy buffer
+    const char *src = (const char*)ddsc->lpSurface + m_copyRect.top * ddsc->lPitch + bytesPerPixel * m_copyRect.left;
+
+    m_copyBuffer = malloc(bytesPerPixel * width * height);
+    if (!m_copyBuffer)
+      return;
+
+    // Copy into the copy buffer
+    char *dst = (char*)m_copyBuffer;
+
+    for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++)
+    {
+      memcpy(dst, src, copyPitch);
+      src += ddsc->lPitch;
+      dst += copyPitch;
+    }
+  }
+
+  // Setup display surface
+  if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::Flag_Bit5) != 0)
+  {
+    MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
+    MxBool unkbool = FALSE;
+    displaySurface->vtable2c(ddsc, m_waitIndicator->m_unk50, 0, 0, m_waitIndicator->GetLocation().m_x, m_waitIndicator->GetLocation().m_y, m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight(), unkbool);
+  }
+  else
+  {
+    MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
+    displaySurface->vtable24(ddsc, m_waitIndicator->m_unk50, 0, 0, m_waitIndicator->GetLocation().m_x, m_waitIndicator->GetLocation().m_y, m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight());
+  }
 }
