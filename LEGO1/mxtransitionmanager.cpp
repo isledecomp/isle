@@ -33,12 +33,36 @@ MxTransitionManager::~MxTransitionManager()
   TickleManager()->UnregisterClient(this);
 }
 
-// OFFSET: LEGO1 0x1004bac0 STUB
+// OFFSET: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
-  // TODO
+  if (this->m_animationSpeed + this->m_systemTime > timeGetTime()) {
+    return SUCCESS;
+  }
 
-  return 0;
+  this->m_systemTime = timeGetTime();
+
+  switch (this->m_transitionType) {
+    case NO_ANIMATION:
+      FUN_1004bcf0();
+      break;
+    case DISSOLVE:
+      Transition_Dissolve();
+      break;
+    case PIXELATION:
+      Transition_Pixelation();
+      break;
+    case SCREEN_WIPE:
+      Transition_Wipe();
+      break;
+    case WINDOWS:
+      Transition_Windows();
+      break;
+    case BROKEN:
+      Transition_Broken();
+      break;
+  }
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1004bc30
@@ -190,6 +214,33 @@ MxResult MxTransitionManager::StartTransition(TransitionType p_animationType, Mx
     return SUCCESS;
   }
   return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1004bcf0
+void MxTransitionManager::FUN_1004bcf0()
+{
+  LegoVideoManager *videoManager = VideoManager();
+  videoManager->GetDisplaySurface()->FUN_100ba640();
+  EndTransition(TRUE);
+}
+
+// OFFSET: LEGO1 0x1004bed0 STUB
+void MxTransitionManager::Transition_Pixelation()
+{
+  // TODO
+}
+
+
+// OFFSET: LEGO1 0x1004c270 STUB
+void MxTransitionManager::Transition_Windows()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1004c3e0 STUB
+void MxTransitionManager::Transition_Broken()
+{
+  // TODO
 }
 
 // OFFSET: LEGO1 0x1004c170

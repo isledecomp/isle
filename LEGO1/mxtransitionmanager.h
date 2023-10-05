@@ -42,10 +42,17 @@ public:
 
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_doCopy, MxBool p_playMusicInAnim);
 
+
 private:
   void EndTransition(MxBool p_notifyWorld);
   void Transition_Dissolve();
+  void Transition_Pixelation();
   void Transition_Wipe();
+  void Transition_Windows();
+  void Transition_Broken();
+
+  void FUN_1004bcf0();
+
   void SubmitCopyRect(LPDDSURFACEDESC ddsc);
   void SetupCopyRect(LPDDSURFACEDESC ddsc);
 
