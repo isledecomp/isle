@@ -20,7 +20,7 @@ public:
   DecompPatchList()
   {
     // I'm having CRT initialization order issues
-    // with MSVC 4.20, so I'm going to leave m_head
+    // with MSVC 4.2, so I'm going to leave m_head
     // uninitialized. It's static so it should be
     // zeroed anyways.
     // m_head = NULL;

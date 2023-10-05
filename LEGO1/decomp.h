@@ -34,11 +34,10 @@ void DecompPatchAdd(void *origFunc, void *newFunc);
 
 #else
 
-#define DECOMP_METHOD_HOOK()
-
-#define DECOMP_HOOK_DECL_EXPORT()
-#define DECOMP_HOOK_DEFN_EXPORT()
-#define DECOMP_HOOK_EXPORT()
+#define DECOMP_HOOK_DECL_CLS()
+#define DECOMP_HOOK_START_CLS()
+#define DECOMP_HOOK_END_CLS()
+#define DECOMP_HOOK_EXPORT_CLS()
 
 #endif
 
