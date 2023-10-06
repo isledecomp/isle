@@ -20,7 +20,21 @@ MxAudioManager::~MxAudioManager()
 // OFFSET: LEGO1 0x100b8df0
 void MxAudioManager::Init()
 {
-  this->m_unk2c = 100;
+  this->m_volume = 100;
+}
+
+// OFFSET: LEGO1 0x10029910
+MxS32 MxAudioManager::GetVolume()
+{
+  return this->m_volume;
+}
+
+// OFFSET: LEGO1 0x100b8ea0
+void MxAudioManager::SetVolume(MxS32 p_volume)
+{
+  this->m_criticalSection.Enter();
+  this->m_volume = p_volume;
+  this->m_criticalSection.Leave();
 }
 
 // OFFSET: LEGO1 0x100b8e00

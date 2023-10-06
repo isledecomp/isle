@@ -114,7 +114,7 @@ class WinePathConverter:
 
   def get_wine_path(self, unix_fn: str) -> str:
     if unix_fn.startswith('./'):
-      return self.win_cmd + '\\' + unix_fn[2:].replace('/', '\\')
+      return self.win_cwd + '\\' + unix_fn[2:].replace('/', '\\')
     if unix_fn.startswith(self.unix_cwd):
       return self.win_cwd + '\\' + unix_fn.removeprefix(self.unix_cwd).replace('/', '\\').lstrip('\\')
     return self._call_winepath_unix2win(unix_fn)

@@ -17,3 +17,9 @@ void MxMediaPresenter::Init()
   this->m_unk48 = NULL;
   this->m_unk4c = NULL;
 }
+
+// OFFSET: LEGO1 0x100b5f10 STUB
+void MxMediaPresenter::VTable0x58()
+{
+  // TODO
+}

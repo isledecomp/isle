@@ -29,6 +29,8 @@ public:
     return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
+  virtual void VTable0x58(); // vtable+0x58
+
   undefined4 m_unk40;
   undefined4 m_unk44;
   undefined4 m_unk48;

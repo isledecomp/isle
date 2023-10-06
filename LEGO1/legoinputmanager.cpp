@@ -27,8 +27,8 @@ LegoInputManager::LegoInputManager()
   m_joyid = -1;
   m_joystickIndex = -1;
   m_useJoystick = FALSE;
-  m_unk0x335 = 0;
-  m_unk0x336 = 0;
+  m_unk0x335 = FALSE;
+  m_unk0x336 = FALSE;
   m_unk0x74 = 0x19;
   m_timeout = 1000;
 }

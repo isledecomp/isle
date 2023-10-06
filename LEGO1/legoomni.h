@@ -75,12 +75,16 @@ public:
   LegoGameState *GetGameState() { return m_gameState; }
   LegoNavController *GetNavController() { return m_navController; }
   MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
+  LegoWorld *GetCurrentWorld() { return m_currentWorld; }
 
 private:
   int m_unk68;
   int m_unk6c;
   LegoInputManager *m_inputMgr; // 0x70
-  char m_unk74[0x10];
+  undefined4 m_unk74;
+  undefined4 m_unk78;
+  LegoWorld *m_currentWorld;
+  undefined4 m_unk80;
   LegoNavController *m_navController; // 0x84
   Isle* m_isle; // 0x88
   char m_unk8c[0x4];
@@ -115,5 +119,6 @@ LegoBuildingManager* BuildingManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char *, const char *, const char *);
+LegoWorld *GetCurrentWorld();
 
 #endif // LEGOOMNI_H
