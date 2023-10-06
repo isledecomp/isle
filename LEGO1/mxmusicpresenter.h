@@ -21,7 +21,7 @@ public:
   }
 
   MxMusicPresenter();
-  ~MxMusicPresenter();
+  virtual ~MxMusicPresenter() override;
 
 private:
   void Init();
