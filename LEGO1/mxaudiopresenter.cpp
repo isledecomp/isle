@@ -11,7 +11,7 @@ undefined4 MxAudioPresenter::vtable5c()
 }
 
 // OFFSET: LEGO1 0x1000d270
-void MxAudioPresenter::vtable60(undefined4 p_param)
+void MxAudioPresenter::vtable60(undefined4 p_unk50)
 {
-  this->m_unk50 = p_param;
+  this->m_unk50 = p_unk50;
 }
