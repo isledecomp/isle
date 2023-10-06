@@ -1,13 +1,15 @@
 #include "buildingentity.h"
 
-// OFFSET: LEGO1 0x10014e20 STUB
+#include "mxomni.h"
+
+// OFFSET: LEGO1 0x10014e20
 BuildingEntity::BuildingEntity()
 {
-  // TODO
+  NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x10015030 STUB
+// OFFSET: LEGO1 0x10015030
 BuildingEntity::~BuildingEntity()
 {
-  // TODO
+  NotificationManager()->Unregister(this);
 }
