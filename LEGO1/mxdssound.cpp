@@ -1,5 +1,7 @@
 #include "mxdssound.h"
 
+#include "legoutil.h"
+
 DECOMP_SIZE_ASSERT(MxDSSound, 0xc0)
 
 // OFFSET: LEGO1 0x100c92c0
@@ -46,8 +48,7 @@ void MxDSSound::Deserialize(char **p_source, MxS16 p_unk24)
 {
   MxDSMediaAction::Deserialize(p_source, p_unk24);
 
-  this->m_volume = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
+  GetScalar(p_source, this->m_volume);
 }
 
 // OFFSET: LEGO1 0x100c9510
