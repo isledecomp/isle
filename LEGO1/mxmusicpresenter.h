@@ -21,9 +21,11 @@ public:
   }
 
   MxMusicPresenter();
+  ~MxMusicPresenter();
 
 private:
   void Init();
+  void Destroy(MxBool);
 };
 
 #endif // MXMUSICPRESENTER_H
