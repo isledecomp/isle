@@ -1,6 +1,7 @@
 #ifndef MXAUDIOPRESENTER_H
 #define MXAUDIOPRESENTER_H
 
+#include "decomp.h"
 #include "mxmediapresenter.h"
 
 // VTABLE 0x100d4c70
@@ -24,7 +25,10 @@ public:
     return !strcmp(name, MxAudioPresenter::ClassName()) || MxMediaPresenter::IsA(name);
   }
 
-  int m_unk50;
+  virtual undefined4 vtable5c();
+  virtual void vtable60(undefined4);
+
+  undefined4 m_unk50;
 };
 
 #endif // MXAUDIOPRESENTER_H
