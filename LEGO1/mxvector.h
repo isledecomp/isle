@@ -96,7 +96,7 @@ public:
   virtual void EqualsCross(MxVector3 *p_a, MxVector3 *p_b);
   virtual void EqualsScalar(float *p_value);
 
-  inline void Fill(float value) { EqualsScalar(&value); }
+  inline void Fill(float p_value) { EqualsScalar(&p_value); }
 };
 
 // VTABLE 0x100d45a0
