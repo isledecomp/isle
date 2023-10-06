@@ -33,9 +33,9 @@ inline void GetScalar(char **p_source, T& p_dest)
 template <class T>
 inline T GetScalar(T **p_source)
 {
-  T p_val = **p_source;
+  T val = **p_source;
   *p_source += 1;
-  return p_val;
+  return val;
 }
 
 template <class T>
