@@ -70,8 +70,8 @@ public:
 
   inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
   inline MxPoint32 GetLocation() const { return this->m_location; }
-  inline MxS32 GetDisplayX() const { return this->m_location.m_x; }
-  inline MxS32 GetDisplayY() const { return this->m_location.m_y; }
+  inline MxS32 GetLocationX() const { return this->m_location.m_x; }
+  inline MxS32 GetLocationY() const { return this->m_location.m_y; }
   inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
   inline MxDSAction *GetAction() const { return this->m_action; }
 
