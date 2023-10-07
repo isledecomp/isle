@@ -318,17 +318,17 @@ void MxTransitionManager::SubmitCopyRect(LPDDSURFACEDESC ddsc)
   }
 
   // Copy the copy rect onto the surface
-  char *dst;
+  MxU8 *dst;
 
-  DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
+  MxU32 bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
-  const char *src = (const char *)m_copyBuffer;
+  const MxU8 *src = (const MxU8 *)m_copyBuffer;
 
-  LONG copyPitch;
+  MxS32 copyPitch;
   copyPitch = ((m_copyRect.right - m_copyRect.left) + 1) * bytesPerPixel;
 
-  LONG y;
-  dst = (char *)ddsc->lpSurface + (ddsc->lPitch * m_copyRect.top) + (bytesPerPixel * m_copyRect.left);
+  MxS32 y;
+  dst = (MxU8 *)ddsc->lpSurface + (ddsc->lPitch * m_copyRect.top) + (bytesPerPixel * m_copyRect.left);
 
   for (y = 0; y < m_copyRect.bottom - m_copyRect.top + 1; ++y) {
     memcpy(dst, src, copyPitch);
@@ -355,8 +355,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
   // Check if wait indicator has started
   if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::TickleState_Streaming) {
     // Setup the copy rect
-    DWORD copyPitch = (ddsc->ddpfPixelFormat.dwRGBBitCount / 8) * (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
-    DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
+    MxU32 copyPitch = (ddsc->ddpfPixelFormat.dwRGBBitCount / 8) * (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
+    MxU32 bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
     m_copyRect.left = m_waitIndicator->GetLocationX();
     m_copyRect.top = m_waitIndicator->GetLocationY();
@@ -368,14 +368,14 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
     m_copyRect.bottom = m_copyRect.top + height - 1;
 
     // Allocate the copy buffer
-    const char *src = (const char*)ddsc->lpSurface + m_copyRect.top * ddsc->lPitch + bytesPerPixel * m_copyRect.left;
+    const MxU8 *src = (const MxU8*)ddsc->lpSurface + m_copyRect.top * ddsc->lPitch + bytesPerPixel * m_copyRect.left;
 
-    m_copyBuffer = new char[bytesPerPixel * width * height];
+    m_copyBuffer = new MxU8[bytesPerPixel * width * height];
     if (!m_copyBuffer)
       return;
 
     // Copy into the copy buffer
-    char *dst = (char*)m_copyBuffer;
+    MxU8 *dst = m_copyBuffer;
 
     for (MxS32 i = 0; i < (m_copyRect.bottom - m_copyRect.top + 1); i++)
     {

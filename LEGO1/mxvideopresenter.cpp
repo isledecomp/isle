@@ -57,7 +57,7 @@ MxS32 MxVideoPresenter::GetWidth()
                  : m_bitmap->GetBmiHeader()->biWidth;
 }
 
-// OFFSET: LEGO1 0x1000c800 STUB
+// OFFSET: LEGO1 0x1000c800
 MxS32 MxVideoPresenter::GetHeight()
 {
   return m_unk54 ? m_unk54->height

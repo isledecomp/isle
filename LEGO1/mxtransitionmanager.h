@@ -57,7 +57,7 @@ private:
 
   MxVideoPresenter *m_waitIndicator;
   RECT m_copyRect;
-  void *m_copyBuffer;
+  MxU8 *m_copyBuffer;
 
   flag_bitfield m_copyFlags;
   undefined4 m_unk24;
