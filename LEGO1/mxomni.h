@@ -4,6 +4,7 @@
 #include "mxcore.h"
 #include "mxstring.h"
 #include "mxcriticalsection.h"
+#include "mxautolocker.h"
 
 class MxAtomIdCounterSet;
 class MxDSAction;
