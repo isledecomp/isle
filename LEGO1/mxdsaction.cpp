@@ -1,9 +1,10 @@
 #include "mxdsaction.h"
 
+#include "mxomni.h"
+#include "mxtimer.h"
+
 #include <float.h>
 #include <limits.h>
-
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 

@@ -1,23 +1,23 @@
 #ifndef MXOMNI_H
 #define MXOMNI_H
 
+#include "mxcore.h"
+#include "mxstring.h"
 #include "mxcriticalsection.h"
-#include "mxdsaction.h"
-#include "mxeventmanager.h"
-#include "mxmusicmanager.h"
-#include "mxnotificationmanager.h"
-#include "mxobjectfactory.h"
-#include "mxomnicreateflags.h"
-#include "mxomnicreateparam.h"
-#include "mxsoundmanager.h"
-#include "mxstreamer.h"
-#include "mxticklemanager.h"
-#include "mxtimer.h"
-#include "mxvariabletable.h"
-#include "mxvideomanager.h"
-#include "mxatomidcounter.h"
-#include "mxautolocker.h"
-#include "mxeventmanager.h"
+
+class MxAtomIdCounterSet;
+class MxDSAction;
+class MxEventManager;
+class MxMusicManager;
+class MxNotificationManager;
+class MxObjectFactory;
+class MxOmniCreateParam;
+class MxSoundManager;
+class MxStreamer;
+class MxTickleManager;
+class MxTimer;
+class MxVariableTable;
+class MxVideoManager;
 
 // VTABLE 0x100dc168
 // SIZE 0x68

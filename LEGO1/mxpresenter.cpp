@@ -1,13 +1,16 @@
 #include "mxpresenter.h"
+
+#include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxparam.h"
-#include "legoomni.h"
 #include "mxdsanim.h"
 #include "mxdssound.h"
-#include <string.h>
+#include "mxnotificationmanager.h"
 
 #include "decomp.h"
 #include "define.h"
+
+#include <string.h>
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 

@@ -1,9 +1,10 @@
 
 #include "mxthread.h"
 
-#include <process.h>
-
 #include "mxomni.h"
+#include "mxtimer.h"
+
+#include <process.h>
 
 // OFFSET: LEGO1 0x100bf690
 MxResult MxThread::Run()
