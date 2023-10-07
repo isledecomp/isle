@@ -68,17 +68,19 @@ public:
 
   MxBool IsEnabled();
 
-  inline MxS32 GetCurrentTickleState() { return this->m_currentTickleState; }
-  inline MxPoint32 GetLocation() { return this->m_location; }
-  inline MxS32 GetDisplayZ() { return this->m_displayZ; }
-  inline MxDSAction *GetAction() { return this->m_action; }
+  inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
+  inline MxPoint32 GetLocation() const { return this->m_location; }
+  inline MxS32 GetLocationX() const { return this->m_location.m_x; }
+  inline MxS32 GetLocationY() const { return this->m_location.m_y; }
+  inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
+  inline MxDSAction *GetAction() const { return this->m_action; }
 
 protected:
   __declspec(dllexport) void Init();
   void SendTo_unkPresenter(MxOmni *);
 
 private:
-  MxS32 m_currentTickleState; // 0x8
+  TickleState m_currentTickleState; // 0x8
   MxU32 m_previousTickleStates;
   MxPoint32 m_location;
   MxS32 m_displayZ;

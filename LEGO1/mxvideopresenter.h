@@ -2,9 +2,11 @@
 #define MXVIDEOPRESENTER_H
 
 #include "mxmediapresenter.h"
+#include "mxbitmap.h"
 
 #include "decomp.h"
 
+// VTABLE 0x100d4be8
 class MxVideoPresenter : public MxMediaPresenter
 {
 public:
@@ -41,12 +43,20 @@ public:
   virtual void VTable0x70(); // vtable+0x70
   virtual void VTable0x74(); // vtable+0x74
   virtual void VTable0x78(); // vtable+0x78
-  virtual void VTable0x7c(); // vtable+0x7c
+  virtual MxBool VTable0x7c(); // vtable+0x7c
   virtual MxS32 GetWidth();  // vtable+0x80
   virtual MxS32 GetHeight(); // vtable+0x84
 
-  undefined4 m_unk50;
-  undefined4 m_unk54;
+  // TODO: Not sure what this is. Seems to have size of 12 bytes
+  // based on 0x100b9e9a. Values are copied from the bitmap header.
+  typedef struct {
+    undefined unk0[8];
+    MxU16 width;
+    MxU16 height;
+  } unknown_meta_struct;
+
+  MxBitmap *m_bitmap;
+  unknown_meta_struct *m_unk54;
   undefined4 m_unk58;
   undefined2 m_unk5c;
   unsigned char m_flags; // 0x5e
