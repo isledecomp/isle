@@ -48,7 +48,7 @@ void MxSoundManager::Destroy(MxBool p_param)
   }
 }
 
-// OFFSET: LEGO1 0x100ae8b0
+// OFFSET: LEGO1 0x100ae8b0 STUB
 MxResult MxSoundManager::StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2)
 {
   // TODO STUB
