@@ -23,12 +23,8 @@ MxLong LegoEntity::Notify(MxParam &p)
 // OFFSET: LEGO1 0x100105f0
 void LegoEntity::Reset()
 {
-  float value = 0.0f;
-  m_vec1.EqualsScalar(&value);
-
-  value = 0.0f;
-  m_vec2.EqualsScalar(&value);
-
+  m_vec1.Fill(0);
+  m_vec2.Fill(0);
   m_unk50 = 0;
   m_unk54 = 0;
   m_unk58 = 0;
