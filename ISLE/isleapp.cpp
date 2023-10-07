@@ -732,14 +732,14 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
       ds.SetObjectId(0);
       VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
 
-      if (Start(ds) != SUCCESS) {
+      if (Start(&ds) != SUCCESS) {
         return;
       }
     } else {
       ds.SetAtomId(stream->atom);
       ds.SetUnknown24(-1);
       ds.SetObjectId(0);
-      if (Start(ds) != SUCCESS) {
+      if (Start(&ds) != SUCCESS) {
         return;
       }
       this->m_gameStarted = 1;
