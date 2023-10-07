@@ -47,3 +47,22 @@ void MxSoundManager::Destroy(MxBool p_param)
     MxAudioManager::Destroy();
   }
 }
+
+// OFFSET: LEGO1 0x100ae8b0
+MxResult MxSoundManager::StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2)
+{
+  // TODO STUB
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100aed10 STUB
+void MxSoundManager::vtable0x34()
+{
+  // TODO STUB
+}
+
+// OFFSET: LEGO1 0x100aee10 STUB
+void MxSoundManager::vtable0x38()
+{
+  // TODO STUB
+}
