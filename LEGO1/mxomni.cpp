@@ -345,8 +345,7 @@ void MxOmni::Destroy()
 MxLong MxOmni::Notify(MxParam &p)
 {
   MxAutoLocker lock(&this->m_criticalsection);
-  MxLong result;
-
+  
   if (p.GetType() != MXSTREAMER_UNKNOWN)
     return 0;
 
