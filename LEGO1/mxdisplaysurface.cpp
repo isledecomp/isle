@@ -176,7 +176,7 @@ void MxDisplaySurface::SetPalette(MxPalette *p_palette)
 }
 
 // OFFSET: LEGO1 0x100bc200 STUB
-void MxDisplaySurface::vtable24(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+void MxDisplaySurface::vtable24(LPDDSURFACEDESC, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 
 }
@@ -188,7 +188,7 @@ MxBool MxDisplaySurface::vtable28(undefined4, undefined4, undefined4, undefined4
 }
 
 // OFFSET: LEGO1 0x100bc630 STUB
-MxBool MxDisplaySurface::vtable2c(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
+MxBool MxDisplaySurface::vtable2c(LPDDSURFACEDESC, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
 {
   return 0;
 }
@@ -231,4 +231,10 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 undefined4 MxDisplaySurface::vtable44(undefined4, undefined4*, undefined4, undefined4)
 {
   return 0;
+}
+
+// OFFSET: LEGO1 0x100ba640 STUB
+void MxDisplaySurface::FUN_100ba640()
+{
+  // TODO
 }

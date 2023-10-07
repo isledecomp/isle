@@ -14,7 +14,7 @@ public:
   MxTransitionManager();
   virtual ~MxTransitionManager() override; // vtable+0x0
 
-  __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *videoPresenter);
+  __declspec(dllexport) void SetWaitIndicator(MxVideoPresenter *p_waitIndicator);
 
   virtual MxResult Tickle(); // vtable+0x8
 
@@ -44,11 +44,18 @@ public:
 
   MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_doCopy, MxBool p_playMusicInAnim);
 
+
 private:
   void EndTransition(MxBool p_notifyWorld);
+  void Transition_None();
   void Transition_Dissolve();
-  void SubmitCopyRect(DDSURFACEDESC &);
-  void SetupCopyRect(DDSURFACEDESC &);
+  void Transition_Pixelation();
+  void Transition_Wipe();
+  void Transition_Windows();
+  void Transition_Broken();
+
+  void SubmitCopyRect(LPDDSURFACEDESC ddsc);
+  void SetupCopyRect(LPDDSURFACEDESC ddsc);
 
   MxVideoPresenter *m_waitIndicator;
   RECT m_copyRect;
