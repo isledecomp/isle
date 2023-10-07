@@ -48,11 +48,15 @@ void LegoVideoManager::MoveCursor(int x, int y)
 // OFFSET: LEGO1 0x1007c440
 void LegoVideoManager::SetSkyColor(float red, float green, float blue)
 {
-  PALETTEENTRY colorStrucure; // [esp+0h] [ebp-4h] BYREF
+  PALETTEENTRY colorStrucure;
 
-  colorStrucure.peRed = (red* 255.0);
+  colorStrucure.peRed = (red * 255.0);
   colorStrucure.peGreen = (green * 255.0);
   colorStrucure.peBlue = (blue * 255.0);
   colorStrucure.peFlags = -124;
-  // TODO
+  m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
+  m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
+
+  // TODO 3d manager
+  //m_3dManager->
 }
