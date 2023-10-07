@@ -23,7 +23,7 @@ void MxEventManager::Init()
 }
 
 // OFFSET: LEGO1 0x100c04a0
-MxResult MxEventManager::CreateEventThread(int p_frequencyMS, MxBool p_noRegister)
+MxResult MxEventManager::CreateEventThread(MxU32 p_frequencyMS, MxBool p_noRegister)
 {
   MxResult status = FAILURE;
   MxBool locked = FALSE;
