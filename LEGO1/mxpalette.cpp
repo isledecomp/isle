@@ -1,5 +1,7 @@
 #include "mxpalette.h"
+
 #include "mxomni.h"
+#include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x10102188 0x400
 PALETTEENTRY g_defaultPaletteEntries[256] =

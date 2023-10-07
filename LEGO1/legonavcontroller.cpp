@@ -1,6 +1,7 @@
 #include "legonavcontroller.h"
 
 #include "legoomni.h"
+#include "legovideomanager.h"
 #include "legoutil.h"
 
 // 0x100f4c28

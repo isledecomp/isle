@@ -1,21 +1,23 @@
 #ifndef MXOMNI_H
 #define MXOMNI_H
 
+#include "mxcore.h"
+#include "mxstring.h"
 #include "mxcriticalsection.h"
-#include "mxdsaction.h"
-#include "mxeventmanager.h"
-#include "mxmusicmanager.h"
-#include "mxnotificationmanager.h"
-#include "mxobjectfactory.h"
-#include "mxomnicreateflags.h"
-#include "mxomnicreateparam.h"
-#include "mxsoundmanager.h"
-#include "mxstreamer.h"
-#include "mxticklemanager.h"
-#include "mxtimer.h"
-#include "mxvariabletable.h"
-#include "mxvideomanager.h"
-#include "mxatomidcounter.h"
+
+class MxAtomIdCounterSet;
+class MxDSAction;
+class MxEventManager;
+class MxMusicManager;
+class MxNotificationManager;
+class MxObjectFactory;
+class MxOmniCreateParam;
+class MxSoundManager;
+class MxStreamer;
+class MxTickleManager;
+class MxTimer;
+class MxVariableTable;
+class MxVideoManager;
 
 // VTABLE 0x100dc168
 // SIZE 0x68
@@ -38,7 +40,7 @@ public:
   virtual void Init(); // vtable+14
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
-  virtual void vtable0x20(); // vtable+20
+  virtual MxResult Start(MxDSAction* p_dsAction); // vtable+20
   virtual void DeleteObject(MxDSAction &ds); // vtable+24
   virtual MxBool DoesEntityExist(MxDSAction &ds); // vtable+28
   virtual void vtable0x2c(); // vtable+2c
