@@ -33,7 +33,7 @@ public:
   virtual MxResult Open(const char *p_filename); // vtable+0x14
   virtual MxResult vtable0x18(undefined4 p_unknown, undefined4 p_unknown2); //vtable+0x18
   virtual MxResult vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2); //vtable+0x1c
-  virtual long vtable0x20(MxDSAction* action); //vtable+0x20
+  virtual MxResult vtable0x20(MxDSAction* action); //vtable+0x20
 
   MxBool FUN_100c20d0(MxDSObject &p_obj);
 

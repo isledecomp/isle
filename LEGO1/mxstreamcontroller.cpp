@@ -44,7 +44,7 @@ MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unkno
 }
 
 // OFFSET: LEGO1 0x100c1690 STUB
-long MxStreamController::vtable0x20(MxDSAction* action)
+MxResult MxStreamController::vtable0x20(MxDSAction* action)
 {
   // TODO STUB
   return FAILURE;
