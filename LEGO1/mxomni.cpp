@@ -207,10 +207,9 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
 
   if (p.CreateFlags().CreateTickleManager())
   {
-    MxTickleManager *tickleManager = new MxTickleManager();
-    this->m_tickleManager = tickleManager;
+    this->m_tickleManager = new MxTickleManager();
 
-    if (tickleManager == NULL)
+    if (m_tickleManager == NULL)
       goto failure;
   }
 
@@ -278,8 +277,6 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
       m_eventManager = NULL;
     }
   }
-
-
 
   result = SUCCESS;
   failure:
