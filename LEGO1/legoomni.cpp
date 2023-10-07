@@ -256,6 +256,10 @@ void LegoOmni::Init()
 MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
   // FIXME: Stub
+  MxOmni::Create(p);
+  m_gameState = new LegoGameState();
+  m_bkgAudioManager = new MxBackgroundAudioManager();
+
   return SUCCESS;
 }
 
@@ -264,9 +268,14 @@ void LegoOmni::Destroy()
   // FIXME: Stub
 }
 
-void LegoOmni::vtable0x20()
+// OFFSET: LEGO1 0x1005b580
+MxResult LegoOmni::Start(MxDSAction* action)
 {
-  // FIXME: Stub
+  MxResult result = MxOmni::Start(action);
+  this->m_action.SetAtomId(action->GetAtomId());
+  this->m_action.SetObjectId(action->GetObjectId());
+  this->m_action.SetUnknown24(action->GetUnknown24());
+  return result;
 }
 
 void LegoOmni::DeleteObject(MxDSAction &ds)
