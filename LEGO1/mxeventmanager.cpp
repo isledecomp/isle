@@ -16,3 +16,10 @@ MxEventManager::~MxEventManager()
 void MxEventManager::Init()
 {
 }
+
+// OFFSET: LEGO1 0x100c04a0 STUB
+MxResult MxEventManager::vtable0x28(undefined4 p_unknown1, undefined p_unknown2)
+{
+  //TODO
+  return FAILURE;
+}

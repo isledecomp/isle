@@ -85,7 +85,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
       LegoWorld *world = GetCurrentWorld();
 
       if (world) {
-        world->Notify(MxParam(0x18, this));
+        world->Notify(MxParam(MXTRANSITIONMANAGER_TRANSITIONENDED, this));
       }
     }
   }

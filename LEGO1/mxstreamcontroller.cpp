@@ -1,6 +1,7 @@
 #include "mxstreamcontroller.h"
 
 #include "mxautolocker.h"
+#include "legoomni.h"
 
 // OFFSET: LEGO1 0x100c0b90 STUB
 MxStreamController::MxStreamController()
@@ -24,10 +25,11 @@ MxBool MxStreamController::FUN_100c20d0(MxDSObject &p_obj)
 // OFFSET: LEGO1 0x100c1520
 MxResult MxStreamController::Open(const char *p_filename)
 {
+  char sourceName [256];
   MxAutoLocker locker(&m_criticalSection);
 
-  // TODO
-
+  MakeSourceName(sourceName, p_filename);
+  this->atom = MxAtomId(sourceName, LookupMode_LowerCase2);
   return SUCCESS;
 }
 
