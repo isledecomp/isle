@@ -14,6 +14,10 @@ public:
   MxSoundManager();
   virtual ~MxSoundManager() override; // vtable+0x0
 
+  virtual MxResult StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2); //vtable+0x30
+  virtual void vtable0x34(); // vtable+0x34
+  virtual void vtable0x38(); // vtable+0x38
+
 private:
   void Init();
   void Destroy(MxBool);

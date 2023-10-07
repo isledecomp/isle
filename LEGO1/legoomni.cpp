@@ -3,6 +3,7 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
 #include "legogamestate.h"
+#include "legoutil.h"
 
 // 0x100f4588
 char *g_nocdSourceName = NULL;
@@ -307,14 +308,18 @@ void LegoOmni::NotifyCurrentEntity()
   // FIXME: Stub
 }
 
+// OFFSET: LEGO1 0x1005b640
 void LegoOmni::StartTimer()
 {
-  // FIXME: Stub
+  MxOmni::StartTimer();
+  SetAppCursor(2);
 }
 
-void LegoOmni::vtable0x3c()
+// OFFSET: LEGO1 0x1005b650
+void LegoOmni::StopTimer()
 {
-  // FIXME: Stub
+  MxOmni::StopTimer();
+  SetAppCursor(0);
 }
 
 MxBool LegoOmni::vtable40()
