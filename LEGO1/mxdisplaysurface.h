@@ -3,6 +3,7 @@
 
 #include <ddraw.h>
 
+#include "mxbitmap.h"
 #include "mxcore.h"
 #include "mxpalette.h"
 #include "mxvideoparam.h"
@@ -25,9 +26,9 @@ public:
   virtual MxResult Create(MxVideoParam &p_videoParam);
   virtual void Clear();
   virtual void SetPalette(MxPalette *p_palette);
-  virtual void vtable24(LPDDSURFACEDESC, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
+  virtual void vtable24(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
   virtual MxBool vtable28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
-  virtual MxBool vtable2c(LPDDSURFACEDESC, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool);
+  virtual MxBool vtable2c(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool);
   virtual MxBool vtable30(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool);
   virtual undefined4 vtable34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
   virtual void Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);

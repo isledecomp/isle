@@ -52,7 +52,7 @@ void MxOmni::Init()
   m_timer = NULL;
   m_streamer = NULL;
   m_atomIdCounterSet = NULL;
-  m_unk64 = NULL;
+  m_timerRunning = NULL;
 }
 
 // OFFSET: LEGO1 0x100b0090
@@ -99,16 +99,26 @@ void MxOmni::NotifyCurrentEntity()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b09d0 STUB
+// OFFSET: LEGO1 0x100b09d0
 void MxOmni::StartTimer()
 {
-  // TODO
+  if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Start();
+    m_soundManager->vtable0x34();
+    m_timerRunning = TRUE;
+  }
 }
 
-// OFFSET: LEGO1 0x100b0a00 STUB
-void MxOmni::vtable0x3c()
+// OFFSET: LEGO1 0x100b0a00
+void MxOmni::StopTimer()
 {
-  // TODO
+  if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Stop();
+    m_soundManager->vtable0x38();
+    m_timerRunning = FALSE;
+  }
 }
 
 // OFFSET: LEGO1 0x100b0690

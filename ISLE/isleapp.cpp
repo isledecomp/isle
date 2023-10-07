@@ -104,7 +104,7 @@ void IsleApp::Close()
     Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
     Lego()->DeleteObject(ds);
     TransitionManager()->SetWaitIndicator(NULL);
-    Lego()->vtable0x3c();
+    Lego()->StopTimer();
 
     MxLong lVar8;
     do {
@@ -243,7 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
         g_rmDisabled = 0;
-        Lego()->vtable0x3c();
+        Lego()->StopTimer();
       }
 
       if (g_closed) {

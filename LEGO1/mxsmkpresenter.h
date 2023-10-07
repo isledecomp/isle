@@ -12,7 +12,12 @@ class MxSmkPresenter : public MxVideoPresenter
 public:
   MxSmkPresenter();
 
-  undefined4 m_unk64[430];
+  virtual void VTable0x60() override;
+
+  undefined4 m_unk64;
+  MxS32 m_smkWidth; // 0x68
+  MxS32 m_smkHeight; // 0x6c
+  undefined4 m_unk70[427];
   undefined4 m_unk71c;
 private:
   void Init();
