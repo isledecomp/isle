@@ -42,10 +42,16 @@ void MxOmni::Init()
   m_unk64 = NULL;
 }
 
-// OFFSET: LEGO1 0x100b0090 STUB
-void MxOmni::vtable0x20()
+// OFFSET: LEGO1 0x100b0090
+long MxOmni::Start(MxDSAction* ds)
 {
-  // TODO
+  MxResult result = -1;
+  if(ds->GetAtomId().GetInternal() != NULL && ds->GetObjectId() != -1 && m_streamer != NULL)
+  {
+    result = m_streamer->Unknown100b99b0(ds);
+  }
+
+  return result;
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
@@ -258,7 +264,7 @@ MxAtomIdCounterSet *AtomIdCounterSet()
 MxStreamer* Streamer()
 {
   return MxOmni::GetInstance()->GetStreamer();
-} 
+}
 
 // OFFSET: LEGO1 0x100acf00
 MxSoundManager* MSoundManager()
