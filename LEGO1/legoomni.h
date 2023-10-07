@@ -110,10 +110,9 @@ __declspec(dllexport) LegoEntity * PickEntity(MxLong,MxLong);
 __declspec(dllexport) LegoROI * PickROI(MxLong,MxLong);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
 __declspec(dllexport) LegoSoundManager * SoundManager();
-__declspec(dllexport) MxLong Start(MxDSAction *);
+__declspec(dllexport) MxResult Start(MxDSAction&);
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
-__declspec(dllexport) MxLong Start(MxDSAction *a);
 
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();

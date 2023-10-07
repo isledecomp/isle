@@ -32,20 +32,20 @@ MxResult MxStreamController::Open(const char *p_filename)
 }
 
 // OFFSET: LEGO1 0x100b9400
-undefined4 MxStreamController::vtable0x18(undefined4 p_unknown, undefined4 p_unknown2)
+MxResult MxStreamController::vtable0x18(undefined4 p_unknown, undefined4 p_unknown2)
 {
-  return -1;
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100b9410
-undefined4 MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2)
+MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2)
 {
-  return -1;
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100c1690 STUB
 long MxStreamController::vtable0x20(MxDSAction* action)
 {
   // TODO STUB
-  return -1;
+  return FAILURE;
 }

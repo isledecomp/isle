@@ -142,11 +142,11 @@ MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
     controller = GetOpenStream(p_action->GetAtomId().GetInternal());
     if (controller == NULL)
     {
-      return -1;
+      return FAILURE;
     }
     return controller->vtable0x20(p_action);
   }
-  return -1;
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100b9b60

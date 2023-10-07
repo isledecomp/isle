@@ -43,12 +43,12 @@ void MxOmni::Init()
 }
 
 // OFFSET: LEGO1 0x100b0090
-long MxOmni::Start(MxDSAction* ds)
+MxResult MxOmni::Start(MxDSAction* p_dsAction)
 {
-  MxResult result = -1;
-  if(ds->GetAtomId().GetInternal() != NULL && ds->GetObjectId() != -1 && m_streamer != NULL)
+  MxResult result = FAILURE;
+  if(p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL)
   {
-    result = m_streamer->Unknown100b99b0(ds);
+    result = m_streamer->Unknown100b99b0(p_dsAction);
   }
 
   return result;

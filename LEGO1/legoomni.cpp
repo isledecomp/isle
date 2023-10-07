@@ -100,9 +100,9 @@ void SetOmniUserMessage(void (*p_userMsg)(const char *,int))
 }
 
 // OFFSET: LEGO1 0x100acf50
-MxLong Start(MxDSAction* action)
+MxResult Start(MxDSAction& p_dsAction)
 {
-  return MxOmni::GetInstance()->Start(action);
+  return MxOmni::GetInstance()->Start(&p_dsAction);
 }
 
 // OFFSET: LEGO1 0x1005ad10

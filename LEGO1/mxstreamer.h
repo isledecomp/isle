@@ -96,7 +96,7 @@ public:
 
   MxResult AddStreamControllerToOpenList(MxStreamController *p_stream);
 
-  MxResult Unknown100b99b0(MxDSAction* p_action);
+  MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action);
 
 private:
   list<MxStreamController *> m_openStreams; // 0x8
