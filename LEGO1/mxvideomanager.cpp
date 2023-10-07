@@ -34,7 +34,7 @@ MxResult MxVideoManager::Tickle()
 
   UpdateRegion();
   m_region->Reset();
-  
+
   return SUCCESS;
 }
 
@@ -54,13 +54,13 @@ MxResult MxVideoManager::Init()
 void MxVideoManager::SortPresenterList()
 {
   if (this->m_presenters->GetCount() <= 1)
-    return; 
+    return;
 
   MxPresenterListCursor a(this->m_presenters);
   MxPresenterListCursor b(this->m_presenters);
   MxU32 count = this->m_presenters->GetCount() - 1;
   MxBool finished;
-    
+
   if (count != 0) {
     do {
       a.Reset();
@@ -110,4 +110,16 @@ MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
 
   this->m_criticalSection.Leave();
   return 0;
+}
+
+// OFFSET: LEGO1 0x100bebe0 STUB
+void MxVideoManager::vtable0x28()
+{
+
+}
+
+// OFFSET: LEGO1 0x100bebe0 STUB
+MxResult MxVideoManager::vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2)
+{
+  return FAILURE;
 }

@@ -176,7 +176,8 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
   {
     goto failure;
   }
-
+  m_mediaPath = p.GetMediaPath();
+  m_windowHandle = p.GetWindowHandle();
   if (p.CreateFlags().CreateObjectFactory())
   {
     MxObjectFactory *objectFactory = new MxObjectFactory();
@@ -218,7 +219,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     MxNotificationManager *notificationManager = new MxNotificationManager();
     this->m_notificationManager = notificationManager;
 
-    if (notificationManager == NULL)
+    if (notificationManager == NULL || notificationManager->Create(100, 0) != SUCCESS)
       goto failure;
   }
 
@@ -227,7 +228,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     MxStreamer *streamer = new MxStreamer();
     this->m_streamer = streamer;
 
-    if (streamer == NULL)
+    if (streamer == NULL || streamer->Init() != SUCCESS)
       goto failure;
   }
 
@@ -236,8 +237,11 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     MxVideoManager *videoManager = new MxVideoManager();
     this->m_videoManager = videoManager;
 
-    if (videoManager == NULL)
-      return FAILURE;
+    if (videoManager != NULL && videoManager->vtable0x2c(p.GetVideoParam(), 100, 0) != 0)
+    {
+      delete m_videoManager;
+      m_videoManager = NULL;
+    }
   }
 
   if (p.CreateFlags().CreateSoundManager())
@@ -246,9 +250,10 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     this->m_soundManager = soundManager;
 
     //TODO
-    if (soundManager != NULL)
+    if (soundManager != NULL && soundManager->StartDirectSound(10, 0) != FAILURE)
     {
-
+      delete m_soundManager;
+      m_soundManager = NULL;
     }
   }
 

@@ -15,6 +15,10 @@ public:
 
   const MxOmniCreateFlags& CreateFlags() const { return this->m_createFlags; }
 
+  const MxString GetMediaPath() const { return m_mediaPath; }
+  const HWND GetWindowHandle() const { return m_windowHandle; }
+  MxVideoParam& GetVideoParam() { return m_videoParam; }
+
 private:
   MxString m_mediaPath;
   HWND m_windowHandle;

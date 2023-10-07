@@ -16,7 +16,6 @@
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
 #include "mxatomidcounter.h"
-#include "mxmidimanager.h"
 #include "mxautolocker.h"
 
 // VTABLE 0x100dc168
