@@ -346,15 +346,11 @@ MxLong MxOmni::Notify(MxParam &p)
 {
   MxAutoLocker lock(&this->m_criticalsection);
   MxLong result;
-  if (p.GetType() == MXSTREAMER_UNKNOWN)
-  {
-    result = HandleNotificationType2(p);
-  }
-  else
-  {
-    result = 0;
-  }
-  return result;
+
+  if (p.GetType() != MXSTREAMER_UNKNOWN)
+    return 0;
+
+  return HandleNotificationType2(p);
 }
 
 // OFFSET: LEGO1 0x100b0880 STUB
