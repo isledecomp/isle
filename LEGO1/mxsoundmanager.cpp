@@ -1,5 +1,5 @@
 #include "mxsoundmanager.h"
-
+#include "mxticklemanager.h"
 #include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
