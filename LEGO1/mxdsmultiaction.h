@@ -37,10 +37,8 @@ public:
   virtual MxBool HasId(MxU32 p_objectId) override; // vtable+34;
   virtual void SetSomeTimingField(MxLong p_someTimingField) override; // vtable+38;
 
-private:
-  MxU32 m_sizeOnDisk;
-
 protected:
+  MxU32 m_sizeOnDisk;
   MxDSActionList *m_actions;
 };
 
