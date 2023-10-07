@@ -123,3 +123,9 @@ MxResult MxVideoManager::vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unk
 {
   return FAILURE;
 }
+
+// OFFSET: LEGO1 0x100be270
+void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+{
+
+}

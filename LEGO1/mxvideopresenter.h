@@ -35,14 +35,14 @@ public:
 
   virtual void InitVirtual() override; // vtable+0x38
 
-  virtual void VTable0x5c(); // vtable+0x5c
+  virtual void VTable0x5c(undefined4 p_unknown1); // vtable+0x5c
   virtual void VTable0x60(); // vtable+0x60
   virtual void VTable0x64(); // vtable+0x64
-  virtual void VTable0x68(); // vtable+0x68
+  virtual void VTable0x68(undefined4 p_unknown1); // vtable+0x68
   virtual void VTable0x6c(); // vtable+0x6c
   virtual void VTable0x70(); // vtable+0x70
-  virtual void VTable0x74(); // vtable+0x74
-  virtual void VTable0x78(); // vtable+0x78
+  virtual undefined VTable0x74(); // vtable+0x74
+  virtual MxCore* VTable0x78(); // vtable+0x78
   virtual MxBool VTable0x7c(); // vtable+0x7c
   virtual MxS32 GetWidth();  // vtable+0x80
   virtual MxS32 GetHeight(); // vtable+0x84
@@ -57,10 +57,10 @@ public:
 
   MxBitmap *m_bitmap;
   unknown_meta_struct *m_unk54;
-  undefined4 m_unk58;
+  MxCore* m_unk58;
   undefined2 m_unk5c;
   unsigned char m_flags; // 0x5e
-  undefined4 m_unk60;
+  MxLong m_unk60;
 };
 
 #endif // MXVIDEOPRESENTER_H

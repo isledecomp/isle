@@ -1,6 +1,9 @@
 #ifndef MXRECT32_H
 #define MXRECT32_H
 
+#define MxRect32GetWidth(rect) (rect.m_right - rect.m_left) + 1
+#define MxRect32GetHeight(rect) (rect.m_bottom - rect.m_top) + 1
+
 class MxRect32
 {
 public:

@@ -5,6 +5,7 @@
 #include "mxregion.h"
 #include "mxmediamanager.h"
 #include "mxvideoparam.h"
+#include "mxrect32.h"
 
 // VTABLE 0x100dc810
 // SIZE 0x64
@@ -19,6 +20,7 @@ public:
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
   __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
+  virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height);
 
   MxVideoManager();
 
