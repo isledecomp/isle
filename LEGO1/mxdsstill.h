@@ -27,7 +27,7 @@ public:
     return !strcmp(name, MxDSStill::ClassName()) || MxDSMediaAction::IsA(name);
   }
 
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 };
 
 #endif // MXDSSTILL_H
