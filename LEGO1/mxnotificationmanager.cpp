@@ -1,7 +1,8 @@
+#include "mxnotificationmanager.h"
+
 #include "legoomni.h"
 #include "mxautolocker.h"
-#include "mxcore.h"
-#include "mxnotificationmanager.h"
+#include "mxticklemanager.h"
 #include "mxparam.h"
 #include "mxtypes.h"
 

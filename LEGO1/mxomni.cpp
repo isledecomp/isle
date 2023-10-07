@@ -1,5 +1,17 @@
 #include "mxomni.h"
 
+#include "mxatomidcounter.h"
+#include "mxeventmanager.h"
+#include "mxmusicmanager.h" 
+#include "mxnotificationmanager.h"
+#include "mxobjectfactory.h"
+#include "mxomnicreateparam.h"
+#include "mxsoundmanager.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxvideomanager.h"
+
 // 0x101015b8
 char g_hdPath[1024];
 

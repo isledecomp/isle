@@ -2,25 +2,24 @@
 #define LEGOOMNI_H
 
 #include "compat.h"
-#include "legoentity.h"
-#include "legoinputmanager.h"
-#include "legogamestate.h"
-#include "legonavcontroller.h"
-#include "legopathboundary.h"
-#include "legoroi.h"
-#include "legovideomanager.h"
-#include "mxatomid.h"
-#include "mxbackgroundaudiomanager.h"
-#include "mxdsaction.h"
-#include "mxdsfile.h"
-#include "mxdsobject.h"
 #include "mxomni.h"
-#include "mxtransitionmanager.h"
-#include "isle.h"
-#include "legobuildingmanager.h"
-#include "legoplantmanager.h"
+#include "mxdsaction.h"
 
+class Isle;
+class LegoBuildingManager;
+class LegoEntity;
+class LegoGameState;
+class LegoInputManager;
+class LegoNavController;
+class LegoPathBoundary;
+class LegoPlantManager;
+class LegoROI;
 class LegoSoundManager;
+class LegoVideoManager;
+class LegoWorld;
+class MxAtomId;
+class MxBackgroundAudioManager;
+class MxDSFile;
 class MxTransitionManager;
 
 // VTABLE 0x100d8638

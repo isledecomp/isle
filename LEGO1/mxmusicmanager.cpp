@@ -1,5 +1,7 @@
 #include "mxmusicmanager.h"
+#include "mxticklemanager.h"
 #include "mxomni.h"
+
 #include <windows.h>
 
 DECOMP_SIZE_ASSERT(MxMusicManager, 0x58);

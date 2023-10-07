@@ -1,6 +1,8 @@
 #include "legoomni.h"
 
-#include "mxdsobject.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxdsfile.h"
+#include "legogamestate.h"
 
 // 0x100f4588
 char *g_nocdSourceName = NULL;

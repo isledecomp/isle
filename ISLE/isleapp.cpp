@@ -3,14 +3,25 @@
 
 #include <dsound.h>
 
-#include "legoomni.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
 #include "legomodelpresenter.h"
+#include "legoomni.h"
 #include "legopartpresenter.h"
+#include "legoroi.h"
+#include "legovideomanager.h"
 #include "legoworldpresenter.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxdirectdraw.h"
 #include "mxdsaction.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxtransitionmanager.h"
 
 #include "res/resource.h"
 
