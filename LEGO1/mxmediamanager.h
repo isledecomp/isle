@@ -23,6 +23,7 @@ public:
   virtual void StopPresenters(); // vtable+24
 
   MxResult Init();
+  void TerminateThread(MxBool p_dontDestroy);
 
 protected:
   MxPresenterList *m_presenters;
