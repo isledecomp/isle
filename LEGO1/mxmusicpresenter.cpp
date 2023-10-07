@@ -37,7 +37,7 @@ MxResult MxMusicPresenter::AddToMusicManager()
     result = SUCCESS;
     MusicManager()->AddPresenter(*this);
   }
-  return result:
+  return result;
 } 
 
 // OFFSET: LEGO1 0x100c25d0
