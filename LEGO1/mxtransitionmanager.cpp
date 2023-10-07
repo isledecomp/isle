@@ -358,8 +358,8 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
     DWORD copyPitch = (ddsc->ddpfPixelFormat.dwRGBBitCount / 8) * (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
     DWORD bytesPerPixel = ddsc->ddpfPixelFormat.dwRGBBitCount / 8;
 
-    m_copyRect.left = m_waitIndicator->GetLocation().m_x;
-    m_copyRect.top = m_waitIndicator->GetLocation().m_y;
+    m_copyRect.left = m_waitIndicator->GetDisplayX();
+    m_copyRect.top = m_waitIndicator->GetDisplayY();
 
     MxS32 height = m_waitIndicator->GetHeight();
     MxS32 width = m_waitIndicator->GetWidth();
@@ -390,11 +390,11 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
   {
     MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
     MxBool unkbool = FALSE;
-    displaySurface->vtable2c(ddsc, m_waitIndicator->m_unk50, 0, 0, m_waitIndicator->GetLocation().m_x, m_waitIndicator->GetLocation().m_y, m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight(), unkbool);
+    displaySurface->vtable2c(ddsc, m_waitIndicator->m_bitmap, 0, 0, m_waitIndicator->GetDisplayX(), m_waitIndicator->GetDisplayY(), m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight(), unkbool);
   }
   else
   {
     MxDisplaySurface *displaySurface = VideoManager()->GetDisplaySurface();
-    displaySurface->vtable24(ddsc, m_waitIndicator->m_unk50, 0, 0, m_waitIndicator->GetLocation().m_x, m_waitIndicator->GetLocation().m_y, m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight());
+    displaySurface->vtable24(ddsc, m_waitIndicator->m_bitmap, 0, 0, m_waitIndicator->GetDisplayX(), m_waitIndicator->GetDisplayY(), m_waitIndicator->GetWidth(), m_waitIndicator->GetHeight());
   }
 }

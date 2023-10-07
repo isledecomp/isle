@@ -25,6 +25,8 @@ struct MxBITMAPINFO {
 #define LOWCOLOR 0 // 256 color
 #define HIGHCOLOR 1 // High Color (16-bit)
 
+// SIZE 0x20
+// VTABLE 0x100dc7b0
 class MxBitmap : public MxCore
 {
 public:
@@ -43,6 +45,8 @@ public:
   virtual void ImportPalette(MxPalette* p_palette); // vtable+38
   virtual MxResult SetBitDepth(MxBool); // vtable+3c
   virtual MxResult StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
+
+  inline BITMAPINFOHEADER *GetBmiHeader() const { return m_bmiHeader; }
 
 private:
   MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
