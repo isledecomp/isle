@@ -310,7 +310,7 @@ void LegoOmni::StartTimer()
   // FIXME: Stub
 }
 
-void LegoOmni::vtable0x3c()
+void LegoOmni::StopTimer()
 {
   // FIXME: Stub
 }

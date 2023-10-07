@@ -39,7 +39,7 @@ void MxOmni::Init()
   m_timer = NULL;
   m_streamer = NULL;
   m_atomIdCounterSet = NULL;
-  m_unk64 = NULL;
+  m_TimerRunning = FALSE;
 }
 
 // OFFSET: LEGO1 0x100b0090
@@ -86,16 +86,26 @@ void MxOmni::NotifyCurrentEntity()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b09d0 STUB
+// OFFSET: LEGO1 0x100b09d0
 void MxOmni::StartTimer()
 {
-  // TODO
+  if (m_TimerRunning == FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Start();
+    m_soundManager->vtable0x34();
+    m_TimerRunning = TRUE;
+  }
 }
 
-// OFFSET: LEGO1 0x100b0a00 STUB
-void MxOmni::vtable0x3c()
+// OFFSET: LEGO1 0x100b0a00
+void MxOmni::StopTimer()
 {
-  // TODO
+  if (m_TimerRunning != FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Stop();
+    m_soundManager->vtable0x38();
+    m_TimerRunning = FALSE;
+  }
 }
 
 // OFFSET: LEGO1 0x100b0690
@@ -160,7 +170,21 @@ void MxOmni::SetInstance(MxOmni *instance)
 // OFFSET: LEGO1 0x100af0c0
 MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
+  MxResult result = FAILURE;
   m_atomIdCounterSet = new MxAtomIdCounterSet();
+  if (m_atomIdCounterSet == NULL)
+  {
+    goto failure;
+  }
+
+  if (p.CreateFlags().CreateObjectFactory())
+  {
+    MxObjectFactory *objectFactory = new MxObjectFactory();
+    this->m_objectFactory = objectFactory;
+
+    if (objectFactory == NULL)
+      goto failure;
+  }
 
   if (p.CreateFlags().CreateVariableTable())
   {
@@ -168,7 +192,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     this->m_variableTable = variableTable;
 
     if (variableTable == NULL)
-      return FAILURE;
+      goto failure;
   }
 
   if (p.CreateFlags().CreateTimer())
@@ -180,24 +204,82 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
       return FAILURE;
   }
 
-  return SUCCESS;
+  if (p.CreateFlags().CreateTickleManager())
+  {
+    MxTickleManager *tickleManager = new MxTickleManager();
+    this->m_tickleManager = tickleManager;
+
+    if (tickleManager == NULL)
+      goto failure;
+  }
+
+  if (p.CreateFlags().CreateNotificationManager())
+  {
+    MxNotificationManager *notificationManager = new MxNotificationManager();
+    this->m_notificationManager = notificationManager;
+
+    if (notificationManager == NULL)
+      goto failure;
+  }
+
+  if (p.CreateFlags().CreateStreamer())
+  {
+    MxStreamer *streamer = new MxStreamer();
+    this->m_streamer = streamer;
+
+    if (streamer == NULL)
+      goto failure;
+  }
+
+  if (p.CreateFlags().CreateVideoManager())
+  {
+    MxVideoManager *videoManager = new MxVideoManager();
+    this->m_videoManager = videoManager;
+
+    if (videoManager == NULL)
+      return FAILURE;
+  }
+
+  if (p.CreateFlags().CreateSoundManager())
+  {
+    MxSoundManager *soundManager = new MxSoundManager();
+    this->m_soundManager = soundManager;
+
+    //TODO
+    if (soundManager != NULL)
+    {
+
+    }
+  }
+
+  if (p.CreateFlags().CreateMusicManager())
+  {
+
+  }
+
+
+
+  result = SUCCESS;
+  failure:
+  if (result != SUCCESS)
+  {
+    Destroy();
+  }
+
+  return result;
 }
 
 // OFFSET: LEGO1 0x100afe90
 void MxOmni::Destroy()
 {
   // FIXME: Stub
-
-  /*
-  // TODO: private members
   if (m_notificationManager) {
-    while (m_notificationManager->m_queue->size()) {
+    while (m_notificationManager->GetQueueSize()) {
       m_notificationManager->Tickle();
     }
+    m_notificationManager->SetActive(FALSE);
   }
 
-  m_notificationManager->m_active = 0;
-  */
 
   delete m_eventManager;
   delete m_soundManager;
@@ -226,8 +308,24 @@ void MxOmni::Destroy()
 // OFFSET: LEGO1 0x100b07f0
 MxLong MxOmni::Notify(MxParam &p)
 {
-  // FIXME: Stub
-  return 0;
+  MxAutoLocker lock(&this->m_criticalsection);
+  MxLong result;
+  if (p.GetType() == 2)
+  {
+    result = HandleNotificationType2(p);
+  }
+  else
+  {
+    result = 0;
+  }
+  return result;
+}
+
+// OFFSET: LEGO1 0x100b0880 STUB
+MxLong MxOmni::HandleNotificationType2(MxParam& p_param)
+{
+  // TODO STUB
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100acea0

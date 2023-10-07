@@ -16,6 +16,8 @@
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
 #include "mxatomidcounter.h"
+#include "mxmidimanager.h"
+#include "mxautolocker.h"
 
 // VTABLE 0x100dc168
 // SIZE 0x68
@@ -45,7 +47,7 @@ public:
   virtual int vtable0x30(char*, int, MxCore*); // vtable+30
   virtual void NotifyCurrentEntity(); // vtable+34
   virtual void StartTimer(); // vtable+38
-  virtual void vtable0x3c(); // vtable+3c
+  virtual void StopTimer(); // vtable+3c
   static void SetInstance(MxOmni* instance);
   HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
@@ -79,7 +81,9 @@ protected:
 
   MxCriticalSection m_criticalsection; // 0x48
 
-  unsigned char m_unk64; // 0x64
+  MxBool m_TimerRunning; // 0x64
+
+  MxLong HandleNotificationType2(MxParam& p_param);
 };
 __declspec(dllexport) MxTickleManager * TickleManager();
 __declspec(dllexport) MxTimer * Timer();

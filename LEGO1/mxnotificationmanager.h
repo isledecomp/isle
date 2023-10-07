@@ -55,6 +55,8 @@ public:
   void Register(MxCore *p_listener);
   void Unregister(MxCore *p_listener);
   MxResult Send(MxCore *p_listener, MxParam *p_param);
+  inline void SetActive(MxBool p_active) { m_active = p_active; }
+  inline size_t GetQueueSize() { return m_queue->size(); }
 
 private:
   void FlushPending(MxCore *p_listener);

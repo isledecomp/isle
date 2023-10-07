@@ -62,7 +62,7 @@ public:
   virtual int vtable0x30(char*, int, MxCore*) override;
   virtual void NotifyCurrentEntity() override;
   virtual void StartTimer() override;
-  virtual void vtable0x3c() override;
+  virtual void StopTimer() override;
   virtual MxBool vtable40();
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
