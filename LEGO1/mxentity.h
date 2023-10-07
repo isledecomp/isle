@@ -28,8 +28,10 @@ public:
   }
 
   virtual MxResult SetEntityId(MxS32 p_id, const MxAtomId &p_atom); // vtable+0x14
-private:
+public:
   MxS32 m_mxEntityId; // 0x8
+
+protected:
   MxAtomId m_atom; // 0xc
 };
 
