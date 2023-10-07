@@ -346,7 +346,7 @@ MxLong MxOmni::Notify(MxParam &p)
 {
   MxAutoLocker lock(&this->m_criticalsection);
   MxLong result;
-  if (p.GetType() == 2)
+  if (p.GetType() == MXSTREAMER_UNKNOWN)
   {
     result = HandleNotificationType2(p);
   }

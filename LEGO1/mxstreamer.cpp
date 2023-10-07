@@ -9,8 +9,6 @@
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 
-#define MXSTREAMER_DELETE_NOTIFY 6
-
 // OFFSET: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
 {
