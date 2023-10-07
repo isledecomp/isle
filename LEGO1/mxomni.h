@@ -17,6 +17,7 @@
 #include "mxvideomanager.h"
 #include "mxatomidcounter.h"
 #include "mxautolocker.h"
+#include "mxeventmanager.h"
 
 // VTABLE 0x100dc168
 // SIZE 0x68

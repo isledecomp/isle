@@ -237,7 +237,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     MxVideoManager *videoManager = new MxVideoManager();
     this->m_videoManager = videoManager;
 
-    if (videoManager != NULL && videoManager->vtable0x2c(p.GetVideoParam(), 100, 0) != 0)
+    if (videoManager != NULL && videoManager->vtable0x2c(p.GetVideoParam(), 100, 0) != SUCCESS)
     {
       delete m_videoManager;
       m_videoManager = NULL;
@@ -250,7 +250,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     this->m_soundManager = soundManager;
 
     //TODO
-    if (soundManager != NULL && soundManager->StartDirectSound(10, 0) != FAILURE)
+    if (soundManager != NULL && soundManager->StartDirectSound(10, 0) != SUCCESS)
     {
       delete m_soundManager;
       m_soundManager = NULL;
@@ -259,7 +259,24 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
 
   if (p.CreateFlags().CreateMusicManager())
   {
+    MxMusicManager *musicManager = new MxMusicManager();
+    this->m_musicManager = musicManager;
+    if (musicManager != NULL && musicManager->StartMIDIThread(50, 0) != SUCCESS)
+    {
+      delete m_musicManager;
+      m_musicManager = NULL;
+    }
+  }
 
+  if (p.CreateFlags().CreateEventManager())
+  {
+    MxEventManager *eventManager = new MxEventManager();
+    this->m_eventManager = eventManager;
+    if (m_eventManager != NULL && m_eventManager->vtable0x28(50, 0) != SUCCESS)
+    {
+      delete m_eventManager;
+      m_eventManager = NULL;
+    }
   }
 
 
