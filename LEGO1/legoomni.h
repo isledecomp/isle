@@ -55,7 +55,7 @@ public:
   virtual void Init() override; // vtable+14
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
   virtual void Destroy() override; // vtable+1c
-  virtual void vtable0x20() override;
+  virtual MxResult Start(MxDSAction* action) override;
   virtual void DeleteObject(MxDSAction &ds) override;
   virtual MxBool DoesEntityExist(MxDSAction &ds) override;
   virtual void vtable0x2c() override;
@@ -110,10 +110,9 @@ __declspec(dllexport) LegoEntity * PickEntity(MxLong,MxLong);
 __declspec(dllexport) LegoROI * PickROI(MxLong,MxLong);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
 __declspec(dllexport) LegoSoundManager * SoundManager();
-__declspec(dllexport) MxLong Start(MxDSAction *);
+__declspec(dllexport) MxResult Start(MxDSAction*);
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
-__declspec(dllexport) MxLong Start(MxDSAction *a);
 
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();

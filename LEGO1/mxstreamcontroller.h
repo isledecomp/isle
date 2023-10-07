@@ -6,6 +6,7 @@
 #include "mxcriticalsection.h"
 #include "mxcore.h"
 #include "mxdsobject.h"
+#include "mxdsaction.h"
 
 // VTABLE 0x100dc968
 // SIZE 0x64
@@ -30,6 +31,9 @@ public:
   }
 
   virtual MxResult Open(const char *p_filename); // vtable+0x14
+  virtual MxResult vtable0x18(undefined4 p_unknown, undefined4 p_unknown2); //vtable+0x18
+  virtual MxResult vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2); //vtable+0x1c
+  virtual MxResult vtable0x20(MxDSAction* action); //vtable+0x20
 
   MxBool FUN_100c20d0(MxDSObject &p_obj);
 
