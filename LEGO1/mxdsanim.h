@@ -27,7 +27,7 @@ public:
     return !strcmp(name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(name);
   }
 
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 };
 
 #endif // MXDSANIM_H

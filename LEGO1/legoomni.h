@@ -2,25 +2,24 @@
 #define LEGOOMNI_H
 
 #include "compat.h"
-#include "legoentity.h"
-#include "legoinputmanager.h"
-#include "legogamestate.h"
-#include "legonavcontroller.h"
-#include "legopathboundary.h"
-#include "legoroi.h"
-#include "legovideomanager.h"
-#include "mxatomid.h"
-#include "mxbackgroundaudiomanager.h"
-#include "mxdsaction.h"
-#include "mxdsfile.h"
-#include "mxdsobject.h"
 #include "mxomni.h"
-#include "mxtransitionmanager.h"
-#include "isle.h"
-#include "legobuildingmanager.h"
-#include "legoplantmanager.h"
+#include "mxdsaction.h"
 
+class Isle;
+class LegoBuildingManager;
+class LegoEntity;
+class LegoGameState;
+class LegoInputManager;
+class LegoNavController;
+class LegoPathBoundary;
+class LegoPlantManager;
+class LegoROI;
 class LegoSoundManager;
+class LegoVideoManager;
+class LegoWorld;
+class MxAtomId;
+class MxBackgroundAudioManager;
+class MxDSFile;
 class MxTransitionManager;
 
 // VTABLE 0x100d8638
@@ -55,14 +54,14 @@ public:
   virtual void Init() override; // vtable+14
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
   virtual void Destroy() override; // vtable+1c
-  virtual void vtable0x20() override;
+  virtual MxResult Start(MxDSAction* action) override;
   virtual void DeleteObject(MxDSAction &ds) override;
   virtual MxBool DoesEntityExist(MxDSAction &ds) override;
   virtual void vtable0x2c() override;
   virtual int vtable0x30(char*, int, MxCore*) override;
   virtual void NotifyCurrentEntity() override;
   virtual void StartTimer() override;
-  virtual void vtable0x3c() override;
+  virtual void StopTimer() override;
   virtual MxBool vtable40();
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
@@ -110,10 +109,9 @@ __declspec(dllexport) LegoEntity * PickEntity(MxLong,MxLong);
 __declspec(dllexport) LegoROI * PickROI(MxLong,MxLong);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char *,int));
 __declspec(dllexport) LegoSoundManager * SoundManager();
-__declspec(dllexport) MxLong Start(MxDSAction *);
+__declspec(dllexport) MxResult Start(MxDSAction*);
 __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
-__declspec(dllexport) MxLong Start(MxDSAction *a);
 
 LegoBuildingManager* BuildingManager();
 Isle* GetIsle();

@@ -8,10 +8,10 @@ void MxVideoPresenter::VTable0x5c()
   // TODO
 }
 
-// OFFSET: LEGO1 0x1000c710 STUB
+// OFFSET: LEGO1 0x1000c710
 void MxVideoPresenter::VTable0x60()
 {
-  // TODO
+  // Empty
 }
 
 // OFFSET: LEGO1 0x1000c720 STUB
@@ -44,24 +44,24 @@ void MxVideoPresenter::VTable0x78()
   // TODO
 }
 
-// OFFSET: LEGO1 0x1000c7c0 STUB
-void MxVideoPresenter::VTable0x7c()
+// OFFSET: LEGO1 0x1000c7c0
+MxBool MxVideoPresenter::VTable0x7c()
 {
-  // TODO
+  return (m_bitmap != NULL) || (m_unk54 != NULL);
 }
 
-// OFFSET: LEGO1 0x1000c7e0 STUB
+// OFFSET: LEGO1 0x1000c7e0
 MxS32 MxVideoPresenter::GetWidth()
 {
-  // TODO
-  return 0;
+  return m_unk54 ? m_unk54->width
+                 : m_bitmap->GetBmiHeader()->biWidth;
 }
 
-// OFFSET: LEGO1 0x1000c800 STUB
+// OFFSET: LEGO1 0x1000c800
 MxS32 MxVideoPresenter::GetHeight()
 {
-  // TODO
-  return 0;
+  return m_unk54 ? m_unk54->height
+                 : m_bitmap->GetBmiHeader()->biHeight;
 }
 
 // OFFSET: LEGO1 0x100b2760 STUB

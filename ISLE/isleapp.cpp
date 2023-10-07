@@ -3,14 +3,25 @@
 
 #include <dsound.h>
 
-#include "legoomni.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
 #include "legomodelpresenter.h"
+#include "legoomni.h"
 #include "legopartpresenter.h"
+#include "legoroi.h"
+#include "legovideomanager.h"
 #include "legoworldpresenter.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxdirectdraw.h"
 #include "mxdsaction.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxtransitionmanager.h"
 
 #include "res/resource.h"
 
@@ -93,7 +104,7 @@ void IsleApp::Close()
     Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
     Lego()->DeleteObject(ds);
     TransitionManager()->SetWaitIndicator(NULL);
-    Lego()->vtable0x3c();
+    Lego()->StopTimer();
 
     MxLong lVar8;
     do {
@@ -232,7 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
         g_rmDisabled = 0;
-        Lego()->vtable0x3c();
+        Lego()->StopTimer();
       }
 
       if (g_closed) {

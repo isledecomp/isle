@@ -1,5 +1,7 @@
 #include "skateboard.h"
+
 #include "mxomni.h"
+#include "mxnotificationmanager.h"
 
 #include "decomp.h"
 

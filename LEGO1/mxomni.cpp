@@ -1,5 +1,17 @@
 #include "mxomni.h"
 
+#include "mxatomidcounter.h"
+#include "mxeventmanager.h"
+#include "mxmusicmanager.h"
+#include "mxnotificationmanager.h"
+#include "mxobjectfactory.h"
+#include "mxomnicreateparam.h"
+#include "mxsoundmanager.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxvideomanager.h"
+
 // 0x101015b8
 char g_hdPath[1024];
 
@@ -39,13 +51,19 @@ void MxOmni::Init()
   m_timer = NULL;
   m_streamer = NULL;
   m_atomIdCounterSet = NULL;
-  m_unk64 = NULL;
+  m_timerRunning = NULL;
 }
 
-// OFFSET: LEGO1 0x100b0090 STUB
-void MxOmni::vtable0x20()
+// OFFSET: LEGO1 0x100b0090
+MxResult MxOmni::Start(MxDSAction* p_dsAction)
 {
-  // TODO
+  MxResult result = FAILURE;
+  if(p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL)
+  {
+    result = m_streamer->Unknown100b99b0(p_dsAction);
+  }
+
+  return result;
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
@@ -80,16 +98,26 @@ void MxOmni::NotifyCurrentEntity()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b09d0 STUB
+// OFFSET: LEGO1 0x100b09d0
 void MxOmni::StartTimer()
 {
-  // TODO
+  if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Start();
+    m_soundManager->vtable0x34();
+    m_timerRunning = TRUE;
+  }
 }
 
-// OFFSET: LEGO1 0x100b0a00 STUB
-void MxOmni::vtable0x3c()
+// OFFSET: LEGO1 0x100b0a00
+void MxOmni::StopTimer()
 {
-  // TODO
+  if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL)
+  {
+    m_timer->Stop();
+    m_soundManager->vtable0x38();
+    m_timerRunning = FALSE;
+  }
 }
 
 // OFFSET: LEGO1 0x100b0690
@@ -258,7 +286,7 @@ MxAtomIdCounterSet *AtomIdCounterSet()
 MxStreamer* Streamer()
 {
   return MxOmni::GetInstance()->GetStreamer();
-} 
+}
 
 // OFFSET: LEGO1 0x100acf00
 MxSoundManager* MSoundManager()

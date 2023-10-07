@@ -1,10 +1,11 @@
 #include "mxdsaction.h"
 
+#include "mxomni.h"
+#include "mxtimer.h"
+#include "legoutil.h"
+
 #include <float.h>
 #include <limits.h>
-
-#include "mxomni.h"
-#include "legoutil.h"
 
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 
@@ -22,22 +23,9 @@ MxDSAction::MxDSAction()
   this->m_loopCount = -1;
 
   this->SetType(MxDSType_Action);
-
-  {
-    float value = FLT_MAX;
-    this->m_location.EqualsScalar(&value);
-  }
-
-  {
-    float value = FLT_MAX;
-    this->m_direction.EqualsScalar(&value);
-  }
-
-  {
-    float value = FLT_MAX;
-    this->m_up.EqualsScalar(&value);
-  }
-
+  this->m_location.Fill(FLT_MAX);
+  this->m_direction.Fill(FLT_MAX);
+  this->m_up.Fill(FLT_MAX);
   this->m_unk84 = 0;
   this->m_unk88 = 0;
   this->m_omni = NULL;

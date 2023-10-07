@@ -21,9 +21,11 @@ public:
   }
 
   MxMusicPresenter();
+  virtual ~MxMusicPresenter() override;
 
 private:
   void Init();
+  void Destroy(MxBool);
 };
 
 #endif // MXMUSICPRESENTER_H

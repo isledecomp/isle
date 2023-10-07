@@ -1,23 +1,25 @@
-#include "mxmidimanager.h"
+#include "mxmusicmanager.h"
+#include "mxticklemanager.h"
 #include "mxomni.h"
+
 #include <windows.h>
 
-DECOMP_SIZE_ASSERT(MxMIDIManager, 0x58);
+DECOMP_SIZE_ASSERT(MxMusicManager, 0x58);
 
 // OFFSET: LEGO1 0x100c05a0
-MxMIDIManager::MxMIDIManager()
+MxMusicManager::MxMusicManager()
 {
   Init();
 }
 
 // OFFSET: LEGO1 0x100c0630
-MxMIDIManager::~MxMIDIManager()
+MxMusicManager::~MxMusicManager()
 {
   LockedReinitialize(TRUE);
 }
 
 // OFFSET: LEGO1 0x100c0b20
-void MxMIDIManager::DeinitializeMIDI()
+void MxMusicManager::DeinitializeMIDI()
 {
   m_criticalSection.Enter();
 
@@ -36,14 +38,14 @@ void MxMIDIManager::DeinitializeMIDI()
 }
 
 // OFFSET: LEGO1 0x100c0690
-void MxMIDIManager::Init()
+void MxMusicManager::Init()
 {
   this->m_multiplier = 100;
   InitData();
 }
 
 // OFFSET: LEGO1 0x100c06a0
-void MxMIDIManager::InitData()
+void MxMusicManager::InitData()
 {
   this->m_MIDIStreamH = 0;
   this->m_MIDIInitialized = FALSE;
@@ -56,7 +58,7 @@ void MxMIDIManager::InitData()
 }
 
 // OFFSET: LEGO1 0x100c06c0
-void MxMIDIManager::LockedReinitialize(MxBool p_skipDestroy)
+void MxMusicManager::LockedReinitialize(MxBool p_skipDestroy)
 {
   if (this->m_thread)
   {
@@ -83,20 +85,20 @@ void MxMIDIManager::LockedReinitialize(MxBool p_skipDestroy)
 }
 
 // OFFSET: LEGO1 0x100c0930
-void MxMIDIManager::Destroy()
+void MxMusicManager::Destroy()
 {
   LockedReinitialize(FALSE);
 }
 
 // OFFSET: LEGO1 0x100c09a0
-MxS32 MxMIDIManager::CalculateVolume(MxS32 p_volume)
+MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 {
   MxS32 result = (p_volume * 0xffff) / 100;
   return (result << 0x10) | result;
 }
 
 // OFFSET: LEGO1 0x100c07f0
-void MxMIDIManager::SetMIDIVolume()
+void MxMusicManager::SetMIDIVolume()
 {
   MxS32 result = (this->m_volume * this->m_multiplier) / 0x64;
   HMIDISTRM streamHandle = this->m_MIDIStreamH;
@@ -109,7 +111,7 @@ void MxMIDIManager::SetMIDIVolume()
 }
 
 // OFFSET: LEGO1 0x100c0940
-void MxMIDIManager::SetVolume(MxS32 p_volume)
+void MxMusicManager::SetVolume(MxS32 p_volume)
 {
   MxAudioManager::SetVolume(p_volume);
   this->m_criticalSection.Enter();
@@ -118,7 +120,7 @@ void MxMIDIManager::SetVolume(MxS32 p_volume)
 }
 
 // OFFSET: LEGO1 0x100c0840
-MxResult MxMIDIManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_noRegister)
+MxResult MxMusicManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_noRegister)
 {
   MxResult status = FAILURE;
   MxBool locked = FALSE;

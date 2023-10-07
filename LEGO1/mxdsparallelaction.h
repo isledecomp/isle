@@ -27,8 +27,8 @@ public:
     return !strcmp(name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(name);
   }
 
-  virtual MxLong GetDuration(); // vtable+24;
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxLong GetDuration() override; // vtable+24;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 };
 
 #endif // MXDSPARALLELACTION_H
