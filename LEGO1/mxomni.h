@@ -82,7 +82,7 @@ protected:
 
   MxCriticalSection m_criticalsection; // 0x48
 
-  MxBool m_TimerRunning; // 0x64
+  MxBool m_timerRunning; // 0x64
 
   MxLong HandleNotificationType2(MxParam& p_param);
 };

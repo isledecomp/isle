@@ -2,7 +2,7 @@
 
 #include "mxatomidcounter.h"
 #include "mxeventmanager.h"
-#include "mxmusicmanager.h" 
+#include "mxmusicmanager.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxomnicreateparam.h"
@@ -51,7 +51,7 @@ void MxOmni::Init()
   m_timer = NULL;
   m_streamer = NULL;
   m_atomIdCounterSet = NULL;
-  m_TimerRunning = FALSE;
+  m_timerRunning = FALSE;
 }
 
 // OFFSET: LEGO1 0x100b0090
@@ -72,7 +72,7 @@ void MxOmni::DeleteObject(MxDSAction &ds)
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b09a0 STUB
+// OFFSET: LEGO1 100b09a0 STUB
 MxBool MxOmni::DoesEntityExist(MxDSAction &ds)
 {
   // TODO
@@ -85,10 +85,9 @@ void MxOmni::vtable0x2c()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100aefb0 STUB
+// OFFSET: LEGO1 0x100aefb0
 int MxOmni::vtable0x30(char*, int, MxCore*)
 {
-  // TODO
   return 0;
 }
 
@@ -101,22 +100,22 @@ void MxOmni::NotifyCurrentEntity()
 // OFFSET: LEGO1 0x100b09d0
 void MxOmni::StartTimer()
 {
-  if (m_TimerRunning == FALSE && m_timer != NULL && m_soundManager != NULL)
+  if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL)
   {
     m_timer->Start();
     m_soundManager->vtable0x34();
-    m_TimerRunning = TRUE;
+    m_timerRunning = TRUE;
   }
 }
 
 // OFFSET: LEGO1 0x100b0a00
 void MxOmni::StopTimer()
 {
-  if (m_TimerRunning != FALSE && m_timer != NULL && m_soundManager != NULL)
+  if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL)
   {
     m_timer->Stop();
     m_soundManager->vtable0x38();
-    m_TimerRunning = FALSE;
+    m_timerRunning = FALSE;
   }
 }
 
