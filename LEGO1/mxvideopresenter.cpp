@@ -92,6 +92,7 @@ void MxVideoPresenter::Destroy(MxBool p_reinit)
   {
     MVideoManager()->RemovePresenter(*this);
   }
+
   if(m_unk58 != NULL)
   {
     m_unk58->Tickle();
@@ -118,7 +119,6 @@ void MxVideoPresenter::Destroy(MxBool p_reinit)
   if (!p_reinit)
   {
       // TODO MxMediaPresenter->Destroy(FALSE)
-      //Destroy(FALSE);
   }
 }
 
