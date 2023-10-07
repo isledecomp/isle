@@ -358,7 +358,7 @@ MxLong MxOmni::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x100b0880 STUB
-MxLong MxOmni::HandleNotificationType2(MxParam& p_param)
+MxResult MxOmni::HandleNotificationType2(MxParam& p_param)
 {
   // TODO STUB
   return FAILURE;
