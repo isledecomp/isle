@@ -6,7 +6,7 @@
 #include "legoutil.h"
 
 // 0x100f4588
-char *g_nocdSourceName = NULL;
+MxAtomId *g_nocdSourceName = NULL;
 
 // 0x101020e8
 void (*g_omniUserMessage)(const char *,int);
@@ -225,7 +225,7 @@ MxTransitionManager *TransitionManager()
 // OFFSET: LEGO1 0x10053430
 const char *GetNoCD_SourceName()
 {
-  return g_nocdSourceName;
+  return g_nocdSourceName->GetInternal();
 }
 
 // OFFSET: LEGO1 0x1005b5f0
@@ -252,7 +252,23 @@ LegoEntity *PickEntity(MxLong,MxLong)
 // OFFSET: LEGO1 0x10058bd0
 void LegoOmni::Init()
 {
-  // FIXME: Stub
+  MxOmni::Init();
+  m_unk68 = 0;
+  m_inputMgr = NULL;
+  m_unk6c = 0;
+  m_unk74 = 0;
+  m_unk78 = 0;
+  m_currentWorld = NULL;
+  m_unk80 = FALSE;
+  m_isle = NULL;
+  m_unk8c = 0;
+  m_plantManager = NULL;
+  m_gameState = NULL;
+  m_animationManager = NULL;
+  m_buildingManager = NULL;
+  m_bkgAudioManager = NULL;
+  m_unk13c = TRUE;
+  m_transitionManager = NULL;
 }
 
 // OFFSET: LEGO1 0x10058e70
@@ -266,6 +282,7 @@ MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
   return SUCCESS;
 }
 
+// OFFSET: LEGO1 0x10058c30 STUB
 void LegoOmni::Destroy()
 {
   // FIXME: Stub
@@ -320,12 +337,6 @@ void LegoOmni::StopTimer()
 {
   MxOmni::StopTimer();
   SetAppCursor(0);
-}
-
-MxBool LegoOmni::vtable40()
-{
-  // FIXME: Stub
-  return 0;
 }
 
 // OFFSET: LEGO1 0x100157a0
