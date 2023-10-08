@@ -1,5 +1,4 @@
 #include "legovideomanager.h"
-#include <ddraw.h>
 
 // OFFSET: LEGO1 0x1007aa20 STUB
 LegoVideoManager::LegoVideoManager()
@@ -39,10 +38,21 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
   // TODO
 }
 
-// OFFSET: LEGO1 0x1007b6a0 STUB
+// OFFSET: LEGO1 0x1007b6a0
 void LegoVideoManager::MoveCursor(int x, int y)
 {
-  // TODO
+  m_cursorX = x;
+  m_cursorY = y;
+  m_cursorMoved = TRUE;
+  if(623 < x)
+  {
+    m_cursorX = 623;
+  }
+
+  if (463 < y)
+  {
+    m_cursorY = 463;
+  }
 }
 
 // OFFSET: LEGO1 0x1007c440
@@ -50,13 +60,13 @@ void LegoVideoManager::SetSkyColor(float red, float green, float blue)
 {
   PALETTEENTRY colorStrucure;
 
-  colorStrucure.peRed = (red * 255.0);
-  colorStrucure.peGreen = (green * 255.0);
-  colorStrucure.peBlue = (blue * 255.0);
+  colorStrucure.peRed = (red * 255.0f);
+  colorStrucure.peGreen = (green * 255.0f);
+  colorStrucure.peBlue = (blue * 255.0f);
   colorStrucure.peFlags = -124;
   m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
   m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 
   // TODO 3d manager
-  //m_3dManager->
+  //m_3dManager->m_pViewport->vtable1c(red, green, blue)
 }

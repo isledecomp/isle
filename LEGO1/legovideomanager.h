@@ -5,6 +5,7 @@
 #include "mxdirect3d.h"
 #include "lego3dmanager.h"
 #include "decomp.h"
+#include "ddraw.h"
 
 // VTABLE 0x100d9c88
 // SIZE 0x590
@@ -26,6 +27,9 @@ public:
   void SetSkyColor(float r, float g, float b);
   inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
 
+  // OFFSET: LEGO1 0x1007c4c0
+  void OverrideSkyColor(MxBool shouldOverride) { this->m_videoParam.GetPalette()->SetOverrideSkyColor(shouldOverride);}
+
 private:
   undefined4 m_unk64;
   Lego3DManager *m_3dManager;
@@ -34,6 +38,16 @@ private:
   MxDirect3D *m_direct3d;
   undefined m_pad78[0x6c];
   MxBool m_unke4;
+  undefined m_pade5[2];
+  PALETTEENTRY m_paletteEntries[256];
+  MxBool m_unk4e7;
+  undefined4 m_unk4e8;
+  MxBool m_isFullScreenMovie;
+  undefined m_pad4ed[0x14];
+  MxBool m_cursorMoved;
+  undefined m_pad4f8[8];
+  int m_cursorX;
+  int m_cursorY;
 };
 
 #endif // LEGOVIDEOMANAGER_H
