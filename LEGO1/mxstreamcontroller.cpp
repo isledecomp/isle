@@ -46,8 +46,33 @@ MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unkno
 }
 
 // OFFSET: LEGO1 0x100c1690 STUB
-MxResult MxStreamController::vtable0x20(MxDSAction* action)
+MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 {
   // TODO STUB
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100c1740 STUB
+MxResult MxStreamController::vtable0x24(undefined4 p_unknown)
+{
+  // TODO STUB
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b9420
+MxResult MxStreamController::vtable0x28()
+{
+  return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x100c1c10 STUB
+MxResult MxStreamController::vtable0x2c(undefined4 p_unknown1, undefined4 p_unknow2)
+{
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100c1ce0 STUB
+MxResult MxStreamController::vtable0x30(undefined4 p_unknown)
+{
   return FAILURE;
 }
