@@ -39,30 +39,30 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 }
 
 // OFFSET: LEGO1 0x1007b6a0
-void LegoVideoManager::MoveCursor(int x, int y)
+void LegoVideoManager::MoveCursor(int p_x, int p_y)
 {
-  m_cursorX = x;
-  m_cursorY = y;
+  m_cursorX = p_x;
+  m_cursorY = p_y;
   m_cursorMoved = TRUE;
-  if(623 < x)
+  if(623 < p_x)
   {
     m_cursorX = 623;
   }
 
-  if (463 < y)
+  if (463 < p_y)
   {
     m_cursorY = 463;
   }
 }
 
 // OFFSET: LEGO1 0x1007c440
-void LegoVideoManager::SetSkyColor(float red, float green, float blue)
+void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 {
   PALETTEENTRY colorStrucure;
 
-  colorStrucure.peRed = (red * 255.0f);
-  colorStrucure.peGreen = (green * 255.0f);
-  colorStrucure.peBlue = (blue * 255.0f);
+  colorStrucure.peRed = (p_red * 255.0f);
+  colorStrucure.peGreen = (p_green * 255.0f);
+  colorStrucure.peBlue = (p_blue * 255.0f);
   colorStrucure.peFlags = -124;
   m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
   m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);

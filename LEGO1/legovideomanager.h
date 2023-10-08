@@ -28,7 +28,7 @@ public:
   inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
 
   // OFFSET: LEGO1 0x1007c4c0
-  void OverrideSkyColor(MxBool shouldOverride) { this->m_videoParam.GetPalette()->SetOverrideSkyColor(shouldOverride);}
+  void OverrideSkyColor(MxBool p_shouldOverride) { this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);}
 
 private:
   undefined4 m_unk64;
