@@ -1,5 +1,7 @@
 #include "mxdsmediaaction.h"
 
+#include "legoutil.h"
+
 DECOMP_SIZE_ASSERT(MxDSMediaAction, 0xb8)
 
 // OFFSET: LEGO1 0x100c8b40
@@ -68,21 +70,13 @@ void MxDSMediaAction::Deserialize(char **p_source, MxS16 p_unk24)
 {
   MxDSAction::Deserialize(p_source, p_unk24);
 
-  CopyMediaSrcPath(*p_source);
-  *p_source += strlen(this->m_mediaSrcPath) + 1;
-  
-  this->m_unk9c = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-  this->m_unka0 = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-  this->m_framesPerSecond = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_mediaFormat = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_paletteManagement = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_sustainTime = *(MxLong*) *p_source;
-  *p_source += sizeof(MxLong);
+  GetString(p_source, this->m_mediaSrcPath, this, &MxDSMediaAction::CopyMediaSrcPath);
+  GetScalar(p_source, this->m_unk9c);
+  GetScalar(p_source, this->m_unka0);
+  GetScalar(p_source, this->m_framesPerSecond);
+  GetScalar(p_source, this->m_mediaFormat);
+  GetScalar(p_source, this->m_paletteManagement);
+  GetScalar(p_source, this->m_sustainTime);
 }
 
 // OFFSET: LEGO1 0x100c8e80

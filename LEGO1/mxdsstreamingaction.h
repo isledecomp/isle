@@ -24,7 +24,7 @@ public:
     return *this; 
   }
 
-  virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
+  virtual MxBool HasId(MxU32 p_objectId) override; // vtable+34;
 
   MxResult Init();
   void SetInternalAction(MxDSAction *p_dsAction);

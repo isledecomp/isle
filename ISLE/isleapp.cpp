@@ -3,14 +3,25 @@
 
 #include <dsound.h>
 
-#include "legoomni.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
 #include "legomodelpresenter.h"
+#include "legoomni.h"
 #include "legopartpresenter.h"
+#include "legoroi.h"
+#include "legovideomanager.h"
 #include "legoworldpresenter.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxdirectdraw.h"
 #include "mxdsaction.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxstreamer.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxtransitionmanager.h"
 
 #include "res/resource.h"
 
@@ -93,7 +104,7 @@ void IsleApp::Close()
     Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
     Lego()->DeleteObject(ds);
     TransitionManager()->SetWaitIndicator(NULL);
-    Lego()->vtable0x3c();
+    Lego()->StopTimer();
 
     MxLong lVar8;
     do {
@@ -232,23 +243,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_reqEnableRMDevice = 0;
         VideoManager()->EnableRMDevice();
         g_rmDisabled = 0;
-        Lego()->vtable0x3c();
+        Lego()->StopTimer();
       }
 
       if (g_closed) {
         break;
       }
 
-      if (g_mousedown == 0) {
-LAB_00401bc7:
-        if (g_mousemoved) {
-          g_mousemoved = FALSE;
-        }
-      } else if (g_mousemoved) {
-        if (g_isle) {
-          g_isle->Tick(0);
-        }
-        goto LAB_00401bc7;
+      if (g_mousedown && g_mousemoved && g_isle) {
+        g_isle->Tick(0);
+      }
+
+      if (g_mousemoved) {
+        g_mousemoved = FALSE;
       }
     }
   }
@@ -727,7 +734,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
         return;
       }
 
-      ds.SetAtomId(stream->atom);
+      ds.SetAtomId(stream->GetAtom());
       ds.SetUnknown24(-1);
       ds.SetObjectId(0);
       VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
@@ -736,7 +743,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
         return;
       }
     } else {
-      ds.SetAtomId(stream->atom);
+      ds.SetAtomId(stream->GetAtom());
       ds.SetUnknown24(-1);
       ds.SetObjectId(0);
       if (Start(&ds) != SUCCESS) {

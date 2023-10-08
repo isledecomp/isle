@@ -1,5 +1,5 @@
 #include "mxsoundmanager.h"
-
+#include "mxticklemanager.h"
 #include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
@@ -46,4 +46,23 @@ void MxSoundManager::Destroy(MxBool p_param)
   if (!p_param) {
     MxAudioManager::Destroy();
   }
+}
+
+// OFFSET: LEGO1 0x100ae8b0 STUB
+MxResult MxSoundManager::StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2)
+{
+  // TODO STUB
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100aed10 STUB
+void MxSoundManager::vtable0x34()
+{
+  // TODO STUB
+}
+
+// OFFSET: LEGO1 0x100aee10 STUB
+void MxSoundManager::vtable0x38()
+{
+  // TODO STUB
 }

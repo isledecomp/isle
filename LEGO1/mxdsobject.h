@@ -36,6 +36,7 @@ public:
 
   inline const MxAtomId& GetAtomId() { return this->m_atomId; }
   inline MxU32 GetObjectId() { return this->m_objectId; }
+  inline MxS16 GetUnknown24() { return this->m_unk24; }
 
   inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
   inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }

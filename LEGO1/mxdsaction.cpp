@@ -1,9 +1,11 @@
 #include "mxdsaction.h"
 
+#include "mxomni.h"
+#include "mxtimer.h"
+#include "legoutil.h"
+
 #include <float.h>
 #include <limits.h>
-
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 
@@ -21,22 +23,9 @@ MxDSAction::MxDSAction()
   this->m_loopCount = -1;
 
   this->SetType(MxDSType_Action);
-
-  {
-    float value = FLT_MAX;
-    this->m_location.EqualsScalar(&value);
-  }
-
-  {
-    float value = FLT_MAX;
-    this->m_direction.EqualsScalar(&value);
-  }
-
-  {
-    float value = FLT_MAX;
-    this->m_up.EqualsScalar(&value);
-  }
-
+  this->m_location.Fill(FLT_MAX);
+  this->m_direction.Fill(FLT_MAX);
+  this->m_up.Fill(FLT_MAX);
   this->m_unk84 = 0;
   this->m_unk88 = 0;
   this->m_omni = NULL;
@@ -96,38 +85,24 @@ void MxDSAction::Deserialize(char **p_source, MxS16 p_unk24)
 {
   MxDSObject::Deserialize(p_source, p_unk24);
 
-  this->m_flags = *(MxU32*) *p_source;
-  *p_source += sizeof(MxU32);
-  this->m_startTime = *(MxLong*) *p_source;
-  *p_source += sizeof(MxLong);
-  this->m_duration = *(MxLong*) *p_source;
-  *p_source += sizeof(MxLong);
-  this->m_loopCount = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_location[0] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_location[1] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_location[2] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_direction[0] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_direction[1] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_direction[2] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_up[0] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_up[1] = *(double*) *p_source;
-  *p_source += sizeof(double);
-  this->m_up[2] = *(double*) *p_source;
-  *p_source += sizeof(double);
+  GetScalar(p_source, this->m_flags);
+  GetScalar(p_source, this->m_startTime);
+  GetScalar(p_source, this->m_duration);
+  GetScalar(p_source, this->m_loopCount);
+  GetDouble(p_source, this->m_location[0]);
+  GetDouble(p_source, this->m_location[1]);
+  GetDouble(p_source, this->m_location[2]);
+  GetDouble(p_source, this->m_direction[0]);
+  GetDouble(p_source, this->m_direction[1]);
+  GetDouble(p_source, this->m_direction[2]);
+  GetDouble(p_source, this->m_up[0]);
+  GetDouble(p_source, this->m_up[1]);
+  GetDouble(p_source, this->m_up[2]);
 
-  MxU16 unkLength = *(MxU16*) *p_source;
-  *p_source += sizeof(MxU16);
-  if (unkLength) {
-    AppendData(unkLength, *p_source);
-    *p_source += unkLength;
+  MxU16 extraLength = GetScalar((MxU16**) p_source);
+  if (extraLength) {
+    AppendData(extraLength, *p_source);
+    *p_source += extraLength;
   }
 }
 

@@ -2,6 +2,8 @@
 #include "mxautolocker.h"
 #include "mxpresenter.h"
 #include "decomp.h"
+#include "mxticklemanager.h"
+#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
 
@@ -65,7 +67,7 @@ void MxMediaManager::Destroy()
 
   if (this->m_presenters)
     delete this->m_presenters;
-    
+
   Init();
 }
 
@@ -96,4 +98,23 @@ void MxMediaManager::StopPresenters()
 
   while (cursor.Next(presenter))
     presenter->EndAction();
+}
+
+// OFFSET: LEGO1 0x100c0460
+void MxMediaManager::TerminateThread(MxBool p_reinit)
+{
+  if(m_thread != NULL)
+  {
+    m_thread->Terminate();
+    delete m_thread;
+  }
+  else
+  {
+    TickleManager()->UnregisterClient(this);
+  }
+
+  if(!p_reinit)
+  {
+    MxMediaManager::Destroy();
+  }
 }

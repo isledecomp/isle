@@ -1,6 +1,9 @@
 #include "legoomni.h"
 
-#include "mxdsobject.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxdsfile.h"
+#include "legogamestate.h"
+#include "legoutil.h"
 
 // 0x100f4588
 char *g_nocdSourceName = NULL;
@@ -99,11 +102,10 @@ void SetOmniUserMessage(void (*p_userMsg)(const char *,int))
   g_omniUserMessage = p_userMsg;
 }
 
-// OFFSET: LEGO1 0x100acf50 STUB
-MxLong Start(MxDSAction *)
+// OFFSET: LEGO1 0x100acf50
+MxResult Start(MxDSAction* p_dsAction)
 {
-  // TODO
-  return 0;
+  return MxOmni::GetInstance()->Start(p_dsAction);
 }
 
 // OFFSET: LEGO1 0x1005ad10
@@ -257,6 +259,10 @@ void LegoOmni::Init()
 MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
   // FIXME: Stub
+  MxOmni::Create(p);
+  m_gameState = new LegoGameState();
+  m_bkgAudioManager = new MxBackgroundAudioManager();
+
   return SUCCESS;
 }
 
@@ -265,9 +271,14 @@ void LegoOmni::Destroy()
   // FIXME: Stub
 }
 
-void LegoOmni::vtable0x20()
+// OFFSET: LEGO1 0x1005b580
+MxResult LegoOmni::Start(MxDSAction* action)
 {
-  // FIXME: Stub
+  MxResult result = MxOmni::Start(action);
+  this->m_action.SetAtomId(action->GetAtomId());
+  this->m_action.SetObjectId(action->GetObjectId());
+  this->m_action.SetUnknown24(action->GetUnknown24());
+  return result;
 }
 
 void LegoOmni::DeleteObject(MxDSAction &ds)
@@ -297,14 +308,18 @@ void LegoOmni::NotifyCurrentEntity()
   // FIXME: Stub
 }
 
+// OFFSET: LEGO1 0x1005b640
 void LegoOmni::StartTimer()
 {
-  // FIXME: Stub
+  MxOmni::StartTimer();
+  SetAppCursor(2);
 }
 
-void LegoOmni::vtable0x3c()
+// OFFSET: LEGO1 0x1005b650
+void LegoOmni::StopTimer()
 {
-  // FIXME: Stub
+  MxOmni::StopTimer();
+  SetAppCursor(0);
 }
 
 MxBool LegoOmni::vtable40()

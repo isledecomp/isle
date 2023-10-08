@@ -13,6 +13,9 @@ public:
   MxDSSelectAction();
   virtual ~MxDSSelectAction() override;
 
+  void CopyFrom(MxDSSelectAction &p_dsSelectAction);
+  MxDSSelectAction &operator=(MxDSSelectAction &p_dsSelectAction);
+
   // OFFSET: LEGO1 0x100cb6f0
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -25,6 +28,11 @@ public:
   {
     return !strcmp(name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(name);
   }
+
+  //virtual MxU32 GetSizeOnDisk() override; // vtable+18;
+  //virtual void Deserialize(char **p_source, MxS16 p_unk24) override; // vtable+1c;
+  //virtual MxLong GetDuration() override; // vtable+24;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 
 private:
   MxString m_unk0x9c;

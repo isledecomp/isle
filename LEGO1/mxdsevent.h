@@ -25,7 +25,7 @@ public:
     return !strcmp(name, MxDSEvent::ClassName()) || MxDSMediaAction::IsA(name);
   }
 
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxDSAction *Clone() override; // vtable+2c;
 };
 
 #endif // MXDSEVENT_H
