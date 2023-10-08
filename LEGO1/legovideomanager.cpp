@@ -1,5 +1,7 @@
 #include "legovideomanager.h"
 
+DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
+
 // OFFSET: LEGO1 0x1007aa20 STUB
 LegoVideoManager::LegoVideoManager()
 {
@@ -39,20 +41,17 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 }
 
 // OFFSET: LEGO1 0x1007b6a0
-void LegoVideoManager::MoveCursor(int p_x, int p_y)
+void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 {
-  m_cursorX = p_x;
-  m_cursorY = p_y;
+  m_cursorX = p_cursorX;
+  m_cursorY = p_cursorY;
   m_cursorMoved = TRUE;
-  if(623 < p_x)
-  {
-    m_cursorX = 623;
-  }
 
-  if (463 < p_y)
-  {
+  if (623 < p_cursorX)
+    m_cursorX = 623;
+
+  if (463 < p_cursorY)
     m_cursorY = 463;
-  }
 }
 
 // OFFSET: LEGO1 0x1007c440

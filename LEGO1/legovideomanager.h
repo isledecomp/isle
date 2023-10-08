@@ -5,7 +5,8 @@
 #include "mxdirect3d.h"
 #include "lego3dmanager.h"
 #include "decomp.h"
-#include "ddraw.h"
+
+#include <ddraw.h>
 
 // VTABLE 0x100d9c88
 // SIZE 0x590
@@ -25,7 +26,7 @@ public:
   inline MxDirect3D *GetDirect3D() { return this->m_direct3d; }
 
   void SetSkyColor(float r, float g, float b);
-  inline void SetUnkE4(MxBool p_value) { this->m_unke4 = p_value; }
+  inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
 
   // OFFSET: LEGO1 0x1007c4c0
   void OverrideSkyColor(MxBool p_shouldOverride) { this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);}
@@ -36,18 +37,14 @@ private:
   undefined4 m_unk6c;
   undefined4 m_unk70;
   MxDirect3D *m_direct3d;
-  undefined m_pad78[0x6c];
-  MxBool m_unke4;
-  undefined m_pade5[2];
-  PALETTEENTRY m_paletteEntries[256];
-  MxBool m_unk4e7;
-  undefined4 m_unk4e8;
-  MxBool m_isFullScreenMovie;
-  undefined m_pad4ed[0x14];
-  MxBool m_cursorMoved;
-  undefined m_pad4f8[8];
-  int m_cursorX;
-  int m_cursorY;
+  undefined m_pad0x78[0x6c];
+  MxBool m_unk0xe4;
+  undefined m_pad0xe8[0x41c];
+  MxBool m_cursorMoved; // 0x501
+  undefined m_pad0x502[0x8];
+  MxS32 m_cursorX; // 0x50c
+  MxS32 m_cursorY; // 0x510
+  undefined m_pad0x514[0x7c];
 };
 
 #endif // LEGOVIDEOMANAGER_H
