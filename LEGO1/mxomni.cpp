@@ -284,7 +284,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
   {
     MxEventManager *eventManager = new MxEventManager();
     this->m_eventManager = eventManager;
-    if (m_eventManager != NULL && m_eventManager->vtable0x28(50, 0) != SUCCESS)
+    if (m_eventManager != NULL && m_eventManager->CreateEventThread(50, 0) != SUCCESS)
     {
       delete m_eventManager;
       m_eventManager = NULL;
@@ -345,7 +345,7 @@ void MxOmni::Destroy()
 MxLong MxOmni::Notify(MxParam &p)
 {
   MxAutoLocker lock(&this->m_criticalsection);
-  
+
   if (p.GetType() != MXSTREAMER_UNKNOWN)
     return 0;
 

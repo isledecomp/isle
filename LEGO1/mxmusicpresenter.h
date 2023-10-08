@@ -4,6 +4,7 @@
 #include "mxaudiopresenter.h"
 
 // VTABLE 0x100dc9b8
+// SIZE 0x54
 class MxMusicPresenter : public MxAudioPresenter
 {
 public:
@@ -22,6 +23,9 @@ public:
 
   MxMusicPresenter();
   virtual ~MxMusicPresenter() override;
+
+  virtual MxResult AddToMusicManager(); // vtable+0x34
+  virtual void vtable38(); // vtable+0x38
 
 private:
   void Init();
