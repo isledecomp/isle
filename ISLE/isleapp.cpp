@@ -250,16 +250,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         break;
       }
 
-      if (g_mousedown == 0) {
-LAB_00401bc7:
-        if (g_mousemoved) {
-          g_mousemoved = FALSE;
-        }
-      } else if (g_mousemoved) {
-        if (g_isle) {
-          g_isle->Tick(0);
-        }
-        goto LAB_00401bc7;
+      if (g_mousedown && g_mousemoved && g_isle) {
+        g_isle->Tick(0);
+      }
+
+      if (g_mousemoved) {
+        g_mousemoved = FALSE;
       }
     }
   }
