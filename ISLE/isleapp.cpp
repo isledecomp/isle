@@ -734,7 +734,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
         return;
       }
 
-      ds.SetAtomId(stream->atom);
+      ds.SetAtomId(stream->GetAtom());
       ds.SetUnknown24(-1);
       ds.SetObjectId(0);
       VideoManager()->EnableFullScreenMovie(TRUE, TRUE);
@@ -743,7 +743,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
         return;
       }
     } else {
-      ds.SetAtomId(stream->atom);
+      ds.SetAtomId(stream->GetAtom());
       ds.SetUnknown24(-1);
       ds.SetObjectId(0);
       if (Start(&ds) != SUCCESS) {

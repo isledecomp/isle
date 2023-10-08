@@ -31,7 +31,7 @@ public:
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
   inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
   inline MxDisplaySurface *GetDisplaySurface() { return this->m_displaySurface; }
-private:
+protected:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
   LPDIRECTDRAWSURFACE m_pDDSurface;
