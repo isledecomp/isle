@@ -78,7 +78,6 @@ public:
 protected:
   __declspec(dllexport) void Init();
   void SendTo_unkPresenter(MxOmni *);
-
   TickleState m_currentTickleState; // 0x8
   MxU32 m_previousTickleStates;
   MxPoint32 m_location;
