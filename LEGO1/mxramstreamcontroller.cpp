@@ -11,7 +11,7 @@ MxResult MxRAMStreamController::Open(const char *p_filename)
 }
 
 // OFFSET: LEGO1 0x100c6210 STUB
-MxResult MxRAMStreamController::vtable0x20(MxDSAction* action)
+MxResult MxRAMStreamController::vtable0x20(MxDSAction* p_action)
 {
   // TODO STUB
   return FAILURE;

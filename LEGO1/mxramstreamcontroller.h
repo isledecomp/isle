@@ -25,7 +25,7 @@ public:
   }
 
   virtual MxResult Open(const char *p_filename) override;
-  virtual MxResult vtable0x20(MxDSAction* action) override;
+  virtual MxResult vtable0x20(MxDSAction* p_action) override;
   virtual MxResult vtable0x24(undefined4 p_unknown) override;
 
 private:
