@@ -109,7 +109,7 @@ void MxVideoPresenter::Destroy(MxBool p_reinit)
     rect.m_top = GetLocationY();
 
     MVideoManager()->InvalidateRect(rect);
-    MVideoManager()->vtable0x34(rect.m_left, rect.m_top, MxRect32GetWidth(rect), MxRect32GetHeight(rect));
+    MVideoManager()->vtable0x34(rect.m_left, rect.m_top, rect.GetWidth(), rect.GetHeight());
   }
 
   delete m_bitmap;
