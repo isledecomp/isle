@@ -5,6 +5,7 @@
 #include "mxstreamprovider.h"
 #include "mxthread.h"
 #include "mxcriticalsection.h"
+#include "mxunklist.h"
 
 class MxDiskStreamProvider;
 
@@ -21,32 +22,6 @@ public:
 
 private:
   MxDiskStreamProvider *m_target;
-};
-
-// TODO
-struct MxDiskStreamListNode {
-  MxDiskStreamListNode *m_unk00;
-  MxDiskStreamListNode *m_unk04;
-  undefined4 m_unk08;
-};
-
-// TODO
-struct MxDiskStreamList {
-  inline MxDiskStreamList() {
-    undefined unk;
-    this->m_unk00 = unk;
-
-    MxDiskStreamListNode *node = new MxDiskStreamListNode();
-    node->m_unk00 = node;
-    node->m_unk04 = node;
-    
-    this->m_head = node;
-    this->m_count = 0;
-  }
-
-  undefined m_unk00;
-  MxDiskStreamListNode *m_head;
-  MxU32 m_count;
 };
 
 // VTABLE 0x100dd138
@@ -80,7 +55,7 @@ private:
   undefined m_remainingWork; // 0x34
   undefined m_unk35; // 0x35
   MxCriticalSection m_criticalSection; // 0x38
-  MxDiskStreamList m_list;
+  MxUnkList m_list;
 };
 
 #endif // MXDISKSTREAMPROVIDER_H
