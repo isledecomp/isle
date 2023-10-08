@@ -13,6 +13,7 @@ public:
   {
     Init();
   }
+  ~MxMediaPresenter();
 
   virtual MxResult Tickle() override; // vtable+0x8, override MxCore
 
@@ -29,6 +30,13 @@ public:
     return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
+  virtual void StreamingTickle() override; // vtable+0x20, override MxPresenter
+  virtual void RepeatingTickle() override; // vtable+0x24, override MxPresenter
+  virtual void DoneTickle() override; // vtable+0x2c, override MxPresenter
+  virtual void InitVirtual() override; // vtable+0x38, override MxPresenter
+  virtual MxLong StartAction(MxStreamController *, MxDSAction *) override; // vtable+0x3c, override MxPresenter
+  virtual void EndAction() override; // vtable+0x40, override MxPresenter
+  virtual void Enable(MxBool p_enable) override; //vtable+0x54, override MxPresenter
   virtual void VTable0x58(); // vtable+0x58
 
   undefined4 m_unk40;
@@ -37,6 +45,7 @@ public:
   undefined4 m_unk4c;
 private:
   void Init();
+  void Destroy(MxBool);
 
 };
 
