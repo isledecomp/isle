@@ -83,19 +83,17 @@ void MxDSSelectAction::Deserialize(char **p_source, MxS16 p_unk24)
 
   this->m_unk0x9c = *p_source;
 
-  const char *result;
-  char buffer[6];
   if (!strnicmp(this->m_unk0x9c.GetData(), "RANDOM_", strlen("RANDOM_"))) {
+    char buffer[10];
     MxS16 value = atoi(&this->m_unk0x9c.GetData()[strlen("RANDOM_")]);
 
     srand(Timer()->GetTime());
     MxS32 random = rand() % value;
-    result = itoa((MxS16) random, buffer, 10);
+    string = itoa((MxS16) random, buffer, 10);
   }
   else
-    result = VariableTable()->GetVariable(*p_source);
+    string = VariableTable()->GetVariable(*p_source);
 
-  string = result;
   *p_source += strlen(*p_source) + 1;
 
   MxU32 count = *(MxU32*) *p_source;
