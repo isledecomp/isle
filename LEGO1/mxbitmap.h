@@ -21,10 +21,6 @@ struct MxBITMAPINFO {
   RGBQUAD             bmiColors[256];
 };
 
-// These values are the bit depth, set in the registry
-#define LOWCOLOR 0 // 256 color
-#define HIGHCOLOR 1 // High Color (16-bit)
-
 // SIZE 0x20
 // VTABLE 0x100dc7b0
 class MxBitmap : public MxCore
@@ -54,8 +50,8 @@ private:
   MxBITMAPINFO *m_info; // 0x8
   BITMAPINFOHEADER *m_bmiHeader; // 0xc
   RGBQUAD *m_paletteData; // 0x10
-  LPVOID *m_data; // 0x14
-  MxBool m_bitDepth; // 0x18
+  MxU8 *m_data; // 0x14
+  MxBool m_isHighColor; // 0x18
   MxPalette *m_palette; // 0x1c
 };
 
