@@ -93,6 +93,7 @@ add_library(lego1 SHARED
   LEGO1/legoworld.cpp
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
+  LEGO1/mxactionnotificationparam.cpp
   LEGO1/mxatomid.cpp
   LEGO1/mxatomidcounter.cpp
   LEGO1/mxaudiomanager.cpp
@@ -144,11 +145,11 @@ add_library(lego1 SHARED
   LEGO1/mxmusicmanager.cpp
   LEGO1/mxmusicpresenter.cpp
   LEGO1/mxnotificationmanager.cpp
+  LEGO1/mxnotificationparam.cpp
   LEGO1/mxobjectfactory.cpp
   LEGO1/mxomni.cpp
   LEGO1/mxomnicreateflags.cpp
   LEGO1/mxomnicreateparam.cpp
-  LEGO1/mxomnicreateparambase.cpp
   LEGO1/mxpalette.cpp
   LEGO1/mxparam.cpp
   LEGO1/mxpresenter.cpp

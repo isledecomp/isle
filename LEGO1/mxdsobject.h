@@ -46,6 +46,7 @@ public:
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
   inline MxDSType GetType() const { return (MxDSType) this->m_type; }
 
+private:
   MxU32 m_sizeOnDisk; // 0x8
   MxU16 m_type; // 0xc
   char* m_sourceName; // 0x10
@@ -55,8 +56,6 @@ public:
   MxAtomId m_atomId; // 0x20
   MxS16 m_unk24; // 0x24
   undefined4 m_unk28; // 0x28
-private:
-
 };
 
 MxDSObject *DeserializeDSObjectDispatch(char **, MxS16);
