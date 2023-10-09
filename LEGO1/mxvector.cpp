@@ -371,7 +371,7 @@ float MxVector4::DotImpl(float *p_a, float *p_b) const
 {
   return
     p_a[0] * p_b[0] + p_a[2] * p_b[2] +
-    p_a[1] * p_b[1] + p_a[3] * p_b[3];
+    (p_a[1] * p_b[1] + p_a[3] * p_b[3]);
 }
 
 // OFFSET: LEGO1 0x10002a20
@@ -453,8 +453,19 @@ MxResult MxVector4::NormalizeQuaternion()
   return FAILURE;
 }
 
-// OFFSET: LEGO1 0x10002bf0 STUB
+// OFFSET: LEGO1 0x10002bf0
 void MxVector4::UnknownQuaternionOp(MxVector4 *p_a, MxVector4 *p_b)
 {
+  MxFloat *bDat = p_b->m_data;
+  MxFloat *aDat = p_a->m_data;
 
+  this->m_data[3] = aDat[3] * bDat[3] - (bDat[0] * aDat[0] + aDat[2] *bDat[2] + aDat[1] * aDat[1]);
+  this->m_data[0] = bDat[2] * aDat[1] - bDat[1] * aDat[2];
+  this->m_data[1] = aDat[2] * bDat[0] - bDat[2] * aDat[0];
+  this->m_data[2] = bDat[1] * aDat[0] - aDat[1] * bDat[0];
+
+
+  m_data[0] = p_b->m_data[3] * p_a->m_data[0] + p_a->m_data[3] * p_b->m_data[0] + m_data[0];
+  m_data[1] = p_b->m_data[1] * p_a->m_data[3] + p_a->m_data[1] * p_b->m_data[3] + m_data[1];
+  m_data[2] = p_b->m_data[2] * p_a->m_data[3] + p_a->m_data[2] * p_b->m_data[3] + m_data[2];
 }
