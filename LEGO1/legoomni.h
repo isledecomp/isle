@@ -4,9 +4,9 @@
 #include "compat.h"
 #include "mxomni.h"
 #include "mxdsaction.h"
-#include "legoanimationmanager.h"
 
 class Isle;
+class LegoAnimationManager;
 class LegoBuildingManager;
 class LegoEntity;
 class LegoGameState;
