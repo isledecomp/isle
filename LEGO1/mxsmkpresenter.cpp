@@ -24,5 +24,5 @@ void MxSmkPresenter::VTable0x60()
   }
 
   m_bitmap = new MxBitmap();
-  m_bitmap->SetSize(m_smkWidth, m_smkHeight, NULL, NULL);
+  m_bitmap->SetSize(m_smkWidth, m_smkHeight, NULL, FALSE);
 }
