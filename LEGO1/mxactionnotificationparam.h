@@ -26,7 +26,8 @@ public:
     this->m_action->SetUnknown24(oldAction->GetUnknown24());
   }
 
-  inline virtual MxActionNotificationParam::~MxActionNotificationParam() override // 0x100511e0
+  // OFFSET: LEGO1 0x10051050
+  inline virtual MxActionNotificationParam::~MxActionNotificationParam() override
   {
     if (!this->m_realloc)
       return;
