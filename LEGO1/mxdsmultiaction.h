@@ -28,14 +28,14 @@ public:
     return !strcmp(name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(name);
   }
 
-  virtual undefined4 unk14(); // vtable+14;
-  virtual MxU32 GetSizeOnDisk(); // vtable+18;
-  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
-  virtual void SetAtomId(MxAtomId p_atomId); // vtable+20;
-  virtual MxDSAction *Clone(); // vtable+2c;
-  virtual void MergeFrom(MxDSAction &p_dsAction); // vtable+30;
-  virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
-  virtual void SetSomeTimingField(MxLong p_someTimingField); // vtable+38;
+  virtual undefined4 unk14() override; // vtable+14;
+  virtual MxU32 GetSizeOnDisk() override; // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24) override; // vtable+1c;
+  virtual void SetAtomId(MxAtomId p_atomId) override; // vtable+20;
+  virtual MxDSAction *Clone() override; // vtable+2c;
+  virtual void MergeFrom(MxDSAction &p_dsAction) override; // vtable+30;
+  virtual MxBool HasId(MxU32 p_objectId) override; // vtable+34;
+  virtual void SetSomeTimingField(MxLong p_someTimingField) override; // vtable+38;
 
 private:
   MxU32 m_sizeOnDisk;

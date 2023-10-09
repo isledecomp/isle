@@ -1,13 +1,16 @@
 #include "mxpresenter.h"
+
+#include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxparam.h"
-#include "legoomni.h"
 #include "mxdsanim.h"
 #include "mxdssound.h"
-#include <string.h>
+#include "mxnotificationmanager.h"
 
 #include "decomp.h"
 #include "define.h"
+
+#include <string.h>
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 
@@ -46,9 +49,9 @@ void MxPresenter::ParseExtra()
       int val = token ? atoi(token) : 0;
 
       int result = MxOmni::GetInstance()->vtable0x30(t_token, val, this);
-      
+
       m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Parsed);
-      
+
       if (result)
         SendTo_unkPresenter(MxOmni::GetInstance());
 
@@ -62,8 +65,7 @@ void MxPresenter::SendTo_unkPresenter(MxOmni *p_omni)
   if (m_unkPresenter) {
     MxAutoLocker lock(&m_criticalSection);
 
-    // TOOD: magic number used for notification type. replace with enum
-    NotificationManager()->Send(m_unkPresenter, &MxParam(5, this));
+    NotificationManager()->Send(m_unkPresenter, &MxParam(MXPRESENTER_NOTIFICATION, this));
 
     m_action->SetOmni(p_omni ? p_omni : MxOmni::GetInstance());
     m_unkPresenter = NULL;

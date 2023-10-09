@@ -13,7 +13,9 @@ class MxVideoManager : public MxMediaManager
 public:
   virtual ~MxVideoManager();
 
-  virtual MxResult Tickle(); // vtable+0x8
+  virtual MxResult Tickle() override; // vtable+0x8
+  virtual void vtable0x28(); // vtable+0x28 (TODO ARGUMENTS)
+  virtual MxResult vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2); // vtable+0x2c
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
   __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
@@ -27,7 +29,7 @@ public:
   inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
   inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
   inline MxDisplaySurface *GetDisplaySurface() { return this->m_displaySurface; }
-private:
+protected:
   MxVideoParam m_videoParam;
   LPDIRECTDRAW m_pDirectDraw;
   LPDIRECTDRAWSURFACE m_pDDSurface;

@@ -5,6 +5,8 @@
 #include "mxvideopresenter.h"
 #include "legoomni.h"
 
+#include <ddraw.h>
+
 // VTABLE 0x100d7ea0
 class MxTransitionManager : public MxCore
 {
@@ -57,7 +59,7 @@ private:
 
   MxVideoPresenter *m_waitIndicator;
   RECT m_copyRect;
-  void *m_copyBuffer;
+  MxU8 *m_copyBuffer;
 
   flag_bitfield m_copyFlags;
   undefined4 m_unk24;

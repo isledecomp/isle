@@ -4,7 +4,6 @@
 #include "mxtypes.h"
 #include "mxcore.h"
 
-// SIZE 0xc
 template <class T>
 class MxListEntry
 {
@@ -14,6 +13,11 @@ public:
     m_obj = p_obj;
     m_prev = p_prev;
     m_next = NULL;
+  }
+  MxListEntry(T p_obj, MxListEntry *p_prev, MxListEntry *p_next) {
+    m_obj = p_obj;
+    m_prev = p_prev;
+    m_next = p_next;
   }
 
   T GetValue() { return this->m_obj; }
@@ -26,7 +30,6 @@ private:
   MxListEntry *m_next;
 };
 
-// VTABLE 0x100d6350
 // SIZE 0x10
 template <class T>
 class MxListParent : public MxCore
@@ -46,7 +49,6 @@ protected:
   void (*m_customDestructor)(T); // +0xc
 };
 
-// VTABLE 0x100d6368
 // SIZE 0x18
 template <class T>
 class MxList : protected MxListParent<T>
@@ -60,6 +62,7 @@ public:
   virtual ~MxList();
 
   void Append(T);
+  void OtherAppend(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
   void DeleteAll();
   MxU32 GetCount() { return m_count; }
   void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
@@ -71,9 +74,9 @@ protected:
 
 private:
   void _DeleteEntry(MxListEntry<T> *match);
+  void _InsertEntry(T, MxListEntry<T> *, MxListEntry<T> *);
 };
 
-// VTABLE 0x100d6488
 template <class T>
 class MxListCursor : public MxCore
 {
@@ -96,7 +99,6 @@ private:
 };
 
 // Unclear purpose
-// VTABLE 0x100d6530
 template <class T>
 class MxListCursorChild : public MxListCursor<T> 
 {
@@ -105,7 +107,6 @@ public:
 };
 
 // Unclear purpose
-// VTABLE 0x100d6470
 template <class T>
 class MxListCursorChildChild : public MxListCursorChild<T>
 {
@@ -149,6 +150,24 @@ inline void MxList<T>::Append(T p_newobj)
     this->m_first = newEntry;
     
   this->m_last = newEntry;
+  this->m_count++;
+}
+
+template <class T>
+inline void MxList<T>::_InsertEntry(T p_newobj, MxListEntry<T> *p_prev, MxListEntry<T> *p_next)
+{
+  MxListEntry<T> *newEntry = new MxListEntry<T>(p_newobj, p_prev, p_next);
+
+  if (p_prev)
+    p_prev->m_next = newEntry;
+  else
+    this->m_first = newEntry;
+
+  if (p_next)
+    p_next->m_prev = newEntry;
+  else
+    this->m_last = newEntry;
+
   this->m_count++;
 }
 
@@ -198,7 +217,7 @@ inline MxBool MxListCursor<T>::Next(T& p_obj)
     m_match = m_match->m_next;
 
   if (m_match)
-    p_obj = m_match->m_obj;
+    p_obj = m_match->GetValue();
 
   return m_match != NULL;
 }

@@ -1,14 +1,13 @@
 #include "mxstreamer.h"
 
-#include <algorithm>
-
 #include "legoomni.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxramstreamcontroller.h"
+#include "mxnotificationmanager.h"
+
+#include <algorithm>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
-
-#define MXSTREAMER_DELETE_NOTIFY 6
 
 // OFFSET: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
@@ -81,7 +80,7 @@ MxLong MxStreamer::Close(const char *p)
   for (list<MxStreamController *>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
     MxStreamController *c = *it;
 
-    if (!p || !strcmp(p, c->atom.GetInternal())) {
+    if (!p || !strcmp(p, c->GetAtom().GetInternal())) {
       m_openStreams.erase(it);
 
       if (!c->FUN_100c20d0(ds)) {
@@ -110,7 +109,7 @@ MxStreamController *MxStreamer::GetOpenStream(const char *p_name)
 {
   for (list<MxStreamController *>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
     MxStreamController *c = *it;
-    MxAtomId &atom = c->atom;
+    MxAtomId &atom = c->GetAtom();
     if (p_name) {
       if (!strcmp(atom.GetInternal(), p_name)) {
        return *it;
@@ -130,6 +129,22 @@ MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController *stream)
     return SUCCESS;
   }
 
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b99b0
+MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
+{
+  MxStreamController* controller;
+  if (p_action != NULL && p_action->GetAtomId().GetInternal() != NULL && p_action->GetObjectId() != -1)
+  {
+    controller = GetOpenStream(p_action->GetAtomId().GetInternal());
+    if (controller == NULL)
+    {
+      return FAILURE;
+    }
+    return controller->vtable0x20(p_action);
+  }
   return FAILURE;
 }
 

@@ -140,8 +140,8 @@ add_library(lego1 SHARED
   LEGO1/mxmatrix.cpp
   LEGO1/mxmediamanager.cpp
   LEGO1/mxmediapresenter.cpp
-  LEGO1/mxmidimanager.cpp
   LEGO1/mxmidipresenter.cpp
+  LEGO1/mxmusicmanager.cpp
   LEGO1/mxmusicpresenter.cpp
   LEGO1/mxnotificationmanager.cpp
   LEGO1/mxobjectfactory.cpp
@@ -154,6 +154,7 @@ add_library(lego1 SHARED
   LEGO1/mxpresenter.cpp
   LEGO1/mxpresenterlist.cpp
   LEGO1/mxramstreamcontroller.cpp
+  LEGO1/mxramstreamprovider.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmkpresenter.cpp
@@ -162,7 +163,9 @@ add_library(lego1 SHARED
   LEGO1/mxstillpresenter.cpp
   LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
+  LEGO1/mxstreamprovider.cpp
   LEGO1/mxstring.cpp
+  LEGO1/mxstringlist.cpp
   LEGO1/mxthread.cpp
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp

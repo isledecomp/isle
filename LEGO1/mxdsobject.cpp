@@ -15,6 +15,7 @@
 #include "mxdsselectaction.h"
 #include "mxdsstill.h"
 #include "mxdsobjectaction.h"
+#include "legoutil.h"
 
 DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
 
@@ -128,19 +129,13 @@ MxU32 MxDSObject::GetSizeOnDisk()
 // OFFSET: LEGO1 0x100bfa20
 void MxDSObject::Deserialize(char **p_source, MxS16 p_unk24)
 {
-  this->SetSourceName(*p_source);
-  *p_source += strlen(this->m_sourceName) + 1;
-  this->m_unk14 = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-
-  this->SetObjectName(*p_source);
-  *p_source += strlen(this->m_objectName) + 1;
-  this->m_objectId = *(MxU32*) *p_source;
-  *p_source += sizeof(MxU32);
+  GetString(p_source, this->m_sourceName, this, &MxDSObject::SetSourceName);
+  GetScalar(p_source, this->m_unk14);
+  GetString(p_source, this->m_objectName, this, &MxDSObject::SetObjectName);
+  GetScalar(p_source, this->m_objectId);
 
   this->m_unk24 = p_unk24;
 }
-
 
 // OFFSET: LEGO1 0x100bfb30
 MxDSObject *DeserializeDSObjectDispatch(char **p_source, MxS16 p_flags)
