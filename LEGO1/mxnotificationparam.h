@@ -24,15 +24,8 @@ public:
   virtual ~MxNotificationParam() override {} // vtable+0x0 (scalar deleting destructor)
   virtual MxNotificationParam *Clone(); // vtable+0x4
 
-  inline MxParamType GetType() const
-  {
-    return m_type;
-  }
-
-  inline MxCore *GetSender() const
-  {
-    return m_sender;
-  }
+  inline MxParamType GetType() const { return m_type; }
+  inline MxCore *GetSender() const { return m_sender; }
 
 protected:
   MxParamType m_type; // 0x4
