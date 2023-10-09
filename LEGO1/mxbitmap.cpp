@@ -7,7 +7,7 @@ DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 // Bitmap header magic string "BM" (42 4d)
 // Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
 // GLOBAL: LEGO1 0x10102184
-MxU16 g_bitmapSignature = 0x4d42;
+MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
@@ -132,7 +132,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
       return ret;
   }
 
-  for (int i = 0; i < 256; i++) {
+  for (MxS32 i = 0; i < 256; i++) {
     p_rgbquad[i].rgbRed      = entries[i].peRed;
     p_rgbquad[i].rgbGreen    = entries[i].peGreen;
     p_rgbquad[i].rgbBlue     = entries[i].peBlue;
@@ -144,7 +144,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 }
 
 // OFFSET: LEGO1 0x100bcaa0
-MxResult MxBitmap::SetSize(int p_width, int p_height, MxPalette *p_palette, int p_isHighColor)
+MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette *p_palette, MxBool p_isHighColor)
 {
   MxResult ret = FAILURE;
   MxLong size = AlignToFourByte(p_width) * p_height;
@@ -366,7 +366,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 }
 
 // OFFSET: LEGO1 0x100bd3e0
-MxResult MxBitmap::StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
+MxResult MxBitmap::StretchBits(HDC p_hdc, MxS32 p_xSrc, MxS32 p_ySrc, MxS32 p_xDest, MxS32 p_yDest, MxS32 p_destWidth, MxS32 p_destHeight)
 {
   // Compression fix?
   if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {

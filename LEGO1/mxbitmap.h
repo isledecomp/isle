@@ -31,7 +31,7 @@ public:
 
   virtual MxResult ImportBitmap(MxBitmap *p_bitmap); // vtable+14
   virtual MxResult ImportBitmapInfo(MxBITMAPINFO *p_info); // vtable+18
-  virtual MxResult SetSize(int p_width, int p_height, MxPalette *p_palette, int); // vtable+1c
+  virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette *p_palette, MxBool); // vtable+1c
   virtual MxResult LoadFile(HANDLE p_handle); // vtable+20
   __declspec(dllexport) virtual MxLong Read(const char *p_filename); // vtable+24
   virtual int vtable28(int);
@@ -40,7 +40,7 @@ public:
   __declspec(dllexport) virtual MxPalette *CreatePalette(); // vtable+34
   virtual void ImportPalette(MxPalette* p_palette); // vtable+38
   virtual MxResult SetBitDepth(MxBool); // vtable+3c
-  virtual MxResult StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight); // vtable+40
+  virtual MxResult StretchBits(HDC p_hdc, MxS32 p_xSrc, MxS32 p_ySrc, MxS32 p_xDest, MxS32 p_yDest, MxS32 p_destWidth, MxS32 p_destHeight); // vtable+40
 
   inline BITMAPINFOHEADER *GetBmiHeader() const { return m_bmiHeader; }
 
