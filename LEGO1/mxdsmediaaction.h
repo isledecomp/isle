@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxdsaction.h"
+#include "mxpoint32.h"
 
 // VTABLE 0x100dcd40
 // SIZE 0xb8
@@ -38,8 +39,10 @@ public:
 private:
   MxU32 m_sizeOnDisk;
   char *m_mediaSrcPath;
-  undefined4 m_unk9c;
-  undefined4 m_unka0;
+  struct {
+    undefined4 m_unk00;
+    undefined4 m_unk04;
+  } m_unk9c;
   MxS32 m_framesPerSecond;
   MxS32 m_mediaFormat;
   MxS32 m_paletteManagement;
