@@ -371,7 +371,7 @@ float MxVector4::DotImpl(float *p_a, float *p_b) const
 {
   return
     p_a[0] * p_b[0] + p_a[2] * p_b[2] +
-    p_a[1] * p_b[1] + p_a[3] * p_b[3];
+    (p_a[1] * p_b[1] + p_a[3] * p_b[3]);
 }
 
 // OFFSET: LEGO1 0x10002a20
