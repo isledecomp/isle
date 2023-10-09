@@ -19,9 +19,10 @@ MxResult MxDiskStreamController::Tickle()
   return 0;
 }
 
-// OFFSET: LEGO1 0x100c7790
+// OFFSET: LEGO1 0x100c7790 STUB
 MxResult MxDiskStreamController::Open(const char *p_filename)
 {
+  // TODO
   return FAILURE;
 }
 
