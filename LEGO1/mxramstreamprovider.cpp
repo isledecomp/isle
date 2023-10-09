@@ -41,7 +41,7 @@ MxU32 MxRAMStreamProvider::GetFileSize()
 }
 
 // OFFSET: LEGO1 0x100d0940
-MxU32 MxRAMStreamProvider::vtable0x1C()
+MxU32 MxRAMStreamProvider::GetStreamBuffersNum()
 {
   return 1;
 }
