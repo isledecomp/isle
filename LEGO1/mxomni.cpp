@@ -121,6 +121,12 @@ void MxOmni::StopTimer()
   }
 }
 
+// OFFSET: LEGO1 0x10058a90
+MxBool MxOmni::IsTimerRunning()
+{
+  return m_timerRunning;
+}
+
 // OFFSET: LEGO1 0x100b0690
 void MxOmni::DestroyInstance()
 {

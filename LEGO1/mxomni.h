@@ -48,6 +48,7 @@ public:
   virtual void NotifyCurrentEntity(); // vtable+34
   virtual void StartTimer(); // vtable+38
   virtual void StopTimer(); // vtable+3c
+  virtual MxBool IsTimerRunning(); //vtable+40
   static void SetInstance(MxOmni* instance);
   HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
