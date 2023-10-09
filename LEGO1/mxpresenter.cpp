@@ -6,7 +6,7 @@
 #include "mxdsanim.h"
 #include "mxdssound.h"
 #include "mxnotificationmanager.h"
-
+#include "mxstreamer.h"
 #include "decomp.h"
 #include "define.h"
 
@@ -135,10 +135,21 @@ MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
   return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b4e40 STUB
+// OFFSET: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-  // TODO
+  if (this->m_action == FALSE)
+    return;
+  MxAutoLocker lock(&this->m_criticalSection);
+  if (!this->m_unkPresenter)
+  {
+    MxOmni::GetInstance()->NotifyCurrentEntity(&MxUnknown2(MXSTREAMER_UNKNOWN, NULL, this->m_action, TRUE));
+  }
+
+  this->m_action = FALSE;
+  MxS32 previousTickleState = 1 << m_currentTickleState;
+  this->m_previousTickleStates |= previousTickleState;
+  this->m_currentTickleState = TickleState_Idle;
 }
 
 // OFFSET: LEGO1 0x100b52d0

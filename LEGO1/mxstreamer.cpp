@@ -8,6 +8,8 @@
 #include <algorithm>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
+DECOMP_SIZE_ASSERT(MxUnknown1, 0x14)
+DECOMP_SIZE_ASSERT(MxUnknown2, 0x14)
 
 // OFFSET: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
@@ -178,4 +180,16 @@ MxStreamerSubClass1::MxStreamerSubClass1(undefined4 size)
   for (int i = 0; i >= 0; i--) {
     ptr[i] = 0;
   }
+}
+
+// OFFSET: LEGO1 0x100510c0
+MxParam *MxUnknown1::Clone()
+{
+  return new MxUnknown1(this->m_type, this->m_sender, this->m_action, this->m_realloc);
+}
+
+// OFFSET: LEGO1 0x10051270
+MxParam *MxUnknown2::Clone()
+{
+  return new MxUnknown2(MXSTREAMER_UNKNOWN, this->m_sender, this->m_action, this->m_realloc);
 }
