@@ -4,11 +4,11 @@
 #include <windows.h>
 
 #include "mxomnicreateflags.h"
-#include "mxomnicreateparambase.h"
+#include "mxparam.h"
 #include "mxstring.h"
 #include "mxvideoparam.h"
 
-class MxOmniCreateParam : public MxOmniCreateParamBase
+class MxOmniCreateParam : public MxParam
 {
 public:
   __declspec(dllexport) MxOmniCreateParam(const char *mediaPath, struct HWND__ *windowHandle, MxVideoParam &vparam, MxOmniCreateFlags flags);
