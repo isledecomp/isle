@@ -54,7 +54,7 @@ public:
   virtual MxU32 GetStreamBuffersNum() override; //vtable+0x1c
   virtual void vtable0x20(undefined4 p_unknown1) override; //vtable+0x20
   virtual MxU32 GetLengthInDWords() override; //vtable+0x24
-  virtual void* GetBufferForDWords()override; //vtable+0x28
+  virtual MxU32* GetBufferForDWords()override; //vtable+0x28
 
 private:
   MxDiskStreamProviderThread m_thread; // 0x10

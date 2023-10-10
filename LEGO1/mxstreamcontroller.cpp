@@ -48,27 +48,21 @@ MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unkno
 // OFFSET: LEGO1 0x100c1690
 MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 {
-  MxResult result;
-  void* buffer;
-  MxU32 buffer_value;
   MxAutoLocker locker(&m_criticalSection);
 
-  MxStreamProvider* provider = m_provider;
-  MxU32 objectId = p_action->GetObjectId();
-  if(objectId < provider->GetLengthInDWords())
-  {
-    buffer = provider->GetBufferForDWords();
-    buffer_value = *(MxU32 *)((MxU32)buffer + objectId * 4);
-  }
+  MxResult result;
+  MxU32 offset = 0;
 
-  if (buffer_value == NULL)
-  {
-    result = FAILURE;
-  }
+  MxS32 objectId = p_action->GetObjectId();
+  MxStreamProvider *provider = m_provider;
+
+  if ((MxS32) provider->GetLengthInDWords() > objectId)
+    offset = provider->GetBufferForDWords()[objectId];
+
+  if (offset)
+    result = vtable0x2c(p_action, offset);
   else
-  {
-    result = vtable0x2c(p_action, buffer_value);
-  }
+    result = FAILURE;
 
   return result;
 }

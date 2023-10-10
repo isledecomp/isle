@@ -29,7 +29,7 @@ public:
   virtual MxU32 GetStreamBuffersNum() = 0; //vtable+0x1c
   virtual void vtable0x20(undefined4 p_unknown1); //vtable+0x20
   virtual MxU32 GetLengthInDWords() = 0; //vtable+0x24
-  virtual void* GetBufferForDWords() = 0; //vtable+0x28
+  virtual MxU32* GetBufferForDWords() = 0; //vtable+0x28
 
 protected:
   void *m_pLookup;

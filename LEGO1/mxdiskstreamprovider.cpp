@@ -79,7 +79,7 @@ MxU32 MxDiskStreamProvider::GetLengthInDWords()
 }
 
 // OFFSET: LEGO1 0x100d1ec0
-void* MxDiskStreamProvider::GetBufferForDWords()
+MxU32* MxDiskStreamProvider::GetBufferForDWords()
 {
   return m_pFile->GetBuffer();
 }

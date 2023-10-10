@@ -14,7 +14,7 @@ MxLong MxDSSource::GetLengthInDWords()
 }
 
 // OFFSET: LEGO1 0x100c0000
-void *MxDSSource::GetBuffer()
+MxU32 *MxDSSource::GetBuffer()
 {
   return m_pBuffer;
 }
