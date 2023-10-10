@@ -45,11 +45,26 @@ MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unkno
   return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100c1690 STUB
+// OFFSET: LEGO1 0x100c1690
 MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 {
-  // TODO STUB
-  return FAILURE;
+  MxAutoLocker locker(&m_criticalSection);
+
+  MxResult result;
+  MxU32 offset = 0;
+
+  MxS32 objectId = p_action->GetObjectId();
+  MxStreamProvider *provider = m_provider;
+
+  if ((MxS32) provider->GetLengthInDWords() > objectId)
+    offset = provider->GetBufferForDWords()[objectId];
+
+  if (offset)
+    result = vtable0x2c(p_action, offset);
+  else
+    result = FAILURE;
+
+  return result;
 }
 
 // OFFSET: LEGO1 0x100c1740 STUB
@@ -66,7 +81,7 @@ MxResult MxStreamController::vtable0x28()
 }
 
 // OFFSET: LEGO1 0x100c1c10 STUB
-MxResult MxStreamController::vtable0x2c(undefined4 p_unknown1, undefined4 p_unknow2)
+MxResult MxStreamController::vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
   return FAILURE;
 }

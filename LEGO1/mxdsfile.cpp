@@ -81,7 +81,7 @@ MxLong MxDSFile::ReadChunks()
     }
     MxULong* pLengthInDWords = &m_lengthInDWords;
     m_io.Read(pLengthInDWords, 4);
-    m_pBuffer = malloc(*pLengthInDWords * 4);
+    m_pBuffer = new MxU32[*pLengthInDWords];
     m_io.Read(m_pBuffer, *pLengthInDWords * 4);
     return 0;
   }
@@ -120,7 +120,7 @@ MxLong MxDSFile::Close()
   if (m_lengthInDWords != 0)
   {
     m_lengthInDWords = 0;
-    free(m_pBuffer);
+    delete[] m_pBuffer;
     m_pBuffer = NULL;
   }
   return 0;

@@ -7,6 +7,7 @@
 #include "mxcore.h"
 #include "mxdsobject.h"
 #include "mxdsaction.h"
+#include "mxstreamprovider.h"
 
 // VTABLE 0x100dc968
 // SIZE 0x64
@@ -36,7 +37,7 @@ public:
   virtual MxResult vtable0x20(MxDSAction* p_action); //vtable+0x20
   virtual MxResult vtable0x24(undefined4 p_unknown); //vtable+0x24
   virtual MxResult vtable0x28(); //vtable+0x28
-  virtual MxResult vtable0x2c(undefined4 p_unknown1, undefined4 p_unknow2); //vtable+0x2c
+  virtual MxResult vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval); //vtable+0x2c
   virtual MxResult vtable0x30(undefined4 p_unknown); //vtable+0x30
 
   MxBool FUN_100c20d0(MxDSObject &p_obj);
@@ -45,7 +46,7 @@ public:
 protected:
   MxCriticalSection m_criticalSection;
   MxAtomId atom;
-  undefined4 m_unk28; // MxStreamProvider*
+  MxStreamProvider* m_provider; // MxStreamProvider*
   undefined4 m_unk2c;
   undefined m_unk30[0x34];
 };

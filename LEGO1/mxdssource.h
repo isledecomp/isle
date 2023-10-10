@@ -34,11 +34,11 @@ public:
   virtual MxULong GetBufferSize() = 0;
   virtual MxULong GetStreamBuffersNum() = 0;
   virtual MxLong GetLengthInDWords();
-  virtual void* GetBuffer(); // 0x34
+  virtual MxU32* GetBuffer(); // 0x34
 
 protected:
   MxULong m_lengthInDWords;
-  void* m_pBuffer;
+  MxU32* m_pBuffer;
   MxLong m_position;
 };
 

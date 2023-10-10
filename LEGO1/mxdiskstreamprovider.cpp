@@ -46,3 +46,40 @@ void MxDiskStreamProvider::PerformWork()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x100d13d0 STUB
+MxResult MxDiskStreamProvider::SetResourceToGet(void* p_resource)
+{
+  // TODO
+  return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100d1e90
+MxU32 MxDiskStreamProvider::GetFileSize()
+{
+  return m_pFile->GetBufferSize();
+}
+
+// OFFSET: LEGO1 0x100d1ea0
+MxU32 MxDiskStreamProvider::GetStreamBuffersNum()
+{
+  return m_pFile->GetStreamBuffersNum();
+}
+
+// OFFSET: LEGO1 0x100d15e0 STUB
+void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100d1eb0
+MxU32 MxDiskStreamProvider::GetLengthInDWords()
+{
+  return m_pFile->GetLengthInDWords();
+}
+
+// OFFSET: LEGO1 0x100d1ec0
+MxU32* MxDiskStreamProvider::GetBufferForDWords()
+{
+  return m_pFile->GetBuffer();
+}

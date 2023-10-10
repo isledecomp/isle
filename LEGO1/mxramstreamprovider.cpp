@@ -41,7 +41,7 @@ MxU32 MxRAMStreamProvider::GetFileSize()
 }
 
 // OFFSET: LEGO1 0x100d0940
-MxU32 MxRAMStreamProvider::vtable0x1C()
+MxU32 MxRAMStreamProvider::GetStreamBuffersNum()
 {
   return 1;
 }
@@ -53,7 +53,7 @@ MxU32 MxRAMStreamProvider::GetLengthInDWords()
 }
 
 // OFFSET: LEGO1 0x100d0960
-void* MxRAMStreamProvider::GetBufferForDWords()
+MxU32* MxRAMStreamProvider::GetBufferForDWords()
 {
   return m_bufferForDWords;
 }
