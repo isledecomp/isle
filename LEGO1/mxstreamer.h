@@ -5,7 +5,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
-#include "mxparam.h"
+#include "mxnotificationparam.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
@@ -40,17 +40,17 @@ public:
   inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
 };
 
-class MxStreamerNotification : public MxParam
+class MxStreamerNotification : public MxNotificationParam
 {
 public:
-  inline MxStreamerNotification(MxParamType p_type, MxCore *p_sender, MxStreamController *p_ctrlr) : MxParam(p_type, p_sender)
+  inline MxStreamerNotification(MxParamType p_type, MxCore *p_sender, MxStreamController *p_ctrlr) : MxNotificationParam(p_type, p_sender)
   {
     m_controller = p_ctrlr;
   }
 
   virtual ~MxStreamerNotification() override {}
 
-  virtual MxParam *Clone() override;
+  virtual MxNotificationParam *Clone() override;
 
   MxStreamController *GetController() { return m_controller; }
 
@@ -102,7 +102,6 @@ private:
   list<MxStreamController *> m_openStreams; // 0x8
   MxStreamerSubClass2 m_subclass1; // 0x14
   MxStreamerSubClass3 m_subclass2; // 0x20
-
 };
 
 #endif // MXSTREAMER_H

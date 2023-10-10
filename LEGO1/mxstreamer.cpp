@@ -99,7 +99,7 @@ MxLong MxStreamer::Close(const char *p)
 }
 
 // OFFSET: LEGO1 0x100b9700
-MxParam *MxStreamerNotification::Clone()
+MxNotificationParam *MxStreamerNotification::Clone()
 {
   return new MxStreamerNotification(m_type, m_sender, m_controller);
 }
@@ -119,7 +119,6 @@ MxStreamController *MxStreamer::GetOpenStream(const char *p_name)
 
   return NULL;
 }
-
 
 // OFFSET: LEGO1 0x100b9930
 MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController *stream)
@@ -151,7 +150,7 @@ MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
 // OFFSET: LEGO1 0x100b9b60
 MxLong MxStreamer::Notify(MxParam &p)
 {
-  if (p.GetType() == MXSTREAMER_DELETE_NOTIFY) {
+  if (((MxNotificationParam&) p).GetType() == MXSTREAMER_DELETE_NOTIFY) {
     MxDSAction ds;
 
     ds.SetUnknown24(-2);

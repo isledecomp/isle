@@ -93,10 +93,9 @@ int MxOmni::vtable0x30(char*, int, MxCore*)
   return 0;
 }
 
-// OFFSET: LEGO1 0x100aefc0 STUB
-void MxOmni::NotifyCurrentEntity()
+// OFFSET: LEGO1 0x100aefc0
+void MxOmni::NotifyCurrentEntity(MxParam *p_param)
 {
-  // TODO
 }
 
 // OFFSET: LEGO1 0x100b09d0
@@ -352,7 +351,7 @@ MxLong MxOmni::Notify(MxParam &p)
 {
   MxAutoLocker lock(&this->m_criticalsection);
 
-  if (p.GetType() != MXSTREAMER_UNKNOWN)
+  if (((MxNotificationParam&) p).GetType() != MXSTREAMER_UNKNOWN)
     return 0;
 
   return HandleNotificationType2(p);
