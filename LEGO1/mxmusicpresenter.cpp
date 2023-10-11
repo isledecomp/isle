@@ -23,7 +23,7 @@ void MxMusicPresenter::Init()
 {
 }
 
-// OFFSET: LEGO1 0x100c2550 STUB
+// OFFSET: LEGO1 0x100c2550
 void MxMusicPresenter::Destroy(MxBool p_reinit)
 {
   if (MusicManager()) {
@@ -33,8 +33,7 @@ void MxMusicPresenter::Destroy(MxBool p_reinit)
   Init();
   m_criticalSection.Leave();
   if (!p_reinit) {
-    // MxMediaPresenter::Destroy(FALSE);
-	// FIXME
+    MxMediaPresenter::Destroy(FALSE);
   }
 }
 
