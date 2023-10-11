@@ -23,10 +23,18 @@ void MxMusicPresenter::Init()
 {
 }
 
-// OFFSET: LEGO1 0x100c2550 STUB
-void MxMusicPresenter::Destroy(MxBool)
+// OFFSET: LEGO1 0x100c2550
+void MxMusicPresenter::Destroy(MxBool p_reinit)
 {
-  // TODO
+  if (MusicManager()) {
+    MusicManager()->RemovePresenter(*this);
+  }
+  m_criticalSection.Enter();
+  Init();
+  m_criticalSection.Leave();
+  if (!p_reinit) {
+    MxMediaPresenter::Destroy(FALSE);
+  }
 }
 
 // OFFSET: LEGO1 0x100c25a0

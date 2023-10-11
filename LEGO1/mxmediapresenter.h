@@ -43,9 +43,10 @@ public:
   undefined4 m_unk44;
   undefined4 m_unk48;
   undefined4 m_unk4c;
+protected:
+  void Destroy(MxBool);
 private:
   void Init();
-  void Destroy(MxBool);
 
 };
 
