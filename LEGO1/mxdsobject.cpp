@@ -3,6 +3,20 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "mxdstypes.h"
+#include "mxdsaction.h"
+#include "mxdsmediaaction.h"
+#include "mxdsanim.h"
+#include "mxdssound.h"
+#include "mxdsmultiaction.h"
+#include "mxdsserialaction.h"
+#include "mxdsparallelaction.h"
+#include "mxdsevent.h"
+#include "mxdsselectaction.h"
+#include "mxdsstill.h"
+#include "mxdsobjectaction.h"
+#include "legoutil.h"
+
 DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
 
 // OFFSET: LEGO1 0x100bf6a0
@@ -115,15 +129,66 @@ MxU32 MxDSObject::GetSizeOnDisk()
 // OFFSET: LEGO1 0x100bfa20
 void MxDSObject::Deserialize(char **p_source, MxS16 p_unk24)
 {
-  this->SetSourceName(*p_source);
-  *p_source += strlen(this->m_sourceName) + 1;
-  this->m_unk14 = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-
-  this->SetObjectName(*p_source);
-  *p_source += strlen(this->m_objectName) + 1;
-  this->m_objectId = *(MxU32*) *p_source;
-  *p_source += sizeof(MxU32);
+  GetString(p_source, this->m_sourceName, this, &MxDSObject::SetSourceName);
+  GetScalar(p_source, this->m_unk14);
+  GetString(p_source, this->m_objectName, this, &MxDSObject::SetObjectName);
+  GetScalar(p_source, this->m_objectId);
 
   this->m_unk24 = p_unk24;
+}
+
+// OFFSET: LEGO1 0x100bfb30
+MxDSObject *DeserializeDSObjectDispatch(char **p_source, MxS16 p_flags)
+{
+  MxU16 type = *(MxU16*) *p_source;
+  *p_source += 2;
+
+  MxDSObject *obj = NULL;
+
+  switch (type) {
+    default:
+      return NULL;
+    case MxDSType_Object:
+      obj = new MxDSObject();
+      break;
+    case MxDSType_Action:
+      obj = new MxDSAction();
+      break;
+    case MxDSType_MediaAction:
+      obj = new MxDSMediaAction();
+      break;
+    case MxDSType_Anim:
+      obj = new MxDSAnim();
+      break;
+    case MxDSType_Sound:
+      obj = new MxDSSound();
+      break;
+    case MxDSType_MultiAction:
+      obj = new MxDSMultiAction();
+      break;
+    case MxDSType_SerialAction:
+      obj = new MxDSSerialAction();
+      break;
+    case MxDSType_ParallelAction:
+      obj = new MxDSParallelAction();
+      break;
+    case MxDSType_Event:
+      obj = new MxDSEvent();
+      break;
+    case MxDSType_SelectAction:
+      obj = new MxDSSelectAction();
+      break;
+    case MxDSType_Still:
+      obj = new MxDSStill();
+      break;
+    case MxDSType_ObjectAction:
+      obj = new MxDSObjectAction();
+      break;
+  }
+
+  if (obj) {
+    obj->Deserialize(p_source, p_flags);
+  }
+
+  return obj;
 }

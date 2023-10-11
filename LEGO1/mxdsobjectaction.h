@@ -26,7 +26,7 @@ public:
     return !strcmp(name, MxDSObjectAction::ClassName()) || MxDSMediaAction::IsA(name);
   }
 
-  virtual MxDSAction *Clone(); // vtable+2c;
+  virtual MxDSAction *Clone() override; // vtable+2c;
   virtual void CopyFrom(MxDSObjectAction &p_dsObjectAction); // vtable+44;
 };
 

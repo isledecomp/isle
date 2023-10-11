@@ -1,10 +1,28 @@
 #include "legogamestate.h"
+
 #include "legoomni.h"
+#include "mxvariabletable.h"
+#include "decomp.h"
+
+// Based on the highest dword offset (0x42c) referenced in the constructor.
+// There may be other members that come after.
+DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
 // OFFSET: LEGO1 0x10039550
 LegoGameState::LegoGameState()
 {
   // TODO
+  m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_backgroundColor);
+
+  m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_tempBackgroundColor);
+
+  m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
+  VariableTable()->SetVariable(m_fullScreenMovie);
+
+  VariableTable()->SetVariable("lightposition", "2");
+  SerializeScoreHistory(1);
 }
 
 // OFFSET: LEGO1 0x10039720

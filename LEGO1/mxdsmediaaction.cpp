@@ -1,13 +1,15 @@
 #include "mxdsmediaaction.h"
 
+#include "legoutil.h"
+
 DECOMP_SIZE_ASSERT(MxDSMediaAction, 0xb8)
 
 // OFFSET: LEGO1 0x100c8b40
 MxDSMediaAction::MxDSMediaAction()
 {
   this->m_mediaSrcPath = NULL;
-  this->m_unk9c = 0;
-  this->m_unka0 = 0;
+  this->m_unk9c.m_unk00 = 0;
+  this->m_unk9c.m_unk04 = 0;
   this->m_framesPerSecond = 0;
   this->m_mediaFormat = 0;
   this->m_paletteManagement = 1;
@@ -27,10 +29,7 @@ void MxDSMediaAction::CopyFrom(MxDSMediaAction &p_dsMediaAction)
 {
   CopyMediaSrcPath(p_dsMediaAction.m_mediaSrcPath);
 
-  // TODO
   this->m_unk9c = p_dsMediaAction.m_unk9c;
-  this->m_unka0 = p_dsMediaAction.m_unka0;
-
   this->m_framesPerSecond = p_dsMediaAction.m_framesPerSecond;
   this->m_mediaFormat = p_dsMediaAction.m_mediaFormat;
   this->m_paletteManagement = p_dsMediaAction.m_paletteManagement;
@@ -68,21 +67,13 @@ void MxDSMediaAction::Deserialize(char **p_source, MxS16 p_unk24)
 {
   MxDSAction::Deserialize(p_source, p_unk24);
 
-  CopyMediaSrcPath(*p_source);
-  *p_source += strlen(this->m_mediaSrcPath) + 1;
-  
-  this->m_unk9c = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-  this->m_unka0 = *(undefined4*) *p_source;
-  *p_source += sizeof(undefined4);
-  this->m_framesPerSecond = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_mediaFormat = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_paletteManagement = *(MxS32*) *p_source;
-  *p_source += sizeof(MxS32);
-  this->m_sustainTime = *(MxLong*) *p_source;
-  *p_source += sizeof(MxLong);
+  GetString(p_source, this->m_mediaSrcPath, this, &MxDSMediaAction::CopyMediaSrcPath);
+  GetScalar(p_source, this->m_unk9c.m_unk00);
+  GetScalar(p_source, this->m_unk9c.m_unk04);
+  GetScalar(p_source, this->m_framesPerSecond);
+  GetScalar(p_source, this->m_mediaFormat);
+  GetScalar(p_source, this->m_paletteManagement);
+  GetScalar(p_source, this->m_sustainTime);
 }
 
 // OFFSET: LEGO1 0x100c8e80

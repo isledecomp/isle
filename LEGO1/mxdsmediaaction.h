@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxdsaction.h"
+#include "mxpoint32.h"
 
 // VTABLE 0x100dcd40
 // SIZE 0xb8
@@ -28,15 +29,20 @@ public:
     return !strcmp(name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(name);
   }
 
-  virtual MxU32 GetSizeOnDisk(); // vtable+18;
-  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
+  virtual MxU32 GetSizeOnDisk() override; // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24) override; // vtable+1c;
 
   void CopyMediaSrcPath(const char *p_mediaSrcPath);
+
+  inline MxS32 GetMediaFormat() const { return this->m_mediaFormat; }
+  inline MxLong GetSustainTime() const { return this->m_sustainTime; }
 private:
   MxU32 m_sizeOnDisk;
   char *m_mediaSrcPath;
-  undefined4 m_unk9c;
-  undefined4 m_unka0;
+  struct {
+    undefined4 m_unk00;
+    undefined4 m_unk04;
+  } m_unk9c;
   MxS32 m_framesPerSecond;
   MxS32 m_mediaFormat;
   MxS32 m_paletteManagement;

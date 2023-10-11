@@ -95,6 +95,8 @@ public:
   virtual void EqualsCross(MxVector3 *p_a, float *p_b);
   virtual void EqualsCross(MxVector3 *p_a, MxVector3 *p_b);
   virtual void EqualsScalar(float *p_value);
+
+  inline void Fill(float p_value) { EqualsScalar(&p_value); }
 };
 
 // VTABLE 0x100d45a0
@@ -123,8 +125,8 @@ public:
   void EqualsScalar(float *p_value);
 
   // vtable + 0x84
-  virtual void unk1(MxVector4 *p_a, float *p_b);
-  virtual void SetMatrixProduct(float *p_vec, float *p_mat);
+  virtual void SetMatrixProduct(MxVector4 *p_a, float *p_b);
+  virtual void SetMatrixProductImpl(float *p_vec, float *p_mat);
   virtual MxResult NormalizeQuaternion();
   virtual void UnknownQuaternionOp(MxVector4 *p_a, MxVector4 *p_b);
 };

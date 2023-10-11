@@ -47,13 +47,13 @@ MxLong MxDSFile::Open(MxULong uStyle)
 }
 
 // OFFSET: LEGO1 0x100cc780
-MxLong MxDSFile::Read(unsigned char *pch, MxULong cch)
+MxResult MxDSFile::Read(unsigned char *p_buf, MxULong p_nbytes)
 {
-  if (m_io.Read((char*)pch, cch) != cch)
-    return -1;
+  if (m_io.Read(p_buf, p_nbytes) != p_nbytes)
+    return FAILURE;
 
-  m_position += cch;
-  return 0;
+  m_position += p_nbytes;
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100cc620
@@ -72,7 +72,7 @@ MxLong MxDSFile::ReadChunks()
     return -1;
   }
 
-  m_io.Read((char*)&m_header, 0xc);
+  m_io.Read(&m_header, 0xc);
   if ((m_header.majorVersion == SI_MAJOR_VERSION) && (m_header.minorVersion == SI_MINOR_VERSION))
   {
     childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
@@ -80,9 +80,9 @@ MxLong MxDSFile::ReadChunks()
       return -1;
     }
     MxULong* pLengthInDWords = &m_lengthInDWords;
-    m_io.Read((char *)pLengthInDWords, 4);
-    m_pBuffer = malloc(*pLengthInDWords * 4);
-    m_io.Read((char*)m_pBuffer, *pLengthInDWords * 4);
+    m_io.Read(pLengthInDWords, 4);
+    m_pBuffer = new MxU32[*pLengthInDWords];
+    m_io.Read(m_pBuffer, *pLengthInDWords * 4);
     return 0;
   }
   else
@@ -120,7 +120,7 @@ MxLong MxDSFile::Close()
   if (m_lengthInDWords != 0)
   {
     m_lengthInDWords = 0;
-    free(m_pBuffer);
+    delete[] m_pBuffer;
     m_pBuffer = NULL;
   }
   return 0;

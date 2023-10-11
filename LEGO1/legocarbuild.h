@@ -12,7 +12,7 @@ public:
   virtual ~LegoCarBuild() override;
 
   virtual MxLong Notify(MxParam &p) override; // vtable+0x4
-  virtual MxLong Tickle() override; // vtable+0x8
+  virtual MxResult Tickle() override; // vtable+0x8
 
   // OFFSET: LEGO1 0x10022940
   inline virtual const char *ClassName() const override // vtable+0x0c

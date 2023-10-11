@@ -8,6 +8,20 @@ class MxMIDIPresenter : public MxMusicPresenter
 {
 public:
   MxMIDIPresenter();
+
+  // OFFSET: LEGO1 0x100c2650
+  inline virtual const char *ClassName() const override // vtable+0xc
+  {
+    // 0x10101df8
+    return "MxMIDIPresenter";
+  }
+
+  // OFFSET: LEGO1 0x100c2660
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxMIDIPresenter::ClassName()) || MxMusicPresenter::IsA(name);
+  }
+
 private:
   void Init();
   undefined4 m_unk54;

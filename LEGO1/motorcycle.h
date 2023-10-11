@@ -1,6 +1,7 @@
 #ifndef MOTORCYCLE_H
 #define MOTORCYCLE_H
 
+#include "decomp.h"
 #include "islepathactor.h"
 
 // VTABLE 0x100d7090
@@ -22,7 +23,10 @@ public:
   {
     return !strcmp(name, Motorcycle::ClassName()) || IslePathActor::IsA(name);
   }
-
+private:
+  undefined m_unk160[4];
+  MxFloat m_unk164;
+  undefined m_unk168[4];
 };
 
 #endif // MOTORCYCLE_H

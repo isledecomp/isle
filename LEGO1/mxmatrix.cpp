@@ -111,21 +111,20 @@ void MxMatrix::EqualsMxProduct(const MxMatrix *p_a, const MxMatrix *p_b)
   EqualsDataProduct(p_a->m_data, p_b->m_data);
 }
 
-// Just a placeholder matrix multiply implementation. I think the decomp will
-// look roughly like this but it's not close to matching and won't be until
-// an exact match is found given it's all loop and float crunching.
-// OFFSET: LEGO1 0x100024d0 STUB
+// OFFSET: LEGO1 0x100024d0
 void MxMatrix::EqualsDataProduct(const float *p_a, const float *p_b)
 {
+  float *cur = m_data;
   for (int row = 0; row < 4; ++row)
   {
     for (int col = 0; col < 4; ++col)
     {
-      m_data[row * 4 + col] = 0.0f;
+      *cur = 0.0f;
       for (int k = 0; k < 4; ++k)
       {
-        m_data[row * 4 + col] += p_a[row * 4 + k] * p_b[k * 4 + col];
+        *cur += p_a[row * 4 + k] * p_b[k * 4 + col];
       }
+      cur++;
     }
   }
 }

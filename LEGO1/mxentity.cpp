@@ -1,6 +1,6 @@
 #include "mxentity.h"
 
-DECOMP_SIZE_ASSERT(MxEntity, 0x68)
+DECOMP_SIZE_ASSERT(MxEntity, 0x10)
 
 // OFFSET: LEGO1 0x1001d190
 MxEntity::MxEntity()

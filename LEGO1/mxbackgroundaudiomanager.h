@@ -28,8 +28,9 @@ public:
   }
 
   __declspec(dllexport) void Enable(unsigned char p);
-private:
+
   void Stop();
+private:
   void Init();
 
   MxBool m_musicEnabled; // 0x8

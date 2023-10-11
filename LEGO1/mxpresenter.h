@@ -2,8 +2,10 @@
 #define MXPRESENTER_H
 
 #include "mxcore.h"
+#include "mxpoint32.h"
 #include "mxdsaction.h"
 #include "mxcriticalsection.h"
+#include "mxomni.h"
 
 #include "decomp.h"
 
@@ -13,7 +15,7 @@ class MxStreamController;
 class MxPresenter : public MxCore
 {
 public:
-  enum TickleState 
+  enum TickleState
   {
     TickleState_Idle = 0,
     TickleState_Ready,
@@ -27,7 +29,7 @@ public:
   MxPresenter() { Init(); }
 
   __declspec(dllexport) virtual ~MxPresenter(); // vtable+0x0
-  __declspec(dllexport) virtual MxLong Tickle() override; // vtable+0x8
+  __declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x8
 
   // OFFSET: LEGO1 0x1000bfe0
   inline virtual const char *ClassName() const override// vtable+0xc
@@ -60,24 +62,31 @@ public:
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   virtual void SetTickleState(TickleState p_tickleState); // vtable+0x44
   virtual MxBool HasTickleStatePassed(TickleState p_tickleState); // vtable+0x48
-  virtual undefined4 VTable0x4c(); // vtable+0x4c
-  virtual undefined VTable0x50(undefined4, undefined4); // vtable+0x50
+  virtual undefined4 PutData(); // vtable+0x4c
+  virtual MxBool IsHit(MxS32 p_x, MxS32 p_y); // vtable+0x50
   __declspec(dllexport) virtual void Enable(MxBool p_enable); // vtable+0x54
 
   MxBool IsEnabled();
 
+  inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
+  inline MxPoint32 GetLocation() const { return this->m_location; }
+  inline MxS32 GetLocationX() const { return this->m_location.m_x; }
+  inline MxS32 GetLocationY() const { return this->m_location.m_y; }
+  inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
+  inline MxDSAction *GetAction() const { return this->m_action; }
+
 protected:
   __declspec(dllexport) void Init();
-
-private:
-  MxS32 m_currentTickleState; // 0x8
-  MxU32 m_previousTickleStates;
-  undefined4 m_unk0x10;
-  undefined4 m_unk0x14;
-  undefined4 m_unk0x18;
-  MxDSAction* m_action; // 0
-  MxCriticalSection m_criticalSection;
-  undefined4 m_unk0x3c;
+  void SendTo_unkPresenter(MxOmni *);
+  TickleState m_currentTickleState; // 0x8
+  MxU32 m_previousTickleStates; // 0x0c
+  MxPoint32 m_location; // 0x10
+  MxS32 m_displayZ; // 0x18
+  MxDSAction *m_action; // 0x1c
+  MxCriticalSection m_criticalSection; // 0x20
+  MxPresenter *m_unkPresenter; // 0x3c
 };
+
+char *PresenterNameDispatch(const MxDSAction &);
 
 #endif // MXPRESENTER_H
