@@ -125,7 +125,7 @@ public:
   void EqualsScalar(float *p_value);
 
   // vtable + 0x84
-  virtual void unk1(MxVector4 *p_a, float *p_b);
+  virtual void SetMatrixProductWrapper(MxVector4 *p_a, float *p_b);
   virtual void SetMatrixProduct(float *p_vec, float *p_mat);
   virtual MxResult NormalizeQuaternion();
   virtual void UnknownQuaternionOp(MxVector4 *p_a, MxVector4 *p_b);
