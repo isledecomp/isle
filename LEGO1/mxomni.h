@@ -45,9 +45,10 @@ public:
   virtual MxBool DoesEntityExist(MxDSAction &ds); // vtable+28
   virtual void vtable0x2c(); // vtable+2c
   virtual int vtable0x30(char*, int, MxCore*); // vtable+30
-  virtual void NotifyCurrentEntity(); // vtable+34
+  virtual void NotifyCurrentEntity(MxParam *p_param); // vtable+34
   virtual void StartTimer(); // vtable+38
   virtual void StopTimer(); // vtable+3c
+  virtual MxBool IsTimerRunning(); //vtable+40
   static void SetInstance(MxOmni* instance);
   HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }

@@ -6,7 +6,8 @@
 #include "mxdsanim.h"
 #include "mxdssound.h"
 #include "mxnotificationmanager.h"
-
+#include "mxactionnotificationparam.h"
+#include "mxstreamer.h"
 #include "decomp.h"
 #include "define.h"
 
@@ -65,7 +66,7 @@ void MxPresenter::SendTo_unkPresenter(MxOmni *p_omni)
   if (m_unkPresenter) {
     MxAutoLocker lock(&m_criticalSection);
 
-    NotificationManager()->Send(m_unkPresenter, &MxParam(MXPRESENTER_NOTIFICATION, this));
+    NotificationManager()->Send(m_unkPresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 
     m_action->SetOmni(p_omni ? p_omni : MxOmni::GetInstance());
     m_unkPresenter = NULL;
@@ -135,10 +136,21 @@ MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
   return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b4e40 STUB
+// OFFSET: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-  // TODO
+  if (this->m_action == FALSE)
+    return;
+  MxAutoLocker lock(&this->m_criticalSection);
+  if (!this->m_unkPresenter)
+  {
+    MxOmni::GetInstance()->NotifyCurrentEntity(&MxEndActionNotificationParam(MXSTREAMER_UNKNOWN, NULL, this->m_action, TRUE));
+  }
+
+  this->m_action = FALSE;
+  MxS32 previousTickleState = 1 << m_currentTickleState;
+  this->m_previousTickleStates |= previousTickleState;
+  this->m_currentTickleState = TickleState_Idle;
 }
 
 // OFFSET: LEGO1 0x100b52d0

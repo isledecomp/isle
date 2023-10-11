@@ -708,7 +708,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
   }
 
   if (this->m_frameDelta + g_lastFrameTime < currentTime) {
-    if (!Lego()->vtable40()) {
+    if (!Lego()->IsTimerRunning()) {
       TickleManager()->Tickle();
     }
     g_lastFrameTime = currentTime;

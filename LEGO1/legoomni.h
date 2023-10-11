@@ -6,6 +6,7 @@
 #include "mxdsaction.h"
 
 class Isle;
+class LegoAnimationManager;
 class LegoBuildingManager;
 class LegoEntity;
 class LegoGameState;
@@ -62,7 +63,6 @@ public:
   virtual void NotifyCurrentEntity() override;
   virtual void StartTimer() override;
   virtual void StopTimer() override;
-  virtual MxBool vtable40();
 
   LegoVideoManager *GetVideoManager() { return (LegoVideoManager *) m_videoManager; }
   LegoSoundManager *GetSoundManager() { return (LegoSoundManager *)m_soundManager;}
@@ -83,19 +83,18 @@ private:
   undefined4 m_unk74;
   undefined4 m_unk78;
   LegoWorld *m_currentWorld;
-  undefined4 m_unk80;
+  MxBool m_unk80;
   LegoNavController *m_navController; // 0x84
   Isle* m_isle; // 0x88
-  char m_unk8c[0x4];
+  undefined4 m_unk8c;
   LegoPlantManager* m_plantManager; // 0x90
-  char m_unk94[0x4];
+  LegoAnimationManager* m_animationManager;
   LegoBuildingManager* m_buildingManager; // 0x98
   LegoGameState *m_gameState; // 0x9c
   MxDSAction m_action;
   MxBackgroundAudioManager *m_bkgAudioManager; // 0x134
   MxTransitionManager *m_transitionManager; // 0x138
-  int m_unk13c;
-
+  MxBool m_unk13c;
 };
 
 __declspec(dllexport) MxBackgroundAudioManager * BackgroundAudioManager();

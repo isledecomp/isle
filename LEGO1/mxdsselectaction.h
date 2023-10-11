@@ -29,9 +29,8 @@ public:
     return !strcmp(name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(name);
   }
 
-  //virtual MxU32 GetSizeOnDisk() override; // vtable+18;
-  //virtual void Deserialize(char **p_source, MxS16 p_unk24) override; // vtable+1c;
-  //virtual MxLong GetDuration() override; // vtable+24;
+  virtual MxU32 GetSizeOnDisk() override; // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24) override; // vtable+1c;
   virtual MxDSAction *Clone() override; // vtable+2c;
 
 private:

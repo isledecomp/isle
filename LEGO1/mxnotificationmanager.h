@@ -3,6 +3,7 @@
 
 #include "mxcore.h"
 #include "mxcriticalsection.h"
+#include "mxnotificationparam.h"
 #include "mxtypes.h"
 
 #include "compat.h"
@@ -10,22 +11,15 @@
 class MxNotification
 {
 public:
-  MxNotification(MxCore *p_target, MxParam *p_param);
+  MxNotification(MxCore *p_target, MxNotificationParam *p_param);
   ~MxNotification();
 
-  inline MxCore *GetTarget()
-  {
-    return m_target;
-  }
-
-  inline MxParam *GetParam()
-  {
-    return m_param;
-  }
+  inline MxCore *GetTarget() { return m_target; }
+  inline MxNotificationParam *GetParam() { return m_param; }
 
 private:
   MxCore *m_target; // 0x0
-  MxParam *m_param; // 0x4
+  MxNotificationParam *m_param; // 0x4
 };
 
 class MxIdList : public list<MxU32>
@@ -54,7 +48,7 @@ public:
   virtual MxResult Create(MxS32 p_unk1, MxS32 p_unk2); // vtable+0x14
   void Register(MxCore *p_listener);
   void Unregister(MxCore *p_listener);
-  MxResult Send(MxCore *p_listener, MxParam *p_param);
+  MxResult Send(MxCore *p_listener, MxNotificationParam *p_param);
 
 private:
   void FlushPending(MxCore *p_listener);

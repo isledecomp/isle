@@ -79,11 +79,11 @@ protected:
   __declspec(dllexport) void Init();
   void SendTo_unkPresenter(MxOmni *);
   TickleState m_currentTickleState; // 0x8
-  MxU32 m_previousTickleStates;
-  MxPoint32 m_location;
-  MxS32 m_displayZ;
-  MxDSAction *m_action; // 0
-  MxCriticalSection m_criticalSection;
+  MxU32 m_previousTickleStates; // 0x0c
+  MxPoint32 m_location; // 0x10
+  MxS32 m_displayZ; // 0x18
+  MxDSAction *m_action; // 0x1c
+  MxCriticalSection m_criticalSection; // 0x20
   MxPresenter *m_unkPresenter; // 0x3c
 };
 

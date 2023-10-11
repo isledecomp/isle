@@ -29,7 +29,7 @@ public:
 
 private:
   void Init();
-  void Destroy(MxBool);
+  void Destroy(MxBool p_reinit);
 };
 
 #endif // MXMUSICPRESENTER_H

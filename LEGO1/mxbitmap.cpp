@@ -1,12 +1,13 @@
 #include "mxbitmap.h"
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(MxBITMAPINFO, 1064);
+DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
+DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 
-// The way that the BITMAPFILEHEADER structure ensures the file type is by ensuring it is "BM", which is literally just 0x424d.
+// Bitmap header magic string "BM" (42 4d)
 // Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete (1998)
 // GLOBAL: LEGO1 0x10102184
-undefined2 g_bitmapSignature = 0x424d;
+MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
@@ -15,7 +16,7 @@ MxBitmap::MxBitmap()
   this->m_bmiHeader = NULL;
   this->m_paletteData = NULL;
   this->m_data = NULL;
-  this->m_bitDepth = LOWCOLOR;
+  this->m_isHighColor = FALSE;
   this->m_palette = NULL;
 }
 
@@ -30,43 +31,54 @@ MxBitmap::~MxBitmap()
     delete m_palette;  
 }
 
+// Bit mask trick to round up to the nearest multiple of four.
+// Pixel data may be stored with padding.
+// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
+inline MxLong AlignToFourByte(MxLong p_value)
+{
+  return (p_value + 3) & -4;
+}
+
+// Same as the one from legoutil.h, but flipped the other way
+// TODO: While it's not outside the realm of possibility that they
+// reimplemented Abs for only this file, that seems odd, right?
+inline MxLong _Abs(MxLong p_value)
+{
+  return p_value > 0 ? p_value : -p_value;
+}
+
 // OFFSET: LEGO1 0x100bcc40
 MxResult MxBitmap::ImportBitmap(MxBitmap *p_bitmap)
 {
-  MxLong height;
   MxResult result = FAILURE;
 
   this->m_info = new MxBITMAPINFO;
   if(this->m_info) {
-    height = p_bitmap->m_bmiHeader->biHeight;
-    if (height <= 0L) {
-      height = -height;
-    }
-    this->m_data = (LPVOID*) new MxU8[(p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height];
+    MxLong height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+    this->m_data = new MxU8[AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height];
     if(this->m_data) {
-      memcpy(this->m_info, p_bitmap->m_info, sizeof(MxBITMAPINFO));
-
-      height = p_bitmap->m_bmiHeader->biHeight;
-      if (height <= 0L) {
-        height = -height;
-      }
-      memcpy(this->m_data, p_bitmap->m_data, (p_bitmap->m_bmiHeader->biWidth + 3U & -4) * height);
+      memcpy(this->m_info, p_bitmap->m_info, sizeof(*this->m_info));
+      height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+      memcpy(this->m_data, p_bitmap->m_data, AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height);
 
       result = SUCCESS;
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
     }
   }
+
   if (result != SUCCESS) {
     if (this->m_info) {
       delete this->m_info;
       this->m_info = NULL;
     }
+
     if (this->m_data) {
       delete this->m_data;
       this->m_data = NULL;
     }
   }
+
   return result;
 }
 
@@ -76,29 +88,31 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO *p_info)
   MxResult result = FAILURE;
   MxLong width  = p_info->bmiHeader.biWidth;
   MxLong height = p_info->bmiHeader.biHeight;
-  // ((width + 3) & -4) clamps width to nearest 4-byte boundary
-  MxLong size = ((width + 3) & -4) * height;
+  MxLong size = AlignToFourByte(width) * height;
 
   this->m_info = new MxBITMAPINFO;
   if (this->m_info) {
-    this->m_data = (LPVOID*) new MxU8[size];
+    this->m_data = new MxU8[size];
     if(this->m_data) {
-      memcpy(this->m_info, p_info, sizeof(MxBITMAPINFO));
+      memcpy(this->m_info, p_info, sizeof(*this->m_info));
       this->m_bmiHeader = &this->m_info->bmiHeader;
       this->m_paletteData = this->m_info->bmiColors;
       result = SUCCESS;
     }
   }
+
   if (result != SUCCESS) {
     if (this->m_info) {
       delete this->m_info;
       this->m_info = NULL;
     }
+
     if (this->m_data) {
       delete this->m_data;
       this->m_data = NULL;
     }
   }
+
   return result;
 }
 
@@ -118,7 +132,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
       return ret;
   }
 
-  for (int i = 0; i < 256; i++) {
+  for (MxS32 i = 0; i < 256; i++) {
     p_rgbquad[i].rgbRed      = entries[i].peRed;
     p_rgbquad[i].rgbGreen    = entries[i].peGreen;
     p_rgbquad[i].rgbBlue     = entries[i].peBlue;
@@ -130,14 +144,14 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 }
 
 // OFFSET: LEGO1 0x100bcaa0
-MxResult MxBitmap::SetSize(int p_width, int p_height, MxPalette *p_palette, int p_bitDepth)
+MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette *p_palette, MxBool p_isHighColor)
 {
   MxResult ret = FAILURE;
-  MxLong size = ((p_width + 3) & -4) * p_height;
+  MxLong size = AlignToFourByte(p_width) * p_height;
 
   m_info = new MxBITMAPINFO;
   if (m_info) {
-    m_data = (LPVOID*) new MxU8[size];
+    m_data = new MxU8[size];
     if (m_data) {
       m_bmiHeader = &m_info->bmiHeader;
       m_paletteData = m_info->bmiColors;
@@ -152,7 +166,7 @@ MxResult MxBitmap::SetSize(int p_width, int p_height, MxPalette *p_palette, int 
       m_bmiHeader->biSizeImage = size;
 
       if (!ImportColorsToPalette(m_paletteData, p_palette)) {
-        if (!SetBitDepth(p_bitDepth)) {
+        if (!SetBitDepth(p_isHighColor)) {
           ret = SUCCESS;
         }
       }
@@ -177,34 +191,26 @@ MxResult MxBitmap::SetSize(int p_width, int p_height, MxPalette *p_palette, int 
 // OFFSET: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
-  BOOL ret;
-  LPVOID* lpBuffer;
-  MxLong height;
   MxResult result = FAILURE;
   DWORD bytesRead;
   BITMAPFILEHEADER hdr;
-  MxLong size;
 
-  ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
+  BOOL ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
   if (ret && (hdr.bfType == g_bitmapSignature)) {
     this->m_info = new MxBITMAPINFO;
-    if(this->m_info) {
-      ret = ReadFile(p_handle, this->m_info, sizeof(MxBITMAPINFO), &bytesRead, NULL);
-      if (ret && ((this->m_info->bmiHeader).biBitCount == 8)) {
-        size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
-        lpBuffer = (LPVOID*) new MxU8[size];
-        this->m_data = lpBuffer;
-        if (lpBuffer) {
-          ret = ReadFile(p_handle, lpBuffer, size, &bytesRead, NULL);
-          if(ret) {
+    if (this->m_info) {
+      ret = ReadFile(p_handle, this->m_info, sizeof(*this->m_info), &bytesRead, NULL);
+      if (ret && (this->m_info->bmiHeader.biBitCount == 8)) {
+        MxLong size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
+        this->m_data = new MxU8[size];
+        if (this->m_data) {
+          ret = ReadFile(p_handle, this->m_data, size, &bytesRead, NULL);
+          if (ret) {
             this->m_bmiHeader = &this->m_info->bmiHeader;
             this->m_paletteData = this->m_info->bmiColors;
-            if((this->m_info->bmiHeader).biSizeImage == 0) {
-              height = (this->m_info->bmiHeader).biHeight;
-              if (height <= 0L) {
-                height = -height;
-              }
-              (this->m_info->bmiHeader).biSizeImage = ((this->m_info->bmiHeader).biWidth + 3U & -4) * height;
+            if (this->m_info->bmiHeader.biSizeImage == 0) {
+              MxLong height = _Abs(this->m_info->bmiHeader.biHeight);
+              this->m_info->bmiHeader.biSizeImage = AlignToFourByte(this->m_info->bmiHeader.biWidth) * height;
             }
             result = SUCCESS;
           }
@@ -212,16 +218,19 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
       }
     }
   }
+
   if (result != SUCCESS) {
     if (this->m_info) {
       delete this->m_info;
       this->m_info = NULL;
     }
+
     if (this->m_data) {
       delete this->m_data;
       this->m_data = NULL;
     }
   }
+
   return result;
 }
 
@@ -270,14 +279,14 @@ MxPalette *MxBitmap::CreatePalette()
   MxBool success = FALSE;
   MxPalette *palette = NULL;
 
-  switch (this->m_bitDepth) {
-    case LOWCOLOR:
+  switch (this->m_isHighColor) {
+    case FALSE:
       palette = new MxPalette(this->m_paletteData);
       if (palette)
         success = TRUE;
       break;
 
-    case HIGHCOLOR:
+    case TRUE:
       palette = this->m_palette->Clone();
       if (palette)
         success = TRUE;
@@ -295,14 +304,13 @@ MxPalette *MxBitmap::CreatePalette()
 // OFFSET: LEGO1 0x100bd280
 void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
-  // This is weird but it matches. Maybe m_bmiColorsProvided had more
-  // potential values than just true/false at some point?
-  switch (this->m_bitDepth) {
-    case LOWCOLOR:
+  // Odd to use a switch on a boolean, but it matches.
+  switch (this->m_isHighColor) {
+    case FALSE:
       ImportColorsToPalette(this->m_paletteData, p_palette);
       break;
     
-    case HIGHCOLOR:
+    case TRUE:
       if (this->m_palette) {
         delete this->m_palette;
       }
@@ -312,18 +320,17 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 }
 
 // OFFSET: LEGO1 0x100bd2d0
-MxResult MxBitmap::SetBitDepth(MxBool p_bitDepth)
+MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 {
   MxResult ret = FAILURE;
   MxPalette *pal = NULL;
 
-  if (m_bitDepth == p_bitDepth) {
+  if (m_isHighColor == p_isHighColor) {
     // no change: do nothing.
     ret = SUCCESS;
   } else {
-    // TODO: Another switch used for this boolean value? Is it not a bool?
-    switch (p_bitDepth) {
-      case 0:
+    switch (p_isHighColor) {
+      case FALSE:
         ImportColorsToPalette(m_paletteData, m_palette);
         if (m_palette)
           delete m_palette;
@@ -331,7 +338,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_bitDepth)
         m_palette = NULL;
         break;
 
-      case 1:
+      case TRUE:
         pal = NULL;
         pal = new MxPalette(m_paletteData);
         if (pal) {
@@ -343,7 +350,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_bitDepth)
             buf[i] = i;
           }
 
-          m_bitDepth = p_bitDepth;
+          m_isHighColor = p_isHighColor;
           ret = SUCCESS;
         }
         break;
@@ -359,12 +366,12 @@ MxResult MxBitmap::SetBitDepth(MxBool p_bitDepth)
 }
 
 // OFFSET: LEGO1 0x100bd3e0
-MxResult MxBitmap::StretchBits(HDC p_hdc, int p_xSrc, int p_ySrc, int p_xDest, int p_yDest, int p_destWidth, int p_destHeight)
+MxResult MxBitmap::StretchBits(HDC p_hdc, MxS32 p_xSrc, MxS32 p_ySrc, MxS32 p_xDest, MxS32 p_yDest, MxS32 p_destWidth, MxS32 p_destHeight)
 {
   // Compression fix?
   if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
 
-  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, (BITMAPINFO*)this->m_info, this->m_bitDepth, SRCCOPY);
+  return StretchDIBits(p_hdc, p_xDest, p_yDest, p_destWidth, p_destHeight, p_xSrc, p_ySrc, p_destWidth, p_destHeight, this->m_data, (BITMAPINFO*)this->m_info, this->m_isHighColor, SRCCOPY);
 }
