@@ -162,9 +162,13 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_up[2] != FLT_MAX)
     this->m_up[2] = p_dsAction.m_up[2];
 
-  // TODO
   MxU16 extraLength = p_dsAction.m_extraLength;
   char *extraData = p_dsAction.m_extraData;
+
+  // Taking those references forces the compiler to move the values onto the stack.
+  // The original code most likely looked differently, but this yields a 100% match.
+  MxU16 &_extraLength = extraLength;
+  char *&_extraData = extraData;
   if (extraLength && extraData) {
     if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
       delete[] this->m_extraData;
