@@ -410,13 +410,14 @@ void MxVector4::EqualsScalar(float *p_value)
   m_data[3] = *p_value;
 }
 
-// OFFSET: LEGO1 0x10002ae0 STUB
-void MxVector4::unk1(MxVector4 *p_a, float *p_b)
+// OFFSET: LEGO1 0x10002ae0
+void MxVector4::SetMatrixProduct(MxVector4 *p_a, float *p_b)
 {
+  SetMatrixProductImpl(p_a->m_data, p_b);
 }
 
 // OFFSET: LEGO1 0x10002a40
-void MxVector4::SetMatrixProduct(float *p_vec, float *p_mat)
+void MxVector4::SetMatrixProductImpl(float *p_vec, float *p_mat)
 {
   m_data[0] =
       p_vec[0] * p_mat[0] + p_vec[1] * p_mat[4] +
