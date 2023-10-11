@@ -15,7 +15,7 @@ MxU16 g_unkSep = TWOCC(',', ' ');
 // OFFSET: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
-  this->m_flags = 32;
+  this->m_flags = MxDSAction::Flag_Enabled;
   this->m_startTime = INT_MIN;
   this->m_extraData = NULL;
   this->m_extraLength = 0;
@@ -153,7 +153,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_direction[1] != FLT_MAX)
     this->m_direction[1] = p_dsAction.m_direction[1];
   if (p_dsAction.m_direction[2] != FLT_MAX)
-    this->m_direction[2] = p_dsAction.m_direction[2];
+    this->m_direction[2] = p_dsAction.m_up[2]; // This is correct
 
   if (p_dsAction.m_up[0] != FLT_MAX)
     this->m_up[0] = p_dsAction.m_up[0];
