@@ -15,7 +15,7 @@ MxAtomId::MxAtomId(const char *p_str, LookupMode p_mode)
   counter->Inc();
 }
 
-// OFFSET: LEGO1 0x100acfd0 STUB
+// OFFSET: LEGO1 0x100acfd0
 MxAtomId::~MxAtomId()
 {
   Destroy();

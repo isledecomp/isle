@@ -34,8 +34,8 @@ public:
     BinaryBit = 4,
   };
 
-  static MxResult __stdcall WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName);
-  static int __stdcall ReadVariable(LegoStream* p_stream, MxVariableTable* p_to);
+  static MxResult WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName);
+  static MxS32 ReadVariable(LegoStream* p_stream, MxVariableTable* p_to);
 
 protected:
   MxU8 m_mode;

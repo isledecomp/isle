@@ -26,7 +26,7 @@ MxObjectFactory::MxObjectFactory()
 }
 
 // OFFSET: LEGO1 0x100b12c0
-void *MxObjectFactory::Create(const char *p_name)
+MxCore *MxObjectFactory::Create(const char *p_name)
 {
   MxAtomId atom(p_name, LookupMode_Exact);
 

@@ -4,6 +4,7 @@
 #include "legostate.h"
 #include "infocenterstate.h"
 #include "legostream.h"
+#include "mxobjectfactory.h"
 #include "mxvariabletable.h"
 #include "mxstring.h"
 
@@ -11,67 +12,10 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// OFFSET: LEGO1 0x10039550
-LegoGameState::LegoGameState()
-{
-  // TODO
-  m_stateCount = 0;
-  m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
-  VariableTable()->SetVariable(m_backgroundColor);
-
-  m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundcolor", "set 56 54 68");
-  VariableTable()->SetVariable(m_tempBackgroundColor);
-
-  m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
-  VariableTable()->SetVariable(m_fullScreenMovie);
-
-  VariableTable()->SetVariable("lightposition", "2");
-  SerializeScoreHistory(1);
-}
-
-// OFFSET: LEGO1 0x10039720 STUB
-LegoGameState::~LegoGameState()
-{
-  // TODO
-}
-
-// OFFSET: LEGO1 0x10039c60 STUB
-MxResult LegoGameState::Load(MxULong)
-{
-  // TODO
-  return 0;
-}
-
-// OFFSET: LEGO1 0x100f3e40
+// GLOBAL OFFSET: LEGO1 0x100f3e40
 const char *g_fileExtensionGS = ".GS";
 
-// OFFSET: LEGO1 0x1003a170
-void LegoGameState::GetFileSavePath(MxString *p_outPath, MxULong p_slotn)
-{
-  char baseForSlot[2] = "0";
-  char path[1024] = "";
-
-  // Save path base
-  if (m_savePath != NULL)
-    strcpy(path, m_savePath);
-
-  // Slot: "G0", "G1", ...
-  strcat(path, "G");
-  baseForSlot[0] += p_slotn;
-  strcat(path, baseForSlot);
-
-  // Extension: ".GS"
-  strcat(path, g_fileExtensionGS);
-  *p_outPath = &MxString(path);
-}
-
-struct ColorStringStruct
-{
-  const char *m_targetName;
-  const char *m_colorName;
-};
-
-// OFFSET: LEGO1 0x100f3e58
+// GLOBAL OFFSET: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
   {"c_dbbkfny0", "lego red"},
   {"c_dbbkxly0", "lego white"},
@@ -120,145 +64,102 @@ ColorStringStruct g_colorSaveData[43] = {
 
 // NOTE: This offset = the end of the variables table, the last entry
 // in that table is a special entry, the string "END_OF_VARIABLES"
-// OFFSET: LEGO1 0x100f3e50
+// GLOBAL OFFSET: LEGO1 0x100f3e50
 extern const char *s_endOfVariables;
 
-// OFFSET: LEGO1 0x1003a020
-MxResult __stdcall WriteEndOfVariables(LegoStream *p_stream)
+// OFFSET: LEGO1 0x10039550
+LegoGameState::LegoGameState()
 {
-  unsigned char len = strlen(s_endOfVariables);
+  // TODO
+  m_stateCount = 0;
+  m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_backgroundColor);
+
+  m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundcolor", "set 56 54 68");
+  VariableTable()->SetVariable(m_tempBackgroundColor);
+
+  m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
+  VariableTable()->SetVariable(m_fullScreenMovie);
+
+  VariableTable()->SetVariable("lightposition", "2");
+  SerializeScoreHistory(1);
+}
+
+// OFFSET: LEGO1 0x10039720 STUB
+LegoGameState::~LegoGameState()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10039c60 STUB
+MxResult LegoGameState::Load(MxULong)
+{
+  // TODO
+  return 0;
+}
+
+// OFFSET: LEGO1 0x1003a170
+void LegoGameState::GetFileSavePath(MxString *p_outPath, MxULong p_slotn)
+{
+  char baseForSlot[2] = "0";
+  char path[1024] = "";
+
+  // Save path base
+  if (m_savePath != NULL)
+    strcpy(path, m_savePath);
+
+  // Slot: "G0", "G1", ...
+  strcat(path, "G");
+  baseForSlot[0] += p_slotn;
+  strcat(path, baseForSlot);
+
+  // Extension: ".GS"
+  strcat(path, g_fileExtensionGS);
+  *p_outPath = MxString(path);
+}
+
+// OFFSET: LEGO1 0x1003a020
+MxResult LegoGameState::WriteEndOfVariables(LegoStream *p_stream)
+{
+  MxU8 len = strlen(s_endOfVariables);
   if (p_stream->Write(&len, 1) == SUCCESS)
     return p_stream->Write(s_endOfVariables, len);
   return FAILURE;
 }
 
-struct LegoSaveDataEntry3
-{
-  char *m_name;
-  void *m_pSomething1;
-  void *m_pSomething2;
-  int m_savePart1;
-  int m_savePart2;
-  MxU8 m_savePart3;
-  undefined padding1[3];
-  undefined unk1[24];
-  MxU8 m_frameOffsetInDwords;
-  int *m_pFrameData;
-  MxU8 m_currentFrame;
-  undefined padding2[3];
-  undefined unk2[8];
-  MxU8 m_savePart5;
-  undefined padding3[3];
-  undefined unk3[20];
-  MxU8 m_savePart6;
-  undefined padding4[3];
-  undefined unk4[44];
-  MxU8 m_savePart7;
-  undefined padding5[3];
-  undefined unk5[20];
-  MxU8 m_savePart8;
-  undefined padding6[3];
-  undefined unk6[68];
-  MxU8 m_savePart9;
-  undefined padding7[3];
-  undefined unk7[20];
-  MxU8 m_savePart10;
-  undefined padding8[3];
-};
-
-DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
-
-// OFFSET: LEGO1 0x10104f20
-LegoSaveDataEntry3 g_saveData3[66];
-
-// Some Mx singleton which is in 0x8C of LegoOmni
-class UnknownWritingSaveData3 {
-  MxResult WriteSaveData3(LegoStream *p_stream);
-};
-
-// Match except for swapped registers
-// OFFSET: LEGO1 0x10083310
-MxResult UnknownWritingSaveData3::WriteSaveData3(LegoStream *p_stream)
-{
-  MxResult result = FAILURE;
-
-  // This should probably be a for loop but I can't figure out how to
-  // make it match as a for loop.
-  LegoSaveDataEntry3 *entry = g_saveData3;
-  const LegoSaveDataEntry3 *end = &g_saveData3[66];
-  while (true)
-  {
-    if (p_stream->Write(&entry->m_savePart1, 4) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart2, 4) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart3, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_currentFrame, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart5, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart6, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart7, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart8, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart9, 1) != SUCCESS)
-      break;
-    if (p_stream->Write(&entry->m_savePart10, 1) != SUCCESS)
-      break;
-    if (++entry >= end)
-    {
-      result = SUCCESS;
-      break;
-    }
-  }
-  return result;
-}
-
-// OFFSET: LEGO1 0x10039980 STUB
+// OFFSET: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
   MxResult result;
   InfocenterState *infocenterState = (InfocenterState *)GameState()->GetState("InfocenterState");
-  if (infocenterState == NULL || infocenterState->GetInfocenterBufferElement(0) == 0)
-  {
+  if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == 0)
     result = SUCCESS;
-  }
-  else
-  {
+  else {
     result = FAILURE;
     MxVariableTable *variableTable = VariableTable();
     MxString savePath;
     GetFileSavePath(&savePath, p_slot);
     LegoFileStream fileStream;
-    if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE)
-    {
+    if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE) {
       MxU32 maybeVersion = 0x1000C;
       fileStream.Write(&maybeVersion, 4);
       fileStream.Write(&m_secondThingWritten, 2);
       fileStream.Write(&m_someEnumState, 2);
       fileStream.Write(&m_someModeSwitch, 1);
 
-      for (int i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i)
-      {
+      for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
         if (LegoStream::WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)
           return result;
       }
 
-      if (LegoStream::WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE)
-      {
-        if (LegoStream::WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE)
-        {
+      if (LegoStream::WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
+        if (LegoStream::WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE) {
           WriteEndOfVariables(&fileStream);
 
           // TODO: Calls down to more aggregate writing functions
-          
           return SUCCESS;
         }
       }
-
     }
   }
   return result;
@@ -280,30 +181,22 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 void LegoGameState::SetSavePath(char *p_savePath)
 {
   if (m_savePath != NULL)
-  {
     delete[] m_savePath;
-  }
-  if (p_savePath)
-  {
+
+  if (p_savePath) {
     m_savePath = new char[strlen(p_savePath) + 1];
     strcpy(m_savePath, p_savePath);
   }
   else
-  {
     m_savePath = NULL;
-  }
 }
 
 // OFFSET: LEGO1 0x1003bbb0
 LegoState *LegoGameState::GetState(char *p_stateName)
 {
   for (MxS32 i = 0; i < m_stateCount; ++i)
-  {
     if (m_stateArray[i]->IsA(p_stateName))
-    {
       return m_stateArray[i];
-    }
-  }
   return NULL;
 }
 
@@ -319,27 +212,25 @@ LegoState *LegoGameState::CreateState(char *p_stateName)
 // OFFSET: LEGO1 0x1003bc30
 void LegoGameState::RegisterState(LegoState *p_state)
 {
-  int targetIndex;
+  MxS32 targetIndex;
   for (targetIndex = 0; targetIndex < m_stateCount; ++targetIndex)
-  {
     if (m_stateArray[targetIndex]->IsA(p_state->ClassName()))
       break;
-  }
-  if (targetIndex == m_stateCount)
-  {
-    LegoState **newBuffer = (LegoState**)malloc(m_stateCount * 4 + 4);
-    if (m_stateCount != 0)
-    {
+
+  if (targetIndex == m_stateCount) {
+    LegoState **newBuffer = new LegoState*[m_stateCount + 1];
+
+    if (m_stateCount != 0) {
       memcpy(newBuffer, m_stateArray, m_stateCount * sizeof(LegoState*));
-      free(m_stateArray);
+      delete[] m_stateArray;
     }
+
     newBuffer[m_stateCount++] = p_state;
     m_stateArray = newBuffer;
     return;
   }
-  if (m_stateArray[targetIndex] != NULL)
-  {
+
+  if (m_stateArray[targetIndex])
     delete m_stateArray[targetIndex];
-  }
   m_stateArray[targetIndex] = p_state;
 }

@@ -7,8 +7,15 @@
 #include "legofullscreenmovie.h"
 
 class LegoState;
+class LegoStream;
 class MxVariable;
 class MxString;
+
+struct ColorStringStruct
+{
+  const char *m_targetName;
+  const char *m_colorName;
+};
 
 // SIZE 0x430 (at least)
 class LegoGameState
@@ -29,6 +36,7 @@ public:
 
 private:
   void RegisterState(LegoState *p_state);
+  MxResult WriteEndOfVariables(LegoStream *p_stream);
 
 private:
   char *m_savePath; // 0x0
@@ -41,7 +49,7 @@ private:
   LegoBackgroundColor *m_tempBackgroundColor; // 0x1c
   LegoFullScreenMovie *m_fullScreenMovie; // 0x20
   MxU16 m_secondThingWritten;
-  undefined m_unk24[1036];
+  undefined m_unk24[1032];
 };
 
 #endif // LEGOGAMESTATE_H

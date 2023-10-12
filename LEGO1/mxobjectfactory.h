@@ -23,7 +23,21 @@ class MxObjectFactory : public MxCore
 {
 public:
   MxObjectFactory();
-  virtual void *Create(const char *p_name); // vtable 0x14
+
+  // OFFSET: LEGO1 0x1008f70
+  inline virtual const char *ClassName() const override // vtable+0xc
+  {
+    // 0x100f0730
+    return "MxObjectFactory";
+  }
+
+  // OFFSET: LEGO1 0x1008f80
+  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
+  {
+    return !strcmp(name, MxObjectFactory::ClassName()) || MxCore::IsA(name);
+  }
+
+  virtual MxCore *Create(const char *p_name); // vtable 0x14
   virtual void Destroy(void *p_object); // vtable 0x18
 private:
 #define X(V) MxAtomId m_id##V;

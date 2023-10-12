@@ -262,7 +262,7 @@ void LegoOmni::Init()
   m_currentWorld = NULL;
   m_unk80 = FALSE;
   m_isle = NULL;
-  m_unk8c = 0;
+  m_unkLegoSaveDataWriter = NULL;
   m_plantManager = NULL;
   m_gameState = NULL;
   m_animationManager = NULL;
