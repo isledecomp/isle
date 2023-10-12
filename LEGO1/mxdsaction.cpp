@@ -15,7 +15,7 @@ MxU16 g_unkSep = TWOCC(',', ' ');
 // OFFSET: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
-  this->m_flags = 32;
+  this->m_flags = MxDSAction::Flag_Enabled;
   this->m_startTime = INT_MIN;
   this->m_extraData = NULL;
   this->m_extraLength = 0;
@@ -153,7 +153,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_direction[1] != FLT_MAX)
     this->m_direction[1] = p_dsAction.m_direction[1];
   if (p_dsAction.m_direction[2] != FLT_MAX)
-    this->m_direction[2] = p_dsAction.m_direction[2];
+    this->m_direction[2] = p_dsAction.m_up[2]; // This is correct
 
   if (p_dsAction.m_up[0] != FLT_MAX)
     this->m_up[0] = p_dsAction.m_up[0];
@@ -162,9 +162,13 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_up[2] != FLT_MAX)
     this->m_up[2] = p_dsAction.m_up[2];
 
-  // TODO
   MxU16 extraLength = p_dsAction.m_extraLength;
   char *extraData = p_dsAction.m_extraData;
+
+  // Taking those references forces the compiler to move the values onto the stack.
+  // The original code most likely looked different, but this yields a 100% match.
+  MxU16 &_extraLength = extraLength;
+  char *&_extraData = extraData;
   if (extraLength && extraData) {
     if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
       delete[] this->m_extraData;
