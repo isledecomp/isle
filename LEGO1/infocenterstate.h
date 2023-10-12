@@ -58,7 +58,7 @@ private:
   */
 
   undefined pad[0x70];
-  MxU32 m_buffer[7];
+  MxU32 m_buffer[7]; // 0x78
 };
 
 #endif // INFOCENTERSTATE_H
