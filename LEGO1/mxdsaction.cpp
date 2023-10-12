@@ -166,7 +166,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   char *extraData = p_dsAction.m_extraData;
 
   // Taking those references forces the compiler to move the values onto the stack.
-  // The original code most likely looked differently, but this yields a 100% match.
+  // The original code most likely looked different, but this yields a 100% match.
   MxU16 &_extraLength = extraLength;
   char *&_extraData = extraData;
   if (extraLength && extraData) {
