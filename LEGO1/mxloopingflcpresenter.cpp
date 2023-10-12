@@ -4,20 +4,28 @@
 
 DECOMP_SIZE_ASSERT(MxLoopingFlcPresenter, 0x6c);
 
-// OFFSET: LEGO1 0x100b4310 STUB
+// OFFSET: LEGO1 0x100b4310
 MxLoopingFlcPresenter::MxLoopingFlcPresenter()
 {
-  // TODO
+  Init();
 }
 
-// OFFSET: LEGO1 0x100b43b0 STUB
+// OFFSET: LEGO1 0x100b43b0
 MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 {
-  // TODO
+  Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100b4410 STUB
+// OFFSET: LEGO1 0x100b4410
 void MxLoopingFlcPresenter::Init()
 {
-  // TODO
+  this->m_unk68 = 0;
+  this->m_flags &= 0xfd;
+  this->m_flags &= 0xfb;
+}
+
+// OFFSET: LEGO1 0x100b4432 STUB
+void MxLoopingFlcPresenter::Destroy(MxBool p_param)
+{
+  // TODO 
 }

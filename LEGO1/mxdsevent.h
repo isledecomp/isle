@@ -9,6 +9,9 @@ public:
   MxDSEvent();
   virtual ~MxDSEvent() override;
 
+  void CopyFrom(MxDSEvent &p_dsEvent);
+  MxDSEvent &operator=(MxDSEvent &p_dsEvent);
+
   // OFFSET: LEGO1 0x100c9660
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -21,6 +24,8 @@ public:
   {
     return !strcmp(name, MxDSEvent::ClassName()) || MxDSMediaAction::IsA(name);
   }
+
+  virtual MxDSAction *Clone() override; // vtable+2c;
 };
 
 #endif // MXDSEVENT_H

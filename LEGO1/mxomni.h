@@ -1,19 +1,23 @@
 #ifndef MXOMNI_H
 #define MXOMNI_H
 
+#include "mxcore.h"
+#include "mxstring.h"
 #include "mxcriticalsection.h"
-#include "mxeventmanager.h"
-#include "mxmusicmanager.h"
-#include "mxnotificationmanager.h"
-#include "mxobjectfactory.h"
-#include "mxomnicreateflags.h"
-#include "mxomnicreateparam.h"
-#include "mxsoundmanager.h"
-#include "mxstreamer.h"
-#include "mxticklemanager.h"
-#include "mxtimer.h"
-#include "mxvariabletable.h"
-#include "mxvideomanager.h"
+
+class MxAtomIdCounterSet;
+class MxDSAction;
+class MxEventManager;
+class MxMusicManager;
+class MxNotificationManager;
+class MxObjectFactory;
+class MxOmniCreateParam;
+class MxSoundManager;
+class MxStreamer;
+class MxTickleManager;
+class MxTimer;
+class MxVariableTable;
+class MxVideoManager;
 
 // VTABLE 0x100dc168
 // SIZE 0x68
@@ -32,11 +36,21 @@ public:
   MxOmni();
   virtual ~MxOmni() override;
 
-  virtual MxLong Notify(MxParam &p); // vtable+04
+  virtual MxLong Notify(MxParam &p) override; // vtable+04
   virtual void Init(); // vtable+14
-  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
+  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
+  virtual MxResult Start(MxDSAction* p_dsAction); // vtable+20
+  virtual void DeleteObject(MxDSAction &ds); // vtable+24
+  virtual MxBool DoesEntityExist(MxDSAction &ds); // vtable+28
+  virtual void vtable0x2c(); // vtable+2c
+  virtual int vtable0x30(char*, int, MxCore*); // vtable+30
+  virtual void NotifyCurrentEntity(MxParam *p_param); // vtable+34
+  virtual void StartTimer(); // vtable+38
+  virtual void StopTimer(); // vtable+3c
+  virtual MxBool IsTimerRunning(); //vtable+40
   static void SetInstance(MxOmni* instance);
+  HWND GetWindowHandle() const { return this->m_windowHandle; }
   MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
   MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }
   MxTickleManager* GetTickleManager() const { return this->m_tickleManager; }
@@ -47,11 +61,13 @@ public:
   MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
   MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
   MxEventManager* GetEventManager() const { return this->m_eventManager; }
+  MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
+  MxResult HandleNotificationType2(MxParam& p_param);
 protected:
   static MxOmni* g_instance;
 
   MxString m_mediaPath; // 0x8
-  HWND *m_windowHandle; // 0x18;
+  HWND m_windowHandle; // 0x18;
   MxObjectFactory *m_objectFactory; // 0x1C
   MxVariableTable* m_variableTable; //0x20
   MxTickleManager* m_tickleManager; //0x24
@@ -63,11 +79,11 @@ protected:
   MxTimer* m_timer; //0x3C
   MxStreamer* m_streamer; //0x40
 
-  int m_unk44; // 0x44
+  MxAtomIdCounterSet* m_atomIdCounterSet; // 0x44
 
   MxCriticalSection m_criticalsection; // 0x48
 
-  unsigned char m_unk64; // 0x64
+  MxBool m_timerRunning; // 0x64
 };
 __declspec(dllexport) MxTickleManager * TickleManager();
 __declspec(dllexport) MxTimer * Timer();
@@ -78,6 +94,7 @@ __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
 MxVideoManager * MVideoManager();
+MxAtomIdCounterSet* AtomIdCounterSet();
 
 MxObjectFactory *ObjectFactory();
 

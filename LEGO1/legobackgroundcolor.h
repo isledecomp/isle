@@ -1,13 +1,15 @@
 #ifndef LEGOBACKGROUNDCOLOR_H
 #define LEGOBACKGROUNDCOLOR_H
 
-#include "mxstringvariable.h"
+#include "mxvariable.h"
 
-class LegoBackgroundColor : public MxStringVariable
+// VTABLE 0x100d74a8
+// SIZE 0x30
+class LegoBackgroundColor : public MxVariable
 {
 public:
-  __declspec(dllexport) LegoBackgroundColor(const char *p_name, const char *p_colorString);
-  void SetColorString(const char *p_colorString);
+  __declspec(dllexport) LegoBackgroundColor(const char *p_key, const char *p_value);
+  virtual void SetValue(const char *p_colorString) override;
 
 private:
   float h;

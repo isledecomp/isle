@@ -1,7 +1,8 @@
+#include "mxnotificationmanager.h"
+
 #include "legoomni.h"
 #include "mxautolocker.h"
-#include "mxcore.h"
-#include "mxnotificationmanager.h"
+#include "mxticklemanager.h"
 #include "mxparam.h"
 #include "mxtypes.h"
 
@@ -12,7 +13,7 @@ DECOMP_SIZE_ASSERT(MxNotification, 0x8);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
 // OFFSET: LEGO1 0x100ac220
-MxNotification::MxNotification(MxCore *p_target, MxParam *p_param)
+MxNotification::MxNotification(MxCore *p_target, MxNotificationParam *p_param)
 {
   m_target = p_target;
   m_param = p_param->Clone();
@@ -41,7 +42,7 @@ MxNotificationManager::~MxNotificationManager()
   delete m_queue;
   m_queue = NULL;
 
-  TickleManager()->Unregister(this);
+  TickleManager()->UnregisterClient(this);
 }
 
 // OFFSET: LEGO1 0x100ac800
@@ -80,7 +81,7 @@ MxResult MxNotificationManager::Create(MxS32 p_unk1, MxS32 p_unk2)
     result = FAILURE;
   }
   else {
-    TickleManager()->Register(this, 10);
+    TickleManager()->RegisterClient(this, 10);
   }
 
   return result;
@@ -160,7 +161,7 @@ void MxNotificationManager::FlushPending(MxCore *p_listener)
 }
 
 // OFFSET: LEGO1 0x100ac6c0
-MxResult MxNotificationManager::Send(MxCore *p_listener, MxParam *p_param)
+MxResult MxNotificationManager::Send(MxCore *p_listener, MxNotificationParam *p_param)
 {
   MxAutoLocker lock(&m_lock);
 

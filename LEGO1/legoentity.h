@@ -2,8 +2,12 @@
 #define LEGOENTITY_H
 
 #include "mxentity.h"
+#include "mxvector.h"
+#include "extra.h"
+#include "decomp.h"
 
 // VTABLE 0x100d4858
+// SIZE 0x68 (probably)
 class LegoEntity : public MxEntity
 {
 public:
@@ -30,7 +34,27 @@ public:
     return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
   }
 
-  virtual void Destroy() override; // vtable+0x1c
+  virtual void vtable18(); // vtable+0x18
+  virtual void Destroy(MxBool); // vtable+0x1c
+  virtual void ParseAction(char *); // vtable+0x20
+
+protected:
+  void Reset();
+
+  undefined m_unk10;
+  undefined m_unk11;
+  MxVector3Data m_vec1; // 0x14
+  MxVector3Data m_vec2; // 0x28
+  MxVector3Data m_vec3; // 0x3c
+  undefined4 m_unk50;
+  undefined4 m_unk54;
+  undefined m_unk58;
+  undefined m_unk59;
+  // For tokens from the extra string that look like this:
+  // "Action:openram;\lego\scripts\Race\CarRaceR;0"
+  ExtraActionType m_actionType; // 0x5c
+  char *m_actionArgString; // 0x60
+  MxS32 m_actionArgNumber; // 0x64
 
 };
 

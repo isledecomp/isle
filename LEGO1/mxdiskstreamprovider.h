@@ -1,9 +1,11 @@
 #ifndef MXDISKSTREAMPROVIDER_H
 #define MXDISKSTREAMPROVIDER_H
 
+#include "decomp.h"
 #include "mxstreamprovider.h"
 #include "mxthread.h"
 #include "mxcriticalsection.h"
+#include "mxunklist.h"
 
 class MxDiskStreamProvider;
 
@@ -47,15 +49,20 @@ public:
 
   void PerformWork();
 
+  virtual MxResult SetResourceToGet(void* p_resource) override; //vtable+0x14
+  virtual MxU32 GetFileSize() override; //vtable+0x18
+  virtual MxU32 GetStreamBuffersNum() override; //vtable+0x1c
+  virtual void vtable0x20(undefined4 p_unknown1) override; //vtable+0x20
+  virtual MxU32 GetLengthInDWords() override; //vtable+0x24
+  virtual MxU32* GetBufferForDWords() override; //vtable+0x28
+
 private:
-  MxDiskStreamProviderThread m_thread;
-  MxSemaphore m_busySemaphore;
-  byte m_remainingWork;
-  byte m_unk1;
-  MxCriticalSection m_criticalSection;
-  byte unk2[4];
-  void* unk3;
-  void *unk4;
+  MxDiskStreamProviderThread m_thread; // 0x10
+  MxSemaphore m_busySemaphore; // 0x2c
+  undefined m_remainingWork; // 0x34
+  undefined m_unk35; // 0x35
+  MxCriticalSection m_criticalSection; // 0x38
+  MxUnkList m_list;
 };
 
 #endif // MXDISKSTREAMPROVIDER_H

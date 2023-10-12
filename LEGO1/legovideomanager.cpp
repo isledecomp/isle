@@ -1,5 +1,6 @@
 #include "legovideomanager.h"
-#include <ddraw.h>
+
+DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
 
 // OFFSET: LEGO1 0x1007aa20 STUB
 LegoVideoManager::LegoVideoManager()
@@ -27,26 +28,44 @@ int LegoVideoManager::DisableRMDevice()
   return 0;
 }
 
+// OFFSET: LEGO1 0x1007c300
+void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
+{
+  EnableFullScreenMovie(p_enable, TRUE);
+}
+
 // OFFSET: LEGO1 0x1007c310 STUB
-void LegoVideoManager::EnableFullScreenMovie(unsigned char a, unsigned char b)
+void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x1007b6a0 STUB
-void LegoVideoManager::MoveCursor(int x, int y)
+// OFFSET: LEGO1 0x1007b6a0
+void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 {
-  // TODO
+  m_cursorX = p_cursorX;
+  m_cursorY = p_cursorY;
+  m_cursorMoved = TRUE;
+
+  if (623 < p_cursorX)
+    m_cursorX = 623;
+
+  if (463 < p_cursorY)
+    m_cursorY = 463;
 }
 
 // OFFSET: LEGO1 0x1007c440
-void LegoVideoManager::SetSkyColor(float red, float green, float blue)
+void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 {
-  PALETTEENTRY colorStrucure; // [esp+0h] [ebp-4h] BYREF
+  PALETTEENTRY colorStrucure;
 
-  colorStrucure.peRed = (red* 255.0);
-  colorStrucure.peGreen = (green * 255.0);
-  colorStrucure.peBlue = (blue * 255.0);
+  colorStrucure.peRed = (p_red * 255.0f);
+  colorStrucure.peGreen = (p_green * 255.0f);
+  colorStrucure.peBlue = (p_blue * 255.0f);
   colorStrucure.peFlags = -124;
-  // TODO
+  m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
+  m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
+
+  // TODO 3d manager
+  //m_3dManager->m_pViewport->vtable1c(red, green, blue)
 }

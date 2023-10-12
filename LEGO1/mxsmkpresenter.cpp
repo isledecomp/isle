@@ -15,3 +15,14 @@ void MxSmkPresenter::Init()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x100b3960
+void MxSmkPresenter::VTable0x60()
+{
+  if (m_bitmap) {
+    delete m_bitmap;
+  }
+
+  m_bitmap = new MxBitmap();
+  m_bitmap->SetSize(m_smkWidth, m_smkHeight, NULL, FALSE);
+}

@@ -13,8 +13,9 @@ public:
   {
     Init();
   }
+  virtual ~MxMediaPresenter() override;
 
-  virtual MxLong Tickle() override; // vtable+0x8, override MxCore
+  virtual MxResult Tickle() override;
 
   // OFFSET: LEGO1 0x1000c5c0
   inline virtual const char *ClassName() const override // vtable+0xc
@@ -29,10 +30,21 @@ public:
     return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
+  virtual void StreamingTickle() override;
+  virtual void RepeatingTickle() override;
+  virtual void DoneTickle() override;
+  virtual void InitVirtual() override;
+  virtual MxLong StartAction(MxStreamController *, MxDSAction *) override;
+  virtual void EndAction() override;
+  virtual void Enable(MxBool p_enable) override;
+  virtual void VTable0x58();
+
   undefined4 m_unk40;
   undefined4 m_unk44;
   undefined4 m_unk48;
   undefined4 m_unk4c;
+protected:
+  void Destroy(MxBool);
 private:
   void Init();
 

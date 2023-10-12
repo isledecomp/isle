@@ -28,32 +28,36 @@ public:
   inline virtual MxBool IsA(const char *name) const override { return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name); }; // vtable+10;
 
   virtual undefined4 unk14(); // vtable+14;
-  virtual MxU32 CalculateUnk08(); // vtable+18;
-  virtual void Parse(char **p_source, MxS16 p_unk24); // vtable+1c;
-
-  inline const MxAtomId& GetAtomId() { return this->m_atomId; }
-  inline undefined4 GetUnknown1c() { return this->m_unk1c; }
-
-  inline void SetUnknown1c(undefined4 p_unk1c) { this->m_unk1c = p_unk1c; }
-  inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
-
+  virtual MxU32 GetSizeOnDisk(); // vtable+18;
+  virtual void Deserialize(char **p_source, MxS16 p_unk24); // vtable+1c;
   // OFFSET: ISLE 0x401c40
   // OFFSET: LEGO1 0x10005530
-  inline void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; }
+  inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
-protected:
+  inline const MxAtomId& GetAtomId() { return this->m_atomId; }
+  inline MxU32 GetObjectId() { return this->m_objectId; }
+  inline MxS16 GetUnknown24() { return this->m_unk24; }
+
+  inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
+  inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
+
+  inline char *GetSourceName() const { return this->m_sourceName; }
+
   inline void SetType(MxDSType p_type) { this->m_type = p_type; }
+  inline MxDSType GetType() const { return (MxDSType) this->m_type; }
 
 private:
-  MxU32 m_unk08;
-  MxU16 m_type;
-  char* m_sourceName;
-  undefined4 m_unk14;
-  char *m_objectName;
-  undefined4 m_unk1c;
-  MxAtomId m_atomId;
-  MxS16 m_unk24;
-  undefined4 m_unk28;
+  MxU32 m_sizeOnDisk; // 0x8
+  MxU16 m_type; // 0xc
+  char* m_sourceName; // 0x10
+  undefined4 m_unk14; // 0x14
+  char *m_objectName; // 0x18
+  MxU32 m_objectId; // 0x1c
+  MxAtomId m_atomId; // 0x20
+  MxS16 m_unk24; // 0x24
+  undefined4 m_unk28; // 0x28
 };
+
+MxDSObject *DeserializeDSObjectDispatch(char **, MxS16);
 
 #endif // MXDSOBJECT_H

@@ -11,6 +11,8 @@ public:
   MxDSObjectAction();
   virtual ~MxDSObjectAction() override;
 
+  MxDSObjectAction &operator=(MxDSObjectAction &p_dsObjectAction);
+
   // OFFSET: LEGO1 0x100c88e0
   inline virtual const char *ClassName() const override // vtable+0x0c
   {
@@ -23,6 +25,9 @@ public:
   {
     return !strcmp(name, MxDSObjectAction::ClassName()) || MxDSMediaAction::IsA(name);
   }
+
+  virtual MxDSAction *Clone() override; // vtable+2c;
+  virtual void CopyFrom(MxDSObjectAction &p_dsObjectAction); // vtable+44;
 };
 
 #endif // MXDSOBJECTACTION_H

@@ -25,6 +25,8 @@ typedef int MxLong;
 typedef unsigned int MxULong;
 #endif
 
+typedef MxS32 MxTime;
+
 typedef MxLong MxResult;
 const MxResult SUCCESS = 0;
 const MxResult FAILURE = -1;
@@ -38,5 +40,23 @@ typedef MxU8 MxBool;
 #ifndef FALSE
 #define FALSE 0
 #endif
+
+#define TWOCC(a, b) (((a) << 0) | ((b) << 8))
+#define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
+
+// Must be union with struct for match.
+typedef union {
+  struct {
+    MxU8 bit0: 1;
+    MxU8 bit1: 1;
+    MxU8 bit2: 1;
+    MxU8 bit3: 1;
+    MxU8 bit4: 1;
+    MxU8 bit5: 1;
+    MxU8 bit6: 1;
+    MxU8 bit7: 1;
+  };
+  // BYTE all; // ?
+} flag_bitfield;
 
 #endif // MXTYPE_H

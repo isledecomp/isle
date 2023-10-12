@@ -1,7 +1,6 @@
 #ifndef MXDSCHUNK_H
 #define MXDSCHUNK_H
 
-
 #include "mxcore.h"
 #include "mxtypes.h"
 

@@ -21,7 +21,7 @@ MxLong Act2Brick::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x1007a7f0 STUB
-MxLong Act2Brick::Tickle()
+MxResult Act2Brick::Tickle()
 {
   // TODO
 

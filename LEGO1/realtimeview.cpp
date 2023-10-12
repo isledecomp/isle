@@ -1,4 +1,11 @@
 #include "realtimeview.h"
+#include <math.h>
+
+// 0x10109598
+float g_userMaxLodPower;
+
+// 0x10101044
+float g_userMaxBase = 4.0f;
 
 // 0x10101048
 float g_userMaxLod = 3.6f;
@@ -19,10 +26,17 @@ float RealtimeView::GetPartsThreshold()
   return g_partsThreshold;
 }
 
+// OFFSET: LEGO1 100a5e20
+void RealtimeView::UpdateMaxLOD()
+{
+  g_userMaxLodPower = pow(g_userMaxBase, -g_userMaxLod);
+}
+
 // OFFSET: LEGO1 0x100a5de0
 void RealtimeView::SetUserMaxLOD(float p_lod)
 {
   g_userMaxLod = p_lod;
+  UpdateMaxLOD();
 }
 
 // OFFSET: LEGO1 0x100a5df0

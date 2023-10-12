@@ -21,7 +21,7 @@ MxLong LegoCarBuild::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x100238b0 STUB
-MxLong LegoCarBuild::Tickle()
+MxResult LegoCarBuild::Tickle()
 {
   // TODO
 

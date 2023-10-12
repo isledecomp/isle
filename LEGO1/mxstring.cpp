@@ -1,6 +1,10 @@
 #include "mxstring.h"
+#include "decomp.h"
+
 #include <stdlib.h>
 #include <string.h>
+
+DECOMP_SIZE_ASSERT(MxString, 0x10)
 
 // OFFSET: LEGO1 0x100ae200
 MxString::MxString()
@@ -52,14 +56,14 @@ void MxString::ToLowerCase()
 }
 
 // OFFSET: LEGO1 0x100ae4b0
-MxString &MxString::operator=(MxString *param)
+MxString &MxString::operator=(MxString &param)
 {
-  if (this->m_data != param->m_data)
+  if (this->m_data != param.m_data)
   {
     delete[] this->m_data;
-    this->m_length = param->m_length;
+    this->m_length = param.m_length;
     this->m_data = new char[this->m_length + 1];
-    strcpy(this->m_data, param->m_data);
+    strcpy(this->m_data, param.m_data);
   }
 
   return *this;

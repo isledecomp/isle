@@ -2,6 +2,7 @@
 #define MXCOMPOSITEPRESENTER_H
 
 #include "mxpresenter.h"
+#include "mxunklist.h"
 
 // VTABLE 0x100dc618
 // SIZE 0x4c
@@ -24,9 +25,7 @@ public:
     return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
   }
 
-  undefined m_unk40;
-  undefined4 *m_unk44;
-  undefined4 m_unk48;
+  MxUnkList m_list;
 };
 
 #endif // MXCOMPOSITEPRESENTER_H

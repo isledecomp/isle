@@ -1,14 +1,16 @@
 #ifndef LEGOGAMESTATE_H
 #define LEGOGAMESTATE_H
 
-#include "mxtypes.h"
-
 #include "decomp.h"
+#include "mxtypes.h"
+#include "legobackgroundcolor.h"
+#include "legofullscreenmovie.h"
 
 class LegoState;
 class MxVariable;
 class MxString;
 
+// SIZE 0x430 (at least)
 class LegoGameState
 {
 public:
@@ -29,18 +31,17 @@ private:
   void RegisterState(LegoState *p_state);
 
 private:
-  char *m_savePath;
+  char *m_savePath; // 0x0
   MxS16 m_stateCount;
-  undefined2 padding1;
   LegoState **m_stateArray;
   MxU8 m_someModeSwitch;
-  undefined padding2[3];
   MxU32 m_someEnumState;
-  undefined4 unk1;
-  MxVariable *m_backgroundColor;
-  MxVariable *m_tempBackgroundColor;
-  MxVariable *m_fsMovieVariable;
+  undefined4 m_unk0x14;
+  LegoBackgroundColor *m_backgroundColor; // 0x18
+  LegoBackgroundColor *m_tempBackgroundColor; // 0x1c
+  LegoFullScreenMovie *m_fullScreenMovie; // 0x20
   MxU16 m_secondThingWritten;
+  undefined m_unk24[1036];
 };
 
 #endif // LEGOGAMESTATE_H
