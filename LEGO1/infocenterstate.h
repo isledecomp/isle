@@ -29,6 +29,7 @@ public:
   inline MxU32 GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
 
 private:
+  // Members should be renamed with their offsets before use
   /*
     struct SomeStruct
     {
