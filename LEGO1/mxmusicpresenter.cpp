@@ -49,8 +49,7 @@ MxResult MxMusicPresenter::AddToMusicManager()
 } 
 
 // OFFSET: LEGO1 0x100c25d0
-void MxMusicPresenter::vtable38()
+void MxMusicPresenter::DestroyPermanent()
 {
-  // TODO: Name this function when we know what the argument to Destroy does
   Destroy(FALSE);
 }

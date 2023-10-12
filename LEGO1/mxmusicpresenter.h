@@ -25,7 +25,7 @@ public:
   virtual ~MxMusicPresenter() override;
 
   virtual MxResult AddToMusicManager(); // vtable+0x34
-  virtual void vtable38(); // vtable+0x38
+  virtual void DestroyPermanent(); // vtable+0x38
 
 private:
   void Init();
