@@ -3,6 +3,8 @@
 
 #include "legostate.h"
 
+#include "decomp.h"
+
 // VTABLE 0x100d93a8
 // SIZE 0x94
 class InfocenterState : public LegoState
@@ -23,6 +25,40 @@ public:
   {
     return !strcmp(name, InfocenterState::ClassName()) || LegoState::IsA(name);
   }
+
+  inline MxU32 GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
+
+private:
+  // Members should be renamed with their offsets before use
+  /*
+    struct SomeStruct
+    {
+      undefined4 unk1;
+      undefined2 unk2;
+      undefined2 unk3;
+      undefined2 unk4;
+    };
+
+    undefined2 unk1;
+    undefined2 unk2;
+    undefined4 unk3;
+    undefined4 padding1;
+    void *unk4;
+    undefined2 unk5;
+    undefined2 unk6;
+    undefined2 unk7;
+    undefined2 padding2;
+    void *unk8;
+    undefined2 unk9;
+    undefined2 unk10;
+    undefined2 unk11;
+    undefined2 padding3;
+    SomeStruct unk12[6];
+    undefined4 unk13;
+  */
+
+  undefined pad[0x70];
+  MxU32 m_buffer[7]; // 0x78
 };
 
 #endif // INFOCENTERSTATE_H

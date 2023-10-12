@@ -16,6 +16,7 @@ class LegoPathBoundary;
 class LegoPlantManager;
 class LegoROI;
 class LegoSoundManager;
+class LegoUnkSaveDataWriter;
 class LegoVideoManager;
 class LegoWorld;
 class MxAtomId;
@@ -77,8 +78,8 @@ public:
   LegoWorld *GetCurrentWorld() { return m_currentWorld; }
 
 private:
-  int m_unk68;
-  int m_unk6c;
+  undefined4 m_unk68;
+  undefined4 m_unk6c;
   LegoInputManager *m_inputMgr; // 0x70
   undefined4 m_unk74;
   undefined4 m_unk78;
@@ -86,7 +87,7 @@ private:
   MxBool m_unk80;
   LegoNavController *m_navController; // 0x84
   Isle* m_isle; // 0x88
-  undefined4 m_unk8c;
+  LegoUnkSaveDataWriter* m_unkLegoSaveDataWriter;
   LegoPlantManager* m_plantManager; // 0x90
   LegoAnimationManager* m_animationManager;
   LegoBuildingManager* m_buildingManager; // 0x98

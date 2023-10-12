@@ -4,6 +4,7 @@
 #include "mxdsfile.h"
 #include "legogamestate.h"
 #include "legoutil.h"
+#include "legoobjectfactory.h"
 
 // 0x100f4588
 MxAtomId *g_nocdSourceName = NULL;
@@ -261,7 +262,7 @@ void LegoOmni::Init()
   m_currentWorld = NULL;
   m_unk80 = FALSE;
   m_isle = NULL;
-  m_unk8c = 0;
+  m_unkLegoSaveDataWriter = NULL;
   m_plantManager = NULL;
   m_gameState = NULL;
   m_animationManager = NULL;
@@ -271,11 +272,12 @@ void LegoOmni::Init()
   m_transitionManager = NULL;
 }
 
-// OFFSET: LEGO1 0x10058e70
+// OFFSET: LEGO1 0x10058e70 STUB
 MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 {
-  // FIXME: Stub
   MxOmni::Create(p);
+
+  m_objectFactory = new LegoObjectFactory();
   m_gameState = new LegoGameState();
   m_bkgAudioManager = new MxBackgroundAudioManager();
 
