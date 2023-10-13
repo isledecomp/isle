@@ -25,7 +25,6 @@ void MxLoopingSmkPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100b49d0 STUB
-void MxLoopingSmkPresenter::Destroy(MxBool p_bool)
+void MxLoopingSmkPresenter::Destroy(MxBool p_fromDestructor)
 {
-  // TODO - theres a chain of destroy and free function calls here (FUN_100b4300 -> FUN_100b3900 -> FUN_100c5d40 -> function at 0x100b27b0)
 }
