@@ -31,7 +31,7 @@ public:
 private:
   // Members should be renamed with their offsets before use
   /*
-    struct SomeStruct
+    struct UnkStruct
     {
       undefined4 unk1;
       undefined2 unk2;
@@ -53,7 +53,7 @@ private:
     undefined2 unk10;
     undefined2 unk11;
     undefined2 padding3;
-    SomeStruct unk12[6];
+    UnkStruct unk12[6];
     undefined4 unk13;
   */
 

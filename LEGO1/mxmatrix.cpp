@@ -175,7 +175,7 @@ void MxMatrix::ToQuaternion(MxVector4 *p_outQuat)
 // No idea what this function is doing and it will be hard to tell until
 // we have a confirmed usage site.
 // OFFSET: LEGO1 0x10002710 STUB
-MxResult MxMatrix::DoSomethingWithLength(const MxVector3 *p_vec)
+MxResult MxMatrix::FUN_10002710(const MxVector3 *p_vec)
 {
   return FAILURE;
 }

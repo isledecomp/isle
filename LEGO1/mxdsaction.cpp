@@ -29,7 +29,7 @@ MxDSAction::MxDSAction()
   this->m_unk84 = 0;
   this->m_unk88 = 0;
   this->m_omni = NULL;
-  this->m_someTimingField = INT_MIN;
+  this->m_unkTimingField = INT_MIN;
 }
 
 // OFFSET: LEGO1 0x100ada80
@@ -55,7 +55,7 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   this->m_unk84 = p_dsAction.m_unk84;
   this->m_unk88 = p_dsAction.m_unk88;
   this->m_omni = p_dsAction.m_omni;
-  this->m_someTimingField = p_dsAction.m_someTimingField;
+  this->m_unkTimingField = p_dsAction.m_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100adc10
@@ -185,15 +185,15 @@ MxBool MxDSAction::HasId(MxU32 p_objectId)
 }
 
 // OFFSET: LEGO1 0x100ada40
-void MxDSAction::SetSomeTimingField(MxLong p_someTimingField)
+void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
 {
-  this->m_someTimingField = p_someTimingField;
+  this->m_unkTimingField = p_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100ada50
-MxLong MxDSAction::GetSomeTimingField()
+MxLong MxDSAction::GetUnkTimingField()
 {
-  return this->m_someTimingField;
+  return this->m_unkTimingField;
 }
 
 // Win32 defines GetCurrentTime to GetTickCount
@@ -202,7 +202,7 @@ MxLong MxDSAction::GetSomeTimingField()
 // OFFSET: LEGO1 0x100adcd0
 MxLong MxDSAction::GetCurrentTime()
 {
-  return Timer()->GetTime() - this->m_someTimingField;
+  return Timer()->GetTime() - this->m_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100ade60
