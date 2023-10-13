@@ -38,7 +38,7 @@ void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100c25a0
-MxResult MxMusicPresenter::AddToMusicManager()
+MxResult MxMusicPresenter::AddToManager()
 {
   MxResult result = FAILURE;
   if (MusicManager()) {

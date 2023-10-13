@@ -17,7 +17,7 @@ public:
   virtual void SetVolume(MxS32 p_volume); // vtable+2c
 
 private:
-  void LockedReinitialize(MxBool p_skipDestroy);
+  void Destroy(MxBool p_fromDestructor);
 
   static MxS32 g_unkCount;
 

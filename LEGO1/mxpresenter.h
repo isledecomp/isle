@@ -56,8 +56,8 @@ protected:
   __declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 
 public:
-  virtual undefined4 VTable0x34(); // vtable+0x34
-  virtual void InitVirtual(); // vtable+0x38
+  virtual MxResult AddToManager(); // vtable+0x34
+  virtual void Destroy(); // vtable+0x38
   __declspec(dllexport) virtual MxLong StartAction(MxStreamController *, MxDSAction *); // vtable+0x3c
   __declspec(dllexport) virtual void EndAction(); // vtable+0x40
   virtual void SetTickleState(TickleState p_tickleState); // vtable+0x44
