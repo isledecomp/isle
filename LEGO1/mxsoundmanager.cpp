@@ -24,7 +24,7 @@ void MxSoundManager::Init()
 }
 
 // OFFSET: LEGO1 0x100ae840
-void MxSoundManager::Destroy(MxBool p_param)
+void MxSoundManager::Destroy(MxBool p_fromDestructor)
 {
   if (this->m_thread) {
     this->m_thread->Terminate();
@@ -43,7 +43,7 @@ void MxSoundManager::Destroy(MxBool p_param)
   Init();
   this->m_criticalSection.Leave();
 
-  if (!p_param) {
+  if (!p_fromDestructor) {
     MxAudioManager::Destroy();
   }
 }

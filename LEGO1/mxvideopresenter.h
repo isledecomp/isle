@@ -31,9 +31,9 @@ public:
   }
 
   void Init();
-  void Destroy(MxBool);
+  void Destroy(MxBool p_fromDestructor);
 
-  virtual void InitVirtual() override; // vtable+0x38
+  virtual void Destroy() override; // vtable+0x38
 
   virtual void VTable0x5c(); // vtable+0x5c
   virtual void VTable0x60(); // vtable+0x60

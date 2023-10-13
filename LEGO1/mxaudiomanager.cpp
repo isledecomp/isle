@@ -14,7 +14,7 @@ MxAudioManager::MxAudioManager()
 // OFFSET: LEGO1 0x100b8d90
 MxAudioManager::~MxAudioManager()
 {
-  LockedReinitialize(TRUE);
+  Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x100b8df0
@@ -38,14 +38,14 @@ void MxAudioManager::SetVolume(MxS32 p_volume)
 }
 
 // OFFSET: LEGO1 0x100b8e00
-void MxAudioManager::LockedReinitialize(MxBool p_skipDestroy)
+void MxAudioManager::Destroy(MxBool p_fromDestructor)
 {
   this->m_criticalSection.Enter();
   g_unkCount--;
   Init();
   this->m_criticalSection.Leave();
 
-  if (!p_skipDestroy)
+  if (!p_fromDestructor)
     MxMediaManager::Destroy();
 }
 
@@ -74,5 +74,5 @@ MxResult MxAudioManager::InitPresenters()
 // OFFSET: LEGO1 0x100b8e90
 void MxAudioManager::Destroy()
 {
-  LockedReinitialize(FALSE);
+  Destroy(FALSE);
 }

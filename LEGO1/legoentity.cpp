@@ -46,7 +46,7 @@ MxResult LegoEntity::InitFromMxDSObject(MxDSObject& p_object)
 }
 
 // OFFSET: LEGO1 0x10010810 STUB
-void LegoEntity::Destroy(MxBool)
+void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
   if (m_unk54) {
     // TODO

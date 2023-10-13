@@ -20,7 +20,7 @@ public:
 
 private:
   void Init();
-  void Destroy(MxBool);
+  void Destroy(MxBool p_fromDestructor);
 
   undefined4 m_unk30;
   LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34

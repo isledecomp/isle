@@ -36,7 +36,7 @@ public:
   }
 
   virtual MxResult InitFromMxDSObject(MxDSObject& p_object); // vtable+0x18
-  virtual void Destroy(MxBool); // vtable+0x1c
+  virtual void Destroy(MxBool p_fromDestructor); // vtable+0x1c
   virtual void ParseAction(char *); // vtable+0x20
 
 protected:

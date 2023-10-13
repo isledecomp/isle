@@ -33,7 +33,7 @@ MxVideoPresenter::~MxVideoPresenter()
 }
 
 // OFFSET: LEGO1 0x1000c7a0 STUB
-void MxVideoPresenter::InitVirtual()
+void MxVideoPresenter::Destroy()
 {
   // TODO
 }
@@ -71,7 +71,7 @@ void MxVideoPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100b27b0 STUB
-void MxVideoPresenter::Destroy(MxBool)
+void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
   // TODO
 }

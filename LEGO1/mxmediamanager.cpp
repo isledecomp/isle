@@ -99,22 +99,3 @@ void MxMediaManager::StopPresenters()
   while (cursor.Next(presenter))
     presenter->EndAction();
 }
-
-// OFFSET: LEGO1 0x100c0460
-void MxMediaManager::TerminateThread(MxBool p_reinit)
-{
-  if(m_thread != NULL)
-  {
-    m_thread->Terminate();
-    delete m_thread;
-  }
-  else
-  {
-    TickleManager()->UnregisterClient(this);
-  }
-
-  if(!p_reinit)
-  {
-    MxMediaManager::Destroy();
-  }
-}
