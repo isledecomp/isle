@@ -33,7 +33,7 @@ public:
   virtual void StreamingTickle() override;
   virtual void RepeatingTickle() override;
   virtual void DoneTickle() override;
-  virtual void InitVirtual() override;
+  virtual void Destroy() override;
   virtual MxLong StartAction(MxStreamController *, MxDSAction *) override;
   virtual void EndAction() override;
   virtual void Enable(MxBool p_enable) override;
@@ -43,10 +43,9 @@ public:
   undefined4 m_unk44;
   undefined4 m_unk48;
   undefined4 m_unk4c;
-protected:
-  void Destroy(MxBool);
 private:
   void Init();
+  void Destroy(MxBool p_fromDestructor);
 
 };
 

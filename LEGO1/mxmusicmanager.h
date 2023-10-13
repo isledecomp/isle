@@ -17,7 +17,7 @@ public:
   virtual MxResult StartMIDIThread(MxU32 p_frequencyMS, MxU8 p_noRegister); // vtable+30
 
 private:
-  void LockedReinitialize(MxBool p_skipDestroy);
+  void Destroy(MxBool p_fromDestructor);
   void DeinitializeMIDI();
 
   MxS32 CalculateVolume(MxS32 p_volume);

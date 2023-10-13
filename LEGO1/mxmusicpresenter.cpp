@@ -24,7 +24,7 @@ void MxMusicPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100c2550
-void MxMusicPresenter::Destroy(MxBool p_reinit)
+void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 {
   if (MusicManager()) {
     MusicManager()->RemovePresenter(*this);
@@ -32,8 +32,8 @@ void MxMusicPresenter::Destroy(MxBool p_reinit)
   m_criticalSection.Enter();
   Init();
   m_criticalSection.Leave();
-  if (!p_reinit) {
-    MxMediaPresenter::Destroy(FALSE);
+  if (!p_fromDestructor) {
+    MxMediaPresenter::Destroy();
   }
 }
 
@@ -49,7 +49,7 @@ MxResult MxMusicPresenter::AddToMusicManager()
 } 
 
 // OFFSET: LEGO1 0x100c25d0
-void MxMusicPresenter::InitVirtual()
+void MxMusicPresenter::Destroy()
 {
   Destroy(FALSE);
 }

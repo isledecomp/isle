@@ -25,7 +25,7 @@ void MxMediaPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100b54f0 STUB
-void MxMediaPresenter::Destroy(MxBool p_destroy)
+void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 {
   // TODO
 }
@@ -57,7 +57,7 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 }
 
 // OFFSET: LEGO1 0x1000c5b0
-void MxMediaPresenter::InitVirtual()
+void MxMediaPresenter::Destroy()
 {
   Destroy(FALSE);
 }
