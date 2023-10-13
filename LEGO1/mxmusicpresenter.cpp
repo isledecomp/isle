@@ -49,7 +49,7 @@ MxResult MxMusicPresenter::AddToMusicManager()
 } 
 
 // OFFSET: LEGO1 0x100c25d0
-void MxMusicPresenter::DestroyPermanent()
+void MxMusicPresenter::InitVirtual()
 {
   Destroy(FALSE);
 }
