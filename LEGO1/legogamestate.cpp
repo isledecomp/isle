@@ -143,9 +143,9 @@ MxResult LegoGameState::Save(MxULong p_slot)
     if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE) {
       MxU32 maybeVersion = 0x1000C;
       fileStream.Write(&maybeVersion, 4);
-      fileStream.Write(&m_secondThingWritten, 2);
-      fileStream.Write(&m_someEnumState, 2);
-      fileStream.Write(&m_someModeSwitch, 1);
+      fileStream.Write(&m_unk24, 2);
+      fileStream.Write(&m_unk10, 2);
+      fileStream.Write(&m_unkC, 1);
 
       for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
         if (LegoStream::WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)

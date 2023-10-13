@@ -36,7 +36,7 @@ public:
 
   // vtable + 0x40
   virtual void ToQuaternion(MxVector4 *p_resultQuat);
-  virtual MxResult DoSomethingWithLength(const MxVector3 *p_vec);
+  virtual MxResult FUN_10002710(const MxVector3 *p_vec);
 
 private:
   float *m_data;

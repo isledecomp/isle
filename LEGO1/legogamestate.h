@@ -42,14 +42,14 @@ private:
   char *m_savePath; // 0x0
   MxS16 m_stateCount;
   LegoState **m_stateArray;
-  MxU8 m_someModeSwitch;
-  MxU32 m_someEnumState;
+  MxU8 m_unkC;
+  MxU32 m_unk10;
   undefined4 m_unk0x14;
   LegoBackgroundColor *m_backgroundColor; // 0x18
   LegoBackgroundColor *m_tempBackgroundColor; // 0x1c
   LegoFullScreenMovie *m_fullScreenMovie; // 0x20
-  MxU16 m_secondThingWritten;
-  undefined m_unk24[1032];
+  MxU16 m_unk24; // 0x24
+  undefined m_unk28[1032];
 };
 
 #endif // LEGOGAMESTATE_H

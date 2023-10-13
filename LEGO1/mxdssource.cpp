@@ -1,9 +1,9 @@
 #include "mxdssource.h"
 
 // OFFSET: LEGO1 0x100bffd0
-void MxDSSource::SomethingWhichCallsRead(void* pUnknownObject)
+void MxDSSource::FUN_100bffd0(void* p_unk)
 {
-  // TODO: Calls read, reading into a buffer somewhere in pUnknownObject.
+  // TODO: Calls read, reading into a buffer somewhere in p_unk.
   Read(NULL, 0);
 }
 
