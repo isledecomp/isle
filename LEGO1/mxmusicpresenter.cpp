@@ -33,7 +33,7 @@ void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
   Init();
   m_criticalSection.Leave();
   if (!p_fromDestructor) {
-    MxMediaPresenter::Destroy();
+    MxMediaPresenter::Destroy(FALSE);
   }
 }
 

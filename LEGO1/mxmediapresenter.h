@@ -45,6 +45,7 @@ public:
   undefined4 m_unk4c;
 private:
   void Init();
+protected:
   void Destroy(MxBool p_fromDestructor);
 
 };
