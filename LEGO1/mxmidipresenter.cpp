@@ -1,6 +1,8 @@
 #include "mxmidipresenter.h"
 
 #include "decomp.h"
+#include "legoomni.h"
+#include "mxmusicmanager.h"
 
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
 
@@ -22,7 +24,15 @@ void MxMIDIPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100c2830 STUB
-void MxMIDIPresenter::Destroy(MxBool p_param)
+void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x100c2940
+void MxMIDIPresenter::EndMIDIAction()
+{
+  if(!MusicManager()->m_MIDIInitialized) {
+    this->EndAction();
+  }
 }

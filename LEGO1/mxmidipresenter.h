@@ -23,6 +23,8 @@ public:
     return !strcmp(name, MxMIDIPresenter::ClassName()) || MxMusicPresenter::IsA(name);
   }
 
+  virtual void EndMIDIAction(); // vtable+0x2a
+
 private:
   void Init();
   void Destroy(MxBool);

@@ -24,7 +24,9 @@ private:
   void SetMIDIVolume();
 
   HMIDISTRM m_MIDIStreamH;  // 0x30
+public:
   MxBool m_MIDIInitialized; // 0x34
+private:
   undefined4 m_unk38;       // 0x38
   undefined4 m_unk3c;       // 0x3c
   undefined4 m_unk40;       // 0x40
