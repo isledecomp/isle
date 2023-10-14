@@ -228,8 +228,73 @@ done:
   return status;
 }
 
-// OFFSET: LEGO1 0x100bebe0 STUB
-MxResult MxVideoManager::vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2)
+// OFFSET: LEGO1 0x100be820
+MxResult MxVideoManager::vtable0x2c(
+    MxVideoParam &p_videoParam,
+    MxU32 p_frequencyMS,
+    MxBool p_createThread)
 {
-  return FAILURE;
+  MxBool locked = FALSE;
+  MxResult status = FAILURE;
+
+  m_unk60 = TRUE;
+
+  if (MxMediaManager::InitPresenters() != SUCCESS)
+    goto done;
+
+  m_criticalSection.Enter();
+  locked = TRUE;
+
+  m_videoParam = p_videoParam;
+  m_region = new MxRegion();
+
+  if (!m_region)
+    goto done;
+
+  if (DirectDrawCreate(NULL, &m_pDirectDraw, NULL) != DD_OK)
+    goto done;
+
+  if (m_pDirectDraw->SetCooperativeLevel(MxOmni::GetInstance()->GetWindowHandle(), DDSCL_NORMAL) != DD_OK)
+    goto done;
+
+  MxPalette *palette;
+  if (p_videoParam.GetPalette() == NULL) {
+    palette = new MxPalette();
+    m_videoParam.SetPalette(palette);
+
+    if (!palette)
+      goto done;
+  }
+  else {
+    palette = p_videoParam.GetPalette()->Clone();
+    m_videoParam.SetPalette(palette);
+
+    if (!palette)
+      goto done;
+  }
+
+  m_displaySurface = new MxDisplaySurface();
+  if (m_displaySurface && m_displaySurface->Create(m_videoParam) == SUCCESS) {
+    m_displaySurface->SetPalette(m_videoParam.GetPalette());
+
+    if (p_createThread) {
+      m_thread = new MxTickleThread(this, p_frequencyMS);
+
+      if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+        goto done;
+    }
+    else
+      TickleManager()->RegisterClient(this, p_frequencyMS);
+
+    status = SUCCESS;
+  }
+
+done:
+  if (status != SUCCESS)
+    Destroy();
+
+  if (locked)
+    m_criticalSection.Leave();
+
+  return status;
 }
