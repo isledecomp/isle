@@ -127,34 +127,34 @@ void MxTransitionManager::Transition_Dissolve()
   memset(&ddsd, 0, sizeof(ddsd));
   ddsd.dwSize = sizeof(ddsd);
 
-  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
   if (res == DDERR_SURFACELOST) {
     m_ddSurface->Restore();
-    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+    res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
   }
 
   if (res == DD_OK) {
     SubmitCopyRect(&ddsd);
 
-    for (MxS32 i = 0; i < 640; i++) {
+    for (MxS32 col = 0; col < 640; col++) {
       // Select 16 columns on each tick
-      if (m_animationTimer * 16 > m_columnOrder[i])
+      if (m_animationTimer * 16 > m_columnOrder[col])
         continue;
 
-      if (m_animationTimer * 16 + 15 < m_columnOrder[i])
+      if (m_animationTimer * 16 + 15 < m_columnOrder[col])
         continue;
 
-      for (MxS32 j = 0; j < 480; j++) {
+      for (MxS32 row = 0; row < 480; row++) {
         // Shift the chosen column a different amount at each scanline.
         // We use the same shift for that scanline each time.
         // By the end, every pixel gets hit.
-        MxS32 ofs = (m_randomShift[j] + i) % 640;
+        MxS32 x_shift = (m_randomShift[row] + col) % 640;
 
         // Set the chosen pixel to black
         if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
-          ((MxU8*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
+          ((MxU8*)ddsd.lpSurface)[row * ddsd.lPitch + x_shift] = 0;
         } else {
-          ((MxU16*)ddsd.lpSurface)[j * ddsd.lPitch + ofs] = 0;
+          ((MxU16*)ddsd.lpSurface)[row * ddsd.lPitch + x_shift] = 0;
         }
       }
     }
@@ -164,7 +164,7 @@ void MxTransitionManager::Transition_Dissolve()
 
     if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
       LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
-      surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, 0x10);
+      surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
     }
 
     m_animationTimer++;
@@ -230,10 +230,121 @@ void MxTransitionManager::Transition_None()
   EndTransition(TRUE);
 }
 
-// OFFSET: LEGO1 0x1004bed0 STUB
+// OFFSET: LEGO1 0x1004bed0
 void MxTransitionManager::Transition_Pixelation()
 {
-  // TODO
+  if (m_animationTimer == 16) {
+    m_animationTimer = 0;
+    EndTransition(TRUE);
+    return;
+  }
+
+  if (m_animationTimer == 0) {
+    // Same init/shuffle steps as the dissolve transition, except that
+    // we are using big blocky pixels and only need 64 columns.
+    for (MxS32 i = 0; i < 64; i++) {
+      m_columnOrder[i] = i;
+    }
+
+    for (i = 0; i < 64; i++) {
+      MxS32 swap = rand() % 64;
+      MxU16 t = m_columnOrder[i];
+      m_columnOrder[i] = m_columnOrder[swap];
+      m_columnOrder[swap] = t;
+    }
+
+    // The same is true here. We only need 48 rows.
+    for (i = 0; i < 48; i++) {
+      m_randomShift[i] = rand() % 64;
+    }
+  }
+
+  // Run one tick of the animation
+  DDSURFACEDESC ddsd;
+  memset(&ddsd, 0, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  }
+
+  if (res == DD_OK) {
+    SubmitCopyRect(&ddsd);
+
+    for (MxS32 col = 0; col < 64; col++) {
+      // Select 4 columns on each tick
+      if (m_animationTimer * 4 > m_columnOrder[col])
+        continue;
+
+      if (m_animationTimer * 4 + 3 < m_columnOrder[col])
+        continue;
+
+      for (MxS32 row = 0; row < 48; row++) {
+        MxS32 x_shift = 10 * ((m_randomShift[row] + col) % 64);
+        
+        // To do the pixelation, we subdivide the 640x480 surface into
+        // 10x10 pixel blocks. At the chosen block, we sample the top-leftmost
+        // color and set the other 99 pixels to that value.
+
+        // Find the pixel to sample
+        MxS32 sample_ofs = 10 * row * ddsd.lPitch + x_shift;
+        MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
+
+        // Save this cast from void* to save time.
+        // Seems to help accuracy doing it this way.
+        MxU8 *surface = (MxU8*)ddsd.lpSurface;
+        MxU8 *source = surface + sample_ofs * bytesPerPixel;
+
+        MxU32 sample = bytesPerPixel == 1 ? *source
+                                          : *(MxU16*)source;
+
+        for (MxS32 k = 10*row; k < 10*row + 10; k++) {
+          if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
+            // TODO: This block and the next don't match, but they are
+            // hopefully correct in principle.
+            MxU16 color_word = MAKEWORD(LOBYTE(sample), LOBYTE(sample));
+            MxU32 new_color = MAKELONG(color_word, color_word);
+            
+            MxU8 *pos = surface + k * ddsd.lPitch + x_shift;
+            MxU32 *dest = (MxU32*)pos;            
+            
+            // Sets 10 pixels (10 bytes)
+            dest[0] = new_color;
+            dest[1] = new_color;
+            MxU16 *half = (MxU16*)(dest+2);
+            *half = new_color;
+          } else {
+            MxU32 new_color = MAKELONG(sample, sample);
+
+            // You might expect a cast to MxU16* instead, but lPitch is
+            // bytes/scanline, not pixels/scanline. Therefore, we just
+            // need to double the x_shift to get to the right spot.
+            MxU8 *pos = surface + k * ddsd.lPitch + 2*x_shift;
+            MxU32 *dest = (MxU32*)pos;
+            // Sets 10 pixels (20 bytes)
+            dest[0] = new_color;
+            dest[1] = new_color;
+            dest[2] = new_color;
+            dest[3] = new_color;
+            dest[4] = new_color;
+          }
+        }
+      }
+    }
+
+    SetupCopyRect(&ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+
+    if (VideoManager()->GetVideoParam().flags().GetFlipSurfaces()) {
+      LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
+      surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
+    }
+
+    m_animationTimer++;
+  }
+
 }
 
 
@@ -263,10 +374,10 @@ void MxTransitionManager::Transition_Wipe()
   memset(&ddsd, 0, sizeof(ddsd));
   ddsd.dwSize = sizeof(ddsd);
 
-  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
   if (res == DDERR_SURFACELOST) {
     m_ddSurface->Restore();
-    res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+    res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
   }
 
   if (res == DD_OK) {
