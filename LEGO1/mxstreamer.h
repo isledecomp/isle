@@ -90,7 +90,7 @@ public:
     return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);
   }
 
-  virtual MxResult Init(); // vtable+0x14
+  virtual MxResult Create(); // vtable+0x14
 
   MxStreamController *GetOpenStream(const char *p_name);
 

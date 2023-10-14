@@ -49,9 +49,9 @@ void MxSoundManager::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100ae8b0 STUB
-MxResult MxSoundManager::StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2)
+MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
-  // TODO STUB
+  // TODO
   return FAILURE;
 }
 

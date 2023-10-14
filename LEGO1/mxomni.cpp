@@ -189,118 +189,87 @@ void MxOmni::SetInstance(MxOmni *instance)
 MxResult MxOmni::Create(MxOmniCreateParam &p)
 {
   MxResult result = FAILURE;
-  m_atomIdCounterSet = new MxAtomIdCounterSet();
-  if (m_atomIdCounterSet == NULL)
-  {
-    goto failure;
-  }
+
+  if (!(m_atomIdCounterSet = new MxAtomIdCounterSet()))
+    goto done;
+
   m_mediaPath = p.GetMediaPath();
   m_windowHandle = p.GetWindowHandle();
-  if (p.CreateFlags().CreateObjectFactory())
-  {
-    MxObjectFactory *objectFactory = new MxObjectFactory();
-    this->m_objectFactory = objectFactory;
 
-    if (objectFactory == NULL)
-      goto failure;
+  if (p.CreateFlags().CreateObjectFactory()) {
+    if (!(m_objectFactory = new MxObjectFactory()))
+      goto done;
   }
 
-  if (p.CreateFlags().CreateVariableTable())
-  {
-    MxVariableTable *variableTable = new MxVariableTable();
-    this->m_variableTable = variableTable;
-
-    if (variableTable == NULL)
-      goto failure;
+  if (p.CreateFlags().CreateVariableTable()) {
+    if (!(m_variableTable = new MxVariableTable()))
+      goto done;
   }
 
-  if (p.CreateFlags().CreateTimer())
-  {
-    MxTimer *timer = new MxTimer();
-    this->m_timer = timer;
-
-    if (timer == NULL)
-      return FAILURE;
+  if (p.CreateFlags().CreateTimer()) {
+    if (!(m_timer = new MxTimer()))
+      goto done;
   }
 
-  if (p.CreateFlags().CreateTickleManager())
-  {
-    this->m_tickleManager = new MxTickleManager();
-
-    if (m_tickleManager == NULL)
-      goto failure;
+  if (p.CreateFlags().CreateTickleManager()) {
+    if (!(m_tickleManager = new MxTickleManager()))
+      goto done;
   }
 
-  if (p.CreateFlags().CreateNotificationManager())
-  {
-    MxNotificationManager *notificationManager = new MxNotificationManager();
-    this->m_notificationManager = notificationManager;
-
-    if (notificationManager == NULL || notificationManager->Create(100, 0) != SUCCESS)
-      goto failure;
-  }
-
-  if (p.CreateFlags().CreateStreamer())
-  {
-    MxStreamer *streamer = new MxStreamer();
-    this->m_streamer = streamer;
-
-    if (streamer == NULL || streamer->Init() != SUCCESS)
-      goto failure;
-  }
-
-  if (p.CreateFlags().CreateVideoManager())
-  {
-    MxVideoManager *videoManager = new MxVideoManager();
-    this->m_videoManager = videoManager;
-
-    if (videoManager && videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
-      delete m_videoManager;
-      m_videoManager = NULL;
+  if (p.CreateFlags().CreateNotificationManager()) {
+    if (m_notificationManager = new MxNotificationManager()) {
+      if (m_notificationManager->Create(100, 0) != SUCCESS)
+        goto done;
     }
   }
 
-  if (p.CreateFlags().CreateSoundManager())
-  {
-    MxSoundManager *soundManager = new MxSoundManager();
-    this->m_soundManager = soundManager;
-
-    //TODO
-    if (soundManager != NULL && soundManager->StartDirectSound(10, 0) != SUCCESS)
-    {
-      delete m_soundManager;
-      m_soundManager = NULL;
+  if (p.CreateFlags().CreateStreamer()) {
+    if (m_streamer = new MxStreamer()) {
+      if (m_streamer->Create() != SUCCESS)
+        goto done;
     }
   }
 
-  if (p.CreateFlags().CreateMusicManager())
-  {
-    MxMusicManager *musicManager = new MxMusicManager();
-    this->m_musicManager = musicManager;
-    if (musicManager != NULL && musicManager->StartMIDIThread(50, 0) != SUCCESS)
-    {
-      delete m_musicManager;
-      m_musicManager = NULL;
+  if (p.CreateFlags().CreateVideoManager()) {
+    if (m_videoManager = new MxVideoManager()) {
+      if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+        delete m_videoManager;
+        m_videoManager = NULL;
+      }
     }
   }
 
-  if (p.CreateFlags().CreateEventManager())
-  {
-    MxEventManager *eventManager = new MxEventManager();
-    this->m_eventManager = eventManager;
-    if (m_eventManager != NULL && m_eventManager->CreateEventThread(50, 0) != SUCCESS)
-    {
-      delete m_eventManager;
-      m_eventManager = NULL;
+  if (p.CreateFlags().CreateSoundManager()) {
+    if (m_soundManager = new MxSoundManager()) {
+      if (m_soundManager->Create(10, 0) != SUCCESS) {
+        delete m_soundManager;
+        m_soundManager = NULL;
+      }
+    }
+  }
+
+  if (p.CreateFlags().CreateMusicManager()) {
+    if (m_musicManager = new MxMusicManager()) {
+      if (m_musicManager->Create(50, 0) != SUCCESS) {
+        delete m_musicManager;
+        m_musicManager = NULL;
+      }
+    }
+  }
+
+  if (p.CreateFlags().CreateEventManager()) {
+    if (m_eventManager = new MxEventManager()) {
+      if (m_eventManager->Create(50, 0) != SUCCESS) {
+        delete m_eventManager;
+        m_eventManager = NULL;
+      }
     }
   }
 
   result = SUCCESS;
-  failure:
+done:
   if (result != SUCCESS)
-  {
     Destroy();
-  }
 
   return result;
 }
