@@ -7,7 +7,8 @@
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
 
 // OFFSET: LEGO1 0x100c25e0
-MxMIDIPresenter::MxMIDIPresenter() {
+MxMIDIPresenter::MxMIDIPresenter()
+{
   Init();
 }
 
@@ -30,9 +31,9 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100c2940
-void MxMIDIPresenter::EndMIDIAction()
+void MxMIDIPresenter::DoneTickle()
 {
-  if(!MusicManager()->m_MIDIInitialized) {
+  if (!MusicManager()->GetMIDIInitialized()) {
     this->EndAction();
   }
 }
