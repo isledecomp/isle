@@ -254,8 +254,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
     MxVideoManager *videoManager = new MxVideoManager();
     this->m_videoManager = videoManager;
 
-    if (videoManager != NULL && videoManager->vtable0x2c(p.GetVideoParam(), 100, 0) != SUCCESS)
-    {
+    if (videoManager && videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
       delete m_videoManager;
       m_videoManager = NULL;
     }
