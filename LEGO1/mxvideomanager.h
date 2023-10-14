@@ -11,7 +11,7 @@
 class MxVideoManager : public MxMediaManager
 {
 public:
-  virtual ~MxVideoManager();
+  virtual ~MxVideoManager() override;
 
   virtual MxResult Tickle() override; // vtable+0x8
   virtual void Destroy() override; // vtable+0x18
