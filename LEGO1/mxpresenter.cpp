@@ -125,8 +125,8 @@ MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
   const MxVector3Data& location = this->m_action->GetLocation();
   MxS32 previousTickleState = this->m_currentTickleState;
 
-  this->m_location = MxPoint32(location[0], location[1]);
-  this->m_displayZ = location[2];
+  this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);
+  this->m_displayZ = this->m_action->GetLocation()[2];
   this->m_previousTickleStates |= 1 << (unsigned char)previousTickleState;
   this->m_currentTickleState = TickleState_Ready;
 
