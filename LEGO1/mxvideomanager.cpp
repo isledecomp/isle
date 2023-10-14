@@ -1,6 +1,8 @@
 #include "mxvideomanager.h"
 #include "mxautolocker.h"
 #include "mxpresenter.h"
+#include "mxticklemanager.h"
+#include "legoomni.h"
 
 // OFFSET: LEGO1 0x100be1f0
 MxVideoManager::MxVideoManager()
@@ -8,10 +10,10 @@ MxVideoManager::MxVideoManager()
   Init();
 }
 
-// OFFSET: LEGO1 0x100be2a0 STUB
+// OFFSET: LEGO1 0x100be2a0
 MxVideoManager::~MxVideoManager()
 {
-  // TODO
+  Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x100bea90
@@ -48,6 +50,41 @@ MxResult MxVideoManager::Init()
   this->m_videoParam.SetPalette(NULL);
   this->m_unk60 = FALSE;
   return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x100be340
+void MxVideoManager::Destroy(MxBool p_fromDestructor)
+{
+  if (m_thread) {
+    m_thread->Terminate();
+    delete m_thread;
+  }
+  else
+    TickleManager()->UnregisterClient(this);
+
+  m_criticalSection.Enter();
+
+  if (m_displaySurface)
+    delete m_displaySurface;
+
+  if (m_region)
+    delete m_region;
+
+  if (m_videoParam.GetPalette())
+    delete m_videoParam.GetPalette();
+
+  if (m_unk60) {
+    if (m_pDirectDraw)
+      m_pDirectDraw->Release();
+    if (m_pDDSurface)
+      m_pDDSurface->Release();
+  }
+
+  Init();
+  m_criticalSection.Leave();
+
+  if (!p_fromDestructor)
+    MxMediaManager::Destroy();
 }
 
 // OFFSET: LEGO1 0x100be440
@@ -87,6 +124,12 @@ void MxVideoManager::SortPresenterList()
 void MxVideoManager::UpdateRegion()
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x100bea50
+void MxVideoManager::Destroy()
+{
+  Destroy(FALSE);
 }
 
 // OFFSET: LEGO1 0x100bea60 STUB
