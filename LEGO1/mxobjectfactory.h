@@ -38,7 +38,7 @@ public:
   }
 
   virtual MxCore *Create(const char *p_name); // vtable 0x14
-  virtual void Destroy(void *p_object); // vtable 0x18
+  virtual void Destroy(MxCore *p_object); // vtable 0x18
 private:
 #define X(V) MxAtomId m_id##V;
   FOR_MXOBJECTFACTORY_OBJECTS(X)

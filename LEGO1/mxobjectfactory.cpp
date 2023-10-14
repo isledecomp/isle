@@ -41,7 +41,7 @@ MxCore *MxObjectFactory::Create(const char *p_name)
 }
 
 // OFFSET: LEGO1 0x100b1a30
-void MxObjectFactory::Destroy(void *p_object)
+void MxObjectFactory::Destroy(MxCore *p_object)
 {
-  delete (MxCore*)p_object;
+  delete p_object;
 }
