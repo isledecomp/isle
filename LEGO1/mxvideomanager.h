@@ -14,6 +14,7 @@ public:
   virtual ~MxVideoManager();
 
   virtual MxResult Tickle() override; // vtable+0x8
+  virtual void Destroy() override; // vtable+0x18
   virtual void vtable0x28(); // vtable+0x28 (TODO ARGUMENTS)
   virtual MxResult vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2); // vtable+0x2c
 
@@ -23,6 +24,7 @@ public:
   MxVideoManager();
 
   MxResult Init();
+  void Destroy(MxBool p_fromDestructor);
   void SortPresenterList();
   void UpdateRegion();
 

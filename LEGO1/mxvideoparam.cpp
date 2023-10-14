@@ -65,11 +65,11 @@ MxVideoParam &MxVideoParam::operator=(const MxVideoParam &p_videoParam)
 void MxVideoParam::SetDeviceName(char *id)
 {
   if (this->m_deviceId != 0)
-    free(this->m_deviceId);
+    delete[] this->m_deviceId;
 
   if (id != 0)
   {
-    this->m_deviceId = (char *)malloc(strlen(id) + 1);
+    this->m_deviceId = new char[strlen(id) + 1];
 
     if (this->m_deviceId != 0) {
       strcpy(this->m_deviceId, id);
@@ -84,5 +84,5 @@ void MxVideoParam::SetDeviceName(char *id)
 MxVideoParam::~MxVideoParam()
 {
   if (this->m_deviceId != 0)
-    free(this->m_deviceId);
+    delete[] this->m_deviceId;
 }
