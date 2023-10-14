@@ -8,6 +8,7 @@ class MxMIDIPresenter : public MxMusicPresenter
 {
 public:
   MxMIDIPresenter();
+  virtual ~MxMIDIPresenter() override;
 
   // OFFSET: LEGO1 0x100c2650
   inline virtual const char *ClassName() const override // vtable+0xc
@@ -22,8 +23,12 @@ public:
     return !strcmp(name, MxMIDIPresenter::ClassName()) || MxMusicPresenter::IsA(name);
   }
 
+  virtual void DoneTickle() override; // vtable+0x2c
+
 private:
   void Init();
+  void Destroy(MxBool);
+
   undefined4 m_unk54;
 };
 
