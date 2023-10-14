@@ -28,7 +28,7 @@ public:
   virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x2c
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
-  __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
+  __declspec(dllexport) virtual MxResult RealizePalette(MxPalette *); // vtable+0x30
 
   MxVideoManager();
 

@@ -139,7 +139,7 @@ void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
 }
 
 // OFFSET: LEGO1 0x100bebe0
-MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
+MxResult MxVideoManager::RealizePalette(MxPalette *p_palette)
 {
   PALETTEENTRY paletteEntries[256];
 
@@ -152,7 +152,7 @@ MxLong MxVideoManager::RealizePalette(MxPalette *p_palette)
   }
 
   this->m_criticalSection.Leave();
-  return 0;
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100be600
