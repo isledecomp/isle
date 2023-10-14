@@ -28,8 +28,8 @@ MxObjectFactory::MxObjectFactory()
 // OFFSET: LEGO1 0x100b12c0
 MxCore *MxObjectFactory::Create(const char *p_name)
 {
-  MxAtomId atom(p_name, LookupMode_Exact);
   MxCore* object = NULL;
+  MxAtomId atom(p_name, LookupMode_Exact);
 
   if (0) {}
 #define X(V) else if (this->m_id##V == atom) { object = new V; }
