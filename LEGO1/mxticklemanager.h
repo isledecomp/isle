@@ -53,14 +53,13 @@ private:
   MxU16 m_flags; // 0xc
 };
 
-class MxTickleClientPtrList : public list<MxTickleClient *>
-{};
+typedef list<MxTickleClient*> MxTickleClientPtrList;
 
 // VTABLE 0x100d86d8
 class MxTickleManager : public MxCore
 {
 public:
-  inline MxTickleManager() : MxCore(), m_clients() {}
+  inline MxTickleManager() {}
   virtual ~MxTickleManager(); // vtable+0x0 (scalar deleting destructor)
 
   virtual MxResult Tickle(); // vtable+0x8
