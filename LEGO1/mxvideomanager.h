@@ -15,7 +15,16 @@ public:
 
   virtual MxResult Tickle() override; // vtable+0x8
   virtual void Destroy() override; // vtable+0x18
-  virtual void vtable0x28(); // vtable+0x28 (TODO ARGUMENTS)
+  virtual MxResult vtable0x28(
+    MxVideoParam& p_videoParam,
+    LPDIRECTDRAW p_pDirectDraw,
+    LPDIRECTDRAWSURFACE p_pDDSurface,
+    LPDIRECTDRAWSURFACE p_ddSurface1,
+    LPDIRECTDRAWSURFACE p_ddSurface2,
+    LPDIRECTDRAWCLIPPER p_ddClipper,
+    MxU32 p_frequencyMS,
+    MxBool p_createThread
+  ); // vtable+0x28
   virtual MxResult vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2); // vtable+0x2c
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
