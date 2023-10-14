@@ -72,6 +72,7 @@ add_library(lego1 SHARED
   LEGO1/legojetski.cpp
   LEGO1/legoloadcachesoundpresenter.cpp
   LEGO1/legolocomotionanimpresenter.cpp
+  LEGO1/legometerpresenter.cpp
   LEGO1/legomodelpresenter.cpp
   LEGO1/legonavcontroller.cpp
   LEGO1/legoobjectfactory.cpp
