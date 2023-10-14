@@ -49,17 +49,16 @@ MxResult MxEventManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
       locked = TRUE;
       this->m_thread = new MxTickleThread(this, p_frequencyMS);
 
-      if (this->m_thread) {
-        if (this->m_thread->Start(0, 0) == SUCCESS)
-          status = SUCCESS;
-      }
+      if (!this->m_thread || this->m_thread->Start(0, 0) != SUCCESS)
+        goto done;
     }
-    else {
+    else
       TickleManager()->RegisterClient(this, p_frequencyMS);
-      status = SUCCESS;
-    }
+
+    status = SUCCESS;
   }
 
+done:
   if (status != SUCCESS)
     Destroy();
 
