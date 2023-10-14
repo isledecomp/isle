@@ -229,7 +229,7 @@ done:
 }
 
 // OFFSET: LEGO1 0x100be820
-MxResult MxVideoManager::vtable0x2c(
+MxResult MxVideoManager::Create(
     MxVideoParam &p_videoParam,
     MxU32 p_frequencyMS,
     MxBool p_createThread)
