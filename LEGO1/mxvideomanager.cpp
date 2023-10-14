@@ -55,7 +55,7 @@ MxResult MxVideoManager::Init()
 // OFFSET: LEGO1 0x100be340
 void MxVideoManager::Destroy(MxBool p_fromDestructor)
 {
-  if (m_thread != NULL) {
+  if (m_thread) {
     m_thread->Terminate();
     delete m_thread;
   }
