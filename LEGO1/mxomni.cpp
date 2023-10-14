@@ -221,13 +221,13 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
       if (m_notificationManager->Create(100, 0) != SUCCESS)
         goto done;
     }
+    else
+      goto done;
   }
 
   if (p.CreateFlags().CreateStreamer()) {
-    if (m_streamer = new MxStreamer()) {
-      if (m_streamer->Create() != SUCCESS)
-        goto done;
-    }
+    if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS) 
+      goto done;
   }
 
   if (p.CreateFlags().CreateVideoManager()) {
