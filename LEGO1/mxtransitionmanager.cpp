@@ -318,7 +318,10 @@ void MxTransitionManager::Transition_Pixelation()
           } else {
             MxU32 new_color = MAKELONG(sample, sample);
 
-            MxU8 *pos = surface + k * ddsd.lPitch + x_shift;
+            // You might expect a cast to MxU16* instead, but lPitch is
+            // bytes/scanline, not pixels/scanline. Therefore, we just
+            // need to double the x_shift to get to the right spot.
+            MxU8 *pos = surface + k * ddsd.lPitch + 2*x_shift;
             MxU32 *dest = (MxU32*)pos;
             // Sets 10 pixels (20 bytes)
             dest[0] = new_color;
