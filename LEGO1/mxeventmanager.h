@@ -13,7 +13,7 @@ public:
   virtual ~MxEventManager() override;
 
   virtual void Destroy() override; // vtable+18
-  virtual MxResult CreateEventThread(MxU32 p_frequencyMS, MxBool p_noRegister); // vtable+28
+  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+28
 
 private:
   void Init();

@@ -15,7 +15,7 @@ public:
   MxString(const char *);
   void ToUpperCase();
   void ToLowerCase();
-  MxString&  operator=(MxString &);
+  MxString&  operator=(const MxString &);
   MxString   operator+(const char *);
   MxString& operator+=(const char *);
 

@@ -72,7 +72,7 @@ MxResult MxNotificationManager::Tickle()
 }
 
 // OFFSET: LEGO1 0x100ac600
-MxResult MxNotificationManager::Create(MxS32 p_unk1, MxS32 p_unk2)
+MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
   MxResult result = SUCCESS;
   m_queue = new MxNotificationPtrList();

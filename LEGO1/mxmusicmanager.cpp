@@ -120,7 +120,7 @@ void MxMusicManager::SetVolume(MxS32 p_volume)
 }
 
 // OFFSET: LEGO1 0x100c0840
-MxResult MxMusicManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_createThread)
+MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
   MxResult status = FAILURE;
   MxBool locked = FALSE;
