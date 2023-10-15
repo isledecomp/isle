@@ -348,10 +348,51 @@ void MxTransitionManager::Transition_Pixelation()
 }
 
 
-// OFFSET: LEGO1 0x1004c270 STUB
+// OFFSET: LEGO1 0x1004c270
 void MxTransitionManager::Transition_Windows()
 {
-  // TODO
+  if (m_animationTimer == 240) {
+    m_animationTimer = 0;
+    EndTransition(TRUE);
+    return;
+  }
+
+  DDSURFACEDESC ddsd;
+  ZeroMemory(&ddsd, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+  }
+
+  if (res == DD_OK) {
+    SubmitCopyRect(&ddsd);
+
+    MxS32 widthInPixels = ddsd.lPitch / 8;
+
+    MxU8 *line = (MxU8 *) ddsd.lpSurface + m_animationTimer * ddsd.lPitch;
+    memset(line, 0, widthInPixels * 640);
+
+    MxS32 count = m_animationTimer + 1;
+    while (count < 480 - m_animationTimer) {
+      line += ddsd.lPitch;
+
+      memset(line + m_animationTimer * widthInPixels, 0, ddsd.lPitch / 8);
+      memset(line + (640 - 1 - m_animationTimer) * widthInPixels, 0, ddsd.lPitch / 8);
+      
+      count++;
+    }
+
+    line += ddsd.lPitch;
+    memset(line, 0, widthInPixels * 640);
+
+    SetupCopyRect(&ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+
+    m_animationTimer++;
+  }
 }
 
 // OFFSET: LEGO1 0x1004c3e0 STUB
