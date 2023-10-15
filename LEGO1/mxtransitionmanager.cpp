@@ -347,7 +347,6 @@ void MxTransitionManager::Transition_Pixelation()
 
 }
 
-
 // OFFSET: LEGO1 0x1004c270
 void MxTransitionManager::Transition_Windows()
 {
@@ -395,10 +394,29 @@ void MxTransitionManager::Transition_Windows()
   }
 }
 
-// OFFSET: LEGO1 0x1004c3e0 STUB
+// OFFSET: LEGO1 0x1004c3e0
 void MxTransitionManager::Transition_Broken()
 {
-  // TODO
+  // This function has no actual animation logic.
+  // It also never calls EndTransition to
+  // properly terminate the transition, so
+  // the game just hangs forever.
+
+  DDSURFACEDESC ddsd;
+  ZeroMemory(&ddsd, sizeof(ddsd));
+  ddsd.dwSize = sizeof(ddsd);
+
+  HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+  if (res == DDERR_SURFACELOST) {
+    m_ddSurface->Restore();
+    res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+  }
+
+  if (res == DD_OK) {
+    SubmitCopyRect(&ddsd);
+    SetupCopyRect(&ddsd);
+    m_ddSurface->Unlock(ddsd.lpSurface);
+  }
 }
 
 // OFFSET: LEGO1 0x1004c170

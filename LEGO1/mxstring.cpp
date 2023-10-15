@@ -56,7 +56,7 @@ void MxString::ToLowerCase()
 }
 
 // OFFSET: LEGO1 0x100ae4b0
-MxString &MxString::operator=(MxString &param)
+MxString &MxString::operator=(const MxString &param)
 {
   if (this->m_data != param.m_data)
   {

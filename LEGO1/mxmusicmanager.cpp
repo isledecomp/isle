@@ -120,44 +120,32 @@ void MxMusicManager::SetVolume(MxS32 p_volume)
 }
 
 // OFFSET: LEGO1 0x100c0840
-MxResult MxMusicManager::StartMIDIThread(MxU32 p_frequencyMS, MxBool p_noRegister)
+MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
   MxResult status = FAILURE;
   MxBool locked = FALSE;
 
-  MxResult result = MxAudioManager::InitPresenters();
-  if (result == SUCCESS)
-  {
-    if (p_noRegister)
-    {
+  if (MxAudioManager::InitPresenters() == SUCCESS) {
+    if (p_createThread) {
       m_criticalSection.Enter();
       locked = TRUE;
       m_thread = new MxTickleThread(this, p_frequencyMS);
 
-      if (m_thread)
-      {
-        if (m_thread->Start(0, 0) == SUCCESS)
-        {
-          status = SUCCESS;
-        }
-      }
+      if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+        goto done;
     }
     else
-    {
       TickleManager()->RegisterClient(this, p_frequencyMS);
-      status = SUCCESS;
-    }
+    
+    status = SUCCESS;
   }
 
+done:
   if (status != SUCCESS)
-  {
     Destroy();
-  }
 
   if (locked)
-  {
     m_criticalSection.Leave();
-  }
 
   return status;
 }

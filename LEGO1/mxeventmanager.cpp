@@ -37,29 +37,28 @@ void MxEventManager::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100c04a0
-MxResult MxEventManager::CreateEventThread(MxU32 p_frequencyMS, MxBool p_noRegister)
+MxResult MxEventManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
   MxResult status = FAILURE;
   MxBool locked = FALSE;
 
   MxResult result = MxMediaManager::InitPresenters();
   if (result == SUCCESS) {
-    if (p_noRegister) {
+    if (p_createThread) {
       this->m_criticalSection.Enter();
       locked = TRUE;
       this->m_thread = new MxTickleThread(this, p_frequencyMS);
 
-      if (this->m_thread) {
-        if (this->m_thread->Start(0, 0) == SUCCESS)
-          status = SUCCESS;
-      }
+      if (!this->m_thread || this->m_thread->Start(0, 0) != SUCCESS)
+        goto done;
     }
-    else {
+    else
       TickleManager()->RegisterClient(this, p_frequencyMS);
-      status = SUCCESS;
-    }
+
+    status = SUCCESS;
   }
 
+done:
   if (status != SUCCESS)
     Destroy();
 

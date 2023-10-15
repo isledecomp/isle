@@ -2,6 +2,7 @@
 #define MXREGION_H
 
 #include "mxcore.h"
+#include "decomp.h"
 
 // VTABLE 0x100dcae8
 // SIZE 0x1c
@@ -21,6 +22,7 @@ private:
   // MxList<MxRect32> *m_rects;
   // 4 coordinates (could be MxRect32)
   // MxS32 left, top, right, bottom;
+  undefined pad[0x14];
 };
 
 #endif // MXREGION_H

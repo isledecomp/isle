@@ -45,7 +45,7 @@ public:
 
   virtual MxResult Tickle(); // vtable+0x8
   // TODO: Where does this method come from?
-  virtual MxResult Create(MxS32 p_unk1, MxS32 p_unk2); // vtable+0x14
+  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x14
   void Register(MxCore *p_listener);
   void Unregister(MxCore *p_listener);
   MxResult Send(MxCore *p_listener, MxNotificationParam *p_param);
