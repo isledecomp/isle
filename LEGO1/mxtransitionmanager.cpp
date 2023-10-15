@@ -369,17 +369,18 @@ void MxTransitionManager::Transition_Windows()
   if (res == DD_OK) {
     SubmitCopyRect(&ddsd);
 
+    MxU8 *line = (MxU8 *) ddsd.lpSurface + m_animationTimer * ddsd.lPitch;
+
     MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
     MxS32 bytesPerLine = bytesPerPixel * 640;
 
-    MxU8 *line = (MxU8 *) ddsd.lpSurface + m_animationTimer * ddsd.lPitch;
     memset(line, 0, bytesPerLine);
 
     for (MxS32 i = m_animationTimer + 1; i < 480 - m_animationTimer; i++) {
       line += ddsd.lPitch;
 
-      memset(line + m_animationTimer * bytesPerPixel, 0, bytesPerLine);
-      memset(line + 640 + (-1 - m_animationTimer) * bytesPerPixel, 0, bytesPerLine);
+      memset(line + m_animationTimer * bytesPerPixel, 0, bytesPerPixel);
+      memset(line + 640 + (-1 - m_animationTimer) * bytesPerPixel, 0, bytesPerPixel);
     }
 
     line += ddsd.lPitch;
