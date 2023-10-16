@@ -2,6 +2,7 @@
 #include "MxVideoManager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
+DECOMP_SIZE_ASSERT(MxVideoPresenter::UnkStruct, 0xc);
 
 // OFFSET: LEGO1 0x1000c700
 void MxVideoPresenter::VTable0x5c(undefined4 p_unknown1)
@@ -40,7 +41,7 @@ void MxVideoPresenter::Destroy()
 }
 
 // OFFSET: LEGO1 0x1000c7b0
-MxCore* MxVideoPresenter::VTable0x78()
+LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
 {
   return m_unk58;
 }
@@ -74,12 +75,13 @@ void MxVideoPresenter::Init()
   m_unk58 = NULL;
   m_unk60 = -1;
   m_flags = m_flags & 0xfe;
-  if (MVideoManager() != NULL)
-  {
+
+  if (MVideoManager() != NULL) {
     MVideoManager();
     m_flags = m_flags | 2;
     m_flags = m_flags & 0xfb;
   }
+
   m_flags = m_flags & 0xf7;
   m_flags = m_flags & 0xef;
 }
@@ -87,39 +89,35 @@ void MxVideoPresenter::Init()
 // OFFSET: LEGO1 0x100b27b0
 void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
-  MxRect32 rect;
   if (MVideoManager() != NULL)
-  {
     MVideoManager()->RemovePresenter(*this);
-  }
 
-  if(m_unk58 != NULL)
-  {
-    m_unk58->Tickle();
+  if (m_unk58) {
+    m_unk58->Release();
     m_unk58 = NULL;
     m_flags = m_flags & 0xfd;
     m_flags = m_flags & 0xfb;
   }
 
-  if (MVideoManager() != NULL && m_unk54 != NULL && m_bitmap != NULL)
-  {
-    rect.m_right = GetWidth() + rect.m_left;
-    rect.m_bottom = GetHeight() + rect.m_top;
-    rect.m_left = GetLocationX();
-    rect.m_top = GetLocationY();
+  if (MVideoManager() && (m_unk54 || m_bitmap)) {
+    MxS32 height = GetHeight();
+    MxS32 width = GetWidth();
+
+    MxS32 x = GetLocationX();
+    MxS32 y = GetLocationY();
+    MxRect32 rect(x, y, x + width, y + height);
 
     MVideoManager()->InvalidateRect(rect);
     MVideoManager()->vtable0x34(rect.m_left, rect.m_top, rect.GetWidth(), rect.GetHeight());
   }
 
   delete m_bitmap;
-  delete m_unk58;
+  delete m_unk54;
 
   Init();
+
   if (!p_fromDestructor)
-  {
-      // TODO MxMediaPresenter->Destroy(FALSE)
-  }
+    MxMediaPresenter::Destroy(FALSE);
 }
 
 // OFFSET: LEGO1 0x100b28b0 STUB
