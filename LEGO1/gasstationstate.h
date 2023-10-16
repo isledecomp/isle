@@ -23,6 +23,14 @@ public:
     return !strcmp(name, GasStationState::ClassName()) || LegoState::IsA(name);
   }
 
+private:
+  undefined4 m_unk0x08[3];
+  undefined4 m_unk0x14;
+  undefined2 m_unk0x18;
+  undefined2 m_unk0x1a;
+  undefined2 m_unk0x1c;
+  undefined2 m_unk0x1e;
+  undefined2 m_unk0x20;
 };
 
 #endif // GASSTATIONSTATE_H
