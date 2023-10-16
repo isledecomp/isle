@@ -4,6 +4,7 @@
 #include "decomp.h"
 
 #include "mxcore.h"
+#include "mxstring.h"
 
 // VTABLE 0x100d46c0
 class LegoState : public MxCore
@@ -24,8 +25,11 @@ public:
     return !strcmp(name, LegoState::ClassName()) || MxCore::IsA(name);
   }
 
-  virtual MxBool VTable0x14();
+  virtual MxBool VTable0x14(); // vtable+0x14
+  virtual MxBool VTable0x18(); // vtable+0x18
+  virtual MxResult VTable0x1C(LegoState *p_legoState); // vtable+0x1C
 
+  void FUN_10006030(MxString p_str);
 };
 
 #endif // LEGOSTATE_H
