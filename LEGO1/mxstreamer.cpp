@@ -16,7 +16,7 @@ MxStreamer::MxStreamer()
 }
 
 // OFFSET: LEGO1 0x100b9190
-MxResult MxStreamer::Init()
+MxResult MxStreamer::Create()
 {
   undefined *b = new undefined[m_subclass1.GetSize() * 0x5800];
   m_subclass1.SetBuffer(b);

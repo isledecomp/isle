@@ -26,20 +26,22 @@ MxObjectFactory::MxObjectFactory()
 }
 
 // OFFSET: LEGO1 0x100b12c0
-MxCore *MxObjectFactory::Create(const char *name)
+MxCore *MxObjectFactory::Create(const char *p_name)
 {
-  MxAtomId atom(name, LookupMode_Exact);
+  MxCore* object = NULL;
+  MxAtomId atom(p_name, LookupMode_Exact);
 
-  if (0) {
-#define X(V) } else if (this->m_id##V == atom) { return new V;
+  if (0) {}
+#define X(V) else if (this->m_id##V == atom) { object = new V; }
   FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
-  } else {
-    return NULL;
-  }
+  else {}
+
+  return object;
 }
 
-// OFFSET: LEGO1 0x100b1a30 STUB
-void MxObjectFactory::vtable18(void *) {
-  // FIXME
+// OFFSET: LEGO1 0x100b1a30
+void MxObjectFactory::Destroy(MxCore *p_object)
+{
+  delete p_object;
 }

@@ -14,10 +14,12 @@ public:
 
   virtual void Destroy() override; // vtable+18
   virtual void SetVolume(MxS32 p_volume) override; // vtable+2c
-  virtual MxResult StartMIDIThread(MxU32 p_frequencyMS, MxU8 p_noRegister); // vtable+30
+  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+30
+
+  inline MxBool GetMIDIInitialized() { return m_MIDIInitialized; }
 
 private:
-  void LockedReinitialize(MxBool p_skipDestroy);
+  void Destroy(MxBool p_fromDestructor);
   void DeinitializeMIDI();
 
   MxS32 CalculateVolume(MxS32 p_volume);

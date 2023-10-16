@@ -35,7 +35,7 @@ public:
   virtual MxDSAction *Clone() override; // vtable+2c;
   virtual void MergeFrom(MxDSAction &p_dsAction) override; // vtable+30;
   virtual MxBool HasId(MxU32 p_objectId) override; // vtable+34;
-  virtual void SetSomeTimingField(MxLong p_someTimingField) override; // vtable+38;
+  virtual void SetUnkTimingField(MxLong p_unkTimingField) override; // vtable+38;
 
 protected:
   MxU32 m_sizeOnDisk;

@@ -34,7 +34,7 @@ MxVideoPresenter::~MxVideoPresenter()
 }
 
 // OFFSET: LEGO1 0x1000c7a0
-void MxVideoPresenter::InitVirtual()
+void MxVideoPresenter::Destroy()
 {
   Destroy(FALSE);
 }
@@ -85,7 +85,7 @@ void MxVideoPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100b27b0
-void MxVideoPresenter::Destroy(MxBool p_reinit)
+void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
   MxRect32 rect;
   if (MVideoManager() != NULL)

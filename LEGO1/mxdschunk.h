@@ -26,10 +26,10 @@ public:
 private:
   MxS16 m_length; // 0x8
   MxLong m_buffer; // 0xc
-  MxLong m_long1FromHeader; // 0x10
-  MxLong m_long2FromHeader; // 0x14
-  void* m_pStuff; // 0x18
-  void* m_pSomething; // 0x1c
+  MxLong m_unk10; // 0x10
+  MxLong m_unk14; // 0x14
+  void* m_unk18; // 0x18
+  void* m_unk1c; // 0x1c
 };
 
 #endif // MXDSCHUNK_H

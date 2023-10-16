@@ -25,7 +25,7 @@ void MxLoopingFlcPresenter::Init()
 }
 
 // OFFSET: LEGO1 0x100b4432 STUB
-void MxLoopingFlcPresenter::Destroy(MxBool p_param)
+void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 {
   // TODO 
 }

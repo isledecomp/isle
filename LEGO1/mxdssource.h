@@ -28,7 +28,7 @@ public:
 
   virtual MxLong Open(MxULong) = 0;
   virtual MxLong Close() = 0;
-  virtual void SomethingWhichCallsRead(void* pUnknownObject);
+  virtual void FUN_100bffd0(void* p_unk);
   virtual MxResult Read(unsigned char *, MxULong) = 0;
   virtual MxLong Seek(MxLong, int) = 0;
   virtual MxULong GetBufferSize() = 0;

@@ -15,7 +15,7 @@ MxU16 g_unkSep = TWOCC(',', ' ');
 // OFFSET: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
-  this->m_flags = 32;
+  this->m_flags = MxDSAction::Flag_Enabled;
   this->m_startTime = INT_MIN;
   this->m_extraData = NULL;
   this->m_extraLength = 0;
@@ -29,7 +29,7 @@ MxDSAction::MxDSAction()
   this->m_unk84 = 0;
   this->m_unk88 = 0;
   this->m_omni = NULL;
-  this->m_someTimingField = INT_MIN;
+  this->m_unkTimingField = INT_MIN;
 }
 
 // OFFSET: LEGO1 0x100ada80
@@ -55,7 +55,7 @@ void MxDSAction::CopyFrom(MxDSAction &p_dsAction)
   this->m_unk84 = p_dsAction.m_unk84;
   this->m_unk88 = p_dsAction.m_unk88;
   this->m_omni = p_dsAction.m_omni;
-  this->m_someTimingField = p_dsAction.m_someTimingField;
+  this->m_unkTimingField = p_dsAction.m_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100adc10
@@ -153,7 +153,7 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_direction[1] != FLT_MAX)
     this->m_direction[1] = p_dsAction.m_direction[1];
   if (p_dsAction.m_direction[2] != FLT_MAX)
-    this->m_direction[2] = p_dsAction.m_direction[2];
+    this->m_direction[2] = p_dsAction.m_up[2]; // This is correct
 
   if (p_dsAction.m_up[0] != FLT_MAX)
     this->m_up[0] = p_dsAction.m_up[0];
@@ -162,9 +162,13 @@ void MxDSAction::MergeFrom(MxDSAction &p_dsAction)
   if (p_dsAction.m_up[2] != FLT_MAX)
     this->m_up[2] = p_dsAction.m_up[2];
 
-  // TODO
   MxU16 extraLength = p_dsAction.m_extraLength;
   char *extraData = p_dsAction.m_extraData;
+
+  // Taking those references forces the compiler to move the values onto the stack.
+  // The original code most likely looked different, but this yields a 100% match.
+  MxU16 &_extraLength = extraLength;
+  char *&_extraData = extraData;
   if (extraLength && extraData) {
     if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
       delete[] this->m_extraData;
@@ -181,15 +185,15 @@ MxBool MxDSAction::HasId(MxU32 p_objectId)
 }
 
 // OFFSET: LEGO1 0x100ada40
-void MxDSAction::SetSomeTimingField(MxLong p_someTimingField)
+void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
 {
-  this->m_someTimingField = p_someTimingField;
+  this->m_unkTimingField = p_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100ada50
-MxLong MxDSAction::GetSomeTimingField()
+MxLong MxDSAction::GetUnkTimingField()
 {
-  return this->m_someTimingField;
+  return this->m_unkTimingField;
 }
 
 // Win32 defines GetCurrentTime to GetTickCount
@@ -198,7 +202,7 @@ MxLong MxDSAction::GetSomeTimingField()
 // OFFSET: LEGO1 0x100adcd0
 MxLong MxDSAction::GetCurrentTime()
 {
-  return Timer()->GetTime() - this->m_someTimingField;
+  return Timer()->GetTime() - this->m_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100ade60

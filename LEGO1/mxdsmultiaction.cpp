@@ -40,14 +40,14 @@ MxDSMultiAction &MxDSMultiAction::operator=(MxDSMultiAction &p_dsMultiAction)
 }
 
 // OFFSET: LEGO1 0x100ca290
-void MxDSMultiAction::SetSomeTimingField(MxLong p_someTimingField)
+void MxDSMultiAction::SetUnkTimingField(MxLong p_unkTimingField)
 {
-  this->m_someTimingField = p_someTimingField;
+  this->m_unkTimingField = p_unkTimingField;
 
   MxDSActionListCursor cursor(this->m_actions);
   MxDSAction *action;
   while (cursor.Next(action))
-    action->SetSomeTimingField(p_someTimingField);
+    action->SetUnkTimingField(p_unkTimingField);
 }
 
 // OFFSET: LEGO1 0x100ca370

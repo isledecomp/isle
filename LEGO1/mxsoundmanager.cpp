@@ -24,7 +24,7 @@ void MxSoundManager::Init()
 }
 
 // OFFSET: LEGO1 0x100ae840
-void MxSoundManager::Destroy(MxBool p_param)
+void MxSoundManager::Destroy(MxBool p_fromDestructor)
 {
   if (this->m_thread) {
     this->m_thread->Terminate();
@@ -43,15 +43,15 @@ void MxSoundManager::Destroy(MxBool p_param)
   Init();
   this->m_criticalSection.Leave();
 
-  if (!p_param) {
+  if (!p_fromDestructor) {
     MxAudioManager::Destroy();
   }
 }
 
 // OFFSET: LEGO1 0x100ae8b0 STUB
-MxResult MxSoundManager::StartDirectSound(undefined4 p_unknown1, MxBool p_unknown2)
+MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
-  // TODO STUB
+  // TODO
   return FAILURE;
 }
 

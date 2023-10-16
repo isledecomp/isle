@@ -11,9 +11,13 @@ class MxEventManager : public MxMediaManager
 public:
   MxEventManager();
   virtual ~MxEventManager() override;
-  virtual MxResult CreateEventThread(MxU32 p_frequencyMS, MxBool p_noRegister); // vtable+28
+
+  virtual void Destroy() override; // vtable+18
+  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+28
+
 private:
   void Init();
+  void Destroy(MxBool p_fromDestructor);
 };
 
 #endif // MXEVENTMANAGER_H

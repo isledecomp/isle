@@ -36,14 +36,17 @@ void LegoEntity::Reset()
   m_unk59 = 4;
 }
 
-// OFFSET: LEGO1 0x100107e0 STUB
-void LegoEntity::vtable18()
+// OFFSET: LEGO1 0x100107e0
+MxResult LegoEntity::InitFromMxDSObject(MxDSObject& p_object)
 {
-
+  m_mxEntityId = p_object.GetObjectId();
+  m_atom = p_object.GetAtomId();
+  AddToCurrentWorld();
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x10010810 STUB
-void LegoEntity::Destroy(MxBool)
+void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
   if (m_unk54) {
     // TODO
@@ -51,6 +54,16 @@ void LegoEntity::Destroy(MxBool)
 
   delete[] m_actionArgString;
   Reset();
+}
+
+// OFFSET: LEGO1 0x10010880 STUB
+void LegoEntity::AddToCurrentWorld()
+{
+  LegoWorld* world = GetCurrentWorld();
+  if (world != NULL && world != (LegoWorld*)this)
+  {
+    // TODO: world->vtable58(this);
+  }
 }
 
 // OFFSET: LEGO1 0x10010e10

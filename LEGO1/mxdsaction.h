@@ -48,8 +48,8 @@ public:
   virtual MxDSAction *Clone(); // vtable+2c;
   virtual void MergeFrom(MxDSAction &p_dsAction); // vtable+30;
   virtual MxBool HasId(MxU32 p_objectId); // vtable+34;
-  virtual void SetSomeTimingField(MxLong p_someTimingField); // vtable+38;
-  virtual MxLong GetSomeTimingField(); // vtable+3c;
+  virtual void SetUnkTimingField(MxLong p_unkTimingField); // vtable+38;
+  virtual MxLong GetUnkTimingField(); // vtable+3c;
   virtual MxLong GetCurrentTime(); // vtable+40;
 
   void AppendData(MxU16 p_extraLength, const char *p_extraData);
@@ -87,7 +87,7 @@ private:
   MxOmni *m_omni; // 0x8c
 
 protected:
-  MxLong m_someTimingField; // 0x90
+  MxLong m_unkTimingField; // 0x90
 };
 
 #endif // MXDSACTION_H

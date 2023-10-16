@@ -5,6 +5,7 @@
 #include "mxvector.h"
 #include "extra.h"
 #include "decomp.h"
+#include "mxdsobject.h"
 
 // VTABLE 0x100d4858
 // SIZE 0x68 (probably)
@@ -34,12 +35,13 @@ public:
     return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
   }
 
-  virtual void vtable18(); // vtable+0x18
-  virtual void Destroy(MxBool); // vtable+0x1c
+  virtual MxResult InitFromMxDSObject(MxDSObject& p_object); // vtable+0x18
+  virtual void Destroy(MxBool p_fromDestructor); // vtable+0x1c
   virtual void ParseAction(char *); // vtable+0x20
 
 protected:
   void Reset();
+  void AddToCurrentWorld();
 
   undefined m_unk10;
   undefined m_unk11;

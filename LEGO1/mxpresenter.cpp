@@ -29,7 +29,6 @@ void MxPresenter::Init()
 // OFFSET: LEGO1 0x100b4fc0
 void MxPresenter::ParseExtra()
 {
-
   MxAutoLocker lock(&m_criticalSection);
   MxU32 len = m_action->GetExtraLength();
   char *extraData = m_action->GetExtraData();
@@ -47,15 +46,13 @@ void MxPresenter::ParseExtra()
       strcpy(t_token, token);
 
       token = strtok(NULL, g_parseExtraTokens);
-      int val = token ? atoi(token) : 0;
-
-      int result = MxOmni::GetInstance()->vtable0x30(t_token, val, this);
+      MxS32 val = token ? atoi(token) : 0;
+      MxS32 result = MxOmni::GetInstance()->vtable0x30(t_token, val, this);
 
       m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Parsed);
 
       if (result)
         SendTo_unkPresenter(MxOmni::GetInstance());
-
     }
   }
 }
@@ -128,8 +125,8 @@ MxLong MxPresenter::StartAction(MxStreamController *, MxDSAction *p_action)
   const MxVector3Data& location = this->m_action->GetLocation();
   MxS32 previousTickleState = this->m_currentTickleState;
 
-  this->m_location = MxPoint32(location[0], location[1]);
-  this->m_displayZ = location[2];
+  this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);
+  this->m_displayZ = this->m_action->GetLocation()[2];
   this->m_previousTickleStates |= 1 << (unsigned char)previousTickleState;
   this->m_currentTickleState = TickleState_Ready;
 
@@ -279,13 +276,13 @@ void MxPresenter::DoneTickle()
 }
 
 // OFFSET: LEGO1 0x1000bf70
-undefined4 MxPresenter::VTable0x34()
+MxResult MxPresenter::AddToManager()
 {
-  return 0;
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1000bf80
-void MxPresenter::InitVirtual()
+void MxPresenter::Destroy()
 {
   Init();
 }

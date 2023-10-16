@@ -72,8 +72,10 @@ add_library(lego1 SHARED
   LEGO1/legojetski.cpp
   LEGO1/legoloadcachesoundpresenter.cpp
   LEGO1/legolocomotionanimpresenter.cpp
+  LEGO1/legometerpresenter.cpp
   LEGO1/legomodelpresenter.cpp
   LEGO1/legonavcontroller.cpp
+  LEGO1/legoobjectfactory.cpp
   LEGO1/legoomni.cpp
   LEGO1/legopalettepresenter.cpp
   LEGO1/legopartpresenter.cpp
@@ -89,6 +91,8 @@ add_library(lego1 SHARED
   LEGO1/legostream.cpp
   LEGO1/legotexturepresenter.cpp
   LEGO1/legoutil.cpp
+  LEGO1/legounksavedatawriter.cpp
+  LEGO1/legovehiclebuildstate.cpp
   LEGO1/legovideomanager.cpp
   LEGO1/legoworld.cpp
   LEGO1/legoworldpresenter.cpp
@@ -156,6 +160,7 @@ add_library(lego1 SHARED
   LEGO1/mxpresenterlist.cpp
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
+  LEGO1/mxregion.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmkpresenter.cpp

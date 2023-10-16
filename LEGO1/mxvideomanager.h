@@ -12,19 +12,30 @@
 class MxVideoManager : public MxMediaManager
 {
 public:
-  virtual ~MxVideoManager();
+  virtual ~MxVideoManager() override;
 
   virtual MxResult Tickle() override; // vtable+0x8
-  virtual void vtable0x28(); // vtable+0x28 (TODO ARGUMENTS)
-  virtual MxResult vtable0x2c(MxVideoParam& p_videoParam, undefined4 p_unknown1, MxU8 p_unknown2); // vtable+0x2c
+  virtual void Destroy() override; // vtable+0x18
+  virtual MxResult vtable0x28(
+    MxVideoParam& p_videoParam,
+    LPDIRECTDRAW p_pDirectDraw,
+    LPDIRECTDRAWSURFACE p_pDDSurface,
+    LPDIRECTDRAWSURFACE p_ddSurface1,
+    LPDIRECTDRAWSURFACE p_ddSurface2,
+    LPDIRECTDRAWCLIPPER p_ddClipper,
+    MxU32 p_frequencyMS,
+    MxBool p_createThread
+  ); // vtable+0x28
+  virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x2c
 
   __declspec(dllexport) void InvalidateRect(MxRect32 &);
-  __declspec(dllexport) virtual MxLong RealizePalette(MxPalette *); // vtable+0x30
+  __declspec(dllexport) virtual MxResult RealizePalette(MxPalette *); // vtable+0x30
   virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height);
 
   MxVideoManager();
 
   MxResult Init();
+  void Destroy(MxBool p_fromDestructor);
   void SortPresenterList();
   void UpdateRegion();
 
