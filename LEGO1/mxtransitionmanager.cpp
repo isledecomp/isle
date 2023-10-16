@@ -357,7 +357,7 @@ void MxTransitionManager::Transition_Windows()
   }
 
   DDSURFACEDESC ddsd;
-  ZeroMemory(&ddsd, sizeof(ddsd));
+  memset(&ddsd, 0, sizeof(ddsd));
   ddsd.dwSize = sizeof(ddsd);
 
   HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
@@ -402,7 +402,7 @@ void MxTransitionManager::Transition_Broken()
   // the game just hangs forever.
 
   DDSURFACEDESC ddsd;
-  ZeroMemory(&ddsd, sizeof(ddsd));
+  memset(&ddsd, 0, sizeof(ddsd));
   ddsd.dwSize = sizeof(ddsd);
 
   HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
