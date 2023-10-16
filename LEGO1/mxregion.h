@@ -22,9 +22,7 @@ public:
 
 private:
   // A container (probably MxList) holding MxRect32
-  // MxList<MxRect32> *m_rects;
-  // 4 coordinates (could be MxRect32)
-  // MxS32 left, top, right, bottom;
+  // MxList<MxRect32*> *m_rects;
   undefined4 m_unk08;
   MxRect32 m_rect;
 };
