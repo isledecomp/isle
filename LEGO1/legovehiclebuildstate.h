@@ -29,16 +29,15 @@ public:
 public:
   struct UnkStruct
   {
-    undefined4 m_unk0;
-    undefined2 m_unk1;
-    undefined2 m_unk2;
-    undefined2 m_unk3;
-    undefined2 _padding;
+    undefined4 m_unk00;
+    undefined2 m_unk04;
+    undefined2 m_unk06;
+    undefined2 m_unk08;
 
     UnkStruct();
   };
 private:
-  UnkStruct m_unk0[4]; // 0x08
+  UnkStruct m_unk08[4]; // 0x08
 
   // This can be one of the following:
   // * LegoRaceCarBuildState
@@ -52,9 +51,9 @@ private:
   // * 3 == cutscene/dialogue
   // * 6 == exit(ing) build screen
   MxU32 m_animationState; // 0x48
-  undefined m_unk2; // 0x4c
-  undefined m_unk3; // 0x4d
-  undefined m_unk4; // 0x4e
+  undefined m_unk4c; // 0x4c
+  undefined m_unk4d; // 0x4d
+  undefined m_unk4e; // 0x4e
   MxU8 m_placedPartCount; // 0x4f
 };
 
