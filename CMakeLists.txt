@@ -92,6 +92,7 @@ add_library(lego1 SHARED
   LEGO1/legotexturepresenter.cpp
   LEGO1/legoutil.cpp
   LEGO1/legounksavedatawriter.cpp
+  LEGO1/legovehiclebuildstate.cpp
   LEGO1/legovideomanager.cpp
   LEGO1/legoworld.cpp
   LEGO1/legoworldpresenter.cpp
