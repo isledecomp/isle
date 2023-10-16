@@ -1,6 +1,8 @@
 #ifndef LEGOSTATE_H
 #define LEGOSTATE_H
 
+#include "decomp.h"
+
 #include "mxcore.h"
 
 // VTABLE 0x100d46c0
