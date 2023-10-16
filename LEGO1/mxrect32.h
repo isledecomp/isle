@@ -17,6 +17,16 @@ public:
   MxS32 m_top;
   MxS32 m_right;
   MxS32 m_bottom;
+
+  inline MxS32 GetWidth()
+  {
+    return (m_right - m_left) + 1;
+  }
+
+  inline MxS32 GetHeight()
+  {
+    return (m_bottom - m_top) + 1;
+  }
 };
 
 #endif // MXRECT32_H
