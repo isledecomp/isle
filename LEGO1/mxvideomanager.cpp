@@ -120,10 +120,34 @@ void MxVideoManager::SortPresenterList()
   }
 }
 
-// OFFSET: LEGO1 0x100be3e0 STUB
+// OFFSET: LEGO1 0x100be3e0
 void MxVideoManager::UpdateRegion()
 {
-  // TODO
+  if (m_region->vtable20() == FALSE) {
+    MxS32 left, top, right, bottom;
+    MxRect32 &regionRect = m_region->GetRect();
+
+    left = m_videoParam.GetRect().m_left;
+    if (left <= regionRect.m_left)
+      left = regionRect.m_left;
+
+    top = regionRect.m_top;
+    if (top <= m_videoParam.GetRect().m_top)
+      top = m_videoParam.GetRect().m_top;
+
+    right = regionRect.m_right;
+    if (right >= m_videoParam.GetRect().m_right)
+      right = m_videoParam.GetRect().m_right;
+    
+    bottom = m_videoParam.GetRect().m_bottom;
+    if (bottom >= regionRect.m_bottom)
+      bottom = regionRect.m_bottom;
+
+    m_displaySurface->Display(
+      left, top, left, top,
+      right - left + 1, bottom - top + 1
+    );
+  }
 }
 
 // OFFSET: LEGO1 0x100bea50
@@ -132,10 +156,15 @@ void MxVideoManager::Destroy()
   Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100bea60 STUB
+// OFFSET: LEGO1 0x100bea60
 void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
 {
-  // TODO
+  m_criticalSection.Enter();
+
+  if (m_region)
+    m_region->vtable18(p_rect);
+
+  m_criticalSection.Leave();
 }
 
 // OFFSET: LEGO1 0x100bebe0
