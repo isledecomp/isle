@@ -116,7 +116,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
   delete m_unk58;
 
   Init();
-  if (!p_reinit)
+  if (!p_fromDestructor)
   {
       // TODO MxMediaPresenter->Destroy(FALSE)
   }
