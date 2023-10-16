@@ -21,7 +21,7 @@ void MxRegion::Reset()
 }
 
 // OFFSET: LEGO1 0x100c3750 STUB
-void MxRegion::vtable18()
+void MxRegion::vtable18(MxRect32 &p_rect)
 {
   // TODO
 }
@@ -33,7 +33,8 @@ void MxRegion::vtable1c()
 }
 
 // OFFSET: LEGO1 0x100c3660 STUB
-void MxRegion::vtable20()
+MxBool MxRegion::vtable20()
 {
   // TODO
+  return FALSE;
 }

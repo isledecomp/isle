@@ -2,6 +2,7 @@
 #define MXREGION_H
 
 #include "mxcore.h"
+#include "mxrect32.h"
 #include "decomp.h"
 
 // VTABLE 0x100dcae8
@@ -13,16 +14,19 @@ public:
   virtual ~MxRegion() override;
 
   virtual void Reset();
-  virtual void vtable18();
+  virtual void vtable18(MxRect32 &p_rect);
   virtual void vtable1c();
-  virtual void vtable20();
+  virtual MxBool vtable20();
+
+  inline MxRect32 &GetRect() { return this->m_rect; }
 
 private:
   // A container (probably MxList) holding MxRect32
   // MxList<MxRect32> *m_rects;
   // 4 coordinates (could be MxRect32)
   // MxS32 left, top, right, bottom;
-  undefined pad[0x14];
+  undefined4 m_unk08;
+  MxRect32 m_rect;
 };
 
 #endif // MXREGION_H
