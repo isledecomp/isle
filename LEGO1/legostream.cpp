@@ -116,6 +116,18 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
   return (m_hFile = fopen(p_filename, modeString)) ? SUCCESS : FAILURE;
 }
 
+// OFFSET: LEGO1 0x10006030
+LegoFileStream *LegoFileStream::FUN_10006030(MxString p_str)
+{
+  MxS16 strLength = strlen(p_str.GetData());
+  const char *strData = p_str.GetData();
+
+  Write(&strLength, sizeof(strLength));
+  Write(strData, strLength);
+
+  return this;
+}
+
 // OFFSET: LEGO1 0x10099080
 LegoMemoryStream::LegoMemoryStream(char* p_buffer)
   : LegoStream()

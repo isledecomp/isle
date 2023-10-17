@@ -18,16 +18,10 @@ MxBool LegoState::VTable0x18() {
 }
 
 // OFFSET: LEGO1 0x10005fb0
-MxResult LegoState::VTable0x1C(LegoState *p_legoState)
+MxResult LegoState::VTable0x1C(LegoFileStream *p_legoFileStream)
 {
-  if (p_legoState->VTable0x14()) {
-    p_legoState->FUN_10006030(this->ClassName());
+  if (p_legoFileStream->IsWriteMode()) {
+    p_legoFileStream->FUN_10006030(this->ClassName());
   }
   return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x10006030 STUB
-void LegoState::FUN_10006030(MxString p_str)
-{
-  // TODO
 }
