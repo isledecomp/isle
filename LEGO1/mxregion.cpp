@@ -3,6 +3,8 @@
 #include <limits.h>
 
 DECOMP_SIZE_ASSERT(MxRegion, 0x1c);
+DECOMP_SIZE_ASSERT(MxRegionTopBottom, 0x0c);
+DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 
 // OFFSET: LEGO1 0x100c31c0
 MxRegion::MxRegion()
