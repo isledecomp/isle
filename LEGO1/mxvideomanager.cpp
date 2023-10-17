@@ -4,40 +4,24 @@
 #include "mxticklemanager.h"
 #include "legoomni.h"
 
+DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)
+
 // OFFSET: LEGO1 0x100be1f0
 MxVideoManager::MxVideoManager()
 {
   Init();
 }
 
+// OFFSET: LEGO1 0x100be270
+void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+{
+
+}
+
 // OFFSET: LEGO1 0x100be2a0
 MxVideoManager::~MxVideoManager()
 {
   Destroy(TRUE);
-}
-
-// OFFSET: LEGO1 0x100bea90
-MxResult MxVideoManager::Tickle()
-{
-  MxAutoLocker lock(&this->m_criticalSection);
-
-  SortPresenterList();
-
-  MxPresenter *presenter;
-  MxPresenterListCursor cursor(this->m_presenters);
-
-  while (cursor.Next(presenter))
-    presenter->Tickle();
-
-  cursor.Reset();
-
-  while (cursor.Next(presenter))
-    presenter->PutData();
-
-  UpdateRegion();
-  m_region->Reset();
-
-  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100be320
@@ -87,6 +71,36 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
     MxMediaManager::Destroy();
 }
 
+// OFFSET: LEGO1 0x100be3e0
+void MxVideoManager::UpdateRegion()
+{
+  if (m_region->vtable20() == FALSE) {
+    MxS32 left, top, right, bottom;
+    MxRect32 &regionRect = m_region->GetRect();
+
+    left = m_videoParam.GetRect().m_left;
+    if (left <= regionRect.m_left)
+      left = regionRect.m_left;
+
+    top = regionRect.m_top;
+    if (top <= m_videoParam.GetRect().m_top)
+      top = m_videoParam.GetRect().m_top;
+
+    right = regionRect.m_right;
+    if (right >= m_videoParam.GetRect().m_right)
+      right = m_videoParam.GetRect().m_right;
+    
+    bottom = m_videoParam.GetRect().m_bottom;
+    if (bottom >= regionRect.m_bottom)
+      bottom = regionRect.m_bottom;
+
+    m_displaySurface->Display(
+      left, top, left, top,
+      right - left + 1, bottom - top + 1
+    );
+  }
+}
+
 // OFFSET: LEGO1 0x100be440
 void MxVideoManager::SortPresenterList()
 {
@@ -120,69 +134,6 @@ void MxVideoManager::SortPresenterList()
   }
 }
 
-// OFFSET: LEGO1 0x100be3e0
-void MxVideoManager::UpdateRegion()
-{
-  if (m_region->vtable20() == FALSE) {
-    MxS32 left, top, right, bottom;
-    MxRect32 &regionRect = m_region->GetRect();
-
-    left = m_videoParam.GetRect().m_left;
-    if (left <= regionRect.m_left)
-      left = regionRect.m_left;
-
-    top = regionRect.m_top;
-    if (top <= m_videoParam.GetRect().m_top)
-      top = m_videoParam.GetRect().m_top;
-
-    right = regionRect.m_right;
-    if (right >= m_videoParam.GetRect().m_right)
-      right = m_videoParam.GetRect().m_right;
-    
-    bottom = m_videoParam.GetRect().m_bottom;
-    if (bottom >= regionRect.m_bottom)
-      bottom = regionRect.m_bottom;
-
-    m_displaySurface->Display(
-      left, top, left, top,
-      right - left + 1, bottom - top + 1
-    );
-  }
-}
-
-// OFFSET: LEGO1 0x100bea50
-void MxVideoManager::Destroy()
-{
-  Destroy(FALSE);
-}
-
-// OFFSET: LEGO1 0x100bea60
-void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
-{
-  m_criticalSection.Enter();
-
-  if (m_region)
-    m_region->vtable18(p_rect);
-
-  m_criticalSection.Leave();
-}
-
-// OFFSET: LEGO1 0x100bebe0
-MxResult MxVideoManager::RealizePalette(MxPalette *p_palette)
-{
-  PALETTEENTRY paletteEntries[256];
-
-  this->m_criticalSection.Enter();
-
-  if (p_palette && this->m_videoParam.GetPalette()) {
-    p_palette->GetEntries(paletteEntries);
-    this->m_videoParam.GetPalette()->SetEntries(paletteEntries);
-    this->m_displaySurface->SetPalette(this->m_videoParam.GetPalette());
-  }
-
-  this->m_criticalSection.Leave();
-  return SUCCESS;
-}
 
 // OFFSET: LEGO1 0x100be600
 MxResult MxVideoManager::vtable0x28(
@@ -328,8 +279,60 @@ done:
   return status;
 }
 
-// OFFSET: LEGO1 0x100be270
-void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+// OFFSET: LEGO1 0x100bea50
+void MxVideoManager::Destroy()
 {
+  Destroy(FALSE);
+}
 
+// OFFSET: LEGO1 0x100bea60
+void MxVideoManager::InvalidateRect(MxRect32 &p_rect)
+{
+  m_criticalSection.Enter();
+
+  if (m_region)
+    m_region->vtable18(p_rect);
+
+  m_criticalSection.Leave();
+}
+
+// OFFSET: LEGO1 0x100bea90
+MxResult MxVideoManager::Tickle()
+{
+  MxAutoLocker lock(&this->m_criticalSection);
+
+  SortPresenterList();
+
+  MxPresenter *presenter;
+  MxPresenterListCursor cursor(this->m_presenters);
+
+  while (cursor.Next(presenter))
+    presenter->Tickle();
+
+  cursor.Reset();
+
+  while (cursor.Next(presenter))
+    presenter->PutData();
+
+  UpdateRegion();
+  m_region->Reset();
+
+  return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x100bebe0
+MxResult MxVideoManager::RealizePalette(MxPalette *p_palette)
+{
+  PALETTEENTRY paletteEntries[256];
+
+  this->m_criticalSection.Enter();
+
+  if (p_palette && this->m_videoParam.GetPalette()) {
+    p_palette->GetEntries(paletteEntries);
+    this->m_videoParam.GetPalette()->SetEntries(paletteEntries);
+    this->m_displaySurface->SetPalette(this->m_videoParam.GetPalette());
+  }
+
+  this->m_criticalSection.Leave();
+  return SUCCESS;
 }
