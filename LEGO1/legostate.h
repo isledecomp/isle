@@ -5,6 +5,7 @@
 
 #include "mxcore.h"
 #include "mxstring.h"
+#include "legostream.h"
 
 // VTABLE 0x100d46c0
 class LegoState : public MxCore
@@ -27,9 +28,7 @@ public:
 
   virtual MxBool VTable0x14(); // vtable+0x14
   virtual MxBool VTable0x18(); // vtable+0x18
-  virtual MxResult VTable0x1C(LegoState *p_legoState); // vtable+0x1C
-
-  void FUN_10006030(MxString p_str);
+  virtual MxResult VTable0x1C(LegoFileStream *p_legoFileStream); // vtable+0x1C
 };
 
 #endif // LEGOSTATE_H

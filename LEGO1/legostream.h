@@ -4,6 +4,7 @@
 #include "compat.h"
 #include "decomp.h"
 #include "mxtypes.h"
+#include "mxstring.h"
 
 #include <iosfwd>
 
@@ -54,6 +55,8 @@ public:
   MxResult Seek(MxU32 p_offset) override;
 
   MxResult Open(const char* p_filename, OpenFlags p_mode);
+
+  LegoFileStream *FUN_10006030(MxString p_str);
 
 private:
   FILE *m_hFile;
