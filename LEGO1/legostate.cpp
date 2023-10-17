@@ -25,3 +25,16 @@ MxResult LegoState::VTable0x1C(LegoFileStream *p_legoFileStream)
   }
   return SUCCESS;
 }
+
+// OFFSET: LEGO1 0x10006030
+LegoFileStream *LegoFileStream::FUN_10006030(MxString p_str)
+{
+  const char *data = p_str.GetData();
+  MxU32 fullLength = strlen(data);
+
+  MxU16 limitedLength = fullLength;
+  Write(&limitedLength, sizeof(limitedLength));
+  Write(data, (MxS16) fullLength);
+
+  return this;
+}
