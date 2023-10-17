@@ -2,8 +2,24 @@
 #define MXREGION_H
 
 #include "mxcore.h"
+#include "mxregionlist.h"
 #include "mxrect32.h"
 #include "decomp.h"
+
+// SIZE 0x0c
+struct MxRegionTopBottom
+{
+  MxS32 m_top;
+  MxS32 m_bottom;
+  MxRegionLeftRightList *m_leftRightList;
+};
+
+// SIZE 0x08
+struct MxRegionLeftRight
+{
+  MxS32 m_left;
+  MxS32 m_right;
+};
 
 // VTABLE 0x100dcae8
 // SIZE 0x1c
@@ -21,9 +37,7 @@ public:
   inline MxRect32 &GetRect() { return this->m_rect; }
 
 private:
-  // A container (probably MxList) holding MxRect32
-  // MxList<MxRect32*> *m_rects;
-  undefined4 m_unk08;
+  MxRegionList *m_list;
   MxRect32 m_rect;
 };
 
