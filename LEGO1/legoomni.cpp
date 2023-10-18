@@ -5,6 +5,7 @@
 #include "legogamestate.h"
 #include "legoutil.h"
 #include "legoobjectfactory.h"
+#include "legoinputmanager.h"
 
 // 0x100f4588
 MxAtomId *g_nocdSourceName = NULL;
@@ -203,6 +204,12 @@ MxDSObject *CreateStreamObject(MxDSFile *p_file, MxS16 p_ofs)
 LegoInputManager *InputManager()
 {
   return LegoOmni::GetInstance()->GetInputManager();
+}
+
+// OFFSET: LEGO1 0x10015750
+LegoControlManager *ControlManager()
+{
+  return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
 }
 
 // OFFSET: LEGO1 0x10015760

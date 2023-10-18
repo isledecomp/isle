@@ -41,6 +41,8 @@ public:
   void SetTimer();
   void KillTimer();
 
+  inline LegoControlManager *GetControlManager() { return m_controlManager; }
+
 //private:
   MxCriticalSection m_criticalSection;
   MxList<undefined4> *m_unk0x5c; // list or hash table
