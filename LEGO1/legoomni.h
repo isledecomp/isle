@@ -11,7 +11,6 @@ class LegoBuildingManager;
 class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
-class LegoControlManager;
 class LegoNavController;
 class LegoPathBoundary;
 class LegoPlantManager;
