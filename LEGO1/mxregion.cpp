@@ -38,12 +38,7 @@ void MxRegion::Reset()
 // OFFSET: LEGO1 0x100c3750
 void MxRegion::vtable18(MxRect32 &p_rect)
 {
-  MxRect32 rectCopy;
-  rectCopy.m_top = p_rect.m_top;
-  rectCopy.m_left = p_rect.m_left;
-  rectCopy.m_bottom = p_rect.m_bottom;
-  rectCopy.m_right = p_rect.m_right;
-
+  MxRect32 rectCopy(p_rect.m_left, p_rect.m_top, p_rect.m_right, p_rect.m_bottom);
   MxRegionListCursor cursor(m_list);
 
   if (rectCopy.m_left < rectCopy.m_right) {
@@ -123,4 +118,3 @@ MxRegionTopBottom *MxRegionTopBottom::Clone()
 {
   return new MxRegionTopBottom(MxRect32());
 }
-
