@@ -10,10 +10,8 @@ DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 MxRegion::MxRegion()
 {
   m_list = new MxRegionList;
-  m_rect.m_left = INT_MAX;
-  m_rect.m_top = INT_MAX;
-  m_rect.m_right = -1;
-  m_rect.m_bottom = - 1;
+  m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
+  m_rect.SetSize(MxSize32(-1, -1));
 }
 
 // OFFSET: LEGO1 0x100c3660 STUB
@@ -38,7 +36,10 @@ void MxRegion::Reset()
 // OFFSET: LEGO1 0x100c3750
 void MxRegion::vtable18(MxRect32 &p_rect)
 {
-  MxRect32 rectCopy(p_rect.m_left, p_rect.m_top, p_rect.m_right, p_rect.m_bottom);
+  MxRect32 rectCopy(
+    MxPoint32(p_rect.m_left, p_rect.m_top),
+    MxSize32(p_rect.m_right, p_rect.m_bottom)
+  );
   MxRegionListCursor cursor(m_list);
 
   if (rectCopy.m_left < rectCopy.m_right) {
@@ -54,7 +55,11 @@ void MxRegion::vtable18(MxRect32 &p_rect)
       }
       else if (rectCopy.m_top < topBottom->m_bottom) {
         if (rectCopy.m_top < topBottom->m_top) {
-          MxRect32 topBottomRect(rectCopy.m_left, rectCopy.m_top, rectCopy.m_right, topBottom->m_top);
+          MxRect32 topBottomRect(
+            MxPoint32(rectCopy.m_left, rectCopy.m_top),
+            MxSize32(rectCopy.m_right, topBottom->m_top)
+          );
+
           MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(topBottomRect);
           cursor.Prepend(newTopBottom);
           rectCopy.m_top = topBottom->m_top;
