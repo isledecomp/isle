@@ -92,6 +92,7 @@ public:
   void SetValue(T p_obj);
   void Head() { m_match = m_list->m_first; }
   void Reset() { m_match = NULL; }
+  void Prepend(T p_newobj);
 
 private:
   MxList<T> *m_list;
@@ -227,6 +228,13 @@ inline void MxListCursor<T>::SetValue(T p_obj)
 {
   if (m_match)
     m_match->m_obj = p_obj;
+}
+
+template <class T>
+inline void MxListCursor<T>::Prepend(T p_newobj)
+{
+  if (m_match)
+    m_list->_InsertEntry(p_newobj, m_match->m_prev, m_match);
 }
 
 #endif // MXLIST_H

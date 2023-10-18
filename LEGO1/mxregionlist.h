@@ -22,6 +22,9 @@ public:
 // SIZE 0x18
 class MxRegionList : public MxRegionListParent {};
 
+// VTABLE 0x100dcb88
+typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
+
 // VTABLE 0x100dcc70
 // SIZE 0x18
 class MxRegionLeftRightListParent : public MxList<MxRegionLeftRight*>

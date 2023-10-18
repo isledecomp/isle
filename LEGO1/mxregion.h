@@ -12,6 +12,11 @@ struct MxRegionTopBottom
   MxS32 m_top;
   MxS32 m_bottom;
   MxRegionLeftRightList *m_leftRightList;
+
+  MxRegionTopBottom(MxRect32 &p_rect);
+
+  MxRegionTopBottom *Clone();
+  void FUN_100c5280(MxS32 p_left, MxS32 p_right);
 };
 
 // SIZE 0x08

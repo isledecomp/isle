@@ -35,10 +35,69 @@ void MxRegion::Reset()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100c3750 STUB
+// OFFSET: LEGO1 0x100c3750
 void MxRegion::vtable18(MxRect32 &p_rect)
 {
-  // TODO
+  MxRect32 rectCopy;
+  rectCopy.m_top = p_rect.m_top;
+  rectCopy.m_left = p_rect.m_left;
+  rectCopy.m_bottom = p_rect.m_bottom;
+  rectCopy.m_right = p_rect.m_right;
+
+  MxRegionListCursor cursor(m_list);
+
+  if (rectCopy.m_left < rectCopy.m_right) {
+    MxRegionTopBottom *topBottom;
+    while (rectCopy.m_top < rectCopy.m_bottom && cursor.Next(topBottom)) {
+      if (topBottom->m_top >= rectCopy.m_bottom) {
+        MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(rectCopy);
+        cursor.Prepend(newTopBottom);
+        rectCopy.m_top = rectCopy.m_bottom;
+      }
+      else {
+        if (rectCopy.m_top < topBottom->m_bottom) {
+          if (rectCopy.m_top < topBottom->m_top) {
+            MxRect32 topBottomRect(rectCopy.m_left, rectCopy.m_top, rectCopy.m_right, topBottom->m_top);
+            MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(topBottomRect);
+            cursor.Prepend(newTopBottom);
+            rectCopy.m_top = topBottom->m_top;
+          }
+          else if (topBottom->m_top < rectCopy.m_top) {
+            MxRegionTopBottom *newTopBottom = topBottom->Clone();
+            newTopBottom->m_bottom = rectCopy.m_top;
+            topBottom->m_top = rectCopy.m_top;
+            cursor.Prepend(newTopBottom);
+          }
+
+          if (rectCopy.m_bottom < topBottom->m_top) {
+            MxRegionTopBottom *newTopBottom = topBottom->Clone();
+            newTopBottom->m_bottom = rectCopy.m_bottom;
+            topBottom->m_top = rectCopy.m_bottom;
+            newTopBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
+            cursor.Prepend(newTopBottom);
+            rectCopy.m_top = rectCopy.m_bottom; 
+          }
+          else {
+            topBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
+            rectCopy.m_top = topBottom->m_top;
+          }
+        }
+      }
+
+      if (rectCopy.m_right <= rectCopy.m_left)
+        break;
+    }
+  }
+
+  if (rectCopy.m_left < rectCopy.m_right && rectCopy.m_top < rectCopy.m_bottom) {
+    MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(rectCopy);
+    m_list->OtherAppend(newTopBottom);
+  }
+
+  m_rect.m_left = m_rect.m_left <= p_rect.m_left ? m_rect.m_left : p_rect.m_left;
+  m_rect.m_top = m_rect.m_top <= p_rect.m_top ? m_rect.m_top : p_rect.m_top;
+  m_rect.m_right = m_rect.m_right <= p_rect.m_right ? p_rect.m_right : m_rect.m_right;
+  m_rect.m_bottom = m_rect.m_bottom <= p_rect.m_bottom ? p_rect.m_bottom : m_rect.m_bottom;
 }
 
 // OFFSET: LEGO1 0x100c3e20 STUB
@@ -46,3 +105,22 @@ void MxRegion::vtable1c()
 {
   // TODO
 }
+
+// OFFSET: LEGO1 0x100c50e0 STUB
+MxRegionTopBottom::MxRegionTopBottom(MxRect32 &p_rect)
+{
+
+}
+
+// OFFSET: LEGO1 0x100c5280 STUB
+void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
+{
+
+}
+
+// OFFSET: LEGO1 0x100c55d0 STUB
+MxRegionTopBottom *MxRegionTopBottom::Clone()
+{
+  return new MxRegionTopBottom(MxRect32());
+}
+
