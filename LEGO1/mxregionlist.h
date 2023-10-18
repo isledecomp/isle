@@ -25,6 +25,12 @@ class MxRegionList : public MxRegionListParent {};
 // VTABLE 0x100dcb88
 typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
 
+// OFFSET: LEGO1 0x100c5970 TEMPLATE
+// MxList<MxRegionTopBottom *>::_InsertEntry
+
+// OFFSET: LEGO1 0x100c5a20 TEMPLATE
+// MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
+
 // VTABLE 0x100dcc70
 // SIZE 0x18
 class MxRegionLeftRightListParent : public MxList<MxRegionLeftRight*>
