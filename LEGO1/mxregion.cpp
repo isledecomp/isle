@@ -53,39 +53,35 @@ void MxRegion::vtable18(MxRect32 &p_rect)
         cursor.Prepend(newTopBottom);
         rectCopy.m_top = rectCopy.m_bottom;
       }
-      else {
-        MxS32 *bottom = &topBottom->m_bottom;
+      else if (rectCopy.m_top < topBottom->m_bottom) {
+        if (rectCopy.m_top < topBottom->m_top) {
+          MxRect32 topBottomRect(
+            MxPoint32(rectCopy.m_left, rectCopy.m_top),
+            MxSize32(rectCopy.m_right, topBottom->m_top)
+          );
 
-        if (rectCopy.m_top < *bottom) {
-          if (rectCopy.m_top < topBottom->m_top) {
-            MxRect32 topBottomRect(
-              MxPoint32(rectCopy.m_left, rectCopy.m_top),
-              MxSize32(rectCopy.m_right, topBottom->m_top)
-            );
+          MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(topBottomRect);
+          cursor.Prepend(newTopBottom);
+          rectCopy.m_top = topBottom->m_top;
+        }
+        else if (topBottom->m_top < rectCopy.m_top) {
+          MxRegionTopBottom *newTopBottom = topBottom->Clone();
+          newTopBottom->m_bottom = rectCopy.m_top;
+          topBottom->m_top = rectCopy.m_top;
+          cursor.Prepend(newTopBottom);
+        }
 
-            MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(topBottomRect);
-            cursor.Prepend(newTopBottom);
-            rectCopy.m_top = topBottom->m_top;
-          }
-          else if (topBottom->m_top < rectCopy.m_top) {
-            MxRegionTopBottom *newTopBottom = topBottom->Clone();
-            newTopBottom->m_bottom = rectCopy.m_top;
-            topBottom->m_top = rectCopy.m_top;
-            cursor.Prepend(newTopBottom);
-          }
-
-          if (rectCopy.m_bottom < *bottom) {
-            MxRegionTopBottom *newTopBottom = topBottom->Clone();
-            newTopBottom->m_bottom = rectCopy.m_bottom;
-            topBottom->m_top = rectCopy.m_bottom;
-            newTopBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
-            cursor.Prepend(newTopBottom);
-            rectCopy.m_top = rectCopy.m_bottom; 
-          }
-          else {
-            topBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
-            rectCopy.m_top = *bottom;
-          }
+        if (rectCopy.m_bottom < topBottom->m_bottom) {
+          MxRegionTopBottom *newTopBottom = topBottom->Clone();
+          newTopBottom->m_bottom = rectCopy.m_bottom;
+          topBottom->m_top = rectCopy.m_bottom;
+          newTopBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
+          cursor.Prepend(newTopBottom);
+          rectCopy.m_top = rectCopy.m_bottom; 
+        }
+        else {
+          topBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
+          rectCopy.m_top = topBottom->m_bottom;
         }
       }
 
