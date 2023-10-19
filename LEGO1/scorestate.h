@@ -22,10 +22,10 @@ public:
   };
 
   virtual MxBool VTable0x14() override; // vtable+0x14
-  virtual MxBool VTable0x18() override; // vtable+0x18
+  virtual MxBool SetScoreCubeTutorialFlag() override; // vtable+0x18
 
 private:
-    MxBool m_unk0x08;
+    MxBool m_playCubeTutorial;
 };
 
 #endif // SCORESTATE_H

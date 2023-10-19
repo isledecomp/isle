@@ -8,8 +8,8 @@ MxBool ScoreState::VTable0x14() {
 }
 
 // OFFSET: LEGO1 0x1000de30
-MxBool ScoreState::VTable0x18()
+MxBool ScoreState::SetScoreCubeTutorialFlag()
 {
-  m_unk0x08 = TRUE;
+  m_playCubeTutorial = TRUE;
   return TRUE;
 }
