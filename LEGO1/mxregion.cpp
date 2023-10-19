@@ -66,6 +66,7 @@ void MxRegion::vtable18(MxRect32 &p_rect)
           MxRegionTopBottom *newTopBottom = topBottom->Clone();
           newTopBottom->m_bottom = rectCopy.m_top;
           topBottom->m_top = rectCopy.m_top;
+          // TODO: _InsertEntry currently inlined, shouldn't be
           cursor.Prepend(newTopBottom);
         }
 
@@ -124,10 +125,53 @@ MxRegionTopBottom::MxRegionTopBottom(MxRect32 &p_rect)
   m_leftRightList->Append(leftRight);
 }
 
-// OFFSET: LEGO1 0x100c5280 STUB
+// OFFSET: LEGO1 0x100c5280
 void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 {
+  MxRegionLeftRightListCursor a(m_leftRightList);
+  MxRegionLeftRightListCursor b(m_leftRightList);
 
+  MxRegionLeftRight *leftRight;
+  while (a.Next(leftRight) && leftRight->m_right < p_left);
+
+  if (!a.GetMatch()) {
+    MxRegionLeftRight *copy = new MxRegionLeftRight(p_left, p_right);
+    m_leftRightList->OtherAppend(copy);
+  }
+  else {
+    if (p_left > leftRight->m_left)
+      p_left = leftRight->m_left;
+
+    if (leftRight->m_left < p_right) {
+      do {
+        if (p_right < leftRight->m_right)
+          p_right = leftRight->m_right;
+
+        // TODO: Currently inlined, shouldn't be
+        b = a;
+        b.Advance();
+
+        if (a.GetMatch()) {
+          a.Destroy();
+          a.Detach();
+        }
+
+        if (!b.Current(leftRight))
+          break;
+
+        a = b;
+      } while (leftRight->m_left < p_right);
+    }
+
+    if (a.GetMatch()) {
+      MxRegionLeftRight *copy = new MxRegionLeftRight(p_left, p_right);
+      a.Prepend(copy);
+    }
+    else {
+      MxRegionLeftRight *copy = new MxRegionLeftRight(p_left, p_right);
+      m_leftRightList->OtherAppend(copy);
+    }
+  }
 }
 
 // OFFSET: LEGO1 0x100c55d0

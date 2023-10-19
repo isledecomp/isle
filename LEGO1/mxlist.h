@@ -88,7 +88,11 @@ public:
 
   MxBool Find(T p_obj);
   void Detach();
+  void Destroy();
   MxBool Next(T& p_obj);
+  MxBool Current(T& p_obj);
+  void Advance();
+  MxListEntry<T> *GetMatch() { return m_match; }
   void SetValue(T p_obj);
   void Head() { m_match = m_list->m_first; }
   void Reset() { m_match = NULL; }
@@ -210,6 +214,12 @@ inline void MxListCursor<T>::Detach()
 }
 
 template <class T>
+inline void MxListCursor<T>::Destroy()
+{
+  m_list->m_customDestructor(m_match->GetValue());
+}
+
+template <class T>
 inline MxBool MxListCursor<T>::Next(T& p_obj)
 {
   if (!m_match)
@@ -221,6 +231,24 @@ inline MxBool MxListCursor<T>::Next(T& p_obj)
     p_obj = m_match->GetValue();
 
   return m_match != NULL;
+}
+
+template <class T>
+inline MxBool MxListCursor<T>::Current(T& p_obj)
+{
+  if (m_match)
+    p_obj = m_match->GetValue();
+
+  return m_match != NULL;
+}
+
+template <class T>
+inline void MxListCursor<T>::Advance()
+{
+  if (!m_match)
+    m_match = m_list->m_first;
+  else
+    m_match = m_match->m_next;
 }
 
 template <class T>
