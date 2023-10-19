@@ -156,7 +156,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
           a.Detach();
         }
 
-      if (!b.Current(leftRight))
+        if (!b.Current(leftRight))
           break;
 
         a = b;
