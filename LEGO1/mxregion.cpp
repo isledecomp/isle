@@ -37,7 +37,7 @@ void MxRegion::Reset()
 void MxRegion::vtable18(MxRect32 &p_rect)
 {
   MxRect32 rectCopy(
-    MxPoint32(p_rect.m_left, p_rect.m_top),
+    p_rect.GetPoint(),
     MxSize32(p_rect.m_right, p_rect.m_bottom)
   );
   MxRegionListCursor cursor(m_list);
@@ -49,19 +49,17 @@ void MxRegion::vtable18(MxRect32 &p_rect)
         break;
 
       if (topBottom->m_top >= rectCopy.m_bottom) {
-        MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(rectCopy);
-        cursor.Prepend(newTopBottom);
+        cursor.Prepend(new MxRegionTopBottom(rectCopy));
         rectCopy.m_top = rectCopy.m_bottom;
       }
       else if (rectCopy.m_top < topBottom->m_bottom) {
         if (rectCopy.m_top < topBottom->m_top) {
           MxRect32 topBottomRect(
-            MxPoint32(rectCopy.m_left, rectCopy.m_top),
+            rectCopy.GetPoint(),
             MxSize32(rectCopy.m_right, topBottom->m_top)
           );
 
-          MxRegionTopBottom *newTopBottom = new MxRegionTopBottom(topBottomRect);
-          cursor.Prepend(newTopBottom);
+          cursor.Prepend(new MxRegionTopBottom(topBottomRect));
           rectCopy.m_top = topBottom->m_top;
         }
         else if (topBottom->m_top < rectCopy.m_top) {

@@ -43,6 +43,8 @@ public:
 
   inline MxS32 GetWidth() { return (m_right - m_left) + 1; }
   inline MxS32 GetHeight() { return (m_bottom - m_top) + 1; }
+
+  inline MxPoint32 GetPoint() { return MxPoint32(this->m_left, this->m_top); }
 };
 
 #endif // MXRECT32_H
