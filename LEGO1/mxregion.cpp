@@ -105,6 +105,14 @@ void MxRegion::vtable1c()
   // TODO
 }
 
+// OFFSET: LEGO1 0x100c4c90
+MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
+{
+  m_top = p_top;
+  m_bottom = p_bottom;
+  m_leftRightList = new MxRegionLeftRightList;
+}
+
 // OFFSET: LEGO1 0x100c50e0
 MxRegionTopBottom::MxRegionTopBottom(MxRect32 &p_rect)
 {
@@ -122,8 +130,16 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 
 }
 
-// OFFSET: LEGO1 0x100c55d0 STUB
+// OFFSET: LEGO1 0x100c55d0
 MxRegionTopBottom *MxRegionTopBottom::Clone()
 {
-  return new MxRegionTopBottom(MxRect32());
+  MxRegionTopBottom *clone = new MxRegionTopBottom(m_top, m_bottom);
+
+  MxRegionLeftRightListCursor cursor(m_leftRightList);
+  MxRegionLeftRight *leftRight;
+
+  while (cursor.Next(leftRight))
+    clone->m_leftRightList->Append(leftRight->Clone());
+
+  return clone;
 }

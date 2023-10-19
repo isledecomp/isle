@@ -9,14 +9,15 @@
 // SIZE 0x0c
 struct MxRegionTopBottom
 {
-  MxS32 m_top;
-  MxS32 m_bottom;
-  MxRegionLeftRightList *m_leftRightList;
-
   MxRegionTopBottom(MxRect32 &p_rect);
+  MxRegionTopBottom(MxS32 m_top, MxS32 m_bottom);
 
   MxRegionTopBottom *Clone();
   void FUN_100c5280(MxS32 p_left, MxS32 p_right);
+
+  MxS32 m_top;
+  MxS32 m_bottom;
+  MxRegionLeftRightList *m_leftRightList;
 };
 
 // SIZE 0x08
@@ -26,6 +27,11 @@ struct MxRegionLeftRight
   {
     m_left = p_left;
     m_right = p_right;
+  }
+
+  MxRegionLeftRight *Clone()
+  {
+    return new MxRegionLeftRight(m_left, m_right);
   }
 
   MxS32 m_left;
