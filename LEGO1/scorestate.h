@@ -21,6 +21,11 @@ public:
     return !strcmp(name, ScoreState::ClassName()) || LegoState::IsA(name);
   };
 
+  virtual MxBool VTable0x14() override; // vtable+0x14
+  virtual MxBool VTable0x18() override; // vtable+0x18
+
+private:
+    MxBool m_unk0x08;
 };
 
 #endif // SCORESTATE_H
