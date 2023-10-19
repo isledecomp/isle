@@ -50,4 +50,13 @@ class MxRegionLeftRightList : public MxRegionLeftRightListParent {};
 // VTABLE 0x100dcc10
 typedef MxListCursorChildChild<MxRegionLeftRight*> MxRegionLeftRightListCursor;
 
+// OFFSET: LEGO1 0x100c54f0 TEMPLATE
+// MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
+
+// OFFSET: LEGO1 0x100c58c0 TEMPLATE
+// MxList<MxRegionLeftRight *>::_InsertEntry
+
+// OFFSET: LEGO1 0x100c5a40 TEMPLATE
+// MxList<MxRegionLeftRight *>::_DeleteEntry
+
 #endif // MXREGIONLIST_H
