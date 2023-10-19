@@ -105,10 +105,15 @@ void MxRegion::vtable1c()
   // TODO
 }
 
-// OFFSET: LEGO1 0x100c50e0 STUB
+// OFFSET: LEGO1 0x100c50e0
 MxRegionTopBottom::MxRegionTopBottom(MxRect32 &p_rect)
 {
+  m_top = p_rect.m_top;
+  m_bottom = p_rect.m_bottom;
+  m_leftRightList = new MxRegionLeftRightList;
 
+  MxRegionLeftRight *leftRight = new MxRegionLeftRight(p_rect.m_left, p_rect.m_right);
+  m_leftRightList->Append(leftRight);
 }
 
 // OFFSET: LEGO1 0x100c5280 STUB
