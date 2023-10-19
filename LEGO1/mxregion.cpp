@@ -84,7 +84,7 @@ void MxRegion::vtable18(MxRect32 &p_rect)
           }
           else {
             topBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
-            rectCopy.m_top = topBottom->m_top;
+            rectCopy.m_top = *bottom;
           }
         }
       }
