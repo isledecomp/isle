@@ -134,7 +134,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
   MxRegionLeftRight *leftRight;
   while (a.Next(leftRight) && leftRight->m_right < p_left);
 
-  if (!a.GetMatch()) {
+  if (!a.HasMatch()) {
     MxRegionLeftRight *copy = new MxRegionLeftRight(p_left, p_right);
     m_leftRightList->OtherAppend(copy);
   }
@@ -151,19 +151,19 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
         b = a;
         b.Advance();
 
-        if (a.GetMatch()) {
+        if (a.HasMatch()) {
           a.Destroy();
           a.Detach();
         }
 
-        if (!b.Current(leftRight))
+      if (!b.Current(leftRight))
           break;
 
         a = b;
       } while (leftRight->m_left < p_right);
     }
 
-    if (a.GetMatch()) {
+    if (a.HasMatch()) {
       MxRegionLeftRight *copy = new MxRegionLeftRight(p_left, p_right);
       a.Prepend(copy);
     }

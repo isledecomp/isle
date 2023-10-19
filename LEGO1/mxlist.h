@@ -92,7 +92,7 @@ public:
   MxBool Next(T& p_obj);
   MxBool Current(T& p_obj);
   void Advance();
-  MxListEntry<T> *GetMatch() { return m_match; }
+  MxBool HasMatch() { return m_match != NULL; }
   void SetValue(T p_obj);
   void Head() { m_match = m_list->m_first; }
   void Reset() { m_match = NULL; }
