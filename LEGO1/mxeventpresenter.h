@@ -28,6 +28,8 @@ public:
 
 private:
   void Init();
+  void Destroy();
+
   undefined4 m_unk50;
 
 };
