@@ -68,7 +68,6 @@ void MxRegion::vtable18(MxRect32 &p_rect)
           MxRegionTopBottom *newTopBottom = topBottom->Clone();
           newTopBottom->m_bottom = rectCopy.m_top;
           topBottom->m_top = rectCopy.m_top;
-          // TODO: _InsertEntry currently inlined, shouldn't be
           cursor.Prepend(newTopBottom);
         }
 
@@ -77,6 +76,7 @@ void MxRegion::vtable18(MxRect32 &p_rect)
           newTopBottom->m_bottom = rectCopy.m_bottom;
           topBottom->m_top = rectCopy.m_bottom;
           newTopBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
+          // TODO: _InsertEntry currently inlined, shouldn't be
           cursor.Prepend(newTopBottom);
           rectCopy.m_top = rectCopy.m_bottom; 
         }
