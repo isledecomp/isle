@@ -14,23 +14,25 @@ MxRegion::MxRegion()
   m_rect.SetSize(MxSize32(-1, -1));
 }
 
-// OFFSET: LEGO1 0x100c3660 STUB
+// OFFSET: LEGO1 0x100c3660
 MxBool MxRegion::vtable20()
 {
-  // TODO
-  return FALSE;
+  return m_list->GetCount() == 0;
 }
 
-// OFFSET: LEGO1 0x100c3690 STUB
+// OFFSET: LEGO1 0x100c3690
 MxRegion::~MxRegion()
 {
-  // TODO
+  if (m_list)
+    delete m_list;
 }
 
-// OFFSET: LEGO1 0x100c3700 STUB
+// OFFSET: LEGO1 0x100c3700
 void MxRegion::Reset()
 {
-  // TODO
+  m_list->DeleteAll();
+  m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
+  m_rect.SetSize(MxSize32(-1, -1));
 }
 
 // OFFSET: LEGO1 0x100c3750
@@ -100,10 +102,29 @@ void MxRegion::vtable18(MxRect32 &p_rect)
   m_rect.m_bottom = m_rect.m_bottom <= p_rect.m_bottom ? p_rect.m_bottom : m_rect.m_bottom;
 }
 
-// OFFSET: LEGO1 0x100c3e20 STUB
-void MxRegion::vtable1c()
+// OFFSET: LEGO1 0x100c3e20
+MxBool MxRegion::vtable1c(MxRect32 &p_rect)
 {
-  // TODO
+  if (m_rect.m_left < p_rect.m_right &&
+      p_rect.m_left < m_rect.m_right &&
+      (m_rect.m_top < p_rect.m_bottom &&
+       p_rect.m_top < m_rect.m_bottom)) {
+    MxRegionListCursor cursor(m_list);
+    MxRegionTopBottom *topBottom;
+  
+    do {
+      do {
+        if (!cursor.Next(topBottom))
+          return FALSE;
+        if (topBottom->m_top >= p_rect.m_bottom)
+          return FALSE;
+      } while (topBottom->m_bottom <= p_rect.m_top);
+    } while (!topBottom->FUN_100c57b0(p_rect));
+
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 // OFFSET: LEGO1 0x100c4c90
@@ -186,4 +207,20 @@ MxRegionTopBottom *MxRegionTopBottom::Clone()
     clone->m_leftRightList->Append(leftRight->Clone());
 
   return clone;
+}
+
+// OFFSET: LEGO1 0x100c57b0
+MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32 &p_rect)
+{
+  MxRegionLeftRightListCursor cursor(m_leftRightList);
+  MxRegionLeftRight *leftRight;
+
+  do {
+    if (!cursor.Next(leftRight))
+      return FALSE;
+    if (p_rect.m_right <= leftRight->m_left)
+      return FALSE;
+  } while (leftRight->m_right <= p_rect.m_left);
+
+  return TRUE;
 }

@@ -14,6 +14,7 @@ struct MxRegionTopBottom
 
   MxRegionTopBottom *Clone();
   void FUN_100c5280(MxS32 p_left, MxS32 p_right);
+  MxBool FUN_100c57b0(MxRect32 &p_rect);
 
   MxS32 m_top;
   MxS32 m_bottom;
@@ -48,7 +49,7 @@ public:
 
   virtual void Reset();
   virtual void vtable18(MxRect32 &p_rect);
-  virtual void vtable1c();
+  virtual MxBool vtable1c(MxRect32 &p_rect);
   virtual MxBool vtable20();
 
   inline MxRect32 &GetRect() { return this->m_rect; }
