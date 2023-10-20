@@ -28,10 +28,9 @@ public:
 
 private:
   void Init();
-  void Destroy();
+  virtual void Destroy() override;
 
-  undefined4 m_unk50;
-
+  undefined4 *m_unk50;
 };
 
 #endif // MXEVENTPRESENTER_H
