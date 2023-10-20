@@ -160,25 +160,23 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
     if (p_left > leftRight->m_left)
       p_left = leftRight->m_left;
 
-    if (leftRight->m_left < p_right) {
-      do {
-        if (p_right < leftRight->m_right)
-          p_right = leftRight->m_right;
+    while (leftRight->m_left < p_right) {
+      if (p_right < leftRight->m_right)
+        p_right = leftRight->m_right;
 
-        // TODO: Currently inlined, shouldn't be
-        b = a;
-        b.Advance();
+      // TODO: Currently inlined, shouldn't be
+      b = a;
+      b.Advance();
 
-        if (a.HasMatch()) {
-          a.Destroy();
-          a.Detach();
-        }
+      if (a.HasMatch()) {
+        a.Destroy();
+        a.Detach();
+      }
 
-        if (!b.Current(leftRight))
-          break;
+      if (!b.Current(leftRight))
+        break;
 
-        a = b;
-      } while (leftRight->m_left < p_right);
+      a = b;
     }
 
     if (a.HasMatch()) {
