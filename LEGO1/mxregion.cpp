@@ -105,23 +105,20 @@ void MxRegion::vtable18(MxRect32 &p_rect)
 // OFFSET: LEGO1 0x100c3e20
 MxBool MxRegion::vtable1c(MxRect32 &p_rect)
 {
-  if (m_rect.m_left < p_rect.m_right &&
-      p_rect.m_left < m_rect.m_right &&
-      (m_rect.m_top < p_rect.m_bottom &&
-       p_rect.m_top < m_rect.m_bottom)) {
-    MxRegionListCursor cursor(m_list);
-    MxRegionTopBottom *topBottom;
+  if (m_rect.m_left >= p_rect.m_right ||
+      p_rect.m_left >= m_rect.m_right ||
+      m_rect.m_top >= p_rect.m_bottom ||
+      p_rect.m_top >= m_rect.m_bottom)
+    return FALSE;
+       
+  MxRegionListCursor cursor(m_list);
+  MxRegionTopBottom *topBottom;
   
-    do {
-      do {
-        if (!cursor.Next(topBottom))
-          return FALSE;
-        if (topBottom->m_top >= p_rect.m_bottom)
-          return FALSE;
-      } while (topBottom->m_bottom <= p_rect.m_top);
-    } while (!topBottom->FUN_100c57b0(p_rect));
-
-    return TRUE;
+  while (cursor.Next(topBottom)) {
+    if (topBottom->m_top >= p_rect.m_bottom)
+      return FALSE;
+    if (topBottom->m_bottom > p_rect.m_top && topBottom->FUN_100c57b0(p_rect))
+      return TRUE;
   }
 
   return FALSE;
@@ -215,12 +212,12 @@ MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32 &p_rect)
   MxRegionLeftRightListCursor cursor(m_leftRightList);
   MxRegionLeftRight *leftRight;
 
-  do {
-    if (!cursor.Next(leftRight))
-      return FALSE;
+  while (cursor.Next(leftRight)) {
     if (p_rect.m_right <= leftRight->m_left)
       return FALSE;
-  } while (leftRight->m_right <= p_rect.m_left);
+    if (leftRight->m_right > p_rect.m_left)
+      return TRUE;
+  }
 
-  return TRUE;
+  return FALSE;
 }
