@@ -23,8 +23,9 @@ public:
     return !strcmp(name, MxSoundPresenter::ClassName()) || MxAudioPresenter::IsA(name);
   };
 
-  virtual MxResult AddToManager(); // vtable+0x34
-  virtual void vtable38(); // vtable+0x38
+  virtual MxResult AddToManager() override; // vtable+0x34
+  virtual void Destroy() override; // vtable+0x38
+
 private:
   void Destroy(MxBool);
 };

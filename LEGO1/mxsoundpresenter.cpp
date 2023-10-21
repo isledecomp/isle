@@ -14,30 +14,32 @@ MxSoundPresenter::~MxSoundPresenter()
 // OFFSET: LEGO1 0x100b1a50
 void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
-  if(MSoundManager()) {
-      MSoundManager()->RemovePresenter(*this);
-  }
+  if (MSoundManager())
+    MSoundManager()->RemovePresenter(*this);
+
   this->m_criticalSection.Enter();
   MxMediaPresenter::Init();
   this->m_criticalSection.Leave();
-  if(p_fromDestructor == FALSE) {
-      MxMediaPresenter::Destroy(FALSE);
-  }
+
+  if (!p_fromDestructor)
+    MxMediaPresenter::Destroy(FALSE);
 }
 
 // OFFSET: LEGO1 0x100b1aa0
 MxResult MxSoundPresenter::AddToManager()
 {
   MxResult ret = FAILURE;
-  if(MSoundManager()) {
-      ret = SUCCESS;
-      MSoundManager()->AddPresenter(*this);
+
+  if (MSoundManager()) {
+    ret = SUCCESS;
+    MSoundManager()->AddPresenter(*this);
   }
+
   return ret;
 }
 
 // OFFSET: LEGO1 0x1000d490
-void MxSoundPresenter::vtable38()
+void MxSoundPresenter::Destroy()
 {
   Destroy(FALSE);
 }
