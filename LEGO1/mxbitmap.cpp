@@ -369,7 +369,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 MxResult MxBitmap::StretchBits(HDC p_hdc, MxS32 p_xSrc, MxS32 p_ySrc, MxS32 p_xDest, MxS32 p_yDest, MxS32 p_destWidth, MxS32 p_destHeight)
 {
   // Compression fix?
-  if ((this->m_bmiHeader->biCompression != 16) && (0 < this->m_bmiHeader->biHeight)) {
+  if ((this->m_bmiHeader->biCompression != BI_RGB_TOPDOWN) && (0 < this->m_bmiHeader->biHeight)) {
     p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
   }
 
