@@ -6,6 +6,7 @@
 #include "legoutil.h"
 #include "legoobjectfactory.h"
 #include "legoinputmanager.h"
+#include "legoworld.h"
 
 // 0x100f4588
 MxAtomId *g_nocdSourceName = NULL;
@@ -329,9 +330,11 @@ int LegoOmni::vtable0x30(char*, int, MxCore*)
   return 0;
 }
 
-void LegoOmni::NotifyCurrentEntity()
+// OFFSET: LEGO1 0x1005b3a0
+void LegoOmni::NotifyCurrentEntity(MxNotificationParam *p_param)
 {
-  // FIXME: Stub
+  if (m_currentWorld)
+    NotificationManager()->Send(m_currentWorld, p_param);
 }
 
 // OFFSET: LEGO1 0x1005b640

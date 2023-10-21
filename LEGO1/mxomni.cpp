@@ -94,7 +94,7 @@ int MxOmni::vtable0x30(char*, int, MxCore*)
 }
 
 // OFFSET: LEGO1 0x100aefc0
-void MxOmni::NotifyCurrentEntity(MxParam *p_param)
+void MxOmni::NotifyCurrentEntity(MxNotificationParam *p_param)
 {
 }
 
