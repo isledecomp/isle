@@ -147,6 +147,15 @@ MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
   return FAILURE;
 }
 
+// OFFSET: LEGO1 0x100b9b30
+MxBool MxStreamer::FUN_100b9b30(MxDSObject &p_dsObject)
+{
+  MxStreamController *controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
+  if (controller)
+    return controller->FUN_100c20d0(p_dsObject);
+  return TRUE;
+}
+
 // OFFSET: LEGO1 0x100b9b60
 MxLong MxStreamer::Notify(MxParam &p)
 {

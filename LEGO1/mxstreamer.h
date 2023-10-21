@@ -7,6 +7,7 @@
 #include "mxcore.h"
 #include "mxnotificationparam.h"
 #include "mxstreamcontroller.h"
+#include "mxdsobject.h"
 #include "mxtypes.h"
 
 // NOTE: This feels like some kind of templated class, maybe something from the
@@ -92,11 +93,10 @@ public:
 
   virtual MxResult Create(); // vtable+0x14
 
+  MxBool FUN_100b9b30(MxDSObject &p_dsObject);
   MxStreamController *GetOpenStream(const char *p_name);
-
   MxResult AddStreamControllerToOpenList(MxStreamController *p_stream);
-
-  MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action);
+  MxResult Unknown100b99b0(MxDSAction* p_action);
 
 private:
   list<MxStreamController *> m_openStreams; // 0x8

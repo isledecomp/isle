@@ -68,15 +68,20 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
-void MxOmni::DeleteObject(MxDSAction &ds)
+void MxOmni::DeleteObject(MxDSAction &p_dsAction)
 {
   // TODO
 }
 
-// OFFSET: LEGO1 0x100b09a0 STUB
-MxBool MxOmni::DoesEntityExist(MxDSAction &ds)
+// OFFSET: LEGO1 0x100b09a0
+MxBool MxOmni::DoesEntityExist(MxDSAction &p_dsAction)
 {
-  // TODO
+  if (m_streamer->FUN_100b9b30(p_dsAction)) {
+    MxNotificationPtrList *queue = m_notificationManager->GetQueue();
+
+    if (!queue || queue->size() == 0)
+      return TRUE;
+  }
   return FALSE;
 }
 
