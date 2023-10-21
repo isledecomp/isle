@@ -96,7 +96,7 @@ public:
   MxBool FUN_100b9b30(MxDSObject &p_dsObject);
   MxStreamController *GetOpenStream(const char *p_name);
   MxResult AddStreamControllerToOpenList(MxStreamController *p_stream);
-  MxResult Unknown100b99b0(MxDSAction* p_action);
+  MxResult FUN_100b99b0(MxDSAction* p_action);
 
 private:
   list<MxStreamController *> m_openStreams; // 0x8

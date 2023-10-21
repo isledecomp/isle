@@ -61,7 +61,7 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
   MxResult result = FAILURE;
   if(p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL)
   {
-    result = m_streamer->Unknown100b99b0(p_dsAction);
+    result = m_streamer->FUN_100b99b0(p_dsAction);
   }
 
   return result;
