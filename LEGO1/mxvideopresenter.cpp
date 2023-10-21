@@ -67,7 +67,7 @@ MxS32 MxVideoPresenter::GetHeight()
 }
 
 // OFFSET: LEGO1 0x100b24f0
-MxVideoPresenter::AlphaMask::AlphaMask(MxBitmap &p_bitmap)
+MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap &p_bitmap)
 {
   m_width  = p_bitmap.GetBmiWidth();
   // DECOMP: ECX becomes word-sized if these are not two separate actions.
@@ -146,6 +146,18 @@ seek_to_last_row:
     t_ptr = bitmap_src_ptr;
   }
 }
+
+// OFFSET: LEGO1 0x100b2670
+MxVideoPresenter::AlphaMask::AlphaMask(const MxVideoPresenter::AlphaMask &p_alpha)
+{
+  m_width  = p_alpha.m_width;
+  m_height = p_alpha.m_height;
+
+  MxS32 size = ((m_width * m_height) / 8) + 1;
+  m_bitmask = new MxU8[size];
+  memcpy(m_bitmask, p_alpha.m_bitmask, size);
+}
+
 
 // OFFSET: LEGO1 0x100b26d0
 MxVideoPresenter::AlphaMask::~AlphaMask()

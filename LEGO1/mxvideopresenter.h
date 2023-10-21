@@ -55,7 +55,8 @@ public:
     MxU16 m_width;
     MxU16 m_height;
 
-    AlphaMask(MxBitmap &);
+    AlphaMask(const MxBitmap &);
+    AlphaMask(const AlphaMask &);
     virtual ~AlphaMask();
   };
 
