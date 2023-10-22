@@ -124,9 +124,9 @@ MxLong MXIOINFO::Read(void *p_buf, MxLong p_len)
 }
 
 // OFFSET: LEGO1 0x100cca00
-MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
+MxResult MXIOINFO::Seek(MxLong p_offset, int p_origin)
 {
-  MxLong result = FAILURE;
+  MxResult result = FAILURE;
 
   // If buffered I/O
   if (m_info.pchBuffer) {
@@ -142,7 +142,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
       }
     } else if (p_origin == SEEK_END) {
       // not possible with buffered I/O
-      return -1;
+      return FAILURE;
     }
     
     // else p_origin == SEEK_SET.
