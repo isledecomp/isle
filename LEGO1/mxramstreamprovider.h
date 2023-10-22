@@ -16,10 +16,12 @@ public:
   virtual MxU32 GetLengthInDWords() override; //vtable+0x24
   virtual MxU32* GetBufferForDWords() override; //vtable+0x28
 
+  inline MxU32* GetBufferOfFileSize() {return m_pBufferOfFileSize;}
+
 protected:
   MxU32 m_bufferSize;
   MxU32 m_fileSize;
-  void* m_pBufferOfFileSize;
+  MxU32* m_pBufferOfFileSize;
   MxU32 m_lengthInDWords;
   MxU32* m_bufferForDWords;
 };
