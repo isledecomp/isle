@@ -16,5 +16,5 @@ LegoPathController::~LegoPathController()
 MxResult LegoPathController::Tickle()
 {
   // TODO
-  return 0;
+  return SUCCESS;
 }
