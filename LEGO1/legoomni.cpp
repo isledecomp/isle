@@ -11,6 +11,9 @@
 // 0x100f4588
 MxAtomId *g_nocdSourceName = NULL;
 
+// 0x100f456c
+MxAtomId *g_jukeboxScript = NULL;
+
 // 0x101020e8
 void (*g_omniUserMessage)(const char *,int);
 
@@ -26,10 +29,13 @@ LegoOmni::~LegoOmni()
   Destroy();
 }
 
-// OFFSET: LEGO1 0x1005b560 STUB
+// OFFSET: LEGO1 0x1005b560
 void LegoOmni::CreateBackgroundAudio()
 {
-  // TODO
+  if (m_bkgAudioManager != NULL)
+  {
+    m_bkgAudioManager->Create(*g_jukeboxScript, 100);
+  }
 }
 
 // OFFSET: LEGO1 0x1005af10 STUB
@@ -308,9 +314,10 @@ MxResult LegoOmni::Start(MxDSAction* action)
   return result;
 }
 
-void LegoOmni::DeleteObject(MxDSAction &ds)
+MxResult LegoOmni::DeleteObject(MxDSAction &ds)
 {
   // FIXME: Stub
+  return FAILURE;
 }
 
 MxBool LegoOmni::DoesEntityExist(MxDSAction &ds)

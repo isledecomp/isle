@@ -57,7 +57,7 @@ public:
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
   virtual void Destroy() override; // vtable+1c
   virtual MxResult Start(MxDSAction* action) override;
-  virtual void DeleteObject(MxDSAction &ds) override;
+  virtual MxResult DeleteObject(MxDSAction &ds) override;
   virtual MxBool DoesEntityExist(MxDSAction &ds) override;
   virtual void vtable0x2c() override;
   virtual int vtable0x30(char*, int, MxCore*) override;

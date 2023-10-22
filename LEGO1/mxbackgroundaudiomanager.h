@@ -28,10 +28,13 @@ public:
   }
 
   __declspec(dllexport) void Enable(unsigned char p);
+  virtual MxResult Create(MxAtomId& script, MxU32 p_interval);
 
   void Stop();
 private:
   void Init();
+  MxResult OpenMusic(MxAtomId& script);
+  void DestroyMusic();
 
   MxBool m_musicEnabled; // 0x8
   MxDSAction m_action1; // 0xc
