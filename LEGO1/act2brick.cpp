@@ -25,5 +25,5 @@ MxResult Act2Brick::Tickle()
 {
   // TODO
 
-  return 0;
+  return SUCCESS;
 }

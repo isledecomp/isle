@@ -12,7 +12,7 @@ MxMediaPresenter::~MxMediaPresenter()
 MxResult MxMediaPresenter::Tickle()
 {
   // TODO
-  return 0;
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b54e0
