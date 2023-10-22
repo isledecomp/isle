@@ -22,7 +22,7 @@ offsetCommentRegex = re.compile(r'//\s?OFFSET:\s?\w+ (?:0x)?([a-f0-9]+)',
 
 # To match the exact syntax (text upper case, hex lower case, with spaces)
 # that is used in most places
-offsetCommentExactRegex = re.compile(r'// OFFSET: [A-Z0-9]+ (0x[a-f][0-9]+)')
+offsetCommentExactRegex = re.compile(r'// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)')
 
 
 def is_blank_or_comment(line: str) -> bool:
@@ -109,6 +109,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
 
 
 def file_is_cpp(filename: str) -> bool:
+    # TODO: expand to check header files also?
     (basefile, ext) = os.path.splitext(filename)
     return ext.lower() == '.cpp'
 
@@ -126,7 +127,19 @@ def walk_source_dir(source: str) -> Iterator[tuple]:
 
 
 def sig_truncate(sig: str) -> str:
+    """Helper to truncate function names to 50 chars and append ellipsis
+       if needed. Goal is to stay under 80 columns for tool output."""
     return f"{sig[:47]}{'...' if len(sig) >= 50 else ''}"
+
+
+def get_inexact_offset_comments(stream: TextIO) -> [tuple]:
+    """Read the file stream and return the line number and string
+       for any offset comments that don't exactly match the template."""
+    return ([
+        (line_no, line.strip())
+        for line_no, line in enumerate(stream)
+        if match_offset_comment(line) and not is_exact_offset_comment(line)
+    ])
 
 
 def check_file(filename: str, verbose: bool = False) -> bool:
@@ -135,31 +148,49 @@ def check_file(filename: str, verbose: bool = False) -> bool:
 
     with open(filename, 'r') as f:
         code_blocks = find_code_blocks(f)
+        # TODO: Should combine these checks if/when we refactor.
+        # This is just for simplicity / proof of concept.
+        f.seek(os.SEEK_SET, 0)
+        bad_comments = get_inexact_offset_comments(f)
 
     just_offsets = [block.offset for block in code_blocks]
     sorted_offsets = sorted(just_offsets)
-    if just_offsets == sorted_offsets:
+    file_out_of_order = just_offsets != sorted_offsets
+
+    # If we detect inexact comments, don't print anything unless we are
+    # in verbose mode. If the file is out of order, we always print the
+    # file name.
+    should_report = ((len(bad_comments) > 0 and verbose)
+                     or file_out_of_order)
+
+    if not should_report and not file_out_of_order:
         return False
 
+    # Else: we are alerting to some problem in this file
     print(filename)
     if verbose:
-        order_lookup = {k: i for i, k in enumerate(sorted_offsets)}
-        prev_offset = 0
+        if file_out_of_order:
+            order_lookup = {k: i for i, k in enumerate(sorted_offsets)}
+            prev_offset = 0
 
-        for block in code_blocks:
-            msg = ' '.join([
-                ' ' if block.offset > prev_offset else '!',
-                f'{block.offset:08x}',
-                f'{block.end_line - block.start_line:4} lines',
-                f'{order_lookup[block.offset]:3}',
-                '    ',
-                sig_truncate(block.signature),
-            ])
-            print(msg)
-            prev_offset = block.offset
+            for block in code_blocks:
+                msg = ' '.join([
+                    ' ' if block.offset > prev_offset else '!',
+                    f'{block.offset:08x}',
+                    f'{block.end_line - block.start_line:4} lines',
+                    f'{order_lookup[block.offset]:3}',
+                    '    ',
+                    sig_truncate(block.signature),
+                ])
+                print(msg)
+                prev_offset = block.offset
+
+        for (line_no, line) in bad_comments:
+            print(f'* line {line_no:3} bad offset comment ({line})')
 
         print()
-    return True
+
+    return file_out_of_order
 
 
 def parse_args(test_args: list | None = None) -> dict:
