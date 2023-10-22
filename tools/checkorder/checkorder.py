@@ -17,12 +17,12 @@ CodeBlock = namedtuple('CodeBlock',
                        ['offset', 'signature', 'start_line', 'end_line'])
 
 # To match a reasonable variance of formatting for the offset comment
-offsetCommentRegex = re.compile(r'//\s?OFFSET:\s?LEGO1 (?:0x)?([a-f0-9]+)',
+offsetCommentRegex = re.compile(r'//\s?OFFSET:\s?\w+ (?:0x)?([a-f0-9]+)',
                                 flags=re.I)
 
 # To match the exact syntax (text upper case, hex lower case, with spaces)
 # that is used in most places
-offsetCommentExactRegex = re.compile(r'// OFFSET: LEGO1 (0x[a-f][0-9]+)')
+offsetCommentExactRegex = re.compile(r'// OFFSET: [A-Z0-9]+ (0x[a-f][0-9]+)')
 
 
 def is_blank_or_comment(line: str) -> bool:
@@ -31,9 +31,9 @@ def is_blank_or_comment(line: str) -> bool:
        function signature, and we want to skip those."""
     line_strip = line.strip()
     return (len(line_strip) == 0
-            or line.startswith('//')
-            or line.startswith('/*')
-            or line.startswith('*/'))
+            or line_strip.startswith('//')
+            or line_strip.startswith('/*')
+            or line_strip.endswith('*/'))
 
 
 def is_exact_offset_comment(line: str) -> bool:
