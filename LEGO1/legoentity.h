@@ -38,6 +38,8 @@ public:
   virtual MxResult InitFromMxDSObject(MxDSObject& p_object); // vtable+0x18
   virtual void Destroy(MxBool p_fromDestructor); // vtable+0x1c
   virtual void ParseAction(char *); // vtable+0x20
+  // OFFSET: LEGO1 0x10001090
+  virtual void VTable0x30(undefined4 p_1) { m_unk50 = p_1; }
 
 protected:
   void Reset();

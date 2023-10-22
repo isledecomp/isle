@@ -5,6 +5,7 @@
 #include "mxstring.h"
 #include "mxcriticalsection.h"
 
+class MxAtomId;
 class MxAtomIdCounterSet;
 class MxDSAction;
 class MxEventManager;
@@ -98,5 +99,6 @@ __declspec(dllexport) MxNotificationManager * NotificationManager();
 MxVideoManager *MVideoManager();
 MxAtomIdCounterSet *AtomIdCounterSet();
 MxObjectFactory *ObjectFactory();
-
+void DeleteObject(MxDSAction &ds);
+void DeleteObjects(MxAtomId *p_id, MxU32 p_first, MxU32 p_last);
 #endif // MXOMNI_H

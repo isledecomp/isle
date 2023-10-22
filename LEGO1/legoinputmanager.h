@@ -2,6 +2,7 @@
 #define LEGOINPUTMANAGER_H
 
 #include "decomp.h"
+#include "legoworld.h"
 #include "mxpresenter.h"
 #include "mxlist.h"
 
@@ -42,12 +43,19 @@ public:
   void KillTimer();
 
   inline LegoControlManager *GetControlManager() { return m_controlManager; }
+  inline LegoWorld *GetWorld() { return m_world; }
+  void SetCamera(LegoCameraController *p_camera);
+  void ClearCamera();
+  void SetWorld(LegoWorld *p_world);
+  void ClearWorld();
+  void inline SetM88(MxBool p_1) { m_unk0x88 = p_1; }
+  void inline SetM336(MxBool p_1) { m_unk0x336 = p_1; }
 
 //private:
   MxCriticalSection m_criticalSection;
   MxList<undefined4> *m_unk0x5c; // list or hash table
-  undefined4 m_unk0x60;
-  undefined4 m_unk0x64;
+  LegoCameraController *m_camera;
+  LegoWorld *m_world;
   MxList<undefined4> *m_unk0x68; // list or hash table
   undefined4 m_unk0x6c;
   undefined4 m_unk0x70;
@@ -72,5 +80,7 @@ public:
   MxBool m_unk0x335;
   MxBool m_unk0x336;
 };
+
+LegoControlManager* ControlManager();
 
 #endif // LEGOINPUTMANAGER_H

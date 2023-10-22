@@ -24,7 +24,8 @@ public:
   {
     return !strcmp(name, LegoControlManager::ClassName()) || MxCore::IsA(name);
   }
-
+  void Register(MxCore *p_listener);
+  void Unregister(MxCore *p_listener);
 };
 
 #endif // LEGOCONTROLMANAGER_H

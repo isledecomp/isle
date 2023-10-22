@@ -265,7 +265,7 @@ void LegoOmni::Init()
   m_unk68 = 0;
   m_inputMgr = NULL;
   m_unk6c = 0;
-  m_unk74 = 0;
+  m_gifManager = NULL;
   m_unk78 = 0;
   m_currentWorld = NULL;
   m_unk80 = FALSE;
@@ -355,4 +355,9 @@ void LegoOmni::StopTimer()
 LegoWorld *GetCurrentWorld()
 {
   return LegoOmni::GetInstance()->GetCurrentWorld();
+}
+
+// OFFSET: LEGO1 0x10015800
+GifManager *GetGifManager() {
+  return LegoOmni::GetInstance()->GetGifManager();
 }

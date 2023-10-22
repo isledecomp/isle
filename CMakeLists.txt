@@ -28,6 +28,7 @@ add_library(lego1 SHARED
   LEGO1/gasstation.cpp
   LEGO1/gasstationentity.cpp
   LEGO1/gasstationstate.cpp
+  LEGO1/gifmanager.cpp
   LEGO1/helicopter.cpp
   LEGO1/helicopterstate.cpp
   LEGO1/historybook.cpp

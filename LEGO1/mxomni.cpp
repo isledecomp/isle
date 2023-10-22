@@ -402,3 +402,20 @@ MxEventManager* EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
 }
+
+// OFFSET: LEGO1 0x100acf70
+void DeleteObject(MxDSAction &ds)
+{
+  MxOmni::GetInstance()->DeleteObject(ds);
+}
+
+// Offset: LEGO1 0x100159e0
+void DeleteObjects(MxAtomId *p_id, MxU32 p_first, MxU32 p_last)
+{
+  MxDSAction action;
+  action.SetAtomId(*p_id);
+  while(p_first <= p_last) {
+    action.SetUnknown24(p_first++);
+    DeleteObject(action);
+  }
+}

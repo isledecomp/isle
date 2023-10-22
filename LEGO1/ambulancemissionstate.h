@@ -22,7 +22,25 @@ public:
   {
     return !strcmp(name, AmbulanceMissionState::ClassName()) || LegoState::IsA(name);
   }
-
+  inline MxU16 GetColor(MxU8 id)
+  {
+    switch (id)
+    {
+    case 1: return m_color1;
+    case 2: return m_color2;
+    case 3: return m_color3;
+    case 4: return m_color4;
+    case 5: return m_color5;
+    default: return 0;
+    }
+  }
+protected:
+  undefined m_unk8[0x12];
+  MxU16 m_color1;
+  MxU16 m_color2;
+  MxU16 m_color3;
+  MxU16 m_color4;
+  MxU16 m_color5;
 };
 
 
