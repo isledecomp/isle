@@ -25,35 +25,17 @@ void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 
 }
 
-// OFFSET: LEGO1 0x100aeac0 STUB
-void LegoSoundManager::SetVolume(MxS32 p_volume)
-{
-
-}
-
 // OFFSET: LEGO1 0x100299f0 STUB
 MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
   return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100aed10 STUB
-void LegoSoundManager::vtable0x34()
-{
-
-}
-
-// OFFSET: LEGO1 0x100aee10 STUB
-void LegoSoundManager::vtable0x38()
-{
-
-}
-
 // OFFSET: LEGO1 0x100299a0
 void LegoSoundManager::Init()
 {
-  unk0x3c = 0;
   unk0x40 = 0;
+  unk0x3c = 0;
 }
 
 // OFFSET: LEGO1 0x1002a3a0 STUB
@@ -62,5 +44,5 @@ MxResult LegoSoundManager::Tickle()
   MxMediaManager::Tickle();
   MxAutoLocker lock(&this->m_criticalSection);
 
-  return 0; //TODO: call something in unk0x40
+  return 0; // TODO: call something in unk0x40
 }
