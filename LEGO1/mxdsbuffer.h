@@ -19,7 +19,7 @@ public:
     return "MxDSBuffer";
   }
 
-  void FUN_100c678(void* p_buffer, MxU32 p_size);
+  MxResult FUN_100c6780(void* p_buffer, MxU32 p_size);
 
   inline void* GetBuffer() { return m_pBuffer;}
   inline MxU32 GetWriteOffset() { return m_writeOffset;}
@@ -32,7 +32,7 @@ private:
   undefined4 m_unk18;
   undefined4 m_unk1c;
   undefined2 m_unk20;
-  int m_mode;
+  undefined4 m_mode;
   MxU32 m_writeOffset;
   MxU32 m_bytesRemaining;
   undefined4 m_unk30;

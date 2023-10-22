@@ -2,6 +2,7 @@
 #define MXDSSOURCE_H
 
 #include "mxcore.h"
+
 class MxDSBuffer;
 
 // VTABLE 0x100dc8c8
@@ -10,7 +11,7 @@ class MxDSSource : public MxCore
 public:
   MxDSSource()
     : m_lengthInDWords(0)
-    , m_pBuffer(0)
+    , m_pBuffer(NULL)
     , m_position(-1)
   {}
 
@@ -29,7 +30,7 @@ public:
 
   virtual MxLong Open(MxULong) = 0;
   virtual MxLong Close() = 0;
-  virtual void ReadToBuffer(MxDSBuffer* p_unk);
+  virtual void ReadToBuffer(MxDSBuffer* p_buffer);
   virtual MxResult Read(unsigned char *, MxULong) = 0;
   virtual MxLong Seek(MxLong, int) = 0;
   virtual MxULong GetBufferSize() = 0;
