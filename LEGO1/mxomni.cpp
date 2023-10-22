@@ -74,12 +74,6 @@ MxResult MxOmni::DeleteObject(MxDSAction &p_dsAction)
   return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100acf70
-MxResult DeleteObject(MxDSAction &ds)
-{
-  return MxOmni::GetInstance()->DeleteObject(ds);
-}
-
 // OFFSET: LEGO1 0x100b09a0
 MxBool MxOmni::DoesEntityExist(MxDSAction &p_dsAction)
 {
@@ -408,4 +402,10 @@ MxMusicManager* MusicManager()
 MxEventManager* EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
+}
+
+// OFFSET: LEGO1 0x100acf70
+MxResult DeleteObject(MxDSAction &p_dsAction)
+{
+  return MxOmni::GetInstance()->DeleteObject(p_dsAction);
 }

@@ -32,10 +32,8 @@ LegoOmni::~LegoOmni()
 // OFFSET: LEGO1 0x1005b560
 void LegoOmni::CreateBackgroundAudio()
 {
-  if (m_bkgAudioManager != NULL)
-  {
+  if (m_bkgAudioManager)
     m_bkgAudioManager->Create(*g_jukeboxScript, 100);
-  }
 }
 
 // OFFSET: LEGO1 0x1005af10 STUB

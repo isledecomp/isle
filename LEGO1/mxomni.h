@@ -94,8 +94,8 @@ __declspec(dllexport) MxVariableTable * VariableTable();
 __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
-MxResult DeleteObject(MxDSAction &ds);
 
+MxResult DeleteObject(MxDSAction &p_dsAction);
 MxVideoManager *MVideoManager();
 MxAtomIdCounterSet *AtomIdCounterSet();
 MxObjectFactory *ObjectFactory();

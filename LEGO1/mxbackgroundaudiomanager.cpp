@@ -31,17 +31,15 @@ MxBackgroundAudioManager::~MxBackgroundAudioManager()
 void MxBackgroundAudioManager::Stop()
 {
   if (m_action2.GetObjectId() != -1)
-  {
     DeleteObject(m_action2);
-  }
+
   m_unk138 = 0;
   m_action2.SetAtomId(MxAtomId());
   m_action2.SetObjectId(-1);
 
   if (m_action1.GetObjectId() != -1)
-  {
     DeleteObject(m_action1);
-  }
+
   m_unka0 = 0;
   m_action1.SetAtomId(MxAtomId());
   m_unk148 = 0;
@@ -68,30 +66,29 @@ void MxBackgroundAudioManager::Init()
 }
 
 // OFFSET: LEGO1 0x1007ece0
-MxResult MxBackgroundAudioManager::Create(MxAtomId& script, MxU32 p_interval)
+MxResult MxBackgroundAudioManager::Create(MxAtomId &p_script, MxU32 p_frequencyMS)
 {
-  MxResult result = OpenMusic(script);
-  if (result == SUCCESS)
-  {
-    TickleManager()->RegisterClient(this, p_interval);
+  MxResult result = OpenMusic(p_script);
+
+  if (result == SUCCESS) {
+    TickleManager()->RegisterClient(this, p_frequencyMS);
     m_musicEnabled = TRUE;
   }
+
   return result;
 }
 
 // OFFSET: LEGO1 0x1007ed20
-MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& script)
+MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId &p_script)
 {
-  MxResult result = FAILURE;
-  if (m_unk14c.GetInternal() != NULL)
-  {
+  if (m_script.GetInternal())
     DestroyMusic();
-  }
 
-  if (Streamer()->Open(script.GetInternal(), 0) != NULL)
-  {
+  MxResult result = FAILURE;
+
+  if (Streamer()->Open(p_script.GetInternal(), 0)) {
+    m_script = p_script;
     result = SUCCESS;
-    m_unk14c = script;
   }
 
   return result;
@@ -100,13 +97,12 @@ MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& script)
 // OFFSET: LEGO1 0x1007ed70
 void MxBackgroundAudioManager::DestroyMusic()
 {
-  if (m_unk14c.GetInternal() != NULL)
-  {
+  if (m_script.GetInternal()) {
     MxDSAction ds;
-    ds.SetAtomId(m_unk14c);
+    ds.SetAtomId(m_script);
     ds.SetUnknown24(-2);
     DeleteObject(ds);
-    Streamer()->Close(m_unk14c.GetInternal());
+    Streamer()->Close(m_script.GetInternal());
     m_musicEnabled = FALSE;
   }
 }
