@@ -21,6 +21,8 @@ public:
     return !strcmp(name, JukeBoxState::ClassName()) || LegoState::IsA(name);
   }
 
+  virtual MxBool VTable0x14() override; // vtable+0x14
+
 };
 
 #endif // JUKEBOXSTATE_H
