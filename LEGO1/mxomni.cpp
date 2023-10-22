@@ -68,9 +68,10 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
-void MxOmni::DeleteObject(MxDSAction &p_dsAction)
+MxResult MxOmni::DeleteObject(MxDSAction &p_dsAction)
 {
   // TODO
+  return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100b09a0
@@ -231,7 +232,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
   }
 
   if (p.CreateFlags().CreateStreamer()) {
-    if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS) 
+    if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS)
       goto done;
   }
 
@@ -401,4 +402,10 @@ MxMusicManager* MusicManager()
 MxEventManager* EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
+}
+
+// OFFSET: LEGO1 0x100acf70
+MxResult DeleteObject(MxDSAction &p_dsAction)
+{
+  return MxOmni::GetInstance()->DeleteObject(p_dsAction);
 }
