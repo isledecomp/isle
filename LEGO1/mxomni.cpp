@@ -410,7 +410,7 @@ MxResult DeleteObject(MxDSAction &p_dsAction)
   return MxOmni::GetInstance()->DeleteObject(p_dsAction);
 }
 
-// Offset: LEGO1 0x100159e0
+// OFFSET: LEGO1 0x100159e0
 void DeleteObjects(MxAtomId *p_id, MxU32 p_first, MxU32 p_last)
 {
   MxDSAction action;
