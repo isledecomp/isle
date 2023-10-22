@@ -126,7 +126,7 @@ MxLong MXIOINFO::Read(void *p_buf, MxLong p_len)
 // OFFSET: LEGO1 0x100cca00
 MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
 {
-  MxLong result = -1;
+  MxLong result = FAILURE;
 
   // If buffered I/O
   if (m_info.pchBuffer) {
@@ -214,7 +214,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
 
         result = m_info.lDiskOffset;
 
-        if (result == -1) {
+        if (result == FAILURE) {
           m_info.lDiskOffset = _llseek((HFILE)m_info.hmmio, 0, SEEK_CUR);
         }
       }
