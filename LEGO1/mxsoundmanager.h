@@ -14,6 +14,8 @@ public:
   MxSoundManager();
   virtual ~MxSoundManager() override; // vtable+0x0
 
+  virtual void Destroy() override; // vtable+18
+  virtual void SetVolume(MxS32 p_volume) override; // vtable+2c
   virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); //vtable+0x30
   virtual void vtable0x34(); // vtable+0x34
   virtual void vtable0x38(); // vtable+0x38

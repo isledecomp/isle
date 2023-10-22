@@ -61,22 +61,28 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
   MxResult result = FAILURE;
   if(p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL)
   {
-    result = m_streamer->Unknown100b99b0(p_dsAction);
+    result = m_streamer->FUN_100b99b0(p_dsAction);
   }
 
   return result;
 }
 
 // OFFSET: LEGO1 0x100b00c0 STUB
-void MxOmni::DeleteObject(MxDSAction &ds)
+MxResult MxOmni::DeleteObject(MxDSAction &p_dsAction)
 {
   // TODO
+  return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b09a0 STUB
-MxBool MxOmni::DoesEntityExist(MxDSAction &ds)
+// OFFSET: LEGO1 0x100b09a0
+MxBool MxOmni::DoesEntityExist(MxDSAction &p_dsAction)
 {
-  // TODO
+  if (m_streamer->FUN_100b9b30(p_dsAction)) {
+    MxNotificationPtrList *queue = m_notificationManager->GetQueue();
+
+    if (!queue || queue->size() == 0)
+      return TRUE;
+  }
   return FALSE;
 }
 
@@ -94,7 +100,7 @@ int MxOmni::vtable0x30(char*, int, MxCore*)
 }
 
 // OFFSET: LEGO1 0x100aefc0
-void MxOmni::NotifyCurrentEntity(MxParam *p_param)
+void MxOmni::NotifyCurrentEntity(MxNotificationParam *p_param)
 {
 }
 
@@ -226,7 +232,7 @@ MxResult MxOmni::Create(MxOmniCreateParam &p)
   }
 
   if (p.CreateFlags().CreateStreamer()) {
-    if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS) 
+    if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS)
       goto done;
   }
 
@@ -396,4 +402,10 @@ MxMusicManager* MusicManager()
 MxEventManager* EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
+}
+
+// OFFSET: LEGO1 0x100acf70
+MxResult DeleteObject(MxDSAction &p_dsAction)
+{
+  return MxOmni::GetInstance()->DeleteObject(p_dsAction);
 }

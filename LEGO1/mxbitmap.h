@@ -21,6 +21,13 @@ struct MxBITMAPINFO {
   RGBQUAD             bmiColors[256];
 };
 
+// Non-standard value for biCompression in the BITMAPINFOHEADER struct.
+// By default, uncompressed bitmaps (BI_RGB) are stored in bottom-up order.
+// You can specify that the bitmap has top-down order instead by providing
+// a negative number for biHeight. It could be that Mindscape decided on a
+// belt & suspenders approach here.
+#define BI_RGB_TOPDOWN      0x10
+
 // SIZE 0x20
 // VTABLE 0x100dc7b0
 class MxBitmap : public MxCore
@@ -43,6 +50,10 @@ public:
   virtual MxResult StretchBits(HDC p_hdc, MxS32 p_xSrc, MxS32 p_ySrc, MxS32 p_xDest, MxS32 p_yDest, MxS32 p_destWidth, MxS32 p_destHeight); // vtable+40
 
   inline BITMAPINFOHEADER *GetBmiHeader() const { return m_bmiHeader; }
+  inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
+  inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
+  inline MxLong GetBmiHeightAbs() const { return m_bmiHeader->biHeight > 0 ? m_bmiHeader->biHeight : -m_bmiHeader->biHeight; }
+  inline MxU8 *GetBitmapData() const { return m_data; }
 
 private:
   MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);

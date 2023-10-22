@@ -10,11 +10,17 @@ class LegoSoundManager : public MxSoundManager
 public:
   LegoSoundManager();
   virtual ~LegoSoundManager() override;
+
   virtual MxResult Tickle() override; // vtable+08
+  virtual void Destroy() override; // vtable+18
+  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; //vtable+0x30
 
 private:
   void Init();
+  void Destroy(MxBool p_fromDestructor);
 
+  undefined4 unk0x3c;
+  undefined4 unk0x40;
 };
 
 #endif // LEGOSOUNDMANAGER_H

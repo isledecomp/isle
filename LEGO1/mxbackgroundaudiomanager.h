@@ -28,10 +28,13 @@ public:
   }
 
   __declspec(dllexport) void Enable(unsigned char p);
+  virtual MxResult Create(MxAtomId &p_script, MxU32 p_frequencyMS);
 
   void Stop();
 private:
   void Init();
+  MxResult OpenMusic(MxAtomId &p_script);
+  void DestroyMusic();
 
   MxBool m_musicEnabled; // 0x8
   MxDSAction m_action1; // 0xc
@@ -42,7 +45,7 @@ private:
   MxS32 m_unk140;
   MxS32 m_unk144;
   MxS16 m_unk148;
-  MxAtomId m_unk14c;
+  MxAtomId m_script;
 };
 
 #endif // MXBACKGROUNDAUDIOMANAGER_H
