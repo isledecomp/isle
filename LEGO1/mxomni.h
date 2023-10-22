@@ -101,5 +101,5 @@ MxVideoManager *MVideoManager();
 MxAtomIdCounterSet *AtomIdCounterSet();
 MxObjectFactory *ObjectFactory();
 void DeleteObject(MxDSAction &ds);
-void DeleteObjects(MxAtomId *p_id, MxU32 p_first, MxU32 p_last);
+void DeleteObjects(MxAtomId *p_id, MxS32 p_first, MxS32 p_last);
 #endif // MXOMNI_H

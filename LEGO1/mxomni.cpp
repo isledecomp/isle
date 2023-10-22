@@ -411,12 +411,15 @@ MxResult DeleteObject(MxDSAction &p_dsAction)
 }
 
 // OFFSET: LEGO1 0x100159e0
-void DeleteObjects(MxAtomId *p_id, MxU32 p_first, MxU32 p_last)
+void DeleteObjects(MxAtomId *p_id, MxS32 p_first, MxS32 p_last)
 {
   MxDSAction action;
   action.SetAtomId(*p_id);
-  while(p_first <= p_last) {
-    action.SetUnknown24(p_first++);
+  action.SetUnknown24(-2);
+  MxS32 l_first = p_first;
+  MxS32 l_last = p_last;
+  while(l_first <= l_last) {
+    action.SetObjectId(l_first++);
     DeleteObject(action);
   }
 }
