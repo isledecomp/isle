@@ -57,7 +57,7 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
   }
   if (!p_fromDestructor)
   {
-    MxMediaPresenter::Destroy(0);
+    MxMediaPresenter::Destroy(FALSE);
   }
 }
 
