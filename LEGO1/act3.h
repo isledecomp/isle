@@ -29,6 +29,7 @@ public:
   protected:
     undefined m_unkf8[0x4114];
     MxEntity *m_unk420c;
+    undefined m_unk4210[0x64];
 };
 
 
