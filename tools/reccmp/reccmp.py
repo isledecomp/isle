@@ -434,7 +434,7 @@ for subdir, dirs, files in os.walk(source):
               line = srcfile.readline()
               line_no += 1
               # Name comes after // comment
-              name = line[2:].strip()
+              name = line.strip()[2:].strip()
 
               recinfo = syminfo.get_recompiled_address_from_name(name)
               if not recinfo:
