@@ -23,7 +23,18 @@ public:
     return !strcmp(name, LegoPathPresenter::ClassName()) || MxMediaPresenter::IsA(name);
   }
 
-};
+  virtual void RepeatingTickle() override;  // vtable+0x24
+  virtual void ParseExtra() override;       // vtable+0x30
+  virtual MxResult AddToManager() override; // vtable+0x34
+  virtual void Destroy() override;          // vtable+0x38
 
+private:
+  void Init();
+
+protected:
+  void Destroy(MxBool p_fromDestructor);
+
+  MxAtomId m_atomId; // 0x50
+};
 
 #endif // LEGOPATHPRESENTER_H
