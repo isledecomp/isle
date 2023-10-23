@@ -5,6 +5,8 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 
+DECOMP_SIZE_ASSERT(Helicopter, 0x230)
+
 // OFFSET: LEGO1 0x10001e60
 Helicopter::Helicopter()
 {

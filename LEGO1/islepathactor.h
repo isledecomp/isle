@@ -27,7 +27,7 @@ public:
 
   // OFFSET: LEGO1 0x10002ff0 TEMPLATE
   // IslePathActor::`scalar deleting destructor'
-  inline virtual ~IslePathActor()
+  inline virtual ~IslePathActor() override
   {
     IslePathActor::Destroy(TRUE);
   }

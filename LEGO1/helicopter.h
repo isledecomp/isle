@@ -29,7 +29,7 @@ public:
 
   // OFFSET: LEGO1 0x10003210 TEMPLATE
   // Helicopter::`scalar deleting destructor'
-  virtual ~Helicopter(); // vtable+0x0
+  virtual ~Helicopter() override; // vtable+0x0
 
 protected:
   MxMatrixData m_unk160;
@@ -42,7 +42,7 @@ protected:
   MxAtomId m_unk22c;
 
 private:
-  void Helicopter::GetState();
+  void GetState();
 };
 
 #endif // HELICOPTER_H
