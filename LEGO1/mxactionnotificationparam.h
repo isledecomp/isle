@@ -38,6 +38,8 @@ public:
 
   virtual MxNotificationParam *Clone() override; // vtable+0x4
 
+  inline MxDSAction *GetAction() { return m_action; }
+
 protected:
   MxDSAction *m_action; // 0xc
   MxBool m_realloc; // 0x10

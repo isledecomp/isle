@@ -49,16 +49,19 @@ public:
 
   // TODO: Not sure what this is. Seems to have size of 12 bytes
   // based on 0x100b9e9a. Values are copied from the bitmap header.
-  struct UnkStruct {
-    undefined unk0[4];
-    MxU16 width;
-    MxU16 height;
+  // SIZE 0xc
+  struct AlphaMask {
+    MxU8 *m_bitmask;
+    MxU16 m_width;
+    MxU16 m_height;
 
-    virtual ~UnkStruct() {}
+    AlphaMask(const MxBitmap &);
+    AlphaMask(const AlphaMask &);
+    virtual ~AlphaMask();
   };
 
   MxBitmap *m_bitmap;
-  UnkStruct *m_unk54;
+  AlphaMask *m_alpha;
   LPDIRECTDRAWSURFACE m_unk58;
   undefined2 m_unk5c;
   unsigned char m_flags; // 0x5e

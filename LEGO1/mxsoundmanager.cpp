@@ -58,11 +58,23 @@ MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 // OFFSET: LEGO1 0x100aed10 STUB
 void MxSoundManager::vtable0x34()
 {
-  // TODO STUB
+  // TODO
 }
 
 // OFFSET: LEGO1 0x100aee10 STUB
 void MxSoundManager::vtable0x38()
 {
-  // TODO STUB
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100aeab0
+void MxSoundManager::Destroy()
+{
+  Destroy(FALSE);
+}
+
+// OFFSET: LEGO1 0x100aeac0 STUB
+void MxSoundManager::SetVolume(MxS32 p_volume)
+{
+  // TODO
 }

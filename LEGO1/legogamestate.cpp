@@ -234,3 +234,15 @@ void LegoGameState::RegisterState(LegoState *p_state)
     delete m_stateArray[targetIndex];
   m_stateArray[targetIndex] = p_state;
 }
+
+// OFFSET: LEGO1 0x1003a720 STUB
+void LegoGameState::FUN_1003a720(MxU32 p_unk)
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1003b060 STUB
+void LegoGameState::HandleAction(MxU32 p_unk)
+{
+  // TODO
+}

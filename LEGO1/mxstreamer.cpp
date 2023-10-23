@@ -132,7 +132,7 @@ MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController *stream)
 }
 
 // OFFSET: LEGO1 0x100b99b0
-MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
+MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 {
   MxStreamController* controller;
   if (p_action != NULL && p_action->GetAtomId().GetInternal() != NULL && p_action->GetObjectId() != -1)
@@ -145,6 +145,15 @@ MxResult MxStreamer::Unknown100b99b0(MxDSAction* p_action)
     return controller->vtable0x20(p_action);
   }
   return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b9b30
+MxBool MxStreamer::FUN_100b9b30(MxDSObject &p_dsObject)
+{
+  MxStreamController *controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
+  if (controller)
+    return controller->FUN_100c20d0(p_dsObject);
+  return TRUE;
 }
 
 // OFFSET: LEGO1 0x100b9b60

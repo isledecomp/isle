@@ -10,8 +10,8 @@ DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
 LegoInputManager::LegoInputManager()
 {
   m_unk0x5c = NULL;
-  m_unk0x64 = 0;
-  m_unk0x60 = 0;
+  m_world = NULL;
+  m_camera = NULL;
   m_unk0x68 = NULL;
   m_unk0x80 = 0;
   m_timer = 0;
@@ -182,6 +182,30 @@ void LegoInputManager::Register(MxCore *)
 void LegoInputManager::UnRegister(MxCore *)
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x1005c700
+void LegoInputManager::SetCamera(LegoCameraController *p_camera)
+{
+  m_camera = p_camera;
+}
+
+// OFFSET: LEGO1 0x1005c710
+void LegoInputManager::ClearCamera()
+{
+  m_camera = NULL;
+}
+
+// OFFSET: LEGO1 0x1005c720
+void LegoInputManager::SetWorld(LegoWorld *p_world)
+{
+  m_world = p_world;
+}
+
+// OFFSET: LEGO1 0x1005c730
+void LegoInputManager::ClearWorld()
+{
+  m_world = NULL;
 }
 
 // OFFSET: LEGO1 0x1005c740 STUB

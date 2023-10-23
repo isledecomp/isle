@@ -2,6 +2,7 @@
 #define LEGOINPUTMANAGER_H
 
 #include "decomp.h"
+#include "legoworld.h"
 #include "mxpresenter.h"
 #include "mxlist.h"
 
@@ -40,12 +41,22 @@ public:
   MxResult GetJoystickState(MxU32 *joystick_x, MxU32 *joystick_y, DWORD *buttons_state, MxU32 *pov_position);
   void SetTimer();
   void KillTimer();
+  void SetCamera(LegoCameraController *p_camera);
+  void ClearCamera();
+  void SetWorld(LegoWorld *p_world);
+  void ClearWorld();
+
+  inline void SetUnknown88(MxBool p_unk0x88) { m_unk0x88 = p_unk0x88; }
+  inline void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
+
+  inline LegoControlManager *GetControlManager() { return m_controlManager; }
+  inline LegoWorld *GetWorld() { return m_world; }
 
 //private:
   MxCriticalSection m_criticalSection;
   MxList<undefined4> *m_unk0x5c; // list or hash table
-  undefined4 m_unk0x60;
-  undefined4 m_unk0x64;
+  LegoCameraController *m_camera;
+  LegoWorld *m_world;
   MxList<undefined4> *m_unk0x68; // list or hash table
   undefined4 m_unk0x6c;
   undefined4 m_unk0x70;

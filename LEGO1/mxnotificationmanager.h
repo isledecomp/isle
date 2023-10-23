@@ -50,6 +50,8 @@ public:
   void Unregister(MxCore *p_listener);
   MxResult Send(MxCore *p_listener, MxNotificationParam *p_param);
 
+  inline MxNotificationPtrList *GetQueue() { return m_queue; }
+
 private:
   void FlushPending(MxCore *p_listener);
 };

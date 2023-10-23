@@ -5,9 +5,11 @@
 #include "mxomni.h"
 #include "mxdsaction.h"
 
+class GifManager;
 class Isle;
 class LegoAnimationManager;
 class LegoBuildingManager;
+class LegoControlManager;
 class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
@@ -57,11 +59,11 @@ public:
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
   virtual void Destroy() override; // vtable+1c
   virtual MxResult Start(MxDSAction* action) override;
-  virtual void DeleteObject(MxDSAction &ds) override;
+  virtual MxResult DeleteObject(MxDSAction &ds) override;
   virtual MxBool DoesEntityExist(MxDSAction &ds) override;
   virtual void vtable0x2c() override;
   virtual int vtable0x30(char*, int, MxCore*) override;
-  virtual void NotifyCurrentEntity() override;
+  virtual void NotifyCurrentEntity(MxNotificationParam *p_param) override;
   virtual void StartTimer() override;
   virtual void StopTimer() override;
 
@@ -76,12 +78,13 @@ public:
   LegoNavController *GetNavController() { return m_navController; }
   MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
   LegoWorld *GetCurrentWorld() { return m_currentWorld; }
+  GifManager *GetGifManager() { return m_gifManager; }
 
 private:
   undefined4 m_unk68;
   undefined4 m_unk6c;
   LegoInputManager *m_inputMgr; // 0x70
-  undefined4 m_unk74;
+  GifManager *m_gifManager;
   undefined4 m_unk78;
   LegoWorld *m_currentWorld;
   MxBool m_unk80;
@@ -114,9 +117,11 @@ __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
 
 LegoBuildingManager* BuildingManager();
+LegoControlManager* ControlManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char *, const char *, const char *);
 LegoWorld *GetCurrentWorld();
+GifManager *GetGifManager();
 
 #endif // LEGOOMNI_H

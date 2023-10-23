@@ -13,7 +13,7 @@ MxBool LegoState::VTable0x14() {
 }
 
 // OFFSET: LEGO1 0x10005fa0
-MxBool LegoState::VTable0x18() {
+MxBool LegoState::SetFlag() {
   return FALSE;
 }
 

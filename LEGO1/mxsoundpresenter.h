@@ -2,11 +2,14 @@
 #define MXSOUNDPRESENTER_H
 
 #include "mxaudiopresenter.h"
+#include "mxomni.h"
 
 // VTABLE 0x100d4b08
 class MxSoundPresenter : public MxAudioPresenter
 {
 public:
+  virtual ~MxSoundPresenter() override;
+
   // OFFSET: LEGO1 0x1000d4a0
   inline virtual const char *ClassName() const // vtable+0x0c
   { 
@@ -20,6 +23,11 @@ public:
     return !strcmp(name, MxSoundPresenter::ClassName()) || MxAudioPresenter::IsA(name);
   };
 
+  virtual MxResult AddToManager() override; // vtable+0x34
+  virtual void Destroy() override; // vtable+0x38
+
+private:
+  void Destroy(MxBool);
 };
 
 #endif // MXSOUNDPRESENTER_H

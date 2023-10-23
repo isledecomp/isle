@@ -5,11 +5,13 @@
 #include "mxstring.h"
 #include "mxcriticalsection.h"
 
+class MxAtomId;
 class MxAtomIdCounterSet;
 class MxDSAction;
 class MxEventManager;
 class MxMusicManager;
 class MxNotificationManager;
+class MxNotificationParam;
 class MxObjectFactory;
 class MxOmniCreateParam;
 class MxSoundManager;
@@ -41,11 +43,11 @@ public:
   virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   virtual MxResult Start(MxDSAction* p_dsAction); // vtable+20
-  virtual void DeleteObject(MxDSAction &ds); // vtable+24
-  virtual MxBool DoesEntityExist(MxDSAction &ds); // vtable+28
+  virtual MxResult DeleteObject(MxDSAction &p_dsAction); // vtable+24
+  virtual MxBool DoesEntityExist(MxDSAction &p_dsAction); // vtable+28
   virtual void vtable0x2c(); // vtable+2c
   virtual int vtable0x30(char*, int, MxCore*); // vtable+30
-  virtual void NotifyCurrentEntity(MxParam *p_param); // vtable+34
+  virtual void NotifyCurrentEntity(MxNotificationParam *p_param); // vtable+34
   virtual void StartTimer(); // vtable+38
   virtual void StopTimer(); // vtable+3c
   virtual MxBool IsTimerRunning(); //vtable+40
@@ -94,8 +96,11 @@ __declspec(dllexport) MxMusicManager * MusicManager();
 __declspec(dllexport) MxEventManager * EventManager();
 __declspec(dllexport) MxNotificationManager * NotificationManager();
 
+MxResult DeleteObject(MxDSAction &p_dsAction);
 MxVideoManager *MVideoManager();
 MxAtomIdCounterSet *AtomIdCounterSet();
 MxObjectFactory *ObjectFactory();
+MxResult DeleteObject(MxDSAction &p_dsAction);
+void DeleteObjects(MxAtomId *p_id, MxS32 p_first, MxS32 p_last);
 
 #endif // MXOMNI_H

@@ -26,10 +26,12 @@ public:
     return !strcmp(name, MxEventPresenter::ClassName()) || MxMediaPresenter::IsA(name);
   }
 
+  virtual void Destroy() override; // vtable+0x38
+
 private:
   void Init();
-  undefined4 m_unk50;
 
+  undefined4 *m_unk50;
 };
 
 #endif // MXEVENTPRESENTER_H

@@ -379,7 +379,7 @@ void MxPalette::Detach()
 MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 {
   MxS32 i;
-  MxResult status = 0;
+  MxResult status = SUCCESS;
 
   if ( this->m_palette )
   {
@@ -423,7 +423,7 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
       this->m_entries[i].peFlags = 0x80;
     
     if ( this->m_palette->SetEntries(0, 0, 256, this->m_entries) )
-      status = -1;
+      status = FAILURE;
   }
 
   return status;

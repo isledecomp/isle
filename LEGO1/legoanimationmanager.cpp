@@ -27,7 +27,7 @@ MxResult LegoAnimationManager::Tickle()
 {
   // TODO
 
-  return 0;
+  return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1005f130 STUB
