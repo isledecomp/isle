@@ -5,9 +5,11 @@
 #include "mxomni.h"
 #include "mxdsaction.h"
 
+class GifManager;
 class Isle;
 class LegoAnimationManager;
 class LegoBuildingManager;
+class LegoControlManager;
 class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
@@ -76,12 +78,13 @@ public:
   LegoNavController *GetNavController() { return m_navController; }
   MxTransitionManager *GetTransitionManager() { return m_transitionManager; }
   LegoWorld *GetCurrentWorld() { return m_currentWorld; }
+  GifManager *GetGifManager() { return m_gifManager; }
 
 private:
   undefined4 m_unk68;
   undefined4 m_unk6c;
   LegoInputManager *m_inputMgr; // 0x70
-  undefined4 m_unk74;
+  GifManager *m_gifManager;
   undefined4 m_unk78;
   LegoWorld *m_currentWorld;
   MxBool m_unk80;
@@ -114,9 +117,11 @@ __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
 
 LegoBuildingManager* BuildingManager();
+LegoControlManager* ControlManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char *, const char *, const char *);
 LegoWorld *GetCurrentWorld();
+GifManager *GetGifManager();
 
 #endif // LEGOOMNI_H

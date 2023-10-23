@@ -37,10 +37,10 @@ void LegoEntity::Reset()
 }
 
 // OFFSET: LEGO1 0x100107e0
-MxResult LegoEntity::InitFromMxDSObject(MxDSObject& p_object)
+MxResult LegoEntity::InitFromMxDSObject(MxDSObject &p_dsObject)
 {
-  m_mxEntityId = p_object.GetObjectId();
-  m_atom = p_object.GetAtomId();
+  m_mxEntityId = p_dsObject.GetObjectId();
+  m_atom = p_dsObject.GetAtomId();
   AddToCurrentWorld();
   return SUCCESS;
 }
@@ -87,4 +87,64 @@ void LegoEntity::ParseAction(char *p_extra)
       }
     }
   }
+}
+
+// OFFSET: LEGO1 0x100108a0 STUB
+void LegoEntity::VTable0x24()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10010790 STUB
+void LegoEntity::VTable0x28()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10010650 STUB
+void LegoEntity::VTable0x2c()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10010f10 STUB
+void LegoEntity::VTable0x34()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10011070 STUB
+void LegoEntity::VTable0x38()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10011300 STUB
+void LegoEntity::VTable0x3c()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10011360 STUB
+void LegoEntity::VTable0x40()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x100113c0 STUB
+void LegoEntity::VTable0x44()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10011420 STUB
+void LegoEntity::VTable0x48()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x10011470 STUB
+void LegoEntity::VTable0x4c()
+{
+  // TODO
 }

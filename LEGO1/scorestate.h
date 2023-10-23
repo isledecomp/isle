@@ -24,8 +24,11 @@ public:
   virtual MxBool VTable0x14() override; // vtable+0x14
   virtual MxBool SetFlag() override; // vtable+0x18
 
+  inline MxBool GetTutorialFlag() { return m_playCubeTutorial; }
+  inline void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }
+
 private:
-    MxBool m_playCubeTutorial;
+  MxBool m_playCubeTutorial;
 };
 
 #endif // SCORESTATE_H

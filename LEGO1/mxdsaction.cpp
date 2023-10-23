@@ -26,7 +26,7 @@ MxDSAction::MxDSAction()
   this->m_location.Fill(FLT_MAX);
   this->m_direction.Fill(FLT_MAX);
   this->m_up.Fill(FLT_MAX);
-  this->m_unk84 = 0;
+  this->m_unk84 = NULL;
   this->m_unk88 = 0;
   this->m_omni = NULL;
   this->m_unkTimingField = INT_MIN;
