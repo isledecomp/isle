@@ -11,8 +11,6 @@ void LegoPathPresenter::Init() {}
 // OFFSET: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()
 {
-  const char *internal = this->m_atomId.GetInternal();
-  internal = NULL;
   Init();
 }
 
@@ -20,9 +18,8 @@ LegoPathPresenter::LegoPathPresenter()
 void LegoPathPresenter::RepeatingTickle()
 {
   if (this->m_action->GetDuration() == -1)
-  {
     return;
-  }
+
   EndAction();
 }
 
@@ -36,11 +33,12 @@ void LegoPathPresenter::ParseExtra()
 MxResult LegoPathPresenter::AddToManager()
 {
   MxResult status = FAILURE;
-  if (VideoManager())
-  {
+
+  if (VideoManager()) {
     VideoManager()->AddPresenter(*this);
     status = SUCCESS;
   }
+
   return status;
 }
 
@@ -48,17 +46,15 @@ MxResult LegoPathPresenter::AddToManager()
 void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 {
   if (VideoManager())
-  {
     VideoManager()->RemovePresenter(*this);
-  }
+
   {
     MxAutoLocker lock(&this->m_criticalSection);
     Init();
   }
+
   if (!p_fromDestructor)
-  {
     MxMediaPresenter::Destroy(FALSE);
-  }
 }
 
 // OFFSET: LEGO1 0x10044c10
