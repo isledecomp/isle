@@ -5,28 +5,16 @@
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54);
 
-// OFFSET: LEGO1 0x10044ab0
-void LegoPathPresenter::Init() {}
-
 // OFFSET: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()
 {
   Init();
 }
 
-// OFFSET: LEGO1 0x10044d40
-void LegoPathPresenter::RepeatingTickle()
+// OFFSET: LEGO1 0x10044ab0
+void LegoPathPresenter::Init()
 {
-  if (this->m_action->GetDuration() == -1)
-    return;
 
-  EndAction();
-}
-
-// OFFSET: LEGO1 0x10044d60 STUB
-void LegoPathPresenter::ParseExtra()
-{
-  // TODO
 }
 
 // OFFSET: LEGO1 0x10044b40
@@ -61,4 +49,19 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 void LegoPathPresenter::Destroy()
 {
   Destroy(FALSE);
+}
+
+// OFFSET: LEGO1 0x10044d40
+void LegoPathPresenter::RepeatingTickle()
+{
+  if (this->m_action->GetDuration() == -1)
+    return;
+
+  EndAction();
+}
+
+// OFFSET: LEGO1 0x10044d60 STUB
+void LegoPathPresenter::ParseExtra()
+{
+  // TODO
 }
