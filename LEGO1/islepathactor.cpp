@@ -11,7 +11,6 @@ IslePathActor::IslePathActor()
   this->m_unk158 = 0;
 }
 
-// OFFSET: LEGO1 0x10002e10
-IslePathActor::~IslePathActor()
-{
+MxResult IslePathActor::InitFromMxDSObject(MxDSObject &p_dsObject) {
+  return MxEntity::InitFromMxDSObject(p_dsObject);
 }

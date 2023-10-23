@@ -32,7 +32,7 @@ void LegoWorld::VTable0x54()
 }
 
 // OFFSET: LEGO1 0x10020220 STUB
-void LegoWorld::VTable0x58()
+void LegoWorld::VTable0x58(MxCore *p_object)
 {
   // TODO
 }
