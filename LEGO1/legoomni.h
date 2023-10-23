@@ -9,6 +9,7 @@ class GifManager;
 class Isle;
 class LegoAnimationManager;
 class LegoBuildingManager;
+class LegoControlManager;
 class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
@@ -116,9 +117,11 @@ __declspec(dllexport) MxTransitionManager * TransitionManager();
 __declspec(dllexport) LegoVideoManager * VideoManager();
 
 LegoBuildingManager* BuildingManager();
+LegoControlManager* ControlManager();
 Isle* GetIsle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char *, const char *, const char *);
 LegoWorld *GetCurrentWorld();
 GifManager *GetGifManager();
+
 #endif // LEGOOMNI_H

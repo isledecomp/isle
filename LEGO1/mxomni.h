@@ -100,6 +100,7 @@ MxResult DeleteObject(MxDSAction &p_dsAction);
 MxVideoManager *MVideoManager();
 MxAtomIdCounterSet *AtomIdCounterSet();
 MxObjectFactory *ObjectFactory();
-void DeleteObject(MxDSAction &ds);
+MxResult DeleteObject(MxDSAction &p_dsAction);
 void DeleteObjects(MxAtomId *p_id, MxS32 p_first, MxS32 p_last);
+
 #endif // MXOMNI_H

@@ -363,6 +363,7 @@ LegoWorld *GetCurrentWorld()
 }
 
 // OFFSET: LEGO1 0x10015800
-GifManager *GetGifManager() {
+GifManager *GetGifManager()
+{
   return LegoOmni::GetInstance()->GetGifManager();
 }

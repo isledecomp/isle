@@ -12,17 +12,22 @@
 #include "racestate.h"
 #include "towtrackmissionstate.h"
 
+DECOMP_SIZE_ASSERT(Score, 0x104)
+
+MxAtomId *g_infoscorScript;
+
 // OFFSET: LEGO1 0x10001000
 Score::Score()
 {
-  m_unkF8 = 0;
+  m_unkf8 = 0;
   NotificationManager()->Register(this);
 }
 
 // OFFSET: LEGO1 0x10001200
 Score::~Score()
 {
-  if (InputManager()->GetWorld() == this) InputManager()->ClearWorld();
+  if (InputManager()->GetWorld() == this)
+    InputManager()->ClearWorld();
   InputManager()->UnRegister(this);
   ControlManager()->Unregister(this);
   NotificationManager()->Unregister(this);
@@ -33,7 +38,7 @@ MxLong Score::Notify(MxParam &p)
 {
   MxLong ret = 0;
   LegoWorld::Notify(p);
-  if (unkf6) {
+  if (m_unkf6) {
     switch (((MxNotificationParam &)p).GetType())
     {
     case PAINT:
@@ -44,7 +49,8 @@ MxLong Score::Notify(MxParam &p)
       ret = FUN_10001510((MxEndActionNotificationParam &)p);
       break;
     case APP_MESSAGE:
-      if (((MxAppNotificationParam &)p).getM18() == 0x20) DeleteScript(); // Shutting down
+      if (((MxAppNotificationParam &)p).GetUnknown18() == 0x20)
+        DeleteScript(); // Shutting down
       ret = 1;
       break;
     case TYPE17:
@@ -52,7 +58,8 @@ MxLong Score::Notify(MxParam &p)
       break;
     case MXTRANSITIONMANAGER_TRANSITIONENDED:
       DeleteObjects(g_infoscorScript, 7, 9);
-      if (m_unkF8) GameState()->HandleAction(m_unkF8);
+      if (m_unkf8)
+        GameState()->HandleAction(m_unkf8);
       ret = 1;
       break;
     default:
@@ -63,14 +70,16 @@ MxLong Score::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x100010b0
-MxBool Score::VTable0x5c() {
+MxBool Score::VTable0x5c()
+{
   return TRUE; 
 }
 
 // OFFSET: LEGO1 0x100012a0
-MxResult Score::InitFromMxDSObject(MxDSObject& p_object) override
+MxResult Score::InitFromMxDSObject(MxDSObject &p_dsObject)
 {
-  MxResult result = SetAsCurrentWorld(p_object);
+  MxResult result = SetAsCurrentWorld(p_dsObject);
+
   if (result == SUCCESS) {
     InputManager()->SetWorld(this);
     ControlManager()->Register(this);
@@ -79,9 +88,10 @@ MxResult Score::InitFromMxDSObject(MxDSObject& p_object) override
     LegoGameState *gs = GameState();
     ScoreState *state = (ScoreState *)gs->GetState("ScoreState");
     m_state = state ? state : (ScoreState *)gs->CreateState("ScoreState");
-    GameState()->Set424(0xd);
+    GameState()->SetUnknown424(0xd);
     GameState()->FUN_1003a720(0);
   }
+
   return result;
 }
 
@@ -102,11 +112,12 @@ void Score::DeleteScript()
 MxLong Score::FUN_10001510(MxEndActionNotificationParam &p)
 {
   MxDSAction *action = p.GetAction();
+
   if (m_atom == action->GetAtomId()) {
     MxU32 id = action->GetObjectId();
-    switch(action->GetObjectId()) {
+    switch (action->GetObjectId()) {
     case 10:
-      m_unkF8 = 0x38;
+      m_unkf8 = 0x38;
       TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
       break;
     case 0x1f5:
@@ -114,6 +125,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam &p)
       m_state->SetTutorialFlag(FALSE);
     }
   }
+
   return 1;
 }
 
@@ -121,53 +133,59 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam &p)
 void Score::Stop()
 {
   LegoWorld::Stop();
+
   MxDSAction action;
   action.SetObjectId(0x1f4);
   action.SetAtomId(m_atom);
-  action.SetM84(this);
+  action.SetUnknown84(this);
   Start(&action);
+
   if (m_state->GetTutorialFlag()) {
     MxDSAction action2;
     action.SetObjectId(0x1f5);
     action.SetAtomId(*g_infoscorScript);
     Start(&action);
   }
-  else FUN_10015910(0xb);
+  else
+    FUN_10015910(0xb);
+
   FUN_10015820(0, 7);
 }
 
 // OFFSET: LEGO1 0x100016d0
 MxLong Score::FUN_100016d0(MxType17NotificationParam &p)
 {
-  MxS16 l = p.GetM28();
-  if (l == 1 || p.GetM20() == 4) {
-    switch (p.GetM20())
+  MxS16 l = p.GetUnknown28();
+
+  if (l == 1 || p.GetUnknown20() == 4) {
+    switch (p.GetUnknown20())
     {
     case 1:
-      m_unkF8 = 2;
-    DeleteScript();
-    TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
+      m_unkf8 = 2;
+      DeleteScript();
+      TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
       break;
     case 2:
-      m_unkF8 = 3;
-    DeleteScript();
-    TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
+      m_unkf8 = 3;
+      DeleteScript();
+      TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
       break;
     case 3:
     {
       LegoInputManager *im = InputManager();
-      im->SetM88(TRUE);
-      im->SetM336(FALSE);
+      im->SetUnknown88(TRUE);
+      im->SetUnknown336(FALSE);
       DeleteScript();
+
       MxDSAction action;
       action.SetObjectId(10);
       action.SetAtomId(*g_infoscorScript);
       Start(&action);
-      break;;
+      break;
     }
     case 4:
     {
-      switch(l) {
+      switch (l) {
         case 1:
         {
           MxDSAction action;
@@ -197,6 +215,7 @@ MxLong Score::FUN_100016d0(MxType17NotificationParam &p)
     }
     }
   }
+
   return 1;
 }
 
@@ -204,11 +223,13 @@ MxLong Score::FUN_100016d0(MxType17NotificationParam &p)
 void Score::VTable0x68(MxBool p_add)
 {
   LegoWorld::VTable0x68(p_add);
+
   if (p_add) {
     InputManager()->SetWorld(this);
     SetIsWorldActive(FALSE);
   }
-  else if (InputManager()->GetWorld() == this) InputManager()->ClearWorld();
+  else if (InputManager()->GetWorld() == this)
+    InputManager()->ClearWorld();
 }
 
 // OFFSET: LEGO1 0x100019d0
@@ -216,12 +237,14 @@ void Score::Paint()
 {
   GifManager *gm = GetGifManager();
   GifData *gd = gm->Get("bigcube.gif");
+
   if (gd) {
     RaceState *l78 = (RaceState *)GameState()->GetState("JetskiRaceState");
     RaceState *l70 = (RaceState *)GameState()->GetState("CarRaceState");
     TowTrackMissionState *lesi = (TowTrackMissionState *)GameState()->GetState("TowTrackMissionState");
     PizzaMissionState *l74 = (PizzaMissionState *)GameState()->GetState("PizzaMissionState");
     AmbulanceMissionState *lebp = (AmbulanceMissionState *)GameState()->GetState("AmbulanceMissionState");
+
     DDSURFACEDESC desc;
     memset(&desc, 0, 0x6c);
     desc.dwSize = 0x6c;
@@ -230,25 +253,32 @@ void Score::Paint()
         gd->m_surface->Unlock(desc.lpSurface);
         return;
       }
+
       for (MxU8 id = 1; id <= 5; id++) {
         m_surface = (MxU8 *)desc.lpSurface;
         MxU16 color = 0;
-        if (l70) color = l70->GetColor(id);
+        if (l70)
+          color = l70->GetColor(id);
         MxU32 row = id - 1;
         FillArea(0, row, color);
         color = 0;
-        if (l78) color = l78->GetColor(id);
+        if (l78)
+          color = l78->GetColor(id);
         FillArea(1, row, color);
         color = 0;
-        if (l74) color = l74->GetColor(id);
+        if (l74)
+          color = l74->GetColor(id);
         FillArea(2, row, color);
         color = 0;
-        if (lesi) color = lesi->GetColor(id);
+        if (lesi)
+          color = lesi->GetColor(id);
         FillArea(3, row, color);
         color = 0;
-        if (lebp) color = lebp->GetColor(id);
+        if (lebp)
+          color = lebp->GetColor(id);
         FillArea(4, row, color);
       }
+
       gd->m_surface->Unlock(desc.lpSurface);
       gd->m_texture->Changed(TRUE, FALSE);
       m_surface = NULL;
@@ -298,8 +328,6 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 MxBool Score::VTable0x64() 
 {
   DeleteScript();
-  m_unkF8 = 2;
+  m_unkf8 = 2;
   return TRUE;
 }
-
-MxAtomId *g_infoscorScript;

@@ -33,9 +33,10 @@ public:
   LegoState *CreateState(char *p_stateName);
 
   void GetFileSavePath(MxString *p_outPath, MxULong p_slotn);
-  inline void Set424(MxU32 p_1) { m_unk424 = p_1; }
-  void FUN_1003a720(MxU32 p_1);
-  void HandleAction(MxU32 p_1);
+  void FUN_1003a720(MxU32 p_unk);
+  void HandleAction(MxU32 p_unk);
+
+  inline void SetUnknown424(undefined4 p_unk424) { m_unk424 = p_unk424; }
 
 private:
   void RegisterState(LegoState *p_state);
@@ -53,8 +54,8 @@ private:
   LegoFullScreenMovie *m_fullScreenMovie; // 0x20
   MxU16 m_unk24; // 0x24
   undefined m_unk28[1020];
-  MxU32 m_unk424;
-  MxU32 m_unk428;
+  undefined4 m_unk424;
+  undefined4 m_unk428;
   undefined4 m_unk42c;
 };
 

@@ -22,6 +22,7 @@ public:
   {
     return !strcmp(name, AmbulanceMissionState::ClassName()) || LegoState::IsA(name);
   }
+
   inline MxU16 GetColor(MxU8 id)
   {
     switch (id)

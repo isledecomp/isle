@@ -41,15 +41,16 @@ public:
   MxResult GetJoystickState(MxU32 *joystick_x, MxU32 *joystick_y, DWORD *buttons_state, MxU32 *pov_position);
   void SetTimer();
   void KillTimer();
-
-  inline LegoControlManager *GetControlManager() { return m_controlManager; }
-  inline LegoWorld *GetWorld() { return m_world; }
   void SetCamera(LegoCameraController *p_camera);
   void ClearCamera();
   void SetWorld(LegoWorld *p_world);
   void ClearWorld();
-  void inline SetM88(MxBool p_1) { m_unk0x88 = p_1; }
-  void inline SetM336(MxBool p_1) { m_unk0x336 = p_1; }
+
+  inline void SetUnknown88(MxBool p_unk0x88) { m_unk0x88 = p_unk0x88; }
+  inline void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
+
+  inline LegoControlManager *GetControlManager() { return m_controlManager; }
+  inline LegoWorld *GetWorld() { return m_world; }
 
 //private:
   MxCriticalSection m_criticalSection;
@@ -80,7 +81,5 @@ public:
   MxBool m_unk0x335;
   MxBool m_unk0x336;
 };
-
-LegoControlManager* ControlManager();
 
 #endif // LEGOINPUTMANAGER_H

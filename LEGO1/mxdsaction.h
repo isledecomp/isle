@@ -62,7 +62,7 @@ public:
   inline MxS32 GetLoopCount() { return m_loopCount; }
   inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
   inline const MxVector3Data &GetLocation() const { return m_location; }
-  inline void SetM84(MxCore *p_1) { m_unk84 = p_1; }
+  inline void SetUnknown84(MxCore *p_unk84) { m_unk84 = p_unk84; }
   inline void SetOmni(MxOmni *p_omni) { m_omni = p_omni; }
 
   inline MxBool IsLooping() const { return m_flags & Flag_Looping; }

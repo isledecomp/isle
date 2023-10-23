@@ -22,6 +22,7 @@ public:
   {
     return !strcmp(name, TowTrackMissionState::ClassName()) || LegoState::IsA(name);
   }
+
   inline MxU16 GetColor(MxU8 id)
   {
     switch (id)
@@ -34,6 +35,7 @@ public:
     default: return 0;
     }
   }
+
 protected:
   undefined m_unk8[0x14];
   MxU16 m_color1;

@@ -29,9 +29,12 @@ public:
   {
     return !strcmp(name, PizzaMissionState::ClassName()) || LegoState::IsA(name);
   }
+
   inline MxU16 GetColor(MxU8 id) { return GetState(id)->m_color; }
+
 private:
   PizzaMissionStateEntry *GetState(MxU8 id);
+
 protected:
   undefined4 m_unk8;
   undefined4 m_unkc;

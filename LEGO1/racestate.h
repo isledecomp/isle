@@ -31,9 +31,12 @@ public:
   {
     return !strcmp(name, RaceState::ClassName()) || LegoState::IsA(name);
   }
+
   inline MxU16 GetColor(MxU8 id) { return GetState(id)->m_color; }
+
 private:
   RaceStateEntry *GetState(MxU8 id);
+
 protected:
   RaceStateEntry m_state[5];
   undefined2 m_unk26[2];

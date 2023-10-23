@@ -99,6 +99,7 @@ add_library(lego1 SHARED
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxactionnotificationparam.cpp
+  LEGO1/mxappnotificationparam.cpp
   LEGO1/mxatomid.cpp
   LEGO1/mxatomidcounter.cpp
   LEGO1/mxaudiomanager.cpp
@@ -177,6 +178,7 @@ add_library(lego1 SHARED
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
+  LEGO1/mxtype17notificationparam.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvector.cpp

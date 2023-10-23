@@ -1,14 +1,18 @@
 #ifndef MXAPPNOTIFICATIONPARAM_H
 #define MXAPPNOTIFICATIONPARAM_H
 
+#include "mxnotificationparam.h"
+
+#include "decomp.h"
+
 // VTABLE 0x100d6aa0
 class MxAppNotificationParam : public MxNotificationParam
 {
 public:
-  inline MxAppNotificationParam() : MxNotificationParam((MxParamType)0, NULL) {}
+  inline MxAppNotificationParam() : MxNotificationParam((MxParamType) 0, NULL) {}
 
   virtual ~MxAppNotificationParam() override {} // vtable+0x0 (scalar deleting destructor)
-  inline MxU8 getM18() { return m_unk18; }
+  inline MxU8 GetUnknown18() { return m_unk18; }
 
 protected:
   undefined m_unkc[0xc];
