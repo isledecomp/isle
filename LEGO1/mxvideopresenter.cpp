@@ -115,14 +115,14 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap &p_bitmap)
 
 // TODO: would prefer not to use goto if we can figure this structure out
 seek_to_last_row:
-    bitmap_src_ptr = ((p_bitmap.GetBmiWidth()+3)&-4) * rows_before_top + p_bitmap.GetBitmapData();
+    bitmap_src_ptr = p_bitmap.GetBmiStride() * rows_before_top + p_bitmap.GetBitmapData();
   }
 
   // How many bytes are there for each row of the bitmap?
   // (i.e. the image stride)
   // If this is a bottom-up DIB, we will walk it in reverse.
   // TODO: Same rounding trick as in MxBitmap
-  MxS32 row_seek = ((m_height+3)&-4);
+  MxS32 row_seek = ((m_width+3)&-4);
   if (p_bitmap.GetBmiHeight() < 0)
     row_seek = -row_seek;
 
@@ -164,6 +164,16 @@ MxVideoPresenter::AlphaMask::~AlphaMask()
 {
   if (m_bitmask)
     delete[] m_bitmask;
+}
+
+// OFFSET: LEGO1 0x100b26f0
+MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
+{
+  if (p_x >= m_width || p_y >= m_height)
+    return 0;
+
+  MxS32 pos = p_y * m_width + p_x;
+  return m_bitmask[pos / 8] & (1 << abs(abs(pos) & 7)) ? 1 : 0;
 }
 
 // OFFSET: LEGO1 0x100b2760
@@ -224,6 +234,65 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 void MxVideoPresenter::VTable0x64()
 {
   // TODO
+}
+
+// OFFSET: LEGO1 0x100b2900
+MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
+{
+  MxDSAction *action = GetAction();
+  if ((action == NULL) || (((action->GetFlags() & MxDSAction::Flag_Bit10) == 0) && !IsEnabled())
+     || (!m_bitmap && !m_alpha))
+    return FALSE;
+
+  if (m_bitmap)
+    return m_alpha->IsHit(p_x - GetLocationX(), p_y - GetLocationY());
+  
+  MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
+  
+  MxLong min_x = GetLocationX();
+  MxLong min_y = GetLocationY();
+  
+  MxLong max_y = min_y + heightAbs;
+  MxLong max_x = min_x + m_bitmap->GetBmiWidth();
+
+  if (p_x < min_x || p_x >= max_x || p_y < min_y || p_y >= max_y)
+    return FALSE;
+
+  MxU8 *pixel;
+
+  MxLong biCompression = m_bitmap->GetBmiHeader()->biCompression;
+  MxLong height = m_bitmap->GetBmiHeight();
+  MxLong seek_row;
+  
+  // DECOMP: Same basic layout as AlphaMask constructor
+  // The idea here is to again seek to the correct place in the bitmap's
+  // m_data buffer. The x,y args are (most likely) screen x and y, so we
+  // need to shift that to coordinates local to the bitmap by removing
+  // the MxPresenter location x and y coordinates.
+  if (biCompression == BI_RGB) {
+    if (biCompression == BI_RGB_TOPDOWN || height < 0) {
+      seek_row = p_y - GetLocationY();
+    } else {
+      height = height > 0 ? height : -height;
+      seek_row = height - p_y - 1 + GetLocationY();
+    }
+    pixel = m_bitmap->GetBmiStride() * seek_row + m_bitmap->GetBitmapData() - GetLocationX() + p_x;
+  } else if (biCompression == BI_RGB_TOPDOWN) {
+    pixel = m_bitmap->GetBitmapData();
+  } else {
+    height = height > 0 ? height : -height;
+    height--;
+    pixel = m_bitmap->GetBmiStride() * height + m_bitmap->GetBitmapData();
+  }
+
+  // DECOMP: m_flags is 1 byte, so no enum here
+  if (m_flags & 0x10)
+    return (MxBool) *pixel;
+
+  if ((GetAction()->GetFlags() & MxDSAction::Flag_Bit4) && *pixel == 0)
+    return FALSE;
+
+  return TRUE;
 }
 
 // OFFSET: LEGO1 0x100b2a70 STUB

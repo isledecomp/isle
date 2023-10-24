@@ -51,6 +51,7 @@ public:
 
   inline BITMAPINFOHEADER *GetBmiHeader() const { return m_bmiHeader; }
   inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
+  inline MxLong GetBmiStride() const { return ((m_bmiHeader->biWidth + 3) & -4); }
   inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
   inline MxLong GetBmiHeightAbs() const { return m_bmiHeader->biHeight > 0 ? m_bmiHeader->biHeight : -m_bmiHeader->biHeight; }
   inline MxU8 *GetBitmapData() const { return m_data; }
