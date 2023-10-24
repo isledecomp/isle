@@ -3,18 +3,17 @@
 
 #include <windows.h>
 
-class MxCriticalSection
-{
+class MxCriticalSection {
 public:
-  __declspec(dllexport) MxCriticalSection();
-  __declspec(dllexport) ~MxCriticalSection();
-  __declspec(dllexport) static void SetDoMutex();
-  void Enter();
-  void Leave();
+	__declspec(dllexport) MxCriticalSection();
+	__declspec(dllexport) ~MxCriticalSection();
+	__declspec(dllexport) static void SetDoMutex();
+	void Enter();
+	void Leave();
 
 private:
-  CRITICAL_SECTION m_criticalSection;
-  HANDLE m_mutex;
+	CRITICAL_SECTION m_criticalSection;
+	HANDLE m_mutex;
 };
 
 #endif // MXCRITICALSECTION_H

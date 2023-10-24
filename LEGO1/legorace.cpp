@@ -3,19 +3,19 @@
 // OFFSET: LEGO1 0x10015aa0 STUB
 LegoRace::LegoRace()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10015d40 STUB
 LegoRace::~LegoRace()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10015e00 STUB
-MxLong LegoRace::Notify(MxParam &p)
+MxLong LegoRace::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

@@ -6,37 +6,37 @@ DECOMP_SIZE_ASSERT(LegoActor, 0x78)
 // OFFSET: LEGO1 0x10002cc0 STUB
 void LegoActor::VTable0x50()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10002cd0 STUB
 void LegoActor::VTable0x54()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10002ce0 STUB
 void LegoActor::VTable0x58()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10002cf0 STUB
 void LegoActor::VTable0x5c()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10002d00 STUB
 void LegoActor::VTable0x60()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10002d10 STUB
 void LegoActor::VTable0x64()
 {
-  // TODO
+	// TODO
 }
 // End header
 

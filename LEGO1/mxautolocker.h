@@ -3,13 +3,13 @@
 
 #include "mxcriticalsection.h"
 
-class MxAutoLocker
-{
+class MxAutoLocker {
 public:
-  MxAutoLocker(MxCriticalSection* cs);
-  ~MxAutoLocker();
+	MxAutoLocker(MxCriticalSection* cs);
+	~MxAutoLocker();
+
 private:
-  MxCriticalSection* m_criticalSection;
+	MxCriticalSection* m_criticalSection;
 };
 
 #endif // MXAUTOLOCKER_H

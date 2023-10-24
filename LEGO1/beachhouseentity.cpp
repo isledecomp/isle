@@ -1,9 +1,9 @@
 #include "beachhouseentity.h"
 
 // OFFSET: LEGO1 0x100150a0 STUB
-MxLong BeachHouseEntity::Notify(MxParam &p)
+MxLong BeachHouseEntity::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

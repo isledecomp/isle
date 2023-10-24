@@ -5,8 +5,7 @@
 
 // VTABLE 0x100d5520
 // SIZE 0x84
-class Pizzeria : public IsleActor
-{
+class Pizzeria : public IsleActor {
 public:
 };
 
