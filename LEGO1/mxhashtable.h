@@ -10,6 +10,9 @@
 #define HASH_TABLE_OPT_EXPAND_MULTIPLY    2
 
 template <class T>
+class MxHashTableCursor;
+
+template <class T>
 class MxHashTableNode
 {
 public:
@@ -162,13 +165,13 @@ MxHashTable<T>::~MxHashTable()
     
     while (t) {
       MxHashTableNode<T> *next = t->m_next;
-      m_customDestructor(t->m_obj);
+      this->m_customDestructor(t->m_obj);
       delete t;
       t = next;
     }
   }
 
-  m_numKeys = 0;
+  this->m_numKeys = 0;
   memset(m_slots, 0, sizeof(MxHashTableNode<T> *) * m_numSlots);
 
   delete[] m_slots;
@@ -196,7 +199,7 @@ inline void MxHashTable<T>::Resize()
   // FIXME: order? m_numKeys set after `rep stosd`
   m_slots = new_table;
   memset(m_slots, 0, sizeof(MxHashTableNode<T> *) * m_numSlots);
-  m_numKeys = 0;
+  this->m_numKeys = 0;
 
   for (int i = 0; i != old_size; i++) {
     MxHashTableNode<T> *t = old_table[i];
@@ -223,13 +226,13 @@ inline void MxHashTable<T>::_NodeInsert(MxHashTableNode<T> *p_node)
     m_slots[bucket]->m_prev = p_node;
 
   m_slots[bucket] = p_node;
-  m_numKeys++;
+  this->m_numKeys++;
 }
 
 template <class T>
 inline void MxHashTable<T>::Add(T* p_newobj)
 {
-  if (m_resizeOption && ((m_numKeys + 1) / m_numSlots) > m_autoResizeRatio)
+  if (m_resizeOption && ((this->m_numKeys + 1) / m_numSlots) > m_autoResizeRatio)
     MxHashTable<T>::Resize();
 
   MxU32 hash = Hash(p_newobj);

@@ -164,9 +164,9 @@ void MxPresenter::Enable(MxBool p_enable)
 }
 
 // OFFSET: LEGO1 0x100b5310
-char *PresenterNameDispatch(const MxDSAction &p_action)
+const char *PresenterNameDispatch(const MxDSAction &p_action)
 {
-  char *name = p_action.GetSourceName();
+  const char *name = p_action.GetSourceName();
   MxS32 format;
 
   if (!name || strlen(name) == 0) {

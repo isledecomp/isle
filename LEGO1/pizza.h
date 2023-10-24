@@ -27,7 +27,7 @@ public:
   }
 
   // OFFSET: LEGO1 0x10037fa0
-  inline MxBool Pizza::IsA(const char *name) const override //vtable+10
+  inline MxBool IsA(const char *name) const override //vtable+10
   {
     return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
   }

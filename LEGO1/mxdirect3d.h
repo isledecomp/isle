@@ -27,7 +27,7 @@ public:
   virtual MxResult _DoEnumerate();
   BOOL FUN_1009c070();
 
-  char *EnumerateErrorToString(HRESULT p_error);
+  const char *EnumerateErrorToString(HRESULT p_error);
 
   undefined4 m_unk004;
   undefined4 m_unk008;

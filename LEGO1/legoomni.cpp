@@ -303,7 +303,7 @@ void LegoOmni::Init()
 }
 
 // OFFSET: LEGO1 0x10058e70 STUB
-MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
+MxResult LegoOmni::Create(MxOmniCreateParam &p)
 {
   MxOmni::Create(p);
 

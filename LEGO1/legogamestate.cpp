@@ -192,7 +192,7 @@ void LegoGameState::SetSavePath(char *p_savePath)
 }
 
 // OFFSET: LEGO1 0x1003bbb0
-LegoState *LegoGameState::GetState(char *p_stateName)
+LegoState *LegoGameState::GetState(COMPAT_CONST char *p_stateName)
 {
   for (MxS32 i = 0; i < m_stateCount; ++i)
     if (m_stateArray[i]->IsA(p_stateName))
@@ -201,11 +201,11 @@ LegoState *LegoGameState::GetState(char *p_stateName)
 }
 
 // OFFSET: LEGO1 0x1003bc00
-LegoState *LegoGameState::CreateState(char *p_stateName)
+LegoState *LegoGameState::CreateState(COMPAT_CONST char *p_stateName)
 {
   LegoState* newState = (LegoState*)ObjectFactory()->Create(p_stateName);
   RegisterState(newState);
-  
+
   return newState;
 }
 

@@ -47,7 +47,7 @@ inline void GetDouble(char **p_source, T& p_dest)
 }
 
 template <class T>
-inline void GetString(char **p_source, const char *&p_dest, T *p_obj, void (T::*p_setter)(const char*))
+inline void GetString(char **p_source, const char *p_dest, T *p_obj, void (T::*p_setter)(const char*))
 {
   (p_obj->*p_setter)(*p_source);
   *p_source += strlen(p_dest) + 1;

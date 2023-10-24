@@ -40,7 +40,7 @@ public:
 
   virtual MxLong Notify(MxParam &p) override; // vtable+04
   virtual void Init(); // vtable+14
-  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p); // vtable+18
+  virtual MxResult Create(MxOmniCreateParam &p); // vtable+18
   virtual void Destroy(); // vtable+1c
   virtual MxResult Start(MxDSAction *p_dsAction); // vtable+20
   virtual MxResult DeleteObject(MxDSAction &p_dsAction); // vtable+24

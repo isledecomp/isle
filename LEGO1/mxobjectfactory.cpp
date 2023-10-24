@@ -35,8 +35,6 @@ MxCore *MxObjectFactory::Create(const char *p_name)
 #define X(V) else if (this->m_id##V == atom) { object = new V; }
   FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
-  else {}
-
   return object;
 }
 

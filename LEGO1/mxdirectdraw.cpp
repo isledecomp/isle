@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(MxDirectDraw::DeviceModesInfo, 0x17c);
 #endif
 
 // GLOBAL OFFSET: LEGO1 0x10100C68
-extern BOOL g_is_PALETTEINDEXED8 = 0;
+BOOL g_is_PALETTEINDEXED8 = 0;
 
 // OFFSET: LEGO1 0x1009DA20
 void EnableResizing(HWND hwnd, BOOL flag)

@@ -56,7 +56,7 @@ public:
   }
 
   virtual void Init() override; // vtable+14
-  virtual MxResult Create(COMPAT_CONST MxOmniCreateParam &p) override; // vtable+18
+  virtual MxResult Create(MxOmniCreateParam &p) override; // vtable+18
   virtual void Destroy() override; // vtable+1c
   virtual MxResult Start(MxDSAction* action) override; // vtable+20
   virtual MxResult DeleteObject(MxDSAction &ds) override; // vtable+24
