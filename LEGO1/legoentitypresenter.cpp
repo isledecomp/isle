@@ -12,7 +12,7 @@ LegoEntityPresenter::~LegoEntityPresenter()
   // TODO
 }
 
-// OFFSET: LEG01 0x100535c0 STUB
+// OFFSET: LEGO1 0x100535c0 STUB
 void LegoEntityPresenter::Init()
 {
   // TODO
