@@ -3,6 +3,8 @@
 #include "mxomni.h"
 #include "mxtypes.h"
 
+#include "math.h"
+
 #include <string.h>
 
 // OFFSET: LEGO1 0x1003e300
@@ -31,6 +33,40 @@ ExtraActionType MatchActionString(const char *p_str) {
     result = ExtraActionType_notify;
 
   return result;
+}
+
+// OFFSET: LEGO1 0x100a5b40
+void CalcLocalTransform(const MxVector3 &p_posVec, const MxVector3 &p_dirVec,
+                        const MxVector3 &p_upVec, MxMatrix &p_outMatrix)
+{
+  MxFloat x_axis[3], y_axis[3], z_axis[3];
+
+  NORMVEC3(z_axis, p_dirVec)
+  NORMVEC3(y_axis, p_upVec)
+
+  VXV3(x_axis, y_axis, z_axis);
+
+  // This is an unrolled version of the "NORMVEC3" macro,
+  // used here to apply a silly hack to get a 100% match
+  {
+    const MxFloat axis2Operation = (x_axis)[2] * (x_axis)[2];
+    MxDouble len = sqrt(((x_axis)[0] * (x_axis)[0] + axis2Operation + (x_axis)[1] * (x_axis)[1]));
+    ((x_axis)[0] = (x_axis)[0] / (len), (x_axis)[1] = (x_axis)[1] / (len), (x_axis)[2] = (x_axis)[2] / (len));
+  }
+
+  VXV3(y_axis, z_axis, x_axis);
+
+  // Exact same thing as pointed out by the above comment
+  {
+    const MxFloat axis2Operation = (y_axis)[2] * (y_axis)[2];
+    MxDouble len = sqrt(((y_axis)[0] * (y_axis)[0] + axis2Operation + (y_axis)[1] * (y_axis)[1]));
+    ((y_axis)[0] = (y_axis)[0] / (len), (y_axis)[1] = (y_axis)[1] / (len), (y_axis)[2] = (y_axis)[2] / (len));
+  }
+
+  SET4from3(&p_outMatrix[0], x_axis,    0);
+  SET4from3(&p_outMatrix[4], y_axis,    0);
+  SET4from3(&p_outMatrix[8], z_axis,    0);
+  SET4from3(&p_outMatrix[12], p_posVec, 1);
 }
 
 // OFFSET: LEGO1 0x1003eae0

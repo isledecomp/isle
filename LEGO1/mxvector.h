@@ -2,6 +2,7 @@
 #define MXVECTOR_H
 
 #include "mxtypes.h"
+#include "vec.h"
 
 // VTABLE 0x100d4288
 // SIZE 0x8
@@ -61,7 +62,7 @@ public:
   virtual void SetVector(float *p_other);
 
   inline float& operator[](size_t idx) { return m_data[idx]; }
-  inline const float operator[](size_t idx) const { return m_data[idx]; }
+  inline const float& operator[](size_t idx) const { return m_data[idx]; }
 protected:
   float *m_data;
 };

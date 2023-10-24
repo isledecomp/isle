@@ -4,6 +4,11 @@
 #include <windows.h>
 
 #include "extra.h"
+#include "mxmatrix.h"
+
+#define NORMVEC3(dst, src) { \
+	MxDouble len = sqrt(NORMSQRD3(src)); \
+	VDS3(dst, src, len); }
 
 template <class T>
 inline T Abs(T p_t)
@@ -55,5 +60,7 @@ inline void GetString(char **p_source, const char *&p_dest, T *p_obj, void (T::*
 ExtraActionType MatchActionString(const char *);
 void ConvertHSVToRGB(float r, float g, float b, float* out_r, float* out_g, float* out_b);
 void SetAppCursor(WPARAM p_wparam);
+void CalcLocalTransform(const MxVector3 &p_posVec, const MxVector3 &p_dirVec,
+                        const MxVector3 &p_upVec, MxMatrix &p_outMatrix);
 
 #endif // LEGOUTIL_H
