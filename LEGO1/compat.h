@@ -31,7 +31,8 @@ static class msVC6_4786WorkAround { public: msVC6_4786WorkAround() {} } msVC6_47
 #include <algorithm>
 #include <list>
 #include <set>
-using namespace std;
+using std::list;
+using std::set;
 #endif
 
 // We use `override` so newer compilers can tell us our vtables are valid,

@@ -209,6 +209,9 @@ add_library(lego1 SHARED
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager.cpp
 )
+if (MINGW)
+  target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
+endif()
 
 # Additional include directories for both targets
 include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")

@@ -7,8 +7,13 @@ typedef unsigned short MxU16;
 typedef signed short MxS16;
 typedef unsigned int MxU32;
 typedef signed int MxS32;
+#ifdef _MSC_VER
 typedef unsigned __int64 MxU64;
 typedef signed __int64 MxS64;
+#else
+typedef unsigned long long int MxU64;
+typedef signed long long int MxS64;
+#endif
 typedef float MxFloat;
 typedef double MxDouble;
 

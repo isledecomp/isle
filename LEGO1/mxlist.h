@@ -5,6 +5,11 @@
 #include "mxcore.h"
 
 template <class T>
+class MxList;
+template <class T>
+class MxListCursor;
+
+template <class T>
 class MxListEntry
 {
 public:
@@ -64,7 +69,7 @@ public:
   void Append(T);
   void OtherAppend(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
   void DeleteAll();
-  MxU32 GetCount() { return m_count; }
+  MxU32 GetCount() { return this->m_count; }
   void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 
   friend class MxListCursor<T>;
@@ -128,12 +133,12 @@ inline void MxList<T>::DeleteAll()
       break;
 
     MxListEntry<T> *next = t->m_next;
-    m_customDestructor(t->GetValue());
+    this->m_customDestructor(t->GetValue());
     delete t;
     t = next;
   }
 
-  m_count = 0;
+  this->m_count = 0;
   m_last = NULL;
   m_first = NULL;
 }
@@ -188,7 +193,7 @@ inline void MxList<T>::_DeleteEntry(MxListEntry<T> *match)
     m_last = *pPrev;
 
   delete match;
-  m_count--;
+  this->m_count--;
 }
 
 template <class T>

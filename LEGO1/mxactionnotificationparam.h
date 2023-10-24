@@ -27,7 +27,7 @@ public:
   }
 
   // OFFSET: LEGO1 0x10051050
-  inline virtual MxActionNotificationParam::~MxActionNotificationParam() override
+  inline virtual ~MxActionNotificationParam() override
   {
     if (!this->m_realloc)
       return;

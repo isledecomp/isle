@@ -19,11 +19,10 @@ MxCore *LegoObjectFactory::Create(const char *p_name)
 {
   MxAtomId atom(p_name, LookupMode_Exact);
 
-  if (0) {
-#define X(V) } else if (this->m_id##V == atom) { return new V;
+#define X(V) if (this->m_id##V == atom) { return new V; } else
   FOR_LEGOOBJECTFACTORY_OBJECTS(X)
 #undef X
-  } else {
+  {
     return MxObjectFactory::Create(p_name);
   }
 }

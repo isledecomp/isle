@@ -27,8 +27,8 @@ void MxMusicManager::DeinitializeMIDI()
   {
     m_MIDIInitialized = FALSE;
     midiStreamStop(m_MIDIStreamH);
-    midiOutUnprepareHeader(m_MIDIStreamH, m_MIDIHdrP, sizeof(MIDIHDR));
-    midiOutSetVolume(m_MIDIStreamH, m_MIDIVolume);
+    midiOutUnprepareHeader((HMIDIOUT)m_MIDIStreamH, m_MIDIHdrP, sizeof(MIDIHDR));
+    midiOutSetVolume((HMIDIOUT)m_MIDIStreamH, m_MIDIVolume);
     midiStreamClose(m_MIDIStreamH);
     delete m_MIDIHdrP;
     InitData();
@@ -106,7 +106,7 @@ void MxMusicManager::SetMIDIVolume()
   if (streamHandle)
   {
     MxS32 volume = CalculateVolume(result);
-    midiOutSetVolume(streamHandle, volume);
+    midiOutSetVolume((HMIDIOUT)streamHandle, volume);
   }
 }
 

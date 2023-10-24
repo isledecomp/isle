@@ -104,7 +104,8 @@ void MxTransitionManager::Transition_Dissolve()
   // If we are starting the animation
   if (m_animationTimer == 0) {
     // Generate the list of columns in order...
-    for (MxS32 i = 0; i < 640; i++) {
+    MxS32 i;
+    for (i = 0; i < 640; i++) {
       m_columnOrder[i] = i;
     }
 
@@ -242,7 +243,8 @@ void MxTransitionManager::Transition_Pixelation()
   if (m_animationTimer == 0) {
     // Same init/shuffle steps as the dissolve transition, except that
     // we are using big blocky pixels and only need 64 columns.
-    for (MxS32 i = 0; i < 64; i++) {
+    MxS32 i;
+    for (i = 0; i < 64; i++) {
       m_columnOrder[i] = i;
     }
 
