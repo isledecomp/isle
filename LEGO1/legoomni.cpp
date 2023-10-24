@@ -146,16 +146,52 @@ LegoVideoManager *VideoManager()
   return LegoOmni::GetInstance()->GetVideoManager();
 }
 
-// OFFSET: LEGO1 0x100157f0
-LegoBuildingManager *BuildingManager()
+// OFFSET: LEGO1 0x10015730
+MxBackgroundAudioManager *BackgroundAudioManager()
 {
-  return LegoOmni::GetInstance()->GetLegoBuildingManager();
+  return LegoOmni::GetInstance()->GetBackgroundAudioManager();
+}
+
+// OFFSET: LEGO1 0x10015740
+LegoInputManager *InputManager()
+{
+  return LegoOmni::GetInstance()->GetInputManager();
+}
+
+// OFFSET: LEGO1 0x10015750
+LegoControlManager *ControlManager()
+{
+  return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
+}
+
+// OFFSET: LEGO1 0x10015760
+LegoGameState *GameState()
+{
+  return LegoOmni::GetInstance()->GetGameState();
+}
+
+// OFFSET: LEGO1 0x10015770
+LegoAnimationManager *AnimationManager()
+{
+  return LegoOmni::GetInstance()->GetAnimationManager();
+}
+
+// OFFSET: LEGO1 0x10015780
+LegoNavController *NavController()
+{
+  return LegoOmni::GetInstance()->GetNavController();
 }
 
 // OFFSET: LEGO1 0x10015790
-Isle *GetIsle()
+LegoWorld *GetCurrentVehicle()
 {
-  return LegoOmni::GetInstance()->GetIsle();
+  return LegoOmni::GetInstance()->GetCurrentVehicle();
+}
+
+// OFFSET: LEGO1 0x100157a0
+LegoWorld *GetCurrentWorld()
+{
+  return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 
 // OFFSET: LEGO1 0x100157e0
@@ -164,10 +200,22 @@ LegoPlantManager *PlantManager()
   return LegoOmni::GetInstance()->GetLegoPlantManager();
 }
 
-// OFFSET: LEGO1 0x10015730
-MxBackgroundAudioManager *BackgroundAudioManager()
+// OFFSET: LEGO1 0x100157f0
+LegoBuildingManager *BuildingManager()
 {
-  return LegoOmni::GetInstance()->GetBackgroundAudioManager();
+  return LegoOmni::GetInstance()->GetLegoBuildingManager();
+}
+
+// OFFSET: LEGO1 0x10015800
+GifManager *GetGifManager()
+{
+  return LegoOmni::GetInstance()->GetGifManager();
+}
+
+// OFFSET: LEGO1 0x10015900
+MxTransitionManager *TransitionManager()
+{
+  return LegoOmni::GetInstance()->GetTransitionManager();
 }
 
 // OFFSET: LEGO1 0x100c0280
@@ -205,36 +253,6 @@ MxDSObject *CreateStreamObject(MxDSFile *p_file, MxS16 p_ofs)
   return NULL;
 }
 
-// OFFSET: LEGO1 0x10015740
-LegoInputManager *InputManager()
-{
-  return LegoOmni::GetInstance()->GetInputManager();
-}
-
-// OFFSET: LEGO1 0x10015750
-LegoControlManager *ControlManager()
-{
-  return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
-}
-
-// OFFSET: LEGO1 0x10015760
-LegoGameState *GameState()
-{
-  return LegoOmni::GetInstance()->GetGameState();
-}
-
-// OFFSET: LEGO1 0x10015780
-LegoNavController *NavController()
-{
-  return LegoOmni::GetInstance()->GetNavController();
-}
-
-// OFFSET: LEGO1 0x10015900
-MxTransitionManager *TransitionManager()
-{
-  return LegoOmni::GetInstance()->GetTransitionManager();
-}
-
 // OFFSET: LEGO1 0x10053430
 const char *GetNoCD_SourceName()
 {
@@ -244,7 +262,7 @@ const char *GetNoCD_SourceName()
 // OFFSET: LEGO1 0x1005b5f0
 MxLong LegoOmni::Notify(MxParam &p)
 {
-  // FIXME: Stub
+  // TODO
   return 0;
 }
 
@@ -273,7 +291,7 @@ void LegoOmni::Init()
   m_unk78 = 0;
   m_currentWorld = NULL;
   m_unk80 = FALSE;
-  m_isle = NULL;
+  m_currentVehicle = NULL;
   m_unkLegoSaveDataWriter = NULL;
   m_plantManager = NULL;
   m_gameState = NULL;
@@ -299,7 +317,7 @@ MxResult LegoOmni::Create(COMPAT_CONST MxOmniCreateParam &p)
 // OFFSET: LEGO1 0x10058c30 STUB
 void LegoOmni::Destroy()
 {
-  // FIXME: Stub
+  // TODO
 }
 
 // OFFSET: LEGO1 0x1005b580
@@ -312,26 +330,24 @@ MxResult LegoOmni::Start(MxDSAction* action)
   return result;
 }
 
+// OFFSET: LEGO1 0x1005b1d0 STUB
 MxResult LegoOmni::DeleteObject(MxDSAction &ds)
 {
-  // FIXME: Stub
+  // TODO
   return FAILURE;
 }
 
+// OFFSET: LEGO1 0x1005b3c0 STUB
 MxBool LegoOmni::DoesEntityExist(MxDSAction &ds)
 {
-  // FIXME: Stub
+  // TODO
   return TRUE;
 }
 
-void LegoOmni::vtable0x2c()
+// OFFSET: LEGO1 0x1005b2f0 STUB
+int LegoOmni::Vtable0x30(char*, int, MxCore*)
 {
-  // FIXME: Stub
-}
-
-int LegoOmni::vtable0x30(char*, int, MxCore*)
-{
-  // FIXME: Stub
+  // TODO
   return 0;
 }
 
@@ -354,16 +370,4 @@ void LegoOmni::StopTimer()
 {
   MxOmni::StopTimer();
   SetAppCursor(0);
-}
-
-// OFFSET: LEGO1 0x100157a0
-LegoWorld *GetCurrentWorld()
-{
-  return LegoOmni::GetInstance()->GetCurrentWorld();
-}
-
-// OFFSET: LEGO1 0x10015800
-GifManager *GetGifManager()
-{
-  return LegoOmni::GetInstance()->GetGifManager();
 }
