@@ -24,6 +24,13 @@ public:
     return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
   }
 
+  virtual void VTable0x50(); // vtable+0x50
+  virtual void VTable0x54(); // vtable+0x54
+  virtual void VTable0x58(); // vtable+0x58
+  virtual void VTable0x5c(); // vtable+0x5c
+  virtual void VTable0x60(); // vtable+0x60
+  virtual void VTable0x64(); // vtable+0x64
+
 private:
   undefined unk68[0x10];
 

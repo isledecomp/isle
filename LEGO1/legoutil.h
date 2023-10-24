@@ -4,6 +4,7 @@
 #include <windows.h>
 
 #include "extra.h"
+#include "mxatomid.h"
 
 template <class T>
 inline T Abs(T p_t)
@@ -54,6 +55,7 @@ inline void GetString(char **p_source, const char *&p_dest, T *p_obj, void (T::*
 
 ExtraActionType MatchActionString(const char *);
 void ConvertHSVToRGB(float r, float g, float b, float* out_r, float* out_g, float* out_b);
+void FUN_1003ee00(MxAtomId &p_atomId, MxS32 p_id);
 void SetAppCursor(WPARAM p_wparam);
 
 #endif // LEGOUTIL_H

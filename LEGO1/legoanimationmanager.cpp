@@ -3,13 +3,32 @@
 // 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
 
+// OFFSET: LEGO1 0x1005eb50
+void LegoAnimationManager::configureLegoAnimationManager(int param_1)
+{
+  g_legoAnimationManagerConfig = param_1;
+}
+
 // OFFSET: LEGO1 0x1005eb60 STUB
 LegoAnimationManager::LegoAnimationManager()
 {
+  // TODO
 }
 
 // OFFSET: LEGO1 0x1005ed30 STUB
 LegoAnimationManager::~LegoAnimationManager()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1005f130 STUB
+void LegoAnimationManager::Init()
+{
+  // TODO
+}
+
+// OFFSET: LEGO1 0x1005f6d0 STUB
+void LegoAnimationManager::FUN_1005f6d0(MxBool p)
 {
   // TODO
 }
@@ -28,16 +47,4 @@ MxResult LegoAnimationManager::Tickle()
   // TODO
 
   return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x1005f130 STUB
-void LegoAnimationManager::Init()
-{
-  // TODO
-}
-
-// OFFSET: LEGO1 0x1005eb50
-void LegoAnimationManager::configureLegoAnimationManager(int param_1)
-{
-  g_legoAnimationManagerConfig = param_1;
 }

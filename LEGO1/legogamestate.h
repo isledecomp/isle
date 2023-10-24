@@ -36,6 +36,7 @@ public:
   void FUN_1003a720(MxU32 p_unk);
   void HandleAction(MxU32 p_unk);
 
+  inline MxU32 GetUnknown10() { return m_unk10; }
   inline void SetUnknown424(undefined4 p_unk424) { m_unk424 = p_unk424; }
 
 private:
