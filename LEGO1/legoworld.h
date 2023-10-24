@@ -27,7 +27,7 @@ public:
 
   virtual void Stop(); // vtable+50
   virtual void VTable0x54(); // vtable+54
-  virtual void VTable0x58(); // vtable+58
+  virtual void VTable0x58(MxCore *p_object); // vtable+58
   virtual MxBool VTable0x5c();  // vtable+5c
   virtual void VTable0x60();  // vtable+60
   virtual MxBool VTable0x64(); // vtable+64

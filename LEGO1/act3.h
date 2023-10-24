@@ -25,6 +25,11 @@ public:
     return !strcmp(name, Act3::ClassName()) || LegoWorld::IsA(name);
   }
 
+  inline void SetUnkown420c(MxEntity *p_entity) { m_unk420c = p_entity; }
+  protected:
+    undefined m_unkf8[0x4114];
+    MxEntity *m_unk420c;
+    undefined m_unk4210[0x64];
 };
 
 

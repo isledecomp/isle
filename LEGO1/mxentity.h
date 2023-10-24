@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
+#include "mxdsobject.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d5390
@@ -28,7 +29,12 @@ public:
   }
 
   virtual MxResult SetEntityId(MxS32 p_id, const MxAtomId &p_atom); // vtable+0x14
-
+  inline  MxResult InitFromMxDSObject(MxDSObject &p_dsObject)
+  {
+    m_mxEntityId = p_dsObject.GetObjectId();
+    m_atom = p_dsObject.GetAtomId();
+    return SUCCESS;
+  }
 protected:
   MxS32 m_mxEntityId; // 0x8
   MxAtomId m_atom; // 0xc
