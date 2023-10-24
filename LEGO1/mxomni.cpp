@@ -56,7 +56,7 @@ void MxOmni::Init()
 }
 
 // OFFSET: LEGO1 0x100b0090
-MxResult MxOmni::Start(MxDSAction* p_dsAction)
+MxResult MxOmni::Start(MxDSAction *p_dsAction)
 {
   MxResult result = FAILURE;
   if(p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL)
@@ -87,13 +87,13 @@ MxBool MxOmni::DoesEntityExist(MxDSAction &p_dsAction)
 }
 
 // OFFSET: LEGO1 0x100b00e0 STUB
-void MxOmni::vtable0x2c()
+void MxOmni::Vtable0x2c()
 {
   // TODO
 }
 
 // OFFSET: LEGO1 0x100aefb0 STUB
-int MxOmni::vtable0x30(char*, int, MxCore*)
+int MxOmni::Vtable0x30(char *, int, MxCore *)
 {
   // TODO
   return 0;
@@ -332,7 +332,7 @@ MxLong MxOmni::Notify(MxParam &p)
 }
 
 // OFFSET: LEGO1 0x100b0880 STUB
-MxResult MxOmni::HandleNotificationType2(MxParam& p_param)
+MxResult MxOmni::HandleNotificationType2(MxParam &p_param)
 {
   // TODO STUB
   return FAILURE;
@@ -369,37 +369,37 @@ MxAtomIdCounterSet *AtomIdCounterSet()
 }
 
 // OFFSET: LEGO1 0x100acef0
-MxStreamer* Streamer()
+MxStreamer *Streamer()
 {
   return MxOmni::GetInstance()->GetStreamer();
 }
 
 // OFFSET: LEGO1 0x100acf00
-MxSoundManager* MSoundManager()
+MxSoundManager *MSoundManager()
 {
   return MxOmni::GetInstance()->GetSoundManager();
 }
 
 // OFFSET: LEGO1 0x100acf10
-MxVideoManager* MVideoManager()
+MxVideoManager *MVideoManager()
 {
   return MxOmni::GetInstance()->GetVideoManager();
 }
 
 // OFFSET: LEGO1 0x100acf20
-MxVariableTable* VariableTable()
+MxVariableTable *VariableTable()
 {
   return MxOmni::GetInstance()->GetVariableTable();
 }
 
 // OFFSET: LEGO1 0x100acf30
-MxMusicManager* MusicManager()
+MxMusicManager *MusicManager()
 {
   return MxOmni::GetInstance()->GetMusicManager();
 }
 
 // OFFSET: LEGO1 0x100acf40
-MxEventManager* EventManager()
+MxEventManager *EventManager()
 {
   return MxOmni::GetInstance()->GetEventManager();
 }

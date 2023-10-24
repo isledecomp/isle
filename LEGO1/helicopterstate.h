@@ -1,6 +1,7 @@
 #ifndef HELICOPTERSTATE_H
 #define HELICOPTERSTATE_H
 
+#include "decomp.h"
 #include "legostate.h"
 
 // VTABLE 0x100d5418
@@ -20,6 +21,10 @@ public:
   {
     return !strcmp(name, HelicopterState::ClassName()) || LegoState::IsA(name);
   }
+
+  inline void SetUnknown8(undefined4 p_unk8) { m_unk8 = p_unk8; }
+  protected:
+    undefined4 m_unk8;
 };
 
 #endif // HELICOPTERSTATE_H
