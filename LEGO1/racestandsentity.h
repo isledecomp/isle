@@ -5,8 +5,6 @@
 
 // VTABLE 0x100d48a8
 // SIZE 0x68
-class RaceStandsEntity : public BuildingEntity
-{
-};
+class RaceStandsEntity : public BuildingEntity {};
 
 #endif // RACESTANDSENTITY_H

@@ -6,7 +6,7 @@
 
 class IsleApp;
 
-extern IsleApp *g_isle;
+extern IsleApp* g_isle;
 extern int g_closed;
 // 0x4101c4
 #define WNDCLASS_NAME "Lego Island MainNoM App"

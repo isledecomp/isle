@@ -2,7 +2,11 @@
 #define DECOMP_H
 
 #if defined(_MSC_VER)
-#define DECOMP_STATIC_ASSERT(V) namespace { typedef int foo[(V)?1:-1]; }
+#define DECOMP_STATIC_ASSERT(V)                                                                                        \
+	namespace                                                                                                          \
+	{                                                                                                                  \
+	typedef int foo[(V) ? 1 : -1];                                                                                     \
+	}
 #define DECOMP_SIZE_ASSERT(T, S) DECOMP_STATIC_ASSERT(sizeof(T) == S)
 #else
 #define DECOMP_STATIC_ASSERT(V)

@@ -5,29 +5,28 @@
 
 // VTABLE 0x100dcd88
 // SIZE 0xb8
-class MxDSAnim : public MxDSMediaAction
-{
+class MxDSAnim : public MxDSMediaAction {
 public:
-  MxDSAnim();
-  virtual ~MxDSAnim() override;
+	MxDSAnim();
+	virtual ~MxDSAnim() override;
 
-  void CopyFrom(MxDSAnim &p_dsAnim);
-  MxDSAnim &operator=(MxDSAnim &p_dsAnim);
+	void CopyFrom(MxDSAnim& p_dsAnim);
+	MxDSAnim& operator=(MxDSAnim& p_dsAnim);
 
-  // OFFSET: LEGO1 0x100c9060
-  inline virtual const char *ClassName() const override // vtable+0x0c
-  {
-    // 0x101025d8
-    return "MxDSAnim";
-  }
+	// OFFSET: LEGO1 0x100c9060
+	inline virtual const char* ClassName() const override // vtable+0x0c
+	{
+		// 0x101025d8
+		return "MxDSAnim";
+	}
 
-  // OFFSET: LEGO1 0x100c9070
-  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
-  {
-    return !strcmp(name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(name);
-  }
+	// OFFSET: LEGO1 0x100c9070
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(name);
+	}
 
-  virtual MxDSAction *Clone() override; // vtable+2c;
+	virtual MxDSAction* Clone() override; // vtable+2c;
 };
 
 #endif // MXDSANIM_H

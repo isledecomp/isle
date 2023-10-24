@@ -1,9 +1,9 @@
 #include "act2policestation.h"
 
 // OFFSET: LEGO1 0x1004e0e0 STUB
-MxLong Act2PoliceStation::Notify(MxParam &p)
+MxLong Act2PoliceStation::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

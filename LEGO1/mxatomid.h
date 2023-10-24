@@ -1,43 +1,35 @@
 #ifndef MXATOMID_H
 #define MXATOMID_H
 
-#include "mxtypes.h"
 #include "mxatomidcounter.h"
+#include "mxtypes.h"
 
-enum LookupMode
-{
-  LookupMode_Exact = 0,
-  LookupMode_LowerCase = 1,
-  LookupMode_UpperCase = 2,
-  LookupMode_LowerCase2 = 3
+enum LookupMode {
+	LookupMode_Exact = 0,
+	LookupMode_LowerCase = 1,
+	LookupMode_UpperCase = 2,
+	LookupMode_LowerCase2 = 3
 };
 
-class MxAtomId
-{
+class MxAtomId {
 public:
-  __declspec(dllexport) MxAtomId(const char *, LookupMode);
-  __declspec(dllexport) MxAtomId &operator=(const MxAtomId &id);
-  __declspec(dllexport) ~MxAtomId();
+	__declspec(dllexport) MxAtomId(const char*, LookupMode);
+	__declspec(dllexport) MxAtomId& operator=(const MxAtomId& id);
+	__declspec(dllexport) ~MxAtomId();
 
-  MxAtomId()
-  {
-    this->m_internal = 0;
-  }
+	MxAtomId() { this->m_internal = 0; }
 
-  inline MxBool operator ==(const MxAtomId &other) const
-  {
-    return this->m_internal == other.m_internal;
-  }
+	inline MxBool operator==(const MxAtomId& other) const { return this->m_internal == other.m_internal; }
 
-  void Clear();
+	void Clear();
 
-  const char *GetInternal() const { return m_internal; }
+	const char* GetInternal() const { return m_internal; }
 
 private:
-  MxAtomIdCounter* GetCounter(const char *, LookupMode);
-  void Destroy();
+	MxAtomIdCounter* GetCounter(const char*, LookupMode);
+	void Destroy();
 
-  const char *m_internal;
+	const char* m_internal;
 };
 
 #endif // MXATOMID_H

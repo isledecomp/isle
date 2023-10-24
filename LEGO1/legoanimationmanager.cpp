@@ -6,45 +6,45 @@ int g_legoAnimationManagerConfig = 1;
 // OFFSET: LEGO1 0x1005eb50
 void LegoAnimationManager::configureLegoAnimationManager(int param_1)
 {
-  g_legoAnimationManagerConfig = param_1;
+	g_legoAnimationManagerConfig = param_1;
 }
 
 // OFFSET: LEGO1 0x1005eb60 STUB
 LegoAnimationManager::LegoAnimationManager()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1005ed30 STUB
 LegoAnimationManager::~LegoAnimationManager()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1005f130 STUB
 void LegoAnimationManager::Init()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1005f6d0 STUB
 void LegoAnimationManager::FUN_1005f6d0(MxBool p)
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100619f0 STUB
-MxLong LegoAnimationManager::Notify(MxParam &p)
+MxLong LegoAnimationManager::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }
 
 // OFFSET: LEGO1 0x10061cc0 STUB
 MxResult LegoAnimationManager::Tickle()
 {
-  // TODO
+	// TODO
 
-  return SUCCESS;
+	return SUCCESS;
 }

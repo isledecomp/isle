@@ -3,19 +3,19 @@
 // OFFSET: LEGO1 0x100822f0 STUB
 HistoryBook::HistoryBook()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100824d0 STUB
 HistoryBook::~HistoryBook()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10082680 STUB
-MxLong HistoryBook::Notify(MxParam &p)
+MxLong HistoryBook::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

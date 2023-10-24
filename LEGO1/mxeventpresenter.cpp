@@ -1,42 +1,42 @@
 #include "mxeventpresenter.h"
-#include "mxeventmanager.h"
-#include "mxomni.h"
 
 #include "decomp.h"
+#include "mxeventmanager.h"
+#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxEventPresenter, 0x54);
 
 // OFFSET: LEGO1 0x100c2b70
 MxEventPresenter::MxEventPresenter()
 {
-  Init();
+	Init();
 }
 
 // OFFSET: LEGO1 0x100c2d40
 MxEventPresenter::~MxEventPresenter()
 {
-  Destroy();
+	Destroy();
 }
 
 // OFFSET: LEGO1 0x100c2da0
 void MxEventPresenter::Init()
 {
-  m_unk50 = NULL;
+	m_unk50 = NULL;
 }
 
 // OFFSET: LEGO1 0x100c2de0
 void MxEventPresenter::Destroy()
 {
-  MxEventManager *eventManager = EventManager();
-  if (eventManager) 
-    EventManager()->RemovePresenter(*this);
+	MxEventManager* eventManager = EventManager();
+	if (eventManager)
+		EventManager()->RemovePresenter(*this);
 
-  m_criticalSection.Enter();
+	m_criticalSection.Enter();
 
-  if (m_unk50)
-    delete m_unk50;
+	if (m_unk50)
+		delete m_unk50;
 
-  Init();
+	Init();
 
-  m_criticalSection.Leave();
+	m_criticalSection.Leave();
 }

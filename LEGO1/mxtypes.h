@@ -51,17 +51,17 @@ typedef MxU8 MxBool;
 
 // Must be union with struct for match.
 typedef union {
-  struct {
-    MxU8 bit0: 1;
-    MxU8 bit1: 1;
-    MxU8 bit2: 1;
-    MxU8 bit3: 1;
-    MxU8 bit4: 1;
-    MxU8 bit5: 1;
-    MxU8 bit6: 1;
-    MxU8 bit7: 1;
-  };
-  // BYTE all; // ?
+	struct {
+		MxU8 bit0 : 1;
+		MxU8 bit1 : 1;
+		MxU8 bit2 : 1;
+		MxU8 bit3 : 1;
+		MxU8 bit4 : 1;
+		MxU8 bit5 : 1;
+		MxU8 bit6 : 1;
+		MxU8 bit7 : 1;
+	};
+	// BYTE all; // ?
 } flag_bitfield;
 
 #endif // MXTYPE_H

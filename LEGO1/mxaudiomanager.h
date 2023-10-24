@@ -5,26 +5,25 @@
 #include "mxmediamanager.h"
 
 // VTABLE 0x100dc6e0
-class MxAudioManager : public MxMediaManager
-{
+class MxAudioManager : public MxMediaManager {
 public:
-  MxAudioManager();
-  virtual ~MxAudioManager() override;
+	MxAudioManager();
+	virtual ~MxAudioManager() override;
 
-  virtual MxResult InitPresenters() override; // vtable+14
-  virtual void Destroy() override; // vtable+18
-  virtual MxS32 GetVolume(); // vtable+28
-  virtual void SetVolume(MxS32 p_volume); // vtable+2c
+	virtual MxResult InitPresenters() override; // vtable+14
+	virtual void Destroy() override;            // vtable+18
+	virtual MxS32 GetVolume();                  // vtable+28
+	virtual void SetVolume(MxS32 p_volume);     // vtable+2c
 
 private:
-  void Destroy(MxBool p_fromDestructor);
+	void Destroy(MxBool p_fromDestructor);
 
-  static MxS32 g_unkCount;
+	static MxS32 g_unkCount;
 
 protected:
-  void Init();
+	void Init();
 
-  MxS32 m_volume; // 0x2c
+	MxS32 m_volume; // 0x2c
 };
 
 #endif // MXAUDIOMANAGER_H

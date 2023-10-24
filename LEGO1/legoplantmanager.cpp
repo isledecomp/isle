@@ -3,25 +3,25 @@
 // OFFSET: LEGO1 0x10026220
 LegoPlantManager::LegoPlantManager()
 {
-  Init();
+	Init();
 }
 
 // OFFSET: LEGO1 0x100262c0 STUB
 LegoPlantManager::~LegoPlantManager()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10026e00 STUB
 MxResult LegoPlantManager::Tickle()
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }
 
 // OFFSET: LEGO1 0x10026330 STUB
 void LegoPlantManager::Init()
 {
-  // TODO
+	// TODO
 }
