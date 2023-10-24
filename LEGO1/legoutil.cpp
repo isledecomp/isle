@@ -3,8 +3,6 @@
 #include "mxomni.h"
 #include "mxtypes.h"
 
-#include "math.h"
-
 #include <string.h>
 
 // OFFSET: LEGO1 0x1003e300
