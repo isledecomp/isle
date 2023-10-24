@@ -135,8 +135,8 @@ seek_to_last_row:
     for (MxS32 i = 0; i < m_width; i++) {
       if (*t_ptr) {
         // TODO: Second CDQ instruction for abs() should not be there.
-        MxS32 shift = abs(offset) & 7;
-        m_bitmask[offset / 8] |= (1 << abs(shift));
+        MxU32 shift = abs(offset) & 7;
+        m_bitmask[offset / 8] |= (1 << abs((MxS32)shift));
       }
       t_ptr++;
       offset++;

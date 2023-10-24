@@ -2,7 +2,7 @@
 #define MXVECTOR_H
 
 #include "mxtypes.h"
-#include "vec.h"
+#include <vec.h>
 
 // VTABLE 0x100d4288
 // SIZE 0x8

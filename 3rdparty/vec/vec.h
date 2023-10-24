@@ -2,111 +2,125 @@
  * vec.h --  Vector macros for 2,3, and 4 dimensions,
  *           for any  combination of C scalar types.
  *
- * Author:		Don Hatch (hatch@sgi.com)
- * Last modified:	Fri Sep 30 03:23:02 PDT 1994
+ * Author:  Don Hatch (hatch@sgi.com)
+ * Last modified: Fri Dec 15 01:57:07 PST 1995
  *
  * General description:
  *
- *	The macro name describes its arguments; e.g.
- *	    	MXS3 is "matrix times scalar in 3 dimensions";
- *	    	VMV2 is "vector minus vector in 2 dimensions".
+ * The macro name describes its arguments; e.g.
+ *      MXS3 is "matrix times scalar in 3 dimensions";
+ *      VMV2 is "vector minus vector in 2 dimensions".
  *
- *	If the result of an operation is a scalar, then the macro "returns"
- *	the value; e.g.
- *	    	result = DOT3(v,w);
- *	    	result = DET4(m);
+ * If the result of an operation is a scalar, then the macro "returns"
+ * the value; e.g.
+ *      result = DOT3(v,w);
+ *      result = DET4(m);
  *
- *	If the result of an operation is a vector or matrix, then
- *	the first argument is the destination; e.g.
- *	    	SET2(tovec, fromvec);
- *	    	MXM3(result, m1, m2);
+ * If the result of an operation is a vector or matrix, then
+ * the first argument is the destination; e.g.
+ *      SET2(tovec, fromvec);
+ *      MXM3(result, m1, m2);
  *
  *  WARNING: For the operations that are not done "componentwise"
- *	    (e.g. vector cross products and matrix multiplies)
- *	    the destination should not be either of the arguments,
- *	    for obvious reasons.  For example, the following is wrong:
- *		VXM2(v,v,m);
+ *     (e.g. vector cross products and matrix multiplies)
+ *     the destination should not be either of the arguments,
+ *     for obvious reasons.  For example, the following is wrong:
+ *  VXM2(v,v,m);
  *          For such "unsafe" macros, there are safe versions provided,
  *          but you have to specify a type for the temporary
- *	    result vector or matrix.  For example, the safe versions
- *	    of VXM2 are:
+ *     result vector or matrix.  For example, the safe versions
+ *     of VXM2 are:
  *              VXM2d(v,v,m)    if v's scalar type is double or float
  *              VXM2i(v,v,m)    if v's scalar type is int or char
  *              VXM2l(v,v,m)    if v's scalar type is long
  *              VXM2r(v,v,m)    if v's scalar type is real
  *              VXM2safe(type,v,v,m) for other scalar types.
- *	    These "safe" macros do not evaluate to C expressions
- *	    (so, for example, they can't be used inside the parentheses of
- *	    a for(...)).
+ *
+ *     These "safe" macros and INVERTMAT do not evaluate to C expressions
+ *     (so, for example, they can't be used inside the parentheses of
+ *     a for(...)).
  *
  *  Specific descriptions:
  *
- *	The "?"'s in the following can be 2, 3, or 4.
+ * The "?"'s in the following can be 2, 3, or 4.
  *
- *	SET?(to,from)			to = from
- *	SETMAT?(to,from)		to = from
- *	ROUNDVEC?(to,from)		to = from with entries rounded
- *							to nearest integer
- *	ROUNDMAT?(to,from)		to = from with entries rounded
- *							to nearest integer
- *	FILLVEC?(v,s)			set each entry of vector v to be s
- *	FILLMAT?(m,s)			set each entry of matrix m to be s
- *	ZEROVEC?(v)			v = 0
- *	ISZEROVEC?(v)			v == 0
- *	EQVEC?(v,w)			v == w
- *	EQMAT?(m1,m2)			m1 == m2
- *	ZEROMAT?(m)			m = 0
- *	IDENTMAT?(m)			m = 1
- *	TRANSPOSE?(to,from)		(matrix to) = (transpose of matrix from)
- *	ADJOINT?(to,from)		(matrix to) = (adjoint of matrix from)
- *					 i.e. its determinant times its inverse
+ * EXPAND?(v)   comma-separated list of elements of v
  *
- *	V{P,M}V?(to,v,w)		to = v {+,-} w
- *	M{P,M}M?(to,m1,m2)		to = m1 {+,-} m2
- *	SX{V,M}?(to,s,from)		to = s * from
- *	M{V,M}?(to,from)		to = -from
- *	{V,M}{X,D}S?(to,from,s)		to = from {*,/} s
- *	MXM?(to,m1,m2)			to = m1 * m2
- *	VXM?(to,v,m)			(row vec to) = (row vec v) * m
- *	MXV?(to,m,v)			(column vec to) = m * (column vec v)
- *	LERP?(to,v0,v1,t)		to = v0 + t*(v1-v0)
+ * SET?(to,from)   to = from
+ * SETMAT?(to,from)  to = from
+ * ROUNDVEC?(to,from)  to = from with entries rounded
+ *       to nearest integer
+ * ROUNDMAT?(to,from)  to = from with entries rounded
+ *       to nearest integer
+ * FILLVEC?(v,s)   set each entry of vector v to be s
+ * FILLMAT?(m,s)   set each entry of matrix m to be s
+ * ZEROVEC?(v)   v = 0
+ * ISZEROVEC?(v)   v == 0
+ * EQVEC?(v,w)   v == w
+ * EQMAT?(m1,m2)   m1 == m2
+ * ZEROMAT?(m)   m = 0
+ * IDENTMAT?(m)   m = 1
+ * TRANSPOSE?(to,from)  (matrix to) = (transpose of matrix from)
+ * ADJOINT?(to,from)  (matrix to) = (adjoint of matrix from)
+ *      i.e. its determinant times its inverse
+ *      INVERTMAT?{d,i,l,r}(to,from) (matrix to) = (inverse of matrix from)
+ *     with temp adjoint and determinant type
+ *     double, int, long, or real respectively
  *
- *	DET?(m)				determinant of m
- *	TRACE?(m)			trace (sum of diagonal entries) of m
- *	DOT?(v,w)			dot (scalar) product of v and w
- *	NORMSQRD?(v)			square of |v|
- *	DISTSQRD?(v,w)			square of |v-w|
+ * V{P,M}V?(to,v,w)  to = v {+,-} w
+ * M{P,M}M?(to,m1,m2)  to = m1 {+,-} m2
+ * SX{V,M}?(to,s,from)  to = s * from
+ * VPSXV?(to,v,s,w)  to = v + s*w
+ * VPVXS?(to,v,w,s)  to = v + w*s
+ * M{V,M}?(to,from)  to = -from
+ * {V,M}{X,D}S?(to,from,s)  to = from {*,/} s
+ * MXM?(to,m1,m2)   to = m1 * m2
+ * VXM?(to,v,m)   (row vec to) = (row vec v) * m
+ * MXV?(to,m,v)   (column vec to) = m * (column vec v)
+ * VMODS?(to,v,s)   to = v mod s (always >= 0)
+ * VMODV?(to,v0,v1)  to = v0 mod v1 componentwise
+ * VDIVS?(to,v,s)   to = (v-(v mod s))/s
+ * VDIVV?(to,v0,v1)  to = (v0-(v0 mod v1))/v1 componentwise
+ * V{MIN,MAX}S?(to,v,s)  to = {MIN,MAX}(v, s)
+ * V{MIN,MAX}V?(to,v0,v1)  to = {MIN,MAX}(v0, v1)
+ * LERP?(to,v0,v1,t)  to = v0 + t*(v1-v0)
  *
- *	XV2(to,v)			to = v rotated by 90 degrees
- *	VXV3(to,v1,v2)			to = cross (vector) product of v1 and v2
- *	VXVXV4(to,v1,v2,v3)		to = 4-dimensional vector cross product
- *					 of v1,v2,v3 (a vector orthogonal to
- *					 v1,v2,v3 whose length equals the
- *					 volume of the spanned parallelotope)
- *	VXV2(v0,v1)			determinant of matrix with rows v0,v1
- *	VXVXV3(v0,v1,v2)		determinant of matrix with rows v0,v1,v2
- *	VXVXVXV4(v0,v1,v2,v3)		determinant of matrix with rows v0,..,v3
+ * DET?(m)    determinant of m
+ * TRACE?(m)   trace (sum of diagonal entries) of m
+ * DOT?(v,w)   dot (scalar) product of v and w
+ * NORMSQRD?(v)   square of |v|
+ * DISTSQRD?(v,w)   square of |v-w|
+ *
+ * XV2(to,v)   to = v rotated by 90 degrees
+ * VXV3(to,v1,v2)   to = cross (vector) product of v1 and v2
+ * VXVXV4(to,v1,v2,v3)  to = 4-dimensional vector cross product
+ *      of v1,v2,v3 (a vector orthogonal to
+ *      v1,v2,v3 whose length equals the
+ *      volume of the spanned parallelotope)
+ * VXV2(v0,v1)   determinant of matrix with rows v0,v1
+ * VXVXV3(v0,v1,v2)  determinant of matrix with rows v0,v1,v2
+ * VXVXVXV4(v0,v1,v2,v3)  determinant of matrix with rows v0,..,v3
  *
  *   The following macros mix objects from different dimensions.
  *   For example, V3XM4 would be used to apply a composite
  *   4x4 rotation-and-translation matrix to a 3d vector.
  *
- *	SET3from2(to,from,pad)		(3d vec to) = (2d vec from) with pad
- *	SET4from3(to,from,pad)		(4d vec to) = (3d vec from) with pad
- *	SETMAT3from2(to,from,pad0,pad1) (3x3 mat to) = (2x2 mat from)
- *					 padded with pad0 on the sides
- *					 and pad1 in the corner
- *	SETMAT4from3(to,from,pad0,pad1) (4x4 mat to) = (3x3 mat from)
- *					 padded with pad0 on the sides
- *					 and pad1 in the corner
- *	V2XM3(to2,v2,m3)       (2d row vec to2) = (2d row vec v2) * (3x3 mat m3)
- *	V3XM4(to3,v3,m4)       (3d row vec to3) = (3d row vec v2) * (4x4 mat m4)
- *	M3XV2(to2,m3,v2)       (2d col vec to2) = (3x3 mat m3) * (2d col vec v2)
- *	M4XV3(to3,m4,v3)       (3d col vec to3) = (4x4 mat m4) * (3d col vec v3)
- *	M2XM3(to3,m2,m3)       (3x3 mat to3) = (2x2 mat m2) * (3x3 mat m3)
- *	M3XM4(to4,m3,m4)       (4x4 mat to4) = (3x3 mat m3) * (4x4 mat m4)
- *	M3XM2(to3,m3,m2)       (3x3 mat to3) = (3x3 mat m3) * (2x2 mat m2)
- *	M4XM3(to4,m4,m3)       (4x4 mat to4) = (4x4 mat m4) * (3x3 mat m3)
+ * SET3from2(to,from,pad)  (3d vec to) = (2d vec from) with pad
+ * SET4from3(to,from,pad)  (4d vec to) = (3d vec from) with pad
+ * SETMAT3from2(to,from,pad0,pad1) (3x3 mat to) = (2x2 mat from)
+ *      padded with pad0 on the sides
+ *      and pad1 in the corner
+ * SETMAT4from3(to,from,pad0,pad1) (4x4 mat to) = (3x3 mat from)
+ *      padded with pad0 on the sides
+ *      and pad1 in the corner
+ * V2XM3(to2,v2,m3)       (2d row vec to2) = (2d row vec v2) * (3x3 mat m3)
+ * V3XM4(to3,v3,m4)       (3d row vec to3) = (3d row vec v2) * (4x4 mat m4)
+ * M3XV2(to2,m3,v2)       (2d col vec to2) = (3x3 mat m3) * (2d col vec v2)
+ * M4XV3(to3,m4,v3)       (3d col vec to3) = (4x4 mat m4) * (3d col vec v3)
+ * M2XM3(to3,m2,m3)       (3x3 mat to3) = (2x2 mat m2) * (3x3 mat m3)
+ * M3XM4(to4,m3,m4)       (4x4 mat to4) = (3x3 mat m3) * (4x4 mat m4)
+ * M3XM2(to3,m3,m2)       (3x3 mat to3) = (3x3 mat m3) * (2x2 mat m2)
+ * M4XM3(to4,m4,m3)       (4x4 mat to4) = (4x4 mat m4) * (3x3 mat m3)
  *
  *
  *   This file is machine-generated and can be regenerated
@@ -116,7 +130,10 @@
 
 #ifndef VEC_H
 #define VEC_H 4
-#include <math.h>	/* for definition of floor() */
+#include <math.h> /* for definition of floor() */
+#define EXPAND2(v) (v)[0], (v)[1]
+#define EXPAND3(v) (v)[0], (v)[1], (v)[2]
+#define EXPAND4(v) (v)[0], (v)[1], (v)[2], (v)[3]
 #define SET2(to,from)	\
 		((to)[0] = (from)[0], \
 		 (to)[1] = (from)[1])
@@ -156,6 +173,12 @@
 #define TRANSPOSE2(to,from)	\
 		(_SETcol2((to)[0], from, 0), \
 		 _SETcol2((to)[1], from, 1))
+#define VPSXV2(to,v,s,w)	\
+		((to)[0] = (v)[0] + (s) * (w)[0], \
+		 (to)[1] = (v)[1] + (s) * (w)[1])
+#define VPVXS2(to,v,w,s)	\
+		((to)[0] = (v)[0] + (w)[0] * (s), \
+		 (to)[1] = (v)[1] + (w)[1] * (s))
 #define VPV2(to,v,w)	\
 		((to)[0] = (v)[0] + (w)[0], \
 		 (to)[1] = (v)[1] + (w)[1])
@@ -201,6 +224,30 @@
 #define MXV2(to,m,v)	\
 		((to)[0] = DOT2((m)[0], v), \
 		 (to)[1] = DOT2((m)[1], v))
+#define VMODS2(to,v,s)	\
+		((to)[0] = SMODS1((v)[0], s), \
+		 (to)[1] = SMODS1((v)[1], s))
+#define VMODV2(to,v0,v1)	\
+		((to)[0] = SMODS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMODS1((v0)[1], (v1)[1]))
+#define VDIVS2(to,v,s)	\
+		((to)[0] = SDIVS1((v)[0], s), \
+		 (to)[1] = SDIVS1((v)[1], s))
+#define VDIVV2(to,v0,v1)	\
+		((to)[0] = SDIVS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SDIVS1((v0)[1], (v1)[1]))
+#define VMINS2(to,v,s)	\
+		((to)[0] = SMINS1((v)[0], s), \
+		 (to)[1] = SMINS1((v)[1], s))
+#define VMINV2(to,v0,v1)	\
+		((to)[0] = SMINS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMINS1((v0)[1], (v1)[1]))
+#define VMAXS2(to,v,s)	\
+		((to)[0] = SMAXS1((v)[0], s), \
+		 (to)[1] = SMAXS1((v)[1], s))
+#define VMAXV2(to,v0,v1)	\
+		((to)[0] = SMAXS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMAXS1((v0)[1], (v1)[1]))
 #define LERP2(to,v0,v1,t)	\
 		((to)[0]=(v0)[0]+(t)*((v1)[0]-(v0)[0]), \
 		 (to)[1]=(v0)[1]+(t)*((v1)[1]-(v0)[1]))
@@ -243,6 +290,14 @@
 		(_DET2(v0,v1,0,1))
 #define DET2(m)	\
 		(VXV2((m)[0],(m)[1]))
+#define SMODS1(a,b)	\
+		((((a)%(b)+(b))%(b)))
+#define SDIVS1(a,b)	\
+		((((a)-SMODS1(a,b))/(b)))
+#define SMINS1(a,b)	\
+		(((a) < (b) ? (a) : (b)))
+#define SMAXS1(a,b)	\
+		(((a) > (b) ? (a) : (b)))
 #define ADJOINT2(to,m)	\
 		( _ADJOINTcol2(to,0,m,1), \
 		 __ADJOINTcol2(to,1,m,0))
@@ -304,6 +359,14 @@
 		(_SETcol3((to)[0], from, 0), \
 		 _SETcol3((to)[1], from, 1), \
 		 _SETcol3((to)[2], from, 2))
+#define VPSXV3(to,v,s,w)	\
+		((to)[0] = (v)[0] + (s) * (w)[0], \
+		 (to)[1] = (v)[1] + (s) * (w)[1], \
+		 (to)[2] = (v)[2] + (s) * (w)[2])
+#define VPVXS3(to,v,w,s)	\
+		((to)[0] = (v)[0] + (w)[0] * (s), \
+		 (to)[1] = (v)[1] + (w)[1] * (s), \
+		 (to)[2] = (v)[2] + (w)[2] * (s))
 #define VPV3(to,v,w)	\
 		((to)[0] = (v)[0] + (w)[0], \
 		 (to)[1] = (v)[1] + (w)[1], \
@@ -364,6 +427,38 @@
 		((to)[0] = DOT3((m)[0], v), \
 		 (to)[1] = DOT3((m)[1], v), \
 		 (to)[2] = DOT3((m)[2], v))
+#define VMODS3(to,v,s)	\
+		((to)[0] = SMODS1((v)[0], s), \
+		 (to)[1] = SMODS1((v)[1], s), \
+		 (to)[2] = SMODS1((v)[2], s))
+#define VMODV3(to,v0,v1)	\
+		((to)[0] = SMODS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMODS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMODS1((v0)[2], (v1)[2]))
+#define VDIVS3(to,v,s)	\
+		((to)[0] = SDIVS1((v)[0], s), \
+		 (to)[1] = SDIVS1((v)[1], s), \
+		 (to)[2] = SDIVS1((v)[2], s))
+#define VDIVV3(to,v0,v1)	\
+		((to)[0] = SDIVS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SDIVS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SDIVS1((v0)[2], (v1)[2]))
+#define VMINS3(to,v,s)	\
+		((to)[0] = SMINS1((v)[0], s), \
+		 (to)[1] = SMINS1((v)[1], s), \
+		 (to)[2] = SMINS1((v)[2], s))
+#define VMINV3(to,v0,v1)	\
+		((to)[0] = SMINS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMINS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMINS1((v0)[2], (v1)[2]))
+#define VMAXS3(to,v,s)	\
+		((to)[0] = SMAXS1((v)[0], s), \
+		 (to)[1] = SMAXS1((v)[1], s), \
+		 (to)[2] = SMAXS1((v)[2], s))
+#define VMAXV3(to,v0,v1)	\
+		((to)[0] = SMAXS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMAXS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMAXS1((v0)[2], (v1)[2]))
 #define LERP3(to,v0,v1,t)	\
 		((to)[0]=(v0)[0]+(t)*((v1)[0]-(v0)[0]), \
 		 (to)[1]=(v0)[1]+(t)*((v1)[1]-(v0)[1]), \
@@ -509,6 +604,16 @@
 		 _SETcol4((to)[1], from, 1), \
 		 _SETcol4((to)[2], from, 2), \
 		 _SETcol4((to)[3], from, 3))
+#define VPSXV4(to,v,s,w)	\
+		((to)[0] = (v)[0] + (s) * (w)[0], \
+		 (to)[1] = (v)[1] + (s) * (w)[1], \
+		 (to)[2] = (v)[2] + (s) * (w)[2], \
+		 (to)[3] = (v)[3] + (s) * (w)[3])
+#define VPVXS4(to,v,w,s)	\
+		((to)[0] = (v)[0] + (w)[0] * (s), \
+		 (to)[1] = (v)[1] + (w)[1] * (s), \
+		 (to)[2] = (v)[2] + (w)[2] * (s), \
+		 (to)[3] = (v)[3] + (w)[3] * (s))
 #define VPV4(to,v,w)	\
 		((to)[0] = (v)[0] + (w)[0], \
 		 (to)[1] = (v)[1] + (w)[1], \
@@ -584,6 +689,46 @@
 		 (to)[1] = DOT4((m)[1], v), \
 		 (to)[2] = DOT4((m)[2], v), \
 		 (to)[3] = DOT4((m)[3], v))
+#define VMODS4(to,v,s)	\
+		((to)[0] = SMODS1((v)[0], s), \
+		 (to)[1] = SMODS1((v)[1], s), \
+		 (to)[2] = SMODS1((v)[2], s), \
+		 (to)[3] = SMODS1((v)[3], s))
+#define VMODV4(to,v0,v1)	\
+		((to)[0] = SMODS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMODS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMODS1((v0)[2], (v1)[2]), \
+		 (to)[3] = SMODS1((v0)[3], (v1)[3]))
+#define VDIVS4(to,v,s)	\
+		((to)[0] = SDIVS1((v)[0], s), \
+		 (to)[1] = SDIVS1((v)[1], s), \
+		 (to)[2] = SDIVS1((v)[2], s), \
+		 (to)[3] = SDIVS1((v)[3], s))
+#define VDIVV4(to,v0,v1)	\
+		((to)[0] = SDIVS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SDIVS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SDIVS1((v0)[2], (v1)[2]), \
+		 (to)[3] = SDIVS1((v0)[3], (v1)[3]))
+#define VMINS4(to,v,s)	\
+		((to)[0] = SMINS1((v)[0], s), \
+		 (to)[1] = SMINS1((v)[1], s), \
+		 (to)[2] = SMINS1((v)[2], s), \
+		 (to)[3] = SMINS1((v)[3], s))
+#define VMINV4(to,v0,v1)	\
+		((to)[0] = SMINS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMINS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMINS1((v0)[2], (v1)[2]), \
+		 (to)[3] = SMINS1((v0)[3], (v1)[3]))
+#define VMAXS4(to,v,s)	\
+		((to)[0] = SMAXS1((v)[0], s), \
+		 (to)[1] = SMAXS1((v)[1], s), \
+		 (to)[2] = SMAXS1((v)[2], s), \
+		 (to)[3] = SMAXS1((v)[3], s))
+#define VMAXV4(to,v0,v1)	\
+		((to)[0] = SMAXS1((v0)[0], (v1)[0]), \
+		 (to)[1] = SMAXS1((v0)[1], (v1)[1]), \
+		 (to)[2] = SMAXS1((v0)[2], (v1)[2]), \
+		 (to)[3] = SMAXS1((v0)[3], (v1)[3]))
 #define LERP4(to,v0,v1,t)	\
 		((to)[0]=(v0)[0]+(t)*((v1)[0]-(v0)[0]), \
 		 (to)[1]=(v0)[1]+(t)*((v1)[1]-(v0)[1]), \
@@ -745,6 +890,16 @@
 #define ADJOINT2i(to,m) ADJOINT2safe(int,to,m)
 #define ADJOINT2l(to,m) ADJOINT2safe(long,to,m)
 #define ADJOINT2r(to,m) ADJOINT2safe(real,to,m)
+#define INVERTMAT2safe(type,to,from) \
+		do {type _vec_h_temp_[2][2]; \
+		    ADJOINT2(_vec_h_temp_, from); \
+		    type _vec_h_temp_invdet_ = (type)1/(type)DET2(from); \
+		    SXM2(to, _vec_h_temp_invdet_, _vec_h_temp_); \
+		} while (0)
+#define INVERTMAT2d(to,from) INVERTMAT2safe(double,to,from)
+#define INVERTMAT2i(to,from) INVERTMAT2safe(int,to,from)
+#define INVERTMAT2l(to,from) INVERTMAT2safe(long,to,from)
+#define INVERTMAT2r(to,from) INVERTMAT2safe(real,to,from)
 #define TRANSPOSE3safe(type,to,from) \
 		do {type _vec_h_temp_[3][3]; \
 		    TRANSPOSE3(_vec_h_temp_,from); \
@@ -835,6 +990,16 @@
 #define ADJOINT3i(to,m) ADJOINT3safe(int,to,m)
 #define ADJOINT3l(to,m) ADJOINT3safe(long,to,m)
 #define ADJOINT3r(to,m) ADJOINT3safe(real,to,m)
+#define INVERTMAT3safe(type,to,from) \
+		do {type _vec_h_temp_[3][3]; \
+		    ADJOINT3(_vec_h_temp_, from); \
+		    type _vec_h_temp_invdet_ = (type)1/(type)DET3(from); \
+		    SXM3(to, _vec_h_temp_invdet_, _vec_h_temp_); \
+		} while (0)
+#define INVERTMAT3d(to,from) INVERTMAT3safe(double,to,from)
+#define INVERTMAT3i(to,from) INVERTMAT3safe(int,to,from)
+#define INVERTMAT3l(to,from) INVERTMAT3safe(long,to,from)
+#define INVERTMAT3r(to,from) INVERTMAT3safe(real,to,from)
 #define TRANSPOSE4safe(type,to,from) \
 		do {type _vec_h_temp_[4][4]; \
 		    TRANSPOSE4(_vec_h_temp_,from); \
@@ -907,4 +1072,14 @@
 #define ADJOINT4i(to,m) ADJOINT4safe(int,to,m)
 #define ADJOINT4l(to,m) ADJOINT4safe(long,to,m)
 #define ADJOINT4r(to,m) ADJOINT4safe(real,to,m)
+#define INVERTMAT4safe(type,to,from) \
+		do {type _vec_h_temp_[4][4]; \
+		    ADJOINT4(_vec_h_temp_, from); \
+		    type _vec_h_temp_invdet_ = (type)1/(type)DET4(from); \
+		    SXM4(to, _vec_h_temp_invdet_, _vec_h_temp_); \
+		} while (0)
+#define INVERTMAT4d(to,from) INVERTMAT4safe(double,to,from)
+#define INVERTMAT4i(to,from) INVERTMAT4safe(int,to,from)
+#define INVERTMAT4l(to,from) INVERTMAT4safe(long,to,from)
+#define INVERTMAT4r(to,from) INVERTMAT4safe(real,to,from)
 #endif /* VEC_H */
