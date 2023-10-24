@@ -1,5 +1,5 @@
 #include "mxvideopresenter.h"
-#include "MxVideoManager.h"
+#include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
@@ -136,7 +136,7 @@ seek_to_last_row:
       if (*t_ptr) {
         // TODO: Second CDQ instruction for abs() should not be there.
         MxU32 shift = abs(offset) & 7;
-        m_bitmask[offset / 8] |= (1 << abs(shift));
+        m_bitmask[offset / 8] |= (1 << abs((MxS32)shift));
       }
       t_ptr++;
       offset++;

@@ -38,6 +38,8 @@ public:
   virtual void ToQuaternion(MxVector4 *p_resultQuat);
   virtual MxResult FUN_10002710(const MxVector3 *p_vec);
 
+  inline float& operator[](size_t idx) { return m_data[idx]; }
+
 private:
   float *m_data;
 };
