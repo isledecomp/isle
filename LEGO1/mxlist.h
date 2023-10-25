@@ -83,7 +83,7 @@ protected:
 
 private:
 	void _DeleteEntry(MxListEntry<T>* match);
-	void _InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
+	MxListEntry<T>* _InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
 };
 
 template <class T>
@@ -161,7 +161,7 @@ inline void MxList<T>::Append(T p_newobj)
 }
 
 template <class T>
-inline void MxList<T>::_InsertEntry(T p_newobj, MxListEntry<T>* p_prev, MxListEntry<T>* p_next)
+inline MxListEntry<T>* MxList<T>::_InsertEntry(T p_newobj, MxListEntry<T>* p_prev, MxListEntry<T>* p_next)
 {
 	MxListEntry<T>* newEntry = new MxListEntry<T>(p_newobj, p_prev, p_next);
 
@@ -176,6 +176,7 @@ inline void MxList<T>::_InsertEntry(T p_newobj, MxListEntry<T>* p_prev, MxListEn
 		this->m_last = newEntry;
 
 	this->m_count++;
+	return newEntry;
 }
 
 template <class T>
