@@ -42,14 +42,14 @@ public:
 	virtual void SetWorldTransform(MxVector3& p_loc, MxVector3& p_dir, MxVector3& p_up); // vtable+0x28
 	virtual void ResetWorldTransform(MxBool p_inVehicle);                                // vtable+0x2c
 	// OFFSET: LEGO1 0x10001090
-	virtual void SetWorldSpeed(MxFloat p_speed) { m_worldSpeed = p_speed; } // vtable+0x30
-	virtual void VTable0x34();                                              // vtable+0x34
-	virtual void VTable0x38();                                              // vtable+0x38
-	virtual void VTable0x3c();                                              // vtable+0x3c
-	virtual void VTable0x40();                                              // vtable+0x40
-	virtual void VTable0x44();                                              // vtable+0x44
-	virtual void VTable0x48();                                              // vtable+0x48
-	virtual void VTable0x4c();                                              // vtable+0x4c
+	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
+	virtual void VTable0x34();                                                        // vtable+0x34
+	virtual void VTable0x38();                                                        // vtable+0x38
+	virtual void VTable0x3c();                                                        // vtable+0x3c
+	virtual void VTable0x40();                                                        // vtable+0x40
+	virtual void VTable0x44();                                                        // vtable+0x44
+	virtual void VTable0x48();                                                        // vtable+0x48
+	virtual void VTable0x4c();                                                        // vtable+0x4c
 
 protected:
 	void Init();
