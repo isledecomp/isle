@@ -180,10 +180,10 @@ inline void MxHashTable<T>::Resize()
 
 	switch (m_resizeOption) {
 	case HASH_TABLE_OPT_EXPAND_ADD:
-		m_numSlots = old_size + m_increaseAmount;
+		m_numSlots += m_increaseAmount;
 		break;
 	case HASH_TABLE_OPT_EXPAND_MULTIPLY:
-		m_numSlots = old_size * m_increaseFactor;
+		m_numSlots *= m_increaseFactor;
 		break;
 	}
 
