@@ -1,9 +1,9 @@
 #ifndef SCORE_H
 #define SCORE_H
 
+#include "legoeventnotificationparam.h"
 #include "legoworld.h"
 #include "mxactionnotificationparam.h"
-#include "mxappnotificationparam.h"
 #include "mxtype17notificationparam.h"
 #include "scorestate.h"
 
@@ -27,6 +27,9 @@ public:
 	{
 		return !strcmp(name, Score::ClassName()) || LegoWorld::IsA(name);
 	}
+
+	// OFFSET: LEGO1 0x100011e0 TEMPLATE
+	// Helicopter::`scalar deleting destructor'
 
 	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject) override; // vtable+18
 	virtual void Stop() override;                                         // vtable+50

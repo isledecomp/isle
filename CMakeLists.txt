@@ -65,6 +65,7 @@ add_library(lego1 SHARED
   LEGO1/legocontrolmanager.cpp
   LEGO1/legoentity.cpp
   LEGO1/legoentitypresenter.cpp
+  LEGO1/legoeventnotificationparam.cpp
   LEGO1/legoflctexturepresenter.cpp
   LEGO1/legofullscreenmovie.cpp
   LEGO1/legogamestate.cpp
@@ -99,7 +100,6 @@ add_library(lego1 SHARED
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxactionnotificationparam.cpp
-  LEGO1/mxappnotificationparam.cpp
   LEGO1/mxatomid.cpp
   LEGO1/mxatomidcounter.cpp
   LEGO1/mxaudiomanager.cpp

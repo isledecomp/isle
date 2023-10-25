@@ -69,7 +69,7 @@ protected:
 	static MxOmni* g_instance;
 
 	MxString m_mediaPath;                         // 0x8
-	HWND m_windowHandle;                          // 0x18;
+	HWND m_windowHandle;                          // 0x18
 	MxObjectFactory* m_objectFactory;             // 0x1C
 	MxVariableTable* m_variableTable;             // 0x20
 	MxTickleManager* m_tickleManager;             // 0x24
@@ -96,7 +96,6 @@ __declspec(dllexport) MxMusicManager* MusicManager();
 __declspec(dllexport) MxEventManager* EventManager();
 __declspec(dllexport) MxNotificationManager* NotificationManager();
 
-MxResult DeleteObject(MxDSAction& p_dsAction);
 MxVideoManager* MVideoManager();
 MxAtomIdCounterSet* AtomIdCounterSet();
 MxObjectFactory* ObjectFactory();

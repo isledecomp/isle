@@ -40,16 +40,16 @@ MxLong Score::Notify(MxParam& p)
 	MxLong ret = 0;
 	LegoWorld::Notify(p);
 	if (m_unkf6) {
-		switch (((MxNotificationParam&) p).GetType()) {
+		switch (((MxNotificationParam&) p).GetNotification()) {
 		case PAINT:
 			ret = 1;
 			Paint();
 			break;
-		case MXSTREAMER_UNKNOWN:
+		case c_notificationEndAction:
 			ret = FUN_10001510((MxEndActionNotificationParam&) p);
 			break;
-		case APP_MESSAGE:
-			if (((MxAppNotificationParam&) p).GetUnknown18() == 0x20)
+		case c_notificationKeyPress:
+			if (((LegoEventNotificationParam&) p).GetKey() == 0x20)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;

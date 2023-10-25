@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
 // OFFSET: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
-	m_unk0x5c = NULL;
+	m_eventQueue = NULL;
 	m_world = NULL;
 	m_camera = NULL;
 	m_unk0x68 = NULL;
@@ -51,9 +51,9 @@ void LegoInputManager::Destroy()
 {
 	ReleaseDX();
 
-	if (m_unk0x5c)
-		delete m_unk0x5c;
-	m_unk0x5c = NULL;
+	if (m_eventQueue)
+		delete m_eventQueue;
+	m_eventQueue = NULL;
 
 	if (m_unk0x68)
 		delete m_unk0x68;

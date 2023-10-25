@@ -42,10 +42,8 @@ public:
 		m_customDestructor = Destroy;
 	}
 
-	// OFFSET: LEGO1 0x100afd30
 	static void Destroy(T*){};
 
-	// OFFSET: LEGO1 0x100afcd0
 	virtual MxS8 Compare(T*, T*) = 0;
 
 protected:
@@ -72,7 +70,6 @@ public:
 
 	virtual MxS8 Compare(T*, T*) = 0;
 
-	// OFFSET: LEGO1 0x100afdc0
 	virtual MxU32 Hash(T*) = 0;
 
 	// FIXME: use of friend here?
@@ -154,7 +151,6 @@ private:
 };
 
 template <class T>
-// OFFSET: LEGO1 0x100b0bd0
 MxHashTable<T>::~MxHashTable()
 {
 	for (int i = 0; i < m_numSlots; i++) {
@@ -175,7 +171,6 @@ MxHashTable<T>::~MxHashTable()
 }
 
 template <class T>
-// OFFSET: LEGO1 0x100b7ab0
 inline void MxHashTable<T>::Resize()
 {
 	// Save a reference to the current table
@@ -185,10 +180,10 @@ inline void MxHashTable<T>::Resize()
 
 	switch (m_resizeOption) {
 	case HASH_TABLE_OPT_EXPAND_ADD:
-		m_numSlots = old_size + m_increaseAmount;
+		m_numSlots += m_increaseAmount;
 		break;
 	case HASH_TABLE_OPT_EXPAND_MULTIPLY:
-		m_numSlots = old_size * m_increaseFactor;
+		m_numSlots *= m_increaseFactor;
 		break;
 	}
 
@@ -212,7 +207,6 @@ inline void MxHashTable<T>::Resize()
 }
 
 template <class T>
-// OFFSET: LEGO1 0x100b7b80
 inline void MxHashTable<T>::_NodeInsert(MxHashTableNode<T>* p_node)
 {
 	int bucket = p_node->m_hash % m_numSlots;

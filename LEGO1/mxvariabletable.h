@@ -21,4 +21,13 @@ public:
 	virtual MxU32 Hash(MxVariable*);                // +0x18
 };
 
+// OFFSET: LEGO1 0x100b0bd0 TEMPLATE
+// MxHashTable<MxVariable>::~MxHashTable<MxVariable>
+
+// OFFSET: LEGO1 0x100b7ab0 TEMPLATE
+// MxHashTable<MxVariable>::Resize
+
+// OFFSET: LEGO1 0x100b7b80 TEMPLATE
+// MxHashTable<MxVariable>::_NodeInsert
+
 #endif // MXVARIABLETABLE_H
