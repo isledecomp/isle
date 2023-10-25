@@ -25,7 +25,12 @@ This repository currently has only one goal: accuracy to the original executable
 
 In general, we're not exhaustively strict about coding style, but there are some preferable guidelines to follow that have been adopted from what we know about the original codebase:
 
-- Indent: 2 spaces
+### Formatting
+
+We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) with a configuration file that aims to replicate the code formatting employed by the original developers. There are [integrations](https://clang.llvm.org/docs/ClangFormat.html#vim-integration) available for most editors and IDEs. The required `clang-format` version is `17.x`.
+
+### Naming conventions
+
 - `PascalCase` for classes, function names, and enumerations.
 - `m_camelCase` for member variables.
 - `g_camelCase` for global variables.
