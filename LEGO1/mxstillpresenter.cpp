@@ -22,7 +22,7 @@ void MxStillPresenter::ParseExtra()
 	if (len == 0)
 		return;
 
-  len &= MAXWORD;
+	len &= MAXWORD;
 
 	char buf[512];
 	memcpy(buf, m_action->GetExtraData(), len);
