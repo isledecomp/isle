@@ -39,12 +39,12 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
-	case c_notificationEndAction:
-		MxPresenter* presenter;
-		presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
-		ret = 1;
+	case c_notificationEndAction: {
+		MxPresenter* presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
 		EndAction(presenter);
+		ret = 1;
 		break;
+	}
 	case c_notificationNewPresenter:
 		TickleManager()->RegisterClient(this, 100);
 		break;
