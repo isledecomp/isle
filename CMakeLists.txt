@@ -28,6 +28,7 @@ add_library(lego1 SHARED
   LEGO1/gasstation.cpp
   LEGO1/gasstationentity.cpp
   LEGO1/gasstationstate.cpp
+  LEGO1/gifmanager.cpp
   LEGO1/helicopter.cpp
   LEGO1/helicopterstate.cpp
   LEGO1/historybook.cpp
@@ -98,6 +99,7 @@ add_library(lego1 SHARED
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxactionnotificationparam.cpp
+  LEGO1/mxappnotificationparam.cpp
   LEGO1/mxatomid.cpp
   LEGO1/mxatomidcounter.cpp
   LEGO1/mxaudiomanager.cpp
@@ -176,6 +178,7 @@ add_library(lego1 SHARED
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
+  LEGO1/mxtype17notificationparam.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvector.cpp
@@ -196,7 +199,8 @@ add_library(lego1 SHARED
   LEGO1/racestate.cpp
   LEGO1/radio.cpp
   LEGO1/radiostate.cpp
-  LEGO1/realtimeview.cpp
+  LEGO1/realtime/realtime.cpp
+  LEGO1/realtime/realtimeview.cpp
   LEGO1/registrationbook.cpp
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
@@ -205,6 +209,12 @@ add_library(lego1 SHARED
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager.cpp
 )
+if (MINGW)
+  target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
+endif()
+
+# Additional include directories for both targets
+include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)

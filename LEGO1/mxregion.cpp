@@ -5,36 +5,36 @@ DECOMP_SIZE_ASSERT(MxRegion, 0x1c);
 // OFFSET: LEGO1 0x100c31c0 STUB
 MxRegion::MxRegion()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100c3690 STUB
 MxRegion::~MxRegion()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100c3700 STUB
 void MxRegion::Reset()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100c3750 STUB
-void MxRegion::vtable18(MxRect32 &p_rect)
+void MxRegion::vtable18(MxRect32& p_rect)
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100c3e20 STUB
 void MxRegion::vtable1c()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100c3660 STUB
 MxBool MxRegion::vtable20()
 {
-  // TODO
-  return FALSE;
+	// TODO
+	return FALSE;
 }
