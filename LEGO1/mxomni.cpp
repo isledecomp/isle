@@ -292,9 +292,9 @@ void MxOmni::Destroy()
 				break;
 			m_notificationManager->Tickle();
 		}
-	}
 
-	m_notificationManager->SetActive(FALSE);
+		m_notificationManager->SetActive(FALSE);
+	}
 
 	delete m_eventManager;
 	delete m_soundManager;
