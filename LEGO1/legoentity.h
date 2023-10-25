@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "extra.h"
+#include "legoroi.h"
 #include "mxdsobject.h"
 #include "mxentity.h"
 #include "mxvector.h"
@@ -34,34 +35,34 @@ public:
 		return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
 	}
 
-	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject); // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);               // vtable+0x1c
-	virtual void ParseAction(char*);                             // vtable+0x20
-	virtual void VTable0x24();                                   // vtable+0x24
-	virtual void VTable0x28();                                   // vtable+0x28
-	virtual void VTable0x2c();                                   // vtable+0x2c
+	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject);                   // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor);                                 // vtable+0x1c
+	virtual void ParseAction(char*);                                               // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2);           // vtable+0x24
+	virtual void SetWorldTransform(MxVector3& loc, MxVector3& dir, MxVector3& up); // vtable+0x28
+	virtual void ResetWorldTransform(MxBool p_inVehicle);                          // vtable+0x2c
 	// OFFSET: LEGO1 0x10001090
-	virtual void VTable0x30(undefined4 p_unk50) { m_unk50 = p_unk50; } // vtable+0x30
-	virtual void VTable0x34();                                         // vtable+0x34
-	virtual void VTable0x38();                                         // vtable+0x38
-	virtual void VTable0x3c();                                         // vtable+0x3c
-	virtual void VTable0x40();                                         // vtable+0x40
-	virtual void VTable0x44();                                         // vtable+0x44
-	virtual void VTable0x48();                                         // vtable+0x48
-	virtual void VTable0x4c();                                         // vtable+0x4c
+	virtual void SetWorldSpeed(MxFloat p_speed) { m_worldSpeed = p_speed; } // vtable+0x30
+	virtual void VTable0x34();                                              // vtable+0x34
+	virtual void VTable0x38();                                              // vtable+0x38
+	virtual void VTable0x3c();                                              // vtable+0x3c
+	virtual void VTable0x40();                                              // vtable+0x40
+	virtual void VTable0x44();                                              // vtable+0x44
+	virtual void VTable0x48();                                              // vtable+0x48
+	virtual void VTable0x4c();                                              // vtable+0x4c
 
 protected:
-	void Reset();
-	void AddToCurrentWorld();
+	void Init();
+	void SetWorld();
 
 	undefined m_unk10;
 	undefined m_unk11;
-	MxVector3Data m_vec1; // 0x14
-	MxVector3Data m_vec2; // 0x28
-	MxVector3Data m_vec3; // 0x3c
-	undefined4 m_unk50;
-	undefined4 m_unk54;
-	undefined m_unk58;
+	MxVector3Data m_worldLocation;  // 0x14
+	MxVector3Data m_worldDirection; // 0x28
+	MxVector3Data m_worldUp;        // 0x3c
+	MxFloat m_worldSpeed;           // 0x50
+	LegoROI* m_roi;                 // 0x54
+	MxBool m_cameraFlag;            // 0x58
 	undefined m_unk59;
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"

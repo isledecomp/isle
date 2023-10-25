@@ -30,11 +30,11 @@ void MxPresenter::Init()
 void MxPresenter::ParseExtra()
 {
 	MxAutoLocker lock(&m_criticalSection);
-	MxU32 len = m_action->GetExtraLength();
+	MxU16 len = m_action->GetExtraLength();
 	char* extraData = m_action->GetExtraData();
 
 	if (len) {
-		len &= MAXWORD;
+		// len &= MAXWORD;
 		char extraCopy[512];
 		memcpy(extraCopy, extraData, len);
 		extraCopy[len] = '\0';
@@ -141,7 +141,7 @@ void MxPresenter::EndAction()
 	MxAutoLocker lock(&this->m_criticalSection);
 	if (!this->m_unkPresenter) {
 		MxOmni::GetInstance()->NotifyCurrentEntity(
-			&MxEndActionNotificationParam(MXSTREAMER_UNKNOWN, NULL, this->m_action, TRUE)
+			&MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
 		);
 	}
 

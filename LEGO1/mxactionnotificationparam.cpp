@@ -12,5 +12,5 @@ MxNotificationParam* MxActionNotificationParam::Clone()
 // OFFSET: LEGO1 0x10051270
 MxNotificationParam* MxEndActionNotificationParam::Clone()
 {
-	return new MxEndActionNotificationParam(MXSTREAMER_UNKNOWN, this->m_sender, this->m_action, this->m_realloc);
+	return new MxEndActionNotificationParam(c_notificationEndAction, this->m_sender, this->m_action, this->m_realloc);
 }

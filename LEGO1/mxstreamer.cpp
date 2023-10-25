@@ -156,7 +156,7 @@ MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 // OFFSET: LEGO1 0x100b9b60
 MxLong MxStreamer::Notify(MxParam& p)
 {
-	if (((MxNotificationParam&) p).GetType() == MXSTREAMER_DELETE_NOTIFY) {
+	if (((MxNotificationParam&) p).GetNotification() == MXSTREAMER_DELETE_NOTIFY) {
 		MxDSAction ds;
 
 		ds.SetUnknown24(-2);

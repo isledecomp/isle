@@ -54,7 +54,10 @@ MxResult MxNotificationManager::Tickle()
 	else {
 		{
 			MxAutoLocker lock(&m_lock);
-			swap(m_queue, m_sendList);
+			MxNotificationPtrList* temp1 = m_queue;
+			MxNotificationPtrList* temp2 = m_sendList;
+			m_queue = temp2;
+			m_sendList = temp1;
 		}
 
 		while (m_sendList->size() != 0) {

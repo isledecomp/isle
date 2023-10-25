@@ -278,18 +278,23 @@ done:
 // OFFSET: LEGO1 0x100afe90
 void MxOmni::Destroy()
 {
-	// FIXME: Stub
-
-	/*
-	// TODO: private members
-	if (m_notificationManager) {
-	  while (m_notificationManager->m_queue->size()) {
-		m_notificationManager->Tickle();
-	  }
+	{
+		MxDSAction action;
+		action.SetObjectId(-1);
+		action.SetUnknown24(-2);
+		DeleteObject(action);
 	}
 
-	m_notificationManager->m_active = 0;
-	*/
+	// TODO: private members
+	if (m_notificationManager) {
+		while (m_notificationManager->GetQueue()) {
+			if (m_notificationManager->GetQueue()->size() == 0)
+				break;
+			m_notificationManager->Tickle();
+		}
+	}
+
+	m_notificationManager->SetActive(FALSE);
 
 	delete m_eventManager;
 	delete m_soundManager;
@@ -313,6 +318,7 @@ void MxOmni::Destroy()
 		}
 		delete m_atomIdCounterSet;
 	}
+	Init();
 }
 
 // OFFSET: LEGO1 0x100b07f0
@@ -320,7 +326,7 @@ MxLong MxOmni::Notify(MxParam& p)
 {
 	MxAutoLocker lock(&this->m_criticalsection);
 
-	if (((MxNotificationParam&) p).GetType() != MXSTREAMER_UNKNOWN)
+	if (((MxNotificationParam&) p).GetNotification() != c_notificationEndAction)
 		return 0;
 
 	return HandleNotificationType2(p);

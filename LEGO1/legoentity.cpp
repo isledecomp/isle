@@ -12,22 +12,14 @@ LegoEntity::~LegoEntity()
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100114f0 STUB
-MxLong LegoEntity::Notify(MxParam& p)
-{
-	// TODO
-
-	return 0;
-}
-
 // OFFSET: LEGO1 0x100105f0
-void LegoEntity::Reset()
+void LegoEntity::Init()
 {
-	m_vec1.Fill(0);
-	m_vec2.Fill(0);
-	m_unk50 = 0;
-	m_unk54 = 0;
-	m_unk58 = 0;
+	m_worldLocation.Fill(0);
+	m_worldDirection.Fill(0);
+	m_worldSpeed = 0;
+	m_roi = NULL;
+	m_cameraFlag = 0;
 	m_actionArgString = NULL;
 	m_unk10 = 0;
 	m_unk11 = 0;
@@ -36,33 +28,51 @@ void LegoEntity::Reset()
 	m_unk59 = 4;
 }
 
+// OFFSET: LEGO1 0x10010650 STUB
+void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x10010790 STUB
+void LegoEntity::SetWorldTransform(MxVector3& loc, MxVector3& dir, MxVector3& up)
+{
+	// TODO
+}
+
 // OFFSET: LEGO1 0x100107e0
 MxResult LegoEntity::InitFromMxDSObject(MxDSObject& p_dsObject)
 {
 	m_mxEntityId = p_dsObject.GetObjectId();
 	m_atom = p_dsObject.GetAtomId();
-	AddToCurrentWorld();
+	Init();
 	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x10010810 STUB
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
-	if (m_unk54) {
+	if (m_roi) {
 		// TODO
 	}
 
 	delete[] m_actionArgString;
-	Reset();
+	Init();
 }
 
 // OFFSET: LEGO1 0x10010880 STUB
-void LegoEntity::AddToCurrentWorld()
+void LegoEntity::SetWorld()
 {
 	LegoWorld* world = GetCurrentWorld();
 	if (world != NULL && world != (LegoWorld*) this) {
-		// TODO: world->vtable58(this);
+		// TODO: world->AddEntity(this);
 	}
+}
+
+// OFFSET: LEGO1 0x100108a0 STUB
+void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
+{
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10010e10
@@ -86,24 +96,6 @@ void LegoEntity::ParseAction(char* p_extra)
 			}
 		}
 	}
-}
-
-// OFFSET: LEGO1 0x100108a0 STUB
-void LegoEntity::VTable0x24()
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x10010790 STUB
-void LegoEntity::VTable0x28()
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x10010650 STUB
-void LegoEntity::VTable0x2c()
-{
-	// TODO
 }
 
 // OFFSET: LEGO1 0x10010f10 STUB
@@ -146,4 +138,12 @@ void LegoEntity::VTable0x48()
 void LegoEntity::VTable0x4c()
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x100114f0 STUB
+MxLong LegoEntity::Notify(MxParam& p)
+{
+	// TODO
+
+	return 0;
 }
