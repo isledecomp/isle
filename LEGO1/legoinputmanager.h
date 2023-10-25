@@ -2,6 +2,7 @@
 #define LEGOINPUTMANAGER_H
 
 #include "decomp.h"
+#include "legoeventnotificationparam.h"
 #include "legoworld.h"
 #include "mxlist.h"
 #include "mxpresenter.h"
@@ -18,6 +19,8 @@ enum NotificationId {
 };
 
 class LegoControlManager;
+// TODO Really a MxQueue, but we don't have one of those
+class LegoEventQueue : public MxList<LegoEventNotificationParam> {};
 
 // VTABLE 0x100d8760
 // SIZE 0x338
@@ -52,7 +55,7 @@ public:
 
 	// private:
 	MxCriticalSection m_criticalSection;
-	MxList<undefined4>* m_unk0x5c; // list or hash table
+	LegoEventQueue* m_eventQueue; // list or hash table
 	LegoCameraController* m_camera;
 	LegoWorld* m_world;
 	MxList<undefined4>* m_unk0x68; // list or hash table

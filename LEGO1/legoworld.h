@@ -3,6 +3,7 @@
 
 #include "legocameracontroller.h"
 #include "legoentity.h"
+#include "mxpresenter.h"
 
 // VTABLE 0x100d6280
 // SIZE 0xf8
@@ -10,6 +11,8 @@ class LegoWorld : public LegoEntity {
 public:
 	__declspec(dllexport) LegoWorld();
 	__declspec(dllexport) virtual ~LegoWorld(); // vtable+0x0
+
+	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
 	// OFFSET: LEGO1 0x1001d690
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -33,6 +36,7 @@ public:
 	virtual void VTable0x68(MxBool p_add);     // vtable+68
 
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
+	void EndAction(MxPresenter* p_presenter);
 
 protected:
 	undefined m_unk68[0x30];

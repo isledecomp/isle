@@ -2,11 +2,19 @@
 
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "mxactionnotificationparam.h"
+#include "mxnotificationparam.h"
+#include "mxomni.h"
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 
 MxBool g_isWorldActive;
+
+// OFFSET: LEGO1 0x100010a0
+void LegoWorld::VTable0x60()
+{
+}
 
 // OFFSET: LEGO1 0x1001ca40 STUB
 LegoWorld::LegoWorld()
@@ -26,10 +34,33 @@ void LegoWorld::Stop()
 	TickleManager()->UnregisterClient(this);
 }
 
+// OFFSET: LEGO1 0x1001f5e0
+MxLong LegoWorld::Notify(MxParam& p_param)
+{
+	MxLong ret = 0;
+	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	case c_notificationEndAction: {
+		MxPresenter* presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
+		EndAction(presenter);
+		ret = 1;
+		break;
+	}
+	case c_notificationNewPresenter:
+		TickleManager()->RegisterClient(this, 100);
+		break;
+	}
+	return ret;
+}
+
 // OFFSET: LEGO1 0x1001f630 STUB
 void LegoWorld::VTable0x54()
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x10020f10 STUB
+void LegoWorld::EndAction(MxPresenter* p_presenter)
+{
 }
 
 // OFFSET: LEGO1 0x10020220 STUB
@@ -42,11 +73,6 @@ void LegoWorld::VTable0x58(MxCore* p_object)
 MxBool LegoWorld::VTable0x5c()
 {
 	return FALSE;
-}
-
-// OFFSET: LEGO1 0x100010a0
-void LegoWorld::VTable0x60()
-{
 }
 
 // OFFSET: LEGO1 0x1001d680

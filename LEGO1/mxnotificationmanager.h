@@ -46,6 +46,7 @@ public:
 	MxResult Send(MxCore* p_listener, MxNotificationParam* p_param);
 
 	inline MxNotificationPtrList* GetQueue() { return m_queue; }
+	inline void SetActive(MxBool p_active) { m_active = p_active; }
 
 private:
 	void FlushPending(MxCore* p_listener);
