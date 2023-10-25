@@ -4,5 +4,6 @@
 extern const char* g_parseExtraTokens;
 extern const char* g_strWORLD;
 extern const char* g_strACTION;
+extern const char* g_strVISIBILITY;
 
 #endif // DEFINE_H

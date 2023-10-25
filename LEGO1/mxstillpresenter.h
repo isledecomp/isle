@@ -8,6 +8,8 @@
 // SIZE 0x6c
 class MxStillPresenter : public MxVideoPresenter {
 public:
+  virtual void ParseExtra() override; // vtable+0x30
+
 	MxStillPresenter() { m_unk68 = 0; }
 	undefined4 m_unk64;
 	undefined4 m_unk68;
