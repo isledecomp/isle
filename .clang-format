@@ -19,6 +19,7 @@ ContinuationIndentWidth: 4
 IncludeBlocks: Regroup
 IndentAccessModifiers: false
 IndentWidth: 4
+InsertNewlineAtEOF: true
 PointerAlignment: Left
 SpaceAfterCStyleCast: true
 TabWidth: 4
