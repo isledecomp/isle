@@ -58,6 +58,7 @@ public:
 
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
 	inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
+	inline MxLong GetBmiStride() const { return ((m_bmiHeader->biWidth + 3) & -4); }
 	inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
 	inline MxLong GetBmiHeightAbs() const
 	{
