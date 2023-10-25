@@ -200,7 +200,8 @@ add_library(lego1 SHARED
   LEGO1/racestate.cpp
   LEGO1/radio.cpp
   LEGO1/radiostate.cpp
-  LEGO1/realtimeview.cpp
+  LEGO1/realtime/realtime.cpp
+  LEGO1/realtime/realtimeview.cpp
   LEGO1/registrationbook.cpp
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
@@ -209,6 +210,12 @@ add_library(lego1 SHARED
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager.cpp
 )
+if (MINGW)
+  target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
+endif()
+
+# Additional include directories for both targets
+include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)

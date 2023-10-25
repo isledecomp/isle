@@ -1,4 +1,5 @@
 #include "realtimeview.h"
+
 #include <math.h>
 
 // 0x10109598
@@ -16,31 +17,31 @@ float g_partsThreshold = 1000.0f;
 // OFFSET: LEGO1 0x100a5e00
 float RealtimeView::GetUserMaxLOD()
 {
-  // TODO
-  return 0;
+	// TODO
+	return 0;
 }
 
 // OFFSET: LEGO1 0x100a5e10
 float RealtimeView::GetPartsThreshold()
 {
-  return g_partsThreshold;
+	return g_partsThreshold;
 }
 
 // OFFSET: LEGO1 100a5e20
 void RealtimeView::UpdateMaxLOD()
 {
-  g_userMaxLodPower = pow(g_userMaxBase, -g_userMaxLod);
+	g_userMaxLodPower = pow(g_userMaxBase, -g_userMaxLod);
 }
 
 // OFFSET: LEGO1 0x100a5de0
 void RealtimeView::SetUserMaxLOD(float p_lod)
 {
-  g_userMaxLod = p_lod;
-  UpdateMaxLOD();
+	g_userMaxLod = p_lod;
+	UpdateMaxLOD();
 }
 
 // OFFSET: LEGO1 0x100a5df0
 void RealtimeView::SetPartsThreshold(float p_threshold)
 {
-  g_partsThreshold = p_threshold;
+	g_partsThreshold = p_threshold;
 }

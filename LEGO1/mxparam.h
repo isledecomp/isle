@@ -1,10 +1,9 @@
 #ifndef MXPARAM_H
 #define MXPARAM_H
 
-class MxParam
-{
+class MxParam {
 public:
-  virtual ~MxParam() {}
+	virtual ~MxParam() {}
 };
 
 #endif // MXPARAM_H

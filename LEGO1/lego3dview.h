@@ -3,14 +3,13 @@
 
 #include "viewmanager.h"
 
-class Lego3DView
-{
+class Lego3DView {
 public:
-  inline ViewManager *GetViewManager() { return this->m_viewManager; }
+	inline ViewManager* GetViewManager() { return this->m_viewManager; }
 
 private:
-  char unknown[0x88];
-  ViewManager *m_viewManager;
+	char unknown[0x88];
+	ViewManager* m_viewManager;
 };
 
 #endif // LEGO3DVIEW_H

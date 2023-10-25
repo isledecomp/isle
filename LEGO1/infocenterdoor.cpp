@@ -3,19 +3,19 @@
 // OFFSET: LEGO1 0x10037730 STUB
 InfocenterDoor::InfocenterDoor()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100378f0 STUB
 InfocenterDoor::~InfocenterDoor()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100379e0 STUB
-MxLong InfocenterDoor::Notify(MxParam &p)
+MxLong InfocenterDoor::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

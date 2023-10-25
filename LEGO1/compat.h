@@ -12,15 +12,18 @@
 #endif
 
 // DIsable "nonstandard extension used : 'bool'" warning spam
-#pragma warning( disable : 4237 )
+#pragma warning(disable : 4237)
 
 // Disable "identifier was truncated to '255' characters" warning.
 // Impossible to avoid this if using STL map or set.
 // This removes most (but not all) occurrences of the warning.
-#pragma warning( disable : 4786 )
+#pragma warning(disable : 4786)
 // To really remove *all* of the warnings, we have to employ the following,
 // obscure workaround from https://www.earthli.com/news/view_article.php?id=376
-static class msVC6_4786WorkAround { public: msVC6_4786WorkAround() {} } msVC6_4786WorkAround;
+static class msVC6_4786WorkAround {
+public:
+	msVC6_4786WorkAround() {}
+} msVC6_4786WorkAround;
 
 #define MSVC420_VERSION 1020
 
@@ -31,7 +34,8 @@ static class msVC6_4786WorkAround { public: msVC6_4786WorkAround() {} } msVC6_47
 #include <algorithm>
 #include <list>
 #include <set>
-using namespace std;
+using std::list;
+using std::set;
 #endif
 
 // We use `override` so newer compilers can tell us our vtables are valid,

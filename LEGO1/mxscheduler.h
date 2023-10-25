@@ -3,11 +3,10 @@
 
 #include "mxtypes.h"
 
-class MxScheduler
-{
+class MxScheduler {
 public:
-  __declspec(dllexport) static MxScheduler *GetInstance();
-  __declspec(dllexport) void StartMultiTasking(MxULong);
+	__declspec(dllexport) static MxScheduler* GetInstance();
+	__declspec(dllexport) void StartMultiTasking(MxULong);
 };
 
 #endif // MXSCHEDULER_H
