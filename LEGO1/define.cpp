@@ -8,3 +8,6 @@ const char* g_strWORLD = "WORLD";
 
 // 0x10102040
 const char* g_strACTION = "ACTION";
+
+// 0x101020cc
+const char* g_strVISIBILITY = "VISIBILITY";
