@@ -147,3 +147,4 @@ MxLong LegoEntity::Notify(MxParam& p)
 
 	return 0;
 }
+
