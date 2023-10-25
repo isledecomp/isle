@@ -35,7 +35,7 @@ void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
 }
 
 // OFFSET: LEGO1 0x10010790 STUB
-void LegoEntity::SetWorldTransform(MxVector3& loc, MxVector3& dir, MxVector3& up)
+void LegoEntity::SetWorldTransform(MxVector3& p_loc, MxVector3& p_dir, MxVector3& p_up)
 {
 	// TODO
 }
