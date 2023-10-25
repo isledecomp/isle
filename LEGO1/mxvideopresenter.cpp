@@ -246,7 +246,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 		(!m_bitmap && !m_alpha))
 		return FALSE;
 
-	if (m_bitmap)
+	if (!m_bitmap)
 		return m_alpha->IsHit(p_x - GetLocationX(), p_y - GetLocationY());
 
 	MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
