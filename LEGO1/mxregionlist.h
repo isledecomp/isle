@@ -8,14 +8,11 @@ struct MxRegionLeftRight;
 
 // VTABLE 0x100dcb40
 // SIZE 0x18
-class MxRegionListParent : public MxList<MxRegionTopBottom*>
-{
+class MxRegionListParent : public MxList<MxRegionTopBottom*> {
 public:
-  static void Destroy(MxRegionTopBottom *p_topBottom);
+	static void Destroy(MxRegionTopBottom* p_topBottom);
 
-  MxRegionListParent() {
-    m_customDestructor = Destroy;
-  }
+	MxRegionListParent() { m_customDestructor = Destroy; }
 };
 
 // VTABLE 0x100dcb58
@@ -33,14 +30,11 @@ typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
 
 // VTABLE 0x100dcc70
 // SIZE 0x18
-class MxRegionLeftRightListParent : public MxList<MxRegionLeftRight*>
-{
+class MxRegionLeftRightListParent : public MxList<MxRegionLeftRight*> {
 public:
-  static void Destroy(MxRegionLeftRight *p_leftRight);
+	static void Destroy(MxRegionLeftRight* p_leftRight);
 
-  MxRegionLeftRightListParent() {
-    m_customDestructor = Destroy;
-  }
+	MxRegionLeftRightListParent() { m_customDestructor = Destroy; }
 };
 
 // VTABLE 0x100dcc88
