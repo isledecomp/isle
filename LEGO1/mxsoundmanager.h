@@ -23,9 +23,9 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk30;
+	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
-	undefined m_unk35[4];
+	undefined m_unk38[4];
 };
 
 #endif // MXSOUNDMANAGER_H
