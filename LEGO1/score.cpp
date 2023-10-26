@@ -240,8 +240,8 @@ void Score::Paint()
 		AmbulanceMissionState* lebp = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 
 		DDSURFACEDESC desc;
-		memset(&desc, 0, 0x6c);
-		desc.dwSize = 0x6c;
+		memset(&desc, 0, sizeof(desc));
+		desc.dwSize = sizeof(desc);
 		if (gd->m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
 			if (desc.lPitch != desc.dwWidth) {
 				gd->m_surface->Unlock(desc.lpSurface);
