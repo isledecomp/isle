@@ -1,7 +1,10 @@
 #include "mxsoundmanager.h"
 
+#include "mxautolocker.h"
 #include "mxomni.h"
+#include "mxpresenter.h"
 #include "mxticklemanager.h"
+#include "mxwavepresenter.h"
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
 
@@ -124,16 +127,30 @@ done:
 	return status;
 }
 
-// OFFSET: LEGO1 0x100aed10 STUB
+// OFFSET: LEGO1 0x100aed10
 void MxSoundManager::vtable0x34()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter))
+		if (presenter->IsA("MxWavePresenter"))
+			((MxWavePresenter*) presenter)->VTable0x64();
 }
 
-// OFFSET: LEGO1 0x100aee10 STUB
+// OFFSET: LEGO1 0x100aee10
 void MxSoundManager::vtable0x38()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter))
+		if (presenter->IsA("MxWavePresenter"))
+			((MxWavePresenter*) presenter)->VTable0x68();
 }
 
 // OFFSET: LEGO1 0x100aeab0
@@ -142,8 +159,18 @@ void MxSoundManager::Destroy()
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100aeac0 STUB
+// OFFSET: LEGO1 0x100aeac0
 void MxSoundManager::SetVolume(MxS32 p_volume)
 {
-	// TODO
+	MxAudioManager::SetVolume(p_volume);
+
+	m_criticalSection.Enter();
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter))
+		((MxAudioPresenter*) presenter)->vtable60(((MxAudioPresenter*) presenter)->vtable5c());
+
+	m_criticalSection.Leave();
 }
