@@ -4,22 +4,41 @@
 #include "decomp.h"
 #include "mxvideopresenter.h"
 
+#include <smk.h>
+
 // VTABLE 0x100dc348
 // SIZE 0x720
 class MxSmkPresenter : public MxVideoPresenter {
 public:
 	MxSmkPresenter();
+	virtual ~MxSmkPresenter() override;
 
 	virtual void VTable0x60() override;
 
-	undefined4 m_unk64;
-	MxS32 m_smkWidth;  // 0x68
-	MxS32 m_smkHeight; // 0x6c
-	undefined4 m_unk70[427];
-	undefined4 m_unk71c;
+	struct MxSmack {
+		Smack m_smack;
+
+		// Unknown for the time being. Not an immediately
+		// recognizable part of the SMK standard...
+
+		undefined m_unk0x3f4[784];
+		undefined4* m_unk0x6a0;
+		undefined4* m_unk0x6a4;
+		undefined4* m_unk0x6a8;
+		undefined4* m_unk0x6ac;
+		undefined4* m_unk0x6b0;
+		undefined4* m_unk0x6b4;
+	};
+
+	MxSmack m_mxSmack;
+	undefined4 m_unk0x71c;
 
 private:
 	void Init();
+	void Destroy(MxBool p_fromDestructor);
+
+	// This should most likely be in a separate translation unit
+	static void FUN_100c5d40(MxSmack* p_mxSmack);
 };
 
 #endif // MXSMKPRESENTER_H
