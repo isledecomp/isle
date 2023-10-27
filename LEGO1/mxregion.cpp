@@ -107,8 +107,7 @@ MxBool MxRegion::vtable1c(MxRect32& p_rect)
 	MxRegionTopBottom* topBottom;
 
 	while (cursor.Next(topBottom)) {
-		MxS32 top = topBottom->m_top;
-		if ((topBottom->m_top = top) >= p_rect.m_bottom)
+		if (topBottom->m_top >= p_rect.m_bottom)
 			return FALSE;
 		if (topBottom->m_bottom > p_rect.m_top && topBottom->FUN_100c57b0(p_rect))
 			return TRUE;
