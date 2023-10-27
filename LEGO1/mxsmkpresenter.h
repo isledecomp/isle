@@ -2,7 +2,6 @@
 #define MXSMKPRESENTER_H
 
 #include <smk.h>
-
 #include "decomp.h"
 #include "mxvideopresenter.h"
 
@@ -15,8 +14,7 @@ public:
 
 	virtual void VTable0x60() override;
 
-	struct MxSmack
-	{
+	struct MxSmack {
 		Smack m_smack;
 
 		// Unknown for the time being. Not an immediately
