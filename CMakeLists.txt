@@ -232,6 +232,9 @@ if (ISLE_USE_DX5)
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
 endif()
 
+# Additional include directories
+include_directories("${CMAKE_SOURCE_DIR}/3rdparty/smk")
+
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
 
