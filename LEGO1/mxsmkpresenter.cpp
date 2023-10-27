@@ -13,19 +13,7 @@ MxSmkPresenter::MxSmkPresenter()
 // OFFSET: LEGO1 0x100b3870
 MxSmkPresenter::~MxSmkPresenter()
 {
-	FUN_100b3900(TRUE);
-}
-
-// OFFSET: LEGO1 0x100b3900
-void MxSmkPresenter::FUN_100b3900(MxBool p_fromDestructor)
-{
-	m_criticalSection.Enter();
-	FUN_100c5d40(&m_mxSmack);
-	Init();
-	m_criticalSection.Leave();
-	if (!p_fromDestructor) {
-		MxVideoPresenter::Destroy(FALSE);
-	}
+	Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x100b38d0
@@ -35,6 +23,21 @@ void MxSmkPresenter::Init()
 	memset(&m_mxSmack, 0, sizeof(m_mxSmack));
 	m_flags &= 0xfd;
 	m_flags &= 0xfb;
+}
+
+// OFFSET: LEGO1 0x100b3900
+void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
+{
+	m_criticalSection.Enter();
+
+	FUN_100c5d40(&m_mxSmack);
+	Init();
+
+	m_criticalSection.Leave();
+
+	if (!p_fromDestructor) {
+		MxVideoPresenter::Destroy(FALSE);
+	}
 }
 
 // OFFSET: LEGO1 0x100b3960

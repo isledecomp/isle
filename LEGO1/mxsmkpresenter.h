@@ -11,7 +11,7 @@
 class MxSmkPresenter : public MxVideoPresenter {
 public:
 	MxSmkPresenter();
-	~MxSmkPresenter();
+	virtual ~MxSmkPresenter() override;
 
 	virtual void VTable0x60() override;
 
@@ -35,8 +35,10 @@ public:
 
 private:
 	void Init();
-	void FUN_100b3900(MxBool p_fromDestructor);
-	void FUN_100c5d40(MxSmack* p_mxSmack);
+	void Destroy(MxBool p_fromDestructor);
+
+	// This should most likely be in a separate translation unit
+	static void FUN_100c5d40(MxSmack* p_mxSmack);
 };
 
 #endif // MXSMKPRESENTER_H

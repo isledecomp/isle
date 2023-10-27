@@ -213,8 +213,9 @@ if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
-# Additional include directories for both targets
+# Additional include directories
 include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")
+include_directories("${CMAKE_SOURCE_DIR}/3rdparty/smk")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)
@@ -231,9 +232,6 @@ if (ISLE_USE_DX5)
   target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
 endif()
-
-# Additional include directories
-include_directories("${CMAKE_SOURCE_DIR}/3rdparty/smk")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
