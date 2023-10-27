@@ -1,9 +1,10 @@
 #ifndef MXSMKPRESENTER_H
 #define MXSMKPRESENTER_H
 
-#include <smk.h>
 #include "decomp.h"
 #include "mxvideopresenter.h"
+
+#include <smk.h>
 
 // VTABLE 0x100dc348
 // SIZE 0x720
