@@ -17,6 +17,14 @@ MxResult MxDiskStreamProviderThread::Run()
 	return SUCCESS;
 }
 
+// Same offset with MxTickleThread::StartWithTarget is intentional
+// OFFSET: LEGO1 0x100d0f50
+MxResult MxDiskStreamProviderThread::StartWithTarget(MxDiskStreamProvider* p_target)
+{
+	m_target = p_target;
+	return Start(0x1000, 0);
+}
+
 // OFFSET: LEGO1 0x100d0f70
 MxDiskStreamProvider::MxDiskStreamProvider()
 {
@@ -68,7 +76,7 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 
 		m_remainingWork = 1;
 		MxResult success = m_busySemaphore.Init(0, 100);
-		// m_thread.Start();
+		m_thread.StartWithTarget(this);
 
 		if (success == SUCCESS && p_resource != NULL) {
 			return SUCCESS;

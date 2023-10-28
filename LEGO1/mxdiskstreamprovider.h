@@ -17,6 +17,8 @@ public:
 
 	MxResult Run() override;
 
+	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
+
 private:
 	MxDiskStreamProvider* m_target;
 };
