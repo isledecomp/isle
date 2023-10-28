@@ -1,9 +1,9 @@
 #include "mxdiskstreamprovider.h"
 
-#include "mxthread.h"
 #include "mxomni.h"
-#include "mxstring.h"
 #include "mxstreamcontroller.h"
+#include "mxstring.h"
+#include "mxthread.h"
 
 DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
 
@@ -52,33 +52,29 @@ void MxDiskStreamProvider::PerformWork()
 // OFFSET: LEGO1 0x100d13d0
 MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
-  m_pLookup = p_resource;
-  MxString path = MxString(MxOmni::GetHD()) + p_resource->GetAtom().GetInternal() + ".si";
+	m_pLookup = p_resource;
+	MxString path = MxString(MxOmni::GetHD()) + p_resource->GetAtom().GetInternal() + ".si";
 
-  MxDSFile* file = new MxDSFile(path.GetData(), 0);
-  m_pFile = file;
-  if (file != NULL)
-  {
-    if (file->Open(0) != 0)
-    {
-      path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
-      file->SetFileName(path);
-      if (file->Open(0) != 0)
-      {
-        return FAILURE;
-      }
-    }
+	MxDSFile* file = new MxDSFile(path.GetData(), 0);
+	m_pFile = file;
+	if (file != NULL) {
+		if (file->Open(0) != 0) {
+			path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
+			file->SetFileName(path);
+			if (file->Open(0) != 0) {
+				return FAILURE;
+			}
+		}
 
-    m_remainingWork = 1;
-    MxResult success = m_busySemaphore.Init(0, 100);
-    //m_thread.Start();
+		m_remainingWork = 1;
+		MxResult success = m_busySemaphore.Init(0, 100);
+		// m_thread.Start();
 
-    if (success == SUCCESS && p_resource != NULL)
-    {
-      return SUCCESS;
-    }
-  }
-  return FAILURE;
+		if (success == SUCCESS && p_resource != NULL) {
+			return SUCCESS;
+		}
+	}
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100d1e90
