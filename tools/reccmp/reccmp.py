@@ -13,6 +13,12 @@ import colorama
 import html
 import re
 
+# Our modules
+from modules.syminfo import SymInfo
+from modules.bin import Bin
+from modules.logger import logger
+import modules.util
+
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
 parser.add_argument('original', metavar='original-binary', help='The original binary')
@@ -33,7 +39,6 @@ parser.add_argument('--debug', action='store_const', const=logging.DEBUG, dest='
 args = parser.parse_args()
 
 logging.basicConfig(level=args.loglevel, format='[%(levelname)s] %(message)s')
-logger = logging.getLogger(__name__)
 
 colorama.init()
 
@@ -66,47 +71,6 @@ if not os.path.isdir(source):
 
 svg = args.svg
 
-# Declare a class that can automatically convert virtual executable addresses
-# to file addresses
-class Bin:
-  def __init__(self, filename):
-    logger.debug('Parsing headers of "%s"... ', filename)
-    self.file = open(filename, 'rb')
-
-    #HACK: Strictly, we should be parsing the header, but we know where
-    #      everything is in these two files so we just jump straight there
-
-    # Read ImageBase
-    self.file.seek(0xB4)
-    self.imagebase, = struct.unpack('<i', self.file.read(4))
-
-    # Read .text VirtualAddress
-    self.file.seek(0x184)
-    self.textvirt, = struct.unpack('<i', self.file.read(4))
-
-    # Read .text PointerToRawData
-    self.file.seek(0x18C)
-    self.textraw, = struct.unpack('<i', self.file.read(4))
-    logger.debug('... Parsing finished')
-
-  def __del__(self):
-    if self.file:
-      self.file.close()
-
-  def get_addr(self, virt):
-    return virt - self.imagebase - self.textvirt + self.textraw
-
-  def read(self, offset, size):
-    self.file.seek(self.get_addr(offset))
-    return self.file.read(size)
-
-class RecompiledInfo:
-  def __init__(self):
-    self.addr = None
-    self.size = None
-    self.name = None
-    self.start = None
-
 class WinePathConverter:
   def __init__(self, unix_cwd):
     self.unix_cwd = unix_cwd
@@ -133,121 +97,6 @@ class WinePathConverter:
   @staticmethod
   def _call_winepath_win2unix(fn: str) -> str:
     return subprocess.check_output(['winepath', fn], text=True).strip()
-
-def get_file_in_script_dir(fn):
-  return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
-
-# Declare a class that parses the output of cvdump for fast access later
-class SymInfo:
-  funcs = {}
-  lines = {}
-  names = {}
-
-  def __init__(self, pdb, file, wine_path_converter):
-    call = [get_file_in_script_dir('cvdump.exe'), '-l', '-s']
-
-    if wine_path_converter:
-      # Run cvdump through wine and convert path to Windows-friendly wine path
-      call.insert(0, 'wine')
-      call.append(wine_path_converter.get_wine_path(pdb))
-    else:
-      call.append(pdb)
-
-    logger.info('Parsing %s ...', pdb)
-    logger.debug('Command = %r', call)
-    line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
-
-    current_section = None
-
-    logger.debug('Parsing output of cvdump.exe ...')
-
-    for i, line in enumerate(line_dump):
-      if line.startswith('***'):
-        current_section = line[4:]
-
-      if current_section == 'SYMBOLS' and 'S_GPROC32' in line:
-        addr = int(line[26:34], 16)
-
-        info = RecompiledInfo()
-        info.addr = addr + recompfile.imagebase + recompfile.textvirt
-
-        use_dbg_offs = False
-        if use_dbg_offs:
-          debug_offs = line_dump[i + 2]
-          debug_start = int(debug_offs[22:30], 16)
-          debug_end = int(debug_offs[43:], 16)
-
-          info.start = debug_start
-          info.size = debug_end - debug_start
-        else:
-          info.start = 0
-          info.size = int(line[41:49], 16)
-
-        info.name = line[77:]
-
-        self.names[info.name] = info
-        self.funcs[addr] = info
-      elif current_section == 'LINES' and line.startswith('  ') and not line.startswith('   '):
-        sourcepath = line.split()[0]
-
-        if wine_path_converter:
-          # Convert filename to Unix path for file compare
-          sourcepath = wine_path_converter.get_unix_path(sourcepath)
-
-        if sourcepath not in self.lines:
-          self.lines[sourcepath] = {}
-
-        j = i + 2
-        while True:
-          ll = line_dump[j].split()
-          if len(ll) == 0:
-            break
-
-          k = 0
-          while k < len(ll):
-            linenum = int(ll[k + 0])
-            address = int(ll[k + 1], 16)
-            if linenum not in self.lines[sourcepath]:
-              self.lines[sourcepath][linenum] = address
-            k += 2
-
-          j += 1
-
-    logger.debug('... Parsing output of cvdump.exe finished')
-
-  def get_recompiled_address(self, filename, line):
-    addr = None
-    found = False
-
-    logger.debug('Looking for %s:%d', filename, line)
-
-    for fn in self.lines:
-      # Sometimes a PDB is compiled with a relative path while we always have
-      # an absolute path. Therefore we must
-      try:
-        if os.path.samefile(fn, filename):
-          filename = fn
-          break
-      except FileNotFoundError as e:
-        continue
-
-    if filename in self.lines and line in self.lines[fn]:
-      addr = self.lines[fn][line]
-
-      if addr in self.funcs:
-        return self.funcs[addr]
-      else:
-        logger.error('Failed to find function symbol with address: 0x%x', addr)
-    else:
-      logger.error('Failed to find function symbol with filename and line: %s:%d', filename, line)
-
-  def get_recompiled_address_from_name(self, name):
-    logger.debug('Looking for %s', name)
-
-    if name in self.names:
-        return self.names[name]
-    else:
-        logger.error('Failed to find function symbol with name: %s', name)
 
 wine_path_converter = None
 if os.name != 'nt':
@@ -397,7 +246,9 @@ htmlinsert = []
 
 # Generate basename of original file, used in locating OFFSET lines
 basename = os.path.basename(os.path.splitext(original)[0])
-pattern = '// OFFSET:'
+funcpattern = '// OFFSET:'
+vtblpattern = '// VTABLE'
+in_class = None
 
 for subdir, dirs, files in os.walk(source):
   for file in files:
@@ -415,8 +266,8 @@ for subdir, dirs, files in os.walk(source):
 
         line = line.strip()
 
-        if line.startswith(pattern) and not line.endswith("STUB"):
-          par = line[len(pattern):].strip().split()
+        if line.startswith(funcpattern) and not line.endswith("STUB"):
+          par = line[len(funcpattern):].strip().split()
           module = par[0]
           if module != basename:
             continue
@@ -535,12 +386,47 @@ for subdir, dirs, files in os.walk(source):
             if html_path:
               escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
               htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), html.escape(recinfo.name), str(effective_ratio), escaped))
+        elif line.startswith(vtblpattern):
+          addr_discovery = line.split()
+
+          try:
+            address = int(addr_discovery[len(addr_discovery)-1], 16)
+            while True:
+              line = srcfile.readline()
+              line_no += 1
+
+              if not line:
+                raise Exception('Failed to find function for vtable listing')
+                break
+
+              try:
+                start_brkt = line.index('(')
+                name_discovery = line[0:start_brkt].split()
+                vtbl_name = name_discovery[len(name_discovery) - 1]
+                break
+              except ValueError:
+                continue
+          except ValueError:
+            pass
+
+          print('Found vtable function %s::%s offset %s' % (in_class, vtbl_name, hex(address)))
+        else:
+          # NOTE: Naive implementation, won't support vtable functions after a nested class
+          class_discovery = line.split()
+
+          try:
+            class_index = class_discovery.index('class')
+
+            if class_index + 1 < len(class_discovery):
+              in_class = class_discovery[class_index + 1]
+          except ValueError:
+            pass
 
       except UnicodeDecodeError:
         break
 
 def gen_html(html_path, data):
-  templatefile = open(get_file_in_script_dir('template.html'), 'r')
+  templatefile = open(util.get_file_in_script_dir('template.html'), 'r')
   if not templatefile:
     print('Failed to find HTML template file, can\'t generate HTML summary')
     return
@@ -559,7 +445,7 @@ def gen_html(html_path, data):
   htmlfile.close()
 
 def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
-  templatefile = open(get_file_in_script_dir('template.svg'), 'r')
+  templatefile = open(util.get_file_in_script_dir('template.svg'), 'r')
   if not templatefile:
     print('Failed to find SVG template file, can\'t generate SVG summary')
     return
