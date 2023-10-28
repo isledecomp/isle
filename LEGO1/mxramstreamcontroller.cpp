@@ -5,6 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxRAMStreamController, 0x98);
 
+// OFFSET: LEGO1 0x100d0d80 STUB
 undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
 {
 	return NULL;
@@ -13,20 +14,23 @@ undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
 // OFFSET: LEGO1 0x100c6110
 MxResult MxRAMStreamController::Open(const char* p_filename)
 {
-	MxResult result = FAILURE;
 	MxAutoLocker locker(&m_criticalSection);
-	if (MxStreamController::Open(p_filename) == 0) {
-		MxRAMStreamProvider* provider = new MxRAMStreamProvider();
-		m_provider = provider;
-		if (provider != NULL) {
-			if (m_provider->SetResourceToGet(this) == SUCCESS) {
-				FUN_100d0d80(provider->GetBufferOfFileSize(), provider->GetFileSize());
-				// m_buffer todo
-				result = SUCCESS;
-			}
-		}
+	if (MxStreamController::Open(p_filename) != SUCCESS) {
+		return FAILURE;
 	}
-	return result;
+	MxRAMStreamProvider* provider = new MxRAMStreamProvider();
+	m_provider = provider;
+	if (provider != NULL) {
+		if (m_provider->SetResourceToGet(this) != SUCCESS) {
+			return FAILURE;
+		}
+
+		FUN_100d0d80(provider->GetBufferOfFileSize(), provider->GetFileSize());
+		m_buffer.FUN_100c6780(provider->GetBufferOfFileSize(), provider->GetFileSize());
+		return SUCCESS;
+	}
+
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100c6210 STUB
