@@ -3,7 +3,7 @@
 
 #include "legostate.h"
 
-// VTABLE 0x100d97a0
+// VTABLEADDR 0x100d97a0
 // SIZE 0x18
 class HospitalState : public LegoState {
 public:

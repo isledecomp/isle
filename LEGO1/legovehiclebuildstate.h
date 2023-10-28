@@ -5,7 +5,7 @@
 #include "legostate.h"
 #include "mxstring.h"
 
-// VTABLE 0x100d66e0
+// VTABLEADDR 0x100d66e0
 // SIZE 0x50 (from 1000acd7)
 class LegoVehicleBuildState : public LegoState {
 public:

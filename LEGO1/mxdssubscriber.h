@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100dc698
+// VTABLEADDR 0x100dc698
 // SIZE 0x4c
 class MxDSSubscriber : public MxCore {
 public:

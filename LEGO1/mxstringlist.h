@@ -4,11 +4,11 @@
 #include "mxlist.h"
 #include "mxstring.h"
 
-// VTABLE 0x100dd040
+// VTABLEADDR 0x100dd040
 // SIZE 0x18
 class MxStringList : public MxList<MxString> {};
 
-// VTABLE 0x100dd058
+// VTABLEADDR 0x100dd058
 typedef MxListCursorChild<MxString> MxStringListCursor;
 
 // OFFSET: LEGO1 0x100cb3c0 TEMPLATE

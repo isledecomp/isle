@@ -10,7 +10,7 @@
 
 class MxStreamController;
 
-// VTABLE 0x100d4d38
+// VTABLEADDR 0x100d4d38
 class MxPresenter : public MxCore {
 public:
 	enum TickleState {

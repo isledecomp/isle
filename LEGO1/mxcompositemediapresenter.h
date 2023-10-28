@@ -3,7 +3,7 @@
 
 #include "mxcompositepresenter.h"
 
-// VTABLE 0x100dc618
+// VTABLEADDR 0x100dc618
 // SIZE 0x50
 class MxCompositeMediaPresenter : public MxCompositePresenter {
 public:

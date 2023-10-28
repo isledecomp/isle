@@ -6,7 +6,7 @@
 
 extern BOOL g_is_PALETTEINDEXED8;
 
-// VTABLE 0x100db818
+// VTABLEADDR 0x100db818
 // SIZE 0x880
 class MxDirectDraw {
 public:

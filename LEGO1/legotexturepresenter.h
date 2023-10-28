@@ -3,7 +3,7 @@
 
 #include "mxmediapresenter.h"
 
-// VTABLE 0x100d4d90
+// VTABLEADDR 0x100d4d90
 // SIZE 0x54 (from inlined construction at 0x10009bb5)
 class LegoTexturePresenter : public MxMediaPresenter {
 public:

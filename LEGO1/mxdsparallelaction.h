@@ -3,7 +3,7 @@
 
 #include "mxdsmultiaction.h"
 
-// VTABLE 0x100dcf80
+// VTABLEADDR 0x100dcf80
 // SIZE 0x9c
 class MxDSParallelAction : public MxDSMultiAction {
 public:

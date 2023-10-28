@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d7380
+// VTABLEADDR 0x100d7380
 // SIZE 0x9c
 class Pizza : public IsleActor {
 public:

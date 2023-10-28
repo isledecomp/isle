@@ -5,7 +5,7 @@
 #include "mxtypes.h"
 #include "mxvariable.h"
 
-// VTABLE 0x100dc1c8
+// VTABLEADDR 0x100dc1c8
 // SIZE 0x28
 class MxVariableTable : public MxHashTable<MxVariable> {
 public:

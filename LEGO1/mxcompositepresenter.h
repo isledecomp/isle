@@ -4,7 +4,7 @@
 #include "mxpresenter.h"
 #include "mxunklist.h"
 
-// VTABLE 0x100dc618
+// VTABLEADDR 0x100dc618
 // SIZE 0x4c
 class MxCompositePresenter : public MxPresenter {
 public:

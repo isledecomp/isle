@@ -3,7 +3,7 @@
 
 #include "mxvector.h"
 
-// VTABLE 0x100d4350
+// VTABLEADDR 0x100d4350
 // SIZE 0x8
 class MxMatrix {
 public:
@@ -43,7 +43,7 @@ private:
 	float* m_data;
 };
 
-// VTABLE 0x100d4300
+// VTABLEADDR 0x100d4300
 // SIZE 0x48
 class MxMatrixData : public MxMatrix {
 public:

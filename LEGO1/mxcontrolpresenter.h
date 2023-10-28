@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxcompositepresenter.h"
 
-// VTABLE 0x100d7b88
+// VTABLEADDR 0x100d7b88
 // SIZE 0x5c
 class MxControlPresenter : public MxCompositePresenter {
 public:

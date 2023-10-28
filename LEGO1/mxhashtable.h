@@ -32,7 +32,7 @@ public:
 };
 
 // See MxOmni::Create
-// VTABLE 0x100dc1b0
+// VTABLEADDR 0x100dc1b0
 template <class T>
 class HashTableParent : public MxCore {
 public:
@@ -51,7 +51,7 @@ protected:
 	void (*m_customDestructor)(T*); // +0xc
 };
 
-// VTABLE 0x100dc1e8
+// VTABLEADDR 0x100dc1e8
 template <class T>
 class MxHashTable : protected HashTableParent<T> {
 public:

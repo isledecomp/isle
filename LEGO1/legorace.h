@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d5db0
+// VTABLEADDR 0x100d5db0
 class LegoRace : public LegoWorld {
 public:
 	LegoRace();

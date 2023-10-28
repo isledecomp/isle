@@ -3,7 +3,7 @@
 
 #include "mxdsmediaaction.h"
 
-// VTABLE 0x100dcdd0
+// VTABLEADDR 0x100dcdd0
 // SIZE 0xc0
 class MxDSSound : public MxDSMediaAction {
 public:

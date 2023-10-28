@@ -7,7 +7,7 @@
 #include "mxregion.h"
 #include "mxvideoparam.h"
 
-// VTABLE 0x100dc810
+// VTABLEADDR 0x100dc810
 // SIZE 0x64
 class MxVideoManager : public MxMediaManager {
 public:

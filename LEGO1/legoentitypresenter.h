@@ -3,7 +3,7 @@
 
 #include "mxcompositepresenter.h"
 
-// VTABLE 0x100d8398
+// VTABLEADDR 0x100d8398
 class LegoEntityPresenter : public MxCompositePresenter {
 public:
 	LegoEntityPresenter();

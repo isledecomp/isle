@@ -3,7 +3,7 @@
 
 #include "legoentitypresenter.h"
 
-// VTABLE 0x100d5320
+// VTABLEADDR 0x100d5320
 // SIZE 0x50
 class LegoActorPresenter : public LegoEntityPresenter {
 public:

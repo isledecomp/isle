@@ -3,7 +3,7 @@
 
 #include "legoanimpresenter.h"
 
-// VTABLE 0x100d99e0
+// VTABLEADDR 0x100d99e0
 // SIZE 0x150
 class LegoCarBuildAnimPresenter : public LegoAnimPresenter {
 public:

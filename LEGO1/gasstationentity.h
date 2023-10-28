@@ -3,7 +3,7 @@
 
 #include "buildingentity.h"
 
-// VTABLE 0x100d5258
+// VTABLEADDR 0x100d5258
 // SIZE 0x68
 class GasStationEntity : public BuildingEntity {
 public:

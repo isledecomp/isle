@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxvideopresenter.h"
 
-// VTABLE 0x100d9aa0
+// VTABLEADDR 0x100d9aa0
 // SIZE 0x68
 class LegoPalettePresenter : public MxVideoPresenter {
 public:

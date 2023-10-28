@@ -3,7 +3,7 @@
 
 #include "mxdsmediaaction.h"
 
-// VTABLE 0x100dce60
+// VTABLEADDR 0x100dce60
 // SIZE 0xb8
 class MxDSStill : public MxDSMediaAction {
 public:

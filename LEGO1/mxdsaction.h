@@ -7,7 +7,7 @@
 
 class MxOmni;
 
-// VTABLE 0x100dc098
+// VTABLEADDR 0x100dc098
 // SIZE 0x94
 class MxDSAction : public MxDSObject {
 public:

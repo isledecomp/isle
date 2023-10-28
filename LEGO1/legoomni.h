@@ -26,7 +26,7 @@ class MxBackgroundAudioManager;
 class MxDSFile;
 class MxTransitionManager;
 
-// VTABLE 0x100d8638
+// VTABLEADDR 0x100d8638
 // SIZE: 0x140
 class LegoOmni : public MxOmni {
 public:

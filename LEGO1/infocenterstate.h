@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "legostate.h"
 
-// VTABLE 0x100d93a8
+// VTABLEADDR 0x100d93a8
 // SIZE 0x94
 class InfocenterState : public LegoState {
 public:

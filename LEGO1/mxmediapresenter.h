@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxpresenter.h"
 
-// VTABLE 0x100d4cd8
+// VTABLEADDR 0x100d4cd8
 class MxMediaPresenter : public MxPresenter {
 public:
 	inline MxMediaPresenter() { Init(); }

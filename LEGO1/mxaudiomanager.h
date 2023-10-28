@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxmediamanager.h"
 
-// VTABLE 0x100dc6e0
+// VTABLEADDR 0x100dc6e0
 class MxAudioManager : public MxMediaManager {
 public:
 	MxAudioManager();

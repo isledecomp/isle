@@ -3,7 +3,7 @@
 
 #include "mxvideopresenter.h"
 
-// VTABLE 0x100d90c8
+// VTABLEADDR 0x100d90c8
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	LegoAnimPresenter();

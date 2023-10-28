@@ -6,7 +6,7 @@
 #include "mxnotificationmanager.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d9fe8
+// VTABLEADDR 0x100d9fe8
 // SIZE 0x150
 class MxBackgroundAudioManager : public MxCore {
 public:

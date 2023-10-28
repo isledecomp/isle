@@ -3,7 +3,7 @@
 
 #include "legowavepresenter.h"
 
-// VTABLE 0x100d52b0
+// VTABLEADDR 0x100d52b0
 // SIZE 0xa0
 class Lego3DWavePresenter : public LegoWavePresenter {
 public:

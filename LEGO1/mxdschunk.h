@@ -4,7 +4,7 @@
 #include "mxcore.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100dc7f8
+// VTABLEADDR 0x100dc7f8
 class MxDSChunk : public MxCore {
 public:
 	MxDSChunk();

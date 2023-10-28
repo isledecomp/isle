@@ -3,7 +3,7 @@
 
 #include "mxcompositepresenter.h"
 
-// VTABLE 0x100d7de8
+// VTABLEADDR 0x100d7de8
 // SIZE 0x74
 class LegoAnimMMPresenter : public MxCompositePresenter {
 public:

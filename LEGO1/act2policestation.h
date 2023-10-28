@@ -3,7 +3,7 @@
 
 #include "legoentity.h"
 
-// VTABLE 0x100d53a8
+// VTABLEADDR 0x100d53a8
 // SIZE 0x68
 class Act2PoliceStation : public LegoEntity {
 public:

@@ -5,7 +5,7 @@
 #include "legoentity.h"
 #include "mxpresenter.h"
 
-// VTABLE 0x100d6280
+// VTABLEADDR 0x100d6280
 // SIZE 0xf8
 class LegoWorld : public LegoEntity {
 public:

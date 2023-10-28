@@ -3,7 +3,7 @@
 
 #include "legoentity.h"
 
-// VTABLE 0x100d5c88
+// VTABLEADDR 0x100d5c88
 // SIZE <= 0x68, hard to tell because it's always constructed as a derivative
 class BuildingEntity : public LegoEntity {
 public:

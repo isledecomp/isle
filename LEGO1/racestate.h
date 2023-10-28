@@ -11,7 +11,7 @@ public:
 	MxU16 m_color;
 };
 
-// VTABLE 0x100d5e30
+// VTABLEADDR 0x100d5e30
 // SIZE 0x2c
 class RaceState : public LegoState {
 public:

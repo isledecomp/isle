@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
-// VTABLE 0x100d9ec8
+// VTABLEADDR 0x100d9ec8
 // SIZE 0x164
 class Jetski : public IslePathActor {
 public:

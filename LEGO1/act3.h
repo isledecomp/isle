@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d9628
+// VTABLEADDR 0x100d9628
 // SIZE 0x4274
 class Act3 : public LegoWorld {
 public:

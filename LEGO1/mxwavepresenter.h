@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxsoundpresenter.h"
 
-// VTABLE 0x100d49a8
+// VTABLEADDR 0x100d49a8
 // SIZE 0x6c
 class MxWavePresenter : public MxSoundPresenter {
 private:

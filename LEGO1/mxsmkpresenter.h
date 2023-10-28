@@ -6,7 +6,7 @@
 
 #include <smk.h>
 
-// VTABLE 0x100dc348
+// VTABLEADDR 0x100dc348
 // SIZE 0x720
 class MxSmkPresenter : public MxVideoPresenter {
 public:

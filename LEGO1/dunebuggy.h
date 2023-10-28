@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
-// VTABLE 0x100d8f98
+// VTABLEADDR 0x100d8f98
 // SIZE 0x16c
 class DuneBuggy : public IslePathActor {
 public:

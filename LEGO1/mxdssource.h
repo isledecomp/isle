@@ -5,7 +5,7 @@
 
 class MxDSBuffer;
 
-// VTABLE 0x100dc8c8
+// VTABLEADDR 0x100dc8c8
 class MxDSSource : public MxCore {
 public:
 	MxDSSource() : m_lengthInDWords(0), m_pBuffer(NULL), m_position(-1) {}

@@ -3,7 +3,7 @@
 
 #include "mxwavepresenter.h"
 
-// VTABLE 0x100d5fa8
+// VTABLEADDR 0x100d5fa8
 // SIZE 0x90
 class LegoLoadCacheSoundPresenter : public MxWavePresenter {
 public:

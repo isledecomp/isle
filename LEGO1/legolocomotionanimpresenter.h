@@ -3,7 +3,7 @@
 
 #include "legoloopinganimpresenter.h"
 
-// VTABLE 0x100d9170
+// VTABLEADDR 0x100d9170
 class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoLocomotionAnimPresenter();

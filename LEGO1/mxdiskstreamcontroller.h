@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-// VTABLE 0x100dccb8
+// VTABLEADDR 0x100dccb8
 // SIZE 0xc8
 class MxDiskStreamController : public MxStreamController {
 public:

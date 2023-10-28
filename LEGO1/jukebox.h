@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d8958
+// VTABLEADDR 0x100d8958
 // SIZE 0x104
 class JukeBox : public LegoWorld {
 public:

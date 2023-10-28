@@ -5,7 +5,7 @@
 
 #define FOR_LEGOOBJECTFACTORY_OBJECTS(X) X(InfocenterState)
 
-// VTABLE 0x100d4768
+// VTABLEADDR 0x100d4768
 class LegoObjectFactory : public MxObjectFactory {
 public:
 	LegoObjectFactory();

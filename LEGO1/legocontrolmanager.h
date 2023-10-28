@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d6a80
+// VTABLEADDR 0x100d6a80
 class LegoControlManager : public MxCore {
 public:
 	LegoControlManager();

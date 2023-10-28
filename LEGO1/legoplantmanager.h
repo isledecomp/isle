@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d6758
+// VTABLEADDR 0x100d6758
 // SIZE 0x2c
 class LegoPlantManager : public MxCore {
 public:

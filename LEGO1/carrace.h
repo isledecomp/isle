@@ -3,7 +3,7 @@
 
 #include "legorace.h"
 
-// VTABLE 0x100d5e50
+// VTABLEADDR 0x100d5e50
 // SIZE 0x154
 class CarRace : public LegoRace {
 public:

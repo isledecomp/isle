@@ -3,7 +3,7 @@
 
 #include "legoactor.h"
 
-// VTABLE 0x100d5178
+// VTABLEADDR 0x100d5178
 class IsleActor : public LegoActor {
 public:
 	// OFFSET: LEGO1 0x1000e660

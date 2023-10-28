@@ -9,7 +9,7 @@
 #include "mxdsobject.h"
 #include "mxstreamprovider.h"
 
-// VTABLE 0x100dc968
+// VTABLEADDR 0x100dc968
 // SIZE 0x64
 class MxStreamController : public MxCore {
 public:

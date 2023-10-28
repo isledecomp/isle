@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
-// VTABLE 0x100d7090
+// VTABLEADDR 0x100d7090
 // SIZE 0x16c
 class Motorcycle : public IslePathActor {
 public:

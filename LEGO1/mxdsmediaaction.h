@@ -5,7 +5,7 @@
 #include "mxdsaction.h"
 #include "mxpoint32.h"
 
-// VTABLE 0x100dcd40
+// VTABLEADDR 0x100dcd40
 // SIZE 0xb8
 class MxDSMediaAction : public MxDSAction {
 public:

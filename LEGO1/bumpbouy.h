@@ -4,7 +4,7 @@
 #include "legoanimactor.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d6790
+// VTABLEADDR 0x100d6790
 class BumpBouy : public LegoAnimActor {
 public:
 	// OFFSET: LEGO1 0x100274e0

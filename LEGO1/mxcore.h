@@ -8,14 +8,20 @@
 
 class MxParam;
 
-// VTABLE 0x100dc0f8
+// VTABLEADDR 0x100dc0f8
 // SIZE 0x8
 class MxCore {
 public:
 	__declspec(dllexport) MxCore();
-	__declspec(dllexport) virtual ~MxCore();                   // vtable+00
-	__declspec(dllexport) virtual MxResult Notify(MxParam& p); // vtable+04
-	virtual MxResult Tickle();                                 // vtable+08
+
+	// VTABLE 0x0
+	__declspec(dllexport) virtual ~MxCore();
+
+	// VTABLE 0x4
+	__declspec(dllexport) virtual MxResult Notify(MxParam& p);
+
+	// VTABLE 0x8
+	virtual MxResult Tickle();
 
 	// OFFSET: LEGO1 0x100144c0
 	inline virtual const char* ClassName() const // vtable+0c

@@ -3,7 +3,7 @@
 
 #include "buildingentity.h"
 
-// VTABLE 0x100d4b90
+// VTABLEADDR 0x100d4b90
 // SIZE 0x68
 class InfoCenterEntity : public BuildingEntity {
 public:

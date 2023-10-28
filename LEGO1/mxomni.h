@@ -21,7 +21,7 @@ class MxTimer;
 class MxVariableTable;
 class MxVideoManager;
 
-// VTABLE 0x100dc168
+// VTABLEADDR 0x100dc168
 // SIZE 0x68
 class MxOmni : public MxCore {
 public:

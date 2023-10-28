@@ -5,7 +5,7 @@
 #include "mxcore.h"
 #include "mxdsfile.h"
 
-// VTABLE 0x100dd100
+// VTABLEADDR 0x100dd100
 // SIZE 0x10
 class MxStreamProvider : public MxCore {
 public:

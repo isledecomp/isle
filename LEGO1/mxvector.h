@@ -5,7 +5,7 @@
 
 #include <vec.h>
 
-// VTABLE 0x100d4288
+// VTABLEADDR 0x100d4288
 // SIZE 0x8
 class MxVector2 {
 public:
@@ -68,7 +68,7 @@ protected:
 	float* m_data;
 };
 
-// VTABLE 0x100d4518
+// VTABLEADDR 0x100d4518
 // SIZE 0x8
 class MxVector3 : public MxVector2 {
 public:
@@ -100,7 +100,7 @@ public:
 	inline void Fill(float p_value) { EqualsScalar(&p_value); }
 };
 
-// VTABLE 0x100d45a0
+// VTABLEADDR 0x100d45a0
 // SIZE 0x8
 class MxVector4 : public MxVector3 {
 public:
@@ -131,7 +131,7 @@ public:
 	virtual void UnknownQuaternionOp(MxVector4* p_a, MxVector4* p_b);
 };
 
-// VTABLE 0x100d4488
+// VTABLEADDR 0x100d4488
 // SIZE 0x14
 class MxVector3Data : public MxVector3 {
 public:
@@ -158,7 +158,7 @@ public:
 	}
 };
 
-// VTABLE 0x100d41e8
+// VTABLEADDR 0x100d41e8
 // SIZE 0x18
 class MxVector4Data : public MxVector4 {
 public:

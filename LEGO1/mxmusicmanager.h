@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxaudiomanager.h"
 
-// VTABLE 0x100dc930
+// VTABLEADDR 0x100dc930
 // SIZE 0x58
 class MxMusicManager : public MxAudioManager {
 public:

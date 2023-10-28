@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d6fb8
+// VTABLEADDR 0x100d6fb8
 // SIZE 0x140
 // Radio at 0x12c
 class Isle : public LegoWorld {

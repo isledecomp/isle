@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxsmkpresenter.h"
 
-// VTABLE 0x100dc540
+// VTABLEADDR 0x100dc540
 // SIZE 0x724
 class MxLoopingSmkPresenter : public MxSmkPresenter {
 public:

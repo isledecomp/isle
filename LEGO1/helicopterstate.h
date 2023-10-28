@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "legostate.h"
 
-// VTABLE 0x100d5418
+// VTABLEADDR 0x100d5418
 // SIZE 0xc
 class HelicopterState : public LegoState {
 public:

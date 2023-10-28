@@ -247,7 +247,7 @@ htmlinsert = []
 # Generate basename of original file, used in locating OFFSET lines
 basename = os.path.basename(os.path.splitext(original)[0])
 funcpattern = '// OFFSET:'
-vtblpattern = '// VTABLE'
+vtblpattern = '// VTABLE '
 in_class = None
 
 for subdir, dirs, files in os.walk(source):

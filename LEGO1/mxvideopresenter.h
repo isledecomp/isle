@@ -5,7 +5,7 @@
 #include "mxbitmap.h"
 #include "mxmediapresenter.h"
 
-// VTABLE 0x100d4be8
+// VTABLEADDR 0x100d4be8
 class MxVideoPresenter : public MxMediaPresenter {
 public:
 	MxVideoPresenter() { Init(); }

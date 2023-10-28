@@ -5,7 +5,7 @@
 #include "mxdsparallelaction.h"
 #include "mxstringlist.h"
 
-// VTABLE 0x100dcfc8
+// VTABLEADDR 0x100dcfc8
 // SIZE 0xb0
 class MxDSSelectAction : public MxDSParallelAction {
 public:

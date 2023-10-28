@@ -5,7 +5,7 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d85b8
+// VTABLEADDR 0x100d85b8
 // SIZE 0x70
 class LegoNavController : public MxCore {
 public:

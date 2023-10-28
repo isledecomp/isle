@@ -3,7 +3,7 @@
 
 #include "racestate.h"
 
-// VTABLE 0x100d4b70
+// VTABLEADDR 0x100d4b70
 // SIZE 0x2c
 class CarRaceState : public RaceState {
 public:

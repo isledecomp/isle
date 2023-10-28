@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100dc0e0
+// VTABLEADDR 0x100dc0e0
 // SIZE 0x10
 class MxTimer : public MxCore {
 public:

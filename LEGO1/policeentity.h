@@ -3,7 +3,7 @@
 
 #include "buildingentity.h"
 
-// VTABLE 0x100d4ab0
+// VTABLEADDR 0x100d4ab0
 // SIZE 0x68
 class PoliceEntity : public BuildingEntity {
 public:

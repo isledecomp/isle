@@ -3,7 +3,7 @@
 
 #include "legoanimactor.h"
 
-// VTABLE 0x100d7920
+// VTABLEADDR 0x100d7920
 class Act3Shark : public LegoAnimActor {
 public:
 	// OFFSET: LEGO1 0x100430c0

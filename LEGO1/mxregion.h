@@ -5,7 +5,7 @@
 #include "mxcore.h"
 #include "mxrect32.h"
 
-// VTABLE 0x100dcae8
+// VTABLEADDR 0x100dcae8
 // SIZE 0x1c
 class MxRegion : public MxCore {
 public:

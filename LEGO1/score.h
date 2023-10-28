@@ -7,7 +7,7 @@
 #include "mxtype17notificationparam.h"
 #include "scorestate.h"
 
-// VTABLE 0x100d4018
+// VTABLEADDR 0x100d4018
 // SIZE 0x104
 class Score : public LegoWorld {
 public:

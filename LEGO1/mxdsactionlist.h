@@ -6,7 +6,7 @@
 
 class MxDSAction;
 
-// VTABLE 0x100dced8
+// VTABLEADDR 0x100dced8
 // SIZE 0x1c
 class MxDSActionList : public MxList<MxDSAction*> {
 public:

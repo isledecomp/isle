@@ -6,7 +6,7 @@
 #include "mxcore.h"
 #include "mxdstypes.h"
 
-// VTABLE 0x100dc868
+// VTABLEADDR 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
 public:

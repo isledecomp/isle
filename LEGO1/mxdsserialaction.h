@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxdsmultiaction.h"
 
-// VTABLE 0x100dcf38
+// VTABLEADDR 0x100dcf38
 // SIZE 0xa8
 class MxDSSerialAction : public MxDSMultiAction {
 public:

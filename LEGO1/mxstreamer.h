@@ -56,7 +56,7 @@ private:
 	MxStreamController* m_controller;
 };
 
-// VTABLE 0x100dc710
+// VTABLEADDR 0x100dc710
 // SIZE 0x2c
 class MxStreamer : public MxCore {
 public:

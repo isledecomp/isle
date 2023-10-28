@@ -22,7 +22,7 @@ class LegoControlManager;
 // TODO Really a MxQueue, but we don't have one of those
 class LegoEventQueue : public MxList<LegoEventNotificationParam> {};
 
-// VTABLE 0x100d8760
+// VTABLEADDR 0x100d8760
 // SIZE 0x338
 class LegoInputManager : public MxPresenter {
 public:

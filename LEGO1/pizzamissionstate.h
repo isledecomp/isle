@@ -12,7 +12,7 @@ public:
 	undefined m_unk18[6];
 };
 
-// VTABLE 0x100d7408
+// VTABLEADDR 0x100d7408
 class PizzaMissionState : public LegoState {
 public:
 	// OFFSET: LEGO1 0x10039290

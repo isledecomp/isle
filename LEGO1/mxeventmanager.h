@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxmediamanager.h"
 
-// VTABLE 0x100dc900
+// VTABLEADDR 0x100dc900
 // SIZE 0x2c
 class MxEventManager : public MxMediaManager {
 public:

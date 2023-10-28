@@ -3,7 +3,7 @@
 
 #include "legoanimpresenter.h"
 
-// VTABLE 0x100d4900
+// VTABLEADDR 0x100d4900
 // SIZE 0xc0 (discovered through inlined constructor at 0x10009ecd)
 class LegoLoopingAnimPresenter : public LegoAnimPresenter {
 public:

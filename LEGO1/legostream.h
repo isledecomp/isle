@@ -13,7 +13,7 @@
 
 class MxVariableTable;
 
-// VTABLE 0x100d7d80
+// VTABLEADDR 0x100d7d80
 class LegoStream {
 public:
 	LegoStream() : m_mode(0) {}
@@ -40,7 +40,7 @@ protected:
 	MxU8 m_mode;
 };
 
-// VTABLE 0x100db730
+// VTABLEADDR 0x100db730
 class LegoFileStream : public LegoStream {
 public:
 	LegoFileStream();
@@ -59,7 +59,7 @@ private:
 	FILE* m_hFile;
 };
 
-// VTABLE 0x100db710
+// VTABLEADDR 0x100db710
 class LegoMemoryStream : public LegoStream {
 public:
 	LegoMemoryStream(char* p_buffer);

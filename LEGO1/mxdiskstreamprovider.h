@@ -9,7 +9,7 @@
 
 class MxDiskStreamProvider;
 
-// VTABLE 0x100dd130
+// VTABLEADDR 0x100dd130
 class MxDiskStreamProviderThread : public MxThread {
 public:
 	// Only inlined, no offset
@@ -21,7 +21,7 @@ private:
 	MxDiskStreamProvider* m_target;
 };
 
-// VTABLE 0x100dd138
+// VTABLEADDR 0x100dd138
 class MxDiskStreamProvider : public MxStreamProvider {
 public:
 	MxDiskStreamProvider();

@@ -3,7 +3,7 @@
 
 #include "legoentity.h"
 
-// VTABLE 0x100da8a0
+// VTABLEADDR 0x100da8a0
 // SIZE 0x6c
 class JukeBoxEntity : public LegoEntity {
 public:

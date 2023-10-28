@@ -6,7 +6,7 @@
 #include "mxcore.h"
 #include "mxstring.h"
 
-// VTABLE 0x100d46c0
+// VTABLEADDR 0x100d46c0
 class LegoState : public MxCore {
 public:
 	virtual ~LegoState() override; // vtable+0x00

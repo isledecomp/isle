@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d7d60
+// VTABLEADDR 0x100d7d60
 // SIZE 0x40
 class LegoPathController : public MxCore {
 public:

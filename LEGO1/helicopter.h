@@ -5,7 +5,7 @@
 #include "islepathactor.h"
 #include "mxmatrix.h"
 
-// VTABLE 0x100d40f8
+// VTABLEADDR 0x100d40f8
 // SIZE 0x230
 class Helicopter : public IslePathActor {
 public:

@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d4650
+// VTABLEADDR 0x100d4650
 // SIZE 0x128
 // Radio variable at 0x46, in constructor
 class GasStation : public LegoWorld {

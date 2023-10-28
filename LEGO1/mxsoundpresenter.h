@@ -4,7 +4,7 @@
 #include "mxaudiopresenter.h"
 #include "mxomni.h"
 
-// VTABLE 0x100d4b08
+// VTABLEADDR 0x100d4b08
 class MxSoundPresenter : public MxAudioPresenter {
 public:
 	virtual ~MxSoundPresenter() override;

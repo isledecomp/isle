@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d57b0
+// VTABLEADDR 0x100d57b0
 // SIZE 0xc8
 class LegoCameraController : public MxCore {
 public:

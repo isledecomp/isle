@@ -3,7 +3,7 @@
 
 #include "mxflcpresenter.h"
 
-// VTABLE 0x100d89e0
+// VTABLEADDR 0x100d89e0
 // SIZE 0x70
 class LegoFlcTexturePresenter : public MxFlcPresenter {
 public:

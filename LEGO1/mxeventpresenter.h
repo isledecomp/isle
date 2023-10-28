@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxmediapresenter.h"
 
-// VTABLE 0x100dca88
+// VTABLEADDR 0x100dca88
 // SIZE 0x54
 class MxEventPresenter : public MxMediaPresenter {
 public:

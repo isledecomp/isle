@@ -3,7 +3,7 @@
 
 #include "islepathactor.h"
 
-// VTABLE 0x100d71a8
+// VTABLEADDR 0x100d71a8
 // SIZE 0x184
 class Ambulance : public IslePathActor {
 public:

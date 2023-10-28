@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d8c18
+// VTABLEADDR 0x100d8c18
 // SIZE 0x500
 class LegoAnimationManager : public MxCore {
 public:

@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d6658
+// VTABLEADDR 0x100d6658
 // SIZE 0x34c
 class LegoCarBuild : public LegoWorld {
 public:

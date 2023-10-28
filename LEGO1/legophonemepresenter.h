@@ -6,7 +6,7 @@
 #include "mxstring.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d8040
+// VTABLEADDR 0x100d8040
 // SIZE 0x88
 class LegoPhonemePresenter : public MxFlcPresenter {
 public:

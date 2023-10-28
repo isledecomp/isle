@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d8a80
+// VTABLEADDR 0x100d8a80
 // SIZE 0x110
 // Radio at 0xf8
 class Police : public LegoWorld {

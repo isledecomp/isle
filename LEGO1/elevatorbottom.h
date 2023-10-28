@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d5f20
+// VTABLEADDR 0x100d5f20
 class ElevatorBottom : public LegoWorld {
 public:
 	ElevatorBottom();

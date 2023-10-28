@@ -18,7 +18,7 @@
 	X(MxLoopingSmkPresenter)                                                                                           \
 	X(MxLoopingMIDIPresenter)
 
-// VTABLE 0x100dc220
+// VTABLEADDR 0x100dc220
 class MxObjectFactory : public MxCore {
 public:
 	MxObjectFactory();

@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d4718
+// VTABLEADDR 0x100d4718
 // SIZE 0x88
 class LegoCacheSound : public MxCore {
 public:

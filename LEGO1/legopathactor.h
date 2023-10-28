@@ -4,7 +4,7 @@
 #include "legoactor.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d6e28
+// VTABLEADDR 0x100d6e28
 // SIZE 0x154 (from inlined construction at 0x1000a346)
 class LegoPathActor : public LegoActor {
 public:

@@ -3,7 +3,7 @@
 
 #include "legopathactor.h"
 
-// VTABLE 0x100d4788
+// VTABLEADDR 0x100d4788
 // SIZE 0x1f8
 class Doors : public LegoPathActor {
 public:

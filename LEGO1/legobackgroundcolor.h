@@ -3,7 +3,7 @@
 
 #include "mxvariable.h"
 
-// VTABLE 0x100d74a8
+// VTABLEADDR 0x100d74a8
 // SIZE 0x30
 class LegoBackgroundColor : public MxVariable {
 public:

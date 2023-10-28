@@ -6,7 +6,7 @@
 #include "mxstring.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100dc890
+// VTABLEADDR 0x100dc890
 class MxDSFile : public MxDSSource {
 public:
 	__declspec(dllexport) MxDSFile(const char* filename, MxULong skipReadingChunks);

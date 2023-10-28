@@ -4,7 +4,7 @@
 #include "mxdsaction.h"
 #include "mxnotificationparam.h"
 
-// VTABLE 0x100d8350
+// VTABLEADDR 0x100d8350
 // SIZE 0x14
 class MxActionNotificationParam : public MxNotificationParam {
 public:
@@ -45,7 +45,7 @@ protected:
 	MxBool m_realloc;     // 0x10
 };
 
-// VTABLE 0x100d8358
+// VTABLEADDR 0x100d8358
 // SIZE 0x14
 class MxEndActionNotificationParam : public MxActionNotificationParam {
 public:

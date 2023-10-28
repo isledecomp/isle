@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "legoentity.h"
 
-// VTABLE 0x100d6d68
+// VTABLEADDR 0x100d6d68
 // SIZE 0x78
 class LegoActor : public LegoEntity {
 public:

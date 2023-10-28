@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
-// VTABLE 0x100d7ee0
+// VTABLEADDR 0x100d7ee0
 // SIZE 0x180
 class TowTrack : public IslePathActor {
 public:

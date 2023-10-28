@@ -3,7 +3,7 @@
 
 #include "legostate.h"
 
-// VTABLE 0x100d7fd8
+// VTABLEADDR 0x100d7fd8
 // SIZE 0x28
 class TowTrackMissionState : public LegoState {
 public:

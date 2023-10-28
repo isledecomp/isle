@@ -7,7 +7,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100d7ea0
+// VTABLEADDR 0x100d7ea0
 class MxTransitionManager : public MxCore {
 public:
 	MxTransitionManager();

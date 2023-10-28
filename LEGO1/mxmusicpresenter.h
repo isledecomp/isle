@@ -3,7 +3,7 @@
 
 #include "mxaudiopresenter.h"
 
-// VTABLE 0x100dc9b8
+// VTABLEADDR 0x100dc9b8
 // SIZE 0x54
 class MxMusicPresenter : public MxAudioPresenter {
 public:

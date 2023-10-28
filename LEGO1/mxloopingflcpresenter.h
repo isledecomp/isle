@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxflcpresenter.h"
 
-// VTABLE 0x100dc480
+// VTABLEADDR 0x100dc480
 // SIZE 0x6c
 class MxLoopingFlcPresenter : public MxFlcPresenter {
 public:

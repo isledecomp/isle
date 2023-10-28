@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100d9730
+// VTABLEADDR 0x100d9730
 // SIZE 0x12c
 class Hospital : public LegoWorld {
 public:

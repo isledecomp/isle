@@ -3,7 +3,7 @@
 
 #include "legostate.h"
 
-// VTABLE 0x100d4a90
+// VTABLEADDR 0x100d4a90
 // SIZE 0x10
 class JukeBoxState : public LegoState {
 public:

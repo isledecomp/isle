@@ -3,7 +3,7 @@
 
 #include "mxvariable.h"
 
-// VTABLE 0x100d74b8
+// VTABLEADDR 0x100d74b8
 // SIZE 0x24
 class LegoFullScreenMovie : public MxVariable {
 public:

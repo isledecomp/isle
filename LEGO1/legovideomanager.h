@@ -8,7 +8,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100d9c88
+// VTABLEADDR 0x100d9c88
 // SIZE 0x590
 class LegoVideoManager : public MxVideoManager {
 public:

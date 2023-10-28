@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxmediapresenter.h"
 
-// VTABLE 0x100d4c70
+// VTABLEADDR 0x100d4c70
 class MxAudioPresenter : public MxMediaPresenter {
 public:
 	MxAudioPresenter() { m_unk50 = 100; }

@@ -3,7 +3,7 @@
 
 #include "legopathactor.h"
 
-// VTABLE 0x100d9b60
+// VTABLEADDR 0x100d9b60
 // SIZE 0x194
 class Act2Brick : public LegoPathActor {
 public:

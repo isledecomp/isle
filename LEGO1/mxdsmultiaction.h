@@ -4,7 +4,7 @@
 #include "mxdsaction.h"
 #include "mxdsactionlist.h"
 
-// VTABLE 0x100dcef0
+// VTABLEADDR 0x100dcef0
 // SIZE 0x9c
 class MxDSMultiAction : public MxDSAction {
 public:
