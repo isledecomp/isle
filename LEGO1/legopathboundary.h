@@ -1,9 +1,6 @@
 #ifndef LEGOPATHBOUNDARH_H
 #define LEGOPATHBOUNDARH_H
 
-class LegoPathBoundary
-{
-  
-};
+class LegoPathBoundary {};
 
 #endif // LEGOPATHBOUNDARH_H

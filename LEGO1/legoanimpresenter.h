@@ -4,27 +4,25 @@
 #include "mxvideopresenter.h"
 
 // VTABLE 0x100d90c8
-class LegoAnimPresenter : public MxVideoPresenter
-{
+class LegoAnimPresenter : public MxVideoPresenter {
 public:
-  LegoAnimPresenter();
+	LegoAnimPresenter();
 
-  // OFFSET: LEGO1 0x10068530
-  inline virtual const char *ClassName() const override // vtable+0x0c
-  {
-    // 0x100f071c
-    return "LegoAnimPresenter";
-  }
+	// OFFSET: LEGO1 0x10068530
+	inline virtual const char* ClassName() const override // vtable+0x0c
+	{
+		// 0x100f071c
+		return "LegoAnimPresenter";
+	}
 
-  // OFFSET: LEGO1 0x10068540
-  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
-  {
-    return !strcmp(name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(name);
-  }
-  
+	// OFFSET: LEGO1 0x10068540
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(name);
+	}
+
 private:
-  void Init();
-
+	void Init();
 };
 
 #endif // LEGOANIMPRESENTER_H

@@ -3,10 +3,9 @@
 
 class ViewROI;
 
-class ViewManager
-{
+class ViewManager {
 public:
-  __declspec(dllexport) void RemoveAll(ViewROI *);
+	__declspec(dllexport) void RemoveAll(ViewROI*);
 };
 
 #endif // VIEWMANAGER_H

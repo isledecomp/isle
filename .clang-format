@@ -1,0 +1,26 @@
+BasedOnStyle: Microsoft
+
+AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: false
+BinPackParameters: false
+BracedInitializerIndentWidth: 4
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterStruct: false
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+IncludeBlocks: Regroup
+IndentAccessModifiers: false
+IndentWidth: 4
+InsertNewlineAtEOF: true
+PointerAlignment: Left
+SpaceAfterCStyleCast: true
+TabWidth: 4
+UseTab: ForContinuationAndIndentation

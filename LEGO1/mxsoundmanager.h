@@ -8,25 +8,24 @@
 
 // VTABLE 0x100dc128
 // SIZE 0x3c
-class MxSoundManager : public MxAudioManager
-{
+class MxSoundManager : public MxAudioManager {
 public:
-  MxSoundManager();
-  virtual ~MxSoundManager() override; // vtable+0x0
+	MxSoundManager();
+	virtual ~MxSoundManager() override; // vtable+0x0
 
-  virtual void Destroy() override; // vtable+18
-  virtual void SetVolume(MxS32 p_volume) override; // vtable+2c
-  virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); //vtable+0x30
-  virtual void vtable0x34(); // vtable+0x34
-  virtual void vtable0x38(); // vtable+0x38
+	virtual void Destroy() override;                                     // vtable+18
+	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+2c
+	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x30
+	virtual void vtable0x34();                                           // vtable+0x34
+	virtual void vtable0x38();                                           // vtable+0x38
 
 private:
-  void Init();
-  void Destroy(MxBool p_fromDestructor);
+	void Init();
+	void Destroy(MxBool p_fromDestructor);
 
-  undefined4 m_unk30;
-  LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
-  undefined m_unk35[4];
+	LPDIRECTSOUND m_directSound;    // 0x30
+	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
+	undefined m_unk38[4];
 };
 
 #endif // MXSOUNDMANAGER_H

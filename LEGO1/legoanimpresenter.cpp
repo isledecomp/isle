@@ -3,11 +3,11 @@
 // OFFSET: LEGO1 0x10068420 STUB
 LegoAnimPresenter::LegoAnimPresenter()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100686f0 STUB
 void LegoAnimPresenter::Init()
 {
-  // TODO
+	// TODO
 }

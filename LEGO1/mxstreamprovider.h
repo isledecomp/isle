@@ -9,22 +9,21 @@ class MxStreamController;
 
 // VTABLE 0x100dd100
 // SIZE 0x10
-class MxStreamProvider : public MxCore
-{
+class MxStreamProvider : public MxCore {
 public:
-  inline MxStreamProvider() : m_pLookup(NULL), m_pFile(NULL) {}
+	inline MxStreamProvider() : m_pLookup(NULL), m_pFile(NULL) {}
 
-  // OFFSET: LEGO1 0x100d07e0
-  inline virtual const char *ClassName() const override // vtable+0x0c
-  {
-    return "MxStreamProvider";
-  }
+	// OFFSET: LEGO1 0x100d07e0
+	inline virtual const char* ClassName() const override // vtable+0x0c
+	{
+		return "MxStreamProvider";
+	}
 
-  // OFFSET: LEGO1 0x100d07f0
-  inline virtual MxBool IsA(const char *name) const override // vtable+0x10
-  {
-    return !strcmp(name, MxStreamProvider::ClassName()) || MxCore::IsA(name);
-  }
+	// OFFSET: LEGO1 0x100d07f0
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, MxStreamProvider::ClassName()) || MxCore::IsA(name);
+	}
 
   virtual MxResult SetResourceToGet(MxStreamController* p_resource); //vtable+0x14
   virtual MxU32 GetFileSize() = 0; //vtable+0x18

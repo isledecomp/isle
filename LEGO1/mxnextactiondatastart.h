@@ -4,9 +4,6 @@
 #include "mxcore.h"
 
 // VTABLE 0x100dc9a0
-class MxNextActionDataStart : public MxCore
-{
-  
-};
+class MxNextActionDataStart : public MxCore {};
 
 #endif // MXNEXTACTIONDATASTART_H

@@ -2,6 +2,16 @@ Debug/
 Release/
 *.ncb
 /.vs
+/.vscode
+/.idea
+.env
+.venv
+env/
+venv/
+ENV/
+VENV/
+env.bak/
+venv.bak/
 ISLE.EXE
 LEGO1.DLL
 build/
