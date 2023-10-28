@@ -244,7 +244,14 @@ const char *GetNoCD_SourceName()
 // OFFSET: LEGO1 0x1005b5f0
 MxLong LegoOmni::Notify(MxParam &p)
 {
-  // FIXME: Stub
+  MxResult result;
+  MxBool videoOver;
+
+  // check if nocd video is over, if so exit
+  if (((MxNotificationParam&) p).GetType() == MXSTREAMER_UNKNOWN)
+  {
+
+  }
   return 0;
 }
 

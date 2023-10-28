@@ -32,6 +32,8 @@ public:
   __declspec(dllexport) virtual MxLong Seek(MxLong,int); // vtable+0x24
   __declspec(dllexport) virtual MxULong GetBufferSize(); // vtable+0x28
   __declspec(dllexport) virtual MxULong GetStreamBuffersNum();  // vtable+0x2c
+
+  inline void SetFileName(MxString p_filename) { m_filename = p_filename; }
 private:
   MxLong ReadChunks();
   struct ChunkHeader {

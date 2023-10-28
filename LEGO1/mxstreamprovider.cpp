@@ -4,7 +4,7 @@
 DECOMP_SIZE_ASSERT(MxStreamProvider, 0x10);
 
 // OFFSET: LEGO1 0x100d07c0
-MxResult MxStreamProvider::SetResourceToGet(void* p_resource)
+MxResult MxStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
   m_pLookup = p_resource;
   return SUCCESS;

@@ -29,7 +29,7 @@ MxRAMStreamProvider::~MxRAMStreamProvider()
 }
 
 // OFFSET: LEGO1 0x100d0ae0 STUB
-MxResult MxRAMStreamProvider::SetResourceToGet(void* p_resource)
+MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
   return FAILURE;
 }

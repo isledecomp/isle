@@ -49,7 +49,7 @@ public:
 
   void PerformWork();
 
-  virtual MxResult SetResourceToGet(void* p_resource) override; //vtable+0x14
+  virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; //vtable+0x14
   virtual MxU32 GetFileSize() override; //vtable+0x18
   virtual MxU32 GetStreamBuffersNum() override; //vtable+0x1c
   virtual void vtable0x20(undefined4 p_unknown1) override; //vtable+0x20
