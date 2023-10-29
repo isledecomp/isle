@@ -32,7 +32,7 @@ public:
 	__declspec(dllexport) virtual MxULong GetBufferSize();                // vtable+0x28
 	__declspec(dllexport) virtual MxULong GetStreamBuffersNum();          // vtable+0x2c
 
-	inline void SetFileName(MxString p_filename) { m_filename = p_filename; }
+	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
 
 private:
 	MxLong ReadChunks();

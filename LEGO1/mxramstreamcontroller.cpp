@@ -18,15 +18,21 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 	if (MxStreamController::Open(p_filename) != SUCCESS) {
 		return FAILURE;
 	}
-	MxRAMStreamProvider* provider = new MxRAMStreamProvider();
-	m_provider = provider;
-	if (provider != NULL) {
+
+	m_provider = new MxRAMStreamProvider();
+	if (((MxRAMStreamProvider*) m_provider) != NULL) {
 		if (m_provider->SetResourceToGet(this) != SUCCESS) {
 			return FAILURE;
 		}
 
-		FUN_100d0d80(provider->GetBufferOfFileSize(), provider->GetFileSize());
-		m_buffer.FUN_100c6780(provider->GetBufferOfFileSize(), provider->GetFileSize());
+		FUN_100d0d80(
+			((MxRAMStreamProvider*) m_provider)->GetBufferOfFileSize(),
+			((MxRAMStreamProvider*) m_provider)->GetFileSize()
+		);
+		m_buffer.FUN_100c6780(
+			((MxRAMStreamProvider*) m_provider)->GetBufferOfFileSize(),
+			((MxRAMStreamProvider*) m_provider)->GetFileSize()
+		);
 		return SUCCESS;
 	}
 

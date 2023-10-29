@@ -13,14 +13,11 @@ class MxDiskStreamProvider;
 class MxDiskStreamProviderThread : public MxThread {
 public:
 	// Only inlined, no offset
-	inline MxDiskStreamProviderThread() : MxThread(), m_target(NULL) {}
+	inline MxDiskStreamProviderThread() : MxThread() { m_target = NULL; }
 
 	MxResult Run() override;
 
 	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
-
-private:
-	MxDiskStreamProvider* m_target;
 };
 
 // VTABLE 0x100dd138
