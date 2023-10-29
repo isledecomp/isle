@@ -95,7 +95,6 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
 		}
 	}
 
-
 	m_pIntoBuffer = m_pBuffer;
 	m_pIntoBuffer2 = m_pBuffer;
 	if (m_pBuffer != NULL) {
