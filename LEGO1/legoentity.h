@@ -13,10 +13,7 @@
 class LegoEntity : public MxEntity {
 public:
 	// Inlined at 0x100853f7
-	inline LegoEntity()
-	{
-		Init();
-	}
+	inline LegoEntity() { Init(); }
 
 	__declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
 
