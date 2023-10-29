@@ -8,19 +8,16 @@ class MxDSAction;
 
 // VTABLE 0x100dced8
 // SIZE 0x1c
-class MxDSActionList : public MxList<MxDSAction*>
-{
+class MxDSActionList : public MxList<MxDSAction*> {
 public:
-  MxDSActionList() {
-    this->m_unk18 = 0;
-  }
+	MxDSActionList() { this->m_unk18 = 0; }
 
-  virtual MxS8 Compare(MxDSAction *, MxDSAction *); // +0x14
+	virtual MxS8 Compare(MxDSAction*, MxDSAction*); // +0x14
 
-  static void Destroy(MxDSAction *p_action);
+	static void Destroy(MxDSAction* p_action);
 
 private:
-  undefined m_unk18;
+	undefined m_unk18;
 };
 
 typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;

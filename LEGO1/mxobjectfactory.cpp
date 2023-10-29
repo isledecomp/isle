@@ -1,19 +1,18 @@
 #include "mxobjectfactory.h"
 
-#include "mxpresenter.h"
+#include "decomp.h"
 #include "mxcompositepresenter.h"
-#include "mxvideopresenter.h"
+#include "mxeventpresenter.h"
 #include "mxflcpresenter.h"
+#include "mxloopingflcpresenter.h"
+#include "mxloopingmidipresenter.h"
+#include "mxloopingsmkpresenter.h"
+#include "mxmidipresenter.h"
+#include "mxpresenter.h"
 #include "mxsmkpresenter.h"
 #include "mxstillpresenter.h"
+#include "mxvideopresenter.h"
 #include "mxwavepresenter.h"
-#include "mxmidipresenter.h"
-#include "mxeventpresenter.h"
-#include "mxloopingflcpresenter.h"
-#include "mxloopingsmkpresenter.h"
-#include "mxloopingmidipresenter.h"
-
-#include "decomp.h"
 
 DECOMP_SIZE_ASSERT(MxObjectFactory, 0x38); // 100af1db
 
@@ -21,27 +20,30 @@ DECOMP_SIZE_ASSERT(MxObjectFactory, 0x38); // 100af1db
 MxObjectFactory::MxObjectFactory()
 {
 #define X(V) this->m_id##V = MxAtomId(#V, LookupMode_Exact);
-  FOR_MXOBJECTFACTORY_OBJECTS(X)
+	FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
 }
 
 // OFFSET: LEGO1 0x100b12c0
-MxCore *MxObjectFactory::Create(const char *p_name)
+MxCore* MxObjectFactory::Create(const char* p_name)
 {
-  MxCore* object = NULL;
-  MxAtomId atom(p_name, LookupMode_Exact);
+	MxCore* object = NULL;
+	MxAtomId atom(p_name, LookupMode_Exact);
 
-  if (0) {}
-#define X(V) else if (this->m_id##V == atom) { object = new V; }
-  FOR_MXOBJECTFACTORY_OBJECTS(X)
+	if (0) {
+	}
+#define X(V)                                                                                                           \
+	else if (this->m_id##V == atom)                                                                                    \
+	{                                                                                                                  \
+		object = new V;                                                                                                \
+	}
+	FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
-  else {}
-
-  return object;
+	return object;
 }
 
 // OFFSET: LEGO1 0x100b1a30
-void MxObjectFactory::Destroy(MxCore *p_object)
+void MxObjectFactory::Destroy(MxCore* p_object)
 {
-  delete p_object;
+	delete p_object;
 }

@@ -3,19 +3,19 @@
 // OFFSET: LEGO1 0x1005e130 STUB
 Police::Police()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1005e320 STUB
 Police::~Police()
 {
-  // TODO
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1005e480 STUB
-MxLong Police::Notify(MxParam &p)
+MxLong Police::Notify(MxParam& p)
 {
-  // TODO
+	// TODO
 
-  return 0;
+	return 0;
 }

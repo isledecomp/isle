@@ -1,8 +1,8 @@
 #ifndef MXATOMIDCOUNTER_H
 #define MXATOMIDCOUNTER_H
 
-#include "mxstring.h"
 #include "compat.h" // STL
+#include "mxstring.h"
 
 // Counts the number of existing MxAtomId objects based
 // on the matching char* string. A <map> seems fit for purpose here:
@@ -14,36 +14,33 @@
 // for the combined key_value_pair, which doesn't seem possible with <map>.
 
 // SIZE: 0x14 (including padding)
-class MxAtomIdCounter
-{
+class MxAtomIdCounter {
 public:
-  // always inlined
-  MxAtomIdCounter(const char *p_str)
-  {
-    m_key = p_str;
-    m_value = 0;
-  }
+	// always inlined
+	MxAtomIdCounter(const char* p_str)
+	{
+		m_key = p_str;
+		m_value = 0;
+	}
 
-  void Inc();
-  void Dec();
-  inline MxString* GetKey() { return &m_key; };
-  inline MxU16 GetValue() { return m_value; };
+	void Inc();
+	void Dec();
+	inline MxString* GetKey() { return &m_key; };
+	inline MxU16 GetValue() { return m_value; };
 
 private:
-  MxString m_key;
-  MxU16 m_value;
+	MxString m_key;
+	MxU16 m_value;
 };
 
-struct MxAtomIdCounterCompare
-{
-  // OFFSET: LEGO1 0x100ad120
-  int operator()(MxAtomIdCounter* const & p_val0, MxAtomIdCounter* const & p_val1) const
-  {
-    return strcmp(p_val0->GetKey()->GetData(), p_val1->GetKey()->GetData()) > 0;
-  }
+struct MxAtomIdCounterCompare {
+	// OFFSET: LEGO1 0x100ad120
+	int operator()(MxAtomIdCounter* const& p_val0, MxAtomIdCounter* const& p_val1) const
+	{
+		return strcmp(p_val0->GetKey()->GetData(), p_val1->GetKey()->GetData()) > 0;
+	}
 };
 
-class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare>
-{};
+class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare> {};
 
-#endif //MXATOMIDCOUNTER_H
+#endif // MXATOMIDCOUNTER_H

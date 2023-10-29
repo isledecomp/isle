@@ -1,3 +1,5 @@
+// clang-format off
+
 #ifndef MXSTL_H
 #define MXSTL_H
 
@@ -216,3 +218,5 @@ class Stack : public stack<_C::value_type, _C, _C::allocator_type>
 #endif
 
 #endif // MXSTL_H
+
+// clang-format on
