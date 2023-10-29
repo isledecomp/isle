@@ -63,6 +63,13 @@ void LegoInputManager::Destroy()
 		delete m_controlManager;
 }
 
+// OFFSET: LEGO1 0x1005b960 STUB
+MxResult LegoInputManager::Create(HWND p_hwnd)
+{
+	// TODO STUB
+	return SUCCESS;
+}
+
 // OFFSET: LEGO1 0x1005c030
 void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
 {

@@ -3,10 +3,16 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
+#include "legosoundmanager.h"
 #include "legoutil.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
+#include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxticklemanager.h"
 
 // 0x100f4588
 MxAtomId* g_nocdSourceName = NULL;
@@ -302,16 +308,56 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
-// OFFSET: LEGO1 0x10058e70 STUB
+// OFFSET: LEGO1 0x10058e70
 MxResult LegoOmni::Create(MxOmniCreateParam& p)
 {
-	MxOmni::Create(p);
+	MxResult result = FAILURE;
+	MxAutoLocker lock(&this->m_criticalsection);
+
+	p.CreateFlags().CreateObjectFactory(FALSE);
+	p.CreateFlags().CreateVideoManager(FALSE);
+	p.CreateFlags().CreateSoundManager(FALSE);
+	p.CreateFlags().CreateTickleManager(FALSE);
+
+	if (!(m_tickleManager = new MxTickleManager()))
+		return FAILURE;
+
+	if (MxOmni::Create(p) != SUCCESS)
+		return FAILURE;
 
 	m_objectFactory = new LegoObjectFactory();
+	if (m_objectFactory == NULL)
+		return FAILURE;
+
+	if (m_soundManager = new LegoSoundManager()) {
+		if (m_soundManager->Create(10, 0) != SUCCESS) {
+			delete m_soundManager;
+			m_soundManager = NULL;
+			return FAILURE;
+		}
+	}
+
+	if (m_videoManager = new LegoVideoManager()) {
+		if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+			delete m_videoManager;
+			m_videoManager = NULL;
+		}
+	}
+
+	if (m_inputMgr = new LegoInputManager()) {
+		if (m_inputMgr->Create(p.GetWindowHandle()) != SUCCESS) {
+			delete m_inputMgr;
+			m_inputMgr = NULL;
+		}
+	}
+
 	m_gameState = new LegoGameState();
 	m_bkgAudioManager = new MxBackgroundAudioManager();
 
-	return SUCCESS;
+	SetAppCursor(1);
+
+	result = SUCCESS;
+	return result;
 }
 
 // OFFSET: LEGO1 0x10058c30 STUB
