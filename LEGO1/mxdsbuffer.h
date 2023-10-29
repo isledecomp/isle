@@ -4,8 +4,7 @@
 #include "decomp.h"
 #include "mxcore.h"
 
-enum MxDSBufferType
-{
+enum MxDSBufferType {
 	MxDSBufferType_Chunk = 0,
 	MxDSBufferType_Allocate = 1,
 	MxDSBufferType_Preallocated = 2,
