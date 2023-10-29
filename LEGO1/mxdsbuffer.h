@@ -19,6 +19,7 @@ public:
 	}
 
 	MxResult FUN_100c6780(void* p_buffer, MxU32 p_size);
+	void FUN_100c6f80(MxU32 p_unk);
 
 	inline void* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }

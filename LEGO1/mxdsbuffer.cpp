@@ -35,3 +35,12 @@ MxResult MxDSBuffer::FUN_100c6780(void* p_buffer, MxU32 p_size)
 	m_mode = 2;
 	return SUCCESS;
 }
+
+// OFFSET: LEGO1 0x100c6f80
+void MxDSBuffer::FUN_100c6f80(MxU32 p_unk)
+{
+	if (p_unk < m_writeOffset)
+	{
+		m_pIntoBuffer2 = p_unk + m_pIntoBuffer;
+	}
+}
