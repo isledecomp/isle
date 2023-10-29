@@ -1,129 +1,13 @@
 import os
-import re
 import sys
 import argparse
-from typing import List, Iterator, TextIO
-from collections import namedtuple
-from enum import Enum
-
-
-class ReaderState(Enum):
-    WANT_OFFSET = 0
-    WANT_SIG = 1
-    IN_FUNC = 2
-
-
-CodeBlock = namedtuple('CodeBlock',
-                       ['offset', 'signature', 'start_line', 'end_line'])
-
-# To match a reasonable variance of formatting for the offset comment
-offsetCommentRegex = re.compile(r'//\s?OFFSET:\s?\w+ (?:0x)?([a-f0-9]+)',
-                                flags=re.I)
-
-# To match the exact syntax (text upper case, hex lower case, with spaces)
-# that is used in most places
-offsetCommentExactRegex = re.compile(r'// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)')
-
-
-def is_blank_or_comment(line: str) -> bool:
-    """Helper to read ahead adter the offset comment is matched.
-       There could be blank lines or other comments before the
-       function signature, and we want to skip those."""
-    line_strip = line.strip()
-    return (len(line_strip) == 0
-            or line_strip.startswith('//')
-            or line_strip.startswith('/*')
-            or line_strip.endswith('*/'))
-
-
-def is_exact_offset_comment(line: str) -> bool:
-    """If the offset comment does not match our (unofficial) syntax
-       we may want to alert the user to fix it for style points."""
-    return offsetCommentExactRegex.match(line) is not None
-
-
-def match_offset_comment(line: str) -> str | None:
-    # TODO: intended to skip the expensive regex match, but is it necessary?
-    if not line.startswith('//'):
-        return None
-
-    match = offsetCommentRegex.match(line)
-    return match.group(1) if match is not None else None
-
-
-def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
-    """Read the IO stream (file) line-by-line and give the following report:
-       Foreach code block (function) in the file, what are its starting and
-       ending line numbers, and what is the given offset in the original
-       binary. We expect the result to be ordered by line number because we
-       are reading the file from start to finish."""
-
-    blocks = []
-
-    offset = None
-    function_sig = None
-    start_line = None
-    state = ReaderState.WANT_OFFSET
-
-    for line_no, line in enumerate(stream):
-        if state in (ReaderState.WANT_SIG, ReaderState.IN_FUNC):
-            # Naive but reasonable assumption that functions will end with
-            # a curly brace on its own line with no prepended spaces.
-            if line.startswith('}'):
-                # TODO: could streamline this and the next case
-                block = CodeBlock(offset=offset,
-                                  signature=function_sig,
-                                  start_line=start_line,
-                                  end_line=line_no)
-
-                blocks.append(block)
-                state = ReaderState.WANT_OFFSET
-            elif match_offset_comment(line) is not None:
-                # We hit another offset unexpectedly before detecting the
-                # end of the function. We can recover easily by just
-                # ending the function here.
-                block = CodeBlock(offset=offset,
-                                  signature=function_sig,
-                                  start_line=start_line,
-                                  end_line=line_no - 1)
-
-                blocks.append(block)
-                state = ReaderState.WANT_OFFSET
-
-            # We want to grab the function signature so we can identify
-            # the code block. Skip any blank lines or comments
-            # that follow the offset comment.
-            elif (not is_blank_or_comment(line)
-                  and state == ReaderState.WANT_SIG):
-                function_sig = line.strip()
-                state = ReaderState.IN_FUNC
-
-        if state == ReaderState.WANT_OFFSET:
-            match = match_offset_comment(line)
-            if match is not None:
-                offset = int(match, 16)
-                start_line = line_no
-                state = ReaderState.WANT_SIG
-
-    return blocks
-
-
-def file_is_cpp(filename: str) -> bool:
-    # TODO: expand to check header files also?
-    (basefile, ext) = os.path.splitext(filename)
-    return ext.lower() == '.cpp'
-
-
-def walk_source_dir(source: str) -> Iterator[tuple]:
-    """Generator to walk the given directory recursively and return
-       any .cpp files found."""
-
-    for subdir, dirs, files in os.walk(source):
-        for file in files:
-            if not file_is_cpp(file):
-                continue
-
-            yield os.path.join(subdir, file)
+from typing import TextIO
+from isledecomp.dir import walk_source_dir
+from isledecomp.parser import find_code_blocks
+from isledecomp.parser.util import (
+    match_offset_comment,
+    is_exact_offset_comment
+)
 
 
 def sig_truncate(sig: str) -> str:
