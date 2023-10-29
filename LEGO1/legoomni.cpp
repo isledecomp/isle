@@ -14,6 +14,8 @@
 #include "mxomnicreateparam.h"
 #include "mxticklemanager.h"
 
+const char* g_current = "current";
+
 // 0x100f4588
 MxAtomId* g_nocdSourceName = NULL;
 
@@ -46,6 +48,13 @@ void LegoOmni::CreateBackgroundAudio()
 void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x1005b0c0
+LegoEntity* LegoOmni::FindByEntityIdOrAtomId(MxAtomId& p_atom, int p_entityid)
+{
+	// TODO
+	return NULL;
 }
 
 // OFFSET: LEGO1 0x1005b400 STUB
@@ -383,18 +392,33 @@ MxResult LegoOmni::DeleteObject(MxDSAction& ds)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005b3c0 STUB
+// OFFSET: LEGO1 0x1005b3c0
 MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 {
-	// TODO
-	return TRUE;
+	if (MxOmni::DoesEntityExist(ds)) {
+		if (FindByEntityIdOrAtomId(ds.GetAtomId(), ds.GetObjectId()) == NULL) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1005b2f0 STUB
-int LegoOmni::Vtable0x30(char*, int, MxCore*)
+// OFFSET: LEGO1 0x1005b2f0
+LegoWorld* LegoOmni::Vtable0x30(const char* p_id, int p_entityId, MxCore* p_presenter)
 {
-	// TODO
-	return 0;
+	LegoWorld* foundEntity = NULL;
+	if (strcmpi(p_id, g_current)) {
+		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, LookupMode_LowerCase2), p_entityId);
+	}
+	else {
+		foundEntity = this->m_currentWorld;
+	}
+
+	if (foundEntity != NULL) {
+		foundEntity->VTable0x58(p_presenter);
+	}
+
+	return foundEntity;
 }
 
 // OFFSET: LEGO1 0x1005b3a0
