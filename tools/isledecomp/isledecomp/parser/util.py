@@ -4,20 +4,18 @@ from collections import namedtuple
 
 
 CodeBlock = namedtuple('CodeBlock',
-                       ['offset', 'signature', 'start_line', 'end_line'])
-
-
-FunctionOffset = namedtuple('FunctionOffset',
-                            ['raw', 'address', 'is_stub'])
+                       ['offset', 'signature', 'start_line', 'end_line',
+                        'offset_comment'])
 
 
 # To match a reasonable variance of formatting for the offset comment
-offsetCommentRegex = re.compile(r'//\s*OFFSET:\s*\w+\s+(?:0x)?([a-f0-9]+)',
+offsetCommentRegex = re.compile(r'//\s*OFFSET:\s*\w+\s+(?:0x)?([a-f0-9]+)(\s+STUB)?',
                                 flags=re.I)
 
 # To match the exact syntax (text upper case, hex lower case, with spaces)
 # that is used in most places
-offsetCommentExactRegex = re.compile(r'^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)(?: STUB)?$')
+# TODO: template and stub mutually exclusive?
+offsetCommentExactRegex = re.compile(r'^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)(?: STUB| TEMPLATE)?$')
 
 
 def is_blank_or_comment(line: str) -> bool:

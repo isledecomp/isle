@@ -5,7 +5,6 @@ from typing import TextIO
 from isledecomp.dir import walk_source_dir
 from isledecomp.parser import find_code_blocks
 from isledecomp.parser.util import (
-    match_offset_comment,
     is_exact_offset_comment
 )
 
@@ -14,16 +13,6 @@ def sig_truncate(sig: str) -> str:
     """Helper to truncate function names to 50 chars and append ellipsis
        if needed. Goal is to stay under 80 columns for tool output."""
     return f"{sig[:47]}{'...' if len(sig) >= 50 else ''}"
-
-
-def get_inexact_offset_comments(stream: TextIO) -> [tuple]:
-    """Read the file stream and return the line number and string
-       for any offset comments that don't exactly match the template."""
-    return ([
-        (line_no, line.strip())
-        for line_no, line in enumerate(stream)
-        if match_offset_comment(line) and not is_exact_offset_comment(line)
-    ])
 
 
 def check_file(filename: str, verbose: bool = False) -> bool:
@@ -35,7 +24,10 @@ def check_file(filename: str, verbose: bool = False) -> bool:
         # TODO: Should combine these checks if/when we refactor.
         # This is just for simplicity / proof of concept.
         f.seek(os.SEEK_SET, 0)
-        bad_comments = get_inexact_offset_comments(f)
+
+    bad_comments = [(block.start_line, block.offset_comment)
+                    for block in code_blocks
+                    if not is_exact_offset_comment(block.offset_comment)]
 
     just_offsets = [block.offset for block in code_blocks]
     sorted_offsets = sorted(just_offsets)

@@ -26,6 +26,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
     blocks = []
 
     offset = None
+    offset_comment = None
     function_sig = None
     start_line = None
     state = ReaderState.WANT_OFFSET
@@ -39,7 +40,8 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                 block = CodeBlock(offset=offset,
                                   signature=function_sig,
                                   start_line=start_line,
-                                  end_line=line_no)
+                                  end_line=line_no,
+                                  offset_comment=offset_comment)
 
                 blocks.append(block)
                 state = ReaderState.WANT_OFFSET
@@ -50,7 +52,8 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                 block = CodeBlock(offset=offset,
                                   signature=function_sig,
                                   start_line=start_line,
-                                  end_line=line_no - 1)
+                                  end_line=line_no - 1,
+                                  offset_comment=offset_comment)
 
                 blocks.append(block)
                 state = ReaderState.WANT_OFFSET
@@ -67,6 +70,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
             match = match_offset_comment(line)
             if match is not None:
                 offset = int(match, 16)
+                offset_comment = line.strip()
                 start_line = line_no
                 state = ReaderState.WANT_SIG
 
