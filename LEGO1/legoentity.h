@@ -15,7 +15,7 @@ public:
 	// Inlined at 0x100853f7
 	inline LegoEntity()
 	{
-		// TODO
+		Init();
 	}
 
 	__declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
