@@ -40,7 +40,7 @@ struct Smack {
 	unsigned long m_trackType[7];
 	unsigned long m_extra;
 	unsigned long m_newPalette;
-	unsigned int m_palette[193];
+	unsigned char m_palette[772];
 	unsigned long m_frameNum;
 	unsigned long m_lastRectX;
 	unsigned long m_lastRectY;
