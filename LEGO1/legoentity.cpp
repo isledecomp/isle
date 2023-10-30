@@ -3,6 +3,7 @@
 #include "define.h"
 #include "legoomni.h"
 #include "legoutil.h"
+#include "legoworld.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
@@ -60,12 +61,12 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 	Init();
 }
 
-// OFFSET: LEGO1 0x10010880 STUB
+// OFFSET: LEGO1 0x10010880
 void LegoEntity::SetWorld()
 {
 	LegoWorld* world = GetCurrentWorld();
 	if (world != NULL && world != (LegoWorld*) this) {
-		// TODO: world->AddEntity(this);
+		world->VTable0x58(this);
 	}
 }
 
