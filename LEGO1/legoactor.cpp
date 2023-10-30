@@ -4,25 +4,25 @@ DECOMP_SIZE_ASSERT(LegoActor, 0x78)
 
 // Probably in header
 // OFFSET: LEGO1 0x10002cc0
-float LegoActor::VTable0x50()
+MxFloat LegoActor::VTable0x50()
 {
 	return m_unk68;
 }
 
 // OFFSET: LEGO1 0x10002cd0
-void LegoActor::VTable0x54(float p_unk)
+void LegoActor::VTable0x54(MxFloat p_unk)
 {
 	m_unk68 = p_unk;
 }
 
 // OFFSET: LEGO1 0x10002ce0
-void LegoActor::VTable0x58(float p_unk)
+void LegoActor::VTable0x58(MxFloat p_unk)
 {
 	m_unk70 = p_unk;
 }
 
 // OFFSET: LEGO1 0x10002cf0
-float LegoActor::VTable0x5c()
+MxFloat LegoActor::VTable0x5c()
 {
 	return m_unk70;
 }
