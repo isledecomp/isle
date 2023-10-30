@@ -29,7 +29,7 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 			((MxRAMStreamProvider*) m_provider)->GetBufferOfFileSize(),
 			((MxRAMStreamProvider*) m_provider)->GetFileSize()
 		);
-		m_buffer.FUN_100c6780(
+		m_buffer.SetBufferPointer(
 			((MxRAMStreamProvider*) m_provider)->GetBufferOfFileSize(),
 			((MxRAMStreamProvider*) m_provider)->GetFileSize()
 		);
