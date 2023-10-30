@@ -30,7 +30,7 @@ public:
 	void FUN_100c6f80(MxU32 p_unk);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
-	inline MxU8 GetWriteOffset() { return m_writeOffset; }
+	inline MxU32 GetWriteOffset() { return m_writeOffset; }
 
 private:
 	MxU8* m_pBuffer;
