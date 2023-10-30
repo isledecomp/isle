@@ -29,7 +29,7 @@ MxDSBuffer::~MxDSBuffer()
 			// TODO
 		}
 		else if (m_mode == MxDSBufferType_Allocate || m_mode == MxDSBufferType_Unknown) {
-			free(m_pBuffer);
+			delete m_pBuffer;
 		}
 	}
 
