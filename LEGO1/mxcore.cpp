@@ -1,13 +1,12 @@
 #include "mxcore.h"
 
-// 0x1010141c
-unsigned int g_mxcoreCount = 0;
+#include "define.h"
 
 // OFFSET: LEGO1 0x100ae1a0
 MxCore::MxCore()
 {
-	m_id = g_mxcoreCount;
-	g_mxcoreCount++;
+	m_id = g_mxcoreCount[0];
+	g_mxcoreCount[0]++;
 }
 
 // OFFSET: LEGO1 0x100ae1e0
