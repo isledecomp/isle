@@ -7,6 +7,7 @@
 
 class MxCore;
 
+// VTABLE 0x100dc860
 class MxThread {
 public:
 	// Note: Comes before virtual destructor
@@ -34,16 +35,15 @@ private:
 	MxU32 m_threadId;
 	MxBool m_running;
 	MxSemaphore m_semaphore;
+
+protected:
+	MxCore* m_target;
 };
 
+// VTABLE 0x100dc6d8
 class MxTickleThread : public MxThread {
 public:
 	MxTickleThread(MxCore* p_target, int p_frequencyMS);
-
-	// Unclear at this time whether this function and the m_target field are
-	// actually a general "userdata" pointer in the base MxThread, but it seems
-	// like the only usage is with an MxTickleThread.
-	MxResult StartWithTarget(MxCore* p_target);
 
 	// Only inlined, no offset
 	virtual ~MxTickleThread() {}
@@ -51,7 +51,6 @@ public:
 	MxResult Run() override;
 
 private:
-	MxCore* m_target;
 	MxS32 m_frequencyMS;
 };
 

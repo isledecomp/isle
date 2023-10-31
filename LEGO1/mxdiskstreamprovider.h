@@ -13,12 +13,11 @@ class MxDiskStreamProvider;
 class MxDiskStreamProviderThread : public MxThread {
 public:
 	// Only inlined, no offset
-	inline MxDiskStreamProviderThread() : MxThread(), m_target(NULL) {}
+	inline MxDiskStreamProviderThread() : MxThread() { m_target = NULL; }
 
 	MxResult Run() override;
 
-private:
-	MxDiskStreamProvider* m_target;
+	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
 };
 
 // VTABLEADDR 0x100dd138
@@ -45,12 +44,12 @@ public:
 
 	void PerformWork();
 
-	virtual MxResult SetResourceToGet(void* p_resource) override; // vtable+0x14
-	virtual MxU32 GetFileSize() override;                         // vtable+0x18
-	virtual MxU32 GetStreamBuffersNum() override;                 // vtable+0x1c
-	virtual void vtable0x20(undefined4 p_unknown1) override;      // vtable+0x20
-	virtual MxU32 GetLengthInDWords() override;                   // vtable+0x24
-	virtual MxU32* GetBufferForDWords() override;                 // vtable+0x28
+	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
+	virtual MxU32 GetFileSize() override;                                       // vtable+0x18
+	virtual MxU32 GetStreamBuffersNum() override;                               // vtable+0x1c
+	virtual void vtable0x20(undefined4 p_unknown1) override;                    // vtable+0x20
+	virtual MxU32 GetLengthInDWords() override;                                 // vtable+0x24
+	virtual MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
 private:
 	MxDiskStreamProviderThread m_thread; // 0x10

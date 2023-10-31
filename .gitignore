@@ -17,3 +17,5 @@ LEGO1.DLL
 build/
 *.swp
 __pycache__/
+LEGO1PROGRESS.HTML
+LEGO1PROGRESS.SVG

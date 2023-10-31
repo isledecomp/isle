@@ -1,5 +1,10 @@
 #include "mxdiskstreamcontroller.h"
 
+#include "mxautolocker.h"
+#include "mxdiskstreamprovider.h"
+#include "mxomni.h"
+#include "mxticklemanager.h"
+
 // OFFSET: LEGO1 0x100c7120 STUB
 MxDiskStreamController::MxDiskStreamController()
 {
@@ -19,11 +24,30 @@ MxResult MxDiskStreamController::Tickle()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100c7790 STUB
+// OFFSET: LEGO1 0x100c7790
 MxResult MxDiskStreamController::Open(const char* p_filename)
 {
-	// TODO
-	return FAILURE;
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxResult result = MxStreamController::Open(p_filename);
+
+	if (result == SUCCESS) {
+		m_provider = new MxDiskStreamProvider();
+		if (m_provider == NULL) {
+			result = FAILURE;
+		}
+		else {
+			result = m_provider->SetResourceToGet(this);
+			if (result != SUCCESS) {
+				delete m_provider;
+				m_provider = NULL;
+			}
+			else {
+				TickleManager()->RegisterClient(this, 10);
+			}
+		}
+	}
+
+	return result;
 }
 
 // OFFSET: LEGO1 0x100c7880

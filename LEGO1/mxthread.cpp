@@ -68,13 +68,6 @@ MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
 	m_frequencyMS = p_frequencyMS;
 }
 
-// OFFSET: LEGO1 0x100d0f50
-MxResult MxTickleThread::StartWithTarget(MxCore* p_target)
-{
-	m_target = p_target;
-	return Start(0x1000, 0);
-}
-
 // Match except for register allocation
 // OFFSET: LEGO1 0x100b8c90
 MxResult MxTickleThread::Run()
