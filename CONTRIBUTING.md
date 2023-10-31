@@ -35,7 +35,7 @@ We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.ht
 - `m_camelCase` for member variables.
 - `g_camelCase` for global variables.
 - `p_camelCase` for function parameters.
-- Instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](https://github.com/isledecomp/isle/blob/master/LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
+- Instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
 
 ## Questions?
 
