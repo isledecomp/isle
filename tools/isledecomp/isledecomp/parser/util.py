@@ -5,17 +5,47 @@ from collections import namedtuple
 
 CodeBlock = namedtuple('CodeBlock',
                        ['offset', 'signature', 'start_line', 'end_line',
-                        'offset_comment'])
+                        'offset_comment', 'module', 'is_template', 'is_stub'])
 
+OffsetMatch = namedtuple('OffsetMatch', ['module', 'address',
+                                         'is_template', 'is_stub'])
+
+# This has not been formally established, but considering that "STUB"
+# is a temporary state for a function, we assume it will appear last,
+# after any other modifiers (i.e. TEMPLATE)
 
 # To match a reasonable variance of formatting for the offset comment
-offsetCommentRegex = re.compile(r'//\s*OFFSET:\s*\w+\s+(?:0x)?([a-f0-9]+)(\s+STUB)?',
+offsetCommentRegex = re.compile(r'\s*//\s*OFFSET:\s*(\w+)\s+(?:0x)?([a-f0-9]+)(\s+TEMPLATE)?(\s+STUB)?',  # nopep8
                                 flags=re.I)
 
 # To match the exact syntax (text upper case, hex lower case, with spaces)
 # that is used in most places
-# TODO: template and stub mutually exclusive?
-offsetCommentExactRegex = re.compile(r'^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)(?: STUB| TEMPLATE)?$')
+offsetCommentExactRegex = re.compile(r'^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)( TEMPLATE)?( STUB)?$')  # nopep8
+
+
+# The goal here is to just read whatever is on the next line, so some
+# flexibility in the formatting seems OK
+templateCommentRegex = re.compile(r'\s*//\s+(.*)')
+
+
+# To remove any comment (//) or block comment (/*) and its leading spaces
+# from the end of a code line
+trailingCommentRegex = re.compile(r'(\s*(?://|/\*).*)$')
+
+
+def template_function_name(line: str) -> str:
+    """Parse function signature for special TEMPLATE functions"""
+    template_match = templateCommentRegex.match(line)
+
+    # If we don't match, you get whatever is on the line as the signature
+    if template_match is not None:
+        return template_match.group(1)
+    else:
+        return line
+
+
+def remove_trailing_comment(line: str) -> str:
+    return trailingCommentRegex.sub('', line)
 
 
 def is_blank_or_comment(line: str) -> bool:
@@ -35,11 +65,12 @@ def is_exact_offset_comment(line: str) -> bool:
     return offsetCommentExactRegex.match(line) is not None
 
 
-def match_offset_comment(line: str) -> str | None:
-    # TODO: intended to skip the expensive regex match, but is it necessary?
-    # TODO: this will skip indented offsets
-    if not line.startswith('//'):
+def match_offset_comment(line: str) -> OffsetMatch | None:
+    match = offsetCommentRegex.match(line)
+    if match is None:
         return None
 
-    match = offsetCommentRegex.match(line)
-    return match.group(1) if match is not None else None
+    return OffsetMatch(module=match.group(1),
+                       address=int(match.group(2), 16),
+                       is_template=match.group(3) is not None,
+                       is_stub=match.group(4) is not None)

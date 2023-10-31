@@ -30,9 +30,10 @@ def test_sanity():
 
     assert len(blocks) == 3
     assert code_blocks_are_sorted(blocks) is True
-    # n.b. The parser returns line numbers as 0-based
-    assert blocks[0].start_line == 5
-    assert blocks[0].end_line == 9
+    # n.b. The parser returns line numbers as 1-based
+    # Function starts when we see the opening curly brace
+    assert blocks[0].start_line == 8
+    assert blocks[0].end_line == 10
 
 
 def test_oneline():
@@ -42,11 +43,7 @@ def test_oneline():
         blocks = find_code_blocks(f)
 
     assert len(blocks) == 2
-    assert blocks[0].start_line == 3
-    # TODO: Because of the way it works now, this captures the blank line
-    # as part of the function. That's not *incorrect* per se, but
-    # this needs to be more consistent if we want the tool to sort the
-    # code blocks in the file.
+    assert blocks[0].start_line == 5
     assert blocks[0].end_line == 5
 
 
@@ -70,3 +67,39 @@ def test_jumbled_case():
 
     assert len(blocks) == 3
     assert code_blocks_are_sorted(blocks) is False
+
+
+def test_bad_file():
+    with sample_file('poorly_formatted.cpp') as f:
+        blocks = find_code_blocks(f)
+
+    assert len(blocks) == 3
+
+
+def test_indented():
+    """Offsets for functions inside of a class will probably be indented."""
+    with sample_file('basic_class.cpp') as f:
+        blocks = find_code_blocks(f)
+
+    # TODO: We don't properly detect the end of these functions
+    # because the closing brace is indented. However... knowing where each
+    # function ends is less important (for now) than capturing
+    # all the functions that are there.
+
+    assert len(blocks) == 2
+    assert blocks[0].offset == int('0x12345678', 16)
+    assert blocks[0].start_line == 15
+    #assert blocks[0].end_line == 18
+
+    assert blocks[1].offset == int('0xdeadbeef', 16)
+    assert blocks[1].start_line == 22
+    #assert blocks[1].end_line == 24
+
+def test_inline():
+    with sample_file('inline.cpp') as f:
+        blocks = find_code_blocks(f)
+
+    assert len(blocks) == 2
+    for block in blocks:
+        assert block.start_line is not None
+        assert block.start_line == block.end_line

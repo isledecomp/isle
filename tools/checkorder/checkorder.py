@@ -2,7 +2,10 @@ import os
 import sys
 import argparse
 from typing import TextIO
-from isledecomp.dir import walk_source_dir
+from isledecomp.dir import (
+    walk_source_dir,
+    file_is_cpp
+)
 from isledecomp.parser import find_code_blocks
 from isledecomp.parser.util import (
     is_exact_offset_comment
