@@ -246,3 +246,12 @@ class SymInfo:
         return self.names[name]
     else:
         logger.error('Failed to find function symbol with name: %s', name)
+
+  def verify_vtable(self, class_name, func_name, offset):
+    for class_id, c in classes.items():
+      if c.name == class_name and c.field_list:
+        fl = fieldlists[c.field_list]
+        for v in fl.vtable:
+          if v.name == func_name and v.offset == offset:
+            return True
+    return False

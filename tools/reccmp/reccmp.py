@@ -400,16 +400,17 @@ for subdir, dirs, files in os.walk(source):
                 break
 
               try:
-                start_brkt = line.index('(')
+                start_brkt = line.rindex('(')
                 name_discovery = line[0:start_brkt].split()
                 vtbl_name = name_discovery[len(name_discovery) - 1]
                 break
               except ValueError:
                 continue
           except ValueError:
-            pass
+            continue
 
-          print('Found vtable function %s::%s offset %s' % (in_class, vtbl_name, hex(address)))
+          if not syminfo.verify_vtable(in_class, vtbl_name, address):
+            raise Exception('Function %s::%s is not at %s' % (in_class, vtbl_name, hex(address)))
         else:
           # NOTE: Naive implementation, won't support vtable functions after a nested class
           class_discovery = line.split()
