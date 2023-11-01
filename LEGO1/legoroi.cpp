@@ -9,13 +9,13 @@ typedef struct {
 	MxS32 green;
 	MxS32 blue;
 	MxS32 unk10;
-} roi_color_alias;
+} ROIColorAlias;
 
 // 0x100dbe28
-double g_unk_roiConstant = 0.00392156862745098;
+const double g_normalizeByteToFloat = 1.0 / 255;
 
 // 0x101011b0
-roi_color_alias g_roiColorAliases[22] = {
+ROIColorAlias g_roiColorAliases[22] = {
 	{"lego black", 0x21, 0x21, 0x21, 0},       {"lego black f", 0x21, 0x21, 0x21, 0},
 	{"lego black flat", 0x21, 0x21, 0x21, 0},  {"lego blue", 0x00, 0x54, 0x8c, 0},
 	{"lego blue flat", 0x00, 0x54, 0x8c, 0},   {"lego brown", 0x4a, 0x23, 0x1a, 0},
@@ -33,7 +33,7 @@ roi_color_alias g_roiColorAliases[22] = {
 MxS32 g_roiConfig = 100;
 
 // 0x101013ac
-ROI_Handler g_someHandlerFunction = NULL;
+ROIHandler g_someHandlerFunction = NULL;
 
 // OFFSET: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(MxS32 p_roi)
@@ -42,7 +42,13 @@ void LegoROI::configureLegoROI(MxS32 p_roi)
 }
 
 // OFFSET: LEGO1 0x100a9bf0
-MxBool LegoROI::CallTheHandlerFunction(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
+MxBool LegoROI::CallTheHandlerFunction(
+	char* p_param,
+	MxFloat& p_red,
+	MxFloat& p_green,
+	MxFloat& p_blue,
+	MxFloat& p_other
+)
 {
 	// TODO
 	if (p_param == NULL)
@@ -54,21 +60,21 @@ MxBool LegoROI::CallTheHandlerFunction(char* p_param, float& p_red, float& p_gre
 			p_param = buf;
 	}
 
-	return LegoROI::ColorAliasLookup(p_param, p_red, p_green, p_blue, p_other);
+	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_other);
 }
 
 // OFFSET: LEGO1 0x100a9c50
-MxBool LegoROI::ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
+MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green, MxFloat& p_blue, MxFloat& p_other)
 {
 	// TODO: this seems awfully hacky for these devs. is there a dynamic way
 	// to represent `the end of this array` that would improve this?
 	MxU32 i = 0;
 	do {
 		if (strcmpi(g_roiColorAliases[i].name, p_param) == 0) {
-			p_red = g_roiColorAliases[i].red * g_unk_roiConstant;
-			p_green = g_roiColorAliases[i].green * g_unk_roiConstant;
-			p_blue = g_roiColorAliases[i].blue * g_unk_roiConstant;
-			p_other = g_roiColorAliases[i].unk10 * g_unk_roiConstant;
+			p_red = g_roiColorAliases[i].red * g_normalizeByteToFloat;
+			p_green = g_roiColorAliases[i].green * g_normalizeByteToFloat;
+			p_blue = g_roiColorAliases[i].blue * g_normalizeByteToFloat;
+			p_other = g_roiColorAliases[i].unk10 * g_normalizeByteToFloat;
 			return TRUE;
 		}
 		i++;
@@ -78,7 +84,7 @@ MxBool LegoROI::ColorAliasLookup(char* p_param, float& p_red, float& p_green, fl
 }
 
 // OFFSET: LEGO1 0x100a9d30
-void LegoROI::SetSomeHandlerFunction(ROI_Handler p_func)
+void LegoROI::SetSomeHandlerFunction(ROIHandler p_func)
 {
 	g_someHandlerFunction = p_func;
 }
