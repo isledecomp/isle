@@ -4,11 +4,11 @@
 
 // SIZE 0x14
 typedef struct {
-	const char* name;
-	MxS32 red;
-	MxS32 green;
-	MxS32 blue;
-	MxS32 unk10;
+	const char* m_name;
+	MxS32 m_red;
+	MxS32 m_green;
+	MxS32 m_blue;
+	MxS32 m_unk10;
 } ROIColorAlias;
 
 // 0x100dbe28
@@ -70,11 +70,11 @@ MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green
 	// to represent `the end of this array` that would improve this?
 	MxU32 i = 0;
 	do {
-		if (strcmpi(g_roiColorAliases[i].name, p_param) == 0) {
-			p_red = g_roiColorAliases[i].red * g_normalizeByteToFloat;
-			p_green = g_roiColorAliases[i].green * g_normalizeByteToFloat;
-			p_blue = g_roiColorAliases[i].blue * g_normalizeByteToFloat;
-			p_other = g_roiColorAliases[i].unk10 * g_normalizeByteToFloat;
+		if (strcmpi(g_roiColorAliases[i].m_name, p_param) == 0) {
+			p_red = g_roiColorAliases[i].m_red * g_normalizeByteToFloat;
+			p_green = g_roiColorAliases[i].m_green * g_normalizeByteToFloat;
+			p_blue = g_roiColorAliases[i].m_blue * g_normalizeByteToFloat;
+			p_other = g_roiColorAliases[i].m_unk10 * g_normalizeByteToFloat;
 			return TRUE;
 		}
 		i++;
