@@ -40,6 +40,7 @@ public:
 private:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteEndOfVariables(LegoStream* p_stream);
+	void SetROIHandlerFunction();
 
 private:
 	char* m_savePath; // 0x0
@@ -57,5 +58,7 @@ private:
 	undefined4 m_unk428;
 	undefined4 m_unk42c;
 };
+
+MxBool ROIHandlerFunction(char* p_0, char* p_output, MxU32 p_copyLen);
 
 #endif // LEGOGAMESTATE_H
