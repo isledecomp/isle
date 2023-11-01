@@ -23,7 +23,11 @@ public:
 	}
 
 private:
-	void Init();
+	virtual void Init();     // vtable+0x68
+	virtual undefined4 vtable6c(undefined4 p_unknown); // vtable+0x6c
+
+	undefined4 Destroy();
+	undefined4 m_unk4c;
 };
 
 #endif // LEGOENTITYPRESENTER_H
