@@ -24,6 +24,12 @@ public:
 		return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
 	}
 
+	virtual void VTable0x58();
+	virtual void VTable0x5c();
+	virtual void VTable0x60();
+	virtual void VTable0x64();
+
+private:
 	MxUnkList m_list;
 };
 
