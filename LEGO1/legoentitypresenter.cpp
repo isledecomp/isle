@@ -3,6 +3,8 @@
 #include "legoomni.h"
 #include "legovideomanager.h"
 
+DECOMP_SIZE_ASSERT(LegoEntityPresenter, 0x50);
+
 // OFFSET: LEGO1 0x10053440
 LegoEntityPresenter::LegoEntityPresenter()
 {

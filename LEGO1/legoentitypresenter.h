@@ -4,6 +4,7 @@
 #include "mxcompositepresenter.h"
 
 // VTABLE 0x100d8398
+// SIZE 0x50
 class LegoEntityPresenter : public MxCompositePresenter {
 public:
 	LegoEntityPresenter();
