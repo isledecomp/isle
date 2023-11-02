@@ -11,6 +11,7 @@
 class MxStreamController;
 
 // VTABLE 0x100d4d38
+// SIZE 0x40
 class MxPresenter : public MxCore {
 public:
 	enum TickleState {

@@ -22,11 +22,13 @@ public:
 		return !strcmp(name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(name);
 	}
 
-private:
+	virtual void Destroy() override;                   // vtable+0x38
 	virtual void Init();                               // vtable+0x68
 	virtual undefined4 vtable6c(undefined4 p_unknown); // vtable+0x6c
 
-	undefined4 Destroy();
+private:
+	void Destroy(MxBool p_fromDestructor);
+
 	undefined4 m_unk4c;
 };
 
