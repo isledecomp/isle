@@ -157,14 +157,9 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 			if (p_right < leftRight->m_right)
 				p_right = leftRight->m_right;
 
-			// TODO: Currently inlined, shouldn't be
 			b = a;
 			b.Advance();
-
-			if (a.HasMatch()) {
-				a.Destroy();
-				a.Detach();
-			}
+			a.Destroy();
 
 			if (!b.Current(leftRight))
 				break;
