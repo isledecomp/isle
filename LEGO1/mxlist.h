@@ -72,8 +72,7 @@ public:
 
 	virtual ~MxList();
 
-	void Append(T);
-	void OtherAppend(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
+	void Append(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
 	void DeleteAll();
 	MxU32 GetCount() { return this->m_count; }
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }

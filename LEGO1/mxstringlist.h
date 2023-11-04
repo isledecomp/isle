@@ -21,7 +21,7 @@ typedef MxListCursorChild<MxString> MxStringListCursor;
 // MxList<MxString>::~MxList<MxString>
 
 // OFFSET: LEGO1 0x100cbb40 TEMPLATE
-// MxList<MxString>::OtherAppend
+// MxList<MxString>::Append
 
 // OFFSET: LEGO1 0x100cc2d0 TEMPLATE
 // MxList<MxString>::_InsertEntry
