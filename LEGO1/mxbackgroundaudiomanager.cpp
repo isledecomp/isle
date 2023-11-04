@@ -160,7 +160,7 @@ void MxBackgroundAudioManager::StartAction(MxParam& p)
 	m_unk138 = (MxCompositePresenter*) ((MxNotificationParam&) p).GetSender();
 	m_action2.SetAtomId(m_unk138->GetAction()->GetAtomId());
 	m_action2.SetObjectId(m_unk138->GetAction()->GetObjectId());
-	m_unk144 = ((MxDSSound*)(m_unk138->GetAction()))->GetVolume();
+	m_unk144 = ((MxDSSound*) (m_unk138->GetAction()))->GetVolume();
 	m_unk138->VTable0x60(0);
 }
 
