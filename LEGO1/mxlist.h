@@ -153,21 +153,6 @@ inline void MxList<T>::DeleteAll()
 }
 
 template <class T>
-inline void MxList<T>::Append(T p_newobj)
-{
-	MxListEntry<T>* currentLast = this->m_last;
-	MxListEntry<T>* newEntry = new MxListEntry<T>(p_newobj, currentLast);
-
-	if (currentLast)
-		currentLast->SetNext(newEntry);
-	else
-		this->m_first = newEntry;
-
-	this->m_last = newEntry;
-	this->m_count++;
-}
-
-template <class T>
 inline MxListEntry<T>* MxList<T>::_InsertEntry(T p_newobj, MxListEntry<T>* p_prev, MxListEntry<T>* p_next)
 {
 	MxListEntry<T>* newEntry = new MxListEntry<T>(p_newobj, p_prev, p_next);
