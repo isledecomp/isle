@@ -13,7 +13,7 @@ public:
 	MxSmkPresenter();
 	virtual ~MxSmkPresenter() override;
 
-    // OFFSET: LEGO1 0x100b3730
+	// OFFSET: LEGO1 0x100b3730
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// 0x10101e38

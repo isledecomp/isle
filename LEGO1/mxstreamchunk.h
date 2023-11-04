@@ -5,7 +5,7 @@
 
 // VTABLE 0x100dc2a8
 class MxStreamChunk : public MxDSChunk {
-    // OFFSET: LEGO1 0x100b1fe0
+	// OFFSET: LEGO1 0x100b1fe0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// 0x10101e5c

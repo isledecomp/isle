@@ -8,7 +8,7 @@
 // SIZE 0x6c
 class MxStillPresenter : public MxVideoPresenter {
 public:
-    // OFFSET: LEGO1 0x100435c0
+	// OFFSET: LEGO1 0x100435c0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// 0x100f0184
