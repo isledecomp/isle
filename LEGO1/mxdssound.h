@@ -30,6 +30,8 @@ public:
 	virtual void Deserialize(char** p_source, MxS16 p_unk24) override; // vtable+1c;
 	virtual MxDSAction* Clone() override;                              // vtable+2c;
 
+	virtual inline MxS32 GetVolume() const { return m_volume; }
+
 private:
 	MxU32 m_sizeOnDisk;
 	MxS32 m_volume; // 0xbc

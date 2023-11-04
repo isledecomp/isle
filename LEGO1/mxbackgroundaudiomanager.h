@@ -1,9 +1,11 @@
 #ifndef MXBACKGROUNDAUDIOMANAGER_H
 #define MXBACKGROUNDAUDIOMANAGER_H
 
+#include "mxcompositepresenter.h"
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxnotificationmanager.h"
+#include "mxpresenter.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d9fe8
@@ -26,10 +28,18 @@ public:
 		return !strcmp(name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(name);
 	}
 
+	virtual MxResult Notify(MxParam& p) override;
+
+	void StartAction(MxParam& p);
+	void StopAction(MxParam& p);
+	virtual MxResult Tickle() override;
+
 	__declspec(dllexport) void Enable(unsigned char p);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Stop();
+	void FUN_1007f570();
+	void FUN_1007f5b0();
 
 private:
 	void Init();
@@ -38,9 +48,9 @@ private:
 
 	MxBool m_musicEnabled; // 0x8
 	MxDSAction m_action1;  // 0xc
-	MxS32 m_unka0;
+	MxCore* m_unka0;
 	MxDSAction m_action2; // 0xa4
-	MxS32 m_unk138;
+	MxCompositePresenter* m_unk138;
 	MxS32 m_unk13c;
 	MxS32 m_unk140;
 	MxS32 m_unk144;
