@@ -13,6 +13,19 @@ public:
 	MxSmkPresenter();
 	virtual ~MxSmkPresenter() override;
 
+	// OFFSET: LEGO1 0x100b3730
+	inline virtual const char* ClassName() const override // vtable+0xc
+	{
+		// 0x10101e38
+		return "MxSmkPresenter";
+	}
+
+	// OFFSET: LEGO1 0x100b3740
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, MxSmkPresenter::ClassName()) || MxVideoPresenter::IsA(name);
+	}
+
 	virtual void Destroy() override;
 	virtual void VTable0x5c(undefined4 p_unknown1) override;
 	virtual void VTable0x60() override;
