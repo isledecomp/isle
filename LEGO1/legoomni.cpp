@@ -1,8 +1,11 @@
 #include "legoomni.h"
 
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
+#include "legoplantmanager.h"
 #include "legosoundmanager.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
@@ -13,6 +16,7 @@
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
 #include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
 
 const char* g_current = "current";
 
@@ -412,6 +416,11 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
+// OFFSET: LEGO1 0x1001a700 STUB
+void FUN_1001a700()
+{
+}
+
 // OFFSET: LEGO1 0x10058e70
 MxResult LegoOmni::Create(MxOmniCreateParam& p)
 {
@@ -455,12 +464,34 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 		}
 	}
 
+	// TODO: there are a few more classes here
+	m_plantManager = new LegoPlantManager();
+	m_animationManager = new LegoAnimationManager();
+	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
-	m_bkgAudioManager = new MxBackgroundAudioManager();
+	// TODO: initialize list at m_unk78
 
-	SetAppCursor(1);
-	RegisterScripts();
-	return SUCCESS;
+	if (m_unk6c && m_gifManager && m_unkLegoSaveDataWriter && m_plantManager && m_animationManager &&
+		m_buildingManager) {
+		// TODO: initialize a bunch of MxVariables
+		RegisterScripts();
+		FUN_1001a700();
+		// todo: another function call. in legoomni maybe?
+		m_bkgAudioManager = new MxBackgroundAudioManager();
+		if (m_bkgAudioManager != NULL) {
+			m_transitionManager = new MxTransitionManager();
+			if (m_transitionManager != NULL) {
+				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
+					m_notificationManager->Register(this);
+					SetAppCursor(1);
+					m_gameState->SetSomeEnumState(0);
+					return SUCCESS;
+				}
+			}
+		}
+	}
+
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x10058c30 STUB
