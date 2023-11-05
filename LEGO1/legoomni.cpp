@@ -212,10 +212,27 @@ GifManager* GetGifManager()
 	return LegoOmni::GetInstance()->GetGifManager();
 }
 
+// OFFSET: LEGO1 0x100158e0
+MxDSAction& GetCurrentAction()
+{
+	return LegoOmni::GetInstance()->GetCurrentAction();
+}
+
 // OFFSET: LEGO1 0x10015900
 MxTransitionManager* TransitionManager()
 {
 	return LegoOmni::GetInstance()->GetTransitionManager();
+}
+
+// OFFSET: LEGO1 0x10015910
+void PlayMusic(MxU32 p_index)
+{
+	// index is the entityid of the music in jukebox.si
+	MxDSAction action;
+	action.SetAtomId(*g_jukeboxScript);
+	action.SetObjectId(p_index);
+
+	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
 }
 
 // OFFSET: LEGO1 0x100c0280

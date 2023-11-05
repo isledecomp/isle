@@ -41,7 +41,7 @@ MxLong Score::Notify(MxParam& p)
 	LegoWorld::Notify(p);
 	if (m_unkf6) {
 		switch (((MxNotificationParam&) p).GetNotification()) {
-		case PAINT:
+		case c_notificationStartAction:
 			ret = 1;
 			Paint();
 			break;
