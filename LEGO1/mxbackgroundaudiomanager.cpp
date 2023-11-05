@@ -183,6 +183,41 @@ void MxBackgroundAudioManager::StopAction(MxParam& p)
 	Lego()->HandleNotificationType2(p);
 }
 
+// OFFSET: LEGO1 0x1007f2f0
+MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
+{
+	if (!m_musicEnabled)
+	{
+		return SUCCESS;
+	}
+	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId())
+	{
+		MxDSAction action;
+		action.SetAtomId(GetCurrentAction().GetAtomId());
+		action.SetObjectId(GetCurrentAction().GetObjectId());
+		action.SetUnknown24(GetCurrentAction().GetUnknown24());
+
+		m_action2.SetAtomId(p_action.GetAtomId());
+		m_action2.SetObjectId(p_action.GetObjectId());
+		m_action2.SetUnknown84(this);
+		m_action2.SetUnknown8c(this);
+
+		MxResult result = Start(&m_action2);
+
+		GetCurrentAction().SetAtomId(action.GetAtomId());
+		GetCurrentAction().SetObjectId(action.GetObjectId());
+		GetCurrentAction().SetUnknown24(action.GetUnknown24());
+
+		if (result == SUCCESS)
+		{
+			m_unk13c = p_unknown2;
+			m_unk140 = p_unknown;
+		}
+		return result;
+	}
+	return FAILURE;
+}
+
 // OFFSET: LEGO1 0x1007ee40 STUB
 MxResult MxBackgroundAudioManager::Tickle()
 {

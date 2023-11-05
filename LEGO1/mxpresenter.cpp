@@ -65,7 +65,7 @@ void MxPresenter::SendTo_unkPresenter(MxOmni* p_omni)
 
 		NotificationManager()->Send(m_unkPresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 
-		m_action->SetOmni(p_omni ? p_omni : MxOmni::GetInstance());
+		m_action->SetUnknown8c(p_omni ? p_omni : MxOmni::GetInstance());
 		m_unkPresenter = NULL;
 	}
 }

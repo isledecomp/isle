@@ -32,6 +32,7 @@ public:
 
 	void StartAction(MxParam& p);
 	void StopAction(MxParam& p);
+	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2);
 	virtual MxResult Tickle() override;
 
 	__declspec(dllexport) void Enable(unsigned char p);

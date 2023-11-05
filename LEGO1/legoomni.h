@@ -79,6 +79,7 @@ public:
 	LegoGameState* GetGameState() { return m_gameState; }
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
+	MxDSAction& GetCurrentAction() { return m_action; }
 
 private:
 	undefined4 m_unk68;
@@ -124,5 +125,6 @@ LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
 GifManager* GetGifManager();
+MxDSAction& GetCurrentAction();
 
 #endif // LEGOOMNI_H
