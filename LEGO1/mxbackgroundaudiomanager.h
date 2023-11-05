@@ -1,7 +1,7 @@
 #ifndef MXBACKGROUNDAUDIOMANAGER_H
 #define MXBACKGROUNDAUDIOMANAGER_H
 
-#include "mxcompositepresenter.h"
+#include "mxaudiopresenter.h"
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxnotificationmanager.h"
@@ -33,7 +33,11 @@ public:
 	void StartAction(MxParam& p);
 	void StopAction(MxParam& p);
 	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2);
+
 	virtual MxResult Tickle() override;
+	void FUN_1007ee70();
+	void FUN_1007ef40();
+	void FadeInOrFadeOut();
 
 	__declspec(dllexport) void Enable(unsigned char p);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
@@ -49,12 +53,12 @@ private:
 
 	MxBool m_musicEnabled; // 0x8
 	MxDSAction m_action1;  // 0xc
-	MxCore* m_unka0;
+	MxAudioPresenter* m_unka0;
 	MxDSAction m_action2; // 0xa4
-	MxCompositePresenter* m_unk138;
+	MxAudioPresenter* m_unk138;
 	MxS32 m_unk13c;
 	MxS32 m_unk140;
-	MxS32 m_unk144;
+	MxS32 m_targetVolume;
 	MxS16 m_unk148;
 	MxAtomId m_script;
 };
