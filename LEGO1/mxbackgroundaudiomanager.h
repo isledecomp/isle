@@ -1,9 +1,11 @@
 #ifndef MXBACKGROUNDAUDIOMANAGER_H
 #define MXBACKGROUNDAUDIOMANAGER_H
 
+#include "mxaudiopresenter.h"
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxnotificationmanager.h"
+#include "mxpresenter.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100d9fe8
@@ -12,6 +14,9 @@ class MxBackgroundAudioManager : public MxCore {
 public:
 	MxBackgroundAudioManager();
 	virtual ~MxBackgroundAudioManager() override;
+
+	virtual MxLong Notify(MxParam& p) override; // vtable+0x04
+	virtual MxResult Tickle() override;         // vtable+0x08
 
 	// OFFSET: LEGO1 0x1007eb70
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -26,10 +31,20 @@ public:
 		return !strcmp(name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(name);
 	}
 
+	void StartAction(MxParam& p);
+	void StopAction(MxParam& p);
+	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2);
+
+	void FUN_1007ee70();
+	void FUN_1007ef40();
+	void FadeInOrFadeOut();
+
 	__declspec(dllexport) void Enable(unsigned char p);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Stop();
+	void LowerVolume();
+	void RaiseVolume();
 
 private:
 	void Init();
@@ -38,12 +53,12 @@ private:
 
 	MxBool m_musicEnabled; // 0x8
 	MxDSAction m_action1;  // 0xc
-	MxS32 m_unka0;
+	MxAudioPresenter* m_unka0;
 	MxDSAction m_action2; // 0xa4
-	MxS32 m_unk138;
+	MxAudioPresenter* m_unk138;
 	MxS32 m_unk13c;
 	MxS32 m_unk140;
-	MxS32 m_unk144;
+	MxS32 m_targetVolume;
 	MxS16 m_unk148;
 	MxAtomId m_script;
 };
