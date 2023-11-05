@@ -1,5 +1,6 @@
 #include "legonavcontroller.h"
 
+#include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
@@ -106,18 +107,14 @@ LegoNavController::LegoNavController()
 	MxTimer* timer = Timer();
 	this->m_time = timer->GetTime();
 
-	// TODO: InputManager()
-	// LegoInputManager* inputManager = InputManager();
-	// inputManager->Register(this);
+	InputManager()->Register(this);
 }
 
-// TODO: InputManager()
 // OFFSET: LEGO1 0x10054c30
-// LegoNavController::~LegoNavController()
-// {
-//   LegoInputManager* inputManager = InputManager();
-//   inputManager->UnRegister(this);
-// }
+LegoNavController::~LegoNavController()
+{
+	InputManager()->UnRegister(this);
+}
 
 // OFFSET: LEGO1 0x10054ca0
 void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
