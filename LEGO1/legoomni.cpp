@@ -133,7 +133,7 @@ void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005b0c0
+// OFFSET: LEGO1 0x1005b0c0 STUB
 LegoEntity* LegoOmni::FindByEntityIdOrAtomId(MxAtomId& p_atom, int p_entityid)
 {
 	// TODO

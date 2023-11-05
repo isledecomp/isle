@@ -28,7 +28,7 @@ void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 // OFFSET: LEGO1 0x100299f0 STUB
 MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	return SUCCESS;
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100299a0
