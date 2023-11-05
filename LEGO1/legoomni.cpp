@@ -1,5 +1,6 @@
 #include "legoomni.h"
 
+#include "gifmanager.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"
@@ -465,13 +466,14 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	}
 
 	// TODO: there are a few more classes here
+	m_gifManager = new GifManager();
 	m_plantManager = new LegoPlantManager();
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
 	// TODO: initialize list at m_unk78
 
-	if (m_unk6c && m_gifManager && m_unkLegoSaveDataWriter && m_plantManager && m_animationManager &&
+	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager &&
 		m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
