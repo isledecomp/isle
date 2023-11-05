@@ -27,6 +27,10 @@ public:
 	}
 
 	T GetValue() { return this->m_obj; }
+	inline MxListEntry* GetPrev() const { return m_prev; };
+	inline MxListEntry* GetNext() const { return m_next; };
+	inline void SetPrev(MxListEntry* p_node) { m_prev = p_node; };
+	inline void SetNext(MxListEntry* p_node) { m_next = p_node; };
 
 	friend class MxList<T>;
 	friend class MxListCursor<T>;
@@ -81,7 +85,6 @@ protected:
 	MxListEntry<T>* m_first; // +0x10
 	MxListEntry<T>* m_last;  // +0x14
 
-private:
 	void _DeleteEntry(MxListEntry<T>* match);
 	MxListEntry<T>* _InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
 };

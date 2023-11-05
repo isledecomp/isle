@@ -43,6 +43,7 @@ public:
 
 	inline MxParamType GetNotification() const { return m_type; }
 	inline MxCore* GetSender() const { return m_sender; }
+	inline MxParamType GetType() const { return m_type; }
 
 protected:
 	MxParamType m_type; // 0x4

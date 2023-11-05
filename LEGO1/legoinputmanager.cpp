@@ -9,10 +9,10 @@ DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
 // OFFSET: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
-	m_eventQueue = NULL;
+	m_unk0x5c = NULL;
 	m_world = NULL;
 	m_camera = NULL;
-	m_unk0x68 = NULL;
+	m_eventQueue = NULL;
 	m_unk0x80 = 0;
 	m_timer = 0;
 	m_unk0x6c = 0;
@@ -36,7 +36,7 @@ LegoInputManager::LegoInputManager()
 // OFFSET: LEGO1 0x1005b8b0 STUB
 MxResult LegoInputManager::Tickle()
 {
-	// TODO
+	ProcessEvents();
 	return SUCCESS;
 }
 
@@ -46,18 +46,26 @@ LegoInputManager::~LegoInputManager()
 	Destroy();
 }
 
+// OFFSET: LEGO1 0x1005b960
+void LegoInputManager::Create()
+{
+	// TODO
+	if (m_eventQueue == NULL)
+		m_eventQueue = new LegoEventQueue();
+}
+
 // OFFSET: LEGO1 0x1005bfe0
 void LegoInputManager::Destroy()
 {
 	ReleaseDX();
 
+	if (m_unk0x5c)
+		delete m_unk0x5c;
+	m_unk0x5c = NULL;
+
 	if (m_eventQueue)
 		delete m_eventQueue;
 	m_eventQueue = NULL;
-
-	if (m_unk0x68)
-		delete m_unk0x68;
-	m_unk0x68 = NULL;
 
 	if (m_controlManager)
 		delete m_controlManager;
@@ -215,10 +223,35 @@ void LegoInputManager::ClearWorld()
 	m_world = NULL;
 }
 
-// OFFSET: LEGO1 0x1005c740 STUB
-void LegoInputManager::QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5)
+// OFFSET: LEGO1 0x1005c740
+void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key)
+{
+	// TODO: param type wrong?
+	LegoEventNotificationParam param =
+		LegoEventNotificationParam((MxParamType) p_id, NULL, p_modifier, p_x, p_y, p_key);
+
+	if (((!m_unk0x88) || ((m_unk0x335 && (param.GetType() == MOUSEDOWN)))) || ((m_unk0x336 && (p_key == ' ')))) {
+		ProcessOneEvent(param);
+	}
+}
+
+// OFFSET: LEGO1 0x1005c820
+void LegoInputManager::ProcessEvents()
+{
+	MxAutoLocker lock(&m_criticalSection);
+
+	LegoEventNotificationParam event;
+	while (m_eventQueue->Dequeue(event)) {
+		if (ProcessOneEvent(event))
+			break;
+	}
+}
+
+// OFFSET: LEGO1 0x1005c9c0 STUB
+MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 {
 	// TODO
+	return FALSE;
 }
 
 // OFFSET: LEGO1 0x1005cfb0
