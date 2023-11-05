@@ -9,9 +9,9 @@ class MxCore;
 
 enum MxParamType {
 	PARAM_NONE = 0,
-	PAINT = 1,                   // 100dc210:100d8350
-	c_notificationEndAction = 2, // 100d8358:100d8350
-	TYPE4 = 4,                   // 100dc208:100d8350
+	c_notificationStartAction = 1, // 100dc210:100d8350
+	c_notificationEndAction = 2,   // 100d8358:100d8350
+	TYPE4 = 4,                     // 100dc208:100d8350
 	MXPRESENTER_NOTIFICATION = 5,
 	MXSTREAMER_DELETE_NOTIFY = 6, // 100dc760
 	c_notificationKeyPress = 7,   // 100d6aa0
