@@ -26,6 +26,35 @@ class MxBackgroundAudioManager;
 class MxDSFile;
 class MxTransitionManager;
 
+extern MxAtomId* g_copterScript;
+extern MxAtomId* g_dunecarScript;
+extern MxAtomId* g_jetskiScript;
+extern MxAtomId* g_racecarScript;
+extern MxAtomId* g_carraceScript;
+extern MxAtomId* g_carracerScript;
+extern MxAtomId* g_jetraceScript;
+extern MxAtomId* g_jetracerScript;
+extern MxAtomId* g_isleScript;
+extern MxAtomId* g_elevbottScript;
+extern MxAtomId* g_infodoorScript;
+extern MxAtomId* g_infomainScript;
+extern MxAtomId* g_infoscorScript;
+extern MxAtomId* g_regbookScript;
+extern MxAtomId* g_histbookScript;
+extern MxAtomId* g_hospitalScript;
+extern MxAtomId* g_policeScript;
+extern MxAtomId* g_garageScript;
+extern MxAtomId* g_act2mainScript;
+extern MxAtomId* g_act3Script;
+extern MxAtomId* g_jukeboxScript;
+extern MxAtomId* g_pz5Script;
+extern MxAtomId* g_introScript;
+extern MxAtomId* g_testScript;
+extern MxAtomId* g_jukeboxwScript;
+extern MxAtomId* g_sndAnimScript;
+extern MxAtomId* g_creditsScript;
+extern MxAtomId* g_nocdSourceName;
+
 // VTABLE 0x100d8638
 // SIZE: 0x140
 class LegoOmni : public MxOmni {
@@ -124,5 +153,7 @@ LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
 GifManager* GetGifManager();
+void RegisterScripts();
+void UnregisterScripts();
 
 #endif // LEGOOMNI_H

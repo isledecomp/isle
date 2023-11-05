@@ -15,8 +15,6 @@
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
 
-MxAtomId* g_infoscorScript;
-
 // OFFSET: LEGO1 0x10001000
 Score::Score()
 {
