@@ -20,7 +20,7 @@ Pizza::~Pizza()
 	TickleManager()->UnregisterClient(this);
 }
 
-// OFFSET: LEGO1 0x100388a0
+// OFFSET: LEGO1 0x100388a0 STUB
 MxResult Pizza::Tickle()
 {
 	// TODO
