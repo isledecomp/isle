@@ -24,6 +24,7 @@ public:
 		return !strcmp(name, MxEventPresenter::ClassName()) || MxMediaPresenter::IsA(name);
 	}
 
+	virtual MxResult AddToManager(); // vtable+0x34
 	virtual void Destroy() override; // vtable+0x38
 
 private:
