@@ -140,16 +140,15 @@ void MxBackgroundAudioManager::DestroyMusic()
 // OFFSET: LEGO1 0x1007f170
 MxResult MxBackgroundAudioManager::Notify(MxParam& p)
 {
-	if (((MxNotificationParam&) p).GetNotification() == c_notificationStartAction) {
+	switch (((MxNotificationParam&) p).GetNotification()) {
+	case c_notificationStartAction:
 		StartAction(p);
 		return 1;
+	case c_notificationEndAction:
+		StopAction(p);
+		return 1;
 	}
-
-	if (((MxNotificationParam&) p).GetNotification() != c_notificationEndAction) {
-		return 0;
-	}
-	StopAction(p);
-	return 1;
+	return 0;
 }
 
 // Matches but register allocation is is different.
@@ -186,12 +185,10 @@ void MxBackgroundAudioManager::StopAction(MxParam& p)
 // OFFSET: LEGO1 0x1007f2f0
 MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
 {
-	if (!m_musicEnabled)
-	{
+	if (!m_musicEnabled) {
 		return SUCCESS;
 	}
-	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId())
-	{
+	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId()) {
 		MxDSAction action;
 		action.SetAtomId(GetCurrentAction().GetAtomId());
 		action.SetObjectId(GetCurrentAction().GetObjectId());
@@ -208,8 +205,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 		GetCurrentAction().SetObjectId(action.GetObjectId());
 		GetCurrentAction().SetUnknown24(action.GetUnknown24());
 
-		if (result == SUCCESS)
-		{
+		if (result == SUCCESS) {
 			m_unk13c = p_unknown2;
 			m_unk140 = p_unknown;
 		}
