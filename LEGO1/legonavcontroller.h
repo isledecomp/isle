@@ -37,7 +37,7 @@ public:
 	);
 
 	LegoNavController();
-	virtual ~LegoNavController(); // vtable+0x0
+	virtual ~LegoNavController() override; // vtable+0x0
 
 	// OFFSET: LEGO1 0x10054b80
 	inline const char* ClassName() const override // vtable+0xc
