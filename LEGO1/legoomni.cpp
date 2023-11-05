@@ -473,8 +473,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	m_gameState = new LegoGameState();
 	// TODO: initialize list at m_unk78
 
-	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager &&
-		m_buildingManager) {
+	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();
