@@ -91,11 +91,10 @@ void MxOmni::Vtable0x2c()
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100aefb0 STUB
-int MxOmni::Vtable0x30(char*, int, MxCore*)
+// OFFSET: LEGO1 0x100aefb0
+MxEntity* MxOmni::FindWorld(char*, int, MxCore*)
 {
-	// TODO
-	return 0;
+	return NULL;
 }
 
 // OFFSET: LEGO1 0x100aefc0
