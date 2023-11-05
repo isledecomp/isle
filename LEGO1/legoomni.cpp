@@ -477,7 +477,6 @@ void RegisterScripts()
 	g_pz5Script = new MxAtomId("\\lego\\scripts\\isle\\pz5", LookupMode_LowerCase2);
 	g_introScript = new MxAtomId("\\lego\\scripts\\intro", LookupMode_LowerCase2);
 	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", LookupMode_LowerCase2);
-	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", LookupMode_LowerCase2);
 	g_jukeboxwScript = new MxAtomId("\\lego\\scripts\\isle\\jukeboxw", LookupMode_LowerCase2);
 	g_sndAnimScript = new MxAtomId("\\lego\\scripts\\sndanim", LookupMode_LowerCase2);
 	g_creditsScript = new MxAtomId("\\lego\\scripts\\credits", LookupMode_LowerCase2);
@@ -510,7 +509,6 @@ void UnregisterScripts()
 	delete g_jukeboxScript;
 	delete g_pz5Script;
 	delete g_introScript;
-	delete g_testScript;
 	delete g_testScript;
 	delete g_jukeboxwScript;
 	delete g_sndAnimScript;
