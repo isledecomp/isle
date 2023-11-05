@@ -15,6 +15,9 @@ public:
 	MxBackgroundAudioManager();
 	virtual ~MxBackgroundAudioManager() override;
 
+	virtual MxLong Notify(MxParam& p) override; // vtable+0x04
+	virtual MxResult Tickle() override;         // vtable+0x08
+
 	// OFFSET: LEGO1 0x1007eb70
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -28,13 +31,10 @@ public:
 		return !strcmp(name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(name);
 	}
 
-	virtual MxResult Notify(MxParam& p) override;
-
 	void StartAction(MxParam& p);
 	void StopAction(MxParam& p);
 	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2);
 
-	virtual MxResult Tickle() override;
 	void FUN_1007ee70();
 	void FUN_1007ef40();
 	void FadeInOrFadeOut();

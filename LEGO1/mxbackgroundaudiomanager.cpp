@@ -138,7 +138,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 }
 
 // OFFSET: LEGO1 0x1007f170
-MxResult MxBackgroundAudioManager::Notify(MxParam& p)
+MxLong MxBackgroundAudioManager::Notify(MxParam& p)
 {
 	switch (((MxNotificationParam&) p).GetNotification()) {
 	case c_notificationStartAction:
@@ -151,7 +151,6 @@ MxResult MxBackgroundAudioManager::Notify(MxParam& p)
 	return 0;
 }
 
-// Matches but register allocation is is different.
 // OFFSET: LEGO1 0x1007f1b0
 void MxBackgroundAudioManager::StartAction(MxParam& p)
 {
@@ -171,12 +170,10 @@ void MxBackgroundAudioManager::StopAction(MxParam& p)
 		m_action1.SetAtomId(MxAtomId());
 		m_action1.SetObjectId(-1);
 	}
-	else {
-		if (((MxNotificationParam&) p).GetSender() == m_unk138) {
-			m_unk138 = NULL;
-			m_action2.SetAtomId(MxAtomId());
-			m_action2.SetObjectId(-1);
-		}
+	else if (((MxNotificationParam&) p).GetSender() == m_unk138) {
+		m_unk138 = NULL;
+		m_action2.SetAtomId(MxAtomId());
+		m_action2.SetObjectId(-1);
 	}
 
 	Lego()->HandleNotificationType2(p);
@@ -218,13 +215,13 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 MxResult MxBackgroundAudioManager::Tickle()
 {
 	switch (m_unk13c) {
-	case 2:
+	case MxPresenter::TickleState_Starting:
 		FadeInOrFadeOut();
 		return SUCCESS;
-	case 3:
+	case MxPresenter::TickleState_Streaming:
 		FUN_1007ee70();
 		return SUCCESS;
-	case 4:
+	case MxPresenter::TickleState_Repeating:
 		FUN_1007ef40();
 		return SUCCESS;
 	default:
@@ -236,7 +233,7 @@ MxResult MxBackgroundAudioManager::Tickle()
 void MxBackgroundAudioManager::FUN_1007ee70()
 {
 	if (m_unka0 && m_unka0->GetAction()) {
-		DeleteObject(m_unk138->GetAction());
+		DeleteObject(*m_unk138->GetAction());
 	}
 
 	if (m_unk138) {
@@ -280,7 +277,7 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 	}
 	else if (m_unka0->GetAction() != NULL) {
 		if (m_unka0->vtable5c() == 0) {
-			DeleteObject(m_unka0->GetAction());
+			DeleteObject(*m_unka0->GetAction());
 		}
 		else {
 			compare = m_unka0->vtable5c();
@@ -298,7 +295,6 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
 	// This function probably is the fade in/out routine
 	if (m_unka0 != NULL) {
-
 		undefined4 volume = m_unka0->vtable5c();
 		MxU32 compare = 30;
 		if (m_unk148 == 0) {
