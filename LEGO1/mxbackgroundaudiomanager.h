@@ -43,8 +43,8 @@ public:
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Stop();
-	void FUN_1007f570();
-	void FUN_1007f5b0();
+	void LowerVolume();
+	void RaiseVolume();
 
 private:
 	void Init();

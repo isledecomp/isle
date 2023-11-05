@@ -52,7 +52,7 @@ void MxBackgroundAudioManager::Stop()
 }
 
 // OFFSET: LEGO1 0x1007f570
-void MxBackgroundAudioManager::FUN_1007f570()
+void MxBackgroundAudioManager::LowerVolume()
 {
 	if (m_unk148 == 0) {
 		if (m_unk13c == 0) {
@@ -64,7 +64,7 @@ void MxBackgroundAudioManager::FUN_1007f570()
 }
 
 // OFFSET: LEGO1 0x1007f5b0
-void MxBackgroundAudioManager::FUN_1007f5b0()
+void MxBackgroundAudioManager::RaiseVolume()
 {
 	if (m_unk148 != 0) {
 		m_unk148--;
