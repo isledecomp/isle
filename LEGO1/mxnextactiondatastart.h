@@ -4,6 +4,7 @@
 #include "mxcore.h"
 
 // VTABLE 0x100dc9a0
+// SIZE 0x14
 class MxNextActionDataStart : public MxCore {
 public:
 	// inlined constructor at 0x100c1847
@@ -13,6 +14,7 @@ public:
 		m_unk24val = p_unk24val;
 		m_data = p_data;
 	}
+
 	// OFFSET: LEGO1 0x100c1900
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
