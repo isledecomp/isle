@@ -75,26 +75,9 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 void MxVideoManager::UpdateRegion()
 {
 	if (m_region->vtable20() == FALSE) {
-		MxS32 left, top, right, bottom;
-		MxRect32& regionRect = m_region->GetRect();
-
-		left = m_videoParam.GetRect().m_left;
-		if (left <= regionRect.m_left)
-			left = regionRect.m_left;
-
-		top = regionRect.m_top;
-		if (top <= m_videoParam.GetRect().m_top)
-			top = m_videoParam.GetRect().m_top;
-
-		right = regionRect.m_right;
-		if (right >= m_videoParam.GetRect().m_right)
-			right = m_videoParam.GetRect().m_right;
-
-		bottom = m_videoParam.GetRect().m_bottom;
-		if (bottom >= regionRect.m_bottom)
-			bottom = regionRect.m_bottom;
-
-		m_displaySurface->Display(left, top, left, top, right - left + 1, bottom - top + 1);
+		MxRect32 rect(m_region->GetRect(), m_videoParam.GetRect());
+		m_displaySurface
+			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 }
 

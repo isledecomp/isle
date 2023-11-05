@@ -15,6 +15,15 @@ struct MxRegionTopBottom {
 	void FUN_100c5280(MxS32 p_left, MxS32 p_right);
 	MxBool FUN_100c57b0(MxRect32& p_rect);
 
+	inline MxS32 GetTop() { return m_top; }
+	inline MxS32 GetBottom() { return m_bottom; }
+
+	inline void SetTop(MxS32 p_top) { m_top = p_top; }
+	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
+
+	friend class MxRegionListParent;
+
+private:
 	MxS32 m_top;
 	MxS32 m_bottom;
 	MxRegionLeftRightList* m_leftRightList;
@@ -30,6 +39,13 @@ struct MxRegionLeftRight {
 
 	MxRegionLeftRight* Clone() { return new MxRegionLeftRight(m_left, m_right); }
 
+	inline MxS32 GetLeft() { return m_left; }
+	inline MxS32 GetRight() { return m_right; }
+
+	inline void SetLeft(MxS32 p_left) { m_left = p_left; }
+	inline void SetRight(MxS32 p_right) { m_right = p_right; }
+
+private:
 	MxS32 m_left;
 	MxS32 m_right;
 };

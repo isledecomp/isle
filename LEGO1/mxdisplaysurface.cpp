@@ -82,8 +82,8 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	}
 
 	if (this->m_videoParam.flags().GetFullScreen()) {
-		MxS32 width = this->m_videoParam.GetRect().m_right - this->m_videoParam.GetRect().m_left + 1;
-		MxS32 height = this->m_videoParam.GetRect().m_bottom - this->m_videoParam.GetRect().m_top + 1;
+		MxS32 width = this->m_videoParam.GetRect().GetWidth();
+		MxS32 height = this->m_videoParam.GetRect().GetHeight();
 
 		if (lpDirectDraw->SetCooperativeLevel(hWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN))
 			goto done;
@@ -129,8 +129,8 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwFlags = DDSD_HEIGHT | DDSD_WIDTH | DDSD_CAPS;
-		ddsd.dwWidth = this->m_videoParam.GetRect().m_right - this->m_videoParam.GetRect().m_left + 1;
-		ddsd.dwHeight = this->m_videoParam.GetRect().m_bottom - this->m_videoParam.GetRect().m_top + 1;
+		ddsd.dwWidth = this->m_videoParam.GetRect().GetWidth();
+		ddsd.dwHeight = this->m_videoParam.GetRect().GetHeight();
 		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
 		if (!this->m_videoParam.flags().GetBackBuffers())
