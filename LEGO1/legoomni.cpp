@@ -8,11 +8,89 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
 
-// 0x100f4588
-MxAtomId* g_nocdSourceName = NULL;
+// 0x100f451c
+MxAtomId* g_copterScript = NULL;
+
+// 0x100f4520
+MxAtomId* g_dunecarScript = NULL;
+
+// 0x100f4524
+MxAtomId* g_jetskiScript = NULL;
+
+// 0x100f4528
+MxAtomId* g_racecarScript = NULL;
+
+// 0x100f452c
+MxAtomId* g_carraceScript = NULL;
+
+// 0x100f4530
+MxAtomId* g_carracerScript = NULL;
+
+// 0x100f4534
+MxAtomId* g_jetraceScript = NULL;
+
+// 0x100f4538
+MxAtomId* g_jetracerScript = NULL;
+
+// 0x100f453c
+MxAtomId* g_isleScript = NULL;
+
+// 0x100f4540
+MxAtomId* g_elevbottScript = NULL;
+
+// 0x100f4544
+MxAtomId* g_infodoorScript = NULL;
+
+// 0x100f4548
+MxAtomId* g_infomainScript = NULL;
+
+// 0x100f454c
+MxAtomId* g_infoscorScript = NULL;
+
+// 0x100f4550
+MxAtomId* g_regbookScript = NULL;
+
+// 0x100f4554
+MxAtomId* g_histbookScript = NULL;
+
+// 0x100f4558
+MxAtomId* g_hospitalScript = NULL;
+
+// 0x100f455c
+MxAtomId* g_policeScript = NULL;
+
+// 0x100f4560
+MxAtomId* g_garageScript = NULL;
+
+// 0x100f4564
+MxAtomId* g_act2mainScript = NULL;
+
+// 0x100f4568
+MxAtomId* g_act3Script = NULL;
 
 // 0x100f456c
 MxAtomId* g_jukeboxScript = NULL;
+
+// 0x100f4570
+MxAtomId* g_pz5Script = NULL;
+
+// 0x100f4574
+MxAtomId* g_introScript = NULL;
+
+// 0x100f4578
+MxAtomId* g_testScript = NULL;
+
+// 0x100f457c
+MxAtomId* g_jukeboxwScript = NULL;
+
+// 0x100f4580c
+MxAtomId* g_sndAnimScript = NULL;
+
+// 0x100f4584
+MxAtomId* g_creditsScript = NULL;
+
+// 0x100f4588
+MxAtomId* g_nocdSourceName = NULL;
 
 // 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
@@ -327,7 +405,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	m_objectFactory = new LegoObjectFactory();
 	m_gameState = new LegoGameState();
 	m_bkgAudioManager = new MxBackgroundAudioManager();
-
+	RegisterScripts();
 	return SUCCESS;
 }
 
@@ -387,4 +465,100 @@ void LegoOmni::StopTimer()
 {
 	MxOmni::StopTimer();
 	SetAppCursor(0);
+}
+
+// OFFSET: LEGO1 0x100528e0
+void RegisterScripts()
+{
+	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", LookupMode_LowerCase2);
+	g_dunecarScript = new MxAtomId("\\lego\\scripts\\build\\dunecar", LookupMode_LowerCase2);
+	g_jetskiScript = new MxAtomId("\\lego\\scripts\\build\\jetski", LookupMode_LowerCase2);
+	g_racecarScript = new MxAtomId("\\lego\\scripts\\build\\racecar", LookupMode_LowerCase2);
+	g_carraceScript = new MxAtomId("\\lego\\scripts\\race\\carrace", LookupMode_LowerCase2);
+	g_carracerScript = new MxAtomId("\\lego\\scripts\\race\\carracer", LookupMode_LowerCase2);
+	g_jetraceScript = new MxAtomId("\\lego\\scripts\\race\\jetrace", LookupMode_LowerCase2);
+	g_jetracerScript = new MxAtomId("\\lego\\scripts\\race\\jetracer", LookupMode_LowerCase2);
+	g_isleScript = new MxAtomId("\\lego\\scripts\\isle\\isle", LookupMode_LowerCase2);
+	g_elevbottScript = new MxAtomId("\\lego\\scripts\\infocntr\\elevbott", LookupMode_LowerCase2);
+	g_infodoorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infodoor", LookupMode_LowerCase2);
+	g_infomainScript = new MxAtomId("\\lego\\scripts\\infocntr\\infomain", LookupMode_LowerCase2);
+	g_infoscorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infoscor", LookupMode_LowerCase2);
+	g_regbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\regbook", LookupMode_LowerCase2);
+	g_histbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\histbook", LookupMode_LowerCase2);
+	g_hospitalScript = new MxAtomId("\\lego\\scripts\\hospital\\hospital", LookupMode_LowerCase2);
+	g_policeScript = new MxAtomId("\\lego\\scripts\\police\\police", LookupMode_LowerCase2);
+	g_garageScript = new MxAtomId("\\lego\\scripts\\garage\\garage", LookupMode_LowerCase2);
+	g_act2mainScript = new MxAtomId("\\lego\\scripts\\act2\\act2main", LookupMode_LowerCase2);
+	g_act3Script = new MxAtomId("\\lego\\scripts\\act3\\act3", LookupMode_LowerCase2);
+	g_jukeboxScript = new MxAtomId("\\lego\\scripts\\isle\\jukebox", LookupMode_LowerCase2);
+	g_pz5Script = new MxAtomId("\\lego\\scripts\\isle\\pz5", LookupMode_LowerCase2);
+	g_introScript = new MxAtomId("\\lego\\scripts\\intro", LookupMode_LowerCase2);
+	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", LookupMode_LowerCase2);
+	g_jukeboxwScript = new MxAtomId("\\lego\\scripts\\isle\\jukeboxw", LookupMode_LowerCase2);
+	g_sndAnimScript = new MxAtomId("\\lego\\scripts\\sndanim", LookupMode_LowerCase2);
+	g_creditsScript = new MxAtomId("\\lego\\scripts\\credits", LookupMode_LowerCase2);
+	g_nocdSourceName = new MxAtomId("\\lego\\scripts\\nocd", LookupMode_LowerCase2);
+}
+
+// OFFSET: LEGO1 0x100530c0
+void UnregisterScripts()
+{
+	delete g_copterScript;
+	delete g_dunecarScript;
+	delete g_jetskiScript;
+	delete g_racecarScript;
+	delete g_carraceScript;
+	delete g_carracerScript;
+	delete g_jetraceScript;
+	delete g_jetracerScript;
+	delete g_isleScript;
+	delete g_elevbottScript;
+	delete g_infodoorScript;
+	delete g_infomainScript;
+	delete g_infoscorScript;
+	delete g_regbookScript;
+	delete g_histbookScript;
+	delete g_hospitalScript;
+	delete g_policeScript;
+	delete g_garageScript;
+	delete g_act2mainScript;
+	delete g_act3Script;
+	delete g_jukeboxScript;
+	delete g_pz5Script;
+	delete g_introScript;
+	delete g_testScript;
+	delete g_jukeboxwScript;
+	delete g_sndAnimScript;
+	delete g_creditsScript;
+	delete g_nocdSourceName;
+
+	g_copterScript = NULL;
+	g_dunecarScript = NULL;
+	g_jetskiScript = NULL;
+	g_racecarScript = NULL;
+	g_carraceScript = NULL;
+	g_carracerScript = NULL;
+	g_jetraceScript = NULL;
+	g_jetracerScript = NULL;
+	g_isleScript = NULL;
+	g_elevbottScript = NULL;
+	g_infodoorScript = NULL;
+	g_infomainScript = NULL;
+	g_infoscorScript = NULL;
+	g_regbookScript = NULL;
+	g_histbookScript = NULL;
+	g_hospitalScript = NULL;
+	g_policeScript = NULL;
+	g_garageScript = NULL;
+	g_act2mainScript = NULL;
+	g_act3Script = NULL;
+	g_jukeboxScript = NULL;
+	g_pz5Script = NULL;
+	g_introScript = NULL;
+	g_testScript = NULL;
+	g_testScript = NULL;
+	g_jukeboxwScript = NULL;
+	g_sndAnimScript = NULL;
+	g_creditsScript = NULL;
+	g_nocdSourceName = NULL;
 }
