@@ -1,12 +1,23 @@
 #include "legoomni.h"
 
+#include "gifmanager.h"
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
+#include "legoplantmanager.h"
+#include "legosoundmanager.h"
 #include "legoutil.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
+#include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
+#include "mxomnicreateflags.h"
+#include "mxomnicreateparam.h"
+#include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
 
 // 0x100f451c
 MxAtomId* g_copterScript = NULL;
@@ -92,6 +103,9 @@ MxAtomId* g_creditsScript = NULL;
 // 0x100f4588
 MxAtomId* g_nocdSourceName = NULL;
 
+// 0x100f6718
+const char* g_current = "current";
+
 // 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
@@ -118,6 +132,13 @@ void LegoOmni::CreateBackgroundAudio()
 void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x1005b0c0 STUB
+LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
+{
+	// TODO
+	return NULL;
 }
 
 // OFFSET: LEGO1 0x1005b400 STUB
@@ -397,16 +418,83 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
-// OFFSET: LEGO1 0x10058e70 STUB
+// OFFSET: LEGO1 0x1001a700 STUB
+void FUN_1001a700()
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x10058e70
 MxResult LegoOmni::Create(MxOmniCreateParam& p)
 {
-	MxOmni::Create(p);
+	MxResult result = FAILURE;
+	MxAutoLocker lock(&this->m_criticalsection);
+
+	p.CreateFlags().CreateObjectFactory(FALSE);
+	p.CreateFlags().CreateVideoManager(FALSE);
+	p.CreateFlags().CreateSoundManager(FALSE);
+	p.CreateFlags().CreateTickleManager(FALSE);
+
+	if (!(m_tickleManager = new MxTickleManager()))
+		return FAILURE;
+
+	if (MxOmni::Create(p) != SUCCESS)
+		return FAILURE;
 
 	m_objectFactory = new LegoObjectFactory();
+	if (m_objectFactory == NULL)
+		return FAILURE;
+
+	if (m_soundManager = new LegoSoundManager()) {
+		if (m_soundManager->Create(10, 0) != SUCCESS) {
+			delete m_soundManager;
+			m_soundManager = NULL;
+			return FAILURE;
+		}
+	}
+
+	if (m_videoManager = new LegoVideoManager()) {
+		if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+			delete m_videoManager;
+			m_videoManager = NULL;
+		}
+	}
+
+	if (m_inputMgr = new LegoInputManager()) {
+		if (m_inputMgr->Create(p.GetWindowHandle()) != SUCCESS) {
+			delete m_inputMgr;
+			m_inputMgr = NULL;
+		}
+	}
+
+	// TODO: there are a few more classes here
+	m_gifManager = new GifManager();
+	m_plantManager = new LegoPlantManager();
+	m_animationManager = new LegoAnimationManager();
+	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
-	m_bkgAudioManager = new MxBackgroundAudioManager();
-	RegisterScripts();
-	return SUCCESS;
+	// TODO: initialize list at m_unk78
+
+	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager && m_buildingManager) {
+		// TODO: initialize a bunch of MxVariables
+		RegisterScripts();
+		FUN_1001a700();
+		// todo: another function call. in legoomni maybe?
+		m_bkgAudioManager = new MxBackgroundAudioManager();
+		if (m_bkgAudioManager != NULL) {
+			m_transitionManager = new MxTransitionManager();
+			if (m_transitionManager != NULL) {
+				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
+					m_notificationManager->Register(this);
+					SetAppCursor(1);
+					m_gameState->SetSomeEnumState(0);
+					return SUCCESS;
+				}
+			}
+		}
+	}
+
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x10058c30 STUB
@@ -432,18 +520,33 @@ MxResult LegoOmni::DeleteObject(MxDSAction& ds)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005b3c0 STUB
+// OFFSET: LEGO1 0x1005b3c0
 MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 {
-	// TODO
-	return TRUE;
+	if (MxOmni::DoesEntityExist(ds)) {
+		if (FindByEntityIdOrAtomId(ds.GetAtomId(), ds.GetObjectId()) == NULL) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1005b2f0 STUB
-int LegoOmni::Vtable0x30(char*, int, MxCore*)
+// OFFSET: LEGO1 0x1005b2f0
+MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxCore* p_presenter)
 {
-	// TODO
-	return 0;
+	LegoWorld* foundEntity = NULL;
+	if (strcmpi(p_id, g_current)) {
+		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, LookupMode_LowerCase2), p_entityId);
+	}
+	else {
+		foundEntity = this->m_currentWorld;
+	}
+
+	if (foundEntity != NULL) {
+		foundEntity->VTable0x58(p_presenter);
+	}
+
+	return foundEntity;
 }
 
 // OFFSET: LEGO1 0x1005b3a0

@@ -31,8 +31,8 @@ MxCore* LegoObjectFactory::Create(const char* p_name)
 	}
 }
 
-// OFFSET: LEGO1 0x1000fb30 STUB
+// OFFSET: LEGO1 0x1000fb30
 void LegoObjectFactory::Destroy(MxCore* p_object)
 {
-	// TODO
+	delete p_object;
 }

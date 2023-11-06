@@ -47,11 +47,12 @@ LegoInputManager::~LegoInputManager()
 }
 
 // OFFSET: LEGO1 0x1005b960
-void LegoInputManager::Create()
+MxResult LegoInputManager::Create(HWND p_hwnd)
 {
 	// TODO
 	if (m_eventQueue == NULL)
 		m_eventQueue = new LegoEventQueue();
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1005bfe0

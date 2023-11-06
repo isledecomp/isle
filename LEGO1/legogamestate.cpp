@@ -164,6 +164,12 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 	// TODO
 }
 
+// OFFSET: LEGO1 0x1003cea0
+void LegoGameState::SetSomeEnumState(undefined4 p_state)
+{
+	m_unk10 = p_state;
+}
+
 // OFFSET: LEGO1 0x10039f00
 void LegoGameState::SetSavePath(char* p_savePath)
 {

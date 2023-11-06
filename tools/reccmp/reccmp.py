@@ -220,12 +220,14 @@ class SymInfo:
     found = False
 
     logger.debug('Looking for %s:%d', filename, line)
+    filename_basename = os.path.basename(filename).lower()
 
     for fn in self.lines:
       # Sometimes a PDB is compiled with a relative path while we always have
       # an absolute path. Therefore we must
       try:
-        if os.path.samefile(fn, filename):
+        if (os.path.basename(fn).lower() == filename_basename and
+            os.path.samefile(fn, filename)):
           filename = fn
           break
       except FileNotFoundError as e:
