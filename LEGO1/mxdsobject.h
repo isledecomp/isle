@@ -35,7 +35,7 @@ public:
 	// OFFSET: LEGO1 0x10005530
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
-	inline MxAtomId& GetAtomId() { return this->m_atomId; }
+	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline MxS16 GetUnknown24() { return this->m_unk24; }
 

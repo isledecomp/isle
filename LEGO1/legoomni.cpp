@@ -134,7 +134,7 @@ void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 }
 
 // OFFSET: LEGO1 0x1005b0c0 STUB
-LegoEntity* LegoOmni::FindByEntityIdOrAtomId(MxAtomId& p_atom, int p_entityid)
+LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	// TODO
 	return NULL;
@@ -420,6 +420,7 @@ void LegoOmni::Init()
 // OFFSET: LEGO1 0x1001a700 STUB
 void FUN_1001a700()
 {
+	// TODO
 }
 
 // OFFSET: LEGO1 0x10058e70
@@ -530,7 +531,7 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 }
 
 // OFFSET: LEGO1 0x1005b2f0
-MxEntity* LegoOmni::FindWorld(char* p_id, int p_entityId, MxCore* p_presenter)
+MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxCore* p_presenter)
 {
 	LegoWorld* foundEntity = NULL;
 	if (strcmpi(p_id, g_current)) {
