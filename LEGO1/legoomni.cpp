@@ -19,8 +19,6 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
-const char* g_current = "current";
-
 // 0x100f451c
 MxAtomId* g_copterScript = NULL;
 
@@ -104,6 +102,9 @@ MxAtomId* g_creditsScript = NULL;
 
 // 0x100f4588
 MxAtomId* g_nocdSourceName = NULL;
+
+// 0x100f6718
+const char* g_current = "current";
 
 // 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
