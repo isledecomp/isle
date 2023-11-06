@@ -38,7 +38,6 @@ public:
 	virtual MxResult Tickle() override; // vtable+0x8
 
 	MxResult Create(HWND p_hwnd);
-	void Create();
 	void Destroy();
 	void CreateAndAcquireKeyboard(HWND hwnd);
 	void ReleaseDX();
