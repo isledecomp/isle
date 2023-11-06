@@ -83,16 +83,18 @@ public:
 		return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name);
 	}
 
-	virtual void Init() override;                                            // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p) override;                  // vtable+18
-	virtual void Destroy() override;                                         // vtable+1c
-	virtual MxResult Start(MxDSAction* action) override;                     // vtable+20
-	virtual MxResult DeleteObject(MxDSAction& ds) override;                  // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& ds) override;                 // vtable+28
-	virtual int Vtable0x30(char*, int, MxCore*) override;                    // vtable+30
-	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override; // vtable+34
-	virtual void StartTimer() override;                                      // vtable+38
-	virtual void StopTimer() override;                                       // vtable+3c
+	virtual void Init() override;                                                                  // vtable+14
+	virtual MxResult Create(MxOmniCreateParam& p) override;                                        // vtable+18
+	virtual void Destroy() override;                                                               // vtable+1c
+	virtual MxResult Start(MxDSAction* action) override;                                           // vtable+20
+	virtual MxResult DeleteObject(MxDSAction& ds) override;                                        // vtable+24
+	virtual MxBool DoesEntityExist(MxDSAction& ds) override;                                       // vtable+28
+	virtual MxEntity* FindWorld(const char* p_id, MxS32 p_entityId, MxCore* p_presenter) override; // vtable+30
+	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                       // vtable+34
+	virtual void StartTimer() override;                                                            // vtable+38
+	virtual void StopTimer() override;                                                             // vtable+3c
+
+	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }

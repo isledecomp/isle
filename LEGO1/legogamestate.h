@@ -37,6 +37,8 @@ public:
 	inline MxU32 GetUnknown10() { return m_unk10; }
 	inline void SetUnknown424(undefined4 p_unk424) { m_unk424 = p_unk424; }
 
+	void SetSomeEnumState(undefined4 p_state);
+
 private:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteEndOfVariables(LegoStream* p_stream);
