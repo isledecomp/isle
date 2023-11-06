@@ -74,8 +74,8 @@ public:
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
 private:
-	static inline MxS32 Min(MxS32 a, MxS32 b) { return a <= b ? a : b; };
-	static inline MxS32 Max(MxS32 a, MxS32 b) { return a <= b ? b : a; };
+	inline static MxS32 Min(MxS32 a, MxS32 b) { return a <= b ? a : b; };
+	inline static MxS32 Max(MxS32 a, MxS32 b) { return a <= b ? b : a; };
 
 	MxS32 m_left;
 	MxS32 m_top;
