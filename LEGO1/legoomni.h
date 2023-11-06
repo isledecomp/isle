@@ -26,6 +26,35 @@ class MxBackgroundAudioManager;
 class MxDSFile;
 class MxTransitionManager;
 
+extern MxAtomId* g_copterScript;
+extern MxAtomId* g_dunecarScript;
+extern MxAtomId* g_jetskiScript;
+extern MxAtomId* g_racecarScript;
+extern MxAtomId* g_carraceScript;
+extern MxAtomId* g_carracerScript;
+extern MxAtomId* g_jetraceScript;
+extern MxAtomId* g_jetracerScript;
+extern MxAtomId* g_isleScript;
+extern MxAtomId* g_elevbottScript;
+extern MxAtomId* g_infodoorScript;
+extern MxAtomId* g_infomainScript;
+extern MxAtomId* g_infoscorScript;
+extern MxAtomId* g_regbookScript;
+extern MxAtomId* g_histbookScript;
+extern MxAtomId* g_hospitalScript;
+extern MxAtomId* g_policeScript;
+extern MxAtomId* g_garageScript;
+extern MxAtomId* g_act2mainScript;
+extern MxAtomId* g_act3Script;
+extern MxAtomId* g_jukeboxScript;
+extern MxAtomId* g_pz5Script;
+extern MxAtomId* g_introScript;
+extern MxAtomId* g_testScript;
+extern MxAtomId* g_jukeboxwScript;
+extern MxAtomId* g_sndAnimScript;
+extern MxAtomId* g_creditsScript;
+extern MxAtomId* g_nocdSourceName;
+
 // VTABLE 0x100d8638
 // SIZE: 0x140
 class LegoOmni : public MxOmni {
@@ -54,16 +83,18 @@ public:
 		return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name);
 	}
 
-	virtual void Init() override;                                            // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p) override;                  // vtable+18
-	virtual void Destroy() override;                                         // vtable+1c
-	virtual MxResult Start(MxDSAction* action) override;                     // vtable+20
-	virtual MxResult DeleteObject(MxDSAction& ds) override;                  // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& ds) override;                 // vtable+28
-	virtual int Vtable0x30(char*, int, MxCore*) override;                    // vtable+30
-	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override; // vtable+34
-	virtual void StartTimer() override;                                      // vtable+38
-	virtual void StopTimer() override;                                       // vtable+3c
+	virtual void Init() override;                                                                  // vtable+14
+	virtual MxResult Create(MxOmniCreateParam& p) override;                                        // vtable+18
+	virtual void Destroy() override;                                                               // vtable+1c
+	virtual MxResult Start(MxDSAction* action) override;                                           // vtable+20
+	virtual MxResult DeleteObject(MxDSAction& ds) override;                                        // vtable+24
+	virtual MxBool DoesEntityExist(MxDSAction& ds) override;                                       // vtable+28
+	virtual MxEntity* FindWorld(const char* p_id, MxS32 p_entityId, MxCore* p_presenter) override; // vtable+30
+	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                       // vtable+34
+	virtual void StartTimer() override;                                                            // vtable+38
+	virtual void StopTimer() override;                                                             // vtable+3c
+
+	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
@@ -79,6 +110,7 @@ public:
 	LegoGameState* GetGameState() { return m_gameState; }
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
+	MxDSAction& GetCurrentAction() { return m_action; }
 
 private:
 	undefined4 m_unk68;
@@ -124,5 +156,9 @@ LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
 GifManager* GetGifManager();
+MxDSAction& GetCurrentAction();
+
+void RegisterScripts();
+void UnregisterScripts();
 
 #endif // LEGOOMNI_H

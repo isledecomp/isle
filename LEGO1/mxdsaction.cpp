@@ -28,7 +28,7 @@ MxDSAction::MxDSAction()
 	this->m_up.Fill(FLT_MAX);
 	this->m_unk84 = NULL;
 	this->m_unk88 = 0;
-	this->m_omni = NULL;
+	this->m_unk8c = NULL;
 	this->m_unkTimingField = INT_MIN;
 }
 
@@ -54,7 +54,7 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	AppendData(p_dsAction.m_extraLength, p_dsAction.m_extraData);
 	this->m_unk84 = p_dsAction.m_unk84;
 	this->m_unk88 = p_dsAction.m_unk88;
-	this->m_omni = p_dsAction.m_omni;
+	this->m_unk8c = p_dsAction.m_unk8c;
 	this->m_unkTimingField = p_dsAction.m_unkTimingField;
 }
 

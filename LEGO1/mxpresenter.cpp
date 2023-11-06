@@ -47,7 +47,7 @@ void MxPresenter::ParseExtra()
 
 			token = strtok(NULL, g_parseExtraTokens);
 			MxS32 val = token ? atoi(token) : 0;
-			MxS32 result = MxOmni::GetInstance()->Vtable0x30(t_token, val, this);
+			MxEntity* result = MxOmni::GetInstance()->FindWorld(t_token, val, this);
 
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Parsed);
 
@@ -65,7 +65,7 @@ void MxPresenter::SendTo_unkPresenter(MxOmni* p_omni)
 
 		NotificationManager()->Send(m_unkPresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 
-		m_action->SetOmni(p_omni ? p_omni : MxOmni::GetInstance());
+		m_action->SetUnknown8c(p_omni ? p_omni : MxOmni::GetInstance());
 		m_unkPresenter = NULL;
 	}
 }

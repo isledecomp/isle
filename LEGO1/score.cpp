@@ -15,8 +15,6 @@
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
 
-MxAtomId* g_infoscorScript;
-
 // OFFSET: LEGO1 0x10001000
 Score::Score()
 {
@@ -41,7 +39,7 @@ MxLong Score::Notify(MxParam& p)
 	LegoWorld::Notify(p);
 	if (m_unkf6) {
 		switch (((MxNotificationParam&) p).GetNotification()) {
-		case PAINT:
+		case c_notificationStartAction:
 			ret = 1;
 			Paint();
 			break;

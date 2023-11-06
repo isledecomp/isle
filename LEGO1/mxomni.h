@@ -20,6 +20,7 @@ class MxTickleManager;
 class MxTimer;
 class MxVariableTable;
 class MxVideoManager;
+class MxEntity;
 
 // VTABLE 0x100dc168
 // SIZE 0x68
@@ -45,7 +46,7 @@ public:
 	virtual MxResult DeleteObject(MxDSAction& p_dsAction);          // vtable+24
 	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);         // vtable+28
 	virtual void Vtable0x2c();                                      // vtable+2c
-	virtual int Vtable0x30(char*, int, MxCore*);                    // vtable+30
+	virtual MxEntity* FindWorld(const char*, MxS32, MxCore*);       // vtable+30
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param); // vtable+34
 	virtual void StartTimer();                                      // vtable+38
 	virtual void StopTimer();                                       // vtable+3c

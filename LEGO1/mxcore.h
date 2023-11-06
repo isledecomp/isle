@@ -13,9 +13,9 @@ class MxParam;
 class MxCore {
 public:
 	__declspec(dllexport) MxCore();
-	__declspec(dllexport) virtual ~MxCore();                   // vtable+00
-	__declspec(dllexport) virtual MxResult Notify(MxParam& p); // vtable+04
-	virtual MxResult Tickle();                                 // vtable+08
+	__declspec(dllexport) virtual ~MxCore();                 // vtable+00
+	__declspec(dllexport) virtual MxLong Notify(MxParam& p); // vtable+04
+	virtual MxResult Tickle();                               // vtable+08
 
 	// OFFSET: LEGO1 0x100144c0
 	inline virtual const char* ClassName() const // vtable+0c

@@ -63,7 +63,7 @@ public:
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 	inline const MxVector3Data& GetLocation() const { return m_location; }
 	inline void SetUnknown84(MxCore* p_unk84) { m_unk84 = p_unk84; }
-	inline void SetOmni(MxOmni* p_omni) { m_omni = p_omni; }
+	inline void SetUnknown8c(MxCore* p_unk8c) { m_unk8c = p_unk8c; }
 
 	inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
 	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
@@ -85,7 +85,7 @@ private:
 	MxU16 m_extraLength;
 	MxCore* m_unk84;
 	undefined4 m_unk88;
-	MxOmni* m_omni; // 0x8c
+	MxCore* m_unk8c;
 
 protected:
 	MxLong m_unkTimingField; // 0x90

@@ -81,7 +81,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100d1760 STUB
+// OFFSET: LEGO1 0x100d18f0 STUB
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO
