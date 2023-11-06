@@ -87,7 +87,7 @@ void MxRegion::vtable18(MxRect32& p_rect)
 
 	if (rectCopy.m_left < rectCopy.m_right && rectCopy.m_top < rectCopy.m_bottom) {
 		MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(rectCopy);
-		m_list->OtherAppend(newTopBottom);
+		m_list->Append(newTopBottom);
 	}
 
 	m_rect.m_left = m_rect.m_left <= p_rect.m_left ? m_rect.m_left : p_rect.m_left;
@@ -147,7 +147,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 
 	if (!a.HasMatch()) {
 		MxRegionLeftRight* copy = new MxRegionLeftRight(p_left, p_right);
-		m_leftRightList->OtherAppend(copy);
+		m_leftRightList->Append(copy);
 	}
 	else {
 		if (p_left > leftRight->m_left)
@@ -157,14 +157,9 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 			if (p_right < leftRight->m_right)
 				p_right = leftRight->m_right;
 
-			// TODO: Currently inlined, shouldn't be
 			b = a;
 			b.Advance();
-
-			if (a.HasMatch()) {
-				a.Destroy();
-				a.Detach();
-			}
+			a.Destroy();
 
 			if (!b.Current(leftRight))
 				break;
@@ -178,7 +173,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 		}
 		else {
 			MxRegionLeftRight* copy = new MxRegionLeftRight(p_left, p_right);
-			m_leftRightList->OtherAppend(copy);
+			m_leftRightList->Append(copy);
 		}
 	}
 }

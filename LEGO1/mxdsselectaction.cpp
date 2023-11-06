@@ -30,7 +30,7 @@ void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 	MxStringListCursor cursor(p_dsSelectAction.m_unk0xac);
 	MxString string;
 	while (cursor.Next(string))
-		this->m_unk0xac->OtherAppend(string);
+		this->m_unk0xac->Append(string);
 }
 
 // OFFSET: LEGO1 0x100cbd50
@@ -109,7 +109,7 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk24)
 			if (!strcmp(string.GetData(), *p_source))
 				index = i;
 
-			this->m_unk0xac->OtherAppend(*p_source);
+			this->m_unk0xac->Append(*p_source);
 			*p_source += strlen(*p_source) + 1;
 		}
 
