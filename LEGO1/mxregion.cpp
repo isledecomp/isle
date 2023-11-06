@@ -38,78 +38,67 @@ void MxRegion::Reset()
 // OFFSET: LEGO1 0x100c3750
 void MxRegion::vtable18(MxRect32& p_rect)
 {
-	MxRect32 rectCopy(p_rect.GetPoint(), MxSize32(p_rect.m_right, p_rect.m_bottom));
+	MxRect32 rect(p_rect.GetPoint(), MxSize32(p_rect.GetRight(), p_rect.GetBottom()));
 	MxRegionListCursor cursor(m_list);
+	MxRegionTopBottom* topBottom;
 
-	if (rectCopy.m_left < rectCopy.m_right) {
-		while (rectCopy.m_top < rectCopy.m_bottom) {
-			MxRegionTopBottom* topBottom;
-			if (!cursor.Next(topBottom))
-				break;
-
-			if (topBottom->m_top >= rectCopy.m_bottom) {
-				cursor.Prepend(new MxRegionTopBottom(rectCopy));
-				rectCopy.m_top = rectCopy.m_bottom;
+	while (rect.IsValid() && cursor.Next(topBottom)) {
+		if (topBottom->GetTop() >= rect.GetBottom()) {
+			MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(rect);
+			cursor.Prepend(newTopBottom);
+			rect.SetTop(rect.GetBottom());
+		}
+		else if (rect.GetTop() < topBottom->GetBottom()) {
+			if (rect.GetTop() < topBottom->GetTop()) {
+				MxRect32 newRect(rect);
+				newRect.SetBottom(topBottom->GetTop());
+				MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(newRect);
+				cursor.Prepend(newTopBottom);
+				rect.SetTop(topBottom->GetTop());
 			}
-			else if (rectCopy.m_top < topBottom->m_bottom) {
-				if (rectCopy.m_top < topBottom->m_top) {
-					MxRect32 topBottomRect(rectCopy.GetPoint(), MxSize32(rectCopy.m_right, topBottom->m_top));
-
-					cursor.Prepend(new MxRegionTopBottom(topBottomRect));
-					rectCopy.m_top = topBottom->m_top;
-				}
-				else if (topBottom->m_top < rectCopy.m_top) {
-					MxRegionTopBottom* newTopBottom = topBottom->Clone();
-					newTopBottom->m_bottom = rectCopy.m_top;
-					topBottom->m_top = rectCopy.m_top;
-					cursor.Prepend(newTopBottom);
-				}
-
-				if (rectCopy.m_bottom < topBottom->m_bottom) {
-					MxRegionTopBottom* newTopBottom = topBottom->Clone();
-					newTopBottom->m_bottom = rectCopy.m_bottom;
-					topBottom->m_top = rectCopy.m_bottom;
-					newTopBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
-					// TODO: _InsertEntry currently inlined, shouldn't be
-					cursor.Prepend(newTopBottom);
-					rectCopy.m_top = rectCopy.m_bottom;
-				}
-				else {
-					topBottom->FUN_100c5280(rectCopy.m_left, rectCopy.m_right);
-					rectCopy.m_top = topBottom->m_bottom;
-				}
+			else if (topBottom->GetTop() < rect.GetTop()) {
+				MxRegionTopBottom* newTopBottom = topBottom->Clone();
+				newTopBottom->SetBottom(rect.GetTop());
+				topBottom->SetTop(rect.GetTop());
+				cursor.Prepend(newTopBottom);
 			}
 
-			if (rectCopy.m_right <= rectCopy.m_left)
-				break;
+			if (rect.GetBottom() < topBottom->GetBottom()) {
+				MxRegionTopBottom* newTopBottom = topBottom->Clone();
+				newTopBottom->SetBottom(rect.GetBottom());
+				topBottom->SetTop(rect.GetBottom());
+				newTopBottom->FUN_100c5280(rect.GetLeft(), rect.GetRight());
+				cursor.Prepend(newTopBottom);
+				rect.SetTop(rect.GetBottom());
+			}
+			else {
+				topBottom->FUN_100c5280(rect.GetLeft(), rect.GetRight());
+				rect.SetTop(topBottom->GetBottom());
+			}
 		}
 	}
 
-	if (rectCopy.m_left < rectCopy.m_right && rectCopy.m_top < rectCopy.m_bottom) {
-		MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(rectCopy);
+	if (rect.IsValid()) {
+		MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(rect);
 		m_list->Append(newTopBottom);
 	}
 
-	m_rect.m_left = m_rect.m_left <= p_rect.m_left ? m_rect.m_left : p_rect.m_left;
-	m_rect.m_top = m_rect.m_top <= p_rect.m_top ? m_rect.m_top : p_rect.m_top;
-	m_rect.m_right = m_rect.m_right <= p_rect.m_right ? p_rect.m_right : m_rect.m_right;
-	m_rect.m_bottom = m_rect.m_bottom <= p_rect.m_bottom ? p_rect.m_bottom : m_rect.m_bottom;
+	m_rect.UpdateBounds(p_rect);
 }
 
 // OFFSET: LEGO1 0x100c3e20
 MxBool MxRegion::vtable1c(MxRect32& p_rect)
 {
-	if (m_rect.m_left >= p_rect.m_right || p_rect.m_left >= m_rect.m_right || m_rect.m_top >= p_rect.m_bottom ||
-		p_rect.m_top >= m_rect.m_bottom)
+	if (!m_rect.IntersectsWith(p_rect))
 		return FALSE;
 
 	MxRegionListCursor cursor(m_list);
 	MxRegionTopBottom* topBottom;
 
 	while (cursor.Next(topBottom)) {
-		if (topBottom->m_top >= p_rect.m_bottom)
+		if (topBottom->GetTop() >= p_rect.GetBottom())
 			return FALSE;
-		if (topBottom->m_bottom > p_rect.m_top && topBottom->FUN_100c57b0(p_rect))
+		if (topBottom->GetBottom() > p_rect.GetTop() && topBottom->FUN_100c57b0(p_rect))
 			return TRUE;
 	}
 
@@ -127,11 +116,11 @@ MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
 // OFFSET: LEGO1 0x100c50e0
 MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 {
-	m_top = p_rect.m_top;
-	m_bottom = p_rect.m_bottom;
+	m_top = p_rect.GetTop();
+	m_bottom = p_rect.GetBottom();
 	m_leftRightList = new MxRegionLeftRightList;
 
-	MxRegionLeftRight* leftRight = new MxRegionLeftRight(p_rect.m_left, p_rect.m_right);
+	MxRegionLeftRight* leftRight = new MxRegionLeftRight(p_rect.GetLeft(), p_rect.GetRight());
 	m_leftRightList->Append(leftRight);
 }
 
@@ -142,7 +131,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 	MxRegionLeftRightListCursor b(m_leftRightList);
 
 	MxRegionLeftRight* leftRight;
-	while (a.Next(leftRight) && leftRight->m_right < p_left)
+	while (a.Next(leftRight) && leftRight->GetRight() < p_left)
 		;
 
 	if (!a.HasMatch()) {
@@ -150,12 +139,12 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 		m_leftRightList->Append(copy);
 	}
 	else {
-		if (p_left > leftRight->m_left)
-			p_left = leftRight->m_left;
+		if (p_left > leftRight->GetLeft())
+			p_left = leftRight->GetLeft();
 
-		while (leftRight->m_left < p_right) {
-			if (p_right < leftRight->m_right)
-				p_right = leftRight->m_right;
+		while (leftRight->GetLeft() < p_right) {
+			if (p_right < leftRight->GetRight())
+				p_right = leftRight->GetRight();
 
 			b = a;
 			b.Advance();
@@ -199,9 +188,9 @@ MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32& p_rect)
 	MxRegionLeftRight* leftRight;
 
 	while (cursor.Next(leftRight)) {
-		if (p_rect.m_right <= leftRight->m_left)
+		if (p_rect.GetRight() <= leftRight->GetLeft())
 			return FALSE;
-		if (leftRight->m_right > p_rect.m_left)
+		if (leftRight->GetRight() > p_rect.GetLeft())
 			return TRUE;
 	}
 
