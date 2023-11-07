@@ -50,19 +50,19 @@ plain = args.no_color
 
 original = args.original
 if not os.path.isfile(original):
-  parser.error('Original binary does not exist')
+  parser.error(f'Original binary {original} does not exist')
 
 recomp = args.recompiled
 if not os.path.isfile(recomp):
-  parser.error('Recompiled binary does not exist')
+  parser.error(f'Recompiled binary {recomp} does not exist')
 
 syms = args.pdb
 if not os.path.isfile(syms):
-  parser.error('Symbols PDB does not exist')
+  parser.error(f'Symbols PDB {syms} does not exist')
 
 source = args.decomp_dir
 if not os.path.isdir(source):
-  parser.error('Source directory does not exist')
+  parser.error(f'Source directory {source} does not exist')
 
 svg = args.svg
 
