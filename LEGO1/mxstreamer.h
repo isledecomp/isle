@@ -42,7 +42,7 @@ public:
 
 class MxStreamerNotification : public MxNotificationParam {
 public:
-	inline MxStreamerNotification(MxParamType p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
+	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
 		: MxNotificationParam(p_type, p_sender)
 	{
 		m_controller = p_ctrlr;

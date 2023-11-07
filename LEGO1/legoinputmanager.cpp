@@ -227,11 +227,10 @@ void LegoInputManager::ClearWorld()
 // OFFSET: LEGO1 0x1005c740
 void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key)
 {
-	// TODO: param type wrong?
-	LegoEventNotificationParam param =
-		LegoEventNotificationParam((MxParamType) p_id, NULL, p_modifier, p_x, p_y, p_key);
+	LegoEventNotificationParam param = LegoEventNotificationParam(p_id, NULL, p_modifier, p_x, p_y, p_key);
 
-	if (((!m_unk0x88) || ((m_unk0x335 && (param.GetType() == MOUSEDOWN)))) || ((m_unk0x336 && (p_key == ' ')))) {
+	if (((!m_unk0x88) || ((m_unk0x335 && (param.GetType() == c_notificationButtonDown)))) ||
+		((m_unk0x336 && (p_key == ' ')))) {
 		ProcessOneEvent(param);
 	}
 }

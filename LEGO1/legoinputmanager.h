@@ -10,15 +10,6 @@
 
 #include <dinput.h>
 
-enum NotificationId {
-	NONE = 0,
-	KEYDOWN = 7,
-	MOUSEUP = 8,
-	MOUSEDOWN = 9,
-	MOUSEMOVE = 10,
-	TIMER = 15
-};
-
 class LegoControlManager;
 
 // VTABLE 0x100d8800
@@ -113,13 +104,13 @@ public:
 // OFFSET: LEGO1 0x1005d010 TEMPLATE
 // MxListEntry<LegoEventNotificationParam>::GetValue
 
-// VTABLE 0x100d87e8
+// VTABLE 0x100d87e8 TEMPLATE
 // class MxQueue<LegoEventNotificationParam>
 
-// VTABLE 0x100d87d0
+// VTABLE 0x100d87d0 TEMPLATE
 // class MxList<LegoEventNotificationParam>
 
-// VTABLE 0x100d87b8
+// VTABLE 0x100d87b8 TEMPLATE
 // class MxListParent<LegoEventNotificationParam>
 
 #endif // LEGOINPUTMANAGER_H

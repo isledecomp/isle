@@ -7,9 +7,9 @@
 // VTABLE 0x100d6aa0
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
-	inline LegoEventNotificationParam() : MxNotificationParam((MxParamType) 0, NULL) {}
+	inline LegoEventNotificationParam() : MxNotificationParam(PARAM_NONE, NULL) {}
 	inline LegoEventNotificationParam(
-		MxParamType p_type,
+		NotificationId p_type,
 		MxCore* p_sender,
 		MxU8 p_modifier,
 		MxS32 p_x,
