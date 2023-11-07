@@ -83,7 +83,6 @@ protected:
 	MxListEntry<T>* m_first; // +0x10
 	MxListEntry<T>* m_last;  // +0x14
 
-private:
 	void _DeleteEntry(MxListEntry<T>* match);
 	MxListEntry<T>* _InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
 };

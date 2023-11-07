@@ -6,21 +6,14 @@
 #include "legoworld.h"
 #include "mxlist.h"
 #include "mxpresenter.h"
+#include "mxqueue.h"
 
 #include <dinput.h>
 
-enum NotificationId {
-	NONE = 0,
-	KEYDOWN = 7,
-	MOUSEUP = 8,
-	MOUSEDOWN = 9,
-	MOUSEMOVE = 10,
-	TIMER = 15
-};
-
 class LegoControlManager;
-// TODO Really a MxQueue, but we don't have one of those
-class LegoEventQueue : public MxList<LegoEventNotificationParam> {};
+
+// VTABLE 0x100d8800
+class LegoEventQueue : public MxQueue<LegoEventNotificationParam> {};
 
 // VTABLE 0x100d8760
 // SIZE 0x338
@@ -29,7 +22,7 @@ public:
 	LegoInputManager();
 	virtual ~LegoInputManager() override;
 
-	__declspec(dllexport) void QueueEvent(NotificationId id, unsigned char p2, MxLong p3, MxLong p4, unsigned char p5);
+	__declspec(dllexport) void QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key);
 	__declspec(dllexport) void Register(MxCore*);
 	__declspec(dllexport) void UnRegister(MxCore*);
 
@@ -54,12 +47,15 @@ public:
 	inline LegoControlManager* GetControlManager() { return m_controlManager; }
 	inline LegoWorld* GetWorld() { return m_world; }
 
+	void ProcessEvents();
+	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
+
 	// private:
 	MxCriticalSection m_criticalSection;
-	LegoEventQueue* m_eventQueue; // list or hash table
+	MxList<undefined4>* m_unk0x5c; // list or hash table
 	LegoCameraController* m_camera;
 	LegoWorld* m_world;
-	MxList<undefined4>* m_unk0x68; // list or hash table
+	LegoEventQueue* m_eventQueue; // +0x68
 	undefined4 m_unk0x6c;
 	undefined4 m_unk0x70;
 	undefined4 m_unk0x74;
@@ -83,5 +79,38 @@ public:
 	MxBool m_unk0x335;
 	MxBool m_unk0x336;
 };
+
+// OFFSET: LEGO1 0x1005bb80 TEMPLATE
+// MxListParent<LegoEventNotificationParam>::Compare
+
+// OFFSET: LEGO1 0x1005bc30 TEMPLATE
+// MxListParent<LegoEventNotificationParam>::Destroy
+
+// OFFSET: LEGO1 0x1005bc80 TEMPLATE
+// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
+
+// OFFSET: LEGO1 0x1005bd50 TEMPLATE
+// MxListParent<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005bdc0 TEMPLATE
+// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005beb0 TEMPLATE
+// LegoEventQueue::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005bf70 TEMPLATE
+// MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005d010 TEMPLATE
+// MxListEntry<LegoEventNotificationParam>::GetValue
+
+// VTABLE 0x100d87e8 TEMPLATE
+// class MxQueue<LegoEventNotificationParam>
+
+// VTABLE 0x100d87d0 TEMPLATE
+// class MxList<LegoEventNotificationParam>
+
+// VTABLE 0x100d87b8 TEMPLATE
+// class MxListParent<LegoEventNotificationParam>
 
 #endif // LEGOINPUTMANAGER_H

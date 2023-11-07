@@ -95,7 +95,7 @@ void IsleApp::Close()
 	if (Lego()) {
 		GameState()->Save(0);
 		if (InputManager()) {
-			InputManager()->QueueEvent(KEYDOWN, 0, 0, 0, 0x20);
+			InputManager()->QueueEvent(c_notificationKeyPress, 0, 0, 0, 0x20);
 		}
 
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
@@ -431,22 +431,22 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 		}
 		keyCode = wParam;
-		type = KEYDOWN;
+		type = c_notificationKeyPress;
 		break;
 	case WM_MOUSEMOVE:
 		g_mousemoved = 1;
-		type = MOUSEMOVE;
+		type = c_notificationMouseMove;
 		break;
 	case WM_TIMER:
-		type = TIMER;
+		type = c_notificationTimer;
 		break;
 	case WM_LBUTTONDOWN:
 		g_mousedown = 1;
-		type = MOUSEDOWN;
+		type = c_notificationButtonDown;
 		break;
 	case WM_LBUTTONUP:
 		g_mousedown = 0;
-		type = MOUSEUP;
+		type = c_notificationButtonUp;
 		break;
 	case 0x5400:
 		if (g_isle) {
@@ -462,7 +462,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (InputManager()) {
 			InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
 		}
-		if (g_isle && g_isle->m_drawCursor && type == MOUSEMOVE) {
+		if (g_isle && g_isle->m_drawCursor && type == c_notificationMouseMove) {
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
 			if (x >= 640) {
