@@ -21,6 +21,14 @@ IndentAccessModifiers: false
 IndentWidth: 4
 InsertNewlineAtEOF: true
 PointerAlignment: Left
+QualifierAlignment: Custom
+QualifierOrder:
+  - inline
+  - static
+  - friend
+  - const
+  - volatile
+  - type
 SpaceAfterCStyleCast: true
 TabWidth: 4
 UseTab: ForContinuationAndIndentation
