@@ -42,8 +42,7 @@ void LegoVideoManager::Destroy()
 {
 	// todo: delete m_unk0x512
 	// todo: delete m_unk0x258
-	if (m_arialFont != NULL)
-	{
+	if (m_arialFont != NULL) {
 		DeleteObject(m_arialFont);
 		m_arialFont = NULL;
 	}
