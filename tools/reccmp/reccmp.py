@@ -336,21 +336,21 @@ def parse_asm(file, addr, size):
   return asm
 
 REGISTER_LIST = set([
-  'ax'
-  'bp'
-  'bx'
-  'cx'
-  'di'
-  'dx'
-  'eax'
-  'ebp'
-  'ebx'
-  'ecx'
-  'edi'
-  'edx'
-  'esi'
+  'ax',
+  'bp',
+  'bx',
+  'cx',
+  'di',
+  'dx',
+  'eax',
+  'ebp',
+  'ebx',
+  'ecx',
+  'edi',
+  'edx',
+  'esi',
   'esp',
-  'si'
+  'si',
   'sp',
 ])
 WORDS = re.compile(r'\w+')
@@ -615,7 +615,7 @@ else:
   if function_count > 0:
     effective_accuracy = total_effective_accuracy / function_count * 100
     actual_accuracy = total_accuracy / function_count * 100
-    print(f'\nTotal effective accuracy {effective_accuracy}% across {function_count} functions ({actual_accuracy}% actual accuracy)')
+    print(f'\nTotal effective accuracy {effective_accuracy:.2f}% across {function_count} functions ({actual_accuracy:.2f}% actual accuracy)')
 
     if svg:
       gen_svg(svg, os.path.basename(original), args.svg_icon, implemented_funcs, function_count, total_effective_accuracy)
