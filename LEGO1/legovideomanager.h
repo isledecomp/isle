@@ -46,7 +46,7 @@ private:
 	MxBool m_unk0xe5;
 	MxBool m_unk0xe6;
 	PALETTEENTRY m_paletteEntries[256]; // 0xe7
-	char m_padding0x4e7;
+	undefined m_padding0x4e7;
 	undefined4 m_unk4e8;
 	MxBool m_isFullscreenMovie;   // 0x4ec
 	MxPalette* m_palette;         // 0x4f0
