@@ -16,10 +16,10 @@ parser.add_argument('--no-color', '-n', action='store_true', help='Do not color 
 args = parser.parse_args()
 
 if not os.path.isfile(args.original):
-  parser.error('Original binary does not exist')
+  parser.error(f'Original binary file {args.original} does not exist')
 
 if not os.path.isfile(args.recompiled):
-  parser.error('Recompiled binary does not exist')
+  parser.error(f'Recompiled binary {args.recompiled} does not exist')
 
 def get_file_in_script_dir(fn):
   return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
@@ -58,25 +58,19 @@ has_diff = False
 
 for line in udiff:
   has_diff = True
-  if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
+  color = ''
+  if line.startswith('++') or line.startswith('@@') or line.startswith('--'):
     # Skip unneeded parts of the diff for the brief view
-    pass
-  elif line.startswith("+"):
-    if args.no_color:
-      print(line)
-    else:
-      print(colorama.Fore.GREEN + line)
-  elif line.startswith("-"):
-    if args.no_color:
-      print(line)
-    else:
-      print(colorama.Fore.RED + line)
-  else:
-    print(line)
+    continue
+  # Work out color if we are printing color
+  if not args.no_color:
+    if line.startswith('+'):
+      color = colorama.Fore.GREEN
+    elif line.startswith('-'):
+      color = colorama.Fore.RED
+  print(color + line)
+  # Reset color if we're printing in color
   if not args.no_color:
     print(colorama.Style.RESET_ALL, end='')
 
-if has_diff:
-  sys.exit(1)
-else:
-  sys.exit(0)
+sys.exit(1 if has_diff else 0)

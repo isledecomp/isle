@@ -50,19 +50,19 @@ plain = args.no_color
 
 original = args.original
 if not os.path.isfile(original):
-  parser.error('Original binary does not exist')
+  parser.error(f'Original binary {original} does not exist')
 
 recomp = args.recompiled
 if not os.path.isfile(recomp):
-  parser.error('Recompiled binary does not exist')
+  parser.error(f'Recompiled binary {recomp} does not exist')
 
 syms = args.pdb
 if not os.path.isfile(syms):
-  parser.error('Symbols PDB does not exist')
+  parser.error(f'Symbols PDB {syms} does not exist')
 
 source = args.decomp_dir
 if not os.path.isdir(source):
-  parser.error('Source directory does not exist')
+  parser.error(f'Source directory {source} does not exist')
 
 svg = args.svg
 
@@ -70,7 +70,7 @@ svg = args.svg
 # to file addresses
 class Bin:
   def __init__(self, filename):
-    logger.debug('Parsing headers of "%s"... ', filename)
+    logger.debug(f'Parsing headers of "{filename}"... ')
     self.file = open(filename, 'rb')
 
     #HACK: Strictly, we should be parsing the header, but we know where
@@ -153,8 +153,8 @@ class SymInfo:
     else:
       call.append(pdb)
 
-    logger.info('Parsing %s ...', pdb)
-    logger.debug('Command = %r', call)
+    logger.info(f'Parsing {pdb} ...')
+    logger.debug(f'Command = {call}')
     line_dump = subprocess.check_output(call).decode('utf-8').split('\r\n')
 
     current_section = None
@@ -219,7 +219,7 @@ class SymInfo:
     addr = None
     found = False
 
-    logger.debug('Looking for %s:%d', filename, line)
+    logger.debug(f'Looking for {filename}:{line}')
     filename_basename = os.path.basename(filename).lower()
 
     for fn in self.lines:
@@ -239,9 +239,9 @@ class SymInfo:
       if addr in self.funcs:
         return self.funcs[addr]
       else:
-        logger.error('Failed to find function symbol with address: 0x%x', addr)
+        logger.error(f'Failed to find function symbol with address: 0x{addr:x}')
     else:
-      logger.error('Failed to find function symbol with filename and line: %s:%d', filename, line)
+      logger.error(f'Failed to find function symbol with filename and line: {filename}:{line}')
 
   def get_recompiled_address_from_name(self, name):
     logger.debug('Looking for %s', name)
@@ -249,7 +249,7 @@ class SymInfo:
     if name in self.names:
         return self.names[name]
     else:
-        logger.error('Failed to find function symbol with name: %s', name)
+        logger.error(f'Failed to find function symbol with name: {name}')
 
 wine_path_converter = None
 if os.name != 'nt':
@@ -272,7 +272,7 @@ class OffsetPlaceholderGenerator:
       return self.replacements[addr]
     else:
       self.counter += 1
-      replacement = '<OFFSET%d>' % self.counter
+      replacement = f'<OFFSET{self.counter}>'
       self.replacements[addr] = replacement
       return replacement
 
@@ -332,12 +332,26 @@ def parse_asm(file, addr, size):
     if op_str is None:
       asm.append(mnemonic)
     else:
-      asm.append("%s %s" % (mnemonic, op_str))
+      asm.append(f'{mnemonic} {op_str}')
   return asm
 
 REGISTER_LIST = set([
-  'eax', 'ebx', 'ecx', 'edx', 'edi', 'esi', 'ebp', 'esp',
-  'ax', 'bx', 'cx', 'dx', 'di', 'si', 'bp', 'sp',
+  'ax',
+  'bp',
+  'bx',
+  'cx',
+  'di',
+  'dx',
+  'eax',
+  'ebp',
+  'ebx',
+  'ecx',
+  'edi',
+  'edx',
+  'esi',
+  'esp',
+  'si',
+  'sp',
 ])
 WORDS = re.compile(r'\w+')
 
@@ -350,9 +364,8 @@ def get_registers(line: str):
       to_replace.append((reg, match.start()))
   return to_replace
 
-def replace_register(lines: list[str], start_line: int, reg: str, replacement: str):
-  for i in range(start_line, len(lines)):
-    lines[i] = lines[i].replace(reg, replacement)
+def replace_register(lines: list[str], start_line: int, reg: str, replacement: str) -> list[str]:
+  return [line.replace(reg, replacement) if i >= start_line else line for i, line in enumerate(lines)]
 
 # Is it possible to make new_asm the same as original_asm by swapping registers?
 def can_resolve_register_differences(original_asm, new_asm):
@@ -379,10 +392,10 @@ def can_resolve_register_differences(original_asm, new_asm):
         if replacing_reg in REGISTER_LIST:
           if replacing_reg != reg:
             # Do a three-way swap replacing in all the subsequent lines
-            temp_reg = "&" * len(reg)
-            replace_register(new_asm, i, replacing_reg, temp_reg)
-            replace_register(new_asm, i, reg, replacing_reg)
-            replace_register(new_asm, i, temp_reg, reg)
+            temp_reg = '&' * len(reg)
+            new_asm = replace_register(new_asm, i, replacing_reg, temp_reg)
+            new_asm = replace_register(new_asm, i, reg, replacing_reg)
+            new_asm = replace_register(new_asm, i, temp_reg, reg)
         else:
           # No replacement to do, different code, bail out
           return False
@@ -404,185 +417,171 @@ pattern = '// OFFSET:'
 for subdir, dirs, files in os.walk(source):
   for file in files:
     srcfilename = os.path.join(os.path.abspath(subdir), file)
-    srcfile = open(srcfilename, 'r')
-    line_no = 0
+    with open(srcfilename, 'r') as srcfile:
+      line_no = 0
 
-    while True:
-      try:
-        line = srcfile.readline()
-        line_no += 1
+      while True:
+        try:
+          line = srcfile.readline()
+          line_no += 1
 
-        if not line:
-          break
+          if not line:
+            break
 
-        line = line.strip()
+          line = line.strip()
 
-        if line.startswith(pattern) and not line.endswith("STUB"):
-          par = line[len(pattern):].strip().split()
-          module = par[0]
-          if module != basename:
-            continue
-
-          addr = int(par[1], 16)
-
-          # Verbose flag handling
-          if verbose:
-            if addr == verbose:
-              found_verbose_target = True
-            else:
+          if line.startswith(pattern) and not line.endswith('STUB'):
+            par = line[len(pattern):].strip().split()
+            module = par[0]
+            if module != basename:
               continue
 
-          if line.endswith("TEMPLATE"):
-              line = srcfile.readline()
-              line_no += 1
-              # Name comes after // comment
-              name = line.strip()[2:].strip()
+            addr = int(par[1], 16)
 
-              recinfo = syminfo.get_recompiled_address_from_name(name)
-              if not recinfo:
-                continue
-          else:
-              find_open_bracket = line
-              while '{' not in find_open_bracket:
-                find_open_bracket = srcfile.readline()
-                line_no += 1
-
-              recinfo = syminfo.get_recompiled_address(srcfilename, line_no)
-              if not recinfo:
-                continue
-
-          # The effective_ratio is the ratio when ignoring differing register 
-          # allocation vs the ratio is the true ratio.
-          ratio = 0.0
-          effective_ratio = 0.0
-          if recinfo.size:
-            origasm = parse_asm(origfile, addr + recinfo.start, recinfo.size)
-            recompasm = parse_asm(recompfile, recinfo.addr + recinfo.start, recinfo.size)
-
-            diff = difflib.SequenceMatcher(None, origasm, recompasm)
-            ratio = diff.ratio()
-            effective_ratio = ratio
-
-            if ratio != 1.0:
-              # Check whether we can resolve register swaps which are actually
-              # perfect matches modulo compiler entropy.
-              if can_resolve_register_differences(origasm, recompasm):
-                effective_ratio = 1.0
-          else:
-            ratio = 0
-
-          percenttext = "%.2f%%" % (effective_ratio * 100)
-          if not plain:
-            if effective_ratio == 1.0:
-              percenttext = colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
-            elif effective_ratio > 0.8:
-              percenttext = colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
-            else:
-              percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
-
-          if effective_ratio == 1.0 and ratio != 1.0:
-            if plain:
-              percenttext += "*"
-            else:
-              percenttext += colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
-
-          if args.print_rec_addr:
-            addrs = '%s / %s' % (hex(addr), hex(recinfo.addr))
-          else:
-            addrs = hex(addr)
-
-          if not verbose:
-            print('  %s (%s) is %s similar to the original' % (recinfo.name, addrs, percenttext))
-
-          function_count += 1
-          total_accuracy += ratio
-          total_effective_accuracy += effective_ratio
-
-          if recinfo.size:
-            udiff = difflib.unified_diff(origasm, recompasm, n=10)
-
-            # If verbose, print the diff for that function to the output
+            # Verbose flag handling
             if verbose:
-              if effective_ratio == 1.0:
-                ok_text = "OK!" if plain else (colorama.Fore.GREEN + "✨ OK! ✨" + colorama.Style.RESET_ALL)
-                if ratio == 1.0:
-                  print("%s: %s 100%% match.\n\n%s\n\n" %
-                        (addrs, recinfo.name, ok_text))
-                else:
-                  print("%s: %s Effective 100%% match. (Differs in register allocation only)\n\n%s (still differs in register allocation)\n\n" %
-                        (addrs, recinfo.name, ok_text))
+              if addr == verbose:
+                found_verbose_target = True
               else:
-                for line in udiff:
-                  if line.startswith("++") or line.startswith("@@") or line.startswith("--"):
-                    # Skip unneeded parts of the diff for the brief view
-                    pass
-                  elif line.startswith("+"):
-                    if plain:
-                      print(line)
-                    else:
-                      print(colorama.Fore.GREEN + line)
-                  elif line.startswith("-"):
-                    if plain:
-                      print(line)
-                    else:
-                      print(colorama.Fore.RED + line)
+                continue
+
+            if line.endswith('TEMPLATE'):
+                line = srcfile.readline()
+                line_no += 1
+                # Name comes after // comment
+                name = line.strip()[2:].strip()
+
+                recinfo = syminfo.get_recompiled_address_from_name(name)
+                if not recinfo:
+                  continue
+            else:
+                find_open_bracket = line
+                while '{' not in find_open_bracket:
+                  find_open_bracket = srcfile.readline()
+                  line_no += 1
+
+                recinfo = syminfo.get_recompiled_address(srcfilename, line_no)
+                if not recinfo:
+                  continue
+
+            # The effective_ratio is the ratio when ignoring differing register
+            # allocation vs the ratio is the true ratio.
+            ratio = 0.0
+            effective_ratio = 0.0
+            if recinfo.size:
+              origasm = parse_asm(origfile, addr + recinfo.start, recinfo.size)
+              recompasm = parse_asm(recompfile, recinfo.addr + recinfo.start, recinfo.size)
+
+              diff = difflib.SequenceMatcher(None, origasm, recompasm)
+              ratio = diff.ratio()
+              effective_ratio = ratio
+
+              if ratio != 1.0:
+                # Check whether we can resolve register swaps which are actually
+                # perfect matches modulo compiler entropy.
+                if can_resolve_register_differences(origasm, recompasm):
+                  effective_ratio = 1.0
+            else:
+              ratio = 0
+
+            percenttext = f'{(effective_ratio * 100):.2f}%'
+            if not plain:
+              if effective_ratio == 1.0:
+                percenttext = colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
+              elif effective_ratio > 0.8:
+                percenttext = colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
+              else:
+                percenttext = colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
+
+            if effective_ratio == 1.0 and ratio != 1.0:
+              if plain:
+                percenttext += '*'
+              else:
+                percenttext += colorama.Fore.RED + '*' + colorama.Style.RESET_ALL
+
+            if args.print_rec_addr:
+              addrs = f'0x{addr:x} / 0x{recinfo.addr:x}'
+            else:
+              addrs = hex(addr)
+
+            if not verbose:
+              print(f'  {recinfo.name} ({addrs}) is {percenttext} similar to the original')
+
+            function_count += 1
+            total_accuracy += ratio
+            total_effective_accuracy += effective_ratio
+
+            if recinfo.size:
+              udiff = difflib.unified_diff(origasm, recompasm, n=10)
+
+              # If verbose, print the diff for that function to the output
+              if verbose:
+                if effective_ratio == 1.0:
+                  ok_text = 'OK!' if plain else (colorama.Fore.GREEN + '✨ OK! ✨' + colorama.Style.RESET_ALL)
+                  if ratio == 1.0:
+                    print(f'{addrs}: {recinfo.name} 100% match.\n\n{ok_text}\n\n')
                   else:
-                    print(line)
-                  if not plain:
-                    print(colorama.Style.RESET_ALL, end='')
+                    print(f'{addrs}: {recinfo.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n')
+                else:
+                  for line in udiff:
+                    if line.startswith('++') or line.startswith('@@') or line.startswith('--'):
+                      # Skip unneeded parts of the diff for the brief view
+                      pass
+                    elif line.startswith('+'):
+                      if plain:
+                        print(line)
+                      else:
+                        print(colorama.Fore.GREEN + line)
+                    elif line.startswith('-'):
+                      if plain:
+                        print(line)
+                      else:
+                        print(colorama.Fore.RED + line)
+                    else:
+                      print(line)
+                    if not plain:
+                      print(colorama.Style.RESET_ALL, end='')
 
-                print("\n%s is only %s similar to the original, diff above" % (recinfo.name, percenttext))
+                  print(f'\n{recinfo.name} is only {percenttext} similar to the original, diff above')
 
-            # If html, record the diffs to an HTML file
-            if html_path:
-              escaped = '\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n').replace('<', '&lt;').replace('>', '&gt;')
-              htmlinsert.append('{address: "%s", name: "%s", matching: %s, diff: "%s"}' % (hex(addr), html.escape(recinfo.name), str(effective_ratio), escaped))
+              # If html, record the diffs to an HTML file
+              if html_path:
+                escaped = html.escape('\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n'))
+                htmlinsert.append(f'{{address: "0x{addr:x}", name: "{html.escape(recinfo.name)}", matching: {effective_ratio}, diff: "{escaped}"}}')
 
-      except UnicodeDecodeError:
-        break
+        except UnicodeDecodeError:
+          break
 
 def gen_html(html_path, data):
-  templatefile = open(get_file_in_script_dir('template.html'), 'r')
-  if not templatefile:
-    print('Failed to find HTML template file, can\'t generate HTML summary')
-    return
-
-  templatedata = templatefile.read()
-  templatefile.close()
+  templatedata = None
+  with open(get_file_in_script_dir('template.html')) as templatefile:
+    templatedata = templatefile.read()
 
   templatedata = templatedata.replace('/* INSERT DATA HERE */', ','.join(data), 1)
 
-  htmlfile = open(html_path, 'w')
-  if not htmlfile:
-    print('Failed to write to HTML file %s' % html_path)
-    return
+  with open(html_path, 'w') as htmlfile:
+    htmlfile.write(templatedata)
 
-  htmlfile.write(templatedata)
-  htmlfile.close()
 
 def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
-  templatefile = open(get_file_in_script_dir('template.svg'), 'r')
-  if not templatefile:
-    print('Failed to find SVG template file, can\'t generate SVG summary')
-    return
+  templatedata = None
+  with open(get_file_in_script_dir('template.svg')) as templatefile:
+    templatedata = templatefile.read()
 
-  templatedata = templatefile.read()
-  templatefile.close()
-
+  # TODO: Use templating engine (e.g. pystache)
   # Replace icon
   if args.svg_icon:
-    iconfile = open(args.svg_icon, 'rb')
-    templatedata = templatedata.replace('{icon}', base64.b64encode(iconfile.read()).decode('utf-8'), 1)
-    iconfile.close()
+    with open(args.svg_icon, 'rb') as iconfile:
+      templatedata = templatedata.replace('{icon}', base64.b64encode(iconfile.read()).decode('utf-8'), 1)
 
   # Replace name
   templatedata = templatedata.replace('{name}', name, 1)
 
   # Replace implemented statistic
-  templatedata = templatedata.replace('{implemented}', '%.2f%% (%i/%i)' % (implemented_funcs / total_funcs * 100, implemented_funcs, total_funcs), 1)
+  templatedata = templatedata.replace('{implemented}', f'{(implemented_funcs / total_funcs * 100):.2f}% ({implemented_funcs}/{total_funcs})', 1)
 
   # Replace accuracy statistic
-  templatedata = templatedata.replace('{accuracy}', '%.2f%%' % (raw_accuracy / implemented_funcs * 100), 1)
+  templatedata = templatedata.replace('{accuracy}', f'{(raw_accuracy / implemented_funcs * 100):.2f}%', 1)
 
   # Generate progress bar width
   total_statistic = raw_accuracy / total_funcs
@@ -593,22 +592,17 @@ def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
   templatedata = templatedata[0:percentstart] + str(progwidth) + templatedata[percentend + 1:]
 
   # Replace percentage statistic
-  templatedata = templatedata.replace('{percent}', '%.2f%%' % (total_statistic * 100), 2)
+  templatedata = templatedata.replace('{percent}', f'{(total_statistic * 100):.2f}%', 2)
 
-  svgfile = open(svg, 'w')
-  if not svgfile:
-    print('Failed to write to SVG file %s' % svg)
-    return
-
-  svgfile.write(templatedata)
-  svgfile.close()
+  with open(svg, 'w') as svgfile:
+    svgfile.write(templatedata)
 
 if html_path:
   gen_html(html_path, htmlinsert)
 
 if verbose:
   if not found_verbose_target:
-    print('Failed to find the function with address %s' % hex(verbose))
+    print(f'Failed to find the function with address 0x{verbose:x}')
 else:
   implemented_funcs = function_count
 
@@ -616,8 +610,9 @@ else:
     function_count = int(args.total)
 
   if function_count > 0:
-    print('\nTotal effective accuracy %.2f%% across %i functions (%.2f%% actual accuracy)' %
-          (total_effective_accuracy / function_count * 100, function_count, total_accuracy / function_count * 100))
+    effective_accuracy = total_effective_accuracy / function_count * 100
+    actual_accuracy = total_accuracy / function_count * 100
+    print(f'\nTotal effective accuracy {effective_accuracy:.2f}% across {function_count} functions ({actual_accuracy:.2f}% actual accuracy)')
 
     if svg:
       gen_svg(svg, os.path.basename(original), args.svg_icon, implemented_funcs, function_count, total_effective_accuracy)
