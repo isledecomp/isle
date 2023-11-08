@@ -364,10 +364,8 @@ def get_registers(line: str):
       to_replace.append((reg, match.start()))
   return to_replace
 
-def replace_register(lines: list[str], start_line: int, reg: str, replacement: str):
-  # TODO: Use map and return lines rather than modifying parameter
-  for i in range(start_line, len(lines)):
-    lines[i] = lines[i].replace(reg, replacement)
+def replace_register(lines: list[str], start_line: int, reg: str, replacement: str) -> list[str]:
+  return [line.replace(reg, replacement) if i >= start_line else line for i, line in enumerate(lines)]
 
 # Is it possible to make new_asm the same as original_asm by swapping registers?
 def can_resolve_register_differences(original_asm, new_asm):
@@ -395,10 +393,9 @@ def can_resolve_register_differences(original_asm, new_asm):
           if replacing_reg != reg:
             # Do a three-way swap replacing in all the subsequent lines
             temp_reg = '&' * len(reg)
-            # TODO: This happens to work but it really shouldn't
-            replace_register(new_asm, i, replacing_reg, temp_reg)
-            replace_register(new_asm, i, reg, replacing_reg)
-            replace_register(new_asm, i, temp_reg, reg)
+            new_asm = replace_register(new_asm, i, replacing_reg, temp_reg)
+            new_asm = replace_register(new_asm, i, reg, replacing_reg)
+            new_asm = replace_register(new_asm, i, temp_reg, reg)
         else:
           # No replacement to do, different code, bail out
           return False
