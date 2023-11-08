@@ -61,10 +61,10 @@ private:
 	undefined4 m_unk0x514;
 	undefined m_pad0x518[0x10];
 	undefined4 m_unk0x528;
-	MxBool m_drawFPS; // 0x52c
-	RECT m_fpsRect;   // 0x530
+	MxBool m_drawFPS;  // 0x52c
+	RECT m_fpsRect;    // 0x530
 	HFONT m_arialFont; // 0x540
-	SIZE m_fpsSize; // 0x544
+	SIZE m_fpsSize;    // 0x544
 	undefined m_pad0x54c[8];
 	undefined m_unk0x554;
 	MxBool m_initialized; // 0x555
