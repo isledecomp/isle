@@ -70,7 +70,7 @@ public:
 		m_first = NULL;
 	}
 
-	virtual ~MxList();
+	virtual ~MxList() override;
 
 	void Append(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
 	void DeleteAll();
