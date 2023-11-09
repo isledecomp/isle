@@ -12,7 +12,7 @@ class MxStreamChunkList : public MxList<MxStreamChunk*> {
 public:
 	MxStreamChunkList() { m_customDestructor = Destroy; }
 
-	virtual MxS8 Compare(MxStreamChunk*, MxStreamChunk*); // +0x14
+	virtual MxS8 Compare(MxStreamChunk*, MxStreamChunk*) override; // +0x14
 
 	static void Destroy(MxStreamChunk* p_chunk);
 };
