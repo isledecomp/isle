@@ -17,6 +17,7 @@ public:
 		Flag_Bit4 = 0x08,
 		Flag_Bit5 = 0x10,
 		Flag_Enabled = 0x20,
+		Flag_Bit7 = 0x40,
 		Flag_Parsed = 0x80,
 		Flag_Bit9 = 0x200,
 		Flag_Bit10 = 0x400,
@@ -50,7 +51,7 @@ public:
 	virtual MxBool HasId(MxU32 p_objectId);                            // vtable+34;
 	virtual void SetUnkTimingField(MxLong p_unkTimingField);           // vtable+38;
 	virtual MxLong GetUnkTimingField();                                // vtable+3c;
-	virtual MxLong GetCurrentTime();                                   // vtable+40;
+	virtual MxLong GetElapsedTime();                                   // vtable+40;
 
 	void AppendData(MxU16 p_extraLength, const char* p_extraData);
 

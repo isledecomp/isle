@@ -21,8 +21,22 @@ MxResult MxDSSubscriber::FUN_100b7ed0(MxStreamController*, MxU32, MxS16)
 	return SUCCESS;
 }
 
+// OFFSET: LEGO1 0x100b8250 STUB
+MxStreamChunk* MxDSSubscriber::FUN_100b8250()
+{
+	// TODO
+	return NULL;
+}
+
+// OFFSET: LEGO1 0x100b8360 STUB
+MxStreamChunk* MxDSSubscriber::FUN_100b8360()
+{
+	// TODO
+	return NULL;
+}
+
 // OFFSET: LEGO1 0x100b8390 STUB
-void MxDSSubscriber::FUN_100b8390(MxDSChunk*)
+void MxDSSubscriber::FUN_100b8390(MxStreamChunk*)
 {
 	// TODO
 }

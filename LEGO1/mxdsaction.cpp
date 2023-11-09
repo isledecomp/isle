@@ -196,11 +196,8 @@ MxLong MxDSAction::GetUnkTimingField()
 	return this->m_unkTimingField;
 }
 
-// Win32 defines GetCurrentTime to GetTickCount
-#undef GetCurrentTime
-
 // OFFSET: LEGO1 0x100adcd0
-MxLong MxDSAction::GetCurrentTime()
+MxLong MxDSAction::GetElapsedTime()
 {
 	return Timer()->GetTime() - this->m_unkTimingField;
 }
