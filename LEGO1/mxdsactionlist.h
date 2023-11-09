@@ -12,7 +12,7 @@ class MxDSActionList : public MxList<MxDSAction*> {
 public:
 	MxDSActionList() { this->m_unk18 = 0; }
 
-	virtual MxS8 Compare(MxDSAction*, MxDSAction*); // +0x14
+	virtual MxS8 Compare(MxDSAction*, MxDSAction*) override; // +0x14
 
 	static void Destroy(MxDSAction* p_action);
 
