@@ -33,8 +33,14 @@ typedef unsigned int MxULong;
 typedef MxS32 MxTime;
 
 typedef MxLong MxResult;
-const MxResult SUCCESS = 0;
-const MxResult FAILURE = -1;
+
+#ifndef SUCCESS
+#define SUCCESS 0
+#endif
+
+#ifndef FAILURE
+#define FAILURE -1
+#endif
 
 typedef MxU8 MxBool;
 

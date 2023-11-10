@@ -189,6 +189,7 @@ add_library(lego1 SHARED
   LEGO1/mxvideoparamflags.cpp
   LEGO1/mxvideopresenter.cpp
   LEGO1/mxwavepresenter.cpp
+  LEGO1/orientableroi.cpp
   LEGO1/pizza.cpp
   LEGO1/pizzamissionstate.cpp
   LEGO1/pizzeria.cpp
@@ -210,6 +211,7 @@ add_library(lego1 SHARED
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager.cpp
+  LEGO1/viewroi.cpp
 )
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)

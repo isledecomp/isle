@@ -5,6 +5,54 @@
 
 #include <vec.h>
 
+/*
+ * A simple array of three floats that can be indexed into.
+ */
+class Vector3 {
+public:
+	float elements[3]; // storage is public for easy access
+	Vector3() {}
+	Vector3(float x, float y, float z)
+	{
+		elements[0] = x;
+		elements[1] = y;
+		elements[2] = z;
+	}
+	Vector3(const float v[3])
+	{
+		elements[0] = v[0];
+		elements[1] = v[1];
+		elements[2] = v[2];
+	}
+	const float& operator[](long i) const { return elements[i]; }
+	float& operator[](long i) { return elements[i]; }
+};
+
+/*
+ * A simple array of four floats that can be indexed into.
+ */
+struct Vector4 {
+public:
+	float elements[4]; // storage is public for easy access
+	inline Vector4() {}
+	Vector4(float x, float y, float z, float w)
+	{
+		elements[0] = x;
+		elements[1] = y;
+		elements[2] = z;
+		elements[3] = w;
+	}
+	Vector4(const float v[4])
+	{
+		elements[0] = v[0];
+		elements[1] = v[1];
+		elements[2] = v[2];
+		elements[3] = v[3];
+	}
+	const float& operator[](long i) const { return elements[i]; }
+	float& operator[](long i) { return elements[i]; }
+};
+
 // VTABLE 0x100d4288
 // SIZE 0x8
 class MxVector2 {
@@ -28,8 +76,8 @@ public:
 
 	// vtable + 0x20
 	virtual void EqualsImpl(float* p_data) = 0;
-	virtual const float* GetData() const;
 	virtual float* GetData();
+	virtual const float* GetData() const;
 	virtual void Clear() = 0;
 
 	// vtable + 0x30
