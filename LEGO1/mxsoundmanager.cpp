@@ -145,7 +145,7 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 	MxPresenterListCursor cursor(m_presenters);
 
 	while (cursor.Next(presenter))
-		((MxAudioPresenter*) presenter)->vtable60(((MxAudioPresenter*) presenter)->vtable5c());
+		((MxAudioPresenter*) presenter)->SetVolume(((MxAudioPresenter*) presenter)->GetVolume());
 
 	m_criticalSection.Leave();
 }

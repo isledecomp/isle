@@ -159,7 +159,7 @@ void MxBackgroundAudioManager::StartAction(MxParam& p)
 	m_action2.SetAtomId(m_unk138->GetAction()->GetAtomId());
 	m_action2.SetObjectId(m_unk138->GetAction()->GetObjectId());
 	m_targetVolume = ((MxDSSound*) (m_unk138->GetAction()))->GetVolume();
-	m_unk138->vtable60(0);
+	m_unk138->SetVolume(0);
 }
 
 // OFFSET: LEGO1 0x1007f200
@@ -257,15 +257,15 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 			if (m_unk148 == 0) {
 				compare = m_unk148;
 			}
-			volume = m_unk138->vtable5c();
+			volume = m_unk138->GetVolume();
 			if (volume < compare) {
-				if (m_unk140 + m_unk138->vtable5c() <= compare) {
+				if (m_unk140 + m_unk138->GetVolume() <= compare) {
 					compare = m_unk140 + compare;
 				}
-				m_unk138->vtable60(compare);
+				m_unk138->SetVolume(compare);
 			}
 			else {
-				m_unk138->vtable60(compare);
+				m_unk138->SetVolume(compare);
 				m_unka0 = m_unk138;
 				m_action1 = m_action2;
 				m_unk138 = NULL;
@@ -276,16 +276,16 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 		}
 	}
 	else if (m_unka0->GetAction() != NULL) {
-		if (m_unka0->vtable5c() == 0) {
+		if (m_unka0->GetVolume() == 0) {
 			DeleteObject(*m_unka0->GetAction());
 		}
 		else {
-			compare = m_unka0->vtable5c();
+			compare = m_unka0->GetVolume();
 			volume = 0;
 			if (compare != m_unk140 && -1 < compare - m_unk140) {
-				volume = m_unka0->vtable5c() - m_unk140;
+				volume = m_unka0->GetVolume() - m_unk140;
 			}
-			m_unk138->vtable60(volume);
+			m_unk138->SetVolume(volume);
 		}
 	}
 }
@@ -295,7 +295,7 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
 	// This function probably is the fade in/out routine
 	if (m_unka0 != NULL) {
-		undefined4 volume = m_unka0->vtable5c();
+		undefined4 volume = m_unka0->GetVolume();
 		MxU32 compare = 30;
 		if (m_unk148 == 0) {
 			compare = m_targetVolume;
@@ -306,17 +306,17 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 			if (compare <= volume) {
 				volume = compare;
 			}
-			m_unka0->vtable60(volume);
+			m_unka0->SetVolume(volume);
 		}
 		else if (compare < volume) {
 			volume = volume - m_unk140;
 			if (volume <= compare) {
 				volume = compare;
 			}
-			m_unka0->vtable60(volume);
+			m_unka0->SetVolume(volume);
 		}
 		else {
-			m_unka0->vtable60(volume);
+			m_unka0->SetVolume(volume);
 			m_unk13c = 0;
 		}
 	}

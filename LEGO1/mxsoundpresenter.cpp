@@ -11,6 +11,12 @@ MxSoundPresenter::~MxSoundPresenter()
 	Destroy(TRUE);
 }
 
+// OFFSET: LEGO1 0x1000d490
+void MxSoundPresenter::Destroy()
+{
+	Destroy(FALSE);
+}
+
 // OFFSET: LEGO1 0x100b1a50
 void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
@@ -36,10 +42,4 @@ MxResult MxSoundPresenter::AddToManager()
 	}
 
 	return ret;
-}
-
-// OFFSET: LEGO1 0x1000d490
-void MxSoundPresenter::Destroy()
-{
-	Destroy(FALSE);
 }
