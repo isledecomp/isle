@@ -6,16 +6,16 @@ DECOMP_SIZE_ASSERT(MxDSChunk, 0x1c);
 MxDSChunk::MxDSChunk()
 {
 	m_flags = 0;
-	m_unk18 = NULL;
+	m_data = NULL;
 	m_unk0c = -1;
 	m_time = 0;
-	m_unk14 = 0;
+	m_length = 0;
 }
 
 // OFFSET: LEGO1 0x100be170
 MxDSChunk::~MxDSChunk()
 {
 	if (m_flags & Flag_Bit1) {
-		delete[] m_unk18;
+		delete[] m_data;
 	}
 }

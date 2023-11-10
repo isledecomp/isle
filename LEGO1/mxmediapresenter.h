@@ -35,7 +35,7 @@ public:
 	virtual MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
 	virtual void EndAction() override;                                       // vtable+0x40
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
-	virtual void VTable0x58(MxStreamChunk* p_chunk);                         // vtable+0x58
+	virtual void AppendChunk(MxStreamChunk* p_chunk);                        // vtable+0x58
 
 protected:
 	MxDSSubscriber* m_subscriber;      // 0x40

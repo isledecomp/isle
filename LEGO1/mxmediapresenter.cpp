@@ -2,6 +2,7 @@
 
 #include "mxautolocker.h"
 #include "mxstreamchunk.h"
+#include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
 
@@ -46,7 +47,7 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 			MxStreamChunk* chunk;
 
 			while (cursor.Next(chunk))
-				chunk->ReleaseUnk18();
+				chunk->Release();
 
 			delete m_chunks;
 		}
@@ -123,7 +124,7 @@ void MxMediaPresenter::StreamingTickle()
 				m_currentTickleState = TickleState_Repeating;
 			}
 			else if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
-				VTable0x58(m_currentChunk);
+				AppendChunk(m_currentChunk);
 
 				if (!MxPresenter::IsEnabled()) {
 					m_subscriber->FUN_100b8390(m_currentChunk);
@@ -166,10 +167,24 @@ void MxMediaPresenter::DoneTickle()
 	EndAction();
 }
 
-// OFFSET: LEGO1 0x100b6030 STUB
+// OFFSET: LEGO1 0x100b6030
 void MxMediaPresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	if (MxPresenter::IsEnabled() != p_enable) {
+		MxPresenter::Enable(p_enable);
+
+		if (p_enable) {
+			MxLong time = Timer()->GetTime();
+			m_action->SetUnkTimingField(time);
+			SetTickleState(TickleState_Repeating);
+		}
+		else {
+			if (m_cursor)
+				m_cursor->Reset();
+			m_currentChunk = NULL;
+			SetTickleState(TickleState_Done);
+		}
+	}
 }
 
 // OFFSET: LEGO1 0x100b5700
@@ -208,8 +223,16 @@ void MxMediaPresenter::EndAction()
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b5f10 STUB
-void MxMediaPresenter::VTable0x58(MxStreamChunk* p_chunk)
+// OFFSET: LEGO1 0x100b5f10
+void MxMediaPresenter::AppendChunk(MxStreamChunk* p_chunk)
 {
-	// TODO
+	MxStreamChunk* chunk = new MxStreamChunk;
+
+	MxU32 length = p_chunk->GetLength();
+	chunk->SetLength(length);
+	chunk->SetData(new MxU8[length]);
+	chunk->SetTime(p_chunk->GetTime());
+
+	memcpy(chunk->GetData(), p_chunk->GetData(), chunk->GetLength());
+	m_chunks->Append(chunk);
 }

@@ -31,21 +31,27 @@ public:
 		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
 	}
 
+	inline void SetTime(MxLong p_time) { m_time = p_time; }
+	inline void SetLength(MxU32 p_length) { m_length = p_length; }
+	inline void SetData(MxU8* p_data) { m_data = p_data; }
+
 	inline MxU16 GetFlags() { return m_flags; }
 	inline MxLong GetTime() { return m_time; }
+	inline MxU32 GetLength() { return m_length; }
+	inline MxU8* GetData() { return m_data; }
 
-	inline void ReleaseUnk18()
+	inline void Release()
 	{
-		if (m_unk18)
-			delete[] m_unk18;
+		if (m_data)
+			delete[] m_data;
 	}
 
 private:
 	MxU16 m_flags;      // 0x8
 	undefined4 m_unk0c; // 0xc
 	MxLong m_time;      // 0x10
-	undefined4 m_unk14; // 0x14
-	MxU8* m_unk18;      // 0x18
+	MxU32 m_length;     // 0x14
+	MxU8* m_data;       // 0x18
 };
 
 #endif // MXDSCHUNK_H
