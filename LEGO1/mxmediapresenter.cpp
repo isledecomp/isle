@@ -126,7 +126,7 @@ void MxMediaPresenter::StreamingTickle()
 			else if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
 				AppendChunk(m_currentChunk);
 
-				if (!MxPresenter::IsEnabled()) {
+				if (!IsEnabled()) {
 					m_subscriber->FUN_100b8390(m_currentChunk);
 					m_currentChunk = NULL;
 				}
@@ -138,7 +138,7 @@ void MxMediaPresenter::StreamingTickle()
 // OFFSET: LEGO1 0x100b5e10
 void MxMediaPresenter::RepeatingTickle()
 {
-	if (MxPresenter::IsEnabled() && !m_currentChunk) {
+	if (IsEnabled() && !m_currentChunk) {
 		if (m_cursor)
 			if (!m_cursor->Next(m_currentChunk))
 				m_cursor->Next(m_currentChunk);
@@ -170,7 +170,7 @@ void MxMediaPresenter::DoneTickle()
 // OFFSET: LEGO1 0x100b6030
 void MxMediaPresenter::Enable(MxBool p_enable)
 {
-	if (MxPresenter::IsEnabled() != p_enable) {
+	if (IsEnabled() != p_enable) {
 		MxPresenter::Enable(p_enable);
 
 		if (p_enable) {

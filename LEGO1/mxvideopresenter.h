@@ -6,10 +6,14 @@
 #include "mxmediapresenter.h"
 
 // VTABLE 0x100d4be8
+// SIZE 0x64
 class MxVideoPresenter : public MxMediaPresenter {
 public:
-	MxVideoPresenter() { Init(); }
+	enum {
+		Flag_Bit1 = 0x01,
+	};
 
+	MxVideoPresenter() { Init(); }
 	virtual ~MxVideoPresenter() override; // vtable+0x0
 
 	// OFFSET: LEGO1 0x1000c820
@@ -28,13 +32,20 @@ public:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	virtual void Destroy() override; // vtable+0x38
-
+	virtual void ReadyTickle() override;                 // vtable+0x18
+	virtual void StartingTickle() override;              // vtable+0x1c
+	virtual void StreamingTickle() override;             // vtable+0x20
+	virtual void RepeatingTickle() override;             // vtable+0x24
+	virtual void Unk5Tickle() override;                  // vtable+0x28
+	virtual MxResult AddToManager() override;            // vtable+0x34
+	virtual void Destroy() override;                     // vtable+0x38
+	virtual void EndAction() override;                   // vtable+0x40
+	virtual undefined4 PutData() override;               // vtable+0x4c
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
-	virtual void VTable0x5c(undefined4 p_unknown1);      // vtable+0x5c
+	virtual void VTable0x5c(MxStreamChunk* p_chunk);     // vtable+0x5c
 	virtual void VTable0x60();                           // vtable+0x60
 	virtual void VTable0x64();                           // vtable+0x64
-	virtual void VTable0x68(undefined4 p_unknown1);      // vtable+0x68
+	virtual void VTable0x68(MxStreamChunk* p_chunk);     // vtable+0x68
 	virtual void VTable0x6c();                           // vtable+0x6c
 	virtual void VTable0x70();                           // vtable+0x70
 	virtual undefined VTable0x74();                      // vtable+0x74
@@ -56,11 +67,11 @@ public:
 		MxS32 IsHit(MxU32 p_x, MxU32 p_y);
 	};
 
-	MxBitmap* m_bitmap;
-	AlphaMask* m_alpha;
-	LPDIRECTDRAWSURFACE m_unk58;
-	undefined2 m_unk5c;
-	unsigned char m_flags; // 0x5e
+	MxBitmap* m_bitmap;          // 0x50
+	AlphaMask* m_alpha;          // 0x54
+	LPDIRECTDRAWSURFACE m_unk58; // 0x58
+	MxS16 m_unk5c;               // 0x5c
+	MxU8 m_flags;                // 0x5e
 	MxLong m_unk60;
 };
 

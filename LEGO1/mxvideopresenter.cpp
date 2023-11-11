@@ -1,12 +1,14 @@
 #include "mxvideopresenter.h"
 
+#include "mxautolocker.h"
+#include "mxdsmediaaction.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
 // OFFSET: LEGO1 0x1000c700
-void MxVideoPresenter::VTable0x5c(undefined4 p_unknown1)
+void MxVideoPresenter::VTable0x5c(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
@@ -18,7 +20,7 @@ void MxVideoPresenter::VTable0x60()
 }
 
 // OFFSET: LEGO1 0x1000c720
-void MxVideoPresenter::VTable0x68(undefined4 p_unknown1)
+void MxVideoPresenter::VTable0x68(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
@@ -232,10 +234,20 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxMediaPresenter::Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b28b0 STUB
+// OFFSET: LEGO1 0x100b28b0
 void MxVideoPresenter::VTable0x64()
 {
-	// TODO
+	MxStreamChunk* chunk = NextChunk();
+
+	if (chunk->GetFlags() & MxStreamChunk::Flag_Bit2) {
+		m_subscriber->FUN_100b8390(chunk);
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Repeating;
+	}
+	else {
+		VTable0x68(chunk);
+		m_subscriber->FUN_100b8390(chunk);
+	}
 }
 
 // OFFSET: LEGO1 0x100b2900
@@ -304,6 +316,175 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 void MxVideoPresenter::VTable0x6c()
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x100b2f60
+void MxVideoPresenter::ReadyTickle()
+{
+	MxStreamChunk* chunk = NextChunk();
+
+	if (chunk) {
+		VTable0x5c(chunk);
+		m_subscriber->FUN_100b8390(chunk);
+		ParseExtra();
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Starting;
+	}
+}
+
+// OFFSET: LEGO1 0x100b2fa0
+void MxVideoPresenter::StartingTickle()
+{
+	MxStreamChunk* chunk = FUN_100b5650();
+
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
+		VTable0x60();
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Streaming;
+	}
+}
+
+// OFFSET: LEGO1 0x100b2fe0
+void MxVideoPresenter::StreamingTickle()
+{
+	if (m_action->GetFlags() & MxDSAction::Flag_Bit9) {
+		if (!m_currentChunk)
+			MxMediaPresenter::StreamingTickle();
+
+		if (m_currentChunk) {
+			VTable0x68(m_currentChunk);
+			m_currentChunk = NULL;
+		}
+	}
+	else {
+		for (MxS16 i = 0; i < m_unk5c; i++) {
+			if (!m_currentChunk) {
+				MxMediaPresenter::StreamingTickle();
+
+				if (!m_currentChunk)
+					break;
+			}
+
+			if (m_action->GetElapsedTime() < m_currentChunk->GetTime())
+				break;
+
+			VTable0x68(m_currentChunk);
+			m_subscriber->FUN_100b8390(m_currentChunk);
+			m_currentChunk = NULL;
+			m_flags |= Flag_Bit1;
+
+			if (m_currentTickleState != TickleState_Streaming)
+				break;
+		}
+
+		if (m_flags & Flag_Bit1)
+			m_unk5c = 5;
+	}
+}
+
+// OFFSET: LEGO1 0x100b3080
+void MxVideoPresenter::RepeatingTickle()
+{
+	if (IsEnabled()) {
+		if (m_action->GetFlags() & MxDSAction::Flag_Bit9) {
+			if (!m_currentChunk)
+				MxMediaPresenter::RepeatingTickle();
+
+			if (m_currentChunk) {
+				VTable0x68(m_currentChunk);
+				m_currentChunk = NULL;
+			}
+		}
+		else {
+			for (MxS16 i = 0; i < m_unk5c; i++) {
+				if (!m_currentChunk) {
+					MxMediaPresenter::RepeatingTickle();
+
+					if (!m_currentChunk)
+						break;
+				}
+
+				if (m_action->GetElapsedTime() % m_action->GetLoopCount() < m_currentChunk->GetTime())
+					break;
+
+				VTable0x68(m_currentChunk);
+				m_currentChunk = NULL;
+				m_flags |= Flag_Bit1;
+
+				if (m_currentTickleState != TickleState_Repeating)
+					break;
+			}
+
+			if (m_flags & Flag_Bit1)
+				m_unk5c = 5;
+		}
+	}
+}
+
+// OFFSET: LEGO1 0x100b3130
+void MxVideoPresenter::Unk5Tickle()
+{
+	MxLong sustainTime = ((MxDSMediaAction*) m_action)->GetSustainTime();
+
+	if (sustainTime != -1) {
+		if (sustainTime) {
+			if (m_unk60 == -1)
+				m_unk60 = m_action->GetElapsedTime();
+
+			if (m_action->GetElapsedTime() >= m_unk60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
+				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+				m_currentTickleState = TickleState_Done;
+			}
+		}
+		else {
+			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+			m_currentTickleState = TickleState_Done;
+		}
+	}
+}
+
+// OFFSET: LEGO1 0x100b31a0
+MxResult MxVideoPresenter::AddToManager()
+{
+	MxResult result = FAILURE;
+
+	if (MVideoManager()) {
+		result = SUCCESS;
+		MVideoManager()->AddPresenter(*this);
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x100b31d0
+void MxVideoPresenter::EndAction()
+{
+	if (m_action) {
+		MxMediaPresenter::EndAction();
+		MxAutoLocker lock(&m_criticalSection);
+
+		if (m_bitmap) {
+			MxLong height = m_bitmap->GetBmiHeightAbs();
+			MxLong width = m_bitmap->GetBmiWidth();
+			MxS32 x = m_location.m_x;
+			MxS32 y = m_location.m_y;
+
+			MxRect32 rect(x, y, x + width, y + height);
+
+			MVideoManager()->InvalidateRect(rect);
+		}
+	}
+}
+
+// OFFSET: LEGO1 0x100b3280
+undefined4 MxVideoPresenter::PutData()
+{
+	MxAutoLocker lock(&m_criticalSection);
+
+	if (IsEnabled() && m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_unk5)
+		VTable0x6c();
+
+	return 0;
 }
 
 // OFFSET: LEGO1 0x100b3300
