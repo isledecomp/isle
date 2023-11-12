@@ -116,7 +116,7 @@ MxResult MxPresenter::Tickle()
 }
 
 // OFFSET: LEGO1 0x100b4d80
-MxLong MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
+MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 {
 	MxAutoLocker lock(&this->m_criticalSection);
 

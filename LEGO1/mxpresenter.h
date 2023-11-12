@@ -54,15 +54,15 @@ protected:
 	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 
 public:
-	virtual MxResult AddToManager();                                                    // vtable+0x34
-	virtual void Destroy();                                                             // vtable+0x38
-	__declspec(dllexport) virtual MxLong StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
-	__declspec(dllexport) virtual void EndAction();                                     // vtable+0x40
-	virtual void SetTickleState(TickleState p_tickleState);                             // vtable+0x44
-	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                     // vtable+0x48
-	virtual undefined4 PutData();                                                       // vtable+0x4c
-	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                         // vtable+0x50
-	__declspec(dllexport) virtual void Enable(MxBool p_enable);                         // vtable+0x54
+	virtual MxResult AddToManager();                                                      // vtable+0x34
+	virtual void Destroy();                                                               // vtable+0x38
+	__declspec(dllexport) virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
+	__declspec(dllexport) virtual void EndAction();                                       // vtable+0x40
+	virtual void SetTickleState(TickleState p_tickleState);                               // vtable+0x44
+	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                       // vtable+0x48
+	virtual undefined4 PutData();                                                         // vtable+0x4c
+	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
+	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
 
 	MxBool IsEnabled();
 

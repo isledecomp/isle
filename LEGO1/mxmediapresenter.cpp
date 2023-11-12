@@ -1,5 +1,8 @@
 #include "mxmediapresenter.h"
 
+#include "mxautolocker.h"
+#include "mxstreamchunk.h"
+
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
 
 // OFFSET: LEGO1 0x1000c550
@@ -8,26 +11,59 @@ MxMediaPresenter::~MxMediaPresenter()
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100b5d10 STUB
-MxResult MxMediaPresenter::Tickle()
+// OFFSET: LEGO1 0x1000c5b0
+void MxMediaPresenter::Destroy()
 {
-	// TODO
-	return SUCCESS;
+	Destroy(FALSE);
 }
 
 // OFFSET: LEGO1 0x100b54e0
 void MxMediaPresenter::Init()
 {
-	this->m_unk40 = NULL;
-	this->m_unk44 = NULL;
-	this->m_unk48 = NULL;
-	this->m_unk4c = NULL;
+	this->m_subscriber = NULL;
+	this->m_chunks = NULL;
+	this->m_cursor = NULL;
+	this->m_currentChunk = NULL;
 }
 
-// OFFSET: LEGO1 0x100b54f0 STUB
+// OFFSET: LEGO1 0x100b54f0
 void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 {
+	{
+		MxAutoLocker lock(&m_criticalSection);
+
+		if (m_currentChunk && m_subscriber)
+			m_subscriber->FUN_100b8390(m_currentChunk);
+
+		if (m_subscriber)
+			delete m_subscriber;
+
+		if (m_cursor)
+			delete m_cursor;
+
+		if (m_chunks) {
+			MxStreamChunkListCursor cursor(m_chunks);
+			MxStreamChunk* chunk;
+
+			while (cursor.Next(chunk))
+				if (chunk->m_unk18)
+					delete[] chunk->m_unk18;
+
+			delete m_chunks;
+		}
+
+		Init();
+	}
+
+	if (!p_fromDestructor)
+		MxPresenter::Destroy();
+}
+
+// OFFSET: LEGO1 0x100b5d10 STUB
+MxResult MxMediaPresenter::Tickle()
+{
 	// TODO
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b5d90 STUB
@@ -56,16 +92,34 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1000c5b0
-void MxMediaPresenter::Destroy()
+// OFFSET: LEGO1 0x100b5700
+MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	Destroy(FALSE);
-}
+	MxResult result = FAILURE;
+	MxAutoLocker lock(&m_criticalSection);
 
-// OFFSET: LEGO1 0x100b5700 STUB
-MxLong MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
-{
-	return 0;
+	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
+		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+			m_chunks = new MxStreamChunkList;
+			m_cursor = new MxStreamChunkListCursor(m_chunks);
+
+			if (!m_chunks && !m_cursor)
+				goto done;
+		}
+
+		if (p_controller) {
+			m_subscriber = new MxDSSubscriber;
+
+			if (!m_subscriber ||
+				m_subscriber->FUN_100b7ed0(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS)
+				goto done;
+		}
+
+		result = SUCCESS;
+	}
+
+done:
+	return result;
 }
 
 // OFFSET: LEGO1 0x100b5bc0 STUB

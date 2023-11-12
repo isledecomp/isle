@@ -23,7 +23,7 @@ public:
 		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
 	}
 
-private:
+	// private:
 	MxS16 m_length;  // 0x8
 	MxLong m_buffer; // 0xc
 	MxLong m_unk10;  // 0x10
