@@ -22,7 +22,7 @@ public:
 		return !strcmp(name, LegoTexturePresenter::ClassName()) || MxMediaPresenter::IsA(name);
 	}
 
-	virtual MxResult AddToManager() override;  // vtable+0x34
+	virtual MxResult AddToManager() override; // vtable+0x34
 };
 
 #endif // LEGOTEXTUREPRESENTER_H
