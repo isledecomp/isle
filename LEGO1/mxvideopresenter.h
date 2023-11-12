@@ -72,7 +72,7 @@ public:
 	LPDIRECTDRAWSURFACE m_unk58; // 0x58
 	MxS16 m_unk5c;               // 0x5c
 	MxU8 m_flags;                // 0x5e
-	MxLong m_unk60;
+	MxLong m_unk60;              // 0x60
 };
 
 #endif // MXVIDEOPRESENTER_H
