@@ -9,6 +9,7 @@
 class MxControlPresenter : public MxCompositePresenter {
 public:
 	MxControlPresenter();
+	virtual ~MxControlPresenter() override;
 
 	// OFFSET: LEGO1 0x10044000
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -23,13 +24,15 @@ public:
 		return !strcmp(name, MxControlPresenter::ClassName()) || MxCompositePresenter::IsA(name);
 	}
 
+	virtual void ReadyTickle() override; // vtable+0x18
+
 private:
 	undefined2 m_unk4c;
 	MxS16 m_unk4e;
 	undefined m_unk50;
 	undefined2 m_unk52;
 	undefined2 m_unk54;
-	undefined4 m_unk58;
+	undefined4* m_unk58;
 };
 
 #endif // MXCONTROLPRESENTER_H
