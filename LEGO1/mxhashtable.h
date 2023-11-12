@@ -63,13 +63,12 @@ public:
 		m_resizeOption = HASH_TABLE_OPT_NO_EXPAND;
 	}
 
-	virtual ~MxHashTable();
+	virtual ~MxHashTable() override;
 
 	void Resize();
 	void Add(T*);
 
-	virtual MxS8 Compare(T*, T*) = 0;
-
+	virtual MxS8 Compare(T*, T*) override = 0;
 	virtual MxU32 Hash(T*) = 0;
 
 	// FIXME: use of friend here?

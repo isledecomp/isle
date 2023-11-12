@@ -17,7 +17,7 @@ public:
 // SIZE 0x18
 class MxPresenterList : public MxPresenterListParent {
 public:
-	virtual MxS8 Compare(MxPresenter*, MxPresenter*); // +0x14
+	virtual MxS8 Compare(MxPresenter*, MxPresenter*) override; // +0x14
 };
 
 typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
