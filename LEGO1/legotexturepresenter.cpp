@@ -1,7 +1,17 @@
 #include "legotexturepresenter.h"
 
-// OFFSET: LEGO1 0x1004eb40 STUB
+#include "legoomni.h"
+#include "legovideomanager.h"
+
+// OFFSET: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()
 {
-	// TODO
+	VideoManager()->RemovePresenter(*this);
+}
+
+// OFFSET: LEGO1 0x1004ebb0
+MxResult LegoTexturePresenter::AddToManager()
+{
+	VideoManager()->AddPresenter(*this);
+	return SUCCESS;
 }
