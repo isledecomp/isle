@@ -27,7 +27,7 @@ public:
 	virtual void VTable0x58();
 	virtual void VTable0x5c();
 	virtual void VTable0x60(undefined4 p_unknown);
-	virtual void VTable0x64();
+	virtual MxBool VTable0x64(undefined4 p_unknown);
 
 private:
 	MxUnkList m_list;

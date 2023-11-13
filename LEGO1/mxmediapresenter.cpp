@@ -1,6 +1,9 @@
 #include "mxmediapresenter.h"
 
+#include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
+#include "mxcompositepresenter.h"
+#include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
@@ -122,10 +125,37 @@ done:
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b5bc0 STUB
+// OFFSET: LEGO1 0x100b5bc0
 void MxMediaPresenter::EndAction()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	if (!m_action)
+		return;
+
+	m_currentChunk = NULL;
+
+	if (m_action->GetFlags() & MxDSAction::Flag_World &&
+		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
+		MxPresenter::Enable(FALSE);
+		SetTickleState(TickleState::TickleState_Idle);
+	}
+	else {
+		MxDSAction* action = m_action;
+		MxPresenter::EndAction();
+
+		if (m_subscriber) {
+			delete m_subscriber;
+			m_subscriber = NULL;
+		}
+
+		if (action && action->GetUnknown8c()) {
+			NotificationManager()->Send(
+				action->GetUnknown8c(),
+				&MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
+			);
+		}
+	}
 }
 
 // OFFSET: LEGO1 0x100b5f10 STUB
