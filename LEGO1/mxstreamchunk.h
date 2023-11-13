@@ -4,7 +4,11 @@
 #include "mxdschunk.h"
 
 // VTABLE 0x100dc2a8
+// SIZE 0x20
 class MxStreamChunk : public MxDSChunk {
+public:
+	inline MxStreamChunk() : m_unk1c(NULL) {}
+
 	// OFFSET: LEGO1 0x100b1fe0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
@@ -17,6 +21,9 @@ class MxStreamChunk : public MxDSChunk {
 	{
 		return !strcmp(name, MxStreamChunk::ClassName()) || MxDSChunk::IsA(name);
 	}
+
+private:
+	void* m_unk1c; // 0x1c
 };
 
 #endif // MXSTREAMCHUNK_H

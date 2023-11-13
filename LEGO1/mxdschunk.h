@@ -1,12 +1,20 @@
 #ifndef MXDSCHUNK_H
 #define MXDSCHUNK_H
 
+#include "decomp.h"
 #include "mxcore.h"
 #include "mxtypes.h"
 
 // VTABLE 0x100dc7f8
+// SIZE 0x1c
 class MxDSChunk : public MxCore {
 public:
+	enum {
+		Flag_Bit1 = 0x01,
+		Flag_Bit2 = 0x02,
+		Flag_Bit3 = 0x04,
+	};
+
 	MxDSChunk();
 	virtual ~MxDSChunk() override;
 
@@ -23,13 +31,27 @@ public:
 		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
 	}
 
-	// private:
-	MxS16 m_length;  // 0x8
-	MxLong m_buffer; // 0xc
-	MxLong m_unk10;  // 0x10
-	MxLong m_unk14;  // 0x14
-	void* m_unk18;   // 0x18
-	void* m_unk1c;   // 0x1c
+	inline void SetTime(MxLong p_time) { m_time = p_time; }
+	inline void SetLength(MxU32 p_length) { m_length = p_length; }
+	inline void SetData(MxU8* p_data) { m_data = p_data; }
+
+	inline MxU16 GetFlags() { return m_flags; }
+	inline MxLong GetTime() { return m_time; }
+	inline MxU32 GetLength() { return m_length; }
+	inline MxU8* GetData() { return m_data; }
+
+	inline void Release()
+	{
+		if (m_data)
+			delete[] m_data;
+	}
+
+private:
+	MxU16 m_flags;      // 0x8
+	undefined4 m_unk0c; // 0xc
+	MxLong m_time;      // 0x10
+	MxU32 m_length;     // 0x14
+	MxU8* m_data;       // 0x18
 };
 
 #endif // MXDSCHUNK_H

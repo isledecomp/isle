@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxdschunk.h"
+#include "mxstreamchunk.h"
 #include "mxstreamcontroller.h"
 
 // VTABLE 0x100dc698
@@ -27,7 +28,9 @@ public:
 	}
 
 	MxResult FUN_100b7ed0(MxStreamController*, MxU32, MxS16);
-	void FUN_100b8390(MxDSChunk*);
+	MxStreamChunk* FUN_100b8250();
+	MxStreamChunk* FUN_100b8360();
+	void FUN_100b8390(MxStreamChunk*);
 
 private:
 	undefined m_pad[0x44]; // 0x8
