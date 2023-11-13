@@ -375,7 +375,7 @@ const char* GetNoCD_SourceName()
 	return g_nocdSourceName->GetInternal();
 }
 
-// OFFSET: LEGO1 0x1005b5f0
+// OFFSET: LEGO1 0x1005b5f0 STUB
 MxLong LegoOmni::Notify(MxParam& p)
 {
 	// TODO
