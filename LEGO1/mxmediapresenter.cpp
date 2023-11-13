@@ -138,7 +138,7 @@ void MxMediaPresenter::EndAction()
 	if (m_action->GetFlags() & MxDSAction::Flag_World &&
 		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
 		MxPresenter::Enable(FALSE);
-		SetTickleState(TickleState::TickleState_Idle);
+		SetTickleState(TickleState_Idle);
 	}
 	else {
 		MxDSAction* action = m_action;
