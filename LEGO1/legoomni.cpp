@@ -532,7 +532,7 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 }
 
 // OFFSET: LEGO1 0x1005b2f0
-MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxCore* p_presenter)
+MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
 {
 	LegoWorld* foundEntity = NULL;
 	if (strcmpi(p_id, g_current)) {

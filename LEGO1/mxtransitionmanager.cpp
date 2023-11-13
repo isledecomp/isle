@@ -468,7 +468,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 {
 	// End current wait indicator
 	if (m_waitIndicator != NULL) {
-		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::Flag_Parsed);
+		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::Flag_World);
 		m_waitIndicator->EndAction();
 		m_waitIndicator = NULL;
 	}

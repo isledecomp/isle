@@ -5,6 +5,7 @@
 #include "legoomni.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
+#include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxdssound.h"
 #include "mxnotificationmanager.h"
@@ -22,7 +23,7 @@ void MxPresenter::Init()
 	m_action = NULL;
 	m_location = MxPoint32(0, 0);
 	m_displayZ = 0;
-	m_unkPresenter = NULL;
+	m_compositePresenter = NULL;
 	m_previousTickleStates = 0;
 }
 
@@ -49,24 +50,24 @@ void MxPresenter::ParseExtra()
 			MxS32 val = token ? atoi(token) : 0;
 			MxEntity* result = MxOmni::GetInstance()->FindWorld(t_token, val, this);
 
-			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Parsed);
+			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_World);
 
 			if (result)
-				SendTo_unkPresenter(MxOmni::GetInstance());
+				SendToCompositePresenter(MxOmni::GetInstance());
 		}
 	}
 }
 
 // OFFSET: LEGO1 0x100b5120
-void MxPresenter::SendTo_unkPresenter(MxOmni* p_omni)
+void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 {
-	if (m_unkPresenter) {
+	if (m_compositePresenter) {
 		MxAutoLocker lock(&m_criticalSection);
 
-		NotificationManager()->Send(m_unkPresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
+		NotificationManager()->Send(m_compositePresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 
 		m_action->SetUnknown8c(p_omni ? p_omni : MxOmni::GetInstance());
-		m_unkPresenter = NULL;
+		m_compositePresenter = NULL;
 	}
 }
 
@@ -138,8 +139,10 @@ void MxPresenter::EndAction()
 {
 	if (this->m_action == FALSE)
 		return;
+
 	MxAutoLocker lock(&this->m_criticalSection);
-	if (!this->m_unkPresenter) {
+
+	if (!this->m_compositePresenter) {
 		MxOmni::GetInstance()->NotifyCurrentEntity(
 			&MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
 		);

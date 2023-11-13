@@ -3,10 +3,10 @@
 // 0x100f37cc
 int g_buildingManagerConfig = 1;
 
-// OFFSET: LEGO1 0x1002f8c0 STUB
+// OFFSET: LEGO1 0x1002f8c0
 LegoBuildingManager::LegoBuildingManager()
 {
-	// TODO
+	Init();
 }
 
 // OFFSET: LEGO1 0x1002f960 STUB
