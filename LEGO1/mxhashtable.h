@@ -67,8 +67,8 @@ protected:
 	// on the value of m_resizeOption. Hard to say whether this is how the devs
 	// did it, but a simple cast in either direction doesn't match.
 	union {
-		MxU32 m_increaseAmount;			// +0x20
-		double m_increaseFactor;		// +0x20
+		MxU32 m_increaseAmount;  // +0x20
+		double m_increaseFactor; // +0x20
 	};
 };
 
@@ -122,6 +122,8 @@ void MxHashTableCursor<T>::DeleteMatch()
 {
 	// Cut the matching node out of the linked list
 	// by updating pointer references.
+	if (m_match == NULL)
+		return;
 
 	if (m_match->m_prev) {
 		m_match->m_prev->m_next = m_match->m_next;
