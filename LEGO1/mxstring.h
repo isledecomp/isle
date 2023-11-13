@@ -18,6 +18,7 @@ public:
 	MxString operator+(const char*);
 	MxString& operator+=(const char*);
 
+	inline MxS8 Compare(const MxString& p_str) const { return strcmp(m_data, p_str.m_data); }
 	inline const char* GetData() const { return m_data; }
 
 private:

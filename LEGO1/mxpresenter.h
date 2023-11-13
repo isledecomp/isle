@@ -8,6 +8,7 @@
 #include "mxomni.h"
 #include "mxpoint32.h"
 
+class MxCompositePresenter;
 class MxStreamController;
 
 // VTABLE 0x100d4d38
@@ -75,14 +76,15 @@ public:
 
 protected:
 	__declspec(dllexport) void Init();
-	void SendTo_unkPresenter(MxOmni*);
-	TickleState m_currentTickleState;    // 0x8
-	MxU32 m_previousTickleStates;        // 0x0c
-	MxPoint32 m_location;                // 0x10
-	MxS32 m_displayZ;                    // 0x18
-	MxDSAction* m_action;                // 0x1c
-	MxCriticalSection m_criticalSection; // 0x20
-	MxPresenter* m_unkPresenter;         // 0x3c
+	void SendToCompositePresenter(MxOmni*);
+
+	TickleState m_currentTickleState;           // 0x8
+	MxU32 m_previousTickleStates;               // 0x0c
+	MxPoint32 m_location;                       // 0x10
+	MxS32 m_displayZ;                           // 0x18
+	MxDSAction* m_action;                       // 0x1c
+	MxCriticalSection m_criticalSection;        // 0x20
+	MxCompositePresenter* m_compositePresenter; // 0x3c
 };
 
 const char* PresenterNameDispatch(const MxDSAction&);
