@@ -61,14 +61,14 @@ protected:
 
 	MxHashTableNode<T>** m_slots; // +0x10
 	MxU32 m_numSlots;             // +0x14
-	MxU32 m_autoResizeRatio;
-	HashTableOpt m_resizeOption; // +0x1c
+	MxU32 m_autoResizeRatio;      // +0x18
+	HashTableOpt m_resizeOption;  // +0x1c
 	// FIXME: or FIXME? This qword is used as an integer or double depending
 	// on the value of m_resizeOption. Hard to say whether this is how the devs
 	// did it, but a simple cast in either direction doesn't match.
 	union {
-		MxU32 m_increaseAmount;
-		double m_increaseFactor;
+		MxU32 m_increaseAmount;			// +0x20
+		double m_increaseFactor;		// +0x20
 	};
 };
 

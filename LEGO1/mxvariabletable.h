@@ -17,8 +17,8 @@ public:
 	// OFFSET: LEGO1 0x100afdb0
 	static void Destroy(MxVariable* p_obj) { p_obj->Destroy(); }
 
-	virtual MxBool Compare(MxVariable*, MxVariable*) override; // +0x14
-	virtual MxU32 Hash(MxVariable*) override;                  // +0x18
+	virtual MxS8 Compare(MxVariable*, MxVariable*) override; // +0x14
+	virtual MxU32 Hash(MxVariable*) override;                // +0x18
 };
 
 // OFFSET: LEGO1 0x100afcd0 TEMPLATE

@@ -15,7 +15,7 @@ public:
 	virtual ~MxCollection() {}
 
 	static void Destroy(T){};
-	virtual MxBool Compare(T, T) { return 0; }
+	virtual MxS8 Compare(T, T) { return 0; }
 
 protected:
 	MxU32 m_count;                 // +0x8

@@ -1,7 +1,7 @@
 #include "mxvariabletable.h"
 
 // OFFSET: LEGO1 0x100b7330
-MxBool MxVariableTable::Compare(MxVariable* p_var0, MxVariable* p_var1)
+MxS8 MxVariableTable::Compare(MxVariable* p_var0, MxVariable* p_var1)
 {
 	return p_var0->GetKey()->Compare(*p_var1->GetKey());
 }
