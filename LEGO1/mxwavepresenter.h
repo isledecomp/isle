@@ -37,7 +37,7 @@ public:
 	virtual undefined4 PutData() override;                     // vtable+0x4c
 	virtual void Enable(MxBool p_enable) override;             // vtable+0x54
 	virtual void AppendChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
-	virtual void vtable60(undefined4) override;                // vtable+0x60
+	virtual void SetVolume(MxU32 p_volume) override;           // vtable+0x60
 	virtual void VTable0x64();                                 // vtable+0x64
 	virtual void VTable0x68();                                 // vtable+0x68
 	virtual undefined VTable0x6c();                            // vtable+0x6c
