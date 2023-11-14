@@ -7,6 +7,9 @@
 // SIZE 0x54
 class MxMusicPresenter : public MxAudioPresenter {
 public:
+	MxMusicPresenter();
+	virtual ~MxMusicPresenter() override;
+
 	// OFFSET: LEGO1 0x100c23a0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
@@ -19,9 +22,6 @@ public:
 	{
 		return !strcmp(name, MxMusicPresenter::ClassName()) || MxAudioPresenter::IsA(name);
 	}
-
-	MxMusicPresenter();
-	virtual ~MxMusicPresenter() override;
 
 	virtual MxResult AddToManager() override; // vtable+0x34
 	virtual void Destroy() override;          // vtable+0x38
