@@ -79,7 +79,7 @@ MxS8 MxWavePresenter::FUN_100b1b60()
 // OFFSET: LEGO1 0x100b1ba0
 MxBool MxWavePresenter::FUN_100b1ba0()
 {
-	return !m_length || FUN_100b1b60() != m_unk64;
+	return !m_unk65 || FUN_100b1b60() != m_unk64;
 }
 
 // OFFSET: LEGO1 0x100b1bd0 STUB
