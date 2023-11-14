@@ -152,7 +152,7 @@ void MxWavePresenter::StartingTickle()
 			EndAction();
 		}
 		else {
-			vtable60(((MxDSSound*) m_action)->GetVolume());
+			SetVolume(((MxDSSound*) m_action)->GetVolume());
 			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 			m_currentTickleState = TickleState_Streaming;
 		}
@@ -191,7 +191,7 @@ void MxWavePresenter::EndAction()
 }
 
 // OFFSET: LEGO1 0x100b2300 STUB
-void MxWavePresenter::vtable60(undefined4)
+void MxWavePresenter::SetVolume(MxU32 p_volume)
 {
 	// TODO
 }
