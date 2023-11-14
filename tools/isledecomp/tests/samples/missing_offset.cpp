@@ -9,7 +9,7 @@ int no_offset_comment()
   return -1;
 }
 
-// OFFSET: LEGO1 0xdeadbeef
+// OFFSET: TEST 0xdeadbeef
 void regular_ole_function()
 {
   printf("hi there");
