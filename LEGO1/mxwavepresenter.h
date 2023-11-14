@@ -64,7 +64,7 @@ private:
 	MxU8 m_unk64;
 	MxBool m_unk65;
 	MxBool m_unk66;
-	undefined m_unk67;
+	MxS8 m_unk67;
 	undefined m_unk68;
 };
 

@@ -5,6 +5,8 @@
 #include "mxomni.h"
 #include "mxsoundmanager.h"
 
+#include <limits.h>
+
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);
 
@@ -124,7 +126,7 @@ void MxWavePresenter::StartingTickle()
 		waveFormatEx.wBitsPerSample = m_waveFormat->m_waveFormatEx.wBitsPerSample;
 
 		if (waveFormatEx.wBitsPerSample == 8)
-			m_unk67 = 0x7f;
+			m_unk67 = SCHAR_MAX;
 
 		if (waveFormatEx.wBitsPerSample == 16)
 			m_unk67 = 0;
