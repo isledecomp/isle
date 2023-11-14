@@ -23,6 +23,8 @@ public:
 	virtual void vtable0x34();                                           // vtable+0x34
 	virtual void vtable0x38();                                           // vtable+0x38
 
+	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

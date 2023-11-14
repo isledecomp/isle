@@ -25,8 +25,8 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 	virtual void Destroy() override;          // vtable+0x38
 
-private:
-	void Destroy(MxBool);
+protected:
+	void Destroy(MxBool p_fromDestructor);
 };
 
 #endif // MXSOUNDPRESENTER_H
