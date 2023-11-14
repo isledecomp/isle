@@ -4,6 +4,7 @@ from typing import List, TextIO
 from enum import Enum
 from .util import (
     CodeBlock,
+    OffsetMatch,
     is_blank_or_comment,
     match_offset_comment,
     is_exact_offset_comment,
@@ -30,7 +31,10 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
 
     blocks = []
 
-    offset_match = None
+    offset_match = OffsetMatch(module=None,
+                               address=None,
+                               is_template=None,
+                               is_stub=None)
     offset_comment = None
     function_sig = None
     start_line = None
