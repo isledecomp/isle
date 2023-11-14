@@ -8,9 +8,11 @@
 #include "mxomni.h"
 #include "mxpoint32.h"
 
+class MxCompositePresenter;
 class MxStreamController;
 
 // VTABLE 0x100d4d38
+// SIZE 0x40
 class MxPresenter : public MxCore {
 public:
 	enum TickleState {
@@ -53,15 +55,15 @@ protected:
 	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 
 public:
-	virtual MxResult AddToManager();                                                    // vtable+0x34
-	virtual void Destroy();                                                             // vtable+0x38
-	__declspec(dllexport) virtual MxLong StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
-	__declspec(dllexport) virtual void EndAction();                                     // vtable+0x40
-	virtual void SetTickleState(TickleState p_tickleState);                             // vtable+0x44
-	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                     // vtable+0x48
-	virtual undefined4 PutData();                                                       // vtable+0x4c
-	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                         // vtable+0x50
-	__declspec(dllexport) virtual void Enable(MxBool p_enable);                         // vtable+0x54
+	virtual MxResult AddToManager();                                                      // vtable+0x34
+	virtual void Destroy();                                                               // vtable+0x38
+	__declspec(dllexport) virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
+	__declspec(dllexport) virtual void EndAction();                                       // vtable+0x40
+	virtual void SetTickleState(TickleState p_tickleState);                               // vtable+0x44
+	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                       // vtable+0x48
+	virtual undefined4 PutData();                                                         // vtable+0x4c
+	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
+	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
 
 	MxBool IsEnabled();
 
@@ -74,14 +76,15 @@ public:
 
 protected:
 	__declspec(dllexport) void Init();
-	void SendTo_unkPresenter(MxOmni*);
-	TickleState m_currentTickleState;    // 0x8
-	MxU32 m_previousTickleStates;        // 0x0c
-	MxPoint32 m_location;                // 0x10
-	MxS32 m_displayZ;                    // 0x18
-	MxDSAction* m_action;                // 0x1c
-	MxCriticalSection m_criticalSection; // 0x20
-	MxPresenter* m_unkPresenter;         // 0x3c
+	void SendToCompositePresenter(MxOmni*);
+
+	TickleState m_currentTickleState;           // 0x8
+	MxU32 m_previousTickleStates;               // 0x0c
+	MxPoint32 m_location;                       // 0x10
+	MxS32 m_displayZ;                           // 0x18
+	MxDSAction* m_action;                       // 0x1c
+	MxCriticalSection m_criticalSection;        // 0x20
+	MxCompositePresenter* m_compositePresenter; // 0x3c
 };
 
 const char* PresenterNameDispatch(const MxDSAction&);

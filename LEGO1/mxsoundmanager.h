@@ -2,6 +2,7 @@
 #define MXSOUNDMANAGER_H
 
 #include "decomp.h"
+#include "mxatomid.h"
 #include "mxaudiomanager.h"
 
 #include <dsound.h>
@@ -11,6 +12,9 @@
 class MxSoundManager : public MxAudioManager {
 public:
 	MxSoundManager();
+
+	// OFFSET: LEGO1 0x100ae7b0 TEMPLATE
+	// MxSoundManager::`scalar deleting destructor'
 	virtual ~MxSoundManager() override; // vtable+0x0
 
 	virtual void Destroy() override;                                     // vtable+18
@@ -22,6 +26,8 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
+	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
+	MxS32 FUN_100aecf0(MxU32 p_unk);
 
 	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34

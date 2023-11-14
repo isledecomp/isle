@@ -37,9 +37,12 @@ public:
 	inline MxU32 GetUnknown10() { return m_unk10; }
 	inline void SetUnknown424(undefined4 p_unk424) { m_unk424 = p_unk424; }
 
+	void SetSomeEnumState(undefined4 p_state);
+
 private:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteEndOfVariables(LegoStream* p_stream);
+	void SetROIHandlerFunction();
 
 private:
 	char* m_savePath; // 0x0
@@ -57,5 +60,7 @@ private:
 	undefined4 m_unk428;
 	undefined4 m_unk42c;
 };
+
+MxBool ROIHandlerFunction(char* p_0, char* p_output, MxU32 p_copyLen);
 
 #endif // LEGOGAMESTATE_H

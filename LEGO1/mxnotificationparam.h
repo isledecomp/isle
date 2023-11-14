@@ -7,11 +7,11 @@
 
 class MxCore;
 
-enum MxParamType {
+enum NotificationId {
 	PARAM_NONE = 0,
-	PAINT = 1,                   // 100dc210:100d8350
-	c_notificationEndAction = 2, // 100d8358:100d8350
-	TYPE4 = 4,                   // 100dc208:100d8350
+	c_notificationStartAction = 1, // 100dc210:100d8350
+	c_notificationEndAction = 2,   // 100d8358:100d8350
+	TYPE4 = 4,                     // 100dc208:100d8350
 	MXPRESENTER_NOTIFICATION = 5,
 	MXSTREAMER_DELETE_NOTIFY = 6, // 100dc760
 	c_notificationKeyPress = 7,   // 100d6aa0
@@ -36,17 +36,20 @@ enum MxParamType {
 // VTABLE 0x100d56e0
 class MxNotificationParam : public MxParam {
 public:
-	inline MxNotificationParam(MxParamType p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender) {}
+	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
+	{
+	}
 
 	virtual ~MxNotificationParam() override {} // vtable+0x0 (scalar deleting destructor)
 	virtual MxNotificationParam* Clone();      // vtable+0x4
 
-	inline MxParamType GetNotification() const { return m_type; }
+	inline NotificationId GetNotification() const { return m_type; }
 	inline MxCore* GetSender() const { return m_sender; }
+	inline NotificationId GetType() const { return m_type; }
 
 protected:
-	MxParamType m_type; // 0x4
-	MxCore* m_sender;   // 0x8
+	NotificationId m_type; // 0x4
+	MxCore* m_sender;      // 0x8
 };
 
 #endif // MXNOTIFICATIONPARAM_H

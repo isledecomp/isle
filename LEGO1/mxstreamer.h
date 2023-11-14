@@ -18,9 +18,11 @@ public:
 
 	~MxStreamerSubClass1() { delete[] m_buffer; }
 
-	undefined4 GetSize() { return m_size; }
+	undefined4 GetSize() const { return m_size; }
 
 	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
+	inline undefined* GetBuffer() const { return m_buffer; }
+	inline undefined4 GetUnk08() const { return m_unk08; }
 
 private:
 	undefined* m_buffer;
@@ -40,7 +42,7 @@ public:
 
 class MxStreamerNotification : public MxNotificationParam {
 public:
-	inline MxStreamerNotification(MxParamType p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
+	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
 		: MxNotificationParam(p_type, p_sender)
 	{
 		m_controller = p_ctrlr;
@@ -92,6 +94,9 @@ public:
 	MxStreamController* GetOpenStream(const char* p_name);
 	MxResult AddStreamControllerToOpenList(MxStreamController* p_stream);
 	MxResult FUN_100b99b0(MxDSAction* p_action);
+
+	inline const MxStreamerSubClass2& GetSubclass1() { return m_subclass1; }
+	inline const MxStreamerSubClass3& GetSubclass2() { return m_subclass2; }
 
 private:
 	list<MxStreamController*> m_openStreams; // 0x8

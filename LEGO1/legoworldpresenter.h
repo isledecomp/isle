@@ -24,6 +24,9 @@ public:
 	{
 		return !strcmp(name, LegoWorldPresenter::ClassName()) || LegoEntityPresenter::IsA(name);
 	}
+
+private:
+	undefined4 m_unk50;
 };
 
 #endif // LEGOWORLDPRESENTER_H

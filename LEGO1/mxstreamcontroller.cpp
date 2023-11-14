@@ -2,6 +2,9 @@
 
 #include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxnextactiondatastart.h"
+
+DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 
 // OFFSET: LEGO1 0x100c0b90 STUB
 MxStreamController::MxStreamController()
@@ -74,20 +77,42 @@ MxResult MxStreamController::vtable0x24(undefined4 p_unknown)
 	return FAILURE;
 }
 
+// OFFSET: LEGO1 0x100c1800 STUB
+MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
+{
+	MxNextActionDataStart* dataActionStart =
+		new MxNextActionDataStart(p_action->GetObjectId(), p_action->GetUnknown24(), p_val);
+	if (dataActionStart == NULL) {
+		return FAILURE;
+	}
+	// TODO: insert dataActionStart to a list
+	return FAILURE;
+}
+
 // OFFSET: LEGO1 0x100b9420
 MxResult MxStreamController::vtable0x28()
 {
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100c1c10 STUB
+// OFFSET: LEGO1 0x100c1c10
 MxResult MxStreamController::vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
-	return FAILURE;
+	MxAutoLocker locker(&m_criticalSection);
+	if (FUN_100c1a00(p_action, p_bufferval) != SUCCESS) {
+		return FAILURE;
+	}
+	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 
 // OFFSET: LEGO1 0x100c1ce0 STUB
 MxResult MxStreamController::vtable0x30(undefined4 p_unknown)
+{
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100c1a00 STUB
+MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
 {
 	return FAILURE;
 }

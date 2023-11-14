@@ -23,17 +23,17 @@ public:
 
 	__declspec(dllexport) MxOmniCreateFlags();
 
-	const inline MxBool CreateObjectFactory() const { return this->m_flags1 & Flag_CreateObjectFactory; }
-	const inline MxBool CreateVariableTable() const { return this->m_flags1 & Flag_CreateVariableTable; }
-	const inline MxBool CreateTickleManager() const { return this->m_flags1 & Flag_CreateTickleManager; }
-	const inline MxBool CreateNotificationManager() const { return this->m_flags1 & Flag_CreateNotificationManager; }
-	const inline MxBool CreateVideoManager() const { return this->m_flags1 & Flag_CreateVideoManager; }
-	const inline MxBool CreateSoundManager() const { return this->m_flags1 & Flag_CreateSoundManager; }
-	const inline MxBool CreateMusicManager() const { return this->m_flags1 & Flag_CreateMusicManager; }
-	const inline MxBool CreateEventManager() const { return this->m_flags1 & Flag_CreateEventManager; }
+	inline const MxBool CreateObjectFactory() const { return this->m_flags1 & Flag_CreateObjectFactory; }
+	inline const MxBool CreateVariableTable() const { return this->m_flags1 & Flag_CreateVariableTable; }
+	inline const MxBool CreateTickleManager() const { return this->m_flags1 & Flag_CreateTickleManager; }
+	inline const MxBool CreateNotificationManager() const { return this->m_flags1 & Flag_CreateNotificationManager; }
+	inline const MxBool CreateVideoManager() const { return this->m_flags1 & Flag_CreateVideoManager; }
+	inline const MxBool CreateSoundManager() const { return this->m_flags1 & Flag_CreateSoundManager; }
+	inline const MxBool CreateMusicManager() const { return this->m_flags1 & Flag_CreateMusicManager; }
+	inline const MxBool CreateEventManager() const { return this->m_flags1 & Flag_CreateEventManager; }
 
-	const inline MxBool CreateTimer() const { return this->m_flags2 & Flag_CreateTimer; }
-	const inline MxBool CreateStreamer() const { return this->m_flags2 & Flag_CreateStreamer; }
+	inline const MxBool CreateTimer() const { return this->m_flags2 & Flag_CreateTimer; }
+	inline const MxBool CreateStreamer() const { return this->m_flags2 & Flag_CreateStreamer; }
 
 	inline void CreateObjectFactory(MxBool b)
 	{

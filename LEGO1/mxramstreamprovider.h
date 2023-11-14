@@ -9,6 +9,19 @@ public:
 	MxRAMStreamProvider();
 	virtual ~MxRAMStreamProvider() override;
 
+	// OFFSET: LEGO1 0x100d0970
+	inline virtual const char* ClassName() const override // vtable+0xc
+	{
+		// 0x10102864
+		return "MxRAMStreamProvider";
+	}
+
+	// OFFSET: LEGO1 0x100d0980
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, MxRAMStreamProvider::ClassName()) || MxStreamProvider::IsA(name);
+	}
+
 	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
 	virtual MxU32 GetFileSize() override;                                       // vtable+0x18
 	virtual MxU32 GetStreamBuffersNum() override;                               // vtable+0x1c

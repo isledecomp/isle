@@ -1,5 +1,6 @@
 #include "mxsoundmanager.h"
 
+#include "define.h"
 #include "mxautolocker.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
@@ -127,6 +128,53 @@ done:
 	return status;
 }
 
+// OFFSET: LEGO1 0x100aeab0
+void MxSoundManager::Destroy()
+{
+	Destroy(FALSE);
+}
+
+// OFFSET: LEGO1 0x100aeac0
+void MxSoundManager::SetVolume(MxS32 p_volume)
+{
+	MxAudioManager::SetVolume(p_volume);
+
+	m_criticalSection.Enter();
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter))
+		((MxAudioPresenter*) presenter)->vtable60(((MxAudioPresenter*) presenter)->vtable5c());
+
+	m_criticalSection.Leave();
+}
+
+// OFFSET: LEGO1 0x100aebd0
+MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId)
+{
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter)) {
+		if (presenter->GetAction()->GetAtomId().GetInternal() == p_atomId.GetInternal() &&
+			presenter->GetAction()->GetObjectId() == p_objectId)
+			return presenter;
+	}
+
+	return NULL;
+}
+
+// OFFSET: LEGO1 0x100aecf0
+MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_unk)
+{
+	if (!p_unk)
+		return -10000;
+	return g_mxcoreCount[p_unk];
+}
+
 // OFFSET: LEGO1 0x100aed10
 void MxSoundManager::vtable0x34()
 {
@@ -151,26 +199,4 @@ void MxSoundManager::vtable0x38()
 	while (cursor.Next(presenter))
 		if (presenter->IsA("MxWavePresenter"))
 			((MxWavePresenter*) presenter)->VTable0x68();
-}
-
-// OFFSET: LEGO1 0x100aeab0
-void MxSoundManager::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// OFFSET: LEGO1 0x100aeac0
-void MxSoundManager::SetVolume(MxS32 p_volume)
-{
-	MxAudioManager::SetVolume(p_volume);
-
-	m_criticalSection.Enter();
-
-	MxPresenter* presenter;
-	MxPresenterListCursor cursor(m_presenters);
-
-	while (cursor.Next(presenter))
-		((MxAudioPresenter*) presenter)->vtable60(((MxAudioPresenter*) presenter)->vtable5c());
-
-	m_criticalSection.Leave();
 }

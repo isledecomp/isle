@@ -23,15 +23,18 @@ public:
 		return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
 	}
 
-	virtual void VTable0x50(); // vtable+0x50
-	virtual void VTable0x54(); // vtable+0x54
-	virtual void VTable0x58(); // vtable+0x58
-	virtual void VTable0x5c(); // vtable+0x5c
-	virtual void VTable0x60(); // vtable+0x60
-	virtual void VTable0x64(); // vtable+0x64
+	virtual MxFloat VTable0x50();             // vtable+0x50
+	virtual void VTable0x54(MxFloat p_unk);   // vtable+0x54
+	virtual void VTable0x58(MxFloat p_unk);   // vtable+0x58
+	virtual MxFloat VTable0x5c();             // vtable+0x5c
+	virtual undefined VTable0x60();           // vtable+0x60
+	virtual void VTable0x64(undefined p_unk); // vtable+0x64
 
 private:
-	undefined unk68[0x10];
+	MxFloat m_unk68;
+	undefined4 m_unk6c;
+	MxFloat m_unk70;
+	undefined m_unk74;
 };
 
 #endif // LEGOACTOR_H

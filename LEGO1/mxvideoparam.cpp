@@ -6,14 +6,14 @@
 // OFFSET: LEGO1 0x100bec70
 MxVideoParam::MxVideoParam()
 {
-	this->m_rect.m_right = 640;
-	this->m_rect.m_bottom = 480;
-	this->m_rect.m_left = 0;
-	this->m_rect.m_top = 0;
-	this->m_palette = 0;
+	this->m_rect.SetRight(640);
+	this->m_rect.SetBottom(480);
+	this->m_rect.SetLeft(0);
+	this->m_rect.SetTop(0);
+	this->m_palette = NULL;
 	this->m_backBuffers = 0;
 	this->m_unk1c = 0;
-	this->m_deviceId = 0;
+	this->m_deviceId = NULL;
 }
 
 // OFFSET: LEGO1 0x100beca0
@@ -24,10 +24,7 @@ MxVideoParam::MxVideoParam(
 	COMPAT_CONST MxVideoParamFlags& p_flags
 )
 {
-	this->m_rect.m_left = p_rect.m_left;
-	this->m_rect.m_top = p_rect.m_top;
-	this->m_rect.m_right = p_rect.m_right;
-	this->m_rect.m_bottom = p_rect.m_bottom;
+	this->m_rect = p_rect;
 	this->m_palette = p_pal;
 	this->m_backBuffers = p_backBuffers;
 	this->m_flags = p_flags;
@@ -38,10 +35,7 @@ MxVideoParam::MxVideoParam(
 // OFFSET: LEGO1 0x100becf0
 MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 {
-	this->m_rect.m_left = p_videoParam.m_rect.m_left;
-	this->m_rect.m_top = p_videoParam.m_rect.m_top;
-	this->m_rect.m_right = p_videoParam.m_rect.m_right;
-	this->m_rect.m_bottom = p_videoParam.m_rect.m_bottom;
+	this->m_rect = p_videoParam.m_rect;
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
@@ -53,10 +47,7 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 // OFFSET: LEGO1 0x100bede0
 MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 {
-	this->m_rect.m_left = p_videoParam.m_rect.m_left;
-	this->m_rect.m_top = p_videoParam.m_rect.m_top;
-	this->m_rect.m_right = p_videoParam.m_rect.m_right;
-	this->m_rect.m_bottom = p_videoParam.m_rect.m_bottom;
+	this->m_rect = p_videoParam.m_rect;
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
@@ -69,24 +60,24 @@ MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 // OFFSET: LEGO1 0x100bed70
 void MxVideoParam::SetDeviceName(char* id)
 {
-	if (this->m_deviceId != 0)
+	if (this->m_deviceId != NULL)
 		delete[] this->m_deviceId;
 
 	if (id != 0) {
 		this->m_deviceId = new char[strlen(id) + 1];
 
-		if (this->m_deviceId != 0) {
+		if (this->m_deviceId != NULL) {
 			strcpy(this->m_deviceId, id);
 		}
 	}
 	else {
-		this->m_deviceId = 0;
+		this->m_deviceId = NULL;
 	}
 }
 
 // OFFSET: LEGO1 0x100bed50
 MxVideoParam::~MxVideoParam()
 {
-	if (this->m_deviceId != 0)
+	if (this->m_deviceId != NULL)
 		delete[] this->m_deviceId;
 }

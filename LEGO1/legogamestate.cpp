@@ -2,6 +2,7 @@
 
 #include "infocenterstate.h"
 #include "legoomni.h"
+#include "legoroi.h"
 #include "legostate.h"
 #include "legostream.h"
 #include "mxobjectfactory.h"
@@ -43,6 +44,8 @@ extern const char* s_endOfVariables;
 LegoGameState::LegoGameState()
 {
 	// TODO
+	SetROIHandlerFunction();
+
 	m_stateCount = 0;
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
@@ -57,10 +60,22 @@ LegoGameState::LegoGameState()
 	SerializeScoreHistory(1);
 }
 
-// OFFSET: LEGO1 0x10039720 STUB
+// OFFSET: LEGO1 0x10039720
 LegoGameState::~LegoGameState()
 {
-	// TODO
+	LegoROI::SetSomeHandlerFunction(NULL);
+
+	if (m_stateCount) {
+		for (MxS16 i = 0; i < m_stateCount; i++) {
+			LegoState* state = m_stateArray[i];
+			if (state)
+				delete state;
+		}
+
+		delete[] m_stateArray;
+	}
+
+	delete[] m_savePath;
 }
 
 // OFFSET: LEGO1 0x10039c60 STUB
@@ -149,6 +164,12 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 	// TODO
 }
 
+// OFFSET: LEGO1 0x1003cea0
+void LegoGameState::SetSomeEnumState(undefined4 p_state)
+{
+	m_unk10 = p_state;
+}
+
 // OFFSET: LEGO1 0x10039f00
 void LegoGameState::SetSavePath(char* p_savePath)
 {
@@ -161,6 +182,33 @@ void LegoGameState::SetSavePath(char* p_savePath)
 	}
 	else
 		m_savePath = NULL;
+}
+
+// OFFSET: LEGO1 0x1003bac0
+void LegoGameState::SetROIHandlerFunction()
+{
+	LegoROI::SetSomeHandlerFunction(&ROIHandlerFunction);
+}
+
+// OFFSET: LEGO1 0x1003bad0
+MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen)
+{
+	if (p_output != NULL && p_copyLen != 0 &&
+		(strnicmp(p_input, "INDIR-F-", strlen("INDIR-F-")) == 0 ||
+		 strnicmp(p_input, "INDIR-G-", strlen("INDIR-F-")) == 0)) {
+
+		char buf[256];
+		sprintf(buf, "c_%s", &p_input[strlen("INDIR-F-")]);
+
+		const char* value = VariableTable()->GetVariable(buf);
+		if (value != NULL) {
+			strncpy(p_output, value, p_copyLen);
+			p_output[p_copyLen - 1] = '\0';
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // OFFSET: LEGO1 0x1003bbb0

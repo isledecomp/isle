@@ -5,7 +5,7 @@
 // OFFSET: LEGO1 0x100bffd0
 void MxDSSource::ReadToBuffer(MxDSBuffer* p_buffer)
 {
-	Read((unsigned char*) p_buffer->GetBuffer(), p_buffer->GetWriteOffset());
+	Read(p_buffer->GetBuffer(), p_buffer->GetWriteOffset());
 }
 
 // OFFSET: LEGO1 0x100bfff0

@@ -35,11 +35,13 @@ public:
 	virtual MxResult vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2); // vtable+0x1c
 	virtual MxResult vtable0x20(MxDSAction* p_action);                        // vtable+0x20
 	virtual MxResult vtable0x24(undefined4 p_unknown);                        // vtable+0x24
-	virtual MxResult vtable0x28();                                            // vtable+0x28
-	virtual MxResult vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval);     // vtable+0x2c
-	virtual MxResult vtable0x30(undefined4 p_unknown);                        // vtable+0x30
+	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
+	virtual MxResult vtable0x28();                                        // vtable+0x28
+	virtual MxResult vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
+	virtual MxResult vtable0x30(undefined4 p_unknown);                    // vtable+0x30
 
 	MxBool FUN_100c20d0(MxDSObject& p_obj);
+	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval);
 
 	inline MxAtomId& GetAtom() { return atom; };
 

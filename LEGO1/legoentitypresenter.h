@@ -4,6 +4,7 @@
 #include "mxcompositepresenter.h"
 
 // VTABLE 0x100d8398
+// SIZE 0x50
 class LegoEntityPresenter : public MxCompositePresenter {
 public:
 	LegoEntityPresenter();
@@ -22,8 +23,14 @@ public:
 		return !strcmp(name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(name);
 	}
 
+	virtual void Destroy() override;                   // vtable+0x38
+	virtual void Init();                               // vtable+0x68
+	virtual undefined4 vtable6c(undefined4 p_unknown); // vtable+0x6c
+
 private:
-	void Init();
+	void Destroy(MxBool p_fromDestructor);
+
+	undefined4 m_unk4c;
 };
 
 #endif // LEGOENTITYPRESENTER_H
