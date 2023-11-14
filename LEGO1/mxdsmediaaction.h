@@ -37,17 +37,17 @@ public:
 	inline MxLong GetSustainTime() const { return this->m_sustainTime; }
 
 private:
-	MxU32 m_sizeOnDisk;
-	char* m_mediaSrcPath;
+	MxU32 m_sizeOnDisk;   // 0x94
+	char* m_mediaSrcPath; // 0x98
 	struct {
 		undefined4 m_unk00;
 		undefined4 m_unk04;
-	} m_unk9c;
-	MxS32 m_framesPerSecond;
-	MxS32 m_mediaFormat;
-	MxS32 m_paletteManagement;
-	MxLong m_sustainTime;
-	undefined4 m_unkb4;
+	} m_unk9c;                 // 0x9c
+	MxS32 m_framesPerSecond;   // 0xa4
+	MxS32 m_mediaFormat;       // 0xa8
+	MxS32 m_paletteManagement; // 0xac
+	MxLong m_sustainTime;      // 0xb0
+	undefined4 m_unkb4;        // 0xb4
 };
 
 #endif // MXDSMEDIAACTION_H

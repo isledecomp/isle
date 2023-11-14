@@ -70,27 +70,21 @@ public:
 	inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
 	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
 
-private:
-	MxU32 m_sizeOnDisk;
-	MxU32 m_flags;
-	MxLong m_startTime;
-
 protected:
-	MxLong m_duration;
-	MxS32 m_loopCount;
-
-private:
-	MxVector3Data m_location;
-	MxVector3Data m_direction;
-	MxVector3Data m_up;
-	char* m_extraData;
-	MxU16 m_extraLength;
-	MxCore* m_unk84;
-	undefined4 m_unk88;
-	MxCore* m_unk8c;
-
-protected:
-	MxLong m_unkTimingField; // 0x90
+	MxU32 m_sizeOnDisk;        // 0x2c
+	MxU32 m_flags;             // 0x30
+	MxLong m_startTime;        // 0x34
+	MxLong m_duration;         // 0x38
+	MxS32 m_loopCount;         // 0x3c
+	MxVector3Data m_location;  // 0x40
+	MxVector3Data m_direction; // 0x54
+	MxVector3Data m_up;        // 0x68
+	char* m_extraData;         // 0x7c
+	MxU16 m_extraLength;       // 0x80
+	MxCore* m_unk84;           // 0x84
+	undefined4 m_unk88;        // 0x88
+	MxCore* m_unk8c;           // 0x8c
+	MxLong m_unkTimingField;   // 0x90
 };
 
 #endif // MXDSACTION_H
