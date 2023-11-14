@@ -5,6 +5,7 @@
 #include "mxomni.h"
 
 // VTABLE 0x100d4b08
+// SIZE 0x54
 class MxSoundPresenter : public MxAudioPresenter {
 public:
 	virtual ~MxSoundPresenter() override;
