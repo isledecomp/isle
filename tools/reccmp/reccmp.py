@@ -414,7 +414,6 @@ htmlinsert = []
 
 # Generate basename of original file, used in locating OFFSET lines
 basename = os.path.basename(os.path.splitext(original)[0])
-pattern = '// OFFSET:'
 
 for srcfilename in walk_source_dir(source):
   with open(srcfilename, 'r') as srcfile:
