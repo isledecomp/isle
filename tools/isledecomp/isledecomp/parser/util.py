@@ -1,5 +1,5 @@
 # C++ Parser utility functions and data structures
-from __future__ import annotations # python <3.10 compatibility
+from __future__ import annotations  # python <3.10 compatibility
 import re
 from collections import namedtuple
 
@@ -8,8 +8,8 @@ CodeBlock = namedtuple('CodeBlock',
                        ['offset', 'signature', 'start_line', 'end_line',
                         'offset_comment', 'module', 'is_template', 'is_stub'])
 
-OffsetMatch = namedtuple('OffsetMatch', ['module', 'address',
-                                         'is_template', 'is_stub'])
+OffsetMatch = namedtuple('OffsetMatch', ['module', 'address', 'is_template',
+                                         'is_stub', 'comment'])
 
 # This has not been formally established, but considering that "STUB"
 # is a temporary state for a function, we assume it will appear last,
@@ -74,4 +74,23 @@ def match_offset_comment(line: str) -> OffsetMatch | None:
     return OffsetMatch(module=match.group(1),
                        address=int(match.group(2), 16),
                        is_template=match.group(3) is not None,
-                       is_stub=match.group(4) is not None)
+                       is_stub=match.group(4) is not None,
+                       comment=line.strip())
+
+
+def distinct_module(offsets: [OffsetMatch]) -> [OffsetMatch]:
+    """Given a list of offset markers, return a list with distinct
+       module names. If module names (case-insensitive) are repeated,
+       choose the offset that appears first."""
+
+    if len(offsets) < 2:
+        return offsets
+
+    # Dict maintains insertion order in python >=3.7
+    offsets_dict = {}
+    for offset in offsets:
+        module_upper = offset.module.upper()
+        if module_upper not in offsets_dict:
+            offsets_dict[module_upper] = offset
+
+    return list(offsets_dict.values())

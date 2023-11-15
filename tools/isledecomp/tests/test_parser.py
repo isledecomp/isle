@@ -89,11 +89,12 @@ def test_indented():
     assert len(blocks) == 2
     assert blocks[0].offset == int('0x12345678', 16)
     assert blocks[0].start_line == 15
-    #assert blocks[0].end_line == 18
+    # assert blocks[0].end_line == 18
 
     assert blocks[1].offset == int('0xdeadbeef', 16)
     assert blocks[1].start_line == 22
-    #assert blocks[1].end_line == 24
+    # assert blocks[1].end_line == 24
+
 
 def test_inline():
     with sample_file('inline.cpp') as f:
@@ -103,3 +104,25 @@ def test_inline():
     for block in blocks:
         assert block.start_line is not None
         assert block.start_line == block.end_line
+
+
+def test_multiple_offsets():
+    """If multiple offset marks appear before for a code block, take them
+       all but ensure module name (case-insensitive) is distinct.
+       Use first module occurrence in case of duplicates."""
+    with sample_file('multiple_offsets.cpp') as f:
+        blocks = find_code_blocks(f)
+
+    assert len(blocks) == 4
+    assert blocks[0].module == 'TEST'
+    assert blocks[0].start_line == 9
+
+    assert blocks[1].module == 'HELLO'
+    assert blocks[1].start_line == 9
+
+    # Duplicate modules are ignored
+    assert blocks[2].start_line == 16
+    assert blocks[2].offset == 0x2345
+
+    assert blocks[3].module == 'TEST'
+    assert blocks[3].offset == 0x2002

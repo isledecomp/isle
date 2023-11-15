@@ -10,6 +10,7 @@ from .util import (
     is_exact_offset_comment,
     template_function_name,
     remove_trailing_comment,
+    distinct_module,
 )
 
 
@@ -31,11 +32,8 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
 
     blocks = []
 
-    offset_match = OffsetMatch(module=None,
-                               address=None,
-                               is_template=None,
-                               is_stub=None)
-    offset_comment = None
+    offset_matches = []
+
     function_sig = None
     start_line = None
     end_line = None
@@ -50,15 +48,19 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
         # Do this before reading again so that an EOF will not
         # cause us to miss the last function of the file.
         if state == ReaderState.FUNCTION_DONE:
-            block = CodeBlock(offset=offset_match.address,
-                              signature=function_sig,
-                              start_line=start_line,
-                              end_line=end_line,
-                              offset_comment=offset_comment,
-                              module=offset_match.module,
-                              is_template=offset_match.is_template,
-                              is_stub=offset_match.is_stub)
-            blocks.append(block)
+            # Our list of offset marks could have duplicates on
+            # module name, so we'll eliminate those now.
+            for offset_match in distinct_module(offset_matches):
+                block = CodeBlock(offset=offset_match.address,
+                                  signature=function_sig,
+                                  start_line=start_line,
+                                  end_line=end_line,
+                                  offset_comment=offset_match.comment,
+                                  module=offset_match.module,
+                                  is_template=offset_match.is_template,
+                                  is_stub=offset_match.is_stub)
+                blocks.append(block)
+            offset_matches = []
             state = ReaderState.WANT_OFFSET
 
         if can_seek:
@@ -67,19 +69,33 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
             if line == '':
                 break
 
-        if (state != ReaderState.WANT_OFFSET and
-                match_offset_comment(line) is not None):
-            # We hit another offset unexpectedly.
-            # We can recover easily by just ending the function here.
-            end_line = line_no - 1
-            state = ReaderState.FUNCTION_DONE
+        new_match = match_offset_comment(line)
+        if new_match is not None:
+            # We will allow multiple offsets if we have just begun
+            # the code block, but not after we hit the curly brace.
+            if state in (ReaderState.WANT_OFFSET, ReaderState.IN_TEMPLATE,
+                         ReaderState.WANT_SIG):
+                # If we detected an offset marker unexpectedly,
+                # we are handling it here so we can continue seeking.
+                can_seek = True
 
-            # Pause reading here so we handle the offset marker
-            # on the next loop iteration
-            can_seek = False
+                offset_matches.append(new_match)
 
-        # Regular state machine handling begins now
-        if state == ReaderState.IN_TEMPLATE:
+                if new_match.is_template:
+                    state = ReaderState.IN_TEMPLATE
+                else:
+                    state = ReaderState.WANT_SIG
+            else:
+                # We hit another offset unexpectedly.
+                # We can recover easily by just ending the function here.
+                end_line = line_no - 1
+                state = ReaderState.FUNCTION_DONE
+
+                # Pause reading here so we handle the offset marker
+                # on the next loop iteration
+                can_seek = False
+
+        elif state == ReaderState.IN_TEMPLATE:
             # TEMPLATE functions are a special case. The signature is
             # given on the next line (in a // comment)
             function_sig = template_function_name(line)
@@ -92,13 +108,14 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
             # marker. There is not a formal procedure for this, so just
             # assume the next "code line" is the function signature
             if not is_blank_or_comment(line):
+                # Inline functions may end with a comment. Strip that out
+                # to help parsing.
                 function_sig = remove_trailing_comment(line.strip())
 
                 # Now check to see if the opening curly bracket is on the
                 # same line. clang-format should prevent this (BraceWrapping)
                 # but it is easy to detect.
-                # If the entire function is on one line, we can handle that
-                # too, although this should be limited to inlines.
+                # If the entire function is on one line, handle that too.
                 if function_sig.endswith('{'):
                     start_line = line_no
                     state = ReaderState.IN_FUNC
@@ -121,19 +138,5 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
             if line.startswith('}'):
                 end_line = line_no
                 state = ReaderState.FUNCTION_DONE
-
-        elif state == ReaderState.WANT_OFFSET:
-            # If we detected an offset marker unexpectedly, we are handling
-            # it here so we can continue seeking.
-            can_seek = True
-            match = match_offset_comment(line)
-            if match is not None:
-                offset_match = match
-                offset_comment = line.strip()
-
-                if match.is_template:
-                    state = ReaderState.IN_TEMPLATE
-                else:
-                    state = ReaderState.WANT_SIG
 
     return blocks
