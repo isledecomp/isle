@@ -22,9 +22,6 @@ public:
 	virtual const Vector3& GetWorldVelocity() const;
 	virtual const BoundingBox& GetWorldBoundingBox() const;
 	virtual const BoundingSphere& GetWorldBoundingSphere() const;
-	//	virtual float* GetWorldPosition() const { return (float*) m_local2world.GetData() + 12; }
-	//	virtual float* GetWorldDirection() const { return (float*) m_local2world.GetData() + 8; }
-	//	virtual float* GetWorldUp() const { return (float*) m_local2world.GetData() + 4; }
 
 protected:
 	// vtable + 0x14
@@ -32,12 +29,12 @@ protected:
 	virtual void UpdateWorldBoundingVolumes() = 0;
 
 public:
-	virtual void OrientableROI::VTable0x1c();
+	virtual void VTable0x1c();
 	// vtable + 0x20
-	virtual void OrientableROI::SetLocalTransform(const MxMatrix& p_transform);
-	virtual void OrientableROI::VTable0x24(const MxMatrixData& p_transform);
-	virtual void OrientableROI::UpdateWorldData(const MxMatrixData& p_transform);
-	virtual void OrientableROI::UpdateWorldVelocity();
+	virtual void SetLocalTransform(const MxMatrix& p_transform);
+	virtual void VTable0x24(const MxMatrixData& p_transform);
+	virtual void UpdateWorldData(const MxMatrixData& p_transform);
+	virtual void UpdateWorldVelocity();
 
 protected:
 	char m_unkc;
