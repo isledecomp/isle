@@ -2,7 +2,7 @@
 #define VIEWROI_H
 
 #include "orientableroi.h"
-#include "tgl.h"
+#include "tgl/tgl.h"
 #include "viewlodlist.h"
 
 /*

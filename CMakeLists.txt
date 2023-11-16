@@ -218,8 +218,8 @@ if (MINGW)
 endif()
 
 # Additional include directories
-include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")
-include_directories("${CMAKE_SOURCE_DIR}/3rdparty/smk")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smk")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)
