@@ -189,7 +189,6 @@ add_library(lego1 SHARED
   LEGO1/mxvideoparamflags.cpp
   LEGO1/mxvideopresenter.cpp
   LEGO1/mxwavepresenter.cpp
-  LEGO1/orientableroi.cpp
   LEGO1/pizza.cpp
   LEGO1/pizzamissionstate.cpp
   LEGO1/pizzeria.cpp
@@ -202,6 +201,7 @@ add_library(lego1 SHARED
   LEGO1/racestate.cpp
   LEGO1/radio.cpp
   LEGO1/radiostate.cpp
+  LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
   LEGO1/realtime/realtimeview.cpp
   LEGO1/registrationbook.cpp
@@ -210,9 +210,9 @@ add_library(lego1 SHARED
   LEGO1/skateboard.cpp
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
-  LEGO1/viewmanager.cpp
-  LEGO1/viewroi.cpp
-)
+  LEGO1/viewmanager/viewmanager.cpp
+  LEGO1/viewmanager/viewroi.cpp
+ "LEGO1/realtime/mxmatrix.h" "LEGO1/realtime/mxvector.h")
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
@@ -249,7 +249,7 @@ if (ISLE_BUILD_APP)
     ISLE/res/isle.rc
     ISLE/isleapp.cpp
     ISLE/define.cpp
-  )
+   "LEGO1/realtime/mxmatrix.h" "LEGO1/realtime/mxvector.h")
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")

@@ -1,10 +1,10 @@
 #ifndef VIEWLODLIST_H
 #define VIEWLODLIST_H
 
-#include "LODList.h"
+#include "../compat.h"
+#include "../mxtypes.h"
+#include "../realtime/LODList.h"
 #include "assert.h"
-#include "compat.h"
-#include "mxtypes.h"
 #pragma warning(disable : 4786)
 
 class ViewLOD;

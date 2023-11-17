@@ -1,6 +1,6 @@
 #include "viewroi.h"
 
-#include "decomp.h"
+#include "../decomp.h"
 
 DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
 

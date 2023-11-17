@@ -1,8 +1,8 @@
 #ifndef VIEWROI_H
 #define VIEWROI_H
 
-#include "orientableroi.h"
-#include "tgl/tgl.h"
+#include "../realtime/orientableroi.h"
+#include "../tgl/tgl.h"
 #include "viewlodlist.h"
 
 /*

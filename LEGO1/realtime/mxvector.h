@@ -1,7 +1,7 @@
 #ifndef MXVECTOR_H
 #define MXVECTOR_H
 
-#include "mxtypes.h"
+#include "../mxtypes.h"
 
 #include <vec.h>
 

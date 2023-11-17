@@ -1,11 +1,11 @@
 #ifndef ROI_H
 #define ROI_H
 
-#include "compat.h"
+#include "../compat.h"
+#include "../mxstl.h"
+#include "../realtime/realtime.h"
 #include "lodlist.h"
-#include "mxstl.h"
 #include "mxvector.h"
-#include "realtime/realtime.h"
 
 /*
  * A simple bounding box object with Min and Max accessor methods.

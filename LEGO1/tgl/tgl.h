@@ -10,7 +10,6 @@
 
 #endif /* _WIN32 */
 
-#include "mxmatrix.h"
 #include "tglVector.h"
 
 namespace Tgl
