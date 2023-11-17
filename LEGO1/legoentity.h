@@ -6,7 +6,7 @@
 #include "legoroi.h"
 #include "mxdsobject.h"
 #include "mxentity.h"
-#include "mxvector.h"
+#include "realtime/mxvector.h"
 
 // VTABLE 0x100d4858
 // SIZE 0x68 (probably)

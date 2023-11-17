@@ -3,7 +3,7 @@
 
 #include "mxdsobject.h"
 #include "mxtypes.h"
-#include "mxvector.h"
+#include "realtime/mxvector.h"
 
 class MxOmni;
 

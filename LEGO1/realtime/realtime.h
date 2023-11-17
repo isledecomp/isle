@@ -1,7 +1,7 @@
 #ifndef REALTIME_H
 #define REALTIME_H
 
-#include "../mxmatrix.h"
+#include "mxmatrix.h"
 
 #define NORMVEC3(dst, src)                                                                                             \
 	{                                                                                                                  \
