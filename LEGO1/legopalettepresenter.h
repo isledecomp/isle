@@ -2,6 +2,7 @@
 #define LEGOPALETTEPRESENTER_H
 
 #include "decomp.h"
+#include "mxpalette.h"
 #include "mxvideopresenter.h"
 
 // VTABLE 0x100d9aa0
@@ -24,10 +25,12 @@ public:
 		return !strcmp(name, ClassName()) || MxVideoPresenter::IsA(name);
 	}
 
+	virtual void Destroy(); // vtable+0x38
 private:
 	void Init();
+	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk64;
+	MxPalette* m_palette;
 };
 
 #endif // LEGOPALETTEPRESENTER_H
