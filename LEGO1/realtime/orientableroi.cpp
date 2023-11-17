@@ -40,7 +40,7 @@ void OrientableROI::UpdateWorldData(const MxMatrixData& p_transform)
 	if (m_comp)
 		for (CompoundObject::iterator iter = m_comp->begin(); !(iter == m_comp->end()); iter++) {
 			ROI* child = *iter;
-			static_cast<OrientableROI*>(child)->UpdateWorldData(m_local2world);
+			static_cast<OrientableROI*>(child)->UpdateWorldData(p_transform);
 		}
 }
 
