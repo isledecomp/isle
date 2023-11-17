@@ -41,7 +41,7 @@ public:
 
 protected:
 	Tgl::Group* geometry;
-	void UpdateWorldData(const MatrixData& parent2world);
+	void UpdateWorldData(const Matrix4Data& parent2world);
 };
 
 #endif // VIEWROI_H

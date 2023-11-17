@@ -32,8 +32,8 @@ public:
 	virtual ~Helicopter() override; // vtable+0x0
 
 protected:
-	MatrixData m_unk160;
-	MatrixData m_unk1a8;
+	Matrix4Data m_unk160;
+	Matrix4Data m_unk1a8;
 	undefined4 m_unk1f0;
 	Vector4Data m_unk1f4;
 	Vector4Data m_unk20c;

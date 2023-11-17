@@ -31,14 +31,14 @@ protected:
 public:
 	virtual void VTable0x1c();
 	// vtable + 0x20
-	virtual void SetLocalTransform(const MatrixImpl& p_transform);
-	virtual void VTable0x24(const MatrixData& p_transform);
-	virtual void UpdateWorldData(const MatrixData& p_transform);
+	virtual void SetLocalTransform(const Matrix4Impl& p_transform);
+	virtual void VTable0x24(const Matrix4Data& p_transform);
+	virtual void UpdateWorldData(const Matrix4Data& p_transform);
 	virtual void UpdateWorldVelocity();
 
 protected:
 	char m_unkc;
-	MatrixData m_local2world;               // 0x10
+	Matrix4Data m_local2world;              // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Vector3Data m_world_velocity;           // 0xc0

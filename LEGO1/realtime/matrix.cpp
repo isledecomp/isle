@@ -7,65 +7,65 @@
 #include <memory.h>
 
 DECOMP_SIZE_ASSERT(Matrix4, 0x40);
-DECOMP_SIZE_ASSERT(MatrixImpl, 0x8);
-DECOMP_SIZE_ASSERT(MatrixData, 0x48);
+DECOMP_SIZE_ASSERT(Matrix4Impl, 0x8);
+DECOMP_SIZE_ASSERT(Matrix4Data, 0x48);
 
 // OFFSET: LEGO1 0x10002320
-void MatrixImpl::EqualsMatrixData(const Matrix4& p_matrix)
+void Matrix4Impl::EqualsMatrixData(const Matrix4& p_matrix)
 {
 	*m_data = p_matrix;
 }
 
 // OFFSET: LEGO1 0x10002340
-void MatrixImpl::EqualsMatrixImpl(const MatrixImpl* p_other)
+void Matrix4Impl::EqualsMatrixImpl(const Matrix4Impl* p_other)
 {
 	*m_data = *p_other->m_data;
 }
 
 // OFFSET: LEGO1 0x10002360
-void MatrixImpl::AnotherSetData(Matrix4& p_data)
+void Matrix4Impl::AnotherSetData(Matrix4& p_data)
 {
 	m_data = &p_data;
 }
 
 // OFFSET: LEGO1 0x10002370
-void MatrixImpl::SetData(Matrix4& p_data)
+void Matrix4Impl::SetData(Matrix4& p_data)
 {
 	m_data = &p_data;
 }
 
 // OFFSET: LEGO1 0x10002380
-const Matrix4* MatrixImpl::GetData() const
+const Matrix4* Matrix4Impl::GetData() const
 {
 	return m_data;
 }
 
 // OFFSET: LEGO1 0x10002390
-Matrix4* MatrixImpl::GetData()
+Matrix4* Matrix4Impl::GetData()
 {
 	return m_data;
 }
 
 // OFFSET: LEGO1 0x100023a0
-const float* MatrixImpl::Element(int p_row, int p_col) const
+const float* Matrix4Impl::Element(int p_row, int p_col) const
 {
 	return &(*m_data)[p_row][p_col];
 }
 
 // OFFSET: LEGO1 0x100023c0
-float* MatrixImpl::Element(int p_row, int p_col)
+float* Matrix4Impl::Element(int p_row, int p_col)
 {
 	return &(*m_data)[p_row][p_col];
 }
 
 // OFFSET: LEGO1 0x100023e0
-void MatrixImpl::Clear()
+void Matrix4Impl::Clear()
 {
 	memset(m_data, 0, 16 * sizeof(float));
 }
 
 // OFFSET: LEGO1 0x100023f0
-void MatrixImpl::SetIdentity()
+void Matrix4Impl::SetIdentity()
 {
 	Clear();
 	(*m_data)[0][0] = 1.0f;
@@ -75,7 +75,7 @@ void MatrixImpl::SetIdentity()
 }
 
 // OFFSET: LEGO1 0x10002430
-MatrixImpl* MatrixImpl::operator+=(const Matrix4& p_matrix)
+Matrix4Impl* Matrix4Impl::operator+=(const Matrix4& p_matrix)
 {
 	for (int i = 0; i < 16; ++i)
 		((float*) m_data)[i] += ((float*) &p_matrix)[i];
@@ -85,7 +85,7 @@ MatrixImpl* MatrixImpl::operator+=(const Matrix4& p_matrix)
 // Matches but instructions are significantly out of order. Probably not wrong
 // code given that the very similar SetTranslation does match.
 // OFFSET: LEGO1 0x10002460
-void MatrixImpl::TranslateBy(const float* p_x, const float* p_y, const float* p_z)
+void Matrix4Impl::TranslateBy(const float* p_x, const float* p_y, const float* p_z)
 {
 	((float*) m_data)[12] += *p_x;
 	((float*) m_data)[13] += *p_y;
@@ -93,7 +93,7 @@ void MatrixImpl::TranslateBy(const float* p_x, const float* p_y, const float* p_
 }
 
 // OFFSET: LEGO1 0x100024a0
-void MatrixImpl::SetTranslation(const float* p_x, const float* p_y, const float* p_z)
+void Matrix4Impl::SetTranslation(const float* p_x, const float* p_y, const float* p_z)
 {
 	(*m_data)[3][0] = *p_x;
 	(*m_data)[3][1] = *p_y;
@@ -101,7 +101,7 @@ void MatrixImpl::SetTranslation(const float* p_x, const float* p_y, const float*
 }
 
 // OFFSET: LEGO1 0x100024d0
-void MatrixImpl::EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b)
+void Matrix4Impl::EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b)
 {
 	float* cur = (float*) m_data;
 	for (int row = 0; row < 4; ++row) {
@@ -116,7 +116,7 @@ void MatrixImpl::EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b)
 }
 
 // OFFSET: LEGO1 0x10002530
-void MatrixImpl::EqualsMxProduct(const MatrixImpl* p_a, const MatrixImpl* p_b)
+void Matrix4Impl::EqualsMxProduct(const Matrix4Impl* p_a, const Matrix4Impl* p_b)
 {
 	EqualsDataProduct(*p_a->m_data, *p_b->m_data);
 }
@@ -125,7 +125,7 @@ void MatrixImpl::EqualsMxProduct(const MatrixImpl* p_a, const MatrixImpl* p_b)
 // be manually worked out. Included since I at least figured out what it was
 // doing with rotateIndex and what overall operation it's trying to do.
 // OFFSET: LEGO1 0x10002550 STUB
-void MatrixImpl::ToQuaternion(Vector4Impl* p_outQuat)
+void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 {
 	/*
 	float trace = m_data[0] + m_data[5] + m_data[10];
@@ -168,19 +168,19 @@ void MatrixImpl::ToQuaternion(Vector4Impl* p_outQuat)
 // No idea what this function is doing and it will be hard to tell until
 // we have a confirmed usage site.
 // OFFSET: LEGO1 0x10002710 STUB
-int MatrixImpl::FUN_10002710(const Vector3Impl* p_vec)
+int Matrix4Impl::FUN_10002710(const Vector3Impl* p_vec)
 {
 	return -1;
 }
 
 // OFFSET: LEGO1 0x10002850
-void MatrixImpl::operator=(const MatrixImpl& p_other)
+void Matrix4Impl::operator=(const Matrix4Impl& p_other)
 {
 	EqualsMatrixImpl(&p_other);
 }
 
 // OFFSET: LEGO1 0x10002860
-void MatrixData::operator=(const MatrixData& p_other)
+void Matrix4Data::operator=(const Matrix4Data& p_other)
 {
 	EqualsMatrixImpl(&p_other);
 }

@@ -12,26 +12,26 @@ void OrientableROI::VTable0x1c()
 }
 
 // OFFSET: LEGO1 0x100a5930
-void OrientableROI::SetLocalTransform(const MatrixImpl& p_transform)
+void OrientableROI::SetLocalTransform(const Matrix4Impl& p_transform)
 {
-	reinterpret_cast<MatrixImpl&>(m_local2world) = p_transform;
+	reinterpret_cast<Matrix4Impl&>(m_local2world) = p_transform;
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // OFFSET: LEGO1 0x100a5960
-void OrientableROI::VTable0x24(const MatrixData& p_transform)
+void OrientableROI::VTable0x24(const Matrix4Data& p_transform)
 {
-	MatrixData l_matrix(m_local2world);
+	Matrix4Data l_matrix(m_local2world);
 	m_local2world.EqualsMxProduct(&p_transform, &l_matrix);
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // OFFSET: LEGO1 0x100a59b0
-void OrientableROI::UpdateWorldData(const MatrixData& p_transform)
+void OrientableROI::UpdateWorldData(const Matrix4Data& p_transform)
 {
-	MatrixData l_matrix(m_local2world);
+	Matrix4Data l_matrix(m_local2world);
 	m_local2world.EqualsMxProduct(&l_matrix, &p_transform);
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();

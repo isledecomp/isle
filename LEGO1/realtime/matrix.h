@@ -33,12 +33,12 @@ public:
 
 // VTABLE 0x100d4350
 // SIZE 0x8
-class MatrixImpl {
+class Matrix4Impl {
 public:
-	inline MatrixImpl(Matrix4& p_data) : m_data(&p_data) {}
+	inline Matrix4Impl(Matrix4& p_data) : m_data(&p_data) {}
 
 	// vtable + 0x00
-	virtual void EqualsMatrixImpl(const MatrixImpl* p_other);
+	virtual void EqualsMatrixImpl(const Matrix4Impl* p_other);
 	virtual void EqualsMatrixData(const Matrix4& p_matrix);
 	virtual void SetData(Matrix4& p_data);
 	virtual void AnotherSetData(Matrix4& p_data);
@@ -52,13 +52,13 @@ public:
 	// vtable + 0x20
 	virtual void Clear();
 	virtual void SetIdentity();
-	virtual void operator=(const MatrixImpl& p_other);
-	virtual MatrixImpl* operator+=(const Matrix4& p_matrix);
+	virtual void operator=(const Matrix4Impl& p_other);
+	virtual Matrix4Impl* operator+=(const Matrix4& p_matrix);
 
 	// vtable + 0x30
 	virtual void TranslateBy(const float* p_x, const float* p_y, const float* p_z);
 	virtual void SetTranslation(const float* p_x, const float* p_y, const float* p_z);
-	virtual void EqualsMxProduct(const MatrixImpl* p_a, const MatrixImpl* p_b);
+	virtual void EqualsMxProduct(const Matrix4Impl* p_a, const Matrix4Impl* p_b);
 	virtual void EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b);
 
 	// vtable + 0x40
@@ -73,16 +73,16 @@ protected:
 
 // VTABLE 0x100d4300
 // SIZE 0x48
-class MatrixData : public MatrixImpl {
+class Matrix4Data : public Matrix4Impl {
 public:
-	inline MatrixData() : MatrixImpl(m) {}
-	inline MatrixData(MatrixData& p_other) : MatrixImpl(m) { m = *p_other.m_data; }
+	inline Matrix4Data() : Matrix4Impl(m) {}
+	inline Matrix4Data(Matrix4Data& p_other) : Matrix4Impl(m) { m = *p_other.m_data; }
 	inline Matrix4& GetMatrix() { return *m_data; }
 
 	// No idea why there's another equals. Maybe to some other type like the
 	// DirectX Retained Mode Matrix type which is also a float* alias?
 	// vtable + 0x44
-	virtual void operator=(const MatrixData& p_other);
+	virtual void operator=(const Matrix4Data& p_other);
 
 	Matrix4 m;
 };

@@ -5,7 +5,7 @@ void CalcLocalTransform(
 	const Vector3Impl& p_posVec,
 	const Vector3Impl& p_dirVec,
 	const Vector3Impl& p_upVec,
-	MatrixImpl& p_outMatrix
+	Matrix4Impl& p_outMatrix
 )
 {
 	float x_axis[3], y_axis[3], z_axis[3];
