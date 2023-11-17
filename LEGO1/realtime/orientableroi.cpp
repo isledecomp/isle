@@ -12,26 +12,26 @@ void OrientableROI::VTable0x1c()
 }
 
 // OFFSET: LEGO1 0x100a5930
-void OrientableROI::SetLocalTransform(const MxMatrix& p_transform)
+void OrientableROI::SetLocalTransform(const MatrixImpl& p_transform)
 {
-	reinterpret_cast<MxMatrix&>(m_local2world) = p_transform;
+	reinterpret_cast<MatrixImpl&>(m_local2world) = p_transform;
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // OFFSET: LEGO1 0x100a5960
-void OrientableROI::VTable0x24(const MxMatrixData& p_transform)
+void OrientableROI::VTable0x24(const MatrixData& p_transform)
 {
-	MxMatrixData l_matrix(m_local2world);
+	MatrixData l_matrix(m_local2world);
 	m_local2world.EqualsMxProduct(&p_transform, &l_matrix);
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // OFFSET: LEGO1 0x100a59b0
-void OrientableROI::UpdateWorldData(const MxMatrixData& p_transform)
+void OrientableROI::UpdateWorldData(const MatrixData& p_transform)
 {
-	MxMatrixData l_matrix(m_local2world);
+	MatrixData l_matrix(m_local2world);
 	m_local2world.EqualsMxProduct(&l_matrix, &p_transform);
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
@@ -54,11 +54,13 @@ const Vector3& OrientableROI::GetWorldVelocity() const
 {
 	return (Vector3&) *m_world_velocity.GetData();
 }
+
 // OFFSET: LEGO1 0x100a5d90
 const BoundingBox& OrientableROI::GetWorldBoundingBox() const
 {
 	return m_world_bounding_box;
 }
+
 // OFFSET: LEGO1 0x100a5da0
 const BoundingSphere& OrientableROI::GetWorldBoundingSphere() const
 {

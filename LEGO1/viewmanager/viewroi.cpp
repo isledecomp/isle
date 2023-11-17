@@ -23,7 +23,7 @@ Tgl::Group* ViewROI::GetGeometry()
 }
 
 // OFFSET: LEGO1 0x100a9ee0
-void ViewROI::UpdateWorldData(const MxMatrixData& parent2world)
+void ViewROI::UpdateWorldData(const MatrixData& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
 	if (geometry) {

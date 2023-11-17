@@ -3,7 +3,7 @@
 
 #include "mxdsobject.h"
 #include "mxtypes.h"
-#include "realtime/mxvector.h"
+#include "realtime/vector.h"
 
 class MxOmni;
 
@@ -62,7 +62,7 @@ public:
 	inline MxLong GetStartTime() const { return m_startTime; }
 	inline MxS32 GetLoopCount() { return m_loopCount; }
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
-	inline const MxVector3Data& GetLocation() const { return m_location; }
+	inline const Vector3Data& GetLocation() const { return m_location; }
 	inline void SetUnknown84(MxCore* p_unk84) { m_unk84 = p_unk84; }
 	inline MxCore* GetUnknown8c() { return m_unk8c; }
 	inline void SetUnknown8c(MxCore* p_unk8c) { m_unk8c = p_unk8c; }
@@ -71,20 +71,20 @@ public:
 	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
 
 protected:
-	MxU32 m_sizeOnDisk;        // 0x2c
-	MxU32 m_flags;             // 0x30
-	MxLong m_startTime;        // 0x34
-	MxLong m_duration;         // 0x38
-	MxS32 m_loopCount;         // 0x3c
-	MxVector3Data m_location;  // 0x40
-	MxVector3Data m_direction; // 0x54
-	MxVector3Data m_up;        // 0x68
-	char* m_extraData;         // 0x7c
-	MxU16 m_extraLength;       // 0x80
-	MxCore* m_unk84;           // 0x84
-	undefined4 m_unk88;        // 0x88
-	MxCore* m_unk8c;           // 0x8c
-	MxLong m_unkTimingField;   // 0x90
+	MxU32 m_sizeOnDisk;      // 0x2c
+	MxU32 m_flags;           // 0x30
+	MxLong m_startTime;      // 0x34
+	MxLong m_duration;       // 0x38
+	MxS32 m_loopCount;       // 0x3c
+	Vector3Data m_location;  // 0x40
+	Vector3Data m_direction; // 0x54
+	Vector3Data m_up;        // 0x68
+	char* m_extraData;       // 0x7c
+	MxU16 m_extraLength;     // 0x80
+	MxCore* m_unk84;         // 0x84
+	undefined4 m_unk88;      // 0x88
+	MxCore* m_unk8c;         // 0x8c
+	MxLong m_unkTimingField; // 0x90
 };
 
 #endif // MXDSACTION_H

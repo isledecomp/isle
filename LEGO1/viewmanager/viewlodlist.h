@@ -2,9 +2,9 @@
 #define VIEWLODLIST_H
 
 #include "../compat.h"
-#include "../mxtypes.h"
-#include "../realtime/LODList.h"
+#include "../realtime/lodlist.h"
 #include "assert.h"
+
 #pragma warning(disable : 4786)
 
 class ViewLOD;
@@ -44,7 +44,7 @@ private:
 // ??? for now, until we have symbol management
 typedef const char* ROIName;
 struct ROINameComparator {
-	MxBool operator()(const ROIName& rName1, const ROIName& rName2) const
+	bool operator()(const ROIName& rName1, const ROIName& rName2) const
 	{
 		return strcmp((const char*) rName1, (const char*) rName2) > 0;
 	}

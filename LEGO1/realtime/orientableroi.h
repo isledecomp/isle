@@ -1,7 +1,7 @@
 #ifndef ORIENTABLEROI_H
 #define ORIENTABLEROI_H
 
-#include "mxmatrix.h"
+#include "matrix.h"
 #include "roi.h"
 
 class OrientableROI : public ROI {
@@ -31,19 +31,19 @@ protected:
 public:
 	virtual void VTable0x1c();
 	// vtable + 0x20
-	virtual void SetLocalTransform(const MxMatrix& p_transform);
-	virtual void VTable0x24(const MxMatrixData& p_transform);
-	virtual void UpdateWorldData(const MxMatrixData& p_transform);
+	virtual void SetLocalTransform(const MatrixImpl& p_transform);
+	virtual void VTable0x24(const MatrixData& p_transform);
+	virtual void UpdateWorldData(const MatrixData& p_transform);
 	virtual void UpdateWorldVelocity();
 
 protected:
 	char m_unkc;
-	MxMatrixData m_local2world;             // 0x10
+	MatrixData m_local2world;               // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
 	BoundingSphere m_world_bounding_sphere; // 0xa8
-	MxVector3Data m_world_velocity;         // 0xc0
-	MxU32 m_unkd4;
-	MxU32 m_unkd8;
+	Vector3Data m_world_velocity;           // 0xc0
+	unsigned int m_unkd4;
+	unsigned int m_unkd8;
 };
 
 #endif // ORIENTABLEROI_H

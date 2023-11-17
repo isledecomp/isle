@@ -3,7 +3,7 @@
 
 #include "helicopterstate.h"
 #include "islepathactor.h"
-#include "realtime/mxmatrix.h"
+#include "realtime/matrix.h"
 
 // VTABLE 0x100d40f8
 // SIZE 0x230
@@ -32,11 +32,11 @@ public:
 	virtual ~Helicopter() override; // vtable+0x0
 
 protected:
-	MxMatrixData m_unk160;
-	MxMatrixData m_unk1a8;
+	MatrixData m_unk160;
+	MatrixData m_unk1a8;
 	undefined4 m_unk1f0;
-	MxVector4Data m_unk1f4;
-	MxVector4Data m_unk20c;
+	Vector4Data m_unk1f4;
+	Vector4Data m_unk20c;
 	undefined4 m_unk224;
 	HelicopterState* m_state;
 	MxAtomId m_unk22c;

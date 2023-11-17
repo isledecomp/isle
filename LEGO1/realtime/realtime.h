@@ -1,19 +1,19 @@
 #ifndef REALTIME_H
 #define REALTIME_H
 
-#include "mxmatrix.h"
+#include "matrix.h"
 
 #define NORMVEC3(dst, src)                                                                                             \
 	{                                                                                                                  \
-		MxDouble len = sqrt(NORMSQRD3(src));                                                                           \
+		double len = sqrt(NORMSQRD3(src));                                                                             \
 		VDS3(dst, src, len);                                                                                           \
 	}
 
 void CalcLocalTransform(
-	const MxVector3& p_posVec,
-	const MxVector3& p_dirVec,
-	const MxVector3& p_upVec,
-	MxMatrix& p_outMatrix
+	const Vector3Impl& p_posVec,
+	const Vector3Impl& p_dirVec,
+	const Vector3Impl& p_upVec,
+	MatrixImpl& p_outMatrix
 );
 
 #endif // REALTIME_H

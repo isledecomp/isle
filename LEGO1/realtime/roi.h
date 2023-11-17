@@ -5,23 +5,23 @@
 #include "../mxstl.h"
 #include "../realtime/realtime.h"
 #include "lodlist.h"
-#include "mxvector.h"
+#include "vector.h"
 
 /*
  * A simple bounding box object with Min and Max accessor methods.
  */
 class BoundingBox {
 public:
-	const MxVector3Data& Min() const { return min; }
-	MxVector3Data& Min() { return min; }
-	const MxVector3Data& Max() const { return max; }
-	MxVector3Data& Max() { return max; }
+	const Vector3Data& Min() const { return min; }
+	Vector3Data& Min() { return min; }
+	const Vector3Data& Max() const { return max; }
+	Vector3Data& Max() { return max; }
 
 private:
-	MxVector3Data min;
-	MxVector3Data max;
-	MxVector3Data m_unk28;
-	MxVector3Data m_unk3c;
+	Vector3Data min;
+	Vector3Data max;
+	Vector3Data m_unk28;
+	Vector3Data m_unk3c;
 };
 
 /*
@@ -29,13 +29,13 @@ private:
  */
 class BoundingSphere {
 public:
-	const MxVector3Data& Center() const { return center; }
-	MxVector3Data& Center() { return center; }
+	const Vector3Data& Center() const { return center; }
+	Vector3Data& Center() { return center; }
 	const float& Radius() const { return radius; }
 	float& Radius() { return radius; }
 
 private:
-	MxVector3Data center;
+	Vector3Data center;
 	float radius;
 };
 

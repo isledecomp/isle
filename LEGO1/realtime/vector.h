@@ -1,7 +1,5 @@
-#ifndef MXVECTOR_H
-#define MXVECTOR_H
-
-#include "../mxtypes.h"
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <vec.h>
 
@@ -11,6 +9,7 @@
 class Vector3 {
 public:
 	float elements[3]; // storage is public for easy access
+
 	Vector3() {}
 	Vector3(float x, float y, float z)
 	{
@@ -18,12 +17,14 @@ public:
 		elements[1] = y;
 		elements[2] = z;
 	}
+
 	Vector3(const float v[3])
 	{
 		elements[0] = v[0];
 		elements[1] = v[1];
 		elements[2] = v[2];
 	}
+
 	const float& operator[](long i) const { return elements[i]; }
 	float& operator[](long i) { return elements[i]; }
 };
@@ -34,6 +35,7 @@ public:
 struct Vector4 {
 public:
 	float elements[4]; // storage is public for easy access
+
 	inline Vector4() {}
 	Vector4(float x, float y, float z, float w)
 	{
@@ -49,16 +51,17 @@ public:
 		elements[2] = v[2];
 		elements[3] = v[3];
 	}
+
 	const float& operator[](long i) const { return elements[i]; }
 	float& operator[](long i) { return elements[i]; }
 };
 
 // VTABLE 0x100d4288
 // SIZE 0x8
-class MxVector2 {
+class Vector2Impl {
 public:
 	// OFFSET: LEGO1 0x1000c0f0
-	inline MxVector2(float* p_data) { this->SetData(p_data); }
+	inline Vector2Impl(float* p_data) { this->SetData(p_data); }
 
 	// vtable + 0x00 (no virtual destructor)
 	virtual void AddScalarImpl(float p_value) = 0;
@@ -81,32 +84,32 @@ public:
 	virtual void Clear() = 0;
 
 	// vtable + 0x30
-	virtual float Dot(MxVector2* p_a, float* p_b) const;
-	virtual float Dot(float* p_a, MxVector2* p_b) const;
-	virtual float Dot(MxVector2* p_a, MxVector2* p_b) const;
+	virtual float Dot(Vector2Impl* p_a, float* p_b) const;
+	virtual float Dot(float* p_a, Vector2Impl* p_b) const;
+	virtual float Dot(Vector2Impl* p_a, Vector2Impl* p_b) const;
 	virtual float Dot(float* p_a, float* p_b) const;
 
 	// vtable + 0x40
 	virtual float LenSquared() const = 0;
-	virtual MxResult Unitize();
+	virtual int Unitize();
 
 	// vtable + 0x48
-	virtual void AddVector(MxVector2* p_other);
+	virtual void AddVector(Vector2Impl* p_other);
 	virtual void AddVector(float* p_other);
 	virtual void AddScalar(float p_value);
 
 	// vtable + 0x54
-	virtual void SubVector(MxVector2* p_other);
+	virtual void SubVector(Vector2Impl* p_other);
 	virtual void SubVector(float* p_other);
 
 	// vtable + 0x5C
 	virtual void MullScalar(float* p_value);
-	virtual void MullVector(MxVector2* p_other);
+	virtual void MullVector(Vector2Impl* p_other);
 	virtual void MullVector(float* p_other);
 	virtual void DivScalar(float* p_value);
 
 	// vtable + 0x6C
-	virtual void SetVector(MxVector2* p_other);
+	virtual void SetVector(Vector2Impl* p_other);
 	virtual void SetVector(float* p_other);
 
 	inline float& operator[](size_t idx) { return m_data[idx]; }
@@ -118,9 +121,9 @@ protected:
 
 // VTABLE 0x100d4518
 // SIZE 0x8
-class MxVector3 : public MxVector2 {
+class Vector3Impl : public Vector2Impl {
 public:
-	inline MxVector3(float* p_data) : MxVector2(p_data) {}
+	inline Vector3Impl(float* p_data) : Vector2Impl(p_data) {}
 
 	void AddScalarImpl(float p_value);
 
@@ -140,9 +143,9 @@ public:
 
 	// vtable + 0x74
 	virtual void EqualsCrossImpl(float* p_a, float* p_b);
-	virtual void EqualsCross(float* p_a, MxVector3* p_b);
-	virtual void EqualsCross(MxVector3* p_a, float* p_b);
-	virtual void EqualsCross(MxVector3* p_a, MxVector3* p_b);
+	virtual void EqualsCross(float* p_a, Vector3Impl* p_b);
+	virtual void EqualsCross(Vector3Impl* p_a, float* p_b);
+	virtual void EqualsCross(Vector3Impl* p_a, Vector3Impl* p_b);
 	virtual void EqualsScalar(float* p_value);
 
 	inline void Fill(float p_value) { EqualsScalar(&p_value); }
@@ -150,9 +153,9 @@ public:
 
 // VTABLE 0x100d45a0
 // SIZE 0x8
-class MxVector4 : public MxVector3 {
+class Vector4Impl : public Vector3Impl {
 public:
-	inline MxVector4(float* p_data) : MxVector3(p_data) {}
+	inline Vector4Impl(float* p_data) : Vector3Impl(p_data) {}
 
 	void AddScalarImpl(float p_value);
 
@@ -173,18 +176,18 @@ public:
 	void EqualsScalar(float* p_value);
 
 	// vtable + 0x84
-	virtual void SetMatrixProduct(MxVector4* p_a, float* p_b);
+	virtual void SetMatrixProduct(Vector4Impl* p_a, float* p_b);
 	virtual void SetMatrixProductImpl(float* p_vec, float* p_mat);
-	virtual MxResult NormalizeQuaternion();
-	virtual void UnknownQuaternionOp(MxVector4* p_a, MxVector4* p_b);
+	virtual int NormalizeQuaternion();
+	virtual void UnknownQuaternionOp(Vector4Impl* p_a, Vector4Impl* p_b);
 };
 
 // VTABLE 0x100d4488
 // SIZE 0x14
-class MxVector3Data : public MxVector3 {
+class Vector3Data : public Vector3Impl {
 public:
-	inline MxVector3Data() : MxVector3(storage) {}
-	inline MxVector3Data(float p_x, float p_y, float p_z) : MxVector3(storage), x(p_x), y(p_y), z(p_z) {}
+	inline Vector3Data() : Vector3Impl(storage) {}
+	inline Vector3Data(float p_x, float p_y, float p_z) : Vector3Impl(storage), x(p_x), y(p_y), z(p_z) {}
 
 	union {
 		float storage[3];
@@ -195,7 +198,7 @@ public:
 		};
 	};
 
-	void CopyFrom(MxVector3Data& p_other)
+	void CopyFrom(Vector3Data& p_other)
 	{
 		EqualsImpl(p_other.m_data);
 
@@ -208,9 +211,9 @@ public:
 
 // VTABLE 0x100d41e8
 // SIZE 0x18
-class MxVector4Data : public MxVector4 {
+class Vector4Data : public Vector4Impl {
 public:
-	inline MxVector4Data() : MxVector4(storage) {}
+	inline Vector4Data() : Vector4Impl(storage) {}
 	union {
 		float storage[4];
 		struct {
@@ -222,4 +225,4 @@ public:
 	};
 };
 
-#endif // MXVECTOR_H
+#endif // VECTOR_H

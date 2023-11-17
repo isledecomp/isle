@@ -1,7 +1,7 @@
-#ifndef MXMATRIX_H
-#define MXMATRIX_H
+#ifndef MATRIX_H
+#define MATRIX_H
 
-#include "mxvector.h"
+#include "vector.h"
 
 /*
  * A simple array of four Vector4s that can be indexed into.
@@ -9,6 +9,7 @@
 class Matrix4 {
 public:
 	float rows[4][4]; // storage is public for easy access
+
 	inline Matrix4() {}
 	/*
 	Matrix4(const Vector4& x_axis, const Vector4& y_axis, const Vector4& z_axis, const Vector4& position)
@@ -32,12 +33,12 @@ public:
 
 // VTABLE 0x100d4350
 // SIZE 0x8
-class MxMatrix {
+class MatrixImpl {
 public:
-	inline MxMatrix(Matrix4& p_data) : m_data(&p_data) {}
+	inline MatrixImpl(Matrix4& p_data) : m_data(&p_data) {}
 
 	// vtable + 0x00
-	virtual void EqualsMxMatrix(const MxMatrix* p_other);
+	virtual void EqualsMatrixImpl(const MatrixImpl* p_other);
 	virtual void EqualsMatrixData(const Matrix4& p_matrix);
 	virtual void SetData(Matrix4& p_data);
 	virtual void AnotherSetData(Matrix4& p_data);
@@ -51,18 +52,18 @@ public:
 	// vtable + 0x20
 	virtual void Clear();
 	virtual void SetIdentity();
-	virtual void operator=(const MxMatrix& p_other);
-	virtual MxMatrix* operator+=(const Matrix4& p_matrix);
+	virtual void operator=(const MatrixImpl& p_other);
+	virtual MatrixImpl* operator+=(const Matrix4& p_matrix);
 
 	// vtable + 0x30
 	virtual void TranslateBy(const float* p_x, const float* p_y, const float* p_z);
 	virtual void SetTranslation(const float* p_x, const float* p_y, const float* p_z);
-	virtual void EqualsMxProduct(const MxMatrix* p_a, const MxMatrix* p_b);
+	virtual void EqualsMxProduct(const MatrixImpl* p_a, const MatrixImpl* p_b);
 	virtual void EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b);
 
 	// vtable + 0x40
-	virtual void ToQuaternion(MxVector4* p_resultQuat);
-	virtual MxResult FUN_10002710(const MxVector3* p_vec);
+	virtual void ToQuaternion(Vector4Impl* p_resultQuat);
+	virtual int FUN_10002710(const Vector3Impl* p_vec);
 
 	inline float& operator[](size_t idx) { return (*m_data)[idx >> 2][idx & 3]; }
 
@@ -72,18 +73,18 @@ protected:
 
 // VTABLE 0x100d4300
 // SIZE 0x48
-class MxMatrixData : public MxMatrix {
+class MatrixData : public MatrixImpl {
 public:
-	inline MxMatrixData() : MxMatrix(m) {}
-	inline MxMatrixData(MxMatrixData& p_other) : MxMatrix(m) { m = *p_other.m_data; }
+	inline MatrixData() : MatrixImpl(m) {}
+	inline MatrixData(MatrixData& p_other) : MatrixImpl(m) { m = *p_other.m_data; }
 	inline Matrix4& GetMatrix() { return *m_data; }
 
 	// No idea why there's another equals. Maybe to some other type like the
 	// DirectX Retained Mode Matrix type which is also a float* alias?
 	// vtable + 0x44
-	virtual void operator=(const MxMatrixData& p_other);
+	virtual void operator=(const MatrixData& p_other);
 
 	Matrix4 m;
 };
 
-#endif // MXMATRIX_H
+#endif // MATRIX_H
