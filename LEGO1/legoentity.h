@@ -32,7 +32,7 @@ public:
 		return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);
 	}
 
-	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject);                         // vtable+0x18
+	virtual MxResult Create(MxDSObject& p_dsObject);                                     // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor);                                       // vtable+0x1c
 	virtual void ParseAction(char*);                                                     // vtable+0x20
 	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2);                 // vtable+0x24

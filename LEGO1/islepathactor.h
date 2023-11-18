@@ -28,16 +28,16 @@ public:
 	// IslePathActor::`scalar deleting destructor'
 	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 
-	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject) override; // vtable+0x18
-	virtual void VTable0xcc();                                            // vtable+0xcc
-	virtual void VTable0xd0();                                            // vtable+0xd0
-	virtual void VTable0xd4();                                            // vtable+0xd4
-	virtual void VTable0xd8();                                            // vtable+0xd8
-	virtual void VTable0xdc();                                            // vtable+0xdc
-	virtual void VTable0xe0();                                            // vtable+0xe0
-	virtual void VTable0xe4();                                            // vtable+0xe4
-	virtual void VTable0xe8(MxU32 p_1, MxBool p_2, MxU8 p_3);             // vtable+0xe8
-	virtual void VTable0xec();                                            // vtable+0xec
+	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual void VTable0xcc();                                // vtable+0xcc
+	virtual void VTable0xd0();                                // vtable+0xd0
+	virtual void VTable0xd4();                                // vtable+0xd4
+	virtual void VTable0xd8();                                // vtable+0xd8
+	virtual void VTable0xdc();                                // vtable+0xdc
+	virtual void VTable0xe0();                                // vtable+0xe0
+	virtual void VTable0xe4();                                // vtable+0xe4
+	virtual void VTable0xe8(MxU32 p_1, MxBool p_2, MxU8 p_3); // vtable+0xe8
+	virtual void VTable0xec();                                // vtable+0xec
 
 	inline void SetWorld(LegoWorld* p_world) { m_pLegoWorld = p_world; }
 	inline LegoWorld* GetWorld() { return m_pLegoWorld; }

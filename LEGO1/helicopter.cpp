@@ -24,9 +24,9 @@ Helicopter::~Helicopter()
 }
 
 // OFFSET: LEGO1 0x100032c0
-MxResult Helicopter::InitFromMxDSObject(MxDSObject& p_dsObject)
+MxResult Helicopter::Create(MxDSObject& p_dsObject)
 {
-	MxResult result = IslePathActor::InitFromMxDSObject(p_dsObject);
+	MxResult result = IslePathActor::Create(p_dsObject);
 	LegoWorld* world = GetCurrentWorld();
 	SetWorld(world);
 	if (world->IsA("Act3")) {
