@@ -42,7 +42,7 @@ void LegoEntity::SetWorldTransform(MxVector3& p_loc, MxVector3& p_dir, MxVector3
 }
 
 // OFFSET: LEGO1 0x100107e0
-MxResult LegoEntity::InitFromMxDSObject(MxDSObject& p_dsObject)
+MxResult LegoEntity::Create(MxDSObject& p_dsObject)
 {
 	m_mxEntityId = p_dsObject.GetObjectId();
 	m_atom = p_dsObject.GetAtomId();

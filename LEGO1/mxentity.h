@@ -28,7 +28,7 @@ public:
 	}
 
 	virtual MxResult SetEntityId(MxS32 p_id, const MxAtomId& p_atom); // vtable+0x14
-	inline MxResult InitFromMxDSObject(MxDSObject& p_dsObject)
+	inline MxResult Create(MxDSObject& p_dsObject)
 	{
 		m_mxEntityId = p_dsObject.GetObjectId();
 		m_atom = p_dsObject.GetAtomId();
