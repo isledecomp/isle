@@ -156,13 +156,13 @@ void MxHashTable<T>::DeleteAll()
 
 		while (t) {
 			MxHashTableNode<T>* next = t->m_next;
-			m_customDestructor(t->m_obj);
+			this->m_customDestructor(t->m_obj);
 			delete t;
 			t = next;
 		}
 	}
 
-	m_count = 0;
+	this->m_count = 0;
 	memset(m_slots, 0, sizeof(MxHashTableNode<T>*) * m_numSlots);
 
 	delete[] m_slots;
@@ -188,7 +188,7 @@ inline void MxHashTable<T>::Resize()
 	MxHashTableNode<T>** new_table = new MxHashTableNode<T>*[m_numSlots];
 	m_slots = new_table;
 	memset(m_slots, 0, sizeof(MxHashTableNode<T>*) * m_numSlots);
-	m_count = 0;
+	this->m_count = 0;
 
 	for (MxS32 i = 0; i != old_size; i++) {
 		MxHashTableNode<T>* t = old_table[i];
@@ -214,13 +214,13 @@ inline void MxHashTable<T>::_NodeInsert(MxHashTableNode<T>* p_node)
 		m_slots[bucket]->m_prev = p_node;
 
 	m_slots[bucket] = p_node;
-	m_count++;
+	this->m_count++;
 }
 
 template <class T>
 inline void MxHashTable<T>::Add(T p_newobj)
 {
-	if (m_resizeOption && ((m_count + 1) / m_numSlots) > m_autoResizeRatio)
+	if (m_resizeOption && ((this->m_count + 1) / m_numSlots) > m_autoResizeRatio)
 		MxHashTable<T>::Resize();
 
 	MxU32 hash = Hash(p_newobj);

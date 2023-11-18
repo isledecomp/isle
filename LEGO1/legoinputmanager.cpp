@@ -5,6 +5,7 @@
 #include "mxautolocker.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
+DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18);
 
 // OFFSET: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
@@ -54,6 +55,27 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 		m_eventQueue = new LegoEventQueue();
 	return SUCCESS;
 }
+
+// OFFSET: LEGO1 0x1005bb80 TEMPLATE
+// MxCollection<LegoEventNotificationParam>::Compare
+
+// OFFSET: LEGO1 0x1005bc30 TEMPLATE
+// MxCollection<LegoEventNotificationParam>::Destroy
+
+// OFFSET: LEGO1 0x1005bc80 TEMPLATE
+// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
+
+// OFFSET: LEGO1 0x1005bd50 TEMPLATE
+// MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005bdc0 TEMPLATE
+// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005beb0 TEMPLATE
+// LegoEventQueue::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x1005bf70 TEMPLATE
+// MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x1005bfe0
 void LegoInputManager::Destroy()
@@ -270,3 +292,6 @@ void LegoInputManager::KillTimer()
 		::KillTimer(omni->GetWindowHandle(), m_timer);
 	}
 }
+
+// OFFSET: LEGO1 0x1005d010 TEMPLATE
+// MxListEntry<LegoEventNotificationParam>::GetValue

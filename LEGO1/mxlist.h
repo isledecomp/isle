@@ -1,6 +1,7 @@
 #ifndef MXLIST_H
 #define MXLIST_H
 
+#include "mxcollection.h"
 #include "mxcore.h"
 #include "mxtypes.h"
 
@@ -8,6 +9,12 @@ template <class T>
 class MxList;
 template <class T>
 class MxListCursor;
+
+template <class T>
+class MxPtrList : public MxList<T*> {
+public:
+	MxPtrList() { m_customDestructor = Destroy; }
+};
 
 template <class T>
 class MxListEntry {
@@ -40,29 +47,9 @@ private:
 	MxListEntry* m_next;
 };
 
-// SIZE 0x10
-template <class T>
-class MxListParent : public MxCore {
-public:
-	MxListParent()
-	{
-		m_count = 0;
-		m_customDestructor = Destroy;
-	}
-
-	virtual ~MxListParent() {}
-	virtual MxS8 Compare(T, T) { return 0; };
-
-	static void Destroy(T){};
-
-protected:
-	MxU32 m_count;                 // +0x8
-	void (*m_customDestructor)(T); // +0xc
-};
-
 // SIZE 0x18
 template <class T>
-class MxList : protected MxListParent<T> {
+class MxList : protected MxCollection<T> {
 public:
 	MxList()
 	{

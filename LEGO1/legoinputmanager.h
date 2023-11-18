@@ -12,7 +12,17 @@
 
 class LegoControlManager;
 
+// VTABLE 0x100d87b8 TEMPLATE
+// class MxCollection<LegoEventNotificationParam>
+
+// VTABLE 0x100d87d0 TEMPLATE
+// class MxList<LegoEventNotificationParam>
+
+// VTABLE 0x100d87e8 TEMPLATE
+// class MxQueue<LegoEventNotificationParam>
+
 // VTABLE 0x100d8800
+// SIZE 0x18
 class LegoEventQueue : public MxQueue<LegoEventNotificationParam> {};
 
 // VTABLE 0x100d8760
@@ -79,38 +89,5 @@ public:
 	MxBool m_unk0x335;
 	MxBool m_unk0x336;
 };
-
-// OFFSET: LEGO1 0x1005bb80 TEMPLATE
-// MxListParent<LegoEventNotificationParam>::Compare
-
-// OFFSET: LEGO1 0x1005bc30 TEMPLATE
-// MxListParent<LegoEventNotificationParam>::Destroy
-
-// OFFSET: LEGO1 0x1005bc80 TEMPLATE
-// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
-
-// OFFSET: LEGO1 0x1005bd50 TEMPLATE
-// MxListParent<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// OFFSET: LEGO1 0x1005bdc0 TEMPLATE
-// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// OFFSET: LEGO1 0x1005beb0 TEMPLATE
-// LegoEventQueue::`scalar deleting destructor'
-
-// OFFSET: LEGO1 0x1005bf70 TEMPLATE
-// MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// OFFSET: LEGO1 0x1005d010 TEMPLATE
-// MxListEntry<LegoEventNotificationParam>::GetValue
-
-// VTABLE 0x100d87e8 TEMPLATE
-// class MxQueue<LegoEventNotificationParam>
-
-// VTABLE 0x100d87d0 TEMPLATE
-// class MxList<LegoEventNotificationParam>
-
-// VTABLE 0x100d87b8 TEMPLATE
-// class MxListParent<LegoEventNotificationParam>
 
 #endif // LEGOINPUTMANAGER_H
