@@ -65,7 +65,7 @@ public:
 	virtual void ToQuaternion(Vector4Impl* p_resultQuat);
 	virtual int FUN_10002710(const Vector3Impl* p_vec);
 
-	inline float& operator[](size_t idx) { return (*m_data)[idx >> 2][idx & 3]; }
+	inline float& operator[](size_t idx) { return ((float*) m_data)[idx]; }
 
 protected:
 	Matrix4* m_data;
@@ -75,8 +75,8 @@ protected:
 // SIZE 0x48
 class Matrix4Data : public Matrix4Impl {
 public:
-	inline Matrix4Data() : Matrix4Impl(m) {}
-	inline Matrix4Data(Matrix4Data& p_other) : Matrix4Impl(m) { m = *p_other.m_data; }
+	inline Matrix4Data() : Matrix4Impl(m_matrix) {}
+	inline Matrix4Data(Matrix4Data& p_other) : Matrix4Impl(m_matrix) { m_matrix = *p_other.m_data; }
 	inline Matrix4& GetMatrix() { return *m_data; }
 
 	// No idea why there's another equals. Maybe to some other type like the
@@ -84,7 +84,7 @@ public:
 	// vtable + 0x44
 	virtual void operator=(const Matrix4Data& p_other);
 
-	Matrix4 m;
+	Matrix4 m_matrix;
 };
 
 #endif // MATRIX_H

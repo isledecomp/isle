@@ -186,43 +186,31 @@ public:
 // SIZE 0x14
 class Vector3Data : public Vector3Impl {
 public:
-	inline Vector3Data() : Vector3Impl(storage) {}
-	inline Vector3Data(float p_x, float p_y, float p_z) : Vector3Impl(storage), x(p_x), y(p_y), z(p_z) {}
-
-	union {
-		float storage[3];
-		struct {
-			float x;
-			float y;
-			float z;
-		};
-	};
+	inline Vector3Data() : Vector3Impl(m_vector.elements) {}
+	inline Vector3Data(float p_x, float p_y, float p_z) : Vector3Impl(m_vector.elements), m_vector(p_x, p_y, p_z) {}
 
 	void CopyFrom(Vector3Data& p_other)
 	{
 		EqualsImpl(p_other.m_data);
 
-		float* dest = this->storage;
-		float* src = p_other.storage;
-		for (size_t i = sizeof(storage) / sizeof(float); i > 0; --i)
+		float* dest = m_vector.elements;
+		float* src = p_other.m_vector.elements;
+		for (size_t i = sizeof(m_vector) / sizeof(float); i > 0; --i)
 			*dest++ = *src++;
 	}
+
+private:
+	Vector3 m_vector;
 };
 
 // VTABLE 0x100d41e8
 // SIZE 0x18
 class Vector4Data : public Vector4Impl {
 public:
-	inline Vector4Data() : Vector4Impl(storage) {}
-	union {
-		float storage[4];
-		struct {
-			float x;
-			float y;
-			float z;
-			float w;
-		};
-	};
+	inline Vector4Data() : Vector4Impl(m_vector.elements) {}
+
+private:
+	Vector4 m_vector;
 };
 
 #endif // VECTOR_H
