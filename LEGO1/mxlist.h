@@ -13,7 +13,7 @@ class MxListCursor;
 template <class T>
 class MxPtrList : public MxList<T*> {
 public:
-	MxPtrList() { m_customDestructor = Destroy; }
+	MxPtrList(void (*p_destroy)(T*) = Destroy) { m_customDestructor = p_destroy; }
 };
 
 template <class T>
