@@ -21,7 +21,7 @@ struct MxRegionTopBottom {
 	inline void SetTop(MxS32 p_top) { m_top = p_top; }
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
-	friend class MxRegionListParent;
+	friend class MxRegionList;
 
 private:
 	MxS32 m_top;
