@@ -17,4 +17,6 @@ jobs:
           --style=file \
           ISLE/*.cpp ISLE/*.h \
           LEGO1/*.cpp LEGO1/*.h \
-          LEGO1/realtime/*.cpp LEGO1/realtime/*.h
+          LEGO1/realtime/*.cpp LEGO1/realtime/*.h \
+          LEGO1/tgl/*.h \
+          LEGO1/viewmanager/*.cpp LEGO1/viewmanager/*.h

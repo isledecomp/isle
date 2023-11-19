@@ -145,7 +145,6 @@ add_library(lego1 SHARED
   LEGO1/mxloopingflcpresenter.cpp
   LEGO1/mxloopingmidipresenter.cpp
   LEGO1/mxloopingsmkpresenter.cpp
-  LEGO1/mxmatrix.cpp
   LEGO1/mxmediamanager.cpp
   LEGO1/mxmediapresenter.cpp
   LEGO1/mxmidipresenter.cpp
@@ -184,7 +183,6 @@ add_library(lego1 SHARED
   LEGO1/mxtype17notificationparam.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
-  LEGO1/mxvector.cpp
   LEGO1/mxvideomanager.cpp
   LEGO1/mxvideoparam.cpp
   LEGO1/mxvideoparamflags.cpp
@@ -202,23 +200,27 @@ add_library(lego1 SHARED
   LEGO1/racestate.cpp
   LEGO1/radio.cpp
   LEGO1/radiostate.cpp
+  LEGO1/realtime/matrix.cpp
+  LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
   LEGO1/realtime/realtimeview.cpp
+  LEGO1/realtime/vector.cpp
   LEGO1/registrationbook.cpp
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
-  LEGO1/viewmanager.cpp
+  LEGO1/viewmanager/viewmanager.cpp
+  LEGO1/viewmanager/viewroi.cpp
 )
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
 # Additional include directories
-include_directories("${CMAKE_SOURCE_DIR}/3rdparty/vec")
-include_directories("${CMAKE_SOURCE_DIR}/3rdparty/smk")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smk")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)

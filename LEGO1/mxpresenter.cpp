@@ -123,7 +123,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 
 	this->m_action = p_action;
 
-	const MxVector3Data& location = this->m_action->GetLocation();
+	const Vector3Data& location = this->m_action->GetLocation();
 	MxS32 previousTickleState = this->m_currentTickleState;
 
 	this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);

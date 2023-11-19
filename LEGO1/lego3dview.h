@@ -1,7 +1,7 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
-#include "viewmanager.h"
+#include "viewmanager/viewmanager.h"
 
 class Lego3DView {
 public:
