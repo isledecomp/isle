@@ -5,6 +5,7 @@
 #include "mxomni.h"
 
 // VTABLE 0x100d4b08
+// SIZE 0x54
 class MxSoundPresenter : public MxAudioPresenter {
 public:
 	virtual ~MxSoundPresenter() override;
@@ -26,7 +27,7 @@ public:
 	virtual void Destroy() override;          // vtable+0x38
 
 private:
-	void Destroy(MxBool);
+	void Destroy(MxBool p_fromDestructor);
 };
 
 #endif // MXSOUNDPRESENTER_H

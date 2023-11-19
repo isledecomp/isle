@@ -21,6 +21,12 @@ Please keep your pull requests small and understandable; you may be able to shoo
 
 This repository currently has only one goal: accuracy to the original executables. We are byte/instruction matching as much as possible, which means the priority is making the original compiler (MSVC 4.20) produce code that matches the original game. As such, modernizations and bug fixes will probably be rejected for the time being.
 
+## Overview
+
+* `3rdparty`: Contains code obtained from third parties, not including Mindscape. Generally, these are libraries that have been placed in the public domain or are freely available on the web. As these are unaltered files, our style guide (see below) does not apply.
+* `ISLE`: Decompilation of `ISLE.EXE`. It depends on some code in `LEGO1`.
+* `LEGO1`: Decompilation of `LEGO1.DLL`. This folder contains code from Mindscape's custom in-house engine called **Omni** (file pattern: `mx*`), the LEGO Island-specific extensions for Omni and the game's code (file pattern: `lego*`) as well as several utility libraries (`realtime`, `tgl`, `viewmanager`) developed by Mindscape.
+
 ## Code Style
 
 In general, we're not exhaustively strict about coding style, but there are some preferable guidelines to follow that have been adopted from what we know about the original codebase:
@@ -31,11 +37,13 @@ We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.ht
 
 ### Naming conventions
 
+The following conventions should generally be applied everywhere except for the utility libraries (`LEGO1/realtime`, `LEGO1/tgl`, `LEGO1/viewmanager`) and any 3rd party libraries (`3rdparty`).
+
 - `PascalCase` for classes, function names, and enumerations.
 - `m_camelCase` for member variables.
 - `g_camelCase` for global variables.
 - `p_camelCase` for function parameters.
-- Instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
+- Within the Omni engine (file pattern: `mx*`), instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
 
 ## Questions?
 

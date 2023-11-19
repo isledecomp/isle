@@ -1,3 +1,4 @@
-colorama
 capstone
+colorama
 isledecomp
+pystache

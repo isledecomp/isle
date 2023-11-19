@@ -6,51 +6,44 @@
 struct MxRegionTopBottom;
 struct MxRegionLeftRight;
 
-// VTABLE 0x100dcb40
-// SIZE 0x18
-class MxRegionListParent : public MxList<MxRegionTopBottom*> {
-public:
-	static void Destroy(MxRegionTopBottom* p_topBottom);
+// VTABLE 0x100dcb10 TEMPLATE
+// class MxCollection<MxRegionTopBottom *>
 
-	MxRegionListParent() { m_customDestructor = Destroy; }
-};
+// VTABLE 0x100dcb28 TEMPLATE
+// class MxList<MxRegionTopBottom *>
+
+// VTABLE 0x100dcb40 TEMPLATE
+// class MxPtrList<MxRegionTopBottom>
 
 // VTABLE 0x100dcb58
 // SIZE 0x18
-class MxRegionList : public MxRegionListParent {};
+class MxRegionList : public MxPtrList<MxRegionTopBottom> {
+public:
+	MxRegionList() : MxPtrList<MxRegionTopBottom>(Destroy) {}
+	static void Destroy(MxRegionTopBottom*);
+};
 
 // VTABLE 0x100dcb88
 typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
 
-// OFFSET: LEGO1 0x100c5970 TEMPLATE
-// MxList<MxRegionTopBottom *>::_InsertEntry
-
-// OFFSET: LEGO1 0x100c5a20 TEMPLATE
-// MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
-
-// VTABLE 0x100dcc70
-// SIZE 0x18
-class MxRegionLeftRightListParent : public MxList<MxRegionLeftRight*> {
-public:
-	static void Destroy(MxRegionLeftRight* p_leftRight);
-
-	MxRegionLeftRightListParent() { m_customDestructor = Destroy; }
-};
-
-// VTABLE 0x100dcc88
-// SIZE 0x18
-class MxRegionLeftRightList : public MxRegionLeftRightListParent {};
-
 // VTABLE 0x100dcc10
 typedef MxListCursorChildChild<MxRegionLeftRight*> MxRegionLeftRightListCursor;
 
-// OFFSET: LEGO1 0x100c54f0 TEMPLATE
-// MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
+// VTABLE 0x100dcc40 TEMPLATE
+// class MxCollection<MxRegionLeftRight *>
 
-// OFFSET: LEGO1 0x100c58c0 TEMPLATE
-// MxList<MxRegionLeftRight *>::_InsertEntry
+// VTABLE 0x100dcc58 TEMPLATE
+// class MxList<MxRegionLeftRight *>
 
-// OFFSET: LEGO1 0x100c5a40 TEMPLATE
-// MxList<MxRegionLeftRight *>::_DeleteEntry
+// VTABLE 0x100dcc70 TEMPLATE
+// class MxPtrList<MxRegionLeftRight>
+
+// VTABLE 0x100dcc88
+// SIZE 0x18
+class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
+public:
+	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(Destroy) {}
+	static void Destroy(MxRegionLeftRight*);
+};
 
 #endif // MXREGIONLIST_H

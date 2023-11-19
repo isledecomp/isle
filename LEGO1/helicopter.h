@@ -3,7 +3,7 @@
 
 #include "helicopterstate.h"
 #include "islepathactor.h"
-#include "mxmatrix.h"
+#include "realtime/matrix.h"
 
 // VTABLE 0x100d40f8
 // SIZE 0x230
@@ -24,7 +24,7 @@ public:
 		return !strcmp(name, Helicopter::ClassName()) || IslePathActor::IsA(name);
 	}
 
-	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
 	virtual void VTable0xe4() override;
 
 	// OFFSET: LEGO1 0x10003210 TEMPLATE
@@ -32,11 +32,11 @@ public:
 	virtual ~Helicopter() override; // vtable+0x0
 
 protected:
-	MxMatrixData m_unk160;
-	MxMatrixData m_unk1a8;
+	Matrix4Data m_unk160;
+	Matrix4Data m_unk1a8;
 	undefined4 m_unk1f0;
-	MxVector4Data m_unk1f4;
-	MxVector4Data m_unk20c;
+	Vector4Data m_unk1f4;
+	Vector4Data m_unk20c;
 	undefined4 m_unk224;
 	HelicopterState* m_state;
 	MxAtomId m_unk22c;
