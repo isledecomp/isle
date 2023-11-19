@@ -68,6 +68,7 @@ public:
 	inline float& operator[](size_t idx) { return ((float*) m_data)[idx]; }
 
 protected:
+	// TODO: Currently unclear whether this class contains a Matrix4* or float*.
 	Matrix4* m_data;
 };
 
