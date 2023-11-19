@@ -28,7 +28,7 @@ void MxDSActionList::Destroy(MxDSAction* p_action)
 // MxList<MxDSAction *>::~MxList<MxDSAction *>
 
 // OFFSET: LEGO1 0x100c9e30 TEMPLATE
-// MxCollection<MxDSAction *>::~MxCollection<MxDSAction *>
+// MxCollection<MxDSAction *>::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100c9ea0 TEMPLATE
-// MxList<MxDSAction *>::~MxList<MxDSAction *>
+// MxList<MxDSAction *>::`scalar deleting destructor'
