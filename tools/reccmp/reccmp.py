@@ -12,6 +12,7 @@ import sys
 import colorama
 import html
 import re
+from pystache import Renderer
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
@@ -552,50 +553,38 @@ for subdir, dirs, files in os.walk(source):
         except UnicodeDecodeError:
           break
 
-def gen_html(html_path, data):
-  templatedata = None
-  with open(get_file_in_script_dir('template.html')) as templatefile:
-    templatedata = templatefile.read()
+def gen_html(html_file, data):
+  output_data = Renderer().render_path(get_file_in_script_dir('template.html'),
+    {
+      "data": ','.join(data)
+    }
+  )
 
-  templatedata = templatedata.replace('/* INSERT DATA HERE */', ','.join(data), 1)
-
-  with open(html_path, 'w') as htmlfile:
-    htmlfile.write(templatedata)
+  with open(html_file, 'w') as htmlfile:
+    htmlfile.write(output_data)
 
 
-def gen_svg(svg, name, icon, implemented_funcs, total_funcs, raw_accuracy):
-  templatedata = None
-  with open(get_file_in_script_dir('template.svg')) as templatefile:
-    templatedata = templatefile.read()
+def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_accuracy):
+  icon_data = None
+  if icon:
+    with open(icon, 'rb') as iconfile:
+      icon_data = base64.b64encode(iconfile.read()).decode('utf-8')
 
-  # TODO: Use templating engine (e.g. pystache)
-  # Replace icon
-  if args.svg_icon:
-    with open(args.svg_icon, 'rb') as iconfile:
-      templatedata = templatedata.replace('{icon}', base64.b64encode(iconfile.read()).decode('utf-8'), 1)
-
-  # Replace name
-  templatedata = templatedata.replace('{name}', name, 1)
-
-  # Replace implemented statistic
-  templatedata = templatedata.replace('{implemented}', f'{(implemented_funcs / total_funcs * 100):.2f}% ({implemented_funcs}/{total_funcs})', 1)
-
-  # Replace accuracy statistic
-  templatedata = templatedata.replace('{accuracy}', f'{(raw_accuracy / implemented_funcs * 100):.2f}%', 1)
-
-  # Generate progress bar width
   total_statistic = raw_accuracy / total_funcs
-  percenttemplate = '{progbar'
-  percentstart = templatedata.index(percenttemplate)
-  percentend = templatedata.index('}', percentstart)
-  progwidth = float(templatedata[percentstart + len(percenttemplate) + 1:percentend]) * total_statistic
-  templatedata = templatedata[0:percentstart] + str(progwidth) + templatedata[percentend + 1:]
+  full_percentbar_width = 127.18422
+  output_data = Renderer().render_path(get_file_in_script_dir('template.svg'),
+    {
+      "name": name_svg,
+      "icon": icon_data,
+      "implemented": f'{(svg_implemented_funcs / total_funcs * 100):.2f}% ({svg_implemented_funcs}/{total_funcs})',
+      "accuracy": f'{(raw_accuracy / svg_implemented_funcs * 100):.2f}%',
+      "progbar": total_statistic * full_percentbar_width,
+      "percent": f'{(total_statistic * 100):.2f}%',
+    }
+  )
+  with open(svg_file, 'w') as svgfile:
+    svgfile.write(output_data)
 
-  # Replace percentage statistic
-  templatedata = templatedata.replace('{percent}', f'{(total_statistic * 100):.2f}%', 2)
-
-  with open(svg, 'w') as svgfile:
-    svgfile.write(templatedata)
 
 if html_path:
   gen_html(html_path, htmlinsert)
