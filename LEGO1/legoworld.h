@@ -41,11 +41,11 @@ public:
 	void EndAction(MxPresenter* p_presenter);
 
 protected:
-	LegoPathControllerList m_list0x68; // +0x68
-	MxPresenterList m_list0x80;        // +0x80
-	LegoCameraController* m_camera;    // +0x98
+	LegoPathControllerList m_list0x68; // 0x68
+	MxPresenterList m_list0x80;        // 0x80
+	LegoCameraController* m_camera;    // 0x98
 	undefined m_unk9c[0x1c];
-	MxPresenterList m_list0xb8; // +0xb8
+	MxPresenterList m_list0xb8; // 0xb8
 	undefined m_unkd0[0x26];
 	undefined m_unkf6;
 	undefined m_unkf7;
