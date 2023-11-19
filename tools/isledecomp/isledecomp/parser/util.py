@@ -41,8 +41,8 @@ def template_function_name(line: str) -> str:
     # If we don't match, you get whatever is on the line as the signature
     if template_match is not None:
         return template_match.group(1)
-    else:
-        return line
+
+    return line
 
 
 def remove_trailing_comment(line: str) -> str:

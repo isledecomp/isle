@@ -1,7 +1,6 @@
 import os
 import sys
 import argparse
-from typing import TextIO
 from isledecomp.dir import (
     walk_source_dir,
     file_is_cpp
@@ -24,9 +23,6 @@ def check_file(filename: str, verbose: bool = False) -> bool:
 
     with open(filename, 'r') as f:
         code_blocks = find_code_blocks(f)
-        # TODO: Should combine these checks if/when we refactor.
-        # This is just for simplicity / proof of concept.
-        f.seek(os.SEEK_SET, 0)
 
     bad_comments = [(block.start_line, block.offset_comment)
                     for block in code_blocks
