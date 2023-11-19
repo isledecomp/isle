@@ -83,6 +83,7 @@ add_library(lego1 SHARED
   LEGO1/legopartpresenter.cpp
   LEGO1/legopathactor.cpp
   LEGO1/legopathcontroller.cpp
+  LEGO1/legopathcontrollerlist.cpp
   LEGO1/legopathpresenter.cpp
   LEGO1/legophonemepresenter.cpp
   LEGO1/legoplantmanager.cpp

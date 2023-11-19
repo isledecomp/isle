@@ -14,7 +14,7 @@ MxEntity::~MxEntity()
 }
 
 // OFFSET: LEGO1 0x10001070
-MxResult MxEntity::SetEntityId(MxS32 p_id, const MxAtomId& p_atom)
+MxResult MxEntity::Create(MxS32 p_id, const MxAtomId& p_atom)
 {
 	this->m_mxEntityId = p_id;
 	this->m_atom = p_atom;

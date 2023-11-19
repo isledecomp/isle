@@ -8,14 +8,34 @@ LegoPalettePresenter::LegoPalettePresenter()
 	Init();
 }
 
-// OFFSET: LEGO1 0x1007a070 STUB
+// OFFSET: LEGO1 0x1007a070
 LegoPalettePresenter::~LegoPalettePresenter()
 {
-	// TODO
+	Destroy(TRUE);
 }
 
 // OFFSET: LEGO1 0x1007a0d0
 void LegoPalettePresenter::Init()
 {
-	this->m_unk64 = 0;
+	m_palette = NULL;
+}
+
+// OFFSET: LEGO1 0x1007a0e0
+void LegoPalettePresenter::Destroy(MxBool p_fromDestructor)
+{
+	m_criticalSection.Enter();
+	if (m_palette) {
+		delete m_palette;
+	}
+	Init();
+	m_criticalSection.Leave();
+	if (!p_fromDestructor) {
+		MxVideoPresenter::Destroy(FALSE);
+	}
+}
+
+// OFFSET: LEGO1 0x1007a120
+void LegoPalettePresenter::Destroy()
+{
+	Destroy(FALSE);
 }

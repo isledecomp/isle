@@ -24,7 +24,7 @@ public:
 		return !strcmp(name, Helicopter::ClassName()) || IslePathActor::IsA(name);
 	}
 
-	virtual MxResult InitFromMxDSObject(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
 	virtual void VTable0xe4() override;
 
 	// OFFSET: LEGO1 0x10003210 TEMPLATE

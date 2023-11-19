@@ -5,30 +5,22 @@
 
 class MxPresenter;
 
-// Unclear what the purpose of this class is
-// VTABLE 0x100d62f0
-// SIZE 0x18
-class MxPresenterListParent : public MxList<MxPresenter*> {
-public:
-	MxPresenterListParent() { m_customDestructor = Destroy; }
-};
+// VTABLE 0x100d62f0 TEMPLATE
+// class MxPtrList<MxPresenter>
 
 // VTABLE 0x100d6308
 // SIZE 0x18
-class MxPresenterList : public MxPresenterListParent {
+class MxPresenterList : public MxPtrList<MxPresenter> {
 public:
-	virtual MxS8 Compare(MxPresenter*, MxPresenter*) override; // +0x14
+	virtual MxS8 Compare(MxPresenter*, MxPresenter*) override; // vtable+0x14
 };
 
 typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
 
-// OFFSET: LEGO1 0x1001cd20 TEMPLATE
-// MxListParent<MxPresenter *>::Compare
+// VTABLE 0x100d6350 TEMPLATE
+// class MxCollection<MxPresenter *>
 
-// OFFSET: LEGO1 0x1001cd30 TEMPLATE
-// MxListParent<MxPresenter *>::Destroy
-
-// OFFSET: LEGO1 0x1001ce20 TEMPLATE
-// MxList<MxPresenter *>::~MxList<MxPresenter *>
+// VTABLE 0x100d6368 TEMPLATE
+// class MxList<MxPresenter *>
 
 #endif // MXPRESENTERLIST_H

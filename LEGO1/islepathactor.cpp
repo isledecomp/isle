@@ -44,9 +44,9 @@ IslePathActor::IslePathActor()
 }
 
 // OFFSET: LEGO1 0x1001a280
-MxResult IslePathActor::InitFromMxDSObject(MxDSObject& p_dsObject)
+MxResult IslePathActor::Create(MxDSObject& p_dsObject)
 {
-	return MxEntity::InitFromMxDSObject(p_dsObject);
+	return MxEntity::Create(p_dsObject);
 }
 
 // OFFSET: LEGO1 0x1001a350 STUB
