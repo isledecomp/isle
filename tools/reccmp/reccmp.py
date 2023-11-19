@@ -12,7 +12,7 @@ import sys
 import colorama
 import html
 import re
-import pystache
+from pystache import Renderer
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.')
@@ -554,25 +554,17 @@ for subdir, dirs, files in os.walk(source):
           break
 
 def gen_html(html_file, data):
-  templatedata = None
-  with open(get_file_in_script_dir('template.html')) as templatefile:
-    templatedata = templatefile.read()
-
-  outputdata = pystache.render(templatedata,
+  output_data = Renderer().render_path(get_file_in_script_dir('template.html'),
     {
       "data": ','.join(data)
     }
   )
 
   with open(html_file, 'w') as htmlfile:
-    htmlfile.write(outputdata)
+    htmlfile.write(output_data)
 
 
 def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_accuracy):
-  templatedata = None
-  with open(get_file_in_script_dir('template.svg')) as templatefile:
-    templatedata = templatefile.read()
-
   icon_data = None
   if icon:
     with open(icon, 'rb') as iconfile:
@@ -580,7 +572,7 @@ def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_ac
 
   total_statistic = raw_accuracy / total_funcs
   full_percentbar_width = 127.18422
-  output_data = pystache.render(templatedata,
+  output_data = Renderer().render_path(get_file_in_script_dir('template.svg'),
     {
       "name": name_svg,
       "icon": icon_data,
