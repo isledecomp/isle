@@ -24,7 +24,7 @@ public:
 		return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
 	}
 
-	virtual void vtable70() override; // vtable+0x74
+	virtual void VTable0x70() override; // vtable+0x70
 
 	undefined4* m_unk64;
 };

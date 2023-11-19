@@ -25,11 +25,11 @@ MxFlcPresenter::~MxFlcPresenter()
 }
 
 // OFFSET: LEGO1 0x100b3620
-void MxFlcPresenter::vtable70()
+void MxFlcPresenter::VTable0x70()
 {
 	MxPalette* pal = m_bitmap->CreatePalette();
 	MVideoManager()->RealizePalette(pal);
-	if (pal) {
+
+	if (pal)
 		delete pal;
-	}
 }
