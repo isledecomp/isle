@@ -11,12 +11,6 @@ MxS8 LegoPathControllerList::Compare(LegoPathController* p_a, LegoPathController
 	return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 }
 
-// OFFSET: LEGO1 0x1001d3c0
-void LegoPathControllerList::Destroy(LegoPathController* p_controller)
-{
-	delete p_controller;
-}
-
 // OFFSET: LEGO1 0x1001d230 TEMPLATE
 // MxCollection<LegoPathController *>::Compare
 
@@ -31,6 +25,12 @@ void LegoPathControllerList::Destroy(LegoPathController* p_controller)
 
 // OFFSET: LEGO1 0x1001d330 TEMPLATE
 // MxList<LegoPathController *>::~MxList<LegoPathController *>
+
+// OFFSET: LEGO1 0x1001d3c0
+void LegoPathControllerList::Destroy(LegoPathController* p_controller)
+{
+	delete p_controller;
+}
 
 // OFFSET: LEGO1 0x1001d490 TEMPLATE
 // MxCollection<LegoPathController *>::`scalar deleting destructor'
