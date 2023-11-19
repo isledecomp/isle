@@ -1,7 +1,7 @@
 #ifndef ROI_H
 #define ROI_H
 
-// ROI stands for Region of Interest.
+// ROI stands for Real-time Object Instance.
 
 #include "../compat.h"
 #include "../mxstl.h"
