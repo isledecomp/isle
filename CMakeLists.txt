@@ -114,6 +114,12 @@ add_library(lego1 SHARED
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
   LEGO1/mxdirect3d.cpp
+  LEGO1/mxdirect3drm.cpp
+  LEGO1/mxdirect3drmclasses.cpp
+  LEGO1/mxdirect3drmdevice.cpp
+  LEGO1/mxdirect3drmobject.cpp
+  LEGO1/mxdirect3drmtexture.cpp
+  LEGO1/mxdirect3drmviewport.cpp
   LEGO1/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
@@ -237,6 +243,7 @@ endif()
 if (ISLE_USE_DX5)
   target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+  target_link_libraries(lego1 PRIVATE d3drm)
 endif()
 
 # Link libraries
