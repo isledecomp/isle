@@ -303,6 +303,8 @@ public:
     virtual Result  SetOrientation(const double direction[3],
                                    const double up[3]) = 0;
 #endif
+	// TODO: The type was changed from `FloatMatrix` to `Matrix` to make code in UpdateWorldData match.
+	// However, this is unlikely to be correct and will have to be figured out at some point.
 	virtual Result SetTransformation(const Matrix4&) = 0;
 
 	// ??? not yet fully implemented
