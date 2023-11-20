@@ -26,7 +26,7 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 	virtual void Destroy() override;          // vtable+0x38
 
-private:
+protected:
 	void Destroy(MxBool p_fromDestructor);
 };
 

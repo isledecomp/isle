@@ -24,13 +24,17 @@ public:
 		return !strcmp(name, MxEventPresenter::ClassName()) || MxMediaPresenter::IsA(name);
 	}
 
-	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
+	virtual void ReadyTickle() override;           // vtable+0x18
+	virtual void StartingTickle() override;        // vtable+0x1c
+	virtual MxResult AddToManager() override;      // vtable+0x34
+	virtual void Destroy() override;               // vtable+0x38
+	virtual undefined4 PutData() override;         // vtable+0x4c
+	virtual void CopyData(MxStreamChunk* p_chunk); // vtable+0x5c
 
 private:
 	void Init();
 
-	undefined4* m_unk50;
+	MxU8* m_data; // 0x50
 };
 
 #endif // MXEVENTPRESENTER_H
