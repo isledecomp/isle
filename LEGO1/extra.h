@@ -4,6 +4,7 @@
 // Items related to the Extra string of key-value pairs found in MxOb
 
 enum ExtraActionType {
+	ExtraActionType_none = 0,
 	ExtraActionType_opendisk = 1,
 	ExtraActionType_openram = 2,
 	ExtraActionType_close = 3,
