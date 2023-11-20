@@ -25,11 +25,12 @@ public:
 
 	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
 
+	MxS32 FUN_100aecf0(MxU32 p_unk);
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
-	MxS32 FUN_100aecf0(MxU32 p_unk);
 
 	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
