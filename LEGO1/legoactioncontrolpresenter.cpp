@@ -8,11 +8,7 @@
 #include "mxomni.h"
 #include "mxticklemanager.h"
 
-// Only a `scalar deleting destructor' exists.
-LegoActionControlPresenter::~LegoActionControlPresenter()
-{
-	Destroy(TRUE);
-}
+DECOMP_SIZE_ASSERT(LegoActionControlPresenter, 0x68)
 
 // OFFSET: LEGO1 0x10043ce0 STUB
 void LegoActionControlPresenter::ReadyTickle()
@@ -30,10 +26,12 @@ void LegoActionControlPresenter::RepeatingTickle()
 MxResult LegoActionControlPresenter::AddToManager()
 {
 	MxResult result = FAILURE;
+
 	if (TickleManager()) {
 		result = SUCCESS;
 		TickleManager()->RegisterClient(this, 100);
 	}
+
 	return result;
 }
 
