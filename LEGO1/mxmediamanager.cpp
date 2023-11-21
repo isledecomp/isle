@@ -28,24 +28,6 @@ MxResult MxMediaManager::Init()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b8790
-MxResult MxMediaManager::Tickle()
-{
-	MxAutoLocker lock(&this->m_criticalSection);
-	MxPresenter* presenter;
-	MxPresenterListCursor cursor(this->m_presenters);
-
-	while (cursor.Next(presenter))
-		presenter->Tickle();
-
-	cursor.Reset();
-
-	while (cursor.Next(presenter))
-		presenter->PutData();
-
-	return SUCCESS;
-}
-
 // OFFSET: LEGO1 0x100b85e0
 MxResult MxMediaManager::InitPresenters()
 {
@@ -70,6 +52,24 @@ void MxMediaManager::Destroy()
 		delete this->m_presenters;
 
 	Init();
+}
+
+// OFFSET: LEGO1 0x100b8790
+MxResult MxMediaManager::Tickle()
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(this->m_presenters);
+
+	while (cursor.Next(presenter))
+		presenter->Tickle();
+
+	cursor.Reset();
+
+	while (cursor.Next(presenter))
+		presenter->PutData();
+
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b88c0

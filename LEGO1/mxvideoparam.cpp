@@ -44,17 +44,11 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 	SetDeviceName(p_videoParam.m_deviceId);
 }
 
-// OFFSET: LEGO1 0x100bede0
-MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
+// OFFSET: LEGO1 0x100bed50
+MxVideoParam::~MxVideoParam()
 {
-	this->m_rect = p_videoParam.m_rect;
-	this->m_palette = p_videoParam.m_palette;
-	this->m_backBuffers = p_videoParam.m_backBuffers;
-	this->m_flags = p_videoParam.m_flags;
-	this->m_unk1c = p_videoParam.m_unk1c;
-	SetDeviceName(p_videoParam.m_deviceId);
-
-	return *this;
+	if (this->m_deviceId != NULL)
+		delete[] this->m_deviceId;
 }
 
 // OFFSET: LEGO1 0x100bed70
@@ -75,9 +69,15 @@ void MxVideoParam::SetDeviceName(char* id)
 	}
 }
 
-// OFFSET: LEGO1 0x100bed50
-MxVideoParam::~MxVideoParam()
+// OFFSET: LEGO1 0x100bede0
+MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 {
-	if (this->m_deviceId != NULL)
-		delete[] this->m_deviceId;
+	this->m_rect = p_videoParam.m_rect;
+	this->m_palette = p_videoParam.m_palette;
+	this->m_backBuffers = p_videoParam.m_backBuffers;
+	this->m_flags = p_videoParam.m_flags;
+	this->m_unk1c = p_videoParam.m_unk1c;
+	SetDeviceName(p_videoParam.m_deviceId);
+
+	return *this;
 }

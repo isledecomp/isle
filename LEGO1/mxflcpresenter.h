@@ -11,17 +11,17 @@ public:
 	MxFlcPresenter();
 	virtual ~MxFlcPresenter() override;
 
+	// OFFSET: LEGO1 0x1004e200
+	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	{
+		return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
+	}
+
 	// OFFSET: LEGO1 0x100b33f0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// 0x100f43c8
 		return "MxFlcPresenter";
-	}
-
-	// OFFSET: LEGO1 0x1004e200
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
-	{
-		return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
 	}
 
 	virtual void VTable0x70() override; // vtable+0x70

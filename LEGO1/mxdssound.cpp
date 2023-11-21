@@ -34,13 +34,15 @@ MxDSSound& MxDSSound::operator=(MxDSSound& p_dsSound)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100c95d0
-MxU32 MxDSSound::GetSizeOnDisk()
+// OFFSET: LEGO1 0x100c9510
+MxDSAction* MxDSSound::Clone()
 {
-	MxU32 totalSizeOnDisk = MxDSMediaAction::GetSizeOnDisk();
+	MxDSSound* clone = new MxDSSound();
 
-	this->m_sizeOnDisk = sizeof(this->m_volume);
-	return totalSizeOnDisk + 4;
+	if (clone)
+		*clone = *this;
+
+	return clone;
 }
 
 // OFFSET: LEGO1 0x100c95a0
@@ -51,13 +53,11 @@ void MxDSSound::Deserialize(char** p_source, MxS16 p_unk24)
 	GetScalar(p_source, this->m_volume);
 }
 
-// OFFSET: LEGO1 0x100c9510
-MxDSAction* MxDSSound::Clone()
+// OFFSET: LEGO1 0x100c95d0
+MxU32 MxDSSound::GetSizeOnDisk()
 {
-	MxDSSound* clone = new MxDSSound();
+	MxU32 totalSizeOnDisk = MxDSMediaAction::GetSizeOnDisk();
 
-	if (clone)
-		*clone = *this;
-
-	return clone;
+	this->m_sizeOnDisk = sizeof(this->m_volume);
+	return totalSizeOnDisk + 4;
 }
