@@ -5,10 +5,6 @@
 #include "legoutil.h"
 #include "mxmediapresenter.h"
 
-// TODO: Find proper compilation unit to put this
-// OFFSET: LEGO1 0x1000d1d0 TEMPLATE
-// LegoActionControlPresenter::`scalar deleting destructor'
-
 // VTABLE 0x100d5118
 // SIZE 0x68
 class LegoActionControlPresenter : public MxMediaPresenter {
@@ -28,6 +24,10 @@ public:
 	{
 		return !strcmp(name, LegoActionControlPresenter::ClassName()) || MxMediaPresenter::IsA(name);
 	}
+
+	// TODO: Find proper compilation unit to put this
+	// OFFSET: LEGO1 0x1000d1d0 TEMPLATE
+	// LegoActionControlPresenter::`scalar deleting destructor'
 
 	virtual void ReadyTickle() override;           // vtable+0x18
 	virtual void RepeatingTickle() override;       // vtable+0x24
