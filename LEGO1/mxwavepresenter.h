@@ -62,7 +62,7 @@ private:
 	MxU32 m_length;                 // 0x5c
 	MxU32 m_bytes;                  // 0x60
 	MxU8 m_unk64;                   // 0x64
-	MxBool m_unk65;                 // 0x65
+	MxBool m_playing;               // 0x65
 	MxBool m_unk66;                 // 0x66
 	MxS8 m_unk67;                   // 0x67
 	MxBool m_unk68;                 // 0x68

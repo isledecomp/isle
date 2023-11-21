@@ -39,7 +39,7 @@ void MxWavePresenter::Init()
 	m_length = 0;
 	m_bytes = 0;
 	m_unk64 = 0;
-	m_unk65 = FALSE;
+	m_playing = FALSE;
 	m_unk66 = FALSE;
 	m_unk68 = FALSE;
 }
@@ -84,7 +84,7 @@ MxS8 MxWavePresenter::FUN_100b1b60()
 // OFFSET: LEGO1 0x100b1ba0
 MxBool MxWavePresenter::FUN_100b1ba0()
 {
-	return !m_unk65 || FUN_100b1b60() != m_unk64;
+	return !m_playing || FUN_100b1b60() != m_unk64;
 }
 
 // OFFSET: LEGO1 0x100b1bd0
@@ -261,21 +261,21 @@ undefined4 MxWavePresenter::PutData()
 				m_currentChunk = NULL;
 			}
 
-			if (!m_unk65) {
+			if (!m_playing) {
 				m_dsBuffer->SetCurrentPosition(0);
 
 				if (m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING) == DS_OK)
-					m_unk65 = TRUE;
+					m_playing = TRUE;
 			}
 			break;
 		case TickleState_Repeating:
-			if (m_unk65)
+			if (m_playing)
 				break;
 
 			m_dsBuffer->SetCurrentPosition(0);
 
 			if (m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1) == DS_OK)
-				m_unk65 = TRUE;
+				m_playing = TRUE;
 		}
 	}
 
@@ -317,7 +317,7 @@ void MxWavePresenter::Enable(MxBool p_enable)
 
 		if (p_enable) {
 			m_unk64 = 0;
-			m_unk65 = FALSE;
+			m_playing = FALSE;
 		}
 		else if (m_dsBuffer)
 			m_dsBuffer->Stop();
@@ -349,7 +349,7 @@ void MxWavePresenter::ParseExtra()
 // OFFSET: LEGO1 0x100b2440
 void MxWavePresenter::VTable0x64()
 {
-	if (!m_unk68 && m_unk65) {
+	if (!m_unk68 && m_playing) {
 		if (m_dsBuffer)
 			m_dsBuffer->Stop();
 		m_unk68 = TRUE;
@@ -360,7 +360,7 @@ void MxWavePresenter::VTable0x64()
 void MxWavePresenter::VTable0x68()
 {
 	if (m_unk68) {
-		if (m_dsBuffer && m_unk65) {
+		if (m_dsBuffer && m_playing) {
 			switch (m_currentTickleState) {
 			case TickleState_Streaming:
 				m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
