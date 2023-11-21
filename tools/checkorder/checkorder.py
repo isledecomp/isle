@@ -3,7 +3,7 @@ import sys
 import argparse
 from isledecomp.dir import (
     walk_source_dir,
-    file_is_cpp
+    is_file_cpp
 )
 from isledecomp.parser import find_code_blocks
 from isledecomp.parser.util import (
@@ -92,7 +92,7 @@ def main():
 
     if os.path.isdir(args['target']):
         files_to_check = list(walk_source_dir(args['target']))
-    elif os.path.isfile(args['target']) and file_is_cpp(args['target']):
+    elif os.path.isfile(args['target']) and is_file_cpp(args['target']):
         files_to_check = [args['target']]
     else:
         sys.exit('Invalid target')

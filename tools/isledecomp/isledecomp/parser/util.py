@@ -1,6 +1,7 @@
 # C++ Parser utility functions and data structures
 from __future__ import annotations  # python <3.10 compatibility
 import re
+from typing import List
 from collections import namedtuple
 
 
@@ -34,7 +35,7 @@ templateCommentRegex = re.compile(r'\s*//\s+(.*)')
 trailingCommentRegex = re.compile(r'(\s*(?://|/\*).*)$')
 
 
-def template_function_name(line: str) -> str:
+def get_template_function_name(line: str) -> str:
     """Parse function signature for special TEMPLATE functions"""
     template_match = templateCommentRegex.match(line)
 
@@ -78,7 +79,7 @@ def match_offset_comment(line: str) -> OffsetMatch | None:
                        comment=line.strip())
 
 
-def distinct_module(offsets: [OffsetMatch]) -> [OffsetMatch]:
+def distinct_by_module(offsets: List) -> List:
     """Given a list of offset markers, return a list with distinct
        module names. If module names (case-insensitive) are repeated,
        choose the offset that appears first."""

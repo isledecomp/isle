@@ -1,10 +1,11 @@
 import pytest
 from collections import namedtuple
+from typing import List
 from isledecomp.parser.util import (
     is_blank_or_comment,
     match_offset_comment,
     is_exact_offset_comment,
-    distinct_module,
+    distinct_by_module,
 )
 
 
@@ -92,7 +93,7 @@ def test_exact_offset_comment(line: str, exact: bool, match):
 # Helper for the next test: cut down version of OffsetMatch
 MiniOfs = namedtuple('MiniOfs', ['module', 'value'])
 
-distinct_module_samples = [
+distinct_by_module_samples = [
     # empty set
     ([], []),
     # same module name
@@ -107,6 +108,6 @@ distinct_module_samples = [
 ]
 
 
-@pytest.mark.parametrize('sample, expected', distinct_module_samples)
-def test_distinct_module(sample: [MiniOfs], expected: [MiniOfs]):
-    assert distinct_module(sample) == expected
+@pytest.mark.parametrize('sample, expected', distinct_by_module_samples)
+def test_distinct_by_module(sample: List[MiniOfs], expected: List[MiniOfs]):
+    assert distinct_by_module(sample) == expected

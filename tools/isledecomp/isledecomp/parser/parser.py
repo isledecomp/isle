@@ -8,9 +8,9 @@ from .util import (
     is_blank_or_comment,
     match_offset_comment,
     is_exact_offset_comment,
-    template_function_name,
+    get_template_function_name,
     remove_trailing_comment,
-    distinct_module,
+    distinct_by_module,
 )
 
 
@@ -30,16 +30,16 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
        binary. We expect the result to be ordered by line number because we
        are reading the file from start to finish."""
 
-    blocks = []
+    blocks: List[CodeBlock] = []
 
-    offset_matches = []
+    offset_matches: List[OffsetMatch] = []
 
     function_sig = None
     start_line = None
     end_line = None
     state = ReaderState.WANT_OFFSET
 
-    # 1-based to match cvdump and your text-editor
+    # 1-based to match cvdump and your text editor
     # I know it says 0, but we will increment before each readline()
     line_no = 0
     can_seek = True
@@ -50,7 +50,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
         if state == ReaderState.FUNCTION_DONE:
             # Our list of offset marks could have duplicates on
             # module name, so we'll eliminate those now.
-            for offset_match in distinct_module(offset_matches):
+            for offset_match in distinct_by_module(offset_matches):
                 block = CodeBlock(offset=offset_match.address,
                                   signature=function_sig,
                                   start_line=start_line,
@@ -98,7 +98,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
         elif state == ReaderState.IN_TEMPLATE:
             # TEMPLATE functions are a special case. The signature is
             # given on the next line (in a // comment)
-            function_sig = template_function_name(line)
+            function_sig = get_template_function_name(line)
             start_line = line_no
             end_line = line_no
             state = ReaderState.FUNCTION_DONE
