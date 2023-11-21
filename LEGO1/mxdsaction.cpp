@@ -32,6 +32,36 @@ MxDSAction::MxDSAction()
 	this->m_unkTimingField = INT_MIN;
 }
 
+// OFFSET: LEGO1 0x100ad940
+MxLong MxDSAction::GetDuration()
+{
+	return this->m_duration;
+}
+
+// OFFSET: LEGO1 0x100ad950
+void MxDSAction::SetDuration(MxLong p_duration)
+{
+	this->m_duration = p_duration;
+}
+
+// OFFSET: LEGO1 0x100ad960
+MxBool MxDSAction::HasId(MxU32 p_objectId)
+{
+	return this->GetObjectId() == p_objectId;
+}
+
+// OFFSET: LEGO1 0x100ada40
+void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
+{
+	this->m_unkTimingField = p_unkTimingField;
+}
+
+// OFFSET: LEGO1 0x100ada50
+MxLong MxDSAction::GetUnkTimingField()
+{
+	return this->m_unkTimingField;
+}
+
 // OFFSET: LEGO1 0x100ada80
 MxDSAction::~MxDSAction()
 {
@@ -58,17 +88,6 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_unkTimingField = p_dsAction.m_unkTimingField;
 }
 
-// OFFSET: LEGO1 0x100adc10
-MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
-{
-	if (this == &p_dsAction)
-		return *this;
-
-	MxDSObject::operator=(p_dsAction);
-	this->CopyFrom(p_dsAction);
-	return *this;
-}
-
 // OFFSET: LEGO1 0x100adbe0
 MxU32 MxDSAction::GetSizeOnDisk()
 {
@@ -80,42 +99,15 @@ MxU32 MxDSAction::GetSizeOnDisk()
 	return totalSizeOnDisk;
 }
 
-// OFFSET: LEGO1 0x100adf70
-void MxDSAction::Deserialize(char** p_source, MxS16 p_unk24)
+// OFFSET: LEGO1 0x100adc10
+MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
 {
-	MxDSObject::Deserialize(p_source, p_unk24);
+	if (this == &p_dsAction)
+		return *this;
 
-	GetScalar(p_source, this->m_flags);
-	GetScalar(p_source, this->m_startTime);
-	GetScalar(p_source, this->m_duration);
-	GetScalar(p_source, this->m_loopCount);
-	GetDouble(p_source, this->m_location[0]);
-	GetDouble(p_source, this->m_location[1]);
-	GetDouble(p_source, this->m_location[2]);
-	GetDouble(p_source, this->m_direction[0]);
-	GetDouble(p_source, this->m_direction[1]);
-	GetDouble(p_source, this->m_direction[2]);
-	GetDouble(p_source, this->m_up[0]);
-	GetDouble(p_source, this->m_up[1]);
-	GetDouble(p_source, this->m_up[2]);
-
-	MxU16 extraLength = GetScalar((MxU16**) p_source);
-	if (extraLength) {
-		AppendData(extraLength, *p_source);
-		*p_source += extraLength;
-	}
-}
-
-// OFFSET: LEGO1 0x100ad940
-MxLong MxDSAction::GetDuration()
-{
-	return this->m_duration;
-}
-
-// OFFSET: LEGO1 0x100ad950
-void MxDSAction::SetDuration(MxLong p_duration)
-{
-	this->m_duration = p_duration;
+	MxDSObject::operator=(p_dsAction);
+	this->CopyFrom(p_dsAction);
+	return *this;
 }
 
 // OFFSET: LEGO1 0x100adc40
@@ -127,6 +119,12 @@ MxDSAction* MxDSAction::Clone()
 		*clone = *this;
 
 	return clone;
+}
+
+// OFFSET: LEGO1 0x100adcd0
+MxLong MxDSAction::GetElapsedTime()
+{
+	return Timer()->GetTime() - this->m_unkTimingField;
 }
 
 // OFFSET: LEGO1 0x100add00
@@ -178,30 +176,6 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 	}
 }
 
-// OFFSET: LEGO1 0x100ad960
-MxBool MxDSAction::HasId(MxU32 p_objectId)
-{
-	return this->GetObjectId() == p_objectId;
-}
-
-// OFFSET: LEGO1 0x100ada40
-void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
-{
-	this->m_unkTimingField = p_unkTimingField;
-}
-
-// OFFSET: LEGO1 0x100ada50
-MxLong MxDSAction::GetUnkTimingField()
-{
-	return this->m_unkTimingField;
-}
-
-// OFFSET: LEGO1 0x100adcd0
-MxLong MxDSAction::GetElapsedTime()
-{
-	return Timer()->GetTime() - this->m_unkTimingField;
-}
-
 // OFFSET: LEGO1 0x100ade60
 void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 {
@@ -227,5 +201,31 @@ void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 			this->m_extraLength = p_extraLength;
 			memcpy(copy, p_extraData, p_extraLength);
 		}
+	}
+}
+
+// OFFSET: LEGO1 0x100adf70
+void MxDSAction::Deserialize(char** p_source, MxS16 p_unk24)
+{
+	MxDSObject::Deserialize(p_source, p_unk24);
+
+	GetScalar(p_source, this->m_flags);
+	GetScalar(p_source, this->m_startTime);
+	GetScalar(p_source, this->m_duration);
+	GetScalar(p_source, this->m_loopCount);
+	GetDouble(p_source, this->m_location[0]);
+	GetDouble(p_source, this->m_location[1]);
+	GetDouble(p_source, this->m_location[2]);
+	GetDouble(p_source, this->m_direction[0]);
+	GetDouble(p_source, this->m_direction[1]);
+	GetDouble(p_source, this->m_direction[2]);
+	GetDouble(p_source, this->m_up[0]);
+	GetDouble(p_source, this->m_up[1]);
+	GetDouble(p_source, this->m_up[2]);
+
+	MxU16 extraLength = GetScalar((MxU16**) p_source);
+	if (extraLength) {
+		AppendData(extraLength, *p_source);
+		*p_source += extraLength;
 	}
 }

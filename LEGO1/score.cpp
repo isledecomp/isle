@@ -22,6 +22,12 @@ Score::Score()
 	NotificationManager()->Register(this);
 }
 
+// OFFSET: LEGO1 0x100010b0
+MxBool Score::VTable0x5c()
+{
+	return TRUE;
+}
+
 // OFFSET: LEGO1 0x10001200
 Score::~Score()
 {
@@ -30,6 +36,39 @@ Score::~Score()
 	InputManager()->UnRegister(this);
 	ControlManager()->Unregister(this);
 	NotificationManager()->Unregister(this);
+}
+
+// OFFSET: LEGO1 0x100012a0
+MxResult Score::Create(MxDSObject& p_dsObject)
+{
+	MxResult result = SetAsCurrentWorld(p_dsObject);
+
+	if (result == SUCCESS) {
+		InputManager()->SetWorld(this);
+		ControlManager()->Register(this);
+		InputManager()->Register(this);
+		SetIsWorldActive(FALSE);
+		LegoGameState* gs = GameState();
+		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
+		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
+		GameState()->SetUnknown424(0xd);
+		GameState()->FUN_1003a720(0);
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x10001340
+void Score::DeleteScript()
+{
+	if (m_state->GetTutorialFlag()) {
+		MxDSAction action;
+		action.SetObjectId(0x1f5);
+		action.SetAtomId(*g_infoscorScript);
+		action.SetUnknown24(-2);
+		DeleteObject(action);
+		m_state->SetTutorialFlag(FALSE);
+	}
 }
 
 // OFFSET: LEGO1 0x10001410
@@ -65,45 +104,6 @@ MxLong Score::Notify(MxParam& p)
 		}
 	}
 	return ret;
-}
-
-// OFFSET: LEGO1 0x100010b0
-MxBool Score::VTable0x5c()
-{
-	return TRUE;
-}
-
-// OFFSET: LEGO1 0x100012a0
-MxResult Score::Create(MxDSObject& p_dsObject)
-{
-	MxResult result = SetAsCurrentWorld(p_dsObject);
-
-	if (result == SUCCESS) {
-		InputManager()->SetWorld(this);
-		ControlManager()->Register(this);
-		InputManager()->Register(this);
-		SetIsWorldActive(FALSE);
-		LegoGameState* gs = GameState();
-		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
-		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
-		GameState()->SetUnknown424(0xd);
-		GameState()->FUN_1003a720(0);
-	}
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x10001340
-void Score::DeleteScript()
-{
-	if (m_state->GetTutorialFlag()) {
-		MxDSAction action;
-		action.SetObjectId(0x1f5);
-		action.SetAtomId(*g_infoscorScript);
-		action.SetUnknown24(-2);
-		DeleteObject(action);
-		m_state->SetTutorialFlag(FALSE);
-	}
 }
 
 // OFFSET: LEGO1 0x10001510

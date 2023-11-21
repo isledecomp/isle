@@ -6,11 +6,34 @@
 
 #include <process.h>
 
-// OFFSET: LEGO1 0x100bf690
-MxResult MxThread::Run()
+// OFFSET: LEGO1 0x100b8bb0
+MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
 {
-	m_semaphore.Release(1);
-	return SUCCESS;
+	m_target = p_target;
+	m_frequencyMS = p_frequencyMS;
+}
+
+// Match except for register allocation
+// OFFSET: LEGO1 0x100b8c90
+MxResult MxTickleThread::Run()
+{
+	MxTimer* timer = Timer();
+	int lastTickled = -m_frequencyMS;
+	while (IsRunning()) {
+		int currentTime = timer->GetTime();
+
+		if (currentTime < lastTickled) {
+			lastTickled = -m_frequencyMS;
+		}
+		int timeRemainingMS = (m_frequencyMS - currentTime) + lastTickled;
+		if (timeRemainingMS <= 0) {
+			m_target->Tickle();
+			timeRemainingMS = 0;
+			lastTickled = currentTime;
+		}
+		Sleep(timeRemainingMS);
+	}
+	return MxThread::Run();
 }
 
 // OFFSET: LEGO1 0x100bf510
@@ -42,6 +65,12 @@ MxResult MxThread::Start(int p_stack, int p_flag)
 	return result;
 }
 
+// OFFSET: LEGO1 0x100bf660
+void MxThread::Sleep(MxS32 p_milliseconds)
+{
+	::Sleep(p_milliseconds);
+}
+
 // OFFSET: LEGO1 0x100bf670
 void MxThread::Terminate()
 {
@@ -55,38 +84,9 @@ unsigned MxThread::ThreadProc(void* p_thread)
 	return static_cast<MxThread*>(p_thread)->Run();
 }
 
-// OFFSET: LEGO1 0x100bf660
-void MxThread::Sleep(MxS32 p_milliseconds)
+// OFFSET: LEGO1 0x100bf690
+MxResult MxThread::Run()
 {
-	::Sleep(p_milliseconds);
-}
-
-// OFFSET: LEGO1 0x100b8bb0
-MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
-{
-	m_target = p_target;
-	m_frequencyMS = p_frequencyMS;
-}
-
-// Match except for register allocation
-// OFFSET: LEGO1 0x100b8c90
-MxResult MxTickleThread::Run()
-{
-	MxTimer* timer = Timer();
-	int lastTickled = -m_frequencyMS;
-	while (IsRunning()) {
-		int currentTime = timer->GetTime();
-
-		if (currentTime < lastTickled) {
-			lastTickled = -m_frequencyMS;
-		}
-		int timeRemainingMS = (m_frequencyMS - currentTime) + lastTickled;
-		if (timeRemainingMS <= 0) {
-			m_target->Tickle();
-			timeRemainingMS = 0;
-			lastTickled = currentTime;
-		}
-		Sleep(timeRemainingMS);
-	}
-	return MxThread::Run();
+	m_semaphore.Release(1);
+	return SUCCESS;
 }

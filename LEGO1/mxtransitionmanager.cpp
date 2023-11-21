@@ -39,6 +39,14 @@ MxTransitionManager::~MxTransitionManager()
 	TickleManager()->UnregisterClient(this);
 }
 
+// OFFSET: LEGO1 0x1004baa0
+MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
+{
+	LegoVideoManager* videoManager = VideoManager();
+	this->m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
+	return SUCCESS;
+}
+
 // OFFSET: LEGO1 0x1004bac0
 MxResult MxTransitionManager::Tickle()
 {
@@ -71,6 +79,53 @@ MxResult MxTransitionManager::Tickle()
 	return SUCCESS;
 }
 
+// OFFSET: LEGO1 0x1004bb70
+MxResult MxTransitionManager::StartTransition(
+	TransitionType p_animationType,
+	MxS32 p_speed,
+	MxBool p_doCopy,
+	MxBool p_playMusicInAnim
+)
+{
+	if (this->m_transitionType == NOT_TRANSITIONING) {
+		if (!p_playMusicInAnim) {
+			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
+			backgroundAudioManager->Stop();
+		}
+
+		this->m_transitionType = p_animationType;
+
+		m_copyFlags.bit0 = p_doCopy;
+
+		if (m_copyFlags.bit0 && m_waitIndicator != NULL) {
+			m_waitIndicator->Enable(TRUE);
+
+			MxDSAction* action = m_waitIndicator->GetAction();
+			action->SetLoopCount(10000);
+			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit9);
+		}
+
+		MxU32 time = timeGetTime();
+		this->m_systemTime = time;
+
+		this->m_animationSpeed = p_speed;
+
+		MxTickleManager* tickleManager = TickleManager();
+		tickleManager->RegisterClient(this, p_speed);
+
+		LegoInputManager* inputManager = InputManager();
+		inputManager->m_unk0x88 = TRUE;
+		inputManager->m_unk0x336 = FALSE;
+
+		LegoVideoManager* videoManager = VideoManager();
+		videoManager->SetUnkE4(FALSE);
+
+		SetAppCursor(1);
+		return SUCCESS;
+	}
+	return FAILURE;
+}
+
 // OFFSET: LEGO1 0x1004bc30
 void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 {
@@ -89,6 +144,14 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 			}
 		}
 	}
+}
+
+// OFFSET: LEGO1 0x1004bcf0
+void MxTransitionManager::Transition_None()
+{
+	LegoVideoManager* videoManager = VideoManager();
+	videoManager->GetDisplaySurface()->FUN_100ba640();
+	EndTransition(TRUE);
 }
 
 // OFFSET: LEGO1 0x1004bd10
@@ -171,69 +234,6 @@ void MxTransitionManager::Transition_Dissolve()
 
 		m_animationTimer++;
 	}
-}
-
-// OFFSET: LEGO1 0x1004baa0
-MxResult MxTransitionManager::GetDDrawSurfaceFromVideoManager() // vtable+0x14
-{
-	LegoVideoManager* videoManager = VideoManager();
-	this->m_ddSurface = videoManager->GetDisplaySurface()->GetDirectDrawSurface2();
-	return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x1004bb70
-MxResult MxTransitionManager::StartTransition(
-	TransitionType p_animationType,
-	MxS32 p_speed,
-	MxBool p_doCopy,
-	MxBool p_playMusicInAnim
-)
-{
-	if (this->m_transitionType == NOT_TRANSITIONING) {
-		if (!p_playMusicInAnim) {
-			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
-			backgroundAudioManager->Stop();
-		}
-
-		this->m_transitionType = p_animationType;
-
-		m_copyFlags.bit0 = p_doCopy;
-
-		if (m_copyFlags.bit0 && m_waitIndicator != NULL) {
-			m_waitIndicator->Enable(TRUE);
-
-			MxDSAction* action = m_waitIndicator->GetAction();
-			action->SetLoopCount(10000);
-			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit9);
-		}
-
-		MxU32 time = timeGetTime();
-		this->m_systemTime = time;
-
-		this->m_animationSpeed = p_speed;
-
-		MxTickleManager* tickleManager = TickleManager();
-		tickleManager->RegisterClient(this, p_speed);
-
-		LegoInputManager* inputManager = InputManager();
-		inputManager->m_unk0x88 = TRUE;
-		inputManager->m_unk0x336 = FALSE;
-
-		LegoVideoManager* videoManager = VideoManager();
-		videoManager->SetUnkE4(FALSE);
-
-		SetAppCursor(1);
-		return SUCCESS;
-	}
-	return FAILURE;
-}
-
-// OFFSET: LEGO1 0x1004bcf0
-void MxTransitionManager::Transition_None()
-{
-	LegoVideoManager* videoManager = VideoManager();
-	videoManager->GetDisplaySurface()->FUN_100ba640();
-	EndTransition(TRUE);
 }
 
 // OFFSET: LEGO1 0x1004bed0
@@ -353,6 +353,45 @@ void MxTransitionManager::Transition_Pixelation()
 	}
 }
 
+// OFFSET: LEGO1 0x1004c170
+void MxTransitionManager::Transition_Wipe()
+{
+	// If the animation is finished
+	if (m_animationTimer == 240) {
+		m_animationTimer = 0;
+		EndTransition(TRUE);
+		return;
+	}
+
+	DDSURFACEDESC ddsd;
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+	if (res == DDERR_SURFACELOST) {
+		m_ddSurface->Restore();
+		res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+	}
+
+	if (res == DD_OK) {
+		SubmitCopyRect(&ddsd);
+
+		// For each of the 240 animation ticks, blank out two scanlines
+		// starting at the top of the screen.
+		// (dwRGBBitCount / 8) will tell how many bytes are used per pixel.
+		MxU8* line = (MxU8*) ddsd.lpSurface + 2 * ddsd.lPitch * m_animationTimer;
+		memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
+
+		line += ddsd.lPitch;
+		memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
+
+		SetupCopyRect(&ddsd);
+		m_ddSurface->Unlock(ddsd.lpSurface);
+
+		m_animationTimer++;
+	}
+}
+
 // OFFSET: LEGO1 0x1004c270
 void MxTransitionManager::Transition_Windows()
 {
@@ -421,45 +460,6 @@ void MxTransitionManager::Transition_Broken()
 		SubmitCopyRect(&ddsd);
 		SetupCopyRect(&ddsd);
 		m_ddSurface->Unlock(ddsd.lpSurface);
-	}
-}
-
-// OFFSET: LEGO1 0x1004c170
-void MxTransitionManager::Transition_Wipe()
-{
-	// If the animation is finished
-	if (m_animationTimer == 240) {
-		m_animationTimer = 0;
-		EndTransition(TRUE);
-		return;
-	}
-
-	DDSURFACEDESC ddsd;
-	memset(&ddsd, 0, sizeof(ddsd));
-	ddsd.dwSize = sizeof(ddsd);
-
-	HRESULT res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
-	if (res == DDERR_SURFACELOST) {
-		m_ddSurface->Restore();
-		res = m_ddSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
-	}
-
-	if (res == DD_OK) {
-		SubmitCopyRect(&ddsd);
-
-		// For each of the 240 animation ticks, blank out two scanlines
-		// starting at the top of the screen.
-		// (dwRGBBitCount / 8) will tell how many bytes are used per pixel.
-		MxU8* line = (MxU8*) ddsd.lpSurface + 2 * ddsd.lPitch * m_animationTimer;
-		memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
-
-		line += ddsd.lPitch;
-		memset(line, 0, 640 * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
-
-		SetupCopyRect(&ddsd);
-		m_ddSurface->Unlock(ddsd.lpSurface);
-
-		m_animationTimer++;
 	}
 }
 

@@ -2,6 +2,12 @@
 
 #include "mxregion.h"
 
+// OFFSET: LEGO1 0x100c32e0 TEMPLATE
+// MxCollection<MxRegionTopBottom *>::Compare
+
+// OFFSET: LEGO1 0x100c3340 TEMPLATE
+// MxCollection<MxRegionTopBottom *>::Destroy
+
 // OFFSET: LEGO1 0x100c33e0
 void MxRegionList::Destroy(MxRegionTopBottom* p_topBottom)
 {
@@ -11,18 +17,6 @@ void MxRegionList::Destroy(MxRegionTopBottom* p_topBottom)
 		delete p_topBottom;
 	}
 }
-
-// OFFSET: LEGO1 0x100c4e80
-void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
-{
-	delete p_leftRight;
-}
-
-// OFFSET: LEGO1 0x100c32e0 TEMPLATE
-// MxCollection<MxRegionTopBottom *>::Compare
-
-// OFFSET: LEGO1 0x100c3340 TEMPLATE
-// MxCollection<MxRegionTopBottom *>::Destroy
 
 // OFFSET: LEGO1 0x100c34d0 TEMPLATE
 // MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
@@ -38,6 +32,12 @@ void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
 
 // OFFSET: LEGO1 0x100c4de0 TEMPLATE
 // MxCollection<MxRegionLeftRight *>::Destroy
+
+// OFFSET: LEGO1 0x100c4e80
+void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
+{
+	delete p_leftRight;
+}
 
 // OFFSET: LEGO1 0x100c4f50 TEMPLATE
 // MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'

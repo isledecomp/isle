@@ -10,6 +10,28 @@ DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 // (1998) GLOBAL: LEGO1 0x10102184
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
+// Bit mask trick to round up to the nearest multiple of four.
+// Pixel data may be stored with padding.
+// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
+inline MxLong AlignToFourByte(MxLong p_value)
+{
+	return (p_value + 3) & -4;
+}
+
+// Same as the one from legoutil.h, but flipped the other way
+// TODO: While it's not outside the realm of possibility that they
+// reimplemented Abs for only this file, that seems odd, right?
+inline MxLong _Abs(MxLong p_value)
+{
+	return p_value > 0 ? p_value : -p_value;
+}
+
+// OFFSET: LEGO1 0x1004e0d0
+int MxBitmap::vtable28(int)
+{
+	return -1;
+}
+
 // OFFSET: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
 {
@@ -30,118 +52,6 @@ MxBitmap::~MxBitmap()
 		delete m_data;
 	if (this->m_palette)
 		delete m_palette;
-}
-
-// Bit mask trick to round up to the nearest multiple of four.
-// Pixel data may be stored with padding.
-// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
-inline MxLong AlignToFourByte(MxLong p_value)
-{
-	return (p_value + 3) & -4;
-}
-
-// Same as the one from legoutil.h, but flipped the other way
-// TODO: While it's not outside the realm of possibility that they
-// reimplemented Abs for only this file, that seems odd, right?
-inline MxLong _Abs(MxLong p_value)
-{
-	return p_value > 0 ? p_value : -p_value;
-}
-
-// OFFSET: LEGO1 0x100bcc40
-MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
-{
-	MxResult result = FAILURE;
-
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		MxLong height = _Abs(p_bitmap->m_bmiHeader->biHeight);
-		this->m_data = new MxU8[AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height];
-		if (this->m_data) {
-			memcpy(this->m_info, p_bitmap->m_info, sizeof(*this->m_info));
-			height = _Abs(p_bitmap->m_bmiHeader->biHeight);
-			memcpy(this->m_data, p_bitmap->m_data, AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height);
-
-			result = SUCCESS;
-			this->m_bmiHeader = &this->m_info->bmiHeader;
-			this->m_paletteData = this->m_info->bmiColors;
-		}
-	}
-
-	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
-		}
-
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
-		}
-	}
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x100bcba0
-MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
-{
-	MxResult result = FAILURE;
-	MxLong width = p_info->bmiHeader.biWidth;
-	MxLong height = p_info->bmiHeader.biHeight;
-	MxLong size = AlignToFourByte(width) * height;
-
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		this->m_data = new MxU8[size];
-		if (this->m_data) {
-			memcpy(this->m_info, p_info, sizeof(*this->m_info));
-			this->m_bmiHeader = &this->m_info->bmiHeader;
-			this->m_paletteData = this->m_info->bmiColors;
-			result = SUCCESS;
-		}
-	}
-
-	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
-		}
-
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
-		}
-	}
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x100bd450
-MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
-{
-	MxResult ret = FAILURE;
-	PALETTEENTRY entries[256];
-
-	if (p_palette) {
-		if (p_palette->GetEntries(entries))
-			return ret;
-	}
-	else {
-		MxPalette local_pal;
-		if (local_pal.GetEntries(entries))
-			return ret;
-	}
-
-	for (MxS32 i = 0; i < 256; i++) {
-		p_rgbquad[i].rgbRed = entries[i].peRed;
-		p_rgbquad[i].rgbGreen = entries[i].peGreen;
-		p_rgbquad[i].rgbBlue = entries[i].peBlue;
-		p_rgbquad[i].rgbReserved = 0;
-	}
-
-	ret = SUCCESS;
-	return ret;
 }
 
 // OFFSET: LEGO1 0x100bcaa0
@@ -189,6 +99,91 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 	return ret;
 }
 
+// OFFSET: LEGO1 0x100bcba0
+MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
+{
+	MxResult result = FAILURE;
+	MxLong width = p_info->bmiHeader.biWidth;
+	MxLong height = p_info->bmiHeader.biHeight;
+	MxLong size = AlignToFourByte(width) * height;
+
+	this->m_info = new MxBITMAPINFO;
+	if (this->m_info) {
+		this->m_data = new MxU8[size];
+		if (this->m_data) {
+			memcpy(this->m_info, p_info, sizeof(*this->m_info));
+			this->m_bmiHeader = &this->m_info->bmiHeader;
+			this->m_paletteData = this->m_info->bmiColors;
+			result = SUCCESS;
+		}
+	}
+
+	if (result != SUCCESS) {
+		if (this->m_info) {
+			delete this->m_info;
+			this->m_info = NULL;
+		}
+
+		if (this->m_data) {
+			delete this->m_data;
+			this->m_data = NULL;
+		}
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x100bcc40
+MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
+{
+	MxResult result = FAILURE;
+
+	this->m_info = new MxBITMAPINFO;
+	if (this->m_info) {
+		MxLong height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+		this->m_data = new MxU8[AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height];
+		if (this->m_data) {
+			memcpy(this->m_info, p_bitmap->m_info, sizeof(*this->m_info));
+			height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+			memcpy(this->m_data, p_bitmap->m_data, AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height);
+
+			result = SUCCESS;
+			this->m_bmiHeader = &this->m_info->bmiHeader;
+			this->m_paletteData = this->m_info->bmiColors;
+		}
+	}
+
+	if (result != SUCCESS) {
+		if (this->m_info) {
+			delete this->m_info;
+			this->m_info = NULL;
+		}
+
+		if (this->m_data) {
+			delete this->m_data;
+			this->m_data = NULL;
+		}
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x100bcd10
+MxLong MxBitmap::Read(const char* p_filename)
+{
+	MxResult result = FAILURE;
+	HANDLE handle =
+		CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle))
+		result = SUCCESS;
+
+	if (handle)
+		CloseHandle(handle);
+
+	return result;
+}
+
 // OFFSET: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
@@ -234,28 +229,6 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	}
 
 	return result;
-}
-
-// OFFSET: LEGO1 0x100bcd10
-MxLong MxBitmap::Read(const char* p_filename)
-{
-	MxResult result = FAILURE;
-	HANDLE handle =
-		CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle))
-		result = SUCCESS;
-
-	if (handle)
-		CloseHandle(handle);
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x1004e0d0
-int MxBitmap::vtable28(int)
-{
-	return -1;
 }
 
 // OFFSET: LEGO1 0x100bce70 STUB
@@ -392,4 +365,31 @@ MxResult MxBitmap::StretchBits(
 		this->m_isHighColor,
 		SRCCOPY
 	);
+}
+
+// OFFSET: LEGO1 0x100bd450
+MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
+{
+	MxResult ret = FAILURE;
+	PALETTEENTRY entries[256];
+
+	if (p_palette) {
+		if (p_palette->GetEntries(entries))
+			return ret;
+	}
+	else {
+		MxPalette local_pal;
+		if (local_pal.GetEntries(entries))
+			return ret;
+	}
+
+	for (MxS32 i = 0; i < 256; i++) {
+		p_rgbquad[i].rgbRed = entries[i].peRed;
+		p_rgbquad[i].rgbGreen = entries[i].peGreen;
+		p_rgbquad[i].rgbBlue = entries[i].peBlue;
+		p_rgbquad[i].rgbReserved = 0;
+	}
+
+	ret = SUCCESS;
+	return ret;
 }

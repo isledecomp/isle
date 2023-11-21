@@ -19,6 +19,55 @@ DECOMP_SIZE_ASSERT(LegoStream, 0x8);
 DECOMP_SIZE_ASSERT(LegoFileStream, 0xC);
 DECOMP_SIZE_ASSERT(LegoMemoryStream, 0x10);
 
+// OFFSET: LEGO1 0x10039f70
+MxResult LegoStream::WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName)
+{
+	MxResult result = FAILURE;
+	const char* variableValue = p_from->GetVariable(p_variableName);
+
+	if (variableValue) {
+		MxU8 length = strlen(p_variableName);
+		if (p_stream->Write((char*) &length, 1) == SUCCESS) {
+			if (p_stream->Write(p_variableName, length) == SUCCESS) {
+				length = strlen(variableValue);
+				if (p_stream->Write((char*) &length, 1) == SUCCESS)
+					result = p_stream->Write((char*) variableValue, length);
+			}
+		}
+	}
+	return result;
+}
+
+// 95% match, just some instruction ordering differences on the call to
+// MxVariableTable::SetVariable at the end.
+// OFFSET: LEGO1 0x1003a080
+MxS32 LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
+{
+	MxS32 result = 1;
+	MxU8 length;
+
+	if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+		char nameBuffer[256];
+		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
+			nameBuffer[length] = '\0';
+			if (strcmp(nameBuffer, s_endOfVariables) == 0)
+				// 2 -> "This was the last entry, done reading."
+				result = 2;
+			else {
+				if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+					char valueBuffer[256];
+					if (p_stream->Read(valueBuffer, length) == SUCCESS) {
+						result = 0;
+						valueBuffer[length] = '\0';
+						p_to->SetVariable(nameBuffer, valueBuffer);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
 // OFFSET: LEGO1 0x10045ae0
 MxBool LegoStream::IsWriteMode()
 {
@@ -29,6 +78,29 @@ MxBool LegoStream::IsWriteMode()
 MxBool LegoStream::IsReadMode()
 {
 	return m_mode == LEGOSTREAM_MODE_READ;
+}
+
+// OFFSET: LEGO1 0x10099080
+LegoMemoryStream::LegoMemoryStream(char* p_buffer) : LegoStream()
+{
+	m_buffer = p_buffer;
+	m_offset = 0;
+}
+
+// OFFSET: LEGO1 0x10099160
+MxResult LegoMemoryStream::Read(void* p_buffer, MxU32 p_size)
+{
+	memcpy(p_buffer, m_buffer + m_offset, p_size);
+	m_offset += p_size;
+	return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x10099190
+MxResult LegoMemoryStream::Write(const void* p_buffer, MxU32 p_size)
+{
+	memcpy(m_buffer + m_offset, p_buffer, p_size);
+	m_offset += p_size;
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100991c0
@@ -113,29 +185,6 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 	return (m_hFile = fopen(p_filename, modeString)) ? SUCCESS : FAILURE;
 }
 
-// OFFSET: LEGO1 0x10099080
-LegoMemoryStream::LegoMemoryStream(char* p_buffer) : LegoStream()
-{
-	m_buffer = p_buffer;
-	m_offset = 0;
-}
-
-// OFFSET: LEGO1 0x10099160
-MxResult LegoMemoryStream::Read(void* p_buffer, MxU32 p_size)
-{
-	memcpy(p_buffer, m_buffer + m_offset, p_size);
-	m_offset += p_size;
-	return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x10099190
-MxResult LegoMemoryStream::Write(const void* p_buffer, MxU32 p_size)
-{
-	memcpy(m_buffer + m_offset, p_buffer, p_size);
-	m_offset += p_size;
-	return SUCCESS;
-}
-
 // OFFSET: LEGO1 0x100994a0
 MxResult LegoMemoryStream::Tell(MxU32* p_offset)
 {
@@ -148,53 +197,4 @@ MxResult LegoMemoryStream::Seek(MxU32 p_offset)
 {
 	m_offset = p_offset;
 	return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x10039f70
-MxResult LegoStream::WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName)
-{
-	MxResult result = FAILURE;
-	const char* variableValue = p_from->GetVariable(p_variableName);
-
-	if (variableValue) {
-		MxU8 length = strlen(p_variableName);
-		if (p_stream->Write((char*) &length, 1) == SUCCESS) {
-			if (p_stream->Write(p_variableName, length) == SUCCESS) {
-				length = strlen(variableValue);
-				if (p_stream->Write((char*) &length, 1) == SUCCESS)
-					result = p_stream->Write((char*) variableValue, length);
-			}
-		}
-	}
-	return result;
-}
-
-// 95% match, just some instruction ordering differences on the call to
-// MxVariableTable::SetVariable at the end.
-// OFFSET: LEGO1 0x1003a080
-MxS32 LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
-{
-	MxS32 result = 1;
-	MxU8 length;
-
-	if (p_stream->Read((char*) &length, 1) == SUCCESS) {
-		char nameBuffer[256];
-		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
-			nameBuffer[length] = '\0';
-			if (strcmp(nameBuffer, s_endOfVariables) == 0)
-				// 2 -> "This was the last entry, done reading."
-				result = 2;
-			else {
-				if (p_stream->Read((char*) &length, 1) == SUCCESS) {
-					char valueBuffer[256];
-					if (p_stream->Read(valueBuffer, length) == SUCCESS) {
-						result = 0;
-						valueBuffer[length] = '\0';
-						p_to->SetVariable(nameBuffer, valueBuffer);
-					}
-				}
-			}
-		}
-	}
-	return result;
 }
