@@ -47,6 +47,23 @@ MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 	return *this;
 }
 
+// OFFSET: LEGO1 0x100c8e80
+void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
+{
+	if (this->m_mediaSrcPath == p_mediaSrcPath)
+		return;
+
+	delete[] this->m_mediaSrcPath;
+
+	if (p_mediaSrcPath) {
+		this->m_mediaSrcPath = new char[strlen(p_mediaSrcPath) + 1];
+		if (this->m_mediaSrcPath)
+			strcpy(this->m_mediaSrcPath, p_mediaSrcPath);
+	}
+	else
+		this->m_mediaSrcPath = NULL;
+}
+
 // OFFSET: LEGO1 0x100c8f10
 MxU32 MxDSMediaAction::GetSizeOnDisk()
 {
@@ -74,21 +91,4 @@ void MxDSMediaAction::Deserialize(char** p_source, MxS16 p_unk24)
 	GetScalar(p_source, this->m_mediaFormat);
 	GetScalar(p_source, this->m_paletteManagement);
 	GetScalar(p_source, this->m_sustainTime);
-}
-
-// OFFSET: LEGO1 0x100c8e80
-void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
-{
-	if (this->m_mediaSrcPath == p_mediaSrcPath)
-		return;
-
-	delete[] this->m_mediaSrcPath;
-
-	if (p_mediaSrcPath) {
-		this->m_mediaSrcPath = new char[strlen(p_mediaSrcPath) + 1];
-		if (this->m_mediaSrcPath)
-			strcpy(this->m_mediaSrcPath, p_mediaSrcPath);
-	}
-	else
-		this->m_mediaSrcPath = NULL;
 }

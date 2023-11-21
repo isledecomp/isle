@@ -2,6 +2,12 @@
 
 #include "define.h"
 
+// OFFSET: LEGO1 0x10001f70
+MxResult MxCore::Tickle()
+{
+	return SUCCESS;
+}
+
 // OFFSET: LEGO1 0x100ae1a0
 MxCore::MxCore()
 {
@@ -18,10 +24,4 @@ MxCore::~MxCore()
 MxLong MxCore::Notify(MxParam& p)
 {
 	return 0;
-}
-
-// OFFSET: LEGO1 0x10001f70
-MxResult MxCore::Tickle()
-{
-	return SUCCESS;
 }

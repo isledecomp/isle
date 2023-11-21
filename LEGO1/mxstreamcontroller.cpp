@@ -6,6 +6,24 @@
 
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 
+// OFFSET: LEGO1 0x100b9400
+MxResult MxStreamController::vtable0x18(undefined4 p_unknown, undefined4 p_unknown2)
+{
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b9410
+MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2)
+{
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b9420
+MxResult MxStreamController::vtable0x28()
+{
+	return SUCCESS;
+}
+
 // OFFSET: LEGO1 0x100c0b90 STUB
 MxStreamController::MxStreamController()
 {
@@ -18,13 +36,6 @@ MxStreamController::~MxStreamController()
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100c20d0 STUB
-MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
-{
-	// TODO
-	return TRUE;
-}
-
 // OFFSET: LEGO1 0x100c1520
 MxResult MxStreamController::Open(const char* p_filename)
 {
@@ -34,18 +45,6 @@ MxResult MxStreamController::Open(const char* p_filename)
 	MakeSourceName(sourceName, p_filename);
 	this->atom = MxAtomId(sourceName, LookupMode_LowerCase2);
 	return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x100b9400
-MxResult MxStreamController::vtable0x18(undefined4 p_unknown, undefined4 p_unknown2)
-{
-	return FAILURE;
-}
-
-// OFFSET: LEGO1 0x100b9410
-MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2)
-{
-	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100c1690
@@ -89,10 +88,10 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b9420
-MxResult MxStreamController::vtable0x28()
+// OFFSET: LEGO1 0x100c1a00 STUB
+MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
 {
-	return SUCCESS;
+	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x100c1c10
@@ -111,8 +110,9 @@ MxResult MxStreamController::vtable0x30(undefined4 p_unknown)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100c1a00 STUB
-MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
+// OFFSET: LEGO1 0x100c20d0 STUB
+MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
-	return FAILURE;
+	// TODO
+	return TRUE;
 }

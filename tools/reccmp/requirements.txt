@@ -1,3 +1,4 @@
 capstone
 colorama
+isledecomp
 pystache

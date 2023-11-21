@@ -31,70 +31,6 @@ MxBackgroundAudioManager::~MxBackgroundAudioManager()
 	DestroyMusic();
 }
 
-// OFFSET: LEGO1 0x1007f470
-void MxBackgroundAudioManager::Stop()
-{
-	if (m_action2.GetObjectId() != -1)
-		DeleteObject(m_action2);
-
-	m_unk138 = 0;
-	m_action2.SetAtomId(MxAtomId());
-	m_action2.SetObjectId(-1);
-
-	if (m_action1.GetObjectId() != -1)
-		DeleteObject(m_action1);
-
-	m_unka0 = 0;
-	m_action1.SetAtomId(MxAtomId());
-	m_unk148 = 0;
-	m_action1.SetObjectId(-1);
-	m_unk13c = 0;
-}
-
-// OFFSET: LEGO1 0x1007f570
-void MxBackgroundAudioManager::LowerVolume()
-{
-	if (m_unk148 == 0) {
-		if (m_unk13c == 0) {
-			m_unk13c = 2;
-		}
-		m_unk140 = 20;
-	}
-	m_unk148++;
-}
-
-// OFFSET: LEGO1 0x1007f5b0
-void MxBackgroundAudioManager::RaiseVolume()
-{
-	if (m_unk148 != 0) {
-		m_unk148--;
-		if (m_unk148 == 0) {
-			if (m_unk13c == 0) {
-				m_unk13c = 2;
-			}
-			m_unk140 = 10;
-		}
-	}
-}
-
-// OFFSET: LEGO1 0x1007f5f0
-void MxBackgroundAudioManager::Enable(MxBool p)
-{
-	if (this->m_musicEnabled != p) {
-		this->m_musicEnabled = p;
-		if (!p) {
-			Stop();
-		}
-	}
-}
-
-// OFFSET: LEGO1 0x1007f650
-void MxBackgroundAudioManager::Init()
-{
-	this->m_unka0 = 0;
-	this->m_unk13c = 0;
-}
-
 // OFFSET: LEGO1 0x1007ece0
 MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyMS)
 {
@@ -135,80 +71,6 @@ void MxBackgroundAudioManager::DestroyMusic()
 		Streamer()->Close(m_script.GetInternal());
 		m_musicEnabled = FALSE;
 	}
-}
-
-// OFFSET: LEGO1 0x1007f170
-MxLong MxBackgroundAudioManager::Notify(MxParam& p)
-{
-	switch (((MxNotificationParam&) p).GetNotification()) {
-	case c_notificationStartAction:
-		StartAction(p);
-		return 1;
-	case c_notificationEndAction:
-		StopAction(p);
-		return 1;
-	}
-	return 0;
-}
-
-// OFFSET: LEGO1 0x1007f1b0
-void MxBackgroundAudioManager::StartAction(MxParam& p)
-{
-	// TODO: the sender is most likely a MxAudioPresenter?
-	m_unk138 = (MxAudioPresenter*) ((MxNotificationParam&) p).GetSender();
-	m_action2.SetAtomId(m_unk138->GetAction()->GetAtomId());
-	m_action2.SetObjectId(m_unk138->GetAction()->GetObjectId());
-	m_targetVolume = ((MxDSSound*) (m_unk138->GetAction()))->GetVolume();
-	m_unk138->SetVolume(0);
-}
-
-// OFFSET: LEGO1 0x1007f200
-void MxBackgroundAudioManager::StopAction(MxParam& p)
-{
-	if (((MxNotificationParam&) p).GetSender() == m_unka0) {
-		m_unka0 = NULL;
-		m_action1.SetAtomId(MxAtomId());
-		m_action1.SetObjectId(-1);
-	}
-	else if (((MxNotificationParam&) p).GetSender() == m_unk138) {
-		m_unk138 = NULL;
-		m_action2.SetAtomId(MxAtomId());
-		m_action2.SetObjectId(-1);
-	}
-
-	Lego()->HandleNotificationType2(p);
-}
-
-// OFFSET: LEGO1 0x1007f2f0
-MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
-{
-	if (!m_musicEnabled) {
-		return SUCCESS;
-	}
-	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId()) {
-		MxDSAction action;
-		action.SetAtomId(GetCurrentAction().GetAtomId());
-		action.SetObjectId(GetCurrentAction().GetObjectId());
-		action.SetUnknown24(GetCurrentAction().GetUnknown24());
-
-		m_action2.SetAtomId(p_action.GetAtomId());
-		m_action2.SetObjectId(p_action.GetObjectId());
-		m_action2.SetUnknown84(this);
-		m_action2.SetUnknown8c(this);
-
-		MxResult result = Start(&m_action2);
-
-		GetCurrentAction().SetAtomId(action.GetAtomId());
-		GetCurrentAction().SetObjectId(action.GetObjectId());
-		GetCurrentAction().SetUnknown24(action.GetUnknown24());
-
-		if (result == SUCCESS) {
-			m_unk13c = p_unknown2;
-			m_unk140 = p_unknown;
-		}
-		return result;
-	}
-	return FAILURE;
 }
 
 // OFFSET: LEGO1 0x1007ee40
@@ -323,4 +185,142 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 	else {
 		m_unk13c = 0;
 	}
+}
+
+// OFFSET: LEGO1 0x1007f170
+MxLong MxBackgroundAudioManager::Notify(MxParam& p)
+{
+	switch (((MxNotificationParam&) p).GetNotification()) {
+	case c_notificationStartAction:
+		StartAction(p);
+		return 1;
+	case c_notificationEndAction:
+		StopAction(p);
+		return 1;
+	}
+	return 0;
+}
+
+// OFFSET: LEGO1 0x1007f1b0
+void MxBackgroundAudioManager::StartAction(MxParam& p)
+{
+	// TODO: the sender is most likely a MxAudioPresenter?
+	m_unk138 = (MxAudioPresenter*) ((MxNotificationParam&) p).GetSender();
+	m_action2.SetAtomId(m_unk138->GetAction()->GetAtomId());
+	m_action2.SetObjectId(m_unk138->GetAction()->GetObjectId());
+	m_targetVolume = ((MxDSSound*) (m_unk138->GetAction()))->GetVolume();
+	m_unk138->SetVolume(0);
+}
+
+// OFFSET: LEGO1 0x1007f200
+void MxBackgroundAudioManager::StopAction(MxParam& p)
+{
+	if (((MxNotificationParam&) p).GetSender() == m_unka0) {
+		m_unka0 = NULL;
+		m_action1.SetAtomId(MxAtomId());
+		m_action1.SetObjectId(-1);
+	}
+	else if (((MxNotificationParam&) p).GetSender() == m_unk138) {
+		m_unk138 = NULL;
+		m_action2.SetAtomId(MxAtomId());
+		m_action2.SetObjectId(-1);
+	}
+
+	Lego()->HandleNotificationType2(p);
+}
+
+// OFFSET: LEGO1 0x1007f2f0
+MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
+{
+	if (!m_musicEnabled) {
+		return SUCCESS;
+	}
+	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId()) {
+		MxDSAction action;
+		action.SetAtomId(GetCurrentAction().GetAtomId());
+		action.SetObjectId(GetCurrentAction().GetObjectId());
+		action.SetUnknown24(GetCurrentAction().GetUnknown24());
+
+		m_action2.SetAtomId(p_action.GetAtomId());
+		m_action2.SetObjectId(p_action.GetObjectId());
+		m_action2.SetUnknown84(this);
+		m_action2.SetUnknown8c(this);
+
+		MxResult result = Start(&m_action2);
+
+		GetCurrentAction().SetAtomId(action.GetAtomId());
+		GetCurrentAction().SetObjectId(action.GetObjectId());
+		GetCurrentAction().SetUnknown24(action.GetUnknown24());
+
+		if (result == SUCCESS) {
+			m_unk13c = p_unknown2;
+			m_unk140 = p_unknown;
+		}
+		return result;
+	}
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1007f470
+void MxBackgroundAudioManager::Stop()
+{
+	if (m_action2.GetObjectId() != -1)
+		DeleteObject(m_action2);
+
+	m_unk138 = 0;
+	m_action2.SetAtomId(MxAtomId());
+	m_action2.SetObjectId(-1);
+
+	if (m_action1.GetObjectId() != -1)
+		DeleteObject(m_action1);
+
+	m_unka0 = 0;
+	m_action1.SetAtomId(MxAtomId());
+	m_unk148 = 0;
+	m_action1.SetObjectId(-1);
+	m_unk13c = 0;
+}
+
+// OFFSET: LEGO1 0x1007f570
+void MxBackgroundAudioManager::LowerVolume()
+{
+	if (m_unk148 == 0) {
+		if (m_unk13c == 0) {
+			m_unk13c = 2;
+		}
+		m_unk140 = 20;
+	}
+	m_unk148++;
+}
+
+// OFFSET: LEGO1 0x1007f5b0
+void MxBackgroundAudioManager::RaiseVolume()
+{
+	if (m_unk148 != 0) {
+		m_unk148--;
+		if (m_unk148 == 0) {
+			if (m_unk13c == 0) {
+				m_unk13c = 2;
+			}
+			m_unk140 = 10;
+		}
+	}
+}
+
+// OFFSET: LEGO1 0x1007f5f0
+void MxBackgroundAudioManager::Enable(MxBool p)
+{
+	if (this->m_musicEnabled != p) {
+		this->m_musicEnabled = p;
+		if (!p) {
+			Stop();
+		}
+	}
+}
+
+// OFFSET: LEGO1 0x1007f650
+void MxBackgroundAudioManager::Init()
+{
+	this->m_unka0 = 0;
+	this->m_unk13c = 0;
 }

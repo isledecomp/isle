@@ -70,6 +70,12 @@ done:
 	return result;
 }
 
+// OFFSET: LEGO1 0x100d15e0 STUB
+void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
+{
+	// TODO
+}
+
 // OFFSET: LEGO1 0x100d1750
 MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
@@ -97,12 +103,6 @@ MxU32 MxDiskStreamProvider::GetFileSize()
 MxU32 MxDiskStreamProvider::GetStreamBuffersNum()
 {
 	return m_pFile->GetStreamBuffersNum();
-}
-
-// OFFSET: LEGO1 0x100d15e0 STUB
-void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
-{
-	// TODO
 }
 
 // OFFSET: LEGO1 0x100d1eb0

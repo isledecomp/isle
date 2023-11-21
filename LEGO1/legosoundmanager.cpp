@@ -14,10 +14,11 @@ LegoSoundManager::~LegoSoundManager()
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x1002a390
-void LegoSoundManager::Destroy()
+// OFFSET: LEGO1 0x100299a0
+void LegoSoundManager::Init()
 {
-	Destroy(FALSE);
+	unk0x40 = 0;
+	unk0x3c = 0;
 }
 
 // OFFSET: LEGO1 0x100299b0 STUB
@@ -31,11 +32,10 @@ MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100299a0
-void LegoSoundManager::Init()
+// OFFSET: LEGO1 0x1002a390
+void LegoSoundManager::Destroy()
 {
-	unk0x40 = 0;
-	unk0x3c = 0;
+	Destroy(FALSE);
 }
 
 // OFFSET: LEGO1 0x1002a3a0 STUB

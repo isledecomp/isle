@@ -18,3 +18,4 @@ build/
 *.swp
 LEGO1PROGRESS.HTML
 LEGO1PROGRESS.SVG
+*.pyc

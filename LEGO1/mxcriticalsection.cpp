@@ -31,12 +31,6 @@ MxCriticalSection::~MxCriticalSection()
 	DeleteCriticalSection(&this->m_criticalSection);
 }
 
-// OFFSET: LEGO1 0x100b6e00
-void MxCriticalSection::SetDoMutex()
-{
-	g_useMutex = 1;
-}
-
 // OFFSET: LEGO1 0x100b6d80
 void MxCriticalSection::Enter()
 {
@@ -69,4 +63,10 @@ void MxCriticalSection::Leave()
 	}
 
 	LeaveCriticalSection(&this->m_criticalSection);
+}
+
+// OFFSET: LEGO1 0x100b6e00
+void MxCriticalSection::SetDoMutex()
+{
+	g_useMutex = 1;
 }

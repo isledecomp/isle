@@ -78,42 +78,6 @@ LegoGameState::~LegoGameState()
 	delete[] m_savePath;
 }
 
-// OFFSET: LEGO1 0x10039c60 STUB
-MxResult LegoGameState::Load(MxULong)
-{
-	// TODO
-	return 0;
-}
-
-// OFFSET: LEGO1 0x1003a170
-void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
-{
-	char baseForSlot[2] = "0";
-	char path[1024] = "";
-
-	// Save path base
-	if (m_savePath != NULL)
-		strcpy(path, m_savePath);
-
-	// Slot: "G0", "G1", ...
-	strcat(path, "G");
-	baseForSlot[0] += p_slotn;
-	strcat(path, baseForSlot);
-
-	// Extension: ".GS"
-	strcat(path, g_fileExtensionGS);
-	*p_outPath = MxString(path);
-}
-
-// OFFSET: LEGO1 0x1003a020
-MxResult LegoGameState::WriteEndOfVariables(LegoStream* p_stream)
-{
-	MxU8 len = strlen(s_endOfVariables);
-	if (p_stream->Write(&len, 1) == SUCCESS)
-		return p_stream->Write(s_endOfVariables, len);
-	return FAILURE;
-}
-
 // OFFSET: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
@@ -152,22 +116,11 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	return result;
 }
 
-// OFFSET: LEGO1 0x1003a2e0 STUB
-void LegoGameState::SerializePlayersInfo(MxS16 p)
+// OFFSET: LEGO1 0x10039c60 STUB
+MxResult LegoGameState::Load(MxULong)
 {
 	// TODO
-}
-
-// OFFSET: LEGO1 0x1003cdd0 STUB
-void LegoGameState::SerializeScoreHistory(MxS16 p)
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x1003cea0
-void LegoGameState::SetSomeEnumState(undefined4 p_state)
-{
-	m_unk10 = p_state;
+	return 0;
 }
 
 // OFFSET: LEGO1 0x10039f00
@@ -182,6 +135,53 @@ void LegoGameState::SetSavePath(char* p_savePath)
 	}
 	else
 		m_savePath = NULL;
+}
+
+// OFFSET: LEGO1 0x1003a020
+MxResult LegoGameState::WriteEndOfVariables(LegoStream* p_stream)
+{
+	MxU8 len = strlen(s_endOfVariables);
+	if (p_stream->Write(&len, 1) == SUCCESS)
+		return p_stream->Write(s_endOfVariables, len);
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1003a170
+void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
+{
+	char baseForSlot[2] = "0";
+	char path[1024] = "";
+
+	// Save path base
+	if (m_savePath != NULL)
+		strcpy(path, m_savePath);
+
+	// Slot: "G0", "G1", ...
+	strcat(path, "G");
+	baseForSlot[0] += p_slotn;
+	strcat(path, baseForSlot);
+
+	// Extension: ".GS"
+	strcat(path, g_fileExtensionGS);
+	*p_outPath = MxString(path);
+}
+
+// OFFSET: LEGO1 0x1003a2e0 STUB
+void LegoGameState::SerializePlayersInfo(MxS16 p)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x1003a720 STUB
+void LegoGameState::FUN_1003a720(MxU32 p_unk)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x1003b060 STUB
+void LegoGameState::HandleAction(MxU32 p_unk)
+{
+	// TODO
 }
 
 // OFFSET: LEGO1 0x1003bac0
@@ -255,14 +255,14 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
-// OFFSET: LEGO1 0x1003a720 STUB
-void LegoGameState::FUN_1003a720(MxU32 p_unk)
+// OFFSET: LEGO1 0x1003cdd0 STUB
+void LegoGameState::SerializeScoreHistory(MxS16 p)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003b060 STUB
-void LegoGameState::HandleAction(MxU32 p_unk)
+// OFFSET: LEGO1 0x1003cea0
+void LegoGameState::SetSomeEnumState(undefined4 p_state)
 {
-	// TODO
+	m_unk10 = p_state;
 }

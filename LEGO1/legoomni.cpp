@@ -109,124 +109,6 @@ const char* g_current = "current";
 // 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
-// OFFSET: LEGO1 0x10058a00
-LegoOmni::LegoOmni()
-{
-	Init();
-}
-
-// OFFSET: LEGO1 0x10058b50
-LegoOmni::~LegoOmni()
-{
-	Destroy();
-}
-
-// OFFSET: LEGO1 0x1005b560
-void LegoOmni::CreateBackgroundAudio()
-{
-	if (m_bkgAudioManager)
-		m_bkgAudioManager->Create(*g_jukeboxScript, 100);
-}
-
-// OFFSET: LEGO1 0x1005af10 STUB
-void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x1005b0c0 STUB
-LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
-{
-	// TODO
-	return NULL;
-}
-
-// OFFSET: LEGO1 0x1005b400 STUB
-int LegoOmni::GetCurrPathInfo(LegoPathBoundary**, int&)
-{
-	// TODO
-	return 0;
-}
-
-// OFFSET: LEGO1 0x100b6ff0
-void MakeSourceName(char* p_output, const char* p_input)
-{
-	const char* cln = strchr(p_input, ':');
-	if (cln) {
-		p_input = cln + 1;
-	}
-
-	strcpy(p_output, p_input);
-
-	strlwr(p_output);
-
-	char* extLoc = strstr(p_output, ".si");
-	if (extLoc) {
-		*extLoc = 0;
-	}
-}
-
-// OFFSET: LEGO1 0x100b7050
-MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p_source)
-{
-	MxBool didMatch = FALSE;
-
-	MxS16 len = strlen(p_source);
-	char* temp = new char[len + 1];
-	strcpy(temp, p_source);
-
-	char* token = strtok(temp, ", \t\r\n:");
-	while (token) {
-		len -= (strlen(token) + 1);
-
-		if (strcmpi(token, p_key) == 0) {
-			if (p_outputValue && len > 0) {
-				char* cur = &token[strlen(p_key)];
-				cur++;
-				while (*cur != ',') {
-					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r')
-						break;
-					*p_outputValue++ = *cur++;
-				}
-				*p_outputValue = '\0';
-			}
-
-			didMatch = TRUE;
-			break;
-		}
-
-		token = strtok(NULL, ", \t\r\n:");
-	}
-
-	delete[] temp;
-	return didMatch;
-}
-
-// OFFSET: LEGO1 0x100b7210
-void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
-{
-	g_omniUserMessage = p_userMsg;
-}
-
-// OFFSET: LEGO1 0x100acf50
-MxResult Start(MxDSAction* p_dsAction)
-{
-	return MxOmni::GetInstance()->Start(p_dsAction);
-}
-
-// OFFSET: LEGO1 0x1005ad10
-LegoOmni* LegoOmni::GetInstance()
-{
-	return (LegoOmni*) MxOmni::GetInstance();
-}
-
-// OFFSET: LEGO1 0x1005ac90
-void LegoOmni::CreateInstance()
-{
-	MxOmni::DestroyInstance();
-	MxOmni::SetInstance(new LegoOmni());
-}
-
 // OFFSET: LEGO1 0x10015700
 LegoOmni* Lego()
 {
@@ -334,52 +216,10 @@ void PlayMusic(MxU32 p_index)
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
 }
 
-// OFFSET: LEGO1 0x100c0280
-MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
-{
-	char* buf;
-	_MMCKINFO tmp_chunk;
-
-	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], 0)) {
-		return NULL;
-	}
-
-	if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
-		if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
-
-			buf = new char[tmp_chunk.cksize];
-			if (!buf) {
-				return NULL;
-			}
-
-			if (p_file->Read((MxU8*) buf, tmp_chunk.cksize) != 0) {
-				return NULL;
-			}
-
-			// Save a copy so we can clean up properly, because
-			// this function will alter the pointer value.
-			char* copy = buf;
-			MxDSObject* obj = DeserializeDSObjectDispatch(&buf, -1);
-			delete[] copy;
-			return obj;
-		}
-		return NULL;
-	}
-
-	return NULL;
-}
-
-// OFFSET: LEGO1 0x10053430
-const char* GetNoCD_SourceName()
-{
-	return g_nocdSourceName->GetInternal();
-}
-
-// OFFSET: LEGO1 0x1005b5f0 STUB
-MxLong LegoOmni::Notify(MxParam& p)
+// OFFSET: LEGO1 0x1001a700 STUB
+void FUN_1001a700()
 {
 	// TODO
-	return 0;
 }
 
 // OFFSET: LEGO1 0x1003dd70 STUB
@@ -394,180 +234,6 @@ LegoEntity* PickEntity(MxLong, MxLong)
 {
 	// TODO
 	return NULL;
-}
-
-// OFFSET: LEGO1 0x10058bd0
-void LegoOmni::Init()
-{
-	MxOmni::Init();
-	m_unk68 = 0;
-	m_inputMgr = NULL;
-	m_unk6c = 0;
-	m_gifManager = NULL;
-	m_unk78 = 0;
-	m_currentWorld = NULL;
-	m_unk80 = FALSE;
-	m_currentVehicle = NULL;
-	m_unkLegoSaveDataWriter = NULL;
-	m_plantManager = NULL;
-	m_gameState = NULL;
-	m_animationManager = NULL;
-	m_buildingManager = NULL;
-	m_bkgAudioManager = NULL;
-	m_unk13c = TRUE;
-	m_transitionManager = NULL;
-}
-
-// OFFSET: LEGO1 0x1001a700 STUB
-void FUN_1001a700()
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x10058e70
-MxResult LegoOmni::Create(MxOmniCreateParam& p)
-{
-	MxResult result = FAILURE;
-	MxAutoLocker lock(&this->m_criticalsection);
-
-	p.CreateFlags().CreateObjectFactory(FALSE);
-	p.CreateFlags().CreateVideoManager(FALSE);
-	p.CreateFlags().CreateSoundManager(FALSE);
-	p.CreateFlags().CreateTickleManager(FALSE);
-
-	if (!(m_tickleManager = new MxTickleManager()))
-		return FAILURE;
-
-	if (MxOmni::Create(p) != SUCCESS)
-		return FAILURE;
-
-	m_objectFactory = new LegoObjectFactory();
-	if (m_objectFactory == NULL)
-		return FAILURE;
-
-	if (m_soundManager = new LegoSoundManager()) {
-		if (m_soundManager->Create(10, 0) != SUCCESS) {
-			delete m_soundManager;
-			m_soundManager = NULL;
-			return FAILURE;
-		}
-	}
-
-	if (m_videoManager = new LegoVideoManager()) {
-		if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
-			delete m_videoManager;
-			m_videoManager = NULL;
-		}
-	}
-
-	if (m_inputMgr = new LegoInputManager()) {
-		if (m_inputMgr->Create(p.GetWindowHandle()) != SUCCESS) {
-			delete m_inputMgr;
-			m_inputMgr = NULL;
-		}
-	}
-
-	// TODO: there are a few more classes here
-	m_gifManager = new GifManager();
-	m_plantManager = new LegoPlantManager();
-	m_animationManager = new LegoAnimationManager();
-	m_buildingManager = new LegoBuildingManager();
-	m_gameState = new LegoGameState();
-	// TODO: initialize list at m_unk78
-
-	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager && m_buildingManager) {
-		// TODO: initialize a bunch of MxVariables
-		RegisterScripts();
-		FUN_1001a700();
-		// todo: another function call. in legoomni maybe?
-		m_bkgAudioManager = new MxBackgroundAudioManager();
-		if (m_bkgAudioManager != NULL) {
-			m_transitionManager = new MxTransitionManager();
-			if (m_transitionManager != NULL) {
-				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
-					m_notificationManager->Register(this);
-					SetAppCursor(1);
-					m_gameState->SetSomeEnumState(0);
-					return SUCCESS;
-				}
-			}
-		}
-	}
-
-	return FAILURE;
-}
-
-// OFFSET: LEGO1 0x10058c30 STUB
-void LegoOmni::Destroy()
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x1005b580
-MxResult LegoOmni::Start(MxDSAction* action)
-{
-	MxResult result = MxOmni::Start(action);
-	this->m_action.SetAtomId(action->GetAtomId());
-	this->m_action.SetObjectId(action->GetObjectId());
-	this->m_action.SetUnknown24(action->GetUnknown24());
-	return result;
-}
-
-// OFFSET: LEGO1 0x1005b1d0 STUB
-MxResult LegoOmni::DeleteObject(MxDSAction& ds)
-{
-	// TODO
-	return FAILURE;
-}
-
-// OFFSET: LEGO1 0x1005b3c0
-MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
-{
-	if (MxOmni::DoesEntityExist(ds)) {
-		if (FindByEntityIdOrAtomId(ds.GetAtomId(), ds.GetObjectId()) == NULL) {
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-// OFFSET: LEGO1 0x1005b2f0
-MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
-{
-	LegoWorld* foundEntity = NULL;
-	if (strcmpi(p_id, g_current)) {
-		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, LookupMode_LowerCase2), p_entityId);
-	}
-	else {
-		foundEntity = this->m_currentWorld;
-	}
-
-	if (foundEntity != NULL) {
-		foundEntity->VTable0x58(p_presenter);
-	}
-
-	return foundEntity;
-}
-
-// OFFSET: LEGO1 0x1005b3a0
-void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
-{
-	if (m_currentWorld)
-		NotificationManager()->Send(m_currentWorld, p_param);
-}
-
-// OFFSET: LEGO1 0x1005b640
-void LegoOmni::StartTimer()
-{
-	MxOmni::StartTimer();
-	SetAppCursor(2);
-}
-
-// OFFSET: LEGO1 0x1005b650
-void LegoOmni::StopTimer()
-{
-	MxOmni::StopTimer();
-	SetAppCursor(0);
 }
 
 // OFFSET: LEGO1 0x100528e0
@@ -664,4 +330,338 @@ void UnregisterScripts()
 	g_sndAnimScript = NULL;
 	g_creditsScript = NULL;
 	g_nocdSourceName = NULL;
+}
+
+// OFFSET: LEGO1 0x10053430
+const char* GetNoCD_SourceName()
+{
+	return g_nocdSourceName->GetInternal();
+}
+
+// OFFSET: LEGO1 0x10058a00
+LegoOmni::LegoOmni()
+{
+	Init();
+}
+
+// OFFSET: LEGO1 0x10058b50
+LegoOmni::~LegoOmni()
+{
+	Destroy();
+}
+
+// OFFSET: LEGO1 0x10058bd0
+void LegoOmni::Init()
+{
+	MxOmni::Init();
+	m_unk68 = 0;
+	m_inputMgr = NULL;
+	m_unk6c = 0;
+	m_gifManager = NULL;
+	m_unk78 = 0;
+	m_currentWorld = NULL;
+	m_unk80 = FALSE;
+	m_currentVehicle = NULL;
+	m_unkLegoSaveDataWriter = NULL;
+	m_plantManager = NULL;
+	m_gameState = NULL;
+	m_animationManager = NULL;
+	m_buildingManager = NULL;
+	m_bkgAudioManager = NULL;
+	m_unk13c = TRUE;
+	m_transitionManager = NULL;
+}
+
+// OFFSET: LEGO1 0x10058c30 STUB
+void LegoOmni::Destroy()
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x10058e70
+MxResult LegoOmni::Create(MxOmniCreateParam& p)
+{
+	MxResult result = FAILURE;
+	MxAutoLocker lock(&this->m_criticalsection);
+
+	p.CreateFlags().CreateObjectFactory(FALSE);
+	p.CreateFlags().CreateVideoManager(FALSE);
+	p.CreateFlags().CreateSoundManager(FALSE);
+	p.CreateFlags().CreateTickleManager(FALSE);
+
+	if (!(m_tickleManager = new MxTickleManager()))
+		return FAILURE;
+
+	if (MxOmni::Create(p) != SUCCESS)
+		return FAILURE;
+
+	m_objectFactory = new LegoObjectFactory();
+	if (m_objectFactory == NULL)
+		return FAILURE;
+
+	if (m_soundManager = new LegoSoundManager()) {
+		if (m_soundManager->Create(10, 0) != SUCCESS) {
+			delete m_soundManager;
+			m_soundManager = NULL;
+			return FAILURE;
+		}
+	}
+
+	if (m_videoManager = new LegoVideoManager()) {
+		if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+			delete m_videoManager;
+			m_videoManager = NULL;
+		}
+	}
+
+	if (m_inputMgr = new LegoInputManager()) {
+		if (m_inputMgr->Create(p.GetWindowHandle()) != SUCCESS) {
+			delete m_inputMgr;
+			m_inputMgr = NULL;
+		}
+	}
+
+	// TODO: there are a few more classes here
+	m_gifManager = new GifManager();
+	m_plantManager = new LegoPlantManager();
+	m_animationManager = new LegoAnimationManager();
+	m_buildingManager = new LegoBuildingManager();
+	m_gameState = new LegoGameState();
+	// TODO: initialize list at m_unk78
+
+	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager && m_buildingManager) {
+		// TODO: initialize a bunch of MxVariables
+		RegisterScripts();
+		FUN_1001a700();
+		// todo: another function call. in legoomni maybe?
+		m_bkgAudioManager = new MxBackgroundAudioManager();
+		if (m_bkgAudioManager != NULL) {
+			m_transitionManager = new MxTransitionManager();
+			if (m_transitionManager != NULL) {
+				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
+					m_notificationManager->Register(this);
+					SetAppCursor(1);
+					m_gameState->SetSomeEnumState(0);
+					return SUCCESS;
+				}
+			}
+		}
+	}
+
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1005ac90
+void LegoOmni::CreateInstance()
+{
+	MxOmni::DestroyInstance();
+	MxOmni::SetInstance(new LegoOmni());
+}
+
+// OFFSET: LEGO1 0x1005ad10
+LegoOmni* LegoOmni::GetInstance()
+{
+	return (LegoOmni*) MxOmni::GetInstance();
+}
+
+// OFFSET: LEGO1 0x1005af10 STUB
+void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x1005b0c0 STUB
+LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
+{
+	// TODO
+	return NULL;
+}
+
+// OFFSET: LEGO1 0x1005b1d0 STUB
+MxResult LegoOmni::DeleteObject(MxDSAction& ds)
+{
+	// TODO
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x1005b2f0
+MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
+{
+	LegoWorld* foundEntity = NULL;
+	if (strcmpi(p_id, g_current)) {
+		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, LookupMode_LowerCase2), p_entityId);
+	}
+	else {
+		foundEntity = this->m_currentWorld;
+	}
+
+	if (foundEntity != NULL) {
+		foundEntity->VTable0x58(p_presenter);
+	}
+
+	return foundEntity;
+}
+
+// OFFSET: LEGO1 0x1005b3a0
+void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
+{
+	if (m_currentWorld)
+		NotificationManager()->Send(m_currentWorld, p_param);
+}
+
+// OFFSET: LEGO1 0x1005b3c0
+MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
+{
+	if (MxOmni::DoesEntityExist(ds)) {
+		if (FindByEntityIdOrAtomId(ds.GetAtomId(), ds.GetObjectId()) == NULL) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+// OFFSET: LEGO1 0x1005b400 STUB
+int LegoOmni::GetCurrPathInfo(LegoPathBoundary**, int&)
+{
+	// TODO
+	return 0;
+}
+
+// OFFSET: LEGO1 0x1005b560
+void LegoOmni::CreateBackgroundAudio()
+{
+	if (m_bkgAudioManager)
+		m_bkgAudioManager->Create(*g_jukeboxScript, 100);
+}
+
+// OFFSET: LEGO1 0x1005b580
+MxResult LegoOmni::Start(MxDSAction* action)
+{
+	MxResult result = MxOmni::Start(action);
+	this->m_action.SetAtomId(action->GetAtomId());
+	this->m_action.SetObjectId(action->GetObjectId());
+	this->m_action.SetUnknown24(action->GetUnknown24());
+	return result;
+}
+
+// OFFSET: LEGO1 0x1005b5f0 STUB
+MxLong LegoOmni::Notify(MxParam& p)
+{
+	// TODO
+	return 0;
+}
+
+// OFFSET: LEGO1 0x1005b640
+void LegoOmni::StartTimer()
+{
+	MxOmni::StartTimer();
+	SetAppCursor(2);
+}
+
+// OFFSET: LEGO1 0x1005b650
+void LegoOmni::StopTimer()
+{
+	MxOmni::StopTimer();
+	SetAppCursor(0);
+}
+
+// OFFSET: LEGO1 0x100acf50
+MxResult Start(MxDSAction* p_dsAction)
+{
+	return MxOmni::GetInstance()->Start(p_dsAction);
+}
+
+// OFFSET: LEGO1 0x100b6ff0
+void MakeSourceName(char* p_output, const char* p_input)
+{
+	const char* cln = strchr(p_input, ':');
+	if (cln) {
+		p_input = cln + 1;
+	}
+
+	strcpy(p_output, p_input);
+
+	strlwr(p_output);
+
+	char* extLoc = strstr(p_output, ".si");
+	if (extLoc) {
+		*extLoc = 0;
+	}
+}
+
+// OFFSET: LEGO1 0x100b7050
+MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p_source)
+{
+	MxBool didMatch = FALSE;
+
+	MxS16 len = strlen(p_source);
+	char* temp = new char[len + 1];
+	strcpy(temp, p_source);
+
+	char* token = strtok(temp, ", \t\r\n:");
+	while (token) {
+		len -= (strlen(token) + 1);
+
+		if (strcmpi(token, p_key) == 0) {
+			if (p_outputValue && len > 0) {
+				char* cur = &token[strlen(p_key)];
+				cur++;
+				while (*cur != ',') {
+					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r')
+						break;
+					*p_outputValue++ = *cur++;
+				}
+				*p_outputValue = '\0';
+			}
+
+			didMatch = TRUE;
+			break;
+		}
+
+		token = strtok(NULL, ", \t\r\n:");
+	}
+
+	delete[] temp;
+	return didMatch;
+}
+
+// OFFSET: LEGO1 0x100b7210
+void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
+{
+	g_omniUserMessage = p_userMsg;
+}
+
+// OFFSET: LEGO1 0x100c0280
+MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
+{
+	char* buf;
+	_MMCKINFO tmp_chunk;
+
+	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], 0)) {
+		return NULL;
+	}
+
+	if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
+		if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
+
+			buf = new char[tmp_chunk.cksize];
+			if (!buf) {
+				return NULL;
+			}
+
+			if (p_file->Read((MxU8*) buf, tmp_chunk.cksize) != 0) {
+				return NULL;
+			}
+
+			// Save a copy so we can clean up properly, because
+			// this function will alter the pointer value.
+			char* copy = buf;
+			MxDSObject* obj = DeserializeDSObjectDispatch(&buf, -1);
+			delete[] copy;
+			return obj;
+		}
+		return NULL;
+	}
+
+	return NULL;
 }

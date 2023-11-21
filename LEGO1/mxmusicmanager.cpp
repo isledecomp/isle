@@ -19,24 +19,6 @@ MxMusicManager::~MxMusicManager()
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100c0b20
-void MxMusicManager::DeinitializeMIDI()
-{
-	m_criticalSection.Enter();
-
-	if (m_MIDIInitialized) {
-		m_MIDIInitialized = FALSE;
-		midiStreamStop(m_MIDIStreamH);
-		midiOutUnprepareHeader((HMIDIOUT) m_MIDIStreamH, m_MIDIHdrP, sizeof(MIDIHDR));
-		midiOutSetVolume((HMIDIOUT) m_MIDIStreamH, m_MIDIVolume);
-		midiStreamClose(m_MIDIStreamH);
-		delete m_MIDIHdrP;
-		InitData();
-	}
-
-	m_criticalSection.Leave();
-}
-
 // OFFSET: LEGO1 0x100c0690
 void MxMusicManager::Init()
 {
@@ -80,19 +62,6 @@ void MxMusicManager::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// OFFSET: LEGO1 0x100c0930
-void MxMusicManager::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// OFFSET: LEGO1 0x100c09a0
-MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
-{
-	MxS32 result = (p_volume * 0xffff) / 100;
-	return (result << 0x10) | result;
-}
-
 // OFFSET: LEGO1 0x100c07f0
 void MxMusicManager::SetMIDIVolume()
 {
@@ -103,15 +72,6 @@ void MxMusicManager::SetMIDIVolume()
 		MxS32 volume = CalculateVolume(result);
 		midiOutSetVolume((HMIDIOUT) streamHandle, volume);
 	}
-}
-
-// OFFSET: LEGO1 0x100c0940
-void MxMusicManager::SetVolume(MxS32 p_volume)
-{
-	MxAudioManager::SetVolume(p_volume);
-	m_criticalSection.Enter();
-	SetMIDIVolume();
-	m_criticalSection.Leave();
 }
 
 // OFFSET: LEGO1 0x100c0840
@@ -143,4 +103,44 @@ done:
 		m_criticalSection.Leave();
 
 	return status;
+}
+
+// OFFSET: LEGO1 0x100c0930
+void MxMusicManager::Destroy()
+{
+	Destroy(FALSE);
+}
+
+// OFFSET: LEGO1 0x100c0940
+void MxMusicManager::SetVolume(MxS32 p_volume)
+{
+	MxAudioManager::SetVolume(p_volume);
+	m_criticalSection.Enter();
+	SetMIDIVolume();
+	m_criticalSection.Leave();
+}
+
+// OFFSET: LEGO1 0x100c09a0
+MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
+{
+	MxS32 result = (p_volume * 0xffff) / 100;
+	return (result << 0x10) | result;
+}
+
+// OFFSET: LEGO1 0x100c0b20
+void MxMusicManager::DeinitializeMIDI()
+{
+	m_criticalSection.Enter();
+
+	if (m_MIDIInitialized) {
+		m_MIDIInitialized = FALSE;
+		midiStreamStop(m_MIDIStreamH);
+		midiOutUnprepareHeader((HMIDIOUT) m_MIDIStreamH, m_MIDIHdrP, sizeof(MIDIHDR));
+		midiOutSetVolume((HMIDIOUT) m_MIDIStreamH, m_MIDIVolume);
+		midiStreamClose(m_MIDIStreamH);
+		delete m_MIDIHdrP;
+		InitData();
+	}
+
+	m_criticalSection.Leave();
 }

@@ -28,6 +28,12 @@ void MxDisplaySurface::Reset()
 	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
 }
 
+// OFFSET: LEGO1 0x100ba640 STUB
+void MxDisplaySurface::FUN_100ba640()
+{
+	// TODO
+}
+
 // OFFSET: LEGO1 0x100ba790
 MxResult MxDisplaySurface::Init(
 	MxVideoParam& p_videoParam,
@@ -178,29 +184,8 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
 }
 
-// OFFSET: LEGO1 0x100bc200 STUB
-void MxDisplaySurface::vtable24(
-	LPDDSURFACEDESC,
-	MxBitmap*,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4
-)
-{
-}
-
 // OFFSET: LEGO1 0x100bacc0 STUB
 MxBool MxDisplaySurface::vtable28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
-{
-	return 0;
-}
-
-// OFFSET: LEGO1 0x100bc630 STUB
-MxBool MxDisplaySurface::
-	vtable2c(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
 {
 	return 0;
 }
@@ -253,8 +238,23 @@ undefined4 MxDisplaySurface::vtable44(undefined4, undefined4*, undefined4, undef
 	return 0;
 }
 
-// OFFSET: LEGO1 0x100ba640 STUB
-void MxDisplaySurface::FUN_100ba640()
+// OFFSET: LEGO1 0x100bc200 STUB
+void MxDisplaySurface::vtable24(
+	LPDDSURFACEDESC,
+	MxBitmap*,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4
+)
 {
-	// TODO
+}
+
+// OFFSET: LEGO1 0x100bc630 STUB
+MxBool MxDisplaySurface::
+	vtable2c(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
+{
+	return 0;
 }

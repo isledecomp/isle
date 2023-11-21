@@ -44,6 +44,47 @@ MxNotificationManager::~MxNotificationManager()
 	TickleManager()->UnregisterClient(this);
 }
 
+// OFFSET: LEGO1 0x100ac600
+MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
+{
+	MxResult result = SUCCESS;
+	m_queue = new MxNotificationPtrList();
+
+	if (m_queue == NULL) {
+		result = FAILURE;
+	}
+	else {
+		TickleManager()->RegisterClient(this, 10);
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x100ac6c0
+MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_param)
+{
+	MxAutoLocker lock(&m_lock);
+
+	if (m_active == FALSE) {
+		return FAILURE;
+	}
+	else {
+		MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+		if (it == m_listenerIds.end()) {
+			return FAILURE;
+		}
+		else {
+			MxNotification* notif = new MxNotification(p_listener, p_param);
+			if (notif != NULL) {
+				m_queue->push_back(notif);
+				return SUCCESS;
+			}
+		}
+	}
+
+	return FAILURE;
+}
+
 // OFFSET: LEGO1 0x100ac800
 MxResult MxNotificationManager::Tickle()
 {
@@ -70,47 +111,6 @@ MxResult MxNotificationManager::Tickle()
 		delete m_sendList;
 		m_sendList = NULL;
 		return SUCCESS;
-	}
-}
-
-// OFFSET: LEGO1 0x100ac600
-MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
-{
-	MxResult result = SUCCESS;
-	m_queue = new MxNotificationPtrList();
-
-	if (m_queue == NULL) {
-		result = FAILURE;
-	}
-	else {
-		TickleManager()->RegisterClient(this, 10);
-	}
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x100acd20
-void MxNotificationManager::Register(MxCore* p_listener)
-{
-	MxAutoLocker lock(&m_lock);
-
-	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-	if (it != m_listenerIds.end())
-		return;
-
-	m_listenerIds.push_back(p_listener->GetId());
-}
-
-// OFFSET: LEGO1 0x100acdf0
-void MxNotificationManager::Unregister(MxCore* p_listener)
-{
-	MxAutoLocker lock(&m_lock);
-
-	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-
-	if (it != m_listenerIds.end()) {
-		m_listenerIds.erase(it);
-		FlushPending(p_listener);
 	}
 }
 
@@ -163,27 +163,27 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 	}
 }
 
-// OFFSET: LEGO1 0x100ac6c0
-MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_param)
+// OFFSET: LEGO1 0x100acd20
+void MxNotificationManager::Register(MxCore* p_listener)
 {
 	MxAutoLocker lock(&m_lock);
 
-	if (m_active == FALSE) {
-		return FAILURE;
-	}
-	else {
-		MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-		if (it == m_listenerIds.end()) {
-			return FAILURE;
-		}
-		else {
-			MxNotification* notif = new MxNotification(p_listener, p_param);
-			if (notif != NULL) {
-				m_queue->push_back(notif);
-				return SUCCESS;
-			}
-		}
-	}
+	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+	if (it != m_listenerIds.end())
+		return;
 
-	return FAILURE;
+	m_listenerIds.push_back(p_listener->GetId());
+}
+
+// OFFSET: LEGO1 0x100acdf0
+void MxNotificationManager::Unregister(MxCore* p_listener)
+{
+	MxAutoLocker lock(&m_lock);
+
+	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+
+	if (it != m_listenerIds.end()) {
+		m_listenerIds.erase(it);
+		FlushPending(p_listener);
+	}
 }

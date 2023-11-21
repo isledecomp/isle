@@ -1,0 +1,20 @@
+name: Check order
+
+on: [push, pull_request]
+
+jobs:
+  checkorder:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build isledecomp library
+      run: |
+        pip install tools/isledecomp
+
+    - name: Run checkorder.py
+      run: |
+        pip install -r tools/checkorder/requirements.txt
+        python3 tools/checkorder/checkorder.py --verbose --enforce ISLE
+        python3 tools/checkorder/checkorder.py --verbose --enforce LEGO1

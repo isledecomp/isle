@@ -5,11 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxRAMStreamController, 0x98);
 
-// OFFSET: LEGO1 0x100d0d80 STUB
-undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
-{
-	return NULL;
-}
+undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize);
 
 // OFFSET: LEGO1 0x100c6110
 MxResult MxRAMStreamController::Open(const char* p_filename)
@@ -51,4 +47,10 @@ MxResult MxRAMStreamController::vtable0x24(undefined4 p_unknown)
 {
 	// TODO STUB
 	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100d0d80 STUB
+undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
+{
+	return NULL;
 }

@@ -5,6 +5,14 @@
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
+// OFFSET: LEGO1 0x1000caf0
+MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
+{
+	if (m_compositePresenter)
+		return m_compositePresenter->VTable0x64(p_unknown);
+	return TRUE;
+}
+
 // OFFSET: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {
@@ -33,12 +41,4 @@ void MxCompositePresenter::VTable0x5c()
 void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
 {
 	// TODO
-}
-
-// OFFSET: LEGO1 0x1000caf0
-MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
-{
-	if (m_compositePresenter)
-		return m_compositePresenter->VTable0x64(p_unknown);
-	return TRUE;
 }
