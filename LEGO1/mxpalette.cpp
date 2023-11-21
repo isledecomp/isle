@@ -80,7 +80,7 @@ MxPalette::MxPalette()
 	this->m_skyColor = this->m_entries[141];
 }
 
-// OFFSET: LEGO1 0x100BEED0
+// OFFSET: LEGO1 0x100beed0
 MxPalette::MxPalette(const RGBQUAD* p_colors)
 {
 	this->m_overrideSkyColor = FALSE;
@@ -97,7 +97,7 @@ MxPalette::MxPalette(const RGBQUAD* p_colors)
 	this->m_skyColor = this->m_entries[141];
 }
 
-// OFFSET: LEGO1 100bef90
+// OFFSET: LEGO1 0x100bef90
 MxPalette::~MxPalette()
 {
 	if (m_palette) {
@@ -105,21 +105,30 @@ MxPalette::~MxPalette()
 	}
 }
 
-// OFFSET: LEGO1 0x100bf390
-void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
+// OFFSET: LEGO1 0x100bf000
+LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
 {
-	HDC hdc;
+	MxS32 i;
+	if (this->m_palette == NULL) {
+		for (i = 0; i < 10; i++)
+			this->m_entries[i].peFlags = 0x80;
+		for (i = 10; i < 136; i++)
+			this->m_entries[i].peFlags = 0x44;
+		for (i = 136; i < 140; i++)
+			this->m_entries[i].peFlags = 0x84;
+		this->m_entries[140].peFlags = 0x84;
+		this->m_entries[141].peFlags = 0x44;
+		for (i = 142; i < 246; i++)
+			this->m_entries[i].peFlags = 0x84;
+		for (i = 246; i < 256; i++)
+			this->m_entries[i].peFlags = 0x80;
 
-	hdc = GetDC(0);
-	if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
-		GetSystemPaletteEntries(hdc, 0, 10, p_entries);
-		GetSystemPaletteEntries(hdc, 246, 10, &p_entries[246]);
+		if (MVideoManager() && MVideoManager()->GetDirectDraw()) {
+			MVideoManager()->GetDirectDraw()->CreatePalette(4, this->m_entries, &this->m_palette, NULL);
+		}
 	}
-	else {
-		memcpy(p_entries, g_defaultPaletteEntries, sizeof(PALETTEENTRY) * 10);
-		memcpy(&p_entries[246], &g_defaultPaletteEntries[246], sizeof(PALETTEENTRY) * 10);
-	}
-	ReleaseDC(0, hdc);
+
+	return this->m_palette;
 }
 
 // OFFSET: LEGO1 0x100bf0b0
@@ -131,48 +140,11 @@ MxPalette* MxPalette::Clone()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bf420
-void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
-{
-	HDC hdc;
-
-	hdc = GetDC(0);
-	if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
-		GetSystemPaletteEntries(hdc, 0, 256, p_entries);
-		memcpy(&p_entries[10], &g_defaultPaletteEntries[10], sizeof(PALETTEENTRY) * 236);
-	}
-	else {
-		memcpy(p_entries, g_defaultPaletteEntries, sizeof(PALETTEENTRY) * 256);
-	}
-
-	ReleaseDC(0, hdc);
-}
-
 // OFFSET: LEGO1 0x100bf150
 MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 {
 	memcpy(p_entries, this->m_entries, sizeof(this->m_entries));
 	return SUCCESS;
-}
-
-// OFFSET: LEGO1 0x100bf340
-MxBool MxPalette::operator==(MxPalette& other)
-{
-	for (MxS32 i = 0; i < 256; i++) {
-		if (this->m_entries[i].peRed != other.m_entries[i].peRed)
-			return FALSE;
-		if (this->m_entries[i].peGreen != other.m_entries[i].peGreen)
-			return FALSE;
-		if (this->m_entries[i].peBlue != other.m_entries[i].peBlue)
-			return FALSE;
-	}
-	return TRUE;
-}
-
-// OFFSET: LEGO1 0x100bf330
-void MxPalette::Detach()
-{
-	this->m_palette = NULL;
 }
 
 // OFFSET: LEGO1 0x100bf170
@@ -240,7 +212,61 @@ MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
 	return status;
 }
 
-// OFFSET: LEGO1 0x100BF490
+// OFFSET: LEGO1 0x100bf330
+void MxPalette::Detach()
+{
+	this->m_palette = NULL;
+}
+
+// OFFSET: LEGO1 0x100bf340
+MxBool MxPalette::operator==(MxPalette& other)
+{
+	for (MxS32 i = 0; i < 256; i++) {
+		if (this->m_entries[i].peRed != other.m_entries[i].peRed)
+			return FALSE;
+		if (this->m_entries[i].peGreen != other.m_entries[i].peGreen)
+			return FALSE;
+		if (this->m_entries[i].peBlue != other.m_entries[i].peBlue)
+			return FALSE;
+	}
+	return TRUE;
+}
+
+// OFFSET: LEGO1 0x100bf390
+void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
+{
+	HDC hdc;
+
+	hdc = GetDC(0);
+	if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
+		GetSystemPaletteEntries(hdc, 0, 10, p_entries);
+		GetSystemPaletteEntries(hdc, 246, 10, &p_entries[246]);
+	}
+	else {
+		memcpy(p_entries, g_defaultPaletteEntries, sizeof(PALETTEENTRY) * 10);
+		memcpy(&p_entries[246], &g_defaultPaletteEntries[246], sizeof(PALETTEENTRY) * 10);
+	}
+	ReleaseDC(0, hdc);
+}
+
+// OFFSET: LEGO1 0x100bf420
+void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
+{
+	HDC hdc;
+
+	hdc = GetDC(0);
+	if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) != 0 && GetDeviceCaps(hdc, SIZEPALETTE) == 256) {
+		GetSystemPaletteEntries(hdc, 0, 256, p_entries);
+		memcpy(&p_entries[10], &g_defaultPaletteEntries[10], sizeof(PALETTEENTRY) * 236);
+	}
+	else {
+		memcpy(p_entries, g_defaultPaletteEntries, sizeof(PALETTEENTRY) * 256);
+	}
+
+	ReleaseDC(0, hdc);
+}
+
+// OFFSET: LEGO1 0x100bf490
 void MxPalette::Reset(MxBool p_ignoreSkyColor)
 {
 	if (this->m_palette != NULL) {
@@ -251,30 +277,4 @@ void MxPalette::Reset(MxBool p_ignoreSkyColor)
 		SetEntries(this->m_entries);
 		this->m_palette->SetEntries(0, 0, 256, this->m_entries);
 	}
-}
-
-// OFFSET: LEGO1 0x100BF000
-LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
-{
-	MxS32 i;
-	if (this->m_palette == NULL) {
-		for (i = 0; i < 10; i++)
-			this->m_entries[i].peFlags = 0x80;
-		for (i = 10; i < 136; i++)
-			this->m_entries[i].peFlags = 0x44;
-		for (i = 136; i < 140; i++)
-			this->m_entries[i].peFlags = 0x84;
-		this->m_entries[140].peFlags = 0x84;
-		this->m_entries[141].peFlags = 0x44;
-		for (i = 142; i < 246; i++)
-			this->m_entries[i].peFlags = 0x84;
-		for (i = 246; i < 256; i++)
-			this->m_entries[i].peFlags = 0x80;
-
-		if (MVideoManager() && MVideoManager()->GetDirectDraw()) {
-			MVideoManager()->GetDirectDraw()->CreatePalette(4, this->m_entries, &this->m_palette, NULL);
-		}
-	}
-
-	return this->m_palette;
 }

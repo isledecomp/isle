@@ -8,6 +8,11 @@ LegoPhonemePresenter::LegoPhonemePresenter()
 	Init();
 }
 
+// OFFSET: LEGO1 0x1004e340
+LegoPhonemePresenter::~LegoPhonemePresenter()
+{
+}
+
 // OFFSET: LEGO1 0x1004e3b0
 void LegoPhonemePresenter::Init()
 {
@@ -15,9 +20,4 @@ void LegoPhonemePresenter::Init()
 	m_unk6c = 0;
 	m_unk70 = 0;
 	m_unk84 = 0;
-}
-
-// OFFSET: LEGO1 0x1004e340
-LegoPhonemePresenter::~LegoPhonemePresenter()
-{
 }

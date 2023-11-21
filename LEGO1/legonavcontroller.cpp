@@ -30,62 +30,6 @@ float g_turnSensitivity = 0.4f;
 // 0x100f4c54
 MxBool g_turnUseVelocity = FALSE;
 
-// OFFSET: LEGO1 0x10054d40
-void LegoNavController::GetDefaults(
-	int* p_mouseDeadzone,
-	float* p_movementMaxSpeed,
-	float* p_turnMaxSpeed,
-	float* p_movementMaxAccel,
-	float* p_turnMaxAccel,
-	float* p_movementDecel,
-	float* p_turnDecel,
-	float* p_movementMinAccel,
-	float* p_turnMinAccel,
-	float* p_turnSensitivity,
-	MxBool* p_turnUseVelocity
-)
-{
-	*p_mouseDeadzone = g_mouseDeadzone;
-	*p_movementMaxSpeed = g_movementMaxSpeed;
-	*p_turnMaxSpeed = g_turnMaxSpeed;
-	*p_movementMaxAccel = g_movementMaxAccel;
-	*p_turnMaxAccel = g_turnMaxAccel;
-	*p_movementDecel = g_movementDecel;
-	*p_turnDecel = g_turnDecel;
-	*p_movementMinAccel = g_movementMinAccel;
-	*p_turnMinAccel = g_turnMinAccel;
-	*p_turnSensitivity = g_turnSensitivity;
-	*p_turnUseVelocity = g_turnUseVelocity;
-}
-
-// OFFSET: LEGO1 0x10054dd0
-void LegoNavController::SetDefaults(
-	int p_mouseDeadzone,
-	float p_movementMaxSpeed,
-	float p_turnMaxSpeed,
-	float p_movementMaxAccel,
-	float p_turnMaxAccel,
-	float p_movementDecel,
-	float p_turnDecel,
-	float p_movementMinAccel,
-	float p_turnMinAccel,
-	float p_turnSensitivity,
-	MxBool p_turnUseVelocity
-)
-{
-	g_mouseDeadzone = p_mouseDeadzone;
-	g_movementMaxSpeed = p_movementMaxSpeed;
-	g_turnMaxSpeed = p_turnMaxSpeed;
-	g_movementMaxAccel = p_movementMaxAccel;
-	g_turnMaxAccel = p_turnMaxAccel;
-	g_movementDecel = p_movementDecel;
-	g_turnDecel = p_turnDecel;
-	g_movementMinAccel = p_movementMinAccel;
-	g_turnMinAccel = p_turnMinAccel;
-	g_turnSensitivity = p_turnSensitivity;
-	g_turnUseVelocity = p_turnUseVelocity;
-}
-
 // OFFSET: LEGO1 0x10054ac0
 LegoNavController::LegoNavController()
 {
@@ -143,6 +87,62 @@ void LegoNavController::ResetToDefault()
 	this->m_movementMaxSpeed = g_movementMaxSpeed;
 	this->m_turnUseVelocity = g_turnUseVelocity;
 	this->m_turnSensitivity = g_turnSensitivity;
+}
+
+// OFFSET: LEGO1 0x10054d40
+void LegoNavController::GetDefaults(
+	int* p_mouseDeadzone,
+	float* p_movementMaxSpeed,
+	float* p_turnMaxSpeed,
+	float* p_movementMaxAccel,
+	float* p_turnMaxAccel,
+	float* p_movementDecel,
+	float* p_turnDecel,
+	float* p_movementMinAccel,
+	float* p_turnMinAccel,
+	float* p_turnSensitivity,
+	MxBool* p_turnUseVelocity
+)
+{
+	*p_mouseDeadzone = g_mouseDeadzone;
+	*p_movementMaxSpeed = g_movementMaxSpeed;
+	*p_turnMaxSpeed = g_turnMaxSpeed;
+	*p_movementMaxAccel = g_movementMaxAccel;
+	*p_turnMaxAccel = g_turnMaxAccel;
+	*p_movementDecel = g_movementDecel;
+	*p_turnDecel = g_turnDecel;
+	*p_movementMinAccel = g_movementMinAccel;
+	*p_turnMinAccel = g_turnMinAccel;
+	*p_turnSensitivity = g_turnSensitivity;
+	*p_turnUseVelocity = g_turnUseVelocity;
+}
+
+// OFFSET: LEGO1 0x10054dd0
+void LegoNavController::SetDefaults(
+	int p_mouseDeadzone,
+	float p_movementMaxSpeed,
+	float p_turnMaxSpeed,
+	float p_movementMaxAccel,
+	float p_turnMaxAccel,
+	float p_movementDecel,
+	float p_turnDecel,
+	float p_movementMinAccel,
+	float p_turnMinAccel,
+	float p_turnSensitivity,
+	MxBool p_turnUseVelocity
+)
+{
+	g_mouseDeadzone = p_mouseDeadzone;
+	g_movementMaxSpeed = p_movementMaxSpeed;
+	g_turnMaxSpeed = p_turnMaxSpeed;
+	g_movementMaxAccel = p_movementMaxAccel;
+	g_turnMaxAccel = p_turnMaxAccel;
+	g_movementDecel = p_movementDecel;
+	g_turnDecel = p_turnDecel;
+	g_movementMinAccel = p_movementMinAccel;
+	g_turnMinAccel = p_turnMinAccel;
+	g_turnSensitivity = p_turnSensitivity;
+	g_turnUseVelocity = p_turnUseVelocity;
 }
 
 // OFFSET: LEGO1 0x10054e40

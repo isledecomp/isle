@@ -7,6 +7,9 @@
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
+// OFFSET: LEGO1 0x10001090 TEMPLATE
+// LegoEntity::SetWorldSpeed
+
 // OFFSET: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {

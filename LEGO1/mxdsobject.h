@@ -6,6 +6,10 @@
 #include "mxcore.h"
 #include "mxdstypes.h"
 
+// TODO: Find proper compilation unit to put this
+// OFFSET: LEGO1 0x10005530 TEMPLATE
+// MxDSObject::SetAtomId
+
 // VTABLE 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
@@ -28,11 +32,9 @@ public:
 		return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name);
 	}; // vtable+10;
 
-	virtual undefined4 unk14();                               // vtable+14;
-	virtual MxU32 GetSizeOnDisk();                            // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24); // vtable+1c;
-	// OFFSET: ISLE 0x401c40
-	// OFFSET: LEGO1 0x10005530
+	virtual undefined4 unk14();                                                     // vtable+14;
+	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
+	virtual void Deserialize(char** p_source, MxS16 p_unk24);                       // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }

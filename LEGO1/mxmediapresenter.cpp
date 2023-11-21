@@ -103,6 +103,69 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 	return result;
 }
 
+// OFFSET: LEGO1 0x100b5700
+MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
+{
+	MxResult result = FAILURE;
+	MxAutoLocker lock(&m_criticalSection);
+
+	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
+		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+			m_chunks = new MxStreamChunkList;
+			m_cursor = new MxStreamChunkListCursor(m_chunks);
+
+			if (!m_chunks && !m_cursor)
+				goto done;
+		}
+
+		if (p_controller) {
+			m_subscriber = new MxDSSubscriber;
+
+			if (!m_subscriber ||
+				m_subscriber->FUN_100b7ed0(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS)
+				goto done;
+		}
+
+		result = SUCCESS;
+	}
+
+done:
+	return result;
+}
+
+// OFFSET: LEGO1 0x100b5bc0
+void MxMediaPresenter::EndAction()
+{
+	MxAutoLocker lock(&m_criticalSection);
+
+	if (!m_action)
+		return;
+
+	m_currentChunk = NULL;
+
+	if (m_action->GetFlags() & MxDSAction::Flag_World &&
+		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
+		MxPresenter::Enable(FALSE);
+		SetTickleState(TickleState_Idle);
+	}
+	else {
+		MxDSAction* action = m_action;
+		MxPresenter::EndAction();
+
+		if (m_subscriber) {
+			delete m_subscriber;
+			m_subscriber = NULL;
+		}
+
+		if (action && action->GetUnknown8c()) {
+			NotificationManager()->Send(
+				action->GetUnknown8c(),
+				&MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
+			);
+		}
+	}
+}
+
 // OFFSET: LEGO1 0x100b5d10
 MxResult MxMediaPresenter::Tickle()
 {
@@ -170,6 +233,20 @@ void MxMediaPresenter::DoneTickle()
 	EndAction();
 }
 
+// OFFSET: LEGO1 0x100b5f10
+void MxMediaPresenter::AppendChunk(MxStreamChunk* p_chunk)
+{
+	MxStreamChunk* chunk = new MxStreamChunk;
+
+	MxU32 length = p_chunk->GetLength();
+	chunk->SetLength(length);
+	chunk->SetData(new MxU8[length]);
+	chunk->SetTime(p_chunk->GetTime());
+
+	memcpy(chunk->GetData(), p_chunk->GetData(), chunk->GetLength());
+	m_chunks->Append(chunk);
+}
+
 // OFFSET: LEGO1 0x100b6030
 void MxMediaPresenter::Enable(MxBool p_enable)
 {
@@ -188,81 +265,4 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 			SetTickleState(TickleState_Done);
 		}
 	}
-}
-
-// OFFSET: LEGO1 0x100b5700
-MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
-{
-	MxResult result = FAILURE;
-	MxAutoLocker lock(&m_criticalSection);
-
-	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
-			m_chunks = new MxStreamChunkList;
-			m_cursor = new MxStreamChunkListCursor(m_chunks);
-
-			if (!m_chunks && !m_cursor)
-				goto done;
-		}
-
-		if (p_controller) {
-			m_subscriber = new MxDSSubscriber;
-
-			if (!m_subscriber ||
-				m_subscriber->FUN_100b7ed0(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS)
-				goto done;
-		}
-
-		result = SUCCESS;
-	}
-
-done:
-	return result;
-}
-
-// OFFSET: LEGO1 0x100b5bc0
-void MxMediaPresenter::EndAction()
-{
-	MxAutoLocker lock(&m_criticalSection);
-
-	if (!m_action)
-		return;
-
-	m_currentChunk = NULL;
-
-	if (m_action->GetFlags() & MxDSAction::Flag_World &&
-		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
-		MxPresenter::Enable(FALSE);
-		SetTickleState(TickleState_Idle);
-	}
-	else {
-		MxDSAction* action = m_action;
-		MxPresenter::EndAction();
-
-		if (m_subscriber) {
-			delete m_subscriber;
-			m_subscriber = NULL;
-		}
-
-		if (action && action->GetUnknown8c()) {
-			NotificationManager()->Send(
-				action->GetUnknown8c(),
-				&MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
-			);
-		}
-	}
-}
-
-// OFFSET: LEGO1 0x100b5f10
-void MxMediaPresenter::AppendChunk(MxStreamChunk* p_chunk)
-{
-	MxStreamChunk* chunk = new MxStreamChunk;
-
-	MxU32 length = p_chunk->GetLength();
-	chunk->SetLength(length);
-	chunk->SetData(new MxU8[length]);
-	chunk->SetTime(p_chunk->GetTime());
-
-	memcpy(chunk->GetData(), p_chunk->GetData(), chunk->GetLength());
-	m_chunks->Append(chunk);
 }

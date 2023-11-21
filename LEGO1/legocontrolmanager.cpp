@@ -12,14 +12,6 @@ LegoControlManager::~LegoControlManager()
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10029600 STUB
-MxResult LegoControlManager::Tickle()
-{
-	// TODO
-
-	return 0;
-}
-
 // OFFSET: LEGO1 0x10028e10 STUB
 void LegoControlManager::Register(MxCore* p_listener)
 {
@@ -30,4 +22,12 @@ void LegoControlManager::Register(MxCore* p_listener)
 void LegoControlManager::Unregister(MxCore* p_listener)
 {
 	// TODO
+}
+
+// OFFSET: LEGO1 0x10029600 STUB
+MxResult LegoControlManager::Tickle()
+{
+	// TODO
+
+	return 0;
 }

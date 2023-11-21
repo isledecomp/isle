@@ -25,10 +25,113 @@ MxBool g_use3dSound;
 // 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
 
+// OFFSET: LEGO1 0x100159e0
+void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
+{
+	MxDSAction action;
+
+	action.SetAtomId(*p_id);
+	action.SetUnknown24(-2);
+
+	for (MxS32 l_first = p_first, l_last = p_last; l_first <= l_last; l_first++) {
+		action.SetObjectId(l_first);
+		DeleteObject(action);
+	}
+}
+
+// OFFSET: LEGO1 0x10058a90
+MxBool MxOmni::IsTimerRunning()
+{
+	return m_timerRunning;
+}
+
+// OFFSET: LEGO1 0x100acea0
+MxObjectFactory* ObjectFactory()
+{
+	return MxOmni::GetInstance()->GetObjectFactory();
+}
+
+// OFFSET: LEGO1 0x100aceb0
+MxNotificationManager* NotificationManager()
+{
+	return MxOmni::GetInstance()->GetNotificationManager();
+}
+
+// OFFSET: LEGO1 0x100acec0
+MxTickleManager* TickleManager()
+{
+	return MxOmni::GetInstance()->GetTickleManager();
+}
+
+// OFFSET: LEGO1 0x100aced0
+MxTimer* Timer()
+{
+	return MxOmni::GetInstance()->GetTimer();
+}
+
+// OFFSET: LEGO1 0x100acee0
+MxAtomIdCounterSet* AtomIdCounterSet()
+{
+	return MxOmni::GetInstance()->GetAtomIdCounterSet();
+}
+
+// OFFSET: LEGO1 0x100acef0
+MxStreamer* Streamer()
+{
+	return MxOmni::GetInstance()->GetStreamer();
+}
+
+// OFFSET: LEGO1 0x100acf00
+MxSoundManager* MSoundManager()
+{
+	return MxOmni::GetInstance()->GetSoundManager();
+}
+
+// OFFSET: LEGO1 0x100acf10
+MxVideoManager* MVideoManager()
+{
+	return MxOmni::GetInstance()->GetVideoManager();
+}
+
+// OFFSET: LEGO1 0x100acf20
+MxVariableTable* VariableTable()
+{
+	return MxOmni::GetInstance()->GetVariableTable();
+}
+
+// OFFSET: LEGO1 0x100acf30
+MxMusicManager* MusicManager()
+{
+	return MxOmni::GetInstance()->GetMusicManager();
+}
+
+// OFFSET: LEGO1 0x100acf40
+MxEventManager* EventManager()
+{
+	return MxOmni::GetInstance()->GetEventManager();
+}
+
+// OFFSET: LEGO1 0x100acf70
+MxResult DeleteObject(MxDSAction& p_dsAction)
+{
+	return MxOmni::GetInstance()->DeleteObject(p_dsAction);
+}
+
 // OFFSET: LEGO1 0x100aef10
 MxOmni::MxOmni()
 {
 	Init();
+}
+
+// OFFSET: LEGO1 0x100aefb0
+MxEntity* MxOmni::FindWorld(const char*, MxS32, MxPresenter*)
+{
+	return NULL;
+}
+
+// OFFSET: LEGO1 0x100aefc0
+void MxOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
+{
 }
 
 // OFFSET: LEGO1 0x100aeff0
@@ -53,130 +156,6 @@ void MxOmni::Init()
 	m_streamer = NULL;
 	m_atomIdCounterSet = NULL;
 	m_timerRunning = NULL;
-}
-
-// OFFSET: LEGO1 0x100b0090
-MxResult MxOmni::Start(MxDSAction* p_dsAction)
-{
-	MxResult result = FAILURE;
-	if (p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL) {
-		result = m_streamer->FUN_100b99b0(p_dsAction);
-	}
-
-	return result;
-}
-
-// OFFSET: LEGO1 0x100b00c0 STUB
-MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
-{
-	// TODO
-	return FAILURE;
-}
-
-// OFFSET: LEGO1 0x100b09a0
-MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
-{
-	if (m_streamer->FUN_100b9b30(p_dsAction)) {
-		MxNotificationPtrList* queue = m_notificationManager->GetQueue();
-
-		if (!queue || queue->size() == 0)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-// OFFSET: LEGO1 0x100b00e0 STUB
-void MxOmni::Vtable0x2c()
-{
-	// TODO
-}
-
-// OFFSET: LEGO1 0x100aefb0
-MxEntity* MxOmni::FindWorld(const char*, MxS32, MxPresenter*)
-{
-	return NULL;
-}
-
-// OFFSET: LEGO1 0x100aefc0
-void MxOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
-{
-}
-
-// OFFSET: LEGO1 0x100b09d0
-void MxOmni::StartTimer()
-{
-	if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL) {
-		m_timer->Start();
-		m_soundManager->vtable0x34();
-		m_timerRunning = TRUE;
-	}
-}
-
-// OFFSET: LEGO1 0x100b0a00
-void MxOmni::StopTimer()
-{
-	if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL) {
-		m_timer->Stop();
-		m_soundManager->vtable0x38();
-		m_timerRunning = FALSE;
-	}
-}
-
-// OFFSET: LEGO1 0x10058a90
-MxBool MxOmni::IsTimerRunning()
-{
-	return m_timerRunning;
-}
-
-// OFFSET: LEGO1 0x100b0690
-void MxOmni::DestroyInstance()
-{
-	if (g_instance != NULL) {
-		delete g_instance;
-		g_instance = NULL;
-	}
-}
-
-// OFFSET: LEGO1 0x100b0900
-const char* MxOmni::GetHD()
-{
-	return g_hdPath;
-}
-
-// OFFSET: LEGO1 0x100b0940
-const char* MxOmni::GetCD()
-{
-	return g_cdPath;
-}
-
-// OFFSET: LEGO1 0x100b0980
-MxBool MxOmni::IsSound3D()
-{
-	return g_use3dSound;
-}
-
-// OFFSET: LEGO1 0x100b0910
-void MxOmni::SetHD(const char* p_hd)
-{
-	strcpy(g_hdPath, p_hd);
-}
-
-// OFFSET: LEGO1 0x100b0950
-void MxOmni::SetCD(const char* p_cd)
-{
-	strcpy(g_cdPath, p_cd);
-}
-
-// OFFSET: LEGO1 0x100b0990
-void MxOmni::SetSound3D(MxBool p_3dsound)
-{
-	g_use3dSound = p_3dsound;
-}
-
-// OFFSET: LEGO1 0x100b0680
-MxOmni* MxOmni::GetInstance()
-{
-	return g_instance;
 }
 
 // OFFSET: LEGO1 0x100af0b0
@@ -320,6 +299,45 @@ void MxOmni::Destroy()
 	Init();
 }
 
+// OFFSET: LEGO1 0x100b0090
+MxResult MxOmni::Start(MxDSAction* p_dsAction)
+{
+	MxResult result = FAILURE;
+	if (p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL) {
+		result = m_streamer->FUN_100b99b0(p_dsAction);
+	}
+
+	return result;
+}
+
+// OFFSET: LEGO1 0x100b00c0 STUB
+MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
+{
+	// TODO
+	return FAILURE;
+}
+
+// OFFSET: LEGO1 0x100b00e0 STUB
+void MxOmni::Vtable0x2c()
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x100b0680
+MxOmni* MxOmni::GetInstance()
+{
+	return g_instance;
+}
+
+// OFFSET: LEGO1 0x100b0690
+void MxOmni::DestroyInstance()
+{
+	if (g_instance != NULL) {
+		delete g_instance;
+		g_instance = NULL;
+	}
+}
+
 // OFFSET: LEGO1 0x100b07f0
 MxLong MxOmni::Notify(MxParam& p)
 {
@@ -338,88 +356,70 @@ MxResult MxOmni::HandleNotificationType2(MxParam& p_param)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100acea0
-MxObjectFactory* ObjectFactory()
+// OFFSET: LEGO1 0x100b0900
+const char* MxOmni::GetHD()
 {
-	return MxOmni::GetInstance()->GetObjectFactory();
+	return g_hdPath;
 }
 
-// OFFSET: LEGO1 0x100aceb0
-MxNotificationManager* NotificationManager()
+// OFFSET: LEGO1 0x100b0910
+void MxOmni::SetHD(const char* p_hd)
 {
-	return MxOmni::GetInstance()->GetNotificationManager();
+	strcpy(g_hdPath, p_hd);
 }
 
-// OFFSET: LEGO1 0x100acec0
-MxTickleManager* TickleManager()
+// OFFSET: LEGO1 0x100b0940
+const char* MxOmni::GetCD()
 {
-	return MxOmni::GetInstance()->GetTickleManager();
+	return g_cdPath;
 }
 
-// OFFSET: LEGO1 0x100aced0
-MxTimer* Timer()
+// OFFSET: LEGO1 0x100b0950
+void MxOmni::SetCD(const char* p_cd)
 {
-	return MxOmni::GetInstance()->GetTimer();
+	strcpy(g_cdPath, p_cd);
 }
 
-// OFFSET: LEGO1 0x100acee0
-MxAtomIdCounterSet* AtomIdCounterSet()
+// OFFSET: LEGO1 0x100b0980
+MxBool MxOmni::IsSound3D()
 {
-	return MxOmni::GetInstance()->GetAtomIdCounterSet();
+	return g_use3dSound;
 }
 
-// OFFSET: LEGO1 0x100acef0
-MxStreamer* Streamer()
+// OFFSET: LEGO1 0x100b0990
+void MxOmni::SetSound3D(MxBool p_3dsound)
 {
-	return MxOmni::GetInstance()->GetStreamer();
+	g_use3dSound = p_3dsound;
 }
 
-// OFFSET: LEGO1 0x100acf00
-MxSoundManager* MSoundManager()
+// OFFSET: LEGO1 0x100b09a0
+MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
-	return MxOmni::GetInstance()->GetSoundManager();
+	if (m_streamer->FUN_100b9b30(p_dsAction)) {
+		MxNotificationPtrList* queue = m_notificationManager->GetQueue();
+
+		if (!queue || queue->size() == 0)
+			return TRUE;
+	}
+	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100acf10
-MxVideoManager* MVideoManager()
+// OFFSET: LEGO1 0x100b09d0
+void MxOmni::StartTimer()
 {
-	return MxOmni::GetInstance()->GetVideoManager();
+	if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL) {
+		m_timer->Start();
+		m_soundManager->vtable0x34();
+		m_timerRunning = TRUE;
+	}
 }
 
-// OFFSET: LEGO1 0x100acf20
-MxVariableTable* VariableTable()
+// OFFSET: LEGO1 0x100b0a00
+void MxOmni::StopTimer()
 {
-	return MxOmni::GetInstance()->GetVariableTable();
-}
-
-// OFFSET: LEGO1 0x100acf30
-MxMusicManager* MusicManager()
-{
-	return MxOmni::GetInstance()->GetMusicManager();
-}
-
-// OFFSET: LEGO1 0x100acf40
-MxEventManager* EventManager()
-{
-	return MxOmni::GetInstance()->GetEventManager();
-}
-
-// OFFSET: LEGO1 0x100acf70
-MxResult DeleteObject(MxDSAction& p_dsAction)
-{
-	return MxOmni::GetInstance()->DeleteObject(p_dsAction);
-}
-
-// OFFSET: LEGO1 0x100159e0
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
-{
-	MxDSAction action;
-
-	action.SetAtomId(*p_id);
-	action.SetUnknown24(-2);
-
-	for (MxS32 l_first = p_first, l_last = p_last; l_first <= l_last; l_first++) {
-		action.SetObjectId(l_first);
-		DeleteObject(action);
+	if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL) {
+		m_timer->Stop();
+		m_soundManager->vtable0x38();
+		m_timerRunning = FALSE;
 	}
 }
