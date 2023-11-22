@@ -64,6 +64,11 @@
         color: #80FF80;
       }
 
+      .identical {
+        font-style: italic;
+        text-align: center;
+      }
+
       #sortind {
         margin: 0 0.5em;
       }
@@ -75,23 +80,23 @@
       }
     </style>
     <script>
-      var data = [{{{data}}}];
+      var data = {{{data}}};
+
+      function diffCssClass(firstChar) {
+        return firstChar === '-' ? 'diffneg' : (firstChar === '+' ? 'diffpos' : '');
+      }
+
+      function asmLineToDiv(line) {
+        const diff_line = document.createElement('div');
+        diff_line.className = diffCssClass(line[0]);
+        diff_line.innerText = line;
+        return diff_line;
+      }
 
       function formatAsm(asm) {
         var lines = asm.split('\n');
-
-        for (var i = 0; i < lines.length; i++) {
-          var l = lines[i];
-          if (l.length > 0) {
-            if (l[0] == '-') {
-              lines[i] = '<span class="diffneg">' + l + '</span>';
-            } else if (l[0] == '+') {
-              lines[i] = '<span class="diffpos">' + l + '</span>';
-            }
-          }
-        }
-
-        return lines.join('<br>');
+        return lines.filter(line => line.length > 0)
+                    .map(asmLineToDiv);
       }
 
       function rowClick() {
@@ -105,11 +110,16 @@
           decCel.colSpan = 3;
           var diff = data[this.dataset.index].diff;
           if (diff == '') {
-            diff = '<center><i>Identical function - no diff</i></center>';
+            diff = document.createElement('div');
+            diff.className = 'identical';
+            diff.innerText = 'Identical function - no diff';
+            decCel.appendChild(diff);
           } else {
             diff = formatAsm(diff);
+            for (const el of diff) {
+              decCel.appendChild(el);
+            }
           }
-          decCel.innerHTML = diff;
           this.dataset.expanded = true;
         }
       }
@@ -219,8 +229,8 @@
           var nameCel = row.appendChild(document.createElement('td'));
           var matchCel = row.appendChild(document.createElement('td'));
 
-          addrCel.innerHTML = addrCel.dataset.value = element.address;
-          nameCel.innerHTML = nameCel.dataset.value = element.name;
+          addrCel.innerText = addrCel.dataset.value = element.address;
+          nameCel.innerText = nameCel.dataset.value = element.name;
 
           var effectiveNote = (element.matching == 1 && element.diff != '') ? '*' : '';
           matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%' + effectiveNote;
