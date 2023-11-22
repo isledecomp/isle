@@ -18,7 +18,7 @@ jobs:
       shell: bash
       run: |
         pip install -r tools/reccmp/requirements.txt
-        pylint tools
+        pylint tools --ignore=build,tests
         black --check tools
 
     - name: Run clang-format

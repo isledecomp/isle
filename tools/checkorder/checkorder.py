@@ -16,7 +16,7 @@ def check_file(filename: str, verbose: bool = False) -> bool:
     """Open and read the given file, then check whether the code blocks
     are in order. If verbose, print each block."""
 
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         code_blocks = find_code_blocks(f)
 
     bad_comments = [
