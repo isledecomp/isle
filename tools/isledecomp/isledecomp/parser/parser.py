@@ -7,7 +7,6 @@ from .util import (
     OffsetMatch,
     is_blank_or_comment,
     match_offset_comment,
-    is_exact_offset_comment,
     get_template_function_name,
     remove_trailing_comment,
     distinct_by_module,
