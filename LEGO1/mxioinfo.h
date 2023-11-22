@@ -17,7 +17,7 @@ public:
 	MxU16 Open(const char*, MxULong);
 	MxU16 Close(MxLong);
 	MxLong Read(void*, MxLong);
-	MxLong Seek(MxLong, int);
+	MxLong Seek(MxLong, MxLong);
 	MxU16 SetBuffer(char*, MxLong, MxLong);
 	MxU16 Flush(MxU16);
 	MxU16 Advance(MxU16);

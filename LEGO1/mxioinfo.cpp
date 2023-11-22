@@ -28,7 +28,7 @@ MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 	m_info.lBufOffset = 0;
 	m_info.lDiskOffset = 0;
 
-	// Cast of p_flags to u16 forces the `movzx` instruction
+	// DECOMP: Cast of p_flags to u16 forces the `movzx` instruction
 	m_info.hmmio = (HMMIO) OpenFile(p_filename, &_unused, (MxU16) p_flags);
 
 	if ((HFILE) m_info.hmmio != HFILE_ERROR) {
@@ -36,7 +36,7 @@ MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 		if (p_flags & MMIO_ALLOCBUF) {
 
 			// Default buffer length of 8k if none specified
-			int len = m_info.cchBuffer ? m_info.cchBuffer : 8192;
+			MxLong len = m_info.cchBuffer ? m_info.cchBuffer : 8192;
 			HPSTR buf = new char[len];
 
 			if (!buf) {
@@ -91,7 +91,7 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 
 	if (m_info.pchBuffer) {
 
-		int bytes_left = m_info.pchEndRead - m_info.pchNext;
+		MxLong bytes_left = m_info.pchEndRead - m_info.pchNext;
 		while (p_len > 0) {
 
 			if (bytes_left > 0) {
@@ -129,7 +129,7 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 }
 
 // OFFSET: LEGO1 0x100cca00
-MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
+MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 {
 	MxLong result = -1;
 
@@ -171,7 +171,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
 				else {
 
 					// align offset to buffer size
-					int new_offset = p_offset - (p_offset % m_info.cchBuffer);
+					MxLong new_offset = p_offset - (p_offset % m_info.cchBuffer);
 					m_info.lBufOffset = new_offset;
 
 					// do we need to seek again?
@@ -194,7 +194,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, int p_origin)
 						}
 						else {
 							// We can read from the file. Fill the buffer.
-							int bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, m_info.cchBuffer);
+							MxLong bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, m_info.cchBuffer);
 
 							if (bytes_read == -1) {
 								m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
@@ -265,7 +265,7 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 		if (m_info.pchBuffer) {
 			// if we have a file open for writing
 			if (m_info.hmmio && (m_info.dwFlags & MMIO_RWMODE)) {
-				// (pulling this value out into a variable forces it into EBX)
+				// DECOMP: pulling this value out into a variable forces it into EBX
 				MxLong cchBuffer = m_info.cchBuffer;
 				if (cchBuffer > 0) {
 					if (m_info.lBufOffset != m_info.lDiskOffset) {
@@ -355,7 +355,7 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 			}
 			else {
-				int bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
+				MxLong bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
 
 				if (bytes_read == -1) {
 					result = MMIOERR_CANNOTREAD;
@@ -397,10 +397,9 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 				p_chunkInfo->dwDataOffset = m_info.lDiskOffset;
 			}
 
-			if (p_chunkInfo->ckid == FOURCC_RIFF || p_chunkInfo->ckid == FOURCC_LIST) {
-				if (Read(&p_chunkInfo->fccType, 4) != 4) {
-					result = MMIOERR_CANNOTREAD;
-				}
+			if ((p_chunkInfo->ckid == FOURCC_RIFF || p_chunkInfo->ckid == FOURCC_LIST) &&
+				Read(&p_chunkInfo->fccType, 4) != 4) {
+				result = MMIOERR_CANNOTREAD;
 			}
 		}
 	}
@@ -415,8 +414,7 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 		MMCKINFO tmp;
 		tmp.dwFlags = 0;
 
-		// This loop is... something
-		do {
+		while (running) {
 			if (Read(&tmp, 8) != 8) {
 				// If the first read fails, report read error. Else EOF.
 				result = read_ok ? MMIOERR_CHUNKNOTFOUND : MMIOERR_CANNOTREAD;
@@ -435,33 +433,24 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 					result = MMIOERR_CHUNKNOTFOUND;
 					running = FALSE;
 				}
-				else {
-					if ((p_descend == MMIO_FINDLIST && tmp.ckid == FOURCC_LIST) ||
-						(p_descend == MMIO_FINDRIFF && tmp.ckid == FOURCC_RIFF)) {
-						if (Read(&tmp.fccType, 4) != 4) {
-							result = MMIOERR_CANNOTREAD;
-						}
-						else {
-							if (p_chunkInfo->fccType != tmp.fccType)
-								continue;
-						}
+				else if ((p_descend == MMIO_FINDLIST && tmp.ckid == FOURCC_LIST) || (p_descend == MMIO_FINDRIFF && tmp.ckid == FOURCC_RIFF)) {
+					if (Read(&tmp.fccType, 4) != 4) {
+						result = MMIOERR_CANNOTREAD;
 						running = FALSE;
 					}
-					else {
-						if (p_chunkInfo->ckid != tmp.ckid) {
-							if (Seek((tmp.cksize & 1) + tmp.cksize, SEEK_CUR) != -1) {
-								continue;
-							}
-							else {
-								result = MMIOERR_CANNOTSEEK;
-							}
-						}
+					else if (p_chunkInfo->fccType == tmp.fccType) {
 						running = FALSE;
 					}
 				}
+				else if (p_chunkInfo->ckid == tmp.ckid) {
+					running = FALSE;
+				}
+				else if (Seek((tmp.cksize & 1) + tmp.cksize, SEEK_CUR) == -1) {
+					result = MMIOERR_CANNOTSEEK;
+					running = FALSE;
+				}
 			}
-
-		} while (running);
+		}
 
 		if (!result)
 			memcpy(p_chunkInfo, &tmp, sizeof(MMCKINFO));
