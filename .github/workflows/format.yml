@@ -3,7 +3,25 @@ name: Format
 on: [push, pull_request]
 
 jobs:
-  format:
+  clang-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run clang-format
+      run: |
+        pipx run "clang-format>=17,<18" \
+          --Werror \
+          --dry-run \
+          --style=file \
+          ISLE/*.cpp ISLE/*.h \
+          LEGO1/*.cpp LEGO1/*.h \
+          LEGO1/realtime/*.cpp LEGO1/realtime/*.h \
+          LEGO1/tgl/*.h \
+          LEGO1/viewmanager/*.cpp LEGO1/viewmanager/*.h
+
+  python-format:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,15 +38,3 @@ jobs:
         pip install -r tools/reccmp/requirements.txt
         pylint tools --ignore=build,tests
         black --check tools
-
-    - name: Run clang-format
-      run: |
-        pipx run "clang-format>=17,<18" \
-          --Werror \
-          --dry-run \
-          --style=file \
-          ISLE/*.cpp ISLE/*.h \
-          LEGO1/*.cpp LEGO1/*.h \
-          LEGO1/realtime/*.cpp LEGO1/realtime/*.h \
-          LEGO1/tgl/*.h \
-          LEGO1/viewmanager/*.cpp LEGO1/viewmanager/*.h
