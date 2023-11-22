@@ -23,6 +23,7 @@ MxFlcPresenter::~MxFlcPresenter()
 		delete this->m_unk64;
 	}
 }
+<<<<<<< HEAD
 
 // OFFSET: LEGO1 0x100b3620
 void MxFlcPresenter::VTable0x70()
@@ -33,3 +34,16 @@ void MxFlcPresenter::VTable0x70()
 	if (pal)
 		delete pal;
 }
+||||||| parent of 679bbcf (MxFlcPresenter: vtable70)
+=======
+
+// OFFSET: LEGO1 0x100b3620
+void MxFlcPresenter::vtable70()
+{
+	MxPalette* pal = m_bitmap->CreatePalette();
+	MVideoManager()->RealizePalette(pal);
+	if (pal) {
+		delete pal;
+	}
+}
+>>>>>>> 679bbcf (MxFlcPresenter: vtable70)

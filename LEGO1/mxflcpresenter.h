@@ -26,6 +26,8 @@ public:
 
 	virtual void VTable0x70() override; // vtable+0x70
 
+	virtual void vtable70() override; // vtable+0x74
+
 	undefined4* m_unk64;
 };
 
