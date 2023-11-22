@@ -10,7 +10,7 @@ import logging
 import os
 import sys
 import colorama
-import html
+import json
 import re
 from isledecomp.dir import walk_source_dir
 from isledecomp.parser import find_code_blocks
@@ -526,14 +526,16 @@ for srcfilename in walk_source_dir(source):
 
       # If html, record the diffs to an HTML file
       if html_path:
-        escaped = html.escape('\\n'.join(udiff).replace('"', '\\"').replace('\n', '\\n'))
-        htmlinsert.append(f'{{address: "0x{addr:x}", name: "{html.escape(recinfo.name)}", matching: {effective_ratio}, diff: "{escaped}"}}')
+        htmlinsert.append({"address": f"0x{addr:x}",
+                           "name": recinfo.name,
+                           "matching": effective_ratio,
+                           "diff": '\n'.join(udiff)})
 
 
 def gen_html(html_file, data):
   output_data = Renderer().render_path(get_file_in_script_dir('template.html'),
     {
-      "data": ','.join(data)
+      "data": data,
     }
   )
 
@@ -564,7 +566,7 @@ def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_ac
 
 
 if html_path:
-  gen_html(html_path, htmlinsert)
+  gen_html(html_path, json.dumps(htmlinsert))
 
 if verbose:
   if not found_verbose_target:
