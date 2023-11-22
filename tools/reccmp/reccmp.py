@@ -2,18 +2,21 @@
 
 import argparse
 import base64
-from capstone import *
 import difflib
-import struct
-import subprocess
+import json
 import logging
 import os
-import sys
-import colorama
-import json
 import re
+import struct
+import subprocess
+import sys
+
 from isledecomp.dir import walk_source_dir
 from isledecomp.parser import find_code_blocks
+from isledecomp.utils import print_diff
+
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+import colorama
 from pystache import Renderer
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
@@ -503,24 +506,7 @@ for srcfilename in walk_source_dir(source):
           else:
             print(f'{addrs}: {recinfo.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n')
         else:
-          for line in udiff:
-            if line.startswith('++') or line.startswith('@@') or line.startswith('--'):
-              # Skip unneeded parts of the diff for the brief view
-              pass
-            elif line.startswith('+'):
-              if plain:
-                print(line)
-              else:
-                print(colorama.Fore.GREEN + line)
-            elif line.startswith('-'):
-              if plain:
-                print(line)
-              else:
-                print(colorama.Fore.RED + line)
-            else:
-              print(line)
-            if not plain:
-              print(colorama.Style.RESET_ALL, end='')
+          print_diff(udiff, plain)
 
           print(f'\n{recinfo.name} is only {percenttext} similar to the original, diff above')
 

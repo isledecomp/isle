@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-import colorama
 import difflib
 import subprocess
 import os
 import sys
+
+from isledecomp.utils import print_diff
 
 parser = argparse.ArgumentParser(allow_abbrev=False,
   description='Verify Exports: Compare the exports of two DLLs.')
@@ -54,23 +55,6 @@ og_exp = get_exports(args.original)
 re_exp = get_exports(args.recompiled)
 
 udiff = difflib.unified_diff(og_exp, re_exp)
-has_diff = False
-
-for line in udiff:
-  has_diff = True
-  color = ''
-  if line.startswith('++') or line.startswith('@@') or line.startswith('--'):
-    # Skip unneeded parts of the diff for the brief view
-    continue
-  # Work out color if we are printing color
-  if not args.no_color:
-    if line.startswith('+'):
-      color = colorama.Fore.GREEN
-    elif line.startswith('-'):
-      color = colorama.Fore.RED
-  print(color + line)
-  # Reset color if we're printing in color
-  if not args.no_color:
-    print(colorama.Style.RESET_ALL, end='')
+has_diff = print_diff(udiff, args.no_color)
 
 sys.exit(1 if has_diff else 0)
