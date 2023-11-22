@@ -1,3 +1,5 @@
+from .bin import *
 from .dir import *
-from .utils import *
 from .parser import *
+from .syminfo import *
+from .utils import *
