@@ -38,7 +38,7 @@ jobs:
           build/ISLE.PDB
           build/LEGO1.DLL
           build/LEGO1.PDB
-          
+
   compare:
     needs: build
     runs-on: windows-latest
@@ -96,7 +96,7 @@ jobs:
       shell: bash
       run: |
         python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
-      
+
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -104,7 +104,7 @@ jobs:
         path: |
           ISLEPROGRESS.*
           LEGO1PROGRESS.*
-          
+
   upload:
     needs: [build, compare]
     runs-on: ubuntu-latest
@@ -113,16 +113,16 @@ jobs:
     - uses: actions/checkout@v3
       with:
         repository: 'probonopd/uploadtool'
-    
+
     - uses: actions/download-artifact@master
       with:
        name: Win32
        path: build
-       
+
     - uses: actions/download-artifact@master
       with:
         name: Accuracy Report
-        
+
     - name: Upload Continuous Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -133,6 +133,6 @@ jobs:
           build/LEGO1.DLL \
           ISLEPROGRESS.* \
           LEGO1PROGRESS.*
-        
+
         curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
         curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/

@@ -3,11 +3,23 @@ name: Format
 on: [push, pull_request]
 
 jobs:
-  clang-format:
+  format:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Build isledecomp library
+      shell: bash
+      run: |
+        pip install black pylint tools/isledecomp
+
+    - name: Run pylint and black
+      shell: bash
+      run: |
+        pip install -r tools/reccmp/requirements.txt
+        pylint tools
+        black --check tools
 
     - name: Run clang-format
       run: |
