@@ -37,7 +37,7 @@ void MxWavePresenter::Init()
 	m_waveFormat = NULL;
 	m_dsBuffer = NULL;
 	m_length = 0;
-	m_bytes = 0;
+	m_lockSize = 0;
 	m_unk64 = 0;
 	m_playing = FALSE;
 	m_unk66 = FALSE;
@@ -88,7 +88,7 @@ MxBool MxWavePresenter::FUN_100b1ba0()
 }
 
 // OFFSET: LEGO1 0x100b1bd0
-void MxWavePresenter::FUN_100b1bd0(void* p_audioPtr, MxU32 p_length)
+void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 {
 	DWORD dwStatus;
 	LPVOID pvAudioPtr1;
@@ -108,23 +108,22 @@ void MxWavePresenter::FUN_100b1bd0(void* p_audioPtr, MxU32 p_length)
 	if (dwStatus != DSBSTATUS_BUFFERLOST) {
 		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
 			m_unk64++;
-			m_bytes = p_length;
+			m_lockSize = p_length;
 		}
 		else {
 			m_unk64 = 1 - m_unk64;
-			m_bytes = m_length;
+			m_lockSize = m_length;
 		}
 
-		if (m_dsBuffer->Lock(dwOffset, m_bytes, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) ==
+		if (m_dsBuffer->Lock(dwOffset, m_lockSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) ==
 			DS_OK) {
 			memcpy(pvAudioPtr1, p_audioPtr, p_length);
 
-			// TODO
-
-			if (m_bytes > p_length && !(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+			if (m_lockSize > p_length && !(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+				memset((MxU8*) pvAudioPtr1 + p_length, m_silenceData, m_lockSize - p_length);
 			}
 
-			m_dsBuffer->Unlock(pvAudioPtr1, m_bytes, pvAudioPtr2, 0);
+			m_dsBuffer->Unlock(pvAudioPtr1, m_lockSize, pvAudioPtr2, 0);
 		}
 	}
 }
@@ -164,10 +163,10 @@ void MxWavePresenter::StartingTickle()
 		waveFormatEx.wBitsPerSample = m_waveFormat->m_waveFormatEx.wBitsPerSample;
 
 		if (waveFormatEx.wBitsPerSample == 8)
-			m_unk67 = SCHAR_MAX;
+			m_silenceData = 0x7F;
 
 		if (waveFormatEx.wBitsPerSample == 16)
-			m_unk67 = 0;
+			m_silenceData = 0;
 
 		DSBUFFERDESC desc;
 		memset(&desc, 0, sizeof(desc));
@@ -232,7 +231,7 @@ void MxWavePresenter::DoneTickle()
 
 		MxS8 result = dwCurrentPlayCursor / m_length;
 		if (m_action->GetFlags() & MxDSAction::Flag_Bit7 || m_action->GetFlags() & MxDSAction::Flag_Looping ||
-			m_unk64 != result || m_bytes + (m_length * result) <= dwCurrentPlayCursor)
+			m_unk64 != result || m_lockSize + (m_length * result) <= dwCurrentPlayCursor)
 			MxMediaPresenter::DoneTickle();
 	}
 	else
@@ -242,7 +241,7 @@ void MxWavePresenter::DoneTickle()
 // OFFSET: LEGO1 0x100b2130
 void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
 {
-	FUN_100b1bd0(p_chunk->GetData(), p_chunk->GetLength());
+	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
 	if (IsEnabled())
 		m_subscriber->FUN_100b8390(p_chunk);
 }
@@ -256,7 +255,7 @@ undefined4 MxWavePresenter::PutData()
 		switch (m_currentTickleState) {
 		case TickleState_Streaming:
 			if (m_currentChunk && FUN_100b1ba0()) {
-				FUN_100b1bd0(m_currentChunk->GetData(), m_currentChunk->GetLength());
+				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
 				m_subscriber->FUN_100b8390(m_currentChunk);
 				m_currentChunk = NULL;
 			}
