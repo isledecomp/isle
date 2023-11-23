@@ -53,15 +53,15 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	MxS8 FUN_100b1b60();
+	MxS8 GetPlayedChunks();
 	MxBool FUN_100b1ba0();
 	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);
 
 	WaveFormat* m_waveFormat;       // 0x54
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x58
-	MxU32 m_length;                 // 0x5c
+	MxU32 m_chunkLength;            // 0x5c
 	MxU32 m_lockSize;               // 0x60
-	MxU8 m_unk64;                   // 0x64
+	MxU8 m_writtenChunks;           // 0x64
 	MxBool m_playing;               // 0x65
 	MxBool m_unk66;                 // 0x66
 	MxS8 m_silenceData;             // 0x67

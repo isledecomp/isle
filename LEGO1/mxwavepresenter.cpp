@@ -34,9 +34,9 @@ void MxWavePresenter::Init()
 {
 	m_waveFormat = NULL;
 	m_dsBuffer = NULL;
-	m_length = 0;
+	m_chunkLength = 0;
 	m_lockSize = 0;
-	m_unk64 = 0;
+	m_writtenChunks = 0;
 	m_playing = FALSE;
 	m_unk66 = FALSE;
 	m_unk68 = FALSE;
@@ -68,21 +68,21 @@ void MxWavePresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100b1b60
-MxS8 MxWavePresenter::FUN_100b1b60()
+MxS8 MxWavePresenter::GetPlayedChunks()
 {
 	DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
-	MxS8 result = -1;
+	MxS8 playedChunks = -1;
 
 	if (m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor) == DS_OK)
-		result = dwCurrentPlayCursor / m_length;
+		playedChunks = dwCurrentPlayCursor / m_chunkLength;
 
-	return result;
+	return playedChunks;
 }
 
 // OFFSET: LEGO1 0x100b1ba0
 MxBool MxWavePresenter::FUN_100b1ba0()
 {
-	return !m_playing || FUN_100b1b60() != m_unk64;
+	return !m_playing || GetPlayedChunks() != m_writtenChunks;
 }
 
 // OFFSET: LEGO1 0x100b1bd0
@@ -95,7 +95,7 @@ void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 	DWORD dwAudioBytes1;
 	DWORD dwAudioBytes2;
 
-	dwOffset = m_length * m_unk64;
+	dwOffset = m_chunkLength * m_writtenChunks;
 	m_dsBuffer->GetStatus(&dwStatus);
 
 	if (dwStatus == DSBSTATUS_BUFFERLOST) {
@@ -105,12 +105,12 @@ void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 
 	if (dwStatus != DSBSTATUS_BUFFERLOST) {
 		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
-			m_unk64++;
+			m_writtenChunks++;
 			m_lockSize = p_length;
 		}
 		else {
-			m_unk64 = 1 - m_unk64;
-			m_lockSize = m_length;
+			m_writtenChunks = 1 - m_writtenChunks;
+			m_lockSize = m_chunkLength;
 		}
 
 		if (m_dsBuffer->Lock(dwOffset, m_lockSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) ==
@@ -150,7 +150,7 @@ void MxWavePresenter::StartingTickle()
 		MxU32 length = chunk->GetLength();
 		WAVEFORMATEX waveFormatEx;
 
-		m_length = length;
+		m_chunkLength = length;
 		memset(&waveFormatEx, 0, sizeof(waveFormatEx));
 
 		waveFormatEx.wFormatTag = m_waveFormat->m_waveFormatEx.wFormatTag;
@@ -205,11 +205,11 @@ void MxWavePresenter::StreamingTickle()
 				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
 
 				m_currentChunk = new MxStreamChunk;
-				MxU8* data = new MxU8[m_length];
+				MxU8* data = new MxU8[m_chunkLength];
 
-				memset(data, m_silenceData, m_length);
+				memset(data, m_silenceData, m_chunkLength);
 
-				m_currentChunk->SetLength(m_length);
+				m_currentChunk->SetLength(m_chunkLength);
 				m_currentChunk->SetData(data);
 				m_currentChunk->SetTime(chunk->GetTime() + 1000);
 				m_currentChunk->SetFlags(MxDSChunk::Flag_Bit1);
@@ -227,9 +227,9 @@ void MxWavePresenter::DoneTickle()
 		DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
 		m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor);
 
-		MxS8 result = dwCurrentPlayCursor / m_length;
+		MxS8 playedChunks = dwCurrentPlayCursor / m_chunkLength;
 		if (m_action->GetFlags() & MxDSAction::Flag_Bit7 || m_action->GetFlags() & MxDSAction::Flag_Looping ||
-			m_unk64 != result || m_lockSize + (m_length * result) <= dwCurrentPlayCursor)
+			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor)
 			MxMediaPresenter::DoneTickle();
 	}
 	else
@@ -313,7 +313,7 @@ void MxWavePresenter::Enable(MxBool p_enable)
 		MxSoundPresenter::Enable(p_enable);
 
 		if (p_enable) {
-			m_unk64 = 0;
+			m_writtenChunks = 0;
 			m_playing = FALSE;
 		}
 		else if (m_dsBuffer)
