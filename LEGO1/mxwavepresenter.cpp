@@ -202,12 +202,12 @@ void MxWavePresenter::StreamingTickle()
 			MxStreamChunk* chunk = FUN_100b5650();
 
 			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit2 && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
-				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit8);
+				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
 
 				m_currentChunk = new MxStreamChunk;
 				MxU8* data = new MxU8[m_length];
 
-				// TODO
+				memset(data, m_silenceData, m_length);
 
 				m_currentChunk->SetLength(m_length);
 				m_currentChunk->SetData(data);
