@@ -13,6 +13,8 @@ public:
 		Flag_Bit1 = 0x01,
 		Flag_Bit2 = 0x02,
 		Flag_Bit3 = 0x04,
+		Flag_Bit8 = 0x80,
+		Flag_Bit16 = 0x8000
 	};
 
 	MxDSChunk();
@@ -31,6 +33,7 @@ public:
 		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
 	}
 
+	inline void SetFlags(MxU16 flags) { m_flags = flags; }
 	inline void SetTime(MxLong p_time) { m_time = p_time; }
 	inline void SetLength(MxU32 p_length) { m_length = p_length; }
 	inline void SetData(MxU8* p_data) { m_data = p_data; }

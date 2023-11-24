@@ -15,6 +15,9 @@ MxSoundManager::MxSoundManager()
 	Init();
 }
 
+// OFFSET: LEGO1 0x100ae7b0 TEMPLATE
+// MxSoundManager::`scalar deleting destructor'
+
 // OFFSET: LEGO1 0x100ae7d0
 MxSoundManager::~MxSoundManager()
 {
@@ -176,7 +179,7 @@ MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_unk)
 }
 
 // OFFSET: LEGO1 0x100aed10
-void MxSoundManager::vtable0x34()
+void MxSoundManager::Pause()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
@@ -185,11 +188,11 @@ void MxSoundManager::vtable0x34()
 
 	while (cursor.Next(presenter))
 		if (presenter->IsA("MxWavePresenter"))
-			((MxWavePresenter*) presenter)->VTable0x64();
+			((MxWavePresenter*) presenter)->Pause();
 }
 
 // OFFSET: LEGO1 0x100aee10
-void MxSoundManager::vtable0x38()
+void MxSoundManager::Resume()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
@@ -198,5 +201,5 @@ void MxSoundManager::vtable0x38()
 
 	while (cursor.Next(presenter))
 		if (presenter->IsA("MxWavePresenter"))
-			((MxWavePresenter*) presenter)->VTable0x68();
+			((MxWavePresenter*) presenter)->Resume();
 }

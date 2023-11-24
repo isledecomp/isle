@@ -409,7 +409,7 @@ void MxOmni::StartTimer()
 {
 	if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL) {
 		m_timer->Start();
-		m_soundManager->vtable0x34();
+		m_soundManager->Pause();
 		m_timerRunning = TRUE;
 	}
 }
@@ -419,7 +419,7 @@ void MxOmni::StopTimer()
 {
 	if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL) {
 		m_timer->Stop();
-		m_soundManager->vtable0x38();
+		m_soundManager->Resume();
 		m_timerRunning = FALSE;
 	}
 }
