@@ -38,9 +38,9 @@ public:
 	virtual void Enable(MxBool p_enable) override;             // vtable+0x54
 	virtual void AppendChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
 	virtual void SetVolume(MxS32 p_volume) override;           // vtable+0x60
-	virtual void VTable0x64();                                 // vtable+0x64
-	virtual void VTable0x68();                                 // vtable+0x68
-	virtual undefined VTable0x6c();                            // vtable+0x6c
+	virtual void Pause();                                      // vtable+0x64
+	virtual void Resume();                                     // vtable+0x68
+	virtual MxBool IsPaused();                                 // vtable+0x6c
 
 	// Reference: https://github.com/itsmattkc/SIEdit/blob/master/lib/othertypes.h
 	// SIZE 0x1c
@@ -53,19 +53,19 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	MxS8 FUN_100b1b60();
+	MxS8 GetPlayedChunks();
 	MxBool FUN_100b1ba0();
-	void FUN_100b1bd0(void* p_audioPtr, MxU32 p_length);
+	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);
 
-	WaveFormat* m_waveFormat;
-	LPDIRECTSOUNDBUFFER m_dsBuffer;
-	MxU32 m_length;
-	undefined4 m_unk60;
-	MxU8 m_unk64;
-	MxBool m_unk65;
-	MxBool m_unk66;
-	MxS8 m_unk67;
-	undefined m_unk68;
+	WaveFormat* m_waveFormat;       // 0x54
+	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x58
+	MxU32 m_chunkLength;            // 0x5c
+	MxU32 m_lockSize;               // 0x60
+	MxU8 m_writtenChunks;           // 0x64
+	MxBool m_started;               // 0x65
+	MxBool m_unk66;                 // 0x66
+	MxS8 m_silenceData;             // 0x67
+	MxBool m_paused;                // 0x68
 };
 
 #endif // MXWAVEPRESENTER_H

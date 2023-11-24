@@ -1,11 +1,12 @@
 #include "mxwavepresenter.h"
 
 #include "decomp.h"
+#include "define.h"
+#include "legoomni.h"
+#include "mxautolocker.h"
 #include "mxdssound.h"
 #include "mxomni.h"
 #include "mxsoundmanager.h"
-
-#include <limits.h>
 
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);
@@ -23,9 +24,9 @@ void MxWavePresenter::Destroy()
 }
 
 // OFFSET: LEGO1 0x1000d6b0
-undefined MxWavePresenter::VTable0x6c()
+MxBool MxWavePresenter::IsPaused()
 {
-	return m_unk68;
+	return m_paused;
 }
 
 // OFFSET: LEGO1 0x100b1ad0
@@ -33,12 +34,12 @@ void MxWavePresenter::Init()
 {
 	m_waveFormat = NULL;
 	m_dsBuffer = NULL;
-	m_length = 0;
-	m_unk60 = 0;
-	m_unk64 = 0;
-	m_unk65 = FALSE;
+	m_chunkLength = 0;
+	m_lockSize = 0;
+	m_writtenChunks = 0;
+	m_started = FALSE;
 	m_unk66 = FALSE;
-	m_unk68 = 0;
+	m_paused = FALSE;
 }
 
 // OFFSET: LEGO1 0x100b1af0
@@ -67,28 +68,62 @@ void MxWavePresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100b1b60
-MxS8 MxWavePresenter::FUN_100b1b60()
+MxS8 MxWavePresenter::GetPlayedChunks()
 {
 	DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
-	MxS8 result = -1;
+	MxS8 playedChunks = -1;
 
 	if (m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor) == DS_OK)
-		result = dwCurrentPlayCursor / m_length;
+		playedChunks = dwCurrentPlayCursor / m_chunkLength;
 
-	return result;
+	return playedChunks;
 }
 
 // OFFSET: LEGO1 0x100b1ba0
 MxBool MxWavePresenter::FUN_100b1ba0()
 {
-	return !m_unk65 || FUN_100b1b60() != m_unk64;
+	return !m_started || GetPlayedChunks() != m_writtenChunks;
 }
 
-// OFFSET: LEGO1 0x100b1bd0 STUB
-void MxWavePresenter::FUN_100b1bd0(void* p_audioPtr, MxU32 p_length)
+// OFFSET: LEGO1 0x100b1bd0
+void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 {
-	// Lock/Unlock on m_dsBuffer
-	// TODO
+	DWORD dwStatus;
+	LPVOID pvAudioPtr1;
+	DWORD dwOffset;
+	LPVOID pvAudioPtr2;
+	DWORD dwAudioBytes1;
+	DWORD dwAudioBytes2;
+
+	dwOffset = m_chunkLength * m_writtenChunks;
+	m_dsBuffer->GetStatus(&dwStatus);
+
+	if (dwStatus == DSBSTATUS_BUFFERLOST) {
+		m_dsBuffer->Restore();
+		m_dsBuffer->GetStatus(&dwStatus);
+	}
+
+	if (dwStatus != DSBSTATUS_BUFFERLOST) {
+		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+			m_writtenChunks++;
+			m_lockSize = p_length;
+		}
+		else {
+			m_writtenChunks = 1 - m_writtenChunks;
+			m_lockSize = m_chunkLength;
+		}
+
+		if (m_dsBuffer->Lock(dwOffset, m_lockSize, &pvAudioPtr1, &dwAudioBytes1, &pvAudioPtr2, &dwAudioBytes2, 0) ==
+			DS_OK) {
+			memcpy(pvAudioPtr1, p_audioPtr, p_length);
+
+			if (m_lockSize > p_length && !(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+				memset((MxU8*) pvAudioPtr1 + p_length, m_silenceData, m_lockSize - p_length);
+			}
+
+			m_dsBuffer->Unlock(pvAudioPtr1, m_lockSize, pvAudioPtr2, 0);
+		}
+	}
 }
 
 // OFFSET: LEGO1 0x100b1cf0
@@ -115,7 +150,7 @@ void MxWavePresenter::StartingTickle()
 		MxU32 length = chunk->GetLength();
 		WAVEFORMATEX waveFormatEx;
 
-		m_length = length;
+		m_chunkLength = length;
 		memset(&waveFormatEx, 0, sizeof(waveFormatEx));
 
 		waveFormatEx.wFormatTag = m_waveFormat->m_waveFormatEx.wFormatTag;
@@ -126,17 +161,17 @@ void MxWavePresenter::StartingTickle()
 		waveFormatEx.wBitsPerSample = m_waveFormat->m_waveFormatEx.wBitsPerSample;
 
 		if (waveFormatEx.wBitsPerSample == 8)
-			m_unk67 = SCHAR_MAX;
+			m_silenceData = 0x7F;
 
 		if (waveFormatEx.wBitsPerSample == 16)
-			m_unk67 = 0;
+			m_silenceData = 0;
 
 		DSBUFFERDESC desc;
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
 		if (m_unk66)
-			desc.dwFlags = DSBCAPS_CTRL3D | DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLVOLUME;
+			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRL3D | DSBCAPS_CTRLVOLUME;
 		else
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;
 
@@ -159,63 +194,182 @@ void MxWavePresenter::StartingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b1ea0 STUB
+// OFFSET: LEGO1 0x100b1ea0
 void MxWavePresenter::StreamingTickle()
 {
-	// TODO
+	if (!m_currentChunk) {
+		if (!(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+			MxStreamChunk* chunk = FUN_100b5650();
+
+			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit2 && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
+				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
+
+				m_currentChunk = new MxStreamChunk;
+				MxU8* data = new MxU8[m_chunkLength];
+
+				memset(data, m_silenceData, m_chunkLength);
+
+				m_currentChunk->SetLength(m_chunkLength);
+				m_currentChunk->SetData(data);
+				m_currentChunk->SetTime(chunk->GetTime() + 1000);
+				m_currentChunk->SetFlags(MxDSChunk::Flag_Bit1);
+			}
+		}
+
+		MxMediaPresenter::StreamingTickle();
+	}
 }
 
-// OFFSET: LEGO1 0x100b20c0 STUB
+// OFFSET: LEGO1 0x100b20c0
 void MxWavePresenter::DoneTickle()
 {
-	// TODO
+	if (m_dsBuffer) {
+		DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
+		m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor);
+
+		MxS8 playedChunks = dwCurrentPlayCursor / m_chunkLength;
+		if (m_action->GetFlags() & MxDSAction::Flag_Bit7 || m_action->GetFlags() & MxDSAction::Flag_Looping ||
+			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor)
+			MxMediaPresenter::DoneTickle();
+	}
+	else
+		MxMediaPresenter::DoneTickle();
 }
 
-// OFFSET: LEGO1 0x100b2130 STUB
+// OFFSET: LEGO1 0x100b2130
 void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
 {
-	// TODO
+	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
+	if (IsEnabled())
+		m_subscriber->FUN_100b8390(p_chunk);
 }
 
-// OFFSET: LEGO1 0x100b2160 STUB
+// OFFSET: LEGO1 0x100b2160
 undefined4 MxWavePresenter::PutData()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	if (IsEnabled()) {
+		switch (m_currentTickleState) {
+		case TickleState_Streaming:
+			if (m_currentChunk && FUN_100b1ba0()) {
+				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
+				m_subscriber->FUN_100b8390(m_currentChunk);
+				m_currentChunk = NULL;
+			}
+
+			if (!m_started) {
+				m_dsBuffer->SetCurrentPosition(0);
+
+				if (m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING) == DS_OK)
+					m_started = TRUE;
+			}
+			break;
+		case TickleState_Repeating:
+			if (m_started)
+				break;
+
+			m_dsBuffer->SetCurrentPosition(0);
+
+			if (m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1) == DS_OK)
+				m_started = TRUE;
+		}
+	}
+
 	return 0;
 }
 
-// OFFSET: LEGO1 0x100b2280 STUB
+// OFFSET: LEGO1 0x100b2280
 void MxWavePresenter::EndAction()
 {
-	// TODO
+	if (m_action) {
+		MxAutoLocker lock(&m_criticalSection);
+		MxMediaPresenter::EndAction();
+
+		if (m_dsBuffer)
+			m_dsBuffer->Stop();
+	}
 }
 
-// OFFSET: LEGO1 0x100b2300 STUB
+// OFFSET: LEGO1 0x100b2300
 void MxWavePresenter::SetVolume(MxS32 p_volume)
 {
-	// TODO
+	m_criticalSection.Enter();
+
+	m_volume = p_volume;
+	if (m_dsBuffer != NULL) {
+		MxS32 volume = p_volume * MxOmni::GetInstance()->GetSoundManager()->GetVolume() / 100;
+		MxS32 otherVolume = MxOmni::GetInstance()->GetSoundManager()->FUN_100aecf0(volume);
+		m_dsBuffer->SetVolume(otherVolume);
+	}
+
+	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100b2360 STUB
+// OFFSET: LEGO1 0x100b2360
 void MxWavePresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	if (IsEnabled() != p_enable) {
+		MxSoundPresenter::Enable(p_enable);
+
+		if (p_enable) {
+			m_writtenChunks = 0;
+			m_started = FALSE;
+		}
+		else if (m_dsBuffer)
+			m_dsBuffer->Stop();
+	}
 }
 
-// OFFSET: LEGO1 0x100b23a0 STUB
+// OFFSET: LEGO1 0x100b23a0
 void MxWavePresenter::ParseExtra()
 {
-	// TODO
+	char extraCopy[512];
+
+	MxSoundPresenter::ParseExtra();
+	*((MxU16*) &extraCopy[0]) = m_action->GetExtraLength();
+	char* extraData = m_action->GetExtraData();
+
+	if (*((MxU16*) &extraCopy[0])) {
+		MxU16 len = *((MxU16*) &extraCopy[0]);
+		memcpy(extraCopy, extraData, len);
+		extraCopy[len] = '\0';
+
+		char t_soundValue[512];
+		if (KeyValueStringParse(t_soundValue, g_strSOUND, extraCopy)) {
+			if (!strcmpi(t_soundValue, "FALSE"))
+				Enable(FALSE);
+		}
+	}
 }
 
-// OFFSET: LEGO1 0x100b2440 STUB
-void MxWavePresenter::VTable0x64()
+// OFFSET: LEGO1 0x100b2440
+void MxWavePresenter::Pause()
 {
-	// TODO
+	if (!m_paused && m_started) {
+		if (m_dsBuffer)
+			m_dsBuffer->Stop();
+		m_paused = TRUE;
+	}
 }
 
-// OFFSET: LEGO1 0x100b2470 STUB
-void MxWavePresenter::VTable0x68()
+// OFFSET: LEGO1 0x100b2470
+void MxWavePresenter::Resume()
 {
-	// TODO
+	if (m_paused) {
+		if (m_dsBuffer && m_started) {
+			switch (m_currentTickleState) {
+			case TickleState_Streaming:
+				m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
+				break;
+			case TickleState_Repeating:
+				m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1);
+				break;
+			case TickleState_Done:
+				m_dsBuffer->Play(0, 0, 0);
+			}
+		}
+
+		m_paused = FALSE;
+	}
 }

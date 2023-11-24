@@ -16,6 +16,9 @@ const char* g_parseExtraTokens = ":;";
 // 0x10101edc
 const char* g_strWORLD = "WORLD";
 
+// 0x10101f20
+const char* g_strSOUND = "SOUND";
+
 // 0x10102040
 const char* g_strACTION = "ACTION";
 

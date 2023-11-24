@@ -12,24 +12,22 @@
 class MxSoundManager : public MxAudioManager {
 public:
 	MxSoundManager();
-
-	// OFFSET: LEGO1 0x100ae7b0 TEMPLATE
-	// MxSoundManager::`scalar deleting destructor'
 	virtual ~MxSoundManager() override; // vtable+0x0
 
-	virtual void Destroy() override;                                     // vtable+18
-	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+2c
+	virtual void Destroy() override;                                     // vtable+0x18
+	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+0x2c
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x30
-	virtual void vtable0x34();                                           // vtable+0x34
-	virtual void vtable0x38();                                           // vtable+0x38
+	virtual void Pause();                                                // vtable+0x34
+	virtual void Resume();                                               // vtable+0x38
 
 	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
+
+	MxS32 FUN_100aecf0(MxU32 p_unk);
 
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);
-	MxS32 FUN_100aecf0(MxU32 p_unk);
 
 	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
