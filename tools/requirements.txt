@@ -1,3 +1,4 @@
+tools/isledecomp
 capstone
 colorama
 isledecomp

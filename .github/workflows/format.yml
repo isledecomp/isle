@@ -27,14 +27,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Build isledecomp library
+    - name: Install python libraries
       shell: bash
       run: |
-        pip install black pylint tools/isledecomp
+        pip install black pylint -r tools/requirements.txt
 
     - name: Run pylint and black
       shell: bash
       run: |
-        pip install -r tools/reccmp/requirements.txt
         pylint tools --ignore=build,tests
         black --check tools

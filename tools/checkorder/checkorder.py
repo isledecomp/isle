@@ -67,7 +67,9 @@ def check_file(filename: str, verbose: bool = False) -> bool:
 
 
 def parse_args(test_args: list | None = None) -> dict:
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(
+        description="Checks the source files to make sure the function offset comments are in order",
+    )
     p.add_argument("target", help="The file or directory to check.")
     p.add_argument(
         "--enforce",
