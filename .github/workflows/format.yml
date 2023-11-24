@@ -30,10 +30,10 @@ jobs:
     - name: Install python libraries
       shell: bash
       run: |
-        pip install black pylint -r tools/requirements.txt
+        pip install black pylint pytest -r tools/requirements.txt
 
     - name: Run pylint and black
       shell: bash
       run: |
-        pylint tools --ignore=build,tests
+        pylint tools --ignore=build
         black --check tools

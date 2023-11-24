@@ -18,15 +18,26 @@ This verifies exports by comparing the exports of an original DLL and the recomp
 ## checkorder
 This checks the order of C++ source and header files to make sure the functions are in order
 
+## isledecomp
+This is a library that is used by rhe above scripts. it has a collection of useful classes and functions
+
+### Testing
+`isledecomp` has a small suite of tests. Install pylint and run it, passing in the directory:
+
+```
+pip install pytest
+pytest tools/isledecomp/tests/
+```
+
 ## Development
 In order to keep the code clean and consistent, we use `pylint` and `black`:
 
 ```
 pip install black pylint
 ```
-### To run pylint:
+### To run pylint (ignores build and virtualenv):
 ```
-pylint tools/ --ignore=build,tests,bin,lib
+pylint tools/ --ignore=build,bin,lib
 ```
 
 ### To check code formatting without rewriting files:

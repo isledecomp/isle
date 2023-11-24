@@ -1,5 +1,4 @@
 import os
-import pytest
 from typing import List, TextIO
 from isledecomp.parser import find_code_blocks
 from isledecomp.parser.util import CodeBlock
@@ -11,7 +10,7 @@ def sample_file(filename: str) -> TextIO:
     """Wrapper for opening the samples from the directory that does not
     depend on the cwd where we run the test"""
     full_path = os.path.join(SAMPLE_DIR, filename)
-    return open(full_path, "r")
+    return open(full_path, "r", encoding="utf-8")
 
 
 def code_blocks_are_sorted(blocks: List[CodeBlock]) -> bool:

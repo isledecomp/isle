@@ -1,6 +1,6 @@
-import pytest
 from collections import namedtuple
 from typing import List
+import pytest
 from isledecomp.parser.util import (
     is_blank_or_comment,
     match_offset_comment,
@@ -69,14 +69,14 @@ offset_comment_samples = [
 ]
 
 
-@pytest.mark.parametrize("match, exact, line", offset_comment_samples)
-def test_offset_match(line: str, match: bool, exact):
+@pytest.mark.parametrize("match, _, line", offset_comment_samples)
+def test_offset_match(line: str, match: bool, _):
     did_match = match_offset_comment(line) is not None
     assert did_match is match
 
 
-@pytest.mark.parametrize("match, exact, line", offset_comment_samples)
-def test_exact_offset_comment(line: str, exact: bool, match):
+@pytest.mark.parametrize("_, exact, line", offset_comment_samples)
+def test_exact_offset_comment(line: str, exact: bool, _):
     assert is_exact_offset_comment(line) is exact
 
 
