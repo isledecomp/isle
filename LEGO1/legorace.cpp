@@ -1,25 +1,23 @@
 #include "legorace.h"
 
+#include "mxnotificationmanager.h"
+
 DECOMP_SIZE_ASSERT(LegoRace, 0x144)
 
-#include "mxnotificationmanager.h"
-#include "mxomni.h"
-
 // OFFSET: LEGO1 0x1000dab0
-undefined4 LegoRace::vtable0x78(void)
+undefined4 LegoRace::VTable0x78(undefined4)
 {
 	return 0;
 }
 
 // OFFSET: LEGO1 0x1000dac0 STUB
-void LegoRace::vtable0x7c()
+void LegoRace::VTable0x7c(undefined4, undefined4)
 {
 	// TODO
-	return;
 }
 
 // OFFSET: LEGO1 0x1000dae0
-MxBool LegoRace::vtable0x5c()
+MxBool LegoRace::VTable0x5c()
 {
 	return TRUE;
 }
@@ -46,21 +44,28 @@ LegoRace::LegoRace()
 }
 
 // OFFSET: LEGO1 0x10015b70
-undefined4 LegoRace::vtable0x70()
+undefined4 LegoRace::VTable0x70(undefined4)
 {
 	return 0;
 }
 
 // OFFSET: LEGO1 0x10015b80
-undefined4 LegoRace::vtable0x74()
+undefined4 LegoRace::VTable0x74(undefined4)
 {
 	return 0;
 }
 
 // OFFSET: LEGO1 0x10015b90
-MxBool LegoRace::vtable0x64()
+MxBool LegoRace::VTable0x64()
 {
 	return FALSE;
+}
+
+// OFFSET: LEGO1 0x10015ce0 STUB
+MxResult LegoRace::Create(MxDSObject& p_dsObject)
+{
+	// TODO
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x10015d40 STUB
@@ -73,13 +78,11 @@ LegoRace::~LegoRace()
 MxLong LegoRace::Notify(MxParam& p)
 {
 	// TODO
-
 	return 0;
 }
 
 // OFFSET: LEGO1 0x10015ed0 STUB
-void LegoRace::vtable0x68(MxBool p_add)
+void LegoRace::VTable0x68(MxBool p_add)
 {
 	// TODO
-	return;
 }

@@ -6,6 +6,7 @@
 #include "mxtypes.h"
 
 // VTABLE 0x100d5db0
+// SIZE 0x144
 class LegoRace : public LegoWorld {
 public:
 	LegoRace();
@@ -26,18 +27,16 @@ public:
 		return !strcmp(name, LegoRace::ClassName()) || LegoWorld::IsA(name);
 	}
 
-	// FIXME: Something is wrong here that is breaking the linking
-	// virtual MxS32 vtable0x18(int) override; // vtable+0x18  // FIXME: should be  virtual MxResult Create(MxDSObject&
-	// p_dsObject) override;  // vtable+0x18
+	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
+	virtual MxBool VTable0x64() override;                     // vtable+0x64
+	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	virtual undefined4 VTable0x6c(undefined4) = 0;            // vtable+0x6c
+	virtual undefined4 VTable0x70(undefined4);                // vtable+0x70
+	virtual undefined4 VTable0x74(undefined4);                // vtable+0x74
+	virtual undefined4 VTable0x78(undefined4);                // vtable+0x78
+	virtual void VTable0x7c(undefined4, undefined4);          // vtable+0x7c
 
-	virtual MxBool vtable0x5c() override;           // vtable+0x5c
-	virtual MxBool vtable0x64() override;           // vtable+0x64
-	virtual void vtable0x68(MxBool p_add) override; // vtable+0x68
-
-	virtual undefined4 vtable0x70(); // vtable+0x70
-	virtual undefined4 vtable0x74(); // vtable+0x74
-	virtual undefined4 vtable0x78(); // vtable+0x78
-	virtual void vtable0x7c();       // vtable+0x7c
 private:
 	undefined4 m_unkf8;     // 0xf8
 	undefined4 m_unkfc;     // 0xfc
