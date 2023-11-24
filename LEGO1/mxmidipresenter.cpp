@@ -2,16 +2,11 @@
 
 #include "decomp.h"
 #include "legoomni.h"
+#include "mxautolocker.h"
+#include "mxdssound.h"
 #include "mxmusicmanager.h"
 
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
-
-// OFFSET: LEGO1 0x100c25a0 STUB
-MxResult MxMIDIPresenter::AddToManager()
-{
-	// TODO
-	return SUCCESS;
-}
 
 // OFFSET: LEGO1 0x100c25e0
 MxMIDIPresenter::MxMIDIPresenter()
@@ -28,31 +23,61 @@ MxMIDIPresenter::~MxMIDIPresenter()
 // OFFSET: LEGO1 0x100c2820
 void MxMIDIPresenter::Init()
 {
-	m_unk54 = 0;
+	m_chunk = NULL;
 }
 
-// OFFSET: LEGO1 0x100c2830 STUB
+// OFFSET: LEGO1 0x100c2830
 void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
+	if (MusicManager()) {
+		MusicManager()->DeinitializeMIDI();
+	}
+
+	m_criticalSection.Enter();
+
+	if (m_subscriber && m_chunk)
+		m_subscriber->FUN_100b8390(m_chunk);
+	Init();
+
+	m_criticalSection.Leave();
+
+	if (!p_fromDestructor)
+		MxMusicPresenter::Destroy();
 }
 
-// OFFSET: LEGO1 0x100c2890 STUB
+// OFFSET: LEGO1 0x100c2890
 void MxMIDIPresenter::ReadyTickle()
 {
-	// TODO
+	MxStreamChunk* chunk = NextChunk();
+
+	if (chunk) {
+		m_subscriber->FUN_100b8390(chunk);
+		ParseExtra();
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Starting;
+	}
 }
 
-// OFFSET: LEGO1 0x100c28d0 STUB
+// OFFSET: LEGO1 0x100c28d0
 void MxMIDIPresenter::StartingTickle()
 {
-	// TODO
+	MxStreamChunk* chunk = FUN_100b5650();
+
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Streaming;
+	}
 }
 
-// OFFSET: LEGO1 0x100c2910 STUB
+// OFFSET: LEGO1 0x100c2910
 void MxMIDIPresenter::StreamingTickle()
 {
-	// TODO
+	if (m_chunk) {
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Done;
+	}
+	else
+		m_chunk = NextChunk();
 }
 
 // OFFSET: LEGO1 0x100c2940
@@ -62,21 +87,42 @@ void MxMIDIPresenter::DoneTickle()
 		EndAction();
 }
 
-// OFFSET: LEGO1 0x100c2960 STUB
+// OFFSET: LEGO1 0x100c2960
 void MxMIDIPresenter::Destroy()
 {
-	// TODO
+	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100c2970 STUB
+// OFFSET: LEGO1 0x100c2970
 undefined4 MxMIDIPresenter::PutData()
 {
-	// TODO
+	m_criticalSection.Enter();
+
+	if (m_currentTickleState == TickleState_Streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
+		SetVolume(((MxDSSound*) m_action)->GetVolume());
+
+		if (MusicManager()->FUN_100c09c0(m_chunk->GetData(), 1))
+			EndAction();
+	}
+
+	m_criticalSection.Leave();
 	return 0;
 }
 
-// OFFSET: LEGO1 0x100c29e0 STUB
+// OFFSET: LEGO1 0x100c29e0
 void MxMIDIPresenter::EndAction()
 {
-	// TODO
+	if (m_action) {
+		MxAutoLocker lock(&m_criticalSection);
+
+		MxMediaPresenter::EndAction();
+		MusicManager()->DeinitializeMIDI();
+	}
+}
+
+// OFFSET: LEGO1 0x100c2a60
+void MxMIDIPresenter::SetVolume(MxS32 p_volume)
+{
+	m_volume = p_volume;
+	MusicManager()->SetMultiplier(p_volume);
 }

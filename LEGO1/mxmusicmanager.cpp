@@ -120,11 +120,27 @@ void MxMusicManager::SetVolume(MxS32 p_volume)
 	m_criticalSection.Leave();
 }
 
+// OFFSET: LEGO1 0x100c0970
+void MxMusicManager::SetMultiplier(MxS32 p_multiplier)
+{
+	m_criticalSection.Enter();
+	m_multiplier = p_multiplier;
+	SetMIDIVolume();
+	m_criticalSection.Leave();
+}
+
 // OFFSET: LEGO1 0x100c09a0
 MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 {
 	MxS32 result = (p_volume * 0xffff) / 100;
 	return (result << 0x10) | result;
+}
+
+// OFFSET: LEGO1 0x100c09c0 STUB
+undefined4 MxMusicManager::FUN_100c09c0(MxU8* p_data, undefined4)
+{
+	// TODO
+	return 0;
 }
 
 // OFFSET: LEGO1 0x100c0b20

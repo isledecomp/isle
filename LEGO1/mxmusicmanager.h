@@ -17,9 +17,12 @@ public:
 
 	inline MxBool GetMIDIInitialized() { return m_MIDIInitialized; }
 
+	void DeinitializeMIDI();
+	undefined4 FUN_100c09c0(MxU8* p_data, undefined4);
+	void SetMultiplier(MxS32 p_multiplier);
+
 private:
 	void Destroy(MxBool p_fromDestructor);
-	void DeinitializeMIDI();
 
 	MxS32 CalculateVolume(MxS32 p_volume);
 	void SetMIDIVolume();
