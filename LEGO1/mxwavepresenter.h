@@ -38,9 +38,9 @@ public:
 	virtual void Enable(MxBool p_enable) override;             // vtable+0x54
 	virtual void AppendChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
 	virtual void SetVolume(MxS32 p_volume) override;           // vtable+0x60
-	virtual void VTable0x64();                                 // vtable+0x64
-	virtual void VTable0x68();                                 // vtable+0x68
-	virtual MxBool VTable0x6c();                               // vtable+0x6c
+	virtual void Pause();                                      // vtable+0x64
+	virtual void Resume();                                     // vtable+0x68
+	virtual MxBool IsPaused();                                 // vtable+0x6c
 
 	// Reference: https://github.com/itsmattkc/SIEdit/blob/master/lib/othertypes.h
 	// SIZE 0x1c
@@ -62,10 +62,10 @@ private:
 	MxU32 m_chunkLength;            // 0x5c
 	MxU32 m_lockSize;               // 0x60
 	MxU8 m_writtenChunks;           // 0x64
-	MxBool m_playing;               // 0x65
+	MxBool m_started;               // 0x65
 	MxBool m_unk66;                 // 0x66
 	MxS8 m_silenceData;             // 0x67
-	MxBool m_unk68;                 // 0x68
+	MxBool m_paused;                // 0x68
 };
 
 #endif // MXWAVEPRESENTER_H
