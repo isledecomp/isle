@@ -29,9 +29,11 @@ void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 	if (MusicManager()) {
 		MusicManager()->RemovePresenter(*this);
 	}
+
 	m_criticalSection.Enter();
 	Init();
 	m_criticalSection.Leave();
+
 	if (!p_fromDestructor) {
 		MxMediaPresenter::Destroy(FALSE);
 	}
@@ -41,10 +43,12 @@ void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 MxResult MxMusicPresenter::AddToManager()
 {
 	MxResult result = FAILURE;
+
 	if (MusicManager()) {
 		result = SUCCESS;
 		MusicManager()->AddPresenter(*this);
 	}
+
 	return result;
 }
 

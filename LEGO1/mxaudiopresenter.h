@@ -23,11 +23,11 @@ public:
 		return !strcmp(name, MxAudioPresenter::ClassName()) || MxMediaPresenter::IsA(name);
 	}
 
-	virtual MxU32 GetVolume();              // vtable+0x5c
-	virtual void SetVolume(MxU32 p_volume); // vtable+0x60
+	virtual MxS32 GetVolume();              // vtable+0x5c
+	virtual void SetVolume(MxS32 p_volume); // vtable+0x60
 
-private:
-	MxU32 m_volume;
+protected:
+	MxS32 m_volume;
 };
 
 #endif // MXAUDIOPRESENTER_H

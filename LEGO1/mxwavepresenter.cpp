@@ -191,7 +191,7 @@ void MxWavePresenter::EndAction()
 }
 
 // OFFSET: LEGO1 0x100b2300 STUB
-void MxWavePresenter::SetVolume(MxU32 p_volume)
+void MxWavePresenter::SetVolume(MxS32 p_volume)
 {
 	// TODO
 }
