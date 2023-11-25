@@ -137,7 +137,7 @@ MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 }
 
 // OFFSET: LEGO1 0x100c09c0 STUB
-undefined4 MxMusicManager::FUN_100c09c0(MxU8* p_data, undefined4)
+undefined4 MxMusicManager::FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount)
 {
 	// TODO
 	return 0;

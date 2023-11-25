@@ -37,6 +37,7 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
+protected:
 	MxStreamChunk* m_chunk;
 };
 
