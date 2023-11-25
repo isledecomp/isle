@@ -9,12 +9,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Build isledecomp library
+    - name: Install python libraries
       run: |
-        pip install tools/isledecomp
+        pip install -r tools/requirements.txt
 
     - name: Run checkorder.py
       run: |
-        pip install -r tools/checkorder/requirements.txt
         python3 tools/checkorder/checkorder.py --verbose --enforce ISLE
         python3 tools/checkorder/checkorder.py --verbose --enforce LEGO1

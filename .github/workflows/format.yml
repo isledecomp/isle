@@ -20,3 +20,20 @@ jobs:
           LEGO1/realtime/*.cpp LEGO1/realtime/*.h \
           LEGO1/tgl/*.h \
           LEGO1/viewmanager/*.cpp LEGO1/viewmanager/*.h
+
+  python-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install python libraries
+      shell: bash
+      run: |
+        pip install black pylint pytest -r tools/requirements.txt
+
+    - name: Run pylint and black
+      shell: bash
+      run: |
+        pylint tools --ignore=build
+        black --check tools

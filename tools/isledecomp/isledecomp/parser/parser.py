@@ -7,7 +7,6 @@ from .util import (
     OffsetMatch,
     is_blank_or_comment,
     match_offset_comment,
-    is_exact_offset_comment,
     get_template_function_name,
     remove_trailing_comment,
     distinct_by_module,
@@ -25,10 +24,10 @@ class ReaderState(Enum):
 
 def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
     """Read the IO stream (file) line-by-line and give the following report:
-       Foreach code block (function) in the file, what are its starting and
-       ending line numbers, and what is the given offset in the original
-       binary. We expect the result to be ordered by line number because we
-       are reading the file from start to finish."""
+    Foreach code block (function) in the file, what are its starting and
+    ending line numbers, and what is the given offset in the original
+    binary. We expect the result to be ordered by line number because we
+    are reading the file from start to finish."""
 
     blocks: List[CodeBlock] = []
 
@@ -51,14 +50,16 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
             # Our list of offset marks could have duplicates on
             # module name, so we'll eliminate those now.
             for offset_match in distinct_by_module(offset_matches):
-                block = CodeBlock(offset=offset_match.address,
-                                  signature=function_sig,
-                                  start_line=start_line,
-                                  end_line=end_line,
-                                  offset_comment=offset_match.comment,
-                                  module=offset_match.module,
-                                  is_template=offset_match.is_template,
-                                  is_stub=offset_match.is_stub)
+                block = CodeBlock(
+                    offset=offset_match.address,
+                    signature=function_sig,
+                    start_line=start_line,
+                    end_line=end_line,
+                    offset_comment=offset_match.comment,
+                    module=offset_match.module,
+                    is_template=offset_match.is_template,
+                    is_stub=offset_match.is_stub,
+                )
                 blocks.append(block)
             offset_matches = []
             state = ReaderState.WANT_OFFSET
@@ -66,15 +67,18 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
         if can_seek:
             line_no += 1
             line = stream.readline()
-            if line == '':
+            if line == "":
                 break
 
         new_match = match_offset_comment(line)
         if new_match is not None:
             # We will allow multiple offsets if we have just begun
             # the code block, but not after we hit the curly brace.
-            if state in (ReaderState.WANT_OFFSET, ReaderState.IN_TEMPLATE,
-                         ReaderState.WANT_SIG):
+            if state in (
+                ReaderState.WANT_OFFSET,
+                ReaderState.IN_TEMPLATE,
+                ReaderState.WANT_SIG,
+            ):
                 # If we detected an offset marker unexpectedly,
                 # we are handling it here so we can continue seeking.
                 can_seek = True
@@ -116,11 +120,10 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                 # same line. clang-format should prevent this (BraceWrapping)
                 # but it is easy to detect.
                 # If the entire function is on one line, handle that too.
-                if function_sig.endswith('{'):
+                if function_sig.endswith("{"):
                     start_line = line_no
                     state = ReaderState.IN_FUNC
-                elif (function_sig.endswith('}') or
-                        function_sig.endswith('};')):
+                elif function_sig.endswith("}") or function_sig.endswith("};"):
                     start_line = line_no
                     end_line = line_no
                     state = ReaderState.FUNCTION_DONE
@@ -128,14 +131,14 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                     state = ReaderState.WANT_CURLY
 
         elif state == ReaderState.WANT_CURLY:
-            if line.strip() == '{':
+            if line.strip() == "{":
                 start_line = line_no
                 state = ReaderState.IN_FUNC
 
         elif state == ReaderState.IN_FUNC:
             # Naive but reasonable assumption that functions will end with
             # a curly brace on its own line with no prepended spaces.
-            if line.startswith('}'):
+            if line.startswith("}"):
                 end_line = line_no
                 state = ReaderState.FUNCTION_DONE
 
