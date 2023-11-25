@@ -139,7 +139,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 // OFFSET: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-	if (this->m_action == FALSE)
+	if (this->m_action == NULL)
 		return;
 
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -150,7 +150,7 @@ void MxPresenter::EndAction()
 		);
 	}
 
-	this->m_action = FALSE;
+	this->m_action = NULL;
 	MxS32 previousTickleState = 1 << m_currentTickleState;
 	this->m_previousTickleStates |= previousTickleState;
 	this->m_currentTickleState = TickleState_Idle;
