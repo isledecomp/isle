@@ -18,7 +18,7 @@ public:
 	inline MxBool GetMIDIInitialized() { return m_MIDIInitialized; }
 
 	void DeinitializeMIDI();
-	undefined4 FUN_100c09c0(MxU8* p_data, undefined4);
+	undefined4 FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount);
 	void SetMultiplier(MxS32 p_multiplier);
 
 private:
