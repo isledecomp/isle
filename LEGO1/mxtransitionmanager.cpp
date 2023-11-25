@@ -574,7 +574,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
 		MxBool unkbool = FALSE;
 		displaySurface->vtable2c(
 			ddsc,
-			m_waitIndicator->m_bitmap,
+			m_waitIndicator->GetBitmap(),
 			0,
 			0,
 			m_waitIndicator->GetLocationX(),
@@ -588,7 +588,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC ddsc)
 		MxDisplaySurface* displaySurface = VideoManager()->GetDisplaySurface();
 		displaySurface->vtable24(
 			ddsc,
-			m_waitIndicator->m_bitmap,
+			m_waitIndicator->GetBitmap(),
 			0,
 			0,
 			m_waitIndicator->GetLocationX(),

@@ -42,24 +42,25 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100b3940 STUB
-void MxSmkPresenter::VTable0x5c(undefined4 p_unknown1)
+void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100b3960
-void MxSmkPresenter::VTable0x60()
+void MxSmkPresenter::CreateBitmap()
 {
-	if (m_bitmap) {
+	if (m_bitmap)
 		delete m_bitmap;
-	}
 
-	m_bitmap = new MxBitmap();
+	m_bitmap = new MxBitmap;
 	m_bitmap->SetSize(m_mxSmack.m_smack.m_width, m_mxSmack.m_smack.m_height, NULL, FALSE);
 }
 
 // OFFSET: LEGO1 0x100b3a00 STUB
-void MxSmkPresenter::VTable0x68(undefined4 p_unknown1)
+void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
+	// TODO
 }
 
 // OFFSET: LEGO1 0x100b4260

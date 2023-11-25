@@ -8,19 +8,19 @@ DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
 // OFFSET: LEGO1 0x1000c700
-void MxVideoPresenter::VTable0x5c(MxStreamChunk* p_chunk)
+void MxVideoPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
 
 // OFFSET: LEGO1 0x1000c710
-void MxVideoPresenter::VTable0x60()
+void MxVideoPresenter::CreateBitmap()
 {
 	// Empty
 }
 
 // OFFSET: LEGO1 0x1000c720
-void MxVideoPresenter::VTable0x68(MxStreamChunk* p_chunk)
+void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
@@ -235,7 +235,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // OFFSET: LEGO1 0x100b28b0
-void MxVideoPresenter::VTable0x64()
+void MxVideoPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
@@ -245,7 +245,7 @@ void MxVideoPresenter::VTable0x64()
 		m_currentTickleState = TickleState_Repeating;
 	}
 	else {
-		VTable0x68(chunk);
+		LoadFrame(chunk);
 		m_subscriber->FUN_100b8390(chunk);
 	}
 }
@@ -324,7 +324,7 @@ void MxVideoPresenter::ReadyTickle()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk) {
-		VTable0x5c(chunk);
+		LoadHeader(chunk);
 		m_subscriber->FUN_100b8390(chunk);
 		ParseExtra();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
@@ -338,7 +338,7 @@ void MxVideoPresenter::StartingTickle()
 	MxStreamChunk* chunk = FUN_100b5650();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
-		VTable0x60();
+		CreateBitmap();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Streaming;
 	}
@@ -352,7 +352,7 @@ void MxVideoPresenter::StreamingTickle()
 			MxMediaPresenter::StreamingTickle();
 
 		if (m_currentChunk) {
-			VTable0x68(m_currentChunk);
+			LoadFrame(m_currentChunk);
 			m_currentChunk = NULL;
 		}
 	}
@@ -368,7 +368,7 @@ void MxVideoPresenter::StreamingTickle()
 			if (m_action->GetElapsedTime() < m_currentChunk->GetTime())
 				break;
 
-			VTable0x68(m_currentChunk);
+			LoadFrame(m_currentChunk);
 			m_subscriber->FUN_100b8390(m_currentChunk);
 			m_currentChunk = NULL;
 			m_flags |= Flag_Bit1;
@@ -391,7 +391,7 @@ void MxVideoPresenter::RepeatingTickle()
 				MxMediaPresenter::RepeatingTickle();
 
 			if (m_currentChunk) {
-				VTable0x68(m_currentChunk);
+				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
 			}
 		}
@@ -407,7 +407,7 @@ void MxVideoPresenter::RepeatingTickle()
 				if (m_action->GetElapsedTime() % m_action->GetLoopCount() < m_currentChunk->GetTime())
 					break;
 
-				VTable0x68(m_currentChunk);
+				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
 				m_flags |= Flag_Bit1;
 

@@ -26,12 +26,12 @@ public:
 		return !strcmp(name, MxSmkPresenter::ClassName()) || MxVideoPresenter::IsA(name);
 	}
 
-	virtual void Destroy() override;
-	virtual void VTable0x5c(undefined4 p_unknown1) override;
-	virtual void VTable0x60() override;
-	virtual void VTable0x68(undefined4 p_unknown1) override; // vtable+0x68
-	virtual void VTable0x70() override;
-	virtual MxU32 VTable0x88();
+	virtual void Destroy() override;                          // vtable+0x38
+	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
+	virtual void CreateBitmap() override;                     // vtable+0x60
+	virtual void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
+	virtual void VTable0x70() override;                       // vtable+0x70
+	virtual MxU32 VTable0x88();                               // vtable+0x88
 
 	struct MxSmack {
 		Smack m_smack;
