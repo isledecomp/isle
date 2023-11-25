@@ -7,6 +7,12 @@
 
 DECOMP_SIZE_ASSERT(MxLoopingMIDIPresenter, 0x58);
 
+// OFFSET: LEGO1 0x100b1830 TEMPLATE
+// MxLoopingMIDIPresenter::ClassName
+
+// OFFSET: LEGO1 0x100b1840 TEMPLATE
+// MxLoopingMIDIPresenter::IsA
+
 // OFFSET: LEGO1 0x100b19c0 TEMPLATE
 // MxLoopingMIDIPresenter::`scalar deleting destructor'
 
