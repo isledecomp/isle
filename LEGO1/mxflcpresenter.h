@@ -2,6 +2,9 @@
 #define MXFLCPRESENTER_H
 
 #include "decomp.h"
+
+#include <flic.h>
+
 #include "mxvideopresenter.h"
 
 // VTABLE 0x100dc2c0
@@ -24,11 +27,10 @@ public:
 		return "MxFlcPresenter";
 	}
 
+	virtual void vtable60() override; // vtable+0x60
 	virtual void VTable0x70() override; // vtable+0x70
 
-	virtual void vtable70() override; // vtable+0x74
-
-	undefined4* m_unk64;
+	FLIC_HEADER* m_unk64; // 0x64 - what we believe so far. Could be another custom structure like MxSmack.
 };
 
 #endif // MXFLCPRESENTER_H
