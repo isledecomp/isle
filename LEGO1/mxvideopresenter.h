@@ -41,7 +41,7 @@ public:
 	virtual MxResult AddToManager() override;            // vtable+0x34
 	virtual void Destroy() override;                     // vtable+0x38
 	virtual void EndAction() override;                   // vtable+0x40
-	virtual undefined4 PutData() override;               // vtable+0x4c
+	virtual MxResult PutData() override;                 // vtable+0x4c
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
 	virtual void LoadHeader(MxStreamChunk* p_chunk);     // vtable+0x5c
 	virtual void CreateBitmap();                         // vtable+0x60

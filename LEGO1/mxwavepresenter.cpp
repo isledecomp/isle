@@ -245,7 +245,7 @@ void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
 }
 
 // OFFSET: LEGO1 0x100b2160
-undefined4 MxWavePresenter::PutData()
+MxResult MxWavePresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
@@ -276,7 +276,7 @@ undefined4 MxWavePresenter::PutData()
 		}
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b2280

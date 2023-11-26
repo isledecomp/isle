@@ -20,7 +20,7 @@ public:
 
 	virtual void StreamingTickle() override; // vtable+0x20
 	virtual void DoneTickle() override;      // vtable+0x2c
-	virtual undefined4 PutData() override;   // vtable+0x4c
+	virtual MxResult PutData() override;     // vtable+0x4c
 };
 
 #endif // MXLOOPINGMIDIPRESENTER_H

@@ -61,7 +61,7 @@ public:
 	__declspec(dllexport) virtual void EndAction();                                       // vtable+0x40
 	virtual void SetTickleState(TickleState p_tickleState);                               // vtable+0x44
 	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                       // vtable+0x48
-	virtual undefined4 PutData();                                                         // vtable+0x4c
+	virtual MxResult PutData();                                                           // vtable+0x4c
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
 	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
 

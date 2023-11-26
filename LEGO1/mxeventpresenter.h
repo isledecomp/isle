@@ -28,7 +28,7 @@ public:
 	virtual void StartingTickle() override;        // vtable+0x1c
 	virtual MxResult AddToManager() override;      // vtable+0x34
 	virtual void Destroy() override;               // vtable+0x38
-	virtual undefined4 PutData() override;         // vtable+0x4c
+	virtual MxResult PutData() override;           // vtable+0x4c
 	virtual void CopyData(MxStreamChunk* p_chunk); // vtable+0x5c
 
 private:

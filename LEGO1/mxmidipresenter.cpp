@@ -94,7 +94,7 @@ void MxMIDIPresenter::Destroy()
 }
 
 // OFFSET: LEGO1 0x100c2970
-undefined4 MxMIDIPresenter::PutData()
+MxResult MxMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();
 
@@ -106,7 +106,7 @@ undefined4 MxMIDIPresenter::PutData()
 	}
 
 	m_criticalSection.Leave();
-	return 0;
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100c29e0
