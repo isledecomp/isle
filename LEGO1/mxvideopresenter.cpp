@@ -477,14 +477,14 @@ void MxVideoPresenter::EndAction()
 }
 
 // OFFSET: LEGO1 0x100b3280
-undefined4 MxVideoPresenter::PutData()
+MxResult MxVideoPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (IsEnabled() && m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_unk5)
 		VTable0x6c();
 
-	return 0;
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100b3300

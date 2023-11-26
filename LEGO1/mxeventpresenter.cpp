@@ -88,7 +88,7 @@ void MxEventPresenter::StartingTickle()
 }
 
 // OFFSET: LEGO1 0x100c2ef0
-undefined4 MxEventPresenter::PutData()
+MxResult MxEventPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
@@ -113,5 +113,5 @@ undefined4 MxEventPresenter::PutData()
 		}
 	}
 
-	return 0;
+	return SUCCESS;
 }

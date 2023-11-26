@@ -45,7 +45,7 @@ void MxLoopingMIDIPresenter::DoneTickle()
 }
 
 // OFFSET: LEGO1 0x100c2b00
-undefined4 MxLoopingMIDIPresenter::PutData()
+MxResult MxLoopingMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();
 
@@ -55,5 +55,5 @@ undefined4 MxLoopingMIDIPresenter::PutData()
 	}
 
 	m_criticalSection.Leave();
-	return 0;
+	return SUCCESS;
 }

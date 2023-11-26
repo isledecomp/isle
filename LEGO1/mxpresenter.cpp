@@ -96,9 +96,9 @@ MxBool MxPresenter::HasTickleStatePassed(TickleState p_tickleState)
 }
 
 // OFFSET: LEGO1 0x1000bfc0
-undefined4 MxPresenter::PutData()
+MxResult MxPresenter::PutData()
 {
-	return 0;
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x1000bfd0

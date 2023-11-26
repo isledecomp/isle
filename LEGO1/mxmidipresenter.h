@@ -30,7 +30,7 @@ public:
 	virtual void DoneTickle() override;              // vtable+0x2c
 	virtual void Destroy() override;                 // vtable+0x38
 	virtual void EndAction() override;               // vtable+0x40
-	virtual undefined4 PutData() override;           // vtable+0x4c
+	virtual MxResult PutData() override;             // vtable+0x4c
 	virtual void SetVolume(MxS32 p_volume) override; // vtable+0x60
 
 private:
