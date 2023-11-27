@@ -233,9 +233,9 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 }
 
 // OFFSET: LEGO1 0x100bbc60 STUB
-undefined4 MxDisplaySurface::vtable44(undefined4, undefined4*, undefined4, undefined4)
+LPDIRECTDRAWSURFACE MxDisplaySurface::vtable44(MxBitmap*, undefined4*, undefined4, undefined4)
 {
-	return 0;
+	return NULL;
 }
 
 // OFFSET: LEGO1 0x100bc200 STUB
