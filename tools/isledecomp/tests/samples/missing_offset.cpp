@@ -5,12 +5,12 @@
 
 int no_offset_comment()
 {
-	static int dummy = 123;
-	return -1;
+  static int dummy = 123;
+  return -1;
 }
 
 // FUNCTION: TEST 0xdeadbeef
 void regular_ole_function()
 {
-	printf("hi there");
+  printf("hi there");
 }
