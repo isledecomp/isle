@@ -1,12 +1,14 @@
 #ifndef MXSTREAMCONTROLLER_H
 #define MXSTREAMCONTROLLER_H
 
+#include "compat.h" // STL
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
 #include "mxdsobject.h"
+#include "mxstreamlist.h"
 #include "mxstreamprovider.h"
 
 // VTABLE 0x100dc968
@@ -46,11 +48,15 @@ public:
 	inline MxAtomId& GetAtom() { return atom; };
 
 protected:
-	MxCriticalSection m_criticalSection;
-	MxAtomId atom;
-	MxStreamProvider* m_provider; // MxStreamProvider*
-	undefined4 m_unk2c;
-	undefined m_unk30[0x34];
+	MxCriticalSection m_criticalSection;                // 0x8
+	MxAtomId atom;                                      // 0x24
+	MxStreamProvider* m_provider;                       // 0x28
+	undefined4 m_unk2c;                                 // 0x2c
+	MxStreamListMxDSSubscriber m_subscriberList;        // 0x30
+	MxStreamListMxDSAction m_unkList0x3c;               // 0x3c
+	MxStreamListMxNextActionDataStart m_nextActionList; // 0x48
+	MxStreamListMxDSAction m_unkList0x54;               // 0x54
+	MxDSAction* m_action0x60;                           // 0x60
 };
 
 #endif // MXSTREAMCONTROLLER_H

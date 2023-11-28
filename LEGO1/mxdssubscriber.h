@@ -5,7 +5,8 @@
 #include "mxcore.h"
 #include "mxdschunk.h"
 #include "mxstreamchunk.h"
-#include "mxstreamcontroller.h"
+
+class MxStreamController;
 
 // VTABLE 0x100dc698
 // SIZE 0x4c

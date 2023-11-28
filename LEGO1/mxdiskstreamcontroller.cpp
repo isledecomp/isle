@@ -5,11 +5,25 @@
 #include "mxomni.h"
 #include "mxticklemanager.h"
 
-// OFFSET: LEGO1 0x100c7120 STUB
+DECOMP_SIZE_ASSERT(MxDiskStreamController, 0xc8);
+
+// OFFSET: LEGO1 0x100c7120
 MxDiskStreamController::MxDiskStreamController()
 {
-	// TODO
+	m_unk8c = 0;
 }
+
+// OFFSET: LEGO1 0x100c7330 TEMPLATE
+// list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
+
+// OFFSET: LEGO1 0x100c7420 TEMPLATE
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
+
+// OFFSET: LEGO1 0x100c7490 TEMPLATE
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
+
+// OFFSET: LEGO1 0x100c74e0 TEMPLATE
+// List<MxDSBuffer *>::~List<MxDSBuffer *>
 
 // OFFSET: LEGO1 0x100c7530 STUB
 MxDiskStreamController::~MxDiskStreamController()

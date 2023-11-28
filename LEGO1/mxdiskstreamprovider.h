@@ -1,11 +1,13 @@
 #ifndef MXDISKSTREAMPROVIDER_H
 #define MXDISKSTREAMPROVIDER_H
 
+#include "compat.h"
 #include "decomp.h"
 #include "mxcriticalsection.h"
+#include "mxdsaction.h"
+#include "mxstreamlist.h"
 #include "mxstreamprovider.h"
 #include "mxthread.h"
-#include "mxunklist.h"
 
 class MxDiskStreamProvider;
 
@@ -57,7 +59,7 @@ private:
 	undefined m_remainingWork;           // 0x34
 	undefined m_unk35;                   // 0x35
 	MxCriticalSection m_criticalSection; // 0x38
-	MxUnkList m_list;
+	MxStreamListMxDSAction m_list;       // 0x54
 };
 
 #endif // MXDISKSTREAMPROVIDER_H

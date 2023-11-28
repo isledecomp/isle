@@ -3,6 +3,7 @@
 
 #include <windows.h>
 
+// SIZE 0x1c
 class MxCriticalSection {
 public:
 	__declspec(dllexport) MxCriticalSection();

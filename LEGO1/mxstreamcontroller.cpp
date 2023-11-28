@@ -3,7 +3,9 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxnextactiondatastart.h"
+#include "mxstreamchunk.h"
 
+DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 
 // OFFSET: LEGO1 0x100b9400
@@ -24,11 +26,57 @@ MxResult MxStreamController::vtable0x28()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100c0b90 STUB
+// OFFSET: LEGO1 0x100c0b90
 MxStreamController::MxStreamController()
 {
-	// TODO
+	m_provider = NULL;
+	m_unk2c = 0; // TODO: probably also NULL
+	m_action0x60 = NULL;
 }
+
+// OFFSET: LEGO1 0x100c0d60 TEMPLATE
+// list<MxDSAction *,allocator<MxDSAction *> >::~list<MxDSAction *,allocator<MxDSAction *> >
+
+// OFFSET: LEGO1 0x100c0dd0 TEMPLATE
+// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::~list<MxDSSubscriber *,allocator<MxDSSubscriber *> >
+
+// OFFSET: LEGO1 0x100c0e40 TEMPLATE
+// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::_Buynode
+
+// clang-format off
+// OFFSET: LEGO1 0x100c0e70 TEMPLATE
+// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::~list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >
+// clang-format on
+
+// OFFSET: LEGO1 0x100c0ee0 TEMPLATE
+// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
+
+// OFFSET: LEGO1 0x100c0fc0 TEMPLATE
+// MxStreamListMxDSSubscriber::~MxStreamListMxDSSubscriber
+
+// OFFSET: LEGO1 0x100c1010 TEMPLATE
+// MxStreamListMxDSAction::~MxStreamListMxDSAction
+
+// OFFSET: LEGO1 0x100c1060 TEMPLATE
+// MxStreamListMxNextActionDataStart::~MxStreamListMxNextActionDataStart
+
+// OFFSET: LEGO1 0x100c10b0 TEMPLATE
+// MxStreamList<MxDSSubscriber *>::~MxStreamList<MxDSSubscriber *>
+
+// OFFSET: LEGO1 0x100c1100 TEMPLATE
+// MxStreamList<MxDSAction *>::~MxStreamList<MxDSAction *>
+
+// OFFSET: LEGO1 0x100c1150 TEMPLATE
+// MxStreamList<MxNextActionDataStart *>::~MxStreamList<MxNextActionDataStart *>
+
+// OFFSET: LEGO1 0x100c11a0 TEMPLATE
+// List<MxDSSubscriber *>::~List<MxDSSubscriber *>
+
+// OFFSET: LEGO1 0x100c11f0 TEMPLATE
+// List<MxDSAction *>::~List<MxDSAction *>
+
+// OFFSET: LEGO1 0x100c1240 TEMPLATE
+// List<MxNextActionDataStart *>::~List<MxNextActionDataStart *>
 
 // OFFSET: LEGO1 0x100c1290 STUB
 MxStreamController::~MxStreamController()
@@ -76,7 +124,7 @@ MxResult MxStreamController::vtable0x24(undefined4 p_unknown)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100c1800 STUB
+// OFFSET: LEGO1 0x100c1800
 MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 {
 	MxNextActionDataStart* dataActionStart =
@@ -84,8 +132,9 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 	if (dataActionStart == NULL) {
 		return FAILURE;
 	}
-	// TODO: insert dataActionStart to a list
-	return FAILURE;
+
+	m_nextActionList.push_back(dataActionStart);
+	return SUCCESS;
 }
 
 // OFFSET: LEGO1 0x100c1a00 STUB
