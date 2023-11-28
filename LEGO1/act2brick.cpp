@@ -12,7 +12,7 @@ Act2Brick::~Act2Brick()
 	// TODO
 }
 
-// STUB FUNCTION: LEGO1 0x1007a8c0 STUB
+// FUNCTION: LEGO1 0x1007a8c0 STUB
 MxLong Act2Brick::Notify(MxParam& p)
 {
 	// TODO
