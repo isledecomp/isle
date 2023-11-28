@@ -6,17 +6,17 @@
 // FUNCTION: TEST 0x1234
 void function01()
 {
-	// TODO
+  // TODO
 }
 
 // FUNCTION: TEST 0x2345
 void function02()
 {
-	// TODO
+  // TODO
 }
 
 // FUNCTION: TEST 0x3456
 void function03()
 {
-	// TODO
+  // TODO
 }
