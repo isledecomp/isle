@@ -28,6 +28,9 @@ public:
 		return !strcmp(name, MxNextActionDataStart::ClassName()) || MxCore::IsA(name);
 	}
 
+	inline MxU32 GetObjectId() const { return m_objectId; }
+	inline MxS16 GetUnknown24() const { return m_unk24val; }
+
 private:
 	MxU32 m_objectId;
 	MxS16 m_unk24val;

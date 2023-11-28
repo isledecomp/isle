@@ -1,6 +1,10 @@
 #include "mxcriticalsection.h"
 
+#include "decomp.h"
+
 #include <stdio.h>
+
+DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c);
 
 // 0x10101e78
 int g_useMutex = 0;

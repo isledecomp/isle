@@ -1,6 +1,9 @@
 #ifndef MXDISKSTREAMCONTROLLER_H
 #define MXDISKSTREAMCONTROLLER_H
 
+#include "compat.h" // STL
+#include "decomp.h"
+#include "mxdsbuffer.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
@@ -34,6 +37,17 @@ public:
 	{
 		return !strcmp(name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(name);
 	}
+
+private:
+	MxStreamListMxDSAction m_list0x64; // 0x64
+	undefined m_unk70;                 // 0x70
+	list<MxDSBuffer*> m_list0x74;      // 0x74
+	MxStreamListMxDSAction m_list0x80; // 0x80
+	undefined2 m_unk8c;                // 0x8c
+	MxStreamListMxDSAction m_list0x90; // 0x90
+	MxCriticalSection m_critical9c;    // 0x9c
+	MxStreamListMxDSAction m_list0xb8; // 0xb8
+	undefined m_unkc4;                 // 0xc4
 };
 
 #endif // MXDISKSTREAMCONTROLLER_H
