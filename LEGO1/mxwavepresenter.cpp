@@ -11,25 +11,25 @@
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);
 
-// OFFSET: LEGO1 0x1000d640
+// FUNCTION: LEGO1 0x1000d640
 MxWavePresenter::~MxWavePresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x1000d6a0
+// FUNCTION: LEGO1 0x1000d6a0
 void MxWavePresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x1000d6b0
+// FUNCTION: LEGO1 0x1000d6b0
 MxBool MxWavePresenter::IsPaused()
 {
 	return m_paused;
 }
 
-// OFFSET: LEGO1 0x100b1ad0
+// FUNCTION: LEGO1 0x100b1ad0
 void MxWavePresenter::Init()
 {
 	m_waveFormat = NULL;
@@ -42,7 +42,7 @@ void MxWavePresenter::Init()
 	m_paused = FALSE;
 }
 
-// OFFSET: LEGO1 0x100b1af0
+// FUNCTION: LEGO1 0x100b1af0
 MxResult MxWavePresenter::AddToManager()
 {
 	MxResult result = MxSoundPresenter::AddToManager();
@@ -50,7 +50,7 @@ MxResult MxWavePresenter::AddToManager()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b1b10
+// FUNCTION: LEGO1 0x100b1b10
 void MxWavePresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (m_dsBuffer) {
@@ -67,7 +67,7 @@ void MxWavePresenter::Destroy(MxBool p_fromDestructor)
 		MxSoundPresenter::Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b1b60
+// FUNCTION: LEGO1 0x100b1b60
 MxS8 MxWavePresenter::GetPlayedChunks()
 {
 	DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
@@ -79,13 +79,13 @@ MxS8 MxWavePresenter::GetPlayedChunks()
 	return playedChunks;
 }
 
-// OFFSET: LEGO1 0x100b1ba0
+// FUNCTION: LEGO1 0x100b1ba0
 MxBool MxWavePresenter::FUN_100b1ba0()
 {
 	return !m_started || GetPlayedChunks() != m_writtenChunks;
 }
 
-// OFFSET: LEGO1 0x100b1bd0
+// FUNCTION: LEGO1 0x100b1bd0
 void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 {
 	DWORD dwStatus;
@@ -126,7 +126,7 @@ void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 	}
 }
 
-// OFFSET: LEGO1 0x100b1cf0
+// FUNCTION: LEGO1 0x100b1cf0
 void MxWavePresenter::ReadyTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -141,7 +141,7 @@ void MxWavePresenter::ReadyTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b1d50
+// FUNCTION: LEGO1 0x100b1d50
 void MxWavePresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -194,7 +194,7 @@ void MxWavePresenter::StartingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b1ea0
+// FUNCTION: LEGO1 0x100b1ea0
 void MxWavePresenter::StreamingTickle()
 {
 	if (!m_currentChunk) {
@@ -220,7 +220,7 @@ void MxWavePresenter::StreamingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b20c0
+// FUNCTION: LEGO1 0x100b20c0
 void MxWavePresenter::DoneTickle()
 {
 	if (m_dsBuffer) {
@@ -236,7 +236,7 @@ void MxWavePresenter::DoneTickle()
 		MxMediaPresenter::DoneTickle();
 }
 
-// OFFSET: LEGO1 0x100b2130
+// FUNCTION: LEGO1 0x100b2130
 void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
 {
 	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
@@ -244,7 +244,7 @@ void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
 		m_subscriber->FUN_100b8390(p_chunk);
 }
 
-// OFFSET: LEGO1 0x100b2160
+// FUNCTION: LEGO1 0x100b2160
 MxResult MxWavePresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -279,7 +279,7 @@ MxResult MxWavePresenter::PutData()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b2280
+// FUNCTION: LEGO1 0x100b2280
 void MxWavePresenter::EndAction()
 {
 	if (m_action) {
@@ -291,7 +291,7 @@ void MxWavePresenter::EndAction()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2300
+// FUNCTION: LEGO1 0x100b2300
 void MxWavePresenter::SetVolume(MxS32 p_volume)
 {
 	m_criticalSection.Enter();
@@ -306,7 +306,7 @@ void MxWavePresenter::SetVolume(MxS32 p_volume)
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100b2360
+// FUNCTION: LEGO1 0x100b2360
 void MxWavePresenter::Enable(MxBool p_enable)
 {
 	if (IsEnabled() != p_enable) {
@@ -321,7 +321,7 @@ void MxWavePresenter::Enable(MxBool p_enable)
 	}
 }
 
-// OFFSET: LEGO1 0x100b23a0
+// FUNCTION: LEGO1 0x100b23a0
 void MxWavePresenter::ParseExtra()
 {
 	char extraCopy[512];
@@ -343,7 +343,7 @@ void MxWavePresenter::ParseExtra()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2440
+// FUNCTION: LEGO1 0x100b2440
 void MxWavePresenter::Pause()
 {
 	if (!m_paused && m_started) {
@@ -353,7 +353,7 @@ void MxWavePresenter::Pause()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2470
+// FUNCTION: LEGO1 0x100b2470
 void MxWavePresenter::Resume()
 {
 	if (m_paused) {

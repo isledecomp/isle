@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
 
-// OFFSET: LEGO1 0x1007aa20
+// FUNCTION: LEGO1 0x1007aa20
 LegoVideoManager::LegoVideoManager()
 {
 	m_unk64 = 0;
@@ -30,14 +30,14 @@ LegoVideoManager::LegoVideoManager()
 	m_initialized = FALSE;
 }
 
-// OFFSET: LEGO1 0x1007ab40
+// FUNCTION: LEGO1 0x1007ab40
 LegoVideoManager::~LegoVideoManager()
 {
 	Destroy();
 	delete m_palette;
 }
 
-// OFFSET: LEGO1 0x1007b5e0
+// FUNCTION: LEGO1 0x1007b5e0
 void LegoVideoManager::Destroy()
 {
 	// todo: delete m_unk0x512
@@ -55,7 +55,7 @@ void LegoVideoManager::Destroy()
 	delete[] m_prefCounter;
 }
 
-// OFFSET: LEGO1 0x1007b6a0
+// FUNCTION: LEGO1 0x1007b6a0
 void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 {
 	m_cursorX = p_cursorX;
@@ -69,19 +69,19 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
-// OFFSET: LEGO1 0x1007c300
+// FUNCTION: LEGO1 0x1007c300
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
 {
 	EnableFullScreenMovie(p_enable, TRUE);
 }
 
-// OFFSET: LEGO1 0x1007c310 STUB
+// FUNCTION: LEGO1 0x1007c310 STUB
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1007c440
+// FUNCTION: LEGO1 0x1007c440
 void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 {
 	PALETTEENTRY colorStrucure;
@@ -97,14 +97,14 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	// m_3dManager->m_pViewport->vtable1c(red, green, blue)
 }
 
-// OFFSET: LEGO1 0x1007c560 STUB
+// FUNCTION: LEGO1 0x1007c560 STUB
 int LegoVideoManager::EnableRMDevice()
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1007c740 STUB
+// FUNCTION: LEGO1 0x1007c740 STUB
 int LegoVideoManager::DisableRMDevice()
 {
 	// TODO

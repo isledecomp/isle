@@ -7,7 +7,7 @@
 
 class MxCore;
 
-// VTABLE 0x100dc860
+// VTABLE: LEGO1 0x100dc860
 class MxThread {
 public:
 	// Note: Comes before virtual destructor
@@ -40,7 +40,7 @@ protected:
 	MxCore* m_target;
 };
 
-// VTABLE 0x100dc6d8
+// VTABLE: LEGO1 0x100dc6d8
 class MxTickleThread : public MxThread {
 public:
 	MxTickleThread(MxCore* p_target, int p_frequencyMS);

@@ -1,6 +1,6 @@
 #include "mxvideoparamflags.h"
 
-// OFFSET: LEGO1 0x100bec40
+// FUNCTION: LEGO1 0x100bec40
 MxVideoParamFlags::MxVideoParamFlags()
 {
 	this->SetFullScreen(0);

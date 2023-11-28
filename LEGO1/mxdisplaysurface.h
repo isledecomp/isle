@@ -9,7 +9,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100dc768
+// VTABLE: LEGO1 0x100dc768
 // SIZE 0xac
 class MxDisplaySurface : public MxCore {
 public:

@@ -6,16 +6,16 @@
 struct MxRegionTopBottom;
 struct MxRegionLeftRight;
 
-// VTABLE 0x100dcb10 TEMPLATE
+// VTABLE: LEGO1 0x100dcb10 SYNTHETIC
 // class MxCollection<MxRegionTopBottom *>
 
-// VTABLE 0x100dcb28 TEMPLATE
+// VTABLE: LEGO1 0x100dcb28 SYNTHETIC
 // class MxList<MxRegionTopBottom *>
 
-// VTABLE 0x100dcb40 TEMPLATE
+// VTABLE: LEGO1 0x100dcb40 SYNTHETIC
 // class MxPtrList<MxRegionTopBottom>
 
-// VTABLE 0x100dcb58
+// VTABLE: LEGO1 0x100dcb58
 // SIZE 0x18
 class MxRegionList : public MxPtrList<MxRegionTopBottom> {
 public:
@@ -23,22 +23,22 @@ public:
 	static void Destroy(MxRegionTopBottom*);
 };
 
-// VTABLE 0x100dcb88
+// VTABLE: LEGO1 0x100dcb88
 typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
 
-// VTABLE 0x100dcc10
+// VTABLE: LEGO1 0x100dcc10
 typedef MxListCursorChildChild<MxRegionLeftRight*> MxRegionLeftRightListCursor;
 
-// VTABLE 0x100dcc40 TEMPLATE
+// VTABLE: LEGO1 0x100dcc40 SYNTHETIC
 // class MxCollection<MxRegionLeftRight *>
 
-// VTABLE 0x100dcc58 TEMPLATE
+// VTABLE: LEGO1 0x100dcc58 SYNTHETIC
 // class MxList<MxRegionLeftRight *>
 
-// VTABLE 0x100dcc70 TEMPLATE
+// VTABLE: LEGO1 0x100dcc70 SYNTHETIC
 // class MxPtrList<MxRegionLeftRight>
 
-// VTABLE 0x100dcc88
+// VTABLE: LEGO1 0x100dcc88
 // SIZE 0x18
 class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
 public:

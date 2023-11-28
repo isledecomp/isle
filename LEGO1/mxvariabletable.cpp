@@ -1,36 +1,36 @@
 #include "mxvariabletable.h"
 
-// OFFSET: LEGO1 0x100afcd0 TEMPLATE
+// FUNCTION: LEGO1 0x100afcd0 SYNTHETIC
 // MxCollection<MxVariable *>::Compare
 
-// OFFSET: LEGO1 0x100afce0 TEMPLATE
+// FUNCTION: LEGO1 0x100afce0 SYNTHETIC
 // MxCollection<MxVariable *>::~MxCollection<MxVariable *>
 
-// OFFSET: LEGO1 0x100afd30 TEMPLATE
+// FUNCTION: LEGO1 0x100afd30 SYNTHETIC
 // MxCollection<MxVariable *>::Destroy
 
-// OFFSET: LEGO1 0x100afd40 TEMPLATE
+// FUNCTION: LEGO1 0x100afd40 SYNTHETIC
 // MxCollection<MxVariable *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100afdb0 TEMPLATE
+// FUNCTION: LEGO1 0x100afdb0 SYNTHETIC
 // MxVariableTable::Destroy
 
-// OFFSET: LEGO1 0x100afdc0 TEMPLATE
+// FUNCTION: LEGO1 0x100afdc0 SYNTHETIC
 // MxHashTable<MxVariable *>::Hash
 
-// OFFSET: LEGO1 0x100b0bd0 TEMPLATE
+// FUNCTION: LEGO1 0x100b0bd0 SYNTHETIC
 // MxHashTable<MxVariable *>::~MxHashTable<MxVariable *>
 
-// OFFSET: LEGO1 0x100b0ca0 TEMPLATE
+// FUNCTION: LEGO1 0x100b0ca0 SYNTHETIC
 // MxHashTable<MxVariable *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100b7330
+// FUNCTION: LEGO1 0x100b7330
 MxS8 MxVariableTable::Compare(MxVariable* p_var0, MxVariable* p_var1)
 {
 	return p_var0->GetKey()->Compare(*p_var1->GetKey());
 }
 
-// OFFSET: LEGO1 0x100b7370
+// FUNCTION: LEGO1 0x100b7370
 MxU32 MxVariableTable::Hash(MxVariable* p_var)
 {
 	const char* str = p_var->GetKey()->GetData();
@@ -43,7 +43,7 @@ MxU32 MxVariableTable::Hash(MxVariable* p_var)
 	return value;
 }
 
-// OFFSET: LEGO1 0x100b73a0
+// FUNCTION: LEGO1 0x100b73a0
 void MxVariableTable::SetVariable(const char* p_key, const char* p_value)
 {
 	MxHashTableCursor<MxVariable*> cursor(this);
@@ -59,7 +59,7 @@ void MxVariableTable::SetVariable(const char* p_key, const char* p_value)
 	}
 }
 
-// OFFSET: LEGO1 0x100b7740
+// FUNCTION: LEGO1 0x100b7740
 void MxVariableTable::SetVariable(MxVariable* p_var)
 {
 	MxHashTableCursor<MxVariable*> cursor(this);
@@ -71,7 +71,7 @@ void MxVariableTable::SetVariable(MxVariable* p_var)
 	MxHashTable<MxVariable*>::Add(p_var);
 }
 
-// OFFSET: LEGO1 0x100b78f0
+// FUNCTION: LEGO1 0x100b78f0
 const char* MxVariableTable::GetVariable(const char* p_key)
 {
 	const char* value = "";
@@ -89,8 +89,8 @@ const char* MxVariableTable::GetVariable(const char* p_key)
 	return value;
 }
 
-// OFFSET: LEGO1 0x100b7ab0 TEMPLATE
+// FUNCTION: LEGO1 0x100b7ab0 SYNTHETIC
 // MxHashTable<MxVariable *>::Resize
 
-// OFFSET: LEGO1 0x100b7b80 TEMPLATE
+// FUNCTION: LEGO1 0x100b7b80 SYNTHETIC
 // MxHashTable<MxVariable *>::_NodeInsert

@@ -13,7 +13,7 @@ const char* g_str_enable = "enable";
 // 0x100f3bf4
 const char* g_str_disable = "disable";
 
-// OFFSET: LEGO1 0x1003c500
+// FUNCTION: LEGO1 0x1003c500
 LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)
 {
 	m_key = p_key;
@@ -21,7 +21,7 @@ LegoFullScreenMovie::LegoFullScreenMovie(const char* p_key, const char* p_value)
 	SetValue(p_value);
 }
 
-// OFFSET: LEGO1 0x1003c5c0
+// FUNCTION: LEGO1 0x1003c5c0
 void LegoFullScreenMovie::SetValue(const char* p_option)
 {
 	m_value = p_option;

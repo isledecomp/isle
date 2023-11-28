@@ -4,7 +4,7 @@
 #include <vec.h>
 
 // TODO: Find proper compilation unit to put this
-// OFFSET: LEGO1 0x1000c0f0 TEMPLATE
+// FUNCTION: LEGO1 0x1000c0f0 SYNTHETIC
 // Vector2Impl::Vector2Impl
 
 /*
@@ -60,7 +60,7 @@ public:
 	float& operator[](long i) { return elements[i]; }
 };
 
-// VTABLE 0x100d4288
+// VTABLE: LEGO1 0x100d4288
 // SIZE 0x8
 class Vector2Impl {
 public:
@@ -120,7 +120,7 @@ protected:
 	float* m_data;
 };
 
-// VTABLE 0x100d4518
+// VTABLE: LEGO1 0x100d4518
 // SIZE 0x8
 class Vector3Impl : public Vector2Impl {
 public:
@@ -152,7 +152,7 @@ public:
 	inline void Fill(float p_value) { EqualsScalar(&p_value); }
 };
 
-// VTABLE 0x100d45a0
+// VTABLE: LEGO1 0x100d45a0
 // SIZE 0x8
 class Vector4Impl : public Vector3Impl {
 public:
@@ -183,7 +183,7 @@ public:
 	virtual void UnknownQuaternionOp(Vector4Impl* p_a, Vector4Impl* p_b);
 };
 
-// VTABLE 0x100d4488
+// VTABLE: LEGO1 0x100d4488
 // SIZE 0x14
 class Vector3Data : public Vector3Impl {
 public:
@@ -204,7 +204,7 @@ private:
 	Vector3 m_vector;
 };
 
-// VTABLE 0x100d41e8
+// VTABLE: LEGO1 0x100d41e8
 // SIZE 0x18
 class Vector4Data : public Vector4Impl {
 public:

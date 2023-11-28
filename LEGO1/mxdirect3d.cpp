@@ -6,7 +6,7 @@ DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x198);
 
-// OFFSET: LEGO1 0x1009b0a0
+// FUNCTION: LEGO1 0x1009b0a0
 MxDirect3D::MxDirect3D()
 {
 	this->m_pDirect3d = NULL;
@@ -15,13 +15,13 @@ MxDirect3D::MxDirect3D()
 	this->m_pDeviceModeFinder = NULL;
 }
 
-// OFFSET: LEGO1 0x1009b140
+// FUNCTION: LEGO1 0x1009b140
 MxDirect3D::~MxDirect3D()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x1009b1a0
+// FUNCTION: LEGO1 0x1009b1a0
 BOOL MxDirect3D::Create(
 	HWND hWnd,
 	BOOL fullscreen_1,
@@ -57,7 +57,7 @@ BOOL MxDirect3D::Create(
 	return success;
 }
 
-// OFFSET: LEGO1 0x1009b210
+// FUNCTION: LEGO1 0x1009b210
 void MxDirect3D::Destroy()
 {
 	if (this->m_pDirect3dDevice) {
@@ -84,7 +84,7 @@ void MxDirect3D::Destroy()
 	MxDirectDraw::Destroy();
 }
 
-// OFFSET: LEGO1 0x1009b290
+// FUNCTION: LEGO1 0x1009b290
 void MxDirect3D::Clear()
 {
 	if (this->m_pDirect3dDevice) {
@@ -98,7 +98,7 @@ void MxDirect3D::Clear()
 	MxDirectDraw::DestroyButNotDirectDraw();
 }
 
-// OFFSET: LEGO1 0x1009b2d0
+// FUNCTION: LEGO1 0x1009b2d0
 BOOL MxDirect3D::CreateIDirect3D()
 {
 	MxResult ret = IDirect3D_QueryInterface(m_pDirectDraw, IID_IDirect3D2, (LPVOID*) &m_pDirect3d);
@@ -111,7 +111,7 @@ BOOL MxDirect3D::CreateIDirect3D()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009b310 STUB
+// FUNCTION: LEGO1 0x1009b310 STUB
 BOOL MxDirect3D::D3DSetMode()
 {
 	// TODO
@@ -122,13 +122,13 @@ BOOL MxDirect3D::D3DSetMode()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009b8b0
+// FUNCTION: LEGO1 0x1009b8b0
 MxDeviceModeFinder::MxDeviceModeFinder()
 {
 	memset(this, 0, sizeof(*this));
 }
 
-// OFFSET: LEGO1 0x1009b8d0
+// FUNCTION: LEGO1 0x1009b8d0
 MxDeviceModeFinder::~MxDeviceModeFinder()
 {
 	if (m_deviceInfo) {
@@ -137,7 +137,7 @@ MxDeviceModeFinder::~MxDeviceModeFinder()
 	}
 }
 
-// OFFSET: LEGO1 0x1009c070 STUB
+// FUNCTION: LEGO1 0x1009c070 STUB
 BOOL MxDeviceEnumerate::FUN_1009c070()
 {
 	// TODO
@@ -150,7 +150,7 @@ BOOL MxDeviceEnumerate::FUN_1009c070()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009c4c0
+// FUNCTION: LEGO1 0x1009c4c0
 void MxDirect3D::BuildErrorString(const char* p_format, ...)
 {
 	va_list args;
@@ -163,7 +163,7 @@ void MxDirect3D::BuildErrorString(const char* p_format, ...)
 	OutputDebugString(buf);
 }
 
-// OFFSET: LEGO1 0x1009c6c0
+// FUNCTION: LEGO1 0x1009c6c0
 MxResult MxDeviceEnumerate::_DoEnumerate()
 {
 	// TODO: what does ECX refer to in this context?
@@ -180,14 +180,14 @@ MxResult MxDeviceEnumerate::_DoEnumerate()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x1009c710 STUB
+// FUNCTION: LEGO1 0x1009c710 STUB
 BOOL FAR PASCAL EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID)
 {
 	// TODO
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1009c730 STUB
+// FUNCTION: LEGO1 0x1009c730 STUB
 const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
 	// TODO: This is a list of error messages, similar to the function in

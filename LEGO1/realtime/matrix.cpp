@@ -10,61 +10,61 @@ DECOMP_SIZE_ASSERT(Matrix4, 0x40);
 DECOMP_SIZE_ASSERT(Matrix4Impl, 0x8);
 DECOMP_SIZE_ASSERT(Matrix4Data, 0x48);
 
-// OFFSET: LEGO1 0x10002320
+// FUNCTION: LEGO1 0x10002320
 void Matrix4Impl::EqualsMatrixData(const Matrix4& p_matrix)
 {
 	*m_data = p_matrix;
 }
 
-// OFFSET: LEGO1 0x10002340
+// FUNCTION: LEGO1 0x10002340
 void Matrix4Impl::EqualsMatrixImpl(const Matrix4Impl* p_other)
 {
 	*m_data = *p_other->m_data;
 }
 
-// OFFSET: LEGO1 0x10002360
+// FUNCTION: LEGO1 0x10002360
 void Matrix4Impl::AnotherSetData(Matrix4& p_data)
 {
 	m_data = &p_data;
 }
 
-// OFFSET: LEGO1 0x10002370
+// FUNCTION: LEGO1 0x10002370
 void Matrix4Impl::SetData(Matrix4& p_data)
 {
 	m_data = &p_data;
 }
 
-// OFFSET: LEGO1 0x10002380
+// FUNCTION: LEGO1 0x10002380
 const Matrix4* Matrix4Impl::GetData() const
 {
 	return m_data;
 }
 
-// OFFSET: LEGO1 0x10002390
+// FUNCTION: LEGO1 0x10002390
 Matrix4* Matrix4Impl::GetData()
 {
 	return m_data;
 }
 
-// OFFSET: LEGO1 0x100023a0
+// FUNCTION: LEGO1 0x100023a0
 const float* Matrix4Impl::Element(int p_row, int p_col) const
 {
 	return &(*m_data)[p_row][p_col];
 }
 
-// OFFSET: LEGO1 0x100023c0
+// FUNCTION: LEGO1 0x100023c0
 float* Matrix4Impl::Element(int p_row, int p_col)
 {
 	return &(*m_data)[p_row][p_col];
 }
 
-// OFFSET: LEGO1 0x100023e0
+// FUNCTION: LEGO1 0x100023e0
 void Matrix4Impl::Clear()
 {
 	memset(m_data, 0, 16 * sizeof(float));
 }
 
-// OFFSET: LEGO1 0x100023f0
+// FUNCTION: LEGO1 0x100023f0
 void Matrix4Impl::SetIdentity()
 {
 	Clear();
@@ -74,7 +74,7 @@ void Matrix4Impl::SetIdentity()
 	(*m_data)[3][3] = 1.0f;
 }
 
-// OFFSET: LEGO1 0x10002430
+// FUNCTION: LEGO1 0x10002430
 Matrix4Impl* Matrix4Impl::operator+=(const Matrix4& p_matrix)
 {
 	for (int i = 0; i < 16; ++i)
@@ -84,7 +84,7 @@ Matrix4Impl* Matrix4Impl::operator+=(const Matrix4& p_matrix)
 
 // Matches but instructions are significantly out of order. Probably not wrong
 // code given that the very similar SetTranslation does match.
-// OFFSET: LEGO1 0x10002460
+// FUNCTION: LEGO1 0x10002460
 void Matrix4Impl::TranslateBy(const float* p_x, const float* p_y, const float* p_z)
 {
 	((float*) m_data)[12] += *p_x;
@@ -92,7 +92,7 @@ void Matrix4Impl::TranslateBy(const float* p_x, const float* p_y, const float* p
 	((float*) m_data)[14] += *p_z;
 }
 
-// OFFSET: LEGO1 0x100024a0
+// FUNCTION: LEGO1 0x100024a0
 void Matrix4Impl::SetTranslation(const float* p_x, const float* p_y, const float* p_z)
 {
 	(*m_data)[3][0] = *p_x;
@@ -100,7 +100,7 @@ void Matrix4Impl::SetTranslation(const float* p_x, const float* p_y, const float
 	(*m_data)[3][2] = *p_z;
 }
 
-// OFFSET: LEGO1 0x100024d0
+// FUNCTION: LEGO1 0x100024d0
 void Matrix4Impl::EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b)
 {
 	float* cur = (float*) m_data;
@@ -115,7 +115,7 @@ void Matrix4Impl::EqualsDataProduct(const Matrix4& p_a, const Matrix4& p_b)
 	}
 }
 
-// OFFSET: LEGO1 0x10002530
+// FUNCTION: LEGO1 0x10002530
 void Matrix4Impl::EqualsMxProduct(const Matrix4Impl* p_a, const Matrix4Impl* p_b)
 {
 	EqualsDataProduct(*p_a->m_data, *p_b->m_data);
@@ -124,7 +124,7 @@ void Matrix4Impl::EqualsMxProduct(const Matrix4Impl* p_a, const Matrix4Impl* p_b
 // Not close, Ghidra struggles understinging this method so it will have to
 // be manually worked out. Included since I at least figured out what it was
 // doing with rotateIndex and what overall operation it's trying to do.
-// OFFSET: LEGO1 0x10002550 STUB
+// FUNCTION: LEGO1 0x10002550 STUB
 void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 {
 	/*
@@ -167,19 +167,19 @@ void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 
 // No idea what this function is doing and it will be hard to tell until
 // we have a confirmed usage site.
-// OFFSET: LEGO1 0x10002710 STUB
+// FUNCTION: LEGO1 0x10002710 STUB
 int Matrix4Impl::FUN_10002710(const Vector3Impl* p_vec)
 {
 	return -1;
 }
 
-// OFFSET: LEGO1 0x10002850
+// FUNCTION: LEGO1 0x10002850
 void Matrix4Impl::operator=(const Matrix4Impl& p_other)
 {
 	EqualsMatrixImpl(&p_other);
 }
 
-// OFFSET: LEGO1 0x10002860
+// FUNCTION: LEGO1 0x10002860
 void Matrix4Data::operator=(const Matrix4Data& p_other)
 {
 	EqualsMatrixImpl(&p_other);

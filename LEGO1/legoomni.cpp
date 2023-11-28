@@ -109,103 +109,103 @@ const char* g_current = "current";
 // 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
-// OFFSET: LEGO1 0x10015700
+// FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()
 {
 	return (LegoOmni*) MxOmni::GetInstance();
 }
 
-// OFFSET: LEGO1 0x10015710
+// FUNCTION: LEGO1 0x10015710
 LegoSoundManager* SoundManager()
 {
 	return LegoOmni::GetInstance()->GetSoundManager();
 }
 
-// OFFSET: LEGO1 0x10015720
+// FUNCTION: LEGO1 0x10015720
 LegoVideoManager* VideoManager()
 {
 	return LegoOmni::GetInstance()->GetVideoManager();
 }
 
-// OFFSET: LEGO1 0x10015730
+// FUNCTION: LEGO1 0x10015730
 MxBackgroundAudioManager* BackgroundAudioManager()
 {
 	return LegoOmni::GetInstance()->GetBackgroundAudioManager();
 }
 
-// OFFSET: LEGO1 0x10015740
+// FUNCTION: LEGO1 0x10015740
 LegoInputManager* InputManager()
 {
 	return LegoOmni::GetInstance()->GetInputManager();
 }
 
-// OFFSET: LEGO1 0x10015750
+// FUNCTION: LEGO1 0x10015750
 LegoControlManager* ControlManager()
 {
 	return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
 }
 
-// OFFSET: LEGO1 0x10015760
+// FUNCTION: LEGO1 0x10015760
 LegoGameState* GameState()
 {
 	return LegoOmni::GetInstance()->GetGameState();
 }
 
-// OFFSET: LEGO1 0x10015770
+// FUNCTION: LEGO1 0x10015770
 LegoAnimationManager* AnimationManager()
 {
 	return LegoOmni::GetInstance()->GetAnimationManager();
 }
 
-// OFFSET: LEGO1 0x10015780
+// FUNCTION: LEGO1 0x10015780
 LegoNavController* NavController()
 {
 	return LegoOmni::GetInstance()->GetNavController();
 }
 
-// OFFSET: LEGO1 0x10015790
+// FUNCTION: LEGO1 0x10015790
 LegoWorld* GetCurrentVehicle()
 {
 	return LegoOmni::GetInstance()->GetCurrentVehicle();
 }
 
-// OFFSET: LEGO1 0x100157a0
+// FUNCTION: LEGO1 0x100157a0
 LegoWorld* GetCurrentWorld()
 {
 	return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 
-// OFFSET: LEGO1 0x100157e0
+// FUNCTION: LEGO1 0x100157e0
 LegoPlantManager* PlantManager()
 {
 	return LegoOmni::GetInstance()->GetLegoPlantManager();
 }
 
-// OFFSET: LEGO1 0x100157f0
+// FUNCTION: LEGO1 0x100157f0
 LegoBuildingManager* BuildingManager()
 {
 	return LegoOmni::GetInstance()->GetLegoBuildingManager();
 }
 
-// OFFSET: LEGO1 0x10015800
+// FUNCTION: LEGO1 0x10015800
 GifManager* GetGifManager()
 {
 	return LegoOmni::GetInstance()->GetGifManager();
 }
 
-// OFFSET: LEGO1 0x100158e0
+// FUNCTION: LEGO1 0x100158e0
 MxDSAction& GetCurrentAction()
 {
 	return LegoOmni::GetInstance()->GetCurrentAction();
 }
 
-// OFFSET: LEGO1 0x10015900
+// FUNCTION: LEGO1 0x10015900
 MxTransitionManager* TransitionManager()
 {
 	return LegoOmni::GetInstance()->GetTransitionManager();
 }
 
-// OFFSET: LEGO1 0x10015910
+// FUNCTION: LEGO1 0x10015910
 void PlayMusic(MxU32 p_index)
 {
 	// index is the entityid of the music in jukebox.si
@@ -216,27 +216,27 @@ void PlayMusic(MxU32 p_index)
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
 }
 
-// OFFSET: LEGO1 0x1001a700 STUB
+// FUNCTION: LEGO1 0x1001a700 STUB
 void FUN_1001a700()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003dd70 STUB
+// FUNCTION: LEGO1 0x1003dd70 STUB
 LegoROI* PickROI(MxLong, MxLong)
 {
 	// TODO
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x1003ddc0 STUB
+// FUNCTION: LEGO1 0x1003ddc0 STUB
 LegoEntity* PickEntity(MxLong, MxLong)
 {
 	// TODO
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x100528e0
+// FUNCTION: LEGO1 0x100528e0
 void RegisterScripts()
 {
 	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", LookupMode_LowerCase2);
@@ -269,7 +269,7 @@ void RegisterScripts()
 	g_nocdSourceName = new MxAtomId("\\lego\\scripts\\nocd", LookupMode_LowerCase2);
 }
 
-// OFFSET: LEGO1 0x100530c0
+// FUNCTION: LEGO1 0x100530c0
 void UnregisterScripts()
 {
 	delete g_copterScript;
@@ -332,25 +332,25 @@ void UnregisterScripts()
 	g_nocdSourceName = NULL;
 }
 
-// OFFSET: LEGO1 0x10053430
+// FUNCTION: LEGO1 0x10053430
 const char* GetNoCD_SourceName()
 {
 	return g_nocdSourceName->GetInternal();
 }
 
-// OFFSET: LEGO1 0x10058a00
+// FUNCTION: LEGO1 0x10058a00
 LegoOmni::LegoOmni()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x10058b50
+// FUNCTION: LEGO1 0x10058b50
 LegoOmni::~LegoOmni()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x10058bd0
+// FUNCTION: LEGO1 0x10058bd0
 void LegoOmni::Init()
 {
 	MxOmni::Init();
@@ -372,13 +372,13 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
-// OFFSET: LEGO1 0x10058c30 STUB
+// FUNCTION: LEGO1 0x10058c30 STUB
 void LegoOmni::Destroy()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10058e70
+// FUNCTION: LEGO1 0x10058e70
 MxResult LegoOmni::Create(MxOmniCreateParam& p)
 {
 	MxResult result = FAILURE;
@@ -451,40 +451,40 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005ac90
+// FUNCTION: LEGO1 0x1005ac90
 void LegoOmni::CreateInstance()
 {
 	MxOmni::DestroyInstance();
 	MxOmni::SetInstance(new LegoOmni());
 }
 
-// OFFSET: LEGO1 0x1005ad10
+// FUNCTION: LEGO1 0x1005ad10
 LegoOmni* LegoOmni::GetInstance()
 {
 	return (LegoOmni*) MxOmni::GetInstance();
 }
 
-// OFFSET: LEGO1 0x1005af10 STUB
+// FUNCTION: LEGO1 0x1005af10 STUB
 void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005b0c0 STUB
+// FUNCTION: LEGO1 0x1005b0c0 STUB
 LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	// TODO
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x1005b1d0 STUB
+// FUNCTION: LEGO1 0x1005b1d0 STUB
 MxResult LegoOmni::DeleteObject(MxDSAction& ds)
 {
 	// TODO
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005b2f0
+// FUNCTION: LEGO1 0x1005b2f0
 MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
 {
 	LegoWorld* foundEntity = NULL;
@@ -502,14 +502,14 @@ MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p
 	return foundEntity;
 }
 
-// OFFSET: LEGO1 0x1005b3a0
+// FUNCTION: LEGO1 0x1005b3a0
 void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
 {
 	if (m_currentWorld)
 		NotificationManager()->Send(m_currentWorld, p_param);
 }
 
-// OFFSET: LEGO1 0x1005b3c0
+// FUNCTION: LEGO1 0x1005b3c0
 MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 {
 	if (MxOmni::DoesEntityExist(ds)) {
@@ -520,21 +520,21 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1005b400 STUB
+// FUNCTION: LEGO1 0x1005b400 STUB
 int LegoOmni::GetCurrPathInfo(LegoPathBoundary**, int&)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1005b560
+// FUNCTION: LEGO1 0x1005b560
 void LegoOmni::CreateBackgroundAudio()
 {
 	if (m_bkgAudioManager)
 		m_bkgAudioManager->Create(*g_jukeboxScript, 100);
 }
 
-// OFFSET: LEGO1 0x1005b580
+// FUNCTION: LEGO1 0x1005b580
 MxResult LegoOmni::Start(MxDSAction* action)
 {
 	MxResult result = MxOmni::Start(action);
@@ -544,34 +544,34 @@ MxResult LegoOmni::Start(MxDSAction* action)
 	return result;
 }
 
-// OFFSET: LEGO1 0x1005b5f0 STUB
+// FUNCTION: LEGO1 0x1005b5f0 STUB
 MxLong LegoOmni::Notify(MxParam& p)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1005b640
+// FUNCTION: LEGO1 0x1005b640
 void LegoOmni::StartTimer()
 {
 	MxOmni::StartTimer();
 	SetAppCursor(2);
 }
 
-// OFFSET: LEGO1 0x1005b650
+// FUNCTION: LEGO1 0x1005b650
 void LegoOmni::StopTimer()
 {
 	MxOmni::StopTimer();
 	SetAppCursor(0);
 }
 
-// OFFSET: LEGO1 0x100acf50
+// FUNCTION: LEGO1 0x100acf50
 MxResult Start(MxDSAction* p_dsAction)
 {
 	return MxOmni::GetInstance()->Start(p_dsAction);
 }
 
-// OFFSET: LEGO1 0x100b6ff0
+// FUNCTION: LEGO1 0x100b6ff0
 void MakeSourceName(char* p_output, const char* p_input)
 {
 	const char* cln = strchr(p_input, ':');
@@ -589,7 +589,7 @@ void MakeSourceName(char* p_output, const char* p_input)
 	}
 }
 
-// OFFSET: LEGO1 0x100b7050
+// FUNCTION: LEGO1 0x100b7050
 MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p_source)
 {
 	MxBool didMatch = FALSE;
@@ -625,13 +625,13 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 	return didMatch;
 }
 
-// OFFSET: LEGO1 0x100b7210
+// FUNCTION: LEGO1 0x100b7210
 void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
 {
 	g_omniUserMessage = p_userMsg;
 }
 
-// OFFSET: LEGO1 0x100c0280
+// FUNCTION: LEGO1 0x100c0280
 MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
 {
 	char* buf;

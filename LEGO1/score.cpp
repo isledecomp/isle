@@ -15,20 +15,20 @@
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
 
-// OFFSET: LEGO1 0x10001000
+// FUNCTION: LEGO1 0x10001000
 Score::Score()
 {
 	m_unkf8 = 0;
 	NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x100010b0
+// FUNCTION: LEGO1 0x100010b0
 MxBool Score::VTable0x5c()
 {
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x10001200
+// FUNCTION: LEGO1 0x10001200
 Score::~Score()
 {
 	if (InputManager()->GetWorld() == this)
@@ -38,7 +38,7 @@ Score::~Score()
 	NotificationManager()->Unregister(this);
 }
 
-// OFFSET: LEGO1 0x100012a0
+// FUNCTION: LEGO1 0x100012a0
 MxResult Score::Create(MxDSObject& p_dsObject)
 {
 	MxResult result = SetAsCurrentWorld(p_dsObject);
@@ -58,7 +58,7 @@ MxResult Score::Create(MxDSObject& p_dsObject)
 	return result;
 }
 
-// OFFSET: LEGO1 0x10001340
+// FUNCTION: LEGO1 0x10001340
 void Score::DeleteScript()
 {
 	if (m_state->GetTutorialFlag()) {
@@ -71,7 +71,7 @@ void Score::DeleteScript()
 	}
 }
 
-// OFFSET: LEGO1 0x10001410
+// FUNCTION: LEGO1 0x10001410
 MxLong Score::Notify(MxParam& p)
 {
 	MxLong ret = 0;
@@ -106,7 +106,7 @@ MxLong Score::Notify(MxParam& p)
 	return ret;
 }
 
-// OFFSET: LEGO1 0x10001510
+// FUNCTION: LEGO1 0x10001510
 MxLong Score::FUN_10001510(MxEndActionNotificationParam& p)
 {
 	MxDSAction* action = p.GetAction();
@@ -127,7 +127,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p)
 	return 1;
 }
 
-// OFFSET: LEGO1 0x10001580
+// FUNCTION: LEGO1 0x10001580
 void Score::Stop()
 {
 	LegoWorld::Stop();
@@ -150,7 +150,7 @@ void Score::Stop()
 	FUN_10015820(0, 7);
 }
 
-// OFFSET: LEGO1 0x100016d0
+// FUNCTION: LEGO1 0x100016d0
 MxLong Score::FUN_100016d0(MxType17NotificationParam& p)
 {
 	MxS16 l = p.GetUnknown28();
@@ -211,7 +211,7 @@ MxLong Score::FUN_100016d0(MxType17NotificationParam& p)
 	return 1;
 }
 
-// OFFSET: LEGO1 0x10001980
+// FUNCTION: LEGO1 0x10001980
 void Score::VTable0x68(MxBool p_add)
 {
 	LegoWorld::VTable0x68(p_add);
@@ -224,7 +224,7 @@ void Score::VTable0x68(MxBool p_add)
 		InputManager()->ClearWorld();
 }
 
-// OFFSET: LEGO1 0x100019d0
+// FUNCTION: LEGO1 0x100019d0
 void Score::Paint()
 {
 	GifManager* gm = GetGifManager();
@@ -278,7 +278,7 @@ void Score::Paint()
 	}
 }
 
-// OFFSET: LEGO1 0x10001d20
+// FUNCTION: LEGO1 0x10001d20
 void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 {
 	MxU32 data[24];
@@ -316,7 +316,7 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 	}
 }
 
-// OFFSET: LEGO1 0x10001e40
+// FUNCTION: LEGO1 0x10001e40
 MxBool Score::VTable0x64()
 {
 	DeleteScript();

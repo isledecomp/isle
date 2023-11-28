@@ -24,7 +24,7 @@
 
 #include <dsound.h>
 
-// OFFSET: ISLE 0x401000
+// FUNCTION: ISLE 0x401000
 IsleApp::IsleApp()
 {
 	m_hdPath = NULL;
@@ -61,7 +61,7 @@ IsleApp::IsleApp()
 	LegoOmni::CreateInstance();
 }
 
-// OFFSET: ISLE 0x4011a0
+// FUNCTION: ISLE 0x4011a0
 IsleApp::~IsleApp()
 {
 	if (LegoOmni::GetInstance()) {
@@ -86,7 +86,7 @@ IsleApp::~IsleApp()
 	}
 }
 
-// OFFSET: ISLE 0x401260
+// FUNCTION: ISLE 0x401260
 void IsleApp::Close()
 {
 	MxDSAction ds;
@@ -121,7 +121,7 @@ void IsleApp::Close()
 	}
 }
 
-// OFFSET: ISLE 0x4013b0
+// FUNCTION: ISLE 0x4013b0
 BOOL IsleApp::SetupLegoOmni()
 {
 	BOOL result = FALSE;
@@ -140,7 +140,7 @@ BOOL IsleApp::SetupLegoOmni()
 	return result;
 }
 
-// OFFSET: ISLE 0x401560
+// FUNCTION: ISLE 0x401560
 void IsleApp::SetupVideoFlags(
 	BOOL fullScreen,
 	BOOL flipSurfaces,
@@ -172,7 +172,7 @@ void IsleApp::SetupVideoFlags(
 BOOL FindExistingInstance(void);
 BOOL StartDirectSound(void);
 
-// OFFSET: ISLE 0x401610
+// FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	// Look for another instance, if we find one, bring it to the foreground instead
@@ -281,10 +281,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return msg.wParam;
 }
 
-// OFFSET: ISLE 0x401c40 TEMPLATE
+// FUNCTION: ISLE 0x401c40 SYNTHETIC
 // MxDSObject::SetAtomId
 
-// OFFSET: ISLE 0x401ca0
+// FUNCTION: ISLE 0x401ca0
 BOOL FindExistingInstance(void)
 {
 	HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
@@ -297,7 +297,7 @@ BOOL FindExistingInstance(void)
 	return 1;
 }
 
-// OFFSET: ISLE 0x401ce0
+// FUNCTION: ISLE 0x401ce0
 BOOL StartDirectSound(void)
 {
 	LPDIRECTSOUND lpDS = NULL;
@@ -310,7 +310,7 @@ BOOL StartDirectSound(void)
 	return FALSE;
 }
 
-// OFFSET: ISLE 0x401d20
+// FUNCTION: ISLE 0x401d20
 LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	NotificationId type;
@@ -481,7 +481,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// OFFSET: ISLE 0x4023e0
+// FUNCTION: ISLE 0x4023e0
 MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
 	WNDCLASSA wndclass;
@@ -627,7 +627,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	return SUCCESS;
 }
 
-// OFFSET: ISLE 0x402740
+// FUNCTION: ISLE 0x402740
 BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 {
 	HKEY hKey;
@@ -646,7 +646,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 	return out;
 }
 
-// OFFSET: ISLE 0x4027b0
+// FUNCTION: ISLE 0x4027b0
 int IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 {
 	char buffer[256];
@@ -668,7 +668,7 @@ int IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 	return read;
 }
 
-// OFFSET: ISLE 0x402880
+// FUNCTION: ISLE 0x402880
 int IsleApp::ReadRegInt(LPCSTR name, int* out)
 {
 	char buffer[256];
@@ -681,7 +681,7 @@ int IsleApp::ReadRegInt(LPCSTR name, int* out)
 	return read;
 }
 
-// OFFSET: ISLE 0x4028d0
+// FUNCTION: ISLE 0x4028d0
 void IsleApp::LoadConfig()
 {
 	char buffer[1024];
@@ -747,7 +747,7 @@ void IsleApp::LoadConfig()
 	}
 }
 
-// OFFSET: ISLE 0x402c20
+// FUNCTION: ISLE 0x402c20
 inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 {
 	if (!this->m_windowActive) {
@@ -819,7 +819,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		Sleep(0);
 }
 
-// OFFSET: ISLE 0x402e80
+// FUNCTION: ISLE 0x402e80
 void IsleApp::SetupCursor(WPARAM wParam)
 {
 	switch (wParam) {

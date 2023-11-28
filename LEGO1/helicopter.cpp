@@ -10,20 +10,20 @@
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
 
-// OFFSET: LEGO1 0x10001e60
+// FUNCTION: LEGO1 0x10001e60
 Helicopter::Helicopter()
 {
 	m_unk13c = 60;
 }
 
-// OFFSET: LEGO1 0x10003230
+// FUNCTION: LEGO1 0x10003230
 Helicopter::~Helicopter()
 {
 	ControlManager()->Unregister(this);
 	IslePathActor::Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100032c0
+// FUNCTION: LEGO1 0x100032c0
 MxResult Helicopter::Create(MxDSObject& p_dsObject)
 {
 	MxResult result = IslePathActor::Create(p_dsObject);
@@ -39,7 +39,7 @@ MxResult Helicopter::Create(MxDSObject& p_dsObject)
 	return result;
 }
 
-// OFFSET: LEGO1 0x10003320
+// FUNCTION: LEGO1 0x10003320
 void Helicopter::GetState()
 {
 	m_state = (HelicopterState*) GameState()->GetState("HelicopterState");
@@ -47,7 +47,7 @@ void Helicopter::GetState()
 		m_state = (HelicopterState*) GameState()->CreateState("HelicopterState");
 }
 
-// OFFSET: LEGO1 0x10003360
+// FUNCTION: LEGO1 0x10003360
 void Helicopter::VTable0xe4()
 {
 	if (!GameState()->GetUnknown10()) {

@@ -5,7 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
-// OFFSET: LEGO1 0x10043f50
+// FUNCTION: LEGO1 0x10043f50
 MxControlPresenter::MxControlPresenter()
 {
 	this->m_unk4c = 0;
@@ -16,7 +16,7 @@ MxControlPresenter::MxControlPresenter()
 	this->m_unk54 = 0;
 }
 
-// OFFSET: LEGO1 0x10044110
+// FUNCTION: LEGO1 0x10044110
 MxControlPresenter::~MxControlPresenter()
 {
 	if (this->m_unk58) {
@@ -24,7 +24,7 @@ MxControlPresenter::~MxControlPresenter()
 	}
 }
 
-// OFFSET: LEGO1 0x10044610
+// FUNCTION: LEGO1 0x10044610
 void MxControlPresenter::ReadyTickle()
 {
 	MxPresenter::ParseExtra();

@@ -5,7 +5,7 @@
 //        class' ClassName() function, but none of them call it directly.
 class Act3Actor {
 public:
-	// OFFSET: LEGO1 0x100431b0
+	// FUNCTION: LEGO1 0x100431b0
 	inline virtual const char* ClassName() override
 	{
 		// 0x100f03ac

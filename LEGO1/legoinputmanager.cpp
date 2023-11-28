@@ -7,7 +7,7 @@
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
 DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18);
 
-// OFFSET: LEGO1 0x1005b790
+// FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
 	m_unk0x5c = NULL;
@@ -34,20 +34,20 @@ LegoInputManager::LegoInputManager()
 	m_timeout = 1000;
 }
 
-// OFFSET: LEGO1 0x1005b8b0 STUB
+// FUNCTION: LEGO1 0x1005b8b0 STUB
 MxResult LegoInputManager::Tickle()
 {
 	ProcessEvents();
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x1005b8f0
+// FUNCTION: LEGO1 0x1005b8f0
 LegoInputManager::~LegoInputManager()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x1005b960
+// FUNCTION: LEGO1 0x1005b960
 MxResult LegoInputManager::Create(HWND p_hwnd)
 {
 	// TODO
@@ -56,28 +56,28 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x1005bb80 TEMPLATE
+// FUNCTION: LEGO1 0x1005bb80 SYNTHETIC
 // MxCollection<LegoEventNotificationParam>::Compare
 
-// OFFSET: LEGO1 0x1005bc30 TEMPLATE
+// FUNCTION: LEGO1 0x1005bc30 SYNTHETIC
 // MxCollection<LegoEventNotificationParam>::Destroy
 
-// OFFSET: LEGO1 0x1005bc80 TEMPLATE
+// FUNCTION: LEGO1 0x1005bc80 SYNTHETIC
 // MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
 
-// OFFSET: LEGO1 0x1005bd50 TEMPLATE
+// FUNCTION: LEGO1 0x1005bd50 SYNTHETIC
 // MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1005bdc0 TEMPLATE
+// FUNCTION: LEGO1 0x1005bdc0 SYNTHETIC
 // MxList<LegoEventNotificationParam>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1005beb0 TEMPLATE
+// FUNCTION: LEGO1 0x1005beb0 SYNTHETIC
 // LegoEventQueue::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1005bf70 TEMPLATE
+// FUNCTION: LEGO1 0x1005bf70 SYNTHETIC
 // MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1005bfe0
+// FUNCTION: LEGO1 0x1005bfe0
 void LegoInputManager::Destroy()
 {
 	ReleaseDX();
@@ -94,7 +94,7 @@ void LegoInputManager::Destroy()
 		delete m_controlManager;
 }
 
-// OFFSET: LEGO1 0x1005c030
+// FUNCTION: LEGO1 0x1005c030
 void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
 {
 	HINSTANCE hinstance = (HINSTANCE) GetWindowLong(hwnd, GWL_HINSTANCE);
@@ -110,7 +110,7 @@ void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
 	}
 }
 
-// OFFSET: LEGO1 0x1005c0a0
+// FUNCTION: LEGO1 0x1005c0a0
 void LegoInputManager::ReleaseDX()
 {
 	if (m_directInputDevice != NULL) {
@@ -125,7 +125,7 @@ void LegoInputManager::ReleaseDX()
 	}
 }
 
-// OFFSET: LEGO1 0x1005c240
+// FUNCTION: LEGO1 0x1005c240
 MxResult LegoInputManager::GetJoystickId()
 {
 	JOYINFOEX joyinfoex;
@@ -157,7 +157,7 @@ MxResult LegoInputManager::GetJoystickId()
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005c320
+// FUNCTION: LEGO1 0x1005c320
 MxResult LegoInputManager::GetJoystickState(
 	MxU32* joystick_x,
 	MxU32* joystick_y,
@@ -210,43 +210,43 @@ MxResult LegoInputManager::GetJoystickState(
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1005c470 STUB
+// FUNCTION: LEGO1 0x1005c470 STUB
 void LegoInputManager::Register(MxCore*)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005c5c0 STUB
+// FUNCTION: LEGO1 0x1005c5c0 STUB
 void LegoInputManager::UnRegister(MxCore*)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005c700
+// FUNCTION: LEGO1 0x1005c700
 void LegoInputManager::SetCamera(LegoCameraController* p_camera)
 {
 	m_camera = p_camera;
 }
 
-// OFFSET: LEGO1 0x1005c710
+// FUNCTION: LEGO1 0x1005c710
 void LegoInputManager::ClearCamera()
 {
 	m_camera = NULL;
 }
 
-// OFFSET: LEGO1 0x1005c720
+// FUNCTION: LEGO1 0x1005c720
 void LegoInputManager::SetWorld(LegoWorld* p_world)
 {
 	m_world = p_world;
 }
 
-// OFFSET: LEGO1 0x1005c730
+// FUNCTION: LEGO1 0x1005c730
 void LegoInputManager::ClearWorld()
 {
 	m_world = NULL;
 }
 
-// OFFSET: LEGO1 0x1005c740
+// FUNCTION: LEGO1 0x1005c740
 void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key)
 {
 	LegoEventNotificationParam param = LegoEventNotificationParam(p_id, NULL, p_modifier, p_x, p_y, p_key);
@@ -257,7 +257,7 @@ void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p
 	}
 }
 
-// OFFSET: LEGO1 0x1005c820
+// FUNCTION: LEGO1 0x1005c820
 void LegoInputManager::ProcessEvents()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -269,14 +269,14 @@ void LegoInputManager::ProcessEvents()
 	}
 }
 
-// OFFSET: LEGO1 0x1005c9c0 STUB
+// FUNCTION: LEGO1 0x1005c9c0 STUB
 MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1005cfb0
+// FUNCTION: LEGO1 0x1005cfb0
 void LegoInputManager::SetTimer()
 {
 	LegoOmni* omni = LegoOmni::GetInstance();
@@ -284,7 +284,7 @@ void LegoInputManager::SetTimer()
 	m_timer = timer;
 }
 
-// OFFSET: LEGO1 0x1005cfd0
+// FUNCTION: LEGO1 0x1005cfd0
 void LegoInputManager::KillTimer()
 {
 	if (m_timer != 0) {
@@ -293,5 +293,5 @@ void LegoInputManager::KillTimer()
 	}
 }
 
-// OFFSET: LEGO1 0x1005d010 TEMPLATE
+// FUNCTION: LEGO1 0x1005d010 SYNTHETIC
 // MxListEntry<LegoEventNotificationParam>::GetValue

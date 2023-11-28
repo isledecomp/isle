@@ -11,20 +11,20 @@
 DECOMP_SIZE_ASSERT(MxNotification, 0x8);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
-// OFFSET: LEGO1 0x100ac220
+// FUNCTION: LEGO1 0x100ac220
 MxNotification::MxNotification(MxCore* p_target, MxNotificationParam* p_param)
 {
 	m_target = p_target;
 	m_param = p_param->Clone();
 }
 
-// OFFSET: LEGO1 0x100ac240
+// FUNCTION: LEGO1 0x100ac240
 MxNotification::~MxNotification()
 {
 	delete m_param;
 }
 
-// OFFSET: LEGO1 0x100ac250
+// FUNCTION: LEGO1 0x100ac250
 MxNotificationManager::MxNotificationManager() : MxCore(), m_lock(), m_listenerIds()
 {
 	m_unk2c = 0;
@@ -33,7 +33,7 @@ MxNotificationManager::MxNotificationManager() : MxCore(), m_lock(), m_listenerI
 	m_sendList = NULL;
 }
 
-// OFFSET: LEGO1 0x100ac450
+// FUNCTION: LEGO1 0x100ac450
 MxNotificationManager::~MxNotificationManager()
 {
 	MxAutoLocker lock(&m_lock);
@@ -44,7 +44,7 @@ MxNotificationManager::~MxNotificationManager()
 	TickleManager()->UnregisterClient(this);
 }
 
-// OFFSET: LEGO1 0x100ac600
+// FUNCTION: LEGO1 0x100ac600
 MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxResult result = SUCCESS;
@@ -60,7 +60,7 @@ MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThrea
 	return result;
 }
 
-// OFFSET: LEGO1 0x100ac6c0
+// FUNCTION: LEGO1 0x100ac6c0
 MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_param)
 {
 	MxAutoLocker lock(&m_lock);
@@ -85,7 +85,7 @@ MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100ac800
+// FUNCTION: LEGO1 0x100ac800
 MxResult MxNotificationManager::Tickle()
 {
 	m_sendList = new MxNotificationPtrList();
@@ -114,7 +114,7 @@ MxResult MxNotificationManager::Tickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100ac990
+// FUNCTION: LEGO1 0x100ac990
 void MxNotificationManager::FlushPending(MxCore* p_listener)
 {
 	MxNotificationPtrList pending;
@@ -163,7 +163,7 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 	}
 }
 
-// OFFSET: LEGO1 0x100acd20
+// FUNCTION: LEGO1 0x100acd20
 void MxNotificationManager::Register(MxCore* p_listener)
 {
 	MxAutoLocker lock(&m_lock);
@@ -175,7 +175,7 @@ void MxNotificationManager::Register(MxCore* p_listener)
 	m_listenerIds.push_back(p_listener->GetId());
 }
 
-// OFFSET: LEGO1 0x100acdf0
+// FUNCTION: LEGO1 0x100acdf0
 void MxNotificationManager::Unregister(MxCore* p_listener)
 {
 	MxAutoLocker lock(&m_lock);

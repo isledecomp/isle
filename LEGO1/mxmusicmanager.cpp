@@ -7,26 +7,26 @@
 
 DECOMP_SIZE_ASSERT(MxMusicManager, 0x58);
 
-// OFFSET: LEGO1 0x100c05a0
+// FUNCTION: LEGO1 0x100c05a0
 MxMusicManager::MxMusicManager()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100c0630
+// FUNCTION: LEGO1 0x100c0630
 MxMusicManager::~MxMusicManager()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100c0690
+// FUNCTION: LEGO1 0x100c0690
 void MxMusicManager::Init()
 {
 	m_multiplier = 100;
 	InitData();
 }
 
-// OFFSET: LEGO1 0x100c06a0
+// FUNCTION: LEGO1 0x100c06a0
 void MxMusicManager::InitData()
 {
 	m_MIDIStreamH = 0;
@@ -39,7 +39,7 @@ void MxMusicManager::InitData()
 	m_MIDIHdrP = NULL;
 }
 
-// OFFSET: LEGO1 0x100c06c0
+// FUNCTION: LEGO1 0x100c06c0
 void MxMusicManager::Destroy(MxBool p_fromDestructor)
 {
 	if (m_thread) {
@@ -62,7 +62,7 @@ void MxMusicManager::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// OFFSET: LEGO1 0x100c07f0
+// FUNCTION: LEGO1 0x100c07f0
 void MxMusicManager::SetMIDIVolume()
 {
 	MxS32 result = (m_volume * m_multiplier) / 0x64;
@@ -74,7 +74,7 @@ void MxMusicManager::SetMIDIVolume()
 	}
 }
 
-// OFFSET: LEGO1 0x100c0840
+// FUNCTION: LEGO1 0x100c0840
 MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxResult status = FAILURE;
@@ -105,13 +105,13 @@ done:
 	return status;
 }
 
-// OFFSET: LEGO1 0x100c0930
+// FUNCTION: LEGO1 0x100c0930
 void MxMusicManager::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100c0940
+// FUNCTION: LEGO1 0x100c0940
 void MxMusicManager::SetVolume(MxS32 p_volume)
 {
 	MxAudioManager::SetVolume(p_volume);
@@ -120,7 +120,7 @@ void MxMusicManager::SetVolume(MxS32 p_volume)
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100c0970
+// FUNCTION: LEGO1 0x100c0970
 void MxMusicManager::SetMultiplier(MxS32 p_multiplier)
 {
 	m_criticalSection.Enter();
@@ -129,21 +129,21 @@ void MxMusicManager::SetMultiplier(MxS32 p_multiplier)
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100c09a0
+// FUNCTION: LEGO1 0x100c09a0
 MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 {
 	MxS32 result = (p_volume * 0xffff) / 100;
 	return (result << 0x10) | result;
 }
 
-// OFFSET: LEGO1 0x100c09c0 STUB
+// FUNCTION: LEGO1 0x100c09c0 STUB
 undefined4 MxMusicManager::FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x100c0b20
+// FUNCTION: LEGO1 0x100c0b20
 void MxMusicManager::DeinitializeMIDI()
 {
 	m_criticalSection.Enter();

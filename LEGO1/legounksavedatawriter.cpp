@@ -6,10 +6,10 @@
 
 DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
 
-// GLOBAL OFFSET: LEGO1 0x10104f20
+// GLOBAL FUNCTION: LEGO1 0x10104f20
 LegoSaveDataEntry3 g_saveData3[66];
 
-// OFFSET: LEGO1 0x10083310
+// FUNCTION: LEGO1 0x10083310
 MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStream* p_stream)
 {
 	MxResult result = FAILURE;

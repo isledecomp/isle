@@ -3,7 +3,7 @@
 
 #include "mxmidipresenter.h"
 
-// VTABLE 0x100dc240
+// VTABLE: LEGO1 0x100dc240
 // SIZE 0x58
 class MxLoopingMIDIPresenter : public MxMIDIPresenter {
 public:

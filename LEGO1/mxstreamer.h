@@ -58,7 +58,7 @@ private:
 	MxStreamController* m_controller;
 };
 
-// VTABLE 0x100dc710
+// VTABLE: LEGO1 0x100dc710
 // SIZE 0x2c
 class MxStreamer : public MxCore {
 public:
@@ -75,14 +75,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
-	// OFFSET: LEGO1 0x100b9000
+	// FUNCTION: LEGO1 0x100b9000
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x1010210c
 		return "MxStreamer";
 	}
 
-	// OFFSET: LEGO1 0x100b9010
+	// FUNCTION: LEGO1 0x100b9010
 	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);

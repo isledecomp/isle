@@ -8,7 +8,7 @@
 
 DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 
-// OFFSET: LEGO1 0x100b3310
+// FUNCTION: LEGO1 0x100b3310
 MxFlcPresenter::MxFlcPresenter()
 {
 	this->m_unk64 = 0;
@@ -16,7 +16,7 @@ MxFlcPresenter::MxFlcPresenter()
 	this->m_flags &= 0xfb;
 }
 
-// OFFSET: LEGO1 0x100b3420
+// FUNCTION: LEGO1 0x100b3420
 MxFlcPresenter::~MxFlcPresenter()
 {
 	if (this->m_unk64) {
@@ -24,7 +24,7 @@ MxFlcPresenter::~MxFlcPresenter()
 	}
 }
 
-// OFFSET: LEGO1 0x100b3620
+// FUNCTION: LEGO1 0x100b3620
 void MxFlcPresenter::VTable0x70()
 {
 	MxPalette* pal = m_bitmap->CreatePalette();

@@ -7,19 +7,19 @@
 // but this assert will enforce the size if we decide to change that.
 DECOMP_SIZE_ASSERT(MXIOINFO, sizeof(MMIOINFO));
 
-// OFFSET: LEGO1 0x100cc800
+// FUNCTION: LEGO1 0x100cc800
 MXIOINFO::MXIOINFO()
 {
 	memset(&m_info, 0, sizeof(m_info));
 }
 
-// OFFSET: LEGO1 0x100cc820
+// FUNCTION: LEGO1 0x100cc820
 MXIOINFO::~MXIOINFO()
 {
 	Close(0);
 }
 
-// OFFSET: LEGO1 0x100cc830
+// FUNCTION: LEGO1 0x100cc830
 MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 {
 	OFSTRUCT _unused;
@@ -62,7 +62,7 @@ MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100cc8e0
+// FUNCTION: LEGO1 0x100cc8e0
 MxU16 MXIOINFO::Close(MxLong p_unused)
 {
 	MxU16 result = 0;
@@ -84,7 +84,7 @@ MxU16 MXIOINFO::Close(MxLong p_unused)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100cc930
+// FUNCTION: LEGO1 0x100cc930
 MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 {
 	MxLong bytes_read = 0;
@@ -128,7 +128,7 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 	return bytes_read;
 }
 
-// OFFSET: LEGO1 0x100cca00
+// FUNCTION: LEGO1 0x100cca00
 MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 {
 	MxLong result = -1;
@@ -236,7 +236,7 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100ccbc0
+// FUNCTION: LEGO1 0x100ccbc0
 MxU16 MXIOINFO::SetBuffer(char* p_buf, MxLong p_len, MxLong p_unused)
 {
 	MxU16 result = Flush(0);
@@ -254,7 +254,7 @@ MxU16 MXIOINFO::SetBuffer(char* p_buf, MxLong p_len, MxLong p_unused)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100ccc10
+// FUNCTION: LEGO1 0x100ccc10
 MxU16 MXIOINFO::Flush(MxU16 p_unused)
 {
 	MxU16 result = 0;
@@ -304,7 +304,7 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100ccd00
+// FUNCTION: LEGO1 0x100ccd00
 MxU16 MXIOINFO::Advance(MxU16 p_option)
 {
 	MxU16 result = 0;
@@ -376,7 +376,7 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100cce60
+// FUNCTION: LEGO1 0x100cce60
 MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU16 p_descend)
 {
 	MxU16 result = 0;

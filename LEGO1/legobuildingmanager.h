@@ -3,14 +3,14 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d6f50
+// VTABLE: LEGO1 0x100d6f50
 // SIZE 0x30
 class LegoBuildingManager : public MxCore {
 public:
 	LegoBuildingManager();
 	virtual ~LegoBuildingManager() override;
 
-	// OFFSET: LEGO1 0x1002f930
+	// FUNCTION: LEGO1 0x1002f930
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x100f37d0

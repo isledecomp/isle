@@ -3,7 +3,7 @@
 
 #include "legoworld.h"
 
-// VTABLE 0x100da328
+// VTABLE: LEGO1 0x100da328
 // SIZE 0x3e4
 class HistoryBook : public LegoWorld {
 public:
@@ -12,14 +12,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
-	// OFFSET: LEGO1 0x10082390
+	// FUNCTION: LEGO1 0x10082390
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x100f04bc
 		return "HistoryBook";
 	}
 
-	// OFFSET: LEGO1 0x100823a0
+	// FUNCTION: LEGO1 0x100823a0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, HistoryBook::ClassName()) || LegoWorld::IsA(name);

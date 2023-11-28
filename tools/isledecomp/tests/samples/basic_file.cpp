@@ -3,20 +3,20 @@
 
 // A very simple well-formed code file
 
-// OFFSET: TEST 0x1234
+// FUNCTION: TEST 0x1234
 void function01()
 {
-  // TODO
+	// TODO
 }
 
-// OFFSET: TEST 0x2345
+// FUNCTION: TEST 0x2345
 void function02()
 {
-  // TODO
+	// TODO
 }
 
-// OFFSET: TEST 0x3456
+// FUNCTION: TEST 0x3456
 void function03()
 {
-  // TODO
+	// TODO
 }

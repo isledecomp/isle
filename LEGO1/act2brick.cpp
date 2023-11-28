@@ -1,18 +1,18 @@
 #include "act2brick.h"
 
-// OFFSET: LEGO1 0x1007a2b0 STUB
+// FUNCTION: LEGO1 0x1007a2b0 STUB
 Act2Brick::Act2Brick()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1007a470 STUB
+// FUNCTION: LEGO1 0x1007a470 STUB
 Act2Brick::~Act2Brick()
 {
 	// TODO
 }
 
-// STUB OFFSET: LEGO1 0x1007a8c0 STUB
+// STUB FUNCTION: LEGO1 0x1007a8c0 STUB
 MxLong Act2Brick::Notify(MxParam& p)
 {
 	// TODO
@@ -20,7 +20,7 @@ MxLong Act2Brick::Notify(MxParam& p)
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1007a7f0 STUB
+// FUNCTION: LEGO1 0x1007a7f0 STUB
 MxResult Act2Brick::Tickle()
 {
 	// TODO

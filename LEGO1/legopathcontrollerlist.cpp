@@ -5,38 +5,38 @@
 
 DECOMP_SIZE_ASSERT(LegoPathControllerList, 0x18);
 
-// OFFSET: LEGO1 0x1001d210
+// FUNCTION: LEGO1 0x1001d210
 MxS8 LegoPathControllerList::Compare(LegoPathController* p_a, LegoPathController* p_b)
 {
 	return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 }
 
-// OFFSET: LEGO1 0x1001d230 TEMPLATE
+// FUNCTION: LEGO1 0x1001d230 SYNTHETIC
 // MxCollection<LegoPathController *>::Compare
 
-// OFFSET: LEGO1 0x1001d240 TEMPLATE
+// FUNCTION: LEGO1 0x1001d240 SYNTHETIC
 // MxList<LegoPathController *>::MxList<LegoPathController *>
 
-// OFFSET: LEGO1 0x1001d2d0 TEMPLATE
+// FUNCTION: LEGO1 0x1001d2d0 SYNTHETIC
 // MxCollection<LegoPathController *>::~MxCollection<LegoPathController *>
 
-// OFFSET: LEGO1 0x1001d320 TEMPLATE
+// FUNCTION: LEGO1 0x1001d320 SYNTHETIC
 // MxCollection<LegoPathController *>::Destroy
 
-// OFFSET: LEGO1 0x1001d330 TEMPLATE
+// FUNCTION: LEGO1 0x1001d330 SYNTHETIC
 // MxList<LegoPathController *>::~MxList<LegoPathController *>
 
-// OFFSET: LEGO1 0x1001d3c0
+// FUNCTION: LEGO1 0x1001d3c0
 void LegoPathControllerList::Destroy(LegoPathController* p_controller)
 {
 	delete p_controller;
 }
 
-// OFFSET: LEGO1 0x1001d490 TEMPLATE
+// FUNCTION: LEGO1 0x1001d490 SYNTHETIC
 // MxCollection<LegoPathController *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1001d500 TEMPLATE
+// FUNCTION: LEGO1 0x1001d500 SYNTHETIC
 // MxList<LegoPathController *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1001d5b0 TEMPLATE
+// FUNCTION: LEGO1 0x1001d5b0 SYNTHETIC
 // MxPtrList<LegoPathController>::`scalar deleting destructor'

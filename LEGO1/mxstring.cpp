@@ -7,7 +7,7 @@
 
 DECOMP_SIZE_ASSERT(MxString, 0x10)
 
-// OFFSET: LEGO1 0x100ae200
+// FUNCTION: LEGO1 0x100ae200
 MxString::MxString()
 {
 	// Set string to one char in length and set that char to null terminator
@@ -16,7 +16,7 @@ MxString::MxString()
 	this->m_length = 0;
 }
 
-// OFFSET: LEGO1 0x100ae2a0
+// FUNCTION: LEGO1 0x100ae2a0
 MxString::MxString(const MxString& str)
 {
 	this->m_length = str.m_length;
@@ -24,7 +24,7 @@ MxString::MxString(const MxString& str)
 	strcpy(this->m_data, str.m_data);
 }
 
-// OFFSET: LEGO1 0x100ae350
+// FUNCTION: LEGO1 0x100ae350
 MxString::MxString(const char* str)
 {
 	if (str) {
@@ -39,25 +39,25 @@ MxString::MxString(const char* str)
 	}
 }
 
-// OFFSET: LEGO1 0x100ae420
+// FUNCTION: LEGO1 0x100ae420
 MxString::~MxString()
 {
 	delete[] this->m_data;
 }
 
-// OFFSET: LEGO1 0x100ae490
+// FUNCTION: LEGO1 0x100ae490
 void MxString::ToUpperCase()
 {
 	strupr(this->m_data);
 }
 
-// OFFSET: LEGO1 0x100ae4a0
+// FUNCTION: LEGO1 0x100ae4a0
 void MxString::ToLowerCase()
 {
 	strlwr(this->m_data);
 }
 
-// OFFSET: LEGO1 0x100ae4b0
+// FUNCTION: LEGO1 0x100ae4b0
 MxString& MxString::operator=(const MxString& param)
 {
 	if (this->m_data != param.m_data) {
@@ -70,7 +70,7 @@ MxString& MxString::operator=(const MxString& param)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100ae510
+// FUNCTION: LEGO1 0x100ae510
 const MxString& MxString::operator=(const char* param)
 {
 	if (this->m_data != param) {
@@ -85,7 +85,7 @@ const MxString& MxString::operator=(const char* param)
 
 // Return type is intentionally just MxString, not MxString&.
 // This forces MSVC to add $ReturnUdt$ to the stack for 100% match.
-// OFFSET: LEGO1 0x100ae580
+// FUNCTION: LEGO1 0x100ae580
 MxString MxString::operator+(const char* str)
 {
 	// MxString constructor allocates 1 byte for m_data, so free that first
@@ -101,7 +101,7 @@ MxString MxString::operator+(const char* str)
 	return MxString(tmp);
 }
 
-// OFFSET: LEGO1 0x100ae690
+// FUNCTION: LEGO1 0x100ae690
 MxString& MxString::operator+=(const char* str)
 {
 	int newlen = this->m_length + strlen(str);

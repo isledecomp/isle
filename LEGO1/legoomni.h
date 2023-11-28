@@ -55,7 +55,7 @@ extern MxAtomId* g_sndAnimScript;
 extern MxAtomId* g_creditsScript;
 extern MxAtomId* g_nocdSourceName;
 
-// VTABLE 0x100d8638
+// VTABLE: LEGO1 0x100d8638
 // SIZE: 0x140
 class LegoOmni : public MxOmni {
 public:
@@ -70,14 +70,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+04
 
-	// OFFSET: LEGO1 0x10058aa0
+	// FUNCTION: LEGO1 0x10058aa0
 	inline virtual const char* ClassName() const override // vtable+0c
 	{
 		// 0x100f671c
 		return "LegoOmni";
 	}
 
-	// OFFSET: LEGO1 0x10058ab0
+	// FUNCTION: LEGO1 0x10058ab0
 	inline virtual MxBool IsA(const char* name) const override // vtable+10
 	{
 		return !strcmp(name, LegoOmni::ClassName()) || MxOmni::IsA(name);

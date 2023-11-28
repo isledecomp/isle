@@ -8,7 +8,7 @@ DECOMP_SIZE_ASSERT(GifManager, 0x30);
 
 GifMapEntry* DAT_100f0100;
 
-// OFFSET: LEGO1 0x10001cc0
+// FUNCTION: LEGO1 0x10001cc0
 GifMapEntry* GifMap::FindNode(const char*& string)
 {
 	GifMapEntry* ret = m_unk4;

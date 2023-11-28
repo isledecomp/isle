@@ -9,10 +9,10 @@ DECOMP_SIZE_ASSERT(MxDirectDraw::DeviceModesInfo, 0x17c);
 #define DDSCAPS_3DDEVICE 0x00002000l
 #endif
 
-// GLOBAL OFFSET: LEGO1 0x10100c68
+// GLOBAL FUNCTION: LEGO1 0x10100c68
 BOOL g_is_PALETTEINDEXED8 = 0;
 
-// OFFSET: LEGO1 0x1009d490
+// FUNCTION: LEGO1 0x1009d490
 MxDirectDraw::MxDirectDraw()
 {
 	m_pFrontBuffer = NULL;
@@ -39,7 +39,7 @@ MxDirectDraw::MxDirectDraw()
 	m_hFont = NULL;
 }
 
-// OFFSET: LEGO1 0x1009d530
+// FUNCTION: LEGO1 0x1009d530
 MxDirectDraw::~MxDirectDraw()
 {
 	Destroy();
@@ -50,7 +50,7 @@ MxDirectDraw::~MxDirectDraw()
 	}
 }
 
-// OFFSET: LEGO1 0x1009d570
+// FUNCTION: LEGO1 0x1009d570
 int MxDirectDraw::GetPrimaryBitDepth()
 {
 	DWORD dwRGBBitCount;
@@ -72,7 +72,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
 	return dwRGBBitCount;
 }
 
-// OFFSET: LEGO1 0x1009d5e0
+// FUNCTION: LEGO1 0x1009d5e0
 BOOL MxDirectDraw::Create(
 	HWND hWnd,
 	BOOL fullscreen_1,
@@ -117,7 +117,7 @@ BOOL MxDirectDraw::Create(
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009d690
+// FUNCTION: LEGO1 0x1009d690
 BOOL MxDirectDraw::RecreateDirectDraw(GUID** ppGUID)
 {
 	if (m_pDirectDraw) {
@@ -128,7 +128,7 @@ BOOL MxDirectDraw::RecreateDirectDraw(GUID** ppGUID)
 	return (DirectDrawCreate(*ppGUID, &m_pDirectDraw, 0) == DD_OK);
 }
 
-// OFFSET: LEGO1 0x1009d6c0
+// FUNCTION: LEGO1 0x1009d6c0
 BOOL MxDirectDraw::CacheOriginalPaletteEntries()
 {
 	HDC DC;
@@ -141,7 +141,7 @@ BOOL MxDirectDraw::CacheOriginalPaletteEntries()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009d700
+// FUNCTION: LEGO1 0x1009d700
 BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen)
 {
 	int reservedLowEntryCount = 10;
@@ -192,7 +192,7 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009d800
+// FUNCTION: LEGO1 0x1009d800
 void MxDirectDraw::Destroy()
 {
 	DestroyButNotDirectDraw();
@@ -212,7 +212,7 @@ void MxDirectDraw::Destroy()
 	}
 }
 
-// OFFSET: LEGO1 0x1009d860
+// FUNCTION: LEGO1 0x1009d860
 void MxDirectDraw::DestroyButNotDirectDraw()
 {
 	RestoreOriginalPaletteEntries();
@@ -260,7 +260,7 @@ void MxDirectDraw::DestroyButNotDirectDraw()
 	}
 }
 
-// OFFSET: LEGO1 0x1009d920
+// FUNCTION: LEGO1 0x1009d920
 void MxDirectDraw::FUN_1009D920()
 {
 	RestoreOriginalPaletteEntries();
@@ -272,7 +272,7 @@ void MxDirectDraw::FUN_1009D920()
 	}
 }
 
-// OFFSET: LEGO1 0x1009d960
+// FUNCTION: LEGO1 0x1009d960
 BOOL MxDirectDraw::DDInit(BOOL fullscreen)
 {
 	HRESULT result;
@@ -296,7 +296,7 @@ BOOL MxDirectDraw::DDInit(BOOL fullscreen)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009d9d0
+// FUNCTION: LEGO1 0x1009d9d0
 BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
 	Mode mode = {width, height, bpp};
@@ -310,7 +310,7 @@ BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1009da20
+// FUNCTION: LEGO1 0x1009da20
 void EnableResizing(HWND hwnd, BOOL flag)
 {
 	static DWORD dwStyle;
@@ -326,7 +326,7 @@ void EnableResizing(HWND hwnd, BOOL flag)
 	}
 }
 
-// OFFSET: LEGO1 0x1009da80
+// FUNCTION: LEGO1 0x1009da80
 BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 {
 	HRESULT result;
@@ -442,13 +442,13 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 	return m_bFullScreen || CreateTextSurfaces();
 }
 
-// OFFSET: LEGO1 0x1009dd80
+// FUNCTION: LEGO1 0x1009dd80
 HRESULT MxDirectDraw::CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4)
 {
 	return m_pDirectDraw->CreateSurface(a2, a3, a4);
 }
 
-// OFFSET: LEGO1 0x1009dda0
+// FUNCTION: LEGO1 0x1009dda0
 BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf)
 {
 	HRESULT result;
@@ -463,7 +463,7 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 	return (result == DD_OK);
 }
 
-// OFFSET: LEGO1 0x1009ddf0
+// FUNCTION: LEGO1 0x1009ddf0
 BOOL MxDirectDraw::DDCreateSurfaces()
 {
 	HRESULT result;
@@ -542,7 +542,7 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e020
+// FUNCTION: LEGO1 0x1009e020
 void MxDirectDraw::FUN_1009E020()
 {
 	HRESULT result;
@@ -581,7 +581,7 @@ void MxDirectDraw::FUN_1009E020()
 	}
 }
 
-// OFFSET: LEGO1 0x1009e110
+// FUNCTION: LEGO1 0x1009e110
 BOOL MxDirectDraw::TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface)
 {
 	HRESULT result;
@@ -613,19 +613,19 @@ BOOL MxDirectDraw::TextToTextSurface(const char* text, IDirectDrawSurface* pSurf
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e210
+// FUNCTION: LEGO1 0x1009e210
 BOOL MxDirectDraw::TextToTextSurface1(const char* text)
 {
 	return TextToTextSurface(text, m_pText1Surface, m_text1SizeOnSurface);
 }
 
-// OFFSET: LEGO1 0x1009e230
+// FUNCTION: LEGO1 0x1009e230
 BOOL MxDirectDraw::TextToTextSurface2(const char* text)
 {
 	return TextToTextSurface(text, m_pText2Surface, m_text2SizeOnSurface);
 }
 
-// OFFSET: LEGO1 0x1009e250
+// FUNCTION: LEGO1 0x1009e250
 BOOL MxDirectDraw::CreateTextSurfaces()
 {
 	HRESULT result;
@@ -707,7 +707,7 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e4d0
+// FUNCTION: LEGO1 0x1009e4d0
 BOOL MxDirectDraw::RestoreSurfaces()
 {
 	HRESULT result;
@@ -765,7 +765,7 @@ BOOL MxDirectDraw::RestoreSurfaces()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e5e0
+// FUNCTION: LEGO1 0x1009e5e0
 BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 {
 	HRESULT result;                // eax
@@ -796,7 +796,7 @@ BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e6a0
+// FUNCTION: LEGO1 0x1009e6a0
 int MxDirectDraw::Pause(int p_increment)
 {
 	if (p_increment) {
@@ -836,7 +836,7 @@ int MxDirectDraw::Pause(int p_increment)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e750
+// FUNCTION: LEGO1 0x1009e750
 BOOL MxDirectDraw::RestorePaletteEntries()
 {
 	HRESULT result;
@@ -854,7 +854,7 @@ BOOL MxDirectDraw::RestorePaletteEntries()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e7a0
+// FUNCTION: LEGO1 0x1009e7a0
 BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 {
 	HRESULT result;
@@ -872,7 +872,7 @@ BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x1009e7f0
+// FUNCTION: LEGO1 0x1009e7f0
 int MxDirectDraw::FlipToGDISurface()
 {
 	HRESULT ret;
@@ -888,7 +888,7 @@ int MxDirectDraw::FlipToGDISurface()
 	return 1;
 }
 
-// OFFSET: LEGO1 0x1009e830
+// FUNCTION: LEGO1 0x1009e830
 void MxDirectDraw::Error(const char* message, int error)
 {
 	// 0x10100c70
@@ -903,7 +903,7 @@ void MxDirectDraw::Error(const char* message, int error)
 	}
 }
 
-// OFFSET: LEGO1 0x1009e880
+// FUNCTION: LEGO1 0x1009e880
 const char* MxDirectDraw::ErrorToString(HRESULT error)
 {
 	switch (error) {
@@ -1113,13 +1113,13 @@ const char* MxDirectDraw::ErrorToString(HRESULT error)
 	}
 }
 
-// OFFSET: LEGO1 0x1009efb0
+// FUNCTION: LEGO1 0x1009efb0
 MxDirectDraw::DeviceModesInfo::DeviceModesInfo()
 {
 	memset(this, 0, sizeof(*this));
 }
 
-// OFFSET: LEGO1 0x1009efd0
+// FUNCTION: LEGO1 0x1009efd0
 MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
 {
 	if (p_guid != NULL) {

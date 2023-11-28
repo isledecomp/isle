@@ -5,26 +5,26 @@
 #include "legoworld.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d4398
+// VTABLE: LEGO1 0x100d4398
 // SIZE 0x160
 class IslePathActor : public LegoPathActor {
 public:
 	IslePathActor();
 
-	// OFFSET: LEGO1 0x10002ea0
+	// FUNCTION: LEGO1 0x10002ea0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x100f0104
 		return "IslePathActor";
 	}
 
-	// OFFSET: LEGO1 0x10002eb0
+	// FUNCTION: LEGO1 0x10002eb0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, IslePathActor::ClassName()) || LegoPathActor::IsA(name);
 	}
 
-	// OFFSET: LEGO1 0x10002ff0 TEMPLATE
+	// FUNCTION: LEGO1 0x10002ff0 SYNTHETIC
 	// IslePathActor::`scalar deleting destructor'
 	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 

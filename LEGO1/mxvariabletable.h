@@ -5,7 +5,7 @@
 #include "mxtypes.h"
 #include "mxvariable.h"
 
-// VTABLE 0x100dc1c8
+// VTABLE: LEGO1 0x100dc1c8
 // SIZE 0x28
 class MxVariableTable : public MxHashTable<MxVariable*> {
 public:
@@ -20,10 +20,10 @@ public:
 	virtual MxU32 Hash(MxVariable*) override;                // vtable+0x18
 };
 
-// VTABLE 0x100dc1b0 TEMPLATE
+// VTABLE: LEGO1 0x100dc1b0 SYNTHETIC
 // class MxCollection<MxVariable *>
 
-// VTABLE 0x100dc1e8 TEMPLATE
+// VTABLE: LEGO1 0x100dc1e8 SYNTHETIC
 // class MxHashTable<MxVariable *>
 
 #endif // MXVARIABLETABLE_H

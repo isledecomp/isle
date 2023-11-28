@@ -57,7 +57,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                     end_line=end_line,
                     offset_comment=offset_match.comment,
                     module=offset_match.module,
-                    is_template=offset_match.is_template,
+                    is_synthetic=offset_match.is_synthetic,
                     is_stub=offset_match.is_stub,
                 )
                 blocks.append(block)
@@ -85,7 +85,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
 
                 offset_matches.append(new_match)
 
-                if new_match.is_template:
+                if new_match.is_synthetic:
                     state = ReaderState.IN_TEMPLATE
                 else:
                     state = ReaderState.WANT_SIG
@@ -100,7 +100,7 @@ def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
                 can_seek = False
 
         elif state == ReaderState.IN_TEMPLATE:
-            # TEMPLATE functions are a special case. The signature is
+            # SYNTHETIC functions are a special case. The signature is
             # given on the next line (in a // comment)
             function_sig = get_template_function_name(line)
             start_line = line_no

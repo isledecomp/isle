@@ -6,13 +6,13 @@
 
 class MxStreamChunk;
 
-// VTABLE 0x100dc5d0 TEMPLATE
+// VTABLE: LEGO1 0x100dc5d0 SYNTHETIC
 // class MxCollection<MxStreamChunk *>
 
-// VTABLE 0x100dc5e8 TEMPLATE
+// VTABLE: LEGO1 0x100dc5e8 SYNTHETIC
 // class MxList<MxStreamChunk *>
 
-// VTABLE 0x100dc600
+// VTABLE: LEGO1 0x100dc600
 // SIZE 0x18
 class MxStreamChunkList : public MxList<MxStreamChunk*> {
 public:

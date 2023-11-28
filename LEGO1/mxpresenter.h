@@ -11,7 +11,7 @@
 class MxCompositePresenter;
 class MxStreamController;
 
-// VTABLE 0x100d4d38
+// VTABLE: LEGO1 0x100d4d38
 // SIZE 0x40
 class MxPresenter : public MxCore {
 public:
@@ -30,14 +30,14 @@ public:
 	__declspec(dllexport) virtual ~MxPresenter();             // vtable+0x0
 	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x8
 
-	// OFFSET: LEGO1 0x1000bfe0
+	// FUNCTION: LEGO1 0x1000bfe0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// 0x100f0740
 		return "MxPresenter";
 	}
 
-	// OFFSET: LEGO1 0x1000bff0
+	// FUNCTION: LEGO1 0x1000bff0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxPresenter::ClassName()) || MxCore::IsA(name);

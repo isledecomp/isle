@@ -4,7 +4,7 @@
 #include "mxdsaction.h"
 #include "mxnotificationparam.h"
 
-// VTABLE 0x100d8350
+// VTABLE: LEGO1 0x100d8350
 // SIZE 0x14
 class MxActionNotificationParam : public MxNotificationParam {
 public:
@@ -31,7 +31,7 @@ public:
 		this->m_action->SetUnknown24(oldAction->GetUnknown24());
 	}
 
-	// OFFSET: LEGO1 0x10051050
+	// FUNCTION: LEGO1 0x10051050
 	inline virtual ~MxActionNotificationParam() override
 	{
 		if (!this->m_realloc)
@@ -50,7 +50,7 @@ protected:
 	MxBool m_realloc;     // 0x10
 };
 
-// VTABLE 0x100d8358
+// VTABLE: LEGO1 0x100d8358
 // SIZE 0x14
 class MxEndActionNotificationParam : public MxActionNotificationParam {
 public:

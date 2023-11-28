@@ -10,19 +10,19 @@
 
 DECOMP_SIZE_ASSERT(LegoActionControlPresenter, 0x68)
 
-// OFFSET: LEGO1 0x10043ce0 STUB
+// FUNCTION: LEGO1 0x10043ce0 STUB
 void LegoActionControlPresenter::ReadyTickle()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10043d40 STUB
+// FUNCTION: LEGO1 0x10043d40 STUB
 void LegoActionControlPresenter::RepeatingTickle()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10043df0
+// FUNCTION: LEGO1 0x10043df0
 MxResult LegoActionControlPresenter::AddToManager()
 {
 	MxResult result = FAILURE;
@@ -35,7 +35,7 @@ MxResult LegoActionControlPresenter::AddToManager()
 	return result;
 }
 
-// OFFSET: LEGO1 0x10043e20
+// FUNCTION: LEGO1 0x10043e20
 void LegoActionControlPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (TickleManager()) {
@@ -47,7 +47,7 @@ void LegoActionControlPresenter::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// OFFSET: LEGO1 0x10043e50
+// FUNCTION: LEGO1 0x10043e50
 void LegoActionControlPresenter::ParseExtra()
 {
 	MxU32 len = m_action->GetExtraLength();

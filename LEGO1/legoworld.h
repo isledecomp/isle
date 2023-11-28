@@ -7,7 +7,7 @@
 #include "mxpresenter.h"
 #include "mxpresenterlist.h"
 
-// VTABLE 0x100d6280
+// VTABLE: LEGO1 0x100d6280
 // SIZE 0xf8
 class LegoWorld : public LegoEntity {
 public:
@@ -16,14 +16,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
-	// OFFSET: LEGO1 0x1001d690
+	// FUNCTION: LEGO1 0x1001d690
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x100f0058
 		return "LegoWorld";
 	}
 
-	// OFFSET: LEGO1 0x1001d6a0
+	// FUNCTION: LEGO1 0x1001d6a0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, LegoWorld::ClassName()) || LegoEntity::IsA(name);

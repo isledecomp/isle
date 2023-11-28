@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100d6758
+// VTABLE: LEGO1 0x100d6758
 // SIZE 0x2c
 class LegoPlantManager : public MxCore {
 public:
@@ -12,7 +12,7 @@ public:
 
 	virtual MxResult Tickle() override; // vtable+0x8
 
-	// OFFSET: LEGO1 0x10026290
+	// FUNCTION: LEGO1 0x10026290
 	inline const char* ClassName() const override // vtable+0xc
 	{
 		// 0x100f318c

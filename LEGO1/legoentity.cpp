@@ -7,16 +7,16 @@
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
-// OFFSET: LEGO1 0x10001090 TEMPLATE
+// FUNCTION: LEGO1 0x10001090 SYNTHETIC
 // LegoEntity::SetWorldSpeed
 
-// OFFSET: LEGO1 0x1000c290
+// FUNCTION: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100105f0
+// FUNCTION: LEGO1 0x100105f0
 void LegoEntity::Init()
 {
 	m_worldLocation.Fill(0);
@@ -32,19 +32,19 @@ void LegoEntity::Init()
 	m_unk59 = 4;
 }
 
-// OFFSET: LEGO1 0x10010650 STUB
+// FUNCTION: LEGO1 0x10010650 STUB
 void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10010790 STUB
+// FUNCTION: LEGO1 0x10010790 STUB
 void LegoEntity::SetWorldTransform(Vector3Impl& p_loc, Vector3Impl& p_dir, Vector3Impl& p_up)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100107e0
+// FUNCTION: LEGO1 0x100107e0
 MxResult LegoEntity::Create(MxDSObject& p_dsObject)
 {
 	m_mxEntityId = p_dsObject.GetObjectId();
@@ -53,7 +53,7 @@ MxResult LegoEntity::Create(MxDSObject& p_dsObject)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x10010810 STUB
+// FUNCTION: LEGO1 0x10010810 STUB
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
@@ -64,7 +64,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 	Init();
 }
 
-// OFFSET: LEGO1 0x10010880
+// FUNCTION: LEGO1 0x10010880
 void LegoEntity::SetWorld()
 {
 	LegoWorld* world = GetCurrentWorld();
@@ -73,13 +73,13 @@ void LegoEntity::SetWorld()
 	}
 }
 
-// OFFSET: LEGO1 0x100108a0 STUB
+// FUNCTION: LEGO1 0x100108a0 STUB
 void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10010e10
+// FUNCTION: LEGO1 0x10010e10
 void LegoEntity::ParseAction(char* p_extra)
 {
 	char copy[1024];
@@ -102,49 +102,49 @@ void LegoEntity::ParseAction(char* p_extra)
 	}
 }
 
-// OFFSET: LEGO1 0x10010f10 STUB
+// FUNCTION: LEGO1 0x10010f10 STUB
 void LegoEntity::VTable0x34()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10011070 STUB
+// FUNCTION: LEGO1 0x10011070 STUB
 void LegoEntity::VTable0x38()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10011300 STUB
+// FUNCTION: LEGO1 0x10011300 STUB
 void LegoEntity::VTable0x3c()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10011360 STUB
+// FUNCTION: LEGO1 0x10011360 STUB
 void LegoEntity::VTable0x40()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100113c0 STUB
+// FUNCTION: LEGO1 0x100113c0 STUB
 void LegoEntity::VTable0x44()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10011420 STUB
+// FUNCTION: LEGO1 0x10011420 STUB
 void LegoEntity::VTable0x48()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10011470 STUB
+// FUNCTION: LEGO1 0x10011470 STUB
 void LegoEntity::VTable0x4c()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100114f0 STUB
+// FUNCTION: LEGO1 0x100114f0 STUB
 MxLong LegoEntity::Notify(MxParam& p)
 {
 	// TODO
