@@ -1,27 +1,22 @@
-#ifndef TGL_H
-#define TGL_H
 
-#ifdef _WIN32
+#ifndef _tgl_h
+#define _tgl_h
 
-#define NOMINMAX // to avoid conflict with STL
+#include "tglvector.h"
+
 #include <d3d.h>
 #include <ddraw.h>
-#include <windows.h> // HWND
-
-#endif /* _WIN32 */
-
-#include "tglVector.h"
+#include <windows.h>
 
 namespace Tgl
 {
 
-// ???
 enum ColorModel {
+	// Note: Not used in shipped game, no way to verify contents.
 	Ramp,
 	RGB
 };
 
-// ???
 enum ShadingModel {
 	Wireframe,
 	UnlitFlat,
@@ -30,7 +25,6 @@ enum ShadingModel {
 	Phong
 };
 
-// ?????
 enum LightType {
 	Ambient,
 	Point,
@@ -39,7 +33,6 @@ enum LightType {
 	ParallelPoint
 };
 
-// ???
 enum ProjectionType {
 	Perspective,
 	Orthographic
@@ -50,22 +43,17 @@ enum TextureMappingMode {
 	PerspectiveCorrect
 };
 
+// Not in the Tgl leak, inferred from the assembly
+enum MaterialMode {
+	FromParent,
+	FromFrame,
+	FromMesh,
+};
+
 struct PaletteEntry {
 	unsigned char m_red;
 	unsigned char m_green;
 	unsigned char m_blue;
-};
-
-#ifdef _WIN32
-
-struct DeviceDirectDrawCreateData {
-	const GUID* m_driverGUID;
-	HWND m_hWnd; // ??? derive from m_pDirectDraw
-	IDirectDraw* m_pDirectDraw;
-	IDirectDrawSurface* m_pFrontBuffer; // ??? derive from m_pDirectDraw
-	IDirectDrawSurface* m_pBackBuffer;
-	IDirectDrawPalette* m_pPalette; // ??? derive from m_pDirectDraw
-	int m_isFullScreen;             // ??? derive from m_pDirectDraw
 };
 
 struct DeviceDirect3DCreateData {
@@ -73,16 +61,21 @@ struct DeviceDirect3DCreateData {
 	IDirect3DDevice* m_pDirect3DDevice;
 };
 
-#else
+struct DeviceDirectDrawCreateData {
+	const GUID* m_driverGUID;
+	HWND m_hWnd;
+	IDirectDraw* m_pDirectDraw;
+	IDirectDrawSurface* m_pFrontBuffer;
+	IDirectDrawSurface* m_pBackBuffer;
 
-struct DeviceDirectDrawCreateData {};
+	// These have possibly been removed in the shipped game
+	// (Put them back if we can verify when we find a callsite
+	// which constructs this type)
+	// IDirectDrawPalette* m_pPalette;
+	// int m_isFullScreen;
+};
 
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Result (return value type)
-
+// Result type used for all methods in the Tgl API
 enum Result {
 	Error = 0,
 	Success = 1
@@ -93,10 +86,7 @@ inline int Succeeded(Result result)
 	return (result == Success);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
 // Forward declarations
-
 class Renderer;
 class Object;
 class Device;
@@ -106,30 +96,24 @@ class Camera;
 class Group;
 class Mesh;
 class Texture;
+class Something;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Object
-
+// VTABLE 0x100db980
 class Object {
 public:
 	virtual ~Object() {}
 
-	// returns pointer to implementation data
 	virtual void* ImplementationDataPtr() = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Renderer
-
-// ??? for now until we figured out how an app should pass the Renderer around
-Renderer* CreateRenderer();
-
+// VTABLE 0x100db948
 class Renderer : public Object {
 public:
-	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) = 0;
+	// vtable+0x08
 	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) = 0;
+	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) = 0;
+
+	// vtable+0x10
 	virtual View* CreateView(
 		const Device*,
 		const Camera*,
@@ -139,98 +123,69 @@ public:
 		unsigned long height
 	) = 0;
 	virtual Camera* CreateCamera() = 0;
-	virtual Light* CreateLight(LightType, double r, double g, double b) = 0;
-	virtual Group* CreateGroup(const Group* pParent = 0) = 0;
+	virtual Light* CreateLight(LightType, float p_r, float p_g, float p_b) = 0;
+	virtual Group* CreateGroup(const Group* p_parent = 0) = 0;
 
-	// pTextureCoordinates is pointer to array of vertexCount elements
-	//  (each element being two floats), or NULL
-	// pFaceData is faceCount tuples, each of format
-	//  [vertex1index, ... vertexNindex], where N = vertexPerFaceCount
-	virtual Mesh* CreateMesh(
-		unsigned long vertexCount,
-		const float (*pVertices)[3],
-		const float (*pTextureCoordinates)[2],
-		unsigned long faceCount,
-		unsigned long vertexPerFaceCount,
-		unsigned long* pFaceData
-	) = 0;
-	// pTextureCoordinates is pointer to array of vertexCount elements
-	//  (each element being two floats), or NULL
-	// pFaceData is:
-	//  [face1VertexCount face1Vertex1index, ... face1VertexMindex
-	//   face2VertexCount face2Vertex1index, ... face2VertexNindex
-	//   ...
-	//   0]
-	virtual Mesh* CreateMesh(
-		unsigned long vertexCount,
-		const float (*pVertices)[3],
-		const float (*pTextureCoordinates)[2],
-		unsigned long* pFaceData
-	) = 0;
-	virtual Texture* CreateTexture(
-		int width,
-		int height,
-		int bitsPerTexel,
-		const void* pTexels,
-		int pTexelsArePersistent,
-		int paletteEntryCount,
-		const PaletteEntry* pEntries
-	) = 0;
+	// vtable+0x20
+	virtual Something* CreateSomething() = 0;
 	virtual Texture* CreateTexture() = 0;
-
+	virtual Texture* CreateTexture(
+		int p_width,
+		int p_height,
+		int p_bitsPerTexel,
+		const void* p_pTexels,
+		int p_pTexelsArePersistent,
+		int p_paletteEntryCount,
+		const PaletteEntry* p_pEntries
+	) = 0;
 	virtual Result SetTextureDefaultShadeCount(unsigned long) = 0;
+
+	// vtable+0x30
 	virtual Result SetTextureDefaultColorCount(unsigned long) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Device
+Renderer* CreateRenderer();
 
+// VTABLE 0x100db9b8
 class Device : public Object {
 public:
+	// vtable+0x08
 	virtual unsigned long GetWidth() = 0;
 	virtual unsigned long GetHeight() = 0;
+
+	// vtable+0x10
 	virtual Result SetColorModel(ColorModel) = 0;
 	virtual Result SetShadingModel(ShadingModel) = 0;
 	virtual Result SetShadeCount(unsigned long) = 0;
 	virtual Result SetDither(int) = 0;
+
+	// vtable+0x20
 	virtual Result Update() = 0;
-
-	// ??? should this be handled by app ???
-	// ??? this needs to be called when the window on which the device is ...
-	// is being activated
-	virtual void HandleActivate(int bActivate) = 0;
-
-	// ??? this needs to be called when the window on which this device is based
-	// needs to be repainted
-	virtual void HandlePaint(void*) = 0;
-
-#ifdef _DEBUG
-	virtual unsigned long GetDrawnTriangleCount() = 0;
-#endif
+	virtual void InitFromD3DDevice(Device*) = 0;
+	virtual void InitFromWindowsDevice(Device*) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// View
-
+// VTABLE 0x100dba28
 class View : public Object {
 public:
 	virtual Result Add(const Light*) = 0;
 	virtual Result Remove(const Light*) = 0;
 
+	// vtable+0x10
 	virtual Result SetCamera(const Camera*) = 0;
 	virtual Result SetProjection(ProjectionType) = 0;
-	virtual Result SetFrustrum(double frontClippingDistance, double backClippingDistance, double degrees) = 0;
-	virtual Result SetBackgroundColor(double r, double g, double b) = 0;
+	virtual Result SetFrustrum(float p_frontClippingDistance, float p_backClippingDistance, float p_degrees) = 0;
+	virtual Result SetBackgroundColor(float p_r, float p_g, float p_b) = 0;
 
+	// vtable+0x20
+	virtual Result GetBackgroundColor(float* p_r, float* p_g, float* p_b) = 0;
 	virtual Result Clear() = 0;
-	virtual Result Render(const Group*) = 0;
-	// ??? needed for fine grain control when using DirectDraw/D3D ???
+	virtual Result Render(const Light*) = 0;
 	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) = 0;
 
-	// ??? for now: used by Mesh Cost calculation
-	virtual Result TransformWorldToScreen(const double world[3], double screen[4]) = 0;
+	// vtable+0x30
+	virtual Result TransformWorldToScreen(const float world[3], float screen[4]) = 0;
+	virtual Result TransformScreenToWorld(const float screen[4], float world[3]) = 0;
 
 	// Pick():
 	//  x, y:
@@ -264,102 +219,94 @@ public:
 	) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Camera
-
+// VTABLE 0x100dbae8
 class Camera : public Object {
 public:
-#if 0
-    virtual Result  SetPosition(const double[3]) = 0;
-    virtual Result  SetOrientation(const double direction[3],
-                                   const double up[3]) = 0;
-#endif
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(const FloatMatrix&) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Light
-
+// VTABLE 0x100dbb08
 class Light : public Object {
 public:
-#if 0
-    virtual Result  SetPosition(const double[3]) = 0;
-    virtual Result  SetOrientation(const double direction[3],
-                                   const double up[3]) = 0;
-#endif
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(const FloatMatrix&) = 0;
+	virtual Result SetColor(float p_r, float p_g, float p_b) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Group
-
-class Group : public Object {
-public:
-#if 0
-    virtual Result  SetPosition(const double[3]) = 0;
-    virtual Result  SetOrientation(const double direction[3],
-                                   const double up[3]) = 0;
-#endif
-	// TODO: The type was changed from `FloatMatrix` to `Matrix` to make code in UpdateWorldData match.
-	// However, this is unlikely to be correct and will have to be figured out at some point.
-	virtual Result SetTransformation(const Matrix4&) = 0;
-
-	// ??? not yet fully implemented
-	virtual Result SetColor(double r, double g, double b) = 0;
-	virtual Result SetTexture(const Texture*) = 0;
-
-	virtual Result Add(const Group*) = 0;
-	virtual Result Add(const Mesh*) = 0;
-
-	virtual Result Remove(const Group*) = 0;
-	virtual Result Remove(const Mesh*) = 0;
-
-	virtual Result RemoveAll() = 0;
-
-	// ??? for now: used by Mesh Cost calculation
-	virtual Result TransformLocalToWorld(const double local[3], double world[3]) = 0;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// Mesh
-
+// VTABLE 0x100dbbb0
 class Mesh : public Object {
 public:
-	// ??? also on Group
-	virtual Result SetColor(double r, double g, double b) = 0;
+	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
-	virtual Result SetTextureMappingMode(TextureMappingMode) = 0;
+	virtual Result GetTexture(Texture*&) = 0;
+
+	virtual Result SetTextureMappingMode(ProjectionType) = 0;
 	virtual Result SetShadingModel(ShadingModel) = 0;
 
-#ifdef _DEBUG
-	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
-	virtual unsigned long GetFaceCount() = 0;
-	virtual unsigned long GetVertexCount() = 0;
-#endif
+	// Clone data in underlying group
+	virtual Mesh* DeepClone(Something*) = 0;
+
+	// Just get another Group pointing to the same underlying data
+	virtual Mesh* ShallowClone(Something*) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Texture
+// VTABLE 0x100dbaa0
+class Group : public Object {
+public:
+	virtual Result SetTransformation(const FloatMatrix&) = 0;
+	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a) = 0;
+	virtual Result SetTexture(const Texture*) = 0;
+	virtual Result GetTexture(Texture*&) = 0;
+	virtual Result SetMaterialMode(MaterialMode) = 0;
+	virtual Result Add(const Group*) = 0;
+	virtual Result Add(const Mesh*) = 0;
+	virtual Result Remove(const Group*) = 0;
+	virtual Result Remove(const Mesh*) = 0;
+	virtual Result RemoveAll() = 0;
 
+	// This is TransformLocalToWorld in the leak, however it seems
+	// to have been replaced by something else in the shipped code.
+	virtual Result Unknown() = 0;
+};
+
+// Don't know what this is. Seems like another Tgl object which
+// was not in the leaked Tgl code. My suspicion is that it's
+// some kind of builder class for creating meshes.
+// VTABLE 0x100dbb30
+class Something : public Object {
+public:
+	virtual Result SetMeshData(
+		unsigned long p_faceCount,
+		unsigned long p_vertexCount,
+		const float (*p_positions)[3],
+		const float (*p_normals)[3],
+		const float (*p_textureCoordinates)[2],
+		unsigned long p_vertexPerFaceCount,
+		unsigned long* p_faceData
+	) = 0;
+	virtual Result GetBoundingBox(float p_min[3], float p_max[3]) = 0;
+	virtual Something* Clone() = 0;
+};
+
+// VTABLE 0x100dbb68
 class Texture : public Object {
 public:
-	virtual Result SetTexels(
-		int width,
-		int height,
-		int bitsPerTexel,
-		const void* pTexels,
-		int pTexelsArePersistent
-	) = 0;
-	virtual Result SetPalette(int entryCount, const PaletteEntry* pEntries) = 0;
-};
+	// vtable+0x08
+	virtual Result SetTexels(int p_width, int p_height, int p_bitsPerTexel, void* p_texels) = 0;
+	virtual void FillRowsOfTexture(int p_y, int p_height, void* p_buffer) = 0;
 
-//////////////////////////////////////////////////////////////////////////////
+	// vtable+0x10
+	virtual Result Changed(int p_texelsChanged, int p_paletteChanged) = 0;
+	virtual Result GetBufferAndPalette(
+		int* p_width,
+		int* p_height,
+		int* p_depth,
+		void** p_buffer,
+		int* p_paletteSize,
+		PaletteEntry** p_palette
+	) = 0;
+	virtual Result SetPalette(int p_entryCount, PaletteEntry* p_entries) = 0;
+};
 
 } // namespace Tgl
 
-#endif // TGL_H
+#endif /* _tgl_h */

@@ -1,7 +1,10 @@
-#ifndef TGLVECTOR_H
-#define TGLVECTOR_H
+#ifndef _tglVector_h
+#define _tglVector_h
+// Note: This file is almost an exact copy of the one from
+// the leak but using floats instead of doubles, hence the
+// strange formatting in some places.
 
-#include "math.h" // ??? sin() in  RotateAroundY()
+#include "math.h" // sin() in RotateAroundY()
 
 #include <stddef.h> // offsetof()
 
@@ -72,22 +75,22 @@ inline void Array<T, N>::operator+=(const Array<T, N>& rArray)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// FloatMatrix4
+// FloatMatrix
 
-class FloatMatrix4 : public Array<Array<float, 4>, 4> {
+class FloatMatrix : public Array<Array<float, 4>, 4> {
 public:
-	FloatMatrix4() {}
-	FloatMatrix4(const FloatMatrix4& rMatrix) { *this = rMatrix; }
-	FloatMatrix4(const FloatMatrix4&, const FloatMatrix4&);
+	FloatMatrix() {}
+	FloatMatrix(const FloatMatrix& rMatrix) { *this = rMatrix; }
+	FloatMatrix(const FloatMatrix&, const FloatMatrix&);
 
-	void operator*=(const FloatMatrix4&);
+	void operator*=(const FloatMatrix&);
 };
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// FloatMatrix4 implementation
+// FloatMatrix implementation
 
-inline FloatMatrix4::FloatMatrix4(const FloatMatrix4& rMatrix1, const FloatMatrix4& rMatrix2)
+inline FloatMatrix::FloatMatrix(const FloatMatrix& rMatrix1, const FloatMatrix& rMatrix2)
 {
 	for (int row = 0; row < 4; row++) {
 		for (int column = 0; column < 4; column++) {
@@ -102,11 +105,11 @@ inline FloatMatrix4::FloatMatrix4(const FloatMatrix4& rMatrix1, const FloatMatri
 	}
 }
 
-inline void FloatMatrix4::operator*=(const FloatMatrix4& rMatrix)
+inline void FloatMatrix::operator*=(const FloatMatrix& rMatrix)
 {
-	FloatMatrix4 temp(*this, rMatrix);
+	FloatMatrix temp(*this, rMatrix);
 
-	// *this = FloatMatrix4(*this, rMatrix);
+	// *this = FloatMatrix(*this, rMatrix);
 	*this = temp;
 }
 
@@ -114,7 +117,7 @@ inline void FloatMatrix4::operator*=(const FloatMatrix4& rMatrix)
 //
 // Transformation matrices
 
-class Translation : public FloatMatrix4 {
+class Translation : public FloatMatrix {
 public:
 	Translation(const float[3]);
 	Translation(float x, float y, float z);
@@ -123,7 +126,7 @@ protected:
 	void Init(float x, float y, float z);
 };
 
-class Scale : public FloatMatrix4 {
+class Scale : public FloatMatrix {
 public:
 	Scale(const float[3]);
 	Scale(float x, float y, float z);
@@ -133,16 +136,15 @@ protected:
 	void Init(float x, float y, float z);
 };
 
-class RotationX : public FloatMatrix4 {
+class RotationX : public FloatMatrix {
 public:
 	RotationX(float radians);
 };
 
-class RotationY : public FloatMatrix4 {
+class RotationY : public FloatMatrix {
 public:
 	RotationY(float radians);
 };
-
 //////////////////////////////////////////////////////////////////////////////
 //
 // Transformation matrices implementation
@@ -274,4 +276,4 @@ inline RotationY::RotationY(float radians)
 
 } // namespace Tgl
 
-#endif // TLGVECTOR_H
+#endif /* _tglVector_h */
