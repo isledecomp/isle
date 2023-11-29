@@ -13,7 +13,7 @@ Renderer* CreateRenderer()
 	return renderer;
 }
 
-// OFFSET: LEGO1 0x1010103c
+// GLOBAL OFFSET: LEGO1 0x1010103c
 IDirect3DRM* g_pD3DRM = NULL;
 
 // Inlined only
@@ -53,7 +53,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& p_data)
 	return device;
 }
 
-// OFFSET: LEGO1 0x10101040
+// GLOBAL OFFSET: LEGO1 0x10101040
 static int gSetBufferCount = 1;
 
 // OFFSET: LEGO1 0x100a1900

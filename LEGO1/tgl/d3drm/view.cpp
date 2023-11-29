@@ -42,6 +42,9 @@ ViewportAppData::~ViewportAppData()
 	m_pLightFrame->Release();
 }
 
+// Forward declare to satisfy order check
+void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg);
+
 // OFFSET: LEGO1 0x100a1160
 Result ViewImpl::ViewportCreateAppData(IDirect3DRM* p_device, IDirect3DRMViewport* p_view, IDirect3DRMFrame* p_camera)
 {
@@ -54,6 +57,25 @@ Result ViewImpl::ViewportCreateAppData(IDirect3DRM* p_device, IDirect3DRMViewpor
 	if (!Succeeded(result)) {
 		delete data;
 		p_view->SetAppData(0);
+	}
+	return result;
+}
+
+inline Result ViewRestoreFrameAfterRender(
+	IDirect3DRMFrame* pFrame,
+	IDirect3DRMFrame* pCamera,
+	IDirect3DRMFrame* pLightFrame
+)
+{
+	Result result = Success;
+	if (pFrame) {
+		// remove camera and light frame from frame that was rendered
+		// this doesn't destroy the camera as it is still the camera of the viewport...
+		result = ResultVal(pFrame->DeleteChild(pCamera));
+		result = ResultVal(pFrame->DeleteChild(pLightFrame));
+
+		// decrease frame's ref count (it was increased in ViewPrepareFrameForRender())
+		pFrame->Release();
 	}
 	return result;
 }
@@ -126,25 +148,6 @@ Result ViewImpl::Remove(const Light* p_light)
 	const LightImpl* light = static_cast<const LightImpl*>(p_light);
 	IDirect3DRMFrame* frame = light->ImplementationData();
 	return ResultVal(ViewportGetLightFrame(m_data)->DeleteChild(frame));
-}
-
-inline Result ViewRestoreFrameAfterRender(
-	IDirect3DRMFrame* pFrame,
-	IDirect3DRMFrame* pCamera,
-	IDirect3DRMFrame* pLightFrame
-)
-{
-	Result result = Success;
-	if (pFrame) {
-		// remove camera and light frame from frame that was rendered
-		// this doesn't destroy the camera as it is still the camera of the viewport...
-		result = ResultVal(pFrame->DeleteChild(pCamera));
-		result = ResultVal(pFrame->DeleteChild(pLightFrame));
-
-		// decrease frame's ref count (it was increased in ViewPrepareFrameForRender())
-		pFrame->Release();
-	}
-	return result;
 }
 
 // OFFSET: LEGO1 0x100a2df0

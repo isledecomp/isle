@@ -4,6 +4,14 @@ using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(TglD3DRMIMAGE, 0x40);
 
+inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* p_texture)
+{
+	return reinterpret_cast<TglD3DRMIMAGE*>(p_texture->GetAppData());
+}
+
+// Forward declare to satisfy order check
+void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
+
 // OFFSET: LEGO1 0x100a12a0
 Result TextureImpl::SetImage(IDirect3DRMTexture* p_self, TglD3DRMIMAGE* p_image)
 {
@@ -125,11 +133,6 @@ TextureImpl::~TextureImpl()
 		m_data->Release();
 		m_data = NULL;
 	}
-}
-
-inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* p_texture)
-{
-	return reinterpret_cast<TglD3DRMIMAGE*>(p_texture->GetAppData());
 }
 
 // OFFSET: LEGO1 0x100a3c10
