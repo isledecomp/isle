@@ -245,11 +245,10 @@ endif()
 if (ISLE_USE_DX5)
   target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-  target_link_libraries(lego1 PRIVATE d3drm)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
