@@ -2,10 +2,9 @@
 #define MXFLCPRESENTER_H
 
 #include "decomp.h"
+#include "mxvideopresenter.h"
 
 #include <flic.h>
-
-#include "mxvideopresenter.h"
 
 // VTABLE 0x100dc2c0
 // SIZE 0x68
@@ -27,10 +26,12 @@ public:
 		return "MxFlcPresenter";
 	}
 
-	virtual void vtable60() override; // vtable+0x60
-	virtual void VTable0x70() override; // vtable+0x70
+	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
+	virtual void CreateBitmap() override;                     // vtable+0x60
+	virtual void VTable0x70() override;                       // vtable+0x70
 
-	FLIC_HEADER* m_unk64; // 0x64 - what we believe so far. Could be another custom structure like MxSmack.
+protected:
+	FLIC_HEADER* m_flicHeader;
 };
 
 #endif // MXFLCPRESENTER_H
