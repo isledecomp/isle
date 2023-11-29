@@ -18,6 +18,8 @@ public:
 		return "MxLoopingFlcPresenter";
 	}
 
+	virtual void NextFrame() override; // vtable+0x64
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
