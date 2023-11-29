@@ -75,22 +75,22 @@ inline void Array<T, N>::operator+=(const Array<T, N>& rArray)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// FloatMatrix
+// FloatMatrix4
 
-class FloatMatrix : public Array<Array<float, 4>, 4> {
+class FloatMatrix4 : public Array<Array<float, 4>, 4> {
 public:
-	FloatMatrix() {}
-	FloatMatrix(const FloatMatrix& rMatrix) { *this = rMatrix; }
-	FloatMatrix(const FloatMatrix&, const FloatMatrix&);
+	FloatMatrix4() {}
+	FloatMatrix4(const FloatMatrix4& rMatrix) { *this = rMatrix; }
+	FloatMatrix4(const FloatMatrix4&, const FloatMatrix4&);
 
-	void operator*=(const FloatMatrix&);
+	void operator*=(const FloatMatrix4&);
 };
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// FloatMatrix implementation
+// FloatMatrix4 implementation
 
-inline FloatMatrix::FloatMatrix(const FloatMatrix& rMatrix1, const FloatMatrix& rMatrix2)
+inline FloatMatrix4::FloatMatrix4(const FloatMatrix4& rMatrix1, const FloatMatrix4& rMatrix2)
 {
 	for (int row = 0; row < 4; row++) {
 		for (int column = 0; column < 4; column++) {
@@ -105,11 +105,11 @@ inline FloatMatrix::FloatMatrix(const FloatMatrix& rMatrix1, const FloatMatrix& 
 	}
 }
 
-inline void FloatMatrix::operator*=(const FloatMatrix& rMatrix)
+inline void FloatMatrix4::operator*=(const FloatMatrix4& rMatrix)
 {
-	FloatMatrix temp(*this, rMatrix);
+	FloatMatrix4 temp(*this, rMatrix);
 
-	// *this = FloatMatrix(*this, rMatrix);
+	// *this = FloatMatrix4(*this, rMatrix);
 	*this = temp;
 }
 
@@ -117,7 +117,7 @@ inline void FloatMatrix::operator*=(const FloatMatrix& rMatrix)
 //
 // Transformation matrices
 
-class Translation : public FloatMatrix {
+class Translation : public FloatMatrix4 {
 public:
 	Translation(const float[3]);
 	Translation(float x, float y, float z);
@@ -126,7 +126,7 @@ protected:
 	void Init(float x, float y, float z);
 };
 
-class Scale : public FloatMatrix {
+class Scale : public FloatMatrix4 {
 public:
 	Scale(const float[3]);
 	Scale(float x, float y, float z);
@@ -136,12 +136,12 @@ protected:
 	void Init(float x, float y, float z);
 };
 
-class RotationX : public FloatMatrix {
+class RotationX : public FloatMatrix4 {
 public:
 	RotationX(float radians);
 };
 
-class RotationY : public FloatMatrix {
+class RotationY : public FloatMatrix4 {
 public:
 	RotationY(float radians);
 };

@@ -18,7 +18,7 @@ void* GroupImpl::ImplementationDataPtr()
 }
 
 // OFFSET: LEGO1 0x100a31e0
-Result GroupImpl::SetTransformation(const FloatMatrix& p_matrix)
+Result GroupImpl::SetTransformation(const FloatMatrix4& p_matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* matrix = Translate(p_matrix, helper);

@@ -27,8 +27,7 @@ void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
 	if (geometry) {
-		//		Tgl::FloatMatrix4 tgl_mat;
-		Matrix4 mat;
+		Tgl::FloatMatrix4 mat;
 		SETMAT4(mat, m_local2world.GetMatrix());
 		Tgl::Result result = geometry->SetTransformation(mat);
 		// assert(Tgl::Succeeded(result));

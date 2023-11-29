@@ -21,7 +21,7 @@ void* LightImpl::ImplementationDataPtr()
 }
 
 // OFFSET: LEGO1 0x100a3780
-Result LightImpl::SetTransformation(const FloatMatrix& p_matrix)
+Result LightImpl::SetTransformation(const FloatMatrix4& p_matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* matrix = Translate(p_matrix, helper);

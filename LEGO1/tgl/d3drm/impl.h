@@ -170,7 +170,7 @@ public:
 	virtual void* ImplementationDataPtr();
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix&);
+	virtual Result SetTransformation(const FloatMatrix4&);
 
 	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
 
@@ -189,7 +189,7 @@ public:
 	virtual void* ImplementationDataPtr();
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix&);
+	virtual Result SetTransformation(const FloatMatrix4&);
 	virtual Result SetColor(float p_r, float p_g, float p_b);
 
 	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
@@ -243,7 +243,7 @@ public:
 	virtual void* ImplementationDataPtr();
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix&);
+	virtual Result SetTransformation(const FloatMatrix4&);
 	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a);
 
 	// vtable+0x10
@@ -405,7 +405,7 @@ inline D3DRMPROJECTIONTYPE Translate(ProjectionType p_tglProjectionType)
 // Yes this function serves no purpose, originally they intended it to
 // convert from doubles to floats but ended up using floats throughout
 // the software stack.
-inline D3DRMMATRIX4D* Translate(const FloatMatrix& tglMatrix4x4, D3DRMMATRIX4D& rD3DRMMatrix4x4)
+inline D3DRMMATRIX4D* Translate(const FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DRMMatrix4x4)
 {
 	for (int i = 0; i < (sizeof(rD3DRMMatrix4x4) / sizeof(rD3DRMMatrix4x4[0])); i++) {
 		for (int j = 0; j < (sizeof(rD3DRMMatrix4x4[0]) / sizeof(rD3DRMMatrix4x4[0][0])); j++) {

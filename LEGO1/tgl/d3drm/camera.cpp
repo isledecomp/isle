@@ -21,7 +21,7 @@ void* CameraImpl::ImplementationDataPtr()
 }
 
 // OFFSET: LEGO1 0x100a3700
-Result CameraImpl::SetTransformation(const FloatMatrix& p_matrix)
+Result CameraImpl::SetTransformation(const FloatMatrix4& p_matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* pTransformation = Translate(p_matrix, helper);
