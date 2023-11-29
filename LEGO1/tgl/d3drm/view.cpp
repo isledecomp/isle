@@ -14,6 +14,8 @@ struct ViewportAppData {
 	float m_backgroundColorBlue;
 };
 
+DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
+
 // OFFSET: LEGO1 0x100a10b0
 ViewportAppData::ViewportAppData(IDirect3DRM* p_renderer)
 {
@@ -40,7 +42,50 @@ ViewportAppData::~ViewportAppData()
 	m_pLightFrame->Release();
 }
 
-DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
+// OFFSET: LEGO1 0x100a1160
+Result ViewImpl::ViewportCreateAppData(IDirect3DRM* p_device, IDirect3DRMViewport* p_view, IDirect3DRMFrame* p_camera)
+{
+	ViewportAppData* data = new ViewportAppData(p_device);
+	data->m_pCamera = p_camera;
+	Result result = ResultVal(p_view->SetAppData(reinterpret_cast<unsigned long>(data)));
+	if (Succeeded(result)) {
+		result = ResultVal(p_view->AddDestroyCallback(ViewportDestroyCallback, data));
+	}
+	if (!Succeeded(result)) {
+		delete data;
+		p_view->SetAppData(0);
+	}
+	return result;
+}
+
+// OFFSET: LEGO1 0x100a1240
+void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg)
+{
+	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(p_arg);
+
+	ViewRestoreFrameAfterRender(
+		pViewportAppData->m_pLastRenderedFrame,
+		pViewportAppData->m_pCamera,
+		pViewportAppData->m_pLightFrame
+	);
+
+	delete pViewportAppData;
+}
+
+// OFFSET: LEGO1 0x100a1290
+Result ViewportPickImpl(
+	IDirect3DRMViewport* p_viewport,
+	int x,
+	int y,
+	const Group** ppGroupsToPickFrom,
+	int groupsToPickFromCount,
+	const Group**& rppPickedGroups,
+	int& rPickedGroupCount
+)
+{
+	// Left unimplemented in shipped game.
+	return Error;
+}
 
 inline ViewportAppData* ViewportGetData(IDirect3DRMViewport* p_viewport)
 {
@@ -240,6 +285,27 @@ Result ViewImpl::ForceUpdate(unsigned long x, unsigned long y, unsigned long wid
 	return ResultVal(m_data->ForceUpdate(x, y, x + width - 1, y + height - 1));
 }
 
+// OFFSET: LEGO1 0x100a30c0
+Result ViewImpl::Pick(
+	unsigned long x,
+	unsigned long y,
+	const Group** ppGroupsToPickFrom,
+	int groupsToPickFromCount,
+	const Group**& rppPickedGroups,
+	int& rPickedGroupCount
+)
+{
+	return ViewportPickImpl(
+		m_data,
+		x,
+		y,
+		ppGroupsToPickFrom,
+		groupsToPickFromCount,
+		rppPickedGroups,
+		rPickedGroupCount
+	);
+}
+
 // OFFSET: LEGO1 0x100a30f0
 Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 {
@@ -285,68 +351,3 @@ Result ViewImpl::TransformScreenToWorld(const float p_screen[4], float p_world[3
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a1290
-Result ViewportPickImpl(
-	IDirect3DRMViewport* p_viewport,
-	int x,
-	int y,
-	const Group** ppGroupsToPickFrom,
-	int groupsToPickFromCount,
-	const Group**& rppPickedGroups,
-	int& rPickedGroupCount
-)
-{
-	// Left unimplemented in shipped game.
-	return Error;
-}
-
-// OFFSET: LEGO1 0x100a30c0
-Result ViewImpl::Pick(
-	unsigned long x,
-	unsigned long y,
-	const Group** ppGroupsToPickFrom,
-	int groupsToPickFromCount,
-	const Group**& rppPickedGroups,
-	int& rPickedGroupCount
-)
-{
-	return ViewportPickImpl(
-		m_data,
-		x,
-		y,
-		ppGroupsToPickFrom,
-		groupsToPickFromCount,
-		rppPickedGroups,
-		rPickedGroupCount
-	);
-}
-
-// OFFSET: LEGO1 0x100a1240
-void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg)
-{
-	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(p_arg);
-
-	ViewRestoreFrameAfterRender(
-		pViewportAppData->m_pLastRenderedFrame,
-		pViewportAppData->m_pCamera,
-		pViewportAppData->m_pLightFrame
-	);
-
-	delete pViewportAppData;
-}
-
-// OFFSET: LEGO1 0x100a1160
-Result ViewImpl::ViewportCreateAppData(IDirect3DRM* p_device, IDirect3DRMViewport* p_view, IDirect3DRMFrame* p_camera)
-{
-	ViewportAppData* data = new ViewportAppData(p_device);
-	data->m_pCamera = p_camera;
-	Result result = ResultVal(p_view->SetAppData(reinterpret_cast<unsigned long>(data)));
-	if (Succeeded(result)) {
-		result = ResultVal(p_view->AddDestroyCallback(ViewportDestroyCallback, data));
-	}
-	if (!Succeeded(result)) {
-		delete data;
-		p_view->SetAppData(0);
-	}
-	return result;
-}

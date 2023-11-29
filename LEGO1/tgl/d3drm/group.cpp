@@ -88,18 +88,18 @@ Result GroupImpl::SetMaterialMode(MaterialMode p_mode)
 	return ResultVal(m_data->SetMaterialMode(mode));
 }
 
-// OFFSET: LEGO1 0x100a3430
-Result GroupImpl::Add(const Group* p_group)
-{
-	const GroupImpl* group = static_cast<const GroupImpl*>(p_group);
-	return ResultVal(m_data->AddVisual(group->m_data));
-}
-
 // OFFSET: LEGO1 0x100a3410
 Result GroupImpl::Add(const Mesh* p_mesh)
 {
 	const MeshImpl* mesh = static_cast<const MeshImpl*>(p_mesh);
 	return ResultVal(m_data->AddVisual(mesh->ImplementationData()->groupMesh));
+}
+
+// OFFSET: LEGO1 0x100a3430
+Result GroupImpl::Add(const Group* p_group)
+{
+	const GroupImpl* group = static_cast<const GroupImpl*>(p_group);
+	return ResultVal(m_data->AddVisual(group->m_data));
 }
 
 // OFFSET: LEGO1 0x100a3450

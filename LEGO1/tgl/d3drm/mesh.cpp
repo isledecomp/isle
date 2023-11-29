@@ -46,26 +46,6 @@ Result MeshImpl::SetTexture(const Texture* p_texture)
 	return ResultVal(m_data->groupMesh->SetGroupTexture(m_data->groupIndex, texture));
 }
 
-// OFFSET: LEGO1 0x100a4330
-Result MeshImpl::GetTexture(Texture*& p_texture)
-{
-	IDirect3DRMTexture* texture;
-	TextureImpl* holder = new TextureImpl();
-	Result result = ResultVal(m_data->groupMesh->GetGroupTexture(m_data->groupIndex, &texture));
-	if (result) {
-		// Seems to actually call the first virtual method of holder here
-		// but that doesn't make any sense since it passes three arguments
-		// to the method (self + string constant? + an offset?).
-
-		// This line makes the start of the function match and is what I
-		// would expect to see there but it clearly isn't what's actually
-		// there.
-		holder->SetImplementation(texture);
-	}
-	p_texture = holder;
-	return Success;
-}
-
 // OFFSET: LEGO1 0x100a3f80
 Result MeshImpl::SetTextureMappingMode(ProjectionType p_projType)
 {
@@ -163,4 +143,24 @@ Mesh* MeshImpl::ShallowClone(Something* p_mesh)
 		newGroup = NULL;
 	}
 	return newGroup;
+}
+
+// OFFSET: LEGO1 0x100a4330
+Result MeshImpl::GetTexture(Texture*& p_texture)
+{
+	IDirect3DRMTexture* texture;
+	TextureImpl* holder = new TextureImpl();
+	Result result = ResultVal(m_data->groupMesh->GetGroupTexture(m_data->groupIndex, &texture));
+	if (result) {
+		// Seems to actually call the first virtual method of holder here
+		// but that doesn't make any sense since it passes three arguments
+		// to the method (self + string constant? + an offset?).
+
+		// This line makes the start of the function match and is what I
+		// would expect to see there but it clearly isn't what's actually
+		// there.
+		holder->SetImplementation(texture);
+	}
+	p_texture = holder;
+	return Success;
 }

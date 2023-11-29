@@ -4,6 +4,36 @@ using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(TglD3DRMIMAGE, 0x40);
 
+// OFFSET: LEGO1 0x100a12a0
+Result TextureImpl::SetImage(IDirect3DRMTexture* p_self, TglD3DRMIMAGE* p_image)
+{
+	unsigned long appData;
+	Result result;
+
+	appData = reinterpret_cast<unsigned long>(p_image);
+
+	// This is here because in the original code they asserted
+	// on the return value being NULL.
+	TextureGetImage(p_self);
+
+	result = ResultVal(p_self->SetAppData(appData));
+	if (Succeeded(result) && p_image) {
+		result = ResultVal(p_self->AddDestroyCallback(TextureDestroyCallback, NULL));
+		if (!Succeeded(result)) {
+			p_self->SetAppData(0);
+		}
+	}
+	return result;
+}
+
+// OFFSET: LEGO1 0x100a1300
+void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
+{
+	TglD3DRMIMAGE* pImage = reinterpret_cast<TglD3DRMIMAGE*>(pObject->GetAppData());
+	delete pImage;
+	pObject->SetAppData(0);
+}
+
 // OFFSET: LEGO1 0x100a1330
 TglD3DRMIMAGE::TglD3DRMIMAGE(
 	int p_width,
@@ -39,12 +69,6 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 	}
 }
 
-// OFFSET: LEGO1 0x100a13e0 STUB
-Result TglD3DRMIMAGE::CreateBuffer(int p_width, int p_height, int p_depth, void* p_buffer, int p_useBuffer)
-{
-	return Error;
-}
-
 // OFFSET: LEGO1 0x100a13b0
 void TglD3DRMIMAGE::Destroy()
 {
@@ -52,6 +76,12 @@ void TglD3DRMIMAGE::Destroy()
 		free(m_image.buffer1);
 	}
 	free(m_image.palette);
+}
+
+// OFFSET: LEGO1 0x100a13e0 STUB
+Result TglD3DRMIMAGE::CreateBuffer(int p_width, int p_height, int p_depth, void* p_buffer, int p_useBuffer)
+{
+	return Error;
 }
 
 // OFFSET: LEGO1 0x100a1510
@@ -95,12 +125,6 @@ TextureImpl::~TextureImpl()
 		m_data->Release();
 		m_data = NULL;
 	}
-}
-
-// OFFSET: LEGO1 0x100a3d70
-void* TextureImpl::ImplementationDataPtr()
-{
-	return reinterpret_cast<void*>(&m_data);
 }
 
 inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* p_texture)
@@ -168,32 +192,8 @@ Result TextureImpl::SetPalette(int p_entryCount, PaletteEntry* p_entries)
 	return Success;
 }
 
-// OFFSET: LEGO1 0x100a1300
-void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
+// OFFSET: LEGO1 0x100a3d70
+void* TextureImpl::ImplementationDataPtr()
 {
-	TglD3DRMIMAGE* pImage = reinterpret_cast<TglD3DRMIMAGE*>(pObject->GetAppData());
-	delete pImage;
-	pObject->SetAppData(0);
-}
-
-// OFFSET: LEGO1 0x100a12a0
-Result TextureImpl::SetImage(IDirect3DRMTexture* p_self, TglD3DRMIMAGE* p_image)
-{
-	unsigned long appData;
-	Result result;
-
-	appData = reinterpret_cast<unsigned long>(p_image);
-
-	// This is here because in the original code they asserted
-	// on the return value being NULL.
-	TextureGetImage(p_self);
-
-	result = ResultVal(p_self->SetAppData(appData));
-	if (Succeeded(result) && p_image) {
-		result = ResultVal(p_self->AddDestroyCallback(TextureDestroyCallback, NULL));
-		if (!Succeeded(result)) {
-			p_self->SetAppData(0);
-		}
-	}
-	return result;
+	return reinterpret_cast<void*>(&m_data);
 }

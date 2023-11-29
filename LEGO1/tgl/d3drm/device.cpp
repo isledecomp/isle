@@ -58,12 +58,6 @@ Result DeviceImpl::SetDither(int p_dither)
 	return ResultVal(m_data->SetDither(p_dither));
 }
 
-// OFFSET: LEGO1 0x100a2d60
-Result DeviceImpl::Update()
-{
-	return ResultVal(m_data->Update());
-}
-
 // Probably wrong, not sure what's going on in this method.
 // OFFSET: LEGO1 0x100a2ce0
 void DeviceImpl::InitFromD3DDevice(Device*)
@@ -88,4 +82,10 @@ void DeviceImpl::InitFromWindowsDevice(Device*)
 		// m_data->Init(??);
 		winDevice->Release();
 	}
+}
+
+// OFFSET: LEGO1 0x100a2d60
+Result DeviceImpl::Update()
+{
+	return ResultVal(m_data->Update());
 }
