@@ -29,3 +29,21 @@ void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 {
 	// TODO
 }
+
+// OFFSET: LEGO1 0x100b4470
+void MxLoopingFlcPresenter::NextFrame()
+{
+	MxStreamChunk* chunk = NextChunk();
+
+	if (chunk->GetFlags() & MxStreamChunk::Flag_Bit2) {
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Repeating;
+	}
+	else {
+		LoadFrame(chunk);
+		AppendChunk(chunk);
+		m_unk68 += m_flicHeader->speed;
+	}
+
+	m_subscriber->FUN_100b8390(chunk);
+}
