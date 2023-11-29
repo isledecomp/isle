@@ -30,7 +30,7 @@ void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b4470
+// FUNCTION: LEGO1 0x100b4470
 void MxLoopingFlcPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
