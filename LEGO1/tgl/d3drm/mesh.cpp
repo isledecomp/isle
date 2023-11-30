@@ -93,10 +93,10 @@ Mesh* MeshImpl::DeepClone(Something* p_mesh)
 	DWORD dataSize;
 	unsigned int vcount, fcount, vperface;
 	m_data->groupMesh->GetGroup(m_data->groupIndex, &vcount, &fcount, &vperface, &dataSize, NULL);
-	unsigned int* faceBuffer = (unsigned int*) malloc(dataSize * sizeof(unsigned int));
+	unsigned int* faceBuffer = new unsigned int[dataSize];
 	m_data->groupMesh->GetGroup(m_data->groupIndex, &vcount, &fcount, &vperface, &dataSize, faceBuffer);
 	// We expect vertex to be sized 0x24, checked at start of file.
-	D3DRMVERTEX* vertexBuffer = (D3DRMVERTEX*) malloc(vcount * sizeof(D3DRMVERTEX));
+	D3DRMVERTEX* vertexBuffer = new D3DRMVERTEX[vcount];
 	m_data->groupMesh->GetVertices(m_data->groupIndex, 0, vcount, vertexBuffer);
 	LPDIRECT3DRMTEXTURE textureRef;
 	m_data->groupMesh->GetGroupTexture(m_data->groupIndex, &textureRef);
@@ -116,10 +116,8 @@ Mesh* MeshImpl::DeepClone(Something* p_mesh)
 	Result result = ResultVal(target->ImplementationData()->SetGroupColor(index, color));
 
 	// Cleanup
-	if (faceBuffer)
-		free(faceBuffer);
-	if (vertexBuffer)
-		free(vertexBuffer);
+	delete[] faceBuffer;
+	delete[] vertexBuffer;
 	if (result == Error) {
 		delete newSomething;
 		newSomething = NULL;
