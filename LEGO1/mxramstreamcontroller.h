@@ -13,7 +13,7 @@ public:
 	// FUNCTION: LEGO1 0x100b9430
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x10102130
+		// GLOBAL: LEGO1 0x10102130
 		return "MxRAMStreamController";
 	}
 

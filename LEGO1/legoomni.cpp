@@ -106,7 +106,7 @@ MxAtomId* g_nocdSourceName = NULL;
 // GLOBAL: LEGO1 0x100f6718
 const char* g_current = "current";
 
-// 0x101020e8
+// GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
 // FUNCTION: LEGO1 0x10015700

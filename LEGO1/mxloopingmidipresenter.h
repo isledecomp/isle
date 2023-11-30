@@ -9,7 +9,7 @@ class MxLoopingMIDIPresenter : public MxMIDIPresenter {
 public:
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x10101de0
+		// GLOBAL: LEGO1 0x10101de0
 		return "MxLoopingMIDIPresenter";
 	}
 

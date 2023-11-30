@@ -13,16 +13,16 @@
 #include "mxtimer.h"
 #include "mxvideomanager.h"
 
-// 0x101015b8
+// GLOBAL: LEGO1 0x101015b8
 char g_hdPath[1024];
 
-// 0x101019b8
+// GLOBAL: LEGO1 0x101019b8
 char g_cdPath[1024];
 
-// 0x10101db8
+// GLOBAL: LEGO1 0x10101db8
 MxBool g_use3dSound;
 
-// 0x101015b0
+// GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
 
 // FUNCTION: LEGO1 0x100159e0

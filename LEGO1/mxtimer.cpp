@@ -2,10 +2,10 @@
 
 #include <windows.h>
 
-// 0x10101414
+// GLOBAL: LEGO1 0x10101414
 MxLong MxTimer::s_LastTimeCalculated = 0;
 
-// 0x10101418
+// GLOBAL: LEGO1 0x10101418
 MxLong MxTimer::s_LastTimeTimerStarted = 0;
 
 // FUNCTION: LEGO1 0x100ae060

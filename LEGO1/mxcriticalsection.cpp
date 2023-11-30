@@ -6,7 +6,7 @@
 
 DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c);
 
-// 0x10101e78
+// GLOBAL: LEGO1 0x10101e78
 int g_useMutex = 0;
 
 // FUNCTION: LEGO1 0x100b6d20

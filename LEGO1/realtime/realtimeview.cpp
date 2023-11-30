@@ -2,16 +2,16 @@
 
 #include <math.h>
 
-// 0x10109598
+// GLOBAL: LEGO1 0x10109598
 float g_userMaxLodPower;
 
-// 0x10101044
+// GLOBAL: LEGO1 0x10101044
 float g_userMaxBase = 4.0f;
 
-// 0x10101048
+// GLOBAL: LEGO1 0x10101048
 float g_userMaxLod = 3.6f;
 
-// 0x1010104c
+// GLOBAL: LEGO1 0x1010104c
 float g_partsThreshold = 1000.0f;
 
 // FUNCTION: LEGO1 0x100a5de0

@@ -14,7 +14,7 @@ typedef struct {
 // GLOBAL: LEGO1 0x100dbe28
 const double g_normalizeByteToFloat = 1.0 / 255;
 
-// 0x101011b0
+// GLOBAL: LEGO1 0x101011b0
 ROIColorAlias g_roiColorAliases[22] = {
 	{"lego black", 0x21, 0x21, 0x21, 0},       {"lego black f", 0x21, 0x21, 0x21, 0},
 	{"lego black flat", 0x21, 0x21, 0x21, 0},  {"lego blue", 0x00, 0x54, 0x8c, 0},
@@ -29,10 +29,10 @@ ROIColorAlias g_roiColorAliases[22] = {
 	{"lego yellow", 0xff, 0xb9, 0x00, 0},      {"lego yellow flat", 0xff, 0xb9, 0x00, 0},
 };
 
-// 0x10101368
+// GLOBAL: LEGO1 0x10101368
 MxS32 g_roiConfig = 100;
 
-// 0x101013ac
+// GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
 
 // FUNCTION: LEGO1 0x100a81c0
