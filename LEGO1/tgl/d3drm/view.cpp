@@ -3,7 +3,7 @@
 using namespace TglImpl;
 
 struct ViewportAppData {
-	ViewportAppData(IDirect3DRM* p_renderer);
+	ViewportAppData(IDirect3DRM* pRenderer);
 	~ViewportAppData();
 
 	IDirect3DRMFrame* m_pLightFrame;
@@ -17,9 +17,9 @@ struct ViewportAppData {
 DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
 
 // OFFSET: LEGO1 0x100a10b0
-ViewportAppData::ViewportAppData(IDirect3DRM* p_renderer)
+ViewportAppData::ViewportAppData(IDirect3DRM* pRenderer)
 {
-	p_renderer->CreateFrame(NULL, &m_pLightFrame);
+	pRenderer->CreateFrame(NULL, &m_pLightFrame);
 	m_pCamera = NULL;
 	m_pLastRenderedFrame = NULL;
 	m_backgroundColorRed = 0.0f;
@@ -43,20 +43,20 @@ ViewportAppData::~ViewportAppData()
 }
 
 // Forward declare to satisfy order check
-void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg);
+void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
 // OFFSET: LEGO1 0x100a1160
-Result ViewImpl::ViewportCreateAppData(IDirect3DRM* p_device, IDirect3DRMViewport* p_view, IDirect3DRMFrame* p_camera)
+Result ViewImpl::ViewportCreateAppData(IDirect3DRM* pDevice, IDirect3DRMViewport* pView, IDirect3DRMFrame* pCamera)
 {
-	ViewportAppData* data = new ViewportAppData(p_device);
-	data->m_pCamera = p_camera;
-	Result result = ResultVal(p_view->SetAppData(reinterpret_cast<unsigned long>(data)));
+	ViewportAppData* data = new ViewportAppData(pDevice);
+	data->m_pCamera = pCamera;
+	Result result = ResultVal(pView->SetAppData(reinterpret_cast<unsigned long>(data)));
 	if (Succeeded(result)) {
-		result = ResultVal(p_view->AddDestroyCallback(ViewportDestroyCallback, data));
+		result = ResultVal(pView->AddDestroyCallback(ViewportDestroyCallback, data));
 	}
 	if (!Succeeded(result)) {
 		delete data;
-		p_view->SetAppData(0);
+		pView->SetAppData(0);
 	}
 	return result;
 }
@@ -81,9 +81,9 @@ inline Result ViewRestoreFrameAfterRender(
 }
 
 // OFFSET: LEGO1 0x100a1240
-void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg)
+void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
-	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(p_arg);
+	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(pArg);
 
 	ViewRestoreFrameAfterRender(
 		pViewportAppData->m_pLastRenderedFrame,
@@ -96,7 +96,7 @@ void ViewportDestroyCallback(IDirect3DRMObject* p_object, void* p_arg)
 
 // OFFSET: LEGO1 0x100a1290
 Result ViewportPickImpl(
-	IDirect3DRMViewport* p_viewport,
+	IDirect3DRMViewport* pViewport,
 	int x,
 	int y,
 	const Group** ppGroupsToPickFrom,
@@ -109,14 +109,14 @@ Result ViewportPickImpl(
 	return Error;
 }
 
-inline ViewportAppData* ViewportGetData(IDirect3DRMViewport* p_viewport)
+inline ViewportAppData* ViewportGetData(IDirect3DRMViewport* pViewport)
 {
-	return reinterpret_cast<ViewportAppData*>(p_viewport->GetAppData());
+	return reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
 }
 
-inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* p_viewport)
+inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 {
-	return ViewportGetData(p_viewport)->m_pLightFrame;
+	return ViewportGetData(pViewport)->m_pLightFrame;
 }
 
 // Inlined only
@@ -135,25 +135,25 @@ void* ViewImpl::ImplementationDataPtr()
 }
 
 // OFFSET: LEGO1 0x100a2d90
-Result ViewImpl::Add(const Light* p_light)
+Result ViewImpl::Add(const Light* pLight)
 {
-	const LightImpl* light = static_cast<const LightImpl*>(p_light);
+	const LightImpl* light = static_cast<const LightImpl*>(pLight);
 	IDirect3DRMFrame* frame = light->ImplementationData();
 	return ResultVal(ViewportGetLightFrame(m_data)->AddChild(frame));
 }
 
 // OFFSET: LEGO1 0x100a2dc0
-Result ViewImpl::Remove(const Light* p_light)
+Result ViewImpl::Remove(const Light* pLight)
 {
-	const LightImpl* light = static_cast<const LightImpl*>(p_light);
+	const LightImpl* light = static_cast<const LightImpl*>(pLight);
 	IDirect3DRMFrame* frame = light->ImplementationData();
 	return ResultVal(ViewportGetLightFrame(m_data)->DeleteChild(frame));
 }
 
 // OFFSET: LEGO1 0x100a2df0
-Result ViewImpl::SetCamera(const Camera* p_camera)
+Result ViewImpl::SetCamera(const Camera* pCamera)
 {
-	const CameraImpl* camera = static_cast<const CameraImpl*>(p_camera);
+	const CameraImpl* camera = static_cast<const CameraImpl*>(pCamera);
 	IDirect3DRMFrame* frame = camera->ImplementationData();
 
 	ViewportAppData* pViewportAppData;
@@ -172,19 +172,19 @@ Result ViewImpl::SetCamera(const Camera* p_camera)
 }
 
 // OFFSET: LEGO1 0x100a2e70
-Result ViewImpl::SetProjection(ProjectionType p_type)
+Result ViewImpl::SetProjection(ProjectionType type)
 {
-	return ResultVal(m_data->SetProjection(Translate(p_type)));
+	return ResultVal(m_data->SetProjection(Translate(type)));
 }
 
 // OFFSET: LEGO1 0x100a2eb0
-Result ViewImpl::SetFrustrum(float p_frontClippingDistance, float p_backClippingDistance, float p_degrees)
+Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees)
 {
-	float field = p_frontClippingDistance * tan(DegreesToRadians(p_degrees / 2));
+	float field = frontClippingDistance * tan(DegreesToRadians(degrees / 2));
 	Result result;
-	result = ResultVal(m_data->SetFront(p_frontClippingDistance));
+	result = ResultVal(m_data->SetFront(frontClippingDistance));
 	if (Succeeded(result)) {
-		result = ResultVal(m_data->SetBack(p_backClippingDistance));
+		result = ResultVal(m_data->SetBack(backClippingDistance));
 	}
 	if (Succeeded(result)) {
 		result = ResultVal(m_data->SetField(field));
@@ -194,28 +194,28 @@ Result ViewImpl::SetFrustrum(float p_frontClippingDistance, float p_backClipping
 }
 
 // OFFSET: LEGO1 0x100a2f30
-Result ViewImpl::SetBackgroundColor(float p_r, float p_g, float p_b)
+Result ViewImpl::SetBackgroundColor(float r, float g, float b)
 {
 	Result ret = Success;
 	// Note, this method in the shipped game is very diverged from
 	// the Tgl leak code.
 	ViewportAppData* data = ViewportGetData(m_data);
-	data->m_backgroundColorRed = p_r;
-	data->m_backgroundColorGreen = p_g;
-	data->m_backgroundColorBlue = p_b;
+	data->m_backgroundColorRed = r;
+	data->m_backgroundColorGreen = g;
+	data->m_backgroundColorBlue = b;
 	if (data->m_pLastRenderedFrame) {
-		ret = ResultVal(data->m_pLastRenderedFrame->SetSceneBackgroundRGB(p_r, p_g, p_b));
+		ret = ResultVal(data->m_pLastRenderedFrame->SetSceneBackgroundRGB(r, g, b));
 	}
 	return ret;
 }
 
 // OFFSET: LEGO1 0x100a2f80
-Result ViewImpl::GetBackgroundColor(float* p_r, float* p_g, float* p_b)
+Result ViewImpl::GetBackgroundColor(float* r, float* g, float* b)
 {
 	ViewportAppData* data = ViewportGetData(m_data);
-	*p_r = data->m_backgroundColorRed;
-	*p_g = data->m_backgroundColorGreen;
-	*p_b = data->m_backgroundColorBlue;
+	*r = data->m_backgroundColorRed;
+	*g = data->m_backgroundColorGreen;
+	*b = data->m_backgroundColorBlue;
 	return Success;
 }
 
@@ -254,11 +254,11 @@ inline Result ViewPrepareFrameForRender(
 }
 
 // OFFSET: LEGO1 0x100a2fd0
-Result ViewImpl::Render(const Light* p_camera)
+Result ViewImpl::Render(const Light* pCamera)
 {
 	ViewportAppData* appdata = ViewportGetData(m_data);
 
-	IDirect3DRMFrame* light = static_cast<const LightImpl*>(p_camera)->ImplementationData();
+	IDirect3DRMFrame* light = static_cast<const LightImpl*>(pCamera)->ImplementationData();
 
 	IDirect3DRMFrame* lastRendered = appdata->m_pLastRenderedFrame;
 	if (light != lastRendered) {
@@ -332,23 +332,23 @@ Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 }
 
 // OFFSET: LEGO1 0x100a3160
-Result ViewImpl::TransformScreenToWorld(const float p_screen[4], float p_world[3])
+Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
 {
 	// 100% match minus instruction reordering.
 	D3DVECTOR d3dRMWorld;
 	D3DRMVECTOR4D d3dScreen;
-	d3dScreen.x = p_screen[0];
-	d3dScreen.y = p_screen[1];
-	d3dScreen.z = p_screen[2];
-	d3dScreen.w = p_screen[3];
+	d3dScreen.x = screen[0];
+	d3dScreen.y = screen[1];
+	d3dScreen.z = screen[2];
+	d3dScreen.w = screen[3];
 	Result result;
 
 	result = ResultVal(m_data->InverseTransform(&d3dRMWorld, &d3dScreen));
 
 	if (Succeeded(result)) {
-		p_world[0] = d3dRMWorld.x;
-		p_world[1] = d3dRMWorld.y;
-		p_world[2] = d3dRMWorld.z;
+		world[0] = d3dRMWorld.x;
+		world[1] = d3dRMWorld.y;
+		world[2] = d3dRMWorld.z;
 	}
 
 	return result;

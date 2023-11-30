@@ -6,7 +6,7 @@ using namespace TglImpl;
 GroupImpl::~GroupImpl()
 {
 	if (m_data) {
-		free(m_data);
+		m_data->Release();
 		m_data = NULL;
 	}
 }
@@ -18,43 +18,43 @@ void* GroupImpl::ImplementationDataPtr()
 }
 
 // OFFSET: LEGO1 0x100a31e0
-Result GroupImpl::SetTransformation(const FloatMatrix4& p_matrix)
+Result GroupImpl::SetTransformation(const FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
-	D3DRMMATRIX4D* matrix = Translate(p_matrix, helper);
-	return ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *matrix));
+	D3DRMMATRIX4D* d3dMatrix = Translate(matrix, helper);
+	return ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *d3dMatrix));
 }
 
 // OFFSET: LEGO1 0x100a3240
-Result GroupImpl::SetColor(float p_r, float p_g, float p_b, float p_a)
+Result GroupImpl::SetColor(float r, float g, float b, float a)
 {
 	// The first instruction makes no sense here:
 	// cmp dword ptr [esp + 0x10], 0
 	// This compares a, which we know is a float because it immediately
 	// gets passed into D3DRMCreateColorRGBA, but does the comparison
 	// as though it's an int??
-	if (*reinterpret_cast<int*>(&p_a) > 0) {
-		D3DCOLOR color = D3DRMCreateColorRGBA(p_r, p_g, p_b, p_a);
+	if (*reinterpret_cast<int*>(&a) > 0) {
+		D3DCOLOR color = D3DRMCreateColorRGBA(r, g, b, a);
 		return ResultVal(m_data->SetColor(color));
 	}
 	else {
-		return ResultVal(m_data->SetColorRGB(p_r, p_a, p_b));
+		return ResultVal(m_data->SetColorRGB(r, a, b));
 	}
 }
 
 // OFFSET: LEGO1 0x100a32b0
-Result GroupImpl::SetTexture(const Texture* p_texture)
+Result GroupImpl::SetTexture(const Texture* pTexture)
 {
-	IDirect3DRMTexture* texture = p_texture ? static_cast<const TextureImpl*>(p_texture)->ImplementationData() : NULL;
-	return ResultVal(m_data->SetTexture(texture));
+	IDirect3DRMTexture* pD3DTexture = pTexture ? static_cast<const TextureImpl*>(pTexture)->ImplementationData() : NULL;
+	return ResultVal(m_data->SetTexture(pD3DTexture));
 }
 
 // OFFSET: LEGO1 0x100a32e0
-Result GroupImpl::GetTexture(Texture*& p_texture)
+Result GroupImpl::GetTexture(Texture*& pTexture)
 {
-	IDirect3DRMTexture* texture;
+	IDirect3DRMTexture* pD3DTexture;
 	TextureImpl* holder = new TextureImpl();
-	Result result = ResultVal(m_data->GetTexture(&texture));
+	Result result = ResultVal(m_data->GetTexture(&pD3DTexture));
 	if (result) {
 		// Seems to actually call the first virtual method of holder here
 		// but that doesn't make any sense since it passes three arguments
@@ -63,57 +63,57 @@ Result GroupImpl::GetTexture(Texture*& p_texture)
 		// This line makes the start of the function match and is what I
 		// would expect to see there but it clearly isn't what's actually
 		// there.
-		holder->SetImplementation(texture);
+		holder->SetImplementation(pD3DTexture);
 	}
-	p_texture = holder;
+	pTexture = holder;
 	return Success;
 }
 
 // OFFSET: LEGO1 0x100a33c0
-Result GroupImpl::SetMaterialMode(MaterialMode p_mode)
+Result GroupImpl::SetMaterialMode(MaterialMode mode)
 {
-	D3DRMMATERIALMODE mode;
-	switch (p_mode)
+	D3DRMMATERIALMODE d3dMode;
+	switch (mode)
 	{
 	case FromParent:
-		mode = D3DRMMATERIAL_FROMPARENT;
+		d3dMode = D3DRMMATERIAL_FROMPARENT;
 		break;
 	case FromFrame:
-		mode = D3DRMMATERIAL_FROMFRAME;
+		d3dMode = D3DRMMATERIAL_FROMFRAME;
 		break;
 	case FromMesh:
-		mode = D3DRMMATERIAL_FROMMESH;
+		d3dMode = D3DRMMATERIAL_FROMMESH;
 		break;
 	}
-	return ResultVal(m_data->SetMaterialMode(mode));
+	return ResultVal(m_data->SetMaterialMode(d3dMode));
 }
 
 // OFFSET: LEGO1 0x100a3410
-Result GroupImpl::Add(const Mesh* p_mesh)
+Result GroupImpl::Add(const Mesh* pMesh)
 {
-	const MeshImpl* mesh = static_cast<const MeshImpl*>(p_mesh);
-	return ResultVal(m_data->AddVisual(mesh->ImplementationData()->groupMesh));
+	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
+	return ResultVal(m_data->AddVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
 // OFFSET: LEGO1 0x100a3430
-Result GroupImpl::Add(const Group* p_group)
+Result GroupImpl::Add(const Group* pGroup)
 {
-	const GroupImpl* group = static_cast<const GroupImpl*>(p_group);
-	return ResultVal(m_data->AddVisual(group->m_data));
+	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
+	return ResultVal(m_data->AddVisual(pGroupImpl->m_data));
 }
 
 // OFFSET: LEGO1 0x100a3450
-Result GroupImpl::Remove(const Group* p_group)
+Result GroupImpl::Remove(const Group* pGroup)
 {
-	const GroupImpl* group = static_cast<const GroupImpl*>(p_group);
-	return ResultVal(m_data->DeleteVisual(group->m_data));
+	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
+	return ResultVal(m_data->DeleteVisual(pGroupImpl->m_data));
 }
 
 // OFFSET: LEGO1 0x100a3480
-Result GroupImpl::Remove(const Mesh* p_mesh)
+Result GroupImpl::Remove(const Mesh* pMesh)
 {
-	const MeshImpl* mesh = static_cast<const MeshImpl*>(p_mesh);
-	return ResultVal(m_data->DeleteVisual(mesh->ImplementationData()->groupMesh));
+	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
+	return ResultVal(m_data->DeleteVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
 // OFFSET: LEGO1 0x100a34b0 STUB

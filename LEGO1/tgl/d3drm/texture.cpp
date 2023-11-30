@@ -4,31 +4,31 @@ using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(TglD3DRMIMAGE, 0x40);
 
-inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* p_texture)
+inline TglD3DRMIMAGE* TextureGetImage(IDirect3DRMTexture* pTexture)
 {
-	return reinterpret_cast<TglD3DRMIMAGE*>(p_texture->GetAppData());
+	return reinterpret_cast<TglD3DRMIMAGE*>(pTexture->GetAppData());
 }
 
 // Forward declare to satisfy order check
 void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
 // OFFSET: LEGO1 0x100a12a0
-Result TextureImpl::SetImage(IDirect3DRMTexture* p_self, TglD3DRMIMAGE* p_image)
+Result TextureImpl::SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage)
 {
 	unsigned long appData;
 	Result result;
 
-	appData = reinterpret_cast<unsigned long>(p_image);
+	appData = reinterpret_cast<unsigned long>(pImage);
 
 	// This is here because in the original code they asserted
 	// on the return value being NULL.
-	TextureGetImage(p_self);
+	TextureGetImage(pSelf);
 
-	result = ResultVal(p_self->SetAppData(appData));
-	if (Succeeded(result) && p_image) {
-		result = ResultVal(p_self->AddDestroyCallback(TextureDestroyCallback, NULL));
+	result = ResultVal(pSelf->SetAppData(appData));
+	if (Succeeded(result) && pImage) {
+		result = ResultVal(pSelf->AddDestroyCallback(TextureDestroyCallback, NULL));
 		if (!Succeeded(result)) {
-			p_self->SetAppData(0);
+			pSelf->SetAppData(0);
 		}
 	}
 	return result;
@@ -44,13 +44,13 @@ void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 
 // OFFSET: LEGO1 0x100a1330
 TglD3DRMIMAGE::TglD3DRMIMAGE(
-	int p_width,
-	int p_height,
-	int p_depth,
-	void* p_buffer,
-	int p_useBuffer,
-	int p_paletteSize,
-	PaletteEntry* p_palette
+	int width,
+	int height,
+	int depth,
+	void* pBuffer,
+	int useBuffer,
+	int paletteSize,
+	PaletteEntry* pEntries
 )
 {
 	m_image.aspectx = 1;
@@ -69,11 +69,11 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 	m_image.palette_size = 0;
 	m_image.palette = NULL;
 	m_texelsAllocatedByClient = 0;
-	if (p_buffer != NULL) {
-		CreateBuffer(p_width, p_height, p_depth, p_buffer, p_useBuffer);
+	if (pBuffer != NULL) {
+		CreateBuffer(width, height, depth, pBuffer, useBuffer);
 	}
-	if (p_palette != NULL) {
-		InitializePalette(p_paletteSize, p_palette);
+	if (pEntries != NULL) {
+		InitializePalette(paletteSize, pEntries);
 	}
 }
 
@@ -87,39 +87,39 @@ void TglD3DRMIMAGE::Destroy()
 }
 
 // OFFSET: LEGO1 0x100a13e0 STUB
-Result TglD3DRMIMAGE::CreateBuffer(int p_width, int p_height, int p_depth, void* p_buffer, int p_useBuffer)
+Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer)
 {
 	return Error;
 }
 
 // OFFSET: LEGO1 0x100a1510
-void TglD3DRMIMAGE::FillRowsOfTexture(int p_y, int p_height, char* p_content)
+void TglD3DRMIMAGE::FillRowsOfTexture(int y, int height, char* pContent)
 {
 	// The purpose is clearly this but I can't get the assembly to line up.
-	memcpy((char*) m_image.buffer1 + (p_y * m_image.bytes_per_line), p_content, p_height * m_image.bytes_per_line);
+	memcpy((char*) m_image.buffer1 + (y * m_image.bytes_per_line), pContent, height * m_image.bytes_per_line);
 }
 
 // OFFSET: LEGO1 0x100a1550
-Result TglD3DRMIMAGE::InitializePalette(int p_paletteSize, PaletteEntry* p_palette)
+Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 {
 	// This function is a 100% match if the PaletteEntry class is copied
 	// into into the TglD3DRMIMAGE class instead of being a global struct.
-	if (m_image.palette_size != p_paletteSize) {
+	if (m_image.palette_size != paletteSize) {
 		if (m_image.palette != NULL) {
 			free(m_image.palette);
 			m_image.palette = NULL;
 			m_image.palette_size = 0;
 		}
-		if (p_paletteSize > 0) {
-			m_image.palette = (D3DRMPALETTEENTRY*) malloc(4 * p_paletteSize);
-			m_image.palette_size = p_paletteSize;
+		if (paletteSize > 0) {
+			m_image.palette = (D3DRMPALETTEENTRY*) malloc(4 * paletteSize);
+			m_image.palette_size = paletteSize;
 		}
 	}
-	if (p_paletteSize > 0) {
-		for (int i = 0; i < p_paletteSize; i++) {
-			m_image.palette[i].red = p_palette[i].m_red;
-			m_image.palette[i].green = p_palette[i].m_green;
-			m_image.palette[i].blue = p_palette[i].m_blue;
+	if (paletteSize > 0) {
+		for (int i = 0; i < paletteSize; i++) {
+			m_image.palette[i].red = pEntries[i].m_red;
+			m_image.palette[i].green = pEntries[i].m_green;
+			m_image.palette[i].blue = pEntries[i].m_blue;
 			m_image.palette[i].flags = D3DRMPALETTE_READONLY;
 		}
 	}
@@ -136,10 +136,10 @@ TextureImpl::~TextureImpl()
 }
 
 // OFFSET: LEGO1 0x100a3c10
-Result TextureImpl::SetTexels(int p_width, int p_height, int p_bitsPerTexel, void* p_texels)
+Result TextureImpl::SetTexels(int width, int height, int bitsPerTexel, void* pTexels)
 {
 	TglD3DRMIMAGE* image = TextureGetImage(m_data);
-	Result result = image->CreateBuffer(p_width, p_height, p_bitsPerTexel, p_texels, TRUE);
+	Result result = image->CreateBuffer(width, height, bitsPerTexel, pTexels, TRUE);
 	if (Succeeded(result)) {
 		result = ResultVal(m_data->Changed(TRUE, FALSE));
 	}
@@ -147,50 +147,50 @@ Result TextureImpl::SetTexels(int p_width, int p_height, int p_bitsPerTexel, voi
 }
 
 // OFFSET: LEGO1 0x100a3c60
-void TextureImpl::FillRowsOfTexture(int p_y, int p_height, void* p_buffer)
+void TextureImpl::FillRowsOfTexture(int y, int height, void* pBuffer)
 {
 	TglD3DRMIMAGE* image = TextureGetImage(m_data);
-	image->FillRowsOfTexture(p_y, p_height, (char*) p_buffer);
+	image->FillRowsOfTexture(y, height, (char*) pBuffer);
 }
 
 // OFFSET: LEGO1 0x100a3c90
-Result TextureImpl::Changed(int p_texelsChanged, int p_paletteChanged)
+Result TextureImpl::Changed(int texelsChanged, int paletteChanged)
 {
-	return ResultVal(m_data->Changed(p_texelsChanged, p_paletteChanged));
+	return ResultVal(m_data->Changed(texelsChanged, paletteChanged));
 }
 
 // OFFSET: LEGO1 0x100a3d00
 Result TextureImpl::GetBufferAndPalette(
-	int* p_width,
-	int* p_height,
-	int* p_depth,
-	void** p_buffer,
-	int* p_paletteSize,
-	PaletteEntry** p_palette
+	int* width,
+	int* height,
+	int* depth,
+	void** pBuffer,
+	int* paletteSize,
+	PaletteEntry** pEntries
 )
 {
 	// Something really doesn't match here, not sure what's up.
 	TglD3DRMIMAGE* image = TextureGetImage(m_data);
-	*p_width = image->m_image.width;
-	*p_height = image->m_image.height;
-	*p_depth = image->m_image.depth;
-	*p_buffer = image->m_image.buffer1;
-	*p_paletteSize = image->m_image.palette_size;
+	*width = image->m_image.width;
+	*height = image->m_image.height;
+	*depth = image->m_image.depth;
+	*pBuffer = image->m_image.buffer1;
+	*paletteSize = image->m_image.palette_size;
 	for (int i = 0; i < image->m_image.palette_size; i++) {
-		p_palette[i]->m_red = image->m_image.palette[i].red;
-		p_palette[i]->m_green = image->m_image.palette[i].green;
-		p_palette[i]->m_blue = image->m_image.palette[i].blue;
+		pEntries[i]->m_red = image->m_image.palette[i].red;
+		pEntries[i]->m_green = image->m_image.palette[i].green;
+		pEntries[i]->m_blue = image->m_image.palette[i].blue;
 	}
 	return Success;
 }
 
 // OFFSET: LEGO1 0x100a3d40
-Result TextureImpl::SetPalette(int p_entryCount, PaletteEntry* p_entries)
+Result TextureImpl::SetPalette(int entryCount, PaletteEntry* pEntries)
 {
 	// Not 100% confident this is supposed to directly be forwarding arguments,
 	// but it probably is given FillRowsOfTexture matches doing that.
 	TglD3DRMIMAGE* image = TextureGetImage(m_data);
-	image->InitializePalette(p_entryCount, p_entries);
+	image->InitializePalette(entryCount, pEntries);
 	m_data->Changed(FALSE, TRUE);
 	return Success;
 }
