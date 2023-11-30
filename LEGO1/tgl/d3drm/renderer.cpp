@@ -42,10 +42,10 @@ void RendererImpl::Destroy()
 }
 
 // OFFSET: LEGO1 0x100a1894
-Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& p_data)
+Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
 	DeviceImpl* device = new DeviceImpl();
-	HRESULT result = m_data->CreateDeviceFromD3D(p_data.m_pDirect3D, p_data.m_pDirect3DDevice, &device->m_data);
+	HRESULT result = m_data->CreateDeviceFromD3D(data.m_pDirect3D, data.m_pDirect3DDevice, &device->m_data);
 	if (!SUCCEEDED(result)) {
 		delete device;
 		device = NULL;
@@ -57,16 +57,16 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& p_data)
 static int gSetBufferCount = 1;
 
 // OFFSET: LEGO1 0x100a1900
-Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& p_data)
+Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
 	DeviceImpl* device = new DeviceImpl();
 	HRESULT result = m_data->CreateDeviceFromSurface(
-		const_cast<LPGUID>(p_data.m_driverGUID),
-		p_data.m_pDirectDraw,
-		p_data.m_pBackBuffer,
+		const_cast<LPGUID>(data.m_driverGUID),
+		data.m_pDirectDraw,
+		data.m_pBackBuffer,
 		&device->m_data
 	);
-	if (SUCCEEDED(result) && p_data.m_pBackBuffer && gSetBufferCount) {
+	if (SUCCEEDED(result) && data.m_pBackBuffer && gSetBufferCount) {
 		device->m_data->SetBufferCount(2);
 	}
 	if (!SUCCEEDED(result)) {
@@ -77,22 +77,22 @@ Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& p_data)
 }
 
 inline Result RendererCreateView(
-	IDirect3DRM* p_renderer,
-	IDirect3DRMDevice* p_device,
-	IDirect3DRMFrame* p_camera,
-	IDirect3DRMViewport*& p_view,
-	unsigned long p_x,
-	unsigned long p_y,
-	unsigned long p_width,
-	unsigned long p_height
+	IDirect3DRM* pRenderer,
+	IDirect3DRMDevice* pDevice,
+	IDirect3DRMFrame* pCamera,
+	IDirect3DRMViewport*& rpView,
+	unsigned long x,
+	unsigned long y,
+	unsigned long width,
+	unsigned long height
 )
 {
-	Result result = ResultVal(p_renderer->CreateViewport(p_device, p_camera, p_x, p_y, p_width, p_height, &p_view));
+	Result result = ResultVal(pRenderer->CreateViewport(pDevice, pCamera, x, y, width, height, &rpView));
 	if (Succeeded(result)) {
-		result = ViewImpl::ViewportCreateAppData(p_renderer, p_view, p_camera);
+		result = ViewImpl::ViewportCreateAppData(pRenderer, rpView, pCamera);
 		if (!Succeeded(result)) {
-			p_view->Release();
-			p_view = NULL;
+			rpView->Release();
+			rpView = NULL;
 		}
 	}
 	return result;
@@ -100,24 +100,24 @@ inline Result RendererCreateView(
 
 // OFFSET: LEGO1 0x100a1a00
 View* RendererImpl::CreateView(
-	const Device* p_device,
-	const Camera* p_camera,
-	unsigned long p_x,
-	unsigned long p_y,
-	unsigned long p_width,
-	unsigned long p_height
+	const Device* pDevice,
+	const Camera* pCamera,
+	unsigned long x,
+	unsigned long y,
+	unsigned long width,
+	unsigned long height
 )
 {
 	ViewImpl* view = new ViewImpl();
 	Result result = RendererCreateView(
 		m_data,
-		static_cast<const DeviceImpl*>(p_device)->m_data,
-		static_cast<const CameraImpl*>(p_camera)->m_data,
+		static_cast<const DeviceImpl*>(pDevice)->m_data,
+		static_cast<const CameraImpl*>(pCamera)->m_data,
 		view->m_data,
-		p_x,
-		p_y,
-		p_width,
-		p_height
+		x,
+		y,
+		width,
+		height
 	);
 	if (!result) {
 		delete view;
@@ -126,25 +126,25 @@ View* RendererImpl::CreateView(
 	return view;
 }
 
-inline Result RendererCreateGroup(IDirect3DRM* p_renderer, IDirect3DRMFrame* p_parent, IDirect3DRMFrame*& p_group)
+inline Result RendererCreateGroup(IDirect3DRM* pRenderer, IDirect3DRMFrame* pParent, IDirect3DRMFrame*& rpGroup)
 {
-	Result result = ResultVal(p_renderer->CreateFrame(NULL, &p_group));
-	if (Succeeded(result) && p_parent) {
-		result = ResultVal(p_parent->AddVisual(p_group));
+	Result result = ResultVal(pRenderer->CreateFrame(NULL, &rpGroup));
+	if (Succeeded(result) && pParent) {
+		result = ResultVal(pParent->AddVisual(rpGroup));
 		if (!Succeeded(result)) {
-			p_group->Release();
-			p_group = NULL;
+			rpGroup->Release();
+			rpGroup = NULL;
 		}
 	}
 	return result;
 }
 
 // OFFSET: LEGO1 0x100a1b20
-Group* RendererImpl::CreateGroup(const Group* p_parent)
+Group* RendererImpl::CreateGroup(const Group* pParent)
 {
 	GroupImpl* group = new GroupImpl();
 	Result result =
-		RendererCreateGroup(m_data, p_parent ? static_cast<const GroupImpl*>(p_parent)->m_data : NULL, group->m_data);
+		RendererCreateGroup(m_data, pParent ? static_cast<const GroupImpl*>(pParent)->m_data : NULL, group->m_data);
 	if (!result) {
 		delete group;
 		group = NULL;
@@ -164,11 +164,11 @@ Camera* RendererImpl::CreateCamera()
 }
 
 // OFFSET: LEGO1 0x100a1cf0
-Light* RendererImpl::CreateLight(LightType p_type, float p_r, float p_g, float p_b)
+Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 {
 	LightImpl* newLight = new LightImpl();
 	D3DRMLIGHTTYPE translatedType;
-	switch (p_type) {
+	switch (type) {
 	case Ambient:
 		translatedType = D3DRMLIGHT_AMBIENT;
 		break;
@@ -192,7 +192,7 @@ Light* RendererImpl::CreateLight(LightType p_type, float p_r, float p_g, float p
 	Result result = ResultVal(m_data->CreateFrame(NULL, &frame));
 	if (Succeeded(result)) {
 		LPDIRECT3DRMLIGHT d3dLight;
-		result = ResultVal(m_data->CreateLightRGB(translatedType, p_r, p_g, p_b, &d3dLight));
+		result = ResultVal(m_data->CreateLightRGB(translatedType, r, g, b, &d3dLight));
 		if (!Succeeded(result)) {
 			frame->Release();
 		}
@@ -233,27 +233,27 @@ Unk* RendererImpl::CreateUnk()
 }
 
 inline Result RendererCreateTexture(
-	IDirect3DRM* p_renderer,
-	IDirect3DRMTexture*& p_texture,
-	int p_width,
-	int p_height,
-	int p_bytesPerPixel,
-	void* p_buffer,
-	int p_useBuffer,
-	int p_paletteSize,
-	PaletteEntry* p_palette
+	IDirect3DRM* renderer,
+	IDirect3DRMTexture*& texture,
+	int width,
+	int height,
+	int bytesPerPixel,
+	void* pBuffer,
+	int useBuffer,
+	int paletteSize,
+	PaletteEntry* pEntries
 )
 {
 	TglD3DRMIMAGE* image;
 	Result result;
 
-	image = new TglD3DRMIMAGE(p_width, p_height, p_bytesPerPixel, p_buffer, p_useBuffer, p_paletteSize, p_palette);
-	result = ResultVal(p_renderer->CreateTexture(&image->m_image, &p_texture));
+	image = new TglD3DRMIMAGE(width, height, bytesPerPixel, pBuffer, useBuffer, paletteSize, pEntries);
+	result = ResultVal(renderer->CreateTexture(&image->m_image, &texture));
 	if (Succeeded(result)) {
-		result = TextureImpl::SetImage(p_texture, image);
+		result = TextureImpl::SetImage(texture, image);
 		if (!Succeeded(result)) {
-			p_texture->Release();
-			p_texture = NULL;
+			texture->Release();
+			texture = NULL;
 			delete image;
 		}
 	}
@@ -265,26 +265,26 @@ inline Result RendererCreateTexture(
 
 // OFFSET: LEGO1 0x100a1f50
 Texture* RendererImpl::CreateTexture(
-	int p_width,
-	int p_height,
-	int p_bitsPerTexel,
-	const void* p_pTexels,
-	int p_texelsArePersistent,
-	int p_paletteEntryCount,
-	const PaletteEntry* p_pEntries
+	int width,
+	int height,
+	int bitsPerTexel,
+	const void* pTexels,
+	int texelsArePersistent,
+	int paletteEntryCount,
+	const PaletteEntry* pEntries
 )
 {
 	TextureImpl* texture = new TextureImpl();
 	if (!Succeeded(RendererCreateTexture(
 			m_data,
 			texture->m_data,
-			p_width,
-			p_height,
-			p_bitsPerTexel,
-			const_cast<void*>(p_pTexels),
-			p_texelsArePersistent,
-			p_paletteEntryCount,
-			const_cast<PaletteEntry*>(p_pEntries)
+			width,
+			height,
+			bitsPerTexel,
+			const_cast<void*>(pTexels),
+			texelsArePersistent,
+			paletteEntryCount,
+			const_cast<PaletteEntry*>(pEntries)
 		))) {
 		delete texture;
 		texture = NULL;
@@ -305,15 +305,15 @@ Texture* RendererImpl::CreateTexture()
 
 
 // OFFSET: LEGO1 0x100a2270
-Result RendererImpl::SetTextureDefaultShadeCount(unsigned long p_shadeCount)
+Result RendererImpl::SetTextureDefaultShadeCount(unsigned long shadeCount)
 {
-	return ResultVal(m_data->SetDefaultTextureShades(p_shadeCount));
+	return ResultVal(m_data->SetDefaultTextureShades(shadeCount));
 }
 
 // OFFSET: LEGO1 0x100a2290
-Result RendererImpl::SetTextureDefaultColorCount(unsigned long p_colorCount)
+Result RendererImpl::SetTextureDefaultColorCount(unsigned long colorCount)
 {
-	return ResultVal(m_data->SetDefaultTextureColors(p_colorCount));
+	return ResultVal(m_data->SetDefaultTextureColors(colorCount));
 }
 
 // OFFSET: LEGO1 0x100a22b0

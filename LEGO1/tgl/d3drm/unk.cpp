@@ -22,30 +22,30 @@ void* UnkImpl::ImplementationDataPtr()
 
 // OFFSET: LEGO1 0x100a3840 STUB
 Result UnkImpl::SetMeshData(
-	unsigned long p_faceCount,
-	unsigned long p_vertexCount,
-	const float (*p_positions)[3],
-	const float (*p_normals)[3],
-	const float (*p_textureCoordinates)[2],
-	unsigned long p_vertexPerFaceCount,
-	unsigned long* p_faceData
+	unsigned long faceCount,
+	unsigned long vertexCount,
+	const float (*pPositions)[3],
+	const float (*pNormals)[3],
+	const float (*pTextureCoordinates)[2],
+	unsigned long vertexPerFaceCount,
+	unsigned long* pFaceData
 )
 {
 	return Error;
 }
 
 // OFFSET: LEGO1 0x100a3ae0
-Result UnkImpl::GetBoundingBox(float p_min[3], float p_max[3])
+Result UnkImpl::GetBoundingBox(float min[3], float max[3])
 {
 	D3DRMBOX box;
 	Result result = ResultVal(m_data->GetBox(&box));
 	if (result == Success) {
-		p_min[0] = box.min.x;
-		p_min[1] = box.min.y;
-		p_min[2] = box.min.z;
-		p_max[0] = box.max.x;
-		p_max[1] = box.max.y;
-		p_max[2] = box.max.z;
+		min[0] = box.min.x;
+		min[1] = box.min.y;
+		min[2] = box.min.z;
+		max[0] = box.max.x;
+		max[1] = box.max.y;
+		max[2] = box.max.z;
 	}
 	return result;
 }

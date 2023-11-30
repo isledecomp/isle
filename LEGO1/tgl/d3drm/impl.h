@@ -19,9 +19,9 @@ namespace TglImpl
 using namespace Tgl;
 
 // Utility function used by implementations
-inline Result ResultVal(HRESULT p_result)
+inline Result ResultVal(HRESULT result)
 {
-	return SUCCEEDED(p_result) ? Success : Error;
+	return SUCCEEDED(result) ? Success : Error;
 }
 
 // Forward declare implementations
@@ -51,26 +51,26 @@ public:
 	virtual View* CreateView(
 		const Device*,
 		const Camera*,
-		unsigned long p_x,
-		unsigned long p_y,
-		unsigned long p_width,
-		unsigned long p_height
+		unsigned long x,
+		unsigned long y,
+		unsigned long width,
+		unsigned long height
 	);
 	virtual Camera* CreateCamera();
-	virtual Light* CreateLight(LightType, float p_r, float p_g, float p_b);
-	virtual Group* CreateGroup(const Group* p_parent);
+	virtual Light* CreateLight(LightType, float r, float g, float b);
+	virtual Group* CreateGroup(const Group* pParent);
 
 	// vtable+0x20
 	virtual Unk* CreateUnk();
 	virtual Texture* CreateTexture();
 	virtual Texture* CreateTexture(
-		int p_width,
-		int p_height,
-		int p_bitsPerTexel,
-		const void* p_pTexels,
-		int p_pTexelsArePersistent,
-		int p_paletteEntryCount,
-		const PaletteEntry* p_pEntries
+		int width,
+		int height,
+		int bitsPerTexel,
+		const void* pTexels,
+		int pTexelsArePersistent,
+		int paletteEntryCount,
+		const PaletteEntry* pEntries
 	);
 	virtual Result SetTextureDefaultShadeCount(unsigned long);
 
@@ -131,11 +131,11 @@ public:
 	// vtable+0x10
 	virtual Result SetCamera(const Camera*);
 	virtual Result SetProjection(ProjectionType);
-	virtual Result SetFrustrum(float p_frontClippingDistance, float p_backClippingDistance, float p_degrees);
-	virtual Result SetBackgroundColor(float p_r, float p_g, float p_b);
+	virtual Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees);
+	virtual Result SetBackgroundColor(float r, float g, float b);
 
 	// vtable+0x20
-	virtual Result GetBackgroundColor(float* p_r, float* p_g, float* p_b);
+	virtual Result GetBackgroundColor(float* r, float* g, float* b);
 	virtual Result Clear();
 	virtual Result Render(const Light*);
 	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height);
@@ -144,12 +144,12 @@ public:
 	virtual Result TransformWorldToScreen(const float world[3], float screen[4]);
 	virtual Result TransformScreenToWorld(const float screen[4], float world[3]);
 	virtual Result Pick(
-		unsigned long p_x,
-		unsigned long p_y,
-		const Group** p_ppGroupsToPickFrom,
-		int p_groupsToPickFromCount,
-		const Group**& p_rppPickedGroups,
-		int& p_rPickedGroupCount
+		unsigned long x,
+		unsigned long y,
+		const Group** ppGroupsToPickFrom,
+		int groupsToPickFromCount,
+		const Group**& rppPickedGroups,
+		int& rPickedGroupCount
 	);
 
 	inline IDirect3DRMViewport* ImplementationData() const { return m_data; }
@@ -191,7 +191,7 @@ public:
 
 	// vtable+0x08
 	virtual Result SetTransformation(const FloatMatrix4&);
-	virtual Result SetColor(float p_r, float p_g, float p_b);
+	virtual Result SetColor(float r, float g, float b);
 
 	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
 
@@ -210,7 +210,7 @@ public:
 	virtual void* ImplementationDataPtr();
 
 	// vtable+0x08
-	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a);
+	virtual Result SetColor(float r, float g, float b, float a);
 	virtual Result SetTexture(const Texture*);
 
 	// vtable+0x10
@@ -245,7 +245,7 @@ public:
 
 	// vtable+0x08
 	virtual Result SetTransformation(const FloatMatrix4&);
-	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a);
+	virtual Result SetColor(float r, float g, float b, float a);
 
 	// vtable+0x10
 	virtual Result SetTexture(const Texture*);
@@ -278,15 +278,15 @@ public:
 
 	// vtable+0x08
 	virtual Result SetMeshData(
-		unsigned long p_faceCount,
-		unsigned long p_vertexCount,
-		const float (*p_positions)[3],
-		const float (*p_normals)[3],
-		const float (*p_textureCoordinates)[2],
-		unsigned long p_vertexPerFaceCount,
-		unsigned long* p_faceData
+		unsigned long faceCount,
+		unsigned long vertexCount,
+		const float (*pPositions)[3],
+		const float (*pNormals)[3],
+		const float (*pTextureCoordinates)[2],
+		unsigned long vertexPerFaceCount,
+		unsigned long* pFaceData
 	);
-	virtual Result GetBoundingBox(float p_min[3], float p_max[3]);
+	virtual Result GetBoundingBox(float min[3], float max[3]);
 
 	// vtable+0x10
 	virtual Unk* Clone();
@@ -303,20 +303,20 @@ private:
 class TglD3DRMIMAGE {
 public:
 	TglD3DRMIMAGE(
-		int p_width,
-		int p_height,
-		int p_depth,
-		void* p_buffer,
-		int p_useBuffer,
-		int p_paletteSize,
-		PaletteEntry* p_palette
+		int width,
+		int height,
+		int depth,
+		void* pBuffer,
+		int useBuffer,
+		int paletteSize,
+		PaletteEntry* pEntries
 	);
 	~TglD3DRMIMAGE() { Destroy(); }
 
-	Result CreateBuffer(int p_width, int p_height, int p_depth, void* p_buffer, int p_useBuffer);
+	Result CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer);
 	void Destroy();
-	void FillRowsOfTexture(int p_y, int p_height, char* p_content);
-	Result InitializePalette(int p_paletteSize, PaletteEntry* p_palette);
+	void FillRowsOfTexture(int y, int height, char* content);
+	Result InitializePalette(int paletteSize, PaletteEntry* pEntries);
 
 	D3DRMIMAGE m_image;
 	int m_texelsAllocatedByClient;
@@ -331,38 +331,38 @@ public:
 	virtual void* ImplementationDataPtr();
 
 	// vtable+0x08
-	virtual Result SetTexels(int p_width, int p_height, int p_bitsPerTexel, void* p_texels);
-	virtual void FillRowsOfTexture(int p_y, int p_height, void* p_buffer);
+	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels);
+	virtual void FillRowsOfTexture(int y, int height, void* pBuffer);
 
 	// vtable+0x10
-	virtual Result Changed(int p_texelsChanged, int p_paletteChanged);
+	virtual Result Changed(int texelsChanged, int paletteChanged);
 	virtual Result GetBufferAndPalette(
-		int* p_width,
-		int* p_height,
-		int* p_depth,
-		void** p_buffer,
-		int* p_paletteSize,
-		PaletteEntry** p_palette
+		int* pWidth,
+		int* pHeight,
+		int* pDepth,
+		void** ppBuffer,
+		int* ppPaletteSize,
+		PaletteEntry** ppPalette
 	);
-	virtual Result SetPalette(int p_entryCount, PaletteEntry* p_entries);
+	virtual Result SetPalette(int entryCount, PaletteEntry* entries);
 
 	inline IDirect3DRMTexture* ImplementationData() const { return m_data; }
-	inline void SetImplementation(IDirect3DRMTexture* data) { m_data = data; }
+	inline void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
 
 	friend class RendererImpl;
 
-	static Result SetImage(IDirect3DRMTexture* p_self, TglD3DRMIMAGE* p_image);
+	static Result SetImage(IDirect3DRMTexture* pSelf, TglD3DRMIMAGE* pImage);
 
 private:
 	IDirect3DRMTexture* m_data;
 };
 
 // Translation helpers
-inline D3DRMRENDERQUALITY Translate(ShadingModel p_tglShadingModel)
+inline D3DRMRENDERQUALITY Translate(ShadingModel tglShadingModel)
 {
 	D3DRMRENDERQUALITY renderQuality;
 
-	switch (p_tglShadingModel) {
+	switch (tglShadingModel) {
 	case Wireframe:
 		renderQuality = D3DRMRENDER_WIREFRAME;
 		break;
@@ -386,10 +386,10 @@ inline D3DRMRENDERQUALITY Translate(ShadingModel p_tglShadingModel)
 	return renderQuality;
 }
 
-inline D3DRMPROJECTIONTYPE Translate(ProjectionType p_tglProjectionType)
+inline D3DRMPROJECTIONTYPE Translate(ProjectionType tglProjectionType)
 {
 	D3DRMPROJECTIONTYPE projectionType;
-	switch (p_tglProjectionType) {
+	switch (tglProjectionType) {
 	case Perspective:
 		projectionType = D3DRMPROJECT_PERSPECTIVE;
 		break;

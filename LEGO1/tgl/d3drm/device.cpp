@@ -38,24 +38,24 @@ Result DeviceImpl::SetColorModel(ColorModel)
 }
 
 // OFFSET: LEGO1 0x100a2c30
-Result DeviceImpl::SetShadingModel(ShadingModel p_model)
+Result DeviceImpl::SetShadingModel(ShadingModel model)
 {
 	// Doesn't match well even though we know this is exactly
 	// the original code thanks to the jump table.
-	D3DRMRENDERQUALITY renderQuality = Translate(p_model);
+	D3DRMRENDERQUALITY renderQuality = Translate(model);
 	return ResultVal(m_data->SetQuality(renderQuality));
 }
 
 // OFFSET: LEGO1 0x100a2ca0
-Result DeviceImpl::SetShadeCount(unsigned long p_shadeCount)
+Result DeviceImpl::SetShadeCount(unsigned long shadeCount)
 {
-	return ResultVal(m_data->SetShades(p_shadeCount));
+	return ResultVal(m_data->SetShades(shadeCount));
 }
 
 // OFFSET: LEGO1 0x100a2cc0
-Result DeviceImpl::SetDither(int p_dither)
+Result DeviceImpl::SetDither(int dither)
 {
-	return ResultVal(m_data->SetDither(p_dither));
+	return ResultVal(m_data->SetDither(dither));
 }
 
 // Probably wrong, not sure what's going on in this method.

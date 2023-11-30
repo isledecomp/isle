@@ -123,20 +123,20 @@ public:
 		unsigned long height
 	) = 0;
 	virtual Camera* CreateCamera() = 0;
-	virtual Light* CreateLight(LightType, float p_r, float p_g, float p_b) = 0;
-	virtual Group* CreateGroup(const Group* p_parent = 0) = 0;
+	virtual Light* CreateLight(LightType, float r, float g, float b) = 0;
+	virtual Group* CreateGroup(const Group* pParent = 0) = 0;
 
 	// vtable+0x20
 	virtual Unk* CreateUnk() = 0;
 	virtual Texture* CreateTexture() = 0;
 	virtual Texture* CreateTexture(
-		int p_width,
-		int p_height,
-		int p_bitsPerTexel,
-		const void* p_pTexels,
-		int p_pTexelsArePersistent,
-		int p_paletteEntryCount,
-		const PaletteEntry* p_pEntries
+		int width,
+		int height,
+		int bitsPerTexel,
+		const void* pTexels,
+		int pTexelsArePersistent,
+		int paletteEntryCount,
+		const PaletteEntry* pEntries
 	) = 0;
 	virtual Result SetTextureDefaultShadeCount(unsigned long) = 0;
 
@@ -174,11 +174,11 @@ public:
 	// vtable+0x10
 	virtual Result SetCamera(const Camera*) = 0;
 	virtual Result SetProjection(ProjectionType) = 0;
-	virtual Result SetFrustrum(float p_frontClippingDistance, float p_backClippingDistance, float p_degrees) = 0;
-	virtual Result SetBackgroundColor(float p_r, float p_g, float p_b) = 0;
+	virtual Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees) = 0;
+	virtual Result SetBackgroundColor(float r, float g, float b) = 0;
 
 	// vtable+0x20
-	virtual Result GetBackgroundColor(float* p_r, float* p_g, float* p_b) = 0;
+	virtual Result GetBackgroundColor(float* r, float* g, float* b) = 0;
 	virtual Result Clear() = 0;
 	virtual Result Render(const Light*) = 0;
 	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) = 0;
@@ -229,13 +229,13 @@ public:
 class Light : public Object {
 public:
 	virtual Result SetTransformation(const FloatMatrix4&) = 0;
-	virtual Result SetColor(float p_r, float p_g, float p_b) = 0;
+	virtual Result SetColor(float r, float g, float b) = 0;
 };
 
 // VTABLE 0x100dbbb0
 class Mesh : public Object {
 public:
-	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a) = 0;
+	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 
@@ -253,7 +253,7 @@ public:
 class Group : public Object {
 public:
 	virtual Result SetTransformation(const FloatMatrix4&) = 0;
-	virtual Result SetColor(float p_r, float p_g, float p_b, float p_a) = 0;
+	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 	virtual Result SetMaterialMode(MaterialMode) = 0;
@@ -275,15 +275,15 @@ public:
 class Unk : public Object {
 public:
 	virtual Result SetMeshData(
-		unsigned long p_faceCount,
-		unsigned long p_vertexCount,
-		const float (*p_positions)[3],
-		const float (*p_normals)[3],
-		const float (*p_textureCoordinates)[2],
-		unsigned long p_vertexPerFaceCount,
-		unsigned long* p_faceData
+		unsigned long faceCount,
+		unsigned long vertexCount,
+		const float (*pPositions)[3],
+		const float (*pNormals)[3],
+		const float (*pTextureCoordinates)[2],
+		unsigned long vertexPerFaceCount,
+		unsigned long* pFaceData
 	) = 0;
-	virtual Result GetBoundingBox(float p_min[3], float p_max[3]) = 0;
+	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;
 };
 
@@ -291,20 +291,20 @@ public:
 class Texture : public Object {
 public:
 	// vtable+0x08
-	virtual Result SetTexels(int p_width, int p_height, int p_bitsPerTexel, void* p_texels) = 0;
-	virtual void FillRowsOfTexture(int p_y, int p_height, void* p_buffer) = 0;
+	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) = 0;
+	virtual void FillRowsOfTexture(int y, int height, void* pBuffer) = 0;
 
 	// vtable+0x10
-	virtual Result Changed(int p_texelsChanged, int p_paletteChanged) = 0;
+	virtual Result Changed(int texelsChanged, int paletteChanged) = 0;
 	virtual Result GetBufferAndPalette(
-		int* p_width,
-		int* p_height,
-		int* p_depth,
-		void** p_buffer,
-		int* p_paletteSize,
-		PaletteEntry** p_palette
+		int* pWidth,
+		int* pHeight,
+		int* pDepth,
+		void** ppBuffer,
+		int* pPaletteSize,
+		PaletteEntry** ppPalette
 	) = 0;
-	virtual Result SetPalette(int p_entryCount, PaletteEntry* p_entries) = 0;
+	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
 };
 
 } // namespace Tgl
