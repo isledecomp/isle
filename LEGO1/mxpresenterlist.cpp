@@ -11,26 +11,26 @@ MxS8 MxPresenterList::Compare(MxPresenter* p_a, MxPresenter* p_b)
 	return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 }
 
-// FUNCTION: LEGO1 0x1001cd20 SYNTHETIC
+// TEMPLATE: LEGO1 0x1001cd20
 // MxCollection<MxPresenter *>::Compare
 
-// FUNCTION: LEGO1 0x1001cd30 SYNTHETIC
+// TEMPLATE: LEGO1 0x1001cd30
 // MxCollection<MxPresenter *>::Destroy
 
-// FUNCTION: LEGO1 0x1001cd40 SYNTHETIC
+// TEMPLATE: LEGO1 0x1001cd40
 // MxList<MxPresenter *>::MxList<MxPresenter *>
 
-// FUNCTION: LEGO1 0x1001cdd0 SYNTHETIC
+// TEMPLATE: LEGO1 0x1001cdd0
 // MxCollection<MxPresenter *>::~MxCollection<MxPresenter *>
 
-// FUNCTION: LEGO1 0x1001ce20 SYNTHETIC
+// TEMPLATE: LEGO1 0x1001ce20
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
 
-// FUNCTION: LEGO1 0x1001cf70 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1001cf70
 // MxCollection<MxPresenter *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001cfe0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1001cfe0
 // MxList<MxPresenter *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001d090 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1001d090
 // MxPtrList<MxPresenter>::`scalar deleting destructor'

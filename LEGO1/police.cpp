@@ -1,18 +1,18 @@
 #include "police.h"
 
-// FUNCTION: LEGO1 0x1005e130 STUB
+// STUB: LEGO1 0x1005e130
 Police::Police()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005e320 STUB
+// STUB: LEGO1 0x1005e320
 Police::~Police()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005e480 STUB
+// STUB: LEGO1 0x1005e480
 MxLong Police::Notify(MxParam& p)
 {
 	// TODO

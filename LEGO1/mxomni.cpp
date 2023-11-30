@@ -310,14 +310,14 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100b00c0 STUB
+// STUB: LEGO1 0x100b00c0
 MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	// TODO
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100b00e0 STUB
+// STUB: LEGO1 0x100b00e0
 void MxOmni::Vtable0x2c()
 {
 	// TODO
@@ -349,7 +349,7 @@ MxLong MxOmni::Notify(MxParam& p)
 	return HandleNotificationType2(p);
 }
 
-// FUNCTION: LEGO1 0x100b0880 STUB
+// STUB: LEGO1 0x100b0880
 MxResult MxOmni::HandleNotificationType2(MxParam& p_param)
 {
 	// TODO STUB

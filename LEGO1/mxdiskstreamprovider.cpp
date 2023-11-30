@@ -32,7 +32,7 @@ MxDiskStreamProvider::MxDiskStreamProvider()
 	this->m_unk35 = 0;
 }
 
-// FUNCTION: LEGO1 0x100d1240 STUB
+// STUB: LEGO1 0x100d1240
 MxDiskStreamProvider::~MxDiskStreamProvider()
 {
 	// TODO
@@ -70,7 +70,7 @@ done:
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100d15e0 STUB
+// STUB: LEGO1 0x100d15e0
 void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
 {
 	// TODO
@@ -87,7 +87,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x100d18f0 STUB
+// STUB: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO

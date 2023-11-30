@@ -1,6 +1,6 @@
 #include "radiostate.h"
 
-// FUNCTION: LEGO1 0x1002ce10 STUB
+// STUB: LEGO1 0x1002ce10
 RadioState::RadioState()
 {
 	// TODO

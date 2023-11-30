@@ -102,7 +102,7 @@ void ConvertHSVToRGB(float h, float s, float v, float* r_out, float* b_out, floa
 	}
 }
 
-// FUNCTION: LEGO1 0x1003ee00 STUB
+// STUB: LEGO1 0x1003ee00
 void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 {
 }

@@ -6,19 +6,19 @@ LegoPlantManager::LegoPlantManager()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x100262c0 STUB
+// STUB: LEGO1 0x100262c0
 LegoPlantManager::~LegoPlantManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10026330 STUB
+// STUB: LEGO1 0x10026330
 void LegoPlantManager::Init()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10026e00 STUB
+// STUB: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()
 {
 	// TODO

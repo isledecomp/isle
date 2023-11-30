@@ -16,13 +16,13 @@ void LegoWorld::VTable0x60()
 {
 }
 
-// FUNCTION: LEGO1 0x10015820 STUB
+// STUB: LEGO1 0x10015820
 void FUN_10015820(MxU32 p_unk1, MxU32 p_unk2)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10015910 STUB
+// STUB: LEGO1 0x10015910
 void FUN_10015910(MxU32 p_unk1)
 {
 	// TODO
@@ -36,7 +36,7 @@ void SetIsWorldActive(MxBool p_isWorldActive)
 	g_isWorldActive = p_isWorldActive;
 }
 
-// FUNCTION: LEGO1 0x1001ca40 STUB
+// STUB: LEGO1 0x1001ca40
 LegoWorld::LegoWorld()
 {
 	// TODO
@@ -54,13 +54,13 @@ MxBool LegoWorld::VTable0x64()
 	return FALSE;
 }
 
-// FUNCTION: LEGO1 0x1001dfa0 STUB
+// STUB: LEGO1 0x1001dfa0
 LegoWorld::~LegoWorld()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1001e0b0 STUB
+// STUB: LEGO1 0x1001e0b0
 MxResult LegoWorld::SetAsCurrentWorld(MxDSObject& p_dsObject)
 {
 	// TODO
@@ -85,24 +85,24 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 	return ret;
 }
 
-// FUNCTION: LEGO1 0x1001f630 STUB
+// STUB: LEGO1 0x1001f630
 void LegoWorld::VTable0x54()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10020220 STUB
+// STUB: LEGO1 0x10020220
 void LegoWorld::VTable0x58(MxCore* p_object)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10020f10 STUB
+// STUB: LEGO1 0x10020f10
 void LegoWorld::EndAction(MxPresenter* p_presenter)
 {
 }
 
-// FUNCTION: LEGO1 0x10021a70 STUB
+// STUB: LEGO1 0x10021a70
 void LegoWorld::VTable0x68(MxBool p_add)
 {
 	// TODO

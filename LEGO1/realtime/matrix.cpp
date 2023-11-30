@@ -124,7 +124,7 @@ void Matrix4Impl::EqualsMxProduct(const Matrix4Impl* p_a, const Matrix4Impl* p_b
 // Not close, Ghidra struggles understinging this method so it will have to
 // be manually worked out. Included since I at least figured out what it was
 // doing with rotateIndex and what overall operation it's trying to do.
-// FUNCTION: LEGO1 0x10002550 STUB
+// STUB: LEGO1 0x10002550
 void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 {
 	/*
@@ -167,7 +167,7 @@ void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 
 // No idea what this function is doing and it will be hard to tell until
 // we have a confirmed usage site.
-// FUNCTION: LEGO1 0x10002710 STUB
+// STUB: LEGO1 0x10002710
 int Matrix4Impl::FUN_10002710(const Vector3Impl* p_vec)
 {
 	return -1;

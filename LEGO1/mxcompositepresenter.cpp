@@ -25,19 +25,19 @@ MxCompositePresenter::~MxCompositePresenter()
 	NotificationManager()->Unregister(this);
 }
 
-// FUNCTION: LEGO1 0x100b67f0 STUB
+// STUB: LEGO1 0x100b67f0
 void MxCompositePresenter::VTable0x58()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b69b0 STUB
+// STUB: LEGO1 0x100b69b0
 void MxCompositePresenter::VTable0x5c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b6b40 STUB
+// STUB: LEGO1 0x100b6b40
 void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
 {
 	// TODO

@@ -1,27 +1,27 @@
 #include "mxvariabletable.h"
 
-// FUNCTION: LEGO1 0x100afcd0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100afcd0
 // MxCollection<MxVariable *>::Compare
 
-// FUNCTION: LEGO1 0x100afce0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100afce0
 // MxCollection<MxVariable *>::~MxCollection<MxVariable *>
 
-// FUNCTION: LEGO1 0x100afd30 SYNTHETIC
+// TEMPLATE: LEGO1 0x100afd30
 // MxCollection<MxVariable *>::Destroy
 
-// FUNCTION: LEGO1 0x100afd40 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100afd40
 // MxCollection<MxVariable *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100afdb0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100afdb0
 // MxVariableTable::Destroy
 
-// FUNCTION: LEGO1 0x100afdc0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100afdc0
 // MxHashTable<MxVariable *>::Hash
 
-// FUNCTION: LEGO1 0x100b0bd0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100b0bd0
 // MxHashTable<MxVariable *>::~MxHashTable<MxVariable *>
 
-// FUNCTION: LEGO1 0x100b0ca0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100b0ca0
 // MxHashTable<MxVariable *>::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x100b7330
@@ -89,8 +89,8 @@ const char* MxVariableTable::GetVariable(const char* p_key)
 	return value;
 }
 
-// FUNCTION: LEGO1 0x100b7ab0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100b7ab0
 // MxHashTable<MxVariable *>::Resize
 
-// FUNCTION: LEGO1 0x100b7b80 SYNTHETIC
+// TEMPLATE: LEGO1 0x100b7b80
 // MxHashTable<MxVariable *>::_NodeInsert

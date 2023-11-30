@@ -21,12 +21,12 @@ void LegoSoundManager::Init()
 	unk0x3c = 0;
 }
 
-// FUNCTION: LEGO1 0x100299b0 STUB
+// STUB: LEGO1 0x100299b0
 void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 {
 }
 
-// FUNCTION: LEGO1 0x100299f0 STUB
+// STUB: LEGO1 0x100299f0
 MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	return FAILURE;
@@ -38,7 +38,7 @@ void LegoSoundManager::Destroy()
 	Destroy(FALSE);
 }
 
-// FUNCTION: LEGO1 0x1002a3a0 STUB
+// STUB: LEGO1 0x1002a3a0
 MxResult LegoSoundManager::Tickle()
 {
 	MxMediaManager::Tickle();

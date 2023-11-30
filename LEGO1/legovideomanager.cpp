@@ -75,7 +75,7 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
 	EnableFullScreenMovie(p_enable, TRUE);
 }
 
-// FUNCTION: LEGO1 0x1007c310 STUB
+// STUB: LEGO1 0x1007c310
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 {
 	// TODO
@@ -97,14 +97,14 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	// m_3dManager->m_pViewport->vtable1c(red, green, blue)
 }
 
-// FUNCTION: LEGO1 0x1007c560 STUB
+// STUB: LEGO1 0x1007c560
 int LegoVideoManager::EnableRMDevice()
 {
 	// TODO
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x1007c740 STUB
+// STUB: LEGO1 0x1007c740
 int LegoVideoManager::DisableRMDevice()
 {
 	// TODO

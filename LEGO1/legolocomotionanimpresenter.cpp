@@ -6,7 +6,7 @@ LegoLocomotionAnimPresenter::LegoLocomotionAnimPresenter()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x1006d0b0 STUB
+// STUB: LEGO1 0x1006d0b0
 void LegoLocomotionAnimPresenter::Init()
 {
 	// TODO

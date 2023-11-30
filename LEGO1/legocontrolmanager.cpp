@@ -1,30 +1,30 @@
 #include "legocontrolmanager.h"
 
-// FUNCTION: LEGO1 0x10028520 STUB
+// STUB: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10028d60 STUB
+// STUB: LEGO1 0x10028d60
 LegoControlManager::~LegoControlManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10028e10 STUB
+// STUB: LEGO1 0x10028e10
 void LegoControlManager::Register(MxCore* p_listener)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10028ea0 STUB
+// STUB: LEGO1 0x10028ea0
 void LegoControlManager::Unregister(MxCore* p_listener)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10029600 STUB
+// STUB: LEGO1 0x10029600
 MxResult LegoControlManager::Tickle()
 {
 	// TODO

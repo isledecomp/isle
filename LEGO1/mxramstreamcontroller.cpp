@@ -35,21 +35,21 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c6210 STUB
+// STUB: LEGO1 0x100c6210
 MxResult MxRAMStreamController::vtable0x20(MxDSAction* p_action)
 {
 	// TODO STUB
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c6320 STUB
+// STUB: LEGO1 0x100c6320
 MxResult MxRAMStreamController::vtable0x24(undefined4 p_unknown)
 {
 	// TODO STUB
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100d0d80 STUB
+// STUB: LEGO1 0x100d0d80
 undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
 {
 	return NULL;

@@ -111,7 +111,7 @@ BOOL MxDirect3D::CreateIDirect3D()
 	return TRUE;
 }
 
-// FUNCTION: LEGO1 0x1009b310 STUB
+// STUB: LEGO1 0x1009b310
 BOOL MxDirect3D::D3DSetMode()
 {
 	// TODO
@@ -137,7 +137,7 @@ MxDeviceModeFinder::~MxDeviceModeFinder()
 	}
 }
 
-// FUNCTION: LEGO1 0x1009c070 STUB
+// STUB: LEGO1 0x1009c070
 BOOL MxDeviceEnumerate::FUN_1009c070()
 {
 	// TODO
@@ -180,14 +180,14 @@ MxResult MxDeviceEnumerate::_DoEnumerate()
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x1009c710 STUB
+// STUB: LEGO1 0x1009c710
 BOOL FAR PASCAL EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID)
 {
 	// TODO
 	return FALSE;
 }
 
-// FUNCTION: LEGO1 0x1009c730 STUB
+// STUB: LEGO1 0x1009c730
 const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
 	// TODO: This is a list of error messages, similar to the function in

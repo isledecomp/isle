@@ -13,19 +13,19 @@ MxDiskStreamController::MxDiskStreamController()
 	m_unk8c = 0;
 }
 
-// FUNCTION: LEGO1 0x100c7330 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c7330
 // list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
 
-// FUNCTION: LEGO1 0x100c7420 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c7420
 // list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
 
-// FUNCTION: LEGO1 0x100c7490 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c7490
 // list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
 
-// FUNCTION: LEGO1 0x100c74e0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c74e0
 // List<MxDSBuffer *>::~List<MxDSBuffer *>
 
-// FUNCTION: LEGO1 0x100c7530 STUB
+// STUB: LEGO1 0x100c7530
 MxDiskStreamController::~MxDiskStreamController()
 {
 	// TODO
@@ -69,35 +69,35 @@ MxResult MxDiskStreamController::vtable0x34(undefined4 p_unknown)
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c7ac0 STUB
+// STUB: LEGO1 0x100c7ac0
 MxResult MxDiskStreamController::vtable0x28()
 {
 	// TODO
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c7c00 STUB
+// STUB: LEGO1 0x100c7c00
 MxResult MxDiskStreamController::vtable0x30(undefined4 p_unknown)
 {
 	// TODO
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c7ff0 STUB
+// STUB: LEGO1 0x100c7ff0
 MxResult MxDiskStreamController::vtable0x20(MxDSAction* p_action)
 {
 	// TODO
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c8160 STUB
+// STUB: LEGO1 0x100c8160
 MxResult MxDiskStreamController::vtable0x24(undefined4 p_unknown)
 {
 	// TODO
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c8640 STUB
+// STUB: LEGO1 0x100c8640
 MxResult MxDiskStreamController::Tickle()
 {
 	// TODO

@@ -1,18 +1,18 @@
 #include "infocenter.h"
 
-// FUNCTION: LEGO1 0x1006ea20 STUB
+// STUB: LEGO1 0x1006ea20
 Infocenter::Infocenter()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1006ec90 STUB
+// STUB: LEGO1 0x1006ec90
 Infocenter::~Infocenter()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1006ef10 STUB
+// STUB: LEGO1 0x1006ef10
 MxLong Infocenter::Notify(MxParam& p)
 {
 	// TODO
@@ -20,7 +20,7 @@ MxLong Infocenter::Notify(MxParam& p)
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x10070af0 STUB
+// STUB: LEGO1 0x10070af0
 MxResult Infocenter::Tickle()
 {
 	// TODO

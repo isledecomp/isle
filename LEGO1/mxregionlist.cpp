@@ -2,10 +2,10 @@
 
 #include "mxregion.h"
 
-// FUNCTION: LEGO1 0x100c32e0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c32e0
 // MxCollection<MxRegionTopBottom *>::Compare
 
-// FUNCTION: LEGO1 0x100c3340 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c3340
 // MxCollection<MxRegionTopBottom *>::Destroy
 
 // FUNCTION: LEGO1 0x100c33e0
@@ -18,19 +18,19 @@ void MxRegionList::Destroy(MxRegionTopBottom* p_topBottom)
 	}
 }
 
-// FUNCTION: LEGO1 0x100c34d0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c34d0
 // MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c3540 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c3540
 // MxList<MxRegionTopBottom *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c35f0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c35f0
 // MxPtrList<MxRegionTopBottom>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c4d80 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c4d80
 // MxCollection<MxRegionLeftRight *>::Compare
 
-// FUNCTION: LEGO1 0x100c4de0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c4de0
 // MxCollection<MxRegionLeftRight *>::Destroy
 
 // FUNCTION: LEGO1 0x100c4e80
@@ -39,26 +39,26 @@ void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
 	delete p_leftRight;
 }
 
-// FUNCTION: LEGO1 0x100c4f50 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c4f50
 // MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c4fc0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c4fc0
 // MxList<MxRegionLeftRight *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c5070 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c5070
 // MxPtrList<MxRegionLeftRight>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c54f0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c54f0
 // MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
 
-// FUNCTION: LEGO1 0x100c58c0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c58c0
 // MxList<MxRegionLeftRight *>::_InsertEntry
 
-// FUNCTION: LEGO1 0x100c5970 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c5970
 // MxList<MxRegionTopBottom *>::_InsertEntry
 
-// FUNCTION: LEGO1 0x100c5a20 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c5a20
 // MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
 
-// FUNCTION: LEGO1 0x100c5a40 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c5a40
 // MxList<MxRegionLeftRight *>::_DeleteEntry

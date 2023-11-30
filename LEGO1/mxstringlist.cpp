@@ -4,23 +4,23 @@
 
 DECOMP_SIZE_ASSERT(MxListEntry<MxString>, 0x18)
 
-// FUNCTION: LEGO1 0x100cb3c0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cb3c0
 // MxCollection<MxString>::Compare
 
-// FUNCTION: LEGO1 0x100cb470 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cb470
 // MxCollection<MxString>::Destroy
 
-// FUNCTION: LEGO1 0x100cb4c0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cb4c0
 // MxList<MxString>::~MxList<MxString>
 
-// FUNCTION: LEGO1 0x100cbb40 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cbb40
 // MxList<MxString>::Append
 
-// FUNCTION: LEGO1 0x100cc2d0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cc2d0
 // MxList<MxString>::_InsertEntry
 
-// FUNCTION: LEGO1 0x100cc3c0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cc3c0
 // MxListEntry<MxString>::MxListEntry<MxString>
 
-// FUNCTION: LEGO1 0x100cc450 SYNTHETIC
+// TEMPLATE: LEGO1 0x100cc450
 // MxListEntry<MxString>::GetValue

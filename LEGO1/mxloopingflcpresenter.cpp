@@ -24,7 +24,7 @@ void MxLoopingFlcPresenter::Init()
 	this->m_flags &= 0xfb;
 }
 
-// FUNCTION: LEGO1 0x100b4432 STUB
+// STUB: LEGO1 0x100b4432
 void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 {
 	// TODO

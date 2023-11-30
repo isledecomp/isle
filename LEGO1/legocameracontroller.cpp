@@ -1,12 +1,12 @@
 #include "legocameracontroller.h"
 
-// FUNCTION: LEGO1 0x10011d50 STUB
+// STUB: LEGO1 0x10011d50
 LegoCameraController::LegoCameraController()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011f70 STUB
+// STUB: LEGO1 0x10011f70
 LegoCameraController::~LegoCameraController()
 {
 	// TODO

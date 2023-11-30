@@ -28,7 +28,7 @@ public:
 		return !strcmp(name, Score::ClassName()) || LegoWorld::IsA(name);
 	}
 
-	// FUNCTION: LEGO1 0x100011e0 SYNTHETIC
+	// SYNTHETIC: LEGO1 0x100011e0
 	// Score::`scalar deleting destructor'
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+18

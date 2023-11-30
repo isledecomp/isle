@@ -310,7 +310,7 @@ if __name__ == "__main__":
         total_effective_accuracy = 0
         htmlinsert = []
 
-        # Generate basename of original file, used in locating FUNCTION lines
+        # Generate basename of original file, used in locating OFFSET lines
         basename = os.path.basename(os.path.splitext(original)[0])
 
         for srcfilename in walk_source_dir(source):
@@ -332,7 +332,7 @@ if __name__ == "__main__":
                     else:
                         continue
 
-                if block.is_synthetic:
+                if block.is_template:
                     recinfo = syminfo.get_recompiled_address_from_name(block.signature)
                     if not recinfo:
                         continue

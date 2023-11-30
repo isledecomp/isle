@@ -136,7 +136,7 @@ MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 	return (result << 0x10) | result;
 }
 
-// FUNCTION: LEGO1 0x100c09c0 STUB
+// STUB: LEGO1 0x100c09c0
 undefined4 MxMusicManager::FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount)
 {
 	// TODO

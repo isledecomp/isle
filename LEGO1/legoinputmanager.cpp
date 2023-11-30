@@ -34,7 +34,7 @@ LegoInputManager::LegoInputManager()
 	m_timeout = 1000;
 }
 
-// FUNCTION: LEGO1 0x1005b8b0 STUB
+// STUB: LEGO1 0x1005b8b0
 MxResult LegoInputManager::Tickle()
 {
 	ProcessEvents();
@@ -56,25 +56,25 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x1005bb80 SYNTHETIC
+// TEMPLATE: LEGO1 0x1005bb80
 // MxCollection<LegoEventNotificationParam>::Compare
 
-// FUNCTION: LEGO1 0x1005bc30 SYNTHETIC
+// TEMPLATE: LEGO1 0x1005bc30
 // MxCollection<LegoEventNotificationParam>::Destroy
 
-// FUNCTION: LEGO1 0x1005bc80 SYNTHETIC
+// TEMPLATE: LEGO1 0x1005bc80
 // MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
 
-// FUNCTION: LEGO1 0x1005bd50 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1005bd50
 // MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1005bdc0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1005bdc0
 // MxList<LegoEventNotificationParam>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1005beb0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1005beb0
 // LegoEventQueue::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1005bf70 SYNTHETIC
+// SYNTHETIC: LEGO1 0x1005bf70
 // MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x1005bfe0
@@ -210,13 +210,13 @@ MxResult LegoInputManager::GetJoystickState(
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x1005c470 STUB
+// STUB: LEGO1 0x1005c470
 void LegoInputManager::Register(MxCore*)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005c5c0 STUB
+// STUB: LEGO1 0x1005c5c0
 void LegoInputManager::UnRegister(MxCore*)
 {
 	// TODO
@@ -269,7 +269,7 @@ void LegoInputManager::ProcessEvents()
 	}
 }
 
-// FUNCTION: LEGO1 0x1005c9c0 STUB
+// STUB: LEGO1 0x1005c9c0
 MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 {
 	// TODO
@@ -293,5 +293,5 @@ void LegoInputManager::KillTimer()
 	}
 }
 
-// FUNCTION: LEGO1 0x1005d010 SYNTHETIC
+// TEMPLATE: LEGO1 0x1005d010
 // MxListEntry<LegoEventNotificationParam>::GetValue

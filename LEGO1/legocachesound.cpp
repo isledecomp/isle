@@ -6,13 +6,13 @@ LegoCacheSound::LegoCacheSound()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x10006630 STUB
+// STUB: LEGO1 0x10006630
 LegoCacheSound::~LegoCacheSound()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100066d0 STUB
+// STUB: LEGO1 0x100066d0
 void LegoCacheSound::Init()
 {
 	// TODO

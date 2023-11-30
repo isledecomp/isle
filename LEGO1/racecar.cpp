@@ -8,7 +8,7 @@ RaceCar::RaceCar()
 	this->m_unk13c = 40.0;
 }
 
-// FUNCTION: LEGO1 0x10028420 STUB
+// STUB: LEGO1 0x10028420
 RaceCar::~RaceCar()
 {
 	// TODO

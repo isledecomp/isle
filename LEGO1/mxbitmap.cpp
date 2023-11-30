@@ -231,12 +231,12 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100bce70 STUB
+// STUB: LEGO1 0x100bce70
 void MxBitmap::vtable2c(int, int, int, int, int, int, int)
 {
 }
 
-// FUNCTION: LEGO1 0x100bd020 STUB
+// STUB: LEGO1 0x100bd020
 void MxBitmap::vtable30(int, int, int, int, int, int, int)
 {
 }

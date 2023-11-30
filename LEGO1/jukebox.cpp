@@ -1,6 +1,6 @@
 #include "jukebox.h"
 
-// FUNCTION: LEGO1 0x1005d660 STUB
+// STUB: LEGO1 0x1005d660
 JukeBox::JukeBox()
 {
 	// TODO

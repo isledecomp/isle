@@ -27,7 +27,7 @@ public:
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
 	virtual void VTable0xe4() override;
 
-	// FUNCTION: LEGO1 0x10003210 SYNTHETIC
+	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
 	virtual ~Helicopter() override; // vtable+0x0
 

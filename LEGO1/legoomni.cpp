@@ -216,20 +216,20 @@ void PlayMusic(MxU32 p_index)
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
 }
 
-// FUNCTION: LEGO1 0x1001a700 STUB
+// STUB: LEGO1 0x1001a700
 void FUN_1001a700()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1003dd70 STUB
+// STUB: LEGO1 0x1003dd70
 LegoROI* PickROI(MxLong, MxLong)
 {
 	// TODO
 	return NULL;
 }
 
-// FUNCTION: LEGO1 0x1003ddc0 STUB
+// STUB: LEGO1 0x1003ddc0
 LegoEntity* PickEntity(MxLong, MxLong)
 {
 	// TODO
@@ -372,7 +372,7 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
-// FUNCTION: LEGO1 0x10058c30 STUB
+// STUB: LEGO1 0x10058c30
 void LegoOmni::Destroy()
 {
 	// TODO
@@ -464,20 +464,20 @@ LegoOmni* LegoOmni::GetInstance()
 	return (LegoOmni*) MxOmni::GetInstance();
 }
 
-// FUNCTION: LEGO1 0x1005af10 STUB
+// STUB: LEGO1 0x1005af10
 void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005b0c0 STUB
+// STUB: LEGO1 0x1005b0c0
 LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	// TODO
 	return NULL;
 }
 
-// FUNCTION: LEGO1 0x1005b1d0 STUB
+// STUB: LEGO1 0x1005b1d0
 MxResult LegoOmni::DeleteObject(MxDSAction& ds)
 {
 	// TODO
@@ -520,7 +520,7 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
 	return FALSE;
 }
 
-// FUNCTION: LEGO1 0x1005b400 STUB
+// STUB: LEGO1 0x1005b400
 int LegoOmni::GetCurrPathInfo(LegoPathBoundary**, int&)
 {
 	// TODO
@@ -544,7 +544,7 @@ MxResult LegoOmni::Start(MxDSAction* action)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x1005b5f0 STUB
+// STUB: LEGO1 0x1005b5f0
 MxLong LegoOmni::Notify(MxParam& p)
 {
 	// TODO

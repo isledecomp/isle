@@ -34,51 +34,51 @@ MxStreamController::MxStreamController()
 	m_action0x60 = NULL;
 }
 
-// FUNCTION: LEGO1 0x100c0d60 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0d60
 // list<MxDSAction *,allocator<MxDSAction *> >::~list<MxDSAction *,allocator<MxDSAction *> >
 
-// FUNCTION: LEGO1 0x100c0dd0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0dd0
 // list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::~list<MxDSSubscriber *,allocator<MxDSSubscriber *> >
 
-// FUNCTION: LEGO1 0x100c0e40 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0e40
 // list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::_Buynode
 
 // clang-format off
-// FUNCTION: LEGO1 0x100c0e70 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0e70
 // list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::~list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >
 // clang-format on
 
-// FUNCTION: LEGO1 0x100c0ee0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0ee0
 // list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
 
-// FUNCTION: LEGO1 0x100c0fc0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c0fc0
 // MxStreamListMxDSSubscriber::~MxStreamListMxDSSubscriber
 
-// FUNCTION: LEGO1 0x100c1010 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c1010
 // MxStreamListMxDSAction::~MxStreamListMxDSAction
 
-// FUNCTION: LEGO1 0x100c1060 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c1060
 // MxStreamListMxNextActionDataStart::~MxStreamListMxNextActionDataStart
 
-// FUNCTION: LEGO1 0x100c10b0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c10b0
 // MxStreamList<MxDSSubscriber *>::~MxStreamList<MxDSSubscriber *>
 
-// FUNCTION: LEGO1 0x100c1100 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c1100
 // MxStreamList<MxDSAction *>::~MxStreamList<MxDSAction *>
 
-// FUNCTION: LEGO1 0x100c1150 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c1150
 // MxStreamList<MxNextActionDataStart *>::~MxStreamList<MxNextActionDataStart *>
 
-// FUNCTION: LEGO1 0x100c11a0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c11a0
 // List<MxDSSubscriber *>::~List<MxDSSubscriber *>
 
-// FUNCTION: LEGO1 0x100c11f0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c11f0
 // List<MxDSAction *>::~List<MxDSAction *>
 
-// FUNCTION: LEGO1 0x100c1240 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c1240
 // List<MxNextActionDataStart *>::~List<MxNextActionDataStart *>
 
-// FUNCTION: LEGO1 0x100c1290 STUB
+// STUB: LEGO1 0x100c1290
 MxStreamController::~MxStreamController()
 {
 	// TODO
@@ -117,7 +117,7 @@ MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100c1740 STUB
+// STUB: LEGO1 0x100c1740
 MxResult MxStreamController::vtable0x24(undefined4 p_unknown)
 {
 	// TODO STUB
@@ -137,7 +137,7 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x100c1a00 STUB
+// STUB: LEGO1 0x100c1a00
 MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
 {
 	return FAILURE;
@@ -153,13 +153,13 @@ MxResult MxStreamController::vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 
-// FUNCTION: LEGO1 0x100c1ce0 STUB
+// STUB: LEGO1 0x100c1ce0
 MxResult MxStreamController::vtable0x30(undefined4 p_unknown)
 {
 	return FAILURE;
 }
 
-// FUNCTION: LEGO1 0x100c20d0 STUB
+// STUB: LEGO1 0x100c20d0
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
 	// TODO

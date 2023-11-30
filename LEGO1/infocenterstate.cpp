@@ -2,13 +2,13 @@
 
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94);
 
-// FUNCTION: LEGO1 0x10071600 STUB
+// STUB: LEGO1 0x10071600
 InfocenterState::InfocenterState()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10071920 STUB
+// STUB: LEGO1 0x10071920
 InfocenterState::~InfocenterState()
 {
 	// TODO

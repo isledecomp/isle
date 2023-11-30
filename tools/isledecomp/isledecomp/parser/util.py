@@ -14,29 +14,29 @@ CodeBlock = namedtuple(
         "end_line",
         "offset_comment",
         "module",
-        "is_synthetic",
+        "is_template",
         "is_stub",
     ],
 )
 
 OffsetMatch = namedtuple(
-    "OffsetMatch", ["module", "address", "is_synthetic", "is_stub", "comment"]
+    "OffsetMatch", ["module", "address", "is_template", "is_stub", "comment"]
 )
 
 # This has not been formally established, but considering that "STUB"
 # is a temporary state for a function, we assume it will appear last,
-# after any other modifiers (i.e. SYNTHETIC)
+# after any other modifiers (i.e. TEMPLATE)
 
 # To match a reasonable variance of formatting for the offset comment
 offsetCommentRegex = re.compile(
-    r"\s*//\s*FUNCTION:\s*(\w+)\s+(?:0x)?([a-f0-9]+)(\s+SYNTHETIC)?(\s+STUB)?",  # nopep8
+    r"\s*//\s*OFFSET:\s*(\w+)\s+(?:0x)?([a-f0-9]+)(\s+TEMPLATE)?(\s+STUB)?",  # nopep8
     flags=re.I,
 )
 
 # To match the exact syntax (text upper case, hex lower case, with spaces)
 # that is used in most places
 offsetCommentExactRegex = re.compile(
-    r"^// FUNCTION: [A-Z0-9]+ (0x[a-f0-9]+)( SYNTHETIC)?( STUB)?$"
+    r"^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)( TEMPLATE)?( STUB)?$"
 )  # nopep8
 
 
@@ -51,7 +51,7 @@ trailingCommentRegex = re.compile(r"(\s*(?://|/\*).*)$")
 
 
 def get_template_function_name(line: str) -> str:
-    """Parse function signature for special SYNTHETIC functions"""
+    """Parse function signature for special TEMPLATE functions"""
     template_match = templateCommentRegex.match(line)
 
     # If we don't match, you get whatever is on the line as the signature
@@ -92,7 +92,7 @@ def match_offset_comment(line: str) -> OffsetMatch | None:
     return OffsetMatch(
         module=match.group(1),
         address=int(match.group(2), 16),
-        is_synthetic=match.group(3) is not None,
+        is_template=match.group(3) is not None,
         is_stub=match.group(4) is not None,
         comment=line.strip(),
     )

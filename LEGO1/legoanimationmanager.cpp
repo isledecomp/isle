@@ -9,31 +9,31 @@ void LegoAnimationManager::configureLegoAnimationManager(int param_1)
 	g_legoAnimationManagerConfig = param_1;
 }
 
-// FUNCTION: LEGO1 0x1005eb60 STUB
+// STUB: LEGO1 0x1005eb60
 LegoAnimationManager::LegoAnimationManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005ed30 STUB
+// STUB: LEGO1 0x1005ed30
 LegoAnimationManager::~LegoAnimationManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005f130 STUB
+// STUB: LEGO1 0x1005f130
 void LegoAnimationManager::Init()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1005f6d0 STUB
+// STUB: LEGO1 0x1005f6d0
 void LegoAnimationManager::FUN_1005f6d0(MxBool p)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100619f0 STUB
+// STUB: LEGO1 0x100619f0
 MxLong LegoAnimationManager::Notify(MxParam& p)
 {
 	// TODO
@@ -41,7 +41,7 @@ MxLong LegoAnimationManager::Notify(MxParam& p)
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x10061cc0 STUB
+// STUB: LEGO1 0x10061cc0
 MxResult LegoAnimationManager::Tickle()
 {
 	// TODO

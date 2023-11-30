@@ -1,6 +1,6 @@
 #include "pizzeriastate.h"
 
-// FUNCTION: LEGO1 0x10017af0 STUB
+// STUB: LEGO1 0x10017af0
 PizzeriaState::PizzeriaState()
 {
 	// TODO

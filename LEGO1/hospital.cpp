@@ -1,18 +1,18 @@
 #include "hospital.h"
 
-// FUNCTION: LEGO1 0x100745e0 STUB
+// STUB: LEGO1 0x100745e0
 Hospital::Hospital()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100747f0 STUB
+// STUB: LEGO1 0x100747f0
 Hospital::~Hospital()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10074990 STUB
+// STUB: LEGO1 0x10074990
 MxLong Hospital::Notify(MxParam& p)
 {
 	// TODO

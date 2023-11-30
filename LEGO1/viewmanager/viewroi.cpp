@@ -35,7 +35,7 @@ void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 	}
 }
 
-// FUNCTION: LEGO1 0x100aa250 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100aa250
 // ViewROI::`scalar deleting destructor'
 inline ViewROI::~ViewROI()
 {

@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 // 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";
 
-// FUNCTION: LEGO1 0x10043550 SYNTHETIC
+// FUNCTION: LEGO1 0x10043550
 // MxStillPresenter::~MxStillPresenter
 
 // FUNCTION: LEGO1 0x100435b0
@@ -18,13 +18,13 @@ void MxStillPresenter::Destroy()
 	Destroy(FALSE);
 }
 
-// FUNCTION: LEGO1 0x100435c0 SYNTHETIC
+// FUNCTION: LEGO1 0x100435c0
 // MxStillPresenter::ClassName
 
-// FUNCTION: LEGO1 0x100435d0 SYNTHETIC
+// FUNCTION: LEGO1 0x100435d0
 // MxStillPresenter::IsA
 
-// FUNCTION: LEGO1 0x100436e0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100436e0
 // MxStillPresenter::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x100b9c70
@@ -74,43 +74,43 @@ void MxStillPresenter::NextFrame()
 	m_subscriber->FUN_100b8390(chunk);
 }
 
-// FUNCTION: LEGO1 0x100b9dd0 STUB
+// STUB: LEGO1 0x100b9dd0
 void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b9f30 STUB
+// STUB: LEGO1 0x100b9f30
 void MxStillPresenter::VTable0x70()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b9f60 STUB
+// STUB: LEGO1 0x100b9f60
 void MxStillPresenter::StartingTickle()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b9f90 STUB
+// STUB: LEGO1 0x100b9f90
 void MxStillPresenter::StreamingTickle()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100b9ff0 STUB
+// STUB: LEGO1 0x100b9ff0
 void MxStillPresenter::RepeatingTickle()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100ba040 STUB
+// STUB: LEGO1 0x100ba040
 void MxStillPresenter::VTable0x88(undefined4, undefined4)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100ba140 STUB
+// STUB: LEGO1 0x100ba140
 void MxStillPresenter::Enable(MxBool p_enable)
 {
 	// TODO
@@ -149,7 +149,7 @@ void MxStillPresenter::ParseExtra()
 	}
 }
 
-// FUNCTION: LEGO1 0x100ba2c0 STUB
+// STUB: LEGO1 0x100ba2c0
 MxStillPresenter* MxStillPresenter::Clone()
 {
 	// TODO

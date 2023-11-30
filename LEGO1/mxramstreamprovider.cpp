@@ -53,7 +53,7 @@ MxRAMStreamProvider::~MxRAMStreamProvider()
 	m_bufferForDWords = NULL;
 }
 
-// FUNCTION: LEGO1 0x100d0ae0 STUB
+// STUB: LEGO1 0x100d0ae0
 MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
 	return FAILURE;

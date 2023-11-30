@@ -26,7 +26,7 @@ public:
 	}
 
 	// TODO: Find proper compilation unit to put this
-	// FUNCTION: LEGO1 0x1000d1d0 SYNTHETIC
+	// SYNTHETIC: LEGO1 0x1000d1d0
 	// LegoActionControlPresenter::`scalar deleting destructor'
 
 	virtual void ReadyTickle() override;           // vtable+0x18

@@ -15,7 +15,7 @@ LegoWorldPresenter::LegoWorldPresenter()
 	m_unk50 = 50000;
 }
 
-// FUNCTION: LEGO1 0x10066770 STUB
+// STUB: LEGO1 0x10066770
 LegoWorldPresenter::~LegoWorldPresenter()
 {
 	// TODO

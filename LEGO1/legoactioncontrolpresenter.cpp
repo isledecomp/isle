@@ -10,13 +10,13 @@
 
 DECOMP_SIZE_ASSERT(LegoActionControlPresenter, 0x68)
 
-// FUNCTION: LEGO1 0x10043ce0 STUB
+// STUB: LEGO1 0x10043ce0
 void LegoActionControlPresenter::ReadyTickle()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10043d40 STUB
+// STUB: LEGO1 0x10043d40
 void LegoActionControlPresenter::RepeatingTickle()
 {
 	// TODO

@@ -7,7 +7,7 @@
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
-// FUNCTION: LEGO1 0x10001090 SYNTHETIC
+// FUNCTION: LEGO1 0x10001090
 // LegoEntity::SetWorldSpeed
 
 // FUNCTION: LEGO1 0x1000c290
@@ -32,13 +32,13 @@ void LegoEntity::Init()
 	m_unk59 = 4;
 }
 
-// FUNCTION: LEGO1 0x10010650 STUB
+// STUB: LEGO1 0x10010650
 void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10010790 STUB
+// STUB: LEGO1 0x10010790
 void LegoEntity::SetWorldTransform(Vector3Impl& p_loc, Vector3Impl& p_dir, Vector3Impl& p_up)
 {
 	// TODO
@@ -53,7 +53,7 @@ MxResult LegoEntity::Create(MxDSObject& p_dsObject)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x10010810 STUB
+// STUB: LEGO1 0x10010810
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
@@ -73,7 +73,7 @@ void LegoEntity::SetWorld()
 	}
 }
 
-// FUNCTION: LEGO1 0x100108a0 STUB
+// STUB: LEGO1 0x100108a0
 void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
 	// TODO
@@ -102,49 +102,49 @@ void LegoEntity::ParseAction(char* p_extra)
 	}
 }
 
-// FUNCTION: LEGO1 0x10010f10 STUB
+// STUB: LEGO1 0x10010f10
 void LegoEntity::VTable0x34()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011070 STUB
+// STUB: LEGO1 0x10011070
 void LegoEntity::VTable0x38()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011300 STUB
+// STUB: LEGO1 0x10011300
 void LegoEntity::VTable0x3c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011360 STUB
+// STUB: LEGO1 0x10011360
 void LegoEntity::VTable0x40()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100113c0 STUB
+// STUB: LEGO1 0x100113c0
 void LegoEntity::VTable0x44()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011420 STUB
+// STUB: LEGO1 0x10011420
 void LegoEntity::VTable0x48()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10011470 STUB
+// STUB: LEGO1 0x10011470
 void LegoEntity::VTable0x4c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100114f0 STUB
+// STUB: LEGO1 0x100114f0
 MxLong LegoEntity::Notify(MxParam& p)
 {
 	// TODO

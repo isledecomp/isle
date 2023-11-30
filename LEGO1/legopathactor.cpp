@@ -3,164 +3,164 @@
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
 // Probably in header
-// FUNCTION: LEGO1 0x10002d20 STUB
+// STUB: LEGO1 0x10002d20
 void LegoPathActor::VTable0x78()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d30 STUB
+// STUB: LEGO1 0x10002d30
 void LegoPathActor::VTable0x7c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d40 STUB
+// STUB: LEGO1 0x10002d40
 void LegoPathActor::VTable0x90()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d50 STUB
+// STUB: LEGO1 0x10002d50
 void LegoPathActor::VTable0x94()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d60 STUB
+// STUB: LEGO1 0x10002d60
 void LegoPathActor::VTable0xa0()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d70 STUB
+// STUB: LEGO1 0x10002d70
 void LegoPathActor::VTable0xac()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d80 STUB
+// STUB: LEGO1 0x10002d80
 void LegoPathActor::VTable0xb0()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002d90 STUB
+// STUB: LEGO1 0x10002d90
 void LegoPathActor::VTable0xb4()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002da0 STUB
+// STUB: LEGO1 0x10002da0
 void LegoPathActor::VTable0xb8()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002db0 STUB
+// STUB: LEGO1 0x10002db0
 void LegoPathActor::VTable0xbc()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002dc0 STUB
+// STUB: LEGO1 0x10002dc0
 void LegoPathActor::VTable0xc0()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002dd0 STUB
+// STUB: LEGO1 0x10002dd0
 void LegoPathActor::VTable0xc4()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10002de0 STUB
+// STUB: LEGO1 0x10002de0
 void LegoPathActor::VTable0xc8()
 {
 	// TODO
 }
 // End header
 
-// FUNCTION: LEGO1 0x1002d700 STUB
+// STUB: LEGO1 0x1002d700
 LegoPathActor::LegoPathActor()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002d820 STUB
+// STUB: LEGO1 0x1002d820
 LegoPathActor::~LegoPathActor()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002d8d0 STUB
+// STUB: LEGO1 0x1002d8d0
 void LegoPathActor::VTable0x80()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002d9c0 STUB
+// STUB: LEGO1 0x1002d9c0
 void LegoPathActor::VTable0x88()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002de10 STUB
+// STUB: LEGO1 0x1002de10
 void LegoPathActor::VTable0x84()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002e100 STUB
+// STUB: LEGO1 0x1002e100
 void LegoPathActor::VTable0x8c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002e740 STUB
+// STUB: LEGO1 0x1002e740
 void LegoPathActor::VTable0x74()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002e790 STUB
+// STUB: LEGO1 0x1002e790
 void LegoPathActor::VTable0x70()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002e8b0 STUB
+// STUB: LEGO1 0x1002e8b0
 void LegoPathActor::VTable0x98()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002e8d0 STUB
+// STUB: LEGO1 0x1002e8d0
 void LegoPathActor::VTable0x6c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002ebe0 STUB
+// STUB: LEGO1 0x1002ebe0
 void LegoPathActor::VTable0x68()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002f1b0 STUB
+// STUB: LEGO1 0x1002f1b0
 void LegoPathActor::VTable0x9c()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002f650 STUB
+// STUB: LEGO1 0x1002f650
 void LegoPathActor::VTable0xa4()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002f700 STUB
+// STUB: LEGO1 0x1002f700
 void LegoPathActor::VTable0xa8()
 {
 	// TODO

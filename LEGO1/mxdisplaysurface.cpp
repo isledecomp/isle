@@ -28,7 +28,7 @@ void MxDisplaySurface::Reset()
 	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
 }
 
-// FUNCTION: LEGO1 0x100ba640 STUB
+// STUB: LEGO1 0x100ba640
 void MxDisplaySurface::FUN_100ba640()
 {
 	// TODO
@@ -179,18 +179,18 @@ void MxDisplaySurface::Clear()
 	this->Reset();
 }
 
-// FUNCTION: LEGO1 0x100baae0 STUB
+// STUB: LEGO1 0x100baae0
 void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
 }
 
-// FUNCTION: LEGO1 0x100bacc0 STUB
+// STUB: LEGO1 0x100bacc0
 MxBool MxDisplaySurface::vtable28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x100bb1d0 STUB
+// STUB: LEGO1 0x100bb1d0
 MxBool MxDisplaySurface::vtable30(
 	undefined4,
 	undefined4,
@@ -205,13 +205,13 @@ MxBool MxDisplaySurface::vtable30(
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x100bb850 STUB
+// STUB: LEGO1 0x100bb850
 undefined4 MxDisplaySurface::vtable34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x100bba50 STUB
+// STUB: LEGO1 0x100bba50
 void MxDisplaySurface::Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 }
@@ -232,13 +232,13 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 		this->m_ddSurface2->ReleaseDC(p_hdc);
 }
 
-// FUNCTION: LEGO1 0x100bbc60 STUB
+// STUB: LEGO1 0x100bbc60
 undefined4 MxDisplaySurface::vtable44(undefined4, undefined4*, undefined4, undefined4)
 {
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x100bc200 STUB
+// STUB: LEGO1 0x100bc200
 void MxDisplaySurface::vtable24(
 	LPDDSURFACEDESC,
 	MxBitmap*,
@@ -252,7 +252,7 @@ void MxDisplaySurface::vtable24(
 {
 }
 
-// FUNCTION: LEGO1 0x100bc630 STUB
+// STUB: LEGO1 0x100bc630
 MxBool MxDisplaySurface::
 	vtable2c(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
 {

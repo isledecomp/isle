@@ -1,12 +1,12 @@
 #include "legocarbuildanimpresenter.h"
 
-// FUNCTION: LEGO1 0x10078400 STUB
+// STUB: LEGO1 0x10078400
 LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10078680 STUB
+// STUB: LEGO1 0x10078680
 LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 {
 	// TODO

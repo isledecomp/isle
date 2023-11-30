@@ -1,12 +1,12 @@
 #include "legoanimpresenter.h"
 
-// FUNCTION: LEGO1 0x10068420 STUB
+// STUB: LEGO1 0x10068420
 LegoAnimPresenter::LegoAnimPresenter()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x100686f0 STUB
+// STUB: LEGO1 0x100686f0
 void LegoAnimPresenter::Init()
 {
 	// TODO

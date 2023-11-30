@@ -20,7 +20,7 @@ Pizza::~Pizza()
 	TickleManager()->UnregisterClient(this);
 }
 
-// FUNCTION: LEGO1 0x100388a0 STUB
+// STUB: LEGO1 0x100388a0
 MxResult Pizza::Tickle()
 {
 	// TODO

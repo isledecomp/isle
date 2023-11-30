@@ -1,6 +1,6 @@
 #include "beachhouseentity.h"
 
-// FUNCTION: LEGO1 0x100150a0 STUB
+// STUB: LEGO1 0x100150a0
 MxLong BeachHouseEntity::Notify(MxParam& p)
 {
 	// TODO

@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(AmbulanceMissionState, 0x24);
 
-// FUNCTION: LEGO1 0x100373a0 STUB
+// STUB: LEGO1 0x100373a0
 AmbulanceMissionState::AmbulanceMissionState()
 {
 	// TODO

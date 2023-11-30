@@ -60,7 +60,7 @@ void LegoPathPresenter::RepeatingTickle()
 	EndAction();
 }
 
-// FUNCTION: LEGO1 0x10044d60 STUB
+// STUB: LEGO1 0x10044d60
 void LegoPathPresenter::ParseExtra()
 {
 	// TODO

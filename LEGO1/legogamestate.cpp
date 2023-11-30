@@ -116,7 +116,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x10039c60 STUB
+// STUB: LEGO1 0x10039c60
 MxResult LegoGameState::Load(MxULong)
 {
 	// TODO
@@ -166,19 +166,19 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 	*p_outPath = MxString(path);
 }
 
-// FUNCTION: LEGO1 0x1003a2e0 STUB
+// STUB: LEGO1 0x1003a2e0
 void LegoGameState::SerializePlayersInfo(MxS16 p)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1003a720 STUB
+// STUB: LEGO1 0x1003a720
 void LegoGameState::FUN_1003a720(MxU32 p_unk)
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1003b060 STUB
+// STUB: LEGO1 0x1003b060
 void LegoGameState::HandleAction(MxU32 p_unk)
 {
 	// TODO
@@ -255,7 +255,7 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
-// FUNCTION: LEGO1 0x1003cdd0 STUB
+// STUB: LEGO1 0x1003cdd0
 void LegoGameState::SerializeScoreHistory(MxS16 p)
 {
 	// TODO

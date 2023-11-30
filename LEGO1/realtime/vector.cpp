@@ -60,7 +60,7 @@ float Vector2Impl::DotImpl(float* p_a, float* p_b) const
 	return p_b[0] * p_a[0] + p_b[1] * p_a[1];
 }
 
-// FUNCTION: LEGO1 0x10002060 SYNTHETIC
+// FUNCTION: LEGO1 0x10002060
 // Vector2Impl::SetData
 
 // FUNCTION: LEGO1 0x10002070
@@ -339,7 +339,7 @@ void Vector4Impl::EqualsScalar(float* p_value)
 
 // Note close yet, included because I'm at least confident I know what operation
 // it's trying to do.
-// FUNCTION: LEGO1 0x10002b70 STUB
+// STUB: LEGO1 0x10002b70
 int Vector4Impl::NormalizeQuaternion()
 {
 	float* v = m_data;

@@ -4,7 +4,7 @@
 #include <vec.h>
 
 // TODO: Find proper compilation unit to put this
-// FUNCTION: LEGO1 0x1000c0f0 SYNTHETIC
+// FUNCTION: LEGO1 0x1000c0f0
 // Vector2Impl::Vector2Impl
 
 /*

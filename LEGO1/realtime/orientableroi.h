@@ -16,7 +16,7 @@ public:
 		ZEROVEC3(m_world_velocity);
 		IDENTMAT4(m_local2world.GetMatrix());
 	}
-	// FUNCTION: LEGO1 0x100a4630 SYNTHETIC
+	// SYNTHETIC: LEGO1 0x100a4630
 	// OrientableROI::`scalar deleting destructor'
 
 	virtual const Vector3& GetWorldVelocity() const;

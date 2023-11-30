@@ -312,7 +312,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	return TRUE;
 }
 
-// FUNCTION: LEGO1 0x100b2a70 STUB
+// STUB: LEGO1 0x100b2a70
 void MxVideoPresenter::VTable0x6c()
 {
 	// TODO

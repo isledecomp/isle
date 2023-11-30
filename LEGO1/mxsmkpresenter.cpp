@@ -41,7 +41,7 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// FUNCTION: LEGO1 0x100b3940 STUB
+// STUB: LEGO1 0x100b3940
 void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	// TODO
@@ -57,7 +57,7 @@ void MxSmkPresenter::CreateBitmap()
 	m_bitmap->SetSize(m_mxSmack.m_smack.m_width, m_mxSmack.m_smack.m_height, NULL, FALSE);
 }
 
-// FUNCTION: LEGO1 0x100b3a00 STUB
+// STUB: LEGO1 0x100b3a00
 void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	// TODO

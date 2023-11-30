@@ -14,7 +14,7 @@ blank_or_comment_param = [
     (True, "\t"),
     (True, "    "),
     (False, "\tint abc=123;"),
-    (True, "// FUNCTION: LEGO1 0xdeadbeef"),
+    (True, "// OFFSET: LEGO1 0xdeadbeef"),
     (True, "   /* Block comment beginning"),
     (True, "Block comment ending */   "),
     # TODO: does clang-format have anything to say about these cases?
@@ -31,41 +31,41 @@ def test_is_blank_or_comment(line: str, expected: bool):
 offset_comment_samples = [
     # (can_parse: bool, exact_match: bool, line: str)
     # Should match both expected modules with optional STUB marker
-    (True, True, "// FUNCTION: LEGO1 0xdeadbeef"),
-    (True, True, "// FUNCTION: LEGO1 0xdeadbeef STUB"),
-    (True, True, "// FUNCTION: ISLE 0x12345678"),
-    (True, True, "// FUNCTION: ISLE 0x12345678 STUB"),
+    (True, True, "// OFFSET: LEGO1 0xdeadbeef"),
+    (True, True, "// OFFSET: LEGO1 0xdeadbeef STUB"),
+    (True, True, "// OFFSET: ISLE 0x12345678"),
+    (True, True, "// OFFSET: ISLE 0x12345678 STUB"),
     # No trailing spaces allowed
-    (True, False, "// FUNCTION: LEGO1 0xdeadbeef  "),
-    (True, False, "// FUNCTION: LEGO1 0xdeadbeef STUB "),
+    (True, False, "// OFFSET: LEGO1 0xdeadbeef  "),
+    (True, False, "// OFFSET: LEGO1 0xdeadbeef STUB "),
     # Must have exactly one space between elements
-    (True, False, "//FUNCTION: ISLE 0xdeadbeef"),
-    (True, False, "// FUNCTION:ISLE 0xdeadbeef"),
-    (True, False, "//  FUNCTION: ISLE 0xdeadbeef"),
-    (True, False, "// FUNCTION:  ISLE 0xdeadbeef"),
-    (True, False, "// FUNCTION: ISLE  0xdeadbeef"),
-    (True, False, "// FUNCTION: ISLE 0xdeadbeef  STUB"),
+    (True, False, "//OFFSET: ISLE 0xdeadbeef"),
+    (True, False, "// OFFSET:ISLE 0xdeadbeef"),
+    (True, False, "//  OFFSET: ISLE 0xdeadbeef"),
+    (True, False, "// OFFSET:  ISLE 0xdeadbeef"),
+    (True, False, "// OFFSET: ISLE  0xdeadbeef"),
+    (True, False, "// OFFSET: ISLE 0xdeadbeef  STUB"),
     # Must have 0x prefix for hex number
-    (True, False, "// FUNCTION: ISLE deadbeef"),
+    (True, False, "// OFFSET: ISLE deadbeef"),
     # Offset, module name, and STUB must be uppercase
-    (True, False, "// function: ISLE 0xdeadbeef"),
-    (True, False, "// function: isle 0xdeadbeef"),
-    (True, False, "// FUNCTION: LEGO1 0xdeadbeef stub"),
+    (True, False, "// offset: ISLE 0xdeadbeef"),
+    (True, False, "// offset: isle 0xdeadbeef"),
+    (True, False, "// OFFSET: LEGO1 0xdeadbeef stub"),
     # Hex string must be lowercase
-    (True, False, "// FUNCTION: ISLE 0xDEADBEEF"),
+    (True, False, "// OFFSET: ISLE 0xDEADBEEF"),
     # TODO: How flexible should we be with matching the module name?
-    (True, True, "// FUNCTION: OMNI 0x12345678"),
-    (True, True, "// FUNCTION: LEG01 0x12345678"),
-    (True, False, "// FUNCTION: hello 0x12345678"),
+    (True, True, "// OFFSET: OMNI 0x12345678"),
+    (True, True, "// OFFSET: LEG01 0x12345678"),
+    (True, False, "// OFFSET: hello 0x12345678"),
     # Not close enough to match
-    (False, False, "// FUNCTION: ISLE0x12345678"),
-    (False, False, "// FUNCTION: 0x12345678"),
+    (False, False, "// OFFSET: ISLE0x12345678"),
+    (False, False, "// OFFSET: 0x12345678"),
     (False, False, "// LEGO1: 0x12345678"),
     # Hex string shorter than 8 characters
-    (True, True, "// FUNCTION: LEGO1 0x1234"),
+    (True, True, "// OFFSET: LEGO1 0x1234"),
     # TODO: These match but shouldn't.
-    # (False, False, '// FUNCTION: LEGO1 0'),
-    # (False, False, '// FUNCTION: LEGO1 0x'),
+    # (False, False, '// OFFSET: LEGO1 0'),
+    # (False, False, '// OFFSET: LEGO1 0x'),
 ]
 
 

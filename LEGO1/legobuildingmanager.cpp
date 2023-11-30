@@ -15,13 +15,13 @@ LegoBuildingManager::LegoBuildingManager()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x1002f960 STUB
+// STUB: LEGO1 0x1002f960
 LegoBuildingManager::~LegoBuildingManager()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1002f9d0 STUB
+// STUB: LEGO1 0x1002f9d0
 void LegoBuildingManager::Init()
 {
 	// TODO

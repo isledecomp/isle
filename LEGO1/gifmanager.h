@@ -45,7 +45,7 @@ public:
 // VTABLE: LEGO1 0x100d86d4
 class GifManagerBase {
 public:
-	// FUNCTION: LEGO1 0x1005a310 STUB
+	// STUB: LEGO1 0x1005a310
 	virtual ~GifManagerBase() {} // vtable+00
 
 	inline GifData* Get(const char* name) { return m_unk8.Get(name); }
@@ -59,7 +59,7 @@ protected:
 // VTABLE: LEGO1 0x100d86fc
 class GifManager : public GifManagerBase {
 public:
-	// FUNCTION: LEGO1 0x1005a580 STUB
+	// STUB: LEGO1 0x1005a580
 	virtual ~GifManager() {} // vtable+00
 
 protected:

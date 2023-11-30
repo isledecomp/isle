@@ -24,7 +24,7 @@ public:
 		return !strcmp(name, IslePathActor::ClassName()) || LegoPathActor::IsA(name);
 	}
 
-	// FUNCTION: LEGO1 0x10002ff0 SYNTHETIC
+	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'
 	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 

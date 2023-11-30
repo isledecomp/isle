@@ -10,7 +10,7 @@ undefined4 LegoRace::VTable0x78(undefined4)
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x1000dac0 STUB
+// STUB: LEGO1 0x1000dac0
 void LegoRace::VTable0x7c(undefined4, undefined4)
 {
 	// TODO
@@ -61,27 +61,27 @@ MxBool LegoRace::VTable0x64()
 	return FALSE;
 }
 
-// FUNCTION: LEGO1 0x10015ce0 STUB
+// STUB: LEGO1 0x10015ce0
 MxResult LegoRace::Create(MxDSObject& p_dsObject)
 {
 	// TODO
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x10015d40 STUB
+// STUB: LEGO1 0x10015d40
 LegoRace::~LegoRace()
 {
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10015e00 STUB
+// STUB: LEGO1 0x10015e00
 MxLong LegoRace::Notify(MxParam& p)
 {
 	// TODO
 	return 0;
 }
 
-// FUNCTION: LEGO1 0x10015ed0 STUB
+// STUB: LEGO1 0x10015ed0
 void LegoRace::VTable0x68(MxBool p_add)
 {
 	// TODO

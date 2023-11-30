@@ -6,7 +6,7 @@ LegoHideAnimPresenter::LegoHideAnimPresenter()
 	Init();
 }
 
-// FUNCTION: LEGO1 0x1006da50 STUB
+// STUB: LEGO1 0x1006da50
 void LegoHideAnimPresenter::Init()
 {
 }

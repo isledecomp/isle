@@ -18,17 +18,17 @@ void MxDSActionList::Destroy(MxDSAction* p_action)
 		delete p_action;
 }
 
-// FUNCTION: LEGO1 0x100c9cc0 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c9cc0
 // MxCollection<MxDSAction *>::Compare
 
-// FUNCTION: LEGO1 0x100c9d20 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c9d20
 // MxCollection<MxDSAction *>::Destroy
 
-// FUNCTION: LEGO1 0x100c9d30 SYNTHETIC
+// TEMPLATE: LEGO1 0x100c9d30
 // MxList<MxDSAction *>::~MxList<MxDSAction *>
 
-// FUNCTION: LEGO1 0x100c9e30 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c9e30
 // MxCollection<MxDSAction *>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x100c9ea0 SYNTHETIC
+// SYNTHETIC: LEGO1 0x100c9ea0
 // MxList<MxDSAction *>::`scalar deleting destructor'
