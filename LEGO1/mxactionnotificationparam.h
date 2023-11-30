@@ -64,7 +64,7 @@ public:
 	{
 	}
 
-	inline virtual ~MxEndActionNotificationParam() override{}; // 0x100513a0
+	inline virtual ~MxEndActionNotificationParam() override{};
 
 	virtual MxNotificationParam* Clone() override; // vtable+0x4
 };

@@ -19,91 +19,91 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
-// 0x100f451c
+// GLOBAL: LEGO1 0x100f451c
 MxAtomId* g_copterScript = NULL;
 
-// 0x100f4520
+// GLOBAL: LEGO1 0x100f4520
 MxAtomId* g_dunecarScript = NULL;
 
-// 0x100f4524
+// GLOBAL: LEGO1 0x100f4524
 MxAtomId* g_jetskiScript = NULL;
 
-// 0x100f4528
+// GLOBAL: LEGO1 0x100f4528
 MxAtomId* g_racecarScript = NULL;
 
-// 0x100f452c
+// GLOBAL: LEGO1 0x100f452c
 MxAtomId* g_carraceScript = NULL;
 
-// 0x100f4530
+// GLOBAL: LEGO1 0x100f4530
 MxAtomId* g_carracerScript = NULL;
 
-// 0x100f4534
+// GLOBAL: LEGO1 0x100f4534
 MxAtomId* g_jetraceScript = NULL;
 
-// 0x100f4538
+// GLOBAL: LEGO1 0x100f4538
 MxAtomId* g_jetracerScript = NULL;
 
-// 0x100f453c
+// GLOBAL: LEGO1 0x100f453c
 MxAtomId* g_isleScript = NULL;
 
-// 0x100f4540
+// GLOBAL: LEGO1 0x100f4540
 MxAtomId* g_elevbottScript = NULL;
 
-// 0x100f4544
+// GLOBAL: LEGO1 0x100f4544
 MxAtomId* g_infodoorScript = NULL;
 
-// 0x100f4548
+// GLOBAL: LEGO1 0x100f4548
 MxAtomId* g_infomainScript = NULL;
 
-// 0x100f454c
+// GLOBAL: LEGO1 0x100f454c
 MxAtomId* g_infoscorScript = NULL;
 
-// 0x100f4550
+// GLOBAL: LEGO1 0x100f4550
 MxAtomId* g_regbookScript = NULL;
 
-// 0x100f4554
+// GLOBAL: LEGO1 0x100f4554
 MxAtomId* g_histbookScript = NULL;
 
-// 0x100f4558
+// GLOBAL: LEGO1 0x100f4558
 MxAtomId* g_hospitalScript = NULL;
 
-// 0x100f455c
+// GLOBAL: LEGO1 0x100f455c
 MxAtomId* g_policeScript = NULL;
 
-// 0x100f4560
+// GLOBAL: LEGO1 0x100f4560
 MxAtomId* g_garageScript = NULL;
 
-// 0x100f4564
+// GLOBAL: LEGO1 0x100f4564
 MxAtomId* g_act2mainScript = NULL;
 
-// 0x100f4568
+// GLOBAL: LEGO1 0x100f4568
 MxAtomId* g_act3Script = NULL;
 
-// 0x100f456c
+// GLOBAL: LEGO1 0x100f456c
 MxAtomId* g_jukeboxScript = NULL;
 
-// 0x100f4570
+// GLOBAL: LEGO1 0x100f4570
 MxAtomId* g_pz5Script = NULL;
 
-// 0x100f4574
+// GLOBAL: LEGO1 0x100f4574
 MxAtomId* g_introScript = NULL;
 
-// 0x100f4578
+// GLOBAL: LEGO1 0x100f4578
 MxAtomId* g_testScript = NULL;
 
-// 0x100f457c
+// GLOBAL: LEGO1 0x100f457c
 MxAtomId* g_jukeboxwScript = NULL;
 
-// 0x100f4580c
+// GLOBAL: LEGO1 0x100f4580c
 MxAtomId* g_sndAnimScript = NULL;
 
-// 0x100f4584
+// GLOBAL: LEGO1 0x100f4584
 MxAtomId* g_creditsScript = NULL;
 
-// 0x100f4588
+// GLOBAL: LEGO1 0x100f4588
 MxAtomId* g_nocdSourceName = NULL;
 
-// 0x100f6718
+// GLOBAL: LEGO1 0x100f6718
 const char* g_current = "current";
 
 // 0x101020e8

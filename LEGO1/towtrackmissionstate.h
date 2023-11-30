@@ -12,7 +12,7 @@ public:
 	// FUNCTION: LEGO1 0x1004dfa0
 	inline virtual const char* ClassName() const // vtable+0x0c
 	{
-		// 0x100f00bc
+		// GLOBAL: LEGO1 0x100f00bc
 		return "TowTrackMissionState";
 	}
 

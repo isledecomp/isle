@@ -26,7 +26,7 @@ public:
 
 	inline virtual const char* ClassName() const // vtable+0c
 	{
-		// 0x100f007c
+		// GLOBAL: LEGO1 0x100f007c
 		return "MxCore";
 	}
 

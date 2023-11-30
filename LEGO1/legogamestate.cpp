@@ -13,10 +13,10 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// GLOBAL FUNCTION: LEGO1 0x100f3e40
+// GLOBAL: LEGO1 0x100f3e40
 const char* g_fileExtensionGS = ".GS";
 
-// GLOBAL FUNCTION: LEGO1 0x100f3e58
+// GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
 	{"c_dbbkfny0", "lego red"},    {"c_dbbkxly0", "lego white"},  {"c_chbasey0", "lego black"},
 	{"c_chbacky0", "lego black"},  {"c_chdishy0", "lego white"},  {"c_chhorny0", "lego black"},
@@ -37,7 +37,7 @@ ColorStringStruct g_colorSaveData[43] = {
 
 // NOTE: This offset = the end of the variables table, the last entry
 // in that table is a special entry, the string "END_OF_VARIABLES"
-// GLOBAL FUNCTION: LEGO1 0x100f3e50
+// GLOBAL: LEGO1 0x100f3e50
 extern const char* s_endOfVariables;
 
 // FUNCTION: LEGO1 0x10039550

@@ -10,7 +10,7 @@
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 
-// 0x100f4378
+// GLOBAL: LEGO1 0x100f4378
 RECT g_fullScreenRect = {0, 0, 640, 480};
 
 // FUNCTION: LEGO1 0x1004b8d0

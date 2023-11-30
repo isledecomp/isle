@@ -13,7 +13,7 @@ public:
 
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f0184
+		// GLOBAL: LEGO1 0x100f0184
 		return "MxStillPresenter";
 	}
 

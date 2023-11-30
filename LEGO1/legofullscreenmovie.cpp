@@ -7,10 +7,10 @@
 
 DECOMP_SIZE_ASSERT(LegoFullScreenMovie, 0x24)
 
-// 0x100f3be8
+// GLOBAL: LEGO1 0x100f3be8
 const char* g_str_enable = "enable";
 
-// 0x100f3bf4
+// GLOBAL: LEGO1 0x100f3bf4
 const char* g_str_disable = "disable";
 
 // FUNCTION: LEGO1 0x1003c500

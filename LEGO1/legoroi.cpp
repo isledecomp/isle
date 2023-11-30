@@ -11,7 +11,7 @@ typedef struct {
 	MxS32 m_unk10;
 } ROIColorAlias;
 
-// 0x100dbe28
+// GLOBAL: LEGO1 0x100dbe28
 const double g_normalizeByteToFloat = 1.0 / 255;
 
 // 0x101011b0

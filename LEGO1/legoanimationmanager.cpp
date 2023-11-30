@@ -1,6 +1,6 @@
 #include "legoanimationmanager.h"
 
-// 0x100f74f8
+// GLOBAL: LEGO1 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
 
 // FUNCTION: LEGO1 0x1005eb50

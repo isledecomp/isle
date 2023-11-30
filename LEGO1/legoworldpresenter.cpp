@@ -1,6 +1,6 @@
 #include "legoworldpresenter.h"
 
-// 0x100f75d4
+// GLOBAL: LEGO1 0x100f75d4
 undefined4 g_LegoWorldPresenterQuality = 1;
 
 // FUNCTION: LEGO1 0x100665b0

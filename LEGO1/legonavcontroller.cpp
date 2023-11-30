@@ -5,29 +5,29 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 
-// 0x100f4c28
+// GLOBAL: LEGO1 0x100f4c28
 int g_mouseDeadzone = 40;
-// 0x100f4c2c
+// GLOBAL: LEGO1 0x100f4c2c
 float g_zeroThreshold = 0.001f;
-// 0x100f4c30
+// GLOBAL: LEGO1 0x100f4c30
 float g_movementMaxSpeed = 40.0f;
-// 0x100f4c34
+// GLOBAL: LEGO1 0x100f4c34
 float g_turnMaxSpeed = 20.0f;
-// 0x100f4c38
+// GLOBAL: LEGO1 0x100f4c38
 float g_movementMaxAccel = 15.0f;
-// 0x100f4c3c
+// GLOBAL: LEGO1 0x100f4c3c
 float g_turnMaxAccel = 30.0f;
-// 0x100f4c40
+// GLOBAL: LEGO1 0x100f4c40
 float g_movementMinAccel = 4.0f;
-// 0x100f4c44
+// GLOBAL: LEGO1 0x100f4c44
 float g_turnMinAccel = 15.0f;
-// 0x100f4c48
+// GLOBAL: LEGO1 0x100f4c48
 float g_movementDecel = 50.0f;
-// 0x100f4c4c
+// GLOBAL: LEGO1 0x100f4c4c
 float g_turnDecel = 50.0f;
-// 0x100f4c50
+// GLOBAL: LEGO1 0x100f4c50
 float g_turnSensitivity = 0.4f;
-// 0x100f4c54
+// GLOBAL: LEGO1 0x100f4c54
 MxBool g_turnUseVelocity = FALSE;
 
 // FUNCTION: LEGO1 0x10054ac0

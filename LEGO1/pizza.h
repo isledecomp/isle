@@ -20,7 +20,7 @@ public:
 	// FUNCTION: LEGO1 0x10037f90
 	inline const char* ClassName() const // vtable+0c
 	{
-		// 0x100f038c
+		// GLOBAL: LEGO1 0x100f038c
 		return "Pizza";
 	}
 

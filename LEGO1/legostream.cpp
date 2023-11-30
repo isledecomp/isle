@@ -9,7 +9,7 @@
 // This is a pointer to the end of the global variable name table, which has
 // the text "END_OF_VARIABLES" in it.
 // TODO: make s_endOfVariables reference the actual end of the variable array.
-// GLOBAL FUNCTION: LEGO1 0x100f3e50
+// GLOBAL: LEGO1 0x100f3e50
 const char* s_endOfVariables = "END_OF_VARIABLES";
 
 // Very likely but not certain sizes.

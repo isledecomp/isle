@@ -1,6 +1,6 @@
 #include "legobuildingmanager.h"
 
-// 0x100f37cc
+// GLOBAL: LEGO1 0x100f37cc
 int g_buildingManagerConfig = 1;
 
 // FUNCTION: LEGO1 0x1002f8b0
