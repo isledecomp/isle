@@ -7,15 +7,6 @@ DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 DECOMP_SIZE_ASSERT(Mesh, 0x4);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
 
-// Inlined only
-MeshImpl::~MeshImpl()
-{
-	if (m_data) {
-		free(m_data);
-		m_data = NULL;
-	}
-}
-
 // OFFSET: LEGO1 0x100a3ed0
 void* MeshImpl::ImplementationDataPtr()
 {
@@ -38,6 +29,9 @@ Result MeshImpl::SetColor(float p_r, float p_g, float p_b, float p_a)
 		return ResultVal(m_data->groupMesh->SetGroupColorRGB(m_data->groupIndex, p_r, p_g, p_b));
 	}
 }
+
+// OFFSET: LEGO1 0x100a3d80 TEMPLATE
+// TglImpl::MeshImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a3f50
 Result MeshImpl::SetTexture(const Texture* p_texture)
