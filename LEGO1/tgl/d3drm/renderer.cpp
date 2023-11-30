@@ -3,7 +3,7 @@
 using namespace TglImpl;
 
 // OFFSET: LEGO1 0x100a15e0
-Renderer* CreateRenderer()
+Renderer* Tgl::CreateRenderer()
 {
 	RendererImpl* renderer = new RendererImpl();
 	if (!renderer->Create()) {
