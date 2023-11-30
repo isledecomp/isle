@@ -6,7 +6,7 @@ using namespace TglImpl;
 GroupImpl::~GroupImpl()
 {
 	if (m_data) {
-		free(m_data);
+		m_data->Release();
 		m_data = NULL;
 	}
 }
