@@ -216,20 +216,20 @@ Light* RendererImpl::CreateLight(LightType p_type, float p_r, float p_g, float p
 }
 
 // OFFSET: LEGO1 0x100a1e90
-Something* RendererImpl::CreateSomething()
+Unk* RendererImpl::CreateUnk()
 {
-	// Note: I'm fairly certain that Something is not what Tgl calls a
+	// Note: I'm fairly certain that Unknown is not what Tgl calls a
 	// "Mesh", because the methods on Mesh in the Tgl leak line up much
 	// more closely with a different vtable than the one assigned in
 	// this method (meaning this method is not creating a Mesh).
 	// Maybe this method is something like CreateMeshBuilder where the
 	// Mesh data type in the Tgl leak was split into builder/result?
-	SomethingImpl* something = new SomethingImpl();
-	if (FAILED(m_data->CreateMesh(&something->m_data))) {
-		delete something;
-		something = NULL;
+	UnkImpl* unknown = new UnkImpl();
+	if (FAILED(m_data->CreateMesh(&unknown->m_data))) {
+		delete unknown;
+		unknown = NULL;
 	}
-	return something;
+	return unknown;
 }
 
 inline Result RendererCreateTexture(

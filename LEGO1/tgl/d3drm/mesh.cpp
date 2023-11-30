@@ -82,12 +82,12 @@ Result MeshImpl::SetShadingModel(ShadingModel p_model)
 }
 
 // OFFSET: LEGO1 0x100a4030
-Mesh* MeshImpl::DeepClone(Something* p_mesh)
+Mesh* MeshImpl::DeepClone(Unk* p_mesh)
 {
 	// Create group
-	MeshImpl* newSomething = new MeshImpl();
+	MeshImpl* newMesh = new MeshImpl();
 	MeshData* data = new MeshData();
-	newSomething->m_data = data;
+	newMesh->m_data = data;
 
 	// Query information from old group
 	DWORD dataSize;
@@ -105,10 +105,10 @@ Mesh* MeshImpl::DeepClone(Something* p_mesh)
 	D3DCOLOR color = m_data->groupMesh->GetGroupColor(m_data->groupIndex);
 
 	// Push information to new group
-	SomethingImpl* target = static_cast<SomethingImpl*>(p_mesh);
+	UnkImpl* target = static_cast<UnkImpl*>(p_mesh);
 	D3DRMGROUPINDEX index;
 	target->ImplementationData()->AddGroup(vcount, fcount, vperface, faceBuffer, &index);
-	newSomething->m_data->groupIndex = index;
+	newMesh->m_data->groupIndex = index;
 	target->ImplementationData()->SetVertices(index, 0, vcount, vertexBuffer);
 	target->ImplementationData()->SetGroupTexture(index, textureRef);
 	target->ImplementationData()->SetGroupMapping(index, mapping);
@@ -119,22 +119,22 @@ Mesh* MeshImpl::DeepClone(Something* p_mesh)
 	delete[] faceBuffer;
 	delete[] vertexBuffer;
 	if (result == Error) {
-		delete newSomething;
-		newSomething = NULL;
+		delete newMesh;
+		newMesh = NULL;
 	}
 
-	return newSomething;
+	return newMesh;
 }
 
 // OFFSET: LEGO1 0x100a4240
-Mesh* MeshImpl::ShallowClone(Something* p_mesh)
+Mesh* MeshImpl::ShallowClone(Unk* p_mesh)
 {
 	MeshImpl* newGroup = new MeshImpl();
 	MeshData* newData = new MeshData();
 	newGroup->m_data = newData;
 	if (newData) {
 		newData->groupIndex = m_data->groupIndex;
-		newData->groupMesh = static_cast<SomethingImpl*>(p_mesh)->ImplementationData();
+		newData->groupMesh = static_cast<UnkImpl*>(p_mesh)->ImplementationData();
 	}
 	else {
 		delete newGroup;

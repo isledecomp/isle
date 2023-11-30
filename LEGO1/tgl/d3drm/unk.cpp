@@ -2,11 +2,11 @@
 
 using namespace TglImpl;
 
-DECOMP_SIZE_ASSERT(Something, 0x4);
-DECOMP_SIZE_ASSERT(SomethingImpl, 0x8);
+DECOMP_SIZE_ASSERT(Unk, 0x4);
+DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
 
 // Inlined only
-SomethingImpl::~SomethingImpl()
+UnkImpl::~UnkImpl()
 {
 	if (m_data) {
 		m_data->Release();
@@ -15,13 +15,13 @@ SomethingImpl::~SomethingImpl()
 }
 
 // OFFSET: LEGO1 0x100a3830
-void* SomethingImpl::ImplementationDataPtr()
+void* UnkImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
 // OFFSET: LEGO1 0x100a3840 STUB
-Result SomethingImpl::SetMeshData(
+Result UnkImpl::SetMeshData(
 	unsigned long p_faceCount,
 	unsigned long p_vertexCount,
 	const float (*p_positions)[3],
@@ -35,7 +35,7 @@ Result SomethingImpl::SetMeshData(
 }
 
 // OFFSET: LEGO1 0x100a3ae0
-Result SomethingImpl::GetBoundingBox(float p_min[3], float p_max[3])
+Result UnkImpl::GetBoundingBox(float p_min[3], float p_max[3])
 {
 	D3DRMBOX box;
 	Result result = ResultVal(m_data->GetBox(&box));
@@ -51,9 +51,9 @@ Result SomethingImpl::GetBoundingBox(float p_min[3], float p_max[3])
 }
 
 // OFFSET: LEGO1 0x100a3b40
-Something* SomethingImpl::Clone()
+Unk* UnkImpl::Clone()
 {
-	SomethingImpl* mesh = new SomethingImpl();
+	UnkImpl* mesh = new UnkImpl();
 	int ret = m_data->Clone(0, IID_IDirect3DRMMeshBuilder, (void**) &mesh->m_data);
 	if (ret < 0) {
 		delete mesh;

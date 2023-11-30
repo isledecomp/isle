@@ -96,7 +96,7 @@ class Camera;
 class Group;
 class Mesh;
 class Texture;
-class Something;
+class Unk;
 
 // VTABLE 0x100db980
 class Object {
@@ -127,7 +127,7 @@ public:
 	virtual Group* CreateGroup(const Group* p_parent = 0) = 0;
 
 	// vtable+0x20
-	virtual Something* CreateSomething() = 0;
+	virtual Unk* CreateUnk() = 0;
 	virtual Texture* CreateTexture() = 0;
 	virtual Texture* CreateTexture(
 		int p_width,
@@ -243,10 +243,10 @@ public:
 	virtual Result SetShadingModel(ShadingModel) = 0;
 
 	// Clone data in underlying group
-	virtual Mesh* DeepClone(Something*) = 0;
+	virtual Mesh* DeepClone(Unk*) = 0;
 
 	// Just get another Group pointing to the same underlying data
-	virtual Mesh* ShallowClone(Something*) = 0;
+	virtual Mesh* ShallowClone(Unk*) = 0;
 };
 
 // VTABLE 0x100dbaa0
@@ -272,7 +272,7 @@ public:
 // was not in the leaked Tgl code. My suspicion is that it's
 // some kind of builder class for creating meshes.
 // VTABLE 0x100dbb30
-class Something : public Object {
+class Unk : public Object {
 public:
 	virtual Result SetMeshData(
 		unsigned long p_faceCount,
@@ -284,7 +284,7 @@ public:
 		unsigned long* p_faceData
 	) = 0;
 	virtual Result GetBoundingBox(float p_min[3], float p_max[3]) = 0;
-	virtual Something* Clone() = 0;
+	virtual Unk* Clone() = 0;
 };
 
 // VTABLE 0x100dbb68

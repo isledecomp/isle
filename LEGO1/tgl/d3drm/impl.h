@@ -33,6 +33,7 @@ class CameraImpl;
 class GroupImpl;
 class MeshImpl;
 class TextureImpl;
+class UnkImpl;
 
 // VTABLE 0x100db910
 class RendererImpl : public Renderer {
@@ -60,7 +61,7 @@ public:
 	virtual Group* CreateGroup(const Group* p_parent);
 
 	// vtable+0x20
-	virtual Something* CreateSomething();
+	virtual Unk* CreateUnk();
 	virtual Texture* CreateTexture();
 	virtual Texture* CreateTexture(
 		int p_width,
@@ -216,10 +217,10 @@ public:
 	virtual Result GetTexture(Texture*&);
 	virtual Result SetTextureMappingMode(ProjectionType);
 	virtual Result SetShadingModel(ShadingModel);
-	virtual Mesh* DeepClone(Something*);
+	virtual Mesh* DeepClone(Unk*);
 
 	// vtable+0x20
-	virtual Mesh* ShallowClone(Something*);
+	virtual Mesh* ShallowClone(Unk*);
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
@@ -268,10 +269,10 @@ private:
 };
 
 // VTABLE 0x100dbb18
-class SomethingImpl : public Something {
+class UnkImpl : public Unk {
 public:
-	SomethingImpl() : m_data(0) {}
-	~SomethingImpl();
+	UnkImpl() : m_data(0) {}
+	~UnkImpl();
 
 	virtual void* ImplementationDataPtr();
 
@@ -288,7 +289,7 @@ public:
 	virtual Result GetBoundingBox(float p_min[3], float p_max[3]);
 
 	// vtable+0x10
-	virtual Something* Clone();
+	virtual Unk* Clone();
 
 	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
