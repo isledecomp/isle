@@ -2,14 +2,8 @@
 
 using namespace TglImpl;
 
-// Inlined only
-GroupImpl::~GroupImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a2480 TEMPLATE
+// TglImpl::GroupImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a31d0
 void* GroupImpl::ImplementationDataPtr()

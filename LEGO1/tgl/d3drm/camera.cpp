@@ -5,14 +5,8 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Camera, 0x4);
 DECOMP_SIZE_ASSERT(CameraImpl, 0x8);
 
-// Inlined only
-CameraImpl::~CameraImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a2560 TEMPLATE
+// TglImpl::LightImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a36f0
 void* CameraImpl::ImplementationDataPtr()

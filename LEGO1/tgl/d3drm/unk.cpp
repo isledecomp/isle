@@ -5,14 +5,8 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Unk, 0x4);
 DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
 
-// Inlined only
-UnkImpl::~UnkImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a2720 TEMPLATE
+// TglImpl::LightImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a3830
 void* UnkImpl::ImplementationDataPtr()

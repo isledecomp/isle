@@ -4,14 +4,8 @@
 
 using namespace TglImpl;
 
-// Inlined only
-DeviceImpl::~DeviceImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a22c0 TEMPLATE
+// TglImpl::LightImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a2bf0
 void* DeviceImpl::ImplementationDataPtr()

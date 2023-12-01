@@ -89,7 +89,13 @@ private:
 class DeviceImpl : public Device {
 public:
 	DeviceImpl() : m_data(0) {}
-	~DeviceImpl();
+	~DeviceImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -120,7 +126,13 @@ private:
 class ViewImpl : public View {
 public:
 	ViewImpl() : m_data(0) {}
-	~ViewImpl();
+	~ViewImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -166,7 +178,13 @@ private:
 class CameraImpl : public Camera {
 public:
 	CameraImpl() : m_data(0) {}
-	~CameraImpl();
+	~CameraImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -185,7 +203,13 @@ private:
 class LightImpl : public Light {
 public:
 	LightImpl() : m_data(0) {}
-	~LightImpl();
+	~LightImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -245,7 +269,13 @@ private:
 class GroupImpl : public Group {
 public:
 	GroupImpl() : m_data(0) {}
-	~GroupImpl();
+	~GroupImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -278,7 +308,13 @@ private:
 class UnkImpl : public Unk {
 public:
 	UnkImpl() : m_data(0) {}
-	~UnkImpl();
+	~UnkImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
@@ -332,7 +368,13 @@ public:
 class TextureImpl : public Texture {
 public:
 	TextureImpl() : m_data(0) {}
-	~TextureImpl();
+	~TextureImpl()
+	{
+		if (m_data) {
+			m_data->Release();
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 

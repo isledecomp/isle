@@ -5,14 +5,8 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Light, 0x4);
 DECOMP_SIZE_ASSERT(LightImpl, 0x8);
 
-// Inlined only
-LightImpl::~LightImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a2640 TEMPLATE
+// TglImpl::LightImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a3770
 void* LightImpl::ImplementationDataPtr()

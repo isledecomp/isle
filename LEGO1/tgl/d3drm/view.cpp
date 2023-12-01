@@ -119,14 +119,8 @@ inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 	return ViewportGetData(pViewport)->m_pLightFrame;
 }
 
-// Inlined only
-ViewImpl::~ViewImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a23a0 TEMPLATE
+// TglImpl::LightImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a2d80
 void* ViewImpl::ImplementationDataPtr()

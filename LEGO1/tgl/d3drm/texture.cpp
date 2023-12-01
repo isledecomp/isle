@@ -126,14 +126,8 @@ Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 	return Success;
 }
 
-// Inlined only
-TextureImpl::~TextureImpl()
-{
-	if (m_data) {
-		m_data->Release();
-		m_data = NULL;
-	}
-}
+// OFFSET: LEGO1 0x100a2800 TEMPLATE
+// TglImpl::TextureImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a3c10
 Result TextureImpl::SetTexels(int width, int height, int bitsPerTexel, void* pTexels)

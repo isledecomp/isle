@@ -13,6 +13,9 @@ Renderer* Tgl::CreateRenderer()
 	return renderer;
 }
 
+// OFFSET: LEGO1 0x100a16d0 TEMPLATE
+// TglImpl::RendererImpl::`scalar deleting destructor'
+
 // GLOBAL OFFSET: LEGO1 0x1010103c
 IDirect3DRM* g_pD3DRM = NULL;
 
@@ -31,12 +34,19 @@ Result RendererImpl::Create()
 	return (m_data != NULL) ? Success : Error;
 }
 
+inline void RendererDestroy(IDirect3DRM* pRenderer)
+{
+	int refCount = pRenderer->Release();
+	if (refCount <= 0) {
+		g_pD3DRM = NULL;
+	}
+}
+
 // Inlined only
 void RendererImpl::Destroy()
 {
 	if (m_data) {
-		if (m_data->Release() == 0)
-			g_pD3DRM = NULL;
+		RendererDestroy(m_data);
 		m_data = NULL;
 	}
 }
