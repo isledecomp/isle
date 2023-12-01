@@ -37,8 +37,21 @@ void MxCompositePresenter::VTable0x5c()
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6b40 STUB
-void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
+// OFFSET: LEGO1 0x100b6b40
+void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 {
-	// TODO
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if (*it == p_presenter) {
+			if (++it == m_list.end()) {
+				if (m_compositePresenter)
+					m_compositePresenter->VTable0x60(this);
+			}
+			else if (m_action->IsA("MxDSSerialAction")) {
+				MxPresenter* presenter = *it;
+				if (!presenter->GetCurrentTickleState())
+					presenter->SetTickleState(TickleState_Ready);
+			}
+			return;
+		}
+	}
 }

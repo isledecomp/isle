@@ -1,8 +1,10 @@
 #ifndef MXCOMPOSITEPRESENTER_H
 #define MXCOMPOSITEPRESENTER_H
 
+#include "compat.h" // STL
 #include "mxpresenter.h"
-#include "mxunklist.h"
+
+class MxCompositePresenterList : public list<MxPresenter*> {};
 
 // VTABLE 0x100dc618
 // SIZE 0x4c
@@ -26,11 +28,11 @@ public:
 
 	virtual void VTable0x58();
 	virtual void VTable0x5c();
-	virtual void VTable0x60(undefined4 p_unknown);
+	virtual void VTable0x60(MxPresenter* p_presenter);
 	virtual MxBool VTable0x64(undefined4 p_unknown);
 
 private:
-	MxUnkList m_list;
+	MxCompositePresenterList m_list;
 };
 
 #endif // MXCOMPOSITEPRESENTER_H
