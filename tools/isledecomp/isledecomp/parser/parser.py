@@ -1,6 +1,6 @@
 # C++ file parser
 
-from typing import List, TextIO, Iterable
+from typing import List, Iterable, Iterator
 from enum import Enum
 from .util import (
     DecompMarker,
@@ -12,7 +12,6 @@ from .util import (
 )
 from .node import (
     ParserAlert,
-    ParserNode,
     ParserFunction,
     ParserVariable,
     ParserVtable,
@@ -64,9 +63,8 @@ class MarkerDict:
         self.markers[module] = (marker.type, marker.offset)
         return False
 
-    def iter(self):
-        for module in self.markers:
-            (marker_type, offset) = self.markers[module]
+    def iter(self) -> Iterator[DecompMarker]:
+        for module, (marker_type, offset) in self.markers.items():
             yield DecompMarker(marker_type, module, offset)
 
     def empty(self):
@@ -74,27 +72,26 @@ class MarkerDict:
 
 
 class DecompParser:
+    # pylint: disable=too-many-instance-attributes
+    # Could combine output lists into a single list to get under the limit,
+    # but not right now
     def __init__(self):
-        self.fun_markers = MarkerDict()
-        self.var_markers = MarkerDict()
-        self.tbl_markers = MarkerDict()
-        self.reset()
+        # The lists to be populated as we parse
+        self.functions: List[ParserFunction] = []
+        self.vtables: List[ParserVtable] = []
+        self.variables: List[ParserVariable] = []
+        self.alerts: List[ParserAlert] = []
 
-    def reset(self):
-        # Output values
-        self.functions = []
-        self.vtables = []
-        self.variables = []
-        self.alerts = []
-
-        # Internal state machine stuff
         self.line_number: int = 0
         self.state: ReaderState = ReaderState.SEARCH
 
         self.last_line: str = ""
-        self.fun_markers.empty()
-        self.var_markers.empty()
-        self.tbl_markers.empty()
+
+        # To allow for multiple markers where code is shared across different
+        # modules, save lists of compatible markers that appear in sequence
+        self.fun_markers = MarkerDict()
+        self.var_markers = MarkerDict()
+        self.tbl_markers = MarkerDict()
 
         # To handle functions that are entirely indented (i.e. those defined
         # in class declarations), remember how many whitespace characters
@@ -102,13 +99,32 @@ class DecompParser:
         # This should give us the same or better accuracy for a well-formed file.
         # The alternative is counting the curly braces on each line
         # but that's probably too cumbersome.
-        self.curly_indent_stops = 0
+        self.curly_indent_stops: int = 0
 
         # For non-synthetic functions, save the line number where the function begins
         # (i.e. where we see the curly brace) along with the function signature.
         # We will need both when we reach the end of the function.
         self.function_start: int = 0
         self.function_sig: str = ""
+
+    def reset(self):
+        self.functions = []
+        self.vtables = []
+        self.variables = []
+        self.alerts = []
+
+        self.line_number = 0
+        self.state = ReaderState.SEARCH
+
+        self.last_line = ""
+
+        self.fun_markers.empty()
+        self.var_markers.empty()
+        self.tbl_markers.empty()
+
+        self.curly_indent_stops = 0
+        self.function_start = 0
+        self.function_sig = ""
 
     def _recover(self):
         """We hit a syntax error and need to reset temp structures"""
@@ -340,19 +356,3 @@ class DecompParser:
     def read_lines(self, lines: Iterable):
         for line in lines:
             self.read_line(line)
-
-
-def find_code_blocks(stream: TextIO) -> List[ParserNode]:
-    """Read the IO stream (file) line-by-line and give the following report:
-    Foreach code block (function) in the file, what are its starting and
-    ending line numbers, and what is the given offset in the original
-    binary. We expect the result to be ordered by line number because we
-    are reading the file from start to finish."""
-
-    # TODO: this will be replaced shortly. shim for now to avoid
-    # making more changes elsewhere
-    p = DecompParser()
-    for line in stream:
-        p.read_line(line)
-
-    return p.functions

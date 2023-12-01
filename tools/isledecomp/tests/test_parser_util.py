@@ -1,5 +1,3 @@
-from collections import namedtuple
-from typing import List
 import pytest
 from isledecomp.parser.parser import MarkerDict
 from isledecomp.parser.util import (

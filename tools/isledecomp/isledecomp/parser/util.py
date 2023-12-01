@@ -1,7 +1,6 @@
 # C++ Parser utility functions and data structures
 from __future__ import annotations  # python <3.10 compatibility
 import re
-from typing import List
 from collections import namedtuple
 
 DecompMarker = namedtuple("DecompMarker", ["type", "module", "offset"])

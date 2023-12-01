@@ -3,7 +3,6 @@ from isledecomp.parser.parser import (
     ReaderState as _rs,
     DecompParser,
 )
-from isledecomp.parser.util import DecompMarker
 from isledecomp.parser.error import ParserError as _pe
 
 # fmt: off
@@ -35,28 +34,28 @@ state_change_marker_cases = [
     (_rs.IN_TEMPLATE,     "SYNTHETIC",  _rs.IN_TEMPLATE,     None),
     (_rs.IN_TEMPLATE,     "TEMPLATE",   _rs.IN_TEMPLATE,     None),
     (_rs.IN_TEMPLATE,     "VTABLE",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
-    
+
     (_rs.WANT_CURLY,      "FUNCTION",   _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
     (_rs.WANT_CURLY,      "GLOBAL",     _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
     (_rs.WANT_CURLY,      "STUB",       _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
     (_rs.WANT_CURLY,      "SYNTHETIC",  _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
     (_rs.WANT_CURLY,      "TEMPLATE",   _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
     (_rs.WANT_CURLY,      "VTABLE",     _rs.SEARCH,          _pe.UNEXPECTED_MARKER),
-    
+
     (_rs.IN_GLOBAL,       "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "GLOBAL",     _rs.IN_GLOBAL,       None),
     (_rs.IN_GLOBAL,       "STUB",       _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "SYNTHETIC",  _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "TEMPLATE",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "VTABLE",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
-    
+
     (_rs.IN_FUNC_GLOBAL,  "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "GLOBAL",     _rs.IN_FUNC_GLOBAL,  None),
     (_rs.IN_FUNC_GLOBAL,  "STUB",       _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "SYNTHETIC",  _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "TEMPLATE",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "VTABLE",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
-    
+
     (_rs.IN_VTABLE,       "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_VTABLE,       "GLOBAL",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_VTABLE,       "STUB",       _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
@@ -75,7 +74,8 @@ def test_state_change_by_marker(
 ):
     p = DecompParser()
     p.state = state
-    p._handle_marker(DecompMarker(marker_type, "TEST", 0x1234))
+    mock_line = f"// {marker_type}: TEST 0x1234"
+    p.read_line(mock_line)
     assert p.state == new_state
 
     if expected_error is not None:

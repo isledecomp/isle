@@ -1,6 +1,6 @@
 import os
-import pytest
 from typing import List, TextIO
+import pytest
 from isledecomp.parser import DecompParser
 from isledecomp.parser.node import ParserSymbol
 
@@ -20,8 +20,8 @@ def code_blocks_are_sorted(blocks: List[ParserSymbol]) -> bool:
     return just_offsets == sorted(just_offsets)
 
 
-@pytest.fixture
-def parser():
+@pytest.fixture(name="parser")
+def fixture_parser():
     return DecompParser()
 
 

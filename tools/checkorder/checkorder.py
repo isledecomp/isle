@@ -19,7 +19,6 @@ def check_file(filename: str, verbose: bool = False) -> bool:
     with open(filename, "r", encoding="utf-8") as f:
         parser.read_lines(f)
 
-
     just_offsets = [block.offset for block in parser.functions]
     sorted_offsets = sorted(just_offsets)
     file_out_of_order = just_offsets != sorted_offsets
@@ -46,7 +45,7 @@ def check_file(filename: str, verbose: bool = False) -> bool:
                 msg = " ".join(
                     [
                         " " if fun.offset > prev_offset else "!",
-                        f"{block.offset:08x}",
+                        f"{fun.offset:08x}",
                         f"{fun.end_line - fun.line_number:4} lines",
                         f"{order_lookup[fun.offset]:3}",
                         "    ",

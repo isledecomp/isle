@@ -3,12 +3,11 @@ from isledecomp.parser.parser import (
     ReaderState,
     DecompParser,
 )
-from isledecomp.parser.util import DecompMarker
 from isledecomp.parser.error import ParserError
 
 
-@pytest.fixture
-def parser():
+@pytest.fixture(name="parser")
+def fixture_parser():
     return DecompParser()
 
 
