@@ -48,7 +48,7 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 			}
 			else if (m_action->IsA("MxDSSerialAction")) {
 				MxPresenter* presenter = *it;
-				if (!presenter->GetCurrentTickleState())
+				if (presenter->GetCurrentTickleState() == TickleState_Idle)
 					presenter->SetTickleState(TickleState_Ready);
 			}
 			return;
