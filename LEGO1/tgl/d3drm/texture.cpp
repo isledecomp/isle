@@ -81,9 +81,9 @@ TglD3DRMIMAGE::TglD3DRMIMAGE(
 void TglD3DRMIMAGE::Destroy()
 {
 	if (m_texelsAllocatedByClient == 0) {
-		free(m_image.buffer1);
+		delete m_image.buffer1;
 	}
-	free(m_image.palette);
+	delete m_image.palette;
 }
 
 // OFFSET: LEGO1 0x100a13e0 STUB
@@ -106,12 +106,12 @@ Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 	// into into the TglD3DRMIMAGE class instead of being a global struct.
 	if (m_image.palette_size != paletteSize) {
 		if (m_image.palette != NULL) {
-			free(m_image.palette);
+			delete m_image.palette;
 			m_image.palette = NULL;
 			m_image.palette_size = 0;
 		}
 		if (paletteSize > 0) {
-			m_image.palette = (D3DRMPALETTEENTRY*) malloc(4 * paletteSize);
+			m_image.palette = new D3DRMPALETTEENTRY[paletteSize];
 			m_image.palette_size = paletteSize;
 		}
 	}

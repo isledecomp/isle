@@ -11,7 +11,7 @@ DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
 MeshImpl::~MeshImpl()
 {
 	if (m_data) {
-		free(m_data);
+		delete m_data;
 		m_data = NULL;
 	}
 }
