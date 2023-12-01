@@ -3,6 +3,8 @@
 #include "decomp.h"
 #include "define.h"
 #include "legoomni.h"
+#include "mxomni.h"
+#include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
@@ -74,10 +76,41 @@ void MxStillPresenter::NextFrame()
 	m_subscriber->FUN_100b8390(chunk);
 }
 
-// OFFSET: LEGO1 0x100b9dd0 STUB
+// OFFSET: LEGO1 0x100b9dd0
 void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	// TODO
+	memcpy(m_bitmap->GetBitmapData(), p_chunk->GetData(), p_chunk->GetLength());
+
+	MxS32 height = GetHeight() - 1;
+	MxS32 width = GetWidth() - 1;
+	MxS32 x = GetLocationX();
+	MxS32 y = GetLocationY();
+
+	MxRect32 rect(x, y, width + x, height + y);
+	MVideoManager()->InvalidateRect(rect);
+
+	if (m_flags & Flag_Bit2) {
+		undefined4 unk = 0;
+		m_unk58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->vtable44(
+			m_bitmap,
+			&unk,
+			(m_flags & Flag_Bit4) / 8,
+			m_action->GetFlags() & MxDSAction::Flag_Bit4
+		);
+
+		if (m_alpha)
+			delete m_alpha;
+		m_alpha = new AlphaMask(*m_bitmap);
+
+		if (m_bitmap)
+			delete m_bitmap;
+		m_bitmap = NULL;
+
+		if (m_unk58 && unk)
+			m_flags |= Flag_Bit3;
+		else
+			m_flags &= ~Flag_Bit3;
+	}
 }
 
 // OFFSET: LEGO1 0x100b9f30 STUB
