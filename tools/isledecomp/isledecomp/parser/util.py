@@ -12,7 +12,7 @@ markerRegex = re.compile(
     flags=re.I,
 )
 
-markerExactRegex = re.compile(r"// ([A-Z]+): ([A-Z0-9]+) (0x[a-f0-9]+)$")
+markerExactRegex = re.compile(r"\s*// ([A-Z]+): ([A-Z0-9]+) (0x[a-f0-9]+)$")
 
 # The goal here is to just read whatever is on the next line, so some
 # flexibility in the formatting seems OK
