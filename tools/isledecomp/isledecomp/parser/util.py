@@ -8,7 +8,7 @@ DecompMarker = namedtuple("DecompMarker", ["type", "module", "offset"])
 
 
 markerRegex = re.compile(
-    r"\s*//\s*(\w+):\s*(\w+)\s+((?:0x)?[a-f0-9]+)",
+    r"\s*//\s*(\w+):\s*(\w+)\s+(0x[a-f0-9]+)",
     flags=re.I,
 )
 
