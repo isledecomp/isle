@@ -43,6 +43,19 @@ MxCompositePresenter::~MxCompositePresenter()
 	NotificationManager()->Unregister(this);
 }
 
+// OFFSET: LEGO1 0x100b6410 STUB
+MxResult MxCompositePresenter::StartAction(MxStreamController*, MxDSAction*)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// OFFSET: LEGO1 0x100b65e0 STUB
+void MxCompositePresenter::EndAction()
+{
+	// TODO
+}
+
 // OFFSET: LEGO1 0x100b67f0 STUB
 void MxCompositePresenter::VTable0x58()
 {
@@ -72,4 +85,23 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 			return;
 		}
 	}
+}
+
+// OFFSET: LEGO1 0x100b6bc0 STUB
+void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x100b6c30 STUB
+void MxCompositePresenter::Enable(MxBool p_enable)
+{
+	// TODO
+}
+
+// OFFSET: LEGO1 0x100b6c80 STUB
+MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
+{
+	// TODO
+	return TRUE;
 }
