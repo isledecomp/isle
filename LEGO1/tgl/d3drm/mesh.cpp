@@ -7,15 +7,6 @@ DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 DECOMP_SIZE_ASSERT(Mesh, 0x4);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
 
-// Inlined only
-MeshImpl::~MeshImpl()
-{
-	if (m_data) {
-		delete m_data;
-		m_data = NULL;
-	}
-}
-
 // OFFSET: LEGO1 0x100a3d80 TEMPLATE
 // TglImpl::MeshImpl::`scalar deleting destructor'
 
