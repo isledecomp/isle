@@ -5,7 +5,7 @@
 using namespace TglImpl;
 
 // OFFSET: LEGO1 0x100a22c0 TEMPLATE
-// TglImpl::LightImpl::`scalar deleting destructor'
+// TglImpl::DeviceImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a2bf0
 void* DeviceImpl::ImplementationDataPtr()

@@ -6,7 +6,7 @@ DECOMP_SIZE_ASSERT(Unk, 0x4);
 DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
 
 // OFFSET: LEGO1 0x100a2720 TEMPLATE
-// TglImpl::LightImpl::`scalar deleting destructor'
+// TglImpl::UnkImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a3830
 void* UnkImpl::ImplementationDataPtr()
