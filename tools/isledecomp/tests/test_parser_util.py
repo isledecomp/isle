@@ -41,8 +41,8 @@ marker_samples = [
     (True, False, "//  FUNCTION: ISLE 0xdeadbeef"),
     (True, False, "// FUNCTION:  ISLE 0xdeadbeef"),
     (True, False, "// FUNCTION: ISLE  0xdeadbeef"),
-    # Must have 0x prefix for hex number
-    (True, False, "// FUNCTION: ISLE deadbeef"),
+    # Must have 0x prefix for hex number to match at all
+    (False, False, "// FUNCTION: ISLE deadbeef"),
     # Offset, module name, and STUB must be uppercase
     (True, False, "// function: ISLE 0xdeadbeef"),
     (True, False, "// function: isle 0xdeadbeef"),

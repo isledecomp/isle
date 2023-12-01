@@ -26,7 +26,7 @@ def test_missing_sig(parser):
 def test_not_exact_syntax(parser):
     """Alert to inexact syntax right here in the parser instead of kicking it downstream.
     Doing this means we don't have to save the actual text."""
-    parser.read_line("// function: test 1234")
+    parser.read_line("// function: test 0x1234")
     assert len(parser.alerts) == 1
     assert parser.alerts[0].code == ParserError.BAD_DECOMP_MARKER
 
