@@ -1,11 +1,12 @@
 from collections import namedtuple
 from typing import List
 import pytest
+from isledecomp.parser.parser import MarkerDict
 from isledecomp.parser.util import (
+    DecompMarker,
     is_blank_or_comment,
-    match_offset_comment,
-    is_exact_offset_comment,
-    distinct_by_module,
+    match_marker,
+    is_marker_exact,
 )
 
 
@@ -28,76 +29,72 @@ def test_is_blank_or_comment(line: str, expected: bool):
     assert is_blank_or_comment(line) is expected
 
 
-offset_comment_samples = [
+marker_samples = [
     # (can_parse: bool, exact_match: bool, line: str)
-    # Should match both expected modules with optional STUB marker
-    (True, True, "// OFFSET: LEGO1 0xdeadbeef"),
-    (True, True, "// OFFSET: LEGO1 0xdeadbeef STUB"),
-    (True, True, "// OFFSET: ISLE 0x12345678"),
-    (True, True, "// OFFSET: ISLE 0x12345678 STUB"),
+    (True, True, "// FUNCTION: LEGO1 0xdeadbeef"),
+    (True, True, "// FUNCTION: ISLE 0x12345678"),
     # No trailing spaces allowed
-    (True, False, "// OFFSET: LEGO1 0xdeadbeef  "),
-    (True, False, "// OFFSET: LEGO1 0xdeadbeef STUB "),
+    (True, False, "// FUNCTION: LEGO1 0xdeadbeef  "),
     # Must have exactly one space between elements
-    (True, False, "//OFFSET: ISLE 0xdeadbeef"),
-    (True, False, "// OFFSET:ISLE 0xdeadbeef"),
-    (True, False, "//  OFFSET: ISLE 0xdeadbeef"),
-    (True, False, "// OFFSET:  ISLE 0xdeadbeef"),
-    (True, False, "// OFFSET: ISLE  0xdeadbeef"),
-    (True, False, "// OFFSET: ISLE 0xdeadbeef  STUB"),
+    (True, False, "//FUNCTION: ISLE 0xdeadbeef"),
+    (True, False, "// FUNCTION:ISLE 0xdeadbeef"),
+    (True, False, "//  FUNCTION: ISLE 0xdeadbeef"),
+    (True, False, "// FUNCTION:  ISLE 0xdeadbeef"),
+    (True, False, "// FUNCTION: ISLE  0xdeadbeef"),
     # Must have 0x prefix for hex number
-    (True, False, "// OFFSET: ISLE deadbeef"),
+    (True, False, "// FUNCTION: ISLE deadbeef"),
     # Offset, module name, and STUB must be uppercase
-    (True, False, "// offset: ISLE 0xdeadbeef"),
-    (True, False, "// offset: isle 0xdeadbeef"),
-    (True, False, "// OFFSET: LEGO1 0xdeadbeef stub"),
+    (True, False, "// function: ISLE 0xdeadbeef"),
+    (True, False, "// function: isle 0xdeadbeef"),
     # Hex string must be lowercase
-    (True, False, "// OFFSET: ISLE 0xDEADBEEF"),
+    (True, False, "// FUNCTION: ISLE 0xDEADBEEF"),
     # TODO: How flexible should we be with matching the module name?
-    (True, True, "// OFFSET: OMNI 0x12345678"),
-    (True, True, "// OFFSET: LEG01 0x12345678"),
-    (True, False, "// OFFSET: hello 0x12345678"),
+    (True, True, "// FUNCTION: OMNI 0x12345678"),
+    (True, True, "// FUNCTION: LEG01 0x12345678"),
+    (True, False, "// FUNCTION: hello 0x12345678"),
     # Not close enough to match
-    (False, False, "// OFFSET: ISLE0x12345678"),
-    (False, False, "// OFFSET: 0x12345678"),
+    (False, False, "// FUNCTION: ISLE0x12345678"),
+    (False, False, "// FUNCTION: 0x12345678"),
     (False, False, "// LEGO1: 0x12345678"),
     # Hex string shorter than 8 characters
-    (True, True, "// OFFSET: LEGO1 0x1234"),
+    (True, True, "// FUNCTION: LEGO1 0x1234"),
     # TODO: These match but shouldn't.
-    # (False, False, '// OFFSET: LEGO1 0'),
-    # (False, False, '// OFFSET: LEGO1 0x'),
+    # (False, False, '// FUNCTION: LEGO1 0'),
+    # (False, False, '// FUNCTION: LEGO1 0x'),
 ]
 
 
-@pytest.mark.parametrize("match, _, line", offset_comment_samples)
-def test_offset_match(line: str, match: bool, _):
-    did_match = match_offset_comment(line) is not None
+@pytest.mark.parametrize("match, _, line", marker_samples)
+def test_marker_match(line: str, match: bool, _):
+    did_match = match_marker(line) is not None
     assert did_match is match
 
 
-@pytest.mark.parametrize("_, exact, line", offset_comment_samples)
-def test_exact_offset_comment(line: str, exact: bool, _):
-    assert is_exact_offset_comment(line) is exact
+@pytest.mark.parametrize("_, exact, line", marker_samples)
+def test_marker_exact(line: str, exact: bool, _):
+    assert is_marker_exact(line) is exact
 
 
-# Helper for the next test: cut down version of OffsetMatch
-MiniOfs = namedtuple("MiniOfs", ["module", "value"])
-
-distinct_by_module_samples = [
-    # empty set
-    ([], []),
-    # same module name
-    ([MiniOfs("TEST", 123), MiniOfs("TEST", 555)], [MiniOfs("TEST", 123)]),
-    # same module name, case-insensitive
-    ([MiniOfs("test", 123), MiniOfs("TEST", 555)], [MiniOfs("test", 123)]),
-    # duplicates, non-consecutive
-    (
-        [MiniOfs("test", 123), MiniOfs("abc", 111), MiniOfs("TEST", 555)],
-        [MiniOfs("test", 123), MiniOfs("abc", 111)],
-    ),
-]
+def test_marker_dict_simple():
+    d = MarkerDict()
+    d.insert(DecompMarker("FUNCTION", "TEST", 0x1234))
+    markers = list(d.iter())
+    assert len(markers) == 1
 
 
-@pytest.mark.parametrize("sample, expected", distinct_by_module_samples)
-def test_distinct_by_module(sample: List[MiniOfs], expected: List[MiniOfs]):
-    assert distinct_by_module(sample) == expected
+def test_marker_dict_ofs_replace():
+    d = MarkerDict()
+    d.insert(DecompMarker("FUNCTION", "TEST", 0x1234))
+    d.insert(DecompMarker("FUNCTION", "TEST", 0x555))
+    markers = list(d.iter())
+    assert len(markers) == 1
+    assert markers[0].offset == 0x1234
+
+
+def test_marker_dict_type_replace():
+    d = MarkerDict()
+    d.insert(DecompMarker("FUNCTION", "TEST", 0x1234))
+    d.insert(DecompMarker("STUB", "TEST", 0x1234))
+    markers = list(d.iter())
+    assert len(markers) == 1
+    assert markers[0].type == "FUNCTION"

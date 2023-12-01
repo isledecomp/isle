@@ -1,127 +1,170 @@
-import os
-from typing import List, TextIO
-from isledecomp.parser import find_code_blocks
-from isledecomp.parser.util import CodeBlock
-
-SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "samples")
-
-
-def sample_file(filename: str) -> TextIO:
-    """Wrapper for opening the samples from the directory that does not
-    depend on the cwd where we run the test"""
-    full_path = os.path.join(SAMPLE_DIR, filename)
-    return open(full_path, "r", encoding="utf-8")
+import pytest
+from isledecomp.parser.parser import (
+    ReaderState,
+    DecompParser,
+)
+from isledecomp.parser.util import DecompMarker
+from isledecomp.parser.error import ParserError
 
 
-def code_blocks_are_sorted(blocks: List[CodeBlock]) -> bool:
-    """Helper to make this more idiomatic"""
-    just_offsets = [block.offset for block in blocks]
-    return just_offsets == sorted(just_offsets)
+@pytest.fixture
+def parser():
+    return DecompParser()
 
 
-# Tests are below #
+@pytest.mark.skip(reason="todo")
+def test_missing_sig(parser):
+    """Bad syntax: function signature is missing"""
+    parser.read_lines(["// FUNCTION: TEST 0x1234", "{"])
+    assert parser.state == ReaderState.IN_FUNC
+    assert len(parser.alerts) == 1
+    parser.read_line("}")
+    assert len(parser.functions) == 1
+    assert parser.functions[0] != "{"
 
 
-def test_sanity():
-    """Read a very basic file"""
-    with sample_file("basic_file.cpp") as f:
-        blocks = find_code_blocks(f)
-
-    assert len(blocks) == 3
-    assert code_blocks_are_sorted(blocks) is True
-    # n.b. The parser returns line numbers as 1-based
-    # Function starts when we see the opening curly brace
-    assert blocks[0].start_line == 8
-    assert blocks[0].end_line == 10
+def test_not_exact_syntax(parser):
+    """Alert to inexact syntax right here in the parser instead of kicking it downstream.
+    Doing this means we don't have to save the actual text."""
+    parser.read_line("// function: test 1234")
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.BAD_DECOMP_MARKER
 
 
-def test_oneline():
-    """(Assuming clang-format permits this) This sample has a function
-    on a single line. This will test the end-of-function detection"""
-    with sample_file("oneline_function.cpp") as f:
-        blocks = find_code_blocks(f)
+def test_invalid_marker(parser):
+    """We matched a decomp marker, but it's not one we care about"""
+    parser.read_line("// BANANA: TEST 0x1234")
+    assert parser.state == ReaderState.SEARCH
 
-    assert len(blocks) == 2
-    assert blocks[0].start_line == 5
-    assert blocks[0].end_line == 5
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.BOGUS_MARKER
 
 
-def test_missing_offset():
-    """What if the function doesn't have an offset comment?"""
-    with sample_file("missing_offset.cpp") as f:
-        blocks = find_code_blocks(f)
-
-    # TODO: For now, the function without the offset will just be ignored.
-    # Would be the same outcome if the comment was present but mangled and
-    # we failed to match it. We should detect these cases in the future.
-    assert len(blocks) == 1
-
-
-def test_jumbled_case():
-    """The parser just reports what it sees. It is the responsibility of
-    the downstream tools to do something about a jumbled file.
-    Just verify that we are reading it correctly."""
-    with sample_file("out_of_order.cpp") as f:
-        blocks = find_code_blocks(f)
-
-    assert len(blocks) == 3
-    assert code_blocks_are_sorted(blocks) is False
+def test_unexpected_marker(parser):
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "// GLOBAL: TEST 0x5000",
+        ]
+    )
+    assert parser.state == ReaderState.SEARCH
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.INCOMPATIBLE_MARKER
 
 
-def test_bad_file():
-    with sample_file("poorly_formatted.cpp") as f:
-        blocks = find_code_blocks(f)
-
-    assert len(blocks) == 3
-
-
-def test_indented():
-    """Offsets for functions inside of a class will probably be indented."""
-    with sample_file("basic_class.cpp") as f:
-        blocks = find_code_blocks(f)
-
-    # TODO: We don't properly detect the end of these functions
-    # because the closing brace is indented. However... knowing where each
-    # function ends is less important (for now) than capturing
-    # all the functions that are there.
-
-    assert len(blocks) == 2
-    assert blocks[0].offset == int("0x12345678", 16)
-    assert blocks[0].start_line == 15
-    # assert blocks[0].end_line == 18
-
-    assert blocks[1].offset == int("0xdeadbeef", 16)
-    assert blocks[1].start_line == 22
-    # assert blocks[1].end_line == 24
+def test_variable(parser):
+    parser.read_lines(
+        [
+            "// GLOBAL: HELLO 0x1234",
+            "int g_value = 5;",
+        ]
+    )
+    assert len(parser.variables) == 1
 
 
-def test_inline():
-    with sample_file("inline.cpp") as f:
-        blocks = find_code_blocks(f)
+def test_synthetic_plus_marker(parser):
+    """Should fail with error and not log the synthetic"""
+    parser.read_lines(
+        [
+            "// SYNTHETIC: HEY 0x555",
+            "// FUNCTION: HOWDY 0x1234",
+        ]
+    )
+    assert len(parser.functions) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.INCOMPATIBLE_MARKER
 
-    assert len(blocks) == 2
-    for block in blocks:
-        assert block.start_line is not None
-        assert block.start_line == block.end_line
+
+def test_different_markers_different_module(parser):
+    """Does it make any sense for a function to be a stub in one module,
+    but not in another? I don't know. But it's no problem for us."""
+    parser.read_lines(
+        [
+            "// FUNCTION: HOWDY 0x1234",
+            "// STUB: SUP 0x5555",
+            "void interesting_function() {",
+            "}",
+        ]
+    )
+
+    assert len(parser.alerts) == 0
+    assert len(parser.functions) == 2
 
 
-def test_multiple_offsets():
-    """If multiple offset marks appear before for a code block, take them
-    all but ensure module name (case-insensitive) is distinct.
-    Use first module occurrence in case of duplicates."""
-    with sample_file("multiple_offsets.cpp") as f:
-        blocks = find_code_blocks(f)
+def test_different_markers_same_module(parser):
+    """Now, if something is a regular function but then a stub,
+    what do we say about that?"""
+    parser.read_lines(
+        [
+            "// FUNCTION: HOWDY 0x1234",
+            "// STUB: HOWDY 0x5555",
+            "void interesting_function() {",
+            "}",
+        ]
+    )
 
-    assert len(blocks) == 4
-    assert blocks[0].module == "TEST"
-    assert blocks[0].start_line == 9
+    # Use first marker declaration, don't replace
+    assert len(parser.functions) == 1
+    assert parser.functions[0].is_stub is False
 
-    assert blocks[1].module == "HELLO"
-    assert blocks[1].start_line == 9
+    # Should alert to this
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.DUPLICATE_MODULE
 
-    # Duplicate modules are ignored
-    assert blocks[2].start_line == 16
-    assert blocks[2].offset == 0x2345
 
-    assert blocks[3].module == "TEST"
-    assert blocks[3].offset == 0x2002
+def test_unexpected_synthetic(parser):
+    """FUNCTION then SYNTHETIC should fail to report either one"""
+    parser.read_lines(
+        [
+            "// FUNCTION: HOWDY 0x1234",
+            "// SYNTHETIC: HOWDY 0x5555",
+            "void interesting_function() {",
+            "}",
+        ]
+    )
+
+    assert parser.state == ReaderState.SEARCH
+    assert len(parser.functions) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.INCOMPATIBLE_MARKER
+
+
+@pytest.mark.skip(reason="not implemented yet")
+def test_duplicate_offset(parser):
+    """Repeating the same module/offset in the same file is probably a typo"""
+    parser.read_lines(
+        [
+            "// GLOBAL: HELLO 0x1234",
+            "int x = 1;",
+            "// GLOBAL: HELLO 0x1234",
+            "int y = 2;",
+        ]
+    )
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.DUPLICATE_OFFSET
+
+
+def test_multiple_variables(parser):
+    """Theoretically the same global variable can appear in multiple modules"""
+    parser.read_lines(
+        [
+            "// GLOBAL: HELLO 0x1234",
+            "// GLOBAL: WUZZUP 0x555",
+            "const char *g_greeting;",
+        ]
+    )
+    assert len(parser.alerts) == 0
+    assert len(parser.variables) == 2
+
+
+def test_multiple_vtables(parser):
+    parser.read_lines(
+        [
+            "// VTABLE: HELLO 0x1234",
+            "// VTABLE: TEST 0x5432",
+            "class MxString : public MxCore {",
+        ]
+    )
+    assert len(parser.alerts) == 0
+    assert len(parser.vtables) == 2

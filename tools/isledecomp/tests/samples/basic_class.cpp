@@ -3,6 +3,7 @@
 
 // A very simple class
 
+// VTABLE: TEST 0x1001002
 class TestClass {
 public:
   TestClass();
@@ -10,14 +11,14 @@ public:
 
   virtual MxResult Tickle() override; // vtable+08
 
-  // OFFSET: TEST 0x12345678
+  // FUNCTION: TEST 0x12345678
   inline const char* ClassName() const // vtable+0c
   {
     // 0xabcd1234
     return "TestClass";
   }
 
-  // OFFSET: TEST 0xdeadbeef
+  // FUNCTION: TEST 0xdeadbeef
   inline MxBool IsA(const char* name) const override // vtable+10
   {
     return !strcmp(name, TestClass::ClassName());

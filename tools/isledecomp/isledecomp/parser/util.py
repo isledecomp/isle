@@ -4,41 +4,15 @@ import re
 from typing import List
 from collections import namedtuple
 
+DecompMarker = namedtuple("DecompMarker", ["type", "module", "offset"])
 
-CodeBlock = namedtuple(
-    "CodeBlock",
-    [
-        "offset",
-        "signature",
-        "start_line",
-        "end_line",
-        "offset_comment",
-        "module",
-        "is_template",
-        "is_stub",
-    ],
-)
 
-OffsetMatch = namedtuple(
-    "OffsetMatch", ["module", "address", "is_template", "is_stub", "comment"]
-)
-
-# This has not been formally established, but considering that "STUB"
-# is a temporary state for a function, we assume it will appear last,
-# after any other modifiers (i.e. TEMPLATE)
-
-# To match a reasonable variance of formatting for the offset comment
-offsetCommentRegex = re.compile(
-    r"\s*//\s*OFFSET:\s*(\w+)\s+(?:0x)?([a-f0-9]+)(\s+TEMPLATE)?(\s+STUB)?",  # nopep8
+markerRegex = re.compile(
+    r"\s*//\s*(\w+):\s*(\w+)\s+((?:0x)?[a-f0-9]+)",
     flags=re.I,
 )
 
-# To match the exact syntax (text upper case, hex lower case, with spaces)
-# that is used in most places
-offsetCommentExactRegex = re.compile(
-    r"^// OFFSET: [A-Z0-9]+ (0x[a-f0-9]+)( TEMPLATE)?( STUB)?$"
-)  # nopep8
-
+markerExactRegex = re.compile(r"// ([A-Z]+): ([A-Z0-9]+) (0x[a-f0-9]+)$")
 
 # The goal here is to just read whatever is on the next line, so some
 # flexibility in the formatting seems OK
@@ -78,39 +52,15 @@ def is_blank_or_comment(line: str) -> bool:
     )
 
 
-def is_exact_offset_comment(line: str) -> bool:
-    """If the offset comment does not match our (unofficial) syntax
-    we may want to alert the user to fix it for style points."""
-    return offsetCommentExactRegex.match(line) is not None
-
-
-def match_offset_comment(line: str) -> OffsetMatch | None:
-    match = offsetCommentRegex.match(line)
+def match_marker(line: str) -> DecompMarker | None:
+    match = markerRegex.match(line)
     if match is None:
         return None
 
-    return OffsetMatch(
-        module=match.group(1),
-        address=int(match.group(2), 16),
-        is_template=match.group(3) is not None,
-        is_stub=match.group(4) is not None,
-        comment=line.strip(),
+    return DecompMarker(
+        type=match.group(1), module=match.group(2), offset=int(match.group(3), 16)
     )
 
 
-def distinct_by_module(offsets: List) -> List:
-    """Given a list of offset markers, return a list with distinct
-    module names. If module names (case-insensitive) are repeated,
-    choose the offset that appears first."""
-
-    if len(offsets) < 2:
-        return offsets
-
-    # Dict maintains insertion order in python >=3.7
-    offsets_dict = {}
-    for offset in offsets:
-        module_upper = offset.module.upper()
-        if module_upper not in offsets_dict:
-            offsets_dict[module_upper] = offset
-
-    return list(offsets_dict.values())
+def is_marker_exact(line: str) -> bool:
+    return markerExactRegex.match(line) is not None

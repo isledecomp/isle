@@ -1,145 +1,346 @@
 # C++ file parser
 
-from typing import List, TextIO
+from typing import List, TextIO, Iterable
 from enum import Enum
 from .util import (
-    CodeBlock,
-    OffsetMatch,
+    DecompMarker,
     is_blank_or_comment,
-    match_offset_comment,
+    match_marker,
+    is_marker_exact,
     get_template_function_name,
     remove_trailing_comment,
-    distinct_by_module,
 )
+from .node import (
+    ParserAlert,
+    ParserNode,
+    ParserFunction,
+    ParserVariable,
+    ParserVtable,
+)
+from .error import ParserError
 
 
 class ReaderState(Enum):
-    WANT_OFFSET = 0
+    SEARCH = 0
     WANT_SIG = 1
     IN_FUNC = 2
     IN_TEMPLATE = 3
     WANT_CURLY = 4
-    FUNCTION_DONE = 5
+    IN_GLOBAL = 5
+    IN_FUNC_GLOBAL = 6
+    IN_VTABLE = 7
 
 
-def find_code_blocks(stream: TextIO) -> List[CodeBlock]:
-    """Read the IO stream (file) line-by-line and give the following report:
-    Foreach code block (function) in the file, what are its starting and
-    ending line numbers, and what is the given offset in the original
-    binary. We expect the result to be ordered by line number because we
-    are reading the file from start to finish."""
+def marker_is_stub(marker: DecompMarker) -> bool:
+    return marker.type.upper() == "STUB"
 
-    blocks: List[CodeBlock] = []
 
-    offset_matches: List[OffsetMatch] = []
+def marker_is_variable(marker: DecompMarker) -> bool:
+    return marker.type.upper() == "GLOBAL"
 
-    function_sig = None
-    start_line = None
-    end_line = None
-    state = ReaderState.WANT_OFFSET
 
-    # 1-based to match cvdump and your text editor
-    # I know it says 0, but we will increment before each readline()
-    line_no = 0
-    can_seek = True
+def marker_is_synthetic(marker: DecompMarker) -> bool:
+    return marker.type.upper() in ("SYNTHETIC", "TEMPLATE")
 
-    while True:
-        # Do this before reading again so that an EOF will not
-        # cause us to miss the last function of the file.
-        if state == ReaderState.FUNCTION_DONE:
-            # Our list of offset marks could have duplicates on
-            # module name, so we'll eliminate those now.
-            for offset_match in distinct_by_module(offset_matches):
-                block = CodeBlock(
-                    offset=offset_match.address,
-                    signature=function_sig,
-                    start_line=start_line,
+
+def marker_is_function(marker: DecompMarker) -> bool:
+    return marker.type.upper() in ("FUNCTION", "STUB")
+
+
+def marker_is_vtable(marker: DecompMarker) -> bool:
+    return marker.type.upper() == "VTABLE"
+
+
+class MarkerDict:
+    def __init__(self):
+        self.markers: dict = {}
+
+    def insert(self, marker: DecompMarker) -> bool:
+        module = marker.module.upper()
+        # Return True if this insert would overwrite
+        if module in self.markers:
+            return True
+
+        self.markers[module] = (marker.type, marker.offset)
+        return False
+
+    def iter(self):
+        for module in self.markers:
+            (marker_type, offset) = self.markers[module]
+            yield DecompMarker(marker_type, module, offset)
+
+    def empty(self):
+        self.markers = {}
+
+
+class DecompParser:
+    def __init__(self):
+        self.fun_markers = MarkerDict()
+        self.var_markers = MarkerDict()
+        self.tbl_markers = MarkerDict()
+        self.reset()
+
+    def reset(self):
+        # Output values
+        self.functions = []
+        self.vtables = []
+        self.variables = []
+        self.alerts = []
+
+        # Internal state machine stuff
+        self.line_number: int = 0
+        self.state: ReaderState = ReaderState.SEARCH
+
+        self.last_line: str = ""
+        self.fun_markers.empty()
+        self.var_markers.empty()
+        self.tbl_markers.empty()
+        self.function_start: int = 0
+        self.function_sig: str = ""
+
+    def _recover(self):
+        """We hit a syntax error and need to reset temp structures"""
+        self.state = ReaderState.SEARCH
+        self.fun_markers.empty()
+        self.var_markers.empty()
+        self.tbl_markers.empty()
+
+    def _syntax_warning(self, code):
+        self.alerts.append(
+            ParserAlert(
+                line_number=self.line_number,
+                code=code,
+                line=self.last_line.strip(),
+            )
+        )
+
+    def _syntax_error(self, code):
+        self._syntax_warning(code)
+        self._recover()
+
+    def _function_starts_here(self):
+        self.function_start = self.line_number
+
+    def _function_marker(self, marker: DecompMarker):
+        if self.fun_markers.insert(marker):
+            self._syntax_warning(ParserError.DUPLICATE_MODULE)
+        self.state = ReaderState.WANT_SIG
+
+    def _synthetic_marker(self, marker: DecompMarker):
+        if self.fun_markers.insert(marker):
+            self._syntax_warning(ParserError.DUPLICATE_MODULE)
+        self.state = ReaderState.IN_TEMPLATE
+
+    def _function_done(self, unexpected: bool = False):
+        end_line = self.line_number
+        if unexpected:
+            end_line -= -1
+
+        for marker in self.fun_markers.iter():
+            self.functions.append(
+                ParserFunction(
+                    line_number=self.function_start,
+                    module=marker.module,
+                    offset=marker.offset,
+                    is_stub=marker_is_stub(marker),
+                    is_template=marker_is_synthetic(marker),
+                    name=self.function_sig,
                     end_line=end_line,
-                    offset_comment=offset_match.comment,
-                    module=offset_match.module,
-                    is_template=offset_match.is_template,
-                    is_stub=offset_match.is_stub,
                 )
-                blocks.append(block)
-            offset_matches = []
-            state = ReaderState.WANT_OFFSET
+            )
 
-        if can_seek:
-            line_no += 1
-            line = stream.readline()
-            if line == "":
-                break
+        self.fun_markers.empty()
+        self.state = ReaderState.SEARCH
 
-        new_match = match_offset_comment(line)
-        if new_match is not None:
-            # We will allow multiple offsets if we have just begun
-            # the code block, but not after we hit the curly brace.
-            if state in (
-                ReaderState.WANT_OFFSET,
-                ReaderState.IN_TEMPLATE,
+    def _vtable_marker(self, marker: DecompMarker):
+        if self.tbl_markers.insert(marker):
+            self._syntax_warning(ParserError.DUPLICATE_MODULE)
+        self.state = ReaderState.IN_VTABLE
+
+    def _vtable_done(self):
+        for marker in self.tbl_markers.iter():
+            self.vtables.append(
+                ParserVtable(
+                    line_number=self.line_number,
+                    module=marker.module,
+                    offset=marker.offset,
+                    class_name=self.last_line.strip(),
+                )
+            )
+
+        self.tbl_markers.empty()
+        self.state = ReaderState.SEARCH
+
+    def _variable_marker(self, marker: DecompMarker):
+        if self.var_markers.insert(marker):
+            self._syntax_warning(ParserError.DUPLICATE_MODULE)
+
+        if self.state in (ReaderState.IN_FUNC, ReaderState.IN_FUNC_GLOBAL):
+            self.state = ReaderState.IN_FUNC_GLOBAL
+        else:
+            self.state = ReaderState.IN_GLOBAL
+
+    def _variable_done(self):
+        for marker in self.var_markers.iter():
+            self.variables.append(
+                ParserVariable(
+                    line_number=self.line_number,
+                    module=marker.module,
+                    offset=marker.offset,
+                    name=self.last_line.strip(),
+                )
+            )
+
+        self.var_markers.empty()
+        if self.state == ReaderState.IN_FUNC_GLOBAL:
+            self.state = ReaderState.IN_FUNC
+        else:
+            self.state = ReaderState.SEARCH
+
+    def _handle_marker(self, marker: DecompMarker):
+        # Cannot handle any markers between function sig and opening curly brace
+        if self.state == ReaderState.WANT_CURLY:
+            self._syntax_error(ParserError.UNEXPECTED_MARKER)
+            return
+
+        # TODO: How uncertain are we of detecting the end of a function
+        # in a clang-formatted file? For now we assume we have missed the
+        # end if we detect a non-GLOBAL marker while state is IN_FUNC.
+        # Maybe these cases should be syntax errors instead
+
+        if marker_is_function(marker):
+            if self.state in (
+                ReaderState.SEARCH,
                 ReaderState.WANT_SIG,
             ):
-                # If we detected an offset marker unexpectedly,
-                # we are handling it here so we can continue seeking.
-                can_seek = True
-
-                offset_matches.append(new_match)
-
-                if new_match.is_template:
-                    state = ReaderState.IN_TEMPLATE
-                else:
-                    state = ReaderState.WANT_SIG
-            else:
+                # We will allow multiple offsets if we have just begun
+                # the code block, but not after we hit the curly brace.
+                self._function_marker(marker)
+            elif self.state == ReaderState.IN_FUNC:
                 # We hit another offset unexpectedly.
                 # We can recover easily by just ending the function here.
-                end_line = line_no - 1
-                state = ReaderState.FUNCTION_DONE
+                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
+                self._function_done()
 
-                # Pause reading here so we handle the offset marker
-                # on the next loop iteration
-                can_seek = False
+                # Start the next function right after so we can
+                # read the next line.
+                self._function_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
 
-        elif state == ReaderState.IN_TEMPLATE:
+        elif marker_is_synthetic(marker):
+            if self.state in (ReaderState.SEARCH, ReaderState.IN_TEMPLATE):
+                self._synthetic_marker(marker)
+            elif self.state == ReaderState.IN_FUNC:
+                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
+                self._function_done()
+                self._synthetic_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        elif marker_is_variable(marker):
+            if self.state in (
+                ReaderState.SEARCH,
+                ReaderState.IN_GLOBAL,
+                ReaderState.IN_FUNC,
+                ReaderState.IN_FUNC_GLOBAL,
+            ):
+                self._variable_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        elif marker_is_vtable(marker):
+            if self.state in (ReaderState.SEARCH, ReaderState.IN_VTABLE):
+                self._vtable_marker(marker)
+            elif self.state == ReaderState.IN_FUNC:
+                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
+                self._function_done()
+                self._vtable_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        else:
+            self._syntax_warning(ParserError.BOGUS_MARKER)
+
+    def read_line(self, line: str):
+        self.last_line = line  # TODO: Useful or hack for error reporting?
+        self.line_number += 1
+
+        marker = match_marker(line)
+        if marker is not None:
+            # TODO: what's the best place for this?
+            # Does it belong with reading or marker handling?
+            if not is_marker_exact(self.last_line):
+                self._syntax_warning(ParserError.BAD_DECOMP_MARKER)
+            self._handle_marker(marker)
+            return
+
+        if self.state == ReaderState.IN_TEMPLATE:
             # TEMPLATE functions are a special case. The signature is
             # given on the next line (in a // comment)
-            function_sig = get_template_function_name(line)
-            start_line = line_no
-            end_line = line_no
-            state = ReaderState.FUNCTION_DONE
+            self.function_sig = get_template_function_name(line)
+            self._function_starts_here()
+            self._function_done()
 
-        elif state == ReaderState.WANT_SIG:
+        elif self.state == ReaderState.WANT_SIG:
             # Skip blank lines or comments that come after the offset
             # marker. There is not a formal procedure for this, so just
             # assume the next "code line" is the function signature
             if not is_blank_or_comment(line):
                 # Inline functions may end with a comment. Strip that out
                 # to help parsing.
-                function_sig = remove_trailing_comment(line.strip())
+                self.function_sig = remove_trailing_comment(line.strip())
 
                 # Now check to see if the opening curly bracket is on the
                 # same line. clang-format should prevent this (BraceWrapping)
                 # but it is easy to detect.
                 # If the entire function is on one line, handle that too.
-                if function_sig.endswith("{"):
-                    start_line = line_no
-                    state = ReaderState.IN_FUNC
-                elif function_sig.endswith("}") or function_sig.endswith("};"):
-                    start_line = line_no
-                    end_line = line_no
-                    state = ReaderState.FUNCTION_DONE
+                if self.function_sig.endswith("{"):
+                    self._function_starts_here()
+                    self.state = ReaderState.IN_FUNC
+                elif self.function_sig.endswith("}") or self.function_sig.endswith(
+                    "};"
+                ):
+                    self._function_starts_here()
+                    self._function_done()
                 else:
-                    state = ReaderState.WANT_CURLY
+                    self.state = ReaderState.WANT_CURLY
 
-        elif state == ReaderState.WANT_CURLY:
+        elif self.state == ReaderState.WANT_CURLY:
             if line.strip() == "{":
-                start_line = line_no
-                state = ReaderState.IN_FUNC
+                self._function_starts_here()
+                self.state = ReaderState.IN_FUNC
 
-        elif state == ReaderState.IN_FUNC:
+        elif self.state == ReaderState.IN_FUNC:
             # Naive but reasonable assumption that functions will end with
             # a curly brace on its own line with no prepended spaces.
             if line.startswith("}"):
-                end_line = line_no
-                state = ReaderState.FUNCTION_DONE
+                self._function_done()
 
-    return blocks
+        elif self.state in (ReaderState.IN_GLOBAL, ReaderState.IN_FUNC_GLOBAL):
+            if not is_blank_or_comment(line):
+                self._variable_done()
+
+        elif self.state == ReaderState.IN_VTABLE:
+            if not is_blank_or_comment(line):
+                self._vtable_done()
+
+    def read_lines(self, lines: Iterable):
+        for line in lines:
+            self.read_line(line)
+
+
+def find_code_blocks(stream: TextIO) -> List[ParserNode]:
+    """Read the IO stream (file) line-by-line and give the following report:
+    Foreach code block (function) in the file, what are its starting and
+    ending line numbers, and what is the given offset in the original
+    binary. We expect the result to be ordered by line number because we
+    are reading the file from start to finish."""
+
+    # TODO: this will be replaced shortly. shim for now to avoid
+    # making more changes elsewhere
+    p = DecompParser()
+    for line in stream:
+        p.read_line(line)
+
+    return p.functions
