@@ -16,6 +16,9 @@ MeshImpl::~MeshImpl()
 	}
 }
 
+// OFFSET: LEGO1 0x100a3d80 TEMPLATE
+// TglImpl::MeshImpl::`scalar deleting destructor'
+
 // OFFSET: LEGO1 0x100a3ed0
 void* MeshImpl::ImplementationDataPtr()
 {

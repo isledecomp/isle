@@ -205,7 +205,13 @@ private:
 class MeshImpl : public Mesh {
 public:
 	MeshImpl() : m_data(0) {}
-	~MeshImpl();
+	~MeshImpl()
+	{
+		if (m_data) {
+			delete m_data;
+			m_data = NULL;
+		}
+	}
 
 	virtual void* ImplementationDataPtr();
 
