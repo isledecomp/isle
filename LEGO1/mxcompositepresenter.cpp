@@ -19,6 +19,24 @@ MxCompositePresenter::MxCompositePresenter()
 	NotificationManager()->Register(this);
 }
 
+// OFFSET: LEGO1 0x100b61a0 TEMPLATE
+// list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
+
+// OFFSET: LEGO1 0x100b6210 TEMPLATE
+// MxCompositePresenter::ClassName
+
+// OFFSET: LEGO1 0x100b6220 TEMPLATE
+// MxCompositePresenter::IsA
+
+// OFFSET: LEGO1 0x100b62d0 TEMPLATE
+// MxCompositePresenter::`scalar deleting destructor'
+
+// OFFSET: LEGO1 0x100b62f0 TEMPLATE
+// MxCompositePresenterList::~MxCompositePresenterList
+
+// OFFSET: LEGO1 0x100b6340 TEMPLATE
+// List<MxPresenter *>::~List<MxPresenter *>
+
 // OFFSET: LEGO1 0x100b6390
 MxCompositePresenter::~MxCompositePresenter()
 {
