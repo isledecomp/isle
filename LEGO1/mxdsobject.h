@@ -7,7 +7,7 @@
 #include "mxdstypes.h"
 
 // TODO: Find proper compilation unit to put this
-// FUNCTION: LEGO1 0x10005530
+// SYNTHETIC: LEGO1 0x10005530
 // MxDSObject::SetAtomId
 
 // VTABLE: LEGO1 0x100dc868
