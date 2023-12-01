@@ -11,7 +11,7 @@ DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 // GLOBAL: LEGO1 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";
 
-// FUNCTION: LEGO1 0x10043550
+// SYNTHETIC: LEGO1 0x10043550
 // MxStillPresenter::~MxStillPresenter
 
 // FUNCTION: LEGO1 0x100435b0
@@ -20,10 +20,10 @@ void MxStillPresenter::Destroy()
 	Destroy(FALSE);
 }
 
-// FUNCTION: LEGO1 0x100435c0
+// SYNTHETIC: LEGO1 0x100435c0
 // MxStillPresenter::ClassName
 
-// FUNCTION: LEGO1 0x100435d0
+// SYNTHETIC: LEGO1 0x100435d0
 // MxStillPresenter::IsA
 
 // SYNTHETIC: LEGO1 0x100436e0
