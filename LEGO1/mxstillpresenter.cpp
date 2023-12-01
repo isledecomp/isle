@@ -3,6 +3,8 @@
 #include "decomp.h"
 #include "define.h"
 #include "legoomni.h"
+#include "mxcompositepresenter.h"
+#include "mxdsmediaaction.h"
 #include "mxomni.h"
 #include "mxvideomanager.h"
 
@@ -83,8 +85,8 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	MxS32 height = GetHeight() - 1;
 	MxS32 width = GetWidth() - 1;
-	MxS32 x = GetLocationX();
-	MxS32 y = GetLocationY();
+	MxS32 x = m_location.m_x;
+	MxS32 y = m_location.m_y;
 
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
@@ -98,12 +100,10 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 			m_action->GetFlags() & MxDSAction::Flag_Bit4
 		);
 
-		if (m_alpha)
-			delete m_alpha;
+		delete m_alpha;
 		m_alpha = new AlphaMask(*m_bitmap);
 
-		if (m_bitmap)
-			delete m_bitmap;
+		delete m_bitmap;
 		m_bitmap = NULL;
 
 		if (m_unk58 && unk)
@@ -113,40 +113,88 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	}
 }
 
-// OFFSET: LEGO1 0x100b9f30 STUB
-void MxStillPresenter::VTable0x70()
+// OFFSET: LEGO1 0x100b9f30
+void MxStillPresenter::RealizePalette()
 {
-	// TODO
+	MxPalette* palette = m_bitmap->CreatePalette();
+	MVideoManager()->RealizePalette(palette);
+	delete palette;
 }
 
-// OFFSET: LEGO1 0x100b9f60 STUB
+// OFFSET: LEGO1 0x100b9f60
 void MxStillPresenter::StartingTickle()
 {
-	// TODO
+	MxVideoPresenter::StartingTickle();
+
+	if (m_currentTickleState == TickleState_Streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
+		RealizePalette();
 }
 
-// OFFSET: LEGO1 0x100b9f90 STUB
+// OFFSET: LEGO1 0x100b9f90
 void MxStillPresenter::StreamingTickle()
 {
-	// TODO
+	MxStreamChunk* chunk = FUN_100b5650();
+
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
+		m_chunkTime = chunk->GetTime();
+		NextFrame();
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Repeating;
+
+		if (m_action->GetDuration() == -1 && m_compositePresenter)
+			m_compositePresenter->VTable0x60(this);
+	}
 }
 
-// OFFSET: LEGO1 0x100b9ff0 STUB
+// OFFSET: LEGO1 0x100b9ff0
 void MxStillPresenter::RepeatingTickle()
 {
-	// TODO
+	if (m_action->GetDuration() != -1) {
+		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
+			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+			m_currentTickleState = TickleState_unk5;
+		}
+	}
 }
 
-// OFFSET: LEGO1 0x100ba040 STUB
-void MxStillPresenter::VTable0x88(undefined4, undefined4)
+// OFFSET: LEGO1 0x100ba040
+void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 {
-	// TODO
+	MxS32 x = m_location.m_x;
+	MxS32 y = m_location.m_y;
+	m_location.m_x = p_x;
+	m_location.m_y = p_y;
+
+	if (IsEnabled()) {
+		MxS32 height = GetHeight() - 1;
+		MxS32 width = GetWidth() - 1;
+
+		MxRect32 rect_a(x, y, width + x, height + y);
+		MxRect32 rect_b(m_location.m_x, m_location.m_y, width + m_location.m_x, height + m_location.m_y);
+
+		MVideoManager()->InvalidateRect(rect_a);
+		MVideoManager()->vtable0x34(rect_a.GetLeft(), rect_a.GetTop(), rect_a.GetWidth(), rect_a.GetHeight());
+
+		MVideoManager()->InvalidateRect(rect_b);
+		MVideoManager()->vtable0x34(rect_b.GetLeft(), rect_b.GetTop(), rect_b.GetWidth(), rect_b.GetHeight());
+	}
 }
 
-// OFFSET: LEGO1 0x100ba140 STUB
+// OFFSET: LEGO1 0x100ba140
 void MxStillPresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	MxVideoPresenter::Enable(p_enable);
+
+	if (MVideoManager() && (m_alpha || m_bitmap)) {
+		MxS32 height = GetHeight();
+		MxS32 width = GetWidth();
+		MxS32 x = m_location.m_x;
+		MxS32 y = m_location.m_y;
+
+		MxRect32 rect(x, y, width + x, height + y);
+		MVideoManager()->InvalidateRect(rect);
+		MVideoManager()->vtable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
+	}
 }
 
 // OFFSET: LEGO1 0x100ba1e0

@@ -1,7 +1,11 @@
 #include "mxvideoparam.h"
 
+#include "decomp.h"
+
 #include <stdlib.h>
 #include <string.h>
+
+DECOMP_SIZE_ASSERT(MxVideoParam, 0x24);
 
 // OFFSET: LEGO1 0x100bec70
 MxVideoParam::MxVideoParam()

@@ -48,7 +48,7 @@ public:
 	virtual void NextFrame();                            // vtable+0x64
 	virtual void LoadFrame(MxStreamChunk* p_chunk);      // vtable+0x68
 	virtual void VTable0x6c();                           // vtable+0x6c
-	virtual void VTable0x70();                           // vtable+0x70
+	virtual void RealizePalette();                       // vtable+0x70
 	virtual undefined VTable0x74();                      // vtable+0x74
 	virtual LPDIRECTDRAWSURFACE VTable0x78();            // vtable+0x78
 	virtual MxBool VTable0x7c();                         // vtable+0x7c

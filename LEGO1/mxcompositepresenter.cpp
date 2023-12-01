@@ -38,7 +38,7 @@ void MxCompositePresenter::VTable0x5c()
 }
 
 // OFFSET: LEGO1 0x100b6b40 STUB
-void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
+void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 {
 	// TODO
 }

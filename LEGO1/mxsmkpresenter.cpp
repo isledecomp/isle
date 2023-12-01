@@ -85,7 +85,7 @@ MxU32 MxSmkPresenter::VTable0x88()
 }
 
 // OFFSET: LEGO1 0x100b42c0
-void MxSmkPresenter::VTable0x70()
+void MxSmkPresenter::RealizePalette()
 {
 	MxPalette* palette = m_bitmap->CreatePalette();
 	MVideoManager()->RealizePalette(palette);

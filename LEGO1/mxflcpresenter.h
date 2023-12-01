@@ -28,7 +28,7 @@ public:
 
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	virtual void CreateBitmap() override;                     // vtable+0x60
-	virtual void VTable0x70() override;                       // vtable+0x70
+	virtual void RealizePalette() override;                   // vtable+0x70
 
 protected:
 	FLIC_HEADER* m_flicHeader;

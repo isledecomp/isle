@@ -10,6 +10,7 @@
 
 #include <ddraw.h>
 
+// SIZE 0x24
 class MxVideoParam {
 public:
 	__declspec(dllexport) MxVideoParam();
@@ -31,12 +32,12 @@ public:
 	inline MxU32 GetBackBuffers() { return this->m_backBuffers; }
 
 private:
-	MxRect32 m_rect;
-	MxPalette* m_palette;
-	MxU32 m_backBuffers;
-	MxVideoParamFlags m_flags;
-	int m_unk1c;
-	char* m_deviceId;
+	MxRect32 m_rect;           // 0x00
+	MxPalette* m_palette;      // 0x10
+	MxU32 m_backBuffers;       // 0x14
+	MxVideoParamFlags m_flags; // 0x18
+	int m_unk1c;               // 0x1c
+	char* m_deviceId;          // 0x20
 };
 
 #endif // MXVIDEOPARAM_H
