@@ -95,6 +95,18 @@ class DecompParser:
         self.fun_markers.empty()
         self.var_markers.empty()
         self.tbl_markers.empty()
+
+        # To handle functions that are entirely indented (i.e. those defined
+        # in class declarations), remember how many whitespace characters
+        # came before the opening curly brace and match that up at the end.
+        # This should give us the same or better accuracy for a well-formed file.
+        # The alternative is counting the curly braces on each line
+        # but that's probably too cumbersome.
+        self.curly_indent_stops = 0
+
+        # For non-synthetic functions, save the line number where the function begins
+        # (i.e. where we see the curly brace) along with the function signature.
+        # We will need both when we reach the end of the function.
         self.function_start: int = 0
         self.function_sig: str = ""
 
@@ -150,6 +162,7 @@ class DecompParser:
             )
 
         self.fun_markers.empty()
+        self.curly_indent_stops = 0
         self.state = ReaderState.SEARCH
 
     def _vtable_marker(self, marker: DecompMarker):
@@ -308,13 +321,12 @@ class DecompParser:
 
         elif self.state == ReaderState.WANT_CURLY:
             if line.strip() == "{":
+                self.curly_indent_stops = line.index("{")
                 self._function_starts_here()
                 self.state = ReaderState.IN_FUNC
 
         elif self.state == ReaderState.IN_FUNC:
-            # Naive but reasonable assumption that functions will end with
-            # a curly brace on its own line with no prepended spaces.
-            if line.startswith("}"):
+            if line.strip().startswith("}") and line[self.curly_indent_stops] == "}":
                 self._function_done()
 
         elif self.state in (ReaderState.IN_GLOBAL, ReaderState.IN_FUNC_GLOBAL):
