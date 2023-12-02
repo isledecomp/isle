@@ -120,7 +120,7 @@ inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 }
 
 // OFFSET: LEGO1 0x100a23a0 TEMPLATE
-// TglImpl::LightImpl::`scalar deleting destructor'
+// TglImpl::ViewImpl::`scalar deleting destructor'
 
 // OFFSET: LEGO1 0x100a2d80
 void* ViewImpl::ImplementationDataPtr()
