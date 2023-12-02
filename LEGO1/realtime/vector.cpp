@@ -60,7 +60,7 @@ float Vector2Impl::DotImpl(float* p_a, float* p_b) const
 	return p_b[0] * p_a[0] + p_b[1] * p_a[1];
 }
 
-// SYNTHETIC: LEGO1 0x10002060
+// FUNCTION: LEGO1 0x10002060
 // Vector2Impl::SetData
 
 // FUNCTION: LEGO1 0x10002070

@@ -9,10 +9,10 @@
 class MxParam;
 
 // TODO: Find proper compilation unit to put these
-// SYNTHETIC: LEGO1 0x100140d0
+// FUNCTION: LEGO1 0x100140d0
 // MxCore::IsA
 
-// SYNTHETIC: LEGO1 0x100144c0
+// FUNCTION: LEGO1 0x100144c0
 // MxCore::ClassName
 
 // VTABLE: LEGO1 0x100dc0f8
