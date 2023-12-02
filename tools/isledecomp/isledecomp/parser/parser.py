@@ -42,6 +42,10 @@ def marker_is_synthetic(marker: DecompMarker) -> bool:
     return marker.type.upper() in ("SYNTHETIC", "TEMPLATE")
 
 
+def marker_is_template(marker: DecompMarker) -> bool:
+    return marker.type.upper() == "TEMPLATE"
+
+
 def marker_is_function(marker: DecompMarker) -> bool:
     return marker.type.upper() in ("FUNCTION", "STUB")
 
@@ -55,8 +59,8 @@ class MarkerDict:
         self.markers: dict = {}
 
     def insert(self, marker: DecompMarker) -> bool:
+        """Return True if this insert would overwrite"""
         module = marker.module.upper()
-        # Return True if this insert would overwrite
         if module in self.markers:
             return True
 
@@ -159,9 +163,12 @@ class DecompParser:
             self._syntax_warning(ParserError.DUPLICATE_MODULE)
         self.state = ReaderState.IN_TEMPLATE
 
-    def _function_done(self, unexpected: bool = False):
+    def _function_done(self, lookup_by_name: bool = False, unexpected: bool = False):
         end_line = self.line_number
         if unexpected:
+            # If we missed the end of the previous function, assume it ended
+            # on the previous line and that whatever we are tracking next
+            # begins on the current line.
             end_line -= 1
 
         for marker in self.fun_markers.iter():
@@ -170,8 +177,10 @@ class DecompParser:
                     line_number=self.function_start,
                     module=marker.module,
                     offset=marker.offset,
+                    lookup_by_name=lookup_by_name,
                     is_stub=marker_is_stub(marker),
-                    is_template=marker_is_synthetic(marker),
+                    is_synthetic=marker_is_synthetic(marker),
+                    is_template=marker_is_template(marker),
                     name=self.function_sig,
                     end_line=end_line,
                 )
@@ -262,7 +271,7 @@ class DecompParser:
                 self._synthetic_marker(marker)
             elif self.state == ReaderState.IN_FUNC:
                 self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done(unexpected=True)
+                self._function_done(lookup_by_name=True, unexpected=True)
                 self._synthetic_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
@@ -304,6 +313,7 @@ class DecompParser:
             self._handle_marker(marker)
             return
 
+        line_strip = line.strip()
         if self.state == ReaderState.IN_TEMPLATE:
             # TEMPLATE functions are a special case. The signature is
             # given on the next line (in a // comment)
@@ -313,16 +323,32 @@ class DecompParser:
             else:
                 self.function_sig = name
                 self._function_starts_here()
-                self._function_done()
+                self._function_done(lookup_by_name=True)
 
         elif self.state == ReaderState.WANT_SIG:
-            # Skip blank lines or comments that come after the offset
-            # marker. There is not a formal procedure for this, so just
-            # assume the next "code line" is the function signature
-            if not is_blank_or_comment(line):
+            # Ignore blanks on the way to function start or function name
+            if len(line_strip) == 0:
+                self._syntax_warning(ParserError.UNEXPECTED_BLANK_LINE)
+
+            elif line_strip.startswith("//"):
+                # If we found a comment, assume implicit lookup-by-name
+                # function and end here. We know this is not a decomp marker
+                # because it would have been handled already.
+                self.function_sig = get_synthetic_name(line)
+                self._function_starts_here()
+                self._function_done(lookup_by_name=True)
+
+            elif line_strip == "{":
+                # We missed the function signature but we can recover from this
+                self.function_sig = "(unknown)"
+                self._function_starts_here()
+                self._syntax_warning(ParserError.MISSED_START_OF_FUNCTION)
+                self.state = ReaderState.IN_FUNC
+
+            else:
                 # Inline functions may end with a comment. Strip that out
                 # to help parsing.
-                self.function_sig = remove_trailing_comment(line.strip())
+                self.function_sig = remove_trailing_comment(line_strip)
 
                 # Now check to see if the opening curly bracket is on the
                 # same line. clang-format should prevent this (BraceWrapping)
@@ -340,13 +366,13 @@ class DecompParser:
                     self.state = ReaderState.WANT_CURLY
 
         elif self.state == ReaderState.WANT_CURLY:
-            if line.strip() == "{":
+            if line_strip == "{":
                 self.curly_indent_stops = line.index("{")
                 self._function_starts_here()
                 self.state = ReaderState.IN_FUNC
 
         elif self.state == ReaderState.IN_FUNC:
-            if line.strip().startswith("}") and line[self.curly_indent_stops] == "}":
+            if line_strip.startswith("}") and line[self.curly_indent_stops] == "}":
                 self._function_done()
 
         elif self.state in (ReaderState.IN_GLOBAL, ReaderState.IN_FUNC_GLOBAL):

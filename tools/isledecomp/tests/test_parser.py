@@ -11,15 +11,23 @@ def fixture_parser():
     return DecompParser()
 
 
-@pytest.mark.skip(reason="todo")
 def test_missing_sig(parser):
-    """Bad syntax: function signature is missing"""
-    parser.read_lines(["// FUNCTION: TEST 0x1234", "{"])
-    assert parser.state == ReaderState.IN_FUNC
-    assert len(parser.alerts) == 1
-    parser.read_line("}")
+    """In the hopefully rare scenario that the function signature and marker
+    are swapped, we still have enough to match witch reccmp"""
+    parser.read_lines(
+        [
+            "void my_function()",
+            "// FUNCTION: TEST 0x1234",
+            "{",
+            "}",
+        ]
+    )
+    assert parser.state == ReaderState.SEARCH
     assert len(parser.functions) == 1
-    assert parser.functions[0] != "{"
+    assert parser.functions[0].line_number == 3
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.MISSED_START_OF_FUNCTION
 
 
 def test_not_exact_syntax(parser):
@@ -210,7 +218,7 @@ def test_synthetic(parser):
         ]
     )
     assert len(parser.functions) == 1
-    assert parser.functions[0].is_template is True
+    assert parser.functions[0].lookup_by_name is True
     assert parser.functions[0].name == "TestClass::TestMethod"
 
 
@@ -285,3 +293,67 @@ def test_indented_no_curly_hint(parser):
         ]
     )
     assert len(parser.alerts) == 0
+
+
+def test_implicit_lookup_by_name(parser):
+    """FUNCTION (or STUB) offsets must directly precede the function signature.
+    If we detect a comment instead, we assume that this is a lookup-by-name
+    function and end here."""
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "// TestClass::TestMethod()",
+        ]
+    )
+    assert parser.state == ReaderState.SEARCH
+    assert len(parser.functions) == 1
+    assert parser.functions[0].lookup_by_name is True
+    assert parser.functions[0].name == "TestClass::TestMethod()"
+
+
+def test_function_with_spaces(parser):
+    """There should not be any spaces between the end of FUNCTION markers
+    and the start or name of the function. If it's a blank line, we can safely
+    ignore but should alert to this."""
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "   ",
+            "inline void test_function() { };",
+        ]
+    )
+    assert len(parser.functions) == 1
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.UNEXPECTED_BLANK_LINE
+
+
+def test_function_with_spaces_implicit(parser):
+    """Same as above, but for implicit lookup-by-name"""
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "   ",
+            "// Implicit::Method",
+        ]
+    )
+    assert len(parser.functions) == 1
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.UNEXPECTED_BLANK_LINE
+
+
+@pytest.mark.xfail(reason="will assume implicit lookup-by-name function")
+def test_function_is_commented(parser):
+    """In an ideal world, we would recognize that there is no code here.
+    Some editors (or users) might comment the function on each line like this
+    but hopefully it is rare."""
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "// int my_function()",
+            "// {",
+            "//     return 5;",
+            "// }",
+        ]
+    )
+
+    assert len(parser.functions) == 0

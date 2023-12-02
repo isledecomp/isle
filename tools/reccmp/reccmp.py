@@ -334,7 +334,7 @@ if __name__ == "__main__":
                     else:
                         continue
 
-                if fun.is_template:
+                if fun.lookup_by_name:
                     recinfo = syminfo.get_recompiled_address_from_name(fun.name)
                     if not recinfo:
                         continue

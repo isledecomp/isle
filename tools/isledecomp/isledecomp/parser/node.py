@@ -21,6 +21,7 @@ class ParserSymbol(ParserNode):
 @dataclass
 class ParserFunction(ParserSymbol):
     name: str
+    lookup_by_name: bool = False
     is_stub: bool = False
     is_synthetic: bool = False
     is_template: bool = False
