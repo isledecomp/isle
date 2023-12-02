@@ -5,6 +5,7 @@ from isledecomp.parser.util import (
     is_blank_or_comment,
     match_marker,
     is_marker_exact,
+    get_class_name,
 )
 
 
@@ -96,3 +97,36 @@ def test_marker_dict_type_replace():
     markers = list(d.iter())
     assert len(markers) == 1
     assert markers[0].type == "FUNCTION"
+
+
+class_name_match_cases = [
+    ("class MxString {", "MxString"),
+    ("// class MxString", "MxString"),
+    ("class MxString : public MxCore {", "MxString"),
+    ("class MxPtrList<MxPresenter>", "MxPtrList<MxPresenter>"),
+    # If it is possible to match the symbol MxList<LegoPathController *>::`vftable'
+    # we should get the correct class name if possible. If the template type is a pointer,
+    # the asterisk and class name are separated by one space.
+    ("// class MxList<LegoPathController *>", "MxList<LegoPathController *>"),
+    ("// class MxList<LegoPathController*>", "MxList<LegoPathController *>"),
+    ("// class MxList<LegoPathController* >", "MxList<LegoPathController *>"),
+    # I don't know if this would ever come up, but sure, why not?
+    ("// class MxList<LegoPathController**>", "MxList<LegoPathController **>"),
+]
+
+
+@pytest.mark.parametrize("line, class_name", class_name_match_cases)
+def test_get_class_name(line: str, class_name: str):
+    assert get_class_name(line) == class_name
+
+
+class_name_no_match_cases = [
+    "MxString { ",
+    "clas MxString",
+    "// MxPtrList<MxPresenter>::`scalar deleting destructor'",
+]
+
+
+@pytest.mark.parametrize("line", class_name_no_match_cases)
+def test_get_class_name_none(line: str):
+    assert get_class_name(line) is None

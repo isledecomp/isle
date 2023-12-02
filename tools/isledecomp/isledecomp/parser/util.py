@@ -63,3 +63,33 @@ def match_marker(line: str) -> DecompMarker | None:
 
 def is_marker_exact(line: str) -> bool:
     return markerExactRegex.match(line) is not None
+
+
+template_class_decl_regex = re.compile(
+    r"\s*(?:\/\/)?\s*class (\w+)<([\w]+)\s*(\*+)?\s*>"
+)
+
+
+class_decl_regex = re.compile(r"\s*(?:\/\/)?\s*class (\w+)")
+
+
+def get_class_name(line: str) -> str | None:
+    """For VTABLE markers, extract the class name from the code line or comment
+    where it appears."""
+
+    match = template_class_decl_regex.match(line)
+    if match is not None:
+        # For template classes, we should reformat the class name so it matches
+        # the output from cvdump: one space between the template type and any asterisks
+        # if it is a pointer type.
+        (class_name, template_type, asterisks) = match.groups()
+        if asterisks is not None:
+            return f"{class_name}<{template_type} {asterisks}>"
+
+        return f"{class_name}<{template_type}>"
+
+    match = class_decl_regex.match(line)
+    if match is not None:
+        return match.group(1)
+
+    return None

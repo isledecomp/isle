@@ -193,6 +193,7 @@ def test_multiple_vtables(parser):
     )
     assert len(parser.alerts) == 0
     assert len(parser.vtables) == 2
+    assert parser.vtables[0].class_name == "MxString"
 
 
 def test_multiple_vtables_same_module(parser):

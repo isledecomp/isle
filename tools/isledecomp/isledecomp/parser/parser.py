@@ -7,6 +7,7 @@ from .util import (
     is_blank_or_comment,
     match_marker,
     is_marker_exact,
+    get_class_name,
     get_synthetic_name,
     remove_trailing_comment,
 )
@@ -195,14 +196,18 @@ class DecompParser:
             self._syntax_warning(ParserError.DUPLICATE_MODULE)
         self.state = ReaderState.IN_VTABLE
 
-    def _vtable_done(self):
+    def _vtable_done(self, class_name: str = None):
+        if class_name is None:
+            # Best we can do
+            class_name = self.last_line.strip()
+
         for marker in self.tbl_markers.iter():
             self.vtables.append(
                 ParserVtable(
                     line_number=self.line_number,
                     module=marker.module,
                     offset=marker.offset,
-                    class_name=self.last_line.strip(),
+                    class_name=class_name,
                 )
             )
 
@@ -380,8 +385,9 @@ class DecompParser:
                 self._variable_done()
 
         elif self.state == ReaderState.IN_VTABLE:
-            if not is_blank_or_comment(line):
-                self._vtable_done()
+            vtable_class = get_class_name(line)
+            if vtable_class is not None:
+                self._vtable_done(class_name=vtable_class)
 
     def read_lines(self, lines: Iterable):
         for line in lines:
