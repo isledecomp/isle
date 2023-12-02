@@ -162,7 +162,7 @@ class DecompParser:
     def _function_done(self, unexpected: bool = False):
         end_line = self.line_number
         if unexpected:
-            end_line -= -1
+            end_line -= 1
 
         for marker in self.fun_markers.iter():
             self.functions.append(
@@ -249,7 +249,7 @@ class DecompParser:
                 # We hit another offset unexpectedly.
                 # We can recover easily by just ending the function here.
                 self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done()
+                self._function_done(unexpected=True)
 
                 # Start the next function right after so we can
                 # read the next line.
@@ -262,7 +262,7 @@ class DecompParser:
                 self._synthetic_marker(marker)
             elif self.state == ReaderState.IN_FUNC:
                 self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done()
+                self._function_done(unexpected=True)
                 self._synthetic_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
@@ -283,7 +283,7 @@ class DecompParser:
                 self._vtable_marker(marker)
             elif self.state == ReaderState.IN_FUNC:
                 self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done()
+                self._function_done(unexpected=True)
                 self._vtable_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)

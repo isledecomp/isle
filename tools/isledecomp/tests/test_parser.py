@@ -39,7 +39,8 @@ def test_invalid_marker(parser):
     assert parser.alerts[0].code == ParserError.BOGUS_MARKER
 
 
-def test_unexpected_marker(parser):
+def test_incompatible_marker(parser):
+    """The marker we just read cannot be handled in the current parser state"""
     parser.read_lines(
         [
             "// FUNCTION: TEST 0x1234",
@@ -52,6 +53,7 @@ def test_unexpected_marker(parser):
 
 
 def test_variable(parser):
+    """Should identify a global variable"""
     parser.read_lines(
         [
             "// GLOBAL: HELLO 0x1234",
@@ -62,7 +64,8 @@ def test_variable(parser):
 
 
 def test_synthetic_plus_marker(parser):
-    """Should fail with error and not log the synthetic"""
+    """Marker tracking preempts synthetic name detection.
+    Should fail with error and not log the synthetic"""
     parser.read_lines(
         [
             "// SYNTHETIC: HEY 0x555",
@@ -157,6 +160,21 @@ def test_multiple_variables(parser):
     assert len(parser.variables) == 2
 
 
+def test_multiple_variables_same_module(parser):
+    """Should not overwrite offset"""
+    parser.read_lines(
+        [
+            "// GLOBAL: HELLO 0x1234",
+            "// GLOBAL: HELLO 0x555",
+            "const char *g_greeting;",
+        ]
+    )
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.DUPLICATE_MODULE
+    assert len(parser.variables) == 1
+    assert parser.variables[0].offset == 0x1234
+
+
 def test_multiple_vtables(parser):
     parser.read_lines(
         [
@@ -167,3 +185,101 @@ def test_multiple_vtables(parser):
     )
     assert len(parser.alerts) == 0
     assert len(parser.vtables) == 2
+
+
+def test_multiple_vtables_same_module(parser):
+    """Should not overwrite offset"""
+    parser.read_lines(
+        [
+            "// VTABLE: HELLO 0x1234",
+            "// VTABLE: HELLO 0x5432",
+            "class MxString : public MxCore {",
+        ]
+    )
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.DUPLICATE_MODULE
+    assert len(parser.vtables) == 1
+    assert parser.vtables[0].offset == 0x1234
+
+
+def test_synthetic(parser):
+    parser.read_lines(
+        [
+            "// SYNTHETIC: TEST 0x1234",
+            "// TestClass::TestMethod",
+        ]
+    )
+    assert len(parser.functions) == 1
+    assert parser.functions[0].is_template is True
+    assert parser.functions[0].name == "TestClass::TestMethod"
+
+
+def test_synthetic_same_module(parser):
+    parser.read_lines(
+        [
+            "// SYNTHETIC: TEST 0x1234",
+            "// SYNTHETIC: TEST 0x555",
+            "// TestClass::TestMethod",
+        ]
+    )
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.DUPLICATE_MODULE
+    assert len(parser.functions) == 1
+    assert parser.functions[0].offset == 0x1234
+
+
+@pytest.mark.skip(reason="todo")
+def test_synthetic_no_comment(parser):
+    """Synthetic marker followed by a code line (i.e. non-comment)"""
+    parser.read_lines(
+        [
+            "// SYNTHETIC: TEST 0x1234",
+            "int x = 123;",
+        ]
+    )
+    assert len(parser.functions) == 0
+
+
+def test_single_line_function(parser):
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "int hello() { return 1234; }",
+        ]
+    )
+    assert len(parser.functions) == 1
+    assert parser.functions[0].line_number == 2
+    assert parser.functions[0].end_line == 2
+
+
+def test_indented_function(parser):
+    """Track the number of whitespace characters when we begin the function
+    and check that against each closing curly brace we read.
+    Should not report a syntax warning if the function is indented"""
+    parser.read_lines(
+        [
+            "    // FUNCTION: TEST 0x1234",
+            "    void indented()",
+            "    {",
+            "        // TODO",
+            "    }",
+            "    // FUNCTION: NEXT 0x555",
+        ]
+    )
+    assert len(parser.alerts) == 0
+
+
+@pytest.mark.xfail(reason="todo")
+def test_indented_no_curly_hint(parser):
+    """Same as above, but opening curly brace is on the same line.
+    Without the hint of how many whitespace characters to check, can we
+    still identify the end of the function?"""
+    parser.read_lines(
+        [
+            "    // FUNCTION: TEST 0x1234",
+            "    void indented() {",
+            "    }",
+            "    // FUNCTION: NEXT 0x555",
+        ]
+    )
+    assert len(parser.alerts) == 0
