@@ -23,15 +23,15 @@ templateCommentRegex = re.compile(r"\s*//\s+(.*)")
 trailingCommentRegex = re.compile(r"(\s*(?://|/\*).*)$")
 
 
-def get_template_function_name(line: str) -> str:
-    """Parse function signature for special TEMPLATE functions"""
+def get_synthetic_name(line: str) -> str | None:
+    """Synthetic names appear on a single line comment on the line after the marker.
+    If that's not what we have, return None"""
     template_match = templateCommentRegex.match(line)
 
-    # If we don't match, you get whatever is on the line as the signature
     if template_match is not None:
         return template_match.group(1)
 
-    return line
+    return None
 
 
 def remove_trailing_comment(line: str) -> str:

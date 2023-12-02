@@ -228,7 +228,6 @@ def test_synthetic_same_module(parser):
     assert parser.functions[0].offset == 0x1234
 
 
-@pytest.mark.skip(reason="todo")
 def test_synthetic_no_comment(parser):
     """Synthetic marker followed by a code line (i.e. non-comment)"""
     parser.read_lines(
@@ -238,6 +237,9 @@ def test_synthetic_no_comment(parser):
         ]
     )
     assert len(parser.functions) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.BAD_SYNTHETIC
+    assert parser.state == ReaderState.SEARCH
 
 
 def test_single_line_function(parser):

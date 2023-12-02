@@ -7,7 +7,7 @@ from .util import (
     is_blank_or_comment,
     match_marker,
     is_marker_exact,
-    get_template_function_name,
+    get_synthetic_name,
     remove_trailing_comment,
 )
 from .node import (
@@ -307,9 +307,13 @@ class DecompParser:
         if self.state == ReaderState.IN_TEMPLATE:
             # TEMPLATE functions are a special case. The signature is
             # given on the next line (in a // comment)
-            self.function_sig = get_template_function_name(line)
-            self._function_starts_here()
-            self._function_done()
+            name = get_synthetic_name(line)
+            if name is None:
+                self._syntax_error(ParserError.BAD_SYNTHETIC)
+            else:
+                self.function_sig = name
+                self._function_starts_here()
+                self._function_done()
 
         elif self.state == ReaderState.WANT_SIG:
             # Skip blank lines or comments that come after the offset

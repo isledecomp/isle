@@ -18,9 +18,6 @@ class ParserError(Enum):
     # to handle it
     BOGUS_MARKER = 104
 
-    # WARN: Under a synthetic marker we expected a comment but found a code line instead
-    SYNTHETIC_NOT_COMMENT = 110
-
     # WARN: New function marker appeared while we were inside a function
     MISSED_END_OF_FUNCTION = 117
 
@@ -31,3 +28,6 @@ class ParserError(Enum):
     # with the preceding markers.
     # For example, a GLOBAL cannot follow FUNCTION/STUB
     INCOMPATIBLE_MARKER = 201
+
+    # ERROR: The line following a synthetic marker was not a comment
+    BAD_SYNTHETIC = 202
