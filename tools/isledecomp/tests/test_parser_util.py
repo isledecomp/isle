@@ -100,6 +100,7 @@ def test_marker_dict_type_replace():
 
 
 class_name_match_cases = [
+    ("struct MxString {", "MxString"),
     ("class MxString {", "MxString"),
     ("// class MxString", "MxString"),
     ("class MxString : public MxCore {", "MxString"),

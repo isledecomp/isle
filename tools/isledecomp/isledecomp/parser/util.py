@@ -66,11 +66,11 @@ def is_marker_exact(line: str) -> bool:
 
 
 template_class_decl_regex = re.compile(
-    r"\s*(?:\/\/)?\s*class (\w+)<([\w]+)\s*(\*+)?\s*>"
+    r"\s*(?:\/\/)?\s*(?:class|struct) (\w+)<([\w]+)\s*(\*+)?\s*>"
 )
 
 
-class_decl_regex = re.compile(r"\s*(?:\/\/)?\s*class (\w+)")
+class_decl_regex = re.compile(r"\s*(?:\/\/)?\s*(?:class|struct) (\w+)")
 
 
 def get_class_name(line: str) -> str | None:
