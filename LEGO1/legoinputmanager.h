@@ -12,13 +12,13 @@
 
 class LegoControlManager;
 
-// VTABLE: LEGO1 0x100d87b8 SYNTHETIC
+// VTABLE: LEGO1 0x100d87b8
 // class MxCollection<LegoEventNotificationParam>
 
-// VTABLE: LEGO1 0x100d87d0 SYNTHETIC
+// VTABLE: LEGO1 0x100d87d0
 // class MxList<LegoEventNotificationParam>
 
-// VTABLE: LEGO1 0x100d87e8 SYNTHETIC
+// VTABLE: LEGO1 0x100d87e8
 // class MxQueue<LegoEventNotificationParam>
 
 // VTABLE: LEGO1 0x100d8800

@@ -5,7 +5,7 @@
 
 class MxPresenter;
 
-// VTABLE: LEGO1 0x100d62f0 SYNTHETIC
+// VTABLE: LEGO1 0x100d62f0
 // class MxPtrList<MxPresenter>
 
 // VTABLE: LEGO1 0x100d6308
@@ -17,10 +17,10 @@ public:
 
 typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
 
-// VTABLE: LEGO1 0x100d6350 SYNTHETIC
+// VTABLE: LEGO1 0x100d6350
 // class MxCollection<MxPresenter *>
 
-// VTABLE: LEGO1 0x100d6368 SYNTHETIC
+// VTABLE: LEGO1 0x100d6368
 // class MxList<MxPresenter *>
 
 #endif // MXPRESENTERLIST_H
