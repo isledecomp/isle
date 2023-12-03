@@ -10,7 +10,7 @@ We are continually working on extending the capabilities of our "decompilation l
 
 ## Functions
 
-All non-inlined functions in the code base with the exception of [3rd party code](/3rdparty) must be annotated with one of the following markers, which include the module name and address of the function as found in the original binaries. This information is then used to compare the recompiled assembly with the original assembly, resulting in an accuracy score. Functions in a given compilation must be ordered by their address in ascending order.
+All non-inlined functions in the code base with the exception of [3rd party code](/3rdparty) must be annotated with one of the following markers, which include the module name and address of the function as found in the original binaries. This information is then used to compare the recompiled assembly with the original assembly, resulting in an accuracy score. Functions in a given compilation unit must be ordered by their address in ascending order.
 
 The annotations can be attached to the function implementation, which is the most common case, or use the "comment" syntax (see examples below) for functions that cannot be referred to directly (such as templated, synthetic or non-inlined inline functions). They should appear exclusively in `.cpp` files.
 
