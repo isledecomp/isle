@@ -43,7 +43,7 @@ LegoCameraController::LegoCameraController()
 
 ### `TEMPLATE`
 
-Templated functiosn should be annotated with `TEMPLATE`. Since the goal is to eventually have a full accounting of all the functions present in the binaries, please make an effort to find and annotate every function of a templated class.
+Templated functions should be annotated with `TEMPLATE`. Since the goal is to eventually have a full accounting of all the functions present in the binaries, please make an effort to find and annotate every function of a templated class.
 
 ```
 // TEMPLATE: LEGO1 0x100c0ee0
