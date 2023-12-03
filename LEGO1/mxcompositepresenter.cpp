@@ -56,6 +56,13 @@ void MxCompositePresenter::EndAction()
 	// TODO
 }
 
+// OFFSET: LEGO1 0x100b6760 STUB
+MxLong MxCompositePresenter::Notify(MxParam& p)
+{
+	// TODO
+	return 0;
+}
+
 // OFFSET: LEGO1 0x100b67f0 STUB
 void MxCompositePresenter::VTable0x58()
 {

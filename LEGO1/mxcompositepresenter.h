@@ -13,6 +13,8 @@ public:
 	MxCompositePresenter();
 	virtual ~MxCompositePresenter() override; // vtable+0x0
 
+	virtual MxLong Notify(MxParam& p) override; // vtable+0x04
+
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// 0x100f0774
