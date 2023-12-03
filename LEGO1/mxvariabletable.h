@@ -20,10 +20,10 @@ public:
 	virtual MxU32 Hash(MxVariable*) override;                // vtable+0x18
 };
 
-// VTABLE: LEGO1 0x100dc1b0 SYNTHETIC
+// VTABLE: LEGO1 0x100dc1b0
 // class MxCollection<MxVariable *>
 
-// VTABLE: LEGO1 0x100dc1e8 SYNTHETIC
+// VTABLE: LEGO1 0x100dc1e8
 // class MxHashTable<MxVariable *>
 
 #endif // MXVARIABLETABLE_H

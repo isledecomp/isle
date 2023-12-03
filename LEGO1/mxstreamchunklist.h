@@ -6,10 +6,10 @@
 
 class MxStreamChunk;
 
-// VTABLE: LEGO1 0x100dc5d0 SYNTHETIC
+// VTABLE: LEGO1 0x100dc5d0
 // class MxCollection<MxStreamChunk *>
 
-// VTABLE: LEGO1 0x100dc5e8 SYNTHETIC
+// VTABLE: LEGO1 0x100dc5e8
 // class MxList<MxStreamChunk *>
 
 // VTABLE: LEGO1 0x100dc600

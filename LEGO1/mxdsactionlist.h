@@ -6,10 +6,10 @@
 
 class MxDSAction;
 
-// VTABLE: LEGO1 0x100dcea8 SYNTHETIC
+// VTABLE: LEGO1 0x100dcea8
 // class MxCollection<MxDSAction *>
 
-// VTABLE: LEGO1 0x100dcec0 SYNTHETIC
+// VTABLE: LEGO1 0x100dcec0
 // class MxList<MxDSAction *>
 
 // VTABLE: LEGO1 0x100dced8

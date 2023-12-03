@@ -2,8 +2,7 @@ import os
 import sys
 import argparse
 from isledecomp.dir import walk_source_dir, is_file_cpp
-from isledecomp.parser import find_code_blocks
-from isledecomp.parser.util import is_exact_offset_comment
+from isledecomp.parser import DecompParser
 
 
 def sig_truncate(sig: str) -> str:
@@ -16,23 +15,21 @@ def check_file(filename: str, verbose: bool = False) -> bool:
     """Open and read the given file, then check whether the code blocks
     are in order. If verbose, print each block."""
 
+    parser = DecompParser()
     with open(filename, "r", encoding="utf-8") as f:
-        code_blocks = find_code_blocks(f)
+        parser.read_lines(f)
 
-    bad_comments = [
-        (block.start_line, block.offset_comment)
-        for block in code_blocks
-        if not is_exact_offset_comment(block.offset_comment)
-    ]
-
-    just_offsets = [block.offset for block in code_blocks]
+    just_offsets = [block.offset for block in parser.functions]
     sorted_offsets = sorted(just_offsets)
     file_out_of_order = just_offsets != sorted_offsets
+
+    # TODO: When we add parser error severity, actual errors that obstruct
+    # parsing should probably be shown here regardless of verbose mode
 
     # If we detect inexact comments, don't print anything unless we are
     # in verbose mode. If the file is out of order, we always print the
     # file name.
-    should_report = (len(bad_comments) > 0 and verbose) or file_out_of_order
+    should_report = (len(parser.alerts) > 0 and verbose) or file_out_of_order
 
     if not should_report and not file_out_of_order:
         return False
@@ -44,22 +41,22 @@ def check_file(filename: str, verbose: bool = False) -> bool:
             order_lookup = {k: i for i, k in enumerate(sorted_offsets)}
             prev_offset = 0
 
-            for block in code_blocks:
+            for fun in parser.functions:
                 msg = " ".join(
                     [
-                        " " if block.offset > prev_offset else "!",
-                        f"{block.offset:08x}",
-                        f"{block.end_line - block.start_line:4} lines",
-                        f"{order_lookup[block.offset]:3}",
+                        " " if fun.offset > prev_offset else "!",
+                        f"{fun.offset:08x}",
+                        f"{fun.end_line - fun.line_number:4} lines",
+                        f"{order_lookup[fun.offset]:3}",
                         "    ",
-                        sig_truncate(block.signature),
+                        sig_truncate(fun.signature),
                     ]
                 )
                 print(msg)
-                prev_offset = block.offset
+                prev_offset = fun.offset
 
-        for line_no, line in bad_comments:
-            print(f"* line {line_no:3} bad offset comment ({line})")
+        for alert in parser.alerts:
+            print(f"* line {alert.line_number:4} {alert.code} ({alert.line})")
 
         print()
 

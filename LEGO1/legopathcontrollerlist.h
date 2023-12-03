@@ -5,7 +5,7 @@
 #include "mxlist.h"
 #include "mxtypes.h"
 
-// VTABLE: LEGO1 0x100d6320 SYNTHETIC
+// VTABLE: LEGO1 0x100d6320
 // class MxPtrList<LegoPathController>
 
 // VTABLE: LEGO1 0x100d6338
@@ -17,10 +17,10 @@ public:
 	static void Destroy(LegoPathController*);
 };
 
-// VTABLE: LEGO1 0x100d6380 SYNTHETIC
+// VTABLE: LEGO1 0x100d6380
 // class MxCollection<LegoPathController *>
 
-// VTABLE: LEGO1 0x100d6398 SYNTHETIC
+// VTABLE: LEGO1 0x100d6398
 // class MxList<LegoPathController *>
 
 #endif // LEGOPATHCONTROLLERLIST_H

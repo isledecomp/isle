@@ -8,7 +8,7 @@ DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0xc);
 // FUNCTION: LEGO1 0x100bfa80
 MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 {
-	// DECOMP: ALPHA 0x1008b99d ?
+	// DECOMP ALPHA 0x1008b99d ?
 
 	MxDSAction* found = NULL;
 
