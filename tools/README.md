@@ -135,10 +135,10 @@ Use `pip` to install the required packages to be able to use the Python tools fo
 pip install -r tools/requirements.txt
 ```
 
-* `reccmp`: Compares the original EXE or DLL with a recompiled EXE or DLL, provided a PDB file
-* `verexp`: Verifies exports by comparing the exports of the original DLL and the recompiled DLL
-* `checkorder`: Checks function declarations, ensuring they appear in ascending order within a unit
-* `isledecomp`: A library that implements a parser to identify the "decompilation" annotations (see above)
+* [`reccmp`](/tools/reccmp): Compares the original EXE or DLL with a recompiled EXE or DLL, provided a PDB file
+* [`verexp`](/tools/checkorder): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
+* [`checkorder`](/tools/checkorder): Checks function declarations, ensuring they appear in ascending order within a unit
+* [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the "decompilation" annotations (see above)
 
 ## Testing
 
