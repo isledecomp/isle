@@ -23,10 +23,10 @@ This repository currently has only one goal: accuracy to the original executable
 
 ## Overview
 
-* [3rdparty](/3rdparty): Contains code obtained from third parties, not including Mindscape. Generally, these are libraries that have been placed in the public domain or are freely available on the web. As these are unaltered files, our style guide (see below) does not apply.
-* [ISLE](/ISLE): Decompilation of `ISLE.EXE`. It depends on some code in `LEGO1`.
-* [LEGO1](/LEGO1): Decompilation of `LEGO1.DLL`. This folder contains code from Mindscape's custom in-house engine called **Omni** (file pattern: `mx*`), the LEGO Island-specific extensions for Omni and the game's code (file pattern: `lego*`) as well as several utility libraries developed by Mindscape.
-* [tools](/tools): A set of tools aiding in the decompilation effort.
+* [`3rdparty`](/3rdparty): Contains code obtained from third parties, not including Mindscape. Generally, these are libraries that have been placed in the public domain or are freely available on the web. As these are unaltered files, our style guide (see below) does not apply.
+* [`ISLE`](/ISLE): Decompilation of `ISLE.EXE`. It depends on some code in `LEGO1`.
+* [`LEGO1`](/LEGO1): Decompilation of `LEGO1.DLL`. This folder contains code from Mindscape's custom in-house engine called **Omni** (file pattern: `mx*`), the LEGO Island-specific extensions for Omni and the game's code (file pattern: `lego*`) as well as several utility libraries developed by Mindscape.
+* [`tools`](/tools): A set of tools aiding in the decompilation effort.
 
 ## Tooling
 
