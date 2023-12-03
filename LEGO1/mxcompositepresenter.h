@@ -37,7 +37,7 @@ public:
 	virtual MxBool VTable0x64(undefined4 p_unknown);                         // vtable+0x64
 
 private:
-	MxCompositePresenterList m_list;
+	MxCompositePresenterList m_list; // 0x40
 };
 
 #endif // MXCOMPOSITEPRESENTER_H
