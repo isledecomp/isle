@@ -1,60 +1,55 @@
-# LEGO Island Decompilation
+# Contributing
 
-[Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2COf_bB6cfgTapD5WduAfPz) | [Contributing](https://github.com/isledecomp/isle/blob/master/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
-  
-This is a **work-in-progress** decompilation of LEGO Island version 1.1. It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
+## Learning Decompilation
 
-## Status
+Generally, decompilation is a fairly advanced skill. If you aren't already familiar with it, it will likely take you months, or even years, to learn the skills necessary to do it (depending on your current proficiency with C/C++ and x86 assembly). If you're still interested, [part 1 of the decompilation vlog](https://www.youtube.com/watch?v=MToTEqoVv3I) covers the overall process and should give you a starting point that you can dive in from.
 
-<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
+## Ghidra Server
 
-Currently `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching, however we anticipate they will as more of the overall codebase is implemented.
+For documenting the original binaries and generating pseudocode that we decompile with, we primarily use [Ghidra](https://ghidra-sre.org/) (it's free and open source). To help with collaboration, we have a shared Ghidra repository with all of our current work. You are free to check it out and mess around with it locally, however to prevent sabotage, you will need to request permission before you can push your changes back to the server (ask in the Matrix room).
 
-`LEGO1.DLL` is still very much incomplete and cannot be used at this time. Instead, if you want to test this, it is recommended to pair the recompiled `ISLE.EXE` with the `LEGO1.DLL` from the original game.
+To access the Ghidra repository, use the following details:
 
-## Building
+- Address: `server.mattkc.com`
+- Port: `13100`
 
-This projects uses the [CMake](https://cmake.org/) build system, which allows for a high degree of versatility regarding compilers and development environments. For the most accurate results, it is recommended to use Microsoft Visual C++ 4.20 (the same compiler used to build the original game). Since we're trying to match this to the original executable as closely as possible, all contributions will be graded with the output of this compiler.
+## General Guidelines
 
+If you have contributions, feel free to create a pull request! Someone will review and merge it (or provide feedback) as soon as possible.
 
-These instructions will outline how to compile this repository into an accurate instruction-matching binary with Visual C++ 4.2. If you wish, you can try using other compilers, but this is at your own risk and won't be covered in this guide.
+Please keep your pull requests small and understandable; you may be able to shoot ahead and make a lot of progress in a short amount of time, but this is a collaborative project, so you must allow others to catch up and follow along. Large pull requests become significantly more unwieldy to review, and as such make it exponentially more likely for a mistake or error to go undetected. They also make it harder to merge other pull requests because the more files you modify, the more likely it is for a merge conflict to occur. A general guideline is to keep submissions limited to one class at a time. Sometimes two or more classes may be too interlinked for this to be feasible, so this is not a hard rule, however if your PR is starting to modify more than 10 or so files, it's probably getting too big.
 
-#### Prerequisites
+This repository currently has only one goal: accuracy to the original executables. We are byte/instruction matching as much as possible, which means the priority is making the original compiler (MSVC 4.20) produce code that matches the original game. As such, modernizations and bug fixes will probably be rejected for the time being.
 
-You will need the following software installed:
+## Overview
 
-- Microsoft Visual C++ 4.2. This can be found on many abandonware sites, but the installer can be a little iffy on modern versions of Windows. For convenience, I made a [portable version](https://github.com/itsmattkc/msvc420) that can be downloaded and used quickly instead.
-- [CMake](https://cmake.org/). A copy is often included with the "Desktop development with C++" workload in newer versions of Visual Studio, however it can also be installed as a standalone app.
+* [3rdparty](/3rdparty): Contains code obtained from third parties, not including Mindscape. Generally, these are libraries that have been placed in the public domain or are freely available on the web. As these are unaltered files, our style guide (see below) does not apply.
+* [ISLE](/ISLE): Decompilation of `ISLE.EXE`. It depends on some code in `LEGO1`.
+* [LEGO1](/LEGO1): Decompilation of `LEGO1.DLL`. This folder contains code from Mindscape's custom in-house engine called **Omni** (file pattern: `mx*`), the LEGO Island-specific extensions for Omni and the game's code (file pattern: `lego*`) as well as several utility libraries developed by Mindscape.
+* [tools](/tools): A set of tools aiding in the decompilation effort.
 
-#### Compiling
+## Tooling
 
-1. Open a Command Prompt (`cmd`).
-1. From Visual C++ 4.2, run `BIN/VCVARS32.BAT x86` to populate the path and other environment variables for compiling with MSVC.
-1. Make a folder for compiled objects to go, such as a `build` folder inside the source repository (the folder you cloned/downloaded to).
-1. In your Command Prompt, `cd` to the build folder.
-1. Configure the project with CMake by running:
-```
-cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
-```
-  - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
-  - Replace `<path-to-source>` with the source repository. Can be `..` if your build folder is inside the source repository.
-  - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. `Debug` builds are not recommended because they are unlikely to be compatible with the retail `LEGO1.DLL`, which is currently the only way to really use this decomp.
-  - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
-1. Build the project by running `nmake` or `cmake --build <build-folder>`
-1. When this is done, there should a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
+Please make yourself familiar with the available tooling and annotations [here](/tools/README.md).
 
-If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
+## Code Style
 
-## Usage
+In general, we're not exhaustively strict about coding style, but there are some preferable guidelines to follow that have been adopted from what we know about the original codebase:
 
-Simply place the compiled `ISLE.EXE` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Unless you're a developer, disregard the compiled `LEGO1.DLL` for now as it is too incomplete to be usable. Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys point to the correct location for the asset files.
+### Formatting
 
-## Contributing
+We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.html) with a configuration file that aims to replicate the code formatting employed by the original developers. There are [integrations](https://clang.llvm.org/docs/ClangFormat.html#vim-integration) available for most editors and IDEs. The required `clang-format` version is `17.x`.
 
-If you're interested in helping/contributing to this project, check out the [CONTRIBUTING](https://github.com/isledecomp/isle/blob/master/CONTRIBUTING.md) page.
+### Naming conventions
 
-## Additional Information
+The following conventions should generally be applied everywhere except for the utility libraries (`LEGO1/realtime`, `LEGO1/tgl`, `LEGO1/viewmanager`) and any 3rd party libraries (`3rdparty`).
 
-### Which version of LEGO Island do I have?
+- `PascalCase` for classes, function names, and enumerations.
+- `m_camelCase` for member variables.
+- `g_camelCase` for global variables.
+- `p_camelCase` for function parameters.
+- Within the Omni engine (file pattern: `mx*`), instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
 
-Right click on `LEGO1.DLL`, select `Properties`, and switch to the `Details` tab. Under `Version` you should either see `1.0.0.0` (1.0) or `1.1.0.0` (1.1). Additionally, you can look at the game disc files; 1.0's files will all say August 8, 1997, and 1.1's files will all say September 8, 1997. Version 1.1 is by far the most common, especially if you're not using the English or Japanese versions, so that's most likely the version you have.
+## Questions?
+
+For any further questions, feel free to ask in either the [Matrix chatroom](https://matrix.to/#/#isledecomp:matrix.org) or on the [forum](https://forum.mattkc.com/viewforum.php?f=1).
