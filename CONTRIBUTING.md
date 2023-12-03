@@ -30,7 +30,7 @@ This repository currently has only one goal: accuracy to the original executable
 
 ## Tooling
 
-Please make yourself familiar with the available tooling and annotations [here](/tools/README.md).
+Please make yourself familiar with the [available tooling and annotations](/tools/README.md).
 
 ## Code Style
 
