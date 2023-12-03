@@ -101,7 +101,7 @@ public:
 
 ## Member variables (**WIP**)
 
-Member variablse should be annotated with their relative offsets.
+Member variables should be annotated with their relative offsets.
 
 ```
 class MxDSObject : public MxCore {
