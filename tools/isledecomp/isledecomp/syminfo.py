@@ -40,11 +40,12 @@ class SymInfo:
                 current_section = line[4:]
 
             if current_section == "SYMBOLS" and "S_GPROC32" in line:
+                sym_section = int(line[21:25], 16)
                 sym_addr = int(line[26:34], 16)
 
                 info = RecompiledInfo()
-                info.addr = (
-                    sym_addr + sym_recompfile.imagebase + sym_recompfile.textvirt
+                info.addr = sym_addr + sym_recompfile.get_section_offset_by_index(
+                    sym_section
                 )
 
                 use_dbg_offs = False
