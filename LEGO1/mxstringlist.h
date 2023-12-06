@@ -14,4 +14,7 @@ public:
 	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list){};
 };
 
+// VTABLE: LEGO1 0x100dd070
+// class MxListCursor<MxString>
+
 #endif // MXSTRINGLIST_H

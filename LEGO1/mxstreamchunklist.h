@@ -23,9 +23,13 @@ public:
 	static void Destroy(MxStreamChunk* p_chunk);
 };
 
+// VTABLE: LEGO1 0x100dc510
 class MxStreamChunkListCursor : public MxListCursor<MxStreamChunk*> {
 public:
 	MxStreamChunkListCursor(MxStreamChunkList* p_list) : MxListCursor<MxStreamChunk*>(p_list){};
 };
+
+// VTABLE: LEGO1 0x100dc528
+// class MxListCursor<MxStreamChunk *>
 
 #endif // MXSTREAMCHUNKLIST_H

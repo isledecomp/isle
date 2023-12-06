@@ -86,6 +86,24 @@ void MxRegion::vtable18(MxRect32& p_rect)
 	m_rect.UpdateBounds(p_rect);
 }
 
+// SYNTHETIC: LEGO1 0x100c3be0
+// MxRegionListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c3c50
+// MxPtrListCursor<MxRegionTopBottom>::~MxPtrListCursor<MxRegionTopBottom>
+
+// SYNTHETIC: LEGO1 0x100c3ca0
+// MxListCursor<MxRegionTopBottom *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c3d10
+// MxPtrListCursor<MxRegionTopBottom>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c3d80
+// MxListCursor<MxRegionTopBottom *>::~MxListCursor<MxRegionTopBottom *>
+
+// SYNTHETIC: LEGO1 0x100c3dd0
+// MxRegionListCursor::~MxRegionListCursor
+
 // FUNCTION: LEGO1 0x100c3e20
 MxBool MxRegion::vtable1c(MxRect32& p_rect)
 {
@@ -104,6 +122,21 @@ MxBool MxRegion::vtable1c(MxRect32& p_rect)
 
 	return FALSE;
 }
+
+// SYNTHETIC: LEGO1 0x100c4790
+// MxRegionLeftRightListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c4800
+// MxPtrListCursor<MxRegionLeftRight>::~MxPtrListCursor<MxRegionLeftRight>
+
+// SYNTHETIC: LEGO1 0x100c4850
+// MxListCursor<MxRegionLeftRight *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c48c0
+// MxPtrListCursor<MxRegionLeftRight>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c4930
+// MxListCursor<MxRegionLeftRight *>::~MxListCursor<MxRegionLeftRight *>
 
 // FUNCTION: LEGO1 0x100c4c90
 MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
@@ -166,6 +199,15 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 		}
 	}
 }
+
+// TEMPLATE: LEGO1 0x100c54f0
+// MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
+
+// TEMPLATE: LEGO1 0x100c5560
+// MxRegionLeftRightListCursor::~MxRegionLeftRightListCursor
+
+// TEMPLATE: LEGO1 0x100c55b0
+// MxListCursor<MxRegionLeftRight *>::operator=
 
 // FUNCTION: LEGO1 0x100c55d0
 MxRegionTopBottom* MxRegionTopBottom::Clone()
