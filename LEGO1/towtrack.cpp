@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(TowTrack, 0x180);
 
-// OFFSET: LEGO1 0x1004c720
+// FUNCTION: LEGO1 0x1004c720
 TowTrack::TowTrack()
 {
 	this->m_unk168 = 0;

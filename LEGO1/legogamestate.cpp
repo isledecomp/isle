@@ -13,10 +13,10 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// GLOBAL OFFSET: LEGO1 0x100f3e40
+// GLOBAL: LEGO1 0x100f3e40
 const char* g_fileExtensionGS = ".GS";
 
-// GLOBAL OFFSET: LEGO1 0x100f3e58
+// GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
 	{"c_dbbkfny0", "lego red"},    {"c_dbbkxly0", "lego white"},  {"c_chbasey0", "lego black"},
 	{"c_chbacky0", "lego black"},  {"c_chdishy0", "lego white"},  {"c_chhorny0", "lego black"},
@@ -37,10 +37,10 @@ ColorStringStruct g_colorSaveData[43] = {
 
 // NOTE: This offset = the end of the variables table, the last entry
 // in that table is a special entry, the string "END_OF_VARIABLES"
-// GLOBAL OFFSET: LEGO1 0x100f3e50
+// GLOBAL: LEGO1 0x100f3e50
 extern const char* s_endOfVariables;
 
-// OFFSET: LEGO1 0x10039550
+// FUNCTION: LEGO1 0x10039550
 LegoGameState::LegoGameState()
 {
 	// TODO
@@ -60,7 +60,7 @@ LegoGameState::LegoGameState()
 	SerializeScoreHistory(1);
 }
 
-// OFFSET: LEGO1 0x10039720
+// FUNCTION: LEGO1 0x10039720
 LegoGameState::~LegoGameState()
 {
 	LegoROI::SetSomeHandlerFunction(NULL);
@@ -78,7 +78,7 @@ LegoGameState::~LegoGameState()
 	delete[] m_savePath;
 }
 
-// OFFSET: LEGO1 0x10039980
+// FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
 	MxResult result;
@@ -116,14 +116,14 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	return result;
 }
 
-// OFFSET: LEGO1 0x10039c60 STUB
+// STUB: LEGO1 0x10039c60
 MxResult LegoGameState::Load(MxULong)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10039f00
+// FUNCTION: LEGO1 0x10039f00
 void LegoGameState::SetSavePath(char* p_savePath)
 {
 	if (m_savePath != NULL)
@@ -137,7 +137,7 @@ void LegoGameState::SetSavePath(char* p_savePath)
 		m_savePath = NULL;
 }
 
-// OFFSET: LEGO1 0x1003a020
+// FUNCTION: LEGO1 0x1003a020
 MxResult LegoGameState::WriteEndOfVariables(LegoStream* p_stream)
 {
 	MxU8 len = strlen(s_endOfVariables);
@@ -146,7 +146,7 @@ MxResult LegoGameState::WriteEndOfVariables(LegoStream* p_stream)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1003a170
+// FUNCTION: LEGO1 0x1003a170
 void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 {
 	char baseForSlot[2] = "0";
@@ -166,31 +166,31 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 	*p_outPath = MxString(path);
 }
 
-// OFFSET: LEGO1 0x1003a2e0 STUB
+// STUB: LEGO1 0x1003a2e0
 void LegoGameState::SerializePlayersInfo(MxS16 p)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003a720 STUB
+// STUB: LEGO1 0x1003a720
 void LegoGameState::FUN_1003a720(MxU32 p_unk)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003b060 STUB
+// STUB: LEGO1 0x1003b060
 void LegoGameState::HandleAction(MxU32 p_unk)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003bac0
+// FUNCTION: LEGO1 0x1003bac0
 void LegoGameState::SetROIHandlerFunction()
 {
 	LegoROI::SetSomeHandlerFunction(&ROIHandlerFunction);
 }
 
-// OFFSET: LEGO1 0x1003bad0
+// FUNCTION: LEGO1 0x1003bad0
 MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen)
 {
 	if (p_output != NULL && p_copyLen != 0 &&
@@ -211,7 +211,7 @@ MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x1003bbb0
+// FUNCTION: LEGO1 0x1003bbb0
 LegoState* LegoGameState::GetState(COMPAT_CONST char* p_stateName)
 {
 	for (MxS32 i = 0; i < m_stateCount; ++i)
@@ -220,7 +220,7 @@ LegoState* LegoGameState::GetState(COMPAT_CONST char* p_stateName)
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x1003bc00
+// FUNCTION: LEGO1 0x1003bc00
 LegoState* LegoGameState::CreateState(COMPAT_CONST char* p_stateName)
 {
 	LegoState* newState = (LegoState*) ObjectFactory()->Create(p_stateName);
@@ -229,7 +229,7 @@ LegoState* LegoGameState::CreateState(COMPAT_CONST char* p_stateName)
 	return newState;
 }
 
-// OFFSET: LEGO1 0x1003bc30
+// FUNCTION: LEGO1 0x1003bc30
 void LegoGameState::RegisterState(LegoState* p_state)
 {
 	MxS32 targetIndex;
@@ -255,13 +255,13 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
-// OFFSET: LEGO1 0x1003cdd0 STUB
+// STUB: LEGO1 0x1003cdd0
 void LegoGameState::SerializeScoreHistory(MxS16 p)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1003cea0
+// FUNCTION: LEGO1 0x1003cea0
 void LegoGameState::SetSomeEnumState(undefined4 p_state)
 {
 	m_unk10 = p_state;

@@ -5,19 +5,19 @@
 
 DECOMP_SIZE_ASSERT(MxSmkPresenter, 0x720);
 
-// OFFSET: LEGO1 0x100b3650
+// FUNCTION: LEGO1 0x100b3650
 MxSmkPresenter::MxSmkPresenter()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100b3870
+// FUNCTION: LEGO1 0x100b3870
 MxSmkPresenter::~MxSmkPresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100b38d0
+// FUNCTION: LEGO1 0x100b38d0
 void MxSmkPresenter::Init()
 {
 	m_unk0x71c = 0;
@@ -26,7 +26,7 @@ void MxSmkPresenter::Init()
 	m_flags &= 0xfb;
 }
 
-// OFFSET: LEGO1 0x100b3900
+// FUNCTION: LEGO1 0x100b3900
 void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
@@ -41,13 +41,13 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// OFFSET: LEGO1 0x100b3940 STUB
+// STUB: LEGO1 0x100b3940
 void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b3960
+// FUNCTION: LEGO1 0x100b3960
 void MxSmkPresenter::CreateBitmap()
 {
 	if (m_bitmap)
@@ -57,13 +57,13 @@ void MxSmkPresenter::CreateBitmap()
 	m_bitmap->SetSize(m_mxSmack.m_smack.m_width, m_mxSmack.m_smack.m_height, NULL, FALSE);
 }
 
-// OFFSET: LEGO1 0x100b3a00 STUB
+// STUB: LEGO1 0x100b3a00
 void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b4260
+// FUNCTION: LEGO1 0x100b4260
 MxU32 MxSmkPresenter::VTable0x88()
 {
 	MxU32 result = m_unk0x71c;
@@ -84,7 +84,7 @@ MxU32 MxSmkPresenter::VTable0x88()
 	}
 }
 
-// OFFSET: LEGO1 0x100b42c0
+// FUNCTION: LEGO1 0x100b42c0
 void MxSmkPresenter::VTable0x70()
 {
 	MxPalette* palette = m_bitmap->CreatePalette();
@@ -92,13 +92,13 @@ void MxSmkPresenter::VTable0x70()
 	delete palette;
 }
 
-// OFFSET: LEGO1 0x100b4300
+// FUNCTION: LEGO1 0x100b4300
 void MxSmkPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100c5d40
+// FUNCTION: LEGO1 0x100c5d40
 void MxSmkPresenter::FUN_100c5d40(MxSmack* p_mxSmack)
 {
 	if (p_mxSmack->m_unk0x6a0)

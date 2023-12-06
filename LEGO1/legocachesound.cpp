@@ -1,18 +1,18 @@
 #include "legocachesound.h"
 
-// OFFSET: LEGO1 0x100064d0
+// FUNCTION: LEGO1 0x100064d0
 LegoCacheSound::LegoCacheSound()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x10006630 STUB
+// STUB: LEGO1 0x10006630
 LegoCacheSound::~LegoCacheSound()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100066d0 STUB
+// STUB: LEGO1 0x100066d0
 void LegoCacheSound::Init()
 {
 	// TODO

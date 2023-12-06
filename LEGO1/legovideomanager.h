@@ -8,7 +8,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100d9c88
+// VTABLE: LEGO1 0x100d9c88
 // SIZE 0x590
 class LegoVideoManager : public MxVideoManager {
 public:
@@ -27,7 +27,7 @@ public:
 	void SetSkyColor(float r, float g, float b);
 	inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
 
-	// OFFSET: LEGO1 0x1007c4c0
+	// FUNCTION: LEGO1 0x1007c4c0
 	void OverrideSkyColor(MxBool p_shouldOverride)
 	{
 		this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);

@@ -6,7 +6,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100dc848
+// VTABLE: LEGO1 0x100dc848
 // SIZE 0x414
 class MxPalette : public MxCore {
 public:

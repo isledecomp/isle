@@ -5,7 +5,7 @@
 #include "mxdsaction.h"
 #include "mxpoint32.h"
 
-// VTABLE 0x100dcd40
+// VTABLE: LEGO1 0x100dcd40
 // SIZE 0xb8
 class MxDSMediaAction : public MxDSAction {
 public:
@@ -15,14 +15,14 @@ public:
 	void CopyFrom(MxDSMediaAction& p_dsMediaAction);
 	MxDSMediaAction& operator=(MxDSMediaAction& p_dsMediaAction);
 
-	// OFFSET: LEGO1 0x100c8be0
+	// FUNCTION: LEGO1 0x100c8be0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f7624
+		// GLOBAL: LEGO1 0x100f7624
 		return "MxDSMediaAction";
 	}
 
-	// OFFSET: LEGO1 0x100c8bf0
+	// FUNCTION: LEGO1 0x100c8bf0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(name);

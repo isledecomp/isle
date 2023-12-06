@@ -5,19 +5,19 @@
 
 DECOMP_SIZE_ASSERT(MxSoundPresenter, 0x54)
 
-// OFFSET: LEGO1 0x1000d430
+// FUNCTION: LEGO1 0x1000d430
 MxSoundPresenter::~MxSoundPresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x1000d490
+// FUNCTION: LEGO1 0x1000d490
 void MxSoundPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b1a50
+// FUNCTION: LEGO1 0x100b1a50
 void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MSoundManager())
@@ -31,7 +31,7 @@ void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 		MxMediaPresenter::Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b1aa0
+// FUNCTION: LEGO1 0x100b1aa0
 MxResult MxSoundPresenter::AddToManager()
 {
 	MxResult ret = FAILURE;

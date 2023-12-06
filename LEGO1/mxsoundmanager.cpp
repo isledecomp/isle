@@ -9,29 +9,29 @@
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
 
-// OFFSET: LEGO1 0x100ae740
+// FUNCTION: LEGO1 0x100ae740
 MxSoundManager::MxSoundManager()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100ae7b0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100ae7b0
 // MxSoundManager::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100ae7d0
+// FUNCTION: LEGO1 0x100ae7d0
 MxSoundManager::~MxSoundManager()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100ae830
+// FUNCTION: LEGO1 0x100ae830
 void MxSoundManager::Init()
 {
 	m_directSound = NULL;
 	m_dsBuffer = NULL;
 }
 
-// OFFSET: LEGO1 0x100ae840
+// FUNCTION: LEGO1 0x100ae840
 void MxSoundManager::Destroy(MxBool p_fromDestructor)
 {
 	if (this->m_thread) {
@@ -56,7 +56,7 @@ void MxSoundManager::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// OFFSET: LEGO1 0x100ae8b0
+// FUNCTION: LEGO1 0x100ae8b0
 MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxResult status = FAILURE;
@@ -131,13 +131,13 @@ done:
 	return status;
 }
 
-// OFFSET: LEGO1 0x100aeab0
+// FUNCTION: LEGO1 0x100aeab0
 void MxSoundManager::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100aeac0
+// FUNCTION: LEGO1 0x100aeac0
 void MxSoundManager::SetVolume(MxS32 p_volume)
 {
 	MxAudioManager::SetVolume(p_volume);
@@ -153,7 +153,7 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100aebd0
+// FUNCTION: LEGO1 0x100aebd0
 MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId)
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -170,7 +170,7 @@ MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_obje
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x100aecf0
+// FUNCTION: LEGO1 0x100aecf0
 MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_unk)
 {
 	if (!p_unk)
@@ -178,7 +178,7 @@ MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_unk)
 	return g_mxcoreCount[p_unk];
 }
 
-// OFFSET: LEGO1 0x100aed10
+// FUNCTION: LEGO1 0x100aed10
 void MxSoundManager::Pause()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -191,7 +191,7 @@ void MxSoundManager::Pause()
 			((MxWavePresenter*) presenter)->Pause();
 }
 
-// OFFSET: LEGO1 0x100aee10
+// FUNCTION: LEGO1 0x100aee10
 void MxSoundManager::Resume()
 {
 	MxAutoLocker lock(&m_criticalSection);

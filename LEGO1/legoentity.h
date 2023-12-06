@@ -8,7 +8,7 @@
 #include "mxentity.h"
 #include "realtime/vector.h"
 
-// VTABLE 0x100d4858
+// VTABLE: LEGO1 0x100d4858
 // SIZE 0x68 (probably)
 class LegoEntity : public MxEntity {
 public:
@@ -19,14 +19,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
-	// OFFSET: LEGO1 0x1000c2f0
+	// FUNCTION: LEGO1 0x1000c2f0
 	inline const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f0064
+		// GLOBAL: LEGO1 0x100f0064
 		return "LegoEntity";
 	}
 
-	// OFFSET: LEGO1 0x1000c300
+	// FUNCTION: LEGO1 0x1000c300
 	inline MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, LegoEntity::ClassName()) || MxEntity::IsA(name);

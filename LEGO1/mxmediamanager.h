@@ -7,7 +7,7 @@
 #include "mxthread.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100dc6b0
+// VTABLE: LEGO1 0x100dc6b0
 // SIZE 0x2c
 class MxMediaManager : public MxCore {
 public:

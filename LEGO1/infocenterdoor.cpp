@@ -1,18 +1,18 @@
 #include "infocenterdoor.h"
 
-// OFFSET: LEGO1 0x10037730 STUB
+// STUB: LEGO1 0x10037730
 InfocenterDoor::InfocenterDoor()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100378f0 STUB
+// STUB: LEGO1 0x100378f0
 InfocenterDoor::~InfocenterDoor()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100379e0 STUB
+// STUB: LEGO1 0x100379e0
 MxLong InfocenterDoor::Notify(MxParam& p)
 {
 	// TODO

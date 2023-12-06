@@ -5,7 +5,7 @@
 #include "mxbitmap.h"
 #include "mxmediapresenter.h"
 
-// VTABLE 0x100d4be8
+// VTABLE: LEGO1 0x100d4be8
 // SIZE 0x64
 class MxVideoPresenter : public MxMediaPresenter {
 public:
@@ -20,14 +20,14 @@ public:
 	MxVideoPresenter() { Init(); }
 	virtual ~MxVideoPresenter() override; // vtable+0x0
 
-	// OFFSET: LEGO1 0x1000c820
+	// FUNCTION: LEGO1 0x1000c820
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f0760
+		// GLOBAL: LEGO1 0x100f0760
 		return "MxVideoPresenter";
 	}
 
-	// OFFSET: LEGO1 0x1000c830
+	// FUNCTION: LEGO1 0x1000c830
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(name);

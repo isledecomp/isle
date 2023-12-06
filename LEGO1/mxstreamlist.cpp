@@ -5,10 +5,10 @@ DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0xc);
 DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0xc);
 DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0xc);
 
-// OFFSET: LEGO1 0x100bfa80
+// FUNCTION: LEGO1 0x100bfa80
 MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 {
-	// DECOMP: ALPHA 0x1008b99d ?
+	// DECOMP ALPHA 0x1008b99d ?
 
 	MxDSAction* found = NULL;
 
@@ -30,7 +30,7 @@ MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 	return found;
 }
 
-// OFFSET: LEGO1 0x100c2240
+// FUNCTION: LEGO1 0x100c2240
 MxNextActionDataStart* MxStreamListMxNextActionDataStart::Find(MxU32 p_id, MxS16 p_value)
 {
 	MxNextActionDataStart* match = NULL;

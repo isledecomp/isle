@@ -4,25 +4,25 @@
 
 DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
 
-// OFFSET: LEGO1 0x100a9eb0
+// FUNCTION: LEGO1 0x100a9eb0
 float ViewROI::IntrinsicImportance() const
 {
 	return .5;
 } // for now
 
-// OFFSET: LEGO1 0x100a9ec0
+// FUNCTION: LEGO1 0x100a9ec0
 const Tgl::Group* ViewROI::GetGeometry() const
 {
 	return geometry;
 }
 
-// OFFSET: LEGO1 0x100a9ed0
+// FUNCTION: LEGO1 0x100a9ed0
 Tgl::Group* ViewROI::GetGeometry()
 {
 	return geometry;
 }
 
-// OFFSET: LEGO1 0x100a9ee0
+// FUNCTION: LEGO1 0x100a9ee0
 void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
@@ -35,7 +35,7 @@ void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 	}
 }
 
-// OFFSET: LEGO1 0x100aa250 TEMPLATE
+// SYNTHETIC: LEGO1 0x100aa250
 // ViewROI::`scalar deleting destructor'
 inline ViewROI::~ViewROI()
 {

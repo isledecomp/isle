@@ -24,7 +24,7 @@ class MxIdList : public list<MxU32> {};
 
 class MxNotificationPtrList : public list<MxNotification*> {};
 
-// VTABLE 0x100dc078
+// VTABLE: LEGO1 0x100dc078
 class MxNotificationManager : public MxCore {
 private:
 	MxNotificationPtrList* m_queue;    // 0x8

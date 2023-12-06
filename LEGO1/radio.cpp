@@ -1,6 +1,6 @@
 #include "radio.h"
 
-// OFFSET: LEGO1 0x1002c990 STUB
+// STUB: LEGO1 0x1002c990
 Radio::~Radio()
 {
 	// TODO

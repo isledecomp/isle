@@ -2,23 +2,23 @@
 
 DECOMP_SIZE_ASSERT(MxDSEvent, 0xb8)
 
-// OFFSET: LEGO1 0x100c95f0
+// FUNCTION: LEGO1 0x100c95f0
 MxDSEvent::MxDSEvent()
 {
 	this->SetType(MxDSType_Event);
 }
 
-// OFFSET: LEGO1 0x100c97a0
+// FUNCTION: LEGO1 0x100c97a0
 MxDSEvent::~MxDSEvent()
 {
 }
 
-// OFFSET: LEGO1 0x100c97f0
+// FUNCTION: LEGO1 0x100c97f0
 void MxDSEvent::CopyFrom(MxDSEvent& p_dsEvent)
 {
 }
 
-// OFFSET: LEGO1 0x100c9800
+// FUNCTION: LEGO1 0x100c9800
 MxDSEvent& MxDSEvent::operator=(MxDSEvent& p_dsEvent)
 {
 	if (this == &p_dsEvent)
@@ -29,7 +29,7 @@ MxDSEvent& MxDSEvent::operator=(MxDSEvent& p_dsEvent)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100c9830
+// FUNCTION: LEGO1 0x100c9830
 MxDSAction* MxDSEvent::Clone()
 {
 	MxDSEvent* clone = new MxDSEvent();

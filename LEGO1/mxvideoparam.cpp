@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// OFFSET: LEGO1 0x100bec70
+// FUNCTION: LEGO1 0x100bec70
 MxVideoParam::MxVideoParam()
 {
 	this->m_rect.SetRight(640);
@@ -16,7 +16,7 @@ MxVideoParam::MxVideoParam()
 	this->m_deviceId = NULL;
 }
 
-// OFFSET: LEGO1 0x100beca0
+// FUNCTION: LEGO1 0x100beca0
 MxVideoParam::MxVideoParam(
 	COMPAT_CONST MxRect32& p_rect,
 	MxPalette* p_pal,
@@ -32,7 +32,7 @@ MxVideoParam::MxVideoParam(
 	this->m_deviceId = NULL;
 }
 
-// OFFSET: LEGO1 0x100becf0
+// FUNCTION: LEGO1 0x100becf0
 MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 {
 	this->m_rect = p_videoParam.m_rect;
@@ -44,14 +44,14 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 	SetDeviceName(p_videoParam.m_deviceId);
 }
 
-// OFFSET: LEGO1 0x100bed50
+// FUNCTION: LEGO1 0x100bed50
 MxVideoParam::~MxVideoParam()
 {
 	if (this->m_deviceId != NULL)
 		delete[] this->m_deviceId;
 }
 
-// OFFSET: LEGO1 0x100bed70
+// FUNCTION: LEGO1 0x100bed70
 void MxVideoParam::SetDeviceName(char* id)
 {
 	if (this->m_deviceId != NULL)
@@ -69,7 +69,7 @@ void MxVideoParam::SetDeviceName(char* id)
 	}
 }
 
-// OFFSET: LEGO1 0x100bede0
+// FUNCTION: LEGO1 0x100bede0
 MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 {
 	this->m_rect = p_videoParam.m_rect;

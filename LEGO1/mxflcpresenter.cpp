@@ -8,7 +8,7 @@
 
 DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 
-// OFFSET: LEGO1 0x100b3310
+// FUNCTION: LEGO1 0x100b3310
 MxFlcPresenter::MxFlcPresenter()
 {
 	this->m_flicHeader = NULL;
@@ -16,7 +16,7 @@ MxFlcPresenter::MxFlcPresenter()
 	this->m_flags &= 0xfb;
 }
 
-// OFFSET: LEGO1 0x100b3420
+// FUNCTION: LEGO1 0x100b3420
 MxFlcPresenter::~MxFlcPresenter()
 {
 	if (this->m_flicHeader) {
@@ -24,14 +24,14 @@ MxFlcPresenter::~MxFlcPresenter()
 	}
 }
 
-// OFFSET: LEGO1 0x100b3490
+// FUNCTION: LEGO1 0x100b3490
 void MxFlcPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	m_flicHeader = (FLIC_HEADER*) new MxU8[p_chunk->GetLength()];
 	memcpy(m_flicHeader, p_chunk->GetData(), p_chunk->GetLength());
 }
 
-// OFFSET: LEGO1 0x100b34d0
+// FUNCTION: LEGO1 0x100b34d0
 void MxFlcPresenter::CreateBitmap()
 {
 	if (m_bitmap)
@@ -41,7 +41,7 @@ void MxFlcPresenter::CreateBitmap()
 	m_bitmap->SetSize(m_flicHeader->width, m_flicHeader->height, NULL, FALSE);
 }
 
-// OFFSET: LEGO1 0x100b3620
+// FUNCTION: LEGO1 0x100b3620
 void MxFlcPresenter::VTable0x70()
 {
 	MxPalette* pal = m_bitmap->CreatePalette();
