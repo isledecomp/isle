@@ -9,6 +9,9 @@
 class MxStringList : public MxList<MxString> {};
 
 // VTABLE: LEGO1 0x100dd058
-typedef MxListCursorChild<MxString> MxStringListCursor;
+class MxStringListCursor : public MxListCursor<MxString> {
+public:
+	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list){};
+};
 
 #endif // MXSTRINGLIST_H

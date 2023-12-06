@@ -24,12 +24,10 @@ public:
 };
 
 // VTABLE: LEGO1 0x100dcb88
-// class MxListCursorChildChild<MxRegionTopBottom *>
-typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
-
-// VTABLE: LEGO1 0x100dcc10
-// class MxListCursorChildChild<MxRegionLeftRight *>
-typedef MxListCursorChildChild<MxRegionLeftRight*> MxRegionLeftRightListCursor;
+class MxRegionListCursor : public MxPtrListCursor<MxRegionTopBottom> {
+public:
+	MxRegionListCursor(MxRegionList* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
+};
 
 // VTABLE: LEGO1 0x100dcc40
 // class MxCollection<MxRegionLeftRight *>
@@ -46,6 +44,12 @@ class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
 public:
 	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(Destroy) {}
 	static void Destroy(MxRegionLeftRight*);
+};
+
+// VTABLE: LEGO1 0x100dcc10
+class MxRegionLeftRightListCursor : public MxPtrListCursor<MxRegionLeftRight> {
+public:
+	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
 };
 
 #endif // MXREGIONLIST_H

@@ -23,6 +23,9 @@ public:
 	static void Destroy(MxStreamChunk* p_chunk);
 };
 
-typedef MxListCursorChild<MxStreamChunk*> MxStreamChunkListCursor;
+class MxStreamChunkListCursor : public MxListCursor<MxStreamChunk*> {
+public:
+	MxStreamChunkListCursor(MxStreamChunkList* p_list) : MxListCursor<MxStreamChunk*>(p_list){};
+};
 
 #endif // MXSTREAMCHUNKLIST_H

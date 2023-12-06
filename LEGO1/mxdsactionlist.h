@@ -26,6 +26,9 @@ private:
 	undefined m_unk18;
 };
 
-typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;
+class MxDSActionListCursor : public MxListCursor<MxDSAction*> {
+public:
+	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list){};
+};
 
 #endif // MXDSACTIONLIST_H
