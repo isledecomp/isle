@@ -15,6 +15,9 @@ public:
 	virtual ~Score() override;                  // vtable+0x0
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
+	// FUNCTION: LEGO1 0x100010b0
+	MxBool VTable0x5c() { return TRUE; }
+
 	// FUNCTION: LEGO1 0x100010c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -33,7 +36,6 @@ public:
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+18
 	virtual void Stop() override;                             // vtable+50
-	virtual MxBool VTable0x5c() override;                     // vtable+5c
 	virtual MxBool VTable0x64() override;                     // vtable+64
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+68
 

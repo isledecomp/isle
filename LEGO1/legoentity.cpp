@@ -102,6 +102,11 @@ void LegoEntity::ParseAction(char* p_extra)
 	}
 }
 
+// STUB: LEGO1 0x10010c30
+void LegoEntity::FUN_10010c30()
+{
+}
+
 // STUB: LEGO1 0x10010f10
 void LegoEntity::VTable0x34()
 {

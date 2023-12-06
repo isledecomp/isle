@@ -24,10 +24,25 @@ public:
 	const char* m_key;
 	GifData* m_value;
 };
+extern GifMapEntry* DAT_100f0100;
 
 class GifMap {
 public:
-	GifMapEntry* FindNode(const char*& string);
+	// FUNCTION: LEGO1 0x10001cc0
+	GifMapEntry* GifMap::FindNode(const char*& string)
+	{
+		GifMapEntry* ret = m_unk4;
+		GifMapEntry* current = ret->m_parent;
+		while (current != DAT_100f0100) {
+			if (strcmp(current->m_key, string) <= 0) {
+				ret = current;
+				current = current->m_right;
+			}
+			else
+				current = current->m_left;
+		}
+		return ret;
+	}
 
 	inline GifData* Get(const char* string)
 	{
@@ -51,7 +66,6 @@ public:
 	inline GifData* Get(const char* name) { return m_unk8.Get(name); }
 
 protected:
-	undefined4 m_unk0;
 	undefined4 m_unk4;
 	GifMap m_unk8;
 };
@@ -63,7 +77,7 @@ public:
 	virtual ~GifManager() {} // vtable+00
 
 protected:
-	undefined m_unk[0x1c];
+	undefined m_unk[0x14];
 };
 
 #endif // GIFMANAGER_H

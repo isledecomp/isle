@@ -44,7 +44,7 @@ private:
 // ??? for now, until we have symbol management
 typedef const char* ROIName;
 struct ROINameComparator {
-	bool operator()(const ROIName& rName1, const ROIName& rName2) const
+	int operator()(const ROIName& rName1, const ROIName& rName2) const
 	{
 		return strcmp((const char*) rName1, (const char*) rName2) > 0;
 	}

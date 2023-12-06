@@ -2,6 +2,8 @@
 #define LEGOCAMERACONTROLLER_H
 
 #include "mxcore.h"
+#include "realtime/matrix.h"
+#include "realtime/vector.h"
 
 // VTABLE: LEGO1 0x100d57b0
 // SIZE 0xc8
@@ -22,6 +24,11 @@ public:
 	{
 		return !strcmp(name, ClassName()) || MxCore::IsA(name);
 	}
+	void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
+	void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32 p_2);
+	Vector3Data& FUN_10012740();
+	Vector3Data& FUN_100127f0();
+	Vector3Data& FUN_100128a0();
 };
 
 #endif // LEGOCAMERACONTROLLER_H

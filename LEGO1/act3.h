@@ -25,11 +25,13 @@ public:
 	}
 
 	inline void SetUnkown420c(MxEntity* p_entity) { m_unk420c = p_entity; }
+	inline void SetUnkown4270(MxU32 p) { m_unk4270 = p; }
 
 protected:
 	undefined m_unkf8[0x4114];
 	MxEntity* m_unk420c;
-	undefined m_unk4210[0x64];
+	undefined m_unk4210[0x60];
+	MxU32 m_unk4270;
 };
 
 #endif // ACT3_H

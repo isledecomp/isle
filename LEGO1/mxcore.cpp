@@ -2,12 +2,6 @@
 
 #include "define.h"
 
-// FUNCTION: LEGO1 0x10001f70
-MxResult MxCore::Tickle()
-{
-	return SUCCESS;
-}
-
 // FUNCTION: LEGO1 0x100ae1a0
 MxCore::MxCore()
 {

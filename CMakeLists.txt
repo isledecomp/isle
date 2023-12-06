@@ -7,6 +7,8 @@ option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
+  LEGO1/score.cpp
+  LEGO1/helicopter.cpp
   LEGO1/act1state.cpp
   LEGO1/act2brick.cpp
   LEGO1/act2policestation.cpp
@@ -29,7 +31,6 @@ add_library(lego1 SHARED
   LEGO1/gasstationentity.cpp
   LEGO1/gasstationstate.cpp
   LEGO1/gifmanager.cpp
-  LEGO1/helicopter.cpp
   LEGO1/helicopterstate.cpp
   LEGO1/historybook.cpp
   LEGO1/hospital.cpp
@@ -207,7 +208,6 @@ add_library(lego1 SHARED
   LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
   LEGO1/registrationbook.cpp
-  LEGO1/score.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
   LEGO1/towtrack.cpp

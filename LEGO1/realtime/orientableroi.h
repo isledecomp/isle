@@ -23,13 +23,11 @@ public:
 	virtual const BoundingBox& GetWorldBoundingBox() const;
 	virtual const BoundingSphere& GetWorldBoundingSphere() const;
 
-protected:
 	// vtable + 0x14
 	virtual void VTable0x14() { VTable0x1c(); }
 	virtual void UpdateWorldBoundingVolumes() = 0;
-
-public:
 	virtual void VTable0x1c();
+
 	// vtable + 0x20
 	virtual void SetLocalTransform(const Matrix4Impl& p_transform);
 	virtual void VTable0x24(const Matrix4Data& p_transform);

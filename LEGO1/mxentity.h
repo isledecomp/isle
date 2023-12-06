@@ -27,7 +27,14 @@ public:
 		return !strcmp(name, MxEntity::ClassName()) || MxCore::IsA(name);
 	}
 
-	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom); // vtable+0x14
+	// FUNCTION: LEGO1 0x10001070
+	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom)
+	{
+		this->m_mxEntityId = p_id;
+		this->m_atom = p_atom;
+		return SUCCESS;
+	}
+
 	inline MxResult Create(MxDSObject& p_dsObject)
 	{
 		m_mxEntityId = p_dsObject.GetObjectId();
