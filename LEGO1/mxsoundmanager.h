@@ -7,7 +7,7 @@
 
 #include <dsound.h>
 
-// VTABLE 0x100dc128
+// VTABLE: LEGO1 0x100dc128
 // SIZE 0x3c
 class MxSoundManager : public MxAudioManager {
 public:

@@ -6,7 +6,7 @@ DECOMP_SIZE_ASSERT(MxRegion, 0x1c);
 DECOMP_SIZE_ASSERT(MxRegionTopBottom, 0x0c);
 DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 
-// OFFSET: LEGO1 0x100c31c0
+// FUNCTION: LEGO1 0x100c31c0
 MxRegion::MxRegion()
 {
 	m_list = new MxRegionList;
@@ -14,20 +14,20 @@ MxRegion::MxRegion()
 	m_rect.SetSize(MxSize32(-1, -1));
 }
 
-// OFFSET: LEGO1 0x100c3660
+// FUNCTION: LEGO1 0x100c3660
 MxBool MxRegion::vtable20()
 {
 	return m_list->GetCount() == 0;
 }
 
-// OFFSET: LEGO1 0x100c3690
+// FUNCTION: LEGO1 0x100c3690
 MxRegion::~MxRegion()
 {
 	if (m_list)
 		delete m_list;
 }
 
-// OFFSET: LEGO1 0x100c3700
+// FUNCTION: LEGO1 0x100c3700
 void MxRegion::Reset()
 {
 	m_list->DeleteAll();
@@ -35,7 +35,7 @@ void MxRegion::Reset()
 	m_rect.SetSize(MxSize32(-1, -1));
 }
 
-// OFFSET: LEGO1 0x100c3750
+// FUNCTION: LEGO1 0x100c3750
 void MxRegion::vtable18(MxRect32& p_rect)
 {
 	MxRect32 rect(p_rect.GetPoint(), MxSize32(p_rect.GetRight(), p_rect.GetBottom()));
@@ -86,7 +86,7 @@ void MxRegion::vtable18(MxRect32& p_rect)
 	m_rect.UpdateBounds(p_rect);
 }
 
-// OFFSET: LEGO1 0x100c3e20
+// FUNCTION: LEGO1 0x100c3e20
 MxBool MxRegion::vtable1c(MxRect32& p_rect)
 {
 	if (!m_rect.IntersectsWith(p_rect))
@@ -105,7 +105,7 @@ MxBool MxRegion::vtable1c(MxRect32& p_rect)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100c4c90
+// FUNCTION: LEGO1 0x100c4c90
 MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
 {
 	m_top = p_top;
@@ -113,7 +113,7 @@ MxRegionTopBottom::MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom)
 	m_leftRightList = new MxRegionLeftRightList;
 }
 
-// OFFSET: LEGO1 0x100c50e0
+// FUNCTION: LEGO1 0x100c50e0
 MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 {
 	m_top = p_rect.GetTop();
@@ -124,7 +124,7 @@ MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 	m_leftRightList->Append(leftRight);
 }
 
-// OFFSET: LEGO1 0x100c5280
+// FUNCTION: LEGO1 0x100c5280
 void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 {
 	MxRegionLeftRightListCursor a(m_leftRightList);
@@ -167,7 +167,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 	}
 }
 
-// OFFSET: LEGO1 0x100c55d0
+// FUNCTION: LEGO1 0x100c55d0
 MxRegionTopBottom* MxRegionTopBottom::Clone()
 {
 	MxRegionTopBottom* clone = new MxRegionTopBottom(m_top, m_bottom);
@@ -181,7 +181,7 @@ MxRegionTopBottom* MxRegionTopBottom::Clone()
 	return clone;
 }
 
-// OFFSET: LEGO1 0x100c57b0
+// FUNCTION: LEGO1 0x100c57b0
 MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32& p_rect)
 {
 	MxRegionLeftRightListCursor cursor(m_leftRightList);

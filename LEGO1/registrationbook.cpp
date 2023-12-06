@@ -1,18 +1,18 @@
 #include "registrationbook.h"
 
-// OFFSET: LEGO1 0x10076d20 STUB
+// STUB: LEGO1 0x10076d20
 RegistrationBook::RegistrationBook()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10076f50 STUB
+// STUB: LEGO1 0x10076f50
 RegistrationBook::~RegistrationBook()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100770e0 STUB
+// STUB: LEGO1 0x100770e0
 MxLong RegistrationBook::Notify(MxParam& p)
 {
 	// TODO

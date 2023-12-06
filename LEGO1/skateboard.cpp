@@ -6,7 +6,7 @@
 
 DECOMP_SIZE_ASSERT(SkateBoard, 0x168);
 
-// OFFSET: LEGO1 0x1000fd40
+// FUNCTION: LEGO1 0x1000fd40
 SkateBoard::SkateBoard()
 {
 	this->m_unk160 = 0;

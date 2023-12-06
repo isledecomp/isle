@@ -7,7 +7,7 @@
 
 #include <ddraw.h>
 
-// VTABLE 0x100d7ea0
+// VTABLE: LEGO1 0x100d7ea0
 class MxTransitionManager : public MxCore {
 public:
 	MxTransitionManager();
@@ -17,13 +17,13 @@ public:
 
 	virtual MxResult Tickle(); // vtable+0x8
 
-	// OFFSET: LEGO1 0x1004b950
+	// FUNCTION: LEGO1 0x1004b950
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		return "MxTransitionManager";
 	}
 
-	// OFFSET: LEGO1 0x1004b960
+	// FUNCTION: LEGO1 0x1004b960
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxTransitionManager::ClassName()) || MxCore::IsA(name);

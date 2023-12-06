@@ -4,7 +4,7 @@
 
 DECOMP_SIZE_ASSERT(Ambulance, 0x184);
 
-// OFFSET: LEGO1 0x10035ee0
+// FUNCTION: LEGO1 0x10035ee0
 Ambulance::Ambulance()
 {
 	this->m_unk168 = 0;

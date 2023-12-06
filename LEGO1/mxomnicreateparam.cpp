@@ -1,6 +1,6 @@
 #include "mxomnicreateparam.h"
 
-// OFFSET: LEGO1 0x100b0b00
+// FUNCTION: LEGO1 0x100b0b00
 MxOmniCreateParam::MxOmniCreateParam(
 	const char* mediaPath,
 	struct HWND__* windowHandle,

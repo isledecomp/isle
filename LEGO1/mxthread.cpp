@@ -6,7 +6,7 @@
 
 #include <process.h>
 
-// OFFSET: LEGO1 0x100b8bb0
+// FUNCTION: LEGO1 0x100b8bb0
 MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
 {
 	m_target = p_target;
@@ -14,7 +14,7 @@ MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
 }
 
 // Match except for register allocation
-// OFFSET: LEGO1 0x100b8c90
+// FUNCTION: LEGO1 0x100b8c90
 MxResult MxTickleThread::Run()
 {
 	MxTimer* timer = Timer();
@@ -36,7 +36,7 @@ MxResult MxTickleThread::Run()
 	return MxThread::Run();
 }
 
-// OFFSET: LEGO1 0x100bf510
+// FUNCTION: LEGO1 0x100bf510
 MxThread::MxThread()
 {
 	m_hThread = NULL;
@@ -44,7 +44,7 @@ MxThread::MxThread()
 	m_threadId = 0;
 }
 
-// OFFSET: LEGO1 0x100bf5a0
+// FUNCTION: LEGO1 0x100bf5a0
 MxThread::~MxThread()
 {
 	if (m_hThread)
@@ -53,7 +53,7 @@ MxThread::~MxThread()
 
 typedef unsigned(__stdcall* ThreadFunc)(void*);
 
-// OFFSET: LEGO1 0x100bf610
+// FUNCTION: LEGO1 0x100bf610
 MxResult MxThread::Start(int p_stack, int p_flag)
 {
 	MxResult result = FAILURE;
@@ -65,26 +65,26 @@ MxResult MxThread::Start(int p_stack, int p_flag)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bf660
+// FUNCTION: LEGO1 0x100bf660
 void MxThread::Sleep(MxS32 p_milliseconds)
 {
 	::Sleep(p_milliseconds);
 }
 
-// OFFSET: LEGO1 0x100bf670
+// FUNCTION: LEGO1 0x100bf670
 void MxThread::Terminate()
 {
 	m_running = FALSE;
 	m_semaphore.Wait(INFINITE);
 }
 
-// OFFSET: LEGO1 0x100bf680
+// FUNCTION: LEGO1 0x100bf680
 unsigned MxThread::ThreadProc(void* p_thread)
 {
 	return static_cast<MxThread*>(p_thread)->Run();
 }
 
-// OFFSET: LEGO1 0x100bf690
+// FUNCTION: LEGO1 0x100bf690
 MxResult MxThread::Run()
 {
 	m_semaphore.Release(1);

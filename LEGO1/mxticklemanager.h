@@ -32,7 +32,7 @@ private:
 
 typedef list<MxTickleClient*> MxTickleClientPtrList;
 
-// VTABLE 0x100d86d8
+// VTABLE: LEGO1 0x100d86d8
 class MxTickleManager : public MxCore {
 public:
 	inline MxTickleManager() {}

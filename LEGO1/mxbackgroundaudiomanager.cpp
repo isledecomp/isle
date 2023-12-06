@@ -10,7 +10,7 @@
 
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
-// OFFSET: LEGO1 0x1007ea90
+// FUNCTION: LEGO1 0x1007ea90
 MxBackgroundAudioManager::MxBackgroundAudioManager()
 {
 	NotificationManager()->Register(this);
@@ -23,7 +23,7 @@ MxBackgroundAudioManager::MxBackgroundAudioManager()
 	m_musicEnabled = FALSE;
 }
 
-// OFFSET: LEGO1 0x1007ec20
+// FUNCTION: LEGO1 0x1007ec20
 MxBackgroundAudioManager::~MxBackgroundAudioManager()
 {
 	TickleManager()->UnregisterClient(this);
@@ -31,7 +31,7 @@ MxBackgroundAudioManager::~MxBackgroundAudioManager()
 	DestroyMusic();
 }
 
-// OFFSET: LEGO1 0x1007ece0
+// FUNCTION: LEGO1 0x1007ece0
 MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyMS)
 {
 	MxResult result = OpenMusic(p_script);
@@ -44,7 +44,7 @@ MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyM
 	return result;
 }
 
-// OFFSET: LEGO1 0x1007ed20
+// FUNCTION: LEGO1 0x1007ed20
 MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& p_script)
 {
 	if (m_script.GetInternal())
@@ -60,7 +60,7 @@ MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& p_script)
 	return result;
 }
 
-// OFFSET: LEGO1 0x1007ed70
+// FUNCTION: LEGO1 0x1007ed70
 void MxBackgroundAudioManager::DestroyMusic()
 {
 	if (m_script.GetInternal()) {
@@ -73,7 +73,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 	}
 }
 
-// OFFSET: LEGO1 0x1007ee40
+// FUNCTION: LEGO1 0x1007ee40
 MxResult MxBackgroundAudioManager::Tickle()
 {
 	switch (m_unk13c) {
@@ -91,7 +91,7 @@ MxResult MxBackgroundAudioManager::Tickle()
 	}
 }
 
-// OFFSET: LEGO1 0x1007ee70
+// FUNCTION: LEGO1 0x1007ee70
 void MxBackgroundAudioManager::FUN_1007ee70()
 {
 	if (m_unka0 && m_unka0->GetAction()) {
@@ -108,7 +108,7 @@ void MxBackgroundAudioManager::FUN_1007ee70()
 	}
 }
 
-// OFFSET: LEGO1 0x1007ef40
+// FUNCTION: LEGO1 0x1007ef40
 void MxBackgroundAudioManager::FUN_1007ef40()
 {
 	MxU32 compare;
@@ -152,7 +152,7 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 	}
 }
 
-// OFFSET: LEGO1 0x1007f0e0
+// FUNCTION: LEGO1 0x1007f0e0
 void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
 	// This function probably is the fade in/out routine
@@ -187,7 +187,7 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 	}
 }
 
-// OFFSET: LEGO1 0x1007f170
+// FUNCTION: LEGO1 0x1007f170
 MxLong MxBackgroundAudioManager::Notify(MxParam& p)
 {
 	switch (((MxNotificationParam&) p).GetNotification()) {
@@ -201,7 +201,7 @@ MxLong MxBackgroundAudioManager::Notify(MxParam& p)
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1007f1b0
+// FUNCTION: LEGO1 0x1007f1b0
 void MxBackgroundAudioManager::StartAction(MxParam& p)
 {
 	// TODO: the sender is most likely a MxAudioPresenter?
@@ -212,7 +212,7 @@ void MxBackgroundAudioManager::StartAction(MxParam& p)
 	m_unk138->SetVolume(0);
 }
 
-// OFFSET: LEGO1 0x1007f200
+// FUNCTION: LEGO1 0x1007f200
 void MxBackgroundAudioManager::StopAction(MxParam& p)
 {
 	if (((MxNotificationParam&) p).GetSender() == m_unka0) {
@@ -229,7 +229,7 @@ void MxBackgroundAudioManager::StopAction(MxParam& p)
 	Lego()->HandleNotificationType2(p);
 }
 
-// OFFSET: LEGO1 0x1007f2f0
+// FUNCTION: LEGO1 0x1007f2f0
 MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
 {
 	if (!m_musicEnabled) {
@@ -261,7 +261,7 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x1007f470
+// FUNCTION: LEGO1 0x1007f470
 void MxBackgroundAudioManager::Stop()
 {
 	if (m_action2.GetObjectId() != -1)
@@ -281,7 +281,7 @@ void MxBackgroundAudioManager::Stop()
 	m_unk13c = 0;
 }
 
-// OFFSET: LEGO1 0x1007f570
+// FUNCTION: LEGO1 0x1007f570
 void MxBackgroundAudioManager::LowerVolume()
 {
 	if (m_unk148 == 0) {
@@ -293,7 +293,7 @@ void MxBackgroundAudioManager::LowerVolume()
 	m_unk148++;
 }
 
-// OFFSET: LEGO1 0x1007f5b0
+// FUNCTION: LEGO1 0x1007f5b0
 void MxBackgroundAudioManager::RaiseVolume()
 {
 	if (m_unk148 != 0) {
@@ -307,7 +307,7 @@ void MxBackgroundAudioManager::RaiseVolume()
 	}
 }
 
-// OFFSET: LEGO1 0x1007f5f0
+// FUNCTION: LEGO1 0x1007f5f0
 void MxBackgroundAudioManager::Enable(MxBool p)
 {
 	if (this->m_musicEnabled != p) {
@@ -318,7 +318,7 @@ void MxBackgroundAudioManager::Enable(MxBool p)
 	}
 }
 
-// OFFSET: LEGO1 0x1007f650
+// FUNCTION: LEGO1 0x1007f650
 void MxBackgroundAudioManager::Init()
 {
 	this->m_unka0 = 0;

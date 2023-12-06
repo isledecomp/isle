@@ -31,7 +31,7 @@ public:
 	float* operator[](long i) { return rows[i]; }
 };
 
-// VTABLE 0x100d4350
+// VTABLE: LEGO1 0x100d4350
 // SIZE 0x8
 class Matrix4Impl {
 public:
@@ -72,7 +72,7 @@ protected:
 	Matrix4* m_data;
 };
 
-// VTABLE 0x100d4300
+// VTABLE: LEGO1 0x100d4300
 // SIZE 0x48
 class Matrix4Data : public Matrix4Impl {
 public:

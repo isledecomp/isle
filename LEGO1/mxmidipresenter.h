@@ -4,21 +4,21 @@
 #include "mxmusicpresenter.h"
 #include "mxstreamchunk.h"
 
-// VTABLE 0x100dca20
+// VTABLE: LEGO1 0x100dca20
 // SIZE 0x58
 class MxMIDIPresenter : public MxMusicPresenter {
 public:
 	MxMIDIPresenter();
 	virtual ~MxMIDIPresenter() override;
 
-	// OFFSET: LEGO1 0x100c2650
+	// FUNCTION: LEGO1 0x100c2650
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x10101df8
+		// GLOBAL: LEGO1 0x10101df8
 		return "MxMIDIPresenter";
 	}
 
-	// OFFSET: LEGO1 0x100c2660
+	// FUNCTION: LEGO1 0x100c2660
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxMIDIPresenter::ClassName()) || MxMusicPresenter::IsA(name);

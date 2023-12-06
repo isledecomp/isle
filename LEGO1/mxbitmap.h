@@ -29,7 +29,7 @@ struct MxBITMAPINFO {
 #define BI_RGB_TOPDOWN 0x10
 
 // SIZE 0x20
-// VTABLE 0x100dc7b0
+// VTABLE: LEGO1 0x100dc7b0
 class MxBitmap : public MxCore {
 public:
 	__declspec(dllexport) MxBitmap();

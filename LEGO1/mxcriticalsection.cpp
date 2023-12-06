@@ -6,10 +6,10 @@
 
 DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c);
 
-// 0x10101e78
+// GLOBAL: LEGO1 0x10101e78
 int g_useMutex = 0;
 
-// OFFSET: LEGO1 0x100b6d20
+// FUNCTION: LEGO1 0x100b6d20
 MxCriticalSection::MxCriticalSection()
 {
 	HANDLE mutex;
@@ -24,7 +24,7 @@ MxCriticalSection::MxCriticalSection()
 	this->m_mutex = NULL;
 }
 
-// OFFSET: LEGO1 0x100b6d60
+// FUNCTION: LEGO1 0x100b6d60
 MxCriticalSection::~MxCriticalSection()
 {
 	if (this->m_mutex != NULL) {
@@ -35,7 +35,7 @@ MxCriticalSection::~MxCriticalSection()
 	DeleteCriticalSection(&this->m_criticalSection);
 }
 
-// OFFSET: LEGO1 0x100b6d80
+// FUNCTION: LEGO1 0x100b6d80
 void MxCriticalSection::Enter()
 {
 	DWORD result;
@@ -58,7 +58,7 @@ void MxCriticalSection::Enter()
 	}
 }
 
-// OFFSET: LEGO1 0x100b6de0
+// FUNCTION: LEGO1 0x100b6de0
 void MxCriticalSection::Leave()
 {
 	if (this->m_mutex != NULL) {
@@ -69,7 +69,7 @@ void MxCriticalSection::Leave()
 	LeaveCriticalSection(&this->m_criticalSection);
 }
 
-// OFFSET: LEGO1 0x100b6e00
+// FUNCTION: LEGO1 0x100b6e00
 void MxCriticalSection::SetDoMutex()
 {
 	g_useMutex = 1;

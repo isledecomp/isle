@@ -5,7 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
-// OFFSET: LEGO1 0x1000caf0
+// FUNCTION: LEGO1 0x1000caf0
 MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
 {
 	if (m_compositePresenter)
@@ -13,69 +13,69 @@ MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x100b60b0
+// FUNCTION: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {
 	NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x100b61a0 TEMPLATE
+// TEMPLATE: LEGO1 0x100b61a0
 // list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
 
-// OFFSET: LEGO1 0x100b6210 TEMPLATE
+// FUNCTION: LEGO1 0x100b6210
 // MxCompositePresenter::ClassName
 
-// OFFSET: LEGO1 0x100b6220 TEMPLATE
+// FUNCTION: LEGO1 0x100b6220
 // MxCompositePresenter::IsA
 
-// OFFSET: LEGO1 0x100b62d0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100b62d0
 // MxCompositePresenter::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100b62f0 TEMPLATE
+// TEMPLATE: LEGO1 0x100b62f0 TEMPLATE
 // MxCompositePresenterList::~MxCompositePresenterList
 
-// OFFSET: LEGO1 0x100b6340 TEMPLATE
+// TEMPLATE: LEGO1 0x100b6340
 // List<MxPresenter *>::~List<MxPresenter *>
 
-// OFFSET: LEGO1 0x100b6390
+// FUNCTION: LEGO1 0x100b6390
 MxCompositePresenter::~MxCompositePresenter()
 {
 	NotificationManager()->Unregister(this);
 }
 
-// OFFSET: LEGO1 0x100b6410 STUB
+// STUB: LEGO1 0x100b6410
 MxResult MxCompositePresenter::StartAction(MxStreamController*, MxDSAction*)
 {
 	// TODO
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b65e0 STUB
+// STUB: LEGO1 0x100b65e0
 void MxCompositePresenter::EndAction()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6760 STUB
+// STUB: LEGO1 0x100b6760
 MxLong MxCompositePresenter::Notify(MxParam& p)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x100b67f0 STUB
+// STUB: LEGO1 0x100b67f0
 void MxCompositePresenter::VTable0x58()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b69b0 STUB
+// STUB: LEGO1 0x100b69b0
 void MxCompositePresenter::VTable0x5c()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6b40
+// FUNCTION: LEGO1 0x100b6b40
 void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 {
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
@@ -94,19 +94,19 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 	}
 }
 
-// OFFSET: LEGO1 0x100b6bc0 STUB
+// STUB: LEGO1 0x100b6bc0
 void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6c30 STUB
+// STUB: LEGO1 0x100b6c30
 void MxCompositePresenter::Enable(MxBool p_enable)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6c80 STUB
+// STUB: LEGO1 0x100b6c80
 MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	// TODO

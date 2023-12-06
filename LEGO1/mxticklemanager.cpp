@@ -10,7 +10,7 @@
 DECOMP_SIZE_ASSERT(MxTickleClient, 0x10);
 DECOMP_SIZE_ASSERT(MxTickleManager, 0x14);
 
-// OFFSET: LEGO1 0x100bdd10
+// FUNCTION: LEGO1 0x100bdd10
 MxTickleClient::MxTickleClient(MxCore* p_client, MxTime p_interval)
 {
 	m_flags = 0;
@@ -19,7 +19,7 @@ MxTickleClient::MxTickleClient(MxCore* p_client, MxTime p_interval)
 	m_lastUpdateTime = -m_interval;
 }
 
-// OFFSET: LEGO1 0x100bdd30
+// FUNCTION: LEGO1 0x100bdd30
 MxTickleManager::~MxTickleManager()
 {
 	while (m_clients.size() != 0) {
@@ -30,7 +30,7 @@ MxTickleManager::~MxTickleManager()
 }
 
 // TODO: Match.
-// OFFSET: LEGO1 0x100bdde0
+// FUNCTION: LEGO1 0x100bdde0
 MxResult MxTickleManager::Tickle()
 {
 	MxTime time = Timer()->GetTime();
@@ -59,7 +59,7 @@ MxResult MxTickleManager::Tickle()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100bde80
+// FUNCTION: LEGO1 0x100bde80
 void MxTickleManager::RegisterClient(MxCore* p_client, MxTime p_interval)
 {
 	MxTime interval = GetClientTickleInterval(p_client);
@@ -70,7 +70,7 @@ void MxTickleManager::RegisterClient(MxCore* p_client, MxTime p_interval)
 	}
 }
 
-// OFFSET: LEGO1 0x100bdf60
+// FUNCTION: LEGO1 0x100bdf60
 void MxTickleManager::UnregisterClient(MxCore* p_client)
 {
 	MxTickleClientPtrList::iterator it = m_clients.begin();
@@ -85,7 +85,7 @@ void MxTickleManager::UnregisterClient(MxCore* p_client)
 	}
 }
 
-// OFFSET: LEGO1 0x100bdfa0
+// FUNCTION: LEGO1 0x100bdfa0
 void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interval)
 {
 	for (MxTickleClientPtrList::iterator it = m_clients.begin(); it != m_clients.end(); it++) {
@@ -97,7 +97,7 @@ void MxTickleManager::SetClientTickleInterval(MxCore* p_client, MxTime p_interva
 	}
 }
 
-// OFFSET: LEGO1 0x100be000
+// FUNCTION: LEGO1 0x100be000
 MxTime MxTickleManager::GetClientTickleInterval(MxCore* p_client)
 {
 	MxTickleClientPtrList::iterator it = m_clients.begin();

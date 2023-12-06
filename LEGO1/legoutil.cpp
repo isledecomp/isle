@@ -5,7 +5,7 @@
 
 #include <string.h>
 
-// OFFSET: LEGO1 0x1003e300
+// FUNCTION: LEGO1 0x1003e300
 ExtraActionType MatchActionString(const char* p_str)
 {
 	ExtraActionType result = ExtraActionType_unknown;
@@ -34,7 +34,7 @@ ExtraActionType MatchActionString(const char* p_str)
 	return result;
 }
 
-// OFFSET: LEGO1 0x1003eae0
+// FUNCTION: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float h, float s, float v, float* r_out, float* b_out, float* g_out)
 {
 	double calc;
@@ -102,12 +102,12 @@ void ConvertHSVToRGB(float h, float s, float v, float* r_out, float* b_out, floa
 	}
 }
 
-// OFFSET: LEGO1 0x1003ee00 STUB
+// STUB: LEGO1 0x1003ee00
 void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 {
 }
 
-// OFFSET: LEGO1 0x1003ef40
+// FUNCTION: LEGO1 0x1003ef40
 void SetAppCursor(WPARAM p_wparam)
 {
 	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);

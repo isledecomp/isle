@@ -19,7 +19,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
 
-// OFFSET: LEGO1 0x100bf6a0
+// FUNCTION: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
 	this->SetType(MxDSType_Object);
@@ -31,14 +31,14 @@ MxDSObject::MxDSObject()
 	this->m_unk28 = 0;
 }
 
-// OFFSET: LEGO1 0x100bf7e0
+// FUNCTION: LEGO1 0x100bf7e0
 MxDSObject::~MxDSObject()
 {
 	delete[] m_objectName;
 	delete[] m_sourceName;
 }
 
-// OFFSET: LEGO1 0x100bf870
+// FUNCTION: LEGO1 0x100bf870
 void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 {
 	this->SetSourceName(p_dsObject.m_sourceName);
@@ -50,7 +50,7 @@ void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 	this->m_unk28 = p_dsObject.m_unk28;
 }
 
-// OFFSET: LEGO1 0x100bf8c0
+// FUNCTION: LEGO1 0x100bf8c0
 MxDSObject& MxDSObject::operator=(MxDSObject& p_dsObject)
 {
 	if (this == &p_dsObject)
@@ -60,7 +60,7 @@ MxDSObject& MxDSObject::operator=(MxDSObject& p_dsObject)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100bf8e0
+// FUNCTION: LEGO1 0x100bf8e0
 void MxDSObject::SetObjectName(const char* p_objectName)
 {
 	if (p_objectName != this->m_objectName) {
@@ -79,7 +79,7 @@ void MxDSObject::SetObjectName(const char* p_objectName)
 	}
 }
 
-// OFFSET: LEGO1 0x100bf950
+// FUNCTION: LEGO1 0x100bf950
 void MxDSObject::SetSourceName(const char* p_sourceName)
 {
 	if (p_sourceName != this->m_sourceName) {
@@ -98,13 +98,13 @@ void MxDSObject::SetSourceName(const char* p_sourceName)
 	}
 }
 
-// OFFSET: LEGO1 0x100bf9c0
+// FUNCTION: LEGO1 0x100bf9c0
 undefined4 MxDSObject::unk14()
 {
 	return 10;
 }
 
-// OFFSET: LEGO1 0x100bf9d0
+// FUNCTION: LEGO1 0x100bf9d0
 MxU32 MxDSObject::GetSizeOnDisk()
 {
 	MxU32 sizeOnDisk;
@@ -126,7 +126,7 @@ MxU32 MxDSObject::GetSizeOnDisk()
 	return sizeOnDisk;
 }
 
-// OFFSET: LEGO1 0x100bfa20
+// FUNCTION: LEGO1 0x100bfa20
 void MxDSObject::Deserialize(char** p_source, MxS16 p_unk24)
 {
 	GetString(p_source, this->m_sourceName, this, &MxDSObject::SetSourceName);
@@ -137,7 +137,7 @@ void MxDSObject::Deserialize(char** p_source, MxS16 p_unk24)
 	this->m_unk24 = p_unk24;
 }
 
-// OFFSET: LEGO1 0x100bfb30
+// FUNCTION: LEGO1 0x100bfb30
 MxDSObject* DeserializeDSObjectDispatch(char** p_source, MxS16 p_flags)
 {
 	MxU16 type = *(MxU16*) *p_source;

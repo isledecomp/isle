@@ -11,10 +11,10 @@ typedef struct {
 	MxS32 m_unk10;
 } ROIColorAlias;
 
-// 0x100dbe28
+// GLOBAL: LEGO1 0x100dbe28
 const double g_normalizeByteToFloat = 1.0 / 255;
 
-// 0x101011b0
+// GLOBAL: LEGO1 0x101011b0
 ROIColorAlias g_roiColorAliases[22] = {
 	{"lego black", 0x21, 0x21, 0x21, 0},       {"lego black f", 0x21, 0x21, 0x21, 0},
 	{"lego black flat", 0x21, 0x21, 0x21, 0},  {"lego blue", 0x00, 0x54, 0x8c, 0},
@@ -29,19 +29,19 @@ ROIColorAlias g_roiColorAliases[22] = {
 	{"lego yellow", 0xff, 0xb9, 0x00, 0},      {"lego yellow flat", 0xff, 0xb9, 0x00, 0},
 };
 
-// 0x10101368
+// GLOBAL: LEGO1 0x10101368
 MxS32 g_roiConfig = 100;
 
-// 0x101013ac
+// GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
 
-// OFFSET: LEGO1 0x100a81c0
+// FUNCTION: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(MxS32 p_roi)
 {
 	g_roiConfig = p_roi;
 }
 
-// OFFSET: LEGO1 0x100a9bf0
+// FUNCTION: LEGO1 0x100a9bf0
 MxBool LegoROI::CallTheHandlerFunction(
 	char* p_param,
 	MxFloat& p_red,
@@ -63,7 +63,7 @@ MxBool LegoROI::CallTheHandlerFunction(
 	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_other);
 }
 
-// OFFSET: LEGO1 0x100a9c50
+// FUNCTION: LEGO1 0x100a9c50
 MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green, MxFloat& p_blue, MxFloat& p_other)
 {
 	// TODO: this seems awfully hacky for these devs. is there a dynamic way
@@ -83,13 +83,13 @@ MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100a9d30
+// FUNCTION: LEGO1 0x100a9d30
 void LegoROI::SetSomeHandlerFunction(ROIHandler p_func)
 {
 	g_someHandlerFunction = p_func;
 }
 
-// OFFSET: LEGO1 0x100a9e10
+// FUNCTION: LEGO1 0x100a9e10
 void LegoROI::SetDisplayBB(MxS32 p_displayBB)
 {
 	// Intentionally empty function

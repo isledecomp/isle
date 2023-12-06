@@ -9,13 +9,13 @@
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
 
-// OFFSET: LEGO1 0x100b8f00
+// FUNCTION: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
 {
 	NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x100b9190
+// FUNCTION: LEGO1 0x100b9190
 MxResult MxStreamer::Create()
 {
 	undefined* b = new undefined[m_subclass1.GetSize() * 0x5800];
@@ -31,7 +31,7 @@ MxResult MxStreamer::Create()
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b91d0
+// FUNCTION: LEGO1 0x100b91d0
 MxStreamer::~MxStreamer()
 {
 	while (!m_openStreams.empty()) {
@@ -43,7 +43,7 @@ MxStreamer::~MxStreamer()
 	NotificationManager()->Unregister(this);
 }
 
-// OFFSET: LEGO1 0x100b92c0
+// FUNCTION: LEGO1 0x100b92c0
 MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 {
 	// TODO
@@ -68,7 +68,7 @@ MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 	return stream;
 }
 
-// OFFSET: LEGO1 0x100b9570
+// FUNCTION: LEGO1 0x100b9570
 MxLong MxStreamer::Close(const char* p)
 {
 	MxDSAction ds;
@@ -97,13 +97,13 @@ MxLong MxStreamer::Close(const char* p)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b9700
+// FUNCTION: LEGO1 0x100b9700
 MxNotificationParam* MxStreamerNotification::Clone()
 {
 	return new MxStreamerNotification(m_type, m_sender, m_controller);
 }
 
-// OFFSET: LEGO1 0x100b9870
+// FUNCTION: LEGO1 0x100b9870
 MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 {
 	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
@@ -119,7 +119,7 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 	return NULL;
 }
 
-// OFFSET: LEGO1 0x100b9930
+// FUNCTION: LEGO1 0x100b9930
 MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* stream)
 {
 	if (find(m_openStreams.begin(), m_openStreams.end(), stream) == m_openStreams.end()) {
@@ -130,7 +130,7 @@ MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* stream)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b99b0
+// FUNCTION: LEGO1 0x100b99b0
 MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 {
 	MxStreamController* controller;
@@ -144,7 +144,7 @@ MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// OFFSET: LEGO1 0x100b9b30
+// FUNCTION: LEGO1 0x100b9b30
 MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 {
 	MxStreamController* controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
@@ -153,7 +153,7 @@ MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x100b9b60
+// FUNCTION: LEGO1 0x100b9b60
 MxLong MxStreamer::Notify(MxParam& p)
 {
 	if (((MxNotificationParam&) p).GetNotification() == MXSTREAMER_DELETE_NOTIFY) {

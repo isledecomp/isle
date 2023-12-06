@@ -2,7 +2,7 @@
 
 #include "mxomni.h"
 
-// OFFSET: LEGO1 0x100acf90
+// FUNCTION: LEGO1 0x100acf90
 MxAtomId::MxAtomId(const char* p_str, LookupMode p_mode)
 {
 	if (!MxOmni::GetInstance())
@@ -16,13 +16,13 @@ MxAtomId::MxAtomId(const char* p_str, LookupMode p_mode)
 	counter->Inc();
 }
 
-// OFFSET: LEGO1 0x100acfd0
+// FUNCTION: LEGO1 0x100acfd0
 MxAtomId::~MxAtomId()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x100acfe0
+// FUNCTION: LEGO1 0x100acfe0
 void MxAtomId::Destroy()
 {
 	if (!m_internal)
@@ -42,7 +42,7 @@ void MxAtomId::Destroy()
 	counter->Dec();
 }
 
-// OFFSET: LEGO1 0x100ad1c0
+// FUNCTION: LEGO1 0x100ad1c0
 MxAtomId& MxAtomId::operator=(const MxAtomId& p_atomId)
 {
 	if (m_internal)
@@ -58,7 +58,7 @@ MxAtomId& MxAtomId::operator=(const MxAtomId& p_atomId)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100ad210
+// FUNCTION: LEGO1 0x100ad210
 MxAtomIdCounter* MxAtomId::GetCounter(const char* p_str, LookupMode p_mode)
 {
 	MxAtomId _unused;
@@ -88,7 +88,7 @@ MxAtomIdCounter* MxAtomId::GetCounter(const char* p_str, LookupMode p_mode)
 	return counter;
 }
 
-// OFFSET: LEGO1 0x100ad7e0
+// FUNCTION: LEGO1 0x100ad7e0
 void MxAtomId::Clear()
 {
 	// Reset but do not delete MxAtomId object.

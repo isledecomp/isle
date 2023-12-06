@@ -1,39 +1,39 @@
 #include "legoanimationmanager.h"
 
-// 0x100f74f8
+// GLOBAL: LEGO1 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
 
-// OFFSET: LEGO1 0x1005eb50
+// FUNCTION: LEGO1 0x1005eb50
 void LegoAnimationManager::configureLegoAnimationManager(int param_1)
 {
 	g_legoAnimationManagerConfig = param_1;
 }
 
-// OFFSET: LEGO1 0x1005eb60 STUB
+// STUB: LEGO1 0x1005eb60
 LegoAnimationManager::LegoAnimationManager()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005ed30 STUB
+// STUB: LEGO1 0x1005ed30
 LegoAnimationManager::~LegoAnimationManager()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005f130 STUB
+// STUB: LEGO1 0x1005f130
 void LegoAnimationManager::Init()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1005f6d0 STUB
+// STUB: LEGO1 0x1005f6d0
 void LegoAnimationManager::FUN_1005f6d0(MxBool p)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100619f0 STUB
+// STUB: LEGO1 0x100619f0
 MxLong LegoAnimationManager::Notify(MxParam& p)
 {
 	// TODO
@@ -41,7 +41,7 @@ MxLong LegoAnimationManager::Notify(MxParam& p)
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10061cc0 STUB
+// STUB: LEGO1 0x10061cc0
 MxResult LegoAnimationManager::Tickle()
 {
 	// TODO

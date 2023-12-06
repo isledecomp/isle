@@ -7,7 +7,7 @@
 
 DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
 
-// OFFSET: LEGO1 0x100d0f30
+// FUNCTION: LEGO1 0x100d0f30
 MxResult MxDiskStreamProviderThread::Run()
 {
 	if (m_target)
@@ -17,14 +17,14 @@ MxResult MxDiskStreamProviderThread::Run()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100d0f50
+// FUNCTION: LEGO1 0x100d0f50
 MxResult MxDiskStreamProviderThread::StartWithTarget(MxDiskStreamProvider* p_target)
 {
 	m_target = p_target;
 	return Start(0x1000, 0);
 }
 
-// OFFSET: LEGO1 0x100d0f70
+// FUNCTION: LEGO1 0x100d0f70
 MxDiskStreamProvider::MxDiskStreamProvider()
 {
 	this->m_pFile = NULL;
@@ -32,13 +32,13 @@ MxDiskStreamProvider::MxDiskStreamProvider()
 	this->m_unk35 = 0;
 }
 
-// OFFSET: LEGO1 0x100d1240 STUB
+// STUB: LEGO1 0x100d1240
 MxDiskStreamProvider::~MxDiskStreamProvider()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100d13d0
+// FUNCTION: LEGO1 0x100d13d0
 MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
 	MxResult result = FAILURE;
@@ -70,13 +70,13 @@ done:
 	return result;
 }
 
-// OFFSET: LEGO1 0x100d15e0 STUB
+// STUB: LEGO1 0x100d15e0
 void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100d1750
+// FUNCTION: LEGO1 0x100d1750
 MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
 	while (m_remainingWork != 0) {
@@ -87,31 +87,31 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100d18f0 STUB
+// STUB: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100d1e90
+// FUNCTION: LEGO1 0x100d1e90
 MxU32 MxDiskStreamProvider::GetFileSize()
 {
 	return m_pFile->GetBufferSize();
 }
 
-// OFFSET: LEGO1 0x100d1ea0
+// FUNCTION: LEGO1 0x100d1ea0
 MxU32 MxDiskStreamProvider::GetStreamBuffersNum()
 {
 	return m_pFile->GetStreamBuffersNum();
 }
 
-// OFFSET: LEGO1 0x100d1eb0
+// FUNCTION: LEGO1 0x100d1eb0
 MxU32 MxDiskStreamProvider::GetLengthInDWords()
 {
 	return m_pFile->GetLengthInDWords();
 }
 
-// OFFSET: LEGO1 0x100d1ec0
+// FUNCTION: LEGO1 0x100d1ec0
 MxU32* MxDiskStreamProvider::GetBufferForDWords()
 {
 	return m_pFile->GetBuffer();

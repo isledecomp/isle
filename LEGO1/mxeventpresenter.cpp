@@ -8,25 +8,25 @@
 
 DECOMP_SIZE_ASSERT(MxEventPresenter, 0x54);
 
-// OFFSET: LEGO1 0x100c2b70
+// FUNCTION: LEGO1 0x100c2b70
 MxEventPresenter::MxEventPresenter()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100c2d40
+// FUNCTION: LEGO1 0x100c2d40
 MxEventPresenter::~MxEventPresenter()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x100c2da0
+// FUNCTION: LEGO1 0x100c2da0
 void MxEventPresenter::Init()
 {
 	m_data = NULL;
 }
 
-// OFFSET: LEGO1 0x100c2db0
+// FUNCTION: LEGO1 0x100c2db0
 MxResult MxEventPresenter::AddToManager()
 {
 	MxResult ret = FAILURE;
@@ -39,7 +39,7 @@ MxResult MxEventPresenter::AddToManager()
 	return ret;
 }
 
-// OFFSET: LEGO1 0x100c2de0
+// FUNCTION: LEGO1 0x100c2de0
 void MxEventPresenter::Destroy()
 {
 	if (EventManager())
@@ -55,14 +55,14 @@ void MxEventPresenter::Destroy()
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100c2e30
+// FUNCTION: LEGO1 0x100c2e30
 void MxEventPresenter::CopyData(MxStreamChunk* p_chunk)
 {
 	m_data = new MxU8[p_chunk->GetLength()];
 	memcpy(m_data, p_chunk->GetData(), p_chunk->GetLength());
 }
 
-// OFFSET: LEGO1 0x100c2e70
+// FUNCTION: LEGO1 0x100c2e70
 void MxEventPresenter::ReadyTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -76,7 +76,7 @@ void MxEventPresenter::ReadyTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100c2eb0
+// FUNCTION: LEGO1 0x100c2eb0
 void MxEventPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -87,7 +87,7 @@ void MxEventPresenter::StartingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100c2ef0
+// FUNCTION: LEGO1 0x100c2ef0
 MxResult MxEventPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
