@@ -5,19 +5,19 @@
 #include "legostate.h"
 #include "mxstring.h"
 
-// VTABLE 0x100d66e0
+// VTABLE: LEGO1 0x100d66e0
 // SIZE 0x50 (from 1000acd7)
 class LegoVehicleBuildState : public LegoState {
 public:
 	LegoVehicleBuildState(char* p_classType);
 
-	// OFFSET: LEGO1 0x10025ff0
+	// FUNCTION: LEGO1 0x10025ff0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		return this->m_className.GetData();
 	}
 
-	// OFFSET: LEGO1 0x10026000
+	// FUNCTION: LEGO1 0x10026000
 	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);

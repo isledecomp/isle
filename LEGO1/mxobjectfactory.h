@@ -18,19 +18,19 @@
 	X(MxLoopingSmkPresenter)                                                                                           \
 	X(MxLoopingMIDIPresenter)
 
-// VTABLE 0x100dc220
+// VTABLE: LEGO1 0x100dc220
 class MxObjectFactory : public MxCore {
 public:
 	MxObjectFactory();
 
-	// OFFSET: LEGO1 0x10008f70
+	// FUNCTION: LEGO1 0x10008f70
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f0730
+		// GLOBAL: LEGO1 0x100f0730
 		return "MxObjectFactory";
 	}
 
-	// OFFSET: LEGO1 0x10008f80
+	// FUNCTION: LEGO1 0x10008f80
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxObjectFactory::ClassName()) || MxCore::IsA(name);

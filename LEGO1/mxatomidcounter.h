@@ -34,7 +34,7 @@ private:
 };
 
 struct MxAtomIdCounterCompare {
-	// OFFSET: LEGO1 0x100ad120
+	// FUNCTION: LEGO1 0x100ad120
 	int operator()(MxAtomIdCounter* const& p_val0, MxAtomIdCounter* const& p_val1) const
 	{
 		return strcmp(p_val0->GetKey()->GetData(), p_val1->GetKey()->GetData()) > 0;

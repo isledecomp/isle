@@ -5,7 +5,7 @@
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50); // 1000acd7
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState::UnkStruct, 0xc);
 
-// OFFSET: LEGO1 0x10017c00
+// FUNCTION: LEGO1 0x10017c00
 LegoVehicleBuildState::UnkStruct::UnkStruct()
 {
 	m_unk04 = 0;
@@ -14,7 +14,7 @@ LegoVehicleBuildState::UnkStruct::UnkStruct()
 	m_unk08 = 0;
 }
 
-// OFFSET: LEGO1 0x10025f30
+// FUNCTION: LEGO1 0x10025f30
 LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
 {
 	this->m_className = p_classType;

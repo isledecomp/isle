@@ -5,7 +5,7 @@
 #include "mxdsparallelaction.h"
 #include "mxstringlist.h"
 
-// VTABLE 0x100dcfc8
+// VTABLE: LEGO1 0x100dcfc8
 // SIZE 0xb0
 class MxDSSelectAction : public MxDSParallelAction {
 public:
@@ -15,14 +15,14 @@ public:
 	void CopyFrom(MxDSSelectAction& p_dsSelectAction);
 	MxDSSelectAction& operator=(MxDSSelectAction& p_dsSelectAction);
 
-	// OFFSET: LEGO1 0x100cb6f0
+	// FUNCTION: LEGO1 0x100cb6f0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x1010261c
+		// GLOBAL: LEGO1 0x1010261c
 		return "MxDSSelectAction";
 	}
 
-	// OFFSET: LEGO1 0x100cb700
+	// FUNCTION: LEGO1 0x100cb700
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(name);

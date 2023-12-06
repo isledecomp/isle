@@ -10,28 +10,28 @@
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
-// 0x10101eb0
+// GLOBAL: LEGO1 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";
 
-// OFFSET: LEGO1 0x10043550 TEMPLATE
+// FUNCTION: LEGO1 0x10043550
 // MxStillPresenter::~MxStillPresenter
 
-// OFFSET: LEGO1 0x100435b0
+// FUNCTION: LEGO1 0x100435b0
 void MxStillPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100435c0 TEMPLATE
+// FUNCTION: LEGO1 0x100435c0
 // MxStillPresenter::ClassName
 
-// OFFSET: LEGO1 0x100435d0 TEMPLATE
+// FUNCTION: LEGO1 0x100435d0
 // MxStillPresenter::IsA
 
-// OFFSET: LEGO1 0x100436e0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100436e0
 // MxStillPresenter::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100b9c70
+// FUNCTION: LEGO1 0x100b9c70
 void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
@@ -46,7 +46,7 @@ void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 		MxVideoPresenter::Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b9cc0
+// FUNCTION: LEGO1 0x100b9cc0
 void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	if (m_bitmapInfo)
@@ -57,7 +57,7 @@ void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 	memcpy(m_bitmapInfo, p_chunk->GetData(), p_chunk->GetLength());
 }
 
-// OFFSET: LEGO1 0x100b9d10
+// FUNCTION: LEGO1 0x100b9d10
 void MxStillPresenter::CreateBitmap()
 {
 	if (m_bitmap)
@@ -70,7 +70,7 @@ void MxStillPresenter::CreateBitmap()
 	m_bitmapInfo = NULL;
 }
 
-// OFFSET: LEGO1 0x100b9db0
+// FUNCTION: LEGO1 0x100b9db0
 void MxStillPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -78,7 +78,7 @@ void MxStillPresenter::NextFrame()
 	m_subscriber->FUN_100b8390(chunk);
 }
 
-// OFFSET: LEGO1 0x100b9dd0
+// FUNCTION: LEGO1 0x100b9dd0
 void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	memcpy(m_bitmap->GetBitmapData(), p_chunk->GetData(), p_chunk->GetLength());
@@ -113,7 +113,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	}
 }
 
-// OFFSET: LEGO1 0x100b9f30
+// FUNCTION: LEGO1 0x100b9f30
 void MxStillPresenter::RealizePalette()
 {
 	MxPalette* palette = m_bitmap->CreatePalette();
@@ -121,7 +121,7 @@ void MxStillPresenter::RealizePalette()
 	delete palette;
 }
 
-// OFFSET: LEGO1 0x100b9f60
+// FUNCTION: LEGO1 0x100b9f60
 void MxStillPresenter::StartingTickle()
 {
 	MxVideoPresenter::StartingTickle();
@@ -130,7 +130,7 @@ void MxStillPresenter::StartingTickle()
 		RealizePalette();
 }
 
-// OFFSET: LEGO1 0x100b9f90
+// FUNCTION: LEGO1 0x100b9f90
 void MxStillPresenter::StreamingTickle()
 {
 	MxStreamChunk* chunk = FUN_100b5650();
@@ -146,7 +146,7 @@ void MxStillPresenter::StreamingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b9ff0
+// FUNCTION: LEGO1 0x100b9ff0
 void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
@@ -157,7 +157,7 @@ void MxStillPresenter::RepeatingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100ba040
+// FUNCTION: LEGO1 0x100ba040
 void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 {
 	MxS32 x = m_location.m_x;
@@ -180,7 +180,7 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 	}
 }
 
-// OFFSET: LEGO1 0x100ba140
+// FUNCTION: LEGO1 0x100ba140
 void MxStillPresenter::Enable(MxBool p_enable)
 {
 	MxVideoPresenter::Enable(p_enable);
@@ -197,7 +197,7 @@ void MxStillPresenter::Enable(MxBool p_enable)
 	}
 }
 
-// OFFSET: LEGO1 0x100ba1e0
+// FUNCTION: LEGO1 0x100ba1e0
 void MxStillPresenter::ParseExtra()
 {
 	MxPresenter::ParseExtra();
@@ -230,7 +230,7 @@ void MxStillPresenter::ParseExtra()
 	}
 }
 
-// OFFSET: LEGO1 0x100ba2c0 STUB
+// STUB: LEGO1 0x100ba2c0
 MxStillPresenter* MxStillPresenter::Clone()
 {
 	// TODO

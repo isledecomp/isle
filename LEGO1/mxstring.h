@@ -3,7 +3,7 @@
 
 #include "mxcore.h"
 
-// VTABLE 0x100dc110
+// VTABLE: LEGO1 0x100dc110
 class MxString : public MxCore {
 public:
 	__declspec(dllexport) MxString(const MxString&);

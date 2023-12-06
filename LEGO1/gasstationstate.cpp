@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(GasStationState, 0x24);
 
-// OFFSET: LEGO1 0x10005eb0
+// FUNCTION: LEGO1 0x10005eb0
 GasStationState::GasStationState()
 {
 	m_unk0x18 = 0;

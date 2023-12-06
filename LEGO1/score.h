@@ -7,7 +7,7 @@
 #include "mxtype17notificationparam.h"
 #include "scorestate.h"
 
-// VTABLE 0x100d4018
+// VTABLE: LEGO1 0x100d4018
 // SIZE 0x104
 class Score : public LegoWorld {
 public:
@@ -15,20 +15,20 @@ public:
 	virtual ~Score() override;                  // vtable+0x0
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
 
-	// OFFSET: LEGO1 0x100010c0
+	// FUNCTION: LEGO1 0x100010c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f0058
+		// GLOBAL: LEGO1 0x100f0058
 		return "Score";
 	}
 
-	// OFFSET: LEGO1 0x100010d0
+	// FUNCTION: LEGO1 0x100010d0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, Score::ClassName()) || LegoWorld::IsA(name);
 	}
 
-	// OFFSET: LEGO1 0x100011e0 TEMPLATE
+	// SYNTHETIC: LEGO1 0x100011e0
 	// Score::`scalar deleting destructor'
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+18

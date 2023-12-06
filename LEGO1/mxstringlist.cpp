@@ -4,23 +4,23 @@
 
 DECOMP_SIZE_ASSERT(MxListEntry<MxString>, 0x18)
 
-// OFFSET: LEGO1 0x100cb3c0 TEMPLATE
+// TEMPLATE: LEGO1 0x100cb3c0
 // MxCollection<MxString>::Compare
 
-// OFFSET: LEGO1 0x100cb470 TEMPLATE
+// TEMPLATE: LEGO1 0x100cb470
 // MxCollection<MxString>::Destroy
 
-// OFFSET: LEGO1 0x100cb4c0 TEMPLATE
+// TEMPLATE: LEGO1 0x100cb4c0
 // MxList<MxString>::~MxList<MxString>
 
-// OFFSET: LEGO1 0x100cbb40 TEMPLATE
+// TEMPLATE: LEGO1 0x100cbb40
 // MxList<MxString>::Append
 
-// OFFSET: LEGO1 0x100cc2d0 TEMPLATE
+// TEMPLATE: LEGO1 0x100cc2d0
 // MxList<MxString>::_InsertEntry
 
-// OFFSET: LEGO1 0x100cc3c0 TEMPLATE
+// TEMPLATE: LEGO1 0x100cc3c0
 // MxListEntry<MxString>::MxListEntry<MxString>
 
-// OFFSET: LEGO1 0x100cc450 TEMPLATE
+// TEMPLATE: LEGO1 0x100cc450
 // MxListEntry<MxString>::GetValue

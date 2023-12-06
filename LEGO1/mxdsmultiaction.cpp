@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
 
-// OFFSET: LEGO1 0x100c9b90
+// FUNCTION: LEGO1 0x100c9b90
 MxDSMultiAction::MxDSMultiAction()
 {
 	this->SetType(MxDSType_MultiAction);
@@ -10,14 +10,14 @@ MxDSMultiAction::MxDSMultiAction()
 	this->m_actions->SetDestroy(MxDSActionList::Destroy);
 }
 
-// OFFSET: LEGO1 0x100ca060
+// FUNCTION: LEGO1 0x100ca060
 MxDSMultiAction::~MxDSMultiAction()
 {
 	if (this->m_actions)
 		delete this->m_actions;
 }
 
-// OFFSET: LEGO1 0x100ca0d0
+// FUNCTION: LEGO1 0x100ca0d0
 void MxDSMultiAction::CopyFrom(MxDSMultiAction& p_dsMultiAction)
 {
 	this->m_actions->DeleteAll();
@@ -28,7 +28,7 @@ void MxDSMultiAction::CopyFrom(MxDSMultiAction& p_dsMultiAction)
 		this->m_actions->Append(action->Clone());
 }
 
-// OFFSET: LEGO1 0x100ca260
+// FUNCTION: LEGO1 0x100ca260
 MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 {
 	if (this == &p_dsMultiAction)
@@ -39,7 +39,7 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100ca290
+// FUNCTION: LEGO1 0x100ca290
 void MxDSMultiAction::SetUnkTimingField(MxLong p_unkTimingField)
 {
 	this->m_unkTimingField = p_unkTimingField;
@@ -50,7 +50,7 @@ void MxDSMultiAction::SetUnkTimingField(MxLong p_unkTimingField)
 		action->SetUnkTimingField(p_unkTimingField);
 }
 
-// OFFSET: LEGO1 0x100ca370
+// FUNCTION: LEGO1 0x100ca370
 void MxDSMultiAction::MergeFrom(MxDSAction& p_dsMultiAction)
 {
 	MxDSAction::MergeFrom(p_dsMultiAction);
@@ -61,7 +61,7 @@ void MxDSMultiAction::MergeFrom(MxDSAction& p_dsMultiAction)
 		action->MergeFrom(p_dsMultiAction);
 }
 
-// OFFSET: LEGO1 0x100ca450
+// FUNCTION: LEGO1 0x100ca450
 MxBool MxDSMultiAction::HasId(MxU32 p_objectId)
 {
 	if (this->GetObjectId() == p_objectId)
@@ -77,7 +77,7 @@ MxBool MxDSMultiAction::HasId(MxU32 p_objectId)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100ca550
+// FUNCTION: LEGO1 0x100ca550
 MxDSAction* MxDSMultiAction::Clone()
 {
 	MxDSMultiAction* clone = new MxDSMultiAction();
@@ -88,7 +88,7 @@ MxDSAction* MxDSMultiAction::Clone()
 	return clone;
 }
 
-// OFFSET: LEGO1 0x100ca5e0
+// FUNCTION: LEGO1 0x100ca5e0
 undefined4 MxDSMultiAction::unk14()
 {
 	undefined4 result = MxDSAction::unk14();
@@ -101,7 +101,7 @@ undefined4 MxDSMultiAction::unk14()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100ca6c0
+// FUNCTION: LEGO1 0x100ca6c0
 MxU32 MxDSMultiAction::GetSizeOnDisk()
 {
 	MxU32 totalSizeOnDisk = MxDSAction::GetSizeOnDisk() + 16;
@@ -116,7 +116,7 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 	return totalSizeOnDisk;
 }
 
-// OFFSET: LEGO1 0x100ca7b0
+// FUNCTION: LEGO1 0x100ca7b0
 void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk24)
 {
 	MxDSAction::Deserialize(p_source, p_unk24);
@@ -142,7 +142,7 @@ void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk24)
 	*p_source += extraFlag;
 }
 
-// OFFSET: LEGO1 0x100ca8c0
+// FUNCTION: LEGO1 0x100ca8c0
 void MxDSMultiAction::SetAtomId(MxAtomId p_atomId)
 {
 	MxDSAction::SetAtomId(p_atomId);

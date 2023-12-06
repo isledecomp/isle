@@ -4,7 +4,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSStreamingAction, 0xb4)
 
-// OFFSET: LEGO1 0x100cd010
+// FUNCTION: LEGO1 0x100cd010
 MxDSStreamingAction::MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset)
 {
 	Init();
@@ -14,7 +14,7 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset)
 	this->m_bufferOffset = p_offset;
 }
 
-// OFFSET: LEGO1 0x100cd090
+// FUNCTION: LEGO1 0x100cd090
 MxBool MxDSStreamingAction::HasId(MxU32 p_objectId)
 {
 	if (this->m_internalAction)
@@ -22,14 +22,14 @@ MxBool MxDSStreamingAction::HasId(MxU32 p_objectId)
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100cd0d0
+// FUNCTION: LEGO1 0x100cd0d0
 MxDSStreamingAction::MxDSStreamingAction(MxDSStreamingAction& p_dsStreamingAction)
 {
 	Init();
 	CopyFrom(p_dsStreamingAction);
 }
 
-// OFFSET: LEGO1 0x100cd150
+// FUNCTION: LEGO1 0x100cd150
 MxDSStreamingAction::~MxDSStreamingAction()
 {
 	if (this->m_unka0)
@@ -40,7 +40,7 @@ MxDSStreamingAction::~MxDSStreamingAction()
 		delete this->m_internalAction;
 }
 
-// OFFSET: LEGO1 0x100cd1e0
+// FUNCTION: LEGO1 0x100cd1e0
 MxResult MxDSStreamingAction::Init()
 {
 	this->m_unk94 = 0;
@@ -54,7 +54,7 @@ MxResult MxDSStreamingAction::Init()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100cd220
+// FUNCTION: LEGO1 0x100cd220
 MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStreamingAction)
 {
 	*this = p_dsStreamingAction;
@@ -70,7 +70,7 @@ MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStre
 	return this;
 }
 
-// OFFSET: LEGO1 0x100cd2a0
+// FUNCTION: LEGO1 0x100cd2a0
 void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
 {
 	if (this->m_internalAction)
@@ -78,7 +78,7 @@ void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
 	this->m_internalAction = p_dsAction;
 }
 
-// OFFSET: LEGO1 0x100cd2d0
+// FUNCTION: LEGO1 0x100cd2d0
 void MxDSStreamingAction::FUN_100CD2D0()
 {
 	if (this->m_duration == -1)

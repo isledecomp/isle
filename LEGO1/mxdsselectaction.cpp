@@ -6,21 +6,21 @@
 
 DECOMP_SIZE_ASSERT(MxDSSelectAction, 0xb0)
 
-// OFFSET: LEGO1 0x100cb2b0
+// FUNCTION: LEGO1 0x100cb2b0
 MxDSSelectAction::MxDSSelectAction()
 {
 	this->SetType(MxDSType_SelectAction);
 	this->m_unk0xac = new MxStringList;
 }
 
-// OFFSET: LEGO1 0x100cb8d0
+// FUNCTION: LEGO1 0x100cb8d0
 MxDSSelectAction::~MxDSSelectAction()
 {
 	if (this->m_unk0xac)
 		delete this->m_unk0xac;
 }
 
-// OFFSET: LEGO1 0x100cb950
+// FUNCTION: LEGO1 0x100cb950
 void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 {
 	this->m_unk0x9c = p_dsSelectAction.m_unk0x9c;
@@ -33,7 +33,7 @@ void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 		this->m_unk0xac->Append(string);
 }
 
-// OFFSET: LEGO1 0x100cbd50
+// FUNCTION: LEGO1 0x100cbd50
 MxDSSelectAction& MxDSSelectAction::operator=(MxDSSelectAction& p_dsSelectAction)
 {
 	if (this != &p_dsSelectAction) {
@@ -43,7 +43,7 @@ MxDSSelectAction& MxDSSelectAction::operator=(MxDSSelectAction& p_dsSelectAction
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100cbd80
+// FUNCTION: LEGO1 0x100cbd80
 MxDSAction* MxDSSelectAction::Clone()
 {
 	MxDSSelectAction* clone = new MxDSSelectAction();
@@ -54,7 +54,7 @@ MxDSAction* MxDSSelectAction::Clone()
 	return clone;
 }
 
-// OFFSET: LEGO1 0x100cbe10
+// FUNCTION: LEGO1 0x100cbe10
 MxU32 MxDSSelectAction::GetSizeOnDisk()
 {
 	MxU32 totalSizeOnDisk = MxDSParallelAction::GetSizeOnDisk();
@@ -73,7 +73,7 @@ MxU32 MxDSSelectAction::GetSizeOnDisk()
 	return totalSizeOnDisk;
 }
 
-// OFFSET: LEGO1 0x100cbf60
+// FUNCTION: LEGO1 0x100cbf60
 void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk24)
 {
 	MxString string;

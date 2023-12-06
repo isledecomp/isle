@@ -6,7 +6,7 @@
 #include "mxpresenter.h"
 #include "mxstreamchunklist.h"
 
-// VTABLE 0x100d4cd8
+// VTABLE: LEGO1 0x100d4cd8
 // SIZE 0x50
 class MxMediaPresenter : public MxPresenter {
 public:
@@ -15,14 +15,14 @@ public:
 
 	virtual MxResult Tickle() override; // vtable+0x8
 
-	// OFFSET: LEGO1 0x1000c5c0
+	// FUNCTION: LEGO1 0x1000c5c0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f074c
+		// GLOBAL: LEGO1 0x100f074c
 		return "MxMediaPresenter";
 	}
 
-	// OFFSET: LEGO1 0x1000c5d0
+	// FUNCTION: LEGO1 0x1000c5d0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(name);

@@ -16,12 +16,12 @@
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 
-// OFFSET: LEGO1 0x1000be30
+// FUNCTION: LEGO1 0x1000be30
 void MxPresenter::VTable0x14()
 {
 }
 
-// OFFSET: LEGO1 0x1000be40
+// FUNCTION: LEGO1 0x1000be40
 void MxPresenter::ReadyTickle()
 {
 	ParseExtra();
@@ -30,84 +30,84 @@ void MxPresenter::ReadyTickle()
 	m_currentTickleState = TickleState_Starting;
 }
 
-// OFFSET: LEGO1 0x1000be60
+// FUNCTION: LEGO1 0x1000be60
 void MxPresenter::StartingTickle()
 {
 	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 	m_currentTickleState = TickleState_Streaming;
 }
 
-// OFFSET: LEGO1 0x1000be80
+// FUNCTION: LEGO1 0x1000be80
 void MxPresenter::StreamingTickle()
 {
 	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 	m_currentTickleState = TickleState_Repeating;
 }
 
-// OFFSET: LEGO1 0x1000bea0
+// FUNCTION: LEGO1 0x1000bea0
 void MxPresenter::RepeatingTickle()
 {
 	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 	m_currentTickleState = TickleState_unk5;
 }
 
-// OFFSET: LEGO1 0x1000bec0
+// FUNCTION: LEGO1 0x1000bec0
 void MxPresenter::Unk5Tickle()
 {
 	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 	m_currentTickleState = TickleState_Done;
 }
 
-// OFFSET: LEGO1 0x1000bee0
+// FUNCTION: LEGO1 0x1000bee0
 void MxPresenter::DoneTickle()
 {
 	m_previousTickleStates |= 1 << m_currentTickleState;
 	m_currentTickleState = TickleState_Idle;
 }
 
-// OFFSET: LEGO1 0x1000bf00
+// FUNCTION: LEGO1 0x1000bf00
 MxPresenter::~MxPresenter()
 {
 }
 
-// OFFSET: LEGO1 0x1000bf70
+// FUNCTION: LEGO1 0x1000bf70
 MxResult MxPresenter::AddToManager()
 {
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x1000bf80
+// FUNCTION: LEGO1 0x1000bf80
 void MxPresenter::Destroy()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x1000bf90
+// FUNCTION: LEGO1 0x1000bf90
 void MxPresenter::SetTickleState(TickleState p_tickleState)
 {
 	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 	m_currentTickleState = p_tickleState;
 }
 
-// OFFSET: LEGO1 0x1000bfb0
+// FUNCTION: LEGO1 0x1000bfb0
 MxBool MxPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	return m_previousTickleStates & (1 << (unsigned char) p_tickleState);
 }
 
-// OFFSET: LEGO1 0x1000bfc0
+// FUNCTION: LEGO1 0x1000bfc0
 MxResult MxPresenter::PutData()
 {
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x1000bfd0
+// FUNCTION: LEGO1 0x1000bfd0
 MxBool MxPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x100b4d50
+// FUNCTION: LEGO1 0x100b4d50
 void MxPresenter::Init()
 {
 	m_currentTickleState = TickleState_Idle;
@@ -118,7 +118,7 @@ void MxPresenter::Init()
 	m_previousTickleStates = 0;
 }
 
-// OFFSET: LEGO1 0x100b4d80
+// FUNCTION: LEGO1 0x100b4d80
 MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -136,7 +136,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b4e40
+// FUNCTION: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
 	if (this->m_action == NULL)
@@ -156,7 +156,7 @@ void MxPresenter::EndAction()
 	this->m_currentTickleState = TickleState_Idle;
 }
 
-// OFFSET: LEGO1 0x100b4fc0
+// FUNCTION: LEGO1 0x100b4fc0
 void MxPresenter::ParseExtra()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -187,7 +187,7 @@ void MxPresenter::ParseExtra()
 	}
 }
 
-// OFFSET: LEGO1 0x100b5120
+// FUNCTION: LEGO1 0x100b5120
 void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 {
 	if (m_compositePresenter) {
@@ -200,7 +200,7 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 	}
 }
 
-// OFFSET: LEGO1 0x100b5200
+// FUNCTION: LEGO1 0x100b5200
 MxResult MxPresenter::Tickle()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -240,7 +240,7 @@ MxResult MxPresenter::Tickle()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b52d0
+// FUNCTION: LEGO1 0x100b52d0
 void MxPresenter::Enable(MxBool p_enable)
 {
 	if (this->m_action && this->IsEnabled() != p_enable) {
@@ -253,7 +253,7 @@ void MxPresenter::Enable(MxBool p_enable)
 	}
 }
 
-// OFFSET: LEGO1 0x100b5310
+// FUNCTION: LEGO1 0x100b5310
 const char* PresenterNameDispatch(const MxDSAction& p_action)
 {
 	const char* name = p_action.GetSourceName();
@@ -304,7 +304,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 	return name;
 }
 
-// OFFSET: LEGO1 0x100b54c0
+// FUNCTION: LEGO1 0x100b54c0
 MxBool MxPresenter::IsEnabled()
 {
 	return this->m_action && this->m_action->GetFlags() & MxDSAction::Flag_Enabled;

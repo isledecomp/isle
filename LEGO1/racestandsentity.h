@@ -3,7 +3,7 @@
 
 #include "buildingentity.h"
 
-// VTABLE 0x100d48a8
+// VTABLE: LEGO1 0x100d48a8
 // SIZE 0x68
 class RaceStandsEntity : public BuildingEntity {};
 

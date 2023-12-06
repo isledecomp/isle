@@ -9,19 +9,19 @@
 
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
 
-// OFFSET: LEGO1 0x1000c550
+// FUNCTION: LEGO1 0x1000c550
 MxMediaPresenter::~MxMediaPresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x1000c5b0
+// FUNCTION: LEGO1 0x1000c5b0
 void MxMediaPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b54e0
+// FUNCTION: LEGO1 0x100b54e0
 void MxMediaPresenter::Init()
 {
 	this->m_subscriber = NULL;
@@ -30,7 +30,7 @@ void MxMediaPresenter::Init()
 	this->m_currentChunk = NULL;
 }
 
-// OFFSET: LEGO1 0x100b54f0
+// FUNCTION: LEGO1 0x100b54f0
 void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 {
 	{
@@ -62,7 +62,7 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 		MxPresenter::Destroy();
 }
 
-// OFFSET: LEGO1 0x100b5650
+// FUNCTION: LEGO1 0x100b5650
 MxStreamChunk* MxMediaPresenter::FUN_100b5650()
 {
 	MxStreamChunk* result = NULL;
@@ -83,7 +83,7 @@ MxStreamChunk* MxMediaPresenter::FUN_100b5650()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b56b0
+// FUNCTION: LEGO1 0x100b56b0
 MxStreamChunk* MxMediaPresenter::NextChunk()
 {
 	MxStreamChunk* result = NULL;
@@ -103,7 +103,7 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b5700
+// FUNCTION: LEGO1 0x100b5700
 MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
 	MxResult result = FAILURE;
@@ -133,7 +133,7 @@ done:
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b5bc0
+// FUNCTION: LEGO1 0x100b5bc0
 void MxMediaPresenter::EndAction()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -166,7 +166,7 @@ void MxMediaPresenter::EndAction()
 	}
 }
 
-// OFFSET: LEGO1 0x100b5d10
+// FUNCTION: LEGO1 0x100b5d10
 MxResult MxMediaPresenter::Tickle()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -176,7 +176,7 @@ MxResult MxMediaPresenter::Tickle()
 	return MxPresenter::Tickle();
 }
 
-// OFFSET: LEGO1 0x100b5d90
+// FUNCTION: LEGO1 0x100b5d90
 void MxMediaPresenter::StreamingTickle()
 {
 	if (!m_currentChunk) {
@@ -201,7 +201,7 @@ void MxMediaPresenter::StreamingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b5e10
+// FUNCTION: LEGO1 0x100b5e10
 void MxMediaPresenter::RepeatingTickle()
 {
 	if (IsEnabled() && !m_currentChunk) {
@@ -225,7 +225,7 @@ void MxMediaPresenter::RepeatingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b5ef0
+// FUNCTION: LEGO1 0x100b5ef0
 void MxMediaPresenter::DoneTickle()
 {
 	m_previousTickleStates |= 1 << m_currentTickleState;
@@ -233,7 +233,7 @@ void MxMediaPresenter::DoneTickle()
 	EndAction();
 }
 
-// OFFSET: LEGO1 0x100b5f10
+// FUNCTION: LEGO1 0x100b5f10
 void MxMediaPresenter::AppendChunk(MxStreamChunk* p_chunk)
 {
 	MxStreamChunk* chunk = new MxStreamChunk;
@@ -247,7 +247,7 @@ void MxMediaPresenter::AppendChunk(MxStreamChunk* p_chunk)
 	m_chunks->Append(chunk);
 }
 
-// OFFSET: LEGO1 0x100b6030
+// FUNCTION: LEGO1 0x100b6030
 void MxMediaPresenter::Enable(MxBool p_enable)
 {
 	if (IsEnabled() != p_enable) {

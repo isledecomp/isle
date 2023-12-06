@@ -33,7 +33,7 @@ enum NotificationId {
 	MXTRANSITIONMANAGER_TRANSITIONENDED = 24
 };
 
-// VTABLE 0x100d56e0
+// VTABLE: LEGO1 0x100d56e0
 class MxNotificationParam : public MxParam {
 public:
 	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)

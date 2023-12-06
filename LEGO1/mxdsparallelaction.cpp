@@ -4,23 +4,23 @@
 
 DECOMP_SIZE_ASSERT(MxDSParallelAction, 0x9c)
 
-// OFFSET: LEGO1 0x100cae80
+// FUNCTION: LEGO1 0x100cae80
 MxDSParallelAction::MxDSParallelAction()
 {
 	this->SetType(MxDSType_ParallelAction);
 }
 
-// OFFSET: LEGO1 0x100cb040
+// FUNCTION: LEGO1 0x100cb040
 MxDSParallelAction::~MxDSParallelAction()
 {
 }
 
-// OFFSET: LEGO1 0x100cb090
+// FUNCTION: LEGO1 0x100cb090
 void MxDSParallelAction::CopyFrom(MxDSParallelAction& p_dsParallelAction)
 {
 }
 
-// OFFSET: LEGO1 0x100cb0a0
+// FUNCTION: LEGO1 0x100cb0a0
 MxDSParallelAction& MxDSParallelAction::operator=(MxDSParallelAction& p_dsParallelAction)
 {
 	if (this == &p_dsParallelAction)
@@ -31,7 +31,7 @@ MxDSParallelAction& MxDSParallelAction::operator=(MxDSParallelAction& p_dsParall
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100cb0d0
+// FUNCTION: LEGO1 0x100cb0d0
 MxDSAction* MxDSParallelAction::Clone()
 {
 	MxDSParallelAction* clone = new MxDSParallelAction();
@@ -42,7 +42,7 @@ MxDSAction* MxDSParallelAction::Clone()
 	return clone;
 }
 
-// OFFSET: LEGO1 0x100cb160
+// FUNCTION: LEGO1 0x100cb160
 MxLong MxDSParallelAction::GetDuration()
 {
 	if (this->m_duration)

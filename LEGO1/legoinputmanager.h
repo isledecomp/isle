@@ -12,20 +12,20 @@
 
 class LegoControlManager;
 
-// VTABLE 0x100d87b8 TEMPLATE
+// VTABLE: LEGO1 0x100d87b8
 // class MxCollection<LegoEventNotificationParam>
 
-// VTABLE 0x100d87d0 TEMPLATE
+// VTABLE: LEGO1 0x100d87d0
 // class MxList<LegoEventNotificationParam>
 
-// VTABLE 0x100d87e8 TEMPLATE
+// VTABLE: LEGO1 0x100d87e8
 // class MxQueue<LegoEventNotificationParam>
 
-// VTABLE 0x100d8800
+// VTABLE: LEGO1 0x100d8800
 // SIZE 0x18
 class LegoEventQueue : public MxQueue<LegoEventNotificationParam> {};
 
-// VTABLE 0x100d8760
+// VTABLE: LEGO1 0x100d8760
 // SIZE 0x338
 class LegoInputManager : public MxPresenter {
 public:

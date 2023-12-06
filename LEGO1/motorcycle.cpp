@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(Motorcycle, 0x16c);
 
-// OFFSET: LEGO1 0x100357b0
+// FUNCTION: LEGO1 0x100357b0
 Motorcycle::Motorcycle()
 {
 	this->m_unk13c = 40.0;

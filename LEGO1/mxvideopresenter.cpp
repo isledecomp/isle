@@ -7,67 +7,67 @@
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
-// OFFSET: LEGO1 0x1000c700
+// FUNCTION: LEGO1 0x1000c700
 void MxVideoPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
 
-// OFFSET: LEGO1 0x1000c710
+// FUNCTION: LEGO1 0x1000c710
 void MxVideoPresenter::CreateBitmap()
 {
 	// Empty
 }
 
-// OFFSET: LEGO1 0x1000c720
+// FUNCTION: LEGO1 0x1000c720
 void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	// Empty
 }
 
-// OFFSET: LEGO1 0x1000c730
+// FUNCTION: LEGO1 0x1000c730
 void MxVideoPresenter::RealizePalette()
 {
 	// Empty
 }
 
-// OFFSET: LEGO1 0x1000c740
+// FUNCTION: LEGO1 0x1000c740
 MxVideoPresenter::~MxVideoPresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x1000c7a0
+// FUNCTION: LEGO1 0x1000c7a0
 void MxVideoPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x1000c7b0
+// FUNCTION: LEGO1 0x1000c7b0
 LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
 {
 	return m_unk58;
 }
 
-// OFFSET: LEGO1 0x1000c7c0
+// FUNCTION: LEGO1 0x1000c7c0
 MxBool MxVideoPresenter::VTable0x7c()
 {
 	return (m_bitmap != NULL) || (m_alpha != NULL);
 }
 
-// OFFSET: LEGO1 0x1000c7e0
+// FUNCTION: LEGO1 0x1000c7e0
 MxS32 MxVideoPresenter::GetWidth()
 {
 	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiHeader()->biWidth;
 }
 
-// OFFSET: LEGO1 0x1000c800
+// FUNCTION: LEGO1 0x1000c800
 MxS32 MxVideoPresenter::GetHeight()
 {
 	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeader()->biHeight;
 }
 
-// OFFSET: LEGO1 0x100b24f0
+// FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
 	m_width = p_bitmap.GetBmiWidth();
@@ -152,7 +152,7 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	}
 }
 
-// OFFSET: LEGO1 0x100b2670
+// FUNCTION: LEGO1 0x100b2670
 MxVideoPresenter::AlphaMask::AlphaMask(const MxVideoPresenter::AlphaMask& p_alpha)
 {
 	m_width = p_alpha.m_width;
@@ -163,14 +163,14 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxVideoPresenter::AlphaMask& p_alph
 	memcpy(m_bitmask, p_alpha.m_bitmask, size);
 }
 
-// OFFSET: LEGO1 0x100b26d0
+// FUNCTION: LEGO1 0x100b26d0
 MxVideoPresenter::AlphaMask::~AlphaMask()
 {
 	if (m_bitmask)
 		delete[] m_bitmask;
 }
 
-// OFFSET: LEGO1 0x100b26f0
+// FUNCTION: LEGO1 0x100b26f0
 MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 {
 	if (p_x >= m_width || p_y >= m_height)
@@ -180,7 +180,7 @@ MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 	return m_bitmask[pos / 8] & (1 << abs(abs(pos) & 7)) ? 1 : 0;
 }
 
-// OFFSET: LEGO1 0x100b2760
+// FUNCTION: LEGO1 0x100b2760
 void MxVideoPresenter::Init()
 {
 	m_bitmap = NULL;
@@ -200,7 +200,7 @@ void MxVideoPresenter::Init()
 	m_flags = m_flags & 0xef;
 }
 
-// OFFSET: LEGO1 0x100b27b0
+// FUNCTION: LEGO1 0x100b27b0
 void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MVideoManager() != NULL)
@@ -234,7 +234,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxMediaPresenter::Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100b28b0
+// FUNCTION: LEGO1 0x100b28b0
 void MxVideoPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -250,7 +250,7 @@ void MxVideoPresenter::NextFrame()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2900
+// FUNCTION: LEGO1 0x100b2900
 MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
@@ -312,13 +312,13 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x100b2a70 STUB
+// STUB: LEGO1 0x100b2a70
 void MxVideoPresenter::VTable0x6c()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b2f60
+// FUNCTION: LEGO1 0x100b2f60
 void MxVideoPresenter::ReadyTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -332,7 +332,7 @@ void MxVideoPresenter::ReadyTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2fa0
+// FUNCTION: LEGO1 0x100b2fa0
 void MxVideoPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = FUN_100b5650();
@@ -344,7 +344,7 @@ void MxVideoPresenter::StartingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b2fe0
+// FUNCTION: LEGO1 0x100b2fe0
 void MxVideoPresenter::StreamingTickle()
 {
 	if (m_action->GetFlags() & MxDSAction::Flag_Bit9) {
@@ -382,7 +382,7 @@ void MxVideoPresenter::StreamingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b3080
+// FUNCTION: LEGO1 0x100b3080
 void MxVideoPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
@@ -421,7 +421,7 @@ void MxVideoPresenter::RepeatingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b3130
+// FUNCTION: LEGO1 0x100b3130
 void MxVideoPresenter::Unk5Tickle()
 {
 	MxLong sustainTime = ((MxDSMediaAction*) m_action)->GetSustainTime();
@@ -443,7 +443,7 @@ void MxVideoPresenter::Unk5Tickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100b31a0
+// FUNCTION: LEGO1 0x100b31a0
 MxResult MxVideoPresenter::AddToManager()
 {
 	MxResult result = FAILURE;
@@ -456,7 +456,7 @@ MxResult MxVideoPresenter::AddToManager()
 	return result;
 }
 
-// OFFSET: LEGO1 0x100b31d0
+// FUNCTION: LEGO1 0x100b31d0
 void MxVideoPresenter::EndAction()
 {
 	if (m_action) {
@@ -476,7 +476,7 @@ void MxVideoPresenter::EndAction()
 	}
 }
 
-// OFFSET: LEGO1 0x100b3280
+// FUNCTION: LEGO1 0x100b3280
 MxResult MxVideoPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
@@ -487,7 +487,7 @@ MxResult MxVideoPresenter::PutData()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b3300
+// FUNCTION: LEGO1 0x100b3300
 undefined MxVideoPresenter::VTable0x74()
 {
 	return 0;

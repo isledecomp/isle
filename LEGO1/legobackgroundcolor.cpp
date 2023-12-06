@@ -11,7 +11,7 @@ const char* g_delimiter = "\t";
 const char* g_set = "set";
 const char* g_reset = "reset";
 
-// OFFSET: LEGO1 0x1003bfb0
+// FUNCTION: LEGO1 0x1003bfb0
 LegoBackgroundColor::LegoBackgroundColor(const char* p_key, const char* p_value)
 {
 	m_key = p_key;
@@ -19,7 +19,7 @@ LegoBackgroundColor::LegoBackgroundColor(const char* p_key, const char* p_value)
 	SetValue(p_value);
 }
 
-// OFFSET: LEGO1 0x1003c070
+// FUNCTION: LEGO1 0x1003c070
 void LegoBackgroundColor::SetValue(const char* p_colorString)
 {
 	m_value = p_colorString;

@@ -1,6 +1,6 @@
 #include "mxcompositemediapresenter.h"
 
-// OFFSET: LEGO1 0x10073ea0 STUB
+// STUB: LEGO1 0x10073ea0
 MxCompositeMediaPresenter::MxCompositeMediaPresenter()
 {
 	// TODO

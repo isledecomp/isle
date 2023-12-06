@@ -1,18 +1,18 @@
 #include "legocarbuild.h"
 
-// OFFSET: LEGO1 0x100226d0 STUB
+// STUB: LEGO1 0x100226d0
 LegoCarBuild::LegoCarBuild()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10022a80 STUB
+// STUB: LEGO1 0x10022a80
 LegoCarBuild::~LegoCarBuild()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100238b0 STUB
+// STUB: LEGO1 0x100238b0
 MxResult LegoCarBuild::Tickle()
 {
 	// TODO
@@ -20,7 +20,7 @@ MxResult LegoCarBuild::Tickle()
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10024050 STUB
+// STUB: LEGO1 0x10024050
 MxLong LegoCarBuild::Notify(MxParam& p)
 {
 	// TODO
