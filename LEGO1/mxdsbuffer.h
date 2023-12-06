@@ -11,17 +11,17 @@ enum MxDSBufferType {
 	MxDSBufferType_Unknown = 3,
 };
 
-// VTABLE 0x100dcca0
+// VTABLE: LEGO1 0x100dcca0
 // SIZE 0x34
 class MxDSBuffer : public MxCore {
 public:
 	MxDSBuffer();
 	virtual ~MxDSBuffer() override;
 
-	// OFFSET: LEGO1 0x100c6500
+	// FUNCTION: LEGO1 0x100c6500
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f0568
+		// GLOBAL: LEGO1 0x100f0568
 		return "MxDSBuffer";
 	}
 

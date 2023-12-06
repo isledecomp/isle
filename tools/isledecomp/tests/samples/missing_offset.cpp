@@ -9,7 +9,7 @@ int no_offset_comment()
   return -1;
 }
 
-// OFFSET: TEST 0xdeadbeef
+// FUNCTION: TEST 0xdeadbeef
 void regular_ole_function()
 {
   printf("hi there");

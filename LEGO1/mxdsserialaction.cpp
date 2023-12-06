@@ -4,7 +4,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
 
-// OFFSET: LEGO1 0x100ca9d0
+// FUNCTION: LEGO1 0x100ca9d0
 MxDSSerialAction::MxDSSerialAction()
 {
 	this->SetType(MxDSType_SerialAction);
@@ -12,13 +12,13 @@ MxDSSerialAction::MxDSSerialAction()
 	this->m_unk0xa0 = 0;
 }
 
-// OFFSET: LEGO1 0x100caac0
+// FUNCTION: LEGO1 0x100caac0
 void MxDSSerialAction::SetDuration(MxLong p_duration)
 {
 	this->m_duration = p_duration;
 }
 
-// OFFSET: LEGO1 0x100cac10
+// FUNCTION: LEGO1 0x100cac10
 MxDSSerialAction::~MxDSSerialAction()
 {
 	if (this->m_cursor)
@@ -27,12 +27,12 @@ MxDSSerialAction::~MxDSSerialAction()
 	this->m_cursor = NULL;
 }
 
-// OFFSET: LEGO1 0x100cac90
+// FUNCTION: LEGO1 0x100cac90
 void MxDSSerialAction::CopyFrom(MxDSSerialAction& p_dsSerialAction)
 {
 }
 
-// OFFSET: LEGO1 0x100caca0
+// FUNCTION: LEGO1 0x100caca0
 MxDSSerialAction& MxDSSerialAction::operator=(MxDSSerialAction& p_dsSerialAction)
 {
 	if (this == &p_dsSerialAction)
@@ -43,7 +43,7 @@ MxDSSerialAction& MxDSSerialAction::operator=(MxDSSerialAction& p_dsSerialAction
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100cacd0
+// FUNCTION: LEGO1 0x100cacd0
 MxDSAction* MxDSSerialAction::Clone()
 {
 	MxDSSerialAction* clone = new MxDSSerialAction();
@@ -54,7 +54,7 @@ MxDSAction* MxDSSerialAction::Clone()
 	return clone;
 }
 
-// OFFSET: LEGO1 0x100cad60
+// FUNCTION: LEGO1 0x100cad60
 MxLong MxDSSerialAction::GetDuration()
 {
 	if (this->m_duration)

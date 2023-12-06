@@ -7,10 +7,10 @@
 #include "mxdstypes.h"
 
 // TODO: Find proper compilation unit to put this
-// OFFSET: LEGO1 0x10005530 TEMPLATE
+// FUNCTION: LEGO1 0x10005530
 // MxDSObject::SetAtomId
 
-// VTABLE 0x100dc868
+// VTABLE: LEGO1 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
 public:
@@ -23,10 +23,10 @@ public:
 	__declspec(dllexport) void SetObjectName(const char* p_objectName);
 	void SetSourceName(const char* p_sourceName);
 
-	// OFFSET: LEGO1 0x100bf730
+	// FUNCTION: LEGO1 0x100bf730
 	inline virtual const char* ClassName() const override { return "MxDSObject"; }; // vtable+0c
 
-	// OFFSET: LEGO1 0x100bf740
+	// FUNCTION: LEGO1 0x100bf740
 	inline virtual MxBool IsA(const char* name) const override
 	{
 		return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name);

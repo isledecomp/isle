@@ -5,32 +5,32 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 
-// 0x100f4c28
+// GLOBAL: LEGO1 0x100f4c28
 int g_mouseDeadzone = 40;
-// 0x100f4c2c
+// GLOBAL: LEGO1 0x100f4c2c
 float g_zeroThreshold = 0.001f;
-// 0x100f4c30
+// GLOBAL: LEGO1 0x100f4c30
 float g_movementMaxSpeed = 40.0f;
-// 0x100f4c34
+// GLOBAL: LEGO1 0x100f4c34
 float g_turnMaxSpeed = 20.0f;
-// 0x100f4c38
+// GLOBAL: LEGO1 0x100f4c38
 float g_movementMaxAccel = 15.0f;
-// 0x100f4c3c
+// GLOBAL: LEGO1 0x100f4c3c
 float g_turnMaxAccel = 30.0f;
-// 0x100f4c40
+// GLOBAL: LEGO1 0x100f4c40
 float g_movementMinAccel = 4.0f;
-// 0x100f4c44
+// GLOBAL: LEGO1 0x100f4c44
 float g_turnMinAccel = 15.0f;
-// 0x100f4c48
+// GLOBAL: LEGO1 0x100f4c48
 float g_movementDecel = 50.0f;
-// 0x100f4c4c
+// GLOBAL: LEGO1 0x100f4c4c
 float g_turnDecel = 50.0f;
-// 0x100f4c50
+// GLOBAL: LEGO1 0x100f4c50
 float g_turnSensitivity = 0.4f;
-// 0x100f4c54
+// GLOBAL: LEGO1 0x100f4c54
 MxBool g_turnUseVelocity = FALSE;
 
-// OFFSET: LEGO1 0x10054ac0
+// FUNCTION: LEGO1 0x10054ac0
 LegoNavController::LegoNavController()
 {
 	ResetToDefault();
@@ -54,13 +54,13 @@ LegoNavController::LegoNavController()
 	InputManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x10054c30
+// FUNCTION: LEGO1 0x10054c30
 LegoNavController::~LegoNavController()
 {
 	InputManager()->UnRegister(this);
 }
 
-// OFFSET: LEGO1 0x10054ca0
+// FUNCTION: LEGO1 0x10054ca0
 void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
 {
 	this->m_hMax = p_hMax;
@@ -72,7 +72,7 @@ void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
 	}
 }
 
-// OFFSET: LEGO1 0x10054cd0
+// FUNCTION: LEGO1 0x10054cd0
 void LegoNavController::ResetToDefault()
 {
 	this->m_mouseDeadzone = g_mouseDeadzone;
@@ -89,7 +89,7 @@ void LegoNavController::ResetToDefault()
 	this->m_turnSensitivity = g_turnSensitivity;
 }
 
-// OFFSET: LEGO1 0x10054d40
+// FUNCTION: LEGO1 0x10054d40
 void LegoNavController::GetDefaults(
 	int* p_mouseDeadzone,
 	float* p_movementMaxSpeed,
@@ -117,7 +117,7 @@ void LegoNavController::GetDefaults(
 	*p_turnUseVelocity = g_turnUseVelocity;
 }
 
-// OFFSET: LEGO1 0x10054dd0
+// FUNCTION: LEGO1 0x10054dd0
 void LegoNavController::SetDefaults(
 	int p_mouseDeadzone,
 	float p_movementMaxSpeed,
@@ -145,7 +145,7 @@ void LegoNavController::SetDefaults(
 	g_turnUseVelocity = p_turnUseVelocity;
 }
 
-// OFFSET: LEGO1 0x10054e40
+// FUNCTION: LEGO1 0x10054e40
 void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 {
 	if (this->m_trackDefault != FALSE)
@@ -172,7 +172,7 @@ void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 	}
 }
 
-// OFFSET: LEGO1 0x10054f10
+// FUNCTION: LEGO1 0x10054f10
 float LegoNavController::CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed)
 {
 	float result;
@@ -188,7 +188,7 @@ float LegoNavController::CalculateNewTargetSpeed(int p_pos, int p_center, float 
 	return result;
 }
 
-// OFFSET: LEGO1 0x10054f90
+// FUNCTION: LEGO1 0x10054f90
 float LegoNavController::CalculateNewAccel(int p_pos, int p_center, float p_maxAccel, int p_minAccel)
 {
 	float result;
@@ -202,7 +202,7 @@ float LegoNavController::CalculateNewAccel(int p_pos, int p_center, float p_maxA
 	return result;
 }
 
-// OFFSET: LEGO1 0x10054fe0
+// FUNCTION: LEGO1 0x10054fe0
 float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time)
 {
 	float newVel = p_currentVel;

@@ -5,10 +5,10 @@
 
 class MxPresenter;
 
-// VTABLE 0x100d62f0 TEMPLATE
+// VTABLE: LEGO1 0x100d62f0
 // class MxPtrList<MxPresenter>
 
-// VTABLE 0x100d6308
+// VTABLE: LEGO1 0x100d6308
 // SIZE 0x18
 class MxPresenterList : public MxPtrList<MxPresenter> {
 public:
@@ -17,10 +17,10 @@ public:
 
 typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
 
-// VTABLE 0x100d6350 TEMPLATE
+// VTABLE: LEGO1 0x100d6350
 // class MxCollection<MxPresenter *>
 
-// VTABLE 0x100d6368 TEMPLATE
+// VTABLE: LEGO1 0x100d6368
 // class MxList<MxPresenter *>
 
 #endif // MXPRESENTERLIST_H

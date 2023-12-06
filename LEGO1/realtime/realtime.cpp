@@ -1,6 +1,6 @@
 #include "realtime.h"
 
-// OFFSET: LEGO1 0x100a5b40
+// FUNCTION: LEGO1 0x100a5b40
 void CalcLocalTransform(
 	const Vector3Impl& p_posVec,
 	const Vector3Impl& p_dirVec,

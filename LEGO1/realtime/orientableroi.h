@@ -6,7 +6,7 @@
 
 class OrientableROI : public ROI {
 public:
-	// OFFSET: LEGO1 0x100a4420
+	// FUNCTION: LEGO1 0x100a4420
 	OrientableROI()
 	{
 		FILLVEC3(m_world_bounding_box.Min(), 888888.8);
@@ -16,7 +16,7 @@ public:
 		ZEROVEC3(m_world_velocity);
 		IDENTMAT4(m_local2world.GetMatrix());
 	}
-	// OFFSET: LEGO1 0x100a4630 TEMPLATE
+	// SYNTHETIC: LEGO1 0x100a4630
 	// OrientableROI::`scalar deleting destructor'
 
 	virtual const Vector3& GetWorldVelocity() const;

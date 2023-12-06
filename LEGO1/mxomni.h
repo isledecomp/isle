@@ -23,7 +23,7 @@ class MxVariableTable;
 class MxVideoManager;
 class MxEntity;
 
-// VTABLE 0x100dc168
+// VTABLE: LEGO1 0x100dc168
 // SIZE 0x68
 class MxOmni : public MxCore {
 public:

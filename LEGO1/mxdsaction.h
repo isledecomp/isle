@@ -7,7 +7,7 @@
 
 class MxOmni;
 
-// VTABLE 0x100dc098
+// VTABLE: LEGO1 0x100dc098
 // SIZE 0x94
 class MxDSAction : public MxDSObject {
 public:
@@ -29,14 +29,14 @@ public:
 	void CopyFrom(MxDSAction& p_dsAction);
 	MxDSAction& operator=(MxDSAction& p_dsAction);
 
-	// OFFSET: LEGO1 0x100ad980
+	// FUNCTION: LEGO1 0x100ad980
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x101013f4
+		// GLOBAL: LEGO1 0x101013f4
 		return "MxDSAction";
 	}
 
-	// OFFSET: LEGO1 0x100ad990
+	// FUNCTION: LEGO1 0x100ad990
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxDSAction::ClassName()) || MxDSObject::IsA(name);

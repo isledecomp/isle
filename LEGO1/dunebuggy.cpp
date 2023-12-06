@@ -4,7 +4,7 @@
 
 DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c);
 
-// OFFSET: LEGO1 0x10067bb0
+// FUNCTION: LEGO1 0x10067bb0
 DuneBuggy::DuneBuggy()
 {
 	this->m_unk13c = 25.0;

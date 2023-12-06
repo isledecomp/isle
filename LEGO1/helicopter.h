@@ -5,20 +5,20 @@
 #include "islepathactor.h"
 #include "realtime/matrix.h"
 
-// VTABLE 0x100d40f8
+// VTABLE: LEGO1 0x100d40f8
 // SIZE 0x230
 class Helicopter : public IslePathActor {
 public:
 	Helicopter();
 
-	// OFFSET: LEGO1 0x10003070
+	// FUNCTION: LEGO1 0x10003070
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f0130
+		// GLOBAL: LEGO1 0x100f0130
 		return "Helicopter";
 	}
 
-	// OFFSET: LEGO1 0x10003080
+	// FUNCTION: LEGO1 0x10003080
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, Helicopter::ClassName()) || IslePathActor::IsA(name);
@@ -27,7 +27,7 @@ public:
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
 	virtual void VTable0xe4() override;
 
-	// OFFSET: LEGO1 0x10003210 TEMPLATE
+	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
 	virtual ~Helicopter() override; // vtable+0x0
 

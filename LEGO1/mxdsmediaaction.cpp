@@ -4,7 +4,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSMediaAction, 0xb8)
 
-// OFFSET: LEGO1 0x100c8b40
+// FUNCTION: LEGO1 0x100c8b40
 MxDSMediaAction::MxDSMediaAction()
 {
 	this->m_mediaSrcPath = NULL;
@@ -18,13 +18,13 @@ MxDSMediaAction::MxDSMediaAction()
 	this->SetType(MxDSType_MediaAction);
 }
 
-// OFFSET: LEGO1 0x100c8cf0
+// FUNCTION: LEGO1 0x100c8cf0
 MxDSMediaAction::~MxDSMediaAction()
 {
 	delete[] this->m_mediaSrcPath;
 }
 
-// OFFSET: LEGO1 0x100c8d60
+// FUNCTION: LEGO1 0x100c8d60
 void MxDSMediaAction::CopyFrom(MxDSMediaAction& p_dsMediaAction)
 {
 	CopyMediaSrcPath(p_dsMediaAction.m_mediaSrcPath);
@@ -36,7 +36,7 @@ void MxDSMediaAction::CopyFrom(MxDSMediaAction& p_dsMediaAction)
 	this->m_sustainTime = p_dsMediaAction.m_sustainTime;
 }
 
-// OFFSET: LEGO1 0x100c8dc0
+// FUNCTION: LEGO1 0x100c8dc0
 MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 {
 	if (this == &p_dsMediaAction)
@@ -47,7 +47,7 @@ MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 	return *this;
 }
 
-// OFFSET: LEGO1 0x100c8e80
+// FUNCTION: LEGO1 0x100c8e80
 void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 {
 	if (this->m_mediaSrcPath == p_mediaSrcPath)
@@ -64,7 +64,7 @@ void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 		this->m_mediaSrcPath = NULL;
 }
 
-// OFFSET: LEGO1 0x100c8f10
+// FUNCTION: LEGO1 0x100c8f10
 MxU32 MxDSMediaAction::GetSizeOnDisk()
 {
 	MxU32 totalSizeOnDisk = MxDSAction::GetSizeOnDisk();
@@ -79,7 +79,7 @@ MxU32 MxDSMediaAction::GetSizeOnDisk()
 	return totalSizeOnDisk;
 }
 
-// OFFSET: LEGO1 0x100c8f60
+// FUNCTION: LEGO1 0x100c8f60
 void MxDSMediaAction::Deserialize(char** p_source, MxS16 p_unk24)
 {
 	MxDSAction::Deserialize(p_source, p_unk24);

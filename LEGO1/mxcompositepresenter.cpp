@@ -5,7 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
-// OFFSET: LEGO1 0x1000caf0
+// FUNCTION: LEGO1 0x1000caf0
 MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
 {
 	if (m_compositePresenter)
@@ -13,31 +13,31 @@ MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x100b60b0
+// FUNCTION: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {
 	NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x100b6390
+// FUNCTION: LEGO1 0x100b6390
 MxCompositePresenter::~MxCompositePresenter()
 {
 	NotificationManager()->Unregister(this);
 }
 
-// OFFSET: LEGO1 0x100b67f0 STUB
+// STUB: LEGO1 0x100b67f0
 void MxCompositePresenter::VTable0x58()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b69b0 STUB
+// STUB: LEGO1 0x100b69b0
 void MxCompositePresenter::VTable0x5c()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x100b6b40 STUB
+// STUB: LEGO1 0x100b6b40
 void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
 {
 	// TODO

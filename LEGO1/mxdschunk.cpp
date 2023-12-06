@@ -2,7 +2,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSChunk, 0x1c);
 
-// OFFSET: LEGO1 0x100be050
+// FUNCTION: LEGO1 0x100be050
 MxDSChunk::MxDSChunk()
 {
 	m_flags = 0;
@@ -12,7 +12,7 @@ MxDSChunk::MxDSChunk()
 	m_length = 0;
 }
 
-// OFFSET: LEGO1 0x100be170
+// FUNCTION: LEGO1 0x100be170
 MxDSChunk::~MxDSChunk()
 {
 	if (m_flags & Flag_Bit1) {

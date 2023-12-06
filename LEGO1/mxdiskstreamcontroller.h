@@ -9,7 +9,7 @@
 
 #include <string.h>
 
-// VTABLE 0x100dccb8
+// VTABLE: LEGO1 0x100dccb8
 // SIZE 0xc8
 class MxDiskStreamController : public MxStreamController {
 public:
@@ -25,14 +25,14 @@ public:
 	virtual MxResult vtable0x30(undefined4 p_unknown) override;                        // vtable+0x30
 	virtual MxResult vtable0x34(undefined4 p_unknown);                                 // vtable+0x34
 
-	// OFFSET: LEGO1 0x100c7360
+	// FUNCTION: LEGO1 0x100c7360
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x10102144
+		// GLOBAL: LEGO1 0x10102144
 		return "MxDiskStreamController";
 	}
 
-	// OFFSET: LEGO1 0x100c7370
+	// FUNCTION: LEGO1 0x100c7370
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(name);

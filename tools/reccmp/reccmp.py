@@ -10,7 +10,7 @@ import re
 
 from isledecomp import (
     Bin,
-    find_code_blocks,
+    DecompParser,
     get_file_in_script_dir,
     OffsetPlaceholderGenerator,
     print_diff,
@@ -313,18 +313,20 @@ if __name__ == "__main__":
         # Generate basename of original file, used in locating OFFSET lines
         basename = os.path.basename(os.path.splitext(original)[0])
 
+        parser = DecompParser()
         for srcfilename in walk_source_dir(source):
+            parser.reset()
             with open(srcfilename, "r", encoding="utf-8") as srcfile:
-                blocks = find_code_blocks(srcfile)
+                parser.read_lines(srcfile)
 
-            for block in blocks:
-                if block.is_stub:
+            for fun in parser.functions:
+                if fun.is_stub:
                     continue
 
-                if block.module != basename:
+                if fun.module != basename:
                     continue
 
-                addr = block.offset
+                addr = fun.offset
                 # Verbose flag handling
                 if verbose:
                     if addr == verbose:
@@ -332,13 +334,13 @@ if __name__ == "__main__":
                     else:
                         continue
 
-                if block.is_template:
-                    recinfo = syminfo.get_recompiled_address_from_name(block.signature)
+                if fun.lookup_by_name:
+                    recinfo = syminfo.get_recompiled_address_from_name(fun.name)
                     if not recinfo:
                         continue
                 else:
                     recinfo = syminfo.get_recompiled_address(
-                        srcfilename, block.start_line
+                        srcfilename, fun.line_number
                     )
                     if not recinfo:
                         continue

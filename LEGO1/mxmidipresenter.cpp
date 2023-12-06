@@ -8,25 +8,25 @@
 
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);
 
-// OFFSET: LEGO1 0x100c25e0
+// FUNCTION: LEGO1 0x100c25e0
 MxMIDIPresenter::MxMIDIPresenter()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100c27c0
+// FUNCTION: LEGO1 0x100c27c0
 MxMIDIPresenter::~MxMIDIPresenter()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100c2820
+// FUNCTION: LEGO1 0x100c2820
 void MxMIDIPresenter::Init()
 {
 	m_chunk = NULL;
 }
 
-// OFFSET: LEGO1 0x100c2830
+// FUNCTION: LEGO1 0x100c2830
 void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MusicManager()) {
@@ -45,7 +45,7 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 		MxMusicPresenter::Destroy();
 }
 
-// OFFSET: LEGO1 0x100c2890
+// FUNCTION: LEGO1 0x100c2890
 void MxMIDIPresenter::ReadyTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
@@ -58,7 +58,7 @@ void MxMIDIPresenter::ReadyTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100c28d0
+// FUNCTION: LEGO1 0x100c28d0
 void MxMIDIPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = FUN_100b5650();
@@ -69,7 +69,7 @@ void MxMIDIPresenter::StartingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100c2910
+// FUNCTION: LEGO1 0x100c2910
 void MxMIDIPresenter::StreamingTickle()
 {
 	if (m_chunk) {
@@ -80,20 +80,20 @@ void MxMIDIPresenter::StreamingTickle()
 		m_chunk = NextChunk();
 }
 
-// OFFSET: LEGO1 0x100c2940
+// FUNCTION: LEGO1 0x100c2940
 void MxMIDIPresenter::DoneTickle()
 {
 	if (!MusicManager()->GetMIDIInitialized())
 		EndAction();
 }
 
-// OFFSET: LEGO1 0x100c2960
+// FUNCTION: LEGO1 0x100c2960
 void MxMIDIPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100c2970
+// FUNCTION: LEGO1 0x100c2970
 MxResult MxMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();
@@ -109,7 +109,7 @@ MxResult MxMIDIPresenter::PutData()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100c29e0
+// FUNCTION: LEGO1 0x100c29e0
 void MxMIDIPresenter::EndAction()
 {
 	if (m_action) {
@@ -120,7 +120,7 @@ void MxMIDIPresenter::EndAction()
 	}
 }
 
-// OFFSET: LEGO1 0x100c2a60
+// FUNCTION: LEGO1 0x100c2a60
 void MxMIDIPresenter::SetVolume(MxS32 p_volume)
 {
 	m_volume = p_volume;

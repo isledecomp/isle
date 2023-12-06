@@ -26,13 +26,13 @@ inline MxLong _Abs(MxLong p_value)
 	return p_value > 0 ? p_value : -p_value;
 }
 
-// OFFSET: LEGO1 0x1004e0d0
+// FUNCTION: LEGO1 0x1004e0d0
 int MxBitmap::vtable28(int)
 {
 	return -1;
 }
 
-// OFFSET: LEGO1 0x100bc980
+// FUNCTION: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
 {
 	this->m_info = NULL;
@@ -43,7 +43,7 @@ MxBitmap::MxBitmap()
 	this->m_palette = NULL;
 }
 
-// OFFSET: LEGO1 0x100bca10
+// FUNCTION: LEGO1 0x100bca10
 MxBitmap::~MxBitmap()
 {
 	if (this->m_info)
@@ -54,7 +54,7 @@ MxBitmap::~MxBitmap()
 		delete m_palette;
 }
 
-// OFFSET: LEGO1 0x100bcaa0
+// FUNCTION: LEGO1 0x100bcaa0
 MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool p_isHighColor)
 {
 	MxResult ret = FAILURE;
@@ -99,7 +99,7 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 	return ret;
 }
 
-// OFFSET: LEGO1 0x100bcba0
+// FUNCTION: LEGO1 0x100bcba0
 MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 {
 	MxResult result = FAILURE;
@@ -133,7 +133,7 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bcc40
+// FUNCTION: LEGO1 0x100bcc40
 MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 {
 	MxResult result = FAILURE;
@@ -168,7 +168,7 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bcd10
+// FUNCTION: LEGO1 0x100bcd10
 MxLong MxBitmap::Read(const char* p_filename)
 {
 	MxResult result = FAILURE;
@@ -184,7 +184,7 @@ MxLong MxBitmap::Read(const char* p_filename)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bcd60
+// FUNCTION: LEGO1 0x100bcd60
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
 	MxResult result = FAILURE;
@@ -231,17 +231,17 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100bce70 STUB
+// STUB: LEGO1 0x100bce70
 void MxBitmap::vtable2c(int, int, int, int, int, int, int)
 {
 }
 
-// OFFSET: LEGO1 0x100bd020 STUB
+// STUB: LEGO1 0x100bd020
 void MxBitmap::vtable30(int, int, int, int, int, int, int)
 {
 }
 
-// OFFSET: LEGO1 0x100bd1c0
+// FUNCTION: LEGO1 0x100bd1c0
 MxPalette* MxBitmap::CreatePalette()
 {
 	MxBool success = FALSE;
@@ -269,7 +269,7 @@ MxPalette* MxBitmap::CreatePalette()
 	return palette;
 }
 
-// OFFSET: LEGO1 0x100bd280
+// FUNCTION: LEGO1 0x100bd280
 void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
 	// Odd to use a switch on a boolean, but it matches.
@@ -287,7 +287,7 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 	}
 }
 
-// OFFSET: LEGO1 0x100bd2d0
+// FUNCTION: LEGO1 0x100bd2d0
 MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 {
 	MxResult ret = FAILURE;
@@ -334,7 +334,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 	return ret;
 }
 
-// OFFSET: LEGO1 0x100bd3e0
+// FUNCTION: LEGO1 0x100bd3e0
 MxResult MxBitmap::StretchBits(
 	HDC p_hdc,
 	MxS32 p_xSrc,
@@ -367,7 +367,7 @@ MxResult MxBitmap::StretchBits(
 	);
 }
 
-// OFFSET: LEGO1 0x100bd450
+// FUNCTION: LEGO1 0x100bd450
 MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
 {
 	MxResult ret = FAILURE;
@@ -375,15 +375,16 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 
 	if (p_palette) {
 		if (p_palette->GetEntries(entries))
-			return ret;
+			goto done;
 	}
 	else {
 		MxPalette local_pal;
 		if (local_pal.GetEntries(entries))
-			return ret;
+			goto done;
 	}
 
-	for (MxS32 i = 0; i < 256; i++) {
+	MxS32 i;
+	for (i = 0; i < 256; i++) {
 		p_rgbquad[i].rgbRed = entries[i].peRed;
 		p_rgbquad[i].rgbGreen = entries[i].peGreen;
 		p_rgbquad[i].rgbBlue = entries[i].peBlue;
@@ -391,5 +392,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 	}
 
 	ret = SUCCESS;
+
+done:
 	return ret;
 }

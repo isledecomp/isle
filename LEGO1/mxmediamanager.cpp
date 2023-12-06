@@ -8,19 +8,19 @@
 
 DECOMP_SIZE_ASSERT(MxMediaManager, 0x2c);
 
-// OFFSET: LEGO1 0x100b84c0
+// FUNCTION: LEGO1 0x100b84c0
 MxMediaManager::MxMediaManager()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100b8560
+// FUNCTION: LEGO1 0x100b8560
 MxMediaManager::~MxMediaManager()
 {
 	Destroy();
 }
 
-// OFFSET: LEGO1 0x100b85d0
+// FUNCTION: LEGO1 0x100b85d0
 MxResult MxMediaManager::Init()
 {
 	this->m_presenters = NULL;
@@ -28,7 +28,7 @@ MxResult MxMediaManager::Init()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b85e0
+// FUNCTION: LEGO1 0x100b85e0
 MxResult MxMediaManager::InitPresenters()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -43,7 +43,7 @@ MxResult MxMediaManager::InitPresenters()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b8710
+// FUNCTION: LEGO1 0x100b8710
 void MxMediaManager::Destroy()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -54,7 +54,7 @@ void MxMediaManager::Destroy()
 	Init();
 }
 
-// OFFSET: LEGO1 0x100b8790
+// FUNCTION: LEGO1 0x100b8790
 MxResult MxMediaManager::Tickle()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -72,7 +72,7 @@ MxResult MxMediaManager::Tickle()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100b88c0
+// FUNCTION: LEGO1 0x100b88c0
 void MxMediaManager::AddPresenter(MxPresenter& p_presenter)
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -80,7 +80,7 @@ void MxMediaManager::AddPresenter(MxPresenter& p_presenter)
 	this->m_presenters->Append(&p_presenter);
 }
 
-// OFFSET: LEGO1 0x100b8980
+// FUNCTION: LEGO1 0x100b8980
 void MxMediaManager::RemovePresenter(MxPresenter& p_presenter)
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -90,7 +90,7 @@ void MxMediaManager::RemovePresenter(MxPresenter& p_presenter)
 		cursor.Detach();
 }
 
-// OFFSET: LEGO1 0x100b8ac0
+// FUNCTION: LEGO1 0x100b8ac0
 void MxMediaManager::StopPresenters()
 {
 	MxAutoLocker lock(&this->m_criticalSection);

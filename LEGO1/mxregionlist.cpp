@@ -2,13 +2,13 @@
 
 #include "mxregion.h"
 
-// OFFSET: LEGO1 0x100c32e0 TEMPLATE
+// TEMPLATE: LEGO1 0x100c32e0
 // MxCollection<MxRegionTopBottom *>::Compare
 
-// OFFSET: LEGO1 0x100c3340 TEMPLATE
+// TEMPLATE: LEGO1 0x100c3340
 // MxCollection<MxRegionTopBottom *>::Destroy
 
-// OFFSET: LEGO1 0x100c33e0
+// FUNCTION: LEGO1 0x100c33e0
 void MxRegionList::Destroy(MxRegionTopBottom* p_topBottom)
 {
 	if (p_topBottom) {
@@ -18,47 +18,47 @@ void MxRegionList::Destroy(MxRegionTopBottom* p_topBottom)
 	}
 }
 
-// OFFSET: LEGO1 0x100c34d0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c34d0
 // MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c3540 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c3540
 // MxList<MxRegionTopBottom *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c35f0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c35f0
 // MxPtrList<MxRegionTopBottom>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c4d80 TEMPLATE
+// TEMPLATE: LEGO1 0x100c4d80
 // MxCollection<MxRegionLeftRight *>::Compare
 
-// OFFSET: LEGO1 0x100c4de0 TEMPLATE
+// TEMPLATE: LEGO1 0x100c4de0
 // MxCollection<MxRegionLeftRight *>::Destroy
 
-// OFFSET: LEGO1 0x100c4e80
+// FUNCTION: LEGO1 0x100c4e80
 void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
 {
 	delete p_leftRight;
 }
 
-// OFFSET: LEGO1 0x100c4f50 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c4f50
 // MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c4fc0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c4fc0
 // MxList<MxRegionLeftRight *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c5070 TEMPLATE
+// SYNTHETIC: LEGO1 0x100c5070
 // MxPtrList<MxRegionLeftRight>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c54f0 TEMPLATE
+// TEMPLATE: LEGO1 0x100c54f0
 // MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
 
-// OFFSET: LEGO1 0x100c58c0 TEMPLATE
+// TEMPLATE: LEGO1 0x100c58c0
 // MxList<MxRegionLeftRight *>::_InsertEntry
 
-// OFFSET: LEGO1 0x100c5970 TEMPLATE
+// TEMPLATE: LEGO1 0x100c5970
 // MxList<MxRegionTopBottom *>::_InsertEntry
 
-// OFFSET: LEGO1 0x100c5a20 TEMPLATE
+// TEMPLATE: LEGO1 0x100c5a20
 // MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
 
-// OFFSET: LEGO1 0x100c5a40 TEMPLATE
+// TEMPLATE: LEGO1 0x100c5a40
 // MxList<MxRegionLeftRight *>::_DeleteEntry

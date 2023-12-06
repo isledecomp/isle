@@ -5,7 +5,7 @@
 
 DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 
-// OFFSET: LEGO1 0x100c6470
+// FUNCTION: LEGO1 0x100c6470
 MxDSBuffer::MxDSBuffer()
 {
 	m_unk20 = 0;
@@ -21,7 +21,7 @@ MxDSBuffer::MxDSBuffer()
 	m_unk30 = 0;
 }
 
-// OFFSET: LEGO1 0x100c6530
+// FUNCTION: LEGO1 0x100c6530
 MxDSBuffer::~MxDSBuffer()
 {
 	if (m_pBuffer != NULL) {
@@ -37,7 +37,7 @@ MxDSBuffer::~MxDSBuffer()
 	m_unk1c = 0;
 }
 
-// OFFSET: LEGO1 0x100c6640
+// FUNCTION: LEGO1 0x100c6640
 MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
 {
 	MxResult result = FAILURE;
@@ -106,7 +106,7 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
 	return result;
 }
 
-// OFFSET: LEGO1 0x100c6780
+// FUNCTION: LEGO1 0x100c6780
 MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 {
 	m_pBuffer = (MxU8*) p_buffer;
@@ -118,7 +118,7 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100c6f80
+// FUNCTION: LEGO1 0x100c6f80
 void MxDSBuffer::FUN_100c6f80(MxU32 p_unk)
 {
 	if (p_unk < m_writeOffset) {

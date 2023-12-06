@@ -4,20 +4,20 @@
 #include "mxdsbuffer.h"
 #include "mxstreamcontroller.h"
 
-// VTABLE 0x100dc728
+// VTABLE: LEGO1 0x100dc728
 // SIZE 0x98
 class MxRAMStreamController : public MxStreamController {
 public:
 	inline MxRAMStreamController() {}
 
-	// OFFSET: LEGO1 0x100b9430
+	// FUNCTION: LEGO1 0x100b9430
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x10102130
+		// GLOBAL: LEGO1 0x10102130
 		return "MxRAMStreamController";
 	}
 
-	// OFFSET: LEGO1 0x100b9440
+	// FUNCTION: LEGO1 0x100b9440
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxRAMStreamController::ClassName()) || !strcmp(name, MxStreamController::ClassName()) ||

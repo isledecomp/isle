@@ -17,7 +17,8 @@ public:
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // +0xe0
 };
 
-// VTABLE 0x100db814 (or 0x100d9cc8?)
+// VTABLE: LEGO1 0x100db814
+// or is it 0x100d9cc8?
 // SIZE 0x198
 class MxDeviceEnumerate {
 public:
@@ -35,7 +36,7 @@ public:
 	undefined4 m_unknown[97];
 };
 
-// VTABLE 0x100db800
+// VTABLE: LEGO1 0x100db800
 // SIZE 0x894
 class MxDirect3D : public MxDirectDraw {
 public:

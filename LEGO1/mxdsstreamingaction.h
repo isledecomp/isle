@@ -5,7 +5,7 @@
 
 class MxDSBuffer;
 
-// VTABLE 0x100dd088
+// VTABLE: LEGO1 0x100dd088
 // SIZE 0xb4
 class MxDSStreamingAction : public MxDSAction {
 public:
