@@ -86,7 +86,7 @@ def sanitize(file, placeholder_generator, mnemonic, op_str):
         for i, word in enumerate(words):
             try:
                 inttest = int(word, 16)
-                if inttest >= file.imagebase + file.textvirt:
+                if inttest >= file.get_section_offset_by_index(1):
                     words[i] = placeholder_generator.get(inttest)
             except ValueError:
                 pass

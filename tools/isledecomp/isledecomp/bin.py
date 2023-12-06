@@ -64,17 +64,12 @@ class Bin:
     """Parses a PE format EXE and allows reading data from a virtual address.
     Reference: ohttps://learn.microsoft.com/en-us/windows/win32/debug/pe-format"""
 
-    # pylint: disable=too-many-instance-attributes
-    # Could remove textvirt and textraw in an upcoming refactor
-
     def __init__(self, filename, logger=None):
         self.logger = logger
         self._debuglog(f'Parsing headers of "{filename}"... ')
         self.filename = filename
         self.file = None
         self.imagebase = None
-        self.textvirt = None
-        self.textraw = None
         self.sections = []
         self.last_section = None
 
@@ -107,10 +102,6 @@ class Bin:
 
         text_section = self._get_section_by_name(".text")
         self.last_section = text_section
-
-        # These are used by reccmp
-        self.textvirt = text_section.VirtualAddress
-        self.textraw = text_section.PointerToRawData
 
         self._debuglog("... Parsing finished")
         return self
