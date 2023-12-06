@@ -5,16 +5,16 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Light, 0x4);
 DECOMP_SIZE_ASSERT(LightImpl, 0x8);
 
-// OFFSET: LEGO1 0x100a2640 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a2640
 // TglImpl::LightImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a3770
+// FUNCTION: LEGO1 0x100a3770
 void* LightImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a3780
+// FUNCTION: LEGO1 0x100a3780
 Result LightImpl::SetTransformation(const FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
@@ -22,7 +22,7 @@ Result LightImpl::SetTransformation(const FloatMatrix4& matrix)
 	return ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *d3dMatrix));
 }
 
-// OFFSET: LEGO1 0x100a37e0
+// FUNCTION: LEGO1 0x100a37e0
 Result LightImpl::SetColor(float r, float g, float b)
 {
 	IDirect3DRMLightArray* lightArray;

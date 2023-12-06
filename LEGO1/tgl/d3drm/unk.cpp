@@ -5,16 +5,16 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Unk, 0x4);
 DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
 
-// OFFSET: LEGO1 0x100a2720 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a2720
 // TglImpl::UnkImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a3830
+// FUNCTION: LEGO1 0x100a3830
 void* UnkImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a3840 STUB
+// FUNCTION: LEGO1 0x100a3840 STUB
 Result UnkImpl::SetMeshData(
 	unsigned long faceCount,
 	unsigned long vertexCount,
@@ -28,7 +28,7 @@ Result UnkImpl::SetMeshData(
 	return Error;
 }
 
-// OFFSET: LEGO1 0x100a3ae0
+// FUNCTION: LEGO1 0x100a3ae0
 Result UnkImpl::GetBoundingBox(float min[3], float max[3])
 {
 	D3DRMBOX box;
@@ -44,7 +44,7 @@ Result UnkImpl::GetBoundingBox(float min[3], float max[3])
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a3b40
+// FUNCTION: LEGO1 0x100a3b40
 Unk* UnkImpl::Clone()
 {
 	UnkImpl* mesh = new UnkImpl();

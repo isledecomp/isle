@@ -2,16 +2,16 @@
 
 using namespace TglImpl;
 
-// OFFSET: LEGO1 0x100a2480 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a2480
 // TglImpl::GroupImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a31d0
+// FUNCTION: LEGO1 0x100a31d0
 void* GroupImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a31e0
+// FUNCTION: LEGO1 0x100a31e0
 Result GroupImpl::SetTransformation(const FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
@@ -19,7 +19,7 @@ Result GroupImpl::SetTransformation(const FloatMatrix4& matrix)
 	return ResultVal(m_data->AddTransform(D3DRMCOMBINE_REPLACE, *d3dMatrix));
 }
 
-// OFFSET: LEGO1 0x100a3240
+// FUNCTION: LEGO1 0x100a3240
 Result GroupImpl::SetColor(float r, float g, float b, float a)
 {
 	// The first instruction makes no sense here:
@@ -36,14 +36,14 @@ Result GroupImpl::SetColor(float r, float g, float b, float a)
 	}
 }
 
-// OFFSET: LEGO1 0x100a32b0
+// FUNCTION: LEGO1 0x100a32b0
 Result GroupImpl::SetTexture(const Texture* pTexture)
 {
 	IDirect3DRMTexture* pD3DTexture = pTexture ? static_cast<const TextureImpl*>(pTexture)->ImplementationData() : NULL;
 	return ResultVal(m_data->SetTexture(pD3DTexture));
 }
 
-// OFFSET: LEGO1 0x100a32e0
+// FUNCTION: LEGO1 0x100a32e0
 Result GroupImpl::GetTexture(Texture*& pTexture)
 {
 	IDirect3DRMTexture* pD3DTexture;
@@ -63,12 +63,11 @@ Result GroupImpl::GetTexture(Texture*& pTexture)
 	return Success;
 }
 
-// OFFSET: LEGO1 0x100a33c0
+// FUNCTION: LEGO1 0x100a33c0
 Result GroupImpl::SetMaterialMode(MaterialMode mode)
 {
 	D3DRMMATERIALMODE d3dMode;
-	switch (mode)
-	{
+	switch (mode) {
 	case FromParent:
 		d3dMode = D3DRMMATERIAL_FROMPARENT;
 		break;
@@ -82,41 +81,41 @@ Result GroupImpl::SetMaterialMode(MaterialMode mode)
 	return ResultVal(m_data->SetMaterialMode(d3dMode));
 }
 
-// OFFSET: LEGO1 0x100a3410
+// FUNCTION: LEGO1 0x100a3410
 Result GroupImpl::Add(const Mesh* pMesh)
 {
 	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
 	return ResultVal(m_data->AddVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
-// OFFSET: LEGO1 0x100a3430
+// FUNCTION: LEGO1 0x100a3430
 Result GroupImpl::Add(const Group* pGroup)
 {
 	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
 	return ResultVal(m_data->AddVisual(pGroupImpl->m_data));
 }
 
-// OFFSET: LEGO1 0x100a3450
+// FUNCTION: LEGO1 0x100a3450
 Result GroupImpl::Remove(const Group* pGroup)
 {
 	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
 	return ResultVal(m_data->DeleteVisual(pGroupImpl->m_data));
 }
 
-// OFFSET: LEGO1 0x100a3480
+// FUNCTION: LEGO1 0x100a3480
 Result GroupImpl::Remove(const Mesh* pMesh)
 {
 	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
 	return ResultVal(m_data->DeleteVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
-// OFFSET: LEGO1 0x100a34b0 STUB
+// FUNCTION: LEGO1 0x100a34b0 STUB
 Result GroupImpl::RemoveAll()
 {
 	return Error;
 }
 
-// OFFSET: LEGO1 0x100a34c0 STUB
+// FUNCTION: LEGO1 0x100a34c0 STUB
 Result GroupImpl::Unknown()
 {
 	return Error;

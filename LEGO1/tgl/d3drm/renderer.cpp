@@ -2,7 +2,7 @@
 
 using namespace TglImpl;
 
-// OFFSET: LEGO1 0x100a15e0
+// FUNCTION: LEGO1 0x100a15e0
 Renderer* Tgl::CreateRenderer()
 {
 	RendererImpl* renderer = new RendererImpl();
@@ -13,10 +13,10 @@ Renderer* Tgl::CreateRenderer()
 	return renderer;
 }
 
-// OFFSET: LEGO1 0x100a16d0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a16d0
 // TglImpl::RendererImpl::`scalar deleting destructor'
 
-// GLOBAL OFFSET: LEGO1 0x1010103c
+// GLOBAL: LEGO1 0x1010103c
 IDirect3DRM* g_pD3DRM = NULL;
 
 // Inlined only
@@ -51,7 +51,7 @@ void RendererImpl::Destroy()
 	}
 }
 
-// OFFSET: LEGO1 0x100a1894
+// FUNCTION: LEGO1 0x100a1894
 Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
 	DeviceImpl* device = new DeviceImpl();
@@ -63,10 +63,10 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 	return device;
 }
 
-// GLOBAL OFFSET: LEGO1 0x10101040
+// GLOBAL: LEGO1 0x10101040
 static int gSetBufferCount = 1;
 
-// OFFSET: LEGO1 0x100a1900
+// FUNCTION: LEGO1 0x100a1900
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 {
 	DeviceImpl* device = new DeviceImpl();
@@ -108,7 +108,7 @@ inline Result RendererCreateView(
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a1a00
+// FUNCTION: LEGO1 0x100a1a00
 View* RendererImpl::CreateView(
 	const Device* pDevice,
 	const Camera* pCamera,
@@ -149,7 +149,7 @@ inline Result RendererCreateGroup(IDirect3DRM* pRenderer, IDirect3DRMFrame* pPar
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a1b20
+// FUNCTION: LEGO1 0x100a1b20
 Group* RendererImpl::CreateGroup(const Group* pParent)
 {
 	GroupImpl* group = new GroupImpl();
@@ -162,7 +162,7 @@ Group* RendererImpl::CreateGroup(const Group* pParent)
 	return group;
 }
 
-// OFFSET: LEGO1 0x100a1c30
+// FUNCTION: LEGO1 0x100a1c30
 Camera* RendererImpl::CreateCamera()
 {
 	CameraImpl* camera = new CameraImpl();
@@ -173,7 +173,7 @@ Camera* RendererImpl::CreateCamera()
 	return camera;
 }
 
-// OFFSET: LEGO1 0x100a1cf0
+// FUNCTION: LEGO1 0x100a1cf0
 Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 {
 	LightImpl* newLight = new LightImpl();
@@ -225,7 +225,7 @@ Light* RendererImpl::CreateLight(LightType type, float r, float g, float b)
 	return newLight;
 }
 
-// OFFSET: LEGO1 0x100a1e90
+// FUNCTION: LEGO1 0x100a1e90
 Unk* RendererImpl::CreateUnk()
 {
 	// Note: I'm fairly certain that Unknown is not what Tgl calls a
@@ -273,7 +273,7 @@ inline Result RendererCreateTexture(
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a1f50
+// FUNCTION: LEGO1 0x100a1f50
 Texture* RendererImpl::CreateTexture(
 	int width,
 	int height,
@@ -302,7 +302,7 @@ Texture* RendererImpl::CreateTexture(
 	return texture;
 }
 
-// OFFSET: LEGO1 0x100a20d0
+// FUNCTION: LEGO1 0x100a20d0
 Texture* RendererImpl::CreateTexture()
 {
 	TextureImpl* texture = new TextureImpl();
@@ -313,20 +313,19 @@ Texture* RendererImpl::CreateTexture()
 	return texture;
 }
 
-
-// OFFSET: LEGO1 0x100a2270
+// FUNCTION: LEGO1 0x100a2270
 Result RendererImpl::SetTextureDefaultShadeCount(unsigned long shadeCount)
 {
 	return ResultVal(m_data->SetDefaultTextureShades(shadeCount));
 }
 
-// OFFSET: LEGO1 0x100a2290
+// FUNCTION: LEGO1 0x100a2290
 Result RendererImpl::SetTextureDefaultColorCount(unsigned long colorCount)
 {
 	return ResultVal(m_data->SetDefaultTextureColors(colorCount));
 }
 
-// OFFSET: LEGO1 0x100a22b0
+// FUNCTION: LEGO1 0x100a22b0
 void* RendererImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);

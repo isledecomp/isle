@@ -4,34 +4,34 @@
 
 using namespace TglImpl;
 
-// OFFSET: LEGO1 0x100a22c0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a22c0
 // TglImpl::DeviceImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a2bf0
+// FUNCTION: LEGO1 0x100a2bf0
 void* DeviceImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a2c00
+// FUNCTION: LEGO1 0x100a2c00
 unsigned long DeviceImpl::GetWidth()
 {
 	return m_data->GetWidth();
 }
 
-// OFFSET: LEGO1 0x100a2c10
+// FUNCTION: LEGO1 0x100a2c10
 unsigned long DeviceImpl::GetHeight()
 {
 	return m_data->GetHeight();
 }
 
-// OFFSET: LEGO1 0x100a2c20
+// FUNCTION: LEGO1 0x100a2c20
 Result DeviceImpl::SetColorModel(ColorModel)
 {
 	return Success;
 }
 
-// OFFSET: LEGO1 0x100a2c30
+// FUNCTION: LEGO1 0x100a2c30
 Result DeviceImpl::SetShadingModel(ShadingModel model)
 {
 	// Doesn't match well even though we know this is exactly
@@ -40,20 +40,20 @@ Result DeviceImpl::SetShadingModel(ShadingModel model)
 	return ResultVal(m_data->SetQuality(renderQuality));
 }
 
-// OFFSET: LEGO1 0x100a2ca0
+// FUNCTION: LEGO1 0x100a2ca0
 Result DeviceImpl::SetShadeCount(unsigned long shadeCount)
 {
 	return ResultVal(m_data->SetShades(shadeCount));
 }
 
-// OFFSET: LEGO1 0x100a2cc0
+// FUNCTION: LEGO1 0x100a2cc0
 Result DeviceImpl::SetDither(int dither)
 {
 	return ResultVal(m_data->SetDither(dither));
 }
 
 // Probably wrong, not sure what's going on in this method.
-// OFFSET: LEGO1 0x100a2ce0
+// FUNCTION: LEGO1 0x100a2ce0
 void DeviceImpl::InitFromD3DDevice(Device*)
 {
 	// Device argument is intentionally unused.
@@ -67,7 +67,7 @@ void DeviceImpl::InitFromD3DDevice(Device*)
 // Really don't know what's going on here. Seems it will call down to Init
 // but the decomp suggests it otherwise looks the same as InitFromD3D but Init
 // takes widly different parameters.
-// OFFSET: LEGO1 0x100a2d20
+// FUNCTION: LEGO1 0x100a2d20
 void DeviceImpl::InitFromWindowsDevice(Device*)
 {
 	// Device argument is intentionally unused.
@@ -78,7 +78,7 @@ void DeviceImpl::InitFromWindowsDevice(Device*)
 	}
 }
 
-// OFFSET: LEGO1 0x100a2d60
+// FUNCTION: LEGO1 0x100a2d60
 Result DeviceImpl::Update()
 {
 	return ResultVal(m_data->Update());

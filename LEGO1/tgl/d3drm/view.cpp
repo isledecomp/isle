@@ -16,7 +16,7 @@ struct ViewportAppData {
 
 DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
 
-// OFFSET: LEGO1 0x100a10b0
+// FUNCTION: LEGO1 0x100a10b0
 ViewportAppData::ViewportAppData(IDirect3DRM* pRenderer)
 {
 	pRenderer->CreateFrame(NULL, &m_pLightFrame);
@@ -27,7 +27,7 @@ ViewportAppData::ViewportAppData(IDirect3DRM* pRenderer)
 	m_backgroundColorBlue = 0.0f;
 }
 
-// OFFSET: LEGO1 0x100a10e0
+// FUNCTION: LEGO1 0x100a10e0
 ViewportAppData::~ViewportAppData()
 {
 	IDirect3DRMFrameArray* pChildFrames;
@@ -45,7 +45,7 @@ ViewportAppData::~ViewportAppData()
 // Forward declare to satisfy order check
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
-// OFFSET: LEGO1 0x100a1160
+// FUNCTION: LEGO1 0x100a1160
 Result ViewImpl::ViewportCreateAppData(IDirect3DRM* pDevice, IDirect3DRMViewport* pView, IDirect3DRMFrame* pCamera)
 {
 	ViewportAppData* data = new ViewportAppData(pDevice);
@@ -80,7 +80,7 @@ inline Result ViewRestoreFrameAfterRender(
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a1240
+// FUNCTION: LEGO1 0x100a1240
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 {
 	ViewportAppData* pViewportAppData = reinterpret_cast<ViewportAppData*>(pArg);
@@ -94,7 +94,7 @@ void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg)
 	delete pViewportAppData;
 }
 
-// OFFSET: LEGO1 0x100a1290
+// FUNCTION: LEGO1 0x100a1290
 Result ViewportPickImpl(
 	IDirect3DRMViewport* pViewport,
 	int x,
@@ -119,16 +119,16 @@ inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 	return ViewportGetData(pViewport)->m_pLightFrame;
 }
 
-// OFFSET: LEGO1 0x100a23a0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a23a0
 // TglImpl::ViewImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a2d80
+// FUNCTION: LEGO1 0x100a2d80
 void* ViewImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a2d90
+// FUNCTION: LEGO1 0x100a2d90
 Result ViewImpl::Add(const Light* pLight)
 {
 	const LightImpl* light = static_cast<const LightImpl*>(pLight);
@@ -136,7 +136,7 @@ Result ViewImpl::Add(const Light* pLight)
 	return ResultVal(ViewportGetLightFrame(m_data)->AddChild(frame));
 }
 
-// OFFSET: LEGO1 0x100a2dc0
+// FUNCTION: LEGO1 0x100a2dc0
 Result ViewImpl::Remove(const Light* pLight)
 {
 	const LightImpl* light = static_cast<const LightImpl*>(pLight);
@@ -144,7 +144,7 @@ Result ViewImpl::Remove(const Light* pLight)
 	return ResultVal(ViewportGetLightFrame(m_data)->DeleteChild(frame));
 }
 
-// OFFSET: LEGO1 0x100a2df0
+// FUNCTION: LEGO1 0x100a2df0
 Result ViewImpl::SetCamera(const Camera* pCamera)
 {
 	const CameraImpl* camera = static_cast<const CameraImpl*>(pCamera);
@@ -165,13 +165,13 @@ Result ViewImpl::SetCamera(const Camera* pCamera)
 	return ResultVal(m_data->SetCamera(frame));
 }
 
-// OFFSET: LEGO1 0x100a2e70
+// FUNCTION: LEGO1 0x100a2e70
 Result ViewImpl::SetProjection(ProjectionType type)
 {
 	return ResultVal(m_data->SetProjection(Translate(type)));
 }
 
-// OFFSET: LEGO1 0x100a2eb0
+// FUNCTION: LEGO1 0x100a2eb0
 Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees)
 {
 	float field = frontClippingDistance * tan(DegreesToRadians(degrees / 2));
@@ -187,7 +187,7 @@ Result ViewImpl::SetFrustrum(float frontClippingDistance, float backClippingDist
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a2f30
+// FUNCTION: LEGO1 0x100a2f30
 Result ViewImpl::SetBackgroundColor(float r, float g, float b)
 {
 	Result ret = Success;
@@ -203,7 +203,7 @@ Result ViewImpl::SetBackgroundColor(float r, float g, float b)
 	return ret;
 }
 
-// OFFSET: LEGO1 0x100a2f80
+// FUNCTION: LEGO1 0x100a2f80
 Result ViewImpl::GetBackgroundColor(float* r, float* g, float* b)
 {
 	ViewportAppData* data = ViewportGetData(m_data);
@@ -213,7 +213,7 @@ Result ViewImpl::GetBackgroundColor(float* r, float* g, float* b)
 	return Success;
 }
 
-// OFFSET: LEGO1 0x100a2fb0
+// FUNCTION: LEGO1 0x100a2fb0
 Result ViewImpl::Clear()
 {
 	return ResultVal(m_data->Clear());
@@ -247,7 +247,7 @@ inline Result ViewPrepareFrameForRender(
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a2fd0
+// FUNCTION: LEGO1 0x100a2fd0
 Result ViewImpl::Render(const Light* pCamera)
 {
 	ViewportAppData* appdata = ViewportGetData(m_data);
@@ -276,13 +276,13 @@ Result ViewImpl::Render(const Light* pCamera)
 	return ResultVal(m_data->Render(light));
 }
 
-// OFFSET: LEGO1 0x100a3080
+// FUNCTION: LEGO1 0x100a3080
 Result ViewImpl::ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	return ResultVal(m_data->ForceUpdate(x, y, x + width - 1, y + height - 1));
 }
 
-// OFFSET: LEGO1 0x100a30c0
+// FUNCTION: LEGO1 0x100a30c0
 Result ViewImpl::Pick(
 	unsigned long x,
 	unsigned long y,
@@ -303,7 +303,7 @@ Result ViewImpl::Pick(
 	);
 }
 
-// OFFSET: LEGO1 0x100a30f0
+// FUNCTION: LEGO1 0x100a30f0
 Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 {
 	D3DRMVECTOR4D d3dRMScreen;
@@ -325,7 +325,7 @@ Result ViewImpl::TransformWorldToScreen(const float world[3], float screen[4])
 	return result;
 }
 
-// OFFSET: LEGO1 0x100a3160
+// FUNCTION: LEGO1 0x100a3160
 Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
 {
 	// 100% match minus instruction reordering.
@@ -347,4 +347,3 @@ Result ViewImpl::TransformScreenToWorld(const float screen[4], float world[3])
 
 	return result;
 }
-

@@ -7,16 +7,16 @@ DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 DECOMP_SIZE_ASSERT(Mesh, 0x4);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
 
-// OFFSET: LEGO1 0x100a3d80 TEMPLATE
+// SYNTHETIC: LEGO1 0x100a3d80
 // TglImpl::MeshImpl::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100a3ed0
+// FUNCTION: LEGO1 0x100a3ed0
 void* MeshImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// OFFSET: LEGO1 0x100a3ee0
+// FUNCTION: LEGO1 0x100a3ee0
 Result MeshImpl::SetColor(float r, float g, float b, float a)
 {
 	// The first instruction makes no sense here:
@@ -33,14 +33,14 @@ Result MeshImpl::SetColor(float r, float g, float b, float a)
 	}
 }
 
-// OFFSET: LEGO1 0x100a3f50
+// FUNCTION: LEGO1 0x100a3f50
 Result MeshImpl::SetTexture(const Texture* pTexture)
 {
 	IDirect3DRMTexture* texture = pTexture ? static_cast<const TextureImpl*>(pTexture)->ImplementationData() : NULL;
 	return ResultVal(m_data->groupMesh->SetGroupTexture(m_data->groupIndex, texture));
 }
 
-// OFFSET: LEGO1 0x100a3f80
+// FUNCTION: LEGO1 0x100a3f80
 Result MeshImpl::SetTextureMappingMode(ProjectionType projType)
 {
 	if (projType == Perspective) {
@@ -51,7 +51,7 @@ Result MeshImpl::SetTextureMappingMode(ProjectionType projType)
 	}
 }
 
-// OFFSET: LEGO1 0x100a3fc0
+// FUNCTION: LEGO1 0x100a3fc0
 Result MeshImpl::SetShadingModel(ShadingModel model)
 {
 	D3DRMRENDERQUALITY mode;
@@ -75,7 +75,7 @@ Result MeshImpl::SetShadingModel(ShadingModel model)
 	return ResultVal(m_data->groupMesh->SetGroupQuality(m_data->groupIndex, mode));
 }
 
-// OFFSET: LEGO1 0x100a4030
+// FUNCTION: LEGO1 0x100a4030
 Mesh* MeshImpl::DeepClone(Unk* pUnk)
 {
 	// Create group
@@ -120,7 +120,7 @@ Mesh* MeshImpl::DeepClone(Unk* pUnk)
 	return newMesh;
 }
 
-// OFFSET: LEGO1 0x100a4240
+// FUNCTION: LEGO1 0x100a4240
 Mesh* MeshImpl::ShallowClone(Unk* pUnk)
 {
 	MeshImpl* newGroup = new MeshImpl();
@@ -137,7 +137,7 @@ Mesh* MeshImpl::ShallowClone(Unk* pUnk)
 	return newGroup;
 }
 
-// OFFSET: LEGO1 0x100a4330
+// FUNCTION: LEGO1 0x100a4330
 Result MeshImpl::GetTexture(Texture*& rpTexture)
 {
 	IDirect3DRMTexture* texture;
