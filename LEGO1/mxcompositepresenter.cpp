@@ -38,7 +38,7 @@ void MxCompositePresenter::VTable0x5c()
 }
 
 // STUB: LEGO1 0x100b6b40
-void MxCompositePresenter::VTable0x60(undefined4 p_unknown)
+void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 {
 	// TODO
 }
