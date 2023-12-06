@@ -62,7 +62,7 @@ def section_contains_vaddr(section, imagebase, vaddr) -> bool:
 
 class Bin:
     """Parses a PE format EXE and allows reading data from a virtual address.
-    Reference: ohttps://learn.microsoft.com/en-us/windows/win32/debug/pe-format"""
+    Reference: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format"""
 
     def __init__(self, filename, logger=None):
         self.logger = logger
