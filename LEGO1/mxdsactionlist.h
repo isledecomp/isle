@@ -6,13 +6,13 @@
 
 class MxDSAction;
 
-// VTABLE 0x100dcea8 TEMPLATE
+// VTABLE: LEGO1 0x100dcea8
 // class MxCollection<MxDSAction *>
 
-// VTABLE 0x100dcec0 TEMPLATE
+// VTABLE: LEGO1 0x100dcec0
 // class MxList<MxDSAction *>
 
-// VTABLE 0x100dced8
+// VTABLE: LEGO1 0x100dced8
 // SIZE 0x1c
 class MxDSActionList : public MxList<MxDSAction*> {
 public:

@@ -7,24 +7,24 @@
 
 DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)
 
-// OFFSET: LEGO1 0x100be1f0
+// FUNCTION: LEGO1 0x100be1f0
 MxVideoManager::MxVideoManager()
 {
 	Init();
 }
 
-// OFFSET: LEGO1 0x100be270
+// FUNCTION: LEGO1 0x100be270
 void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 }
 
-// OFFSET: LEGO1 0x100be2a0
+// FUNCTION: LEGO1 0x100be2a0
 MxVideoManager::~MxVideoManager()
 {
 	Destroy(TRUE);
 }
 
-// OFFSET: LEGO1 0x100be320
+// FUNCTION: LEGO1 0x100be320
 MxResult MxVideoManager::Init()
 {
 	this->m_pDirectDraw = NULL;
@@ -36,7 +36,7 @@ MxResult MxVideoManager::Init()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100be340
+// FUNCTION: LEGO1 0x100be340
 void MxVideoManager::Destroy(MxBool p_fromDestructor)
 {
 	if (m_thread) {
@@ -71,7 +71,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 		MxMediaManager::Destroy();
 }
 
-// OFFSET: LEGO1 0x100be3e0
+// FUNCTION: LEGO1 0x100be3e0
 void MxVideoManager::UpdateRegion()
 {
 	if (m_region->vtable20() == FALSE) {
@@ -81,7 +81,7 @@ void MxVideoManager::UpdateRegion()
 	}
 }
 
-// OFFSET: LEGO1 0x100be440
+// FUNCTION: LEGO1 0x100be440
 void MxVideoManager::SortPresenterList()
 {
 	if (this->m_presenters->GetCount() <= 1)
@@ -114,7 +114,7 @@ void MxVideoManager::SortPresenterList()
 	}
 }
 
-// OFFSET: LEGO1 0x100be600
+// FUNCTION: LEGO1 0x100be600
 MxResult MxVideoManager::vtable0x28(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAW p_pDirectDraw,
@@ -188,7 +188,7 @@ done:
 	return status;
 }
 
-// OFFSET: LEGO1 0x100be820
+// FUNCTION: LEGO1 0x100be820
 MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxBool locked = FALSE;
@@ -256,13 +256,13 @@ done:
 	return status;
 }
 
-// OFFSET: LEGO1 0x100bea50
+// FUNCTION: LEGO1 0x100bea50
 void MxVideoManager::Destroy()
 {
 	Destroy(FALSE);
 }
 
-// OFFSET: LEGO1 0x100bea60
+// FUNCTION: LEGO1 0x100bea60
 void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 {
 	m_criticalSection.Enter();
@@ -273,7 +273,7 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 	m_criticalSection.Leave();
 }
 
-// OFFSET: LEGO1 0x100bea90
+// FUNCTION: LEGO1 0x100bea90
 MxResult MxVideoManager::Tickle()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
@@ -297,7 +297,7 @@ MxResult MxVideoManager::Tickle()
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100bebe0
+// FUNCTION: LEGO1 0x100bebe0
 MxResult MxVideoManager::RealizePalette(MxPalette* p_palette)
 {
 	PALETTEENTRY paletteEntries[256];

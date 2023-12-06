@@ -1,6 +1,6 @@
 #include "define.h"
 
-// 0x1010141c
+// GLOBAL: LEGO1 0x1010141c
 MxU32 g_mxcoreCount[101] = {0,     -6643, -5643, -5058, -4643, -4321, -4058, -3836, -3643, -3473, -3321, -3184, -3058,
 							-2943, -2836, -2736, -2643, -2556, -2473, -2395, -2321, -2251, -2184, -2120, -2058, -2000,
 							-1943, -1888, -1836, -1785, -1736, -1689, -1643, -1599, -1556, -1514, -1473, -1434, -1395,
@@ -10,17 +10,17 @@ MxU32 g_mxcoreCount[101] = {0,     -6643, -5643, -5058, -4643, -4321, -4058, -38
 							-358,  -340,  -321,  -304,  -286,  -268,  -251,  -234,  -217,  -200,  -184,  -168,  -152,
 							-136,  -120,  -104,  -89,   -74,   -58,   -43,   -29,   -14,   0};
 
-// 0x10101eac
+// GLOBAL: LEGO1 0x10101eac
 const char* g_parseExtraTokens = ":;";
 
-// 0x10101edc
+// GLOBAL: LEGO1 0x10101edc
 const char* g_strWORLD = "WORLD";
 
-// 0x10101f20
+// GLOBAL: LEGO1 0x10101f20
 const char* g_strSOUND = "SOUND";
 
-// 0x10102040
+// GLOBAL: LEGO1 0x10102040
 const char* g_strACTION = "ACTION";
 
-// 0x101020cc
+// GLOBAL: LEGO1 0x101020cc
 const char* g_strVISIBILITY = "VISIBILITY";

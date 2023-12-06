@@ -2,24 +2,24 @@
 
 DECOMP_SIZE_ASSERT(LegoState, 0x08);
 
-// OFFSET: LEGO1 0x10005f40
+// FUNCTION: LEGO1 0x10005f40
 LegoState::~LegoState()
 {
 }
 
-// OFFSET: LEGO1 0x10005f90
+// FUNCTION: LEGO1 0x10005f90
 MxBool LegoState::VTable0x14()
 {
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x10005fa0
+// FUNCTION: LEGO1 0x10005fa0
 MxBool LegoState::SetFlag()
 {
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x10005fb0
+// FUNCTION: LEGO1 0x10005fb0
 MxResult LegoState::VTable0x1C(LegoFileStream* p_legoFileStream)
 {
 	if (p_legoFileStream->IsWriteMode()) {
@@ -28,7 +28,7 @@ MxResult LegoState::VTable0x1C(LegoFileStream* p_legoFileStream)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x10006030
+// FUNCTION: LEGO1 0x10006030
 LegoFileStream* LegoFileStream::FUN_10006030(MxString p_str)
 {
 	const char* data = p_str.GetData();

@@ -9,13 +9,13 @@
 class MxParam;
 
 // TODO: Find proper compilation unit to put these
-// OFFSET: LEGO1 0x100140d0 TEMPLATE
+// FUNCTION: LEGO1 0x100140d0
 // MxCore::IsA
 
-// OFFSET: LEGO1 0x100144c0 TEMPLATE
+// FUNCTION: LEGO1 0x100144c0
 // MxCore::ClassName
 
-// VTABLE 0x100dc0f8
+// VTABLE: LEGO1 0x100dc0f8
 // SIZE 0x8
 class MxCore {
 public:
@@ -26,7 +26,7 @@ public:
 
 	inline virtual const char* ClassName() const // vtable+0c
 	{
-		// 0x100f007c
+		// GLOBAL: LEGO1 0x100f007c
 		return "MxCore";
 	}
 

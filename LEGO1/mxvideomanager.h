@@ -7,10 +7,11 @@
 #include "mxregion.h"
 #include "mxvideoparam.h"
 
-// VTABLE 0x100dc810
+// VTABLE: LEGO1 0x100dc810
 // SIZE 0x64
 class MxVideoManager : public MxMediaManager {
 public:
+	MxVideoManager();
 	virtual ~MxVideoManager() override;
 
 	virtual MxResult Tickle() override; // vtable+0x8
@@ -30,8 +31,6 @@ public:
 	__declspec(dllexport) void InvalidateRect(MxRect32&);
 	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*); // vtable+0x30
 	virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height);
-
-	MxVideoManager();
 
 	MxResult Init();
 	void Destroy(MxBool p_fromDestructor);

@@ -6,21 +6,21 @@
 
 #include <dsound.h>
 
-// VTABLE 0x100d49a8
+// VTABLE: LEGO1 0x100d49a8
 // SIZE 0x6c
 class MxWavePresenter : public MxSoundPresenter {
 public:
 	MxWavePresenter() { Init(); }
 	virtual ~MxWavePresenter() override; // vtable+0x00
 
-	// OFFSET: LEGO1 0x1000d6c0
+	// FUNCTION: LEGO1 0x1000d6c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x100f07b4
+		// GLOBAL: LEGO1 0x100f07b4
 		return "MxWavePresenter";
 	}
 
-	// OFFSET: LEGO1 0x1000d6d0
+	// FUNCTION: LEGO1 0x1000d6d0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(name);

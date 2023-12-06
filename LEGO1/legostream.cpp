@@ -9,7 +9,7 @@
 // This is a pointer to the end of the global variable name table, which has
 // the text "END_OF_VARIABLES" in it.
 // TODO: make s_endOfVariables reference the actual end of the variable array.
-// GLOBAL OFFSET: LEGO1 0x100f3e50
+// GLOBAL: LEGO1 0x100f3e50
 const char* s_endOfVariables = "END_OF_VARIABLES";
 
 // Very likely but not certain sizes.
@@ -19,7 +19,7 @@ DECOMP_SIZE_ASSERT(LegoStream, 0x8);
 DECOMP_SIZE_ASSERT(LegoFileStream, 0xC);
 DECOMP_SIZE_ASSERT(LegoMemoryStream, 0x10);
 
-// OFFSET: LEGO1 0x10039f70
+// FUNCTION: LEGO1 0x10039f70
 MxResult LegoStream::WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName)
 {
 	MxResult result = FAILURE;
@@ -40,7 +40,7 @@ MxResult LegoStream::WriteVariable(LegoStream* p_stream, MxVariableTable* p_from
 
 // 95% match, just some instruction ordering differences on the call to
 // MxVariableTable::SetVariable at the end.
-// OFFSET: LEGO1 0x1003a080
+// FUNCTION: LEGO1 0x1003a080
 MxS32 LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
 {
 	MxS32 result = 1;
@@ -68,26 +68,26 @@ MxS32 LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
 	return result;
 }
 
-// OFFSET: LEGO1 0x10045ae0
+// FUNCTION: LEGO1 0x10045ae0
 MxBool LegoStream::IsWriteMode()
 {
 	return m_mode == LEGOSTREAM_MODE_WRITE;
 }
 
-// OFFSET: LEGO1 0x10045af0
+// FUNCTION: LEGO1 0x10045af0
 MxBool LegoStream::IsReadMode()
 {
 	return m_mode == LEGOSTREAM_MODE_READ;
 }
 
-// OFFSET: LEGO1 0x10099080
+// FUNCTION: LEGO1 0x10099080
 LegoMemoryStream::LegoMemoryStream(char* p_buffer) : LegoStream()
 {
 	m_buffer = p_buffer;
 	m_offset = 0;
 }
 
-// OFFSET: LEGO1 0x10099160
+// FUNCTION: LEGO1 0x10099160
 MxResult LegoMemoryStream::Read(void* p_buffer, MxU32 p_size)
 {
 	memcpy(p_buffer, m_buffer + m_offset, p_size);
@@ -95,7 +95,7 @@ MxResult LegoMemoryStream::Read(void* p_buffer, MxU32 p_size)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x10099190
+// FUNCTION: LEGO1 0x10099190
 MxResult LegoMemoryStream::Write(const void* p_buffer, MxU32 p_size)
 {
 	memcpy(m_buffer + m_offset, p_buffer, p_size);
@@ -103,20 +103,20 @@ MxResult LegoMemoryStream::Write(const void* p_buffer, MxU32 p_size)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100991c0
+// FUNCTION: LEGO1 0x100991c0
 LegoFileStream::LegoFileStream() : LegoStream()
 {
 	m_hFile = NULL;
 }
 
-// OFFSET: LEGO1 0x10099250
+// FUNCTION: LEGO1 0x10099250
 LegoFileStream::~LegoFileStream()
 {
 	if (m_hFile != NULL)
 		fclose(m_hFile);
 }
 
-// OFFSET: LEGO1 0x100992c0
+// FUNCTION: LEGO1 0x100992c0
 MxResult LegoFileStream::Read(void* p_buffer, MxU32 p_size)
 {
 	if (m_hFile == NULL)
@@ -125,7 +125,7 @@ MxResult LegoFileStream::Read(void* p_buffer, MxU32 p_size)
 	return (fread(p_buffer, 1, p_size, m_hFile) == p_size) ? SUCCESS : FAILURE;
 }
 
-// OFFSET: LEGO1 0x10099300
+// FUNCTION: LEGO1 0x10099300
 MxResult LegoFileStream::Write(const void* p_buffer, MxU32 p_size)
 {
 	if (m_hFile == NULL)
@@ -134,7 +134,7 @@ MxResult LegoFileStream::Write(const void* p_buffer, MxU32 p_size)
 	return (fwrite(p_buffer, 1, p_size, m_hFile) == p_size) ? SUCCESS : FAILURE;
 }
 
-// OFFSET: LEGO1 0x10099340
+// FUNCTION: LEGO1 0x10099340
 MxResult LegoFileStream::Tell(MxU32* p_offset)
 {
 	if (m_hFile == NULL)
@@ -148,7 +148,7 @@ MxResult LegoFileStream::Tell(MxU32* p_offset)
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x10099370
+// FUNCTION: LEGO1 0x10099370
 MxResult LegoFileStream::Seek(MxU32 p_offset)
 {
 	if (m_hFile == NULL)
@@ -157,7 +157,7 @@ MxResult LegoFileStream::Seek(MxU32 p_offset)
 	return (fseek(m_hFile, p_offset, 0) == 0) ? SUCCESS : FAILURE;
 }
 
-// OFFSET: LEGO1 0x100993a0
+// FUNCTION: LEGO1 0x100993a0
 MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 {
 	char modeString[4];
@@ -185,14 +185,14 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 	return (m_hFile = fopen(p_filename, modeString)) ? SUCCESS : FAILURE;
 }
 
-// OFFSET: LEGO1 0x100994a0
+// FUNCTION: LEGO1 0x100994a0
 MxResult LegoMemoryStream::Tell(MxU32* p_offset)
 {
 	*p_offset = m_offset;
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x100994b0
+// FUNCTION: LEGO1 0x100994b0
 MxResult LegoMemoryStream::Seek(MxU32 p_offset)
 {
 	m_offset = p_offset;

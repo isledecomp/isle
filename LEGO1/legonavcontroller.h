@@ -5,7 +5,7 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d85b8
+// VTABLE: LEGO1 0x100d85b8
 // SIZE 0x70
 class LegoNavController : public MxCore {
 public:
@@ -39,14 +39,14 @@ public:
 	LegoNavController();
 	virtual ~LegoNavController() override; // vtable+0x0
 
-	// OFFSET: LEGO1 0x10054b80
+	// FUNCTION: LEGO1 0x10054b80
 	inline const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f66d8
+		// GLOBAL: LEGO1 0x100f66d8
 		return "LegoNavController";
 	}
 
-	// OFFSET: LEGO1 0x10054b90
+	// FUNCTION: LEGO1 0x10054b90
 	inline MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, ClassName()) || MxCore::IsA(name);

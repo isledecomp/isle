@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxvideopresenter.h"
 
-// VTABLE 0x100d7a38
+// VTABLE: LEGO1 0x100d7a38
 // SIZE 0x6c
 class MxStillPresenter : public MxVideoPresenter {
 public:
@@ -13,7 +13,7 @@ public:
 
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// 0x100f0184
+		// GLOBAL: LEGO1 0x100f0184
 		return "MxStillPresenter";
 	}
 

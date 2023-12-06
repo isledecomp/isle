@@ -3,7 +3,7 @@
 
 #include "mxdsmediaaction.h"
 
-// VTABLE 0x100dcd88
+// VTABLE: LEGO1 0x100dcd88
 // SIZE 0xb8
 class MxDSAnim : public MxDSMediaAction {
 public:
@@ -13,14 +13,14 @@ public:
 	void CopyFrom(MxDSAnim& p_dsAnim);
 	MxDSAnim& operator=(MxDSAnim& p_dsAnim);
 
-	// OFFSET: LEGO1 0x100c9060
+	// FUNCTION: LEGO1 0x100c9060
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// 0x101025d8
+		// GLOBAL: LEGO1 0x101025d8
 		return "MxDSAnim";
 	}
 
-	// OFFSET: LEGO1 0x100c9070
+	// FUNCTION: LEGO1 0x100c9070
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxDSAnim::ClassName()) || MxDSMediaAction::IsA(name);

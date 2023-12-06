@@ -5,32 +5,32 @@
 DECOMP_SIZE_ASSERT(MxPresenterList, 0x18);
 DECOMP_SIZE_ASSERT(MxPresenterListCursor, 0x10);
 
-// OFFSET: LEGO1 0x1001cd00
+// FUNCTION: LEGO1 0x1001cd00
 MxS8 MxPresenterList::Compare(MxPresenter* p_a, MxPresenter* p_b)
 {
 	return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 }
 
-// OFFSET: LEGO1 0x1001cd20 TEMPLATE
+// TEMPLATE: LEGO1 0x1001cd20
 // MxCollection<MxPresenter *>::Compare
 
-// OFFSET: LEGO1 0x1001cd30 TEMPLATE
+// TEMPLATE: LEGO1 0x1001cd30
 // MxCollection<MxPresenter *>::Destroy
 
-// OFFSET: LEGO1 0x1001cd40 TEMPLATE
+// TEMPLATE: LEGO1 0x1001cd40
 // MxList<MxPresenter *>::MxList<MxPresenter *>
 
-// OFFSET: LEGO1 0x1001cdd0 TEMPLATE
+// TEMPLATE: LEGO1 0x1001cdd0
 // MxCollection<MxPresenter *>::~MxCollection<MxPresenter *>
 
-// OFFSET: LEGO1 0x1001ce20 TEMPLATE
+// TEMPLATE: LEGO1 0x1001ce20
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
 
-// OFFSET: LEGO1 0x1001cf70 TEMPLATE
+// SYNTHETIC: LEGO1 0x1001cf70
 // MxCollection<MxPresenter *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1001cfe0 TEMPLATE
+// SYNTHETIC: LEGO1 0x1001cfe0
 // MxList<MxPresenter *>::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x1001d090 TEMPLATE
+// SYNTHETIC: LEGO1 0x1001d090
 // MxPtrList<MxPresenter>::`scalar deleting destructor'

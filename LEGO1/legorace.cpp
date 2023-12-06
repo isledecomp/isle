@@ -4,25 +4,25 @@
 
 DECOMP_SIZE_ASSERT(LegoRace, 0x144)
 
-// OFFSET: LEGO1 0x1000dab0
+// FUNCTION: LEGO1 0x1000dab0
 undefined4 LegoRace::VTable0x78(undefined4)
 {
 	return 0;
 }
 
-// OFFSET: LEGO1 0x1000dac0 STUB
+// STUB: LEGO1 0x1000dac0
 void LegoRace::VTable0x7c(undefined4, undefined4)
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x1000dae0
+// FUNCTION: LEGO1 0x1000dae0
 MxBool LegoRace::VTable0x5c()
 {
 	return TRUE;
 }
 
-// OFFSET: LEGO1 0x10015aa0
+// FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
 {
 	this->m_unkf8 = 0;
@@ -43,45 +43,45 @@ LegoRace::LegoRace()
 	NotificationManager()->Register(this);
 }
 
-// OFFSET: LEGO1 0x10015b70
+// FUNCTION: LEGO1 0x10015b70
 undefined4 LegoRace::VTable0x70(undefined4)
 {
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10015b80
+// FUNCTION: LEGO1 0x10015b80
 undefined4 LegoRace::VTable0x74(undefined4)
 {
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10015b90
+// FUNCTION: LEGO1 0x10015b90
 MxBool LegoRace::VTable0x64()
 {
 	return FALSE;
 }
 
-// OFFSET: LEGO1 0x10015ce0 STUB
+// STUB: LEGO1 0x10015ce0
 MxResult LegoRace::Create(MxDSObject& p_dsObject)
 {
 	// TODO
 	return SUCCESS;
 }
 
-// OFFSET: LEGO1 0x10015d40 STUB
+// STUB: LEGO1 0x10015d40
 LegoRace::~LegoRace()
 {
 	// TODO
 }
 
-// OFFSET: LEGO1 0x10015e00 STUB
+// STUB: LEGO1 0x10015e00
 MxLong LegoRace::Notify(MxParam& p)
 {
 	// TODO
 	return 0;
 }
 
-// OFFSET: LEGO1 0x10015ed0 STUB
+// STUB: LEGO1 0x10015ed0
 void LegoRace::VTable0x68(MxBool p_add)
 {
 	// TODO

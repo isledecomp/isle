@@ -7,16 +7,16 @@
 
 DECOMP_SIZE_ASSERT(MxLoopingMIDIPresenter, 0x58);
 
-// OFFSET: LEGO1 0x100b1830 TEMPLATE
+// FUNCTION: LEGO1 0x100b1830
 // MxLoopingMIDIPresenter::ClassName
 
-// OFFSET: LEGO1 0x100b1840 TEMPLATE
+// FUNCTION: LEGO1 0x100b1840
 // MxLoopingMIDIPresenter::IsA
 
-// OFFSET: LEGO1 0x100b19c0 TEMPLATE
+// SYNTHETIC: LEGO1 0x100b19c0
 // MxLoopingMIDIPresenter::`scalar deleting destructor'
 
-// OFFSET: LEGO1 0x100c2a80
+// FUNCTION: LEGO1 0x100c2a80
 void MxLoopingMIDIPresenter::StreamingTickle()
 {
 	if (m_action->GetLoopCount()) {
@@ -35,7 +35,7 @@ void MxLoopingMIDIPresenter::StreamingTickle()
 	}
 }
 
-// OFFSET: LEGO1 0x100c2ae0
+// FUNCTION: LEGO1 0x100c2ae0
 void MxLoopingMIDIPresenter::DoneTickle()
 {
 	if (m_action->GetLoopCount())
@@ -44,7 +44,7 @@ void MxLoopingMIDIPresenter::DoneTickle()
 		EndAction();
 }
 
-// OFFSET: LEGO1 0x100c2b00
+// FUNCTION: LEGO1 0x100c2b00
 MxResult MxLoopingMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();

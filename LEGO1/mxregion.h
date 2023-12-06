@@ -50,7 +50,7 @@ private:
 	MxS32 m_right;
 };
 
-// VTABLE 0x100dcae8
+// VTABLE: LEGO1 0x100dcae8
 // SIZE 0x1c
 class MxRegion : public MxCore {
 public:

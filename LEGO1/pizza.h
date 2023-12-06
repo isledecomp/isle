@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 #include "mxtypes.h"
 
-// VTABLE 0x100d7380
+// VTABLE: LEGO1 0x100d7380
 // SIZE 0x9c
 class Pizza : public IsleActor {
 public:
@@ -17,14 +17,14 @@ public:
 
 	virtual MxResult Tickle() override; // vtable+08
 
-	// OFFSET: LEGO1 0x10037f90
+	// FUNCTION: LEGO1 0x10037f90
 	inline const char* ClassName() const // vtable+0c
 	{
-		// 0x100f038c
+		// GLOBAL: LEGO1 0x100f038c
 		return "Pizza";
 	}
 
-	// OFFSET: LEGO1 0x10037fa0
+	// FUNCTION: LEGO1 0x10037fa0
 	inline MxBool IsA(const char* name) const override // vtable+10
 	{
 		return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
