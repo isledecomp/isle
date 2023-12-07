@@ -4,6 +4,7 @@
 #include "mxpoint32.h"
 #include "mxsize32.h"
 
+// SIZE 0x10
 class MxRect32 {
 public:
 	MxRect32() {}

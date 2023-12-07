@@ -29,8 +29,8 @@ public:
 	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x2c
 
 	__declspec(dllexport) void InvalidateRect(MxRect32&);
-	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*); // vtable+0x30
-	virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height);
+	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*);            // vtable+0x30
+	virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
 
 	MxResult Init();
 	void Destroy(MxBool p_fromDestructor);
@@ -42,12 +42,12 @@ public:
 	inline MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
 
 protected:
-	MxVideoParam m_videoParam;
-	LPDIRECTDRAW m_pDirectDraw;
-	LPDIRECTDRAWSURFACE m_pDDSurface;
-	MxDisplaySurface* m_displaySurface;
-	MxRegion* m_region;
-	MxBool m_unk60;
+	MxVideoParam m_videoParam;          // 0x2c
+	LPDIRECTDRAW m_pDirectDraw;         // 0x50
+	LPDIRECTDRAWSURFACE m_pDDSurface;   // 0x54
+	MxDisplaySurface* m_displaySurface; // 0x58
+	MxRegion* m_region;                 // 0x5c
+	MxBool m_unk60;                     // 0x60
 };
 
 #endif // MXVIDEOMANAGER_H

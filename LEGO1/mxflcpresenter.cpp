@@ -42,11 +42,9 @@ void MxFlcPresenter::CreateBitmap()
 }
 
 // FUNCTION: LEGO1 0x100b3620
-void MxFlcPresenter::VTable0x70()
+void MxFlcPresenter::RealizePalette()
 {
-	MxPalette* pal = m_bitmap->CreatePalette();
-	MVideoManager()->RealizePalette(pal);
-
-	if (pal)
-		delete pal;
+	MxPalette* palette = m_bitmap->CreatePalette();
+	MVideoManager()->RealizePalette(palette);
+	delete palette;
 }

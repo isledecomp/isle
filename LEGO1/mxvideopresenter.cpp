@@ -26,7 +26,7 @@ void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
 }
 
 // FUNCTION: LEGO1 0x1000c730
-void MxVideoPresenter::VTable0x70()
+void MxVideoPresenter::RealizePalette()
 {
 	// Empty
 }
