@@ -31,7 +31,7 @@ MxCompositePresenter::MxCompositePresenter()
 // SYNTHETIC: LEGO1 0x100b62d0
 // MxCompositePresenter::`scalar deleting destructor'
 
-// TEMPLATE: LEGO1 0x100b62f0
+// FUNCTION: LEGO1 0x100b62f0
 // MxCompositePresenterList::~MxCompositePresenterList
 
 // TEMPLATE: LEGO1 0x100b6340
