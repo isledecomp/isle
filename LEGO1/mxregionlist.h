@@ -29,28 +29,15 @@ public:
 // VTABLE: LEGO1 0x100dcba0
 // class MxListCursor<MxRegionTopBottom *>
 
-// TODO: MxRegionListCursor should probably extend MxPtrListCursor. Doing this has
-// drastically reduced the match percentage for MxRegion::vtable18, so we will replicate
-// the previous cursor hierarchy with this dummy class for now.
-
-template <class T>
-class _ListCursorDummy : public MxListCursor<T> {
-public:
-	_ListCursorDummy(MxList<T>* p_list) : MxListCursor<T>(p_list){};
-};
+// TODO: The initialize list param type should be MxRegionList, but doing that
+// drastically reduced the match percentage for MxRegion::vtable18.
+// It also works with MxPtrList, so we'll do that until we figure this out.
 
 // VTABLE: LEGO1 0x100dcb88
-class MxRegionListCursor : public _ListCursorDummy<MxRegionTopBottom*> {
-public:
-	MxRegionListCursor(MxList<MxRegionTopBottom*>* p_list) : _ListCursorDummy<MxRegionTopBottom*>(p_list){};
-};
-
-/*
 class MxRegionListCursor : public MxPtrListCursor<MxRegionTopBottom> {
 public:
-  MxRegionListCursor(MxRegionList* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
+	MxRegionListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
 };
-*/
 
 // VTABLE: LEGO1 0x100dcc40
 // class MxCollection<MxRegionLeftRight *>
