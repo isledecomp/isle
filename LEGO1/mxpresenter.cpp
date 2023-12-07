@@ -195,7 +195,7 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 
 		NotificationManager()->Send(m_compositePresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 
-		m_action->SetUnknown8c(p_omni ? p_omni : MxOmni::GetInstance());
+		m_action->SetOrigin(p_omni ? p_omni : MxOmni::GetInstance());
 		m_compositePresenter = NULL;
 	}
 }
