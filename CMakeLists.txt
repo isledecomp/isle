@@ -276,17 +276,12 @@ if (ISLE_BUILD_APP)
 endif()
 
 if (MSVC)
-  # Remove "identifier was truncated to '255' characters" warnings from output.
-  # Impossible to avoid this if using STL map or set.
-  # Unfortunately, MSVC4 has a bug that makes it impossible
-  # to get rid of this warning by using the standard #pragma directive.
-  configure_file("compile.cmd" "compile.cmd")
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "compile.cmd < NUL")
-
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
-  target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  if (ISLE_BUILD_APP)
+    target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  endif()
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
