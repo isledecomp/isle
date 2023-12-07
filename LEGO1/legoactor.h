@@ -11,24 +11,23 @@ public:
 	LegoActor();
 
 	// FUNCTION: LEGO1 0x1002d210
-	inline virtual const char* ClassName() const override // vtable+0x0c
-	{
-		// GLOBAL: LEGO1 0x100f0124
-		return "LegoActor";
-	}
+	inline virtual const char* ClassName() const override; // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x1002d220
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
-	{
-		return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
-	}
+	inline virtual MxBool IsA(const char* name) const override; // vtable+0x10
 
-	virtual MxFloat VTable0x50();             // vtable+0x50
-	virtual void VTable0x54(MxFloat p_unk);   // vtable+0x54
-	virtual void VTable0x58(MxFloat p_unk);   // vtable+0x58
-	virtual MxFloat VTable0x5c();             // vtable+0x5c
-	virtual undefined VTable0x60();           // vtable+0x60
-	virtual void VTable0x64(undefined p_unk); // vtable+0x64
+	// FUNCTION: LEGO1 0x10002cc0
+	virtual MxFloat VTable0x50() { return m_unk68; }
+	// FUNCTION: LEGO1 0x10002cd0
+	virtual void VTable0x54(MxFloat p_unk) { m_unk68 = p_unk; }
+	// FUNCTION: LEGO1 0x10002ce0
+	virtual void VTable0x58(MxFloat p_unk) { m_unk70 = p_unk; }
+	// FUNCTION: LEGO1 0x10002cf0
+	virtual MxFloat VTable0x5c() { return m_unk70; }
+	// FUNCTION: LEGO1 0x10002d00
+	virtual undefined VTable0x60() { return m_unk74; }
+	// FUNCTION: LEGO1 0x10002d10
+	virtual void VTable0x64(undefined p_unk) { m_unk74 = p_unk; }
 
 private:
 	MxFloat m_unk68;

@@ -495,6 +495,8 @@ private:
 class Vector4Data : public Vector4Impl {
 public:
 	inline Vector4Data() : Vector4Impl(m_vector.elements) {}
+	// FUNCTION: LEGO1 0x10003200
+	virtual void operator=(Vector4Data& p_other) { EqualsImpl(p_other.m_data); }
 
 private:
 	Vector4 m_vector;

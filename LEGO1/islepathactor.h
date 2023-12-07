@@ -18,14 +18,14 @@ public:
 	virtual MxU32 VTable0xcc() { return 0; } // vtable+0xcc
 	// FUNCTION: LEGO1 0x10002df0
 	virtual MxU32 VTable0xd0() { return 0; } // vtable+0xd0
-	// FUNCTION: LEGO1 0x10002e10
-	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 	// FUNCTION: LEGO1 0x10002e80
 	virtual MxU32 VTable0xd4(MxType17NotificationParam& p) { return 0; } // vtable+0xd4
 	// FUNCTION: LEGO1 0x10002e90
 	virtual MxU32 VTable0xd8(MxType18NotificationParam& p) { return 0; } // vtable+0xd8
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam& p) { return 0; } // vtable+0xdc
+	// FUNCTION: LEGO1 0x10002e10
+	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); }
 
 	// FUNCTION: LEGO1 0x10002ea0
 	inline virtual const char* ClassName() const override // vtable+0x0c
