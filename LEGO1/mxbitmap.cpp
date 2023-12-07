@@ -375,15 +375,16 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 
 	if (p_palette) {
 		if (p_palette->GetEntries(entries))
-			return ret;
+			goto done;
 	}
 	else {
 		MxPalette local_pal;
 		if (local_pal.GetEntries(entries))
-			return ret;
+			goto done;
 	}
 
-	for (MxS32 i = 0; i < 256; i++) {
+	MxS32 i;
+	for (i = 0; i < 256; i++) {
 		p_rgbquad[i].rgbRed = entries[i].peRed;
 		p_rgbquad[i].rgbGreen = entries[i].peGreen;
 		p_rgbquad[i].rgbBlue = entries[i].peBlue;
@@ -391,5 +392,7 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 	}
 
 	ret = SUCCESS;
+
+done:
 	return ret;
 }
