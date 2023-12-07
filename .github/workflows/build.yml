@@ -20,6 +20,10 @@ jobs:
         # Use minimum supported version
         cmake-version: '3.13.x'
 
+    - name: Patch MSVC 4.2
+      run: |
+        python tools/patch_c2.py msvc420/bin/C2.EXE
+
     - name: Build
       shell: cmd
       run: |
