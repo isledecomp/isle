@@ -7,6 +7,7 @@
 // VTABLE: LEGO1 0x100d7e80
 class MxType18NotificationParam : public MxNotificationParam {
 public:
+
 protected:
 	undefined4 m_unkc;
 };
