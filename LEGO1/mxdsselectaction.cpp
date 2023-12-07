@@ -42,7 +42,7 @@ void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 // SYNTHETIC: LEGO1 0x100cbc90
 // MxListCursor<MxString>::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x100cbd00
+// FUNCTION: LEGO1 0x100cbd00
 // MxStringListCursor::~MxStringListCursor
 
 // FUNCTION: LEGO1 0x100cbd50

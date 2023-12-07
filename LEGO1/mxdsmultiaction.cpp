@@ -12,7 +12,7 @@ DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
 // SYNTHETIC: LEGO1 0x1004add0
 // MxListCursor<MxDSAction *>::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x1004ae40
+// FUNCTION: LEGO1 0x1004ae40
 // MxDSActionListCursor::~MxDSActionListCursor
 
 // FUNCTION: LEGO1 0x100c9b90

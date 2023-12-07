@@ -82,7 +82,7 @@ MxResult LegoWorld::SetAsCurrentWorld(MxDSObject& p_dsObject)
 // TEMPLATE: LEGO1 0x1001f070
 // MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
 
-// SYNTHETIC: LEGO1 0x1001f0c0
+// FUNCTION: LEGO1 0x1001f0c0
 // MxPresenterListCursor::~MxPresenterListCursor
 
 // FUNCTION: LEGO1 0x1001f5e0

@@ -51,13 +51,13 @@ MxStreamController::MxStreamController()
 // TEMPLATE: LEGO1 0x100c0ee0
 // list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
 
-// TEMPLATE: LEGO1 0x100c0fc0
+// FUNCTION: LEGO1 0x100c0fc0
 // MxStreamListMxDSSubscriber::~MxStreamListMxDSSubscriber
 
-// TEMPLATE: LEGO1 0x100c1010
+// FUNCTION: LEGO1 0x100c1010
 // MxStreamListMxDSAction::~MxStreamListMxDSAction
 
-// TEMPLATE: LEGO1 0x100c1060
+// FUNCTION: LEGO1 0x100c1060
 // MxStreamListMxNextActionDataStart::~MxStreamListMxNextActionDataStart
 
 // TEMPLATE: LEGO1 0x100c10b0

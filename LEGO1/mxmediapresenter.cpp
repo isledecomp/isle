@@ -31,7 +31,7 @@ void MxMediaPresenter::Destroy()
 // SYNTHETIC: LEGO1 0x100b47a0
 // MxListCursor<MxStreamChunk *>::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x100b4810
+// FUNCTION: LEGO1 0x100b4810
 // MxStreamChunkListCursor::~MxStreamChunkListCursor
 
 // FUNCTION: LEGO1 0x100b54e0

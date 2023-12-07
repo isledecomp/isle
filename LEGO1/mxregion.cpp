@@ -101,7 +101,7 @@ void MxRegion::vtable18(MxRect32& p_rect)
 // TEMPLATE: LEGO1 0x100c3d80
 // MxListCursor<MxRegionTopBottom *>::~MxListCursor<MxRegionTopBottom *>
 
-// SYNTHETIC: LEGO1 0x100c3dd0
+// FUNCTION: LEGO1 0x100c3dd0
 // MxRegionListCursor::~MxRegionListCursor
 
 // FUNCTION: LEGO1 0x100c3e20
@@ -203,7 +203,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 // TEMPLATE: LEGO1 0x100c54f0
 // MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
 
-// TEMPLATE: LEGO1 0x100c5560
+// FUNCTION: LEGO1 0x100c5560
 // MxRegionLeftRightListCursor::~MxRegionLeftRightListCursor
 
 // TEMPLATE: LEGO1 0x100c55b0
