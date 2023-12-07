@@ -210,6 +210,15 @@ add_library(lego1 SHARED
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
+  LEGO1/tgl/d3drm/camera.cpp
+  LEGO1/tgl/d3drm/device.cpp
+  LEGO1/tgl/d3drm/group.cpp
+  LEGO1/tgl/d3drm/light.cpp
+  LEGO1/tgl/d3drm/mesh.cpp
+  LEGO1/tgl/d3drm/renderer.cpp
+  LEGO1/tgl/d3drm/texture.cpp
+  LEGO1/tgl/d3drm/unk.cpp
+  LEGO1/tgl/d3drm/view.cpp
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager/viewmanager.cpp
@@ -241,7 +250,7 @@ if (ISLE_USE_DX5)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
