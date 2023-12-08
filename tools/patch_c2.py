@@ -18,7 +18,7 @@ C2_SIZE = 549888
 def main():
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
-        description="Path C2.EXE of Micrisoft Visual Studio 4.2.0 to disable C4786 warning",
+        description="Path C2.EXE of Microsoft Visual Studio 4.2.0 to disable C4786 warning",
     )
     parser.add_argument("path", type=pathlib.Path, help="Path of C2.EXE")
     parser.add_argument(
