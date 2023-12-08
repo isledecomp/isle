@@ -24,6 +24,10 @@
 
 #include <dsound.h>
 
+// Might be static functions of IsleApp
+BOOL FindExistingInstance(void);
+BOOL StartDirectSound(void);
+
 // FUNCTION: ISLE 0x401000
 IsleApp::IsleApp()
 {
@@ -168,9 +172,6 @@ void IsleApp::SetupVideoFlags(
 		m_videoParam.flags().Set16Bit(1);
 	}
 }
-
-BOOL FindExistingInstance(void);
-BOOL StartDirectSound(void);
 
 // FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -421,15 +422,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
-	case WM_SETCURSOR:
-		if (g_isle) {
-			HCURSOR hCursor = g_isle->m_cursorCurrent;
-			if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
-				SetCursor(hCursor);
-				return 0;
-			}
-		}
-		break;
 	case WM_KEYDOWN:
 		// While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
 		// to be what the assembly is actually doing
@@ -457,6 +449,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case 0x5400:
 		if (g_isle) {
 			g_isle->SetupCursor(wParam);
+			return 0;
+		}
+		break;
+	case WM_SETCURSOR:
+		if (g_isle && (g_isle->m_cursorCurrent == g_isle->m_cursorBusy ||
+					   g_isle->m_cursorCurrent == g_isle->m_cursorNo || !g_isle->m_cursorCurrent)) {
+			SetCursor(g_isle->m_cursorCurrent);
 			return 0;
 		}
 		break;
@@ -815,10 +814,8 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			}
 			this->m_gameStarted = 1;
 		}
-		return;
 	}
-
-	if (sleepIfNotNextFrame != 0)
+	else if (sleepIfNotNextFrame != 0)
 		Sleep(0);
 }
 
