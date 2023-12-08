@@ -289,8 +289,9 @@ if (MSVC)
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
-
-  target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  if (ISLE_BUILD_APP)
+    target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  endif()
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
