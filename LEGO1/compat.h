@@ -18,12 +18,6 @@
 // Impossible to avoid this if using STL map or set.
 // This removes most (but not all) occurrences of the warning.
 #pragma warning(disable : 4786)
-// To really remove *all* of the warnings, we have to employ the following,
-// obscure workaround from https://www.earthli.com/news/view_article.php?id=376
-static class msVC6_4786WorkAround {
-public:
-	msVC6_4786WorkAround() {}
-} msVC6_4786WorkAround;
 
 #define MSVC420_VERSION 1020
 

@@ -22,6 +22,7 @@ class LegoSoundManager;
 class LegoUnkSaveDataWriter;
 class LegoVideoManager;
 class LegoWorld;
+class LegoWorldList;
 class MxAtomId;
 class MxBackgroundAudioManager;
 class MxDSFile;
@@ -118,7 +119,7 @@ private:
 	undefined4 m_unk6c;
 	LegoInputManager* m_inputMgr; // 0x70
 	GifManager* m_gifManager;
-	undefined4 m_unk78;
+	LegoWorldList* m_worldList; // 0x78
 	LegoWorld* m_currentWorld;
 	MxBool m_unk80;
 	LegoNavController* m_navController; // 0x84

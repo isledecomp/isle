@@ -23,6 +23,7 @@ from capstone import Cs, CS_ARCH_X86, CS_MODE_32
 import colorama
 from pystache import Renderer
 
+
 REGISTER_LIST = set(
     [
         "ax",
@@ -200,7 +201,8 @@ def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_ac
 
 
 # Do the actual work
-if __name__ == "__main__":
+def main():
+    # pylint: disable=too-many-locals, too-many-nested-blocks, too-many-branches, too-many-statements
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
         description="Recompilation Compare: compare an original EXE with a recompiled EXE + PDB.",
@@ -483,3 +485,7 @@ if __name__ == "__main__":
                         function_count,
                         total_effective_accuracy,
                     )
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

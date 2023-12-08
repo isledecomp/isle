@@ -30,7 +30,7 @@ public:
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	virtual void CreateBitmap() override;                     // vtable+0x60
 	virtual void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
-	virtual void VTable0x70() override;                       // vtable+0x70
+	virtual void RealizePalette() override;                   // vtable+0x70
 	virtual MxU32 VTable0x88();                               // vtable+0x88
 
 	struct MxSmack {

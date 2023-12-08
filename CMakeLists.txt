@@ -99,6 +99,7 @@ add_library(lego1 SHARED
   LEGO1/legovehiclebuildstate.cpp
   LEGO1/legovideomanager.cpp
   LEGO1/legoworld.cpp
+  LEGO1/legoworldlist.cpp
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxactionnotificationparam.cpp
@@ -210,6 +211,15 @@ add_library(lego1 SHARED
   LEGO1/registrationbook.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
+  LEGO1/tgl/d3drm/camera.cpp
+  LEGO1/tgl/d3drm/device.cpp
+  LEGO1/tgl/d3drm/group.cpp
+  LEGO1/tgl/d3drm/light.cpp
+  LEGO1/tgl/d3drm/mesh.cpp
+  LEGO1/tgl/d3drm/renderer.cpp
+  LEGO1/tgl/d3drm/texture.cpp
+  LEGO1/tgl/d3drm/unk.cpp
+  LEGO1/tgl/d3drm/view.cpp
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager/viewmanager.cpp
@@ -241,7 +251,7 @@ if (ISLE_USE_DX5)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -279,8 +289,9 @@ if (MSVC)
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
-
-  target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  if (ISLE_BUILD_APP)
+    target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+  endif()
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")

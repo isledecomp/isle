@@ -1,7 +1,10 @@
-#ifndef TGLVECTOR_H
-#define TGLVECTOR_H
+#ifndef _tglVector_h
+#define _tglVector_h
+// Note: This file is almost an exact copy of the one from
+// the leak but using floats instead of doubles, hence the
+// strange formatting in some places.
 
-#include "math.h" // ??? sin() in  RotateAroundY()
+#include "math.h" // sin() in RotateAroundY()
 
 #include <stddef.h> // offsetof()
 
@@ -142,7 +145,6 @@ class RotationY : public FloatMatrix4 {
 public:
 	RotationY(float radians);
 };
-
 //////////////////////////////////////////////////////////////////////////////
 //
 // Transformation matrices implementation
@@ -274,4 +276,4 @@ inline RotationY::RotationY(float radians)
 
 } // namespace Tgl
 
-#endif // TLGVECTOR_H
+#endif /* _tglVector_h */

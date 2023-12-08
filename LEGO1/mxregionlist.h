@@ -23,13 +23,21 @@ public:
 	static void Destroy(MxRegionTopBottom*);
 };
 
-// VTABLE: LEGO1 0x100dcb88
-// class MxListCursorChildChild<MxRegionTopBottom *>
-typedef MxListCursorChildChild<MxRegionTopBottom*> MxRegionListCursor;
+// VTABLE: LEGO1 0x100dcb70
+// class MxPtrListCursor<MxRegionTopBottom>
 
-// VTABLE: LEGO1 0x100dcc10
-// class MxListCursorChildChild<MxRegionLeftRight *>
-typedef MxListCursorChildChild<MxRegionLeftRight*> MxRegionLeftRightListCursor;
+// VTABLE: LEGO1 0x100dcba0
+// class MxListCursor<MxRegionTopBottom *>
+
+// TODO: The initialize list param type should be MxRegionList, but doing that
+// drastically reduced the match percentage for MxRegion::vtable18.
+// It also works with MxPtrList, so we'll do that until we figure this out.
+
+// VTABLE: LEGO1 0x100dcb88
+class MxRegionListCursor : public MxPtrListCursor<MxRegionTopBottom> {
+public:
+	MxRegionListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
+};
 
 // VTABLE: LEGO1 0x100dcc40
 // class MxCollection<MxRegionLeftRight *>
@@ -46,6 +54,18 @@ class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
 public:
 	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(Destroy) {}
 	static void Destroy(MxRegionLeftRight*);
+};
+
+// VTABLE: LEGO1 0x100dcbf8
+// class MxPtrListCursor<MxRegionLeftRight>
+
+// VTABLE: LEGO1 0x100dcc28
+// class MxListCursor<MxRegionLeftRight *>
+
+// VTABLE: LEGO1 0x100dcc10
+class MxRegionLeftRightListCursor : public MxPtrListCursor<MxRegionLeftRight> {
+public:
+	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
 };
 
 #endif // MXREGIONLIST_H

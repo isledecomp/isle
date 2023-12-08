@@ -32,14 +32,14 @@ public:
 	virtual void CreateBitmap() override;                     // vtable+0x60
 	virtual void NextFrame() override;                        // vtable+0x64
 	virtual void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
-	virtual void VTable0x70() override;                       // vtable+0x70
-	virtual void VTable0x88(undefined4, undefined4);          // vtable+0x88
+	virtual void RealizePalette() override;                   // vtable+0x70
+	virtual void VTable0x88(MxS32 p_x, MxS32 p_y);            // vtable+0x88
 	virtual MxStillPresenter* Clone();                        // vtable+0x8c
 
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk64;         // 0x64
+	MxLong m_chunkTime;         // 0x64
 	MxBITMAPINFO* m_bitmapInfo; // 0x68
 };
 
