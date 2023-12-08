@@ -1,10 +1,10 @@
 #ifndef MXSTREAMLIST_H
 #define MXSTREAMLIST_H
 
-#include "compat.h" // STL
 #include "mxdsaction.h"
 #include "mxdssubscriber.h"
 #include "mxnextactiondatastart.h"
+#include "mxstl/stlcompat.h"
 
 template <class T>
 class MxStreamList : public list<T> {};

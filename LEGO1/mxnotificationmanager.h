@@ -1,10 +1,10 @@
 #ifndef MXNOTIFICATIONMANAGER_H
 #define MXNOTIFICATIONMANAGER_H
 
-#include "compat.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxnotificationparam.h"
+#include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
 class MxNotification {

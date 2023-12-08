@@ -3,9 +3,9 @@
 
 // ROI stands for Real-time Object Instance.
 
-#include "../compat.h"
-#include "../mxstl.h"
+#include "../mxstl/stlcompat.h"
 #include "../realtime/realtime.h"
+#include "compat.h"
 #include "lodlist.h"
 #include "vector.h"
 

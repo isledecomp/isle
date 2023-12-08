@@ -1,6 +1,6 @@
 #include "orientableroi.h"
 
-#include "../decomp.h"
+#include "decomp.h"
 
 DECOMP_SIZE_ASSERT(OrientableROI, 0xdc)
 
