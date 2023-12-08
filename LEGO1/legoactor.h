@@ -10,10 +10,7 @@ class LegoActor : public LegoEntity {
 public:
 	LegoActor();
 
-	// FUNCTION: LEGO1 0x1002d210
-	inline virtual const char* ClassName() const override; // vtable+0x0c
-
-	// FUNCTION: LEGO1 0x1002d220
+	inline virtual const char* ClassName() const override;      // vtable+0x0c
 	inline virtual MxBool IsA(const char* name) const override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x10002cc0
