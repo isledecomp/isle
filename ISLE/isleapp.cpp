@@ -389,31 +389,34 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_DISPLAYCHANGE:
-		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D() &&
-			VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
-			int targetWidth = LOWORD(lParam);
-			int targetHeight = HIWORD(lParam);
-			int targetDepth = wParam;
+		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D()) {
+			if (VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
+				int targetDepth = wParam;
+				int targetWidth = LOWORD(lParam);
+				int targetHeight = HIWORD(lParam);
 
-			if (g_waitingForTargetDepth) {
-				g_waitingForTargetDepth = 0;
-				g_targetDepth = targetDepth;
-			}
-			else {
-				BOOL valid = FALSE;
-				if (targetWidth == g_targetWidth && targetHeight == g_targetHeight && g_targetDepth == targetDepth) {
-					valid = TRUE;
+				if (g_waitingForTargetDepth) {
+					g_waitingForTargetDepth = 0;
+					g_targetDepth = targetDepth;
 				}
+				else {
+					BOOL valid = FALSE;
 
-				if (g_rmDisabled) {
-					if (valid) {
-						g_reqEnableRMDevice = 1;
+					if (g_targetWidth == targetWidth && g_targetHeight == targetHeight &&
+						g_targetDepth == targetDepth) {
+						valid = TRUE;
 					}
-				}
-				else if (!valid) {
-					g_rmDisabled = 1;
-					Lego()->StartTimer();
-					VideoManager()->DisableRMDevice();
+
+					if (g_rmDisabled) {
+						if (valid) {
+							g_reqEnableRMDevice = 1;
+						}
+					}
+					else if (!valid) {
+						g_rmDisabled = 1;
+						Lego()->StartTimer();
+						VideoManager()->DisableRMDevice();
+					}
 				}
 			}
 		}
@@ -433,8 +436,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (lParam & (KF_REPEAT << 16)) {
 			return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 		}
-		keyCode = wParam;
 		type = c_notificationKeyPress;
+		keyCode = wParam;
 		break;
 	case WM_MOUSEMOVE:
 		g_mousemoved = 1;
