@@ -6,10 +6,6 @@
 #include "mxcore.h"
 #include "mxdstypes.h"
 
-// TODO: Find proper compilation unit to put this
-// FUNCTION: LEGO1 0x10005530
-// MxDSObject::SetAtomId
-
 // VTABLE: LEGO1 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
@@ -62,5 +58,11 @@ private:
 };
 
 MxDSObject* DeserializeDSObjectDispatch(char**, MxS16);
+
+// FUNCTION: ISLE 0x401c40
+// MxDSObject::SetAtomId
+
+// FUNCTION: LEGO1 0x10005530
+// MxDSObject::SetAtomId
 
 #endif // MXDSOBJECT_H

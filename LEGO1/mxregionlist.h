@@ -68,4 +68,88 @@ public:
 	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
 };
 
+// TEMPLATE: LEGO1 0x100c32e0
+// MxCollection<MxRegionTopBottom *>::Compare
+
+// TEMPLATE: LEGO1 0x100c3340
+// MxCollection<MxRegionTopBottom *>::Destroy
+
+// SYNTHETIC: LEGO1 0x100c34d0
+// MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c3540
+// MxList<MxRegionTopBottom *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c35f0
+// MxPtrList<MxRegionTopBottom>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c3be0
+// MxRegionListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c3c50
+// MxPtrListCursor<MxRegionTopBottom>::~MxPtrListCursor<MxRegionTopBottom>
+
+// SYNTHETIC: LEGO1 0x100c3ca0
+// MxListCursor<MxRegionTopBottom *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c3d10
+// MxPtrListCursor<MxRegionTopBottom>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c3d80
+// MxListCursor<MxRegionTopBottom *>::~MxListCursor<MxRegionTopBottom *>
+
+// FUNCTION: LEGO1 0x100c3dd0
+// MxRegionListCursor::~MxRegionListCursor
+
+// SYNTHETIC: LEGO1 0x100c4790
+// MxRegionLeftRightListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c4800
+// MxPtrListCursor<MxRegionLeftRight>::~MxPtrListCursor<MxRegionLeftRight>
+
+// SYNTHETIC: LEGO1 0x100c4850
+// MxListCursor<MxRegionLeftRight *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c48c0
+// MxPtrListCursor<MxRegionLeftRight>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c4930
+// MxListCursor<MxRegionLeftRight *>::~MxListCursor<MxRegionLeftRight *>
+
+// TEMPLATE: LEGO1 0x100c4d80
+// MxCollection<MxRegionLeftRight *>::Compare
+
+// TEMPLATE: LEGO1 0x100c4de0
+// MxCollection<MxRegionLeftRight *>::Destroy
+
+// SYNTHETIC: LEGO1 0x100c4f50
+// MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c4fc0
+// MxList<MxRegionLeftRight *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100c5070
+// MxPtrList<MxRegionLeftRight>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c54f0
+// MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
+
+// FUNCTION: LEGO1 0x100c5560
+// MxRegionLeftRightListCursor::~MxRegionLeftRightListCursor
+
+// TEMPLATE: LEGO1 0x100c55b0
+// MxListCursor<MxRegionLeftRight *>::operator=
+
+// TEMPLATE: LEGO1 0x100c58c0
+// MxList<MxRegionLeftRight *>::_InsertEntry
+
+// TEMPLATE: LEGO1 0x100c5970
+// MxList<MxRegionTopBottom *>::_InsertEntry
+
+// TEMPLATE: LEGO1 0x100c5a20
+// MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
+
+// TEMPLATE: LEGO1 0x100c5a40
+// MxList<MxRegionLeftRight *>::_DeleteEntry
+
 #endif // MXREGIONLIST_H

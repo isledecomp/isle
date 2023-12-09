@@ -3,10 +3,6 @@
 
 #include <vec.h>
 
-// TODO: Find proper compilation unit to put this
-// FUNCTION: LEGO1 0x1000c0f0
-// Vector2Impl::Vector2Impl
-
 /*
  * A simple array of three floats that can be indexed into.
  */
@@ -64,6 +60,7 @@ public:
 // SIZE 0x8
 class Vector2Impl {
 public:
+	// FUNCTION: LEGO1 0x1000c0f0
 	inline Vector2Impl(float* p_data) { this->SetData(p_data); }
 
 	// vtable + 0x00 (no virtual destructor)

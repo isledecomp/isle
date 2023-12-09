@@ -19,24 +19,6 @@ MxCompositePresenter::MxCompositePresenter()
 	NotificationManager()->Register(this);
 }
 
-// TEMPLATE: LEGO1 0x100b61a0
-// list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
-
-// FUNCTION: LEGO1 0x100b6210
-// MxCompositePresenter::ClassName
-
-// FUNCTION: LEGO1 0x100b6220
-// MxCompositePresenter::IsA
-
-// SYNTHETIC: LEGO1 0x100b62d0
-// MxCompositePresenter::`scalar deleting destructor'
-
-// FUNCTION: LEGO1 0x100b62f0
-// MxCompositePresenterList::~MxCompositePresenterList
-
-// TEMPLATE: LEGO1 0x100b6340
-// List<MxPresenter *>::~List<MxPresenter *>
-
 // FUNCTION: LEGO1 0x100b6390
 MxCompositePresenter::~MxCompositePresenter()
 {

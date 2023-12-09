@@ -22,15 +22,6 @@ void MxStillPresenter::Destroy()
 	Destroy(FALSE);
 }
 
-// FUNCTION: LEGO1 0x100435c0
-// MxStillPresenter::ClassName
-
-// FUNCTION: LEGO1 0x100435d0
-// MxStillPresenter::IsA
-
-// SYNTHETIC: LEGO1 0x100436e0
-// MxStillPresenter::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100b9c70
 void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 {

@@ -464,4 +464,34 @@ inline D3DRMMATRIX4D* Translate(const FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D&
 	return &rD3DRMMatrix4x4;
 }
 
+// SYNTHETIC: LEGO1 0x100a16d0
+// TglImpl::RendererImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a22c0
+// TglImpl::DeviceImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a23a0
+// TglImpl::ViewImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a2480
+// TglImpl::GroupImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a2560
+// TglImpl::CameraImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a2640
+// TglImpl::LightImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a2720
+// TglImpl::UnkImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a2800
+// TglImpl::TextureImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100a3d80
+// TglImpl::MeshImpl::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100aa250
+// ViewROI::`scalar deleting destructor'
+
 } /* namespace TglImpl */

@@ -11,12 +11,14 @@ public:
 	MxStillPresenter() { m_bitmapInfo = NULL; }
 	virtual ~MxStillPresenter() override { Destroy(TRUE); }; // vtable+0x00
 
+	// FUNCTION: LEGO1 0x100435c0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// GLOBAL: LEGO1 0x100f0184
 		return "MxStillPresenter";
 	}
 
+	// FUNCTION: LEGO1 0x100435d0
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxStillPresenter::ClassName()) || MxVideoPresenter::IsA(name);
@@ -42,5 +44,8 @@ private:
 	MxLong m_chunkTime;         // 0x64
 	MxBITMAPINFO* m_bitmapInfo; // 0x68
 };
+
+// SYNTHETIC: LEGO1 0x100436e0
+// MxStillPresenter::`scalar deleting destructor'
 
 #endif // MXSTILLPRESENTER_H

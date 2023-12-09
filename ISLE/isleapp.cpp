@@ -281,9 +281,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return msg.wParam;
 }
 
-// FUNCTION: ISLE 0x401c40
-// MxDSObject::SetAtomId
-
 // FUNCTION: ISLE 0x401ca0
 BOOL FindExistingInstance(void)
 {

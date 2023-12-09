@@ -59,4 +59,48 @@ protected:
 	MxDSAction* m_action0x60;                           // 0x60
 };
 
+// TEMPLATE: LEGO1 0x100c0d60
+// list<MxDSAction *,allocator<MxDSAction *> >::~list<MxDSAction *,allocator<MxDSAction *> >
+
+// TEMPLATE: LEGO1 0x100c0dd0
+// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::~list<MxDSSubscriber *,allocator<MxDSSubscriber *> >
+
+// TEMPLATE: LEGO1 0x100c0e40
+// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::_Buynode
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100c0e70
+// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::~list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x100c0ee0
+// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
+
+// FUNCTION: LEGO1 0x100c0fc0
+// MxStreamListMxDSSubscriber::~MxStreamListMxDSSubscriber
+
+// FUNCTION: LEGO1 0x100c1010
+// MxStreamListMxDSAction::~MxStreamListMxDSAction
+
+// FUNCTION: LEGO1 0x100c1060
+// MxStreamListMxNextActionDataStart::~MxStreamListMxNextActionDataStart
+
+// TEMPLATE: LEGO1 0x100c10b0
+// MxStreamList<MxDSSubscriber *>::~MxStreamList<MxDSSubscriber *>
+
+// TEMPLATE: LEGO1 0x100c1100
+// MxStreamList<MxDSAction *>::~MxStreamList<MxDSAction *>
+
+// TEMPLATE: LEGO1 0x100c1150
+// MxStreamList<MxNextActionDataStart *>::~MxStreamList<MxNextActionDataStart *>
+
+// TEMPLATE: LEGO1 0x100c11a0
+// List<MxDSSubscriber *>::~List<MxDSSubscriber *>
+
+// TEMPLATE: LEGO1 0x100c11f0
+// List<MxDSAction *>::~List<MxDSAction *>
+
+// TEMPLATE: LEGO1 0x100c1240
+// List<MxNextActionDataStart *>::~List<MxNextActionDataStart *>
+
 #endif // MXSTREAMCONTROLLER_H
