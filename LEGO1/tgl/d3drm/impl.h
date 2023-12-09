@@ -491,7 +491,4 @@ inline D3DRMMATRIX4D* Translate(const FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D&
 // SYNTHETIC: LEGO1 0x100a3d80
 // TglImpl::MeshImpl::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x100aa250
-// ViewROI::`scalar deleting destructor'
-
 } /* namespace TglImpl */
