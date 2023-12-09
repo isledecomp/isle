@@ -49,7 +49,7 @@ def check_file(filename: str, verbose: bool = False) -> bool:
                         f"{fun.end_line - fun.line_number:4} lines",
                         f"{order_lookup[fun.offset]:3}",
                         "    ",
-                        sig_truncate(fun.signature),
+                        sig_truncate(fun.name),
                     ]
                 )
                 print(msg)

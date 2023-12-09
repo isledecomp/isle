@@ -26,6 +26,13 @@ private:
 	undefined m_unk18;
 };
 
-typedef MxListCursorChild<MxDSAction*> MxDSActionListCursor;
+// VTABLE: LEGO1 0x100d7e68
+// class MxListCursor<MxDSAction *>
+
+// VTABLE: LEGO1 0x100d7e50
+class MxDSActionListCursor : public MxListCursor<MxDSAction*> {
+public:
+	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list){};
+};
 
 #endif // MXDSACTIONLIST_H

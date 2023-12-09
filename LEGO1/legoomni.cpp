@@ -11,6 +11,7 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "legoworldlist.h"
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
@@ -358,7 +359,7 @@ void LegoOmni::Init()
 	m_inputMgr = NULL;
 	m_unk6c = 0;
 	m_gifManager = NULL;
-	m_unk78 = 0;
+	m_worldList = NULL;
 	m_currentWorld = NULL;
 	m_unk80 = FALSE;
 	m_currentVehicle = NULL;
@@ -427,9 +428,9 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
-	// TODO: initialize list at m_unk78
+	m_worldList = new LegoWorldList();
 
-	if (m_unk6c && m_gifManager && m_unk78 && m_plantManager && m_animationManager && m_buildingManager) {
+	if (m_unk6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();
