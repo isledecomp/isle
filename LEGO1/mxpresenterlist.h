@@ -15,7 +15,17 @@ public:
 	virtual MxS8 Compare(MxPresenter*, MxPresenter*) override; // vtable+0x14
 };
 
-typedef MxListCursorChildChild<MxPresenter*> MxPresenterListCursor;
+// VTABLE: LEGO1 0x100d6488
+// class MxListCursor<MxPresenter *>
+
+// VTABLE: LEGO1 0x100d6530
+// class MxPtrListCursor<MxPresenter>
+
+// VTABLE: LEGO1 0x100d6470
+class MxPresenterListCursor : public MxPtrListCursor<MxPresenter> {
+public:
+	MxPresenterListCursor(MxPresenterList* p_list) : MxPtrListCursor<MxPresenter>(p_list){};
+};
 
 // VTABLE: LEGO1 0x100d6350
 // class MxCollection<MxPresenter *>

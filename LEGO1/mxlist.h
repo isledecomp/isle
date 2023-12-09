@@ -100,18 +100,10 @@ private:
 	MxListEntry<T>* m_match;
 };
 
-// Unclear purpose
 template <class T>
-class MxListCursorChild : public MxListCursor<T> {
+class MxPtrListCursor : public MxListCursor<T*> {
 public:
-	MxListCursorChild(MxList<T>* p_list) : MxListCursor<T>(p_list) {}
-};
-
-// Unclear purpose
-template <class T>
-class MxListCursorChildChild : public MxListCursorChild<T> {
-public:
-	MxListCursorChildChild(MxList<T>* p_list) : MxListCursorChild<T>(p_list) {}
+	MxPtrListCursor(MxPtrList<T>* p_list) : MxListCursor<T*>(p_list){};
 };
 
 template <class T>

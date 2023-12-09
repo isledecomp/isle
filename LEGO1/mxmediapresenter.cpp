@@ -21,6 +21,19 @@ void MxMediaPresenter::Destroy()
 	Destroy(FALSE);
 }
 
+// TODO: These probably belong in another class
+// SYNTHETIC: LEGO1 0x100b46e0
+// MxStreamChunkListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b4750
+// MxListCursor<MxStreamChunk *>::~MxListCursor<MxStreamChunk *>
+
+// SYNTHETIC: LEGO1 0x100b47a0
+// MxListCursor<MxStreamChunk *>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100b4810
+// MxStreamChunkListCursor::~MxStreamChunkListCursor
+
 // FUNCTION: LEGO1 0x100b54e0
 void MxMediaPresenter::Init()
 {

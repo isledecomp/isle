@@ -20,6 +20,10 @@ jobs:
         # Use minimum supported version
         cmake-version: '3.13.x'
 
+    - name: Patch MSVC 4.2
+      run: |
+        python tools/patch_c2.py msvc420/bin/C2.EXE
+
     - name: Build
       shell: cmd
       run: |
@@ -79,7 +83,7 @@ jobs:
       shell: bash
       run: |
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB . | tee ISLEPROGRESS.TXT
-        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 1929 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
+        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 4252 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
 
     - name: Compare Accuracy With Current Master
       shell: bash

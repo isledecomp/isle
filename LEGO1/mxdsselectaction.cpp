@@ -33,6 +33,18 @@ void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 		this->m_unk0xac->Append(string);
 }
 
+// SYNTHETIC: LEGO1 0x100cbbd0
+// MxStringListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100cbc40
+// MxListCursor<MxString>::~MxListCursor<MxString>
+
+// SYNTHETIC: LEGO1 0x100cbc90
+// MxListCursor<MxString>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100cbd00
+// MxStringListCursor::~MxStringListCursor
+
 // FUNCTION: LEGO1 0x100cbd50
 MxDSSelectAction& MxDSSelectAction::operator=(MxDSSelectAction& p_dsSelectAction)
 {
@@ -130,3 +142,6 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk24)
 
 	*p_source += extraFlag;
 }
+
+// TEMPLATE: LEGO1 0x100cc450
+// MxListEntry<MxString>::GetValue
