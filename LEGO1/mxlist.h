@@ -60,8 +60,7 @@ public:
 	virtual ~MxList() override;
 
 	void Append(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
-	void DeleteAll();
-	void ClearAll();
+	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 
@@ -122,34 +121,17 @@ MxList<T>::~MxList()
 }
 
 template <class T>
-inline void MxList<T>::DeleteAll()
+inline void MxList<T>::DeleteAll(MxBool p_destroy)
 {
 	for (MxListEntry<T>* t = m_first;;) {
 		if (!t)
 			break;
 
 		MxListEntry<T>* next = t->GetNext();
-		this->m_customDestructor(t->GetValue());
-		delete t;
-		t = next;
-	}
 
-	this->m_count = 0;
-	m_last = NULL;
-	m_first = NULL;
-}
+		if (p_destroy)
+			this->m_customDestructor(t->GetValue());
 
-// TODO: This is DeleteAll without using the customDestructor.
-// Were they a single function originally, possibly
-// parameterized on "p_ownership"?
-template <class T>
-inline void MxList<T>::ClearAll()
-{
-	for (MxListEntry<T>* t = m_first;;) {
-		if (!t)
-			break;
-
-		MxListEntry<T>* next = t->GetNext();
 		delete t;
 		t = next;
 	}
