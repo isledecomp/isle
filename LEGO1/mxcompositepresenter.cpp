@@ -183,9 +183,6 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p)
 	}
 }
 
-// TEMPLATE: LEGO1 0x100b6cd0
-// MxList<MxDSAction *>::_DeleteEntry
-
 // FUNCTION: LEGO1 0x100b69b0
 void MxCompositePresenter::VTable0x5c(MxNotificationParam& p)
 {
@@ -280,3 +277,6 @@ MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
 
 	return TRUE;
 }
+
+// TEMPLATE: LEGO1 0x100b6cd0
+// MxList<MxDSAction *>::_DeleteEntry
