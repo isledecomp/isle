@@ -95,6 +95,13 @@ public:
 	void Reset() { m_match = NULL; }
 	void Prepend(T p_newobj);
 
+	// TODO: Probably shouldn't exist
+	void NextFragment()
+	{
+		if (m_match)
+			m_match = m_match->GetNext();
+	}
+
 private:
 	MxList<T>* m_list;
 	MxListEntry<T>* m_match;

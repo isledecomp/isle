@@ -62,7 +62,15 @@ MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxD
 	MxDSAction* action;
 
 	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
-		while (cursor.Next(action)) {
+		// The usual cursor.Next() loop doesn't match here, even though
+		// the logic is the same. It does match when "deconstructed" into
+		// the following Head(), Current() and NextFragment() calls,
+		// but this seems unlikely to be the original code.
+		// The alpha debug build also uses Next().
+		cursor.Head();
+		while (cursor.Current(action)) {
+			cursor.NextFragment();
+
 			MxBool success = FALSE;
 
 			action->CopyFlags(m_action->GetFlags());
