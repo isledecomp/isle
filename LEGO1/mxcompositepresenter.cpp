@@ -1,7 +1,6 @@
 #include "mxcompositepresenter.h"
 
 #include "decomp.h"
-#include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxnotificationmanager.h"
@@ -133,25 +132,96 @@ MxLong MxCompositePresenter::Notify(MxParam& p)
 
 	switch (((MxNotificationParam&) p).GetNotification()) {
 	case c_notificationEndAction:
-		VTable0x58(p);
+		VTable0x58((MxEndActionNotificationParam&) p);
 		break;
 	case MXPRESENTER_NOTIFICATION:
-		VTable0x5c(p);
+		VTable0x5c((MxNotificationParam&) p);
 	}
 
 	return 0;
 }
 
-// STUB: LEGO1 0x100b67f0
-void MxCompositePresenter::VTable0x58(MxParam& p)
+// FUNCTION: LEGO1 0x100b67f0
+void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p)
 {
-	// TODO
+	MxPresenter* presenter = (MxPresenter*) p.GetSender();
+	MxDSAction* action = p.GetAction();
+	MxCompositePresenterList::iterator it;
+
+	if (!m_list.empty()) {
+		for (it = m_list.begin(); it != m_list.end(); it++) {
+			if (*it == presenter) {
+				m_list.erase(it++);
+				break;
+			}
+		}
+	}
+
+	if (m_action) {
+		MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
+		MxDSActionListCursor cursor(actions);
+
+		if (cursor.Find(action))
+			cursor.Detach();
+	}
+
+	if (presenter)
+		delete presenter;
+
+	if (action)
+		delete action;
+
+	if (m_list.empty()) {
+		EndAction();
+	}
+	else {
+		if (m_action->IsA("MxDSSerialAction") && it != m_list.end()) {
+			MxPresenter* presenter = *it;
+			if (presenter->GetCurrentTickleState() == TickleState_Idle)
+				presenter->SetTickleState(TickleState_Ready);
+		}
+	}
 }
 
-// STUB: LEGO1 0x100b69b0
-void MxCompositePresenter::VTable0x5c(MxParam& p)
+// TEMPLATE: LEGO1 0x100b6cd0
+// MxList<MxDSAction *>::_DeleteEntry
+
+// FUNCTION: LEGO1 0x100b69b0
+void MxCompositePresenter::VTable0x5c(MxNotificationParam& p)
 {
-	// TODO
+	if (!m_list.empty()) {
+		MxPresenter* presenter = (MxPresenter*) p.GetSender();
+
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+			if (*it == presenter) {
+				m_list.erase(it++);
+
+				if (presenter->GetCurrentTickleState() == TickleState_Idle)
+					presenter->SetTickleState(TickleState_Ready);
+
+				MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
+				MxDSActionListCursor cursor(actions);
+
+				if (cursor.Find(presenter->GetAction()))
+					cursor.Detach();
+
+				if (m_list.empty()) {
+					EndAction();
+				}
+				else {
+					if (m_action->IsA("MxDSSerialAction")) {
+						MxPresenter* presenter = *it;
+						if (presenter->GetCurrentTickleState() == TickleState_Idle)
+							presenter->SetTickleState(TickleState_Ready);
+					}
+				}
+
+				return;
+			}
+		}
+
+		NotificationManager()->Send(this, &p);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b6b40
@@ -173,21 +243,40 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 	}
 }
 
-// STUB: LEGO1 0x100b6bc0
+// FUNCTION: LEGO1 0x100b6bc0
 void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 {
-	// TODO
+	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+	m_currentTickleState = p_tickleState;
+
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		MxPresenter* presenter = *it;
+		presenter->SetTickleState(p_tickleState);
+
+		if (m_action->IsA("MxDSSerialAction") && p_tickleState == TickleState_Ready)
+			return;
+	}
 }
 
-// STUB: LEGO1 0x100b6c30
+// FUNCTION: LEGO1 0x100b6c30
 void MxCompositePresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	MxPresenter::Enable(p_enable);
+
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		MxPresenter* presenter = *it;
+		presenter->Enable(p_enable);
+	}
 }
 
-// STUB: LEGO1 0x100b6c80
+// FUNCTION: LEGO1 0x100b6c80
 MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
-	// TODO
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		MxPresenter* presenter = *it;
+		if (!presenter->HasTickleStatePassed(p_tickleState))
+			return FALSE;
+	}
+
 	return TRUE;
 }
