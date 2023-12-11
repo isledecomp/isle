@@ -177,16 +177,16 @@ MxResult MxStreamController::vtable0x30(MxDSAction* p_unknown)
 	return result;
 }
 
-// STUB: LEGO1 0x100c20d0
-MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
-{
-	// TODO
-	return TRUE;
-}
-
 // STUB: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
 	// TODO
 	return FAILURE;
+}
+
+// STUB: LEGO1 0x100c20d0
+MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
+{
+	// TODO
+	return TRUE;
 }
