@@ -42,11 +42,19 @@ MxResult MxRAMStreamController::vtable0x20(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100c6320
-MxResult MxRAMStreamController::vtable0x24(undefined4 p_unknown)
+// FUNCTION: LEGO1 0x100c6320
+MxResult MxRAMStreamController::vtable0x24(MxDSAction* p_action)
 {
-	// TODO STUB
-	return FAILURE;
+	MxDSAction action;
+	do {
+		if (m_action0x60 != NULL) {
+			delete m_action0x60;
+			m_action0x60 = NULL;
+		}
+		action = *p_action;
+		MxStreamController::vtable0x24(&action);
+	} while (m_action0x60 != NULL);
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100d0d80
