@@ -36,5 +36,5 @@ jobs:
     - name: Run pylint and black
       shell: bash
       run: |
-        pylint tools --ignore=build
-        black --check tools
+        pylint tools --ignore=build,ncc
+        black --check tools --exclude=ncc

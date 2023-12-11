@@ -15,7 +15,7 @@ jobs:
         version: "16"
 
     - name: Symlink libclang-16.so
-      run: sudo ln -s libclang-16.so.1 /lib/x86_64-linux-gnu/libclang-16.so
+      run: sudo ln -s libclang-16.so.1 /usr/lib/x86_64-linux-gnu/libclang-16.so
       working-directory: ${{ env.LLVM_PATH }}/lib
 
     - name: Install python libraries
