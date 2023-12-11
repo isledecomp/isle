@@ -64,11 +64,19 @@ public:
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 	inline const Vector3Data& GetLocation() const { return m_location; }
 	inline void SetUnknown84(MxCore* p_unk84) { m_unk84 = p_unk84; }
-	inline MxCore* GetUnknown8c() { return m_unk8c; }
-	inline void SetUnknown8c(MxCore* p_unk8c) { m_unk8c = p_unk8c; }
+	inline MxCore* GetOrigin() { return m_origin; }
+	inline void SetOrigin(MxCore* p_origin) { m_origin = p_origin; }
 
 	inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
 	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
+
+	inline void CopyFlags(MxU32 p_flags)
+	{
+		if (p_flags & MxDSAction::Flag_Looping)
+			SetFlags(GetFlags() | MxDSAction::Flag_Looping);
+		else if (p_flags & MxDSAction::Flag_Bit3)
+			SetFlags(GetFlags() | MxDSAction::Flag_Bit3);
+	}
 
 protected:
 	MxU32 m_sizeOnDisk;      // 0x2c
@@ -83,7 +91,7 @@ protected:
 	MxU16 m_extraLength;     // 0x80
 	MxCore* m_unk84;         // 0x84
 	undefined4 m_unk88;      // 0x88
-	MxCore* m_unk8c;         // 0x8c
+	MxCore* m_origin;        // 0x8c
 	MxLong m_unkTimingField; // 0x90
 };
 
