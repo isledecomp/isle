@@ -1,3 +1,4 @@
+from __future__ import annotations  # python <3.10 compatibility
 from enum import Enum
 from dataclasses import dataclass
 
