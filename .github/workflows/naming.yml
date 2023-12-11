@@ -15,8 +15,7 @@ jobs:
         version: "16"
 
     - name: Symlink libclang-16.so
-      run: sudo ln -s libclang-16.so /usr/lib/x86_64-linux-gnu/libclang-16.so
-      working-directory: ${{ env.LLVM_PATH }}/lib
+      run: ls -la ${{ env.LLVM_PATH }}/lib
 
     - name: Install python libraries
       run: |
@@ -25,6 +24,6 @@ jobs:
     - name: Run ncc
       run: |
         python3 tools/ncc/ncc.py \
-          --clang-lib ${{ env.LLVM_PATH }}/lib/libclang-16.so.1 \
+          --clang-lib ${{ env.LLVM_PATH }}/lib/libclang-16.so \
           --style tools/ncc/ncc.style \
           --path LEGO1
