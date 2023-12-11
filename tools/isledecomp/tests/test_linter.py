@@ -68,3 +68,15 @@ def test_module_isolation(linter):
 
     assert linter.check_lines(lines, "test.cpp", "TEST") is True
     assert linter.check_lines(lines, "test.cpp", "ALPHA") is True
+
+
+def test_byname_headers_only(linter):
+    """Markers that ar referenced by name with cvdump belong in header files only."""
+    lines = [
+        "// FUNCTION: TEST 0x1000",
+        "// MyClass::~MyClass",
+    ]
+
+    assert linter.check_lines(lines, "test.h", "TEST") is True
+    assert linter.check_lines(lines, "test.cpp", "TEST") is False
+    assert linter.alerts[0].code == ParserError.BYNAME_FUNCTION_IN_CPP

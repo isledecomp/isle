@@ -35,6 +35,9 @@ class ParserError(Enum):
     # state of SEARCH
     UNEXPECTED_END_OF_FILE = 108
 
+    # WARN: We found a marker to be referenced by name outside of a header file.
+    BYNAME_FUNCTION_IN_CPP = 109
+
     # This code or higher is an error, not a warning
     DECOMP_ERROR_START = 200
 

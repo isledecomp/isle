@@ -13,7 +13,7 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
-    - name: Run checkorder.py
+    - name: Run decomplint.py
       run: |
-        python3 tools/checkorder/checkorder.py --verbose --enforce ISLE
-        python3 tools/checkorder/checkorder.py --verbose --enforce LEGO1
+        python3 tools/decomplint/decomplint.py --enforce ISLE --module ISLE
+        python3 tools/decomplint/decomplint.py --enforce LEGO1 --module LEGO1

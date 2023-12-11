@@ -2,13 +2,6 @@ from .parser import DecompParser
 from .error import ParserAlert, ParserError
 
 
-# TODO: You get an error for each function out of order.
-# Same as the verbose display but just as main line errors.
-# TODO: Sort alerts by line number at the end?
-# TODO: No more verbose mode. This is a linter and you get warnings always.
-# TODO: --warnfail flag?
-
-
 def get_checkorder_filter(module):
     """Return a filter function on implemented functions in the given module"""
     return lambda fun: fun.module == module and not fun.lookup_by_name
@@ -65,8 +58,17 @@ class DecompLinter:
         pass
 
     def _check_byname_allowed(self):
-        # TODO
-        pass
+        if self.file_is_header():
+            return
+
+        for fun in self._parser.functions:
+            if fun.lookup_by_name:
+                self.alerts.append(
+                    ParserAlert(
+                        code=ParserError.BYNAME_FUNCTION_IN_CPP,
+                        line_number=fun.line_number,
+                    )
+                )
 
     def check_lines(self, lines, filename, module=None):
         """`lines` is a generic iterable to allow for testing with a list of strings.
