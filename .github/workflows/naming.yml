@@ -1,0 +1,23 @@
+name: Naming conventions
+
+on: [push, pull_request]
+
+jobs:
+  ncc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1
+      with:
+        version: "16"
+
+    - name: Install python libraries
+      run: |
+        pip install -r tools/requirements.txt
+
+    - name: Run ncc
+      run: |
+        python3 tools/ncc/ncc.py --style tools/ncc/ncc.style --path LEGO1
