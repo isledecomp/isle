@@ -27,6 +27,7 @@ This repository currently has only one goal: accuracy to the original executable
 * [`ISLE`](/ISLE): Decompilation of `ISLE.EXE`. It depends on some code in `LEGO1`.
 * [`LEGO1`](/LEGO1): Decompilation of `LEGO1.DLL`. This folder contains code from Mindscape's custom in-house engine called **Omni** (file pattern: `mx*`), the LEGO Island-specific extensions for Omni and the game's code (file pattern: `lego*`) as well as several utility libraries developed by Mindscape.
 * [`tools`](/tools): A set of tools aiding in the decompilation effort.
+* [`util`](/util): Utility headers aiding in the decompilation effort.
 
 ## Tooling
 

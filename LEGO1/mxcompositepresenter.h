@@ -1,8 +1,8 @@
 #ifndef MXCOMPOSITEPRESENTER_H
 #define MXCOMPOSITEPRESENTER_H
 
-#include "compat.h" // STL
 #include "mxpresenter.h"
+#include "mxstl/stlcompat.h"
 
 class MxCompositePresenterList : public list<MxPresenter*> {};
 

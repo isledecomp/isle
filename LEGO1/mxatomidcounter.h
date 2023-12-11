@@ -1,7 +1,7 @@
 #ifndef MXATOMIDCOUNTER_H
 #define MXATOMIDCOUNTER_H
 
-#include "compat.h" // STL
+#include "mxstl/stlcompat.h"
 #include "mxstring.h"
 
 // Counts the number of existing MxAtomId objects based

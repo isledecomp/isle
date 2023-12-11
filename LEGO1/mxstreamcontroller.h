@@ -1,13 +1,13 @@
 #ifndef MXSTREAMCONTROLLER_H
 #define MXSTREAMCONTROLLER_H
 
-#include "compat.h" // STL
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
 #include "mxdsobject.h"
+#include "mxstl/stlcompat.h"
 #include "mxstreamlist.h"
 #include "mxstreamprovider.h"
 
