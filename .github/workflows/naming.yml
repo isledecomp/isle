@@ -25,6 +25,6 @@ jobs:
     - name: Run ncc
       run: |
         python3 tools/ncc/ncc.py \
-          --clang-lib ${{ env.LLVM_PATH }}/lib \
+          --clang-lib ${{ env.LLVM_PATH }}/lib/libclang-16.so.1 \
           --style tools/ncc/ncc.style \
           --path LEGO1
