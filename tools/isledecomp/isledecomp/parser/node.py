@@ -7,12 +7,6 @@ class ParserNode:
 
 
 @dataclass
-class ParserAlert(ParserNode):
-    code: int
-    line: str
-
-
-@dataclass
 class ParserSymbol(ParserNode):
     module: str
     offset: int

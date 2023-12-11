@@ -1,6 +1,8 @@
 from enum import Enum
+from dataclasses import dataclass
 
 
+# TODO: poorly chosen name, should be AlertType or AlertCode or something
 class ParserError(Enum):
     # WARN: Stub function exceeds some line number threshold
     UNLIKELY_STUB = 100
@@ -29,6 +31,13 @@ class ParserError(Enum):
     # and the start of the function. We can ignore it, but the line shouldn't be there
     UNEXPECTED_BLANK_LINE = 107
 
+    # WARN: We called the finish() method for the parser but had not reached the starting
+    # state of SEARCH
+    UNEXPECTED_END_OF_FILE = 108
+
+    # This code or higher is an error, not a warning
+    DECOMP_ERROR_START = 200
+
     # ERROR: We found a marker unexpectedly
     UNEXPECTED_MARKER = 200
 
@@ -39,3 +48,20 @@ class ParserError(Enum):
 
     # ERROR: The line following a synthetic marker was not a comment
     BAD_SYNTHETIC = 202
+
+    # ERROR: This function offset comes before the previous offset from the same module
+    # This hopefully gives some hint about which functions need to be rearranged.
+    FUNCTION_OUT_OF_ORDER = 203
+
+
+@dataclass
+class ParserAlert:
+    code: ParserError
+    line_number: int
+    line: str | None = None
+
+    def is_warning(self) -> bool:
+        return self.code.value < ParserError.DECOMP_ERROR_START.value
+
+    def is_error(self) -> bool:
+        return self.code.value >= ParserError.DECOMP_ERROR_START.value

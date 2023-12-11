@@ -1,95 +1,85 @@
 import os
 import sys
 import argparse
+import colorama
 from isledecomp.dir import walk_source_dir, is_file_cpp
-from isledecomp.parser import DecompParser
+from isledecomp.parser import DecompLinter
+
+colorama.init()
 
 
-def sig_truncate(sig: str) -> str:
-    """Helper to truncate function names to 50 chars and append ellipsis
-    if needed. Goal is to stay under 80 columns for tool output."""
-    return f"{sig[:47]}{'...' if len(sig) >= 50 else ''}"
+def display_errors(alerts, filename):
+    sorted_alerts = sorted(alerts, key=lambda a: a.line_number)
+
+    for alert in sorted_alerts:
+        error_type = (
+            f"{colorama.Fore.RED}error: "
+            if alert.is_error()
+            else f"{colorama.Fore.YELLOW}warning: "
+        )
+        components = [
+            colorama.Fore.LIGHTWHITE_EX,
+            filename,
+            ":",
+            str(alert.line_number),
+            " : ",
+            error_type,
+            colorama.Fore.LIGHTWHITE_EX,
+            alert.code.name.lower(),
+        ]
+        print("".join(components))
+
+        if alert.line is not None:
+            print(f"{colorama.Fore.WHITE}  {alert.line}")
 
 
-def check_file(filename: str, verbose: bool = False) -> bool:
-    """Open and read the given file, then check whether the code blocks
-    are in order. If verbose, print each block."""
-
-    parser = DecompParser()
-    with open(filename, "r", encoding="utf-8") as f:
-        parser.read_lines(f)
-
-    just_offsets = [block.offset for block in parser.functions]
-    sorted_offsets = sorted(just_offsets)
-    file_out_of_order = just_offsets != sorted_offsets
-
-    # TODO: When we add parser error severity, actual errors that obstruct
-    # parsing should probably be shown here regardless of verbose mode
-
-    # If we detect inexact comments, don't print anything unless we are
-    # in verbose mode. If the file is out of order, we always print the
-    # file name.
-    should_report = (len(parser.alerts) > 0 and verbose) or file_out_of_order
-
-    if not should_report and not file_out_of_order:
-        return False
-
-    # Else: we are alerting to some problem in this file
-    print(filename)
-    if verbose:
-        if file_out_of_order:
-            order_lookup = {k: i for i, k in enumerate(sorted_offsets)}
-            prev_offset = 0
-
-            for fun in parser.functions:
-                msg = " ".join(
-                    [
-                        " " if fun.offset > prev_offset else "!",
-                        f"{fun.offset:08x}",
-                        f"{fun.end_line - fun.line_number:4} lines",
-                        f"{order_lookup[fun.offset]:3}",
-                        "    ",
-                        sig_truncate(fun.name),
-                    ]
-                )
-                print(msg)
-                prev_offset = fun.offset
-
-        for alert in parser.alerts:
-            print(f"* line {alert.line_number:4} {alert.code} ({alert.line})")
-
-        print()
-
-    return file_out_of_order
-
-
-def parse_args(test_args: list | None = None) -> dict:
+def parse_args() -> dict:
     p = argparse.ArgumentParser(
-        description="Checks the source files to make sure the function offset comments are in order",
+        description="Syntax checking and linting for decomp annotation markers."
     )
     p.add_argument("target", help="The file or directory to check.")
     p.add_argument(
         "--enforce",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Fail with error code if target is out of order.",
+        help="Fail if syntax errors are found.",
     )
     p.add_argument(
-        "--verbose",
+        "--module",
+        required=False,
+        type=str,
+        help="If present, run targeted checks for markers from the given module.",
+    )
+    p.add_argument(
+        "--warnfail",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help=(
-            "Display each code block in the file and show "
-            "where each consecutive run of blocks is broken."
-        ),
+        help="Fail if syntax warnings are found and enforce is enabled.",
     )
 
-    if test_args is None:
-        args = p.parse_args()
-    else:
-        args = p.parse_args(test_args)
-
+    args = p.parse_args()
     return vars(args)
+
+
+def process_files(files, module=None):
+    warning_count = 0
+    error_count = 0
+
+    linter = DecompLinter()
+    for filename in files:
+        success = linter.check_file(filename, module)
+
+        warnings = [a for a in linter.alerts if a.is_warning()]
+        errors = [a for a in linter.alerts if a.is_error()]
+
+        error_count += len(errors)
+        warning_count += len(warnings)
+
+        if not success:
+            display_errors(linter.alerts, filename)
+            print()
+
+    return (warning_count, error_count)
 
 
 def main():
@@ -102,24 +92,12 @@ def main():
     else:
         sys.exit("Invalid target")
 
-    files_out_of_order = 0
+    (warning_count, error_count) = process_files(files_to_check, module=args["module"])
 
-    for file in files_to_check:
-        is_jumbled = check_file(file, args["verbose"])
-        if is_jumbled:
-            files_out_of_order += 1
+    print(colorama.Style.RESET_ALL, end="")
 
-    if files_out_of_order > 0:
-        error_message = " ".join(
-            [
-                str(files_out_of_order),
-                "files are" if files_out_of_order > 1 else "file is",
-                "out of order",
-            ]
-        )
-        print(error_message)
-
-    if files_out_of_order > 0 and args["enforce"]:
+    would_fail = error_count > 0 or (warning_count > 0 and args["warnfail"])
+    if args["enforce"] and would_fail:
         sys.exit(1)
 
 
