@@ -13,9 +13,6 @@ DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 // GLOBAL: LEGO1 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";
 
-// FUNCTION: LEGO1 0x10043550
-// MxStillPresenter::~MxStillPresenter
-
 // FUNCTION: LEGO1 0x100435b0
 void MxStillPresenter::Destroy()
 {

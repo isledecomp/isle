@@ -9,6 +9,7 @@
 class MxStillPresenter : public MxVideoPresenter {
 public:
 	MxStillPresenter() { m_bitmapInfo = NULL; }
+	// FUNCTION: LEGO1 0x10043550
 	virtual ~MxStillPresenter() override { Destroy(TRUE); }; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100435c0
