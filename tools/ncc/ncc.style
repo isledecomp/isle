@@ -3,7 +3,7 @@ ClassName: '^[A-Z][a-zA-Z0-9]+$'
 EnumName: '^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
 FunctionName: '^FUN_[a-f0-9]{8}$|^[A-Z][a-zA-Z0-9]+$'
 ParameterName: '^p_[a-z0-9][a-zA-Z0-9]*$|^$'
-StructName: '^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
+StructName: '^\(anon|^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
 TypedefName: '^[A-Z][a-zA-Z0-9]+$'
 UnionName: '^\(anon|^[A-Z][a-zA-Z0-9]+$'
 VariableName:
