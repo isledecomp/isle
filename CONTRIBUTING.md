@@ -43,7 +43,7 @@ We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.ht
 
 ### Naming conventions
 
-We are currently using a customized version of [ncc](https://github.com/nithinn/ncc) with a configuration file that aims to replicate the naming conventions employed by the original developers. `ncc` requires Clang 16; please refer to the [tool](/tools/ncc) and the (GitHub action)[/.github/workflows/naming.yml] for guidance.
+We are currently using a customized version of [ncc](https://github.com/nithinn/ncc) with a configuration file that aims to replicate the naming conventions employed by the original developers. `ncc` requires Clang 16; please refer to the [tool](/tools/ncc) and the [GitHub action](/.github/workflows/naming.yml) for guidance.
 
 ## Questions?
 
