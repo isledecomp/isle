@@ -53,7 +53,7 @@ public:
 
 protected:
 	// TODO: the types
-	undefined unk78[0xc4];
+	undefined m_pad[0xc4];
 	MxFloat m_unk0x13c;
 	MxS32 m_unk0x140;
 	MxS32 m_unk0x144;

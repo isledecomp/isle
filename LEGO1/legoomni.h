@@ -61,8 +61,8 @@ extern MxAtomId* g_nocdSourceName;
 class LegoOmni : public MxOmni {
 public:
 	__declspec(dllexport) void CreateBackgroundAudio();
-	__declspec(dllexport) void RemoveWorld(const MxAtomId& p1, MxLong p2);
-	__declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary**, int&);
+	__declspec(dllexport) void RemoveWorld(const MxAtomId&, MxLong);
+	__declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
 	__declspec(dllexport) static void CreateInstance();
 	__declspec(dllexport) static LegoOmni* GetInstance();
 
@@ -85,11 +85,11 @@ public:
 	}
 
 	virtual void Init() override;                                                                       // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p) override;                                             // vtable+18
+	virtual MxResult Create(MxOmniCreateParam& p_param) override;                                       // vtable+18
 	virtual void Destroy() override;                                                                    // vtable+1c
-	virtual MxResult Start(MxDSAction* action) override;                                                // vtable+20
-	virtual MxResult DeleteObject(MxDSAction& ds) override;                                             // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& ds) override;                                            // vtable+28
+	virtual MxResult Start(MxDSAction* p_dsAction) override;                                            // vtable+20
+	virtual MxResult DeleteObject(MxDSAction& p_dsAction) override;                                     // vtable+24
+	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                    // vtable+28
 	virtual MxEntity* FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                            // vtable+34
 	virtual void StartTimer() override;                                                                 // vtable+38
@@ -123,7 +123,7 @@ private:
 	MxBool m_unk0x80;
 	LegoNavController* m_navController; // 0x84
 	LegoWorld* m_currentVehicle;        // 0x88
-	LegoUnkSaveDataWriter* m_unk0xLegoSaveDataWriter;
+	LegoUnkSaveDataWriter* m_saveDataWriter;
 	LegoPlantManager* m_plantManager; // 0x90
 	LegoAnimationManager* m_animationManager;
 	LegoBuildingManager* m_buildingManager; // 0x98

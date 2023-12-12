@@ -1,2 +1,6 @@
 configureLegoAnimationManager(MxS32): 'DLL exported function'
-
+configureLegoBuildingManager(MxS32): 'DLL exported function'
+configureLegoModelPresenter(MxS32): 'DLL exported function'
+configureLegoPartPresenter(MxS32, MxS32): 'DLL exported function'
+configureLegoROI(MxS32): 'DLL exported function'
+GetNoCD_SourceName: 'DLL exported function'

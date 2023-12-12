@@ -8,9 +8,9 @@
 
 // This is a pointer to the end of the global variable name table, which has
 // the text "END_OF_VARIABLES" in it.
-// TODO: make s_endOfVariables reference the actual end of the variable array.
+// TODO: make g_endOfVariables reference the actual end of the variable array.
 // GLOBAL: LEGO1 0x100f3e50
-const char* s_endOfVariables = "END_OF_VARIABLES";
+const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // Very likely but not certain sizes.
 // The classes are only used on the stack in functions we have not 100% matched
@@ -50,7 +50,7 @@ MxS32 LegoStream::ReadVariable(LegoStream* p_stream, MxVariableTable* p_to)
 		char nameBuffer[256];
 		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
 			nameBuffer[length] = '\0';
-			if (strcmp(nameBuffer, s_endOfVariables) == 0)
+			if (strcmp(nameBuffer, g_endOfVariables) == 0)
 				// 2 -> "This was the last entry, done reading."
 				result = 2;
 			else {

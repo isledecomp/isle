@@ -20,7 +20,7 @@ public:
 		return !strcmp(p_name, LegoPartPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	__declspec(dllexport) static void configureLegoPartPresenter(int param_1, int param_2);
+	__declspec(dllexport) static void configureLegoPartPresenter(MxS32, MxS32);
 };
 
 #endif // LEGOPARTPRESENTER_H

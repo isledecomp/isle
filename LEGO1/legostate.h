@@ -26,7 +26,7 @@ public:
 
 	virtual MxBool VTable0x14();                                   // vtable+0x14
 	virtual MxBool SetFlag();                                      // vtable+0x18
-	virtual MxResult VTable0x1C(LegoFileStream* p_legoFileStream); // vtable+0x1C
+	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream); // vtable+0x1C
 };
 
 #endif // LEGOSTATE_H

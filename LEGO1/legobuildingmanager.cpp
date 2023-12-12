@@ -4,9 +4,9 @@
 int g_buildingManagerConfig = 1;
 
 // FUNCTION: LEGO1 0x1002f8b0
-void LegoBuildingManager::configureLegoBuildingManager(int param_1)
+void LegoBuildingManager::configureLegoBuildingManager(MxS32 p_buildingManagerConfig)
 {
-	g_buildingManagerConfig = param_1;
+	g_buildingManagerConfig = p_buildingManagerConfig;
 }
 
 // FUNCTION: LEGO1 0x1002f8c0

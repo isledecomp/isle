@@ -25,7 +25,7 @@ public:
 
 	virtual void Destroy() override;                     // vtable+0x38
 	virtual void Init();                                 // vtable+0x68
-	virtual undefined4 VTable0x6c(undefined4 p_unknown); // vtable+0x6c
+	virtual undefined4 VTable0x6c(undefined4 p_unk0x4c); // vtable+0x6c
 
 private:
 	void Destroy(MxBool p_fromDestructor);

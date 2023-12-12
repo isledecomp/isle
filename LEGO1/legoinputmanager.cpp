@@ -95,15 +95,15 @@ void LegoInputManager::Destroy()
 }
 
 // FUNCTION: LEGO1 0x1005c030
-void LegoInputManager::CreateAndAcquireKeyboard(HWND hwnd)
+void LegoInputManager::CreateAndAcquireKeyboard(HWND p_hwnd)
 {
-	HINSTANCE hinstance = (HINSTANCE) GetWindowLong(hwnd, GWL_HINSTANCE);
+	HINSTANCE hinstance = (HINSTANCE) GetWindowLong(p_hwnd, GWL_HINSTANCE);
 	HRESULT hresult = DirectInputCreate(hinstance, 0x500, &m_directInput, NULL); // 0x500 for DX5
 
 	if (hresult == DI_OK) {
 		HRESULT createdeviceresult = m_directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
 		if (createdeviceresult == DI_OK) {
-			m_directInputDevice->SetCooperativeLevel(hwnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+			m_directInputDevice->SetCooperativeLevel(p_hwnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 			m_directInputDevice->SetDataFormat(&c_dfDIKeyboard);
 			m_directInputDevice->Acquire();
 		}
@@ -159,10 +159,10 @@ MxResult LegoInputManager::GetJoystickId()
 
 // FUNCTION: LEGO1 0x1005c320
 MxResult LegoInputManager::GetJoystickState(
-	MxU32* joystick_x,
-	MxU32* joystick_y,
-	DWORD* buttons_state,
-	MxU32* pov_position
+	MxU32* p_joystickX,
+	MxU32* p_joystickY,
+	DWORD* p_buttonsState,
+	MxU32* p_povPosition
 )
 {
 	if (m_useJoystick != FALSE) {
@@ -186,23 +186,23 @@ MxResult LegoInputManager::GetJoystickState(
 		MMRESULT mmresult = joyGetPosEx(m_joyid, &joyinfoex);
 
 		if (mmresult == MMSYSERR_NOERROR) {
-			*buttons_state = joyinfoex.dwButtons;
+			*p_buttonsState = joyinfoex.dwButtons;
 			MxU32 xmin = m_joyCaps.wXmin;
 			MxU32 ymax = m_joyCaps.wYmax;
 			MxU32 ymin = m_joyCaps.wYmin;
 			MxS32 ydiff = ymax - ymin;
-			*joystick_x = ((joyinfoex.dwXpos - xmin) * 100) / (m_joyCaps.wXmax - xmin);
-			*joystick_y = ((joyinfoex.dwYpos - m_joyCaps.wYmin) * 100) / ydiff;
+			*p_joystickX = ((joyinfoex.dwXpos - xmin) * 100) / (m_joyCaps.wXmax - xmin);
+			*p_joystickY = ((joyinfoex.dwYpos - m_joyCaps.wYmin) * 100) / ydiff;
 			if ((m_joyCaps.wCaps & (JOYCAPS_POV4DIR | JOYCAPS_POVCTS)) != 0) {
 				if (joyinfoex.dwPOV == JOY_POVCENTERED) {
-					*pov_position = (MxU32) -1;
+					*p_povPosition = (MxU32) -1;
 					return SUCCESS;
 				}
-				*pov_position = joyinfoex.dwPOV / 100;
+				*p_povPosition = joyinfoex.dwPOV / 100;
 				return SUCCESS;
 			}
 			else {
-				*pov_position = (MxU32) -1;
+				*p_povPosition = (MxU32) -1;
 				return SUCCESS;
 			}
 		}

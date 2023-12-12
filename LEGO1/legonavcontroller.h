@@ -64,8 +64,8 @@ private:
 	int m_vMax;
 	int m_mouseDeadzone;
 	float m_zeroThreshold;
-	float unk_18;
-	float unk_1C;
+	float m_unk0x18;
+	float m_unk0x1c;
 	float m_targetMovementSpeed;
 	float m_targetTurnSpeed;
 	float m_movementMaxSpeed;
@@ -82,12 +82,12 @@ private:
 	MxBool m_turnUseVelocity;
 	int m_time;
 	MxBool m_trackDefault;
-	MxBool m_unk0x5D;
-	char m_unk0x5E[2];
+	MxBool m_unk0x5d;
+	char m_unk0x5e[2];
 	int m_unk0x60;
 	int m_unk0x64;
 	int m_unk0x68;
-	MxBool m_unk0x6C;
+	MxBool m_unk0x6c;
 };
 
 #endif // LEGONAVCONTROLLER_H

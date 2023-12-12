@@ -40,10 +40,10 @@ public:
 
 	MxResult Create(HWND p_hwnd);
 	void Destroy();
-	void CreateAndAcquireKeyboard(HWND hwnd);
+	void CreateAndAcquireKeyboard(HWND p_hwnd);
 	void ReleaseDX();
 	MxResult GetJoystickId();
-	MxResult GetJoystickState(MxU32* joystick_x, MxU32* joystick_y, DWORD* buttons_state, MxU32* pov_position);
+	MxResult GetJoystickState(MxU32* p_joystickX, MxU32* p_joystickY, DWORD* p_buttonsState, MxU32* p_povPosition);
 	void SetTimer();
 	void KillTimer();
 	void SetCamera(LegoCameraController* p_camera);

@@ -35,15 +35,15 @@ LegoNavController::LegoNavController()
 {
 	ResetToDefault();
 
-	this->unk_18 = 0.0f;
-	this->unk_1C = 0.0f;
+	this->m_unk0x18 = 0.0f;
+	this->m_unk0x1c = 0.0f;
 	this->m_targetMovementSpeed = 0.0f;
 	this->m_targetTurnSpeed = 0.0f;
 	this->m_movementAccel = 0.0f;
 	this->m_turnAccel = 0.0f;
 	this->m_trackDefault = FALSE;
-	this->m_unk0x5D = FALSE;
-	this->m_unk0x6C = FALSE;
+	this->m_unk0x5d = FALSE;
+	this->m_unk0x6c = FALSE;
 	this->m_unk0x64 = 0;
 	this->m_unk0x68 = 0;
 	this->m_unk0x60 = 0;
