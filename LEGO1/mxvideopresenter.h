@@ -28,9 +28,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000c830
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(name);
+		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
 	virtual void ReadyTickle() override;                 // vtable+0x18

@@ -25,9 +25,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10016020
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, RaceState::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	inline MxU16 GetColor(MxU8 id) { return GetState(id)->m_color; }

@@ -19,9 +19,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10072520
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Act3::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, Act3::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
 	inline void SetUnkown420c(MxEntity* p_entity) { m_unk420c = p_entity; }

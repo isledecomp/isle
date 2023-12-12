@@ -21,9 +21,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c9340
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(name);
+		return !strcmp(p_name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
 	virtual MxU32 GetSizeOnDisk() override;                            // vtable+18;

@@ -14,9 +14,9 @@ public:
 	virtual ~MxFlcPresenter() override;
 
 	// FUNCTION: LEGO1 0x1004e200
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(name);
+		return !strcmp(p_name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
 	// FUNCTION: LEGO1 0x100b33f0

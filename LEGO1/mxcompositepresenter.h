@@ -21,9 +21,9 @@ public:
 		return "MxCompositePresenter";
 	}
 
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
+		return !strcmp(p_name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}
 
 	virtual MxResult StartAction(MxStreamController*, MxDSAction* p_action) override; // vtable+0x3c

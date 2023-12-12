@@ -20,9 +20,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000d0f0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoActionControlPresenter::ClassName()) || MxMediaPresenter::IsA(name);
+		return !strcmp(p_name, LegoActionControlPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
 	// TODO: Find proper compilation unit to put this

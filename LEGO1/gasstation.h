@@ -22,9 +22,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10004790
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, GasStation::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, GasStation::ClassName()) || LegoWorld::IsA(p_name);
 	}
 };
 

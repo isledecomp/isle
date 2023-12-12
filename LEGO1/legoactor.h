@@ -18,9 +18,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1002d220
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoActor::ClassName()) || LegoEntity::IsA(name);
+		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
 	virtual MxFloat VTable0x50();             // vtable+0x50

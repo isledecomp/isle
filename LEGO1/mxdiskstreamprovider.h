@@ -37,9 +37,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100d1170
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDiskStreamProvider::ClassName()) || MxStreamProvider::IsA(name);
+		return !strcmp(p_name, MxDiskStreamProvider::ClassName()) || MxStreamProvider::IsA(p_name);
 	}
 
 	MxResult WaitForWorkToComplete();

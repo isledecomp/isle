@@ -17,9 +17,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1004dfb0
-	inline virtual MxBool IsA(const char* name) const // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const // vtable+0x10
 	{
-		return !strcmp(name, TowTrackMissionState::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	inline MxU16 GetColor(MxU8 id)

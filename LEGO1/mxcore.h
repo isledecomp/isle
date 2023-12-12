@@ -30,9 +30,9 @@ public:
 		return "MxCore";
 	}
 
-	inline virtual MxBool IsA(const char* name) const // vtable+10
+	inline virtual MxBool IsA(const char* p_name) const // vtable+10
 	{
-		return !strcmp(name, MxCore::ClassName());
+		return !strcmp(p_name, MxCore::ClassName());
 	}
 
 	inline MxU32 GetId() { return m_id; }

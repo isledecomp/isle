@@ -28,9 +28,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100be0d0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
 
 	inline void SetFlags(MxU16 flags) { m_flags = flags; }

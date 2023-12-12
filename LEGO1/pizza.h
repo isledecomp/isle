@@ -25,9 +25,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10037fa0
-	inline MxBool IsA(const char* name) const override // vtable+10
+	inline MxBool IsA(const char* p_name) const override // vtable+10
 	{
-		return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
+		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
 private:

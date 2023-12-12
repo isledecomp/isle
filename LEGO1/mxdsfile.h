@@ -20,9 +20,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c0130
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSFile::ClassName()) || MxDSSource::IsA(name);
+		return !strcmp(p_name, MxDSFile::ClassName()) || MxDSSource::IsA(p_name);
 	}
 
 	__declspec(dllexport) virtual MxLong Open(MxULong);                   // vtable+0x14

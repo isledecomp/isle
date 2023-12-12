@@ -27,9 +27,9 @@ public:
 	inline virtual const char* ClassName() const override { return "MxDSObject"; }; // vtable+0c
 
 	// FUNCTION: LEGO1 0x100bf740
-	inline virtual MxBool IsA(const char* name) const override
+	inline virtual MxBool IsA(const char* p_name) const override
 	{
-		return !strcmp(name, MxDSObject::ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
 	}; // vtable+10;
 
 	virtual undefined4 unk14();                                                     // vtable+14;

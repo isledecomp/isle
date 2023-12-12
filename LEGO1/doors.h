@@ -15,9 +15,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000e440
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Doors::ClassName()) || LegoPathActor::IsA(name);
+		return !strcmp(p_name, Doors::ClassName()) || LegoPathActor::IsA(p_name);
 	}
 };
 

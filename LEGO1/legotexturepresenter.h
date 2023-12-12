@@ -17,9 +17,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000ce60
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoTexturePresenter::ClassName()) || MxMediaPresenter::IsA(name);
+		return !strcmp(p_name, LegoTexturePresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
 	virtual MxResult AddToManager() override; // vtable+0x34
