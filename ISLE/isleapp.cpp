@@ -24,6 +24,10 @@
 
 #include <dsound.h>
 
+// Might be static functions of IsleApp
+BOOL FindExistingInstance(void);
+BOOL StartDirectSound(void);
+
 // FUNCTION: ISLE 0x401000
 IsleApp::IsleApp()
 {
@@ -168,9 +172,6 @@ void IsleApp::SetupVideoFlags(
 		m_videoParam.flags().Set16Bit(1);
 	}
 }
-
-BOOL FindExistingInstance(void);
-BOOL StartDirectSound(void);
 
 // FUNCTION: ISLE 0x401610
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -386,52 +387,46 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_DISPLAYCHANGE:
-		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D() &&
-			VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
-			int targetWidth = LOWORD(lParam);
-			int targetHeight = HIWORD(lParam);
-			int targetDepth = wParam;
+		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D()) {
+			if (VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
+				int targetDepth = wParam;
+				int targetWidth = LOWORD(lParam);
+				int targetHeight = HIWORD(lParam);
 
-			if (g_waitingForTargetDepth) {
-				g_waitingForTargetDepth = 0;
-				g_targetDepth = targetDepth;
-			}
-			else {
-				BOOL valid = FALSE;
-				if (targetWidth == g_targetWidth && targetHeight == g_targetHeight && g_targetDepth == targetDepth) {
-					valid = TRUE;
+				if (g_waitingForTargetDepth) {
+					g_waitingForTargetDepth = 0;
+					g_targetDepth = targetDepth;
 				}
+				else {
+					BOOL valid = FALSE;
 
-				if (g_rmDisabled) {
-					if (valid) {
-						g_reqEnableRMDevice = 1;
+					if (g_targetWidth == targetWidth && g_targetHeight == targetHeight &&
+						g_targetDepth == targetDepth) {
+						valid = TRUE;
 					}
-				}
-				else if (!valid) {
-					g_rmDisabled = 1;
-					Lego()->StartTimer();
-					VideoManager()->DisableRMDevice();
+
+					if (g_rmDisabled) {
+						if (valid) {
+							g_reqEnableRMDevice = 1;
+						}
+					}
+					else if (!valid) {
+						g_rmDisabled = 1;
+						Lego()->StartTimer();
+						VideoManager()->DisableRMDevice();
+					}
 				}
 			}
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
-	case WM_SETCURSOR:
-		if (g_isle) {
-			HCURSOR hCursor = g_isle->m_cursorCurrent;
-			if (hCursor == g_isle->m_cursorBusy || hCursor == g_isle->m_cursorNo || !hCursor) {
-				SetCursor(hCursor);
-				return 0;
-			}
-		}
-		break;
 	case WM_KEYDOWN:
 		// While this probably should be (HIWORD(lParam) & KF_REPEAT), this seems
 		// to be what the assembly is actually doing
 		if (lParam & (KF_REPEAT << 16)) {
 			return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 		}
-		keyCode = wParam;
 		type = c_notificationKeyPress;
+		keyCode = wParam;
 		break;
 	case WM_MOUSEMOVE:
 		g_mousemoved = 1;
@@ -451,6 +446,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case 0x5400:
 		if (g_isle) {
 			g_isle->SetupCursor(wParam);
+			return 0;
+		}
+		break;
+	case WM_SETCURSOR:
+		if (g_isle && (g_isle->m_cursorCurrent == g_isle->m_cursorBusy ||
+					   g_isle->m_cursorCurrent == g_isle->m_cursorNo || !g_isle->m_cursorCurrent)) {
+			SetCursor(g_isle->m_cursorCurrent);
 			return 0;
 		}
 		break;
@@ -809,10 +811,8 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			}
 			this->m_gameStarted = 1;
 		}
-		return;
 	}
-
-	if (sleepIfNotNextFrame != 0)
+	else if (sleepIfNotNextFrame != 0)
 		Sleep(0);
 }
 
