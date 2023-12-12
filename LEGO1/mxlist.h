@@ -70,7 +70,7 @@ protected:
 	MxListEntry<T>* m_first; // 0x10
 	MxListEntry<T>* m_last;  // 0x14
 
-	void DeleteEntry(MxListEntry<T>* match);
+	void DeleteEntry(MxListEntry<T>*);
 	MxListEntry<T>* InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
 };
 

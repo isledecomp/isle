@@ -185,8 +185,8 @@ inline void MxHashTable<T>::Resize()
 		break;
 	}
 
-	MxHashTableNode<T>** new_table = new MxHashTableNode<T>*[m_numSlots];
-	m_slots = new_table;
+	MxHashTableNode<T>** newTable = new MxHashTableNode<T>*[m_numSlots];
+	m_slots = newTable;
 	memset(m_slots, 0, sizeof(MxHashTableNode<T>*) * m_numSlots);
 	this->m_count = 0;
 

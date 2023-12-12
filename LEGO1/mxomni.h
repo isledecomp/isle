@@ -41,7 +41,7 @@ public:
 
 	virtual MxLong Notify(MxParam& p_param) override;               // vtable+04
 	virtual void Init();                                            // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p);                  // vtable+18
+	virtual MxResult Create(MxOmniCreateParam& p_param);            // vtable+18
 	virtual void Destroy();                                         // vtable+1c
 	virtual MxResult Start(MxDSAction* p_dsAction);                 // vtable+20
 	virtual MxResult DeleteObject(MxDSAction& p_dsAction);          // vtable+24
@@ -52,7 +52,7 @@ public:
 	virtual void StartTimer();                                      // vtable+38
 	virtual void StopTimer();                                       // vtable+3c
 	virtual MxBool IsTimerRunning();                                // vtable+40
-	static void SetInstance(MxOmni* instance);
+	static void SetInstance(MxOmni* p_instance);
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
 	MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }

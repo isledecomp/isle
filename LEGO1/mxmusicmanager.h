@@ -15,7 +15,7 @@ public:
 	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+2c
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+30
 
-	inline MxBool GetMIDIInitialized() { return m_MIDIInitialized; }
+	inline MxBool GetMIDIInitialized() { return m_midiInitialized; }
 
 	void DeinitializeMIDI();
 	undefined4 FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount);
@@ -27,16 +27,16 @@ private:
 	MxS32 CalculateVolume(MxS32 p_volume);
 	void SetMIDIVolume();
 
-	HMIDISTRM m_MIDIStreamH;  // 0x30
-	MxBool m_MIDIInitialized; // 0x34
+	HMIDISTRM m_midiStreamH;  // 0x30
+	MxBool m_midiInitialized; // 0x34
 	undefined4 m_unk0x38;     // 0x38
 	undefined4 m_unk0x3c;     // 0x3c
 	undefined4 m_unk0x40;     // 0x40
 	undefined4 m_unk0x44;     // 0x44
 	undefined4 m_unk0x48;     // 0x48
-	MIDIHDR* m_MIDIHdrP;      // 0x4c
+	MIDIHDR* m_midiHdrP;      // 0x4c
 	MxS32 m_multiplier;       // 0x50
-	DWORD m_MIDIVolume;       // 0x54
+	DWORD m_midiVolume;       // 0x54
 
 protected:
 	void Init();

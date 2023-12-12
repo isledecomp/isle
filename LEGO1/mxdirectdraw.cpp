@@ -313,16 +313,16 @@ BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 // FUNCTION: LEGO1 0x1009da20
 void EnableResizing(HWND p_hwnd, BOOL p_flag)
 {
-	static DWORD s_dwStyle;
+	static DWORD g_dwStyle;
 
 	if (!p_flag) {
-		s_dwStyle = GetWindowLong(p_hwnd, GWL_STYLE);
-		if (s_dwStyle & WS_THICKFRAME) {
+		g_dwStyle = GetWindowLong(p_hwnd, GWL_STYLE);
+		if (g_dwStyle & WS_THICKFRAME) {
 			SetWindowLong(p_hwnd, GWL_STYLE, GetWindowLong(p_hwnd, GWL_STYLE) ^ WS_THICKFRAME);
 		}
 	}
 	else {
-		SetWindowLong(p_hwnd, GWL_STYLE, s_dwStyle);
+		SetWindowLong(p_hwnd, GWL_STYLE, g_dwStyle);
 	}
 }
 

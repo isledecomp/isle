@@ -11,10 +11,10 @@
 class MxOmniCreateParam : public MxParam {
 public:
 	__declspec(dllexport) MxOmniCreateParam(
-		const char* mediaPath,
-		struct HWND__* windowHandle,
-		MxVideoParam& vparam,
-		MxOmniCreateFlags flags
+		const char* p_mediaPath,
+		struct HWND__* p_windowHandle,
+		MxVideoParam& p_vparam,
+		MxOmniCreateFlags p_flags
 	);
 
 	MxOmniCreateFlags& CreateFlags() { return this->m_createFlags; }
