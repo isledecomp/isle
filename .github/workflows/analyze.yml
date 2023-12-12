@@ -3,7 +3,7 @@ name: Analyze
 on: [push, pull_request]
 
 jobs:
-  decomp-lint:
+  decomplint:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +13,10 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
-    - name: Run decomplint.py
+    - name: Lint ISLE
       run: |
         python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
+
+    - name: Lint LEGO1
+      run: |
         python3 tools/decomplint/decomplint.py LEGO1 --module LEGO1 --warnfail
