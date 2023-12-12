@@ -139,7 +139,7 @@ MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 		if (controller == NULL) {
 			return FAILURE;
 		}
-		return controller->vtable0x20(p_action);
+		return controller->VTable0x20(p_action);
 	}
 	return FAILURE;
 }

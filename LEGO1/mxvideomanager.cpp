@@ -14,7 +14,7 @@ MxVideoManager::MxVideoManager()
 }
 
 // FUNCTION: LEGO1 0x100be270
-void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+void MxVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 }
 
@@ -115,7 +115,7 @@ void MxVideoManager::SortPresenterList()
 }
 
 // FUNCTION: LEGO1 0x100be600
-MxResult MxVideoManager::vtable0x28(
+MxResult MxVideoManager::VTable0x28(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAW p_pDirectDraw,
 	LPDIRECTDRAWSURFACE p_pDDSurface,

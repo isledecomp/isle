@@ -222,7 +222,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxRect32 rect(x, y, x + width, y + height);
 
 		MVideoManager()->InvalidateRect(rect);
-		MVideoManager()->vtable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
+		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 
 	delete m_bitmap;

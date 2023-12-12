@@ -25,8 +25,8 @@ public:
 	}
 
 	virtual MxResult Open(const char* p_filename) override;
-	virtual MxResult vtable0x20(MxDSAction* p_action) override;
-	virtual MxResult vtable0x24(MxDSAction* p_action) override;
+	virtual MxResult VTable0x20(MxDSAction* p_action) override;
+	virtual MxResult VTable0x24(MxDSAction* p_action) override;
 
 private:
 	MxDSBuffer m_buffer;
