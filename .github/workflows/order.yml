@@ -1,9 +1,9 @@
-name: Check order
+name: Decomp marker linting
 
 on: [push, pull_request]
 
 jobs:
-  checkorder:
+  decomplint:
     runs-on: ubuntu-latest
 
     steps:

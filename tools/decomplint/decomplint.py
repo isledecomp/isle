@@ -33,7 +33,7 @@ def display_errors(alerts, filename):
             print(f"{colorama.Fore.WHITE}  {alert.line}")
 
 
-def parse_args() -> dict:
+def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Syntax checking and linting for decomp annotation markers."
     )
@@ -57,8 +57,8 @@ def parse_args() -> dict:
         help="Fail if syntax warnings are found and enforce is enabled.",
     )
 
-    args = p.parse_args()
-    return vars(args)
+    (args, _) = p.parse_known_args()
+    return args
 
 
 def process_files(files, module=None):
@@ -85,19 +85,19 @@ def process_files(files, module=None):
 def main():
     args = parse_args()
 
-    if os.path.isdir(args["target"]):
-        files_to_check = list(walk_source_dir(args["target"]))
-    elif os.path.isfile(args["target"]) and is_file_cpp(args["target"]):
-        files_to_check = [args["target"]]
+    if os.path.isdir(args.target):
+        files_to_check = list(walk_source_dir(args.target))
+    elif os.path.isfile(args.target) and is_file_cpp(args.target):
+        files_to_check = [args.target]
     else:
         sys.exit("Invalid target")
 
-    (warning_count, error_count) = process_files(files_to_check, module=args["module"])
+    (warning_count, error_count) = process_files(files_to_check, module=args.module)
 
     print(colorama.Style.RESET_ALL, end="")
 
-    would_fail = error_count > 0 or (warning_count > 0 and args["warnfail"])
-    if args["enforce"] and would_fail:
+    would_fail = error_count > 0 or (warning_count > 0 and args.warnfail)
+    if args.enforce and would_fail:
         sys.exit(1)
 
 
