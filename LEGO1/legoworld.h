@@ -51,8 +51,8 @@ protected:
 	undefined m_unk0xf7;
 };
 
-void FUN_10015820(MxU32 p_unk1, MxU32 p_unk2);
-void FUN_10015910(MxU32 p_unk1);
+void FUN_10015820(MxU32, MxU32);
+void FUN_10015910(MxU32);
 void SetIsWorldActive(MxBool p_isWorldActive);
 
 #endif // LEGOWORLD_H

@@ -35,67 +35,67 @@ ExtraActionType MatchActionString(const char* p_str)
 }
 
 // FUNCTION: LEGO1 0x1003eae0
-void ConvertHSVToRGB(float h, float s, float v, float* r_out, float* b_out, float* g_out)
+void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut)
 {
 	double calc;
 	double p;
-	MxLong hue_index;
+	MxLong hueIndex;
 	double v9;
 	double v12;
 	double v13;
 
-	double s_dbl = s;
+	double sDbl = p_s;
 
-	if (s > 0.5f)
-		calc = (1.0f - v) * s + v;
+	if (p_s > 0.5f)
+		calc = (1.0f - p_v) * p_s + p_v;
 	else
-		calc = (v + 1.0) * s_dbl;
+		calc = (p_v + 1.0) * sDbl;
 	if (calc <= 0.0) {
-		*g_out = 0.0f;
-		*b_out = 0.0f;
-		*r_out = 0.0f;
+		*p_gOut = 0.0f;
+		*p_bOut = 0.0f;
+		*p_rOut = 0.0f;
 		return;
 	}
-	p = s * 2.0f - calc;
-	hue_index = h * 6.0;
-	v9 = (h * 6.0 - (float) hue_index) * ((calc - p) / calc) * calc;
+	p = p_s * 2.0f - calc;
+	hueIndex = p_h * 6.0;
+	v9 = (p_h * 6.0 - (float) hueIndex) * ((calc - p) / calc) * calc;
 	v12 = p + v9;
 	v13 = calc - v9;
-	switch (hue_index) {
+	switch (hueIndex) {
 	case 0:
-		*r_out = calc;
-		*b_out = v12;
-		*g_out = p;
+		*p_rOut = calc;
+		*p_bOut = v12;
+		*p_gOut = p;
 		break;
 	case 1:
-		*r_out = v13;
-		*b_out = calc;
-		*g_out = p;
+		*p_rOut = v13;
+		*p_bOut = calc;
+		*p_gOut = p;
 		break;
 	case 2:
-		*r_out = p;
-		*b_out = calc;
-		*g_out = v12;
+		*p_rOut = p;
+		*p_bOut = calc;
+		*p_gOut = v12;
 		break;
 	case 3:
-		*r_out = p;
-		*b_out = v13;
-		*g_out = calc;
+		*p_rOut = p;
+		*p_bOut = v13;
+		*p_gOut = calc;
 		break;
 	case 4:
-		*r_out = v12;
-		*b_out = p;
-		*g_out = calc;
+		*p_rOut = v12;
+		*p_bOut = p;
+		*p_gOut = calc;
 		break;
 	case 5:
-		*r_out = calc;
-		*b_out = p;
-		*g_out = v13;
+		*p_rOut = calc;
+		*p_bOut = p;
+		*p_gOut = v13;
 		break;
 	case 6:
-		*r_out = calc;
-		*b_out = p;
-		*g_out = v13;
+		*p_rOut = calc;
+		*p_bOut = p;
+		*p_gOut = v13;
 		break;
 	default:
 		return;

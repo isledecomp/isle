@@ -33,13 +33,13 @@ public:
 
 	void StartAction(MxParam& p_param);
 	void StopAction(MxParam& p_param);
-	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2);
+	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c);
 
 	void FUN_1007ee70();
 	void FUN_1007ef40();
 	void FadeInOrFadeOut();
 
-	__declspec(dllexport) void Enable(unsigned char p);
+	__declspec(dllexport) void Enable(MxBool p_enable);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Stop();

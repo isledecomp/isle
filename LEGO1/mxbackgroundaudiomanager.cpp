@@ -230,7 +230,7 @@ void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1007f2f0
-MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unknown, undefined4 p_unknown2)
+MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c)
 {
 	if (!m_musicEnabled) {
 		return SUCCESS;
@@ -253,8 +253,8 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 		GetCurrentAction().SetUnknown24(action.GetUnknown24());
 
 		if (result == SUCCESS) {
-			m_unk0x13c = p_unknown2;
-			m_unk0x140 = p_unknown;
+			m_unk0x13c = p_unk0x13c;
+			m_unk0x140 = p_unk0x140;
 		}
 		return result;
 	}
@@ -308,11 +308,11 @@ void MxBackgroundAudioManager::RaiseVolume()
 }
 
 // FUNCTION: LEGO1 0x1007f5f0
-void MxBackgroundAudioManager::Enable(MxBool p)
+void MxBackgroundAudioManager::Enable(MxBool p_enable)
 {
-	if (this->m_musicEnabled != p) {
-		this->m_musicEnabled = p;
-		if (!p) {
+	if (this->m_musicEnabled != p_enable) {
+		this->m_musicEnabled = p_enable;
+		if (!p_enable) {
 			Stop();
 		}
 	}

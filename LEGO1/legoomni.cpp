@@ -636,21 +636,21 @@ void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
 MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
 {
 	char* buf;
-	_MMCKINFO tmp_chunk;
+	_MMCKINFO tmpChunk;
 
 	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], 0)) {
 		return NULL;
 	}
 
-	if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
-		if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
+	if (p_file->Read((MxU8*) &tmpChunk.ckid, 8) == 0 && tmpChunk.ckid == FOURCC('M', 'x', 'S', 't')) {
+		if (p_file->Read((MxU8*) &tmpChunk.ckid, 8) == 0 && tmpChunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
 
-			buf = new char[tmp_chunk.cksize];
+			buf = new char[tmpChunk.cksize];
 			if (!buf) {
 				return NULL;
 			}
 
-			if (p_file->Read((MxU8*) buf, tmp_chunk.cksize) != 0) {
+			if (p_file->Read((MxU8*) buf, tmpChunk.cksize) != 0) {
 				return NULL;
 			}
 

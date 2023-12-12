@@ -17,8 +17,8 @@
 
 // SIZE 0x428
 struct MxBITMAPINFO {
-	BITMAPINFOHEADER bmiHeader;
-	RGBQUAD bmiColors[256];
+	BITMAPINFOHEADER m_bmiHeader;
+	RGBQUAD m_bmiColors[256];
 };
 
 // Non-standard value for biCompression in the BITMAPINFOHEADER struct.
