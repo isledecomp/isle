@@ -63,7 +63,7 @@ public:
 	virtual ~GifManager() {} // vtable+00
 
 protected:
-	undefined m_unk0x[0x1c];
+	undefined m_unk0x14[0x1c];
 };
 
 #endif // GIFMANAGER_H
