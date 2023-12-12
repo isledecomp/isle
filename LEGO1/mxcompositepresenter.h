@@ -58,4 +58,7 @@ private:
 // TEMPLATE: LEGO1 0x100b6340
 // List<MxPresenter *>::~List<MxPresenter *>
 
+// TEMPLATE: LEGO1 0x100b6cd0
+// MxList<MxDSAction *>::_DeleteEntry
+
 #endif // MXCOMPOSITEPRESENTER_H

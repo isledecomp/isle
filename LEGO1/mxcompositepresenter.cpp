@@ -256,6 +256,3 @@ MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
 
 	return TRUE;
 }
-
-// TEMPLATE: LEGO1 0x100b6cd0
-// MxList<MxDSAction *>::_DeleteEntry
