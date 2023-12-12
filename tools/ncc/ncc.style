@@ -1,9 +1,9 @@
 ClassName: '^[A-Z][a-zA-Z0-9]+$'
-CppMethod: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,3}$|^(?!VTable).*[A-Z][a-zA-Z0-9]+$'
+CppMethod: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,4}$|^(?!VTable).*[A-Z][a-zA-Z0-9]+$'
 # EnumConstantName
 EnumName: '^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
-FunctionName: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,3}$|^(?!VTable).*[A-Z][a-zA-Z0-9]+$'
-ParameterName: '^p_(unk0x[a-f0-9]{1,3}$|(?!unk).*[a-z][a-zA-Z0-9]*)$|^$'
+FunctionName: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,4}$|^(?!VTable).*[A-Z][a-zA-Z0-9]+$'
+ParameterName: '^p_(unk0x[a-f0-9]{1,4}$|(?!unk).*[a-z][a-zA-Z0-9]*)$|^$'
 StructName: '^\(anon|^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
 TypedefName: '^[A-Z][a-zA-Z0-9]+$'
 UnionName: '^\(anon|^[A-Z][a-zA-Z0-9]+$'
@@ -18,4 +18,4 @@ VariableName:
         Integer: ''
         Bool: ''
         Pointer: ''
-    Pattern: '^(unk0x[a-f0-9]{1,3}$|(?!unk).*[a-z][a-zA-Z0-9]*)$'
+    Pattern: '^(unk0x[a-f0-9]{1,4}$|(?!unk).*[a-z][a-zA-Z0-9]*)$'
