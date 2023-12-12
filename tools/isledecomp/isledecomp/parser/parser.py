@@ -12,12 +12,11 @@ from .util import (
     remove_trailing_comment,
 )
 from .node import (
-    ParserAlert,
     ParserFunction,
     ParserVariable,
     ParserVtable,
 )
-from .error import ParserError
+from .error import ParserAlert, ParserError
 
 
 class ReaderState(Enum):
@@ -29,6 +28,7 @@ class ReaderState(Enum):
     IN_GLOBAL = 5
     IN_FUNC_GLOBAL = 6
     IN_VTABLE = 7
+    DONE = 100
 
 
 def marker_is_stub(marker: DecompMarker) -> bool:
@@ -56,7 +56,7 @@ def marker_is_vtable(marker: DecompMarker) -> bool:
 
 
 class MarkerDict:
-    def __init__(self):
+    def __init__(self) -> None:
         self.markers: dict = {}
 
     def insert(self, marker: DecompMarker) -> bool:
@@ -80,7 +80,7 @@ class DecompParser:
     # pylint: disable=too-many-instance-attributes
     # Could combine output lists into a single list to get under the limit,
     # but not right now
-    def __init__(self):
+    def __init__(self) -> None:
         # The lists to be populated as we parse
         self.functions: List[ParserFunction] = []
         self.vtables: List[ParserVtable] = []
@@ -306,6 +306,9 @@ class DecompParser:
             self._syntax_warning(ParserError.BOGUS_MARKER)
 
     def read_line(self, line: str):
+        if self.state == ReaderState.DONE:
+            return
+
         self.last_line = line  # TODO: Useful or hack for error reporting?
         self.line_number += 1
 
@@ -392,3 +395,9 @@ class DecompParser:
     def read_lines(self, lines: Iterable):
         for line in lines:
             self.read_line(line)
+
+    def finish(self):
+        if self.state != ReaderState.SEARCH:
+            self._syntax_warning(ParserError.UNEXPECTED_END_OF_FILE)
+
+        self.state = ReaderState.DONE

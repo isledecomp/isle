@@ -7,9 +7,6 @@ DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 DECOMP_SIZE_ASSERT(Mesh, 0x4);
 DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
 
-// SYNTHETIC: LEGO1 0x100a3d80
-// TglImpl::MeshImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a3ed0
 void* MeshImpl::ImplementationDataPtr()
 {

@@ -44,4 +44,7 @@ protected:
 	void UpdateWorldData(const Matrix4Data& parent2world);
 };
 
+// SYNTHETIC: LEGO1 0x100aa250
+// ViewROI::`scalar deleting destructor'
+
 #endif // VIEWROI_H

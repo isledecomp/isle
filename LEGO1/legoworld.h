@@ -55,4 +55,22 @@ void FUN_10015820(MxU32, MxU32);
 void FUN_10015910(MxU32);
 void SetIsWorldActive(MxBool p_isWorldActive);
 
+// SYNTHETIC: LEGO1 0x1001eed0
+// MxPresenterListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1001ef40
+// MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
+
+// SYNTHETIC: LEGO1 0x1001ef90
+// MxListCursor<MxPresenter *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001f000
+// MxPtrListCursor<MxPresenter>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1001f070
+// MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
+
+// FUNCTION: LEGO1 0x1001f0c0
+// MxPresenterListCursor::~MxPresenterListCursor
+
 #endif // LEGOWORLD_H

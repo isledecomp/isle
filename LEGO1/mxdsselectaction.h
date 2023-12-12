@@ -37,4 +37,19 @@ private:
 	MxStringList* m_unk0xac;
 };
 
+// SYNTHETIC: LEGO1 0x100cbbd0
+// MxStringListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100cbc40
+// MxListCursor<MxString>::~MxListCursor<MxString>
+
+// SYNTHETIC: LEGO1 0x100cbc90
+// MxListCursor<MxString>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100cbd00
+// MxStringListCursor::~MxStringListCursor
+
+// TEMPLATE: LEGO1 0x100cc450
+// MxListEntry<MxString>::GetValue
+
 #endif // MXDSSELECTACTION_H

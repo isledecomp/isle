@@ -25,10 +25,6 @@ public:
 		return !strcmp(p_name, LegoActionControlPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	// TODO: Find proper compilation unit to put this
-	// SYNTHETIC: LEGO1 0x1000d1d0
-	// LegoActionControlPresenter::`scalar deleting destructor'
-
 	virtual void ReadyTickle() override;           // vtable+0x18
 	virtual void RepeatingTickle() override;       // vtable+0x24
 	virtual void ParseExtra() override;            // vtable+0x30
@@ -40,5 +36,8 @@ private:
 	MxString m_unk0x54;        // 0x54
 	undefined4 m_unk0x64;      // 0x64
 };
+
+// SYNTHETIC: LEGO1 0x1000d1d0
+// LegoActionControlPresenter::`scalar deleting destructor'
 
 #endif // LEGOACTIONCONTROLPRESENTER_H

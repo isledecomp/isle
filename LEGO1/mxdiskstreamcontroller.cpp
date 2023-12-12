@@ -13,18 +13,6 @@ MxDiskStreamController::MxDiskStreamController()
 	m_unk0x8c = 0;
 }
 
-// TEMPLATE: LEGO1 0x100c7330
-// list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
-
-// TEMPLATE: LEGO1 0x100c7420
-// list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
-
-// TEMPLATE: LEGO1 0x100c7490
-// list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
-
-// TEMPLATE: LEGO1 0x100c74e0
-// List<MxDSBuffer *>::~List<MxDSBuffer *>
-
 // STUB: LEGO1 0x100c7530
 MxDiskStreamController::~MxDiskStreamController()
 {

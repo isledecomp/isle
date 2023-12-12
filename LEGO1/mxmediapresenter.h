@@ -49,4 +49,16 @@ protected:
 	MxStreamChunk* NextChunk();
 };
 
+// SYNTHETIC: LEGO1 0x100b46e0
+// MxStreamChunkListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b4750
+// MxListCursor<MxStreamChunk *>::~MxListCursor<MxStreamChunk *>
+
+// SYNTHETIC: LEGO1 0x100b47a0
+// MxListCursor<MxStreamChunk *>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100b4810
+// MxStreamChunkListCursor::~MxStreamChunkListCursor
+
 #endif // MXMEDIAPRESENTER_H

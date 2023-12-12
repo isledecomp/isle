@@ -56,27 +56,6 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 	return SUCCESS;
 }
 
-// TEMPLATE: LEGO1 0x1005bb80
-// MxCollection<LegoEventNotificationParam>::Compare
-
-// TEMPLATE: LEGO1 0x1005bc30
-// MxCollection<LegoEventNotificationParam>::Destroy
-
-// TEMPLATE: LEGO1 0x1005bc80
-// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
-
-// SYNTHETIC: LEGO1 0x1005bd50
-// MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1005bdc0
-// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1005beb0
-// LegoEventQueue::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1005bf70
-// MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x1005bfe0
 void LegoInputManager::Destroy()
 {
@@ -292,6 +271,3 @@ void LegoInputManager::KillTimer()
 		::KillTimer(omni->GetWindowHandle(), m_timer);
 	}
 }
-
-// TEMPLATE: LEGO1 0x1005d010
-// MxListEntry<LegoEventNotificationParam>::GetValue

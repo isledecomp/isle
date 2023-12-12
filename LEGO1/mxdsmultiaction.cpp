@@ -2,19 +2,6 @@
 
 DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
 
-// TODO: Should be moved later
-// SYNTHETIC: LEGO1 0x1004ad10
-// MxDSActionListCursor::`scalar deleting destructor'
-
-// TEMPLATE: LEGO1 0x1004ad80
-// MxListCursor<MxDSAction *>::~MxListCursor<MxDSAction *>
-
-// SYNTHETIC: LEGO1 0x1004add0
-// MxListCursor<MxDSAction *>::`scalar deleting destructor'
-
-// FUNCTION: LEGO1 0x1004ae40
-// MxDSActionListCursor::~MxDSActionListCursor
-
 // FUNCTION: LEGO1 0x100c9b90
 MxDSMultiAction::MxDSMultiAction()
 {
