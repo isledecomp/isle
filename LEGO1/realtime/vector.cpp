@@ -1,7 +1,7 @@
 
 #include "vector.h"
 
-#include "../decomp.h"
+#include "decomp.h"
 
 #include <math.h>
 #include <memory.h>
