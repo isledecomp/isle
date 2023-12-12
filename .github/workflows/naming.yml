@@ -23,5 +23,6 @@ jobs:
         python3 tools/ncc/ncc.py \
           --clang-lib ${{ env.LLVM_PATH }}/lib/libclang.so \
           --style tools/ncc/ncc.style \
+          --definition WINAPI FAR HWND__=HWND \
           --include util \
           --path LEGO1
