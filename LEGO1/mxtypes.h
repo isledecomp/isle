@@ -1,5 +1,5 @@
-#ifndef MXTYPE_H
-#define MXTYPE_H
+#ifndef MXTYPES_H
+#define MXTYPES_H
 
 typedef unsigned char MxU8;
 typedef signed char MxS8;
@@ -70,4 +70,4 @@ typedef union {
 	// BYTE all; // ?
 } flag_bitfield;
 
-#endif // MXTYPE_H
+#endif // MXTYPES_H

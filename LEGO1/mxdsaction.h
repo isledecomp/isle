@@ -49,8 +49,8 @@ public:
 	virtual MxDSAction* Clone();                                         // vtable+2c;
 	virtual void MergeFrom(MxDSAction& p_dsAction);                      // vtable+30;
 	virtual MxBool HasId(MxU32 p_objectId);                              // vtable+34;
-	virtual void SetUnkTimingField(MxLong p_unkTimingField);             // vtable+38;
-	virtual MxLong GetUnkTimingField();                                  // vtable+3c;
+	virtual void SetUnknown90(MxLong p_unk0x90);                         // vtable+38;
+	virtual MxLong GetUnknown90();                                       // vtable+3c;
 	virtual MxLong GetElapsedTime();                                     // vtable+40;
 
 	void AppendData(MxU16 p_extraLength, const char* p_extraData);
@@ -79,20 +79,20 @@ public:
 	}
 
 protected:
-	MxU32 m_sizeOnDisk;        // 0x2c
-	MxU32 m_flags;             // 0x30
-	MxLong m_startTime;        // 0x34
-	MxLong m_duration;         // 0x38
-	MxS32 m_loopCount;         // 0x3c
-	Vector3Data m_location;    // 0x40
-	Vector3Data m_direction;   // 0x54
-	Vector3Data m_up;          // 0x68
-	char* m_extraData;         // 0x7c
-	MxU16 m_extraLength;       // 0x80
-	MxCore* m_unk0x84;         // 0x84
-	undefined4 m_unk0x88;      // 0x88
-	MxCore* m_origin;          // 0x8c
-	MxLong m_unk0xTimingField; // 0x90
+	MxU32 m_sizeOnDisk;      // 0x2c
+	MxU32 m_flags;           // 0x30
+	MxLong m_startTime;      // 0x34
+	MxLong m_duration;       // 0x38
+	MxS32 m_loopCount;       // 0x3c
+	Vector3Data m_location;  // 0x40
+	Vector3Data m_direction; // 0x54
+	Vector3Data m_up;        // 0x68
+	char* m_extraData;       // 0x7c
+	MxU16 m_extraLength;     // 0x80
+	MxCore* m_unk0x84;       // 0x84
+	undefined4 m_unk0x88;    // 0x88
+	MxCore* m_origin;        // 0x8c
+	MxLong m_unk0x90;        // 0x90
 };
 
 #endif // MXDSACTION_H

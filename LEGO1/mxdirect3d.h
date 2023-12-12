@@ -23,7 +23,8 @@ public:
 class MxDeviceEnumerate {
 public:
 	MxDeviceEnumerate();
-	virtual MxResult _DoEnumerate();
+	virtual MxResult DoEnumerate();
+
 	BOOL FUN_1009c070();
 
 	const char* EnumerateErrorToString(HRESULT p_error);
@@ -31,9 +32,9 @@ public:
 	undefined4 m_unk0x004;
 	undefined4 m_unk0x008;
 	undefined4 m_unk0x00c;
-	MxBool m_unk0x010_flag; // +0x10
+	MxBool m_unk0x010; // +0x10
 
-	undefined4 m_unk0xnown[97];
+	undefined4 m_unk0x014[97];
 };
 
 // VTABLE: LEGO1 0x100db800

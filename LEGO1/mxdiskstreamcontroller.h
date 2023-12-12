@@ -16,14 +16,14 @@ public:
 	MxDiskStreamController();
 	virtual ~MxDiskStreamController() override;
 
-	virtual MxResult Tickle() override;                                                // vtable+0x8
-	virtual MxResult Open(const char* p_filename) override;                            // vtable+0x14
-	virtual MxResult VTable0x18(undefined4 p_unknown, undefined4 p_unknown2) override; // vtable+0x18
-	virtual MxResult VTable0x20(MxDSAction* p_action) override;                        // vtable+0x20
-	virtual MxResult VTable0x24(undefined4 p_unknown) override;                        // vtable+0x24
-	virtual MxResult VTable0x28() override;                                            // vtable+0x28
-	virtual MxResult VTable0x30(undefined4 p_unknown) override;                        // vtable+0x30
-	virtual MxResult VTable0x34(undefined4 p_unknown);                                 // vtable+0x34
+	virtual MxResult Tickle() override;                           // vtable+0x8
+	virtual MxResult Open(const char* p_filename) override;       // vtable+0x14
+	virtual MxResult VTable0x18(undefined4, undefined4) override; // vtable+0x18
+	virtual MxResult VTable0x20(MxDSAction* p_action) override;   // vtable+0x20
+	virtual MxResult VTable0x24(MxDSAction* p_action) override;   // vtable+0x24
+	virtual MxResult VTable0x28() override;                       // vtable+0x28
+	virtual MxResult VTable0x30(MxDSAction* p_action) override;   // vtable+0x30
+	virtual MxResult VTable0x34(undefined4);                      // vtable+0x34
 
 	// FUNCTION: LEGO1 0x100c7360
 	inline virtual const char* ClassName() const override // vtable+0x0c

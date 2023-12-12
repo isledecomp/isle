@@ -378,8 +378,8 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 			goto done;
 	}
 	else {
-		MxPalette local_pal;
-		if (local_pal.GetEntries(entries))
+		MxPalette palette;
+		if (palette.GetEntries(entries))
 			goto done;
 	}
 

@@ -10,7 +10,7 @@
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 
 // GLOBAL: LEGO1 0x10101410
-MxU16 g_unkSep = TWOCC(',', ' ');
+MxU16 g_sep = TWOCC(',', ' ');
 
 // FUNCTION: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
@@ -29,7 +29,7 @@ MxDSAction::MxDSAction()
 	this->m_unk0x84 = NULL;
 	this->m_unk0x88 = 0;
 	this->m_origin = NULL;
-	this->m_unk0xTimingField = INT_MIN;
+	this->m_unk0x90 = INT_MIN;
 }
 
 // FUNCTION: LEGO1 0x100ad940
@@ -51,15 +51,15 @@ MxBool MxDSAction::HasId(MxU32 p_objectId)
 }
 
 // FUNCTION: LEGO1 0x100ada40
-void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
+void MxDSAction::SetUnknown90(MxLong p_unk0x90)
 {
-	this->m_unk0xTimingField = p_unkTimingField;
+	this->m_unk0x90 = p_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100ada50
-MxLong MxDSAction::GetUnkTimingField()
+MxLong MxDSAction::GetUnknown90()
 {
-	return this->m_unk0xTimingField;
+	return this->m_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100ada80
@@ -85,7 +85,7 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_unk0x84 = p_dsAction.m_unk0x84;
 	this->m_unk0x88 = p_dsAction.m_unk0x88;
 	this->m_origin = p_dsAction.m_origin;
-	this->m_unk0xTimingField = p_dsAction.m_unk0xTimingField;
+	this->m_unk0x90 = p_dsAction.m_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100adbe0
@@ -124,7 +124,7 @@ MxDSAction* MxDSAction::Clone()
 // FUNCTION: LEGO1 0x100adcd0
 MxLong MxDSAction::GetElapsedTime()
 {
-	return Timer()->GetTime() - this->m_unk0xTimingField;
+	return Timer()->GetTime() - this->m_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100add00
@@ -165,8 +165,8 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 
 	// Taking those references forces the compiler to move the values onto the stack.
 	// The original code most likely looked different, but this yields a 100% match.
-	MxU16& _extraLength = extraLength;
-	char*& _extraData = extraData;
+	MxU16& extraLengthRef = extraLength;
+	char*& extraDataRef = extraData;
 	if (extraLength && extraData) {
 		if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
 			delete[] this->m_extraData;
@@ -183,13 +183,13 @@ void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 		return;
 
 	if (this->m_extraLength) {
-		char* concat = new char[p_extraLength + this->m_extraLength + sizeof(g_unkSep)];
+		char* concat = new char[p_extraLength + this->m_extraLength + sizeof(g_sep)];
 		memcpy(concat, this->m_extraData, this->m_extraLength);
 
-		*(MxU16*) &concat[this->m_extraLength] = g_unkSep;
-		memcpy(&concat[this->m_extraLength + sizeof(g_unkSep)], p_extraData, p_extraLength);
+		*(MxU16*) &concat[this->m_extraLength] = g_sep;
+		memcpy(&concat[this->m_extraLength + sizeof(g_sep)], p_extraData, p_extraLength);
 
-		this->m_extraLength += p_extraLength + sizeof(g_unkSep);
+		this->m_extraLength += p_extraLength + sizeof(g_sep);
 		delete[] this->m_extraData;
 		this->m_extraData = concat;
 	}

@@ -52,7 +52,7 @@ BOOL MxDirect3D::Create(
 		success = TRUE;
 
 	if (!success)
-		FUN_1009D920();
+		FUN_1009d920();
 
 	return success;
 }
@@ -164,10 +164,10 @@ void MxDirect3D::BuildErrorString(const char* p_format, ...)
 }
 
 // FUNCTION: LEGO1 0x1009c6c0
-MxResult MxDeviceEnumerate::_DoEnumerate()
+MxResult MxDeviceEnumerate::DoEnumerate()
 {
 	// TODO: what does ECX refer to in this context?
-	if (m_unk0x010_flag)
+	if (m_unk0x010)
 		return FAILURE;
 
 	HRESULT ret = DirectDrawEnumerate(EnumerateCallback, this);
@@ -176,7 +176,7 @@ MxResult MxDeviceEnumerate::_DoEnumerate()
 		return FAILURE;
 	}
 
-	m_unk0x010_flag = TRUE;
+	m_unk0x010 = TRUE;
 	return SUCCESS;
 }
 

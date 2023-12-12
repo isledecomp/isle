@@ -53,14 +53,14 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 }
 
 // FUNCTION: LEGO1 0x100ca290
-void MxDSMultiAction::SetUnkTimingField(MxLong p_unkTimingField)
+void MxDSMultiAction::SetUnknown90(MxLong p_unkTimingField)
 {
-	this->m_unk0xTimingField = p_unkTimingField;
+	this->m_unk0x90 = p_unkTimingField;
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action))
-		action->SetUnkTimingField(p_unkTimingField);
+		action->SetUnknown90(p_unkTimingField);
 }
 
 // FUNCTION: LEGO1 0x100ca370
