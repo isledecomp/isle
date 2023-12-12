@@ -13,7 +13,7 @@ public:
 	MxDeviceModeFinder();
 	~MxDeviceModeFinder();
 
-	undefined4 m_unk0xnown[56];
+	undefined4 m_pad[56];
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // +0xe0
 };
 

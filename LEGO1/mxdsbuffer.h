@@ -27,7 +27,7 @@ public:
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode);
 	MxResult SetBufferPointer(MxU32* p_buffer, MxU32 p_size);
-	void FUN_100c6f80(MxU32 p_unk);
+	void FUN_100c6f80(MxU32 p_writeOffset);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }

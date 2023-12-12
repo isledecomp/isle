@@ -32,7 +32,7 @@ public:
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
 	}; // vtable+10;
 
-	virtual undefined4 unk14();                                                     // vtable+14;
+	virtual undefined4 VTable0x14();                                                // vtable+14;
 	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
 	virtual void Deserialize(char** p_source, MxS16 p_unk0x24);                     // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;

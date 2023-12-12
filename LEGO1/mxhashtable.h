@@ -57,7 +57,7 @@ public:
 	friend class MxHashTableCursor<T>;
 
 protected:
-	void _NodeInsert(MxHashTableNode<T>*);
+	void NodeInsert(MxHashTableNode<T>*);
 
 	MxHashTableNode<T>** m_slots; // 0x10
 	MxU32 m_numSlots;             // 0x14
@@ -173,8 +173,8 @@ inline void MxHashTable<T>::Resize()
 {
 	// Save a reference to the current table
 	// so we can walk nodes and re-insert
-	MxU32 old_size = m_numSlots;
-	MxHashTableNode<T>** old_table = m_slots;
+	MxU32 oldSize = m_numSlots;
+	MxHashTableNode<T>** oldTable = m_slots;
 
 	switch (m_resizeOption) {
 	case HashTableOpt_ExpandAdd:
@@ -190,21 +190,21 @@ inline void MxHashTable<T>::Resize()
 	memset(m_slots, 0, sizeof(MxHashTableNode<T>*) * m_numSlots);
 	this->m_count = 0;
 
-	for (MxS32 i = 0; i != old_size; i++) {
-		MxHashTableNode<T>* t = old_table[i];
+	for (MxS32 i = 0; i != oldSize; i++) {
+		MxHashTableNode<T>* t = oldTable[i];
 
 		while (t) {
 			MxHashTableNode<T>* next = t->m_next;
-			_NodeInsert(t);
+			NodeInsert(t);
 			t = next;
 		}
 	}
 
-	delete[] old_table;
+	delete[] oldTable;
 }
 
 template <class T>
-inline void MxHashTable<T>::_NodeInsert(MxHashTableNode<T>* p_node)
+inline void MxHashTable<T>::NodeInsert(MxHashTableNode<T>* p_node)
 {
 	MxS32 bucket = p_node->m_hash % m_numSlots;
 
@@ -226,7 +226,7 @@ inline void MxHashTable<T>::Add(T p_newobj)
 	MxU32 hash = Hash(p_newobj);
 	MxHashTableNode<T>* node = new MxHashTableNode<T>(p_newobj, hash);
 
-	MxHashTable<T>::_NodeInsert(node);
+	MxHashTable<T>::NodeInsert(node);
 }
 
 #undef HASH_TABLE_INIT_SIZE

@@ -301,7 +301,7 @@ BOOL MxDirectDraw::IsSupportedMode(int width, int height, int bpp)
 {
 	Mode mode = {width, height, bpp};
 
-	for (int i = 0; i < m_pCurrentDeviceModesList->count; i++) {
+	for (int i = 0; i < m_pCurrentDeviceModesList->m_count; i++) {
 		if (m_pCurrentDeviceModesList->m_modeArray[i] == mode) {
 			return TRUE;
 		}
@@ -892,21 +892,21 @@ int MxDirectDraw::FlipToGDISurface()
 void MxDirectDraw::Error(const char* p_message, MxS32 p_error)
 {
 	// GLOBAL: LEGO1 0x10100c70
-	static BOOL s_isInsideError = FALSE;
-	if (!s_isInsideError) {
-		s_isInsideError = TRUE;
+	static BOOL g_isInsideError = FALSE;
+	if (!g_isInsideError) {
+		g_isInsideError = TRUE;
 		Destroy();
 		if (m_pErrorHandler) {
 			m_pErrorHandler(p_message, p_error, m_pErrorHandlerArg);
 		}
-		s_isInsideError = FALSE;
+		g_isInsideError = FALSE;
 	}
 }
 
 // FUNCTION: LEGO1 0x1009e880
-const char* MxDirectDraw::ErrorToString(HRESULT error)
+const char* MxDirectDraw::ErrorToString(HRESULT p_error)
 {
-	switch (error) {
+	switch (p_error) {
 	case DD_OK:
 		return "No error.\0";
 	case DDERR_ALREADYINITIALIZED:

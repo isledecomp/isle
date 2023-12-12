@@ -52,13 +52,13 @@ void MxRegionLeftRightList::Destroy(MxRegionLeftRight* p_leftRight)
 // MxListCursor<MxRegionLeftRight *>::MxListCursor<MxRegionLeftRight *>
 
 // TEMPLATE: LEGO1 0x100c58c0
-// MxList<MxRegionLeftRight *>::_InsertEntry
+// MxList<MxRegionLeftRight *>::InsertEntry
 
 // TEMPLATE: LEGO1 0x100c5970
-// MxList<MxRegionTopBottom *>::_InsertEntry
+// MxList<MxRegionTopBottom *>::InsertEntry
 
 // TEMPLATE: LEGO1 0x100c5a20
 // MxListEntry<MxRegionTopBottom *>::MxListEntry<MxRegionTopBottom *>
 
 // TEMPLATE: LEGO1 0x100c5a40
-// MxList<MxRegionLeftRight *>::_DeleteEntry
+// MxList<MxRegionLeftRight *>::DeleteEntry

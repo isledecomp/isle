@@ -10,7 +10,7 @@ UnionName: '^\(anon|^[A-Z][a-zA-Z0-9]+$'
 VariableName:
     ScopePrefix:
         Global: 'g_'
-        Static: 's_'
+        Static: 'g_'
         ClassMember: 'm_'
         StructMember: 'm_'
     DataTypePrefix:

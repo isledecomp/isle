@@ -99,7 +99,7 @@ void MxDSObject::SetSourceName(const char* p_sourceName)
 }
 
 // FUNCTION: LEGO1 0x100bf9c0
-undefined4 MxDSObject::unk14()
+undefined4 MxDSObject::VTable0x14()
 {
 	return 10;
 }

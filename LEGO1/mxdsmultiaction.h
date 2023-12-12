@@ -27,14 +27,14 @@ public:
 		return !strcmp(p_name, MxDSMultiAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
 
-	virtual undefined4 unk14() override;                                 // vtable+14;
+	virtual undefined4 VTable0x14() override;                            // vtable+14;
 	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
 	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	virtual void SetAtomId(MxAtomId p_atomId) override;                  // vtable+20;
 	virtual MxDSAction* Clone() override;                                // vtable+2c;
 	virtual void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+30;
 	virtual MxBool HasId(MxU32 p_objectId) override;                     // vtable+34;
-	virtual void SetUnknown90(MxLong p_unkTimingField) override;         // vtable+38;
+	virtual void SetUnknown90(MxLong p_unk0x90) override;                // vtable+38;
 
 	inline MxDSActionList* GetActionList() const { return m_actions; };
 

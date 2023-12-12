@@ -31,9 +31,9 @@ public:
 	struct DeviceModesInfo {
 		GUID* m_guid;
 		Mode* m_modeArray;
-		MxS32 count;
+		MxS32 m_count;
 		DDCAPS m_ddcaps;
-		void* m_178;
+		void* m_unk0x178;
 
 		DeviceModesInfo();
 		~DeviceModesInfo();
@@ -59,7 +59,7 @@ protected:
 	BOOL m_bIgnoreWMSIZE;
 	BOOL m_bPrimaryPalettized;
 	BOOL m_bFullScreen;
-	void* m_850;
+	void* m_unk0x850;
 	BOOL m_bOnlySystemMemory;
 	BOOL m_bIsOnPrimaryDevice;
 	ErrorHandler m_pErrorHandler;
@@ -91,7 +91,7 @@ public:
 	);
 	virtual void Destroy();
 	virtual void DestroyButNotDirectDraw();
-	virtual const char* ErrorToString(HRESULT error);
+	virtual const char* ErrorToString(HRESULT p_error);
 
 protected:
 	BOOL CacheOriginalPaletteEntries();

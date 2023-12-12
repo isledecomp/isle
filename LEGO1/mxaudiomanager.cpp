@@ -3,7 +3,7 @@
 DECOMP_SIZE_ASSERT(MxAudioManager, 0x30);
 
 // GLOBAL: LEGO1 0x10102108
-MxS32 MxAudioManager::s_count = 0;
+MxS32 MxAudioManager::g_count = 0;
 
 // FUNCTION: LEGO1 0x10029910
 MxS32 MxAudioManager::GetVolume()
@@ -33,7 +33,7 @@ void MxAudioManager::Init()
 void MxAudioManager::Destroy(MxBool p_fromDestructor)
 {
 	this->m_criticalSection.Enter();
-	s_count--;
+	g_count--;
 	Init();
 	this->m_criticalSection.Leave();
 
@@ -51,7 +51,7 @@ MxResult MxAudioManager::InitPresenters()
 		this->m_criticalSection.Enter();
 		success = TRUE;
 		result = SUCCESS;
-		s_count++;
+		g_count++;
 	}
 
 	if (result)

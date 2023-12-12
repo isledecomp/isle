@@ -12,20 +12,20 @@ MxDSFile::~MxDSFile()
 }
 
 // FUNCTION: LEGO1 0x100cc4b0
-MxDSFile::MxDSFile(const char* filename, MxULong skipReadingChunks)
+MxDSFile::MxDSFile(const char* p_filename, MxULong p_skipReadingChunks)
 {
-	m_filename = filename;
-	m_skipReadingChunks = skipReadingChunks;
+	m_filename = p_filename;
+	m_skipReadingChunks = p_skipReadingChunks;
 }
 
 // FUNCTION: LEGO1 0x100cc590
-MxLong MxDSFile::Open(MxULong uStyle)
+MxLong MxDSFile::Open(MxULong p_uStyle)
 {
 	MXIOINFO& io = m_io;
 	MxLong longResult = 1;
 	memset(&io, 0, sizeof(MXIOINFO));
 
-	if (io.Open(m_filename.GetData(), uStyle) != 0) {
+	if (io.Open(m_filename.GetData(), p_uStyle) != 0) {
 		return -1;
 	}
 
@@ -63,7 +63,7 @@ MxLong MxDSFile::ReadChunks()
 	}
 
 	m_io.Read(&m_header, 0xc);
-	if ((m_header.majorVersion == SI_MAJOR_VERSION) && (m_header.minorVersion == SI_MINOR_VERSION)) {
+	if ((m_header.m_majorVersion == SI_MAJOR_VERSION) && (m_header.m_minorVersion == SI_MINOR_VERSION)) {
 		childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
 		if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {
 			return -1;
@@ -106,19 +106,19 @@ MxResult MxDSFile::Read(unsigned char* p_buf, MxULong p_nbytes)
 }
 
 // FUNCTION: LEGO1 0x100cc7b0
-MxLong MxDSFile::Seek(MxLong lOffset, int iOrigin)
+MxLong MxDSFile::Seek(MxLong p_lOffset, MxS32 p_iOrigin)
 {
-	return (m_position = m_io.Seek(lOffset, iOrigin)) == -1 ? -1 : 0;
+	return (m_position = m_io.Seek(p_lOffset, p_iOrigin)) == -1 ? -1 : 0;
 }
 
 // FUNCTION: LEGO1 0x100cc7e0
 MxULong MxDSFile::GetBufferSize()
 {
-	return m_header.bufferSize;
+	return m_header.m_bufferSize;
 }
 
 // FUNCTION: LEGO1 0x100cc7f0
 MxULong MxDSFile::GetStreamBuffersNum()
 {
-	return m_header.streamBuffersNum;
+	return m_header.m_streamBuffersNum;
 }

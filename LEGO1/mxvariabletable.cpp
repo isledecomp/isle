@@ -93,4 +93,4 @@ const char* MxVariableTable::GetVariable(const char* p_key)
 // MxHashTable<MxVariable *>::Resize
 
 // TEMPLATE: LEGO1 0x100b7b80
-// MxHashTable<MxVariable *>::_NodeInsert
+// MxHashTable<MxVariable *>::NodeInsert

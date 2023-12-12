@@ -29,7 +29,7 @@ public:
 
 	MxResult Init();
 	void SetInternalAction(MxDSAction* p_dsAction);
-	void FUN_100CD2D0();
+	void FUN_100cd2d0();
 
 private:
 	MxU32 m_unk0x94;

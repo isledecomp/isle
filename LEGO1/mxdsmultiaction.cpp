@@ -53,14 +53,14 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 }
 
 // FUNCTION: LEGO1 0x100ca290
-void MxDSMultiAction::SetUnknown90(MxLong p_unkTimingField)
+void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
 {
-	this->m_unk0x90 = p_unkTimingField;
+	this->m_unk0x90 = p_unk0x90;
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action))
-		action->SetUnknown90(p_unkTimingField);
+		action->SetUnknown90(p_unk0x90);
 }
 
 // FUNCTION: LEGO1 0x100ca370
@@ -102,14 +102,14 @@ MxDSAction* MxDSMultiAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100ca5e0
-undefined4 MxDSMultiAction::unk14()
+undefined4 MxDSMultiAction::VTable0x14()
 {
-	undefined4 result = MxDSAction::unk14();
+	undefined4 result = MxDSAction::VTable0x14();
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action))
-		result += action->unk14();
+		result += action->VTable0x14();
 
 	return result;
 }

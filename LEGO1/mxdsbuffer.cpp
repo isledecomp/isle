@@ -119,10 +119,10 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 }
 
 // FUNCTION: LEGO1 0x100c6f80
-void MxDSBuffer::FUN_100c6f80(MxU32 p_unk)
+void MxDSBuffer::FUN_100c6f80(MxU32 p_writeOffset)
 {
-	if (p_unk < m_writeOffset) {
-		m_pIntoBuffer2 = m_pBuffer + p_unk;
-		m_pIntoBuffer = m_pBuffer + p_unk;
+	if (p_writeOffset < m_writeOffset) {
+		m_pIntoBuffer2 = m_pBuffer + p_writeOffset;
+		m_pIntoBuffer = m_pBuffer + p_writeOffset;
 	}
 }
