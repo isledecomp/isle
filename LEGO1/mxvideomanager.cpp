@@ -99,14 +99,14 @@ void MxVideoManager::SortPresenterList()
 
 			finished = TRUE;
 			for (MxU32 i = count; i != 0; i--) {
-				MxPresenter *p_a, *p_b;
+				MxPresenter *presenterA, *presenterB;
 
-				a.Next(p_a);
-				b.Next(p_b);
+				a.Next(presenterA);
+				b.Next(presenterB);
 
-				if (p_a->GetDisplayZ() < p_b->GetDisplayZ()) {
-					a.SetValue(p_b);
-					b.SetValue(p_a);
+				if (presenterA->GetDisplayZ() < presenterB->GetDisplayZ()) {
+					a.SetValue(presenterB);
+					b.SetValue(presenterA);
 					finished = FALSE;
 				}
 			}

@@ -335,9 +335,9 @@ void MxWavePresenter::ParseExtra()
 		memcpy(extraCopy, extraData, len);
 		extraCopy[len] = '\0';
 
-		char t_soundValue[512];
-		if (KeyValueStringParse(t_soundValue, g_strSOUND, extraCopy)) {
-			if (!strcmpi(t_soundValue, "FALSE"))
+		char soundValue[512];
+		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {
+			if (!strcmpi(soundValue, "FALSE"))
 				Enable(FALSE);
 		}
 	}

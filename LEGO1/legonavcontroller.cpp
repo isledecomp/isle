@@ -66,7 +66,7 @@ void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
 	this->m_hMax = p_hMax;
 	this->m_vMax = p_vMax;
 
-	if (VideoManager()->GetVideoParam().flags().GetFullScreen()) {
+	if (VideoManager()->GetVideoParam().Flags().GetFullScreen()) {
 		this->m_hMax = 640;
 		this->m_vMax = 480;
 	}

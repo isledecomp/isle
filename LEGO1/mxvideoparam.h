@@ -14,15 +14,19 @@
 class MxVideoParam {
 public:
 	__declspec(dllexport) MxVideoParam();
-	__declspec(dllexport) MxVideoParam(MxVideoParam&);
-	__declspec(dllexport)
-		MxVideoParam(COMPAT_CONST MxRect32& rect, MxPalette* pal, MxULong p3, COMPAT_CONST MxVideoParamFlags& flags);
-	__declspec(dllexport) MxVideoParam& operator=(const MxVideoParam&);
+	__declspec(dllexport) MxVideoParam(MxVideoParam& p_videoParam);
+	__declspec(dllexport) MxVideoParam(
+		COMPAT_CONST MxRect32& p_rect,
+		MxPalette* p_palette,
+		MxULong p_backBuffers,
+		COMPAT_CONST MxVideoParamFlags& p_flags
+	);
+	__declspec(dllexport) MxVideoParam& operator=(const MxVideoParam& p_videoParam);
 	__declspec(dllexport) ~MxVideoParam();
 
-	__declspec(dllexport) void SetDeviceName(char* id);
+	__declspec(dllexport) void SetDeviceName(char* p_deviceId);
 
-	inline MxVideoParamFlags& flags() { return m_flags; }
+	inline MxVideoParamFlags& Flags() { return m_flags; }
 
 	inline void SetPalette(MxPalette* p_palette) { this->m_palette = p_palette; }
 	inline void SetBackBuffers(MxU32 p_backBuffers) { this->m_backBuffers = p_backBuffers; }

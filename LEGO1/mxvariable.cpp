@@ -12,9 +12,9 @@ MxString* MxVariable::GetValue()
 }
 
 // FUNCTION: LEGO1 0x1003beb0
-void MxVariable::SetValue(const char* value)
+void MxVariable::SetValue(const char* p_value)
 {
-	m_value = value;
+	m_value = p_value;
 }
 
 // FUNCTION: LEGO1 0x1003bec0

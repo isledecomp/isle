@@ -70,10 +70,10 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	this->m_initialized = TRUE;
 	this->m_videoParam = p_videoParam;
 
-	if (!this->m_videoParam.flags().GetFullScreen())
-		this->m_videoParam.flags().SetFlipSurfaces(FALSE);
+	if (!this->m_videoParam.Flags().GetFullScreen())
+		this->m_videoParam.Flags().SetFlipSurfaces(FALSE);
 
-	if (!this->m_videoParam.flags().GetFlipSurfaces()) {
+	if (!this->m_videoParam.Flags().GetFlipSurfaces()) {
 		this->m_videoParam.SetBackBuffers(1);
 	}
 	else {
@@ -84,10 +84,10 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		else if (backBuffers > 2)
 			this->m_videoParam.SetBackBuffers(2);
 
-		this->m_videoParam.flags().SetBackBuffers(TRUE);
+		this->m_videoParam.Flags().SetBackBuffers(TRUE);
 	}
 
-	if (this->m_videoParam.flags().GetFullScreen()) {
+	if (this->m_videoParam.Flags().GetFullScreen()) {
 		MxS32 width = this->m_videoParam.GetRect().GetWidth();
 		MxS32 height = this->m_videoParam.GetRect().GetHeight();
 
@@ -100,7 +100,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		if (lpDirectDraw->GetDisplayMode(&ddsd))
 			goto done;
 
-		MxS32 bitdepth = !this->m_videoParam.flags().Get16Bit() ? 8 : 16;
+		MxS32 bitdepth = !this->m_videoParam.Flags().Get16Bit() ? 8 : 16;
 
 		if (ddsd.dwWidth != width || ddsd.dwHeight != height || ddsd.ddpfPixelFormat.dwRGBBitCount != bitdepth) {
 			if (lpDirectDraw->SetDisplayMode(width, height, bitdepth))
@@ -108,7 +108,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		}
 	}
 
-	if (this->m_videoParam.flags().GetFlipSurfaces()) {
+	if (this->m_videoParam.Flags().GetFlipSurfaces()) {
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwBackBufferCount = this->m_videoParam.GetBackBuffers();
@@ -139,7 +139,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwHeight = this->m_videoParam.GetRect().GetHeight();
 		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
-		if (!this->m_videoParam.flags().GetBackBuffers())
+		if (!this->m_videoParam.Flags().GetBackBuffers())
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
 		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface2, NULL))

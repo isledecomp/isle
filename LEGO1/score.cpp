@@ -107,9 +107,9 @@ MxLong Score::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001510
-MxLong Score::FUN_10001510(MxEndActionNotificationParam& p)
+MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 {
-	MxDSAction* action = p.GetAction();
+	MxDSAction* action = p_param.GetAction();
 
 	if (m_atom == action->GetAtomId()) {
 		MxU32 id = action->GetObjectId();
@@ -151,12 +151,12 @@ void Score::Stop()
 }
 
 // FUNCTION: LEGO1 0x100016d0
-MxLong Score::FUN_100016d0(MxType17NotificationParam& p)
+MxLong Score::FUN_100016d0(MxType17NotificationParam& p_param)
 {
-	MxS16 l = p.GetUnknown28();
+	MxS16 l = p_param.GetUnknown28();
 
-	if (l == 1 || p.GetUnknown20() == 4) {
-		switch (p.GetUnknown20()) {
+	if (l == 1 || p_param.GetUnknown20() == 4) {
+		switch (p_param.GetUnknown20()) {
 		case 1:
 			m_unk0xf8 = 2;
 			DeleteScript();

@@ -38,8 +38,8 @@ public:
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+68
 
 	void Paint();
-	MxLong FUN_10001510(MxEndActionNotificationParam& p);
-	MxLong FUN_100016d0(MxType17NotificationParam& p);
+	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
+	MxLong FUN_100016d0(MxType17NotificationParam& p_param);
 	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
 
 protected:

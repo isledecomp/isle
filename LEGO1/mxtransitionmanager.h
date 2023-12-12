@@ -45,23 +45,23 @@ public:
 
 private:
 	void EndTransition(MxBool p_notifyWorld);
-	void Transition_None();
-	void Transition_Dissolve();
-	void Transition_Pixelation();
-	void Transition_Wipe();
-	void Transition_Windows();
-	void Transition_Broken();
+	void TransitionNone();
+	void TransitionDissolve();
+	void TransitionPixelation();
+	void TransitionWipe();
+	void TransitionWindows();
+	void TransitionBroken();
 
-	void SubmitCopyRect(LPDDSURFACEDESC ddsc);
-	void SetupCopyRect(LPDDSURFACEDESC ddsc);
+	void SubmitCopyRect(LPDDSURFACEDESC p_ddsc);
+	void SetupCopyRect(LPDDSURFACEDESC p_ddsc);
 
 	MxVideoPresenter* m_waitIndicator;
 	RECT m_copyRect;
 	MxU8* m_copyBuffer;
 
-	flag_bitfield m_copyFlags;
+	FlagBitfield m_copyFlags;
 	undefined4 m_unk0x24;
-	flag_bitfield m_unk0x28;
+	FlagBitfield m_unk0x28;
 
 	TransitionType m_transitionType;
 	LPDIRECTDRAWSURFACE m_ddSurface;
