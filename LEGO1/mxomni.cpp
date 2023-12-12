@@ -387,9 +387,9 @@ MxBool MxOmni::IsSound3D()
 }
 
 // FUNCTION: LEGO1 0x100b0990
-void MxOmni::SetSound3D(MxBool p_3dsound)
+void MxOmni::SetSound3D(MxBool p_use3dSound)
 {
-	g_use3dSound = p_3dsound;
+	g_use3dSound = p_use3dSound;
 }
 
 // FUNCTION: LEGO1 0x100b09a0

@@ -15,7 +15,7 @@ MxResult MxStreamController::VTable0x18(undefined4, undefined4)
 }
 
 // FUNCTION: LEGO1 0x100b9410
-MxResult MxStreamController::vtable0x1C(undefined4, undefined4)
+MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
 {
 	return FAILURE;
 }
@@ -91,7 +91,7 @@ MxResult MxStreamController::Open(const char* p_filename)
 	MxAutoLocker locker(&m_criticalSection);
 
 	MakeSourceName(sourceName, p_filename);
-	this->atom = MxAtomId(sourceName, LookupMode_LowerCase2);
+	this->m_atom = MxAtomId(sourceName, LookupMode_LowerCase2);
 	return SUCCESS;
 }
 
@@ -122,7 +122,7 @@ MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	VTable0x30(p_action);
-	m_action0x60 = m_unk0xList0x54.Find(p_action, TRUE);
+	m_action0x60 = m_unk0x54.Find(p_action, TRUE);
 	if (m_action0x60 == NULL) {
 		return FAILURE;
 	}
@@ -167,7 +167,7 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result = FAILURE;
-	MxDSAction* action = m_unk0xList0x3c.Find(p_action, TRUE);
+	MxDSAction* action = m_unk0x3c.Find(p_action, TRUE);
 	if (action != NULL) {
 		MxNextActionDataStart* data = m_nextActionList.Find(action->GetObjectId(), action->GetUnknown24());
 		delete action;

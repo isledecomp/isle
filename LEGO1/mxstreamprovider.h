@@ -28,7 +28,7 @@ public:
 	virtual MxResult SetResourceToGet(MxStreamController* p_resource); // vtable+0x14
 	virtual MxU32 GetFileSize() = 0;                                   // vtable+0x18
 	virtual MxU32 GetStreamBuffersNum() = 0;                           // vtable+0x1c
-	virtual void VTable0x20(undefined4 p_unknown1);                    // vtable+0x20
+	virtual void VTable0x20(undefined4);                               // vtable+0x20
 	virtual MxU32 GetLengthInDWords() = 0;                             // vtable+0x24
 	virtual MxU32* GetBufferForDWords() = 0;                           // vtable+0x28
 

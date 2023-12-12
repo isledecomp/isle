@@ -13,7 +13,7 @@ public:
 	// Note: Comes before virtual destructor
 	virtual MxResult Run();
 
-	MxResult Start(int p_stack, int p_flag);
+	MxResult Start(MxS32 p_stack, MxS32 p_flag);
 
 	void Terminate();
 
@@ -43,7 +43,7 @@ protected:
 // VTABLE: LEGO1 0x100dc6d8
 class MxTickleThread : public MxThread {
 public:
-	MxTickleThread(MxCore* p_target, int p_frequencyMS);
+	MxTickleThread(MxCore* p_target, MxS32 p_frequencyMS);
 
 	// Only inlined, no offset
 	virtual ~MxTickleThread() {}

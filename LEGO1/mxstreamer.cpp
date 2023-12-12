@@ -69,16 +69,15 @@ MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 }
 
 // FUNCTION: LEGO1 0x100b9570
-MxLong MxStreamer::Close(const char* p)
+MxLong MxStreamer::Close(const char* p_name)
 {
 	MxDSAction ds;
-
 	ds.SetUnknown24(-2);
 
 	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
 		MxStreamController* c = *it;
 
-		if (!p || !strcmp(p, c->GetAtom().GetInternal())) {
+		if (!p_name || !strcmp(p_name, c->GetAtom().GetInternal())) {
 			m_openStreams.erase(it);
 
 			if (!c->FUN_100c20d0(ds)) {
@@ -120,10 +119,10 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x100b9930
-MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* stream)
+MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* p_stream)
 {
-	if (find(m_openStreams.begin(), m_openStreams.end(), stream) == m_openStreams.end()) {
-		m_openStreams.push_back(stream);
+	if (find(m_openStreams.begin(), m_openStreams.end(), p_stream) == m_openStreams.end()) {
+		m_openStreams.push_back(p_stream);
 		return SUCCESS;
 	}
 
@@ -176,10 +175,10 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 }
 
 // No offset, function is always inlined
-MxStreamerSubClass1::MxStreamerSubClass1(undefined4 size)
+MxStreamerSubClass1::MxStreamerSubClass1(undefined4 p_size)
 {
 	m_buffer = NULL;
-	m_size = size;
+	m_size = p_size;
 	undefined4* ptr = &m_unk0x08;
 	for (int i = 0; i >= 0; i--) {
 		ptr[i] = 0;
