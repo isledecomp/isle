@@ -26,9 +26,9 @@ public:
 		return !strcmp(p_name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	virtual MxU32 GetSizeOnDisk() override;                            // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24) override; // vtable+1c;
-	virtual MxDSAction* Clone() override;                              // vtable+2c;
+	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual MxDSAction* Clone() override;                                // vtable+2c;
 
 	inline MxS32 GetVolume() const { return m_volume; }
 

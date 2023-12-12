@@ -34,7 +34,7 @@ public:
 
 	virtual undefined4 unk14();                                                     // vtable+14;
 	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24);                       // vtable+1c;
+	virtual void Deserialize(char** p_source, MxS16 p_unk0x24);                     // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
 	inline MxDSType GetType() const { return (MxDSType) this->m_type; }
@@ -45,7 +45,7 @@ public:
 
 	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
-	inline void SetUnknown24(MxS16 p_unk24) { this->m_unk0x24 = p_unk24; }
+	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
 
 private:
 	MxU32 m_sizeOnDisk;   // 0x8

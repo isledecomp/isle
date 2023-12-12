@@ -80,9 +80,9 @@ MxU32 MxDSMediaAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100c8f60
-void MxDSMediaAction::Deserialize(char** p_source, MxS16 p_unk24)
+void MxDSMediaAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 {
-	MxDSAction::Deserialize(p_source, p_unk24);
+	MxDSAction::Deserialize(p_source, p_unk0x24);
 
 	GetString(p_source, this->m_mediaSrcPath, this, &MxDSMediaAction::CopyMediaSrcPath);
 	GetScalar(p_source, this->m_unk0x9c.m_unk0x00);

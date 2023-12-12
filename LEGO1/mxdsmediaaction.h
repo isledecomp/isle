@@ -28,8 +28,8 @@ public:
 		return !strcmp(p_name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
 
-	virtual MxU32 GetSizeOnDisk() override;                            // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24) override; // vtable+1c;
+	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 

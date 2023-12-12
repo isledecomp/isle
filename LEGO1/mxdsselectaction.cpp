@@ -86,10 +86,10 @@ MxU32 MxDSSelectAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100cbf60
-void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk24)
+void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 {
 	MxString string;
-	MxDSAction::Deserialize(p_source, p_unk24);
+	MxDSAction::Deserialize(p_source, p_unk0x24);
 
 	MxU32 extraFlag = *(MxU32*) (*p_source + 4) & 1;
 	*p_source += 12;
@@ -129,7 +129,7 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk24)
 			MxU32 extraFlag = *(MxU32*) (*p_source + 4) & 1;
 			*p_source += 8;
 
-			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk24);
+			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
 
 			if (index == i)
 				this->m_actions->Append(action);

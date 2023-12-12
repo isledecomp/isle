@@ -35,7 +35,7 @@ public:
 	void HandleAction(MxU32 p_unk);
 
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
-	inline void SetUnknown424(undefined4 p_unk424) { m_unk0x424 = p_unk424; }
+	inline void SetUnknown424(undefined4 p_unk0x424) { m_unk0x424 = p_unk0x424; }
 
 	void SetSomeEnumState(undefined4 p_state);
 

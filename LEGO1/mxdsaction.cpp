@@ -205,9 +205,9 @@ void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 }
 
 // FUNCTION: LEGO1 0x100adf70
-void MxDSAction::Deserialize(char** p_source, MxS16 p_unk24)
+void MxDSAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 {
-	MxDSObject::Deserialize(p_source, p_unk24);
+	MxDSObject::Deserialize(p_source, p_unk0x24);
 
 	GetScalar(p_source, this->m_flags);
 	GetScalar(p_source, this->m_startTime);
