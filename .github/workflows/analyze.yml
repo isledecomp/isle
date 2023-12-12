@@ -3,7 +3,7 @@ name: Analyze
 on: [push, pull_request]
 
 jobs:
-  decomplint:
+  decomplint-isle:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,11 +13,20 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
-    - name: Lint ISLE
-      continue-on-error: true
+    - name: Run decomplint.py
       run: |
         python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
 
-    - name: Lint LEGO1
+  decomplint-lego1:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install python libraries
+      run: |
+        pip install -r tools/requirements.txt
+
+    - name: Run decomplint.py
       run: |
         python3 tools/decomplint/decomplint.py LEGO1 --module LEGO1 --warnfail
