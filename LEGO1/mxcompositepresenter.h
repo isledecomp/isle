@@ -42,6 +42,9 @@ private:
 	MxCompositePresenterList m_list; // 0x40
 };
 
+// TEMPLATE: LEGO1 0x1004ae90
+// list<MxPresenter *,allocator<MxPresenter *> >::_Buynode
+
 // TEMPLATE: LEGO1 0x100b61a0
 // list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
 

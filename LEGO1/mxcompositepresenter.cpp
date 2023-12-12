@@ -17,9 +17,6 @@ MxBool MxCompositePresenter::VTable0x64(undefined4 p_unknown)
 	return TRUE;
 }
 
-// TEMPLATE: LEGO1 0x1004ae90
-// list<MxPresenter *,allocator<MxPresenter *> >::_Buynode
-
 // FUNCTION: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {
