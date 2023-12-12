@@ -47,9 +47,12 @@ def test_byname_ignored(linter):
         "// FUNCTION: TEST 0x2000",
         "void function2() {}",
     ]
-    # TODO: This will fail after enforcing that bynames belong in headers
-    assert linter.check_lines(lines, "test.cpp", "TEST") is True
-    assert len(linter.alerts) == 0
+    # This will fail because byname lookup does not belong in the cpp file
+    assert linter.check_lines(lines, "test.cpp", "TEST") is False
+    # but it should not fail for function order.
+    assert all(
+        alert.code != ParserError.FUNCTION_OUT_OF_ORDER for alert in linter.alerts
+    )
 
 
 def test_module_isolation(linter):

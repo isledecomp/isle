@@ -56,7 +56,7 @@ def marker_is_vtable(marker: DecompMarker) -> bool:
 
 
 class MarkerDict:
-    def __init__(self):
+    def __init__(self) -> None:
         self.markers: dict = {}
 
     def insert(self, marker: DecompMarker) -> bool:
@@ -80,7 +80,7 @@ class DecompParser:
     # pylint: disable=too-many-instance-attributes
     # Could combine output lists into a single list to get under the limit,
     # but not right now
-    def __init__(self):
+    def __init__(self) -> None:
         # The lists to be populated as we parse
         self.functions: List[ParserFunction] = []
         self.vtables: List[ParserVtable] = []

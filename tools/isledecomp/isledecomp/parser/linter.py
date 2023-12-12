@@ -1,3 +1,4 @@
+from typing import List, Optional
 from .parser import DecompParser
 from .error import ParserAlert, ParserError
 
@@ -8,11 +9,11 @@ def get_checkorder_filter(module):
 
 
 class DecompLinter:
-    def __init__(self):
-        self.alerts = []
+    def __init__(self) -> None:
+        self.alerts: List[ParserAlert] = []
         self._parser = DecompParser()
-        self._filename = ""
-        self._module = None
+        self._filename: str = ""
+        self._module: Optional[str] = None
 
     def reset(self):
         self.alerts = []
@@ -53,7 +54,7 @@ class DecompLinter:
 
             last_offset = fun.offset
 
-    def _check_symbol_uniqueness(self):
+    def _check_offset_uniqueness(self):
         # TODO
         pass
 
@@ -85,7 +86,7 @@ class DecompLinter:
 
         if self._module is not None:
             self._check_byname_allowed()
-            self._check_symbol_uniqueness()
+            self._check_offset_uniqueness()
 
             if not self.file_is_header():
                 self._check_function_order()

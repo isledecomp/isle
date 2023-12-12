@@ -1,5 +1,5 @@
-from __future__ import annotations  # python <3.10 compatibility
 from enum import Enum
+from typing import Optional
 from dataclasses import dataclass
 
 
@@ -62,7 +62,7 @@ class ParserError(Enum):
 class ParserAlert:
     code: ParserError
     line_number: int
-    line: str | None = None
+    line: Optional[str] = None
 
     def is_warning(self) -> bool:
         return self.code.value < ParserError.DECOMP_ERROR_START.value
