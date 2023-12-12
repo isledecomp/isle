@@ -15,9 +15,6 @@ MxSoundManager::MxSoundManager()
 	Init();
 }
 
-// SYNTHETIC: LEGO1 0x100ae7b0
-// MxSoundManager::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100ae7d0
 MxSoundManager::~MxSoundManager()
 {

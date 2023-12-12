@@ -17,18 +17,3 @@ void MxStreamChunkList::Destroy(MxStreamChunk* p_chunk)
 	if (p_chunk)
 		delete p_chunk;
 }
-
-// TEMPLATE: LEGO1 0x100b5930
-// MxCollection<MxStreamChunk *>::Compare
-
-// TEMPLATE: LEGO1 0x100b5990
-// MxCollection<MxStreamChunk *>::Destroy
-
-// TEMPLATE: LEGO1 0x100b59a0
-// MxList<MxStreamChunk *>::~MxList<MxStreamChunk *>
-
-// SYNTHETIC: LEGO1 0x100b5aa0
-// MxCollection<MxStreamChunk *>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x100b5b10
-// MxList<MxStreamChunk *>::`scalar deleting destructor'

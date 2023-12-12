@@ -5,16 +5,13 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Unk, 0x4);
 DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
 
-// SYNTHETIC: LEGO1 0x100a2720
-// TglImpl::UnkImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a3830
 void* UnkImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
-// FUNCTION: LEGO1 0x100a3840 STUB
+// STUB: LEGO1 0x100a3840
 Result UnkImpl::SetMeshData(
 	unsigned long faceCount,
 	unsigned long vertexCount,

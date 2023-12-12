@@ -26,4 +26,34 @@ public:
 // VTABLE: LEGO1 0x100dc1e8
 // class MxHashTable<MxVariable *>
 
+// TEMPLATE: LEGO1 0x100afcd0
+// MxCollection<MxVariable *>::Compare
+
+// TEMPLATE: LEGO1 0x100afce0
+// MxCollection<MxVariable *>::~MxCollection<MxVariable *>
+
+// TEMPLATE: LEGO1 0x100afd30
+// MxCollection<MxVariable *>::Destroy
+
+// SYNTHETIC: LEGO1 0x100afd40
+// MxCollection<MxVariable *>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100afdb0
+// MxVariableTable::Destroy
+
+// TEMPLATE: LEGO1 0x100afdc0
+// MxHashTable<MxVariable *>::Hash
+
+// TEMPLATE: LEGO1 0x100b0bd0
+// MxHashTable<MxVariable *>::~MxHashTable<MxVariable *>
+
+// SYNTHETIC: LEGO1 0x100b0ca0
+// MxHashTable<MxVariable *>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b7ab0
+// MxHashTable<MxVariable *>::Resize
+
+// TEMPLATE: LEGO1 0x100b7b80
+// MxHashTable<MxVariable *>::_NodeInsert
+
 #endif // MXVARIABLETABLE_H

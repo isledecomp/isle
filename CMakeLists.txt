@@ -230,6 +230,8 @@ if (MINGW)
 endif()
 
 # Additional include directories
+
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/util")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smk")
@@ -263,6 +265,8 @@ if (ISLE_BUILD_APP)
     ISLE/isleapp.cpp
     ISLE/define.cpp
   )
+
+  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
 
   # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")

@@ -1,9 +1,9 @@
 #ifndef MXDISKSTREAMCONTROLLER_H
 #define MXDISKSTREAMCONTROLLER_H
 
-#include "compat.h" // STL
 #include "decomp.h"
 #include "mxdsbuffer.h"
+#include "mxstl/stlcompat.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
@@ -49,5 +49,17 @@ private:
 	MxStreamListMxDSAction m_list0xb8; // 0xb8
 	undefined m_unkc4;                 // 0xc4
 };
+
+// TEMPLATE: LEGO1 0x100c7330
+// list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100c7420
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
+
+// TEMPLATE: LEGO1 0x100c7490
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100c74e0
+// List<MxDSBuffer *>::~List<MxDSBuffer *>
 
 #endif // MXDISKSTREAMCONTROLLER_H

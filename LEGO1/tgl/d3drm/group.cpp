@@ -2,9 +2,6 @@
 
 using namespace TglImpl;
 
-// SYNTHETIC: LEGO1 0x100a2480
-// TglImpl::GroupImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a31d0
 void* GroupImpl::ImplementationDataPtr()
 {
@@ -109,13 +106,13 @@ Result GroupImpl::Remove(const Mesh* pMesh)
 	return ResultVal(m_data->DeleteVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
-// FUNCTION: LEGO1 0x100a34b0 STUB
+// STUB: LEGO1 0x100a34b0
 Result GroupImpl::RemoveAll()
 {
 	return Error;
 }
 
-// FUNCTION: LEGO1 0x100a34c0 STUB
+// STUB: LEGO1 0x100a34c0
 Result GroupImpl::Unknown()
 {
 	return Error;

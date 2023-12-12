@@ -7,9 +7,6 @@
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
-// FUNCTION: LEGO1 0x10001090
-// LegoEntity::SetWorldSpeed
-
 // FUNCTION: LEGO1 0x1000c290
 LegoEntity::~LegoEntity()
 {

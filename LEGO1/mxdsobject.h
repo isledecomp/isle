@@ -6,10 +6,6 @@
 #include "mxcore.h"
 #include "mxdstypes.h"
 
-// TODO: Find proper compilation unit to put this
-// FUNCTION: LEGO1 0x10005530
-// MxDSObject::SetAtomId
-
 // VTABLE: LEGO1 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
@@ -37,17 +33,15 @@ public:
 	virtual void Deserialize(char** p_source, MxS16 p_unk24);                       // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
-	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
+	inline MxDSType GetType() const { return (MxDSType) this->m_type; }
+	inline const char* GetSourceName() const { return this->m_sourceName; }
 	inline MxU32 GetObjectId() { return this->m_objectId; }
+	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk24; }
 
+	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
 	inline void SetUnknown24(MxS16 p_unk24) { this->m_unk24 = p_unk24; }
-
-	inline const char* GetSourceName() const { return this->m_sourceName; }
-
-	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
-	inline MxDSType GetType() const { return (MxDSType) this->m_type; }
 
 private:
 	MxU32 m_sizeOnDisk; // 0x8
@@ -62,5 +56,11 @@ private:
 };
 
 MxDSObject* DeserializeDSObjectDispatch(char**, MxS16);
+
+// FUNCTION: ISLE 0x401c40
+// MxDSObject::SetAtomId
+
+// FUNCTION: LEGO1 0x10005530
+// MxDSObject::SetAtomId
 
 #endif // MXDSOBJECT_H

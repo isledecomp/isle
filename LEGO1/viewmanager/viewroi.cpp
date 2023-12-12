@@ -1,6 +1,6 @@
 #include "viewroi.h"
 
-#include "../decomp.h"
+#include "decomp.h"
 
 DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
 
@@ -34,8 +34,6 @@ void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 	}
 }
 
-// SYNTHETIC: LEGO1 0x100aa250
-// ViewROI::`scalar deleting destructor'
 inline ViewROI::~ViewROI()
 {
 	// SetLODList() will decrease refCount of LODList

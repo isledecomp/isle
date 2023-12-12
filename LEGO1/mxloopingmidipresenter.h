@@ -7,12 +7,14 @@
 // SIZE 0x58
 class MxLoopingMIDIPresenter : public MxMIDIPresenter {
 public:
+	// FUNCTION: LEGO1 0x100b1830
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
 		// GLOBAL: LEGO1 0x10101de0
 		return "MxLoopingMIDIPresenter";
 	}
 
+	// FUNCTION: LEGO1 0x100b1840
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxLoopingMIDIPresenter::ClassName()) || MxMIDIPresenter::IsA(name);
@@ -22,5 +24,8 @@ public:
 	virtual void DoneTickle() override;      // vtable+0x2c
 	virtual MxResult PutData() override;     // vtable+0x4c
 };
+
+// SYNTHETIC: LEGO1 0x100b19c0
+// MxLoopingMIDIPresenter::`scalar deleting destructor'
 
 #endif // MXLOOPINGMIDIPRESENTER_H
