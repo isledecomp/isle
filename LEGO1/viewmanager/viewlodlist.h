@@ -1,9 +1,9 @@
 #ifndef VIEWLODLIST_H
 #define VIEWLODLIST_H
 
-#include "../compat.h"
 #include "../realtime/lodlist.h"
 #include "assert.h"
+#include "compat.h"
 
 #pragma warning(disable : 4786)
 

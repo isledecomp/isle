@@ -36,9 +36,11 @@ public:
 	virtual MxBool HasId(MxU32 p_objectId) override;                   // vtable+34;
 	virtual void SetUnkTimingField(MxLong p_unkTimingField) override;  // vtable+38;
 
+	inline MxDSActionList* GetActionList() const { return m_actions; };
+
 protected:
-	MxU32 m_sizeOnDisk;
-	MxDSActionList* m_actions;
+	MxU32 m_sizeOnDisk;        // 0x94
+	MxDSActionList* m_actions; // 0x98
 };
 
 // SYNTHETIC: LEGO1 0x1004ad10

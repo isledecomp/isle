@@ -1,6 +1,6 @@
 
-#include "../../decomp.h"
 #include "../tgl.h"
+#include "decomp.h"
 
 #include <d3drm.h>
 

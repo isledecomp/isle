@@ -157,9 +157,9 @@ void MxMediaPresenter::EndAction()
 			m_subscriber = NULL;
 		}
 
-		if (action && action->GetUnknown8c()) {
+		if (action && action->GetOrigin()) {
 			NotificationManager()->Send(
-				action->GetUnknown8c(),
+				action->GetOrigin(),
 				&MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
 			);
 		}

@@ -74,6 +74,11 @@ public:
 	inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
 	inline MxDSAction* GetAction() const { return this->m_action; }
 
+	inline void SetCompositePresenter(MxCompositePresenter* p_compositePresenter)
+	{
+		m_compositePresenter = p_compositePresenter;
+	}
+
 protected:
 	__declspec(dllexport) void Init();
 	void SendToCompositePresenter(MxOmni*);

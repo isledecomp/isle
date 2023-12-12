@@ -1,8 +1,8 @@
 #ifndef MXTICKLEMANAGER_H
 #define MXTICKLEMANAGER_H
 
-#include "compat.h"
 #include "mxcore.h"
+#include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
 class MxTickleClient {

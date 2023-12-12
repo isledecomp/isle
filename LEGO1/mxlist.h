@@ -60,7 +60,7 @@ public:
 	virtual ~MxList() override;
 
 	void Append(T p_obj) { _InsertEntry(p_obj, this->m_last, NULL); };
-	void DeleteAll();
+	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 
@@ -95,6 +95,13 @@ public:
 	void Reset() { m_match = NULL; }
 	void Prepend(T p_newobj);
 
+	// TODO: Probably shouldn't exist
+	void NextFragment()
+	{
+		if (m_match)
+			m_match = m_match->GetNext();
+	}
+
 private:
 	MxList<T>* m_list;
 	MxListEntry<T>* m_match;
@@ -113,14 +120,17 @@ MxList<T>::~MxList()
 }
 
 template <class T>
-inline void MxList<T>::DeleteAll()
+inline void MxList<T>::DeleteAll(MxBool p_destroy)
 {
 	for (MxListEntry<T>* t = m_first;;) {
 		if (!t)
 			break;
 
 		MxListEntry<T>* next = t->GetNext();
-		this->m_customDestructor(t->GetValue());
+
+		if (p_destroy)
+			this->m_customDestructor(t->GetValue());
+
 		delete t;
 		t = next;
 	}
