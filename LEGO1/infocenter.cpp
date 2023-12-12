@@ -13,7 +13,7 @@ Infocenter::~Infocenter()
 }
 
 // STUB: LEGO1 0x1006ef10
-MxLong Infocenter::Notify(MxParam& p)
+MxLong Infocenter::Notify(MxParam& p_param)
 {
 	// TODO
 

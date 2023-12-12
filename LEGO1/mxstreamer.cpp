@@ -154,14 +154,14 @@ MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 }
 
 // FUNCTION: LEGO1 0x100b9b60
-MxLong MxStreamer::Notify(MxParam& p)
+MxLong MxStreamer::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p).GetNotification() == MXSTREAMER_DELETE_NOTIFY) {
+	if (((MxNotificationParam&) p_param).GetNotification() == MXSTREAMER_DELETE_NOTIFY) {
 		MxDSAction ds;
 
 		ds.SetUnknown24(-2);
 
-		MxStreamController* c = static_cast<MxStreamerNotification&>(p).GetController();
+		MxStreamController* c = static_cast<MxStreamerNotification&>(p_param).GetController();
 
 		if (!c->FUN_100c20d0(ds)) {
 			MxStreamerNotification notif(MXSTREAMER_DELETE_NOTIFY, NULL, c);

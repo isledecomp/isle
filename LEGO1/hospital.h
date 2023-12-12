@@ -10,7 +10,7 @@ public:
 	Hospital();
 	virtual ~Hospital() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x04
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100746b0
 	inline virtual const char* ClassName() const override // vtable+0x0c

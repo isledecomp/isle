@@ -339,14 +339,14 @@ void MxOmni::DestroyInstance()
 }
 
 // FUNCTION: LEGO1 0x100b07f0
-MxLong MxOmni::Notify(MxParam& p)
+MxLong MxOmni::Notify(MxParam& p_param)
 {
 	MxAutoLocker lock(&this->m_criticalsection);
 
-	if (((MxNotificationParam&) p).GetNotification() != c_notificationEndAction)
+	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction)
 		return 0;
 
-	return HandleNotificationType2(p);
+	return HandleNotificationType2(p_param);
 }
 
 // STUB: LEGO1 0x100b0880

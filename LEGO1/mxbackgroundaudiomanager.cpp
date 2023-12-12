@@ -188,24 +188,24 @@ void MxBackgroundAudioManager::FadeInOrFadeOut()
 }
 
 // FUNCTION: LEGO1 0x1007f170
-MxLong MxBackgroundAudioManager::Notify(MxParam& p)
+MxLong MxBackgroundAudioManager::Notify(MxParam& p_param)
 {
-	switch (((MxNotificationParam&) p).GetNotification()) {
+	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationStartAction:
-		StartAction(p);
+		StartAction(p_param);
 		return 1;
 	case c_notificationEndAction:
-		StopAction(p);
+		StopAction(p_param);
 		return 1;
 	}
 	return 0;
 }
 
 // FUNCTION: LEGO1 0x1007f1b0
-void MxBackgroundAudioManager::StartAction(MxParam& p)
+void MxBackgroundAudioManager::StartAction(MxParam& p_param)
 {
 	// TODO: the sender is most likely a MxAudioPresenter?
-	m_unk138 = (MxAudioPresenter*) ((MxNotificationParam&) p).GetSender();
+	m_unk138 = (MxAudioPresenter*) ((MxNotificationParam&) p_param).GetSender();
 	m_action2.SetAtomId(m_unk138->GetAction()->GetAtomId());
 	m_action2.SetObjectId(m_unk138->GetAction()->GetObjectId());
 	m_targetVolume = ((MxDSSound*) (m_unk138->GetAction()))->GetVolume();
@@ -213,20 +213,20 @@ void MxBackgroundAudioManager::StartAction(MxParam& p)
 }
 
 // FUNCTION: LEGO1 0x1007f200
-void MxBackgroundAudioManager::StopAction(MxParam& p)
+void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p).GetSender() == m_unka0) {
+	if (((MxNotificationParam&) p_param).GetSender() == m_unka0) {
 		m_unka0 = NULL;
 		m_action1.SetAtomId(MxAtomId());
 		m_action1.SetObjectId(-1);
 	}
-	else if (((MxNotificationParam&) p).GetSender() == m_unk138) {
+	else if (((MxNotificationParam&) p_param).GetSender() == m_unk138) {
 		m_unk138 = NULL;
 		m_action2.SetAtomId(MxAtomId());
 		m_action2.SetObjectId(-1);
 	}
 
-	Lego()->HandleNotificationType2(p);
+	Lego()->HandleNotificationType2(p_param);
 }
 
 // FUNCTION: LEGO1 0x1007f2f0

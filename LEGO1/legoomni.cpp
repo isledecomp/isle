@@ -546,7 +546,7 @@ MxResult LegoOmni::Start(MxDSAction* action)
 }
 
 // STUB: LEGO1 0x1005b5f0
-MxLong LegoOmni::Notify(MxParam& p)
+MxLong LegoOmni::Notify(MxParam& p_param)
 {
 	// TODO
 	return 0;

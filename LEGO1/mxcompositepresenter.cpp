@@ -127,29 +127,29 @@ void MxCompositePresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x100b6760
-MxLong MxCompositePresenter::Notify(MxParam& p)
+MxLong MxCompositePresenter::Notify(MxParam& p_param)
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	switch (((MxNotificationParam&) p).GetNotification()) {
+	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationEndAction:
-		VTable0x58(p);
+		VTable0x58(p_param);
 		break;
 	case MXPRESENTER_NOTIFICATION:
-		VTable0x5c(p);
+		VTable0x5c(p_param);
 	}
 
 	return 0;
 }
 
 // STUB: LEGO1 0x100b67f0
-void MxCompositePresenter::VTable0x58(MxParam& p)
+void MxCompositePresenter::VTable0x58(MxParam& p_param)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x100b69b0
-void MxCompositePresenter::VTable0x5c(MxParam& p)
+void MxCompositePresenter::VTable0x5c(MxParam& p_param)
 {
 	// TODO
 }

@@ -20,9 +20,9 @@ class MxParam;
 class MxCore {
 public:
 	__declspec(dllexport) MxCore();
-	__declspec(dllexport) virtual ~MxCore();                 // vtable+00
-	__declspec(dllexport) virtual MxLong Notify(MxParam& p); // vtable+04
-	virtual MxResult Tickle();                               // vtable+08
+	__declspec(dllexport) virtual ~MxCore();                       // vtable+00
+	__declspec(dllexport) virtual MxLong Notify(MxParam& p_param); // vtable+04
+	virtual MxResult Tickle();                                     // vtable+08
 
 	inline virtual const char* ClassName() const // vtable+0c
 	{

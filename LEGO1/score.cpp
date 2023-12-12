@@ -72,26 +72,26 @@ void Score::DeleteScript()
 }
 
 // FUNCTION: LEGO1 0x10001410
-MxLong Score::Notify(MxParam& p)
+MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
-	LegoWorld::Notify(p);
+	LegoWorld::Notify(p_param);
 	if (m_unkf6) {
-		switch (((MxNotificationParam&) p).GetNotification()) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationStartAction:
 			ret = 1;
 			Paint();
 			break;
 		case c_notificationEndAction:
-			ret = FUN_10001510((MxEndActionNotificationParam&) p);
+			ret = FUN_10001510((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			if (((LegoEventNotificationParam&) p).GetKey() == 0x20)
+			if (((LegoEventNotificationParam&) p_param).GetKey() == 0x20)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;
 		case TYPE17:
-			ret = FUN_100016d0((MxType17NotificationParam&) p);
+			ret = FUN_100016d0((MxType17NotificationParam&) p_param);
 			break;
 		case MXTRANSITIONMANAGER_TRANSITIONENDED:
 			DeleteObjects(g_infoscorScript, 7, 9);

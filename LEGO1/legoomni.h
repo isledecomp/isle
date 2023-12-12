@@ -69,7 +69,7 @@ public:
 	LegoOmni();
 	virtual ~LegoOmni(); // vtable+00
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+04
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+04
 
 	// FUNCTION: LEGO1 0x10058aa0
 	inline virtual const char* ClassName() const override // vtable+0c

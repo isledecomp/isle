@@ -75,7 +75,7 @@ LegoRace::~LegoRace()
 }
 
 // STUB: LEGO1 0x10015e00
-MxLong LegoRace::Notify(MxParam& p)
+MxLong LegoRace::Notify(MxParam& p_param)
 {
 	// TODO
 	return 0;

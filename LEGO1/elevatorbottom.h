@@ -9,7 +9,7 @@ public:
 	ElevatorBottom();
 	virtual ~ElevatorBottom() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x10017f20
 	inline virtual const char* ClassName() const override // vtable+0x0c

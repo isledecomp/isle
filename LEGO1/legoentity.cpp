@@ -145,7 +145,7 @@ void LegoEntity::VTable0x4c()
 }
 
 // STUB: LEGO1 0x100114f0
-MxLong LegoEntity::Notify(MxParam& p)
+MxLong LegoEntity::Notify(MxParam& p_param)
 {
 	// TODO
 

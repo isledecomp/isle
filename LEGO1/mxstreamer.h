@@ -73,7 +73,7 @@ public:
 	__declspec(dllexport) MxStreamController* Open(const char* p_name, MxU16 p_openMode);
 	__declspec(dllexport) MxLong Close(const char* p_name);
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x100b9000
 	inline virtual const char* ClassName() const override // vtable+0x0c
