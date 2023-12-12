@@ -13,7 +13,11 @@ jobs:
       run: |
         pip install -r tools/requirements.txt
 
-    - name: Lint codebase
+    - name: Lint ISLE
+      continue-on-error: true
       run: |
-        python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail ||
+        python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
+
+    - name: Lint LEGO1
+      run: |
         python3 tools/decomplint/decomplint.py LEGO1 --module LEGO1 --warnfail
