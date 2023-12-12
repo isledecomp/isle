@@ -54,6 +54,6 @@ public:
 // MxHashTable<MxVariable *>::Resize
 
 // TEMPLATE: LEGO1 0x100b7b80
-// MxHashTable<MxVariable *>::_NodeInsert
+// MxHashTable<MxVariable *>::NodeInsert
 
 #endif // MXVARIABLETABLE_H
