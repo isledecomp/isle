@@ -4,9 +4,6 @@
 
 using namespace TglImpl;
 
-// SYNTHETIC: LEGO1 0x100a22c0
-// TglImpl::DeviceImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a2bf0
 void* DeviceImpl::ImplementationDataPtr()
 {

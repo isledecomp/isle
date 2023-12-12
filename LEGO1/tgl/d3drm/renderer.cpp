@@ -13,9 +13,6 @@ Renderer* Tgl::CreateRenderer()
 	return renderer;
 }
 
-// SYNTHETIC: LEGO1 0x100a16d0
-// TglImpl::RendererImpl::`scalar deleting destructor'
-
 // GLOBAL: LEGO1 0x1010103c
 IDirect3DRM* g_pD3DRM = NULL;
 

@@ -358,3 +358,20 @@ def test_function_is_commented(parser):
     )
 
     assert len(parser.functions) == 0
+
+
+def test_unexpected_eof(parser):
+    """If a decomp marker finds its way to the last line of the file,
+    report that we could not get anything from it."""
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "// Cls::Method",
+            "// FUNCTION: TEST 0x5555",
+        ]
+    )
+    parser.finish()
+
+    assert len(parser.functions) == 1
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.UNEXPECTED_END_OF_FILE

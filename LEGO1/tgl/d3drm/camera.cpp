@@ -5,9 +5,6 @@ using namespace TglImpl;
 DECOMP_SIZE_ASSERT(Camera, 0x4);
 DECOMP_SIZE_ASSERT(CameraImpl, 0x8);
 
-// SYNTHETIC: LEGO1 0x100a2560
-// TglImpl::CameraImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a36f0
 void* CameraImpl::ImplementationDataPtr()
 {

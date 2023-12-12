@@ -43,4 +43,16 @@ protected:
 	MxDSActionList* m_actions; // 0x98
 };
 
+// SYNTHETIC: LEGO1 0x1004ad10
+// MxDSActionListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1004ad80
+// MxListCursor<MxDSAction *>::~MxListCursor<MxDSAction *>
+
+// SYNTHETIC: LEGO1 0x1004add0
+// MxListCursor<MxDSAction *>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1004ae40
+// MxDSActionListCursor::~MxDSActionListCursor
+
 #endif // MXDSMULTIACTION_H

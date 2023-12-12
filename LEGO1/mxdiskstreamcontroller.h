@@ -50,4 +50,16 @@ private:
 	undefined m_unkc4;                 // 0xc4
 };
 
+// TEMPLATE: LEGO1 0x100c7330
+// list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100c7420
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
+
+// TEMPLATE: LEGO1 0x100c7490
+// list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100c74e0
+// List<MxDSBuffer *>::~List<MxDSBuffer *>
+
 #endif // MXDISKSTREAMCONTROLLER_H

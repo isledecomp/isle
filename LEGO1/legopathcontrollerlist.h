@@ -23,4 +23,28 @@ public:
 // VTABLE: LEGO1 0x100d6398
 // class MxList<LegoPathController *>
 
+// TEMPLATE: LEGO1 0x1001d230
+// MxCollection<LegoPathController *>::Compare
+
+// TEMPLATE: LEGO1 0x1001d240
+// MxList<LegoPathController *>::MxList<LegoPathController *>
+
+// TEMPLATE: LEGO1 0x1001d2d0
+// MxCollection<LegoPathController *>::~MxCollection<LegoPathController *>
+
+// TEMPLATE: LEGO1 0x1001d320
+// MxCollection<LegoPathController *>::Destroy
+
+// TEMPLATE: LEGO1 0x1001d330
+// MxList<LegoPathController *>::~MxList<LegoPathController *>
+
+// SYNTHETIC: LEGO1 0x1001d490
+// MxCollection<LegoPathController *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001d500
+// MxList<LegoPathController *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001d5b0
+// MxPtrList<LegoPathController>::`scalar deleting destructor'
+
 #endif // LEGOPATHCONTROLLERLIST_H

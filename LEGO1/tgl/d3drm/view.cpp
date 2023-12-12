@@ -119,9 +119,6 @@ inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport)
 	return ViewportGetData(pViewport)->m_pLightFrame;
 }
 
-// SYNTHETIC: LEGO1 0x100a23a0
-// TglImpl::ViewImpl::`scalar deleting destructor'
-
 // FUNCTION: LEGO1 0x100a2d80
 void* ViewImpl::ImplementationDataPtr()
 {
