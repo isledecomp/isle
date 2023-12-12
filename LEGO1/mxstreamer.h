@@ -22,12 +22,12 @@ public:
 
 	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
 	inline undefined* GetBuffer() const { return m_buffer; }
-	inline undefined4 GetUnk08() const { return m_unk08; }
+	inline undefined4 GetUnk08() const { return m_unk0x08; }
 
 private:
 	undefined* m_buffer;
 	undefined4 m_size;
-	undefined4 m_unk08;
+	undefined4 m_unk0x08;
 };
 
 class MxStreamerSubClass2 : public MxStreamerSubClass1 {

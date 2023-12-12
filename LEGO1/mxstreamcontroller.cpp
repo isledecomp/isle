@@ -30,7 +30,7 @@ MxResult MxStreamController::vtable0x28()
 MxStreamController::MxStreamController()
 {
 	m_provider = NULL;
-	m_unk2c = 0; // TODO: probably also NULL
+	m_unk0x2c = 0; // TODO: probably also NULL
 	m_action0x60 = NULL;
 }
 
@@ -122,7 +122,7 @@ MxResult MxStreamController::vtable0x24(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	vtable0x30(p_action);
-	m_action0x60 = m_unkList0x54.Find(p_action, TRUE);
+	m_action0x60 = m_unk0xList0x54.Find(p_action, TRUE);
 	if (m_action0x60 == NULL) {
 		return FAILURE;
 	}
@@ -167,7 +167,7 @@ MxResult MxStreamController::vtable0x30(MxDSAction* p_unknown)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result = FAILURE;
-	MxDSAction* action = m_unkList0x3c.Find(p_unknown, TRUE);
+	MxDSAction* action = m_unk0xList0x3c.Find(p_unknown, TRUE);
 	if (action != NULL) {
 		MxNextActionDataStart* data = m_nextActionList.Find(action->GetObjectId(), action->GetUnknown24());
 		delete action;

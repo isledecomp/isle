@@ -42,11 +42,11 @@ LegoNavController::LegoNavController()
 	this->m_movementAccel = 0.0f;
 	this->m_turnAccel = 0.0f;
 	this->m_trackDefault = FALSE;
-	this->m_unk5D = FALSE;
-	this->m_unk6C = FALSE;
-	this->m_unk64 = 0;
-	this->m_unk68 = 0;
-	this->m_unk60 = 0;
+	this->m_unk0x5D = FALSE;
+	this->m_unk0x6C = FALSE;
+	this->m_unk0x64 = 0;
+	this->m_unk0x68 = 0;
+	this->m_unk0x60 = 0;
 
 	MxTimer* timer = Timer();
 	this->m_time = timer->GetTime();

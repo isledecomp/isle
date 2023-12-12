@@ -26,7 +26,7 @@ public:
 	}
 
 private:
-	undefined4 m_unk50;
+	undefined4 m_unk0x50;
 };
 
 #endif // LEGOWORLDPRESENTER_H

@@ -93,7 +93,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	if (m_flags & Flag_Bit2) {
 		undefined4 unk = 0;
-		m_unk58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->vtable44(
+		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->vtable44(
 			m_bitmap,
 			&unk,
 			(m_flags & Flag_Bit4) / 8,
@@ -106,7 +106,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		delete m_bitmap;
 		m_bitmap = NULL;
 
-		if (m_unk58 && unk)
+		if (m_unk0x58 && unk)
 			m_flags |= Flag_Bit3;
 		else
 			m_flags &= ~Flag_Bit3;

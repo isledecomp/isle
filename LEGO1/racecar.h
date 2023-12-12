@@ -26,7 +26,7 @@ public:
 
 private:
 	// TODO: RaceCar fields
-	undefined m_unk160[4];
+	undefined m_unk0x160[4];
 };
 
 #endif // RACECAR_H

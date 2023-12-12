@@ -106,10 +106,10 @@ Member variables should be annotated with their relative offsets.
 ```
 class MxDSObject : public MxCore {
 private:
-	MxU32 m_sizeOnDisk; // 0x8
-	MxU16 m_type;       // 0xc
-	char* m_sourceName; // 0x10
-	undefined4 m_unk14; // 0x14
+	MxU32 m_sizeOnDisk;   // 0x8
+	MxU16 m_type;         // 0xc
+	char* m_sourceName;   // 0x10
+	undefined4 m_unk0x14; // 0x14
 ```
 
 ## Global variables (**WIP**)

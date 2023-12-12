@@ -25,21 +25,21 @@ MxBool LegoRace::VTable0x5c()
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
 {
-	this->m_unkf8 = 0;
-	this->m_unkfc = 0;
-	this->m_unk100 = 0;
-	this->m_unk104 = 0;
-	this->m_unk108 = 0;
-	this->m_unk10c = 0;
-	this->m_unk140 = 0;
-	this->m_unk110 = 0;
-	this->m_unk114 = 0;
-	this->m_unk118 = 0;
-	this->m_unk128 = 0;
-	this->m_unk12c = 0;
-	this->m_unk120 = 0;
-	this->m_unk124 = 0;
-	this->m_unk11c = 0;
+	this->m_unk0xf8 = 0;
+	this->m_unk0xfc = 0;
+	this->m_unk0x100 = 0;
+	this->m_unk0x104 = 0;
+	this->m_unk0x108 = 0;
+	this->m_unk0x10c = 0;
+	this->m_unk0x140 = 0;
+	this->m_unk0x110 = 0;
+	this->m_unk0x114 = 0;
+	this->m_unk0x118 = 0;
+	this->m_unk0x128 = 0;
+	this->m_unk0x12c = 0;
+	this->m_unk0x120 = 0;
+	this->m_unk0x124 = 0;
+	this->m_unk0x11c = 0;
 	NotificationManager()->Register(this);
 }
 

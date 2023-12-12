@@ -13,7 +13,7 @@ DECOMP_SIZE_ASSERT(Helicopter, 0x230)
 // FUNCTION: LEGO1 0x10001e60
 Helicopter::Helicopter()
 {
-	m_unk13c = 60;
+	m_unk0x13c = 60;
 }
 
 // FUNCTION: LEGO1 0x10003230
@@ -63,16 +63,16 @@ void Helicopter::VTable0xe4()
 		}
 	}
 	m_state->SetUnknown8(0);
-	FUN_1003ee00(m_unk22c, 0x16);
-	FUN_1003ee00(m_unk22c, 0x17);
-	FUN_1003ee00(m_unk22c, 0x18);
-	FUN_1003ee00(m_unk22c, 0x19);
-	FUN_1003ee00(m_unk22c, 0x1a);
-	FUN_1003ee00(m_unk22c, 0x1b);
-	FUN_1003ee00(m_unk22c, 0x1c);
-	FUN_1003ee00(m_unk22c, 0x1d);
-	FUN_1003ee00(m_unk22c, 0x1e);
-	FUN_1003ee00(m_unk22c, 0x1f);
+	FUN_1003ee00(m_unk0x22c, 0x16);
+	FUN_1003ee00(m_unk0x22c, 0x17);
+	FUN_1003ee00(m_unk0x22c, 0x18);
+	FUN_1003ee00(m_unk0x22c, 0x19);
+	FUN_1003ee00(m_unk0x22c, 0x1a);
+	FUN_1003ee00(m_unk0x22c, 0x1b);
+	FUN_1003ee00(m_unk0x22c, 0x1c);
+	FUN_1003ee00(m_unk0x22c, 0x1d);
+	FUN_1003ee00(m_unk0x22c, 0x1e);
+	FUN_1003ee00(m_unk0x22c, 0x1f);
 	AnimationManager()->FUN_1005f6d0(TRUE);
 	ControlManager()->Unregister(this);
 }

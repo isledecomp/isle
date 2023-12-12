@@ -27,12 +27,12 @@ public:
 	virtual void ReadyTickle() override; // vtable+0x18
 
 private:
-	undefined2 m_unk4c;
-	MxS16 m_unk4e;
-	undefined m_unk50;
-	undefined2 m_unk52;
-	undefined2 m_unk54;
-	undefined4* m_unk58;
+	undefined2 m_unk0x4c;
+	MxS16 m_unk0x4e;
+	undefined m_unk0x50;
+	undefined2 m_unk0x52;
+	undefined2 m_unk0x54;
+	undefined4* m_unk0x58;
 };
 
 #endif // MXCONTROLPRESENTER_H

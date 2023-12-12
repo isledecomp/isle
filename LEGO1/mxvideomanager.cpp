@@ -32,7 +32,7 @@ MxResult MxVideoManager::Init()
 	this->m_displaySurface = NULL;
 	this->m_region = NULL;
 	this->m_videoParam.SetPalette(NULL);
-	this->m_unk60 = FALSE;
+	this->m_unk0x60 = FALSE;
 	return SUCCESS;
 }
 
@@ -57,7 +57,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 	if (m_videoParam.GetPalette())
 		delete m_videoParam.GetPalette();
 
-	if (m_unk60) {
+	if (m_unk0x60) {
 		if (m_pDirectDraw)
 			m_pDirectDraw->Release();
 		if (m_pDDSurface)
@@ -129,7 +129,7 @@ MxResult MxVideoManager::vtable0x28(
 	MxBool locked = FALSE;
 	MxResult status = FAILURE;
 
-	m_unk60 = FALSE;
+	m_unk0x60 = FALSE;
 
 	if (MxMediaManager::InitPresenters() != SUCCESS)
 		goto done;
@@ -194,7 +194,7 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 	MxBool locked = FALSE;
 	MxResult status = FAILURE;
 
-	m_unk60 = TRUE;
+	m_unk0x60 = TRUE;
 
 	if (MxMediaManager::InitPresenters() != SUCCESS)
 		goto done;

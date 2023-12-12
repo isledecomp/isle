@@ -13,7 +13,7 @@ public:
 	MxDeviceModeFinder();
 	~MxDeviceModeFinder();
 
-	undefined4 m_unknown[56];
+	undefined4 m_unk0xnown[56];
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // +0xe0
 };
 
@@ -28,12 +28,12 @@ public:
 
 	const char* EnumerateErrorToString(HRESULT p_error);
 
-	undefined4 m_unk004;
-	undefined4 m_unk008;
-	undefined4 m_unk00c;
-	MxBool m_unk010_flag; // +0x10
+	undefined4 m_unk0x004;
+	undefined4 m_unk0x008;
+	undefined4 m_unk0x00c;
+	MxBool m_unk0x010_flag; // +0x10
 
-	undefined4 m_unknown[97];
+	undefined4 m_unk0xnown[97];
 };
 
 // VTABLE: LEGO1 0x100db800
@@ -68,8 +68,8 @@ private:
 	MxDeviceModeFinder* m_pDeviceModeFinder; // +0x880
 	IDirect3D* m_pDirect3d;                  // +0x884
 	IDirect3DDevice* m_pDirect3dDevice;
-	undefined4 m_unk88c;
-	undefined4 m_unk890;
+	undefined4 m_unk0x88c;
+	undefined4 m_unk0x890;
 };
 
 BOOL FAR PASCAL EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID);

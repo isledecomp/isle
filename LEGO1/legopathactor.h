@@ -54,12 +54,12 @@ public:
 protected:
 	// TODO: the types
 	undefined unk78[0xc4];
-	MxFloat m_unk13c;
-	MxS32 m_unk140;
-	MxS32 m_unk144;
-	undefined m_unk148;
-	MxS32 m_unk14c;
-	MxFloat m_unk150;
+	MxFloat m_unk0x13c;
+	MxS32 m_unk0x140;
+	MxS32 m_unk0x144;
+	undefined m_unk0x148;
+	MxS32 m_unk0x14c;
+	MxFloat m_unk0x150;
 };
 
 #endif // LEGOPATHACTOR_H

@@ -40,7 +40,7 @@ IsleApp::IsleApp()
 	m_backBuffersInVram = 1;
 	m_using8bit = 0;
 	m_using16bit = 1;
-	m_unk24 = 0;
+	m_unk0x24 = 0;
 	m_drawCursor = 0;
 	m_use3dSound = 1;
 	m_useMusic = 1;
@@ -497,7 +497,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 		m_backBuffersInVram,
 		m_using8bit,
 		m_using16bit,
-		m_unk24,
+		m_unk0x24,
 		FALSE,
 		m_wideViewAngle,
 		m_deviceId

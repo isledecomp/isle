@@ -22,7 +22,7 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk720;
+	undefined4 m_unk0x720;
 };
 
 #endif // MXLOOPINGSMKPRESENTER_H

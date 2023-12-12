@@ -76,12 +76,12 @@ private:
 protected:
 	void Destroy(MxBool p_fromDestructor);
 
-	MxBitmap* m_bitmap;          // 0x50
-	AlphaMask* m_alpha;          // 0x54
-	LPDIRECTDRAWSURFACE m_unk58; // 0x58
-	MxS16 m_unk5c;               // 0x5c
-	MxU8 m_flags;                // 0x5e
-	MxLong m_unk60;              // 0x60
+	MxBitmap* m_bitmap;            // 0x50
+	AlphaMask* m_alpha;            // 0x54
+	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
+	MxS16 m_unk0x5c;               // 0x5c
+	MxU8 m_flags;                  // 0x5e
+	MxLong m_unk0x60;              // 0x60
 };
 
 #endif // MXVIDEOPRESENTER_H

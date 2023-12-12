@@ -114,16 +114,16 @@ public:
 	MxDSAction& GetCurrentAction() { return m_action; }
 
 private:
-	undefined4 m_unk68;
-	undefined4 m_unk6c;
+	undefined4 m_unk0x68;
+	undefined4 m_unk0x6c;
 	LegoInputManager* m_inputMgr; // 0x70
 	GifManager* m_gifManager;
 	LegoWorldList* m_worldList; // 0x78
 	LegoWorld* m_currentWorld;
-	MxBool m_unk80;
+	MxBool m_unk0x80;
 	LegoNavController* m_navController; // 0x84
 	LegoWorld* m_currentVehicle;        // 0x88
-	LegoUnkSaveDataWriter* m_unkLegoSaveDataWriter;
+	LegoUnkSaveDataWriter* m_unk0xLegoSaveDataWriter;
 	LegoPlantManager* m_plantManager; // 0x90
 	LegoAnimationManager* m_animationManager;
 	LegoBuildingManager* m_buildingManager; // 0x98
@@ -131,7 +131,7 @@ private:
 	MxDSAction m_action;
 	MxBackgroundAudioManager* m_bkgAudioManager; // 0x134
 	MxTransitionManager* m_transitionManager;    // 0x138
-	MxBool m_unk13c;
+	MxBool m_unk0x13c;
 };
 
 __declspec(dllexport) MxBackgroundAudioManager* BackgroundAudioManager();

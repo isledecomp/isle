@@ -46,7 +46,7 @@ void MxVideoPresenter::Destroy()
 // FUNCTION: LEGO1 0x1000c7b0
 LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
 {
-	return m_unk58;
+	return m_unk0x58;
 }
 
 // FUNCTION: LEGO1 0x1000c7c0
@@ -185,9 +185,9 @@ void MxVideoPresenter::Init()
 {
 	m_bitmap = NULL;
 	m_alpha = NULL;
-	m_unk5c = 1;
-	m_unk58 = NULL;
-	m_unk60 = -1;
+	m_unk0x5c = 1;
+	m_unk0x58 = NULL;
+	m_unk0x60 = -1;
 	m_flags = m_flags & 0xfe;
 
 	if (MVideoManager() != NULL) {
@@ -206,9 +206,9 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	if (MVideoManager() != NULL)
 		MVideoManager()->RemovePresenter(*this);
 
-	if (m_unk58) {
-		m_unk58->Release();
-		m_unk58 = NULL;
+	if (m_unk0x58) {
+		m_unk0x58->Release();
+		m_unk0x58 = NULL;
 		m_flags = m_flags & 0xfd;
 		m_flags = m_flags & 0xfb;
 	}
@@ -357,7 +357,7 @@ void MxVideoPresenter::StreamingTickle()
 		}
 	}
 	else {
-		for (MxS16 i = 0; i < m_unk5c; i++) {
+		for (MxS16 i = 0; i < m_unk0x5c; i++) {
 			if (!m_currentChunk) {
 				MxMediaPresenter::StreamingTickle();
 
@@ -378,7 +378,7 @@ void MxVideoPresenter::StreamingTickle()
 		}
 
 		if (m_flags & Flag_Bit1)
-			m_unk5c = 5;
+			m_unk0x5c = 5;
 	}
 }
 
@@ -396,7 +396,7 @@ void MxVideoPresenter::RepeatingTickle()
 			}
 		}
 		else {
-			for (MxS16 i = 0; i < m_unk5c; i++) {
+			for (MxS16 i = 0; i < m_unk0x5c; i++) {
 				if (!m_currentChunk) {
 					MxMediaPresenter::RepeatingTickle();
 
@@ -416,7 +416,7 @@ void MxVideoPresenter::RepeatingTickle()
 			}
 
 			if (m_flags & Flag_Bit1)
-				m_unk5c = 5;
+				m_unk0x5c = 5;
 		}
 	}
 }
@@ -428,10 +428,10 @@ void MxVideoPresenter::Unk5Tickle()
 
 	if (sustainTime != -1) {
 		if (sustainTime) {
-			if (m_unk60 == -1)
-				m_unk60 = m_action->GetElapsedTime();
+			if (m_unk0x60 == -1)
+				m_unk0x60 = m_action->GetElapsedTime();
 
-			if (m_action->GetElapsedTime() >= m_unk60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
 				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 				m_currentTickleState = TickleState_Done;
 			}

@@ -57,7 +57,7 @@ private:
 	MxDiskStreamProviderThread m_thread; // 0x10
 	MxSemaphore m_busySemaphore;         // 0x2c
 	undefined m_remainingWork;           // 0x34
-	undefined m_unk35;                   // 0x35
+	undefined m_unk0x35;                 // 0x35
 	MxCriticalSection m_criticalSection; // 0x38
 	MxStreamListMxDSAction m_list;       // 0x54
 };

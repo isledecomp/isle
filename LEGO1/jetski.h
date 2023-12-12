@@ -25,7 +25,7 @@ public:
 
 private:
 	// TODO: Jetski fields
-	undefined m_unk160[4];
+	undefined m_unk0x160[4];
 };
 
 #endif // JETSKI_H

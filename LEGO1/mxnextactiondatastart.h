@@ -11,7 +11,7 @@ public:
 	inline MxNextActionDataStart(MxU32 p_objectId, MxS16 p_unk24val, MxU32 p_data)
 	{
 		m_objectId = p_objectId;
-		m_unk24val = p_unk24val;
+		m_unk0x24val = p_unk24val;
 		m_data = p_data;
 	}
 
@@ -29,11 +29,11 @@ public:
 	}
 
 	inline MxU32 GetObjectId() const { return m_objectId; }
-	inline MxS16 GetUnknown24() const { return m_unk24val; }
+	inline MxS16 GetUnknown24() const { return m_unk0x24val; }
 
 private:
 	MxU32 m_objectId;
-	MxS16 m_unk24val;
+	MxS16 m_unk0x24val;
 	MxU32 m_data;
 };
 

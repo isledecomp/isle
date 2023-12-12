@@ -33,13 +33,13 @@ public:
 	{
 		GifData* ret = NULL;
 		GifMapEntry* entry = FindNode(string);
-		if (((m_unk4 == entry || strcmp(string, entry->m_key) > 0) ? m_unk4 : entry) != entry)
+		if (((m_unk0x4 == entry || strcmp(string, entry->m_key) > 0) ? m_unk0x4 : entry) != entry)
 			ret = entry->m_value;
 		return ret;
 	}
 
-	undefined4 m_unk0;
-	GifMapEntry* m_unk4;
+	undefined4 m_unk0x0;
+	GifMapEntry* m_unk0x4;
 };
 
 // VTABLE: LEGO1 0x100d86d4
@@ -48,12 +48,12 @@ public:
 	// STUB: LEGO1 0x1005a310
 	virtual ~GifManagerBase() {} // vtable+00
 
-	inline GifData* Get(const char* name) { return m_unk8.Get(name); }
+	inline GifData* Get(const char* name) { return m_unk0x8.Get(name); }
 
 protected:
-	undefined4 m_unk0;
-	undefined4 m_unk4;
-	GifMap m_unk8;
+	undefined4 m_unk0x0;
+	undefined4 m_unk0x4;
+	GifMap m_unk0x8;
 };
 
 // VTABLE: LEGO1 0x100d86fc
@@ -63,7 +63,7 @@ public:
 	virtual ~GifManager() {} // vtable+00
 
 protected:
-	undefined m_unk[0x1c];
+	undefined m_unk0x[0x1c];
 };
 
 #endif // GIFMANAGER_H

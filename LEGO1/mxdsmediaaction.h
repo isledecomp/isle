@@ -41,14 +41,14 @@ private:
 	MxU32 m_sizeOnDisk;   // 0x94
 	char* m_mediaSrcPath; // 0x98
 	struct {
-		undefined4 m_unk00;
-		undefined4 m_unk04;
-	} m_unk9c;                 // 0x9c
+		undefined4 m_unk0x00;
+		undefined4 m_unk0x04;
+	} m_unk0x9c;               // 0x9c
 	MxS32 m_framesPerSecond;   // 0xa4
 	MxS32 m_mediaFormat;       // 0xa8
 	MxS32 m_paletteManagement; // 0xac
 	MxLong m_sustainTime;      // 0xb0
-	undefined4 m_unkb4;        // 0xb4
+	undefined4 m_unk0xb4;      // 0xb4
 };
 
 #endif // MXDSMEDIAACTION_H

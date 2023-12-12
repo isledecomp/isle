@@ -52,11 +52,11 @@ protected:
 	MxCriticalSection m_criticalSection;                // 0x8
 	MxAtomId atom;                                      // 0x24
 	MxStreamProvider* m_provider;                       // 0x28
-	undefined4 m_unk2c;                                 // 0x2c
+	undefined4 m_unk0x2c;                               // 0x2c
 	MxStreamListMxDSSubscriber m_subscriberList;        // 0x30
-	MxStreamListMxDSAction m_unkList0x3c;               // 0x3c
+	MxStreamListMxDSAction m_unk0xList0x3c;             // 0x3c
 	MxStreamListMxNextActionDataStart m_nextActionList; // 0x48
-	MxStreamListMxDSAction m_unkList0x54;               // 0x54
+	MxStreamListMxDSAction m_unk0xList0x54;             // 0x54
 	MxDSAction* m_action0x60;                           // 0x60
 };
 

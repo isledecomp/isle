@@ -11,7 +11,7 @@ MxDirect3D::MxDirect3D()
 {
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
-	this->m_unk88c = NULL;
+	this->m_unk0x88c = NULL;
 	this->m_pDeviceModeFinder = NULL;
 }
 
@@ -167,7 +167,7 @@ void MxDirect3D::BuildErrorString(const char* p_format, ...)
 MxResult MxDeviceEnumerate::_DoEnumerate()
 {
 	// TODO: what does ECX refer to in this context?
-	if (m_unk010_flag)
+	if (m_unk0x010_flag)
 		return FAILURE;
 
 	HRESULT ret = DirectDrawEnumerate(EnumerateCallback, this);
@@ -176,7 +176,7 @@ MxResult MxDeviceEnumerate::_DoEnumerate()
 		return FAILURE;
 	}
 
-	m_unk010_flag = TRUE;
+	m_unk0x010_flag = TRUE;
 	return SUCCESS;
 }
 

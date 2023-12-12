@@ -11,7 +11,7 @@ GifMapEntry* DAT_100f0100;
 // FUNCTION: LEGO1 0x10001cc0
 GifMapEntry* GifMap::FindNode(const char*& string)
 {
-	GifMapEntry* ret = m_unk4;
+	GifMapEntry* ret = m_unk0x4;
 	GifMapEntry* current = ret->m_parent;
 	while (current != DAT_100f0100) {
 		if (strcmp(current->m_key, string) <= 0) {

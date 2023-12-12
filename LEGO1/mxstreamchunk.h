@@ -7,7 +7,7 @@
 // SIZE 0x20
 class MxStreamChunk : public MxDSChunk {
 public:
-	inline MxStreamChunk() : m_unk1c(NULL) {}
+	inline MxStreamChunk() : m_unk0x1c(NULL) {}
 
 	// FUNCTION: LEGO1 0x100b1fe0
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -23,7 +23,7 @@ public:
 	}
 
 private:
-	void* m_unk1c; // 0x1c
+	void* m_unk0x1c; // 0x1c
 };
 
 #endif // MXSTREAMCHUNK_H

@@ -31,10 +31,10 @@ public:
 	virtual void VTable0x64(undefined p_unk); // vtable+0x64
 
 private:
-	MxFloat m_unk68;
-	undefined4 m_unk6c;
-	MxFloat m_unk70;
-	undefined m_unk74;
+	MxFloat m_unk0x68;
+	undefined4 m_unk0x6c;
+	MxFloat m_unk0x70;
+	undefined m_unk0x74;
 };
 
 #endif // LEGOACTOR_H

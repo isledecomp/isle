@@ -44,8 +44,8 @@ public:
 
 private:
 	LegoWorld* m_pLegoWorld; // 0x154
-	MxFloat m_unk158;
-	MxFloat m_unk15c;
+	MxFloat m_unk0x158;
+	MxFloat m_unk0x15c;
 };
 
 #endif // ISLEPATHACTOR_H

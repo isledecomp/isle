@@ -31,15 +31,15 @@ public:
 	}
 
 private:
-	undefined4 m_unk78;
-	undefined4 m_unk7c;
-	undefined4 m_unk80;
-	undefined4 m_unk84;
-	undefined4 m_unk88;
-	undefined4 m_unk8c;
-	undefined4 m_unk90;
-	undefined4 m_unk94;
-	undefined m_unk98;
+	undefined4 m_unk0x78;
+	undefined4 m_unk0x7c;
+	undefined4 m_unk0x80;
+	undefined4 m_unk0x84;
+	undefined4 m_unk0x88;
+	undefined4 m_unk0x8c;
+	undefined4 m_unk0x90;
+	undefined4 m_unk0x94;
+	undefined m_unk0x98;
 };
 
 #endif // PIZZA_H

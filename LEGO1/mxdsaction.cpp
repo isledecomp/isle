@@ -26,10 +26,10 @@ MxDSAction::MxDSAction()
 	this->m_location.Fill(FLT_MAX);
 	this->m_direction.Fill(FLT_MAX);
 	this->m_up.Fill(FLT_MAX);
-	this->m_unk84 = NULL;
-	this->m_unk88 = 0;
+	this->m_unk0x84 = NULL;
+	this->m_unk0x88 = 0;
 	this->m_origin = NULL;
-	this->m_unkTimingField = INT_MIN;
+	this->m_unk0xTimingField = INT_MIN;
 }
 
 // FUNCTION: LEGO1 0x100ad940
@@ -53,13 +53,13 @@ MxBool MxDSAction::HasId(MxU32 p_objectId)
 // FUNCTION: LEGO1 0x100ada40
 void MxDSAction::SetUnkTimingField(MxLong p_unkTimingField)
 {
-	this->m_unkTimingField = p_unkTimingField;
+	this->m_unk0xTimingField = p_unkTimingField;
 }
 
 // FUNCTION: LEGO1 0x100ada50
 MxLong MxDSAction::GetUnkTimingField()
 {
-	return this->m_unkTimingField;
+	return this->m_unk0xTimingField;
 }
 
 // FUNCTION: LEGO1 0x100ada80
@@ -82,10 +82,10 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_up.CopyFrom(p_dsAction.m_up);
 
 	AppendData(p_dsAction.m_extraLength, p_dsAction.m_extraData);
-	this->m_unk84 = p_dsAction.m_unk84;
-	this->m_unk88 = p_dsAction.m_unk88;
+	this->m_unk0x84 = p_dsAction.m_unk0x84;
+	this->m_unk0x88 = p_dsAction.m_unk0x88;
 	this->m_origin = p_dsAction.m_origin;
-	this->m_unkTimingField = p_dsAction.m_unkTimingField;
+	this->m_unk0xTimingField = p_dsAction.m_unk0xTimingField;
 }
 
 // FUNCTION: LEGO1 0x100adbe0
@@ -124,7 +124,7 @@ MxDSAction* MxDSAction::Clone()
 // FUNCTION: LEGO1 0x100adcd0
 MxLong MxDSAction::GetElapsedTime()
 {
-	return Timer()->GetTime() - this->m_unkTimingField;
+	return Timer()->GetTime() - this->m_unk0xTimingField;
 }
 
 // FUNCTION: LEGO1 0x100add00

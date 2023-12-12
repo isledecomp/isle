@@ -60,8 +60,8 @@ private:
 	MxU8* m_copyBuffer;
 
 	flag_bitfield m_copyFlags;
-	undefined4 m_unk24;
-	flag_bitfield m_unk28;
+	undefined4 m_unk0x24;
+	flag_bitfield m_unk0x28;
 
 	TransitionType m_transitionType;
 	LPDIRECTDRAWSURFACE m_ddSurface;

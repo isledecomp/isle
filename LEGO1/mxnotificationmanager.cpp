@@ -27,7 +27,7 @@ MxNotification::~MxNotification()
 // FUNCTION: LEGO1 0x100ac250
 MxNotificationManager::MxNotificationManager() : MxCore(), m_lock(), m_listenerIds()
 {
-	m_unk2c = 0;
+	m_unk0x2c = 0;
 	m_queue = NULL;
 	m_active = TRUE;
 	m_sendList = NULL;

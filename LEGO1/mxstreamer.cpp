@@ -180,7 +180,7 @@ MxStreamerSubClass1::MxStreamerSubClass1(undefined4 size)
 {
 	m_buffer = NULL;
 	m_size = size;
-	undefined4* ptr = &m_unk08;
+	undefined4* ptr = &m_unk0x08;
 	for (int i = 0; i >= 0; i--) {
 		ptr[i] = 0;
 	}

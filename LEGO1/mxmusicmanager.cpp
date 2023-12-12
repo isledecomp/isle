@@ -31,11 +31,11 @@ void MxMusicManager::InitData()
 {
 	m_MIDIStreamH = 0;
 	m_MIDIInitialized = FALSE;
-	m_unk38 = 0;
-	m_unk3c = 0;
-	m_unk40 = 0;
-	m_unk44 = 0;
-	m_unk48 = 0;
+	m_unk0x38 = 0;
+	m_unk0x3c = 0;
+	m_unk0x40 = 0;
+	m_unk0x44 = 0;
+	m_unk0x48 = 0;
 	m_MIDIHdrP = NULL;
 }
 

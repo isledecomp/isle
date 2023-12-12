@@ -51,15 +51,15 @@ protected:
 	void Init();
 	void SetWorld();
 
-	undefined m_unk10;
-	undefined m_unk11;
+	undefined m_unk0x10;
+	undefined m_unk0x11;
 	Vector3Data m_worldLocation;  // 0x14
 	Vector3Data m_worldDirection; // 0x28
 	Vector3Data m_worldUp;        // 0x3c
 	MxFloat m_worldSpeed;         // 0x50
 	LegoROI* m_roi;               // 0x54
 	MxBool m_cameraFlag;          // 0x58
-	undefined m_unk59;
+	undefined m_unk0x59;
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	ExtraActionType m_actionType; // 0x5c

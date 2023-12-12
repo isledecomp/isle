@@ -30,7 +30,7 @@ public:
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk4c;
+	undefined4 m_unk0x4c;
 };
 
 #endif // LEGOENTITYPRESENTER_H

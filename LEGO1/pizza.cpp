@@ -5,13 +5,13 @@ DECOMP_SIZE_ASSERT(Pizza, 0x9c);
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
 {
-	this->m_unk7c = 0;
-	this->m_unk80 = 0;
-	this->m_unk84 = 0;
-	this->m_unk88 = 0;
-	this->m_unk8c = -1;
-	this->m_unk98 = 0;
-	this->m_unk90 = 0x80000000;
+	this->m_unk0x7c = 0;
+	this->m_unk0x80 = 0;
+	this->m_unk0x84 = 0;
+	this->m_unk0x88 = 0;
+	this->m_unk0x8c = -1;
+	this->m_unk0x98 = 0;
+	this->m_unk0x90 = 0x80000000;
 }
 
 // FUNCTION: LEGO1 0x10038100

@@ -5,11 +5,11 @@
 
 struct PizzaMissionStateEntry {
 public:
-	undefined2 m_unk0;
+	undefined2 m_unk0x0;
 	MxU8 m_id;
-	undefined m_unk3[0x15];
+	undefined m_unk0x3[0x15];
 	MxU16 m_color;
-	undefined m_unk18[6];
+	undefined m_unk0x18[6];
 };
 
 // VTABLE: LEGO1 0x100d7408
@@ -34,8 +34,8 @@ private:
 	PizzaMissionStateEntry* GetState(MxU8 id);
 
 protected:
-	undefined4 m_unk8;
-	undefined4 m_unkc;
+	undefined4 m_unk0x8;
+	undefined4 m_unk0xc;
 	PizzaMissionStateEntry m_state[5];
 };
 

@@ -8,17 +8,17 @@ DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 // FUNCTION: LEGO1 0x100c6470
 MxDSBuffer::MxDSBuffer()
 {
-	m_unk20 = 0;
+	m_unk0x20 = 0;
 	m_pBuffer = NULL;
 	m_pIntoBuffer = NULL;
 	m_pIntoBuffer2 = NULL;
-	m_unk14 = 0;
-	m_unk18 = 0;
-	m_unk1c = 0;
+	m_unk0x14 = 0;
+	m_unk0x18 = 0;
+	m_unk0x1c = 0;
 	m_writeOffset = 0;
 	m_bytesRemaining = 0;
 	m_mode = MxDSBufferType_Preallocated;
-	m_unk30 = 0;
+	m_unk0x30 = 0;
 }
 
 // FUNCTION: LEGO1 0x100c6530
@@ -33,8 +33,8 @@ MxDSBuffer::~MxDSBuffer()
 		}
 	}
 
-	m_unk14 = 0;
-	m_unk1c = 0;
+	m_unk0x14 = 0;
+	m_unk0x1c = 0;
 }
 
 // FUNCTION: LEGO1 0x100c6640

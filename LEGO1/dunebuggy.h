@@ -25,9 +25,9 @@ public:
 
 private:
 	// TODO: Double check DuneBuggy field types
-	undefined4 m_unk160;
-	MxFloat m_unk164;
-	undefined4 m_unk168;
+	undefined4 m_unk0x160;
+	MxFloat m_unk0x164;
+	undefined4 m_unk0x168;
 };
 
 #endif // DUNEBUGGY_H

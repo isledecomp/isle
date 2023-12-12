@@ -29,11 +29,11 @@ private:
 
 	HMIDISTRM m_MIDIStreamH;  // 0x30
 	MxBool m_MIDIInitialized; // 0x34
-	undefined4 m_unk38;       // 0x38
-	undefined4 m_unk3c;       // 0x3c
-	undefined4 m_unk40;       // 0x40
-	undefined4 m_unk44;       // 0x44
-	undefined4 m_unk48;       // 0x48
+	undefined4 m_unk0x38;     // 0x38
+	undefined4 m_unk0x3c;     // 0x3c
+	undefined4 m_unk0x40;     // 0x40
+	undefined4 m_unk0x44;     // 0x44
+	undefined4 m_unk0x48;     // 0x48
 	MIDIHDR* m_MIDIHdrP;      // 0x4c
 	MxS32 m_multiplier;       // 0x50
 	DWORD m_MIDIVolume;       // 0x54

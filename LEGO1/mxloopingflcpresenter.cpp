@@ -19,7 +19,7 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 // FUNCTION: LEGO1 0x100b4410
 void MxLoopingFlcPresenter::Init()
 {
-	this->m_unk68 = 0;
+	this->m_unk0x68 = 0;
 	this->m_flags &= 0xfd;
 	this->m_flags &= 0xfb;
 }
@@ -42,7 +42,7 @@ void MxLoopingFlcPresenter::NextFrame()
 	else {
 		LoadFrame(chunk);
 		AppendChunk(chunk);
-		m_unk68 += m_flicHeader->speed;
+		m_unk0x68 += m_flicHeader->speed;
 	}
 
 	m_subscriber->FUN_100b8390(chunk);

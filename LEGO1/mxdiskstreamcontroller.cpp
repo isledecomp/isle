@@ -10,7 +10,7 @@ DECOMP_SIZE_ASSERT(MxDiskStreamController, 0xc8);
 // FUNCTION: LEGO1 0x100c7120
 MxDiskStreamController::MxDiskStreamController()
 {
-	m_unk8c = 0;
+	m_unk0x8c = 0;
 }
 
 // TEMPLATE: LEGO1 0x100c7330

@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(Score, 0x104)
 // FUNCTION: LEGO1 0x10001000
 Score::Score()
 {
-	m_unkf8 = 0;
+	m_unk0xf8 = 0;
 	NotificationManager()->Register(this);
 }
 
@@ -76,7 +76,7 @@ MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
 	LegoWorld::Notify(p_param);
-	if (m_unkf6) {
+	if (m_unk0xf6) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationStartAction:
 			ret = 1;
@@ -95,8 +95,8 @@ MxLong Score::Notify(MxParam& p_param)
 			break;
 		case MXTRANSITIONMANAGER_TRANSITIONENDED:
 			DeleteObjects(g_infoscorScript, 7, 9);
-			if (m_unkf8)
-				GameState()->HandleAction(m_unkf8);
+			if (m_unk0xf8)
+				GameState()->HandleAction(m_unk0xf8);
 			ret = 1;
 			break;
 		default:
@@ -115,7 +115,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p)
 		MxU32 id = action->GetObjectId();
 		switch (action->GetObjectId()) {
 		case 10:
-			m_unkf8 = 0x38;
+			m_unk0xf8 = 0x38;
 			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
 			break;
 		case 0x1f5:
@@ -158,12 +158,12 @@ MxLong Score::FUN_100016d0(MxType17NotificationParam& p)
 	if (l == 1 || p.GetUnknown20() == 4) {
 		switch (p.GetUnknown20()) {
 		case 1:
-			m_unkf8 = 2;
+			m_unk0xf8 = 2;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
 			break;
 		case 2:
-			m_unkf8 = 3;
+			m_unk0xf8 = 3;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
 			break;
@@ -320,6 +320,6 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 MxBool Score::VTable0x64()
 {
 	DeleteScript();
-	m_unkf8 = 2;
+	m_unk0xf8 = 2;
 	return TRUE;
 }

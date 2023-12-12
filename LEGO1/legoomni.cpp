@@ -355,21 +355,21 @@ LegoOmni::~LegoOmni()
 void LegoOmni::Init()
 {
 	MxOmni::Init();
-	m_unk68 = 0;
+	m_unk0x68 = 0;
 	m_inputMgr = NULL;
-	m_unk6c = 0;
+	m_unk0x6c = 0;
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
-	m_unk80 = FALSE;
+	m_unk0x80 = FALSE;
 	m_currentVehicle = NULL;
-	m_unkLegoSaveDataWriter = NULL;
+	m_unk0xLegoSaveDataWriter = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;
 	m_animationManager = NULL;
 	m_buildingManager = NULL;
 	m_bkgAudioManager = NULL;
-	m_unk13c = TRUE;
+	m_unk0x13c = TRUE;
 	m_transitionManager = NULL;
 }
 
@@ -430,7 +430,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList();
 
-	if (m_unk6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
+	if (m_unk0x6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();

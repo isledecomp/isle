@@ -21,10 +21,10 @@ public:
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	inline void SetUnknown8(undefined4 p_unk8) { m_unk8 = p_unk8; }
+	inline void SetUnknown8(undefined4 p_unk8) { m_unk0x8 = p_unk8; }
 
 protected:
-	undefined4 m_unk8;
+	undefined4 m_unk0x8;
 };
 
 #endif // HELICOPTERSTATE_H

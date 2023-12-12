@@ -82,12 +82,12 @@ private:
 	MxBool m_turnUseVelocity;
 	int m_time;
 	MxBool m_trackDefault;
-	MxBool m_unk5D;
-	char m_unk5E[2];
-	int m_unk60;
-	int m_unk64;
-	int m_unk68;
-	MxBool m_unk6C;
+	MxBool m_unk0x5D;
+	char m_unk0x5E[2];
+	int m_unk0x60;
+	int m_unk0x64;
+	int m_unk0x68;
+	MxBool m_unk0x6C;
 };
 
 #endif // LEGONAVCONTROLLER_H

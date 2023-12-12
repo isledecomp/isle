@@ -6,8 +6,8 @@
 struct RaceStateEntry {
 public:
 	MxU8 m_id;
-	undefined m_unk1[1];
-	MxU16 m_unk2;
+	undefined m_unk0x1[1];
+	MxU16 m_unk0x2;
 	MxU16 m_color;
 };
 
@@ -37,8 +37,8 @@ private:
 
 protected:
 	RaceStateEntry m_state[5];
-	undefined2 m_unk26[2];
-	undefined4 m_unk28;
+	undefined2 m_unk0x26[2];
+	undefined4 m_unk0x28;
 };
 
 #endif // RACESTATE_H

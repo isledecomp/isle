@@ -53,13 +53,13 @@ private:
 
 	MxBool m_musicEnabled; // 0x8
 	MxDSAction m_action1;  // 0xc
-	MxAudioPresenter* m_unka0;
+	MxAudioPresenter* m_unk0xa0;
 	MxDSAction m_action2; // 0xa4
-	MxAudioPresenter* m_unk138;
-	MxS32 m_unk13c;
-	MxS32 m_unk140;
+	MxAudioPresenter* m_unk0x138;
+	MxS32 m_unk0x13c;
+	MxS32 m_unk0x140;
 	MxS32 m_targetVolume;
-	MxS16 m_unk148;
+	MxS16 m_unk0x148;
 	MxAtomId m_script;
 };
 

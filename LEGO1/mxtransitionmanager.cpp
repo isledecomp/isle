@@ -22,8 +22,8 @@ MxTransitionManager::MxTransitionManager()
 	m_waitIndicator = NULL;
 	m_copyBuffer = NULL;
 	m_copyFlags.bit0 = FALSE;
-	m_unk28.bit0 = FALSE;
-	m_unk24 = 0;
+	m_unk0x28.bit0 = FALSE;
+	m_unk0x24 = 0;
 }
 
 // FUNCTION: LEGO1 0x1004ba00

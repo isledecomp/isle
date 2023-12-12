@@ -24,9 +24,9 @@ public:
 	}
 
 private:
-	undefined m_unk160[4];
-	MxFloat m_unk164;
-	undefined m_unk168[4];
+	undefined m_unk0x160[4];
+	MxFloat m_unk0x164;
+	undefined m_unk0x168[4];
 };
 
 #endif // MOTORCYCLE_H

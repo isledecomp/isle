@@ -16,8 +16,8 @@ LegoPhonemePresenter::~LegoPhonemePresenter()
 // FUNCTION: LEGO1 0x1004e3b0
 void LegoPhonemePresenter::Init()
 {
-	m_unk68 = 0;
-	m_unk6c = 0;
-	m_unk70 = 0;
-	m_unk84 = 0;
+	m_unk0x68 = 0;
+	m_unk0x6c = 0;
+	m_unk0x70 = 0;
+	m_unk0x84 = 0;
 }

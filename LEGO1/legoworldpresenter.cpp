@@ -12,7 +12,7 @@ void LegoWorldPresenter::configureLegoWorldPresenter(int p_quality)
 // FUNCTION: LEGO1 0x100665c0
 LegoWorldPresenter::LegoWorldPresenter()
 {
-	m_unk50 = 50000;
+	m_unk0x50 = 50000;
 }
 
 // STUB: LEGO1 0x10066770

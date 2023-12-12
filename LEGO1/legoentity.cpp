@@ -25,11 +25,11 @@ void LegoEntity::Init()
 	m_roi = NULL;
 	m_cameraFlag = 0;
 	m_actionArgString = NULL;
-	m_unk10 = 0;
-	m_unk11 = 0;
+	m_unk0x10 = 0;
+	m_unk0x11 = 0;
 	m_actionType = ExtraActionType_unknown;
 	m_actionArgNumber = -1;
-	m_unk59 = 4;
+	m_unk0x59 = 4;
 }
 
 // STUB: LEGO1 0x10010650

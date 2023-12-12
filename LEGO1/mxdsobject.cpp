@@ -24,11 +24,11 @@ MxDSObject::MxDSObject()
 {
 	this->SetType(MxDSType_Object);
 	this->m_sourceName = NULL;
-	this->m_unk14 = 0;
+	this->m_unk0x14 = 0;
 	this->m_objectName = NULL;
-	this->m_unk24 = -1;
+	this->m_unk0x24 = -1;
 	this->m_objectId = -1;
-	this->m_unk28 = 0;
+	this->m_unk0x28 = 0;
 }
 
 // FUNCTION: LEGO1 0x100bf7e0
@@ -42,12 +42,12 @@ MxDSObject::~MxDSObject()
 void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 {
 	this->SetSourceName(p_dsObject.m_sourceName);
-	this->m_unk14 = p_dsObject.m_unk14;
+	this->m_unk0x14 = p_dsObject.m_unk0x14;
 	this->SetObjectName(p_dsObject.m_objectName);
 	this->m_objectId = p_dsObject.m_objectId;
-	this->m_unk24 = p_dsObject.m_unk24;
+	this->m_unk0x24 = p_dsObject.m_unk0x24;
 	this->m_atomId = p_dsObject.m_atomId;
-	this->m_unk28 = p_dsObject.m_unk28;
+	this->m_unk0x28 = p_dsObject.m_unk0x28;
 }
 
 // FUNCTION: LEGO1 0x100bf8c0
@@ -130,11 +130,11 @@ MxU32 MxDSObject::GetSizeOnDisk()
 void MxDSObject::Deserialize(char** p_source, MxS16 p_unk24)
 {
 	GetString(p_source, this->m_sourceName, this, &MxDSObject::SetSourceName);
-	GetScalar(p_source, this->m_unk14);
+	GetScalar(p_source, this->m_unk0x14);
 	GetString(p_source, this->m_objectName, this, &MxDSObject::SetObjectName);
 	GetScalar(p_source, this->m_objectId);
 
-	this->m_unk24 = p_unk24;
+	this->m_unk0x24 = p_unk24;
 }
 
 // FUNCTION: LEGO1 0x100bfb30

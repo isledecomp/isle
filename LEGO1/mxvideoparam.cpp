@@ -16,7 +16,7 @@ MxVideoParam::MxVideoParam()
 	this->m_rect.SetTop(0);
 	this->m_palette = NULL;
 	this->m_backBuffers = 0;
-	this->m_unk1c = 0;
+	this->m_unk0x1c = 0;
 	this->m_deviceId = NULL;
 }
 
@@ -32,7 +32,7 @@ MxVideoParam::MxVideoParam(
 	this->m_palette = p_pal;
 	this->m_backBuffers = p_backBuffers;
 	this->m_flags = p_flags;
-	this->m_unk1c = 0;
+	this->m_unk0x1c = 0;
 	this->m_deviceId = NULL;
 }
 
@@ -43,7 +43,7 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
-	this->m_unk1c = p_videoParam.m_unk1c;
+	this->m_unk0x1c = p_videoParam.m_unk0x1c;
 	this->m_deviceId = NULL;
 	SetDeviceName(p_videoParam.m_deviceId);
 }
@@ -80,7 +80,7 @@ MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
-	this->m_unk1c = p_videoParam.m_unk1c;
+	this->m_unk0x1c = p_videoParam.m_unk0x1c;
 	SetDeviceName(p_videoParam.m_deviceId);
 
 	return *this;

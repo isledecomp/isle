@@ -7,7 +7,7 @@
 // SIZE 0xc
 class Act3State : public LegoState {
 public:
-	inline Act3State() { m_unk08 = 0; }
+	inline Act3State() { m_unk0x08 = 0; }
 
 	// FUNCTION: LEGO1 0x1000e300
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -26,7 +26,7 @@ public:
 
 private:
 	// FIXME: May be part of LegoState? Uncertain...
-	MxU32 m_unk08;
+	MxU32 m_unk0x08;
 };
 
 #endif // ACT3STATE_H

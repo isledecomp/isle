@@ -94,9 +94,9 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE) {
 			MxU32 maybeVersion = 0x1000C;
 			fileStream.Write(&maybeVersion, 4);
-			fileStream.Write(&m_unk24, 2);
-			fileStream.Write(&m_unk10, 2);
-			fileStream.Write(&m_unkC, 1);
+			fileStream.Write(&m_unk0x24, 2);
+			fileStream.Write(&m_unk0x10, 2);
+			fileStream.Write(&m_unk0xC, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
 				if (LegoStream::WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)
@@ -264,5 +264,5 @@ void LegoGameState::SerializeScoreHistory(MxS16 p)
 // FUNCTION: LEGO1 0x1003cea0
 void LegoGameState::SetSomeEnumState(undefined4 p_state)
 {
-	m_unk10 = p_state;
+	m_unk0x10 = p_state;
 }

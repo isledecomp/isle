@@ -41,7 +41,7 @@ public:
 	}
 
 protected:
-	undefined m_unk8[0x12];
+	undefined m_unk0x8[0x12];
 	MxU16 m_color1;
 	MxU16 m_color2;
 	MxU16 m_color3;
