@@ -16,12 +16,14 @@ public:
 
 	virtual MxLong Notify(MxParam& p) override; // vtable+0x04
 
+	// FUNCTION: LEGO1 0x100b6210
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// GLOBAL: LEGO1 0x100f0774
 		return "MxCompositePresenter";
 	}
 
+	// FUNCTION: LEGO1 0x100b6220
 	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
 	{
 		return !strcmp(name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(name);
@@ -40,5 +42,20 @@ public:
 private:
 	MxCompositePresenterList m_list; // 0x40
 };
+
+// TEMPLATE: LEGO1 0x1004ae90
+// list<MxPresenter *,allocator<MxPresenter *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100b61a0
+// list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
+
+// SYNTHETIC: LEGO1 0x100b62d0
+// MxCompositePresenter::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100b62f0
+// MxCompositePresenterList::~MxCompositePresenterList
+
+// TEMPLATE: LEGO1 0x100b6340
+// List<MxPresenter *>::~List<MxPresenter *>
 
 #endif // MXCOMPOSITEPRESENTER_H

@@ -90,4 +90,28 @@ public:
 	MxBool m_unk0x336;
 };
 
+// TEMPLATE: LEGO1 0x1005bb80
+// MxCollection<LegoEventNotificationParam>::Compare
+
+// TEMPLATE: LEGO1 0x1005bc30
+// MxCollection<LegoEventNotificationParam>::Destroy
+
+// TEMPLATE: LEGO1 0x1005bc80
+// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
+
+// SYNTHETIC: LEGO1 0x1005bd50
+// MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1005bdc0
+// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1005beb0
+// LegoEventQueue::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1005bf70
+// MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1005d010
+// MxListEntry<LegoEventNotificationParam>::GetValue
+
 #endif // LEGOINPUTMANAGER_H

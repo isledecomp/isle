@@ -34,4 +34,7 @@ private:
 	undefined m_unk38[4];
 };
 
+// SYNTHETIC: LEGO1 0x100ae7b0
+// MxSoundManager::`scalar deleting destructor'
+
 #endif // MXSOUNDMANAGER_H

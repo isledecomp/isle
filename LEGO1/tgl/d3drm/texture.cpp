@@ -86,7 +86,7 @@ void TglD3DRMIMAGE::Destroy()
 	delete m_image.palette;
 }
 
-// FUNCTION: LEGO1 0x100a13e0 STUB
+// STUB: LEGO1 0x100a13e0
 Result TglD3DRMIMAGE::CreateBuffer(int width, int height, int depth, void* pBuffer, int useBuffer)
 {
 	return Error;
@@ -125,9 +125,6 @@ Result TglD3DRMIMAGE::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 	}
 	return Success;
 }
-
-// SYNTHETIC: LEGO1 0x100a2800
-// TglImpl::TextureImpl::`scalar deleting destructor'
 
 // FUNCTION: LEGO1 0x100a3c10
 Result TextureImpl::SetTexels(int width, int height, int bitsPerTexel, void* pTexels)

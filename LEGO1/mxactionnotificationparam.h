@@ -67,4 +67,7 @@ public:
 	virtual MxNotificationParam* Clone() override; // vtable+0x4
 };
 
+// SYNTHETIC: LEGO1 0x100513a0
+// MxEndActionNotificationParam::`scalar deleting destructor'
+
 #endif
