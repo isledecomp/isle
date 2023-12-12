@@ -1,4 +1,4 @@
-name: Naming conventions
+name: Naming
 
 on: [push, pull_request]
 
