@@ -1,9 +1,9 @@
-name: Decomp marker linting
+name: Analyze
 
 on: [push, pull_request]
 
 jobs:
-  decomplint:
+  decomp-lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,5 +15,5 @@ jobs:
 
     - name: Run decomplint.py
       run: |
-        python3 tools/decomplint/decomplint.py --enforce ISLE --module ISLE
-        python3 tools/decomplint/decomplint.py --enforce LEGO1 --module LEGO1
+        python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
+        python3 tools/decomplint/decomplint.py LEGO1 --module LEGO1 --warnfail

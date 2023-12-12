@@ -39,12 +39,6 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument("target", help="The file or directory to check.")
     p.add_argument(
-        "--enforce",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Fail if syntax errors are found.",
-    )
-    p.add_argument(
         "--module",
         required=False,
         type=str,
@@ -54,7 +48,7 @@ def parse_args() -> argparse.Namespace:
         "--warnfail",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Fail if syntax warnings are found and enforce is enabled.",
+        help="Fail if syntax warnings are found.",
     )
 
     (args, _) = p.parse_known_args()
@@ -97,7 +91,7 @@ def main():
     print(colorama.Style.RESET_ALL, end="")
 
     would_fail = error_count > 0 or (warning_count > 0 and args.warnfail)
-    if args.enforce and would_fail:
+    if would_fail:
         sys.exit(1)
 
 
