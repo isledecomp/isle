@@ -74,7 +74,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100be3e0
 void MxVideoManager::UpdateRegion()
 {
-	if (m_region->vtable20() == FALSE) {
+	if (m_region->VTable0x20() == FALSE) {
 		MxRect32 rect(m_region->GetRect(), m_videoParam.GetRect());
 		m_displaySurface
 			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
@@ -268,7 +268,7 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 	m_criticalSection.Enter();
 
 	if (m_region)
-		m_region->vtable18(p_rect);
+		m_region->VTable0x18(p_rect);
 
 	m_criticalSection.Leave();
 }

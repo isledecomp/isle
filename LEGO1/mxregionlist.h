@@ -30,7 +30,7 @@ public:
 // class MxListCursor<MxRegionTopBottom *>
 
 // TODO: The initialize list param type should be MxRegionList, but doing that
-// drastically reduced the match percentage for MxRegion::vtable18.
+// drastically reduced the match percentage for MxRegion::VTable0x18.
 // It also works with MxPtrList, so we'll do that until we figure this out.
 
 // VTABLE: LEGO1 0x100dcb88

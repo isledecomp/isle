@@ -94,7 +94,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 
 	// TODO 3d manager
-	// m_3dManager->m_pViewport->vtable1c(red, green, blue)
+	// m_3dManager->m_pViewport->VTable0x1c(red, green, blue)
 }
 
 // STUB: LEGO1 0x1007c560

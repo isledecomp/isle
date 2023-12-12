@@ -24,7 +24,7 @@ LegoEntityPresenter::~LegoEntityPresenter()
 }
 
 // FUNCTION: LEGO1 0x10053630
-undefined4 LegoEntityPresenter::vtable6c(undefined4 p_unknown)
+undefined4 LegoEntityPresenter::VTable0x6c(undefined4 p_unknown)
 {
 	m_unk0x4c = p_unknown;
 	return 0;

@@ -40,9 +40,9 @@ public:
 	virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool); // vtable+1c
 	virtual MxResult LoadFile(HANDLE p_handle);                                            // vtable+20
 	__declspec(dllexport) virtual MxLong Read(const char* p_filename);                     // vtable+24
-	virtual int vtable28(int);
-	virtual void vtable2c(int, int, int, int, int, int, int);
-	virtual void vtable30(int, int, int, int, int, int, int);
+	virtual int VTable0x28(int);
+	virtual void VTable0x2c(int, int, int, int, int, int, int);
+	virtual void VTable0x30(int, int, int, int, int, int, int);
 	__declspec(dllexport) virtual MxPalette* CreatePalette(); // vtable+34
 	virtual void ImportPalette(MxPalette* p_palette);         // vtable+38
 	virtual MxResult SetBitDepth(MxBool);                     // vtable+3c

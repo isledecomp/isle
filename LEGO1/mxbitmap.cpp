@@ -27,7 +27,7 @@ inline MxLong _Abs(MxLong p_value)
 }
 
 // FUNCTION: LEGO1 0x1004e0d0
-int MxBitmap::vtable28(int)
+int MxBitmap::VTable0x28(int)
 {
 	return -1;
 }
@@ -232,12 +232,12 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 }
 
 // STUB: LEGO1 0x100bce70
-void MxBitmap::vtable2c(int, int, int, int, int, int, int)
+void MxBitmap::VTable0x2c(int, int, int, int, int, int, int)
 {
 }
 
 // STUB: LEGO1 0x100bd020
-void MxBitmap::vtable30(int, int, int, int, int, int, int)
+void MxBitmap::VTable0x30(int, int, int, int, int, int, int)
 {
 }
 

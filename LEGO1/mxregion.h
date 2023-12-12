@@ -58,9 +58,9 @@ public:
 	virtual ~MxRegion() override;
 
 	virtual void Reset();
-	virtual void vtable18(MxRect32& p_rect);
-	virtual MxBool vtable1c(MxRect32& p_rect);
-	virtual MxBool vtable20();
+	virtual void VTable0x18(MxRect32& p_rect);
+	virtual MxBool VTable0x1c(MxRect32& p_rect);
+	virtual MxBool VTable0x20();
 
 	inline MxRect32& GetRect() { return this->m_rect; }
 
