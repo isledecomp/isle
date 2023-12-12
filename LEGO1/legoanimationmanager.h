@@ -26,9 +26,9 @@ public:
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
-	void FUN_1005f6d0(MxBool p);
+	void FUN_1005f6d0(MxBool);
 
-	__declspec(dllexport) static void configureLegoAnimationManager(int param_1);
+	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
 private:
 	void Init();

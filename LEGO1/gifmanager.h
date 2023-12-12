@@ -27,13 +27,13 @@ public:
 
 class GifMap {
 public:
-	GifMapEntry* FindNode(const char*& string);
+	GifMapEntry* FindNode(const char*& p_string);
 
-	inline GifData* Get(const char* string)
+	inline GifData* Get(const char* p_string)
 	{
 		GifData* ret = NULL;
-		GifMapEntry* entry = FindNode(string);
-		if (((m_unk0x4 == entry || strcmp(string, entry->m_key) > 0) ? m_unk0x4 : entry) != entry)
+		GifMapEntry* entry = FindNode(p_string);
+		if (((m_unk0x4 == entry || strcmp(p_string, entry->m_key) > 0) ? m_unk0x4 : entry) != entry)
 			ret = entry->m_value;
 		return ret;
 	}
@@ -48,7 +48,7 @@ public:
 	// STUB: LEGO1 0x1005a310
 	virtual ~GifManagerBase() {} // vtable+00
 
-	inline GifData* Get(const char* name) { return m_unk0x8.Get(name); }
+	inline GifData* Get(const char* p_name) { return m_unk0x8.Get(p_name); }
 
 protected:
 	undefined4 m_unk0x0;

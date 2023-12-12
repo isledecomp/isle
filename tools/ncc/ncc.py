@@ -367,6 +367,7 @@ class Options:
         self.args = None
         self._style_file = None
         self.file_exclusions = None
+        self._skip_file = None
 
         self.parser = argparse.ArgumentParser(
             prog="ncc.py",
@@ -407,6 +408,11 @@ class Options:
                                  "matches a specified pattern according to the rules used by "
                                  "the Unix shell")
 
+        self.parser.add_argument('--skip', '-s', dest="skip_file",
+                                 help="Read list of items to ignore during the check. "
+                                 "User can use the skip file to specify character sequences that should "
+                                 "be ignored by ncc")
+
         # self.parser.add_argument('--exclude-dir', dest='exclude_dir', help="Skip the directories"
         #                          "matching the pattern specified")
 
@@ -425,6 +431,11 @@ class Options:
                 sys.stderr.write("Style file '{}' not found!\n".format(self._style_file))
                 sys.exit(1)
 
+        if self.args.skip_file:
+            self._skip_file = self.args.skip_file
+            if not os.path.exists(self._skip_file):
+                sys.stderr.write("Skip file '{}' not found!\n".format(self._skip_file))
+
     def dump_all_rules(self):
         print("----------------------------------------------------------")
         print("{:<35} | {}".format("Rule Name", "Pattern"))
@@ -432,6 +443,24 @@ class Options:
         for (key, value) in default_rules_db.items():
             print("{:<35} : {}".format(key, value.pattern_str))
 
+class SkipDb(object):
+    def __init__(self, skip_file=None):
+        self.__skip_db = {}
+
+        if skip_file:
+            self.build_skip_db(skip_file)
+
+    def build_skip_db(self, skip_file):
+        with open(skip_file) as stylefile:
+            style_rules = yaml.safe_load(stylefile)
+            for (skip_string, skip_comment) in style_rules.items():
+                self.__skip_db[skip_string] = skip_comment
+
+    def check_skip_db(self, input_query):
+        if input_query in self.__skip_db.keys():
+            return 1
+        else:
+            return 0
 
 class RulesDb(object):
     def __init__(self, style_file=None):
@@ -491,9 +520,10 @@ class RulesDb(object):
 
 
 class Validator(object):
-    def __init__(self, rule_db, filename, options):
+    def __init__(self, rule_db, filename, options, skip_db=None):
         self.filename = filename
         self.rule_db = rule_db
+        self.skip_db = skip_db
         self.options = options
         self.node_stack = AstNodeStack()
 
@@ -550,6 +580,10 @@ class Validator(object):
         if not self.rule_db.is_rule_enabled(node.kind):
             return 0
 
+        # If the pattern is in the skip list, ignore it
+        if self.skip_db.check_skip_db(node.displayname):
+            return 0
+
         rule_name = self.rule_db.get_rule_names(node.kind)
         rule = self.rule_db.get_rule(rule_name)
         if rule.evaluate(node, self.node_stack.peek()) is False:
@@ -598,19 +632,22 @@ if __name__ == "__main__":
     """ Creating the rules database """
     rules_db = RulesDb(op._style_file)
 
+    """ Creating the skip database """
+    skip_db = SkipDb(op._skip_file)
+
     """ Check the source code against the configured rules """
     errors = 0
     for path in op.args.path:
         if os.path.isfile(path):
             if do_validate(op, path):
-                v = Validator(rules_db, path, op)
+                v = Validator(rules_db, path, op, skip_db)
                 errors += v.validate()
         elif os.path.isdir(path):
             for (root, subdirs, files) in os.walk(path):
                 for filename in files:
                     path = root + '/' + filename
                     if do_validate(op, path):
-                        v = Validator(rules_db, path, op)
+                        v = Validator(rules_db, path, op, skip_db)
                         errors += v.validate()
 
                 if not op.args.recurse:

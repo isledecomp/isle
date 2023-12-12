@@ -36,14 +36,14 @@ public:
 	virtual void VTable0xdc();                                // vtable+0xdc
 	virtual void VTable0xe0();                                // vtable+0xe0
 	virtual void VTable0xe4();                                // vtable+0xe4
-	virtual void VTable0xe8(MxU32 p_1, MxBool p_2, MxU8 p_3); // vtable+0xe8
+	virtual void VTable0xe8(MxU32, MxBool, MxU8);             // vtable+0xe8
 	virtual void VTable0xec();                                // vtable+0xec
 
-	inline void SetWorld(LegoWorld* p_world) { m_pLegoWorld = p_world; }
-	inline LegoWorld* GetWorld() { return m_pLegoWorld; }
+	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
+	inline LegoWorld* GetWorld() { return m_world; }
 
 private:
-	LegoWorld* m_pLegoWorld; // 0x154
+	LegoWorld* m_world; // 0x154
 	MxFloat m_unk0x158;
 	MxFloat m_unk0x15c;
 };

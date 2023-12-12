@@ -4,9 +4,9 @@
 int g_legoAnimationManagerConfig = 1;
 
 // FUNCTION: LEGO1 0x1005eb50
-void LegoAnimationManager::configureLegoAnimationManager(int param_1)
+void LegoAnimationManager::configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig)
 {
-	g_legoAnimationManagerConfig = param_1;
+	g_legoAnimationManagerConfig = p_legoAnimationManagerConfig;
 }
 
 // STUB: LEGO1 0x1005eb60
@@ -28,7 +28,7 @@ void LegoAnimationManager::Init()
 }
 
 // STUB: LEGO1 0x1005f6d0
-void LegoAnimationManager::FUN_1005f6d0(MxBool p)
+void LegoAnimationManager::FUN_1005f6d0(MxBool)
 {
 	// TODO
 }

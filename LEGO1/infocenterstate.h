@@ -55,7 +55,7 @@ private:
 	  undefined4 unk13;
 	*/
 
-	undefined pad[0x70];
+	undefined m_pad[0x70];
 	MxU32 m_buffer[7]; // 0x78
 };
 
