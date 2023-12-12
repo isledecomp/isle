@@ -10,6 +10,7 @@ UnionName: '^\(anon|^[A-Z][a-zA-Z0-9]+$'
 VariableName:
     ScopePrefix:
         Global: 'g_'
+        Static: 's_'
         ClassMember: 'm_'
         StructMember: 'm_'
     DataTypePrefix:
@@ -17,4 +18,4 @@ VariableName:
         Integer: ''
         Bool: ''
         Pointer: ''
-    Pattern: '^(unk0x[a-f0-9]{1,3}$|(?!unk).+[a-z0-9][a-zA-Z0-9]*)$'
+    Pattern: '^(unk0x[a-f0-9]{1,3}$|(?!unk).*[a-z0-9][a-zA-Z0-9]*)$'
