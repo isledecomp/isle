@@ -372,7 +372,7 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 
 		m_bIgnoreWM_SIZE = TRUE;
 		dwStyle = GetWindowLong(m_hWndMain, GWL_STYLE);
-		dwStyle &= ~(WS_POPUP | WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED);
+		dwStyle &= ~WS_POPUP;
 		dwStyle |= WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED;
 		SetWindowLong(m_hWndMain, GWL_STYLE, dwStyle);
 

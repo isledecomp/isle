@@ -87,7 +87,7 @@ def sanitize(file, placeholder_generator, mnemonic, op_str):
         for i, word in enumerate(words):
             try:
                 inttest = int(word, 16)
-                if inttest >= file.get_section_offset_by_index(1):
+                if file.is_relocated_addr(inttest):
                     words[i] = placeholder_generator.get(inttest)
             except ValueError:
                 pass
