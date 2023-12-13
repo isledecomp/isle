@@ -75,17 +75,15 @@ MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 		}
 
 		m_fileSize = m_pFile->CalcFileSize();
-		if (m_fileSize != 0)
-		{
+		if (m_fileSize != 0) {
 			m_bufferSize = m_pFile->GetBufferSize();
 			m_pBufferOfFileSize = new MxU32[m_fileSize];
-			if (m_pBufferOfFileSize != NULL && m_pFile->Read((unsigned char *)m_pBufferOfFileSize, m_fileSize) == SUCCESS)
-			{
+			if (m_pBufferOfFileSize != NULL &&
+				m_pFile->Read((unsigned char*) m_pBufferOfFileSize, m_fileSize) == SUCCESS) {
 				m_lengthInDWords = m_pFile->GetLengthInDWords();
 				m_bufferForDWords = new MxU32[m_lengthInDWords << 2];
 
-				if (m_bufferForDWords != NULL)
-				{
+				if (m_bufferForDWords != NULL) {
 					memcpy(m_bufferForDWords, m_pFile->GetBuffer(), m_lengthInDWords);
 					result = SUCCESS;
 				}
