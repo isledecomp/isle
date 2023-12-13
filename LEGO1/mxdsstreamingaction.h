@@ -34,7 +34,7 @@ public:
 	inline MxU32 GetBufferOffset() { return m_bufferOffset; }
 	inline MxDSBuffer* GetUnknowna0() { return m_unk0xa0; }
 	inline MxDSBuffer* GetUnknowna4() { return m_unk0xa4; }
-	inline void SetUnknowna0(MxDSBuffer* p_unka0) { m_unk0xa0 = p_unka0; }
+	inline void SetUnknowna0(MxDSBuffer* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
 private:
 	MxU32 m_unk0x94;
