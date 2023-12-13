@@ -3,10 +3,10 @@
 
 #include "decomp.h"
 #include "mxdsbuffer.h"
+#include "mxdsstreamingaction.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
-#include "mxdsstreamingaction.h"
 
 #include <string.h>
 
