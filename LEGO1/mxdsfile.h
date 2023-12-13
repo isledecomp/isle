@@ -36,7 +36,7 @@ public:
 
 	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
 
-	inline int CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
+	inline MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
 
 private:
 	MxLong ReadChunks();
