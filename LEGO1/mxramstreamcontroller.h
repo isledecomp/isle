@@ -1,8 +1,8 @@
 #ifndef MXRAMSTREAMCONTROLLER_H
 #define MXRAMSTREAMCONTROLLER_H
 
-#include "mxdsstreamingaction.h"
 #include "mxdsbuffer.h"
+#include "mxdsstreamingaction.h"
 #include "mxstreamcontroller.h"
 
 // VTABLE: LEGO1 0x100dc728
