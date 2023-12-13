@@ -4,7 +4,7 @@
 int g_modelPresenterConfig = 1;
 
 // FUNCTION: LEGO1 0x1007f660
-void LegoModelPresenter::configureLegoModelPresenter(int param_1)
+void LegoModelPresenter::configureLegoModelPresenter(MxS32 p_modelPresenterConfig)
 {
-	g_modelPresenterConfig = param_1;
+	g_modelPresenterConfig = p_modelPresenterConfig;
 }

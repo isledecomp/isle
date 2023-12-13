@@ -11,7 +11,7 @@
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
 // GLOBAL: LEGO1 0x10101eb0
-const char* g_strBMP_ISMAP = "BMP_ISMAP";
+const char* g_strBmpIsmap = "BMP_ISMAP";
 
 // FUNCTION: LEGO1 0x100435b0
 void MxStillPresenter::Destroy()
@@ -80,10 +80,10 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MVideoManager()->InvalidateRect(rect);
 
 	if (m_flags & Flag_Bit2) {
-		undefined4 unk = 0;
-		m_unk58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->vtable44(
+		undefined4 und = 0;
+		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
 			m_bitmap,
-			&unk,
+			&und,
 			(m_flags & Flag_Bit4) / 8,
 			m_action->GetFlags() & MxDSAction::Flag_Bit4
 		);
@@ -94,7 +94,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		delete m_bitmap;
 		m_bitmap = NULL;
 
-		if (m_unk58 && unk)
+		if (m_unk0x58 && und)
 			m_flags |= Flag_Bit3;
 		else
 			m_flags &= ~Flag_Bit3;
@@ -157,14 +157,14 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 		MxS32 height = GetHeight() - 1;
 		MxS32 width = GetWidth() - 1;
 
-		MxRect32 rect_a(x, y, width + x, height + y);
-		MxRect32 rect_b(m_location.m_x, m_location.m_y, width + m_location.m_x, height + m_location.m_y);
+		MxRect32 rectA(x, y, width + x, height + y);
+		MxRect32 rectB(m_location.m_x, m_location.m_y, width + m_location.m_x, height + m_location.m_y);
 
-		MVideoManager()->InvalidateRect(rect_a);
-		MVideoManager()->vtable0x34(rect_a.GetLeft(), rect_a.GetTop(), rect_a.GetWidth(), rect_a.GetHeight());
+		MVideoManager()->InvalidateRect(rectA);
+		MVideoManager()->VTable0x34(rectA.GetLeft(), rectA.GetTop(), rectA.GetWidth(), rectA.GetHeight());
 
-		MVideoManager()->InvalidateRect(rect_b);
-		MVideoManager()->vtable0x34(rect_b.GetLeft(), rect_b.GetTop(), rect_b.GetWidth(), rect_b.GetHeight());
+		MVideoManager()->InvalidateRect(rectB);
+		MVideoManager()->VTable0x34(rectB.GetLeft(), rectB.GetTop(), rectB.GetWidth(), rectB.GetHeight());
 	}
 }
 
@@ -181,7 +181,7 @@ void MxStillPresenter::Enable(MxBool p_enable)
 
 		MxRect32 rect(x, y, width + x, height + y);
 		MVideoManager()->InvalidateRect(rect);
-		MVideoManager()->vtable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
+		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 }
 
@@ -211,7 +211,7 @@ void MxStillPresenter::ParseExtra()
 		}
 	}
 
-	if (KeyValueStringParse(output, g_strBMP_ISMAP, buf)) {
+	if (KeyValueStringParse(output, g_strBmpIsmap, buf)) {
 		m_flags |= Flag_Bit5;
 		m_flags &= ~Flag_Bit2;
 		m_flags &= ~Flag_Bit3;

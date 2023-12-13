@@ -61,7 +61,7 @@ MxAtomId& MxAtomId::operator=(const MxAtomId& p_atomId)
 // FUNCTION: LEGO1 0x100ad210
 MxAtomIdCounter* MxAtomId::GetCounter(const char* p_str, LookupMode p_mode)
 {
-	MxAtomId _unused;
+	MxAtomId unused;
 	MxAtomIdCounter* counter = new MxAtomIdCounter(p_str);
 
 	switch (p_mode) {

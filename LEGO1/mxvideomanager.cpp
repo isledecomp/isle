@@ -14,7 +14,7 @@ MxVideoManager::MxVideoManager()
 }
 
 // FUNCTION: LEGO1 0x100be270
-void MxVideoManager::vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+void MxVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 }
 
@@ -32,7 +32,7 @@ MxResult MxVideoManager::Init()
 	this->m_displaySurface = NULL;
 	this->m_region = NULL;
 	this->m_videoParam.SetPalette(NULL);
-	this->m_unk60 = FALSE;
+	this->m_unk0x60 = FALSE;
 	return SUCCESS;
 }
 
@@ -57,7 +57,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 	if (m_videoParam.GetPalette())
 		delete m_videoParam.GetPalette();
 
-	if (m_unk60) {
+	if (m_unk0x60) {
 		if (m_pDirectDraw)
 			m_pDirectDraw->Release();
 		if (m_pDDSurface)
@@ -74,7 +74,7 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100be3e0
 void MxVideoManager::UpdateRegion()
 {
-	if (m_region->vtable20() == FALSE) {
+	if (m_region->VTable0x20() == FALSE) {
 		MxRect32 rect(m_region->GetRect(), m_videoParam.GetRect());
 		m_displaySurface
 			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
@@ -99,14 +99,14 @@ void MxVideoManager::SortPresenterList()
 
 			finished = TRUE;
 			for (MxU32 i = count; i != 0; i--) {
-				MxPresenter *p_a, *p_b;
+				MxPresenter *presenterA, *presenterB;
 
-				a.Next(p_a);
-				b.Next(p_b);
+				a.Next(presenterA);
+				b.Next(presenterB);
 
-				if (p_a->GetDisplayZ() < p_b->GetDisplayZ()) {
-					a.SetValue(p_b);
-					b.SetValue(p_a);
+				if (presenterA->GetDisplayZ() < presenterB->GetDisplayZ()) {
+					a.SetValue(presenterB);
+					b.SetValue(presenterA);
 					finished = FALSE;
 				}
 			}
@@ -115,7 +115,7 @@ void MxVideoManager::SortPresenterList()
 }
 
 // FUNCTION: LEGO1 0x100be600
-MxResult MxVideoManager::vtable0x28(
+MxResult MxVideoManager::VTable0x28(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAW p_pDirectDraw,
 	LPDIRECTDRAWSURFACE p_pDDSurface,
@@ -129,7 +129,7 @@ MxResult MxVideoManager::vtable0x28(
 	MxBool locked = FALSE;
 	MxResult status = FAILURE;
 
-	m_unk60 = FALSE;
+	m_unk0x60 = FALSE;
 
 	if (MxMediaManager::InitPresenters() != SUCCESS)
 		goto done;
@@ -194,7 +194,7 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 	MxBool locked = FALSE;
 	MxResult status = FAILURE;
 
-	m_unk60 = TRUE;
+	m_unk0x60 = TRUE;
 
 	if (MxMediaManager::InitPresenters() != SUCCESS)
 		goto done;
@@ -268,7 +268,7 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 	m_criticalSection.Enter();
 
 	if (m_region)
-		m_region->vtable18(p_rect);
+		m_region->VTable0x18(p_rect);
 
 	m_criticalSection.Leave();
 }

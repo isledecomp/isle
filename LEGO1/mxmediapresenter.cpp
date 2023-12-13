@@ -255,7 +255,7 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 
 		if (p_enable) {
 			MxLong time = Timer()->GetTime();
-			m_action->SetUnkTimingField(time);
+			m_action->SetUnknown90(time);
 			SetTickleState(TickleState_Repeating);
 		}
 		else {

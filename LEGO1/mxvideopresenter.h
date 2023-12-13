@@ -28,9 +28,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000c830
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(name);
+		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
 	virtual void ReadyTickle() override;                 // vtable+0x18
@@ -76,12 +76,12 @@ private:
 protected:
 	void Destroy(MxBool p_fromDestructor);
 
-	MxBitmap* m_bitmap;          // 0x50
-	AlphaMask* m_alpha;          // 0x54
-	LPDIRECTDRAWSURFACE m_unk58; // 0x58
-	MxS16 m_unk5c;               // 0x5c
-	MxU8 m_flags;                // 0x5e
-	MxLong m_unk60;              // 0x60
+	MxBitmap* m_bitmap;            // 0x50
+	AlphaMask* m_alpha;            // 0x54
+	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
+	MxS16 m_unk0x5c;               // 0x5c
+	MxU8 m_flags;                  // 0x5e
+	MxLong m_unk0x60;              // 0x60
 };
 
 #endif // MXVIDEOPRESENTER_H

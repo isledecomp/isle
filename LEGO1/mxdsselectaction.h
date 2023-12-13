@@ -23,14 +23,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100cb700
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(name);
+		return !strcmp(p_name, MxDSSelectAction::ClassName()) || MxDSParallelAction::IsA(p_name);
 	}
 
-	virtual MxU32 GetSizeOnDisk() override;                            // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24) override; // vtable+1c;
-	virtual MxDSAction* Clone() override;                              // vtable+2c;
+	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual MxDSAction* Clone() override;                                // vtable+2c;
 
 private:
 	MxString m_unk0x9c;

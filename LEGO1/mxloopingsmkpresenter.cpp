@@ -19,7 +19,7 @@ MxLoopingSmkPresenter::~MxLoopingSmkPresenter()
 // FUNCTION: LEGO1 0x100b49b0
 void MxLoopingSmkPresenter::Init()
 {
-	this->m_unk720 = 0;
+	this->m_unk0x720 = 0;
 	this->m_flags &= 0xfd;
 	this->m_flags &= 0xfb;
 }

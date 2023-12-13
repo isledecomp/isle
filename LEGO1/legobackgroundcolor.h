@@ -11,9 +11,9 @@ public:
 	virtual void SetValue(const char* p_colorString) override;
 
 private:
-	float h;
-	float s;
-	float v;
+	float m_h;
+	float m_s;
+	float m_v;
 };
 
 #endif // LEGOBACKGROUNDCOLOR_H

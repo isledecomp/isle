@@ -13,7 +13,7 @@ GasStation::~GasStation()
 }
 
 // STUB: LEGO1 0x10004a60
-MxLong GasStation::Notify(MxParam& p)
+MxLong GasStation::Notify(MxParam& p_param)
 {
 	// TODO
 

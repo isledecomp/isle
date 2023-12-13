@@ -43,13 +43,7 @@ We are currently using [clang-format](https://clang.llvm.org/docs/ClangFormat.ht
 
 ### Naming conventions
 
-The following conventions should generally be applied everywhere except for the utility libraries (`LEGO1/realtime`, `LEGO1/tgl`, `LEGO1/viewmanager`) and any 3rd party libraries (`3rdparty`).
-
-- `PascalCase` for classes, function names, and enumerations.
-- `m_camelCase` for member variables.
-- `g_camelCase` for global variables.
-- `p_camelCase` for function parameters.
-- Within the Omni engine (file pattern: `mx*`), instead of C++ primitives (e.g. `int`, `long`, etc.), use types in [`mxtypes.h`](LEGO1/mxtypes.h) instead. This will help us ensure that variables will be the correct size regardless of the underlying compiler/platform/architecture.
+We are currently using a customized version of [ncc](https://github.com/nithinn/ncc) with a configuration file that aims to replicate the naming conventions employed by the original developers. `ncc` requires Clang `16.x`; please refer to the [tool](/tools/ncc) and the [GitHub action](/.github/workflows/naming.yml) for guidance.
 
 ## Questions?
 

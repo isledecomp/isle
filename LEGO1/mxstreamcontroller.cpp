@@ -9,19 +9,19 @@ DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 
 // FUNCTION: LEGO1 0x100b9400
-MxResult MxStreamController::vtable0x18(undefined4 p_unknown, undefined4 p_unknown2)
+MxResult MxStreamController::VTable0x18(undefined4, undefined4)
 {
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100b9410
-MxResult MxStreamController::vtable0x1C(undefined4 p_unknown, undefined4 p_unknown2)
+MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
 {
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100b9420
-MxResult MxStreamController::vtable0x28()
+MxResult MxStreamController::VTable0x28()
 {
 	return SUCCESS;
 }
@@ -30,7 +30,7 @@ MxResult MxStreamController::vtable0x28()
 MxStreamController::MxStreamController()
 {
 	m_provider = NULL;
-	m_unk2c = 0; // TODO: probably also NULL
+	m_unk0x2c = 0; // TODO: probably also NULL
 	m_action0x60 = NULL;
 }
 
@@ -47,12 +47,12 @@ MxResult MxStreamController::Open(const char* p_filename)
 	MxAutoLocker locker(&m_criticalSection);
 
 	MakeSourceName(sourceName, p_filename);
-	this->atom = MxAtomId(sourceName, LookupMode_LowerCase2);
+	this->m_atom = MxAtomId(sourceName, LookupMode_LowerCase2);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c1690
-MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
+MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 
@@ -66,7 +66,7 @@ MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 		offset = provider->GetBufferForDWords()[objectId];
 
 	if (offset)
-		result = vtable0x2c(p_action, offset);
+		result = VTable0x2c(p_action, offset);
 	else
 		result = FAILURE;
 
@@ -74,11 +74,11 @@ MxResult MxStreamController::vtable0x20(MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c1740
-MxResult MxStreamController::vtable0x24(MxDSAction* p_action)
+MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
-	vtable0x30(p_action);
-	m_action0x60 = m_unkList0x54.Find(p_action, TRUE);
+	VTable0x30(p_action);
+	m_action0x60 = m_unk0x54.Find(p_action, TRUE);
 	if (m_action0x60 == NULL) {
 		return FAILURE;
 	}
@@ -109,7 +109,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferva
 }
 
 // FUNCTION: LEGO1 0x100c1c10
-MxResult MxStreamController::vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
+MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	if (FUN_100c1a00(p_action, p_bufferval) != SUCCESS) {
@@ -119,11 +119,11 @@ MxResult MxStreamController::vtable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 }
 
 // FUNCTION: LEGO1 0x100c1ce0
-MxResult MxStreamController::vtable0x30(MxDSAction* p_unknown)
+MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result = FAILURE;
-	MxDSAction* action = m_unkList0x3c.Find(p_unknown, TRUE);
+	MxDSAction* action = m_unk0x3c.Find(p_action, TRUE);
 	if (action != NULL) {
 		MxNextActionDataStart* data = m_nextActionList.Find(action->GetObjectId(), action->GetUnknown24());
 		delete action;

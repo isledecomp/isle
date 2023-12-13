@@ -12,6 +12,6 @@ MxResult MxStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 }
 
 // FUNCTION: LEGO1 0x100d07d0
-void MxStreamProvider::vtable0x20(undefined4 p_unknown1)
+void MxStreamProvider::VTable0x20(undefined4)
 {
 }

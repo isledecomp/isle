@@ -198,13 +198,13 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 }
 
 // FUNCTION: LEGO1 0x100bf2d0
-MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_sky_color)
+MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_skyColor)
 {
 	MxResult status = 0;
 	if (this->m_palette != NULL) {
-		this->m_entries[141].peRed = p_sky_color->peRed;
-		this->m_entries[141].peGreen = p_sky_color->peGreen;
-		this->m_entries[141].peBlue = p_sky_color->peBlue;
+		this->m_entries[141].peRed = p_skyColor->peRed;
+		this->m_entries[141].peGreen = p_skyColor->peGreen;
+		this->m_entries[141].peBlue = p_skyColor->peBlue;
 		this->m_skyColor = this->m_entries[141];
 		if (this->m_palette->SetEntries(0, 141, 1, &this->m_skyColor)) {
 			status = -1;
@@ -220,14 +220,14 @@ void MxPalette::Detach()
 }
 
 // FUNCTION: LEGO1 0x100bf340
-MxBool MxPalette::operator==(MxPalette& other)
+MxBool MxPalette::operator==(MxPalette& p_other)
 {
 	for (MxS32 i = 0; i < 256; i++) {
-		if (this->m_entries[i].peRed != other.m_entries[i].peRed)
+		if (this->m_entries[i].peRed != p_other.m_entries[i].peRed)
 			return FALSE;
-		if (this->m_entries[i].peGreen != other.m_entries[i].peGreen)
+		if (this->m_entries[i].peGreen != p_other.m_entries[i].peGreen)
 			return FALSE;
-		if (this->m_entries[i].peBlue != other.m_entries[i].peBlue)
+		if (this->m_entries[i].peBlue != p_other.m_entries[i].peBlue)
 			return FALSE;
 	}
 	return TRUE;

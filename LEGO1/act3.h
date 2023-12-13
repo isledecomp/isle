@@ -19,17 +19,17 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10072520
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Act3::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, Act3::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	inline void SetUnkown420c(MxEntity* p_entity) { m_unk420c = p_entity; }
+	inline void SetUnkown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
 
 protected:
-	undefined m_unkf8[0x4114];
-	MxEntity* m_unk420c;
-	undefined m_unk4210[0x64];
+	undefined m_unk0xf8[0x4114];
+	MxEntity* m_unk0x420c;
+	undefined m_unk0x4210[0x64];
 };
 
 #endif // ACT3_H

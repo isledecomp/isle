@@ -70,10 +70,10 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	this->m_initialized = TRUE;
 	this->m_videoParam = p_videoParam;
 
-	if (!this->m_videoParam.flags().GetFullScreen())
-		this->m_videoParam.flags().SetFlipSurfaces(FALSE);
+	if (!this->m_videoParam.Flags().GetFullScreen())
+		this->m_videoParam.Flags().SetFlipSurfaces(FALSE);
 
-	if (!this->m_videoParam.flags().GetFlipSurfaces()) {
+	if (!this->m_videoParam.Flags().GetFlipSurfaces()) {
 		this->m_videoParam.SetBackBuffers(1);
 	}
 	else {
@@ -84,10 +84,10 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		else if (backBuffers > 2)
 			this->m_videoParam.SetBackBuffers(2);
 
-		this->m_videoParam.flags().SetBackBuffers(TRUE);
+		this->m_videoParam.Flags().SetBackBuffers(TRUE);
 	}
 
-	if (this->m_videoParam.flags().GetFullScreen()) {
+	if (this->m_videoParam.Flags().GetFullScreen()) {
 		MxS32 width = this->m_videoParam.GetRect().GetWidth();
 		MxS32 height = this->m_videoParam.GetRect().GetHeight();
 
@@ -100,7 +100,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		if (lpDirectDraw->GetDisplayMode(&ddsd))
 			goto done;
 
-		MxS32 bitdepth = !this->m_videoParam.flags().Get16Bit() ? 8 : 16;
+		MxS32 bitdepth = !this->m_videoParam.Flags().Get16Bit() ? 8 : 16;
 
 		if (ddsd.dwWidth != width || ddsd.dwHeight != height || ddsd.ddpfPixelFormat.dwRGBBitCount != bitdepth) {
 			if (lpDirectDraw->SetDisplayMode(width, height, bitdepth))
@@ -108,7 +108,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		}
 	}
 
-	if (this->m_videoParam.flags().GetFlipSurfaces()) {
+	if (this->m_videoParam.Flags().GetFlipSurfaces()) {
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwBackBufferCount = this->m_videoParam.GetBackBuffers();
@@ -139,7 +139,7 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwHeight = this->m_videoParam.GetRect().GetHeight();
 		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
-		if (!this->m_videoParam.flags().GetBackBuffers())
+		if (!this->m_videoParam.Flags().GetBackBuffers())
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
 		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface2, NULL))
@@ -185,13 +185,13 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 }
 
 // STUB: LEGO1 0x100bacc0
-MxBool MxDisplaySurface::vtable28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+MxBool MxDisplaySurface::VTable0x28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 	return 0;
 }
 
 // STUB: LEGO1 0x100bb1d0
-MxBool MxDisplaySurface::vtable30(
+MxBool MxDisplaySurface::VTable0x30(
 	undefined4,
 	undefined4,
 	undefined4,
@@ -206,7 +206,7 @@ MxBool MxDisplaySurface::vtable30(
 }
 
 // STUB: LEGO1 0x100bb850
-undefined4 MxDisplaySurface::vtable34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+undefined4 MxDisplaySurface::VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
 {
 	return 0;
 }
@@ -233,13 +233,13 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 }
 
 // STUB: LEGO1 0x100bbc60
-LPDIRECTDRAWSURFACE MxDisplaySurface::vtable44(MxBitmap*, undefined4*, undefined4, undefined4)
+LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4)
 {
 	return NULL;
 }
 
 // STUB: LEGO1 0x100bc200
-void MxDisplaySurface::vtable24(
+void MxDisplaySurface::VTable0x24(
 	LPDDSURFACEDESC,
 	MxBitmap*,
 	undefined4,
@@ -253,8 +253,17 @@ void MxDisplaySurface::vtable24(
 }
 
 // STUB: LEGO1 0x100bc630
-MxBool MxDisplaySurface::
-	vtable2c(LPDDSURFACEDESC, MxBitmap*, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool)
+MxBool MxDisplaySurface::VTable0x2c(
+	LPDDSURFACEDESC,
+	MxBitmap*,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4,
+	undefined4,
+	MxBool
+)
 {
 	return 0;
 }

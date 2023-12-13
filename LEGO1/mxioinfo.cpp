@@ -22,14 +22,14 @@ MXIOINFO::~MXIOINFO()
 // FUNCTION: LEGO1 0x100cc830
 MxU16 MXIOINFO::Open(const char* p_filename, MxULong p_flags)
 {
-	OFSTRUCT _unused;
+	OFSTRUCT unused;
 	MxU16 result = 0;
 
 	m_info.lBufOffset = 0;
 	m_info.lDiskOffset = 0;
 
 	// DECOMP: Cast of p_flags to u16 forces the `movzx` instruction
-	m_info.hmmio = (HMMIO) OpenFile(p_filename, &_unused, (MxU16) p_flags);
+	m_info.hmmio = (HMMIO) OpenFile(p_filename, &unused, (MxU16) p_flags);
 
 	if ((HFILE) m_info.hmmio != HFILE_ERROR) {
 		m_info.dwFlags = p_flags;
@@ -87,45 +87,45 @@ MxU16 MXIOINFO::Close(MxLong p_unused)
 // FUNCTION: LEGO1 0x100cc930
 MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 {
-	MxLong bytes_read = 0;
+	MxLong bytesRead = 0;
 
 	if (m_info.pchBuffer) {
 
-		MxLong bytes_left = m_info.pchEndRead - m_info.pchNext;
+		MxLong bytesLeft = m_info.pchEndRead - m_info.pchNext;
 		while (p_len > 0) {
 
-			if (bytes_left > 0) {
-				if (p_len < bytes_left)
-					bytes_left = p_len;
+			if (bytesLeft > 0) {
+				if (p_len < bytesLeft)
+					bytesLeft = p_len;
 
-				memcpy(p_buf, m_info.pchNext, bytes_left);
-				p_len -= bytes_left;
+				memcpy(p_buf, m_info.pchNext, bytesLeft);
+				p_len -= bytesLeft;
 
-				m_info.pchNext += bytes_left;
-				bytes_read += bytes_left;
+				m_info.pchNext += bytesLeft;
+				bytesRead += bytesLeft;
 			}
 
 			if (p_len <= 0 || Advance(0))
 				break;
 
-			bytes_left = m_info.pchEndRead - m_info.pchNext;
-			if (bytes_left <= 0)
+			bytesLeft = m_info.pchEndRead - m_info.pchNext;
+			if (bytesLeft <= 0)
 				break;
 		}
 	}
 	else if (m_info.hmmio && p_len > 0) {
-		bytes_read = _hread((HFILE) m_info.hmmio, p_buf, p_len);
+		bytesRead = _hread((HFILE) m_info.hmmio, p_buf, p_len);
 
-		if (bytes_read == -1) {
-			bytes_read = 0;
+		if (bytesRead == -1) {
+			bytesRead = 0;
 			m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 		}
 		else {
-			m_info.lDiskOffset += bytes_read;
+			m_info.lDiskOffset += bytesRead;
 		}
 	}
 
-	return bytes_read;
+	return bytesRead;
 }
 
 // FUNCTION: LEGO1 0x100cca00
@@ -171,13 +171,13 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 				else {
 
 					// align offset to buffer size
-					MxLong new_offset = p_offset - (p_offset % m_info.cchBuffer);
-					m_info.lBufOffset = new_offset;
+					MxLong newOffset = p_offset - (p_offset % m_info.cchBuffer);
+					m_info.lBufOffset = newOffset;
 
 					// do we need to seek again?
 					// (i.e. are we already aligned to buffer size?)
-					if (p_offset != new_offset) {
-						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, new_offset, SEEK_SET);
+					if (p_offset != newOffset) {
+						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, newOffset, SEEK_SET);
 
 						if (m_info.lDiskOffset == -1) {
 							m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
@@ -194,15 +194,15 @@ MxLong MXIOINFO::Seek(MxLong p_offset, MxLong p_origin)
 						}
 						else {
 							// We can read from the file. Fill the buffer.
-							MxLong bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, m_info.cchBuffer);
+							MxLong bytesRead = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, m_info.cchBuffer);
 
-							if (bytes_read == -1) {
+							if (bytesRead == -1) {
 								m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 							}
 							else {
-								m_info.lDiskOffset += bytes_read;
+								m_info.lDiskOffset += bytesRead;
 								m_info.pchNext = p_offset - m_info.lBufOffset + m_info.pchBuffer;
-								m_info.pchEndRead = m_info.pchBuffer + bytes_read;
+								m_info.pchEndRead = m_info.pchBuffer + bytesRead;
 
 								if (m_info.pchNext < m_info.pchEndRead) {
 									result = p_offset;
@@ -278,10 +278,10 @@ MxU16 MXIOINFO::Flush(MxU16 p_unused)
 						m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 					}
 					else {
-						MxLong bytes_written = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cchBuffer);
+						MxLong bytesWritten = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cchBuffer);
 
-						if (bytes_written != -1 && bytes_written == cchBuffer) {
-							m_info.lDiskOffset += bytes_written;
+						if (bytesWritten != -1 && bytesWritten == cchBuffer) {
+							m_info.lDiskOffset += bytesWritten;
 							m_info.pchNext = m_info.pchBuffer;
 							m_info.dwFlags &= ~MMIO_DIRTY;
 						}
@@ -327,10 +327,10 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 				result = MMIOERR_CANNOTSEEK;
 			}
 			else {
-				MxLong bytes_written = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
+				MxLong bytesWritten = _hwrite((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
 
-				if (bytes_written != -1 && bytes_written == cch) {
-					m_info.lDiskOffset += bytes_written;
+				if (bytesWritten != -1 && bytesWritten == cch) {
+					m_info.lDiskOffset += bytesWritten;
 					m_info.pchNext = m_info.pchBuffer;
 					m_info.pchEndRead = m_info.pchBuffer;
 					m_info.dwFlags &= ~MMIO_DIRTY;
@@ -355,16 +355,16 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 				m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 			}
 			else {
-				MxLong bytes_read = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
+				MxLong bytesRead = _hread((HFILE) m_info.hmmio, m_info.pchBuffer, cch);
 
-				if (bytes_read == -1) {
+				if (bytesRead == -1) {
 					result = MMIOERR_CANNOTREAD;
 					m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 				}
 				else {
-					m_info.lDiskOffset += bytes_read;
+					m_info.lDiskOffset += bytesRead;
 					m_info.pchNext = m_info.pchBuffer;
-					m_info.pchEndRead = m_info.pchBuffer + bytes_read;
+					m_info.pchEndRead = m_info.pchBuffer + bytesRead;
 				}
 			}
 		}
@@ -410,18 +410,18 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 			ofs = p_parentInfo->cksize + p_parentInfo->dwDataOffset;
 
 		BOOL running = TRUE;
-		BOOL read_ok = FALSE;
+		BOOL readOk = FALSE;
 		MMCKINFO tmp;
 		tmp.dwFlags = 0;
 
 		while (running) {
 			if (Read(&tmp, 8) != 8) {
 				// If the first read fails, report read error. Else EOF.
-				result = read_ok ? MMIOERR_CHUNKNOTFOUND : MMIOERR_CANNOTREAD;
+				result = readOk ? MMIOERR_CHUNKNOTFOUND : MMIOERR_CANNOTREAD;
 				running = FALSE;
 			}
 			else {
-				read_ok = TRUE;
+				readOk = TRUE;
 				if (m_info.pchBuffer) {
 					tmp.dwDataOffset = m_info.pchNext - m_info.pchBuffer + m_info.lBufOffset;
 				}

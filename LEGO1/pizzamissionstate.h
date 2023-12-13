@@ -5,11 +5,11 @@
 
 struct PizzaMissionStateEntry {
 public:
-	undefined2 m_unk0;
+	undefined2 m_unk0x0;
 	MxU8 m_id;
-	undefined m_unk3[0x15];
+	undefined m_unk0x3[0x15];
 	MxU16 m_color;
-	undefined m_unk18[6];
+	undefined m_unk0x18[6];
 };
 
 // VTABLE: LEGO1 0x100d7408
@@ -23,19 +23,19 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100392a0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, PizzaMissionState::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	inline MxU16 GetColor(MxU8 id) { return GetState(id)->m_color; }
+	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 
 private:
-	PizzaMissionStateEntry* GetState(MxU8 id);
+	PizzaMissionStateEntry* GetState(MxU8 p_id);
 
 protected:
-	undefined4 m_unk8;
-	undefined4 m_unkc;
+	undefined4 m_unk0x8;
+	undefined4 m_unk0xc;
 	PizzaMissionStateEntry m_state[5];
 };
 

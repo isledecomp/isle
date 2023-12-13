@@ -12,12 +12,12 @@ RaceState::RaceState()
 }
 
 // FUNCTION: LEGO1 0x10016280
-RaceStateEntry* RaceState::GetState(MxU8 id)
+RaceStateEntry* RaceState::GetState(MxU8 p_id)
 {
 	for (MxS16 i = 0;; i++) {
 		if (i >= 5)
 			return NULL;
-		if (m_state[i].m_id == id)
+		if (m_state[i].m_id == p_id)
 			return m_state + i;
 	}
 }

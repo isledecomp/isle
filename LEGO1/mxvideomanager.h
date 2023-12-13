@@ -16,7 +16,7 @@ public:
 
 	virtual MxResult Tickle() override; // vtable+0x8
 	virtual void Destroy() override;    // vtable+0x18
-	virtual MxResult vtable0x28(
+	virtual MxResult VTable0x28(
 		MxVideoParam& p_videoParam,
 		LPDIRECTDRAW p_pDirectDraw,
 		LPDIRECTDRAWSURFACE p_pDDSurface,
@@ -30,7 +30,7 @@ public:
 
 	__declspec(dllexport) void InvalidateRect(MxRect32&);
 	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*);            // vtable+0x30
-	virtual void vtable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
+	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
 
 	MxResult Init();
 	void Destroy(MxBool p_fromDestructor);
@@ -47,7 +47,7 @@ protected:
 	LPDIRECTDRAWSURFACE m_pDDSurface;   // 0x54
 	MxDisplaySurface* m_displaySurface; // 0x58
 	MxRegion* m_region;                 // 0x5c
-	MxBool m_unk60;                     // 0x60
+	MxBool m_unk0x60;                   // 0x60
 };
 
 #endif // MXVIDEOMANAGER_H

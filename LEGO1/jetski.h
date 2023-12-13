@@ -18,14 +18,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1007e440
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Jetski::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, Jetski::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 private:
 	// TODO: Jetski fields
-	undefined m_unk160[4];
+	undefined m_unk0x160[4];
 };
 
 #endif // JETSKI_H

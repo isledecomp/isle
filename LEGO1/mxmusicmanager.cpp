@@ -29,14 +29,14 @@ void MxMusicManager::Init()
 // FUNCTION: LEGO1 0x100c06a0
 void MxMusicManager::InitData()
 {
-	m_MIDIStreamH = 0;
-	m_MIDIInitialized = FALSE;
-	m_unk38 = 0;
-	m_unk3c = 0;
-	m_unk40 = 0;
-	m_unk44 = 0;
-	m_unk48 = 0;
-	m_MIDIHdrP = NULL;
+	m_midiStreamH = 0;
+	m_midiInitialized = FALSE;
+	m_unk0x38 = 0;
+	m_unk0x3c = 0;
+	m_unk0x40 = 0;
+	m_unk0x44 = 0;
+	m_unk0x48 = 0;
+	m_midiHdrP = NULL;
 }
 
 // FUNCTION: LEGO1 0x100c06c0
@@ -66,7 +66,7 @@ void MxMusicManager::Destroy(MxBool p_fromDestructor)
 void MxMusicManager::SetMIDIVolume()
 {
 	MxS32 result = (m_volume * m_multiplier) / 0x64;
-	HMIDISTRM streamHandle = m_MIDIStreamH;
+	HMIDISTRM streamHandle = m_midiStreamH;
 
 	if (streamHandle) {
 		MxS32 volume = CalculateVolume(result);
@@ -148,13 +148,13 @@ void MxMusicManager::DeinitializeMIDI()
 {
 	m_criticalSection.Enter();
 
-	if (m_MIDIInitialized) {
-		m_MIDIInitialized = FALSE;
-		midiStreamStop(m_MIDIStreamH);
-		midiOutUnprepareHeader((HMIDIOUT) m_MIDIStreamH, m_MIDIHdrP, sizeof(MIDIHDR));
-		midiOutSetVolume((HMIDIOUT) m_MIDIStreamH, m_MIDIVolume);
-		midiStreamClose(m_MIDIStreamH);
-		delete m_MIDIHdrP;
+	if (m_midiInitialized) {
+		m_midiInitialized = FALSE;
+		midiStreamStop(m_midiStreamH);
+		midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR));
+		midiOutSetVolume((HMIDIOUT) m_midiStreamH, m_midiVolume);
+		midiStreamClose(m_midiStreamH);
+		delete m_midiHdrP;
 		InitData();
 	}
 

@@ -355,21 +355,21 @@ LegoOmni::~LegoOmni()
 void LegoOmni::Init()
 {
 	MxOmni::Init();
-	m_unk68 = 0;
+	m_unk0x68 = 0;
 	m_inputMgr = NULL;
-	m_unk6c = 0;
+	m_unk0x6c = 0;
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
-	m_unk80 = FALSE;
+	m_unk0x80 = FALSE;
 	m_currentVehicle = NULL;
-	m_unkLegoSaveDataWriter = NULL;
+	m_saveDataWriter = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;
 	m_animationManager = NULL;
 	m_buildingManager = NULL;
 	m_bkgAudioManager = NULL;
-	m_unk13c = TRUE;
+	m_unk0x13c = TRUE;
 	m_transitionManager = NULL;
 }
 
@@ -380,20 +380,20 @@ void LegoOmni::Destroy()
 }
 
 // FUNCTION: LEGO1 0x10058e70
-MxResult LegoOmni::Create(MxOmniCreateParam& p)
+MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
 	MxAutoLocker lock(&this->m_criticalsection);
 
-	p.CreateFlags().CreateObjectFactory(FALSE);
-	p.CreateFlags().CreateVideoManager(FALSE);
-	p.CreateFlags().CreateSoundManager(FALSE);
-	p.CreateFlags().CreateTickleManager(FALSE);
+	p_param.CreateFlags().CreateObjectFactory(FALSE);
+	p_param.CreateFlags().CreateVideoManager(FALSE);
+	p_param.CreateFlags().CreateSoundManager(FALSE);
+	p_param.CreateFlags().CreateTickleManager(FALSE);
 
 	if (!(m_tickleManager = new MxTickleManager()))
 		return FAILURE;
 
-	if (MxOmni::Create(p) != SUCCESS)
+	if (MxOmni::Create(p_param) != SUCCESS)
 		return FAILURE;
 
 	m_objectFactory = new LegoObjectFactory();
@@ -409,14 +409,14 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	}
 
 	if (m_videoManager = new LegoVideoManager()) {
-		if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+		if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 			delete m_videoManager;
 			m_videoManager = NULL;
 		}
 	}
 
 	if (m_inputMgr = new LegoInputManager()) {
-		if (m_inputMgr->Create(p.GetWindowHandle()) != SUCCESS) {
+		if (m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
 			delete m_inputMgr;
 			m_inputMgr = NULL;
 		}
@@ -430,7 +430,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p)
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList();
 
-	if (m_unk6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
+	if (m_unk0x6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();
@@ -466,7 +466,7 @@ LegoOmni* LegoOmni::GetInstance()
 }
 
 // STUB: LEGO1 0x1005af10
-void LegoOmni::RemoveWorld(const MxAtomId& p1, MxLong p2)
+void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 {
 	// TODO
 }
@@ -479,7 +479,7 @@ LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_ent
 }
 
 // STUB: LEGO1 0x1005b1d0
-MxResult LegoOmni::DeleteObject(MxDSAction& ds)
+MxResult LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	// TODO
 	return FAILURE;
@@ -511,10 +511,10 @@ void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
 }
 
 // FUNCTION: LEGO1 0x1005b3c0
-MxBool LegoOmni::DoesEntityExist(MxDSAction& ds)
+MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
-	if (MxOmni::DoesEntityExist(ds)) {
-		if (FindByEntityIdOrAtomId(ds.GetAtomId(), ds.GetObjectId()) == NULL) {
+	if (MxOmni::DoesEntityExist(p_dsAction)) {
+		if (FindByEntityIdOrAtomId(p_dsAction.GetAtomId(), p_dsAction.GetObjectId()) == NULL) {
 			return TRUE;
 		}
 	}
@@ -536,17 +536,17 @@ void LegoOmni::CreateBackgroundAudio()
 }
 
 // FUNCTION: LEGO1 0x1005b580
-MxResult LegoOmni::Start(MxDSAction* action)
+MxResult LegoOmni::Start(MxDSAction* p_dsAction)
 {
-	MxResult result = MxOmni::Start(action);
-	this->m_action.SetAtomId(action->GetAtomId());
-	this->m_action.SetObjectId(action->GetObjectId());
-	this->m_action.SetUnknown24(action->GetUnknown24());
+	MxResult result = MxOmni::Start(p_dsAction);
+	this->m_action.SetAtomId(p_dsAction->GetAtomId());
+	this->m_action.SetObjectId(p_dsAction->GetObjectId());
+	this->m_action.SetUnknown24(p_dsAction->GetUnknown24());
 	return result;
 }
 
 // STUB: LEGO1 0x1005b5f0
-MxLong LegoOmni::Notify(MxParam& p)
+MxLong LegoOmni::Notify(MxParam& p_param)
 {
 	// TODO
 	return 0;
@@ -636,21 +636,21 @@ void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
 MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
 {
 	char* buf;
-	_MMCKINFO tmp_chunk;
+	_MMCKINFO tmpChunk;
 
 	if (p_file->Seek(((MxLong*) p_file->GetBuffer())[p_ofs], 0)) {
 		return NULL;
 	}
 
-	if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'S', 't')) {
-		if (p_file->Read((MxU8*) &tmp_chunk.ckid, 8) == 0 && tmp_chunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
+	if (p_file->Read((MxU8*) &tmpChunk.ckid, 8) == 0 && tmpChunk.ckid == FOURCC('M', 'x', 'S', 't')) {
+		if (p_file->Read((MxU8*) &tmpChunk.ckid, 8) == 0 && tmpChunk.ckid == FOURCC('M', 'x', 'O', 'b')) {
 
-			buf = new char[tmp_chunk.cksize];
+			buf = new char[tmpChunk.cksize];
 			if (!buf) {
 				return NULL;
 			}
 
-			if (p_file->Read((MxU8*) buf, tmp_chunk.cksize) != 0) {
+			if (p_file->Read((MxU8*) buf, tmpChunk.cksize) != 0) {
 				return NULL;
 			}
 

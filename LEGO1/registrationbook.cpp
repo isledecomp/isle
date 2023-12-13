@@ -13,7 +13,7 @@ RegistrationBook::~RegistrationBook()
 }
 
 // STUB: LEGO1 0x100770e0
-MxLong RegistrationBook::Notify(MxParam& p)
+MxLong RegistrationBook::Notify(MxParam& p_param)
 {
 	// TODO
 

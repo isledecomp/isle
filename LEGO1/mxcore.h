@@ -13,9 +13,9 @@ class MxParam;
 class MxCore {
 public:
 	__declspec(dllexport) MxCore();
-	__declspec(dllexport) virtual ~MxCore();                 // vtable+00
-	__declspec(dllexport) virtual MxLong Notify(MxParam& p); // vtable+04
-	virtual MxResult Tickle();                               // vtable+08
+	__declspec(dllexport) virtual ~MxCore();                       // vtable+00
+	__declspec(dllexport) virtual MxLong Notify(MxParam& p_param); // vtable+04
+	virtual MxResult Tickle();                                     // vtable+08
 
 	// FUNCTION: LEGO1 0x100144c0
 	inline virtual const char* ClassName() const // vtable+0c
@@ -25,9 +25,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100140d0
-	inline virtual MxBool IsA(const char* name) const // vtable+10
+	inline virtual MxBool IsA(const char* p_name) const // vtable+10
 	{
-		return !strcmp(name, MxCore::ClassName());
+		return !strcmp(p_name, MxCore::ClassName());
 	}
 
 	inline MxU32 GetId() { return m_id; }

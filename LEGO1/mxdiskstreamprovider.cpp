@@ -29,7 +29,7 @@ MxDiskStreamProvider::MxDiskStreamProvider()
 {
 	this->m_pFile = NULL;
 	this->m_remainingWork = 0;
-	this->m_unk35 = 0;
+	this->m_unk0x35 = 0;
 }
 
 // STUB: LEGO1 0x100d1240
@@ -71,7 +71,7 @@ done:
 }
 
 // STUB: LEGO1 0x100d15e0
-void MxDiskStreamProvider::vtable0x20(undefined4 p_unknown1)
+void MxDiskStreamProvider::VTable0x20(undefined4)
 {
 	// TODO
 }
@@ -81,7 +81,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
 	while (m_remainingWork != 0) {
 		m_busySemaphore.Wait(INFINITE);
-		if (m_unk35 != 0)
+		if (m_unk0x35 != 0)
 			PerformWork();
 	}
 	return SUCCESS;

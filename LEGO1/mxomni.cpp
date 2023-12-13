@@ -33,8 +33,8 @@ void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
 	action.SetAtomId(*p_id);
 	action.SetUnknown24(-2);
 
-	for (MxS32 l_first = p_first, l_last = p_last; l_first <= l_last; l_first++) {
-		action.SetObjectId(l_first);
+	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
+		action.SetObjectId(first);
 		DeleteObject(action);
 	}
 }
@@ -159,43 +159,43 @@ void MxOmni::Init()
 }
 
 // FUNCTION: LEGO1 0x100af0b0
-void MxOmni::SetInstance(MxOmni* instance)
+void MxOmni::SetInstance(MxOmni* p_instance)
 {
-	g_instance = instance;
+	g_instance = p_instance;
 }
 
 // FUNCTION: LEGO1 0x100af0c0
-MxResult MxOmni::Create(MxOmniCreateParam& p)
+MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
 
 	if (!(m_atomIdCounterSet = new MxAtomIdCounterSet()))
 		goto done;
 
-	m_mediaPath = p.GetMediaPath();
-	m_windowHandle = p.GetWindowHandle();
+	m_mediaPath = p_param.GetMediaPath();
+	m_windowHandle = p_param.GetWindowHandle();
 
-	if (p.CreateFlags().CreateObjectFactory()) {
+	if (p_param.CreateFlags().CreateObjectFactory()) {
 		if (!(m_objectFactory = new MxObjectFactory()))
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateVariableTable()) {
+	if (p_param.CreateFlags().CreateVariableTable()) {
 		if (!(m_variableTable = new MxVariableTable()))
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateTimer()) {
+	if (p_param.CreateFlags().CreateTimer()) {
 		if (!(m_timer = new MxTimer()))
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateTickleManager()) {
+	if (p_param.CreateFlags().CreateTickleManager()) {
 		if (!(m_tickleManager = new MxTickleManager()))
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateNotificationManager()) {
+	if (p_param.CreateFlags().CreateNotificationManager()) {
 		if (m_notificationManager = new MxNotificationManager()) {
 			if (m_notificationManager->Create(100, 0) != SUCCESS)
 				goto done;
@@ -204,21 +204,21 @@ MxResult MxOmni::Create(MxOmniCreateParam& p)
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateStreamer()) {
+	if (p_param.CreateFlags().CreateStreamer()) {
 		if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS)
 			goto done;
 	}
 
-	if (p.CreateFlags().CreateVideoManager()) {
+	if (p_param.CreateFlags().CreateVideoManager()) {
 		if (m_videoManager = new MxVideoManager()) {
-			if (m_videoManager->Create(p.GetVideoParam(), 100, 0) != SUCCESS) {
+			if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 				delete m_videoManager;
 				m_videoManager = NULL;
 			}
 		}
 	}
 
-	if (p.CreateFlags().CreateSoundManager()) {
+	if (p_param.CreateFlags().CreateSoundManager()) {
 		if (m_soundManager = new MxSoundManager()) {
 			if (m_soundManager->Create(10, 0) != SUCCESS) {
 				delete m_soundManager;
@@ -227,7 +227,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p)
 		}
 	}
 
-	if (p.CreateFlags().CreateMusicManager()) {
+	if (p_param.CreateFlags().CreateMusicManager()) {
 		if (m_musicManager = new MxMusicManager()) {
 			if (m_musicManager->Create(50, 0) != SUCCESS) {
 				delete m_musicManager;
@@ -236,7 +236,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p)
 		}
 	}
 
-	if (p.CreateFlags().CreateEventManager()) {
+	if (p_param.CreateFlags().CreateEventManager()) {
 		if (m_eventManager = new MxEventManager()) {
 			if (m_eventManager->Create(50, 0) != SUCCESS) {
 				delete m_eventManager;
@@ -339,14 +339,14 @@ void MxOmni::DestroyInstance()
 }
 
 // FUNCTION: LEGO1 0x100b07f0
-MxLong MxOmni::Notify(MxParam& p)
+MxLong MxOmni::Notify(MxParam& p_param)
 {
 	MxAutoLocker lock(&this->m_criticalsection);
 
-	if (((MxNotificationParam&) p).GetNotification() != c_notificationEndAction)
+	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction)
 		return 0;
 
-	return HandleNotificationType2(p);
+	return HandleNotificationType2(p_param);
 }
 
 // STUB: LEGO1 0x100b0880
@@ -387,9 +387,9 @@ MxBool MxOmni::IsSound3D()
 }
 
 // FUNCTION: LEGO1 0x100b0990
-void MxOmni::SetSound3D(MxBool p_3dsound)
+void MxOmni::SetSound3D(MxBool p_use3dSound)
 {
-	g_use3dSound = p_3dsound;
+	g_use3dSound = p_use3dSound;
 }
 
 // FUNCTION: LEGO1 0x100b09a0

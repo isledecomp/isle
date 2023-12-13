@@ -18,15 +18,15 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000fde0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, SkateBoard::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, SkateBoard::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 private:
 	// TODO: SkateBoard types
-	undefined m_unk160;
-	undefined m_unk161[0x7];
+	undefined m_unk0x160;
+	undefined m_unk0x161[0x7];
 };
 
 #endif // SKATEBOARD_H

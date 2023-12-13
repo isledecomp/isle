@@ -15,9 +15,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000d8a0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Lego3DWavePresenter::ClassName()) || MxWavePresenter::IsA(name);
+		return !strcmp(p_name, Lego3DWavePresenter::ClassName()) || MxWavePresenter::IsA(p_name);
 	}
 };
 

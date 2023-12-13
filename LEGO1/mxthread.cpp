@@ -7,7 +7,7 @@
 #include <process.h>
 
 // FUNCTION: LEGO1 0x100b8bb0
-MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
+MxTickleThread::MxTickleThread(MxCore* p_target, MxS32 p_frequencyMS)
 {
 	m_target = p_target;
 	m_frequencyMS = p_frequencyMS;
@@ -18,14 +18,15 @@ MxTickleThread::MxTickleThread(MxCore* p_target, int p_frequencyMS)
 MxResult MxTickleThread::Run()
 {
 	MxTimer* timer = Timer();
-	int lastTickled = -m_frequencyMS;
+	MxS32 lastTickled = -m_frequencyMS;
 	while (IsRunning()) {
-		int currentTime = timer->GetTime();
+		MxLong currentTime = timer->GetTime();
 
 		if (currentTime < lastTickled) {
 			lastTickled = -m_frequencyMS;
 		}
-		int timeRemainingMS = (m_frequencyMS - currentTime) + lastTickled;
+
+		MxS32 timeRemainingMS = (m_frequencyMS - currentTime) + lastTickled;
 		if (timeRemainingMS <= 0) {
 			m_target->Tickle();
 			timeRemainingMS = 0;
@@ -54,7 +55,7 @@ MxThread::~MxThread()
 typedef unsigned(__stdcall* ThreadFunc)(void*);
 
 // FUNCTION: LEGO1 0x100bf610
-MxResult MxThread::Start(int p_stack, int p_flag)
+MxResult MxThread::Start(MxS32 p_stack, MxS32 p_flag)
 {
 	MxResult result = FAILURE;
 	if (m_semaphore.Init(0, 1) == SUCCESS) {

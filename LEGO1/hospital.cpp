@@ -13,7 +13,7 @@ Hospital::~Hospital()
 }
 
 // STUB: LEGO1 0x10074990
-MxLong Hospital::Notify(MxParam& p)
+MxLong Hospital::Notify(MxParam& p_param)
 {
 	// TODO
 

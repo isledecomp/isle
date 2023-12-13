@@ -17,8 +17,8 @@ LegoSoundManager::~LegoSoundManager()
 // FUNCTION: LEGO1 0x100299a0
 void LegoSoundManager::Init()
 {
-	unk0x40 = 0;
-	unk0x3c = 0;
+	m_unk0x40 = 0;
+	m_unk0x3c = 0;
 }
 
 // STUB: LEGO1 0x100299b0

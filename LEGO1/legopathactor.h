@@ -20,9 +20,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000c440
-	inline MxBool IsA(const char* name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoPathActor::ClassName()) || LegoActor::IsA(name);
+		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
 	virtual void VTable0x68(); // vtable+0x68
@@ -53,13 +53,13 @@ public:
 
 protected:
 	// TODO: the types
-	undefined unk78[0xc4];
-	MxFloat m_unk13c;
-	MxS32 m_unk140;
-	MxS32 m_unk144;
-	undefined m_unk148;
-	MxS32 m_unk14c;
-	MxFloat m_unk150;
+	undefined m_pad[0xc4];
+	MxFloat m_unk0x13c;
+	MxS32 m_unk0x140;
+	MxS32 m_unk0x144;
+	undefined m_unk0x148;
+	MxS32 m_unk0x14c;
+	MxFloat m_unk0x150;
 };
 
 #endif // LEGOPATHACTOR_H

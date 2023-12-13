@@ -18,15 +18,15 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100b9440
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxRAMStreamController::ClassName()) || !strcmp(name, MxStreamController::ClassName()) ||
-			   MxCore::IsA(name);
+		return !strcmp(p_name, MxRAMStreamController::ClassName()) ||
+			   !strcmp(p_name, MxStreamController::ClassName()) || MxCore::IsA(p_name);
 	}
 
 	virtual MxResult Open(const char* p_filename) override;
-	virtual MxResult vtable0x20(MxDSAction* p_action) override;
-	virtual MxResult vtable0x24(MxDSAction* p_action) override;
+	virtual MxResult VTable0x20(MxDSAction* p_action) override;
+	virtual MxResult VTable0x24(MxDSAction* p_action) override;
 
 private:
 	MxDSBuffer m_buffer;

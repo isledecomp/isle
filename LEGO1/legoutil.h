@@ -54,7 +54,7 @@ inline void GetString(char** p_source, const char* p_dest, T* p_obj, void (T::*p
 }
 
 ExtraActionType MatchActionString(const char*);
-void ConvertHSVToRGB(float r, float g, float b, float* out_r, float* out_g, float* out_b);
+void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);
 void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id);
 void SetAppCursor(WPARAM p_wparam);
 

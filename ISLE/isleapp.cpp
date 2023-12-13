@@ -40,7 +40,7 @@ IsleApp::IsleApp()
 	m_backBuffersInVram = 1;
 	m_using8bit = 0;
 	m_using16bit = 1;
-	m_unk24 = 0;
+	m_unk0x24 = 0;
 	m_drawCursor = 0;
 	m_use3dSound = 1;
 	m_useMusic = 1;
@@ -54,7 +54,7 @@ IsleApp::IsleApp()
 	m_windowActive = 1;
 
 	m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
-	m_videoParam.flags().Set16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
+	m_videoParam.Flags().Set16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
 	m_windowHandle = NULL;
 	m_cursorArrow = NULL;
@@ -157,19 +157,19 @@ void IsleApp::SetupVideoFlags(
 	char* deviceId
 )
 {
-	m_videoParam.flags().SetFullScreen(fullScreen);
-	m_videoParam.flags().SetFlipSurfaces(flipSurfaces);
-	m_videoParam.flags().SetBackBuffers(!backBuffers);
-	m_videoParam.flags().Set_f2bit0(!param_6);
-	m_videoParam.flags().Set_f1bit7(param_7);
-	m_videoParam.flags().SetWideViewAngle(wideViewAngle);
-	m_videoParam.flags().Set_f2bit1(1);
+	m_videoParam.Flags().SetFullScreen(fullScreen);
+	m_videoParam.Flags().SetFlipSurfaces(flipSurfaces);
+	m_videoParam.Flags().SetBackBuffers(!backBuffers);
+	m_videoParam.Flags().SetF2bit0(!param_6);
+	m_videoParam.Flags().SetF1bit7(param_7);
+	m_videoParam.Flags().SetWideViewAngle(wideViewAngle);
+	m_videoParam.Flags().SetF2bit1(1);
 	m_videoParam.SetDeviceName(deviceId);
 	if (using8bit) {
-		m_videoParam.flags().Set16Bit(0);
+		m_videoParam.Flags().Set16Bit(0);
 	}
 	if (using16bit) {
-		m_videoParam.flags().Set16Bit(1);
+		m_videoParam.Flags().Set16Bit(1);
 	}
 }
 
@@ -494,7 +494,7 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 		m_backBuffersInVram,
 		m_using8bit,
 		m_using16bit,
-		m_unk24,
+		m_unk0x24,
 		FALSE,
 		m_wideViewAngle,
 		m_deviceId

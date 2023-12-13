@@ -21,9 +21,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100caf10
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(name);
+		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}
 
 	virtual MxLong GetDuration() override; // vtable+24;

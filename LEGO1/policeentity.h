@@ -15,9 +15,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000ed70
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, PoliceEntity::ClassName()) || BuildingEntity::IsA(name);
+		return !strcmp(p_name, PoliceEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 };
 

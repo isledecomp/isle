@@ -16,14 +16,14 @@ public:
 	MxDiskStreamController();
 	virtual ~MxDiskStreamController() override;
 
-	virtual MxResult Tickle() override;                                                // vtable+0x8
-	virtual MxResult Open(const char* p_filename) override;                            // vtable+0x14
-	virtual MxResult vtable0x18(undefined4 p_unknown, undefined4 p_unknown2) override; // vtable+0x18
-	virtual MxResult vtable0x20(MxDSAction* p_action) override;                        // vtable+0x20
-	virtual MxResult vtable0x24(undefined4 p_unknown) override;                        // vtable+0x24
-	virtual MxResult vtable0x28() override;                                            // vtable+0x28
-	virtual MxResult vtable0x30(undefined4 p_unknown) override;                        // vtable+0x30
-	virtual MxResult vtable0x34(undefined4 p_unknown);                                 // vtable+0x34
+	virtual MxResult Tickle() override;                           // vtable+0x8
+	virtual MxResult Open(const char* p_filename) override;       // vtable+0x14
+	virtual MxResult VTable0x18(undefined4, undefined4) override; // vtable+0x18
+	virtual MxResult VTable0x20(MxDSAction* p_action) override;   // vtable+0x20
+	virtual MxResult VTable0x24(MxDSAction* p_action) override;   // vtable+0x24
+	virtual MxResult VTable0x28() override;                       // vtable+0x28
+	virtual MxResult VTable0x30(MxDSAction* p_action) override;   // vtable+0x30
+	virtual MxResult VTable0x34(undefined4);                      // vtable+0x34
 
 	// FUNCTION: LEGO1 0x100c7360
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -33,21 +33,21 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c7370
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(name);
+		return !strcmp(p_name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(p_name);
 	}
 
 private:
 	MxStreamListMxDSAction m_list0x64; // 0x64
-	undefined m_unk70;                 // 0x70
+	undefined m_unk0x70;               // 0x70
 	list<MxDSBuffer*> m_list0x74;      // 0x74
 	MxStreamListMxDSAction m_list0x80; // 0x80
-	undefined2 m_unk8c;                // 0x8c
+	undefined2 m_unk0x8c;              // 0x8c
 	MxStreamListMxDSAction m_list0x90; // 0x90
 	MxCriticalSection m_critical9c;    // 0x9c
 	MxStreamListMxDSAction m_list0xb8; // 0xb8
-	undefined m_unkc4;                 // 0xc4
+	undefined m_unk0xc4;               // 0xc4
 };
 
 // TEMPLATE: LEGO1 0x100c7330

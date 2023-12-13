@@ -1,9 +1,9 @@
 #include "mxautolocker.h"
 
 // FUNCTION: LEGO1 0x100b8ed0
-MxAutoLocker::MxAutoLocker(MxCriticalSection* critsect)
+MxAutoLocker::MxAutoLocker(MxCriticalSection* p_criticalSection)
 {
-	this->m_criticalSection = critsect;
+	this->m_criticalSection = p_criticalSection;
 	if (this->m_criticalSection != 0)
 		this->m_criticalSection->Enter();
 }

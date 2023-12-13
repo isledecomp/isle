@@ -10,7 +10,7 @@
 // SIZE 0x414
 class MxPalette : public MxCore {
 public:
-	__declspec(dllexport) MxBool operator==(MxPalette&);
+	__declspec(dllexport) MxBool operator==(MxPalette& p_other);
 	__declspec(dllexport) void Detach();
 
 	MxPalette();
@@ -22,7 +22,7 @@ public:
 	void GetDefaultPalette(LPPALETTEENTRY p_entries);
 	MxResult GetEntries(LPPALETTEENTRY p_entries);
 	MxResult SetEntries(LPPALETTEENTRY p_palette);
-	MxResult SetSkyColor(LPPALETTEENTRY p_sky_color);
+	MxResult SetSkyColor(LPPALETTEENTRY p_skyColor);
 	void Reset(MxBool p_ignoreSkyColor);
 	LPDIRECTDRAWPALETTE CreateNativePalette();
 	inline void SetOverrideSkyColor(MxBool p_value) { this->m_overrideSkyColor = p_value; }

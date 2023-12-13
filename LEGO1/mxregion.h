@@ -9,7 +9,7 @@
 // SIZE 0x0c
 struct MxRegionTopBottom {
 	MxRegionTopBottom(MxRect32& p_rect);
-	MxRegionTopBottom(MxS32 m_top, MxS32 m_bottom);
+	MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom);
 
 	MxRegionTopBottom* Clone();
 	void FUN_100c5280(MxS32 p_left, MxS32 p_right);
@@ -58,9 +58,9 @@ public:
 	virtual ~MxRegion() override;
 
 	virtual void Reset();
-	virtual void vtable18(MxRect32& p_rect);
-	virtual MxBool vtable1c(MxRect32& p_rect);
-	virtual MxBool vtable20();
+	virtual void VTable0x18(MxRect32& p_rect);
+	virtual MxBool VTable0x1c(MxRect32& p_rect);
+	virtual MxBool VTable0x20();
 
 	inline MxRect32& GetRect() { return this->m_rect; }
 

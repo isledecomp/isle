@@ -37,13 +37,13 @@ public:
 	virtual void UpdateWorldVelocity();
 
 protected:
-	char m_unkc;
+	char m_unk0xc;
 	Matrix4Data m_local2world;              // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Vector3Data m_world_velocity;           // 0xc0
-	unsigned int m_unkd4;
-	unsigned int m_unkd8;
+	unsigned int m_unk0xd4;
+	unsigned int m_unk0xd8;
 };
 
 #endif // ORIENTABLEROI_H

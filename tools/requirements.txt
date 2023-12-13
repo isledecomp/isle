@@ -1,5 +1,7 @@
 tools/isledecomp
 capstone
+clang==16.*
 colorama
 isledecomp
 pystache
+pyyaml

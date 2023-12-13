@@ -19,9 +19,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10003080
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Helicopter::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
@@ -32,14 +32,14 @@ public:
 	virtual ~Helicopter() override; // vtable+0x0
 
 protected:
-	Matrix4Data m_unk160;
-	Matrix4Data m_unk1a8;
-	undefined4 m_unk1f0;
-	Vector4Data m_unk1f4;
-	Vector4Data m_unk20c;
-	undefined4 m_unk224;
+	Matrix4Data m_unk0x160;
+	Matrix4Data m_unk0x1a8;
+	undefined4 m_unk0x1f0;
+	Vector4Data m_unk0x1f4;
+	Vector4Data m_unk0x20c;
+	undefined4 m_unk0x224;
 	HelicopterState* m_state;
-	MxAtomId m_unk22c;
+	MxAtomId m_unk0x22c;
 
 private:
 	void GetState();
