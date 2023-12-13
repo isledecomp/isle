@@ -8,8 +8,8 @@ DECOMP_SIZE_ASSERT(MxCompositeMediaPresenter, 0x50)
 // FUNCTION: LEGO1 0x10073ea0
 MxCompositeMediaPresenter::MxCompositeMediaPresenter()
 {
-	m_unk4c = 0;
-	m_unk4e = 0;
+	m_unk0x4c = 0;
+	m_unk0x4e = 0;
 	VideoManager()->AddPresenter(*this);
 }
 
