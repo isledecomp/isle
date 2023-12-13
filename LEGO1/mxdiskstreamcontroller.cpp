@@ -85,13 +85,11 @@ void MxDiskStreamController::FUN_100c7f40(MxDSStreamingAction* p_streamingaction
 MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 {
 	MxAutoLocker lock(&this->m_criticalSection);
-	MxDSStreamingAction* action;
-
 	MxDSStreamingAction* entry =
 		(MxDSStreamingAction*) m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
 
 	if (entry) {
-		action = new MxDSStreamingAction(*p_action, 0);
+		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
 		action->SetUnknown28(entry->GetUnknown28());
 		action->SetUnknown84(entry->GetUnknown84());
 		action->SetOrigin(entry->GetOrigin());
