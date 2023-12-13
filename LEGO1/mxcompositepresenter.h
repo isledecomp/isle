@@ -1,6 +1,7 @@
 #ifndef MXCOMPOSITEPRESENTER_H
 #define MXCOMPOSITEPRESENTER_H
 
+#include "mxactionnotificationparam.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
 
@@ -28,15 +29,15 @@ public:
 		return !strcmp(p_name, MxCompositePresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}
 
-	virtual MxResult StartAction(MxStreamController*, MxDSAction* p_action) override; // vtable+0x3c
-	virtual void EndAction() override;                                                // vtable+0x40
-	virtual void SetTickleState(TickleState p_tickleState) override;                  // vtable+0x44
-	virtual MxBool HasTickleStatePassed(TickleState p_tickleState) override;          // vtable+0x48
-	virtual void Enable(MxBool p_enable) override;                                    // vtable+0x54
-	virtual void VTable0x58(MxParam& p_param);                                        // vtable+0x58
-	virtual void VTable0x5c(MxParam& p_param);                                        // vtable+0x5c
-	virtual void VTable0x60(MxPresenter* p_presenter);                                // vtable+0x60
-	virtual MxBool VTable0x64(undefined4 p_undefined);                                // vtable+0x64
+	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
+	virtual void EndAction() override;                                                             // vtable+0x40
+	virtual void SetTickleState(TickleState p_tickleState) override;                               // vtable+0x44
+	virtual MxBool HasTickleStatePassed(TickleState p_tickleState) override;                       // vtable+0x48
+	virtual void Enable(MxBool p_enable) override;                                                 // vtable+0x54
+	virtual void VTable0x58(MxEndActionNotificationParam& p_param);                                // vtable+0x58
+	virtual void VTable0x5c(MxNotificationParam& p_param);                                         // vtable+0x5c
+	virtual void VTable0x60(MxPresenter* p_presenter);                                             // vtable+0x60
+	virtual MxBool VTable0x64(undefined4 p_undefined);                                             // vtable+0x64
 
 private:
 	MxCompositePresenterList m_list; // 0x40
@@ -56,5 +57,8 @@ private:
 
 // TEMPLATE: LEGO1 0x100b6340
 // List<MxPresenter *>::~List<MxPresenter *>
+
+// TEMPLATE: LEGO1 0x100b6cd0
+// MxList<MxDSAction *>::_DeleteEntry
 
 #endif // MXCOMPOSITEPRESENTER_H
