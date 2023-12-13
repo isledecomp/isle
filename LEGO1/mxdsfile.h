@@ -6,6 +6,8 @@
 #include "mxstring.h"
 #include "mxtypes.h"
 
+#include <windows.h>
+
 // VTABLE: LEGO1 0x100dc890
 class MxDSFile : public MxDSSource {
 public:
@@ -33,6 +35,8 @@ public:
 	__declspec(dllexport) virtual MxULong GetStreamBuffersNum();          // vtable+0x2c
 
 	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
+
+	inline MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
 
 private:
 	MxLong ReadChunks();

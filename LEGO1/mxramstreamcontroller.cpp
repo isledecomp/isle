@@ -1,11 +1,12 @@
 #include "mxramstreamcontroller.h"
 
 #include "mxautolocker.h"
+#include "mxdsstreamingaction.h"
 #include "mxramstreamprovider.h"
 
 DECOMP_SIZE_ASSERT(MxRAMStreamController, 0x98);
 
-undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize);
+undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize);
 
 // FUNCTION: LEGO1 0x100c6110
 MxResult MxRAMStreamController::Open(const char* p_filename)
@@ -21,7 +22,7 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 			return FAILURE;
 		}
 
-		FUN_100d0d80(
+		ReadData(
 			((MxRAMStreamProvider*) m_provider)->GetBufferOfFileSize(),
 			((MxRAMStreamProvider*) m_provider)->GetFileSize()
 		);
@@ -35,11 +36,32 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100c6210
+// FUNCTION: LEGO1 0x100c6210
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
-	// TODO STUB
-	return FAILURE;
+	MxAutoLocker locker(&m_criticalSection);
+	MxS16 unk0x24 = 0;
+	MxResult result = FAILURE;
+	if (p_action->GetUnknown24() == -1) {
+		p_action->SetUnknown24(-3);
+		MxDSAction* action = m_unk0x54.Find(p_action, FALSE);
+		if (action != NULL) {
+			unk0x24 = action->GetUnknown24() + 1;
+		}
+		p_action->SetUnknown24(unk0x24);
+	}
+	else {
+		if (m_unk0x54.Find(p_action, FALSE)) {
+			return FAILURE;
+		}
+	}
+
+	if (MxStreamController::VTable0x20(p_action) == SUCCESS) {
+		MxDSStreamingAction* action = (MxDSStreamingAction*) m_unk0x3c.Find(p_action, FALSE);
+		MxDSStreamingAction streamingaction(*action);
+		result = DeserializeObject(streamingaction);
+	}
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100c6320
@@ -57,8 +79,21 @@ MxResult MxRAMStreamController::VTable0x24(MxDSAction* p_action)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100c63c0
+MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
+{
+	MxAutoLocker locker(&m_criticalSection);
+	MxResult result;
+	undefined4 value = 0;
+	do {
+		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
+		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
+	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
+	return result;
+}
+
 // STUB: LEGO1 0x100d0d80
-undefined* __cdecl FUN_100d0d80(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
+undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
 {
 	return NULL;
 }
