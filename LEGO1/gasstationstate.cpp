@@ -11,8 +11,8 @@ GasStationState::GasStationState()
 	m_unk0x1e = 0;
 	m_unk0x20 = 0;
 
-	undefined4* unk = m_unk0x08;
-	unk[0] = -1;
-	unk[1] = -1;
-	unk[2] = -1;
+	undefined4* unk0x08 = m_unk0x08;
+	unk0x08[0] = -1;
+	unk0x08[1] = -1;
+	unk0x08[2] = -1;
 }

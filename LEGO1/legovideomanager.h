@@ -19,12 +19,12 @@ public:
 	__declspec(dllexport) int DisableRMDevice();
 	void EnableFullScreenMovie(MxBool p_enable);
 	__declspec(dllexport) void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
-	__declspec(dllexport) void MoveCursor(int x, int y);
+	__declspec(dllexport) void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
 
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 
-	void SetSkyColor(float r, float g, float b);
+	void SetSkyColor(float p_red, float p_green, float p_blue);
 	inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
 
 	// FUNCTION: LEGO1 0x1007c4c0
@@ -36,10 +36,10 @@ public:
 	virtual void Destroy() override; // vtable+0x18
 
 private:
-	undefined4 m_unk64;
+	undefined4 m_unk0x64;
 	Lego3DManager* m_3dManager; // 0x68
-	undefined4 m_unk6c;
-	undefined4 m_unk70;
+	undefined4 m_unk0x6c;
+	undefined4 m_unk0x70;
 	MxDirect3D* m_direct3d; // 0x74
 	undefined4 m_unk0x78[27];
 	MxBool m_unk0xe4;
@@ -47,7 +47,7 @@ private:
 	MxBool m_unk0xe6;
 	PALETTEENTRY m_paletteEntries[256]; // 0xe7
 	undefined m_padding0x4e7;
-	undefined4 m_unk4e8;
+	undefined4 m_unk0x4e8;
 	MxBool m_isFullscreenMovie;   // 0x4ec
 	MxPalette* m_palette;         // 0x4f0
 	LARGE_INTEGER* m_prefCounter; // 0x4f4

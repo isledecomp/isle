@@ -18,9 +18,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10085cd0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, JukeBoxEntity::ClassName()) || LegoEntity::IsA(name);
+		return !strcmp(p_name, JukeBoxEntity::ClassName()) || LegoEntity::IsA(p_name);
 	}
 };
 

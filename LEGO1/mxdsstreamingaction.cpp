@@ -10,7 +10,7 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset)
 	Init();
 
 	*this = p_dsAction;
-	this->m_unk94 = p_offset;
+	this->m_unk0x94 = p_offset;
 	this->m_bufferOffset = p_offset;
 }
 
@@ -32,10 +32,10 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSStreamingAction& p_dsStreamingActio
 // FUNCTION: LEGO1 0x100cd150
 MxDSStreamingAction::~MxDSStreamingAction()
 {
-	if (this->m_unka0)
-		delete this->m_unka0;
-	if (this->m_unka4)
-		delete this->m_unka4;
+	if (this->m_unk0xa0)
+		delete this->m_unk0xa0;
+	if (this->m_unk0xa4)
+		delete this->m_unk0xa4;
 	if (this->m_internalAction)
 		delete this->m_internalAction;
 }
@@ -43,13 +43,13 @@ MxDSStreamingAction::~MxDSStreamingAction()
 // FUNCTION: LEGO1 0x100cd1e0
 MxResult MxDSStreamingAction::Init()
 {
-	this->m_unk94 = 0;
+	this->m_unk0x94 = 0;
 	this->m_bufferOffset = 0;
-	this->m_unk9c = 0;
-	this->m_unka0 = NULL;
-	this->m_unka4 = NULL;
-	this->m_unka8 = 0;
-	this->m_unkac = 2;
+	this->m_unk0x9c = 0;
+	this->m_unk0xa0 = NULL;
+	this->m_unk0xa4 = NULL;
+	this->m_unk0xa8 = 0;
+	this->m_unk0xac = 2;
 	this->m_internalAction = NULL;
 	return SUCCESS;
 }
@@ -58,13 +58,13 @@ MxResult MxDSStreamingAction::Init()
 MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStreamingAction)
 {
 	*this = p_dsStreamingAction;
-	this->m_unk94 = p_dsStreamingAction.m_unk94;
+	this->m_unk0x94 = p_dsStreamingAction.m_unk0x94;
 	this->m_bufferOffset = p_dsStreamingAction.m_bufferOffset;
-	this->m_unk9c = p_dsStreamingAction.m_unk9c;
-	this->m_unka0 = NULL;
-	this->m_unka4 = NULL;
-	this->m_unkac = p_dsStreamingAction.m_unkac;
-	this->m_unka8 = p_dsStreamingAction.m_unka8;
+	this->m_unk0x9c = p_dsStreamingAction.m_unk0x9c;
+	this->m_unk0xa0 = NULL;
+	this->m_unk0xa4 = NULL;
+	this->m_unk0xac = p_dsStreamingAction.m_unk0xac;
+	this->m_unk0xa8 = p_dsStreamingAction.m_unk0xa8;
 	SetInternalAction(p_dsStreamingAction.m_internalAction ? p_dsStreamingAction.m_internalAction->Clone() : NULL);
 
 	return this;
@@ -79,7 +79,7 @@ void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100cd2d0
-void MxDSStreamingAction::FUN_100CD2D0()
+void MxDSStreamingAction::FUN_100cd2d0()
 {
 	if (this->m_duration == -1)
 		return;
@@ -88,5 +88,5 @@ void MxDSStreamingAction::FUN_100CD2D0()
 	this->m_loopCount--;
 
 	this->m_duration -= duration;
-	this->m_unka8 += duration;
+	this->m_unk0xa8 += duration;
 }

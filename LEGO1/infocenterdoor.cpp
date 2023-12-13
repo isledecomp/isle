@@ -13,7 +13,7 @@ InfocenterDoor::~InfocenterDoor()
 }
 
 // STUB: LEGO1 0x100379e0
-MxLong InfocenterDoor::Notify(MxParam& p)
+MxLong InfocenterDoor::Notify(MxParam& p_param)
 {
 	// TODO
 

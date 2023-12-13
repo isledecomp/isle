@@ -22,8 +22,8 @@ public:
 private:
 	Vector3Data min;
 	Vector3Data max;
-	Vector3Data m_unk28;
-	Vector3Data m_unk3c;
+	Vector3Data m_unk0x28;
+	Vector3Data m_unk0x3c;
 };
 
 /*

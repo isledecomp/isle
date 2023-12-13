@@ -25,21 +25,21 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10037fa0
-	inline MxBool IsA(const char* name) const override // vtable+10
+	inline MxBool IsA(const char* p_name) const override // vtable+10
 	{
-		return !strcmp(name, Pizza::ClassName()) || IsleActor::IsA(name);
+		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
 private:
-	undefined4 m_unk78;
-	undefined4 m_unk7c;
-	undefined4 m_unk80;
-	undefined4 m_unk84;
-	undefined4 m_unk88;
-	undefined4 m_unk8c;
-	undefined4 m_unk90;
-	undefined4 m_unk94;
-	undefined m_unk98;
+	undefined4 m_unk0x78;
+	undefined4 m_unk0x7c;
+	undefined4 m_unk0x80;
+	undefined4 m_unk0x84;
+	undefined4 m_unk0x88;
+	undefined4 m_unk0x8c;
+	undefined4 m_unk0x90;
+	undefined4 m_unk0x94;
+	undefined m_unk0x98;
 };
 
 #endif // PIZZA_H

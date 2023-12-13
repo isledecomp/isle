@@ -19,9 +19,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10071850
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, InfocenterState::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, InfocenterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	inline MxU32 GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
@@ -55,7 +55,7 @@ private:
 	  undefined4 unk13;
 	*/
 
-	undefined pad[0x70];
+	undefined m_pad[0x70];
 	MxU32 m_buffer[7]; // 0x78
 };
 

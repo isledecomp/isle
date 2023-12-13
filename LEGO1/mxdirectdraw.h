@@ -1,10 +1,10 @@
 #ifndef MXDIRECTDRAW_H
 #define MXDIRECTDRAW_H
 
+#include "mxtypes.h"
+
 #include <ddraw.h>
 #include <windows.h>
-
-extern BOOL g_is_PALETTEINDEXED8;
 
 // VTABLE: LEGO1 0x100db818
 // SIZE 0x880
@@ -14,23 +14,26 @@ public:
 
 	// size 0x0c
 	struct Mode {
-		int width;
-		int height;
-		int bitsPerPixel;
+		MxS32 m_width;
+		MxS32 m_height;
+		MxS32 m_bitsPerPixel;
 
-		int operator==(const Mode& rMode) const
+		MxS32 operator==(const Mode& p_mode) const
 		{
-			return ((width == rMode.width) && (height == rMode.height) && (bitsPerPixel == rMode.bitsPerPixel));
+			return (
+				(m_width == p_mode.m_width) && (m_height == p_mode.m_height) &&
+				(m_bitsPerPixel == p_mode.m_bitsPerPixel)
+			);
 		}
 	};
 
-	// size 0x17c
+	// SIZE 0x17c
 	struct DeviceModesInfo {
-		GUID* p_guid;
-		Mode* m_mode_ARRAY;
-		int count;
+		GUID* m_guid;
+		Mode* m_modeArray;
+		MxS32 m_count;
 		DDCAPS m_ddcaps;
-		void* a_178;
+		void* m_unk0x178;
 
 		DeviceModesInfo();
 		~DeviceModesInfo();
@@ -53,10 +56,10 @@ protected:
 	SIZE m_text2SizeOnSurface;
 	HWND m_hWndMain;
 	HFONT m_hFont;
-	BOOL m_bIgnoreWM_SIZE;
+	BOOL m_bIgnoreWMSIZE;
 	BOOL m_bPrimaryPalettized;
 	BOOL m_bFullScreen;
-	void* a_850;
+	void* m_unk0x850;
 	BOOL m_bOnlySystemMemory;
 	BOOL m_bIsOnPrimaryDevice;
 	ErrorHandler m_pErrorHandler;
@@ -88,7 +91,7 @@ public:
 	);
 	virtual void Destroy();
 	virtual void DestroyButNotDirectDraw();
-	virtual const char* ErrorToString(HRESULT error);
+	virtual const char* ErrorToString(HRESULT p_error);
 
 protected:
 	BOOL CacheOriginalPaletteEntries();
@@ -98,7 +101,7 @@ protected:
 	BOOL DDCreateSurfaces();
 	BOOL DDInit(BOOL fullscreen);
 	BOOL DDSetMode(int width, int height, int bpp);
-	void Error(const char* message, int error);
+	void Error(const char* p_message, MxS32 p_error);
 
 	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
 	BOOL IsSupportedMode(int width, int height, int bpp);
@@ -110,8 +113,8 @@ protected:
 	BOOL TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface);
 	BOOL TextToTextSurface1(const char* text);
 	BOOL TextToTextSurface2(const char* lpString);
-	void FUN_1009E020();
-	void FUN_1009D920();
+	void FUN_1009e020();
+	void FUN_1009d920();
 };
 
 #endif // MXDIRECTDRAW_H

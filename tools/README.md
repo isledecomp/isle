@@ -106,10 +106,10 @@ Member variables should be annotated with their relative offsets.
 ```
 class MxDSObject : public MxCore {
 private:
-	MxU32 m_sizeOnDisk; // 0x8
-	MxU16 m_type;       // 0xc
-	char* m_sourceName; // 0x10
-	undefined4 m_unk14; // 0x14
+	MxU32 m_sizeOnDisk;   // 0x8
+	MxU16 m_type;         // 0xc
+	char* m_sourceName;   // 0x10
+	undefined4 m_unk0x14; // 0x14
 ```
 
 ## Global variables (**WIP**)
@@ -135,9 +135,11 @@ Use `pip` to install the required packages to be able to use the Python tools fo
 pip install -r tools/requirements.txt
 ```
 
+* [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20), to get rid of a bugged warning
 * [`reccmp`](/tools/reccmp): Compares the original EXE or DLL with a recompiled EXE or DLL, provided a PDB file
-* [`verexp`](/tools/checkorder): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
-* [`checkorder`](/tools/checkorder): Checks function declarations, ensuring they appear in ascending order within a unit
+* [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
+* [`decomplint`](/tools/decomplint): Checks the decompilation annotations (see above)
+* [`ncc`](/tools/ncc): Checks naming conventions based on a set of rules
 * [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the "decompilation" annotations (see above)
 
 ## Testing

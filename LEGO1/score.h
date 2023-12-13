@@ -12,8 +12,8 @@
 class Score : public LegoWorld {
 public:
 	Score();
-	virtual ~Score() override;                  // vtable+0x0
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual ~Score() override;                        // vtable+0x0
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x100010c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -23,9 +23,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100010d0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Score::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, Score::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
 	// SYNTHETIC: LEGO1 0x100011e0
@@ -38,12 +38,12 @@ public:
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+68
 
 	void Paint();
-	MxLong FUN_10001510(MxEndActionNotificationParam& p);
-	MxLong FUN_100016d0(MxType17NotificationParam& p);
+	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
+	MxLong FUN_100016d0(MxType17NotificationParam& p_param);
 	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
 
 protected:
-	undefined4 m_unkf8;
+	undefined4 m_unk0xf8;
 	ScoreState* m_state;
 	MxU8* m_surface;
 

@@ -14,12 +14,12 @@ enum LookupMode {
 class MxAtomId {
 public:
 	__declspec(dllexport) MxAtomId(const char*, LookupMode);
-	__declspec(dllexport) MxAtomId& operator=(const MxAtomId& id);
+	__declspec(dllexport) MxAtomId& operator=(const MxAtomId& p_atomId);
 	__declspec(dllexport) ~MxAtomId();
 
 	MxAtomId() { this->m_internal = 0; }
 
-	inline MxBool operator==(const MxAtomId& other) const { return this->m_internal == other.m_internal; }
+	inline MxBool operator==(const MxAtomId& p_atomId) const { return this->m_internal == p_atomId.m_internal; }
 
 	void Clear();
 

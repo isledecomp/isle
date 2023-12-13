@@ -37,21 +37,21 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100ad990
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSAction::ClassName()) || MxDSObject::IsA(name);
+		return !strcmp(p_name, MxDSAction::ClassName()) || MxDSObject::IsA(p_name);
 	}
 
-	virtual MxU32 GetSizeOnDisk() override;                            // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk24) override; // vtable+1c;
-	virtual MxLong GetDuration();                                      // vtable+24;
-	virtual void SetDuration(MxLong p_duration);                       // vtable+28;
-	virtual MxDSAction* Clone();                                       // vtable+2c;
-	virtual void MergeFrom(MxDSAction& p_dsAction);                    // vtable+30;
-	virtual MxBool HasId(MxU32 p_objectId);                            // vtable+34;
-	virtual void SetUnkTimingField(MxLong p_unkTimingField);           // vtable+38;
-	virtual MxLong GetUnkTimingField();                                // vtable+3c;
-	virtual MxLong GetElapsedTime();                                   // vtable+40;
+	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual MxLong GetDuration();                                        // vtable+24;
+	virtual void SetDuration(MxLong p_duration);                         // vtable+28;
+	virtual MxDSAction* Clone();                                         // vtable+2c;
+	virtual void MergeFrom(MxDSAction& p_dsAction);                      // vtable+30;
+	virtual MxBool HasId(MxU32 p_objectId);                              // vtable+34;
+	virtual void SetUnknown90(MxLong p_unk0x90);                         // vtable+38;
+	virtual MxLong GetUnknown90();                                       // vtable+3c;
+	virtual MxLong GetElapsedTime();                                     // vtable+40;
 
 	void AppendData(MxU16 p_extraLength, const char* p_extraData);
 
@@ -63,7 +63,7 @@ public:
 	inline MxS32 GetLoopCount() { return m_loopCount; }
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 	inline const Vector3Data& GetLocation() const { return m_location; }
-	inline void SetUnknown84(MxCore* p_unk84) { m_unk84 = p_unk84; }
+	inline void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	inline MxCore* GetOrigin() { return m_origin; }
 	inline void SetOrigin(MxCore* p_origin) { m_origin = p_origin; }
 
@@ -89,10 +89,10 @@ protected:
 	Vector3Data m_up;        // 0x68
 	char* m_extraData;       // 0x7c
 	MxU16 m_extraLength;     // 0x80
-	MxCore* m_unk84;         // 0x84
-	undefined4 m_unk88;      // 0x88
+	MxCore* m_unk0x84;       // 0x84
+	undefined4 m_unk0x88;    // 0x88
 	MxCore* m_origin;        // 0x8c
-	MxLong m_unkTimingField; // 0x90
+	MxLong m_unk0x90;        // 0x90
 };
 
 #endif // MXDSACTION_H

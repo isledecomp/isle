@@ -5,7 +5,7 @@
 
 class MxAutoLocker {
 public:
-	MxAutoLocker(MxCriticalSection* cs);
+	MxAutoLocker(MxCriticalSection* p_criticalSection);
 	~MxAutoLocker();
 
 private:

@@ -17,16 +17,16 @@ public:
 	inline MxLong GetTime()
 	{
 		if (this->m_isRunning)
-			return s_LastTimeTimerStarted;
+			return g_lastTimeTimerStarted;
 		else
-			return s_LastTimeCalculated - this->m_startTime;
+			return g_lastTimeCalculated - this->m_startTime;
 	}
 
 private:
 	MxLong m_startTime;
 	MxBool m_isRunning;
-	static MxLong s_LastTimeCalculated;
-	static MxLong s_LastTimeTimerStarted;
+	static MxLong g_lastTimeCalculated;
+	static MxLong g_lastTimeTimerStarted;
 };
 
 #endif // MXTIMER_H

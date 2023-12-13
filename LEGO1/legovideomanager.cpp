@@ -5,14 +5,14 @@ DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
 // FUNCTION: LEGO1 0x1007aa20
 LegoVideoManager::LegoVideoManager()
 {
-	m_unk64 = 0;
+	m_unk0x64 = 0;
 	m_3dManager = NULL;
-	m_unk6c = 0;
+	m_unk0x6c = 0;
 	m_direct3d = 0;
 	m_unk0xe6 = FALSE;
 	memset(m_unk0x78, 0, sizeof(m_unk0x78));
 	m_unk0x78[0] = 0x6c;
-	m_unk4e8 = 0;
+	m_unk0x4e8 = 0;
 	m_isFullscreenMovie = FALSE;
 	m_palette = NULL;
 	m_prefCounter = NULL;
@@ -47,11 +47,11 @@ void LegoVideoManager::Destroy()
 		m_arialFont = NULL;
 	}
 
-	// delete m_unk64; //TODO: delete d3drm
+	// delete m_unk0x64; //TODO: delete d3drm
 
 	delete m_3dManager;
 	MxVideoManager::Destroy();
-	// todo: delete m_unk4e8
+	// todo: delete m_unk0x4e8
 	delete[] m_prefCounter;
 }
 
@@ -94,7 +94,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
 
 	// TODO 3d manager
-	// m_3dManager->m_pViewport->vtable1c(red, green, blue)
+	// m_3dManager->m_pViewport->VTable0x1c(red, green, blue)
 }
 
 // STUB: LEGO1 0x1007c560

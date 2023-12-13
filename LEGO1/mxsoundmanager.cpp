@@ -168,11 +168,11 @@ MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_obje
 }
 
 // FUNCTION: LEGO1 0x100aecf0
-MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_unk)
+MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_undefined)
 {
-	if (!p_unk)
+	if (!p_undefined)
 		return -10000;
-	return g_mxcoreCount[p_unk];
+	return g_mxcoreCount[p_undefined];
 }
 
 // FUNCTION: LEGO1 0x100aed10

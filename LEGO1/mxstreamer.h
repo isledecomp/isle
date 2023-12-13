@@ -14,7 +14,7 @@
 //       STL. But I haven't figured out what yet (it's definitely not a vector).
 class MxStreamerSubClass1 {
 public:
-	inline MxStreamerSubClass1(undefined4 size);
+	inline MxStreamerSubClass1(undefined4 p_size);
 
 	~MxStreamerSubClass1() { delete[] m_buffer; }
 
@@ -22,12 +22,12 @@ public:
 
 	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
 	inline undefined* GetBuffer() const { return m_buffer; }
-	inline undefined4 GetUnk08() const { return m_unk08; }
+	inline undefined4 GetUnk08() const { return m_unk0x08; }
 
 private:
 	undefined* m_buffer;
 	undefined4 m_size;
-	undefined4 m_unk08;
+	undefined4 m_unk0x08;
 };
 
 class MxStreamerSubClass2 : public MxStreamerSubClass1 {
@@ -73,7 +73,7 @@ public:
 	__declspec(dllexport) MxStreamController* Open(const char* p_name, MxU16 p_openMode);
 	__declspec(dllexport) MxLong Close(const char* p_name);
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x100b9000
 	inline virtual const char* ClassName() const override // vtable+0x0c

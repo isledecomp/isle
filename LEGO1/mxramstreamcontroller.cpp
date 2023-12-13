@@ -36,14 +36,14 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 }
 
 // STUB: LEGO1 0x100c6210
-MxResult MxRAMStreamController::vtable0x20(MxDSAction* p_action)
+MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
 	// TODO STUB
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6320
-MxResult MxRAMStreamController::vtable0x24(MxDSAction* p_action)
+MxResult MxRAMStreamController::VTable0x24(MxDSAction* p_action)
 {
 	MxDSAction action;
 	do {
@@ -52,7 +52,7 @@ MxResult MxRAMStreamController::vtable0x24(MxDSAction* p_action)
 			m_action0x60 = NULL;
 		}
 		action = *p_action;
-		MxStreamController::vtable0x24(&action);
+		MxStreamController::VTable0x24(&action);
 	} while (m_action0x60 != NULL);
 	return SUCCESS;
 }

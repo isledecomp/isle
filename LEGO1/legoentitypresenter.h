@@ -18,19 +18,19 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100534c0
-	inline MxBool IsA(const char* name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(name);
+		return !strcmp(p_name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
 
-	virtual void Destroy() override;                   // vtable+0x38
-	virtual void Init();                               // vtable+0x68
-	virtual undefined4 vtable6c(undefined4 p_unknown); // vtable+0x6c
+	virtual void Destroy() override;                     // vtable+0x38
+	virtual void Init();                                 // vtable+0x68
+	virtual undefined4 VTable0x6c(undefined4 p_unk0x4c); // vtable+0x6c
 
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk4c;
+	undefined4 m_unk0x4c;
 };
 
 #endif // LEGOENTITYPRESENTER_H

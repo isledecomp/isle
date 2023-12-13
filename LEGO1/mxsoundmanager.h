@@ -22,7 +22,7 @@ public:
 
 	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
 
-	MxS32 FUN_100aecf0(MxU32 p_unk);
+	MxS32 FUN_100aecf0(MxU32 p_undefined);
 
 private:
 	void Init();
@@ -31,7 +31,7 @@ private:
 
 	LPDIRECTSOUND m_directSound;    // 0x30
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x34
-	undefined m_unk38[4];
+	undefined m_unk0x38[4];
 };
 
 // SYNTHETIC: LEGO1 0x100ae7b0

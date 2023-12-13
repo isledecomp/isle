@@ -10,7 +10,7 @@ public:
 	LegoWorldPresenter();
 	virtual ~LegoWorldPresenter() override; // vtable+0x0
 
-	__declspec(dllexport) static void configureLegoWorldPresenter(int param_1);
+	__declspec(dllexport) static void configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality);
 
 	// FUNCTION: LEGO1 0x10066630
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -20,13 +20,13 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10066640
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoWorldPresenter::ClassName()) || LegoEntityPresenter::IsA(name);
+		return !strcmp(p_name, LegoWorldPresenter::ClassName()) || LegoEntityPresenter::IsA(p_name);
 	}
 
 private:
-	undefined4 m_unk50;
+	undefined4 m_unk0x50;
 };
 
 #endif // LEGOWORLDPRESENTER_H

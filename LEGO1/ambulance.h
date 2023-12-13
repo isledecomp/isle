@@ -17,25 +17,25 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10035fb0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Ambulance::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, Ambulance::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 private:
 	// TODO: Ambulance fields
-	undefined m_unk160[4];
-	MxS32 m_unk164;
-	MxS16 m_unk168;
-	MxS16 m_unk16a;
-	MxS16 m_unk16c;
-	MxS16 m_unk16e;
-	MxS16 m_unk170;
-	MxS16 m_unk172;
-	MxS32 m_unk174;
-	MxS32 m_unk178;
-	MxFloat m_unk17c;
-	undefined m_unk180[4];
+	undefined m_unk0x160[4];
+	MxS32 m_unk0x164;
+	MxS16 m_unk0x168;
+	MxS16 m_unk0x16a;
+	MxS16 m_unk0x16c;
+	MxS16 m_unk0x16e;
+	MxS16 m_unk0x170;
+	MxS16 m_unk0x172;
+	MxS32 m_unk0x174;
+	MxS32 m_unk0x178;
+	MxFloat m_unk0x17c;
+	undefined m_unk0x180[4];
 };
 
 #endif // AMBULANCE_H

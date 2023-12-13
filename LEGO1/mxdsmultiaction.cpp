@@ -40,14 +40,14 @@ MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 }
 
 // FUNCTION: LEGO1 0x100ca290
-void MxDSMultiAction::SetUnkTimingField(MxLong p_unkTimingField)
+void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
 {
-	this->m_unkTimingField = p_unkTimingField;
+	this->m_unk0x90 = p_unk0x90;
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action))
-		action->SetUnkTimingField(p_unkTimingField);
+		action->SetUnknown90(p_unk0x90);
 }
 
 // FUNCTION: LEGO1 0x100ca370
@@ -89,14 +89,14 @@ MxDSAction* MxDSMultiAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100ca5e0
-undefined4 MxDSMultiAction::unk14()
+undefined4 MxDSMultiAction::VTable0x14()
 {
-	undefined4 result = MxDSAction::unk14();
+	undefined4 result = MxDSAction::VTable0x14();
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action))
-		result += action->unk14();
+		result += action->VTable0x14();
 
 	return result;
 }
@@ -117,9 +117,9 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100ca7b0
-void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk24)
+void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 {
-	MxDSAction::Deserialize(p_source, p_unk24);
+	MxDSAction::Deserialize(p_source, p_unk0x24);
 
 	MxU32 extraFlag = *(MxU32*) (*p_source + 4) & 1;
 	*p_source += 12;
@@ -132,7 +132,7 @@ void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk24)
 			MxU32 extraFlag = *(MxU32*) (*p_source + 4) & 1;
 			*p_source += 8;
 
-			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk24);
+			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
 			*p_source += extraFlag;
 
 			this->m_actions->Append(action);

@@ -13,7 +13,7 @@ HistoryBook::~HistoryBook()
 }
 
 // STUB: LEGO1 0x10082680
-MxLong HistoryBook::Notify(MxParam& p)
+MxLong HistoryBook::Notify(MxParam& p_param)
 {
 	// TODO
 

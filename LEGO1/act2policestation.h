@@ -7,7 +7,7 @@
 // SIZE 0x68
 class Act2PoliceStation : public LegoEntity {
 public:
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x1000e200
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -17,9 +17,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000e210
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Act2PoliceStation::ClassName()) || LegoEntity::IsA(name);
+		return !strcmp(p_name, Act2PoliceStation::ClassName()) || LegoEntity::IsA(p_name);
 	}
 };
 

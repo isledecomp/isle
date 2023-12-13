@@ -18,15 +18,15 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10035850
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Motorcycle::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, Motorcycle::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 private:
-	undefined m_unk160[4];
-	MxFloat m_unk164;
-	undefined m_unk168[4];
+	undefined m_unk0x160[4];
+	MxFloat m_unk0x164;
+	undefined m_unk0x168[4];
 };
 
 #endif // MOTORCYCLE_H

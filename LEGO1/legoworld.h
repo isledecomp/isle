@@ -14,7 +14,7 @@ public:
 	__declspec(dllexport) LegoWorld();
 	__declspec(dllexport) virtual ~LegoWorld(); // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x1001d690
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -24,9 +24,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1001d6a0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoWorld::ClassName()) || LegoEntity::IsA(name);
+		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
 	virtual void Stop();                       // vtable+50
@@ -44,15 +44,15 @@ protected:
 	LegoPathControllerList m_list0x68; // 0x68
 	MxPresenterList m_list0x80;        // 0x80
 	LegoCameraController* m_camera;    // 0x98
-	undefined m_unk9c[0x1c];
+	undefined m_unk0x9c[0x1c];
 	MxPresenterList m_list0xb8; // 0xb8
-	undefined m_unkd0[0x26];
-	undefined m_unkf6;
-	undefined m_unkf7;
+	undefined m_unk0xd0[0x26];
+	undefined m_unk0xf6;
+	undefined m_unk0xf7;
 };
 
-void FUN_10015820(MxU32 p_unk1, MxU32 p_unk2);
-void FUN_10015910(MxU32 p_unk1);
+void FUN_10015820(MxU32, MxU32);
+void FUN_10015910(MxU32);
 void SetIsWorldActive(MxBool p_isWorldActive);
 
 // SYNTHETIC: LEGO1 0x1001eed0

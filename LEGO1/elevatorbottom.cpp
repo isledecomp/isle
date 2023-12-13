@@ -13,7 +13,7 @@ ElevatorBottom::~ElevatorBottom()
 }
 
 // STUB: LEGO1 0x10018150
-MxLong ElevatorBottom::Notify(MxParam& p)
+MxLong ElevatorBottom::Notify(MxParam& p_param)
 {
 	// TODO
 
