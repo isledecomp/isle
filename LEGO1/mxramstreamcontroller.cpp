@@ -40,15 +40,15 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
-	MxS16 unknown24Value = 0;
+	MxS16 unk24 = 0;
 	MxResult result = FAILURE;
 	if (p_action->GetUnknown24() == -1) {
 		p_action->SetUnknown24(-3);
 		MxDSAction* action = m_unk0x54.Find(p_action, FALSE);
 		if (action != NULL) {
-			unknown24Value = action->GetUnknown24() + 1;
+			unk24 = action->GetUnknown24() + 1;
 		}
-		p_action->SetUnknown24(unknown24Value);
+		p_action->SetUnknown24(unk24);
 	}
 	else {
 		if (m_unk0x54.Find(p_action, FALSE)) {
@@ -80,15 +80,15 @@ MxResult MxRAMStreamController::VTable0x24(MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c63c0
-MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& action)
+MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result;
-	undefined4 unkVar = 0;
+	undefined4 unknownValue = 0;
 	do {
-		m_buffer.FUN_100c6f80(action.GetUnknown94());
-		result = m_buffer.FUN_100c67b0(this, &action, &unkVar);
-	} while (m_unk0x3c.Find(&action, FALSE) != NULL);
+		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
+		result = m_buffer.FUN_100c67b0(this, &p_action, &unknownValue);
+	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
 	return result;
 }
 
