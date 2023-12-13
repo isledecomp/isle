@@ -100,7 +100,7 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 		if (VTable0x2c(p_action, entry->GetUnknown94()) != SUCCESS)
 			return FAILURE;
 	}
-	else if (MxStreamController::VTable0x20((MxDSAction*) p_action) != SUCCESS)
+	else if (MxStreamController::VTable0x20(p_action) != SUCCESS)
 		return FAILURE;
 
 	m_unk0x70 = 1;
