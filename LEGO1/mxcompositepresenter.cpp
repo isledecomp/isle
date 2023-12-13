@@ -123,8 +123,8 @@ MxLong MxCompositePresenter::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x100b67f0
 void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 {
-	MxPresenter* presenter = (MxPresenter*) p.GetSender();
-	MxDSAction* action = p.GetAction();
+	MxPresenter* presenter = (MxPresenter*) p_param.GetSender();
+	MxDSAction* action = p_param.GetAction();
 	MxCompositePresenterList::iterator it;
 
 	if (!m_list.empty()) {
@@ -166,7 +166,7 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 {
 	if (!m_list.empty()) {
-		MxPresenter* presenter = (MxPresenter*) p.GetSender();
+		MxPresenter* presenter = (MxPresenter*) p_param.GetSender();
 
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			if (*it == presenter) {
@@ -196,7 +196,7 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 			}
 		}
 
-		NotificationManager()->Send(this, &p);
+		NotificationManager()->Send(this, &p_param);
 	}
 }
 

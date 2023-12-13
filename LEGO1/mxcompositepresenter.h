@@ -37,7 +37,7 @@ public:
 	virtual void VTable0x58(MxEndActionNotificationParam& p_param);                                // vtable+0x58
 	virtual void VTable0x5c(MxNotificationParam& p_param);                                         // vtable+0x5c
 	virtual void VTable0x60(MxPresenter* p_presenter);                                             // vtable+0x60
-	virtual MxBool VTable0x64(undefined4 p_unknown);                                               // vtable+0x64
+	virtual MxBool VTable0x64(undefined4 p_undefined);                                             // vtable+0x64
 
 private:
 	MxCompositePresenterList m_list; // 0x40
