@@ -32,7 +32,7 @@ public:
 private:
 	MxDSBuffer m_buffer;
 
-	MxResult DeserializeObject(MxDSStreamingAction& action);
+	MxResult DeserializeObject(MxDSStreamingAction& p_action);
 };
 
 #endif // MXRAMSTREAMCONTROLLER_H

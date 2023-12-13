@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+
 class MxStreamController;
 class MxDSAction;
 
