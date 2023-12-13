@@ -1,6 +1,7 @@
 #ifndef MXRAMSTREAMCONTROLLER_H
 #define MXRAMSTREAMCONTROLLER_H
 
+#include "MxDSStreamingAction.h"
 #include "mxdsbuffer.h"
 #include "mxstreamcontroller.h"
 
@@ -30,6 +31,7 @@ public:
 
 private:
 	MxDSBuffer m_buffer;
+	MxResult DeserializeObject(MxDSStreamingAction& action);
 };
 
 #endif // MXRAMSTREAMCONTROLLER_H

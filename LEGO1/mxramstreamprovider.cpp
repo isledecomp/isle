@@ -1,6 +1,8 @@
 #include "mxramstreamprovider.h"
 
 #include "decomp.h"
+#include "mxomni.h"
+#include "mxstreamcontroller.h"
 
 DECOMP_SIZE_ASSERT(MxRAMStreamProvider, 0x24);
 
@@ -53,8 +55,46 @@ MxRAMStreamProvider::~MxRAMStreamProvider()
 	m_bufferForDWords = NULL;
 }
 
-// STUB: LEGO1 0x100d0ae0
+// FUNCTION: LEGO1 0x100d0ae0
 MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 {
-	return FAILURE;
+	MxResult result = FAILURE;
+	MxString path;
+	m_pLookup = p_resource;
+
+	path = (MxString(MxOmni::GetHD()) + p_resource->GetAtom().GetInternal() + ".si");
+
+	m_pFile = new MxDSFile(path.GetData(), 0);
+	if (m_pFile != NULL) {
+		if (m_pFile->Open(0) != 0) {
+			path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
+			m_pFile->SetFileName(path.GetData());
+
+			if (m_pFile->Open(0) != 0)
+				goto done;
+		}
+
+		m_fileSize = m_pFile->CalcFileSize();
+		if (m_fileSize != 0)
+		{
+			m_bufferSize = m_pFile->GetBufferSize();
+			m_pBufferOfFileSize = new MxU32[m_fileSize];
+			if (m_pBufferOfFileSize != NULL && m_pFile->Read((unsigned char *)m_pBufferOfFileSize, m_fileSize) == SUCCESS)
+			{
+				m_lengthInDWords = m_pFile->GetLengthInDWords();
+				m_bufferForDWords = new MxU32[m_lengthInDWords << 2];
+
+				if (m_bufferForDWords != NULL)
+				{
+					memcpy(m_bufferForDWords, m_pFile->GetBuffer(), m_lengthInDWords);
+					result = SUCCESS;
+				}
+			}
+		}
+	}
+
+done:
+	delete m_pFile;
+	m_pFile = NULL;
+	return result;
 }

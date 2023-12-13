@@ -1,6 +1,7 @@
 #include "mxdsbuffer.h"
 
 #include "mxomni.h"
+#include "mxstreamcontroller.h"
 #include "mxstreamer.h"
 
 DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
@@ -116,6 +117,13 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 	m_writeOffset = p_size;
 	m_mode = MxDSBufferType_Preallocated;
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100c67b0
+MxResult MxDSBuffer::FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4* p_unk)
+{
+	// TODO STUB
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6f80

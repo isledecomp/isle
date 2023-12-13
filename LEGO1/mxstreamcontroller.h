@@ -47,6 +47,7 @@ public:
 	MxResult FUN_100c1f00(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
+	inline MxStreamListMxDSAction GetUnknown3c() { return m_unk0x3c; };
 
 protected:
 	MxCriticalSection m_criticalSection;                // 0x8
