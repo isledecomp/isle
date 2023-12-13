@@ -2,6 +2,7 @@
 
 #include "mxautolocker.h"
 #include "mxdiskstreamprovider.h"
+#include "mxdsstreamingaction.h"
 #include "mxomni.h"
 #include "mxticklemanager.h"
 
@@ -71,11 +72,38 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100c7ff0
-MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
+// STUB: LEGO1 0x100c7f4
+void MxDiskStreamController::FUN_100c7f4(MxDSStreamingAction* p_streamingaction)
 {
 	// TODO
-	return FAILURE;
+	// seems to do something with a list
+}
+
+// FUNCTION: LEGO1 0x100c7ff0
+MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxResult result;
+	MxDSStreamingAction* entry = (MxDSStreamingAction*)m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
+	if (!entry) {
+		result = MxStreamController::VTable0x20((MxDSAction*)p_action);
+	}
+	else {
+		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
+		action->SetUnknown84(entry->GetUnknown84());
+		action->SetUnknown8c(entry->GetUnknown8c());
+		action->SetUnknowna0(entry->GetUnknowna0());
+
+		FUN_100c7f4(action);
+		result = vtable0x2c(p_action, action->GetBufferOffset());
+	}
+
+	if (result == SUCCESS)
+	{
+		m_unk70 = 1;
+		m_unkc4 = 1;
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x100c8160

@@ -63,6 +63,7 @@ public:
 	inline MxS32 GetLoopCount() { return m_loopCount; }
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
 	inline const Vector3Data& GetLocation() const { return m_location; }
+	inline MxCore* GetUnknown84() const { return m_unk84; }
 	inline void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	inline MxCore* GetOrigin() { return m_origin; }
 	inline void SetOrigin(MxCore* p_origin) { m_origin = p_origin; }
