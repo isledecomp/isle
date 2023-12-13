@@ -20,7 +20,7 @@ MxBool LegoState::SetFlag()
 }
 
 // FUNCTION: LEGO1 0x10005fb0
-MxResult LegoState::VTable0x1C(LegoFileStream* p_legoFileStream)
+MxResult LegoState::VTable0x1c(LegoFileStream* p_legoFileStream)
 {
 	if (p_legoFileStream->IsWriteMode()) {
 		p_legoFileStream->FUN_10006030(this->ClassName());

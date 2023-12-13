@@ -38,7 +38,7 @@ void MxWavePresenter::Init()
 	m_lockSize = 0;
 	m_writtenChunks = 0;
 	m_started = FALSE;
-	m_unk66 = FALSE;
+	m_unk0x66 = FALSE;
 	m_paused = FALSE;
 }
 
@@ -170,7 +170,7 @@ void MxWavePresenter::StartingTickle()
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (m_unk66)
+		if (m_unk0x66)
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRL3D | DSBCAPS_CTRLVOLUME;
 		else
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;
@@ -335,9 +335,9 @@ void MxWavePresenter::ParseExtra()
 		memcpy(extraCopy, extraData, len);
 		extraCopy[len] = '\0';
 
-		char t_soundValue[512];
-		if (KeyValueStringParse(t_soundValue, g_strSOUND, extraCopy)) {
-			if (!strcmpi(t_soundValue, "FALSE"))
+		char soundValue[512];
+		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {
+			if (!strcmpi(soundValue, "FALSE"))
 				Enable(FALSE);
 		}
 	}

@@ -13,7 +13,7 @@ Police::~Police()
 }
 
 // STUB: LEGO1 0x1005e480
-MxLong Police::Notify(MxParam& p)
+MxLong Police::Notify(MxParam& p_param)
 {
 	// TODO
 

@@ -12,7 +12,7 @@ public:
 	LegoRace();
 	virtual ~LegoRace() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x10015ba0
 	inline const char* ClassName() const override // vtable+0xc
@@ -22,9 +22,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10015bb0
-	inline MxBool IsA(const char* name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoRace::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
@@ -38,22 +38,22 @@ public:
 	virtual void VTable0x7c(undefined4, undefined4);          // vtable+0x7c
 
 private:
-	undefined4 m_unkf8;     // 0xf8
-	undefined4 m_unkfc;     // 0xfc
-	undefined4 m_unk100;    // 0x100
-	undefined4 m_unk104;    // 0x104
-	undefined4 m_unk108;    // 0x108
-	undefined4 m_unk10c;    // 0x10c
-	undefined4 m_unk110;    // 0x110
-	undefined4 m_unk114;    // 0x114
-	undefined4 m_unk118;    // 0x118
-	undefined4 m_unk11c;    // 0x11c
-	undefined4 m_unk120;    // 0x120 - this may be the current vehcle (function at 0x10015880)
-	undefined4 m_unk124;    // 0x124 - something game state
-	undefined4 m_unk128;    // 0x128
-	undefined4 m_unk12c;    // 0x12c
-	undefined4 m_unk130[4]; // unconfirmed bytes, ghidra claims these are integers
-	undefined4 m_unk140;
+	undefined4 m_unk0xf8;     // 0xf8
+	undefined4 m_unk0xfc;     // 0xfc
+	undefined4 m_unk0x100;    // 0x100
+	undefined4 m_unk0x104;    // 0x104
+	undefined4 m_unk0x108;    // 0x108
+	undefined4 m_unk0x10c;    // 0x10c
+	undefined4 m_unk0x110;    // 0x110
+	undefined4 m_unk0x114;    // 0x114
+	undefined4 m_unk0x118;    // 0x118
+	undefined4 m_unk0x11c;    // 0x11c
+	undefined4 m_unk0x120;    // 0x120 - this may be the current vehcle (function at 0x10015880)
+	undefined4 m_unk0x124;    // 0x124 - something game state
+	undefined4 m_unk0x128;    // 0x128
+	undefined4 m_unk0x12c;    // 0x12c
+	undefined4 m_unk0x130[4]; // unconfirmed bytes, ghidra claims these are integers
+	undefined4 m_unk0x140;
 };
 
 #endif // LEGORACE_H

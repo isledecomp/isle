@@ -35,60 +35,60 @@ public:
 	inline const MxBool CreateTimer() const { return this->m_flags2 & Flag_CreateTimer; }
 	inline const MxBool CreateStreamer() const { return this->m_flags2 & Flag_CreateStreamer; }
 
-	inline void CreateObjectFactory(MxBool b)
+	inline void CreateObjectFactory(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateObjectFactory : this->m_flags1 & ~Flag_CreateObjectFactory);
+			(p_enable ? this->m_flags1 | Flag_CreateObjectFactory : this->m_flags1 & ~Flag_CreateObjectFactory);
 	}
-	inline void CreateVariableTable(MxBool b)
+	inline void CreateVariableTable(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateVariableTable : this->m_flags1 & ~Flag_CreateVariableTable);
+			(p_enable ? this->m_flags1 | Flag_CreateVariableTable : this->m_flags1 & ~Flag_CreateVariableTable);
 	}
-	inline void CreateTickleManager(MxBool b)
+	inline void CreateTickleManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateTickleManager : this->m_flags1 & ~Flag_CreateTickleManager);
+			(p_enable ? this->m_flags1 | Flag_CreateTickleManager : this->m_flags1 & ~Flag_CreateTickleManager);
 	}
-	inline void CreateNotificationManager(MxBool b)
+	inline void CreateNotificationManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateNotificationManager
-					   : this->m_flags1 & ~Flag_CreateNotificationManager);
+			(p_enable ? this->m_flags1 | Flag_CreateNotificationManager
+					  : this->m_flags1 & ~Flag_CreateNotificationManager);
 	}
-	inline void CreateVideoManager(MxBool b)
+	inline void CreateVideoManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateVideoManager : this->m_flags1 & ~Flag_CreateVideoManager);
+			(p_enable ? this->m_flags1 | Flag_CreateVideoManager : this->m_flags1 & ~Flag_CreateVideoManager);
 	}
-	inline void CreateSoundManager(MxBool b)
+	inline void CreateSoundManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateSoundManager : this->m_flags1 & ~Flag_CreateSoundManager);
+			(p_enable ? this->m_flags1 | Flag_CreateSoundManager : this->m_flags1 & ~Flag_CreateSoundManager);
 	}
-	inline void CreateMusicManager(MxBool b)
+	inline void CreateMusicManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateMusicManager : this->m_flags1 & ~Flag_CreateMusicManager);
+			(p_enable ? this->m_flags1 | Flag_CreateMusicManager : this->m_flags1 & ~Flag_CreateMusicManager);
 	}
-	inline void CreateEventManager(MxBool b)
+	inline void CreateEventManager(MxBool p_enable)
 	{
 		this->m_flags1 =
-			(b == TRUE ? this->m_flags1 | Flag_CreateEventManager : this->m_flags1 & ~Flag_CreateEventManager);
+			(p_enable ? this->m_flags1 | Flag_CreateEventManager : this->m_flags1 & ~Flag_CreateEventManager);
 	}
 
-	inline void CreateTimer(MxBool b)
+	inline void CreateTimer(MxBool p_enable)
 	{
-		this->m_flags2 = (b == TRUE ? this->m_flags2 | Flag_CreateTimer : this->m_flags2 & ~Flag_CreateTimer);
+		this->m_flags2 = (p_enable ? this->m_flags2 | Flag_CreateTimer : this->m_flags2 & ~Flag_CreateTimer);
 	}
-	inline void CreateStreamer(MxBool b)
+	inline void CreateStreamer(MxBool p_enable)
 	{
-		this->m_flags2 = (b == TRUE ? this->m_flags2 | Flag_CreateStreamer : this->m_flags2 & ~Flag_CreateStreamer);
+		this->m_flags2 = (p_enable ? this->m_flags2 | Flag_CreateStreamer : this->m_flags2 & ~Flag_CreateStreamer);
 	}
 
 private:
-	unsigned char m_flags1;
-	unsigned char m_flags2;
+	MxU8 m_flags1;
+	MxU8 m_flags2;
 };
 
 #endif // MXOMNICREATEFLAGS_H

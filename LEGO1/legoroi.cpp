@@ -8,7 +8,7 @@ typedef struct {
 	MxS32 m_red;
 	MxS32 m_green;
 	MxS32 m_blue;
-	MxS32 m_unk10;
+	MxS32 m_unk0x10;
 } ROIColorAlias;
 
 // GLOBAL: LEGO1 0x100dbe28
@@ -36,9 +36,9 @@ MxS32 g_roiConfig = 100;
 ROIHandler g_someHandlerFunction = NULL;
 
 // FUNCTION: LEGO1 0x100a81c0
-void LegoROI::configureLegoROI(MxS32 p_roi)
+void LegoROI::configureLegoROI(MxS32 p_roiConfig)
 {
-	g_roiConfig = p_roi;
+	g_roiConfig = p_roiConfig;
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
@@ -74,7 +74,7 @@ MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green
 			p_red = g_roiColorAliases[i].m_red * g_normalizeByteToFloat;
 			p_green = g_roiColorAliases[i].m_green * g_normalizeByteToFloat;
 			p_blue = g_roiColorAliases[i].m_blue * g_normalizeByteToFloat;
-			p_other = g_roiColorAliases[i].m_unk10 * g_normalizeByteToFloat;
+			p_other = g_roiColorAliases[i].m_unk0x10 * g_normalizeByteToFloat;
 			return TRUE;
 		}
 		i++;

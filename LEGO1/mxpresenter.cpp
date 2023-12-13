@@ -169,15 +169,15 @@ void MxPresenter::ParseExtra()
 		memcpy(extraCopy, extraData, len);
 		extraCopy[len] = '\0';
 
-		char t_worldValue[512];
-		if (KeyValueStringParse(t_worldValue, g_strWORLD, extraCopy)) {
-			char* token = strtok(t_worldValue, g_parseExtraTokens);
-			char t_token[256];
-			strcpy(t_token, token);
+		char worldValue[512];
+		if (KeyValueStringParse(worldValue, g_strWORLD, extraCopy)) {
+			char* token = strtok(worldValue, g_parseExtraTokens);
+			char buf[256];
+			strcpy(buf, token);
 
 			token = strtok(NULL, g_parseExtraTokens);
 			MxS32 val = token ? atoi(token) : 0;
-			MxEntity* result = MxOmni::GetInstance()->FindWorld(t_token, val, this);
+			MxEntity* result = MxOmni::GetInstance()->FindWorld(buf, val, this);
 
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_World);
 

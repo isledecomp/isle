@@ -14,9 +14,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10013ea0
-	inline MxBool IsA(const char* name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, LegoJetski::ClassName()) || LegoJetskiRaceActor::IsA(name);
+		return !strcmp(p_name, LegoJetski::ClassName()) || LegoJetskiRaceActor::IsA(p_name);
 	}
 };
 

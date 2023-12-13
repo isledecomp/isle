@@ -21,7 +21,7 @@ public:
 		m_value = p_value;
 	}
 	virtual MxString* GetValue();
-	virtual void SetValue(const char*);
+	virtual void SetValue(const char* p_value);
 	virtual void Destroy();
 
 	inline const MxString* GetKey() const { return &m_key; }

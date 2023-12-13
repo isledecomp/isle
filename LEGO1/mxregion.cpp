@@ -15,7 +15,7 @@ MxRegion::MxRegion()
 }
 
 // FUNCTION: LEGO1 0x100c3660
-MxBool MxRegion::vtable20()
+MxBool MxRegion::VTable0x20()
 {
 	return m_list->GetCount() == 0;
 }
@@ -36,7 +36,7 @@ void MxRegion::Reset()
 }
 
 // FUNCTION: LEGO1 0x100c3750
-void MxRegion::vtable18(MxRect32& p_rect)
+void MxRegion::VTable0x18(MxRect32& p_rect)
 {
 	MxRect32 rect(p_rect.GetPoint(), MxSize32(p_rect.GetRight(), p_rect.GetBottom()));
 	MxRegionListCursor cursor(m_list);
@@ -87,7 +87,7 @@ void MxRegion::vtable18(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c3e20
-MxBool MxRegion::vtable1c(MxRect32& p_rect)
+MxBool MxRegion::VTable0x1c(MxRect32& p_rect)
 {
 	if (!m_rect.IntersectsWith(p_rect))
 		return FALSE;

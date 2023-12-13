@@ -16,23 +16,23 @@ MxVideoParam::MxVideoParam()
 	this->m_rect.SetTop(0);
 	this->m_palette = NULL;
 	this->m_backBuffers = 0;
-	this->m_unk1c = 0;
+	this->m_unk0x1c = 0;
 	this->m_deviceId = NULL;
 }
 
 // FUNCTION: LEGO1 0x100beca0
 MxVideoParam::MxVideoParam(
 	COMPAT_CONST MxRect32& p_rect,
-	MxPalette* p_pal,
+	MxPalette* p_palette,
 	MxULong p_backBuffers,
 	COMPAT_CONST MxVideoParamFlags& p_flags
 )
 {
 	this->m_rect = p_rect;
-	this->m_palette = p_pal;
+	this->m_palette = p_palette;
 	this->m_backBuffers = p_backBuffers;
 	this->m_flags = p_flags;
-	this->m_unk1c = 0;
+	this->m_unk0x1c = 0;
 	this->m_deviceId = NULL;
 }
 
@@ -43,7 +43,7 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
-	this->m_unk1c = p_videoParam.m_unk1c;
+	this->m_unk0x1c = p_videoParam.m_unk0x1c;
 	this->m_deviceId = NULL;
 	SetDeviceName(p_videoParam.m_deviceId);
 }
@@ -56,16 +56,16 @@ MxVideoParam::~MxVideoParam()
 }
 
 // FUNCTION: LEGO1 0x100bed70
-void MxVideoParam::SetDeviceName(char* id)
+void MxVideoParam::SetDeviceName(char* p_deviceId)
 {
 	if (this->m_deviceId != NULL)
 		delete[] this->m_deviceId;
 
-	if (id != 0) {
-		this->m_deviceId = new char[strlen(id) + 1];
+	if (p_deviceId != NULL) {
+		this->m_deviceId = new char[strlen(p_deviceId) + 1];
 
 		if (this->m_deviceId != NULL) {
-			strcpy(this->m_deviceId, id);
+			strcpy(this->m_deviceId, p_deviceId);
 		}
 	}
 	else {
@@ -80,7 +80,7 @@ MxVideoParam& MxVideoParam::operator=(const MxVideoParam& p_videoParam)
 	this->m_palette = p_videoParam.m_palette;
 	this->m_backBuffers = p_videoParam.m_backBuffers;
 	this->m_flags = p_videoParam.m_flags;
-	this->m_unk1c = p_videoParam.m_unk1c;
+	this->m_unk0x1c = p_videoParam.m_unk0x1c;
 	SetDeviceName(p_videoParam.m_deviceId);
 
 	return *this;

@@ -29,16 +29,16 @@ public:
 
 	MxResult Init();
 	void SetInternalAction(MxDSAction* p_dsAction);
-	void FUN_100CD2D0();
+	void FUN_100cd2d0();
 
 private:
-	MxU32 m_unk94;
+	MxU32 m_unk0x94;
 	MxU32 m_bufferOffset;
-	MxS32 m_unk9c;
-	MxDSBuffer* m_unka0;
-	MxDSBuffer* m_unka4;
-	MxLong m_unka8;
-	undefined2 m_unkac;
+	MxS32 m_unk0x9c;
+	MxDSBuffer* m_unk0xa0;
+	MxDSBuffer* m_unk0xa4;
+	MxLong m_unk0xa8;
+	undefined2 m_unk0xac;
 	MxDSAction* m_internalAction;
 };
 

@@ -34,14 +34,14 @@ public:
 	__declspec(dllexport) static MxBool IsSound3D();
 	__declspec(dllexport) static void SetCD(const char* p_cd);
 	__declspec(dllexport) static void SetHD(const char* p_hd);
-	__declspec(dllexport) static void SetSound3D(MxBool p_3dsound);
+	__declspec(dllexport) static void SetSound3D(MxBool p_use3dSound);
 
 	MxOmni();
 	virtual ~MxOmni() override;
 
-	virtual MxLong Notify(MxParam& p) override;                     // vtable+04
+	virtual MxLong Notify(MxParam& p_param) override;               // vtable+04
 	virtual void Init();                                            // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p);                  // vtable+18
+	virtual MxResult Create(MxOmniCreateParam& p_param);            // vtable+18
 	virtual void Destroy();                                         // vtable+1c
 	virtual MxResult Start(MxDSAction* p_dsAction);                 // vtable+20
 	virtual MxResult DeleteObject(MxDSAction& p_dsAction);          // vtable+24
@@ -52,7 +52,7 @@ public:
 	virtual void StartTimer();                                      // vtable+38
 	virtual void StopTimer();                                       // vtable+3c
 	virtual MxBool IsTimerRunning();                                // vtable+40
-	static void SetInstance(MxOmni* instance);
+	static void SetInstance(MxOmni* p_instance);
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
 	MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }

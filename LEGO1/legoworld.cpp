@@ -17,13 +17,13 @@ void LegoWorld::VTable0x60()
 }
 
 // STUB: LEGO1 0x10015820
-void FUN_10015820(MxU32 p_unk1, MxU32 p_unk2)
+void FUN_10015820(MxU32, MxU32)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10015910
-void FUN_10015910(MxU32 p_unk1)
+void FUN_10015910(MxU32)
 {
 	// TODO
 }

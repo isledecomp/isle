@@ -1,5 +1,5 @@
-#ifndef MXTYPE_H
-#define MXTYPE_H
+#ifndef MXTYPES_H
+#define MXTYPES_H
 
 typedef unsigned char MxU8;
 typedef signed char MxS8;
@@ -58,16 +58,16 @@ typedef MxU8 MxBool;
 // Must be union with struct for match.
 typedef union {
 	struct {
-		MxU8 bit0 : 1;
-		MxU8 bit1 : 1;
-		MxU8 bit2 : 1;
-		MxU8 bit3 : 1;
-		MxU8 bit4 : 1;
-		MxU8 bit5 : 1;
-		MxU8 bit6 : 1;
-		MxU8 bit7 : 1;
+		MxU8 m_bit0 : 1;
+		MxU8 m_bit1 : 1;
+		MxU8 m_bit2 : 1;
+		MxU8 m_bit3 : 1;
+		MxU8 m_bit4 : 1;
+		MxU8 m_bit5 : 1;
+		MxU8 m_bit6 : 1;
+		MxU8 m_bit7 : 1;
 	};
 	// BYTE all; // ?
-} flag_bitfield;
+} FlagBitfield;
 
-#endif // MXTYPE_H
+#endif // MXTYPES_H

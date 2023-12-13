@@ -17,14 +17,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10037610
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, AmbulanceMissionState::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	inline MxU16 GetColor(MxU8 id)
+	inline MxU16 GetColor(MxU8 p_id)
 	{
-		switch (id) {
+		switch (p_id) {
 		case 1:
 			return m_color1;
 		case 2:
@@ -41,7 +41,7 @@ public:
 	}
 
 protected:
-	undefined m_unk8[0x12];
+	undefined m_unk0x8[0x12];
 	MxU16 m_color1;
 	MxU16 m_color2;
 	MxU16 m_color3;

@@ -21,9 +21,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000d6d0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(name);
+		return !strcmp(p_name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(p_name);
 	}
 
 	virtual void ReadyTickle() override;                       // vtable+0x18
@@ -63,7 +63,7 @@ private:
 	MxU32 m_lockSize;               // 0x60
 	MxU8 m_writtenChunks;           // 0x64
 	MxBool m_started;               // 0x65
-	MxBool m_unk66;                 // 0x66
+	MxBool m_unk0x66;               // 0x66
 	MxS8 m_silenceData;             // 0x67
 	MxBool m_paused;                // 0x68
 };

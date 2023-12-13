@@ -7,7 +7,7 @@
 // SIZE 0xc
 class Act3State : public LegoState {
 public:
-	inline Act3State() { m_unk08 = 0; }
+	inline Act3State() { m_unk0x08 = 0; }
 
 	// FUNCTION: LEGO1 0x1000e300
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -17,16 +17,16 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000e310
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Act3State::ClassName()) || LegoState::IsA(name);
+		return !strcmp(p_name, Act3State::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	virtual MxBool VTable0x14() override;
 
 private:
 	// FIXME: May be part of LegoState? Uncertain...
-	MxU32 m_unk08;
+	MxU32 m_unk0x08;
 };
 
 #endif // ACT3STATE_H

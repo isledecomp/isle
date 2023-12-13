@@ -11,7 +11,7 @@ public:
 	Police();
 	virtual ~Police() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x1005e1e0
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -21,9 +21,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1005e1f0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, Police::ClassName()) || LegoWorld::IsA(name);
+		return !strcmp(p_name, Police::ClassName()) || LegoWorld::IsA(p_name);
 	}
 };
 

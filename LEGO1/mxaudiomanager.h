@@ -18,7 +18,7 @@ public:
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	static MxS32 g_unkCount;
+	static MxS32 g_count;
 
 protected:
 	void Init();

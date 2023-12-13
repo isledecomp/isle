@@ -50,7 +50,7 @@ public:
 
 	// 20
 	BOOL m_using16bit;
-	int m_unk24;
+	int m_unk0x24;
 	BOOL m_use3dSound;
 	BOOL m_useMusic;
 

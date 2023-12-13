@@ -18,8 +18,8 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 unk0x3c;
-	undefined4 unk0x40;
+	undefined4 m_unk0x3c;
+	undefined4 m_unk0x40;
 };
 
 #endif // LEGOSOUNDMANAGER_H

@@ -18,16 +18,16 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10067c40
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, DuneBuggy::ClassName()) || IslePathActor::IsA(name);
+		return !strcmp(p_name, DuneBuggy::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
 private:
 	// TODO: Double check DuneBuggy field types
-	undefined4 m_unk160;
-	MxFloat m_unk164;
-	undefined4 m_unk168;
+	undefined4 m_unk0x160;
+	MxFloat m_unk0x164;
+	undefined4 m_unk0x168;
 };
 
 #endif // DUNEBUGGY_H

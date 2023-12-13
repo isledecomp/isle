@@ -8,10 +8,10 @@
 class MxNextActionDataStart : public MxCore {
 public:
 	// inlined constructor at 0x100c1847
-	inline MxNextActionDataStart(MxU32 p_objectId, MxS16 p_unk24val, MxU32 p_data)
+	inline MxNextActionDataStart(MxU32 p_objectId, MxS16 p_unk0x24, MxU32 p_data)
 	{
 		m_objectId = p_objectId;
-		m_unk24val = p_unk24val;
+		m_unk0x24 = p_unk0x24;
 		m_data = p_data;
 	}
 
@@ -23,17 +23,17 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c1910
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxNextActionDataStart::ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, MxNextActionDataStart::ClassName()) || MxCore::IsA(p_name);
 	}
 
 	inline MxU32 GetObjectId() const { return m_objectId; }
-	inline MxS16 GetUnknown24() const { return m_unk24val; }
+	inline MxS16 GetUnknown24() const { return m_unk0x24; }
 
 private:
 	MxU32 m_objectId;
-	MxS16 m_unk24val;
+	MxS16 m_unk0x24;
 	MxU32 m_data;
 };
 

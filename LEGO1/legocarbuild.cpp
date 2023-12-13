@@ -21,7 +21,7 @@ MxResult LegoCarBuild::Tickle()
 }
 
 // STUB: LEGO1 0x10024050
-MxLong LegoCarBuild::Notify(MxParam& p)
+MxLong LegoCarBuild::Notify(MxParam& p_param)
 {
 	// TODO
 

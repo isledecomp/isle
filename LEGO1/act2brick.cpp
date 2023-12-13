@@ -21,7 +21,7 @@ MxResult Act2Brick::Tickle()
 }
 
 // STUB: LEGO1 0x1007a8c0
-MxLong Act2Brick::Notify(MxParam& p)
+MxLong Act2Brick::Notify(MxParam& p_param)
 {
 	// TODO
 

@@ -8,7 +8,7 @@ public:
 	inline ViewManager* GetViewManager() { return this->m_viewManager; }
 
 private:
-	char unknown[0x88];
+	char m_pad[0x88];
 	ViewManager* m_viewManager;
 };
 

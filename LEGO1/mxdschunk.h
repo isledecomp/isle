@@ -28,12 +28,12 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100be0d0
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSChunk::ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	inline void SetFlags(MxU16 flags) { m_flags = flags; }
+	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 	inline void SetTime(MxLong p_time) { m_time = p_time; }
 	inline void SetLength(MxU32 p_length) { m_length = p_length; }
 	inline void SetData(MxU8* p_data) { m_data = p_data; }
@@ -50,11 +50,11 @@ public:
 	}
 
 private:
-	MxU16 m_flags;      // 0x8
-	undefined4 m_unk0c; // 0xc
-	MxLong m_time;      // 0x10
-	MxU32 m_length;     // 0x14
-	MxU8* m_data;       // 0x18
+	MxU16 m_flags;        // 0x8
+	undefined4 m_unk0x0c; // 0xc
+	MxLong m_time;        // 0x10
+	MxU32 m_length;       // 0x14
+	MxU8* m_data;         // 0x18
 };
 
 #endif // MXDSCHUNK_H

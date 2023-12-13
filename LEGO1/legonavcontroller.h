@@ -47,9 +47,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10054b90
-	inline MxBool IsA(const char* name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
 	void SetControlMax(int p_hMax, int p_vMax);
@@ -64,8 +64,8 @@ private:
 	int m_vMax;
 	int m_mouseDeadzone;
 	float m_zeroThreshold;
-	float unk_18;
-	float unk_1C;
+	float m_unk0x18;
+	float m_unk0x1c;
 	float m_targetMovementSpeed;
 	float m_targetTurnSpeed;
 	float m_movementMaxSpeed;
@@ -82,12 +82,12 @@ private:
 	MxBool m_turnUseVelocity;
 	int m_time;
 	MxBool m_trackDefault;
-	MxBool m_unk5D;
-	char m_unk5E[2];
-	int m_unk60;
-	int m_unk64;
-	int m_unk68;
-	MxBool m_unk6C;
+	MxBool m_unk0x5d;
+	char m_unk0x5e[2];
+	int m_unk0x60;
+	int m_unk0x64;
+	int m_unk0x68;
+	MxBool m_unk0x6c;
 };
 
 #endif // LEGONAVCONTROLLER_H

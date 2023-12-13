@@ -29,7 +29,7 @@ public:
 	virtual MxResult Create(MxVideoParam& p_videoParam);
 	virtual void Clear();
 	virtual void SetPalette(MxPalette* p_palette);
-	virtual void vtable24(
+	virtual void VTable0x24(
 		LPDDSURFACEDESC,
 		MxBitmap*,
 		undefined4,
@@ -39,8 +39,8 @@ public:
 		undefined4,
 		undefined4
 	);
-	virtual MxBool vtable28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
-	virtual MxBool vtable2c(
+	virtual MxBool VTable0x28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
+	virtual MxBool VTable0x2c(
 		LPDDSURFACEDESC,
 		MxBitmap*,
 		undefined4,
@@ -51,12 +51,21 @@ public:
 		undefined4,
 		MxBool
 	);
-	virtual MxBool vtable30(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, MxBool);
-	virtual undefined4 vtable34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
+	virtual MxBool VTable0x30(
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		MxBool
+	);
+	virtual undefined4 VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
 	virtual void Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
 	virtual void GetDC(HDC* p_hdc);
 	virtual void ReleaseDC(HDC p_hdc);
-	virtual LPDIRECTDRAWSURFACE vtable44(MxBitmap*, undefined4*, undefined4, undefined4);
+	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4);
 
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }

@@ -10,8 +10,8 @@ public:
 	LegoAnimationManager();
 	virtual ~LegoAnimationManager() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p) override; // vtable+0x4
-	virtual MxResult Tickle() override;         // vtable+0x8
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxResult Tickle() override;               // vtable+0x8
 
 	// FUNCTION: LEGO1 0x1005ec80
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -21,14 +21,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1005ec90
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, ClassName()) || MxCore::IsA(name);
+		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
-	void FUN_1005f6d0(MxBool p);
+	void FUN_1005f6d0(MxBool);
 
-	__declspec(dllexport) static void configureLegoAnimationManager(int param_1);
+	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
 private:
 	void Init();

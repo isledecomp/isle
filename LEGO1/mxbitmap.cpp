@@ -21,13 +21,13 @@ inline MxLong AlignToFourByte(MxLong p_value)
 // Same as the one from legoutil.h, but flipped the other way
 // TODO: While it's not outside the realm of possibility that they
 // reimplemented Abs for only this file, that seems odd, right?
-inline MxLong _Abs(MxLong p_value)
+inline MxLong AbsFlipped(MxLong p_value)
 {
 	return p_value > 0 ? p_value : -p_value;
 }
 
 // FUNCTION: LEGO1 0x1004e0d0
-int MxBitmap::vtable28(int)
+int MxBitmap::VTable0x28(int)
 {
 	return -1;
 }
@@ -64,9 +64,9 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 	if (m_info) {
 		m_data = new MxU8[size];
 		if (m_data) {
-			m_bmiHeader = &m_info->bmiHeader;
-			m_paletteData = m_info->bmiColors;
-			memset(&m_info->bmiHeader, 0, sizeof(m_info->bmiHeader));
+			m_bmiHeader = &m_info->m_bmiHeader;
+			m_paletteData = m_info->m_bmiColors;
+			memset(&m_info->m_bmiHeader, 0, sizeof(m_info->m_bmiHeader));
 
 			m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
 			m_bmiHeader->biWidth = p_width;
@@ -103,8 +103,8 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 {
 	MxResult result = FAILURE;
-	MxLong width = p_info->bmiHeader.biWidth;
-	MxLong height = p_info->bmiHeader.biHeight;
+	MxLong width = p_info->m_bmiHeader.biWidth;
+	MxLong height = p_info->m_bmiHeader.biHeight;
 	MxLong size = AlignToFourByte(width) * height;
 
 	this->m_info = new MxBITMAPINFO;
@@ -112,8 +112,8 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 		this->m_data = new MxU8[size];
 		if (this->m_data) {
 			memcpy(this->m_info, p_info, sizeof(*this->m_info));
-			this->m_bmiHeader = &this->m_info->bmiHeader;
-			this->m_paletteData = this->m_info->bmiColors;
+			this->m_bmiHeader = &this->m_info->m_bmiHeader;
+			this->m_paletteData = this->m_info->m_bmiColors;
 			result = SUCCESS;
 		}
 	}
@@ -140,16 +140,16 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 
 	this->m_info = new MxBITMAPINFO;
 	if (this->m_info) {
-		MxLong height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+		MxLong height = AbsFlipped(p_bitmap->m_bmiHeader->biHeight);
 		this->m_data = new MxU8[AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height];
 		if (this->m_data) {
 			memcpy(this->m_info, p_bitmap->m_info, sizeof(*this->m_info));
-			height = _Abs(p_bitmap->m_bmiHeader->biHeight);
+			height = AbsFlipped(p_bitmap->m_bmiHeader->biHeight);
 			memcpy(this->m_data, p_bitmap->m_data, AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height);
 
 			result = SUCCESS;
-			this->m_bmiHeader = &this->m_info->bmiHeader;
-			this->m_paletteData = this->m_info->bmiColors;
+			this->m_bmiHeader = &this->m_info->m_bmiHeader;
+			this->m_paletteData = this->m_info->m_bmiColors;
 		}
 	}
 
@@ -196,18 +196,18 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 		this->m_info = new MxBITMAPINFO;
 		if (this->m_info) {
 			ret = ReadFile(p_handle, this->m_info, sizeof(*this->m_info), &bytesRead, NULL);
-			if (ret && (this->m_info->bmiHeader.biBitCount == 8)) {
+			if (ret && (this->m_info->m_bmiHeader.biBitCount == 8)) {
 				MxLong size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
 				this->m_data = new MxU8[size];
 				if (this->m_data) {
 					ret = ReadFile(p_handle, this->m_data, size, &bytesRead, NULL);
 					if (ret) {
-						this->m_bmiHeader = &this->m_info->bmiHeader;
-						this->m_paletteData = this->m_info->bmiColors;
-						if (this->m_info->bmiHeader.biSizeImage == 0) {
-							MxLong height = _Abs(this->m_info->bmiHeader.biHeight);
-							this->m_info->bmiHeader.biSizeImage =
-								AlignToFourByte(this->m_info->bmiHeader.biWidth) * height;
+						this->m_bmiHeader = &this->m_info->m_bmiHeader;
+						this->m_paletteData = this->m_info->m_bmiColors;
+						if (this->m_info->m_bmiHeader.biSizeImage == 0) {
+							MxLong height = AbsFlipped(this->m_info->m_bmiHeader.biHeight);
+							this->m_info->m_bmiHeader.biSizeImage =
+								AlignToFourByte(this->m_info->m_bmiHeader.biWidth) * height;
 						}
 						result = SUCCESS;
 					}
@@ -232,12 +232,12 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 }
 
 // STUB: LEGO1 0x100bce70
-void MxBitmap::vtable2c(int, int, int, int, int, int, int)
+void MxBitmap::VTable0x2c(int, int, int, int, int, int, int)
 {
 }
 
 // STUB: LEGO1 0x100bd020
-void MxBitmap::vtable30(int, int, int, int, int, int, int)
+void MxBitmap::VTable0x30(int, int, int, int, int, int, int)
 {
 }
 
@@ -378,8 +378,8 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 			goto done;
 	}
 	else {
-		MxPalette local_pal;
-		if (local_pal.GetEntries(entries))
+		MxPalette palette;
+		if (palette.GetEntries(entries))
 			goto done;
 	}
 

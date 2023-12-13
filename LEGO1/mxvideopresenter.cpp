@@ -46,7 +46,7 @@ void MxVideoPresenter::Destroy()
 // FUNCTION: LEGO1 0x1000c7b0
 LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
 {
-	return m_unk58;
+	return m_unk0x58;
 }
 
 // FUNCTION: LEGO1 0x1000c7c0
@@ -72,16 +72,16 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
 	m_width = p_bitmap.GetBmiWidth();
 	// DECOMP: ECX becomes word-sized if these are not two separate actions.
-	MxLong _height = p_bitmap.GetBmiHeightAbs();
-	m_height = _height;
+	MxLong height = p_bitmap.GetBmiHeightAbs();
+	m_height = height;
 
 	MxS32 size = ((m_width * m_height) / 8) + 1;
 	m_bitmask = new MxU8[size];
 	memset(m_bitmask, 0, size);
 
 	MxU32 biCompression = p_bitmap.GetBmiHeader()->biCompression;
-	MxU32 rows_before_top;
-	MxU8* bitmap_src_ptr;
+	MxU32 rowsBeforeTop;
+	MxU8* bitmapSrcPtr;
 
 	// The goal here is to enable us to walk through the bitmap's rows
 	// in order, regardless of the orientation. We want to end up at the
@@ -95,11 +95,11 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 		// DECOMP: I think this must be an OR. If not, the check for
 		// biCompression == 16 gets optimized away.
 		if (biCompression == BI_RGB_TOPDOWN || p_bitmap.GetBmiHeight() < 0) {
-			rows_before_top = 0;
+			rowsBeforeTop = 0;
 		}
 		else {
-			rows_before_top = p_bitmap.GetBmiHeightAbs();
-			rows_before_top--;
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
+			rowsBeforeTop--;
 		}
 
 		goto seek_to_last_row;
@@ -107,48 +107,48 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	else if (biCompression == BI_RGB_TOPDOWN) {
 		// DECOMP: This is the only condition where we skip the
 		// calculation below.
-		bitmap_src_ptr = p_bitmap.GetBitmapData();
+		bitmapSrcPtr = p_bitmap.GetBitmapData();
 	}
 	else {
 		if (p_bitmap.GetBmiHeight() < 0) {
-			rows_before_top = 0;
+			rowsBeforeTop = 0;
 		}
 		else {
-			rows_before_top = p_bitmap.GetBmiHeightAbs();
-			rows_before_top--;
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
+			rowsBeforeTop--;
 		}
 
 	// TODO: would prefer not to use goto if we can figure this structure out
 	seek_to_last_row:
-		bitmap_src_ptr = p_bitmap.GetBmiStride() * rows_before_top + p_bitmap.GetBitmapData();
+		bitmapSrcPtr = p_bitmap.GetBmiStride() * rowsBeforeTop + p_bitmap.GetBitmapData();
 	}
 
 	// How many bytes are there for each row of the bitmap?
 	// (i.e. the image stride)
 	// If this is a bottom-up DIB, we will walk it in reverse.
 	// TODO: Same rounding trick as in MxBitmap
-	MxS32 row_seek = ((m_width + 3) & -4);
+	MxS32 rowSeek = ((m_width + 3) & -4);
 	if (p_bitmap.GetBmiHeight() < 0)
-		row_seek = -row_seek;
+		rowSeek = -rowSeek;
 
 	// The actual offset into the m_bitmask array. The two for-loops
 	// are just for counting the pixels.
 	MxS32 offset = 0;
 
-	MxU8* t_ptr = bitmap_src_ptr;
+	MxU8* tPtr = bitmapSrcPtr;
 	for (MxS32 j = 0; j < m_height; j++) {
 		for (MxS32 i = 0; i < m_width; i++) {
-			if (*t_ptr) {
+			if (*tPtr) {
 				// TODO: Second CDQ instruction for abs() should not be there.
 				MxU32 shift = abs(offset) & 7;
 				m_bitmask[offset / 8] |= (1 << abs((MxS32) shift));
 			}
-			t_ptr++;
+			tPtr++;
 			offset++;
 		}
 		// Seek to the start of the next row
-		bitmap_src_ptr += row_seek;
-		t_ptr = bitmap_src_ptr;
+		bitmapSrcPtr += rowSeek;
+		tPtr = bitmapSrcPtr;
 	}
 }
 
@@ -185,9 +185,9 @@ void MxVideoPresenter::Init()
 {
 	m_bitmap = NULL;
 	m_alpha = NULL;
-	m_unk5c = 1;
-	m_unk58 = NULL;
-	m_unk60 = -1;
+	m_unk0x5c = 1;
+	m_unk0x58 = NULL;
+	m_unk0x60 = -1;
 	m_flags = m_flags & 0xfe;
 
 	if (MVideoManager() != NULL) {
@@ -206,9 +206,9 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	if (MVideoManager() != NULL)
 		MVideoManager()->RemovePresenter(*this);
 
-	if (m_unk58) {
-		m_unk58->Release();
-		m_unk58 = NULL;
+	if (m_unk0x58) {
+		m_unk0x58->Release();
+		m_unk0x58 = NULL;
 		m_flags = m_flags & 0xfd;
 		m_flags = m_flags & 0xfb;
 	}
@@ -222,7 +222,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxRect32 rect(x, y, x + width, y + height);
 
 		MVideoManager()->InvalidateRect(rect);
-		MVideoManager()->vtable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
+		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 
 	delete m_bitmap;
@@ -263,20 +263,20 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 
 	MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
 
-	MxLong min_x = GetLocationX();
-	MxLong min_y = GetLocationY();
+	MxLong minX = GetLocationX();
+	MxLong minY = GetLocationY();
 
-	MxLong max_y = min_y + heightAbs;
-	MxLong max_x = min_x + m_bitmap->GetBmiWidth();
+	MxLong maxY = minY + heightAbs;
+	MxLong maxX = minX + m_bitmap->GetBmiWidth();
 
-	if (p_x < min_x || p_x >= max_x || p_y < min_y || p_y >= max_y)
+	if (p_x < minX || p_x >= maxX || p_y < minY || p_y >= maxY)
 		return FALSE;
 
 	MxU8* pixel;
 
 	MxLong biCompression = m_bitmap->GetBmiHeader()->biCompression;
 	MxLong height = m_bitmap->GetBmiHeight();
-	MxLong seek_row;
+	MxLong seekRow;
 
 	// DECOMP: Same basic layout as AlphaMask constructor
 	// The idea here is to again seek to the correct place in the bitmap's
@@ -285,13 +285,13 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	// the MxPresenter location x and y coordinates.
 	if (biCompression == BI_RGB) {
 		if (biCompression == BI_RGB_TOPDOWN || height < 0) {
-			seek_row = p_y - GetLocationY();
+			seekRow = p_y - GetLocationY();
 		}
 		else {
 			height = height > 0 ? height : -height;
-			seek_row = height - p_y - 1 + GetLocationY();
+			seekRow = height - p_y - 1 + GetLocationY();
 		}
-		pixel = m_bitmap->GetBmiStride() * seek_row + m_bitmap->GetBitmapData() - GetLocationX() + p_x;
+		pixel = m_bitmap->GetBmiStride() * seekRow + m_bitmap->GetBitmapData() - GetLocationX() + p_x;
 	}
 	else if (biCompression == BI_RGB_TOPDOWN) {
 		pixel = m_bitmap->GetBitmapData();
@@ -357,7 +357,7 @@ void MxVideoPresenter::StreamingTickle()
 		}
 	}
 	else {
-		for (MxS16 i = 0; i < m_unk5c; i++) {
+		for (MxS16 i = 0; i < m_unk0x5c; i++) {
 			if (!m_currentChunk) {
 				MxMediaPresenter::StreamingTickle();
 
@@ -378,7 +378,7 @@ void MxVideoPresenter::StreamingTickle()
 		}
 
 		if (m_flags & Flag_Bit1)
-			m_unk5c = 5;
+			m_unk0x5c = 5;
 	}
 }
 
@@ -396,7 +396,7 @@ void MxVideoPresenter::RepeatingTickle()
 			}
 		}
 		else {
-			for (MxS16 i = 0; i < m_unk5c; i++) {
+			for (MxS16 i = 0; i < m_unk0x5c; i++) {
 				if (!m_currentChunk) {
 					MxMediaPresenter::RepeatingTickle();
 
@@ -416,7 +416,7 @@ void MxVideoPresenter::RepeatingTickle()
 			}
 
 			if (m_flags & Flag_Bit1)
-				m_unk5c = 5;
+				m_unk0x5c = 5;
 		}
 	}
 }
@@ -428,10 +428,10 @@ void MxVideoPresenter::Unk5Tickle()
 
 	if (sustainTime != -1) {
 		if (sustainTime) {
-			if (m_unk60 == -1)
-				m_unk60 = m_action->GetElapsedTime();
+			if (m_unk0x60 == -1)
+				m_unk0x60 = m_action->GetElapsedTime();
 
-			if (m_action->GetElapsedTime() >= m_unk60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
 				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 				m_currentTickleState = TickleState_Done;
 			}

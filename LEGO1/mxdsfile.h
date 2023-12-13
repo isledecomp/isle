@@ -9,7 +9,7 @@
 // VTABLE: LEGO1 0x100dc890
 class MxDSFile : public MxDSSource {
 public:
-	__declspec(dllexport) MxDSFile(const char* filename, MxULong skipReadingChunks);
+	__declspec(dllexport) MxDSFile(const char* p_filename, MxULong p_skipReadingChunks);
 	__declspec(dllexport) virtual ~MxDSFile(); // vtable+0x0
 
 	// FUNCTION: LEGO1 0x100c0120
@@ -20,9 +20,9 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c0130
-	inline virtual MxBool IsA(const char* name) const override // vtable+0x10
+	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(name, MxDSFile::ClassName()) || MxDSSource::IsA(name);
+		return !strcmp(p_name, MxDSFile::ClassName()) || MxDSSource::IsA(p_name);
 	}
 
 	__declspec(dllexport) virtual MxLong Open(MxULong);                   // vtable+0x14
@@ -37,13 +37,13 @@ public:
 private:
 	MxLong ReadChunks();
 	struct ChunkHeader {
-		ChunkHeader() : majorVersion(0), minorVersion(0), bufferSize(0), streamBuffersNum(0) {}
+		ChunkHeader() : m_majorVersion(0), m_minorVersion(0), m_bufferSize(0), m_streamBuffersNum(0) {}
 
-		MxU16 majorVersion;
-		MxU16 minorVersion;
-		MxULong bufferSize;
-		MxS16 streamBuffersNum;
-		MxS16 reserved;
+		MxU16 m_majorVersion;
+		MxU16 m_minorVersion;
+		MxULong m_bufferSize;
+		MxS16 m_streamBuffersNum;
+		MxS16 m_reserved;
 	};
 
 	MxString m_filename;

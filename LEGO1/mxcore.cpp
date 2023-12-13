@@ -21,7 +21,7 @@ MxCore::~MxCore()
 }
 
 // FUNCTION: LEGO1 0x100ae1f0
-MxLong MxCore::Notify(MxParam& p)
+MxLong MxCore::Notify(MxParam& p_param)
 {
 	return 0;
 }

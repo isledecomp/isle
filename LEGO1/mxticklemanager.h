@@ -21,7 +21,7 @@ public:
 
 	inline void SetLastUpdateTime(MxTime p_lastUpdateTime) { m_lastUpdateTime = p_lastUpdateTime; }
 
-	inline void SetFlags(MxU16 flags) { m_flags = flags; }
+	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 
 private:
 	MxCore* m_client;        // 0x0

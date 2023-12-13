@@ -30,7 +30,7 @@ public:
 // MxList<MxString>::Append
 
 // TEMPLATE: LEGO1 0x100cc2d0
-// MxList<MxString>::_InsertEntry
+// MxList<MxString>::InsertEntry
 
 // TEMPLATE: LEGO1 0x100cc3c0
 // MxListEntry<MxString>::MxListEntry<MxString>
