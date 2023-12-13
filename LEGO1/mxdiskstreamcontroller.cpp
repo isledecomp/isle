@@ -72,38 +72,44 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100c7f4
-void MxDiskStreamController::FUN_100c7f4(MxDSStreamingAction* p_streamingaction)
+// FUNCTION: LEGO1 0x100c7f40
+void MxDiskStreamController::FUN_100c7f40(MxDSStreamingAction* p_streamingaction)
 {
-	// TODO
-	// seems to do something with a list
+	MxAutoLocker lock(&this->m_criticalSection);
+	if (p_streamingaction) {
+		m_list0x64.push_back(p_streamingaction);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c7ff0
 MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&this->m_criticalSection);
 	MxResult result;
-	MxDSStreamingAction* entry = (MxDSStreamingAction*)m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxDSStreamingAction* entry =
+		(MxDSStreamingAction*) m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
 	if (!entry) {
-		result = MxStreamController::VTable0x20((MxDSAction*)p_action);
+		result = MxStreamController::VTable0x20((MxDSAction*) p_action);
 	}
 	else {
 		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
+		action->SetUnknown28(entry->GetUnknown28());
 		action->SetUnknown84(entry->GetUnknown84());
-		action->SetUnknown8c(entry->GetUnknown8c());
-		action->SetUnknowna0(entry->GetUnknowna0());
+		action->SetOrigin(entry->GetOrigin());
+		action->SetUnknowna0(entry->GetUnknowna4());
 
-		FUN_100c7f4(action);
-		result = vtable0x2c(p_action, action->GetBufferOffset());
+		FUN_100c7f40(action);
+		result = VTable0x2c(p_action, action->GetBufferOffset());
 	}
 
-	if (result == SUCCESS)
-	{
-		m_unk70 = 1;
-		m_unkc4 = 1;
+	if (result == SUCCESS) {
+		return FAILURE;
 	}
-	return result;
+	else {
+		m_unk0x70 = 1;
+		m_unk0xc4 = 1;
+		return SUCCESS;
+	}
 }
 
 // STUB: LEGO1 0x100c8160

@@ -38,10 +38,12 @@ public:
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
+	inline undefined4 GetUnknown28() { return this->m_unk0x28; }
 
 	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
 	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
+	inline void SetUnknown28(undefined4 p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
 
 private:
 	MxU32 m_sizeOnDisk;   // 0x8

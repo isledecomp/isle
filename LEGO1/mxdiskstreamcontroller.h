@@ -6,6 +6,7 @@
 #include "mxstl/stlcompat.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
+#include "mxdsstreamingaction.h"
 
 #include <string.h>
 
@@ -49,7 +50,7 @@ private:
 	MxStreamListMxDSAction m_list0xb8; // 0xb8
 	undefined m_unk0xc4;               // 0xc4
 
-	void FUN_100c7f4(MxDSStreamingAction* p_streamingaction);
+	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
 };
 
 // TEMPLATE: LEGO1 0x100c7330
