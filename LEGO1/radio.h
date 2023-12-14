@@ -2,10 +2,12 @@
 #define RADIO_H
 
 #include "mxcore.h"
+#include "radiostate.h"
 
 // VTABLE: LEGO1 0x100d6d10
 class Radio : public MxCore {
 public:
+	Radio();
 	virtual ~Radio() override;
 
 	// FUNCTION: LEGO1 0x1002c8e0
@@ -20,6 +22,12 @@ public:
 	{
 		return !strcmp(p_name, Radio::ClassName()) || MxCore::IsA(p_name);
 	}
+
+private:
+	RadioState* m_state; // 0x08
+	MxBool m_unk0xc;     // 0x0c
+
+	void CreateRadioState();
 };
 
 #endif // RADIO_H
