@@ -35,7 +35,7 @@ ExtraActionType MatchActionString(const char* p_str)
 }
 
 // STUB: LEGO1 0x1003e430
-void InvokeAction(ExtraActionType actionId, MxAtomId& pAtom, int targetEntityId, LegoEntity* sender)
+void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
 {
 }
 

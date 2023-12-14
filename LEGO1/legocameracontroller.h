@@ -26,7 +26,7 @@ public:
 	}
 
 	void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
-	void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32 p_2);
+	void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32);
 	Vector3Data& FUN_10012740();
 	Vector3Data& FUN_100127f0();
 	Vector3Data& FUN_100128a0();

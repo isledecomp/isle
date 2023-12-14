@@ -18,7 +18,7 @@ void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3
 }
 
 // STUB: LEGO1 0x100123e0
-void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32 p_2)
+void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32)
 {
 }
 

@@ -98,7 +98,7 @@ MxU32 Helicopter::VTable0xcc()
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(FALSE);
 		VTable0xe8(0x29, TRUE, 7);
-		((Isle*) GetCurrentWorld())->setUnknown13c(0x3c);
+		((Isle*) GetCurrentWorld())->SetUnknown13c(0x3c);
 		FUN_10015820(1, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, TRUE);
 		SetUnknownDC(4);
@@ -122,22 +122,22 @@ MxU32 Helicopter::VTable0xcc()
 MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 {
 	MxU32 ret = 0;
-	MxAtomId l_script;
+	MxAtomId script;
 	switch (GameState()->GetUnknown10()) {
 	case 0:
-		l_script = *g_isleScript;
+		script = *g_isleScript;
 		break;
 	case 1:
-		l_script = *g_act2mainScript;
+		script = *g_act2mainScript;
 		break;
 	case 2:
-		l_script = *g_act3Script;
+		script = *g_act3Script;
 		break;
 	}
 	if (p_param.GetUnknown28() == 1) {
 		switch (p_param.GetUnknown20()) {
 		case 0x17:
-			if (*g_act3Script == l_script) {
+			if (*g_act3Script == script) {
 				((Act3*) GetCurrentWorld())->SetUnkown4270(2);
 				TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
 			}
@@ -148,37 +148,37 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 			ret = 1;
 			break;
 		case 0x18: {
-			if (*g_act3Script == l_script)
+			if (*g_act3Script == script)
 				break;
 			Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 			if (m_state->GetUnkown8() == 0) {
 				state->SetUnknown18(4);
 				m_state->SetUnknown8(1);
 				m_world->FUN_1001fc80(this);
-				InvokeAction(ExtraActionType_start, l_script, 0x20, NULL);
+				InvokeAction(ExtraActionType_start, script, 0x20, NULL);
 				SetUnknownDC(0);
 			}
 			ret = 1;
 			break;
 		}
 		case 0x19:
-			if (*g_act3Script == l_script)
+			if (*g_act3Script == script)
 				break;
 			if (m_state->GetUnkown8() == 2) {
 				m_state->SetUnknown8(3);
 				m_world->FUN_1001fc80(this);
-				InvokeAction(ExtraActionType_start, l_script, 0x21, NULL);
+				InvokeAction(ExtraActionType_start, script, 0x21, NULL);
 				SetUnknownDC(4);
 			}
 			ret = 1;
 			break;
 		case 0x1a:
-			if (*g_act3Script != l_script)
+			if (*g_act3Script != script)
 				break;
 			ret = 1;
 			/* fall through */
 		case 0x1b:
-			if (*g_act3Script != l_script)
+			if (*g_act3Script != script)
 				break;
 			if (m_world && m_world->GetCamera()) {
 				Vector3Data loc, dir, lookat;
@@ -202,7 +202,7 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 			break;
 		case 0x1c:
 			if (GameState()->GetUnknown10() == 0) {
-				((Isle*) GetCurrentWorld())->setUnknown13c(2);
+				((Isle*) GetCurrentWorld())->SetUnknown13c(2);
 				TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
 				VTable0xe4();
 			}
@@ -279,16 +279,16 @@ void Helicopter::VTable0x74(Matrix4Impl& p_transform)
 }
 
 // FUNCTION: LEGO1 0x10003ee0
-void Helicopter::VTable0x70(float p)
+void Helicopter::VTable0x70(float p_float)
 {
 	int state = m_state->GetUnkown8();
 	switch (state) {
 	default:
-		LegoPathActor::VTable0x70(p);
+		LegoPathActor::VTable0x70(p_float);
 		return;
 	case 4:
 	case 5:
-		float f = m_unk0x1f0 - p + 3000;
+		float f = m_unk0x1f0 - p_float + 3000;
 		if (f >= 0) {
 			float f2 = f / 3000 + 1;
 			if (f2 < 0)

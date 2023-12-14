@@ -45,9 +45,9 @@ public:
 
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
 	void EndAction(MxPresenter* p_presenter);
-	void FUN_1001fc80(IslePathActor* actor);
-	MxBool FUN_100727e0(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up);
-	MxBool FUN_10072980(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up);
+	void FUN_1001fc80(IslePathActor* p_actor);
+	MxBool FUN_100727e0(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
+	MxBool FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
 

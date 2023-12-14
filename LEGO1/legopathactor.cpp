@@ -45,7 +45,7 @@ void LegoPathActor::VTable0x74(Matrix4Impl& p_transform)
 }
 
 // STUB: LEGO1 0x1002e790
-void LegoPathActor::VTable0x70(float p)
+void LegoPathActor::VTable0x70(float)
 {
 	// TODO
 }

@@ -27,10 +27,10 @@ public:
 
 	virtual void VTable0x68();                         // vtable+0x68
 	virtual void VTable0x6c();                         // vtable+0x6c
-	virtual void VTable0x70(float p);                  // vtable+0x70
+	virtual void VTable0x70(float p_float);            // vtable+0x70
 	virtual void VTable0x74(Matrix4Impl& p_transform); // vtable+0x74
 	// FUNCTION: LEGO1 0x10002d20
-	virtual void VTable0x78(MxU8 p_1) { m_unk0xea = p_1; } // vtable+0x78
+	virtual void VTable0x78(MxU8 p_unk0xea) { m_unk0xea = p_unk0xea; } // vtable+0x78
 	// FUNCTION: LEGO1 0x10002d30
 	virtual MxU8 VTable0x7c() { return m_unk0xea; } // vtable+0x7c
 	virtual void VTable0x80();                      // vtable+0x80
@@ -48,7 +48,7 @@ public:
 	virtual void VTable0xa4();               // vtable+0xa4
 	virtual void VTable0xa8();               // vtable+0xa8
 	// FUNCTION: LEGO1 0x10002d70
-	virtual void VTable0xac(MxFloat p_1) { m_unk0x140 = p_1; } // vtable+0xac
+	virtual void VTable0xac(MxFloat p_unk0x13c) { m_unk0x13c = p_unk0x13c; } // vtable+0xac
 	// FUNCTION: LEGO1 0x10002d80
 	virtual MxFloat VTable0xb0() { return m_unk0x13c; } // vtable+0xb0
 	// FUNCTION: LEGO1 0x10002d90
@@ -56,15 +56,15 @@ public:
 	// FUNCTION: LEGO1 0x10002da0
 	virtual MxFloat VTable0xb8() { return m_unk0x144; } // vtable+0xb8
 	// FUNCTION: LEGO1 0x10002db0
-	virtual void VTable0xbc(MxFloat p_1) { m_unk0x140 = p_1; } // vtable+0xbc
+	virtual void VTable0xbc(MxFloat p_unk0x140) { m_unk0x140 = p_unk0x140; } // vtable+0xbc
 	// FUNCTION: LEGO1 0x10002dc0
-	virtual void VTable0xc0(MxFloat p_1) { m_unk0x144 = p_1; } // vtable+0xc0
+	virtual void VTable0xc0(MxFloat p_unk0x144) { m_unk0x144 = p_unk0x144; } // vtable+0xc0
 	// FUNCTION: LEGO1 0x10002dd0
 	virtual void VTable0xc4() {} // vtable+0xc4
 	// FUNCTION: LEGO1 0x10002de0
-	virtual void VTable0xc8(MxU8 p_1) { m_unk0x148 = p_1; } // vtable+0xc8
+	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
-	inline void SetUnknownDC(MxU32 p) { m_unk0xdc = p; }
+	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
 
 protected:
 	undefined m_unk0x78[0x64]; // 0x78

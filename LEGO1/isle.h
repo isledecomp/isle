@@ -22,7 +22,7 @@ public:
 	{
 		return !strcmp(p_name, Isle::ClassName()) || LegoWorld::IsA(p_name);
 	}
-	inline void setUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
+	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 protected:
 	undefined m_unk0xf8[0x44]; // 0xf8

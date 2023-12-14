@@ -87,7 +87,7 @@ void LegoWorld::VTable0x54()
 }
 
 // FUNCTION: LEGO1 0x1001fc80
-void LegoWorld::FUN_1001fc80(IslePathActor* actor)
+void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {
 }
 
@@ -121,13 +121,13 @@ void LegoWorld::Stop()
 }
 
 // STUB: LEGO1 0x100727e0
-MxBool LegoWorld::FUN_100727e0(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up)
+MxBool LegoWorld::FUN_100727e0(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up)
 {
 	return FALSE;
 }
 
 // STUB: LEGO1 0x10072980
-MxBool LegoWorld::FUN_10072980(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up)
+MxBool LegoWorld::FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up)
 {
 	return FALSE;
 }
