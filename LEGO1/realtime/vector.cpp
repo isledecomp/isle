@@ -133,57 +133,57 @@ int Vector2Impl::Unitize()
 }
 
 // FUNCTION: LEGO1 0x100021c0
-void Vector2Impl::AddScalar(float p_value)
+void Vector2Impl::Add(float p_value)
 {
 	AddScalarImpl(p_value);
 }
 
 // FUNCTION: LEGO1 0x100021d0
-void Vector2Impl::AddVector(float* p_other)
+void Vector2Impl::Add(float* p_other)
 {
 	AddVectorImpl(p_other);
 }
 
 // FUNCTION: LEGO1 0x100021e0
-void Vector2Impl::AddVector(Vector2Impl* p_other)
+void Vector2Impl::Add(Vector2Impl* p_other)
 {
 	AddVectorImpl(p_other->m_data);
 }
 
 // FUNCTION: LEGO1 0x100021f0
-void Vector2Impl::SubVector(float* p_other)
+void Vector2Impl::Sub(float* p_other)
 {
 	SubVectorImpl(p_other);
 }
 
 // FUNCTION: LEGO1 0x10002200
-void Vector2Impl::SubVector(Vector2Impl* p_other)
+void Vector2Impl::Sub(Vector2Impl* p_other)
 {
 	SubVectorImpl(p_other->m_data);
 }
 
 // FUNCTION: LEGO1 0x10002210
-void Vector2Impl::MullVector(float* p_other)
+void Vector2Impl::Mul(float* p_other)
 {
 	MullVectorImpl(p_other);
 }
 
 // FUNCTION: LEGO1 0x10002220
-void Vector2Impl::MullVector(Vector2Impl* p_other)
+void Vector2Impl::Mul(Vector2Impl* p_other)
 {
 	MullVectorImpl(p_other->m_data);
 }
 
 // FUNCTION: LEGO1 0x10002230
-void Vector2Impl::MullScalar(float* p_value)
+void Vector2Impl::Mul(float& p_value)
 {
-	MullScalarImpl(p_value);
+	MullScalarImpl(&p_value);
 }
 
 // FUNCTION: LEGO1 0x10002240
-void Vector2Impl::DivScalar(float* p_value)
+void Vector2Impl::Div(float& p_value)
 {
-	DivScalarImpl(p_value);
+	DivScalarImpl(&p_value);
 }
 
 // FUNCTION: LEGO1 0x10002250

@@ -49,9 +49,9 @@ class LODObject {
 public:
 	// LODObject();
 	virtual ~LODObject() {}
-	virtual float Cost(float pixels_covered) const = 0;
-	virtual float AveragePolyArea() const = 0;
-	virtual int NVerts() const = 0;
+	virtual float Cost(float pixels_covered) const = 0; // vtable+0x4
+	virtual float AveragePolyArea() const = 0;          // vtable+0x8
+	virtual int NVerts() const = 0;                     // vtable+0xc
 };
 
 /*
@@ -73,6 +73,8 @@ typedef vector<const ROI*> ROIList;
  */
 typedef vector<int> IntList;
 
+// VTABLE: LEGO1 0x100dbc38
+// SIZE 0xc
 class ROI {
 public:
 	ROI()
@@ -86,10 +88,10 @@ public:
 		assert(!m_comp);
 		assert(!m_lods);
 	}
-	virtual float IntrinsicImportance() const = 0;
-	virtual const Vector3& GetWorldVelocity() const = 0;
-	virtual const BoundingBox& GetWorldBoundingBox() const = 0;
-	virtual const BoundingSphere& GetWorldBoundingSphere() const = 0;
+	virtual float IntrinsicImportance() const = 0;                    // vtable+0x4
+	virtual const Vector3& GetWorldVelocity() const = 0;              // vtable+0x8
+	virtual const BoundingBox& GetWorldBoundingBox() const = 0;       // vtable+0xc
+	virtual const BoundingSphere& GetWorldBoundingSphere() const = 0; // vtable+0x10
 
 	const LODListBase* GetLODs() const { return m_lods; }
 	const LODObject* GetLOD(int i) const
@@ -101,7 +103,7 @@ public:
 	const CompoundObject* GetComp() const { return m_comp; }
 
 protected:
-	CompoundObject* m_comp;
-	LODListBase* m_lods;
+	CompoundObject* m_comp; // 0x4
+	LODListBase* m_lods;    // 0x8
 };
 #endif // ROI_H

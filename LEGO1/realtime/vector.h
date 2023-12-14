@@ -93,19 +93,19 @@ public:
 	virtual int Unitize();
 
 	// vtable + 0x48
-	virtual void AddVector(Vector2Impl* p_other);
-	virtual void AddVector(float* p_other);
-	virtual void AddScalar(float p_value);
+	virtual void Add(Vector2Impl* p_other);
+	virtual void Add(float* p_other);
+	virtual void Add(float p_value);
 
 	// vtable + 0x54
-	virtual void SubVector(Vector2Impl* p_other);
-	virtual void SubVector(float* p_other);
+	virtual void Sub(Vector2Impl* p_other);
+	virtual void Sub(float* p_other);
 
 	// vtable + 0x5C
-	virtual void MullScalar(float* p_value);
-	virtual void MullVector(Vector2Impl* p_other);
-	virtual void MullVector(float* p_other);
-	virtual void DivScalar(float* p_value);
+	virtual void Mul(float* p_value);
+	virtual void Mul(Vector2Impl* p_other);
+	virtual void Mul(float& p_other);
+	virtual void Div(float& p_value);
 
 	// vtable + 0x6C
 	virtual void SetVector(Vector2Impl* p_other);
@@ -197,6 +197,7 @@ public:
 		for (size_t i = sizeof(m_vector) / sizeof(float); i > 0; --i)
 			*dest++ = *src++;
 	}
+	inline void EqualsCross(Vector3Data& p_a, Vector3Data& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
 
 private:
 	Vector3 m_vector;

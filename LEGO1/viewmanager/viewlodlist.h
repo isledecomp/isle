@@ -5,6 +5,7 @@
 #include "assert.h"
 #include "compat.h"
 
+#pragma warning(disable : 4237)
 #pragma warning(disable : 4786)
 
 class ViewLOD;

@@ -48,3 +48,8 @@ MxResult LegoAnimationManager::Tickle()
 
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10064670
+void LegoAnimationManager::FUN_10064670(MxBool)
+{
+}

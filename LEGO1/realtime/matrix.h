@@ -63,7 +63,7 @@ public:
 
 	// vtable + 0x40
 	virtual void ToQuaternion(Vector4Impl* p_resultQuat);
-	virtual int FUN_10002710(const Vector3Impl* p_vec);
+	virtual int FromQuaternion(const Vector4Impl& p_vec);
 
 	inline float& operator[](size_t idx) { return ((float*) m_data)[idx]; }
 
