@@ -7,6 +7,7 @@
 
 class GifManager;
 class Isle;
+class IslePathActor;
 class LegoAnimationManager;
 class LegoBuildingManager;
 class LegoControlManager;
@@ -104,7 +105,7 @@ public:
 	GifManager* GetGifManager() { return m_gifManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
-	LegoWorld* GetCurrentVehicle() { return m_currentVehicle; }
+	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
 	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 	LegoBuildingManager* GetLegoBuildingManager() { return m_buildingManager; }
@@ -122,7 +123,7 @@ private:
 	LegoWorld* m_currentWorld;
 	MxBool m_unk0x80;
 	LegoNavController* m_navController; // 0x84
-	LegoWorld* m_currentVehicle;        // 0x88
+	IslePathActor* m_currentVehicle;    // 0x88
 	LegoUnkSaveDataWriter* m_saveDataWriter;
 	LegoPlantManager* m_plantManager; // 0x90
 	LegoAnimationManager* m_animationManager;
@@ -152,7 +153,7 @@ __declspec(dllexport) LegoVideoManager* VideoManager();
 LegoAnimationManager* AnimationManager();
 LegoBuildingManager* BuildingManager();
 LegoControlManager* ControlManager();
-LegoWorld* GetCurrentVehicle();
+IslePathActor* GetCurrentVehicle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();

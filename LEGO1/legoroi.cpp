@@ -35,6 +35,15 @@ MxS32 g_roiConfig = 100;
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
 
+// STUB: LEGO1 0x100a46b0
+void LegoROI::FUN_100a46b0(Matrix4Impl& p_transform)
+{
+}
+
+void LegoROI::FUN_100a58f0(Matrix4Impl& p_transform)
+{
+}
+
 // FUNCTION: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(MxS32 p_roiConfig)
 {

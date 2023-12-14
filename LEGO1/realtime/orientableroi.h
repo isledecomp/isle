@@ -16,34 +16,29 @@ public:
 		ZEROVEC3(m_world_velocity);
 		IDENTMAT4(m_local2world.GetMatrix());
 	}
+
+	virtual const Vector3& GetWorldVelocity() const;                // vtable+0x8
+	virtual const BoundingBox& GetWorldBoundingBox() const;         // vtable+0xc
+	virtual const BoundingSphere& GetWorldBoundingSphere() const;   // vtable+0x10
+	virtual void VTable0x14() { VTable0x1c(); }                     // vtable+0x14
+	virtual void UpdateWorldBoundingVolumes() = 0;                  // vtable+0x18
+	virtual void VTable0x1c();                                      // vtable+0x1c
+	virtual void SetLocalTransform(const Matrix4Impl& p_transform); // vtable+0x20
+	virtual void VTable0x24(const Matrix4Data& p_transform);        // vtable+0x24
+	virtual void UpdateWorldData(const Matrix4Data& p_transform);   // vtable+0x28
+	virtual void UpdateWorldVelocity();                             // vtable+0x2c
+
 	// SYNTHETIC: LEGO1 0x100a4630
 	// OrientableROI::`scalar deleting destructor'
 
-	virtual const Vector3& GetWorldVelocity() const;
-	virtual const BoundingBox& GetWorldBoundingBox() const;
-	virtual const BoundingSphere& GetWorldBoundingSphere() const;
-
 protected:
-	// vtable + 0x14
-	virtual void VTable0x14() { VTable0x1c(); }
-	virtual void UpdateWorldBoundingVolumes() = 0;
-
-public:
-	virtual void VTable0x1c();
-	// vtable + 0x20
-	virtual void SetLocalTransform(const Matrix4Impl& p_transform);
-	virtual void VTable0x24(const Matrix4Data& p_transform);
-	virtual void UpdateWorldData(const Matrix4Data& p_transform);
-	virtual void UpdateWorldVelocity();
-
-protected:
-	char m_unk0xc;
+	char m_unk0xc;                          // 0xc
 	Matrix4Data m_local2world;              // 0x10
 	BoundingBox m_world_bounding_box;       // 0x58
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Vector3Data m_world_velocity;           // 0xc0
-	unsigned int m_unk0xd4;
-	unsigned int m_unk0xd8;
+	unsigned int m_unk0xd4;                 // 0xd4
+	unsigned int m_unk0xd8;                 // 0xd8
 };
 
 #endif // ORIENTABLEROI_H

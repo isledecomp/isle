@@ -2,86 +2,6 @@
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
-// Probably in header
-// STUB: LEGO1 0x10002d20
-void LegoPathActor::VTable0x78()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d30
-void LegoPathActor::VTable0x7c()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d40
-void LegoPathActor::VTable0x90()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d50
-void LegoPathActor::VTable0x94()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d60
-void LegoPathActor::VTable0xa0()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d70
-void LegoPathActor::VTable0xac()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d80
-void LegoPathActor::VTable0xb0()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002d90
-void LegoPathActor::VTable0xb4()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002da0
-void LegoPathActor::VTable0xb8()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002db0
-void LegoPathActor::VTable0xbc()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002dc0
-void LegoPathActor::VTable0xc0()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002dd0
-void LegoPathActor::VTable0xc4()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002de0
-void LegoPathActor::VTable0xc8()
-{
-	// TODO
-}
-// End header
-
 // STUB: LEGO1 0x1002d700
 LegoPathActor::LegoPathActor()
 {
@@ -119,13 +39,13 @@ void LegoPathActor::VTable0x8c()
 }
 
 // STUB: LEGO1 0x1002e740
-void LegoPathActor::VTable0x74()
+void LegoPathActor::VTable0x74(Matrix4Impl& p_transform)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x1002e790
-void LegoPathActor::VTable0x70()
+void LegoPathActor::VTable0x70(float p)
 {
 	// TODO
 }

@@ -76,6 +76,11 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 	// TODO
 }
 
+// STUB: LEGO1 0x10010c30
+void LegoEntity::FUN_10010c30()
+{
+}
+
 // FUNCTION: LEGO1 0x10010e10
 void LegoEntity::ParseAction(char* p_extra)
 {

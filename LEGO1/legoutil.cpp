@@ -34,6 +34,11 @@ ExtraActionType MatchActionString(const char* p_str)
 	return result;
 }
 
+// STUB: LEGO1 0x1003e430
+void InvokeAction(ExtraActionType actionId, MxAtomId& pAtom, int targetEntityId, LegoEntity* sender)
+{
+}
+
 // FUNCTION: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut)
 {
@@ -111,4 +116,10 @@ void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 void SetAppCursor(WPARAM p_wparam)
 {
 	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);
+}
+
+// STUB: LEGO1 0x1003ef60
+MxBool FUN_1003ef60()
+{
+	return true;
 }

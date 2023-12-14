@@ -11,11 +11,6 @@ DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 
 MxBool g_isWorldActive;
 
-// FUNCTION: LEGO1 0x100010a0
-void LegoWorld::VTable0x60()
-{
-}
-
 // STUB: LEGO1 0x10015820
 void FUN_10015820(MxU32, MxU32)
 {
@@ -91,6 +86,11 @@ void LegoWorld::VTable0x54()
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x1001fc80
+void LegoWorld::FUN_1001fc80(IslePathActor* actor)
+{
+}
+
 // STUB: LEGO1 0x10020220
 void LegoWorld::VTable0x58(MxCore* p_object)
 {
@@ -108,8 +108,36 @@ void LegoWorld::VTable0x68(MxBool p_add)
 	// TODO
 }
 
+// STUB: LEGO1 0x10022080
+MxResult LegoWorld::Tickle()
+{
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x10022340
 void LegoWorld::Stop()
 {
 	TickleManager()->UnregisterClient(this);
+}
+
+// STUB: LEGO1 0x100727e0
+MxBool LegoWorld::FUN_100727e0(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up)
+{
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10072980
+MxBool LegoWorld::FUN_10072980(MxU32 p, Vector3Data& loc, Vector3Data& dir, Vector3Data& up)
+{
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10073400
+void LegoWorld::FUN_10073400()
+{
+}
+
+// STUB: LEGO1 0x10073400
+void LegoWorld::FUN_10073430()
+{
 }

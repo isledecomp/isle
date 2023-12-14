@@ -2,38 +2,6 @@
 
 DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
 
-// Probably in header
-// STUB: LEGO1 0x10002df0
-void IslePathActor::VTable0xd0()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002e00
-void IslePathActor::VTable0xdc()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002e70
-void IslePathActor::VTable0xcc()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002e80
-void IslePathActor::VTable0xd4()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10002e90
-void IslePathActor::VTable0xd8()
-{
-	// TODO
-}
-// End header
-
 // FUNCTION: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
 {
