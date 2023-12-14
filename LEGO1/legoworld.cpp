@@ -86,7 +86,7 @@ void LegoWorld::VTable0x54()
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1001fc80
+// STUB: LEGO1 0x1001fc80
 void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {
 }

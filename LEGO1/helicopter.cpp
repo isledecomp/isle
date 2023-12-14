@@ -281,7 +281,7 @@ void Helicopter::VTable0x74(Matrix4Impl& p_transform)
 // FUNCTION: LEGO1 0x10003ee0
 void Helicopter::VTable0x70(float p_float)
 {
-	int state = m_state->GetUnkown8();
+	MxU32 state = m_state->GetUnkown8();
 	switch (state) {
 	default:
 		LegoPathActor::VTable0x70(p_float);

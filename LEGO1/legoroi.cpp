@@ -40,6 +40,7 @@ void LegoROI::FUN_100a46b0(Matrix4Impl& p_transform)
 {
 }
 
+// STUB: LEGO1 0x100a58f0
 void LegoROI::FUN_100a58f0(Matrix4Impl& p_transform)
 {
 }
