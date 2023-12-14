@@ -21,6 +21,12 @@ public:
 	{
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	};
+
+	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
+
+protected:
+	undefined m_unk0x8[0x10]; // 0x8
+	MxU32 m_unk0x18;          // 0x18
 };
 
 #endif // ACT1STATE_H

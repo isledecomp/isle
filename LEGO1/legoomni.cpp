@@ -165,7 +165,7 @@ LegoNavController* NavController()
 }
 
 // FUNCTION: LEGO1 0x10015790
-LegoWorld* GetCurrentVehicle()
+IslePathActor* GetCurrentVehicle()
 {
 	return LegoOmni::GetInstance()->GetCurrentVehicle();
 }

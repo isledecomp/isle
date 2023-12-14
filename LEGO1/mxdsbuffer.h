@@ -4,6 +4,9 @@
 #include "decomp.h"
 #include "mxcore.h"
 
+class MxStreamController;
+class MxDSAction;
+
 enum MxDSBufferType {
 	MxDSBufferType_Chunk = 0,
 	MxDSBufferType_Allocate = 1,
@@ -27,6 +30,7 @@ public:
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode);
 	MxResult SetBufferPointer(MxU32* p_buffer, MxU32 p_size);
+	MxResult FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*);
 	void FUN_100c6f80(MxU32 p_writeOffset);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
@@ -43,7 +47,7 @@ private:
 	MxDSBufferType m_mode;
 	MxU32 m_writeOffset;
 	MxU32 m_bytesRemaining;
-	undefined4 m_unk0x30;
+	MxDSAction* m_unk0x30;
 };
 
 #endif // MXDSBUFFER_H

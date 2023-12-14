@@ -168,7 +168,7 @@ void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 // No idea what this function is doing and it will be hard to tell until
 // we have a confirmed usage site.
 // STUB: LEGO1 0x10002710
-int Matrix4Impl::FUN_10002710(const Vector3Impl* p_vec)
+int Matrix4Impl::FromQuaternion(const Vector4Impl& p_vec)
 {
 	return -1;
 }

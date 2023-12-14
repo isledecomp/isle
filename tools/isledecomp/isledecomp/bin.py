@@ -72,6 +72,7 @@ class Bin:
         self.imagebase = None
         self.sections = []
         self.last_section = None
+        self._relocated_addrs = set()
 
     def __enter__(self):
         self._debuglog(f"Bin {self.filename} Enter")
@@ -100,6 +101,8 @@ class Bin:
             for i in range(pe_hdr.NumberOfSections)
         ]
 
+        self._populate_relocations()
+
         text_section = self._get_section_by_name(".text")
         self.last_section = text_section
 
@@ -115,6 +118,52 @@ class Bin:
         """Write to the logger, if present"""
         if self.logger is not None:
             self.logger.debug(msg)
+
+    def get_relocated_addresses(self):
+        return sorted(self._relocated_addrs)
+
+    def is_relocated_addr(self, vaddr) -> bool:
+        return vaddr in self._relocated_addrs
+
+    def _populate_relocations(self):
+        """The relocation table in .reloc gives each virtual address where the next four
+        bytes are, itself, another virtual address. During loading, these values will be
+        patched according to the virtual address space for the image, as provided by Windows.
+        We can use this information to get a list of where each significant "thing"
+        in the file is located. Anything that is referenced absolutely (i.e. excluding
+        jump destinations given by local offset) will be here.
+        One use case is to tell whether an immediate value in an operand represents
+        a virtual address or just a big number."""
+
+        ofs = self.get_section_offset_by_name(".reloc")
+        reloc_addrs = []
+
+        # Parse the structure in .reloc to get the list locations to check.
+        # The first 8 bytes are 2 dwords that give the base page address
+        # and the total block size (including this header).
+        # The page address is used to compact the list; each entry is only
+        # 2 bytes, and these are added to the base to get the full location.
+        # If the entry read in is zero, we are at the end of this section and
+        # these are padding bytes.
+        while True:
+            (page_base, block_size) = struct.unpack("<2I", self.read(ofs, 8))
+            if block_size == 0:
+                break
+
+            # HACK: ignore the relocation type for now (the top 4 bits of the value).
+            values = list(struct.iter_unpack("<H", self.read(ofs + 8, block_size - 8)))
+            reloc_addrs += [
+                self.imagebase + page_base + (v[0] & 0xFFF) for v in values if v[0] != 0
+            ]
+
+            ofs += block_size
+
+        # We are now interested in the relocated addresses themselves. Seek to the
+        # address where there is a relocation, then read the four bytes into our set.
+        reloc_addrs.sort()
+        for addr in reloc_addrs:
+            (relocated_addr,) = struct.unpack("<I", self.read(addr, 4))
+            self._relocated_addrs.add(relocated_addr)
 
     def _set_section_for_vaddr(self, vaddr):
         if self.last_section is not None and section_contains_vaddr(

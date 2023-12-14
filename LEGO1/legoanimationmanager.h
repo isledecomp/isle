@@ -27,6 +27,7 @@ public:
 	}
 
 	void FUN_1005f6d0(MxBool);
+	void FUN_10064670(MxBool);
 
 	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 

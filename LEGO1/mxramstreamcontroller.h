@@ -2,6 +2,7 @@
 #define MXRAMSTREAMCONTROLLER_H
 
 #include "mxdsbuffer.h"
+#include "mxdsstreamingaction.h"
 #include "mxstreamcontroller.h"
 
 // VTABLE: LEGO1 0x100dc728
@@ -30,6 +31,8 @@ public:
 
 private:
 	MxDSBuffer m_buffer;
+
+	MxResult DeserializeObject(MxDSStreamingAction& p_action);
 };
 
 #endif // MXRAMSTREAMCONTROLLER_H
