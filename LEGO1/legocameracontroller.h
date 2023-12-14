@@ -22,11 +22,11 @@ public:
 	// FUNCTION: LEGO1 0x10011ed0
 	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(p_name, LegoCameraController::ClassName()) || MxCore::IsA(p_name);
+		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
-	void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
-	void LegoCameraController::FUN_100123e0(Matrix4Data& p_transform, MxU32);
+	void LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
+	void FUN_100123e0(Matrix4Data& p_transform, MxU32);
 	Vector3Data& FUN_10012740();
 	Vector3Data& FUN_100127f0();
 	Vector3Data& FUN_100128a0();

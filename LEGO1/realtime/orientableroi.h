@@ -4,6 +4,8 @@
 #include "matrix.h"
 #include "roi.h"
 
+// VTABLE: LEGO1 0x100dbc08
+// SIZE 0xdc
 class OrientableROI : public ROI {
 public:
 	// FUNCTION: LEGO1 0x100a4420
@@ -17,9 +19,10 @@ public:
 		IDENTMAT4(m_local2world.GetMatrix());
 	}
 
-	virtual const Vector3& GetWorldVelocity() const;                // vtable+0x8
-	virtual const BoundingBox& GetWorldBoundingBox() const;         // vtable+0xc
-	virtual const BoundingSphere& GetWorldBoundingSphere() const;   // vtable+0x10
+	virtual const Vector3& GetWorldVelocity() const override;              // vtable+0x8
+	virtual const BoundingBox& GetWorldBoundingBox() const override;       // vtable+0xc
+	virtual const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
+	// FUNCTION: LEGO1 0x100a5db0
 	virtual void VTable0x14() { VTable0x1c(); }                     // vtable+0x14
 	virtual void UpdateWorldBoundingVolumes() = 0;                  // vtable+0x18
 	virtual void VTable0x1c();                                      // vtable+0x1c

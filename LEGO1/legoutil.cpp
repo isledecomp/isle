@@ -121,5 +121,5 @@ void SetAppCursor(WPARAM p_wparam)
 // STUB: LEGO1 0x1003ef60
 MxBool FUN_1003ef60()
 {
-	return true;
+	return TRUE;
 }
