@@ -78,11 +78,18 @@ MxResult Isle::Create(MxDSObject& p_dsObject)
 		}
 		m_act1state = state;
 
-		FUN_1003ef0(TRUE);
+		FUN_1003ef00(TRUE);
 		GameState()->SetDirty(TRUE);
 	}
 
 	return result;
+}
+
+// STUB: LEGO1 0x10030c10
+MxLong Isle::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x10030fc0

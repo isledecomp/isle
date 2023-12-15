@@ -113,7 +113,7 @@ void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 }
 
 // STUB: LEGO1 0x1003ef00
-void FUN_1003ef0(MxBool)
+void FUN_1003ef00(MxBool)
 {
 	// TODO (something related to animation manager)
 }
