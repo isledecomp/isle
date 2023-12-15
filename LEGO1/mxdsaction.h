@@ -19,8 +19,9 @@ public:
 		Flag_Enabled = 0x20,
 		Flag_Bit7 = 0x40,
 		Flag_World = 0x80,
-		Flag_Bit9 = 0x200,
-		Flag_Bit10 = 0x400,
+		Flag_Bit9 = 0x100,
+		Flag_Bit10 = 0x200,
+		Flag_Bit11 = 0x400,
 	};
 
 	__declspec(dllexport) MxDSAction();

@@ -30,8 +30,8 @@ public:
 	virtual MxResult PutData() override;                                              // vtable+0x4c
 
 private:
-	undefined2 m_unk0x4c; // 0x4c
-	undefined m_unk0x4e;  // 0x4e
+	MxS16 m_unk0x4c;  // 0x4c
+	MxBool m_unk0x4e; // 0x4e
 };
 
 // SYNTHETIC: LEGO1 0x10074000
