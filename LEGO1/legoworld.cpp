@@ -98,7 +98,7 @@ void LegoWorld::VTable0x58(MxCore* p_object)
 }
 
 // STUB: LEGO1 0x10020f10
-void LegoWorld::EndAction(MxCore* p_presenter)
+void LegoWorld::EndAction(MxCore* p_object)
 {
 }
 

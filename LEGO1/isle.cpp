@@ -1,6 +1,7 @@
 #include "isle.h"
 
 #include "act1state.h"
+#include "islepathactor.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -43,7 +44,7 @@ Isle::~Isle()
 	}
 
 	if (GetCurrentVehicle() != NULL) {
-		VTable0x6c((MxCore*) GetCurrentVehicle());
+		VTable0x6c(GetCurrentVehicle());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -152,21 +153,21 @@ void Isle::VTable0x58(MxCore* p_object)
 }
 
 // FUNCTION: LEGO1 0x10033050
-void Isle::VTable0x6c(MxCore* p_object)
+void Isle::VTable0x6c(IslePathActor* p_actor)
 {
-	LegoWorld::EndAction(p_object);
+	LegoWorld::EndAction(p_actor);
 
-	if (p_object->IsA("Helicopter")) {
+	if (p_actor->IsA("Helicopter")) {
 		m_helicopter = NULL;
 	}
-	else if (p_object->IsA("DuneBuggy")) {
+	else if (p_actor->IsA("DuneBuggy")) {
 		m_dunebuggy = NULL;
 	}
-	else if (p_object->IsA("Jetski")) {
-		m_jetski = 0;
+	else if (p_actor->IsA("Jetski")) {
+		m_jetski = NULL;
 	}
-	else if (p_object->IsA("RaceCar")) {
-		m_racecar = 0;
+	else if (p_actor->IsA("RaceCar")) {
+		m_racecar = NULL;
 	}
 }
 

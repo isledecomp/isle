@@ -44,7 +44,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_camera; }
 
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
-	void EndAction(MxCore* p_presenter);
+	void EndAction(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxBool FUN_100727e0(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
 	MxBool FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);

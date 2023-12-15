@@ -47,6 +47,7 @@ public:
 	virtual void VTable0x44();                                                        // vtable+0x44
 	virtual void VTable0x48();                                                        // vtable+0x48
 	virtual void VTable0x4c();                                                        // vtable+0x4c
+
 	void FUN_10010c30();
 
 protected:
