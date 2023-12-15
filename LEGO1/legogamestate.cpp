@@ -261,13 +261,16 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
+// STUB: LEGO1 0x1003c870
 void LegoGameState::WriteScoreHistory(MxU16*)
 {
+	// TODO
 }
 
 // STUB: LEGO1 0x1003ccf0
 void FUN_1003ccf0(MxU16*, LegoFileStream&)
 {
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x1003cdd0
