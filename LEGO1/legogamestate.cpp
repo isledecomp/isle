@@ -271,18 +271,18 @@ void FUN_1003ccf0(MxU16*, LegoFileStream&)
 }
 
 // FUNCTION: LEGO1 0x1003cdd0
-void LegoGameState::SerializeScoreHistory(MxS16 m_flags)
+void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 {
 	LegoFileStream stream;
 	MxString savePath(m_savePath);
 	savePath += "\\";
 	savePath += g_historyGSI;
 
-	if (m_flags == LegoStream::WriteBit) {
+	if (p_flags == LegoStream::WriteBit) {
 		WriteScoreHistory(&m_unk0xa6);
 	}
 
-	if (stream.Open(savePath.GetData(), (LegoStream::OpenFlags) m_flags) == SUCCESS) {
+	if (stream.Open(savePath.GetData(), (LegoStream::OpenFlags) p_flags) == SUCCESS) {
 		FUN_1003ccf0(&m_unk0xa6, stream);
 	}
 }

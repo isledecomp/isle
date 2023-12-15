@@ -24,7 +24,7 @@ public:
 	__declspec(dllexport) MxResult Load(MxULong);
 	__declspec(dllexport) MxResult Save(MxULong);
 	__declspec(dllexport) void SerializePlayersInfo(MxS16);
-	__declspec(dllexport) void SerializeScoreHistory(MxS16 m_flags);
+	__declspec(dllexport) void SerializeScoreHistory(MxS16 p_flags);
 	__declspec(dllexport) void SetSavePath(char*);
 
 	LegoState* GetState(COMPAT_CONST char* p_stateName);
