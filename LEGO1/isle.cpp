@@ -159,7 +159,6 @@ void Isle::VTable0x6c(MxCore* p_object)
 	}
 }
 
-
 // STUB: LEGO1 0x10033180
 MxBool Isle::VTable0x64()
 {
