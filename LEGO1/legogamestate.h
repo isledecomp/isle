@@ -33,7 +33,6 @@ public:
 	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
 	void FUN_1003a720(MxU32);
 	void HandleAction(MxU32);
-	void WriteScoreHistory(MxU16*);
 
 	inline MxU8 GetUnknownC() { return m_unk0xc; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }

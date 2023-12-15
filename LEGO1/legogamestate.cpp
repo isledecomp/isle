@@ -262,7 +262,7 @@ void LegoGameState::RegisterState(LegoState* p_state)
 }
 
 // STUB: LEGO1 0x1003c870
-void LegoGameState::WriteScoreHistory(MxU16*)
+void WriteScoreHistory(MxU16*)
 {
 	// TODO
 }
