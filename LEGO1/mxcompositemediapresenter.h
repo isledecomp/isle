@@ -27,7 +27,7 @@ public:
 
 	virtual void StartingTickle() override;                                           // vtable+0x1c
 	virtual MxResult StartAction(MxStreamController*, MxDSAction* p_action) override; // vtable+0x3c
-	virtual MxResult PutData();                                                       // vtable+0x4c
+	virtual MxResult PutData() override;                                              // vtable+0x4c
 
 private:
 	undefined2 m_unk0x4c; // 0x4c
