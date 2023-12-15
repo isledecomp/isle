@@ -6,6 +6,7 @@
 #include "mxstring.h"
 #include "mxtypes.h"
 
+#pragma warning(disable : 4237)
 #include <iosfwd>
 
 #define LEGOSTREAM_MODE_READ 1
