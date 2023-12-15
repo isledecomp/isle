@@ -140,13 +140,6 @@ void Isle::VTable0x58(MxCore* p_object)
 	}
 }
 
-// STUB: LEGO1 0x10033180
-MxBool Isle::VTable0x64()
-{
-	// TODO
-	return FALSE;
-}
-
 // FUNCTION: LEGO1 0x10033050
 void Isle::VTable0x6c(MxCore* p_object)
 {
@@ -164,4 +157,12 @@ void Isle::VTable0x6c(MxCore* p_object)
 	else if (p_object->IsA("RaceCar")) {
 		m_racecar = 0;
 	}
+}
+
+
+// STUB: LEGO1 0x10033180
+MxBool Isle::VTable0x64()
+{
+	// TODO
+	return FALSE;
 }
