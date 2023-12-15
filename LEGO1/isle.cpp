@@ -60,21 +60,25 @@ MxResult Isle::Create(MxDSObject& p_dsObject)
 		InputManager()->SetWorld(this);
 		GameState()->FUN_1003a720(0);
 
-		undefined4 currentact = GameState()->GetCurrentAct();
-		if (currentact == -1) {
-			m_unk0x13c = 2;
-		}
-		else if (currentact == 1 || currentact == 2) {
+		switch (GameState()->GetCurrentAct()) {
+		case 1:
 			GameState()->FUN_1003a720(0x2e);
+			break;
+		case 2:
+			GameState()->FUN_1003a720(0x2e);
+			break;
+		case -1:
+			m_unk0x13c = 2;
 		}
 
 		if (GameState()->GetUnknown424() == 1) {
 			GameState()->SetUnknown424(0);
 		}
 
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		LegoGameState* gameState = GameState();
+		Act1State* state = (Act1State*) gameState->GetState("Act1State");
 		if (state == NULL) {
-			state = (Act1State*) GameState()->CreateState("Act1State");
+			state = (Act1State*) gameState->CreateState("Act1State");
 		}
 		m_act1state = state;
 

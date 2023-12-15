@@ -36,7 +36,7 @@ public:
 
 	inline MxU8 GetUnknownC() { return m_unk0xc; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
-	inline undefined4 GetCurrentAct() { return m_currentAct; }
+	inline MxS32 GetCurrentAct() { return m_currentAct; }
 	inline undefined4 GetUnknown424() { return m_unk0x424; }
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetUnknown424(undefined4 p_unk0x424) { m_unk0x424 = p_unk0x424; }
@@ -62,7 +62,7 @@ private:
 	LegoState** m_stateArray;                   // 0x8
 	MxU8 m_unk0xc;                              // 0xc
 	MxU32 m_unk0x10;                            // 0x10
-	undefined4 m_currentAct;                    // 0x14
+	MxS32 m_currentAct;                         // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
