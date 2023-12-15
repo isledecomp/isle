@@ -1,6 +1,6 @@
 import os
 import subprocess
-from .utils import get_file_in_script_dir
+from isledecomp.lib import lib_path_join
 
 
 class RecompiledInfo:
@@ -18,7 +18,7 @@ class SymInfo:
 
     def __init__(self, pdb, sym_recompfile, sym_logger, sym_wine_path_converter=None):
         self.logger = sym_logger
-        call = [get_file_in_script_dir("cvdump.exe"), "-l", "-s"]
+        call = [lib_path_join("cvdump.exe"), "-l", "-s"]
 
         if sym_wine_path_converter:
             # Run cvdump through wine and convert path to Windows-friendly wine path
