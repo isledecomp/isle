@@ -41,12 +41,19 @@ public:
 	void SetSomeEnumState(undefined4 p_state);
 	void FUN_1003ceb0();
 
+	struct ScoreStruct {
+		void WriteScoreHistory();
+		void FUN_1003ccf0(LegoFileStream&);
+
+		MxU16 m_unk0x00;
+		undefined m_unk0x02[0x2c][20];
+	};
+
 private:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteEndOfVariables(LegoStream* p_stream);
 	void SetROIHandlerFunction();
 
-private:
 	char* m_savePath;                           // 0x0
 	MxS16 m_stateCount;                         // 0x4
 	LegoState** m_stateArray;                   // 0x8
@@ -58,8 +65,8 @@ private:
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
 	undefined m_unk0x28[128];                   // 0x28
-	MxU16 m_unk0xa6;                            // 0xa6
-	undefined m_unk0xa9[890];                   // 0xa9
+	ScoreStruct m_unk0xa6;                      // 0xa6
+	undefined m_unk0x41a[10];                   // 0x41a - might be part of the structure at 0xa6
 	undefined4 m_unk0x424;                      // 0x424
 	undefined4 m_unk0x428;                      // 0x428
 	undefined4 m_unk0x42c;                      // 0x42c

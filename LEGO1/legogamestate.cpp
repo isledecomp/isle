@@ -262,13 +262,13 @@ void LegoGameState::RegisterState(LegoState* p_state)
 }
 
 // STUB: LEGO1 0x1003c870
-void WriteScoreHistory(MxU16*)
+void LegoGameState::ScoreStruct::WriteScoreHistory()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x1003ccf0
-void FUN_1003ccf0(MxU16*, LegoFileStream&)
+void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFileStream&)
 {
 	// TODO
 }
@@ -282,11 +282,11 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 	savePath += g_historyGSI;
 
 	if (p_flags == LegoStream::WriteBit) {
-		WriteScoreHistory(&m_unk0xa6);
+		m_unk0xa6.WriteScoreHistory();
 	}
 
 	if (stream.Open(savePath.GetData(), (LegoStream::OpenFlags) p_flags) == SUCCESS) {
-		FUN_1003ccf0(&m_unk0xa6, stream);
+		m_unk0xa6.FUN_1003ccf0(stream);
 	}
 }
 
