@@ -188,16 +188,16 @@ LegoBuildingManager* BuildingManager()
 	return LegoOmni::GetInstance()->GetLegoBuildingManager();
 }
 
-// FUNCTION: LEGO1 0x100158c0
-LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
-{
-	return LegoOmni::GetInstance()->FindByEntityIdOrAtomId(p_atom, p_entityid);
-}
-
 // FUNCTION: LEGO1 0x10015800
 GifManager* GetGifManager()
 {
 	return LegoOmni::GetInstance()->GetGifManager();
+}
+
+// FUNCTION: LEGO1 0x100158c0
+LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
+{
+	return LegoOmni::GetInstance()->FindByEntityIdOrAtomId(p_atom, p_entityid);
 }
 
 // FUNCTION: LEGO1 0x100158e0
