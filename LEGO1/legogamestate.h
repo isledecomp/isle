@@ -4,10 +4,10 @@
 #include "decomp.h"
 #include "legobackgroundcolor.h"
 #include "legofullscreenmovie.h"
+#include "legostream.h"
 #include "mxtypes.h"
 
 class LegoState;
-class LegoStream;
 class MxVariable;
 class MxString;
 
@@ -24,7 +24,7 @@ public:
 	__declspec(dllexport) MxResult Load(MxULong);
 	__declspec(dllexport) MxResult Save(MxULong);
 	__declspec(dllexport) void SerializePlayersInfo(MxS16);
-	__declspec(dllexport) void SerializeScoreHistory(MxS16);
+	__declspec(dllexport) void SerializeScoreHistory(MxS16 m_flags);
 	__declspec(dllexport) void SetSavePath(char*);
 
 	LegoState* GetState(COMPAT_CONST char* p_stateName);
@@ -33,12 +33,14 @@ public:
 	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
 	void FUN_1003a720(MxU32);
 	void HandleAction(MxU32);
+	void WriteScoreHistory(MxU16*);
 
 	inline MxU8 GetUnknownC() { return m_unk0xc; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline void SetUnknown424(undefined4 p_unk0x424) { m_unk0x424 = p_unk0x424; }
 
 	void SetSomeEnumState(undefined4 p_state);
+	void FUN_1003ceb0();
 
 private:
 	void RegisterState(LegoState* p_state);
@@ -51,12 +53,14 @@ private:
 	LegoState** m_stateArray;                   // 0x8
 	MxU8 m_unk0xc;                              // 0xc
 	MxU32 m_unk0x10;                            // 0x10
-	undefined4 m_unk0x14;                       // 0x14
+	undefined4 m_currentAct;                    // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	undefined m_unk0x28[1020];                  // 0x28
+	undefined m_unk0x28[128];                   // 0x28
+	MxU16 m_unk0xa6;                            // 0xa6
+	undefined m_unk0xa9[890];                   // 0xa9
 	undefined4 m_unk0x424;                      // 0x424
 	undefined4 m_unk0x428;                      // 0x428
 	undefined4 m_unk0x42c;                      // 0x42c

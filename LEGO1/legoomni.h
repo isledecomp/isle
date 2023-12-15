@@ -157,6 +157,7 @@ IslePathActor* GetCurrentVehicle();
 LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
+LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 GifManager* GetGifManager();
 MxDSAction& GetCurrentAction();
 
