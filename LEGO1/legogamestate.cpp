@@ -13,6 +13,12 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
+// GLOBAL: LEGO1 0x100f3e24
+const char* g_historyGSI = "History.gsi";
+
+// GLOBAL: LEGO1 0x100f3e30
+const char* g_playersGSI = "Players.gsi";
+
 // GLOBAL: LEGO1 0x100f3e40
 const char* g_fileExtensionGS = ".GS";
 
@@ -255,14 +261,54 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
-// STUB: LEGO1 0x1003cdd0
-void LegoGameState::SerializeScoreHistory(MxS16)
+// STUB: LEGO1 0x1003c870
+void LegoGameState::ScoreStruct::WriteScoreHistory()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x1003ccf0
+void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFileStream&)
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1003cdd0
+void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
+{
+	LegoFileStream stream;
+	MxString savePath(m_savePath);
+	savePath += "\\";
+	savePath += g_historyGSI;
+
+	if (p_flags == LegoStream::WriteBit) {
+		m_unk0xa6.WriteScoreHistory();
+	}
+
+	if (stream.Open(savePath.GetData(), (LegoStream::OpenFlags) p_flags) == SUCCESS) {
+		m_unk0xa6.FUN_1003ccf0(stream);
+	}
 }
 
 // FUNCTION: LEGO1 0x1003cea0
 void LegoGameState::SetSomeEnumState(undefined4 p_state)
 {
 	m_unk0x10 = p_state;
+}
+
+// FUNCTION: LEGO1 0x1003ceb0
+void LegoGameState::FUN_1003ceb0()
+{
+	if (FindEntityByAtomIdOrEntityId(*g_isleScript, 0)) {
+		m_currentAct = 0;
+	}
+	else if (FindEntityByAtomIdOrEntityId(*g_act2mainScript, 0)) {
+		m_currentAct = 1;
+	}
+	else if (FindEntityByAtomIdOrEntityId(*g_act3Script, 0)) {
+		m_currentAct = 2;
+	}
+	else {
+		m_currentAct = -1;
+	}
 }
