@@ -89,7 +89,7 @@ public:
 	virtual MxResult Create(MxOmniCreateParam& p_param) override;                                       // vtable+18
 	virtual void Destroy() override;                                                                    // vtable+1c
 	virtual MxResult Start(MxDSAction* p_dsAction) override;                                            // vtable+20
-	virtual MxResult DeleteObject(MxDSAction& p_dsAction) override;                                     // vtable+24
+	virtual void DeleteObject(MxDSAction& p_dsAction) override;                                         // vtable+24
 	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                    // vtable+28
 	virtual MxEntity* FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                            // vtable+34

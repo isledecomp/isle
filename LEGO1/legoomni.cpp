@@ -236,8 +236,7 @@ void FUN_1001a700()
 // FUNCTION: LEGO1 0x1003dd70
 LegoROI* PickROI(MxLong p_a, MxLong p_b)
 {
-	LegoVideoManager* vid = VideoManager();
-	return vid->Get3DManager()->GetLego3DView()->PickROI(p_a, p_b);
+	return VideoManager()->Get3DManager()->GetLego3DView()->PickROI(p_a, p_b);
 }
 
 // STUB: LEGO1 0x1003ddc0
@@ -562,10 +561,9 @@ LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_ent
 }
 
 // STUB: LEGO1 0x1005b1d0
-MxResult LegoOmni::DeleteObject(MxDSAction& p_dsAction)
+void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	// TODO
-	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x1005b2f0

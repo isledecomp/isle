@@ -44,7 +44,7 @@ public:
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
 	MxBool FUN_100c20d0(MxDSObject& p_obj);
 	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval);
-	MxCore* FUN_100c1e70(MxDSAction& p_action);
+	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
 	MxResult FUN_100c1f00(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };

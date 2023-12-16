@@ -51,7 +51,7 @@ public:
 	MxBool FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
-	int GetCurrPathInfo(LegoPathBoundary** p_path, int& p_value);
+	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 
 protected:
 	LegoPathControllerList m_list0x68; // 0x68

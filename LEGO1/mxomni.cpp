@@ -114,9 +114,9 @@ MxEventManager* EventManager()
 }
 
 // FUNCTION: LEGO1 0x100acf70
-MxResult DeleteObject(MxDSAction& p_dsAction)
+void DeleteObject(MxDSAction& p_dsAction)
 {
-	return MxOmni::GetInstance()->DeleteObject(p_dsAction);
+	MxOmni::GetInstance()->DeleteObject(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100aef10
@@ -313,14 +313,11 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100b00c0
-MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
+void MxOmni::DeleteObject(MxDSAction& p_dsAction)
 {
-	MxResult result;
 	if (m_streamer != NULL) {
-		result = m_streamer->DeleteObject(&p_dsAction);
+		m_streamer->DeleteObject(&p_dsAction);
 	}
-
-	return result;
 }
 
 // FUNCTION: LEGO1 0x100b00e0
@@ -328,10 +325,11 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 {
 	MxResult result = FAILURE;
 	MxPresenter* object = (MxPresenter*) m_objectFactory->Create(PresenterNameDispatch(p_action));
+
 	if (object) {
 		if (object->AddToManager() == SUCCESS) {
-			MxPresenter* sender = (MxPresenter*) p_action.GetUnknown28();
-			if (sender == NULL && (sender = (MxPresenter*) p_controller->FUN_100c1e70(p_action)) == NULL) {
+			MxPresenter* sender = p_action.GetUnknown28();
+			if (sender == NULL && (sender = p_controller->FUN_100c1e70(p_action)) == NULL) {
 				if (p_action.GetOrigin() == NULL) {
 					p_action.SetOrigin(this);
 				}
@@ -345,10 +343,7 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 
 			if (object->StartAction(p_controller, &p_action) == SUCCESS) {
 				if (sender) {
-					NotificationManager()->Send(
-						p_action.GetUnknown84(),
-						&MxType4NotificationParam(this, &p_action, object)
-					);
+					NotificationManager()->Send(sender, &MxType4NotificationParam(this, &p_action, object));
 				}
 
 				if (p_action.GetUnknown84()) {
@@ -379,9 +374,10 @@ void MxOmni::DestroyInstance()
 	}
 }
 
-MxBool MxOmni::FUN_100b06b0(MxDSAction* p_action)
+// STUB: LEGO1 0x100b06b0
+MxBool MxOmni::FUN_100b06b0(MxDSAction* p_action, const char* p_name)
 {
-	// TODO STUB
+	// TODO
 	return FAILURE;
 }
 
@@ -401,9 +397,11 @@ MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 {
 	MxDSAction* action = ((MxEndActionNotificationParam&) p_param).GetAction();
 	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());
+
 	if (controller != NULL) {
-		if (controller->GetUnk0x54().Find(action, FALSE)) {
-			if (FUN_100b06b0(action) == FALSE) {
+		action = controller->GetUnk0x54().Find(action, FALSE);
+		if (action) {
+			if (FUN_100b06b0(action, "LegoLoopingAnimPresenter") == FALSE) {
 				delete controller->GetUnk0x54().Find(action, TRUE);
 			}
 		}
@@ -416,6 +414,7 @@ MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 	if (((MxEndActionNotificationParam&) p_param).GetAction()) {
 		delete ((MxEndActionNotificationParam&) p_param).GetAction();
 	}
+
 	return 1;
 }
 
