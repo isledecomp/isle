@@ -353,9 +353,8 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 						&MxStartActionNotificationParam(c_notificationStartAction, this, &p_action, FALSE)
 					);
 				}
+				result = SUCCESS;
 			}
-
-			result = SUCCESS;
 		}
 	}
 	return result;
