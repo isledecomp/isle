@@ -23,6 +23,7 @@ public:
 	};
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
+	inline MxU32 GetUnknown18() { return m_unk0x18; }
 
 protected:
 	undefined m_unk0x8[0x10]; // 0x8
