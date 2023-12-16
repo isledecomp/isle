@@ -148,17 +148,14 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 {
 	MxDSAction tempAction;
 
-	if (p_dsAction == NULL)
-	{
+	if (p_dsAction == NULL) {
 		tempAction.SetUnknown24(-2);
 	}
-	else
-	{
+	else {
 		tempAction.SetObjectId(p_dsAction->GetObjectId());
 		tempAction.SetAtomId(p_dsAction->GetAtomId());
 		tempAction.SetUnknown24(p_dsAction->GetUnknown24());
 	}
-
 
 	// TODO: remove action from list
 	return -1;

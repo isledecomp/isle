@@ -413,8 +413,7 @@ MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 		delete ((MxEndActionNotificationParam&) p_param).GetSender();
 	}
 
-	if (((MxEndActionNotificationParam&) p_param).GetAction())
-	{
+	if (((MxEndActionNotificationParam&) p_param).GetAction()) {
 		delete ((MxEndActionNotificationParam&) p_param).GetAction();
 	}
 	return 1;
