@@ -6,4 +6,6 @@ setup(
     description="Python tools for the isledecomp project",
     packages=find_packages(),
     tests_require=["pytest"],
+    include_package_data=True,
+    package_data={"isledecomp.lib": ["*.exe", "*.dll"]},
 )
