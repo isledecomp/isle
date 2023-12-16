@@ -133,6 +133,21 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100c1e70
+MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
+{
+	MxAutoLocker locker(&m_criticalSection);
+	MxPresenter* result = NULL;
+	if (p_action.GetObjectId() != -1) {
+		MxDSAction* action = m_unk0x3c.Find(&p_action, FALSE);
+		if (action != NULL) {
+			result = action->GetUnknown28();
+		}
+	}
+
+	return result;
+}
+
 // STUB: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {

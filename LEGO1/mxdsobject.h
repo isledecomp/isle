@@ -6,6 +6,8 @@
 #include "mxcore.h"
 #include "mxdstypes.h"
 
+class MxPresenter;
+
 // VTABLE: LEGO1 0x100dc868
 // SIZE 0x2c
 class MxDSObject : public MxCore {
@@ -38,23 +40,25 @@ public:
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
-	inline undefined4 GetUnknown28() { return this->m_unk0x28; }
+	inline MxPresenter* GetUnknown28() { return this->m_unk0x28; }
 
 	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
 	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
 	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
-	inline void SetUnknown28(undefined4 p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
+	inline void SetUnknown28(MxPresenter* p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
+
+	inline void ClearAtom() { m_atomId.Clear(); }
 
 private:
-	MxU32 m_sizeOnDisk;   // 0x8
-	MxU16 m_type;         // 0xc
-	char* m_sourceName;   // 0x10
-	undefined4 m_unk0x14; // 0x14
-	char* m_objectName;   // 0x18
-	MxU32 m_objectId;     // 0x1c
-	MxAtomId m_atomId;    // 0x20
-	MxS16 m_unk0x24;      // 0x24
-	undefined4 m_unk0x28; // 0x28
+	MxU32 m_sizeOnDisk;     // 0x8
+	MxU16 m_type;           // 0xc
+	char* m_sourceName;     // 0x10
+	undefined4 m_unk0x14;   // 0x14
+	char* m_objectName;     // 0x18
+	MxU32 m_objectId;       // 0x1c
+	MxAtomId m_atomId;      // 0x20
+	MxS16 m_unk0x24;        // 0x24
+	MxPresenter* m_unk0x28; // 0x28
 };
 
 MxDSObject* DeserializeDSObjectDispatch(char**, MxS16);

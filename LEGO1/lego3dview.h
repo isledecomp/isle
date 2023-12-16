@@ -1,11 +1,15 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
+#include "mxtypes.h"
 #include "viewmanager/viewmanager.h"
+
+class LegoROI;
 
 class Lego3DView {
 public:
 	inline ViewManager* GetViewManager() { return this->m_viewManager; }
+	LegoROI* PickROI(MxLong p_a, MxLong p_b);
 
 private:
 	char m_pad[0x88];

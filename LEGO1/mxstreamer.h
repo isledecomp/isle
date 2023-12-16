@@ -94,6 +94,7 @@ public:
 	MxStreamController* GetOpenStream(const char* p_name);
 	MxResult AddStreamControllerToOpenList(MxStreamController* p_stream);
 	MxResult FUN_100b99b0(MxDSAction* p_action);
+	MxResult DeleteObject(MxDSAction* p_dsAction);
 
 	inline const MxStreamerSubClass2& GetSubclass1() { return m_subclass1; }
 	inline const MxStreamerSubClass3& GetSubclass2() { return m_subclass2; }

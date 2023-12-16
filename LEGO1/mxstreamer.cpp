@@ -143,6 +143,24 @@ MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x100b99f0
+MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
+{
+	MxDSAction tempAction;
+
+	if (p_dsAction == NULL) {
+		tempAction.SetUnknown24(-2);
+	}
+	else {
+		tempAction.SetObjectId(p_dsAction->GetObjectId());
+		tempAction.SetAtomId(p_dsAction->GetAtomId());
+		tempAction.SetUnknown24(p_dsAction->GetUnknown24());
+	}
+
+	// TODO: remove action from list
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100b9b30
 MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 {
