@@ -10,7 +10,7 @@ public:
 private:
 	int m_unk0x00;
 	int m_unk0x04;
-	Lego3DView* m_3dView;
+	Lego3DView* m_3dView; // 0x08
 };
 
 #endif // LEGO3DMANAGER_H

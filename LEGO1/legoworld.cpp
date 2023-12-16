@@ -91,6 +91,13 @@ void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {
 }
 
+// STUB: LEGO1 0x10020120
+int LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, int& p_value)
+{
+	// TODO
+	return 0;
+}
+
 // STUB: LEGO1 0x10020220
 void LegoWorld::VTable0x58(MxCore* p_object)
 {

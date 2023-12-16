@@ -1,5 +1,6 @@
 #include "mxomni.h"
 
+#include "mxactionnotificationparam.h"
 #include "mxatomidcounter.h"
 #include "mxautolocker.h"
 #include "mxeventmanager.h"
@@ -7,6 +8,7 @@
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxomnicreateparam.h"
+#include "mxpresenter.h"
 #include "mxsoundmanager.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
@@ -317,10 +319,46 @@ MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100b00e0
-void MxOmni::Vtable0x2c()
+// FUNCTION: LEGO1 0x100b00e0
+MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action)
 {
-	// TODO
+	MxResult result = FAILURE;
+	MxPresenter* object = (MxPresenter*) m_objectFactory->Create(PresenterNameDispatch(p_action));
+	if (object == NULL) {
+		return result;
+	}
+
+	if (object->AddToManager() == SUCCESS) {
+		MxPresenter* sender = (MxPresenter*) p_action.GetUnknown28();
+		if (sender == NULL && (sender = (MxPresenter*) p_controller->FUN_100c1e70(p_action)) == NULL) {
+			if (p_action.GetOrigin() == NULL) {
+				p_action.SetOrigin(this);
+			}
+
+			object->SetCompositePresenter(NULL);
+		}
+		else {
+			p_action.SetOrigin(sender);
+			object->SetCompositePresenter((MxCompositePresenter*) sender);
+		}
+
+		if (object->StartAction(p_controller, &p_action) == SUCCESS) {
+			if (sender) {
+				NotificationManager()->Send(p_action.GetUnknown84(), &MxType4NotificationParam(this, &p_action, FALSE));
+			}
+
+			if (p_action.GetUnknown84()) {
+				NotificationManager()->Send(
+					p_action.GetUnknown84(),
+					&MxStartActionNotificationParam(c_notificationStartAction, this, &p_action, FALSE)
+				);
+			}
+		}
+
+		result = SUCCESS;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100b0680

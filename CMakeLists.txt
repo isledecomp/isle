@@ -224,6 +224,7 @@ add_library(lego1 SHARED
   LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
+  LEGO1/lego3dview.cpp
 )
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)

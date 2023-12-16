@@ -45,6 +45,8 @@ public:
 	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
 	inline void SetUnknown28(undefined4 p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
 
+	inline void ClearAtom() { m_atomId.Clear(); }
+
 private:
 	MxU32 m_sizeOnDisk;   // 0x8
 	MxU16 m_type;         // 0xc

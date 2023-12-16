@@ -8,10 +8,12 @@
 #include "legoobjectfactory.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
+#include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
+#include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
@@ -173,7 +175,7 @@ IslePathActor* GetCurrentVehicle()
 // FUNCTION: LEGO1 0x100157a0
 LegoWorld* GetCurrentWorld()
 {
-	return LegoOmni::GetInstance()->GetCurrentWorld();
+	return LegoOmni::GetInstance()->GetCurrentOmniWorld();
 }
 
 // FUNCTION: LEGO1 0x100157e0
@@ -227,13 +229,15 @@ void PlayMusic(MxU32 p_index)
 void FUN_1001a700()
 {
 	// TODO
+
+	// This function seems to populate an unknown structure, and then calls 0x1001b230
 }
 
-// STUB: LEGO1 0x1003dd70
-LegoROI* PickROI(MxLong, MxLong)
+// FUNCTION: LEGO1 0x1003dd70
+LegoROI* PickROI(MxLong p_a, MxLong p_b)
 {
-	// TODO
-	return NULL;
+	LegoVideoManager* vid = VideoManager();
+	return vid->Get3DManager()->GetLego3DView()->PickROI(p_a, p_b);
 }
 
 // STUB: LEGO1 0x1003ddc0
@@ -379,10 +383,83 @@ void LegoOmni::Init()
 	m_transitionManager = NULL;
 }
 
-// STUB: LEGO1 0x10058c30
+// FUNCTION: LEGO1 0x10058c30
 void LegoOmni::Destroy()
 {
-	// TODO
+	MxAutoLocker lock(&this->m_criticalsection);
+
+	m_notificationManager->Unregister(this);
+
+	if (m_worldList) {
+		delete m_worldList;
+		m_worldList = NULL;
+	}
+
+	if (m_gameState) {
+		delete m_gameState;
+		m_gameState = NULL;
+	}
+
+	if (m_animationManager) {
+		delete m_animationManager;
+		m_animationManager = NULL;
+	}
+
+	if (m_saveDataWriter) {
+		delete m_saveDataWriter;
+		m_saveDataWriter = NULL;
+	}
+
+	if (m_plantManager) {
+		delete m_plantManager;
+		m_plantManager = NULL;
+	}
+
+	if (m_buildingManager) {
+		delete m_buildingManager;
+		m_buildingManager = NULL;
+	}
+
+	if (m_gifManager) {
+		delete m_gifManager;
+		m_gifManager = NULL;
+	}
+
+	if (m_unk0x6c) {
+		// delete m_unk0x6c; // TODO
+		m_unk0x6c = NULL;
+	}
+
+	if (m_inputMgr) {
+		delete m_inputMgr;
+		m_inputMgr = NULL;
+	}
+
+	if (m_inputMgr) {
+		delete m_inputMgr;
+		m_inputMgr = NULL;
+	}
+
+	// todo FUN_10046de0
+
+	if (m_bkgAudioManager) {
+		m_bkgAudioManager->Stop();
+
+		delete m_bkgAudioManager;
+		m_bkgAudioManager = NULL;
+	}
+
+	if (m_transitionManager) {
+		delete m_transitionManager;
+		m_transitionManager = NULL;
+	}
+
+	m_action.ClearAtom();
+	UnregisterScripts();
+
+	delete[] m_unk0x68;
+
+	MxOmni::Destroy();
 }
 
 // FUNCTION: LEGO1 0x10058e70
@@ -527,11 +604,14 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x1005b400
-int LegoOmni::GetCurrPathInfo(LegoPathBoundary**, int&)
+// FUNCTION: LEGO1 0x1005b400
+int LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, int& p_value)
 {
-	// TODO
-	return 0;
+	if (GetCurrentWorld() == NULL) {
+		return -1;
+	}
+
+	return GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
 // FUNCTION: LEGO1 0x1005b560
@@ -551,11 +631,23 @@ MxResult LegoOmni::Start(MxDSAction* p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x1005b5f0
+// FUNCTION: LEGO1 0x1005b5f0
 MxLong LegoOmni::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	MxBool isCD = FALSE;
+
+	if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAction &&
+		((MxActionNotificationParam&) p_param).GetAction()->GetAtomId() == *g_nocdSourceName) {
+		isCD = TRUE;
+	}
+
+	MxLong result = MxOmni::Notify(p_param);
+	if (isCD) {
+		// Exit the game if nocd.si ended
+		PostMessageA(m_windowHandle, WM_CLOSE, 0, 0);
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1005b640

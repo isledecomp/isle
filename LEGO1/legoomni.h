@@ -103,7 +103,7 @@ public:
 
 	LegoInputManager* GetInputManager() { return m_inputMgr; }
 	GifManager* GetGifManager() { return m_gifManager; }
-	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
+	LegoWorld* GetCurrentOmniWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
 	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
@@ -115,24 +115,24 @@ public:
 	MxDSAction& GetCurrentAction() { return m_action; }
 
 private:
-	undefined4 m_unk0x68;
-	undefined4 m_unk0x6c;
-	LegoInputManager* m_inputMgr; // 0x70
-	GifManager* m_gifManager;
-	LegoWorldList* m_worldList; // 0x78
-	LegoWorld* m_currentWorld;
-	MxBool m_unk0x80;
-	LegoNavController* m_navController; // 0x84
-	IslePathActor* m_currentVehicle;    // 0x88
-	LegoUnkSaveDataWriter* m_saveDataWriter;
-	LegoPlantManager* m_plantManager; // 0x90
-	LegoAnimationManager* m_animationManager;
-	LegoBuildingManager* m_buildingManager; // 0x98
-	LegoGameState* m_gameState;             // 0x9c
-	MxDSAction m_action;
+	undefined4* m_unk0x68;                        // 0x68
+	undefined4 m_unk0x6c;                        // 0x6c
+	LegoInputManager* m_inputMgr;                // 0x70
+	GifManager* m_gifManager;                    // 0x74
+	LegoWorldList* m_worldList;                  // 0x78
+	LegoWorld* m_currentWorld;                   // 0x7c
+	MxBool m_unk0x80;                            // 0x80
+	LegoNavController* m_navController;          // 0x84
+	IslePathActor* m_currentVehicle;             // 0x88
+	LegoUnkSaveDataWriter* m_saveDataWriter;     // 0x8c
+	LegoPlantManager* m_plantManager;            // 0x90
+	LegoAnimationManager* m_animationManager;    // 0x94
+	LegoBuildingManager* m_buildingManager;      // 0x98
+	LegoGameState* m_gameState;                  // 0x9c
+	MxDSAction m_action;                         // 0xa0
 	MxBackgroundAudioManager* m_bkgAudioManager; // 0x134
 	MxTransitionManager* m_transitionManager;    // 0x138
-	MxBool m_unk0x13c;
+	MxBool m_unk0x13c;                           // 0x13c
 };
 
 __declspec(dllexport) MxBackgroundAudioManager* BackgroundAudioManager();

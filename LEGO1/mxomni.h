@@ -22,6 +22,7 @@ class MxTimer;
 class MxVariableTable;
 class MxVideoManager;
 class MxEntity;
+class MxStreamController;
 
 // VTABLE: LEGO1 0x100dc168
 // SIZE 0x68
@@ -39,19 +40,19 @@ public:
 	MxOmni();
 	virtual ~MxOmni() override;
 
-	virtual MxLong Notify(MxParam& p_param) override;               // vtable+04
-	virtual void Init();                                            // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p_param);            // vtable+18
-	virtual void Destroy();                                         // vtable+1c
-	virtual MxResult Start(MxDSAction* p_dsAction);                 // vtable+20
-	virtual MxResult DeleteObject(MxDSAction& p_dsAction);          // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);         // vtable+28
-	virtual void Vtable0x2c();                                      // vtable+2c
-	virtual MxEntity* FindWorld(const char*, MxS32, MxPresenter*);  // vtable+30
-	virtual void NotifyCurrentEntity(MxNotificationParam* p_param); // vtable+34
-	virtual void StartTimer();                                      // vtable+38
-	virtual void StopTimer();                                       // vtable+3c
-	virtual MxBool IsTimerRunning();                                // vtable+40
+	virtual MxLong Notify(MxParam& p_param) override;                                         // vtable+04
+	virtual void Init();                                                                      // vtable+14
+	virtual MxResult Create(MxOmniCreateParam& p_param);                                      // vtable+18
+	virtual void Destroy();                                                                   // vtable+1c
+	virtual MxResult Start(MxDSAction* p_dsAction);                                           // vtable+20
+	virtual MxResult DeleteObject(MxDSAction& p_dsAction);                                    // vtable+24
+	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);                                   // vtable+28
+	virtual MxResult CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action); // vtable+2c
+	virtual MxEntity* FindWorld(const char*, MxS32, MxPresenter*);                            // vtable+30
+	virtual void NotifyCurrentEntity(MxNotificationParam* p_param);                           // vtable+34
+	virtual void StartTimer();                                                                // vtable+38
+	virtual void StopTimer();                                                                 // vtable+3c
+	virtual MxBool IsTimerRunning();                                                          // vtable+40
 	static void SetInstance(MxOmni* p_instance);
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }

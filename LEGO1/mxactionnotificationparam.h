@@ -50,6 +50,23 @@ protected:
 	MxBool m_realloc;     // 0x10
 };
 
+// VTABLE: LEGO1 0x100dc210
+// SIZE 0x14
+class MxStartActionNotificationParam : public MxActionNotificationParam {
+public:
+	inline MxStartActionNotificationParam(
+		NotificationId p_type,
+		MxCore* p_sender,
+		MxDSAction* p_action,
+		MxBool p_reallocAction
+	)
+		: MxActionNotificationParam(p_type, p_sender, p_action, p_reallocAction)
+	{
+	}
+
+	virtual MxNotificationParam* Clone() override; // vtable+0x4
+};
+
 // VTABLE: LEGO1 0x100d8358
 // SIZE 0x14
 class MxEndActionNotificationParam : public MxActionNotificationParam {
@@ -67,7 +84,32 @@ public:
 	virtual MxNotificationParam* Clone() override; // vtable+0x4
 };
 
+// VTABLE: LEGO1 0x100dc208
+// SIZE 0x18
+class MxType4NotificationParam : public MxActionNotificationParam {
+public:
+	inline MxType4NotificationParam(
+		MxCore* p_sender,
+		MxDSAction* p_action,
+		undefined4 p_unk0x14
+	)
+		: MxActionNotificationParam(TYPE4, p_sender, p_action, FALSE)
+	{
+		m_unk0x14 = p_unk0x14;
+	}
+
+	virtual MxNotificationParam* Clone() override; // vtable+0x4
+
+private:
+	undefined4 m_unk0x14; // 0x14
+};
+
+// SYNTHETIC: LEGO1 0x100b0430
+// MxStartActionNotificationParam::`scalar deleting destructor'
+
 // SYNTHETIC: LEGO1 0x100513a0
 // MxEndActionNotificationParam::`scalar deleting destructor'
 
+// SYNTHETIC: LEGO1 0x100b05c0
+// MxType4NotificationParam::`scalar deleting destructor'
 #endif
