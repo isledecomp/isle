@@ -4,6 +4,8 @@
 #include "mxdsaction.h"
 #include "mxnotificationparam.h"
 
+class MxPresenter;
+
 // VTABLE: LEGO1 0x100d8350
 // SIZE 0x14
 class MxActionNotificationParam : public MxNotificationParam {
@@ -88,7 +90,7 @@ public:
 // SIZE 0x18
 class MxType4NotificationParam : public MxActionNotificationParam {
 public:
-	inline MxType4NotificationParam(MxCore* p_sender, MxDSAction* p_action, undefined4 p_unk0x14)
+	inline MxType4NotificationParam(MxCore* p_sender, MxDSAction* p_action, MxPresenter* p_unk0x14)
 		: MxActionNotificationParam(TYPE4, p_sender, p_action, FALSE)
 	{
 		m_unk0x14 = p_unk0x14;
@@ -97,7 +99,7 @@ public:
 	virtual MxNotificationParam* Clone() override; // vtable+0x4
 
 private:
-	undefined4 m_unk0x14; // 0x14
+	MxPresenter* m_unk0x14; // 0x14
 };
 
 // SYNTHETIC: LEGO1 0x100b0430

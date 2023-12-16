@@ -324,40 +324,40 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 {
 	MxResult result = FAILURE;
 	MxPresenter* object = (MxPresenter*) m_objectFactory->Create(PresenterNameDispatch(p_action));
-	if (object == NULL) {
-		return result;
+	if (object) {
+		if (object->AddToManager() == SUCCESS) {
+			MxPresenter* sender = (MxPresenter*) p_action.GetUnknown28();
+			if (sender == NULL && (sender = (MxPresenter*) p_controller->FUN_100c1e70(p_action)) == NULL) {
+				if (p_action.GetOrigin() == NULL) {
+					p_action.SetOrigin(this);
+				}
+
+				object->SetCompositePresenter(NULL);
+			}
+			else {
+				p_action.SetOrigin(sender);
+				object->SetCompositePresenter((MxCompositePresenter*) sender);
+			}
+
+			if (object->StartAction(p_controller, &p_action) == SUCCESS) {
+				if (sender) {
+					NotificationManager()->Send(
+						p_action.GetUnknown84(),
+						&MxType4NotificationParam(this, &p_action, object)
+					);
+				}
+
+				if (p_action.GetUnknown84()) {
+					NotificationManager()->Send(
+						p_action.GetUnknown84(),
+						&MxStartActionNotificationParam(c_notificationStartAction, this, &p_action, FALSE)
+					);
+				}
+			}
+
+			result = SUCCESS;
+		}
 	}
-
-	if (object->AddToManager() == SUCCESS) {
-		MxPresenter* sender = (MxPresenter*) p_action.GetUnknown28();
-		if (sender == NULL && (sender = (MxPresenter*) p_controller->FUN_100c1e70(p_action)) == NULL) {
-			if (p_action.GetOrigin() == NULL) {
-				p_action.SetOrigin(this);
-			}
-
-			object->SetCompositePresenter(NULL);
-		}
-		else {
-			p_action.SetOrigin(sender);
-			object->SetCompositePresenter((MxCompositePresenter*) sender);
-		}
-
-		if (object->StartAction(p_controller, &p_action) == SUCCESS) {
-			if (sender) {
-				NotificationManager()->Send(p_action.GetUnknown84(), &MxType4NotificationParam(this, &p_action, FALSE));
-			}
-
-			if (p_action.GetUnknown84()) {
-				NotificationManager()->Send(
-					p_action.GetUnknown84(),
-					&MxStartActionNotificationParam(c_notificationStartAction, this, &p_action, FALSE)
-				);
-			}
-		}
-
-		result = SUCCESS;
-	}
-
 	return result;
 }
 

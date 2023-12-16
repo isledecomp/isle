@@ -605,7 +605,7 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1005b400
-int LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, int& p_value)
+MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
 	if (GetCurrentWorld() == NULL) {
 		return -1;

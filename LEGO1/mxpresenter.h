@@ -10,6 +10,7 @@
 
 class MxCompositePresenter;
 class MxStreamController;
+class MxPresenter;
 
 // VTABLE: LEGO1 0x100d4d38
 // SIZE 0x40
