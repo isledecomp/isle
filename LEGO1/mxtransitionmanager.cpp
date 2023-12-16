@@ -102,7 +102,7 @@ MxResult MxTransitionManager::StartTransition(
 
 			MxDSAction* action = m_waitIndicator->GetAction();
 			action->SetLoopCount(10000);
-			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit9);
+			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit10);
 		}
 
 		MxU32 time = timeGetTime();

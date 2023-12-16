@@ -254,7 +254,7 @@ void MxVideoPresenter::NextFrame()
 MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
-	if ((action == NULL) || (((action->GetFlags() & MxDSAction::Flag_Bit10) == 0) && !IsEnabled()) ||
+	if ((action == NULL) || (((action->GetFlags() & MxDSAction::Flag_Bit11) == 0) && !IsEnabled()) ||
 		(!m_bitmap && !m_alpha))
 		return FALSE;
 
@@ -347,7 +347,7 @@ void MxVideoPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x100b2fe0
 void MxVideoPresenter::StreamingTickle()
 {
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit9) {
+	if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
 		if (!m_currentChunk)
 			MxMediaPresenter::StreamingTickle();
 
@@ -386,7 +386,7 @@ void MxVideoPresenter::StreamingTickle()
 void MxVideoPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Bit9) {
+		if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
 			if (!m_currentChunk)
 				MxMediaPresenter::RepeatingTickle();
 

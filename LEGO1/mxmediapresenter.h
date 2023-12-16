@@ -45,6 +45,8 @@ protected:
 
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
+
+public:
 	MxStreamChunk* FUN_100b5650();
 	MxStreamChunk* NextChunk();
 };
