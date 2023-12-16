@@ -54,6 +54,7 @@ public:
 	virtual void StopTimer();                                                                 // vtable+3c
 	virtual MxBool IsTimerRunning();                                                          // vtable+40
 	static void SetInstance(MxOmni* p_instance);
+	static MxBool FUN_100b06b0(MxDSAction* p_action);
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
 	MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }
@@ -66,7 +67,7 @@ public:
 	MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
 	MxEventManager* GetEventManager() const { return this->m_eventManager; }
 	MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
-	MxResult HandleNotificationType2(MxParam& p_param);
+	MxLong HandleActionEnd(MxParam& p_param);
 
 protected:
 	static MxOmni* g_instance;

@@ -312,11 +312,15 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x100b00c0
+// FUNCTION: LEGO1 0x100b00c0
 MxResult MxOmni::DeleteObject(MxDSAction& p_dsAction)
 {
-	// TODO
-	return FAILURE;
+	MxResult result;
+	if (m_streamer != NULL) {
+		result = m_streamer->DeleteObject(&p_dsAction);
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100b00e0
@@ -375,6 +379,12 @@ void MxOmni::DestroyInstance()
 	}
 }
 
+MxBool MxOmni::FUN_100b06b0(MxDSAction* p_action)
+{
+	// TODO STUB
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100b07f0
 MxLong MxOmni::Notify(MxParam& p_param)
 {
@@ -383,14 +393,31 @@ MxLong MxOmni::Notify(MxParam& p_param)
 	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction)
 		return 0;
 
-	return HandleNotificationType2(p_param);
+	return HandleActionEnd(p_param);
 }
 
-// STUB: LEGO1 0x100b0880
-MxResult MxOmni::HandleNotificationType2(MxParam& p_param)
+// FUNCTION: LEGO1 0x100b0880
+MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 {
-	// TODO STUB
-	return FAILURE;
+	MxDSAction* action = ((MxEndActionNotificationParam&) p_param).GetAction();
+	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());
+	if (controller != NULL) {
+		if (controller->GetUnk0x54().Find(action, FALSE)) {
+			if (FUN_100b06b0(action) == FALSE) {
+				delete controller->GetUnk0x54().Find(action, TRUE);
+			}
+		}
+	}
+
+	if (((MxEndActionNotificationParam&) p_param).GetSender()) {
+		delete ((MxEndActionNotificationParam&) p_param).GetSender();
+	}
+
+	if (((MxEndActionNotificationParam&) p_param).GetAction())
+	{
+		delete ((MxEndActionNotificationParam&) p_param).GetAction();
+	}
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x100b0900
