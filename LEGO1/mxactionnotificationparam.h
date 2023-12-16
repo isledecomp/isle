@@ -66,6 +66,11 @@ public:
 	{
 	}
 
+	// FUNCTION: LEGO1 0x100b04a0
+	inline virtual ~MxStartActionNotificationParam() override
+	{
+	}
+
 	virtual MxNotificationParam* Clone() override; // vtable+0x4
 };
 
@@ -94,6 +99,11 @@ public:
 		: MxActionNotificationParam(TYPE4, p_sender, p_action, FALSE)
 	{
 		m_unk0x14 = p_unk0x14;
+	}
+
+	// FUNCTION: LEGO1 0x100b0630
+	inline virtual ~MxType4NotificationParam() override
+	{
 	}
 
 	virtual MxNotificationParam* Clone() override; // vtable+0x4

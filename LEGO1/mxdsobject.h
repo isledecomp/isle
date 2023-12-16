@@ -50,14 +50,14 @@ public:
 	inline void ClearAtom() { m_atomId.Clear(); }
 
 private:
-	MxU32 m_sizeOnDisk;   // 0x8
-	MxU16 m_type;         // 0xc
-	char* m_sourceName;   // 0x10
-	undefined4 m_unk0x14; // 0x14
-	char* m_objectName;   // 0x18
-	MxU32 m_objectId;     // 0x1c
-	MxAtomId m_atomId;    // 0x20
-	MxS16 m_unk0x24;      // 0x24
+	MxU32 m_sizeOnDisk;     // 0x8
+	MxU16 m_type;           // 0xc
+	char* m_sourceName;     // 0x10
+	undefined4 m_unk0x14;   // 0x14
+	char* m_objectName;     // 0x18
+	MxU32 m_objectId;       // 0x1c
+	MxAtomId m_atomId;      // 0x20
+	MxS16 m_unk0x24;        // 0x24
 	MxPresenter* m_unk0x28; // 0x28
 };
 
