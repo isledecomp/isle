@@ -158,7 +158,7 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 	}
 
 	// TODO: remove action from list
-	return -1;
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100b9b30
