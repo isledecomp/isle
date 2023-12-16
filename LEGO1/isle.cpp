@@ -96,42 +96,54 @@ MxResult Isle::Create(MxDSObject& p_dsObject)
 // FUNCTION: LEGO1 0x10030c10
 MxLong Isle::Notify(MxParam& p_param)
 {
+	MxLong result = 0;
+	LegoWorld::Notify(p_param);
+
 	if (m_unk0xf6) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
-			return StopAction(p_param);
+			result = StopAction(p_param);
+			break;
 		case c_notificationButtonUp:
 		case c_notificationButtonDown:
 			switch (m_act1state->GetUnknown18()) {
 			case 3:
-				return m_pizza->Notify(p_param);
+				result = m_pizza->Notify(p_param);
+				break;
 			case 10:
-				return m_ambulance->Notify(p_param);
-			default:
-				return 0;
+				result = m_ambulance->Notify(p_param);
+				break;
 			}
+			break;
 		case TYPE17:
-			return HandleType17Notification(p_param);
+			result = HandleType17Notification(p_param);
+			break;
 		case TYPE18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
-				return GetCurrentVehicle()->Notify(p_param);
+				result = GetCurrentVehicle()->Notify(p_param);
+				break;
 			case 8:
-				return m_towtrack->Notify(p_param);
+				result = m_towtrack->Notify(p_param);
+				break;
 			case 10:
-				return m_ambulance->Notify(p_param);
+				result = m_ambulance->Notify(p_param);
+				break;
 			}
+			break;
 		case TYPE19:
-			return HandleType19Notification(p_param);
+			result = HandleType19Notification(p_param);
+			break;
 		case TYPE20:
 			VTable0x68(TRUE);
-			return 0;
+			break;
 		case MXTRANSITIONMANAGER_TRANSITIONENDED:
-			return HandleTransitionEnd();
+			result = HandleTransitionEnd();
+			break;
 		}
 	}
 
-	return 0;
+	return result;
 }
 
 // STUB: LEGO1 0x10030d90
