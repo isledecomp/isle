@@ -25,6 +25,7 @@ public:
 
 	virtual MxBool SetFlag() override;                                      // vtable+0x18
 	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
+
 private:
 	undefined4 m_unk0x8;
 	undefined4 m_unk0xc;
