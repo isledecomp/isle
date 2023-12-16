@@ -4,8 +4,8 @@ import argparse
 import difflib
 import subprocess
 import os
-import sys
 
+from isledecomp.lib import lib_path_join
 from isledecomp.utils import print_diff
 
 
@@ -32,11 +32,8 @@ def main():
     if not os.path.isfile(args.recompiled):
         parser.error(f"Recompiled binary {args.recompiled} does not exist")
 
-    def get_file_in_script_dir(fn):
-        return os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), fn)
-
     def get_exports(file):
-        call = [get_file_in_script_dir("DUMPBIN.EXE"), "/EXPORTS"]
+        call = [lib_path_join("DUMPBIN.EXE"), "/EXPORTS"]
 
         if os.name != "nt":
             call.insert(0, "wine")
