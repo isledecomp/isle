@@ -27,6 +27,7 @@ public:
 	virtual ~Isle() override;
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	MxLong StopAction(MxParam& p_param);
 
 	// FUNCTION: LEGO1 0x10030910
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -42,13 +43,16 @@ public:
 	}
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
 	virtual void Stop() override;                             // vtable+50
-	virtual void VTable0x58(MxCore* p_object) override;       // vtable+58
+	MxLong HandleType17Notification(MxParam& p_param);
+	MxLong HandleType19Notification(MxParam& p_param);
+	virtual void VTable0x58(MxCore* p_object) override; // vtable+58
 	// FUNCTION: LEGO1 0x10030900
 	virtual MxBool VTable0x5c() override { return TRUE; } // vtable+5c
 	// FUNCTION: LEGO1 0x10033170
-	virtual void VTable0x60() override {}            // vtable+60
-	virtual MxBool VTable0x64() override;            // vtable+64
-	virtual void VTable0x68(MxBool p_add) override;  // vtable+68
+	virtual void VTable0x60() override {}           // vtable+60
+	virtual MxBool VTable0x64() override;           // vtable+64
+	virtual void VTable0x68(MxBool p_add) override; // vtable+68
+	MxLong HandleTransitionEnd();
 	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
 
 	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }

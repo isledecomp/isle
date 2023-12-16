@@ -1,6 +1,7 @@
 #include "isle.h"
 
 #include "act1state.h"
+#include "ambulance.h"
 #include "islepathactor.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -9,6 +10,8 @@
 #include "legoutil.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
+#include "pizza.h"
+#include "towtrack.h"
 
 DECOMP_SIZE_ASSERT(Isle, 0x140);
 
@@ -90,10 +93,50 @@ MxResult Isle::Create(MxDSObject& p_dsObject)
 	return result;
 }
 
-// STUB: LEGO1 0x10030c10
+// FUNCTION: LEGO1 0x10030c10
 MxLong Isle::Notify(MxParam& p_param)
 {
-	// TODO
+	if (m_unk0xf6) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		case c_notificationEndAction:
+			return StopAction(p_param);
+		case c_notificationButtonUp:
+		case c_notificationButtonDown:
+			switch (m_act1state->GetUnknown18()) {
+			case 3:
+				return m_pizza->Notify(p_param);
+			case 10:
+				return m_ambulance->Notify(p_param);
+			default:
+				return 0;
+			}
+		case TYPE17:
+			return HandleType17Notification(p_param);
+		case TYPE18:
+			switch (m_act1state->GetUnknown18()) {
+			case 4:
+				return GetCurrentVehicle()->Notify(p_param);
+			case 8:
+				return m_towtrack->Notify(p_param);
+			case 10:
+				return m_ambulance->Notify(p_param);
+			}
+		case TYPE19:
+			return HandleType19Notification(p_param);
+		case TYPE20:
+			VTable0x68(TRUE);
+			return 0;
+		case MXTRANSITIONMANAGER_TRANSITIONENDED:
+			return HandleTransitionEnd();
+		}
+	}
+
+	return 0;
+}
+
+// STUB: LEGO1 0x10030d90
+MxLong Isle::StopAction(MxParam& p_param)
+{
 	return 0;
 }
 
@@ -103,10 +146,28 @@ void Isle::Stop()
 	// TODO
 }
 
+// STUB: LGEO1 0x10031030
+MxLong Isle::HandleType17Notification(MxParam& p_param)
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x100315f0
+MxLong Isle::HandleType19Notification(MxParam& p_param)
+{
+	return 0;
+}
+
 // STUB: LEGO1 0x10031820
 void Isle::VTable0x68(MxBool p_add)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10031820
+MxLong Isle::HandleTransitionEnd()
+{
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10032f10
