@@ -1,8 +1,8 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
-#include "viewmanager/viewmanager.h"
 #include "mxtypes.h"
+#include "viewmanager/viewmanager.h"
 
 class LegoROI;
 

@@ -9,16 +9,16 @@ MxNotificationParam* MxActionNotificationParam::Clone()
 	return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
 }
 
-// FUNCTION: LEGO1 0x100b0300
-MxNotificationParam* MxStartActionNotificationParam::Clone()
-{
-	return new MxEndActionNotificationParam(c_notificationStartAction, this->m_sender, this->m_action, this->m_realloc);
-}
-
 // FUNCTION: LEGO1 0x10051270
 MxNotificationParam* MxEndActionNotificationParam::Clone()
 {
 	return new MxEndActionNotificationParam(c_notificationEndAction, this->m_sender, this->m_action, this->m_realloc);
+}
+
+// FUNCTION: LEGO1 0x100b0300
+MxNotificationParam* MxStartActionNotificationParam::Clone()
+{
+	return new MxEndActionNotificationParam(c_notificationStartAction, this->m_sender, this->m_action, this->m_realloc);
 }
 
 // FUNCTION: LEGO1 0x100b04f0

@@ -115,7 +115,7 @@ public:
 	MxDSAction& GetCurrentAction() { return m_action; }
 
 private:
-	undefined4* m_unk0x68;                        // 0x68
+	undefined4* m_unk0x68;                       // 0x68
 	undefined4 m_unk0x6c;                        // 0x6c
 	LegoInputManager* m_inputMgr;                // 0x70
 	GifManager* m_gifManager;                    // 0x74

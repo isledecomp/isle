@@ -88,11 +88,7 @@ public:
 // SIZE 0x18
 class MxType4NotificationParam : public MxActionNotificationParam {
 public:
-	inline MxType4NotificationParam(
-		MxCore* p_sender,
-		MxDSAction* p_action,
-		undefined4 p_unk0x14
-	)
+	inline MxType4NotificationParam(MxCore* p_sender, MxDSAction* p_action, undefined4 p_unk0x14)
 		: MxActionNotificationParam(TYPE4, p_sender, p_action, FALSE)
 	{
 		m_unk0x14 = p_unk0x14;

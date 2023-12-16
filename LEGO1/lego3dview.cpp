@@ -1,4 +1,5 @@
 #include "lego3dview.h"
+
 #include "legoroi.h"
 
 // STUB: LEGO1 0x1003dd70
