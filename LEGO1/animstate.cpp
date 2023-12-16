@@ -17,16 +17,16 @@ AnimState::~AnimState()
 	// TODO
 }
 
-// STUB: LEGO1 0x100654f0
-MxBool AnimState::SetFlag()
-{
-	// TODO
-	return FALSE;
-}
-
 // STUB: LEGO1 0x100652d0
 MxResult AnimState::VTable0x1c(LegoFileStream* p_legoFileStream)
 {
 	// TODO
 	return FAILURE;
+}
+
+// STUB: LEGO1 0x100654f0
+MxBool AnimState::SetFlag()
+{
+	// TODO
+	return FALSE;
 }
