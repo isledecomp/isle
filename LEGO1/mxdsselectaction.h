@@ -49,7 +49,4 @@ private:
 // FUNCTION: LEGO1 0x100cbd00
 // MxStringListCursor::~MxStringListCursor
 
-// TEMPLATE: LEGO1 0x100cc450
-// MxListEntry<MxString>::GetValue
-
 #endif // MXDSSELECTACTION_H

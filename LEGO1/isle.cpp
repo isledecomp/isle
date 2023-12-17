@@ -176,7 +176,7 @@ void Isle::VTable0x68(MxBool p_add)
 	// TODO
 }
 
-// STUB: LEGO1 0x10031820
+// STUB: LEGO1 0x100327a0
 MxLong Isle::HandleTransitionEnd()
 {
 	return 0;

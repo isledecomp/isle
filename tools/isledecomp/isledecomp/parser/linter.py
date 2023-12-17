@@ -1,6 +1,7 @@
 from typing import List, Optional
 from .parser import DecompParser
 from .error import ParserAlert, ParserError
+from .node import ParserSymbol
 
 
 def get_checkorder_filter(module):
@@ -14,15 +15,38 @@ class DecompLinter:
         self._parser = DecompParser()
         self._filename: str = ""
         self._module: Optional[str] = None
+        # Set of (str, int) tuples for each module/offset pair seen while scanning.
+        # This is _not_ reset between files and is intended to report offset reuse
+        # when scanning the entire directory.
+        self._offsets_used = set()
 
-    def reset(self):
+    def reset(self, full_reset: bool = False):
         self.alerts = []
         self._parser.reset()
         self._filename = ""
         self._module = None
 
+        if full_reset:
+            self._offsets_used.clear()
+
     def file_is_header(self):
         return self._filename.lower().endswith(".h")
+
+    def _load_offsets_from_list(self, marker_list: List[ParserSymbol]):
+        """Helper for loading (module, offset) tuples while the DecompParser
+        has them broken up into three different lists."""
+        for marker in marker_list:
+            value = (marker.module, marker.offset)
+            if value in self._offsets_used:
+                self.alerts.append(
+                    ParserAlert(
+                        code=ParserError.DUPLICATE_OFFSET,
+                        line_number=marker.line_number,
+                        line=f"0x{marker.offset:08x}",
+                    )
+                )
+            else:
+                self._offsets_used.add(value)
 
     def _check_function_order(self):
         """Rules:
@@ -55,8 +79,9 @@ class DecompLinter:
             last_offset = fun.offset
 
     def _check_offset_uniqueness(self):
-        # TODO
-        pass
+        self._load_offsets_from_list(self._parser.functions)
+        self._load_offsets_from_list(self._parser.vtables)
+        self._load_offsets_from_list(self._parser.variables)
 
     def _check_byname_allowed(self):
         if self.file_is_header():
@@ -75,7 +100,7 @@ class DecompLinter:
         """`lines` is a generic iterable to allow for testing with a list of strings.
         We assume lines has the entire contents of the compilation unit."""
 
-        self.reset()
+        self.reset(False)
         self._filename = filename
         self._module = module
 
@@ -84,9 +109,10 @@ class DecompLinter:
         self._parser.finish()
         self.alerts = self._parser.alerts[::]
 
+        self._check_offset_uniqueness()
+
         if self._module is not None:
             self._check_byname_allowed()
-            self._check_offset_uniqueness()
 
             if not self.file_is_header():
                 self._check_function_order()

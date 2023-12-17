@@ -122,7 +122,7 @@ void LegoWorld::FUN_10073400()
 {
 }
 
-// STUB: LEGO1 0x10073400
+// STUB: LEGO1 0x10073430
 void LegoWorld::FUN_10073430()
 {
 }

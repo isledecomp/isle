@@ -112,8 +112,8 @@ const char* g_current = "current";
 // GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
-// GLOBAL: LEGO1 0x100f4c54
-MxBool g_isWorldActive;
+// GLOBAL: LEGO1 0x100f4c58
+MxBool g_isWorldActive = TRUE;
 
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()

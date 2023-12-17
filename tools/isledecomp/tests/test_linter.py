@@ -70,6 +70,7 @@ def test_module_isolation(linter):
     ]
 
     assert linter.check_lines(lines, "test.cpp", "TEST") is True
+    linter.reset(True)
     assert linter.check_lines(lines, "test.cpp", "ALPHA") is True
 
 
@@ -81,5 +82,33 @@ def test_byname_headers_only(linter):
     ]
 
     assert linter.check_lines(lines, "test.h", "TEST") is True
+    linter.reset(True)
     assert linter.check_lines(lines, "test.cpp", "TEST") is False
     assert linter.alerts[0].code == ParserError.BYNAME_FUNCTION_IN_CPP
+
+
+def test_duplicate_offsets(linter):
+    """The linter will retain module/offset pairs found until we do a full reset."""
+    lines = [
+        "// FUNCTION: TEST 0x1000",
+        "// FUNCTION: HELLO 0x1000",
+        "// MyClass::~MyClass",
+    ]
+
+    # Should not fail for duplicate offset 0x1000 because the modules are unique.
+    assert linter.check_lines(lines, "test.h", "TEST") is True
+
+    # Simulate a failure by reading the same file twice.
+    assert linter.check_lines(lines, "test.h", "TEST") is False
+
+    # Two errors because offsets from both modules are duplicated
+    assert len(linter.alerts) == 2
+    assert all(a.code == ParserError.DUPLICATE_OFFSET for a in linter.alerts)
+
+    # Partial reset will retain the list of seen offsets.
+    linter.reset(False)
+    assert linter.check_lines(lines, "test.h", "TEST") is False
+
+    # Full reset will forget seen offsets.
+    linter.reset(True)
+    assert linter.check_lines(lines, "test.h", "TEST") is True
