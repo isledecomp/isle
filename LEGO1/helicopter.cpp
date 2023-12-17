@@ -102,7 +102,7 @@ MxU32 Helicopter::VTable0xcc()
 		FUN_10015820(1, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, TRUE);
 		SetUnknownDC(4);
-		FUN_10015910(9);
+		PlayMusic(9);
 		break;
 	case 1:
 		m_script = *g_act2mainScript;

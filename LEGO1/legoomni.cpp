@@ -112,6 +112,9 @@ const char* g_current = "current";
 // GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, int);
 
+// GLOBAL: LEGO1 0x100f4c54
+MxBool g_isWorldActive;
+
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()
 {
@@ -196,6 +199,12 @@ GifManager* GetGifManager()
 	return LegoOmni::GetInstance()->GetGifManager();
 }
 
+// STUB: LEGO1 0x10015820
+void FUN_10015820(MxU32, MxU32)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100158c0
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
@@ -223,6 +232,14 @@ void PlayMusic(MxU32 p_index)
 	action.SetObjectId(p_index);
 
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
+}
+
+// FUNCTION: LEGO1 0x100159c0
+void SetIsWorldActive(MxBool p_isWorldActive)
+{
+	if (!p_isWorldActive)
+		LegoOmni::GetInstance()->GetInputManager()->SetCamera(NULL);
+	g_isWorldActive = p_isWorldActive;
 }
 
 // STUB: LEGO1 0x1001a700

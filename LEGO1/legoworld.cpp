@@ -9,28 +9,6 @@
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 
-MxBool g_isWorldActive;
-
-// STUB: LEGO1 0x10015820
-void FUN_10015820(MxU32, MxU32)
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10015910
-void FUN_10015910(MxU32)
-{
-	// TODO
-}
-
-// FUNCTION: LEGO1 0x100159c0
-void SetIsWorldActive(MxBool p_isWorldActive)
-{
-	if (!p_isWorldActive)
-		LegoOmni::GetInstance()->GetInputManager()->SetCamera(NULL);
-	g_isWorldActive = p_isWorldActive;
-}
-
 // STUB: LEGO1 0x1001ca40
 LegoWorld::LegoWorld()
 {

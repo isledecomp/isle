@@ -158,9 +158,12 @@ LegoPlantManager* PlantManager();
 MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
 GifManager* GetGifManager();
+void FUN_10015820(MxU32, MxU32);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 
+void PlayMusic(MxU32 p_index);
+void SetIsWorldActive(MxBool p_isWorldActive);
 void RegisterScripts();
 void UnregisterScripts();
 

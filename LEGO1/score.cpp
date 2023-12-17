@@ -119,7 +119,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
 			break;
 		case 0x1f5:
-			FUN_10015910(0xb);
+			PlayMusic(11);
 			m_state->SetTutorialFlag(FALSE);
 		}
 	}
@@ -145,7 +145,7 @@ void Score::Stop()
 		Start(&action);
 	}
 	else
-		FUN_10015910(0xb);
+		PlayMusic(11);
 
 	FUN_10015820(0, 7);
 }

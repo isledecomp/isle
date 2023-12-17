@@ -64,10 +64,6 @@ protected:
 	undefined m_unk0xf7;               // 0xf7
 };
 
-void FUN_10015820(MxU32, MxU32);
-void FUN_10015910(MxU32);
-void SetIsWorldActive(MxBool p_isWorldActive);
-
 // SYNTHETIC: LEGO1 0x1001eed0
 // MxPresenterListCursor::`scalar deleting destructor'
 
