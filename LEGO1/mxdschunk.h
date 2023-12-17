@@ -40,11 +40,10 @@ public:
 	inline void SetData(MxU8* p_data) { m_data = p_data; }
 
 	inline MxU16 GetFlags() { return m_flags; }
+	inline undefined4 GetObjectId() { return m_objectId; }
 	inline MxLong GetTime() { return m_time; }
 	inline MxU32 GetLength() { return m_length; }
 	inline MxU8* GetData() { return m_data; }
-
-	inline undefined4 GetObjectId() { return m_objectId; }
 
 	inline void Release()
 	{
