@@ -35,6 +35,8 @@ MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 	MxU32 headersize = 0;
 	if (p_chunkData) {
 		MxU8* chunkData = p_chunkData;
+		// Note: the alpha debug version uses memcpy calls here,
+		// but the code generation is the same.
 		GetScalar(&p_chunkData, m_flags);
 		GetScalar(&p_chunkData, m_objectId);
 		GetScalar(&p_chunkData, m_time);
