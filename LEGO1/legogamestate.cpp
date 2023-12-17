@@ -43,7 +43,6 @@ ColorStringStruct g_colorSaveData[43] = {
 
 // NOTE: This offset = the end of the variables table, the last entry
 // in that table is a special entry, the string "END_OF_VARIABLES"
-// GLOBAL: LEGO1 0x100f3e50
 extern const char* g_endOfVariables;
 
 // FUNCTION: LEGO1 0x10039550
