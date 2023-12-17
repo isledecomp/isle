@@ -35,4 +35,7 @@ private:
 	MxDSBuffer* m_buffer; // 0x1c
 };
 
+// SYNTHETIC: LEGO1 0x100b20a0
+// MxStreamChunk::`scalar deleting destructor'
+
 #endif // MXSTREAMCHUNK_H

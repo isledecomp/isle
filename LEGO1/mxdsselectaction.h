@@ -29,7 +29,7 @@ public:
 	}
 
 	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	virtual MxDSAction* Clone() override;                                // vtable+2c;
 
 private:

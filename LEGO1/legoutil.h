@@ -27,7 +27,7 @@ inline T Max(T p_t1, T p_t2)
 }
 
 template <class T>
-inline void GetScalar(char** p_source, T& p_dest)
+inline void GetScalar(MxU8** p_source, T& p_dest)
 {
 	p_dest = *(T*) *p_source;
 	*p_source += sizeof(T);
@@ -42,16 +42,16 @@ inline T GetScalar(T** p_source)
 }
 
 template <class T>
-inline void GetDouble(char** p_source, T& p_dest)
+inline void GetDouble(MxU8** p_source, T& p_dest)
 {
 	p_dest = *(double*) *p_source;
 	*p_source += sizeof(double);
 }
 
 template <class T>
-inline void GetString(char** p_source, const char* p_dest, T* p_obj, void (T::*p_setter)(const char*))
+inline void GetString(MxU8** p_source, const char* p_dest, T* p_obj, void (T::*p_setter)(const char*))
 {
-	(p_obj->*p_setter)(*p_source);
+	(p_obj->*p_setter)((char*) *p_source);
 	*p_source += strlen(p_dest) + 1;
 }
 

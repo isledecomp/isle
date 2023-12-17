@@ -74,7 +74,7 @@ MxU32 MxDSSelectAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100cbf60
-void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk0x24)
+void MxDSSelectAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 {
 	MxString string;
 	MxDSAction::Deserialize(p_source, p_unk0x24);
@@ -82,7 +82,7 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 	MxU32 extraFlag = *(MxU32*) (*p_source + 4) & 1;
 	*p_source += 12;
 
-	this->m_unk0x9c = *p_source;
+	this->m_unk0x9c = (char*) *p_source;
 
 	if (!strnicmp(this->m_unk0x9c.GetData(), "RANDOM_", strlen("RANDOM_"))) {
 		char buffer[10];
@@ -93,9 +93,9 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 		string = itoa((MxS16) random, buffer, 10);
 	}
 	else
-		string = VariableTable()->GetVariable(*p_source);
+		string = VariableTable()->GetVariable((char*) *p_source);
 
-	*p_source += strlen(*p_source) + 1;
+	*p_source += strlen((char*) *p_source) + 1;
 
 	MxU32 count = *(MxU32*) *p_source;
 	*p_source += sizeof(MxU32);
@@ -106,11 +106,11 @@ void MxDSSelectAction::Deserialize(char** p_source, MxS16 p_unk0x24)
 
 		MxU32 i;
 		for (i = 0; i < count; i++) {
-			if (!strcmp(string.GetData(), *p_source))
+			if (!strcmp(string.GetData(), (char*) *p_source))
 				index = i;
 
-			this->m_unk0xac->Append(*p_source);
-			*p_source += strlen(*p_source) + 1;
+			this->m_unk0xac->Append((char*) *p_source);
+			*p_source += strlen((char*) *p_source) + 1;
 		}
 
 		for (i = 0; i < count; i++) {

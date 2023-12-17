@@ -7,7 +7,7 @@ MxDSChunk::MxDSChunk()
 {
 	m_flags = 0;
 	m_data = NULL;
-	m_objectid = -1;
+	m_objectId = -1;
 	m_time = 0;
 	m_length = 0;
 }

@@ -130,32 +130,37 @@ MxResult MxDSBuffer::FUN_100c67b0(MxStreamController* p_controller, MxDSAction* 
 }
 
 // FUNCTION: LEGO1 0x100c68a0
-MxResult MxDSBuffer::CreateObject(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, undefined4)
+MxResult MxDSBuffer::CreateObject(
+	MxStreamController* p_controller,
+	MxU32* p_data,
+	MxDSAction* p_action,
+	undefined4 p_undefined
+)
 {
 	if (p_data == NULL) {
 		return FAILURE;
 	}
 
-	MxCore* header = ReadChunk(p_data, p_action->GetUnknown24());
+	MxCore* header = ReadChunk(this, p_data, p_action->GetUnknown24());
 
 	if (header == NULL) {
 		return FAILURE;
 	}
 
-	switch (*p_data) {
-	case FOURCC('M', 'x', 'C', 'h'):
-		if (!m_unk0x30->HasId(((MxStreamChunk*) header)->GetObjectId())) {
+	if (*p_data == FOURCC('M', 'x', 'O', 'b'))
+		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
+	else if (*p_data == FOURCC('M', 'x', 'C', 'h')) {
+		MxStreamChunk* chunk = (MxStreamChunk*) header;
+		if (!m_unk0x30->HasId((chunk)->GetObjectId())) {
 			delete header;
 			return SUCCESS;
 		}
 
-		return ParseChunk(p_controller, p_data, p_action, (MxStreamChunk*) header);
-	case FOURCC('M', 'x', 'O', 'b'):
-		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
-	default:
-		delete header;
-		return FAILURE;
+		return ParseChunk(p_controller, p_data, p_action, p_undefined, chunk);
 	}
+
+	delete header;
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6960
@@ -201,15 +206,16 @@ MxResult MxDSBuffer::ParseChunk(
 	MxStreamController* p_controller,
 	MxU32* p_data,
 	MxDSAction* p_action,
+	undefined4,
 	MxStreamChunk* p_header
 )
 {
-	// TODO STUB
+	// TODO
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6d00
-MxCore* MxDSBuffer::ReadChunk(MxU32* p_chunkData, MxU16 p_flags)
+MxCore* MxDSBuffer::ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags)
 {
 	// This function reads a chunk. If it is an object, this function returns an MxDSObject. If it is a chunk, returns a
 	// MxDSChunk.
@@ -218,16 +224,17 @@ MxCore* MxDSBuffer::ReadChunk(MxU32* p_chunkData, MxU16 p_flags)
 
 	switch (*p_chunkData) {
 	case FOURCC('M', 'x', 'O', 'b'):
-		result = DeserializeDSObjectDispatch((char**) &dataStart, p_flags);
+		result = DeserializeDSObjectDispatch(&dataStart, p_flags);
 		break;
 	case FOURCC('M', 'x', 'C', 'h'):
 		result = new MxStreamChunk();
-		if (result != NULL && ((MxStreamChunk*) result)->ReadChunk(this, (MxU8*) p_chunkData) != SUCCESS) {
+		if (result != NULL && ((MxStreamChunk*) result)->ReadChunk(p_buffer, (MxU8*) p_chunkData) != SUCCESS) {
 			delete result;
 			result = NULL;
 		}
-		break;
+		return result;
 	}
+
 	return result;
 }
 

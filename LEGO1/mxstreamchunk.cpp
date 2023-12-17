@@ -1,5 +1,6 @@
 #include "mxstreamchunk.h"
 
+#include "legoutil.h"
 #include "mxdsbuffer.h"
 
 // FUNCTION: LEGO1 0x100c2fe0
@@ -33,13 +34,15 @@ MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 {
 	MxU32 headersize = 0;
 	if (p_chunkData) {
-		SetFlags(*(MxU16*) p_chunkData);
-		SetObjectId(*(MxU32*) (p_chunkData + 2));
-		SetTime(*(MxLong*) (p_chunkData + 6));
-		SetLength(*(MxU32*) (p_chunkData + 10));
-		SetData(p_chunkData + 14);
-		headersize = (MxU32) (p_chunkData + 14) - (MxU32) p_chunkData;
+		MxU8* chunkData = p_chunkData;
+		GetScalar(&p_chunkData, m_flags);
+		GetScalar(&p_chunkData, m_objectId);
+		GetScalar(&p_chunkData, m_time);
+		GetScalar(&p_chunkData, m_length);
+		m_data = p_chunkData;
+		headersize = p_chunkData - chunkData;
 	}
+
 	return headersize;
 }
 
