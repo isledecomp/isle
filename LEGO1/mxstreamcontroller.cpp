@@ -154,12 +154,10 @@ MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 	MxAutoLocker locker(&m_criticalSection);
 	MxDSAction* action = p_action->Clone();
 
-	if (action == NULL)
-	{
+	if (action == NULL) {
 		return FAILURE;
 	}
-	else
-	{
+	else {
 		m_unk0x54.push_back(action);
 		return SUCCESS;
 	}
