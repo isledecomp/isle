@@ -8,6 +8,7 @@ class MxStreamController;
 class MxDSAction;
 class MxDSStreamingAction;
 class MxStreamChunk;
+class MxDSChunk;
 
 enum MxDSBufferType {
 	MxDSBufferType_Chunk = 0,
@@ -37,23 +38,25 @@ public:
 	MxResult StartPresenterFromAction(MxStreamController* p_controller, MxDSAction* p_action1, MxDSAction* p_action2);
 	MxResult ParseChunk(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, MxStreamChunk* p_header);
 	MxCore* ReadChunk(MxU32* p_chunkData, MxU16 p_flags);
+	MxU8 ReleaseRef(MxDSChunk*);
+	void AddRef(MxDSChunk* p_chunk);
 	void FUN_100c6f80(MxU32 p_writeOffset);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
 
 private:
-	MxU8* m_pBuffer;
-	MxU8* m_pIntoBuffer;
-	MxU8* m_pIntoBuffer2;
-	undefined4 m_unk0x14;
-	undefined4 m_unk0x18;
-	undefined4 m_unk0x1c;
-	undefined2 m_unk0x20;
-	MxDSBufferType m_mode;
-	MxU32 m_writeOffset;
-	MxU32 m_bytesRemaining;
-	MxDSStreamingAction* m_unk0x30;
+	MxU8* m_pBuffer;                // 0x08
+	MxU8* m_pIntoBuffer;            // 0x0c
+	MxU8* m_pIntoBuffer2;           // 0x10
+	undefined4 m_unk0x14;           // 0x14
+	undefined4 m_unk0x18;           // 0x18
+	undefined4 m_unk0x1c;           // 0x1c
+	MxU16 m_refcount;               // 0x20
+	MxDSBufferType m_mode;          // 0x24
+	MxU32 m_writeOffset;            // 0x28
+	MxU32 m_bytesRemaining;         // 0x2c
+	MxDSStreamingAction* m_unk0x30; // 0x30
 };
 
 #endif // MXDSBUFFER_H

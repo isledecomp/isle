@@ -1,5 +1,6 @@
 #include "mxdsbuffer.h"
 
+#include "mxdschunk.h"
 #include "mxdsstreamingaction.h"
 #include "mxomni.h"
 #include "mxstreamchunk.h"
@@ -11,7 +12,7 @@ DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 // FUNCTION: LEGO1 0x100c6470
 MxDSBuffer::MxDSBuffer()
 {
-	m_unk0x20 = 0;
+	m_refcount = 0;
 	m_pBuffer = NULL;
 	m_pIntoBuffer = NULL;
 	m_pIntoBuffer2 = NULL;
@@ -143,7 +144,7 @@ MxResult MxDSBuffer::CreateObject(MxStreamController* p_controller, MxU32* p_dat
 
 	switch (*p_data) {
 	case FOURCC('M', 'x', 'C', 'h'):
-		if (!m_unk0x30->HasId(((MxStreamChunk*) header)->GetUnk0xc())) {
+		if (!m_unk0x30->HasId(((MxStreamChunk*) header)->GetObjectId())) {
 			delete header;
 			return SUCCESS;
 		}
@@ -228,6 +229,23 @@ MxCore* MxDSBuffer::ReadChunk(MxU32* p_chunkData, MxU16 p_flags)
 		break;
 	}
 	return result;
+}
+
+// FUNCTION: LEGO1 0x100c6ec0
+MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
+{
+	if (m_refcount != 0) {
+		m_refcount--;
+	}
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x100c6ee0
+void MxDSBuffer::AddRef(MxDSChunk* p_chunk)
+{
+	if (p_chunk) {
+		m_refcount++;
+	}
 }
 
 // FUNCTION: LEGO1 0x100c6f80

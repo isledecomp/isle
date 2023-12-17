@@ -34,6 +34,7 @@ public:
 	}
 
 	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
+	inline void SetObjectId(undefined4 p_objectid) { m_objectid = p_objectid; }
 	inline void SetTime(MxLong p_time) { m_time = p_time; }
 	inline void SetLength(MxU32 p_length) { m_length = p_length; }
 	inline void SetData(MxU8* p_data) { m_data = p_data; }
@@ -43,7 +44,7 @@ public:
 	inline MxU32 GetLength() { return m_length; }
 	inline MxU8* GetData() { return m_data; }
 
-	inline undefined4 GetUnk0xc() { return m_unk0x0c; }
+	inline undefined4 GetObjectId() { return m_objectid; }
 
 	inline void Release()
 	{
@@ -53,7 +54,7 @@ public:
 
 private:
 	MxU16 m_flags;        // 0x8
-	undefined4 m_unk0x0c; // 0xc
+	undefined4 m_objectid; // 0xc
 	MxLong m_time;        // 0x10
 	MxU32 m_length;       // 0x14
 	MxU8* m_data;         // 0x18
