@@ -117,7 +117,7 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 }
 
 // FUNCTION: LEGO1 0x100ca7b0
-void MxDSMultiAction::Deserialize(char** p_source, MxS16 p_unk0x24)
+void MxDSMultiAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 {
 	MxDSAction::Deserialize(p_source, p_unk0x24);
 

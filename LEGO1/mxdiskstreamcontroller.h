@@ -51,6 +51,7 @@ private:
 	undefined m_unk0xc4;               // 0xc4
 
 	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
+	void InsertToList74(MxDSBuffer* p_buffer);
 };
 
 // TEMPLATE: LEGO1 0x100c7330

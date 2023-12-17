@@ -29,7 +29,7 @@ public:
 
 	virtual undefined4 VTable0x14() override;                            // vtable+14;
 	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	virtual void Deserialize(char** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	virtual void SetAtomId(MxAtomId p_atomId) override;                  // vtable+20;
 	virtual MxDSAction* Clone() override;                                // vtable+2c;
 	virtual void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+30;

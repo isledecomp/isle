@@ -115,6 +115,13 @@ MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 	return FAILURE;
 }
 
+// FUNCTION: LEGO1 0x100c84a0
+void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	m_list0x74.push_back(p_buffer);
+}
+
 // STUB: LEGO1 0x100c8640
 MxResult MxDiskStreamController::Tickle()
 {
