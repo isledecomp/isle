@@ -51,7 +51,7 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
 	else if (p_mode == MxDSBufferType_Chunk) {
 		MxStreamer* streamer = Streamer();
 		// I have no clue as to what this does, or even if its correct. Maybe it's related to storing chunks in
-		// MxRamStreamController?
+		// MxDiskStreamController?
 		if (p_bufferSize >> 10 == 0x40) {
 			i = 0;
 			while (i < 22) {
@@ -121,6 +121,13 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100c67b0
+MxResult MxDSBuffer::FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*)
+{
+	// TODO STUB
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100c68a0
 MxResult MxDSBuffer::CreateObject(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, undefined4)
 {
@@ -130,56 +137,59 @@ MxResult MxDSBuffer::CreateObject(MxStreamController* p_controller, MxU32* p_dat
 
 	MxCore* header = ReadChunk(p_data, p_action->GetUnknown24());
 
-	if (*p_data == FOURCC('M', 'x', 'O', 'b')) {
-		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
+	if (header == NULL) {
+		return FAILURE;
 	}
 
-	if (*p_data == FOURCC('M', 'x', 'C', 'h')) {
-		if (m_unk0x30->HasId(((MxStreamChunk*) header)->GetUnk0xc()) == 0) {
+	switch (*p_data) {
+	case FOURCC('M', 'x', 'C', 'h'):
+		if (!m_unk0x30->HasId(((MxStreamChunk*) header)->GetUnk0xc())) {
 			delete header;
 			return SUCCESS;
 		}
 
 		return ParseChunk(p_controller, p_data, p_action, (MxStreamChunk*) header);
+	case FOURCC('M', 'x', 'O', 'b'):
+		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
+	default:
+		delete header;
+		return FAILURE;
 	}
-
-	delete header;
-	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6960
 MxResult MxDSBuffer::StartPresenterFromAction(
 	MxStreamController* p_controller,
 	MxDSAction* p_action1,
-	MxDSAction* p_object_header
+	MxDSAction* p_objectheader
 )
 {
 	if (!m_unk0x30->GetInternalAction()) {
-		p_object_header->SetAtomId(p_action1->GetAtomId());
-		p_object_header->SetUnknown28(p_action1->GetUnknown28());
-		p_object_header->SetUnknown84(p_action1->GetUnknown84());
-		p_object_header->SetOrigin(p_action1->GetOrigin());
-		p_object_header->SetUnknown90(p_action1->GetUnknown90());
-		p_object_header->MergeFrom(*p_action1);
+		p_objectheader->SetAtomId(p_action1->GetAtomId());
+		p_objectheader->SetUnknown28(p_action1->GetUnknown28());
+		p_objectheader->SetUnknown84(p_action1->GetUnknown84());
+		p_objectheader->SetOrigin(p_action1->GetOrigin());
+		p_objectheader->SetUnknown90(p_action1->GetUnknown90());
+		p_objectheader->MergeFrom(*p_action1);
 
-		m_unk0x30->SetInternalAction(p_object_header->Clone());
+		m_unk0x30->SetInternalAction(p_objectheader->Clone());
 
-		p_controller->InsertActionToList54(p_object_header);
+		p_controller->InsertActionToList54(p_objectheader);
 
-		if (MxOmni::GetInstance()->CreatePresenter(p_controller, *p_object_header) != SUCCESS) {
+		if (MxOmni::GetInstance()->CreatePresenter(p_controller, *p_objectheader) != SUCCESS) {
 			return FAILURE;
 		}
 
-		m_unk0x30->SetLoopCount(p_object_header->GetLoopCount());
-		m_unk0x30->SetFlags(p_object_header->GetFlags());
-		m_unk0x30->SetDuration(p_object_header->GetDuration());
+		m_unk0x30->SetLoopCount(p_objectheader->GetLoopCount());
+		m_unk0x30->SetFlags(p_objectheader->GetFlags());
+		m_unk0x30->SetDuration(p_objectheader->GetDuration());
 
 		if (m_unk0x30->GetInternalAction() == NULL) {
 			return FAILURE;
 		}
 	}
-	else if (p_object_header) {
-		delete p_object_header;
+	else if (p_objectheader) {
+		delete p_objectheader;
 	}
 
 	return SUCCESS;
@@ -218,13 +228,6 @@ MxCore* MxDSBuffer::ReadChunk(MxU32* p_chunkData, MxU16 p_flags)
 		break;
 	}
 	return result;
-}
-
-// STUB: LEGO1 0x100c67b0
-MxResult MxDSBuffer::FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*)
-{
-	// TODO STUB
-	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c6f80

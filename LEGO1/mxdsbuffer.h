@@ -32,11 +32,11 @@ public:
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode);
 	MxResult SetBufferPointer(MxU32* p_buffer, MxU32 p_size);
+	MxResult FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*);
 	MxResult CreateObject(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, undefined4);
 	MxResult StartPresenterFromAction(MxStreamController* p_controller, MxDSAction* p_action1, MxDSAction* p_action2);
 	MxResult ParseChunk(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, MxStreamChunk* p_header);
 	MxCore* ReadChunk(MxU32* p_chunkData, MxU16 p_flags);
-	MxResult FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*);
 	void FUN_100c6f80(MxU32 p_writeOffset);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
