@@ -43,6 +43,8 @@ public:
 	inline MxU32 GetLength() { return m_length; }
 	inline MxU8* GetData() { return m_data; }
 
+	inline undefined4 GetUnk0xc() { return m_unk0x0c; }
+
 	inline void Release()
 	{
 		if (m_data)

@@ -3,6 +3,8 @@
 
 #include "mxdschunk.h"
 
+class MxDSBuffer;
+
 // VTABLE: LEGO1 0x100dc2a8
 // SIZE 0x20
 class MxStreamChunk : public MxDSChunk {
@@ -21,6 +23,8 @@ public:
 	{
 		return !strcmp(p_name, MxStreamChunk::ClassName()) || MxDSChunk::IsA(p_name);
 	}
+
+	MxResult ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData);
 
 private:
 	void* m_unk0x1c; // 0x1c

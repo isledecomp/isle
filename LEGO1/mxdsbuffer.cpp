@@ -1,6 +1,8 @@
 #include "mxdsbuffer.h"
 
+#include "mxdsstreamingaction.h"
 #include "mxomni.h"
+#include "mxstreamchunk.h"
 #include "mxstreamcontroller.h"
 #include "mxstreamer.h"
 
@@ -117,6 +119,105 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 	m_writeOffset = p_size;
 	m_mode = MxDSBufferType_Preallocated;
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100c68a0
+MxResult MxDSBuffer::CreateObject(MxStreamController* p_controller, MxU32* p_data, MxDSAction* p_action, undefined4)
+{
+	if (p_data == NULL) {
+		return FAILURE;
+	}
+
+	MxCore* header = ReadChunk(p_data, p_action->GetUnknown24());
+
+	if (*p_data == FOURCC('M', 'x', 'O', 'b')) {
+		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
+	}
+
+	if (*p_data == FOURCC('M', 'x', 'C', 'h')) {
+		if (m_unk0x30->HasId(((MxStreamChunk*) header)->GetUnk0xc()) == 0) {
+			delete header;
+			return SUCCESS;
+		}
+
+		return ParseChunk(p_controller, p_data, p_action, (MxStreamChunk*) header);
+	}
+
+	delete header;
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x100c6960
+MxResult MxDSBuffer::StartPresenterFromAction(
+	MxStreamController* p_controller,
+	MxDSAction* p_action1,
+	MxDSAction* p_object_header
+)
+{
+	if (!m_unk0x30->GetInternalAction()) {
+		p_object_header->SetAtomId(p_action1->GetAtomId());
+		p_object_header->SetUnknown28(p_action1->GetUnknown28());
+		p_object_header->SetUnknown84(p_action1->GetUnknown84());
+		p_object_header->SetOrigin(p_action1->GetOrigin());
+		p_object_header->SetUnknown90(p_action1->GetUnknown90());
+		p_object_header->MergeFrom(*p_action1);
+
+		m_unk0x30->SetInternalAction(p_object_header->Clone());
+
+		p_controller->InsertActionToList54(p_object_header);
+
+		if (MxOmni::GetInstance()->CreatePresenter(p_controller, *p_object_header) != SUCCESS) {
+			return FAILURE;
+		}
+
+		m_unk0x30->SetLoopCount(p_object_header->GetLoopCount());
+		m_unk0x30->SetFlags(p_object_header->GetFlags());
+		m_unk0x30->SetDuration(p_object_header->GetDuration());
+
+		if (m_unk0x30->GetInternalAction() == NULL) {
+			return FAILURE;
+		}
+	}
+	else if (p_object_header) {
+		delete p_object_header;
+	}
+
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100c6a50
+MxResult MxDSBuffer::ParseChunk(
+	MxStreamController* p_controller,
+	MxU32* p_data,
+	MxDSAction* p_action,
+	MxStreamChunk* p_header
+)
+{
+	// TODO STUB
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x100c6d00
+MxCore* MxDSBuffer::ReadChunk(MxU32* p_chunkData, MxU16 p_flags)
+{
+	// This function reads a chunk. If it is an object, this function returns an MxDSObject. If it is a chunk, returns a
+	// MxDSChunk.
+	MxCore* result = NULL;
+	MxU8* dataStart = (MxU8*) p_chunkData + 8;
+
+	switch (*p_chunkData) {
+	case FOURCC('M', 'x', 'O', 'b'):
+		result = DeserializeDSObjectDispatch((char**) &dataStart, p_flags);
+		break;
+	case FOURCC('M', 'x', 'C', 'h'):
+		result = new MxStreamChunk();
+		if (result != NULL && ((MxStreamChunk*) result)->ReadChunk(this, (MxU8*) p_chunkData) != SUCCESS) {
+			delete result;
+			result = NULL;
+		}
+		break;
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x100c67b0

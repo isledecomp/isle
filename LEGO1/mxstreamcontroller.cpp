@@ -148,6 +148,23 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100c1da0
+MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
+{
+	MxAutoLocker locker(&m_criticalSection);
+	MxDSAction* action = p_action->Clone();
+
+	if (action == NULL)
+	{
+		return FAILURE;
+	}
+	else
+	{
+		m_unk0x54.push_back(action);
+		return SUCCESS;
+	}
+}
+
 // STUB: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {

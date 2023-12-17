@@ -121,3 +121,10 @@ MxResult MxDiskStreamController::Tickle()
 	// TODO
 	return SUCCESS;
 }
+
+// FUNCTION: LEGO1 0x100c84a0
+void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	m_list0x74.push_back(p_buffer);
+}
