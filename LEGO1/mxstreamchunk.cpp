@@ -32,14 +32,13 @@ MxResult MxStreamChunk::ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData)
 MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 {
 	MxU32 headersize = 0;
-	if(p_chunkData)
-	{
-		SetFlags(*(MxU16*)p_chunkData);
-		SetObjectId(*(MxU32*)(p_chunkData + 2));
-		SetTime(*(MxLong*)(p_chunkData + 6));
-		SetLength(*(MxU32*)(p_chunkData + 10));
+	if (p_chunkData) {
+		SetFlags(*(MxU16*) p_chunkData);
+		SetObjectId(*(MxU32*) (p_chunkData + 2));
+		SetTime(*(MxLong*) (p_chunkData + 6));
+		SetLength(*(MxU32*) (p_chunkData + 10));
 		SetData(p_chunkData + 14);
-		headersize = (MxU32)(p_chunkData + 14) - (MxU32)p_chunkData;
+		headersize = (MxU32) (p_chunkData + 14) - (MxU32) p_chunkData;
 	}
 	return headersize;
 }
