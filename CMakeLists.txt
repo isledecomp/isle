@@ -168,6 +168,7 @@ add_library(lego1 SHARED
   LEGO1/mxregionlist.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
+  LEGO1/mxsmack.cpp
   LEGO1/mxsmkpresenter.cpp
   LEGO1/mxsoundmanager.cpp
   LEGO1/mxsoundpresenter.cpp
