@@ -151,7 +151,7 @@ MxU32 MxSmack::FUN_100cd782()
 // STUB: LEGO1 0x100cd7e8
 void MxSmack::DecodeHuffmanTrees(
 	MxU8* p_huffmanTrees,
-	MxU8* p_unk0x6ac,
+	MxU8* p_huffmanTables,
 	MxULong p_codeSize,
 	MxULong p_abSize,
 	MxULong p_detailSize,
