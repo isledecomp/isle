@@ -14,7 +14,7 @@ struct MxSmack {
 	MxU8* m_frameTypes;        // 0x6a4
 	MxU8* m_huffmanTrees;      // 0x6a8
 	MxU8* m_huffmanTables;     // 0x6ac
-	MxU32 maxFrameSize;        // 0x6b0
+	MxU32 m_maxFrameSize;      // 0x6b0
 	MxU8* m_unk0x6b4;          // 0x6b4
 
 	static MxResult LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack);

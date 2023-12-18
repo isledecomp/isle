@@ -67,8 +67,8 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 void MxSmkPresenter::VTable0x88()
 {
 	if ((m_mxSmack.m_smack.m_header.m_smkType & 1) != 0) {
-		MxU32 unk = (m_unk0x71c % m_mxSmack.m_smack.m_header.m_frames);
-		if (1 < m_unk0x71c && unk == 1)
+		MxU32 und = (m_unk0x71c % m_mxSmack.m_smack.m_header.m_frames);
+		if (1 < m_unk0x71c && und == 1)
 			m_unk0x71c = 1;
 	}
 	else {

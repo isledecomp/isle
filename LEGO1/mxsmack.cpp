@@ -38,12 +38,12 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 			memcpy(frameSizes, p_data, FRAME_COUNT(p_mxSmack) * sizeof(MxU32));
 
 			p_data += FRAME_COUNT(p_mxSmack) * sizeof(MxU32);
-			p_mxSmack->maxFrameSize = 0;
+			p_mxSmack->m_maxFrameSize = 0;
 
 			// TODO
 			for (MxU32 i = 0; i < FRAME_COUNT(p_mxSmack); i++) {
-				if (p_mxSmack->maxFrameSize < frameSizes[i])
-					p_mxSmack->maxFrameSize = frameSizes[i];
+				if (p_mxSmack->m_maxFrameSize < frameSizes[i])
+					p_mxSmack->m_maxFrameSize = frameSizes[i];
 			}
 
 			frameTypes = new MxU8[FRAME_COUNT(p_mxSmack)];
