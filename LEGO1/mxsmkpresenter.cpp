@@ -74,6 +74,7 @@ void MxSmkPresenter::VTable0x88()
 	else {
 		if (m_mxSmack.m_smack.m_header.m_frames == m_unk0x71c) {
 			m_unk0x71c = 0;
+			// TODO: struct incorrect, m_palette at wrong offset
 			memset(m_mxSmack.m_smack.m_palette, 0, sizeof(m_mxSmack.m_smack.m_palette));
 		}
 	}
