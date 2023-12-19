@@ -6,6 +6,8 @@
 
 #include <smk.h>
 
+// This might all be part of the RAD Game Tools Smacker SDK since it looks like C-style code
+
 // SIZE 0x6b8
 struct MxSmack {
 	Smack m_smack;             // 0x00
