@@ -30,7 +30,7 @@ extern "C"
 // SIZE 0x6b8
 struct MxSmack {
 	SmackTag m_smackTag;       // 0x00
-	undefined m_unk0x3f4[784]; // 0x390
+	undefined m_unk0x390[784]; // 0x390
 	MxU32* m_frameSizes;       // 0x6a0
 	MxU8* m_frameTypes;        // 0x6a4
 	MxU8* m_huffmanTrees;      // 0x6a8
