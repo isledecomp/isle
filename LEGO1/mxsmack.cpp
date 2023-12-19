@@ -123,7 +123,6 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 	return result;
 
 #undef FRAME_COUNT
-#undef HEADER
 }
 
 // FUNCTION: LEGO1 0x100c5d40
