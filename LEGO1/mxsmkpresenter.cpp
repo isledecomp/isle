@@ -54,7 +54,7 @@ void MxSmkPresenter::CreateBitmap()
 		delete m_bitmap;
 
 	m_bitmap = new MxBitmap;
-	m_bitmap->SetSize(m_mxSmack.m_smack.m_header.m_width, m_mxSmack.m_smack.m_header.m_height, NULL, FALSE);
+	m_bitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
 }
 
 // STUB: LEGO1 0x100b3a00
@@ -66,16 +66,16 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b4260
 void MxSmkPresenter::VTable0x88()
 {
-	if ((m_mxSmack.m_smack.m_header.m_smkType & 1) != 0) {
-		MxU32 und = (m_unk0x71c % m_mxSmack.m_smack.m_header.m_frames);
+	if ((m_mxSmack.m_smackTag.SmackerType & 1) != 0) {
+		MxU32 und = (m_unk0x71c % m_mxSmack.m_smackTag.Frames);
 		if (1 < m_unk0x71c && und == 1)
 			m_unk0x71c = 1;
 	}
 	else {
-		if (m_mxSmack.m_smack.m_header.m_frames == m_unk0x71c) {
+		if (m_mxSmack.m_smackTag.Frames == m_unk0x71c) {
 			m_unk0x71c = 0;
-			// TODO: struct incorrect, m_palette at wrong offset
-			memset(m_mxSmack.m_smack.m_palette, 0, sizeof(m_mxSmack.m_smack.m_palette));
+			// TODO: struct incorrect, Palette at wrong offset?
+			memset(m_mxSmack.m_smackTag.Palette, 0, sizeof(m_mxSmack.m_smackTag.Palette));
 		}
 	}
 }
