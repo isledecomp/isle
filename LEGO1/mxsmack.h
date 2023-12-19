@@ -10,10 +10,10 @@
 // but present in SMACK.LIB and used directly by Mindscape.
 extern "C"
 {
-	// FUNCTION: LEGO1 0x100cd782
+	// (SMACK.LIB) FUNCTION: LEGO1 0x100cd782
 	u32 SmackGetSizeTables();
 
-	// FUNCTION: LEGO1 0x100cd7e8
+	// (SMACK.LIB) FUNCTION: LEGO1 0x100cd7e8
 	void SmackDoTables(
 		u8* p_huffmanTrees,
 		u8* p_huffmanTables,
@@ -23,7 +23,7 @@ extern "C"
 		u32 p_typeSize
 	);
 
-	// FUNCTION: LEGO1 0x100d052c
+	// (SMACK.LIB) FUNCTION: LEGO1 0x100d052c
 	u32 SmackGetSizeDeltas(u32 p_width, u32 p_height);
 }
 
