@@ -6,8 +6,6 @@
 
 #include <smk.h>
 
-// This might all be part of the RAD Game Tools Smacker SDK since it looks like C-style code
-
 // SIZE 0x6b8
 struct MxSmack {
 	Smack m_smack;             // 0x00
@@ -21,8 +19,10 @@ struct MxSmack {
 
 	static MxResult LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack);
 	static void Destroy(MxSmack* p_mxSmack);
-	static MxU32 FUN_100cd782();
-	static void DecodeHuffmanTrees(
+
+	// Part of the Smacker SDK
+	static MxU32 SmackGetSizeTables();
+	static void SmackDoTables(
 		MxU8* p_huffmanTrees,
 		MxU8* p_huffmanTables,
 		MxULong p_codeSize,
@@ -30,7 +30,7 @@ struct MxSmack {
 		MxULong p_detailSize,
 		MxULong p_typeSize
 	);
-	static MxULong FUN_100d052c(MxULong p_width, MxULong p_height);
+	static MxULong SmackGetSizeDeltas(MxULong p_width, MxULong p_height);
 };
 
 #endif // MXSMACK_H

@@ -69,13 +69,13 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 
 					p_mxSmack->m_huffmanTables = new MxU8
 						[HEADER(p_mxSmack).m_codeSize + HEADER(p_mxSmack).m_abSize + HEADER(p_mxSmack).m_detailSize +
-						 HEADER(p_mxSmack).m_typeSize + FUN_100cd782()];
+						 HEADER(p_mxSmack).m_typeSize + SmackGetSizeTables()];
 
 					if (!p_mxSmack->m_huffmanTables) {
 						result = FAILURE;
 					}
 					else {
-						DecodeHuffmanTrees(
+						SmackDoTables(
 							huffmanTrees,
 							p_mxSmack->m_huffmanTables,
 							HEADER(p_mxSmack).m_codeSize,
@@ -84,7 +84,7 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 							HEADER(p_mxSmack).m_typeSize
 						);
 
-						MxU32 size = FUN_100d052c(HEADER(p_mxSmack).m_width, HEADER(p_mxSmack).m_height) + 32;
+						MxU32 size = SmackGetSizeDeltas(HEADER(p_mxSmack).m_width, HEADER(p_mxSmack).m_height) + 32;
 						p_mxSmack->m_unk0x6b4 = new MxU8[size];
 						memset(p_mxSmack->m_unk0x6b4, 0, size);
 
@@ -142,14 +142,16 @@ void MxSmack::Destroy(MxSmack* p_mxSmack)
 		delete[] p_mxSmack->m_unk0x6b4;
 }
 
+// Part of the Smacker SDK
+
 // FUNCTION: LEGO1 0x100cd782
-MxU32 MxSmack::FUN_100cd782()
+MxU32 MxSmack::SmackGetSizeTables()
 {
 	return 29800;
 }
 
 // STUB: LEGO1 0x100cd7e8
-void MxSmack::DecodeHuffmanTrees(
+void MxSmack::SmackDoTables(
 	MxU8* p_huffmanTrees,
 	MxU8* p_huffmanTables,
 	MxULong p_codeSize,
@@ -162,7 +164,7 @@ void MxSmack::DecodeHuffmanTrees(
 }
 
 // STUB: LEGO1 0x100d052c
-MxULong MxSmack::FUN_100d052c(MxULong p_width, MxULong p_height)
+MxULong MxSmack::SmackGetSizeDeltas(MxULong p_width, MxULong p_height)
 {
 	// TODO
 	return 0;
