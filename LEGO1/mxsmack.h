@@ -11,20 +11,20 @@
 extern "C"
 {
 	// FUNCTION: LEGO1 0x100cd782
-	MxU32 SmackGetSizeTables();
+	u32 SmackGetSizeTables();
 
 	// FUNCTION: LEGO1 0x100cd7e8
 	void SmackDoTables(
-		MxU8* p_huffmanTrees,
-		MxU8* p_huffmanTables,
-		MxULong p_codeSize,
-		MxULong p_abSize,
-		MxULong p_detailSize,
-		MxULong p_typeSize
+		u8* p_huffmanTrees,
+		u8* p_huffmanTables,
+		u32 p_codeSize,
+		u32 p_abSize,
+		u32 p_detailSize,
+		u32 p_typeSize
 	);
 
 	// FUNCTION: LEGO1 0x100d052c
-	MxULong SmackGetSizeDeltas(MxULong p_width, MxULong p_height);
+	u32 SmackGetSizeDeltas(u32 p_width, u32 p_height);
 }
 
 // SIZE 0x6b8
