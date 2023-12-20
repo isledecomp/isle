@@ -11,12 +11,6 @@ template <class T>
 class MxListCursor;
 
 template <class T>
-class MxPtrList : public MxList<T*> {
-public:
-	MxPtrList(void (*p_destroy)(T*) = Destroy) { m_customDestructor = p_destroy; }
-};
-
-template <class T>
 class MxListEntry {
 public:
 	MxListEntry() {}
@@ -62,9 +56,9 @@ public:
 	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); };
 	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
-	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 
 	friend class MxListCursor<T>;
+	using MxCollection<T>::SetDestroy;
 
 protected:
 	MxListEntry<T>* m_first; // 0x10
@@ -72,6 +66,16 @@ protected:
 
 	void DeleteEntry(MxListEntry<T>*);
 	MxListEntry<T>* InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
+};
+
+template <class T>
+class MxPtrList : public MxList<T*> {
+public:
+	MxPtrList(MxBool p_ownership) { SetOwnership(p_ownership); }
+
+	static void Destroy(T* p_obj) { delete p_obj; };
+
+	void SetOwnership(MxBool p_ownership) { SetDestroy(p_ownership ? Destroy : MxCollection<T*>::Destroy); }
 };
 
 template <class T>

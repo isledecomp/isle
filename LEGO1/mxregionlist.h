@@ -3,8 +3,78 @@
 
 #include "mxlist.h"
 
-struct MxRegionTopBottom;
-struct MxRegionLeftRight;
+// SIZE 0x08
+struct MxRegionLeftRight {
+	MxRegionLeftRight(MxS32 p_left, MxS32 p_right)
+	{
+		m_left = p_left;
+		m_right = p_right;
+	}
+
+	MxRegionLeftRight* Clone() { return new MxRegionLeftRight(m_left, m_right); }
+
+	inline MxS32 GetLeft() { return m_left; }
+	inline MxS32 GetRight() { return m_right; }
+
+	inline void SetLeft(MxS32 p_left) { m_left = p_left; }
+	inline void SetRight(MxS32 p_right) { m_right = p_right; }
+
+private:
+	MxS32 m_left;
+	MxS32 m_right;
+};
+
+// VTABLE: LEGO1 0x100dcc40
+// class MxCollection<MxRegionLeftRight *>
+
+// VTABLE: LEGO1 0x100dcc58
+// class MxList<MxRegionLeftRight *>
+
+// VTABLE: LEGO1 0x100dcc70
+// class MxPtrList<MxRegionLeftRight>
+
+// VTABLE: LEGO1 0x100dcc88
+// SIZE 0x18
+class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
+public:
+	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(TRUE) {}
+};
+
+// VTABLE: LEGO1 0x100dcbf8
+// class MxPtrListCursor<MxRegionLeftRight>
+
+// VTABLE: LEGO1 0x100dcc28
+// class MxListCursor<MxRegionLeftRight *>
+
+// VTABLE: LEGO1 0x100dcc10
+class MxRegionLeftRightListCursor : public MxPtrListCursor<MxRegionLeftRight> {
+public:
+	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
+};
+
+// SIZE 0x0c
+struct MxRegionTopBottom {
+	MxRegionTopBottom(MxRect32& p_rect);
+	MxRegionTopBottom(MxS32 p_top, MxS32 p_bottom);
+	~MxRegionTopBottom() { delete m_leftRightList; }
+
+	MxRegionTopBottom* Clone();
+	void FUN_100c5280(MxS32 p_left, MxS32 p_right);
+	MxBool FUN_100c57b0(MxRect32& p_rect);
+
+	inline MxS32 GetTop() { return m_top; }
+	inline MxS32 GetBottom() { return m_bottom; }
+
+	inline void SetTop(MxS32 p_top) { m_top = p_top; }
+	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
+
+	friend class MxRegionList;
+
+private:
+	MxS32 m_top;
+	MxS32 m_bottom;
+	MxRegionLeftRightList* m_leftRightList;
+};
 
 // VTABLE: LEGO1 0x100dcb10
 // class MxCollection<MxRegionTopBottom *>
@@ -19,8 +89,7 @@ struct MxRegionLeftRight;
 // SIZE 0x18
 class MxRegionList : public MxPtrList<MxRegionTopBottom> {
 public:
-	MxRegionList() : MxPtrList<MxRegionTopBottom>(Destroy) {}
-	static void Destroy(MxRegionTopBottom*);
+	MxRegionList() : MxPtrList<MxRegionTopBottom>(TRUE) {}
 };
 
 // VTABLE: LEGO1 0x100dcb70
@@ -39,40 +108,14 @@ public:
 	MxRegionListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
 };
 
-// VTABLE: LEGO1 0x100dcc40
-// class MxCollection<MxRegionLeftRight *>
-
-// VTABLE: LEGO1 0x100dcc58
-// class MxList<MxRegionLeftRight *>
-
-// VTABLE: LEGO1 0x100dcc70
-// class MxPtrList<MxRegionLeftRight>
-
-// VTABLE: LEGO1 0x100dcc88
-// SIZE 0x18
-class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
-public:
-	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(Destroy) {}
-	static void Destroy(MxRegionLeftRight*);
-};
-
-// VTABLE: LEGO1 0x100dcbf8
-// class MxPtrListCursor<MxRegionLeftRight>
-
-// VTABLE: LEGO1 0x100dcc28
-// class MxListCursor<MxRegionLeftRight *>
-
-// VTABLE: LEGO1 0x100dcc10
-class MxRegionLeftRightListCursor : public MxPtrListCursor<MxRegionLeftRight> {
-public:
-	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
-};
-
 // TEMPLATE: LEGO1 0x100c32e0
 // MxCollection<MxRegionTopBottom *>::Compare
 
 // TEMPLATE: LEGO1 0x100c3340
 // MxCollection<MxRegionTopBottom *>::Destroy
+
+// TEMPLATE: LEGO1 0x100c33e0
+// MxPtrList<MxRegionTopBottom>::Destroy
 
 // SYNTHETIC: LEGO1 0x100c34d0
 // MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
@@ -124,6 +167,9 @@ public:
 
 // SYNTHETIC: LEGO1 0x100c4f50
 // MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100c4e80
+// MxPtrList<MxRegionLeftRight>::Destroy
 
 // SYNTHETIC: LEGO1 0x100c4fc0
 // MxList<MxRegionLeftRight *>::`scalar deleting destructor'

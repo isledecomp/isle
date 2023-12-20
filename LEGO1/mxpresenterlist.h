@@ -2,8 +2,7 @@
 #define MXPRESENTERLIST_H
 
 #include "mxlist.h"
-
-class MxPresenter;
+#include "mxpresenter.h"
 
 // VTABLE: LEGO1 0x100d62f0
 // class MxPtrList<MxPresenter>
@@ -12,7 +11,13 @@ class MxPresenter;
 // SIZE 0x18
 class MxPresenterList : public MxPtrList<MxPresenter> {
 public:
-	virtual MxS8 Compare(MxPresenter*, MxPresenter*) override; // vtable+0x14
+	MxPresenterList(MxBool p_ownership = FALSE) : MxPtrList<MxPresenter>(p_ownership) {}
+
+	// FUNCTION: LEGO1 0x1001cd00
+	virtual MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
+	{
+		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
+	}; // vtable+0x14
 };
 
 // VTABLE: LEGO1 0x100d6488

@@ -84,7 +84,6 @@ add_library(lego1 SHARED
   LEGO1/legopartpresenter.cpp
   LEGO1/legopathactor.cpp
   LEGO1/legopathcontroller.cpp
-  LEGO1/legopathcontrollerlist.cpp
   LEGO1/legopathpresenter.cpp
   LEGO1/legophonemepresenter.cpp
   LEGO1/legoplantmanager.cpp
@@ -99,7 +98,6 @@ add_library(lego1 SHARED
   LEGO1/legovehiclebuildstate.cpp
   LEGO1/legovideomanager.cpp
   LEGO1/legoworld.cpp
-  LEGO1/legoworldlist.cpp
   LEGO1/legoworldpresenter.cpp
   LEGO1/motorcycle.cpp
   LEGO1/mxactionnotificationparam.cpp
@@ -121,7 +119,6 @@ add_library(lego1 SHARED
   LEGO1/mxdiskstreamprovider.cpp
   LEGO1/mxdisplaysurface.cpp
   LEGO1/mxdsaction.cpp
-  LEGO1/mxdsactionlist.cpp
   LEGO1/mxdsanim.cpp
   LEGO1/mxdsbuffer.cpp
   LEGO1/mxdschunk.cpp
@@ -161,11 +158,9 @@ add_library(lego1 SHARED
   LEGO1/mxpalette.cpp
   LEGO1/mxparam.cpp
   LEGO1/mxpresenter.cpp
-  LEGO1/mxpresenterlist.cpp
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
-  LEGO1/mxregionlist.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmkpresenter.cpp
@@ -173,13 +168,11 @@ add_library(lego1 SHARED
   LEGO1/mxsoundpresenter.cpp
   LEGO1/mxstillpresenter.cpp
   LEGO1/mxstreamchunk.cpp
-  LEGO1/mxstreamchunklist.cpp
   LEGO1/mxstreamcontroller.cpp
   LEGO1/mxstreamer.cpp
   LEGO1/mxstreamlist.cpp
   LEGO1/mxstreamprovider.cpp
   LEGO1/mxstring.cpp
-  LEGO1/mxstringlist.cpp
   LEGO1/mxthread.cpp
   LEGO1/mxticklemanager.cpp
   LEGO1/mxtimer.cpp

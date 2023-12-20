@@ -18,9 +18,14 @@ class MxDSActionList : public MxList<MxDSAction*> {
 public:
 	MxDSActionList() { this->m_unk0x18 = 0; }
 
-	virtual MxS8 Compare(MxDSAction*, MxDSAction*) override; // vtable+0x14
+	// FUNCTION: LEGO1 0x100c9c90
+	virtual MxS8 MxDSActionList::Compare(MxDSAction* p_a, MxDSAction* p_b) override
+	{
+		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
+	} // vtable+0x14
 
-	static void Destroy(MxDSAction* p_action);
+	// FUNCTION: LEGO1 0x100c9cb0
+	static void Destroy(MxDSAction* p_action) { delete p_action; }
 
 private:
 	undefined m_unk0x18;

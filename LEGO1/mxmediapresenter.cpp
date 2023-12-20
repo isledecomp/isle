@@ -8,6 +8,8 @@
 #include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
+DECOMP_SIZE_ASSERT(MxStreamChunkList, 0x18);
+DECOMP_SIZE_ASSERT(MxStreamChunkListCursor, 0x10);
 
 // FUNCTION: LEGO1 0x1000c550
 MxMediaPresenter::~MxMediaPresenter()

@@ -10,7 +10,7 @@
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 
 // STUB: LEGO1 0x1001ca40
-LegoWorld::LegoWorld()
+LegoWorld::LegoWorld() : m_list0x68(TRUE)
 {
 	// TODO
 }
