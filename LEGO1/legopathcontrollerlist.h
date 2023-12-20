@@ -15,7 +15,7 @@ public:
 	LegoPathControllerList(MxBool p_ownership = FALSE) : MxPtrList<LegoPathController>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001d210
-	virtual MxS8 LegoPathControllerList::Compare(LegoPathController* p_a, LegoPathController* p_b) override
+	virtual MxS8 Compare(LegoPathController* p_a, LegoPathController* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14
