@@ -168,6 +168,7 @@ add_library(lego1 SHARED
   LEGO1/mxregionlist.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
+  LEGO1/mxsmack.cpp
   LEGO1/mxsmkpresenter.cpp
   LEGO1/mxsoundmanager.cpp
   LEGO1/mxsoundpresenter.cpp
@@ -232,11 +233,10 @@ if (MINGW)
 endif()
 
 # Additional include directories
-
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/util")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smk")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)
@@ -254,8 +254,10 @@ if (ISLE_USE_DX5)
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
 endif()
 
+target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
+
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm)
+target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm smack)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
