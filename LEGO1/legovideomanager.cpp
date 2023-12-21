@@ -75,10 +75,53 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
 	EnableFullScreenMovie(p_enable, TRUE);
 }
 
-// STUB: LEGO1 0x1007c310
+// FUNCTION: LEGO1 0x1007c310
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 {
-	// TODO
+	if (m_isFullscreenMovie != p_enable) {
+		m_isFullscreenMovie = p_enable;
+
+		if (p_enable) {
+			m_palette = m_videoParam.GetPalette()->Clone();
+			OverrideSkyColor(FALSE);
+
+			m_displaySurface->GetVideoParam().Flags().SetF1bit3(p_scale);
+
+			m_unk0xe4 = FALSE;
+			m_unk0x500 = TRUE;
+		}
+		else {
+			m_displaySurface->FUN_100ba640();
+			m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
+
+			// restore previous pallete
+			RealizePalette(m_palette);
+			delete m_palette;
+			m_palette = NULL;
+
+			// update region where video used to be
+			MxRect32 rect(
+				0,
+				0,
+				m_videoParam.GetRect().GetRight() - m_videoParam.GetRect().GetLeft(),
+				m_videoParam.GetRect().GetBottom() - m_videoParam.GetRect().GetTop()
+			);
+
+			InvalidateRect(rect);
+			UpdateRegion();
+			OverrideSkyColor(TRUE);
+
+			m_unk0xe4 = TRUE;
+			m_unk0x500 = FALSE;
+		}
+	}
+
+	if (p_enable) {
+		m_displaySurface->GetVideoParam().Flags().SetF1bit3(p_scale);
+	}
+	else {
+		m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x1007c440
@@ -95,6 +138,12 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 
 	// TODO 3d manager
 	// m_3dManager->m_pViewport->VTable0x1c(red, green, blue)
+}
+
+// FUNCTION: LEGO1 0x1007c4c0
+void LegoVideoManager::OverrideSkyColor(MxBool p_shouldOverride)
+{
+	this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);
 }
 
 // STUB: LEGO1 0x1007c560
