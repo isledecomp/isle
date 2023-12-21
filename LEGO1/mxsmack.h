@@ -2,6 +2,8 @@
 #define MXSMACK_H
 
 #include "decomp.h"
+#include "mxbitmap.h"
+#include "mxrectlist.h"
 #include "mxtypes.h"
 
 #include <smack.h>
@@ -40,6 +42,14 @@ struct MxSmack {
 
 	static MxResult LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack);
 	static void Destroy(MxSmack* p_mxSmack);
+	static void FUN_100c5db0(
+		MxBITMAPINFO* p_bitmapInfo,
+		MxU8* p_bitmapData,
+		MxSmack* p_mxSmack,
+		MxU8* p_chunkData,
+		MxBool p_und,
+		MxRectList* p_list
+	);
 };
 
 #endif // MXSMACK_H

@@ -139,3 +139,16 @@ void MxSmack::Destroy(MxSmack* p_mxSmack)
 	if (p_mxSmack->m_unk0x6b4)
 		delete[] p_mxSmack->m_unk0x6b4;
 }
+
+// STUB: LEGO1 0x100c5db0
+void MxSmack::FUN_100c5db0(
+	MxBITMAPINFO* p_bitmapInfo,
+	MxU8* p_bitmapData,
+	MxSmack* p_mxSmack,
+	MxU8* p_chunkData,
+	MxBool p_und,
+	MxRectList* p_list
+)
+{
+	// TODO
+}

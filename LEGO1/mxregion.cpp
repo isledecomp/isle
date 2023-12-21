@@ -10,8 +10,7 @@ DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 MxRegion::MxRegion()
 {
 	m_list = new MxRegionList;
-	m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
-	m_rect.SetSize(MxSize32(-1, -1));
+	m_rect = MxRect32(INT_MAX, INT_MAX, -1, -1);
 }
 
 // FUNCTION: LEGO1 0x100c3660
@@ -31,14 +30,14 @@ MxRegion::~MxRegion()
 void MxRegion::Reset()
 {
 	m_list->DeleteAll();
-	m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
-	m_rect.SetSize(MxSize32(-1, -1));
+	m_rect = MxRect32(INT_MAX, INT_MAX, -1, -1);
 }
 
 // FUNCTION: LEGO1 0x100c3750
 void MxRegion::VTable0x18(MxRect32& p_rect)
 {
-	MxRect32 rect(p_rect.GetPoint(), MxSize32(p_rect.GetRight(), p_rect.GetBottom()));
+	MxRect32 rect(p_rect);
+	MxRect32 newRect;
 	MxRegionListCursor cursor(m_list);
 	MxRegionTopBottom* topBottom;
 
@@ -50,7 +49,7 @@ void MxRegion::VTable0x18(MxRect32& p_rect)
 		}
 		else if (rect.GetTop() < topBottom->GetBottom()) {
 			if (rect.GetTop() < topBottom->GetTop()) {
-				MxRect32 newRect(rect);
+				newRect = rect;
 				newRect.SetBottom(topBottom->GetTop());
 				MxRegionTopBottom* newTopBottom = new MxRegionTopBottom(newRect);
 				cursor.Prepend(newTopBottom);
