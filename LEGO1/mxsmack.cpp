@@ -6,7 +6,7 @@ DECOMP_SIZE_ASSERT(SmackTag, 0x390);
 DECOMP_SIZE_ASSERT(MxSmack, 0x6b8);
 
 // FUNCTION: LEGO1 0x100c5a90
-MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
+MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 {
 // Macros for readability
 #define FRAME_COUNT(mxSmack) (p_mxSmack->m_smackTag.Frames + (p_mxSmack->m_smackTag.SmackerType & 1))
@@ -82,8 +82,7 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 							p_mxSmack->m_smackTag.typesize
 						);
 
-						MxU32 size =
-							::SmackGetSizeDeltas(p_mxSmack->m_smackTag.Width, p_mxSmack->m_smackTag.Height) + 32;
+						MxU32 size = SmackGetSizeDeltas(p_mxSmack->m_smackTag.Width, p_mxSmack->m_smackTag.Height) + 32;
 						p_mxSmack->m_unk0x6b4 = new MxU8[size];
 						memset(p_mxSmack->m_unk0x6b4, 0, size);
 
@@ -92,7 +91,7 @@ MxResult MxSmack::LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack)
 
 						*data = 1;
 						data++;
-						*data = 0;
+						*data = NULL; // MxU8* bitmapData
 						data++;
 						*data = p_mxSmack->m_smackTag.Width / 4;
 						data++;
@@ -140,15 +139,88 @@ void MxSmack::Destroy(MxSmack* p_mxSmack)
 		delete[] p_mxSmack->m_unk0x6b4;
 }
 
-// STUB: LEGO1 0x100c5db0
-void MxSmack::FUN_100c5db0(
+// This should be refactored to somewhere else
+inline MxLong AbsFlipped(MxLong p_value)
+{
+	return p_value > 0 ? p_value : -p_value;
+}
+
+// FUNCTION: LEGO1 0x100c5db0
+MxResult MxSmack::LoadFrame(
 	MxBITMAPINFO* p_bitmapInfo,
 	MxU8* p_bitmapData,
 	MxSmack* p_mxSmack,
 	MxU8* p_chunkData,
-	MxBool p_und,
+	MxBool p_paletteChanged,
 	MxRectList* p_list
 )
 {
+	p_bitmapInfo->m_bmiHeader.biHeight = -AbsFlipped(p_bitmapInfo->m_bmiHeader.biHeight);
+	*(MxU8**) (p_mxSmack->m_unk0x6b4 + 4) = p_bitmapData;
+
+	// Reference: https://wiki.multimedia.cx/index.php/Smacker#Palette_Chunk
+	if (p_paletteChanged) {
+		MxU8 palette[772];
+
+		MxU8* intoChunk = p_chunkData + 1;
+		MxU8* intoPalette = palette;
+		MxU16 paletteIndex = 0;
+		// TODO: struct incorrect, Palette at wrong offset?
+		MxU8* currentPalette = &p_mxSmack->m_smackTag.Palette[4];
+
+		do {
+			if (*intoChunk & 0x80) {
+				MxU8 length = (*intoChunk & 0x7f) + 1;
+				memcpy(intoPalette, &currentPalette[paletteIndex * 3], length * 3);
+				intoPalette += length * 3;
+				paletteIndex += length;
+				intoChunk++;
+			}
+			else {
+				if (*intoChunk & 0x40) {
+					MxU8 length = (*intoChunk & 0x3f) + 1;
+					memcpy(intoPalette, &currentPalette[*(intoChunk + 1) * 3], length * 3);
+					intoPalette += length * 3;
+					paletteIndex += length;
+					intoChunk += 2;
+				}
+				else {
+					*(MxU32*) intoPalette = *(MxU32*) intoChunk;
+					intoPalette += 3;
+					paletteIndex++;
+					intoChunk += 3;
+				}
+			}
+		} while (paletteIndex < 256);
+
+		for (MxU32 i = 0; i < 256; i++) {
+			memcpy(currentPalette, &palette[i * 3], 3);
+			currentPalette += 3;
+			p_bitmapInfo->m_bmiColors[i].rgbBlue = palette[i * 3 + 2] * 4;
+			p_bitmapInfo->m_bmiColors[i].rgbGreen = palette[i * 3 + 1] * 4;
+			p_bitmapInfo->m_bmiColors[i].rgbRed = palette[i * 3] * 4;
+		}
+
+		p_chunkData += *p_chunkData * 4;
+	}
+
+	SmackDoFrameToBuffer(p_chunkData, p_mxSmack->m_huffmanTables, p_mxSmack->m_unk0x6b4);
+
+	MxS16 und1 = 1;
+	MxU32 und2[4];
+	MxRect32 rect;
+
+	while (FUN_100c6050(p_mxSmack->m_unk0x6b4, &und1, und2, &rect)) {
+		MxRect32* newRect = new MxRect32(rect);
+		p_list->Append(newRect);
+	}
+
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100c6050
+MxBool MxSmack::FUN_100c6050(MxU8* p_unk0x6b4, MxS16* p_und1, MxU32* p_und2, MxRect32* p_rect)
+{
 	// TODO
+	return TRUE;
 }
