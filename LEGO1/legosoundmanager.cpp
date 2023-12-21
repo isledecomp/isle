@@ -18,7 +18,7 @@ LegoSoundManager::~LegoSoundManager()
 void LegoSoundManager::Init()
 {
 	m_unk0x40 = 0;
-	m_unk0x3c = 0;
+	m_listener = NULL;
 }
 
 // STUB: LEGO1 0x100299b0
@@ -26,10 +26,43 @@ void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 {
 }
 
-// STUB: LEGO1 0x100299f0
+// FUNCTION: LEGO1 0x100299f0
 MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	return FAILURE;
+	MxBool locked = FALSE;
+	MxResult result = FAILURE;
+	if (MxSoundManager::Create(10, FALSE) == SUCCESS) {
+		m_criticalSection.Enter();
+		locked = TRUE;
+		if (MxOmni::IsSound3D()) {
+			if (m_dsBuffer->QueryInterface(IID_IDirectSound3DListener, (LPVOID*) &m_listener) == S_OK) {
+				MxOmni* omni = MxOmni::GetInstance();
+				IDirectSound* sound;
+				if (omni && omni->GetSoundManager() && (sound = omni->GetSoundManager()->GetDirectSound())) {
+					DSCAPS caps;
+					memset(&caps, 0, sizeof(DSCAPS));
+					caps.dwSize = sizeof(DSCAPS);
+
+					if (sound->GetCaps(&caps) == S_OK && caps.dwMaxHw3DAllBuffers == 0) {
+						m_listener->SetDistanceFactor(0.026315790f, 0);
+						m_listener->SetRolloffFactor(10, 0);
+					}
+				}
+			}
+		}
+
+		// todo
+		result = SUCCESS;
+	}
+
+	if (result != SUCCESS) {
+		Destroy();
+	}
+
+	if (locked) {
+		m_criticalSection.Leave();
+	}
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1002a390

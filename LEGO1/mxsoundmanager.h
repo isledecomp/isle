@@ -24,7 +24,7 @@ public:
 
 	MxS32 FUN_100aecf0(MxU32 p_undefined);
 
-private:
+protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 	MxPresenter* FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId);

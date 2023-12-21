@@ -18,7 +18,7 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk0x3c;
+	IDirectSound3DListener* m_listener;
 	undefined4 m_unk0x40;
 };
 
