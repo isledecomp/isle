@@ -386,7 +386,7 @@ void LegoOmni::Init()
 	MxOmni::Init();
 	m_unk0x68 = 0;
 	m_inputMgr = NULL;
-	m_renderMgr = 0;
+	m_renderMgr = NULL;
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
