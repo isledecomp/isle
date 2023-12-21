@@ -19,9 +19,9 @@
 #include "mxdsfile.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
-#include "mxunknown100dbdbc.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxunknown100dbdbc.h"
 
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
 
