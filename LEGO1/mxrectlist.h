@@ -1,5 +1,5 @@
-#ifndef MxRectList_H
-#define MxRectList_H
+#ifndef MXRECTLIST_H
+#define MXRECTLIST_H
 
 #include "mxlist.h"
 #include "mxrect32.h"
@@ -83,4 +83,4 @@ public:
 // TEMPLATE: LEGO1 0x100b4210
 // MxRectListCursor::~MxRectListCursor
 
-#endif // MxRectList_H
+#endif // MXRECTLIST_H
