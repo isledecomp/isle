@@ -233,7 +233,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 		Matrix4 mat2 = mat.GetMatrix();
 		float s = sin(0.5235987901687622); // PI / 6, 30 deg
 		float c = cos(0.5235987901687622); // PI / 6, 30 deg
-		for (int i = 0; i < 4; i++) {
+		for (MxS32 i = 0; i < 4; i++) {
 			mat.GetMatrix()[i][1] = mat2[i][1] * c - mat2[i][2] * s;
 			mat.GetMatrix()[i][2] = mat2[i][2] * c + mat2[i][1] * s;
 		}
@@ -328,14 +328,13 @@ MxResult HelicopterSubclass::FUN_100040a0(Vector4Impl& p_v, float p_f)
 	if (state == 1) {
 		p_v.EqualsImpl(m_unk0x0.GetVector().elements);
 		p_v[3] = acos(p_v[3]) * (1 - p_f) * 2.0;
-		p_v.NormalizeQuaternion();
-		return SUCCESS;
+		return p_v.NormalizeQuaternion();
 	}
 	else if (state == 2) {
 		p_v.EqualsImpl(m_unk0x18.GetVector().elements);
 		p_v[3] = acos(p_v[3]) * p_f * 2.0;
 		p_v.NormalizeQuaternion();
-		return SUCCESS;
+		return p_v.NormalizeQuaternion();
 	}
 	else if (state == 3) {
 		double d1 = p_v.Dot(&m_unk0x0, &m_unk0x18), d2;
@@ -350,7 +349,7 @@ MxResult HelicopterSubclass::FUN_100040a0(Vector4Impl& p_v, float p_f)
 				d1 = 1 - p_f;
 				d2 = p_f;
 			}
-			for (int i = 0; i < 4; i++) {
+			for (MxS32 i = 0; i < 4; i++) {
 				p_v[i] = m_unk0x18[i] * d2 + m_unk0x0[i] * d1;
 			}
 			return SUCCESS;
@@ -361,7 +360,7 @@ MxResult HelicopterSubclass::FUN_100040a0(Vector4Impl& p_v, float p_f)
 		p_v[3] = m_unk0x0[2];
 		d1 = sin((1 - p_f) * 1.570796326794895);
 		d2 = sin(p_f * 1.570796326794895);
-		for (int i = 0; i < 3; i++) {
+		for (MxS32 i = 0; i < 3; i++) {
 			p_v[i] = m_unk0x0[i] * d1 + p_v[i] * d2;
 		}
 		return SUCCESS;
