@@ -10,8 +10,7 @@ DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 MxRegion::MxRegion()
 {
 	m_list = new MxRegionList;
-	m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
-	m_rect.SetSize(MxSize32(-1, -1));
+	m_rect = MxRect32(INT_MAX, INT_MAX, -1, -1);
 }
 
 // FUNCTION: LEGO1 0x100c3660
@@ -31,8 +30,7 @@ MxRegion::~MxRegion()
 void MxRegion::Reset()
 {
 	m_list->DeleteAll();
-	m_rect.SetPoint(MxPoint32(INT_MAX, INT_MAX));
-	m_rect.SetSize(MxSize32(-1, -1));
+	m_rect = MxRect32(INT_MAX, INT_MAX, -1, -1);
 }
 
 // FUNCTION: LEGO1 0x100c3750
