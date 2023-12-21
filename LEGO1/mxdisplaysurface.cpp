@@ -28,10 +28,55 @@ void MxDisplaySurface::Reset()
 	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
 }
 
-// STUB: LEGO1 0x100ba640
+// FUNCTION: LEGO1 0x100ba640
 void MxDisplaySurface::FUN_100ba640()
 {
-	// TODO
+	int backbuffers;
+	DDSURFACEDESC desc;
+	HRESULT hr;
+	int height;
+
+	if (!m_videoParam.Flags().GetFlipSurfaces()) {
+		backbuffers = 1;
+	}
+	else {
+		backbuffers = m_videoParam.GetBackBuffers() + 1;
+	}
+
+	for (MxU32 i = 0; i < backbuffers; i++) {
+		memset(&desc, 0, sizeof(DDSURFACEDESC));
+
+		desc.dwSize = sizeof(DDSURFACEDESC);
+		hr = m_ddSurface2->Lock(NULL, &desc, DDLOCK_WAIT, NULL);
+		if (hr == DDERR_SURFACELOST) {
+			m_ddSurface2->Restore();
+			hr = m_ddSurface2->Lock(NULL, &desc, DDLOCK_WAIT, NULL);
+		}
+
+		if (hr != S_OK) {
+			return;
+		}
+
+		MxU8* surface = (MxU8*) desc.lpSurface;
+		height = m_videoParam.GetRect().GetBottom() - m_videoParam.GetRect().GetTop();
+		if (height != -1) {
+			do {
+				memset(
+					surface,
+					0,
+					(m_videoParam.GetRect().GetRight() - m_videoParam.GetRect().GetLeft() + 1) *
+						desc.ddpfPixelFormat.dwRGBBitCount
+				);
+
+				surface += desc.lPitch;
+			} while (height--);
+		}
+
+		m_ddSurface2->Unlock(desc.lpSurface);
+		if (m_videoParam.Flags().GetFlipSurfaces()) {
+			m_ddSurface1->Flip(NULL, 1);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100ba790
