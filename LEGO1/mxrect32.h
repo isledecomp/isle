@@ -40,14 +40,6 @@ public:
 		return *this;
 	}
 
-	inline void CopyFrom(const MxRect32& p_rect)
-	{
-		this->m_left = p_rect.m_left;
-		this->m_top = p_rect.m_top;
-		this->m_right = p_rect.m_right;
-		this->m_bottom = p_rect.m_bottom;
-	}
-
 	inline void Intersect(const MxRect32& p_rect)
 	{
 		m_left = Max(p_rect.m_left, m_left);
@@ -107,6 +99,14 @@ public:
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
 private:
+	inline void CopyFrom(const MxRect32& p_rect)
+	{
+		this->m_left = p_rect.m_left;
+		this->m_top = p_rect.m_top;
+		this->m_right = p_rect.m_right;
+		this->m_bottom = p_rect.m_bottom;
+	}
+
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
 	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
 

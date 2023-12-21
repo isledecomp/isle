@@ -12,6 +12,12 @@ public:
 		this->m_y = p_y;
 	}
 
+	MxPoint32(const MxPoint32& p_point)
+	{
+		this->m_x = p_point.m_x;
+		this->m_y = p_point.m_y;
+	}
+
 	inline MxS32 GetX() const { return m_x; }
 	inline MxS32 GetY() const { return m_y; }
 
