@@ -19,7 +19,7 @@
 #include "mxdsfile.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
-#include "mxrendermanager.h"
+#include "mxunknown100dbdbc.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
@@ -526,7 +526,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		}
 	}
 
-	m_renderMgr = new MxRenderManager();
+	m_renderMgr = new MxUnknown100dbdbc();
 	m_gifManager = new GifManager();
 	// TODO: there is another class here
 	m_plantManager = new LegoPlantManager();

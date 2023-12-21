@@ -1,5 +1,5 @@
-#ifndef MXRENDERMANAGER_H
-#define MXRENDERMANAGER_H
+#ifndef MXUNKNOWN100DBDBC_H
+#define MXUNKNOWN100DBDBC_H
 
 #include "mxtypes.h"
 
@@ -13,4 +13,4 @@ private:
 	char m_unk0x4[0x14]; // TODO: change to 0x10 once scalar deconstructor is added
 };
 
-#endif // MXRENDERMANAGER_H
+#endif // MXUNKNOWN100DBDBC_H
