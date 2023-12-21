@@ -12,9 +12,13 @@
 // SIZE 0x18
 class LegoPathControllerList : public MxPtrList<LegoPathController> {
 public:
-	LegoPathControllerList() : MxPtrList<LegoPathController>(Destroy) {}
-	virtual MxS8 Compare(LegoPathController*, LegoPathController*) override; // vtable+0x14
-	static void Destroy(LegoPathController*);
+	LegoPathControllerList(MxBool p_ownership = FALSE) : MxPtrList<LegoPathController>(p_ownership) {}
+
+	// FUNCTION: LEGO1 0x1001d210
+	virtual MxS8 Compare(LegoPathController* p_a, LegoPathController* p_b) override
+	{
+		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
+	} // vtable+0x14
 };
 
 // VTABLE: LEGO1 0x100d6380
@@ -37,6 +41,9 @@ public:
 
 // TEMPLATE: LEGO1 0x1001d330
 // MxList<LegoPathController *>::~MxList<LegoPathController *>
+
+// TEMPLATE: LEGO1 0x1001d3c0
+// MxPtrList<LegoPathController>::Destroy
 
 // SYNTHETIC: LEGO1 0x1001d490
 // MxCollection<LegoPathController *>::`scalar deleting destructor'

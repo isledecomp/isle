@@ -1,6 +1,8 @@
 #include "mxdsmultiaction.h"
 
 DECOMP_SIZE_ASSERT(MxDSMultiAction, 0x9c)
+DECOMP_SIZE_ASSERT(MxDSActionList, 0x1c);
+DECOMP_SIZE_ASSERT(MxDSActionListCursor, 0x10);
 
 // FUNCTION: LEGO1 0x100c9b90
 MxDSMultiAction::MxDSMultiAction()

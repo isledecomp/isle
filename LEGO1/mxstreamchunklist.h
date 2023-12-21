@@ -18,9 +18,14 @@ class MxStreamChunkList : public MxList<MxStreamChunk*> {
 public:
 	MxStreamChunkList() { m_customDestructor = Destroy; }
 
-	virtual MxS8 Compare(MxStreamChunk*, MxStreamChunk*) override; // vtable+0x14
+	// FUNCTION: LEGO1 0x100b5900
+	virtual MxS8 Compare(MxStreamChunk* p_a, MxStreamChunk* p_b) override
+	{
+		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
+	} // vtable+0x14
 
-	static void Destroy(MxStreamChunk* p_chunk);
+	// FUNCTION: LEGO1 0x100b5920
+	static void Destroy(MxStreamChunk* p_chunk) { delete p_chunk; }
 };
 
 // VTABLE: LEGO1 0x100dc510

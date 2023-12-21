@@ -19,9 +19,13 @@ class LegoWorld;
 // SIZE 0x18
 class LegoWorldList : public MxPtrList<LegoWorld> {
 public:
-	LegoWorldList() : MxPtrList<LegoWorld>(Destroy) {}
-	virtual MxS8 Compare(LegoWorld*, LegoWorld*) override; // vtable+0x14
-	static void Destroy(LegoWorld*);
+	LegoWorldList(MxBool p_ownership = FALSE) : MxPtrList<LegoWorld>(p_ownership) {}
+
+	// FUNCTION: LEGO1 0x100598d0
+	virtual MxS8 Compare(LegoWorld* p_a, LegoWorld* p_b) override
+	{
+		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
+	}; // vtable+0x14
 };
 
 // TEMPLATE: LEGO1 0x100598f0
@@ -35,6 +39,9 @@ public:
 
 // TEMPLATE: LEGO1 0x10059960
 // MxList<LegoWorld *>::~MxList<LegoWorld *>
+
+// TEMPLATE: LEGO1 0x100599f0
+// MxPtrList<LegoWorld>::Destroy
 
 // SYNTHETIC: LEGO1 0x10059ac0
 // MxCollection<LegoWorld *>::`scalar deleting destructor'

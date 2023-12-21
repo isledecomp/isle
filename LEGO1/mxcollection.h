@@ -9,12 +9,14 @@ public:
 	MxCollection()
 	{
 		m_count = 0;
-		m_customDestructor = Destroy;
+		SetDestroy(Destroy);
 	}
 
-	virtual ~MxCollection() {}
-
 	static void Destroy(T){};
+
+	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
+
+	virtual ~MxCollection() {}
 	virtual MxS8 Compare(T, T) { return 0; }
 
 protected:

@@ -22,6 +22,8 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
+
 // GLOBAL: LEGO1 0x100f451c
 MxAtomId* g_copterScript = NULL;
 
@@ -527,7 +529,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
-	m_worldList = new LegoWorldList();
+	m_worldList = new LegoWorldList(TRUE);
 
 	if (m_unk0x6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
