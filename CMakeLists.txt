@@ -161,7 +161,6 @@ add_library(lego1 SHARED
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
-  LEGO1/mxrendermanager.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmack.cpp
@@ -180,6 +179,7 @@ add_library(lego1 SHARED
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxtype17notificationparam.cpp
+  LEGO1/mxunknown100dbdbc.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvideomanager.cpp
