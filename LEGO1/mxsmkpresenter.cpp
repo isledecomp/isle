@@ -80,7 +80,9 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRect32* rect;
 
 	while (cursor.Next(rect)) {
-		invalidateRect = *rect;
+		// This should probably be using the assignment operator,
+		// but it's currently reducing the match significantly.
+		invalidateRect.CopyFrom(*rect);
 		invalidateRect.AddPoint(m_location);
 		MVideoManager()->InvalidateRect(invalidateRect);
 	}
