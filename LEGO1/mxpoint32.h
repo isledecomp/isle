@@ -12,6 +12,13 @@ public:
 		this->m_y = p_y;
 	}
 
+	inline MxS32 GetX() const { return m_x; }
+	inline MxS32 GetY() const { return m_y; }
+
+	inline void SetX(MxS32 p_x) { m_x = p_x; }
+	inline void SetY(MxS32 p_y) { m_y = p_y; }
+
+private:
 	MxS32 m_x;
 	MxS32 m_y;
 };

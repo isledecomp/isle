@@ -73,8 +73,8 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	MxS32 height = GetHeight() - 1;
 	MxS32 width = GetWidth() - 1;
-	MxS32 x = m_location.m_x;
-	MxS32 y = m_location.m_y;
+	MxS32 x = m_location.GetX();
+	MxS32 y = m_location.GetY();
 
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
@@ -148,17 +148,17 @@ void MxStillPresenter::RepeatingTickle()
 // FUNCTION: LEGO1 0x100ba040
 void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 {
-	MxS32 x = m_location.m_x;
-	MxS32 y = m_location.m_y;
-	m_location.m_x = p_x;
-	m_location.m_y = p_y;
+	MxS32 x = m_location.GetX();
+	MxS32 y = m_location.GetY();
+	m_location.SetX(p_x);
+	m_location.SetY(p_y);
 
 	if (IsEnabled()) {
 		MxS32 height = GetHeight() - 1;
 		MxS32 width = GetWidth() - 1;
 
 		MxRect32 rectA(x, y, width + x, height + y);
-		MxRect32 rectB(m_location.m_x, m_location.m_y, width + m_location.m_x, height + m_location.m_y);
+		MxRect32 rectB(m_location.GetX(), m_location.GetY(), width + m_location.GetX(), height + m_location.GetY());
 
 		MVideoManager()->InvalidateRect(rectA);
 		MVideoManager()->VTable0x34(rectA.GetLeft(), rectA.GetTop(), rectA.GetWidth(), rectA.GetHeight());
@@ -176,8 +176,8 @@ void MxStillPresenter::Enable(MxBool p_enable)
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
-		MxS32 x = m_location.m_x;
-		MxS32 y = m_location.m_y;
+		MxS32 x = m_location.GetX();
+		MxS32 y = m_location.GetY();
 
 		MxRect32 rect(x, y, width + x, height + y);
 		MVideoManager()->InvalidateRect(rect);

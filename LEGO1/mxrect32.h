@@ -18,10 +18,10 @@ public:
 
 	MxRect32(const MxPoint32& p_point, const MxSize32& p_size)
 	{
-		this->m_left = p_point.m_x;
-		this->m_top = p_point.m_y;
-		this->m_right = p_size.m_width;
-		this->m_bottom = p_size.m_height;
+		this->m_left = p_point.GetX();
+		this->m_top = p_point.GetY();
+		this->m_right = p_size.GetWidth();
+		this->m_bottom = p_size.GetHeight();
 	}
 
 	MxRect32(const MxRect32& p_a, const MxRect32& p_b)
@@ -32,16 +32,33 @@ public:
 		m_bottom = Min(p_a.m_bottom, p_b.m_bottom);
 	}
 
+	MxRect32& MxRect32::operator=(const MxRect32& p_rect)
+	{
+		this->m_left = p_rect.m_left;
+		this->m_top = p_rect.m_top;
+		this->m_right = p_rect.m_right;
+		this->m_bottom = p_rect.m_bottom;
+		return *this;
+	}
+
 	inline void SetPoint(const MxPoint32& p_point)
 	{
-		this->m_left = p_point.m_x;
-		this->m_top = p_point.m_y;
+		this->m_left = p_point.GetX();
+		this->m_top = p_point.GetY();
+	}
+
+	inline void AddPoint(const MxPoint32& p_point)
+	{
+		this->m_left += p_point.GetX();
+		this->m_top += p_point.GetY();
+		this->m_right += p_point.GetX();
+		this->m_bottom += p_point.GetY();
 	}
 
 	inline void SetSize(const MxSize32& p_size)
 	{
-		this->m_right = p_size.m_width;
-		this->m_bottom = p_size.m_height;
+		this->m_right = p_size.GetWidth();
+		this->m_bottom = p_size.GetHeight();
 	}
 
 	inline MxBool IsValid() { return m_left < m_right && m_top < m_bottom; }
