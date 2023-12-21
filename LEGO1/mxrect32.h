@@ -32,13 +32,20 @@ public:
 		m_bottom = Min(p_a.m_bottom, p_b.m_bottom);
 	}
 
+	MxRect32(const MxRect32& p_rect) { CopyFrom(p_rect); }
+
 	MxRect32& MxRect32::operator=(const MxRect32& p_rect)
 	{
-		this->m_left = p_rect.m_left;
-		this->m_top = p_rect.m_top;
-		this->m_right = p_rect.m_right;
-		this->m_bottom = p_rect.m_bottom;
+		CopyFrom(p_rect);
 		return *this;
+	}
+
+	inline void Intersect(const MxRect32& p_rect)
+	{
+		m_left = Max(p_rect.m_left, m_left);
+		m_top = Max(p_rect.m_top, m_top);
+		m_right = Min(p_rect.m_right, m_right);
+		m_bottom = Min(p_rect.m_bottom, m_bottom);
 	}
 
 	inline void SetPoint(const MxPoint32& p_point)
@@ -61,12 +68,6 @@ public:
 		this->m_bottom = p_size.GetHeight();
 	}
 
-	inline MxBool IsValid() { return m_left < m_right && m_top < m_bottom; }
-	inline MxBool IntersectsWith(const MxRect32& p_rect)
-	{
-		return m_left < p_rect.m_right && p_rect.m_left < m_right && m_top < p_rect.m_bottom && p_rect.m_top < m_bottom;
-	}
-
 	inline void UpdateBounds(const MxRect32& p_rect)
 	{
 		m_left = Min(m_left, p_rect.m_left);
@@ -75,16 +76,22 @@ public:
 		m_bottom = Max(m_bottom, p_rect.m_bottom);
 	}
 
-	inline MxS32 GetWidth() { return (m_right - m_left) + 1; }
-	inline MxS32 GetHeight() { return (m_bottom - m_top) + 1; }
+	inline MxBool IsValid() const { return m_left < m_right && m_top < m_bottom; }
+	inline MxBool IntersectsWith(const MxRect32& p_rect) const
+	{
+		return m_left < p_rect.m_right && p_rect.m_left < m_right && m_top < p_rect.m_bottom && p_rect.m_top < m_bottom;
+	}
 
-	inline MxPoint32 GetPoint() { return MxPoint32(this->m_left, this->m_top); }
-	inline MxSize32 GetSize() { return MxSize32(this->m_right, this->m_bottom); }
+	inline MxS32 GetWidth() const { return (m_right - m_left) + 1; }
+	inline MxS32 GetHeight() const { return (m_bottom - m_top) + 1; }
 
-	inline MxS32 GetLeft() { return m_left; }
-	inline MxS32 GetTop() { return m_top; }
-	inline MxS32 GetRight() { return m_right; }
-	inline MxS32 GetBottom() { return m_bottom; }
+	inline MxPoint32 GetPoint() const { return MxPoint32(this->m_left, this->m_top); }
+	inline MxSize32 GetSize() const { return MxSize32(this->m_right, this->m_bottom); }
+
+	inline MxS32 GetLeft() const { return m_left; }
+	inline MxS32 GetTop() const { return m_top; }
+	inline MxS32 GetRight() const { return m_right; }
+	inline MxS32 GetBottom() const { return m_bottom; }
 
 	inline void SetLeft(MxS32 p_left) { m_left = p_left; }
 	inline void SetTop(MxS32 p_top) { m_top = p_top; }
@@ -92,6 +99,14 @@ public:
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
 private:
+	inline void CopyFrom(const MxRect32& p_rect)
+	{
+		this->m_left = p_rect.m_left;
+		this->m_top = p_rect.m_top;
+		this->m_right = p_rect.m_right;
+		this->m_bottom = p_rect.m_bottom;
+	}
+
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
 	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
 
