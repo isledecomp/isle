@@ -34,7 +34,7 @@ public:
 
 	MxRect32(const MxRect32& p_rect) { CopyFrom(p_rect); }
 
-	MxRect32& MxRect32::operator=(const MxRect32& p_rect)
+	MxRect32& operator=(const MxRect32& p_rect)
 	{
 		CopyFrom(p_rect);
 		return *this;
