@@ -19,6 +19,7 @@
 #include "mxdsfile.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
+#include "mxrendermanager.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
@@ -385,7 +386,7 @@ void LegoOmni::Init()
 	MxOmni::Init();
 	m_unk0x68 = 0;
 	m_inputMgr = NULL;
-	m_unk0x6c = 0;
+	m_renderMgr = 0;
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
@@ -443,9 +444,9 @@ void LegoOmni::Destroy()
 		m_gifManager = NULL;
 	}
 
-	if (m_unk0x6c) {
-		// delete m_unk0x6c; // TODO
-		m_unk0x6c = NULL;
+	if (m_renderMgr) {
+		delete m_renderMgr;
+		m_renderMgr = NULL;
 	}
 
 	if (m_inputMgr) {
@@ -503,6 +504,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 
 	if (m_soundManager = new LegoSoundManager()) {
 		if (m_soundManager->Create(10, 0) != SUCCESS) {
+			OutputDebugStringA("lego sound fail\n");
 			delete m_soundManager;
 			m_soundManager = NULL;
 			return FAILURE;
@@ -511,6 +513,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 
 	if (m_videoManager = new LegoVideoManager()) {
 		if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
+			OutputDebugStringA("lego vid failure\n");
 			delete m_videoManager;
 			m_videoManager = NULL;
 		}
@@ -523,15 +526,16 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		}
 	}
 
-	// TODO: there are a few more classes here
+	m_renderMgr = new MxRenderManager();
 	m_gifManager = new GifManager();
+	// TODO: there is another class here
 	m_plantManager = new LegoPlantManager();
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (m_unk0x6c && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
+	if (m_renderMgr && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();

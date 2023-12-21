@@ -161,6 +161,7 @@ add_library(lego1 SHARED
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
+  LEGO1/mxrendermanager.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmack.cpp
