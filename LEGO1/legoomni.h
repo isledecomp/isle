@@ -27,6 +27,7 @@ class MxAtomId;
 class MxBackgroundAudioManager;
 class MxDSFile;
 class MxTransitionManager;
+class MxUnknown100dbdbc;
 
 extern MxAtomId* g_copterScript;
 extern MxAtomId* g_dunecarScript;
@@ -116,7 +117,7 @@ public:
 
 private:
 	undefined4* m_unk0x68;                       // 0x68
-	undefined4 m_unk0x6c;                        // 0x6c
+	MxUnknown100dbdbc* m_renderMgr;              // 0x6c
 	LegoInputManager* m_inputMgr;                // 0x70
 	GifManager* m_gifManager;                    // 0x74
 	LegoWorldList* m_worldList;                  // 0x78
