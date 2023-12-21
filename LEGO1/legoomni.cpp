@@ -504,7 +504,6 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 
 	if (m_soundManager = new LegoSoundManager()) {
 		if (m_soundManager->Create(10, 0) != SUCCESS) {
-			OutputDebugStringA("lego sound fail\n");
 			delete m_soundManager;
 			m_soundManager = NULL;
 			return FAILURE;
@@ -513,7 +512,6 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 
 	if (m_videoManager = new LegoVideoManager()) {
 		if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
-			OutputDebugStringA("lego vid failure\n");
 			delete m_videoManager;
 			m_videoManager = NULL;
 		}
