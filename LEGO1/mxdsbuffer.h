@@ -55,6 +55,7 @@ public:
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
+	inline MxDSBufferType GetMode() { return m_mode; }
 
 private:
 	MxU8* m_pBuffer;                // 0x08

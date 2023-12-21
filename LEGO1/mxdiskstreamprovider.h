@@ -10,6 +10,7 @@
 #include "mxthread.h"
 
 class MxDiskStreamProvider;
+class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dd130
 class MxDiskStreamProviderThread : public MxThread {
@@ -43,7 +44,7 @@ public:
 	}
 
 	MxResult WaitForWorkToComplete();
-
+	MxResult FUN_100d1780(MxDSStreamingAction* p_action);
 	void PerformWork();
 
 	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14

@@ -92,8 +92,42 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 	return result;
 }
 
-// STUB: LEGO1 0x100d0d80
+// FUNCTION: LEGO1 0x100d0d80
 undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
 {
+	MxU32* ptr = p_fileSizeBuffer;
+	MxU32* end = p_fileSizeBuffer + p_fileSize;
+	MxU32 objectId;
+
+	if (p_fileSizeBuffer < end) {
+		do {
+			MxU32* oldPtr = ptr;
+			if (*ptr = FOURCC('M', 'x', 'O', 'b')) {
+				ptr += 8;
+
+				MxDSObject* object = DeserializeDSObjectDispatch((MxU8**) &ptr, -1);
+				objectId = object->GetObjectId();
+				delete object;
+
+				ptr = (MxU32*) (oldPtr + oldPtr[1] + (oldPtr[1] & 1) + 8);
+
+				if (ptr < end) {
+					do {
+						oldPtr = ptr;
+						if (*ptr == FOURCC('M', 'x', 'C', 'h')) {
+							// todo
+						}
+						else {
+							ptr++;
+						}
+					} while (ptr < end);
+				}
+			}
+			else {
+				ptr++;
+			}
+		} while (ptr < end);
+	}
+
 	return NULL;
 }

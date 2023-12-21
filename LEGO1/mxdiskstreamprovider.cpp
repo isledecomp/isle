@@ -1,5 +1,6 @@
 #include "mxdiskstreamprovider.h"
 
+#include "mxdsbuffer.h"
 #include "mxomni.h"
 #include "mxstreamcontroller.h"
 #include "mxstring.h"
@@ -85,6 +86,13 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 			PerformWork();
 	}
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100d1780
+MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
+{
+	// TODO
+	return FAILURE;
 }
 
 // STUB: LEGO1 0x100d18f0

@@ -2,6 +2,7 @@
 
 #include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
 #include "mxstreamchunk.h"
 
@@ -11,19 +12,21 @@ DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 // FUNCTION: LEGO1 0x100b9400
 MxResult MxStreamController::VTable0x18(undefined4, undefined4)
 {
+	OutputDebugStringA("MxStreamController::VTable0x18 not implemented\n");
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100b9410
 MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
 {
+	OutputDebugStringA("MxStreamController::VTable0x1c not implemented\n");
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100b9420
-MxResult MxStreamController::VTable0x28()
+MxDSStreamingAction* MxStreamController::VTable0x28()
 {
-	return SUCCESS;
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100c0b90
@@ -105,6 +108,7 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 // STUB: LEGO1 0x100c1a00
 MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
 {
+	OutputDebugStringA("MxStreamController::FUN_100c1a00 not implemented\n");
 	return FAILURE;
 }
 
@@ -166,6 +170,7 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 // STUB: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
+	OutputDebugStringA("MxStreamController::FUN_100c1f00 not implemented\n");
 	// TODO
 	return FAILURE;
 }
@@ -173,6 +178,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 // STUB: LEGO1 0x100c20d0
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
+	OutputDebugStringA("MxStreamController::FUN_100c20d0 not implemented\n");
 	// TODO
 	return TRUE;
 }
