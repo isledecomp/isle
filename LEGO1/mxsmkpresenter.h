@@ -38,8 +38,8 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 protected:
-	MxSmack m_mxSmack;     // 0x64
-	MxU32 m_elapsedFrames; // 0x71c
+	MxSmack m_mxSmack;    // 0x64
+	MxU32 m_currentFrame; // 0x71c
 };
 
 #endif // MXSMKPRESENTER_H

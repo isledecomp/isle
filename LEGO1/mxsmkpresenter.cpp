@@ -21,7 +21,7 @@ MxSmkPresenter::~MxSmkPresenter()
 // FUNCTION: LEGO1 0x100b38d0
 void MxSmkPresenter::Init()
 {
-	m_elapsedFrames = 0;
+	m_currentFrame = 0;
 	memset(&m_mxSmack, 0, sizeof(m_mxSmack));
 	m_flags &= 0xfd;
 	m_flags &= 0xfb;
@@ -65,8 +65,8 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxU8* bitmapData = m_bitmap->GetBitmapData();
 	MxU8* chunkData = p_chunk->GetData();
 
-	MxBool paletteChanged = m_mxSmack.m_frameTypes[m_elapsedFrames] & 1;
-	m_elapsedFrames++;
+	MxBool paletteChanged = m_mxSmack.m_frameTypes[m_currentFrame] & 1;
+	m_currentFrame++;
 	VTable0x88();
 
 	MxRectList list(TRUE);
@@ -90,13 +90,13 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 void MxSmkPresenter::VTable0x88()
 {
 	if ((m_mxSmack.m_smackTag.SmackerType & 1) != 0) {
-		MxU32 und = (m_elapsedFrames % m_mxSmack.m_smackTag.Frames);
-		if (1 < m_elapsedFrames && und == 1)
-			m_elapsedFrames = 1;
+		MxU32 und = (m_currentFrame % m_mxSmack.m_smackTag.Frames);
+		if (1 < m_currentFrame && und == 1)
+			m_currentFrame = 1;
 	}
 	else {
-		if (m_mxSmack.m_smackTag.Frames == m_elapsedFrames) {
-			m_elapsedFrames = 0;
+		if (m_mxSmack.m_smackTag.Frames == m_currentFrame) {
+			m_currentFrame = 0;
 			// TODO: struct incorrect, Palette at wrong offset?
 			memset(&m_mxSmack.m_smackTag.Palette[4], 0, sizeof(m_mxSmack.m_smackTag.Palette));
 		}
