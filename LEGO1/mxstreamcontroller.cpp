@@ -2,6 +2,7 @@
 
 #include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
 #include "mxstreamchunk.h"
 
@@ -21,9 +22,9 @@ MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
 }
 
 // FUNCTION: LEGO1 0x100b9420
-MxResult MxStreamController::VTable0x28()
+MxDSStreamingAction* MxStreamController::VTable0x28()
 {
-	return SUCCESS;
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100c0b90

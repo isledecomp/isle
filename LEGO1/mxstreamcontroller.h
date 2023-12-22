@@ -11,6 +11,8 @@
 #include "mxstreamlist.h"
 #include "mxstreamprovider.h"
 
+class MxDSStreamingAction;
+
 // VTABLE: LEGO1 0x100dc968
 // SIZE 0x64
 class MxStreamController : public MxCore {
@@ -37,7 +39,7 @@ public:
 	virtual MxResult VTable0x1c(undefined4, undefined4);                  // vtable+0x1c
 	virtual MxResult VTable0x20(MxDSAction* p_action);                    // vtable+0x20
 	virtual MxResult VTable0x24(MxDSAction* p_action);                    // vtable+0x24
-	virtual MxResult VTable0x28();                                        // vtable+0x28
+	virtual MxDSStreamingAction* VTable0x28();                            // vtable+0x28
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 
