@@ -206,11 +206,11 @@ MxResult MxSmack::LoadFrame(
 
 	SmackDoFrameToBuffer(p_chunkData, p_mxSmack->m_huffmanTables, p_mxSmack->m_unk0x6b4);
 
-	MxS16 und1 = 1;
-	MxU32 und2[4];
+	MxU16 und = 1;
+	u32 smackRect[4];
 	MxRect32 rect;
 
-	while (FUN_100c6050(p_mxSmack->m_unk0x6b4, &und1, und2, &rect)) {
+	while (GetRect(p_mxSmack->m_unk0x6b4, &und, smackRect, &rect)) {
 		MxRect32* newRect = new MxRect32(rect);
 		p_list->Append(newRect);
 	}
@@ -218,9 +218,35 @@ MxResult MxSmack::LoadFrame(
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c6050
-MxBool MxSmack::FUN_100c6050(MxU8* p_unk0x6b4, MxS16* p_und1, MxU32* p_und2, MxRect32* p_rect)
+// FUNCTION: LEGO1 0x100c6050
+MxBool MxSmack::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect)
 {
-	// TODO
+	u32 left, bottom, top, right;
+
+	if (!*p_und)
+		return FALSE;
+
+	if (*p_und == 1) {
+		if (!SmackGetRect(p_unk0x6b4, p_smackRect))
+			return FALSE;
+		*p_und = 2;
+	}
+
+	left = p_smackRect[0];
+	top = p_smackRect[1];
+	right = p_smackRect[2] + p_smackRect[0];
+	bottom = p_smackRect[3] + p_smackRect[1];
+
+	while (SmackGetRect(p_unk0x6b4, p_smackRect)) {
+		if (left > p_smackRect[0])
+			left = p_smackRect[0];
+		if (right < p_smackRect[0] + p_smackRect[2])
+			right = p_smackRect[0] + p_smackRect[2];
+
+		bottom = p_smackRect[1] + p_smackRect[3];
+	}
+
+	*p_und = 0;
+	*p_rect = MxRect32(left, top, right, bottom);
 	return TRUE;
 }
