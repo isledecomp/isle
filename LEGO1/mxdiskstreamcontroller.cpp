@@ -88,11 +88,29 @@ void MxDiskStreamController::FUN_100c7980()
 	}
 }
 
-// STUB: LEGO1 0x100c7ac0
+// FUNCTION: LEGO1 0x100c7ac0
 MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 {
-	// TODO
-	return NULL;
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxDSStreamingAction* result = NULL;
+	MxU32 filesize = m_provider->GetFileSize();
+
+	if(m_unk0x3c.size() != 0)
+	{
+		MxDSStreamingAction* oldAction = (MxDSStreamingAction*) m_unk0x3c.front();
+		m_unk0x3c.pop_front();
+
+		MxDSStreamingAction* action = new MxDSStreamingAction(*oldAction);
+		result = action;
+		if(action)
+		{
+			oldAction->SetUnknown94(action->GetBufferOffset() + filesize);
+			oldAction->SetBufferOffset(action->GetBufferOffset() + filesize);
+			m_unk0x3c.push_back(action);
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100c7c00
@@ -102,21 +120,17 @@ MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 	MxResult result = MxStreamController::VTable0x30(p_action);
 
 	MxDSStreamingAction* item;
-	while(TRUE)
-	{
-		item = (MxDSStreamingAction*)m_list0x90.Find(p_action, TRUE);
-		if (item == NULL)
-		{
+	while (TRUE) {
+		item = (MxDSStreamingAction*) m_list0x90.Find(p_action, TRUE);
+		if (item == NULL) {
 			break;
 		}
 		FUN_100c7cb0(item);
 	}
 
-	while(TRUE)
-	{
-		item = (MxDSStreamingAction*)m_list0x64.Find(p_action, TRUE);
-		if (item == NULL)
-		{
+	while (TRUE) {
+		item = (MxDSStreamingAction*) m_list0x64.Find(p_action, TRUE);
+		if (item == NULL) {
 			break;
 		}
 		FUN_100c7cb0(item);
