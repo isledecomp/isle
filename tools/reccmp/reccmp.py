@@ -16,7 +16,6 @@ from isledecomp import (
     print_diff,
     SymInfo,
     walk_source_dir,
-    WinePathConverter,
 )
 
 from capstone import Cs, CS_ARCH_X86, CS_MODE_32
@@ -295,13 +294,8 @@ def main():
 
     svg = args.svg
 
-    wine_path_converter = None
-    if os.name != "nt":
-        wine_path_converter = WinePathConverter(source)
     with Bin(original, logger) as origfile, Bin(recomp, logger) as recompfile:
-        syminfo = SymInfo(
-            syms, recompfile, logger, sym_wine_path_converter=wine_path_converter
-        )
+        syminfo = SymInfo(syms, recompfile, logger, source)
 
         print()
 
