@@ -1,6 +1,7 @@
 #include "mxsmkpresenter.h"
 
 #include "decomp.h"
+#include "mxdsmediaaction.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxSmkPresenter, 0x720);
@@ -44,7 +45,7 @@ void MxSmkPresenter::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100b3940
 void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
-	MxSmack::LoadHeaderAndTrees(p_chunk->GetData(), &m_mxSmack);
+	MxSmack::LoadHeader(p_chunk->GetData(), &m_mxSmack);
 }
 
 // FUNCTION: LEGO1 0x100b3960
@@ -57,10 +58,32 @@ void MxSmkPresenter::CreateBitmap()
 	m_bitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
 }
 
-// STUB: LEGO1 0x100b3a00
+// FUNCTION: LEGO1 0x100b3a00
 void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	// TODO
+	MxBITMAPINFO* bitmapInfo = m_bitmap->GetBitmapInfo();
+	MxU8* bitmapData = m_bitmap->GetBitmapData();
+	MxU8* chunkData = p_chunk->GetData();
+
+	MxBool paletteChanged = m_mxSmack.m_frameTypes[m_unk0x71c] & 1;
+	m_unk0x71c++;
+	VTable0x88();
+
+	MxRectList list(TRUE);
+	MxSmack::LoadFrame(bitmapInfo, bitmapData, &m_mxSmack, chunkData, paletteChanged, &list);
+
+	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && paletteChanged)
+		RealizePalette();
+
+	MxRect32 invalidateRect;
+	MxRectListCursor cursor(&list);
+	MxRect32* rect;
+
+	while (cursor.Next(rect)) {
+		invalidateRect = *rect;
+		invalidateRect.AddPoint(GetLocation());
+		MVideoManager()->InvalidateRect(invalidateRect);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b4260
@@ -75,7 +98,7 @@ void MxSmkPresenter::VTable0x88()
 		if (m_mxSmack.m_smackTag.Frames == m_unk0x71c) {
 			m_unk0x71c = 0;
 			// TODO: struct incorrect, Palette at wrong offset?
-			memset(m_mxSmack.m_smackTag.Palette, 0, sizeof(m_mxSmack.m_smackTag.Palette));
+			memset(&m_mxSmack.m_smackTag.Palette[4], 0, sizeof(m_mxSmack.m_smackTag.Palette));
 		}
 	}
 }

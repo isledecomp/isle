@@ -65,6 +65,7 @@ public:
 		return m_bmiHeader->biHeight > 0 ? m_bmiHeader->biHeight : -m_bmiHeader->biHeight;
 	}
 	inline MxU8* GetBitmapData() const { return m_data; }
+	inline MxBITMAPINFO* GetBitmapInfo() const { return m_info; }
 
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);

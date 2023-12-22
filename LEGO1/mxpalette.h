@@ -25,6 +25,7 @@ public:
 	MxResult SetSkyColor(LPPALETTEENTRY p_skyColor);
 	void Reset(MxBool p_ignoreSkyColor);
 	LPDIRECTDRAWPALETTE CreateNativePalette();
+
 	inline void SetOverrideSkyColor(MxBool p_value) { this->m_overrideSkyColor = p_value; }
 
 private:

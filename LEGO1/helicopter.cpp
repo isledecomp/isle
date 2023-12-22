@@ -233,7 +233,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 		Matrix4 mat2 = mat.GetMatrix();
 		float s = sin(0.5235987901687622); // PI / 6, 30 deg
 		float c = cos(0.5235987901687622); // PI / 6, 30 deg
-		for (int i = 0; i < 4; i++) {
+		for (MxS32 i = 0; i < 4; i++) {
 			mat.GetMatrix()[i][1] = mat2[i][1] * c - mat2[i][2] * s;
 			mat.GetMatrix()[i][2] = mat2[i][2] * c + mat2[i][1] * s;
 		}
@@ -321,8 +321,50 @@ void Helicopter::VTable0x70(float p_float)
 	}
 }
 
-// STUB: LEGO1 0x100040a0
+// FUNCTION: LEGO1 0x100040a0
 MxResult HelicopterSubclass::FUN_100040a0(Vector4Impl& p_v, float p_f)
 {
-	return SUCCESS;
+	MxU32 state = m_unk0x30;
+	if (state == 1) {
+		p_v.EqualsImpl(m_unk0x0.GetVector().elements);
+		p_v[3] = acos(p_v[3]) * (1 - p_f) * 2.0;
+		return p_v.NormalizeQuaternion();
+	}
+	else if (state == 2) {
+		p_v.EqualsImpl(m_unk0x18.GetVector().elements);
+		p_v[3] = acos(p_v[3]) * p_f * 2.0;
+		p_v.NormalizeQuaternion();
+		return p_v.NormalizeQuaternion();
+	}
+	else if (state == 3) {
+		double d1 = p_v.Dot(&m_unk0x0, &m_unk0x18), d2;
+		if (d1 + 1 > 0.00001) {
+			if (1 - d1 > 0.00001) {
+				double d = acos(d1);
+				sin(d);
+				d1 = sin((1 - p_f) * d) / sin(d);
+				d2 = sin(p_f * d) / sin(d);
+			}
+			else {
+				d1 = 1 - p_f;
+				d2 = p_f;
+			}
+			for (MxS32 i = 0; i < 4; i++) {
+				p_v[i] = m_unk0x18[i] * d2 + m_unk0x0[i] * d1;
+			}
+			return SUCCESS;
+		}
+		p_v[0] = -m_unk0x0[1];
+		p_v[1] = m_unk0x0[1];
+		p_v[2] = -m_unk0x0[3];
+		p_v[3] = m_unk0x0[2];
+		d1 = sin((1 - p_f) * 1.570796326794895);
+		d2 = sin(p_f * 1.570796326794895);
+		for (MxS32 i = 0; i < 3; i++) {
+			p_v[i] = m_unk0x0[i] * d1 + p_v[i] * d2;
+		}
+		return SUCCESS;
+	}
+	else
+		return FAILURE;
 }

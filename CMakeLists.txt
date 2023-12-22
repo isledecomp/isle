@@ -179,6 +179,7 @@ add_library(lego1 SHARED
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxtype17notificationparam.cpp
+  LEGO1/mxunknown100dbdbc.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvideomanager.cpp

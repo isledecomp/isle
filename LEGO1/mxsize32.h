@@ -12,6 +12,10 @@ public:
 		this->m_height = p_height;
 	}
 
+	inline MxS32 GetWidth() const { return m_width; }
+	inline MxS32 GetHeight() const { return m_height; }
+
+private:
 	MxS32 m_width;
 	MxS32 m_height;
 };

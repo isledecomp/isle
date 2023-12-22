@@ -75,7 +75,9 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 void MxVideoManager::UpdateRegion()
 {
 	if (m_region->VTable0x20() == FALSE) {
-		MxRect32 rect(m_region->GetRect(), m_videoParam.GetRect());
+		MxRect32 rect(m_region->GetRect());
+		rect.Intersect(m_videoParam.GetRect());
+
 		m_displaySurface
 			->Display(rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}

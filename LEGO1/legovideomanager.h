@@ -21,19 +21,14 @@ public:
 	__declspec(dllexport) void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
 	__declspec(dllexport) void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
 
-	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
-	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
+	virtual void Destroy() override; // vtable+0x18
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
+	void OverrideSkyColor(MxBool p_shouldOverride);
+
+	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
+	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 	inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
-
-	// FUNCTION: LEGO1 0x1007c4c0
-	void OverrideSkyColor(MxBool p_shouldOverride)
-	{
-		this->m_videoParam.GetPalette()->SetOverrideSkyColor(p_shouldOverride);
-	}
-
-	virtual void Destroy() override; // vtable+0x18
 
 private:
 	undefined4 m_unk0x64;

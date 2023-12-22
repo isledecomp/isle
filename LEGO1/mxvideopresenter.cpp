@@ -217,8 +217,8 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
 
-		MxS32 x = GetLocationX();
-		MxS32 y = GetLocationY();
+		MxS32 x = m_location.GetX();
+		MxS32 y = m_location.GetY();
 		MxRect32 rect(x, y, x + width, y + height);
 
 		MVideoManager()->InvalidateRect(rect);
@@ -259,12 +259,12 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 		return FALSE;
 
 	if (!m_bitmap)
-		return m_alpha->IsHit(p_x - GetLocationX(), p_y - GetLocationY());
+		return m_alpha->IsHit(p_x - m_location.GetX(), p_y - m_location.GetY());
 
 	MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
 
-	MxLong minX = GetLocationX();
-	MxLong minY = GetLocationY();
+	MxLong minX = m_location.GetX();
+	MxLong minY = m_location.GetY();
 
 	MxLong maxY = minY + heightAbs;
 	MxLong maxX = minX + m_bitmap->GetBmiWidth();
@@ -285,13 +285,13 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	// the MxPresenter location x and y coordinates.
 	if (biCompression == BI_RGB) {
 		if (biCompression == BI_RGB_TOPDOWN || height < 0) {
-			seekRow = p_y - GetLocationY();
+			seekRow = p_y - m_location.GetY();
 		}
 		else {
 			height = height > 0 ? height : -height;
-			seekRow = height - p_y - 1 + GetLocationY();
+			seekRow = height - p_y - 1 + m_location.GetY();
 		}
-		pixel = m_bitmap->GetBmiStride() * seekRow + m_bitmap->GetBitmapData() - GetLocationX() + p_x;
+		pixel = m_bitmap->GetBmiStride() * seekRow + m_bitmap->GetBitmapData() - m_location.GetX() + p_x;
 	}
 	else if (biCompression == BI_RGB_TOPDOWN) {
 		pixel = m_bitmap->GetBitmapData();
@@ -466,8 +466,8 @@ void MxVideoPresenter::EndAction()
 		if (m_bitmap) {
 			MxLong height = m_bitmap->GetBmiHeightAbs();
 			MxLong width = m_bitmap->GetBmiWidth();
-			MxS32 x = m_location.m_x;
-			MxS32 y = m_location.m_y;
+			MxS32 x = m_location.GetX();
+			MxS32 y = m_location.GetY();
 
 			MxRect32 rect(x, y, x + width, y + height);
 

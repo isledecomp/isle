@@ -174,11 +174,13 @@ public:
 
 	void EqualsScalar(float* p_value);
 
-	// vtable + 0x84
+	// vtable + 0x88
 	virtual void SetMatrixProduct(Vector4Impl* p_a, float* p_b);
 	virtual void SetMatrixProductImpl(float* p_vec, float* p_mat);
 	virtual int NormalizeQuaternion();
 	virtual void UnknownQuaternionOp(Vector4Impl* p_a, Vector4Impl* p_b);
+
+	inline Vector4& GetVector() { return *((Vector4*) m_data); }
 };
 
 // VTABLE: LEGO1 0x100d4488
