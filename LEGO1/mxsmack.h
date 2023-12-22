@@ -25,6 +25,9 @@ extern "C"
 		u32 p_typeSize
 	);
 
+	// (SMACK.LIB) FUNCTION: LEGO1 0x100cda83
+	void SmackDoFrameToBuffer(u8* p_source, u8* p_huffmanTables, u8* p_unk0x6b4);
+
 	// (SMACK.LIB) FUNCTION: LEGO1 0x100d052c
 	u32 SmackGetSizeDeltas(u32 p_width, u32 p_height);
 }
@@ -40,16 +43,17 @@ struct MxSmack {
 	MxU32 m_maxFrameSize;      // 0x6b0
 	MxU8* m_unk0x6b4;          // 0x6b4
 
-	static MxResult LoadHeaderAndTrees(MxU8* p_data, MxSmack* p_mxSmack);
+	static MxResult LoadHeader(MxU8* p_data, MxSmack* p_mxSmack);
 	static void Destroy(MxSmack* p_mxSmack);
-	static void FUN_100c5db0(
+	static MxResult LoadFrame(
 		MxBITMAPINFO* p_bitmapInfo,
 		MxU8* p_bitmapData,
 		MxSmack* p_mxSmack,
 		MxU8* p_chunkData,
-		MxBool p_und,
+		MxBool p_paletteChanged,
 		MxRectList* p_list
 	);
+	static MxBool FUN_100c6050(MxU8* p_unk0x6b4, MxS16* p_und1, MxU32* p_und2, MxRect32* p_rect);
 };
 
 #endif // MXSMACK_H
