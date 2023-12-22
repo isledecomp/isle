@@ -21,8 +21,8 @@ MxLoopingSmkPresenter::~MxLoopingSmkPresenter()
 void MxLoopingSmkPresenter::Init()
 {
 	this->m_elapsedDuration = 0;
-	this->m_flags &= 0xfd;
-	this->m_flags &= 0xfb;
+	this->m_flags &= ~Flag_Bit2;
+	this->m_flags &= ~Flag_Bit3;
 }
 
 // FUNCTION: LEGO1 0x100b49d0

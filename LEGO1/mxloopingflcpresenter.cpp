@@ -20,8 +20,8 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 void MxLoopingFlcPresenter::Init()
 {
 	this->m_unk0x68 = 0;
-	this->m_flags &= 0xfd;
-	this->m_flags &= 0xfb;
+	this->m_flags &= ~Flag_Bit2;
+	this->m_flags &= ~Flag_Bit3;
 }
 
 // STUB: LEGO1 0x100b4432
