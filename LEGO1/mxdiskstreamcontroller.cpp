@@ -168,16 +168,17 @@ MxResult MxDiskStreamController::FUN_100c7d10()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
 	MxDSStreamingAction* action = FUN_100c7db0();
-	if (action) {
-		if (FUN_100c8360(action) == SUCCESS) {
-			return SUCCESS;
-		}
-		else {
-			VTable0x24(action);
-			FUN_100c7cb0(action);
-		}
+
+	if (!action)
+		return FAILURE;
+
+	if (FUN_100c8360(action) != SUCCESS) {
+		VTable0x24(action);
+		FUN_100c7cb0(action);
+		return FAILURE;
 	}
-	return FAILURE;
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100c7db0
