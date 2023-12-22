@@ -30,6 +30,9 @@ extern "C"
 
 	// (SMACK.LIB) FUNCTION: LEGO1 0x100d052c
 	u32 SmackGetSizeDeltas(u32 p_width, u32 p_height);
+
+	// (SMACK.LIB) FUNCTION: LEGO1 0x100d0543
+	u8 SmackGetRect(u8* p_unk0x6b4, u32* p_rect);
 }
 
 // SIZE 0x6b8
@@ -53,7 +56,7 @@ struct MxSmack {
 		MxBool p_paletteChanged,
 		MxRectList* p_list
 	);
-	static MxBool FUN_100c6050(MxU8* p_unk0x6b4, MxS16* p_und1, MxU32* p_und2, MxRect32* p_rect);
+	static MxBool GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect32* p_rect);
 };
 
 #endif // MXSMACK_H
