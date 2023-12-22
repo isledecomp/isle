@@ -123,7 +123,11 @@ MxResult MxDSBuffer::SetBufferPointer(MxU32* p_buffer, MxU32 p_size)
 }
 
 // STUB: LEGO1 0x100c67b0
-MxResult MxDSBuffer::FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, MxDSStreamingAction** p_streamingAction)
+MxResult MxDSBuffer::FUN_100c67b0(
+	MxStreamController* p_controller,
+	MxDSAction* p_action,
+	MxDSStreamingAction** p_streamingAction
+)
 {
 	// TODO STUB
 	return FAILURE;
