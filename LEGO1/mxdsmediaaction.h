@@ -33,6 +33,7 @@ public:
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 
+	inline MxS32 GetFramesPerSecond() const { return this->m_framesPerSecond; }
 	inline MxS32 GetMediaFormat() const { return this->m_mediaFormat; }
 	inline MxS32 GetPaletteManagement() const { return this->m_paletteManagement; }
 	inline MxLong GetSustainTime() const { return this->m_sustainTime; }
