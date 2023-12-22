@@ -95,11 +95,34 @@ MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 	return NULL;
 }
 
-// STUB: LEGO1 0x100c7c00
+// FUNCTION: LEGO1 0x100c7c00
 MxResult MxDiskStreamController::VTable0x30(MxDSAction* p_action)
 {
-	// TODO
-	return FAILURE;
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxResult result = MxStreamController::VTable0x30(p_action);
+
+	MxDSStreamingAction* item;
+	while(TRUE)
+	{
+		item = (MxDSStreamingAction*)m_list0x90.Find(p_action, TRUE);
+		if (item == NULL)
+		{
+			break;
+		}
+		FUN_100c7cb0(item);
+	}
+
+	while(TRUE)
+	{
+		item = (MxDSStreamingAction*)m_list0x64.Find(p_action, TRUE);
+		if (item == NULL)
+		{
+			break;
+		}
+		FUN_100c7cb0(item);
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100c7cb0
