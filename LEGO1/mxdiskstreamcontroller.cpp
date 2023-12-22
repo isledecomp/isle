@@ -97,19 +97,17 @@ void MxDiskStreamController::FUN_100c7980()
 MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
+	MxDSAction* oldAction;
 	MxDSStreamingAction* result = NULL;
 	MxU32 filesize = m_provider->GetFileSize();
 
-	if (m_unk0x3c.size() != 0) {
-		MxDSStreamingAction* oldAction = (MxDSStreamingAction*) m_unk0x3c.front();
-		m_unk0x3c.pop_front();
-
-		MxDSStreamingAction* action = new MxDSStreamingAction(*oldAction);
-		result = action;
-		if (action) {
-			oldAction->SetUnknown94(action->GetBufferOffset() + filesize);
-			oldAction->SetBufferOffset(action->GetBufferOffset() + filesize);
-			m_unk0x3c.push_back(action);
+	if (m_unk0x3c.PopFront(oldAction)) {
+		result = new MxDSStreamingAction((MxDSStreamingAction&) *oldAction);
+		if (result) {
+			MxU32 offset = result->GetBufferOffset() + filesize;
+			((MxDSStreamingAction*) oldAction)->SetUnknown94(offset);
+			((MxDSStreamingAction*) oldAction)->SetBufferOffset(offset);
+			m_unk0x3c.push_back(result);
 		}
 	}
 
