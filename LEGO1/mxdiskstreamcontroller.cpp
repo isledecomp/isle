@@ -63,23 +63,28 @@ void MxDiskStreamController::FUN_100c7980()
 {
 	MxDSBuffer* buffer;
 	MxDSStreamingAction* action = NULL;
-	MxAutoLocker lock(&this->m_criticalSection);
 
-	if (m_unk0x3c.size() != 0 || m_provider->GetStreamBuffersNum() > m_unk0x8c) {
-		buffer = new MxDSBuffer();
-		if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBufferType_Chunk) == SUCCESS) {
-			action = VTable0x28();
-			if (action) {
-				action->SetUnknowna0(buffer);
-				m_unk0x8c++;
-			}
-			else {
+	{
+		MxAutoLocker lock(&this->m_criticalSection);
+
+		if (m_unk0x3c.size() && m_unk0x8c < m_provider->GetStreamBuffersNum()) {
+			buffer = new MxDSBuffer();
+
+			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBufferType_Chunk) != SUCCESS) {
+				if (buffer)
+					delete buffer;
 				return;
 			}
-		}
-		else {
-			delete buffer;
-			return;
+
+			action = VTable0x28();
+			if (!action) {
+				if (buffer)
+					delete buffer;
+				return;
+			}
+
+			action->SetUnknowna0(buffer);
+			m_unk0x8c++;
 		}
 	}
 

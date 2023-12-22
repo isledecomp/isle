@@ -49,7 +49,7 @@ public:
 
 	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
 	virtual MxU32 GetFileSize() override;                                       // vtable+0x18
-	virtual MxU32 GetStreamBuffersNum() override;                               // vtable+0x1c
+	virtual MxS32 GetStreamBuffersNum() override;                               // vtable+0x1c
 	virtual void VTable0x20(undefined4) override;                               // vtable+0x20
 	virtual MxU32 GetLengthInDWords() override;                                 // vtable+0x24
 	virtual MxU32* GetBufferForDWords() override;                               // vtable+0x28

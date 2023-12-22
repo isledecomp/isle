@@ -108,7 +108,7 @@ MxU32 MxDiskStreamProvider::GetFileSize()
 }
 
 // FUNCTION: LEGO1 0x100d1ea0
-MxU32 MxDiskStreamProvider::GetStreamBuffersNum()
+MxS32 MxDiskStreamProvider::GetStreamBuffersNum()
 {
 	return m_pFile->GetStreamBuffersNum();
 }

@@ -23,7 +23,7 @@ MxU32 MxRAMStreamProvider::GetFileSize()
 }
 
 // FUNCTION: LEGO1 0x100d0940
-MxU32 MxRAMStreamProvider::GetStreamBuffersNum()
+MxS32 MxRAMStreamProvider::GetStreamBuffersNum()
 {
 	return 1;
 }
