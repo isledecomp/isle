@@ -95,15 +95,13 @@ MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 	MxDSStreamingAction* result = NULL;
 	MxU32 filesize = m_provider->GetFileSize();
 
-	if(m_unk0x3c.size() != 0)
-	{
+	if (m_unk0x3c.size() != 0) {
 		MxDSStreamingAction* oldAction = (MxDSStreamingAction*) m_unk0x3c.front();
 		m_unk0x3c.pop_front();
 
 		MxDSStreamingAction* action = new MxDSStreamingAction(*oldAction);
 		result = action;
-		if(action)
-		{
+		if (action) {
 			oldAction->SetUnknown94(action->GetBufferOffset() + filesize);
 			oldAction->SetBufferOffset(action->GetBufferOffset() + filesize);
 			m_unk0x3c.push_back(action);
