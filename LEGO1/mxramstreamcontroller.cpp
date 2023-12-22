@@ -84,7 +84,7 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result;
-	MxDSStreamingAction* value = 0;
+	MxDSStreamingAction* value = NULL;
 	do {
 		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
 		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
