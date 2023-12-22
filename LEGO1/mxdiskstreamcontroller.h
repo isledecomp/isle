@@ -54,7 +54,9 @@ private:
 	void FUN_100c7ce0(MxDSBuffer* p_buffer);
 	MxResult FUN_100c7d10();
 	void FUN_100c7980();
+	MxDSStreamingAction* FUN_100c7db0();
 	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
+	MxResult FUN_100c8360(MxDSStreamingAction* p_action);
 	void InsertToList74(MxDSBuffer* p_buffer);
 	void FUN_100c8540();
 	void FUN_100c8720();

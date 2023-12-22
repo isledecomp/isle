@@ -160,10 +160,28 @@ void MxDiskStreamController::FUN_100c7ce0(MxDSBuffer* p_buffer)
 	}
 }
 
-// STUB: LEGO1 0x100c7d10
+// FUNCTION: LEGO1 0x100c7d10
 MxResult MxDiskStreamController::FUN_100c7d10()
 {
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxDSStreamingAction* action = FUN_100c7db0();
+	if (action) {
+		if (FUN_100c8360(action) == SUCCESS) {
+			return SUCCESS;
+		}
+		else {
+			VTable0x24(action);
+			FUN_100c7cb0(action);
+		}
+	}
 	return FAILURE;
+}
+
+// STUB: LEGO1 0x100c7db0
+MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
+{
+	// TODO
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100c7f40
@@ -207,6 +225,37 @@ MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 {
 	// TODO
 	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x100c8360
+MxResult MxDiskStreamController::FUN_100c8360(MxDSStreamingAction* p_action)
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	MxDSBuffer* buffer = p_action->GetUnknowna0();
+	MxDSStreamingAction* action2 = (MxDSStreamingAction*) m_list0x90.Find(p_action, TRUE);
+	buffer->FUN_100c6f80(p_action->GetUnknown94() - p_action->GetBufferOffset());
+	buffer->FUN_100c67b0(this, p_action, &action2);
+
+	if (buffer->GetRefCount()) {
+		p_action->SetUnknowna0(NULL);
+		InsertToList74(buffer);
+	}
+
+	if (action2) {
+		if (action2->GetUnknowna0() == NULL) {
+			FUN_100c7cb0(action2);
+		}
+		else {
+			if (action2->GetObjectId() == -1) {
+				action2->SetObjectId(p_action->GetObjectId());
+			}
+
+			m_list0x90.push_back(action2);
+		}
+	}
+
+	FUN_100c7cb0(p_action);
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c84a0
