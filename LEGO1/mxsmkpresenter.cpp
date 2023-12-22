@@ -111,6 +111,12 @@ void MxSmkPresenter::RealizePalette()
 	delete palette;
 }
 
+// FUNCTION: LEGO1 0x100b42f0
+MxResult MxSmkPresenter::AddToManager()
+{
+	return MxVideoPresenter::AddToManager();
+}
+
 // FUNCTION: LEGO1 0x100b4300
 void MxSmkPresenter::Destroy()
 {

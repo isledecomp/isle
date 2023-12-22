@@ -18,11 +18,21 @@ public:
 		return "MxLoopingSmkPresenter";
 	}
 
+	virtual void RepeatingTickle() override;  // vtable+0x24
+	virtual MxResult AddToManager() override; // vtable+0x34
+	virtual void Destroy() override;          // vtable+0x38
+	virtual void NextFrame() override;        // vtable+0x64
+	virtual void VTable0x88() override;       // vtable+0x88
+	virtual void VTable0x8c();                // vtable+0x8c
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk0x720;
+	MxLong m_elapsedDuration; // 0x720
 };
+
+// SYNTHETIC: LEGO1 0x100b4930
+// MxLoopingSmkPresenter::`scalar deleting destructor'
 
 #endif // MXLOOPINGSMKPRESENTER_H

@@ -25,6 +25,7 @@ public:
 		return !strcmp(p_name, MxSmkPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
+	virtual MxResult AddToManager() override;                 // vtable+0x34
 	virtual void Destroy() override;                          // vtable+0x38
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	virtual void CreateBitmap() override;                     // vtable+0x60
@@ -36,6 +37,7 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
+protected:
 	MxSmack m_mxSmack;     // 0x64
 	undefined4 m_unk0x71c; // 0x71c
 };
