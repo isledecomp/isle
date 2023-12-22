@@ -39,7 +39,7 @@ private:
 
 protected:
 	MxSmack m_mxSmack;     // 0x64
-	undefined4 m_unk0x71c; // 0x71c
+	MxU32 m_elapsedFrames; // 0x71c
 };
 
 #endif // MXSMKPRESENTER_H
