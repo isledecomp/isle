@@ -207,10 +207,10 @@ MxResult MxSmack::LoadFrame(
 	SmackDoFrameToBuffer(p_chunkData, p_mxSmack->m_huffmanTables, p_mxSmack->m_unk0x6b4);
 
 	MxU16 und = 1;
-	u32 p_smackRect[4];
+	u32 smackRect[4];
 	MxRect32 rect;
 
-	while (GetRect(p_mxSmack->m_unk0x6b4, &und, p_smackRect, &rect)) {
+	while (GetRect(p_mxSmack->m_unk0x6b4, &und, smackRect, &rect)) {
 		MxRect32* newRect = new MxRect32(rect);
 		p_list->Append(newRect);
 	}
