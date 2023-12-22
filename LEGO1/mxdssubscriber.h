@@ -38,7 +38,7 @@ public:
 private:
 	MxStreamChunkList m_unk0x08;        // 0x08
 	MxStreamChunkListCursor* m_unk0x20; // 0x20
-	MxStreamChunkList m_unk0x24;        // 0x20
+	MxStreamChunkList m_unk0x24;        // 0x24
 	MxStreamChunkListCursor* m_unk0x3c; // 0x3c
 	MxStreamController* m_controller;   // 0x40
 	MxU32 m_objectId;                   // 0x44
