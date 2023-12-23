@@ -1,0 +1,36 @@
+name: Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  pytest-win:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install python libraries
+      shell: bash
+      run: |
+        pip install pytest -r tools/requirements.txt
+
+    - name: Run python unit tests (Windows)
+      shell: bash
+      run: |
+        pytest tools/isledecomp
+
+  pytest-ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install python libraries
+      shell: bash
+      run: |
+        pip install pytest -r tools/requirements.txt
+
+    - name: Run python unit tests (Ubuntu)
+      shell: bash
+      run: |
+        pytest tools/isledecomp
