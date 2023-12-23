@@ -72,7 +72,7 @@ done:
 }
 
 // STUB: LEGO1 0x100d15e0
-void MxDiskStreamProvider::VTable0x20(undefined4)
+void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
 	// TODO
 }
