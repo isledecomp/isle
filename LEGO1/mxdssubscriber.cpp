@@ -19,7 +19,7 @@ MxDSSubscriber::~MxDSSubscriber()
 	if (m_controller)
 		m_controller->FUN_100c1620(this);
 
-	FUN_100b8030();
+	DeleteChunks();
 
 	if (m_unk0x20)
 		delete m_unk0x20;
@@ -52,28 +52,74 @@ MxResult MxDSSubscriber::Create(MxStreamController* p_controller, MxU32 p_object
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100b8030
-void MxDSSubscriber::FUN_100b8030()
+// FUNCTION: LEGO1 0x100b8030
+void MxDSSubscriber::DeleteChunks()
 {
-	// TODO
+	if (m_controller) {
+		MxStreamChunk* chunk = NULL;
+
+		while (m_unk0x20->First(chunk)) {
+			m_unk0x20->Detach();
+			delete chunk;
+		}
+
+		while (m_unk0x3c->First(chunk)) {
+			m_unk0x3c->Detach();
+			delete chunk;
+		}
+	}
 }
 
-// STUB: LEGO1 0x100b8250
+// FUNCTION: LEGO1 0x100b8150
+MxResult MxDSSubscriber::AddChunk(MxStreamChunk* p_chunk, MxBool p_append)
+{
+	if (m_unk0x20) {
+		if (p_append)
+			m_unk0x08.Append(p_chunk);
+		else
+			m_unk0x08.Prepend(p_chunk);
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100b8250
 MxStreamChunk* MxDSSubscriber::FUN_100b8250()
 {
-	// TODO
-	return NULL;
+	MxStreamChunk* chunk = NULL;
+
+	if (m_unk0x20)
+		m_unk0x20->First(chunk);
+
+	if (chunk) {
+		m_unk0x20->Detach();
+		m_unk0x24.Append(chunk);
+	}
+
+	return chunk;
 }
 
-// STUB: LEGO1 0x100b8360
+// FUNCTION: LEGO1 0x100b8360
 MxStreamChunk* MxDSSubscriber::FUN_100b8360()
 {
-	// TODO
-	return NULL;
+	MxStreamChunk* chunk = NULL;
+
+	if (m_unk0x20)
+		m_unk0x20->First(chunk);
+
+	return chunk;
 }
 
-// STUB: LEGO1 0x100b8390
-void MxDSSubscriber::FUN_100b8390(MxStreamChunk*)
+// FUNCTION: LEGO1 0x100b8390
+void MxDSSubscriber::FUN_100b8390(MxStreamChunk* p_chunk)
 {
-	// TODO
+	if (p_chunk) {
+		if (m_unk0x3c->Find(p_chunk)) {
+			m_unk0x3c->Detach();
+			if (p_chunk)
+				delete p_chunk;
+		}
+		else if ((p_chunk->GetFlags() & MxStreamChunk::Flag_Bit1) != 0 && p_chunk)
+			delete p_chunk;
+	}
 }

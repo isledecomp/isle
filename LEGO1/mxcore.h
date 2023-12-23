@@ -33,7 +33,7 @@ public:
 	inline MxU32 GetId() { return m_id; }
 
 private:
-	MxU32 m_id;
+	MxU32 m_id; // 0x04
 };
 
 #endif // MXCORE_H

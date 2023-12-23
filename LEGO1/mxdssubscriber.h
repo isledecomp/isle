@@ -30,10 +30,11 @@ public:
 	}
 
 	MxResult Create(MxStreamController* p_controller, MxU32 p_objectId, MxS16 p_unk0x48);
-	void FUN_100b8030();
+	void DeleteChunks();
+	MxResult AddChunk(MxStreamChunk* p_chunk, MxBool p_append);
 	MxStreamChunk* FUN_100b8250();
 	MxStreamChunk* FUN_100b8360();
-	void FUN_100b8390(MxStreamChunk*);
+	void FUN_100b8390(MxStreamChunk* p_chunk);
 
 private:
 	MxStreamChunkList m_unk0x08;        // 0x08

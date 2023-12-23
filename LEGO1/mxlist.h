@@ -54,6 +54,7 @@ public:
 	virtual ~MxList() override;
 
 	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); };
+	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); };
 	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
 
@@ -195,8 +196,10 @@ inline MxBool MxListCursor<T>::Find(T p_obj)
 template <class T>
 inline void MxListCursor<T>::Detach()
 {
-	m_list->DeleteEntry(m_match);
-	m_match = NULL;
+	if (m_match) {
+		m_list->DeleteEntry(m_match);
+		m_match = NULL;
+	}
 }
 
 template <class T>
@@ -204,7 +207,8 @@ inline void MxListCursor<T>::Destroy()
 {
 	if (m_match) {
 		m_list->m_customDestructor(m_match->GetValue());
-		Detach();
+		m_list->DeleteEntry(m_match);
+		m_match = NULL;
 	}
 }
 

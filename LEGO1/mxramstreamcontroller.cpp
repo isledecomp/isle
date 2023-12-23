@@ -40,8 +40,9 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
-	MxS16 unk0x24 = 0;
+	MxS32 unk0x24 = 0;
 	MxResult result = FAILURE;
+
 	if (p_action->GetUnknown24() == -1) {
 		p_action->SetUnknown24(-3);
 		MxDSAction* action = m_unk0x54.Find(p_action, FALSE);
@@ -85,11 +86,14 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result;
 	MxDSStreamingAction* value = NULL;
+
 	do {
 		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
+		// Probably not MxResult, see below
 		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
 	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
-	return result;
+
+	return result == SUCCESS ? SUCCESS : FAILURE;
 }
 
 // STUB: LEGO1 0x100d0d80
