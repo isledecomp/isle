@@ -86,11 +86,14 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 	MxAutoLocker locker(&m_criticalSection);
 	MxResult result;
 	MxDSStreamingAction* value = NULL;
+
 	do {
 		m_buffer.FUN_100c6f80(p_action.GetUnknown94());
+		// Probably not MxResult, see below
 		result = m_buffer.FUN_100c67b0(this, &p_action, &value);
 	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
-	return result;
+
+	return result == SUCCESS ? SUCCESS : FAILURE;
 }
 
 // STUB: LEGO1 0x100d0d80
