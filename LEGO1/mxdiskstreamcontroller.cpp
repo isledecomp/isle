@@ -107,7 +107,7 @@ MxDSStreamingAction* MxDiskStreamController::VTable0x28()
 			MxU32 offset = result->GetBufferOffset() + filesize;
 			((MxDSStreamingAction*) oldAction)->SetUnknown94(offset);
 			((MxDSStreamingAction*) oldAction)->SetBufferOffset(offset);
-			m_unk0x3c.push_back(result);
+			m_unk0x3c.push_back(oldAction);
 		}
 	}
 
