@@ -1,43 +1,83 @@
 import os
 import subprocess
 import sys
+import pathlib
 from typing import Iterator
 
 
-class WinePathConverter:
-    def __init__(self, unix_cwd):
-        self.unix_cwd = unix_cwd
-        self.win_cwd = self._call_winepath_unix2win(self.unix_cwd)
+def winepath_win_to_unix(path: str) -> str:
+    return subprocess.check_output(["winepath", path], text=True).strip()
 
-    def get_wine_path(self, unix_fn: str) -> str:
-        if unix_fn.startswith("./"):
-            return self.win_cwd + "\\" + unix_fn[2:].replace("/", "\\")
-        if unix_fn.startswith(self.unix_cwd):
-            return (
-                self.win_cwd
-                + "\\"
-                + unix_fn.removeprefix(self.unix_cwd).replace("/", "\\").lstrip("\\")
+
+def winepath_unix_to_win(path: str) -> str:
+    return subprocess.check_output(["winepath", "-w", path], text=True).strip()
+
+
+class PathResolver:
+    """Intended to resolve Windows/Wine paths used in the PDB (cvdump) output
+    into a "canonical" format to be matched against code file paths from os.walk.
+    MSVC may include files from the parent dir using `..`. We eliminate those and create
+    an absolute path so that information about the same file under different names
+    will be combined into the same record. (i.e. line_no/addr pairs from LINES section.)
+    """
+
+    def __init__(self, basedir) -> None:
+        """basedir is the root path of the code directory in the format for your OS.
+        We will convert it to a PureWindowsPath to be platform-independent
+        and match that to the paths from the PDB."""
+
+        # Memoize the converted paths. We will need to do this for each path
+        # in the PDB, for each function in that file. (i.e. lots of repeated work)
+        self._memo = {}
+
+        # Convert basedir to an absolute path if it is not already.
+        # If it is not absolute, we cannot do the path swap on unix.
+        self._realdir = pathlib.Path(basedir).resolve()
+
+        self._is_unix = os.name != "nt"
+        if self._is_unix:
+            self._basedir = pathlib.PureWindowsPath(
+                winepath_unix_to_win(str(self._realdir))
             )
-        return self._call_winepath_unix2win(unix_fn)
+        else:
+            self._basedir = self._realdir
 
-    def get_unix_path(self, win_fn: str) -> str:
-        if win_fn.startswith(".\\") or win_fn.startswith("./"):
-            return self.unix_cwd + "/" + win_fn[2:].replace("\\", "/")
-        if win_fn.startswith(self.win_cwd):
-            return (
-                self.unix_cwd
-                + "/"
-                + win_fn.removeprefix(self.win_cwd).replace("\\", "/")
-            )
-        return self._call_winepath_win2unix(win_fn)
+    def _memo_wrapper(self, path_str: str) -> str:
+        """Wrapper so we can memoize from the public caller method"""
+        path = pathlib.PureWindowsPath(path_str)
+        if not path.is_absolute():
+            # pathlib syntactic sugar for path concat
+            path = self._basedir / path
 
-    @staticmethod
-    def _call_winepath_unix2win(fn: str) -> str:
-        return subprocess.check_output(["winepath", "-w", fn], text=True).strip()
+        if self._is_unix:
+            # If the given path is relative to the basedir, deconstruct the path
+            # and swap in our unix path to avoid an expensive call to winepath.
+            try:
+                # Will raise ValueError if we are not relative to the base.
+                section = path.relative_to(self._basedir)
+                # Should combine to pathlib.PosixPath
+                mockpath = (self._realdir / section).resolve()
+                if mockpath.is_file():
+                    return str(mockpath)
+            except ValueError:
+                pass
 
-    @staticmethod
-    def _call_winepath_win2unix(fn: str) -> str:
-        return subprocess.check_output(["winepath", fn], text=True).strip()
+            # We are not relative to the basedir, or our path swap attempt
+            # did not point at an actual file. Either way, we are forced
+            # to call winepath using our original path.
+            return winepath_win_to_unix(str(path))
+
+        # We must be on Windows. Convert back to WindowsPath.
+        # The resolve() call will eliminate intermediate backdir references.
+        return str(pathlib.Path(path).resolve())
+
+    def resolve_cvdump(self, path_str: str) -> str:
+        """path_str is in Windows/Wine path format.
+        We will return a path in the format for the host OS."""
+        if path_str not in self._memo:
+            self._memo[path_str] = self._memo_wrapper(path_str)
+
+        return self._memo[path_str]
 
 
 def is_file_cpp(filename: str) -> bool:

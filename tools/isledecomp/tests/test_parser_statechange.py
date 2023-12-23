@@ -1,3 +1,4 @@
+from typing import Optional
 import pytest
 from isledecomp.parser.parser import (
     ReaderState as _rs,
@@ -70,7 +71,7 @@ state_change_marker_cases = [
     "state, marker_type, new_state, expected_error", state_change_marker_cases
 )
 def test_state_change_by_marker(
-    state: _rs, marker_type: str, new_state: _rs, expected_error: None | _pe
+    state: _rs, marker_type: str, new_state: _rs, expected_error: Optional[_pe]
 ):
     p = DecompParser()
     p.state = state

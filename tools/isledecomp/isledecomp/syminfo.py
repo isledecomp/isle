@@ -1,6 +1,7 @@
 import os
 import subprocess
 from isledecomp.lib import lib_path_join
+from isledecomp.dir import PathResolver, winepath_unix_to_win
 
 
 class RecompiledInfo:
@@ -16,14 +17,15 @@ class SymInfo:
     lines = {}
     names = {}
 
-    def __init__(self, pdb, sym_recompfile, sym_logger, sym_wine_path_converter=None):
+    def __init__(self, pdb, sym_recompfile, sym_logger, base_dir):
         self.logger = sym_logger
+        path_resolver = PathResolver(base_dir)
         call = [lib_path_join("cvdump.exe"), "-l", "-s"]
 
-        if sym_wine_path_converter:
+        if os.name != "nt":
             # Run cvdump through wine and convert path to Windows-friendly wine path
             call.insert(0, "wine")
-            call.append(sym_wine_path_converter.get_wine_path(pdb))
+            call.append(winepath_unix_to_win(pdb))
         else:
             call.append(pdb)
 
@@ -70,10 +72,7 @@ class SymInfo:
                 and not line.startswith("   ")
             ):
                 sourcepath = line.split()[0]
-
-                if sym_wine_path_converter:
-                    # Convert filename to Unix path for file compare
-                    sourcepath = sym_wine_path_converter.get_unix_path(sourcepath)
+                sourcepath = path_resolver.resolve_cvdump(sourcepath)
 
                 if sourcepath not in self.lines:
                     self.lines[sourcepath] = {}
