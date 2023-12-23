@@ -7,6 +7,7 @@
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
 #include "mxdsobject.h"
+#include "mxdssubscriber.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamlist.h"
 #include "mxstreamprovider.h"
@@ -18,7 +19,6 @@ class MxDSStreamingAction;
 class MxStreamController : public MxCore {
 public:
 	MxStreamController();
-
 	virtual ~MxStreamController() override; // vtable+0x0
 
 	// FUNCTION: LEGO1 0x100c0f10
@@ -43,12 +43,14 @@ public:
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 
+	void FUN_100c15d0(MxDSSubscriber* p_subscriber);
+	void FUN_100c1620(MxDSSubscriber* p_subscriber);
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
-	MxBool FUN_100c20d0(MxDSObject& p_obj);
 	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval);
 	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
-	MxResult InsertActionToList54(MxDSAction* p_action);
 	MxResult FUN_100c1f00(MxDSAction* p_action);
+	MxBool FUN_100c20d0(MxDSObject& p_obj);
+	MxResult InsertActionToList54(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
 	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; };

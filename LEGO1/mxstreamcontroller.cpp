@@ -52,6 +52,18 @@ MxResult MxStreamController::Open(const char* p_filename)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100c15d0
+void MxStreamController::FUN_100c15d0(MxDSSubscriber* p_subscriber)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100c1620
+void MxStreamController::FUN_100c1620(MxDSSubscriber* p_subscriber)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100c1690
 MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 {
