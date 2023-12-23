@@ -40,8 +40,9 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
 	MxAutoLocker locker(&m_criticalSection);
-	MxS16 unk0x24 = 0;
+	MxS32 unk0x24 = 0;
 	MxResult result = FAILURE;
+
 	if (p_action->GetUnknown24() == -1) {
 		p_action->SetUnknown24(-3);
 		MxDSAction* action = m_unk0x54.Find(p_action, FALSE);
