@@ -1,6 +1,7 @@
 #ifndef JUKEBOX_H
 #define JUKEBOX_H
 
+#include "decomp.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d8958
@@ -21,6 +22,12 @@ public:
 	{
 		return !strcmp(p_name, JukeBox::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+private:
+	undefined m_unkf8[4];
+	undefined4 m_unkfc;
+	undefined2 m_unk100;
+	undefined m_unk102[2];
 };
 
 #endif // JUKEBOX_H
