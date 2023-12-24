@@ -45,68 +45,65 @@ MxDSBuffer::~MxDSBuffer()
 MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
 {
 	MxResult result = FAILURE;
-	MxU32 i = 0;
-	if (p_mode == MxDSBufferType_Allocate) {
-		m_pBuffer = new MxU8[p_bufferSize];
-	}
-	else if (p_mode == MxDSBufferType_Chunk) {
-		MxStreamer* streamer = Streamer();
-		// I have no clue as to what this does, or even if its correct. Maybe it's related to storing chunks in
-		// MxDiskStreamController?
-		if (p_bufferSize >> 10 == 0x40) {
-			i = 0;
-			while (i < 22) {
-				if ((*(MxU32*) ((streamer->GetSubclass1().GetUnk08() + ((i & 0xffffffe7) >> 3)) & 1 << ((MxU8) i & 0x1f)
-					)) == 0) {
-					MxU32* ptr = (MxU32*) ((streamer->GetSubclass1().GetUnk08() + ((i & 0xffffffe7) >> 3)) &
-										   1 << ((MxU8) i & 0x1f));
 
-					// mark it as used?
+	switch (p_mode) {
+	case MxDSBufferType_Allocate:
+		m_pBuffer = new MxU8[p_bufferSize];
+		break;
+
+	case MxDSBufferType_Chunk: {
+		MxStreamer* streamer = Streamer();
+
+		switch (p_bufferSize / 1024) {
+		case 0x40: {
+			for (MxU32 i = 0; i < 22; i++) {
+				if (((1 << (i & 0x1f)) & (*(MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(i & ~0x18u) >> 3])) == 0) {
+					MxU32* ptr = (MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(i & 0xffffffe7) >> 3];
+
 					*ptr = *ptr ^ 1 << (i & 0x1f);
 
 					m_pBuffer =
 						(MxU8*) (streamer->GetSubclass1().GetSize() * i * 0x400 + streamer->GetSubclass1().GetBuffer());
-					break;
+					goto done;
 				}
-				i++;
 			}
 
 			m_pBuffer = NULL;
+			break;
 		}
-		else if (p_bufferSize >> 10 == 0x80) {
-			i = 0;
-			// Same thing as above but it uses subclass2
-			while (i < 22) {
-				if ((*(MxU32*) ((streamer->GetSubclass2().GetUnk08() + ((i & 0xffffffe7) >> 3)) & 1 << ((MxU8) i & 0x1f)
-					)) == 0) {
-					MxU32* ptr = (MxU32*) ((streamer->GetSubclass2().GetUnk08() + ((i & 0xffffffe7) >> 3)) &
-										   1 << ((MxU8) i & 0x1f));
+		case 0x80: {
+			for (MxU32 i = 0; i < 2; i++) {
+				if (((1 << (i & 0x1f)) & (*(MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(i & ~0x18u) >> 3])) == 0) {
+					MxU32* ptr = (MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(i & 0xffffffe7) >> 3];
 
-					// mark it as used?
 					*ptr = *ptr ^ 1 << (i & 0x1f);
 
 					m_pBuffer =
 						(MxU8*) (streamer->GetSubclass2().GetSize() * i * 0x400 + streamer->GetSubclass2().GetBuffer());
-					break;
+					goto done;
 				}
-				i++;
 			}
 
 			m_pBuffer = NULL;
+			break;
 		}
-		else {
-			m_pIntoBuffer = NULL;
+		default:
+			m_pBuffer = NULL;
 		}
 	}
+	}
 
+done:
 	m_pIntoBuffer = m_pBuffer;
 	m_pIntoBuffer2 = m_pBuffer;
+
 	if (m_pBuffer != NULL) {
 		m_mode = p_mode;
 		m_bytesRemaining = p_bufferSize;
 		m_writeOffset = p_bufferSize;
 		result = SUCCESS;
 	}
+
 	return result;
 }
 
@@ -221,8 +218,8 @@ MxResult MxDSBuffer::ParseChunk(
 // FUNCTION: LEGO1 0x100c6d00
 MxCore* MxDSBuffer::ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags)
 {
-	// This function reads a chunk. If it is an object, this function returns an MxDSObject. If it is a chunk, returns a
-	// MxDSChunk.
+	// This function reads a chunk. If it is an object, this function returns an MxDSObject. If it is a chunk,
+	// returns a MxDSChunk.
 	MxCore* result = NULL;
 	MxU8* dataStart = (MxU8*) p_chunkData + 8;
 
