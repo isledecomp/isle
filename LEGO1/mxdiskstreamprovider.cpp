@@ -1,5 +1,6 @@
 #include "mxdiskstreamprovider.h"
 
+#include "mxdsbuffer.h"
 #include "mxomni.h"
 #include "mxstreamcontroller.h"
 #include "mxstring.h"
@@ -58,10 +59,9 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 		}
 
 		m_remainingWork = 1;
-		MxResult success = m_busySemaphore.Init(0, 100);
-		m_thread.StartWithTarget(this);
+		m_busySemaphore.Init(0, 100);
 
-		if (success == SUCCESS && p_resource != NULL) {
+		if (m_thread.StartWithTarget(this) == SUCCESS && p_resource != NULL) {
 			result = SUCCESS;
 		}
 	}
@@ -71,7 +71,7 @@ done:
 }
 
 // STUB: LEGO1 0x100d15e0
-void MxDiskStreamProvider::VTable0x20(undefined4)
+void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
 	// TODO
 }
@@ -87,6 +87,13 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100d1780
+MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
+{
+	// TODO
+	return FAILURE;
+}
+
 // STUB: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
@@ -100,7 +107,7 @@ MxU32 MxDiskStreamProvider::GetFileSize()
 }
 
 // FUNCTION: LEGO1 0x100d1ea0
-MxU32 MxDiskStreamProvider::GetStreamBuffersNum()
+MxS32 MxDiskStreamProvider::GetStreamBuffersNum()
 {
 	return m_pFile->GetStreamBuffersNum();
 }

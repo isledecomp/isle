@@ -33,7 +33,11 @@ public:
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode);
 	MxResult SetBufferPointer(MxU32* p_buffer, MxU32 p_size);
-	MxResult FUN_100c67b0(MxStreamController* p_controller, MxDSAction* p_action, undefined4*);
+	MxResult FUN_100c67b0(
+		MxStreamController* p_controller,
+		MxDSAction* p_action,
+		MxDSStreamingAction** p_streamingAction
+	);
 	MxResult CreateObject(
 		MxStreamController* p_controller,
 		MxU32* p_data,
@@ -55,6 +59,8 @@ public:
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
+	inline MxU16 GetRefCount() { return m_refcount; }
+	inline MxDSBufferType GetMode() { return m_mode; }
 
 private:
 	MxU8* m_pBuffer;                // 0x08

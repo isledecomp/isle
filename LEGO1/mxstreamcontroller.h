@@ -7,16 +7,18 @@
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
 #include "mxdsobject.h"
+#include "mxdssubscriber.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamlist.h"
 #include "mxstreamprovider.h"
+
+class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dc968
 // SIZE 0x64
 class MxStreamController : public MxCore {
 public:
 	MxStreamController();
-
 	virtual ~MxStreamController() override; // vtable+0x0
 
 	// FUNCTION: LEGO1 0x100c0f10
@@ -37,16 +39,18 @@ public:
 	virtual MxResult VTable0x1c(undefined4, undefined4);                  // vtable+0x1c
 	virtual MxResult VTable0x20(MxDSAction* p_action);                    // vtable+0x20
 	virtual MxResult VTable0x24(MxDSAction* p_action);                    // vtable+0x24
-	virtual MxResult VTable0x28();                                        // vtable+0x28
+	virtual MxDSStreamingAction* VTable0x28();                            // vtable+0x28
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 
+	void FUN_100c15d0(MxDSSubscriber* p_subscriber);
+	void FUN_100c1620(MxDSSubscriber* p_subscriber);
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
-	MxBool FUN_100c20d0(MxDSObject& p_obj);
 	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval);
 	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
-	MxResult InsertActionToList54(MxDSAction* p_action);
 	MxResult FUN_100c1f00(MxDSAction* p_action);
+	MxBool FUN_100c20d0(MxDSObject& p_obj);
+	MxResult InsertActionToList54(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
 	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; };
@@ -55,7 +59,7 @@ protected:
 	MxCriticalSection m_criticalSection;                // 0x8
 	MxAtomId m_atom;                                    // 0x24
 	MxStreamProvider* m_provider;                       // 0x28
-	undefined4 m_unk0x2c;                               // 0x2c
+	undefined4* m_unk0x2c;                              // 0x2c
 	MxStreamListMxDSSubscriber m_subscriberList;        // 0x30
 	MxStreamListMxDSAction m_unk0x3c;                   // 0x3c
 	MxStreamListMxNextActionDataStart m_nextActionList; // 0x48

@@ -54,6 +54,7 @@ public:
 	virtual ~MxList() override;
 
 	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); };
+	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); };
 	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
 
@@ -92,6 +93,8 @@ public:
 	void Destroy();
 	MxBool Next(T& p_obj);
 	MxBool Current(T& p_obj);
+	MxBool First(T& p_obj);
+	MxBool Last(T& p_obj);
 	MxBool Advance();
 	MxBool HasMatch() { return m_match != NULL; }
 	void SetValue(T p_obj);
@@ -193,8 +196,10 @@ inline MxBool MxListCursor<T>::Find(T p_obj)
 template <class T>
 inline void MxListCursor<T>::Detach()
 {
-	m_list->DeleteEntry(m_match);
-	m_match = NULL;
+	if (m_match) {
+		m_list->DeleteEntry(m_match);
+		m_match = NULL;
+	}
 }
 
 template <class T>
@@ -202,7 +207,8 @@ inline void MxListCursor<T>::Destroy()
 {
 	if (m_match) {
 		m_list->m_customDestructor(m_match->GetValue());
-		Detach();
+		m_list->DeleteEntry(m_match);
+		m_match = NULL;
 	}
 }
 
@@ -223,6 +229,26 @@ inline MxBool MxListCursor<T>::Next(T& p_obj)
 template <class T>
 inline MxBool MxListCursor<T>::Current(T& p_obj)
 {
+	if (m_match)
+		p_obj = m_match->GetValue();
+
+	return m_match != NULL;
+}
+
+template <class T>
+inline MxBool MxListCursor<T>::First(T& p_obj)
+{
+	m_match = m_list->m_first;
+	if (m_match)
+		p_obj = m_match->GetValue();
+
+	return m_match != NULL;
+}
+
+template <class T>
+inline MxBool MxListCursor<T>::Last(T& p_obj)
+{
+	m_match = m_list->m_last;
 	if (m_match)
 		p_obj = m_match->GetValue();
 

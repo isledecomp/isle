@@ -2,6 +2,7 @@
 
 #include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
 #include "mxstreamchunk.h"
 
@@ -21,23 +22,46 @@ MxResult MxStreamController::VTable0x1c(undefined4, undefined4)
 }
 
 // FUNCTION: LEGO1 0x100b9420
-MxResult MxStreamController::VTable0x28()
+MxDSStreamingAction* MxStreamController::VTable0x28()
 {
-	return SUCCESS;
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100c0b90
 MxStreamController::MxStreamController()
 {
 	m_provider = NULL;
-	m_unk0x2c = 0; // TODO: probably also NULL
+	m_unk0x2c = NULL;
 	m_action0x60 = NULL;
 }
 
-// STUB: LEGO1 0x100c1290
+// FUNCTION: LEGO1 0x100c1290
 MxStreamController::~MxStreamController()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxDSSubscriber* subscriber;
+	while (m_subscriberList.PopFront(subscriber))
+		delete subscriber;
+
+	MxDSAction* action;
+	while (m_unk0x3c.PopFront(action))
+		delete action;
+
+	if (m_provider) {
+		MxStreamProvider* provider = m_provider;
+		m_provider = NULL;
+		provider->VTable0x20(&MxDSAction());
+		delete provider;
+	}
+
+	if (m_unk0x2c) {
+		delete m_unk0x2c;
+		m_unk0x2c = NULL;
+	}
+
+	while (m_unk0x54.PopFront(action))
+		delete action;
 }
 
 // FUNCTION: LEGO1 0x100c1520
@@ -49,6 +73,18 @@ MxResult MxStreamController::Open(const char* p_filename)
 	MakeSourceName(sourceName, p_filename);
 	this->m_atom = MxAtomId(sourceName, LookupMode_LowerCase2);
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100c15d0
+void MxStreamController::FUN_100c15d0(MxDSSubscriber* p_subscriber)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100c1620
+void MxStreamController::FUN_100c1620(MxDSSubscriber* p_subscriber)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100c1690

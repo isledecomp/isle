@@ -188,16 +188,16 @@ void MxVideoPresenter::Init()
 	m_unk0x5c = 1;
 	m_unk0x58 = NULL;
 	m_unk0x60 = -1;
-	m_flags = m_flags & 0xfe;
+	m_flags &= ~Flag_Bit1;
 
 	if (MVideoManager() != NULL) {
 		MVideoManager();
-		m_flags = m_flags | 2;
-		m_flags = m_flags & 0xfb;
+		m_flags |= Flag_Bit2;
+		m_flags &= ~Flag_Bit3;
 	}
 
-	m_flags = m_flags & 0xf7;
-	m_flags = m_flags & 0xef;
+	m_flags &= ~Flag_Bit4;
+	m_flags &= ~Flag_Bit5;
 }
 
 // FUNCTION: LEGO1 0x100b27b0
@@ -209,8 +209,8 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	if (m_unk0x58) {
 		m_unk0x58->Release();
 		m_unk0x58 = NULL;
-		m_flags = m_flags & 0xfd;
-		m_flags = m_flags & 0xfb;
+		m_flags &= ~Flag_Bit2;
+		m_flags &= ~Flag_Bit3;
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {

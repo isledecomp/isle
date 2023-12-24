@@ -5,6 +5,7 @@
 #include "mxcore.h"
 #include "mxdschunk.h"
 #include "mxstreamchunk.h"
+#include "mxstreamchunklist.h"
 
 class MxStreamController;
 
@@ -28,13 +29,27 @@ public:
 		return !strcmp(p_name, MxDSSubscriber::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	MxResult FUN_100b7ed0(MxStreamController*, MxU32, MxS16);
+	MxResult Create(MxStreamController* p_controller, MxU32 p_objectId, MxS16 p_unk0x48);
+	void DeleteChunks();
+	MxResult AddChunk(MxStreamChunk* p_chunk, MxBool p_append);
 	MxStreamChunk* FUN_100b8250();
 	MxStreamChunk* FUN_100b8360();
-	void FUN_100b8390(MxStreamChunk*);
+	void FUN_100b8390(MxStreamChunk* p_chunk);
 
 private:
-	undefined m_pad[0x44]; // 0x8
+	MxStreamChunkList m_unk0x08;        // 0x08
+	MxStreamChunkListCursor* m_unk0x20; // 0x20
+	MxStreamChunkList m_unk0x24;        // 0x24
+	MxStreamChunkListCursor* m_unk0x3c; // 0x3c
+	MxStreamController* m_controller;   // 0x40
+	MxU32 m_objectId;                   // 0x44
+	MxS16 m_unk0x48;                    // 0x48
 };
+
+// SYNTHETIC: LEGO1 0x100b7de0
+// MxDSSubscriber::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b7d00
+// MxStreamChunkList::~MxStreamChunkList
 
 #endif // MXDSSUBSCRIBER_H

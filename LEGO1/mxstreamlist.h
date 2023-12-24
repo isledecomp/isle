@@ -7,7 +7,18 @@
 #include "mxstl/stlcompat.h"
 
 template <class T>
-class MxStreamList : public list<T> {};
+class MxStreamList : public list<T> {
+public:
+	MxBool PopFront(T& p_obj)
+	{
+		if (empty())
+			return FALSE;
+
+		p_obj = front();
+		pop_front();
+		return TRUE;
+	}
+};
 
 // SIZE 0xc
 class MxStreamListMxDSAction : public MxStreamList<MxDSAction*> {
