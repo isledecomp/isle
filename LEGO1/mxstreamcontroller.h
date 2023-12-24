@@ -46,7 +46,7 @@ public:
 	void FUN_100c15d0(MxDSSubscriber* p_subscriber);
 	void FUN_100c1620(MxDSSubscriber* p_subscriber);
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
-	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval);
+	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset);
 	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
 	MxResult FUN_100c1f00(MxDSAction* p_action);
 	MxBool FUN_100c20d0(MxDSObject& p_obj);

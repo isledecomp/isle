@@ -41,14 +41,14 @@ public:
 	inline void SetBufferOffset(MxU32 p_bufferOffset) { m_bufferOffset = p_bufferOffset; }
 
 private:
-	MxU32 m_unk0x94;
-	MxU32 m_bufferOffset;
-	MxS32 m_unk0x9c;
-	MxDSBuffer* m_unk0xa0;
-	MxDSBuffer* m_unk0xa4;
-	MxLong m_unk0xa8;
-	undefined2 m_unk0xac;
-	MxDSAction* m_internalAction;
+	MxU32 m_unk0x94;              // 0x94
+	MxU32 m_bufferOffset;         // 0x98
+	MxS32 m_unk0x9c;              // 0x9c
+	MxDSBuffer* m_unk0xa0;        // 0xa0
+	MxDSBuffer* m_unk0xa4;        // 0xa4
+	MxLong m_unk0xa8;             // 0xa8
+	undefined2 m_unk0xac;         // 0xac
+	MxDSAction* m_internalAction; // 0xb0
 };
 
 #endif // MXDSSTREAMINGACTION_H
