@@ -29,30 +29,29 @@ MxTickleManager::~MxTickleManager()
 	}
 }
 
-// TODO: Match.
 // FUNCTION: LEGO1 0x100bdde0
 MxResult MxTickleManager::Tickle()
 {
 	MxTime time = Timer()->GetTime();
 
-	MxTickleClientPtrList::iterator it = m_clients.begin();
-
-	while (it != m_clients.end()) {
+	for (MxTickleClientPtrList::iterator it = m_clients.begin(); it != m_clients.end();) {
 		MxTickleClient* client = *it;
-		if ((client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) == 0) {
-			if (client->GetLastUpdateTime() >= time)
+
+		// TODO: Match.
+		if ((MxU8) client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) {
+			m_clients.erase(it++);
+			delete client;
+		}
+		else {
+			it++;
+
+			if (client->GetLastUpdateTime() > time)
 				client->SetLastUpdateTime(-client->GetTickleInterval());
 
 			if ((client->GetTickleInterval() + client->GetLastUpdateTime()) < time) {
 				client->GetClient()->Tickle();
 				client->SetLastUpdateTime(time);
 			}
-
-			it++;
-		}
-		else {
-			m_clients.erase(it++);
-			delete client;
 		}
 	}
 
