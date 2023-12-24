@@ -31,14 +31,37 @@ MxDSStreamingAction* MxStreamController::VTable0x28()
 MxStreamController::MxStreamController()
 {
 	m_provider = NULL;
-	m_unk0x2c = 0; // TODO: probably also NULL
+	m_unk0x2c = NULL;
 	m_action0x60 = NULL;
 }
 
-// STUB: LEGO1 0x100c1290
+// FUNCTION: LEGO1 0x100c1290
 MxStreamController::~MxStreamController()
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxDSSubscriber* subscriber;
+	while (m_subscriberList.PopFront(subscriber))
+		delete subscriber;
+
+	MxDSAction* action;
+	while (m_unk0x3c.PopFront(action))
+		delete action;
+
+	if (m_provider) {
+		MxStreamProvider* provider = m_provider;
+		m_provider = NULL;
+		provider->VTable0x20(&MxDSAction());
+		delete provider;
+	}
+
+	if (m_unk0x2c) {
+		delete m_unk0x2c;
+		m_unk0x2c = NULL;
+	}
+
+	while (m_unk0x54.PopFront(action))
+		delete action;
 }
 
 // FUNCTION: LEGO1 0x100c1520

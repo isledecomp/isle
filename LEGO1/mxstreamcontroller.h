@@ -59,7 +59,7 @@ protected:
 	MxCriticalSection m_criticalSection;                // 0x8
 	MxAtomId m_atom;                                    // 0x24
 	MxStreamProvider* m_provider;                       // 0x28
-	undefined4 m_unk0x2c;                               // 0x2c
+	undefined4* m_unk0x2c;                              // 0x2c
 	MxStreamListMxDSSubscriber m_subscriberList;        // 0x30
 	MxStreamListMxDSAction m_unk0x3c;                   // 0x3c
 	MxStreamListMxNextActionDataStart m_nextActionList; // 0x48
