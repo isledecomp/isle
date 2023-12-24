@@ -1,6 +1,7 @@
 #include "mxstreamcontroller.h"
 
 #include "legoomni.h"
+#include "legoutil.h"
 #include "mxautolocker.h"
 #include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
@@ -139,7 +140,6 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 	return SUCCESS;
 }
 
-#include "legoutil.h"
 // FUNCTION: LEGO1 0x100c1a00
 MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
