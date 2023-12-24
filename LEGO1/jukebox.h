@@ -24,10 +24,9 @@ public:
 	}
 
 private:
-	undefined m_unk0xf8[4];
-	undefined4 m_unk0xfc;
-	undefined2 m_unk0x100;
-	undefined m_unk0x102[2];
+	undefined m_unk0xf8[4]; // 0xf8
+	undefined4 m_unk0xfc;   // 0xfc
+	undefined2 m_unk0x100;  // 0x100
 };
 
 #endif // JUKEBOX_H
