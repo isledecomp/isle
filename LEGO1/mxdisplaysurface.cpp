@@ -2,6 +2,7 @@
 
 #include "mxomni.h"
 #include "mxvideomanager.h"
+#include <windows.h>
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
@@ -216,9 +217,30 @@ void MxDisplaySurface::Clear()
 	this->Reset();
 }
 
-// STUB: LEGO1 0x100baae0
+// FUNCTION: LEGO1 0x100baae0
 void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
+	HDC hdc;
+	HPALETTE hpal;
+	LOGPALETTE lpal;
+	if((this->m_surfaceDesc).ddpfPixelFormat.dwFlags & 0x20) {
+		this->m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
+		this->m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
+		if(((this->m_videoParam).Flags().GetFlipSurfaces()) == 0) {
+			lpal.palVersion = 0x300;
+			lpal.palNumEntries = 256;
+			// FIXME: this loop
+			memset(lpal.palPalEntry, lpal.palNumEntries, 0);
+
+			hpal = CreatePalette(&lpal);
+			hdc = ::GetDC(0);
+			SelectPalette(hdc, hpal, 0);
+			RealizePalette(hdc);
+			::ReleaseDC(0, hdc);
+			DeleteObject(hpal);
+		}
+	}
+	// TODO: Second half of this function
 }
 
 // STUB: LEGO1 0x100bacc0
