@@ -784,11 +784,11 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		LegoOmni::GetInstance()->CreateBackgroundAudio();
 		BackgroundAudioManager()->Enable(this->m_useMusic);
 
-		MxStreamController* stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", 0);
+		MxStreamController* stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", MxStreamer::e_DiskStream);
 		MxDSAction ds;
 
 		if (!stream) {
-			stream = Streamer()->Open("\\lego\\scripts\\nocd", 0);
+			stream = Streamer()->Open("\\lego\\scripts\\nocd", MxStreamer::e_DiskStream);
 			if (!stream) {
 				return;
 			}

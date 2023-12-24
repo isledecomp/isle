@@ -36,6 +36,9 @@ public:
 	MxStreamChunk* FUN_100b8360();
 	void FUN_100b8390(MxStreamChunk* p_chunk);
 
+	inline MxU32 GetObjectId() { return m_objectId; }
+	inline MxS16 GetUnknown48() { return m_unk0x48; }
+
 private:
 	MxStreamChunkList m_unk0x08;        // 0x08
 	MxStreamChunkListCursor* m_unk0x20; // 0x20
