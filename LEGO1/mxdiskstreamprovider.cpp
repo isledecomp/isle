@@ -59,10 +59,9 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 		}
 
 		m_remainingWork = 1;
-		MxResult success = m_busySemaphore.Init(0, 100);
-		m_thread.StartWithTarget(this);
+		m_busySemaphore.Init(0, 100);
 
-		if (success == SUCCESS && p_resource != NULL) {
+		if (m_thread.StartWithTarget(this) == SUCCESS && p_resource != NULL) {
 			result = SUCCESS;
 		}
 	}
