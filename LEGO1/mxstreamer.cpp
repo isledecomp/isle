@@ -46,7 +46,6 @@ MxStreamer::~MxStreamer()
 // FUNCTION: LEGO1 0x100b92c0
 MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 {
-	// TODO
 	MxStreamController* stream = NULL;
 
 	if (!GetOpenStream(p_name)) {
@@ -59,7 +58,7 @@ MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 			break;
 		}
 
-		if (!stream || stream->Open(p_name) != SUCCESS || AddStreamControllerToOpenList(stream) != SUCCESS) {
+		if (stream && (stream->Open(p_name) != SUCCESS || AddStreamControllerToOpenList(stream) != SUCCESS)) {
 			delete stream;
 			stream = NULL;
 		}
