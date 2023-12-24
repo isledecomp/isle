@@ -19,7 +19,14 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 	IDirectSound3DListener* m_listener;
-	undefined4 m_unk0x40;
+	LegoSoundManagerSubclass* m_unk0x40;
+};
+
+// VTABLE: LEGO1 0x100d6b4c
+// SIZE 0x20
+class LegoSoundManagerSubclass
+{
+
 };
 
 #endif // LEGOSOUNDMANAGER_H

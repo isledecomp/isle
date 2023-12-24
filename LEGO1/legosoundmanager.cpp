@@ -51,7 +51,7 @@ MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 			}
 		}
 
-		// todo
+		m_unk0x40 = new LegoSoundManagerSubclass();
 		result = SUCCESS;
 	}
 
