@@ -5,6 +5,7 @@
 #include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
 #include "mxstreamchunk.h"
+#include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
@@ -138,10 +139,61 @@ MxResult MxStreamController::FUN_100c1800(MxDSAction* p_action, MxU32 p_val)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c1a00
-MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_bufferval)
+#include "legoutil.h"
+// FUNCTION: LEGO1 0x100c1a00
+MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
-	return FAILURE;
+	if (p_action->GetUnknown24() == -1) {
+		MxS16 newUnknown24 = -1;
+
+		// These loops might be a template function in the list classes
+		for (MxStreamListMxDSAction::iterator it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
+			MxDSAction* action = *it;
+
+			if (action->GetObjectId() == p_action->GetObjectId())
+				newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+		}
+
+		if (newUnknown24 == -1) {
+			for (MxStreamListMxDSAction::iterator it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
+				MxDSAction* action = *it;
+
+				if (action->GetObjectId() == p_action->GetObjectId())
+					newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+			}
+
+			if (newUnknown24 == -1) {
+				for (MxStreamListMxDSSubscriber::iterator it = m_subscriberList.begin(); it != m_subscriberList.end();
+					 it++) {
+					MxDSSubscriber* subscriber = *it;
+
+					if (subscriber->GetObjectId() == p_action->GetObjectId())
+						newUnknown24 = Max(newUnknown24, subscriber->GetUnknown48());
+				}
+			}
+		}
+
+		p_action->SetUnknown24(newUnknown24 + 1);
+	}
+	else {
+		if (m_unk0x3c.Find(p_action, FALSE))
+			return FAILURE;
+	}
+
+	MxDSStreamingAction* streamingAction = new MxDSStreamingAction(*p_action, p_offset);
+
+	if (!streamingAction)
+		return FAILURE;
+
+	MxU32 fileSize = m_provider->GetFileSize();
+	streamingAction->SetBufferOffset(fileSize * (p_offset / fileSize));
+	streamingAction->SetObjectId(p_action->GetObjectId());
+
+	MxLong time = Timer()->GetTime();
+	streamingAction->SetUnknown90(time);
+
+	m_unk0x3c.push_back(streamingAction);
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c1c10
