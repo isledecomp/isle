@@ -50,9 +50,11 @@ public:
 		MxU32 m_flags;
 	};
 
+protected:
+	void Destroy(MxBool p_fromDestructor);
+
 private:
 	void Init();
-	void Destroy(MxBool p_fromDestructor);
 	MxS8 GetPlayedChunks();
 	MxBool FUN_100b1ba0();
 	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);
