@@ -43,6 +43,8 @@ public:
 
 	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
 	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
+	void InsertToList74(MxDSBuffer* p_buffer);
+	void FUN_100c7cb0(MxDSStreamingAction* p_action);
 
 private:
 	MxStreamListMxDSAction m_list0x64; // 0x64
@@ -57,13 +59,11 @@ private:
 
 	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
 	void FUN_100c7970();
-	void FUN_100c7cb0(MxDSStreamingAction* p_action);
 	void FUN_100c7ce0(MxDSBuffer* p_buffer);
 	MxResult FUN_100c7d10();
 	void FUN_100c7980();
 	MxDSStreamingAction* FUN_100c7db0();
 	MxResult FUN_100c8360(MxDSStreamingAction* p_action);
-	void InsertToList74(MxDSBuffer* p_buffer);
 	void FUN_100c8540();
 	void FUN_100c8720();
 };

@@ -53,17 +53,20 @@ public:
 		MxStreamChunk* p_header
 	);
 	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
-	void SwapBuffers();
+	MxU8* SkipToData();
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
+	MxResult CalcBytesRemaining(MxU8* p_data);
 	void FUN_100c6f80(MxU32 p_writeOffset);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
+	inline MxU32 GetBytesRemaining() { return m_bytesRemaining; }
 	inline MxU16 GetRefCount() { return m_refcount; }
 	inline MxDSBufferType GetMode() { return m_mode; }
 	inline void SetUnknown14(undefined4 p_unk0x14) { m_unk0x14 = p_unk0x14; }
 	inline void SetUnknown1c(undefined4 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+	inline void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
 
 private:
 	MxU8* m_pBuffer;                // 0x08
