@@ -49,10 +49,10 @@ inline void GetDouble(MxU8** p_source, T& p_dest)
 }
 
 template <class T>
-inline void GetString(MxU8** p_source, const char* p_dest, T* p_obj, void (T::*p_setter)(const char*))
+inline void GetString(MxU8** p_source, char** p_dest, T* p_obj, void (T::*p_setter)(const char*))
 {
 	(p_obj->*p_setter)((char*) *p_source);
-	*p_source += strlen(p_dest) + 1;
+	*p_source += strlen(*p_dest) + 1;
 }
 
 ExtraActionType MatchActionString(const char*);
