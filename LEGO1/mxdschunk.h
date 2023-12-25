@@ -47,10 +47,7 @@ public:
 	inline MxU8* GetData() { return m_data; }
 
 	// FUNCTION: LEGO1 0x100be1e0
-	static MxU32 ReturnE()
-	{
-		return 0xe;
-	}
+	static MxU32 ReturnE() { return 0xe; }
 
 	inline void Release()
 	{
