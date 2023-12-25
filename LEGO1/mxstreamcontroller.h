@@ -53,6 +53,7 @@ public:
 	MxResult InsertActionToList54(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
+	inline MxStreamListMxDSAction& GetUnk0x3c() { return m_unk0x3c; };
 	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; };
 
 protected:

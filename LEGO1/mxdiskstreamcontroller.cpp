@@ -1,5 +1,6 @@
 #include "mxdiskstreamcontroller.h"
 
+#include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdiskstreamprovider.h"
 #include "mxdsstreamingaction.h"
@@ -181,10 +182,30 @@ MxResult MxDiskStreamController::FUN_100c7d10()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c7db0
+// FUNCTION: LEGO1 0x100c7db0
 MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 {
-	// TODO
+	MxAutoLocker lock(&this->m_criticalSection);
+
+	for (MxStreamListMxNextActionDataStart::iterator it = m_nextActionList.begin(); it != m_nextActionList.end();
+		 it++) {
+		MxNextActionDataStart* data = *it;
+
+		for (MxStreamListMxDSAction::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it++) {
+			MxDSStreamingAction* streamingAction = (MxDSStreamingAction*) *it2;
+
+			if (streamingAction->GetObjectId() == data->GetObjectId() &&
+				streamingAction->GetUnknown24() == data->GetUnknown24() &&
+				streamingAction->GetBufferOffset() == data->GetData()) {
+				m_nextActionList.erase(it);
+				data->SetData(m_provider->GetFileSize() + data->GetData());
+				m_nextActionList.push_back(data);
+
+				m_list0x64.erase(it2);
+				return streamingAction;
+			}
+		}
+	}
 	return NULL;
 }
 
@@ -224,11 +245,39 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c8160
+// FUNCTION: LEGO1 0x100c8160
 MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 {
-	// TODO
-	return FAILURE;
+	MxAutoLocker lock(&this->m_criticalSection);
+	if (m_unk0x54.Find(p_action, FALSE) == NULL) {
+		if (VTable0x30(p_action) == SUCCESS) {
+			MxOmni::GetInstance()->NotifyCurrentEntity(
+				&MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
+			);
+		}
+	}
+
+	MxDSAction action;
+	if (m_provider) {
+		m_provider->VTable0x20(p_action);
+	}
+
+	do {
+		if (m_action0x60 != NULL) {
+			delete m_action0x60;
+			m_action0x60 = NULL;
+		}
+
+		action = *p_action;
+		MxStreamController::VTable0x24(&action);
+	} while (m_action0x60 != NULL);
+
+	if (m_unk0x3c.size() == 0) {
+		m_unk0x70 = 0;
+		m_unk0xc4 = 0;
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c8360
@@ -269,10 +318,26 @@ void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 	m_list0x74.push_back(p_buffer);
 }
 
-// STUB: LEGO1 0x100c8540
+// FUNCTION: LEGO1 0x100c8540
 void MxDiskStreamController::FUN_100c8540()
 {
-	// TODO
+	MxAutoLocker lock(&this->m_criticalSection);
+	for (list<MxDSBuffer*>::iterator it = m_list0x74.begin(); it != m_list0x74.end(); it++) {
+		MxDSBuffer* buf = *it;
+		if (buf->GetRefCount() == 0) {
+			m_list0x74.erase(it);
+			FUN_100c7ce0(buf);
+		}
+	}
+	MxDSStreamingAction* action;
+	if (m_nextActionList.size() == 0 && m_list0x64.size() == 0) {
+		do {
+			action = (MxDSStreamingAction*)m_list0x64.front();
+			m_list0xb8.pop_front();
+
+			FUN_100c7cb0(action);
+		} while (m_list0x64.size() != 0);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c8640

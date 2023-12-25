@@ -42,17 +42,18 @@ public:
 		MxStreamController* p_controller,
 		MxU32* p_data,
 		MxDSAction* p_action,
-		undefined4 p_undefined
+		MxDSStreamingAction** p_streamingAction
 	);
 	MxResult StartPresenterFromAction(MxStreamController* p_controller, MxDSAction* p_action1, MxDSAction* p_action2);
 	MxResult ParseChunk(
 		MxStreamController* p_controller,
 		MxU32* p_data,
 		MxDSAction* p_action,
-		undefined4,
+		MxDSStreamingAction** p_streamingAction,
 		MxStreamChunk* p_header
 	);
 	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
+	void SwapBuffers();
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
 	void FUN_100c6f80(MxU32 p_writeOffset);

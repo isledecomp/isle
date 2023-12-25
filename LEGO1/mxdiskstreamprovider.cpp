@@ -1,12 +1,17 @@
 #include "mxdiskstreamprovider.h"
 
+#include "mxautolocker.h"
 #include "mxdsbuffer.h"
+#include "mxdsstreamingaction.h"
 #include "mxomni.h"
 #include "mxstreamcontroller.h"
 #include "mxstring.h"
 #include "mxthread.h"
 
 DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
+
+// GLOBAL: LEGO1 0x10102878
+MxU32 DAT_10102878 = 0;
 
 // FUNCTION: LEGO1 0x100d0f30
 MxResult MxDiskStreamProviderThread::Run()
@@ -87,10 +92,36 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100d1780
+// FUNCTION: LEGO1 0x100d1780
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
-	// TODO
+	if (m_remainingWork == 0) {
+		if (p_action->GetUnknown94() > 0 && !p_action->GetUnknowna0()) {
+			MxDSBuffer* buffer = new MxDSBuffer();
+			if (buffer) {
+				if (buffer->AllocateBuffer(GetFileSize(), MxDSBufferType_Allocate) == SUCCESS) {
+					p_action->SetUnknowna0(buffer);
+				}
+				else {
+					delete buffer;
+					return FAILURE;
+				}
+			}
+		}
+
+		if (p_action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
+			DAT_10102878++;
+		}
+
+		{
+			MxAutoLocker lock(&m_criticalSection);
+			m_list.push_back(p_action);
+		}
+
+		m_unk0x35 = 1;
+		m_busySemaphore.Release(1);
+		return SUCCESS;
+	}
 	return FAILURE;
 }
 

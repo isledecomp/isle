@@ -30,6 +30,8 @@ public:
 
 	inline MxU32 GetObjectId() const { return m_objectId; }
 	inline MxS16 GetUnknown24() const { return m_unk0x24; }
+	inline MxU32 GetData() const { return m_data; }
+	inline void SetData(MxU32 p_data) { m_data = p_data; }
 
 private:
 	MxU32 m_objectId;
