@@ -193,7 +193,6 @@ MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
 // STUB: LEGO1 0x100d1b20
 MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 {
-	OutputDebugString("MxDiskStreamProvider::FUN_100d1b20");
 	return FAILURE;
 }
 
