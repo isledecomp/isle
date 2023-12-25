@@ -29,7 +29,7 @@ void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 // STUB: LEGO1 0x100299f0
 MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	return FAILURE;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1002a390

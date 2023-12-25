@@ -5,6 +5,7 @@
 #include "mxautolocker.h"
 #include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
+#include "mxstl/stlcompat.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
 

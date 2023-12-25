@@ -39,6 +39,11 @@ public:
 		return !strcmp(p_name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(p_name);
 	}
 
+	inline MxBool GetUnk0xc4() const { return m_unk0xc4; }
+
+	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
+	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
+
 private:
 	MxStreamListMxDSAction m_list0x64; // 0x64
 	undefined m_unk0x70;               // 0x70
@@ -48,14 +53,15 @@ private:
 	MxStreamListMxDSAction m_list0x90; // 0x90
 	MxCriticalSection m_critical9c;    // 0x9c
 	MxStreamListMxDSAction m_list0xb8; // 0xb8
-	undefined m_unk0xc4;               // 0xc4
+	MxBool m_unk0xc4;                  // 0xc4
 
+	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
+	void FUN_100c7970();
 	void FUN_100c7cb0(MxDSStreamingAction* p_action);
 	void FUN_100c7ce0(MxDSBuffer* p_buffer);
 	MxResult FUN_100c7d10();
 	void FUN_100c7980();
 	MxDSStreamingAction* FUN_100c7db0();
-	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
 	MxResult FUN_100c8360(MxDSStreamingAction* p_action);
 	void InsertToList74(MxDSBuffer* p_buffer);
 	void FUN_100c8540();

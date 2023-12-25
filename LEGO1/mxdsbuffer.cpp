@@ -135,7 +135,7 @@ MxResult MxDSBuffer::CreateObject(
 	MxStreamController* p_controller,
 	MxU32* p_data,
 	MxDSAction* p_action,
-	undefined4 p_undefined
+	MxDSStreamingAction** p_streamingAction
 )
 {
 	if (p_data == NULL) {
@@ -157,7 +157,7 @@ MxResult MxDSBuffer::CreateObject(
 			return SUCCESS;
 		}
 
-		return ParseChunk(p_controller, p_data, p_action, p_undefined, chunk);
+		return ParseChunk(p_controller, p_data, p_action, p_streamingAction, chunk);
 	}
 
 	delete header;
@@ -207,7 +207,7 @@ MxResult MxDSBuffer::ParseChunk(
 	MxStreamController* p_controller,
 	MxU32* p_data,
 	MxDSAction* p_action,
-	undefined4,
+	MxDSStreamingAction** p_streamingAction,
 	MxStreamChunk* p_header
 )
 {

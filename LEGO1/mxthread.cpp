@@ -1,10 +1,14 @@
 
 #include "mxthread.h"
 
+#include "decomp.h"
 #include "mxomni.h"
 #include "mxtimer.h"
 
 #include <process.h>
+
+DECOMP_SIZE_ASSERT(MxThread, 0x1c)
+DECOMP_SIZE_ASSERT(MxTickleThread, 0x20)
 
 // FUNCTION: LEGO1 0x100b8bb0
 MxTickleThread::MxTickleThread(MxCore* p_target, MxS32 p_frequencyMS)

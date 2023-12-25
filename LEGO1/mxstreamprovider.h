@@ -34,8 +34,8 @@ public:
 	virtual MxU32* GetBufferForDWords() = 0;                           // vtable+0x28
 
 protected:
-	MxStreamController* m_pLookup;
-	MxDSFile* m_pFile;
+	MxStreamController* m_pLookup; // 0x08
+	MxDSFile* m_pFile;             // 0x0c
 };
 
 #endif // MXSTREAMPROVIDER_H
