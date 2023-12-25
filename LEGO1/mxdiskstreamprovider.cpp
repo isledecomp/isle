@@ -35,8 +35,8 @@ MxResult MxDiskStreamProviderThread::StartWithTarget(MxDiskStreamProvider* p_tar
 MxDiskStreamProvider::MxDiskStreamProvider()
 {
 	this->m_pFile = NULL;
-	this->m_remainingWork = 0;
-	this->m_unk0x35 = 0;
+	this->m_remainingWork = FALSE;
+	this->m_unk0x35 = FALSE;
 }
 
 // STUB: LEGO1 0x100d1240
@@ -64,7 +64,7 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 				goto done;
 		}
 
-		m_remainingWork = 1;
+		m_remainingWork = TRUE;
 		m_busySemaphore.Init(0, 100);
 
 		if (m_thread.StartWithTarget(this) == SUCCESS && p_resource != NULL) {
@@ -85,18 +85,19 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100d1750
 MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
-	while (m_remainingWork != 0) {
+	while (m_remainingWork) {
 		m_busySemaphore.Wait(INFINITE);
-		if (m_unk0x35 != 0)
+		if (m_unk0x35)
 			PerformWork();
 	}
+
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100d1780
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
-	if (m_remainingWork == 0)
+	if (!m_remainingWork)
 		return FAILURE;
 
 	if (p_action->GetUnknown9c() > 0 && !p_action->GetUnknowna0()) {
@@ -122,7 +123,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 		m_list.push_back(p_action);
 	}
 
-	m_unk0x35 = 1;
+	m_unk0x35 = TRUE;
 	m_busySemaphore.Release(1);
 	return SUCCESS;
 }
