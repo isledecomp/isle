@@ -6,6 +6,7 @@
 class MxDSBuffer;
 
 // VTABLE: LEGO1 0x100dc8c8
+// SIZE 0x14
 class MxDSSource : public MxCore {
 public:
 	MxDSSource() : m_lengthInDWords(0), m_pBuffer(NULL), m_position(-1) {}
@@ -35,9 +36,9 @@ public:
 	inline MxLong GetPosition() const { return m_position; }
 
 protected:
-	MxULong m_lengthInDWords;
-	MxU32* m_pBuffer;
-	MxLong m_position;
+	MxULong m_lengthInDWords; // 0x08
+	MxU32* m_pBuffer;         // 0x0c
+	MxLong m_position;        // 0x10
 };
 
 #endif // MXDSSOURCE_H

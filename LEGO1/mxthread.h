@@ -16,8 +16,7 @@ public:
 	MxResult Start(MxS32 p_stack, MxS32 p_flag);
 
 	void Terminate();
-
-	static void Sleep(MxS32 p_milliseconds);
+	void Sleep(MxS32 p_milliseconds);
 
 	// Inferred, not in DLL
 	inline MxBool IsRunning() { return m_running; }

@@ -2,6 +2,8 @@
 
 #include "mxdsbuffer.h"
 
+DECOMP_SIZE_ASSERT(MxDSSource, 0x14)
+
 // FUNCTION: LEGO1 0x100bffd0
 MxResult MxDSSource::ReadToBuffer(MxDSBuffer* p_buffer)
 {

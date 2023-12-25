@@ -130,55 +130,63 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 // FUNCTION: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
-	MxDSStreamingAction* action;
+	MxDiskStreamController* controller = (MxDiskStreamController*) m_pLookup;
+	MxDSStreamingAction* streamingAction = NULL;
+
 	{
 		MxAutoLocker lock(&m_criticalSection);
-		if (m_list.size() != 0 && !FUN_100d1af0((MxDSStreamingAction*) m_list.front())) {
-			MxThread::Sleep(500);
-			m_busySemaphore.Release(1);
-			return;
+		if (!m_list.empty()) {
+			streamingAction = (MxDSStreamingAction*) m_list.front();
+
+			if (streamingAction && !FUN_100d1af0(streamingAction)) {
+				m_thread.Sleep(500);
+				m_busySemaphore.Release(1);
+				return;
+			}
 		}
 	}
 
 	{
 		MxAutoLocker lock(&m_criticalSection);
-		if (m_list.size() != 0) {
-			action = (MxDSStreamingAction*) m_list.front();
-			m_list.pop_front();
 
-			// TODO delete lock here (could be an inline function for locking & popping list)
-			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
-				g_unk0x10102878--;
+		if (!m_list.PopFrontStreamingAction(streamingAction))
+			return;
+	}
+
+	if (streamingAction->GetUnknowna0()->GetWriteOffset() < 0x20000) {
+		g_unk0x10102878--;
+	}
+
+	MxDSBuffer* buffer = streamingAction->GetUnknowna0();
+
+	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
+		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
+		buffer->SetUnknown14(m_pFile->GetPosition());
+
+		if (m_pFile->ReadToBuffer(buffer) == SUCCESS) {
+			buffer->SetUnknown1c(m_pFile->GetPosition());
+
+			if (streamingAction->GetUnknown9c() > 0) {
+				FUN_100d1b20(streamingAction);
 			}
-
-			MxDSBuffer* buffer = action->GetUnknowna0();
-			if (m_pFile->GetPosition() == action->GetUnknowna0()->GetWriteOffset() ||
-				m_pFile->Seek(action->GetBufferOffset(), 0) == 0) {
-				buffer->SetUnknown14(m_pFile->GetPosition());
-				if (m_pFile->ReadToBuffer(buffer) == SUCCESS) {
-					buffer->SetUnknown1c(m_pFile->GetPosition());
-					if (action->GetUnknown9c() < 1) {
-						if (m_pLookup == NULL || !((MxDiskStreamController*) m_pLookup)->GetUnk0xc4()) {
-							((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
-						}
-						else {
-							((MxDiskStreamController*) m_pLookup)->FUN_100c7f40(action);
-						}
-					}
-					else {
-						FUN_100d1b20(action);
-					}
-
-					action = NULL;
+			else {
+				if (m_pLookup == NULL || !((MxDiskStreamController*) m_pLookup)->GetUnk0xc4()) {
+					controller->FUN_100c8670(streamingAction);
+				}
+				else {
+					controller->FUN_100c7f40(streamingAction);
 				}
 			}
+
+			streamingAction = NULL;
 		}
 	}
 
-	if (action) {
-		((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+	if (streamingAction) {
+		controller->FUN_100c8670(streamingAction);
 	}
-	MxThread::Sleep(0);
+
+	m_thread.Sleep(0);
 }
 
 // FUNCTION: LEGO1 0x100d1af0
