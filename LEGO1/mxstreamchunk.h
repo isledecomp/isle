@@ -31,7 +31,7 @@ public:
 
 	MxResult ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData);
 	MxU32 ReadChunkHeader(MxU8* p_chunkData);
-	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_unk24val);
+	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_obj24val);
 	void SetBuffer(MxDSBuffer* p_buffer);
 
 	// FUNCTION: LEGO1 0x100c3180
