@@ -256,7 +256,6 @@ MxResult MxDSBuffer::ParseChunk(
 )
 {
 	// TODO
-	OutputDebugString("ParseChunk() todo\n");
 	return FAILURE;
 }
 
