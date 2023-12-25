@@ -127,7 +127,6 @@ MxResult MxDSBuffer::FUN_100c67b0(
 )
 {
 	// TODO STUB
-	OutputDebugStringA("MxDSBuffer::FUN_100c67b0\n");
 	return FAILURE;
 }
 
@@ -213,7 +212,6 @@ MxResult MxDSBuffer::ParseChunk(
 )
 {
 	// TODO
-	OutputDebugStringA("MxDSBuffer::ParseChunk not implemented\n");
 	return FAILURE;
 }
 

@@ -82,14 +82,12 @@ MxResult MxStreamController::Open(const char* p_filename)
 void MxStreamController::FUN_100c15d0(MxDSSubscriber* p_subscriber)
 {
 	// TODO
-	OutputDebugStringA("MxStreamController::FUN_100c15d0\n");
 }
 
 // STUB: LEGO1 0x100c1620
 void MxStreamController::FUN_100c1620(MxDSSubscriber* p_subscriber)
 {
 	// TODO
-	OutputDebugStringA("MxStreamController::FUN_100c1620\n");
 }
 
 // FUNCTION: LEGO1 0x100c1690
@@ -258,7 +256,6 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
 	// TODO
-	OutputDebugStringA("MxStreamController::FUN_100c1f00\n");
 	return FAILURE;
 }
 
@@ -266,6 +263,5 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
 	// TODO
-	OutputDebugStringA("MxStreamController::FUN_100c20d0\n");
 	return TRUE;
 }

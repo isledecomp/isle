@@ -79,20 +79,17 @@ done:
 // STUB: LEGO1 0x100d15e0
 void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
-	OutputDebugStringA("MxDiskStreamProvider::VTable0x20");
 	// TODO
 }
 
 // FUNCTION: LEGO1 0x100d1750
 MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
-	OutputDebugStringA("WaitForWorkToComplete\n");
 	while (m_remainingWork != 0) {
 		m_busySemaphore.Wait(INFINITE);
 		if (m_unk0x35 != 0)
 			PerformWork();
 	}
-	OutputDebugStringA("Work is completed\n");
 	return SUCCESS;
 }
 
