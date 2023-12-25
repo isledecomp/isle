@@ -132,7 +132,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO
-	OutputDebugStringA("work is not being preformed.");
+	OutputDebugStringA("work is not being preformed.\n");
 }
 
 // FUNCTION: LEGO1 0x100d1af0

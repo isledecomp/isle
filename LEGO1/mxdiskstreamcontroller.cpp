@@ -47,6 +47,12 @@ MxResult MxDiskStreamController::Open(const char* p_filename)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100c7880
+MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
+{
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x100c7890
 MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 {
@@ -59,12 +65,6 @@ MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 		FUN_100c7970();
 		return SUCCESS;
 	}
-}
-
-// FUNCTION: LEGO1 0x100c7880
-MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
-{
-	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c7960
