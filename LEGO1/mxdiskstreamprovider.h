@@ -46,6 +46,7 @@ public:
 	MxResult WaitForWorkToComplete();
 	MxResult FUN_100d1780(MxDSStreamingAction* p_action);
 	void PerformWork();
+	static MxBool FUN_100d1af0(MxDSStreamingAction* p_action);
 
 	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
 	virtual MxU32 GetFileSize() override;                                       // vtable+0x18

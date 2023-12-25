@@ -128,11 +128,22 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100d18f0
+// FUNCTION: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO
 	OutputDebugStringA("work is not being preformed.");
+}
+
+// FUNCTION: LEGO1 0x100d1af0
+MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
+{
+	if (p_action->GetUnknowna0()->GetWriteOffset() == 0x20000)
+	{
+		return DAT_10102878 == 0;
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x100d1e90

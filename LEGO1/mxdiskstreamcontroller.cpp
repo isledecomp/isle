@@ -47,6 +47,20 @@ MxResult MxDiskStreamController::Open(const char* p_filename)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100c7890
+MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
+{
+	MxAutoLocker lock(&this->m_criticalSection);
+	if (p_action == NULL) {
+		return FAILURE;
+	}
+	else {
+		m_list0x80.push_back(p_action);
+		FUN_100c7970();
+		return SUCCESS;
+	}
+}
+
 // FUNCTION: LEGO1 0x100c7880
 MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
 {
@@ -57,6 +71,12 @@ MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
 MxResult MxDiskStreamController::VTable0x34(undefined4)
 {
 	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x100c7970
+void MxDiskStreamController::FUN_100c7970()
+{
+	// Empty
 }
 
 // FUNCTION: LEGO1 0x100c7980
@@ -356,6 +376,13 @@ MxResult MxDiskStreamController::Tickle()
 	}
 
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100c8670
+void MxDiskStreamController::FUN_100c8670(MxDSStreamingAction* p_streamingAction)
+{
+	MxAutoLocker lock(&this->m_critical9c);
+	m_list0xb8.push_back(p_streamingAction);
 }
 
 // FUNCTION: LEGO1 0x100c8720

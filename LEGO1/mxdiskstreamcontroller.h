@@ -50,6 +50,8 @@ private:
 	MxStreamListMxDSAction m_list0xb8; // 0xb8
 	undefined m_unk0xc4;               // 0xc4
 
+	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
+	void FUN_100c7970();
 	void FUN_100c7cb0(MxDSStreamingAction* p_action);
 	void FUN_100c7ce0(MxDSBuffer* p_buffer);
 	MxResult FUN_100c7d10();
@@ -60,6 +62,7 @@ private:
 	void InsertToList74(MxDSBuffer* p_buffer);
 	void FUN_100c8540();
 	void FUN_100c8720();
+	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
 };
 
 // TEMPLATE: LEGO1 0x100c7330
