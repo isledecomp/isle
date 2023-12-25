@@ -128,35 +128,35 @@ MxResult MxDSBuffer::FUN_100c67b0(
 )
 {
 	MxResult result = FAILURE;
-	MxU8* data;
+
 	m_unk0x30 = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action, FALSE);
-	if (m_unk0x30 == NULL) {
+	if (m_unk0x30 == NULL)
 		return FAILURE;
-	}
 
-	do {
-		while (TRUE) {
-			data = (MxU8*) SkipToData();
-			if (data == NULL) {
-				return SUCCESS;
-			}
-			if (*p_streamingAction == NULL) {
+	MxU8* data;
+	while (data = (MxU8*) SkipToData()) {
+		if (*p_streamingAction == NULL) {
+			result = CreateObject(p_controller, (MxU32*) data, p_action, p_streamingAction);
+
+			if (result == FAILURE)
+				return result;
+			// TODO: Not a MxResult value?
+			if (result == 1)
 				break;
-			}
-
+		}
+		else {
 			MxDSBuffer* buffer = (*p_streamingAction)->GetUnknowna0();
 
-			if (CalcBytesRemaining(data) != SUCCESS) {
+			if (buffer->CalcBytesRemaining(data) != SUCCESS) {
 				return result;
 			}
 
 			if (buffer->GetBytesRemaining() == 0) {
 				buffer->SetUnk30(m_unk0x30);
 
-				MxResult createObjectBufferResult =
-					buffer->CreateObject(p_controller, (MxU32*) buffer->GetBuffer(), p_action, p_streamingAction);
-				if (createObjectBufferResult != SUCCESS) {
-					return createObjectBufferResult;
+				result = buffer->CreateObject(p_controller, (MxU32*) buffer->GetBuffer(), p_action, p_streamingAction);
+				if (result != SUCCESS) {
+					return result;
 				}
 
 				if (buffer->GetRefCount() != 0) {
@@ -167,16 +167,9 @@ MxResult MxDSBuffer::FUN_100c67b0(
 
 				((MxDiskStreamController*) p_controller)->FUN_100c7cb0(*p_streamingAction);
 				*p_streamingAction = NULL;
-				result = SUCCESS;
 			}
 		}
-
-		MxResult createObjectResult = CreateObject(p_controller, (MxU32*) data, p_action, p_streamingAction);
-		if (createObjectResult == FAILURE) {
-			return FAILURE;
-		}
-		result = createObjectResult;
-	} while (result != 1);
+	}
 
 	return SUCCESS;
 }
