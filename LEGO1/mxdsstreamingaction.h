@@ -38,7 +38,7 @@ public:
 	inline MxDSAction* GetInternalAction() { return m_internalAction; }
 	inline MxU32 GetBufferOffset() { return m_bufferOffset; }
 	inline void SetUnknown94(MxU32 p_unk0x94) { m_unk0x94 = p_unk0x94; }
-	inline void SetUnknown9c(MxU32 p_unk0x9c) { m_unk0x9c = p_unk0x9c; }
+	inline void SetUnknown9c(MxS32 p_unk0x9c) { m_unk0x9c = p_unk0x9c; }
 	inline void SetUnknowna0(MxDSBuffer* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 	inline void SetBufferOffset(MxU32 p_bufferOffset) { m_bufferOffset = p_bufferOffset; }
 

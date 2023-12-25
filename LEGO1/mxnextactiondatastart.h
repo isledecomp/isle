@@ -34,8 +34,8 @@ public:
 	inline void SetData(MxU32 p_data) { m_data = p_data; }
 
 private:
-	MxU32 m_objectId; // 0x8
-	MxS16 m_unk0x24;  // 0xc
+	MxU32 m_objectId; // 0x08
+	MxS16 m_unk0x24;  // 0x0c
 	MxU32 m_data;     // 0x10
 };
 
