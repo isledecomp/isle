@@ -190,10 +190,10 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 	for (MxStreamListMxNextActionDataStart::iterator it = m_nextActionList.begin(); it != m_nextActionList.end();
 		 it++) {
 		MxNextActionDataStart* data = *it;
-
-		for (MxStreamListMxDSAction::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it++) {
+		OutputDebugStringA("found data action start\n");
+		for (MxStreamListMxDSAction::iterator it2 = m_list0x64.begin(); it2 != m_list0x64.end(); it2++) {
 			MxDSStreamingAction* streamingAction = (MxDSStreamingAction*) *it2;
-
+			OutputDebugStringA("found streaming action\n");
 			if (streamingAction->GetObjectId() == data->GetObjectId() &&
 				streamingAction->GetUnknown24() == data->GetUnknown24() &&
 				streamingAction->GetBufferOffset() == data->GetData()) {
@@ -224,8 +224,9 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 	MxAutoLocker lock(&this->m_criticalSection);
 	MxDSStreamingAction* entry =
 		(MxDSStreamingAction*) m_list0x80.Find(p_action, FALSE); // TODO: is this a seperate class?
-
+	OutputDebugStringA("MxDiskStreamController::VTable0x20\n");
 	if (entry) {
+		OutputDebugStringA("MxDiskStreamController::VTable0x20 no entry\n");
 		MxDSStreamingAction* action = new MxDSStreamingAction(*p_action, 0);
 		action->SetUnknown28(entry->GetUnknown28());
 		action->SetUnknown84(entry->GetUnknown84());
@@ -329,10 +330,10 @@ void MxDiskStreamController::FUN_100c8540()
 			FUN_100c7ce0(buf);
 		}
 	}
-	MxDSStreamingAction* action;
-	if (m_nextActionList.size() == 0 && m_list0x64.size() == 0) {
+
+	if (m_nextActionList.size() == 0 && m_list0x64.size() != 0) {
 		do {
-			action = (MxDSStreamingAction*)m_list0x64.front();
+			MxDSStreamingAction* action = (MxDSStreamingAction*) m_list0x64.front();
 			m_list0xb8.pop_front();
 
 			FUN_100c7cb0(action);

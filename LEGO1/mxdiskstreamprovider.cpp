@@ -78,24 +78,27 @@ done:
 // STUB: LEGO1 0x100d15e0
 void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
+	OutputDebugStringA("MxDiskStreamProvider::VTable0x20");
 	// TODO
 }
 
 // FUNCTION: LEGO1 0x100d1750
 MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
+	OutputDebugStringA("WaitForWorkToComplete\n");
 	while (m_remainingWork != 0) {
 		m_busySemaphore.Wait(INFINITE);
 		if (m_unk0x35 != 0)
 			PerformWork();
 	}
+	OutputDebugStringA("Work is completed\n");
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100d1780
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
-	if (m_remainingWork == 0) {
+	if (m_remainingWork != 0) {
 		if (p_action->GetUnknown94() > 0 && !p_action->GetUnknowna0()) {
 			MxDSBuffer* buffer = new MxDSBuffer();
 			if (buffer) {
@@ -129,6 +132,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 void MxDiskStreamProvider::PerformWork()
 {
 	// TODO
+	OutputDebugStringA("work is not being preformed.");
 }
 
 // FUNCTION: LEGO1 0x100d1e90
