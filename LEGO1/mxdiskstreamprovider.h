@@ -13,17 +13,17 @@ class MxDiskStreamProvider;
 class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dd130
+// SIZE 0x1c
 class MxDiskStreamProviderThread : public MxThread {
 public:
-	// Only inlined, no offset
 	inline MxDiskStreamProviderThread() : MxThread() { m_target = NULL; }
 
 	MxResult Run() override;
-
 	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
 };
 
 // VTABLE: LEGO1 0x100dd138
+// SIZE 0x60
 class MxDiskStreamProvider : public MxStreamProvider {
 public:
 	MxDiskStreamProvider();

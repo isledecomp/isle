@@ -13,8 +13,8 @@ public:
 	void Leave();
 
 private:
-	CRITICAL_SECTION m_criticalSection;
-	HANDLE m_mutex;
+	CRITICAL_SECTION m_criticalSection; // 0x00
+	HANDLE m_mutex;                     // 0x18
 };
 
 #endif // MXCRITICALSECTION_H
