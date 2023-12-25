@@ -1,6 +1,7 @@
 #include "mxdiskstreamprovider.h"
 
 #include "mxautolocker.h"
+#include "mxdiskstreamcontroller.h"
 #include "mxdsbuffer.h"
 #include "mxdsstreamingaction.h"
 #include "mxomni.h"
@@ -131,8 +132,56 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 // FUNCTION: LEGO1 0x100d18f0
 void MxDiskStreamProvider::PerformWork()
 {
-	// TODO
-	OutputDebugStringA("work is not being preformed.\n");
+	MxDSStreamingAction* action;
+	{
+		MxAutoLocker lock(&m_criticalSection);
+		if (m_list.size() != 0 && !FUN_100d1af0((MxDSStreamingAction*)m_list.front())) {
+			MxThread::Sleep(500);
+			m_busySemaphore.Release(1);
+			return;
+		}
+	}
+
+	{
+		MxAutoLocker lock(&m_criticalSection);
+		if (m_list.size() != 0) {
+			action = (MxDSStreamingAction*)m_list.front();
+			m_list.pop_front();
+
+			// TODO delete lock here (could be an line function)
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
+				g_unk0x10102878--;
+			}
+
+			MxDSBuffer* buffer = action->GetUnknowna0();
+			if (m_pFile->GetPosition() == action->GetUnknowna0()->GetWriteOffset() ||
+				m_pFile->Seek(action->GetBufferOffset(), 0) == 0) {
+				buffer->SetUnknown14(m_pFile->GetPosition());
+				if (m_pFile->ReadToBuffer(buffer) == SUCCESS) {
+					buffer->SetUnknown1c(m_pFile->GetPosition());
+					if (action->GetUnknown9c() < 1) {
+						if (m_pLookup == NULL || !((MxDiskStreamController*) m_pLookup)->GetUnk0xc4()) {
+							((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+						}
+						else {
+							((MxDiskStreamController*) m_pLookup)->FUN_100c7f40(action);
+						}
+					}
+					else {
+						FUN_100d1b20(action);
+					}
+
+					action = NULL;
+				}
+			}
+		}
+	}
+
+	if (action)
+	{
+		((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+	}
+	MxThread::Sleep(0);
 }
 
 // FUNCTION: LEGO1 0x100d1af0
@@ -143,6 +192,13 @@ MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
 	}
 
 	return TRUE;
+}
+
+// STUB: LEGO1 0x100d1b20
+MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
+{
+	OutputDebugString("MxDiskStreamProvider::FUN_100d1b20");
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100d1e90

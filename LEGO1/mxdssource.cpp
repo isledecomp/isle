@@ -3,9 +3,9 @@
 #include "mxdsbuffer.h"
 
 // FUNCTION: LEGO1 0x100bffd0
-void MxDSSource::ReadToBuffer(MxDSBuffer* p_buffer)
+MxResult MxDSSource::ReadToBuffer(MxDSBuffer* p_buffer)
 {
-	Read(p_buffer->GetBuffer(), p_buffer->GetWriteOffset());
+	return Read(p_buffer->GetBuffer(), p_buffer->GetWriteOffset());
 }
 
 // FUNCTION: LEGO1 0x100bfff0

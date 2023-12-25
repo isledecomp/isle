@@ -17,7 +17,7 @@ public:
 
 	void Terminate();
 
-	void Sleep(MxS32 p_milliseconds);
+	static void Sleep(MxS32 p_milliseconds);
 
 	// Inferred, not in DLL
 	inline MxBool IsRunning() { return m_running; }

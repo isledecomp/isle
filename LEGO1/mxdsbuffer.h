@@ -62,6 +62,8 @@ public:
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
 	inline MxU16 GetRefCount() { return m_refcount; }
 	inline MxDSBufferType GetMode() { return m_mode; }
+	inline void SetUnknown14(undefined4 p_unk0x14) { m_unk0x14 = p_unk0x14; }
+	inline void SetUnknown1c(undefined4 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
 
 private:
 	MxU8* m_pBuffer;                // 0x08

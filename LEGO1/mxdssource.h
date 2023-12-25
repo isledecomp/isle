@@ -23,15 +23,16 @@ public:
 		return !strcmp(p_name, MxDSSource::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxLong Open(MxULong) = 0;
-	virtual MxLong Close() = 0;
-	virtual void ReadToBuffer(MxDSBuffer* p_buffer);
-	virtual MxResult Read(unsigned char*, MxULong) = 0;
-	virtual MxLong Seek(MxLong, int) = 0;
-	virtual MxULong GetBufferSize() = 0;
-	virtual MxULong GetStreamBuffersNum() = 0;
-	virtual MxLong GetLengthInDWords();
-	virtual MxU32* GetBuffer(); // 0x34
+	virtual MxLong Open(MxULong) = 0;                   // vtable+0x14
+	virtual MxLong Close() = 0;                         // vtable+0x18
+	virtual MxResult ReadToBuffer(MxDSBuffer* p_buffer);    // vtable+0x1c
+	virtual MxResult Read(unsigned char*, MxULong) = 0; // vtable+0x20
+	virtual MxLong Seek(MxLong, int) = 0;               // vtable+0x24
+	virtual MxULong GetBufferSize() = 0;                // vtable+0x28
+	virtual MxULong GetStreamBuffersNum() = 0;          // vtable+0x2c
+	virtual MxLong GetLengthInDWords();                 // vtable+0x30
+	virtual MxU32* GetBuffer();                         // vtable+0x34
+	inline MxLong GetPosition() const { return m_position; }
 
 protected:
 	MxULong m_lengthInDWords;
