@@ -17,7 +17,7 @@ LegoLoadCacheSoundPresenter::~LegoLoadCacheSoundPresenter()
 // FUNCTION: LEGO1 0x100184e0
 void LegoLoadCacheSoundPresenter::Init()
 {
-	this->m_unk0x70 = 0;
+	this->m_unk0x70 = NULL;
 	this->m_unk0x78 = 0;
 	this->m_unk0x7c = 0;
 }
