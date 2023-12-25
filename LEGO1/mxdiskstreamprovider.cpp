@@ -148,7 +148,7 @@ void MxDiskStreamProvider::PerformWork()
 			action = (MxDSStreamingAction*) m_list.front();
 			m_list.pop_front();
 
-			// TODO delete lock here (could be an line function)
+			// TODO delete lock here (could be an inline function for locking & popping list)
 			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 				g_unk0x10102878--;
 			}
