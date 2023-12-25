@@ -2,6 +2,7 @@
 
 #include "legoutil.h"
 #include "mxdsbuffer.h"
+#include "mxstreamlist.h"
 
 // FUNCTION: LEGO1 0x100c2fe0
 MxStreamChunk::~MxStreamChunk()
@@ -46,6 +47,25 @@ MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 	}
 
 	return headersize;
+}
+
+// FUNCTION: LEGO1 0x100c30e0
+MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_unk24val)
+{
+	for (MxStreamListMxDSSubscriber::iterator it = p_subscriberList.begin(); it != p_subscriberList.end(); it++) {
+		if ((*it)->GetObjectId() == m_objectId && (*it)->GetUnknown48() == p_unk24val) {
+			if ((m_flags & 2) != 0 && m_buffer) {
+				m_buffer->ReleaseRef(this);
+				m_buffer = NULL;
+			}
+
+			(*it)->AddChunk(this, p_preappend);
+
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c3170

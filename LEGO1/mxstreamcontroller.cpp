@@ -78,16 +78,17 @@ MxResult MxStreamController::Open(const char* p_filename)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c15d0
+// FUNCTION: LEGO1 0x100c15d0
 void MxStreamController::FUN_100c15d0(MxDSSubscriber* p_subscriber)
 {
-	// TODO
+	m_subscriberList.push_back(p_subscriber);
 }
 
 // STUB: LEGO1 0x100c1620
 void MxStreamController::FUN_100c1620(MxDSSubscriber* p_subscriber)
 {
 	// TODO
+	OutputDebugString("MxStreamController::FUN_100c1620 STUB\n");
 }
 
 // FUNCTION: LEGO1 0x100c1690

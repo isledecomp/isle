@@ -2,8 +2,10 @@
 #define MXSTREAMCHUNK_H
 
 #include "mxdschunk.h"
+#include "mxdsobject.h"
 
 class MxDSBuffer;
+class MxStreamListMxDSSubscriber;
 
 // VTABLE: LEGO1 0x100dc2a8
 // SIZE 0x20
@@ -29,7 +31,20 @@ public:
 
 	MxResult ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData);
 	MxU32 ReadChunkHeader(MxU8* p_chunkData);
+	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_unk24val);
 	void SetBuffer(MxDSBuffer* p_buffer);
+
+	// FUNCTION: LEGO1 0x100c3180
+	static MxU32* ReturnPlus8Ptr(MxU32* p_chunk) { return p_chunk + 8; }
+
+	// FUNCTION: LEGO1 0x100c3190
+	static MxU32* ReturnPlus10Ptr(MxU32* p_chunk) { return p_chunk + 10; }
+
+	// FUNCTION: LEGO1 0x100c31a0
+	static MxU32* ReturnPlus14Ptr(MxU32* p_chunk) { return p_chunk + 14; }
+
+	// FUNCTION: LEGO1 0x100c31b0
+	static MxU32* ReturnPlus18Ptr(MxU32* p_chunk) { return p_chunk + 18; }
 
 private:
 	MxDSBuffer* m_buffer; // 0x1c

@@ -42,8 +42,15 @@ public:
 	inline MxU16 GetFlags() { return m_flags; }
 	inline undefined4 GetObjectId() { return m_objectId; }
 	inline MxLong GetTime() { return m_time; }
+	inline MxLong& GetTimeRef() { return m_time; }
 	inline MxU32 GetLength() { return m_length; }
 	inline MxU8* GetData() { return m_data; }
+
+	// FUNCTION: LEGO1 0x100be1e0
+	static MxU32 ReturnE()
+	{
+		return 0xe;
+	}
 
 	inline void Release()
 	{

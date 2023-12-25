@@ -53,8 +53,10 @@ public:
 	MxResult InsertActionToList54(MxDSAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
+	inline MxStreamProvider* GetProvider() { return m_provider; };
 	inline MxStreamListMxDSAction& GetUnk0x3c() { return m_unk0x3c; };
 	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; };
+	inline MxStreamListMxDSSubscriber& GetSubscriberList() { return m_subscriberList; };
 
 protected:
 	MxCriticalSection m_criticalSection;                // 0x8
