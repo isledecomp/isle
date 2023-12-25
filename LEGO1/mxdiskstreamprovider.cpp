@@ -135,7 +135,7 @@ void MxDiskStreamProvider::PerformWork()
 	MxDSStreamingAction* action;
 	{
 		MxAutoLocker lock(&m_criticalSection);
-		if (m_list.size() != 0 && !FUN_100d1af0((MxDSStreamingAction*)m_list.front())) {
+		if (m_list.size() != 0 && !FUN_100d1af0((MxDSStreamingAction*) m_list.front())) {
 			MxThread::Sleep(500);
 			m_busySemaphore.Release(1);
 			return;
@@ -145,7 +145,7 @@ void MxDiskStreamProvider::PerformWork()
 	{
 		MxAutoLocker lock(&m_criticalSection);
 		if (m_list.size() != 0) {
-			action = (MxDSStreamingAction*)m_list.front();
+			action = (MxDSStreamingAction*) m_list.front();
 			m_list.pop_front();
 
 			// TODO delete lock here (could be an line function)
@@ -177,8 +177,7 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
-	if (action)
-	{
+	if (action) {
 		((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
 	}
 	MxThread::Sleep(0);
