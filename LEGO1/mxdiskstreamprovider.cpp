@@ -11,7 +11,7 @@
 DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
 
 // GLOBAL: LEGO1 0x10102878
-MxU32 DAT_10102878 = 0;
+MxU32 g_unk0x10102878 = 0;
 
 // FUNCTION: LEGO1 0x100d0f30
 MxResult MxDiskStreamProviderThread::Run()
@@ -113,7 +113,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 		}
 
 		if (p_action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
-			DAT_10102878++;
+			g_unk0x10102878++;
 		}
 
 		{
@@ -138,9 +138,8 @@ void MxDiskStreamProvider::PerformWork()
 // FUNCTION: LEGO1 0x100d1af0
 MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
 {
-	if (p_action->GetUnknowna0()->GetWriteOffset() == 0x20000)
-	{
-		return DAT_10102878 == 0;
+	if (p_action->GetUnknowna0()->GetWriteOffset() == 0x20000) {
+		return g_unk0x10102878 == 0;
 	}
 
 	return TRUE;
