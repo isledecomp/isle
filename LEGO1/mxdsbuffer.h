@@ -53,7 +53,7 @@ public:
 		MxStreamChunk* p_header
 	);
 	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
-	MxU8* SwapBuffers();
+	MxU8* SkipToData();
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
 	MxResult CalcBytesRemaining(MxU8* p_data);

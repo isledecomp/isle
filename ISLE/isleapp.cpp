@@ -787,7 +787,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		MxStreamController* stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", MxStreamer::e_DiskStream);
 		MxDSAction ds;
 
-		if (1) {
+		if (!stream) {
 			stream = Streamer()->Open("\\lego\\scripts\\nocd", MxStreamer::e_DiskStream);
 			if (!stream) {
 				return;

@@ -136,7 +136,7 @@ MxResult MxDSBuffer::FUN_100c67b0(
 
 	do {
 		while (TRUE) {
-			data = (MxU8*) SwapBuffers();
+			data = (MxU8*) SkipToData();
 			if (data == NULL) {
 				return SUCCESS;
 			}
@@ -292,7 +292,7 @@ MxCore* MxDSBuffer::ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_
 }
 
 // FUNCTION: LEGO1 0x100c6df0
-MxU8* MxDSBuffer::SwapBuffers()
+MxU8* MxDSBuffer::SkipToData()
 {
 	MxU8* result = NULL;
 
