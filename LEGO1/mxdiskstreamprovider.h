@@ -27,7 +27,6 @@ public:
 class MxDiskStreamProvider : public MxStreamProvider {
 public:
 	MxDiskStreamProvider();
-
 	virtual ~MxDiskStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d1160

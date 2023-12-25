@@ -96,34 +96,35 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 // FUNCTION: LEGO1 0x100d1780
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
-	if (m_remainingWork != 0) {
-		if (p_action->GetUnknown94() > 0 && !p_action->GetUnknowna0()) {
-			MxDSBuffer* buffer = new MxDSBuffer();
-			if (buffer) {
-				if (buffer->AllocateBuffer(GetFileSize(), MxDSBufferType_Allocate) == SUCCESS) {
-					p_action->SetUnknowna0(buffer);
-				}
-				else {
-					delete buffer;
-					return FAILURE;
-				}
-			}
+	if (m_remainingWork == 0)
+		return FAILURE;
+
+	if (p_action->GetUnknown9c() > 0 && !p_action->GetUnknowna0()) {
+		MxDSBuffer* buffer = new MxDSBuffer();
+
+		if (!buffer)
+			return FAILURE;
+
+		if (buffer->AllocateBuffer(GetFileSize(), MxDSBufferType_Allocate) != SUCCESS) {
+			delete buffer;
+			return FAILURE;
 		}
 
-		if (p_action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
-			g_unk0x10102878++;
-		}
-
-		{
-			MxAutoLocker lock(&m_criticalSection);
-			m_list.push_back(p_action);
-		}
-
-		m_unk0x35 = 1;
-		m_busySemaphore.Release(1);
-		return SUCCESS;
+		p_action->SetUnknowna0(buffer);
 	}
-	return FAILURE;
+
+	if (p_action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
+		g_unk0x10102878++;
+	}
+
+	{
+		MxAutoLocker lock(&m_criticalSection);
+		m_list.push_back(p_action);
+	}
+
+	m_unk0x35 = 1;
+	m_busySemaphore.Release(1);
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100d18f0

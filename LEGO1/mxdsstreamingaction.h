@@ -32,7 +32,7 @@ public:
 	void FUN_100cd2d0();
 
 	inline MxU32 GetUnknown94() { return m_unk0x94; }
-	inline MxU32 GetUnknown9c() { return m_unk0x9c; }
+	inline MxS32 GetUnknown9c() { return m_unk0x9c; }
 	inline MxDSBuffer* GetUnknowna0() { return m_unk0xa0; }
 	inline MxDSBuffer* GetUnknowna4() { return m_unk0xa4; }
 	inline MxDSAction* GetInternalAction() { return m_internalAction; }
