@@ -60,11 +60,10 @@ MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 	if (p_action == NULL) {
 		return FAILURE;
 	}
-	else {
-		m_list0x80.push_back(p_action);
-		FUN_100c7970();
-		return SUCCESS;
-	}
+
+	m_list0x80.push_back(p_action);
+	FUN_100c7970();
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100c7960
@@ -216,6 +215,7 @@ MxDSStreamingAction* MxDiskStreamController::FUN_100c7db0()
 				streamingAction->GetUnknown24() == data->GetUnknown24() &&
 				streamingAction->GetBufferOffset() == data->GetData()) {
 				m_nextActionList.erase(it);
+
 				data->SetData(m_provider->GetFileSize() + data->GetData());
 				m_nextActionList.push_back(data);
 
@@ -339,21 +339,22 @@ void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 void MxDiskStreamController::FUN_100c8540()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
-	for (list<MxDSBuffer*>::iterator it = m_list0x74.begin(); it != m_list0x74.end(); it++) {
+	for (list<MxDSBuffer*>::iterator it = m_list0x74.begin(); it != m_list0x74.end();) {
 		MxDSBuffer* buf = *it;
 		if (buf->GetRefCount() == 0) {
-			m_list0x74.erase(it);
+			m_list0x74.erase(it++);
 			FUN_100c7ce0(buf);
 		}
+		else
+			it++;
 	}
 
-	if (m_nextActionList.size() == 0 && m_list0x64.size() != 0) {
-		do {
+	if (m_nextActionList.empty()) {
+		while (!m_list0x64.empty()) {
 			MxDSStreamingAction* action = (MxDSStreamingAction*) m_list0x64.front();
-			m_list0xb8.pop_front();
-
+			m_list0x64.pop_front();
 			FUN_100c7cb0(action);
-		} while (m_list0x64.size() != 0);
+		}
 	}
 }
 
