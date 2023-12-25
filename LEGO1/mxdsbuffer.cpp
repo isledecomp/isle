@@ -161,11 +161,11 @@ MxResult MxDSBuffer::FUN_100c67b0(
 
 				if (buffer->GetRefCount() != 0) {
 					// Note: *p_streamingAction is always null in MxRamStreamProvider
-					((MxDiskStreamController*)p_controller)->InsertToList74(buffer);
+					((MxDiskStreamController*) p_controller)->InsertToList74(buffer);
 					(*p_streamingAction)->SetUnknowna0(NULL);
 				}
 
-				((MxDiskStreamController*)p_controller)->FUN_100c7cb0(*p_streamingAction);
+				((MxDiskStreamController*) p_controller)->FUN_100c7cb0(*p_streamingAction);
 				*p_streamingAction = NULL;
 				result = SUCCESS;
 			}
@@ -300,6 +300,10 @@ MxU8* MxDSBuffer::SwapBuffers()
 		do {
 			MxU32* ptr = (MxU32*) m_pIntoBuffer;
 			switch (*ptr) {
+			case FOURCC('L', 'I', 'S', 'T'):
+			case FOURCC('R', 'I', 'F', 'F'):
+				m_pIntoBuffer = (MxU8*) (ptr + 3);
+				break;
 			case FOURCC('M', 'x', 'O', 'b'):
 			case FOURCC('M', 'x', 'C', 'h'):
 				result = m_pIntoBuffer;
@@ -311,11 +315,17 @@ MxU8* MxDSBuffer::SwapBuffers()
 					return result;
 				}
 				goto done;
+			case FOURCC('M', 'x', 'D', 'a'):
 			case FOURCC('M', 'x', 'S', 't'):
 				m_pIntoBuffer = (MxU8*) (ptr + 2);
 				break;
-			default:
+			case FOURCC('M', 'x', 'H', 'd'):
+				m_pIntoBuffer = (MxU8*) ((MxU32) ptr + ptr[1] + 8);
 				break;
+			default:
+				m_pIntoBuffer = NULL;
+				m_pIntoBuffer2 = NULL;
+				return NULL;
 			}
 		} while (m_pIntoBuffer <= m_pBuffer + (m_writeOffset - 8));
 	}
