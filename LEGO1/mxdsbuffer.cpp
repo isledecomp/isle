@@ -286,72 +286,84 @@ MxResult MxDSBuffer::ParseChunk(
 {
 	MxResult result = SUCCESS;
 
-	if ((m_unk0x30->GetFlags() & 4) == 0 || m_unk0x30->GetUnknowna4() == NULL || -1 < p_header->GetTime()) {
-		MxLong& ptr = p_header->GetTimeRef();
-		ptr = ptr + m_unk0x30->GetUnknowna8();
+	if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
+		delete p_header;
+		goto done;
+	}
 
-		if ((p_header->GetFlags() & 0x10) == 0) {
-			if ((p_header->GetFlags() & 2) != 0) {
-				if (m_unk0x30->HasId(p_header->GetObjectId())) {
-					// this could be an inlined function
-					if ((m_unk0x30->GetFlags() & 4) == 0 ||
-						m_unk0x30->GetLoopCount() < 2 && m_unk0x30->GetDuration() != -1) {
-						if (p_action->GetObjectId() == m_unk0x30->GetObjectId() &&
-							p_controller->VTable0x30(p_action) == SUCCESS) {
-							p_controller->GetProvider()->VTable0x20(p_action);
-							result = 1;
-						}
-					}
-					else {
-						if (p_action->GetObjectId() == p_header->GetObjectId()) {
-							MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_unk0x30->GetObjectId()];
-							m_unk0x30->SetUnknown94(val);
-							m_unk0x30->SetBufferOffset((val / m_writeOffset) * m_writeOffset);
-							MxNextActionDataStart* data =
-								p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
-							if (data) {
-								data->SetData(m_unk0x30->GetBufferOffset());
-							}
-							m_unk0x30->FUN_100cd2d0();
-						}
+	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
 
-						delete p_header;
-						p_header = NULL;
-					}
-				}
-			}
+	if (p_header->GetFlags() & MxDSChunk::Flag_Bit5) {
+		MxU32 und = MxDSChunk::ReturnE();
+		MxU32 length = p_header->GetLength();
+		MxDSBuffer* buffer = new MxDSBuffer();
 
-			if (p_header) {
-				if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetUnknown24()) != SUCCESS) {
-					delete p_header;
-				}
+		if (buffer && buffer->AllocateBuffer(length + und + 8, MxDSBufferType_Allocate) == SUCCESS &&
+			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
+			// improve no temp var
+			MxDSStreamingAction* streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
+			*p_streamingAction = streamingAction;
+
+			if (streamingAction) {
+				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
+				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Bit5;
+
+				delete p_header;
+				(*p_streamingAction)->SetUnknowna0(buffer);
+				goto done;
 			}
 		}
-		else {
-			MxDSBuffer* buffer = new MxDSBuffer();
-			if (buffer) {
-				if (buffer->AllocateBuffer(p_header->GetLength() + 8 + MxDSChunk::ReturnE(), MxDSBufferType_Allocate) ==
-						SUCCESS &&
-					CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
-					MxDSStreamingAction* streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
-					*p_streamingAction = streamingAction;
-					if (streamingAction) {
-						MxU32* ptr2 = MxStreamChunk::ReturnPlus8Ptr((MxU32*) m_pBuffer);
-						*ptr2 = *ptr2 & 0xffef;
-						delete p_header;
-						(*p_streamingAction)->SetUnknowna0(buffer);
-						return SUCCESS;
-					}
-				}
-				delete buffer;
-			}
+
+		if (buffer)
+			delete buffer;
+
+		if (p_header)
 			delete p_header;
-		}
+
+		result = FAILURE;
 	}
 	else {
-		delete p_header;
-		result = SUCCESS;
+		if (p_header->GetFlags() & MxDSChunk::Flag_Bit2) {
+			if (m_unk0x30->HasId(p_header->GetObjectId())) {
+				if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 &&
+					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {
+
+					if (p_action->GetObjectId() == p_header->GetObjectId()) {
+						MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_unk0x30->GetObjectId()];
+
+						m_unk0x30->SetUnknown94(val);
+						m_unk0x30->SetBufferOffset(m_writeOffset * (val / m_writeOffset));
+
+						MxNextActionDataStart* data =
+							p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
+
+						if (data)
+							data->SetData(m_unk0x30->GetBufferOffset());
+
+						m_unk0x30->FUN_100cd2d0();
+					}
+
+					delete p_header;
+					p_header = NULL;
+				}
+				else {
+					if (p_action->GetObjectId() == p_header->GetObjectId() &&
+						p_controller->VTable0x30(p_action) == SUCCESS) {
+						p_controller->GetProvider()->VTable0x20(p_action);
+						result = 1;
+					}
+				}
+			}
+		}
+
+		if (p_header) {
+			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetUnknown24()) != SUCCESS) {
+				delete p_header;
+			}
+		}
 	}
+
+done:
 	return result;
 }
 

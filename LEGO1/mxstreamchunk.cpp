@@ -73,3 +73,9 @@ void MxStreamChunk::SetBuffer(MxDSBuffer* p_buffer)
 {
 	m_buffer = p_buffer;
 }
+
+// FUNCTION: LEGO1 0x100c3180
+MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
+{
+	return (MxU16*) (p_buffer + 8);
+}

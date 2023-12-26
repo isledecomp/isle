@@ -34,8 +34,7 @@ public:
 	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_obj24val);
 	void SetBuffer(MxDSBuffer* p_buffer);
 
-	// FUNCTION: LEGO1 0x100c3180
-	static MxU32* ReturnPlus8Ptr(MxU32* p_chunk) { return p_chunk + 8; }
+	static MxU16* IntoFlags(MxU8* p_buffer);
 
 	// FUNCTION: LEGO1 0x100c3190
 	static MxU32* ReturnPlus10Ptr(MxU32* p_chunk) { return p_chunk + 10; }
