@@ -63,7 +63,9 @@ public:
 	inline MxLong GetStartTime() const { return m_startTime; }
 	inline MxS32 GetLoopCount() { return m_loopCount; }
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
-	inline const Vector3Data& GetLocation() const { return m_location; }
+	inline Vector3Data& GetLocation() { return m_location; }
+	inline Vector3Data& GetDirection() { return m_direction; }
+	inline Vector3Data& GetUp() { return m_up; }
 	inline MxCore* GetUnknown84() { return m_unk0x84; }
 	inline void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	inline MxCore* GetOrigin() { return m_origin; }

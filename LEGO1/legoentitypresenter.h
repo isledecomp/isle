@@ -3,6 +3,8 @@
 
 #include "mxcompositepresenter.h"
 
+class LegoEntity;
+
 // VTABLE: LEGO1 0x100d8398
 // SIZE 0x50
 class LegoEntityPresenter : public MxCompositePresenter {
@@ -23,14 +25,18 @@ public:
 		return !strcmp(p_name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
 
-	virtual void Destroy() override;                     // vtable+0x38
-	virtual void Init();                                 // vtable+0x68
-	virtual undefined4 VTable0x6c(undefined4 p_unk0x4c); // vtable+0x6c
+	virtual void ReadyTickle() override;                                                           // vtable+0x18
+	virtual void RepeatingTickle();                                                                // vtable+0x24
+	virtual void ParseExtra();                                                                     // vtable+0x30
+	virtual void Destroy() override;                                                               // vtable+0x38
+	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
+	virtual void Init();                                                                           // vtable+0x68
+	virtual undefined4 SetBackend(LegoEntity* p_unk0x4c);                                          // vtable+0x6c
 
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk0x4c;
+	LegoEntity* m_objectBackend; // 0x4c
 };
 
 #endif // LEGOENTITYPRESENTER_H

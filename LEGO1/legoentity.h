@@ -49,6 +49,7 @@ public:
 	virtual void VTable0x4c();                                                        // vtable+0x4c
 
 	void FUN_10010c30();
+	void SetLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up, MxBool);
 
 protected:
 	void Init();
