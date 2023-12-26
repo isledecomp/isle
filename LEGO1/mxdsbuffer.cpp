@@ -288,23 +288,21 @@ MxResult MxDSBuffer::ParseChunk(
 
 	if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
 		delete p_header;
-		goto done;
+		return SUCCESS;
 	}
 
 	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
 
 	if (p_header->GetFlags() & MxDSChunk::Flag_Bit5) {
-		MxU32 und = MxDSChunk::ReturnE();
-		MxU32 length = p_header->GetLength();
+		MxU32 length = p_header->GetLength() + MxDSChunk::ReturnE() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
-		if (buffer && buffer->AllocateBuffer(length + und + 8, MxDSBufferType_Allocate) == SUCCESS &&
+		if (buffer && buffer->AllocateBuffer(length, MxDSBufferType_Allocate) == SUCCESS &&
 			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
-			// improve no temp var
-			MxDSStreamingAction* streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
-			*p_streamingAction = streamingAction;
+			*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
+			;
 
-			if (streamingAction) {
+			if (*p_streamingAction) {
 				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
 				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Bit5;
 
@@ -317,10 +315,8 @@ MxResult MxDSBuffer::ParseChunk(
 		if (buffer)
 			delete buffer;
 
-		if (p_header)
-			delete p_header;
-
-		result = FAILURE;
+		delete p_header;
+		return FAILURE;
 	}
 	else {
 		if (p_header->GetFlags() & MxDSChunk::Flag_Bit2) {
