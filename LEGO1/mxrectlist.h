@@ -69,13 +69,13 @@ public:
 // MxRectListCursor::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100b4090
-// MxPtrListCursor<MxRect32 *>::~MxPtrListCursor<MxRect32 *>
+// MxPtrListCursor<MxRect32>::~MxPtrListCursor<MxRect32>
 
 // SYNTHETIC: LEGO1 0x100b40e0
 // MxListCursor<MxRect32 *>::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100b4150
-// MxPtrListCursor<MxRect32 *>::`scalar deleting destructor'
+// MxPtrListCursor<MxRect32>::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100b41c0
 // MxListCursor<MxRect32 *>::~MxListCursor<MxRect32 *>
