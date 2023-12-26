@@ -80,6 +80,18 @@ MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
 	return (MxU16*) (p_buffer + 8);
 }
 
+// FUNCTION: LEGO1 0x100c3190
+MxU32* MxStreamChunk::IntoPlus0xa(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 0xa);
+}
+
+// FUNCTION: LEGO1 0x100c31a0
+MxU32* MxStreamChunk::IntoPlus0xe(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 0xe);
+}
+
 // FUNCTION: LEGO1 0x100c31b0
 MxU32* MxStreamChunk::IntoPlus0x12(MxU8* p_buffer)
 {
