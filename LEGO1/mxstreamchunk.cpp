@@ -50,16 +50,16 @@ MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 }
 
 // FUNCTION: LEGO1 0x100c30e0
-MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_obj24val)
+MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_append, MxS16 p_obj24val)
 {
 	for (MxStreamListMxDSSubscriber::iterator it = p_subscriberList.begin(); it != p_subscriberList.end(); it++) {
 		if ((*it)->GetObjectId() == m_objectId && (*it)->GetUnknown48() == p_obj24val) {
-			if ((m_flags & 2) != 0 && m_buffer) {
+			if (m_flags & MxDSChunk::Flag_Bit2 && m_buffer) {
 				m_buffer->ReleaseRef(this);
 				m_buffer = NULL;
 			}
 
-			(*it)->AddChunk(this, p_preappend);
+			(*it)->AddChunk(this, p_append);
 
 			return SUCCESS;
 		}
@@ -81,7 +81,7 @@ MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
 }
 
 // FUNCTION: LEGO1 0x100c31b0
-MxU32* MxStreamChunk::IntoPlus18(MxU8* p_buffer)
+MxU32* MxStreamChunk::IntoPlus0x12(MxU8* p_buffer)
 {
-	return (MxU32*) (p_buffer + 18);
+	return (MxU32*) (p_buffer + 0x12);
 }

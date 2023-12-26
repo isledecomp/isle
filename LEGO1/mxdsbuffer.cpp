@@ -469,7 +469,7 @@ MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 			memcpy(m_pBuffer + m_writeOffset - m_bytesRemaining, ptr, bytesRead);
 
 			if (m_writeOffset == m_bytesRemaining)
-				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoPlus18(m_pBuffer) + MxStreamChunk::ReturnE();
+				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoPlus0x12(m_pBuffer) + MxStreamChunk::ReturnE();
 
 			m_bytesRemaining -= bytesRead;
 			result = SUCCESS;

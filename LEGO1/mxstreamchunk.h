@@ -31,11 +31,11 @@ public:
 
 	MxResult ReadChunk(MxDSBuffer* p_buffer, MxU8* p_chunkData);
 	MxU32 ReadChunkHeader(MxU8* p_chunkData);
-	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_preappend, MxS16 p_obj24val);
+	MxResult SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_append, MxS16 p_obj24val);
 	void SetBuffer(MxDSBuffer* p_buffer);
 
 	static MxU16* IntoFlags(MxU8* p_buffer);
-	static MxU32* IntoPlus18(MxU8* p_buffer);
+	static MxU32* IntoPlus0x12(MxU8* p_buffer);
 
 	// FUNCTION: LEGO1 0x100c3190
 	static MxU32* ReturnPlus10Ptr(MxU32* p_chunk) { return p_chunk + 10; }
