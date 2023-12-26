@@ -36,7 +36,7 @@ public:
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	LegoEntity* m_objectBackend;
+	LegoEntity* m_objectBackend; // 0x4c
 };
 
 #endif // LEGOENTITYPRESENTER_H
