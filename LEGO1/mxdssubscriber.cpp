@@ -17,7 +17,7 @@ MxDSSubscriber::MxDSSubscriber()
 MxDSSubscriber::~MxDSSubscriber()
 {
 	if (m_controller)
-		m_controller->FUN_100c1620(this);
+		m_controller->RemoveSubscriber(this);
 
 	DeleteChunks();
 
@@ -48,7 +48,7 @@ MxResult MxDSSubscriber::Create(MxStreamController* p_controller, MxU32 p_object
 	if (!m_unk0x3c)
 		return FAILURE;
 
-	m_controller->FUN_100c15d0(this);
+	m_controller->AddSubscriber(this);
 	return SUCCESS;
 }
 

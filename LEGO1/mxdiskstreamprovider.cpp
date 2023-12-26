@@ -77,10 +77,47 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100d15e0
+// FUNCTION: LEGO1 0x100d15e0
 void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
-	// TODO
+	MxDSStreamingAction* action;
+
+	if (p_action->GetObjectId() == -1) {
+		m_unk0x35 = FALSE;
+
+		do {
+			action = NULL;
+
+			{
+				MxAutoLocker lock(&m_criticalSection);
+				m_list.PopFrontStreamingAction(action);
+			}
+
+			if (!action)
+				return;
+
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+				g_unk0x10102878--;
+
+			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+		} while (action);
+	}
+	else {
+		do {
+			{
+				MxAutoLocker lock(&m_criticalSection);
+				action = (MxDSStreamingAction*) m_list.Find(p_action, TRUE);
+			}
+
+			if (!action)
+				return;
+
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+				g_unk0x10102878--;
+
+			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+		} while (action);
+	}
 }
 
 // FUNCTION: LEGO1 0x100d1750
