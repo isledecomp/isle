@@ -30,11 +30,40 @@ MxDSBuffer::MxDSBuffer()
 MxDSBuffer::~MxDSBuffer()
 {
 	if (m_pBuffer != NULL) {
-		if (m_mode == MxDSBufferType_Chunk) {
-			// TODO
-		}
-		else if (m_mode == MxDSBufferType_Allocate || m_mode == MxDSBufferType_Unknown) {
+
+		switch (m_mode) {
+		case MxDSBufferType_Allocate:
+		case MxDSBufferType_Unknown:
 			delete[] m_pBuffer;
+			break;
+
+		case MxDSBufferType_Chunk: {
+			MxStreamer* streamer = Streamer();
+			switch (m_writeOffset / 1024) {
+			case 0x40: {
+				MxU32 a = streamer->GetSubclass1().GetSize() << 10;
+				MxU32 bit = ((m_pBuffer - streamer->GetSubclass1().GetBuffer()) / a) & 0x1f;
+				MxU32 index = (((m_pBuffer - streamer->GetSubclass1().GetBuffer()) / a) & 0xFFFFFFE7) >> 3;
+
+				if (((((*(MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(index)])) & 1) << bit) != 0) {
+					MxU32* ptr = (MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(index)];
+					*ptr = *ptr ^ bit;
+				}
+				break;
+			}
+			case 0x80: {
+				MxU32 a = streamer->GetSubclass2().GetSize() << 10;
+				MxU32 bit = ((m_pBuffer - streamer->GetSubclass2().GetBuffer()) / a) & 0x1f;
+				MxU32 index = (((m_pBuffer - streamer->GetSubclass2().GetBuffer()) / a) & 0xFFFFFFE7) >> 3;
+
+				if (((((*(MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(index)])) & 1) << bit) != 0) {
+					MxU32* ptr = (MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(index)];
+					*ptr = *ptr ^ bit;
+				}
+				break;
+			}
+			}
+		}
 		}
 	}
 
@@ -274,7 +303,20 @@ MxResult MxDSBuffer::ParseChunk(
 						}
 					}
 					else {
-						OutputDebugString("Case A not implemented in parse Chunk\n");
+						if (p_action->GetObjectId() == p_header->GetObjectId()) {
+							MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_unk0x30->GetObjectId()];
+							m_unk0x30->SetUnknown94(val);
+							m_unk0x30->SetBufferOffset((val / m_writeOffset) * m_writeOffset);
+							MxNextActionDataStart* data =
+								p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
+							if (data) {
+								data->SetData(m_unk0x30->GetBufferOffset());
+							}
+							m_unk0x30->FUN_100cd2d0();
+						}
+
+						delete p_header;
+						p_header = NULL;
 					}
 				}
 			}

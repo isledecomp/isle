@@ -51,6 +51,7 @@ public:
 	MxResult FUN_100c1f00(MxDSAction* p_action);
 	MxBool FUN_100c20d0(MxDSObject& p_obj);
 	MxResult InsertActionToList54(MxDSAction* p_action);
+	MxNextActionDataStart* FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
 	inline MxStreamProvider* GetProvider() { return m_provider; };

@@ -259,6 +259,12 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x100c20b0
+MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action)
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x100c20d0
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
