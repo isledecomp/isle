@@ -27,9 +27,9 @@ public:
 		override;                                                                          // vtable+0x2c
 	virtual MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
 	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
-	virtual void VTable0x38(undefined4, undefined4);
+	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
 	// FUNCTION: LGEO1 0x1007ab10
-	virtual undefined4 VTable0x3c() { return m_unk0x4e8; }
+	virtual undefined4 VTable0x3c() { return m_unk0x4e8; } // vtable+0x3c
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
