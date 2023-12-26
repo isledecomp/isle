@@ -79,16 +79,19 @@ MxResult MxStreamController::Open(const char* p_filename)
 }
 
 // FUNCTION: LEGO1 0x100c15d0
-void MxStreamController::FUN_100c15d0(MxDSSubscriber* p_subscriber)
+void MxStreamController::AddSubscriber(MxDSSubscriber* p_subscriber)
 {
 	m_subscriberList.push_back(p_subscriber);
 }
 
-// STUB: LEGO1 0x100c1620
-void MxStreamController::FUN_100c1620(MxDSSubscriber* p_subscriber)
+// FUNCTION: LEGO1 0x100c1620
+void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 {
-	// TODO
-	OutputDebugString("MxStreamController::FUN_100c1620 STUB\n");
+	for (MxStreamListMxDSSubscriber::iterator it = m_subscriberList.begin(); it != m_subscriberList.end(); it++) {
+		if (*it == p_subscriber) {
+			m_subscriberList.erase(it);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100c1690

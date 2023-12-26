@@ -43,8 +43,8 @@ public:
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 
-	void FUN_100c15d0(MxDSSubscriber* p_subscriber);
-	void FUN_100c1620(MxDSSubscriber* p_subscriber);
+	void AddSubscriber(MxDSSubscriber* p_subscriber);
+	void RemoveSubscriber(MxDSSubscriber* p_subscriber);
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
 	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset);
 	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
