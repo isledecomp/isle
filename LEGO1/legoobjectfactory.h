@@ -26,9 +26,9 @@
 	X(Lego3DWavePresenter)                                                                                             \
 	X(LegoActor)                                                                                                       \
 	X(LegoPathActor)                                                                                                   \
-	X(LegoRaceCar)                                                                                                   \
+	X(LegoRaceCar)                                                                                                     \
 	X(LegoJetski)                                                                                                      \
-	X(JetskiRace)                                                                                                      \
+	/*X(JetskiRace) \*/                                                                                                \
 	X(LegoEntity)                                                                                                      \
 	X(LegoCarRaceActor)                                                                                                \
 	X(LegoJetskiRaceActor)                                                                                             \
@@ -48,11 +48,7 @@
 	X(GasStation)                                                                                                      \
 	X(LegoAct2)                                                                                                        \
 	X(LegoAct2State)                                                                                                   \
-	X(CarRace)                                                                                                         \
-	X(LegoRaceCarBuildState)                                                                                           \
-	X(LegoCopterBuildState)                                                                                            \
-	X(LegoDuneCarBuildState)                                                                                           \
-	X(LegoJetskiBuildState)                                                                                            \
+	/*X(CarRace)*/                                                                                                     \
 	X(HospitalState)                                                                                                   \
 	X(InfocenterState)                                                                                                 \
 	X(PoliceState)                                                                                                     \
@@ -63,9 +59,9 @@
 	X(DuneBuggy)                                                                                                       \
 	X(Pizza)                                                                                                           \
 	X(PizzaMissionState)                                                                                               \
-	X(Act2Actor)                                                                                                       \
-	X(Act2Brick)                                                                                                       \
-	X(Act2GenActor)                                                                                                    \
+	/*X(Act2Actor)*/                                                                                                   \
+	/*X(Act2Brick)*/                                                                                                   \
+	/*X(Act2GenActor)*/                                                                                                \
 	X(Act2PoliceStation)                                                                                               \
 	X(Act3)                                                                                                            \
 	X(Act3State)                                                                                                       \
@@ -79,8 +75,8 @@
 	X(AmbulanceMissionState)                                                                                           \
 	X(TowTrack)                                                                                                        \
 	X(TowTrackMissionState)                                                                                            \
-	X(Act3Cop)                                                                                                         \
-	X(Act3Brickster)                                                                                                   \
+	/*X(Act3Cop)*/                                                                                                     \
+	/*X(Act3Brickster)*/                                                                                               \
 	X(Act3Shark)                                                                                                       \
 	X(BumpBouy)                                                                                                        \
 	X(Act3Actor)                                                                                                       \
@@ -97,12 +93,12 @@
 	X(RaceStandsEntity)                                                                                                \
 	X(JukeBoxEntity)                                                                                                   \
 	X(RadioState)                                                                                                      \
-	X(CaveEntity)                                                                                                      \
-	X(JailEntity)                                                                                                      \
+	/*X(CaveEntity)*/                                                                                                  \
+	/*X(JailEntity)*/                                                                                                  \
 	X(MxCompositeMediaPresenter)                                                                                       \
-	X(Jukebox)                                                                                                         \
+	X(JukeBox)                                                                                                         \
 	X(JukeBoxState)                                                                                                    \
-	X(RaceSkel)                                                                                                        \
+	/*X(RaceSkel)*/                                                                                                    \
 	X(AnimState)
 
 // VTABLE: LEGO1 0x100d4768
