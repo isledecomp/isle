@@ -251,10 +251,10 @@ undefined4 MxDisplaySurface::VTable0x34(undefined4, undefined4, undefined4, unde
 }
 
 // FUNCTION: LEGO1 0x100bba50
-void MxDisplaySurface::Display(MxS16 p_left, MxS16 p_top, MxS16 p_left2, MxS16 p_top2, MxS16 p_width, MxS16 p_height)
+void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p_top2, MxS32 p_width, MxS32 p_height)
 {
 	if (m_videoParam.Flags().GetF2bit1()) {
-		if (m_videoParam.Flags().GetFlipSurfaces() != 0) {
+		if (m_videoParam.Flags().GetFlipSurfaces()) {
 			if (g_unk0x1010215c < 2) {
 				g_unk0x1010215c++;
 
@@ -282,8 +282,8 @@ void MxDisplaySurface::Display(MxS16 p_left, MxS16 p_top, MxS16 p_left2, MxS16 p
 			POINT point = {0, 0};
 			ClientToScreen(MxOmni::GetInstance()->GetWindowHandle(), &point);
 
-			RECT rect1;
-			RECT rect2;
+			// TODO: Match
+			RECT rect1, rect2;
 			rect1.left = p_left2 + m_videoParam.GetRect().GetLeft() + point.x;
 			rect2.left = p_left;
 			rect1.top = p_top2 + m_videoParam.GetRect().GetTop() + point.y;
