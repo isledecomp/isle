@@ -250,17 +250,25 @@ MxPalette* MxBitmap::CreatePalette()
 	switch (this->m_isHighColor) {
 	case FALSE:
 		palette = new MxPalette(this->m_paletteData);
-		if (palette)
-			success = TRUE;
-		break;
 
+		if (!palette)
+			goto done;
+
+		break;
 	case TRUE:
 		palette = this->m_palette->Clone();
-		if (palette)
-			success = TRUE;
+
+		if (!palette)
+			goto done;
+
 		break;
+	default:
+		goto done;
 	}
 
+	success = TRUE;
+
+done:
 	if (!success && palette) {
 		delete palette;
 		palette = NULL;
