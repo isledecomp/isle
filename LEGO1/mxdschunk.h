@@ -13,6 +13,8 @@ public:
 		Flag_Bit1 = 0x01,
 		Flag_Bit2 = 0x02,
 		Flag_Bit3 = 0x04,
+		Flag_Bit4 = 0x08,
+		Flag_Bit5 = 0x10,
 		Flag_Bit8 = 0x80,
 		Flag_Bit16 = 0x8000
 	};
@@ -32,6 +34,8 @@ public:
 	{
 		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
+
+	static MxU32 ReturnE();
 
 	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 	inline void SetObjectId(undefined4 p_objectid) { m_objectId = p_objectid; }
