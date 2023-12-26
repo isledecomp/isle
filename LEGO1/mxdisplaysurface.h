@@ -62,7 +62,7 @@ public:
 		MxBool
 	);
 	virtual undefined4 VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
-	virtual void Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
+	virtual void Display(MxS16 left, MxS16 top, MxS16 left2, MxS16 top2, MxS16 width, MxS16 height);
 	virtual void GetDC(HDC* p_hdc);
 	virtual void ReleaseDC(HDC p_hdc);
 	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4);

@@ -69,6 +69,53 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
+// STUB: LEGO1 0x1007b770
+MxResult LegoVideoManager::Tickle()
+{
+	// TODO
+	return FAILURE;
+}
+
+// STUB: LEGO1 0x1007ac40
+MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
+{
+	// TODO
+	return MxVideoManager::Create(p_videoParam, p_frequencyMS, p_createThread);
+}
+
+// STUB: LEGO1 0x1007c080
+void LegoVideoManager::VTable0x38(undefined4, undefined4)
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1007c290
+MxResult LegoVideoManager::RealizePalette(MxPalette* p_pallete)
+{
+	if (p_pallete && m_videoParam.GetPalette()) {
+		p_pallete->GetEntries(m_paletteEntries);
+		m_videoParam.GetPalette()->SetEntries(m_paletteEntries);
+		m_displaySurface->SetPalette(m_videoParam.GetPalette());
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x1007c4d0
+void LegoVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+{
+	if (p_width == 0) {
+		p_width = m_videoParam.GetRect().GetWidth();
+	}
+	if (p_height == 0) {
+		p_height = m_videoParam.GetRect().GetHeight();
+	}
+
+	if (!m_initialized) {
+		m_3dManager->GetLego3DView()->GetViewPort()->ForceUpdate(p_x, p_y, p_width, p_height);
+	}
+}
+
 // FUNCTION: LEGO1 0x1007c300
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
 {
@@ -135,9 +182,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	colorStrucure.peFlags = -124;
 	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
-
-	// TODO 3d manager
-	// m_3dManager->m_pViewport->VTable0x1c(red, green, blue)
+	m_3dManager->GetLego3DView()->GetViewPort()->SetBackgroundColor(p_red, p_green, p_blue);
 }
 
 // FUNCTION: LEGO1 0x1007c4c0
