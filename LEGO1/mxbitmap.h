@@ -19,6 +19,8 @@
 struct MxBITMAPINFO {
 	BITMAPINFOHEADER m_bmiHeader;
 	RGBQUAD m_bmiColors[256];
+
+	static MxU32 Size() { return sizeof(MxBITMAPINFO); }
 };
 
 // Non-standard value for biCompression in the BITMAPINFOHEADER struct.
@@ -56,16 +58,29 @@ public:
 		MxS32 p_destHeight
 	); // vtable+40
 
+	// Bit mask trick to round up to the nearest multiple of four.
+	// Pixel data may be stored with padding.
+	// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
+	inline MxLong AlignToFourByte(MxLong p_value) const { return (p_value + 3) & -4; }
+
+	// Same as the one from legoutil.h, but flipped the other way
+	// TODO: While it's not outside the realm of possibility that they
+	// reimplemented Abs for only this file, that seems odd, right?
+	inline MxLong AbsFlipped(MxLong p_value) const { return p_value > 0 ? p_value : -p_value; }
+
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
 	inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
 	inline MxLong GetBmiStride() const { return ((m_bmiHeader->biWidth + 3) & -4); }
 	inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
-	inline MxLong GetBmiHeightAbs() const
-	{
-		return m_bmiHeader->biHeight > 0 ? m_bmiHeader->biHeight : -m_bmiHeader->biHeight;
-	}
+	inline MxLong GetBmiHeightAbs() const { return AbsFlipped(m_bmiHeader->biHeight); }
 	inline MxU8* GetBitmapData() const { return m_data; }
 	inline MxBITMAPINFO* GetBitmapInfo() const { return m_info; }
+	inline MxLong GetDataSize() const
+	{
+		MxLong absHeight = GetBmiHeightAbs();
+		MxLong alignedWidth = AlignToFourByte(m_bmiHeader->biWidth);
+		return alignedWidth * absHeight;
+	}
 
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);

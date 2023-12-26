@@ -22,7 +22,7 @@ public:
 
 	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
 	inline undefined* GetBuffer() const { return m_buffer; }
-	inline undefined4 GetUnk08() const { return m_unk0x08; }
+	inline undefined* GetUnk08Ref() const { return (undefined*) &m_unk0x08; }
 
 private:
 	undefined* m_buffer;
