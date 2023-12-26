@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "define.h"
+#include "legoobjectfactory.h"
 #include "legoomni.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
@@ -302,6 +303,27 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 	}
 
 	return name;
+}
+
+// FUNCTION: LEGO1 0x100b5410
+void MxPresenter::FUN_100b5410(const char* p_name)
+{
+	char buffer[512];
+	char buffer2[512];
+	strcpy(buffer, p_name);
+
+	MxU16 extraLen = m_action->GetExtraLength();
+
+	buffer[0] = extraLen;
+	buffer[1] = extraLen >> 8;
+	if (extraLen) {
+		extraLen &= MAXWORD;
+		memcpy(buffer2 + 2, m_action->GetExtraData(), extraLen);
+		buffer2[extraLen + 2] = 0;
+		KeyValueStringParse(buffer, g_strOBJECT, buffer2 + 2);
+	}
+
+	ObjectFactory()->Create(buffer);
 }
 
 // FUNCTION: LEGO1 0x100b54c0
