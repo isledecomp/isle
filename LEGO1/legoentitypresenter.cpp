@@ -77,7 +77,7 @@ void LegoEntityPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x10053720
 void LegoEntityPresenter::RepeatingTickle()
 {
-	if (m_list.size() == 0) {
+	if (m_list.empty()) {
 		EndAction();
 	}
 }
