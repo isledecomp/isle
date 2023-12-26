@@ -85,8 +85,7 @@ void LegoEntityPresenter::RepeatingTickle()
 // FUNCTION: LEGO1 0x10053730
 void LegoEntityPresenter::SetBackendLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up)
 {
-	if (m_objectBackend)
-	{
+	if (m_objectBackend) {
 		m_objectBackend->SetLocation(p_location, p_direction, p_up, TRUE);
 	}
 }

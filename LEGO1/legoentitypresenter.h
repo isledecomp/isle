@@ -36,6 +36,7 @@ public:
 
 private:
 	void Destroy(MxBool p_fromDestructor);
+
 protected:
 	LegoEntity* m_objectBackend; // 0x4c
 };

@@ -44,17 +44,17 @@ void LegoWorldPresenter::ReadyTickle()
 	m_currentTickleState = TickleState_Starting;
 }
 
-// STUB: LEGO1 0x10067a70
-void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
-{
-}
-
 // STUB: LEGO1 0x10066ac0
 void LegoWorldPresenter::StartingTickle()
 {
 }
 
-// FUNCTION: LEGO1 0x10067b00
+// STUB: LEGO1 0x10067a70
+void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
+{
+}
+
+// STUB: LEGO1 0x10067b00
 void LegoWorldPresenter::ParseExtra()
 {
 }
