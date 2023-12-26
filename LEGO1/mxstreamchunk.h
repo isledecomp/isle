@@ -35,15 +35,13 @@ public:
 	void SetBuffer(MxDSBuffer* p_buffer);
 
 	static MxU16* IntoFlags(MxU8* p_buffer);
+	static MxU32* IntoPlus18(MxU8* p_buffer);
 
 	// FUNCTION: LEGO1 0x100c3190
 	static MxU32* ReturnPlus10Ptr(MxU32* p_chunk) { return p_chunk + 10; }
 
 	// FUNCTION: LEGO1 0x100c31a0
 	static MxU32* ReturnPlus14Ptr(MxU32* p_chunk) { return p_chunk + 14; }
-
-	// FUNCTION: LEGO1 0x100c31b0
-	static MxU32* ReturnPlus18Ptr(MxU32* p_chunk) { return p_chunk + 18; }
 
 private:
 	MxDSBuffer* m_buffer; // 0x1c

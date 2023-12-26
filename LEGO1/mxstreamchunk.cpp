@@ -79,3 +79,9 @@ MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
 {
 	return (MxU16*) (p_buffer + 8);
 }
+
+// FUNCTION: LEGO1 0x100c31b0
+MxU32* MxStreamChunk::IntoPlus18(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 18);
+}

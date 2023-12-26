@@ -451,32 +451,31 @@ void MxDSBuffer::AddRef(MxDSChunk* p_chunk)
 MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 {
 	MxResult result = FAILURE;
-	MxU8* ptr;
-	MxU32 bytesRead;
-	if (m_mode == MxDSBufferType_Allocate) {
-		if (m_bytesRemaining != 0) {
 
-			if (m_writeOffset == m_bytesRemaining) {
-				bytesRead = (*(MxU32*) p_data) + 8;
-				ptr = p_data;
-			}
-			else {
-				ptr = &p_data[MxStreamChunk::ReturnE() + 8];
-				bytesRead = (*(MxU32*) p_data) - MxStreamChunk::ReturnE();
-			}
+	if (m_mode == MxDSBufferType_Allocate && m_bytesRemaining != 0) {
+		MxU32 bytesRead;
+		MxU8* ptr;
 
-			if (bytesRead <= m_bytesRemaining) {
-				memcpy(m_pBuffer + (m_writeOffset - m_bytesRemaining), ptr, bytesRead);
-				if (m_writeOffset == m_bytesRemaining) {
-					MxU8* buffer = m_pBuffer;
-					buffer[1] = *MxStreamChunk::ReturnPlus18Ptr((MxU32*) buffer) + MxStreamChunk::ReturnE();
-				}
+		if (m_writeOffset == m_bytesRemaining) {
+			bytesRead = *(MxU32*) (p_data + 4) + 8;
+			ptr = p_data;
+		}
+		else {
+			ptr = &p_data[MxStreamChunk::ReturnE() + 8];
+			bytesRead = (*(MxU32*) (p_data + 4)) - MxStreamChunk::ReturnE();
+		}
 
-				result = SUCCESS;
-				m_bytesRemaining = m_bytesRemaining - bytesRead;
-			}
+		if (bytesRead <= m_bytesRemaining) {
+			memcpy(m_pBuffer + m_writeOffset - m_bytesRemaining, ptr, bytesRead);
+
+			if (m_writeOffset == m_bytesRemaining)
+				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoPlus18(m_pBuffer) + MxStreamChunk::ReturnE();
+
+			m_bytesRemaining -= bytesRead;
+			result = SUCCESS;
 		}
 	}
+
 	return result;
 }
 
