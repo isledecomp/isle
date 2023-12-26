@@ -65,6 +65,7 @@ public:
 	virtual MxResult PutData();                                                           // vtable+0x4c
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
 	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
+
 	MxEntity* CreateEntityBackend(const char* p_name);
 	MxBool IsEnabled();
 
