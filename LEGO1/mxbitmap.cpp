@@ -296,36 +296,41 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 	if (m_isHighColor == p_isHighColor) {
 		// no change: do nothing.
 		ret = SUCCESS;
+		goto done;
 	}
-	else {
-		switch (p_isHighColor) {
-		case FALSE:
-			ImportColorsToPalette(m_paletteData, m_palette);
-			if (m_palette)
-				delete m_palette;
 
-			m_palette = NULL;
-			break;
+	switch (p_isHighColor) {
+	case FALSE:
+		ImportColorsToPalette(m_paletteData, m_palette);
+		if (m_palette)
+			delete m_palette;
 
-		case TRUE:
-			pal = NULL;
-			pal = new MxPalette(m_paletteData);
-			if (pal) {
-				m_palette = pal;
+		m_palette = NULL;
+		break;
+	case TRUE: {
+		pal = NULL;
+		pal = new MxPalette(m_paletteData);
 
-				// TODO: what is this? zeroing out top half of palette?
-				MxU16* buf = (MxU16*) m_paletteData;
-				for (MxU16 i = 0; i < 256; i++) {
-					buf[i] = i;
-				}
+		if (!pal)
+			goto done;
 
-				m_isHighColor = p_isHighColor;
-				ret = SUCCESS;
-			}
-			break;
+		m_palette = pal;
+
+		// TODO: what is this? zeroing out top half of palette?
+		MxU16* buf = (MxU16*) m_paletteData;
+		for (MxU16 i = 0; i < 256; i++) {
+			buf[i] = i;
 		}
+		break;
+	}
+	default:
+		goto done;
 	}
 
+	m_isHighColor = p_isHighColor;
+	ret = SUCCESS;
+
+done:
 	// If we were unsuccessful overall but did manage to alloc
 	// the MxPalette, free it.
 	if (ret && pal)
