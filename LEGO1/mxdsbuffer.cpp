@@ -30,7 +30,6 @@ MxDSBuffer::MxDSBuffer()
 MxDSBuffer::~MxDSBuffer()
 {
 	if (m_pBuffer != NULL) {
-
 		switch (m_mode) {
 		case MxDSBufferType_Allocate:
 		case MxDSBufferType_Unknown:
@@ -38,26 +37,32 @@ MxDSBuffer::~MxDSBuffer()
 			break;
 
 		case MxDSBufferType_Chunk: {
+			MxU32 offset = m_writeOffset / 1024;
 			MxStreamer* streamer = Streamer();
-			switch (m_writeOffset / 1024) {
-			case 0x40: {
-				MxU32 a = streamer->GetSubclass1().GetSize() << 10;
-				MxU32 bit = ((m_pBuffer - streamer->GetSubclass1().GetBuffer()) / a) & 0x1f;
-				MxU32 index = (((m_pBuffer - streamer->GetSubclass1().GetBuffer()) / a) & 0xFFFFFFE7) >> 3;
 
-				if (((((*(MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(index)])) & 1) << bit) != 0) {
-					MxU32* ptr = (MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(index)];
+			switch (offset) {
+			case 0x40: {
+				MxU32 a =
+					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
+
+				MxU32 bit = 1 << ((MxU8) a & 0x1f);
+				MxU32 index = (a & ~0x18u) >> 3;
+
+				if ((*(MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index])) & bit) {
+					MxU32* ptr = (MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index]);
 					*ptr = *ptr ^ bit;
 				}
 				break;
 			}
 			case 0x80: {
-				MxU32 a = streamer->GetSubclass2().GetSize() << 10;
-				MxU32 bit = ((m_pBuffer - streamer->GetSubclass2().GetBuffer()) / a) & 0x1f;
-				MxU32 index = (((m_pBuffer - streamer->GetSubclass2().GetBuffer()) / a) & 0xFFFFFFE7) >> 3;
+				MxU32 a =
+					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
 
-				if (((((*(MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(index)])) & 1) << bit) != 0) {
-					MxU32* ptr = (MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(index)];
+				MxU32 bit = 1 << ((MxU8) a & 0x1f);
+				MxU32 index = (a & ~0x18u) >> 3;
+
+				if ((*(MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index])) & bit) {
+					MxU32* ptr = (MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index]);
 					*ptr = *ptr ^ bit;
 				}
 				break;
