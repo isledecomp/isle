@@ -1,5 +1,5 @@
-#ifndef PIZZERIASTATE_H
-#define PIZZERIASTATE_H
+#ifndef PIZZERIA_H
+#define PIZZERIA_H
 
 #include "isleactor.h"
 
@@ -21,4 +21,4 @@ public:
 	}
 };
 
-#endif // PIZZERIASTATE_H
+#endif // PIZZERIA_H
