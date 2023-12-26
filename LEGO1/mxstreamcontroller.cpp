@@ -87,11 +87,7 @@ void MxStreamController::AddSubscriber(MxDSSubscriber* p_subscriber)
 // FUNCTION: LEGO1 0x100c1620
 void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 {
-	for (MxStreamListMxDSSubscriber::iterator it = m_subscriberList.begin(); it != m_subscriberList.end(); it++) {
-		if (*it == p_subscriber) {
-			m_subscriberList.erase(it);
-		}
-	}
+	m_subscriberList.remove(p_subscriber);
 }
 
 // FUNCTION: LEGO1 0x100c1690
