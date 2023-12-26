@@ -1,8 +1,8 @@
 #ifndef LEGOCARRACE_H
 #define LEGOCARRACE_H
 
-#include "legopathactor.h"
 #include "legocarraceactor.h"
+#include "legopathactor.h"
 
 // VTABLE: LEGO1 0x100d58b8
 // SIZE: 0x200
