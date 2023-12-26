@@ -19,3 +19,9 @@ MxDSChunk::~MxDSChunk()
 		delete[] m_data;
 	}
 }
+
+// FUNCTION: LEGO1 0x100be1e0
+MxU32 MxDSChunk::ReturnE()
+{
+	return 0xe;
+}
