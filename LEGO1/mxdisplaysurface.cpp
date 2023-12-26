@@ -72,6 +72,36 @@ void MxDisplaySurface::FUN_100ba640()
 	}
 }
 
+// OFFSET: LEGO1 0x100ba750
+byte CountTotalBitsSetTo1(MxU32 p_param)
+{
+	MxU32 a;
+	byte i = 0;
+	if(p_param) {
+		do {
+			a = i >> 1;
+			i += ((byte)p_param & 1);
+			p_param = a;
+		} while (a != 0);
+	}
+	return i;
+}
+
+// OFFSET: LEGO1 0x100ba770
+byte CountContiguousBitsSetTo1(MxU32 p_param)
+{
+	MxU32 u;
+	byte count = 0;
+	
+	u = p_param & 1;
+	while(u == 0) {
+		p_param >>= 1;
+		count++;
+		u = p_param & 1;
+	}
+	return count;
+}
+
 // FUNCTION: LEGO1 0x100ba790
 MxResult MxDisplaySurface::Init(
 	MxVideoParam& p_videoParam,
@@ -223,13 +253,19 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 	HDC hdc;
 	HPALETTE hpal;
 	LOGPALETTE lpal;
+	byte bVar2;
+  	byte bVar3;
+  	byte bVar4;
+  	byte bVar5;
+  	byte bVar6;
+  	byte bVar7;
 	if((this->m_surfaceDesc).ddpfPixelFormat.dwFlags & 0x20) {
 		this->m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
 		this->m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
 		if(((this->m_videoParam).Flags().GetFlipSurfaces()) == 0) {
 			lpal.palVersion = 0x300;
 			lpal.palNumEntries = 256;
-			// FIXME: this loop
+			// FIXME: this loop is probably incorrect
 			memset(lpal.palPalEntry, lpal.palNumEntries, 0);
 
 			hpal = CreatePalette(&lpal);
@@ -240,7 +276,23 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 			DeleteObject(hpal);
 		}
 	}
-	// TODO: Second half of this function
+	if((this->m_surfaceDesc).ddpfPixelFormat.dwRGBBitCount == 16) {
+		if(this->m_16bitPal == NULL) {
+			this->m_16bitPal = new MxU16; // FIXME: malloc size 512;
+		}
+		p_palette->GetEntries((PALETTEENTRY*) &lpal);  // ?
+
+		// inferred
+		bVar2 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwYUVBitCount);
+    	bVar3 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwYUVBitCount);
+    	bVar4 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwZBufferBitDepth);
+    	bVar5 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwZBufferBitDepth);
+    	bVar6 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwAlphaBitDepth);
+    	bVar7 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwAlphaBitDepth);
+
+		MxS32 i = 0;
+		// A while loop here then thats it
+	}
 }
 
 // STUB: LEGO1 0x100bacc0
