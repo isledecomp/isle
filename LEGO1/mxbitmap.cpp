@@ -10,22 +10,6 @@ DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 // (1998) GLOBAL: LEGO1 0x10102184
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
-// Bit mask trick to round up to the nearest multiple of four.
-// Pixel data may be stored with padding.
-// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
-inline MxLong AlignToFourByte(MxLong p_value)
-{
-	return (p_value + 3) & -4;
-}
-
-// Same as the one from legoutil.h, but flipped the other way
-// TODO: While it's not outside the realm of possibility that they
-// reimplemented Abs for only this file, that seems odd, right?
-inline MxLong AbsFlipped(MxLong p_value)
-{
-	return p_value > 0 ? p_value : -p_value;
-}
-
 // FUNCTION: LEGO1 0x1004e0d0
 int MxBitmap::VTable0x28(int)
 {
@@ -140,16 +124,14 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 
 	this->m_info = new MxBITMAPINFO;
 	if (this->m_info) {
-		MxLong height = AbsFlipped(p_bitmap->m_bmiHeader->biHeight);
-		this->m_data = new MxU8[AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height];
+		this->m_data = new MxU8[p_bitmap->GetDataSize()];
 		if (this->m_data) {
-			memcpy(this->m_info, p_bitmap->m_info, sizeof(*this->m_info));
-			height = AbsFlipped(p_bitmap->m_bmiHeader->biHeight);
-			memcpy(this->m_data, p_bitmap->m_data, AlignToFourByte(p_bitmap->m_bmiHeader->biWidth) * height);
+			memcpy(this->m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
+			memcpy(this->m_data, p_bitmap->GetBitmapData(), p_bitmap->GetDataSize());
 
-			result = SUCCESS;
 			this->m_bmiHeader = &this->m_info->m_bmiHeader;
 			this->m_paletteData = this->m_info->m_bmiColors;
+			result = SUCCESS;
 		}
 	}
 
