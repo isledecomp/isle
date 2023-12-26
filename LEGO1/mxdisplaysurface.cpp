@@ -251,7 +251,7 @@ undefined4 MxDisplaySurface::VTable0x34(undefined4, undefined4, undefined4, unde
 }
 
 // FUNCTION: LEGO1 0x100bba50
-void MxDisplaySurface::Display(MxS16 left, MxS16 top, MxS16 left2, MxS16 top2, MxS16 width, MxS16 height)
+void MxDisplaySurface::Display(MxS16 p_left, MxS16 p_top, MxS16 p_left2, MxS16 p_top2, MxS16 p_width, MxS16 p_height)
 {
 	if (m_videoParam.Flags().GetF2bit1()) {
 		if (m_videoParam.Flags().GetFlipSurfaces() != 0) {
@@ -265,8 +265,7 @@ void MxDisplaySurface::Display(MxS16 left, MxS16 top, MxS16 left2, MxS16 top2, M
 					MxU8* surface = (MxU8*) ddsd.lpSurface;
 					MxS32 height = m_videoParam.GetRect().GetHeight();
 
-					for (MxU32 i = 0; i < ddsd.dwHeight; i++)
-					{
+					for (MxU32 i = 0; i < ddsd.dwHeight; i++) {
 						memset(surface, 0, ddsd.dwWidth * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
 						surface += ddsd.lPitch;
 					}
@@ -285,14 +284,14 @@ void MxDisplaySurface::Display(MxS16 left, MxS16 top, MxS16 left2, MxS16 top2, M
 
 			RECT rect1;
 			RECT rect2;
-			rect1.left = left2 + m_videoParam.GetRect().GetLeft() + point.x;
-			rect2.left = left;
-			rect1.top = top2 + m_videoParam.GetRect().GetTop() + point.y;
-			rect2.right = left + width;
-			rect2.top = top;
-			rect2.bottom = top + height;
-			rect1.right = rect1.left + width;
-			rect1.bottom = rect1.top + height;
+			rect1.left = p_left2 + m_videoParam.GetRect().GetLeft() + point.x;
+			rect2.left = p_left;
+			rect1.top = p_top2 + m_videoParam.GetRect().GetTop() + point.y;
+			rect2.right = p_left + p_width;
+			rect2.top = p_top;
+			rect2.bottom = p_top + p_height;
+			rect1.right = rect1.left + p_width;
+			rect1.bottom = rect1.top + p_height;
 
 			DDBLTFX data;
 			memset(&data, 0, sizeof(data));
