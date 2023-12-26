@@ -3,7 +3,7 @@
 
 #include "mxcompositepresenter.h"
 
-class IslePathActor;
+class LegoEntity;
 
 // VTABLE: LEGO1 0x100d8398
 // SIZE 0x50
@@ -31,12 +31,12 @@ public:
 	virtual void Destroy() override;                                                               // vtable+0x38
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void Init();                                                                           // vtable+0x68
-	virtual undefined4 VTable0x6c(IslePathActor* p_unk0x4c);                                       // vtable+0x6c
+	virtual undefined4 SetBackend(LegoEntity* p_unk0x4c);                                          // vtable+0x6c
 
 private:
 	void Destroy(MxBool p_fromDestructor);
 
-	IslePathActor* m_unk0x4c;
+	LegoEntity* m_objectBackend;
 };
 
 #endif // LEGOENTITYPRESENTER_H

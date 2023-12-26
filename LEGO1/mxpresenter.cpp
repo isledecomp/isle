@@ -9,6 +9,7 @@
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxdssound.h"
+#include "mxentity.h"
 #include "mxnotificationmanager.h"
 #include "mxparam.h"
 #include "mxstreamer.h"
@@ -306,7 +307,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100b5410
-void MxPresenter::FUN_100b5410(const char* p_name)
+MxEntity* MxPresenter::CreateEntityBackend(const char* p_name)
 {
 	char buffer[512];
 	char buffer2[512];
@@ -323,7 +324,7 @@ void MxPresenter::FUN_100b5410(const char* p_name)
 		KeyValueStringParse(buffer, g_strOBJECT, buffer2 + 2);
 	}
 
-	ObjectFactory()->Create(buffer);
+	return (MxEntity*) ObjectFactory()->Create(buffer);
 }
 
 // FUNCTION: LEGO1 0x100b54c0

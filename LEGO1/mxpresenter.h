@@ -10,6 +10,7 @@
 
 class MxCompositePresenter;
 class MxStreamController;
+class MxEntity;
 
 // VTABLE: LEGO1 0x100d4d38
 // SIZE 0x40
@@ -64,7 +65,7 @@ public:
 	virtual MxResult PutData();                                                           // vtable+0x4c
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
 	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
-	void FUN_100b5410(const char* p_name);
+	MxEntity* CreateEntityBackend(const char* p_name);
 	MxBool IsEnabled();
 
 	inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }

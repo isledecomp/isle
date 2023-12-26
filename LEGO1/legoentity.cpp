@@ -76,6 +76,12 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 	// TODO
 }
 
+// STUB: LEGO1 0x100109b0
+void LegoEntity::SetLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up, MxBool)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10010c30
 void LegoEntity::FUN_10010c30()
 {

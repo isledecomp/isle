@@ -15,7 +15,7 @@ LegoEntityPresenter::LegoEntityPresenter()
 // FUNCTION: LEGO1 0x100535c0
 void LegoEntityPresenter::Init()
 {
-	m_unk0x4c = 0;
+	m_objectBackend = 0;
 }
 
 // FUNCTION: LEGO1 0x100535d0
@@ -25,9 +25,9 @@ LegoEntityPresenter::~LegoEntityPresenter()
 }
 
 // FUNCTION: LEGO1 0x10053630
-undefined4 LegoEntityPresenter::VTable0x6c(IslePathActor* p_unk0x4c)
+undefined4 LegoEntityPresenter::SetBackend(LegoEntity* p_backend)
 {
-	m_unk0x4c = p_unk0x4c;
+	m_objectBackend = p_backend;
 	return 0;
 }
 
@@ -59,10 +59,19 @@ MxResult LegoEntityPresenter::StartAction(MxStreamController* p_controller, MxDS
 	return result;
 }
 
-// STUB: LEGO1 0x100536c0
+// FUNCTION: LEGO1 0x100536c0
 void LegoEntityPresenter::ReadyTickle()
 {
-	// TODO
+	if (GetCurrentWorld()) {
+		m_objectBackend = (LegoEntity*) MxPresenter::CreateEntityBackend("LegoEntity");
+		if (m_objectBackend) {
+			m_objectBackend->Create(*m_action);
+			m_objectBackend->SetLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), TRUE);
+			ParseExtra();
+		}
+		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+		m_currentTickleState = TickleState_Starting;
+	}
 }
 
 // FUNCTION: LEGO1 0x10053720
@@ -83,6 +92,6 @@ void LegoEntityPresenter::ParseExtra()
 		data[len] = 0;
 
 		len &= MAXWORD;
-		m_unk0x4c->ParseAction(data);
+		m_objectBackend->ParseAction(data);
 	}
 }
