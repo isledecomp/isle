@@ -3,6 +3,7 @@
 #include "legoomni.h"
 #include "legoutil.h"
 #include "mxautolocker.h"
+#include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
 #include "mxstl/stlcompat.h"
@@ -252,11 +253,35 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 	return result;
 }
 
-// STUB: LEGO1 0x100c1f00
+// FUNCTION: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
-	// TODO
-	return FAILURE;
+	MxAutoLocker lock(&m_criticalSection);
+
+	MxU32 objectId = p_action->GetObjectId();
+	MxStreamChunk* chunk = new MxStreamChunk;
+
+	if (!chunk)
+		return FAILURE;
+
+	chunk->SetFlags(MxDSChunk::Flag_Bit3);
+	chunk->SetObjectId(objectId);
+
+	if (chunk->SendChunk(m_subscriberList, FALSE, p_action->GetUnknown24()) != SUCCESS)
+		delete chunk;
+
+	if (p_action->IsA("MxDSMultiAction")) {
+		MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();
+		MxDSActionListCursor cursor(actions);
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			if (FUN_100c1f00(action) != SUCCESS)
+				return FAILURE;
+		}
+	}
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100c20b0
