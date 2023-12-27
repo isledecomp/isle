@@ -27,11 +27,10 @@ MxResult LegoTexturePresenter::PutData()
 // FUNCTION: LEGO1 0x1004fcb0
 void LegoTexturePresenter::DoneTickle()
 {
-	if (this->m_compositePresenter) {
-		if (this->m_compositePresenter->VTable0x64(2) == 0) {
-			SetTickleState(TickleState_Idle);
-			return;
-		}
+	if (this->m_compositePresenter && !this->m_compositePresenter->VTable0x64(2)) {
+		SetTickleState(TickleState_Idle);
+		return;
 	}
+
 	MxMediaPresenter::DoneTickle();
 }
