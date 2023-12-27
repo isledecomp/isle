@@ -33,9 +33,12 @@ public:
 	virtual void Init();                                                                           // vtable+0x68
 	virtual undefined4 SetBackend(LegoEntity* p_unk0x4c);                                          // vtable+0x6c
 
+	void SetBackendLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up);
+
 private:
 	void Destroy(MxBool p_fromDestructor);
 
+protected:
 	LegoEntity* m_objectBackend; // 0x4c
 };
 
