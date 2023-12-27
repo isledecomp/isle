@@ -61,7 +61,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 }
 
 // GLOBAL: LEGO1 0x10101040
-static int gSetBufferCount = 1;
+static int g_SetBufferCount = 1;
 
 // FUNCTION: LEGO1 0x100a1900
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)

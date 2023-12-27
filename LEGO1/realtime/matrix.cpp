@@ -138,7 +138,7 @@ void Matrix4Impl::ToQuaternion(Vector4Impl* p_outQuat)
 		return;
 	}
 
-	// GLOBAL: LEGO1 0x100d4090
+	// ~GLOBAL: LEGO1 0x100d4090
 	static int rotateIndex[] = {1, 2, 0};
 
 	// Largest element along the trace

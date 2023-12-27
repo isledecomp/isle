@@ -17,7 +17,7 @@ public:
 	// FUNCTION: LEGO1 0x100b1fe0
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x10101e5c
+		// STRING: LEGO1 0x10101e5c
 		return "MxStreamChunk";
 	}
 
