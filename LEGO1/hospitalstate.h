@@ -24,7 +24,6 @@ public:
 	}
 
 private:
-	// TODO: Figure out unused types
 	undefined m_unk0x8[4]; // 0x8
 	undefined2 m_unk0xc;   // 0xc
 	undefined2 m_unk0xe;   // 0xe
