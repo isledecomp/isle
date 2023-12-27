@@ -99,9 +99,25 @@ void LegoWorldPresenter::ReadyTickle()
 	m_currentTickleState = TickleState_Starting;
 }
 
-// STUB: LEGO1 0x10066ac0
+// FUNCTION: LEGO1 0x10066ac0
 void LegoWorldPresenter::StartingTickle()
 {
+	if (m_action->IsA("MxDSSerialAction")) {
+		MxPresenter* presenter = *m_list.begin();
+		if (presenter->GetCurrentTickleState() == TickleState_Idle) {
+			presenter->SetTickleState(TickleState_Ready);
+		}
+	}
+	else {
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+			if ((*it)->GetCurrentTickleState() == TickleState_Idle) {
+				(*it)->SetTickleState(TickleState_Ready);
+			}
+		}
+	}
+
+	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+	m_currentTickleState = TickleState_Streaming;
 }
 
 // STUB: LEGO1 0x10067a70

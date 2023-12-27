@@ -80,7 +80,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 MxResult LegoVideoManager::Tickle()
 {
 	// TODO
-	return FAILURE;
+	return MxVideoManager::Tickle();
 }
 
 // STUB: LEGO1 0x1007c080
