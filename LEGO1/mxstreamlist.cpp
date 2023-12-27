@@ -5,6 +5,20 @@ DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0xc);
 DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0xc);
 DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0xc);
 
+// FUNCTION: LEGO1 0x100b8450
+MxDSSubscriber* MxStreamListMxDSSubscriber::Find(MxDSObject* p_object)
+{
+	for (iterator it = begin(); it != end(); it++) {
+		if (p_object->GetObjectId() == -1 || p_object->GetObjectId() == (*it)->GetObjectId()) {
+			if (p_object->GetUnknown24() == -2 || p_object->GetUnknown24() == (*it)->GetUnknown48()) {
+				return *it;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x100bfa80
 MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 {
