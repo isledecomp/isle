@@ -17,13 +17,11 @@ public:
 		return "LegoFlcTexturePresenter";
 	}
 
-	// MxFlcPresenter's ::IsA is used
-
 private:
 	void Init();
 
-	undefined4 m_unk0x68;
-	undefined4 m_unk0x6c;
+	undefined4 m_unk0x68; // 0x68
+	undefined4 m_unk0x6c; // 0x6c
 };
 
 #endif // LEGOFLCTEXTUREPRESENTER_H
