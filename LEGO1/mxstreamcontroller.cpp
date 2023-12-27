@@ -215,7 +215,7 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 	MxResult result = FAILURE;
 	MxDSAction* action = m_unk0x3c.Find(p_action, TRUE);
 	if (action != NULL) {
-		MxNextActionDataStart* data = m_nextActionList.Find(action->GetObjectId(), action->GetUnknown24());
+		MxNextActionDataStart* data = m_nextActionList.FindAndErase(action->GetObjectId(), action->GetUnknown24());
 		delete action;
 		delete data;
 		result = SUCCESS;
@@ -284,10 +284,10 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c20b0
+// FUNCTION: LEGO1 0x100c20b0
 MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action)
 {
-	return NULL;
+	return m_nextActionList.Find(p_action->GetObjectId(), p_action->GetUnknown24());
 }
 
 // STUB: LEGO1 0x100c20d0

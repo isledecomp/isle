@@ -30,8 +30,19 @@ MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 	return found;
 }
 
-// FUNCTION: LEGO1 0x100c2240
+// FUNCTION: LEGO1 0x100c21e0
 MxNextActionDataStart* MxStreamListMxNextActionDataStart::Find(MxU32 p_id, MxS16 p_value)
+{
+	for (iterator it = begin(); it != end(); it++) {
+		if (p_id == (*it)->GetObjectId() && p_value == (*it)->GetUnknown24())
+			return *it;
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100c2240
+MxNextActionDataStart* MxStreamListMxNextActionDataStart::FindAndErase(MxU32 p_id, MxS16 p_value)
 {
 	MxNextActionDataStart* match = NULL;
 
