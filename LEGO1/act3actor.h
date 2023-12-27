@@ -8,7 +8,7 @@ public:
 	// FUNCTION: LEGO1 0x100431b0
 	inline virtual const char* ClassName() override
 	{
-		// GLOBAL: LEGO1 0x100f03ac
+		// STRING: LEGO1 0x100f03ac
 		return "Act3Actor";
 	}
 };
