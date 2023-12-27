@@ -24,8 +24,8 @@ public:
 	}
 
 private:
-	undefined m_unk0x144[12];
-	undefined4 m_unk0x150;
+	undefined m_unk0x144[12]; // 0x144
+	undefined4 m_unk0x150;    // 0x150
 };
 
 #endif // CARRACE_H

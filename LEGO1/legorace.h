@@ -49,16 +49,16 @@ private:
 	undefined4 m_unk0x114; // 0x114
 	undefined4 m_unk0x118; // 0x118
 	undefined4 m_unk0x11c; // 0x11c
-	undefined4 m_unk0x120; // 0x120 - this may be the current vehcle (function at 0x10015880)
-	undefined4 m_unk0x124; // 0x124 - something game state
+	undefined4 m_unk0x120; // 0x120
+	undefined4 m_unk0x124; // 0x124
 	undefined4 m_unk0x128; // 0x128
 	undefined4 m_unk0x12c; // 0x12c
 
 protected:
-	MxRect32 m_unk0x130; // unconfirmed bytes, ghidra claims these are integers
+	MxRect32 m_unk0x130; // 0x130
 
 private:
-	undefined4 m_unk0x140;
+	undefined4 m_unk0x140; // 0x140
 };
 
 #endif // LEGORACE_H
