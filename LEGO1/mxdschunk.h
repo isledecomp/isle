@@ -56,11 +56,11 @@ public:
 	}
 
 protected:
-	MxU16 m_flags;         // 0x8
-	undefined4 m_objectId; // 0xc
-	MxLong m_time;         // 0x10
-	MxU32 m_length;        // 0x14
-	MxU8* m_data;          // 0x18
+	MxU16 m_flags;    // 0x8
+	MxU32 m_objectId; // 0xc
+	MxLong m_time;    // 0x10
+	MxU32 m_length;   // 0x14
+	MxU8* m_data;     // 0x18
 };
 
 #endif // MXDSCHUNK_H
