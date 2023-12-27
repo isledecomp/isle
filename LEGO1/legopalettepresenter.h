@@ -25,13 +25,15 @@ public:
 		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	virtual void Destroy() override; // vtable+0x38
+	MxResult ParsePallete(MxStreamChunk* p_chunk);
+	virtual void ReadyTickle() override; // vtable+0x18
+	virtual void Destroy() override;     // vtable+0x38
 
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	MxPalette* m_palette;
+	MxPalette* m_palette; // 0x64
 };
 
 #endif // LEGOPALETTEPRESENTER_H
