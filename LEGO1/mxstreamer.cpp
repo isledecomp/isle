@@ -142,7 +142,7 @@ MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100b99f0
+// FUNCTION: LEGO1 0x100b99f0
 MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 {
 	MxDSAction tempAction;
@@ -156,8 +156,16 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 		tempAction.SetUnknown24(p_dsAction->GetUnknown24());
 	}
 
-	// TODO: remove action from list
-	return FAILURE;
+	MxResult result = FAILURE;
+	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+		const char* id = p_dsAction->GetAtomId().GetInternal();
+		if (!id || id == (*it)->GetAtom().GetInternal()) {
+			tempAction.SetAtomId((*it)->GetAtom());
+			result = (*it)->VTable0x24(&tempAction);
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100b9b30
