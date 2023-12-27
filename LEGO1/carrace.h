@@ -1,6 +1,7 @@
 #ifndef CARRACE_H
 #define CARRACE_H
 
+#include "decomp.h"
 #include "legorace.h"
 
 // VTABLE: LEGO1 0x100d5e50
@@ -21,6 +22,10 @@ public:
 	{
 		return !strcmp(p_name, CarRace::ClassName()) || LegoRace::IsA(p_name);
 	}
+
+private:
+	undefined m_unk0x144[12]; // 0x144
+	undefined4 m_unk0x150;    // 0x150
 };
 
 #endif // CARRACE_H

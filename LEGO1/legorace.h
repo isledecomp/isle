@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "legoworld.h"
+#include "mxrect32.h"
 #include "mxtypes.h"
 
 // VTABLE: LEGO1 0x100d5db0
@@ -38,22 +39,26 @@ public:
 	virtual void VTable0x7c(undefined4, undefined4);          // vtable+0x7c
 
 private:
-	undefined4 m_unk0xf8;     // 0xf8
-	undefined4 m_unk0xfc;     // 0xfc
-	undefined4 m_unk0x100;    // 0x100
-	undefined4 m_unk0x104;    // 0x104
-	undefined4 m_unk0x108;    // 0x108
-	undefined4 m_unk0x10c;    // 0x10c
-	undefined4 m_unk0x110;    // 0x110
-	undefined4 m_unk0x114;    // 0x114
-	undefined4 m_unk0x118;    // 0x118
-	undefined4 m_unk0x11c;    // 0x11c
-	undefined4 m_unk0x120;    // 0x120 - this may be the current vehcle (function at 0x10015880)
-	undefined4 m_unk0x124;    // 0x124 - something game state
-	undefined4 m_unk0x128;    // 0x128
-	undefined4 m_unk0x12c;    // 0x12c
-	undefined4 m_unk0x130[4]; // unconfirmed bytes, ghidra claims these are integers
-	undefined4 m_unk0x140;
+	undefined4 m_unk0xf8;  // 0xf8
+	undefined4 m_unk0xfc;  // 0xfc
+	undefined4 m_unk0x100; // 0x100
+	undefined4 m_unk0x104; // 0x104
+	undefined4 m_unk0x108; // 0x108
+	undefined4 m_unk0x10c; // 0x10c
+	undefined4 m_unk0x110; // 0x110
+	undefined4 m_unk0x114; // 0x114
+	undefined4 m_unk0x118; // 0x118
+	undefined4 m_unk0x11c; // 0x11c
+	undefined4 m_unk0x120; // 0x120
+	undefined4 m_unk0x124; // 0x124
+	undefined4 m_unk0x128; // 0x128
+	undefined4 m_unk0x12c; // 0x12c
+
+protected:
+	MxRect32 m_unk0x130; // 0x130
+
+private:
+	undefined4 m_unk0x140; // 0x140
 };
 
 #endif // LEGORACE_H
