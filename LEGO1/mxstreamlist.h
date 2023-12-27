@@ -46,6 +46,9 @@ public:
 };
 
 // SIZE 0xc
-class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {};
+class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {
+public:
+	MxDSSubscriber* Find(MxDSObject* p_object);
+};
 
 #endif // MXSTREAMLIST_H

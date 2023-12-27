@@ -290,9 +290,22 @@ MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingA
 	return m_nextActionList.Find(p_action->GetObjectId(), p_action->GetUnknown24());
 }
 
-// STUB: LEGO1 0x100c20d0
+// FUNCTION: LEGO1 0x100c20d0
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
-	// TODO
+	if (m_subscriberList.Find(&p_obj))
+		return FALSE;
+
+	if (p_obj.IsA("MxDSMultiAction")) {
+		MxDSActionList* actions = ((MxDSMultiAction&) p_obj).GetActionList();
+		MxDSActionListCursor cursor(actions);
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			if (!FUN_100c20d0(*action))
+				return FALSE;
+		}
+	}
+
 	return TRUE;
 }
