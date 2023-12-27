@@ -19,7 +19,7 @@ public:
 	// FUNCTION: LEGO1 0x1000ccc0
 	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(p_name, LegoModelPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
+		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 };
 
