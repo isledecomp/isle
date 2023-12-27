@@ -73,7 +73,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 		data.m_pBackBuffer,
 		&device->m_data
 	);
-	if (SUCCEEDED(result) && data.m_pBackBuffer && gSetBufferCount) {
+	if (SUCCEEDED(result) && data.m_pBackBuffer && g_SetBufferCount) {
 		device->m_data->SetBufferCount(2);
 	}
 	if (!SUCCEEDED(result)) {
