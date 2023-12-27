@@ -29,6 +29,7 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 {
 	return FAILURE;
 }
+
 // FUNCTION: LEGO1 0x10066a50
 void LegoWorldPresenter::ReadyTickle()
 {

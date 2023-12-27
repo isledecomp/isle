@@ -32,6 +32,7 @@ public:
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void Init();                                                                           // vtable+0x68
 	virtual undefined4 SetBackend(LegoEntity* p_unk0x4c);                                          // vtable+0x6c
+
 	void SetBackendLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up);
 
 private:
