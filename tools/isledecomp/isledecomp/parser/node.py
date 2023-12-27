@@ -38,8 +38,7 @@ class ParserFunction(ParserSymbol):
     lookup_by_name: bool = False
 
     def should_skip(self) -> bool:
-        """Temporary helper function because reccmp expects this to be here"""
-        return self.type in (MarkerType.STUB, MarkerType.LIBRARY)
+        return self.type == MarkerType.STUB
 
     def is_nameref(self) -> bool:
         return (
