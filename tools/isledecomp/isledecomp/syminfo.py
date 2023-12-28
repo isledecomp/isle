@@ -1,7 +1,6 @@
 import os
-import subprocess
-from isledecomp.lib import lib_path_join
-from isledecomp.dir import PathResolver, winepath_unix_to_win
+from isledecomp.dir import PathResolver
+from isledecomp.cvdump import Cvdump
 
 
 class RecompiledInfo:
@@ -20,80 +19,54 @@ class SymInfo:
     def __init__(self, pdb, sym_recompfile, sym_logger, base_dir):
         self.logger = sym_logger
         path_resolver = PathResolver(base_dir)
-        call = [lib_path_join("cvdump.exe"), "-l", "-s"]
-
-        if os.name != "nt":
-            # Run cvdump through wine and convert path to Windows-friendly wine path
-            call.insert(0, "wine")
-            call.append(winepath_unix_to_win(pdb))
-        else:
-            call.append(pdb)
 
         self.logger.info("Parsing %s ...", pdb)
-        self.logger.debug("Command = %s", call)
-        line_dump = subprocess.check_output(call).decode("utf-8").split("\r\n")
-
-        current_section = None
-
         self.logger.debug("Parsing output of cvdump.exe ...")
 
-        for i, line in enumerate(line_dump):
-            if line.startswith("***"):
-                current_section = line[4:]
-
-            if current_section == "SYMBOLS" and "S_GPROC32" in line:
-                sym_section = int(line[21:25], 16)
-                sym_addr = int(line[26:34], 16)
-
-                info = RecompiledInfo()
-                info.addr = sym_addr + sym_recompfile.get_section_offset_by_index(
-                    sym_section
-                )
-
-                use_dbg_offs = False
-                if use_dbg_offs:
-                    debug_offs = line_dump[i + 2]
-                    debug_start = int(debug_offs[22:30], 16)
-                    debug_end = int(debug_offs[43:], 16)
-
-                    info.start = debug_start
-                    info.size = debug_end - debug_start
-                else:
-                    info.start = 0
-                    info.size = int(line[41:49], 16)
-
-                info.name = line[77:]
-
-                self.names[info.name] = info
-                self.funcs[sym_addr] = info
-            elif (
-                current_section == "LINES"
-                and line.startswith("  ")
-                and not line.startswith("   ")
-            ):
-                sourcepath = line.split()[0]
-                sourcepath = path_resolver.resolve_cvdump(sourcepath)
-
-                if sourcepath not in self.lines:
-                    self.lines[sourcepath] = {}
-
-                j = i + 2
-                while True:
-                    ll = line_dump[j].split()
-                    if len(ll) == 0:
-                        break
-
-                    k = 0
-                    while k < len(ll):
-                        linenum = int(ll[k + 0])
-                        address = int(ll[k + 1], 16)
-                        if linenum not in self.lines[sourcepath]:
-                            self.lines[sourcepath][linenum] = address
-                        k += 2
-
-                    j += 1
+        cv = Cvdump(pdb).lines().symbols().publics().section_contributions().run()
 
         self.logger.debug("... Parsing output of cvdump.exe finished")
+
+        contrib_dict = {(s.section, s.offset): s.size for s in cv.sizerefs}
+        for pub in cv.publics:
+            if (
+                pub.type == "S_PUB32"
+                and pub.name.startswith("_")
+                and (pub.section, pub.offset) in contrib_dict
+            ):
+                size = contrib_dict[(pub.section, pub.offset)]
+
+                info = RecompiledInfo()
+                info.addr = sym_recompfile.get_abs_addr(pub.section, pub.offset)
+
+                info.start = 0
+                info.size = size
+                info.name = pub.name
+                self.names[pub.name] = info
+                self.funcs[pub.offset] = info
+
+        for proc in cv.symbols:
+            if proc.type != "S_GPROC32":
+                continue
+
+            info = RecompiledInfo()
+            info.addr = sym_recompfile.get_abs_addr(proc.section, proc.offset)
+
+            info.start = 0
+            info.size = proc.size
+            info.name = proc.name
+
+            self.names[proc.name] = info
+            self.funcs[proc.offset] = info
+
+        for sourcepath, line_no, offset in cv.lines:
+            sourcepath = path_resolver.resolve_cvdump(sourcepath)
+
+            if sourcepath not in self.lines:
+                self.lines[sourcepath] = {}
+
+            if line_no not in self.lines[sourcepath]:
+                self.lines[sourcepath][line_no] = offset
 
     def get_recompiled_address(self, filename, line):
         recompiled_addr = None

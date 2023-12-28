@@ -294,7 +294,7 @@ if (MSVC)
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
-    target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+    target_compile_options(isle PRIVATE "/MT$<$<CONFIG:Debug>:d>")
   endif()
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
