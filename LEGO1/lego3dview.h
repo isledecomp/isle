@@ -29,7 +29,7 @@ private:
 	TglImpl::ViewImpl* m_viewPort;       // 0x10
 	undefined m_unk0x14[0x74];           // 0x14
 	ViewManager* m_viewManager;          // 0x88
-	undefined m_unk0x8c[28];             // 0x8c
+	undefined m_unk0x8c[0x1c];           // 0x8c
 };
 
 // SYNTHETIC: LEGO1 0x100aaf10
