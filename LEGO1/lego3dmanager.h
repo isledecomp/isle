@@ -5,7 +5,7 @@
 
 class MxUnknown100dbdbc;
 
-// VTABLE: LEGO1 0x100ab320
+// VTABLE: LEGO1 0x100dbfa4
 // SIZE 0x10
 class Lego3DManager {
 public:
