@@ -6,13 +6,11 @@
 // STUB: LEGO1 0x100aae90
 Lego3DView::Lego3DView()
 {
-
 }
 
 // STUB: LEGO1 0x100aaf30
 Lego3DView::~Lego3DView()
 {
-
 }
 
 // STUB: LEGO1 0x
