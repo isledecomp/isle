@@ -9,3 +9,9 @@ MxUnknown100dbdbc::MxUnknown100dbdbc()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x100a7130
+MxUnknown100dbdbc::~MxUnknown100dbdbc()
+{
+	// TODO
+}

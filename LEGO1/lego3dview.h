@@ -6,11 +6,17 @@
 #include "viewmanager/viewmanager.h"
 
 class LegoROI;
+class MxRenderSettings;
+class Tgl::Renderer;
 
 class Lego3DView {
 public:
+	Lego3DView();
+	virtual ~Lego3DView();
+
 	inline ViewManager* GetViewManager() { return this->m_viewManager; }
 	inline TglImpl::ViewImpl* GetViewPort() { return this->m_viewPort; }
+	MxBool Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& render);
 	LegoROI* PickROI(MxLong p_a, MxLong p_b);
 
 private:
