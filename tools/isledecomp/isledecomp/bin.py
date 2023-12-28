@@ -81,6 +81,7 @@ class Bin:
         self.filename = filename
         self.file = None
         self.imagebase = None
+        self.entry = None
         self.sections: List[ImageSectionHeader] = []
         self.last_section = None
         self._relocated_addrs = set()
@@ -106,6 +107,8 @@ class Bin:
 
         optional_hdr = self.file.read(pe_hdr.SizeOfOptionalHeader)
         (self.imagebase,) = struct.unpack("<i", optional_hdr[0x1C:0x20])
+        (entry,) = struct.unpack("<i", optional_hdr[0x10:0x14])
+        self.entry = entry + self.imagebase
 
         self.sections = [
             ImageSectionHeader(*struct.unpack("<8s6I2HI", self.file.read(0x28)))
@@ -222,6 +225,11 @@ class Bin:
 
         section = self._get_section_by_name(name)
         return section.virtual_address
+
+    def get_abs_addr(self, section: int, offset: int) -> int:
+        """Convenience function for converting section:offset pairs from cvdump
+        into an absolute vaddr."""
+        return self.get_section_offset_by_index(section) + offset
 
     def get_raw_addr(self, vaddr: int) -> int:
         """Returns the raw offset in the PE binary for the given virtual address."""

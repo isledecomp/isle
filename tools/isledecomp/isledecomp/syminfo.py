@@ -37,9 +37,7 @@ class SymInfo:
                 size = contrib_dict[(pub.section, pub.offset)]
 
                 info = RecompiledInfo()
-                info.addr = pub.offset + sym_recompfile.get_section_offset_by_index(
-                    pub.section
-                )
+                info.addr = sym_recompfile.get_abs_addr(pub.section, pub.offset)
 
                 info.start = 0
                 info.size = size
@@ -52,9 +50,7 @@ class SymInfo:
                 continue
 
             info = RecompiledInfo()
-            info.addr = proc.offset + sym_recompfile.get_section_offset_by_index(
-                proc.section
-            )
+            info.addr = sym_recompfile.get_abs_addr(proc.section, proc.offset)
 
             info.start = 0
             info.size = proc.size

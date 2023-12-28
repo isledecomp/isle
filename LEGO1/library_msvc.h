@@ -30,6 +30,17 @@
 // LIBRARY: LEGO1 0x1008b640
 // _rand
 
+// entry
+// LIBRARY: ISLE 0x4082e0
+// _WinMainCRTStartup
+
+// entry
+// LIBRARY: LEGO1 0x1008c860
+// __DllMainCRTStartup@12
+
+// LIBRARY: ISLE 0x409110
+// __mtinit
+
 // LIBRARY: ISLE 0x409190
 // __getptd
 
