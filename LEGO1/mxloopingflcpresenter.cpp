@@ -32,7 +32,7 @@ void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Leave();
 
 	if (!p_fromDestructor)
-		MxVideoPresenter::Destroy(FALSE);
+		MxFlcPresenter::Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b4470
