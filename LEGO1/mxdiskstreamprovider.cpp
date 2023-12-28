@@ -40,10 +40,39 @@ MxDiskStreamProvider::MxDiskStreamProvider()
 	this->m_unk0x35 = FALSE;
 }
 
-// STUB: LEGO1 0x100d1240
+// FUNCTION: LEGO1 0x100d1240
 MxDiskStreamProvider::~MxDiskStreamProvider()
 {
-	// TODO
+	MxDSStreamingAction* action;
+	m_unk0x35 = FALSE;
+
+	do {
+		action = NULL;
+
+		{
+			MxAutoLocker lock(&m_criticalSection);
+			m_list.PopFrontStreamingAction(action);
+		}
+
+		if (!action)
+			break;
+
+		if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+			g_unk0x10102878--;
+
+		((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+	} while (action);
+
+	if (m_remainingWork) {
+		m_remainingWork = FALSE;
+		m_busySemaphore.Release(1);
+		m_thread.Terminate();
+	}
+
+	if (m_pFile)
+		delete m_pFile;
+
+	m_pFile = NULL;
 }
 
 // FUNCTION: LEGO1 0x100d13d0
@@ -77,10 +106,47 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100d15e0
+// FUNCTION: LEGO1 0x100d15e0
 void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 {
-	// TODO
+	MxDSStreamingAction* action;
+
+	if (p_action->GetObjectId() == -1) {
+		m_unk0x35 = FALSE;
+
+		do {
+			action = NULL;
+
+			{
+				MxAutoLocker lock(&m_criticalSection);
+				m_list.PopFrontStreamingAction(action);
+			}
+
+			if (!action)
+				return;
+
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+				g_unk0x10102878--;
+
+			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+		} while (action);
+	}
+	else {
+		do {
+			{
+				MxAutoLocker lock(&m_criticalSection);
+				action = (MxDSStreamingAction*) m_list.Find(p_action, TRUE);
+			}
+
+			if (!action)
+				return;
+
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+				g_unk0x10102878--;
+
+			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
+		} while (action);
+	}
 }
 
 // FUNCTION: LEGO1 0x100d1750

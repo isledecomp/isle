@@ -24,7 +24,7 @@ public:
 	// FUNCTION: LEGO1 0x100c0f10
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x10102130
+		// STRING: LEGO1 0x10102130
 		return "MxStreamController";
 	}
 
@@ -43,18 +43,21 @@ public:
 	virtual MxResult VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval); // vtable+0x2c
 	virtual MxResult VTable0x30(MxDSAction* p_action);                    // vtable+0x30
 
-	void FUN_100c15d0(MxDSSubscriber* p_subscriber);
-	void FUN_100c1620(MxDSSubscriber* p_subscriber);
+	void AddSubscriber(MxDSSubscriber* p_subscriber);
+	void RemoveSubscriber(MxDSSubscriber* p_subscriber);
 	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
 	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset);
 	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
 	MxResult FUN_100c1f00(MxDSAction* p_action);
 	MxBool FUN_100c20d0(MxDSObject& p_obj);
 	MxResult InsertActionToList54(MxDSAction* p_action);
+	MxNextActionDataStart* FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action);
 
 	inline MxAtomId& GetAtom() { return m_atom; };
+	inline MxStreamProvider* GetProvider() { return m_provider; };
 	inline MxStreamListMxDSAction& GetUnk0x3c() { return m_unk0x3c; };
 	inline MxStreamListMxDSAction& GetUnk0x54() { return m_unk0x54; };
+	inline MxStreamListMxDSSubscriber& GetSubscriberList() { return m_subscriberList; };
 
 protected:
 	MxCriticalSection m_criticalSection;                // 0x8

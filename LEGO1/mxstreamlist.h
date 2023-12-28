@@ -41,10 +41,14 @@ public:
 // SIZE 0xc
 class MxStreamListMxNextActionDataStart : public MxStreamList<MxNextActionDataStart*> {
 public:
-	MxNextActionDataStart* Find(MxU32, MxS16);
+	MxNextActionDataStart* Find(MxU32 p_id, MxS16 p_value);
+	MxNextActionDataStart* FindAndErase(MxU32 p_id, MxS16 p_value);
 };
 
 // SIZE 0xc
-class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {};
+class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {
+public:
+	MxDSSubscriber* Find(MxDSObject* p_object);
+};
 
 #endif // MXSTREAMLIST_H

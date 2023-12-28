@@ -61,7 +61,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 }
 
 // GLOBAL: LEGO1 0x10101040
-static int gSetBufferCount = 1;
+static int g_SetBufferCount = 1;
 
 // FUNCTION: LEGO1 0x100a1900
 Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
@@ -73,7 +73,7 @@ Device* RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& data)
 		data.m_pBackBuffer,
 		&device->m_data
 	);
-	if (SUCCEEDED(result) && data.m_pBackBuffer && gSetBufferCount) {
+	if (SUCCEEDED(result) && data.m_pBackBuffer && g_SetBufferCount) {
 		device->m_data->SetBufferCount(2);
 	}
 	if (!SUCCEEDED(result)) {

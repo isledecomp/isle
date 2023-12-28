@@ -1,7 +1,14 @@
 #include "hospitalstate.h"
 
-// STUB: LEGO1 0x10076370
+DECOMP_SIZE_ASSERT(HospitalState, 0x18)
+
+// FUNCTION: LEGO1 0x10076370
 HospitalState::HospitalState()
 {
-	// TODO
+	this->m_unk0xc = 0;
+	this->m_unk0xe = 0;
+	this->m_unk0x10 = 0;
+	this->m_unk0x12 = 0;
+	this->m_unk0x14 = 0;
+	this->m_unk0x16 = 0;
 }

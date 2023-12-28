@@ -316,7 +316,7 @@ def main():
                 parser.read_lines(srcfile)
 
             for fun in parser.functions:
-                if fun.is_stub:
+                if fun.should_skip():
                     continue
 
                 if fun.module != basename:
@@ -330,7 +330,7 @@ def main():
                     else:
                         continue
 
-                if fun.lookup_by_name:
+                if fun.is_nameref():
                     recinfo = syminfo.get_recompiled_address_from_name(fun.name)
                     if not recinfo:
                         continue

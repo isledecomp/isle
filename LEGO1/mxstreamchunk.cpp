@@ -2,6 +2,7 @@
 
 #include "legoutil.h"
 #include "mxdsbuffer.h"
+#include "mxstreamlist.h"
 
 // FUNCTION: LEGO1 0x100c2fe0
 MxStreamChunk::~MxStreamChunk()
@@ -48,8 +49,51 @@ MxU32 MxStreamChunk::ReadChunkHeader(MxU8* p_chunkData)
 	return headersize;
 }
 
+// FUNCTION: LEGO1 0x100c30e0
+MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, MxBool p_append, MxS16 p_obj24val)
+{
+	for (MxStreamListMxDSSubscriber::iterator it = p_subscriberList.begin(); it != p_subscriberList.end(); it++) {
+		if ((*it)->GetObjectId() == m_objectId && (*it)->GetUnknown48() == p_obj24val) {
+			if (m_flags & MxDSChunk::Flag_Bit2 && m_buffer) {
+				m_buffer->ReleaseRef(this);
+				m_buffer = NULL;
+			}
+
+			(*it)->AddChunk(this, p_append);
+
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100c3170
 void MxStreamChunk::SetBuffer(MxDSBuffer* p_buffer)
 {
 	m_buffer = p_buffer;
+}
+
+// FUNCTION: LEGO1 0x100c3180
+MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
+{
+	return (MxU16*) (p_buffer + 8);
+}
+
+// FUNCTION: LEGO1 0x100c3190
+MxU32* MxStreamChunk::IntoPlus0xa(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 0xa);
+}
+
+// FUNCTION: LEGO1 0x100c31a0
+MxU32* MxStreamChunk::IntoPlus0xe(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 0xe);
+}
+
+// FUNCTION: LEGO1 0x100c31b0
+MxU32* MxStreamChunk::IntoPlus0x12(MxU8* p_buffer)
+{
+	return (MxU32*) (p_buffer + 0x12);
 }

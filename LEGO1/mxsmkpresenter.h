@@ -15,7 +15,7 @@ public:
 	// FUNCTION: LEGO1 0x100b3730
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x10101e38
+		// STRING: LEGO1 0x10101e38
 		return "MxSmkPresenter";
 	}
 

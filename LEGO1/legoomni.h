@@ -76,7 +76,7 @@ public:
 	// FUNCTION: LEGO1 0x10058aa0
 	inline virtual const char* ClassName() const override // vtable+0c
 	{
-		// GLOBAL: LEGO1 0x100f671c
+		// STRING: LEGO1 0x100f671c
 		return "LegoOmni";
 	}
 
@@ -98,6 +98,7 @@ public:
 	virtual void StopTimer() override;                                                                  // vtable+3c
 
 	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
+	void AddWorld(LegoWorld* p_world);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }

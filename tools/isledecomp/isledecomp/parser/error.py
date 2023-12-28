@@ -39,6 +39,14 @@ class ParserError(Enum):
     # WARN: We found a marker to be referenced by name outside of a header file.
     BYNAME_FUNCTION_IN_CPP = 109
 
+    # WARN: A GLOBAL marker appeared over a variable without the g_ prefix
+    GLOBAL_MISSING_PREFIX = 110
+
+    # WARN: GLOBAL marker points at something other than variable declaration.
+    # We can't match global variables based on position, but the goal here is
+    # to ignore things like string literal that are not variables.
+    GLOBAL_NOT_VARIABLE = 111
+
     # This code or higher is an error, not a warning
     DECOMP_ERROR_START = 200
 
@@ -50,12 +58,17 @@ class ParserError(Enum):
     # For example, a GLOBAL cannot follow FUNCTION/STUB
     INCOMPATIBLE_MARKER = 201
 
-    # ERROR: The line following a synthetic marker was not a comment
-    BAD_SYNTHETIC = 202
+    # ERROR: The line following an explicit by-name marker was not a comment
+    # We assume a syntax error here rather than try to use the next line
+    BAD_NAMEREF = 202
 
     # ERROR: This function offset comes before the previous offset from the same module
     # This hopefully gives some hint about which functions need to be rearranged.
     FUNCTION_OUT_OF_ORDER = 203
+
+    # ERROR: The line following an explicit by-name marker that does _not_ expect
+    # a comment -- i.e. VTABLE or GLOBAL -- could not extract the name
+    NO_SUITABLE_NAME = 204
 
 
 @dataclass

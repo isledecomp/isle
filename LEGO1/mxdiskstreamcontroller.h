@@ -17,19 +17,12 @@ public:
 	MxDiskStreamController();
 	virtual ~MxDiskStreamController() override;
 
-	virtual MxResult Tickle() override;                           // vtable+0x8
-	virtual MxResult Open(const char* p_filename) override;       // vtable+0x14
-	virtual MxResult VTable0x18(undefined4, undefined4) override; // vtable+0x18
-	virtual MxResult VTable0x20(MxDSAction* p_action) override;   // vtable+0x20
-	virtual MxResult VTable0x24(MxDSAction* p_action) override;   // vtable+0x24
-	virtual MxDSStreamingAction* VTable0x28() override;           // vtable+0x28
-	virtual MxResult VTable0x30(MxDSAction* p_action) override;   // vtable+0x30
-	virtual MxResult VTable0x34(undefined4);                      // vtable+0x34
+	virtual MxResult Tickle() override; // vtable+0x8
 
 	// FUNCTION: LEGO1 0x100c7360
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x10102144
+		// STRING: LEGO1 0x10102144
 		return "MxDiskStreamController";
 	}
 
@@ -38,6 +31,14 @@ public:
 	{
 		return !strcmp(p_name, MxDiskStreamController::ClassName()) || MxStreamController::IsA(p_name);
 	}
+
+	virtual MxResult Open(const char* p_filename) override;       // vtable+0x14
+	virtual MxResult VTable0x18(undefined4, undefined4) override; // vtable+0x18
+	virtual MxResult VTable0x20(MxDSAction* p_action) override;   // vtable+0x20
+	virtual MxResult VTable0x24(MxDSAction* p_action) override;   // vtable+0x24
+	virtual MxDSStreamingAction* VTable0x28() override;           // vtable+0x28
+	virtual MxResult VTable0x30(MxDSAction* p_action) override;   // vtable+0x30
+	virtual MxResult VTable0x34(undefined4);                      // vtable+0x34
 
 	inline MxBool GetUnk0xc4() const { return m_unk0xc4; }
 
@@ -48,7 +49,7 @@ public:
 
 private:
 	MxStreamListMxDSAction m_list0x64; // 0x64
-	undefined m_unk0x70;               // 0x70
+	MxBool m_unk0x70;                  // 0x70
 	list<MxDSBuffer*> m_list0x74;      // 0x74
 	MxStreamListMxDSAction m_list0x80; // 0x80
 	undefined2 m_unk0x8c;              // 0x8c

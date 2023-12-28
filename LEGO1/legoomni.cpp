@@ -568,6 +568,12 @@ LegoOmni* LegoOmni::GetInstance()
 	return (LegoOmni*) MxOmni::GetInstance();
 }
 
+// FUNCTION: LEGO1 0x1005ad20
+void LegoOmni::AddWorld(LegoWorld* p_world)
+{
+	m_worldList->Append(p_world);
+}
+
 // STUB: LEGO1 0x1005af10
 void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 {

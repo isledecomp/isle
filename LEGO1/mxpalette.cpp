@@ -4,7 +4,6 @@
 #include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x10102188
-// SIZE 0x400
 PALETTEENTRY g_defaultPaletteEntries[256] = {
 	{0u, 0u, 0u, 0u},       {128u, 0u, 0u, 0u},     {0u, 128u, 0u, 0u},     {128u, 128u, 0u, 0u},
 	{0u, 0u, 128u, 0u},     {128u, 0u, 128u, 0u},   {0u, 128u, 128u, 0u},   {128u, 128u, 128u, 0u},

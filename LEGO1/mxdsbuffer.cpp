@@ -30,11 +30,45 @@ MxDSBuffer::MxDSBuffer()
 MxDSBuffer::~MxDSBuffer()
 {
 	if (m_pBuffer != NULL) {
-		if (m_mode == MxDSBufferType_Chunk) {
-			// TODO
-		}
-		else if (m_mode == MxDSBufferType_Allocate || m_mode == MxDSBufferType_Unknown) {
+		switch (m_mode) {
+		case MxDSBufferType_Allocate:
+		case MxDSBufferType_Unknown:
 			delete[] m_pBuffer;
+			break;
+
+		case MxDSBufferType_Chunk: {
+			MxU32 offset = m_writeOffset / 1024;
+			MxStreamer* streamer = Streamer();
+
+			switch (offset) {
+			case 0x40: {
+				MxU32 a =
+					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
+
+				MxU32 bit = 1 << ((MxU8) a & 0x1f);
+				MxU32 index = (a & ~0x18u) >> 3;
+
+				if ((*(MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index])) & bit) {
+					MxU32* ptr = (MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index]);
+					*ptr = *ptr ^ bit;
+				}
+				break;
+			}
+			case 0x80: {
+				MxU32 a =
+					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
+
+				MxU32 bit = 1 << ((MxU8) a & 0x1f);
+				MxU32 index = (a & ~0x18u) >> 3;
+
+				if ((*(MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index])) & bit) {
+					MxU32* ptr = (MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index]);
+					*ptr = *ptr ^ bit;
+				}
+				break;
+			}
+			}
+		}
 		}
 	}
 
@@ -246,7 +280,7 @@ MxResult MxDSBuffer::StartPresenterFromAction(
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100c6a50
+// FUNCTION: LEGO1 0x100c6a50
 MxResult MxDSBuffer::ParseChunk(
 	MxStreamController* p_controller,
 	MxU32* p_data,
@@ -255,8 +289,83 @@ MxResult MxDSBuffer::ParseChunk(
 	MxStreamChunk* p_header
 )
 {
-	// TODO
-	return FAILURE;
+	MxResult result = SUCCESS;
+
+	if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
+		delete p_header;
+		return SUCCESS;
+	}
+
+	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
+
+	if (p_header->GetFlags() & MxDSChunk::Flag_Bit5) {
+		MxU32 length = p_header->GetLength() + MxDSChunk::ReturnE() + 8;
+		MxDSBuffer* buffer = new MxDSBuffer();
+
+		if (buffer && buffer->AllocateBuffer(length, MxDSBufferType_Allocate) == SUCCESS &&
+			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
+			*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
+			;
+
+			if (*p_streamingAction) {
+				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
+				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Bit5;
+
+				delete p_header;
+				(*p_streamingAction)->SetUnknowna0(buffer);
+				goto done;
+			}
+		}
+
+		if (buffer)
+			delete buffer;
+
+		delete p_header;
+		return FAILURE;
+	}
+	else {
+		if (p_header->GetFlags() & MxDSChunk::Flag_Bit2) {
+			if (m_unk0x30->HasId(p_header->GetObjectId())) {
+				if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 &&
+					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {
+
+					if (p_action->GetObjectId() == p_header->GetObjectId()) {
+						MxU32 val = p_controller->GetProvider()->GetBufferForDWords()[m_unk0x30->GetObjectId()];
+
+						m_unk0x30->SetUnknown94(val);
+						m_unk0x30->SetBufferOffset(m_writeOffset * (val / m_writeOffset));
+
+						MxNextActionDataStart* data =
+							p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
+
+						if (data)
+							data->SetData(m_unk0x30->GetBufferOffset());
+
+						m_unk0x30->FUN_100cd2d0();
+					}
+
+					delete p_header;
+					p_header = NULL;
+				}
+				else {
+					if (p_action->GetObjectId() == p_header->GetObjectId() &&
+						p_controller->VTable0x30(p_action) == SUCCESS) {
+						p_controller->GetProvider()->VTable0x20(p_action);
+						result = 1;
+					}
+				}
+			}
+		}
+
+		if (p_header) {
+			if (p_header->SendChunk(p_controller->GetSubscriberList(), TRUE, p_action->GetUnknown24()) != SUCCESS) {
+				delete p_header;
+			}
+		}
+	}
+
+done:
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100c6d00
@@ -343,11 +452,36 @@ void MxDSBuffer::AddRef(MxDSChunk* p_chunk)
 	}
 }
 
-// STUB: LEGO1 0x100c6ef0
+// FUNCTION: LEGO1 0x100c6ef0
 MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 {
-	// TODO
-	return FAILURE;
+	MxResult result = FAILURE;
+
+	if (m_mode == MxDSBufferType_Allocate && m_bytesRemaining != 0) {
+		MxU32 bytesRead;
+		MxU8* ptr;
+
+		if (m_writeOffset == m_bytesRemaining) {
+			bytesRead = *(MxU32*) (p_data + 4) + 8;
+			ptr = p_data;
+		}
+		else {
+			ptr = &p_data[MxStreamChunk::ReturnE() + 8];
+			bytesRead = (*(MxU32*) (p_data + 4)) - MxStreamChunk::ReturnE();
+		}
+
+		if (bytesRead <= m_bytesRemaining) {
+			memcpy(m_pBuffer + m_writeOffset - m_bytesRemaining, ptr, bytesRead);
+
+			if (m_writeOffset == m_bytesRemaining)
+				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoPlus0x12(m_pBuffer) + MxStreamChunk::ReturnE();
+
+			m_bytesRemaining -= bytesRead;
+			result = SUCCESS;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100c6f80
