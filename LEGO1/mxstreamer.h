@@ -105,4 +105,7 @@ private:
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };
 
+// SYNTHETIC: LEGO1 0x100b9120
+// MxStreamer::`scalar deleting destructor'
+
 #endif // MXSTREAMER_H

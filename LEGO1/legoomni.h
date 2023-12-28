@@ -59,7 +59,7 @@ extern MxAtomId* g_creditsScript;
 extern MxAtomId* g_nocdSourceName;
 
 // VTABLE: LEGO1 0x100d8638
-// SIZE: 0x140
+// SIZE 0x140
 class LegoOmni : public MxOmni {
 public:
 	__declspec(dllexport) void CreateBackgroundAudio();

@@ -88,6 +88,9 @@ protected:
 // TEMPLATE: LEGO1 0x100c0ee0
 // list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
 
+// SYNTHETIC: LEGO1 0x100c0fa0
+// MxStreamController::`scalar deleting destructor'
+
 // FUNCTION: LEGO1 0x100c0fc0
 // MxStreamListMxDSSubscriber::~MxStreamListMxDSSubscriber
 

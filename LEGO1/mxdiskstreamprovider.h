@@ -64,4 +64,7 @@ private:
 	MxStreamListMxDSAction m_list;       // 0x54
 };
 
+// SYNTHETIC: LEGO1 0x100d1220
+// MxDiskStreamProvider::`scalar deleting destructor'
+
 #endif // MXDISKSTREAMPROVIDER_H

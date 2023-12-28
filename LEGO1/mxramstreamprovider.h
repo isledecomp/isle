@@ -4,6 +4,7 @@
 #include "mxstreamprovider.h"
 
 // VTABLE: LEGO1 0x100dd0d0
+// SIZE 0x24
 class MxRAMStreamProvider : public MxStreamProvider {
 public:
 	MxRAMStreamProvider();
@@ -31,11 +32,14 @@ public:
 	inline MxU32* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
 
 protected:
-	MxU32 m_bufferSize;
-	MxU32 m_fileSize;
-	MxU32* m_pBufferOfFileSize;
-	MxU32 m_lengthInDWords;
-	MxU32* m_bufferForDWords;
+	MxU32 m_bufferSize;         // 0x10
+	MxU32 m_fileSize;           // 0x14
+	MxU32* m_pBufferOfFileSize; // 0x18
+	MxU32 m_lengthInDWords;     // 0x1c
+	MxU32* m_bufferForDWords;   // 0x20
 };
+
+// SYNTHETIC: LEGO1 0x100d0a30
+// MxRAMStreamProvider::`scalar deleting destructor'
 
 #endif // MXRAMSTREAMPROVIDER_H

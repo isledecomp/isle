@@ -38,4 +38,7 @@ protected:
 	MxDSFile* m_pFile;             // 0x0c
 };
 
+// SYNTHETIC: LEGO1 0x100d0870
+// MxStreamProvider::`scalar deleting destructor'
+
 #endif // MXSTREAMPROVIDER_H

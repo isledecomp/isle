@@ -5,7 +5,7 @@
 #include "legopathactor.h"
 
 // VTABLE: LEGO1 0x100d58b8
-// SIZE: 0x200
+// SIZE 0x200
 class LegoRaceCar : public LegoCarRaceActor {
 public:
 	// FUNCTION: LEGO1 0x10014290

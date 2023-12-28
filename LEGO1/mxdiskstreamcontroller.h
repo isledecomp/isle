@@ -78,6 +78,9 @@ private:
 // TEMPLATE: LEGO1 0x100c7490
 // list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
 
+// SYNTHETIC: LEGO1 0x100c74c0
+// MxDiskStreamController::`scalar deleting destructor'
+
 // TEMPLATE: LEGO1 0x100c74e0
 // List<MxDSBuffer *>::~List<MxDSBuffer *>
 
