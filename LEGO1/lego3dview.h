@@ -23,14 +23,13 @@ public:
 
 private:
 	// TODO: all of these fields are in various base classes
-	undefined4 m_vtable;                 // 0x0 (TODO: remove once virtual function added)
-	undefined4 m_unk0x4;                 // 0x4
-	TglImpl::RendererImpl* m_renderImpl; // 0x8
-	TglImpl::DeviceImpl* m_deviceImpl;   // 0xc
+	undefined4 m_unk0x4;                 // 0x04
+	TglImpl::RendererImpl* m_renderImpl; // 0x08
+	TglImpl::DeviceImpl* m_deviceImpl;   // 0x0c
 	TglImpl::ViewImpl* m_viewPort;       // 0x10
 	char m_pad[0x78];                    // 0x14
 	ViewManager* m_viewManager;          // 0x88
-	undefined m_unk0x8c[20];             // 0x8c
+	undefined m_unk0x8c[24];             // 0x8c
 };
 
 #endif // LEGO3DVIEW_H
