@@ -1,11 +1,21 @@
 #ifdef 0
 
+// aka `operator new`
 // LIBRARY: ISLE 0x402f80
 // LIBRARY: LEGO1 0x10086240
-// _malloc
+// ??2@YAPAXI@Z
 
+// aka `operator delete`
 // LIBRARY: ISLE 0x402fa0
 // LIBRARY: LEGO1 0x10086260
+// ??3@YAXPAX@Z
+
+// LIBRARY: ISLE 0x406dd0
+// LIBRARY: LEGO1 0x1008a090
+// _malloc
+
+// LIBRARY: ISLE 0x406f00
+// LIBRARY: LEGO1 0x1008a1c0
 // _free
 
 // LIBRARY: ISLE 0x408220
