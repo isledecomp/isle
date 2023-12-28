@@ -11,7 +11,7 @@ undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize);
 // FUNCTION: LEGO1 0x100c6110
 MxResult MxRAMStreamController::Open(const char* p_filename)
 {
-	MxAutoLocker locker(&m_criticalSection);
+	MxAutoLocker lock(&m_criticalSection);
 	if (MxStreamController::Open(p_filename) != SUCCESS) {
 		return FAILURE;
 	}
@@ -39,7 +39,7 @@ MxResult MxRAMStreamController::Open(const char* p_filename)
 // FUNCTION: LEGO1 0x100c6210
 MxResult MxRAMStreamController::VTable0x20(MxDSAction* p_action)
 {
-	MxAutoLocker locker(&m_criticalSection);
+	MxAutoLocker lock(&m_criticalSection);
 	MxS32 unk0x24 = 0;
 	MxResult result = FAILURE;
 
@@ -83,7 +83,7 @@ MxResult MxRAMStreamController::VTable0x24(MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100c63c0
 MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 {
-	MxAutoLocker locker(&m_criticalSection);
+	MxAutoLocker lock(&m_criticalSection);
 	MxResult result;
 	MxDSStreamingAction* value = NULL;
 
