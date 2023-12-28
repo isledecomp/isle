@@ -29,11 +29,7 @@ class SymInfo:
 
         contrib_dict = {(s.section, s.offset): s.size for s in cv.sizerefs}
         for pub in cv.publics:
-            if (
-                pub.type == "S_PUB32"
-                and pub.name.startswith("_")
-                and (pub.section, pub.offset) in contrib_dict
-            ):
+            if pub.type == "S_PUB32" and (pub.section, pub.offset) in contrib_dict:
                 size = contrib_dict[(pub.section, pub.offset)]
 
                 info = RecompiledInfo()
