@@ -16,7 +16,13 @@ Infocenter::~Infocenter()
 MxResult Infocenter::Tickle()
 {
 	// TODO
+	return 0;
+}
 
+// STUB: LEGO1 0x1006ef10
+MxLong Infocenter::Notify(MxParam& p_param)
+{
+	// TODO
 	return 0;
 }
 
@@ -24,14 +30,6 @@ MxResult Infocenter::Tickle()
 MxResult Infocenter::Create(MxDSObject& p_dsObject)
 {
 	return FAILURE;
-}
-
-// STUB: LEGO1 0x1006ef10
-MxLong Infocenter::Notify(MxParam& p_param)
-{
-	// TODO
-
-	return 0;
 }
 
 // STUB: LEGO1 0x1006f4e0
