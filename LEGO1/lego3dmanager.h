@@ -23,4 +23,7 @@ private:
 	void Destroy();
 };
 
+// SYNTHETIC: LEGO1 0x100ab340
+// Lego3DManager::`scalar deleting destructor'
+
 #endif // LEGO3DMANAGER_H
