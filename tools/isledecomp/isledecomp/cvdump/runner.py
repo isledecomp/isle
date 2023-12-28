@@ -1,6 +1,6 @@
 from os import name as os_name
 from enum import Enum
-from typing import List, Self
+from typing import List
 import subprocess
 from isledecomp.lib import lib_path_join
 from isledecomp.dir import winepath_unix_to_win
@@ -29,23 +29,23 @@ class Cvdump:
         self._pdb: str = pdb
         self._options = set()
 
-    def lines(self) -> Self:
+    def lines(self):
         self._options.add(DumpOpt.LINES)
         return self
 
-    def symbols(self) -> Self:
+    def symbols(self):
         self._options.add(DumpOpt.SYMBOLS)
         return self
 
-    def globals(self) -> Self:
+    def globals(self):
         self._options.add(DumpOpt.GLOBALS)
         return self
 
-    def publics(self) -> Self:
+    def publics(self):
         self._options.add(DumpOpt.PUBLICS)
         return self
 
-    def section_contributions(self) -> Self:
+    def section_contributions(self):
         self._options.add(DumpOpt.SECTION_CONTRIB)
         return self
 
