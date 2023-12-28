@@ -27,7 +27,7 @@ private:
 	TglImpl::RendererImpl* m_renderImpl; // 0x08
 	TglImpl::DeviceImpl* m_deviceImpl;   // 0x0c
 	TglImpl::ViewImpl* m_viewPort;       // 0x10
-	char m_pad[0x78];                    // 0x14
+	undefined m_pad[0x78];               // 0x14
 	ViewManager* m_viewManager;          // 0x88
 	undefined m_unk0x8c[24];             // 0x8c
 };
