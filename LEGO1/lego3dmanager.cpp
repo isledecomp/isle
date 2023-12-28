@@ -29,7 +29,7 @@ void Lego3DManager::Init(MxRenderSettings& p_settings)
 	m_3dView = new Lego3DView();
 
 	MxRenderSettings settings;
-	settings = p_settings;
+	MxRenderSettings::CopyFrom(settings, p_settings);
 
 	m_3dView->Init(settings, *m_render);
 }

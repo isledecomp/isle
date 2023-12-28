@@ -3,6 +3,8 @@
 #include "legoroi.h"
 #include "tgl/tgl.h"
 
+DECOMP_SIZE_ASSERT(Lego3DView, 0xa8)
+
 // STUB: LEGO1 0x100aae90
 Lego3DView::Lego3DView()
 {

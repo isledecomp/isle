@@ -1,5 +1,5 @@
 #ifndef MXRENDERSETTINGS_H
-#define MXRENDERSETTING_H
+#define MXRENDERSETTINGS_H
 
 #include "decomp.h"
 #include "mxtypes.h"
@@ -8,9 +8,10 @@
 #include <ddraw.h>
 #include <windows.h>
 
-class MxRenderSettings {
+// SIZE 0x28
+struct MxRenderSettings {
 public:
-	MxU32 operator=(const MxRenderSettings& p_settings);
+	static MxU32 CopyFrom(MxRenderSettings& p_dest, const MxRenderSettings& p_src);
 
 	undefined4 m_unk0x00;             // 0x00
 	HWND m_hwnd;                      // 0x04

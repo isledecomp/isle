@@ -1,14 +1,16 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
+#include "mxrendersettings.h"
 #include "mxtypes.h"
 #include "tgl/d3drm/impl.h"
 #include "viewmanager/viewmanager.h"
 
 class LegoROI;
-class MxRenderSettings;
 class Tgl::Renderer;
 
+// VTABLE: LEGO1 0x100dbf78
+// SIZE 0xa8
 class Lego3DView {
 public:
 	Lego3DView();
@@ -28,6 +30,7 @@ private:
 	TglImpl::ViewImpl* m_viewPort;       // 0x10
 	char m_pad[0x78];                    // 0x14
 	ViewManager* m_viewManager;          // 0x88
+	undefined m_unk0x8c[20];             // 0x8c
 };
 
 #endif // LEGO3DVIEW_H
