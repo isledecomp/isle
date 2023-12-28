@@ -15,7 +15,7 @@ public:
 	// FUNCTION: LEGO1 0x10079f30
 	inline const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x100f061c
+		// STRING: LEGO1 0x100f061c
 		return "LegoPalettePresenter";
 	}
 
@@ -25,13 +25,16 @@ public:
 		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	virtual void Destroy() override; // vtable+0x38
+	virtual void ReadyTickle() override; // vtable+0x18
+	virtual void Destroy() override;     // vtable+0x38
+
+	MxResult ParsePallete(MxStreamChunk* p_chunk);
 
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	MxPalette* m_palette;
+	MxPalette* m_palette; // 0x64
 };
 
 #endif // LEGOPALETTEPRESENTER_H

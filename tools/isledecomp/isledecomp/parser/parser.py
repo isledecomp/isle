@@ -3,15 +3,19 @@
 from typing import List, Iterable, Iterator
 from enum import Enum
 from .util import (
-    DecompMarker,
     is_blank_or_comment,
-    match_marker,
-    is_marker_exact,
     get_class_name,
+    get_variable_name,
     get_synthetic_name,
     remove_trailing_comment,
 )
+from .marker import (
+    DecompMarker,
+    match_marker,
+    is_marker_exact,
+)
 from .node import (
+    ParserSymbol,
     ParserFunction,
     ParserVariable,
     ParserVtable,
@@ -28,31 +32,9 @@ class ReaderState(Enum):
     IN_GLOBAL = 5
     IN_FUNC_GLOBAL = 6
     IN_VTABLE = 7
+    IN_SYNTHETIC = 8
+    IN_LIBRARY = 9
     DONE = 100
-
-
-def marker_is_stub(marker: DecompMarker) -> bool:
-    return marker.type.upper() == "STUB"
-
-
-def marker_is_variable(marker: DecompMarker) -> bool:
-    return marker.type.upper() == "GLOBAL"
-
-
-def marker_is_synthetic(marker: DecompMarker) -> bool:
-    return marker.type.upper() in ("SYNTHETIC", "TEMPLATE")
-
-
-def marker_is_template(marker: DecompMarker) -> bool:
-    return marker.type.upper() == "TEMPLATE"
-
-
-def marker_is_function(marker: DecompMarker) -> bool:
-    return marker.type.upper() in ("FUNCTION", "STUB")
-
-
-def marker_is_vtable(marker: DecompMarker) -> bool:
-    return marker.type.upper() == "VTABLE"
 
 
 class MarkerDict:
@@ -61,11 +43,12 @@ class MarkerDict:
 
     def insert(self, marker: DecompMarker) -> bool:
         """Return True if this insert would overwrite"""
-        module = marker.module.upper()
+        module = marker.module
         if module in self.markers:
             return True
 
-        self.markers[module] = (marker.type, marker.offset)
+        # TODO: type converted back to string version here instead of using enum
+        self.markers[module] = (marker.type.name, marker.offset)
         return False
 
     def iter(self) -> Iterator[DecompMarker]:
@@ -82,9 +65,7 @@ class DecompParser:
     # but not right now
     def __init__(self) -> None:
         # The lists to be populated as we parse
-        self.functions: List[ParserFunction] = []
-        self.vtables: List[ParserVtable] = []
-        self.variables: List[ParserVariable] = []
+        self._symbols: List[ParserSymbol] = []
         self.alerts: List[ParserAlert] = []
 
         self.line_number: int = 0
@@ -113,9 +94,7 @@ class DecompParser:
         self.function_sig: str = ""
 
     def reset(self):
-        self.functions = []
-        self.vtables = []
-        self.variables = []
+        self._symbols = []
         self.alerts = []
 
         self.line_number = 0
@@ -130,6 +109,18 @@ class DecompParser:
         self.curly_indent_stops = 0
         self.function_start = 0
         self.function_sig = ""
+
+    @property
+    def functions(self) -> List[ParserSymbol]:
+        return [s for s in self._symbols if isinstance(s, ParserFunction)]
+
+    @property
+    def vtables(self) -> List[ParserSymbol]:
+        return [s for s in self._symbols if isinstance(s, ParserVtable)]
+
+    @property
+    def variables(self) -> List[ParserSymbol]:
+        return [s for s in self._symbols if isinstance(s, ParserVariable)]
 
     def _recover(self):
         """We hit a syntax error and need to reset temp structures"""
@@ -159,10 +150,17 @@ class DecompParser:
             self._syntax_warning(ParserError.DUPLICATE_MODULE)
         self.state = ReaderState.WANT_SIG
 
-    def _synthetic_marker(self, marker: DecompMarker):
+    def _nameref_marker(self, marker: DecompMarker):
+        """Functions explicitly referenced by name are set here"""
         if self.fun_markers.insert(marker):
             self._syntax_warning(ParserError.DUPLICATE_MODULE)
-        self.state = ReaderState.IN_TEMPLATE
+
+        if marker.is_template():
+            self.state = ReaderState.IN_TEMPLATE
+        elif marker.is_synthetic():
+            self.state = ReaderState.IN_SYNTHETIC
+        else:
+            self.state = ReaderState.IN_LIBRARY
 
     def _function_done(self, lookup_by_name: bool = False, unexpected: bool = False):
         end_line = self.line_number
@@ -173,16 +171,14 @@ class DecompParser:
             end_line -= 1
 
         for marker in self.fun_markers.iter():
-            self.functions.append(
+            self._symbols.append(
                 ParserFunction(
+                    type=marker.type,
                     line_number=self.function_start,
                     module=marker.module,
                     offset=marker.offset,
-                    lookup_by_name=lookup_by_name,
-                    is_stub=marker_is_stub(marker),
-                    is_synthetic=marker_is_synthetic(marker),
-                    is_template=marker_is_template(marker),
                     name=self.function_sig,
+                    lookup_by_name=lookup_by_name,
                     end_line=end_line,
                 )
             )
@@ -202,12 +198,13 @@ class DecompParser:
             class_name = self.last_line.strip()
 
         for marker in self.tbl_markers.iter():
-            self.vtables.append(
+            self._symbols.append(
                 ParserVtable(
+                    type=marker.type,
                     line_number=self.line_number,
                     module=marker.module,
                     offset=marker.offset,
-                    class_name=class_name,
+                    name=class_name,
                 )
             )
 
@@ -223,14 +220,19 @@ class DecompParser:
         else:
             self.state = ReaderState.IN_GLOBAL
 
-    def _variable_done(self):
+    def _variable_done(self, name: str):
+        if not name.startswith("g_"):
+            self._syntax_warning(ParserError.GLOBAL_MISSING_PREFIX)
+
         for marker in self.var_markers.iter():
-            self.variables.append(
+            self._symbols.append(
                 ParserVariable(
+                    type=marker.type,
                     line_number=self.line_number,
                     module=marker.module,
                     offset=marker.offset,
-                    name=self.last_line.strip(),
+                    name=name,
+                    is_static=self.state == ReaderState.IN_FUNC_GLOBAL,
                 )
             )
 
@@ -246,12 +248,23 @@ class DecompParser:
             self._syntax_error(ParserError.UNEXPECTED_MARKER)
             return
 
+        # If we are inside a function, the only markers we accept are:
+        # GLOBAL, indicating a static variable
+        # STRING, indicating a literal string.
+        # Otherwise we assume that the parser missed the end of the function
+        # and we have moved on to something else.
+        # This is unlikely to occur with well-formed code, but
+        # we can recover easily by just ending the function here.
+        if self.state == ReaderState.IN_FUNC and not marker.allowed_in_func():
+            self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
+            self._function_done(unexpected=True)
+
         # TODO: How uncertain are we of detecting the end of a function
         # in a clang-formatted file? For now we assume we have missed the
         # end if we detect a non-GLOBAL marker while state is IN_FUNC.
         # Maybe these cases should be syntax errors instead
 
-        if marker_is_function(marker):
+        if marker.is_regular_function():
             if self.state in (
                 ReaderState.SEARCH,
                 ReaderState.WANT_SIG,
@@ -259,29 +272,41 @@ class DecompParser:
                 # We will allow multiple offsets if we have just begun
                 # the code block, but not after we hit the curly brace.
                 self._function_marker(marker)
-            elif self.state == ReaderState.IN_FUNC:
-                # We hit another offset unexpectedly.
-                # We can recover easily by just ending the function here.
-                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done(unexpected=True)
-
-                # Start the next function right after so we can
-                # read the next line.
-                self._function_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
 
-        elif marker_is_synthetic(marker):
+        elif marker.is_template():
             if self.state in (ReaderState.SEARCH, ReaderState.IN_TEMPLATE):
-                self._synthetic_marker(marker)
-            elif self.state == ReaderState.IN_FUNC:
-                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done(lookup_by_name=True, unexpected=True)
-                self._synthetic_marker(marker)
+                self._nameref_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
 
-        elif marker_is_variable(marker):
+        elif marker.is_synthetic():
+            if self.state in (ReaderState.SEARCH, ReaderState.IN_SYNTHETIC):
+                self._nameref_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        elif marker.is_library():
+            if self.state in (ReaderState.SEARCH, ReaderState.IN_LIBRARY):
+                self._nameref_marker(marker)
+            else:
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        elif marker.is_string():
+            # TODO: We are ignoring string markers for the moment.
+            # We already have a lot of them in the codebase, though, so we'll
+            # hang onto them for now in case we can use them later.
+            # To match up string constants, the strategy will be:
+            # 1. Use cvdump to find all string constants in the recomp
+            # 2. In the original binary, look at relocated vaddrs from .rdata
+            # 3. Try to match up string data from #1 with locations in #2
+
+            # Throw the syntax error we would throw if we were parsing these
+            if self.state not in (ReaderState.SEARCH, ReaderState.IN_FUNC):
+                self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
+
+        elif marker.is_variable():
             if self.state in (
                 ReaderState.SEARCH,
                 ReaderState.IN_GLOBAL,
@@ -292,12 +317,8 @@ class DecompParser:
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
 
-        elif marker_is_vtable(marker):
+        elif marker.is_vtable():
             if self.state in (ReaderState.SEARCH, ReaderState.IN_VTABLE):
-                self._vtable_marker(marker)
-            elif self.state == ReaderState.IN_FUNC:
-                self._syntax_warning(ParserError.MISSED_END_OF_FUNCTION)
-                self._function_done(unexpected=True)
                 self._vtable_marker(marker)
             else:
                 self._syntax_error(ParserError.INCOMPATIBLE_MARKER)
@@ -322,12 +343,16 @@ class DecompParser:
             return
 
         line_strip = line.strip()
-        if self.state == ReaderState.IN_TEMPLATE:
-            # TEMPLATE functions are a special case. The signature is
-            # given on the next line (in a // comment)
+        if self.state in (
+            ReaderState.IN_SYNTHETIC,
+            ReaderState.IN_TEMPLATE,
+            ReaderState.IN_LIBRARY,
+        ):
+            # Explicit nameref functions provide the function name
+            # on the next line (in a // comment)
             name = get_synthetic_name(line)
             if name is None:
-                self._syntax_error(ParserError.BAD_SYNTHETIC)
+                self._syntax_error(ParserError.BAD_NAMEREF)
             else:
                 self.function_sig = name
                 self._function_starts_here()
@@ -384,8 +409,28 @@ class DecompParser:
                 self._function_done()
 
         elif self.state in (ReaderState.IN_GLOBAL, ReaderState.IN_FUNC_GLOBAL):
-            if not is_blank_or_comment(line):
-                self._variable_done()
+            # TODO: Known problem that an error here will cause us to abandon a
+            # function we have already parsed if state == IN_FUNC_GLOBAL.
+            # However, we are not tolerant of _any_ syntax problems in our
+            # CI actions, so the solution is to just fix the invalid marker.
+            if is_blank_or_comment(line):
+                self._syntax_error(ParserError.NO_SUITABLE_NAME)
+                return
+
+            # We don't have a foolproof mechanism to tell what is and is not a variable.
+            # If the GLOBAL is being declared on a `return` statement, though, this is
+            # not correct. It is either a string literal (which will be handled differently)
+            # or it is not the variable declaration, which is incorrect decomp syntax.
+            if line.strip().startswith("return"):
+                self._syntax_error(ParserError.GLOBAL_NOT_VARIABLE)
+                return
+
+            name = get_variable_name(line)
+            if name is None:
+                self._syntax_error(ParserError.NO_SUITABLE_NAME)
+                return
+
+            self._variable_done(name)
 
         elif self.state == ReaderState.IN_VTABLE:
             vtable_class = get_class_name(line)

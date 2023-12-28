@@ -13,7 +13,7 @@ public:
 	// FUNCTION: LEGO1 0x1000d4a0
 	inline virtual const char* ClassName() const // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x100f07a0
+		// STRING: LEGO1 0x100f07a0
 		return "MxSoundPresenter";
 	};
 

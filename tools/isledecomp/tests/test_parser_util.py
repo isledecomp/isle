@@ -1,11 +1,15 @@
 import pytest
 from isledecomp.parser.parser import MarkerDict
-from isledecomp.parser.util import (
+from isledecomp.parser.marker import (
     DecompMarker,
-    is_blank_or_comment,
+    MarkerType,
     match_marker,
     is_marker_exact,
+)
+from isledecomp.parser.util import (
+    is_blank_or_comment,
     get_class_name,
+    get_variable_name,
 )
 
 
@@ -96,7 +100,7 @@ def test_marker_dict_type_replace():
     d.insert(DecompMarker("STUB", "TEST", 0x1234))
     markers = list(d.iter())
     assert len(markers) == 1
-    assert markers[0].type == "FUNCTION"
+    assert markers[0].type == MarkerType.FUNCTION
 
 
 class_name_match_cases = [
@@ -131,3 +135,26 @@ class_name_no_match_cases = [
 @pytest.mark.parametrize("line", class_name_no_match_cases)
 def test_get_class_name_none(line: str):
     assert get_class_name(line) is None
+
+
+variable_name_cases = [
+    # with prefix for easy access
+    ("char* g_test;", "g_test"),
+    ("g_test;", "g_test"),
+    ("void (*g_test)(int);", "g_test"),
+    ("char g_test[50];", "g_test"),
+    ("char g_test[50] = {1234,", "g_test"),
+    ("int g_test = 500;", "g_test"),
+    # no prefix
+    ("char* hello;", "hello"),
+    ("hello;", "hello"),
+    ("void (*hello)(int);", "hello"),
+    ("char hello[50];", "hello"),
+    ("char hello[50] = {1234,", "hello"),
+    ("int hello = 500;", "hello"),
+]
+
+
+@pytest.mark.parametrize("line,name", variable_name_cases)
+def test_get_variable_name(line: str, name: str):
+    assert get_variable_name(line) == name

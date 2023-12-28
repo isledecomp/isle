@@ -13,6 +13,8 @@ public:
 		Flag_Bit1 = 0x01,
 		Flag_Bit2 = 0x02,
 		Flag_Bit3 = 0x04,
+		Flag_Bit4 = 0x08,
+		Flag_Bit5 = 0x10,
 		Flag_Bit8 = 0x80,
 		Flag_Bit16 = 0x8000
 	};
@@ -23,7 +25,7 @@ public:
 	// FUNCTION: LEGO1 0x100be0c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x10101e6c
+		// STRING: LEGO1 0x10101e6c
 		return "MxDSChunk";
 	}
 
@@ -32,6 +34,8 @@ public:
 	{
 		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
+
+	static MxU32 ReturnE();
 
 	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 	inline void SetObjectId(undefined4 p_objectid) { m_objectId = p_objectid; }
@@ -52,11 +56,11 @@ public:
 	}
 
 protected:
-	MxU16 m_flags;         // 0x8
-	undefined4 m_objectId; // 0xc
-	MxLong m_time;         // 0x10
-	MxU32 m_length;        // 0x14
-	MxU8* m_data;          // 0x18
+	MxU16 m_flags;    // 0x8
+	MxU32 m_objectId; // 0xc
+	MxLong m_time;    // 0x10
+	MxU32 m_length;   // 0x14
+	MxU8* m_data;     // 0x18
 };
 
 #endif // MXDSCHUNK_H

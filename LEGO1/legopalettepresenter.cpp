@@ -1,5 +1,10 @@
 #include "legopalettepresenter.h"
 
+#include "legoomni.h"
+#include "legostream.h"
+#include "legovideomanager.h"
+#include "mxstreamchunk.h"
+
 DECOMP_SIZE_ASSERT(LegoPalettePresenter, 0x68)
 
 // FUNCTION: LEGO1 0x10079e50
@@ -38,4 +43,49 @@ void LegoPalettePresenter::Destroy(MxBool p_fromDestructor)
 void LegoPalettePresenter::Destroy()
 {
 	Destroy(FALSE);
+}
+
+// FUNCTION: LEGO1 0x1007a130
+MxResult LegoPalettePresenter::ParsePallete(MxStreamChunk* p_chunk)
+{
+	MxU8 buffer[40];
+	RGBQUAD palleteData[256];
+	MxResult result = FAILURE;
+	LegoMemoryStream stream((char*) p_chunk->GetData());
+	if (stream.Read(buffer, 40) == SUCCESS) {
+		if (stream.Read(palleteData, sizeof(RGBQUAD) * 256) == SUCCESS) {
+			m_palette = new MxPalette(palleteData);
+			if (m_palette) {
+				result = SUCCESS;
+			}
+		}
+	}
+
+	if (result != SUCCESS && m_palette) {
+		delete m_palette;
+		m_palette = NULL;
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1007a230
+void LegoPalettePresenter::ReadyTickle()
+{
+	MxStreamChunk* chunk = m_subscriber->FUN_100b8360();
+	if (chunk) {
+		if (chunk->GetTime() <= m_action->GetElapsedTime()) {
+			ParseExtra();
+			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
+			m_currentTickleState = TickleState_Starting;
+			chunk = m_subscriber->FUN_100b8250();
+			MxResult result = ParsePallete(chunk);
+			m_subscriber->FUN_100b8390(chunk);
+
+			if (result == SUCCESS) {
+				VideoManager()->RealizePalette(m_palette);
+			}
+			EndAction();
+		}
+	}
 }
