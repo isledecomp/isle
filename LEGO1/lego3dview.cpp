@@ -14,7 +14,7 @@ Lego3DView::~Lego3DView()
 }
 
 // STUB: LEGO1 0x
-MxBool Lego3DView::Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& render)
+MxBool Lego3DView::Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& p_render)
 {
 	return FALSE;
 }

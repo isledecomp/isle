@@ -16,7 +16,7 @@ public:
 
 	inline ViewManager* GetViewManager() { return this->m_viewManager; }
 	inline TglImpl::ViewImpl* GetViewPort() { return this->m_viewPort; }
-	MxBool Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& render);
+	MxBool Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& p_render);
 	LegoROI* PickROI(MxLong p_a, MxLong p_b);
 
 private:
