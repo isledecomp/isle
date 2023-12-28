@@ -75,6 +75,8 @@ class Bin:
     """Parses a PE format EXE and allows reading data from a virtual address.
     Reference: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format"""
 
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self, filename: str, logger=None) -> None:
         self.logger = logger
         self._debuglog(f'Parsing headers of "{filename}"... ')
