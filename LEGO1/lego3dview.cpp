@@ -13,7 +13,7 @@ Lego3DView::~Lego3DView()
 {
 }
 
-// STUB: LEGO1 0x
+// STUB: LEGO1 0x100aaf90
 MxBool Lego3DView::Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& p_render)
 {
 	return FALSE;
