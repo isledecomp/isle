@@ -24,4 +24,5 @@ public:
 	IDirect3D* m_direct3d;            // 0x20
 	IDirect3DDevice* m_d3dDevice;     // 0x24
 };
+
 #endif // MXRENDERSETTINGS_H
