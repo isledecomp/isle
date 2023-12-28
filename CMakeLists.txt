@@ -47,6 +47,7 @@ add_library(lego1 SHARED
   LEGO1/jukebox.cpp
   LEGO1/jukeboxentity.cpp
   LEGO1/jukeboxstate.cpp
+  LEGO1/lego3dmanager.cpp
   LEGO1/lego3dview.cpp
   LEGO1/legoact2state.cpp
   LEGO1/legoactioncontrolpresenter.cpp
@@ -161,6 +162,7 @@ add_library(lego1 SHARED
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
+  LEGO1/mxrendersettings.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmack.cpp
