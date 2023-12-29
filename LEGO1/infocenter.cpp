@@ -12,17 +12,17 @@ Infocenter::~Infocenter()
 	// TODO
 }
 
+// STUB: LEGO1 0x1006ed90
+MxResult Infocenter::Create(MxDSObject& p_dsObject)
+{
+	return FAILURE;
+}
+
 // STUB: LEGO1 0x10070af0
 MxResult Infocenter::Tickle()
 {
 	// TODO
 	return 0;
-}
-
-// STUB: LEGO1 0x1006ed90
-MxResult Infocenter::Create(MxDSObject& p_dsObject)
-{
-	return FAILURE;
 }
 
 // STUB: LEGO1 0x1006ef10
