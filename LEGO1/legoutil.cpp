@@ -58,7 +58,7 @@ void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEnt
 		break;
 	case ExtraActionType_openram:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
-			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_DiskStream);
+			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_RAMStream);
 			Start(&action);
 		}
 		break;
@@ -66,6 +66,7 @@ void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEnt
 		action.SetUnknown24(-2);
 		DeleteObject(action);
 		Streamer()->Close(p_pAtom.GetInternal());
+		break;
 	case ExtraActionType_start:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
 			Start(&action);
@@ -78,14 +79,7 @@ void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEnt
 		}
 		break;
 	case ExtraActionType_run:
-		_spawnl(
-			0,
-			"\\lego\\sources\\main\\main.exe",
-			"\\lego\\sources\\main\\main.exe",
-			"/script",
-			p_pAtom.GetInternal(),
-			0
-		);
+		_spawnl(0, "\\lego\\sources\\main\\main.exe", "\\lego\\sources\\main\\main.exe", "/script", &p_pAtom, 0);
 		break;
 	case ExtraActionType_exit:
 		Lego()->SetExit(TRUE);
@@ -120,6 +114,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender)
 {
 }
+
 // FUNCTION: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut)
 {

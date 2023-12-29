@@ -115,6 +115,7 @@ public:
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
+
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
 
 private:
