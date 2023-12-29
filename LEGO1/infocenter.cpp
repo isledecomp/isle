@@ -25,17 +25,23 @@ MxLong Infocenter::Notify(MxParam& p_param)
 	return 0;
 }
 
+// STUB: LEGO1 0x1006f4e0
+void Infocenter::Stop()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10070aa0
+void Infocenter::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10070af0
 MxResult Infocenter::Tickle()
 {
 	// TODO
 	return 0;
-}
-
-// STUB: LEGO1 0x1006f4e0
-void Infocenter::Stop()
-{
-	// TODO
 }
 
 // FUNCTION: LEGO1 0x10070d00
@@ -48,10 +54,4 @@ MxBool Infocenter::VTable0x5c()
 MxBool Infocenter::VTable0x64()
 {
 	return FALSE;
-}
-
-// STUB: LEGO1 0x10070aa0
-void Infocenter::VTable0x68(MxBool p_add)
-{
-	// TODO
 }
