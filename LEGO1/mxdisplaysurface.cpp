@@ -2,6 +2,7 @@
 
 #include "mxomni.h"
 #include "mxvideomanager.h"
+
 #include <windows.h>
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
@@ -77,10 +78,10 @@ byte CountTotalBitsSetTo1(MxU32 p_param)
 {
 	MxU32 a;
 	byte i = 0;
-	if(p_param) {
+	if (p_param) {
 		do {
 			a = i >> 1;
-			i += ((byte)p_param & 1);
+			i += ((byte) p_param & 1);
 			p_param = a;
 		} while (a != 0);
 	}
@@ -92,9 +93,9 @@ byte CountContiguousBitsSetTo1(MxU32 p_param)
 {
 	MxU32 u;
 	byte count = 0;
-	
+
 	u = p_param & 1;
-	while(u == 0) {
+	while (u == 0) {
 		p_param >>= 1;
 		count++;
 		u = p_param & 1;
@@ -255,15 +256,15 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 	HPALETTE hpal;
 	LOGPALETTE lpal;
 	byte bVar2;
-  	byte bVar3;
-  	byte bVar4;
-  	byte bVar5;
-  	byte bVar6;
-  	byte bVar7;
-	if(((this->m_surfaceDesc).ddpfPixelFormat.dwFlags & 0x20) != 0) {
+	byte bVar3;
+	byte bVar4;
+	byte bVar5;
+	byte bVar6;
+	byte bVar7;
+	if (((this->m_surfaceDesc).ddpfPixelFormat.dwFlags & 0x20) != 0) {
 		this->m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
 		this->m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
-		if(((this->m_videoParam).Flags().GetFullScreen() & 1) == 0) {
+		if (((this->m_videoParam).Flags().GetFullScreen() & 1) == 0) {
 			lpal.palVersion = 0x300;
 			// lpal.palNumEntries = 256;
 			// FIXME: this loop may be incorrect
@@ -278,19 +279,19 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 			DeleteObject(hpal);
 		}
 	}
-	if((this->m_surfaceDesc).ddpfPixelFormat.dwRGBBitCount == 16) {
-		if(this->m_16bitPal == NULL) {
-			this->m_16bitPal = new(MxU16); // FIXME: malloc size 512;
+	if ((this->m_surfaceDesc).ddpfPixelFormat.dwRGBBitCount == 16) {
+		if (this->m_16bitPal == NULL) {
+			this->m_16bitPal = new (MxU16); // FIXME: malloc size 512;
 		}
-		p_palette->GetEntries((PALETTEENTRY*) &lpal);  // ?
+		p_palette->GetEntries((PALETTEENTRY*) &lpal); // ?
 
 		// It looks like the arguments are correct - the offsets match but the registers are swapped
 		bVar2 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwRBitMask);
-    	bVar3 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwRBitMask);
-    	bVar4 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
-    	bVar5 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
-    	bVar6 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
-    	bVar7 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
+		bVar3 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwRBitMask);
+		bVar4 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
+		bVar5 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
+		bVar6 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
+		bVar7 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
 
 		MxS32 i = 0;
 		WORD e = lpal.palNumEntries;
@@ -298,7 +299,8 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 			j = i + 2;
 
 			// this line is probably very incorrect
-			*this->m_16bitPal = e >> (8 - bVar3 & 0x1f) << (bVar2 & 0x1f) | e >> (8 - bVar5 & 0x1f) << (bVar4 & 0x1f) | e >> (8 - bVar7 & 0x1f) << (bVar6 & 0x1f);
+			*this->m_16bitPal = e >> (8 - bVar3 & 0x1f) << (bVar2 & 0x1f) | e >> (8 - bVar5 & 0x1f) << (bVar4 & 0x1f) |
+								e >> (8 - bVar7 & 0x1f) << (bVar6 & 0x1f);
 			i = j;
 			e += 2;
 		} while (j < 512);
