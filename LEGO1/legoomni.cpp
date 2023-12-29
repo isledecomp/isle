@@ -390,7 +390,7 @@ void LegoOmni::Init()
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
-	m_unk0x80 = FALSE;
+	m_exit = FALSE;
 	m_currentVehicle = NULL;
 	m_saveDataWriter = NULL;
 	m_plantManager = NULL;

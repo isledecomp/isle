@@ -116,6 +116,8 @@ public:
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
 
+	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
+
 private:
 	undefined4* m_unk0x68;                       // 0x68
 	MxUnknown100dbdbc* m_renderMgr;              // 0x6c
@@ -123,7 +125,7 @@ private:
 	GifManager* m_gifManager;                    // 0x74
 	LegoWorldList* m_worldList;                  // 0x78
 	LegoWorld* m_currentWorld;                   // 0x7c
-	MxBool m_unk0x80;                            // 0x80
+	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
 	IslePathActor* m_currentVehicle;             // 0x88
 	LegoUnkSaveDataWriter* m_saveDataWriter;     // 0x8c
