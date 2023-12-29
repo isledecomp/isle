@@ -353,6 +353,7 @@ void MxVideoPresenter::PutFrame()
 	MxRect32 rectSrc, rectDest;
 	if (m_action->GetFlags() & MxDSAction::Flag_Bit5) {
 		if (m_unk0x58) {
+			// TODO: Match
 			rectSrc.CopyFrom(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
 			rectDest.CopyFrom(m_location, MxSize32(GetWidth(), GetHeight()));
 
@@ -390,6 +391,7 @@ void MxVideoPresenter::PutFrame()
 		while (regionRect = cursor.VTable0x24(rect)) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				if (m_unk0x58) {
+					// TODO: Match
 					rectSrc.CopyFrom(
 						MxPoint32(regionRect->GetLeft() - m_location.GetX(), regionRect->GetTop() - m_location.GetY()),
 						MxSize32(regionRect->GetWidth(), regionRect->GetHeight())
