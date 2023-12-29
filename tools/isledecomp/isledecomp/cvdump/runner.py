@@ -56,7 +56,7 @@ class Cvdump:
         if os_name == "nt":
             return [cvdump_exe, *flags, self._pdb]
 
-        return ["wine", *flags, cvdump_exe, winepath_unix_to_win(self._pdb)]
+        return ["wine", cvdump_exe, *flags, winepath_unix_to_win(self._pdb)]
 
     def run(self) -> CvdumpParser:
         p = CvdumpParser()
