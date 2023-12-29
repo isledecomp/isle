@@ -224,20 +224,28 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 }
 
 // STUB: LEGO1 0x100bacc0
-MxBool MxDisplaySurface::VTable0x28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+MxBool MxDisplaySurface::VTable0x28(
+	MxBitmap* p_bitmap,
+	MxS32 p_left,
+	MxS32 p_top,
+	MxS32 p_right,
+	MxS32 p_bottom,
+	MxS32 p_width,
+	MxS32 p_height
+)
 {
 	return 0;
 }
 
 // STUB: LEGO1 0x100bb1d0
 MxBool MxDisplaySurface::VTable0x30(
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
+	MxBitmap* p_bitmap,
+	MxS32 p_left,
+	MxS32 p_top,
+	MxS32 p_right,
+	MxS32 p_bottom,
+	MxS32 p_width,
+	MxS32 p_height,
 	MxBool
 )
 {

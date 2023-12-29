@@ -16,13 +16,7 @@ public:
 		this->m_bottom = p_bottom;
 	}
 
-	MxRect32(const MxPoint32& p_point, const MxSize32& p_size)
-	{
-		this->m_left = p_point.GetX();
-		this->m_top = p_point.GetY();
-		this->m_right = p_size.GetWidth();
-		this->m_bottom = p_size.GetHeight();
-	}
+	MxRect32(const MxPoint32& p_point, const MxSize32& p_size) { CopyFrom(p_point, p_size); }
 
 	MxRect32(const MxRect32& p_a, const MxRect32& p_b)
 	{
@@ -98,7 +92,6 @@ public:
 	inline void SetRight(MxS32 p_right) { m_right = p_right; }
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
-private:
 	inline void CopyFrom(const MxRect32& p_rect)
 	{
 		this->m_left = p_rect.m_left;
@@ -107,6 +100,15 @@ private:
 		this->m_bottom = p_rect.m_bottom;
 	}
 
+	inline void CopyFrom(const MxPoint32& p_point, const MxSize32& p_size)
+	{
+		this->m_left = p_point.GetX();
+		this->m_top = p_point.GetY();
+		this->m_right = p_size.GetWidth() + p_point.GetX();
+		this->m_bottom = p_size.GetHeight() + p_point.GetY();
+	}
+
+private:
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
 	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
 

@@ -40,6 +40,7 @@ public:
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 	inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
 	inline MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
+	inline MxRegion* GetRegion() { return this->m_region; }
 
 protected:
 	MxVideoParam m_videoParam;          // 0x2c
