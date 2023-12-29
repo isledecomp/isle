@@ -59,13 +59,13 @@ MxBool MxVideoPresenter::VTable0x7c()
 // FUNCTION: LEGO1 0x1000c7e0
 MxS32 MxVideoPresenter::GetWidth()
 {
-	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiHeader()->biWidth;
+	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth();
 }
 
 // FUNCTION: LEGO1 0x1000c800
 MxS32 MxVideoPresenter::GetHeight()
 {
-	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeader()->biHeight;
+	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs();
 }
 
 // FUNCTION: LEGO1 0x100b24f0
