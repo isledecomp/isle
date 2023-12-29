@@ -372,7 +372,6 @@ void MxDiskStreamController::FUN_100c8540()
 	MxAutoLocker lock(&this->m_criticalSection);
 	for (list<MxDSBuffer*>::iterator it = m_list0x74.begin(); it != m_list0x74.end();) {
 		MxDSBuffer* buf = *it;
-		// TODO: Match
 		if (buf->GetRefCount() == 0) {
 			m_list0x74.erase(it++);
 			FUN_100c7ce0(buf);
