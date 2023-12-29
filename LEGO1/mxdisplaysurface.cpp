@@ -10,17 +10,17 @@ MxU32 g_unk0x1010215c = 0;
 // FUNCTION: LEGO1 0x100ba500
 MxDisplaySurface::MxDisplaySurface()
 {
-	this->Reset();
+	this->Init();
 }
 
 // FUNCTION: LEGO1 0x100ba5a0
 MxDisplaySurface::~MxDisplaySurface()
 {
-	this->Clear();
+	this->Destroy();
 }
 
 // FUNCTION: LEGO1 0x100ba610
-void MxDisplaySurface::Reset()
+void MxDisplaySurface::Init()
 {
 	this->m_ddSurface1 = NULL;
 	this->m_ddSurface2 = NULL;
@@ -199,7 +199,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100baa90
-void MxDisplaySurface::Clear()
+void MxDisplaySurface::Destroy()
 {
 	if (this->m_initialized) {
 		if (this->m_ddSurface2)
@@ -215,7 +215,7 @@ void MxDisplaySurface::Clear()
 	if (this->m_16bitPal)
 		delete this->m_16bitPal;
 
-	this->Reset();
+	this->Init();
 }
 
 // STUB: LEGO1 0x100baae0

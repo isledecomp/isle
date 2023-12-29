@@ -23,7 +23,7 @@ public:
 		LPDIRECTDRAWCLIPPER p_ddClipper
 	);                                                   // vtable+0x14
 	virtual MxResult Create(MxVideoParam& p_videoParam); // vtable+0x18
-	virtual void Clear();                                // vtable+0x1c
+	virtual void Destroy();                              // vtable+0x1c
 	virtual void SetPalette(MxPalette* p_palette);       // vtable+0x20
 	virtual void VTable0x24(
 		LPDDSURFACEDESC,
@@ -92,7 +92,7 @@ public:
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 
 private:
-	void Reset();
+	void Init();
 
 	MxVideoParam m_videoParam;        // 0x08
 	LPDIRECTDRAWSURFACE m_ddSurface1; // 0x2c
@@ -102,5 +102,8 @@ private:
 	DDSURFACEDESC m_surfaceDesc;      // 0x3c
 	MxU16* m_16bitPal;                // 0xa8
 };
+
+// SYNTHETIC: LEGO1 0x100ba580
+// MxDisplaySurface::`scalar deleting destructor'
 
 #endif // MXDISPLAYSURFACE_H
