@@ -2,7 +2,9 @@
 
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "legoutil.h"
 #include "mxactionnotificationparam.h"
+#include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxomni.h"
 #include "mxticklemanager.h"
@@ -13,6 +15,9 @@ DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
 {
 	// TODO
+	m_unk0xf6 = FALSE;
+	m_unk0xf4 = 4;
+	NotificationManager()->Register(this);
 }
 
 // FUNCTION: LEGO1 0x1001d670
@@ -93,10 +98,30 @@ void LegoWorld::VTable0x68(MxBool p_add)
 	// TODO
 }
 
-// STUB: LEGO1 0x10022080
+// FUNCTION: LEGO1 0x10022080
 MxResult LegoWorld::Tickle()
 {
-	return SUCCESS;
+	if (!m_unk0xf6) {
+		switch (m_unk0xf4) {
+		case 0:
+			m_unk0xf6 = TRUE;
+			SetAppCursor(0);
+			Stop();
+			return TRUE;
+		case 2:
+			if (FUN_100220e0() == 1)
+				break;
+		default:
+			m_unk0xf4--;
+		}
+	}
+	return TRUE;
+}
+
+// STUB: LEGO1 0x100220e0
+undefined LegoWorld::FUN_100220e0()
+{
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10022340

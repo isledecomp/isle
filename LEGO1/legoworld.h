@@ -44,6 +44,7 @@ public:
 
 	inline LegoCameraController* GetCamera() { return m_camera; }
 
+	undefined FUN_100220e0();
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
 	void EndAction(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
@@ -59,8 +60,9 @@ protected:
 	LegoCameraController* m_camera;    // 0x98
 	undefined m_unk0x9c[0x1c];         // 0x9c
 	MxPresenterList m_list0xb8;        // 0xb8
-	undefined m_unk0xd0[0x26];         // 0xd0
-	undefined m_unk0xf6;               // 0xf6
+	undefined m_unk0xd0[0x24];         // 0xd0
+	MxS16 m_unk0xf4;                   // 0xf4
+	MxBool m_unk0xf6;                  // 0xf6
 	undefined m_unk0xf7;               // 0xf7
 };
 
