@@ -18,15 +18,15 @@ MxResult Infocenter::Create(MxDSObject& p_dsObject)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x10070af0
-MxResult Infocenter::Tickle()
+// STUB: LEGO1 0x1006ef10
+MxLong Infocenter::Notify(MxParam& p_param)
 {
 	// TODO
 	return 0;
 }
 
-// STUB: LEGO1 0x1006ef10
-MxLong Infocenter::Notify(MxParam& p_param)
+// STUB: LEGO1 0x10070af0
+MxResult Infocenter::Tickle()
 {
 	// TODO
 	return 0;
