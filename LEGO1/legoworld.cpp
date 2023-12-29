@@ -15,7 +15,7 @@ DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
 {
 	// TODO
-	m_unk0xf6 = 0;
+	m_unk0xf6 = FALSE;
 	m_unk0xf4 = 4;
 	NotificationManager()->Register(this);
 }
@@ -101,14 +101,17 @@ void LegoWorld::VTable0x68(MxBool p_add)
 // FUNCTION: LEGO1 0x10022080
 MxResult LegoWorld::Tickle()
 {
-	if (m_unk0xf6 == 0) {
-		if (m_unk0xf4 == 0) {
-			m_unk0xf6 = 1;
+	if (!m_unk0xf6) {
+		switch (m_unk0xf4) {
+		case 0:
+			m_unk0xf6 = TRUE;
 			SetAppCursor(0);
 			Stop();
 			return TRUE;
-		}
-		if (m_unk0xf4 != 2 && FUN_100220e0() != 1) {
+		case 2:
+			if (FUN_100220e0() == 1)
+				break;
+		default:
 			m_unk0xf4--;
 		}
 	}
@@ -116,7 +119,7 @@ MxResult LegoWorld::Tickle()
 }
 
 // STUB: LEGO1 0x100220e0
-undefined4 LegoWorld::FUN_100220e0()
+undefined LegoWorld::FUN_100220e0()
 {
 	return TRUE;
 }
