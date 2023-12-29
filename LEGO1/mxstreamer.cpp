@@ -79,14 +79,10 @@ MxLong MxStreamer::Close(const char* p_name)
 		if (!p_name || !strcmp(p_name, c->GetAtom().GetInternal())) {
 			m_openStreams.erase(it);
 
-			if (!c->FUN_100c20d0(ds)) {
-				MxStreamerNotification notif(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-
-				NotificationManager()->Send(this, &notif);
-			}
-			else {
+			if (c->FUN_100c20d0(ds))
 				delete c;
-			}
+			else
+				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 
 			return SUCCESS;
 		}
