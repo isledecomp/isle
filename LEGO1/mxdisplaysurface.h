@@ -39,7 +39,15 @@ public:
 		undefined4,
 		undefined4
 	);
-	virtual MxBool VTable0x28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
+	virtual MxBool VTable0x28(
+		MxBitmap* p_bitmap,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height
+	);
 	virtual MxBool VTable0x2c(
 		LPDDSURFACEDESC,
 		MxBitmap*,
@@ -52,13 +60,13 @@ public:
 		MxBool
 	);
 	virtual MxBool VTable0x30(
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
-		undefined4,
+		MxBitmap* p_bitmap,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height,
 		MxBool
 	);
 	virtual undefined4 VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);

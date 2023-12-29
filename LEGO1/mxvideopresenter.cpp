@@ -2,6 +2,7 @@
 
 #include "mxautolocker.h"
 #include "mxdsmediaaction.h"
+#include "mxregioncursor.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
@@ -214,13 +215,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
-		MxS32 height = GetHeight();
-		MxS32 width = GetWidth();
-
-		MxS32 x = m_location.GetX();
-		MxS32 y = m_location.GetY();
-		MxRect32 rect(x, y, x + width, y + height);
-
+		MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 		MVideoManager()->InvalidateRect(rect);
 		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
@@ -312,10 +307,135 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100b2a70
+inline MxS32 MxVideoPresenter::PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc)
+{
+	if (p_rectDest.GetTop() > 480 || p_rectDest.GetLeft() > 640 || p_rectSrc.GetTop() > 480 ||
+		p_rectSrc.GetLeft() > 640)
+		return -1;
+
+	if (p_rectDest.GetBottom() > 480)
+		p_rectDest.SetBottom(480);
+
+	if (p_rectDest.GetRight() > 640)
+		p_rectDest.SetRight(640);
+
+	if (p_rectSrc.GetBottom() > 480)
+		p_rectSrc.SetBottom(480);
+
+	if (p_rectSrc.GetRight() > 640)
+		p_rectSrc.SetRight(640);
+
+	MxS32 height = p_rectDest.GetHeight();
+	if (height <= 1)
+		return -1;
+
+	MxS32 width = p_rectDest.GetWidth();
+	if (width <= 1)
+		return -1;
+
+	if (p_rectSrc.GetRight() - width - p_rectSrc.GetLeft() == -1 &&
+		p_rectSrc.GetBottom() - height - p_rectSrc.GetTop() == -1)
+		return 1;
+
+	p_rectSrc.SetRight(p_rectSrc.GetLeft() + width - 1);
+	p_rectSrc.SetBottom(p_rectSrc.GetTop() + height - 1);
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x100b2a70
 void MxVideoPresenter::PutFrame()
 {
-	// TODO
+	MxDisplaySurface* displaySurface = MVideoManager()->GetDisplaySurface();
+	MxRegion* region = MVideoManager()->GetRegion();
+	MxRect32 rect(m_location, MxSize32(GetWidth() - 1, GetHeight() - 1));
+	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
+
+	MxRect32 rectSrc, rectDest;
+	if (m_action->GetFlags() & MxDSAction::Flag_Bit5) {
+		if (m_unk0x58) {
+			rectSrc.CopyFrom(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
+			rectDest.CopyFrom(m_location, MxSize32(GetWidth(), GetHeight()));
+
+			switch (PrepareRects(rectDest, rectSrc)) {
+			case 0:
+				ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
+				break;
+			case 1:
+				ddSurface->BltFast(
+					rectDest.GetLeft(),
+					rectDest.GetTop(),
+					m_unk0x58,
+					(LPRECT) &rectSrc,
+					DDBLTFAST_SRCCOLORKEY | DDBLTFAST_WAIT
+				);
+			}
+		}
+		else {
+			displaySurface->VTable0x30(
+				m_bitmap,
+				0,
+				0,
+				rect.GetLeft(),
+				rect.GetTop(),
+				m_bitmap->GetBmiWidth(),
+				m_bitmap->GetBmiHeightAbs(),
+				TRUE
+			);
+		}
+	}
+	else {
+		MxRegionCursor cursor(region);
+		MxRect32* regionRect;
+
+		while (regionRect = cursor.VTable0x24(rect)) {
+			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
+				if (m_unk0x58) {
+					rectSrc.CopyFrom(
+						MxPoint32(regionRect->GetLeft() - m_location.GetX(), regionRect->GetTop() - m_location.GetY()),
+						MxSize32(regionRect->GetWidth(), regionRect->GetHeight())
+					);
+					rectDest.CopyFrom(
+						MxPoint32(regionRect->GetLeft(), regionRect->GetTop()),
+						MxSize32(regionRect->GetWidth(), regionRect->GetHeight())
+					);
+				}
+
+				if (m_action->GetFlags() & MxDSAction::Flag_Bit4) {
+					if (m_unk0x58) {
+						if (PrepareRects(rectDest, rectSrc) >= 0)
+							ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
+					}
+					else {
+						displaySurface->VTable0x30(
+							m_bitmap,
+							regionRect->GetLeft() - m_location.GetX(),
+							regionRect->GetTop() - m_location.GetY(),
+							regionRect->GetLeft(),
+							regionRect->GetTop(),
+							regionRect->GetWidth(),
+							regionRect->GetHeight(),
+							FALSE
+						);
+					}
+				}
+				else if (m_unk0x58) {
+					if (PrepareRects(rectDest, rectSrc) >= 0)
+						ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, 0, NULL);
+				}
+				else {
+					displaySurface->VTable0x28(
+						m_bitmap,
+						regionRect->GetLeft() - m_location.GetX(),
+						regionRect->GetTop() - m_location.GetY(),
+						regionRect->GetLeft(),
+						regionRect->GetTop(),
+						regionRect->GetWidth(),
+						regionRect->GetHeight()
+					);
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100b2f60

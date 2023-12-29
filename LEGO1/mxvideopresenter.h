@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxbitmap.h"
 #include "mxmediapresenter.h"
+#include "mxrect32.h"
 
 // VTABLE: LEGO1 0x100d4be8
 // SIZE 0x64
@@ -68,6 +69,7 @@ public:
 		MxS32 IsHit(MxU32 p_x, MxU32 p_y);
 	};
 
+	inline MxS32 PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc);
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
 
 private:
