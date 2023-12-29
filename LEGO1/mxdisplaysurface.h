@@ -16,19 +16,15 @@ public:
 	MxDisplaySurface();
 	virtual ~MxDisplaySurface() override;
 
-	void Reset();
-
-	void FUN_100ba640();
-
 	virtual MxResult Init(
 		MxVideoParam& p_videoParam,
 		LPDIRECTDRAWSURFACE p_ddSurface1,
 		LPDIRECTDRAWSURFACE p_ddSurface2,
 		LPDIRECTDRAWCLIPPER p_ddClipper
-	);
-	virtual MxResult Create(MxVideoParam& p_videoParam);
-	virtual void Clear();
-	virtual void SetPalette(MxPalette* p_palette);
+	);                                                   // vtable+0x14
+	virtual MxResult Create(MxVideoParam& p_videoParam); // vtable+0x18
+	virtual void Clear();                                // vtable+0x1c
+	virtual void SetPalette(MxPalette* p_palette);       // vtable+0x20
 	virtual void VTable0x24(
 		LPDDSURFACEDESC,
 		MxBitmap*,
@@ -38,7 +34,7 @@ public:
 		undefined4,
 		undefined4,
 		undefined4
-	);
+	); // vtable+0x24
 	virtual MxBool VTable0x28(
 		MxBitmap* p_bitmap,
 		MxS32 p_left,
@@ -47,7 +43,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);
+	); // vtable+0x28
 	virtual MxBool VTable0x2c(
 		LPDDSURFACEDESC,
 		MxBitmap*,
@@ -58,7 +54,7 @@ public:
 		undefined4,
 		undefined4,
 		MxBool
-	);
+	); // vtable+0x2c
 	virtual MxBool VTable0x30(
 		MxBitmap* p_bitmap,
 		MxS32 p_left,
@@ -68,25 +64,43 @@ public:
 		MxS32 p_width,
 		MxS32 p_height,
 		MxBool
-	);
-	virtual undefined4 VTable0x34(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
-	virtual void Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p_top2, MxS32 p_width, MxS32 p_height);
-	virtual void GetDC(HDC* p_hdc);
-	virtual void ReleaseDC(HDC p_hdc);
-	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4);
+	); // vtable+0x30
+	virtual undefined4 VTable0x34(
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4,
+		undefined4
+	); // vtable+0x34
+	virtual void Display(
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_left2,
+		MxS32 p_top2,
+		MxS32 p_width,
+		MxS32 p_height
+	);                                                                                      // vtable+0x38
+	virtual void GetDC(HDC* p_hdc);                                                         // vtable+0x3c
+	virtual void ReleaseDC(HDC p_hdc);                                                      // vtable+0x40
+	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4); // vtable+0x44
+
+	void FUN_100ba640();
 
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 
 private:
-	MxVideoParam m_videoParam;
-	LPDIRECTDRAWSURFACE m_ddSurface1;
-	LPDIRECTDRAWSURFACE m_ddSurface2;
-	LPDIRECTDRAWCLIPPER m_ddClipper;
-	MxBool m_initialized;
-	DDSURFACEDESC m_surfaceDesc;
-	MxU16* m_16bitPal;
+	void Reset();
+
+	MxVideoParam m_videoParam;        // 0x08
+	LPDIRECTDRAWSURFACE m_ddSurface1; // 0x2c
+	LPDIRECTDRAWSURFACE m_ddSurface2; // 0x30
+	LPDIRECTDRAWCLIPPER m_ddClipper;  // 0x34
+	MxBool m_initialized;             // 0x38
+	DDSURFACEDESC m_surfaceDesc;      // 0x3c
+	MxU16* m_16bitPal;                // 0xa8
 };
 
 #endif // MXDISPLAYSURFACE_H
