@@ -183,13 +183,10 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		MxStreamController* c = static_cast<MxStreamerNotification&>(p_param).GetController();
 
-		if (!c->FUN_100c20d0(ds)) {
-			MxStreamerNotification notif(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-			NotificationManager()->Send(this, &notif);
-		}
-		else {
+		if (c->FUN_100c20d0(ds))
 			delete c;
-		}
+		else
+			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 	}
 
 	return 0;
