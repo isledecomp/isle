@@ -18,11 +18,14 @@ public:
 	virtual MxBool VTable0x1c(MxRect32& p_rect); // vtable+0x1c
 	virtual MxBool VTable0x20();                 // vtable+0x20
 
-	inline MxRect32& GetRect() { return this->m_rect; }
+	inline MxRegionTopBottomList* GetTopBottomList() const { return m_list; }
+	inline const MxRect32& GetRect() const { return m_rect; }
+
+	friend class MxRegionCursor;
 
 private:
-	MxRegionList* m_list; // 0x08
-	MxRect32 m_rect;      // 0x0c
+	MxRegionTopBottomList* m_list; // 0x08
+	MxRect32 m_rect;               // 0x0c
 };
 
 #endif // MXREGION_H

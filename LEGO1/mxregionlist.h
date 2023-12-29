@@ -19,9 +19,11 @@ struct MxRegionLeftRight {
 	inline void SetLeft(MxS32 p_left) { m_left = p_left; }
 	inline void SetRight(MxS32 p_right) { m_right = p_right; }
 
+	inline MxBool IntersectsWith(MxRect32& p_rect) { return m_left < p_rect.GetRight() && p_rect.GetTop() < m_right; }
+
 private:
-	MxS32 m_left;
-	MxS32 m_right;
+	MxS32 m_left;  // 0x00
+	MxS32 m_right; // 0x04
 };
 
 // VTABLE: LEGO1 0x100dcc40
@@ -68,12 +70,15 @@ struct MxRegionTopBottom {
 	inline void SetTop(MxS32 p_top) { m_top = p_top; }
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
-	friend class MxRegionList;
+	inline MxBool IntersectsWith(MxRect32& p_rect) { return m_top < p_rect.GetBottom() && p_rect.GetTop() < m_bottom; }
+
+	friend class MxRegionTopBottomList;
+	friend class MxRegionCursor;
 
 private:
-	MxS32 m_top;
-	MxS32 m_bottom;
-	MxRegionLeftRightList* m_leftRightList;
+	MxS32 m_top;                            // 0x00
+	MxS32 m_bottom;                         // 0x04
+	MxRegionLeftRightList* m_leftRightList; // 0x08
 };
 
 // VTABLE: LEGO1 0x100dcb10
@@ -87,9 +92,9 @@ private:
 
 // VTABLE: LEGO1 0x100dcb58
 // SIZE 0x18
-class MxRegionList : public MxPtrList<MxRegionTopBottom> {
+class MxRegionTopBottomList : public MxPtrList<MxRegionTopBottom> {
 public:
-	MxRegionList() : MxPtrList<MxRegionTopBottom>(TRUE) {}
+	MxRegionTopBottomList() : MxPtrList<MxRegionTopBottom>(TRUE) {}
 };
 
 // VTABLE: LEGO1 0x100dcb70
@@ -98,14 +103,14 @@ public:
 // VTABLE: LEGO1 0x100dcba0
 // class MxListCursor<MxRegionTopBottom *>
 
-// TODO: The initialize list param type should be MxRegionList, but doing that
+// TODO: The initialize list param type should be MxRegionTopBottomList, but doing that
 // drastically reduced the match percentage for MxRegion::VTable0x18.
 // It also works with MxPtrList, so we'll do that until we figure this out.
 
 // VTABLE: LEGO1 0x100dcb88
-class MxRegionListCursor : public MxPtrListCursor<MxRegionTopBottom> {
+class MxRegionTopBottomListCursor : public MxPtrListCursor<MxRegionTopBottom> {
 public:
-	MxRegionListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
+	MxRegionTopBottomListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
 };
 
 // TEMPLATE: LEGO1 0x100c32e0
@@ -127,7 +132,7 @@ public:
 // MxPtrList<MxRegionTopBottom>::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100c3be0
-// MxRegionListCursor::`scalar deleting destructor'
+// MxRegionTopBottomListCursor::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100c3c50
 // MxPtrListCursor<MxRegionTopBottom>::~MxPtrListCursor<MxRegionTopBottom>
@@ -142,7 +147,7 @@ public:
 // MxListCursor<MxRegionTopBottom *>::~MxListCursor<MxRegionTopBottom *>
 
 // FUNCTION: LEGO1 0x100c3dd0
-// MxRegionListCursor::~MxRegionListCursor
+// MxRegionTopBottomListCursor::~MxRegionTopBottomListCursor
 
 // SYNTHETIC: LEGO1 0x100c4790
 // MxRegionLeftRightListCursor::`scalar deleting destructor'

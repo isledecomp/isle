@@ -92,13 +92,23 @@ public:
 	void Detach();
 	void Destroy();
 	MxBool Next(T& p_obj);
+	MxBool Prev(T& p_obj);
 	MxBool Current(T& p_obj);
 	MxBool First(T& p_obj);
 	MxBool Last(T& p_obj);
 	MxBool Advance();
 	MxBool HasMatch() { return m_match != NULL; }
 	void SetValue(T p_obj);
-	void Head() { m_match = m_list->m_first; }
+	MxBool Head()
+	{
+		m_match = m_list->m_first;
+		return m_match != NULL;
+	}
+	MxBool Tail()
+	{
+		m_match = m_list->m_last;
+		return m_match != NULL;
+	}
 	void Reset() { m_match = NULL; }
 	void Prepend(T p_newobj);
 
@@ -110,8 +120,8 @@ public:
 	}
 
 private:
-	MxList<T>* m_list;
-	MxListEntry<T>* m_match;
+	MxList<T>* m_list;       // 0x08
+	MxListEntry<T>* m_match; // 0x0c
 };
 
 template <class T>
@@ -219,6 +229,20 @@ inline MxBool MxListCursor<T>::Next(T& p_obj)
 		m_match = m_list->m_first;
 	else
 		m_match = m_match->GetNext();
+
+	if (m_match)
+		p_obj = m_match->GetValue();
+
+	return m_match != NULL;
+}
+
+template <class T>
+inline MxBool MxListCursor<T>::Prev(T& p_obj)
+{
+	if (!m_match)
+		m_match = m_list->m_last;
+	else
+		m_match = m_match->GetPrev();
 
 	if (m_match)
 		p_obj = m_match->GetValue();
