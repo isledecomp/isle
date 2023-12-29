@@ -110,10 +110,10 @@ private:
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
 	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
 
-	MxS32 m_left;
-	MxS32 m_top;
-	MxS32 m_right;
-	MxS32 m_bottom;
+	MxS32 m_left;   // 0x00
+	MxS32 m_top;    // 0x04
+	MxS32 m_right;  // 0x08
+	MxS32 m_bottom; // 0x0c
 };
 
 #endif // MXRECT32_H

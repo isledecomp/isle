@@ -47,7 +47,7 @@ public:
 	virtual void CreateBitmap();                         // vtable+0x60
 	virtual void NextFrame();                            // vtable+0x64
 	virtual void LoadFrame(MxStreamChunk* p_chunk);      // vtable+0x68
-	virtual void VTable0x6c();                           // vtable+0x6c
+	virtual void PutFrame();                             // vtable+0x6c
 	virtual void RealizePalette();                       // vtable+0x70
 	virtual undefined VTable0x74();                      // vtable+0x74
 	virtual LPDIRECTDRAWSURFACE VTable0x78();            // vtable+0x78

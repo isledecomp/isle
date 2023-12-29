@@ -313,7 +313,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 }
 
 // STUB: LEGO1 0x100b2a70
-void MxVideoPresenter::VTable0x6c()
+void MxVideoPresenter::PutFrame()
 {
 	// TODO
 }
@@ -482,7 +482,7 @@ MxResult MxVideoPresenter::PutData()
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (IsEnabled() && m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_unk5)
-		VTable0x6c();
+		PutFrame();
 
 	return SUCCESS;
 }
