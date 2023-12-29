@@ -92,7 +92,7 @@ public:
 	void Detach();
 	void Destroy();
 	MxBool Next(T& p_obj);
-	MxBool Previous(T& p_obj);
+	MxBool Prev(T& p_obj);
 	MxBool Current(T& p_obj);
 	MxBool First(T& p_obj);
 	MxBool Last(T& p_obj);
@@ -237,7 +237,7 @@ inline MxBool MxListCursor<T>::Next(T& p_obj)
 }
 
 template <class T>
-inline MxBool MxListCursor<T>::Previous(T& p_obj)
+inline MxBool MxListCursor<T>::Prev(T& p_obj)
 {
 	if (!m_match)
 		m_match = m_list->m_last;

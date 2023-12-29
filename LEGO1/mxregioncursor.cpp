@@ -95,14 +95,14 @@ MxRect32* MxRegionCursor::VTable0x30()
 	MxRegionLeftRight* leftRight;
 	MxRegionTopBottom* topBottom;
 
-	if (m_leftRightCursor && m_leftRightCursor->Previous(leftRight)) {
+	if (m_leftRightCursor && m_leftRightCursor->Prev(leftRight)) {
 		m_topBottomCursor->Current(topBottom);
 
 		UpdateRect(leftRight->GetLeft(), topBottom->GetTop(), leftRight->GetRight(), topBottom->GetBottom());
 		return m_rect;
 	}
 
-	if (m_topBottomCursor->Previous(topBottom)) {
+	if (m_topBottomCursor->Prev(topBottom)) {
 		FUN_100c46c0(*topBottom->m_leftRightList);
 		m_leftRightCursor->Last(leftRight);
 
@@ -158,7 +158,7 @@ MxRect32* MxRegionCursor::VTable0x2c(MxRect32& p_rect)
 {
 	MxRegionLeftRight* leftRight;
 
-	if (m_leftRightCursor && m_leftRightCursor->Previous(leftRight)) {
+	if (m_leftRightCursor && m_leftRightCursor->Prev(leftRight)) {
 		MxRegionTopBottom* topBottom;
 
 		m_topBottomCursor->Current(topBottom);
@@ -252,7 +252,7 @@ void MxRegionCursor::FUN_100c4a20(MxRect32& p_rect)
 void MxRegionCursor::FUN_100c4b50(MxRect32& p_rect)
 {
 	MxRegionTopBottom* topBottom;
-	while (m_topBottomCursor->Previous(topBottom)) {
+	while (m_topBottomCursor->Prev(topBottom)) {
 		if (topBottom->GetBottom() <= p_rect.GetTop()) {
 			Reset();
 			return;
@@ -262,7 +262,7 @@ void MxRegionCursor::FUN_100c4b50(MxRect32& p_rect)
 			FUN_100c46c0(*topBottom->m_leftRightList);
 
 			MxRegionLeftRight* leftRight;
-			while (m_leftRightCursor->Previous(leftRight)) {
+			while (m_leftRightCursor->Prev(leftRight)) {
 				if (leftRight->GetRight() <= p_rect.GetLeft())
 					break;
 
