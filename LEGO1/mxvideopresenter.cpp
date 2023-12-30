@@ -222,7 +222,6 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MxS32 y = m_location.GetY();
 
 		MxRect32 rect(x, y, x + width, y + height);
-
 		MVideoManager()->InvalidateRect(rect);
 		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
