@@ -183,7 +183,6 @@ void MxStillPresenter::Enable(MxBool p_enable)
 		MxS32 y = m_location.GetY();
 
 		MxRect32 rect(x, y, width + x, height + y);
-
 		MVideoManager()->InvalidateRect(rect);
 		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
