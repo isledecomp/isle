@@ -418,7 +418,7 @@ void MxDisplaySurface::VTable0x28(
 									surface += 4;
 									*((MxU16*) surface - 2) = element;
 									--v38;
-									*((MxU16*) surface - 2) = element;
+									*((MxU16*) surface - 1) = element;
 								} while (v38);
 							}
 
@@ -443,7 +443,7 @@ void MxDisplaySurface::VTable0x28(
 									surface += 4;
 									*((MxU16*) surface - 2) = element;
 									--v34;
-									*((MxU16*) surface - 2) = element;
+									*((MxU16*) surface - 1) = element;
 								} while (v34);
 							}
 
@@ -492,7 +492,6 @@ void MxDisplaySurface::VTable0x28(
 						for (MxU32 k = 0; p_width > k; k++) {
 							MxU8 v53 = *data++;
 							surface += 2;
-							//*(MxU16*) (surface - 2) = *(MxU16*) (*(MxU32*) (&m_16bitPal) + 2 * v53);
 							*(MxU16*) (surface - 2) = m_16bitPal[v53];
 						}
 						data += v50;
