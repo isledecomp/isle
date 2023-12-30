@@ -215,7 +215,13 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
-		MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
+		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
+		MxS32 height = GetHeight();
+		MxS32 width = GetWidth();
+		MxS32 x = m_location.GetX();
+		MxS32 y = m_location.GetY();
+
+		MxRect32 rect(x, y, x + width, y + height);
 		MVideoManager()->InvalidateRect(rect);
 		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
@@ -347,15 +353,20 @@ void MxVideoPresenter::PutFrame()
 {
 	MxDisplaySurface* displaySurface = MVideoManager()->GetDisplaySurface();
 	MxRegion* region = MVideoManager()->GetRegion();
-	MxRect32 rect(m_location, MxSize32(GetWidth() - 1, GetHeight() - 1));
+	MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
 	MxRect32 rectSrc, rectDest;
 	if (m_action->GetFlags() & MxDSAction::Flag_Bit5) {
 		if (m_unk0x58) {
 			// TODO: Match
-			rectSrc.CopyFrom(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
-			rectDest.CopyFrom(m_location, MxSize32(GetWidth(), GetHeight()));
+			rectSrc.SetPoint(MxPoint32(0, 0));
+			rectSrc.SetRight(GetWidth());
+			rectSrc.SetBottom(GetHeight());
+
+			rectDest.SetPoint(m_location);
+			rectDest.SetRight(rectDest.GetLeft() + GetWidth());
+			rectDest.SetBottom(rectDest.GetTop() + GetHeight());
 
 			switch (PrepareRects(rectDest, rectSrc)) {
 			case 0:
@@ -391,15 +402,15 @@ void MxVideoPresenter::PutFrame()
 		while (regionRect = cursor.VTable0x24(rect)) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				if (m_unk0x58) {
-					// TODO: Match
-					rectSrc.CopyFrom(
-						MxPoint32(regionRect->GetLeft() - m_location.GetX(), regionRect->GetTop() - m_location.GetY()),
-						MxSize32(regionRect->GetWidth(), regionRect->GetHeight())
-					);
-					rectDest.CopyFrom(
-						MxPoint32(regionRect->GetLeft(), regionRect->GetTop()),
-						MxSize32(regionRect->GetWidth(), regionRect->GetHeight())
-					);
+					rectSrc.SetLeft(regionRect->GetLeft() - m_location.GetX());
+					rectSrc.SetTop(regionRect->GetTop() - m_location.GetY());
+					rectSrc.SetRight(rectSrc.GetLeft() + regionRect->GetWidth());
+					rectSrc.SetBottom(rectSrc.GetTop() + regionRect->GetHeight());
+
+					rectDest.SetLeft(regionRect->GetLeft());
+					rectDest.SetTop(regionRect->GetTop());
+					rectDest.SetRight(rectDest.GetLeft() + regionRect->GetWidth());
+					rectDest.SetBottom(rectDest.GetTop() + regionRect->GetHeight());
 				}
 
 				if (m_action->GetFlags() & MxDSAction::Flag_Bit4) {
