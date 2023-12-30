@@ -47,6 +47,7 @@ add_library(lego1 SHARED
   LEGO1/jukebox.cpp
   LEGO1/jukeboxentity.cpp
   LEGO1/jukeboxstate.cpp
+  LEGO1/lego3dmanager.cpp
   LEGO1/lego3dview.cpp
   LEGO1/legoact2state.cpp
   LEGO1/legoactioncontrolpresenter.cpp
@@ -161,6 +162,8 @@ add_library(lego1 SHARED
   LEGO1/mxramstreamcontroller.cpp
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
+  LEGO1/mxregioncursor.cpp
+  LEGO1/mxrendersettings.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmack.cpp
@@ -292,7 +295,7 @@ if (MSVC)
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
-    target_compile_options(isle PRIVATE "/ML$<$<CONFIG:Debug>:d>")
+    target_compile_options(isle PRIVATE "/MT$<$<CONFIG:Debug>:d>")
   endif()
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 

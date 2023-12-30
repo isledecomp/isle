@@ -24,10 +24,15 @@ void MxLoopingFlcPresenter::Init()
 	this->m_flags &= ~Flag_Bit3;
 }
 
-// STUB: LEGO1 0x100b4432
+// FUNCTION: LEGO1 0x100b4430
 void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
+	m_criticalSection.Enter();
+	Init();
+	m_criticalSection.Leave();
+
+	if (!p_fromDestructor)
+		MxFlcPresenter::Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b4470

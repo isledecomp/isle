@@ -8,22 +8,8 @@
 class MxRect32 {
 public:
 	MxRect32() {}
-	MxRect32(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom)
-	{
-		this->m_left = p_left;
-		this->m_top = p_top;
-		this->m_right = p_right;
-		this->m_bottom = p_bottom;
-	}
-
-	MxRect32(const MxPoint32& p_point, const MxSize32& p_size)
-	{
-		this->m_left = p_point.GetX();
-		this->m_top = p_point.GetY();
-		this->m_right = p_size.GetWidth();
-		this->m_bottom = p_size.GetHeight();
-	}
-
+	MxRect32(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom) { CopyFrom(p_left, p_top, p_right, p_bottom); }
+	MxRect32(const MxPoint32& p_point, const MxSize32& p_size) { CopyFrom(p_point, p_size); }
 	MxRect32(const MxRect32& p_a, const MxRect32& p_b)
 	{
 		m_left = Max(p_a.m_left, p_b.m_left);
@@ -62,10 +48,12 @@ public:
 		this->m_bottom += p_point.GetY();
 	}
 
-	inline void SetSize(const MxSize32& p_size)
+	inline void SubtractPoint(const MxPoint32& p_point)
 	{
-		this->m_right = p_size.GetWidth();
-		this->m_bottom = p_size.GetHeight();
+		this->m_left -= p_point.GetX();
+		this->m_top -= p_point.GetY();
+		this->m_right -= p_point.GetX();
+		this->m_bottom -= p_point.GetY();
 	}
 
 	inline void UpdateBounds(const MxRect32& p_rect)
@@ -99,6 +87,14 @@ public:
 	inline void SetBottom(MxS32 p_bottom) { m_bottom = p_bottom; }
 
 private:
+	inline void CopyFrom(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom)
+	{
+		this->m_left = p_left;
+		this->m_top = p_top;
+		this->m_right = p_right;
+		this->m_bottom = p_bottom;
+	}
+
 	inline void CopyFrom(const MxRect32& p_rect)
 	{
 		this->m_left = p_rect.m_left;
@@ -107,13 +103,24 @@ private:
 		this->m_bottom = p_rect.m_bottom;
 	}
 
+	// The address might also be the constructor that calls CopyFrom
+	// FUNCTION: LEGO1 0x100b6fc0
+	inline MxRect32* CopyFrom(const MxPoint32& p_point, const MxSize32& p_size)
+	{
+		this->m_left = p_point.GetX();
+		this->m_top = p_point.GetY();
+		this->m_right = p_size.GetWidth() + p_point.GetX() - 1;
+		this->m_bottom = p_size.GetHeight() + p_point.GetY() - 1;
+		return this;
+	}
+
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
 	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
 
-	MxS32 m_left;
-	MxS32 m_top;
-	MxS32 m_right;
-	MxS32 m_bottom;
+	MxS32 m_left;   // 0x00
+	MxS32 m_top;    // 0x04
+	MxS32 m_right;  // 0x08
+	MxS32 m_bottom; // 0x0c
 };
 
 #endif // MXRECT32_H

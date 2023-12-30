@@ -19,6 +19,9 @@ const char* g_strWORLD = "WORLD";
 // GLOBAL: LEGO1 0x10101f20
 const char* g_strSOUND = "SOUND";
 
+// GLOBAL: LEGO1 0x10101f58
+const char* g_strOBJECT = "OBJECT";
+
 // GLOBAL: LEGO1 0x10102040
 const char* g_strACTION = "ACTION";
 

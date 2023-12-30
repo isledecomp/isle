@@ -9,9 +9,10 @@
 class MxUnknown100dbdbc {
 public:
 	MxUnknown100dbdbc();
+	virtual ~MxUnknown100dbdbc();
 
 private:
-	undefined m_unk0x4[0x14]; // TODO: change to 0x10 once scalar deconstructor is added
+	undefined m_unk0x4[0x10];
 };
 
 #endif // MXUNKNOWN100DBDBC_H

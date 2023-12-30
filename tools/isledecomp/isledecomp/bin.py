@@ -1,4 +1,6 @@
 import struct
+from typing import List, Optional
+from dataclasses import dataclass
 from collections import namedtuple
 
 
@@ -33,44 +35,56 @@ PEHeader = namedtuple(
     ],
 )
 
-ImageSectionHeader = namedtuple(
-    "ImageSectionHeader",
-    [
-        "Name",
-        "Misc",
-        "VirtualAddress",
-        "SizeOfRawData",
-        "PointerToRawData",
-        "PointerToRelocations",
-        "PointerToLineNumbers",
-        "NumberOfRelocations",
-        "NumberOfLineNumbers",
-        "Characteristics",
-    ],
-)
 
+@dataclass
+class ImageSectionHeader:
+    # pylint: disable=too-many-instance-attributes
+    # Most attributes are unused, but this is the struct format
+    name: bytes
+    virtual_size: int
+    virtual_address: int
+    size_of_raw_data: int
+    pointer_to_raw_data: int
+    pointer_to_relocations: int
+    pointer_to_line_numbers: int
+    number_of_relocations: int
+    number_of_line_numbers: int
+    characteristics: int
 
-def section_name_match(section, name):
-    return section.Name == struct.pack("8s", name.encode("ascii"))
+    def match_name(self, name: str) -> bool:
+        return self.name == struct.pack("8s", name.encode("ascii"))
 
+    def contains_vaddr(self, vaddr: int) -> bool:
+        ofs = vaddr - self.virtual_address
+        return 0 <= ofs < max(self.size_of_raw_data, self.virtual_size)
 
-def section_contains_vaddr(section, imagebase, vaddr) -> bool:
-    debased = vaddr - imagebase
-    ofs = debased - section.VirtualAddress
-    return 0 <= ofs < section.SizeOfRawData
+    def addr_is_uninitialized(self, vaddr: int) -> bool:
+        """We cannot rely on the IMAGE_SCN_CNT_UNINITIALIZED_DATA flag (0x80) in
+        the characteristics field so instead we determine it this way."""
+        if not self.contains_vaddr(vaddr):
+            return False
+
+        # Should include the case where size_of_raw_data == 0,
+        # meaning the entire section is uninitialized
+        return (self.virtual_size > self.size_of_raw_data) and (
+            vaddr - self.virtual_address >= self.size_of_raw_data
+        )
 
 
 class Bin:
     """Parses a PE format EXE and allows reading data from a virtual address.
     Reference: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format"""
 
-    def __init__(self, filename, logger=None):
+    # pylint: disable=too-many-instance-attributes
+
+    def __init__(self, filename: str, logger=None) -> None:
         self.logger = logger
         self._debuglog(f'Parsing headers of "{filename}"... ')
         self.filename = filename
         self.file = None
         self.imagebase = None
-        self.sections = []
+        self.entry = None
+        self.sections: List[ImageSectionHeader] = []
         self.last_section = None
         self._relocated_addrs = set()
 
@@ -95,11 +109,17 @@ class Bin:
 
         optional_hdr = self.file.read(pe_hdr.SizeOfOptionalHeader)
         (self.imagebase,) = struct.unpack("<i", optional_hdr[0x1C:0x20])
+        (entry,) = struct.unpack("<i", optional_hdr[0x10:0x14])
+        self.entry = entry + self.imagebase
 
         self.sections = [
             ImageSectionHeader(*struct.unpack("<8s6I2HI", self.file.read(0x28)))
             for i in range(pe_hdr.NumberOfSections)
         ]
+
+        # Add the imagebase here because we almost never need the base vaddr without it
+        for sect in self.sections:
+            sect.virtual_address += self.imagebase
 
         self._populate_relocations()
 
@@ -119,7 +139,7 @@ class Bin:
         if self.logger is not None:
             self.logger.debug(msg)
 
-    def get_relocated_addresses(self):
+    def get_relocated_addresses(self) -> List[int]:
         return sorted(self._relocated_addrs)
 
     def is_relocated_addr(self, vaddr) -> bool:
@@ -165,27 +185,25 @@ class Bin:
             (relocated_addr,) = struct.unpack("<I", self.read(addr, 4))
             self._relocated_addrs.add(relocated_addr)
 
-    def _set_section_for_vaddr(self, vaddr):
-        if self.last_section is not None and section_contains_vaddr(
-            self.last_section, self.imagebase, vaddr
-        ):
+    def _set_section_for_vaddr(self, vaddr: int):
+        if self.last_section is not None and self.last_section.contains_vaddr(vaddr):
             return
 
         # TODO: assumes no potential for section overlap. reasonable?
         self.last_section = next(
             filter(
-                lambda section: section_contains_vaddr(section, self.imagebase, vaddr),
+                lambda section: section.contains_vaddr(vaddr),
                 self.sections,
             ),
             None,
         )
 
         if self.last_section is None:
-            raise InvalidVirtualAddressError
+            raise InvalidVirtualAddressError(f"0x{vaddr:08x}")
 
-    def _get_section_by_name(self, name):
+    def _get_section_by_name(self, name: str):
         section = next(
-            filter(lambda section: section_name_match(section, name), self.sections),
+            filter(lambda section: section.match_name(name), self.sections),
             None,
         )
 
@@ -194,7 +212,7 @@ class Bin:
 
         return section
 
-    def get_section_offset_by_index(self, index) -> int:
+    def get_section_offset_by_index(self, index: int) -> int:
         """The symbols output from cvdump gives addresses in this format: AAAA.BBBBBBBB
         where A is the index (1-based) into the section table and B is the local offset.
         This will return the virtual address for the start of the section at the given index
@@ -202,29 +220,33 @@ class Bin:
         """
 
         section = self.sections[index - 1]
-        return self.imagebase + section.VirtualAddress
+        return section.virtual_address
 
-    def get_section_offset_by_name(self, name) -> int:
+    def get_section_offset_by_name(self, name: str) -> int:
         """Same as above, but use the section name as the lookup"""
 
         section = self._get_section_by_name(name)
-        return self.imagebase + section.VirtualAddress
+        return section.virtual_address
 
-    def get_raw_addr(self, vaddr) -> int:
+    def get_abs_addr(self, section: int, offset: int) -> int:
+        """Convenience function for converting section:offset pairs from cvdump
+        into an absolute vaddr."""
+        return self.get_section_offset_by_index(section) + offset
+
+    def get_raw_addr(self, vaddr: int) -> int:
         """Returns the raw offset in the PE binary for the given virtual address."""
         self._set_section_for_vaddr(vaddr)
         return (
             vaddr
-            - self.imagebase
-            - self.last_section.VirtualAddress
-            + self.last_section.PointerToRawData
+            - self.last_section.virtual_address
+            + self.last_section.pointer_to_raw_data
         )
 
-    def is_valid_vaddr(self, vaddr) -> bool:
+    def is_valid_vaddr(self, vaddr: int) -> bool:
         """Does this virtual address point to anything in the exe?"""
         section = next(
             filter(
-                lambda section: section_contains_vaddr(section, self.imagebase, vaddr),
+                lambda section: section.contains_vaddr(vaddr),
                 self.sections,
             ),
             None,
@@ -232,8 +254,13 @@ class Bin:
 
         return section is not None
 
-    def read(self, offset, size):
+    def read(self, offset: int, size: int) -> Optional[bytes]:
+        """Read (at most) the given number of bytes at the given virtual address.
+        If we return None, the given address points to uninitialized data."""
         self._set_section_for_vaddr(offset)
+
+        if self.last_section.addr_is_uninitialized(offset):
+            return None
 
         raw_addr = self.get_raw_addr(offset)
         self.file.seek(raw_addr)
@@ -242,8 +269,8 @@ class Bin:
         # Reading off the end will most likely misrepresent the virtual addressing.
         _size = min(
             size,
-            self.last_section.PointerToRawData
-            + self.last_section.SizeOfRawData
+            self.last_section.pointer_to_raw_data
+            + self.last_section.size_of_raw_data
             - raw_addr,
         )
         return self.file.read(_size)

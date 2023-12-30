@@ -16,7 +16,7 @@ public:
 	// FUNCTION: LEGO1 0x1000d6c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x100f07b4
+		// STRING: LEGO1 0x100f07b4
 		return "MxWavePresenter";
 	}
 
@@ -50,9 +50,11 @@ public:
 		MxU32 m_flags;
 	};
 
+protected:
+	void Destroy(MxBool p_fromDestructor);
+
 private:
 	void Init();
-	void Destroy(MxBool p_fromDestructor);
 	MxS8 GetPlayedChunks();
 	MxBool FUN_100b1ba0();
 	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);

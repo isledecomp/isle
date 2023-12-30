@@ -1,8 +1,13 @@
 #include "legoutil.h"
 
+#include "legoomni.h"
+#include "legoworld.h"
+#include "mxdsaction.h"
 #include "mxomni.h"
+#include "mxstreamer.h"
 #include "mxtypes.h"
 
+#include <process.h>
 #include <string.h>
 
 // FUNCTION: LEGO1 0x1003e300
@@ -34,8 +39,79 @@ ExtraActionType MatchActionString(const char* p_str)
 	return result;
 }
 
-// STUB: LEGO1 0x1003e430
+MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_entityId);
+void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender);
+
+// FUNCTION: LEGO1 0x1003e430
 void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
+{
+	MxDSAction action;
+	action.SetAtomId(p_pAtom);
+	action.SetObjectId(p_targetEntityId);
+
+	switch (p_actionId) {
+	case ExtraActionType_opendisk:
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_DiskStream);
+			Start(&action);
+		}
+		break;
+	case ExtraActionType_openram:
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_RAMStream);
+			Start(&action);
+		}
+		break;
+	case ExtraActionType_close:
+		action.SetUnknown24(-2);
+		DeleteObject(action);
+		Streamer()->Close(p_pAtom.GetInternal());
+		break;
+	case ExtraActionType_start:
+		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
+			Start(&action);
+		}
+		break;
+	case ExtraActionType_stop:
+		action.SetUnknown24(-2);
+		if (!FUN_1003ee00(p_pAtom, p_targetEntityId)) {
+			DeleteObject(action);
+		}
+		break;
+	case ExtraActionType_run:
+		_spawnl(0, "\\lego\\sources\\main\\main.exe", "\\lego\\sources\\main\\main.exe", "/script", &p_pAtom, 0);
+		break;
+	case ExtraActionType_exit:
+		Lego()->SetExit(TRUE);
+		break;
+	case ExtraActionType_enable:
+		CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId);
+		break;
+	case ExtraActionType_disable:
+		CheckIfEntityExists(FALSE, p_pAtom.GetInternal(), p_targetEntityId);
+		break;
+	case ExtraActionType_notify:
+		NotifyEntity(p_pAtom.GetInternal(), p_targetEntityId, p_sender);
+		break;
+	}
+}
+
+// FUNCTION: LEGO1 0x1003e670
+MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_entityId)
+{
+	LegoWorld* world =
+		(LegoWorld*) FindEntityByAtomIdOrEntityId(MxAtomId(p_filename, LookupMode_LowerCase2), p_entityId);
+	if (world) {
+		world->VTable0x68(p_enable);
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
+}
+
+// STUB: LEGO1 0x1003e700
+void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender)
 {
 }
 
@@ -108,8 +184,9 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 }
 
 // STUB: LEGO1 0x1003ee00
-void FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
+MxBool FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 {
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1003ef00

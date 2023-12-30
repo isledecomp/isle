@@ -5,6 +5,7 @@
 
 #include <windows.h>
 
+// SIZE 0x08
 class MxSemaphore {
 public:
 	MxSemaphore();
@@ -18,7 +19,7 @@ public:
 	void Release(MxU32 p_releaseCount);
 
 private:
-	HANDLE m_hSemaphore;
+	HANDLE m_hSemaphore; // 0x04
 };
 
 #endif // MX_SEMAPHORE_H

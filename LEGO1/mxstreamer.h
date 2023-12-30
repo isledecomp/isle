@@ -22,7 +22,7 @@ public:
 
 	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
 	inline undefined* GetBuffer() const { return m_buffer; }
-	inline undefined4 GetUnk08() const { return m_unk0x08; }
+	inline undefined* GetUnk08Ref() const { return (undefined*) &m_unk0x08; }
 
 private:
 	undefined* m_buffer;
@@ -78,7 +78,7 @@ public:
 	// FUNCTION: LEGO1 0x100b9000
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x1010210c
+		// STRING: LEGO1 0x1010210c
 		return "MxStreamer";
 	}
 
@@ -104,5 +104,8 @@ private:
 	MxStreamerSubClass2 m_subclass1;         // 0x14
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };
+
+// SYNTHETIC: LEGO1 0x100b9120
+// MxStreamer::`scalar deleting destructor'
 
 #endif // MXSTREAMER_H

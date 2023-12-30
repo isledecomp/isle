@@ -16,7 +16,7 @@ public:
 	// FUNCTION: LEGO1 0x1006eb40
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x100f04ec
+		// STRING: LEGO1 0x100f04ec
 		return "Infocenter";
 	}
 
@@ -25,6 +25,12 @@ public:
 	{
 		return !strcmp(p_name, Infocenter::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual void Stop() override;                             // vtable+0x50
+	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
+	virtual MxBool VTable0x64() override;                     // vtable+0x64
+	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68
 };
 
 #endif // INFOCENTER_H

@@ -7,20 +7,22 @@
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
+MxU32 g_unk0x1010215c = 0;
+
 // FUNCTION: LEGO1 0x100ba500
 MxDisplaySurface::MxDisplaySurface()
 {
-	this->Reset();
+	this->Init();
 }
 
 // FUNCTION: LEGO1 0x100ba5a0
 MxDisplaySurface::~MxDisplaySurface()
 {
-	this->Clear();
+	this->Destroy();
 }
 
 // FUNCTION: LEGO1 0x100ba610
-void MxDisplaySurface::Reset()
+void MxDisplaySurface::Init()
 {
 	this->m_ddSurface1 = NULL;
 	this->m_ddSurface2 = NULL;
@@ -221,7 +223,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100baa90
-void MxDisplaySurface::Clear()
+void MxDisplaySurface::Destroy()
 {
 	if (this->m_initialized) {
 		if (this->m_ddSurface2)
@@ -237,7 +239,7 @@ void MxDisplaySurface::Clear()
 	if (this->m_16bitPal)
 		delete this->m_16bitPal;
 
-	this->Reset();
+	this->Init();
 }
 
 // FUNCTION: LEGO1 0x100baae0
@@ -292,20 +294,28 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 }
 
 // STUB: LEGO1 0x100bacc0
-MxBool MxDisplaySurface::VTable0x28(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+MxBool MxDisplaySurface::VTable0x28(
+	MxBitmap* p_bitmap,
+	MxS32 p_left,
+	MxS32 p_top,
+	MxS32 p_right,
+	MxS32 p_bottom,
+	MxS32 p_width,
+	MxS32 p_height
+)
 {
 	return 0;
 }
 
 // STUB: LEGO1 0x100bb1d0
 MxBool MxDisplaySurface::VTable0x30(
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
-	undefined4,
+	MxBitmap* p_bitmap,
+	MxS32 p_left,
+	MxS32 p_top,
+	MxS32 p_right,
+	MxS32 p_bottom,
+	MxS32 p_width,
+	MxS32 p_height,
 	MxBool
 )
 {
@@ -318,9 +328,60 @@ undefined4 MxDisplaySurface::VTable0x34(undefined4, undefined4, undefined4, unde
 	return 0;
 }
 
-// STUB: LEGO1 0x100bba50
-void MxDisplaySurface::Display(undefined4, undefined4, undefined4, undefined4, undefined4, undefined4)
+// FUNCTION: LEGO1 0x100bba50
+void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p_top2, MxS32 p_width, MxS32 p_height)
 {
+	if (m_videoParam.Flags().GetF2bit1()) {
+		if (m_videoParam.Flags().GetFlipSurfaces()) {
+			if (g_unk0x1010215c < 2) {
+				g_unk0x1010215c++;
+
+				DDSURFACEDESC ddsd;
+				memset(&ddsd, 0, sizeof(ddsd));
+				ddsd.dwSize = sizeof(ddsd);
+				if (m_ddSurface2->Lock(NULL, &ddsd, 1, NULL) == S_OK) {
+					MxU8* surface = (MxU8*) ddsd.lpSurface;
+					MxS32 height = m_videoParam.GetRect().GetHeight();
+
+					for (MxU32 i = 0; i < ddsd.dwHeight; i++) {
+						memset(surface, 0, ddsd.dwWidth * ddsd.ddpfPixelFormat.dwRGBBitCount / 8);
+						surface += ddsd.lPitch;
+					}
+
+					m_ddSurface2->Unlock(ddsd.lpSurface);
+				}
+				else {
+					OutputDebugString("MxDisplaySurface::Display error\n");
+				}
+			}
+			m_ddSurface1->Flip(NULL, 1);
+		}
+		else {
+			POINT point = {0, 0};
+			ClientToScreen(MxOmni::GetInstance()->GetWindowHandle(), &point);
+
+			// TODO: Match
+			RECT rect1, rect2;
+			rect1.left = p_left2 + m_videoParam.GetRect().GetLeft() + point.x;
+			rect2.left = p_left;
+			rect1.top = p_top2 + m_videoParam.GetRect().GetTop() + point.y;
+			rect2.right = p_left + p_width;
+			rect2.top = p_top;
+			rect2.bottom = p_top + p_height;
+			rect1.right = rect1.left + p_width;
+			rect1.bottom = rect1.top + p_height;
+
+			DDBLTFX data;
+			memset(&data, 0, sizeof(data));
+			data.dwSize = sizeof(data);
+			data.dwDDFX = 8;
+
+			if (m_ddSurface1->Blt(&rect1, m_ddSurface2, &rect2, 0, &data) == DDERR_SURFACELOST) {
+				m_ddSurface1->Restore();
+				m_ddSurface1->Blt(&rect1, m_ddSurface2, &rect2, 0, &data);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100bbc10

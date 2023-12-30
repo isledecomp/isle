@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(MxRegionLeftRight, 0x08);
 // FUNCTION: LEGO1 0x100c31c0
 MxRegion::MxRegion()
 {
-	m_list = new MxRegionList;
+	m_list = new MxRegionTopBottomList;
 	m_rect = MxRect32(INT_MAX, INT_MAX, -1, -1);
 }
 
@@ -38,7 +38,7 @@ void MxRegion::VTable0x18(MxRect32& p_rect)
 {
 	MxRect32 rect(p_rect);
 	MxRect32 newRect;
-	MxRegionListCursor cursor(m_list);
+	MxRegionTopBottomListCursor cursor(m_list);
 	MxRegionTopBottom* topBottom;
 
 	while (rect.IsValid() && cursor.Next(topBottom)) {
@@ -91,7 +91,7 @@ MxBool MxRegion::VTable0x1c(MxRect32& p_rect)
 	if (!m_rect.IntersectsWith(p_rect))
 		return FALSE;
 
-	MxRegionListCursor cursor(m_list);
+	MxRegionTopBottomListCursor cursor(m_list);
 	MxRegionTopBottom* topBottom;
 
 	while (cursor.Next(topBottom)) {

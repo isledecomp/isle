@@ -71,6 +71,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	memcpy(m_bitmap->GetBitmapData(), p_chunk->GetData(), p_chunk->GetLength());
 
+	// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 	MxS32 height = GetHeight() - 1;
 	MxS32 width = GetWidth() - 1;
 	MxS32 x = m_location.GetX();
@@ -154,6 +155,7 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 	m_location.SetY(p_y);
 
 	if (IsEnabled()) {
+		// Most likely needs to work with MxSize32 and MxPoint32
 		MxS32 height = GetHeight() - 1;
 		MxS32 width = GetWidth() - 1;
 
@@ -174,6 +176,7 @@ void MxStillPresenter::Enable(MxBool p_enable)
 	MxVideoPresenter::Enable(p_enable);
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
+		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
 		MxS32 x = m_location.GetX();

@@ -14,7 +14,7 @@ public:
 	// FUNCTION: LEGO1 0x100b9430
 	inline virtual const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x10102118
+		// STRING: LEGO1 0x10102118
 		return "MxRAMStreamController";
 	}
 
@@ -30,9 +30,12 @@ public:
 	virtual MxResult VTable0x24(MxDSAction* p_action) override;
 
 private:
-	MxDSBuffer m_buffer;
+	MxDSBuffer m_buffer; // 0x64
 
 	MxResult DeserializeObject(MxDSStreamingAction& p_action);
 };
+
+// SYNTHETIC: LEGO1 0x100b94f0
+// MxRAMStreamController::`scalar deleting destructor'
 
 #endif // MXRAMSTREAMCONTROLLER_H

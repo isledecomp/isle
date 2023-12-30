@@ -15,7 +15,7 @@ public:
 	// FUNCTION: LEGO1 0x10045110
 	inline const char* ClassName() const override // vtable+0xc
 	{
-		// GLOBAL: LEGO1 0x100f11b8
+		// STRING: LEGO1 0x100f11b8
 		return "LegoPathController";
 	}
 

@@ -12,7 +12,7 @@ public:
 	// FUNCTION: LEGO1 0x1000ce50
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x100f0664
+		// STRING: LEGO1 0x100f0664
 		return "LegoTexturePresenter";
 	}
 
@@ -22,7 +22,9 @@ public:
 		return !strcmp(p_name, LegoTexturePresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
+	virtual void DoneTickle() override;       // vtable+0x2c
 	virtual MxResult AddToManager() override; // vtable+0x34
+	virtual MxResult PutData() override;      // vtable+0x4c
 };
 
 #endif // LEGOTEXTUREPRESENTER_H

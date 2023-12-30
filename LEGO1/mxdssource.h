@@ -6,6 +6,7 @@
 class MxDSBuffer;
 
 // VTABLE: LEGO1 0x100dc8c8
+// SIZE 0x14
 class MxDSSource : public MxCore {
 public:
 	MxDSSource() : m_lengthInDWords(0), m_pBuffer(NULL), m_position(-1) {}
@@ -13,7 +14,7 @@ public:
 	// FUNCTION: LEGO1 0x100c0010
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x10102588
+		// STRING: LEGO1 0x10102588
 		return "MxDSSource";
 	}
 
@@ -23,20 +24,21 @@ public:
 		return !strcmp(p_name, MxDSSource::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxLong Open(MxULong) = 0;
-	virtual MxLong Close() = 0;
-	virtual void ReadToBuffer(MxDSBuffer* p_buffer);
-	virtual MxResult Read(unsigned char*, MxULong) = 0;
-	virtual MxLong Seek(MxLong, int) = 0;
-	virtual MxULong GetBufferSize() = 0;
-	virtual MxULong GetStreamBuffersNum() = 0;
-	virtual MxLong GetLengthInDWords();
-	virtual MxU32* GetBuffer(); // 0x34
+	virtual MxLong Open(MxULong) = 0;                    // vtable+0x14
+	virtual MxLong Close() = 0;                          // vtable+0x18
+	virtual MxResult ReadToBuffer(MxDSBuffer* p_buffer); // vtable+0x1c
+	virtual MxResult Read(unsigned char*, MxULong) = 0;  // vtable+0x20
+	virtual MxLong Seek(MxLong, int) = 0;                // vtable+0x24
+	virtual MxULong GetBufferSize() = 0;                 // vtable+0x28
+	virtual MxULong GetStreamBuffersNum() = 0;           // vtable+0x2c
+	virtual MxLong GetLengthInDWords();                  // vtable+0x30
+	virtual MxU32* GetBuffer();                          // vtable+0x34
+	inline MxLong GetPosition() const { return m_position; }
 
 protected:
-	MxULong m_lengthInDWords;
-	MxU32* m_pBuffer;
-	MxLong m_position;
+	MxULong m_lengthInDWords; // 0x08
+	MxU32* m_pBuffer;         // 0x0c
+	MxLong m_position;        // 0x10
 };
 
 #endif // MXDSSOURCE_H

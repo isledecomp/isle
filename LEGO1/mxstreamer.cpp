@@ -79,14 +79,10 @@ MxLong MxStreamer::Close(const char* p_name)
 		if (!p_name || !strcmp(p_name, c->GetAtom().GetInternal())) {
 			m_openStreams.erase(it);
 
-			if (!c->FUN_100c20d0(ds)) {
-				MxStreamerNotification notif(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-
-				NotificationManager()->Send(this, &notif);
-			}
-			else {
+			if (c->FUN_100c20d0(ds))
 				delete c;
-			}
+			else
+				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 
 			return SUCCESS;
 		}
@@ -142,7 +138,7 @@ MxResult MxStreamer::FUN_100b99b0(MxDSAction* p_action)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100b99f0
+// FUNCTION: LEGO1 0x100b99f0
 MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 {
 	MxDSAction tempAction;
@@ -156,8 +152,16 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 		tempAction.SetUnknown24(p_dsAction->GetUnknown24());
 	}
 
-	// TODO: remove action from list
-	return FAILURE;
+	MxResult result = FAILURE;
+	for (list<MxStreamController*>::iterator it = m_openStreams.begin(); it != m_openStreams.end(); it++) {
+		const char* id = p_dsAction->GetAtomId().GetInternal();
+		if (!id || id == (*it)->GetAtom().GetInternal()) {
+			tempAction.SetAtomId((*it)->GetAtom());
+			result = (*it)->VTable0x24(&tempAction);
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100b9b30
@@ -179,13 +183,10 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		MxStreamController* c = static_cast<MxStreamerNotification&>(p_param).GetController();
 
-		if (!c->FUN_100c20d0(ds)) {
-			MxStreamerNotification notif(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-			NotificationManager()->Send(this, &notif);
-		}
-		else {
+		if (c->FUN_100c20d0(ds))
 			delete c;
-		}
+		else
+			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 	}
 
 	return 0;

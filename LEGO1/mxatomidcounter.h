@@ -13,7 +13,7 @@
 // Also: the increment/decrement methods suggest a custom type was used
 // for the combined key_value_pair, which doesn't seem possible with <map>.
 
-// SIZE: 0x14 (including padding)
+// SIZE 0x14
 class MxAtomIdCounter {
 public:
 	// always inlined

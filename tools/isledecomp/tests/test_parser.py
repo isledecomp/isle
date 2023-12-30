@@ -115,7 +115,7 @@ def test_different_markers_same_module(parser):
 
     # Use first marker declaration, don't replace
     assert len(parser.functions) == 1
-    assert parser.functions[0].is_stub is False
+    assert parser.functions[0].should_skip() is False
 
     # Should alert to this
     assert len(parser.alerts) == 1
@@ -193,7 +193,7 @@ def test_multiple_vtables(parser):
     )
     assert len(parser.alerts) == 0
     assert len(parser.vtables) == 2
-    assert parser.vtables[0].class_name == "MxString"
+    assert parser.vtables[0].name == "MxString"
 
 
 def test_multiple_vtables_same_module(parser):
@@ -247,7 +247,7 @@ def test_synthetic_no_comment(parser):
     )
     assert len(parser.functions) == 0
     assert len(parser.alerts) == 1
-    assert parser.alerts[0].code == ParserError.BAD_SYNTHETIC
+    assert parser.alerts[0].code == ParserError.BAD_NAMEREF
     assert parser.state == ReaderState.SEARCH
 
 
@@ -375,3 +375,70 @@ def test_unexpected_eof(parser):
     assert len(parser.functions) == 1
     assert len(parser.alerts) == 1
     assert parser.alerts[0].code == ParserError.UNEXPECTED_END_OF_FILE
+
+
+def test_global_variable_prefix(parser):
+    """Global and static variables should have the g_ prefix."""
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            'const char* g_msg = "hello";',
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.alerts) == 0
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEXT 0x5555",
+            "int test = 5;",
+        ]
+    )
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_MISSING_PREFIX
+    # In spite of that, we should still grab the variable name.
+    assert parser.variables[1].name == "test"
+
+
+def test_global_nomatch(parser):
+    """We do our best to grab the variable name, even without the g_ prefix
+    but this (by design) will not match everything."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "FunctionCall();",
+        ]
+    )
+    assert len(parser.variables) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.NO_SUITABLE_NAME
+
+
+def test_static_variable(parser):
+    """We can detect whether a variable is a static function variable
+    based on the parser's state when we detect it.
+    Checking for the word `static` alone is not a good test.
+    Static class variables are filed as S_GDATA32, same as regular globals.
+    Only function statics are filed as S_LDATA32."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "int g_test = 1234;",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert parser.variables[0].is_static is False
+
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x5555",
+            "void test_function() {",
+            "// GLOBAL: TEST 0x8888",
+            "int g_internal = 0;",
+            "}",
+        ]
+    )
+    assert len(parser.variables) == 2
+    assert parser.variables[1].is_static is True

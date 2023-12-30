@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxbitmap.h"
 #include "mxmediapresenter.h"
+#include "mxrect32.h"
 
 // VTABLE: LEGO1 0x100d4be8
 // SIZE 0x64
@@ -23,7 +24,7 @@ public:
 	// FUNCTION: LEGO1 0x1000c820
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
-		// GLOBAL: LEGO1 0x100f0760
+		// STRING: LEGO1 0x100f0760
 		return "MxVideoPresenter";
 	}
 
@@ -47,7 +48,7 @@ public:
 	virtual void CreateBitmap();                         // vtable+0x60
 	virtual void NextFrame();                            // vtable+0x64
 	virtual void LoadFrame(MxStreamChunk* p_chunk);      // vtable+0x68
-	virtual void VTable0x6c();                           // vtable+0x6c
+	virtual void PutFrame();                             // vtable+0x6c
 	virtual void RealizePalette();                       // vtable+0x70
 	virtual undefined VTable0x74();                      // vtable+0x74
 	virtual LPDIRECTDRAWSURFACE VTable0x78();            // vtable+0x78
@@ -68,6 +69,7 @@ public:
 		MxS32 IsHit(MxU32 p_x, MxU32 p_y);
 	};
 
+	inline MxS32 PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc);
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
 
 private:
