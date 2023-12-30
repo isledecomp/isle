@@ -251,16 +251,16 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 
 		if ((m_videoParam.Flags().GetFullScreen() & 1) == 0) {
 			struct {
-				WORD palVersion;
-				WORD palNumEntries;
-				PALETTEENTRY palPalEntry[256];
+				WORD m_palVersion;
+				WORD m_palNumEntries;
+				PALETTEENTRY m_palPalEntry[256];
 			} lpal;
 
-			lpal.palVersion = 0x300;
-			lpal.palNumEntries = 256;
+			lpal.m_palVersion = 0x300;
+			lpal.m_palNumEntries = 256;
 
-			memset(lpal.palPalEntry, 0, sizeof(lpal.palPalEntry));
-			p_palette->GetEntries(lpal.palPalEntry);
+			memset(lpal.m_palPalEntry, 0, sizeof(lpal.m_palPalEntry));
+			p_palette->GetEntries(lpal.m_palPalEntry);
 
 			HPALETTE hpal = CreatePalette((LPLOGPALETTE) &lpal);
 			HDC hdc = ::GetDC(0);
