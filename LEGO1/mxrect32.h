@@ -56,6 +56,14 @@ public:
 		this->m_bottom += p_point.GetY();
 	}
 
+	inline void SubtractPoint(const MxPoint32& p_point)
+	{
+		this->m_left -= p_point.GetX();
+		this->m_top -= p_point.GetY();
+		this->m_right -= p_point.GetX();
+		this->m_bottom -= p_point.GetY();
+	}
+
 	inline void SetSize(const MxSize32& p_size)
 	{
 		this->m_right = p_size.GetWidth();
