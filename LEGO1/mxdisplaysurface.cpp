@@ -295,13 +295,13 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 
 // FUNCTION: LEGO1 0x100bacc0
 void MxDisplaySurface::VTable0x28(
-	MxBitmap* p_bitmap, // a2
-	MxS32 p_left,       // a3
-	MxS32 p_top,        // a4
-	MxS32 p_right,      // a5
-	MxS32 p_bottom,     // a6
-	MxS32 p_width,      // a7
-	MxS32 p_height      // a8
+	MxBitmap* p_bitmap,
+	MxS32 p_left,
+	MxS32 p_top,
+	MxS32 p_right,
+	MxS32 p_bottom,
+	MxS32 p_width,
+	MxS32 p_height
 )
 {
 	if (FUN_100b6e10(
