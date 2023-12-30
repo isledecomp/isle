@@ -218,9 +218,9 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
-
 		MxS32 x = m_location.GetX();
 		MxS32 y = m_location.GetY();
+
 		MxRect32 rect(x, y, x + width, y + height);
 
 		MVideoManager()->InvalidateRect(rect);
