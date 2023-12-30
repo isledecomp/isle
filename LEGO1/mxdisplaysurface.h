@@ -72,6 +72,9 @@ public:
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 
 private:
+	MxU8 CountTotalBitsSetTo1(MxU32 p_param);
+	MxU8 CountContiguousBitsSetTo1(MxU32 p_param);
+
 	MxVideoParam m_videoParam;
 	LPDIRECTDRAWSURFACE m_ddSurface1;
 	LPDIRECTDRAWSURFACE m_ddSurface2;

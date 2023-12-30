@@ -73,33 +73,25 @@ void MxDisplaySurface::FUN_100ba640()
 	}
 }
 
-// OFFSET: LEGO1 0x100ba750
-byte CountTotalBitsSetTo1(MxU32 p_param)
+// FUNCTION: LEGO1 0x100ba750
+MxU8 MxDisplaySurface::CountTotalBitsSetTo1(MxU32 p_param)
 {
-	MxU32 a;
-	byte i = 0;
-	if (p_param) {
-		do {
-			a = i >> 1;
-			i += ((byte) p_param & 1);
-			p_param = a;
-		} while (a != 0);
-	}
-	return i;
+	MxU8 count = 0;
+
+	for (; p_param; p_param >>= 1)
+		count += ((MxU8) p_param & 1);
+
+	return count;
 }
 
-// OFFSET: LEGO1 0x100ba770
-byte CountContiguousBitsSetTo1(MxU32 p_param)
+// FUNCTION: LEGO1 0x100ba770
+MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
 {
-	MxU32 u;
-	byte count = 0;
+	MxU8 count = 0;
 
-	u = p_param & 1;
-	while (u == 0) {
-		p_param >>= 1;
+	for (; (p_param & 1) == 0; p_param >>= 1)
 		count++;
-		u = p_param & 1;
-	}
+
 	return count;
 }
 
@@ -251,59 +243,51 @@ void MxDisplaySurface::Clear()
 // FUNCTION: LEGO1 0x100baae0
 void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
-	HDC hdc;
-	MxS32 j;
-	HPALETTE hpal;
-	LOGPALETTE lpal;
-	byte bVar2;
-	byte bVar3;
-	byte bVar4;
-	byte bVar5;
-	byte bVar6;
-	byte bVar7;
-	if (((this->m_surfaceDesc).ddpfPixelFormat.dwFlags & 0x20) != 0) {
-		this->m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
-		this->m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
-		if (((this->m_videoParam).Flags().GetFullScreen() & 1) == 0) {
-			lpal.palVersion = 0x300;
-			// lpal.palNumEntries = 256;
-			// FIXME: this loop may be incorrect
-			memcpy(lpal.palPalEntry, NULL, sizeof(lpal.palNumEntries));
+	if (m_surfaceDesc.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) {
+		m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
+		m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
 
+		if ((m_videoParam.Flags().GetFullScreen() & 1) == 0) {
+			struct {
+				WORD palVersion;
+				WORD palNumEntries;
+				PALETTEENTRY palPalEntry[256];
+			} lpal;
+
+			lpal.palVersion = 0x300;
+			lpal.palNumEntries = 256;
+
+			memset(lpal.palPalEntry, 0, sizeof(lpal.palPalEntry));
 			p_palette->GetEntries(lpal.palPalEntry);
-			hpal = CreatePalette(&lpal);
-			hdc = ::GetDC(0);
-			SelectPalette(hdc, hpal, 0);
+
+			HPALETTE hpal = CreatePalette((LPLOGPALETTE) &lpal);
+			HDC hdc = ::GetDC(0);
+			SelectPalette(hdc, hpal, FALSE);
 			RealizePalette(hdc);
-			::ReleaseDC(0, hdc);
+			::ReleaseDC(NULL, hdc);
 			DeleteObject(hpal);
 		}
 	}
-	if ((this->m_surfaceDesc).ddpfPixelFormat.dwRGBBitCount == 16) {
-		if (this->m_16bitPal == NULL) {
-			this->m_16bitPal = new (MxU16); // FIXME: malloc size 512;
+
+	if (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16) {
+		if (!m_16bitPal)
+			m_16bitPal = new MxU16[256];
+
+		PALETTEENTRY palette[256];
+		p_palette->GetEntries(palette);
+
+		MxU8 contiguousBitsRed = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwRBitMask);
+		MxU8 totalBitsRed = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwRBitMask);
+		MxU8 contiguousBitsGreen = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwGBitMask);
+		MxU8 totalBitsGreen = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwGBitMask);
+		MxU8 contiguousBitsBlue = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
+		MxU8 totalBitsBlue = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
+
+		for (MxS32 i = 0; i < 256; i++) {
+			m_16bitPal[i] = (((palette[i].peRed >> (8 - totalBitsRed & 0x1f)) << (contiguousBitsRed & 0x1f))) |
+							(((palette[i].peGreen >> (8 - totalBitsGreen & 0x1f)) << (contiguousBitsGreen & 0x1f))) |
+							(((palette[i].peBlue >> (8 - totalBitsBlue & 0x1f)) << (contiguousBitsBlue & 0x1f)));
 		}
-		p_palette->GetEntries((PALETTEENTRY*) &lpal); // ?
-
-		// It looks like the arguments are correct - the offsets match but the registers are swapped
-		bVar2 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwRBitMask);
-		bVar3 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwRBitMask);
-		bVar4 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
-		bVar5 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwGBitMask);
-		bVar6 = CountContiguousBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
-		bVar7 = CountTotalBitsSetTo1((this->m_surfaceDesc).ddpfPixelFormat.dwBBitMask);
-
-		MxS32 i = 0;
-		WORD e = lpal.palNumEntries;
-		do {
-			j = i + 2;
-
-			// this line is probably very incorrect
-			*this->m_16bitPal = e >> (8 - bVar3 & 0x1f) << (bVar2 & 0x1f) | e >> (8 - bVar5 & 0x1f) << (bVar4 & 0x1f) |
-								e >> (8 - bVar7 & 0x1f) << (bVar6 & 0x1f);
-			i = j;
-			e += 2;
-		} while (j < 512);
 	}
 }
 
