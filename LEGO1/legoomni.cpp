@@ -728,6 +728,7 @@ MxBool FUN_100b6e10(
 
 	if (!rect.IntersectsWith(videoParamRect))
 		return FALSE;
+
 	rect.Intersect(videoParamRect);
 	rect.SubtractPoint(bottomRight);
 
@@ -737,7 +738,6 @@ MxBool FUN_100b6e10(
 	*p_bottom += rect.GetTop();
 	*p_width = rect.GetWidth();
 	*p_height = rect.GetHeight();
-
 	return TRUE;
 }
 

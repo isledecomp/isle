@@ -9,10 +9,7 @@ class MxRect32 {
 public:
 	MxRect32() {}
 	MxRect32(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom) { CopyFrom(p_left, p_top, p_right, p_bottom); }
-
-	// FUNCTION: LEGO1 0x100b6fc0
 	MxRect32(const MxPoint32& p_point, const MxSize32& p_size) { CopyFrom(p_point, p_size); }
-
 	MxRect32(const MxRect32& p_a, const MxRect32& p_b)
 	{
 		m_left = Max(p_a.m_left, p_b.m_left);
@@ -106,12 +103,15 @@ private:
 		this->m_bottom = p_rect.m_bottom;
 	}
 
-	inline void CopyFrom(const MxPoint32& p_point, const MxSize32& p_size)
+	// The address might also be the constructor that calls CopyFrom
+	// FUNCTION: LEGO1 0x100b6fc0
+	inline MxRect32* CopyFrom(const MxPoint32& p_point, const MxSize32& p_size)
 	{
 		this->m_left = p_point.GetX();
 		this->m_top = p_point.GetY();
 		this->m_right = p_size.GetWidth() + p_point.GetX() - 1;
 		this->m_bottom = p_size.GetHeight() + p_point.GetY() - 1;
+		return this;
 	}
 
 	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
