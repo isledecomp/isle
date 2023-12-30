@@ -334,7 +334,7 @@ void MxDisplaySurface::VTable0x28(
 			case BI_RGB: {
 				MxS32 rowsBeforeTop;
 				if (p_bitmap->GetBmiHeight() < 0)
-					rowsBeforeTop = 0;
+					rowsBeforeTop = p_top;
 				else
 					rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - p_top - 1;
 				data = p_bitmap->GetBitmapData() + p_left + (p_bitmap->GetBmiStride() * rowsBeforeTop);
@@ -359,7 +359,6 @@ void MxDisplaySurface::VTable0x28(
 
 				switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 				case 8: {
-					OutputDebugStr("Flag, Case 8bit");
 					MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
 					MxLong stride;
 
@@ -382,10 +381,9 @@ void MxDisplaySurface::VTable0x28(
 						}
 
 						data += v22;
-						MxU8* dest = surface + v55;
 
-						memcpy(dest, surfaceBefore, 2 * p_width);
-						surface = dest + ddsd.lPitch;
+						memcpy(&surface[v55], surfaceBefore, 2 * p_width);
+						surface = &surface[v55] + ddsd.lPitch;
 					}
 					break;
 				}
@@ -398,56 +396,40 @@ void MxDisplaySurface::VTable0x28(
 					else
 						stride = -p_bitmap->GetBmiStride();
 
-					MxLong v31 = 4 * p_width;
+					MxS32 length = p_width * 4;
 					MxLong v56 = stride - p_width;
-					MxS32 v61 = p_width;
-					MxLong v62 = ddsd.lPitch - (4 * p_width);
+					MxLong v62 = ddsd.lPitch - length;
 					MxU16* p16BitPal = m_16bitPal;
 
 					if (stride != p_width || v62) {
-						OutputDebugStr("Flag, Case 16bit A");
 						while (p_height--) {
 							MxU8* surfaceBefore = surface;
 
-							if (v61 > 0) {
-								MxS32 v38 = v61;
-								do {
-									MxU32 element = *data++;
-									element = p16BitPal[element];
-
-									surface += 4;
-									*((MxU16*) surface - 2) = element;
-									--v38;
-									*((MxU16*) surface - 1) = element;
-								} while (v38);
+							for (MxS32 i = p_width; i > 0; i--) {
+								MxU16 element = p16BitPal[*data++];
+								surface += 4;
+								*((MxU16*) surface - 2) = element;
+								*((MxU16*) surface - 1) = element;
 							}
 
 							data += v56;
-							MxU8* dest = &surface[v62];
 
-							memcpy(dest, surfaceBefore, 4 * ((MxU32) (4 * p_width) >> 2));
-							surface = dest + ddsd.lPitch;
+							memcpy(&surface[v62], surfaceBefore, length);
+							surface = &surface[v62] + ddsd.lPitch;
 						}
 					}
 					else {
-						OutputDebugStr("Flag, Case 16bit B");
 						while (p_height--) {
 							MxU8* surfaceBefore = surface;
 
-							if (v61 > 0) {
-								MxS32 v34 = v61;
-								do {
-									MxU32 element = *data++;
-									element = p16BitPal[element];
-
-									surface += 4;
-									*((MxU16*) surface - 2) = element;
-									--v34;
-									*((MxU16*) surface - 1) = element;
-								} while (v34);
+							for (MxS32 i = p_width; i > 0; i--) {
+								MxU16 element = p16BitPal[*data++];
+								surface += 4;
+								*((MxU16*) surface - 2) = element;
+								*((MxU16*) surface - 1) = element;
 							}
 
-							memcpy(surface, surfaceBefore, v31);
+							memcpy(surface, surfaceBefore, length);
 							surface += ddsd.lPitch;
 						}
 					}
@@ -457,7 +439,6 @@ void MxDisplaySurface::VTable0x28(
 			else {
 				switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 				case 8: {
-					OutputDebugStr("No flag, Case 8bit");
 					MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
 					MxLong stride;
 
@@ -476,7 +457,6 @@ void MxDisplaySurface::VTable0x28(
 					break;
 				}
 				case 16: {
-					OutputDebugStr("No flag, Case 16bit");
 					MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
 					MxLong stride;
 
