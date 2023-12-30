@@ -92,6 +92,9 @@ public:
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
 
 private:
+	MxU8 CountTotalBitsSetTo1(MxU32 p_param);
+	MxU8 CountContiguousBitsSetTo1(MxU32 p_param);
+
 	void Init();
 
 	MxVideoParam m_videoParam;        // 0x08

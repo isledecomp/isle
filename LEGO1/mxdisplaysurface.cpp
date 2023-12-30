@@ -3,6 +3,8 @@
 #include "legoomni.h"
 #include "mxvideomanager.h"
 
+#include <windows.h>
+
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
 MxU32 g_unk0x1010215c = 0;
@@ -71,6 +73,28 @@ void MxDisplaySurface::FUN_100ba640()
 			m_ddSurface1->Flip(NULL, DDFLIP_WAIT);
 		}
 	}
+}
+
+// FUNCTION: LEGO1 0x100ba750
+MxU8 MxDisplaySurface::CountTotalBitsSetTo1(MxU32 p_param)
+{
+	MxU8 count = 0;
+
+	for (; p_param; p_param >>= 1)
+		count += ((MxU8) p_param & 1);
+
+	return count;
+}
+
+// FUNCTION: LEGO1 0x100ba770
+MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
+{
+	MxU8 count = 0;
+
+	for (; (p_param & 1) == 0; p_param >>= 1)
+		count++;
+
+	return count;
 }
 
 // FUNCTION: LEGO1 0x100ba790
@@ -218,9 +242,55 @@ void MxDisplaySurface::Destroy()
 	this->Init();
 }
 
-// STUB: LEGO1 0x100baae0
+// FUNCTION: LEGO1 0x100baae0
 void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 {
+	if (m_surfaceDesc.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) {
+		m_ddSurface1->SetPalette(p_palette->CreateNativePalette());
+		m_ddSurface2->SetPalette(p_palette->CreateNativePalette());
+
+		if ((m_videoParam.Flags().GetFullScreen() & 1) == 0) {
+			struct {
+				WORD m_palVersion;
+				WORD m_palNumEntries;
+				PALETTEENTRY m_palPalEntry[256];
+			} lpal;
+
+			lpal.m_palVersion = 0x300;
+			lpal.m_palNumEntries = 256;
+
+			memset(lpal.m_palPalEntry, 0, sizeof(lpal.m_palPalEntry));
+			p_palette->GetEntries(lpal.m_palPalEntry);
+
+			HPALETTE hpal = CreatePalette((LPLOGPALETTE) &lpal);
+			HDC hdc = ::GetDC(0);
+			SelectPalette(hdc, hpal, FALSE);
+			RealizePalette(hdc);
+			::ReleaseDC(NULL, hdc);
+			DeleteObject(hpal);
+		}
+	}
+
+	if (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16) {
+		if (!m_16bitPal)
+			m_16bitPal = new MxU16[256];
+
+		PALETTEENTRY palette[256];
+		p_palette->GetEntries(palette);
+
+		MxU8 contiguousBitsRed = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwRBitMask);
+		MxU8 totalBitsRed = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwRBitMask);
+		MxU8 contiguousBitsGreen = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwGBitMask);
+		MxU8 totalBitsGreen = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwGBitMask);
+		MxU8 contiguousBitsBlue = CountContiguousBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
+		MxU8 totalBitsBlue = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
+
+		for (MxS32 i = 0; i < 256; i++) {
+			m_16bitPal[i] = (((palette[i].peRed >> (8 - totalBitsRed & 0x1f)) << (contiguousBitsRed & 0x1f))) |
+							(((palette[i].peGreen >> (8 - totalBitsGreen & 0x1f)) << (contiguousBitsGreen & 0x1f))) |
+							(((palette[i].peBlue >> (8 - totalBitsBlue & 0x1f)) << (contiguousBitsBlue & 0x1f)));
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100bacc0
