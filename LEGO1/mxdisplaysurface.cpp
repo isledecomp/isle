@@ -468,8 +468,8 @@ void MxDisplaySurface::VTable0x28(
 					MxLong v50 = stride - p_width;
 					MxLong j = ddsd.lPitch - (2 * p_width);
 
-					for (MxU32 v51 = 0; p_height > v51; v51++) {
-						for (MxU32 k = 0; p_width > k; k++) {
+					for (MxS32 v51 = 0; p_height > v51; v51++) {
+						for (MxS32 k = 0; p_width > k; k++) {
 							MxU8 v53 = *data++;
 							surface += 2;
 							*(MxU16*) (surface - 2) = m_16bitPal[v53];
