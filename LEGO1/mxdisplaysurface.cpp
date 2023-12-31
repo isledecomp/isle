@@ -327,10 +327,9 @@ void MxDisplaySurface::VTable0x28(
 		}
 
 		if (hr == DD_OK) {
-			BITMAPINFOHEADER* biHeader = p_bitmap->GetBmiHeader();
 			MxU8* data;
 
-			switch (biHeader->biCompression) {
+			switch (p_bitmap->GetBmiHeader()->biCompression) {
 			case BI_RGB: {
 				MxS32 rowsBeforeTop;
 				if (p_bitmap->GetBmiHeight() < 0)
@@ -360,16 +359,10 @@ void MxDisplaySurface::VTable0x28(
 				switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 				case 8: {
 					MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
-					MxLong stride;
-
-					if (biHeader->biCompression == BI_RGB_TOPDOWN || p_bitmap->GetBmiHeight() < 0)
-						stride = p_bitmap->GetBmiStride();
-					else
-						stride = -p_bitmap->GetBmiStride();
+					MxLong stride = p_bitmap->GetAdjustedStride();
 
 					MxLong v22 = stride - p_width;
-					MxLong v55 = ddsd.lPitch - (2 * p_width);
-
+					MxLong length = ddsd.lPitch - (2 * p_width);
 					while (p_height--) {
 						MxU8* surfaceBefore = surface;
 
@@ -381,7 +374,7 @@ void MxDisplaySurface::VTable0x28(
 						}
 
 						data += v22;
-						surface += v55;
+						surface += length;
 
 						memcpy(surface, surfaceBefore, 2 * p_width);
 						surface += ddsd.lPitch;
@@ -390,12 +383,7 @@ void MxDisplaySurface::VTable0x28(
 				}
 				case 16: {
 					MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
-					MxLong stride;
-
-					if (biHeader->biCompression == BI_RGB_TOPDOWN || p_bitmap->GetBmiHeight() < 0)
-						stride = p_bitmap->GetBmiStride();
-					else
-						stride = -p_bitmap->GetBmiStride();
+					MxLong stride = p_bitmap->GetAdjustedStride();
 
 					stride -= p_width;
 					MxS32 length = p_width * 4;
@@ -448,33 +436,22 @@ void MxDisplaySurface::VTable0x28(
 				switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 				case 8: {
 					MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
-					MxLong stride;
+					MxLong stride = p_bitmap->GetAdjustedStride();
 
-					if (biHeader->biCompression == BI_RGB_TOPDOWN || p_bitmap->GetBmiHeight() < 0)
-						stride = p_bitmap->GetBmiStride();
-					else
-						stride = -p_bitmap->GetBmiStride();
-
-					MxLong v57 = ddsd.lPitch;
+					MxLong length = ddsd.lPitch;
 					while (p_height--) {
 						memcpy(surface, data, p_width);
 						data += stride;
-						surface += v57;
+						surface += length;
 					}
 					break;
 				}
 				case 16: {
 					MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
-					MxLong stride;
-
-					if (biHeader->biCompression == BI_RGB_TOPDOWN || p_bitmap->GetBmiHeight() < 0)
-						stride = p_bitmap->GetBmiStride();
-					else
-						stride = -p_bitmap->GetBmiStride();
+					MxLong stride = p_bitmap->GetAdjustedStride();
 
 					MxLong v50 = stride - p_width;
 					MxLong length = ddsd.lPitch - (2 * p_width);
-
 					for (MxS32 i = 0; p_height > i; i++) {
 						for (MxS32 j = 0; p_width > j; j++) {
 							*(MxU16*) surface = m_16bitPal[*data++];
