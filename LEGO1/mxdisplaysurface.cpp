@@ -373,11 +373,11 @@ void MxDisplaySurface::VTable0x28(
 					while (p_height--) {
 						MxU8* surfaceBefore = surface;
 
-						for (MxS32 i = 0; p_width > i; *(surface - 1) = *(data - 1)) {
-							MxU8 element = *data++;
-							surface += 2;
-							++i;
-							*(surface - 2) = element;
+						for (MxS32 i = 0; p_width > i; i++) {
+							MxU8 element = *data;
+							*surface++ = element;
+							data++;
+							*surface++ = *(data - 1);
 						}
 
 						data += v22;
