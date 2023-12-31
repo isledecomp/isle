@@ -385,12 +385,13 @@ void MxDisplaySurface::VTable0x28(
 					MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
 					MxLong stride = p_bitmap->GetAdjustedStride();
 
+					// TODO: Match
 					stride -= p_width;
 					MxS32 length = p_width * 4;
 					MxLong v62 = ddsd.lPitch - length;
-					MxU16* p16BitPal = m_16bitPal;
 					MxS32 height = p_height;
 					MxS32 width = p_width;
+					MxU16* p16BitPal = m_16bitPal;
 
 					if (stride || v62) {
 						while (height--) {
