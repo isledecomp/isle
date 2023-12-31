@@ -396,17 +396,19 @@ void MxDisplaySurface::VTable0x28(
 					else
 						stride = -p_bitmap->GetBmiStride();
 
+					stride -= p_width;
 					MxS32 length = p_width * 4;
 					MxLong v56 = stride - p_width;
 					MxLong v62 = ddsd.lPitch - length;
 					MxU16* p16BitPal = m_16bitPal;
 					MxS32 height = p_height;
+					MxS32 width = p_width;
 
-					if (stride != p_width || v62) {
+					if (stride || v62) {
 						while (height--) {
 							MxU8* surfaceBefore = surface;
 
-							for (MxS32 i = p_width; i > 0; i--) {
+							for (MxS32 i = width; i > 0; i--) {
 								MxU16 element = p16BitPal[*data++];
 								*(MxU16*) surface = element;
 								surface += 2;
@@ -426,7 +428,7 @@ void MxDisplaySurface::VTable0x28(
 						while (height--) {
 							MxU8* surfaceBefore = surface;
 
-							for (MxS32 i = p_width; i > 0; i--) {
+							for (MxS32 i = width; i > 0; i--) {
 								MxU16 element = p16BitPal[*data++];
 								*(MxU16*) surface = element;
 								surface += 2;
