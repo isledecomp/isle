@@ -387,7 +387,6 @@ void MxDisplaySurface::VTable0x28(
 
 					stride -= p_width;
 					MxS32 length = p_width * 4;
-					MxLong v56 = stride - p_width;
 					MxLong v62 = ddsd.lPitch - length;
 					MxU16* p16BitPal = m_16bitPal;
 					MxS32 height = p_height;
@@ -405,7 +404,7 @@ void MxDisplaySurface::VTable0x28(
 								surface += 2;
 							}
 
-							data += v56;
+							data += stride;
 							surface += v62;
 
 							// Odd expression for the length?
