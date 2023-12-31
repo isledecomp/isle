@@ -40,8 +40,9 @@ LegoVideoManager::~LegoVideoManager()
 // STUB: LEGO1 0x1007ac40
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	// TODO
-	return MxVideoManager::Create(p_videoParam, p_frequencyMS, p_createThread);
+	MxResult result = MxVideoManager::Create(p_videoParam, p_frequencyMS, p_createThread);
+	m_videoParam.GetPalette()->CreateNativePalette();
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1007b5e0

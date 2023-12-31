@@ -35,7 +35,7 @@ public:
 		undefined4,
 		undefined4
 	); // vtable+0x24
-	virtual MxBool VTable0x28(
+	virtual void VTable0x28(
 		MxBitmap* p_bitmap,
 		MxS32 p_left,
 		MxS32 p_top,

@@ -81,6 +81,13 @@ public:
 		MxLong alignedWidth = AlignToFourByte(m_bmiHeader->biWidth);
 		return alignedWidth * absHeight;
 	}
+	inline MxLong GetAdjustedStride()
+	{
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+			return GetBmiStride();
+		else
+			return -GetBmiStride();
+	}
 
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
