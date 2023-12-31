@@ -408,9 +408,10 @@ void MxDisplaySurface::VTable0x28(
 
 							for (MxS32 i = p_width; i > 0; i--) {
 								MxU16 element = p16BitPal[*data++];
-								surface += 4;
-								*((MxU16*) surface - 2) = element;
-								*((MxU16*) surface - 1) = element;
+								*(MxU16*) surface = element;
+								surface += 2;
+								*(MxU16*) surface = element;
+								surface += 2;
 							}
 
 							data += v56;
@@ -427,9 +428,10 @@ void MxDisplaySurface::VTable0x28(
 
 							for (MxS32 i = p_width; i > 0; i--) {
 								MxU16 element = p16BitPal[*data++];
-								surface += 4;
-								*((MxU16*) surface - 2) = element;
-								*((MxU16*) surface - 1) = element;
+								*(MxU16*) surface = element;
+								surface += 2;
+								*(MxU16*) surface = element;
+								surface += 2;
 							}
 
 							memcpy(surface, surfaceBefore, length);
@@ -472,7 +474,7 @@ void MxDisplaySurface::VTable0x28(
 
 					for (MxS32 i = 0; p_height > i; i++) {
 						for (MxS32 j = 0; p_width > j; j++) {
-							*(MxU16*) (surface) = m_16bitPal[*data++];
+							*(MxU16*) surface = m_16bitPal[*data++];
 							surface += 2;
 						}
 
