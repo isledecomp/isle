@@ -381,9 +381,10 @@ void MxDisplaySurface::VTable0x28(
 						}
 
 						data += v22;
+						surface += v55;
 
-						memcpy(&surface[v55], surfaceBefore, 2 * p_width);
-						surface = &surface[v55] + ddsd.lPitch;
+						memcpy(surface, surfaceBefore, 2 * p_width);
+						surface += ddsd.lPitch;
 					}
 					break;
 				}
