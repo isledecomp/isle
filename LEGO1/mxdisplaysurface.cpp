@@ -449,9 +449,8 @@ void MxDisplaySurface::VTable0x28(
 
 					MxLong v57 = ddsd.lPitch;
 					while (p_height--) {
-						MxU8* prevData = data;
+						memcpy(surface, data, p_width);
 						data += stride;
-						memcpy(surface, prevData, p_width);
 						surface += v57;
 					}
 					break;
@@ -466,16 +465,16 @@ void MxDisplaySurface::VTable0x28(
 						stride = -p_bitmap->GetBmiStride();
 
 					MxLong v50 = stride - p_width;
-					MxLong j = ddsd.lPitch - (2 * p_width);
+					MxLong length = ddsd.lPitch - (2 * p_width);
 
-					for (MxS32 v51 = 0; p_height > v51; v51++) {
-						for (MxS32 k = 0; p_width > k; k++) {
-							MxU8 v53 = *data++;
+					for (MxS32 i = 0; p_height > i; i++) {
+						for (MxS32 j = 0; p_width > j; j++) {
+							*(MxU16*) (surface) = m_16bitPal[*data++];
 							surface += 2;
-							*(MxU16*) (surface - 2) = m_16bitPal[v53];
 						}
+
 						data += v50;
-						surface += j;
+						surface += length;
 					}
 				}
 				}
