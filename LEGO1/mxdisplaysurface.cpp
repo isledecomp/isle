@@ -416,7 +416,8 @@ void MxDisplaySurface::VTable0x28(
 							data += v56;
 							surface += v62;
 
-							memcpy(surface, surfaceBefore, length);
+							// Odd expression for the length?
+							memcpy(surface, surfaceBefore, 4 * ((MxU32) (4 * p_width) / 4));
 							surface += ddsd.lPitch;
 						}
 					}
