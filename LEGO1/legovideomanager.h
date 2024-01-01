@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "lego3dmanager.h"
 #include "mxdirect3d.h"
-#include "mxstopwatch.h"
+#include "mxdirectx/mxstopwatch.h"
 #include "mxunknown100d9d00.h"
 #include "mxvideomanager.h"
 
