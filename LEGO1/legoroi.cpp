@@ -60,7 +60,7 @@ void LegoROI::configureLegoROI(MxS32 p_roiConfig)
 }
 
 // STUB: LEGO1 0x100a9a50
-LegoROI::LegoROI(Tgl::Renderer* pRenderer, ViewLODList* lodList, MxTime p_time) : ViewROI(pRenderer, lodList)
+LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time) : ViewROI(p_renderer, p_lodList)
 {
 	m_time = p_time;
 }

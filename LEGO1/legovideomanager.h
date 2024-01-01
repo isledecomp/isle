@@ -31,7 +31,7 @@ public:
 	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
 	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
 	// FUNCTION: LGEO1 0x1007ab10
-	virtual MxUnknown100d9d00* VTable0x3c() { return m_unk100d9d00; } // vtable+0x3c
+	virtual MxUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
@@ -55,10 +55,10 @@ private:
 	MxBool m_unk0xe6;
 	PALETTEENTRY m_paletteEntries[256]; // 0xe7
 	undefined m_padding0x4e7;
-	MxUnknown100d9d00* m_unk100d9d00; // 0x4e8
-	MxBool m_isFullscreenMovie;       // 0x4ec
-	MxPalette* m_palette;             // 0x4f0
-	MxStopWatch* m_stopWatch;         // 0x4f4
+	MxUnknown100d9d00* m_unk0x100d9d00; // 0x4e8
+	MxBool m_isFullscreenMovie;         // 0x4ec
+	MxPalette* m_palette;               // 0x4f0
+	MxStopWatch* m_stopWatch;           // 0x4f4
 	undefined m_padding0x4f4[8];
 	MxBool m_unk0x500;
 	MxBool m_cursorMoved; // 0x501

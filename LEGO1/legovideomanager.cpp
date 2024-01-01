@@ -19,7 +19,7 @@ LegoVideoManager::LegoVideoManager()
 	m_unk0xe6 = FALSE;
 	memset(m_unk0x78, 0, sizeof(m_unk0x78));
 	m_unk0x78[0] = 0x6c;
-	m_unk100d9d00 = NULL;
+	m_unk0x100d9d00 = NULL;
 	m_isFullscreenMovie = FALSE;
 	m_palette = NULL;
 	m_stopWatch = NULL;
@@ -168,7 +168,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_3dManager->GetLego3DView()->FUN_100ab100(m_viewROI);
 	m_3dManager->GetLego3DView()->FUN_100ab1b0(m_viewROI);
 
-	m_unk100d9d00 = new MxUnknown100d9d00;
+	m_unk0x100d9d00 = new MxUnknown100d9d00;
 	m_unk0xe4 = FALSE;
 	m_stopWatch = new MxStopWatch;
 	m_stopWatch->Start();

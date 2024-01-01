@@ -13,7 +13,7 @@ typedef MxBool (*ROIHandler)(char*, char*, MxU32);
 // SIZE 0x10c
 class LegoROI : public ViewROI {
 public:
-	LegoROI(Tgl::Renderer* pRenderer, ViewLODList* lodList, MxTime p_time);
+	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time);
 
 	__declspec(dllexport) void SetDisplayBB(MxS32 p_displayBB);
 	__declspec(dllexport) static void configureLegoROI(MxS32 p_roi);
