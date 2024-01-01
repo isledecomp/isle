@@ -1,6 +1,7 @@
 #ifndef VIEWLODLIST_H
 #define VIEWLODLIST_H
 
+#include "../mxstl/stlcompat.h"
 #include "../realtime/lodlist.h"
 #include "assert.h"
 #include "compat.h"
@@ -59,6 +60,8 @@ struct ROINameComparator {
 // It stores ViewLODLists under a name, the name of the ROI where
 // the ViewLODList belongs.
 
+// VTABLE: LEGO1 0x100dbdbc
+// SIZE 0x14
 class ViewLODListManager {
 
 	typedef map<ROIName, ViewLODList*, ROINameComparator> ViewLODListMap;

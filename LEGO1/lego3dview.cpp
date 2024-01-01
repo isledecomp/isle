@@ -16,9 +16,21 @@ Lego3DView::~Lego3DView()
 }
 
 // STUB: LEGO1 0x100aaf90
-MxBool Lego3DView::Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& p_render)
+BOOL Lego3DView::Create(TglSurface::CreateStruct& p_createStruct, Tgl::Renderer* p_renderer)
 {
 	return FALSE;
+}
+
+// STUB: LEGO1 0x100ab100
+void Lego3DView::FUN_100ab100(LegoROI* p_roi)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100ab1b0
+void Lego3DView::FUN_100ab1b0(LegoROI* p_roi)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x100ab2b0

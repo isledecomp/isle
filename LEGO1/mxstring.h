@@ -4,6 +4,7 @@
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100dc110
+// SIZE 0x10
 class MxString : public MxCore {
 public:
 	__declspec(dllexport) MxString(const MxString& p_str);
@@ -22,8 +23,8 @@ public:
 	inline const char* GetData() const { return m_data; }
 
 private:
-	char* m_data;
-	MxU16 m_length;
+	char* m_data;   // 0x08
+	MxU16 m_length; // 0x0c
 };
 
 #endif // MXSTRING_H

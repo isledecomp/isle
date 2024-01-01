@@ -76,8 +76,8 @@ public:
 	__declspec(dllexport) int Pause(int);
 
 	MxDirectDraw();
-
 	virtual ~MxDirectDraw();
+
 	virtual BOOL Create(
 		HWND hWnd,
 		BOOL fullscreen_1,
@@ -88,10 +88,15 @@ public:
 		int bpp,
 		const PALETTEENTRY* pPaletteEntries,
 		int paletteEntryCount
-	);
-	virtual void Destroy();
-	virtual void DestroyButNotDirectDraw();
-	virtual const char* ErrorToString(HRESULT p_error);
+	);                                                  // vtable+0x04
+	virtual void Destroy();                             // vtable+0x08
+	virtual void DestroyButNotDirectDraw();             // vtable+0x0c
+	virtual const char* ErrorToString(HRESULT p_error); // vtable+0x10
+
+	inline IDirectDraw* GetDirectDraw() { return m_pDirectDraw; }
+	inline IDirectDrawSurface* GetFrontBuffer() { return m_pFrontBuffer; }
+	inline IDirectDrawSurface* GetBackBuffer() { return m_pBackBuffer; }
+	inline IDirectDrawClipper* GetClipper() { return m_pClipper; }
 
 protected:
 	BOOL CacheOriginalPaletteEntries();

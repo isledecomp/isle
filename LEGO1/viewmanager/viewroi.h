@@ -3,6 +3,7 @@
 
 #include "../realtime/orientableroi.h"
 #include "../tgl/tgl.h"
+#include "decomp.h"
 #include "viewlodlist.h"
 
 /*
@@ -10,6 +11,9 @@
 	etc. Basically, anything which can be placed in a scene and manipilated
 	by the view manager is a ViewROI.
 */
+
+// VTABLE: LEGO1 0x100dbe70
+// SIZE 0xe0
 class ViewROI : public OrientableROI {
 public:
 	inline ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
@@ -17,7 +21,12 @@ public:
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
 	}
-	inline ~ViewROI();
+	inline ~ViewROI()
+	{
+		// SetLODList() will decrease refCount of LODList
+		SetLODList(0);
+		delete geometry;
+	}
 	inline void SetLODList(ViewLODList* lodList)
 	{
 		// ??? inherently type unsafe - kind of... because, now, ROI
@@ -38,6 +47,8 @@ public:
 	virtual float IntrinsicImportance() const;
 	virtual Tgl::Group* GetGeometry();
 	virtual const Tgl::Group* GetGeometry() const;
+
+	static undefined SetUnk101013d8(undefined p_flag);
 
 protected:
 	Tgl::Group* geometry;

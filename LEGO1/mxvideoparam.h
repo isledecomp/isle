@@ -23,7 +23,6 @@ public:
 	);
 	__declspec(dllexport) MxVideoParam& operator=(const MxVideoParam& p_videoParam);
 	__declspec(dllexport) ~MxVideoParam();
-
 	__declspec(dllexport) void SetDeviceName(char* p_deviceId);
 
 	inline MxVideoParamFlags& Flags() { return m_flags; }
@@ -34,6 +33,7 @@ public:
 	inline MxRect32& GetRect() { return this->m_rect; }
 	inline MxPalette* GetPalette() { return this->m_palette; }
 	inline MxU32 GetBackBuffers() { return this->m_backBuffers; }
+	inline char* GetDeviceName() { return this->m_deviceId; }
 
 private:
 	MxRect32 m_rect;           // 0x00

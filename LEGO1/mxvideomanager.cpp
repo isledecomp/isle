@@ -28,7 +28,7 @@ MxVideoManager::~MxVideoManager()
 MxResult MxVideoManager::Init()
 {
 	this->m_pDirectDraw = NULL;
-	this->m_pDDSurface = NULL;
+	this->m_pDirect3D = NULL;
 	this->m_displaySurface = NULL;
 	this->m_region = NULL;
 	this->m_videoParam.SetPalette(NULL);
@@ -60,8 +60,8 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 	if (m_unk0x60) {
 		if (m_pDirectDraw)
 			m_pDirectDraw->Release();
-		if (m_pDDSurface)
-			m_pDDSurface->Release();
+		if (m_pDirect3D)
+			m_pDirect3D->Release();
 	}
 
 	Init();
@@ -120,7 +120,7 @@ void MxVideoManager::SortPresenterList()
 MxResult MxVideoManager::VTable0x28(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAW p_pDirectDraw,
-	LPDIRECTDRAWSURFACE p_pDDSurface,
+	LPDIRECT3D p_pDirect3D,
 	LPDIRECTDRAWSURFACE p_ddSurface1,
 	LPDIRECTDRAWSURFACE p_ddSurface2,
 	LPDIRECTDRAWCLIPPER p_ddClipper,
@@ -146,7 +146,7 @@ MxResult MxVideoManager::VTable0x28(
 		goto done;
 
 	m_pDirectDraw = p_pDirectDraw;
-	m_pDDSurface = p_pDDSurface;
+	m_pDirect3D = p_pDirect3D;
 
 	MxPalette* palette;
 	if (p_videoParam.GetPalette() == NULL) {

@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxdirectdraw.h"
+#include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
 #include <d3d.h>
@@ -13,40 +14,19 @@ public:
 	MxDeviceModeFinder();
 	~MxDeviceModeFinder();
 
-	undefined4 m_pad[56];
-	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // +0xe0
+	undefined m_pad[0xe0];                       // 0x00
+	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // 0xe0
 };
 
-// VTABLE: LEGO1 0x100db814
-// or is it 0x100d9cc8?
-// SIZE 0x198
-class MxDeviceEnumerate {
-public:
-	MxDeviceEnumerate();
-	virtual MxResult DoEnumerate();
-
-	BOOL FUN_1009c070();
-
-	const char* EnumerateErrorToString(HRESULT p_error);
-
-	undefined4 m_unk0x004;
-	undefined4 m_unk0x008;
-	undefined4 m_unk0x00c;
-	MxBool m_unk0x010; // +0x10
-
-	undefined4 m_unk0x014[97];
-};
+class MxDeviceEnumerate;
 
 // VTABLE: LEGO1 0x100db800
 // SIZE 0x894
 class MxDirect3D : public MxDirectDraw {
 public:
 	MxDirect3D();
-
-	void Clear();
-	inline MxDeviceModeFinder* GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
-
 	virtual ~MxDirect3D();
+
 	virtual BOOL Create(
 		HWND hWnd,
 		BOOL fullscreen_1,
@@ -57,22 +37,59 @@ public:
 		int bpp,
 		const PALETTEENTRY* pPaletteEntries,
 		int paletteEntryCount
-	);
-	virtual void Destroy();
+	) override;                                      // vtable+0x04
+	virtual void Destroy() override;                 // vtable+0x08
+	virtual void DestroyButNotDirectDraw() override; // vtable+0x0c
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
+	BOOL FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerate, undefined* p_und1, undefined* p_und2);
+
+	inline MxDeviceModeFinder* GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
+	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
+	inline IDirect3DDevice* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
+
+private:
+	MxDeviceModeFinder* m_pDeviceModeFinder; // 0x880
+	IDirect3D* m_pDirect3d;                  // 0x884
+	IDirect3DDevice* m_pDirect3dDevice;      // 0x888
+	undefined4 m_unk0x88c;                   // 0x88c
+	undefined4 m_unk0x890;                   // 0x890
+};
+
+// SIZE 0x190
+struct MxDeviceEnumerateElement {
+	undefined m_pad[0x190]; // 0x00
+
+	MxBool operator==(MxDeviceEnumerateElement) const { return TRUE; }
+	MxBool operator<(MxDeviceEnumerateElement) const { return TRUE; }
+};
+
+// VTABLE: LEGO1 0x100db814
+// SIZE 0x14
+class MxDeviceEnumerate {
+public:
+	MxDeviceEnumerate();
+
+	virtual MxResult DoEnumerate(); // vtable+0x00
+
+	BOOL FUN_1009c070();
+	const char* EnumerateErrorToString(HRESULT p_error);
+	MxS32 ParseDeviceName(const char* p_deviceId);
+	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
+	MxResult FUN_1009d0d0();
+	MxResult FUN_1009d210();
 
 	static void BuildErrorString(const char*, ...);
 
-private:
-	MxDeviceModeFinder* m_pDeviceModeFinder; // +0x880
-	IDirect3D* m_pDirect3d;                  // +0x884
-	IDirect3DDevice* m_pDirect3dDevice;
-	undefined4 m_unk0x88c;
-	undefined4 m_unk0x890;
+	list<MxDeviceEnumerateElement> m_list; // 0x04
+	MxBool m_unk0x10;                      // 0x10
 };
 
-BOOL FAR PASCAL EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID);
+BOOL CALLBACK EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID);
+
+// VTABLE: LEGO1 0x100d9cc8
+// SIZE 0x14
+class MxDeviceEnumerate100d9cc8 : public MxDeviceEnumerate {};
 
 #endif // MXDIRECT3D_H

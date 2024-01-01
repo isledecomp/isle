@@ -2,9 +2,10 @@
 
 #include <stdio.h> // for vsprintf
 
-DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
-DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x198);
+DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
+DECOMP_SIZE_ASSERT(MxDeviceEnumerateElement, 0x190);
+DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x14);
 
 // FUNCTION: LEGO1 0x1009b0a0
 MxDirect3D::MxDirect3D()
@@ -85,7 +86,7 @@ void MxDirect3D::Destroy()
 }
 
 // FUNCTION: LEGO1 0x1009b290
-void MxDirect3D::Clear()
+void MxDirect3D::DestroyButNotDirectDraw()
 {
 	if (this->m_pDirect3dDevice) {
 		this->m_pDirect3dDevice->Release();
@@ -122,6 +123,12 @@ BOOL MxDirect3D::D3DSetMode()
 	return TRUE;
 }
 
+// STUB: LEGO1 0x1009b5f0
+BOOL MxDirect3D::FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerate, undefined* p_und1, undefined* p_und2)
+{
+	return TRUE;
+}
+
 // FUNCTION: LEGO1 0x1009b8b0
 MxDeviceModeFinder::MxDeviceModeFinder()
 {
@@ -137,6 +144,12 @@ MxDeviceModeFinder::~MxDeviceModeFinder()
 	}
 }
 
+// FUNCTION: LEGO1 0x1009bec0
+MxDeviceEnumerate::MxDeviceEnumerate()
+{
+	m_unk0x10 = FALSE;
+}
+
 // STUB: LEGO1 0x1009c070
 BOOL MxDeviceEnumerate::FUN_1009c070()
 {
@@ -144,14 +157,14 @@ BOOL MxDeviceEnumerate::FUN_1009c070()
 	// HRESULT ret = DirectDrawCreate();
 	HRESULT ret = 0;
 	if (ret) {
-		MxDirect3D::BuildErrorString("GetCaps failed: %s\n", EnumerateErrorToString(ret));
+		BuildErrorString("GetCaps failed: %s\n", EnumerateErrorToString(ret));
 	}
 	// IDirect3D2_EnumDevices
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1009c4c0
-void MxDirect3D::BuildErrorString(const char* p_format, ...)
+void MxDeviceEnumerate::BuildErrorString(const char* p_format, ...)
 {
 	va_list args;
 	char buf[512];
@@ -166,22 +179,21 @@ void MxDirect3D::BuildErrorString(const char* p_format, ...)
 // FUNCTION: LEGO1 0x1009c6c0
 MxResult MxDeviceEnumerate::DoEnumerate()
 {
-	// TODO: what does ECX refer to in this context?
-	if (m_unk0x010)
+	if (m_unk0x10)
 		return FAILURE;
 
 	HRESULT ret = DirectDrawEnumerate(EnumerateCallback, this);
 	if (ret) {
-		MxDirect3D::BuildErrorString("DirectDrawEnumerate returned error %s\n", EnumerateErrorToString(ret));
+		BuildErrorString("DirectDrawEnumerate returned error %s\n", EnumerateErrorToString(ret));
 		return FAILURE;
 	}
 
-	m_unk0x010 = TRUE;
+	m_unk0x10 = TRUE;
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1009c710
-BOOL FAR PASCAL EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID)
+BOOL CALLBACK EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID)
 {
 	// TODO
 	return FALSE;
@@ -194,4 +206,28 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	// MxDirectDraw, except that this one now contains the Direct3D errors.
 	// Probably just copied from a sample file in the dx5 sdk.
 	return "";
+}
+
+// STUB: LEGO1 0x1009ce60
+MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
+{
+	return -1;
+}
+
+// STUB: LEGO1 0x1009d030
+MxResult MxDeviceEnumerate::FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3)
+{
+	return FAILURE;
+}
+
+// STUB: LEGO1 0x1009d0d0
+MxResult MxDeviceEnumerate::FUN_1009d0d0()
+{
+	return FAILURE;
+}
+
+// STUB: LEGO1 0x1009d210
+MxResult MxDeviceEnumerate::FUN_1009d210()
+{
+	return FAILURE;
 }
