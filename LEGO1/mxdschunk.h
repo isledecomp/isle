@@ -11,11 +11,9 @@ class MxDSChunk : public MxCore {
 public:
 	enum {
 		Flag_Bit1 = 0x01,
-		Flag_Bit2 = 0x02,
+		Flag_End = 0x02,
 		Flag_Bit3 = 0x04,
-		Flag_Bit4 = 0x08,
-		Flag_Bit5 = 0x10,
-		Flag_Bit8 = 0x80,
+		Flag_Split = 0x10,
 		Flag_Bit16 = 0x8000
 	};
 

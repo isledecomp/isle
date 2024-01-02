@@ -201,7 +201,7 @@ void MxWavePresenter::StreamingTickle()
 		if (!(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
 			MxStreamChunk* chunk = FUN_100b5650();
 
-			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit2 && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
+			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_End && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
 				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
 
 				m_currentChunk = new MxStreamChunk;

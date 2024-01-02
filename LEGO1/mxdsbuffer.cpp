@@ -298,18 +298,17 @@ MxResult MxDSBuffer::ParseChunk(
 
 	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
 
-	if (p_header->GetFlags() & MxDSChunk::Flag_Bit5) {
+	if (p_header->GetFlags() & MxDSChunk::Flag_Split) {
 		MxU32 length = p_header->GetLength() + MxDSChunk::ReturnE() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
 		if (buffer && buffer->AllocateBuffer(length, MxDSBufferType_Allocate) == SUCCESS &&
 			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
 			*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
-			;
 
 			if (*p_streamingAction) {
 				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
-				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Bit5;
+				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Split;
 
 				delete p_header;
 				(*p_streamingAction)->SetUnknowna0(buffer);
@@ -324,7 +323,7 @@ MxResult MxDSBuffer::ParseChunk(
 		return FAILURE;
 	}
 	else {
-		if (p_header->GetFlags() & MxDSChunk::Flag_Bit2) {
+		if (p_header->GetFlags() & MxDSChunk::Flag_End) {
 			if (m_unk0x30->HasId(p_header->GetObjectId())) {
 				if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 &&
 					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {
@@ -474,7 +473,7 @@ MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 			memcpy(m_pBuffer + m_writeOffset - m_bytesRemaining, ptr, bytesRead);
 
 			if (m_writeOffset == m_bytesRemaining)
-				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoPlus0x12(m_pBuffer) + MxStreamChunk::ReturnE();
+				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoLength(m_pBuffer) + MxStreamChunk::ReturnE();
 
 			m_bytesRemaining -= bytesRead;
 			result = SUCCESS;

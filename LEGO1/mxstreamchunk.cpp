@@ -54,7 +54,7 @@ MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, 
 {
 	for (MxStreamListMxDSSubscriber::iterator it = p_subscriberList.begin(); it != p_subscriberList.end(); it++) {
 		if ((*it)->GetObjectId() == m_objectId && (*it)->GetUnknown48() == p_obj24val) {
-			if (m_flags & MxDSChunk::Flag_Bit2 && m_buffer) {
+			if (m_flags & MxDSChunk::Flag_End && m_buffer) {
 				m_buffer->ReleaseRef(this);
 				m_buffer = NULL;
 			}
@@ -77,23 +77,23 @@ void MxStreamChunk::SetBuffer(MxDSBuffer* p_buffer)
 // FUNCTION: LEGO1 0x100c3180
 MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
 {
-	return (MxU16*) (p_buffer + 8);
+	return (MxU16*) (p_buffer + 0x08);
 }
 
 // FUNCTION: LEGO1 0x100c3190
-MxU32* MxStreamChunk::IntoPlus0xa(MxU8* p_buffer)
+MxU32* MxStreamChunk::IntoObjectId(MxU8* p_buffer)
 {
-	return (MxU32*) (p_buffer + 0xa);
+	return (MxU32*) (p_buffer + 0x0a);
 }
 
 // FUNCTION: LEGO1 0x100c31a0
-MxU32* MxStreamChunk::IntoPlus0xe(MxU8* p_buffer)
+MxLong* MxStreamChunk::IntoTime(MxU8* p_buffer)
 {
-	return (MxU32*) (p_buffer + 0xe);
+	return (MxLong*) (p_buffer + 0x0e);
 }
 
 // FUNCTION: LEGO1 0x100c31b0
-MxU32* MxStreamChunk::IntoPlus0x12(MxU8* p_buffer)
+MxU32* MxStreamChunk::IntoLength(MxU8* p_buffer)
 {
 	return (MxU32*) (p_buffer + 0x12);
 }
