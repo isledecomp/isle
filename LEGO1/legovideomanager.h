@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "lego3dmanager.h"
 #include "mxdirect3d.h"
+#include "mxdirectx/mxstopwatch.h"
+#include "mxunknown100d9d00.h"
 #include "mxvideomanager.h"
 
 #include <ddraw.h>
@@ -29,7 +31,7 @@ public:
 	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
 	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
 	// FUNCTION: LGEO1 0x1007ab10
-	virtual undefined4 VTable0x3c() { return m_unk0x4e8; } // vtable+0x3c
+	virtual MxUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
@@ -39,9 +41,12 @@ public:
 	inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
 
 private:
-	undefined4 m_unk0x64;
+	MxResult CreateDirect3D();
+	MxResult FUN_1007c930();
+
+	Tgl::Renderer* m_renderer;
 	Lego3DManager* m_3dManager; // 0x68
-	undefined4 m_unk0x6c;
+	LegoROI* m_viewROI;         // 0x6c
 	undefined4 m_unk0x70;
 	MxDirect3D* m_direct3d; // 0x74
 	undefined4 m_unk0x78[27];
@@ -50,10 +55,10 @@ private:
 	MxBool m_unk0xe6;
 	PALETTEENTRY m_paletteEntries[256]; // 0xe7
 	undefined m_padding0x4e7;
-	undefined4 m_unk0x4e8;
-	MxBool m_isFullscreenMovie;   // 0x4ec
-	MxPalette* m_palette;         // 0x4f0
-	LARGE_INTEGER* m_prefCounter; // 0x4f4
+	MxUnknown100d9d00* m_unk0x100d9d00; // 0x4e8
+	MxBool m_isFullscreenMovie;         // 0x4ec
+	MxPalette* m_palette;               // 0x4f0
+	MxStopWatch* m_stopWatch;           // 0x4f4
 	undefined m_padding0x4f4[8];
 	MxBool m_unk0x500;
 	MxBool m_cursorMoved; // 0x501

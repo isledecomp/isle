@@ -1,21 +1,28 @@
 #include "legovideomanager.h"
 
+#include "legoomni.h"
+#include "legoroi.h"
+#include "mxtimer.h"
+#include "realtime/matrix.h"
+#include "viewmanager/viewroi.h"
+
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
+DECOMP_SIZE_ASSERT(MxStopWatch, 0x18);
 
 // FUNCTION: LEGO1 0x1007aa20
 LegoVideoManager::LegoVideoManager()
 {
-	m_unk0x64 = 0;
+	m_renderer = NULL;
 	m_3dManager = NULL;
-	m_unk0x6c = 0;
+	m_viewROI = NULL;
 	m_direct3d = 0;
 	m_unk0xe6 = FALSE;
 	memset(m_unk0x78, 0, sizeof(m_unk0x78));
 	m_unk0x78[0] = 0x6c;
-	m_unk0x4e8 = 0;
+	m_unk0x100d9d00 = NULL;
 	m_isFullscreenMovie = FALSE;
 	m_palette = NULL;
-	m_prefCounter = NULL;
+	m_stopWatch = NULL;
 	m_cursorMoved = FALSE;
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
@@ -37,11 +44,148 @@ LegoVideoManager::~LegoVideoManager()
 	delete m_palette;
 }
 
-// STUB: LEGO1 0x1007ac40
+// STUB: LEGO1 0x1007abb0
+MxResult LegoVideoManager::CreateDirect3D()
+{
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x1007ac40
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	MxResult result = MxVideoManager::Create(p_videoParam, p_frequencyMS, p_createThread);
-	m_videoParam.GetPalette()->CreateNativePalette();
+	MxBool paletteCreated = FALSE;
+	undefined* und1 = NULL;
+	undefined* und2 = NULL;
+	MxResult result = FAILURE;
+
+	MxDeviceEnumerate100d9cc8 deviceEnumerate;
+	Vector3Data posVec(0.0, 1.25, -50.0);
+	Vector3Data dirVec(0.0, 0.0, 1.0);
+	Vector3Data upVec(0.0, 1.0, 0.0);
+	Matrix4Data outMatrix;
+	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
+	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
+	MxS32 und3 = -1;
+
+	if (!p_videoParam.GetPalette()) {
+		MxPalette* palette = new MxPalette;
+		p_videoParam.SetPalette(palette);
+
+		if (!palette)
+			goto done;
+		paletteCreated = TRUE;
+	}
+
+	PALETTEENTRY paletteEntries[256];
+	p_videoParam.GetPalette()->GetEntries(paletteEntries);
+
+	if (CreateDirect3D() != SUCCESS)
+		goto done;
+
+	if (deviceEnumerate.DoEnumerate() != SUCCESS)
+		goto done;
+
+	if (p_videoParam.GetDeviceName()) {
+		und3 = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName());
+		if (und3 >= 0) {
+			if ((und3 = deviceEnumerate.FUN_1009d030(und3, &und1, &und2)) != SUCCESS)
+				und3 = -1;
+		}
+	}
+
+	if (und3 < 0) {
+		deviceEnumerate.FUN_1009d210();
+		und3 = deviceEnumerate.FUN_1009d0d0();
+		deviceEnumerate.FUN_1009d030(und3, &und1, &und2);
+	}
+
+	m_direct3d->FUN_1009b5f0(deviceEnumerate, und1, und2);
+
+	if (!*((MxU32*) &und1[0x14]) && *((MxU32*) &und1[0xe0]) != 2)
+		p_videoParam.Flags().SetF2bit0(TRUE);
+	else
+		p_videoParam.Flags().SetF2bit0(FALSE);
+
+	ViewROI::SetUnk101013d8(p_videoParam.Flags().GetF2bit0() == FALSE);
+
+	if (!m_direct3d->Create(
+			hwnd,
+			p_videoParam.Flags().GetFullScreen(),
+			p_videoParam.Flags().GetFlipSurfaces(),
+			p_videoParam.Flags().GetBackBuffers() == FALSE,
+			p_videoParam.GetRect().GetWidth(),
+			p_videoParam.GetRect().GetHeight(),
+			bits,
+			paletteEntries,
+			sizeof(paletteEntries) / sizeof(paletteEntries[0])
+		))
+		goto done;
+
+	if (MxVideoManager::VTable0x28(
+			p_videoParam,
+			m_direct3d->GetDirectDraw(),
+			m_direct3d->GetDirect3D(),
+			m_direct3d->GetFrontBuffer(),
+			m_direct3d->GetBackBuffer(),
+			m_direct3d->GetClipper(),
+			p_frequencyMS,
+			p_createThread
+		) != SUCCESS)
+		goto done;
+
+	m_renderer = Tgl::CreateRenderer();
+
+	if (!m_renderer)
+		goto done;
+
+	m_3dManager = new Lego3DManager;
+
+	if (!m_3dManager)
+		goto done;
+
+	Lego3DManager::CreateStruct createStruct;
+	memset(&createStruct, 0, sizeof(createStruct));
+	createStruct.m_hwnd = LegoOmni::GetInstance()->GetWindowHandle();
+	createStruct.m_directDraw = m_pDirectDraw;
+	createStruct.m_ddSurface1 = m_displaySurface->GetDirectDrawSurface1();
+	createStruct.m_ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
+	createStruct.m_ddPalette = m_videoParam.GetPalette()->CreateNativePalette();
+	createStruct.m_isFullScreen = FALSE;
+	createStruct.m_flags = m_videoParam.Flags().GetWideViewAngle();
+	createStruct.m_direct3d = m_direct3d->GetDirect3D();
+	createStruct.m_d3dDevice = m_direct3d->GetDirect3DDevice();
+
+	if (!m_3dManager->Create(createStruct))
+		goto done;
+
+	ViewLODList* pLODList;
+
+	if (FUN_1007c930() != SUCCESS)
+		goto done;
+
+	pLODList = m_3dManager->GetViewLODListManager()->Create("CameraROI", 1);
+	m_viewROI = new LegoROI(m_renderer, pLODList, Timer()->GetTime());
+	pLODList->Release();
+
+	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
+	m_viewROI->WrappedSetLocalTransform(outMatrix);
+
+	m_3dManager->GetLego3DView()->FUN_100ab100(m_viewROI);
+	m_3dManager->GetLego3DView()->FUN_100ab1b0(m_viewROI);
+
+	m_unk0x100d9d00 = new MxUnknown100d9d00;
+	m_unk0xe4 = FALSE;
+	m_stopWatch = new MxStopWatch;
+	m_stopWatch->Start();
+
+	result = SUCCESS;
+
+done:
+	if (paletteCreated) {
+		delete p_videoParam.GetPalette();
+		p_videoParam.SetPalette(NULL);
+	}
+
 	return result;
 }
 
@@ -59,8 +203,7 @@ void LegoVideoManager::Destroy()
 
 	delete m_3dManager;
 	MxVideoManager::Destroy();
-	// todo: delete m_unk0x4e8
-	delete[] m_prefCounter;
+	delete m_stopWatch;
 }
 
 // FUNCTION: LEGO1 0x1007b6a0
@@ -204,4 +347,10 @@ int LegoVideoManager::DisableRMDevice()
 {
 	// TODO
 	return 0;
+}
+
+// STUB: LEGO1 0x1007c930
+MxResult LegoVideoManager::FUN_1007c930()
+{
+	return SUCCESS;
 }

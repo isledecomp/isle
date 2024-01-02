@@ -4,6 +4,9 @@
 
 DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
 
+// GLOBAL: LEGO1 0x101013d8
+undefined g_unk101013d8 = 0;
+
 // FUNCTION: LEGO1 0x100a9eb0
 float ViewROI::IntrinsicImportance() const
 {
@@ -34,9 +37,10 @@ void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
 	}
 }
 
-inline ViewROI::~ViewROI()
+// FUNCTION: LEGO1 0x100aa500
+undefined ViewROI::SetUnk101013d8(undefined p_flag)
 {
-	// SetLODList() will decrease refCount of LODList
-	SetLODList(0);
-	delete geometry;
+	undefined oldFlag = g_unk101013d8;
+	g_unk101013d8 = p_flag;
+	return oldFlag;
 }

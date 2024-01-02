@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+DECOMP_SIZE_ASSERT(LegoROI, 0x10c);
+
 // SIZE 0x14
 typedef struct {
 	const char* m_name;
@@ -35,6 +37,12 @@ MxS32 g_roiConfig = 100;
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
 
+// FUNCTION: LEGO1 0x100a46a0
+void LegoROI::WrappedSetLocalTransform(Matrix4Impl& p_transform)
+{
+	SetLocalTransform(p_transform);
+}
+
 // STUB: LEGO1 0x100a46b0
 void LegoROI::FUN_100a46b0(Matrix4Impl& p_transform)
 {
@@ -49,6 +57,12 @@ void LegoROI::FUN_100a58f0(Matrix4Impl& p_transform)
 void LegoROI::configureLegoROI(MxS32 p_roiConfig)
 {
 	g_roiConfig = p_roiConfig;
+}
+
+// STUB: LEGO1 0x100a9a50
+LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time) : ViewROI(p_renderer, p_lodList)
+{
+	m_time = p_time;
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
@@ -103,4 +117,11 @@ void LegoROI::SetSomeHandlerFunction(ROIHandler p_func)
 void LegoROI::SetDisplayBB(MxS32 p_displayBB)
 {
 	// Intentionally empty function
+}
+
+// Note: Actually part of parent class (doesn't exist yet)
+// STUB: LEGO1 0x100aa350
+void LegoROI::UpdateWorldBoundingVolumes()
+{
+	// TODO
 }

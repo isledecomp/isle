@@ -1,9 +1,9 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
-#include "mxrendersettings.h"
 #include "mxtypes.h"
 #include "tgl/d3drm/impl.h"
+#include "tglsurface.h"
 #include "viewmanager/viewmanager.h"
 
 class LegoROI;
@@ -18,8 +18,10 @@ public:
 
 	inline ViewManager* GetViewManager() { return this->m_viewManager; }
 	inline TglImpl::ViewImpl* GetViewPort() { return this->m_viewPort; }
-	MxBool Init(MxRenderSettings& p_renderSettings, Tgl::Renderer& p_render);
+	BOOL Create(TglSurface::CreateStruct& p_createStruct, Tgl::Renderer* p_renderer);
 	LegoROI* PickROI(MxLong p_a, MxLong p_b);
+	void FUN_100ab100(LegoROI* p_roi);
+	void FUN_100ab1b0(LegoROI* p_roi);
 
 private:
 	// TODO: all of these fields are in various base classes

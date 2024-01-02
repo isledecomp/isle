@@ -163,7 +163,6 @@ add_library(lego1 SHARED
   LEGO1/mxramstreamprovider.cpp
   LEGO1/mxregion.cpp
   LEGO1/mxregioncursor.cpp
-  LEGO1/mxrendersettings.cpp
   LEGO1/mxscheduler.cpp
   LEGO1/mxsemaphore.cpp
   LEGO1/mxsmack.cpp
@@ -182,7 +181,7 @@ add_library(lego1 SHARED
   LEGO1/mxtimer.cpp
   LEGO1/mxtransitionmanager.cpp
   LEGO1/mxtype17notificationparam.cpp
-  LEGO1/mxunknown100dbdbc.cpp
+  LEGO1/mxunknown100d7c88.cpp
   LEGO1/mxvariable.cpp
   LEGO1/mxvariabletable.cpp
   LEGO1/mxvideomanager.cpp
@@ -222,6 +221,7 @@ add_library(lego1 SHARED
   LEGO1/tgl/d3drm/view.cpp
   LEGO1/towtrack.cpp
   LEGO1/towtrackmissionstate.cpp
+  LEGO1/viewmanager/viewlodlist.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
 )

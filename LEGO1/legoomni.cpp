@@ -21,7 +21,6 @@
 #include "mxomnicreateparam.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
-#include "mxunknown100dbdbc.h"
 
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
 
@@ -386,7 +385,7 @@ void LegoOmni::Init()
 	MxOmni::Init();
 	m_unk0x68 = 0;
 	m_inputMgr = NULL;
-	m_renderMgr = NULL;
+	m_viewLODListManager = NULL;
 	m_gifManager = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
@@ -444,9 +443,9 @@ void LegoOmni::Destroy()
 		m_gifManager = NULL;
 	}
 
-	if (m_renderMgr) {
-		delete m_renderMgr;
-		m_renderMgr = NULL;
+	if (m_viewLODListManager) {
+		delete m_viewLODListManager;
+		m_viewLODListManager = NULL;
 	}
 
 	if (m_inputMgr) {
@@ -524,7 +523,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		}
 	}
 
-	m_renderMgr = new MxUnknown100dbdbc();
+	m_viewLODListManager = new ViewLODListManager();
 	m_gifManager = new GifManager();
 	// TODO: there is another class here
 	m_plantManager = new LegoPlantManager();
@@ -533,7 +532,8 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (m_renderMgr && m_gifManager && m_worldList && m_plantManager && m_animationManager && m_buildingManager) {
+	if (m_viewLODListManager && m_gifManager && m_worldList && m_plantManager && m_animationManager &&
+		m_buildingManager) {
 		// TODO: initialize a bunch of MxVariables
 		RegisterScripts();
 		FUN_1001a700();
