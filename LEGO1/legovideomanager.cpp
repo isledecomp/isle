@@ -44,10 +44,13 @@ LegoVideoManager::~LegoVideoManager()
 	delete m_palette;
 }
 
-// STUB: LEGO1 0x1007abb0
+// FUNCTION: LEGO1 0x1007abb0
 MxResult LegoVideoManager::CreateDirect3D()
 {
-	return SUCCESS;
+	if (!m_direct3d)
+		m_direct3d = new MxDirect3D;
+
+	return m_direct3d ? SUCCESS : FAILURE;
 }
 
 // FUNCTION: LEGO1 0x1007ac40
