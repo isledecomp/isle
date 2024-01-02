@@ -1,6 +1,7 @@
 #ifndef HOSPITAL_H
 #define HOSPITAL_H
 
+#include "decomp.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d9730
@@ -24,6 +25,21 @@ public:
 	{
 		return !strcmp(p_name, Hospital::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+private:
+	undefined2 m_unk0xf8;    // 0xf8
+	undefined4 m_unk0xfc;    // 0xfc
+	undefined2 m_unk0x100;   // 0x100
+	undefined4 m_unk0x104;   // 0x104 - VTable0x18 suggests this may be pointer to a LegoGameState
+	undefined2 m_unk0x108;   // 0x108
+	undefined4 m_unk0x10c;   // 0x10c
+	undefined4 m_unk0x110;   // 0x110
+	undefined4 m_unk0x114;   // 0x114
+	undefined m_unk0x118;    // 0x118
+	undefined4 m_unk0x11c;   // 0x11c
+	undefined4 m_unk0x120;   // 0x120
+	undefined m_unk0x124[4]; // 0x124
+	undefined m_unk0x128;    // 0x128
 };
 
 #endif // HOSPITAL_H
