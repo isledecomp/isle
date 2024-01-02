@@ -73,7 +73,7 @@ public:
 
 	virtual MxResult DoEnumerate(); // vtable+0x00
 
-	BOOL FUN_1009c070();
+	BOOL EnumDirectDrawCallback(GUID FAR* p_guid, LPSTR p_driverName, LPSTR p_driverDesc);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
