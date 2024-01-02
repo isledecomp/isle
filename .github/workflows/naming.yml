@@ -24,6 +24,6 @@ jobs:
           --clang-lib ${{ env.LLVM_PATH }}/lib/libclang.so \
           --style tools/ncc/ncc.style \
           --skip tools/ncc/skip.yml \
-          --definition WINAPI FAR CALLBACK HWND__=HWND \
+          --definition WINAPI FAR BOOL CALLBACK HWND__=HWND \
           --include util \
           --path LEGO1
