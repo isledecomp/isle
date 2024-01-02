@@ -63,9 +63,9 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	Vector3Data dirVec(0.0, 0.0, 1.0);
 	Vector3Data upVec(0.0, 1.0, 0.0);
 	Matrix4Data outMatrix;
-
 	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
 	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
+	MxS32 und3 = -1;
 
 	if (!p_videoParam.GetPalette()) {
 		MxPalette* palette = new MxPalette;
@@ -85,10 +85,15 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	if (deviceEnumerate.DoEnumerate() != SUCCESS)
 		goto done;
 
-	MxS32 und3;
-	// TODO: Match
-	if (!p_videoParam.GetDeviceName() || (und3 = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName())) < 0 ||
-		deviceEnumerate.FUN_1009d030(und3, &und1, &und2) != SUCCESS) {
+	if (p_videoParam.GetDeviceName()) {
+		und3 = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName());
+		if (und3 >= 0) {
+			if ((und3 = deviceEnumerate.FUN_1009d030(und3, &und1, &und2)) != SUCCESS)
+				und3 = -1;
+		}
+	}
+
+	if (und3 < 0) {
 		deviceEnumerate.FUN_1009d210();
 		und3 = deviceEnumerate.FUN_1009d0d0();
 		deviceEnumerate.FUN_1009d030(und3, &und1, &und2);
