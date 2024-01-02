@@ -35,9 +35,9 @@ public:
 	void SetBuffer(MxDSBuffer* p_buffer);
 
 	static MxU16* IntoFlags(MxU8* p_buffer);
-	static MxU32* IntoPlus0x12(MxU8* p_buffer);
-	static MxU32* IntoPlus0xa(MxU8* p_buffer);
-	static MxU32* IntoPlus0xe(MxU8* p_buffer);
+	static MxU32* IntoObjectId(MxU8* p_buffer);
+	static MxLong* IntoTime(MxU8* p_buffer);
+	static MxU32* IntoLength(MxU8* p_buffer);
 
 private:
 	MxDSBuffer* m_buffer; // 0x1c

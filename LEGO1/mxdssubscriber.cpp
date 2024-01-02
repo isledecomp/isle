@@ -119,7 +119,7 @@ void MxDSSubscriber::FUN_100b8390(MxStreamChunk* p_chunk)
 			if (p_chunk)
 				delete p_chunk;
 		}
-		else if ((p_chunk->GetFlags() & MxStreamChunk::Flag_Bit1) != 0 && p_chunk)
+		else if (p_chunk->GetFlags() & MxDSChunk::Flag_Bit1 && p_chunk)
 			delete p_chunk;
 	}
 }

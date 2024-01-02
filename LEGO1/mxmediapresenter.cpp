@@ -185,7 +185,7 @@ void MxMediaPresenter::StreamingTickle()
 		m_currentChunk = NextChunk();
 
 		if (m_currentChunk) {
-			if (m_currentChunk->GetFlags() & MxDSChunk::Flag_Bit2) {
+			if (m_currentChunk->GetFlags() & MxDSChunk::Flag_End) {
 				m_subscriber->FUN_100b8390(m_currentChunk);
 				m_currentChunk = NULL;
 				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
