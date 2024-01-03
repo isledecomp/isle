@@ -454,7 +454,7 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
 	DeviceHex deviceHex = p_deviceHex;
 
 	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		if (p_num >= 0 && p_num > i)
+		if (p_num >= 0 && p_num < i)
 			return -1;
 
 		MxDeviceEnumerateElement& elem = *it;
