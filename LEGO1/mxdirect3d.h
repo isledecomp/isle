@@ -58,21 +58,43 @@ private:
 };
 
 // SIZE 0x1a4
-struct MxDeviceEnumerate0x178Element {
-	undefined m_unk0x00[0x1a4]; // 0x00
+struct MxDevice {
+	MxDevice() {}
+	~MxDevice();
+	MxDevice(
+		LPGUID p_guid,
+		LPSTR p_deviceDesc,
+		LPSTR p_deviceName,
+		LPD3DDEVICEDESC p_HWDesc,
+		LPD3DDEVICEDESC p_HELDesc
+	);
 
-	MxBool operator==(MxDeviceEnumerate0x178Element) const { return TRUE; }
-	MxBool operator<(MxDeviceEnumerate0x178Element) const { return TRUE; }
+	void Init(
+		LPGUID p_guid,
+		LPSTR p_deviceDesc,
+		LPSTR p_deviceName,
+		LPD3DDEVICEDESC p_HWDesc,
+		LPD3DDEVICEDESC p_HELDesc
+	);
+
+	LPGUID m_guid;           // 0x00
+	char* m_deviceDesc;      // 0x04
+	char* m_deviceName;      // 0x08
+	D3DDEVICEDESC m_HWDesc;  // 0x0c
+	D3DDEVICEDESC m_HELDesc; // 0xd8
+
+	MxBool operator==(MxDevice) const { return TRUE; }
+	MxBool operator<(MxDevice) const { return TRUE; }
 };
 
 // SIZE 0x0c
-struct MxDeviceDisplayMode {
+struct MxDisplayMode {
 	DWORD m_width;        // 0x00
 	DWORD m_height;       // 0x04
 	DWORD m_bitsPerPixel; // 0x08
 
-	MxBool operator==(MxDeviceDisplayMode) const { return TRUE; }
-	MxBool operator<(MxDeviceDisplayMode) const { return TRUE; }
+	MxBool operator==(MxDisplayMode) const { return TRUE; }
+	MxBool operator<(MxDisplayMode) const { return TRUE; }
 };
 
 // SIZE 0x190
@@ -83,12 +105,12 @@ struct MxDeviceEnumerateElement {
 
 	void Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 
-	LPGUID m_guid;                                  // 0x00
-	char* m_driverDesc;                             // 0x04
-	char* m_driverName;                             // 0x08
-	DDCAPS m_ddCaps;                                // 0x0c
-	list<MxDeviceEnumerate0x178Element> m_unk0x178; // 0x178
-	list<MxDeviceDisplayMode> m_displayModes;       // 0x184
+	LPGUID m_guid;                      // 0x00
+	char* m_driverDesc;                 // 0x04
+	char* m_driverName;                 // 0x08
+	DDCAPS m_ddCaps;                    // 0x0c
+	list<MxDevice> m_devices;           // 0x178
+	list<MxDisplayMode> m_displayModes; // 0x184
 
 	MxBool operator==(MxDeviceEnumerateElement) const { return TRUE; }
 	MxBool operator<(MxDeviceEnumerateElement) const { return TRUE; }
@@ -96,21 +118,31 @@ struct MxDeviceEnumerateElement {
 
 // clang-format off
 // TEMPLATE: LEGO1 0x1009b900
-// list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >::~list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >
+// list<MxDevice,allocator<MxDevice> >::~list<MxDevice,allocator<MxDevice> >
 // clang-format on
 
 // clang-format off
 // TEMPLATE: LEGO1 0x1009b970
-// list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >::~list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >
+// list<MxDisplayMode,allocator<MxDisplayMode> >::~list<MxDisplayMode,allocator<MxDisplayMode> >
 // clang-format on
 
 // TEMPLATE: LEGO1 0x1009b9e0
-// List<MxDeviceEnumerate0x178Element>::~List<MxDeviceEnumerate0x178Element>
+// List<MxDevice>::~List<MxDevice>
 
 // TEMPLATE: LEGO1 0x1009ba30
-// List<MxDeviceDisplayMode>::~List<MxDeviceDisplayMode>
+// List<MxDisplayMode>::~List<MxDisplayMode>
+
+// clang-format off
+// TEMPLATE: LEGO1 0x1009bf50
+// list<MxDeviceEnumerateElement,allocator<MxDeviceEnumerateElement> >::~list<MxDeviceEnumerateElement,allocator<MxDeviceEnumerateElement> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x1009bfc0
+// List<MxDeviceEnumerateElement>::~List<MxDeviceEnumerateElement>
 
 // Compiler-generated copy ctor
+// Part of this function are two more synthetic sub-routines,
+// LEGO1 0x1009c400 and LEGO1 0x1009c460
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDeviceEnumerateElement::MxDeviceEnumerateElement
 
@@ -119,11 +151,20 @@ struct MxDeviceEnumerateElement {
 class MxDeviceEnumerate {
 public:
 	MxDeviceEnumerate();
+	// FUNCTION: LEGO1 0x1009c010
+	~MxDeviceEnumerate() {}
 
 	virtual MxResult DoEnumerate(); // vtable+0x00
 
 	BOOL EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 	HRESULT EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd);
+	HRESULT EnumDevicesCallback(
+		LPGUID p_guid,
+		LPSTR p_deviceDesc,
+		LPSTR p_deviceName,
+		LPD3DDEVICEDESC p_HWDesc,
+		LPD3DDEVICEDESC p_HELDesc
+	);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
@@ -135,11 +176,11 @@ public:
 	DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
 	static HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_context);
 	static HRESULT CALLBACK DevicesEnumerateCallback(
-		LPGUID p_lpGuid,
-		LPSTR p_lpDeviceDescription,
-		LPSTR p_lpDeviceName,
-		LPD3DDEVICEDESC p_pHWDesc,
-		LPD3DDEVICEDESC p_pHELDesc,
+		LPGUID p_guid,
+		LPSTR p_deviceDesc,
+		LPSTR p_deviceName,
+		LPD3DDEVICEDESC p_HWDesc,
+		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
 
