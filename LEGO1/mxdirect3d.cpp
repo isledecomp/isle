@@ -458,11 +458,11 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
 			return -1;
 
 		MxDeviceEnumerateElement& elem = *it;
-		for (list<MxDisplayMode>::iterator it2 = elem.m_displayModes.begin(); it2 != elem.m_displayModes.end(); it2++) {
-			MxDisplayMode displayMode = *it2;
+		for (list<MxDevice>::iterator it2 = elem.m_devices.begin(); it2 != elem.m_devices.end(); it2++) {
+			DeviceHex hex;
+			memcpy(&hex, (*it2).m_guid, sizeof(GUID));
 
-			if (displayMode.m_width == deviceHex.hex1 && displayMode.m_height == deviceHex.hex2 &&
-				displayMode.m_bitsPerPixel == deviceHex.hex3 && i == p_num)
+			if (hex.hex1 == deviceHex.hex1 && hex.hex2 == deviceHex.hex2 && hex.hex3 == deviceHex.hex3 && i == p_num)
 				return j;
 
 			j++;
