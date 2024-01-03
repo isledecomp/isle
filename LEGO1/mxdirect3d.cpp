@@ -218,8 +218,8 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 	device.m_driverName = NULL;
 	memset(&device.m_ddCaps, 0, sizeof(device.m_ddCaps));
 
-	LPDIRECTDRAW lpDD = NULL;
 	LPDIRECT3D2 lpDirect3d2 = NULL;
+	LPDIRECTDRAW lpDD = NULL;
 	MxDeviceEnumerateElement& newDevice = m_list.back();
 	HRESULT result = DirectDrawCreate(newDevice.m_guid, &lpDD, NULL);
 
