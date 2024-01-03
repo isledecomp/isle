@@ -21,8 +21,9 @@
 // We use `override` so newer compilers can tell us our vtables are valid,
 // however this keyword was added in C++11, so we define it as empty for
 // compatibility with older compilers.
-#if defined(_MSC_VER) && _MSC_VER <= 1200 // 1200 corresponds to VC6.0 but "override" was probably added even later
+#if __cplusplus < 201103L
 #define override
+#define static_assert(expr, msg)
 #endif
 
 #endif // COMPAT_H

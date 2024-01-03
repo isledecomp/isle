@@ -433,37 +433,48 @@ MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 	if (num < 0)
 		return -1;
 
-	DeviceHex deviceHex;
-	memcpy(&deviceHex, hex, sizeof(deviceHex));
+	GUID guid;
+	memcpy(&guid, hex, sizeof(guid));
 
-	MxS32 result = ProcessDeviceBytes(num, deviceHex);
+	MxS32 result = ProcessDeviceBytes(num, guid);
 
 	if (result < 0)
-		return ProcessDeviceBytes(-1, deviceHex);
+		return ProcessDeviceBytes(-1, guid);
 	return result;
 }
 
 // FUNCTION: LEGO1 0x1009cf20
-MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
+MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
 {
 	if (!m_initialized)
 		return -1;
 
 	MxS32 i = 0;
 	MxS32 j = 0;
-	DeviceHex deviceHex = p_deviceHex;
+
+	struct GUID4 {
+		MxS32 m_data1;
+		MxS32 m_data2;
+		MxS32 m_data3;
+		MxS32 m_data4;
+	};
+
+	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
+
+	GUID4 deviceGuid;
+	memcpy(&deviceGuid, &p_guid, sizeof(GUID4));
 
 	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		if (p_num >= 0 && p_num < i)
 			return -1;
 
+		GUID4 compareGuid;
 		MxDeviceEnumerateElement& elem = *it;
 		for (list<MxDevice>::iterator it2 = elem.m_devices.begin(); it2 != elem.m_devices.end(); it2++) {
-			DeviceHex guidHex;
-			memcpy(&guidHex, (*it2).m_guid, sizeof(GUID));
+			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
 
-			if (deviceHex.hex1 == guidHex.hex1 && deviceHex.hex2 == guidHex.hex2 && deviceHex.hex3 == guidHex.hex3 &&
-				deviceHex.hex4 == guidHex.hex4 && i == p_num)
+			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
+				compareGuid.m_data3 == deviceGuid.m_data3 && compareGuid.m_data4 == deviceGuid.m_data4 && i == p_num)
 				return j;
 
 			j++;

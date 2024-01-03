@@ -150,13 +150,6 @@ struct MxDeviceEnumerateElement {
 // SIZE 0x14
 class MxDeviceEnumerate {
 public:
-	struct DeviceHex {
-		MxS32 hex1;
-		MxS32 hex2;
-		MxS32 hex3;
-		MxS32 hex4;
-	};
-
 	MxDeviceEnumerate();
 	// FUNCTION: LEGO1 0x1009c010
 	~MxDeviceEnumerate() {}
@@ -174,7 +167,7 @@ public:
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
-	MxS32 ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex);
+	MxS32 ProcessDeviceBytes(MxS32 p_num, GUID& p_guid);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
 	MxResult FUN_1009d0d0();
 	MxResult FUN_1009d210();
