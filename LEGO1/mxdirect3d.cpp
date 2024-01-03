@@ -454,11 +454,11 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
 	DeviceHex deviceHex = p_deviceHex;
 
 	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		if (p_num >= 0 && p_num < i)
+		if (p_num >= 0 && p_num > i)
 			return -1;
 
-		for (list<MxDisplayMode>::iterator it2 = (*it).m_displayModes.begin(); it2 != (*it).m_displayModes.end();
-			 it2++) {
+		MxDeviceEnumerateElement& elem = *it;
+		for (list<MxDisplayMode>::iterator it2 = elem.m_displayModes.begin(); it2 != elem.m_displayModes.end(); it2++) {
 			MxDisplayMode displayMode = *it2;
 
 			if (displayMode.m_width == deviceHex.hex1 && displayMode.m_height == deviceHex.hex2 &&
