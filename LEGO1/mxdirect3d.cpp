@@ -459,10 +459,11 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
 
 		MxDeviceEnumerateElement& elem = *it;
 		for (list<MxDevice>::iterator it2 = elem.m_devices.begin(); it2 != elem.m_devices.end(); it2++) {
-			DeviceHex hex;
-			memcpy(&hex, (*it2).m_guid, sizeof(GUID));
+			DeviceHex guidHex;
+			memcpy(&guidHex, (*it2).m_guid, sizeof(GUID));
 
-			if (hex.hex1 == deviceHex.hex1 && hex.hex2 == deviceHex.hex2 && hex.hex3 == deviceHex.hex3 && i == p_num)
+			if (deviceHex.hex1 == guidHex.hex1 && deviceHex.hex2 == guidHex.hex2 && deviceHex.hex3 == guidHex.hex3 &&
+				deviceHex.hex4 == guidHex.hex4 && i == p_num)
 				return j;
 
 			j++;
