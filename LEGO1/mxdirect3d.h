@@ -82,8 +82,8 @@ struct MxDeviceEnumerateElement {
 	void Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 
 	LPGUID m_guid;                                  // 0x00
-	LPSTR m_driverDesc;                             // 0x04
-	LPSTR m_driverName;                             // 0x08
+	char* m_driverDesc;                             // 0x04
+	char* m_driverName;                             // 0x08
 	DDCAPS m_ddCaps;                                // 0x0c
 	list<MxDeviceEnumerate0x178Element> m_unk0x178; // 0x178
 	list<MxDeviceEnumerate0x184Element> m_unk0x184; // 0x184
