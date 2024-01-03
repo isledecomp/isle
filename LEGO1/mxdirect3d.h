@@ -57,13 +57,56 @@ private:
 	undefined4 m_unk0x890;                   // 0x890
 };
 
+// SIZE 0x1a4
+struct MxDeviceEnumerate0x178Element {
+	undefined m_unk0x00[0x1a4]; // 0x00
+
+	MxBool operator==(MxDeviceEnumerate0x178Element) const { return TRUE; }
+	MxBool operator<(MxDeviceEnumerate0x178Element) const { return TRUE; }
+};
+
+// SIZE 0x0c
+struct MxDeviceEnumerate0x184Element {
+	undefined m_unk0x00[0x0c]; // 0x00
+
+	MxBool operator==(MxDeviceEnumerate0x184Element) const { return TRUE; }
+	MxBool operator<(MxDeviceEnumerate0x184Element) const { return TRUE; }
+};
+
 // SIZE 0x190
 struct MxDeviceEnumerateElement {
-	undefined m_pad[0x190]; // 0x00
+	MxDeviceEnumerateElement() {}
+	~MxDeviceEnumerateElement();
+	MxDeviceEnumerateElement(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+
+	void Init(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+
+	GUID* m_guid;                                   // 0x00
+	LPSTR m_driverDesc;                             // 0x04
+	LPSTR m_driverName;                             // 0x08
+	DDCAPS m_ddCaps;                                // 0x0c
+	list<MxDeviceEnumerate0x178Element> m_unk0x178; // 0x178
+	list<MxDeviceEnumerate0x184Element> m_unk0x184; // 0x184
 
 	MxBool operator==(MxDeviceEnumerateElement) const { return TRUE; }
 	MxBool operator<(MxDeviceEnumerateElement) const { return TRUE; }
 };
+
+// clang-format off
+// TEMPLATE: LEGO1 0x1009b900
+// list<MxDeviceEnumerate0x184Element,allocator<MxDeviceEnumerate0x184Element> >::~list<MxDeviceEnumerate0x184Element,allocator<MxDeviceEnumerate0x184Element> >
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x1009b970
+// list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >::~list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x1009b9e0
+// List<MxDeviceEnumerate0x184Element>::~List<MxDeviceEnumerate0x184Element>
+
+// TEMPLATE: LEGO1 0x1009ba30
+// List<MxDeviceEnumerate0x178Element>::~List<MxDeviceEnumerate0x178Element>
 
 // VTABLE: LEGO1 0x100db814
 // SIZE 0x14
@@ -73,7 +116,7 @@ public:
 
 	virtual MxResult DoEnumerate(); // vtable+0x00
 
-	BOOL EnumDirectDrawCallback(GUID FAR* p_guid, LPSTR p_driverName, LPSTR p_driverDesc);
+	BOOL EnumDirectDrawCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
@@ -82,11 +125,21 @@ public:
 
 	static void BuildErrorString(const char*, ...);
 
+private:
 	list<MxDeviceEnumerateElement> m_list; // 0x04
 	MxBool m_unk0x10;                      // 0x10
 };
 
-BOOL CALLBACK EnumerateCallback(GUID FAR*, LPSTR, LPSTR, LPVOID);
+BOOL CALLBACK DirectDrawEnumerateCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
+HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC, LPVOID);
+HRESULT CALLBACK DevicesEnumerateCallback(
+	LPGUID p_lpGuid,
+	LPSTR p_lpDeviceDescription,
+	LPSTR p_lpDeviceName,
+	LPD3DDEVICEDESC p_pHWDesc,
+	LPD3DDEVICEDESC p_pHELDesc,
+	LPVOID p_context
+);
 
 // VTABLE: LEGO1 0x100d9cc8
 // SIZE 0x14
