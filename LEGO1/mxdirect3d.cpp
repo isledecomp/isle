@@ -266,7 +266,7 @@ void MxDevice::Init(
 // FUNCTION: LEGO1 0x1009bec0
 MxDeviceEnumerate::MxDeviceEnumerate()
 {
-	m_unk0x10 = FALSE;
+	m_initialized = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1009c070
@@ -388,7 +388,7 @@ HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 // FUNCTION: LEGO1 0x1009c6c0
 MxResult MxDeviceEnumerate::DoEnumerate()
 {
-	if (m_unk0x10)
+	if (m_initialized)
 		return FAILURE;
 
 	HRESULT ret = DirectDrawEnumerate(DirectDrawEnumerateCallback, this);
@@ -397,7 +397,7 @@ MxResult MxDeviceEnumerate::DoEnumerate()
 		return FAILURE;
 	}
 
-	m_unk0x10 = TRUE;
+	m_initialized = TRUE;
 	return SUCCESS;
 }
 
@@ -418,9 +418,59 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	return "";
 }
 
-// STUB: LEGO1 0x1009ce60
+// FUNCTION: LEGO1 0x1009ce60
 MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 {
+	if (!m_initialized)
+		return -1;
+
+	MxS32 num = -1;
+	MxS32 hex[4];
+
+	if (sscanf(p_deviceId, "%d 0x%x 0x%x 0x%x 0x%x", &num, &hex[0], &hex[1], &hex[2], &hex[3]) != 5)
+		return -1;
+
+	if (num < 0)
+		return -1;
+
+	DeviceHex deviceHex;
+	memcpy(&deviceHex, hex, sizeof(deviceHex));
+
+	MxS32 result = ProcessDeviceBytes(num, deviceHex);
+
+	if (result < 0)
+		return ProcessDeviceBytes(-1, deviceHex);
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1009cf20
+MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, DeviceHex& p_deviceHex)
+{
+	if (!m_initialized)
+		return -1;
+
+	MxS32 i = 0;
+	MxS32 j = 0;
+	DeviceHex deviceHex = p_deviceHex;
+
+	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if (p_num >= 0 && p_num < i)
+			return -1;
+
+		for (list<MxDisplayMode>::iterator it2 = (*it).m_displayModes.begin(); it2 != (*it).m_displayModes.end();
+			 it2++) {
+			MxDisplayMode displayMode = *it2;
+
+			if (displayMode.m_width == deviceHex.hex1 && displayMode.m_height == deviceHex.hex2 &&
+				displayMode.m_bitsPerPixel == deviceHex.hex3 && i == p_num)
+				return j;
+
+			j++;
+		}
+
+		i++;
+	}
+
 	return -1;
 }
 
