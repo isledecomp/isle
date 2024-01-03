@@ -108,6 +108,10 @@ struct MxDeviceEnumerateElement {
 // TEMPLATE: LEGO1 0x1009ba30
 // List<MxDeviceEnumerate0x178Element>::~List<MxDeviceEnumerate0x178Element>
 
+// Compiler-generated copy ctor
+// SYNTHETIC: LEGO1 0x1009c290
+// MxDeviceEnumerateElement::MxDeviceEnumerateElement
+
 // VTABLE: LEGO1 0x100db814
 // SIZE 0x14
 class MxDeviceEnumerate {
