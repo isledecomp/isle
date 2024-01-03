@@ -5,7 +5,7 @@
 DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerate0x178Element, 0x1a4);
-DECOMP_SIZE_ASSERT(MxDeviceEnumerate0x184Element, 0x0c);
+DECOMP_SIZE_ASSERT(MxDeviceDisplayMode, 0x0c);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerateElement, 0x190);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x14);
 
@@ -273,14 +273,15 @@ void MxDeviceEnumerate::BuildErrorString(const char* p_format, ...)
 	OutputDebugString(buf);
 }
 
-// STUB: LEGO1 0x1009c4f0
-HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC, LPVOID)
+// FUNCTION: LEGO1 0x1009c4f0
+HRESULT CALLBACK MxDeviceEnumerate::DisplayModesEnumerateCallback(LPDDSURFACEDESC p_ddsd, LPVOID p_context)
 {
-	return TRUE;
+	MxDeviceEnumerate* deviceEnumerate = (MxDeviceEnumerate*) p_context;
+	return deviceEnumerate->EnumDisplayModesCallback(p_ddsd);
 }
 
 // STUB: LEGO1 0x1009c510
-HRESULT CALLBACK DevicesEnumerateCallback(
+HRESULT CALLBACK MxDeviceEnumerate::DevicesEnumerateCallback(
 	LPGUID p_lpGuid,
 	LPSTR p_lpDeviceDescription,
 	LPSTR p_lpDeviceName,
@@ -290,6 +291,18 @@ HRESULT CALLBACK DevicesEnumerateCallback(
 )
 {
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x1009c540
+HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
+{
+	MxDeviceDisplayMode displayMode;
+	displayMode.m_width = p_ddsd->dwWidth;
+	displayMode.m_height = p_ddsd->dwHeight;
+	displayMode.m_bitsPerPixel = p_ddsd->ddpfPixelFormat.dwRGBBitCount;
+
+	m_list.back().m_displayModes.push_back(displayMode);
+	return DDENUMRET_OK;
 }
 
 // FUNCTION: LEGO1 0x1009c6c0
@@ -309,7 +322,8 @@ MxResult MxDeviceEnumerate::DoEnumerate()
 }
 
 // FUNCTION: LEGO1 0x1009c710
-BOOL CALLBACK DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context)
+BOOL CALLBACK
+MxDeviceEnumerate::DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context)
 {
 	MxDeviceEnumerate* deviceEnumerate = (MxDeviceEnumerate*) p_context;
 	return deviceEnumerate->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
