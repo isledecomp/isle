@@ -96,19 +96,19 @@ struct MxDeviceEnumerateElement {
 
 // clang-format off
 // TEMPLATE: LEGO1 0x1009b900
-// list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >::~list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >
+// list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >::~list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >
 // clang-format on
 
 // clang-format off
 // TEMPLATE: LEGO1 0x1009b970
-// list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >::~list<MxDeviceEnumerate0x178Element,allocator<MxDeviceEnumerate0x178Element> >
+// list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >::~list<MxDeviceDisplayMode,allocator<MxDeviceDisplayMode> >
 // clang-format on
 
 // TEMPLATE: LEGO1 0x1009b9e0
-// List<MxDeviceDisplayMode>::~List<MxDeviceDisplayMode>
+// List<MxDeviceEnumerate0x178Element>::~List<MxDeviceEnumerate0x178Element>
 
 // TEMPLATE: LEGO1 0x1009ba30
-// List<MxDeviceEnumerate0x178Element>::~List<MxDeviceEnumerate0x178Element>
+// List<MxDeviceDisplayMode>::~List<MxDeviceDisplayMode>
 
 // Compiler-generated copy ctor
 // SYNTHETIC: LEGO1 0x1009c290
