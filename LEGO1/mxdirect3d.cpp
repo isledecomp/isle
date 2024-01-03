@@ -266,7 +266,7 @@ void MxDevice::Init(
 // FUNCTION: LEGO1 0x1009bec0
 MxDeviceEnumerate::MxDeviceEnumerate()
 {
-	m_unk0x10 = FALSE;
+	m_initialized = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1009c070
@@ -388,7 +388,7 @@ HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 // FUNCTION: LEGO1 0x1009c6c0
 MxResult MxDeviceEnumerate::DoEnumerate()
 {
-	if (m_unk0x10)
+	if (m_initialized)
 		return FAILURE;
 
 	HRESULT ret = DirectDrawEnumerate(DirectDrawEnumerateCallback, this);
@@ -397,7 +397,7 @@ MxResult MxDeviceEnumerate::DoEnumerate()
 		return FAILURE;
 	}
 
-	m_unk0x10 = TRUE;
+	m_initialized = TRUE;
 	return SUCCESS;
 }
 
@@ -418,9 +418,71 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	return "";
 }
 
-// STUB: LEGO1 0x1009ce60
+// FUNCTION: LEGO1 0x1009ce60
 MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 {
+	if (!m_initialized)
+		return -1;
+
+	MxS32 num = -1;
+	MxS32 hex[4];
+
+	if (sscanf(p_deviceId, "%d 0x%x 0x%x 0x%x 0x%x", &num, &hex[0], &hex[1], &hex[2], &hex[3]) != 5)
+		return -1;
+
+	if (num < 0)
+		return -1;
+
+	GUID guid;
+	memcpy(&guid, hex, sizeof(guid));
+
+	MxS32 result = ProcessDeviceBytes(num, guid);
+
+	if (result < 0)
+		return ProcessDeviceBytes(-1, guid);
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1009cf20
+MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
+{
+	if (!m_initialized)
+		return -1;
+
+	MxS32 i = 0;
+	MxS32 j = 0;
+
+	struct GUID4 {
+		MxS32 m_data1;
+		MxS32 m_data2;
+		MxS32 m_data3;
+		MxS32 m_data4;
+	};
+
+	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
+
+	GUID4 deviceGuid;
+	memcpy(&deviceGuid, &p_guid, sizeof(GUID4));
+
+	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if (p_num >= 0 && p_num < i)
+			return -1;
+
+		GUID4 compareGuid;
+		MxDeviceEnumerateElement& elem = *it;
+		for (list<MxDevice>::iterator it2 = elem.m_devices.begin(); it2 != elem.m_devices.end(); it2++) {
+			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
+
+			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
+				compareGuid.m_data3 == deviceGuid.m_data3 && compareGuid.m_data4 == deviceGuid.m_data4 && i == p_num)
+				return j;
+
+			j++;
+		}
+
+		i++;
+	}
+
 	return -1;
 }
 

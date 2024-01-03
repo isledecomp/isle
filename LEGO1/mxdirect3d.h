@@ -167,6 +167,7 @@ public:
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
+	MxS32 ProcessDeviceBytes(MxS32 p_num, GUID& p_guid);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
 	MxResult FUN_1009d0d0();
 	MxResult FUN_1009d210();
@@ -186,7 +187,7 @@ public:
 
 private:
 	list<MxDeviceEnumerateElement> m_list; // 0x04
-	MxBool m_unk0x10;                      // 0x10
+	MxBool m_initialized;                  // 0x10
 };
 
 // VTABLE: LEGO1 0x100d9cc8
