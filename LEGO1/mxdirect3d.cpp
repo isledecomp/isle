@@ -4,8 +4,8 @@
 
 DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
-DECOMP_SIZE_ASSERT(MxDeviceEnumerate0x178Element, 0x1a4);
-DECOMP_SIZE_ASSERT(MxDeviceDisplayMode, 0x0c);
+DECOMP_SIZE_ASSERT(MxDevice, 0x1a4);
+DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerateElement, 0x190);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x14);
 
@@ -162,10 +162,8 @@ MxDeviceEnumerateElement::~MxDeviceEnumerateElement()
 {
 	if (m_guid)
 		delete m_guid;
-
 	if (m_driverDesc)
 		delete[] m_driverDesc;
-
 	if (m_driverName)
 		delete[] m_driverName;
 }
@@ -197,6 +195,72 @@ void MxDeviceEnumerateElement::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_d
 		m_driverName = new char[strlen(p_driverName) + 1];
 		strcpy(m_driverName, p_driverName);
 	}
+}
+
+// FUNCTION: LEGO1 0x1009bd20
+MxDevice::MxDevice(
+	LPGUID p_guid,
+	LPSTR p_deviceDesc,
+	LPSTR p_deviceName,
+	LPD3DDEVICEDESC p_HWDesc,
+	LPD3DDEVICEDESC p_HELDesc
+)
+{
+	memset(this, 0, sizeof(*this));
+
+	Init(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
+}
+
+// FUNCTION: LEGO1 0x1009bd60
+MxDevice::~MxDevice()
+{
+	if (m_guid)
+		delete m_guid;
+	if (m_deviceDesc)
+		delete[] m_deviceDesc;
+	if (m_deviceName)
+		delete[] m_deviceName;
+}
+
+// FUNCTION: LEGO1 0x1009bda0
+void MxDevice::Init(
+	LPGUID p_guid,
+	LPSTR p_deviceDesc,
+	LPSTR p_deviceName,
+	LPD3DDEVICEDESC p_HWDesc,
+	LPD3DDEVICEDESC p_HELDesc
+)
+{
+	if (m_deviceDesc) {
+		delete[] m_deviceDesc;
+		m_deviceDesc = NULL;
+	}
+
+	if (m_deviceName) {
+		delete[] m_deviceName;
+		m_deviceName = NULL;
+	}
+
+	if (p_guid) {
+		m_guid = new GUID;
+		memcpy(m_guid, p_guid, sizeof(*m_guid));
+	}
+
+	if (p_deviceDesc) {
+		m_deviceDesc = new char[strlen(p_deviceDesc) + 1];
+		strcpy(m_deviceDesc, p_deviceDesc);
+	}
+
+	if (p_deviceName) {
+		m_deviceName = new char[strlen(p_deviceName) + 1];
+		strcpy(m_deviceName, p_deviceName);
+	}
+
+	if (p_HWDesc)
+		memcpy(&m_HWDesc, p_HWDesc, sizeof(m_HWDesc));
+
+	if (p_HELDesc)
+		memcpy(&m_HELDesc, p_HELDesc, sizeof(m_HELDesc));
 }
 
 // FUNCTION: LEGO1 0x1009bec0
@@ -243,7 +307,7 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 				if (result != DD_OK)
 					BuildErrorString("D3D enum devices failed: %s\n", EnumerateErrorToString(result));
 				else {
-					if (newDevice.m_unk0x178.empty()) {
+					if (newDevice.m_devices.empty()) {
 						m_list.pop_back();
 					}
 				}
@@ -280,28 +344,44 @@ HRESULT CALLBACK MxDeviceEnumerate::DisplayModesEnumerateCallback(LPDDSURFACEDES
 	return deviceEnumerate->EnumDisplayModesCallback(p_ddsd);
 }
 
-// STUB: LEGO1 0x1009c510
+// FUNCTION: LEGO1 0x1009c510
 HRESULT CALLBACK MxDeviceEnumerate::DevicesEnumerateCallback(
-	LPGUID p_lpGuid,
-	LPSTR p_lpDeviceDescription,
-	LPSTR p_lpDeviceName,
-	LPD3DDEVICEDESC p_pHWDesc,
-	LPD3DDEVICEDESC p_pHELDesc,
+	LPGUID p_guid,
+	LPSTR p_deviceDesc,
+	LPSTR p_deviceName,
+	LPD3DDEVICEDESC p_HWDesc,
+	LPD3DDEVICEDESC p_HELDesc,
 	LPVOID p_context
 )
 {
-	return TRUE;
+	MxDeviceEnumerate* deviceEnumerate = (MxDeviceEnumerate*) p_context;
+	return deviceEnumerate->EnumDevicesCallback(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
 }
 
 // FUNCTION: LEGO1 0x1009c540
 HRESULT MxDeviceEnumerate::EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd)
 {
-	MxDeviceDisplayMode displayMode;
+	MxDisplayMode displayMode;
 	displayMode.m_width = p_ddsd->dwWidth;
 	displayMode.m_height = p_ddsd->dwHeight;
 	displayMode.m_bitsPerPixel = p_ddsd->ddpfPixelFormat.dwRGBBitCount;
 
 	m_list.back().m_displayModes.push_back(displayMode);
+	return DDENUMRET_OK;
+}
+
+// FUNCTION: LEGO1 0x1009c5d0
+HRESULT MxDeviceEnumerate::EnumDevicesCallback(
+	LPGUID p_guid,
+	LPSTR p_deviceDesc,
+	LPSTR p_deviceName,
+	LPD3DDEVICEDESC p_HWDesc,
+	LPD3DDEVICEDESC p_HELDesc
+)
+{
+	MxDevice device(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
+	m_list.back().m_devices.push_back(device);
+	memset(&device, 0, sizeof(device));
 	return DDENUMRET_OK;
 }
 
