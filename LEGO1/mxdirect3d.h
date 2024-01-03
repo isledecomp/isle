@@ -77,11 +77,11 @@ struct MxDeviceEnumerate0x184Element {
 struct MxDeviceEnumerateElement {
 	MxDeviceEnumerateElement() {}
 	~MxDeviceEnumerateElement();
-	MxDeviceEnumerateElement(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+	MxDeviceEnumerateElement(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 
-	void Init(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+	void Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 
-	GUID* m_guid;                                   // 0x00
+	LPGUID m_guid;                                  // 0x00
 	LPSTR m_driverDesc;                             // 0x04
 	LPSTR m_driverName;                             // 0x08
 	DDCAPS m_ddCaps;                                // 0x0c
@@ -116,7 +116,7 @@ public:
 
 	virtual MxResult DoEnumerate(); // vtable+0x00
 
-	BOOL EnumDirectDrawCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
+	BOOL EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
 	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
@@ -130,7 +130,7 @@ private:
 	MxBool m_unk0x10;                      // 0x10
 };
 
-BOOL CALLBACK DirectDrawEnumerateCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
+BOOL CALLBACK DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context);
 HRESULT CALLBACK DisplayModesEnumerateCallback(LPDDSURFACEDESC, LPVOID);
 HRESULT CALLBACK DevicesEnumerateCallback(
 	LPGUID p_lpGuid,

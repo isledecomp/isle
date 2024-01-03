@@ -147,7 +147,7 @@ MxDeviceModeFinder::~MxDeviceModeFinder()
 }
 
 // FUNCTION: LEGO1 0x1009ba80
-MxDeviceEnumerateElement::MxDeviceEnumerateElement(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
+MxDeviceEnumerateElement::MxDeviceEnumerateElement(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 {
 	m_guid = NULL;
 	m_driverDesc = NULL;
@@ -171,7 +171,7 @@ MxDeviceEnumerateElement::~MxDeviceEnumerateElement()
 }
 
 // FUNCTION: LEGO1 0x1009bc30
-void MxDeviceEnumerateElement::Init(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
+void MxDeviceEnumerateElement::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 {
 	if (m_driverDesc) {
 		delete[] m_driverDesc;
@@ -206,7 +206,7 @@ MxDeviceEnumerate::MxDeviceEnumerate()
 }
 
 // FUNCTION: LEGO1 0x1009c070
-BOOL MxDeviceEnumerate::EnumDirectDrawCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
+BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 {
 	MxDeviceEnumerateElement device(p_guid, p_driverDesc, p_driverName);
 	m_list.push_back(device);
@@ -309,7 +309,7 @@ MxResult MxDeviceEnumerate::DoEnumerate()
 }
 
 // FUNCTION: LEGO1 0x1009c710
-BOOL CALLBACK DirectDrawEnumerateCallback(GUID FAR* p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context)
+BOOL CALLBACK DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName, LPVOID p_context)
 {
 	MxDeviceEnumerate* deviceEnumerate = (MxDeviceEnumerate*) p_context;
 	return deviceEnumerate->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
