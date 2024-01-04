@@ -122,6 +122,28 @@ BOOL MxDirect3D::D3DSetMode()
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x1009b5a0
+DWORD MxDirect3D::GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice)
+{
+	DWORD bitDepth;
+
+	if (p_assignedDevice->m_desc.dwFlags & D3DDD_DEVICEZBUFFERBITDEPTH)
+		bitDepth = p_assignedDevice->m_desc.dwDeviceZBufferBitDepth;
+	else
+		bitDepth = 0;
+
+	if (bitDepth & DDBD_32)
+		return 32;
+	if (bitDepth & DDBD_24)
+		return 24;
+	if (bitDepth & DDBD_16)
+		return 16;
+	if (bitDepth & DDBD_8)
+		return 8;
+
+	return -1;
+}
+
 // FUNCTION: LEGO1 0x1009b5f0
 BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device)
 {

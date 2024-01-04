@@ -23,7 +23,7 @@ public:
 
 	friend class MxDirect3D;
 
-private:
+public:
 	GUID m_guid;                                 // 0x00
 	MxU32 m_flags;                               // 0x10
 	D3DDEVICEDESC m_desc;                        // 0x14
@@ -57,6 +57,7 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
+	DWORD GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice);
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
 	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
