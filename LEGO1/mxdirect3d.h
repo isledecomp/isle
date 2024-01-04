@@ -209,7 +209,7 @@ public:
 	static undefined4 FUN_1009d1a0();
 	static undefined4 FUN_1009d1e0();
 
-	inline list<MxDriver>& GetDeviceList() { return m_list; }
+	friend class MxDirect3D;
 
 private:
 	list<MxDriver> m_list; // 0x04

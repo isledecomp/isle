@@ -135,10 +135,9 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 	}
 
 	MxDeviceModeFinder* deviceModeFinder = new MxDeviceModeFinder;
-	list<MxDriver>& deviceList = p_deviceEnumerator.GetDeviceList();
 	MxS32 i = 0;
 
-	for (list<MxDriver>::iterator it = deviceList.begin(); it != deviceList.end(); it++) {
+	for (list<MxDriver>::iterator it = p_deviceEnumerator.m_list.begin(); it != p_deviceEnumerator.m_list.end(); it++) {
 		MxDriver& driver = *it;
 
 		if (&driver == p_driver) {
