@@ -57,7 +57,7 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
-	MxU32 GetZBufferDepth(MxAssignedDevice* p_deviceInfo);
+	DWORD GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice);
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
 	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };

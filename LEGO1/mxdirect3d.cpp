@@ -121,31 +121,27 @@ BOOL MxDirect3D::D3DSetMode()
 	OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
 	return TRUE;
 }
+
 // FUNCTION: LEGO1 0x1009b5a0
-MxU32 MxDirect3D::GetZBufferDepth(MxAssignedDevice* p_deviceInfo)
+DWORD MxDirect3D::GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice)
 {
-	int depth;
-	DWORD deviceDepth;
+	DWORD bitDepth;
 
-	if ((p_deviceInfo->m_desc.dwFlags & D3DCOLOR_MONO)) {
-		deviceDepth = p_deviceInfo->m_desc.dwDeviceZBufferBitDepth;
-	}
-	else {
-		deviceDepth = 0;
-	}
-
-	if (deviceDepth & DDBD_32)
-		depth = 32;
-	else if (deviceDepth & DDBD_24)
-		depth = 24;
-	else if (deviceDepth & DDBD_16)
-		depth = 16;
-	else if (deviceDepth & DDBD_8)
-		depth = 8;
+	if (p_assignedDevice->m_desc.dwFlags & D3DDD_DEVICEZBUFFERBITDEPTH)
+		bitDepth = p_assignedDevice->m_desc.dwDeviceZBufferBitDepth;
 	else
-		depth = -1;
+		bitDepth = 0;
 
-	return depth;
+	if (bitDepth & DDBD_32)
+		return 32;
+	if (bitDepth & DDBD_24)
+		return 24;
+	if (bitDepth & DDBD_16)
+		return 16;
+	if (bitDepth & DDBD_8)
+		return 8;
+
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x1009b5f0
