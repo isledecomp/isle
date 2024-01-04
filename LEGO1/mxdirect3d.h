@@ -8,13 +8,25 @@
 
 #include <d3d.h>
 
-// SIZE 0xe4
-class MxDeviceModeFinder {
-public:
-	MxDeviceModeFinder();
-	~MxDeviceModeFinder();
+class MxDirect3D;
 
-	undefined m_pad[0xe0];                       // 0x00
+// SIZE 0xe4
+class MxAssignedDevice {
+public:
+	enum {
+		Flag_HardwareMode = 0x01,
+		Flag_PrimaryDevice = 0x02
+	};
+
+	MxAssignedDevice();
+	~MxAssignedDevice();
+
+	friend class MxDirect3D;
+
+private:
+	GUID m_guid;                                 // 0x00
+	MxU32 m_flags;                               // 0x10
+	D3DDEVICEDESC m_desc;                        // 0x14
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // 0xe0
 };
 
@@ -45,18 +57,18 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
-	BOOL FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device);
+	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
-	inline MxDeviceModeFinder* GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
+	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
 	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
 	inline IDirect3DDevice* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
 
 private:
-	MxDeviceModeFinder* m_pDeviceModeFinder; // 0x880
-	IDirect3D* m_pDirect3d;                  // 0x884
-	IDirect3DDevice* m_pDirect3dDevice;      // 0x888
-	undefined4 m_unk0x88c;                   // 0x88c
-	undefined4 m_unk0x890;                   // 0x890
+	MxAssignedDevice* m_assignedDevice; // 0x880
+	IDirect3D* m_pDirect3d;             // 0x884
+	IDirect3DDevice* m_pDirect3dDevice; // 0x888
+	undefined4 m_unk0x88c;              // 0x88c
+	undefined4 m_unk0x890;              // 0x890
 };
 
 // SIZE 0x1a4
@@ -196,6 +208,8 @@ public:
 	);
 	static undefined4 FUN_1009d1a0();
 	static undefined4 FUN_1009d1e0();
+
+	friend class MxDirect3D;
 
 private:
 	list<MxDriver> m_list; // 0x04

@@ -2,7 +2,7 @@
 
 #include <stdio.h> // for vsprintf
 
-DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
+DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4);
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 DECOMP_SIZE_ASSERT(MxDevice, 0x1a4);
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c);
@@ -15,7 +15,7 @@ MxDirect3D::MxDirect3D()
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
 	this->m_unk0x88c = NULL;
-	this->m_pDeviceModeFinder = NULL;
+	this->m_assignedDevice = NULL;
 }
 
 // FUNCTION: LEGO1 0x1009b140
@@ -73,16 +73,13 @@ void MxDirect3D::Destroy()
 		this->m_pDirect3d = NULL;
 	}
 
-	if (this->m_pDeviceModeFinder) {
-		delete m_pDeviceModeFinder;
-		this->m_pDeviceModeFinder = NULL;
+	if (this->m_assignedDevice) {
+		delete m_assignedDevice;
+		this->m_assignedDevice = NULL;
 	}
 
-	// This should get deleted by MxDirectDraw::Destroy
-	if (m_pCurrentDeviceModesList) {
-		// delete m_pCurrentDeviceModesList; // missing?
+	if (m_pCurrentDeviceModesList)
 		m_pCurrentDeviceModesList = NULL;
-	}
 
 	MxDirectDraw::Destroy();
 }
@@ -118,27 +115,103 @@ BOOL MxDirect3D::CreateIDirect3D()
 BOOL MxDirect3D::D3DSetMode()
 {
 	// TODO
-	// if (m_pDeviceModeFinder)
+	// if (m_assignedDevice)
 	Error("This device cannot support the current display mode", 0);
 	OutputDebugString("MxDirect3D::D3DSetMode() front lock failed\n");
 	OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1009b5f0
-BOOL MxDirect3D::FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
+// FUNCTION: LEGO1 0x1009b5f0
+BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device)
 {
+	if (m_assignedDevice) {
+		delete m_assignedDevice;
+		m_assignedDevice = NULL;
+		m_pCurrentDeviceModesList = NULL;
+	}
+
+	MxAssignedDevice* assignedDevice = new MxAssignedDevice;
+	MxS32 i = 0;
+
+	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end(); it++) {
+		MxDriver& driver = *it;
+
+		if (&driver == p_driver) {
+			assignedDevice->m_deviceInfo = new MxDirectDraw::DeviceModesInfo;
+
+			if (driver.m_guid) {
+				assignedDevice->m_deviceInfo->m_guid = new GUID;
+				memcpy(assignedDevice->m_deviceInfo->m_guid, driver.m_guid, sizeof(GUID));
+			}
+
+			assignedDevice->m_deviceInfo->m_count = driver.m_displayModes.size();
+
+			if (assignedDevice->m_deviceInfo->m_count > 0) {
+				assignedDevice->m_deviceInfo->m_modeArray =
+					new MxDirectDraw::Mode[assignedDevice->m_deviceInfo->m_count];
+
+				MxS32 j = 0;
+				for (list<MxDisplayMode>::iterator it2 = driver.m_displayModes.begin();
+					 it2 != driver.m_displayModes.end();
+					 it2++) {
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_width = (*it2).m_width;
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_height = (*it2).m_height;
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_bitsPerPixel = (*it2).m_bitsPerPixel;
+					j++;
+				}
+			}
+
+			memcpy(
+				&assignedDevice->m_deviceInfo->m_ddcaps,
+				&driver.m_ddCaps,
+				sizeof(assignedDevice->m_deviceInfo->m_ddcaps)
+			);
+
+			if (i == 0)
+				assignedDevice->m_flags |= MxAssignedDevice::Flag_PrimaryDevice;
+
+			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
+				MxDevice& device = *it2;
+				if (&device != p_device)
+					continue;
+
+				memcpy(&assignedDevice->m_guid, device.m_guid, sizeof(assignedDevice->m_guid));
+
+				D3DDEVICEDESC* desc;
+				if (device.m_HWDesc.dcmColorModel) {
+					assignedDevice->m_flags |= MxAssignedDevice::Flag_HardwareMode;
+					desc = &device.m_HWDesc;
+				}
+				else
+					desc = &device.m_HELDesc;
+
+				memcpy(&assignedDevice->m_desc, desc, sizeof(assignedDevice->m_desc));
+				m_assignedDevice = assignedDevice;
+				m_pCurrentDeviceModesList = assignedDevice->m_deviceInfo;
+				break;
+			}
+		}
+
+		i++;
+	}
+
+	if (!m_assignedDevice) {
+		delete assignedDevice;
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1009b8b0
-MxDeviceModeFinder::MxDeviceModeFinder()
+MxAssignedDevice::MxAssignedDevice()
 {
 	memset(this, 0, sizeof(*this));
 }
 
 // FUNCTION: LEGO1 0x1009b8d0
-MxDeviceModeFinder::~MxDeviceModeFinder()
+MxAssignedDevice::~MxAssignedDevice()
 {
 	if (m_deviceInfo) {
 		delete m_deviceInfo;
