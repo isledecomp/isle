@@ -57,7 +57,7 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
-	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device);
+	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
 	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
 	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }

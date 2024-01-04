@@ -126,7 +126,7 @@ BOOL MxDirect3D::D3DSetMode()
 }
 
 // FUNCTION: LEGO1 0x1009b5f0
-BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
+BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device)
 {
 	if (m_assignedDevice) {
 		delete m_assignedDevice;
@@ -137,7 +137,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 	MxAssignedDevice* assignedDevice = new MxAssignedDevice;
 	MxS32 i = 0;
 
-	for (list<MxDriver>::iterator it = p_deviceEnumerator.m_list.begin(); it != p_deviceEnumerator.m_list.end(); it++) {
+	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end(); it++) {
 		MxDriver& driver = *it;
 
 		if (&driver == p_driver) {
