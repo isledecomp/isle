@@ -176,22 +176,23 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 
 			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 				MxDevice& device = *it2;
+				if (&device != p_device)
+					continue;
 
-				if (&device == p_device) {
-					memcpy(&deviceModeFinder->m_guid, device.m_guid, sizeof(deviceModeFinder->m_guid));
+				memcpy(&deviceModeFinder->m_guid, device.m_guid, sizeof(deviceModeFinder->m_guid));
 
-					D3DDEVICEDESC* desc;
-					if (device.m_HWDesc.dcmColorModel) {
-						deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_HardwareMode;
-						desc = &device.m_HWDesc;
-					}
-					else
-						desc = &device.m_HELDesc;
-
-					memcpy(&deviceModeFinder->m_desc, desc, sizeof(deviceModeFinder->m_desc));
-					m_pDeviceModeFinder = deviceModeFinder;
-					m_pCurrentDeviceModesList = deviceModeFinder->m_deviceInfo;
+				D3DDEVICEDESC* desc;
+				if (device.m_HWDesc.dcmColorModel) {
+					deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_HardwareMode;
+					desc = &device.m_HWDesc;
 				}
+				else
+					desc = &device.m_HELDesc;
+
+				memcpy(&deviceModeFinder->m_desc, desc, sizeof(deviceModeFinder->m_desc));
+				m_pDeviceModeFinder = deviceModeFinder;
+				m_pCurrentDeviceModesList = deviceModeFinder->m_deviceInfo;
+				break;
 			}
 		}
 
