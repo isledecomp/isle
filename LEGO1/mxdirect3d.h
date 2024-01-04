@@ -19,6 +19,8 @@ public:
 };
 
 class MxDeviceEnumerate;
+struct MxDeviceEnumerateElement;
+struct MxDevice;
 
 // VTABLE: LEGO1 0x100db800
 // SIZE 0x894
@@ -43,7 +45,11 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
-	BOOL FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerate, undefined* p_und1, undefined* p_und2);
+	BOOL FUN_1009b5f0(
+		MxDeviceEnumerate& p_deviceEnumerator,
+		MxDeviceEnumerateElement* p_deviceEnumerate,
+		MxDevice* p_device
+	);
 
 	inline MxDeviceModeFinder* GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
 	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
@@ -146,6 +152,12 @@ struct MxDeviceEnumerateElement {
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDeviceEnumerateElement::MxDeviceEnumerateElement
 
+// SYNTHETIC: LEGO1 0x1009d450
+// MxDeviceEnumerateElement::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1009d470
+// MxDevice::`scalar deleting destructor'
+
 // VTABLE: LEGO1 0x100db814
 // SIZE 0x14
 class MxDeviceEnumerate {
@@ -167,10 +179,12 @@ public:
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
 	MxS32 ParseDeviceName(const char* p_deviceId);
-	MxS32 ProcessDeviceBytes(MxS32 p_num, GUID& p_guid);
-	MxResult FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3);
+	MxS32 ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid);
+	MxResult GetDevice(MxS32 p_deviceNum, MxDeviceEnumerateElement*& p_deviceEnumerate, MxDevice*& p_device);
 	MxResult FUN_1009d0d0();
 	MxResult FUN_1009d210();
+	MxBool FUN_1009d370(MxDeviceEnumerateElement& p_deviceEnumerate);
+	MxBool FUN_1009d3d0(MxDevice& p_device);
 
 	static void BuildErrorString(const char*, ...);
 	static BOOL CALLBACK

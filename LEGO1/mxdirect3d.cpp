@@ -126,7 +126,11 @@ BOOL MxDirect3D::D3DSetMode()
 }
 
 // STUB: LEGO1 0x1009b5f0
-BOOL MxDirect3D::FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerate, undefined* p_und1, undefined* p_und2)
+BOOL MxDirect3D::FUN_1009b5f0(
+	MxDeviceEnumerate& p_deviceEnumerator,
+	MxDeviceEnumerateElement* p_deviceEnumerate,
+	MxDevice* p_device
+)
 {
 	return TRUE;
 }
@@ -444,7 +448,7 @@ MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 }
 
 // FUNCTION: LEGO1 0x1009cf20
-MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
+MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid)
 {
 	if (!m_initialized)
 		return -1;
@@ -465,7 +469,7 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
 	memcpy(&deviceGuid, &p_guid, sizeof(GUID4));
 
 	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		if (p_num >= 0 && p_num < i)
+		if (p_deviceNum >= 0 && p_deviceNum < i)
 			return -1;
 
 		GUID4 compareGuid;
@@ -474,7 +478,8 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
 			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
 
 			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
-				compareGuid.m_data3 == deviceGuid.m_data3 && compareGuid.m_data4 == deviceGuid.m_data4 && i == p_num)
+				compareGuid.m_data3 == deviceGuid.m_data3 && compareGuid.m_data4 == deviceGuid.m_data4 &&
+				i == p_deviceNum)
 				return j;
 
 			j++;
@@ -486,9 +491,33 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_num, GUID& p_guid)
 	return -1;
 }
 
-// STUB: LEGO1 0x1009d030
-MxResult MxDeviceEnumerate::FUN_1009d030(MxS32 p_und1, undefined** p_und2, undefined** p_und3)
+// FUNCTION: LEGO1 0x1009d030
+MxResult MxDeviceEnumerate::GetDevice(
+	MxS32 p_deviceNum,
+	MxDeviceEnumerateElement*& p_deviceEnumerate,
+	MxDevice*& p_device
+)
 {
+	if (p_deviceNum >= 0 && m_initialized) {
+		MxS32 i = 0;
+
+		for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end(); it++) {
+			p_deviceEnumerate = &*it;
+
+			for (list<MxDevice>::iterator it2 = p_deviceEnumerate->m_devices.begin();
+				 it2 != p_deviceEnumerate->m_devices.end();
+				 it2++) {
+				if (i == p_deviceNum) {
+					p_device = &*it2;
+					return SUCCESS;
+				}
+				i++;
+			}
+		}
+
+		return FAILURE;
+	}
+
 	return FAILURE;
 }
 
@@ -498,8 +527,54 @@ MxResult MxDeviceEnumerate::FUN_1009d0d0()
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1009d210
+// FUNCTION: LEGO1 0x1009d210
 MxResult MxDeviceEnumerate::FUN_1009d210()
 {
-	return FAILURE;
+	if (!m_initialized)
+		return FAILURE;
+
+	for (list<MxDeviceEnumerateElement>::iterator it = m_list.begin(); it != m_list.end();) {
+		MxDeviceEnumerateElement& elem = *it;
+
+		if (!FUN_1009d370(elem))
+			m_list.erase(it++);
+		else {
+			for (list<MxDevice>::iterator it2 = elem.m_devices.begin(); it2 != elem.m_devices.end();) {
+				MxDevice& device = *it2;
+
+				if (!FUN_1009d3d0(device))
+					elem.m_devices.erase(it2++);
+				else
+					it2++;
+			}
+
+			if (elem.m_devices.empty())
+				m_list.erase(it++);
+			else
+				it++;
+		}
+	}
+
+	return m_list.empty() ? FAILURE : SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x1009d370
+MxBool MxDeviceEnumerate::FUN_1009d370(MxDeviceEnumerateElement& p_deviceEnumerate)
+{
+	for (list<MxDisplayMode>::iterator it = p_deviceEnumerate.m_displayModes.begin();
+		 it != p_deviceEnumerate.m_displayModes.end();
+		 it++) {
+		if ((*it).m_width == 640 && (*it).m_height == 480) {
+			if ((*it).m_bitsPerPixel == 8 || (*it).m_bitsPerPixel == 16)
+				return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1009d3d0
+MxBool MxDeviceEnumerate::FUN_1009d3d0(MxDevice& p_device)
+{
+	return FALSE;
 }
