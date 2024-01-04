@@ -1127,6 +1127,6 @@ MxDirectDraw::DeviceModesInfo::~DeviceModesInfo()
 	}
 
 	if (m_modeArray != NULL) {
-		delete m_modeArray;
+		delete[] m_modeArray;
 	}
 }
