@@ -15,7 +15,7 @@ MxDirect3D::MxDirect3D()
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
 	this->m_unk0x88c = NULL;
-	this->m_pAssignedDevice = NULL;
+	this->m_assignedDevice = NULL;
 }
 
 // FUNCTION: LEGO1 0x1009b140
@@ -73,9 +73,9 @@ void MxDirect3D::Destroy()
 		this->m_pDirect3d = NULL;
 	}
 
-	if (this->m_pAssignedDevice) {
-		delete m_pAssignedDevice;
-		this->m_pAssignedDevice = NULL;
+	if (this->m_assignedDevice) {
+		delete m_assignedDevice;
+		this->m_assignedDevice = NULL;
 	}
 
 	// This should get deleted by MxDirectDraw::Destroy
@@ -118,7 +118,7 @@ BOOL MxDirect3D::CreateIDirect3D()
 BOOL MxDirect3D::D3DSetMode()
 {
 	// TODO
-	// if (m_pAssignedDevice)
+	// if (m_assignedDevice)
 	Error("This device cannot support the current display mode", 0);
 	OutputDebugString("MxDirect3D::D3DSetMode() front lock failed\n");
 	OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
@@ -128,9 +128,9 @@ BOOL MxDirect3D::D3DSetMode()
 // FUNCTION: LEGO1 0x1009b5f0
 BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
 {
-	if (m_pAssignedDevice) {
-		delete m_pAssignedDevice;
-		m_pAssignedDevice = NULL;
+	if (m_assignedDevice) {
+		delete m_assignedDevice;
+		m_assignedDevice = NULL;
 		m_pCurrentDeviceModesList = NULL;
 	}
 
@@ -190,7 +190,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 					desc = &device.m_HELDesc;
 
 				memcpy(&assignedDevice->m_desc, desc, sizeof(assignedDevice->m_desc));
-				m_pAssignedDevice = assignedDevice;
+				m_assignedDevice = assignedDevice;
 				m_pCurrentDeviceModesList = assignedDevice->m_deviceInfo;
 				break;
 			}
@@ -199,7 +199,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 		i++;
 	}
 
-	if (!m_pAssignedDevice) {
+	if (!m_assignedDevice) {
 		delete assignedDevice;
 		return FALSE;
 	}
