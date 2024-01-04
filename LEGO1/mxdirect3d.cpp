@@ -78,11 +78,8 @@ void MxDirect3D::Destroy()
 		this->m_assignedDevice = NULL;
 	}
 
-	// This should get deleted by MxDirectDraw::Destroy
-	if (m_pCurrentDeviceModesList) {
-		// delete m_pCurrentDeviceModesList; // missing?
+	if (m_pCurrentDeviceModesList)
 		m_pCurrentDeviceModesList = NULL;
-	}
 
 	MxDirectDraw::Destroy();
 }
