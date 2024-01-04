@@ -23,7 +23,7 @@ public:
 
 	friend class MxDirect3D;
 
-public:
+private:
 	GUID m_guid;                                 // 0x00
 	MxU32 m_flags;                               // 0x10
 	D3DDEVICEDESC m_desc;                        // 0x14
