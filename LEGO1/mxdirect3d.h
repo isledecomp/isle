@@ -61,15 +61,15 @@ public:
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
 	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
-	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
-	inline IDirect3DDevice* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
+	inline IDirect3D2* GetDirect3D() { return this->m_pDirect3d; }
+	inline IDirect3DDevice2* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
 
 private:
-	MxAssignedDevice* m_assignedDevice; // 0x880
-	IDirect3D* m_pDirect3d;             // 0x884
-	IDirect3DDevice* m_pDirect3dDevice; // 0x888
-	undefined4 m_unk0x88c;              // 0x88c
-	undefined4 m_unk0x890;              // 0x890
+	MxAssignedDevice* m_assignedDevice;  // 0x880
+	IDirect3D2* m_pDirect3d;             // 0x884
+	IDirect3DDevice2* m_pDirect3dDevice; // 0x888
+	BOOL m_unk0x88c;                     // 0x88c
+	undefined4 m_unk0x890;               // 0x890
 };
 
 // SIZE 0x1a4

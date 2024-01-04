@@ -68,7 +68,7 @@ protected:
 	void* m_pFatalErrorHandlerArg;              // 0x868
 	int m_pauseCount;                           // 0x86c
 	DeviceModesInfo* m_pCurrentDeviceModesList; // 0x870
-	Mode m_currentMode;                         // 0x87c
+	Mode m_currentMode;                         // 0x874
 
 public:
 	__declspec(dllexport) int FlipToGDISurface();
