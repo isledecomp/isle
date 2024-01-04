@@ -2,7 +2,7 @@
 
 #include <stdio.h> // for vsprintf
 
-DECOMP_SIZE_ASSERT(MxDeviceModeFinder, 0xe4);
+DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4);
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 DECOMP_SIZE_ASSERT(MxDevice, 0x1a4);
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c);
@@ -15,7 +15,7 @@ MxDirect3D::MxDirect3D()
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
 	this->m_unk0x88c = NULL;
-	this->m_pDeviceModeFinder = NULL;
+	this->m_pAssignedDevice = NULL;
 }
 
 // FUNCTION: LEGO1 0x1009b140
@@ -73,9 +73,9 @@ void MxDirect3D::Destroy()
 		this->m_pDirect3d = NULL;
 	}
 
-	if (this->m_pDeviceModeFinder) {
-		delete m_pDeviceModeFinder;
-		this->m_pDeviceModeFinder = NULL;
+	if (this->m_pAssignedDevice) {
+		delete m_pAssignedDevice;
+		this->m_pAssignedDevice = NULL;
 	}
 
 	// This should get deleted by MxDirectDraw::Destroy
@@ -118,7 +118,7 @@ BOOL MxDirect3D::CreateIDirect3D()
 BOOL MxDirect3D::D3DSetMode()
 {
 	// TODO
-	// if (m_pDeviceModeFinder)
+	// if (m_pAssignedDevice)
 	Error("This device cannot support the current display mode", 0);
 	OutputDebugString("MxDirect3D::D3DSetMode() front lock failed\n");
 	OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
@@ -128,70 +128,70 @@ BOOL MxDirect3D::D3DSetMode()
 // FUNCTION: LEGO1 0x1009b5f0
 BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
 {
-	if (m_pDeviceModeFinder) {
-		delete m_pDeviceModeFinder;
-		m_pDeviceModeFinder = NULL;
+	if (m_pAssignedDevice) {
+		delete m_pAssignedDevice;
+		m_pAssignedDevice = NULL;
 		m_pCurrentDeviceModesList = NULL;
 	}
 
-	MxDeviceModeFinder* deviceModeFinder = new MxDeviceModeFinder;
+	MxAssignedDevice* assignedDevice = new MxAssignedDevice;
 	MxS32 i = 0;
 
 	for (list<MxDriver>::iterator it = p_deviceEnumerator.m_list.begin(); it != p_deviceEnumerator.m_list.end(); it++) {
 		MxDriver& driver = *it;
 
 		if (&driver == p_driver) {
-			deviceModeFinder->m_deviceInfo = new MxDirectDraw::DeviceModesInfo;
+			assignedDevice->m_deviceInfo = new MxDirectDraw::DeviceModesInfo;
 
 			if (driver.m_guid) {
-				deviceModeFinder->m_deviceInfo->m_guid = new GUID;
-				memcpy(deviceModeFinder->m_deviceInfo->m_guid, driver.m_guid, sizeof(GUID));
+				assignedDevice->m_deviceInfo->m_guid = new GUID;
+				memcpy(assignedDevice->m_deviceInfo->m_guid, driver.m_guid, sizeof(GUID));
 			}
 
-			deviceModeFinder->m_deviceInfo->m_count = driver.m_displayModes.size();
+			assignedDevice->m_deviceInfo->m_count = driver.m_displayModes.size();
 
-			if (deviceModeFinder->m_deviceInfo->m_count > 0) {
-				deviceModeFinder->m_deviceInfo->m_modeArray =
-					new MxDirectDraw::Mode[deviceModeFinder->m_deviceInfo->m_count];
+			if (assignedDevice->m_deviceInfo->m_count > 0) {
+				assignedDevice->m_deviceInfo->m_modeArray =
+					new MxDirectDraw::Mode[assignedDevice->m_deviceInfo->m_count];
 
 				MxS32 j = 0;
 				for (list<MxDisplayMode>::iterator it2 = driver.m_displayModes.begin();
 					 it2 != driver.m_displayModes.end();
 					 it2++) {
-					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_width = (*it2).m_width;
-					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_height = (*it2).m_height;
-					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_bitsPerPixel = (*it2).m_bitsPerPixel;
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_width = (*it2).m_width;
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_height = (*it2).m_height;
+					assignedDevice->m_deviceInfo->m_modeArray[j].m_bitsPerPixel = (*it2).m_bitsPerPixel;
 					j++;
 				}
 			}
 
 			memcpy(
-				&deviceModeFinder->m_deviceInfo->m_ddcaps,
+				&assignedDevice->m_deviceInfo->m_ddcaps,
 				&driver.m_ddCaps,
-				sizeof(deviceModeFinder->m_deviceInfo->m_ddcaps)
+				sizeof(assignedDevice->m_deviceInfo->m_ddcaps)
 			);
 
 			if (i == 0)
-				deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_Bit2;
+				assignedDevice->m_flags |= MxAssignedDevice::Flag_Bit2;
 
 			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 				MxDevice& device = *it2;
 				if (&device != p_device)
 					continue;
 
-				memcpy(&deviceModeFinder->m_guid, device.m_guid, sizeof(deviceModeFinder->m_guid));
+				memcpy(&assignedDevice->m_guid, device.m_guid, sizeof(assignedDevice->m_guid));
 
 				D3DDEVICEDESC* desc;
 				if (device.m_HWDesc.dcmColorModel) {
-					deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_HardwareMode;
+					assignedDevice->m_flags |= MxAssignedDevice::Flag_HardwareMode;
 					desc = &device.m_HWDesc;
 				}
 				else
 					desc = &device.m_HELDesc;
 
-				memcpy(&deviceModeFinder->m_desc, desc, sizeof(deviceModeFinder->m_desc));
-				m_pDeviceModeFinder = deviceModeFinder;
-				m_pCurrentDeviceModesList = deviceModeFinder->m_deviceInfo;
+				memcpy(&assignedDevice->m_desc, desc, sizeof(assignedDevice->m_desc));
+				m_pAssignedDevice = assignedDevice;
+				m_pCurrentDeviceModesList = assignedDevice->m_deviceInfo;
 				break;
 			}
 		}
@@ -199,8 +199,8 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 		i++;
 	}
 
-	if (!m_pDeviceModeFinder) {
-		delete deviceModeFinder;
+	if (!m_pAssignedDevice) {
+		delete assignedDevice;
 		return FALSE;
 	}
 
@@ -208,13 +208,13 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_dr
 }
 
 // FUNCTION: LEGO1 0x1009b8b0
-MxDeviceModeFinder::MxDeviceModeFinder()
+MxAssignedDevice::MxAssignedDevice()
 {
 	memset(this, 0, sizeof(*this));
 }
 
 // FUNCTION: LEGO1 0x1009b8d0
-MxDeviceModeFinder::~MxDeviceModeFinder()
+MxAssignedDevice::~MxAssignedDevice()
 {
 	if (m_deviceInfo) {
 		delete m_deviceInfo;
