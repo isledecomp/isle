@@ -181,7 +181,7 @@ public:
 	MxS32 ParseDeviceName(const char* p_deviceId);
 	MxS32 ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid);
 	MxResult GetDevice(MxS32 p_deviceNum, MxDeviceEnumerateElement*& p_deviceEnumerate, MxDevice*& p_device);
-	MxResult FUN_1009d0d0();
+	MxS32 FUN_1009d0d0();
 	MxResult FUN_1009d210();
 	MxBool FUN_1009d370(MxDeviceEnumerateElement& p_deviceEnumerate);
 	MxBool FUN_1009d3d0(MxDevice& p_device);
@@ -198,6 +198,8 @@ public:
 		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
+	static undefined4 FUN_1009d1a0();
+	static undefined4 FUN_1009d1e0();
 
 private:
 	list<MxDeviceEnumerateElement> m_list; // 0x04
