@@ -120,7 +120,7 @@ void MxVideoManager::SortPresenterList()
 MxResult MxVideoManager::VTable0x28(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAW p_pDirectDraw,
-	LPDIRECT3D p_pDirect3D,
+	LPDIRECT3D2 p_pDirect3D,
 	LPDIRECTDRAWSURFACE p_ddSurface1,
 	LPDIRECTDRAWSURFACE p_ddSurface2,
 	LPDIRECTDRAWCLIPPER p_ddClipper,

@@ -21,7 +21,7 @@ public:
 	virtual MxResult VTable0x28(
 		MxVideoParam& p_videoParam,
 		LPDIRECTDRAW p_pDirectDraw,
-		LPDIRECT3D p_pDirect3D,
+		LPDIRECT3D2 p_pDirect3D,
 		LPDIRECTDRAWSURFACE p_ddSurface1,
 		LPDIRECTDRAWSURFACE p_ddSurface2,
 		LPDIRECTDRAWCLIPPER p_ddClipper,
@@ -47,7 +47,7 @@ public:
 protected:
 	MxVideoParam m_videoParam;          // 0x2c
 	LPDIRECTDRAW m_pDirectDraw;         // 0x50
-	LPDIRECT3D m_pDirect3D;             // 0x54
+	LPDIRECT3D2 m_pDirect3D;            // 0x54
 	MxDisplaySurface* m_displaySurface; // 0x58
 	MxRegion* m_region;                 // 0x5c
 	MxBool m_unk0x60;                   // 0x60

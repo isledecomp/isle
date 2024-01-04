@@ -111,14 +111,89 @@ BOOL MxDirect3D::CreateIDirect3D()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1009b310
+// FUNCTION: LEGO1 0x1009b310
 BOOL MxDirect3D::D3DSetMode()
 {
-	// TODO
-	// if (m_assignedDevice)
-	Error("This device cannot support the current display mode", 0);
-	OutputDebugString("MxDirect3D::D3DSetMode() front lock failed\n");
-	OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
+	if (m_assignedDevice->m_flags & MxAssignedDevice::Flag_HardwareMode) {
+		if (m_bOnlySoftRender) {
+			Error("Failed to place vital surfaces in video memory for hardware driver", DDERR_GENERIC);
+			return FALSE;
+		}
+
+		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE)
+			m_unk0x88c = FALSE;
+		else
+			m_unk0x88c = TRUE;
+
+		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
+		if (!CreateZBuffer(DDSCAPS_VIDEOMEMORY, bitDepth))
+			return FALSE;
+	}
+	else {
+		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE)
+			m_unk0x88c = FALSE;
+		else
+			m_unk0x88c = TRUE;
+
+		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
+		if (!CreateZBuffer(DDSCAPS_SYSTEMMEMORY, bitDepth))
+			return FALSE;
+	}
+
+	HRESULT result = m_pDirect3d->CreateDevice(m_assignedDevice->m_guid, m_pBackBuffer, &m_pDirect3dDevice);
+
+	if (result != DD_OK) {
+		Error("Create D3D device failed", result);
+		return FALSE;
+	}
+
+	MxDirectDraw::Mode mode = m_currentMode;
+
+	if (m_bFullScreen && !IsSupportedMode(mode.m_width, mode.m_height, mode.m_bitsPerPixel)) {
+		Error("This device cannot support the current display mode", DDERR_GENERIC);
+		return FALSE;
+	}
+
+	LPDIRECTDRAWSURFACE frontBuffer = m_pFrontBuffer;
+	LPDIRECTDRAWSURFACE backBuffer = m_pBackBuffer;
+
+	DDSURFACEDESC desc;
+	memset(&desc, 0, sizeof(desc));
+	desc.dwSize = sizeof(desc);
+
+	if (backBuffer->Lock(NULL, &desc, DDLOCK_WAIT, NULL) == DD_OK) {
+		MxU8* surface = (MxU8*) desc.lpSurface;
+
+		for (MxS32 i = mode.m_height; i > 0; i--) {
+			memset(surface, 0, mode.m_width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
+			surface += desc.lPitch;
+		}
+
+		backBuffer->Unlock(desc.lpSurface);
+	}
+	else {
+		OutputDebugString("MxDirect3D::D3DSetMode() back lock failed\n");
+	}
+
+	if (m_bFullScreen) {
+		memset(&desc, 0, sizeof(desc));
+		desc.dwSize = sizeof(desc);
+
+		if (frontBuffer->Lock(NULL, &desc, DDLOCK_WAIT, NULL) == DD_OK) {
+			MxU8* surface = (MxU8*) desc.lpSurface;
+
+			for (MxS32 i = mode.m_height; i > 0; i--) {
+				memset(surface, 0, mode.m_width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
+				surface += desc.lPitch;
+			}
+
+			frontBuffer->Unlock(desc.lpSurface);
+		}
+		else {
+			OutputDebugString("MxDirect3D::D3DSetMode() front lock failed\n");
+		}
+	}
+
 	return TRUE;
 }
 
