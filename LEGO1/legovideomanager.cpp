@@ -57,18 +57,18 @@ MxResult LegoVideoManager::CreateDirect3D()
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxBool paletteCreated = FALSE;
-	undefined* und1 = NULL;
-	undefined* und2 = NULL;
+	MxDriver* driver = NULL;
+	MxDevice* device = NULL;
 	MxResult result = FAILURE;
 
-	MxDeviceEnumerate100d9cc8 deviceEnumerate;
+	MxDeviceEnumerate100d9cc8 deviceEnumerator;
 	Vector3Data posVec(0.0, 1.25, -50.0);
 	Vector3Data dirVec(0.0, 0.0, 1.0);
 	Vector3Data upVec(0.0, 1.0, 0.0);
 	Matrix4Data outMatrix;
 	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
 	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
-	MxS32 und3 = -1;
+	MxS32 deviceNum = -1;
 
 	if (!p_videoParam.GetPalette()) {
 		MxPalette* palette = new MxPalette;
@@ -85,26 +85,26 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	if (CreateDirect3D() != SUCCESS)
 		goto done;
 
-	if (deviceEnumerate.DoEnumerate() != SUCCESS)
+	if (deviceEnumerator.DoEnumerate() != SUCCESS)
 		goto done;
 
 	if (p_videoParam.GetDeviceName()) {
-		und3 = deviceEnumerate.ParseDeviceName(p_videoParam.GetDeviceName());
-		if (und3 >= 0) {
-			if ((und3 = deviceEnumerate.FUN_1009d030(und3, &und1, &und2)) != SUCCESS)
-				und3 = -1;
+		deviceNum = deviceEnumerator.ParseDeviceName(p_videoParam.GetDeviceName());
+		if (deviceNum >= 0) {
+			if ((deviceNum = deviceEnumerator.GetDevice(deviceNum, driver, device)) != SUCCESS)
+				deviceNum = -1;
 		}
 	}
 
-	if (und3 < 0) {
-		deviceEnumerate.FUN_1009d210();
-		und3 = deviceEnumerate.FUN_1009d0d0();
-		deviceEnumerate.FUN_1009d030(und3, &und1, &und2);
+	if (deviceNum < 0) {
+		deviceEnumerator.FUN_1009d210();
+		deviceNum = deviceEnumerator.FUN_1009d0d0();
+		deviceEnumerator.GetDevice(deviceNum, driver, device);
 	}
 
-	m_direct3d->FUN_1009b5f0(deviceEnumerate, und1, und2);
+	m_direct3d->FUN_1009b5f0(deviceEnumerator, driver, device);
 
-	if (!*((MxU32*) &und1[0x14]) && *((MxU32*) &und1[0xe0]) != 2)
+	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2)
 		p_videoParam.Flags().SetF2bit0(TRUE);
 	else
 		p_videoParam.Flags().SetF2bit0(FALSE);
