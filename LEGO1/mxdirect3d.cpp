@@ -272,15 +272,15 @@ MxDeviceEnumerate::MxDeviceEnumerate()
 // FUNCTION: LEGO1 0x1009c070
 BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 {
-	MxDriver device(p_guid, p_driverDesc, p_driverName);
-	m_list.push_back(device);
+	MxDriver driver(p_guid, p_driverDesc, p_driverName);
+	m_list.push_back(driver);
 
 	// Must be zeroed because held resources are copied by pointer only
 	// and should not be freed at the end of this function
-	device.m_guid = NULL;
-	device.m_driverDesc = NULL;
-	device.m_driverName = NULL;
-	memset(&device.m_ddCaps, 0, sizeof(device.m_ddCaps));
+	driver.m_guid = NULL;
+	driver.m_driverDesc = NULL;
+	driver.m_driverName = NULL;
+	memset(&driver.m_ddCaps, 0, sizeof(driver.m_ddCaps));
 
 	LPDIRECT3D2 lpDirect3d2 = NULL;
 	LPDIRECTDRAW lpDD = NULL;
@@ -469,9 +469,8 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid)
 			return -1;
 
 		GUID4 compareGuid;
-		MxDriver& deviceEnumerate = *it;
-		for (list<MxDevice>::iterator it2 = deviceEnumerate.m_devices.begin(); it2 != deviceEnumerate.m_devices.end();
-			 it2++) {
+		MxDriver& driver = *it;
+		for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
 
 			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
@@ -566,22 +565,21 @@ MxResult MxDeviceEnumerate::FUN_1009d210()
 		return FAILURE;
 
 	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end();) {
-		MxDriver& deviceEnumerate = *it;
+		MxDriver& driver = *it;
 
-		if (!FUN_1009d370(deviceEnumerate))
+		if (!FUN_1009d370(driver))
 			m_list.erase(it++);
 		else {
-			for (list<MxDevice>::iterator it2 = deviceEnumerate.m_devices.begin();
-				 it2 != deviceEnumerate.m_devices.end();) {
+			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
 				MxDevice& device = *it2;
 
 				if (!FUN_1009d3d0(device))
-					deviceEnumerate.m_devices.erase(it2++);
+					driver.m_devices.erase(it2++);
 				else
 					it2++;
 			}
 
-			if (deviceEnumerate.m_devices.empty())
+			if (driver.m_devices.empty())
 				m_list.erase(it++);
 			else
 				it++;
