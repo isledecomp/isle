@@ -16,10 +16,30 @@ ViewLODListManager::~ViewLODListManager()
 }
 
 // STUB: LEGO1 0x100a72c0
-ViewLODList* ViewLODListManager::Create(const ROIName&, int lodCount)
+ViewLODList* ViewLODListManager::Create(const ROIName& rROIName, int lodCount)
 {
-	// TODO
-	return NULL;
+	// returned ViewLODList has a refCount of 1, i.e. caller must call Release()
+	// when it no longer holds on to the list
+
+	ViewLODList* pLODList;
+	int refCount;
+	char* pROIName;
+
+	assert(!Lookup(rROIName));
+
+	pLODList = new ViewLODList(lodCount);
+	refCount = pLODList->AddRef();
+	assert(refCount == 1);
+
+	pROIName = new char[strlen(rROIName) + 1];
+	strcpy(pROIName, rROIName);
+
+	m_map[pROIName] = pLODList;
+
+	// NOTE: Lookup() adds a refCount
+	assert((Lookup(rROIName) == pLODList) && (pLODList->Release() == 1));
+
+	return pLODList;
 }
 
 // STUB: LEGO1 0x100a7680

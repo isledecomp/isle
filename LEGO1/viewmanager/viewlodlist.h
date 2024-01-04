@@ -75,7 +75,7 @@ public:
 	// creates an LODList with room for lodCount LODs for a named ROI
 	// returned LODList has a refCount of 1, i.e. caller must call Release()
 	// when it no longer holds on to the list
-	ViewLODList* Create(const ROIName&, int lodCount);
+	ViewLODList* Create(const ROIName& rROIName, int lodCount);
 
 	// returns an LODList for a named ROI
 	// returned LODList's refCount is increased, i.e. caller must call Release()

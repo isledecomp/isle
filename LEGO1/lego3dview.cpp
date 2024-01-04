@@ -18,7 +18,7 @@ Lego3DView::~Lego3DView()
 // STUB: LEGO1 0x100aaf90
 BOOL Lego3DView::Create(TglSurface::CreateStruct& p_createStruct, Tgl::Renderer* p_renderer)
 {
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100ab100
