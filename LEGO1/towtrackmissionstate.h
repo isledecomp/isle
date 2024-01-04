@@ -21,6 +21,7 @@ public:
 	{
 		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
+	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
 
 	inline MxU16 GetColor(MxU8 p_id)
 	{
@@ -41,12 +42,20 @@ public:
 	}
 
 protected:
-	undefined m_unk0x8[0x14];
-	MxU16 m_color1;
-	MxU16 m_color2;
-	MxU16 m_color3;
-	MxU16 m_color4;
-	MxU16 m_color5;
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
+	MxU8 m_unk0x10;       // 0x10
+	MxU16 m_unk0x12;      // 0x12
+	MxU16 m_unk0x14;      // 0x14
+	MxU16 m_unk0x16;      // 0x16
+	MxU16 m_unk0x18;      // 0x18
+	MxU16 m_unk0x1a;      // 0x1a
+	MxU16 m_unk0x1c;      // 0x1c
+	MxU16 m_color1;       // 0x1e
+	MxU16 m_color2;       // 0x20
+	MxU16 m_color3;       // 0x22
+	MxU16 m_color4;       // 0x24
+	MxU16 m_color5;       // 0x26
 };
 
 #endif // TOWTRACKMISSIONSTATE_H
