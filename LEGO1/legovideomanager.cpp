@@ -57,7 +57,7 @@ MxResult LegoVideoManager::CreateDirect3D()
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxBool paletteCreated = FALSE;
-	MxDeviceEnumerateElement* deviceEnumerate = NULL;
+	MxDriver* driver = NULL;
 	MxDevice* device = NULL;
 	MxResult result = FAILURE;
 
@@ -91,7 +91,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	if (p_videoParam.GetDeviceName()) {
 		deviceNum = deviceEnumerator.ParseDeviceName(p_videoParam.GetDeviceName());
 		if (deviceNum >= 0) {
-			if ((deviceNum = deviceEnumerator.GetDevice(deviceNum, deviceEnumerate, device)) != SUCCESS)
+			if ((deviceNum = deviceEnumerator.GetDevice(deviceNum, driver, device)) != SUCCESS)
 				deviceNum = -1;
 		}
 	}
@@ -99,12 +99,12 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	if (deviceNum < 0) {
 		deviceEnumerator.FUN_1009d210();
 		deviceNum = deviceEnumerator.FUN_1009d0d0();
-		deviceEnumerator.GetDevice(deviceNum, deviceEnumerate, device);
+		deviceEnumerator.GetDevice(deviceNum, driver, device);
 	}
 
-	m_direct3d->FUN_1009b5f0(deviceEnumerator, deviceEnumerate, device);
+	m_direct3d->FUN_1009b5f0(deviceEnumerator, driver, device);
 
-	if (!deviceEnumerate->m_ddCaps.dwCaps2 && deviceEnumerate->m_ddCaps.dwSVBRops[7] != 2)
+	if (!driver->m_ddCaps.dwCaps2 && driver->m_ddCaps.dwSVBRops[7] != 2)
 		p_videoParam.Flags().SetF2bit0(TRUE);
 	else
 		p_videoParam.Flags().SetF2bit0(FALSE);
