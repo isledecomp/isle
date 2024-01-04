@@ -39,7 +39,7 @@ MxResult TowTrackMissionState::VTable0x1c(LegoFileStream* p_legoFileStream)
 		p_legoFileStream->Write(&m_color3, sizeof(MxU16));
 		p_legoFileStream->Write(&m_color4, sizeof(MxU16));
 	}
-	else {
+	else if (p_legoFileStream->IsWriteMode()) {
 		p_legoFileStream->Read(&m_unk0x12, sizeof(MxU16));
 		p_legoFileStream->Read(&m_unk0x14, sizeof(MxU16));
 		p_legoFileStream->Read(&m_unk0x16, sizeof(MxU16));
