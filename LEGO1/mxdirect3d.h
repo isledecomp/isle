@@ -59,7 +59,7 @@ public:
 	BOOL D3DSetMode();
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device);
 
-	inline MxAssignedDevice* GetDeviceModeFinder() { return this->m_assignedDevice; };
+	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
 	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
 	inline IDirect3DDevice* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
 
