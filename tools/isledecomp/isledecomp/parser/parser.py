@@ -1,6 +1,6 @@
 # C++ file parser
 
-from typing import List, Iterable, Iterator
+from typing import List, Iterable, Iterator, Optional
 from enum import Enum
 from .util import (
     is_blank_or_comment,
@@ -121,6 +121,11 @@ class DecompParser:
     @property
     def variables(self) -> List[ParserSymbol]:
         return [s for s in self._symbols if isinstance(s, ParserVariable)]
+
+    def iter_symbols(self, module: Optional[str] = None) -> Iterator[ParserSymbol]:
+        for s in self._symbols:
+            if module is None or s.module == module:
+                yield s
 
     def _recover(self):
         """We hit a syntax error and need to reset temp structures"""

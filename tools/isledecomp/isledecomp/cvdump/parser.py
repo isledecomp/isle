@@ -1,5 +1,5 @@
 import re
-from typing import Iterable
+from typing import Iterable, Tuple
 from collections import namedtuple
 
 # e.g. `*** PUBLICS`
@@ -40,17 +40,28 @@ _gdata32_regex = re.compile(
 )
 
 
-LinesEntry = namedtuple("LinesEntry", "filename line_no addr")
+# User functions only
+LinesEntry = namedtuple("LinesEntry", "filename line_no section offset")
+
+# Strings, vtables, functions
+# superset of everything else
+# only place you can find the C symbols (library functions, smacker, etc)
 PublicsEntry = namedtuple("PublicsEntry", "type section offset flags name")
+
+# S_GPROC32 = functions
 SymbolsEntry = namedtuple("SymbolsEntry", "type section offset size name")
+
+# (Estimated) size of any symbol
 SizeRefEntry = namedtuple("SizeRefEntry", "section offset size")
+
+# global variables
 GdataEntry = namedtuple("GdataEntry", "section offset type name")
 
 
 class CvdumpParser:
     def __init__(self) -> None:
         self._section: str = ""
-        self._lines_filename: str = ""
+        self._lines_function: Tuple[str, int] = ("", 0)
 
         self.lines = []
         self.publics = []
@@ -64,19 +75,24 @@ class CvdumpParser:
         we are in."""
 
         # Subheader indicates a new function and possibly a new code filename.
+        # Save the section here because it is not given on the lines that follow.
         if (match := _lines_subsection_header.match(line)) is not None:
-            self._lines_filename = match.group(1)
+            self._lines_function = (
+                match.group("filename"),
+                int(match.group("section"), 16),
+            )
             return
 
-        if (matches := _line_addr_pairs_findall.findall(line)) is not None:
-            for line_no, addr in matches:
-                self.lines.append(
-                    LinesEntry(
-                        filename=self._lines_filename,
-                        line_no=int(line_no),
-                        addr=int(addr, 16),
-                    )
+        # Match any pairs as we find them
+        for line_no, offset in _line_addr_pairs_findall.findall(line):
+            self.lines.append(
+                LinesEntry(
+                    filename=self._lines_function[0],
+                    line_no=int(line_no),
+                    section=self._lines_function[1],
+                    offset=int(offset, 16),
                 )
+            )
 
     def _publics_section(self, line: str):
         """Match each line from PUBLICS and pull out the symbol information.

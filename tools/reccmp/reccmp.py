@@ -10,13 +10,11 @@ import re
 
 from isledecomp import (
     Bin,
-    DecompParser,
     get_file_in_script_dir,
     OffsetPlaceholderGenerator,
     print_diff,
-    SymInfo,
-    walk_source_dir,
 )
+from isledecomp.compare import Compare as IsleCompare
 
 from capstone import Cs, CS_ARCH_X86, CS_MODE_32
 import colorama
@@ -261,7 +259,6 @@ def main():
     args = parser.parse_args()
 
     logging.basicConfig(level=args.loglevel, format="[%(levelname)s] %(message)s")
-    logger = logging.getLogger(__name__)
 
     colorama.init()
 
@@ -294,8 +291,13 @@ def main():
 
     svg = args.svg
 
-    with Bin(original, logger) as origfile, Bin(recomp, logger) as recompfile:
-        syminfo = SymInfo(syms, recompfile, logger, source)
+    with Bin(original, find_str=True) as origfile, Bin(recomp) as recompfile:
+        if verbose is not None:
+            # Mute logger events from compare engine
+            logging.getLogger("isledecomp.compare.db").setLevel(logging.CRITICAL)
+            logging.getLogger("isledecomp.compare.lines").setLevel(logging.CRITICAL)
+
+        isle_compare = IsleCompare(origfile, recompfile, syms, source)
 
         print()
 
@@ -306,150 +308,119 @@ def main():
         total_effective_accuracy = 0
         htmlinsert = []
 
-        # Generate basename of original file, used in locating OFFSET lines
-        basename = os.path.basename(os.path.splitext(original)[0])
+        matches = []
+        if verbose is not None:
+            match = isle_compare.get_one_function(verbose)
+            if match is not None:
+                found_verbose_target = True
+                matches = [match]
+        else:
+            matches = isle_compare.get_functions()
 
-        parser = DecompParser()
-        for srcfilename in walk_source_dir(source):
-            parser.reset()
-            with open(srcfilename, "r", encoding="utf-8") as srcfile:
-                parser.read_lines(srcfile)
+        for match in matches:
+            # The effective_ratio is the ratio when ignoring differing register
+            # allocation vs the ratio is the true ratio.
+            ratio = 0.0
+            effective_ratio = 0.0
+            if match.size:
+                origasm = parse_asm(
+                    capstone_disassembler,
+                    origfile,
+                    match.orig_addr,
+                    match.size,
+                )
+                recompasm = parse_asm(
+                    capstone_disassembler,
+                    recompfile,
+                    match.recomp_addr,
+                    match.size,
+                )
 
-            for fun in parser.functions:
-                if fun.should_skip():
-                    continue
+                diff = difflib.SequenceMatcher(None, origasm, recompasm)
+                ratio = diff.ratio()
+                effective_ratio = ratio
 
-                if fun.module != basename:
-                    continue
+                if ratio != 1.0:
+                    # Check whether we can resolve register swaps which are actually
+                    # perfect matches modulo compiler entropy.
+                    if can_resolve_register_differences(origasm, recompasm):
+                        effective_ratio = 1.0
+            else:
+                ratio = 0
 
-                addr = fun.offset
-                # Verbose flag handling
+            percenttext = f"{(effective_ratio * 100):.2f}%"
+            if not plain:
+                if effective_ratio == 1.0:
+                    percenttext = (
+                        colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
+                    )
+                elif effective_ratio > 0.8:
+                    percenttext = (
+                        colorama.Fore.YELLOW + percenttext + colorama.Style.RESET_ALL
+                    )
+                else:
+                    percenttext = (
+                        colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
+                    )
+
+            if effective_ratio == 1.0 and ratio != 1.0:
+                if plain:
+                    percenttext += "*"
+                else:
+                    percenttext += colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
+
+            if args.print_rec_addr:
+                addrs = f"0x{match.orig_addr:x} / 0x{match.recomp_addr:x}"
+            else:
+                addrs = hex(match.orig_addr)
+
+            if not verbose:
+                print(
+                    f"  {match.name} ({addrs}) is {percenttext} similar to the original"
+                )
+
+            function_count += 1
+            total_accuracy += ratio
+            total_effective_accuracy += effective_ratio
+
+            if match.size:
+                udiff = difflib.unified_diff(origasm, recompasm, n=10)
+
+                # If verbose, print the diff for that function to the output
                 if verbose:
-                    if addr == verbose:
-                        found_verbose_target = True
-                    else:
-                        continue
-
-                if fun.is_nameref():
-                    recinfo = syminfo.get_recompiled_address_from_name(fun.name)
-                    if not recinfo:
-                        continue
-                else:
-                    recinfo = syminfo.get_recompiled_address(
-                        srcfilename, fun.line_number
-                    )
-                    if not recinfo:
-                        continue
-
-                # The effective_ratio is the ratio when ignoring differing register
-                # allocation vs the ratio is the true ratio.
-                ratio = 0.0
-                effective_ratio = 0.0
-                if recinfo.size:
-                    origasm = parse_asm(
-                        capstone_disassembler,
-                        origfile,
-                        addr + recinfo.start,
-                        recinfo.size,
-                    )
-                    recompasm = parse_asm(
-                        capstone_disassembler,
-                        recompfile,
-                        recinfo.addr + recinfo.start,
-                        recinfo.size,
-                    )
-
-                    diff = difflib.SequenceMatcher(None, origasm, recompasm)
-                    ratio = diff.ratio()
-                    effective_ratio = ratio
-
-                    if ratio != 1.0:
-                        # Check whether we can resolve register swaps which are actually
-                        # perfect matches modulo compiler entropy.
-                        if can_resolve_register_differences(origasm, recompasm):
-                            effective_ratio = 1.0
-                else:
-                    ratio = 0
-
-                percenttext = f"{(effective_ratio * 100):.2f}%"
-                if not plain:
                     if effective_ratio == 1.0:
-                        percenttext = (
-                            colorama.Fore.GREEN + percenttext + colorama.Style.RESET_ALL
-                        )
-                    elif effective_ratio > 0.8:
-                        percenttext = (
-                            colorama.Fore.YELLOW
-                            + percenttext
-                            + colorama.Style.RESET_ALL
-                        )
-                    else:
-                        percenttext = (
-                            colorama.Fore.RED + percenttext + colorama.Style.RESET_ALL
-                        )
-
-                if effective_ratio == 1.0 and ratio != 1.0:
-                    if plain:
-                        percenttext += "*"
-                    else:
-                        percenttext += (
-                            colorama.Fore.RED + "*" + colorama.Style.RESET_ALL
-                        )
-
-                if args.print_rec_addr:
-                    addrs = f"0x{addr:x} / 0x{recinfo.addr:x}"
-                else:
-                    addrs = hex(addr)
-
-                if not verbose:
-                    print(
-                        f"  {recinfo.name} ({addrs}) is {percenttext} similar to the original"
-                    )
-
-                function_count += 1
-                total_accuracy += ratio
-                total_effective_accuracy += effective_ratio
-
-                if recinfo.size:
-                    udiff = difflib.unified_diff(origasm, recompasm, n=10)
-
-                    # If verbose, print the diff for that function to the output
-                    if verbose:
-                        if effective_ratio == 1.0:
-                            ok_text = (
-                                "OK!"
-                                if plain
-                                else (
-                                    colorama.Fore.GREEN
-                                    + "✨ OK! ✨"
-                                    + colorama.Style.RESET_ALL
-                                )
+                        ok_text = (
+                            "OK!"
+                            if plain
+                            else (
+                                colorama.Fore.GREEN
+                                + "✨ OK! ✨"
+                                + colorama.Style.RESET_ALL
                             )
-                            if ratio == 1.0:
-                                print(
-                                    f"{addrs}: {recinfo.name} 100% match.\n\n{ok_text}\n\n"
-                                )
-                            else:
-                                print(
-                                    f"{addrs}: {recinfo.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n"
-                                )
+                        )
+                        if ratio == 1.0:
+                            print(f"{addrs}: {match.name} 100% match.\n\n{ok_text}\n\n")
                         else:
-                            print_diff(udiff, plain)
-
                             print(
-                                f"\n{recinfo.name} is only {percenttext} similar to the original, diff above"
+                                f"{addrs}: {match.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n"
                             )
+                    else:
+                        print_diff(udiff, plain)
 
-                    # If html, record the diffs to an HTML file
-                    if html_path:
-                        htmlinsert.append(
-                            {
-                                "address": f"0x{addr:x}",
-                                "name": recinfo.name,
-                                "matching": effective_ratio,
-                                "diff": "\n".join(udiff),
-                            }
+                        print(
+                            f"\n{match.name} is only {percenttext} similar to the original, diff above"
                         )
+
+                # If html, record the diffs to an HTML file
+                if html_path:
+                    htmlinsert.append(
+                        {
+                            "address": f"0x{match.orig_addr:x}",
+                            "name": match.name,
+                            "matching": effective_ratio,
+                            "diff": "\n".join(udiff),
+                        }
+                    )
 
         if html_path:
             gen_html(html_path, json.dumps(htmlinsert))
