@@ -12,12 +12,8 @@ class MxDirectDraw {
 public:
 	typedef void (*ErrorHandler)(const char*, HRESULT, void*);
 
-	// size 0x0c
+	// SIZE 0x0c
 	struct Mode {
-		MxS32 m_width;
-		MxS32 m_height;
-		MxS32 m_bitsPerPixel;
-
 		MxS32 operator==(const Mode& p_mode) const
 		{
 			return (
@@ -25,50 +21,54 @@ public:
 				(m_bitsPerPixel == p_mode.m_bitsPerPixel)
 			);
 		}
+
+		MxS32 m_width;        // 0x00
+		MxS32 m_height;       // 0x04
+		MxS32 m_bitsPerPixel; // 0x08
 	};
 
 	// SIZE 0x17c
 	struct DeviceModesInfo {
-		GUID* m_guid;
-		Mode* m_modeArray;
-		MxS32 m_count;
-		DDCAPS m_ddcaps;
-		void* m_unk0x178;
-
 		DeviceModesInfo();
 		~DeviceModesInfo();
+
+		GUID* m_guid;      // 0x00
+		Mode* m_modeArray; // 0x04
+		MxS32 m_count;     // 0x08
+		DDCAPS m_ddcaps;   // 0x0c
+		void* m_unk0x178;  // 0x178
 	};
 
 protected:
-	BOOL m_bOnlySoftRender;
-	BOOL m_bFlipSurfaces;
-	IDirectDraw* m_pDirectDraw;
-	IDirectDrawSurface* m_pFrontBuffer;
-	IDirectDrawSurface* m_pBackBuffer;
-	IDirectDrawSurface* m_pZBuffer;
-	IDirectDrawSurface* m_pText1Surface;
-	IDirectDrawSurface* m_pText2Surface;
-	IDirectDrawClipper* m_pClipper;
-	IDirectDrawPalette* m_pPalette;
-	PALETTEENTRY m_paletteEntries[256];
-	PALETTEENTRY m_originalPaletteEntries[256];
-	SIZE m_text1SizeOnSurface;
-	SIZE m_text2SizeOnSurface;
-	HWND m_hWndMain;
-	HFONT m_hFont;
-	BOOL m_bIgnoreWMSIZE;
-	BOOL m_bPrimaryPalettized;
-	BOOL m_bFullScreen;
-	void* m_unk0x850;
-	BOOL m_bOnlySystemMemory;
-	BOOL m_bIsOnPrimaryDevice;
-	ErrorHandler m_pErrorHandler;
-	ErrorHandler m_pFatalErrorHandler;
-	void* m_pErrorHandlerArg;
-	void* m_pFatalErrorHandlerArg;
-	int m_pauseCount;
-	DeviceModesInfo* m_pCurrentDeviceModesList;
-	Mode m_currentMode;
+	BOOL m_bOnlySoftRender;                     // 0x04
+	BOOL m_bFlipSurfaces;                       // 0x08
+	IDirectDraw* m_pDirectDraw;                 // 0x0c
+	IDirectDrawSurface* m_pFrontBuffer;         // 0x10
+	IDirectDrawSurface* m_pBackBuffer;          // 0x14
+	IDirectDrawSurface* m_pZBuffer;             // 0x18
+	IDirectDrawSurface* m_pText1Surface;        // 0x1c
+	IDirectDrawSurface* m_pText2Surface;        // 0x20
+	IDirectDrawClipper* m_pClipper;             // 0x24
+	IDirectDrawPalette* m_pPalette;             // 0x28
+	PALETTEENTRY m_paletteEntries[256];         // 0x2c
+	PALETTEENTRY m_originalPaletteEntries[256]; // 0x42c
+	SIZE m_text1SizeOnSurface;                  // 0x82c
+	SIZE m_text2SizeOnSurface;                  // 0x834
+	HWND m_hWndMain;                            // 0x83c
+	HFONT m_hFont;                              // 0x840
+	BOOL m_bIgnoreWMSIZE;                       // 0x844
+	BOOL m_bPrimaryPalettized;                  // 0x848
+	BOOL m_bFullScreen;                         // 0x84c
+	void* m_unk0x850;                           // 0x850
+	BOOL m_bOnlySystemMemory;                   // 0x854
+	BOOL m_bIsOnPrimaryDevice;                  // 0x858
+	ErrorHandler m_pErrorHandler;               // 0x85c
+	ErrorHandler m_pFatalErrorHandler;          // 0x860
+	void* m_pErrorHandlerArg;                   // 0x864
+	void* m_pFatalErrorHandlerArg;              // 0x868
+	int m_pauseCount;                           // 0x86c
+	DeviceModesInfo* m_pCurrentDeviceModesList; // 0x870
+	Mode m_currentMode;                         // 0x87c
 
 public:
 	__declspec(dllexport) int FlipToGDISurface();

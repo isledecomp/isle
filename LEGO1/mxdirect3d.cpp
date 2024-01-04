@@ -125,9 +125,85 @@ BOOL MxDirect3D::D3DSetMode()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1009b5f0
-BOOL MxDirect3D::FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
+// FUNCTION: LEGO1 0x1009b5f0
+BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device)
 {
+	if (m_pDeviceModeFinder) {
+		delete m_pDeviceModeFinder;
+		m_pDeviceModeFinder = NULL;
+		m_pCurrentDeviceModesList = NULL;
+	}
+
+	MxDeviceModeFinder* deviceModeFinder = new MxDeviceModeFinder;
+	list<MxDriver>& deviceList = p_deviceEnumerator.GetDeviceList();
+	MxS32 i = 0;
+
+	for (list<MxDriver>::iterator it = deviceList.begin(); it != deviceList.end(); it++) {
+		MxDriver& driver = *it;
+
+		if (&driver == p_driver) {
+			deviceModeFinder->m_deviceInfo = new MxDirectDraw::DeviceModesInfo;
+
+			if (driver.m_guid) {
+				deviceModeFinder->m_deviceInfo->m_guid = new GUID;
+				memcpy(deviceModeFinder->m_deviceInfo->m_guid, driver.m_guid, sizeof(GUID));
+			}
+
+			deviceModeFinder->m_deviceInfo->m_count = driver.m_displayModes.size();
+
+			if (deviceModeFinder->m_deviceInfo->m_count > 0) {
+				deviceModeFinder->m_deviceInfo->m_modeArray =
+					new MxDirectDraw::Mode[deviceModeFinder->m_deviceInfo->m_count];
+
+				MxS32 j = 0;
+				for (list<MxDisplayMode>::iterator it2 = driver.m_displayModes.begin();
+					 it2 != driver.m_displayModes.end();
+					 it2++) {
+					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_width = (*it2).m_width;
+					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_height = (*it2).m_height;
+					deviceModeFinder->m_deviceInfo->m_modeArray[j].m_bitsPerPixel = (*it2).m_bitsPerPixel;
+					j++;
+				}
+			}
+
+			memcpy(
+				&deviceModeFinder->m_deviceInfo->m_ddcaps,
+				&driver.m_ddCaps,
+				sizeof(deviceModeFinder->m_deviceInfo->m_ddcaps)
+			);
+
+			if (i == 0)
+				deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_Bit2;
+
+			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
+				MxDevice& device = *it2;
+
+				if (&device == p_device) {
+					memcpy(&deviceModeFinder->m_guid, device.m_guid, sizeof(deviceModeFinder->m_guid));
+
+					D3DDEVICEDESC* desc;
+					if (device.m_HWDesc.dcmColorModel) {
+						deviceModeFinder->m_flags |= MxDeviceModeFinder::Flag_HardwareMode;
+						desc = &device.m_HWDesc;
+					}
+					else
+						desc = &device.m_HELDesc;
+
+					memcpy(&deviceModeFinder->m_desc, desc, sizeof(deviceModeFinder->m_desc));
+					m_pDeviceModeFinder = deviceModeFinder;
+					m_pCurrentDeviceModesList = deviceModeFinder->m_deviceInfo;
+				}
+			}
+		}
+
+		i++;
+	}
+
+	if (!m_pDeviceModeFinder) {
+		delete deviceModeFinder;
+		return FALSE;
+	}
+
 	return TRUE;
 }
 

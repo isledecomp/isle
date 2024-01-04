@@ -8,13 +8,25 @@
 
 #include <d3d.h>
 
+class MxDirect3D;
+
 // SIZE 0xe4
 class MxDeviceModeFinder {
 public:
+	enum {
+		Flag_HardwareMode = 0x01,
+		Flag_Bit2 = 0x02
+	};
+
 	MxDeviceModeFinder();
 	~MxDeviceModeFinder();
 
-	undefined m_pad[0xe0];                       // 0x00
+	friend class MxDirect3D;
+
+private:
+	GUID m_guid;                                 // 0x00
+	undefined4 m_flags;                          // 0x10
+	D3DDEVICEDESC m_desc;                        // 0x14
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // 0xe0
 };
 
@@ -45,7 +57,7 @@ public:
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();
-	BOOL FUN_1009b5f0(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device);
+	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerator, MxDriver* p_driver, MxDevice* p_device);
 
 	inline MxDeviceModeFinder* GetDeviceModeFinder() { return this->m_pDeviceModeFinder; };
 	inline IDirect3D* GetDirect3D() { return this->m_pDirect3d; }
@@ -196,6 +208,8 @@ public:
 	);
 	static undefined4 FUN_1009d1a0();
 	static undefined4 FUN_1009d1e0();
+
+	inline list<MxDriver>& GetDeviceList() { return m_list; }
 
 private:
 	list<MxDriver> m_list; // 0x04
