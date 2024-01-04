@@ -172,7 +172,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 			);
 
 			if (i == 0)
-				assignedDevice->m_flags |= MxAssignedDevice::Flag_Bit2;
+				assignedDevice->m_flags |= MxAssignedDevice::Flag_PrimaryDevice;
 
 			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 				MxDevice& device = *it2;

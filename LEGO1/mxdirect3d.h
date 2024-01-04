@@ -15,7 +15,7 @@ class MxAssignedDevice {
 public:
 	enum {
 		Flag_HardwareMode = 0x01,
-		Flag_Bit2 = 0x02
+		Flag_PrimaryDevice = 0x02
 	};
 
 	MxAssignedDevice();
