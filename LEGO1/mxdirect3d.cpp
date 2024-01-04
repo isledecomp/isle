@@ -120,8 +120,9 @@ BOOL MxDirect3D::D3DSetMode()
 			return FALSE;
 		}
 
-		m_unk0x88c = FALSE;
-		if ((m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE) == 0)
+		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE)
+			m_unk0x88c = FALSE;
+		else
 			m_unk0x88c = TRUE;
 
 		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
@@ -129,8 +130,9 @@ BOOL MxDirect3D::D3DSetMode()
 			return FALSE;
 	}
 	else {
-		m_unk0x88c = FALSE;
-		if ((m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE) == 0)
+		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE)
+			m_unk0x88c = FALSE;
+		else
 			m_unk0x88c = TRUE;
 
 		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
