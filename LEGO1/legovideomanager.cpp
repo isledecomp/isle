@@ -163,7 +163,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	ViewLODList* pLODList;
 
-	if (FUN_1007c930() != SUCCESS)
+	if (ConfigureD3DRM() != SUCCESS)
 		goto done;
 
 	pLODList = m_3dManager->GetViewLODListManager()->Create("CameraROI", 1);
@@ -314,7 +314,7 @@ void LegoVideoManager::SetSkyColor(float p_red, float p_green, float p_blue)
 	colorStrucure.peFlags = -124;
 	m_videoParam.GetPalette()->SetSkyColor(&colorStrucure);
 	m_videoParam.GetPalette()->SetOverrideSkyColor(TRUE);
-	m_3dManager->GetLego3DView()->GetViewPort()->SetBackgroundColor(p_red, p_green, p_blue);
+	m_3dManager->GetLego3DView()->GetView()->SetBackgroundColor(p_red, p_green, p_blue);
 }
 
 // FUNCTION: LEGO1 0x1007c4c0
@@ -334,7 +334,7 @@ void LegoVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_h
 	}
 
 	if (!m_initialized) {
-		m_3dManager->GetLego3DView()->GetViewPort()->ForceUpdate(p_x, p_y, p_width, p_height);
+		m_3dManager->GetLego3DView()->GetView()->ForceUpdate(p_x, p_y, p_width, p_height);
 	}
 }
 
@@ -352,8 +352,26 @@ int LegoVideoManager::DisableRMDevice()
 	return 0;
 }
 
-// STUB: LEGO1 0x1007c930
-MxResult LegoVideoManager::FUN_1007c930()
+// FUNCTION: LEGO1 0x1007c930
+MxResult LegoVideoManager::ConfigureD3DRM()
 {
+	IDirect3DRMDevice2* d3drm =
+		((TglImpl::DeviceImpl*) m_3dManager->GetLego3DView()->GetDevice())->ImplementationData();
+
+	if (!d3drm)
+		return FAILURE;
+
+	MxAssignedDevice* assignedDevice = m_direct3d->GetAssignedDevice();
+
+	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::Flag_HardwareMode) {
+		if (assignedDevice->GetDesc().dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR)
+			d3drm->SetTextureQuality(D3DRMTEXTURE_LINEAR);
+
+		d3drm->SetDither(TRUE);
+
+		if (assignedDevice->GetDesc().dpcTriCaps.dwShadeCaps & D3DPSHADECAPS_ALPHAFLATBLEND)
+			d3drm->SetRenderMode(D3DRMRENDERMODE_BLENDEDTRANSPARENCY);
+	}
+
 	return SUCCESS;
 }

@@ -10,7 +10,7 @@ DECOMP_SIZE_ASSERT(Lego3DManager, 0x10);
 // FUNCTION: LEGO1 0x100ab2d0
 BOOL InitializeCreateStruct(TglSurface::CreateStruct& p_tglSurface, const Lego3DManager::CreateStruct& p_createStruct)
 {
-	p_tglSurface.m_unk0x00 = p_createStruct.m_unk0x00;
+	p_tglSurface.m_driverGUID = p_createStruct.m_driverGUID;
 	p_tglSurface.m_hwnd = p_createStruct.m_hwnd;
 	p_tglSurface.m_directDraw = p_createStruct.m_directDraw;
 	p_tglSurface.m_ddSurface1 = p_createStruct.m_ddSurface1;

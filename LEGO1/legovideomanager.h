@@ -42,7 +42,7 @@ public:
 
 private:
 	MxResult CreateDirect3D();
-	MxResult FUN_1007c930();
+	MxResult ConfigureD3DRM();
 
 	Tgl::Renderer* m_renderer;
 	Lego3DManager* m_3dManager; // 0x68

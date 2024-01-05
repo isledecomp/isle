@@ -21,6 +21,9 @@ public:
 	MxAssignedDevice();
 	~MxAssignedDevice();
 
+	inline MxU32 GetFlags() { return m_flags; }
+	inline D3DDEVICEDESC& GetDesc() { return m_desc; }
+
 	friend class MxDirect3D;
 
 private:

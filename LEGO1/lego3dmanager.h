@@ -11,7 +11,7 @@ class Lego3DManager {
 public:
 	// SIZE 0x28
 	struct CreateStruct {
-		undefined4 m_unk0x00;             // 0x00
+		GUID* m_driverGUID;               // 0x00
 		HWND m_hwnd;                      // 0x04
 		IDirectDraw* m_directDraw;        // 0x08
 		IDirectDrawSurface* m_ddSurface1; // 0x0c
