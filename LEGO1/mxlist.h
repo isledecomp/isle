@@ -97,6 +97,7 @@ public:
 	MxBool First(T& p_obj);
 	MxBool Last(T& p_obj);
 	MxBool Advance();
+	MxBool Retreat();
 	MxBool HasMatch() { return m_match != NULL; }
 	void SetValue(T p_obj);
 	MxBool Head()
@@ -286,6 +287,17 @@ inline MxBool MxListCursor<T>::Advance()
 		m_match = m_list->m_first;
 	else
 		m_match = m_match->GetNext();
+
+	return m_match != NULL;
+}
+
+template <class T>
+inline MxBool MxListCursor<T>::Retreat()
+{
+	if (!m_match)
+		m_match = m_list->m_last;
+	else
+		m_match = m_match->GetPrev();
 
 	return m_match != NULL;
 }

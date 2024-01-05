@@ -39,6 +39,55 @@ public:
 		void* m_unk0x178;  // 0x178
 	};
 
+	__declspec(dllexport) int FlipToGDISurface();
+	__declspec(dllexport) static int GetPrimaryBitDepth();
+	__declspec(dllexport) int Pause(int);
+
+	MxDirectDraw();
+	virtual ~MxDirectDraw();
+
+	virtual BOOL Create(
+		HWND hWnd,
+		BOOL fullscreen_1,
+		BOOL surface_fullscreen,
+		BOOL onlySystemMemory,
+		int width,
+		int height,
+		int bpp,
+		const PALETTEENTRY* pPaletteEntries,
+		int paletteEntryCount
+	);                                                  // vtable+0x04
+	virtual void Destroy();                             // vtable+0x08
+	virtual void DestroyButNotDirectDraw();             // vtable+0x0c
+	virtual const char* ErrorToString(HRESULT p_error); // vtable+0x10
+
+	BOOL CacheOriginalPaletteEntries();
+	HRESULT CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4);
+	BOOL CreateTextSurfaces();
+	BOOL CreateZBuffer(DWORD memorytype, DWORD depth);
+	BOOL DDCreateSurfaces();
+	BOOL DDInit(BOOL fullscreen);
+	BOOL DDSetMode(int width, int height, int bpp);
+	void Error(const char* p_message, MxS32 p_error);
+
+	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
+	BOOL IsSupportedMode(int width, int height, int bpp);
+	BOOL RecreateDirectDraw(GUID** a2);
+	BOOL RestoreOriginalPaletteEntries();
+	BOOL RestorePaletteEntries();
+	BOOL RestoreSurfaces();
+	BOOL SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen);
+	BOOL TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface);
+	BOOL TextToTextSurface1(const char* text);
+	BOOL TextToTextSurface2(const char* lpString);
+	void FUN_1009e020();
+	void FUN_1009d920();
+
+	inline IDirectDraw* GetDirectDraw() { return m_pDirectDraw; }
+	inline IDirectDrawSurface* GetFrontBuffer() { return m_pFrontBuffer; }
+	inline IDirectDrawSurface* GetBackBuffer() { return m_pBackBuffer; }
+	inline IDirectDrawClipper* GetClipper() { return m_pClipper; }
+
 protected:
 	BOOL m_bOnlySoftRender;                     // 0x04
 	BOOL m_bFlipSurfaces;                       // 0x08
@@ -69,57 +118,6 @@ protected:
 	int m_pauseCount;                           // 0x86c
 	DeviceModesInfo* m_pCurrentDeviceModesList; // 0x870
 	Mode m_currentMode;                         // 0x874
-
-public:
-	__declspec(dllexport) int FlipToGDISurface();
-	__declspec(dllexport) static int GetPrimaryBitDepth();
-	__declspec(dllexport) int Pause(int);
-
-	MxDirectDraw();
-	virtual ~MxDirectDraw();
-
-	virtual BOOL Create(
-		HWND hWnd,
-		BOOL fullscreen_1,
-		BOOL surface_fullscreen,
-		BOOL onlySystemMemory,
-		int width,
-		int height,
-		int bpp,
-		const PALETTEENTRY* pPaletteEntries,
-		int paletteEntryCount
-	);                                                  // vtable+0x04
-	virtual void Destroy();                             // vtable+0x08
-	virtual void DestroyButNotDirectDraw();             // vtable+0x0c
-	virtual const char* ErrorToString(HRESULT p_error); // vtable+0x10
-
-	inline IDirectDraw* GetDirectDraw() { return m_pDirectDraw; }
-	inline IDirectDrawSurface* GetFrontBuffer() { return m_pFrontBuffer; }
-	inline IDirectDrawSurface* GetBackBuffer() { return m_pBackBuffer; }
-	inline IDirectDrawClipper* GetClipper() { return m_pClipper; }
-
-protected:
-	BOOL CacheOriginalPaletteEntries();
-	HRESULT CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4);
-	BOOL CreateTextSurfaces();
-	BOOL CreateZBuffer(DWORD memorytype, DWORD depth);
-	BOOL DDCreateSurfaces();
-	BOOL DDInit(BOOL fullscreen);
-	BOOL DDSetMode(int width, int height, int bpp);
-	void Error(const char* p_message, MxS32 p_error);
-
-	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
-	BOOL IsSupportedMode(int width, int height, int bpp);
-	BOOL RecreateDirectDraw(GUID** a2);
-	BOOL RestoreOriginalPaletteEntries();
-	BOOL RestorePaletteEntries();
-	BOOL RestoreSurfaces();
-	BOOL SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen);
-	BOOL TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface);
-	BOOL TextToTextSurface1(const char* text);
-	BOOL TextToTextSurface2(const char* lpString);
-	void FUN_1009e020();
-	void FUN_1009d920();
 };
 
 #endif // MXDIRECTDRAW_H

@@ -569,6 +569,12 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(MxBitmap*, undefined4*, undefin
 	return NULL;
 }
 
+// STUB: LEGO1 0x100bc070
+LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x100bc200
 void MxDisplaySurface::VTable0x24(
 	LPDDSURFACEDESC,

@@ -43,6 +43,7 @@ public:
 private:
 	MxResult CreateDirect3D();
 	MxResult ConfigureD3DRM();
+	void FUN_1007bbc0();
 
 	Tgl::Renderer* m_renderer;
 	Lego3DManager* m_3dManager; // 0x68
@@ -59,22 +60,22 @@ private:
 	MxBool m_isFullscreenMovie;         // 0x4ec
 	MxPalette* m_palette;               // 0x4f0
 	MxStopWatch* m_stopWatch;           // 0x4f4
-	undefined m_padding0x4f4[8];
+	double m_elapsedSeconds;            // 0x4f8
 	MxBool m_unk0x500;
 	MxBool m_cursorMoved; // 0x501
 	MxS32 m_cursorXCopy;  // 0x504
 	MxS32 m_cursorYCopy;  // 0x508
 	MxS32 m_cursorX;      // 0x50c
 	MxS32 m_cursorY;      // 0x510
-	undefined4 m_unk0x514;
-	undefined m_pad0x518[0x10];
+	LPDIRECTDRAWSURFACE m_unk0x514;
+	RECT m_unk0x518;
 	undefined4 m_unk0x528;
 	MxBool m_drawFPS;  // 0x52c
 	RECT m_fpsRect;    // 0x530
 	HFONT m_arialFont; // 0x540
 	SIZE m_fpsSize;    // 0x544
 	undefined m_pad0x54c[8];
-	undefined m_unk0x554;
+	MxBool m_unk0x554;
 	MxBool m_initialized; // 0x555
 	undefined m_pad0x556[0x39];
 };
