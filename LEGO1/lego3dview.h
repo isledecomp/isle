@@ -7,7 +7,6 @@
 #include "viewmanager/viewmanager.h"
 
 class LegoROI;
-class Tgl::Renderer;
 
 // VTABLE: LEGO1 0x100dbf78
 // SIZE 0xa8
