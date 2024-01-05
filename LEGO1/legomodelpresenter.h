@@ -21,6 +21,13 @@ public:
 	{
 		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
+
+	virtual void ReadyTickle() override; // vtable+0x18
+	virtual void ParseExtra() override;  // vtable+0x30
+	virtual void Destroy() override;     // vtable+0x38
+
+protected:
+	void Destroy(MxBool p_fromDestructor);
 };
 
 #endif // LEGOMODELPRESENTER_H
