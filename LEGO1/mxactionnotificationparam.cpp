@@ -18,7 +18,12 @@ MxNotificationParam* MxEndActionNotificationParam::Clone()
 // FUNCTION: LEGO1 0x100b0300
 MxNotificationParam* MxStartActionNotificationParam::Clone()
 {
-	return new MxStartActionNotificationParam(c_notificationStartAction, this->m_sender, this->m_action, this->m_realloc);
+	return new MxStartActionNotificationParam(
+		c_notificationStartAction,
+		this->m_sender,
+		this->m_action,
+		this->m_realloc
+	);
 }
 
 // FUNCTION: LEGO1 0x100b04f0
