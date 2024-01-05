@@ -5,10 +5,10 @@
 #include <d3drm.h>
 
 // Forward declare D3D types
-struct IDirect3DRM;
-struct IDirect3DRMDevice;
+struct IDirect3DRM2;
+struct IDirect3DRMDevice2;
 struct IDirect3DRMViewport;
-struct IDirect3DRMFrame;
+struct IDirect3DRMFrame2;
 struct IDirect3DRMMesh;
 struct IDirect3DRMMeshBuilder;
 struct IDirect3DRMTexture;
@@ -82,7 +82,7 @@ public:
 	inline void Destroy();
 
 private:
-	IDirect3DRM* m_data;
+	IDirect3DRM2* m_data;
 };
 
 // VTABLE 0x100db988
@@ -114,12 +114,12 @@ public:
 	virtual void InitFromD3DDevice(Device*);
 	virtual void InitFromWindowsDevice(Device*);
 
-	inline IDirect3DRMDevice* ImplementationData() const { return m_data; }
+	inline IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMDevice* m_data;
+	IDirect3DRMDevice2* m_data;
 };
 
 // VTABLE 0x100db9e8
@@ -166,7 +166,7 @@ public:
 
 	inline IDirect3DRMViewport* ImplementationData() const { return m_data; }
 
-	static Result ViewportCreateAppData(IDirect3DRM*, IDirect3DRMViewport*, IDirect3DRMFrame*);
+	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
 	friend class RendererImpl;
 
@@ -191,12 +191,12 @@ public:
 	// vtable+0x08
 	virtual Result SetTransformation(const FloatMatrix4&);
 
-	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
+	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
 // VTABLE 0x100dbaf8
@@ -217,12 +217,12 @@ public:
 	virtual Result SetTransformation(const FloatMatrix4&);
 	virtual Result SetColor(float r, float g, float b);
 
-	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
+	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
 // VTABLE 0x100dbb88
@@ -301,7 +301,7 @@ public:
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
 // VTABLE 0x100dbb18

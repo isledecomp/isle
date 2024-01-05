@@ -18,6 +18,15 @@ Lego3DView::~Lego3DView()
 // STUB: LEGO1 0x100aaf90
 BOOL Lego3DView::Create(TglSurface::CreateStruct& p_createStruct, Tgl::Renderer* p_renderer)
 {
+	Tgl::DeviceDirectDrawCreateData createData = {
+		p_createStruct.m_driverGUID,
+		p_createStruct.m_hwnd,
+		p_createStruct.m_directDraw,
+		p_createStruct.m_ddSurface1,
+		p_createStruct.m_ddSurface2
+	};
+
+	m_device = p_renderer->CreateDevice(createData);
 	return TRUE;
 }
 

@@ -3,12 +3,12 @@
 using namespace TglImpl;
 
 struct ViewportAppData {
-	ViewportAppData(IDirect3DRM* pRenderer);
+	ViewportAppData(IDirect3DRM2* pRenderer);
 	~ViewportAppData();
 
-	IDirect3DRMFrame* m_pLightFrame;
-	IDirect3DRMFrame* m_pCamera;
-	IDirect3DRMFrame* m_pLastRenderedFrame;
+	IDirect3DRMFrame2* m_pLightFrame;
+	IDirect3DRMFrame2* m_pCamera;
+	IDirect3DRMFrame2* m_pLastRenderedFrame;
 	float m_backgroundColorRed;
 	float m_backgroundColorGreen;
 	float m_backgroundColorBlue;
@@ -17,7 +17,7 @@ struct ViewportAppData {
 DECOMP_SIZE_ASSERT(ViewportAppData, 0x18);
 
 // FUNCTION: LEGO1 0x100a10b0
-ViewportAppData::ViewportAppData(IDirect3DRM* pRenderer)
+ViewportAppData::ViewportAppData(IDirect3DRM2* pRenderer)
 {
 	pRenderer->CreateFrame(NULL, &m_pLightFrame);
 	m_pCamera = NULL;
@@ -46,7 +46,7 @@ ViewportAppData::~ViewportAppData()
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
 // FUNCTION: LEGO1 0x100a1160
-Result ViewImpl::ViewportCreateAppData(IDirect3DRM* pDevice, IDirect3DRMViewport* pView, IDirect3DRMFrame* pCamera)
+Result ViewImpl::ViewportCreateAppData(IDirect3DRM2* pDevice, IDirect3DRMViewport* pView, IDirect3DRMFrame2* pCamera)
 {
 	ViewportAppData* data = new ViewportAppData(pDevice);
 	data->m_pCamera = pCamera;
@@ -145,7 +145,7 @@ Result ViewImpl::Remove(const Light* pLight)
 Result ViewImpl::SetCamera(const Camera* pCamera)
 {
 	const CameraImpl* camera = static_cast<const CameraImpl*>(pCamera);
-	IDirect3DRMFrame* frame = camera->ImplementationData();
+	IDirect3DRMFrame2* frame = camera->ImplementationData();
 
 	ViewportAppData* pViewportAppData;
 	Result result;
@@ -249,9 +249,9 @@ Result ViewImpl::Render(const Light* pCamera)
 {
 	ViewportAppData* appdata = ViewportGetData(m_data);
 
-	IDirect3DRMFrame* light = static_cast<const LightImpl*>(pCamera)->ImplementationData();
+	IDirect3DRMFrame2* light = static_cast<const LightImpl*>(pCamera)->ImplementationData();
 
-	IDirect3DRMFrame* lastRendered = appdata->m_pLastRenderedFrame;
+	IDirect3DRMFrame2* lastRendered = appdata->m_pLastRenderedFrame;
 	if (light != lastRendered) {
 		if (lastRendered) {
 			lastRendered->DeleteChild(appdata->m_pCamera);
