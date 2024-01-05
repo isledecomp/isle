@@ -324,21 +324,23 @@ void MxOmni::DeleteObject(MxDSAction& p_dsAction)
 MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action)
 {
 	MxResult result = FAILURE;
-	MxPresenter* object = (MxPresenter*) m_objectFactory->Create(PresenterNameDispatch(p_action));
+	const char* name = PresenterNameDispatch(p_action);
+	MxPresenter* object = (MxPresenter*) m_objectFactory->Create(name);
 
 	if (object) {
 		if (object->AddToManager() == SUCCESS) {
 			MxPresenter* sender = p_action.GetUnknown28();
-			if (sender == NULL && (sender = p_controller->FUN_100c1e70(p_action)) == NULL) {
-				if (p_action.GetOrigin() == NULL) {
-					p_action.SetOrigin(this);
-				}
+			if (!sender)
+				sender = p_controller->FUN_100c1e70(p_action);
 
-				object->SetCompositePresenter(NULL);
-			}
-			else {
+			if (sender) {
 				p_action.SetOrigin(sender);
 				object->SetCompositePresenter((MxCompositePresenter*) sender);
+			}
+			else {
+				if (!p_action.GetOrigin())
+					p_action.SetOrigin(this);
+				object->SetCompositePresenter(NULL);
 			}
 
 			if (object->StartAction(p_controller, &p_action) == SUCCESS) {
@@ -349,13 +351,14 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 				if (p_action.GetUnknown84()) {
 					NotificationManager()->Send(
 						p_action.GetUnknown84(),
-						&MxStartActionNotificationParam(c_notificationStartAction, this, &p_action, FALSE)
+						&MxStartActionNotificationParam(c_notificationStartAction, object, &p_action, FALSE)
 					);
 				}
 				result = SUCCESS;
 			}
 		}
 	}
+
 	return result;
 }
 
