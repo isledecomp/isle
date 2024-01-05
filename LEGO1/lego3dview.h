@@ -28,7 +28,7 @@ public:
 private:
 	// TODO: all of these fields are in various base classes
 	undefined4 m_unk0x4;        // 0x04
-	Tgl::Renderer* m_render;    // 0x08
+	Tgl::Renderer* m_renderer;  // 0x08
 	Tgl::Device* m_device;      // 0x0c
 	Tgl::View* m_view;          // 0x10
 	undefined m_unk0x14[0x74];  // 0x14
