@@ -157,7 +157,7 @@ void MxOmni::Init()
 	m_timer = NULL;
 	m_streamer = NULL;
 	m_atomIdCounterSet = NULL;
-	m_timerRunning = 0;
+	m_timerRunning = FALSE;
 }
 
 // FUNCTION: LEGO1 0x100af0b0
@@ -356,10 +356,7 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 				if (p_action.GetUnknown84()) {
 #ifdef COMPAT_MODE
 					MxStartActionNotificationParam param(c_notificationStartAction, object, &p_action, FALSE);
-					NotificationManager()->Send(
-						p_action.GetUnknown84(),
-						&param
-					);
+					NotificationManager()->Send(p_action.GetUnknown84(), &param);
 #else
 					NotificationManager()->Send(
 						p_action.GetUnknown84(),
