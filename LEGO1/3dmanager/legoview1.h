@@ -14,7 +14,7 @@ class Tgl::Camera;
 class LegoView : public TglSurface {
 public:
 	LegoView();
-	~LegoView();
+	virtual ~LegoView() override;
 
 	BOOL Create(const CreateStruct&, Tgl::Renderer*);
 	virtual void Destroy() override; // vtable+0x08
@@ -54,11 +54,11 @@ inline Tgl::Camera* LegoView::GetCamera() const
 class LegoView1 : public LegoView {
 public:
 	LegoView1();
-	~LegoView1();
+	virtual ~LegoView1() override;
 
 	BOOL AddLightsToViewport();
 	BOOL Create(const TglSurface::CreateStruct&, Tgl::Renderer*);
-	void Destroy();
+	virtual void Destroy() override; // vtable+0x08
 
 private:
 	Tgl::Light* m_pSunLight;         // 0x78
