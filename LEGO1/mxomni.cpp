@@ -157,7 +157,7 @@ void MxOmni::Init()
 	m_timer = NULL;
 	m_streamer = NULL;
 	m_atomIdCounterSet = NULL;
-	m_timerRunning = NULL;
+	m_timerRunning = 0;
 }
 
 // FUNCTION: LEGO1 0x100af0b0
