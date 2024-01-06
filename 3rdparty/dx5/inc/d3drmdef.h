@@ -136,8 +136,8 @@ typedef struct _D3DRMIMAGE
     int bytes_per_line;		/* number of bytes of memory for a
 				   scanline. This must be a multiple
 				   of 4. */
-    void* buffer1;		/* memory to render into (first buffer). */
-    void* buffer2;		/* second rendering buffer for double
+    char* buffer1;		/* memory to render into (first buffer). */
+    char* buffer2;		/* second rendering buffer for double
 				   buffering, set to NULL for single
 				   buffering. */
     unsigned long red_mask;
