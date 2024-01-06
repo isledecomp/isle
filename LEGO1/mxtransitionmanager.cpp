@@ -229,7 +229,7 @@ void MxTransitionManager::TransitionDissolve()
 
 		if (VideoManager()->GetVideoParam().Flags().GetFlipSurfaces()) {
 			LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
-			surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
+			surf->BltFast(0, 0, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
 		}
 
 		m_animationTimer++;
@@ -346,7 +346,7 @@ void MxTransitionManager::TransitionPixelation()
 
 		if (VideoManager()->GetVideoParam().Flags().GetFlipSurfaces()) {
 			LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
-			surf->BltFast(NULL, NULL, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
+			surf->BltFast(0, 0, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
 		}
 
 		m_animationTimer++;
