@@ -146,7 +146,7 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 				p_right = leftRight->GetRight();
 
 			b = a;
-			b.Advance();
+			b.Next();
 			a.Destroy();
 
 			if (!b.Current(leftRight))

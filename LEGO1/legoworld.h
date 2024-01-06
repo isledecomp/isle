@@ -84,4 +84,7 @@ protected:
 // FUNCTION: LEGO1 0x1001f0c0
 // MxPresenterListCursor::~MxPresenterListCursor
 
+// TEMPLATE: LEGO1 0x10020760
+// MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
+
 #endif // LEGOWORLD_H

@@ -3,6 +3,7 @@
 #include "legoomni.h"
 #include "legoroi.h"
 #include "mxtimer.h"
+#include "mxtransitionmanager.h"
 #include "realtime/matrix.h"
 #include "viewmanager/viewroi.h"
 
@@ -23,7 +24,7 @@ LegoVideoManager::LegoVideoManager()
 	m_isFullscreenMovie = FALSE;
 	m_palette = NULL;
 	m_stopWatch = NULL;
-	m_cursorMoved = FALSE;
+	m_drawCursor = FALSE;
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
@@ -33,7 +34,7 @@ LegoVideoManager::LegoVideoManager()
 	m_unk0x528 = 0;
 	m_arialFont = NULL;
 	m_unk0xe5 = FALSE;
-	m_unk0x554 = 0;
+	m_unk0x554 = FALSE;
 	m_initialized = FALSE;
 }
 
@@ -214,7 +215,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 {
 	m_cursorX = p_cursorX;
 	m_cursorY = p_cursorY;
-	m_cursorMoved = TRUE;
+	m_drawCursor = TRUE;
 
 	if (623 < p_cursorX)
 		m_cursorX = 623;
@@ -223,11 +224,107 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
-// STUB: LEGO1 0x1007b770
+inline void LegoVideoManager::DrawCursor()
+{
+	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
+		if (m_cursorX >= 0 && m_cursorY >= 0) {
+			m_cursorXCopy = m_cursorX;
+			m_cursorYCopy = m_cursorY;
+		}
+	}
+
+	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
+
+	if (!m_unk0x514) {
+		m_unk0x518.top = 0;
+		m_unk0x518.left = 0;
+		m_unk0x518.bottom = 16;
+		m_unk0x518.right = 16;
+		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
+
+		if (!m_unk0x514)
+			m_drawCursor = FALSE;
+	}
+
+	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
+}
+
+// FUNCTION: LEGO1 0x1007b770
 MxResult LegoVideoManager::Tickle()
 {
+	if (m_unk0x554 && !m_videoParam.Flags().GetFlipSurfaces() &&
+		TransitionManager()->GetTransitionType() == MxTransitionManager::NOT_TRANSITIONING)
+		Sleep(30);
+
+	m_stopWatch->Stop();
+	m_elapsedSeconds = m_stopWatch->ElapsedSeconds();
+	m_stopWatch->Reset();
+	m_stopWatch->Start();
+
+	m_direct3d->RestoreSurfaces();
+
+	SortPresenterList();
+
+	MxPresenter* presenter;
+	MxPresenterListCursor cursor(m_presenters);
+
+	while (cursor.Next(presenter))
+		presenter->Tickle();
+
+	if (m_unk0xe4 && !m_initialized)
+		m_3dManager->GetLego3DView()->GetView()->Clear();
+
+	MxRect32 rect(0, 0, m_videoParam.GetRect().GetWidth() - 1, m_videoParam.GetRect().GetHeight() - 1);
+	InvalidateRect(rect);
+
+	if (!m_initialized && (m_unk0xe4 || m_unk0xe5)) {
+		cursor.Reset();
+
+		while (cursor.Next(presenter) && presenter->GetDisplayZ() >= 0)
+			presenter->PutData();
+
+		if (!m_unk0xe5) {
+			m_3dManager->FUN_100ab4b0(0.0);
+			m_3dManager->GetLego3DView()->GetDevice()->Update();
+		}
+
+		cursor.Prev();
+
+		while (cursor.Next(presenter))
+			presenter->PutData();
+
+		if (m_drawCursor)
+			DrawCursor();
+
+		if (m_drawFPS)
+			DrawFPS();
+	}
+	else if (m_unk0x500) {
+		MxPresenter* presenter;
+		MxPresenterListCursor cursor(m_presenters);
+
+		if (cursor.Last(presenter))
+			presenter->PutData();
+	}
+
+	if (!m_initialized) {
+		if (m_unk0xe4 && m_videoParam.Flags().GetFlipSurfaces()) {
+			m_3dManager->GetLego3DView()
+				->GetView()
+				->ForceUpdate(0, 0, m_videoParam.GetRect().GetWidth(), m_videoParam.GetRect().GetHeight());
+		}
+
+		UpdateRegion();
+	}
+
+	m_region->Reset();
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x1007bbc0
+void LegoVideoManager::DrawFPS()
+{
 	// TODO
-	return MxVideoManager::Tickle();
 }
 
 // STUB: LEGO1 0x1007c080
