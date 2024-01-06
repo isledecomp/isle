@@ -76,7 +76,10 @@ public:
 
 	static void Destroy(T* p_obj) { delete p_obj; };
 
-	void SetOwnership(MxBool p_ownership) { MxPtrList<T>::SetDestroy(p_ownership ? MxList<T*>::Destroy : MxCollection<T*>::Destroy); }
+	void SetOwnership(MxBool p_ownership)
+	{
+		MxCollection<T*>::SetDestroy(p_ownership ? MxPtrList<T>::Destroy : MxCollection<T*>::Destroy);
+	}
 };
 
 template <class T>
