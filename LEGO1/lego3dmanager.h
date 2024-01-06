@@ -27,6 +27,7 @@ public:
 	virtual ~Lego3DManager();
 
 	BOOL Create(CreateStruct& p_createStruct);
+	double FUN_100ab4b0(double p_und);
 
 	inline Lego3DView* GetLego3DView() { return this->m_3dView; }
 	inline ViewLODListManager* GetViewLODListManager() { return this->m_viewLODListManager; }

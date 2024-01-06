@@ -86,6 +86,7 @@ public:
 	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4); // vtable+0x44
 
 	void FUN_100ba640();
+	static LPDIRECTDRAWSURFACE FUN_100bc070();
 
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }

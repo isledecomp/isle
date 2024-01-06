@@ -99,7 +99,7 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 			while (cursor.Next(chunk))
 				chunk->SetTime(chunk->GetTime() + time);
 
-			m_cursor->Advance();
+			m_cursor->Next();
 		}
 
 		MxStreamChunk* chunk;

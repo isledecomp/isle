@@ -11,6 +11,8 @@
 // NOTE:	MxStopWatch measures elapsed (wall clock) time.
 //
 
+#define HUGE_VAL_IMMEDIATE 1.7976931348623157e+308
+
 class MxStopWatch {
 public:
 	MxStopWatch();
@@ -54,7 +56,7 @@ inline void MxStopWatch::Stop()
 
 	if (endTick.HighPart != m_startTick.HighPart) {
 		// LARGE_INTEGER arithmetic not yet provided
-		m_elapsedSeconds = HUGE_VAL;
+		m_elapsedSeconds = HUGE_VAL_IMMEDIATE;
 	}
 	else {
 		m_elapsedSeconds += ((endTick.LowPart - m_startTick.LowPart) / (double) m_ticksPerSeconds);

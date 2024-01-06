@@ -63,3 +63,10 @@ void Lego3DManager::Destroy()
 	delete m_viewLODListManager;
 	m_viewLODListManager = NULL;
 }
+
+// STUB: LEGO1 0xx100ab4b0
+double Lego3DManager::FUN_100ab4b0(double p_und)
+{
+	// TODO
+	return 0.0;
+}
