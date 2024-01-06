@@ -10,9 +10,13 @@
 #else
 #include <algorithm>
 #include <list>
+#include <map>
 #include <set>
+#include <vector>
 using std::list;
+using std::map;
 using std::set;
+using std::vector;
 #endif
 
 #endif // STLCOMPAT_H
