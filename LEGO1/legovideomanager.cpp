@@ -156,7 +156,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	createStruct.m_ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
 	createStruct.m_ddPalette = m_videoParam.GetPalette()->CreateNativePalette();
 	createStruct.m_isFullScreen = FALSE;
-	createStruct.m_flags = m_videoParam.Flags().GetWideViewAngle();
+	createStruct.m_isWideViewAngle = m_videoParam.Flags().GetWideViewAngle();
 	createStruct.m_direct3d = m_direct3d->GetDirect3D();
 	createStruct.m_d3dDevice = m_direct3d->GetDirect3DDevice();
 

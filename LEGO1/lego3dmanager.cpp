@@ -16,7 +16,7 @@ BOOL InitializeCreateStruct(TglSurface::CreateStruct& p_tglSurface, const Lego3D
 	p_tglSurface.m_pBackBuffer = p_createStruct.m_ddSurface2;
 	p_tglSurface.m_pPalette = p_createStruct.m_ddPalette;
 	p_tglSurface.m_isFullScreen = p_createStruct.m_isFullScreen;
-	p_tglSurface.m_flags = p_createStruct.m_flags;
+	p_tglSurface.m_isWideViewAngle = p_createStruct.m_isWideViewAngle;
 	p_tglSurface.m_direct3d = p_createStruct.m_direct3d;
 	p_tglSurface.m_d3dDevice = p_createStruct.m_d3dDevice;
 	return TRUE;

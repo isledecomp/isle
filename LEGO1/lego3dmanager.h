@@ -18,7 +18,7 @@ public:
 		IDirectDrawSurface* m_ddSurface2; // 0x10
 		IDirectDrawPalette* m_ddPalette;  // 0x14
 		BOOL m_isFullScreen;              // 0x18
-		MxU32 m_flags;                    // 0x1c
+		BOOL m_isWideViewAngle;           // 0x1c
 		IDirect3D2* m_direct3d;           // 0x20
 		IDirect3DDevice2* m_d3dDevice;    // 0x24
 	};
