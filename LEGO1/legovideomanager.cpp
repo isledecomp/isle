@@ -274,7 +274,7 @@ MxResult LegoVideoManager::Tickle()
 	if (m_unk0xe4 && !m_initialized)
 		m_3dManager->GetLego3DView()->GetView()->Clear();
 
-	MxRect32 rect(0, 0, m_videoParam.GetRect().GetWidth(), m_videoParam.GetRect().GetHeight());
+	MxRect32 rect(0, 0, m_videoParam.GetRect().GetWidth() - 1, m_videoParam.GetRect().GetHeight() - 1);
 	InvalidateRect(rect);
 
 	if (!m_initialized && (m_unk0xe4 || m_unk0xe5)) {
