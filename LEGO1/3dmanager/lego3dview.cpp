@@ -5,6 +5,8 @@
 
 #include "../viewmanager/viewmanager.h"
 
+DECOMP_SIZE_ASSERT(Lego3DView, 0xa8)
+
 /////////////////////////////////////////////////////////////////////////////
 // Lego3DView
 

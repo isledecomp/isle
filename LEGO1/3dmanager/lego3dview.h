@@ -1,6 +1,7 @@
 #ifndef _Lego3DView_h
 #define _Lego3DView_h
 
+#include "decomp.h"
 #include "legoview1.h"
 
 class ViewROI;
@@ -37,6 +38,8 @@ private:
 	double m_previousRenderTime; // 0x8c
 
 	ViewROI* m_pPointOfView; // 0x90
+
+	undefined m_unk0x94[0x0c]; // 0x94
 };
 
 // SYNTHETIC: LEGO1 0x100aaf10
