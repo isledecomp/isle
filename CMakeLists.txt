@@ -207,6 +207,7 @@ add_library(lego1 SHARED
   LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
   LEGO1/registrationbook.cpp
+  LEGO1/res/lego1.rc
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
