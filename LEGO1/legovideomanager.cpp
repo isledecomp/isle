@@ -24,7 +24,7 @@ LegoVideoManager::LegoVideoManager()
 	m_isFullscreenMovie = FALSE;
 	m_palette = NULL;
 	m_stopWatch = NULL;
-	m_cursorMoved = FALSE;
+	m_drawCursor = FALSE;
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
@@ -215,7 +215,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 {
 	m_cursorX = p_cursorX;
 	m_cursorY = p_cursorY;
-	m_cursorMoved = TRUE;
+	m_drawCursor = TRUE;
 
 	if (623 < p_cursorX)
 		m_cursorX = 623;
@@ -224,7 +224,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
-inline void LegoVideoManager::CursorMoved()
+inline void LegoVideoManager::DrawCursor()
 {
 	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
 		if (m_cursorX >= 0 && m_cursorY >= 0) {
@@ -243,7 +243,7 @@ inline void LegoVideoManager::CursorMoved()
 		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
 
 		if (!m_unk0x514)
-			m_cursorMoved = FALSE;
+			m_drawCursor = FALSE;
 	}
 
 	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
@@ -293,11 +293,11 @@ MxResult LegoVideoManager::Tickle()
 		while (cursor.Next(presenter))
 			presenter->PutData();
 
-		if (m_cursorMoved)
-			CursorMoved();
+		if (m_drawCursor)
+			DrawCursor();
 
 		if (m_drawFPS)
-			FUN_1007bbc0();
+			DrawFPS();
 	}
 	else if (m_unk0x500) {
 		MxPresenter* presenter;
@@ -322,7 +322,7 @@ MxResult LegoVideoManager::Tickle()
 }
 
 // STUB: LEGO1 0x1007bbc0
-void LegoVideoManager::FUN_1007bbc0()
+void LegoVideoManager::DrawFPS()
 {
 	// TODO
 }

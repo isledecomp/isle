@@ -43,9 +43,9 @@ public:
 private:
 	MxResult CreateDirect3D();
 	MxResult ConfigureD3DRM();
-	void FUN_1007bbc0();
+	void DrawFPS();
 
-	inline void CursorMoved();
+	inline void DrawCursor();
 
 	Tgl::Renderer* m_renderer;          // 0x64
 	Lego3DManager* m_3dManager;         // 0x68
@@ -64,7 +64,7 @@ private:
 	MxStopWatch* m_stopWatch;           // 0x4f4
 	double m_elapsedSeconds;            // 0x4f8
 	MxBool m_unk0x500;                  // 0x500
-	MxBool m_cursorMoved;               // 0x501
+	MxBool m_drawCursor;                // 0x501
 	MxS32 m_cursorXCopy;                // 0x504
 	MxS32 m_cursorYCopy;                // 0x508
 	MxS32 m_cursorX;                    // 0x50c
