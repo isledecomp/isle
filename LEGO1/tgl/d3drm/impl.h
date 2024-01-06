@@ -85,6 +85,25 @@ private:
 	IDirect3DRM2* m_data;
 };
 
+extern IDirect3DRM2* g_pD3DRM;
+
+inline void RendererDestroy(IDirect3DRM2* pRenderer)
+{
+	int refCount = pRenderer->Release();
+	if (refCount <= 0) {
+		g_pD3DRM = NULL;
+	}
+}
+
+// Inlined only
+void RendererImpl::Destroy()
+{
+	if (m_data) {
+		RendererDestroy(m_data);
+		m_data = NULL;
+	}
+}
+
 // VTABLE 0x100db988
 class DeviceImpl : public Device {
 public:

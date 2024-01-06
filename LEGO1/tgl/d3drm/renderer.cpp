@@ -13,8 +13,10 @@ Renderer* Tgl::CreateRenderer()
 	return renderer;
 }
 
+namespace TglImpl {
 // GLOBAL: LEGO1 0x1010103c
-IDirect3DRM2* g_pD3DRM = NULL;
+IDirect3DRM2 *g_pD3DRM = NULL;
+}
 
 // Inlined only
 Result RendererImpl::Create()
@@ -29,23 +31,6 @@ Result RendererImpl::Create()
 	}
 	m_data = g_pD3DRM;
 	return (m_data != NULL) ? Success : Error;
-}
-
-inline void RendererDestroy(IDirect3DRM2* pRenderer)
-{
-	int refCount = pRenderer->Release();
-	if (refCount <= 0) {
-		g_pD3DRM = NULL;
-	}
-}
-
-// Inlined only
-void RendererImpl::Destroy()
-{
-	if (m_data) {
-		RendererDestroy(m_data);
-		m_data = NULL;
-	}
 }
 
 // FUNCTION: LEGO1 0x100a1894
