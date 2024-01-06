@@ -62,4 +62,16 @@ public:
 // SYNTHETIC: LEGO1 0x1001d090
 // MxPtrList<MxPresenter>::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x1001ef40
+// MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
+
+// TEMPLATE: LEGO1 0x1001f070
+// MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
+
+// TEMPLATE: LEGO1 0x1001f0c0
+// MxPresenterListCursor::~MxPresenterListCursor
+
+// TEMPLATE: LEGO1 0x10020760
+// MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
+
 #endif // MXPRESENTERLIST_H

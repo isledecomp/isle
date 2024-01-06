@@ -5,6 +5,7 @@
 #include "lego3dmanager.h"
 #include "mxdirect3d.h"
 #include "mxdirectx/mxstopwatch.h"
+#include "mxtransitionmanager.h"
 #include "mxunknown100d9d00.h"
 #include "mxvideomanager.h"
 
@@ -44,6 +45,8 @@ private:
 	MxResult CreateDirect3D();
 	MxResult ConfigureD3DRM();
 	void FUN_1007bbc0();
+
+	inline void CursorMoved();
 
 	Tgl::Renderer* m_renderer;
 	Lego3DManager* m_3dManager; // 0x68
