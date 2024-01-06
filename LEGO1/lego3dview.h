@@ -1,9 +1,9 @@
 #ifndef LEGO3DVIEW_H
 #define LEGO3DVIEW_H
 
+#include "3dmanager/tglsurface.h"
+#include "decomp.h"
 #include "mxtypes.h"
-#include "tgl/d3drm/impl.h"
-#include "tglsurface.h"
 #include "viewmanager/viewmanager.h"
 
 class LegoROI;

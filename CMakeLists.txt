@@ -7,6 +7,7 @@ option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
+  LEGO1/3dmanager/tglsurface.cpp
   LEGO1/act1state.cpp
   LEGO1/act2brick.cpp
   LEGO1/act2policestation.cpp

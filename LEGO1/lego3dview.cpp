@@ -19,11 +19,11 @@ Lego3DView::~Lego3DView()
 BOOL Lego3DView::Create(TglSurface::CreateStruct& p_createStruct, Tgl::Renderer* p_renderer)
 {
 	Tgl::DeviceDirectDrawCreateData createData = {
-		p_createStruct.m_driverGUID,
-		p_createStruct.m_hwnd,
-		p_createStruct.m_directDraw,
-		p_createStruct.m_ddSurface1,
-		p_createStruct.m_ddSurface2
+		p_createStruct.m_pDriverGUID,
+		p_createStruct.m_hWnd,
+		p_createStruct.m_pDirectDraw,
+		p_createStruct.m_pFrontBuffer,
+		p_createStruct.m_pBackBuffer
 	};
 
 	m_device = p_renderer->CreateDevice(createData);

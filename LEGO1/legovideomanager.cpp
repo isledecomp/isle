@@ -5,6 +5,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "realtime/matrix.h"
+#include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
@@ -224,31 +225,6 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
-inline void LegoVideoManager::DrawCursor()
-{
-	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
-		if (m_cursorX >= 0 && m_cursorY >= 0) {
-			m_cursorXCopy = m_cursorX;
-			m_cursorYCopy = m_cursorY;
-		}
-	}
-
-	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
-
-	if (!m_unk0x514) {
-		m_unk0x518.top = 0;
-		m_unk0x518.left = 0;
-		m_unk0x518.bottom = 16;
-		m_unk0x518.right = 16;
-		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
-
-		if (!m_unk0x514)
-			m_drawCursor = FALSE;
-	}
-
-	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
-}
-
 // FUNCTION: LEGO1 0x1007b770
 MxResult LegoVideoManager::Tickle()
 {
@@ -319,6 +295,31 @@ MxResult LegoVideoManager::Tickle()
 
 	m_region->Reset();
 	return SUCCESS;
+}
+
+inline void LegoVideoManager::DrawCursor()
+{
+	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
+		if (m_cursorX >= 0 && m_cursorY >= 0) {
+			m_cursorXCopy = m_cursorX;
+			m_cursorYCopy = m_cursorY;
+		}
+	}
+
+	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
+
+	if (!m_unk0x514) {
+		m_unk0x518.top = 0;
+		m_unk0x518.left = 0;
+		m_unk0x518.bottom = 16;
+		m_unk0x518.right = 16;
+		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
+
+		if (!m_unk0x514)
+			m_drawCursor = FALSE;
+	}
+
+	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
 }
 
 // STUB: LEGO1 0x1007bbc0

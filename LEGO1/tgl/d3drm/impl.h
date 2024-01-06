@@ -1,5 +1,6 @@
 
 #include "../tgl.h"
+#include "compat.h"
 #include "decomp.h"
 
 #include <d3drm.h>
@@ -41,11 +42,11 @@ public:
 	RendererImpl() : m_data(0) {}
 	~RendererImpl() { Destroy(); };
 
-	virtual void* ImplementationDataPtr();
+	virtual void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Device* CreateDevice(const DeviceDirect3DCreateData&);
-	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&);
+	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) override;
+	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) override;
 
 	// vtable+0x10
 	virtual View* CreateView(
@@ -55,14 +56,14 @@ public:
 		unsigned long y,
 		unsigned long width,
 		unsigned long height
-	);
-	virtual Camera* CreateCamera();
-	virtual Light* CreateLight(LightType, float r, float g, float b);
-	virtual Group* CreateGroup(const Group* pParent);
+	) override;
+	virtual Camera* CreateCamera() override;
+	virtual Light* CreateLight(LightType, float r, float g, float b) override;
+	virtual Group* CreateGroup(const Group* pParent) override;
 
 	// vtable+0x20
-	virtual Unk* CreateUnk();
-	virtual Texture* CreateTexture();
+	virtual Unk* CreateUnk() override;
+	virtual Texture* CreateTexture() override;
 	virtual Texture* CreateTexture(
 		int width,
 		int height,
@@ -71,11 +72,11 @@ public:
 		int pTexelsArePersistent,
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
-	);
-	virtual Result SetTextureDefaultShadeCount(unsigned long);
+	) override;
+	virtual Result SetTextureDefaultShadeCount(unsigned long) override;
 
 	// vtable+0x30
-	virtual Result SetTextureDefaultColorCount(unsigned long);
+	virtual Result SetTextureDefaultColorCount(unsigned long) override;
 
 public:
 	inline Result Create();
