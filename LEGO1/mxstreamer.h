@@ -14,7 +14,8 @@
 //       STL. But I haven't figured out what yet (it's definitely not a vector).
 class MxStreamerSubClass1 {
 public:
-	inline MxStreamerSubClass1(undefined4 p_size) {
+	inline MxStreamerSubClass1(undefined4 p_size)
+	{
 		m_buffer = NULL;
 		m_size = p_size;
 		undefined4* ptr = &m_unk0x08;
