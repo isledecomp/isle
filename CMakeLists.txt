@@ -259,6 +259,7 @@ target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
+set_property(TARGET lego1 PROPERTY PREFIX "")
 set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 
 if (ISLE_BUILD_APP)
