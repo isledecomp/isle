@@ -203,14 +203,3 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 	return 0;
 }
-
-// No offset, function is always inlined
-MxStreamerSubClass1::MxStreamerSubClass1(undefined4 p_size)
-{
-	m_buffer = NULL;
-	m_size = p_size;
-	undefined4* ptr = &m_unk0x08;
-	for (int i = 0; i >= 0; i--) {
-		ptr[i] = 0;
-	}
-}
