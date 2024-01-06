@@ -13,10 +13,11 @@ Renderer* Tgl::CreateRenderer()
 	return renderer;
 }
 
-namespace TglImpl {
+namespace TglImpl
+{
 // GLOBAL: LEGO1 0x1010103c
-IDirect3DRM2 *g_pD3DRM = NULL;
-}
+IDirect3DRM2* g_pD3DRM = NULL;
+} // namespace TglImpl
 
 // Inlined only
 Result RendererImpl::Create()

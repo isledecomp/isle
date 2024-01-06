@@ -30,7 +30,7 @@ MxDiskStreamController::~MxDiskStreamController()
 #else
 		m_provider->VTable0x20(&MxDSAction());
 #endif
-    }
+	}
 
 	MxDSAction* action;
 	while (m_unk0x3c.PopFront(action))
@@ -307,9 +307,7 @@ MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 		if (VTable0x30(p_action) == SUCCESS) {
 #ifdef COMPAT_MODE
 			MxEndActionNotificationParam param(c_notificationEndAction, NULL, p_action, TRUE);
-			MxOmni::GetInstance()->NotifyCurrentEntity(
-				&param
-			);
+			MxOmni::GetInstance()->NotifyCurrentEntity(&param);
 #else
 			MxOmni::GetInstance()->NotifyCurrentEntity(
 				&MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)

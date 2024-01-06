@@ -88,7 +88,7 @@ MxLong MxStreamer::Close(const char* p_name)
 #else
 				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 #endif
-            }
+			}
 
 			return SUCCESS;
 		}
@@ -198,7 +198,7 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 #else
 			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 #endif
-        }
+		}
 	}
 
 	return 0;

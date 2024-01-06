@@ -162,10 +162,7 @@ void MxMediaPresenter::EndAction()
 		if (action && action->GetOrigin()) {
 #ifdef COMPAT_MODE
 			MxEndActionNotificationParam param(c_notificationEndAction, this, action, FALSE);
-			NotificationManager()->Send(
-				action->GetOrigin(),
-				&param
-			);
+			NotificationManager()->Send(action->GetOrigin(), &param);
 #else
 			NotificationManager()->Send(
 				action->GetOrigin(),
