@@ -25,8 +25,9 @@ MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 	// DECOMP ALPHA 0x1008b99d ?
 
 	MxDSAction* found = NULL;
+	iterator it;
 
-	for (iterator it = begin(); it != end(); it++) {
+	for (it = begin(); it != end(); it++) {
 		if (p_action->GetObjectId() == -1 || p_action->GetObjectId() == (*it)->GetObjectId()) {
 			if (p_action->GetUnknown24() == -2 || p_action->GetUnknown24() == -3 ||
 				p_action->GetUnknown24() == (*it)->GetUnknown24()) {
