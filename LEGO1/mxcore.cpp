@@ -11,7 +11,7 @@ MxResult MxCore::Tickle()
 // FUNCTION: LEGO1 0x100ae1a0
 MxCore::MxCore()
 {
-	m_id = g_mxcoreCount[0];
+	m_id = (MxU32)g_mxcoreCount[0];
 	g_mxcoreCount[0]++;
 }
 
