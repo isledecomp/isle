@@ -27,8 +27,8 @@ public:
 	__declspec(dllexport) void SerializeScoreHistory(MxS16 p_flags);
 	__declspec(dllexport) void SetSavePath(char*);
 
-	LegoState* GetState(COMPAT_CONST char* p_stateName);
-	LegoState* CreateState(COMPAT_CONST char* p_stateName);
+	LegoState* GetState(const char* p_stateName);
+	LegoState* CreateState(const char* p_stateName);
 
 	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
 	void FUN_1003a720(MxU32);

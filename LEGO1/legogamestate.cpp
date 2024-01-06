@@ -219,7 +219,7 @@ MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen)
 }
 
 // FUNCTION: LEGO1 0x1003bbb0
-LegoState* LegoGameState::GetState(COMPAT_CONST char* p_stateName)
+LegoState* LegoGameState::GetState(const char* p_stateName)
 {
 	for (MxS32 i = 0; i < m_stateCount; ++i)
 		if (m_stateArray[i]->IsA(p_stateName))
@@ -228,7 +228,7 @@ LegoState* LegoGameState::GetState(COMPAT_CONST char* p_stateName)
 }
 
 // FUNCTION: LEGO1 0x1003bc00
-LegoState* LegoGameState::CreateState(COMPAT_CONST char* p_stateName)
+LegoState* LegoGameState::CreateState(const char* p_stateName)
 {
 	LegoState* newState = (LegoState*) ObjectFactory()->Create(p_stateName);
 	RegisterState(newState);
