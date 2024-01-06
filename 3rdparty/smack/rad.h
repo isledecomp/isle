@@ -82,7 +82,7 @@
 #endif
 
 #if !defined(__RADDOS__) && !defined(__RADWIN__) && !defined(__RADMAC__)
-  #error RAD.H didn'y detect your platform.  Define __DOS__, __WINDOWS__, WIN32, macintosh, or powerc.
+  #error "RAD.H didn'y detect your platform.  Define __DOS__, __WINDOWS__, WIN32, macintosh, or powerc."
 #endif
 
 #ifdef __RADMAC__
