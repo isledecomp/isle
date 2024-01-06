@@ -288,7 +288,7 @@ MxResult LegoVideoManager::Tickle()
 			m_3dManager->GetLego3DView()->GetDevice()->Update();
 		}
 
-		cursor.Retreat();
+		cursor.Prev();
 
 		while (cursor.Next(presenter))
 			presenter->PutData();
