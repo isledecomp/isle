@@ -13,10 +13,10 @@ public:
 
 	MxBool Dequeue(T& p_obj)
 	{
-		MxBool hasNext = (m_first != NULL);
-		if (m_first) {
-			p_obj = m_first->GetValue();
-			DeleteEntry(m_first);
+		MxBool hasNext = (this->m_first != NULL);
+		if (this->m_first) {
+			p_obj = this->m_first->GetValue();
+			this->DeleteEntry(this->m_first);
 		}
 
 		return hasNext;
