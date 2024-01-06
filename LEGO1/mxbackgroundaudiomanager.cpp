@@ -104,7 +104,7 @@ void MxBackgroundAudioManager::FUN_1007ee70()
 		m_unk0x138 = NULL;
 		m_action2.SetObjectId(-1);
 		m_action2.SetAtomId(MxAtomId());
-		m_unk0x13c = NULL;
+		m_unk0x13c = 0;
 	}
 }
 
@@ -133,7 +133,7 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 				m_unk0x138 = NULL;
 				m_action2.SetObjectId(-1);
 				m_action2.SetAtomId(MxAtomId());
-				m_unk0x13c = NULL;
+				m_unk0x13c = 0;
 			}
 		}
 	}
