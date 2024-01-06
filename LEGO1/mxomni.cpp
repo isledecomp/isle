@@ -345,14 +345,27 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 
 			if (object->StartAction(p_controller, &p_action) == SUCCESS) {
 				if (sender) {
+#ifdef COMPAT_MODE
+					MxType4NotificationParam param(this, &p_action, object);
+					NotificationManager()->Send(sender, &param);
+#else
 					NotificationManager()->Send(sender, &MxType4NotificationParam(this, &p_action, object));
+#endif
 				}
 
 				if (p_action.GetUnknown84()) {
+#ifdef COMPAT_MODE
+					MxStartActionNotificationParam param(c_notificationStartAction, object, &p_action, FALSE);
+					NotificationManager()->Send(
+						p_action.GetUnknown84(),
+						&param
+					);
+#else
 					NotificationManager()->Send(
 						p_action.GetUnknown84(),
 						&MxStartActionNotificationParam(c_notificationStartAction, object, &p_action, FALSE)
 					);
+#endif
 				}
 				result = SUCCESS;
 			}

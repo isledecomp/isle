@@ -55,7 +55,12 @@ MxStreamController::~MxStreamController()
 	if (m_provider) {
 		MxStreamProvider* provider = m_provider;
 		m_provider = NULL;
+#ifdef COMPAT_MODE
+		MxDSAction action;
+		provider->VTable0x20(&action);
+#else
 		provider->VTable0x20(&MxDSAction());
+#endif
 		delete provider;
 	}
 

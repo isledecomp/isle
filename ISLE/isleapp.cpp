@@ -132,9 +132,15 @@ BOOL IsleApp::SetupLegoOmni()
 	char mediaPath[256];
 	GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
+#ifdef COMPAT_MODE
+	MxOmniCreateParam param(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags());
+	BOOL failure = Lego()->Create(param) == FAILURE;
+#else
 	BOOL failure =
 		Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags())
 		) == FAILURE;
+#endif
+
 	if (!failure) {
 		VariableTable()->SetVariable("ACTOR_01", "");
 		TickleManager()->SetClientTickleInterval(VideoManager(), 10);

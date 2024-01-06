@@ -81,8 +81,14 @@ MxLong MxStreamer::Close(const char* p_name)
 
 			if (c->FUN_100c20d0(ds))
 				delete c;
-			else
+			else {
+#ifdef COMPAT_MODE
+				MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+				NotificationManager()->Send(this, &notification);
+#else
 				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+#endif
+            }
 
 			return SUCCESS;
 		}
@@ -185,8 +191,14 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		if (c->FUN_100c20d0(ds))
 			delete c;
-		else
+		else {
+#ifdef COMPAT_MODE
+			MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+			NotificationManager()->Send(this, &notification);
+#else
 			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+#endif
+        }
 	}
 
 	return 0;
