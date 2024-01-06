@@ -255,7 +255,7 @@ endif()
 target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm smack)
+target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
