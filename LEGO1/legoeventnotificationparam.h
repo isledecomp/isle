@@ -4,6 +4,8 @@
 #include "mxnotificationparam.h"
 #include "mxtypes.h"
 
+#include <stdlib.h>
+
 // VTABLE: LEGO1 0x100d6aa0
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
