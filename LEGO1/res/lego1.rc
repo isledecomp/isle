@@ -1,0 +1,39 @@
+#include "resource.h"
+
+LEGO1_LEAF4 CURSOR "leaf_4.cur"
+LEGO1_LEAF7 CURSOR "leaf_7.cur"
+LEGO1_LEAF1 CURSOR "leaf_1.cur"
+LEGO1_LEAF2 CURSOR "leaf_2.cur"
+LEGO1_LEAF6 CURSOR "leaf_6.cur"
+LEGO1_LEAF0 CURSOR "leaf_0.cur"
+LEGO1_LEAF5 CURSOR "leaf_5.cur"
+LEGO1_LEAF3 CURSOR "leaf_3.cur"
+LEGO1_ARROW CURSOR "arrow.cur"
+LEGO1_BUSY  CURSOR "busy.cur"
+
+1 VERSIONINFO
+FILEVERSION 1,1,0,0
+PRODUCTVERSION 1,1,0,0
+FILEOS 0x40004
+FILETYPE 0x2
+{
+BLOCK "StringFileInfo"
+{
+	BLOCK "040904b0"
+	{
+		VALUE "CompanyName", "Mindscape, Inc."
+		VALUE "FileDescription", "LegoOmni Library"
+		VALUE "FileVersion", "1, 1, 0, 0"
+		VALUE "InternalName", "LegoOmni Library"
+		VALUE "LegalCopyright", "Copyright \xA9 1997"
+		VALUE "OriginalFilename", "LegoOmni Library"
+		VALUE "ProductName", "LegoOmni Library"
+		VALUE "ProductVersion", "1, 1, 0, 0"
+	}
+}
+
+BLOCK "VarFileInfo"
+{
+	VALUE "Translation", 0x0409, 0x04B0
+}
+}

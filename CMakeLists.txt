@@ -207,6 +207,7 @@ add_library(lego1 SHARED
   LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
   LEGO1/registrationbook.cpp
+  LEGO1/res/lego1.rc
   LEGO1/score.cpp
   LEGO1/scorestate.cpp
   LEGO1/skateboard.cpp
@@ -254,10 +255,11 @@ endif()
 target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dxguid dinput winmm d3drm smack)
+target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
+set_property(TARGET lego1 PROPERTY PREFIX "")
 set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 
 if (ISLE_BUILD_APP)

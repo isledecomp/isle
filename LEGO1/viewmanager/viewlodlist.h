@@ -6,6 +6,8 @@
 #include "assert.h"
 #include "compat.h"
 
+#include <string.h>
+
 #pragma warning(disable : 4237)
 #pragma warning(disable : 4786)
 

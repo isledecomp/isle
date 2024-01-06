@@ -42,6 +42,12 @@ ViewLODList* ViewLODListManager::Create(const ROIName& rROIName, int lodCount)
 	return pLODList;
 }
 
+// STUB: LEGO1 0x100a75b0
+ViewLODList* ViewLODListManager::Lookup(const ROIName&) const
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x100a7680
 void ViewLODListManager::Destroy(ViewLODList* lodList)
 {

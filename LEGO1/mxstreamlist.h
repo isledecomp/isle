@@ -11,11 +11,11 @@ class MxStreamList : public list<T> {
 public:
 	MxBool PopFront(T& p_obj)
 	{
-		if (empty())
+		if (this->empty())
 			return FALSE;
 
-		p_obj = front();
-		pop_front();
+		p_obj = this->front();
+		this->pop_front();
 		return TRUE;
 	}
 };

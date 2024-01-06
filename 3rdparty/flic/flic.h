@@ -33,4 +33,4 @@ typedef struct {
   BYTE  reserved3[40]; /* Set to zero */
 } FLIC_HEADER;
 
-#endif FLIC_H // FLIC_H
+#endif // FLIC_H

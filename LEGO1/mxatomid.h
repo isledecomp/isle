@@ -20,6 +20,7 @@ public:
 	MxAtomId() { this->m_internal = 0; }
 
 	inline MxBool operator==(const MxAtomId& p_atomId) const { return this->m_internal == p_atomId.m_internal; }
+	inline MxBool operator!=(const MxAtomId& p_atomId) const { return this->m_internal != p_atomId.m_internal; }
 
 	void Clear();
 
