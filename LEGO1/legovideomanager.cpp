@@ -150,11 +150,11 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	Lego3DManager::CreateStruct createStruct;
 	memset(&createStruct, 0, sizeof(createStruct));
-	createStruct.m_hwnd = LegoOmni::GetInstance()->GetWindowHandle();
-	createStruct.m_directDraw = m_pDirectDraw;
-	createStruct.m_ddSurface1 = m_displaySurface->GetDirectDrawSurface1();
-	createStruct.m_ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
-	createStruct.m_ddPalette = m_videoParam.GetPalette()->CreateNativePalette();
+	createStruct.m_hWnd = LegoOmni::GetInstance()->GetWindowHandle();
+	createStruct.m_pDirectDraw = m_pDirectDraw;
+	createStruct.m_pFrontBuffer = m_displaySurface->GetDirectDrawSurface1();
+	createStruct.m_pBackBuffer = m_displaySurface->GetDirectDrawSurface2();
+	createStruct.m_pPalette = m_videoParam.GetPalette()->CreateNativePalette();
 	createStruct.m_isFullScreen = FALSE;
 	createStruct.m_isWideViewAngle = m_videoParam.Flags().GetWideViewAngle();
 	createStruct.m_direct3d = m_direct3d->GetDirect3D();
@@ -175,8 +175,8 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
 	m_viewROI->WrappedSetLocalTransform(outMatrix);
 
-	m_3dManager->GetLego3DView()->FUN_100ab100(m_viewROI);
-	m_3dManager->GetLego3DView()->FUN_100ab1b0(m_viewROI);
+	m_3dManager->GetLego3DView()->Add(*m_viewROI);
+	m_3dManager->GetLego3DView()->SetPointOfView(*m_viewROI);
 
 	m_unk0x100d9d00 = new MxUnknown100d9d00;
 	m_unk0xe4 = FALSE;
@@ -260,7 +260,7 @@ MxResult LegoVideoManager::Tickle()
 			presenter->PutData();
 
 		if (!m_unk0xe5) {
-			m_3dManager->FUN_100ab4b0(0.0);
+			m_3dManager->Render(0.0);
 			m_3dManager->GetLego3DView()->GetDevice()->Update();
 		}
 

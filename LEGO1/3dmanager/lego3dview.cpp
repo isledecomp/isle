@@ -134,7 +134,7 @@ BOOL Lego3DView::Moved(ViewROI& rROI)
 }
 
 // STUB: LEGO1 0x100ab270
-double Lego3DView::Render()
+double Lego3DView::Render(double p_und)
 {
 	// assert(m_pViewManager);
 
