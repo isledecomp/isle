@@ -110,8 +110,8 @@ public:
 class Renderer : public Object {
 public:
 	// vtable+0x08
-	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) = 0;
 	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) = 0;
+	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) = 0;
 
 	// vtable+0x10
 	virtual View* CreateView(

@@ -255,7 +255,7 @@ void FUN_1001a700()
 // FUNCTION: LEGO1 0x1003dd70
 LegoROI* PickROI(MxLong p_a, MxLong p_b)
 {
-	return VideoManager()->Get3DManager()->GetLego3DView()->PickROI(p_a, p_b);
+	return (LegoROI*) VideoManager()->Get3DManager()->GetLego3DView()->Pick(p_a, p_b);
 }
 
 // STUB: LEGO1 0x1003ddc0

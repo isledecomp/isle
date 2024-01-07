@@ -348,9 +348,9 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 		}
 
 		if (!IsSupportedMode(width, height, bpp)) {
-			width = m_pCurrentDeviceModesList->m_modeArray[0].m_width;
-			height = m_pCurrentDeviceModesList->m_modeArray[0].m_height;
-			bpp = m_pCurrentDeviceModesList->m_modeArray[0].m_bitsPerPixel;
+			width = m_pCurrentDeviceModesList->m_modeArray[0].width;
+			height = m_pCurrentDeviceModesList->m_modeArray[0].height;
+			bpp = m_pCurrentDeviceModesList->m_modeArray[0].bitsPerPixel;
 		}
 
 		m_bIgnoreWMSIZE = TRUE;
@@ -396,9 +396,9 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 		m_bIgnoreWMSIZE = FALSE;
 	}
 
-	m_currentMode.m_width = width;
-	m_currentMode.m_height = height;
-	m_currentMode.m_bitsPerPixel = bpp;
+	m_currentMode.width = width;
+	m_currentMode.height = height;
+	m_currentMode.bitsPerPixel = bpp;
 
 	if (!DDCreateSurfaces()) {
 		return FALSE;
@@ -506,8 +506,8 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 			Error("CreateSurface for window front buffer failed", result);
 			return FALSE;
 		}
-		ddsd.dwHeight = m_currentMode.m_height;
-		ddsd.dwWidth = m_currentMode.m_width;
+		ddsd.dwHeight = m_currentMode.height;
+		ddsd.dwWidth = m_currentMode.width;
 		ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
 		if (m_bOnlySystemMemory)
@@ -640,7 +640,7 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	}
 
 	m_hFont = CreateFontA(
-		m_currentMode.m_width <= 600 ? 12 : 24,
+		m_currentMode.width <= 600 ? 12 : 24,
 		0,
 		0,
 		0,
@@ -774,8 +774,8 @@ BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
-	ddsd.dwHeight = m_currentMode.m_height;
-	ddsd.dwWidth = m_currentMode.m_width;
+	ddsd.dwHeight = m_currentMode.height;
+	ddsd.dwWidth = m_currentMode.width;
 	ddsd.dwZBufferBitDepth = depth;
 	ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS | DDSD_ZBUFFERBITDEPTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER | memorytype;
@@ -889,7 +889,7 @@ int MxDirectDraw::FlipToGDISurface()
 }
 
 // FUNCTION: LEGO1 0x1009e830
-void MxDirectDraw::Error(const char* p_message, MxS32 p_error)
+void MxDirectDraw::Error(const char* p_message, int p_error)
 {
 	// GLOBAL: LEGO1 0x10100c70
 	static BOOL g_isInsideError = FALSE;

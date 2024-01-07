@@ -12,7 +12,6 @@
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"
 #include "mxbackgroundaudiomanager.h"
-#include "mxdirectdraw.h"
 #include "mxdsaction.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
@@ -21,6 +20,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "res/resource.h"
+#include "viewmanager/viewmanager.h"
 
 #include <dsound.h>
 
