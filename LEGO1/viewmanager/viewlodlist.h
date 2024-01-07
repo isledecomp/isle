@@ -1,10 +1,10 @@
 #ifndef VIEWLODLIST_H
 #define VIEWLODLIST_H
 
-#include "../mxstl/stlcompat.h"
-#include "../realtime/lodlist.h"
 #include "assert.h"
 #include "compat.h"
+#include "mxstl/stlcompat.h"
+#include "realtime/lodlist.h"
 
 #include <string.h>
 

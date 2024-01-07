@@ -1,9 +1,9 @@
 #ifndef MXDIRECT3D_H
 #define MXDIRECT3D_H
 
-#include "../mxstl/stlcompat.h"
 #include "decomp.h"
 #include "mxdirectdraw.h"
+#include "mxstl/stlcompat.h"
 
 #include <d3d.h>
 
