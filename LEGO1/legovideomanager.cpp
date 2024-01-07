@@ -175,8 +175,8 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
 	m_viewROI->WrappedSetLocalTransform(outMatrix);
 
-	m_3dManager->GetLego3DView()->Add(*m_viewROI);
-	m_3dManager->GetLego3DView()->SetPointOfView(*m_viewROI);
+	m_3dManager->Add(*m_viewROI);
+	m_3dManager->SetPointOfView(*m_viewROI);
 
 	m_unk0x100d9d00 = new MxUnknown100d9d00;
 	m_unk0xe4 = FALSE;
