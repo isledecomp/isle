@@ -133,8 +133,11 @@ BOOL IsleApp::SetupLegoOmni()
 	GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
 #ifdef COMPAT_MODE
-	MxOmniCreateParam param(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags());
-	BOOL failure = Lego()->Create(param) == FAILURE;
+	BOOL failure;
+	{
+		MxOmniCreateParam param(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags());
+		failure = Lego()->Create(param) == FAILURE;
+	}
 #else
 	BOOL failure =
 		Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags())
