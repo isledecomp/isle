@@ -135,7 +135,7 @@ BOOL IsleApp::SetupLegoOmni()
 #ifdef COMPAT_MODE
 	BOOL failure;
 	{
-		MxOmniCreateParam param(mediaPath, (struct HWND__ *) m_windowHandle, m_videoParam, MxOmniCreateFlags());
+		MxOmniCreateParam param(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags());
 		failure = Lego()->Create(param) == FAILURE;
 	}
 #else
