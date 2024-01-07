@@ -160,12 +160,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/common/mxvariabletable.cpp
   LEGO1/omni/src/control/mxcontrolpresenter.cpp
   LEGO1/omni/src/entity/mxentity.cpp
-  LEGO1/omni/src/entity/mxflcpresenter.cpp
-  LEGO1/omni/src/entity/mxloopingflcpresenter.cpp
-  LEGO1/omni/src/entity/mxloopingsmkpresenter.cpp
-  LEGO1/omni/src/entity/mxsmkpresenter.cpp
-  LEGO1/omni/src/entity/mxvideomanager.cpp
-  LEGO1/omni/src/entity/mxvideopresenter.cpp
   LEGO1/omni/src/event/mxeventmanager.cpp
   LEGO1/omni/src/event/mxeventpresenter.cpp
   LEGO1/omni/src/main/mxmain.cpp
@@ -198,14 +192,20 @@ add_library(lego1 SHARED
   LEGO1/omni/src/system/mxthread.cpp
   LEGO1/omni/src/video/mxbitmap.cpp
   LEGO1/omni/src/video/mxdisplaysurface.cpp
+  LEGO1/omni/src/video/mxflcpresenter.cpp
+  LEGO1/omni/src/video/mxloopingflcpresenter.cpp
+  LEGO1/omni/src/video/mxloopingsmkpresenter.cpp
   LEGO1/omni/src/video/mxpalette.cpp
   LEGO1/omni/src/video/mxregion.cpp
   LEGO1/omni/src/video/mxregioncursor.cpp
   LEGO1/omni/src/video/mxsmack.cpp
+  LEGO1/omni/src/video/mxsmkpresenter.cpp
   LEGO1/omni/src/video/mxstillpresenter.cpp
   LEGO1/omni/src/video/mxtransitionmanager.cpp
+  LEGO1/omni/src/video/mxvideomanager.cpp
   LEGO1/omni/src/video/mxvideoparam.cpp
   LEGO1/omni/src/video/mxvideoparamflags.cpp
+  LEGO1/omni/src/video/mxvideopresenter.cpp
   LEGO1/realtime/matrix.cpp
   LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
@@ -238,7 +238,7 @@ target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomn
 # Additional include directories
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)
@@ -256,7 +256,7 @@ if (ISLE_USE_DX5)
   target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
 endif()
 
-target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
+target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack)
