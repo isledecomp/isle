@@ -2,12 +2,12 @@
 
 #include "infocenterstate.h"
 #include "legoomni.h"
-#include "legoroi.h"
 #include "legostate.h"
 #include "legostream.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"
+#include "roi/legoroi.h"
 
 #include <stdio.h>
 

@@ -8,7 +8,6 @@
 #include "legomodelpresenter.h"
 #include "legoomni.h"
 #include "legopartpresenter.h"
-#include "legoroi.h"
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"
 #include "mxbackgroundaudiomanager.h"
