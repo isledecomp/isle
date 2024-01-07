@@ -7,212 +7,210 @@ option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
-  LEGO1/3dmanager/lego3dmanager.cpp
-  LEGO1/3dmanager/lego3dview.cpp
-  LEGO1/3dmanager/legoview1.cpp
-  LEGO1/3dmanager/tglsurface.cpp
-  LEGO1/act1state.cpp
-  LEGO1/act2brick.cpp
-  LEGO1/act2policestation.cpp
-  LEGO1/act3.cpp
-  LEGO1/act3shark.cpp
-  LEGO1/act3state.cpp
-  LEGO1/ambulance.cpp
-  LEGO1/ambulancemissionstate.cpp
-  LEGO1/animstate.cpp
-  LEGO1/beachhouseentity.cpp
-  LEGO1/bike.cpp
-  LEGO1/buildingentity.cpp
-  LEGO1/bumpbouy.cpp
-  LEGO1/carrace.cpp
   LEGO1/define.cpp
-  LEGO1/dllmain.cpp
-  LEGO1/dunebuggy.cpp
-  LEGO1/elevatorbottom.cpp
-  LEGO1/gasstation.cpp
-  LEGO1/gasstationentity.cpp
-  LEGO1/gasstationstate.cpp
-  LEGO1/gifmanager.cpp
-  LEGO1/helicopter.cpp
-  LEGO1/helicopterstate.cpp
-  LEGO1/historybook.cpp
-  LEGO1/hospital.cpp
-  LEGO1/hospitalentity.cpp
-  LEGO1/hospitalstate.cpp
-  LEGO1/infocenter.cpp
-  LEGO1/infocenterdoor.cpp
-  LEGO1/infocenterentity.cpp
-  LEGO1/infocenterstate.cpp
-  LEGO1/isle.cpp
-  LEGO1/isleactor.cpp
-  LEGO1/islepathactor.cpp
-  LEGO1/jetski.cpp
-  LEGO1/jetskirace.cpp
-  LEGO1/jukebox.cpp
-  LEGO1/jukeboxentity.cpp
-  LEGO1/jukeboxstate.cpp
-  LEGO1/legoact2state.cpp
-  LEGO1/legoactioncontrolpresenter.cpp
-  LEGO1/legoactor.cpp
-  LEGO1/legoactor.cpp
-  LEGO1/legoanimactor.cpp
-  LEGO1/legoanimationmanager.cpp
-  LEGO1/legoanimmmpresenter.cpp
-  LEGO1/legoanimpresenter.cpp
-  LEGO1/legobackgroundcolor.cpp
-  LEGO1/legobackgroundcolor.cpp
-  LEGO1/legobuildingmanager.cpp
-  LEGO1/legocachesound.cpp
-  LEGO1/legocameracontroller.cpp
-  LEGO1/legocarbuild.cpp
-  LEGO1/legocarbuildanimpresenter.cpp
-  LEGO1/legocontrolmanager.cpp
-  LEGO1/legoentity.cpp
-  LEGO1/legoentitypresenter.cpp
-  LEGO1/legoeventnotificationparam.cpp
-  LEGO1/legoflctexturepresenter.cpp
-  LEGO1/legofullscreenmovie.cpp
-  LEGO1/legogamestate.cpp
-  LEGO1/legohideanimpresenter.cpp
-  LEGO1/legoinputmanager.cpp
-  LEGO1/legojetski.cpp
-  LEGO1/legoloadcachesoundpresenter.cpp
-  LEGO1/legolocomotionanimpresenter.cpp
-  LEGO1/legometerpresenter.cpp
-  LEGO1/legomodelpresenter.cpp
-  LEGO1/legonavcontroller.cpp
-  LEGO1/legoobjectfactory.cpp
-  LEGO1/legoomni.cpp
-  LEGO1/legopalettepresenter.cpp
-  LEGO1/legopartpresenter.cpp
-  LEGO1/legopathactor.cpp
-  LEGO1/legopathcontroller.cpp
-  LEGO1/legopathpresenter.cpp
-  LEGO1/legophonemepresenter.cpp
-  LEGO1/legoplantmanager.cpp
-  LEGO1/legorace.cpp
-  LEGO1/legoroi.cpp
-  LEGO1/legosoundmanager.cpp
-  LEGO1/legostate.cpp
-  LEGO1/legostream.cpp
-  LEGO1/legotexturepresenter.cpp
-  LEGO1/legoutil.cpp
-  LEGO1/legounksavedatawriter.cpp
-  LEGO1/legovehiclebuildstate.cpp
-  LEGO1/legovideomanager.cpp
-  LEGO1/legoworld.cpp
-  LEGO1/legoworldpresenter.cpp
-  LEGO1/motorcycle.cpp
-  LEGO1/mxactionnotificationparam.cpp
-  LEGO1/mxatomid.cpp
-  LEGO1/mxatomidcounter.cpp
-  LEGO1/mxaudiomanager.cpp
-  LEGO1/mxaudiopresenter.cpp
-  LEGO1/mxautolocker.cpp
-  LEGO1/mxbackgroundaudiomanager.cpp
-  LEGO1/mxbitmap.cpp
-  LEGO1/mxcompositemediapresenter.cpp
-  LEGO1/mxcompositepresenter.cpp
-  LEGO1/mxcontrolpresenter.cpp
-  LEGO1/mxcore.cpp
-  LEGO1/mxcriticalsection.cpp
+  LEGO1/lego/legoomni/src/audio/legocachesound.cpp
+  LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
+  LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
+  LEGO1/lego/legoomni/src/build/legobuildingmanager.cpp
+  LEGO1/lego/legoomni/src/build/legocarbuild.cpp
+  LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
+  LEGO1/lego/legoomni/src/common/gifmanager.cpp
+  LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
+  LEGO1/lego/legoomni/src/common/legocameracontroller.cpp
+  LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
+  LEGO1/lego/legoomni/src/common/legogamestate.cpp
+  LEGO1/lego/legoomni/src/common/legonavcontroller.cpp
+  LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
+  LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
+  LEGO1/lego/legoomni/src/common/legostate.cpp
+  LEGO1/lego/legoomni/src/common/legostream.cpp
+  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
+  LEGO1/lego/legoomni/src/common/legoutil.cpp
+  LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
+  LEGO1/lego/legoomni/src/entity/legoactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoentity.cpp
+  LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
+  LEGO1/lego/legoomni/src/entity/legojetski.cpp
+  LEGO1/lego/legoomni/src/entity/legopathactor.cpp
+  LEGO1/lego/legoomni/src/entity/legorace.cpp
+  LEGO1/lego/legoomni/src/entity/legoworld.cpp
+  LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
+  LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
+  LEGO1/lego/legoomni/src/main/legoomni.cpp
+  LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
+  LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
+  LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
+  LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp
+  LEGO1/lego/legoomni/src/video/legoanimationmanager.cpp
+  LEGO1/lego/legoomni/src/video/legoanimmmpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legopartpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legovideomanager.cpp
+  LEGO1/lego/scripts/act1/act1state.cpp
+  LEGO1/lego/scripts/act2/act2brick.cpp
+  LEGO1/lego/scripts/act2/act2policestation.cpp
+  LEGO1/lego/scripts/act2/legoact2state.cpp
+  LEGO1/lego/scripts/act3/act3.cpp
+  LEGO1/lego/scripts/act3/act3shark.cpp
+  LEGO1/lego/scripts/act3/act3state.cpp
+  LEGO1/lego/scripts/build/buildingentity.cpp
+  LEGO1/lego/scripts/build/dunebuggy.cpp
+  LEGO1/lego/scripts/build/helicopter.cpp
+  LEGO1/lego/scripts/build/helicopterstate.cpp
+  LEGO1/lego/scripts/build/jetski.cpp
+  LEGO1/lego/scripts/build/racecar.cpp
+  LEGO1/lego/scripts/gasstation/gasstation.cpp
+  LEGO1/lego/scripts/gasstation/gasstationentity.cpp
+  LEGO1/lego/scripts/gasstation/gasstationstate.cpp
+  LEGO1/lego/scripts/hospital/ambulance.cpp
+  LEGO1/lego/scripts/hospital/ambulancemissionstate.cpp
+  LEGO1/lego/scripts/hospital/hospital.cpp
+  LEGO1/lego/scripts/hospital/hospitalentity.cpp
+  LEGO1/lego/scripts/hospital/hospitalstate.cpp
+  LEGO1/lego/scripts/infocenter/elevatorbottom.cpp
+  LEGO1/lego/scripts/infocenter/infocenter.cpp
+  LEGO1/lego/scripts/infocenter/infocenterdoor.cpp
+  LEGO1/lego/scripts/infocenter/infocenterentity.cpp
+  LEGO1/lego/scripts/infocenter/infocenterstate.cpp
+  LEGO1/lego/scripts/infocenter/registrationbook.cpp
+  LEGO1/lego/scripts/infocenter/score.cpp
+  LEGO1/lego/scripts/infocenter/scorestate.cpp
+  LEGO1/lego/scripts/isle/animstate.cpp
+  LEGO1/lego/scripts/isle/beachhouseentity.cpp
+  LEGO1/lego/scripts/isle/bike.cpp
+  LEGO1/lego/scripts/isle/bumpbouy.cpp
+  LEGO1/lego/scripts/isle/historybook.cpp
+  LEGO1/lego/scripts/isle/isleactor.cpp
+  LEGO1/lego/scripts/isle/isle.cpp
+  LEGO1/lego/scripts/isle/islepathactor.cpp
+  LEGO1/lego/scripts/isle/jukebox.cpp
+  LEGO1/lego/scripts/isle/jukeboxentity.cpp
+  LEGO1/lego/scripts/isle/jukeboxstate.cpp
+  LEGO1/lego/scripts/isle/motorcycle.cpp
+  LEGO1/lego/scripts/isle/radio.cpp
+  LEGO1/lego/scripts/isle/radiostate.cpp
+  LEGO1/lego/scripts/isle/skateboard.cpp
+  LEGO1/lego/scripts/pizzeria/pizza.cpp
+  LEGO1/lego/scripts/pizzeria/pizzamissionstate.cpp
+  LEGO1/lego/scripts/pizzeria/pizzeria.cpp
+  LEGO1/lego/scripts/pizzeria/pizzeriastate.cpp
+  LEGO1/lego/scripts/police/police.cpp
+  LEGO1/lego/scripts/police/policeentity.cpp
+  LEGO1/lego/scripts/police/policestate.cpp
+  LEGO1/lego/scripts/race/carrace.cpp
+  LEGO1/lego/scripts/race/jetskirace.cpp
+  LEGO1/lego/scripts/race/racestandsentity.cpp
+  LEGO1/lego/scripts/race/racestate.cpp
+  LEGO1/lego/scripts/towtrack/towtrack.cpp
+  LEGO1/lego/scripts/towtrack/towtrackmissionstate.cpp
+  LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
+  LEGO1/lego/sources/3dmanager/lego3dview.cpp
+  LEGO1/lego/sources/3dmanager/legoview1.cpp
+  LEGO1/lego/sources/3dmanager/tglsurface.cpp
+  LEGO1/lego/sources/roi/legoroi.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
-  LEGO1/mxdiskstreamcontroller.cpp
-  LEGO1/mxdiskstreamprovider.cpp
-  LEGO1/mxdisplaysurface.cpp
-  LEGO1/mxdsaction.cpp
-  LEGO1/mxdsanim.cpp
-  LEGO1/mxdsbuffer.cpp
-  LEGO1/mxdschunk.cpp
-  LEGO1/mxdsevent.cpp
-  LEGO1/mxdsfile.cpp
-  LEGO1/mxdsmediaaction.cpp
-  LEGO1/mxdsmultiaction.cpp
-  LEGO1/mxdsobject.cpp
-  LEGO1/mxdsobjectaction.cpp
-  LEGO1/mxdsparallelaction.cpp
-  LEGO1/mxdsselectaction.cpp
-  LEGO1/mxdsserialaction.cpp
-  LEGO1/mxdssound.cpp
-  LEGO1/mxdssource.cpp
-  LEGO1/mxdsstill.cpp
-  LEGO1/mxdsstreamingaction.cpp
-  LEGO1/mxdssubscriber.cpp
-  LEGO1/mxentity.cpp
-  LEGO1/mxeventmanager.cpp
-  LEGO1/mxeventpresenter.cpp
-  LEGO1/mxflcpresenter.cpp
-  LEGO1/mxioinfo.cpp
-  LEGO1/mxloopingflcpresenter.cpp
-  LEGO1/mxloopingmidipresenter.cpp
-  LEGO1/mxloopingsmkpresenter.cpp
-  LEGO1/mxmediamanager.cpp
-  LEGO1/mxmediapresenter.cpp
-  LEGO1/mxmidipresenter.cpp
-  LEGO1/mxmusicmanager.cpp
-  LEGO1/mxmusicpresenter.cpp
-  LEGO1/mxnotificationmanager.cpp
-  LEGO1/mxnotificationparam.cpp
-  LEGO1/mxobjectfactory.cpp
-  LEGO1/mxomni.cpp
-  LEGO1/mxomnicreateflags.cpp
-  LEGO1/mxomnicreateparam.cpp
-  LEGO1/mxpalette.cpp
-  LEGO1/mxparam.cpp
-  LEGO1/mxpresenter.cpp
-  LEGO1/mxramstreamcontroller.cpp
-  LEGO1/mxramstreamprovider.cpp
-  LEGO1/mxregion.cpp
-  LEGO1/mxregioncursor.cpp
-  LEGO1/mxscheduler.cpp
-  LEGO1/mxsemaphore.cpp
-  LEGO1/mxsmack.cpp
-  LEGO1/mxsmkpresenter.cpp
-  LEGO1/mxsoundmanager.cpp
-  LEGO1/mxsoundpresenter.cpp
-  LEGO1/mxstillpresenter.cpp
-  LEGO1/mxstreamchunk.cpp
-  LEGO1/mxstreamcontroller.cpp
-  LEGO1/mxstreamer.cpp
-  LEGO1/mxstreamlist.cpp
-  LEGO1/mxstreamprovider.cpp
-  LEGO1/mxstring.cpp
-  LEGO1/mxthread.cpp
-  LEGO1/mxticklemanager.cpp
-  LEGO1/mxtimer.cpp
-  LEGO1/mxtransitionmanager.cpp
-  LEGO1/mxtype17notificationparam.cpp
-  LEGO1/mxunknown100d7c88.cpp
-  LEGO1/mxvariable.cpp
-  LEGO1/mxvariabletable.cpp
-  LEGO1/mxvideomanager.cpp
-  LEGO1/mxvideoparam.cpp
-  LEGO1/mxvideoparamflags.cpp
-  LEGO1/mxvideopresenter.cpp
-  LEGO1/mxwavepresenter.cpp
-  LEGO1/pizza.cpp
-  LEGO1/pizzamissionstate.cpp
-  LEGO1/pizzeria.cpp
-  LEGO1/pizzeriastate.cpp
-  LEGO1/police.cpp
-  LEGO1/policeentity.cpp
-  LEGO1/policestate.cpp
-  LEGO1/racecar.cpp
-  LEGO1/racestandsentity.cpp
-  LEGO1/racestate.cpp
-  LEGO1/radio.cpp
-  LEGO1/radiostate.cpp
+  LEGO1/omni/src/action/mxdsaction.cpp
+  LEGO1/omni/src/action/mxdsanim.cpp
+  LEGO1/omni/src/action/mxdsevent.cpp
+  LEGO1/omni/src/action/mxdsmediaaction.cpp
+  LEGO1/omni/src/action/mxdsmultiaction.cpp
+  LEGO1/omni/src/action/mxdsobjectaction.cpp
+  LEGO1/omni/src/action/mxdsobject.cpp
+  LEGO1/omni/src/action/mxdsparallelaction.cpp
+  LEGO1/omni/src/action/mxdsselectaction.cpp
+  LEGO1/omni/src/action/mxdsserialaction.cpp
+  LEGO1/omni/src/action/mxdssound.cpp
+  LEGO1/omni/src/action/mxdsstill.cpp
+  LEGO1/omni/src/action/mxdsstreamingaction.cpp
+  LEGO1/omni/src/audio/mxaudiomanager.cpp
+  LEGO1/omni/src/audio/mxaudiopresenter.cpp
+  LEGO1/omni/src/audio/mxbackgroundaudiomanager.cpp
+  LEGO1/omni/src/audio/mxloopingmidipresenter.cpp
+  LEGO1/omni/src/audio/mxmidipresenter.cpp
+  LEGO1/omni/src/audio/mxmusicmanager.cpp
+  LEGO1/omni/src/audio/mxmusicpresenter.cpp
+  LEGO1/omni/src/audio/mxsoundmanager.cpp
+  LEGO1/omni/src/audio/mxsoundpresenter.cpp
+  LEGO1/omni/src/audio/mxwavepresenter.cpp
+  LEGO1/omni/src/common/mxatomidcounter.cpp
+  LEGO1/omni/src/common/mxatomid.cpp
+  LEGO1/omni/src/common/mxcompositemediapresenter.cpp
+  LEGO1/omni/src/common/mxcompositepresenter.cpp
+  LEGO1/omni/src/common/mxcore.cpp
+  LEGO1/omni/src/common/mxmediamanager.cpp
+  LEGO1/omni/src/common/mxmediapresenter.cpp
+  LEGO1/omni/src/common/mxobjectfactory.cpp
+  LEGO1/omni/src/common/mxpresenter.cpp
+  LEGO1/omni/src/common/mxstring.cpp
+  LEGO1/omni/src/common/mxticklemanager.cpp
+  LEGO1/omni/src/common/mxtimer.cpp
+  LEGO1/omni/src/common/mxvariable.cpp
+  LEGO1/omni/src/common/mxvariabletable.cpp
+  LEGO1/omni/src/control/mxcontrolpresenter.cpp
+  LEGO1/omni/src/entity/mxentity.cpp
+  LEGO1/omni/src/entity/mxflcpresenter.cpp
+  LEGO1/omni/src/entity/mxloopingflcpresenter.cpp
+  LEGO1/omni/src/entity/mxloopingsmkpresenter.cpp
+  LEGO1/omni/src/entity/mxsmkpresenter.cpp
+  LEGO1/omni/src/entity/mxvideomanager.cpp
+  LEGO1/omni/src/entity/mxvideopresenter.cpp
+  LEGO1/omni/src/event/mxeventmanager.cpp
+  LEGO1/omni/src/event/mxeventpresenter.cpp
+  LEGO1/omni/src/main/mxmain.cpp
+  LEGO1/omni/src/main/mxomni.cpp
+  LEGO1/omni/src/main/mxomnicreateflags.cpp
+  LEGO1/omni/src/main/mxomnicreateparam.cpp
+  LEGO1/omni/src/notify/mxactionnotificationparam.cpp
+  LEGO1/omni/src/notify/mxnotificationmanager.cpp
+  LEGO1/omni/src/notify/mxnotificationparam.cpp
+  LEGO1/omni/src/notify/mxtype17notificationparam.cpp
+  LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp
+  LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
+  LEGO1/omni/src/stream/mxdsbuffer.cpp
+  LEGO1/omni/src/stream/mxdschunk.cpp
+  LEGO1/omni/src/stream/mxdsfile.cpp
+  LEGO1/omni/src/stream/mxdssource.cpp
+  LEGO1/omni/src/stream/mxdssubscriber.cpp
+  LEGO1/omni/src/stream/mxioinfo.cpp
+  LEGO1/omni/src/stream/mxramstreamcontroller.cpp
+  LEGO1/omni/src/stream/mxramstreamprovider.cpp
+  LEGO1/omni/src/stream/mxstreamchunk.cpp
+  LEGO1/omni/src/stream/mxstreamcontroller.cpp
+  LEGO1/omni/src/stream/mxstreamer.cpp
+  LEGO1/omni/src/stream/mxstreamlist.cpp
+  LEGO1/omni/src/stream/mxstreamprovider.cpp
+  LEGO1/omni/src/system/mxautolocker.cpp
+  LEGO1/omni/src/system/mxcriticalsection.cpp
+  LEGO1/omni/src/system/mxscheduler.cpp
+  LEGO1/omni/src/system/mxsemaphore.cpp
+  LEGO1/omni/src/system/mxthread.cpp
+  LEGO1/omni/src/video/mxbitmap.cpp
+  LEGO1/omni/src/video/mxdisplaysurface.cpp
+  LEGO1/omni/src/video/mxpalette.cpp
+  LEGO1/omni/src/video/mxregion.cpp
+  LEGO1/omni/src/video/mxregioncursor.cpp
+  LEGO1/omni/src/video/mxsmack.cpp
+  LEGO1/omni/src/video/mxstillpresenter.cpp
+  LEGO1/omni/src/video/mxtransitionmanager.cpp
+  LEGO1/omni/src/video/mxvideoparam.cpp
+  LEGO1/omni/src/video/mxvideoparamflags.cpp
   LEGO1/realtime/matrix.cpp
   LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
   LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
-  LEGO1/registrationbook.cpp
-  LEGO1/res/lego1.rc
-  LEGO1/score.cpp
-  LEGO1/scorestate.cpp
-  LEGO1/skateboard.cpp
   LEGO1/tgl/d3drm/camera.cpp
   LEGO1/tgl/d3drm/device.cpp
   LEGO1/tgl/d3drm/group.cpp
@@ -222,8 +220,6 @@ add_library(lego1 SHARED
   LEGO1/tgl/d3drm/texture.cpp
   LEGO1/tgl/d3drm/unk.cpp
   LEGO1/tgl/d3drm/view.cpp
-  LEGO1/towtrack.cpp
-  LEGO1/towtrackmissionstate.cpp
   LEGO1/viewmanager/viewlodlist.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
@@ -232,8 +228,13 @@ if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
-# Additional include directories
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
+target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
+
+# Additional include directories
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
 target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smack")
@@ -272,9 +273,10 @@ if (ISLE_BUILD_APP)
   )
 
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
-
-  # Include LEGO1 headers in ISLE
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
+  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
+  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
+  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
   # Use internal DirectX 5 if required
   if (ISLE_USE_DX5)
