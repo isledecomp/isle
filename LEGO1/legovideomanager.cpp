@@ -5,6 +5,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "realtime/matrix.h"
+#include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
@@ -149,13 +150,13 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	Lego3DManager::CreateStruct createStruct;
 	memset(&createStruct, 0, sizeof(createStruct));
-	createStruct.m_hwnd = LegoOmni::GetInstance()->GetWindowHandle();
-	createStruct.m_directDraw = m_pDirectDraw;
-	createStruct.m_ddSurface1 = m_displaySurface->GetDirectDrawSurface1();
-	createStruct.m_ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
-	createStruct.m_ddPalette = m_videoParam.GetPalette()->CreateNativePalette();
+	createStruct.m_hWnd = LegoOmni::GetInstance()->GetWindowHandle();
+	createStruct.m_pDirectDraw = m_pDirectDraw;
+	createStruct.m_pFrontBuffer = m_displaySurface->GetDirectDrawSurface1();
+	createStruct.m_pBackBuffer = m_displaySurface->GetDirectDrawSurface2();
+	createStruct.m_pPalette = m_videoParam.GetPalette()->CreateNativePalette();
 	createStruct.m_isFullScreen = FALSE;
-	createStruct.m_flags = m_videoParam.Flags().GetWideViewAngle();
+	createStruct.m_isWideViewAngle = m_videoParam.Flags().GetWideViewAngle();
 	createStruct.m_direct3d = m_direct3d->GetDirect3D();
 	createStruct.m_d3dDevice = m_direct3d->GetDirect3DDevice();
 
@@ -174,8 +175,8 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);
 	m_viewROI->WrappedSetLocalTransform(outMatrix);
 
-	m_3dManager->GetLego3DView()->FUN_100ab100(m_viewROI);
-	m_3dManager->GetLego3DView()->FUN_100ab1b0(m_viewROI);
+	m_3dManager->Add(*m_viewROI);
+	m_3dManager->SetPointOfView(*m_viewROI);
 
 	m_unk0x100d9d00 = new MxUnknown100d9d00;
 	m_unk0xe4 = FALSE;
@@ -224,31 +225,6 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 		m_cursorY = 463;
 }
 
-inline void LegoVideoManager::DrawCursor()
-{
-	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
-		if (m_cursorX >= 0 && m_cursorY >= 0) {
-			m_cursorXCopy = m_cursorX;
-			m_cursorYCopy = m_cursorY;
-		}
-	}
-
-	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
-
-	if (!m_unk0x514) {
-		m_unk0x518.top = 0;
-		m_unk0x518.left = 0;
-		m_unk0x518.bottom = 16;
-		m_unk0x518.right = 16;
-		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
-
-		if (!m_unk0x514)
-			m_drawCursor = FALSE;
-	}
-
-	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
-}
-
 // FUNCTION: LEGO1 0x1007b770
 MxResult LegoVideoManager::Tickle()
 {
@@ -284,7 +260,7 @@ MxResult LegoVideoManager::Tickle()
 			presenter->PutData();
 
 		if (!m_unk0xe5) {
-			m_3dManager->FUN_100ab4b0(0.0);
+			m_3dManager->Render(0.0);
 			m_3dManager->GetLego3DView()->GetDevice()->Update();
 		}
 
@@ -319,6 +295,31 @@ MxResult LegoVideoManager::Tickle()
 
 	m_region->Reset();
 	return SUCCESS;
+}
+
+inline void LegoVideoManager::DrawCursor()
+{
+	if (m_cursorX != m_cursorXCopy || m_cursorY != m_cursorYCopy) {
+		if (m_cursorX >= 0 && m_cursorY >= 0) {
+			m_cursorXCopy = m_cursorX;
+			m_cursorYCopy = m_cursorY;
+		}
+	}
+
+	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
+
+	if (!m_unk0x514) {
+		m_unk0x518.top = 0;
+		m_unk0x518.left = 0;
+		m_unk0x518.bottom = 16;
+		m_unk0x518.right = 16;
+		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
+
+		if (!m_unk0x514)
+			m_drawCursor = FALSE;
+	}
+
+	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
 }
 
 // STUB: LEGO1 0x1007bbc0

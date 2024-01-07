@@ -1,14 +1,16 @@
 #ifndef LEGOVIDEOMANAGER_H
 #define LEGOVIDEOMANAGER_H
 
+#include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
-#include "lego3dmanager.h"
 #include "mxdirect3d.h"
 #include "mxdirectx/mxstopwatch.h"
 #include "mxunknown100d9d00.h"
 #include "mxvideomanager.h"
 
 #include <ddraw.h>
+
+class LegoROI;
 
 // VTABLE: LEGO1 0x100d9c88
 // SIZE 0x590
