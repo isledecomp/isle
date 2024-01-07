@@ -34,9 +34,15 @@ void MxAtomId::Destroy()
 	if (!AtomIdCounterSet())
 		return;
 
-	// The dtor is called on the counter object immediately,
-	// so this syntax should be correct.
+#ifdef COMPAT_MODE
+	MxAtomIdCounterSet::iterator it;
+	{
+		MxAtomIdCounter id_counter(m_internal);
+		it = AtomIdCounterSet()->find(&id_counter);
+	}
+#else
 	MxAtomIdCounterSet::iterator it = AtomIdCounterSet()->find(&MxAtomIdCounter(m_internal));
+#endif
 
 	MxAtomIdCounter* counter = (MxAtomIdCounter*) (*it);
 	counter->Dec();

@@ -14,7 +14,7 @@ MxDirect3D::MxDirect3D()
 {
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
-	this->m_unk0x88c = NULL;
+	this->m_unk0x88c = 0;
 	this->m_assignedDevice = NULL;
 }
 

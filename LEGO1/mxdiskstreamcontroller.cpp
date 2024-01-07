@@ -23,8 +23,16 @@ MxDiskStreamController::~MxDiskStreamController()
 	m_unk0xc4 = FALSE;
 	m_unk0x70 = FALSE;
 
-	if (m_provider)
+	if (m_provider) {
+#ifdef COMPAT_MODE
+		{
+			MxDSAction action;
+			m_provider->VTable0x20(&action);
+		}
+#else
 		m_provider->VTable0x20(&MxDSAction());
+#endif
+	}
 
 	MxDSAction* action;
 	while (m_unk0x3c.PopFront(action))
@@ -299,9 +307,16 @@ MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 	MxAutoLocker lock(&this->m_criticalSection);
 	if (m_unk0x54.Find(p_action, FALSE) == NULL) {
 		if (VTable0x30(p_action) == SUCCESS) {
+#ifdef COMPAT_MODE
+			{
+				MxEndActionNotificationParam param(c_notificationEndAction, NULL, p_action, TRUE);
+				MxOmni::GetInstance()->NotifyCurrentEntity(&param);
+			}
+#else
 			MxOmni::GetInstance()->NotifyCurrentEntity(
 				&MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
 			);
+#endif
 		}
 	}
 

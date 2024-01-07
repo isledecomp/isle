@@ -81,8 +81,16 @@ MxLong MxStreamer::Close(const char* p_name)
 
 			if (c->FUN_100c20d0(ds))
 				delete c;
-			else
+			else {
+#ifdef COMPAT_MODE
+				{
+					MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+					NotificationManager()->Send(this, &notification);
+				}
+#else
 				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+#endif
+			}
 
 			return SUCCESS;
 		}
@@ -185,20 +193,17 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		if (c->FUN_100c20d0(ds))
 			delete c;
-		else
+		else {
+#ifdef COMPAT_MODE
+			{
+				MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+				NotificationManager()->Send(this, &notification);
+			}
+#else
 			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+#endif
+		}
 	}
 
 	return 0;
-}
-
-// No offset, function is always inlined
-MxStreamerSubClass1::MxStreamerSubClass1(undefined4 p_size)
-{
-	m_buffer = NULL;
-	m_size = p_size;
-	undefined4* ptr = &m_unk0x08;
-	for (int i = 0; i >= 0; i--) {
-		ptr[i] = 0;
-	}
 }
