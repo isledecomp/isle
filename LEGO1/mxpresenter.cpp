@@ -148,8 +148,10 @@ void MxPresenter::EndAction()
 
 	if (!this->m_compositePresenter) {
 #ifdef COMPAT_MODE
-		MxEndActionNotificationParam param(c_notificationEndAction, NULL, this->m_action, TRUE);
-		MxOmni::GetInstance()->NotifyCurrentEntity(&param);
+		{
+			MxEndActionNotificationParam param(c_notificationEndAction, NULL, this->m_action, TRUE);
+			MxOmni::GetInstance()->NotifyCurrentEntity(&param);
+		}
 #else
 		MxOmni::GetInstance()->NotifyCurrentEntity(
 			&MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
@@ -201,8 +203,10 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 		MxAutoLocker lock(&m_criticalSection);
 
 #ifdef COMPAT_MODE
-		MxNotificationParam param(MXPRESENTER_NOTIFICATION, this);
-		NotificationManager()->Send(m_compositePresenter, &param);
+		{
+			MxNotificationParam param(MXPRESENTER_NOTIFICATION, this);
+			NotificationManager()->Send(m_compositePresenter, &param);
+		}
 #else
 		NotificationManager()->Send(m_compositePresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
 #endif

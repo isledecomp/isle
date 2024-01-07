@@ -35,8 +35,11 @@ void MxAtomId::Destroy()
 		return;
 
 #ifdef COMPAT_MODE
-	MxAtomIdCounter id_counter(m_internal);
-	MxAtomIdCounterSet::iterator it = AtomIdCounterSet()->find(&id_counter);
+	MxAtomIdCounterSet::iterator it;
+	{
+		MxAtomIdCounter id_counter(m_internal);
+		it = AtomIdCounterSet()->find(&id_counter);
+	}
 #else
 	MxAtomIdCounterSet::iterator it = AtomIdCounterSet()->find(&MxAtomIdCounter(m_internal));
 #endif

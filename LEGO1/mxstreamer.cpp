@@ -83,8 +83,10 @@ MxLong MxStreamer::Close(const char* p_name)
 				delete c;
 			else {
 #ifdef COMPAT_MODE
-				MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-				NotificationManager()->Send(this, &notification);
+				{
+					MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+					NotificationManager()->Send(this, &notification);
+				}
 #else
 				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 #endif
@@ -193,8 +195,10 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 			delete c;
 		else {
 #ifdef COMPAT_MODE
-			MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
-			NotificationManager()->Send(this, &notification);
+			{
+				MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+				NotificationManager()->Send(this, &notification);
+			}
 #else
 			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
 #endif
