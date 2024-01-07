@@ -1,10 +1,9 @@
 #ifndef MXDIRECT3D_H
 #define MXDIRECT3D_H
 
+#include "../mxstl/stlcompat.h"
 #include "decomp.h"
 #include "mxdirectdraw.h"
-#include "mxstl/stlcompat.h"
-#include "mxtypes.h"
 
 #include <d3d.h>
 
@@ -21,14 +20,14 @@ public:
 	MxAssignedDevice();
 	~MxAssignedDevice();
 
-	inline MxU32 GetFlags() { return m_flags; }
+	inline unsigned int GetFlags() { return m_flags; }
 	inline D3DDEVICEDESC& GetDesc() { return m_desc; }
 
 	friend class MxDirect3D;
 
 private:
 	GUID m_guid;                                 // 0x00
-	MxU32 m_flags;                               // 0x10
+	unsigned int m_flags;                        // 0x10
 	D3DDEVICEDESC m_desc;                        // 0x14
 	MxDirectDraw::DeviceModesInfo* m_deviceInfo; // 0xe0
 };
@@ -101,8 +100,8 @@ struct MxDevice {
 	D3DDEVICEDESC m_HWDesc;  // 0x0c
 	D3DDEVICEDESC m_HELDesc; // 0xd8
 
-	MxBool operator==(MxDevice) const { return TRUE; }
-	MxBool operator<(MxDevice) const { return TRUE; }
+	int operator==(MxDevice) const { return 0; }
+	int operator<(MxDevice) const { return 0; }
 };
 
 // SIZE 0x0c
@@ -111,8 +110,8 @@ struct MxDisplayMode {
 	DWORD m_height;       // 0x04
 	DWORD m_bitsPerPixel; // 0x08
 
-	MxBool operator==(MxDisplayMode) const { return TRUE; }
-	MxBool operator<(MxDisplayMode) const { return TRUE; }
+	int operator==(MxDisplayMode) const { return 0; }
+	int operator<(MxDisplayMode) const { return 0; }
 };
 
 // SIZE 0x190
@@ -130,8 +129,8 @@ struct MxDriver {
 	list<MxDevice> m_devices;           // 0x178
 	list<MxDisplayMode> m_displayModes; // 0x184
 
-	MxBool operator==(MxDriver) const { return TRUE; }
-	MxBool operator<(MxDriver) const { return TRUE; }
+	int operator==(MxDriver) const { return 0; }
+	int operator<(MxDriver) const { return 0; }
 };
 
 // clang-format off
@@ -178,7 +177,7 @@ public:
 	// FUNCTION: LEGO1 0x1009c010
 	~MxDeviceEnumerate() {}
 
-	virtual MxResult DoEnumerate(); // vtable+0x00
+	virtual int DoEnumerate(); // vtable+0x00
 
 	BOOL EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName);
 	HRESULT EnumDisplayModesCallback(LPDDSURFACEDESC p_ddsd);
@@ -190,13 +189,13 @@ public:
 		LPD3DDEVICEDESC p_HELDesc
 	);
 	const char* EnumerateErrorToString(HRESULT p_error);
-	MxS32 ParseDeviceName(const char* p_deviceId);
-	MxS32 ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid);
-	MxResult GetDevice(MxS32 p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device);
-	MxS32 FUN_1009d0d0();
-	MxResult FUN_1009d210();
-	MxBool FUN_1009d370(MxDriver& p_driver);
-	MxBool FUN_1009d3d0(MxDevice& p_device);
+	int ParseDeviceName(const char* p_deviceId);
+	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
+	int GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device);
+	int FUN_1009d0d0();
+	int FUN_1009d210();
+	unsigned char FUN_1009d370(MxDriver& p_driver);
+	unsigned char FUN_1009d3d0(MxDevice& p_device);
 
 	static void BuildErrorString(const char*, ...);
 	static BOOL CALLBACK
@@ -216,8 +215,8 @@ public:
 	friend class MxDirect3D;
 
 private:
-	list<MxDriver> m_list; // 0x04
-	MxBool m_initialized;  // 0x10
+	list<MxDriver> m_list;       // 0x04
+	unsigned char m_initialized; // 0x10
 };
 
 // VTABLE: LEGO1 0x100d9cc8

@@ -3,7 +3,7 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
-#include "mxdirect3d.h"
+#include "mxdirectx/mxdirect3d.h"
 #include "mxdirectx/mxstopwatch.h"
 #include "mxunknown100d9d00.h"
 #include "mxvideomanager.h"

@@ -1,8 +1,6 @@
 #ifndef MXDIRECTDRAW_H
 #define MXDIRECTDRAW_H
 
-#include "mxtypes.h"
-
 #include <ddraw.h>
 #include <windows.h>
 
@@ -14,17 +12,14 @@ public:
 
 	// SIZE 0x0c
 	struct Mode {
-		MxS32 operator==(const Mode& p_mode) const
+		int operator==(const Mode& p_mode) const
 		{
-			return (
-				(m_width == p_mode.m_width) && (m_height == p_mode.m_height) &&
-				(m_bitsPerPixel == p_mode.m_bitsPerPixel)
-			);
+			return ((width == p_mode.width) && (height == p_mode.height) && (bitsPerPixel == p_mode.bitsPerPixel));
 		}
 
-		MxS32 m_width;        // 0x00
-		MxS32 m_height;       // 0x04
-		MxS32 m_bitsPerPixel; // 0x08
+		int width;        // 0x00
+		int height;       // 0x04
+		int bitsPerPixel; // 0x08
 	};
 
 	// SIZE 0x17c
@@ -34,7 +29,7 @@ public:
 
 		GUID* m_guid;      // 0x00
 		Mode* m_modeArray; // 0x04
-		MxS32 m_count;     // 0x08
+		int m_count;       // 0x08
 		DDCAPS m_ddcaps;   // 0x0c
 		void* m_unk0x178;  // 0x178
 	};
@@ -68,7 +63,7 @@ public:
 	BOOL DDCreateSurfaces();
 	BOOL DDInit(BOOL fullscreen);
 	BOOL DDSetMode(int width, int height, int bpp);
-	void Error(const char* p_message, MxS32 p_error);
+	void Error(const char* p_message, int p_error);
 
 	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
 	BOOL IsSupportedMode(int width, int height, int bpp);

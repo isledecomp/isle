@@ -38,7 +38,6 @@ BOOL MxDirect3D::Create(
 )
 {
 	BOOL success = FALSE;
-
 	BOOL ret = MxDirectDraw::Create(
 		hWnd,
 		fullscreen_1,
@@ -101,7 +100,7 @@ void MxDirect3D::DestroyButNotDirectDraw()
 // FUNCTION: LEGO1 0x1009b2d0
 BOOL MxDirect3D::CreateIDirect3D()
 {
-	MxResult ret = IDirect3D_QueryInterface(m_pDirectDraw, IID_IDirect3D2, (LPVOID*) &m_pDirect3d);
+	HRESULT ret = IDirect3D_QueryInterface(m_pDirectDraw, IID_IDirect3D2, (LPVOID*) &m_pDirect3d);
 
 	if (ret) {
 		Error("Creation of IDirect3D failed", ret);
@@ -149,7 +148,7 @@ BOOL MxDirect3D::D3DSetMode()
 
 	MxDirectDraw::Mode mode = m_currentMode;
 
-	if (m_bFullScreen && !IsSupportedMode(mode.m_width, mode.m_height, mode.m_bitsPerPixel)) {
+	if (m_bFullScreen && !IsSupportedMode(mode.width, mode.height, mode.bitsPerPixel)) {
 		Error("This device cannot support the current display mode", DDERR_GENERIC);
 		return FALSE;
 	}
@@ -162,10 +161,10 @@ BOOL MxDirect3D::D3DSetMode()
 	desc.dwSize = sizeof(desc);
 
 	if (backBuffer->Lock(NULL, &desc, DDLOCK_WAIT, NULL) == DD_OK) {
-		MxU8* surface = (MxU8*) desc.lpSurface;
+		unsigned char* surface = (unsigned char*) desc.lpSurface;
 
-		for (MxS32 i = mode.m_height; i > 0; i--) {
-			memset(surface, 0, mode.m_width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
+		for (int i = mode.height; i > 0; i--) {
+			memset(surface, 0, mode.width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
 			surface += desc.lPitch;
 		}
 
@@ -180,10 +179,10 @@ BOOL MxDirect3D::D3DSetMode()
 		desc.dwSize = sizeof(desc);
 
 		if (frontBuffer->Lock(NULL, &desc, DDLOCK_WAIT, NULL) == DD_OK) {
-			MxU8* surface = (MxU8*) desc.lpSurface;
+			unsigned char* surface = (unsigned char*) desc.lpSurface;
 
-			for (MxS32 i = mode.m_height; i > 0; i--) {
-				memset(surface, 0, mode.m_width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
+			for (int i = mode.height; i > 0; i--) {
+				memset(surface, 0, mode.width * desc.ddpfPixelFormat.dwRGBBitCount / 8);
 				surface += desc.lPitch;
 			}
 
@@ -229,7 +228,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 	}
 
 	MxAssignedDevice* assignedDevice = new MxAssignedDevice;
-	MxS32 i = 0;
+	int i = 0;
 
 	for (list<MxDriver>::iterator it = p_deviceEnumerate.m_list.begin(); it != p_deviceEnumerate.m_list.end(); it++) {
 		MxDriver& driver = *it;
@@ -248,13 +247,13 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 				assignedDevice->m_deviceInfo->m_modeArray =
 					new MxDirectDraw::Mode[assignedDevice->m_deviceInfo->m_count];
 
-				MxS32 j = 0;
+				int j = 0;
 				for (list<MxDisplayMode>::iterator it2 = driver.m_displayModes.begin();
 					 it2 != driver.m_displayModes.end();
 					 it2++) {
-					assignedDevice->m_deviceInfo->m_modeArray[j].m_width = (*it2).m_width;
-					assignedDevice->m_deviceInfo->m_modeArray[j].m_height = (*it2).m_height;
-					assignedDevice->m_deviceInfo->m_modeArray[j].m_bitsPerPixel = (*it2).m_bitsPerPixel;
+					assignedDevice->m_deviceInfo->m_modeArray[j].width = (*it2).m_width;
+					assignedDevice->m_deviceInfo->m_modeArray[j].height = (*it2).m_height;
+					assignedDevice->m_deviceInfo->m_modeArray[j].bitsPerPixel = (*it2).m_bitsPerPixel;
 					j++;
 				}
 			}
@@ -556,19 +555,19 @@ HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 }
 
 // FUNCTION: LEGO1 0x1009c6c0
-MxResult MxDeviceEnumerate::DoEnumerate()
+int MxDeviceEnumerate::DoEnumerate()
 {
 	if (m_initialized)
-		return FAILURE;
+		return -1;
 
 	HRESULT ret = DirectDrawEnumerate(DirectDrawEnumerateCallback, this);
-	if (ret) {
+	if (ret != DD_OK) {
 		BuildErrorString("DirectDrawEnumerate returned error %s\n", EnumerateErrorToString(ret));
-		return FAILURE;
+		return -1;
 	}
 
 	m_initialized = TRUE;
-	return SUCCESS;
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1009c710
@@ -589,13 +588,13 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 }
 
 // FUNCTION: LEGO1 0x1009ce60
-MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
+int MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 {
 	if (!m_initialized)
 		return -1;
 
-	MxS32 num = -1;
-	MxS32 hex[4];
+	int num = -1;
+	int hex[4];
 
 	if (sscanf(p_deviceId, "%d 0x%x 0x%x 0x%x 0x%x", &num, &hex[0], &hex[1], &hex[2], &hex[3]) != 5)
 		return -1;
@@ -606,7 +605,7 @@ MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 	GUID guid;
 	memcpy(&guid, hex, sizeof(guid));
 
-	MxS32 result = ProcessDeviceBytes(num, guid);
+	int result = ProcessDeviceBytes(num, guid);
 
 	if (result < 0)
 		return ProcessDeviceBytes(-1, guid);
@@ -614,19 +613,19 @@ MxS32 MxDeviceEnumerate::ParseDeviceName(const char* p_deviceId)
 }
 
 // FUNCTION: LEGO1 0x1009cf20
-MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid)
+int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 {
 	if (!m_initialized)
 		return -1;
 
-	MxS32 i = 0;
-	MxS32 j = 0;
+	int i = 0;
+	int j = 0;
 
 	struct GUID4 {
-		MxS32 m_data1;
-		MxS32 m_data2;
-		MxS32 m_data3;
-		MxS32 m_data4;
+		int m_data1;
+		int m_data2;
+		int m_data3;
+		int m_data4;
 	};
 
 	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
@@ -658,10 +657,10 @@ MxS32 MxDeviceEnumerate::ProcessDeviceBytes(MxS32 p_deviceNum, GUID& p_guid)
 }
 
 // FUNCTION: LEGO1 0x1009d030
-MxResult MxDeviceEnumerate::GetDevice(MxS32 p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device)
+int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device)
 {
 	if (p_deviceNum >= 0 && m_initialized) {
-		MxS32 i = 0;
+		int i = 0;
 
 		for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			p_driver = &*it;
@@ -669,20 +668,20 @@ MxResult MxDeviceEnumerate::GetDevice(MxS32 p_deviceNum, MxDriver*& p_driver, Mx
 			for (list<MxDevice>::iterator it2 = p_driver->m_devices.begin(); it2 != p_driver->m_devices.end(); it2++) {
 				if (i == p_deviceNum) {
 					p_device = &*it2;
-					return SUCCESS;
+					return 0;
 				}
 				i++;
 			}
 		}
 
-		return FAILURE;
+		return -1;
 	}
 
-	return FAILURE;
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x1009d0d0
-MxS32 MxDeviceEnumerate::FUN_1009d0d0()
+int MxDeviceEnumerate::FUN_1009d0d0()
 {
 	if (!m_initialized)
 		return -1;
@@ -690,10 +689,10 @@ MxS32 MxDeviceEnumerate::FUN_1009d0d0()
 	if (m_list.empty())
 		return -1;
 
-	MxS32 i = 0;
-	MxS32 j = 0;
-	MxS32 k = -1;
-	MxU32 und = FUN_1009d1a0();
+	int i = 0;
+	int j = 0;
+	int k = -1;
+	unsigned int und = FUN_1009d1a0();
 
 	for (list<MxDriver>::iterator it = m_list.begin();; it++) {
 		if (it == m_list.end())
@@ -729,10 +728,10 @@ undefined4 MxDeviceEnumerate::FUN_1009d1e0()
 }
 
 // FUNCTION: LEGO1 0x1009d210
-MxResult MxDeviceEnumerate::FUN_1009d210()
+int MxDeviceEnumerate::FUN_1009d210()
 {
 	if (!m_initialized)
-		return FAILURE;
+		return -1;
 
 	for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end();) {
 		MxDriver& driver = *it;
@@ -756,11 +755,11 @@ MxResult MxDeviceEnumerate::FUN_1009d210()
 		}
 	}
 
-	return m_list.empty() ? FAILURE : SUCCESS;
+	return m_list.empty() ? -1 : 0;
 }
 
 // FUNCTION: LEGO1 0x1009d370
-MxBool MxDeviceEnumerate::FUN_1009d370(MxDriver& p_driver)
+unsigned char MxDeviceEnumerate::FUN_1009d370(MxDriver& p_driver)
 {
 	for (list<MxDisplayMode>::iterator it = p_driver.m_displayModes.begin(); it != p_driver.m_displayModes.end();
 		 it++) {
@@ -774,7 +773,7 @@ MxBool MxDeviceEnumerate::FUN_1009d370(MxDriver& p_driver)
 }
 
 // FUNCTION: LEGO1 0x1009d3d0
-MxBool MxDeviceEnumerate::FUN_1009d3d0(MxDevice& p_device)
+unsigned char MxDeviceEnumerate::FUN_1009d3d0(MxDevice& p_device)
 {
 	if (m_list.size() <= 0)
 		return FALSE;
