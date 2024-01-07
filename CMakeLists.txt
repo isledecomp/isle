@@ -116,8 +116,8 @@ add_library(lego1 SHARED
   LEGO1/mxcontrolpresenter.cpp
   LEGO1/mxcore.cpp
   LEGO1/mxcriticalsection.cpp
-  LEGO1/mxdirect3d.cpp
-  LEGO1/mxdirectdraw.cpp
+  LEGO1/mxdirectx/mxdirect3d.cpp
+  LEGO1/mxdirectx/mxdirectdraw.cpp
   LEGO1/mxdiskstreamcontroller.cpp
   LEGO1/mxdiskstreamprovider.cpp
   LEGO1/mxdisplaysurface.cpp
