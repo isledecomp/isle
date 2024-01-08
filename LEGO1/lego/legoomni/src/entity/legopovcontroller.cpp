@@ -17,49 +17,49 @@ LegoMouseController::~LegoMouseController()
 }
 
 // FUNCTION: LEGO1 0x10065620
-void LegoMouseController::LeftDown(int x, int y)
+void LegoMouseController::LeftDown(int p_x, int p_y)
 {
 	m_isButtonDown = 1;
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065640
-void LegoMouseController::LeftUp(int x, int y)
+void LegoMouseController::LeftUp(int p_x, int p_y)
 {
 	m_isButtonDown = 0;
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065660
-void LegoMouseController::LeftDrag(int x, int y)
+void LegoMouseController::LeftDrag(int p_x, int p_y)
 {
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 // FUNCTION: LEGO1 0x10065680
-void LegoMouseController::RightDown(int x, int y)
+void LegoMouseController::RightDown(int p_x, int p_y)
 {
 	m_isButtonDown = 1;
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 // FUNCTION: LEGO1 0x100656a0
-void LegoMouseController::RightUp(int x, int y)
+void LegoMouseController::RightUp(int p_x, int p_y)
 {
 	m_isButtonDown = 0;
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 // FUNCTION: LEGO1 0x100656c0
-void LegoMouseController::RightDrag(int x, int y)
+void LegoMouseController::RightDrag(int p_x, int p_y)
 {
-	m_buttonX = x;
-	m_buttonY = y;
+	m_buttonX = p_x;
+	m_buttonY = p_y;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -97,16 +97,16 @@ MxResult LegoPointOfViewController::Create(Lego3DView* p_lego3DView)
 }
 
 // FUNCTION: LEGO1 0x100658c0
-void LegoPointOfViewController::LeftDown(int x, int y)
+void LegoPointOfViewController::LeftDown(int p_x, int p_y)
 {
-	LegoMouseController::LeftDown(x, y);
+	LegoMouseController::LeftDown(p_x, p_y);
 	AffectPointOfView();
 }
 
 // FUNCTION: LEGO1 0x100658e0
-void LegoPointOfViewController::LeftDrag(int x, int y)
+void LegoPointOfViewController::LeftDrag(int p_x, int p_y)
 {
-	LegoMouseController::LeftDrag(x, y);
+	LegoMouseController::LeftDrag(p_x, p_y);
 	AffectPointOfView();
 }
 

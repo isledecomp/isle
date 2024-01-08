@@ -42,37 +42,37 @@ public:
 
 	MxResult Create(Lego3DView* p_lego3DView);
 
-	void LeftDown(int x, int y);
-	void LeftDrag(int x, int y);
+	void LeftDown(int p_x, int p_y);
+	void LeftDrag(int p_x, int p_y);
 
 	// FUNCTION: LEGO1 0x10011e40
-	virtual void LeftUp(int x, int y)
+	virtual void LeftUp(int p_x, int p_y)
 	{
-		LegoMouseController::LeftUp(x, y);
+		LegoMouseController::LeftUp(p_x, p_y);
 		AffectPointOfView();
 	}
 	override; // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10011e60
-	virtual void RightDown(int x, int y)
+	virtual void RightDown(int p_x, int p_y)
 	{
-		LegoMouseController::RightDown(x, y);
+		LegoMouseController::RightDown(p_x, p_y);
 		AffectPointOfView();
 	}
 	override; // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10011e80
-	virtual void RightDrag(int x, int y)
+	virtual void RightDrag(int p_x, int p_y)
 	{
-		LegoMouseController::RightDrag(x, y);
+		LegoMouseController::RightDrag(p_x, p_y);
 		AffectPointOfView();
 	}
 	override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10011ea0
-	virtual void RightUp(int x, int y)
+	virtual void RightUp(int p_x, int p_y)
 	{
-		LegoMouseController::RightUp(x, y);
+		LegoMouseController::RightUp(p_x, p_y);
 		AffectPointOfView();
 	}
 	override;                                     // vtable+0x28
