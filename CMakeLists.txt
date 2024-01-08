@@ -323,4 +323,38 @@ if (MSVC)
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
+
+  # Older MSVC versions don't support building in parallel.
+  # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
+  if(CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
+    set_property(GLOBAL PROPERTY JOB_POOLS "msvc_lego=1;msvc_lego1=1")
+    set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_lego)
+    set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_lego)
+    set_property(TARGET lego1 PROPERTY JOB_POOL_COMPILE msvc_lego1)
+    set_property(TARGET lego1 PROPERTY JOB_POOL_LINK msvc_lego1)
+  endif()
+endif()
+
+find_program(CLANGFORMAT_BIN NAMES clang-format)
+if(EXISTS "${CLANGFORMAT_BIN}")
+  execute_process(COMMAND "${CLANGFORMAT_BIN}" --version
+    OUTPUT_VARIABLE "CLANGFORMAT_VERSION_OUTPUT"
+    RESULT_VARIABLE "CLANGFORMAT_RESULT"
+  )
+  if(CLANGFORMAT_RESULT EQUAL 0 AND CLANGFORMAT_VERSION_OUTPUT MATCHES "version ([0-9\\.]+)")
+    set(CLANGFORMAT_VERSION "${CMAKE_MATCH_1}")
+    set(CLANGFORMAT_VERSION_REQUIRED "17.0")
+    message(DEBUG "Found clang-format version ${CLANGFORMAT_VERSION} (needs ${CLANGFORMAT_VERSION_REQUIRED}")
+    if(CLANGFORMAT_VERSION VERSION_GREATER_EQUAL "${CLANGFORMAT_VERSION_REQUIRED}")
+      file(GLOB_RECURSE isle_sources
+        "${PROJECT_SOURCE_DIR}/ISLE/*.cpp"
+        "${PROJECT_SOURCE_DIR}/ISLE/*.h"
+        "${PROJECT_SOURCE_DIR}/LEGO1/*.cpp"
+        "${PROJECT_SOURCE_DIR}/LEGO1/*.h"
+      )
+      string(REPLACE ";" "\n" isle_sources_lines "${isle_sources}")
+      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/isle_sources.txt" "${isle_sources_lines}\n")
+      add_custom_target(clang-format ${CLANGFORMAT_BIN} -i "--files=${CMAKE_CURRENT_BINARY_DIR}/isle_sources.txt")
+    endif()
+  endif()
 endif()
