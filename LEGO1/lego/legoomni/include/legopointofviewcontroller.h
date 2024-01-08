@@ -11,7 +11,7 @@ class LegoNavController;
 //
 // LegoMouseController
 
-// VTABLE: LEGO1 0x10065550
+// VTABLE: LEGO1 0x100d8dd8
 class LegoMouseController : public MxCore {
 public:
 	LegoMouseController();
@@ -75,15 +75,15 @@ public:
 		LegoMouseController::RightUp(x, y);
 		AffectPointOfView();
 	}
-	override;               // vtable+0x28
-	virtual void SetEntity(LegoEntity* p_entity);  // vtable+0x2c
+	override;                                     // vtable+0x28
+	virtual void SetEntity(LegoEntity* p_entity); // vtable+0x2c
 	LegoEntity* GetEntity() { return m_entity; }
 
 protected:
 	void AffectPointOfView();
 	Lego3DView* m_lego3DView; // 0x20
-	LegoEntity* m_entity; // 0x24
-	double m_entityOffsetUp; // 0x28
+	LegoEntity* m_entity;     // 0x24
+	double m_entityOffsetUp;  // 0x28
 	LegoNavController* m_nav; // 0x30
 };
 #endif /* LEGOPOINTOFVIEWCONTROLLER_H */

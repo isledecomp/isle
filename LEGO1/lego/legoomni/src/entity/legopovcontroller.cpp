@@ -116,15 +116,15 @@ void LegoPointOfViewController::AffectPointOfView()
 	// TODO
 }
 
-// STUB: LEGO1 0x10065ae0
-void LegoPointOfViewController::SetEntity(LegoEntity* p_entity)
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x10065930
 MxResult LegoPointOfViewController::Tickle()
 {
 	// TODO
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10065ae0
+void LegoPointOfViewController::SetEntity(LegoEntity* p_entity)
+{
+	// TODO
 }

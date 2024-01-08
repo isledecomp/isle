@@ -29,6 +29,13 @@ MxResult LegoCameraController::Initialize()
 	return LegoPointOfViewController::Create(VideoManager()->Get3DManager()->GetLego3DView());
 }
 
+// STUB: LEGO1 0x10012020
+MxLong LegoCameraController::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x10012260
 void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
 {
@@ -63,13 +70,6 @@ Vector3Data& LegoCameraController::FUN_100128a0()
 	// Actually returns reference to a member
 	static Vector3Data g_v;
 	return g_v;
-}
-
-// STUB: LEGO1 0x10012020
-MxLong LegoCameraController::Notify(MxParam& p_param)
-{
-	// TODO
-	return 0;
 }
 
 // FUNCTION: LEGO1 0x100121b0
