@@ -26,21 +26,21 @@ public:
 		return !strcmp(p_name, MxWavePresenter::ClassName()) || MxSoundPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;                       // vtable+0x18
-	virtual void StartingTickle() override;                    // vtable+0x1c
-	virtual void StreamingTickle() override;                   // vtable+0x20
-	virtual void DoneTickle() override;                        // vtable+0x2c
-	virtual void ParseExtra() override;                        // vtable+0x30
-	virtual MxResult AddToManager() override;                  // vtable+0x34
-	virtual void Destroy() override;                           // vtable+0x38
-	virtual void EndAction() override;                         // vtable+0x40
-	virtual MxResult PutData() override;                       // vtable+0x4c
-	virtual void Enable(MxBool p_enable) override;             // vtable+0x54
-	virtual void AppendChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
-	virtual void SetVolume(MxS32 p_volume) override;           // vtable+0x60
-	virtual void Pause();                                      // vtable+0x64
-	virtual void Resume();                                     // vtable+0x68
-	virtual MxBool IsPaused();                                 // vtable+0x6c
+	virtual void ReadyTickle() override;                     // vtable+0x18
+	virtual void StartingTickle() override;                  // vtable+0x1c
+	virtual void StreamingTickle() override;                 // vtable+0x20
+	virtual void DoneTickle() override;                      // vtable+0x2c
+	virtual void ParseExtra() override;                      // vtable+0x30
+	virtual MxResult AddToManager() override;                // vtable+0x34
+	virtual void Destroy() override;                         // vtable+0x38
+	virtual void EndAction() override;                       // vtable+0x40
+	virtual MxResult PutData() override;                     // vtable+0x4c
+	virtual void Enable(MxBool p_enable) override;           // vtable+0x54
+	virtual void LoopChunk(MxStreamChunk* p_chunk) override; // vtable+0x58
+	virtual void SetVolume(MxS32 p_volume) override;         // vtable+0x60
+	virtual void Pause();                                    // vtable+0x64
+	virtual void Resume();                                   // vtable+0x68
+	virtual MxBool IsPaused();                               // vtable+0x6c
 
 	// Reference: https://github.com/itsmattkc/SIEdit/blob/master/lib/othertypes.h
 	// SIZE 0x1c

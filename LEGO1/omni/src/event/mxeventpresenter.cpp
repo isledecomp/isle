@@ -69,7 +69,7 @@ void MxEventPresenter::ReadyTickle()
 
 	if (chunk) {
 		CopyData(chunk);
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Starting;
@@ -107,7 +107,7 @@ MxResult MxEventPresenter::PutData()
 				}
 
 				if (m_currentTickleState == TickleState_Streaming)
-					m_subscriber->FUN_100b8390(m_currentChunk);
+					m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
 			}
 		}

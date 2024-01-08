@@ -35,19 +35,19 @@ public:
 	virtual MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
 	virtual void EndAction() override;                                       // vtable+0x40
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
-	virtual void AppendChunk(MxStreamChunk* p_chunk);                        // vtable+0x58
+	virtual void LoopChunk(MxStreamChunk* p_chunk);                          // vtable+0x58
 
 protected:
-	MxDSSubscriber* m_subscriber;      // 0x40
-	MxStreamChunkList* m_chunks;       // 0x44
-	MxStreamChunkListCursor* m_cursor; // 0x48
-	MxStreamChunk* m_currentChunk;     // 0x4c
+	MxDSSubscriber* m_subscriber;                  // 0x40
+	MxStreamChunkList* m_loopingChunks;            // 0x44
+	MxStreamChunkListCursor* m_loopingChunkCursor; // 0x48
+	MxStreamChunk* m_currentChunk;                 // 0x4c
 
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
 public:
-	MxStreamChunk* FUN_100b5650();
+	MxStreamChunk* CurrentChunk();
 	MxStreamChunk* NextChunk();
 };
 

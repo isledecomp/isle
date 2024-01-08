@@ -35,7 +35,7 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Enter();
 
 	if (m_subscriber && m_chunk)
-		m_subscriber->FUN_100b8390(m_chunk);
+		m_subscriber->DestroyChunk(m_chunk);
 	Init();
 
 	m_criticalSection.Leave();
@@ -50,7 +50,7 @@ void MxMIDIPresenter::ReadyTickle()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk) {
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Starting;
@@ -60,7 +60,7 @@ void MxMIDIPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100c28d0
 void MxMIDIPresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = FUN_100b5650();
+	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
