@@ -134,7 +134,7 @@ void MxWavePresenter::ReadyTickle()
 	if (chunk) {
 		m_waveFormat = (WaveFormat*) new MxU8[chunk->GetLength()];
 		memcpy(m_waveFormat, chunk->GetData(), chunk->GetLength());
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Starting;
@@ -144,7 +144,7 @@ void MxWavePresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100b1d50
 void MxWavePresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = FUN_100b5650();
+	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		MxU32 length = chunk->GetLength();
@@ -199,7 +199,7 @@ void MxWavePresenter::StreamingTickle()
 {
 	if (!m_currentChunk) {
 		if (!(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
-			MxStreamChunk* chunk = FUN_100b5650();
+			MxStreamChunk* chunk = CurrentChunk();
 
 			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_End && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
 				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
@@ -237,11 +237,11 @@ void MxWavePresenter::DoneTickle()
 }
 
 // FUNCTION: LEGO1 0x100b2130
-void MxWavePresenter::AppendChunk(MxStreamChunk* p_chunk)
+void MxWavePresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
 	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
 	if (IsEnabled())
-		m_subscriber->FUN_100b8390(p_chunk);
+		m_subscriber->DestroyChunk(p_chunk);
 }
 
 // FUNCTION: LEGO1 0x100b2160
@@ -254,7 +254,7 @@ MxResult MxWavePresenter::PutData()
 		case TickleState_Streaming:
 			if (m_currentChunk && FUN_100b1ba0()) {
 				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
-				m_subscriber->FUN_100b8390(m_currentChunk);
+				m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
 			}
 

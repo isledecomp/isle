@@ -63,7 +63,7 @@ void MxStillPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 	LoadFrame(chunk);
-	m_subscriber->FUN_100b8390(chunk);
+	m_subscriber->DestroyChunk(chunk);
 }
 
 // FUNCTION: LEGO1 0x100b9dd0
@@ -122,7 +122,7 @@ void MxStillPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x100b9f90
 void MxStillPresenter::StreamingTickle()
 {
-	MxStreamChunk* chunk = FUN_100b5650();
+	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		m_chunkTime = chunk->GetTime();

@@ -241,13 +241,13 @@ void MxVideoPresenter::NextFrame()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Repeating;
 	}
 	else {
 		LoadFrame(chunk);
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 	}
 }
 
@@ -458,7 +458,7 @@ void MxVideoPresenter::ReadyTickle()
 
 	if (chunk) {
 		LoadHeader(chunk);
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Starting;
@@ -468,7 +468,7 @@ void MxVideoPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100b2fa0
 void MxVideoPresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = FUN_100b5650();
+	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		CreateBitmap();
@@ -502,7 +502,7 @@ void MxVideoPresenter::StreamingTickle()
 				break;
 
 			LoadFrame(m_currentChunk);
-			m_subscriber->FUN_100b8390(m_currentChunk);
+			m_subscriber->DestroyChunk(m_currentChunk);
 			m_currentChunk = NULL;
 			m_flags |= Flag_Bit1;
 

@@ -28,7 +28,7 @@ public:
 	virtual void ReadyTickle() override; // vtable+0x18
 	virtual void Destroy() override;     // vtable+0x38
 
-	MxResult ParsePallete(MxStreamChunk* p_chunk);
+	MxResult ParsePalette(MxStreamChunk* p_chunk);
 
 private:
 	void Init();

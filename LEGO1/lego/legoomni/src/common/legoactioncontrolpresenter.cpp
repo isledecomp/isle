@@ -22,7 +22,7 @@ void LegoActionControlPresenter::ReadyTickle()
 		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 		m_currentTickleState = TickleState_Starting;
 
-		m_subscriber->FUN_100b8390(chunk);
+		m_subscriber->DestroyChunk(chunk);
 		if (m_compositePresenter) {
 			if (m_action->GetDuration() == -1 || m_action->GetFlags() & 1) {
 				m_compositePresenter->VTable0x60(this);
