@@ -144,7 +144,7 @@ void MxWavePresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100b1d50
 void MxWavePresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = NextChunk();
+	MxStreamChunk* chunk = FUN_100b5650();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		MxU32 length = chunk->GetLength();
