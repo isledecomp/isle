@@ -3,10 +3,10 @@
 
 #include "decomp.h"
 #include "extra.h"
-#include "legoroi.h"
 #include "mxdsobject.h"
 #include "mxentity.h"
 #include "realtime/vector.h"
+#include "roi/legoroi.h"
 
 // VTABLE: LEGO1 0x100d4858
 // SIZE 0x68 (probably)

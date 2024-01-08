@@ -14,7 +14,7 @@ env.bak/
 venv.bak/
 ISLE.EXE
 LEGO1.DLL
-build/
+/build/
 *.swp
 LEGO1PROGRESS.*
 ISLEPROGRESS.*

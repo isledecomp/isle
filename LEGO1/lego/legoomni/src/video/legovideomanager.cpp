@@ -1,10 +1,10 @@
 #include "legovideomanager.h"
 
 #include "legoomni.h"
-#include "legoroi.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "realtime/matrix.h"
+#include "roi/legoroi.h"
 #include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
 
@@ -178,7 +178,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_3dManager->Add(*m_viewROI);
 	m_3dManager->SetPointOfView(*m_viewROI);
 
-	m_unk0x100d9d00 = new MxUnknown100d9d00;
+	m_unk0x100d9d00 = new LegoUnknown100d9d00;
 	m_unk0xe4 = FALSE;
 	m_stopWatch = new MxStopWatch;
 	m_stopWatch->Start();

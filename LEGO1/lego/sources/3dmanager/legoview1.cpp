@@ -3,8 +3,8 @@
 
 #include "legoview1.h"
 
-#include "../realtime/realtime.h"
 #include "decomp.h"
+#include "realtime/realtime.h"
 
 #include <vec.h> // SETMAT4
 

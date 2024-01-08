@@ -1,7 +1,7 @@
 
-#include "../tgl.h"
 #include "compat.h"
 #include "decomp.h"
+#include "tgl/tgl.h"
 
 #include <d3drm.h>
 

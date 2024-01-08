@@ -1,8 +1,8 @@
 #ifndef _TglSurface_h
 #define _TglSurface_h
 
-#include "../mxdirectx/mxstopwatch.h"
-#include "../tgl/tgl.h"
+#include "mxdirectx/mxstopwatch.h"
+#include "tgl/tgl.h"
 
 class Tgl::Renderer;
 class Tgl::Device;
