@@ -36,6 +36,39 @@ MxLong LegoCameraController::Notify(MxParam& p_param)
 	return 0;
 }
 
+// FUNCTION: LEGO1 0x100121b0
+void LegoCameraController::OnLButtonDown(MxPoint32 p_point)
+{
+	LeftDown(p_point.GetX(), p_point.GetY());
+}
+
+// FUNCTION: LEGO1 0x100121d0
+void LegoCameraController::OnLButtonUp(MxPoint32 p_point)
+{
+	LeftUp(p_point.GetX(), p_point.GetY());
+}
+
+// FUNCTION: LEGO1 0x100121f0
+void LegoCameraController::OnRButtonDown(MxPoint32 p_point)
+{
+	RightDown(p_point.GetX(), p_point.GetY());
+}
+
+// FUNCTION: LEGO1 0x10012210
+void LegoCameraController::OnRButtonUp(MxPoint32 p_point)
+{
+	RightUp(p_point.GetX(), p_point.GetY());
+}
+
+// FUNCTION: LEGO1 0x10012230
+void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
+{
+	if (p_modifier & c_lButtonState)
+		LeftDrag(p_point.GetX(), p_point.GetY());
+	else if (p_modifier & c_rButtonState)
+		RightDrag(p_point.GetX(), p_point.GetY());
+}
+
 // FUNCTION: LEGO1 0x10012260
 void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
 {
@@ -70,37 +103,4 @@ Vector3Data& LegoCameraController::FUN_100128a0()
 	// Actually returns reference to a member
 	static Vector3Data g_v;
 	return g_v;
-}
-
-// FUNCTION: LEGO1 0x100121b0
-void LegoCameraController::OnLButtonDown(MxPoint32 p_point)
-{
-	LeftDown(p_point.GetX(), p_point.GetY());
-}
-
-// FUNCTION: LEGO1 0x100121d0
-void LegoCameraController::OnLButtonUp(MxPoint32 p_point)
-{
-	LeftUp(p_point.GetX(), p_point.GetY());
-}
-
-// FUNCTION: LEGO1 0x100121f0
-void LegoCameraController::OnRButtonDown(MxPoint32 p_point)
-{
-	RightDown(p_point.GetX(), p_point.GetY());
-}
-
-// FUNCTION: LEGO1 0x10012210
-void LegoCameraController::OnRButtonUp(MxPoint32 p_point)
-{
-	RightUp(p_point.GetX(), p_point.GetY());
-}
-
-// FUNCTION: LEGO1 0x10012230
-void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
-{
-	if (p_modifier & c_lButtonState)
-		LeftDrag(p_point.GetX(), p_point.GetY());
-	else if (p_modifier & c_rButtonState)
-		RightDrag(p_point.GetX(), p_point.GetY());
 }
