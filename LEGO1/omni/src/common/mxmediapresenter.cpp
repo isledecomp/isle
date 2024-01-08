@@ -67,42 +67,42 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x100b5650
 MxStreamChunk* MxMediaPresenter::CurrentChunk()
 {
-	MxStreamChunk* result = NULL;
+	MxStreamChunk* chunk = NULL;
 
 	if (m_subscriber) {
-		result = m_subscriber->CurrentChunk();
+		chunk = m_subscriber->CurrentChunk();
 
-		if (result && result->GetFlags() & MxDSChunk::Flag_Bit3) {
+		if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
 			m_subscriber->NextChunk();
-			m_subscriber->DestroyChunk(result);
-			result = NULL;
+			m_subscriber->DestroyChunk(chunk);
+			chunk = NULL;
 			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 			m_currentTickleState = TickleState_Done;
 		}
 	}
 
-	return result;
+	return chunk;
 }
 
 // FUNCTION: LEGO1 0x100b56b0
 MxStreamChunk* MxMediaPresenter::NextChunk()
 {
-	MxStreamChunk* result = NULL;
+	MxStreamChunk* chunk = NULL;
 
 	if (m_subscriber) {
-		result = m_subscriber->NextChunk();
+		chunk = m_subscriber->NextChunk();
 
-		if (result && result->GetFlags() & MxDSChunk::Flag_Bit3) {
+		if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
-			m_subscriber->DestroyChunk(result);
-			result = NULL;
+			m_subscriber->DestroyChunk(chunk);
+			chunk = NULL;
 			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 			m_currentTickleState = TickleState_Done;
 		}
 	}
 
-	return result;
+	return chunk;
 }
 
 // FUNCTION: LEGO1 0x100b5700
