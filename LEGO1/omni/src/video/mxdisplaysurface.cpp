@@ -1,6 +1,6 @@
 #include "mxdisplaysurface.h"
 
-#include "legoomni.h"
+#include "mxutil.h"
 #include "mxvideomanager.h"
 
 #include <windows.h>

@@ -18,6 +18,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/audio/legocachesound.cpp
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
+  LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/lego/legoomni/src/build/buildingentity.cpp
   LEGO1/lego/legoomni/src/build/dunebuggy.cpp
   LEGO1/lego/legoomni/src/build/helicopter.cpp
@@ -41,6 +42,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legostream.cpp
   LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
+  LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
@@ -114,6 +116,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
   LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legovideomanager.cpp
+  LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
   LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
   LEGO1/lego/sources/3dmanager/lego3dview.cpp
   LEGO1/lego/sources/3dmanager/legoview1.cpp
@@ -136,7 +139,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/action/mxdsstreamingaction.cpp
   LEGO1/omni/src/audio/mxaudiomanager.cpp
   LEGO1/omni/src/audio/mxaudiopresenter.cpp
-  LEGO1/omni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/omni/src/audio/mxloopingmidipresenter.cpp
   LEGO1/omni/src/audio/mxmidipresenter.cpp
   LEGO1/omni/src/audio/mxmusicmanager.cpp
@@ -146,7 +148,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/audio/mxwavepresenter.cpp
   LEGO1/omni/src/common/mxatomidcounter.cpp
   LEGO1/omni/src/common/mxatomid.cpp
-  LEGO1/omni/src/common/mxcompositemediapresenter.cpp
   LEGO1/omni/src/common/mxcompositepresenter.cpp
   LEGO1/omni/src/common/mxcore.cpp
   LEGO1/omni/src/common/mxmediamanager.cpp
@@ -156,6 +157,7 @@ add_library(lego1 SHARED
   LEGO1/omni/src/common/mxstring.cpp
   LEGO1/omni/src/common/mxticklemanager.cpp
   LEGO1/omni/src/common/mxtimer.cpp
+  LEGO1/omni/src/common/mxutil.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
   LEGO1/omni/src/control/mxcontrolpresenter.cpp
@@ -201,7 +203,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/video/mxsmack.cpp
   LEGO1/omni/src/video/mxsmkpresenter.cpp
   LEGO1/omni/src/video/mxstillpresenter.cpp
-  LEGO1/omni/src/video/mxtransitionmanager.cpp
   LEGO1/omni/src/video/mxvideomanager.cpp
   LEGO1/omni/src/video/mxvideoparam.cpp
   LEGO1/omni/src/video/mxvideoparamflags.cpp

@@ -2,10 +2,10 @@
 
 #include "decomp.h"
 #include "define.h"
-#include "legoomni.h"
 #include "mxcompositepresenter.h"
 #include "mxdsmediaaction.h"
 #include "mxomni.h"
+#include "mxutil.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);

@@ -1,8 +1,8 @@
 #include "mxstreamer.h"
 
-#include "legoomni.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxnotificationmanager.h"
+#include "mxomni.h"
 #include "mxramstreamcontroller.h"
 
 #include <algorithm>

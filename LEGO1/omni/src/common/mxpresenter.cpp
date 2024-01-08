@@ -2,8 +2,6 @@
 
 #include "decomp.h"
 #include "define.h"
-#include "legoobjectfactory.h"
-#include "legoomni.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxcompositepresenter.h"
@@ -11,8 +9,10 @@
 #include "mxdssound.h"
 #include "mxentity.h"
 #include "mxnotificationmanager.h"
+#include "mxobjectfactory.h"
 #include "mxparam.h"
 #include "mxstreamer.h"
+#include "mxutil.h"
 
 #include <string.h>
 

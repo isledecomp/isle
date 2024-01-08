@@ -1,14 +1,14 @@
 #include "mxstreamcontroller.h"
 
-#include "legoomni.h"
-#include "legoutil.h"
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
 #include "mxnextactiondatastart.h"
+#include "mxomni.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)

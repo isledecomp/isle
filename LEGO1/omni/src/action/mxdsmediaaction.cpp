@@ -1,6 +1,6 @@
 #include "mxdsmediaaction.h"
 
-#include "legoutil.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxDSMediaAction, 0xb8)
 

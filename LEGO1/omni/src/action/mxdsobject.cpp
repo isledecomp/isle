@@ -1,6 +1,5 @@
 #include "mxdsobject.h"
 
-#include "legoutil.h"
 #include "mxdsaction.h"
 #include "mxdsanim.h"
 #include "mxdsevent.h"
@@ -13,6 +12,7 @@
 #include "mxdssound.h"
 #include "mxdsstill.h"
 #include "mxdstypes.h"
+#include "mxutil.h"
 
 #include <stdlib.h>
 #include <string.h>

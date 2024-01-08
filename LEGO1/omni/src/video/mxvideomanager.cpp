@@ -1,6 +1,5 @@
 #include "mxvideomanager.h"
 
-#include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"

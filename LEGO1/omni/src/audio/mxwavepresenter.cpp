@@ -2,11 +2,11 @@
 
 #include "decomp.h"
 #include "define.h"
-#include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxdssound.h"
 #include "mxomni.h"
 #include "mxsoundmanager.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);

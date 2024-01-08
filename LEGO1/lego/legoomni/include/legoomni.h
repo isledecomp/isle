@@ -140,15 +140,12 @@ private:
 };
 
 __declspec(dllexport) MxBackgroundAudioManager* BackgroundAudioManager();
-__declspec(dllexport) MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
 __declspec(dllexport) LegoGameState* GameState();
 __declspec(dllexport) const char* GetNoCD_SourceName();
 __declspec(dllexport) LegoInputManager* InputManager();
 __declspec(dllexport) LegoOmni* Lego();
-__declspec(dllexport) void MakeSourceName(char*, const char*);
 __declspec(dllexport) LegoEntity* PickEntity(MxLong, MxLong);
 __declspec(dllexport) LegoROI* PickROI(MxLong, MxLong);
-__declspec(dllexport) void SetOmniUserMessage(void (*)(const char*, int));
 __declspec(dllexport) LegoSoundManager* SoundManager();
 __declspec(dllexport) MxResult Start(MxDSAction*);
 __declspec(dllexport) MxTransitionManager* TransitionManager();
@@ -159,25 +156,11 @@ LegoBuildingManager* BuildingManager();
 LegoControlManager* ControlManager();
 IslePathActor* GetCurrentVehicle();
 LegoPlantManager* PlantManager();
-MxBool KeyValueStringParse(char*, const char*, const char*);
 LegoWorld* GetCurrentWorld();
 GifManager* GetGifManager();
 void FUN_10015820(MxU32, MxU32);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
-
-MxBool FUN_100b6e10(
-	MxS32 p_bitmapWidth,
-	MxS32 p_bitmapHeight,
-	MxS32 p_videoParamWidth,
-	MxS32 p_videoParamHeight,
-	MxS32* p_left,
-	MxS32* p_top,
-	MxS32* p_right,
-	MxS32* p_bottom,
-	MxS32* p_width,
-	MxS32* p_height
-);
 
 void PlayMusic(MxU32 p_index);
 void SetIsWorldActive(MxBool p_isWorldActive);

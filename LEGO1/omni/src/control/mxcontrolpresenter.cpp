@@ -1,6 +1,5 @@
 #include "mxcontrolpresenter.h"
 
-#include "legoomni.h"
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
