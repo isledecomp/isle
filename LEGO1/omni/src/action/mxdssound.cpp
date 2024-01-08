@@ -1,6 +1,6 @@
 #include "mxdssound.h"
 
-#include "legoutil.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxDSSound, 0xc0)
 

@@ -1,8 +1,8 @@
 #include "mxdsaction.h"
 
-#include "legoutil.h"
 #include "mxomni.h"
 #include "mxtimer.h"
+#include "mxutil.h"
 
 #include <float.h>
 #include <limits.h>

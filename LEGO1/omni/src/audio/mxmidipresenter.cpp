@@ -1,7 +1,6 @@
 #include "mxmidipresenter.h"
 
 #include "decomp.h"
-#include "legoomni.h"
 #include "mxautolocker.h"
 #include "mxdssound.h"
 #include "mxmusicmanager.h"

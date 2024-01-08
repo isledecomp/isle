@@ -1,8 +1,8 @@
 #include "mxstreamchunk.h"
 
-#include "legoutil.h"
 #include "mxdsbuffer.h"
 #include "mxstreamlist.h"
+#include "mxutil.h"
 
 // FUNCTION: LEGO1 0x100c2fe0
 MxStreamChunk::~MxStreamChunk()

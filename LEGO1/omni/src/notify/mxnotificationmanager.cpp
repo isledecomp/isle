@@ -2,8 +2,8 @@
 
 #include "compat.h"
 #include "decomp.h"
-#include "legoomni.h"
 #include "mxautolocker.h"
+#include "mxomni.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
 #include "mxtypes.h"
