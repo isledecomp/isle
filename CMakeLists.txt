@@ -32,7 +32,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/gifmanager.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
-  LEGO1/lego/legoomni/src/common/legocameracontroller.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legonavcontroller.cpp
@@ -46,10 +45,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
+  LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
   LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
   LEGO1/lego/legoomni/src/entity/legojetski.cpp
   LEGO1/lego/legoomni/src/entity/legopathactor.cpp
+  LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legorace.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
   LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp

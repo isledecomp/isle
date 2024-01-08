@@ -56,6 +56,7 @@ public:
 
 	inline LegoControlManager* GetControlManager() { return m_controlManager; }
 	inline LegoWorld* GetWorld() { return m_world; }
+	inline LegoCameraController* GetCamera() { return m_camera; }
 
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
