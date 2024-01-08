@@ -226,7 +226,7 @@ void MxMediaPresenter::RepeatingTickle()
 			}
 		}
 		else {
-			if (m_action->GetElapsedTime() <= m_action->GetStartTime() + m_action->GetDuration()) {
+			if (m_action->GetStartTime() + m_action->GetDuration() <= m_action->GetElapsedTime()) {
 				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
 				m_currentTickleState = TickleState_unk5;
 			}
