@@ -50,32 +50,28 @@ public:
 	{
 		LegoMouseController::LeftUp(p_x, p_y);
 		AffectPointOfView();
-	}
-	override; // vtable+0x14
+	} override; // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10011e60
 	virtual void RightDown(int p_x, int p_y)
 	{
 		LegoMouseController::RightDown(p_x, p_y);
 		AffectPointOfView();
-	}
-	override; // vtable+0x20
+	} override; // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10011e80
 	virtual void RightDrag(int p_x, int p_y)
 	{
 		LegoMouseController::RightDrag(p_x, p_y);
 		AffectPointOfView();
-	}
-	override; // vtable+0x24
+	} override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10011ea0
 	virtual void RightUp(int p_x, int p_y)
 	{
 		LegoMouseController::RightUp(p_x, p_y);
 		AffectPointOfView();
-	}
-	override;                                     // vtable+0x28
+	} override;                                     // vtable+0x28
 	virtual void SetEntity(LegoEntity* p_entity); // vtable+0x2c
 	LegoEntity* GetEntity() { return m_entity; }
 
