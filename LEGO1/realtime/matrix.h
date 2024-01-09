@@ -35,12 +35,13 @@ public:
 // SIZE 0x8
 class Matrix4Impl {
 public:
-	inline Matrix4Impl(Matrix4& p_data) : m_data(&p_data) {}
+	inline Matrix4Impl(Matrix4& p_data) { SetData(p_data); }
 
 	// vtable + 0x00
 	virtual void EqualsMatrixImpl(const Matrix4Impl* p_other);
 	virtual void EqualsMatrixData(const Matrix4& p_matrix);
-	virtual void SetData(Matrix4& p_data);
+	// FUNCTION: LEGO1 0x10002370
+	virtual void SetData(Matrix4& p_data) { m_data = &p_data; }
 	virtual void AnotherSetData(Matrix4& p_data);
 
 	// vtable + 0x10

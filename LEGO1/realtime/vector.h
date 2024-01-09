@@ -61,7 +61,7 @@ public:
 class Vector2Impl {
 public:
 	// FUNCTION: LEGO1 0x1000c0f0
-	inline Vector2Impl(float* p_data) { this->SetData(p_data); }
+	inline Vector2Impl(float* p_data) { SetData(p_data); }
 
 	// vtable + 0x00 (no virtual destructor)
 	virtual void AddScalarImpl(float p_value) = 0;
@@ -74,7 +74,7 @@ public:
 	virtual void DivScalarImpl(float* p_value) = 0;
 	virtual float DotImpl(float* p_a, float* p_b) const = 0;
 	// FUNCTION: LEGO1 0x10002060
-	virtual void SetData(float* p_data) { this->m_data = p_data; }
+	virtual void SetData(float* p_data) { m_data = p_data; }
 
 	// vtable + 0x20
 	virtual void EqualsImpl(float* p_data) = 0;

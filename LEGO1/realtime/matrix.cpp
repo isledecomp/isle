@@ -28,12 +28,6 @@ void Matrix4Impl::AnotherSetData(Matrix4& p_data)
 	m_data = &p_data;
 }
 
-// FUNCTION: LEGO1 0x10002370
-void Matrix4Impl::SetData(Matrix4& p_data)
-{
-	m_data = &p_data;
-}
-
 // FUNCTION: LEGO1 0x10002380
 const Matrix4* Matrix4Impl::GetData() const
 {
