@@ -102,7 +102,6 @@ public:
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
-
 	LegoInputManager* GetInputManager() { return m_inputMgr; }
 	GifManager* GetGifManager() { return m_gifManager; }
 	LegoWorld* GetCurrentOmniWorld() { return m_currentWorld; }
@@ -115,6 +114,8 @@ public:
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
+
+	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
 
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
 

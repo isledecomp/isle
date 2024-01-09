@@ -59,6 +59,8 @@ public:
 	float CalculateNewAccel(int p_pos, int p_center, float p_maxAccel, int p_minAccel);
 	float CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time);
 
+	inline void SetTrackDefaultParams(MxBool p_trackDefault) { m_trackDefault = p_trackDefault; }
+
 private:
 	int m_hMax;
 	int m_vMax;
