@@ -238,7 +238,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 			mat.GetMatrix()[i][2] = mat2[i][2] * c + mat2[i][1] * s;
 		}
 		Vector3Impl at(mat.GetMatrix()[3]), dir(mat.GetMatrix()[2]), up(mat.GetMatrix()[1]);
-		m_world->GetCamera()->LookAt(at, dir, up);
+		m_world->GetCamera()->SetWorldTransform(at, dir, up);
 		FUN_10010c30();
 		break;
 	}
@@ -247,7 +247,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 		mat.SetIdentity();
 		Vector3Impl at(mat.GetMatrix()[3]), dir(mat.GetMatrix()[2]), up(mat.GetMatrix()[1]);
 		at[1] = 1.25;
-		m_world->GetCamera()->LookAt(at, dir, up);
+		m_world->GetCamera()->SetWorldTransform(at, dir, up);
 		if (GameState()->GetUnknown10() == 0) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
 			VTable0xe8(0x29, TRUE, 7);

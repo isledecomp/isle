@@ -1,6 +1,7 @@
 #include "legocameracontroller.h"
 
 #include "legoinputmanager.h"
+#include "legonotify.h"
 #include "legoomni.h"
 #include "legovideomanager.h"
 
@@ -9,7 +10,7 @@ DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
 // FUNCTION: LEGO1 0x10011d50
 LegoCameraController::LegoCameraController()
 {
-	LookAt(Vector3Data(0, 0, 0), Vector3Data(0, 0, 1), Vector3Data(0, 1, 0));
+	SetWorldTransform(Vector3Data(0, 0, 0), Vector3Data(0, 0, 1), Vector3Data(0, 1, 0));
 }
 
 // FUNCTION: LEGO1 0x10011f70
@@ -23,7 +24,7 @@ LegoCameraController::~LegoCameraController()
 }
 
 // FUNCTION: LEGO1 0x10011ff0
-MxResult LegoCameraController::Initialize()
+MxResult LegoCameraController::Create()
 {
 	InputManager()->SetCamera(this);
 	return LegoPointOfViewController::Create(VideoManager()->Get3DManager()->GetLego3DView());
@@ -70,7 +71,7 @@ void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
 }
 
 // FUNCTION: LEGO1 0x10012260
-void LegoCameraController::LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
+void LegoCameraController::SetWorldTransform(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
 {
 	CalcLocalTransform(p_at, p_dir, p_up, m_matrix1);
 	m_matrix2 = m_matrix1;

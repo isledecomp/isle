@@ -14,7 +14,7 @@ public:
 	LegoCameraController();
 	virtual ~LegoCameraController() override; // vtable+0x0
 
-	virtual MxLong Notify(MxParam& p_param); // vtable+04
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+04
 
 	// FUNCTION: LEGO1 0x10011ec0
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -29,14 +29,14 @@ public:
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual void OnLButtonDown(MxPoint32 p_point);                // vtable+0x30
-	virtual void OnLButtonUp(MxPoint32 p_point);                  // vtable+0x34
-	virtual void OnRButtonDown(MxPoint32 p_point);                // vtable+0x38
-	virtual void OnRButtonUp(MxPoint32 p_point);                  // vtable+0x3c
-	virtual void OnMouseMove(MxU8 p_modifier, MxPoint32 p_point); // vtable+0x40
-	virtual MxResult Initialize();                                // vtable+0x44
+	virtual void OnLButtonDown(MxPoint32 p_point) override;                // vtable+0x30
+	virtual void OnLButtonUp(MxPoint32 p_point) override;                  // vtable+0x34
+	virtual void OnRButtonDown(MxPoint32 p_point) override;                // vtable+0x38
+	virtual void OnRButtonUp(MxPoint32 p_point) override;                  // vtable+0x3c
+	virtual void OnMouseMove(MxU8 p_modifier, MxPoint32 p_point) override; // vtable+0x40
+	virtual MxResult Create();                                             // vtable+0x44
 
-	void LookAt(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
+	void SetWorldTransform(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
 	void FUN_100123e0(Matrix4Data& p_transform, MxU32);
 	Vector3Data& FUN_10012740();
 	Vector3Data& FUN_100127f0();
@@ -45,14 +45,6 @@ public:
 private:
 	Matrix4Data m_matrix1; // 0x38
 	Matrix4Data m_matrix2; // 0x80
-};
-
-// todo: move to legonotify.h
-enum LegoEventNotificationParamType {
-	c_lButtonState = 1,
-	c_rButtonState = 2,
-	c_modKey1 = 4,
-	c_modKey2 = 8,
 };
 
 #endif // LEGOCAMERACONTROLLER_H

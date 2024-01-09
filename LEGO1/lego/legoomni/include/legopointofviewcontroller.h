@@ -1,7 +1,10 @@
 #ifndef LEGOPOINTOFVIEWCONTROLLER_H
 #define LEGOPOINTOFVIEWCONTROLLER_H
+
 #include "decomp.h"
 #include "mxcore.h"
+
+#include <windows.h>
 
 class Lego3DView;
 class LegoEntity;
@@ -12,10 +15,11 @@ class LegoNavController;
 // LegoMouseController
 
 // VTABLE: LEGO1 0x100d8dd8
+// SIZE 0x20
 class LegoMouseController : public MxCore {
 public:
 	LegoMouseController();
-	~LegoMouseController();
+	virtual ~LegoMouseController() override;
 
 	virtual void LeftDown(int, int);  // vtable+0x14
 	virtual void LeftDrag(int, int);  // vtable+0x18
@@ -25,25 +29,22 @@ public:
 	virtual void RightUp(int, int);   // vtable+0x28
 
 private:
-	// note: in the leaked source code, this is a bool (which is typedefed to int)
-	MxU32 m_isButtonDown; // 0x08
-	undefined4 m_unk0xc;  // 0x0c
-	MxDouble m_buttonX;   // 0x10
-	MxDouble m_buttonY;   // 0x18
+	BOOL m_isButtonDown; // 0x08
+	undefined4 m_unk0xc; // 0x0c
+	MxDouble m_buttonX;  // 0x10
+	MxDouble m_buttonY;  // 0x18
 };
 
 // VTABLE: LEGO1 0x100d8e08
+// SIZE 0x38
 class LegoPointOfViewController : public LegoMouseController {
 public:
 	LegoPointOfViewController();
-	~LegoPointOfViewController();
+	virtual ~LegoPointOfViewController() override;
 
-	virtual MxResult Tickle(); // vtable+0x08
-
-	MxResult Create(Lego3DView* p_lego3DView);
-
-	void LeftDown(int p_x, int p_y);
-	void LeftDrag(int p_x, int p_y);
+	virtual MxResult Tickle() override;               // vtable+0x08
+	virtual void LeftDown(int p_x, int p_y) override; // vtable+0x0c
+	virtual void LeftDrag(int p_x, int p_y) override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x10011e40
 	virtual void LeftUp(int p_x, int p_y) override
@@ -76,13 +77,18 @@ public:
 		AffectPointOfView();
 	}                                             // vtable+0x28
 	virtual void SetEntity(LegoEntity* p_entity); // vtable+0x2c
-	LegoEntity* GetEntity() { return m_entity; }
+
+	MxResult Create(Lego3DView* p_lego3DView);
+
+	inline LegoEntity* GetEntity() { return m_entity; }
 
 protected:
 	void AffectPointOfView();
-	Lego3DView* m_lego3DView; // 0x20
-	LegoEntity* m_entity;     // 0x24
-	double m_entityOffsetUp;  // 0x28
-	LegoNavController* m_nav; // 0x30
+
+	Lego3DView* m_lego3DView;  // 0x20
+	LegoEntity* m_entity;      // 0x24
+	MxDouble m_entityOffsetUp; // 0x28
+	LegoNavController* m_nav;  // 0x30
 };
+
 #endif /* LEGOPOINTOFVIEWCONTROLLER_H */

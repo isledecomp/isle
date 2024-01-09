@@ -3,12 +3,15 @@
 #include "legopointofviewcontroller.h"
 #include "mxticklemanager.h"
 
+DECOMP_SIZE_ASSERT(LegoMouseController, 0x20);
+DECOMP_SIZE_ASSERT(LegoPointOfViewController, 0x38);
+
 //////////////////////////////////////////////////////////////////////
 
 // FUNCTION: LEGO1 0x10065550
 LegoMouseController::LegoMouseController()
 {
-	m_isButtonDown = 0;
+	m_isButtonDown = FALSE;
 }
 
 // FUNCTION: LEGO1 0x100655d0
@@ -19,7 +22,7 @@ LegoMouseController::~LegoMouseController()
 // FUNCTION: LEGO1 0x10065620
 void LegoMouseController::LeftDown(int p_x, int p_y)
 {
-	m_isButtonDown = 1;
+	m_isButtonDown = TRUE;
 	m_buttonX = p_x;
 	m_buttonY = p_y;
 }
@@ -27,7 +30,7 @@ void LegoMouseController::LeftDown(int p_x, int p_y)
 // FUNCTION: LEGO1 0x10065640
 void LegoMouseController::LeftUp(int p_x, int p_y)
 {
-	m_isButtonDown = 0;
+	m_isButtonDown = FALSE;
 	m_buttonX = p_x;
 	m_buttonY = p_y;
 }
@@ -42,7 +45,7 @@ void LegoMouseController::LeftDrag(int p_x, int p_y)
 // FUNCTION: LEGO1 0x10065680
 void LegoMouseController::RightDown(int p_x, int p_y)
 {
-	m_isButtonDown = 1;
+	m_isButtonDown = TRUE;
 	m_buttonX = p_x;
 	m_buttonY = p_y;
 }
@@ -50,7 +53,7 @@ void LegoMouseController::RightDown(int p_x, int p_y)
 // FUNCTION: LEGO1 0x100656a0
 void LegoMouseController::RightUp(int p_x, int p_y)
 {
-	m_isButtonDown = 0;
+	m_isButtonDown = FALSE;
 	m_buttonX = p_x;
 	m_buttonY = p_y;
 }
