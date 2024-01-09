@@ -35,6 +35,9 @@ private:
 	MxDouble m_buttonY;  // 0x18
 };
 
+// SYNTHETIC: LEGO1 0x100655b0
+// LegoMouseController::`scalar deleting destructor'
+
 // VTABLE: LEGO1 0x100d8e08
 // SIZE 0x38
 class LegoPointOfViewController : public LegoMouseController {
@@ -90,5 +93,8 @@ protected:
 	MxDouble m_entityOffsetUp; // 0x28
 	LegoNavController* m_nav;  // 0x30
 };
+
+// SYNTHETIC: LEGO1 0x10065750
+// LegoPointOfViewController::`scalar deleting destructor'
 
 #endif /* LEGOPOINTOFVIEWCONTROLLER_H */

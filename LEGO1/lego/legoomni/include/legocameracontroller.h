@@ -47,4 +47,7 @@ private:
 	Matrix4Data m_matrix2; // 0x80
 };
 
+// SYNTHETIC: LEGO1 0x10011f50
+// LegoCameraController::`scalar deleting destructor'
+
 #endif // LEGOCAMERACONTROLLER_H
