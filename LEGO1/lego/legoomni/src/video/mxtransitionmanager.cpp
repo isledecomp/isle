@@ -118,7 +118,7 @@ MxResult MxTransitionManager::StartTransition(
 		inputManager->m_unk0x336 = FALSE;
 
 		LegoVideoManager* videoManager = VideoManager();
-		videoManager->SetUnkE4(FALSE);
+		videoManager->SetRender3D(FALSE);
 
 		SetAppCursor(1);
 		return SUCCESS;

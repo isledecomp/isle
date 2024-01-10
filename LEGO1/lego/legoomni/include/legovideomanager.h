@@ -40,7 +40,7 @@ public:
 
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
-	inline void SetUnkE4(MxBool p_unk0xe4) { this->m_unk0xe4 = p_unk0xe4; }
+	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }
 
 private:
 	MxResult CreateDirect3D();
@@ -55,7 +55,7 @@ private:
 	undefined4 m_unk0x70;                 // 0x70
 	MxDirect3D* m_direct3d;               // 0x74
 	undefined4 m_unk0x78[27];             // 0x78
-	MxBool m_unk0xe4;                     // 0xe4
+	MxBool m_render3d;                    // 0xe4
 	MxBool m_unk0xe5;                     // 0xe5
 	MxBool m_unk0xe6;                     // 0xe6
 	PALETTEENTRY m_paletteEntries[256];   // 0xe7
@@ -65,7 +65,7 @@ private:
 	MxPalette* m_palette;                 // 0x4f0
 	MxStopWatch* m_stopWatch;             // 0x4f4
 	double m_elapsedSeconds;              // 0x4f8
-	MxBool m_unk0x500;                    // 0x500
+	MxBool m_fullScreenMovie;             // 0x500
 	MxBool m_drawCursor;                  // 0x501
 	MxS32 m_cursorXCopy;                  // 0x504
 	MxS32 m_cursorYCopy;                  // 0x508
@@ -80,7 +80,7 @@ private:
 	SIZE m_fpsSize;                       // 0x544
 	undefined m_pad0x54c[8];              // 0x54c
 	MxBool m_unk0x554;                    // 0x554
-	MxBool m_initialized;                 // 0x555
+	MxBool m_paused;                      // 0x555
 	undefined m_pad0x556[0x39];           // 0x556
 };
 

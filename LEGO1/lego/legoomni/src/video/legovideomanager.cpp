@@ -30,13 +30,13 @@ LegoVideoManager::LegoVideoManager()
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
 	m_unk0x514 = 0;
-	m_unk0x500 = FALSE;
+	m_fullScreenMovie = FALSE;
 	m_drawFPS = FALSE;
 	m_unk0x528 = 0;
 	m_arialFont = NULL;
 	m_unk0xe5 = FALSE;
 	m_unk0x554 = FALSE;
-	m_initialized = FALSE;
+	m_paused = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1007ab40
@@ -179,7 +179,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_3dManager->SetPointOfView(*m_viewROI);
 
 	m_unk0x100d9d00 = new LegoUnknown100d9d00;
-	m_unk0xe4 = FALSE;
+	m_render3d = FALSE;
 	m_stopWatch = new MxStopWatch;
 	m_stopWatch->Start();
 
@@ -247,13 +247,13 @@ MxResult LegoVideoManager::Tickle()
 	while (cursor.Next(presenter))
 		presenter->Tickle();
 
-	if (m_unk0xe4 && !m_initialized)
+	if (m_render3d && !m_paused)
 		m_3dManager->GetLego3DView()->GetView()->Clear();
 
 	MxRect32 rect(0, 0, m_videoParam.GetRect().GetWidth() - 1, m_videoParam.GetRect().GetHeight() - 1);
 	InvalidateRect(rect);
 
-	if (!m_initialized && (m_unk0xe4 || m_unk0xe5)) {
+	if (!m_paused && (m_render3d || m_unk0xe5)) {
 		cursor.Reset();
 
 		while (cursor.Next(presenter) && presenter->GetDisplayZ() >= 0)
@@ -275,7 +275,7 @@ MxResult LegoVideoManager::Tickle()
 		if (m_drawFPS)
 			DrawFPS();
 	}
-	else if (m_unk0x500) {
+	else if (m_fullScreenMovie) {
 		MxPresenter* presenter;
 		MxPresenterListCursor cursor(m_presenters);
 
@@ -283,8 +283,8 @@ MxResult LegoVideoManager::Tickle()
 			presenter->PutData();
 	}
 
-	if (!m_initialized) {
-		if (m_unk0xe4 && m_videoParam.Flags().GetFlipSurfaces()) {
+	if (!m_paused) {
+		if (m_render3d && m_videoParam.Flags().GetFlipSurfaces()) {
 			m_3dManager->GetLego3DView()
 				->GetView()
 				->ForceUpdate(0, 0, m_videoParam.GetRect().GetWidth(), m_videoParam.GetRect().GetHeight());
@@ -364,8 +364,8 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 
 			m_displaySurface->GetVideoParam().Flags().SetF1bit3(p_scale);
 
-			m_unk0xe4 = FALSE;
-			m_unk0x500 = TRUE;
+			m_render3d = FALSE;
+			m_fullScreenMovie = TRUE;
 		}
 		else {
 			m_displaySurface->FUN_100ba640();
@@ -388,8 +388,8 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			UpdateRegion();
 			OverrideSkyColor(TRUE);
 
-			m_unk0xe4 = TRUE;
-			m_unk0x500 = FALSE;
+			m_render3d = TRUE;
+			m_fullScreenMovie = FALSE;
 		}
 	}
 
@@ -431,7 +431,7 @@ void LegoVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_h
 		p_height = m_videoParam.GetRect().GetHeight();
 	}
 
-	if (!m_initialized) {
+	if (!m_paused) {
 		m_3dManager->GetLego3DView()->GetView()->ForceUpdate(p_x, p_y, p_width, p_height);
 	}
 }
