@@ -528,10 +528,13 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 MxResult MxDSBuffer::FUN_100c7090(MxDSBuffer* p_buf)
 {
 	MxResult result = FAILURE;
+
 	if (m_writeOffset >= p_buf->m_writeOffset) {
 		memcpy(m_pBuffer, p_buf->m_pBuffer, p_buf->m_writeOffset);
 		result = SUCCESS;
 	}
+
+	m_unk0x1c = p_buf->m_unk0x1c;
 	return result;
 }
 
