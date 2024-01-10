@@ -3,6 +3,45 @@ name: Build
 on: [push, pull_request]
 
 jobs:
+  build-current-toolchain:
+    name: 'Current ${{ matrix.compiler.name }}'
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler:
+        - { name: 'msvc', setup-ninja: true, setup-cmake: true }
+        - { name: 'msys2 mingw32', setup-msys2: true }
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup cmake
+        if: matrix.compiler.setup-cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+        with:
+          # Use minimum supported version
+          cmake-version: '3.13.x'
+
+      - name: Setup ninja
+        if: matrix.compiler.setup-ninja
+        uses: ashutoshvarma/setup-ninja@master
+
+      - name: Set up MSYS2
+        if: matrix.compiler.setup-msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw32
+          install: >-
+            mingw-w64-i686-cc
+            mingw-w64-i686-cmake
+            mingw-w64-i686-ninja
+
+      - name: Build
+        shell: cmd
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja
+          cmake --build build
+
   build:
     runs-on: windows-latest
 
@@ -28,10 +67,8 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
-        cmake --build .
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake --build build
 
     - name: Upload Artifact
       uses: actions/upload-artifact@master
