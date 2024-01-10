@@ -10,6 +10,7 @@ jobs:
       run:
         shell: ${{ matrix.toolchain.shell }}
     strategy:
+      fail-fast: false
       matrix:
         toolchain:
         - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
@@ -29,9 +30,6 @@ jobs:
       - name: Setup cmake
         if: matrix.toolchain.setup-cmake
         uses: jwlawson/actions-setup-cmake@v1.13
-        with:
-          # Use minimum supported version
-          cmake-version: '3.13.x'
 
       - name: Setup ninja
         if: matrix.toolchain.setup-ninja
@@ -41,7 +39,7 @@ jobs:
         if: matrix.toolchain.setup-msvc
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          arch: x86
+          arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
 
       - uses: actions/checkout@v3
 
