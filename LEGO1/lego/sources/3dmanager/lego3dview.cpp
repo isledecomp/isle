@@ -10,11 +10,12 @@ DECOMP_SIZE_ASSERT(Lego3DView, 0xa8)
 /////////////////////////////////////////////////////////////////////////////
 // Lego3DView
 
-// STUB: LEGO1 0x100aae90
+// FUNCTION: LEGO1 0x100aae90
 Lego3DView::Lego3DView()
 {
 	m_pViewManager = 0;
 	m_previousRenderTime = 0;
+	m_unk0x98 = 0;
 	m_pPointOfView = 0;
 }
 
@@ -53,12 +54,12 @@ BOOL Lego3DView::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Rend
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100ab0b0
+// FUNCTION: LEGO1 0x100ab0b0
 void Lego3DView::Destroy()
 {
 	if (m_pPointOfView) {
 		m_pPointOfView = 0;
-		// m_pViewManager->SetPOVSource(0);
+		m_pViewManager->SetPOVSource(0);
 	}
 
 	delete m_pViewManager;
