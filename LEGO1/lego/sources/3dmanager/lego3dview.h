@@ -35,11 +35,9 @@ public:
 
 private:
 	ViewManager* m_pViewManager; // 0x88
-	double m_previousRenderTime; // 0x8c  FIXME: incorrect tags: sizeof(double) = 8 -> 0x8c + 08 = 0x94 > offsetof(Lego3dView, m_pPointOfView)
-
-	ViewROI* m_pPointOfView; // 0x90
-
-	undefined m_unk0x94[0x0c]; // 0x94
+	double m_previousRenderTime; // 0x8c
+	ViewROI* m_pPointOfView;     // 0x94
+	undefined m_unk0x98[0x0c];   // 0x98
 };
 
 // SYNTHETIC: LEGO1 0x100aaf10
