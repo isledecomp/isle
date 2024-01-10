@@ -17,7 +17,7 @@ LegoVideoManager::LegoVideoManager()
 	m_renderer = NULL;
 	m_3dManager = NULL;
 	m_viewROI = NULL;
-	m_direct3d = 0;
+	m_direct3d = NULL;
 	m_unk0xe6 = FALSE;
 	memset(m_unk0x78, 0, sizeof(m_unk0x78));
 	m_unk0x78[0] = 0x6c;
@@ -29,7 +29,7 @@ LegoVideoManager::LegoVideoManager()
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
-	m_unk0x514 = 0;
+	m_unk0x514 = NULL;
 	m_fullScreenMovie = FALSE;
 	m_drawFPS = FALSE;
 	m_unk0x528 = 0;
