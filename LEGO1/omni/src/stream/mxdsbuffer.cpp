@@ -497,24 +497,25 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 {
 	MxU8* current = p_data ? p_data : m_pBuffer;
 	MxU8* end = m_writeOffset + m_pBuffer - 8;
+
 	while (current <= end) {
 		switch (*((MxU32*) current)) {
-		case 'TSIL':
-		case 'FFIR':
+		case FOURCC('L', 'I', 'S', 'T'):
+		case FOURCC('R', 'I', 'F', 'F'):
 			current += 12;
 			break;
-		case 'aDxM':
-		case 'tSxM':
+		case FOURCC('M', 'x', 'D', 'a'):
+		case FOURCC('M', 'x', 'S', 't'):
 			current += 8;
 			break;
-		case 'bOxM':
-		case 'hCxM':
+		case FOURCC('M', 'x', 'O', 'b'):
+		case FOURCC('M', 'x', 'C', 'h'):
 			if (current != p_data)
 				return current;
 			current = ((MxU32) current & 1) + current;
 			current += 8;
 			break;
-		case 'dHxM':
+		case FOURCC('M', 'x', 'H', 'd'):
 			current += (((MxU32*) current)[1] + 8);
 			break;
 		}

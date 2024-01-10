@@ -52,7 +52,6 @@ public:
 		MxDSStreamingAction** p_streamingAction,
 		MxStreamChunk* p_header
 	);
-	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
 	MxU8* SkipToData();
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
@@ -60,6 +59,8 @@ public:
 	void FUN_100c6f80(MxU32 p_writeOffset);
 	MxU8* FUN_100c6fa0(MxU8* p_data);
 	MxResult FUN_100c7090(MxDSBuffer* p_buf);
+
+	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
 	static MxResult Append(MxU8* p_buffer1, MxU8* p_buffer2);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
