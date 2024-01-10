@@ -636,6 +636,27 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 	return GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
+// FUNCTION: LEGO1 0x1005b4f0
+void LegoOmni::FUN_1005b4f0(MxBool p_unk1, MxU32 p_unk2)
+{
+	if (p_unk1) {
+		if (p_unk2 & 1) {
+			m_inputMgr->AllowEventProcessing();
+		}
+
+		if (p_unk2 & 2) {
+			((LegoVideoManager*)m_videoManager)->SetUnkE4(FALSE);
+		}
+
+		if (p_unk2 & 4) {
+			m_videoManager->GetDisplaySurface()->FUN_100ba640();
+		}
+	}
+	else {
+		m_inputMgr->FUN_1005cff0();
+	}
+}
+
 // FUNCTION: LEGO1 0x1005b560
 void LegoOmni::CreateBackgroundAudio()
 {
