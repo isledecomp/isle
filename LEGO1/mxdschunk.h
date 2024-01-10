@@ -33,7 +33,11 @@ public:
 		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	static MxU32 ReturnE();
+	static MxU32 GetHeaderSize();
+	inline static MxU32* IntoType(MxU8* p_buffer) { return (MxU32*) p_buffer; }
+	inline static MxU32* IntoLength(MxU8* p_buffer) { return (MxU32*) (p_buffer + 4); }
+	inline static MxU32 Size(MxU32 p_dataSize) { return (p_dataSize & 1) + p_dataSize + 8; }
+	inline static MxU8* End(MxU8* p_buffer) { return p_buffer + Size(*IntoLength(p_buffer)); }
 
 	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 	inline void SetObjectId(undefined4 p_objectid) { m_objectId = p_objectid; }

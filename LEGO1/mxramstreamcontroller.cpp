@@ -6,8 +6,6 @@
 
 DECOMP_SIZE_ASSERT(MxRAMStreamController, 0x98);
 
-undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize);
-
 // FUNCTION: LEGO1 0x100c6110
 MxResult MxRAMStreamController::Open(const char* p_filename)
 {
@@ -94,10 +92,4 @@ MxResult MxRAMStreamController::DeserializeObject(MxDSStreamingAction& p_action)
 	} while (m_unk0x3c.Find(&p_action, FALSE) != NULL);
 
 	return result == SUCCESS ? SUCCESS : FAILURE;
-}
-
-// STUB: LEGO1 0x100d0d80
-undefined* __cdecl ReadData(MxU32* p_fileSizeBuffer, MxU32 p_fileSize)
-{
-	return NULL;
 }
