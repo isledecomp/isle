@@ -4,7 +4,9 @@
 #include "compat.h"
 #include "tglsurface.h"
 
-class Tgl::Camera;
+namespace tgl {
+class Camera;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView
