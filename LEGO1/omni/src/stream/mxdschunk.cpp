@@ -20,7 +20,7 @@ MxDSChunk::~MxDSChunk()
 }
 
 // FUNCTION: LEGO1 0x100be1e0
-MxU32 MxDSChunk::ReturnE()
+MxU32 MxDSChunk::GetHeaderSize()
 {
 	return 0xe;
 }

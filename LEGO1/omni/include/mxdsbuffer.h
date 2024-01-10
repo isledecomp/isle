@@ -32,7 +32,7 @@ public:
 	}
 
 	MxResult AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode);
-	MxResult SetBufferPointer(MxU32* p_buffer, MxU32 p_size);
+	MxResult SetBufferPointer(MxU8* p_buffer, MxU32 p_size);
 	MxResult FUN_100c67b0(
 		MxStreamController* p_controller,
 		MxDSAction* p_action,
@@ -52,20 +52,27 @@ public:
 		MxDSStreamingAction** p_streamingAction,
 		MxStreamChunk* p_header
 	);
-	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
 	MxU8* SkipToData();
 	MxU8 ReleaseRef(MxDSChunk*);
 	void AddRef(MxDSChunk* p_chunk);
 	MxResult CalcBytesRemaining(MxU8* p_data);
 	void FUN_100c6f80(MxU32 p_writeOffset);
+	MxU8* FUN_100c6fa0(MxU8* p_data);
+	MxResult FUN_100c7090(MxDSBuffer* p_buf);
+
+	static MxCore* ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_flags);
+	static MxResult Append(MxU8* p_buffer1, MxU8* p_buffer2);
 
 	inline MxU8* GetBuffer() { return m_pBuffer; }
-	inline MxU32 GetWriteOffset() { return m_writeOffset; }
-	inline MxU32 GetBytesRemaining() { return m_bytesRemaining; }
+	inline MxU8** GetBufferRef() { return &m_pBuffer; }
+	inline undefined4 GetUnknown14() { return m_unk0x14; }
 	inline MxU16 GetRefCount() { return m_refcount; }
 	inline MxDSBufferType GetMode() { return m_mode; }
+	inline MxU32 GetWriteOffset() { return m_writeOffset; }
+	inline MxU32 GetBytesRemaining() { return m_bytesRemaining; }
 	inline void SetUnknown14(undefined4 p_unk0x14) { m_unk0x14 = p_unk0x14; }
 	inline void SetUnknown1c(undefined4 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+	inline void SetMode(MxDSBufferType p_mode) { m_mode = p_mode; }
 	inline void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
 
 private:

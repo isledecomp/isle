@@ -29,17 +29,19 @@ public:
 	virtual MxU32 GetLengthInDWords() override;                                 // vtable+0x24
 	virtual MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
-	inline MxU32* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
+	inline MxU8* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
 
 protected:
-	MxU32 m_bufferSize;         // 0x10
-	MxU32 m_fileSize;           // 0x14
-	MxU32* m_pBufferOfFileSize; // 0x18
-	MxU32 m_lengthInDWords;     // 0x1c
-	MxU32* m_bufferForDWords;   // 0x20
+	MxU32 m_bufferSize;        // 0x10
+	MxU32 m_fileSize;          // 0x14
+	MxU8* m_pBufferOfFileSize; // 0x18
+	MxU32 m_lengthInDWords;    // 0x1c
+	MxU32* m_bufferForDWords;  // 0x20
 };
 
 // SYNTHETIC: LEGO1 0x100d0a30
 // MxRAMStreamProvider::`scalar deleting destructor'
+
+MxU32 ReadData(MxU8* p_fileSizeBuffer, MxU32 p_fileSize);
 
 #endif // MXRAMSTREAMPROVIDER_H
