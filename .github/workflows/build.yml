@@ -4,34 +4,20 @@ on: [push, pull_request]
 
 jobs:
   build-current-toolchain:
-    name: 'Current ${{ matrix.compiler.name }}'
+    name: 'Current ${{ matrix.toolchain.name }}'
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: ${{ matrix.toolchain.shell }}
     strategy:
       matrix:
-        compiler:
-        - { name: 'msvc', setup-cmake: true, setup-ninja: true, setup-msvc: true }
-        - { name: 'msys2 mingw32', setup-msys2: true }
+        toolchain:
+        - { name: 'msvc',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', setup-msys2: true }
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup cmake
-        if: matrix.compiler.setup-cmake
-        uses: jwlawson/actions-setup-cmake@v1.13
-        with:
-          # Use minimum supported version
-          cmake-version: '3.13.x'
-
-      - name: Setup ninja
-        if: matrix.compiler.setup-ninja
-        uses: ashutoshvarma/setup-ninja@master
-
-      - name: Setup vcvars
-        if: matrix.compiler.setup-msvc
-        uses: ilammy/msvc-dev-cmd@v1
-
       - name: Set up MSYS2
-        if: matrix.compiler.setup-msys2
+        if: matrix.toolchain.setup-msys2
         uses: msys2/setup-msys2@v2
         with:
           msystem: mingw32
@@ -39,6 +25,23 @@ jobs:
             mingw-w64-i686-cc
             mingw-w64-i686-cmake
             mingw-w64-i686-ninja
+
+      - name: Setup cmake
+        if: matrix.toolchain.setup-cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+        with:
+          # Use minimum supported version
+          cmake-version: '3.13.x'
+
+      - name: Setup ninja
+        if: matrix.toolchain.setup-ninja
+        uses: ashutoshvarma/setup-ninja@master
+
+      - name: Setup vcvars
+        if: matrix.toolchain.setup-msvc
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - uses: actions/checkout@v3
 
       - name: Build
         shell: cmd
