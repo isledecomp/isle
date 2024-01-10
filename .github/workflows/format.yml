@@ -11,19 +11,12 @@ jobs:
 
     - name: Run clang-format
       run: |
+        find LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
         pipx run "clang-format>=17,<18" \
           --Werror \
           --dry-run \
           --style=file \
-          ISLE/*.cpp ISLE/*.h \
-          LEGO1/*.cpp LEGO1/*.h \
-          LEGO1/3dmanager/*.cpp LEGO1/3dmanager/*.h \
-          LEGO1/mxdirectx/*.cpp LEGO1/mxdirectx/*.h \
-          LEGO1/mxstl/*.h \
-          LEGO1/realtime/*.cpp LEGO1/realtime/*.h \
-          LEGO1/tgl/*.h \
-          LEGO1/tgl/d3drm/*.cpp LEGO1/tgl/d3drm/*.h \
-          LEGO1/viewmanager/*.cpp LEGO1/viewmanager/*.h
+          -i
 
   python-format:
     runs-on: ubuntu-latest

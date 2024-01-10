@@ -22,8 +22,14 @@ jobs:
       run: |
         python3 tools/ncc/ncc.py \
           --clang-lib ${{ env.LLVM_PATH }}/lib/libclang.so \
+          --recurse \
           --style tools/ncc/ncc.style \
           --skip tools/ncc/skip.yml \
           --definition WINAPI FAR BOOL CALLBACK HWND__=HWND \
-          --include util \
-          --path LEGO1
+          --include \
+            util \
+            LEGO1 \
+            LEGO1/omni/include \
+            LEGO1/lego/legoomni/include \
+            LEGO1/lego/sources \
+          --path LEGO1/omni LEGO1/lego/legoomni
