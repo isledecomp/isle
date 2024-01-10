@@ -2,8 +2,18 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+set(MSVC_FOR_DECOMP FALSE)
+if (MSVC)
+    # Visual C++ 4.2 -> cl version 10.2.0
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
+        set(MSVC_FOR_DECOMP TRUE)
+    endif()
+endif()
+
+message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
+
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
@@ -299,7 +309,14 @@ if (ISLE_BUILD_APP)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
 endif()
 
-if (MSVC)
+if (MSVC_FOR_DECOMP OR MINGW)
+    target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
+    if (ISLE_BUILD_APP)
+        target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
+    endif()
+endif()
+
+if (MSVC_FOR_DECOMP)
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
