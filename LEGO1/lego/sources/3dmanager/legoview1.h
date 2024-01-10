@@ -1,6 +1,7 @@
 #ifndef _LegoView1_h
 #define _LegoView1_h
 
+#include "decomp.h"
 #include "compat.h"
 #include "tglsurface.h"
 
@@ -66,6 +67,7 @@ private:
 	Tgl::Light* m_pSunLight;         // 0x78
 	Tgl::Light* m_pDirectionalLight; // 0x7c
 	Tgl::Light* m_pAmbientLight;     // 0x80
+	undefined m_unk0x84[4];          // 0x84
 };
 
 // SYNTHETIC: LEGO1 0x100ab7a0
