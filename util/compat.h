@@ -3,13 +3,13 @@
 
 // Various macros to enable compiling with other/newer compilers.
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || (defined(_MSC_VER) && _MSC_VER >= 1100)
 #define COMPAT_MODE
 #endif
 
 // Use `COMPAT_CONST` where something ought to be 'const', and a newer compiler would complain if it
 // wasn't, but we know it isn't 'const' in the original code.
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || (defined(_MSC_VER) && _MSC_VER >= 1100)
 #define COMPAT_CONST const
 #else
 #define COMPAT_CONST
