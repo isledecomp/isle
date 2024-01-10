@@ -8,5 +8,3 @@
 #define LEGO1_LEAF5 108
 #define LEGO1_LEAF3 109
 #define LEGO1_BUSY 111
-
-#define APP_ICON 105
