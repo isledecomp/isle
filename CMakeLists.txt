@@ -310,6 +310,12 @@ if (ISLE_BUILD_APP)
 endif()
 
 if (MSVC)
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
+    target_compile_definitions(lego1 PRIVATE _CRT_SECURE_NO_WARNINGS)
+    if (ISLE_BUILD_APP)
+      target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
+    endif()
+  endif()
   # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
     target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
