@@ -40,6 +40,8 @@ jobs:
       - name: Setup vcvars
         if: matrix.toolchain.setup-msvc
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
 
       - uses: actions/checkout@v3
 
