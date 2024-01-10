@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         compiler:
-        - { name: 'msvc', setup-ninja: true, setup-cmake: true }
+        - { name: 'msvc', setup-cmake: true, setup-ninja: true, setup-msvc: true }
         - { name: 'msys2 mingw32', setup-msys2: true }
 
     steps:
@@ -25,6 +25,10 @@ jobs:
       - name: Setup ninja
         if: matrix.compiler.setup-ninja
         uses: ashutoshvarma/setup-ninja@master
+
+      - name: Setup vcvars
+        if: matrix.compiler.setup-msvc
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Set up MSYS2
         if: matrix.compiler.setup-msys2
