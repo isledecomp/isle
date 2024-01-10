@@ -49,6 +49,7 @@ jobs:
           cmake --build build
 
   build:
+    name: 'MSVC 4.20'
     runs-on: windows-latest
 
     steps:
@@ -87,6 +88,7 @@ jobs:
           build/LEGO1.PDB
 
   compare:
+    name: 'Compare with master'
     needs: build
     runs-on: windows-latest
     steps:
@@ -152,6 +154,7 @@ jobs:
           LEGO1PROGRESS.*
 
   upload:
+    name: 'Upload artifacts'
     needs: [build, compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}

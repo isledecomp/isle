@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(isle CXX)
 
 math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
-message(STATUS "Building ${bits}-bit Lego Island")
+message(STATUS "Building ${bits}-bit LEGO Island")
 if (NOT bits EQUAL 32)
     message(WARNING "Only 32-bit executables are supported")
 endif()
