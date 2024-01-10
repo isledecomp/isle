@@ -320,15 +320,15 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 					buffer3->SetMode(MxDSBufferType_Unknown);
 					p_action->SetUnknowna4(buffer3);
 					MxDSBuffer* buffer4 = p_action->GetUnknowna0();
-					MxU32 unk14 = buffer4->GetUnknown14();
+					MxU32 unk0x14 = buffer4->GetUnknown14();
 					MxU8* data2 = buffer4->GetBuffer();
 					while (true) {
 						if (*MxStreamChunk::IntoTime(data2) > p_action->GetUnknown9c())
 							break;
 						data += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
-						unk14 += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
+						unk0x14 += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
 					}
-					p_action->SetUnknown94(unk14);
+					p_action->SetUnknown94(unk0x14);
 					p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
 					delete p_action->GetUnknowna0();
 					return SUCCESS;
