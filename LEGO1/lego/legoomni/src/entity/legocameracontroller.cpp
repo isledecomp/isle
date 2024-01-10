@@ -10,7 +10,14 @@ DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
 // FUNCTION: LEGO1 0x10011d50
 LegoCameraController::LegoCameraController()
 {
+#ifdef COMPAT_MODE
+	Vector3Data at(0, 0, 0);
+	Vector3Data dir(0, 0, 1);
+	Vector3Data up(0, 1, 0);
+	SetWorldTransform(at, dir, up);
+#else
 	SetWorldTransform(Vector3Data(0, 0, 0), Vector3Data(0, 0, 1), Vector3Data(0, 1, 0));
+#endif
 }
 
 // FUNCTION: LEGO1 0x10011f70
