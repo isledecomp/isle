@@ -325,7 +325,7 @@ if (MSVC)
   endif()
 endif()
 
-if (MSVC_FOR_DECOMP OR MINGW)
+if (MSVC_FOR_DECOMP)
     target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
     if (ISLE_BUILD_APP)
         target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
