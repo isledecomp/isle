@@ -42,6 +42,6 @@ protected:
 // SYNTHETIC: LEGO1 0x100d0a30
 // MxRAMStreamProvider::`scalar deleting destructor'
 
-MxU32 __cdecl ReadData(MxU8* p_fileSizeBuffer, MxU32 p_fileSize);
+MxU32 ReadData(MxU8* p_fileSizeBuffer, MxU32 p_fileSize);
 
 #endif // MXRAMSTREAMPROVIDER_H

@@ -99,27 +99,31 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100d0d80
-MxU32 __cdecl ReadData(MxU8* p_buffer, MxU32 p_size)
+MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 {
 	MxU32 id;
 	MxU8* data = p_buffer;
 	MxU8* end = p_buffer + p_size;
 	MxU8* data2;
+
 	if (p_buffer < end) {
 		do {
-			if (*MxDSChunk::IntoType(data) == 'bOxM') {
+			if (*MxDSChunk::IntoType(data) == FOURCC('M', 'x', 'O', 'b')) {
 				data2 = data;
 				data += 8;
+
 				MxDSObject* obj = DeserializeDSObjectDispatch(&data, -1);
 				id = obj->GetObjectId();
 				delete obj;
+
 				data = MxDSChunk::End(data2);
 				while (data < end) {
-					if ((*MxDSChunk::IntoType(data) == 'hCxM')) {
+					if (*MxDSChunk::IntoType(data) == FOURCC('M', 'x', 'C', 'h')) {
 						MxU8* data3 = data;
 						MxU32* psize = MxDSChunk::IntoLength(data);
 						data += MxDSChunk::Size(*psize);
-						if ((*MxDSChunk::IntoType(data2) == 'hCxM') &&
+
+						if ((*MxDSChunk::IntoType(data2) == FOURCC('M', 'x', 'C', 'h')) &&
 							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::Flag_Split)) {
 							if (*MxStreamChunk::IntoObjectId(data2) == *MxStreamChunk::IntoObjectId(data3) &&
 								(*MxStreamChunk::IntoFlags(data3) & MxDSChunk::Flag_Split) &&
@@ -130,8 +134,10 @@ MxU32 __cdecl ReadData(MxU8* p_buffer, MxU32 p_size)
 							else
 								*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::Flag_Split;
 						}
+
 						data2 += MxDSChunk::Size(*MxDSChunk::IntoLength(data2));
 						memcpy(data2, data3, MxDSChunk::Size(*psize));
+
 						if (*MxStreamChunk::IntoObjectId(data2) == id &&
 							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::Flag_End))
 							break;
@@ -144,6 +150,7 @@ MxU32 __cdecl ReadData(MxU8* p_buffer, MxU32 p_size)
 				data++;
 		} while (data < end);
 	}
+
 	*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::Flag_Split;
 	return MxDSChunk::End(data2) - p_buffer;
 }
