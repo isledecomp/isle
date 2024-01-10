@@ -3,6 +3,8 @@
 
 #include "mxtypes.h"
 
+#include <string.h>
+
 class MxDSFile;
 class MxDSObject;
 

@@ -4,8 +4,12 @@
 #include "assert.h"
 #include "lego3dview.h"
 
-class Tgl::Renderer;
-class Tgl::Group;
+namespace Tgl
+{
+class Renderer;
+class Group;
+} // namespace Tgl
+
 class ViewROI;
 
 // ??? for now

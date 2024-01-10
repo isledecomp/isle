@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   decomplint-isle:
+    name: 'ISLE annotations'
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +19,7 @@ jobs:
         python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
 
   decomplint-lego1:
+    name: 'LEGO1 annotations'
     runs-on: ubuntu-latest
 
     steps:

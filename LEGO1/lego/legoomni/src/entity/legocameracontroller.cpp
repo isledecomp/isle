@@ -71,7 +71,7 @@ void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
 }
 
 // FUNCTION: LEGO1 0x10012260
-void LegoCameraController::SetWorldTransform(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
+void LegoCameraController::SetWorldTransform(const Vector3Impl& p_at, const Vector3Impl& p_dir, const Vector3Impl& p_up)
 {
 	CalcLocalTransform(p_at, p_dir, p_up, m_matrix1);
 	m_matrix2 = m_matrix1;

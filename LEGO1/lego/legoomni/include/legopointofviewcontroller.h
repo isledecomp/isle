@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+#include "mxpoint32.h"
 
 #include <windows.h>
 

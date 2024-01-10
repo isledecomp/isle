@@ -2,8 +2,24 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "Building ${bits}-bit LEGO Island")
+if (NOT bits EQUAL 32)
+    message(WARNING "Only 32-bit executables are supported")
+endif()
+
+set(MSVC_FOR_DECOMP FALSE)
+if (MSVC)
+    # Visual C++ 4.2 -> cl version 10.2.0
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
+        set(MSVC_FOR_DECOMP TRUE)
+    endif()
+endif()
+
+message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
+
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
@@ -300,6 +316,29 @@ if (ISLE_BUILD_APP)
 endif()
 
 if (MSVC)
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
+    target_compile_definitions(lego1 PRIVATE _CRT_SECURE_NO_WARNINGS)
+    if (ISLE_BUILD_APP)
+      target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
+    endif()
+  endif()
+  # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
+    target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
+    if (ISLE_BUILD_APP)
+      target_compile_options(isle PRIVATE "-Zc:__cplusplus")
+    endif()
+  endif()
+endif()
+
+if (MSVC_FOR_DECOMP)
+    target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
+    if (ISLE_BUILD_APP)
+        target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
+    endif()
+endif()
+
+if (MSVC_FOR_DECOMP)
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
