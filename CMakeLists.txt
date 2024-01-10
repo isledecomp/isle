@@ -309,6 +309,16 @@ if (ISLE_BUILD_APP)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
 endif()
 
+if (MSVC)
+  # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
+    target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
+    if (ISLE_BUILD_APP)
+      target_compile_options(isle PRIVATE "-Zc:__cplusplus")
+    endif()
+  endif()
+endif()
+
 if (MSVC_FOR_DECOMP OR MINGW)
     target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
     if (ISLE_BUILD_APP)
