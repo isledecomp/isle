@@ -47,7 +47,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja -Werror=dev
           cmake --build build
 
   build:

@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "Building ${bits}-bit Lego Island")
+if (NOT bits EQUAL 32)
+    message(WARNING "Only 32-bit executables are supported")
+endif()
+
 set(MSVC_FOR_DECOMP FALSE)
 if (MSVC)
     # Visual C++ 4.2 -> cl version 10.2.0
