@@ -2,9 +2,13 @@
 #define _LegoView1_h
 
 #include "compat.h"
+#include "decomp.h"
 #include "tglsurface.h"
 
-class Tgl::Camera;
+namespace Tgl
+{
+class Camera;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView

@@ -119,4 +119,11 @@ inline int ViewLODList::Release()
 	return m_refCount;
 }
 
+#ifdef _DEBUG
+inline void ViewLODList::Dump(void (*pTracer)(const char*, ...)) const
+{
+	// FIXME: dump something
+}
+#endif
+
 #endif // VIEWLODLIST_H

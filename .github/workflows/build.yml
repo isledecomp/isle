@@ -3,7 +3,53 @@ name: Build
 on: [push, pull_request]
 
 jobs:
+  build-current-toolchain:
+    name: 'Current ${{ matrix.toolchain.name }}'
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: ${{ matrix.toolchain.shell }}
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+        - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', setup-msys2: true }
+
+    steps:
+      - name: Set up MSYS2
+        if: matrix.toolchain.setup-msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw32
+          install: >-
+            mingw-w64-i686-cc
+            mingw-w64-i686-cmake
+            mingw-w64-i686-ninja
+
+      - name: Setup cmake
+        if: matrix.toolchain.setup-cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+
+      - name: Setup ninja
+        if: matrix.toolchain.setup-ninja
+        uses: ashutoshvarma/setup-ninja@master
+
+      - name: Setup vcvars
+        if: matrix.toolchain.setup-msvc
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
+
+      - uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja -Werror=dev
+          cmake --build build
+
   build:
+    name: 'MSVC 4.20'
     runs-on: windows-latest
 
     steps:
@@ -28,10 +74,8 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
-        cmake --build .
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake --build build
 
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -44,6 +88,7 @@ jobs:
           build/LEGO1.PDB
 
   compare:
+    name: 'Compare with master'
     needs: build
     runs-on: windows-latest
     steps:
@@ -109,6 +154,7 @@ jobs:
           LEGO1PROGRESS.*
 
   upload:
+    name: 'Upload artifacts'
     needs: [build, compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
