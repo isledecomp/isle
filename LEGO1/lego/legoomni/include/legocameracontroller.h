@@ -36,7 +36,7 @@ public:
 	virtual void OnMouseMove(MxU8 p_modifier, MxPoint32 p_point); // vtable+0x40
 	virtual MxResult Create();                                    // vtable+0x44
 
-	void SetWorldTransform(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up);
+	void SetWorldTransform(const Vector3Impl& p_at, const Vector3Impl& p_dir, const Vector3Impl& p_up);
 	void FUN_100123e0(Matrix4Data& p_transform, MxU32);
 	Vector3Data& FUN_10012740();
 	Vector3Data& FUN_100127f0();

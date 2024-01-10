@@ -65,38 +65,6 @@ void LegoMouseController::RightDrag(int p_x, int p_y)
 	m_buttonY = p_y;
 }
 
-
-void LegoMouseController::vmethod_0x2c()
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-void LegoMouseController::OnLButtonDown(MxPoint32 p_point)
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-void LegoMouseController::OnLButtonUp(MxPoint32 p_point)
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-void LegoMouseController::OnRButtonDown(MxPoint32 p_point)
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-void LegoMouseController::OnRButtonUp(MxPoint32 p_point)
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-void LegoMouseController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
-{
-	// FIXME: not sure this method actually exists: LegoCameraController overrides something
-}
-
-
 //////////////////////////////////////////////////////////////////////
 
 // FUNCTION: LEGO1 0x100656e0

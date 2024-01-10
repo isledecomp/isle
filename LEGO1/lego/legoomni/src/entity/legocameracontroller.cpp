@@ -10,14 +10,7 @@ DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
 // FUNCTION: LEGO1 0x10011d50
 LegoCameraController::LegoCameraController()
 {
-#ifdef COMPAT_MODE
-	Vector3Data at(0, 0, 0);
-	Vector3Data dir(0, 0, 1);
-	Vector3Data up(0, 1, 0);
-	SetWorldTransform(at, dir, up);
-#else
 	SetWorldTransform(Vector3Data(0, 0, 0), Vector3Data(0, 0, 1), Vector3Data(0, 1, 0));
-#endif
 }
 
 // FUNCTION: LEGO1 0x10011f70
@@ -78,7 +71,7 @@ void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
 }
 
 // FUNCTION: LEGO1 0x10012260
-void LegoCameraController::SetWorldTransform(Vector3Impl& p_at, Vector3Impl& p_dir, Vector3Impl& p_up)
+void LegoCameraController::SetWorldTransform(const Vector3Impl& p_at, const Vector3Impl& p_dir, const Vector3Impl& p_up)
 {
 	CalcLocalTransform(p_at, p_dir, p_up, m_matrix1);
 	m_matrix2 = m_matrix1;
