@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+#include "mxpoint32.h"
 
 #include <windows.h>
 
@@ -21,12 +22,18 @@ public:
 	LegoMouseController();
 	virtual ~LegoMouseController() override;
 
-	virtual void LeftDown(int, int);  // vtable+0x14
-	virtual void LeftDrag(int, int);  // vtable+0x18
-	virtual void LeftUp(int, int);    // vtable+0x1c
-	virtual void RightDown(int, int); // vtable+0x20
-	virtual void RightDrag(int, int); // vtable+0x24
-	virtual void RightUp(int, int);   // vtable+0x28
+	virtual void LeftDown(int, int);                              // vtable+0x14
+	virtual void LeftDrag(int, int);                              // vtable+0x18
+	virtual void LeftUp(int, int);                                // vtable+0x1c
+	virtual void RightDown(int, int);                             // vtable+0x20
+	virtual void RightDrag(int, int);                             // vtable+0x24
+	virtual void RightUp(int, int);                               // vtable+0x28
+	virtual void vmethod_0x2c();                                  // vtable+0x2c
+	virtual void OnLButtonDown(MxPoint32 p_point);                // vtable+0x30
+	virtual void OnLButtonUp(MxPoint32 p_point);                  // vtable+0x34
+	virtual void OnRButtonDown(MxPoint32 p_point);                // vtable+0x38
+	virtual void OnRButtonUp(MxPoint32 p_point);                  // vtable+0x3c
+	virtual void OnMouseMove(MxU8 p_modifier, MxPoint32 p_point); // vtable+0x40
 
 private:
 	BOOL m_isButtonDown; // 0x08
