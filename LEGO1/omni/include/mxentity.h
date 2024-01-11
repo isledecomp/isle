@@ -11,7 +11,8 @@
 // SIZE 0x10
 class MxEntity : public MxCore {
 public:
-	MxEntity();
+	// FUNCTION: LEGO1 0x1001d190
+	MxEntity() { this->m_mxEntityId = -1; }
 
 	// FUNCTION: LEGO1 0x1000c110
 	virtual ~MxEntity() override{};
