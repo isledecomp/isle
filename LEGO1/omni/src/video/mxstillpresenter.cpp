@@ -121,8 +121,7 @@ void MxStillPresenter::StreamingTickle()
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		m_chunkTime = chunk->GetTime();
 		NextFrame();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
+		ProgressTickleState(TickleState_Repeating);
 
 		if (m_action->GetDuration() == -1 && m_compositePresenter)
 			m_compositePresenter->VTable0x60(this);
@@ -133,10 +132,8 @@ void MxStillPresenter::StreamingTickle()
 void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
-		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_unk5;
-		}
+		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
+			ProgressTickleState(TickleState_unk5);
 	}
 }
 

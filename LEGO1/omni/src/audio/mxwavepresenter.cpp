@@ -118,8 +118,7 @@ void MxWavePresenter::ReadyTickle()
 		memcpy(m_waveFormat, chunk->GetData(), chunk->GetLength());
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	}
 }
 
@@ -170,8 +169,7 @@ void MxWavePresenter::StartingTickle()
 		}
 		else {
 			SetVolume(((MxDSSound*) m_action)->GetVolume());
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Streaming;
+			ProgressTickleState(TickleState_Streaming);
 		}
 	}
 }

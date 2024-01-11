@@ -65,8 +65,7 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 			m_subscriber->NextChunk();
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Done;
+			ProgressTickleState(TickleState_Done);
 		}
 	}
 
@@ -85,8 +84,7 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Done;
+			ProgressTickleState(TickleState_Done);
 		}
 	}
 
@@ -183,8 +181,7 @@ void MxMediaPresenter::StreamingTickle()
 			if (m_currentChunk->GetFlags() & MxDSChunk::Flag_End) {
 				m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_Repeating;
+				ProgressTickleState(TickleState_Repeating);
 			}
 			else if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
 				LoopChunk(m_currentChunk);
@@ -208,16 +205,12 @@ void MxMediaPresenter::RepeatingTickle()
 
 		if (m_currentChunk) {
 			MxLong time = m_currentChunk->GetTime();
-			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount()) {
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_unk5;
-			}
+			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount())
+				ProgressTickleState(TickleState_unk5);
 		}
 		else {
-			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_unk5;
-			}
+			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
+				ProgressTickleState(TickleState_unk5);
 		}
 	}
 }

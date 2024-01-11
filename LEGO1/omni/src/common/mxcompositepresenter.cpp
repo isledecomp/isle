@@ -221,8 +221,7 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 // FUNCTION: LEGO1 0x100b6bc0
 void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 {
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = p_tickleState;
+	ProgressTickleState(p_tickleState);
 
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		MxPresenter* presenter = *it;

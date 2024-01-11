@@ -182,8 +182,7 @@ void MxVideoPresenter::NextFrame()
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
 		m_subscriber->DestroyChunk(chunk);
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
+		ProgressTickleState(TickleState_Repeating);
 	}
 	else {
 		LoadFrame(chunk);
@@ -400,8 +399,7 @@ void MxVideoPresenter::ReadyTickle()
 		LoadHeader(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	}
 }
 
@@ -412,8 +410,7 @@ void MxVideoPresenter::StartingTickle()
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		CreateBitmap();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
+		ProgressTickleState(TickleState_Streaming);
 	}
 }
 
@@ -504,15 +501,11 @@ void MxVideoPresenter::Unk5Tickle()
 			if (m_unk0x60 == -1)
 				m_unk0x60 = m_action->GetElapsedTime();
 
-			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_Done;
-			}
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime())
+				ProgressTickleState(TickleState_Done);
 		}
-		else {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Done;
-		}
+		else
+			ProgressTickleState(TickleState_Done);
 	}
 }
 
