@@ -140,6 +140,7 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
+  LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
@@ -181,7 +182,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/entity/mxentity.cpp
   LEGO1/omni/src/event/mxeventmanager.cpp
   LEGO1/omni/src/event/mxeventpresenter.cpp
-  LEGO1/omni/src/main/mxmain.cpp
   LEGO1/omni/src/main/mxomni.cpp
   LEGO1/omni/src/main/mxomnicreateflags.cpp
   LEGO1/omni/src/main/mxomnicreateparam.cpp
