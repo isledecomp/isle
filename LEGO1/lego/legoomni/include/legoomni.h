@@ -148,7 +148,6 @@ __declspec(dllexport) LegoOmni* Lego();
 __declspec(dllexport) LegoEntity* PickEntity(MxLong, MxLong);
 __declspec(dllexport) LegoROI* PickROI(MxLong, MxLong);
 __declspec(dllexport) LegoSoundManager* SoundManager();
-__declspec(dllexport) MxResult Start(MxDSAction*);
 __declspec(dllexport) MxTransitionManager* TransitionManager();
 __declspec(dllexport) LegoVideoManager* VideoManager();
 
@@ -165,6 +164,7 @@ MxDSAction& GetCurrentAction();
 
 void PlayMusic(MxU32 p_index);
 void SetIsWorldActive(MxBool p_isWorldActive);
+void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void RegisterScripts();
 void UnregisterScripts();
 

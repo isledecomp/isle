@@ -40,8 +40,10 @@ public:
 	{
 	}
 
-	virtual ~MxNotificationParam() override {} // vtable+0x0 (scalar deleting destructor)
-	virtual MxNotificationParam* Clone();      // vtable+0x4
+	virtual ~MxNotificationParam() override {}
+
+	// FUNCTION: LEGO1 0x10010390
+	virtual MxNotificationParam* Clone() { return new MxNotificationParam(m_type, m_sender); }; // vtable+0x4
 
 	inline NotificationId GetNotification() const { return m_type; }
 	inline MxCore* GetSender() const { return m_sender; }

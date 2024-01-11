@@ -27,26 +27,6 @@ MxBool g_use3dSound;
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
 
-// FUNCTION: LEGO1 0x100159e0
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
-{
-	MxDSAction action;
-
-	action.SetAtomId(*p_id);
-	action.SetUnknown24(-2);
-
-	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
-		action.SetObjectId(first);
-		DeleteObject(action);
-	}
-}
-
-// FUNCTION: LEGO1 0x10058a90
-MxBool MxOmni::IsTimerRunning()
-{
-	return m_timerRunning;
-}
-
 // FUNCTION: LEGO1 0x100acea0
 MxObjectFactory* ObjectFactory()
 {
@@ -111,6 +91,12 @@ MxMusicManager* MusicManager()
 MxEventManager* EventManager()
 {
 	return MxOmni::GetInstance()->GetEventManager();
+}
+
+// FUNCTION: LEGO1 0x100acf50
+MxResult Start(MxDSAction* p_dsAction)
+{
+	return MxOmni::GetInstance()->Start(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100acf70
