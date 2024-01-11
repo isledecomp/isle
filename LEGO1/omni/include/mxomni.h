@@ -52,7 +52,9 @@ public:
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param);                           // vtable+34
 	virtual void StartTimer();                                                                // vtable+38
 	virtual void StopTimer();                                                                 // vtable+3c
-	virtual MxBool IsTimerRunning();                                                          // vtable+40
+
+	// FUNCTION: LEGO1 0x10058a90
+	virtual MxBool IsTimerRunning() { return m_timerRunning; }; // vtable+40
 
 	static void SetInstance(MxOmni* p_instance);
 	static MxBool FUN_100b06b0(MxDSAction* p_action, const char* p_name);
@@ -98,12 +100,12 @@ __declspec(dllexport) MxSoundManager* MSoundManager();
 __declspec(dllexport) MxVariableTable* VariableTable();
 __declspec(dllexport) MxMusicManager* MusicManager();
 __declspec(dllexport) MxEventManager* EventManager();
+__declspec(dllexport) MxResult Start(MxDSAction*);
 __declspec(dllexport) MxNotificationManager* NotificationManager();
 
 MxVideoManager* MVideoManager();
 MxAtomIdCounterSet* AtomIdCounterSet();
 MxObjectFactory* ObjectFactory();
 void DeleteObject(MxDSAction& p_dsAction);
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 
 #endif // MXOMNI_H

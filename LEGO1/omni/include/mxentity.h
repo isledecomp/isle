@@ -11,8 +11,11 @@
 // SIZE 0x10
 class MxEntity : public MxCore {
 public:
-	MxEntity();
-	virtual ~MxEntity() override;
+	// FUNCTION: LEGO1 0x1001d190
+	MxEntity() { this->m_mxEntityId = -1; }
+
+	// FUNCTION: LEGO1 0x1000c110
+	virtual ~MxEntity() override{};
 
 	// FUNCTION: LEGO1 0x1000c180
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -27,7 +30,14 @@ public:
 		return !strcmp(p_name, MxEntity::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom); // vtable+0x14
+	// FUNCTION: LEGO1 0x10001070
+	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom)
+	{
+		this->m_mxEntityId = p_id;
+		this->m_atom = p_atom;
+		return SUCCESS;
+	}; // vtable+0x14
+
 	inline MxResult Create(MxDSObject& p_dsObject)
 	{
 		m_mxEntityId = p_dsObject.GetObjectId();

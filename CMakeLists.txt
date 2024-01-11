@@ -58,6 +58,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
+  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
@@ -139,6 +140,7 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
+  LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
@@ -177,11 +179,9 @@ add_library(lego1 SHARED
   LEGO1/omni/src/common/mxutil.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
-  LEGO1/omni/src/control/mxcontrolpresenter.cpp
   LEGO1/omni/src/entity/mxentity.cpp
   LEGO1/omni/src/event/mxeventmanager.cpp
   LEGO1/omni/src/event/mxeventpresenter.cpp
-  LEGO1/omni/src/main/mxmain.cpp
   LEGO1/omni/src/main/mxomni.cpp
   LEGO1/omni/src/main/mxomnicreateflags.cpp
   LEGO1/omni/src/main/mxomnicreateparam.cpp

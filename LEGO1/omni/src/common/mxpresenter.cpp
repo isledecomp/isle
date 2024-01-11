@@ -18,96 +18,11 @@
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 
-// FUNCTION: LEGO1 0x1000be30
-void MxPresenter::VTable0x14()
-{
-}
-
-// FUNCTION: LEGO1 0x1000be40
-void MxPresenter::ReadyTickle()
-{
-	ParseExtra();
-
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Starting;
-}
-
-// FUNCTION: LEGO1 0x1000be60
-void MxPresenter::StartingTickle()
-{
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Streaming;
-}
-
-// FUNCTION: LEGO1 0x1000be80
-void MxPresenter::StreamingTickle()
-{
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Repeating;
-}
-
-// FUNCTION: LEGO1 0x1000bea0
-void MxPresenter::RepeatingTickle()
-{
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_unk5;
-}
-
-// FUNCTION: LEGO1 0x1000bec0
-void MxPresenter::Unk5Tickle()
-{
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Done;
-}
-
-// FUNCTION: LEGO1 0x1000bee0
-void MxPresenter::DoneTickle()
-{
-	m_previousTickleStates |= 1 << m_currentTickleState;
-	m_currentTickleState = TickleState_Idle;
-}
-
-// FUNCTION: LEGO1 0x1000bf00
+#ifdef COMPAT_MODE
 MxPresenter::~MxPresenter()
 {
 }
-
-// FUNCTION: LEGO1 0x1000bf70
-MxResult MxPresenter::AddToManager()
-{
-	return SUCCESS;
-}
-
-// FUNCTION: LEGO1 0x1000bf80
-void MxPresenter::Destroy()
-{
-	Init();
-}
-
-// FUNCTION: LEGO1 0x1000bf90
-void MxPresenter::SetTickleState(TickleState p_tickleState)
-{
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = p_tickleState;
-}
-
-// FUNCTION: LEGO1 0x1000bfb0
-MxBool MxPresenter::HasTickleStatePassed(TickleState p_tickleState)
-{
-	return m_previousTickleStates & (1 << (unsigned char) p_tickleState);
-}
-
-// FUNCTION: LEGO1 0x1000bfc0
-MxResult MxPresenter::PutData()
-{
-	return SUCCESS;
-}
-
-// FUNCTION: LEGO1 0x1000bfd0
-MxBool MxPresenter::IsHit(MxS32 p_x, MxS32 p_y)
-{
-	return FALSE;
-}
+#endif
 
 // FUNCTION: LEGO1 0x100b4d50
 void MxPresenter::Init()
@@ -132,8 +47,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 
 	this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);
 	this->m_displayZ = this->m_action->GetLocation()[2];
-	this->m_previousTickleStates |= 1 << (unsigned char) previousTickleState;
-	this->m_currentTickleState = TickleState_Ready;
+	ProgressTickleState(TickleState_Ready);
 
 	return SUCCESS;
 }

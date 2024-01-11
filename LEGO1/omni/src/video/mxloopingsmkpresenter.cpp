@@ -51,10 +51,8 @@ void MxLoopingSmkPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
-	}
+	if (chunk->GetFlags() & MxDSChunk::Flag_End)
+		ProgressTickleState(TickleState_Repeating);
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);
@@ -67,10 +65,8 @@ void MxLoopingSmkPresenter::NextFrame()
 // FUNCTION: LEGO1 0x100b4a90
 void MxLoopingSmkPresenter::VTable0x8c()
 {
-	if (m_action->GetDuration() < m_elapsedDuration) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_unk5;
-	}
+	if (m_action->GetDuration() < m_elapsedDuration)
+		ProgressTickleState(TickleState_unk5);
 	else {
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);

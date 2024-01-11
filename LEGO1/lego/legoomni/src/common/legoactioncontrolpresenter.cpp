@@ -19,8 +19,7 @@ void LegoActionControlPresenter::ReadyTickle()
 
 	if (chunk) {
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 
 		m_subscriber->DestroyChunk(chunk);
 		if (m_compositePresenter) {
@@ -47,8 +46,7 @@ void LegoActionControlPresenter::RepeatingTickle()
 #else
 		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), LookupMode_LowerCase2), m_unk0x64, NULL);
 #endif
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Done;
+		ProgressTickleState(TickleState_Done);
 	}
 }
 

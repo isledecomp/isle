@@ -43,7 +43,11 @@ public:
 			delete this->m_action;
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	// FUNCTION: LEGO1 0x100510c0
+	virtual MxNotificationParam* Clone() override
+	{
+		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
+	}; // vtable+0x4
 
 	inline MxDSAction* GetAction() { return m_action; }
 
@@ -83,7 +87,16 @@ public:
 	{
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	// FUNCTION: LEGO1 0x10051270
+	virtual MxNotificationParam* Clone() override
+	{
+		return new MxEndActionNotificationParam(
+			c_notificationEndAction,
+			this->m_sender,
+			this->m_action,
+			this->m_realloc
+		);
+	}; // vtable+0x4
 };
 
 // VTABLE: LEGO1 0x100dc208

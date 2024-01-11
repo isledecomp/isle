@@ -71,8 +71,7 @@ void MxEventPresenter::ReadyTickle()
 		CopyData(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	}
 }
 
@@ -81,10 +80,8 @@ void MxEventPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
-	}
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
+		ProgressTickleState(TickleState_Streaming);
 }
 
 // FUNCTION: LEGO1 0x100c2ef0

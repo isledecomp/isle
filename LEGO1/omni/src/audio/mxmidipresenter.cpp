@@ -52,8 +52,7 @@ void MxMIDIPresenter::ReadyTickle()
 	if (chunk) {
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	}
 }
 
@@ -62,19 +61,15 @@ void MxMIDIPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = CurrentChunk();
 
-	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
-	}
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
+		ProgressTickleState(TickleState_Streaming);
 }
 
 // FUNCTION: LEGO1 0x100c2910
 void MxMIDIPresenter::StreamingTickle()
 {
-	if (m_chunk) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Done;
-	}
+	if (m_chunk)
+		ProgressTickleState(TickleState_Done);
 	else
 		m_chunk = NextChunk();
 }

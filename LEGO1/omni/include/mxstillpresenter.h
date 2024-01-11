@@ -25,11 +25,14 @@ public:
 		return !strcmp(p_name, MxStillPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	virtual void StartingTickle() override;                   // vtable+0x1c
-	virtual void StreamingTickle() override;                  // vtable+0x20
-	virtual void RepeatingTickle() override;                  // vtable+0x24
-	virtual void ParseExtra() override;                       // vtable+0x30
-	virtual void Destroy() override;                          // vtable+0x38
+	virtual void StartingTickle() override;  // vtable+0x1c
+	virtual void StreamingTickle() override; // vtable+0x20
+	virtual void RepeatingTickle() override; // vtable+0x24
+	virtual void ParseExtra() override;      // vtable+0x30
+
+	// FUNCTION: LEGO1 0x100435b0
+	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+
 	virtual void Enable(MxBool p_enable) override;            // vtable+0x54
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	virtual void CreateBitmap() override;                     // vtable+0x60

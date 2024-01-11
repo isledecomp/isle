@@ -28,8 +28,14 @@ public:
 
 	MxPresenter() { Init(); }
 
-	__declspec(dllexport) virtual ~MxPresenter();             // vtable+0x0
-	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x8
+#ifdef COMPAT_MODE
+	__declspec(dllexport) virtual ~MxPresenter() override; // vtable+0x00
+#else
+	// FUNCTION: LEGO1 0x1000bf00
+	__declspec(dllexport) virtual ~MxPresenter() override{}; // vtable+0x00
+#endif
+
+	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000bfe0
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -44,27 +50,66 @@ public:
 		return !strcmp(p_name, MxPresenter::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual void VTable0x14();      // vtable+0x14
-	virtual void ReadyTickle();     // vtable+0x18
-	virtual void StartingTickle();  // vtable+0x1c
-	virtual void StreamingTickle(); // vtable+0x20
-	virtual void RepeatingTickle(); // vtable+0x24
-	virtual void Unk5Tickle();      // vtable+0x28
+	// FUNCTION: LEGO1 0x1000be30
+	virtual void VTable0x14() {} // vtable+0x14
+
+	// FUNCTION: LEGO1 0x1000be40
+	virtual void ReadyTickle()
+	{
+		ParseExtra();
+		ProgressTickleState(TickleState_Starting);
+	} // vtable+0x18
+
+	// FUNCTION: LEGO1 0x1000be60
+	virtual void StartingTickle() { ProgressTickleState(TickleState_Streaming); } // vtable+0x1c
+
+	// FUNCTION: LEGO1 0x1000be80
+	virtual void StreamingTickle() { ProgressTickleState(TickleState_Repeating); }; // vtable+0x20
+
+	// FUNCTION: LEGO1 0x1000bea0
+	virtual void RepeatingTickle() { ProgressTickleState(TickleState_unk5); }; // vtable+0x24
+
+	// FUNCTION: LEGO1 0x1000bec0
+	virtual void Unk5Tickle() { ProgressTickleState(TickleState_Done); }; // vtable+0x28
 
 protected:
-	__declspec(dllexport) virtual void DoneTickle(); // vtable+0x2c
+	// FUNCTION: LEGO1 0x1000bee0
+	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(TickleState_Idle); }; // vtable+0x2c
+
 	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 
+	inline void ProgressTickleState(TickleState p_tickleState)
+	{
+		m_previousTickleStates |= 1 << (MxU8) m_currentTickleState;
+		m_currentTickleState = p_tickleState;
+	}
+
 public:
-	virtual MxResult AddToManager();                                                      // vtable+0x34
-	virtual void Destroy();                                                               // vtable+0x38
+	// FUNCTION: LEGO1 0x1000bf70
+	virtual MxResult AddToManager() { return SUCCESS; }; // vtable+0x34
+
+	// FUNCTION: LEGO1 0x1000bf80
+	virtual void Destroy() { Init(); }; // vtable+0x38
+
 	__declspec(dllexport) virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
 	__declspec(dllexport) virtual void EndAction();                                       // vtable+0x40
-	virtual void SetTickleState(TickleState p_tickleState);                               // vtable+0x44
-	virtual MxBool HasTickleStatePassed(TickleState p_tickleState);                       // vtable+0x48
-	virtual MxResult PutData();                                                           // vtable+0x4c
-	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y);                                           // vtable+0x50
-	__declspec(dllexport) virtual void Enable(MxBool p_enable);                           // vtable+0x54
+
+	// FUNCTION: LEGO1 0x1000bf90
+	virtual void SetTickleState(TickleState p_tickleState) { ProgressTickleState(p_tickleState); } // vtable+0x44
+
+	// FUNCTION: LEGO1 0x1000bfb0
+	virtual MxBool HasTickleStatePassed(TickleState p_tickleState)
+	{
+		return m_previousTickleStates & (1 << (MxU8) p_tickleState);
+	}; // vtable+0x48
+
+	// FUNCTION: LEGO1 0x1000bfc0
+	virtual MxResult PutData() { return SUCCESS; }; // vtable+0x4c
+
+	// FUNCTION: LEGO1 0x1000bfd0
+	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) { return FALSE; }; // vtable+0x50
+
+	__declspec(dllexport) virtual void Enable(MxBool p_enable); // vtable+0x54
 
 	MxEntity* CreateEntityBackend(const char* p_name);
 	MxBool IsEnabled();

@@ -95,8 +95,7 @@ void LegoWorldPresenter::ReadyTickle()
 	}
 
 	ParseExtra();
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Starting;
+	ProgressTickleState(TickleState_Starting);
 }
 
 // FUNCTION: LEGO1 0x10066ac0
@@ -116,8 +115,7 @@ void LegoWorldPresenter::StartingTickle()
 		}
 	}
 
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Streaming;
+	ProgressTickleState(TickleState_Streaming);
 }
 
 // STUB: LEGO1 0x10067a70

@@ -10,12 +10,6 @@ DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 // (1998) GLOBAL: LEGO1 0x10102184
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
-// FUNCTION: LEGO1 0x1004e0d0
-int MxBitmap::VTable0x28(int)
-{
-	return -1;
-}
-
 // FUNCTION: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
 {

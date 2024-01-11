@@ -8,66 +8,6 @@
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
-// FUNCTION: LEGO1 0x1000c700
-void MxVideoPresenter::LoadHeader(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c710
-void MxVideoPresenter::CreateBitmap()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c720
-void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c730
-void MxVideoPresenter::RealizePalette()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c740
-MxVideoPresenter::~MxVideoPresenter()
-{
-	Destroy(TRUE);
-}
-
-// FUNCTION: LEGO1 0x1000c7a0
-void MxVideoPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// FUNCTION: LEGO1 0x1000c7b0
-LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
-{
-	return m_unk0x58;
-}
-
-// FUNCTION: LEGO1 0x1000c7c0
-MxBool MxVideoPresenter::VTable0x7c()
-{
-	return (m_bitmap != NULL) || (m_alpha != NULL);
-}
-
-// FUNCTION: LEGO1 0x1000c7e0
-MxS32 MxVideoPresenter::GetWidth()
-{
-	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth();
-}
-
-// FUNCTION: LEGO1 0x1000c800
-MxS32 MxVideoPresenter::GetHeight()
-{
-	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs();
-}
-
 // FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
@@ -242,8 +182,7 @@ void MxVideoPresenter::NextFrame()
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
 		m_subscriber->DestroyChunk(chunk);
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
+		ProgressTickleState(TickleState_Repeating);
 	}
 	else {
 		LoadFrame(chunk);
@@ -460,8 +399,7 @@ void MxVideoPresenter::ReadyTickle()
 		LoadHeader(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	}
 }
 
@@ -472,8 +410,7 @@ void MxVideoPresenter::StartingTickle()
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		CreateBitmap();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
+		ProgressTickleState(TickleState_Streaming);
 	}
 }
 
@@ -564,15 +501,11 @@ void MxVideoPresenter::Unk5Tickle()
 			if (m_unk0x60 == -1)
 				m_unk0x60 = m_action->GetElapsedTime();
 
-			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_Done;
-			}
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime())
+				ProgressTickleState(TickleState_Done);
 		}
-		else {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Done;
-		}
+		else
+			ProgressTickleState(TickleState_Done);
 	}
 }
 

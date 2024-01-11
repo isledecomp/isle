@@ -123,8 +123,7 @@ void MxCompositeMediaPresenter::StartingTickle()
 		}
 
 		if (!m_unk0x4c) {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Streaming;
+			ProgressTickleState(TickleState_Streaming);
 			MxLong time = Timer()->GetTime();
 			m_action->SetUnknown90(time);
 		}
@@ -138,8 +137,7 @@ MxResult MxCompositeMediaPresenter::Tickle()
 
 	switch (m_currentTickleState) {
 	case TickleState_Ready:
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(TickleState_Starting);
 	case TickleState_Starting:
 		StartingTickle();
 		break;

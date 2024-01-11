@@ -241,6 +241,20 @@ void SetIsWorldActive(MxBool p_isWorldActive)
 	g_isWorldActive = p_isWorldActive;
 }
 
+// FUNCTION: LEGO1 0x100159e0
+void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
+{
+	MxDSAction action;
+
+	action.SetAtomId(*p_id);
+	action.SetUnknown24(-2);
+
+	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
+		action.SetObjectId(first);
+		DeleteObject(action);
+	}
+}
+
 // STUB: LEGO1 0x1001a700
 void FUN_1001a700()
 {
@@ -684,10 +698,4 @@ void LegoOmni::StopTimer()
 {
 	MxOmni::StopTimer();
 	SetAppCursor(0);
-}
-
-// FUNCTION: LEGO1 0x100acf50
-MxResult Start(MxDSAction* p_dsAction)
-{
-	return MxOmni::GetInstance()->Start(p_dsAction);
 }
