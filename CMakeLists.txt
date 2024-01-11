@@ -58,6 +58,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
+  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
@@ -177,7 +178,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/common/mxutil.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
-  LEGO1/omni/src/control/mxcontrolpresenter.cpp
   LEGO1/omni/src/entity/mxentity.cpp
   LEGO1/omni/src/event/mxeventmanager.cpp
   LEGO1/omni/src/event/mxeventpresenter.cpp

@@ -8,14 +8,6 @@
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
-// FUNCTION: LEGO1 0x1000caf0
-MxBool MxCompositePresenter::VTable0x64(undefined4 p_undefined)
-{
-	if (m_compositePresenter)
-		return m_compositePresenter->VTable0x64(p_undefined);
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {

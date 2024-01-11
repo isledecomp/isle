@@ -11,7 +11,9 @@
 class MxMediaPresenter : public MxPresenter {
 public:
 	inline MxMediaPresenter() { Init(); }
-	virtual ~MxMediaPresenter() override;
+
+	// FUNCTION: LEGO1 0x1000c550
+	virtual ~MxMediaPresenter() override { Destroy(TRUE); };
 
 	virtual MxResult Tickle() override; // vtable+0x8
 
@@ -28,10 +30,13 @@ public:
 		return !strcmp(p_name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}
 
-	virtual void StreamingTickle() override;                                 // vtable+0x20
-	virtual void RepeatingTickle() override;                                 // vtable+0x24
-	virtual void DoneTickle() override;                                      // vtable+0x2c
-	virtual void Destroy() override;                                         // vtable+0x38
+	virtual void StreamingTickle() override; // vtable+0x20
+	virtual void RepeatingTickle() override; // vtable+0x24
+	virtual void DoneTickle() override;      // vtable+0x2c
+
+	// FUNCTION: LEGO1 0x1000c5b0
+	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+
 	virtual MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
 	virtual void EndAction() override;                                       // vtable+0x40
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54

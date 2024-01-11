@@ -15,7 +15,9 @@ public:
 	__declspec(dllexport) MxCore();
 	__declspec(dllexport) virtual ~MxCore();                       // vtable+00
 	__declspec(dllexport) virtual MxLong Notify(MxParam& p_param); // vtable+04
-	virtual MxResult Tickle();                                     // vtable+08
+
+	// FUNCTION: LEGO1 0x10001f70
+	virtual MxResult Tickle() { return SUCCESS; }; // vtable+08
 
 	// FUNCTION: LEGO1 0x100144c0
 	inline virtual const char* ClassName() const // vtable+0c

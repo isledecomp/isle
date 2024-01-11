@@ -8,7 +8,8 @@
 // SIZE 0x54
 class MxSoundPresenter : public MxAudioPresenter {
 public:
-	virtual ~MxSoundPresenter() override;
+	// FUNCTION: LEGO1 0x1000d430
+	virtual ~MxSoundPresenter() override { Destroy(TRUE); };
 
 	// FUNCTION: LEGO1 0x1000d4a0
 	inline virtual const char* ClassName() const // vtable+0x0c
@@ -24,7 +25,9 @@ public:
 	};
 
 	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
+
+	// FUNCTION: LEGO1 0x1000d490
+	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
 
 protected:
 	void Destroy(MxBool p_fromDestructor);

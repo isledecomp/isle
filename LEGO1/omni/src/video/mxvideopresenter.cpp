@@ -8,66 +8,6 @@
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
-// FUNCTION: LEGO1 0x1000c700
-void MxVideoPresenter::LoadHeader(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c710
-void MxVideoPresenter::CreateBitmap()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c720
-void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c730
-void MxVideoPresenter::RealizePalette()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c740
-MxVideoPresenter::~MxVideoPresenter()
-{
-	Destroy(TRUE);
-}
-
-// FUNCTION: LEGO1 0x1000c7a0
-void MxVideoPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// FUNCTION: LEGO1 0x1000c7b0
-LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
-{
-	return m_unk0x58;
-}
-
-// FUNCTION: LEGO1 0x1000c7c0
-MxBool MxVideoPresenter::VTable0x7c()
-{
-	return (m_bitmap != NULL) || (m_alpha != NULL);
-}
-
-// FUNCTION: LEGO1 0x1000c7e0
-MxS32 MxVideoPresenter::GetWidth()
-{
-	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth();
-}
-
-// FUNCTION: LEGO1 0x1000c800
-MxS32 MxVideoPresenter::GetHeight()
-{
-	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs();
-}
-
 // FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {

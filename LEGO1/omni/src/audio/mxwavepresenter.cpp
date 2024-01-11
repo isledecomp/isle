@@ -11,24 +11,6 @@
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);
 
-// FUNCTION: LEGO1 0x1000d640
-MxWavePresenter::~MxWavePresenter()
-{
-	Destroy(TRUE);
-}
-
-// FUNCTION: LEGO1 0x1000d6a0
-void MxWavePresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// FUNCTION: LEGO1 0x1000d6b0
-MxBool MxWavePresenter::IsPaused()
-{
-	return m_paused;
-}
-
 // FUNCTION: LEGO1 0x100b1ad0
 void MxWavePresenter::Init()
 {
