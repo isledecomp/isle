@@ -28,7 +28,7 @@ public:
 
 	MxPresenter() { Init(); }
 
-#ifdef COMPAT_MODE
+#ifdef ISLE_APP
 	__declspec(dllexport) virtual ~MxPresenter() override; // vtable+0x00
 #else
 	// FUNCTION: LEGO1 0x1000bf00
@@ -73,8 +73,12 @@ public:
 	virtual void Unk5Tickle() { ProgressTickleState(TickleState_Done); }; // vtable+0x28
 
 protected:
+#ifdef ISLE_APP
+	__declspec(dllexport) virtual void DoneTickle(); // vtable+0x2c
+#else
 	// FUNCTION: LEGO1 0x1000bee0
 	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(TickleState_Idle); }; // vtable+0x2c
+#endif
 
 	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 

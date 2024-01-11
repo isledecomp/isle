@@ -291,6 +291,8 @@ if (ISLE_BUILD_APP)
     ISLE/define.cpp
   )
 
+  target_compile_definitions(isle PRIVATE ISLE_APP)
+
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
