@@ -18,6 +18,12 @@
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 
+#ifdef COMPAT_MODE
+MxPresenter::~MxPresenter()
+{
+}
+#endif
+
 // FUNCTION: LEGO1 0x100b4d50
 void MxPresenter::Init()
 {

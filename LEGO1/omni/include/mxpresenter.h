@@ -28,8 +28,12 @@ public:
 
 	MxPresenter() { Init(); }
 
+#ifdef COMPAT_MODE
+	__declspec(dllexport) virtual ~MxPresenter() override; // vtable+0x00
+#else
 	// FUNCTION: LEGO1 0x1000bf00
 	__declspec(dllexport) virtual ~MxPresenter() override{}; // vtable+0x00
+#endif
 
 	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x08
 
