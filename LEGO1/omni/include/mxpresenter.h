@@ -29,7 +29,8 @@ public:
 	MxPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000bf00
-	__declspec(dllexport) virtual ~MxPresenter(){};           // vtable+0x00
+	__declspec(dllexport) virtual ~MxPresenter() override{}; // vtable+0x00
+
 	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000bfe0
@@ -70,7 +71,8 @@ public:
 protected:
 	// FUNCTION: LEGO1 0x1000bee0
 	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(TickleState_Idle); }; // vtable+0x2c
-	__declspec(dllexport) virtual void ParseExtra();                                            // vtable+0x30
+
+	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
 
 	inline void ProgressTickleState(TickleState p_tickleState)
 	{
