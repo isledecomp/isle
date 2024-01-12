@@ -12,15 +12,15 @@ LegoPathPresenter::LegoPathPresenter()
 	Init();
 }
 
+// FUNCTION: LEGO1 0x10044ab0
+void LegoPathPresenter::Init()
+{
+}
+
 // FUNCTION: LEGO1 0x10044ac0
 LegoPathPresenter::~LegoPathPresenter()
 {
 	Destroy(TRUE);
-}
-
-// FUNCTION: LEGO1 0x10044ab0
-void LegoPathPresenter::Init()
-{
 }
 
 // FUNCTION: LEGO1 0x10044b40
@@ -51,27 +51,6 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 		MxMediaPresenter::Destroy(FALSE);
 }
 
-// FUNCTION: LEGO1 0x10044c10
-void LegoPathPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// FUNCTION: LEGO1 0x10044d40
-void LegoPathPresenter::RepeatingTickle()
-{
-	if (this->m_action->GetDuration() == -1)
-		return;
-
-	EndAction();
-}
-
-// STUB: LEGO1 0x10044d60
-void LegoPathPresenter::ParseExtra()
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x10044c20
 void LegoPathPresenter::ReadyTickle()
 {
@@ -91,4 +70,25 @@ void LegoPathPresenter::StreamingTickle()
 
 		m_subscriber->DestroyChunk(chunk);
 	}
+}
+
+// FUNCTION: LEGO1 0x10044c10
+void LegoPathPresenter::Destroy()
+{
+	Destroy(FALSE);
+}
+
+// FUNCTION: LEGO1 0x10044d40
+void LegoPathPresenter::RepeatingTickle()
+{
+	if (this->m_action->GetDuration() == -1)
+		return;
+
+	EndAction();
+}
+
+// STUB: LEGO1 0x10044d60
+void LegoPathPresenter::ParseExtra()
+{
+	// TODO
 }
