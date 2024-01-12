@@ -12,6 +12,12 @@ LegoPathPresenter::LegoPathPresenter()
 	Init();
 }
 
+// FUNCTION: LEGO1 0x10044ac0
+LegoPathPresenter::~LegoPathPresenter()
+{
+	Destroy(TRUE);
+}
+
 // FUNCTION: LEGO1 0x10044ab0
 void LegoPathPresenter::Init()
 {
@@ -64,4 +70,25 @@ void LegoPathPresenter::RepeatingTickle()
 void LegoPathPresenter::ParseExtra()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10044c20
+void LegoPathPresenter::ReadyTickle()
+{
+	// TODO
+	EndAction(); // Allow initialization process to continue
+}
+
+// FUNCTION: LEGO1 0x10044d00
+void LegoPathPresenter::StreamingTickle()
+{
+	MxStreamChunk* chunk = m_subscriber->NextChunk();
+
+	if (chunk) {
+		if (chunk->GetFlags() & MxStreamChunk::Flag_End) {
+			ProgressTickleState(TickleState_Repeating);
+		}
+
+		m_subscriber->DestroyChunk(chunk);
+	}
 }
