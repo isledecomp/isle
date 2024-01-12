@@ -181,15 +181,15 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 			if (*g_act3Script != script)
 				break;
 			if (m_world && m_world->GetCamera()) {
-				Vector3Data loc, dir, lookat;
-				loc.CopyFrom(m_world->GetCamera()->FUN_100127f0());
-				dir.CopyFrom(m_world->GetCamera()->FUN_100128a0());
+				Mx3DPointFloat loc, dir, lookat;
+				loc.CopyFrom(m_world->GetCamera()->GetWorldLocation());
+				dir.CopyFrom(m_world->GetCamera()->GetWorldDirection());
 				lookat = dir;
 				float scale = 3;
 				lookat.Mul(scale);
 				lookat.Add(&loc);
-				Vector3Data v68, v7c, v90(0, 1, 0), va4;
-				v68.CopyFrom(m_world->GetCamera()->FUN_10012740());
+				Mx3DPointFloat v68, v7c, v90(0, 1, 0), va4;
+				v68.CopyFrom(m_world->GetCamera()->GetWorldUp());
 				va4.EqualsCross(v68, dir);
 				v7c.EqualsCross(va4, v90);
 				if (ret)
@@ -219,6 +219,8 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 // FUNCTION: LEGO1 0x10003c20
 MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 {
+	MxU32 ret = 0;
+
 	switch (m_state->GetUnkown8()) {
 	case 1: {
 		if (GameState()->GetUnknown10() == 0) {
@@ -227,44 +229,54 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 		}
 		else
 			VTable0xe8(0x31, TRUE, 7);
+
 		m_state->SetUnknown8(2);
-		Matrix4Data mat;
-		mat.SetIdentity();
-		Matrix4 mat2 = mat.GetMatrix();
+
+		MxMatrix matrix;
+		matrix.SetIdentity();
+
 		float s = sin(0.5235987901687622); // PI / 6, 30 deg
 		float c = cos(0.5235987901687622); // PI / 6, 30 deg
+
+		float matrixCopy[4][4];
+		memcpy(matrixCopy, matrix.GetData(), sizeof(matrixCopy));
 		for (MxS32 i = 0; i < 4; i++) {
-			mat.GetMatrix()[i][1] = mat2[i][1] * c - mat2[i][2] * s;
-			mat.GetMatrix()[i][2] = mat2[i][2] * c + mat2[i][1] * s;
+			matrix.GetData()[i][1] = matrixCopy[i][1] * c - matrixCopy[i][2] * s;
+			matrix.GetData()[i][2] = matrixCopy[i][2] * c + matrixCopy[i][1] * s;
 		}
-		Vector3Impl at(mat.GetMatrix()[3]), dir(mat.GetMatrix()[2]), up(mat.GetMatrix()[1]);
+
+		Vector3 at(matrix[3]), dir(matrix[2]), up(matrix[1]);
 		m_world->GetCamera()->SetWorldTransform(at, dir, up);
 		FUN_10010c30();
+		ret = 1;
 		break;
 	}
 	case 3: {
-		Matrix4Data mat;
-		mat.SetIdentity();
-		Vector3Impl at(mat.GetMatrix()[3]), dir(mat.GetMatrix()[2]), up(mat.GetMatrix()[1]);
+		MxMatrix matrix;
+		matrix.SetIdentity();
+
+		Vector3 at(matrix[3]), dir(matrix[2]), up(matrix[1]);
 		at[1] = 1.25;
 		m_world->GetCamera()->SetWorldTransform(at, dir, up);
+
 		if (GameState()->GetUnknown10() == 0) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
 			VTable0xe8(0x29, TRUE, 7);
 		}
 		else
 			VTable0xe8(0x30, TRUE, 7);
+
 		m_state->SetUnknown8(0);
+		ret = 1;
 		break;
 	}
-	default:
-		return 0;
 	}
-	return 1;
+
+	return ret;
 }
 
 // FUNCTION: LEGO1 0x10003e90
-void Helicopter::VTable0x74(Matrix4Impl& p_transform)
+void Helicopter::VTable0x74(Matrix4& p_transform)
 {
 	if (m_unk0xea != 0) {
 		m_roi->FUN_100a46b0(p_transform);
@@ -295,13 +307,13 @@ void Helicopter::VTable0x70(float p_float)
 				f2 = 0;
 			if (1.0f < f2)
 				f2 = 1.0f;
-			Vector3Impl v(m_unk0x160.GetMatrix()[3]);
-			Matrix4Data mat;
-			Vector3Impl v2(m_unk0x1a8.GetMatrix()[3]);
-			float* loc = m_unk0x1a8.GetMatrix()[3];
+			Vector3 v(m_unk0x160[3]);
+			MxMatrix mat;
+			Vector3 v2(m_unk0x1a8[3]);
+			float* loc = m_unk0x1a8[3];
 			mat.SetIdentity();
 			float fa[4];
-			Vector4Impl v3(fa);
+			Vector4 v3(fa);
 			if (m_unk0x1f4.FUN_100040a0(v3, f2) == SUCCESS) {
 				mat.FromQuaternion(v3);
 			}
@@ -322,18 +334,17 @@ void Helicopter::VTable0x70(float p_float)
 }
 
 // FUNCTION: LEGO1 0x100040a0
-MxResult HelicopterSubclass::FUN_100040a0(Vector4Impl& p_v, float p_f)
+MxResult HelicopterSubclass::FUN_100040a0(Vector4& p_v, float p_f)
 {
 	MxU32 state = m_unk0x30;
 	if (state == 1) {
-		p_v.EqualsImpl(m_unk0x0.GetVector().elements);
+		p_v.EqualsImpl(m_unk0x0.GetData());
 		p_v[3] = acos(p_v[3]) * (1 - p_f) * 2.0;
 		return p_v.NormalizeQuaternion();
 	}
 	else if (state == 2) {
-		p_v.EqualsImpl(m_unk0x18.GetVector().elements);
+		p_v.EqualsImpl(m_unk0x18.GetData());
 		p_v[3] = acos(p_v[3]) * p_f * 2.0;
-		p_v.NormalizeQuaternion();
 		return p_v.NormalizeQuaternion();
 	}
 	else if (state == 3) {

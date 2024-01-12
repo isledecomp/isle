@@ -52,7 +52,7 @@ public:
 
 protected:
 	Tgl::Group* geometry;
-	void UpdateWorldData(const Matrix4Data& parent2world);
+	void UpdateWorldData(const MxMatrix& parent2world);
 };
 
 // SYNTHETIC: LEGO1 0x100aa250

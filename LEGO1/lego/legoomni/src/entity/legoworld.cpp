@@ -131,13 +131,13 @@ void LegoWorld::Stop()
 }
 
 // STUB: LEGO1 0x100727e0
-MxBool LegoWorld::FUN_100727e0(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up)
+MxBool LegoWorld::FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
 {
 	return FALSE;
 }
 
 // STUB: LEGO1 0x10072980
-MxBool LegoWorld::FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up)
+MxBool LegoWorld::FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
 {
 	return FALSE;
 }

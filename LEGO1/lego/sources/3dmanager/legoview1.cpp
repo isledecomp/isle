@@ -4,12 +4,23 @@
 #include "legoview1.h"
 
 #include "decomp.h"
+#include "mxgeometry/mxgeometry3d.h"
+#include "mxgeometry/mxmatrix.h"
 #include "realtime/realtime.h"
 
-#include <vec.h> // SETMAT4
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoView, 0x78);
 DECOMP_SIZE_ASSERT(LegoView1, 0x88);
+
+// GLOBAL: LEGO1 0x101013e4
+float g_sunLightRGB = 1.0;
+
+// GLOBAL: LEGO1 0x101013e8
+float g_directionalLightRGB = 1.0;
+
+// GLOBAL: LEGO1 0x101013ec
+float g_ambientLightRGB = 0.3;
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView
@@ -112,51 +123,39 @@ BOOL LegoView1::AddLightsToViewport()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100ab860
+// FUNCTION: LEGO1 0x100ab860
 BOOL LegoView1::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Renderer* pRenderer)
 {
-	double position[3] = {0, 0, 0};
-	double direction[3];
-	double up[3] = {0, 1, 0};
-
 	if (!LegoView::Create(rCreateStruct, pRenderer)) {
 		return FALSE;
 	}
 
 	// lights
-	m_pSunLight = pRenderer->CreateLight(Tgl::Directional, .9, .9, .9);
-	m_pDirectionalLight = pRenderer->CreateLight(Tgl::Directional, .4, .4, .4);
-	m_pAmbientLight = pRenderer->CreateLight(Tgl::Ambient, .3, .3, .3);
+	m_pSunLight = pRenderer->CreateLight(Tgl::Point, g_sunLightRGB, g_sunLightRGB, g_sunLightRGB);
+	m_pDirectionalLight =
+		pRenderer->CreateLight(Tgl::Directional, g_directionalLightRGB, g_directionalLightRGB, g_directionalLightRGB);
+	m_pAmbientLight = pRenderer->CreateLight(Tgl::Ambient, g_ambientLightRGB, g_ambientLightRGB, g_ambientLightRGB);
 
-#if 0
-    direction[0] = 1, direction[1] = -1, direction[2] = 2;
-    m_pSunLight->SetOrientation(direction, up);
-    direction[0] = -1, direction[1] = -2, direction[2] = -1;
-    m_pDirectionalLight->SetOrientation(direction, up);
-#else
-	{
-		// Change everything to float and proper Matrix types
-		/*
-		Tgl::FloatMatrix4 transformation;
-		Matrix4Data transform;
+	Mx3DPointFloat direction(0.0, -1.0, 0.0);
+	Mx3DPointFloat position(0.0, 0.0, 0.0);
+	Mx3DPointFloat up(1.0, 0.0, 0.0);
 
-		direction[0] = 1, direction[1] = -1, direction[2] = 2;
-		CalcLocalTransform(position, direction, up, transform);
-		SETMAT4(transformation, transform);
-		m_pSunLight->SetTransformation(transformation);
+	Tgl::FloatMatrix4 matrix;
+	Matrix4 in(matrix);
+	MxMatrix transform;
 
-		direction[0] = -1, direction[1] = -2, direction[2] = -1;
-		CalcLocalTransform(position, direction, up, transform);
-		SETMAT4(transformation, transform);
-		m_pDirectionalLight->SetTransformation(transformation);
-		*/
-	}
-#endif
+	CalcLocalTransform(position, direction, up, transform);
+	SETMAT4(in, transform);
+	m_pDirectionalLight->SetTransformation(matrix);
+
+	direction[0] = 0, direction[1] = 150, direction[2] = -150;
+	CalcLocalTransform(position, direction, up, transform);
+	SETMAT4(in, transform);
+	m_pSunLight->SetTransformation(matrix);
 
 	assert(GetView());
-	AddLightsToViewport();
 
-	return TRUE;
+	return AddLightsToViewport();
 }
 
 // FUNCTION: LEGO1 0x100abad0

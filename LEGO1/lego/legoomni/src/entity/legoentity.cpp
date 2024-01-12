@@ -36,7 +36,7 @@ void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
 }
 
 // STUB: LEGO1 0x10010790
-void LegoEntity::SetWorldTransform(const Vector3Impl& p_loc, const Vector3Impl& p_dir, const Vector3Impl& p_up)
+void LegoEntity::SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir, const Vector3& p_up)
 {
 	// TODO
 }
@@ -77,7 +77,7 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 }
 
 // STUB: LEGO1 0x100109b0
-void LegoEntity::SetLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up, MxBool)
+void LegoEntity::SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool)
 {
 	// TODO
 }

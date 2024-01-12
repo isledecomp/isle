@@ -36,11 +36,8 @@ public:
 	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
 	virtual void ParseAction(char*);                                     // vtable+0x20
 	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
-	virtual void SetWorldTransform(
-		const Vector3Impl& p_loc,
-		const Vector3Impl& p_dir,
-		const Vector3Impl& p_up
-	);                                                    // vtable+0x28
+	virtual void SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir,
+								   const Vector3& p_up);  // vtable+0x28
 	virtual void ResetWorldTransform(MxBool p_inVehicle); // vtable+0x2c
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
@@ -53,7 +50,7 @@ public:
 	virtual void VTable0x4c();                                                        // vtable+0x4c
 
 	void FUN_10010c30();
-	void SetLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up, MxBool);
+	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
 protected:
 	void Init();
@@ -61,12 +58,12 @@ protected:
 
 	undefined m_unk0x10;
 	undefined m_unk0x11;
-	Vector3Data m_worldLocation;  // 0x14
-	Vector3Data m_worldDirection; // 0x28
-	Vector3Data m_worldUp;        // 0x3c
-	MxFloat m_worldSpeed;         // 0x50
-	LegoROI* m_roi;               // 0x54
-	MxBool m_cameraFlag;          // 0x58
+	Mx3DPointFloat m_worldLocation;  // 0x14
+	Mx3DPointFloat m_worldDirection; // 0x28
+	Mx3DPointFloat m_worldUp;        // 0x3c
+	MxFloat m_worldSpeed;            // 0x50
+	LegoROI* m_roi;                  // 0x54
+	MxBool m_cameraFlag;             // 0x58
 	undefined m_unk0x59;
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"

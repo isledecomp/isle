@@ -12,7 +12,7 @@ void* LightImpl::ImplementationDataPtr()
 }
 
 // FUNCTION: LEGO1 0x100a3780
-Result LightImpl::SetTransformation(const FloatMatrix4& matrix)
+Result LightImpl::SetTransformation(FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* d3dMatrix = Translate(matrix, helper);
