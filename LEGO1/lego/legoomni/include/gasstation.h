@@ -1,6 +1,7 @@
 #ifndef GASSTATION_H
 #define GASSTATION_H
 
+#include "decomp.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d4650
