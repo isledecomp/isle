@@ -99,7 +99,7 @@ MxLong Isle::Notify(MxParam& p_param)
 	MxLong result = 0;
 	LegoWorld::Notify(p_param);
 
-	if (m_unk0xf6) {
+	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
 			result = StopAction(p_param);
@@ -153,7 +153,7 @@ MxLong Isle::StopAction(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10030fc0
-void Isle::Stop()
+void Isle::VTable0x50()
 {
 	// TODO
 }

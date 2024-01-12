@@ -26,7 +26,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1006f4e0
-void Infocenter::Stop()
+void Infocenter::VTable0x50()
 {
 	// TODO
 }

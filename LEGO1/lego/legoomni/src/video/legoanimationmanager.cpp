@@ -33,6 +33,12 @@ void LegoAnimationManager::FUN_1005f6d0(MxBool)
 	// TODO
 }
 
+// STUB: LEGO1 0x1005f720
+void LegoAnimationManager::FUN_1005f720(undefined4)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x100619f0
 MxLong LegoAnimationManager::Notify(MxParam& p_param)
 {

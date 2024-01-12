@@ -28,6 +28,10 @@ public:
 
 protected:
 	void Destroy(MxBool p_fromDestructor);
+
+private:
+	undefined4 m_unk0x64; // 0x64
+	MxBool m_addedToView; // 0x68
 };
 
 #endif // LEGOMODELPRESENTER_H
