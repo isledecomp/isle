@@ -15,16 +15,23 @@ void LegoModelPresenter::configureLegoModelPresenter(MxS32 p_modelPresenterConfi
 	g_modelPresenterConfig = p_modelPresenterConfig;
 }
 
-// STUB: LEGO1 0x1007f670
+// FUNCTION: LEGO1 0x1007f670
 void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
+	m_criticalSection.Enter();
+	m_unk0x64 = 0;
+	m_addedToView = FALSE;
+	m_criticalSection.Leave();
+	if (!p_fromDestructor) {
+		MxVideoPresenter::Destroy(FALSE);
+	}
 }
 
 // STUB: LEGO1 0x10080050
 void LegoModelPresenter::ReadyTickle()
 {
 	// TODO
+	SetTickleState(TickleState_Starting);
 }
 
 // STUB: LEGO1 0x100801b0
