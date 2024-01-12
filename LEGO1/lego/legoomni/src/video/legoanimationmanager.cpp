@@ -34,7 +34,7 @@ void LegoAnimationManager::FUN_1005f6d0(MxBool)
 }
 
 // STUB: LEGO1 0x1005f720
-void LegoAnimationManager::InitForWorld(undefined4)
+void LegoAnimationManager::FUN_1005f720(undefined4)
 {
 	// TODO
 }

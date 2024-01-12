@@ -37,9 +37,9 @@ LegoWorldPresenter::~LegoWorldPresenter()
 	MxBool result = FALSE;
 	if (m_objectBackend) {
 		undefined4 world = ((LegoWorld*) m_objectBackend)->GetUnknown0xec();
-		PlantManager()->InitForWorld(world);
-		AnimationManager()->InitForWorld(world);
-		BuildingManager()->OnWorldCreated();
+		PlantManager()->FUN_10026360(world);
+		AnimationManager()->FUN_1005f720(world);
+		BuildingManager()->FUN_1002fa00();
 		result = ((LegoWorld*) m_objectBackend)->VTable0x5c();
 	}
 

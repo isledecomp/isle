@@ -106,7 +106,7 @@ MxResult LegoWorld::Tickle()
 		case 0:
 			m_worldStarted = TRUE;
 			SetAppCursor(0);
-			OnStartWorld();
+			VTable0x50();
 			return TRUE;
 		case 2:
 			if (FUN_100220e0() == 1)
@@ -125,7 +125,7 @@ undefined LegoWorld::FUN_100220e0()
 }
 
 // FUNCTION: LEGO1 0x10022340
-void LegoWorld::OnStartWorld()
+void LegoWorld::VTable0x50()
 {
 	TickleManager()->UnregisterClient(this);
 }

@@ -153,7 +153,7 @@ MxLong Isle::StopAction(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10030fc0
-void Isle::OnStartWorld()
+void Isle::VTable0x50()
 {
 	// TODO
 }

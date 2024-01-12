@@ -20,7 +20,7 @@ public:
 		return "LegoPlantManager";
 	}
 
-	void InitForWorld(undefined4 p_world);
+	void FUN_10026360(undefined4 p_world);
 
 private:
 	void Init();

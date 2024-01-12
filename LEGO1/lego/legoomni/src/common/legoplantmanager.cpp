@@ -19,7 +19,7 @@ void LegoPlantManager::Init()
 }
 
 // STUB: LEGO1 0x10026360
-void LegoPlantManager::InitForWorld(undefined4 p_world)
+void LegoPlantManager::FUN_10026360(undefined4 p_world)
 {
 	// TODO
 }

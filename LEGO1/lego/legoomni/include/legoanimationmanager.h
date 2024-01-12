@@ -28,8 +28,8 @@ public:
 	}
 
 	void FUN_1005f6d0(MxBool);
+	void FUN_1005f720(undefined4);
 	void FUN_10064670(MxBool);
-	void InitForWorld(undefined4);
 
 	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 

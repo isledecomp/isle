@@ -28,7 +28,7 @@ void LegoBuildingManager::Init()
 }
 
 // STUB: LEGO1 0x1002fa00
-void LegoBuildingManager::OnWorldCreated()
+void LegoBuildingManager::FUN_1002fa00()
 {
 	// TODO
 }
