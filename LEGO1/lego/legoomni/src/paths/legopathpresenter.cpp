@@ -51,6 +51,12 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 		MxMediaPresenter::Destroy(FALSE);
 }
 
+// FUNCTION: LEGO1 0x10044c10
+void LegoPathPresenter::Destroy()
+{
+	Destroy(FALSE);
+}
+
 // STUB: LEGO1 0x10044c20
 void LegoPathPresenter::ReadyTickle()
 {
@@ -70,12 +76,6 @@ void LegoPathPresenter::StreamingTickle()
 
 		m_subscriber->DestroyChunk(chunk);
 	}
-}
-
-// FUNCTION: LEGO1 0x10044c10
-void LegoPathPresenter::Destroy()
-{
-	Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x10044d40
