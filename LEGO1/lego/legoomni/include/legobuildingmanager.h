@@ -19,6 +19,8 @@ public:
 
 	__declspec(dllexport) static void configureLegoBuildingManager(MxS32);
 
+	void OnWorldCreated();
+
 private:
 	void Init();
 };

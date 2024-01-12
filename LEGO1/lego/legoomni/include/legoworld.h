@@ -43,6 +43,7 @@ public:
 	virtual void VTable0x68(MxBool p_add); // vtable+68
 
 	inline LegoCameraController* GetCamera() { return m_camera; }
+	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 
 	undefined FUN_100220e0();
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
@@ -60,7 +61,9 @@ protected:
 	LegoCameraController* m_camera;    // 0x98
 	undefined m_unk0x9c[0x1c];         // 0x9c
 	MxPresenterList m_list0xb8;        // 0xb8
-	undefined m_unk0xd0[0x24];         // 0xd0
+	undefined m_unk0xd0[0x1c];         // 0xd0
+	undefined4 m_unk0xec;              // 0xec
+	undefined4 m_unk0xf0;              // 0xf0
 	MxS16 m_unk0xf4;                   // 0xf4
 	MxBool m_unk0xf6;                  // 0xf6
 	undefined m_unk0xf7;               // 0xf7

@@ -18,6 +18,12 @@ void LegoPlantManager::Init()
 	// TODO
 }
 
+// STUB: LEGO1 0x10026360
+void LegoPlantManager::InitForWorld(undefined4 p_world)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()
 {
