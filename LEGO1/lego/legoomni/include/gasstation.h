@@ -29,15 +29,15 @@ public:
 	}
 
 private:
-	undefined m_unk0xf8 = 0;
-	undefined m_unk0x104 = 0;
-	undefined m_unk0x100 = 0;
-	undefined m_unk0x106 = 0;
-	undefined m_unk0xfc = 0;
-	undefined m_unk0x108 = 0;
-	undefined m_unk0x114 = 0;
-	undefined m_unk0x10c = 0;
-	undefined m_unk0x115 = 0;
-	undefined m_unk0x110 = 0;
+	undefined m_unk0xf8;
+	undefined m_unk0x104;
+	undefined m_unk0x100;
+	undefined m_unk0x106;
+	undefined m_unk0xfc;
+	undefined m_unk0x108;
+	undefined m_unk0x114;
+	undefined m_unk0x10c;
+	undefined m_unk0x115;
+	undefined m_unk0x110;
 };
 #endif // GASSTATION_H
