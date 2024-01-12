@@ -23,7 +23,7 @@ public:
 		return !strcmp(p_name, LegoPathPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle();               // vtable+0x18
+	virtual void ReadyTickle() override;      // vtable+0x18
 	virtual void StreamingTickle() override;  // vtable+0x20
 	virtual void RepeatingTickle() override;  // vtable+0x24
 	virtual void ParseExtra() override;       // vtable+0x30
