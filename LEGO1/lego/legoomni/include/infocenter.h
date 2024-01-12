@@ -27,7 +27,7 @@ public:
 	}
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
-	virtual void Stop() override;                             // vtable+0x50
+	virtual void VTable0x50() override;                       // vtable+0x50
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual MxBool VTable0x64() override;                     // vtable+0x64
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68

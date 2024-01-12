@@ -1,12 +1,17 @@
 #include "legoworldpresenter.h"
 
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legoentity.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsactionlist.h"
 #include "mxdsmultiaction.h"
+#include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
@@ -26,10 +31,32 @@ LegoWorldPresenter::LegoWorldPresenter()
 	m_unk0x50 = 50000;
 }
 
-// STUB: LEGO1 0x10066770
+// FUNCTION: LEGO1 0x10066770
 LegoWorldPresenter::~LegoWorldPresenter()
 {
-	// TODO
+	MxBool result = FALSE;
+	if (m_objectBackend) {
+		undefined4 world = ((LegoWorld*) m_objectBackend)->GetUnknown0xec();
+		PlantManager()->FUN_10026360(world);
+		AnimationManager()->FUN_1005f720(world);
+		BuildingManager()->FUN_1002fa00();
+		result = ((LegoWorld*) m_objectBackend)->VTable0x5c();
+	}
+
+	if (result == FALSE) {
+		FUN_10015820(0, 7);
+	}
+
+	if (m_objectBackend) {
+#ifdef COMPAT_MODE
+		{
+			MxNotificationParam param(c_notificationNewPresenter, NULL);
+			NotificationManager()->Send(m_objectBackend, &param);
+		}
+#else
+		NotificationManager()->Send(m_objectBackend, &MxNotificationParam(c_notificationNewPresenter, NULL));
+#endif
+	}
 }
 
 // FUNCTION: LEGO1 0x10066870

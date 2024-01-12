@@ -1,6 +1,7 @@
 #ifndef LEGOANIMATIONMANAGER_H
 #define LEGOANIMATIONMANAGER_H
 
+#include "decomp.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d8c18
@@ -27,6 +28,7 @@ public:
 	}
 
 	void FUN_1005f6d0(MxBool);
+	void FUN_1005f720(undefined4);
 	void FUN_10064670(MxBool);
 
 	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);

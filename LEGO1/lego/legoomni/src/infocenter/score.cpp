@@ -76,7 +76,7 @@ MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
 	LegoWorld::Notify(p_param);
-	if (m_unk0xf6) {
+	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationStartAction:
 			ret = 1;
@@ -128,9 +128,9 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001580
-void Score::Stop()
+void Score::VTable0x50()
 {
-	LegoWorld::Stop();
+	LegoWorld::VTable0x50();
 
 	MxDSAction action;
 	action.SetObjectId(0x1f4);
