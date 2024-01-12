@@ -61,7 +61,7 @@ void LegoPathPresenter::Destroy()
 void LegoPathPresenter::ReadyTickle()
 {
 	// TODO
-	EndAction(); // Allow initialization process to continue
+	ProgressTickleState(TickleState_Starting); // Allow initialization process to continue
 }
 
 // FUNCTION: LEGO1 0x10044d00
