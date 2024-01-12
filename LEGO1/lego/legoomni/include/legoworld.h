@@ -33,7 +33,7 @@ public:
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual void Stop();                       // vtable+50
+	virtual void OnStartWorld();               // vtable+50
 	virtual void VTable0x54();                 // vtable+54
 	virtual void VTable0x58(MxCore* p_object); // vtable+58
 	virtual MxBool VTable0x5c();               // vtable+5c
@@ -65,7 +65,7 @@ protected:
 	undefined4 m_unk0xec;              // 0xec
 	undefined4 m_unk0xf0;              // 0xf0
 	MxS16 m_unk0xf4;                   // 0xf4
-	MxBool m_unk0xf6;                  // 0xf6
+	MxBool m_worldStarted;                  // 0xf6
 	undefined m_unk0xf7;               // 0xf7
 };
 
