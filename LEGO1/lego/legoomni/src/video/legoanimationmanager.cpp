@@ -39,7 +39,6 @@ void LegoAnimationManager::InitForWorld(undefined4)
 	// TODO
 }
 
-
 // STUB: LEGO1 0x100619f0
 MxLong LegoAnimationManager::Notify(MxParam& p_param)
 {

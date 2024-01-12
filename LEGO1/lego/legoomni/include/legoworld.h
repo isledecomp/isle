@@ -65,7 +65,7 @@ protected:
 	undefined4 m_unk0xec;              // 0xec
 	undefined4 m_unk0xf0;              // 0xf0
 	MxS16 m_unk0xf4;                   // 0xf4
-	MxBool m_worldStarted;                  // 0xf6
+	MxBool m_worldStarted;             // 0xf6
 	undefined m_unk0xf7;               // 0xf7
 };
 
