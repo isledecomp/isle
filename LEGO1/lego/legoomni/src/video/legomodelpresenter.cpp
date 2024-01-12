@@ -31,7 +31,7 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 void LegoModelPresenter::ReadyTickle()
 {
 	// TODO
-	SetTickleState(MxPresenter::TickleState_Starting);
+	SetTickleState(TickleState_Starting);
 }
 
 // STUB: LEGO1 0x100801b0
