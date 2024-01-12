@@ -33,7 +33,7 @@ public:
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual void VTable0x50();               // vtable+50
+	virtual void VTable0x50();                 // vtable+50
 	virtual void VTable0x54();                 // vtable+54
 	virtual void VTable0x58(MxCore* p_object); // vtable+58
 	virtual MxBool VTable0x5c();               // vtable+5c
