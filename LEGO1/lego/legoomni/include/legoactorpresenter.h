@@ -7,6 +7,8 @@
 // SIZE 0x50
 class LegoActorPresenter : public LegoEntityPresenter {
 public:
+	virtual ~LegoActorPresenter() override{};
+
 	// FUNCTION: LEGO1 0x1000cb10
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -22,7 +24,10 @@ public:
 
 	virtual void ReadyTickle() override;    // vtable+0x18
 	virtual void StartingTickle() override; // vtable+0x1c
-	virtual void ParseExtra();              // vtable+0x30
+	virtual void ParseExtra() override;     // vtable+0x30
 };
+
+// SYNTHETIC: LEGO1 0x1000cc30
+// LegoActorPresenter::`scalar deleting destructor'
 
 #endif // LEGOACTORPRESENTER_H
