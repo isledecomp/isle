@@ -13,7 +13,7 @@ Infocenter::~Infocenter()
 }
 
 // STUB: LEGO1 0x1006ed90
-MxResult Infocenter::Create(MxDSObject& p_dsObject)
+MxResult Infocenter::Create(MxDSAction& p_dsAction)
 {
 	return FAILURE;
 }

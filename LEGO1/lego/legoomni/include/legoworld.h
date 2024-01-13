@@ -33,20 +33,20 @@ public:
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual void VTable0x50();                 // vtable+50
-	virtual void VTable0x54();                 // vtable+54
-	virtual void VTable0x58(MxCore* p_object); // vtable+58
-	virtual MxBool VTable0x5c();               // vtable+5c
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual void VTable0x50();                                // vtable+0x50
+	virtual LegoCameraController* VTable0x54();               // vtable+0x54
+	virtual void VTable0x58(MxCore* p_object);                // vtable+0x58
+	virtual MxBool VTable0x5c();                              // vtable+0x5c
 	// FUNCTION: LEGO1 0x100010a0
-	virtual void VTable0x60() {}           // vtable+60
-	virtual MxBool VTable0x64();           // vtable+64
-	virtual void VTable0x68(MxBool p_add); // vtable+68
+	virtual void VTable0x60() {}           // vtable+0x60
+	virtual MxBool VTable0x64();           // vtable+0x64
+	virtual void VTable0x68(MxBool p_add); // vtable+0x68
 
-	inline LegoCameraController* GetCamera() { return m_camera; }
+	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 
 	undefined FUN_100220e0();
-	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
 	void EndAction(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
@@ -56,17 +56,17 @@ public:
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 
 protected:
-	LegoPathControllerList m_list0x68; // 0x68
-	MxPresenterList m_list0x80;        // 0x80
-	LegoCameraController* m_camera;    // 0x98
-	undefined m_unk0x9c[0x1c];         // 0x9c
-	MxPresenterList m_list0xb8;        // 0xb8
-	undefined m_unk0xd0[0x1c];         // 0xd0
-	undefined4 m_unk0xec;              // 0xec
-	undefined4 m_unk0xf0;              // 0xf0
-	MxS16 m_unk0xf4;                   // 0xf4
-	MxBool m_worldStarted;             // 0xf6
-	undefined m_unk0xf7;               // 0xf7
+	LegoPathControllerList m_list0x68;        // 0x68
+	MxPresenterList m_list0x80;               // 0x80
+	LegoCameraController* m_cameraController; // 0x98
+	undefined m_unk0x9c[0x1c];                // 0x9c
+	MxPresenterList m_list0xb8;               // 0xb8
+	undefined m_unk0xd0[0x1c];                // 0xd0
+	undefined4 m_unk0xec;                     // 0xec
+	undefined4 m_unk0xf0;                     // 0xf0
+	MxS16 m_unk0xf4;                          // 0xf4
+	MxBool m_worldStarted;                    // 0xf6
+	undefined m_unk0xf7;                      // 0xf7
 };
 
 // SYNTHETIC: LEGO1 0x1001eed0

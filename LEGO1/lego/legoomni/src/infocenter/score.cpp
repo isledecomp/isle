@@ -39,9 +39,9 @@ Score::~Score()
 }
 
 // FUNCTION: LEGO1 0x100012a0
-MxResult Score::Create(MxDSObject& p_dsObject)
+MxResult Score::Create(MxDSAction& p_dsAction)
 {
-	MxResult result = SetAsCurrentWorld(p_dsObject);
+	MxResult result = LegoWorld::Create(p_dsAction);
 
 	if (result == SUCCESS) {
 		InputManager()->SetWorld(this);

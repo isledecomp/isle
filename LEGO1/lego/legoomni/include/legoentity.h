@@ -3,7 +3,7 @@
 
 #include "decomp.h"
 #include "extra.h"
-#include "mxdsobject.h"
+#include "mxdsaction.h"
 #include "mxentity.h"
 #include "realtime/vector.h"
 #include "roi/legoroi.h"
@@ -32,7 +32,7 @@ public:
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject);                     // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction);                     // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
 	virtual void ParseAction(char*);                                     // vtable+0x20
 	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
@@ -51,6 +51,8 @@ public:
 
 	void FUN_10010c30();
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
+
+	inline LegoROI* GetROI() { return m_roi; }
 
 protected:
 	void Init();

@@ -27,9 +27,9 @@ Helicopter::~Helicopter()
 }
 
 // FUNCTION: LEGO1 0x100032c0
-MxResult Helicopter::Create(MxDSObject& p_dsObject)
+MxResult Helicopter::Create(MxDSAction& p_dsAction)
 {
-	MxResult result = IslePathActor::Create(p_dsObject);
+	MxResult result = IslePathActor::Create(p_dsAction);
 	LegoWorld* world = GetCurrentWorld();
 	SetWorld(world);
 	if (world->IsA("Act3")) {

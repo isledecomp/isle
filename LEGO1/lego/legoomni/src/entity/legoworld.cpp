@@ -1,8 +1,10 @@
 #include "legoworld.h"
 
+#include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoutil.h"
+#include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
@@ -39,10 +41,28 @@ LegoWorld::~LegoWorld()
 }
 
 // STUB: LEGO1 0x1001e0b0
-MxResult LegoWorld::SetAsCurrentWorld(MxDSObject& p_dsObject)
+MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxEntity::Create(p_dsAction);
+
+	// TODO: Intitialize lists
+
+	if (VTable0x54()) {
+		if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
+			if (GetCurrentWorld()) {
+				GetCurrentWorld()->VTable0x68(0);
+			}
+
+			SetCurrentWorld(this);
+			ControlManager()->FUN_10028df0(&m_list0xb8);
+		}
+
+		SetIsWorldActive(TRUE);
+		m_unk0xec = -1;
+
+		return SUCCESS;
+	}
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x1001f5e0
@@ -63,10 +83,37 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 	return ret;
 }
 
-// STUB: LEGO1 0x1001f630
-void LegoWorld::VTable0x54()
+// FUNCTION: LEGO1 0x1001f630
+LegoCameraController* LegoWorld::VTable0x54()
 {
-	// TODO
+	MxBool success = FALSE;
+
+	if (!VideoManager()) {
+		goto done;
+	}
+	if (!(m_cameraController = new LegoCameraController())) {
+		goto done;
+	}
+	if (m_cameraController->Create() != SUCCESS) {
+		goto done;
+	}
+
+	m_cameraController->OnViewSize(
+		VideoManager()->GetVideoParam().GetRect().GetWidth(),
+		VideoManager()->GetVideoParam().GetRect().GetHeight()
+	);
+
+	success = TRUE;
+
+done:
+	if (!success) {
+		if (m_cameraController) {
+			delete m_cameraController;
+			m_cameraController = NULL;
+		}
+	}
+
+	return m_cameraController;
 }
 
 // STUB: LEGO1 0x1001fc80

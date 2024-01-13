@@ -30,7 +30,7 @@ public:
 		return !strcmp(p_name, IslePathActor::ClassName()) || LegoPathActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	// FUNCTION: LEGO1 0x10002e70
 	virtual MxU32 VTable0xcc() { return 0; } // vtable+0xcc

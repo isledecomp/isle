@@ -37,7 +37,7 @@ public:
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override;              // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
 	void VTable0x70(float p_float) override;                               // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;                        // vtable+0x74
 	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc

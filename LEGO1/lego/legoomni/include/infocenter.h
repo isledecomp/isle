@@ -26,7 +26,7 @@ public:
 		return !strcmp(p_name, Infocenter::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void VTable0x50() override;                       // vtable+0x50
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual MxBool VTable0x64() override;                     // vtable+0x64

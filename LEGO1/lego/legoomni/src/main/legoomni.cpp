@@ -216,6 +216,12 @@ MxDSAction& GetCurrentAction()
 	return LegoOmni::GetInstance()->GetCurrentAction();
 }
 
+// FUNCTION: LEGO1 0x100158f0
+void SetCurrentWorld(LegoWorld* p_world)
+{
+	LegoOmni::GetInstance()->SetWorld(p_world);
+}
+
 // FUNCTION: LEGO1 0x10015900
 MxTransitionManager* TransitionManager()
 {

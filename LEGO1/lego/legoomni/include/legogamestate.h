@@ -72,7 +72,7 @@ private:
 	undefined m_unk0x41a[8];                    // 0x41a - might be part of the structure at 0xa6
 	MxBool m_isDirty;                           // 0x420
 	undefined4 m_unk0x424;                      // 0x424
-	undefined4 m_unk0x428;                      // 0x428
+	undefined4 m_prevArea;                      // 0x428
 	undefined4 m_unk0x42c;                      // 0x42c
 };
 

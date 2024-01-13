@@ -40,7 +40,7 @@ public:
 		return !strcmp(p_name, Isle::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void VTable0x50() override;                       // vtable+50
 	virtual void VTable0x58(MxCore* p_object) override;       // vtable+58
 	// FUNCTION: LEGO1 0x10030900
@@ -57,6 +57,7 @@ public:
 	MxLong HandleType17Notification(MxParam& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
+	void FUN_10032620();
 
 protected:
 	Act1State* m_act1state;   // 0xf8

@@ -1,9 +1,13 @@
 #include "legogamestate.h"
 
 #include "infocenterstate.h"
+#include "legoanimationmanager.h"
 #include "legoomni.h"
 #include "legostate.h"
 #include "legostream.h"
+#include "legoutil.h"
+#include "legovideomanager.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"
@@ -186,9 +190,30 @@ void LegoGameState::FUN_1003a720(MxU32)
 }
 
 // STUB: LEGO1 0x1003b060
-void LegoGameState::HandleAction(MxU32)
+void LegoGameState::HandleAction(MxU32 p_area)
 {
-	// TODO
+	m_prevArea = p_area;
+	BackgroundAudioManager()->Stop();
+	AnimationManager()->FUN_1005ef10();
+	VideoManager()->SetUnk0x554(0);
+
+	MxAtomId* script = g_isleScript;
+	switch (p_area) {
+	case 1:
+		break;
+	case 2:
+		VideoManager()->SetUnk0x554(1);
+		script = g_infomainScript;
+		break;
+	case 3:
+		VideoManager()->SetUnk0x554(1);
+		script = g_infodoorScript;
+		break;
+
+		// TODO: implement other cases
+	}
+
+	InvokeAction(ExtraActionType_opendisk, *script, 0, NULL);
 }
 
 // FUNCTION: LEGO1 0x1003bac0
