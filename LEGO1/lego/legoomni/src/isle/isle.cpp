@@ -161,10 +161,8 @@ void Isle::VTable0x50()
 		GameState()->HandleAction(2);
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
-		return;
 	}
-
-	if (GameState()->GetCurrentAct()) {
+	else if (GameState()->GetCurrentAct()) {
 		FUN_1003ef00(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
