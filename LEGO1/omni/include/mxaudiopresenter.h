@@ -36,7 +36,7 @@ protected:
 // SYNTHETIC: LEGO1 0x1000d370
 // MxAudioPresenter::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1000d3e0
+// SYNTHETIC: LEGO1 0x1000d3e0
 // MxAudioPresenter::~MxAudioPresenter
 
 #endif // MXAUDIOPRESENTER_H
