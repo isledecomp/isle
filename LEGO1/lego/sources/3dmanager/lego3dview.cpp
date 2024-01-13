@@ -25,27 +25,31 @@ Lego3DView::~Lego3DView()
 	Destroy();
 }
 
-// STUB: LEGO1 0x100aaf90
+// FUNCTION: LEGO1 0x100aaf90
 BOOL Lego3DView::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Renderer* pRenderer)
 {
 	double viewAngle = 45;
-	double frontClippingDistance = 1;
-	double backClippingDistance = 5000;
+	if (rCreateStruct.m_isWideViewAngle)
+		viewAngle = 90;
+
+	float frontClippingDistance = 0.1;
+	float backClippingDistance = 500;
 
 	if (!LegoView1::Create(rCreateStruct, pRenderer)) {
 		return FALSE;
 	}
 
-	// assert(GetView());
-	// GetView()->SetFrustrum(frontClippingDistance, backClippingDistance, viewAngle);
+	assert(GetView());
+	GetView()->SetFrustrum(frontClippingDistance, backClippingDistance, viewAngle);
 
-	// assert(GetScene());
-	// assert(!m_pViewManager);
+	assert(GetScene());
+	assert(!m_pViewManager);
 
-	// m_pViewManager = new ViewManager(GetScene(), 0);
-	// m_pViewManager->SetResolution(GetWidth(), GetHeight());
-	// m_pViewManager->SetFrustrum(viewAngle, -frontClippingDistance, -backClippingDistance);
-	// m_previousRenderTime = 0;
+	m_pViewManager = new ViewManager(pRenderer, GetScene(), 0);
+	m_pViewManager->SetResolution(GetWidth(), GetHeight());
+	m_pViewManager->SetFrustrum(viewAngle, frontClippingDistance, backClippingDistance);
+	m_previousRenderTime = 0;
+	m_unk0x98 = 0;
 
 	// // NOTE: a derived class must inform view manager when it configures
 	// //       its (Tgl) view: calling Tgl::View::SetFrustrum() should be

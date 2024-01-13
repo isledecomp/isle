@@ -103,7 +103,7 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 		}
 
 		if (this->m_data) {
-			delete this->m_data;
+			delete[] this->m_data;
 			this->m_data = NULL;
 		}
 	}
