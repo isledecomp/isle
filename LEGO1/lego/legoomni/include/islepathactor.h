@@ -30,6 +30,7 @@ public:
 	}
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	// FUNCTION: LEGO1 0x10002e70
 	virtual MxU32 VTable0xcc() { return 0; } // vtable+0xcc
 	// FUNCTION: LEGO1 0x10002df0
