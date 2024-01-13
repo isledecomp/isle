@@ -20,7 +20,6 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	m_bitmask = new MxU8[size];
 	memset(m_bitmask, 0, size);
 
-	MxU32 biCompression = p_bitmap.GetBmiHeader()->biCompression;
 	MxU32 rowsBeforeTop;
 	MxU8* bitmapSrcPtr;
 
@@ -32,36 +31,25 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// Reminder: Negative biHeight means this is a top-down DIB.
 	// Otherwise it is bottom-up.
 
-	if (biCompression == BI_RGB) {
-		// DECOMP: I think this must be an OR. If not, the check for
-		// biCompression == 16 gets optimized away.
-		if (biCompression == BI_RGB_TOPDOWN || p_bitmap.GetBmiHeight() < 0) {
+	switch (p_bitmap.GetBmiHeader()->biCompression) {
+	case BI_RGB: {
+		if (p_bitmap.GetBmiHeight() < 0)
 			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
-			rowsBeforeTop--;
-		}
-
-		goto seek_to_last_row;
+		else
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+		break;
 	}
-	else if (biCompression == BI_RGB_TOPDOWN) {
-		// DECOMP: This is the only condition where we skip the
-		// calculation below.
+	case BI_RGB_TOPDOWN:
 		bitmapSrcPtr = p_bitmap.GetBitmapData();
-	}
-	else {
-		if (p_bitmap.GetBmiHeight() < 0) {
+		break;
+	default: {
+		if (p_bitmap.GetBmiHeight() < 0)
 			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
-			rowsBeforeTop--;
-		}
-
-	// TODO: would prefer not to use goto if we can figure this structure out
-	seek_to_last_row:
-		bitmapSrcPtr = p_bitmap.GetBmiStride() * rowsBeforeTop + p_bitmap.GetBitmapData();
+		else
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+	}
 	}
 
 	// How many bytes are there for each row of the bitmap?
@@ -69,15 +57,15 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// If this is a bottom-up DIB, we will walk it in reverse.
 	// TODO: Same rounding trick as in MxBitmap
 	MxS32 rowSeek = ((m_width + 3) & -4);
-	if (p_bitmap.GetBmiHeight() < 0)
+	if (p_bitmap.GetBmiHeader()->biCompression != 16 && p_bitmap.GetBmiHeight() > 0)
 		rowSeek = -rowSeek;
 
 	// The actual offset into the m_bitmask array. The two for-loops
 	// are just for counting the pixels.
 	MxS32 offset = 0;
 
-	MxU8* tPtr = bitmapSrcPtr;
 	for (MxS32 j = 0; j < m_height; j++) {
+		MxU8* tPtr = bitmapSrcPtr;
 		for (MxS32 i = 0; i < m_width; i++) {
 			if (*tPtr) {
 				// TODO: Second CDQ instruction for abs() should not be there.
