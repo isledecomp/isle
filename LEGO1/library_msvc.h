@@ -37,8 +37,17 @@
 // LIBRARY: LEGO1 0x1008b5a0
 // _sprintf
 
+// LIBRARY: LEGO1 0x1008b608
+// __ftol
+
 // LIBRARY: LEGO1 0x1008c010
 // _strncpy
+
+// LIBRARY: LEGO1 0x1008c110
+// __strcmpi
+
+// LIBRARY: LEGO1 0x1008c1e0
+// __spawnl
 
 // LIBRARY: ISLE 0x4081e0
 // _srand
