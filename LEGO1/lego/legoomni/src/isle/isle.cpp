@@ -152,10 +152,22 @@ MxLong Isle::StopAction(MxParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10030fc0
+// FUNCTION: LEGO1 0x10030fc0
 void Isle::VTable0x50()
 {
-	// TODO
+	LegoWorld::VTable0x50();
+
+	if (m_act1state->GetUnknown21()) {
+		GameState()->HandleAction(2);
+		m_act1state->SetUnknown18(0);
+		m_act1state->SetUnknown21(0);
+	}
+	else if (GameState()->GetCurrentAct()) {
+		FUN_1003ef00(TRUE);
+		FUN_10032620();
+		m_act1state->FUN_10034d00();
+		FUN_10015820(0, 7);
+	}
 }
 
 // STUB: LGEO1 0x10031030
@@ -172,6 +184,12 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 
 // STUB: LEGO1 0x10031820
 void Isle::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10032620
+void Isle::FUN_10032620()
 {
 	// TODO
 }

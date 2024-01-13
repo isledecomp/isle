@@ -41,6 +41,7 @@ public:
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }
+	inline void SetUnk0x554(MxBool p_unk0x554) { this->m_unk0x554 = p_unk0x554; }
 
 private:
 	MxResult CreateDirect3D();
