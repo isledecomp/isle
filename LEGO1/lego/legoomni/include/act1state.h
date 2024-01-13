@@ -35,7 +35,7 @@ protected:
 	undefined2 m_unk0x1c;     // 0x1c
 	undefined m_unk0x1e;      // 0x1e
 	undefined m_unk0x20;      // 0x20
-	MxBool m_unk0x21;          // 0x21
+	MxBool m_unk0x21;         // 0x21
 };
 
 #endif // ACT1STATE_H

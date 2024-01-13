@@ -8,7 +8,6 @@ Act1State::Act1State()
 	m_unk0x21 = 1;
 }
 
-
 // STUB: LEGO1 0x10034d00
 void Act1State::FUN_10034d00()
 {

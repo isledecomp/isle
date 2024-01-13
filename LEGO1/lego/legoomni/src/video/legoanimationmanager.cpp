@@ -24,7 +24,6 @@ LegoAnimationManager::~LegoAnimationManager()
 // STUB: LEGO1 0x1005ef10
 void LegoAnimationManager::FUN_1005ef10()
 {
-
 }
 
 // STUB: LEGO1 0x1005f130
