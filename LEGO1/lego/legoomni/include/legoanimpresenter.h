@@ -7,6 +7,7 @@
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	LegoAnimPresenter();
+	virtual ~LegoAnimPresenter();
 
 	// FUNCTION: LEGO1 0x10068530
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -24,5 +25,8 @@ public:
 private:
 	void Init();
 };
+
+// SYNTHETIC: LEGO1 0x10068650
+// LegoAnimPresenter::`scalar deleting destructor'
 
 #endif // LEGOANIMPRESENTER_H
