@@ -40,6 +40,21 @@
 // LIBRARY: LEGO1 0x1008b608
 // __ftol
 
+// LIBRARY: LEGO1 0x1008b780
+// _fwrite
+
+// LIBRARY: LEGO1 0x1008b950
+// _fread
+
+// LIBRARY: LEGO1 0x1008bbd0
+// _fclose
+
+// LIBRARY: LEGO1 0x1008bdd0
+// _ftell
+
+// LIBRARY: LEGO1 0x1008bff0
+// _fopen
+
 // LIBRARY: LEGO1 0x1008c010
 // _strncpy
 
@@ -48,6 +63,12 @@
 
 // LIBRARY: LEGO1 0x1008c1e0
 // __spawnl
+
+// LIBRARY: LEGO1 0x1008c200
+// _sscanf
+
+// LIBRARY: LEGO1 0x1008c5c0
+// _fseek
 
 // LIBRARY: ISLE 0x4081e0
 // _srand
@@ -64,5 +85,8 @@
 
 // LIBRARY: LEGO1 0x100d1ed0
 // _strnicmp
+
+// LIBRARY: LEGO1 0x100d2130
+// _vsprintf
 
 #endif
