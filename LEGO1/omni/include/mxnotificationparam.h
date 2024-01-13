@@ -34,6 +34,7 @@ enum NotificationId {
 };
 
 // VTABLE: LEGO1 0x100d56e0
+// SIZE 0x0c
 class MxNotificationParam : public MxParam {
 public:
 	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
@@ -48,8 +49,8 @@ public:
 	inline NotificationId GetType() const { return m_type; }
 
 protected:
-	NotificationId m_type; // 0x4
-	MxCore* m_sender;      // 0x8
+	NotificationId m_type; // 0x04
+	MxCore* m_sender;      // 0x08
 };
 
 // SYNTHETIC: LEGO1 0x10010430

@@ -99,7 +99,7 @@ MxAtomId* g_testScript = NULL;
 // GLOBAL: LEGO1 0x100f457c
 MxAtomId* g_jukeboxwScript = NULL;
 
-// GLOBAL: LEGO1 0x100f4580c
+// GLOBAL: LEGO1 0x100f4580
 MxAtomId* g_sndAnimScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4584

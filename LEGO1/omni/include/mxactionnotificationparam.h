@@ -115,6 +115,9 @@ private:
 	MxPresenter* m_unk0x14; // 0x14
 };
 
+// SYNTHETIC: LEGO1 0x100511e0
+// MxActionNotificationParam::`scalar deleting destructor'
+
 // SYNTHETIC: LEGO1 0x100513a0
 // MxEndActionNotificationParam::`scalar deleting destructor'
 
