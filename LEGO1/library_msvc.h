@@ -37,6 +37,9 @@
 // LIBRARY: LEGO1 0x1008b5a0
 // _sprintf
 
+// LIBRARY: LEGO1 0x1008c010
+// _strncpy
+
 // LIBRARY: ISLE 0x4081e0
 // _srand
 
@@ -49,5 +52,8 @@
 
 // LIBRARY: ISLE 0x409190
 // __getptd
+
+// LIBRARY: LEGO1 0x100d1ed0
+// _strnicmp
 
 #endif
