@@ -57,7 +57,7 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// If this is a bottom-up DIB, we will walk it in reverse.
 	// TODO: Same rounding trick as in MxBitmap
 	MxS32 rowSeek = ((m_width + 3) & -4);
-	if (p_bitmap.GetBmiHeader()->biCompression != 16 && p_bitmap.GetBmiHeight() > 0)
+	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() > 0)
 		rowSeek = -rowSeek;
 
 	// The actual offset into the m_bitmask array. The two for-loops
