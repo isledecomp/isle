@@ -168,7 +168,7 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 		strcpy(path, m_savePath);
 
 	// Slot: "G0", "G1", ...
-	strcat(path, "G");
+	strcat(path, "\\G");
 	baseForSlot[0] += p_slotn;
 	strcat(path, baseForSlot);
 
