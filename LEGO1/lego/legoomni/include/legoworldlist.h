@@ -28,6 +28,12 @@ public:
 	}; // vtable+0x14
 };
 
+// VTABLE: LEGO1 0x100d75a0
+class LegoWorldListCursor : public MxListCursor<LegoWorld*> {
+public:
+	LegoWorldListCursor(LegoWorldList* p_list) : MxListCursor<LegoWorld*>(p_list){};
+};
+
 // TEMPLATE: LEGO1 0x100598f0
 // MxCollection<LegoWorld *>::Compare
 
@@ -51,5 +57,8 @@ public:
 
 // SYNTHETIC: LEGO1 0x10059be0
 // MxPtrList<LegoWorld>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1003e870
+// LegoWorldListCursor::`scalar deleting destructor'
 
 #endif // LEGOWORLDLIST_H

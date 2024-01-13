@@ -597,11 +597,25 @@ void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 	// TODO
 }
 
-// STUB: LEGO1 0x1005b0c0
+// FUNCTION: LEGO1 0x1005b0c0
 LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
-	// TODO
-	return NULL;
+	if (m_worldList) {
+		LegoWorld* world;
+		LegoWorldListCursor cursor(m_worldList);
+
+		while (cursor.Next()) {
+			if ((p_entityid != -1 && world->GetEntityId() == p_entityid) ||
+				(p_atom.GetInternal() && world->GetAtom() == p_atom)) {
+				return world;
+			}
+		}
+
+		return NULL;
+	}
+	else {
+		return NULL;
+	}
 }
 
 // STUB: LEGO1 0x1005b1d0

@@ -45,6 +45,9 @@ public:
 		return SUCCESS;
 	}
 
+	inline MxS32 GetEntityId() { return m_mxEntityId; }
+	inline MxAtomId& GetAtom() { return m_atom; }
+
 protected:
 	MxS32 m_mxEntityId; // 0x8
 	MxAtomId m_atom;    // 0xc
