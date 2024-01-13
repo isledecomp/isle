@@ -143,6 +143,8 @@ add_library(lego1 SHARED
   LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
+  LEGO1/mxgeometry/mxgeometry3d.cpp
+  LEGO1/mxgeometry/mxmatrix.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
   LEGO1/omni/src/action/mxdsevent.cpp

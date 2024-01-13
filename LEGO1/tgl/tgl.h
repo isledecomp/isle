@@ -222,13 +222,13 @@ public:
 // VTABLE 0x100dbae8
 class Camera : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
 };
 
 // VTABLE 0x100dbb08
 class Light : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
 };
 
@@ -252,7 +252,7 @@ public:
 // VTABLE 0x100dbaa0
 class Group : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;

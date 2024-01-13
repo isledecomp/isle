@@ -49,8 +49,8 @@ public:
 	MxResult SetAsCurrentWorld(MxDSObject& p_dsObject);
 	void EndAction(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
-	MxBool FUN_100727e0(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
-	MxBool FUN_10072980(MxU32, Vector3Data& p_loc, Vector3Data& p_dir, Vector3Data& p_up);
+	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	MxBool FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);

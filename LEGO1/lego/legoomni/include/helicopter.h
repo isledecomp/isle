@@ -9,12 +9,12 @@
 class HelicopterSubclass {
 public:
 	inline HelicopterSubclass() : m_unk0x30(0) {}
-	MxResult FUN_100040a0(Vector4Impl& p_v, float p_f);
+	MxResult FUN_100040a0(Vector4& p_v, float p_f);
 
 private:
-	Vector4Data m_unk0x0;  // 0x0
-	Vector4Data m_unk0x18; // 0x18
-	undefined4 m_unk0x30;  // 0x30
+	Mx4DPointFloat m_unk0x0;  // 0x0
+	Mx4DPointFloat m_unk0x18; // 0x18
+	undefined4 m_unk0x30;     // 0x30
 };
 
 // VTABLE: LEGO1 0x100d40f8
@@ -39,7 +39,7 @@ public:
 
 	virtual MxResult Create(MxDSObject& p_dsObject) override;              // vtable+0x18
 	void VTable0x70(float p_float) override;                               // vtable+0x70
-	void VTable0x74(Matrix4Impl& p_transform) override;                    // vtable+0x74
+	void VTable0x74(Matrix4& p_transform) override;                        // vtable+0x74
 	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
 	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
 	virtual MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
@@ -49,8 +49,8 @@ public:
 	// Helicopter::`scalar deleting destructor'
 
 protected:
-	Matrix4Data m_unk0x160;        // 0x160
-	Matrix4Data m_unk0x1a8;        // 0x1a8
+	MxMatrix m_unk0x160;           // 0x160
+	MxMatrix m_unk0x1a8;           // 0x1a8
 	float m_unk0x1f0;              // 0x1f0
 	HelicopterSubclass m_unk0x1f4; // 0x1f4
 	HelicopterState* m_state;      // 0x228

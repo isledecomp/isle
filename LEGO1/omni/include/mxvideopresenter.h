@@ -65,7 +65,8 @@ public:
 
 	// FUNCTION: LEGO1 0x1000c730
 	virtual void RealizePalette(){}; // vtable+0x70
-	virtual undefined VTable0x74();  // vtable+0x74
+
+	virtual undefined VTable0x74(); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000c7b0
 	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; }; // vtable+0x78

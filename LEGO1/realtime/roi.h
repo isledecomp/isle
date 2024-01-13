@@ -5,39 +5,39 @@
 
 #include "compat.h"
 #include "lodlist.h"
+#include "mxgeometry/mxgeometry3d.h"
 #include "mxstl/stlcompat.h"
 #include "realtime/realtime.h"
-#include "vector.h"
 
 /*
  * A simple bounding box object with Min and Max accessor methods.
  */
+// SIZE 0x28
 class BoundingBox {
 public:
-	const Vector3Data& Min() const { return min; }
-	Vector3Data& Min() { return min; }
-	const Vector3Data& Max() const { return max; }
-	Vector3Data& Max() { return max; }
+	const Mx3DPointFloat& Min() const { return min; }
+	Mx3DPointFloat& Min() { return min; }
+	const Mx3DPointFloat& Max() const { return max; }
+	Mx3DPointFloat& Max() { return max; }
 
 private:
-	Vector3Data min;
-	Vector3Data max;
-	Vector3Data m_unk0x28;
-	Vector3Data m_unk0x3c;
+	Mx3DPointFloat min;
+	Mx3DPointFloat max;
 };
 
 /*
  * A simple bounding sphere object with center and radius accessor methods.
  */
+// SIZE 0x18
 class BoundingSphere {
 public:
-	const Vector3Data& Center() const { return center; }
-	Vector3Data& Center() { return center; }
+	const Mx3DPointFloat& Center() const { return center; }
+	Mx3DPointFloat& Center() { return center; }
 	const float& Radius() const { return radius; }
 	float& Radius() { return radius; }
 
 private:
-	Vector3Data center;
+	Mx3DPointFloat center;
 	float radius;
 };
 
@@ -74,13 +74,14 @@ typedef vector<const ROI*> ROIList;
 typedef vector<int> IntList;
 
 // VTABLE: LEGO1 0x100dbc38
-// SIZE 0xc
+// SIZE 0x10
 class ROI {
 public:
 	ROI()
 	{
 		m_comp = 0;
 		m_lods = 0;
+		m_unk0xc = 1;
 	}
 	virtual ~ROI()
 	{
@@ -89,7 +90,7 @@ public:
 		assert(!m_lods);
 	}
 	virtual float IntrinsicImportance() const = 0;                    // vtable+0x4
-	virtual const Vector3& GetWorldVelocity() const = 0;              // vtable+0x8
+	virtual const float* GetWorldVelocity() const = 0;                // vtable+0x8
 	virtual const BoundingBox& GetWorldBoundingBox() const = 0;       // vtable+0xc
 	virtual const BoundingSphere& GetWorldBoundingSphere() const = 0; // vtable+0x10
 
@@ -105,5 +106,6 @@ public:
 protected:
 	CompoundObject* m_comp; // 0x4
 	LODListBase* m_lods;    // 0x8
+	undefined m_unk0xc;     // 0xc
 };
 #endif // ROI_H

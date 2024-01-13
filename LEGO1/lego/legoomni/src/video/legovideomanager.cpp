@@ -65,10 +65,10 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	MxResult result = FAILURE;
 
 	MxDeviceEnumerate100d9cc8 deviceEnumerate;
-	Vector3Data posVec(0.0, 1.25, -50.0);
-	Vector3Data dirVec(0.0, 0.0, 1.0);
-	Vector3Data upVec(0.0, 1.0, 0.0);
-	Matrix4Data outMatrix;
+	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
+	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
+	Mx3DPointFloat upVec(0.0, 1.0, 0.0);
+	MxMatrix outMatrix;
 	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
 	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
 	MxS32 deviceNum = -1;

@@ -28,9 +28,9 @@ public:
 	);
 	static MxBool ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green, MxFloat& p_blue, MxFloat& p_other);
 
-	void WrappedSetLocalTransform(Matrix4Impl& p_transform);
-	void FUN_100a46b0(Matrix4Impl& p_transform);
-	void FUN_100a58f0(Matrix4Impl& p_transform);
+	void WrappedSetLocalTransform(Matrix4& p_transform);
+	void FUN_100a46b0(Matrix4& p_transform);
+	void FUN_100a58f0(Matrix4& p_transform);
 
 	// Note: Actually part of parent class (doesn't exist yet)
 	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
