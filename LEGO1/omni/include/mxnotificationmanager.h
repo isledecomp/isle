@@ -52,4 +52,10 @@ private:
 	void FlushPending(MxCore* p_listener);
 };
 
+// FUNCTION: LEGO1 0x100ac3b0
+// MxIdList::~MxIdList
+
+// TEMPLATE: LEGO1 0x100ac540
+// List<MxNotification *>::~List<MxNotification *>
+
 #endif // MXNOTIFICATIONMANAGER_H

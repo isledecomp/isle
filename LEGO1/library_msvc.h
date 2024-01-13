@@ -18,6 +18,10 @@
 // LIBRARY: LEGO1 0x1008a1c0
 // _free
 
+// LIBRARY: ISLE 0x407ec0
+// LIBRARY: LEGO1 0x1008b020
+// ___CxxFrameHandler
+
 // LIBRARY: ISLE 0x408220
 // LIBRARY: LEGO1 0x1008b400
 // _atol

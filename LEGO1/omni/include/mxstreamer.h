@@ -48,6 +48,7 @@ public:
 	inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
 };
 
+// VTABLE: LEGO1 0x100dc760
 class MxStreamerNotification : public MxNotificationParam {
 public:
 	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)

@@ -50,4 +50,7 @@ private:
 
 #define TICKLE_MANAGER_NOT_FOUND 0x80000000
 
+// TEMPLATE: LEGO1 0x1005a530
+// List<MxTickleClient *>::~List<MxTickleClient *>
+
 #endif // MXTICKLEMANAGER_H

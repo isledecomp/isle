@@ -26,6 +26,9 @@ public:
 // VTABLE: LEGO1 0x100dc1e8
 // class MxHashTable<MxVariable *>
 
+// VTABLE: LEGO1 0x100dc680
+// class MxHashTableCursor<MxVariable *>
+
 // TEMPLATE: LEGO1 0x100afcd0
 // MxCollection<MxVariable *>::Compare
 

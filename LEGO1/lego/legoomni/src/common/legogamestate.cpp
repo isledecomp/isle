@@ -15,14 +15,14 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// GLOBAL: LEGO1 0x100f3e24
-const char* g_historyGSI = "History.gsi";
-
-// GLOBAL: LEGO1 0x100f3e30
-const char* g_playersGSI = "Players.gsi";
-
 // GLOBAL: LEGO1 0x100f3e40
 const char* g_fileExtensionGS = ".GS";
+
+// GLOBAL: LEGO1 0x100f3e44
+const char* g_playersGSI = "Players.gsi";
+
+// GLOBAL: LEGO1 0x100f3e48
+const char* g_historyGSI = "History.gsi";
 
 // GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {

@@ -6,6 +6,7 @@
 #include <windows.h>
 
 // SIZE 0x08
+// VTABLE: LEGO1 0x100dccf0
 class MxSemaphore {
 public:
 	MxSemaphore();

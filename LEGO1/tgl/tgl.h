@@ -98,7 +98,7 @@ class Mesh;
 class Texture;
 class Unk;
 
-// VTABLE 0x100db980
+// VTABLE: LEGO1 0x100db980
 class Object {
 public:
 	virtual ~Object() {}
@@ -106,7 +106,7 @@ public:
 	virtual void* ImplementationDataPtr() = 0;
 };
 
-// VTABLE 0x100db948
+// VTABLE: LEGO1 0x100db948
 class Renderer : public Object {
 public:
 	// vtable+0x08
@@ -146,7 +146,7 @@ public:
 
 Renderer* CreateRenderer();
 
-// VTABLE 0x100db9b8
+// VTABLE: LEGO1 0x100db9b8
 class Device : public Object {
 public:
 	// vtable+0x08
@@ -165,7 +165,7 @@ public:
 	virtual void InitFromWindowsDevice(Device*) = 0;
 };
 
-// VTABLE 0x100dba28
+// VTABLE: LEGO1 0x100dba28
 class View : public Object {
 public:
 	virtual Result Add(const Light*) = 0;
@@ -219,20 +219,20 @@ public:
 	) = 0;
 };
 
-// VTABLE 0x100dbae8
+// VTABLE: LEGO1 0x100dbae8
 class Camera : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
 };
 
-// VTABLE 0x100dbb08
+// VTABLE: LEGO1 0x100dbb08
 class Light : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
 };
 
-// VTABLE 0x100dbbb0
+// VTABLE: LEGO1 0x100dbbb0
 class Mesh : public Object {
 public:
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
@@ -249,7 +249,7 @@ public:
 	virtual Mesh* ShallowClone(Unk*) = 0;
 };
 
-// VTABLE 0x100dbaa0
+// VTABLE: LEGO1 0x100dbaa0
 class Group : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
@@ -271,7 +271,7 @@ public:
 // Don't know what this is. Seems like another Tgl object which
 // was not in the leaked Tgl code. My suspicion is that it's
 // some kind of builder class for creating meshes.
-// VTABLE 0x100dbb30
+// VTABLE: LEGO1 0x100dbb30
 class Unk : public Object {
 public:
 	virtual Result SetMeshData(
@@ -287,7 +287,7 @@ public:
 	virtual Unk* Clone() = 0;
 };
 
-// VTABLE 0x100dbb68
+// VTABLE: LEGO1 0x100dbb68
 class Texture : public Object {
 public:
 	// vtable+0x08

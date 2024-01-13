@@ -8,6 +8,7 @@
 
 #include <windows.h>
 
+// VTABLE: LEGO1 0x100dc218
 class MxOmniCreateParam : public MxParam {
 public:
 	__declspec(dllexport) MxOmniCreateParam(

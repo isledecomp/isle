@@ -80,7 +80,7 @@ public:
 	// FUNCTION: LEGO1 0x1000c800
 	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); }; // vtable+0x84
 
-	// SIZE 0xc
+	// VTABLE: LEGO1 0x100dc2bc
 	struct AlphaMask {
 		MxU8* m_bitmask;
 		MxU16 m_width;
