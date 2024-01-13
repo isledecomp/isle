@@ -20,4 +20,10 @@ public:
 	}
 };
 
+// SYNTHETIC: LEGO1 0x1000e940
+// IsleActor::~IsleActor
+
+// SYNTHETIC: LEGO1 0x1000e990
+// IsleActor::`scalar deleting destructor'
+
 #endif // ISLEACTOR_H
