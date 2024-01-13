@@ -54,11 +54,11 @@ Isle::~Isle()
 }
 
 // FUNCTION: LEGO1 0x10030b20
-MxResult Isle::Create(MxDSAction& p_dsObject)
+MxResult Isle::Create(MxDSAction& p_dsAction)
 {
 	GameState()->FUN_1003ceb0();
 
-	MxResult result = LegoWorld::Create(p_dsObject);
+	MxResult result = LegoWorld::Create(p_dsAction);
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);

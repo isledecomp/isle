@@ -38,10 +38,10 @@ public:
 		return SUCCESS;
 	}; // vtable+0x14
 
-	inline MxResult Create(MxDSAction& p_dsObject)
+	inline MxResult Create(MxDSAction& p_dsAction)
 	{
-		m_mxEntityId = p_dsObject.GetObjectId();
-		m_atom = p_dsObject.GetAtomId();
+		m_mxEntityId = p_dsAction.GetObjectId();
+		m_atom = p_dsAction.GetAtomId();
 		return SUCCESS;
 	}
 

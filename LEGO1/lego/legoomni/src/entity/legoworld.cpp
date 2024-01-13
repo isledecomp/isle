@@ -41,14 +41,14 @@ LegoWorld::~LegoWorld()
 }
 
 // STUB: LEGO1 0x1001e0b0
-MxResult LegoWorld::Create(MxDSAction& p_dsObject)
+MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 {
-	MxEntity::Create(p_dsObject);
+	MxEntity::Create(p_dsAction);
 
 	// TODO: Intitialize lists
 
 	if (VTable0x54()) {
-		if (p_dsObject.GetFlags() & 0x20) {
+		if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
 			if (GetCurrentWorld()) {
 				GetCurrentWorld()->VTable0x68(0);
 			}
@@ -86,7 +86,7 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x1001f630
 LegoCameraController* LegoWorld::VTable0x54()
 {
-	MxBool ok = FALSE;
+	MxBool success = FALSE;
 
 	if (!VideoManager()) {
 		goto done;
@@ -102,15 +102,17 @@ LegoCameraController* LegoWorld::VTable0x54()
 		VideoManager()->GetVideoParam().GetRect().GetWidth(),
 		VideoManager()->GetVideoParam().GetRect().GetHeight()
 	);
-	ok = TRUE;
+
+	success = TRUE;
 
 done:
-	if (!ok) {
+	if (!success) {
 		if (m_cameraController) {
 			delete m_cameraController;
 			m_cameraController = NULL;
 		}
 	}
+
 	return m_cameraController;
 }
 

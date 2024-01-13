@@ -33,15 +33,15 @@ public:
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsObject); // vtable+0x18
-	virtual void VTable0x50();                       // vtable+50
-	virtual LegoCameraController* VTable0x54();      // vtable+54
-	virtual void VTable0x58(MxCore* p_object);       // vtable+58
-	virtual MxBool VTable0x5c();                     // vtable+5c
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual void VTable0x50();                                // vtable+0x50
+	virtual LegoCameraController* VTable0x54();               // vtable+0x54
+	virtual void VTable0x58(MxCore* p_object);                // vtable+0x58
+	virtual MxBool VTable0x5c();                              // vtable+0x5c
 	// FUNCTION: LEGO1 0x100010a0
-	virtual void VTable0x60() {}           // vtable+60
-	virtual MxBool VTable0x64();           // vtable+64
-	virtual void VTable0x68(MxBool p_add); // vtable+68
+	virtual void VTable0x60() {}           // vtable+0x60
+	virtual MxBool VTable0x64();           // vtable+0x64
+	virtual void VTable0x68(MxBool p_add); // vtable+0x68
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }

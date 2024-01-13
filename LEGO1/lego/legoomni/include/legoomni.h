@@ -116,7 +116,7 @@ public:
 	MxDSAction& GetCurrentAction() { return m_action; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-	inline void SetWorld(LegoWorld* p_world) { m_currentWorld = p_world; }
+	inline void SetWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
 
 private:
