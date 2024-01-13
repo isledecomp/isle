@@ -52,6 +52,8 @@ public:
 	void FUN_10010c30();
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
+	inline LegoROI* GetROI() { return m_roi; }
+
 protected:
 	void Init();
 	void SetWorld();
