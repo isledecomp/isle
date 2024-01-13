@@ -116,7 +116,7 @@ public:
 	MxDSAction& GetCurrentAction() { return m_action; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-
+	inline void SetWorld(LegoWorld* p_world) { m_currentWorld = p_world; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
 
 private:
@@ -167,5 +167,6 @@ void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void RegisterScripts();
 void UnregisterScripts();
+void SetCurrentWorld(LegoWorld* p_world);
 
 #endif // LEGOOMNI_H

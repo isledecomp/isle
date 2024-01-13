@@ -42,7 +42,7 @@ void LegoEntity::SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir, c
 }
 
 // FUNCTION: LEGO1 0x100107e0
-MxResult LegoEntity::Create(MxDSObject& p_dsObject)
+MxResult LegoEntity::Create(MxDSAction& p_dsObject)
 {
 	m_mxEntityId = p_dsObject.GetObjectId();
 	m_atom = p_dsObject.GetAtomId();

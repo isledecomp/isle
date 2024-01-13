@@ -12,7 +12,7 @@ IslePathActor::IslePathActor()
 }
 
 // FUNCTION: LEGO1 0x1001a280
-MxResult IslePathActor::Create(MxDSObject& p_dsObject)
+MxResult IslePathActor::Create(MxDSAction& p_dsObject)
 {
 	return MxEntity::Create(p_dsObject);
 }
