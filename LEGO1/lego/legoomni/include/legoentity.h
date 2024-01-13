@@ -3,7 +3,7 @@
 
 #include "decomp.h"
 #include "extra.h"
-#include "mxdsobject.h"
+#include "mxdsaction.h"
 #include "mxentity.h"
 #include "realtime/vector.h"
 #include "roi/legoroi.h"

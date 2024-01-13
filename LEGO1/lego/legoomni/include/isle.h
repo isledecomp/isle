@@ -57,6 +57,7 @@ public:
 	MxLong HandleType17Notification(MxParam& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
+	void FUN_10032620();
 
 protected:
 	Act1State* m_act1state;   // 0xf8
