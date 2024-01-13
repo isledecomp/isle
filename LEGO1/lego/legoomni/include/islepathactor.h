@@ -13,6 +13,7 @@
 class IslePathActor : public LegoPathActor {
 public:
 	IslePathActor();
+	// FUNCTION: LEGO1 0x10002e10
 	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); } // vtable+0x0
 
 	// FUNCTION: LEGO1 0x10002ea0

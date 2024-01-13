@@ -117,7 +117,7 @@ MxBool g_isWorldActive = TRUE;
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()
 {
-	return (LegoOmni*) MxOmni::GetInstance();
+	return LegoOmni::GetInstance();
 }
 
 // FUNCTION: LEGO1 0x10015710
