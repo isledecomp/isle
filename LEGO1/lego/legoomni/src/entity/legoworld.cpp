@@ -47,7 +47,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsObject)
 
 	// TODO: Intitialize lists
 
-	if (VTable0x54() == SUCCESS) {
+	if (VTable0x54()) {
 		if (p_dsObject.GetFlags() & 0x20) {
 			if (GetCurrentWorld()) {
 				GetCurrentWorld()->VTable0x68(0);
