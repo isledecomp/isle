@@ -54,7 +54,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsObject)
 			}
 
 			SetCurrentWorld(this);
-			ControlManager()->FUN_10028df0(m_list0xb8);
+			ControlManager()->FUN_10028df0(&m_list0xb8);
 		}
 
 		SetIsWorldActive(TRUE);
