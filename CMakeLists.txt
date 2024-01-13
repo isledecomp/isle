@@ -60,6 +60,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
   LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp

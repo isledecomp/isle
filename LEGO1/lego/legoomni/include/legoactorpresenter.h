@@ -19,6 +19,10 @@ public:
 	{
 		return !strcmp(p_name, LegoActorPresenter::ClassName()) || LegoEntityPresenter::IsA(p_name);
 	}
+
+	virtual void ReadyTickle() override;    // vtable+0x18
+	virtual void StartingTickle() override; // vtable+0x1c
+	virtual void ParseExtra();              // vtable+0x30
 };
 
 #endif // LEGOACTORPRESENTER_H
