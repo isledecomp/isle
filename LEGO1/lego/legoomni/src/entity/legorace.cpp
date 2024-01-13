@@ -62,7 +62,7 @@ MxBool LegoRace::VTable0x64()
 }
 
 // STUB: LEGO1 0x10015ce0
-MxResult LegoRace::Create(MxDSObject& p_dsObject)
+MxResult LegoRace::Create(MxDSAction& p_dsAction)
 {
 	// TODO
 	return SUCCESS;

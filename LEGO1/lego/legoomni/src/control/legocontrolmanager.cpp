@@ -12,6 +12,12 @@ LegoControlManager::~LegoControlManager()
 	// TODO
 }
 
+// STUB: LEGO1 0x10028df0
+void LegoControlManager::FUN_10028df0(MxPresenterList* p_presenterList)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10028e10
 void LegoControlManager::Register(MxCore* p_listener)
 {

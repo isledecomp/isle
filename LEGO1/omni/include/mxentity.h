@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
-#include "mxdsobject.h"
+#include "mxdsaction.h"
 #include "mxtypes.h"
 
 // VTABLE: LEGO1 0x100d5390
@@ -38,10 +38,10 @@ public:
 		return SUCCESS;
 	}; // vtable+0x14
 
-	inline MxResult Create(MxDSObject& p_dsObject)
+	inline MxResult Create(MxDSAction& p_dsAction)
 	{
-		m_mxEntityId = p_dsObject.GetObjectId();
-		m_atom = p_dsObject.GetAtomId();
+		m_mxEntityId = p_dsAction.GetObjectId();
+		m_atom = p_dsAction.GetAtomId();
 		return SUCCESS;
 	}
 
