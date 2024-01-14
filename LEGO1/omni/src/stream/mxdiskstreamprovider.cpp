@@ -352,6 +352,8 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 					p_action->SetUnknown94(unk0x14);
 					p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
 					delete p_action->GetUnknowna0();
+					p_action->SetUnknowna0(NULL);
+					((MxDiskStreamController*) m_pLookup)->FUN_100c7890(p_action);
 					return SUCCESS;
 				}
 				else {
