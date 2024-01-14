@@ -31,6 +31,10 @@ public:
 
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
 
+	inline float* GetX() { return &m_elements[0]; }
+	inline float* GetY() { return &m_elements[1]; }
+	inline float* GetZ() { return &m_elements[2]; }
+
 private:
 	float m_elements[3];
 };
