@@ -29,10 +29,10 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d75b8
-// MxListCursor<LegoWorld *>
+// class MxListCursor<LegoWorld *>
 
 // VTABLE: LEGO1 0x100d7588
-// MxPtrListCursor<LegoWorld>
+// class MxPtrListCursor<LegoWorld>
 
 // VTABLE: LEGO1 0x100d75a0
 // SIZE 0x10
