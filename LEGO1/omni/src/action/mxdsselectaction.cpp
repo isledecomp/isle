@@ -5,6 +5,8 @@
 #include "mxvariabletable.h"
 
 DECOMP_SIZE_ASSERT(MxDSSelectAction, 0xb0)
+DECOMP_SIZE_ASSERT(MxStringList, 0x18)
+DECOMP_SIZE_ASSERT(MxStringListCursor, 0x10)
 DECOMP_SIZE_ASSERT(MxListEntry<MxString>, 0x18)
 
 // FUNCTION: LEGO1 0x100cb2b0
