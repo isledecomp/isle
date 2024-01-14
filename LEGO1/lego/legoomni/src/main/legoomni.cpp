@@ -23,6 +23,7 @@
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
+DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10);
 
 // GLOBAL: LEGO1 0x100f451c
 MxAtomId* g_copterScript = NULL;
@@ -597,10 +598,20 @@ void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 	// TODO
 }
 
-// STUB: LEGO1 0x1005b0c0
+// FUNCTION: LEGO1 0x1005b0c0
 LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
 {
-	// TODO
+	if (m_worldList) {
+		LegoWorld* world;
+		LegoWorldListCursor cursor(m_worldList);
+
+		while (cursor.Next(world)) {
+			if ((p_entityid == -1 || world->GetEntityId() == p_entityid) &&
+				(!p_atom.GetInternal() || world->GetAtom() == p_atom))
+				return world;
+		}
+	}
+
 	return NULL;
 }
 
