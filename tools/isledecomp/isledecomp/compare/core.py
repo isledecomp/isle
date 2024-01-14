@@ -48,6 +48,7 @@ class Compare:
         self._load_cvdump()
         self._load_markers()
         self._find_original_strings()
+        self._match_thunks()
 
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
@@ -146,6 +147,46 @@ class Compare:
                 continue
 
             self._db.match_string(addr, string)
+
+    def _match_thunks(self):
+        orig_byaddr = {
+            addr: (dll.upper(), name) for (dll, name, addr) in self.orig_bin.imports
+        }
+        recomp_byname = {
+            (dll.upper(), name): addr for (dll, name, addr) in self.recomp_bin.imports
+        }
+        # Combine these two dictionaries. We don't care about imports from recomp
+        # not found in orig because:
+        # 1. They shouldn't be there
+        # 2. They are already identified via cvdump
+        orig_to_recomp = {
+            addr: recomp_byname.get(pair, None) for addr, pair in orig_byaddr.items()
+        }
+
+        # Now: we have the IAT offset in each matched up, so we need to make
+        # the connection between the thunk functions.
+        # We already have the symbol name we need from the PDB.
+        orig_thunks = {
+            iat_ofs: func_ofs for (func_ofs, iat_ofs) in self.orig_bin.thunks
+        }
+        recomp_thunks = {
+            iat_ofs: func_ofs for (func_ofs, iat_ofs) in self.recomp_bin.thunks
+        }
+
+        for orig, recomp in orig_to_recomp.items():
+            self._db.set_pair(orig, recomp, SymbolType.POINTER)
+            thunk_from_orig = orig_thunks.get(orig, None)
+            thunk_from_recomp = recomp_thunks.get(recomp, None)
+
+            if thunk_from_orig is not None and thunk_from_recomp is not None:
+                self._db.set_function_pair(thunk_from_orig, thunk_from_recomp)
+                # Don't compare thunk functions for now. The comparison isn't
+                # "useful" in the usual sense. We are only looking at the 6
+                # bytes of the jmp instruction and not the larger context of
+                # where this function is. Also: these will always match 100%
+                # because we are searching for a match to register this as a
+                # function in the first place.
+                self._db.skip_compare(thunk_from_orig)
 
     def get_one_function(self, addr: int) -> Optional[MatchInfo]:
         """i.e. verbose mode for reccmp"""

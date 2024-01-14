@@ -134,14 +134,20 @@ class CompareDb:
 
         return cur.fetchall()
 
-    def set_function_pair(self, orig: int, recomp: int) -> bool:
-        """For lineref match or _entry"""
+    def set_pair(
+        self, orig: int, recomp: int, compare_type: Optional[SymbolType] = None
+    ) -> bool:
+        compare_value = compare_type.value if compare_type is not None else None
         cur = self._db.execute(
             "UPDATE `symbols` SET orig_addr = ?, compare_type = ? WHERE recomp_addr = ?",
-            (orig, SymbolType.FUNCTION.value, recomp),
+            (orig, compare_value, recomp),
         )
 
         return cur.rowcount > 0
+
+    def set_function_pair(self, orig: int, recomp: int) -> bool:
+        """For lineref match or _entry"""
+        self.set_pair(orig, recomp, SymbolType.FUNCTION)
         # TODO: Both ways required?
 
     def skip_compare(self, orig: int):
