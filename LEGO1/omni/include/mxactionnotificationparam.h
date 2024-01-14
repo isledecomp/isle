@@ -124,7 +124,13 @@ private:
 // SYNTHETIC: LEGO1 0x100b0430
 // MxStartActionNotificationParam::`scalar deleting destructor'
 
+// SYNTHETIC: LEGO1 0x100b04a0
+// MxStartActionNotificationParam::~MxStartActionNotificationParam
+
 // SYNTHETIC: LEGO1 0x100b05c0
 // MxType4NotificationParam::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100b0630
+// MxType4NotificationParam::~MxType4NotificationParam
 
 #endif
