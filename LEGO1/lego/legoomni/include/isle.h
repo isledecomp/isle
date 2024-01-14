@@ -12,7 +12,7 @@ class JukeBoxEntity;
 class Helicopter;
 class Bike;
 class DuneBuggy;
-class Motorcycle;
+class Motocycle;
 class SkateBoard;
 class RaceCar;
 class Jetski;
@@ -69,7 +69,7 @@ protected:
 	Helicopter* m_helicopter; // 0x110
 	Bike* m_bike;             // 0x114
 	DuneBuggy* m_dunebuggy;   // 0x118
-	Motorcycle* m_motorcycle; // 0x11c
+	Motocycle* m_motocycle;   // 0x11c
 	SkateBoard* m_skateboard; // 0x120
 	RaceCar* m_racecar;       // 0x124
 	Jetski* m_jetski;         // 0x128
