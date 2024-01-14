@@ -7,13 +7,13 @@
 // FUNCTION: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()
 {
-	VideoManager()->RemovePresenter(*this);
+	VideoManager()->UnregisterPresenter(*this);
 }
 
 // FUNCTION: LEGO1 0x1004ebb0
 MxResult LegoTexturePresenter::AddToManager()
 {
-	VideoManager()->AddPresenter(*this);
+	VideoManager()->RegisterPresenter(*this);
 	return SUCCESS;
 }
 

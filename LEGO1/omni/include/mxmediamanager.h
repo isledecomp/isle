@@ -14,12 +14,12 @@ public:
 	MxMediaManager();
 	virtual ~MxMediaManager() override;
 
-	virtual MxResult Tickle() override;                     // vtable+08
-	virtual MxResult InitPresenters();                      // vtable+14
-	virtual void Destroy();                                 // vtable+18
-	virtual void AddPresenter(MxPresenter& p_presenter);    // vtable+1c
-	virtual void RemovePresenter(MxPresenter& p_presenter); // vtable+20
-	virtual void StopPresenters();                          // vtable+24
+	virtual MxResult Tickle() override;                         // vtable+08
+	virtual MxResult InitPresenters();                          // vtable+14
+	virtual void Destroy();                                     // vtable+18
+	virtual void RegisterPresenter(MxPresenter& p_presenter);   // vtable+1c
+	virtual void UnregisterPresenter(MxPresenter& p_presenter); // vtable+20
+	virtual void StopPresenters();                              // vtable+24
 
 	MxResult Init();
 

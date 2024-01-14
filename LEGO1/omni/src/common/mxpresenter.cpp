@@ -229,7 +229,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100b5410
-MxEntity* MxPresenter::CreateEntityBackend(const char* p_name)
+MxEntity* MxPresenter::CreateEntity(const char* p_name)
 {
 	char buffer[512];
 	char buffer2[512];

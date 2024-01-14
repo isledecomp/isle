@@ -7,10 +7,10 @@
 void LegoActorPresenter::ReadyTickle()
 {
 	if (GetCurrentWorld()) {
-		m_objectBackend = (LegoEntity*) CreateEntityBackend("LegoActor");
-		if (m_objectBackend) {
-			SetBackendLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
-			m_objectBackend->Create(*m_action);
+		m_entity = (LegoEntity*) CreateEntity("LegoActor");
+		if (m_entity) {
+			SetEntityLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
+			m_entity->Create(*m_action);
 		}
 		ProgressTickleState(TickleState_Starting);
 	}
@@ -19,7 +19,7 @@ void LegoActorPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x10076c90
 void LegoActorPresenter::StartingTickle()
 {
-	if (m_objectBackend->GetROI()) {
+	if (m_entity->GetROI()) {
 		ProgressTickleState(TickleState_Streaming);
 		ParseExtra();
 	}
@@ -34,6 +34,6 @@ void LegoActorPresenter::ParseExtra()
 		memcpy(buffer, extraData, m_action->GetExtraLength());
 		buffer[m_action->GetExtraLength()] = 0;
 
-		m_objectBackend->ParseAction(buffer);
+		m_entity->ParseAction(buffer);
 	}
 }

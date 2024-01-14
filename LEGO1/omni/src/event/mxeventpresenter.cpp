@@ -33,7 +33,7 @@ MxResult MxEventPresenter::AddToManager()
 
 	if (EventManager()) {
 		ret = SUCCESS;
-		EventManager()->AddPresenter(*this);
+		EventManager()->RegisterPresenter(*this);
 	}
 
 	return ret;
@@ -43,7 +43,7 @@ MxResult MxEventPresenter::AddToManager()
 void MxEventPresenter::Destroy()
 {
 	if (EventManager())
-		EventManager()->RemovePresenter(*this);
+		EventManager()->UnregisterPresenter(*this);
 
 	m_criticalSection.Enter();
 
