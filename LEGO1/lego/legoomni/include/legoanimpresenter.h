@@ -7,7 +7,7 @@
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	LegoAnimPresenter();
-	virtual ~LegoAnimPresenter();
+	virtual ~LegoAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x10068530
 	inline virtual const char* ClassName() const override // vtable+0x0c
