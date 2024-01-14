@@ -99,7 +99,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/jukebox.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxentity.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
-  LEGO1/lego/legoomni/src/isle/motorcycle.cpp
+  LEGO1/lego/legoomni/src/isle/motocycle.cpp
   LEGO1/lego/legoomni/src/isle/radio.cpp
   LEGO1/lego/legoomni/src/isle/radiostate.cpp
   LEGO1/lego/legoomni/src/isle/skateboard.cpp

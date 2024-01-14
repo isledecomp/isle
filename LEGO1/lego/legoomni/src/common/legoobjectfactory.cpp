@@ -68,7 +68,7 @@
 #include "doors.h"
 #include "jetski.h"
 #include "legoanimmmpresenter.h"
-#include "motorcycle.h"
+#include "motocycle.h"
 #include "racecar.h"
 #include "towtrack.h"
 #include "towtrackmissionstate.h"

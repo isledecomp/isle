@@ -1,9 +1,9 @@
-#include "motorcycle.h"
+#include "motocycle.h"
 
-DECOMP_SIZE_ASSERT(Motorcycle, 0x16c);
+DECOMP_SIZE_ASSERT(Motocycle, 0x16c);
 
 // FUNCTION: LEGO1 0x100357b0
-Motorcycle::Motorcycle()
+Motocycle::Motocycle()
 {
 	this->m_unk0x13c = 40.0;
 	this->m_unk0x150 = 1.75;

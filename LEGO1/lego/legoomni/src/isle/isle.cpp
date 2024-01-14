@@ -26,7 +26,7 @@ Isle::Isle()
 	m_helicopter = NULL;
 	m_bike = NULL;
 	m_dunebuggy = NULL;
-	m_motorcycle = NULL;
+	m_motocycle = NULL;
 	m_skateboard = NULL;
 	m_racecar = NULL;
 	m_jetski = NULL;
@@ -230,7 +230,7 @@ void Isle::VTable0x58(MxCore* p_object)
 		m_dunebuggy = (DuneBuggy*) p_object;
 	}
 	else if (p_object->IsA("Motorcycle")) {
-		m_motorcycle = (Motorcycle*) p_object;
+		m_motocycle = (Motocycle*) p_object;
 	}
 	else if (p_object->IsA("SkateBoard")) {
 		m_skateboard = (SkateBoard*) p_object;
