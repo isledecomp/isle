@@ -70,7 +70,7 @@
 	X(RaceCar)                                                                                                         \
 	X(Jetski)                                                                                                          \
 	X(Bike)                                                                                                            \
-	X(Motocycle)                                                                                                      \
+	X(Motocycle)                                                                                                       \
 	X(Ambulance)                                                                                                       \
 	X(AmbulanceMissionState)                                                                                           \
 	X(TowTrack)                                                                                                        \
