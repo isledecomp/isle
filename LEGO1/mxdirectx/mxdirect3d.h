@@ -158,10 +158,14 @@ struct MxDriver {
 // List<MxDriver>::~List<MxDriver>
 
 // Compiler-generated copy ctor
-// Part of this function are two more synthetic sub-routines,
-// LEGO1 0x1009c400 and LEGO1 0x1009c460
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDriver::MxDriver
+
+// SYNTHETIC: LEGO1 0x1009c400
+// list<MxDevice,allocator<MxDevice> >::insert
+
+// SYNTHETIC: LEGO1 0x1009c460
+// list<MxDisplayMode,allocator<MxDisplayMode> >::insert
 
 // SYNTHETIC: LEGO1 0x1009d450
 // MxDriver::`scalar deleting destructor'
@@ -222,5 +226,8 @@ private:
 // VTABLE: LEGO1 0x100d9cc8
 // SIZE 0x14
 class MxDeviceEnumerate100d9cc8 : public MxDeviceEnumerate {};
+
+// SYNTHETIC: LEGO1 0x1007b590
+// MxDeviceEnumerate100d9cc8::~MxDeviceEnumerate100d9cc8
 
 #endif // MXDIRECT3D_H

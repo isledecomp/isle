@@ -33,8 +33,11 @@ public:
 	inline const MxString* GetKey() const { return &m_key; }
 
 protected:
-	MxString m_key;
-	MxString m_value;
+	MxString m_key;   // 0x04
+	MxString m_value; // 0x14
 };
+
+// SYNTHETIC: LEGO1 0x1003bf40
+// MxVariable::~MxVariable
 
 #endif // MXVARIABLE_H

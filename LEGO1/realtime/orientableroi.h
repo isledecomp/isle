@@ -32,9 +32,6 @@ public:
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }
 
-	// SYNTHETIC: LEGO1 0x100a4630
-	// OrientableROI::`scalar deleting destructor'
-
 protected:
 	MxMatrix m_local2world;           // 0x10
 	BoundingBox m_world_bounding_box; // 0x58
@@ -51,5 +48,11 @@ protected:
 	undefined4 m_unk0xd4;                   // 0xd4
 	undefined4 m_unk0xd8;                   // 0xd8
 };
+
+// SYNTHETIC: LEGO1 0x100a4630
+// OrientableROI::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100aa2f0
+// OrientableROI::~OrientableROI
 
 #endif // ORIENTABLEROI_H

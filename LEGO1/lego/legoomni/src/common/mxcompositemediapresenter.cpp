@@ -16,13 +16,13 @@ MxCompositeMediaPresenter::MxCompositeMediaPresenter()
 {
 	m_unk0x4c = 0;
 	m_unk0x4e = FALSE;
-	VideoManager()->AddPresenter(*this);
+	VideoManager()->RegisterPresenter(*this);
 }
 
 // FUNCTION: LEGO1 0x10074020
 MxCompositeMediaPresenter::~MxCompositeMediaPresenter()
 {
-	VideoManager()->RemovePresenter(*this);
+	VideoManager()->UnregisterPresenter(*this);
 }
 
 // FUNCTION: LEGO1 0x10074090
@@ -58,9 +58,9 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 					presenter->SetTickleState(TickleState_Idle);
 
 					if (presenter->IsA("MxVideoPresenter"))
-						VideoManager()->RemovePresenter(*presenter);
+						VideoManager()->UnregisterPresenter(*presenter);
 					else if (presenter->IsA("MxAudioPresenter"))
-						SoundManager()->RemovePresenter(*presenter);
+						SoundManager()->UnregisterPresenter(*presenter);
 
 					success = TRUE;
 				}

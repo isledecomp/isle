@@ -5,12 +5,13 @@
 
 #include <windows.h>
 
+// VTABLE: LEGO1 0x100dccf0
 // SIZE 0x08
 class MxSemaphore {
 public:
 	MxSemaphore();
 
-	// Inlined only, no offset
+	// FUNCTION: LEGO1 0x100c87e0
 	~MxSemaphore() { CloseHandle(m_hSemaphore); }
 
 	virtual MxResult Init(MxU32 p_initialCount, MxU32 p_maxCount);

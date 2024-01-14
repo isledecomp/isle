@@ -108,4 +108,8 @@ protected:
 	LODListBase* m_lods;    // 0x8
 	undefined m_unk0xc;     // 0xc
 };
+
+// SYNTHETIC: LEGO1 0x100a5d50
+// ROI::~ROI
+
 #endif // ROI_H

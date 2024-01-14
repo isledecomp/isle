@@ -35,26 +35,26 @@ LegoWorldPresenter::LegoWorldPresenter()
 LegoWorldPresenter::~LegoWorldPresenter()
 {
 	MxBool result = FALSE;
-	if (m_objectBackend) {
-		undefined4 world = ((LegoWorld*) m_objectBackend)->GetUnknown0xec();
+	if (m_entity) {
+		undefined4 world = ((LegoWorld*) m_entity)->GetUnknown0xec();
 		PlantManager()->FUN_10026360(world);
 		AnimationManager()->FUN_1005f720(world);
 		BuildingManager()->FUN_1002fa00();
-		result = ((LegoWorld*) m_objectBackend)->VTable0x5c();
+		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
 
 	if (result == FALSE) {
 		FUN_10015820(0, 7);
 	}
 
-	if (m_objectBackend) {
+	if (m_entity) {
 #ifdef COMPAT_MODE
 		{
 			MxNotificationParam param(c_notificationNewPresenter, NULL);
-			NotificationManager()->Send(m_objectBackend, &param);
+			NotificationManager()->Send(m_entity, &param);
 		}
 #else
-		NotificationManager()->Send(m_objectBackend, &MxNotificationParam(c_notificationNewPresenter, NULL));
+		NotificationManager()->Send(m_entity, &MxNotificationParam(c_notificationNewPresenter, NULL));
 #endif
 	}
 }
@@ -103,7 +103,7 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 				delete presenter;
 		}
 
-		VideoManager()->AddPresenter(*this);
+		VideoManager()->RegisterPresenter(*this);
 
 		result = SUCCESS;
 	}
@@ -114,11 +114,11 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 // FUNCTION: LEGO1 0x10066a50
 void LegoWorldPresenter::ReadyTickle()
 {
-	m_objectBackend = (LegoEntity*) MxPresenter::CreateEntityBackend("LegoWorld");
-	if (m_objectBackend) {
-		m_objectBackend->Create(*m_action);
-		Lego()->AddWorld((LegoWorld*) m_objectBackend);
-		SetBackendLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
+	m_entity = (LegoEntity*) MxPresenter::CreateEntity("LegoWorld");
+	if (m_entity) {
+		m_entity->Create(*m_action);
+		Lego()->AddWorld((LegoWorld*) m_entity);
+		SetEntityLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
 	}
 
 	ParseExtra();

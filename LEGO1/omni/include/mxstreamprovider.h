@@ -41,4 +41,7 @@ protected:
 // SYNTHETIC: LEGO1 0x100d0870
 // MxStreamProvider::`scalar deleting destructor'
 
+// SYNTHETIC: LEGO1 0x100d08e0
+// MxStreamProvider::~MxStreamProvider
+
 #endif // MXSTREAMPROVIDER_H

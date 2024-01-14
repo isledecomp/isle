@@ -97,6 +97,9 @@ inline double MxStopWatch::ElapsedSeconds() const
 	return m_elapsedSeconds;
 }
 
+// SYNTHETIC: LEGO1 0x100a6fc0
+// MxStopWatch::~MxStopWatch
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // MxFrequencyMeter
@@ -181,5 +184,8 @@ inline double MxFrequencyMeter::ElapsedSeconds() const
 {
 	return m_stopWatch.ElapsedSeconds();
 }
+
+// SYNTHETIC: LEGO1 0x100abd10
+// MxFrequencyMeter::~MxFrequencyMeter
 
 #endif /* _MxStopWatch_h */

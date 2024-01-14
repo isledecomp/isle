@@ -26,20 +26,20 @@ public:
 	}
 
 	virtual void ReadyTickle() override;                                                           // vtable+0x18
-	virtual void RepeatingTickle();                                                                // vtable+0x24
-	virtual void ParseExtra();                                                                     // vtable+0x30
+	virtual void RepeatingTickle() override;                                                       // vtable+0x24
+	virtual void ParseExtra() override;                                                            // vtable+0x30
 	virtual void Destroy() override;                                                               // vtable+0x38
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void Init();                                                                           // vtable+0x68
-	virtual undefined4 SetBackend(LegoEntity* p_unk0x4c);                                          // vtable+0x6c
+	virtual undefined4 SetEntity(LegoEntity* p_entity);                                            // vtable+0x6c
 
-	void SetBackendLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up);
+	void SetEntityLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up);
 
 private:
 	void Destroy(MxBool p_fromDestructor);
 
 protected:
-	LegoEntity* m_objectBackend; // 0x4c
+	LegoEntity* m_entity; // 0x4c
 };
 
 #endif // LEGOENTITYPRESENTER_H

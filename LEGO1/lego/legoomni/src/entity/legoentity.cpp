@@ -46,7 +46,7 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 {
 	m_mxEntityId = p_dsAction.GetObjectId();
 	m_atom = p_dsAction.GetAtomId();
-	Init();
+	SetWorld();
 	return SUCCESS;
 }
 

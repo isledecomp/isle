@@ -3,6 +3,7 @@
 
 #include "mxdsmediaaction.h"
 
+// VTABLE: LEGO1 0x100dce18
 class MxDSEvent : public MxDSMediaAction {
 public:
 	MxDSEvent();
