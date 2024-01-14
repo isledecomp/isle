@@ -113,4 +113,7 @@
 // LIBRARY: LEGO1 0x100d21f0
 // _strstr
 
+// LIBRARY: LEGO1 0x100d2270
+// __beginthreadex
+
 #endif
