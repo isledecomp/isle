@@ -18,7 +18,7 @@ ElevatorBottom::ElevatorBottom()
 // FUNCTION: LEGO1 0x10018060
 ElevatorBottom::~ElevatorBottom()
 {
-	if (InputManager()->m_world == this) {
+	if (InputManager()->GetWorld() == this) {
 		InputManager()->ClearWorld();
 	}
 	ControlManager()->Unregister(this);
