@@ -69,6 +69,9 @@ private:
 	void FUN_100c8720();
 };
 
+// TEMPLATE: LEGO1 0x100c14d0
+// list<MxDSAction *,allocator<MxDSAction *> >::erase
+
 // TEMPLATE: LEGO1 0x100c7330
 // list<MxDSAction *,allocator<MxDSAction *> >::_Buynode
 
