@@ -89,4 +89,7 @@
 // LIBRARY: LEGO1 0x100d2130
 // _vsprintf
 
+// LIBRARY: LEGO1 0x100d21c2
+// __CIpow
+
 #endif
