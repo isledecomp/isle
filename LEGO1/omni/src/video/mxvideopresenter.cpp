@@ -133,7 +133,7 @@ void MxVideoPresenter::Init()
 void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MVideoManager() != NULL)
-		MVideoManager()->RemovePresenter(*this);
+		MVideoManager()->UnregisterPresenter(*this);
 
 	if (m_unk0x58) {
 		m_unk0x58->Release();
@@ -504,7 +504,7 @@ MxResult MxVideoPresenter::AddToManager()
 
 	if (MVideoManager()) {
 		result = SUCCESS;
-		MVideoManager()->AddPresenter(*this);
+		MVideoManager()->RegisterPresenter(*this);
 	}
 
 	return result;

@@ -29,7 +29,7 @@ MxResult LegoPathPresenter::AddToManager()
 	MxResult status = FAILURE;
 
 	if (VideoManager()) {
-		VideoManager()->AddPresenter(*this);
+		VideoManager()->RegisterPresenter(*this);
 		status = SUCCESS;
 	}
 
@@ -40,7 +40,7 @@ MxResult LegoPathPresenter::AddToManager()
 void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (VideoManager())
-		VideoManager()->RemovePresenter(*this);
+		VideoManager()->UnregisterPresenter(*this);
 
 	{
 		MxAutoLocker lock(&this->m_criticalSection);
