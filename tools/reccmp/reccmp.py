@@ -230,7 +230,9 @@ def main():
                 print(f"Failed to find the function with address 0x{args.verbose:x}")
                 return
 
-            print_match_verbose(match, is_plain=args.no_color)
+            print_match_verbose(
+                match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
+            )
             return
 
         ### Compare everything.
@@ -241,7 +243,9 @@ def main():
         htmlinsert = []
 
         for match in isle_compare.compare_functions():
-            print_match_oneline(match, is_plain=args.no_color)
+            print_match_oneline(
+                match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
+            )
 
             function_count += 1
             total_accuracy += match.ratio
