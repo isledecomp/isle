@@ -1,9 +1,11 @@
 #ifndef ELEVATORBOTTOM_H
 #define ELEVATORBOTTOM_H
 
+#include "decomp.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d5f20
+// SIZE: 0xfc (from inlined ctor at 0x1000a8aa)
 class ElevatorBottom : public LegoWorld {
 public:
 	ElevatorBottom();
@@ -23,6 +25,9 @@ public:
 	{
 		return !strcmp(p_name, ElevatorBottom::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+private:
+	undefined4 m_unk0xf8; // 0xf8
 };
 
 #endif // ELEVATORBOTTOM_H

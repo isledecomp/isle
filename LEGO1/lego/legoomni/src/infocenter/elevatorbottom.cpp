@@ -1,9 +1,15 @@
 #include "elevatorbottom.h"
 
-// STUB: LEGO1 0x10017e90
+DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
+
+#include "mxnotificationmanager.h"
+#include "mxomni.h"
+
+// FUNCTION: LEGO1 0x10017e90
 ElevatorBottom::ElevatorBottom()
 {
-	// TODO
+	NotificationManager()->Register(this);
+	this->m_unk0xf8 = 0;
 }
 
 // STUB: LEGO1 0x10018060
