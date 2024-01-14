@@ -99,6 +99,12 @@ MxU32 MxDSAction::GetSizeOnDisk()
 	return totalSizeOnDisk;
 }
 
+// FUNCTION: LEGO1 0x100adbd0
+undefined4 MxDSAction::VTable0x14()
+{
+	return MxDSObject::VTable0x14();
+}
+
 // FUNCTION: LEGO1 0x100adc10
 MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
 {

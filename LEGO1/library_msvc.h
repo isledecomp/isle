@@ -40,6 +40,9 @@
 // LIBRARY: LEGO1 0x1008b608
 // __ftol
 
+// LIBRARY: LEGO1 0x1008b630
+// _srand
+
 // LIBRARY: LEGO1 0x1008b680
 // _strncmp
 
@@ -81,6 +84,9 @@
 
 // LIBRARY: LEGO1 0x1008ca60
 // _abort
+
+// LIBRARY: LEGO1 0x100977c0
+// _itoa
 
 // LIBRARY: LEGO1 0x10097b10
 // _strchr

@@ -47,12 +47,12 @@ MxRAMStreamProvider::~MxRAMStreamProvider()
 	m_bufferSize = 0;
 	m_fileSize = 0;
 
-	free(m_pBufferOfFileSize);
+	delete[] m_pBufferOfFileSize;
 	m_pBufferOfFileSize = NULL;
 
 	m_lengthInDWords = 0;
 
-	free(m_bufferForDWords);
+	delete[] m_bufferForDWords;
 	m_bufferForDWords = NULL;
 }
 
