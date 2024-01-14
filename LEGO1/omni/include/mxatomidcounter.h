@@ -43,4 +43,7 @@ struct MxAtomIdCounterCompare {
 
 class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare> {};
 
+// SYNTHETIC: LEGO1 0x100ad170
+// MxAtomIdCounter::~MxAtomIdCounter
+
 #endif // MXATOMIDCOUNTER_H
