@@ -43,6 +43,9 @@
 // LIBRARY: LEGO1 0x1008b680
 // _strncmp
 
+// LIBRARY: LEGO1 0x1008b730
+// _fprintf
+
 // LIBRARY: LEGO1 0x1008b780
 // _fwrite
 
@@ -76,6 +79,12 @@
 // LIBRARY: LEGO1 0x1008c5c0
 // _fseek
 
+// LIBRARY: LEGO1 0x1008ca60
+// _abort
+
+// LIBRARY: LEGO1 0x10097b10
+// _strchr
+
 // LIBRARY: ISLE 0x4081e0
 // _srand
 
@@ -100,5 +109,8 @@
 
 // LIBRARY: LEGO1 0x100d21c2
 // __CIpow
+
+// LIBRARY: LEGO1 0x100d21f0
+// _strstr
 
 #endif

@@ -24,6 +24,7 @@ public:
 		}
 	}
 
+	// FUNCTION: LEGO1 0x100b9110
 	~MxStreamerSubClass1() { delete[] m_buffer; }
 
 	undefined4 GetSize() const { return m_size; }
@@ -56,8 +57,6 @@ public:
 	{
 		m_controller = p_ctrlr;
 	}
-
-	virtual ~MxStreamerNotification() override {}
 
 	virtual MxNotificationParam* Clone() override;
 
@@ -114,7 +113,21 @@ private:
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };
 
+// clang-format off
+// TEMPLATE: LEGO1 0x100b9090
+// list<MxStreamController *,allocator<MxStreamController *> >::~list<MxStreamController *,allocator<MxStreamController *> >
+// clang-format on
+
 // SYNTHETIC: LEGO1 0x100b9120
 // MxStreamer::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b9140
+// List<MxStreamController *>::~List<MxStreamController *>
+
+// SYNTHETIC: LEGO1 0x100b97b0
+// MxStreamerNotification::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100b9820
+// MxStreamerNotification::~MxStreamerNotification
 
 #endif // MXSTREAMER_H

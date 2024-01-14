@@ -11,7 +11,7 @@ class MxSemaphore {
 public:
 	MxSemaphore();
 
-	// Inlined only, no offset
+	// FUNCTION: LEGO1 0x100c87e0
 	~MxSemaphore() { CloseHandle(m_hSemaphore); }
 
 	virtual MxResult Init(MxU32 p_initialCount, MxU32 p_maxCount);
