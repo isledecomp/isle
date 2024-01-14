@@ -31,4 +31,7 @@ private:
 	MxOmniCreateFlags m_createFlags;
 };
 
+// FUNCTION: ISLE 0x4014b0
+// MxOmniCreateParam::~MxOmniCreateParam
+
 #endif // MXOMNICREATEPARAM_H
