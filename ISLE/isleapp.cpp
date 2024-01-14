@@ -614,8 +614,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	LegoAnimationManager::configureLegoAnimationManager(m_islandQuality);
 	if (LegoOmni::GetInstance()) {
 		if (LegoOmni::GetInstance()->GetInputManager()) {
-			LegoOmni::GetInstance()->GetInputManager()->m_useJoystick = m_useJoystick;
-			LegoOmni::GetInstance()->GetInputManager()->m_joystickIndex = m_joystickIndex;
+			LegoOmni::GetInstance()->GetInputManager()->SetUseJoystick(m_useJoystick);
+			LegoOmni::GetInstance()->GetInputManager()->SetJoystickIndex(m_joystickIndex);
 		}
 	}
 	if (m_fullScreen) {
