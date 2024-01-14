@@ -44,6 +44,9 @@ public:
 // TEMPLATE: LEGO1 0x100c9cc0
 // MxCollection<MxDSAction *>::Compare
 
+// TEMPLATE: LEGO1 0x100c9cd0
+// MxCollection<MxDSAction *>::~MxCollection<MxDSAction *>
+
 // TEMPLATE: LEGO1 0x100c9d20
 // MxCollection<MxDSAction *>::Destroy
 

@@ -10,7 +10,7 @@
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
-// GLOBAL: LEGO1 0x10101eb0
+// GLOBAL: LEGO1 0x101020e0
 const char* g_strBmpIsmap = "BMP_ISMAP";
 
 // FUNCTION: LEGO1 0x100b9c70
@@ -164,7 +164,7 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 // FUNCTION: LEGO1 0x100ba140
 void MxStillPresenter::Enable(MxBool p_enable)
 {
-	MxVideoPresenter::Enable(p_enable);
+	MxPresenter::Enable(p_enable);
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
 		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));

@@ -88,6 +88,12 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_unk0x90 = p_dsAction.m_unk0x90;
 }
 
+// FUNCTION: LEGO1 0x100adbd0
+undefined4 MxDSAction::VTable0x14()
+{
+	return MxDSObject::VTable0x14();
+}
+
 // FUNCTION: LEGO1 0x100adbe0
 MxU32 MxDSAction::GetSizeOnDisk()
 {

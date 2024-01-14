@@ -6,6 +6,12 @@ LegoHideAnimPresenter::LegoHideAnimPresenter()
 	Init();
 }
 
+// STUB: LEGO1 0x1006d9f0
+LegoHideAnimPresenter::~LegoHideAnimPresenter()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1006da50
 void LegoHideAnimPresenter::Init()
 {

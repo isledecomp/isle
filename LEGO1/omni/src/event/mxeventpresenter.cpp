@@ -78,7 +78,7 @@ void MxEventPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100c2eb0
 void MxEventPresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = NextChunk();
+	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
 		ProgressTickleState(TickleState_Streaming);

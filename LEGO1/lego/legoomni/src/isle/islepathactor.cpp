@@ -17,6 +17,13 @@ MxResult IslePathActor::Create(MxDSAction& p_dsAction)
 	return MxEntity::Create(p_dsAction);
 }
 
+// FUNCTION: LEGO1 0x1001a2a0
+void IslePathActor::Destroy(MxBool p_fromDestructor)
+{
+	if (!p_fromDestructor)
+		LegoPathActor::Destroy(FALSE);
+}
+
 // STUB: LEGO1 0x1001a350
 void IslePathActor::VTable0xe0()
 {

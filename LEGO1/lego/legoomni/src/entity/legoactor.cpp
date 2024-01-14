@@ -11,3 +11,9 @@ LegoActor::LegoActor()
 	m_unk0x10 = 0;
 	m_unk0x74 = 0;
 }
+
+// STUB: LEGO1 0x1002d320
+LegoActor::~LegoActor()
+{
+	// TODO
+}

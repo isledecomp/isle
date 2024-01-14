@@ -94,6 +94,9 @@ public:
 // TEMPLATE: LEGO1 0x1005bb80
 // MxCollection<LegoEventNotificationParam>::Compare
 
+// TEMPLATE: LEGO1 0x1005bbe0
+// MxCollection<LegoEventNotificationParam>::~MxCollection<LegoEventNotificationParam>
+
 // TEMPLATE: LEGO1 0x1005bc30
 // MxCollection<LegoEventNotificationParam>::Destroy
 
@@ -108,6 +111,9 @@ public:
 
 // SYNTHETIC: LEGO1 0x1005beb0
 // LegoEventQueue::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1005bf20
+// MxQueue<LegoEventNotificationParam>::~MxQueue<LegoEventNotificationParam>
 
 // SYNTHETIC: LEGO1 0x1005bf70
 // MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'

@@ -8,6 +8,7 @@
 
 #include <windows.h>
 
+// VTABLE: LEGO1 0x100dc218
 class MxOmniCreateParam : public MxParam {
 public:
 	__declspec(dllexport) MxOmniCreateParam(
@@ -29,5 +30,8 @@ private:
 	MxVideoParam m_videoParam;
 	MxOmniCreateFlags m_createFlags;
 };
+
+// SYNTHETIC: ISLE 0x4014b0
+// MxOmniCreateParam::~MxOmniCreateParam
 
 #endif // MXOMNICREATEPARAM_H

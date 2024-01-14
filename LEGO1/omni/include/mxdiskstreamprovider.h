@@ -20,9 +20,6 @@ public:
 
 	MxResult Run() override;
 	MxResult StartWithTarget(MxDiskStreamProvider* p_target);
-
-	// SYNTHETIC: LEGO1 0x100d10a0
-	// MxDiskStreamProviderThread::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dd138
@@ -58,9 +55,6 @@ public:
 	virtual MxU32 GetLengthInDWords() override;                                 // vtable+0x24
 	virtual MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
-	// SYNTHETIC: LEGO1 0x100d1220
-	// MxDiskStreamProvider::`scalar deleting destructor'
-
 private:
 	MxDiskStreamProviderThread m_thread; // 0x10
 	MxSemaphore m_busySemaphore;         // 0x2c
@@ -69,5 +63,14 @@ private:
 	MxCriticalSection m_criticalSection; // 0x38
 	MxStreamListMxDSAction m_list;       // 0x54
 };
+
+// SYNTHETIC: LEGO1 0x100d10a0
+// MxDiskStreamProviderThread::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100d1110
+// MxDiskStreamProviderThread::~MxDiskStreamProviderThread
+
+// SYNTHETIC: LEGO1 0x100d1220
+// MxDiskStreamProvider::`scalar deleting destructor'
 
 #endif // MXDISKSTREAMPROVIDER_H

@@ -41,6 +41,9 @@ public:
 // TEMPLATE: LEGO1 0x100b5930
 // MxCollection<MxStreamChunk *>::Compare
 
+// TEMPLATE: LEGO1 0x100b5940
+// MxCollection<MxStreamChunk *>::~MxCollection<MxStreamChunk *>
+
 // TEMPLATE: LEGO1 0x100b5990
 // MxCollection<MxStreamChunk *>::Destroy
 
