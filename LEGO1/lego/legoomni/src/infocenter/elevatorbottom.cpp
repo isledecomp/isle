@@ -2,6 +2,9 @@
 
 DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
 
+#include "legocontrolmanager.h"
+#include "legoinputmanager.h"
+#include "legoomni.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
 
@@ -12,10 +15,14 @@ ElevatorBottom::ElevatorBottom()
 	this->m_unk0xf8 = 0;
 }
 
-// STUB: LEGO1 0x10018060
+// FUNCTION: LEGO1 0x10018060
 ElevatorBottom::~ElevatorBottom()
 {
-	// TODO
+	if (InputManager()->m_world == this) {
+		InputManager()->ClearWorld();
+	}
+	ControlManager()->Unregister(this);
+	NotificationManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x10018150
