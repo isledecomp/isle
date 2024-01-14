@@ -29,6 +29,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100dc510
+// SIZE 0x10
 class MxStreamChunkListCursor : public MxListCursor<MxStreamChunk*> {
 public:
 	MxStreamChunkListCursor(MxStreamChunkList* p_list) : MxListCursor<MxStreamChunk*>(p_list){};

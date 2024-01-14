@@ -28,10 +28,17 @@ public:
 	}; // vtable+0x14
 };
 
+// VTABLE: LEGO1 0x100d75b8
+// MxListCursor<LegoWorld *>
+
+// VTABLE: LEGO1 0x100d7588
+// MxPtrListCursor<LegoWorld>
+
 // VTABLE: LEGO1 0x100d75a0
-class LegoWorldListCursor : public MxListCursor<LegoWorld*> {
+// SIZE 0x10
+class LegoWorldListCursor : public MxPtrListCursor<LegoWorld> {
 public:
-	LegoWorldListCursor(LegoWorldList* p_list) : MxListCursor<LegoWorld*>(p_list){};
+	LegoWorldListCursor(LegoWorldList* p_list) : MxPtrListCursor<LegoWorld>(p_list){};
 };
 
 // TEMPLATE: LEGO1 0x100598f0
@@ -60,5 +67,14 @@ public:
 
 // SYNTHETIC: LEGO1 0x1003e870
 // LegoWorldListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1003e8e0
+// MxPtrListCursor<LegoWorld>::~MxPtrListCursor<LegoWorld>
+
+// FUNCTION: LEGO1 0x1003ea10
+// MxListCursor<LegoWorld *>::~MxListCursor<LegoWorld *>
+
+// FUNCTION: LEGO1 0x1003ea60
+// LegoWorldListCursor::~LegoWorldListCursor
 
 #endif // LEGOWORLDLIST_H

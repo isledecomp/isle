@@ -9,6 +9,7 @@
 class MxStringList : public MxList<MxString> {};
 
 // VTABLE: LEGO1 0x100dd058
+// SIZE 0x10
 class MxStringListCursor : public MxListCursor<MxString> {
 public:
 	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list){};

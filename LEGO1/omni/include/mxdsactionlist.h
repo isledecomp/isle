@@ -35,6 +35,7 @@ private:
 // class MxListCursor<MxDSAction *>
 
 // VTABLE: LEGO1 0x100d7e50
+// SIZE 0x10
 class MxDSActionListCursor : public MxListCursor<MxDSAction*> {
 public:
 	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list){};
