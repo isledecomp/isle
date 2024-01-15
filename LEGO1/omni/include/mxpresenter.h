@@ -127,10 +127,10 @@ public:
 	{
 		m_compositePresenter = p_compositePresenter;
 	}
+	void SendToCompositePresenter(MxOmni*);
 
 protected:
 	__declspec(dllexport) void Init();
-	void SendToCompositePresenter(MxOmni*);
 
 	TickleState m_currentTickleState;           // 0x8
 	MxU32 m_previousTickleStates;               // 0x0c

@@ -10,6 +10,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsactionlist.h"
+#include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
@@ -145,9 +146,27 @@ void LegoWorldPresenter::StartingTickle()
 	ProgressTickleState(TickleState_Streaming);
 }
 
-// STUB: LEGO1 0x10067a70
+// FUNCTION: LEGO1 0x10067a70
 void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 {
+	MxCompositePresenter::VTable0x60(p_presenter);
+	MxDSAction* action = p_presenter->GetAction();
+
+	if (action->GetDuration() != -1 && (action->GetFlags() & 1) == 0) {
+		if (!action->IsA("MxDSMediaAction")) {
+			return;
+		}
+
+		if (((MxDSMediaAction*) action)->GetSustainTime() != -1) {
+			return;
+		}
+	}
+
+	if (!p_presenter->IsA("LegoAnimPresenter") && !p_presenter->IsA("MxControlPresenter") &&
+		!p_presenter->IsA("MxCompositePresenter")) {
+		p_presenter->SendToCompositePresenter(Lego());
+		((LegoWorld*) m_entity)->VTable0x58(p_presenter);
+	}
 }
 
 // STUB: LEGO1 0x10067b00
