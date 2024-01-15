@@ -53,7 +53,7 @@ MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSA
 {
 	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
 
-	FUN_100b7220(m_action, 0x81, TRUE);
+	FUN_100b7220(m_action, MxDSAction::Flag_World | MxDSAction::Flag_Looping, TRUE);
 	ParseExtra();
 
 	MxS16 i = 0;
