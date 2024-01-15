@@ -3,6 +3,7 @@
 
 #include "legocameracontroller.h"
 #include "legoentity.h"
+#include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
 #include "mxpresenter.h"
 #include "mxpresenterlist.h"
@@ -59,7 +60,8 @@ protected:
 	LegoPathControllerList m_list0x68;        // 0x68
 	MxPresenterList m_list0x80;               // 0x80
 	LegoCameraController* m_cameraController; // 0x98
-	undefined m_unk0x9c[0x1c];                // 0x9c
+	LegoEntityList* m_entityList;             // 0x9c
+	undefined m_unk0xa0[0x18];                // 0xa0
 	MxPresenterList m_list0xb8;               // 0xb8
 	undefined m_unk0xd0[0x1c];                // 0xd0
 	undefined4 m_unk0xec;                     // 0xec

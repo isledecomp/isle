@@ -45,7 +45,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 {
 	MxEntity::Create(p_dsAction);
 
-	// TODO: Intitialize lists
+	m_entityList = new LegoEntityList(TRUE);
 
 	if (VTable0x54()) {
 		if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
