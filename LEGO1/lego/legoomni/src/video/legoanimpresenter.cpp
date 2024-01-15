@@ -132,13 +132,6 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
-
-// STUB: LEGO1 0x1006ad30
-void LegoAnimPresenter::PutFrame()
-{
-	// TODO
-}
-
 // FUNCTION: LEGO1 0x10068fb0
 MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
@@ -174,6 +167,12 @@ MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 	}
 
 	return result;
+}
+
+// STUB: LEGO1 0x1006ad30
+void LegoAnimPresenter::PutFrame()
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10099dd0
