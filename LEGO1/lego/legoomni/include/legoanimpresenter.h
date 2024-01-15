@@ -38,6 +38,8 @@ public:
 	virtual void PutFrame() override;                                                              // vtable+0x6c
 	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                           // vtable+0x88
 
+	// 6 more virtual functions here
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
