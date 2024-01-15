@@ -77,14 +77,6 @@ void LegoAnimPresenter::ReadyTickle()
 	}
 }
 
-// FUNCTION: LEGO1 0x1006c620
-MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
-{
-	MxResult result = MxVideoPresenter::StartAction(p_controller, p_action);
-	m_displayZ = 0;
-	return result;
-}
-
 // STUB: LEGO1 0x1006b5e0
 void LegoAnimPresenter::StartingTickle()
 {
@@ -119,10 +111,12 @@ void LegoAnimPresenter::ParseExtra()
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x1006b8e0
-void LegoAnimPresenter::Destroy()
+// FUNCTION: LEGO1 0x1006c620
+MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	Destroy(FALSE);
+	MxResult result = MxVideoPresenter::StartAction(p_controller, p_action);
+	m_displayZ = 0;
+	return result;
 }
 
 // STUB: LEGO1 0x1006c640
@@ -130,6 +124,12 @@ void LegoAnimPresenter::EndAction()
 {
 	// TODO
 	MxVideoPresenter::EndAction();
+}
+
+// FUNCTION: LEGO1 0x1006b8e0
+void LegoAnimPresenter::Destroy()
+{
+	Destroy(FALSE);
 }
 
 // STUB: LEGO1 0x1006ad30
