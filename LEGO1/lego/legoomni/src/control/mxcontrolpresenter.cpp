@@ -52,30 +52,21 @@ MxResult MxControlPresenter::AddToManager()
 MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
 	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
-	MxU8 i = 0;
 
 	FUN_100b7220(m_action, 0x81, TRUE);
 	ParseExtra();
 
+	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		MxBool toggle;
-		if (m_unk0x4c == 3 && m_unk0x4e == 0) {
-			toggle = FALSE;
-		}
-		else {
-			if (!IsEnabled()) {
-				toggle = FALSE;
-			}
-			toggle = m_unk0x4e == i;
-		}
-
+		(*it)->Enable((m_unk0x4c != 3 || m_unk0x4e) && IsEnabled() ? m_unk0x4e == i : FALSE);
 		i++;
-		(*it)->Enable(toggle);
 	}
 
 	if (m_unk0x4c == 3) {
-		(*m_list.end())->GetAction()->SetFlags((*m_list.end())->GetAction()->GetFlags() | 0x400);
+		MxDSAction* action = (*m_list.begin())->GetAction();
+		action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit11);
 	}
+
 	TickleManager()->RegisterClient(this, 200);
 
 	return result;
@@ -130,7 +121,7 @@ void MxControlPresenter::Enable(MxBool p_enable)
 	if (MxPresenter::IsEnabled() != p_enable) {
 		MxPresenter::Enable(p_enable);
 
-		MxU16 i = 0;
+		MxS16 i = 0;
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			if (i == m_unk0x4e) {
 				(*it)->Enable((m_unk0x4c != 3 || i != 0) ? p_enable : 0);
