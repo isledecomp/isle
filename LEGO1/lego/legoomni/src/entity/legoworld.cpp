@@ -11,7 +11,11 @@
 #include "mxomni.h"
 #include "mxticklemanager.h"
 
-DECOMP_SIZE_ASSERT(LegoWorld, 0xf8);
+DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
+DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
+DECOMP_SIZE_ASSERT(LegoEntityListCursor, 0x10)
+DECOMP_SIZE_ASSERT(MxCoreList, 0x18)
+DECOMP_SIZE_ASSERT(MxCoreListCursor, 0x10)
 
 // STUB: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
