@@ -136,7 +136,8 @@ void LegoAnimPresenter::StartingTickle()
 void LegoAnimPresenter::StreamingTickle()
 {
 	if (m_subscriber->CurrentChunk()) {
-		m_subscriber->DestroyChunk(m_subscriber->NextChunk());
+		MxStreamChunk* chunk = m_subscriber->NextChunk();
+		m_subscriber->DestroyChunk(chunk);
 	}
 
 	if (m_unk0x95 == 0) {

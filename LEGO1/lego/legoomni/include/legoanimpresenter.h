@@ -97,7 +97,7 @@ public:
 	virtual void VTable0xc() override;                              // vtable+0x0c
 	virtual MxResult VTable0x10(LegoMemoryStream* p_stream, MxS32); // vtable+0x10
 
-	undefined4 m_unk0x8;  // 0x08
+	MxLong m_unk0x8;      // 0x08
 	undefined4 m_unk0xc;  // 0x0c
 	undefined4 m_unk0x10; // 0x10
 	undefined4 m_unk0x14; // 0x14
