@@ -37,6 +37,11 @@ LegoMeterPresenter::LegoMeterPresenter()
 	m_unk0x6c = 0;
 	m_unk0x84 = 0;
 }
+// FUNCTION: LEGO1 0x10043780
+LegoMeterPresenter::~LegoMeterPresenter()
+{
+	delete m_unk0x6c;
+}
 
 // FUNCTION: LEGO1 0x10043800
 void LegoMeterPresenter::ParseExtra()

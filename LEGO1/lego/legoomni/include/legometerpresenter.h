@@ -8,8 +8,8 @@
 class LegoMeterPresenter : public MxStillPresenter {
 public:
 	LegoMeterPresenter();
-	// FUNCTION: LEGO1 0x10043550
-	virtual ~LegoMeterPresenter() override{};
+	virtual ~LegoMeterPresenter();
+
 	// MxStillPresenter's `::ClassName` and `::IsA` are used.
 
 	virtual void StreamingTickle() override; // vtable+0x20
