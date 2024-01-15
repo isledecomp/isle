@@ -56,9 +56,9 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x10068fb0
-MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
+MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
-	MxS32 result = FAILURE;
+	MxResult result = FAILURE;
 	LegoMemoryStream stream((char*) p_chunk->GetData());
 
 	MxS32 magicSig;
@@ -104,21 +104,21 @@ void LegoAnimPresenter::PutFrame()
 void LegoAnimPresenter::ReadyTickle()
 {
 	m_currentWorld = GetCurrentWorld();
+
 	if (m_currentWorld) {
 		MxStreamChunk* chunk = m_subscriber->CurrentChunk();
-		if (chunk) {
-			if (chunk->GetTime() + m_action->GetStartTime() <= m_action->GetElapsedTime()) {
-				chunk = m_subscriber->NextChunk();
-				MxU32 result = VTable0x88(chunk);
-				m_subscriber->DestroyChunk(chunk);
 
-				if (result == 0) {
-					ProgressTickleState(TickleState_Starting);
-					ParseExtra();
-				}
-				else {
-					EndAction();
-				}
+		if (chunk && chunk->GetTime() + m_action->GetStartTime() <= m_action->GetElapsedTime()) {
+			chunk = m_subscriber->NextChunk();
+			MxResult result = VTable0x88(chunk);
+			m_subscriber->DestroyChunk(chunk);
+
+			if (result == SUCCESS) {
+				ProgressTickleState(TickleState_Starting);
+				ParseExtra();
+			}
+			else {
+				EndAction();
 			}
 		}
 	}
