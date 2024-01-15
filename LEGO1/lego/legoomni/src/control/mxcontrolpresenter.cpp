@@ -29,9 +29,9 @@ MxBool MxControlPresenter::VTable0x64(undefined4 p_undefined)
 }
 
 // FUNCTION: LEGO1 0x10043ff0
-void MxControlPresenter::VTable0x68(MxBool p_undefined)
+void MxControlPresenter::VTable0x68(MxBool p_unk0x50)
 {
-	m_unk0x50 = p_undefined;
+	m_unk0x50 = p_unk0x50;
 }
 
 // FUNCTION: LEGO1 0x10044110
@@ -105,7 +105,7 @@ MxBool MxControlPresenter::FUN_10044480(undefined4, undefined4*)
 }
 
 // STUB: LEGO1 0x10044540
-void MxControlPresenter::VTable0x6c(MxU32 p_new4e)
+void MxControlPresenter::VTable0x6c(undefined4)
 {
 	// TODO
 }
@@ -130,12 +130,13 @@ void MxControlPresenter::Enable(MxBool p_enable)
 	if (MxPresenter::IsEnabled() != p_enable) {
 		MxPresenter::Enable(p_enable);
 
-		MxU8 i = 0;
+		MxU16 i = 0;
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			if (i == m_unk0x4e) {
 				(*it)->Enable((m_unk0x4c != 3 || i != 0) ? p_enable : 0);
 				break;
 			}
+
 			i++;
 		}
 
@@ -149,9 +150,8 @@ void MxControlPresenter::Enable(MxBool p_enable)
 MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	MxCompositePresenterList::iterator it = m_list.begin();
-	for (MxU8 i = m_unk0x4e; i != 0; i--) {
-		it++;
-	}
+	for (MxS16 i = m_unk0x4e; i > 0; i--, it++)
+		;
 
 	return (*it)->HasTickleStatePassed(p_tickleState);
 }

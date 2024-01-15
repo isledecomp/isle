@@ -33,8 +33,8 @@ public:
 	virtual MxBool HasTickleStatePassed(TickleState p_tickleState) override; // vtable+0x48
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
 	virtual MxBool VTable0x64(undefined4 p_undefined) override;              // vtable+0x64
-	virtual void VTable0x68(MxBool p_undefined);                             // vtable+0x68
-	virtual void VTable0x6c(MxU32 p_new4e);                                  // vtable+0x6c
+	virtual void VTable0x68(MxBool p_unk0x50);                               // vtable+0x68
+	virtual void VTable0x6c(undefined4);                                     // vtable+0x6c
 
 private:
 	MxBool FUN_10044270(undefined4, undefined4, undefined4*);
@@ -42,7 +42,7 @@ private:
 	void FUN_10044540(undefined2);
 
 	undefined2 m_unk0x4c;  // 0x4c
-	MxS16 m_unk0x4e;       // 0x4e
+	MxU16 m_unk0x4e;       // 0x4e
 	MxBool m_unk0x50;      // 0x50
 	undefined2 m_unk0x52;  // 0x52
 	undefined2 m_unk0x54;  // 0x54
