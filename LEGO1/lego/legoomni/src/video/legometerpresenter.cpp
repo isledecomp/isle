@@ -11,16 +11,16 @@ const char* g_filterIndex = "FILTER_INDEX";
 const char* g_type = "TYPE";
 
 // GLOBAL: LEGO1 0x10102088
-const char* g_left_to_right = "LEFT_TO_RIGHT";
+const char* g_leftToRight = "LEFT_TO_RIGHT";
 
 // GLOBAL: LEGO1 0x101020ac
-const char* g_right_to_left = "RIGHT_TO_LEFT";
+const char* g_rightToLeft = "RIGHT_TO_LEFT";
 
 // GLOBAL: LEGO1 0x1010205c
-const char* g_bottom_to_top = "BOTTOM_TO_TOP";
+const char* g_bottomToTop = "BOTTOM_TO_TOP";
 
 // GLOBAL: LEGO1 0x101020c0
-const char* g_top_to_bottom = "TOP_TO_BOTTOM";
+const char* g_topToBottom = "TOP_TO_BOTTOM";
 
 // GLOBAL: LEGO1 0x101020c8
 const char* g_variable = "VARIABLE";
@@ -56,16 +56,16 @@ void LegoMeterPresenter::ParseExtra()
 		memcpy(buffer, m_action->GetExtraData(), *((MxU16*) &result[0]));
 
 		if (KeyValueStringParse(buffer, g_type, result)) {
-			if (!strcmp(result, g_left_to_right)) {
+			if (!strcmp(result, g_leftToRight)) {
 				m_layout = 0;
 			}
-			else if (!strcmp(result, g_right_to_left)) {
+			else if (!strcmp(result, g_rightToLeft)) {
 				m_layout = 1;
 			}
-			else if (!strcmp(result, g_bottom_to_top)) {
+			else if (!strcmp(result, g_bottomToTop)) {
 				m_layout = 2;
 			}
-			else if (!strcmp(result, g_top_to_bottom)) {
+			else if (!strcmp(result, g_topToBottom)) {
 				m_layout = 3;
 			}
 		}
@@ -76,7 +76,10 @@ void LegoMeterPresenter::ParseExtra()
 
 		if (KeyValueStringParse(buffer, g_variable, result)) {
 			m_variable = result;
-			return;
+		}
+		else
+		{
+			EndAction();
 		}
 	}
 	else {
