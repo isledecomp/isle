@@ -36,7 +36,7 @@ public:
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void EndAction() override;                                                             // vtable+0x40
 	virtual void PutFrame() override;                                                              // vtable+0x6c
-	virtual MxResult VTable0x88(MxStreamChunk* p_chunk) override;                                  // vtable+0x88
+	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                           // vtable+0x88
 
 private:
 	void Init();
