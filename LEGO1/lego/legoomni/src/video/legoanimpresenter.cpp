@@ -53,6 +53,49 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 	MxVideoPresenter::Destroy(p_fromDestructor);
 }
 
+// FUNCTION: LEGO1 0x10068fb0
+MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
+{
+	MxS32 result = FAILURE;
+	LegoMemoryStream stream((char*) p_chunk->GetData());
+	MxS32 magicSig;
+	MxS32 val3;
+	MxS32 val2 = 0;
+	if (stream.Read(&magicSig, sizeof(MxS32)) == SUCCESS && magicSig == 0x11) {
+		if (stream.Read(&m_unk0xa4, sizeof(MxU32)) == SUCCESS) {
+			if (stream.Read(m_vec.GetX(), sizeof(float)) == SUCCESS) {
+				if (stream.Read(m_vec.GetY(), sizeof(float)) == SUCCESS) {
+					if (stream.Read(m_vec.GetZ(), sizeof(float)) == SUCCESS) {
+						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
+							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
+								m_unk0x64 = new LegoAnimClass();
+								if (m_unk0x64) {
+									if (m_unk0x64->VTable0x10(&stream, val3) == SUCCESS) {
+										result = SUCCESS;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (result != SUCCESS) {
+		delete m_unk0x64;
+		Init();
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x1006ad30
+void LegoAnimPresenter::PutFrame()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1006b550
 void LegoAnimPresenter::ReadyTickle()
 {
@@ -130,49 +173,6 @@ void LegoAnimPresenter::EndAction()
 {
 	// TODO
 	MxVideoPresenter::EndAction();
-}
-
-// FUNCTION: LEGO1 0x10068fb0
-MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
-{
-	MxS32 result = FAILURE;
-	LegoMemoryStream stream((char*) p_chunk->GetData());
-	MxS32 magicSig;
-	MxS32 val3;
-	MxS32 val2 = 0;
-	if (stream.Read(&magicSig, sizeof(MxS32)) == SUCCESS && magicSig == 0x11) {
-		if (stream.Read(&m_unk0xa4, sizeof(MxU32)) == SUCCESS) {
-			if (stream.Read(m_vec.GetX(), sizeof(float)) == SUCCESS) {
-				if (stream.Read(m_vec.GetY(), sizeof(float)) == SUCCESS) {
-					if (stream.Read(m_vec.GetZ(), sizeof(float)) == SUCCESS) {
-						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
-							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
-								m_unk0x64 = new LegoAnimClass();
-								if (m_unk0x64) {
-									if (m_unk0x64->VTable0x10(&stream, val3) == SUCCESS) {
-										result = SUCCESS;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	if (result != SUCCESS) {
-		delete m_unk0x64;
-		Init();
-	}
-
-	return result;
-}
-
-// STUB: LEGO1 0x1006ad30
-void LegoAnimPresenter::PutFrame()
-{
-	// TODO
 }
 
 // FUNCTION: LEGO1 0x10099dd0
