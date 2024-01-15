@@ -21,7 +21,7 @@ public:
 };
 
 // VTALBE: LEGO1 0x100db8d8
-class LegoAnimClass {
+class LegoAnimClass : public LegoAnimClassBase {
 public:
 	LegoAnimClass();
 	virtual ~LegoAnimClass() override;
