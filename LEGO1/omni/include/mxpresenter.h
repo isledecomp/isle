@@ -116,6 +116,7 @@ public:
 	__declspec(dllexport) virtual void Enable(MxBool p_enable); // vtable+0x54
 
 	MxEntity* CreateEntity(const char* p_name);
+	void SendToCompositePresenter(MxOmni*);
 	MxBool IsEnabled();
 
 	inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }
@@ -130,7 +131,6 @@ public:
 
 protected:
 	__declspec(dllexport) void Init();
-	void SendToCompositePresenter(MxOmni*);
 
 	TickleState m_currentTickleState;           // 0x8
 	MxU32 m_previousTickleStates;               // 0x0c
