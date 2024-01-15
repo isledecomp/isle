@@ -124,6 +124,8 @@ void LegoAnimPresenter::ReadyTickle()
 void LegoAnimPresenter::StartingTickle()
 {
 	// TODO
+	ProgressTickleState(TickleState_Streaming);
+	m_unk0x95 = 1; // Allow game to start
 }
 
 // FUNCTION: LEGO1 0x1006b840
