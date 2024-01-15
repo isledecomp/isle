@@ -3,6 +3,7 @@
 #include "legoomni.h"
 #include "legostream.h"
 #include "legoworld.h"
+#include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxstreamchunk.h"
 
@@ -49,7 +50,7 @@ void LegoAnimPresenter::Init()
 void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
 	// TODO
-	return MxVideoPresenter::Destroy(p_fromDestructor);
+	MxVideoPresenter::Destroy(p_fromDestructor);
 }
 
 // FUNCTION: LEGO1 0x1006b550
@@ -76,11 +77,12 @@ void LegoAnimPresenter::ReadyTickle()
 	}
 }
 
-// STUB: LEGO1 0x1006c620
+// FUNCTION: LEGO1 0x1006c620
 MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	// TODO
-	return MxVideoPresenter::StartAction(p_controller, p_action);
+	MxResult result = MxVideoPresenter::StartAction(p_controller, p_action);
+	m_displayZ = 0;
+	return result;
 }
 
 // STUB: LEGO1 0x1006b5e0
@@ -89,10 +91,26 @@ void LegoAnimPresenter::StartingTickle()
 	// TODO
 }
 
-// STUB: LEGO1 0x1006b840
+// FUNCTION: LEGO1 0x1006b840
 void LegoAnimPresenter::StreamingTickle()
 {
-	// TODO
+	if (m_subscriber->CurrentChunk()) {
+		m_subscriber->DestroyChunk(m_subscriber->NextChunk());
+	}
+
+	if (m_unk0x95 == 0) {
+		if (m_unk0x64->m_unk0x8 + m_action->GetStartTime() < m_action->GetElapsedTime()) {
+			m_unk0x95 = 1;
+		}
+	}
+	else {
+		ProgressTickleState(TickleState_Done);
+		if (m_compositePresenter) {
+			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
+				m_compositePresenter->VTable0x60(this);
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x1006bac0
@@ -111,6 +129,7 @@ void LegoAnimPresenter::Destroy()
 void LegoAnimPresenter::EndAction()
 {
 	// TODO
+	MxVideoPresenter::EndAction();
 }
 
 // STUB: LEGO1 0x1006ad30
@@ -119,26 +138,24 @@ void LegoAnimPresenter::PutFrame()
 	// TODO
 }
 
-// STUB: LEGO1 0x10068fb0
+// FUNCTION: LEGO1 0x10068fb0
 MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
+	MxS32 result = FAILURE;
 	LegoMemoryStream stream((char*) p_chunk->GetData());
-	MxS32 val = 0;
+	MxS32 magicSig;
+	MxS32 val3;
 	MxS32 val2 = 0;
-	MxS32 result = -1;
-
-	if (stream.Read(&val, sizeof(MxS32)) == SUCCESS && val == 0x11) {
+	if (stream.Read(&magicSig, sizeof(MxS32)) == SUCCESS && magicSig == 0x11) {
 		if (stream.Read(&m_unk0xa4, sizeof(MxU32)) == SUCCESS) {
 			if (stream.Read(m_vec.GetX(), sizeof(float)) == SUCCESS) {
 				if (stream.Read(m_vec.GetY(), sizeof(float)) == SUCCESS) {
 					if (stream.Read(m_vec.GetZ(), sizeof(float)) == SUCCESS) {
 						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
-
-							MxS32 val3;
 							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
 								m_unk0x64 = new LegoAnimClass();
 								if (m_unk0x64) {
-									if (m_unk0x64->VTable0x10() == SUCCESS) {
+									if (m_unk0x64->VTable0x10(&stream, val3) == SUCCESS) {
 										result = SUCCESS;
 									}
 								}
@@ -150,7 +167,7 @@ MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 		}
 	}
 
-	if (result != 0) {
+	if (result != SUCCESS) {
 		delete m_unk0x64;
 		Init();
 	}
@@ -211,7 +228,7 @@ void LegoAnimClass::VTable0xc()
 }
 
 // STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10()
+MxResult LegoAnimClass::VTable0x10(LegoMemoryStream* p_stream, MxS32)
 {
 	return SUCCESS;
 }

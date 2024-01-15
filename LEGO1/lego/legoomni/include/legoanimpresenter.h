@@ -5,6 +5,36 @@
 #include "mxvideopresenter.h"
 
 class LegoWorld;
+class LegoMemoryStream;
+
+// VTALBE: LEGO1 0x100db768
+class LegoAnimClassBase {
+public:
+	LegoAnimClassBase();
+	virtual ~LegoAnimClassBase();
+
+	virtual void VTable0x4();
+	virtual void VTable0x8();
+	virtual void VTable0xc();
+
+	undefined4 m_unk0x4;
+};
+
+// VTALBE: LEGO1 0x100db8d8
+class LegoAnimClass {
+public:
+	LegoAnimClass();
+	virtual ~LegoAnimClass() override;
+
+	virtual void VTable0x8() override;
+	virtual void VTable0xc() override;
+	virtual MxResult VTable0x10(LegoMemoryStream* p_stream, MxS32);
+
+	undefined4 m_unk0x8;
+	undefined4 m_unk0xc;
+	undefined4 m_unk0x10;
+	undefined4 m_unk0x14;
+};
 
 // VTABLE: LEGO1 0x100d90c8
 class LegoAnimPresenter : public MxVideoPresenter {
@@ -61,35 +91,6 @@ private:
 	undefined4 m_unk0xa4;      // 0xa4
 	Mx3DPointFloat m_vec;      // 0xa8
 	undefined4 m_unk0xbc;      // 0xbc
-};
-
-// VTALBE: LEGO1 0x100db768
-class LegoAnimClassBase {
-public:
-	LegoAnimClassBase();
-	virtual ~LegoAnimClassBase();
-
-	virtual void VTable0x4();
-	virtual void VTable0x8();
-	virtual void VTable0xc();
-
-	undefined4 m_unk0x4;
-};
-
-// VTALBE: LEGO1 0x100db8d8
-class LegoAnimClass {
-public:
-	LegoAnimClass();
-	virtual ~LegoAnimClass() override;
-
-	virtual void VTable0x8() override;
-	virtual void VTable0xc() override;
-	virtual MxResult VTable0x10() override;
-
-	undefined4 m_unk0x8;
-	undefined4 m_unk0xc;
-	undefined4 m_unk0x10;
-	undefined4 m_unk0x14;
 };
 
 // SYNTHETIC: LEGO1 0x10068650
