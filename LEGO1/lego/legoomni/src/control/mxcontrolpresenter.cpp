@@ -1,6 +1,7 @@
 #include "mxcontrolpresenter.h"
 
 #include "mxticklemanager.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
@@ -47,11 +48,37 @@ MxResult MxControlPresenter::AddToManager()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10044190
-MxResult MxControlPresenter::StartAction(MxStreamController*, MxDSAction*)
+// FUNCTION: LEGO1 0x10044190
+MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
+	MxU8 i = 0;
+
+	FUN_100b7220(m_action, 0x81, TRUE);
+	ParseExtra();
+
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		MxBool toggle;
+		if (m_unk0x4c == 3 && m_unk0x4e == 0) {
+			toggle = FALSE;
+		}
+		else {
+			if (!IsEnabled()) {
+				toggle = FALSE;
+			}
+			toggle = m_unk0x4e == i;
+		}
+
+		i++;
+		(*it)->Enable(toggle);
+	}
+
+	if (m_unk0x4c == 3) {
+		(*m_list.end())->GetAction()->SetFlags((*m_list.end())->GetAction()->GetFlags() | 0x400);
+	}
+	TickleManager()->RegisterClient(this, 200);
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10044260
@@ -78,7 +105,7 @@ MxBool MxControlPresenter::FUN_10044480(undefined4, undefined4*)
 }
 
 // STUB: LEGO1 0x10044540
-void MxControlPresenter::FUN_10044540(undefined2)
+void MxControlPresenter::VTable0x6c(MxU32 p_new4e)
 {
 	// TODO
 }
@@ -97,15 +124,34 @@ void MxControlPresenter::ParseExtra()
 	// TODO
 }
 
-// STUB: LEGO1 0x10044820
+// FUNCTION: LEGO1 0x10044820
 void MxControlPresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	if (MxPresenter::IsEnabled() != p_enable) {
+		MxPresenter::Enable(p_enable);
+
+		MxU8 i = 0;
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+			if (i == m_unk0x4e) {
+				(*it)->Enable((m_unk0x4c != 3 || i != 0) ? p_enable : 0);
+				break;
+			}
+			i++;
+		}
+
+		if (!p_enable) {
+			m_unk0x4e = 0;
+		}
+	}
 }
 
-// STUB: LEGO1 0x100448a0
+// FUNCTION: LEGO1 0x100448a0
 MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
-	// TODO
-	return TRUE;
+	MxCompositePresenterList::iterator it = m_list.begin();
+	for (MxU8 i = m_unk0x4e; i != 0; i--) {
+		it++;
+	}
+
+	return (*it)->HasTickleStatePassed(p_tickleState);
 }

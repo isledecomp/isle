@@ -34,6 +34,7 @@ public:
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
 	virtual MxBool VTable0x64(undefined4 p_undefined) override;              // vtable+0x64
 	virtual void VTable0x68(MxBool p_undefined);                             // vtable+0x68
+	virtual void VTable0x6c(MxU32 p_new4e);                                  // vtable+0x6c
 
 private:
 	MxBool FUN_10044270(undefined4, undefined4, undefined4*);
