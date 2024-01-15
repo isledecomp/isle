@@ -7,7 +7,9 @@
 #include "mxdsanim.h"
 #include "mxstreamchunk.h"
 
-DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0);
+DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
+DECOMP_SIZE_ASSERT(LegoAnimClassBase, 0x08)
+DECOMP_SIZE_ASSERT(LegoAnimClass, 0x18)
 
 // FUNCTION: LEGO1 0x10068420
 LegoAnimPresenter::LegoAnimPresenter()
@@ -31,7 +33,7 @@ void LegoAnimPresenter::Init()
 	m_unk0x70 = 0;
 	m_unk0x78 = 0;
 	m_unk0x7c = 0;
-	m_vec.Clear();
+	m_unk0xa8.Clear();
 	m_unk0xa4 = 0;
 	m_currentWorld = NULL;
 	m_unk0x95 = 0;
@@ -58,19 +60,21 @@ MxS32 LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
 	MxS32 result = FAILURE;
 	LegoMemoryStream stream((char*) p_chunk->GetData());
+
 	MxS32 magicSig;
-	MxS32 val3;
 	MxS32 val2 = 0;
+	MxS32 val3;
+
 	if (stream.Read(&magicSig, sizeof(MxS32)) == SUCCESS && magicSig == 0x11) {
 		if (stream.Read(&m_unk0xa4, sizeof(MxU32)) == SUCCESS) {
-			if (stream.Read(m_vec.GetX(), sizeof(float)) == SUCCESS) {
-				if (stream.Read(m_vec.GetY(), sizeof(float)) == SUCCESS) {
-					if (stream.Read(m_vec.GetZ(), sizeof(float)) == SUCCESS) {
+			if (stream.Read(&m_unk0xa8[0], sizeof(float)) == SUCCESS) {
+				if (stream.Read(&m_unk0xa8[1], sizeof(float)) == SUCCESS) {
+					if (stream.Read(&m_unk0xa8[2], sizeof(float)) == SUCCESS) {
 						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
 							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
 								m_unk0x64 = new LegoAnimClass();
 								if (m_unk0x64) {
-									if (m_unk0x64->VTable0x10(&stream, val3) == SUCCESS) {
+									if (m_unk0x64->VTable0x10(&stream, val2) == SUCCESS) {
 										result = SUCCESS;
 									}
 								}
