@@ -81,7 +81,7 @@ public:
 	undefined4 m_unk0x4;
 };
 
-// SYNTHETIC: LEGO1 0x10099e00
+// SYNTHETIC: LEGO1 0x10099de0
 // LegoAnimClassBase::`scalar deleting destructor'
 
 // VTABLE: LEGO1 0x100db8d8

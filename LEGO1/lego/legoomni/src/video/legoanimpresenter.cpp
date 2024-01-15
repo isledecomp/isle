@@ -217,18 +217,20 @@ LegoAnimClass::~LegoAnimClass()
 	// TODO
 }
 
+// STUB: LEGO1 0x100a0c70
+MxResult LegoAnimClass::VTable0x10(LegoMemoryStream* p_stream, MxS32)
+{
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x100a0e30
 void LegoAnimClass::VTable0x8()
 {
+	// TODO
 }
 
 // STUB: LEGO1 0x100a1040
 void LegoAnimClass::VTable0xc()
 {
-}
-
-// STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10(LegoMemoryStream* p_stream, MxS32)
-{
-	return SUCCESS;
+	// TODO
 }
