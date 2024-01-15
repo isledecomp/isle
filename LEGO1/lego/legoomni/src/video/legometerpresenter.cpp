@@ -77,8 +77,7 @@ void LegoMeterPresenter::ParseExtra()
 		if (KeyValueStringParse(buffer, g_variable, result)) {
 			m_variable = result;
 		}
-		else
-		{
+		else {
 			EndAction();
 		}
 	}
