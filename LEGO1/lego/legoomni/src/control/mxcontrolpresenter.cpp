@@ -1,6 +1,7 @@
 #include "mxcontrolpresenter.h"
 
 #include "mxticklemanager.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
@@ -28,9 +29,9 @@ MxBool MxControlPresenter::VTable0x64(undefined4 p_undefined)
 }
 
 // FUNCTION: LEGO1 0x10043ff0
-void MxControlPresenter::VTable0x68(MxBool p_undefined)
+void MxControlPresenter::VTable0x68(MxBool p_unk0x50)
 {
-	m_unk0x50 = p_undefined;
+	m_unk0x50 = p_unk0x50;
 }
 
 // FUNCTION: LEGO1 0x10044110
@@ -47,11 +48,28 @@ MxResult MxControlPresenter::AddToManager()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10044190
-MxResult MxControlPresenter::StartAction(MxStreamController*, MxDSAction*)
+// FUNCTION: LEGO1 0x10044190
+MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
+
+	FUN_100b7220(m_action, MxDSAction::Flag_World | MxDSAction::Flag_Looping, TRUE);
+	ParseExtra();
+
+	MxS16 i = 0;
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		(*it)->Enable((m_unk0x4c != 3 || m_unk0x4e) && IsEnabled() ? m_unk0x4e == i : FALSE);
+		i++;
+	}
+
+	if (m_unk0x4c == 3) {
+		MxDSAction* action = (*m_list.begin())->GetAction();
+		action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit11);
+	}
+
+	TickleManager()->RegisterClient(this, 200);
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10044260
@@ -78,7 +96,7 @@ MxBool MxControlPresenter::FUN_10044480(undefined4, undefined4*)
 }
 
 // STUB: LEGO1 0x10044540
-void MxControlPresenter::FUN_10044540(undefined2)
+void MxControlPresenter::VTable0x6c(undefined4)
 {
 	// TODO
 }
@@ -97,15 +115,34 @@ void MxControlPresenter::ParseExtra()
 	// TODO
 }
 
-// STUB: LEGO1 0x10044820
+// FUNCTION: LEGO1 0x10044820
 void MxControlPresenter::Enable(MxBool p_enable)
 {
-	// TODO
+	if (MxPresenter::IsEnabled() != p_enable) {
+		MxPresenter::Enable(p_enable);
+
+		MxS16 i = 0;
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+			if (i == m_unk0x4e) {
+				(*it)->Enable((m_unk0x4c != 3 || i != 0) ? p_enable : 0);
+				break;
+			}
+
+			i++;
+		}
+
+		if (!p_enable) {
+			m_unk0x4e = 0;
+		}
+	}
 }
 
-// STUB: LEGO1 0x100448a0
+// FUNCTION: LEGO1 0x100448a0
 MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
-	// TODO
-	return TRUE;
+	MxCompositePresenterList::iterator it = m_list.begin();
+	for (MxS16 i = m_unk0x4e; i > 0; i--, it++)
+		;
+
+	return (*it)->HasTickleStatePassed(p_tickleState);
 }

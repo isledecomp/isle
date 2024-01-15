@@ -1,6 +1,9 @@
 #include "mxutil.h"
 
+#include "mxdsaction.h"
+#include "mxdsactionlist.h"
 #include "mxdsfile.h"
+#include "mxdsmultiaction.h"
 #include "mxdsobject.h"
 #include "mxrect32.h"
 
@@ -110,6 +113,21 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
 {
 	g_omniUserMessage = p_userMsg;
+}
+
+// FUNCTION: LEGO1 0x100b7220
+void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags)
+{
+	p_action->SetFlags(!p_setFlags ? p_action->GetFlags() & ~p_newFlags : p_action->GetFlags() | p_newFlags);
+
+	if (p_action->IsA("MxDSMultiAction")) {
+		MxDSActionListCursor cursor(((MxDSMultiAction*) p_action)->GetActionList());
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			FUN_100b7220(action, p_newFlags, p_setFlags);
+		}
+	}
 }
 
 // Should probably be somewhere else
