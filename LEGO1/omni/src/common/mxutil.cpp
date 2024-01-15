@@ -122,9 +122,10 @@ void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags)
 
 	if (p_action->IsA("MxDSMultiAction")) {
 		MxDSActionListCursor cursor(((MxDSMultiAction*) p_action)->GetActionList());
-		MxDSAction* currentAction;
-		while (cursor.Next(currentAction)) {
-			FUN_100b7220(currentAction, p_newFlags, p_setFlags);
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			FUN_100b7220(action, p_newFlags, p_setFlags);
 		}
 	}
 }
