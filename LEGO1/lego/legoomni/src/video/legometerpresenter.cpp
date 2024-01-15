@@ -4,6 +4,8 @@
 #include "mxbitmap.h"
 #include "mxutil.h"
 
+DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
+
 // GLOBAL: LEGO1 0x1010207c
 const char* g_filterIndex = "FILTER_INDEX";
 
@@ -25,18 +27,16 @@ const char* g_topToBottom = "TOP_TO_BOTTOM";
 // GLOBAL: LEGO1 0x101020c8
 const char* g_variable = "VARIABLE";
 
-// Uncomment when member class variables are fleshed out.
-DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94); // 0x1000a163
-
 // FUNCTION: LEGO1 0x10043430
 LegoMeterPresenter::LegoMeterPresenter()
 {
 	m_layout = 0;
-	m_flags &= ~Flag_Bit2;
-	m_type = 1;
 	m_unk0x6c = 0;
 	m_unk0x84 = 0;
+	m_type = 1;
+	m_flags &= ~Flag_Bit2;
 }
+
 // FUNCTION: LEGO1 0x10043780
 LegoMeterPresenter::~LegoMeterPresenter()
 {
@@ -46,26 +46,29 @@ LegoMeterPresenter::~LegoMeterPresenter()
 // FUNCTION: LEGO1 0x10043800
 void LegoMeterPresenter::ParseExtra()
 {
+	char buffer[256];
+
 	MxStillPresenter::ParseExtra();
+	*((MxU16*) &buffer[0]) = m_action->GetExtraLength();
+	char* extraData = m_action->GetExtraData();
 
-	if (m_action->GetExtraLength()) {
-		char buffer[256];
+	if (*((MxU16*) &buffer[0])) {
+		MxU16 len = *((MxU16*) &buffer[0]);
+		memcpy(buffer, extraData, len);
+		buffer[len] = '\0';
+
 		char result[256];
-		*((MxU16*) &result[0]) = m_action->GetExtraLength();
-
-		memcpy(buffer, m_action->GetExtraData(), *((MxU16*) &result[0]));
-
 		if (KeyValueStringParse(buffer, g_type, result)) {
-			if (!strcmp(result, g_leftToRight)) {
+			if (!strcmpi(result, g_leftToRight)) {
 				m_layout = 0;
 			}
-			else if (!strcmp(result, g_rightToLeft)) {
+			else if (!strcmpi(result, g_rightToLeft)) {
 				m_layout = 1;
 			}
-			else if (!strcmp(result, g_bottomToTop)) {
+			else if (!strcmpi(result, g_bottomToTop)) {
 				m_layout = 2;
 			}
-			else if (!strcmp(result, g_topToBottom)) {
+			else if (!strcmpi(result, g_topToBottom)) {
 				m_layout = 3;
 			}
 		}
@@ -90,12 +93,13 @@ void LegoMeterPresenter::ParseExtra()
 void LegoMeterPresenter::StreamingTickle()
 {
 	MxStillPresenter::StreamingTickle();
-	m_unk0x6c = new MxU8[((m_bitmap->GetBmiWidth() + 3) & -4) * m_bitmap->GetBmiHeightAbs()];
+	m_unk0x6c = new MxU8[m_bitmap->GetBmiStride() * m_bitmap->GetBmiHeightAbs()];
 	if (m_unk0x6c == NULL) {
 		EndAction();
 	}
 
-	memcpy(m_unk0x6c, m_bitmap->GetBitmapData(), ((m_bitmap->GetBmiWidth() + 3) & -4) * m_bitmap->GetBmiHeightAbs());
+	memcpy(m_unk0x6c, m_bitmap->GetBitmapData(), m_bitmap->GetBmiStride() * m_bitmap->GetBmiHeightAbs());
+
 	m_unk0x88 = 0;
 	m_unk0x8a = 0;
 	m_unk0x8c = m_bitmap->GetBmiWidth() - 1;

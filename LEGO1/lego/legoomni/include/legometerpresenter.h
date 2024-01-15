@@ -8,7 +8,7 @@
 class LegoMeterPresenter : public MxStillPresenter {
 public:
 	LegoMeterPresenter();
-	virtual ~LegoMeterPresenter();
+	virtual ~LegoMeterPresenter() override;
 
 	// MxStillPresenter's `::ClassName` and `::IsA` are used.
 
@@ -17,6 +17,8 @@ public:
 	virtual void ParseExtra() override;      // vtable+0x30
 
 private:
+	void FUN_10043a50();
+
 	MxU8* m_unk0x6c;     // 0x6c
 	MxU16 m_type;        // 0x70
 	MxString m_variable; // 0x74
@@ -26,8 +28,9 @@ private:
 	MxU16 m_unk0x8c;     // 0x8c
 	MxU16 m_unk0x8e;     // 0x8e
 	MxU16 m_layout;      // 0x90
-
-	void FUN_10043a50();
 };
+
+// SYNTHETIC: LEGO1 0x10043760
+// LegoMeterPresenter::`scalar deleting destructor'
 
 #endif // LEGOMETERPRESENTER_H
