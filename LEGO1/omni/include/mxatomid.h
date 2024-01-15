@@ -11,6 +11,7 @@ enum LookupMode {
 	LookupMode_LowerCase2 = 3
 };
 
+// SIZE 0x04
 class MxAtomId {
 public:
 	__declspec(dllexport) MxAtomId(const char*, LookupMode);
@@ -30,7 +31,7 @@ private:
 	MxAtomIdCounter* GetCounter(const char*, LookupMode);
 	void Destroy();
 
-	const char* m_internal;
+	const char* m_internal; // 0x00
 };
 
 #endif // MXATOMID_H
