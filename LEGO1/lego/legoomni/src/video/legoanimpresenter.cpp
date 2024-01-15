@@ -105,6 +105,12 @@ void LegoAnimPresenter::StreamingTickle()
 	}
 }
 
+// FUNCTION: LEGO1 0x1006b8e0
+void LegoAnimPresenter::Destroy()
+{
+	Destroy(FALSE);
+}
+
 // STUB: LEGO1 0x1006bac0
 void LegoAnimPresenter::ParseExtra()
 {
@@ -126,11 +132,6 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
-// FUNCTION: LEGO1 0x1006b8e0
-void LegoAnimPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
 
 // STUB: LEGO1 0x1006ad30
 void LegoAnimPresenter::PutFrame()
