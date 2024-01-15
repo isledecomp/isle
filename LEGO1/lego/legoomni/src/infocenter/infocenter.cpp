@@ -15,7 +15,6 @@ Infocenter::~Infocenter()
 // STUB: LEGO1 0x1006ed90
 MxResult Infocenter::Create(MxDSAction& p_dsAction)
 {
-	OutputDebugString("infocenter create\n");
 	return FAILURE;
 }
 
@@ -23,7 +22,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 MxLong Infocenter::Notify(MxParam& p_param)
 {
 	// TODO
-	return LegoWorld::Notify(p_param);
+	return 0;
 }
 
 // STUB: LEGO1 0x1006f4e0
@@ -42,7 +41,7 @@ void Infocenter::VTable0x68(MxBool p_add)
 MxResult Infocenter::Tickle()
 {
 	// TODO
-	return  LegoWorld::Tickle();
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10070d00
