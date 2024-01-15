@@ -40,29 +40,37 @@ LegoWorld::~LegoWorld()
 	// TODO
 }
 
-// STUB: LEGO1 0x1001e0b0
+// FUNCTION: LEGO1 0x1001e0b0
 MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 {
 	MxEntity::Create(p_dsAction);
 
 	m_entityList = new LegoEntityList(TRUE);
 
-	if (VTable0x54()) {
-		if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
-			if (GetCurrentWorld()) {
-				GetCurrentWorld()->VTable0x68(0);
-			}
+	if (!m_entityList)
+		return FAILURE;
 
-			SetCurrentWorld(this);
-			ControlManager()->FUN_10028df0(&m_list0xb8);
+	m_coreList = new MxCoreList(TRUE);
+
+	if (!m_coreList)
+		return FAILURE;
+
+	if (!VTable0x54())
+		return FAILURE;
+
+	if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
+		if (GetCurrentWorld()) {
+			GetCurrentWorld()->VTable0x68(0);
 		}
 
-		SetIsWorldActive(TRUE);
-		m_unk0xec = -1;
-
-		return SUCCESS;
+		SetCurrentWorld(this);
+		ControlManager()->FUN_10028df0(&m_list0xb8);
 	}
-	return FAILURE;
+
+	SetIsWorldActive(TRUE);
+	m_unk0xec = -1;
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1001f5e0

@@ -41,6 +41,18 @@ public:
 	LegoWorldListCursor(LegoWorldList* p_list) : MxPtrListCursor<LegoWorld>(p_list){};
 };
 
+// SYNTHETIC: LEGO1 0x1003e870
+// LegoWorldListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1003e8e0
+// MxPtrListCursor<LegoWorld>::~MxPtrListCursor<LegoWorld>
+
+// FUNCTION: LEGO1 0x1003ea10
+// MxListCursor<LegoWorld *>::~MxListCursor<LegoWorld *>
+
+// FUNCTION: LEGO1 0x1003ea60
+// LegoWorldListCursor::~LegoWorldListCursor
+
 // TEMPLATE: LEGO1 0x100598f0
 // MxCollection<LegoWorld *>::Compare
 
@@ -64,17 +76,5 @@ public:
 
 // SYNTHETIC: LEGO1 0x10059be0
 // MxPtrList<LegoWorld>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1003e870
-// LegoWorldListCursor::`scalar deleting destructor'
-
-// FUNCTION: LEGO1 0x1003e8e0
-// MxPtrListCursor<LegoWorld>::~MxPtrListCursor<LegoWorld>
-
-// FUNCTION: LEGO1 0x1003ea10
-// MxListCursor<LegoWorld *>::~MxListCursor<LegoWorld *>
-
-// FUNCTION: LEGO1 0x1003ea60
-// LegoWorldListCursor::~LegoWorldListCursor
 
 #endif // LEGOWORLDLIST_H

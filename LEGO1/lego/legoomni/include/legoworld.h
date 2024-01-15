@@ -5,6 +5,7 @@
 #include "legoentity.h"
 #include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
+#include "mxcorelist.h"
 #include "mxpresenter.h"
 #include "mxpresenterlist.h"
 
@@ -39,8 +40,10 @@ public:
 	virtual LegoCameraController* VTable0x54();               // vtable+0x54
 	virtual void VTable0x58(MxCore* p_object);                // vtable+0x58
 	virtual MxBool VTable0x5c();                              // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x100010a0
-	virtual void VTable0x60() {}           // vtable+0x60
+	virtual void VTable0x60() {} // vtable+0x60
+
 	virtual MxBool VTable0x64();           // vtable+0x64
 	virtual void VTable0x68(MxBool p_add); // vtable+0x68
 
@@ -61,7 +64,8 @@ protected:
 	MxPresenterList m_list0x80;               // 0x80
 	LegoCameraController* m_cameraController; // 0x98
 	LegoEntityList* m_entityList;             // 0x9c
-	undefined m_unk0xa0[0x18];                // 0xa0
+	MxCoreList* m_coreList;                   // 0xa0
+	undefined m_unk0xa4[0x14];                // 0xa4
 	MxPresenterList m_list0xb8;               // 0xb8
 	undefined m_unk0xd0[0x1c];                // 0xd0
 	undefined4 m_unk0xec;                     // 0xec

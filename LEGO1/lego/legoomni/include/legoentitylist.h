@@ -44,7 +44,7 @@ public:
 // TEMPLATE: LEGO1 0x1001e2f0
 // MxCollection<LegoEntity *>::Compare
 
-// XTEMPLATE: LEGO1 0x1001e300
+// TEMPLATE: LEGO1 0x1001e300
 // MxCollection<LegoEntity *>::~MxCollection<LegoEntity *>
 
 // TEMPLATE: LEGO1 0x1001e350
@@ -58,6 +58,9 @@ public:
 
 // SYNTHETIC: LEGO1 0x1001e400
 // LegoEntityList::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1001e470
+// MxPtrList<LegoEntity>::~MxPtrList<LegoEntity>
 
 // SYNTHETIC: LEGO1 0x1001e4c0
 // MxCollection<LegoEntity *>::`scalar deleting destructor'
