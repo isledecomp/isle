@@ -2,7 +2,6 @@
 addresses/symbols that we want to compare between the original and recompiled binaries."""
 import sqlite3
 import logging
-from collections import namedtuple
 from typing import List, Optional
 from isledecomp.types import SymbolType
 
@@ -16,12 +15,35 @@ _SETUP_SQL = """
         size int,
         should_skip int default(FALSE)
     );
+    CREATE INDEX `symbols_or` ON `symbols` (orig_addr);
     CREATE INDEX `symbols_re` ON `symbols` (recomp_addr);
-    CREATE INDEX `symbols_na` ON `symbols` (compare_type, name);    
 """
 
 
-MatchInfo = namedtuple("MatchInfo", "orig_addr, recomp_addr, size, name")
+class MatchInfo:
+    def __init__(
+        self,
+        ctype: Optional[int],
+        orig: Optional[int],
+        recomp: Optional[int],
+        name: Optional[str],
+        size: Optional[int],
+    ) -> None:
+        self.compare_type = SymbolType(ctype) if ctype is not None else None
+        self.orig_addr = orig
+        self.recomp_addr = recomp
+        self.name = name
+        self.size = size
+
+    def match_name(self) -> str:
+        """Combination of the name and compare type.
+        Intended for name substitution in the diff. If there is a diff,
+        it will be more obvious what this symbol indicates."""
+        if self.name is None:
+            return None
+
+        ctype = self.compare_type.name if self.compare_type is not None else "UNK"
+        return f"{self.name} ({ctype})"
 
 
 def matchinfo_factory(_, row):
@@ -61,7 +83,7 @@ class CompareDb:
 
     def get_one_function(self, addr: int) -> Optional[MatchInfo]:
         cur = self._db.execute(
-            """SELECT orig_addr, recomp_addr, size, name
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
             FROM `symbols`
             WHERE compare_type = ?
             AND orig_addr = ?
@@ -74,9 +96,31 @@ class CompareDb:
         cur.row_factory = matchinfo_factory
         return cur.fetchone()
 
+    def get_by_orig(self, addr: int) -> Optional[MatchInfo]:
+        cur = self._db.execute(
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
+            FROM `symbols`
+            WHERE orig_addr = ?
+            """,
+            (addr,),
+        )
+        cur.row_factory = matchinfo_factory
+        return cur.fetchone()
+
+    def get_by_recomp(self, addr: int) -> Optional[MatchInfo]:
+        cur = self._db.execute(
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
+            FROM `symbols`
+            WHERE recomp_addr = ?
+            """,
+            (addr,),
+        )
+        cur.row_factory = matchinfo_factory
+        return cur.fetchone()
+
     def get_matches(self, compare_type: SymbolType) -> List[MatchInfo]:
         cur = self._db.execute(
-            """SELECT orig_addr, recomp_addr, size, name
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
             FROM `symbols`
             WHERE compare_type = ?
             AND orig_addr IS NOT NULL
@@ -90,14 +134,20 @@ class CompareDb:
 
         return cur.fetchall()
 
-    def set_function_pair(self, orig: int, recomp: int) -> bool:
-        """For lineref match or _entry"""
+    def set_pair(
+        self, orig: int, recomp: int, compare_type: Optional[SymbolType] = None
+    ) -> bool:
+        compare_value = compare_type.value if compare_type is not None else None
         cur = self._db.execute(
             "UPDATE `symbols` SET orig_addr = ?, compare_type = ? WHERE recomp_addr = ?",
-            (orig, SymbolType.FUNCTION.value, recomp),
+            (orig, compare_value, recomp),
         )
 
         return cur.rowcount > 0
+
+    def set_function_pair(self, orig: int, recomp: int) -> bool:
+        """For lineref match or _entry"""
+        self.set_pair(orig, recomp, SymbolType.FUNCTION)
         # TODO: Both ways required?
 
     def skip_compare(self, orig: int):

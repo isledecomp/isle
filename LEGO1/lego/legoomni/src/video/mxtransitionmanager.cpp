@@ -114,8 +114,8 @@ MxResult MxTransitionManager::StartTransition(
 		tickleManager->RegisterClient(this, p_speed);
 
 		LegoInputManager* inputManager = InputManager();
-		inputManager->m_unk0x88 = TRUE;
-		inputManager->m_unk0x336 = FALSE;
+		inputManager->SetUnknown88(TRUE);
+		inputManager->SetUnknown336(FALSE);
 
 		LegoVideoManager* videoManager = VideoManager();
 		videoManager->SetRender3D(FALSE);
@@ -486,7 +486,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 		m_waitIndicator = p_waitIndicator;
 
 		LegoVideoManager* videoManager = VideoManager();
-		videoManager->RemovePresenter(*m_waitIndicator);
+		videoManager->UnregisterPresenter(*m_waitIndicator);
 
 		if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::TickleState_Streaming) {
 			m_waitIndicator->Tickle();

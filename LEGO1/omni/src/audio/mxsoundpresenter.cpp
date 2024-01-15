@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(MxSoundPresenter, 0x54)
 void MxSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MSoundManager())
-		MSoundManager()->RemovePresenter(*this);
+		MSoundManager()->UnregisterPresenter(*this);
 
 	this->m_criticalSection.Enter();
 	MxMediaPresenter::Init();
@@ -26,7 +26,7 @@ MxResult MxSoundPresenter::AddToManager()
 
 	if (MSoundManager()) {
 		ret = SUCCESS;
-		MSoundManager()->AddPresenter(*this);
+		MSoundManager()->RegisterPresenter(*this);
 	}
 
 	return ret;

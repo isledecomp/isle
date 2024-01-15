@@ -53,6 +53,9 @@ public:
 // TEMPLATE: LEGO1 0x1001ce20
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
 
+// TEMPLATE: LEGO1 0x1001cf20
+// MxPtrList<MxPresenter>::~MxPtrList<MxPresenter>
+
 // SYNTHETIC: LEGO1 0x1001cf70
 // MxCollection<MxPresenter *>::`scalar deleting destructor'
 

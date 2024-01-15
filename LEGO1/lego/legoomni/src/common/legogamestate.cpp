@@ -19,14 +19,14 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// GLOBAL: LEGO1 0x100f3e24
-const char* g_historyGSI = "History.gsi";
-
-// GLOBAL: LEGO1 0x100f3e30
-const char* g_playersGSI = "Players.gsi";
-
 // GLOBAL: LEGO1 0x100f3e40
 const char* g_fileExtensionGS = ".GS";
+
+// GLOBAL: LEGO1 0x100f3e44
+const char* g_playersGSI = "Players.gsi";
+
+// GLOBAL: LEGO1 0x100f3e48
+const char* g_historyGSI = "History.gsi";
 
 // GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
@@ -168,7 +168,7 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 		strcpy(path, m_savePath);
 
 	// Slot: "G0", "G1", ...
-	strcat(path, "G");
+	strcat(path, "\\G");
 	baseForSlot[0] += p_slotn;
 	strcat(path, baseForSlot);
 

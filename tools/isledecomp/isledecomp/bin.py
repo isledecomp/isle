@@ -97,6 +97,8 @@ class Bin:
         self.find_str = find_str
         self._potential_strings = {}
         self._relocated_addrs = set()
+        self.imports = []
+        self.thunks = []
 
     def __enter__(self):
         logger.debug("Bin %s Enter", self.filename)
@@ -132,6 +134,8 @@ class Bin:
             sect.virtual_address += self.imagebase
 
         self._populate_relocations()
+        self._populate_imports()
+        self._populate_thunks()
 
         # This is a (semi) expensive lookup that is not necesssary in every case.
         # We can find strings in the original if we have coverage using STRING markers.
@@ -238,6 +242,78 @@ class Bin:
             (relocated_addr,) = struct.unpack("<I", self.read(addr, 4))
             self._relocated_addrs.add(relocated_addr)
 
+    def _populate_imports(self):
+        """Parse .idata to find imported DLLs and their functions."""
+        idata_ofs = self.get_section_offset_by_name(".idata")
+
+        def iter_image_import():
+            ofs = idata_ofs
+            while True:
+                # Read 5 dwords until all are zero.
+                image_import_descriptor = struct.unpack("<5I", self.read(ofs, 20))
+                ofs += 20
+                if all(x == 0 for x in image_import_descriptor):
+                    break
+
+                (rva_ilt, _, __, dll_name, rva_iat) = image_import_descriptor
+                # Convert relative virtual addresses into absolute
+                yield (
+                    self.imagebase + rva_ilt,
+                    self.imagebase + dll_name,
+                    self.imagebase + rva_iat,
+                )
+
+        image_import_descriptors = list(iter_image_import())
+
+        def iter_imports():
+            # ILT = Import Lookup Table
+            # IAT = Import Address Table
+            # ILT gives us the symbol name of the import.
+            # IAT gives the address. The compiler generated a thunk function
+            # that jumps to the value of this address.
+            for start_ilt, dll_addr, start_iat in image_import_descriptors:
+                dll_name = self.read_string(dll_addr).decode("ascii")
+                ofs_ilt = start_ilt
+                # Address of "__imp__*" symbols.
+                ofs_iat = start_iat
+                while True:
+                    (lookup_addr,) = struct.unpack("<L", self.read(ofs_ilt, 4))
+                    (import_addr,) = struct.unpack("<L", self.read(ofs_iat, 4))
+                    if lookup_addr == 0 or import_addr == 0:
+                        break
+
+                    # Skip the "Hint" field, 2 bytes
+                    name_ofs = lookup_addr + self.imagebase + 2
+                    symbol_name = self.read_string(name_ofs).decode("ascii")
+                    yield (dll_name, symbol_name, ofs_iat)
+                    ofs_ilt += 4
+                    ofs_iat += 4
+
+        self.imports = list(iter_imports())
+
+    def _populate_thunks(self):
+        """For each imported function, we generate a thunk function. The only
+        instruction in the function is a jmp to the address in .idata.
+        Search .text to find these functions."""
+
+        text_sect = self._get_section_by_name(".text")
+        idata_sect = self._get_section_by_name(".idata")
+        start = text_sect.virtual_address
+        ofs = start
+
+        bs = self.read(ofs, text_sect.size_of_raw_data)
+
+        for shift in (0, 2, 4):
+            window = bs[shift:]
+            win_end = 6 * (len(window) // 6)
+            for i, (b0, b1, jmp_ofs) in enumerate(
+                struct.iter_unpack("<2BL", window[:win_end])
+            ):
+                if (b0, b1) == (0xFF, 0x25) and idata_sect.contains_vaddr(jmp_ofs):
+                    # Record the address of the jmp instruction and the destination in .idata
+                    thunk_ofs = ofs + shift + i * 6
+                    self.thunks.append((thunk_ofs, jmp_ofs))
+
     def _set_section_for_vaddr(self, vaddr: int):
         if self.last_section is not None and self.last_section.contains_vaddr(vaddr):
             return
@@ -318,6 +394,18 @@ class Bin:
         )
 
         return section is not None
+
+    def read_string(self, offset: int, chunk_size: int = 1000) -> Optional[bytes]:
+        """Read until we find a zero byte."""
+        b = self.read(offset, chunk_size)
+        if b is None:
+            return None
+
+        try:
+            return b[: b.index(b"\x00")]
+        except ValueError:
+            # No terminator found, just return what we have
+            return b
 
     def read(self, offset: int, size: int) -> Optional[bytes]:
         """Read (at most) the given number of bytes at the given virtual address.

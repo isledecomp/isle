@@ -9,6 +9,7 @@
 class LegoActor : public LegoEntity {
 public:
 	LegoActor();
+	virtual ~LegoActor() override;
 
 	// FUNCTION: LEGO1 0x1002d210
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -42,5 +43,8 @@ private:
 	MxFloat m_unk0x70;    // 0x70
 	MxU8 m_unk0x74;       // 0x74
 };
+
+// SYNTHETIC: LEGO1 0x1002d300
+// LegoActor::`scalar deleting destructor'
 
 #endif // LEGOACTOR_H

@@ -26,6 +26,9 @@ public:
 // VTABLE: LEGO1 0x100dc1e8
 // class MxHashTable<MxVariable *>
 
+// VTABLE: LEGO1 0x100dc680
+// class MxHashTableCursor<MxVariable *>
+
 // TEMPLATE: LEGO1 0x100afcd0
 // MxCollection<MxVariable *>::Compare
 
@@ -49,6 +52,9 @@ public:
 
 // SYNTHETIC: LEGO1 0x100b0ca0
 // MxHashTable<MxVariable *>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b7680
+// MxHashTableCursor<MxVariable *>::~MxHashTableCursor<MxVariable *>
 
 // TEMPLATE: LEGO1 0x100b7ab0
 // MxHashTable<MxVariable *>::Resize

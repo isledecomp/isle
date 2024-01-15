@@ -7,6 +7,7 @@
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
+// GLOBAL: LEGO1 0x1010215c
 MxU32 g_unk0x1010215c = 0;
 
 // FUNCTION: LEGO1 0x100ba500

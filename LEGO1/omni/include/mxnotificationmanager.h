@@ -52,4 +52,34 @@ private:
 	void FlushPending(MxCore* p_listener);
 };
 
+// TEMPLATE: LEGO1 0x100ac320
+// list<unsigned int,allocator<unsigned int> >::~list<unsigned int,allocator<unsigned int> >
+
+// FUNCTION: LEGO1 0x100ac3b0
+// MxIdList::~MxIdList
+
+// TEMPLATE: LEGO1 0x100ac400
+// List<unsigned int>::~List<unsigned int>
+
+// TEMPLATE: LEGO1 0x100ac540
+// List<MxNotification *>::~List<MxNotification *>
+
+// TEMPLATE: LEGO1 0x100ac590
+// list<MxNotification *,allocator<MxNotification *> >::~list<MxNotification *,allocator<MxNotification *> >
+
+// TEMPLATE: LEGO1 0x100acbf0
+// list<MxNotification *,allocator<MxNotification *> >::begin
+
+// TEMPLATE: LEGO1 0x100acc00
+// list<MxNotification *,allocator<MxNotification *> >::insert
+
+// TEMPLATE: LEGO1 0x100acc50
+// list<MxNotification *,allocator<MxNotification *> >::erase
+
+// TEMPLATE: LEGO1 0x100acca0
+// list<MxNotification *,allocator<MxNotification *> >::_Buynode
+
+// SYNTHETIC: LEGO1 0x100accd0
+// MxNotificationPtrList::~MxNotificationPtrList
+
 #endif // MXNOTIFICATIONMANAGER_H

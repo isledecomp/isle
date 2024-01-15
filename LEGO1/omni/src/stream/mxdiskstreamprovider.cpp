@@ -215,18 +215,20 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+	MxDSBuffer* buffer;
+
 	{
 		MxAutoLocker lock(&m_criticalSection);
 
 		if (!m_list.PopFrontStreamingAction(streamingAction))
-			return;
+			goto done;
 	}
 
 	if (streamingAction->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 		g_unk0x10102878--;
 	}
 
-	MxDSBuffer* buffer = streamingAction->GetUnknowna0();
+	buffer = streamingAction->GetUnknowna0();
 
 	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
 		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
@@ -251,6 +253,7 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+done:
 	if (streamingAction) {
 		controller->FUN_100c8670(streamingAction);
 	}
@@ -349,6 +352,8 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 					p_action->SetUnknown94(unk0x14);
 					p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
 					delete p_action->GetUnknowna0();
+					p_action->SetUnknowna0(NULL);
+					((MxDiskStreamController*) m_pLookup)->FUN_100c7890(p_action);
 					return SUCCESS;
 				}
 				else {

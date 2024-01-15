@@ -36,7 +36,7 @@ class MeshImpl;
 class TextureImpl;
 class UnkImpl;
 
-// VTABLE 0x100db910
+// VTABLE: LEGO1 0x100db910
 class RendererImpl : public Renderer {
 public:
 	RendererImpl() : m_data(0) {}
@@ -105,7 +105,7 @@ void RendererImpl::Destroy()
 	}
 }
 
-// VTABLE 0x100db988
+// VTABLE: LEGO1 0x100db988
 class DeviceImpl : public Device {
 public:
 	DeviceImpl() : m_data(0) {}
@@ -142,7 +142,7 @@ private:
 	IDirect3DRMDevice2* m_data;
 };
 
-// VTABLE 0x100db9e8
+// VTABLE: LEGO1 0x100db9e8
 class ViewImpl : public View {
 public:
 	ViewImpl() : m_data(0) {}
@@ -194,7 +194,7 @@ private:
 	IDirect3DRMViewport* m_data;
 };
 
-// VTABLE 0x100dbad8
+// VTABLE: LEGO1 0x100dbad8
 class CameraImpl : public Camera {
 public:
 	CameraImpl() : m_data(0) {}
@@ -219,7 +219,7 @@ private:
 	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbaf8
+// VTABLE: LEGO1 0x100dbaf8
 class LightImpl : public Light {
 public:
 	LightImpl() : m_data(0) {}
@@ -245,7 +245,7 @@ private:
 	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbb88
+// VTABLE: LEGO1 0x100dbb88
 class MeshImpl : public Mesh {
 public:
 	MeshImpl() : m_data(0) {}
@@ -285,7 +285,7 @@ private:
 	MeshData* m_data;
 };
 
-// VTABLE 0x100dba68
+// VTABLE: LEGO1 0x100dba68
 class GroupImpl : public Group {
 public:
 	GroupImpl() : m_data(0) {}
@@ -324,7 +324,7 @@ private:
 	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbb18
+// VTABLE: LEGO1 0x100dbb18
 class UnkImpl : public Unk {
 public:
 	UnkImpl() : m_data(0) {}
@@ -384,7 +384,7 @@ public:
 	int m_texelsAllocatedByClient;
 };
 
-// VTABLE 0x100dbb48
+// VTABLE: LEGO1 0x100dbb48
 class TextureImpl : public Texture {
 public:
 	TextureImpl() : m_data(0) {}

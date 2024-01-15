@@ -10,20 +10,20 @@ MxS32 g_mxcoreCount[101] = {0,     -6643, -5643, -5058, -4643, -4321, -4058, -38
 							-358,  -340,  -321,  -304,  -286,  -268,  -251,  -234,  -217,  -200,  -184,  -168,  -152,
 							-136,  -120,  -104,  -89,   -74,   -58,   -43,   -29,   -14,   0};
 
-// GLOBAL: LEGO1 0x10101eac
-const char* g_parseExtraTokens = ":;";
+// GLOBAL: LEGO1 0x10102048
+const char* g_strACTION = "ACTION";
 
-// GLOBAL: LEGO1 0x10101edc
-const char* g_strWORLD = "WORLD";
-
-// GLOBAL: LEGO1 0x10101f20
-const char* g_strSOUND = "SOUND";
-
-// GLOBAL: LEGO1 0x10101f58
+// GLOBAL: LEGO1 0x1010209c
 const char* g_strOBJECT = "OBJECT";
 
-// GLOBAL: LEGO1 0x10102040
-const char* g_strACTION = "ACTION";
+// GLOBAL: LEGO1 0x101020b0
+const char* g_strSOUND = "SOUND";
 
 // GLOBAL: LEGO1 0x101020cc
 const char* g_strVISIBILITY = "VISIBILITY";
+
+// GLOBAL: LEGO1 0x101020d0
+const char* g_strWORLD = "WORLD";
+
+// GLOBAL: LEGO1 0x101020e4
+const char* g_parseExtraTokens = ":;";

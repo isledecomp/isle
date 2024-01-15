@@ -30,8 +30,7 @@ void RealtimeView::SetPartsThreshold(float p_threshold)
 // FUNCTION: LEGO1 0x100a5e00
 float RealtimeView::GetUserMaxLOD()
 {
-	// TODO
-	return 0;
+	return g_userMaxLod;
 }
 
 // FUNCTION: LEGO1 0x100a5e10

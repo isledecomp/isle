@@ -92,4 +92,7 @@ public:
 	undefined4 m_unk0x14;
 };
 
+// SYNTHETIC: LEGO1 0x10068650
+// LegoAnimPresenter::`scalar deleting destructor'
+
 #endif // LEGOANIMPRESENTER_H

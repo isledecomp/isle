@@ -8,6 +8,7 @@
 class LegoHideAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoHideAnimPresenter();
+	virtual ~LegoHideAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006d880
 	inline const char* ClassName() const override // vtable+0xc
@@ -25,5 +26,8 @@ public:
 private:
 	void Init();
 };
+
+// SYNTHETIC: LEGO1 0x1006d9d0
+// LegoHideAnimPresenter::`scalar deleting destructor'
 
 #endif // LEGOHIDEANIMPRESENTER_H

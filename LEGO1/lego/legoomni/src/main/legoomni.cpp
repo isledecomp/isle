@@ -100,7 +100,7 @@ MxAtomId* g_testScript = NULL;
 // GLOBAL: LEGO1 0x100f457c
 MxAtomId* g_jukeboxwScript = NULL;
 
-// GLOBAL: LEGO1 0x100f4580c
+// GLOBAL: LEGO1 0x100f4580
 MxAtomId* g_sndAnimScript = NULL;
 
 // GLOBAL: LEGO1 0x100f4584
@@ -118,7 +118,7 @@ MxBool g_isWorldActive = TRUE;
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()
 {
-	return (LegoOmni*) MxOmni::GetInstance();
+	return LegoOmni::GetInstance();
 }
 
 // FUNCTION: LEGO1 0x10015710

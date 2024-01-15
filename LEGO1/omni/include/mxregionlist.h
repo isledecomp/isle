@@ -116,11 +116,20 @@ public:
 // TEMPLATE: LEGO1 0x100c32e0
 // MxCollection<MxRegionTopBottom *>::Compare
 
+// TEMPLATE: LEGO1 0x100c32f0
+// MxCollection<MxRegionTopBottom *>::~MxCollection<MxRegionTopBottom *>
+
 // TEMPLATE: LEGO1 0x100c3340
 // MxCollection<MxRegionTopBottom *>::Destroy
 
+// TEMPLATE: LEGO1 0x100c3350
+// MxList<MxRegionTopBottom *>::~MxList<MxRegionTopBottom *>
+
 // TEMPLATE: LEGO1 0x100c33e0
 // MxPtrList<MxRegionTopBottom>::Destroy
+
+// TEMPLATE: LEGO1 0x100c3480
+// MxPtrList<MxRegionTopBottom>::~MxPtrList<MxRegionTopBottom>
 
 // SYNTHETIC: LEGO1 0x100c34d0
 // MxCollection<MxRegionTopBottom *>::`scalar deleting destructor'
@@ -167,8 +176,17 @@ public:
 // TEMPLATE: LEGO1 0x100c4d80
 // MxCollection<MxRegionLeftRight *>::Compare
 
+// TEMPLATE: LEGO1 0x100c4d90
+// MxCollection<MxRegionLeftRight *>::~MxCollection<MxRegionLeftRight *>
+
 // TEMPLATE: LEGO1 0x100c4de0
 // MxCollection<MxRegionLeftRight *>::Destroy
+
+// TEMPLATE: LEGO1 0x100c4df0
+// MxList<MxRegionLeftRight *>::~MxList<MxRegionLeftRight *>
+
+// TEMPLATE: LEGO1 0x100c4f00
+// MxPtrList<MxRegionLeftRight>::~MxPtrList<MxRegionLeftRight>
 
 // SYNTHETIC: LEGO1 0x100c4f50
 // MxCollection<MxRegionLeftRight *>::`scalar deleting destructor'
