@@ -6,6 +6,8 @@
 
 typedef MxBool (*ROIHandler)(char*, char*, MxU32);
 
+class LegoEntity;
+
 // Note: There is an extra class between LegoROI and ViewROI,
 // maybe called "AutoROI". VTABLE 0x100dbe38
 
@@ -14,6 +16,9 @@ typedef MxBool (*ROIHandler)(char*, char*, MxU32);
 class LegoROI : public ViewROI {
 public:
 	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time);
+
+	// Note: Actually part of parent class (doesn't exist yet)
+	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
 	__declspec(dllexport) void SetDisplayBB(MxS32 p_displayBB);
 	__declspec(dllexport) static void configureLegoROI(MxS32 p_roi);
@@ -32,12 +37,13 @@ public:
 	void FUN_100a46b0(Matrix4& p_transform);
 	void FUN_100a58f0(Matrix4& p_transform);
 
-	// Note: Actually part of parent class (doesn't exist yet)
-	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
+	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
+	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
 
 private:
-	undefined m_pad[0x28]; // 0xe0
-	MxTime m_time;         // 0x108
+	undefined m_pad[0x24];  // 0xe0
+	LegoEntity* m_unk0x104; // 0x104
+	MxTime m_time;          // 0x108
 };
 
 #endif // LEGOROI_H

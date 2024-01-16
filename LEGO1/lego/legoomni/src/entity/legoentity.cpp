@@ -2,16 +2,12 @@
 
 #include "define.h"
 #include "legoomni.h"
+#include "legounksavedatawriter.h"
 #include "legoutil.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
-
-// FUNCTION: LEGO1 0x1000c290
-LegoEntity::~LegoEntity()
-{
-	Destroy(TRUE);
-}
 
 // FUNCTION: LEGO1 0x100105f0
 void LegoEntity::Init()
@@ -20,10 +16,10 @@ void LegoEntity::Init()
 	m_worldDirection.Fill(0);
 	m_worldSpeed = 0;
 	m_roi = NULL;
-	m_cameraFlag = 0;
+	m_cameraFlag = FALSE;
 	m_actionArgString = NULL;
 	m_unk0x10 = 0;
-	m_unk0x11 = 0;
+	m_flags = 0;
 	m_actionType = ExtraActionType_unknown;
 	m_actionArgNumber = -1;
 	m_unk0x59 = 4;
@@ -50,11 +46,22 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10010810
+// FUNCTION: LEGO1 0x10010810
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
-		// TODO
+		if (m_flags & Flag_Bit1) {
+			if (m_roi->GetUnknown0x104() == this)
+				m_roi->SetUnknown0x104(NULL);
+
+			GetUnkSaveDataWriter()->FUN_10083db0(m_roi);
+		}
+		else {
+			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
+
+			if (m_roi)
+				delete m_roi;
+		}
 	}
 
 	delete[] m_actionArgString;
@@ -82,9 +89,13 @@ void LegoEntity::SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direc
 	// TODO
 }
 
-// STUB: LEGO1 0x10010c30
+// FUNCTION: LEGO1 0x10010c30
 void LegoEntity::FUN_10010c30()
 {
+	LegoWorld* world = GetCurrentWorld();
+
+	if (m_cameraFlag && world && world->GetCamera() && m_roi)
+		world->GetCamera()->FUN_100123e0(m_roi->GetLocal2World(), 1);
 }
 
 // FUNCTION: LEGO1 0x10010e10
