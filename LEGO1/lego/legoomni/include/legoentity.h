@@ -12,10 +12,19 @@
 // SIZE 0x68 (probably)
 class LegoEntity : public MxEntity {
 public:
+	enum {
+		Flag_Bit1 = 1
+	};
+
 	// Inlined at 0x100853f7
 	inline LegoEntity() { Init(); }
 
-	__declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
+#ifdef ISLE_APP
+	__declspec(dllexport) virtual ~LegoEntity() override;
+#else
+	// FUNCTION: LEGO1 0x1000c290
+	__declspec(dllexport) virtual ~LegoEntity() override { Destroy(TRUE); }
+#endif
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
@@ -59,7 +68,7 @@ protected:
 	void SetWorld();
 
 	undefined m_unk0x10;
-	undefined m_unk0x11;
+	MxU8 m_flags;                    // 0x11
 	Mx3DPointFloat m_worldLocation;  // 0x14
 	Mx3DPointFloat m_worldDirection; // 0x28
 	Mx3DPointFloat m_worldUp;        // 0x3c
@@ -73,5 +82,8 @@ protected:
 	char* m_actionArgString;      // 0x60
 	MxS32 m_actionArgNumber;      // 0x64
 };
+
+// SYNTHETIC: LEGO1 0x1000c3b0
+// LegoEntity::`scalar deleting destructor'
 
 #endif // LEGOENTITY_H

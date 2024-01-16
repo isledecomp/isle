@@ -114,6 +114,7 @@ public:
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
+	LegoUnkSaveDataWriter* GetUnkSaveDataWriter() { return m_saveDataWriter; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
 	inline void SetWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
@@ -157,6 +158,7 @@ LegoControlManager* ControlManager();
 IslePathActor* GetCurrentVehicle();
 LegoPlantManager* PlantManager();
 LegoWorld* GetCurrentWorld();
+LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxU32, MxU32);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);

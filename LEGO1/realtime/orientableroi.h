@@ -28,6 +28,7 @@ public:
 	virtual void UpdateWorldData(const MxMatrix& p_transform);  // vtable+0x28
 	virtual void UpdateWorldVelocity();                         // vtable+0x2c
 
+	const MxMatrix& GetLocal2World() const { return m_local2world; }
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }

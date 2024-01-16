@@ -24,7 +24,7 @@ public:
 	MxResult Init();
 
 protected:
-	MxPresenterList* m_presenters;
+	MxPresenterList* m_presenters;       // 0x8
 	MxThread* m_thread;                  // 0xc
 	MxCriticalSection m_criticalSection; // 0x10
 };
