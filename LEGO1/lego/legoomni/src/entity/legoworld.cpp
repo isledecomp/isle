@@ -157,6 +157,12 @@ void LegoWorld::VTable0x68(MxBool p_add)
 	// TODO
 }
 
+// STUB: LEGO1 0x100213a0
+MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_name)
+{
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x10022080
 MxResult LegoWorld::Tickle()
 {

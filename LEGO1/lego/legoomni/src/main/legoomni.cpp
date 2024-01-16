@@ -697,7 +697,7 @@ MxLong LegoOmni::Notify(MxParam& p_param)
 	MxLong result = MxOmni::Notify(p_param);
 	if (isCD) {
 		// Exit the game if nocd.si ended
-		PostMessageA(m_windowHandle, WM_CLOSE, 0, 0);
+		CloseMainWindow();
 	}
 
 	return result;

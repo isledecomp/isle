@@ -24,6 +24,8 @@ public:
 	}
 
 	inline MxU8 GetKey() const { return m_key; }
+	inline MxS32 GetX() const { return m_x; }
+	inline MxS32 GetY() const { return m_y; }
 
 protected:
 	MxU8 m_modifier; // 0x0c

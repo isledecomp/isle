@@ -25,6 +25,9 @@ public:
 	}
 
 	inline MxU32 GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
+	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
+
+	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
 private:
 	// Members should be renamed with their offsets before use
@@ -55,7 +58,8 @@ private:
 	  undefined4 unk13;
 	*/
 
-	undefined m_pad[0x70];
+	undefined m_pad[0x6c];
+	MxU32 m_unk0x74;   // 0x74
 	MxU32 m_buffer[7]; // 0x78
 };
 
