@@ -78,7 +78,7 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 }
 
 // STUB: LEGO1 0x100123e0
-void LegoCameraController::FUN_100123e0(MxMatrix& p_transform, MxU32)
+void LegoCameraController::FUN_100123e0(const MxMatrix& p_transform, MxU32)
 {
 }
 

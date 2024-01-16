@@ -181,6 +181,12 @@ LegoWorld* GetCurrentWorld()
 	return LegoOmni::GetInstance()->GetCurrentOmniWorld();
 }
 
+// FUNCTION: LEGO1 0x100157b0
+LegoUnkSaveDataWriter* GetUnkSaveDataWriter()
+{
+	return LegoOmni::GetInstance()->GetUnkSaveDataWriter();
+}
+
 // FUNCTION: LEGO1 0x100157e0
 LegoPlantManager* PlantManager()
 {

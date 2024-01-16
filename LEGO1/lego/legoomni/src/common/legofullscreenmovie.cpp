@@ -29,7 +29,6 @@ void LegoFullScreenMovie::SetValue(const char* p_option)
 
 	LegoVideoManager* videomanager = VideoManager();
 	if (videomanager) {
-
 		if (!strcmp(m_value.GetData(), g_strEnable)) {
 			videomanager->EnableFullScreenMovie(TRUE);
 			return;
