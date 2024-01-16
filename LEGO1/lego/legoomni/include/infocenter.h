@@ -60,10 +60,10 @@ private:
 	// utility functions
 	void StartCredits();
 	static void DeleteCredits();
-	void FUN_10071300(MxS32 p_objectId);
-	void FUN_100713d0();
-	static void FUN_100714a0();
-	static void FUN_10071550();
+	void PlayDialogue(MxS32 p_objectId);
+	void StopCurrentDialogue();
+	static void PlayBookAnimation();
+	static void StopBookAnimation();
 
 	MxS32 m_unk0xf8;                     // 0xf8
 	MxS16 m_unk0xfc;                     // 0xfc

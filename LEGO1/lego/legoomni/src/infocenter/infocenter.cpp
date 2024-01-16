@@ -43,7 +43,6 @@ Infocenter::~Infocenter()
 // STUB: LEGO1 0x1006ed90
 MxResult Infocenter::Create(MxDSAction& p_dsAction)
 {
-	OutputDebugString("create called\n");
 	if (LegoWorld::Create(p_dsAction) == SUCCESS) {
 		InputManager()->SetWorld(this);
 		ControlManager()->Register(this);
@@ -78,7 +77,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			return HandleEndAction(p_param);
 		case c_notificationKeyPress:
-			return HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey()) & 0xff;
+			return HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
 		case c_notificationButtonUp:
 			return HandleButtonUp(
 					   ((LegoEventNotificationParam&) p_param).GetX(),
@@ -94,7 +93,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 		case TYPE17:
 			return HandleNotification17(p_param);
 		case MXTRANSITIONMANAGER_TRANSITIONENDED:
-			FUN_10071550();
+			StopBookAnimation();
 			m_unk0x1d2 = 0;
 			if (m_infocenterState->GetUnknown0x74() == 0xc) {
 				StartCredits();
@@ -110,6 +109,18 @@ MxLong Infocenter::Notify(MxParam& p_param)
 		}
 	}
 	return 0;
+}
+
+// STUB: LEGO1 0x1006f080
+MxLong Infocenter::HandleEndAction(MxParam& p_param)
+{
+	MxDSAction* endedAction = ((MxEndActionNotificationParam&) p_param).GetAction();
+	if (endedAction->GetAtomId() == *g_creditsScript && endedAction->GetObjectId() == 499) {
+		Lego()->CloseMainWindow();
+	}
+
+	// TODO
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x1006f4e0
@@ -138,7 +149,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			FUN_10071300(504); // Play "Ok, lets get started" dialogue
+			PlayDialogue(504); // Play "Ok, lets get started" dialogue
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -148,14 +159,14 @@ void Infocenter::VTable0x50()
 			break;
 		case 8:
 			PlayMusic(11);
-			FUN_10071300(522); // Are you sure you want to exit lego island?
+			PlayDialogue(522); // Are you sure you want to exit lego island?
 			FUN_10015820(0, 7);
 			return;
 		case 0xf:
 			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
 				m_unk0x1d2 = 1;
 			}
-			FUN_10071300(502);
+			PlayDialogue(502);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -174,16 +185,16 @@ void Infocenter::VTable0x50()
 	}
 }
 
-// STUB: LEGO1 0x10070aa0
-void Infocenter::VTable0x68(MxBool p_add)
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x1006f9a0
 void Infocenter::InitializeBitmaps()
 {
 	// TODO: Infocenter class size is wrong
+}
+
+// STUB: LEGO1 0x10070aa0
+void Infocenter::VTable0x68(MxBool p_add)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x1006fd00
@@ -207,18 +218,6 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 // STUB: LEGO1 0x10070370
 MxU8 Infocenter::HandleNotification17(MxParam&)
 {
-	return 1;
-}
-
-// STUB: LEGO1 0x1006f080
-MxLong Infocenter::HandleEndAction(MxParam& p_param)
-{
-	MxDSAction* endedAction = ((MxEndActionNotificationParam&) p_param).GetAction();
-	if (endedAction->GetAtomId() == *g_creditsScript && endedAction->GetObjectId() == 499) {
-		Lego()->CloseMainWindow();
-	}
-
-	// TODO
 	return 1;
 }
 
@@ -287,12 +286,12 @@ void DeleteCredits()
 }
 
 // FUNCTION: LEGO1 0x10071300
-void Infocenter::FUN_10071300(MxS32 p_objectId)
+void Infocenter::PlayDialogue(MxS32 p_objectId)
 {
 	MxDSAction action;
 	action.SetObjectId(p_objectId);
 	action.SetAtomId(*g_infomainScript);
-	FUN_100713d0();
+	StopCurrentDialogue();
 
 	m_unk0xf8 = p_objectId;
 	BackgroundAudioManager()->LowerVolume();
@@ -300,7 +299,7 @@ void Infocenter::FUN_10071300(MxS32 p_objectId)
 }
 
 // FUNCTION: LEGO1 0x100713d0
-void Infocenter::FUN_100713d0()
+void Infocenter::StopCurrentDialogue()
 {
 	if (m_unk0xf8 != -1) {
 		MxDSAction action;
@@ -313,7 +312,7 @@ void Infocenter::FUN_100713d0()
 }
 
 // FUNCTION: LEGO1 0x100714a0
-void Infocenter::FUN_100714a0()
+void Infocenter::PlayBookAnimation()
 {
 	MxDSAction action;
 	action.SetObjectId(400);
@@ -322,7 +321,7 @@ void Infocenter::FUN_100714a0()
 }
 
 // FUNCTION: LEGO1 0x10071550
-void Infocenter::FUN_10071550()
+void Infocenter::StopBookAnimation()
 {
 	MxDSAction action;
 	action.SetObjectId(400);
