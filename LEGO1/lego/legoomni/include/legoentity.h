@@ -13,7 +13,7 @@
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		Flag_Bit1 = 1
+		Flag_Bit1 = 0x01
 	};
 
 	// Inlined at 0x100853f7
@@ -67,7 +67,7 @@ protected:
 	void Init();
 	void SetWorld();
 
-	undefined m_unk0x10;
+	undefined m_unk0x10;             // 0x10
 	MxU8 m_flags;                    // 0x11
 	Mx3DPointFloat m_worldLocation;  // 0x14
 	Mx3DPointFloat m_worldDirection; // 0x28
@@ -75,7 +75,7 @@ protected:
 	MxFloat m_worldSpeed;            // 0x50
 	LegoROI* m_roi;                  // 0x54
 	MxBool m_cameraFlag;             // 0x58
-	undefined m_unk0x59;
+	undefined m_unk0x59;             // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	ExtraActionType m_actionType; // 0x5c
