@@ -211,6 +211,12 @@ void FUN_10015820(MxU32, MxU32)
 	// TODO
 }
 
+// STUB: LEGO1 0x10015860
+void FUN_10015860(const char*, MxU8)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100158c0
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
 {

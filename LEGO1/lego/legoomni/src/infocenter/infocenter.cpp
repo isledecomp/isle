@@ -11,6 +11,13 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
+#include "mxtransitionmanager.h"
+
+// GLOBAL: LEGO1 0x100f7698
+const char* g_2x4red = "2x4red";
+
+// GLOBAL: LEGO1 0x100f76a4
+const char* g_2x4grn = "2x4grn";
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 
@@ -111,16 +118,156 @@ MxLong Infocenter::Notify(MxParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x1006f080
+// FUNCTION: LEGO1 0x1006f080
 MxLong Infocenter::HandleEndAction(MxParam& p_param)
 {
 	MxDSAction* endedAction = ((MxEndActionNotificationParam&) p_param).GetAction();
 	if (endedAction->GetAtomId() == *g_creditsScript && endedAction->GetObjectId() == 499) {
 		Lego()->CloseMainWindow();
+		return 1;
 	}
 
-	// TODO
-	return 1;
+	switch (endedAction->GetObjectId()) {
+	case 40:
+	case 41:
+	case 42:
+	case 43:
+	case 44:
+		if (m_unk0x1d4) {
+			m_unk0x1d4--;
+		}
+
+		if (m_unk0x1d4)
+			break;
+
+		PlayMusic(11);
+		GameState()->FUN_10039780(m_unk0xfc);
+
+		// Play dialogue when player selects character
+		switch (m_unk0xfc) {
+		case 1:
+			PlayDialogue(541); // pepper
+			break;
+		case 2:
+			PlayDialogue(542); // mama brickolinea
+			break;
+		case 3:
+			PlayDialogue(543); // papa brickolinea
+			break;
+		case 4:
+			PlayDialogue(544); // officer nick brick
+			break;
+		case 5:
+			PlayDialogue(545); // lora brick
+			break;
+		default:
+			break;
+		}
+		FUN_10070dc0(TRUE);
+	}
+
+	MxLong result = m_radio.Notify(p_param);
+	if (result == 0) {
+		if (endedAction->GetAtomId() == m_atom || endedAction->GetAtomId() == *g_introScript) {
+			// 514: if you want to get back ...
+			if (endedAction->GetObjectId() == 514) {
+				ControlManager()->FUN_100293c0(0x10, endedAction->GetAtomId(), 0);
+				m_unk0x1d6 = 0;
+			}
+
+			switch (m_infocenterState->GetUnknown0x74()) {
+			case 0:
+				switch (m_currentCutScene) {
+				case 0:
+					PlayCutScene(1, FALSE); // Mindscape animation
+					return 1;
+				case 1:
+					PlayCutScene(2, TRUE); // Lego Island animation
+					return 1;
+				case 4:
+					StopCutScene();
+					// play bad ending dialogue after bad ending cutscene
+					PlayDialogue(540);
+					m_currentCutScene = -1;
+					return 1;
+				case 5:
+					StopCutScene();
+
+					// play good ending dialogue after good ending cutscene
+					PlayDialogue(539);
+					m_currentCutScene = -1;
+					return 1;
+				}
+
+				// default / 2nd case probably?
+				StopCutScene();
+				m_infocenterState->SetUnknown0x74(11);
+				PlayDialogue(500); // play welcome dialogue
+				m_currentCutScene = -1;
+				if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
+					m_unk0x1d2 = 1;
+					return 1;
+				}
+				break;
+			case 1:
+				m_infocenterState->SetUnknown0x74(11);
+				MxU32 val;
+				switch (m_currentCutScene) {
+				case 4:
+					val = 540; // bad ending dialogue
+					break;
+				case 5:
+					val = 539; // good ending dialogue
+					break;
+				default:
+					val = 500; // welcome dialogue
+					break;
+				}
+
+				PlayDialogue(val);
+				m_currentCutScene = -1;
+				return 1;
+			case 2:
+				FUN_10015860(g_2x4red, 0);
+				FUN_10015860(g_2x4grn, 0);
+				BackgroundAudioManager()->RaiseVolume();
+				return 1;
+			case 4:
+				if (endedAction->GetObjectId() == 70 || endedAction->GetObjectId() == 71) {
+					TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
+					m_infocenterState->SetUnknown0x74(14);
+					return 1;
+				}
+				break;
+			case 5:
+				if (m_unk0xf8 == endedAction->GetObjectId()) {
+					if (GameState()->GetUnknown10() != 2 && m_unk0xfc != 0) {
+						GameState()->FUN_10039780(m_unk0xfc);
+					}
+					TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
+					m_infocenterState->SetUnknown0x74(14);
+					return 1;
+				}
+				break;
+			case 11:
+				if (m_infocenterState->GetInfocenterBufferElement(0) == 0 && m_unk0xf8 != 28 && m_unk0xf8 != 29 &&
+					m_unk0xf8 != 42 && m_unk0xf8 != 43 && m_unk0xf8 != 44) {
+					m_unk0x1d0 = 1;
+					PlayMusic(11);
+				}
+				m_infocenterState->SetUnknown0x74(2);
+				FUN_10015860("infoman", 1);
+				return 1;
+			case 12:
+				if (m_unk0xf8 == endedAction->GetObjectId()) {
+					TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
+				}
+			}
+
+			result = 1;
+		}
+	}
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1006f4e0
@@ -191,12 +338,6 @@ void Infocenter::InitializeBitmaps()
 	// TODO: Infocenter class size is wrong
 }
 
-// STUB: LEGO1 0x10070aa0
-void Infocenter::VTable0x68(MxBool p_add)
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x1006fd00
 MxLong Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 {
@@ -227,6 +368,22 @@ MxLong Infocenter::HandleNotification0(MxParam&)
 	return 1;
 }
 
+// FUNCTION: LEGO1 0x10070aa0
+void Infocenter::VTable0x68(MxBool p_add)
+{
+	LegoWorld::VTable0x68(p_add);
+
+	if (p_add) {
+		InputManager()->SetWorld(this);
+		SetIsWorldActive(FALSE);
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
+}
+
 // STUB: LEGO1 0x10070af0
 MxResult Infocenter::Tickle()
 {
@@ -253,10 +410,27 @@ void Infocenter::PlayCutScene(MxU32 p_entityId, MxBool p_scale)
 	}
 }
 
+// FUNCTION: LEGO1 0x10070cb0
+void Infocenter::StopCutScene()
+{
+	if (m_currentCutScene != -1) {
+		InvokeAction(ExtraActionType_close, *g_introScript, m_currentCutScene, NULL);
+	}
+
+	VideoManager()->EnableFullScreenMovie(FALSE);
+	InputManager()->SetUnknown335(FALSE);
+	FUN_10015820(0, 7);
+}
+
 // FUNCTION: LEGO1 0x10070d00
 MxBool Infocenter::VTable0x5c()
 {
 	return TRUE;
+}
+
+// STUB: LEGO1 0x10070dc0
+void Infocenter::FUN_10070dc0(MxBool)
+{
 }
 
 // STUB: LEGO1 0x10070e90
@@ -273,6 +447,7 @@ MxBool Infocenter::VTable0x64()
 // STUB: LEGO1 0x10071030
 void Infocenter::StartCredits()
 {
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10071250

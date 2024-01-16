@@ -44,7 +44,6 @@ public:
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68
 
 private:
-	void PlayCutScene(MxU32 p_entityId, MxBool p_scale);
 	void InitializeBitmaps();
 
 	// notifications
@@ -55,9 +54,12 @@ private:
 	MxLong HandleEndAction(MxParam&);
 	MxLong HandleNotification0(MxParam&);
 
+	void FUN_10070dc0(MxBool);
 	void FUN_10070e90();
 
 	// utility functions
+	void PlayCutScene(MxU32 p_entityId, MxBool p_scale);
+	void StopCutScene();
 	void StartCredits();
 	static void DeleteCredits();
 	void PlayDialogue(MxS32 p_objectId);

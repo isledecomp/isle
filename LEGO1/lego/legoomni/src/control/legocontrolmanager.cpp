@@ -30,6 +30,11 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 	// TODO
 }
 
+// STUB: LEGO1 0x100293c0
+void LegoControlManager::FUN_100293c0(undefined4, const MxAtomId&, undefined2)
+{
+}
+
 // STUB: LEGO1 0x10029600
 MxResult LegoControlManager::Tickle()
 {

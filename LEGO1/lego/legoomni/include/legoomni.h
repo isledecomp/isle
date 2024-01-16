@@ -163,6 +163,7 @@ LegoWorld* GetCurrentWorld();
 LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxU32, MxU32);
+void FUN_10015860(const char*, MxU8);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 

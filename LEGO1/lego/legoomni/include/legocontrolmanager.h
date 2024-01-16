@@ -28,6 +28,7 @@ public:
 	void FUN_10028df0(MxPresenterList* p_presenterList);
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
+	void FUN_100293c0(undefined4, const MxAtomId&, undefined2);
 };
 
 #endif // LEGOCONTROLMANAGER_H
