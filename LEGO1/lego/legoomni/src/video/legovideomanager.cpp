@@ -369,7 +369,7 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			m_fullScreenMovie = TRUE;
 		}
 		else {
-			m_displaySurface->FUN_100ba640();
+			m_displaySurface->ClearScreen();
 			m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
 
 			// restore previous pallete

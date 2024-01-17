@@ -85,7 +85,7 @@ public:
 	virtual void ReleaseDC(HDC p_hdc);                                                      // vtable+0x40
 	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4); // vtable+0x44
 
-	void FUN_100ba640();
+	void ClearScreen();
 	static LPDIRECTDRAWSURFACE FUN_100bc070();
 
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
