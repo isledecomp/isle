@@ -174,106 +174,104 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 	MxLong result = m_radio.Notify(p_param);
 
-	if (result)
+	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript))
 		return result;
 
-	if (action->GetAtomId() == m_atom || action->GetAtomId() == *g_introScript) {
-		if (action->GetObjectId() == e_returnBack) {
-			ControlManager()->FUN_100293c0(0x10, action->GetAtomId(), 0);
-			m_unk0x1d6 = 0;
-		}
+	if (action->GetObjectId() == e_returnBack) {
+		ControlManager()->FUN_100293c0(0x10, action->GetAtomId(), 0);
+		m_unk0x1d6 = 0;
+	}
 
-		switch (m_infocenterState->GetUnknown0x74()) {
-		case 0:
-			switch (m_currentIntroScript) {
-			case e_legoMovie:
-				PlayCutscene(e_mindscapeMovie, FALSE);
-				return 1;
-			case e_mindscapeMovie:
-				PlayCutscene(e_introMovie, TRUE);
-				return 1;
-			case e_badEndMovie:
-				StopCutscene();
-				m_infocenterState->SetUnknown0x74(11);
-				PlayDialogue(e_badEndingDialogue);
-				m_currentIntroScript = e_noIntro;
-				return 1;
-			case e_goodEndMovie:
-				StopCutscene();
-				m_infocenterState->SetUnknown0x74(11);
-				PlayDialogue(e_goodEndingDialogue);
-				m_currentIntroScript = e_noIntro;
-				return 1;
-			}
-
-			// default / 2nd case probably?
+	switch (m_infocenterState->GetUnknown0x74()) {
+	case 0:
+		switch (m_currentIntroScript) {
+		case e_legoMovie:
+			PlayCutscene(e_mindscapeMovie, FALSE);
+			return 1;
+		case e_mindscapeMovie:
+			PlayCutscene(e_introMovie, TRUE);
+			return 1;
+		case e_badEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-			PlayDialogue(e_welcomeDialogue);
+			PlayDialogue(e_badEndingDialogue);
 			m_currentIntroScript = e_noIntro;
-
-			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
-				m_unk0x1d2 = 1;
-				return 1;
-			}
-			break;
-		case 1:
+			return 1;
+		case e_goodEndMovie:
+			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-
-			switch (m_currentIntroScript) {
-			case e_badEndMovie:
-				PlayDialogue(e_badEndingDialogue);
-				break;
-			case e_goodEndMovie:
-				PlayDialogue(e_goodEndingDialogue);
-				break;
-			default:
-				PlayDialogue(e_welcomeDialogue);
-			}
-
+			PlayDialogue(e_goodEndingDialogue);
 			m_currentIntroScript = e_noIntro;
 			return 1;
-		case 2:
-			FUN_10015860(g_object2x4red, 0);
-			FUN_10015860(g_object2x4grn, 0);
-			BackgroundAudioManager()->RaiseVolume();
-			return 1;
-		case 4:
-			if (action->GetObjectId() == 70 || action->GetObjectId() == 71) {
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
-				m_infocenterState->SetUnknown0x74(14);
-				return 1;
-			}
-			break;
-		case 5:
-			if (action->GetObjectId() == m_currentInfomainScript) {
-				if (GameState()->GetUnknown10() != 2 && m_unk0xfc != 0) {
-					GameState()->FUN_10039780(m_unk0xfc);
-				}
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
-				m_infocenterState->SetUnknown0x74(14);
-				return 1;
-			}
-			break;
-		case 11:
-			if (m_infocenterState->GetInfocenterBufferElement(0) == 0 && m_currentInfomainScript != 28 &&
-				m_currentInfomainScript != 29 && m_currentInfomainScript != 42 && m_currentInfomainScript != 43 &&
-				m_currentInfomainScript != 44) {
-				m_unk0x1d0 = 1;
-				PlayMusic(11);
-			}
-
-			m_infocenterState->SetUnknown0x74(2);
-			FUN_10015860("infoman", 1);
-			return 1;
-		case 12:
-			if (action->GetObjectId() == m_currentInfomainScript) {
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
-			}
 		}
 
-		result = 1;
+		// default / 2nd case probably?
+		StopCutscene();
+		m_infocenterState->SetUnknown0x74(11);
+		PlayDialogue(e_welcomeDialogue);
+		m_currentIntroScript = e_noIntro;
+
+		if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
+			m_unk0x1d2 = 1;
+			return 1;
+		}
+		break;
+	case 1:
+		m_infocenterState->SetUnknown0x74(11);
+
+		switch (m_currentIntroScript) {
+		case e_badEndMovie:
+			PlayDialogue(e_badEndingDialogue);
+			break;
+		case e_goodEndMovie:
+			PlayDialogue(e_goodEndingDialogue);
+			break;
+		default:
+			PlayDialogue(e_welcomeDialogue);
+		}
+
+		m_currentIntroScript = e_noIntro;
+		return 1;
+	case 2:
+		FUN_10015860(g_object2x4red, 0);
+		FUN_10015860(g_object2x4grn, 0);
+		BackgroundAudioManager()->RaiseVolume();
+		return 1;
+	case 4:
+		if (action->GetObjectId() == 70 || action->GetObjectId() == 71) {
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			m_infocenterState->SetUnknown0x74(14);
+			return 1;
+		}
+		break;
+	case 5:
+		if (action->GetObjectId() == m_currentInfomainScript) {
+			if (GameState()->GetUnknown10() != 2 && m_unk0xfc != 0) {
+				GameState()->FUN_10039780(m_unk0xfc);
+			}
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			m_infocenterState->SetUnknown0x74(14);
+			return 1;
+		}
+		break;
+	case 11:
+		if (m_infocenterState->GetInfocenterBufferElement(0) == 0 && m_currentInfomainScript != 40 &&
+			m_currentInfomainScript != 41 && m_currentInfomainScript != 42 && m_currentInfomainScript != 43 &&
+			m_currentInfomainScript != 44) {
+			m_unk0x1d0 = 1;
+			PlayMusic(11);
+		}
+
+		m_infocenterState->SetUnknown0x74(2);
+		FUN_10015860("infoman", 1);
+		return 1;
+	case 12:
+		if (action->GetObjectId() == m_currentInfomainScript) {
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		}
 	}
+
+	result = 1;
 
 	return result;
 }
