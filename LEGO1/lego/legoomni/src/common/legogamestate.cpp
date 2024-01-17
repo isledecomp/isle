@@ -60,7 +60,15 @@ LegoGameState::LegoGameState()
 	// TODO
 	SetROIHandlerFunction();
 
-	m_stateCount = 0;
+	this->m_stateCount = 0;
+	this->m_unk0xc = 0;
+	this->m_savePath = NULL;
+	this->m_unk0x424 = 0;
+	this->m_prevArea = 0;
+	this->m_unk0x42c = 0;
+	this->m_isDirty = FALSE;
+	this->m_currentAct = -1;
+
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
 
