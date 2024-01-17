@@ -207,9 +207,9 @@ GifManager* GetGifManager()
 }
 
 // FUNCTION: LEGO1 0x10015820
-void FUN_10015820(MxBool p_unk1, MxU32 p_unk2)
+void FUN_10015820(MxBool p_is3d, MxU32 p_flags)
 {
-	LegoOmni::GetInstance()->FUN_1005b4f0(p_unk1, p_unk2);
+	LegoOmni::GetInstance()->FUN_1005b4f0(p_is3d, p_flags);
 }
 
 // STUB: LEGO1 0x10015860
@@ -681,18 +681,18 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // FUNCTION: LEGO1 0x1005b4f0
-void LegoOmni::FUN_1005b4f0(MxBool p_unk1, MxU32 p_unk2)
+void LegoOmni::FUN_1005b4f0(MxBool p_is3d, MxU32 p_flags)
 {
-	if (p_unk1) {
-		if (p_unk2 & 1) {
+	if (p_is3d) {
+		if (p_flags & 1) {
 			m_inputMgr->AllowEventProcessing();
 		}
 
-		if (p_unk2 & 2) {
-			((LegoVideoManager*)m_videoManager)->SetRender3D(FALSE);
+		if (p_flags & 2) {
+			((LegoVideoManager*) m_videoManager)->SetRender3D(FALSE);
 		}
 
-		if (p_unk2 & 4) {
+		if (p_flags & 4) {
 			m_videoManager->GetDisplaySurface()->ClearScreen();
 		}
 	}

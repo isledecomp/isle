@@ -99,7 +99,7 @@ public:
 
 	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
 	void AddWorld(LegoWorld* p_world);
-	void FUN_1005b4f0(MxBool p_unk1, MxU32 p_unk2);
+	void FUN_1005b4f0(MxBool p_is3d, MxU32 p_flags);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
@@ -163,7 +163,7 @@ LegoPlantManager* PlantManager();
 LegoWorld* GetCurrentWorld();
 LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
-void FUN_10015820(MxBool p_unk1, MxU32 p_unk2);
+void FUN_10015820(MxBool p_is3d, MxU32 p_flags);
 void FUN_10015860(const char*, MxU8);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
