@@ -41,7 +41,7 @@ private:
 	undefined4 m_unk0x110; // 0x110
 	undefined m_unk0x114;  // 0x114
 	undefined m_unk0x115;  // 0x115
-	Radio m_radio; 		   // 0x118
+	Radio m_radio;         // 0x118
 };
 
 #endif // GASSTATION_H
