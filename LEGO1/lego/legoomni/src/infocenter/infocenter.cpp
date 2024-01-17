@@ -370,14 +370,14 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 		case 1:
 		case 4:
 			break;
-		default:
-			result = (MxU32) m_currentInfomainScript;
+		default: {
+			InfomainScript script = m_currentInfomainScript;
 			StopCurrentDialogue();
 
 			switch (m_infocenterState->GetUnknown0x74()) {
 			case 5:
 			case 12:
-				m_currentInfomainScript = (InfomainScript) result;
+				m_currentInfomainScript = script;
 				return 1;
 			default:
 				m_infocenterState->SetUnknown0x74(2);
@@ -386,6 +386,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			case 11:
 				break;
 			}
+		}
 		case 13:
 			StopCredits();
 			break;
