@@ -3,6 +3,19 @@ from typing import Optional
 from enum import Enum
 
 
+class MarkerCategory(Enum):
+    """For the purposes of grouping multiple different DecompMarkers together,
+    assign a rough "category" for the MarkerType values below.
+    It's really only the function types that have to get folded down, but
+    we'll do that in a structured way to permit future expansion."""
+
+    FUNCTION = 1
+    VARIABLE = 2
+    STRING = 3
+    VTABLE = 4
+    ADDRESS = 100  # i.e. no comparison required or possible
+
+
 class MarkerType(Enum):
     UNKNOWN = -100
     FUNCTION = 1
@@ -50,6 +63,23 @@ class DecompMarker:
     @property
     def offset(self) -> int:
         return self._offset
+
+    @property
+    def category(self) -> MarkerCategory:
+        if self.is_vtable():
+            return MarkerCategory.VTABLE
+
+        if self.is_variable():
+            return MarkerCategory.VARIABLE
+
+        if self.is_string():
+            return MarkerCategory.STRING
+
+        # TODO: worth another look if we add more types, but this covers it
+        if self.is_regular_function() or self.is_explicit_byname():
+            return MarkerCategory.FUNCTION
+
+        return MarkerCategory.ADDRESS
 
     def is_regular_function(self) -> bool:
         """Regular function, meaning: not an explicit byname lookup. FUNCTION

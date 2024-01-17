@@ -10,6 +10,7 @@
 // the text "END_OF_VARIABLES" in it.
 // TODO: make g_endOfVariables reference the actual end of the variable array.
 // GLOBAL: LEGO1 0x100f3e50
+// STRING: LEGO1 0x100f3e00
 const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // Very likely but not certain sizes.

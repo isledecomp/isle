@@ -20,12 +20,15 @@
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
 // GLOBAL: LEGO1 0x100f3e40
+// STRING: LEGO1 0x100f3e3c
 const char* g_fileExtensionGS = ".GS";
 
 // GLOBAL: LEGO1 0x100f3e44
+// STRING: LEGO1 0x100f3e30
 const char* g_playersGSI = "Players.gsi";
 
 // GLOBAL: LEGO1 0x100f3e48
+// STRING: LEGO1 0x100f3e24
 const char* g_historyGSI = "History.gsi";
 
 // GLOBAL: LEGO1 0x100f3e58

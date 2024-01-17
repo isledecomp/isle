@@ -110,6 +110,7 @@ MxAtomId* g_creditsScript = NULL;
 MxAtomId* g_nocdSourceName = NULL;
 
 // GLOBAL: LEGO1 0x100f6718
+// STRING: LEGO1 0x100f6710
 const char* g_current = "current";
 
 // GLOBAL: LEGO1 0x100f4c58

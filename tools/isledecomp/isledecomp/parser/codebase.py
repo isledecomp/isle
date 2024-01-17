@@ -6,6 +6,7 @@ from .node import (
     ParserFunction,
     ParserVtable,
     ParserVariable,
+    ParserString,
 )
 
 
@@ -42,3 +43,6 @@ class DecompCodebase:
 
     def iter_variables(self) -> Iterator[ParserVariable]:
         return filter(lambda s: isinstance(s, ParserVariable), self._symbols)
+
+    def iter_strings(self) -> Iterator[ParserString]:
+        return filter(lambda s: isinstance(s, ParserString), self._symbols)

@@ -4,6 +4,7 @@ https://en.wikiversity.org/wiki/Visual_C%2B%2B_name_mangling
 """
 import re
 from collections import namedtuple
+from typing import Optional
 
 
 class InvalidEncodedNumberError(Exception):
@@ -30,13 +31,12 @@ string_const_regex = re.compile(
 StringConstInfo = namedtuple("StringConstInfo", "len is_utf16")
 
 
-def demangle_string_const(symbol: str) -> StringConstInfo:
+def demangle_string_const(symbol: str) -> Optional[StringConstInfo]:
     """Don't bother to decode the string text from the symbol.
     We can just read it from the binary once we have the length."""
     match = string_const_regex.match(symbol)
     if match is None:
-        # See below
-        return StringConstInfo(0, False)
+        return None
 
     try:
         strlen = (
@@ -45,10 +45,7 @@ def demangle_string_const(symbol: str) -> StringConstInfo:
             else int(match.group("len"))
         )
     except (ValueError, InvalidEncodedNumberError):
-        # This would be an annoying error to fail on if we get a bad symbol.
-        # For now, just assume a zero length string because this will probably
-        # raise some eyebrows during the comparison.
-        strlen = 0
+        return None
 
     is_utf16 = match.group("is_utf16") == "1"
     return StringConstInfo(len=strlen, is_utf16=is_utf16)
