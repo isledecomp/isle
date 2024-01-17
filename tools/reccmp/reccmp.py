@@ -12,6 +12,7 @@ from isledecomp import (
     print_diff,
 )
 from isledecomp.compare import Compare as IsleCompare
+from isledecomp.types import SymbolType
 from pystache import Renderer
 import colorama
 
@@ -225,9 +226,9 @@ def main():
         ### Compare one or none.
 
         if args.verbose is not None:
-            match = isle_compare.compare_function(args.verbose)
+            match = isle_compare.compare_address(args.verbose)
             if match is None:
-                print(f"Failed to find the function with address 0x{args.verbose:x}")
+                print(f"Failed to find a match at address 0x{args.verbose:x}")
                 return
 
             print_match_verbose(
@@ -242,14 +243,15 @@ def main():
         total_effective_accuracy = 0
         htmlinsert = []
 
-        for match in isle_compare.compare_functions():
+        for match in isle_compare.compare_all():
             print_match_oneline(
                 match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
             )
 
-            function_count += 1
-            total_accuracy += match.ratio
-            total_effective_accuracy += match.effective_ratio
+            if match.match_type == SymbolType.FUNCTION:
+                function_count += 1
+                total_accuracy += match.ratio
+                total_effective_accuracy += match.effective_ratio
 
             # If html, record the diffs to an HTML file
             if args.html is not None:
