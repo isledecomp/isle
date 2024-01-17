@@ -29,23 +29,23 @@ public:
 	};
 
 	enum InfomainScript {
-		e_noInfomain = -1,
-		e_welcomeDialogue = 500,
-		e_randomDialogue1 = 502,
-		e_letsGetStarted = 504,
-		e_returnBack = 514,
-		e_exitConfirmation = 522,
-		e_goodEndingDialogue = 539,
-		e_badEndingDialogue = 540,
-		e_pepperCharacterSelect = 541,
-		e_mamaCharacterSelect = 542,
-		e_papaCharacterSelect = 543,
-		e_officierCharacterSelect = 544,
-		e_loraCharacterSelect = 545,
+		c_noInfomain = -1,
+		c_welcomeDialogue = 500,
+		c_randomDialogue1 = 502,
+		c_letsGetStarted = 504,
+		c_returnBack = 514,
+		c_exitConfirmation = 522,
+		c_goodEndingDialogue = 539,
+		c_badEndingDialogue = 540,
+		c_pepperCharacterSelect = 541,
+		c_mamaCharacterSelect = 542,
+		c_papaCharacterSelect = 543,
+		c_officierCharacterSelect = 544,
+		c_loraCharacterSelect = 545,
 	};
 
 	enum SndAmimScript {
-		e_bookWig = 400
+		c_bookWig = 400
 	};
 
 	Infocenter();

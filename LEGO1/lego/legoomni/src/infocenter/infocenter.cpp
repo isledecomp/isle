@@ -31,7 +31,7 @@ Infocenter::Infocenter()
 	m_unk0x1cc = 0;
 	m_unk0x11c = 0;
 	m_unk0x104 = 0;
-	m_currentInfomainScript = e_noInfomain;
+	m_currentInfomainScript = c_noInfomain;
 	m_currentIntroScript = e_noIntro;
 
 	memset(&m_entries, 0, sizeof(InfocenterUnkDataEntry) * 7);
@@ -150,19 +150,19 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 			switch (m_unk0xfc) {
 			case 1:
-				PlayDialogue(e_pepperCharacterSelect);
+				PlayDialogue(c_pepperCharacterSelect);
 				break;
 			case 2:
-				PlayDialogue(e_mamaCharacterSelect);
+				PlayDialogue(c_mamaCharacterSelect);
 				break;
 			case 3:
-				PlayDialogue(e_papaCharacterSelect);
+				PlayDialogue(c_papaCharacterSelect);
 				break;
 			case 4:
-				PlayDialogue(e_officierCharacterSelect);
+				PlayDialogue(c_officierCharacterSelect);
 				break;
 			case 5:
-				PlayDialogue(e_loraCharacterSelect);
+				PlayDialogue(c_loraCharacterSelect);
 				break;
 			default:
 				break;
@@ -177,7 +177,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript))
 		return result;
 
-	if (action->GetObjectId() == e_returnBack) {
+	if (action->GetObjectId() == c_returnBack) {
 		ControlManager()->FUN_100293c0(0x10, action->GetAtomId(), 0);
 		m_unk0x1d6 = 0;
 	}
@@ -194,13 +194,13 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		case e_badEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-			PlayDialogue(e_badEndingDialogue);
+			PlayDialogue(c_badEndingDialogue);
 			m_currentIntroScript = e_noIntro;
 			return 1;
 		case e_goodEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-			PlayDialogue(e_goodEndingDialogue);
+			PlayDialogue(c_goodEndingDialogue);
 			m_currentIntroScript = e_noIntro;
 			return 1;
 		}
@@ -208,7 +208,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		// default / 2nd case probably?
 		StopCutscene();
 		m_infocenterState->SetUnknown0x74(11);
-		PlayDialogue(e_welcomeDialogue);
+		PlayDialogue(c_welcomeDialogue);
 		m_currentIntroScript = e_noIntro;
 
 		if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
@@ -221,13 +221,13 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 		switch (m_currentIntroScript) {
 		case e_badEndMovie:
-			PlayDialogue(e_badEndingDialogue);
+			PlayDialogue(c_badEndingDialogue);
 			break;
 		case e_goodEndMovie:
-			PlayDialogue(e_goodEndingDialogue);
+			PlayDialogue(c_goodEndingDialogue);
 			break;
 		default:
-			PlayDialogue(e_welcomeDialogue);
+			PlayDialogue(c_welcomeDialogue);
 		}
 
 		m_currentIntroScript = e_noIntro;
@@ -302,7 +302,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(e_letsGetStarted);
+			PlayDialogue(c_letsGetStarted);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -312,7 +312,7 @@ void Infocenter::VTable0x50()
 			break;
 		case 8:
 			PlayMusic(11);
-			PlayDialogue(e_exitConfirmation);
+			PlayDialogue(c_exitConfirmation);
 			FUN_10015820(0, 7);
 			return;
 		case 0xf:
@@ -320,7 +320,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(e_randomDialogue1);
+			PlayDialogue(c_randomDialogue1);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -526,13 +526,13 @@ void Infocenter::PlayDialogue(InfomainScript p_objectId)
 // FUNCTION: LEGO1 0x100713d0
 void Infocenter::StopCurrentDialogue()
 {
-	if (m_currentInfomainScript != e_noInfomain) {
+	if (m_currentInfomainScript != c_noInfomain) {
 		MxDSAction action;
 		action.SetObjectId(m_currentInfomainScript);
 		action.SetAtomId(*g_infomainScript);
 		action.SetUnknown24(-2);
 		DeleteObject(action);
-		m_currentInfomainScript = e_noInfomain;
+		m_currentInfomainScript = c_noInfomain;
 	}
 }
 
@@ -540,7 +540,7 @@ void Infocenter::StopCurrentDialogue()
 void Infocenter::PlayBookAnimation()
 {
 	MxDSAction action;
-	action.SetObjectId(e_bookWig);
+	action.SetObjectId(c_bookWig);
 	action.SetAtomId(*g_sndAnimScript);
 	Start(&action);
 }
@@ -549,7 +549,7 @@ void Infocenter::PlayBookAnimation()
 void Infocenter::StopBookAnimation()
 {
 	MxDSAction action;
-	action.SetObjectId(e_bookWig);
+	action.SetObjectId(c_bookWig);
 	action.SetAtomId(*g_sndAnimScript);
 	action.SetUnknown24(-2);
 	DeleteObject(action);
