@@ -46,6 +46,7 @@ public:
 	MxResult GetJoystickState(MxU32* p_joystickX, MxU32* p_joystickY, DWORD* p_buttonsState, MxU32* p_povPosition);
 	void SetTimer();
 	void KillTimer();
+	void EnableInputProcessing();
 	void SetCamera(LegoCameraController* p_camera);
 	void ClearCamera();
 	void SetWorld(LegoWorld* p_world);
@@ -56,6 +57,12 @@ public:
 	inline void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
 	inline void SetUseJoystick(MxBool p_useJoystick) { m_useJoystick = p_useJoystick; }
 	inline void SetJoystickIndex(MxS32 p_joystickIndex) { m_joystickIndex = p_joystickIndex; }
+
+	inline void DisableInputProcessing()
+	{
+		m_unk0x88 = TRUE;
+		m_unk0x336 = FALSE;
+	}
 
 	inline LegoControlManager* GetControlManager() { return m_controlManager; }
 	inline LegoWorld* GetWorld() { return m_world; }

@@ -423,7 +423,7 @@ void LegoVideoManager::OverrideSkyColor(MxBool p_shouldOverride)
 }
 
 // FUNCTION: LEGO1 0x1007c4d0
-void LegoVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+void LegoVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 	if (p_width == 0) {
 		p_width = m_videoParam.GetRect().GetWidth();

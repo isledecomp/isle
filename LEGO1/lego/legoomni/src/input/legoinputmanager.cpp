@@ -7,6 +7,12 @@
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
 DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18);
 
+// GLOBAL: LEGO1 0x100f31b0
+MxS32 g_unk0x100f31b0 = -1;
+
+// GLOBAL: LEGO1 0x100f31b4
+MxS32 g_unk0x100f31b4 = 0;
+
 // FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
@@ -270,4 +276,12 @@ void LegoInputManager::KillTimer()
 		LegoOmni* omni = LegoOmni::GetInstance();
 		::KillTimer(omni->GetWindowHandle(), m_timer);
 	}
+}
+
+// FUNCTION: LEGO1 0x1005cff0
+void LegoInputManager::EnableInputProcessing()
+{
+	m_unk0x88 = FALSE;
+	g_unk0x100f31b0 = -1;
+	g_unk0x100f31b4 = 0;
 }

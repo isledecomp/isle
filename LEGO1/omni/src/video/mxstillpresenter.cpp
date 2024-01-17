@@ -155,10 +155,10 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 		MxRect32 rectB(m_location.GetX(), m_location.GetY(), width + m_location.GetX(), height + m_location.GetY());
 
 		MVideoManager()->InvalidateRect(rectA);
-		MVideoManager()->VTable0x34(rectA.GetLeft(), rectA.GetTop(), rectA.GetWidth(), rectA.GetHeight());
+		MVideoManager()->UpdateView(rectA.GetLeft(), rectA.GetTop(), rectA.GetWidth(), rectA.GetHeight());
 
 		MVideoManager()->InvalidateRect(rectB);
-		MVideoManager()->VTable0x34(rectB.GetLeft(), rectB.GetTop(), rectB.GetWidth(), rectB.GetHeight());
+		MVideoManager()->UpdateView(rectB.GetLeft(), rectB.GetTop(), rectB.GetWidth(), rectB.GetHeight());
 	}
 }
 
@@ -176,7 +176,7 @@ void MxStillPresenter::Enable(MxBool p_enable)
 
 		MxRect32 rect(x, y, width + x, height + y);
 		MVideoManager()->InvalidateRect(rect);
-		MVideoManager()->VTable0x34(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
+		MVideoManager()->UpdateView(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 }
 

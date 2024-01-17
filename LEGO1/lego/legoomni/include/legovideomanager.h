@@ -30,7 +30,7 @@ public:
 	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 		override;                                                                          // vtable+0x2c
 	virtual MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
-	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
+	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
 	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
 	// FUNCTION: LGEO1 0x1007ab10
 	virtual LegoUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c
