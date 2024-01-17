@@ -142,11 +142,11 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 			if (world) {
 #ifdef COMPAT_MODE
 				{
-					MxNotificationParam param(MXTRANSITIONMANAGER_TRANSITIONENDED, this);
+					MxNotificationParam param(c_notificationTransitioned, this);
 					world->Notify(param);
 				}
 #else
-				world->Notify(MxNotificationParam(MXTRANSITIONMANAGER_TRANSITIONENDED, this));
+				world->Notify(MxNotificationParam(c_notificationTransitioned, this));
 #endif
 			}
 		}

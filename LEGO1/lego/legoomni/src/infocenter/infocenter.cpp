@@ -105,10 +105,10 @@ MxLong Infocenter::Notify(MxParam& p_param)
 				((LegoEventNotificationParam&) p_param).GetY()
 			);
 			break;
-		case TYPE17:
+		case c_notificationType17:
 			result = HandleNotification17(p_param);
 			break;
-		case MXTRANSITIONMANAGER_TRANSITIONENDED:
+		case c_notificationTransitioned:
 			StopBookAnimation();
 			m_unk0x1d2 = 0;
 

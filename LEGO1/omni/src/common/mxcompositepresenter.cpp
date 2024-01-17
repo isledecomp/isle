@@ -112,7 +112,7 @@ MxLong MxCompositePresenter::Notify(MxParam& p_param)
 	case c_notificationEndAction:
 		VTable0x58((MxEndActionNotificationParam&) p_param);
 		break;
-	case MXPRESENTER_NOTIFICATION:
+	case c_notificationPresenter:
 		VTable0x5c((MxNotificationParam&) p_param);
 	}
 

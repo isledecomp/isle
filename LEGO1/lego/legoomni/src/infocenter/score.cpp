@@ -90,10 +90,10 @@ MxLong Score::Notify(MxParam& p_param)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;
-		case TYPE17:
+		case c_notificationType17:
 			ret = FUN_100016d0((MxType17NotificationParam&) p_param);
 			break;
-		case MXTRANSITIONMANAGER_TRANSITIONENDED:
+		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
 			if (m_unk0xf8)
 				GameState()->HandleAction(m_unk0xf8);

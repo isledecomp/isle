@@ -112,11 +112,11 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 
 #ifdef COMPAT_MODE
 		{
-			MxNotificationParam param(MXPRESENTER_NOTIFICATION, this);
+			MxNotificationParam param(c_notificationPresenter, this);
 			NotificationManager()->Send(m_compositePresenter, &param);
 		}
 #else
-		NotificationManager()->Send(m_compositePresenter, &MxNotificationParam(MXPRESENTER_NOTIFICATION, this));
+		NotificationManager()->Send(m_compositePresenter, &MxNotificationParam(c_notificationPresenter, this));
 #endif
 
 		m_action->SetOrigin(p_omni ? p_omni : MxOmni::GetInstance());

@@ -11,7 +11,7 @@ class MxPresenter;
 // SIZE 0x2c
 class MxDSObject : public MxCore {
 public:
-	enum MxDSType {
+	enum Type {
 		e_object = 0,
 		e_action,
 		e_mediaAction,
@@ -49,14 +49,14 @@ public:
 	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24);                     // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
-	inline MxDSType GetType() const { return (MxDSType) this->m_type; }
+	inline Type GetType() const { return (Type) this->m_type; }
 	inline const char* GetSourceName() const { return this->m_sourceName; }
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
 	inline MxPresenter* GetUnknown28() { return this->m_unk0x28; }
 
-	inline void SetType(MxDSType p_type) { this->m_type = p_type; }
+	inline void SetType(Type p_type) { this->m_type = p_type; }
 	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
 	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
 	inline void SetUnknown28(MxPresenter* p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
