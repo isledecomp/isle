@@ -85,13 +85,19 @@ class Compare:
 
             if sym.node_type == SymbolType.STRING:
                 string_info = demangle_string_const(sym.decorated_name)
+                if string_info is None:
+                    logger.debug(
+                        "Could not demangle string symbol: %s", sym.decorated_name
+                    )
+                    continue
+
                 # TODO: skip unicode for now. will need to handle these differently.
                 if string_info.is_utf16:
                     continue
 
                 raw = self.recomp_bin.read(addr, sym.size())
                 try:
-                    sym.friendly_name = raw.decode("latin1")
+                    sym.friendly_name = raw.decode("latin1").rstrip("\x00")
                 except UnicodeDecodeError:
                     pass
 
@@ -133,6 +139,26 @@ class Compare:
 
         for tbl in codebase.iter_vtables():
             self._db.match_vtable(tbl.offset, tbl.name)
+
+        for string in codebase.iter_strings():
+            # Not that we don't trust you, but we're checking the string
+            # annotation to make sure it is accurate.
+            try:
+                # TODO: would presumably fail for wchar_t strings
+                orig = self.orig_bin.read_string(string.offset).decode("latin1")
+                string_correct = string.name == orig
+            except UnicodeDecodeError:
+                string_correct = False
+
+            if not string_correct:
+                logger.error(
+                    "Data at 0x%x does not match string %s",
+                    string.offset,
+                    repr(string.name),
+                )
+                continue
+
+            self._db.match_string(string.offset, string.name)
 
     def _find_original_strings(self):
         """Go to the original binary and look for the specified string constants

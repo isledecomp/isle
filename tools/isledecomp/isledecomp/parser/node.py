@@ -55,3 +55,8 @@ class ParserVariable(ParserSymbol):
 @dataclass
 class ParserVtable(ParserSymbol):
     pass
+
+
+@dataclass
+class ParserString(ParserSymbol):
+    pass

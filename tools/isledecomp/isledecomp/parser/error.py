@@ -70,6 +70,10 @@ class ParserError(Enum):
     # a comment -- i.e. VTABLE or GLOBAL -- could not extract the name
     NO_SUITABLE_NAME = 204
 
+    # ERROR: Two STRING markers have the same module and offset, but the strings
+    # they annotate are different.
+    WRONG_STRING = 205
+
 
 @dataclass
 class ParserAlert:

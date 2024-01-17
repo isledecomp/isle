@@ -43,7 +43,8 @@ class MatchInfo:
             return None
 
         ctype = self.compare_type.name if self.compare_type is not None else "UNK"
-        return f"{self.name} ({ctype})"
+        name = repr(self.name) if ctype == "STRING" else self.name
+        return f"{name} ({ctype})"
 
 
 def matchinfo_factory(_, row):
@@ -197,3 +198,5 @@ class CompareDb:
         if not did_match:
             escaped = repr(value)
             logger.error("Failed to find string: %s", escaped)
+
+        return did_match

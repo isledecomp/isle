@@ -15,7 +15,7 @@ state_change_marker_cases = [
     (_rs.SEARCH,          "TEMPLATE",   _rs.IN_TEMPLATE,     None),
     (_rs.SEARCH,          "VTABLE",     _rs.IN_VTABLE,       None),
     (_rs.SEARCH,          "LIBRARY",    _rs.IN_LIBRARY,      None),
-    (_rs.SEARCH,          "STRING",     _rs.SEARCH,          None),
+    (_rs.SEARCH,          "STRING",     _rs.IN_GLOBAL,       None),
 
     (_rs.WANT_SIG,        "FUNCTION",   _rs.WANT_SIG,        None),
     (_rs.WANT_SIG,        "GLOBAL",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
@@ -33,7 +33,7 @@ state_change_marker_cases = [
     (_rs.IN_FUNC,         "TEMPLATE",   _rs.IN_TEMPLATE,     _pe.MISSED_END_OF_FUNCTION),
     (_rs.IN_FUNC,         "VTABLE",     _rs.IN_VTABLE,       _pe.MISSED_END_OF_FUNCTION),
     (_rs.IN_FUNC,         "LIBRARY",    _rs.IN_LIBRARY,      _pe.MISSED_END_OF_FUNCTION),
-    (_rs.IN_FUNC,         "STRING",     _rs.IN_FUNC,         None),
+    (_rs.IN_FUNC,         "STRING",     _rs.IN_FUNC_GLOBAL,  None),
 
     (_rs.IN_TEMPLATE,     "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_TEMPLATE,     "GLOBAL",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
@@ -60,7 +60,7 @@ state_change_marker_cases = [
     (_rs.IN_GLOBAL,       "TEMPLATE",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "VTABLE",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_GLOBAL,       "LIBRARY",    _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
-    (_rs.IN_GLOBAL,       "STRING",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
+    (_rs.IN_GLOBAL,       "STRING",     _rs.IN_GLOBAL,       None),
 
     (_rs.IN_FUNC_GLOBAL,  "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "GLOBAL",     _rs.IN_FUNC_GLOBAL,  None),
@@ -69,7 +69,7 @@ state_change_marker_cases = [
     (_rs.IN_FUNC_GLOBAL,  "TEMPLATE",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "VTABLE",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_FUNC_GLOBAL,  "LIBRARY",    _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
-    (_rs.IN_FUNC_GLOBAL,  "STRING",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
+    (_rs.IN_FUNC_GLOBAL,  "STRING",     _rs.IN_FUNC_GLOBAL,  None),
 
     (_rs.IN_VTABLE,       "FUNCTION",   _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
     (_rs.IN_VTABLE,       "GLOBAL",     _rs.SEARCH,          _pe.INCOMPATIBLE_MARKER),
