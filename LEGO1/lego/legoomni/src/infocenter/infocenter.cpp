@@ -419,6 +419,7 @@ void Infocenter::StopCutScene()
 
 	VideoManager()->EnableFullScreenMovie(FALSE);
 	InputManager()->SetUnknown335(FALSE);
+	SetAppCursor(0); // Restore cursor to arrow
 	FUN_10015820(0, 7);
 }
 
