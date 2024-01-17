@@ -24,6 +24,8 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
 
+	virtual void Destroy() override; // vtable+0x38
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
