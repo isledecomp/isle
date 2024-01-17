@@ -32,7 +32,7 @@ Infocenter::Infocenter()
 	m_unk0x11c = 0;
 	m_unk0x104 = 0;
 	m_currentInfomainScript = c_noInfomain;
-	m_currentIntroScript = e_noIntro;
+	m_currentCutscene = e_noIntro;
 
 	memset(&m_entries, 0, sizeof(InfocenterUnkDataEntry) * 7);
 
@@ -184,7 +184,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 	switch (m_infocenterState->GetUnknown0x74()) {
 	case 0:
-		switch (m_currentIntroScript) {
+		switch (m_currentCutscene) {
 		case e_legoMovie:
 			PlayCutscene(e_mindscapeMovie, FALSE);
 			return 1;
@@ -195,13 +195,13 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
 			PlayDialogue(c_badEndingDialogue);
-			m_currentIntroScript = e_noIntro;
+			m_currentCutscene = e_noIntro;
 			return 1;
 		case e_goodEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
 			PlayDialogue(c_goodEndingDialogue);
-			m_currentIntroScript = e_noIntro;
+			m_currentCutscene = e_noIntro;
 			return 1;
 		}
 
@@ -209,7 +209,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		StopCutscene();
 		m_infocenterState->SetUnknown0x74(11);
 		PlayDialogue(c_welcomeDialogue);
-		m_currentIntroScript = e_noIntro;
+		m_currentCutscene = e_noIntro;
 
 		if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
 			m_unk0x1d2 = 1;
@@ -219,7 +219,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 	case 1:
 		m_infocenterState->SetUnknown0x74(11);
 
-		switch (m_currentIntroScript) {
+		switch (m_currentCutscene) {
 		case e_badEndMovie:
 			PlayDialogue(c_badEndingDialogue);
 			break;
@@ -230,7 +230,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 			PlayDialogue(c_welcomeDialogue);
 		}
 
-		m_currentIntroScript = e_noIntro;
+		m_currentCutscene = e_noIntro;
 		return 1;
 	case 2:
 		FUN_10015860(g_object2x4red, 0);
@@ -440,9 +440,9 @@ MxResult Infocenter::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10070c20
-void Infocenter::PlayCutscene(IntroScript p_entityId, MxBool p_scale)
+void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 {
-	m_currentIntroScript = p_entityId;
+	m_currentCutscene = p_entityId;
 
 	VideoManager()->EnableFullScreenMovie(TRUE, p_scale);
 	InputManager()->SetUnknown336(TRUE);
@@ -450,20 +450,20 @@ void Infocenter::PlayCutscene(IntroScript p_entityId, MxBool p_scale)
 	SetAppCursor(0xb); // Hide cursor
 	VideoManager()->GetDisplaySurface()->ClearScreen();
 
-	if (m_currentIntroScript != e_noIntro) {
+	if (m_currentCutscene != e_noIntro) {
 		// check if the cutscene is not an ending
-		if (m_currentIntroScript >= e_badEndMovie && m_currentIntroScript <= e_goodEndMovie) {
+		if (m_currentCutscene >= e_badEndMovie && m_currentCutscene <= e_goodEndMovie) {
 			FUN_10070e90();
 		}
-		InvokeAction(Extra::ActionType::e_opendisk, *g_introScript, m_currentIntroScript, NULL);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_introScript, m_currentCutscene, NULL);
 	}
 }
 
 // FUNCTION: LEGO1 0x10070cb0
 void Infocenter::StopCutscene()
 {
-	if (m_currentIntroScript != e_noIntro) {
-		InvokeAction(Extra::ActionType::e_close, *g_introScript, m_currentIntroScript, NULL);
+	if (m_currentCutscene != e_noIntro) {
+		InvokeAction(Extra::ActionType::e_close, *g_introScript, m_currentCutscene, NULL);
 	}
 
 	VideoManager()->EnableFullScreenMovie(FALSE);

@@ -18,7 +18,7 @@ struct InfocenterUnkDataEntry {
 // SIZE 0x1d8
 class Infocenter : public LegoWorld {
 public:
-	enum IntroScript {
+	enum Cutscene {
 		e_noIntro = -1,
 		e_legoMovie,
 		e_mindscapeMovie,
@@ -86,7 +86,7 @@ private:
 	void FUN_10070dc0(MxBool);
 	void FUN_10070e90();
 
-	void PlayCutscene(IntroScript p_entityId, MxBool p_scale);
+	void PlayCutscene(Cutscene p_entityId, MxBool p_scale);
 	void StopCutscene();
 
 	void StartCredits();
@@ -102,7 +102,7 @@ private:
 	MxS16 m_unk0xfc;                        // 0xfc
 	InfocenterState* m_infocenterState;     // 0x100
 	undefined4 m_unk0x104;                  // 0x104
-	IntroScript m_currentIntroScript;       // 0x108
+	Cutscene m_currentCutscene;             // 0x108
 	Radio m_radio;                          // 0x10c
 	undefined4 m_unk0x11c;                  // 0x11c
 	InfocenterUnkDataEntry m_entries[7];    // 0x120
