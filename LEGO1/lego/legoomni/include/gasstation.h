@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "legoworld.h"
+#include "radio.h"
 
 // VTABLE: LEGO1 0x100d4650
 // SIZE 0x128
@@ -29,15 +30,18 @@ public:
 	}
 
 private:
-	undefined m_unk0xf8;
-	undefined m_unk0x104;
-	undefined m_unk0x100;
-	undefined m_unk0x106;
-	undefined m_unk0xfc;
-	undefined m_unk0x108;
+	undefined2 m_unk0xf8;
+	undefined2 m_unk0xfa;
+	undefined4 m_unk0xfc;
+	undefined4 m_unk0x100;
+	undefined2 m_unk0x104;
+	undefined2 m_unk0x106;
+	undefined4 m_unk0x108;
+	undefined4 m_unk0x10c;
+	undefined4 m_unk0x110;
 	undefined m_unk0x114;
-	undefined m_unk0x10c;
 	undefined m_unk0x115;
-	undefined m_unk0x110;
+	Radio m_radio;
 };
+
 #endif // GASSTATION_H
