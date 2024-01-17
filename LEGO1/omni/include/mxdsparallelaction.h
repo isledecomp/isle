@@ -13,6 +13,9 @@ public:
 	void CopyFrom(MxDSParallelAction& p_dsParallelAction);
 	MxDSParallelAction& operator=(MxDSParallelAction& p_dsParallelAction);
 
+	// FUNCTION: LEGO1 0x100caef0
+	virtual void SetDuration(MxLong p_duration) override { m_duration = p_duration; } // vtable+0x28
+
 	// FUNCTION: LEGO1 0x100caf00
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -25,6 +28,9 @@ public:
 	{
 		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x100cb020
+	// MxDSParallelAction::`scalar deleting destructor'
 
 	virtual MxLong GetDuration() override; // vtable+24;
 	virtual MxDSAction* Clone() override;  // vtable+2c;

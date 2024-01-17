@@ -121,6 +121,15 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x100b98f0
+void MxStreamer::FUN_100b98f0(MxDSAction* p_action)
+{
+	MxStreamController* controller = GetOpenStream(p_action->GetAtomId().GetInternal());
+	if (controller && controller->IsA("MxDiskStreamController")) {
+		((MxDiskStreamController*) controller)->FUN_100c8120(p_action);
+	}
+}
+
 // FUNCTION: LEGO1 0x100b9930
 MxResult MxStreamer::AddStreamControllerToOpenList(MxStreamController* p_stream)
 {

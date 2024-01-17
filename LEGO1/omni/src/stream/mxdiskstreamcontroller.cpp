@@ -301,6 +301,21 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100c8120
+void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
+{
+	VTable0x30(p_action);
+	if (m_provider) {
+		m_provider->VTable0x20(p_action);
+	}
+	while (true) {
+		MxDSAction* found = m_unk0x54.Find(p_action, TRUE);
+		if (!found)
+			break;
+		delete found;
+	}
+}
+
 // FUNCTION: LEGO1 0x100c8160
 MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 {

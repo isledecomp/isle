@@ -47,6 +47,17 @@ MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 	return *this;
 }
 
+// FUNCTION: LEGO1 0x100c8df0
+MxDSAction* MxDSMediaAction::Clone()
+{
+	MxDSMediaAction* clone = new MxDSMediaAction();
+
+	if (clone)
+		*clone = *this;
+
+	return clone;
+}
+
 // FUNCTION: LEGO1 0x100c8e80
 void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 {
@@ -62,6 +73,12 @@ void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 	}
 	else
 		this->m_mediaSrcPath = NULL;
+}
+
+// FUNCTION: LEGO1 0x100c8f00
+undefined4 MxDSMediaAction::VTable0x14()
+{
+	return MxDSAction::VTable0x14();
 }
 
 // FUNCTION: LEGO1 0x100c8f10
