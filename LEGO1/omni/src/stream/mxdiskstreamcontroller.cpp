@@ -305,10 +305,12 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 {
 	VTable0x30(p_action);
+
 	if (m_provider) {
 		m_provider->VTable0x20(p_action);
 	}
-	while (true) {
+
+	while (TRUE) {
 		MxDSAction* found = m_unk0x54.Find(p_action, TRUE);
 		if (!found)
 			break;
