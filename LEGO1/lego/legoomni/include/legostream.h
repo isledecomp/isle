@@ -30,9 +30,9 @@ public:
 	virtual MxBool IsReadMode();
 
 	enum OpenFlags {
-		ReadBit = 1,
-		WriteBit = 2,
-		BinaryBit = 4,
+		c_readBit = 1,
+		c_writeBit = 2,
+		c_binaryBit = 4,
 	};
 
 	static MxResult __stdcall WriteVariable(LegoStream* p_stream, MxVariableTable* p_from, const char* p_variableName);

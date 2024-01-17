@@ -78,9 +78,9 @@ protected:
 	undefined m_unk0x59;             // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
-	ExtraActionType m_actionType; // 0x5c
-	char* m_actionArgString;      // 0x60
-	MxS32 m_actionArgNumber;      // 0x64
+	Extra::ActionType m_actionType; // 0x5c
+	char* m_actionArgString;        // 0x60
+	MxS32 m_actionArgNumber;        // 0x64
 };
 
 // SYNTHETIC: LEGO1 0x1000c3b0

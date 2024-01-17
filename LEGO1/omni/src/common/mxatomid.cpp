@@ -55,7 +55,7 @@ MxAtomId& MxAtomId::operator=(const MxAtomId& p_atomId)
 		Destroy();
 
 	if (p_atomId.m_internal && MxOmni::GetInstance() && AtomIdCounterSet()) {
-		MxAtomIdCounter* counter = GetCounter(p_atomId.m_internal, LookupMode_Exact);
+		MxAtomIdCounter* counter = GetCounter(p_atomId.m_internal, e_exact);
 		counter->Inc();
 	}
 
@@ -71,11 +71,11 @@ MxAtomIdCounter* MxAtomId::GetCounter(const char* p_str, LookupMode p_mode)
 	MxAtomIdCounter* counter = new MxAtomIdCounter(p_str);
 
 	switch (p_mode) {
-	case LookupMode_LowerCase:
-	case LookupMode_LowerCase2:
+	case e_lowerCase:
+	case e_lowerCase2:
 		counter->GetKey()->ToLowerCase();
 		break;
-	case LookupMode_UpperCase:
+	case e_upperCase:
 		counter->GetKey()->ToUpperCase();
 		break;
 	}

@@ -455,7 +455,7 @@ void Infocenter::PlayCutscene(IntroScript p_entityId, MxBool p_scale)
 		if (m_currentIntroScript >= e_badEndMovie && m_currentIntroScript <= e_goodEndMovie) {
 			FUN_10070e90();
 		}
-		InvokeAction(ExtraActionType_opendisk, *g_introScript, m_currentIntroScript, NULL);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_introScript, m_currentIntroScript, NULL);
 	}
 }
 
@@ -463,7 +463,7 @@ void Infocenter::PlayCutscene(IntroScript p_entityId, MxBool p_scale)
 void Infocenter::StopCutscene()
 {
 	if (m_currentIntroScript != e_noIntro) {
-		InvokeAction(ExtraActionType_close, *g_introScript, m_currentIntroScript, NULL);
+		InvokeAction(Extra::ActionType::e_close, *g_introScript, m_currentIntroScript, NULL);
 	}
 
 	VideoManager()->EnableFullScreenMovie(FALSE);

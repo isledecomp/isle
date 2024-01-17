@@ -166,18 +166,18 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 		fclose(m_hFile);
 
 	modeString[0] = '\0';
-	if (p_mode & ReadBit) {
+	if (p_mode & c_readBit) {
 		m_mode = LEGOSTREAM_MODE_READ;
 		strcat(modeString, "r");
 	}
 
-	if (p_mode & WriteBit) {
+	if (p_mode & c_writeBit) {
 		if (m_mode != LEGOSTREAM_MODE_READ)
 			m_mode = LEGOSTREAM_MODE_WRITE;
 		strcat(modeString, "w");
 	}
 
-	if ((p_mode & 4) != 0)
+	if ((p_mode & c_binaryBit) != 0)
 		strcat(modeString, "b");
 	else
 		strcat(modeString, "t");

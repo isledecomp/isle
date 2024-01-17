@@ -4,16 +4,16 @@
 #include "mxatomidcounter.h"
 #include "mxtypes.h"
 
-enum LookupMode {
-	LookupMode_Exact = 0,
-	LookupMode_LowerCase = 1,
-	LookupMode_UpperCase = 2,
-	LookupMode_LowerCase2 = 3
-};
-
 // SIZE 0x04
 class MxAtomId {
 public:
+	enum LookupMode {
+		e_exact = 0,
+		e_lowerCase,
+		e_upperCase,
+		e_lowerCase2,
+	};
+
 	__declspec(dllexport) MxAtomId(const char*, LookupMode);
 	__declspec(dllexport) MxAtomId& operator=(const MxAtomId& p_atomId);
 	__declspec(dllexport) ~MxAtomId();

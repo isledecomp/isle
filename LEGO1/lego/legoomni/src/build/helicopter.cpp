@@ -112,7 +112,7 @@ MxU32 Helicopter::VTable0xcc()
 		break;
 	}
 	VTable0xe0();
-	InvokeAction(ExtraActionType_start, m_script, 0x15, NULL);
+	InvokeAction(Extra::ActionType::e_start, m_script, 0x15, NULL);
 	GetCurrentAction().SetObjectId(-1);
 	ControlManager()->Register(this);
 	return 1;
@@ -155,7 +155,7 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 				state->SetUnknown18(4);
 				m_state->SetUnknown8(1);
 				m_world->FUN_1001fc80(this);
-				InvokeAction(ExtraActionType_start, script, 0x20, NULL);
+				InvokeAction(Extra::ActionType::e_start, script, 0x20, NULL);
 				SetUnknownDC(0);
 			}
 			ret = 1;
@@ -167,7 +167,7 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 			if (m_state->GetUnkown8() == 2) {
 				m_state->SetUnknown8(3);
 				m_world->FUN_1001fc80(this);
-				InvokeAction(ExtraActionType_start, script, 0x21, NULL);
+				InvokeAction(Extra::ActionType::e_start, script, 0x21, NULL);
 				SetUnknownDC(4);
 			}
 			ret = 1;

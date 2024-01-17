@@ -298,34 +298,34 @@ LegoEntity* PickEntity(MxLong, MxLong)
 // FUNCTION: LEGO1 0x100528e0
 void RegisterScripts()
 {
-	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", LookupMode_LowerCase2);
-	g_dunecarScript = new MxAtomId("\\lego\\scripts\\build\\dunecar", LookupMode_LowerCase2);
-	g_jetskiScript = new MxAtomId("\\lego\\scripts\\build\\jetski", LookupMode_LowerCase2);
-	g_racecarScript = new MxAtomId("\\lego\\scripts\\build\\racecar", LookupMode_LowerCase2);
-	g_carraceScript = new MxAtomId("\\lego\\scripts\\race\\carrace", LookupMode_LowerCase2);
-	g_carracerScript = new MxAtomId("\\lego\\scripts\\race\\carracer", LookupMode_LowerCase2);
-	g_jetraceScript = new MxAtomId("\\lego\\scripts\\race\\jetrace", LookupMode_LowerCase2);
-	g_jetracerScript = new MxAtomId("\\lego\\scripts\\race\\jetracer", LookupMode_LowerCase2);
-	g_isleScript = new MxAtomId("\\lego\\scripts\\isle\\isle", LookupMode_LowerCase2);
-	g_elevbottScript = new MxAtomId("\\lego\\scripts\\infocntr\\elevbott", LookupMode_LowerCase2);
-	g_infodoorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infodoor", LookupMode_LowerCase2);
-	g_infomainScript = new MxAtomId("\\lego\\scripts\\infocntr\\infomain", LookupMode_LowerCase2);
-	g_infoscorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infoscor", LookupMode_LowerCase2);
-	g_regbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\regbook", LookupMode_LowerCase2);
-	g_histbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\histbook", LookupMode_LowerCase2);
-	g_hospitalScript = new MxAtomId("\\lego\\scripts\\hospital\\hospital", LookupMode_LowerCase2);
-	g_policeScript = new MxAtomId("\\lego\\scripts\\police\\police", LookupMode_LowerCase2);
-	g_garageScript = new MxAtomId("\\lego\\scripts\\garage\\garage", LookupMode_LowerCase2);
-	g_act2mainScript = new MxAtomId("\\lego\\scripts\\act2\\act2main", LookupMode_LowerCase2);
-	g_act3Script = new MxAtomId("\\lego\\scripts\\act3\\act3", LookupMode_LowerCase2);
-	g_jukeboxScript = new MxAtomId("\\lego\\scripts\\isle\\jukebox", LookupMode_LowerCase2);
-	g_pz5Script = new MxAtomId("\\lego\\scripts\\isle\\pz5", LookupMode_LowerCase2);
-	g_introScript = new MxAtomId("\\lego\\scripts\\intro", LookupMode_LowerCase2);
-	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", LookupMode_LowerCase2);
-	g_jukeboxwScript = new MxAtomId("\\lego\\scripts\\isle\\jukeboxw", LookupMode_LowerCase2);
-	g_sndAnimScript = new MxAtomId("\\lego\\scripts\\sndanim", LookupMode_LowerCase2);
-	g_creditsScript = new MxAtomId("\\lego\\scripts\\credits", LookupMode_LowerCase2);
-	g_nocdSourceName = new MxAtomId("\\lego\\scripts\\nocd", LookupMode_LowerCase2);
+	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", MxAtomId::e_lowerCase2);
+	g_dunecarScript = new MxAtomId("\\lego\\scripts\\build\\dunecar", MxAtomId::e_lowerCase2);
+	g_jetskiScript = new MxAtomId("\\lego\\scripts\\build\\jetski", MxAtomId::e_lowerCase2);
+	g_racecarScript = new MxAtomId("\\lego\\scripts\\build\\racecar", MxAtomId::e_lowerCase2);
+	g_carraceScript = new MxAtomId("\\lego\\scripts\\race\\carrace", MxAtomId::e_lowerCase2);
+	g_carracerScript = new MxAtomId("\\lego\\scripts\\race\\carracer", MxAtomId::e_lowerCase2);
+	g_jetraceScript = new MxAtomId("\\lego\\scripts\\race\\jetrace", MxAtomId::e_lowerCase2);
+	g_jetracerScript = new MxAtomId("\\lego\\scripts\\race\\jetracer", MxAtomId::e_lowerCase2);
+	g_isleScript = new MxAtomId("\\lego\\scripts\\isle\\isle", MxAtomId::e_lowerCase2);
+	g_elevbottScript = new MxAtomId("\\lego\\scripts\\infocntr\\elevbott", MxAtomId::e_lowerCase2);
+	g_infodoorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infodoor", MxAtomId::e_lowerCase2);
+	g_infomainScript = new MxAtomId("\\lego\\scripts\\infocntr\\infomain", MxAtomId::e_lowerCase2);
+	g_infoscorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infoscor", MxAtomId::e_lowerCase2);
+	g_regbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\regbook", MxAtomId::e_lowerCase2);
+	g_histbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\histbook", MxAtomId::e_lowerCase2);
+	g_hospitalScript = new MxAtomId("\\lego\\scripts\\hospital\\hospital", MxAtomId::e_lowerCase2);
+	g_policeScript = new MxAtomId("\\lego\\scripts\\police\\police", MxAtomId::e_lowerCase2);
+	g_garageScript = new MxAtomId("\\lego\\scripts\\garage\\garage", MxAtomId::e_lowerCase2);
+	g_act2mainScript = new MxAtomId("\\lego\\scripts\\act2\\act2main", MxAtomId::e_lowerCase2);
+	g_act3Script = new MxAtomId("\\lego\\scripts\\act3\\act3", MxAtomId::e_lowerCase2);
+	g_jukeboxScript = new MxAtomId("\\lego\\scripts\\isle\\jukebox", MxAtomId::e_lowerCase2);
+	g_pz5Script = new MxAtomId("\\lego\\scripts\\isle\\pz5", MxAtomId::e_lowerCase2);
+	g_introScript = new MxAtomId("\\lego\\scripts\\intro", MxAtomId::e_lowerCase2);
+	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", MxAtomId::e_lowerCase2);
+	g_jukeboxwScript = new MxAtomId("\\lego\\scripts\\isle\\jukeboxw", MxAtomId::e_lowerCase2);
+	g_sndAnimScript = new MxAtomId("\\lego\\scripts\\sndanim", MxAtomId::e_lowerCase2);
+	g_creditsScript = new MxAtomId("\\lego\\scripts\\credits", MxAtomId::e_lowerCase2);
+	g_nocdSourceName = new MxAtomId("\\lego\\scripts\\nocd", MxAtomId::e_lowerCase2);
 }
 
 // FUNCTION: LEGO1 0x100530c0
@@ -638,7 +638,7 @@ MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p
 {
 	LegoWorld* foundEntity = NULL;
 	if (strcmpi(p_id, g_current)) {
-		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, LookupMode_LowerCase2), p_entityId);
+		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, MxAtomId::e_lowerCase2), p_entityId);
 	}
 	else {
 		foundEntity = this->m_currentWorld;

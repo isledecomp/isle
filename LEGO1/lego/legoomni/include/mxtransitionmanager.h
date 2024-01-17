@@ -32,7 +32,7 @@ public:
 	virtual MxResult GetDDrawSurfaceFromVideoManager(); // vtable+0x14
 
 	enum TransitionType {
-		e_notTransitioning,
+		e_notTransitioning = 0,
 		e_noAnimation,
 		e_dissolve,
 		e_pixelation,

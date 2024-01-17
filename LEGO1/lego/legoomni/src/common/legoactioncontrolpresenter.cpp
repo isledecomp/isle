@@ -40,11 +40,11 @@ void LegoActionControlPresenter::RepeatingTickle()
 
 #ifdef COMPAT_MODE
 		{
-			MxAtomId atom(m_unk0x54.GetData(), LookupMode_LowerCase2);
+			MxAtomId atom(m_unk0x54.GetData(), MxAtomId::e_lowerCase2);
 			InvokeAction(m_unk0x50, atom, m_unk0x64, NULL);
 		}
 #else
-		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), LookupMode_LowerCase2), m_unk0x64, NULL);
+		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), MxAtomId::e_lowerCase2), m_unk0x64, NULL);
 #endif
 		ProgressTickleState(TickleState_Done);
 	}
@@ -92,11 +92,11 @@ void LegoActionControlPresenter::ParseExtra()
 	char output[1024];
 	if (KeyValueStringParse(output, g_strACTION, buf)) {
 		m_unk0x50 = MatchActionString(strtok(output, g_parseExtraTokens));
-		if (m_unk0x50 != ExtraActionType_exit) {
+		if (m_unk0x50 != Extra::ActionType::e_exit) {
 			MakeSourceName(buf, strtok(NULL, g_parseExtraTokens));
 			m_unk0x54 = buf;
 			m_unk0x54.ToLowerCase();
-			if (m_unk0x50 != ExtraActionType_run) {
+			if (m_unk0x50 != Extra::ActionType::e_run) {
 				m_unk0x64 = atoi(strtok(NULL, g_parseExtraTokens));
 			}
 		}
