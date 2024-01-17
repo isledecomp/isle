@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, Pizzeria::ClassName()) || IsleActor::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000e8d0
+	// Pizzeria::`scalar deleting destructor'
 };
 
 #endif // PIZZERIA_H

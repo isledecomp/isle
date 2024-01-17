@@ -30,6 +30,9 @@ public:
 
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 
+	// SYNTHETIC: LEGO1 0x10039350
+	// PizzaMissionState::`scalar deleting destructor'
+
 private:
 	PizzaMissionStateEntry* GetState(MxU8 p_id);
 

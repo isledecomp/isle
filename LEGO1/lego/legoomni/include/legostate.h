@@ -27,6 +27,9 @@ public:
 	virtual MxBool VTable0x14();                                   // vtable+0x14
 	virtual MxBool SetFlag();                                      // vtable+0x18
 	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream); // vtable+0x1C
+
+	// SYNTHETIC: LEGO1 0x10006160
+	// LegoState::`scalar deleting destructor'
 };
 
 #endif // LEGOSTATE_H

@@ -60,6 +60,9 @@ public:
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxPresenter* FindPresenter(const char* p_presenter, const char* p_name);
 
+	// SYNTHETIC: LEGO1 0x1001dee0
+	// LegoWorld::`scalar deleting destructor'
+
 protected:
 	LegoPathControllerList m_list0x68;        // 0x68
 	MxPresenterList m_list0x80;               // 0x80

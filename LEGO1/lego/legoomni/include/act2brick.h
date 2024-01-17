@@ -25,6 +25,9 @@ public:
 	{
 		return !strcmp(p_name, Act2Brick::ClassName()) || LegoEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1007a450
+	// Act2Brick::`scalar deleting destructor'
 };
 
 #endif // ACT2BRICK_H

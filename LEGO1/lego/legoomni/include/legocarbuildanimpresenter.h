@@ -22,6 +22,9 @@ public:
 	{
 		return !strcmp(p_name, LegoCarBuildAnimPresenter::ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10078660
+	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 };
 
 #endif // LEGOCARBUILDANIMPRESENTER_H

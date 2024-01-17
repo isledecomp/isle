@@ -20,6 +20,9 @@ public:
 		return "LegoPhonemePresenter";
 	}
 
+	// SYNTHETIC: LEGO1 0x1004e320
+	// LegoPhonemePresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	int m_unk0x68;

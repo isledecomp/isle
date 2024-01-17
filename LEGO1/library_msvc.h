@@ -45,6 +45,9 @@
 // LIBRARY: LEGO1 0x1008b730
 // _fprintf
 
+// LIBRARY: LEGO1 0x1008b670
+// __purecall
+
 // LIBRARY: LEGO1 0x1008b780
 // _fwrite
 

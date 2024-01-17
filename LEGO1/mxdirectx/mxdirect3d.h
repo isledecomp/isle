@@ -66,6 +66,9 @@ public:
 	inline IDirect3D2* GetDirect3D() { return this->m_pDirect3d; }
 	inline IDirect3DDevice2* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
 
+	// SYNTHETIC: LEGO1 0x1009b120
+	// MxDirect3D::`scalar deleting destructor'
+
 private:
 	MxAssignedDevice* m_assignedDevice;  // 0x880
 	IDirect3D2* m_pDirect3d;             // 0x884

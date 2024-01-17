@@ -20,6 +20,9 @@ public:
 
 	virtual void NextFrame() override; // vtable+0x64
 
+	// SYNTHETIC: LEGO1 0x100b4390
+	// MxLoopingFlcPresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

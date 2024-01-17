@@ -13,6 +13,9 @@ class MxStringList : public MxList<MxString> {};
 class MxStringListCursor : public MxListCursor<MxString> {
 public:
 	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list){};
+
+	// SYNTHETIC: LEGO1 0x100cb860
+	// MxStringList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dd010

@@ -21,6 +21,9 @@ public:
 	}
 
 	virtual MxBool VTable0x14() override; // vtable+0x14
+
+	// SYNTHETIC: LEGO1 0x1000f3d0
+	// JukeBoxState::`scalar deleting destructor'
 };
 
 #endif // JUKEBOXSTATE_H

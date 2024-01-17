@@ -22,6 +22,9 @@ public:
 		return !strcmp(p_name, Ambulance::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10036130
+	// Ambulance::`scalar deleting destructor'
+
 private:
 	// TODO: Ambulance fields
 	undefined m_unk0x160[4];

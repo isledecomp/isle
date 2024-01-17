@@ -83,6 +83,9 @@ public:
 			SetFlags(GetFlags() | MxDSAction::c_bit3);
 	}
 
+	// SYNTHETIC: LEGO1 0x100ada60
+	// MxDSAction::`scalar deleting destructor'
+
 protected:
 	MxU32 m_sizeOnDisk;         // 0x2c
 	MxU32 m_flags;              // 0x30

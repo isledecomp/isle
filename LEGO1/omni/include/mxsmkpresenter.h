@@ -33,6 +33,9 @@ public:
 	virtual void RealizePalette() override;                   // vtable+0x70
 	virtual void VTable0x88();                                // vtable+0x88
 
+	// SYNTHETIC: LEGO1 0x100b3850
+	// MxSmkPresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

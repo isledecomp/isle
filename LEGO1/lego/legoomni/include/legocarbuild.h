@@ -25,6 +25,9 @@ public:
 	{
 		return !strcmp(p_name, LegoCarBuild::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10022a60
+	// LegoCarBuild::`scalar deleting destructor'
 };
 
 #endif // LEGOCARBUILD_H

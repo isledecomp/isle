@@ -38,6 +38,9 @@ public:
 	virtual undefined4 VTable0x78(undefined4);                // vtable+0x78
 	virtual void VTable0x7c(undefined4, undefined4);          // vtable+0x7c
 
+	// SYNTHETIC: LEGO1 0x10015cc0
+	// LegoRace::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0xf8;  // 0xf8
 	undefined4 m_unk0xfc;  // 0xfc

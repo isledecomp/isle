@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, Bike::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10076880
+	// Bike::`scalar deleting destructor'
+
 private:
 	// TODO: Bike fields
 	undefined m_unk0x160[4];

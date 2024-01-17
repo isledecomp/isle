@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, Radio::ClassName()) || MxCore::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x1002c970
+	// Radio::`scalar deleting destructor'
+
 private:
 	RadioState* m_state; // 0x08
 	MxBool m_unk0xc;     // 0x0c

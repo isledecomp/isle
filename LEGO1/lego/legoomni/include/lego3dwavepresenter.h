@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, Lego3DWavePresenter::ClassName()) || MxWavePresenter::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f4b0
+	// Lego3DWavePresenter::`scalar deleting destructor'
 };
 
 #endif // LEGO3DWAVEPRESENTER_H

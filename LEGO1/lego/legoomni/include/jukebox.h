@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, JukeBox::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x1005d810
+	// JukeBox::`scalar deleting destructor'
+
 private:
 	undefined m_unk0xf8[4]; // 0xf8
 	undefined4 m_unk0xfc;   // 0xfc

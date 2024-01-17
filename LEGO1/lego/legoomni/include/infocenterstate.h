@@ -29,6 +29,9 @@ public:
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
+	// SYNTHETIC: LEGO1 0x10071900
+	// InfocenterState::`scalar deleting destructor'
+
 private:
 	// Members should be renamed with their offsets before use
 	/*

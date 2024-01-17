@@ -34,6 +34,9 @@ public:
 
 	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
+	// SYNTHETIC: LEGO1 0x1005ed10
+	// LegoAnimationManager::`scalar deleting destructor'
+
 private:
 	void Init();
 };

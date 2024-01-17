@@ -44,6 +44,9 @@ public:
 	virtual void SetClientTickleInterval(MxCore* p_client, MxTime p_interval); // vtable+0x1c
 	virtual MxTime GetClientTickleInterval(MxCore* p_client);                  // vtable+0x20
 
+	// SYNTHETIC: LEGO1 0x1005a510
+	// MxTickleManager::`scalar deleting destructor'
+
 private:
 	MxTickleClientPtrList m_clients; // 0x8
 };

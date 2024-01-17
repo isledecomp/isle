@@ -59,6 +59,9 @@ public:
 	MxLong HandleTransitionEnd();
 	void FUN_10032620();
 
+	// SYNTHETIC: LEGO1 0x10030a30
+	// Isle::`scalar deleting destructor'
+
 protected:
 	Act1State* m_act1state;   // 0xf8
 	Pizza* m_pizza;           // 0xfc

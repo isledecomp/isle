@@ -26,6 +26,9 @@ public:
 		return !strcmp(p_name, ElevatorBottom::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10018040
+	// ElevatorBottom::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0xf8; // 0xf8
 };

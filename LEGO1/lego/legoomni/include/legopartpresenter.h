@@ -21,6 +21,9 @@ public:
 	}
 
 	__declspec(dllexport) static void configureLegoPartPresenter(MxS32, MxS32);
+
+	// SYNTHETIC: LEGO1 0x1000d060
+	// LegoPartPresenter::`scalar deleting destructor'
 };
 
 #endif // LEGOPARTPRESENTER_H

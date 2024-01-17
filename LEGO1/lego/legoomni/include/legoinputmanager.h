@@ -71,6 +71,9 @@ public:
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
 
+	// SYNTHETIC: LEGO1 0x1005b8d0
+	// LegoInputManager::`scalar deleting destructor'
+
 private:
 	MxCriticalSection m_criticalSection;
 	MxList<undefined4>* m_unk0x5c; // list or hash table

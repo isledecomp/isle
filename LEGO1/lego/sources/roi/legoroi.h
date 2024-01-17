@@ -40,6 +40,9 @@ public:
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
 	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
 
+	// SYNTHETIC: LEGO1 0x100a9ad0
+	// LegoROI::`scalar deleting destructor'
+
 private:
 	undefined m_pad[0x24];  // 0xe0
 	LegoEntity* m_unk0x104; // 0x104

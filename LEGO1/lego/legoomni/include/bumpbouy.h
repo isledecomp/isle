@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, BumpBouy::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10027490
+	// BumpBouy::`scalar deleting destructor'
 };
 
 #endif // BUMPBOUY_H

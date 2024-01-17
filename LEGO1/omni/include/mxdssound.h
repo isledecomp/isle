@@ -32,6 +32,9 @@ public:
 
 	inline MxS32 GetVolume() const { return m_volume; }
 
+	// SYNTHETIC: LEGO1 0x100c9450
+	// MxDSSound::`scalar deleting destructor'
+
 private:
 	MxU32 m_sizeOnDisk;
 	MxS32 m_volume; // 0xbc

@@ -89,6 +89,9 @@ public:
 	void Dump(void (*pTracer)(const char*, ...)) const;
 #endif
 
+	// SYNTHETIC: LEGO1 0x100a70c0
+	// ViewLODListManager::`scalar deleting destructor'
+
 private:
 	ViewLODListMap m_map;
 };

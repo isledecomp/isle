@@ -39,6 +39,9 @@ public:
 	virtual MxCore* Create(const char* p_name); // vtable 0x14
 	virtual void Destroy(MxCore* p_object);     // vtable 0x18
 
+	// SYNTHETIC: LEGO1 0x100b1160
+	// MxObjectFactory::`scalar deleting destructor'
+
 private:
 #define X(V) MxAtomId m_id##V;
 	FOR_MXOBJECTFACTORY_OBJECTS(X)

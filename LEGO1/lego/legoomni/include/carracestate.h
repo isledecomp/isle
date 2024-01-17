@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, CarRaceState::ClassName()) || RaceState::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f740
+	// CarRaceState::`scalar deleting destructor'
 };
 
 #endif // CARRACESTATE_H

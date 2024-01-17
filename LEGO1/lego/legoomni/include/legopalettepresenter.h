@@ -30,6 +30,9 @@ public:
 
 	MxResult ParsePalette(MxStreamChunk* p_chunk);
 
+	// SYNTHETIC: LEGO1 0x1007a050
+	// LegoPalettePresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

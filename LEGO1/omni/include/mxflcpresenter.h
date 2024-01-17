@@ -30,6 +30,9 @@ public:
 	virtual void CreateBitmap() override;                     // vtable+0x60
 	virtual void RealizePalette() override;                   // vtable+0x70
 
+	// SYNTHETIC: LEGO1 0x100b3400
+	// MxFlcPresenter::`scalar deleting destructor'
+
 protected:
 	FLIC_HEADER* m_flicHeader;
 };

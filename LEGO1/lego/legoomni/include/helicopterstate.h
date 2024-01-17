@@ -24,6 +24,9 @@ public:
 	inline void SetUnknown8(MxU32 p_unk0x8) { m_unk0x8 = p_unk0x8; }
 	inline MxU32 GetUnkown8() { return m_unk0x8; }
 
+	// SYNTHETIC: LEGO1 0x1000e190
+	// HelicopterState::`scalar deleting destructor'
+
 protected:
 	MxU32 m_unk0x8; // 0x8
 };

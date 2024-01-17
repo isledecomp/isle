@@ -38,6 +38,9 @@ private:
 	MxS32 m_multiplier;       // 0x50
 	DWORD m_midiVolume;       // 0x54
 
+	// SYNTHETIC: LEGO1 0x100c0610
+	// MxMusicManager::`scalar deleting destructor'
+
 protected:
 	void Init();
 	void InitData();

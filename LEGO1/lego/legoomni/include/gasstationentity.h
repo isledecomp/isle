@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, GasStationEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f890
+	// GasStationEntity::`scalar deleting destructor'
 };
 
 #endif // GASSTATIONENTITY_H

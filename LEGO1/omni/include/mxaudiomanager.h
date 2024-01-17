@@ -19,6 +19,9 @@ public:
 
 	virtual void SetVolume(MxS32 p_volume); // vtable+2c
 
+	// SYNTHETIC: LEGO1 0x100b8d70
+	// MxAudioManager::`scalar deleting destructor'
+
 private:
 	void Destroy(MxBool p_fromDestructor);
 

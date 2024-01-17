@@ -19,6 +19,9 @@ public:
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14
+
+	// SYNTHETIC: LEGO1 0x1001d3d0
+	// LegoPathControllerList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100d6380

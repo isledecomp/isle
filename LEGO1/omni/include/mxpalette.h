@@ -28,6 +28,9 @@ public:
 
 	inline void SetOverrideSkyColor(MxBool p_value) { this->m_overrideSkyColor = p_value; }
 
+	// SYNTHETIC: LEGO1 0x100beeb0
+	// MxPalette::`scalar deleting destructor'
+
 private:
 	LPDIRECTDRAWPALETTE m_palette;
 	PALETTEENTRY m_entries[256]; // 0xc

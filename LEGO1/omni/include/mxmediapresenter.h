@@ -42,6 +42,9 @@ public:
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
 	virtual void LoopChunk(MxStreamChunk* p_chunk);                          // vtable+0x58
 
+	// SYNTHETIC: LEGO1 0x1000c680
+	// MxMediaPresenter::`scalar deleting destructor'
+
 protected:
 	MxDSSubscriber* m_subscriber;                  // 0x40
 	MxStreamChunkList* m_loopingChunks;            // 0x44

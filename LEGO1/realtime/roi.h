@@ -103,6 +103,9 @@ public:
 	int GetLODCount() const { return m_lods ? m_lods->Size() : 0; }
 	const CompoundObject* GetComp() const { return m_comp; }
 
+	// SYNTHETIC: LEGO1 0x100a5d60
+	// ROI::`scalar deleting destructor'
+
 protected:
 	CompoundObject* m_comp; // 0x4
 	LODListBase* m_lods;    // 0x8

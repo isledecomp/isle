@@ -24,6 +24,9 @@ public:
 		return !strcmp(p_name, RaceCar::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10028400
+	// RaceCar::`scalar deleting destructor'
+
 private:
 	// TODO: RaceCar fields
 	undefined m_unk0x160[4];

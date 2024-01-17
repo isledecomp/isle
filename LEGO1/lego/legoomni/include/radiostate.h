@@ -21,6 +21,9 @@ public:
 	{
 		return !strcmp(p_name, RadioState::ClassName()) || LegoState::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1002d020
+	// RadioState::`scalar deleting destructor'
 };
 
 #endif // RADIOSTATE_H

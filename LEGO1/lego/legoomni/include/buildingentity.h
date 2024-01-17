@@ -22,6 +22,9 @@ public:
 	{
 		return !strcmp(p_name, BuildingEntity::ClassName()) || LegoEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10015010
+	// BuildingEntity::`scalar deleting destructor'
 };
 
 #endif // BUILDINGENTITY_H
