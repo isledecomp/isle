@@ -129,7 +129,7 @@ void MxDiskStreamController::FUN_100c7980()
 		if (m_unk0x3c.size() && m_unk0x8c < m_provider->GetStreamBuffersNum()) {
 			buffer = new MxDSBuffer();
 
-			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBufferType_Chunk) != SUCCESS) {
+			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBuffer::e_chunk) != SUCCESS) {
 				if (buffer)
 					delete buffer;
 				return;
@@ -213,10 +213,10 @@ void MxDiskStreamController::FUN_100c7cb0(MxDSStreamingAction* p_action)
 void MxDiskStreamController::FUN_100c7ce0(MxDSBuffer* p_buffer)
 {
 	switch (p_buffer->GetMode()) {
-	case MxDSBufferType_Chunk:
+	case MxDSBuffer::e_chunk:
 		m_unk0x8c--;
-	case MxDSBufferType_Allocate:
-	case MxDSBufferType_Unknown:
+	case MxDSBuffer::e_allocate:
+	case MxDSBuffer::e_unknown:
 		delete p_buffer;
 		break;
 	}
@@ -299,6 +299,23 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 	m_unk0x70 = TRUE;
 	m_unk0xc4 = TRUE;
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100c8120
+void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
+{
+	VTable0x30(p_action);
+
+	if (m_provider) {
+		m_provider->VTable0x20(p_action);
+	}
+
+	while (TRUE) {
+		MxDSAction* found = m_unk0x54.Find(p_action, TRUE);
+		if (!found)
+			break;
+		delete found;
+	}
 }
 
 // FUNCTION: LEGO1 0x100c8160

@@ -53,6 +53,9 @@ public:
 // SYNTHETIC: LEGO1 0x100b3d80
 // MxRectList::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x100b3df0
+// MxPtrList<MxRect32>::~MxPtrList<MxRect32>
+
 // SYNTHETIC: LEGO1 0x100b3e40
 // MxCollection<MxRect32 *>::`scalar deleting destructor'
 

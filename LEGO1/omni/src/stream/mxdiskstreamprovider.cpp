@@ -5,6 +5,7 @@
 #include "mxdsbuffer.h"
 #include "mxdsstreamingaction.h"
 #include "mxomni.h"
+#include "mxramstreamprovider.h"
 #include "mxstreamcontroller.h"
 #include "mxstring.h"
 #include "mxthread.h"
@@ -173,7 +174,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 		if (!buffer)
 			return FAILURE;
 
-		if (buffer->AllocateBuffer(GetFileSize(), MxDSBufferType_Allocate) != SUCCESS) {
+		if (buffer->AllocateBuffer(GetFileSize(), MxDSBuffer::e_allocate) != SUCCESS) {
 			delete buffer;
 			return FAILURE;
 		}
@@ -214,18 +215,20 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+	MxDSBuffer* buffer;
+
 	{
 		MxAutoLocker lock(&m_criticalSection);
 
 		if (!m_list.PopFrontStreamingAction(streamingAction))
-			return;
+			goto done;
 	}
 
 	if (streamingAction->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 		g_unk0x10102878--;
 	}
 
-	MxDSBuffer* buffer = streamingAction->GetUnknowna0();
+	buffer = streamingAction->GetUnknowna0();
 
 	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
 		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
@@ -250,6 +253,7 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+done:
 	if (streamingAction) {
 		controller->FUN_100c8670(streamingAction);
 	}
@@ -267,10 +271,105 @@ MxBool MxDiskStreamProvider::FUN_100d1af0(MxDSStreamingAction* p_action)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100d1b20
+// FUNCTION: LEGO1 0x100d1b20
 MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 {
-	return FAILURE;
+	MxDSBuffer* buffer = new MxDSBuffer();
+
+	if (!buffer)
+		return FAILURE;
+
+	MxU32 size = p_action->GetUnknowna0()->GetWriteOffset() - p_action->GetUnknown94() + p_action->GetBufferOffset() +
+				 (p_action->GetUnknowna4() ? p_action->GetUnknowna4()->GetWriteOffset() : 0);
+
+	if (buffer->AllocateBuffer(size, MxDSBuffer::e_allocate) != SUCCESS) {
+		if (!buffer)
+			return FAILURE;
+
+		delete buffer;
+		return FAILURE;
+	}
+
+	MxDSBuffer* buffer2 = p_action->GetUnknowna4();
+	MxU8** pdata;
+	MxU8* data;
+
+	if (buffer2 == NULL) {
+		pdata = buffer->GetBufferRef();
+
+		memcpy(
+			data = *pdata,
+			p_action->GetUnknowna0()->GetBuffer() - p_action->GetBufferOffset() + p_action->GetUnknown94(),
+			size
+		);
+	}
+	else {
+		buffer->FUN_100c7090(buffer2);
+		pdata = buffer->GetBufferRef();
+
+		memcpy(
+			data = (p_action->GetUnknowna4()->GetWriteOffset() + *pdata),
+			p_action->GetUnknowna0()->GetBuffer(),
+			p_action->GetUnknowna0()->GetWriteOffset()
+		);
+
+		delete p_action->GetUnknowna4();
+	}
+
+	p_action->SetUnknowna4(buffer);
+
+	while (data) {
+		if (*MxDSChunk::IntoType(data) != FOURCC('M', 'x', 'O', 'b')) {
+			if (*MxStreamChunk::IntoTime(data) > p_action->GetUnknown9c()) {
+				*MxDSChunk::IntoType(data) = FOURCC('p', 'a', 'd', ' ');
+
+				memcpy(data + 8, *pdata, buffer->GetWriteOffset() + *pdata - data - 8);
+				size = ReadData(*pdata, buffer->GetWriteOffset());
+
+				MxDSBuffer* buffer3 = new MxDSBuffer();
+				if (!buffer3)
+					return FAILURE;
+
+				if (buffer3->AllocateBuffer(size, MxDSBuffer::e_allocate) == SUCCESS) {
+					memcpy(buffer3->GetBuffer(), p_action->GetUnknowna4()->GetBuffer(), size);
+					p_action->GetUnknowna4()->SetMode(MxDSBuffer::e_allocate);
+					delete p_action->GetUnknowna4();
+
+					buffer3->SetMode(MxDSBuffer::e_unknown);
+					p_action->SetUnknowna4(buffer3);
+					MxDSBuffer* buffer4 = p_action->GetUnknowna0();
+					MxU32 unk0x14 = buffer4->GetUnknown14();
+					MxU8* data2 = buffer4->GetBuffer();
+
+					while (TRUE) {
+						if (*MxStreamChunk::IntoTime(data2) > p_action->GetUnknown9c())
+							break;
+
+						data += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
+						unk0x14 += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
+					}
+
+					p_action->SetUnknown94(unk0x14);
+					p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
+					delete p_action->GetUnknowna0();
+					p_action->SetUnknowna0(NULL);
+					((MxDiskStreamController*) m_pLookup)->FUN_100c7890(p_action);
+					return SUCCESS;
+				}
+				else {
+					delete buffer3;
+					return FAILURE;
+				}
+			}
+		}
+
+		data = buffer->FUN_100c6fa0(data);
+	}
+
+	p_action->SetUnknown94(GetFileSize() + p_action->GetBufferOffset());
+	p_action->SetBufferOffset(GetFileSize() + p_action->GetBufferOffset());
+	FUN_100d1780(p_action);
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100d1e90

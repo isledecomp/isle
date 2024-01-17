@@ -26,8 +26,15 @@ public:
 		return !strcmp(p_name, MxDSParallelAction::ClassName()) || MxDSMultiAction::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100cb020
+	// MxDSParallelAction::`scalar deleting destructor'
+
 	virtual MxLong GetDuration() override; // vtable+24;
-	virtual MxDSAction* Clone() override;  // vtable+2c;
+
+	// FUNCTION: LEGO1 0x100caef0
+	virtual void SetDuration(MxLong p_duration) override { m_duration = p_duration; } // vtable+0x28
+
+	virtual MxDSAction* Clone() override; // vtable+2c;
 };
 
 #endif // MXDSPARALLELACTION_H

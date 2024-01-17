@@ -37,7 +37,14 @@ public:
 	virtual void VTable0x58(MxEndActionNotificationParam& p_param);                                // vtable+0x58
 	virtual void VTable0x5c(MxNotificationParam& p_param);                                         // vtable+0x5c
 	virtual void VTable0x60(MxPresenter* p_presenter);                                             // vtable+0x60
-	virtual MxBool VTable0x64(undefined4 p_undefined);                                             // vtable+0x64
+
+	// FUNCTION: LEGO1 0x1000caf0
+	virtual MxBool VTable0x64(undefined4 p_undefined)
+	{
+		if (m_compositePresenter)
+			return m_compositePresenter->VTable0x64(p_undefined);
+		return TRUE;
+	}; // vtable+0x64
 
 protected:
 	MxCompositePresenterList m_list; // 0x40

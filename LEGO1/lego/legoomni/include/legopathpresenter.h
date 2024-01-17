@@ -8,6 +8,7 @@
 class LegoPathPresenter : public MxMediaPresenter {
 public:
 	LegoPathPresenter();
+	virtual ~LegoPathPresenter() override;
 
 	// FUNCTION: LEGO1 0x100449a0
 	inline const char* ClassName() const override // vtable+0xc
@@ -22,6 +23,8 @@ public:
 		return !strcmp(p_name, LegoPathPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
+	virtual void ReadyTickle() override;      // vtable+0x18
+	virtual void StreamingTickle() override;  // vtable+0x20
 	virtual void RepeatingTickle() override;  // vtable+0x24
 	virtual void ParseExtra() override;       // vtable+0x30
 	virtual MxResult AddToManager() override; // vtable+0x34

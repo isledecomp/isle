@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   ncc:
+    name: 'C++'
     runs-on: ubuntu-latest
 
     steps:

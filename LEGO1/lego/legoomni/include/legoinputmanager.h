@@ -53,7 +53,10 @@ public:
 	void ClearWorld();
 
 	inline void SetUnknown88(MxBool p_unk0x88) { m_unk0x88 = p_unk0x88; }
+	inline void SetUnknown335(MxBool p_unk0x335) { m_unk0x335 = p_unk0x335; }
 	inline void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
+	inline void SetUseJoystick(MxBool p_useJoystick) { m_useJoystick = p_useJoystick; }
+	inline void SetJoystickIndex(MxS32 p_joystickIndex) { m_joystickIndex = p_joystickIndex; }
 
 	inline void AllowEventProcessing()
 	{
@@ -68,7 +71,7 @@ public:
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
 
-	// private:
+private:
 	MxCriticalSection m_criticalSection;
 	MxList<undefined4>* m_unk0x5c; // list or hash table
 	LegoCameraController* m_camera;
@@ -101,6 +104,9 @@ public:
 // TEMPLATE: LEGO1 0x1005bb80
 // MxCollection<LegoEventNotificationParam>::Compare
 
+// TEMPLATE: LEGO1 0x1005bbe0
+// MxCollection<LegoEventNotificationParam>::~MxCollection<LegoEventNotificationParam>
+
 // TEMPLATE: LEGO1 0x1005bc30
 // MxCollection<LegoEventNotificationParam>::Destroy
 
@@ -115,6 +121,9 @@ public:
 
 // SYNTHETIC: LEGO1 0x1005beb0
 // LegoEventQueue::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1005bf20
+// MxQueue<LegoEventNotificationParam>::~MxQueue<LegoEventNotificationParam>
 
 // SYNTHETIC: LEGO1 0x1005bf70
 // MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'

@@ -39,9 +39,9 @@ Score::~Score()
 }
 
 // FUNCTION: LEGO1 0x100012a0
-MxResult Score::Create(MxDSObject& p_dsObject)
+MxResult Score::Create(MxDSAction& p_dsAction)
 {
-	MxResult result = SetAsCurrentWorld(p_dsObject);
+	MxResult result = LegoWorld::Create(p_dsAction);
 
 	if (result == SUCCESS) {
 		InputManager()->SetWorld(this);
@@ -76,7 +76,7 @@ MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
 	LegoWorld::Notify(p_param);
-	if (m_unk0xf6) {
+	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationStartAction:
 			ret = 1;
@@ -90,10 +90,10 @@ MxLong Score::Notify(MxParam& p_param)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;
-		case TYPE17:
+		case c_notificationType17:
 			ret = FUN_100016d0((MxType17NotificationParam&) p_param);
 			break;
-		case MXTRANSITIONMANAGER_TRANSITIONENDED:
+		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
 			if (m_unk0xf8)
 				GameState()->HandleAction(m_unk0xf8);
@@ -116,7 +116,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 		switch (action->GetObjectId()) {
 		case 10:
 			m_unk0xf8 = 0x38;
-			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 0x1f5:
 			PlayMusic(11);
@@ -128,9 +128,9 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001580
-void Score::Stop()
+void Score::VTable0x50()
 {
-	LegoWorld::Stop();
+	LegoWorld::VTable0x50();
 
 	MxDSAction action;
 	action.SetObjectId(0x1f4);
@@ -160,12 +160,12 @@ MxLong Score::FUN_100016d0(MxType17NotificationParam& p_param)
 		case 1:
 			m_unk0xf8 = 2;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 2:
 			m_unk0xf8 = 3;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 3: {
 			LegoInputManager* im = InputManager();

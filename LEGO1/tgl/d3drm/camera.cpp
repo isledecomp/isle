@@ -12,7 +12,7 @@ void* CameraImpl::ImplementationDataPtr()
 }
 
 // FUNCTION: LEGO1 0x100a3700
-Result CameraImpl::SetTransformation(const FloatMatrix4& matrix)
+Result CameraImpl::SetTransformation(FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* pTransformation = Translate(matrix, helper);

@@ -11,30 +11,30 @@
 #include <string.h>
 
 // FUNCTION: LEGO1 0x1003e300
-ExtraActionType MatchActionString(const char* p_str)
+Extra::ActionType MatchActionString(const char* p_str)
 {
-	ExtraActionType result = ExtraActionType_unknown;
+	Extra::ActionType result = Extra::ActionType::e_unknown;
 
 	if (!strcmpi("openram", p_str))
-		result = ExtraActionType_openram;
+		result = Extra::ActionType::e_openram;
 	else if (!strcmpi("opendisk", p_str))
-		result = ExtraActionType_opendisk;
+		result = Extra::ActionType::e_opendisk;
 	else if (!strcmpi("close", p_str))
-		result = ExtraActionType_close;
+		result = Extra::ActionType::e_close;
 	else if (!strcmpi("start", p_str))
-		result = ExtraActionType_start;
+		result = Extra::ActionType::e_start;
 	else if (!strcmpi("stop", p_str))
-		result = ExtraActionType_stop;
+		result = Extra::ActionType::e_stop;
 	else if (!strcmpi("run", p_str))
-		result = ExtraActionType_run;
+		result = Extra::ActionType::e_run;
 	else if (!strcmpi("exit", p_str))
-		result = ExtraActionType_exit;
+		result = Extra::ActionType::e_exit;
 	else if (!strcmpi("enable", p_str))
-		result = ExtraActionType_enable;
+		result = Extra::ActionType::e_enable;
 	else if (!strcmpi("disable", p_str))
-		result = ExtraActionType_disable;
+		result = Extra::ActionType::e_disable;
 	else if (!strcmpi("notify", p_str))
-		result = ExtraActionType_notify;
+		result = Extra::ActionType::e_notify;
 
 	return result;
 }
@@ -43,54 +43,54 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender);
 
 // FUNCTION: LEGO1 0x1003e430
-void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
+void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
 {
 	MxDSAction action;
 	action.SetAtomId(p_pAtom);
 	action.SetObjectId(p_targetEntityId);
 
 	switch (p_actionId) {
-	case ExtraActionType_opendisk:
+	case Extra::ActionType::e_opendisk:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
-			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_DiskStream);
+			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_diskStream);
 			Start(&action);
 		}
 		break;
-	case ExtraActionType_openram:
+	case Extra::ActionType::e_openram:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
 			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_RAMStream);
 			Start(&action);
 		}
 		break;
-	case ExtraActionType_close:
+	case Extra::ActionType::e_close:
 		action.SetUnknown24(-2);
 		DeleteObject(action);
 		Streamer()->Close(p_pAtom.GetInternal());
 		break;
-	case ExtraActionType_start:
+	case Extra::ActionType::e_start:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
 			Start(&action);
 		}
 		break;
-	case ExtraActionType_stop:
+	case Extra::ActionType::e_stop:
 		action.SetUnknown24(-2);
 		if (!FUN_1003ee00(p_pAtom, p_targetEntityId)) {
 			DeleteObject(action);
 		}
 		break;
-	case ExtraActionType_run:
+	case Extra::ActionType::e_run:
 		_spawnl(0, "\\lego\\sources\\main\\main.exe", "\\lego\\sources\\main\\main.exe", "/script", &p_pAtom, 0);
 		break;
-	case ExtraActionType_exit:
+	case Extra::ActionType::e_exit:
 		Lego()->SetExit(TRUE);
 		break;
-	case ExtraActionType_enable:
+	case Extra::ActionType::e_enable:
 		CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId);
 		break;
-	case ExtraActionType_disable:
+	case Extra::ActionType::e_disable:
 		CheckIfEntityExists(FALSE, p_pAtom.GetInternal(), p_targetEntityId);
 		break;
-	case ExtraActionType_notify:
+	case Extra::ActionType::e_notify:
 		NotifyEntity(p_pAtom.GetInternal(), p_targetEntityId, p_sender);
 		break;
 	}
@@ -99,8 +99,7 @@ void InvokeAction(ExtraActionType p_actionId, MxAtomId& p_pAtom, int p_targetEnt
 // FUNCTION: LEGO1 0x1003e670
 MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_entityId)
 {
-	LegoWorld* world =
-		(LegoWorld*) FindEntityByAtomIdOrEntityId(MxAtomId(p_filename, LookupMode_LowerCase2), p_entityId);
+	LegoWorld* world = (LegoWorld*) FindEntityByAtomIdOrEntityId(MxAtomId(p_filename, e_lowerCase2), p_entityId);
 	if (world) {
 		world->VTable0x68(p_enable);
 		return TRUE;

@@ -10,14 +10,9 @@
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
-// GLOBAL: LEGO1 0x10101eb0
+// GLOBAL: LEGO1 0x101020e0
+// STRING: LEGO1 0x10101eb0
 const char* g_strBmpIsmap = "BMP_ISMAP";
-
-// FUNCTION: LEGO1 0x100435b0
-void MxStillPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
 
 // FUNCTION: LEGO1 0x100b9c70
 void MxStillPresenter::Destroy(MxBool p_fromDestructor)
@@ -80,13 +75,13 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
 
-	if (m_flags & Flag_Bit2) {
+	if (m_flags & c_bit2) {
 		undefined4 und = 0;
 		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
 			m_bitmap,
 			&und,
-			(m_flags & Flag_Bit4) / 8,
-			m_action->GetFlags() & MxDSAction::Flag_Bit4
+			(m_flags & c_bit4) / 8,
+			m_action->GetFlags() & MxDSAction::c_bit4
 		);
 
 		delete m_alpha;
@@ -96,9 +91,9 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		m_bitmap = NULL;
 
 		if (m_unk0x58 && und)
-			m_flags |= Flag_Bit3;
+			m_flags |= c_bit3;
 		else
-			m_flags &= ~Flag_Bit3;
+			m_flags &= ~c_bit3;
 	}
 }
 
@@ -115,7 +110,7 @@ void MxStillPresenter::StartingTickle()
 {
 	MxVideoPresenter::StartingTickle();
 
-	if (m_currentTickleState == TickleState_Streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
+	if (m_currentTickleState == e_streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
 		RealizePalette();
 }
 
@@ -127,8 +122,7 @@ void MxStillPresenter::StreamingTickle()
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		m_chunkTime = chunk->GetTime();
 		NextFrame();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
+		ProgressTickleState(e_repeating);
 
 		if (m_action->GetDuration() == -1 && m_compositePresenter)
 			m_compositePresenter->VTable0x60(this);
@@ -139,10 +133,8 @@ void MxStillPresenter::StreamingTickle()
 void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
-		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_unk5;
-		}
+		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
+			ProgressTickleState(e_unk5);
 	}
 }
 
@@ -173,7 +165,7 @@ void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
 // FUNCTION: LEGO1 0x100ba140
 void MxStillPresenter::Enable(MxBool p_enable)
 {
-	MxVideoPresenter::Enable(p_enable);
+	MxPresenter::Enable(p_enable);
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
 		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
@@ -193,8 +185,8 @@ void MxStillPresenter::ParseExtra()
 {
 	MxPresenter::ParseExtra();
 
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit5)
-		m_flags |= Flag_Bit4;
+	if (m_action->GetFlags() & MxDSAction::c_bit5)
+		m_flags |= c_bit4;
 
 	MxU32 len = m_action->GetExtraLength();
 
@@ -215,9 +207,9 @@ void MxStillPresenter::ParseExtra()
 	}
 
 	if (KeyValueStringParse(output, g_strBmpIsmap, buf)) {
-		m_flags |= Flag_Bit5;
-		m_flags &= ~Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags |= c_bit5;
+		m_flags &= ~c_bit2;
+		m_flags &= ~c_bit3;
 	}
 }
 

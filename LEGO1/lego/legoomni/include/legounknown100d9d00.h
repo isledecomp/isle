@@ -27,8 +27,14 @@ public:
 // TEMPLATE: LEGO1 0x1007b300
 // MxCollection<LegoUnknown100d7c88 *>::Compare
 
+// TEMPLATE: LEGO1 0x1007b310
+// MxCollection<LegoUnknown100d7c88 *>::~MxCollection<LegoUnknown100d7c88 *>
+
 // TEMPLATE: LEGO1 0x1007b360
 // MxCollection<LegoUnknown100d7c88 *>::Destroy
+
+// TEMPLATE: LEGO1 0x1007b370
+// MxList<LegoUnknown100d7c88 *>::~MxList<LegoUnknown100d7c88 *>
 
 // SYNTHETIC: LEGO1 0x1007b400
 // LegoUnknown100d9d00::`scalar deleting destructor'

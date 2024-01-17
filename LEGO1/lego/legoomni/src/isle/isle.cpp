@@ -26,7 +26,7 @@ Isle::Isle()
 	m_helicopter = NULL;
 	m_bike = NULL;
 	m_dunebuggy = NULL;
-	m_motorcycle = NULL;
+	m_motocycle = NULL;
 	m_skateboard = NULL;
 	m_racecar = NULL;
 	m_jetski = NULL;
@@ -54,11 +54,11 @@ Isle::~Isle()
 }
 
 // FUNCTION: LEGO1 0x10030b20
-MxResult Isle::Create(MxDSObject& p_dsObject)
+MxResult Isle::Create(MxDSAction& p_dsAction)
 {
 	GameState()->FUN_1003ceb0();
 
-	MxResult result = LegoWorld::SetAsCurrentWorld(p_dsObject);
+	MxResult result = LegoWorld::Create(p_dsAction);
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
@@ -99,7 +99,7 @@ MxLong Isle::Notify(MxParam& p_param)
 	MxLong result = 0;
 	LegoWorld::Notify(p_param);
 
-	if (m_unk0xf6) {
+	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
 			result = StopAction(p_param);
@@ -115,10 +115,10 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case TYPE17:
+		case c_notificationType17:
 			result = HandleType17Notification(p_param);
 			break;
-		case TYPE18:
+		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
 				result = GetCurrentVehicle()->Notify(p_param);
@@ -131,13 +131,13 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case TYPE19:
+		case c_notificationType19:
 			result = HandleType19Notification(p_param);
 			break;
-		case TYPE20:
+		case c_notificationType20:
 			VTable0x68(TRUE);
 			break;
-		case MXTRANSITIONMANAGER_TRANSITIONENDED:
+		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
 			break;
 		}
@@ -152,10 +152,22 @@ MxLong Isle::StopAction(MxParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10030fc0
-void Isle::Stop()
+// FUNCTION: LEGO1 0x10030fc0
+void Isle::VTable0x50()
 {
-	// TODO
+	LegoWorld::VTable0x50();
+
+	if (m_act1state->GetUnknown21()) {
+		GameState()->HandleAction(2);
+		m_act1state->SetUnknown18(0);
+		m_act1state->SetUnknown21(0);
+	}
+	else if (GameState()->GetCurrentAct()) {
+		FUN_1003ef00(TRUE);
+		FUN_10032620();
+		m_act1state->FUN_10034d00();
+		FUN_10015820(0, 7);
+	}
 }
 
 // STUB: LGEO1 0x10031030
@@ -172,6 +184,12 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 
 // STUB: LEGO1 0x10031820
 void Isle::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10032620
+void Isle::FUN_10032620()
 {
 	// TODO
 }
@@ -212,7 +230,7 @@ void Isle::VTable0x58(MxCore* p_object)
 		m_dunebuggy = (DuneBuggy*) p_object;
 	}
 	else if (p_object->IsA("Motorcycle")) {
-		m_motorcycle = (Motorcycle*) p_object;
+		m_motocycle = (Motocycle*) p_object;
 	}
 	else if (p_object->IsA("SkateBoard")) {
 		m_skateboard = (SkateBoard*) p_object;

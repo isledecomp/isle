@@ -20,8 +20,8 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 void MxLoopingFlcPresenter::Init()
 {
 	this->m_unk0x68 = 0;
-	this->m_flags &= ~Flag_Bit2;
-	this->m_flags &= ~Flag_Bit3;
+	this->m_flags &= ~c_bit2;
+	this->m_flags &= ~c_bit3;
 }
 
 // FUNCTION: LEGO1 0x100b4430
@@ -40,10 +40,8 @@ void MxLoopingFlcPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
-	}
+	if (chunk->GetFlags() & MxDSChunk::c_end)
+		ProgressTickleState(e_repeating);
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);

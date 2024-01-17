@@ -24,10 +24,21 @@ public:
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
 	inline MxU32 GetUnknown18() { return m_unk0x18; }
+	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x21 = p_unk0x21; }
+	inline MxS16 GetUnknown21() { return m_unk0x21; }
+
+	void FUN_10034d00();
 
 protected:
 	undefined m_unk0x8[0x10]; // 0x8
 	MxU32 m_unk0x18;          // 0x18
+	undefined2 m_unk0x1c;     // 0x1c
+	undefined m_unk0x1e;      // 0x1e
+	undefined m_unk0x1f;      // 0x1f
+	undefined m_unk0x20;      // 0x20
+	MxBool m_unk0x21;         // 0x21
+	undefined m_unk0x22;      // 0x22
+							  // TODO
 };
 
 #endif // ACT1STATE_H

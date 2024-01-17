@@ -36,7 +36,7 @@ _section_contrib_regex = re.compile(
 
 # e.g. `S_GDATA32: [0003:000004A4], Type:   T_32PRCHAR(0470), g_set`
 _gdata32_regex = re.compile(
-    r"S_GDATA32: \[(?P<section>\w{4}):(?P<offset>\w{8})\], Type:\s*(?P<type>\S+), (?P<name>\S+)"
+    r"S_GDATA32: \[(?P<section>\w{4}):(?P<offset>\w{8})\], Type:\s*(?P<type>\S+), (?P<name>.+)"
 )
 
 

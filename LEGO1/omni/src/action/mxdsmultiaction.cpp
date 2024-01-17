@@ -7,7 +7,7 @@ DECOMP_SIZE_ASSERT(MxDSActionListCursor, 0x10);
 // FUNCTION: LEGO1 0x100c9b90
 MxDSMultiAction::MxDSMultiAction()
 {
-	this->SetType(MxDSType_MultiAction);
+	this->SetType(e_multiAction);
 	this->m_actions = new MxDSActionList;
 	this->m_actions->SetDestroy(MxDSActionList::Destroy);
 }

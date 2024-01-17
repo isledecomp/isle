@@ -7,6 +7,7 @@
 
 DECOMP_SIZE_ASSERT(MxDisplaySurface, 0xac);
 
+// GLOBAL: LEGO1 0x1010215c
 MxU32 g_unk0x1010215c = 0;
 
 // FUNCTION: LEGO1 0x100ba500
@@ -33,7 +34,7 @@ void MxDisplaySurface::Init()
 }
 
 // FUNCTION: LEGO1 0x100ba640
-void MxDisplaySurface::FUN_100ba640()
+void MxDisplaySurface::ClearScreen()
 {
 	MxS32 backBuffers;
 	DDSURFACEDESC desc;

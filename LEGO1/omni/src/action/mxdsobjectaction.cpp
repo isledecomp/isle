@@ -5,7 +5,7 @@ DECOMP_SIZE_ASSERT(MxDSObjectAction, 0xb8)
 // FUNCTION: LEGO1 0x100c8870
 MxDSObjectAction::MxDSObjectAction()
 {
-	this->SetType(MxDSType_ObjectAction);
+	this->SetType(e_objectAction);
 }
 
 // FUNCTION: LEGO1 0x100c8a20

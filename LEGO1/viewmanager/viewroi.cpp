@@ -2,6 +2,8 @@
 
 #include "decomp.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
 
 // GLOBAL: LEGO1 0x101013d8
@@ -26,13 +28,15 @@ Tgl::Group* ViewROI::GetGeometry()
 }
 
 // FUNCTION: LEGO1 0x100a9ee0
-void ViewROI::UpdateWorldData(const Matrix4Data& parent2world)
+void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
+
 	if (geometry) {
-		Tgl::FloatMatrix4 mat;
-		SETMAT4(mat, m_local2world.GetMatrix());
-		Tgl::Result result = geometry->SetTransformation(mat);
+		Tgl::FloatMatrix4 matrix;
+		Matrix4 in(matrix);
+		SETMAT4(in, m_local2world);
+		Tgl::Result result = geometry->SetTransformation(matrix);
 		// assert(Tgl::Succeeded(result));
 	}
 }

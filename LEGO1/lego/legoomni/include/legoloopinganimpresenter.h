@@ -21,4 +21,10 @@ public:
 	}
 };
 
+// SYNTHETIC: LEGO1 0x1006d000
+// LegoLoopingAnimPresenter::~LegoLoopingAnimPresenter
+
+// SYNTHETIC: LEGO1 0x1000f440
+// LegoLoopingAnimPresenter::`scalar deleting destructor'
+
 #endif // LEGOLOOPINGANIMPRESENTER_H

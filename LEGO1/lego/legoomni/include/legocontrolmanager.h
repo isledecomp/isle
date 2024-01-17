@@ -2,6 +2,7 @@
 #define LEGOCONTROLMANAGER_H
 
 #include "mxcore.h"
+#include "mxpresenterlist.h"
 
 // VTABLE: LEGO1 0x100d6a80
 class LegoControlManager : public MxCore {
@@ -24,8 +25,10 @@ public:
 		return !strcmp(p_name, LegoControlManager::ClassName()) || MxCore::IsA(p_name);
 	}
 
+	void FUN_10028df0(MxPresenterList* p_presenterList);
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
+	void FUN_100293c0(undefined4, const MxAtomId&, undefined2);
 };
 
 #endif // LEGOCONTROLMANAGER_H

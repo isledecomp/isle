@@ -1,12 +1,18 @@
 #include "legoworldpresenter.h"
 
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legoentity.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsactionlist.h"
+#include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
+#include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
@@ -26,10 +32,32 @@ LegoWorldPresenter::LegoWorldPresenter()
 	m_unk0x50 = 50000;
 }
 
-// STUB: LEGO1 0x10066770
+// FUNCTION: LEGO1 0x10066770
 LegoWorldPresenter::~LegoWorldPresenter()
 {
-	// TODO
+	MxBool result = FALSE;
+	if (m_entity) {
+		undefined4 world = ((LegoWorld*) m_entity)->GetUnknown0xec();
+		PlantManager()->FUN_10026360(world);
+		AnimationManager()->FUN_1005f720(world);
+		BuildingManager()->FUN_1002fa00();
+		result = ((LegoWorld*) m_entity)->VTable0x5c();
+	}
+
+	if (result == FALSE) {
+		FUN_10015820(0, 7);
+	}
+
+	if (m_entity) {
+#ifdef COMPAT_MODE
+		{
+			MxNotificationParam param(c_notificationNewPresenter, NULL);
+			NotificationManager()->Send(m_entity, &param);
+		}
+#else
+		NotificationManager()->Send(m_entity, &MxNotificationParam(c_notificationNewPresenter, NULL));
+#endif
+	}
 }
 
 // FUNCTION: LEGO1 0x10066870
@@ -63,7 +91,7 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 			if (presenter && presenter->AddToManager() == SUCCESS) {
 				presenter->SetCompositePresenter(this);
 				if (presenter->StartAction(p_controller, action) == SUCCESS) {
-					presenter->SetTickleState(TickleState_Idle);
+					presenter->SetTickleState(e_idle);
 					success = TRUE;
 				}
 			}
@@ -76,7 +104,7 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 				delete presenter;
 		}
 
-		VideoManager()->AddPresenter(*this);
+		VideoManager()->RegisterPresenter(*this);
 
 		result = SUCCESS;
 	}
@@ -87,16 +115,15 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 // FUNCTION: LEGO1 0x10066a50
 void LegoWorldPresenter::ReadyTickle()
 {
-	m_objectBackend = (LegoEntity*) MxPresenter::CreateEntityBackend("LegoWorld");
-	if (m_objectBackend) {
-		m_objectBackend->Create(*m_action);
-		Lego()->AddWorld((LegoWorld*) m_objectBackend);
-		SetBackendLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
+	m_entity = (LegoEntity*) MxPresenter::CreateEntity("LegoWorld");
+	if (m_entity) {
+		m_entity->Create(*m_action);
+		Lego()->AddWorld((LegoWorld*) m_entity);
+		SetEntityLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
 	}
 
 	ParseExtra();
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Starting;
+	ProgressTickleState(e_starting);
 }
 
 // FUNCTION: LEGO1 0x10066ac0
@@ -104,25 +131,42 @@ void LegoWorldPresenter::StartingTickle()
 {
 	if (m_action->IsA("MxDSSerialAction")) {
 		MxPresenter* presenter = *m_list.begin();
-		if (presenter->GetCurrentTickleState() == TickleState_Idle) {
-			presenter->SetTickleState(TickleState_Ready);
+		if (presenter->GetCurrentTickleState() == e_idle) {
+			presenter->SetTickleState(e_ready);
 		}
 	}
 	else {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-			if ((*it)->GetCurrentTickleState() == TickleState_Idle) {
-				(*it)->SetTickleState(TickleState_Ready);
+			if ((*it)->GetCurrentTickleState() == e_idle) {
+				(*it)->SetTickleState(e_ready);
 			}
 		}
 	}
 
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = TickleState_Streaming;
+	ProgressTickleState(e_streaming);
 }
 
-// STUB: LEGO1 0x10067a70
+// FUNCTION: LEGO1 0x10067a70
 void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 {
+	MxCompositePresenter::VTable0x60(p_presenter);
+	MxDSAction* action = p_presenter->GetAction();
+
+	if (action->GetDuration() != -1 && (action->GetFlags() & MxDSAction::c_looping) == 0) {
+		if (!action->IsA("MxDSMediaAction")) {
+			return;
+		}
+
+		if (((MxDSMediaAction*) action)->GetSustainTime() != -1) {
+			return;
+		}
+	}
+
+	if (!p_presenter->IsA("LegoAnimPresenter") && !p_presenter->IsA("MxControlPresenter") &&
+		!p_presenter->IsA("MxCompositePresenter")) {
+		p_presenter->SendToCompositePresenter(Lego());
+		((LegoWorld*) m_entity)->VTable0x58(p_presenter);
+	}
 }
 
 // STUB: LEGO1 0x10067b00

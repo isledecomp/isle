@@ -7,8 +7,16 @@
 
 DECOMP_SIZE_ASSERT(LegoBackgroundColor, 0x30)
 
-const char* g_delimiter = "\t";
+// GLOBAL: LEGO1 0x100f3fb0
+// STRING: LEGO1 0x100f3a18
+const char* g_delimiter = " \t";
+
+// GLOBAL: LEGO1 0x100f3fb4
+// STRING: LEGO1 0x100f3bf0
 const char* g_set = "set";
+
+// GLOBAL: LEGO1 0x100f3fb8
+// STRING: LEGO1 0x100f0cdc
 const char* g_reset = "reset";
 
 // FUNCTION: LEGO1 0x1003bfb0

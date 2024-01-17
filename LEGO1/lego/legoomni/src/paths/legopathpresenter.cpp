@@ -17,13 +17,19 @@ void LegoPathPresenter::Init()
 {
 }
 
+// FUNCTION: LEGO1 0x10044ac0
+LegoPathPresenter::~LegoPathPresenter()
+{
+	Destroy(TRUE);
+}
+
 // FUNCTION: LEGO1 0x10044b40
 MxResult LegoPathPresenter::AddToManager()
 {
 	MxResult status = FAILURE;
 
 	if (VideoManager()) {
-		VideoManager()->AddPresenter(*this);
+		VideoManager()->RegisterPresenter(*this);
 		status = SUCCESS;
 	}
 
@@ -34,7 +40,7 @@ MxResult LegoPathPresenter::AddToManager()
 void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (VideoManager())
-		VideoManager()->RemovePresenter(*this);
+		VideoManager()->UnregisterPresenter(*this);
 
 	{
 		MxAutoLocker lock(&this->m_criticalSection);
@@ -49,6 +55,27 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 void LegoPathPresenter::Destroy()
 {
 	Destroy(FALSE);
+}
+
+// STUB: LEGO1 0x10044c20
+void LegoPathPresenter::ReadyTickle()
+{
+	// TODO
+	ProgressTickleState(e_starting); // Allow initialization process to continue
+}
+
+// FUNCTION: LEGO1 0x10044d00
+void LegoPathPresenter::StreamingTickle()
+{
+	MxStreamChunk* chunk = m_subscriber->NextChunk();
+
+	if (chunk) {
+		if (chunk->GetFlags() & MxStreamChunk::c_end) {
+			ProgressTickleState(e_repeating);
+		}
+
+		m_subscriber->DestroyChunk(chunk);
+	}
 }
 
 // FUNCTION: LEGO1 0x10044d40

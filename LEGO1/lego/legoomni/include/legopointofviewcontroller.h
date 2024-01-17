@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxcore.h"
+#include "mxpoint32.h"
 
 #include <windows.h>
 
@@ -82,6 +83,7 @@ public:
 	virtual void SetEntity(LegoEntity* p_entity); // vtable+0x2c
 
 	MxResult Create(Lego3DView* p_lego3DView);
+	void OnViewSize(int p_width, int p_height);
 
 	inline LegoEntity* GetEntity() { return m_entity; }
 

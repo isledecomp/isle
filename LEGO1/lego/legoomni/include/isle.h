@@ -12,7 +12,7 @@ class JukeBoxEntity;
 class Helicopter;
 class Bike;
 class DuneBuggy;
-class Motorcycle;
+class Motocycle;
 class SkateBoard;
 class RaceCar;
 class Jetski;
@@ -40,8 +40,8 @@ public:
 		return !strcmp(p_name, Isle::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
-	virtual void Stop() override;                             // vtable+50
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual void VTable0x50() override;                       // vtable+50
 	virtual void VTable0x58(MxCore* p_object) override;       // vtable+58
 	// FUNCTION: LEGO1 0x10030900
 	virtual MxBool VTable0x5c() override { return TRUE; } // vtable+5c
@@ -57,6 +57,7 @@ public:
 	MxLong HandleType17Notification(MxParam& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
+	void FUN_10032620();
 
 protected:
 	Act1State* m_act1state;   // 0xf8
@@ -68,7 +69,7 @@ protected:
 	Helicopter* m_helicopter; // 0x110
 	Bike* m_bike;             // 0x114
 	DuneBuggy* m_dunebuggy;   // 0x118
-	Motorcycle* m_motorcycle; // 0x11c
+	Motocycle* m_motocycle;   // 0x11c
 	SkateBoard* m_skateboard; // 0x120
 	RaceCar* m_racecar;       // 0x124
 	Jetski* m_jetski;         // 0x128

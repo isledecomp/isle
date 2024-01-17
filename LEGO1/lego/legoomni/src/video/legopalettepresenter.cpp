@@ -49,12 +49,13 @@ void LegoPalettePresenter::Destroy()
 MxResult LegoPalettePresenter::ParsePalette(MxStreamChunk* p_chunk)
 {
 	MxU8 buffer[40];
-	RGBQUAD palleteData[256];
+	RGBQUAD palette[256];
 	MxResult result = FAILURE;
+
 	LegoMemoryStream stream((char*) p_chunk->GetData());
-	if (stream.Read(buffer, 40) == SUCCESS) {
-		if (stream.Read(palleteData, sizeof(RGBQUAD) * 256) == SUCCESS) {
-			m_palette = new MxPalette(palleteData);
+	if (stream.Read(buffer, sizeof(buffer)) == SUCCESS) {
+		if (stream.Read(palette, sizeof(palette)) == SUCCESS) {
+			m_palette = new MxPalette(palette);
 			if (m_palette) {
 				result = SUCCESS;
 			}
@@ -76,8 +77,8 @@ void LegoPalettePresenter::ReadyTickle()
 	if (chunk) {
 		if (chunk->GetTime() <= m_action->GetElapsedTime()) {
 			ParseExtra();
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Starting;
+			ProgressTickleState(e_starting);
+
 			chunk = m_subscriber->NextChunk();
 			MxResult result = ParsePalette(chunk);
 			m_subscriber->DestroyChunk(chunk);

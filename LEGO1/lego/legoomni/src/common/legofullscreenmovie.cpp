@@ -7,10 +7,12 @@
 
 DECOMP_SIZE_ASSERT(LegoFullScreenMovie, 0x24)
 
-// GLOBAL: LEGO1 0x100f3be8
+// GLOBAL: LEGO1 0x100f3fbc
+// STRING: LEGO1 0x100f3be8
 const char* g_strEnable = "enable";
 
-// GLOBAL: LEGO1 0x100f3bf4
+// GLOBAL: LEGO1 0x100f3fc0
+// STRING: LEGO1 0x100f3bf4
 const char* g_strDisable = "disable";
 
 // FUNCTION: LEGO1 0x1003c500
@@ -29,7 +31,6 @@ void LegoFullScreenMovie::SetValue(const char* p_option)
 
 	LegoVideoManager* videomanager = VideoManager();
 	if (videomanager) {
-
 		if (!strcmp(m_value.GetData(), g_strEnable)) {
 			videomanager->EnableFullScreenMovie(TRUE);
 			return;

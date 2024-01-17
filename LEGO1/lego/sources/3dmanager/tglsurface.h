@@ -4,10 +4,13 @@
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/tgl.h"
 
-class Tgl::Renderer;
-class Tgl::Device;
-class Tgl::View;
-class Tgl::Group;
+namespace Tgl
+{
+class Renderer;
+class Device;
+class View;
+class Group;
+} // namespace Tgl
 
 /////////////////////////////////////////////////////////////////////////////
 // TglSurface

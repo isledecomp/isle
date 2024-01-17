@@ -8,66 +8,6 @@
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
 
-// FUNCTION: LEGO1 0x1000c700
-void MxVideoPresenter::LoadHeader(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c710
-void MxVideoPresenter::CreateBitmap()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c720
-void MxVideoPresenter::LoadFrame(MxStreamChunk* p_chunk)
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c730
-void MxVideoPresenter::RealizePalette()
-{
-	// Empty
-}
-
-// FUNCTION: LEGO1 0x1000c740
-MxVideoPresenter::~MxVideoPresenter()
-{
-	Destroy(TRUE);
-}
-
-// FUNCTION: LEGO1 0x1000c7a0
-void MxVideoPresenter::Destroy()
-{
-	Destroy(FALSE);
-}
-
-// FUNCTION: LEGO1 0x1000c7b0
-LPDIRECTDRAWSURFACE MxVideoPresenter::VTable0x78()
-{
-	return m_unk0x58;
-}
-
-// FUNCTION: LEGO1 0x1000c7c0
-MxBool MxVideoPresenter::VTable0x7c()
-{
-	return (m_bitmap != NULL) || (m_alpha != NULL);
-}
-
-// FUNCTION: LEGO1 0x1000c7e0
-MxS32 MxVideoPresenter::GetWidth()
-{
-	return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth();
-}
-
-// FUNCTION: LEGO1 0x1000c800
-MxS32 MxVideoPresenter::GetHeight()
-{
-	return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs();
-}
-
 // FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 {
@@ -80,7 +20,6 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	m_bitmask = new MxU8[size];
 	memset(m_bitmask, 0, size);
 
-	MxU32 biCompression = p_bitmap.GetBmiHeader()->biCompression;
 	MxU32 rowsBeforeTop;
 	MxU8* bitmapSrcPtr;
 
@@ -92,36 +31,25 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// Reminder: Negative biHeight means this is a top-down DIB.
 	// Otherwise it is bottom-up.
 
-	if (biCompression == BI_RGB) {
-		// DECOMP: I think this must be an OR. If not, the check for
-		// biCompression == 16 gets optimized away.
-		if (biCompression == BI_RGB_TOPDOWN || p_bitmap.GetBmiHeight() < 0) {
+	switch (p_bitmap.GetBmiHeader()->biCompression) {
+	case BI_RGB: {
+		if (p_bitmap.GetBmiHeight() < 0)
 			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
-			rowsBeforeTop--;
-		}
-
-		goto seek_to_last_row;
+		else
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+		break;
 	}
-	else if (biCompression == BI_RGB_TOPDOWN) {
-		// DECOMP: This is the only condition where we skip the
-		// calculation below.
+	case BI_RGB_TOPDOWN:
 		bitmapSrcPtr = p_bitmap.GetBitmapData();
-	}
-	else {
-		if (p_bitmap.GetBmiHeight() < 0) {
+		break;
+	default: {
+		if (p_bitmap.GetBmiHeight() < 0)
 			rowsBeforeTop = 0;
-		}
-		else {
-			rowsBeforeTop = p_bitmap.GetBmiHeightAbs();
-			rowsBeforeTop--;
-		}
-
-	// TODO: would prefer not to use goto if we can figure this structure out
-	seek_to_last_row:
-		bitmapSrcPtr = p_bitmap.GetBmiStride() * rowsBeforeTop + p_bitmap.GetBitmapData();
+		else
+			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+	}
 	}
 
 	// How many bytes are there for each row of the bitmap?
@@ -129,15 +57,15 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// If this is a bottom-up DIB, we will walk it in reverse.
 	// TODO: Same rounding trick as in MxBitmap
 	MxS32 rowSeek = ((m_width + 3) & -4);
-	if (p_bitmap.GetBmiHeight() < 0)
+	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() > 0)
 		rowSeek = -rowSeek;
 
 	// The actual offset into the m_bitmask array. The two for-loops
 	// are just for counting the pixels.
 	MxS32 offset = 0;
 
-	MxU8* tPtr = bitmapSrcPtr;
 	for (MxS32 j = 0; j < m_height; j++) {
+		MxU8* tPtr = bitmapSrcPtr;
 		for (MxS32 i = 0; i < m_width; i++) {
 			if (*tPtr) {
 				// TODO: Second CDQ instruction for abs() should not be there.
@@ -189,29 +117,29 @@ void MxVideoPresenter::Init()
 	m_unk0x5c = 1;
 	m_unk0x58 = NULL;
 	m_unk0x60 = -1;
-	m_flags &= ~Flag_Bit1;
+	m_flags &= ~c_bit1;
 
 	if (MVideoManager() != NULL) {
 		MVideoManager();
-		m_flags |= Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags |= c_bit2;
+		m_flags &= ~c_bit3;
 	}
 
-	m_flags &= ~Flag_Bit4;
-	m_flags &= ~Flag_Bit5;
+	m_flags &= ~c_bit4;
+	m_flags &= ~c_bit5;
 }
 
 // FUNCTION: LEGO1 0x100b27b0
 void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MVideoManager() != NULL)
-		MVideoManager()->RemovePresenter(*this);
+		MVideoManager()->UnregisterPresenter(*this);
 
 	if (m_unk0x58) {
 		m_unk0x58->Release();
 		m_unk0x58 = NULL;
-		m_flags &= ~Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags &= ~c_bit2;
+		m_flags &= ~c_bit3;
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
@@ -240,10 +168,9 @@ void MxVideoPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
+	if (chunk->GetFlags() & MxDSChunk::c_end) {
 		m_subscriber->DestroyChunk(chunk);
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Repeating;
+		ProgressTickleState(e_repeating);
 	}
 	else {
 		LoadFrame(chunk);
@@ -255,7 +182,7 @@ void MxVideoPresenter::NextFrame()
 MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
-	if ((action == NULL) || (((action->GetFlags() & MxDSAction::Flag_Bit11) == 0) && !IsEnabled()) ||
+	if ((action == NULL) || (((action->GetFlags() & MxDSAction::c_bit11) == 0) && !IsEnabled()) ||
 		(!m_bitmap && !m_alpha))
 		return FALSE;
 
@@ -307,7 +234,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	if (m_flags & 0x10)
 		return (MxBool) *pixel;
 
-	if ((GetAction()->GetFlags() & MxDSAction::Flag_Bit4) && *pixel == 0)
+	if ((GetAction()->GetFlags() & MxDSAction::c_bit4) && *pixel == 0)
 		return FALSE;
 
 	return TRUE;
@@ -357,7 +284,7 @@ void MxVideoPresenter::PutFrame()
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
 	MxRect32 rectSrc, rectDest;
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit5) {
+	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		if (m_unk0x58) {
 			// TODO: Match
 			rectSrc.SetPoint(MxPoint32(0, 0));
@@ -413,7 +340,7 @@ void MxVideoPresenter::PutFrame()
 					rectDest.SetBottom(rectDest.GetTop() + regionRect->GetHeight());
 				}
 
-				if (m_action->GetFlags() & MxDSAction::Flag_Bit4) {
+				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_unk0x58) {
 						if (PrepareRects(rectDest, rectSrc) >= 0)
 							ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
@@ -460,8 +387,7 @@ void MxVideoPresenter::ReadyTickle()
 		LoadHeader(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -472,15 +398,14 @@ void MxVideoPresenter::StartingTickle()
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		CreateBitmap();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
+		ProgressTickleState(e_streaming);
 	}
 }
 
 // FUNCTION: LEGO1 0x100b2fe0
 void MxVideoPresenter::StreamingTickle()
 {
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
+	if (m_action->GetFlags() & MxDSAction::c_bit10) {
 		if (!m_currentChunk)
 			MxMediaPresenter::StreamingTickle();
 
@@ -504,13 +429,13 @@ void MxVideoPresenter::StreamingTickle()
 			LoadFrame(m_currentChunk);
 			m_subscriber->DestroyChunk(m_currentChunk);
 			m_currentChunk = NULL;
-			m_flags |= Flag_Bit1;
+			m_flags |= c_bit1;
 
-			if (m_currentTickleState != TickleState_Streaming)
+			if (m_currentTickleState != e_streaming)
 				break;
 		}
 
-		if (m_flags & Flag_Bit1)
+		if (m_flags & c_bit1)
 			m_unk0x5c = 5;
 	}
 }
@@ -519,7 +444,7 @@ void MxVideoPresenter::StreamingTickle()
 void MxVideoPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
+		if (m_action->GetFlags() & MxDSAction::c_bit10) {
 			if (!m_currentChunk)
 				MxMediaPresenter::RepeatingTickle();
 
@@ -542,13 +467,13 @@ void MxVideoPresenter::RepeatingTickle()
 
 				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
-				m_flags |= Flag_Bit1;
+				m_flags |= c_bit1;
 
-				if (m_currentTickleState != TickleState_Repeating)
+				if (m_currentTickleState != e_repeating)
 					break;
 			}
 
-			if (m_flags & Flag_Bit1)
+			if (m_flags & c_bit1)
 				m_unk0x5c = 5;
 		}
 	}
@@ -564,15 +489,11 @@ void MxVideoPresenter::Unk5Tickle()
 			if (m_unk0x60 == -1)
 				m_unk0x60 = m_action->GetElapsedTime();
 
-			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
-				m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-				m_currentTickleState = TickleState_Done;
-			}
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime())
+				ProgressTickleState(e_done);
 		}
-		else {
-			m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-			m_currentTickleState = TickleState_Done;
-		}
+		else
+			ProgressTickleState(e_done);
 	}
 }
 
@@ -583,7 +504,7 @@ MxResult MxVideoPresenter::AddToManager()
 
 	if (MVideoManager()) {
 		result = SUCCESS;
-		MVideoManager()->AddPresenter(*this);
+		MVideoManager()->RegisterPresenter(*this);
 	}
 
 	return result;
@@ -614,7 +535,7 @@ MxResult MxVideoPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (IsEnabled() && m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_unk5)
+	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5)
 		PutFrame();
 
 	return SUCCESS;

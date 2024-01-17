@@ -4,15 +4,18 @@
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
-#include "mxdsobject.h"
+#include "mxdsaction.h"
 #include "mxtypes.h"
 
 // VTABLE: LEGO1 0x100d5390
 // SIZE 0x10
 class MxEntity : public MxCore {
 public:
-	MxEntity();
-	virtual ~MxEntity() override;
+	// FUNCTION: LEGO1 0x1001d190
+	MxEntity() { this->m_mxEntityId = -1; }
+
+	// FUNCTION: LEGO1 0x1000c110
+	virtual ~MxEntity() override{};
 
 	// FUNCTION: LEGO1 0x1000c180
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -27,13 +30,23 @@ public:
 		return !strcmp(p_name, MxEntity::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom); // vtable+0x14
-	inline MxResult Create(MxDSObject& p_dsObject)
+	// FUNCTION: LEGO1 0x10001070
+	virtual MxResult Create(MxS32 p_id, const MxAtomId& p_atom)
 	{
-		m_mxEntityId = p_dsObject.GetObjectId();
-		m_atom = p_dsObject.GetAtomId();
+		this->m_mxEntityId = p_id;
+		this->m_atom = p_atom;
+		return SUCCESS;
+	}; // vtable+0x14
+
+	inline MxResult Create(MxDSAction& p_dsAction)
+	{
+		m_mxEntityId = p_dsAction.GetObjectId();
+		m_atom = p_dsAction.GetAtomId();
 		return SUCCESS;
 	}
+
+	inline MxS32 GetEntityId() { return m_mxEntityId; }
+	inline MxAtomId& GetAtom() { return m_atom; }
 
 protected:
 	MxS32 m_mxEntityId; // 0x8

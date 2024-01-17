@@ -27,7 +27,7 @@ void MxMusicPresenter::Init()
 void MxMusicPresenter::Destroy(MxBool p_fromDestructor)
 {
 	if (MusicManager()) {
-		MusicManager()->RemovePresenter(*this);
+		MusicManager()->UnregisterPresenter(*this);
 	}
 
 	m_criticalSection.Enter();
@@ -46,7 +46,7 @@ MxResult MxMusicPresenter::AddToManager()
 
 	if (MusicManager()) {
 		result = SUCCESS;
-		MusicManager()->AddPresenter(*this);
+		MusicManager()->RegisterPresenter(*this);
 	}
 
 	return result;

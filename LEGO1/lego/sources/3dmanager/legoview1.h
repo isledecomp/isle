@@ -2,14 +2,18 @@
 #define _LegoView1_h
 
 #include "compat.h"
+#include "decomp.h"
 #include "tglsurface.h"
 
-class Tgl::Camera;
+namespace Tgl
+{
+class Camera;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView
 
-// VTABLE: 0x100dc000
+// VTABLE: LEGO1 0x100dc000
 // SIZE 0x78
 class LegoView : public TglSurface {
 public:

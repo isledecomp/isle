@@ -1,6 +1,7 @@
 # C++ Parser utility functions and data structures
 import re
 from typing import Optional
+from ast import literal_eval
 
 # The goal here is to just read whatever is on the next line, so some
 # flexibility in the formatting seems OK
@@ -10,6 +11,10 @@ templateCommentRegex = re.compile(r"\s*//\s+(.*)")
 # To remove any comment (//) or block comment (/*) and its leading spaces
 # from the end of a code line
 trailingCommentRegex = re.compile(r"(\s*(?://|/\*).*)$")
+
+
+# Get string contents, ignore escape characters that might interfere
+doubleQuoteRegex = re.compile(r"(\"(?:[^\"\\]|\\.)*\")")
 
 
 def get_synthetic_name(line: str) -> Optional[str]:
@@ -84,5 +89,22 @@ def get_variable_name(line: str) -> Optional[str]:
 
     if (match := less_strict_global_regex.search(line)) is not None:
         return match.group("name")
+
+    return None
+
+
+def get_string_contents(line: str) -> Optional[str]:
+    """Return the first C string seen on this line.
+    We have to unescape the string, and a simple way to do that is to use
+    python's ast.literal_eval. I'm sure there are many pitfalls to doing
+    it this way, but hopefully the regex will ensure reasonably sane input."""
+
+    try:
+        if (match := doubleQuoteRegex.search(line)) is not None:
+            return literal_eval(match.group(1))
+    # pylint: disable=broad-exception-caught
+    # No way to predict what kind of exception could occur.
+    except Exception:
+        pass
 
     return None

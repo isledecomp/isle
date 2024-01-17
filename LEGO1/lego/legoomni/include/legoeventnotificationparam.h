@@ -7,9 +7,10 @@
 #include <stdlib.h>
 
 // VTABLE: LEGO1 0x100d6aa0
+// SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
-	inline LegoEventNotificationParam() : MxNotificationParam(PARAM_NONE, NULL) {}
+	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(
 		NotificationId p_type,
 		MxCore* p_sender,
@@ -22,8 +23,9 @@ public:
 	{
 	}
 
-	virtual ~LegoEventNotificationParam() override {} // vtable+0x0 (scalar deleting destructor)
 	inline MxU8 GetKey() const { return m_key; }
+	inline MxS32 GetX() const { return m_x; }
+	inline MxS32 GetY() const { return m_y; }
 
 protected:
 	MxU8 m_modifier; // 0x0c
@@ -32,5 +34,11 @@ protected:
 	MxU8 m_key;      // 0x18
 	MxU32 m_unk0x1c; // 0x1c
 };
+
+// SYNTHETIC: LEGO1 0x10028770
+// LegoEventNotificationParam::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100287e0
+// LegoEventNotificationParam::~LegoEventNotificationParam
 
 #endif // LEGOEVENTNOTIFICATIONPARAM_H

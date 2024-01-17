@@ -69,6 +69,7 @@ protected:
 	MxListEntry<T>* InsertEntry(T, MxListEntry<T>*, MxListEntry<T>*);
 };
 
+// SIZE 0x18
 template <class T>
 class MxPtrList : public MxList<T*> {
 public:
@@ -82,6 +83,7 @@ public:
 	}
 };
 
+// SIZE 0x10
 template <class T>
 class MxListCursor : public MxCore {
 public:
@@ -128,6 +130,7 @@ private:
 	MxListEntry<T>* m_match; // 0x0c
 };
 
+// SIZE 0x10
 template <class T>
 class MxPtrListCursor : public MxListCursor<T*> {
 public:
