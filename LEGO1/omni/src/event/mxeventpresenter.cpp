@@ -71,7 +71,7 @@ void MxEventPresenter::ReadyTickle()
 		CopyData(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -81,7 +81,7 @@ void MxEventPresenter::StartingTickle()
 	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
-		ProgressTickleState(TickleState_Streaming);
+		ProgressTickleState(e_streaming);
 }
 
 // FUNCTION: LEGO1 0x100c2ef0
@@ -90,8 +90,8 @@ MxResult MxEventPresenter::PutData()
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (IsEnabled()) {
-		if (m_currentTickleState >= TickleState_Streaming &&
-			(m_currentTickleState <= TickleState_Repeating || m_currentTickleState == TickleState_Done)) {
+		if (m_currentTickleState >= e_streaming &&
+			(m_currentTickleState <= e_repeating || m_currentTickleState == e_done)) {
 			if (m_currentChunk && m_currentChunk->GetLength()) {
 				if (m_data[12] == 2) {
 					const char* data = (const char*) m_currentChunk->GetData();
@@ -103,7 +103,7 @@ MxResult MxEventPresenter::PutData()
 					variableTable->SetVariable(key, value);
 				}
 
-				if (m_currentTickleState == TickleState_Streaming)
+				if (m_currentTickleState == e_streaming)
 					m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
 			}

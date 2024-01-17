@@ -5,10 +5,10 @@
 #include "mxtypes.h"
 
 enum LookupMode {
-	LookupMode_Exact = 0,
-	LookupMode_LowerCase = 1,
-	LookupMode_UpperCase = 2,
-	LookupMode_LowerCase2 = 3
+	e_exact = 0,
+	e_lowerCase,
+	e_upperCase,
+	e_lowerCase2,
 };
 
 // SIZE 0x04

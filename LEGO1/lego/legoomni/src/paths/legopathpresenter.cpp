@@ -61,7 +61,7 @@ void LegoPathPresenter::Destroy()
 void LegoPathPresenter::ReadyTickle()
 {
 	// TODO
-	ProgressTickleState(TickleState_Starting); // Allow initialization process to continue
+	ProgressTickleState(e_starting); // Allow initialization process to continue
 }
 
 // FUNCTION: LEGO1 0x10044d00
@@ -70,8 +70,8 @@ void LegoPathPresenter::StreamingTickle()
 	MxStreamChunk* chunk = m_subscriber->NextChunk();
 
 	if (chunk) {
-		if (chunk->GetFlags() & MxStreamChunk::Flag_End) {
-			ProgressTickleState(TickleState_Repeating);
+		if (chunk->GetFlags() & MxStreamChunk::c_end) {
+			ProgressTickleState(e_repeating);
 		}
 
 		m_subscriber->DestroyChunk(chunk);

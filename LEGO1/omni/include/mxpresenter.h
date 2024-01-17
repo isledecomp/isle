@@ -17,13 +17,13 @@ class MxEntity;
 class MxPresenter : public MxCore {
 public:
 	enum TickleState {
-		TickleState_Idle = 0,
-		TickleState_Ready,
-		TickleState_Starting,
-		TickleState_Streaming,
-		TickleState_Repeating,
-		TickleState_unk5,
-		TickleState_Done,
+		e_idle = 0,
+		e_ready,
+		e_starting,
+		e_streaming,
+		e_repeating,
+		e_unk5,
+		e_done,
 	};
 
 	MxPresenter() { Init(); }
@@ -57,27 +57,27 @@ public:
 	virtual void ReadyTickle()
 	{
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	} // vtable+0x18
 
 	// FUNCTION: LEGO1 0x1000be60
-	virtual void StartingTickle() { ProgressTickleState(TickleState_Streaming); } // vtable+0x1c
+	virtual void StartingTickle() { ProgressTickleState(e_streaming); } // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x1000be80
-	virtual void StreamingTickle() { ProgressTickleState(TickleState_Repeating); }; // vtable+0x20
+	virtual void StreamingTickle() { ProgressTickleState(e_repeating); }; // vtable+0x20
 
 	// FUNCTION: LEGO1 0x1000bea0
-	virtual void RepeatingTickle() { ProgressTickleState(TickleState_unk5); }; // vtable+0x24
+	virtual void RepeatingTickle() { ProgressTickleState(e_unk5); }; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x1000bec0
-	virtual void Unk5Tickle() { ProgressTickleState(TickleState_Done); }; // vtable+0x28
+	virtual void Unk5Tickle() { ProgressTickleState(e_done); }; // vtable+0x28
 
 protected:
 #ifdef ISLE_APP
 	__declspec(dllexport) virtual void DoneTickle(); // vtable+0x2c
 #else
 	// FUNCTION: LEGO1 0x1000bee0
-	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(TickleState_Idle); }; // vtable+0x2c
+	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(e_idle); }; // vtable+0x2c
 #endif
 
 	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30

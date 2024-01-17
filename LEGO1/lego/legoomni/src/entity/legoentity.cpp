@@ -20,7 +20,7 @@ void LegoEntity::Init()
 	m_actionArgString = NULL;
 	m_unk0x10 = 0;
 	m_flags = 0;
-	m_actionType = ExtraActionType_unknown;
+	m_actionType = Extra::ActionType::e_unknown;
 	m_actionArgNumber = -1;
 	m_unk0x59 = 4;
 }
@@ -50,7 +50,7 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
-		if (m_flags & Flag_Bit1) {
+		if (m_flags & c_bit1) {
 			if (m_roi->GetUnknown0x104() == this)
 				m_roi->SetUnknown0x104(NULL);
 
@@ -108,13 +108,13 @@ void LegoEntity::ParseAction(char* p_extra)
 	if (KeyValueStringParse(actionValue, g_strACTION, copy)) {
 		m_actionType = MatchActionString(strtok(actionValue, g_parseExtraTokens));
 
-		if (m_actionType != ExtraActionType_exit) {
+		if (m_actionType != Extra::ActionType::e_exit) {
 			char* token = strtok(NULL, g_parseExtraTokens);
 
 			m_actionArgString = new char[strlen(token) + 1];
 			strcpy(m_actionArgString, token);
 
-			if (m_actionType != ExtraActionType_run) {
+			if (m_actionType != Extra::ActionType::e_run) {
 				m_actionArgNumber = atoi(strtok(NULL, g_parseExtraTokens));
 			}
 		}

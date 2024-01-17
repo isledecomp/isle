@@ -55,7 +55,7 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 			if (presenter && presenter->AddToManager() == SUCCESS) {
 				presenter->SetCompositePresenter(this);
 				if (presenter->StartAction(p_controller, action) == SUCCESS) {
-					presenter->SetTickleState(TickleState_Idle);
+					presenter->SetTickleState(e_idle);
 
 					if (presenter->IsA("MxVideoPresenter"))
 						VideoManager()->UnregisterPresenter(*presenter);
@@ -75,7 +75,7 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 		}
 
 		if (!m_compositePresenter) {
-			SetTickleState(TickleState_Ready);
+			SetTickleState(e_ready);
 			MxLong time = Timer()->GetTime();
 			m_action->SetUnknown90(time);
 		}
@@ -93,10 +93,10 @@ void MxCompositeMediaPresenter::StartingTickle()
 
 	if (!m_unk0x4e) {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-			if ((*it)->GetCurrentTickleState() < TickleState_Streaming) {
+			if ((*it)->GetCurrentTickleState() < e_streaming) {
 				(*it)->Tickle();
 
-				if ((*it)->GetCurrentTickleState() == TickleState_Streaming ||
+				if ((*it)->GetCurrentTickleState() == e_streaming ||
 					((*it)->GetAction() && (*it)->GetAction()->GetStartTime()))
 					m_unk0x4c++;
 			}
@@ -115,15 +115,15 @@ void MxCompositeMediaPresenter::StartingTickle()
 	else {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			if (!(*it)->GetAction()->GetStartTime() && ((MxMediaPresenter*) *it)->CurrentChunk() &&
-				!((*it)->GetAction()->GetFlags() & MxDSAction::Flag_Bit9)) {
+				!((*it)->GetAction()->GetFlags() & MxDSAction::c_bit9)) {
 				(*it)->Tickle();
-				(*it)->GetAction()->SetFlags((*it)->GetAction()->GetFlags() | MxDSAction::Flag_Bit9);
+				(*it)->GetAction()->SetFlags((*it)->GetAction()->GetFlags() | MxDSAction::c_bit9);
 				m_unk0x4c--;
 			}
 		}
 
 		if (!m_unk0x4c) {
-			ProgressTickleState(TickleState_Streaming);
+			ProgressTickleState(e_streaming);
 			MxLong time = Timer()->GetTime();
 			m_action->SetUnknown90(time);
 		}
@@ -136,15 +136,15 @@ MxResult MxCompositeMediaPresenter::Tickle()
 	MxAutoLocker lock(&m_criticalSection);
 
 	switch (m_currentTickleState) {
-	case TickleState_Ready:
-		ProgressTickleState(TickleState_Starting);
-	case TickleState_Starting:
+	case e_ready:
+		ProgressTickleState(e_starting);
+	case e_starting:
 		StartingTickle();
 		break;
-	case TickleState_Streaming:
-	case TickleState_Repeating:
-	case TickleState_unk5:
-	case TickleState_Done: {
+	case e_streaming:
+	case e_repeating:
+	case e_unk5:
+	case e_done: {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++)
 			(*it)->Tickle();
 		break;
@@ -161,7 +161,7 @@ MxResult MxCompositeMediaPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_Done) {
+	if (m_currentTickleState >= e_streaming && m_currentTickleState <= e_done) {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++)
 			(*it)->PutData();
 	}

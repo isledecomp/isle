@@ -230,7 +230,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 MxResult LegoVideoManager::Tickle()
 {
 	if (m_unk0x554 && !m_videoParam.Flags().GetFlipSurfaces() &&
-		TransitionManager()->GetTransitionType() == MxTransitionManager::NOT_TRANSITIONING)
+		TransitionManager()->GetTransitionType() == MxTransitionManager::e_notTransitioning)
 		Sleep(30);
 
 	m_stopWatch->Stop();
@@ -369,7 +369,7 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			m_fullScreenMovie = TRUE;
 		}
 		else {
-			m_displaySurface->FUN_100ba640();
+			m_displaySurface->ClearScreen();
 			m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
 
 			// restore previous pallete
@@ -462,7 +462,7 @@ MxResult LegoVideoManager::ConfigureD3DRM()
 
 	MxAssignedDevice* assignedDevice = m_direct3d->GetAssignedDevice();
 
-	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::Flag_HardwareMode) {
+	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::c_hardwareMode) {
 		if (assignedDevice->GetDesc().dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR)
 			d3drm->SetTextureQuality(D3DRMTEXTURE_LINEAR);
 

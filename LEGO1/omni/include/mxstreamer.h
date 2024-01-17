@@ -71,7 +71,7 @@ private:
 class MxStreamer : public MxCore {
 public:
 	enum OpenMode {
-		e_DiskStream,
+		e_diskStream = 0,
 		e_RAMStream
 	};
 

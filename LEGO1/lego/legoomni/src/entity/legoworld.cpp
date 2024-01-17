@@ -62,7 +62,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	if (!VTable0x54())
 		return FAILURE;
 
-	if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
+	if (p_dsAction.GetFlags() & MxDSAction::c_enabled) {
 		if (GetCurrentWorld()) {
 			GetCurrentWorld()->VTable0x68(0);
 		}
@@ -149,6 +149,12 @@ void LegoWorld::VTable0x58(MxCore* p_object)
 // STUB: LEGO1 0x10020f10
 void LegoWorld::EndAction(MxCore* p_object)
 {
+}
+
+// STUB: LEGO1 0x100213a0
+MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_name)
+{
+	return NULL;
 }
 
 // STUB: LEGO1 0x10021a70

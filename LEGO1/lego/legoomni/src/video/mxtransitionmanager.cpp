@@ -17,7 +17,7 @@ RECT g_fullScreenRect = {0, 0, 640, 480};
 MxTransitionManager::MxTransitionManager()
 {
 	m_animationTimer = 0;
-	m_transitionType = NOT_TRANSITIONING;
+	m_transitionType = e_notTransitioning;
 	m_ddSurface = NULL;
 	m_waitIndicator = NULL;
 	m_copyBuffer = NULL;
@@ -57,22 +57,22 @@ MxResult MxTransitionManager::Tickle()
 	this->m_systemTime = timeGetTime();
 
 	switch (this->m_transitionType) {
-	case NO_ANIMATION:
+	case e_noAnimation:
 		TransitionNone();
 		break;
-	case DISSOLVE:
+	case e_dissolve:
 		TransitionDissolve();
 		break;
-	case PIXELATION:
+	case e_pixelation:
 		TransitionPixelation();
 		break;
-	case SCREEN_WIPE:
+	case e_screenWipe:
 		TransitionWipe();
 		break;
-	case WINDOWS:
+	case e_windows:
 		TransitionWindows();
 		break;
-	case BROKEN:
+	case e_broken:
 		TransitionBroken();
 		break;
 	}
@@ -87,7 +87,7 @@ MxResult MxTransitionManager::StartTransition(
 	MxBool p_playMusicInAnim
 )
 {
-	if (this->m_transitionType == NOT_TRANSITIONING) {
+	if (this->m_transitionType == e_notTransitioning) {
 		if (!p_playMusicInAnim) {
 			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
 			backgroundAudioManager->Stop();
@@ -102,7 +102,7 @@ MxResult MxTransitionManager::StartTransition(
 
 			MxDSAction* action = m_waitIndicator->GetAction();
 			action->SetLoopCount(10000);
-			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit10);
+			action->SetFlags(action->GetFlags() | MxDSAction::c_bit10);
 		}
 
 		MxU32 time = timeGetTime();
@@ -129,8 +129,8 @@ MxResult MxTransitionManager::StartTransition(
 // FUNCTION: LEGO1 0x1004bc30
 void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 {
-	if (m_transitionType != NOT_TRANSITIONING) {
-		m_transitionType = NOT_TRANSITIONING;
+	if (m_transitionType != e_notTransitioning) {
+		m_transitionType = e_notTransitioning;
 
 		m_copyFlags.m_bit0 = FALSE;
 
@@ -142,11 +142,11 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 			if (world) {
 #ifdef COMPAT_MODE
 				{
-					MxNotificationParam param(MXTRANSITIONMANAGER_TRANSITIONENDED, this);
+					MxNotificationParam param(c_notificationTransitioned, this);
 					world->Notify(param);
 				}
 #else
-				world->Notify(MxNotificationParam(MXTRANSITIONMANAGER_TRANSITIONENDED, this));
+				world->Notify(MxNotificationParam(c_notificationTransitioned, this));
 #endif
 			}
 		}
@@ -157,7 +157,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 void MxTransitionManager::TransitionNone()
 {
 	LegoVideoManager* videoManager = VideoManager();
-	videoManager->GetDisplaySurface()->FUN_100ba640();
+	videoManager->GetDisplaySurface()->ClearScreen();
 	EndTransition(TRUE);
 }
 
@@ -475,7 +475,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 {
 	// End current wait indicator
 	if (m_waitIndicator != NULL) {
-		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::Flag_World);
+		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::c_world);
 		m_waitIndicator->EndAction();
 		m_waitIndicator = NULL;
 	}
@@ -488,7 +488,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 		LegoVideoManager* videoManager = VideoManager();
 		videoManager->UnregisterPresenter(*m_waitIndicator);
 
-		if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::TickleState_Streaming) {
+		if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::e_streaming) {
 			m_waitIndicator->Tickle();
 		}
 	}
@@ -542,7 +542,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	m_waitIndicator->Tickle();
 
 	// Check if wait indicator has started
-	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::TickleState_Streaming) {
+	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
 		MxU32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously
@@ -576,7 +576,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	}
 
 	// Setup display surface
-	if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::Flag_Bit5) != 0) {
+	if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::c_bit5) != 0) {
 		MxDisplaySurface* displaySurface = VideoManager()->GetDisplaySurface();
 		MxBool und = FALSE;
 		displaySurface->VTable0x2c(

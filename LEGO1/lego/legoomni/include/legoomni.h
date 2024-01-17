@@ -120,6 +120,8 @@ public:
 	inline void SetWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
 
+	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
+
 private:
 	undefined4* m_unk0x68;                       // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c
@@ -161,6 +163,7 @@ LegoWorld* GetCurrentWorld();
 LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxU32, MxU32);
+void FUN_10015860(const char*, MxU8);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 

@@ -43,6 +43,7 @@ public:
 
 	void SetSomeEnumState(undefined4 p_state);
 	void FUN_1003ceb0();
+	void FUN_10039780(MxU8);
 
 	struct ScoreStruct {
 		void WriteScoreHistory();

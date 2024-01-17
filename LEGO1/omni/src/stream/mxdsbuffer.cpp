@@ -22,7 +22,7 @@ MxDSBuffer::MxDSBuffer()
 	m_unk0x1c = 0;
 	m_writeOffset = 0;
 	m_bytesRemaining = 0;
-	m_mode = MxDSBufferType_Preallocated;
+	m_mode = e_preallocated;
 	m_unk0x30 = 0;
 }
 
@@ -31,12 +31,12 @@ MxDSBuffer::~MxDSBuffer()
 {
 	if (m_pBuffer != NULL) {
 		switch (m_mode) {
-		case MxDSBufferType_Allocate:
-		case MxDSBufferType_Unknown:
+		case e_allocate:
+		case e_unknown:
 			delete[] m_pBuffer;
 			break;
 
-		case MxDSBufferType_Chunk: {
+		case e_chunk: {
 			MxU32 offset = m_writeOffset / 1024;
 			MxStreamer* streamer = Streamer();
 
@@ -77,16 +77,16 @@ MxDSBuffer::~MxDSBuffer()
 }
 
 // FUNCTION: LEGO1 0x100c6640
-MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, MxDSBufferType p_mode)
+MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, Type p_mode)
 {
 	MxResult result = FAILURE;
 
 	switch (p_mode) {
-	case MxDSBufferType_Allocate:
+	case e_allocate:
 		m_pBuffer = new MxU8[p_bufferSize];
 		break;
 
-	case MxDSBufferType_Chunk: {
+	case e_chunk: {
 		MxStreamer* streamer = Streamer();
 
 		switch (p_bufferSize / 1024) {
@@ -150,7 +150,7 @@ MxResult MxDSBuffer::SetBufferPointer(MxU8* p_buffer, MxU32 p_size)
 	m_pIntoBuffer2 = p_buffer;
 	m_bytesRemaining = p_size;
 	m_writeOffset = p_size;
-	m_mode = MxDSBufferType_Preallocated;
+	m_mode = e_preallocated;
 	return SUCCESS;
 }
 
@@ -291,24 +291,24 @@ MxResult MxDSBuffer::ParseChunk(
 {
 	MxResult result = SUCCESS;
 
-	if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
+	if (m_unk0x30->GetFlags() & MxDSAction::c_bit3 && m_unk0x30->GetUnknowna8() && p_header->GetTime() < 0) {
 		delete p_header;
 		return SUCCESS;
 	}
 
 	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
 
-	if (p_header->GetFlags() & MxDSChunk::Flag_Split) {
+	if (p_header->GetFlags() & MxDSChunk::c_split) {
 		MxU32 length = p_header->GetLength() + MxDSChunk::GetHeaderSize() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
-		if (buffer && buffer->AllocateBuffer(length, MxDSBufferType_Allocate) == SUCCESS &&
+		if (buffer && buffer->AllocateBuffer(length, e_allocate) == SUCCESS &&
 			buffer->CalcBytesRemaining((MxU8*) p_data) == SUCCESS) {
 			*p_streamingAction = new MxDSStreamingAction((MxDSStreamingAction&) *p_action);
 
 			if (*p_streamingAction) {
 				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
-				*flags = p_header->GetFlags() & ~MxDSChunk::Flag_Split;
+				*flags = p_header->GetFlags() & ~MxDSChunk::c_split;
 
 				delete p_header;
 				(*p_streamingAction)->SetUnknowna0(buffer);
@@ -323,9 +323,9 @@ MxResult MxDSBuffer::ParseChunk(
 		return FAILURE;
 	}
 	else {
-		if (p_header->GetFlags() & MxDSChunk::Flag_End) {
+		if (p_header->GetFlags() & MxDSChunk::c_end) {
 			if (m_unk0x30->HasId(p_header->GetObjectId())) {
-				if (m_unk0x30->GetFlags() & MxDSAction::Flag_Bit3 &&
+				if (m_unk0x30->GetFlags() & MxDSAction::c_bit3 &&
 					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {
 
 					if (p_action->GetObjectId() == p_header->GetObjectId()) {
@@ -456,7 +456,7 @@ MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 {
 	MxResult result = FAILURE;
 
-	if (m_mode == MxDSBufferType_Allocate && m_bytesRemaining != 0) {
+	if (m_mode == e_allocate && m_bytesRemaining != 0) {
 		MxU32 bytesRead;
 		MxU8* ptr;
 

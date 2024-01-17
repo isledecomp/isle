@@ -12,16 +12,16 @@ class MxOmni;
 class MxDSAction : public MxDSObject {
 public:
 	enum {
-		Flag_Looping = 0x01,
-		Flag_Bit3 = 0x04,
-		Flag_Bit4 = 0x08,
-		Flag_Bit5 = 0x10,
-		Flag_Enabled = 0x20,
-		Flag_Bit7 = 0x40,
-		Flag_World = 0x80,
-		Flag_Bit9 = 0x100,
-		Flag_Bit10 = 0x200,
-		Flag_Bit11 = 0x400,
+		c_looping = 0x01,
+		c_bit3 = 0x04,
+		c_bit4 = 0x08,
+		c_bit5 = 0x10,
+		c_enabled = 0x20,
+		c_bit7 = 0x40,
+		c_world = 0x80,
+		c_bit9 = 0x100,
+		c_bit10 = 0x200,
+		c_bit11 = 0x400,
 	};
 
 	__declspec(dllexport) MxDSAction();
@@ -72,15 +72,15 @@ public:
 	inline MxCore* GetOrigin() { return m_origin; }
 	inline void SetOrigin(MxCore* p_origin) { m_origin = p_origin; }
 
-	inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
-	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
+	inline MxBool IsLooping() const { return m_flags & c_looping; }
+	inline MxBool IsBit3() const { return m_flags & c_bit3; }
 
 	inline void CopyFlags(MxU32 p_flags)
 	{
-		if (p_flags & MxDSAction::Flag_Looping)
-			SetFlags(GetFlags() | MxDSAction::Flag_Looping);
-		else if (p_flags & MxDSAction::Flag_Bit3)
-			SetFlags(GetFlags() | MxDSAction::Flag_Bit3);
+		if (p_flags & MxDSAction::c_looping)
+			SetFlags(GetFlags() | MxDSAction::c_looping);
+		else if (p_flags & MxDSAction::c_bit3)
+			SetFlags(GetFlags() | MxDSAction::c_bit3);
 	}
 
 protected:

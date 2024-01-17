@@ -11,11 +11,11 @@
 class MxVideoPresenter : public MxMediaPresenter {
 public:
 	enum {
-		Flag_Bit1 = 0x01,
-		Flag_Bit2 = 0x02,
-		Flag_Bit3 = 0x04,
-		Flag_Bit4 = 0x08,
-		Flag_Bit5 = 0x10,
+		c_bit1 = 0x01,
+		c_bit2 = 0x02,
+		c_bit3 = 0x04,
+		c_bit4 = 0x08,
+		c_bit5 = 0x10,
 	};
 
 	MxVideoPresenter() { Init(); }

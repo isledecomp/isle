@@ -10,8 +10,8 @@
 class OrientableROI : public ROI {
 public:
 	enum {
-		Flag_Bit1 = 0x01,
-		Flag_Bit2 = 0x02
+		c_bit1 = 0x01,
+		c_bit2 = 0x02
 	};
 
 	OrientableROI();

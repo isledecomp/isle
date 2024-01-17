@@ -58,6 +58,7 @@ public:
 	void FUN_10073400();
 	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
+	MxPresenter* FindPresenter(const char* p_presenter, const char* p_name);
 
 protected:
 	LegoPathControllerList m_list0x68;        // 0x68

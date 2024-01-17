@@ -13,7 +13,7 @@
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		Flag_Bit1 = 0x01
+		c_bit1 = 0x01
 	};
 
 	// Inlined at 0x100853f7
@@ -78,9 +78,9 @@ protected:
 	undefined m_unk0x59;             // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
-	ExtraActionType m_actionType; // 0x5c
-	char* m_actionArgString;      // 0x60
-	MxS32 m_actionArgNumber;      // 0x64
+	Extra::ActionType m_actionType; // 0x5c
+	char* m_actionArgString;        // 0x60
+	MxS32 m_actionArgNumber;        // 0x64
 };
 
 // SYNTHETIC: LEGO1 0x1000c3b0

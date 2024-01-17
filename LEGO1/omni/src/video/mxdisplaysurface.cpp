@@ -34,7 +34,7 @@ void MxDisplaySurface::Init()
 }
 
 // FUNCTION: LEGO1 0x100ba640
-void MxDisplaySurface::FUN_100ba640()
+void MxDisplaySurface::ClearScreen()
 {
 	MxS32 backBuffers;
 	DDSURFACEDESC desc;

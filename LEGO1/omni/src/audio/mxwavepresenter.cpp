@@ -86,7 +86,7 @@ void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 	}
 
 	if (dwStatus != DSBSTATUS_BUFFERLOST) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+		if (m_action->GetFlags() & MxDSAction::c_looping) {
 			m_writtenChunks++;
 			m_lockSize = p_length;
 		}
@@ -99,7 +99,7 @@ void MxWavePresenter::WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length)
 			DS_OK) {
 			memcpy(pvAudioPtr1, p_audioPtr, p_length);
 
-			if (m_lockSize > p_length && !(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+			if (m_lockSize > p_length && !(m_action->GetFlags() & MxDSAction::c_looping)) {
 				memset((MxU8*) pvAudioPtr1 + p_length, m_silenceData, m_lockSize - p_length);
 			}
 
@@ -118,7 +118,7 @@ void MxWavePresenter::ReadyTickle()
 		memcpy(m_waveFormat, chunk->GetData(), chunk->GetLength());
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -156,7 +156,7 @@ void MxWavePresenter::StartingTickle()
 		else
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;
 
-		if (m_action->GetFlags() & MxDSAction::Flag_Looping)
+		if (m_action->GetFlags() & MxDSAction::c_looping)
 			desc.dwBufferBytes = m_waveFormat->m_waveFormatEx.nAvgBytesPerSec *
 								 (m_action->GetDuration() / m_action->GetLoopCount()) / 1000;
 		else
@@ -169,7 +169,7 @@ void MxWavePresenter::StartingTickle()
 		}
 		else {
 			SetVolume(((MxDSSound*) m_action)->GetVolume());
-			ProgressTickleState(TickleState_Streaming);
+			ProgressTickleState(e_streaming);
 		}
 	}
 }
@@ -178,11 +178,11 @@ void MxWavePresenter::StartingTickle()
 void MxWavePresenter::StreamingTickle()
 {
 	if (!m_currentChunk) {
-		if (!(m_action->GetFlags() & MxDSAction::Flag_Looping)) {
+		if (!(m_action->GetFlags() & MxDSAction::c_looping)) {
 			MxStreamChunk* chunk = CurrentChunk();
 
-			if (chunk && chunk->GetFlags() & MxDSChunk::Flag_End && !(chunk->GetFlags() & MxDSChunk::Flag_Bit16)) {
-				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::Flag_Bit16);
+			if (chunk && chunk->GetFlags() & MxDSChunk::c_end && !(chunk->GetFlags() & MxDSChunk::c_bit16)) {
+				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::c_bit16);
 
 				m_currentChunk = new MxStreamChunk;
 				MxU8* data = new MxU8[m_chunkLength];
@@ -192,7 +192,7 @@ void MxWavePresenter::StreamingTickle()
 				m_currentChunk->SetLength(m_chunkLength);
 				m_currentChunk->SetData(data);
 				m_currentChunk->SetTime(chunk->GetTime() + 1000);
-				m_currentChunk->SetFlags(MxDSChunk::Flag_Bit1);
+				m_currentChunk->SetFlags(MxDSChunk::c_bit1);
 			}
 		}
 
@@ -208,7 +208,7 @@ void MxWavePresenter::DoneTickle()
 		m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor);
 
 		MxS8 playedChunks = dwCurrentPlayCursor / m_chunkLength;
-		if (m_action->GetFlags() & MxDSAction::Flag_Bit7 || m_action->GetFlags() & MxDSAction::Flag_Looping ||
+		if (m_action->GetFlags() & MxDSAction::c_bit7 || m_action->GetFlags() & MxDSAction::c_looping ||
 			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor)
 			MxMediaPresenter::DoneTickle();
 	}
@@ -231,7 +231,7 @@ MxResult MxWavePresenter::PutData()
 
 	if (IsEnabled()) {
 		switch (m_currentTickleState) {
-		case TickleState_Streaming:
+		case e_streaming:
 			if (m_currentChunk && FUN_100b1ba0()) {
 				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
 				m_subscriber->DestroyChunk(m_currentChunk);
@@ -245,7 +245,7 @@ MxResult MxWavePresenter::PutData()
 					m_started = TRUE;
 			}
 			break;
-		case TickleState_Repeating:
+		case e_repeating:
 			if (m_started)
 				break;
 
@@ -339,13 +339,13 @@ void MxWavePresenter::Resume()
 	if (m_paused) {
 		if (m_dsBuffer && m_started) {
 			switch (m_currentTickleState) {
-			case TickleState_Streaming:
+			case e_streaming:
 				m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
 				break;
-			case TickleState_Repeating:
+			case e_repeating:
 				m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1);
 				break;
-			case TickleState_Done:
+			case e_done:
 				m_dsBuffer->Play(0, 0, 0);
 			}
 		}

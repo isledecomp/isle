@@ -13,8 +13,8 @@ class MxDirect3D;
 class MxAssignedDevice {
 public:
 	enum {
-		Flag_HardwareMode = 0x01,
-		Flag_PrimaryDevice = 0x02
+		c_hardwareMode = 0x01,
+		c_primaryDevice = 0x02
 	};
 
 	MxAssignedDevice();

@@ -23,8 +23,8 @@ void MxSmkPresenter::Init()
 {
 	m_currentFrame = 0;
 	memset(&m_mxSmack, 0, sizeof(m_mxSmack));
-	m_flags &= ~Flag_Bit2;
-	m_flags &= ~Flag_Bit3;
+	m_flags &= ~c_bit2;
+	m_flags &= ~c_bit3;
 }
 
 // FUNCTION: LEGO1 0x100b3900

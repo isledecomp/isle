@@ -8,7 +8,7 @@ DECOMP_SIZE_ASSERT(MxDSSound, 0xc0)
 MxDSSound::MxDSSound()
 {
 	this->m_volume = 0x4f;
-	this->SetType(MxDSType_Sound);
+	this->SetType(e_sound);
 }
 
 // FUNCTION: LEGO1 0x100c9470

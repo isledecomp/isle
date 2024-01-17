@@ -92,11 +92,18 @@ LegoGameState::~LegoGameState()
 	delete[] m_savePath;
 }
 
+// STUB: LEGO1 0x10039780
+void LegoGameState::FUN_10039780(MxU8)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
 	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+
 	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == 0)
 		result = SUCCESS;
 	else {
@@ -105,7 +112,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		MxString savePath;
 		GetFileSavePath(&savePath, p_slot);
 		LegoFileStream fileStream;
-		if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE) {
+		if (fileStream.Open(savePath.GetData(), LegoStream::c_writeBit) != FAILURE) {
 			MxU32 maybeVersion = 0x1000C;
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
@@ -216,7 +223,7 @@ void LegoGameState::HandleAction(MxU32 p_area)
 		// TODO: implement other cases
 	}
 
-	InvokeAction(ExtraActionType_opendisk, *script, 0, NULL);
+	InvokeAction(Extra::ActionType::e_opendisk, *script, 0, NULL);
 }
 
 // FUNCTION: LEGO1 0x1003bac0
@@ -310,7 +317,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 	savePath += "\\";
 	savePath += g_historyGSI;
 
-	if (p_flags == LegoStream::WriteBit) {
+	if (p_flags == LegoStream::c_writeBit) {
 		m_unk0xa6.WriteScoreHistory();
 	}
 

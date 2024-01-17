@@ -12,7 +12,7 @@ void LegoActorPresenter::ReadyTickle()
 			SetEntityLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());
 			m_entity->Create(*m_action);
 		}
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -20,7 +20,7 @@ void LegoActorPresenter::ReadyTickle()
 void LegoActorPresenter::StartingTickle()
 {
 	if (m_entity->GetROI()) {
-		ProgressTickleState(TickleState_Streaming);
+		ProgressTickleState(e_streaming);
 		ParseExtra();
 	}
 }

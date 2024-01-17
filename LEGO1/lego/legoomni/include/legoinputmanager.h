@@ -52,6 +52,7 @@ public:
 	void ClearWorld();
 
 	inline void SetUnknown88(MxBool p_unk0x88) { m_unk0x88 = p_unk0x88; }
+	inline void SetUnknown335(MxBool p_unk0x335) { m_unk0x335 = p_unk0x335; }
 	inline void SetUnknown336(MxBool p_unk0x336) { m_unk0x336 = p_unk0x336; }
 	inline void SetUseJoystick(MxBool p_useJoystick) { m_useJoystick = p_useJoystick; }
 	inline void SetJoystickIndex(MxS32 p_joystickIndex) { m_joystickIndex = p_joystickIndex; }

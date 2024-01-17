@@ -15,14 +15,14 @@ MxU16 g_sep = TWOCC(',', ' ');
 // FUNCTION: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
-	this->m_flags = MxDSAction::Flag_Enabled;
+	this->m_flags = MxDSAction::c_enabled;
 	this->m_startTime = INT_MIN;
 	this->m_extraData = NULL;
 	this->m_extraLength = 0;
 	this->m_duration = INT_MIN;
 	this->m_loopCount = -1;
 
-	this->SetType(MxDSType_Action);
+	this->SetType(e_action);
 	this->m_location.Fill(FLT_MAX);
 	this->m_direction.Fill(FLT_MAX);
 	this->m_up.Fill(FLT_MAX);

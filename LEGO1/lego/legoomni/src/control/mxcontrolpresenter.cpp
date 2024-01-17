@@ -53,7 +53,7 @@ MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSA
 {
 	MxResult result = MxCompositePresenter::StartAction(p_controller, p_action);
 
-	FUN_100b7220(m_action, MxDSAction::Flag_World | MxDSAction::Flag_Looping, TRUE);
+	FUN_100b7220(m_action, MxDSAction::c_world | MxDSAction::c_looping, TRUE);
 	ParseExtra();
 
 	MxS16 i = 0;
@@ -64,7 +64,7 @@ MxResult MxControlPresenter::StartAction(MxStreamController* p_controller, MxDSA
 
 	if (m_unk0x4c == 3) {
 		MxDSAction* action = (*m_list.begin())->GetAction();
-		action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit11);
+		action->SetFlags(action->GetFlags() | MxDSAction::c_bit11);
 	}
 
 	TickleManager()->RegisterClient(this, 200);
@@ -106,7 +106,7 @@ void MxControlPresenter::ReadyTickle()
 {
 	MxPresenter::ParseExtra();
 	TickleManager()->UnregisterClient(this);
-	ProgressTickleState(TickleState_Repeating);
+	ProgressTickleState(e_repeating);
 }
 
 // STUB: LEGO1 0x10044640

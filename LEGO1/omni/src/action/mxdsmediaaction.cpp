@@ -15,7 +15,7 @@ MxDSMediaAction::MxDSMediaAction()
 	this->m_paletteManagement = 1;
 	this->m_unk0xb4 = -1;
 	this->m_sustainTime = 0;
-	this->SetType(MxDSType_MediaAction);
+	this->SetType(e_mediaAction);
 }
 
 // FUNCTION: LEGO1 0x100c8cf0
