@@ -5,6 +5,7 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "legoscripts.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
@@ -146,19 +147,19 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		// Play dialogue when player selects character
 		switch (m_unk0xfc) {
 		case 1:
-			PlayDialogue(541); // pepper
+			PlayDialogue(InfoMainScript_PepperCharacterSelect); // pepper
 			break;
 		case 2:
-			PlayDialogue(542); // mama brickolinea
+			PlayDialogue(InfoMainScript_MamaCharacterSelect); // mama brickolinea
 			break;
 		case 3:
-			PlayDialogue(543); // papa brickolinea
+			PlayDialogue(InfoMainScript_PapaCharacterSelect); // papa brickolinea
 			break;
 		case 4:
-			PlayDialogue(544); // officer nick brick
+			PlayDialogue(InfoMainScript_OfficierCharacterSelect); // officer nick brick
 			break;
 		case 5:
-			PlayDialogue(545); // lora brick
+			PlayDialogue(InfoMainScript_LoraCharacterSelect); // lora brick
 			break;
 		default:
 			break;
@@ -169,8 +170,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 	MxLong result = m_radio.Notify(p_param);
 	if (result == 0) {
 		if (endedAction->GetAtomId() == m_atom || endedAction->GetAtomId() == *g_introScript) {
-			// 514: if you want to get back ...
-			if (endedAction->GetObjectId() == 514) {
+			if (endedAction->GetObjectId() == InfoMainScript_ReturnBack) {
 				ControlManager()->FUN_100293c0(0x10, endedAction->GetAtomId(), 0);
 				m_unk0x1d6 = 0;
 			}
@@ -179,22 +179,22 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 			case 0:
 				switch (m_currentCutScene) {
 				case 0:
-					PlayCutScene(1, FALSE); // Mindscape animation
+					PlayCutScene(IntroScript_Mindscape_Movie, FALSE); // Mindscape animation
 					return 1;
 				case 1:
-					PlayCutScene(2, TRUE); // Lego Island animation
+					PlayCutScene(IntroScript_Intro_Movie, TRUE); // Lego Island animation
 					return 1;
 				case 4:
 					StopCutScene();
 					// play bad ending dialogue after bad ending cutscene
-					PlayDialogue(540);
+					PlayDialogue(InfoMainScript_BadEndingDialogue);
 					m_currentCutScene = -1;
 					return 1;
 				case 5:
 					StopCutScene();
 
 					// play good ending dialogue after good ending cutscene
-					PlayDialogue(539);
+					PlayDialogue(InfoMainScript_GoodEndingDialogue);
 					m_currentCutScene = -1;
 					return 1;
 				}
@@ -202,7 +202,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 				// default / 2nd case probably?
 				StopCutScene();
 				m_infocenterState->SetUnknown0x74(11);
-				PlayDialogue(500); // play welcome dialogue
+				PlayDialogue(InfoMainScript_WelcomeDialogue); // play welcome dialogue
 				m_currentCutScene = -1;
 				if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
 					m_unk0x1d2 = 1;
@@ -287,7 +287,7 @@ void Infocenter::VTable0x50()
 		InitializeBitmaps();
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 3:
-			PlayCutScene(0, TRUE);
+			PlayCutScene(IntroScript_Lego_Movie, TRUE);
 			m_infocenterState->SetUnknown0x74(0);
 			return;
 		case 4:
@@ -296,7 +296,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(504); // Play "Ok, lets get started" dialogue
+			PlayDialogue(InfoMainScript_LetsGetStarted); // Play "Ok, lets get started" dialogue
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -306,14 +306,14 @@ void Infocenter::VTable0x50()
 			break;
 		case 8:
 			PlayMusic(11);
-			PlayDialogue(522); // Are you sure you want to exit lego island?
+			PlayDialogue(InfoMainScript_ExitConfirmation); // Are you sure you want to exit lego island?
 			FUN_10015820(0, 7);
 			return;
 		case 0xf:
 			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
 				m_unk0x1d2 = 1;
 			}
-			PlayDialogue(502);
+			PlayDialogue(InfoMainScript_RandomDialogue1);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -528,7 +528,7 @@ void Infocenter::StopCurrentDialogue()
 void Infocenter::PlayBookAnimation()
 {
 	MxDSAction action;
-	action.SetObjectId(400);
+	action.SetObjectId(SndAmimScript_BookWig);
 	action.SetAtomId(*g_sndAnimScript);
 	Start(&action);
 }
@@ -537,7 +537,7 @@ void Infocenter::PlayBookAnimation()
 void Infocenter::StopBookAnimation()
 {
 	MxDSAction action;
-	action.SetObjectId(400);
+	action.SetObjectId(SndAmimScript_BookWig);
 	action.SetAtomId(*g_sndAnimScript);
 	action.SetUnknown24(-2);
 	DeleteObject(action);
