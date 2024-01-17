@@ -106,7 +106,7 @@
 // FUNCTION: LEGO1 0x10006e40
 LegoObjectFactory::LegoObjectFactory()
 {
-#define X(V) this->m_id##V = MxAtomId(#V, MxAtomId::e_exact);
+#define X(V) this->m_id##V = MxAtomId(#V, e_exact);
 	FOR_LEGOOBJECTFACTORY_OBJECTS(X)
 #undef X
 }
@@ -114,7 +114,7 @@ LegoObjectFactory::LegoObjectFactory()
 // FUNCTION: LEGO1 0x10009a90
 MxCore* LegoObjectFactory::Create(const char* p_name)
 {
-	MxAtomId atom(p_name, MxAtomId::e_exact);
+	MxAtomId atom(p_name, e_exact);
 
 #define X(V)                                                                                                           \
 	if (this->m_id##V == atom) {                                                                                       \

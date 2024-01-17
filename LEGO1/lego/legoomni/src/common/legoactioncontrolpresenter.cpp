@@ -40,11 +40,11 @@ void LegoActionControlPresenter::RepeatingTickle()
 
 #ifdef COMPAT_MODE
 		{
-			MxAtomId atom(m_unk0x54.GetData(), MxAtomId::e_lowerCase2);
+			MxAtomId atom(m_unk0x54.GetData(), e_lowerCase2);
 			InvokeAction(m_unk0x50, atom, m_unk0x64, NULL);
 		}
 #else
-		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), MxAtomId::e_lowerCase2), m_unk0x64, NULL);
+		InvokeAction(m_unk0x50, MxAtomId(m_unk0x54.GetData(), e_lowerCase2), m_unk0x64, NULL);
 #endif
 		ProgressTickleState(e_done);
 	}

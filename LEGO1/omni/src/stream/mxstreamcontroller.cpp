@@ -82,7 +82,7 @@ MxResult MxStreamController::Open(const char* p_filename)
 	MxAutoLocker lock(&m_criticalSection);
 
 	MakeSourceName(sourceName, p_filename);
-	this->m_atom = MxAtomId(sourceName, MxAtomId::e_lowerCase2);
+	this->m_atom = MxAtomId(sourceName, e_lowerCase2);
 	return SUCCESS;
 }
 
