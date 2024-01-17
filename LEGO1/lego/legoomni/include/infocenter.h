@@ -71,16 +71,16 @@ public:
 		c_bricksterEscapedDialogue7 = 531,
 
 		c_infomanHiccup = 532,
-		c_infomanWalkOffScreenLeft = 533,
+		c_infomanWalkOffScreenLeftUnused = 533,
 		c_infomanSneeze = 534,
-		c_infomanWalkOffScreenRight = 535,
+		c_infomanWalkOffScreenRightUnused = 535,
 		c_infomanLaughs = 536,
 		c_infomanLooksBehindAtScreenUnused = 537,
 		c_infomanReturnsFromScreenUnused = 538,
 
 		c_goodEndingDialogue = 539,
 		c_badEndingDialogue = 540,
-		
+
 		c_pepperCharacterSelect = 541,
 		c_mamaCharacterSelect = 542,
 		c_papaCharacterSelect = 543,
