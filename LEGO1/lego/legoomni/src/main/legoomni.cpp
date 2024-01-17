@@ -699,7 +699,7 @@ void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 	else {
 		m_inputMgr->EnableInputProcessing();
 		((LegoVideoManager*) m_videoManager)->SetRender3D(TRUE);
-		((LegoVideoManager*) m_videoManager)->VTable0x34(0, 0, 0, 0);
+		((LegoVideoManager*) m_videoManager)->UpdateView(0, 0, 0, 0);
 	}
 }
 
