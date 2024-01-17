@@ -100,7 +100,7 @@ MxU32 Helicopter::VTable0xcc()
 		VTable0xe8(0x29, TRUE, 7);
 		((Isle*) GetCurrentWorld())->SetUnknown13c(0x3c);
 		FUN_10015820(1, 0);
-		TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, TRUE);
+		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, TRUE);
 		SetUnknownDC(4);
 		PlayMusic(9);
 		break;
@@ -139,7 +139,7 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 		case 0x17:
 			if (*g_act3Script == script) {
 				((Act3*) GetCurrentWorld())->SetUnkown4270(2);
-				TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			}
 			else if (m_state->GetUnkown8() != 0)
 				break;
@@ -203,7 +203,7 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 		case 0x1c:
 			if (GameState()->GetUnknown10() == 0) {
 				((Isle*) GetCurrentWorld())->SetUnknown13c(2);
-				TransitionManager()->StartTransition(MxTransitionManager::PIXELATION, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 				VTable0xe4();
 			}
 			ret = 1;

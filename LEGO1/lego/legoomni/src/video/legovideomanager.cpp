@@ -230,7 +230,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 MxResult LegoVideoManager::Tickle()
 {
 	if (m_unk0x554 && !m_videoParam.Flags().GetFlipSurfaces() &&
-		TransitionManager()->GetTransitionType() == MxTransitionManager::NOT_TRANSITIONING)
+		TransitionManager()->GetTransitionType() == MxTransitionManager::e_notTransitioning)
 		Sleep(30);
 
 	m_stopWatch->Stop();

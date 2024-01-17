@@ -17,7 +17,7 @@ RECT g_fullScreenRect = {0, 0, 640, 480};
 MxTransitionManager::MxTransitionManager()
 {
 	m_animationTimer = 0;
-	m_transitionType = NOT_TRANSITIONING;
+	m_transitionType = e_notTransitioning;
 	m_ddSurface = NULL;
 	m_waitIndicator = NULL;
 	m_copyBuffer = NULL;
@@ -57,22 +57,22 @@ MxResult MxTransitionManager::Tickle()
 	this->m_systemTime = timeGetTime();
 
 	switch (this->m_transitionType) {
-	case NO_ANIMATION:
+	case e_noAnimation:
 		TransitionNone();
 		break;
-	case DISSOLVE:
+	case e_dissolve:
 		TransitionDissolve();
 		break;
-	case PIXELATION:
+	case e_pixelation:
 		TransitionPixelation();
 		break;
-	case SCREEN_WIPE:
+	case e_screenWipe:
 		TransitionWipe();
 		break;
-	case WINDOWS:
+	case e_windows:
 		TransitionWindows();
 		break;
-	case BROKEN:
+	case e_broken:
 		TransitionBroken();
 		break;
 	}
@@ -87,7 +87,7 @@ MxResult MxTransitionManager::StartTransition(
 	MxBool p_playMusicInAnim
 )
 {
-	if (this->m_transitionType == NOT_TRANSITIONING) {
+	if (this->m_transitionType == e_notTransitioning) {
 		if (!p_playMusicInAnim) {
 			MxBackgroundAudioManager* backgroundAudioManager = BackgroundAudioManager();
 			backgroundAudioManager->Stop();
@@ -129,8 +129,8 @@ MxResult MxTransitionManager::StartTransition(
 // FUNCTION: LEGO1 0x1004bc30
 void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 {
-	if (m_transitionType != NOT_TRANSITIONING) {
-		m_transitionType = NOT_TRANSITIONING;
+	if (m_transitionType != e_notTransitioning) {
+		m_transitionType = e_notTransitioning;
 
 		m_copyFlags.m_bit0 = FALSE;
 
