@@ -24,11 +24,11 @@ void LegoHideAnimPresenter::Init()
 void LegoHideAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
-	if(!this->m_unk0xc0)
+	if (!this->m_unk0xc0)
 		delete this->m_unk0xc0;
 	Init();
 	m_criticalSection.Leave();
 
 	// if (!p_fromDestructor)
-		// TODO: another function
+	// TODO: another function
 }
