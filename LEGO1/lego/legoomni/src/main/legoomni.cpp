@@ -207,9 +207,9 @@ GifManager* GetGifManager()
 }
 
 // FUNCTION: LEGO1 0x10015820
-void FUN_10015820(MxBool p_is3d, MxU32 p_flags)
+void FUN_10015820(MxBool p_disable, MxU16 p_flags)
 {
-	LegoOmni::GetInstance()->FUN_1005b4f0(p_is3d, p_flags);
+	LegoOmni::GetInstance()->FUN_1005b4f0(p_disable, p_flags);
 }
 
 // STUB: LEGO1 0x10015860
@@ -681,23 +681,25 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // FUNCTION: LEGO1 0x1005b4f0
-void LegoOmni::FUN_1005b4f0(MxBool p_is3d, MxU32 p_flags)
+void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 {
-	if (p_is3d) {
-		if (p_flags & 1) {
-			m_inputMgr->AllowEventProcessing();
+	if (p_disable) {
+		if (p_flags & c_disableInput) {
+			m_inputMgr->DisableInputProcessing();
 		}
 
-		if (p_flags & 2) {
+		if (p_flags & c_disable3d) {
 			((LegoVideoManager*) m_videoManager)->SetRender3D(FALSE);
 		}
 
-		if (p_flags & 4) {
+		if (p_flags & c_clearScreen) {
 			m_videoManager->GetDisplaySurface()->ClearScreen();
 		}
 	}
 	else {
-		m_inputMgr->FUN_1005cff0();
+		m_inputMgr->EnableInputProcessing();
+		((LegoVideoManager*) m_videoManager)->SetRender3D(TRUE);
+		((LegoVideoManager*) m_videoManager)->VTable0x34(0, 0, 0, 0);
 	}
 }
 

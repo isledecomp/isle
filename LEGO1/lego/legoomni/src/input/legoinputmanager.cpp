@@ -279,7 +279,7 @@ void LegoInputManager::KillTimer()
 }
 
 // FUNCTION: LEGO1 0x1005cff0
-void LegoInputManager::FUN_1005cff0()
+void LegoInputManager::EnableInputProcessing()
 {
 	m_unk0x88 = FALSE;
 	g_unk0x100f31b0 = -1;

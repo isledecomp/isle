@@ -62,6 +62,12 @@ extern MxAtomId* g_nocdSourceName;
 // SIZE 0x140
 class LegoOmni : public MxOmni {
 public:
+	enum {
+		c_disableInput = 0x01,
+		c_disable3d = 0x02,
+		c_clearScreen = 0x04
+	};
+
 	__declspec(dllexport) void CreateBackgroundAudio();
 	__declspec(dllexport) void RemoveWorld(const MxAtomId&, MxLong);
 	__declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
@@ -99,7 +105,7 @@ public:
 
 	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
 	void AddWorld(LegoWorld* p_world);
-	void FUN_1005b4f0(MxBool p_is3d, MxU32 p_flags);
+	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
@@ -163,7 +169,7 @@ LegoPlantManager* PlantManager();
 LegoWorld* GetCurrentWorld();
 LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
-void FUN_10015820(MxBool p_is3d, MxU32 p_flags);
+void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void FUN_10015860(const char*, MxU8);
 LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();

@@ -166,7 +166,7 @@ void Isle::VTable0x50()
 		FUN_1003ef00(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
-		FUN_10015820(0, 7);
+		FUN_10015820(0, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 	}
 }
 
