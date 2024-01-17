@@ -1,4 +1,5 @@
 #include "gasstation.h"
+
 #include "mxnotificationmanager.h"
 
 // FUNCTION: LEGO1 0x100046a0
