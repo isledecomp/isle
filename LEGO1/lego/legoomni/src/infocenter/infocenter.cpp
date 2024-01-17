@@ -283,7 +283,7 @@ void Infocenter::VTable0x50()
 
 	switch (GameState()->GetUnknown10()) {
 	case 0:
-		//bg->Enable(1); // TODO: Uncomment once LegoWorld::FindPresenter and LegoWorld::VTable0x58 are implemented.
+		// bg->Enable(1); // TODO: Uncomment once LegoWorld::FindPresenter and LegoWorld::VTable0x58 are implemented.
 		InitializeBitmaps();
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 3:
