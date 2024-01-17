@@ -99,7 +99,7 @@ MxU32 Helicopter::VTable0xcc()
 		AnimationManager()->FUN_10064670(FALSE);
 		VTable0xe8(0x29, TRUE, 7);
 		((Isle*) GetCurrentWorld())->SetUnknown13c(0x3c);
-		FUN_10015820(1, 0);
+		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, TRUE);
 		SetUnknownDC(4);
 		PlayMusic(9);

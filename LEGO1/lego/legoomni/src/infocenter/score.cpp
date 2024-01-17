@@ -147,7 +147,7 @@ void Score::VTable0x50()
 	else
 		PlayMusic(11);
 
-	FUN_10015820(0, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x100016d0
