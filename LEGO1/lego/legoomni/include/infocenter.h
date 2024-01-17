@@ -88,15 +88,15 @@ private:
 
 	void PlayCutscene(IntroScript p_entityId, MxBool p_scale);
 	void StopCutscene();
+
 	void StartCredits();
+	void StopCredits();
 
 	void PlayDialogue(InfomainScript p_objectId);
 	void StopCurrentDialogue();
 
 	void PlayBookAnimation();
 	void StopBookAnimation();
-
-	static void StopCredits();
 
 	InfomainScript m_currentInfomainScript; // 0xf8
 	MxS16 m_unk0xfc;                        // 0xfc
