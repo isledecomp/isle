@@ -48,7 +48,7 @@ private:
 
 	// notifications
 	MxLong HandleMouseMove(MxS32 p_x, MxS32 p_y);
-	MxU8 HandleKeyPress(char p_key);
+	MxU32 HandleKeyPress(char p_key);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleNotification17(MxParam&);
 	MxLong HandleEndAction(MxParam&);
@@ -61,7 +61,7 @@ private:
 	void PlayCutScene(MxU32 p_entityId, MxBool p_scale);
 	void StopCutScene();
 	void StartCredits();
-	static void DeleteCredits();
+	static void StopCredits();
 	void PlayDialogue(MxS32 p_objectId);
 	void StopCurrentDialogue();
 	static void PlayBookAnimation();

@@ -84,7 +84,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			return HandleEndAction(p_param);
 		case c_notificationKeyPress:
-			return HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
+			return (MxU8)HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
 		case c_notificationButtonUp:
 			return HandleButtonUp(
 					   ((LegoEventNotificationParam&) p_param).GetX(),
@@ -344,10 +344,47 @@ MxLong Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 	return 1;
 }
 
-// STUB: LEGO1 0x1006fda0
-MxU8 Infocenter::HandleKeyPress(char p_key)
+// FUNCTION: LEGO1 0x1006fda0
+MxU32 Infocenter::HandleKeyPress(char p_key)
 {
-	return 1;
+	MxU32 result = 0;
+	if (p_key == ' ' && m_worldStarted) {
+		switch (m_infocenterState->GetUnknown0x74()) {
+		case 0:
+			StopCutScene();
+			m_infocenterState->SetUnknown0x74(1);
+			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
+				m_unk0x1d2 = 1;
+				return 1;
+			}
+			break;
+		case 1:
+		case 4:
+			break;
+		default:
+			result = m_unk0xf8;
+			StopCurrentDialogue();
+			switch (m_infocenterState->GetUnknown0x74()) {
+			case 5:
+			case 12:
+				m_unk0xf8 = result;
+				return 1;
+			default:
+				m_infocenterState->SetUnknown0x74(2);
+				return 1;
+			case 8:
+			case 11:
+				break;
+			}
+		case 13:
+			StopCredits();
+			break;
+		}
+
+		result = 1;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x1006feb0
@@ -452,7 +489,7 @@ void Infocenter::StartCredits()
 }
 
 // FUNCTION: LEGO1 0x10071250
-void DeleteCredits()
+void Infocenter::StopCredits()
 {
 	MxDSAction action;
 	action.SetObjectId(499);
