@@ -14,10 +14,10 @@
 #include "mxtransitionmanager.h"
 
 // GLOBAL: LEGO1 0x100f7698
-const char* g_2x4red = "2x4red";
+const char* g_object2x4red = "2x4red";
 
 // GLOBAL: LEGO1 0x100f76a4
-const char* g_2x4grn = "2x4grn";
+const char* g_object2x4grn = "2x4grn";
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 
@@ -84,7 +84,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			return HandleEndAction(p_param);
 		case c_notificationKeyPress:
-			return (MxU8)HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
+			return (MxU8) HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
 		case c_notificationButtonUp:
 			return HandleButtonUp(
 					   ((LegoEventNotificationParam&) p_param).GetX(),
@@ -228,8 +228,8 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 				m_currentCutScene = -1;
 				return 1;
 			case 2:
-				FUN_10015860(g_2x4red, 0);
-				FUN_10015860(g_2x4grn, 0);
+				FUN_10015860(g_object2x4red, 0);
+				FUN_10015860(g_object2x4grn, 0);
 				BackgroundAudioManager()->RaiseVolume();
 				return 1;
 			case 4:
@@ -270,7 +270,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 	return result;
 }
 
-// FUNCTION: LEGO1 0x1006f4e0
+// STUB: LEGO1 0x1006f4e0
 void Infocenter::VTable0x50()
 {
 	m_unk0x1d0 = 0;
@@ -283,7 +283,7 @@ void Infocenter::VTable0x50()
 
 	switch (GameState()->GetUnknown10()) {
 	case 0:
-		// bg->Enable(1);
+		//bg->Enable(1); // TODO: Uncomment once LegoWorld::FindPresenter and LegoWorld::VTable0x58 are implemented.
 		InitializeBitmaps();
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 3:
