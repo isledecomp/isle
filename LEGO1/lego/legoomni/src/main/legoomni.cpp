@@ -206,10 +206,10 @@ GifManager* GetGifManager()
 	return LegoOmni::GetInstance()->GetGifManager();
 }
 
-// STUB: LEGO1 0x10015820
-void FUN_10015820(MxU32, MxU32)
+// FUNCTION: LEGO1 0x10015820
+void FUN_10015820(MxBool p_unk1, MxU32 p_unk2)
 {
-	// TODO
+	LegoOmni::GetInstance()->FUN_1005b4f0(p_unk1, p_unk2);
 }
 
 // STUB: LEGO1 0x10015860
@@ -689,11 +689,11 @@ void LegoOmni::FUN_1005b4f0(MxBool p_unk1, MxU32 p_unk2)
 		}
 
 		if (p_unk2 & 2) {
-			((LegoVideoManager*)m_videoManager)->SetUnkE4(FALSE);
+			((LegoVideoManager*)m_videoManager)->SetRender3D(FALSE);
 		}
 
 		if (p_unk2 & 4) {
-			m_videoManager->GetDisplaySurface()->FUN_100ba640();
+			m_videoManager->GetDisplaySurface()->ClearScreen();
 		}
 	}
 	else {
