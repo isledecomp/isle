@@ -4,7 +4,6 @@
 #include "decomp.h"
 #include "mxatomid.h"
 #include "mxcore.h"
-#include "mxdstypes.h"
 
 class MxPresenter;
 
@@ -12,6 +11,21 @@ class MxPresenter;
 // SIZE 0x2c
 class MxDSObject : public MxCore {
 public:
+	enum MxDSType {
+		e_object = 0,
+		e_action,
+		e_mediaAction,
+		e_anim,
+		e_sound,
+		e_multiAction,
+		e_serialAction,
+		e_parallelAction,
+		e_event,
+		e_selectAction,
+		e_still,
+		e_objectAction,
+	};
+
 	MxDSObject();
 	virtual ~MxDSObject() override;
 

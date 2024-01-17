@@ -22,7 +22,7 @@ MxDSAction::MxDSAction()
 	this->m_duration = INT_MIN;
 	this->m_loopCount = -1;
 
-	this->SetType(MxDSType_Action);
+	this->SetType(e_action);
 	this->m_location.Fill(FLT_MAX);
 	this->m_direction.Fill(FLT_MAX);
 	this->m_up.Fill(FLT_MAX);

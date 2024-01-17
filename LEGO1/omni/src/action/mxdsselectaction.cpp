@@ -12,7 +12,7 @@ DECOMP_SIZE_ASSERT(MxListEntry<MxString>, 0x18)
 // FUNCTION: LEGO1 0x100cb2b0
 MxDSSelectAction::MxDSSelectAction()
 {
-	this->SetType(MxDSType_SelectAction);
+	this->SetType(e_selectAction);
 	this->m_unk0xac = new MxStringList;
 }
 

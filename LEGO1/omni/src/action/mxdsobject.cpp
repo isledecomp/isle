@@ -11,7 +11,6 @@
 #include "mxdsserialaction.h"
 #include "mxdssound.h"
 #include "mxdsstill.h"
-#include "mxdstypes.h"
 #include "mxutil.h"
 
 #include <stdlib.h>
@@ -22,7 +21,7 @@ DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
 // FUNCTION: LEGO1 0x100bf6a0
 MxDSObject::MxDSObject()
 {
-	this->SetType(MxDSType_Object);
+	this->SetType(e_object);
 	this->m_sourceName = NULL;
 	this->m_unk0x14 = 0;
 	this->m_objectName = NULL;
@@ -148,40 +147,40 @@ MxDSObject* DeserializeDSObjectDispatch(MxU8** p_source, MxS16 p_flags)
 	switch (type) {
 	default:
 		return NULL;
-	case MxDSType_Object:
+	case MxDSObject::e_object:
 		obj = new MxDSObject();
 		break;
-	case MxDSType_Action:
+	case MxDSObject::e_action:
 		obj = new MxDSAction();
 		break;
-	case MxDSType_MediaAction:
+	case MxDSObject::e_mediaAction:
 		obj = new MxDSMediaAction();
 		break;
-	case MxDSType_Anim:
+	case MxDSObject::e_anim:
 		obj = new MxDSAnim();
 		break;
-	case MxDSType_Sound:
+	case MxDSObject::e_sound:
 		obj = new MxDSSound();
 		break;
-	case MxDSType_MultiAction:
+	case MxDSObject::e_multiAction:
 		obj = new MxDSMultiAction();
 		break;
-	case MxDSType_SerialAction:
+	case MxDSObject::e_serialAction:
 		obj = new MxDSSerialAction();
 		break;
-	case MxDSType_ParallelAction:
+	case MxDSObject::e_parallelAction:
 		obj = new MxDSParallelAction();
 		break;
-	case MxDSType_Event:
+	case MxDSObject::e_event:
 		obj = new MxDSEvent();
 		break;
-	case MxDSType_SelectAction:
+	case MxDSObject::e_selectAction:
 		obj = new MxDSSelectAction();
 		break;
-	case MxDSType_Still:
+	case MxDSObject::e_still:
 		obj = new MxDSStill();
 		break;
-	case MxDSType_ObjectAction:
+	case MxDSObject::e_objectAction:
 		obj = new MxDSObjectAction();
 		break;
 	}

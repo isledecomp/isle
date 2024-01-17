@@ -185,7 +185,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 
 	if (!name || strlen(name) == 0) {
 		switch (p_action.GetType()) {
-		case MxDSType_Anim:
+		case MxDSObject::e_anim:
 			format = ((MxDSAnim&) p_action).GetMediaFormat();
 			switch (format) {
 			case FOURCC(' ', 'F', 'L', 'C'):
@@ -197,7 +197,7 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 			}
 			break;
 
-		case MxDSType_Sound:
+		case MxDSObject::e_sound:
 			format = ((MxDSSound&) p_action).GetMediaFormat();
 			switch (format) {
 			case FOURCC(' ', 'M', 'I', 'D'):
@@ -209,17 +209,17 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 			}
 			break;
 
-		case MxDSType_SerialAction:
-		case MxDSType_ParallelAction:
-		case MxDSType_SelectAction:
+		case MxDSObject::e_serialAction:
+		case MxDSObject::e_parallelAction:
+		case MxDSObject::e_selectAction:
 			name = "MxCompositePresenter";
 			break;
 
-		case MxDSType_Event:
+		case MxDSObject::e_event:
 			name = "MxEventPresenter";
 			break;
 
-		case MxDSType_Still:
+		case MxDSObject::e_still:
 			name = "MxStillPresenter";
 			break;
 		}
