@@ -69,7 +69,7 @@ void LegoEntityPresenter::ReadyTickle()
 			m_entity->SetLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), TRUE);
 			ParseExtra();
 		}
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 

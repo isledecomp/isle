@@ -21,7 +21,7 @@ DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
 // FUNCTION: LEGO1 0x100b4d50
 void MxPresenter::Init()
 {
-	m_currentTickleState = TickleState_Idle;
+	m_currentTickleState = e_idle;
 	m_action = NULL;
 	m_location = MxPoint32(0, 0);
 	m_displayZ = 0;
@@ -41,7 +41,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 
 	this->m_location = MxPoint32(this->m_action->GetLocation()[0], this->m_action->GetLocation()[1]);
 	this->m_displayZ = this->m_action->GetLocation()[2];
-	ProgressTickleState(TickleState_Ready);
+	ProgressTickleState(e_ready);
 
 	return SUCCESS;
 }
@@ -70,7 +70,7 @@ void MxPresenter::EndAction()
 	this->m_action = NULL;
 	MxS32 previousTickleState = 1 << m_currentTickleState;
 	this->m_previousTickleStates |= previousTickleState;
-	this->m_currentTickleState = TickleState_Idle;
+	this->m_currentTickleState = e_idle;
 }
 
 // FUNCTION: LEGO1 0x100b4fc0
@@ -130,32 +130,32 @@ MxResult MxPresenter::Tickle()
 	MxAutoLocker lock(&this->m_criticalSection);
 
 	switch (this->m_currentTickleState) {
-	case TickleState_Ready:
+	case e_ready:
 		this->ReadyTickle();
 
-		if (m_currentTickleState != TickleState_Starting)
+		if (m_currentTickleState != e_starting)
 			break;
-	case TickleState_Starting:
+	case e_starting:
 		this->StartingTickle();
 
-		if (m_currentTickleState != TickleState_Streaming)
+		if (m_currentTickleState != e_streaming)
 			break;
-	case TickleState_Streaming:
+	case e_streaming:
 		this->StreamingTickle();
 
-		if (m_currentTickleState != TickleState_Repeating)
+		if (m_currentTickleState != e_repeating)
 			break;
-	case TickleState_Repeating:
+	case e_repeating:
 		this->RepeatingTickle();
 
-		if (m_currentTickleState != TickleState_unk5)
+		if (m_currentTickleState != e_unk5)
 			break;
-	case TickleState_unk5:
+	case e_unk5:
 		this->Unk5Tickle();
 
-		if (m_currentTickleState != TickleState_Done)
+		if (m_currentTickleState != e_done)
 			break;
-	case TickleState_Done:
+	case e_done:
 		this->DoneTickle();
 	default:
 		break;

@@ -77,7 +77,7 @@ void LegoPalettePresenter::ReadyTickle()
 	if (chunk) {
 		if (chunk->GetTime() <= m_action->GetElapsedTime()) {
 			ParseExtra();
-			ProgressTickleState(TickleState_Starting);
+			ProgressTickleState(e_starting);
 
 			chunk = m_subscriber->NextChunk();
 			MxResult result = ParsePalette(chunk);

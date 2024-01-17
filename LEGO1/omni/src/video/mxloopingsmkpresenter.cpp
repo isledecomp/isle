@@ -52,7 +52,7 @@ void MxLoopingSmkPresenter::NextFrame()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End)
-		ProgressTickleState(TickleState_Repeating);
+		ProgressTickleState(e_repeating);
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);
@@ -66,7 +66,7 @@ void MxLoopingSmkPresenter::NextFrame()
 void MxLoopingSmkPresenter::VTable0x8c()
 {
 	if (m_action->GetDuration() < m_elapsedDuration)
-		ProgressTickleState(TickleState_unk5);
+		ProgressTickleState(e_unk5);
 	else {
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);
@@ -108,7 +108,7 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 
 		m_loopingChunkCursor->Next(chunk);
 
-		if (m_currentTickleState != TickleState_Repeating)
+		if (m_currentTickleState != e_repeating)
 			break;
 	}
 }

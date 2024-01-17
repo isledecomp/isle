@@ -28,7 +28,7 @@ MxResult LegoTexturePresenter::PutData()
 void LegoTexturePresenter::DoneTickle()
 {
 	if (this->m_compositePresenter && !this->m_compositePresenter->VTable0x64(2)) {
-		SetTickleState(TickleState_Idle);
+		SetTickleState(e_idle);
 		return;
 	}
 

@@ -41,7 +41,7 @@ void MxLoopingFlcPresenter::NextFrame()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End)
-		ProgressTickleState(TickleState_Repeating);
+		ProgressTickleState(e_repeating);
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);

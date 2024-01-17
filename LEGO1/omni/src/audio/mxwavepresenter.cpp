@@ -118,7 +118,7 @@ void MxWavePresenter::ReadyTickle()
 		memcpy(m_waveFormat, chunk->GetData(), chunk->GetLength());
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -169,7 +169,7 @@ void MxWavePresenter::StartingTickle()
 		}
 		else {
 			SetVolume(((MxDSSound*) m_action)->GetVolume());
-			ProgressTickleState(TickleState_Streaming);
+			ProgressTickleState(e_streaming);
 		}
 	}
 }
@@ -231,7 +231,7 @@ MxResult MxWavePresenter::PutData()
 
 	if (IsEnabled()) {
 		switch (m_currentTickleState) {
-		case TickleState_Streaming:
+		case e_streaming:
 			if (m_currentChunk && FUN_100b1ba0()) {
 				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
 				m_subscriber->DestroyChunk(m_currentChunk);
@@ -245,7 +245,7 @@ MxResult MxWavePresenter::PutData()
 					m_started = TRUE;
 			}
 			break;
-		case TickleState_Repeating:
+		case e_repeating:
 			if (m_started)
 				break;
 
@@ -339,13 +339,13 @@ void MxWavePresenter::Resume()
 	if (m_paused) {
 		if (m_dsBuffer && m_started) {
 			switch (m_currentTickleState) {
-			case TickleState_Streaming:
+			case e_streaming:
 				m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
 				break;
-			case TickleState_Repeating:
+			case e_repeating:
 				m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1);
 				break;
-			case TickleState_Done:
+			case e_done:
 				m_dsBuffer->Play(0, 0, 0);
 			}
 		}

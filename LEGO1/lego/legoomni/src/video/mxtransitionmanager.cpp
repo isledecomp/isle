@@ -488,7 +488,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 		LegoVideoManager* videoManager = VideoManager();
 		videoManager->UnregisterPresenter(*m_waitIndicator);
 
-		if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::TickleState_Streaming) {
+		if (m_waitIndicator->GetCurrentTickleState() < MxPresenter::e_streaming) {
 			m_waitIndicator->Tickle();
 		}
 	}
@@ -542,7 +542,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	m_waitIndicator->Tickle();
 
 	// Check if wait indicator has started
-	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::TickleState_Streaming) {
+	if (m_waitIndicator->GetCurrentTickleState() >= MxPresenter::e_streaming) {
 		// Setup the copy rect
 		MxU32 copyPitch = (p_ddsc->ddpfPixelFormat.dwRGBBitCount / 8) *
 						  (m_copyRect.right - m_copyRect.left + 1); // This uses m_copyRect, seemingly erroneously

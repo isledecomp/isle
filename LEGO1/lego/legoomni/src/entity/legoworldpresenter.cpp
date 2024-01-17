@@ -91,7 +91,7 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 			if (presenter && presenter->AddToManager() == SUCCESS) {
 				presenter->SetCompositePresenter(this);
 				if (presenter->StartAction(p_controller, action) == SUCCESS) {
-					presenter->SetTickleState(TickleState_Idle);
+					presenter->SetTickleState(e_idle);
 					success = TRUE;
 				}
 			}
@@ -123,7 +123,7 @@ void LegoWorldPresenter::ReadyTickle()
 	}
 
 	ParseExtra();
-	ProgressTickleState(TickleState_Starting);
+	ProgressTickleState(e_starting);
 }
 
 // FUNCTION: LEGO1 0x10066ac0
@@ -131,19 +131,19 @@ void LegoWorldPresenter::StartingTickle()
 {
 	if (m_action->IsA("MxDSSerialAction")) {
 		MxPresenter* presenter = *m_list.begin();
-		if (presenter->GetCurrentTickleState() == TickleState_Idle) {
-			presenter->SetTickleState(TickleState_Ready);
+		if (presenter->GetCurrentTickleState() == e_idle) {
+			presenter->SetTickleState(e_ready);
 		}
 	}
 	else {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-			if ((*it)->GetCurrentTickleState() == TickleState_Idle) {
-				(*it)->SetTickleState(TickleState_Ready);
+			if ((*it)->GetCurrentTickleState() == e_idle) {
+				(*it)->SetTickleState(e_ready);
 			}
 		}
 	}
 
-	ProgressTickleState(TickleState_Streaming);
+	ProgressTickleState(e_streaming);
 }
 
 // FUNCTION: LEGO1 0x10067a70

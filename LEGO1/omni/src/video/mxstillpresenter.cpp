@@ -109,7 +109,7 @@ void MxStillPresenter::StartingTickle()
 {
 	MxVideoPresenter::StartingTickle();
 
-	if (m_currentTickleState == TickleState_Streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
+	if (m_currentTickleState == e_streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
 		RealizePalette();
 }
 
@@ -121,7 +121,7 @@ void MxStillPresenter::StreamingTickle()
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		m_chunkTime = chunk->GetTime();
 		NextFrame();
-		ProgressTickleState(TickleState_Repeating);
+		ProgressTickleState(e_repeating);
 
 		if (m_action->GetDuration() == -1 && m_compositePresenter)
 			m_compositePresenter->VTable0x60(this);
@@ -133,7 +133,7 @@ void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
 		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
-			ProgressTickleState(TickleState_unk5);
+			ProgressTickleState(e_unk5);
 	}
 }
 

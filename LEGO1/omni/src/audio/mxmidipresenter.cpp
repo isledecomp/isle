@@ -52,7 +52,7 @@ void MxMIDIPresenter::ReadyTickle()
 	if (chunk) {
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -62,14 +62,14 @@ void MxMIDIPresenter::StartingTickle()
 	MxStreamChunk* chunk = CurrentChunk();
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
-		ProgressTickleState(TickleState_Streaming);
+		ProgressTickleState(e_streaming);
 }
 
 // FUNCTION: LEGO1 0x100c2910
 void MxMIDIPresenter::StreamingTickle()
 {
 	if (m_chunk)
-		ProgressTickleState(TickleState_Done);
+		ProgressTickleState(e_done);
 	else
 		m_chunk = NextChunk();
 }
@@ -92,7 +92,7 @@ MxResult MxMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();
 
-	if (m_currentTickleState == TickleState_Streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
+	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());
 
 		if (MusicManager()->FUN_100c09c0(m_chunk->GetData(), 1))

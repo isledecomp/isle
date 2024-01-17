@@ -170,7 +170,7 @@ void MxVideoPresenter::NextFrame()
 
 	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
 		m_subscriber->DestroyChunk(chunk);
-		ProgressTickleState(TickleState_Repeating);
+		ProgressTickleState(e_repeating);
 	}
 	else {
 		LoadFrame(chunk);
@@ -387,7 +387,7 @@ void MxVideoPresenter::ReadyTickle()
 		LoadHeader(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		ProgressTickleState(TickleState_Starting);
+		ProgressTickleState(e_starting);
 	}
 }
 
@@ -398,7 +398,7 @@ void MxVideoPresenter::StartingTickle()
 
 	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		CreateBitmap();
-		ProgressTickleState(TickleState_Streaming);
+		ProgressTickleState(e_streaming);
 	}
 }
 
@@ -431,7 +431,7 @@ void MxVideoPresenter::StreamingTickle()
 			m_currentChunk = NULL;
 			m_flags |= Flag_Bit1;
 
-			if (m_currentTickleState != TickleState_Streaming)
+			if (m_currentTickleState != e_streaming)
 				break;
 		}
 
@@ -469,7 +469,7 @@ void MxVideoPresenter::RepeatingTickle()
 				m_currentChunk = NULL;
 				m_flags |= Flag_Bit1;
 
-				if (m_currentTickleState != TickleState_Repeating)
+				if (m_currentTickleState != e_repeating)
 					break;
 			}
 
@@ -490,10 +490,10 @@ void MxVideoPresenter::Unk5Tickle()
 				m_unk0x60 = m_action->GetElapsedTime();
 
 			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime())
-				ProgressTickleState(TickleState_Done);
+				ProgressTickleState(e_done);
 		}
 		else
-			ProgressTickleState(TickleState_Done);
+			ProgressTickleState(e_done);
 	}
 }
 
@@ -535,7 +535,7 @@ MxResult MxVideoPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (IsEnabled() && m_currentTickleState >= TickleState_Streaming && m_currentTickleState <= TickleState_unk5)
+	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5)
 		PutFrame();
 
 	return SUCCESS;

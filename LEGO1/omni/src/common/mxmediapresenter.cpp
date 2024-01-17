@@ -65,7 +65,7 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 			m_subscriber->NextChunk();
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
-			ProgressTickleState(TickleState_Done);
+			ProgressTickleState(e_done);
 		}
 	}
 
@@ -84,7 +84,7 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
-			ProgressTickleState(TickleState_Done);
+			ProgressTickleState(e_done);
 		}
 	}
 
@@ -134,7 +134,7 @@ void MxMediaPresenter::EndAction()
 	if (m_action->GetFlags() & MxDSAction::Flag_World &&
 		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
 		MxPresenter::Enable(FALSE);
-		SetTickleState(TickleState_Idle);
+		SetTickleState(e_idle);
 	}
 	else {
 		MxDSAction* action = m_action;
@@ -181,7 +181,7 @@ void MxMediaPresenter::StreamingTickle()
 			if (m_currentChunk->GetFlags() & MxDSChunk::Flag_End) {
 				m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
-				ProgressTickleState(TickleState_Repeating);
+				ProgressTickleState(e_repeating);
 			}
 			else if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
 				LoopChunk(m_currentChunk);
@@ -206,11 +206,11 @@ void MxMediaPresenter::RepeatingTickle()
 		if (m_currentChunk) {
 			MxLong time = m_currentChunk->GetTime();
 			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount())
-				ProgressTickleState(TickleState_unk5);
+				ProgressTickleState(e_unk5);
 		}
 		else {
 			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
-				ProgressTickleState(TickleState_unk5);
+				ProgressTickleState(e_unk5);
 		}
 	}
 }
@@ -219,7 +219,7 @@ void MxMediaPresenter::RepeatingTickle()
 void MxMediaPresenter::DoneTickle()
 {
 	m_previousTickleStates |= 1 << m_currentTickleState;
-	m_currentTickleState = TickleState_Idle;
+	m_currentTickleState = e_idle;
 	EndAction();
 }
 
@@ -246,13 +246,13 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 		if (p_enable) {
 			MxLong time = Timer()->GetTime();
 			m_action->SetUnknown90(time);
-			SetTickleState(TickleState_Repeating);
+			SetTickleState(e_repeating);
 		}
 		else {
 			if (m_loopingChunkCursor)
 				m_loopingChunkCursor->Reset();
 			m_currentChunk = NULL;
-			SetTickleState(TickleState_Done);
+			SetTickleState(e_done);
 		}
 	}
 }

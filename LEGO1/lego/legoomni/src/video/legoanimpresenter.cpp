@@ -114,7 +114,7 @@ void LegoAnimPresenter::ReadyTickle()
 			m_subscriber->DestroyChunk(chunk);
 
 			if (result == SUCCESS) {
-				ProgressTickleState(TickleState_Starting);
+				ProgressTickleState(e_starting);
 				ParseExtra();
 			}
 			else {
@@ -128,7 +128,7 @@ void LegoAnimPresenter::ReadyTickle()
 void LegoAnimPresenter::StartingTickle()
 {
 	// TODO
-	ProgressTickleState(TickleState_Streaming);
+	ProgressTickleState(e_streaming);
 	EndAction(); // Allow game to start
 }
 
@@ -146,7 +146,7 @@ void LegoAnimPresenter::StreamingTickle()
 		}
 	}
 	else {
-		ProgressTickleState(TickleState_Done);
+		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 				m_compositePresenter->VTable0x60(this);

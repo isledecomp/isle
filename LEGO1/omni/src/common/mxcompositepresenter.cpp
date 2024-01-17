@@ -155,8 +155,8 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 	else {
 		if (m_action->IsA("MxDSSerialAction") && it != m_list.end()) {
 			MxPresenter* presenter = *it;
-			if (presenter->GetCurrentTickleState() == TickleState_Idle)
-				presenter->SetTickleState(TickleState_Ready);
+			if (presenter->GetCurrentTickleState() == e_idle)
+				presenter->SetTickleState(e_ready);
 		}
 	}
 }
@@ -171,8 +171,8 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 			if (*it == presenter) {
 				m_list.erase(it++);
 
-				if (presenter->GetCurrentTickleState() == TickleState_Idle)
-					presenter->SetTickleState(TickleState_Ready);
+				if (presenter->GetCurrentTickleState() == e_idle)
+					presenter->SetTickleState(e_ready);
 
 				MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
 				MxDSActionListCursor cursor(actions);
@@ -186,8 +186,8 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 				else {
 					if (m_action->IsA("MxDSSerialAction")) {
 						MxPresenter* presenter = *it;
-						if (presenter->GetCurrentTickleState() == TickleState_Idle)
-							presenter->SetTickleState(TickleState_Ready);
+						if (presenter->GetCurrentTickleState() == e_idle)
+							presenter->SetTickleState(e_ready);
 					}
 				}
 
@@ -210,8 +210,8 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 			}
 			else if (m_action->IsA("MxDSSerialAction")) {
 				MxPresenter* presenter = *it;
-				if (presenter->GetCurrentTickleState() == TickleState_Idle)
-					presenter->SetTickleState(TickleState_Ready);
+				if (presenter->GetCurrentTickleState() == e_idle)
+					presenter->SetTickleState(e_ready);
 			}
 			return;
 		}
@@ -227,7 +227,7 @@ void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 		MxPresenter* presenter = *it;
 		presenter->SetTickleState(p_tickleState);
 
-		if (m_action->IsA("MxDSSerialAction") && p_tickleState == TickleState_Ready)
+		if (m_action->IsA("MxDSSerialAction") && p_tickleState == e_ready)
 			return;
 	}
 }
