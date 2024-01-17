@@ -30,18 +30,77 @@ public:
 
 	enum InfomainScript {
 		c_noInfomain = -1,
+
 		c_welcomeDialogue = 500,
-		c_randomDialogue1 = 502,
-		c_letsGetStarted = 504,
-		c_returnBack = 514,
-		c_exitConfirmation = 522,
+		c_goodJobDialogue = 501,
+
+		c_clickOnInfomanDialogue = 502,
+		c_tickleInfomanDialogue = 503,
+
+		c_letsGetStartedDialogue = 504,
+
+		c_clickOnObjectsGuidanceDialogue = 505,
+		c_arrowNavigationGuidanceDialogue = 506,
+		c_elevatorGuidanceDialogue = 507,
+		c_radioGuidanceDialogue = 508,
+		c_exitGuidanceDialogue1 = 509,
+		c_exitGuidanceDialogue2 = 510,
+		c_goOutsideGuidanceDialogue = 511,
+		c_experimentGuidanceDialogue = 512,
+		c_returnBackGuidanceDialogue1 = 513,
+		c_returnBackGuidanceDialogue2 = 514,
+		c_bricksterWarningDialogue = 515,
+		c_newGameGuidanceDialogue = 516,
+		c_returnBackGuidanceDialogue3 = 517,
+
+		c_reenterInfoCenterDialogue1 = 518,
+		c_reenterInfoCenterDialogue2 = 519,
+		c_reenterInfoCenterDialogue3 = 520,
+		c_reenterInfoCenterDialogue4 = 521,
+
+		c_exitConfirmationDialogue = 522,
+		c_saveGameOptionsDialogueUnused = 523,
+		c_exitGameDialogue = 524,
+
+		c_bricksterEscapedDialogue1 = 525,
+		c_bricksterEscapedDialogue2 = 526,
+		c_bricksterEscapedDialogue3 = 527,
+		c_bricksterEscapedDialogue4 = 528,
+		c_bricksterEscapedDialogue5 = 529,
+		c_bricksterEscapedDialogue6 = 530,
+		c_bricksterEscapedDialogue7 = 531,
+
+		c_infomanHiccup = 532,
+		c_infomanWalkOffScreenLeftUnused = 533,
+		c_infomanSneeze = 534,
+		c_infomanWalkOffScreenRightUnused = 535,
+		c_infomanLaughs = 536,
+		c_infomanLooksBehindAtScreenUnused = 537,
+		c_infomanReturnsFromScreenUnused = 538,
+
 		c_goodEndingDialogue = 539,
 		c_badEndingDialogue = 540,
+
 		c_pepperCharacterSelect = 541,
 		c_mamaCharacterSelect = 542,
 		c_papaCharacterSelect = 543,
-		c_officierCharacterSelect = 544,
-		c_loraCharacterSelect = 545,
+		c_nickCharacterSelect = 544,
+		c_lauraCharacterSelect = 545,
+
+		c_creditsDialogue = 551,
+
+		c_noCDDialogueUnused1 = 552,
+		c_noCDDialogueUnused2 = 553,
+
+		c_leaveInfoCenterDialogue1 = 562,
+		c_leaveInfoCenterDialogue2 = 563,
+		c_leaveInfoCenterDialogue3 = 564,
+		c_leaveInfoCenterDialogue4 = 565,
+
+		c_registerToContinueDialogue = 573,
+
+		c_bricksterDialogue = 574,
+		c_bricksterLaughs = 575,
 	};
 
 	enum SndAmimScript {
