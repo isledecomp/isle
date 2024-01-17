@@ -8,7 +8,7 @@
 class MxCore;
 
 enum NotificationId {
-	c_notificationNone = 0,
+	c_notificationType0 = 0,
 	c_notificationStartAction = 1, // 100dc210:100d8350
 	c_notificationEndAction = 2,   // 100d8358:100d8350
 	c_notificationType4 = 4,       // 100dc208:100d8350

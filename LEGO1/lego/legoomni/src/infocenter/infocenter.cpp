@@ -84,7 +84,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
-		case 0:
+		case c_notificationType0:
 			result = HandleNotification0(p_param);
 			break;
 		case c_notificationEndAction:

@@ -10,7 +10,7 @@
 // SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
-	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationNone, NULL) {}
+	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(
 		NotificationId p_type,
 		MxCore* p_sender,
