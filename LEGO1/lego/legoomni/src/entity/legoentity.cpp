@@ -58,9 +58,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 		}
 		else {
 			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
-
-			if (m_roi)
-				delete m_roi;
+			delete m_roi;
 		}
 	}
 

@@ -28,8 +28,13 @@ public:
 		return !strcmp(p_name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100c8cd0
+	// MxDSMediaAction::`scalar deleting destructor'
+
+	virtual undefined4 VTable0x14();                                     // vtable+14;
 	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
 	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual MxDSAction* Clone() override;                                // vtable+2c;
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 

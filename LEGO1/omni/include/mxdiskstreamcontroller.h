@@ -42,11 +42,12 @@ public:
 
 	inline MxBool GetUnk0xc4() const { return m_unk0xc4; }
 
-	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
-	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
-	void InsertToList74(MxDSBuffer* p_buffer);
-	void FUN_100c7cb0(MxDSStreamingAction* p_action);
 	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
+	void FUN_100c7cb0(MxDSStreamingAction* p_action);
+	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
+	void FUN_100c8120(MxDSAction* p_action);
+	void InsertToList74(MxDSBuffer* p_buffer);
+	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
 
 private:
 	MxStreamListMxDSAction m_list0x64; // 0x64
@@ -86,5 +87,8 @@ private:
 
 // TEMPLATE: LEGO1 0x100c74e0
 // List<MxDSBuffer *>::~List<MxDSBuffer *>
+
+// TEMPLATE: LEGO1 0x100c7ef0
+// list<MxNextActionDataStart *>::insert
 
 #endif // MXDISKSTREAMCONTROLLER_H
