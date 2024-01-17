@@ -74,13 +74,13 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
 
-	if (m_flags & Flag_Bit2) {
+	if (m_flags & c_bit2) {
 		undefined4 und = 0;
 		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
 			m_bitmap,
 			&und,
-			(m_flags & Flag_Bit4) / 8,
-			m_action->GetFlags() & MxDSAction::Flag_Bit4
+			(m_flags & c_bit4) / 8,
+			m_action->GetFlags() & MxDSAction::c_bit4
 		);
 
 		delete m_alpha;
@@ -90,9 +90,9 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		m_bitmap = NULL;
 
 		if (m_unk0x58 && und)
-			m_flags |= Flag_Bit3;
+			m_flags |= c_bit3;
 		else
-			m_flags &= ~Flag_Bit3;
+			m_flags &= ~c_bit3;
 	}
 }
 
@@ -184,8 +184,8 @@ void MxStillPresenter::ParseExtra()
 {
 	MxPresenter::ParseExtra();
 
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit5)
-		m_flags |= Flag_Bit4;
+	if (m_action->GetFlags() & MxDSAction::c_bit5)
+		m_flags |= c_bit4;
 
 	MxU32 len = m_action->GetExtraLength();
 
@@ -206,9 +206,9 @@ void MxStillPresenter::ParseExtra()
 	}
 
 	if (KeyValueStringParse(output, g_strBmpIsmap, buf)) {
-		m_flags |= Flag_Bit5;
-		m_flags &= ~Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags |= c_bit5;
+		m_flags &= ~c_bit2;
+		m_flags &= ~c_bit3;
 	}
 }
 

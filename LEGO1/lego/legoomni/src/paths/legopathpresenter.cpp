@@ -70,7 +70,7 @@ void LegoPathPresenter::StreamingTickle()
 	MxStreamChunk* chunk = m_subscriber->NextChunk();
 
 	if (chunk) {
-		if (chunk->GetFlags() & MxStreamChunk::Flag_End) {
+		if (chunk->GetFlags() & MxStreamChunk::c_end) {
 			ProgressTickleState(e_repeating);
 		}
 

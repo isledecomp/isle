@@ -152,7 +152,7 @@ void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 	MxCompositePresenter::VTable0x60(p_presenter);
 	MxDSAction* action = p_presenter->GetAction();
 
-	if (action->GetDuration() != -1 && (action->GetFlags() & MxDSAction::Flag_Looping) == 0) {
+	if (action->GetDuration() != -1 && (action->GetFlags() & MxDSAction::c_looping) == 0) {
 		if (!action->IsA("MxDSMediaAction")) {
 			return;
 		}

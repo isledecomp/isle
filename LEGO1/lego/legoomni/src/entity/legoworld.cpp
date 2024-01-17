@@ -62,7 +62,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	if (!VTable0x54())
 		return FAILURE;
 
-	if (p_dsAction.GetFlags() & MxDSAction::Flag_Enabled) {
+	if (p_dsAction.GetFlags() & MxDSAction::c_enabled) {
 		if (GetCurrentWorld()) {
 			GetCurrentWorld()->VTable0x68(0);
 		}

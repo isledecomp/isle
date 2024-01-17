@@ -12,8 +12,8 @@ DECOMP_SIZE_ASSERT(MxFlcPresenter, 0x68);
 MxFlcPresenter::MxFlcPresenter()
 {
 	this->m_flicHeader = NULL;
-	this->m_flags &= ~Flag_Bit2;
-	this->m_flags &= ~Flag_Bit3;
+	this->m_flags &= ~c_bit2;
+	this->m_flags &= ~c_bit3;
 }
 
 // FUNCTION: LEGO1 0x100b3420

@@ -60,8 +60,8 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 	if (m_subscriber) {
 		chunk = m_subscriber->CurrentChunk();
 
-		if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit3) {
-			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
+		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
+			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
 			m_subscriber->NextChunk();
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
@@ -80,8 +80,8 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 	if (m_subscriber) {
 		chunk = m_subscriber->NextChunk();
 
-		if (chunk && chunk->GetFlags() & MxDSChunk::Flag_Bit3) {
-			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_Bit7);
+		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
+			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
 			m_subscriber->DestroyChunk(chunk);
 			chunk = NULL;
 			ProgressTickleState(e_done);
@@ -98,7 +98,7 @@ MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAct
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+		if (m_action->GetFlags() & MxDSAction::c_looping) {
 			m_loopingChunks = new MxStreamChunkList;
 			m_loopingChunkCursor = new MxStreamChunkListCursor(m_loopingChunks);
 
@@ -131,8 +131,7 @@ void MxMediaPresenter::EndAction()
 
 	m_currentChunk = NULL;
 
-	if (m_action->GetFlags() & MxDSAction::Flag_World &&
-		(!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
+	if (m_action->GetFlags() & MxDSAction::c_world && (!m_compositePresenter || !m_compositePresenter->VTable0x64(2))) {
 		MxPresenter::Enable(FALSE);
 		SetTickleState(e_idle);
 	}
@@ -178,12 +177,12 @@ void MxMediaPresenter::StreamingTickle()
 		m_currentChunk = NextChunk();
 
 		if (m_currentChunk) {
-			if (m_currentChunk->GetFlags() & MxDSChunk::Flag_End) {
+			if (m_currentChunk->GetFlags() & MxDSChunk::c_end) {
 				m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
 				ProgressTickleState(e_repeating);
 			}
-			else if (m_action->GetFlags() & MxDSAction::Flag_Looping) {
+			else if (m_action->GetFlags() & MxDSAction::c_looping) {
 				LoopChunk(m_currentChunk);
 
 				if (!IsEnabled()) {

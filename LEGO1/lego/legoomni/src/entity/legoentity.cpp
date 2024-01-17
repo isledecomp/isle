@@ -50,7 +50,7 @@ MxResult LegoEntity::Create(MxDSAction& p_dsAction)
 void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
-		if (m_flags & Flag_Bit1) {
+		if (m_flags & c_bit1) {
 			if (m_roi->GetUnknown0x104() == this)
 				m_roi->SetUnknown0x104(NULL);
 

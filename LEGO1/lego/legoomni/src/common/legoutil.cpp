@@ -52,7 +52,7 @@ void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetE
 	switch (p_actionId) {
 	case Extra::ActionType::e_opendisk:
 		if (!CheckIfEntityExists(TRUE, p_pAtom.GetInternal(), p_targetEntityId)) {
-			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_DiskStream);
+			Streamer()->Open(p_pAtom.GetInternal(), MxStreamer::e_diskStream);
 			Start(&action);
 		}
 		break;

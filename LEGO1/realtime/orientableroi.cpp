@@ -17,7 +17,7 @@ OrientableROI::OrientableROI()
 	IDENTMAT4(m_local2world);
 
 	m_unk0xd4 = 0;
-	m_unk0xd8 |= Flag_Bit1 | Flag_Bit2;
+	m_unk0xd8 |= c_bit1 | c_bit2;
 }
 
 // FUNCTION: LEGO1 0x100a5910

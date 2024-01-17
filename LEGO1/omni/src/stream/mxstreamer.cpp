@@ -50,7 +50,7 @@ MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 
 	if (!GetOpenStream(p_name)) {
 		switch (p_lookupType) {
-		case e_DiskStream:
+		case e_diskStream:
 			stream = new MxDiskStreamController();
 			break;
 		case e_RAMStream:

@@ -13,7 +13,7 @@
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		Flag_Bit1 = 0x01
+		c_bit1 = 0x01
 	};
 
 	// Inlined at 0x100853f7

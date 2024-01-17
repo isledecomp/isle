@@ -96,7 +96,7 @@ void MxPresenter::ParseExtra()
 			MxS32 val = token ? atoi(token) : 0;
 			MxEntity* result = MxOmni::GetInstance()->FindWorld(buf, val, this);
 
-			m_action->SetFlags(m_action->GetFlags() | MxDSAction::Flag_World);
+			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_world);
 
 			if (result)
 				SendToCompositePresenter(MxOmni::GetInstance());
@@ -171,9 +171,9 @@ void MxPresenter::Enable(MxBool p_enable)
 		MxU32 flags = this->m_action->GetFlags();
 
 		if (p_enable)
-			this->m_action->SetFlags(flags | MxDSAction::Flag_Enabled);
+			this->m_action->SetFlags(flags | MxDSAction::c_enabled);
 		else
-			this->m_action->SetFlags(flags & ~MxDSAction::Flag_Enabled);
+			this->m_action->SetFlags(flags & ~MxDSAction::c_enabled);
 	}
 }
 
@@ -252,5 +252,5 @@ MxEntity* MxPresenter::CreateEntity(const char* p_name)
 // FUNCTION: LEGO1 0x100b54c0
 MxBool MxPresenter::IsEnabled()
 {
-	return this->m_action && this->m_action->GetFlags() & MxDSAction::Flag_Enabled;
+	return this->m_action && this->m_action->GetFlags() & MxDSAction::c_enabled;
 }

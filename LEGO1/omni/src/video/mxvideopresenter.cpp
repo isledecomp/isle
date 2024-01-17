@@ -117,16 +117,16 @@ void MxVideoPresenter::Init()
 	m_unk0x5c = 1;
 	m_unk0x58 = NULL;
 	m_unk0x60 = -1;
-	m_flags &= ~Flag_Bit1;
+	m_flags &= ~c_bit1;
 
 	if (MVideoManager() != NULL) {
 		MVideoManager();
-		m_flags |= Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags |= c_bit2;
+		m_flags &= ~c_bit3;
 	}
 
-	m_flags &= ~Flag_Bit4;
-	m_flags &= ~Flag_Bit5;
+	m_flags &= ~c_bit4;
+	m_flags &= ~c_bit5;
 }
 
 // FUNCTION: LEGO1 0x100b27b0
@@ -138,8 +138,8 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	if (m_unk0x58) {
 		m_unk0x58->Release();
 		m_unk0x58 = NULL;
-		m_flags &= ~Flag_Bit2;
-		m_flags &= ~Flag_Bit3;
+		m_flags &= ~c_bit2;
+		m_flags &= ~c_bit3;
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
@@ -168,7 +168,7 @@ void MxVideoPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::Flag_End) {
+	if (chunk->GetFlags() & MxDSChunk::c_end) {
 		m_subscriber->DestroyChunk(chunk);
 		ProgressTickleState(e_repeating);
 	}
@@ -182,7 +182,7 @@ void MxVideoPresenter::NextFrame()
 MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
-	if ((action == NULL) || (((action->GetFlags() & MxDSAction::Flag_Bit11) == 0) && !IsEnabled()) ||
+	if ((action == NULL) || (((action->GetFlags() & MxDSAction::c_bit11) == 0) && !IsEnabled()) ||
 		(!m_bitmap && !m_alpha))
 		return FALSE;
 
@@ -234,7 +234,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	if (m_flags & 0x10)
 		return (MxBool) *pixel;
 
-	if ((GetAction()->GetFlags() & MxDSAction::Flag_Bit4) && *pixel == 0)
+	if ((GetAction()->GetFlags() & MxDSAction::c_bit4) && *pixel == 0)
 		return FALSE;
 
 	return TRUE;
@@ -284,7 +284,7 @@ void MxVideoPresenter::PutFrame()
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
 	MxRect32 rectSrc, rectDest;
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit5) {
+	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		if (m_unk0x58) {
 			// TODO: Match
 			rectSrc.SetPoint(MxPoint32(0, 0));
@@ -340,7 +340,7 @@ void MxVideoPresenter::PutFrame()
 					rectDest.SetBottom(rectDest.GetTop() + regionRect->GetHeight());
 				}
 
-				if (m_action->GetFlags() & MxDSAction::Flag_Bit4) {
+				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_unk0x58) {
 						if (PrepareRects(rectDest, rectSrc) >= 0)
 							ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
@@ -405,7 +405,7 @@ void MxVideoPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x100b2fe0
 void MxVideoPresenter::StreamingTickle()
 {
-	if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
+	if (m_action->GetFlags() & MxDSAction::c_bit10) {
 		if (!m_currentChunk)
 			MxMediaPresenter::StreamingTickle();
 
@@ -429,13 +429,13 @@ void MxVideoPresenter::StreamingTickle()
 			LoadFrame(m_currentChunk);
 			m_subscriber->DestroyChunk(m_currentChunk);
 			m_currentChunk = NULL;
-			m_flags |= Flag_Bit1;
+			m_flags |= c_bit1;
 
 			if (m_currentTickleState != e_streaming)
 				break;
 		}
 
-		if (m_flags & Flag_Bit1)
+		if (m_flags & c_bit1)
 			m_unk0x5c = 5;
 	}
 }
@@ -444,7 +444,7 @@ void MxVideoPresenter::StreamingTickle()
 void MxVideoPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
-		if (m_action->GetFlags() & MxDSAction::Flag_Bit10) {
+		if (m_action->GetFlags() & MxDSAction::c_bit10) {
 			if (!m_currentChunk)
 				MxMediaPresenter::RepeatingTickle();
 
@@ -467,13 +467,13 @@ void MxVideoPresenter::RepeatingTickle()
 
 				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
-				m_flags |= Flag_Bit1;
+				m_flags |= c_bit1;
 
 				if (m_currentTickleState != e_repeating)
 					break;
 			}
 
-			if (m_flags & Flag_Bit1)
+			if (m_flags & c_bit1)
 				m_unk0x5c = 5;
 		}
 	}

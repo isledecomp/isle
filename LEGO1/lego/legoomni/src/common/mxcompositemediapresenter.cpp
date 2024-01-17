@@ -115,9 +115,9 @@ void MxCompositeMediaPresenter::StartingTickle()
 	else {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			if (!(*it)->GetAction()->GetStartTime() && ((MxMediaPresenter*) *it)->CurrentChunk() &&
-				!((*it)->GetAction()->GetFlags() & MxDSAction::Flag_Bit9)) {
+				!((*it)->GetAction()->GetFlags() & MxDSAction::c_bit9)) {
 				(*it)->Tickle();
-				(*it)->GetAction()->SetFlags((*it)->GetAction()->GetFlags() | MxDSAction::Flag_Bit9);
+				(*it)->GetAction()->SetFlags((*it)->GetAction()->GetFlags() | MxDSAction::c_bit9);
 				m_unk0x4c--;
 			}
 		}

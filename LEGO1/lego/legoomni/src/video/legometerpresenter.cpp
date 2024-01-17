@@ -34,7 +34,7 @@ LegoMeterPresenter::LegoMeterPresenter()
 	m_unk0x6c = 0;
 	m_unk0x84 = 0;
 	m_type = 1;
-	m_flags &= ~Flag_Bit2;
+	m_flags &= ~c_bit2;
 }
 
 // FUNCTION: LEGO1 0x10043780

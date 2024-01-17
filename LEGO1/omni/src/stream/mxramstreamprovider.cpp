@@ -124,22 +124,22 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 						data += MxDSChunk::Size(*psize);
 
 						if ((*MxDSChunk::IntoType(data2) == FOURCC('M', 'x', 'C', 'h')) &&
-							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::Flag_Split)) {
+							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::c_split)) {
 							if (*MxStreamChunk::IntoObjectId(data2) == *MxStreamChunk::IntoObjectId(data3) &&
-								(*MxStreamChunk::IntoFlags(data3) & MxDSChunk::Flag_Split) &&
+								(*MxStreamChunk::IntoFlags(data3) & MxDSChunk::c_split) &&
 								*MxStreamChunk::IntoTime(data2) == *MxStreamChunk::IntoTime(data3)) {
 								MxDSBuffer::Append(data2, data3);
 								continue;
 							}
 							else
-								*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::Flag_Split;
+								*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::c_split;
 						}
 
 						data2 += MxDSChunk::Size(*MxDSChunk::IntoLength(data2));
 						memcpy(data2, data3, MxDSChunk::Size(*psize));
 
 						if (*MxStreamChunk::IntoObjectId(data2) == id &&
-							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::Flag_End))
+							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::c_end))
 							break;
 					}
 					else
@@ -151,6 +151,6 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 		} while (data < end);
 	}
 
-	*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::Flag_Split;
+	*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::c_split;
 	return MxDSChunk::End(data2) - p_buffer;
 }

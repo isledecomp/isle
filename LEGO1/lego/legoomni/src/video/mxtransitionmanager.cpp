@@ -102,7 +102,7 @@ MxResult MxTransitionManager::StartTransition(
 
 			MxDSAction* action = m_waitIndicator->GetAction();
 			action->SetLoopCount(10000);
-			action->SetFlags(action->GetFlags() | MxDSAction::Flag_Bit10);
+			action->SetFlags(action->GetFlags() | MxDSAction::c_bit10);
 		}
 
 		MxU32 time = timeGetTime();
@@ -475,7 +475,7 @@ void MxTransitionManager::SetWaitIndicator(MxVideoPresenter* p_waitIndicator)
 {
 	// End current wait indicator
 	if (m_waitIndicator != NULL) {
-		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::Flag_World);
+		m_waitIndicator->GetAction()->SetFlags(m_waitIndicator->GetAction()->GetFlags() & ~MxDSAction::c_world);
 		m_waitIndicator->EndAction();
 		m_waitIndicator = NULL;
 	}
@@ -576,7 +576,7 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 	}
 
 	// Setup display surface
-	if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::Flag_Bit5) != 0) {
+	if ((m_waitIndicator->GetAction()->GetFlags() & MxDSAction::c_bit5) != 0) {
 		MxDisplaySurface* displaySurface = VideoManager()->GetDisplaySurface();
 		MxBool und = FALSE;
 		displaySurface->VTable0x2c(

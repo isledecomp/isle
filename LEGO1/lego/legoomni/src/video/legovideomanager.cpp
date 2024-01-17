@@ -462,7 +462,7 @@ MxResult LegoVideoManager::ConfigureD3DRM()
 
 	MxAssignedDevice* assignedDevice = m_direct3d->GetAssignedDevice();
 
-	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::Flag_HardwareMode) {
+	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::c_hardwareMode) {
 		if (assignedDevice->GetDesc().dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR)
 			d3drm->SetTextureQuality(D3DRMTEXTURE_LINEAR);
 

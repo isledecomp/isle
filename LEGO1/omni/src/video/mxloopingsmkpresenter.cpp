@@ -21,8 +21,8 @@ MxLoopingSmkPresenter::~MxLoopingSmkPresenter()
 void MxLoopingSmkPresenter::Init()
 {
 	this->m_elapsedDuration = 0;
-	this->m_flags &= ~Flag_Bit2;
-	this->m_flags &= ~Flag_Bit3;
+	this->m_flags &= ~c_bit2;
+	this->m_flags &= ~c_bit3;
 }
 
 // FUNCTION: LEGO1 0x100b49d0
@@ -51,7 +51,7 @@ void MxLoopingSmkPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::Flag_End)
+	if (chunk->GetFlags() & MxDSChunk::c_end)
 		ProgressTickleState(e_repeating);
 	else {
 		LoadFrame(chunk);
