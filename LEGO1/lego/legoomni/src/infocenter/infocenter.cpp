@@ -159,10 +159,10 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 				PlayDialogue(c_papaCharacterSelect);
 				break;
 			case 4:
-				PlayDialogue(c_officierCharacterSelect);
+				PlayDialogue(c_nickCharacterSelect);
 				break;
 			case 5:
-				PlayDialogue(c_loraCharacterSelect);
+				PlayDialogue(c_lauraCharacterSelect);
 				break;
 			default:
 				break;
@@ -177,7 +177,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript))
 		return result;
 
-	if (action->GetObjectId() == c_returnBack) {
+	if (action->GetObjectId() == c_returnBackGuidanceDialogue2) {
 		ControlManager()->FUN_100293c0(0x10, action->GetAtomId(), 0);
 		m_unk0x1d6 = 0;
 	}
@@ -302,7 +302,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(c_letsGetStarted);
+			PlayDialogue(c_letsGetStartedDialogue);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
@@ -312,7 +312,7 @@ void Infocenter::VTable0x50()
 			break;
 		case 8:
 			PlayMusic(11);
-			PlayDialogue(c_exitConfirmation);
+			PlayDialogue(c_exitConfirmationDialogue);
 			FUN_10015820(0, 7);
 			return;
 		case 0xf:
@@ -320,7 +320,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(c_randomDialogue1);
+			PlayDialogue(c_clickOnInfomanDialogue);
 			PlayMusic(11);
 			FUN_10015820(0, 7);
 			return;
