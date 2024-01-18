@@ -81,7 +81,7 @@ MxResult MxMusicManager::ResetStream()
 			ResetBuffer();
 		}
 
-		if (m_midiHdrP->dwFlags & (MHDR_DONE | MHDR_PREPARED)) {
+		if (m_midiHdrP->dwFlags & MHDR_DONE || m_midiHdrP->dwFlags & MHDR_PREPARED) {
 			if (midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR)) != MMSYSERR_NOERROR)
 				goto done;
 
