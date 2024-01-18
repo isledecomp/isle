@@ -8,7 +8,7 @@ DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
 
 // GLOBAL: LEGO1 0x1010207c
 // STRING: LEGO1 0x10101fb4
-const char* g_filterIndex = "FILTER_INDEX";
+const char* g_filterIndex = "FILLER_INDEX";
 
 // GLOBAL: LEGO1 0x10102094
 // STRING: LEGO1 0x10101f70
