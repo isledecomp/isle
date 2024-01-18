@@ -95,7 +95,7 @@ MxResult MxMIDIPresenter::PutData()
 	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());
 
-		if (MusicManager()->InitializeMIDI(m_chunk->GetData(), 1))
+		if (MusicManager()->InitializeMIDI(m_chunk->GetData(), 1) != SUCCESS)
 			EndAction();
 	}
 
