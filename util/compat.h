@@ -15,11 +15,6 @@
 #define COMPAT_CONST
 #endif
 
-// DWORD_PTR didn't exist in older Windows SDKs
-#if (defined(_MSC_VER) && _MSC_VER < 1100)
-typedef unsigned long DWORD_PTR, *PDWORD_PTR;
-#endif
-
 // Disable "identifier was truncated to '255' characters" warning.
 // Impossible to avoid this if using STL map or set.
 // This removes most (but not all) occurrences of the warning.

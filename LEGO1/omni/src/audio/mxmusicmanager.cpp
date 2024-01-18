@@ -129,16 +129,10 @@ void MxMusicManager::SetMIDIVolume()
 }
 
 // FUNCTION: LEGO1 0x100c0820
-void CALLBACK MxMusicManager::MidiCallbackProc(
-	HMIDIOUT p_hmo,
-	UINT p_wMsg,
-	DWORD_PTR p_dwInstance,
-	DWORD_PTR p_dwParam1,
-	DWORD_PTR p_dwParam2
-)
+void CALLBACK MxMusicManager::MidiCallbackProc(HDRVR p_hdrvr, UINT p_uMsg, DWORD p_dwUser, DWORD p_dw1, DWORD p_dw2)
 {
-	if (p_wMsg == MOM_DONE)
-		((MxMusicManager*) p_dwInstance)->ResetStream();
+	if (p_uMsg == MOM_DONE)
+		((MxMusicManager*) p_dwUser)->ResetStream();
 }
 
 // FUNCTION: LEGO1 0x100c0840
