@@ -150,19 +150,19 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 			switch (m_unk0xfc) {
 			case 1:
-				PlayDialogue(c_pepperCharacterSelect);
+				PlayAction(c_pepperCharacterSelect);
 				break;
 			case 2:
-				PlayDialogue(c_mamaCharacterSelect);
+				PlayAction(c_mamaCharacterSelect);
 				break;
 			case 3:
-				PlayDialogue(c_papaCharacterSelect);
+				PlayAction(c_papaCharacterSelect);
 				break;
 			case 4:
-				PlayDialogue(c_nickCharacterSelect);
+				PlayAction(c_nickCharacterSelect);
 				break;
 			case 5:
-				PlayDialogue(c_lauraCharacterSelect);
+				PlayAction(c_lauraCharacterSelect);
 				break;
 			default:
 				break;
@@ -194,13 +194,13 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		case e_badEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-			PlayDialogue(c_badEndingDialogue);
+			PlayAction(c_badEndingDialogue);
 			m_currentCutscene = e_noIntro;
 			return 1;
 		case e_goodEndMovie:
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(11);
-			PlayDialogue(c_goodEndingDialogue);
+			PlayAction(c_goodEndingDialogue);
 			m_currentCutscene = e_noIntro;
 			return 1;
 		}
@@ -208,7 +208,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		// default / 2nd case probably?
 		StopCutscene();
 		m_infocenterState->SetUnknown0x74(11);
-		PlayDialogue(c_welcomeDialogue);
+		PlayAction(c_welcomeDialogue);
 		m_currentCutscene = e_noIntro;
 
 		if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
@@ -221,13 +221,13 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 
 		switch (m_currentCutscene) {
 		case e_badEndMovie:
-			PlayDialogue(c_badEndingDialogue);
+			PlayAction(c_badEndingDialogue);
 			break;
 		case e_goodEndMovie:
-			PlayDialogue(c_goodEndingDialogue);
+			PlayAction(c_goodEndingDialogue);
 			break;
 		default:
-			PlayDialogue(c_welcomeDialogue);
+			PlayAction(c_welcomeDialogue);
 		}
 
 		m_currentCutscene = e_noIntro;
@@ -302,7 +302,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(c_letsGetStartedDialogue);
+			PlayAction(c_letsGetStartedDialogue);
 			PlayMusic(11);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
@@ -312,7 +312,7 @@ void Infocenter::VTable0x50()
 			break;
 		case 8:
 			PlayMusic(11);
-			PlayDialogue(c_exitConfirmationDialogue);
+			PlayAction(c_exitConfirmationDialogue);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		case 0xf:
@@ -320,7 +320,7 @@ void Infocenter::VTable0x50()
 				m_unk0x1d2 = 1;
 			}
 
-			PlayDialogue(c_clickOnInfomanDialogue);
+			PlayAction(c_clickOnInfomanDialogue);
 			PlayMusic(11);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
@@ -372,7 +372,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			break;
 		default: {
 			InfomainScript script = m_currentInfomainScript;
-			StopCurrentDialogue();
+			StopCurrentAction();
 
 			switch (m_infocenterState->GetUnknown0x74()) {
 			case 5:
@@ -511,12 +511,12 @@ void Infocenter::StopCredits()
 }
 
 // FUNCTION: LEGO1 0x10071300
-void Infocenter::PlayDialogue(InfomainScript p_objectId)
+void Infocenter::PlayAction(InfomainScript p_objectId)
 {
 	MxDSAction action;
 	action.SetObjectId(p_objectId);
 	action.SetAtomId(*g_infomainScript);
-	StopCurrentDialogue();
+	StopCurrentAction();
 
 	m_currentInfomainScript = p_objectId;
 	BackgroundAudioManager()->LowerVolume();
@@ -524,7 +524,7 @@ void Infocenter::PlayDialogue(InfomainScript p_objectId)
 }
 
 // FUNCTION: LEGO1 0x100713d0
-void Infocenter::StopCurrentDialogue()
+void Infocenter::StopCurrentAction()
 {
 	if (m_currentInfomainScript != c_noInfomain) {
 		MxDSAction action;
