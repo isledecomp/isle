@@ -16,9 +16,17 @@ public:
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+30
 
 	inline MxBool GetMIDIInitialized() { return m_midiInitialized; }
+	inline void GetMIDIVolume(DWORD& p_volume)
+	{
+		if (midiOutGetVolume(m_midiStreamH, &p_volume)) {
+			p_volume = CalculateVolume(100);
+		}
+	}
 
+	MxResult ResetStream();
+	void ResetBuffer();
+	undefined4 InitializeMIDI(MxU8* p_data, MxS32 p_loopCount);
 	void DeinitializeMIDI();
-	undefined4 FUN_100c09c0(MxU8* p_data, MxS32 p_loopCount);
 	void SetMultiplier(MxS32 p_multiplier);
 
 private:
@@ -27,16 +35,16 @@ private:
 	MxS32 CalculateVolume(MxS32 p_volume);
 	void SetMIDIVolume();
 
-	HMIDISTRM m_midiStreamH;  // 0x30
-	MxBool m_midiInitialized; // 0x34
-	undefined4 m_unk0x38;     // 0x38
-	undefined4 m_unk0x3c;     // 0x3c
-	undefined4 m_unk0x40;     // 0x40
-	undefined4 m_unk0x44;     // 0x44
-	undefined4 m_unk0x48;     // 0x48
-	MIDIHDR* m_midiHdrP;      // 0x4c
-	MxS32 m_multiplier;       // 0x50
-	DWORD m_midiVolume;       // 0x54
+	HMIDISTRM m_midiStreamH;     // 0x30
+	MxBool m_midiInitialized;    // 0x34
+	MxU32 m_bufferSize;          // 0x38
+	MxU32 m_bufferCurrentSize;   // 0x3c
+	MxU8* m_bufferOffset;        // 0x40
+	MxU8* m_bufferCurrentOffset; // 0x44
+	MxU32 m_loopCount;           // 0x48
+	MIDIHDR* m_midiHdrP;         // 0x4c
+	MxS32 m_multiplier;          // 0x50
+	DWORD m_midiVolume;          // 0x54
 
 	// SYNTHETIC: LEGO1 0x100c0610
 	// MxMusicManager::`scalar deleting destructor'
