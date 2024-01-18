@@ -154,8 +154,8 @@ private:
 	void StartCredits();
 	void StopCredits();
 
-	void PlayDialogue(InfomainScript p_objectId);
-	void StopCurrentDialogue();
+	void PlayAction(InfomainScript p_objectId);
+	void StopCurrentAction();
 
 	void PlayBookAnimation();
 	void StopBookAnimation();
