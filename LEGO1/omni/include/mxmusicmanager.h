@@ -27,7 +27,7 @@ public:
 
 	MxResult ResetStream();
 	void ResetBuffer();
-	undefined4 InitializeMIDI(MxU8* p_data, MxS32 p_loopCount);
+	MxResult InitializeMIDI(MxU8* p_data, MxS32 p_loopCount);
 	void DeinitializeMIDI();
 	void SetMultiplier(MxS32 p_multiplier);
 

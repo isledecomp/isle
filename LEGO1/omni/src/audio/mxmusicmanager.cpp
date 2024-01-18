@@ -204,7 +204,7 @@ MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 }
 
 // FUNCTION: LEGO1 0x100c09c0
-undefined4 MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
+MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 {
 	MxResult result = FAILURE;
 
