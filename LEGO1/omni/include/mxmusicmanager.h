@@ -37,8 +37,7 @@ private:
 	MxS32 CalculateVolume(MxS32 p_volume);
 	void SetMIDIVolume();
 
-	static void CALLBACK
-	MxMusicManager::MidiCallbackProc(HDRVR p_hdrvr, UINT p_uMsg, DWORD p_dwUser, DWORD p_dw1, DWORD p_dw2);
+	static void CALLBACK MidiCallbackProc(HDRVR p_hdrvr, UINT p_uMsg, DWORD p_dwUser, DWORD p_dw1, DWORD p_dw2);
 
 	HMIDISTRM m_midiStreamH;     // 0x30
 	MxBool m_midiInitialized;    // 0x34
