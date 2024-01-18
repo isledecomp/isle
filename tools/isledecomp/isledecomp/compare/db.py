@@ -82,17 +82,29 @@ class CompareDb:
 
         return [string for (string,) in cur.fetchall()]
 
-    def get_one_function(self, addr: int) -> Optional[MatchInfo]:
+    def get_matches(self) -> Optional[MatchInfo]:
         cur = self._db.execute(
             """SELECT compare_type, orig_addr, recomp_addr, name, size
             FROM `symbols`
-            WHERE compare_type = ?
-            AND orig_addr = ?
+            WHERE orig_addr IS NOT NULL
             AND recomp_addr IS NOT NULL
             AND should_skip IS FALSE
             ORDER BY orig_addr
             """,
-            (SymbolType.FUNCTION.value, addr),
+        )
+        cur.row_factory = matchinfo_factory
+
+        return cur.fetchall()
+
+    def get_one_match(self, addr: int) -> Optional[MatchInfo]:
+        cur = self._db.execute(
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
+            FROM `symbols`
+            WHERE orig_addr = ?
+            AND recomp_addr IS NOT NULL
+            AND should_skip IS FALSE
+            """,
+            (addr,),
         )
         cur.row_factory = matchinfo_factory
         return cur.fetchone()
@@ -119,7 +131,7 @@ class CompareDb:
         cur.row_factory = matchinfo_factory
         return cur.fetchone()
 
-    def get_matches(self, compare_type: SymbolType) -> List[MatchInfo]:
+    def get_matches_by_type(self, compare_type: SymbolType) -> List[MatchInfo]:
         cur = self._db.execute(
             """SELECT compare_type, orig_addr, recomp_addr, name, size
             FROM `symbols`

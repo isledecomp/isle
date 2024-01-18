@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, SkateBoard::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x1000ff60
+	// SkateBoard::`scalar deleting destructor'
+
 private:
 	// TODO: SkateBoard types
 	undefined m_unk0x160;

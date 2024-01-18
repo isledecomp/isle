@@ -57,6 +57,9 @@ public:
 		MxU32 m_flags;
 	};
 
+	// SYNTHETIC: LEGO1 0x1000d810
+	// MxWavePresenter::`scalar deleting destructor'
+
 protected:
 	void Destroy(MxBool p_fromDestructor);
 

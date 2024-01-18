@@ -104,6 +104,9 @@ public:
 	virtual ~Object() {}
 
 	virtual void* ImplementationDataPtr() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2250
+	// Tgl::Object::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100db948
@@ -142,6 +145,9 @@ public:
 
 	// vtable+0x30
 	virtual Result SetTextureDefaultColorCount(unsigned long) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a17c0
+	// Tgl::Renderer::`scalar deleting destructor'
 };
 
 Renderer* CreateRenderer();
@@ -163,6 +169,9 @@ public:
 	virtual Result Update() = 0;
 	virtual void InitFromD3DDevice(Device*) = 0;
 	virtual void InitFromWindowsDevice(Device*) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a28e0
+	// Tgl::Device::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dba28
@@ -217,12 +226,18 @@ public:
 		const Group**& rppPickedGroups,
 		int& rPickedGroupCount
 	) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2950
+	// Tgl::View::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbae8
 class Camera : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2a30
+	// Tgl::Camera::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb08
@@ -230,6 +245,9 @@ class Light : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2aa0
+	// Tgl::Light::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbbb0
@@ -247,6 +265,9 @@ public:
 
 	// Just get another Group pointing to the same underlying data
 	virtual Mesh* ShallowClone(Unk*) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a3e60
+	// Tgl::Mesh::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbaa0
@@ -266,6 +287,9 @@ public:
 	// This is TransformLocalToWorld in the leak, however it seems
 	// to have been replaced by something else in the shipped code.
 	virtual Result Unknown() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a29c0
+	// Tgl::Group::`scalar deleting destructor'
 };
 
 // Don't know what this is. Seems like another Tgl object which
@@ -285,6 +309,9 @@ public:
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2b10
+	// Tgl::Unk::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb68
@@ -305,6 +332,9 @@ public:
 		PaletteEntry** ppPalette
 	) = 0;
 	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2b80
+	// Tgl::Texture::`scalar deleting destructor'
 };
 
 } // namespace Tgl

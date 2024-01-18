@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, LegoCacheSound::ClassName()) || MxCore::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10006610
+	// LegoCacheSound::`scalar deleting destructor'
+
 private:
 	void Init();
 };

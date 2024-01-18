@@ -31,6 +31,9 @@ public:
 	virtual MxResult PutData() override;           // vtable+0x4c
 	virtual void CopyData(MxStreamChunk* p_chunk); // vtable+0x5c
 
+	// SYNTHETIC: LEGO1 0x100c2d20
+	// MxEventPresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 

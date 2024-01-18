@@ -21,6 +21,9 @@ public:
 	{
 		return !strcmp(p_name, PizzeriaState::ClassName()) || LegoState::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10017ce0
+	// PizzeriaState::`scalar deleting destructor'
 };
 
 #endif // PIZZERIASTATE_H

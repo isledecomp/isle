@@ -132,6 +132,9 @@ public:
 	virtual MxBool VTable0x64() override;                     // vtable+0x64
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68
 
+	// SYNTHETIC: LEGO1 0x1006ec60
+	// Infocenter::`scalar deleting destructor'
+
 private:
 	void InitializeBitmaps();
 

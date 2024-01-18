@@ -45,6 +45,9 @@ public:
 
 	inline TransitionType GetTransitionType() { return m_transitionType; }
 
+	// SYNTHETIC: LEGO1 0x1004b9e0
+	// MxTransitionManager::`scalar deleting destructor'
+
 private:
 	void EndTransition(MxBool p_notifyWorld);
 	void TransitionNone();

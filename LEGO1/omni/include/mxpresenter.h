@@ -129,6 +129,9 @@ public:
 		m_compositePresenter = p_compositePresenter;
 	}
 
+	// SYNTHETIC: LEGO1 0x1000c070
+	// MxPresenter::`scalar deleting destructor'
+
 protected:
 	__declspec(dllexport) void Init();
 

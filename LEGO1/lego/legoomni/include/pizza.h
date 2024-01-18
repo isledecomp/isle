@@ -30,6 +30,9 @@ public:
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100380e0
+	// Pizza::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0x78;
 	undefined4 m_unk0x7c;

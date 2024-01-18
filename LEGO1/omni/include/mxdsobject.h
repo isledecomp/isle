@@ -63,6 +63,9 @@ public:
 
 	inline void ClearAtom() { m_atomId.Clear(); }
 
+	// SYNTHETIC: LEGO1 0x100bf7c0
+	// MxDSObject::`scalar deleting destructor'
+
 private:
 	MxU32 m_sizeOnDisk;     // 0x8
 	MxU16 m_type;           // 0xc

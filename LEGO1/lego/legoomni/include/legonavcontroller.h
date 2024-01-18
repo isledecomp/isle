@@ -61,6 +61,9 @@ public:
 
 	inline void SetTrackDefaultParams(MxBool p_trackDefault) { m_trackDefault = p_trackDefault; }
 
+	// SYNTHETIC: LEGO1 0x10054c10
+	// LegoNavController::`scalar deleting destructor'
+
 private:
 	int m_hMax;
 	int m_vMax;

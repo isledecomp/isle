@@ -27,6 +27,9 @@ public:
 	// FUNCTION: LEGO1 0x100c9cb0
 	static void Destroy(MxDSAction* p_action) { delete p_action; }
 
+	// SYNTHETIC: LEGO1 0x100c9dc0
+	// MxDSActionList::`scalar deleting destructor'
+
 private:
 	undefined m_unk0x18;
 };

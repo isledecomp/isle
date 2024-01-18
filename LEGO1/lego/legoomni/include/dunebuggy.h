@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, DuneBuggy::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10067dc0
+	// DuneBuggy::`scalar deleting destructor'
+
 private:
 	// TODO: Double check DuneBuggy field types
 	undefined4 m_unk0x160;

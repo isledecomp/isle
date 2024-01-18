@@ -24,6 +24,9 @@ public:
 
 	virtual MxBool VTable0x14() override;
 
+	// SYNTHETIC: LEGO1 0x1000e3c0
+	// Act3State::`scalar deleting destructor'
+
 private:
 	// FIXME: May be part of LegoState? Uncertain...
 	MxU32 m_unk0x08;

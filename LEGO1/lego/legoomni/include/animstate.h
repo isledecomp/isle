@@ -26,6 +26,9 @@ public:
 	virtual MxBool SetFlag() override;                                      // vtable+0x18
 	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
 
+	// SYNTHETIC: LEGO1 0x10065130
+	// AnimState::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0x8;
 	undefined4 m_unk0xc;

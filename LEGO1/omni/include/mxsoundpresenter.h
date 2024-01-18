@@ -29,6 +29,9 @@ public:
 	// FUNCTION: LEGO1 0x1000d490
 	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
 
+	// SYNTHETIC: LEGO1 0x1000d5c0
+	// MxSoundPresenter::`scalar deleting destructor'
+
 protected:
 	void Destroy(MxBool p_fromDestructor);
 };

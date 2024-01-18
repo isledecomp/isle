@@ -24,6 +24,9 @@ public:
 	{
 		return !strcmp(p_name, InfocenterDoor::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x100378d0
+	// InfocenterDoor::`scalar deleting destructor'
 };
 
 #endif // INFOCENTERDOOR_H

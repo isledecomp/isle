@@ -129,6 +129,9 @@ public:
 
 	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
 
+	// SYNTHETIC: LEGO1 0x10058b30
+	// LegoOmni::`scalar deleting destructor'
+
 private:
 	undefined4* m_unk0x68;                       // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c

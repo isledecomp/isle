@@ -24,6 +24,9 @@ public:
 	{
 		return !strcmp(p_name, RegistrationBook::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10076f30
+	// RegistrationBook::`scalar deleting destructor'
 };
 
 #endif // REGISTRATIONBOOK_H

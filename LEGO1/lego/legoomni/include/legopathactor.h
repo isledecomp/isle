@@ -66,6 +66,9 @@ public:
 
 	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
 
+	// SYNTHETIC: LEGO1 0x1002d800
+	// LegoPathActor::`scalar deleting destructor'
+
 protected:
 	undefined m_unk0x78[0x64]; // 0x78
 	MxU32 m_unk0xdc;           // 0xdc

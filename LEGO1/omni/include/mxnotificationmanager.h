@@ -48,6 +48,9 @@ public:
 	inline MxNotificationPtrList* GetQueue() { return m_queue; }
 	inline void SetActive(MxBool p_active) { m_active = p_active; }
 
+	// SYNTHETIC: LEGO1 0x100ac390
+	// MxNotificationManager::`scalar deleting destructor'
+
 private:
 	void FlushPending(MxCore* p_listener);
 };

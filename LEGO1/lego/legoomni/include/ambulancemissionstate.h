@@ -40,6 +40,9 @@ public:
 		}
 	}
 
+	// SYNTHETIC: LEGO1 0x100376c0
+	// AmbulanceMissionState::`scalar deleting destructor'
+
 protected:
 	undefined4 m_unk0x8; // 0x08
 	undefined4 m_unk0xc; // 0x0c

@@ -17,6 +17,9 @@ public:
 		return "LegoFlcTexturePresenter";
 	}
 
+	// SYNTHETIC: LEGO1 0x1005df00
+	// LegoFlcTexturePresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 

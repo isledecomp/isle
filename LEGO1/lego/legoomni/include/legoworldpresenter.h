@@ -31,6 +31,9 @@ public:
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void VTable0x60(MxPresenter* p_presenter) override;                                    // vtable+0x60
 
+	// SYNTHETIC: LEGO1 0x10066750
+	// LegoWorldPresenter::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0x50;
 };

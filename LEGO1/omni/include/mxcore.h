@@ -34,6 +34,9 @@ public:
 
 	inline MxU32 GetId() { return m_id; }
 
+	// SYNTHETIC: LEGO1 0x100ae1c0
+	// MxCore::`scalar deleting destructor'
+
 private:
 	MxU32 m_id; // 0x04
 };

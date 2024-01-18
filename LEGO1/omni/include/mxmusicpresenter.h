@@ -26,6 +26,9 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 	virtual void Destroy() override;          // vtable+0x38
 
+	// SYNTHETIC: LEGO1 0x100c24c0
+	// MxMusicPresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

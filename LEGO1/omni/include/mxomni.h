@@ -73,6 +73,9 @@ public:
 	MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
 	MxLong HandleActionEnd(MxParam& p_param);
 
+	// SYNTHETIC: LEGO1 0x100aefd0
+	// MxOmni::`scalar deleting destructor'
+
 protected:
 	static MxOmni* g_instance;
 

@@ -18,6 +18,9 @@ public:
 	{
 		return !strcmp(p_name, LegoRaceActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10014ab0
+	// LegoRaceActor::`scalar deleting destructor'
 };
 
 #endif // LEGORACEACTOR_H

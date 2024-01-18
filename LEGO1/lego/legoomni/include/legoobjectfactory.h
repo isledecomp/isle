@@ -108,6 +108,9 @@ public:
 	virtual MxCore* Create(const char* p_name) override; // vtable 0x14
 	virtual void Destroy(MxCore* p_object) override;     // vtable 0x18
 
+	// SYNTHETIC: LEGO1 0x10009000
+	// LegoObjectFactory::`scalar deleting destructor'
+
 private:
 #define X(V) MxAtomId m_id##V;
 	FOR_LEGOOBJECTFACTORY_OBJECTS(X)

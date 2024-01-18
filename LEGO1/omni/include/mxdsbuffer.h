@@ -75,6 +75,9 @@ public:
 	inline void SetMode(Type p_mode) { m_mode = p_mode; }
 	inline void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
 
+	// SYNTHETIC: LEGO1 0x100c6510
+	// MxDSBuffer::`scalar deleting destructor'
+
 private:
 	MxU8* m_pBuffer;                // 0x08
 	MxU8* m_pIntoBuffer;            // 0x0c

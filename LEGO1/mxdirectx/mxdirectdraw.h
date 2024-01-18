@@ -83,6 +83,9 @@ public:
 	inline IDirectDrawSurface* GetBackBuffer() { return m_pBackBuffer; }
 	inline IDirectDrawClipper* GetClipper() { return m_pClipper; }
 
+	// SYNTHETIC: LEGO1 0x1009d510
+	// MxDirectDraw::`scalar deleting destructor'
+
 protected:
 	BOOL m_bOnlySoftRender;                     // 0x04
 	BOOL m_bFlipSurfaces;                       // 0x08

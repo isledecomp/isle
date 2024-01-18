@@ -40,6 +40,9 @@ private:
 class MxRegionLeftRightList : public MxPtrList<MxRegionLeftRight> {
 public:
 	MxRegionLeftRightList() : MxPtrList<MxRegionLeftRight>(TRUE) {}
+
+	// SYNTHETIC: LEGO1 0x100c4e90
+	// MxRegionLeftRightList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dcbf8
@@ -95,6 +98,9 @@ private:
 class MxRegionTopBottomList : public MxPtrList<MxRegionTopBottom> {
 public:
 	MxRegionTopBottomList() : MxPtrList<MxRegionTopBottom>(TRUE) {}
+
+	// SYNTHETIC: LEGO1 0x100c3410
+	// MxRegionTopBottomList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dcb70

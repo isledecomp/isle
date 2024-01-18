@@ -26,6 +26,9 @@ public:
 
 	// FUNCTION: LEGO1 0x100b5920
 	static void Destroy(MxStreamChunk* p_chunk) { delete p_chunk; }
+
+	// SYNTHETIC: LEGO1 0x100b5a30
+	// MxStreamChunkList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dc510

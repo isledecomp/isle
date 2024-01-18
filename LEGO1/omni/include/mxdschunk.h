@@ -57,6 +57,9 @@ public:
 			delete[] m_data;
 	}
 
+	// SYNTHETIC: LEGO1 0x100be150
+	// MxDSChunk::`scalar deleting destructor'
+
 protected:
 	MxU16 m_flags;    // 0x8
 	MxU32 m_objectId; // 0xc

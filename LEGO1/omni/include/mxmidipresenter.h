@@ -33,6 +33,9 @@ public:
 	virtual MxResult PutData() override;             // vtable+0x4c
 	virtual void SetVolume(MxS32 p_volume) override; // vtable+0x60
 
+	// SYNTHETIC: LEGO1 0x100c27a0
+	// MxMIDIPresenter::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

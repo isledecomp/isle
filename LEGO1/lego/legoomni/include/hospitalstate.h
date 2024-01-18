@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, HospitalState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100764c0
+	// HospitalState::`scalar deleting destructor'
+
 private:
 	undefined m_unk0x8[4]; // 0x8
 	undefined2 m_unk0xc;   // 0xc

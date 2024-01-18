@@ -92,6 +92,9 @@ public:
 			return -GetBmiStride();
 	}
 
+	// SYNTHETIC: LEGO1 0x100bc9f0
+	// MxBitmap::`scalar deleting destructor'
+
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
 

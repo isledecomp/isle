@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, Motocycle::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100359d0
+	// Motocycle::`scalar deleting destructor'
+
 private:
 	undefined m_unk0x160[4];
 	MxFloat m_unk0x164;

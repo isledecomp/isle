@@ -44,6 +44,9 @@ public:
 	inline MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
 	inline MxRegion* GetRegion() { return this->m_region; }
 
+	// SYNTHETIC: LEGO1 0x100be280
+	// MxVideoManager::`scalar deleting destructor'
+
 protected:
 	MxVideoParam m_videoParam;          // 0x2c
 	LPDIRECTDRAW m_pDirectDraw;         // 0x50

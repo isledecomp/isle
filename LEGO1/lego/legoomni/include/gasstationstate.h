@@ -22,6 +22,9 @@ public:
 		return !strcmp(p_name, GasStationState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10006290
+	// GasStationState::`scalar deleting destructor'
+
 private:
 	undefined4 m_unk0x08[3];
 	undefined4 m_unk0x14;

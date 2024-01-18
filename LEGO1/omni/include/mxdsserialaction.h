@@ -31,6 +31,9 @@ public:
 	virtual void SetDuration(MxLong p_duration) override; // vtable+28;
 	virtual MxDSAction* Clone() override;                 // vtable+2c;
 
+	// SYNTHETIC: LEGO1 0x100cabf0
+	// MxDSSerialAction::`scalar deleting destructor'
+
 private:
 	MxDSActionListCursor* m_cursor;
 	undefined4 m_unk0xa0;

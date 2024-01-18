@@ -8,7 +8,7 @@
 class LegoPathController : public MxCore {
 public:
 	LegoPathController();
-	virtual ~LegoPathController() override;
+	virtual ~LegoPathController() override { Destroy(); };
 
 	virtual MxResult Tickle() override; // vtable+08
 
@@ -24,6 +24,12 @@ public:
 	{
 		return !strcmp(p_name, LegoPathController::ClassName()) || MxCore::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10045740
+	// LegoPathController::`scalar deleting destructor'
+
+	virtual void VTable0x14(); // vtable+0x14
+	virtual void Destroy();    // vtable+0x18
 };
 
 #endif // LEGOPATHCONTROLLER_H

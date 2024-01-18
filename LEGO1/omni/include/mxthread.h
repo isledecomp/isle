@@ -21,6 +21,9 @@ public:
 
 	inline MxBool IsRunning() { return m_running; }
 
+	// SYNTHETIC: LEGO1 0x100bf580
+	// MxThread::`scalar deleting destructor'
+
 protected:
 	MxThread();
 
@@ -47,6 +50,9 @@ public:
 	virtual ~MxTickleThread() {}
 
 	MxResult Run() override;
+
+	// SYNTHETIC: LEGO1 0x100b8c20
+	// MxTickleThread::`scalar deleting destructor'
 
 private:
 	MxS32 m_frequencyMS; // 0x1c

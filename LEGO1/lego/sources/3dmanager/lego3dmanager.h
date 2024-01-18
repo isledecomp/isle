@@ -57,6 +57,9 @@ public:
 	// ??? for now
 	ViewLODListManager* GetViewLODListManager();
 
+	// SYNTHETIC: LEGO1 0x100ab340
+	// Lego3DManager::`scalar deleting destructor'
+
 private:
 	Tgl::Renderer* m_pRenderer; // 0x04
 

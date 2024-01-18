@@ -22,6 +22,9 @@ public:
 	{
 		return !strcmp(p_name, JukeBoxEntity::ClassName()) || LegoEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10085db0
+	// JukeBoxEntity::`scalar deleting destructor'
 };
 
 #endif // JUKEBOXENTITY_H

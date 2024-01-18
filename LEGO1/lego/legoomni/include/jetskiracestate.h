@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, JetskiRaceState::ClassName()) || RaceState::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f680
+	// JetskiRaceState::`scalar deleting destructor'
 };
 
 #endif // JETSKIRACESTATE_H

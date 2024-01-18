@@ -48,6 +48,9 @@ public:
 	inline MxS32 GetEntityId() { return m_mxEntityId; }
 	inline MxAtomId& GetAtom() { return m_atom; }
 
+	// SYNTHETIC: LEGO1 0x1000c210
+	// MxEntity::`scalar deleting destructor'
+
 protected:
 	MxS32 m_mxEntityId; // 0x8
 	MxAtomId m_atom;    // 0xc

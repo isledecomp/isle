@@ -24,6 +24,9 @@ public:
 	MxVideoParam& GetVideoParam() { return m_videoParam; }
 	const MxVideoParam& GetVideoParam() const { return m_videoParam; }
 
+	// SYNTHETIC: LEGO1 0x100b0a70
+	// MxOmniCreateParam::`scalar deleting destructor'
+
 private:
 	MxString m_mediaPath;
 	HWND m_windowHandle;

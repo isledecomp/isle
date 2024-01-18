@@ -27,6 +27,9 @@ public:
 
 	virtual MxDSAction* Clone() override;                      // vtable+2c;
 	virtual void CopyFrom(MxDSObjectAction& p_dsObjectAction); // vtable+44;
+
+	// SYNTHETIC: LEGO1 0x100c8a00
+	// MxDSObjectAction::`scalar deleting destructor'
 };
 
 #endif // MXDSOBJECTACTION_H

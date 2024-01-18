@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, PoliceEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f900
+	// PoliceEntity::`scalar deleting destructor'
 };
 
 #endif // POLICEENTITY_H

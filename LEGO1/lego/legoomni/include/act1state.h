@@ -29,6 +29,9 @@ public:
 
 	void FUN_10034d00();
 
+	// SYNTHETIC: LEGO1 0x10033960
+	// Act1State::`scalar deleting destructor'
+
 protected:
 	undefined m_unk0x8[0x10]; // 0x8
 	MxU32 m_unk0x18;          // 0x18

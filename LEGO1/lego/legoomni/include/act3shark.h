@@ -12,6 +12,9 @@ public:
 		// STRING: LEGO1 0x100f03a0
 		return "Act3Shark";
 	}
+
+	// SYNTHETIC: LEGO1 0x10043020
+	// Act3Shark::`scalar deleting destructor'
 };
 
 #endif // ACT3SHARK_H

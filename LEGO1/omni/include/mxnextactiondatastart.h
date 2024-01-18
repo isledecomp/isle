@@ -33,6 +33,9 @@ public:
 	inline MxU32 GetData() const { return m_data; }
 	inline void SetData(MxU32 p_data) { m_data = p_data; }
 
+	// SYNTHETIC: LEGO1 0x100c1990
+	// MxNextActionDataStart::`scalar deleting destructor'
+
 private:
 	MxU32 m_objectId; // 0x08
 	MxS16 m_unk0x24;  // 0x0c
