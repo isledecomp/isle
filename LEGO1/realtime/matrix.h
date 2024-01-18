@@ -58,7 +58,7 @@ public:
 		m_data[3][3] = 1.0f;
 	} // vtable+0x24
 
-	// FUNCTION: LEGO1 0x10002850
+	// FUNCTION: LEGO1 0x10002420
 	virtual void operator=(const Matrix4& p_matrix) { Equals(p_matrix); } // vtable+0x28
 
 	// FUNCTION: LEGO1 0x10002430

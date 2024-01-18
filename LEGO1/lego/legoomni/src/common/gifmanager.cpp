@@ -24,3 +24,9 @@ GifMapEntry* GifMap::FindNode(const char*& p_string)
 	}
 	return ret;
 }
+
+// STUB: LEGO1 0x10099870
+GifManager::~GifManager()
+{
+	// TODO
+}

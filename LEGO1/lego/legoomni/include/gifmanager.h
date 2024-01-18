@@ -1,6 +1,7 @@
 #ifndef GIFMANAGER_H
 #define GIFMANAGER_H
 
+#include "compat.h"
 #include "decomp.h"
 #include "mxtypes.h"
 
@@ -45,8 +46,11 @@ public:
 // VTABLE: LEGO1 0x100d86d4
 class GifManagerBase {
 public:
-	// STUB: LEGO1 0x1005a310
-	virtual ~GifManagerBase() {} // vtable+00
+	// STUB: LEGO1 0x1005b660
+	virtual ~GifManagerBase() {}
+
+	// SYNTHETIC: LEGO1 0x1005a310
+	// GifManagerBase::`scalar deleting destructor'
 
 	inline GifData* Get(const char* p_name) { return m_unk0x8.Get(p_name); }
 
@@ -59,8 +63,10 @@ protected:
 // VTABLE: LEGO1 0x100d86fc
 class GifManager : public GifManagerBase {
 public:
-	// STUB: LEGO1 0x1005a580
-	virtual ~GifManager() {} // vtable+00
+	virtual ~GifManager() override;
+
+	// SYNTHETIC: LEGO1 0x1005a580
+	// GifManager::`scalar deleting destructor'
 
 protected:
 	undefined m_unk0x14[0x1c];
