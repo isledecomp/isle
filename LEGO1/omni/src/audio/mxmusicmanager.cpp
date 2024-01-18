@@ -66,38 +66,46 @@ void MxMusicManager::Destroy(MxBool p_fromDestructor)
 MxResult MxMusicManager::ResetStream()
 {
 	MxResult result = FAILURE;
+
 	if (m_midiInitialized) {
 		if (m_bufferCurrentSize == 0) {
 			if (m_loopCount != -1) {
 				m_loopCount += -1;
+
 				if (!m_loopCount) {
 					DeinitializeMIDI();
-					return result;
+					goto done;
 				}
 			}
+
 			ResetBuffer();
 		}
-		do {
-			if (m_midiHdrP->dwFlags & (MHDR_DONE | MHDR_PREPARED)) {
-				if (midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR)))
-					break;
-				memset(m_midiHdrP, 0, sizeof(MIDIHDR));
+
+		if (m_midiHdrP->dwFlags & (MHDR_DONE | MHDR_PREPARED)) {
+			if (midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR)) != MMSYSERR_NOERROR)
+				goto done;
+
+			memset(m_midiHdrP, 0, sizeof(MIDIHDR));
+		}
+
+		m_bufferCurrentOffset += 4;
+		DWORD length = *((DWORD*) m_bufferCurrentOffset);
+		m_bufferCurrentOffset += sizeof(DWORD);
+
+		m_midiHdrP->lpData = (LPSTR) m_bufferCurrentOffset;
+		m_midiHdrP->dwBufferLength = length;
+		m_midiHdrP->dwBytesRecorded = length;
+
+		if (!midiOutPrepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR))) {
+			if (!midiStreamOut(m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR))) {
+				result = SUCCESS;
+				m_bufferCurrentOffset += length;
+				m_bufferCurrentSize--;
 			}
-			m_bufferCurrentOffset += 4;
-			DWORD length = *((DWORD*) m_bufferCurrentOffset);
-			m_bufferCurrentOffset += 4;
-			m_midiHdrP->lpData = (LPSTR) m_bufferCurrentOffset;
-			m_midiHdrP->dwBufferLength = length;
-			m_midiHdrP->dwBytesRecorded = length;
-			if (!midiOutPrepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR))) {
-				if (!midiStreamOut(m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR))) {
-					result = SUCCESS;
-					m_bufferCurrentOffset += length;
-					m_bufferCurrentSize--;
-				}
-			}
-		} while (FALSE);
+		}
 	}
+
+done:
 	return result;
 }
 
@@ -121,11 +129,16 @@ void MxMusicManager::SetMIDIVolume()
 }
 
 // FUNCTION: LEGO1 0x100c0820
-static void CALLBACK
-MidiCallbackProc(HMIDIOUT p_hmo, UINT p_wMsg, MxMusicManager* p_dwInstance, MxU32* p_dwParam1, MxU32* p_dwParam2)
+void CALLBACK MxMusicManager::MidiCallbackProc(
+	HMIDIOUT p_hmo,
+	UINT p_wMsg,
+	DWORD_PTR p_dwInstance,
+	DWORD_PTR p_dwParam1,
+	DWORD_PTR p_dwParam2
+)
 {
 	if (p_wMsg == MOM_DONE)
-		p_dwInstance->ResetStream();
+		((MxMusicManager*) p_dwInstance)->ResetStream();
 }
 
 // FUNCTION: LEGO1 0x100c0840
@@ -194,54 +207,62 @@ MxS32 MxMusicManager::CalculateVolume(MxS32 p_volume)
 undefined4 MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 {
 	MxResult result = FAILURE;
+
 	m_criticalSection.Enter();
-	do {
-		if (m_midiInitialized)
-			break;
+
+	if (!m_midiInitialized) {
 		MxU32 total = midiOutGetNumDevs();
 		MxU32 device = 0;
+
 		for (; device < total; device++) {
 			MIDIOUTCAPSA caps;
 			midiOutGetDevCapsA(device, &caps, sizeof(MIDIOUTCAPSA));
 			if (caps.wTechnology == MOD_FMSYNTH)
 				break;
 		}
-		if (device == total)
+
+		if (device >= total)
 			device = -1;
-		if (midiStreamOpen(
-				(LPHMIDIOUT) &m_midiStreamH,
-				&device,
-				1,
-				(DWORD) MidiCallbackProc,
-				(DWORD) this,
-				CALLBACK_FUNCTION
-			))
-			break;
+
+		if (midiStreamOpen(&m_midiStreamH, &device, 1, (DWORD) MidiCallbackProc, (DWORD) this, CALLBACK_FUNCTION) !=
+			MMSYSERR_NOERROR)
+			goto done;
+
 		GetMIDIVolume(m_midiVolume);
+
 		m_midiHdrP = new MIDIHDR();
 		if (!m_midiHdrP)
-			break;
+			goto done;
+
 		memset(m_midiHdrP, 0, sizeof(MIDIHDR));
+
 		MIDIPROPTIMEDIV timediv;
 		timediv.cbStruct = 8;
 		m_bufferOffset = p_data;
 		m_bufferOffset += 0x14;
 		timediv.dwTimeDiv = *((DWORD*) m_bufferOffset);
-		if (midiStreamProperty(m_midiStreamH, (LPBYTE) &timediv, MIDIPROP_SET | MIDIPROP_TIMEDIV))
-			break;
+
+		if (midiStreamProperty(m_midiStreamH, (LPBYTE) &timediv, MIDIPROP_SET | MIDIPROP_TIMEDIV) != MMSYSERR_NOERROR)
+			goto done;
+
 		m_bufferOffset += 0x14;
 		m_bufferSize = *((MxU32*) m_bufferOffset);
-		m_bufferOffset += 0x4;
+		m_bufferOffset += sizeof(MxU32);
 		m_loopCount = p_loopCount;
 		m_midiInitialized = TRUE;
+
 		ResetBuffer();
 		if (ResetStream() != SUCCESS)
-			break;
+			goto done;
+
 		SetMIDIVolume();
-		if (midiStreamRestart(m_midiStreamH))
-			break;
+		if (midiStreamRestart(m_midiStreamH) != MMSYSERR_NOERROR)
+			goto done;
+
 		result = SUCCESS;
-	} while (FALSE);
+	}
+
+done:
 	m_criticalSection.Leave();
 	return result;
 }

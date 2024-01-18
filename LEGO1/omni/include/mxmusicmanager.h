@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "mxaudiomanager.h"
 
+#include <windows.h>
+
 // VTABLE: LEGO1 0x100dc930
 // SIZE 0x58
 class MxMusicManager : public MxAudioManager {
@@ -18,7 +20,7 @@ public:
 	inline MxBool GetMIDIInitialized() { return m_midiInitialized; }
 	inline void GetMIDIVolume(DWORD& p_volume)
 	{
-		if (midiOutGetVolume(m_midiStreamH, &p_volume)) {
+		if (midiOutGetVolume((HMIDIOUT) m_midiStreamH, &p_volume)) {
 			p_volume = CalculateVolume(100);
 		}
 	}
@@ -34,6 +36,9 @@ private:
 
 	MxS32 CalculateVolume(MxS32 p_volume);
 	void SetMIDIVolume();
+
+	static void CALLBACK
+	MidiCallbackProc(HMIDIOUT p_hmo, UINT p_wMsg, DWORD_PTR p_dwInstance, DWORD_PTR p_dwParam1, DWORD_PTR p_dwParam2);
 
 	HMIDISTRM m_midiStreamH;     // 0x30
 	MxBool m_midiInitialized;    // 0x34
