@@ -77,6 +77,12 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x1001e9d0
+void LegoWorld::Destroy(MxBool p_fromDestructor)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1001f5e0
 MxLong LegoWorld::Notify(MxParam& p_param)
 {
