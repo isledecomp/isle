@@ -25,6 +25,9 @@ public:
 		return !strcmp(p_name, InfocenterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	// FUNCTION: LEGO1 0x10071830
+	virtual MxBool VTable0x14() override { return FALSE; } // vtable+0x14
+
 	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
 
