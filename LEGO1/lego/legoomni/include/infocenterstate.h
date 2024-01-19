@@ -66,7 +66,7 @@ private:
 	*/
 
 	undefined m_pad[0x6c];
-	MxU32 m_unk0x74;   // 0x74
+	MxU32 m_unk0x74;               // 0x74
 	MxStillPresenter* m_buffer[7]; // 0x78
 };
 

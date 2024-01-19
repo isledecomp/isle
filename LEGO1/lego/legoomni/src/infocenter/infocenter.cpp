@@ -11,8 +11,8 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
-#include "mxtransitionmanager.h"
 #include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterUnkDataEntry, 0x18)
