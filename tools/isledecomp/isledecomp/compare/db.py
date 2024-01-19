@@ -170,6 +170,12 @@ class CompareDb:
 
     def _match_on(self, compare_type: SymbolType, addr: int, name: str) -> bool:
         # Update the compare_type here too since the marker tells us what we should do
+
+        # Truncate the name to 255 characters. It will not be possible to match a name
+        # longer than that because MSVC truncates the debug symbols to this length.
+        # See also: warning C4786.
+        name = name[:255]
+
         logger.debug("Looking for %s %s", compare_type.name.lower(), name)
         cur = self._db.execute(
             """UPDATE `symbols`
