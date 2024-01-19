@@ -219,12 +219,13 @@ void MxBitmap::BitBlt(
 	MxS32 p_height
 )
 {
-	MxLong dstHeight = AbsFlipped(m_bmiHeader->biHeight);
-	MxLong srcHeight = AbsFlipped(p_src->m_bmiHeader->biHeight);
+	MxLong dstHeight = GetBmiHeightAbs();
+	MxLong srcHeight = p_src->GetBmiHeightAbs();
+
 	if (GetRectIntersection(
-			p_src->m_bmiHeader->biWidth,
+			p_src->GetBmiWidth(),
 			srcHeight,
-			m_bmiHeader->biWidth,
+			GetBmiWidth(),
 			dstHeight,
 			&p_srcLeft,
 			&p_srcTop,
@@ -237,7 +238,8 @@ void MxBitmap::BitBlt(
 		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
 		MxLong srcStride = p_src->GetAdjustedStride();
 		MxLong dstStride = GetAdjustedStride();
-		for (; p_height; --p_height) {
+
+		while (p_height--) {
 			memcpy(dstStart, srcStart, p_width);
 			dstStart += dstStride;
 			srcStart += srcStride;
@@ -256,12 +258,13 @@ void MxBitmap::BitBltTransparent(
 	MxS32 p_height
 )
 {
-	MxLong dstHeight = AbsFlipped(m_bmiHeader->biHeight);
-	MxLong srcHeight = AbsFlipped(p_src->m_bmiHeader->biHeight);
+	MxLong dstHeight = GetBmiHeightAbs();
+	MxLong srcHeight = p_src->GetBmiHeightAbs();
+
 	if (GetRectIntersection(
-			p_src->m_bmiHeader->biWidth,
+			p_src->GetBmiWidth(),
 			srcHeight,
-			m_bmiHeader->biWidth,
+			GetBmiWidth(),
 			dstHeight,
 			&p_srcLeft,
 			&p_srcTop,
@@ -274,6 +277,7 @@ void MxBitmap::BitBltTransparent(
 		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
 		MxLong srcStride = p_src->GetAdjustedStride() - p_width;
 		MxLong dstStride = GetAdjustedStride() - p_width;
+
 		for (MxS32 h = 0; h < p_height; h++) {
 			for (MxS32 w = 0; w < p_width; w++) {
 				if (*srcStart)
@@ -281,6 +285,7 @@ void MxBitmap::BitBltTransparent(
 				srcStart++;
 				dstStart++;
 			}
+
 			srcStart += srcStride;
 			dstStart += dstStride;
 		}
