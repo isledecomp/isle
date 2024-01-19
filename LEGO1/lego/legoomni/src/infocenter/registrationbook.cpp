@@ -41,15 +41,15 @@ MxResult RegistrationBook::Tickle()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10078180
+void RegistrationBook::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100783e0
 MxBool RegistrationBook::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 506);
 	return TRUE;
-}
-
-// STUB: LEGO1 0x10078180
-void RegistrationBook::VTable0x68(MxBool p_add)
-{
-	// TODO
 }

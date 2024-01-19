@@ -14,9 +14,3 @@ InfocenterState::~InfocenterState()
 {
 	// TODO
 }
-
-// FUNCTION: LEGO1 0x10071830
-MxBool InfocenterState::VTable0x14()
-{
-	return FALSE;
-}

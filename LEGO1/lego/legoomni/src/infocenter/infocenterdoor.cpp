@@ -36,12 +36,6 @@ void InfocenterDoor::VTable0x50()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
-// FUNCTION: LEGO1 0x100377a0
-MxBool InfocenterDoor::VTable0x5c()
-{
-	return TRUE;
-}
-
 // STUB: LEGO1 0x10037cd0
 MxBool InfocenterDoor::VTable0x64()
 {
