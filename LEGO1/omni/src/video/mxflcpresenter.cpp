@@ -46,7 +46,7 @@ void MxFlcPresenter::CreateBitmap()
 void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	MxU32* data = (MxU32*) p_chunk->GetData();
-	MxS32 length = *data;
+	MxS32 rectCount = *data;
 	data++;
 
 	MxRect32* rects = (MxRect32*) data;
@@ -56,14 +56,14 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		&m_bitmap->GetBitmapInfo()->m_bmiHeader,
 		m_bitmap->GetBitmapData(),
 		m_flcHeader,
-		&rects[length],
+		&rects[rectCount],
 		&decodedColorMap
 	);
 
 	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && decodedColorMap)
 		RealizePalette();
 
-	for (MxS32 i = 0; i < length; i++) {
+	for (MxS32 i = 0; i < rectCount; i++) {
 		MxRect32 rect(rects[i]);
 		rect.AddPoint(m_location);
 		MVideoManager()->InvalidateRect(rect);
