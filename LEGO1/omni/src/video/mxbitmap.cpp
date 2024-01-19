@@ -1,6 +1,7 @@
 #include "mxbitmap.h"
 
 #include "decomp.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
 DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
@@ -207,14 +208,83 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	return result;
 }
 
-// STUB: LEGO1 0x100bce70
-void MxBitmap::VTable0x2c(int, int, int, int, int, int, int)
+// FUNCTION: LEGO1 0x100bce70
+void MxBitmap::BitBlt(
+	MxBitmap* p_src,
+	MxS32 p_srcLeft,
+	MxS32 p_srcTop,
+	MxS32 p_dstLeft,
+	MxS32 p_dstTop,
+	MxS32 p_width,
+	MxS32 p_height
+)
 {
+	MxLong dstHeight = AbsFlipped(m_bmiHeader->biHeight);
+	MxLong srcHeight = AbsFlipped(p_src->m_bmiHeader->biHeight);
+	if (GetRectIntersection(
+			p_src->m_bmiHeader->biWidth,
+			srcHeight,
+			m_bmiHeader->biWidth,
+			dstHeight,
+			&p_srcLeft,
+			&p_srcTop,
+			&p_dstLeft,
+			&p_dstTop,
+			&p_width,
+			&p_height
+		)) {
+		MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
+		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
+		MxLong srcStride = p_src->GetAdjustedStride();
+		MxLong dstStride = GetAdjustedStride();
+		for (; p_height; --p_height) {
+			memcpy(dstStart, srcStart, p_width);
+			dstStart += dstStride;
+			srcStart += srcStride;
+		}
+	}
 }
 
-// STUB: LEGO1 0x100bd020
-void MxBitmap::VTable0x30(int, int, int, int, int, int, int)
+// FUNCTION: LEGO1 0x100bd020
+void MxBitmap::BitBltTransparent(
+	MxBitmap* p_src,
+	MxS32 p_srcLeft,
+	MxS32 p_srcTop,
+	MxS32 p_dstLeft,
+	MxS32 p_dstTop,
+	MxS32 p_width,
+	MxS32 p_height
+)
 {
+	MxLong dstHeight = AbsFlipped(m_bmiHeader->biHeight);
+	MxLong srcHeight = AbsFlipped(p_src->m_bmiHeader->biHeight);
+	if (GetRectIntersection(
+			p_src->m_bmiHeader->biWidth,
+			srcHeight,
+			m_bmiHeader->biWidth,
+			dstHeight,
+			&p_srcLeft,
+			&p_srcTop,
+			&p_dstLeft,
+			&p_dstTop,
+			&p_width,
+			&p_height
+		)) {
+		MxU8* srcStart = p_src->GetStart(p_srcLeft, p_srcTop);
+		MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
+		MxLong srcStride = p_src->GetAdjustedStride() - p_width;
+		MxLong dstStride = GetAdjustedStride() - p_width;
+		for (MxS32 h = 0; h < p_height; h++) {
+			for (MxS32 w = 0; w < p_width; w++) {
+				if (*srcStart)
+					*dstStart = *srcStart;
+				srcStart++;
+				dstStart++;
+			}
+			srcStart += srcStride;
+			dstStart += dstStride;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100bd1c0

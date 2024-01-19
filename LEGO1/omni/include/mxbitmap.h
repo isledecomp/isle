@@ -46,8 +46,24 @@ public:
 	// FUNCTION: LEGO1 0x1004e0d0
 	virtual int VTable0x28(int) { return -1; };
 
-	virtual void VTable0x2c(int, int, int, int, int, int, int);
-	virtual void VTable0x30(int, int, int, int, int, int, int);
+	virtual void BitBlt(
+		MxBitmap* p_src,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height
+	);
+	virtual void BitBltTransparent(
+		MxBitmap* p_src,
+		MxS32 p_left,
+		MxS32 p_top,
+		MxS32 p_right,
+		MxS32 p_bottom,
+		MxS32 p_width,
+		MxS32 p_height
+	);
 	__declspec(dllexport) virtual MxPalette* CreatePalette(); // vtable+34
 	virtual void ImportPalette(MxPalette* p_palette);         // vtable+38
 	virtual MxResult SetBitDepth(MxBool);                     // vtable+3c
@@ -90,6 +106,26 @@ public:
 			return GetBmiStride();
 		else
 			return -GetBmiStride();
+	}
+
+	inline MxLong GetLine(MxS32 p_top)
+	{
+		MxS32 height;
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+			height = p_top;
+		else
+			height = GetBmiHeightAbs() - p_top - 1;
+		return GetBmiStride() * height;
+	}
+
+	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
+	{
+		if (m_bmiHeader->biCompression == BI_RGB)
+			return GetLine(p_top) + m_data + p_left;
+		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN)
+			return m_data;
+		else
+			return GetLine(0) + m_data;
 	}
 
 	// SYNTHETIC: LEGO1 0x100bc9f0

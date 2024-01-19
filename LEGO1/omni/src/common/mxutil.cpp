@@ -11,45 +11,45 @@
 void (*g_omniUserMessage)(const char*, int);
 
 // FUNCTION: LEGO1 0x100b6e10
-MxBool FUN_100b6e10(
-	MxS32 p_bitmapWidth,
-	MxS32 p_bitmapHeight,
-	MxS32 p_videoParamWidth,
-	MxS32 p_videoParamHeight,
-	MxS32* p_left,
-	MxS32* p_top,
-	MxS32* p_right,
-	MxS32* p_bottom,
+MxBool GetRectIntersection(
+	MxS32 p_rect1Width,
+	MxS32 p_rect1Height,
+	MxS32 p_rect2Width,
+	MxS32 p_rect2Height,
+	MxS32* p_rect1Left,
+	MxS32* p_rect1Top,
+	MxS32* p_rect2Left,
+	MxS32* p_rect2Top,
 	MxS32* p_width,
 	MxS32* p_height
 )
 {
-	MxPoint32 topLeft(*p_left, *p_top);
-	MxRect32 bitmapRect(MxPoint32(0, 0), MxSize32(p_bitmapWidth, p_bitmapHeight));
+	MxPoint32 rect1Origin(*p_rect1Left, *p_rect1Top);
+	MxRect32 rect1(MxPoint32(0, 0), MxSize32(p_rect1Width, p_rect1Height));
 
-	MxPoint32 bottomRight(*p_right, *p_bottom);
-	MxRect32 videoParamRect(MxPoint32(0, 0), MxSize32(p_videoParamWidth, p_videoParamHeight));
+	MxPoint32 rect2Origin(*p_rect2Left, *p_rect2Top);
+	MxRect32 rect2(MxPoint32(0, 0), MxSize32(p_rect2Width, p_rect2Height));
 
 	MxRect32 rect(0, 0, *p_width, *p_height);
-	rect.AddPoint(topLeft);
+	rect.AddPoint(rect1Origin);
 
-	if (!rect.IntersectsWith(bitmapRect))
+	if (!rect.IntersectsWith(rect1))
 		return FALSE;
 
-	rect.Intersect(bitmapRect);
-	rect.SubtractPoint(topLeft);
-	rect.AddPoint(bottomRight);
+	rect.Intersect(rect1);
+	rect.SubtractPoint(rect1Origin);
+	rect.AddPoint(rect2Origin);
 
-	if (!rect.IntersectsWith(videoParamRect))
+	if (!rect.IntersectsWith(rect2))
 		return FALSE;
 
-	rect.Intersect(videoParamRect);
-	rect.SubtractPoint(bottomRight);
+	rect.Intersect(rect2);
+	rect.SubtractPoint(rect2Origin);
 
-	*p_left += rect.GetLeft();
-	*p_top += rect.GetTop();
-	*p_right += rect.GetLeft();
-	*p_bottom += rect.GetTop();
+	*p_rect1Left += rect.GetLeft();
+	*p_rect1Top += rect.GetTop();
+	*p_rect2Left += rect.GetLeft();
+	*p_rect2Top += rect.GetTop();
 	*p_width = rect.GetWidth();
 	*p_height = rect.GetHeight();
 	return TRUE;
