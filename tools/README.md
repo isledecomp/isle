@@ -71,7 +71,7 @@ Synthetic functions should be annotated with `SYNTHETIC`. A synthetic function i
 // MxList<MxRegionLeftRight *>::`scalar deleting destructor'
 ```
 
-## Virtual tables (**WIP**)
+## Virtual tables
 
 Classes with a virtual table should be annotated using the `VTABLE` marker, which includes the module name and address of the virtual table. Additionally, virtual function declarations should be annotated with a comment indicating their relative offset. Please use the following example as a reference.
 
@@ -86,7 +86,7 @@ public:
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x28
 ```
 
-## Class size (**WIP**)
+## Class size
 
 Classes should be annotated using the `SIZE` marker to indicate their size. If you are unsure about the class size in the original binary, please use the currently available information (known member variables) and detail the circumstances in an extra comment if necessary.
 
@@ -112,7 +112,7 @@ private:
 	undefined4 m_unk0x14; // 0x14
 ```
 
-## Global variables (**WIP**)
+## Global variables
 
 Global variables should be annotated using the `GLOBAL` marker, which includes the module name and address of the variable.
 
@@ -125,6 +125,18 @@ MxAtomId* g_pz5Script = NULL;
 
 // GLOBAL: LEGO1 0x100f4574
 MxAtomId* g_introScript = NULL;
+```
+
+## Strings
+
+String values should be annotated using the `STRING` marker, which includes the module name and address of the string.
+
+```
+inline virtual const char* ClassName() const override // vtable+0x0c
+{
+	// STRING: LEGO1 0x100f03fc
+	return "Act2PoliceStation";
+}
 ```
 
 # Tooling
