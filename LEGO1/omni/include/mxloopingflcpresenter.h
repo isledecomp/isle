@@ -31,7 +31,7 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	MxS32 m_elapsedDuration; // 0x68
+	MxLong m_elapsedDuration; // 0x68
 };
 
 #endif // MXLOOPINGFLCPRESENTER_H
