@@ -45,32 +45,28 @@ void MxFlcPresenter::CreateBitmap()
 // FUNCTION: LEGO1 0x100b3570
 void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	MxU32* dat = (MxU32*) p_chunk->GetData() + 4;
-	MxU32 offset = *(MxU32*) p_chunk->GetData();
+	MxU32* data = (MxU32*) p_chunk->GetData();
+	MxS32 length = *data;
+	data++;
+
+	MxRect32* rects = (MxRect32*) data;
 	MxBool decodedColorMap;
 
 	DecodeFLCFrame(
 		&m_bitmap->GetBitmapInfo()->m_bmiHeader,
 		m_bitmap->GetBitmapData(),
 		m_flcHeader,
-		&dat[offset],
-		//&(p_chunk->GetData() + 4)[*(MxU32*) p_chunk->GetData()],
+		&rects[length],
 		&decodedColorMap
 	);
 
 	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && decodedColorMap)
 		RealizePalette();
 
-	while (offset > 0) {
-		dat += 4;
-		MxRect32 rect(
-			dat[-4] + m_location.GetX(),
-			dat[-3] + m_location.GetY(),
-			dat[-2] + m_location.GetX(),
-			dat[-1] + m_location.GetY()
-		);
+	for (MxS32 i = 0; i < length; i++) {
+		MxRect32 rect(rects[i]);
+		rect.AddPoint(m_location);
 		MVideoManager()->InvalidateRect(rect);
-		offset--;
 	}
 }
 
