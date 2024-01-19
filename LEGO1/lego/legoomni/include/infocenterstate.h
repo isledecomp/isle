@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "legostate.h"
+#include "mxstillpresenter.h";
 
 // VTABLE: LEGO1 0x100d93a8
 // SIZE 0x94
@@ -27,7 +28,8 @@ public:
 	// FUNCTION: LEGO1 0x10071830
 	virtual MxBool VTable0x14() override { return FALSE; } // vtable+0x14
 
-	inline MxU32 GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
+	inline MxS16 GetInfocenterBufferSize() { return sizeof(m_buffer) / sizeof(m_buffer[0]); }
+	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
@@ -65,8 +67,8 @@ private:
 	*/
 
 	undefined m_pad[0x6c];
-	MxU32 m_unk0x74;   // 0x74
-	MxU32 m_buffer[7]; // 0x78
+	MxU32 m_unk0x74;               // 0x74
+	MxStillPresenter* m_buffer[7]; // 0x78
 };
 
 #endif // INFOCENTERSTATE_H
