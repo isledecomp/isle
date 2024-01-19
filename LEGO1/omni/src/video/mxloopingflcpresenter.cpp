@@ -45,7 +45,7 @@ void MxLoopingFlcPresenter::NextFrame()
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);
-		m_unk0x68 += m_flicHeader->speed;
+		m_unk0x68 += m_flcHeader->speed;
 	}
 
 	m_subscriber->DestroyChunk(chunk);
