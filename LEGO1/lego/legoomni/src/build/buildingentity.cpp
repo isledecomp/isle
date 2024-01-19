@@ -11,3 +11,11 @@ BuildingEntity::~BuildingEntity()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x100150a0
+MxLong BuildingEntity::Notify(MxParam& p_param)
+{
+	// TODO
+
+	return 0;
+}
