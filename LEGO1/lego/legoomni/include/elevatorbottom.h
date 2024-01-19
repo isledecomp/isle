@@ -31,8 +31,9 @@ public:
 
 	// FUNCTION: LEGO1 0x10017f10
 	virtual MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
-	virtual MxBool VTable0x64() override;                 // vtable+0x64
-	virtual void VTable0x68(MxBool p_add) override;       // vtable+0x68
+
+	virtual MxBool VTable0x64() override;           // vtable+0x64
+	virtual void VTable0x68(MxBool p_add) override; // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x10018040
 	// ElevatorBottom::`scalar deleting destructor'
