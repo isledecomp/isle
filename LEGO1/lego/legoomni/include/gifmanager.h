@@ -11,13 +11,14 @@
 
 #pragma warning(disable : 4237)
 
+// SIZE 0x14
 struct GifData {
 public:
-	char* m_name;
-	LPDIRECTDRAWSURFACE m_surface;
-	LPDIRECTDRAWPALETTE m_palette;
-	LPDIRECT3DRMTEXTURE2 m_texture;
-	MxU8* m_data;
+	char* m_name;                   // 0x00
+	LPDIRECTDRAWSURFACE m_surface;  // 0x04
+	LPDIRECTDRAWPALETTE m_palette;  // 0x08
+	LPDIRECT3DRMTEXTURE2 m_texture; // 0x0c
+	MxU8* m_data;                   // 0x10
 
 	~GifData();
 };
@@ -26,6 +27,7 @@ struct GifMapComparator {
 	bool operator()(const char* const& p_key0, const char* const& p_key1) const { return strcmp(p_key0, p_key1) > 0; }
 };
 
+// SIZE 0x10
 class GifMap : public map<const char*, GifData*, GifMapComparator> {
 	// SYNTHETIC: LEGO1 0x1005a400
 	// GifMap::~GifMap
@@ -34,6 +36,7 @@ class GifMap : public map<const char*, GifData*, GifMapComparator> {
 typedef list<GifData*> GifList;
 
 // VTABLE: LEGO1 0x100d86d4
+// SIZE 0x18
 class GifManagerBase {
 public:
 	// FUNCTION: LEGO1 0x1005b660
@@ -65,11 +68,12 @@ public:
 	// GifManagerBase::`scalar deleting destructor'
 
 protected:
-	MxBool m_ownership;
-	GifMap m_map;
+	MxBool m_ownership; // 0x04
+	GifMap m_map;       // 0x08
 };
 
 // VTABLE: LEGO1 0x100d86fc
+// SIZE 0x24
 class GifManager : public GifManagerBase {
 public:
 	GifManager() { m_ownership = TRUE; };
@@ -81,7 +85,7 @@ public:
 	void FUN_10099cc0(GifData* p_data);
 
 protected:
-	GifList m_list;
+	GifList m_list; // 0x18
 };
 
 // TEMPLATE: LEGO1 0x10059c50

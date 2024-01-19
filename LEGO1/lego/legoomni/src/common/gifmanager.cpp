@@ -46,21 +46,16 @@ void GifManager::FUN_10099cc0(GifData* p_data)
 #else
 	for (GifList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 #endif
-		if (*it == p_data)
-			goto found;
-	}
+		if (*it == p_data) {
+			// TODO: This is wrong, but what is at +0xc on the iterator?
+			*it = NULL;
 
-	// TODO: Maybe a function from <algorithm> would make this more idiomatic
-	// and not require a goto? This is not the only place where we iterate on
-	// a <list> and return early if there is no match.
-	return;
+			if (p_data->m_texture->Release() == TRUE) {
+				delete p_data;
+				m_list.erase(it);
+			}
 
-found:
-	// TODO: This is wrong, but what is at +0xc on the iterator?
-	*it = NULL;
-
-	if (p_data->m_texture->Release() == TRUE) {
-		delete p_data;
-		m_list.erase(it);
+			return;
+		}
 	}
 }
