@@ -47,8 +47,8 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	MxU8* data = p_chunk->GetData();
 
-	MxS32 rectCount = *(MxU32*) data;
-	data += sizeof(MxU32);
+	MxS32 rectCount = *(MxS32*) data;
+	data += sizeof(MxS32);
 
 	MxRect32* rects = (MxRect32*) data;
 	data += rectCount * sizeof(MxRect32);
