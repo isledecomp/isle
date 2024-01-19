@@ -71,6 +71,21 @@ Synthetic functions should be annotated with `SYNTHETIC`. A synthetic function i
 // MxList<MxRegionLeftRight *>::`scalar deleting destructor'
 ```
 
+### `LIBRARY`
+
+Functions located in 3rd party libraries should be annotated with `LIBRARY`. Since the goal is to eventually have a full accounting of all the functions present in the binaries, please make an effort to find and annotate every function of every statically linked library, including the MSVC standard libraries.
+
+```
+// LIBRARY: ISLE 0x4061b0
+// _MemPoolInit@4
+
+// LIBRARY: ISLE 0x406520
+// _MemPoolSetPageSize@8
+
+// LIBRARY: ISLE 0x406630
+// _MemPoolSetBlockSizeFS@8
+```
+
 ## Virtual tables
 
 Classes with a virtual table should be annotated using the `VTABLE` marker, which includes the module name and address of the virtual table. Additionally, virtual function declarations should be annotated with a comment indicating their relative offset. Please use the following example as a reference.
