@@ -45,18 +45,20 @@ void MxFlcPresenter::CreateBitmap()
 // FUNCTION: LEGO1 0x100b3570
 void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	MxU32* data = (MxU32*) p_chunk->GetData();
-	MxS32 rectCount = *data;
-	data++;
+	MxU8* data = p_chunk->GetData();
+
+	MxS32 rectCount = *(MxU32*) data;
+	data += sizeof(MxU32);
 
 	MxRect32* rects = (MxRect32*) data;
-	MxBool decodedColorMap;
+	data += rectCount * sizeof(MxRect32);
 
+	MxBool decodedColorMap;
 	DecodeFLCFrame(
 		&m_bitmap->GetBitmapInfo()->m_bmiHeader,
 		m_bitmap->GetBitmapData(),
 		m_flcHeader,
-		&rects[rectCount],
+		data,
 		&decodedColorMap
 	);
 
