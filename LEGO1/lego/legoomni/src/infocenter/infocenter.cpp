@@ -58,7 +58,7 @@ Infocenter::~Infocenter()
 			m_infocenterState->GetInfocenterBufferElement(i)->Enable(FALSE);
 		}
 		i++;
-	} while (i < 7);
+	} while (i < m_infocenterState->GetInfocenterBufferSize());
 
 	ControlManager()->Unregister(this);
 
