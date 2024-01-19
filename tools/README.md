@@ -86,7 +86,7 @@ public:
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x28
 ```
 
-## Class size
+## Class size (**WIP**)
 
 Classes should be annotated using the `SIZE` marker to indicate their size. If you are unsure about the class size in the original binary, please use the currently available information (known member variables) and detail the circumstances in an extra comment if necessary.
 
