@@ -305,7 +305,7 @@ void MxDisplaySurface::VTable0x28(
 	MxS32 p_height
 )
 {
-	if (FUN_100b6e10(
+	if (GetRectIntersection(
 			p_bitmap->GetBmiWidth(),
 			p_bitmap->GetBmiHeightAbs(),
 			m_videoParam.GetRect().GetWidth(),

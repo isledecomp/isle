@@ -56,15 +56,15 @@ inline void GetString(MxU8** p_source, char** p_dest, T* p_obj, void (T::*p_sett
 	*p_source += strlen(*p_dest) + 1;
 }
 
-MxBool FUN_100b6e10(
-	MxS32 p_bitmapWidth,
-	MxS32 p_bitmapHeight,
-	MxS32 p_videoParamWidth,
-	MxS32 p_videoParamHeight,
-	MxS32* p_left,
-	MxS32* p_top,
-	MxS32* p_right,
-	MxS32* p_bottom,
+MxBool GetRectIntersection(
+	MxS32 p_rect1Width,
+	MxS32 p_rect1Height,
+	MxS32 p_rect2Width,
+	MxS32 p_rect2Height,
+	MxS32* p_rect1Left,
+	MxS32* p_rect1Top,
+	MxS32* p_rect2Left,
+	MxS32* p_rect2Top,
 	MxS32* p_width,
 	MxS32* p_height
 );
