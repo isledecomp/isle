@@ -12,6 +12,7 @@
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
+#include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterUnkDataEntry, 0x18)
@@ -46,10 +47,29 @@ Infocenter::Infocenter()
 	m_unk0x1d6 = 0;
 }
 
-// STUB: LEGO1 0x1006ec90
+// FUNCTION: LEGO1 0x1006ec90
 Infocenter::~Infocenter()
 {
-	// TODO
+	BackgroundAudioManager()->Stop();
+
+	MxS16 i = 0;
+	do {
+		if (m_infocenterState->GetInfocenterBufferElement(i) != NULL) {
+			m_infocenterState->GetInfocenterBufferElement(i)->Enable(FALSE);
+		}
+		i++;
+	} while (i < 7);
+
+	ControlManager()->Unregister(this);
+
+	InputManager()->UnRegister(this);
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	NotificationManager()->Unregister(this);
+
+	TickleManager()->UnregisterClient(this);
 }
 
 // STUB: LEGO1 0x1006ed90
