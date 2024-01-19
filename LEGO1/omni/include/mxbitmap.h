@@ -44,7 +44,7 @@ public:
 	__declspec(dllexport) virtual MxLong Read(const char* p_filename);                     // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
-	virtual int VTable0x28(int) { return -1; };
+	virtual int VTable0x28(int) { return -1; }; // vtable+28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,
@@ -54,7 +54,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);
+	); // vtable+2c
 	virtual void BitBltTransparent(
 		MxBitmap* p_src,
 		MxS32 p_left,
@@ -63,7 +63,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);
+	);                                                        // vtable+30
 	__declspec(dllexport) virtual MxPalette* CreatePalette(); // vtable+34
 	virtual void ImportPalette(MxPalette* p_palette);         // vtable+38
 	virtual MxResult SetBitDepth(MxBool);                     // vtable+3c
