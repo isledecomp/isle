@@ -36,7 +36,7 @@ public:
 	}
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);            // vtable+0x1c
+	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	virtual void VTable0x50();                                // vtable+0x50
 	virtual LegoCameraController* VTable0x54();               // vtable+0x54
 	virtual void VTable0x58(MxCore* p_object);                // vtable+0x58
