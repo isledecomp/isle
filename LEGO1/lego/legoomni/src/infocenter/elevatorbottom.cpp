@@ -59,6 +59,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 			break;
 		}
 	}
+
 	return ret;
 }
 

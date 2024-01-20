@@ -38,7 +38,7 @@ public:
 	// InfocenterDoor::`scalar deleting destructor'
 
 private:
-	MxS32 m_unk0xf8;
+	MxS32 m_unk0xf8; // 0xf8
 };
 
 #endif // INFOCENTERDOOR_H

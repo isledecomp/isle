@@ -35,7 +35,7 @@ Infocenter::Infocenter()
 	m_currentInfomainScript = c_noInfomain;
 	m_currentCutscene = e_noIntro;
 
-	memset(&m_entries, 0, sizeof(InfocenterUnkDataEntry) * 7);
+	memset(&m_entries, 0, sizeof(m_entries));
 
 	m_unk0x1c8 = -1;
 	SetAppCursor(1);
@@ -198,7 +198,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		return result;
 
 	if (action->GetObjectId() == c_returnBackGuidanceDialogue2) {
-		ControlManager()->FUN_100293c0(0x10, action->GetAtomId(), 0);
+		ControlManager()->FUN_100293c0(0x10, action->GetAtomId().GetInternal(), 0);
 		m_unk0x1d6 = 0;
 	}
 
@@ -472,23 +472,18 @@ MxResult Infocenter::Tickle()
 
 	if (m_unk0x1d6 != 0) {
 		m_unk0x1d6 += 100;
+
 		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
-			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
-			return SUCCESS;
+			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
 		}
-
-		if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
-			ControlManager()->FUN_100293c0(0x10, m_atom, 0);
-			return SUCCESS;
+		else if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
+			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
 		}
-
-		if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
-			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
-			return SUCCESS;
+		else if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
+			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
 		}
-
-		if (4400 < m_unk0x1d6) {
-			ControlManager()->FUN_100293c0(0x10, m_atom, 0);
+		else if (4400 < m_unk0x1d6) {
+			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
 			m_unk0x1d6 = 0;
 		}
 	}

@@ -31,7 +31,7 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 }
 
 // STUB: LEGO1 0x100293c0
-void LegoControlManager::FUN_100293c0(undefined4, const MxAtomId&, undefined2)
+void LegoControlManager::FUN_100293c0(undefined4, const char*, undefined2)
 {
 }
 

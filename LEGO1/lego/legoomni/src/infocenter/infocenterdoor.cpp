@@ -6,6 +6,8 @@
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 
+DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
+
 // FUNCTION: LEGO1 0x10037730
 InfocenterDoor::InfocenterDoor()
 {
