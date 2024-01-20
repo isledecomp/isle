@@ -482,7 +482,7 @@ MxResult Infocenter::Tickle()
 		else if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
 			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
 		}
-		else if (4400 < m_unk0x1d6) {
+		else if (m_unk0x1d6 > 4400) {
 			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
 			m_unk0x1d6 = 0;
 		}
