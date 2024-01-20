@@ -30,7 +30,7 @@ public:
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction); // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'
