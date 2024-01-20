@@ -22,6 +22,8 @@ public:
 		return !strcmp(p_name, PizzeriaState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+
 	// SYNTHETIC: LEGO1 0x10017ce0
 	// PizzeriaState::`scalar deleting destructor'
 };

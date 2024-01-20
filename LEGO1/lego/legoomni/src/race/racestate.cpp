@@ -11,6 +11,13 @@ RaceState::RaceState()
 	// TODO
 }
 
+// STUB: LEGO1 0x10016140
+MxResult RaceState::VTable0x1c(LegoFileStream* p_legoFileStream)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x10016280
 RaceStateEntry* RaceState::GetState(MxU8 p_id)
 {

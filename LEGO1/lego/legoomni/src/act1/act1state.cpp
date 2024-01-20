@@ -13,6 +13,20 @@ Act1State::Act1State()
 	m_unk0x1c = 1;
 }
 
+// STUB: LEGO1 0x10033ac0
+MxResult Act1State::VTable0x1c(LegoFileStream* p_legoFileStream)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100346d0
+MxBool Act1State::SetFlag()
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x10034d00
 void Act1State::FUN_10034d00()
 {

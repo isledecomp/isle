@@ -21,6 +21,9 @@ public:
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	virtual MxBool VTable0x14() override; // vtable+0x14
+	virtual MxBool SetFlag() override;    // vtable+0x18
+
 	inline void SetUnknown8(MxU32 p_unk0x8) { m_unk0x8 = p_unk0x8; }
 	inline MxU32 GetUnkown8() { return m_unk0x8; }
 

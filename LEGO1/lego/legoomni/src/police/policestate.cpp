@@ -10,3 +10,10 @@ PoliceState::PoliceState()
 	m_unk0xc = 0;
 	m_unk0x8 = (rand() % 2 == 0) ? 501 : 500;
 }
+
+// STUB: LEGO1 0x1005e990
+MxResult PoliceState::VTable0x1c(LegoFileStream* p_legoFileStream)
+{
+	// TODO
+	return SUCCESS;
+}
