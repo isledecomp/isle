@@ -17,7 +17,7 @@ void ViewManager::RemoveAll(ViewROI*)
 }
 
 // STUB: LEGO1 0x100a6930
-void ViewManager::Update(MxFloat p_previousRenderTime, MxFloat p_und2)
+void ViewManager::Update(float p_previousRenderTime, float p_und2)
 {
 }
 
