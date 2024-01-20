@@ -23,6 +23,12 @@ public:
 		return !strcmp(p_name, SkateBoard::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
+	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
+	virtual MxU32 VTable0xd0() override;                                   // vtable+0xd0
+	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
+	virtual void VTable0xe4() override;                                    // vtable+0xe4
+
 	// SYNTHETIC: LEGO1 0x1000ff60
 	// SkateBoard::`scalar deleting destructor'
 

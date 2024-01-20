@@ -23,10 +23,10 @@ public:
 		return !strcmp(p_name, PoliceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
-
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
 
 private:
 	undefined4 m_unk0x8; // 0x8

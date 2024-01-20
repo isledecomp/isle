@@ -18,6 +18,11 @@ public:
 		return "LegoLoadCacheSoundPresenter";
 	}
 
+	virtual void ReadyTickle() override;     // vtable+0x18
+	virtual void StreamingTickle() override; // vtable+0x20
+	virtual void DoneTickle() override;      // vtable+0x2c
+	virtual MxResult PutData() override;     // vtable+0x4c
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

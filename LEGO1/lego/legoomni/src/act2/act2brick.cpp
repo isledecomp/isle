@@ -12,6 +12,13 @@ Act2Brick::~Act2Brick()
 	// TODO
 }
 
+// STUB: LEGO1 0x1007a750
+MxS32 Act2Brick::VTable0x94()
+{
+	// TODO
+	return 0;
+}
+
 // STUB: LEGO1 0x1007a7f0
 MxResult Act2Brick::Tickle()
 {

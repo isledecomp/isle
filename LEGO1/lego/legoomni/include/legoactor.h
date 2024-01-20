@@ -24,6 +24,9 @@ public:
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
+	virtual void ParseAction(char*) override;                                     // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
+
 	// FUNCTION: LEGO1 0x10002cc0
 	virtual MxFloat VTable0x50() { return m_unk0x68; } // vtable+0x50
 	// FUNCTION: LEGO1 0x10002cd0

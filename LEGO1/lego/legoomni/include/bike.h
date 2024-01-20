@@ -23,6 +23,11 @@ public:
 		return !strcmp(p_name, Bike::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
+	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
+	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
+	virtual void VTable0xe4() override;                                    // vtable+0xe4
+
 	// SYNTHETIC: LEGO1 0x10076880
 	// Bike::`scalar deleting destructor'
 

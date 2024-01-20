@@ -41,6 +41,24 @@ void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
 	}
 }
 
+// STUB: LEGO1 0x100a9fc0
+void ViewROI::VTable0x24(const MxMatrix& p_transform)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100aa0a0
+void ViewROI::SetLocalTransform(const Matrix4& p_transform)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100aa180
+void ViewROI::VTable0x1c()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100aa500
 undefined ViewROI::SetUnk101013d8(undefined p_flag)
 {

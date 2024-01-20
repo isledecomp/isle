@@ -17,6 +17,13 @@ Police::Police()
 	NotificationManager()->Register(this);
 }
 
+// STUB: LEGO1 0x1005e1d0
+MxBool Police::VTable0x5c()
+{
+	// TODO
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x1005e320
 Police::~Police()
 {
@@ -67,4 +74,17 @@ void Police::VTable0x50()
 	LegoWorld::VTable0x50();
 	PlayMusic(JukeBox::e_policeStation);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+}
+
+// STUB: LEGO1 0x1005e740
+void Police::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1005e790
+MxBool Police::VTable0x64()
+{
+	// TODO
+	return FALSE;
 }

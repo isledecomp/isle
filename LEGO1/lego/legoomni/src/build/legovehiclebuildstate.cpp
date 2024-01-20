@@ -23,3 +23,10 @@ LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
 	this->m_unk0x4e = 0;
 	this->m_placedPartCount = 0;
 }
+
+// STUB: LEGO1 0x10026120
+MxResult LegoVehicleBuildState::VTable0x1c(LegoFileStream* p_legoFileStream)
+{
+	// TODO
+	return SUCCESS;
+}

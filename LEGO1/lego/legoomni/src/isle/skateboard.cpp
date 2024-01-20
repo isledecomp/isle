@@ -1,4 +1,4 @@
-#include "skateboard.h"
+#include "SkateBoard.h"
 
 #include "decomp.h"
 #include "mxnotificationmanager.h"
@@ -15,4 +15,38 @@ SkateBoard::SkateBoard()
 	this->m_unk0x148 = 1;
 
 	NotificationManager()->Register(this);
+}
+
+// STUB: LEGO1 0x10010000
+MxResult SkateBoard::Create(MxDSAction& p_dsAction)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10010050
+void SkateBoard::VTable0xe4()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100100e0
+MxU32 SkateBoard::VTable0xcc()
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10010230
+MxU32 SkateBoard::VTable0xd4(MxType17NotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x100104f0
+MxU32 SkateBoard::VTable0xd0()
+{
+	// TODO
+	return 0;
 }

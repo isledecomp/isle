@@ -20,6 +20,13 @@ Pizza::~Pizza()
 	TickleManager()->UnregisterClient(this);
 }
 
+// STUB: LEGO1 0x10038170
+MxResult Pizza::Create(MxDSAction& p_dsAction)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x100388a0
 MxResult Pizza::Tickle()
 {

@@ -131,7 +131,6 @@ public:
 
 	// vtable+0x20
 	virtual Unk* CreateUnk() = 0;
-	virtual Texture* CreateTexture() = 0;
 	virtual Texture* CreateTexture(
 		int width,
 		int height,
@@ -141,6 +140,7 @@ public:
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
 	) = 0;
+	virtual Texture* CreateTexture() = 0;
 	virtual Result SetTextureDefaultShadeCount(unsigned long) = 0;
 
 	// vtable+0x30
@@ -278,10 +278,10 @@ public:
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 	virtual Result SetMaterialMode(MaterialMode) = 0;
-	virtual Result Add(const Group*) = 0;
 	virtual Result Add(const Mesh*) = 0;
-	virtual Result Remove(const Group*) = 0;
+	virtual Result Add(const Group*) = 0;
 	virtual Result Remove(const Mesh*) = 0;
+	virtual Result Remove(const Group*) = 0;
 	virtual Result RemoveAll() = 0;
 
 	// This is TransformLocalToWorld in the leak, however it seems

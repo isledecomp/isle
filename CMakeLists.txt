@@ -27,10 +27,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/act1/act1state.cpp
   LEGO1/lego/legoomni/src/act2/act2brick.cpp
   LEGO1/lego/legoomni/src/act2/act2policestation.cpp
+  LEGO1/lego/legoomni/src/act2/legoact2.cpp
   LEGO1/lego/legoomni/src/act2/legoact2state.cpp
   LEGO1/lego/legoomni/src/act3/act3.cpp
   LEGO1/lego/legoomni/src/act3/act3shark.cpp
   LEGO1/lego/legoomni/src/act3/act3state.cpp
+  LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
   LEGO1/lego/legoomni/src/audio/legocachesound.cpp
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
@@ -63,13 +65,17 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
+  LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
   LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
   LEGO1/lego/legoomni/src/entity/legojetski.cpp
+  LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legopathactor.cpp
   LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legorace.cpp
+  LEGO1/lego/legoomni/src/entity/legoraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoracecar.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
   LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
   LEGO1/lego/legoomni/src/gasstation/gasstation.cpp
@@ -92,6 +98,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
   LEGO1/lego/legoomni/src/isle/bike.cpp
   LEGO1/lego/legoomni/src/isle/bumpbouy.cpp
+  LEGO1/lego/legoomni/src/isle/doors.cpp
   LEGO1/lego/legoomni/src/isle/historybook.cpp
   LEGO1/lego/legoomni/src/isle/isleactor.cpp
   LEGO1/lego/legoomni/src/isle/isle.cpp
@@ -128,6 +135,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoloopinganimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
   LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
   LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp

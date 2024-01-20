@@ -155,6 +155,19 @@ void LegoAnimPresenter::StreamingTickle()
 	}
 }
 
+// STUB: LEGO1 0x1006b8c0
+void LegoAnimPresenter::DoneTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006b8d0
+MxResult LegoAnimPresenter::AddToManager()
+{
+	// TODO
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1006b8e0
 void LegoAnimPresenter::Destroy()
 {

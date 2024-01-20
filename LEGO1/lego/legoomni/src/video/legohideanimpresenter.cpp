@@ -36,8 +36,39 @@ void LegoHideAnimPresenter::Destroy(MxBool p_fromDestructor)
 		LegoHideAnimPresenter::Destroy();
 }
 
+// STUB: LEGO1 0x1006dab0
+MxResult LegoHideAnimPresenter::AddToManager()
+{
+	// TODO
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1006dac0
 void LegoHideAnimPresenter::Destroy()
 {
 	Destroy(FALSE);
+}
+
+// STUB: LEGO1 0x1006dad0
+void LegoHideAnimPresenter::PutFrame()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006dae0
+void LegoHideAnimPresenter::ReadyTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006db20
+void LegoHideAnimPresenter::StartingTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006e9e0
+void LegoHideAnimPresenter::EndAction()
+{
+	// TODO
 }

@@ -10,6 +10,8 @@ public:
 	Radio();
 	virtual ~Radio() override;
 
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+
 	// FUNCTION: LEGO1 0x1002c8e0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{

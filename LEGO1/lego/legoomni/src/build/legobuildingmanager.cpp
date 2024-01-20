@@ -32,3 +32,10 @@ void LegoBuildingManager::FUN_1002fa00()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10030220
+MxResult LegoBuildingManager::Tickle()
+{
+	// TODO
+	return SUCCESS;
+}

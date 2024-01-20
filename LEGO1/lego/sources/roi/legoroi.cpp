@@ -119,6 +119,12 @@ void LegoROI::SetDisplayBB(MxS32 p_displayBB)
 	// Intentionally empty function
 }
 
+// FUNCTION: LEGO1 0x100aa340
+float LegoROI::IntrinsicImportance() const
+{
+	return .5;
+}
+
 // Note: Actually part of parent class (doesn't exist yet)
 // STUB: LEGO1 0x100aa350
 void LegoROI::UpdateWorldBoundingVolumes()

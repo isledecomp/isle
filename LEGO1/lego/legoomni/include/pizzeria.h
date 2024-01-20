@@ -20,6 +20,8 @@ public:
 		return !strcmp(p_name, Pizzeria::ClassName()) || IsleActor::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+
 	// SYNTHETIC: LEGO1 0x1000e8d0
 	// Pizzeria::`scalar deleting destructor'
 };

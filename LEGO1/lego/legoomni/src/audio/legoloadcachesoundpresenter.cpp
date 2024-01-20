@@ -28,3 +28,28 @@ void LegoLoadCacheSoundPresenter::Destroy(MxBool p_fromDestructor)
 	delete this->m_unk0x70;
 	MxWavePresenter::Destroy(p_fromDestructor);
 }
+
+// STUB: LEGO1 0x10018510
+void LegoLoadCacheSoundPresenter::ReadyTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100185f0
+void LegoLoadCacheSoundPresenter::StreamingTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100186f0
+void LegoLoadCacheSoundPresenter::DoneTickle()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10018700
+MxResult LegoLoadCacheSoundPresenter::PutData()
+{
+	// TODO
+	return SUCCESS;
+}
