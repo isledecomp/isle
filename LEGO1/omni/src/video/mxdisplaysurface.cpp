@@ -591,7 +591,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 	ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
 	if (draw->CreateSurface(&ddsd, &surface, NULL) != S_OK) {
-		if (!*p_ret) {
+		if (*p_ret) {
 			*p_ret = 0;
 
 			// Try creating bitmap surface in vram if system ram ran out
@@ -602,131 +602,133 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				surface = NULL;
 			}
 		}
-	}
-
-	if (!surface) {
-		return NULL;
-	}
-
-	memset(&ddsd, 0, sizeof(ddsd));
-	ddsd.dwSize = sizeof(ddsd);
-
-	if (surface->Lock(NULL, &ddsd, 1, 0) != S_OK) {
-		surface->Release();
-		return NULL;
-	}
-
-	if (p_doNotWriteToSurface) {
-		return surface;
-	}
-
-	BITMAPINFOHEADER* hdr = p_bitmap->GetBmiHeader();
-	MxU32 rowsBeforeTop;
-	MxU8* bitmapSrcPtr;
-
-	// The goal here is to enable us to walk through the bitmap's rows
-	// in order, regardless of the orientation. We want to end up at the
-	// start of the first row, which is either at position 0, or at
-	// (image_stride * biHeight) - 1.
-
-	// Reminder: Negative biHeight means this is a top-down DIB.
-	// Otherwise it is bottom-up.
-
-	switch (p_bitmap->GetBmiHeader()->biCompression) {
-	case BI_RGB: {
-		if (p_bitmap->GetBmiHeight() < 0)
-			rowsBeforeTop = 0;
 		else
-			rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-		bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-		break;
-	}
-	case BI_RGB_TOPDOWN:
-		bitmapSrcPtr = p_bitmap->GetBitmapData();
-		break;
-	default: {
-		if (p_bitmap->GetBmiHeight() < 0)
-			rowsBeforeTop = 0;
-		else
-			rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-		bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-	}
+			surface = NULL;
 	}
 
-	MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
-	MxU32 widthNormal = p_bitmap->GetBmiWidth();
-	MxU32 heightAbs = p_bitmap->GetBmiHeightAbs();
+	if (surface) {
+		memset(&ddsd, 0, sizeof(ddsd));
+		ddsd.dwSize = sizeof(ddsd);
 
-	// How many bytes are there for each row of the bitmap?
-	// (i.e. the image stride)
-	// If this is a bottom-up DIB, we will walk it in reverse.
-	// TODO: Same rounding trick as in MxBitmap
-	MxS32 rowSeek = ((p_bitmap->GetBmiWidth() + 3) & -4);
-	if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
-		rowSeek = -rowSeek;
-	MxU32 newPitch = ddsd.lPitch;
-	switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
-	case 8: {
-		for (heightAbs > 0; heightAbs--;) {
-			memcpy(surfaceData, bitmapSrcPtr, p_bitmap->GetBmiHeight());
-			bitmapSrcPtr += rowSeek;
-			surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+		if (surface->Lock(NULL, &ddsd, DDLOCK_WAIT, 0) != S_OK) {
+			surface->Release();
+			surface = NULL;
+			goto done;
 		}
-		surface->Unlock(ddsd.lpSurface);
-		if (p_transparent && surface) {
-			DDCOLORKEY key;
-			surface->SetColorKey(8, &key);
+
+		if (p_doNotWriteToSurface) {
+			goto done;
 		}
-		break;
-	}
-	case 16:
-		if (m_16bitPal == NULL) {
-			if (surface) {
-				surface->Release();
+
+		// The goal here is to enable us to walk through the bitmap's rows
+		// in order, regardless of the orientation. We want to end up at the
+		// start of the first row, which is either at position 0, or at
+		// (image_stride * biHeight) - 1.
+
+		// Reminder: Negative biHeight means this is a top-down DIB.
+		// Otherwise it is bottom-up.
+
+		MxU8* bitmapSrcPtr;
+		switch (p_bitmap->GetBmiHeader()->biCompression) {
+		case BI_RGB: {
+			MxS32 rowsBeforeTop;
+			if (p_bitmap->GetBmiHeight() < 0)
+				rowsBeforeTop = 0;
+			else
+				rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
+			bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
+			break;
+		}
+		case BI_RGB_TOPDOWN:
+			bitmapSrcPtr = p_bitmap->GetBitmapData();
+			break;
+		default: {
+			MxS32 rowsBeforeTop;
+			if (p_bitmap->GetBmiHeight() < 0)
+				rowsBeforeTop = 0;
+			else
+				rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
+			bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
+		}
+		}
+
+		MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
+		MxU32 widthNormal = p_bitmap->GetBmiWidth();
+		MxU32 heightAbs = p_bitmap->GetBmiHeightAbs();
+
+		// How many bytes are there for each row of the bitmap?
+		// (i.e. the image stride)
+		// If this is a bottom-up DIB, we will walk it in reverse.
+		// TODO: Same rounding trick as in MxBitmap
+		MxS32 rowSeek = ((p_bitmap->GetBmiWidth() + 3) & -4);
+		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
+			rowSeek = -rowSeek;
+
+		MxU32 newPitch = ddsd.lPitch;
+		switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
+		case 8: {
+			for (heightAbs > 0; heightAbs--;) {
+				memcpy(surfaceData, bitmapSrcPtr, p_bitmap->GetBmiHeight());
+				bitmapSrcPtr += rowSeek;
+				surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
 			}
-			return NULL;
-		}
-		else {
-			rowSeek -= p_bitmap->GetBmiWidth();
-			newPitch -= 2 * p_bitmap->GetBmiWidth();
-
-			if (p_transparent) {
-				for (int y = heightAbs; y > 0; y--) {
-					for (int x = widthNormal; x > 0; x--) {
-						if (*bitmapSrcPtr) {
-							*surfaceData = m_16bitPal[*bitmapSrcPtr];
-						}
-						else {
-							*surfaceData = 31775;
-						}
-						bitmapSrcPtr++;
-						surfaceData++;
-					}
-
-					bitmapSrcPtr += rowSeek;
-					surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
-				}
-
+			surface->Unlock(ddsd.lpSurface);
+			if (p_transparent && surface) {
 				DDCOLORKEY key;
-				key.dwColorSpaceHighValue = 31775;
-				key.dwColorSpaceLowValue = 31775;
 				surface->SetColorKey(8, &key);
 			}
+			break;
+		}
+		case 16:
+			if (m_16bitPal == NULL) {
+				if (surface) {
+					surface->Release();
+				}
+				return NULL;
+			}
 			else {
-				for (int y = heightAbs; y > 0; y--) {
-					for (int x = widthNormal; x > 0; x--) {
-						*surfaceData++ = m_16bitPal[*bitmapSrcPtr++];
+				rowSeek -= p_bitmap->GetBmiWidth();
+				newPitch -= 2 * p_bitmap->GetBmiWidth();
+
+				if (p_transparent) {
+					for (int y = heightAbs; y > 0; y--) {
+						for (int x = widthNormal; x > 0; x--) {
+							if (*bitmapSrcPtr) {
+								*surfaceData = m_16bitPal[*bitmapSrcPtr];
+							}
+							else {
+								*surfaceData = 31775;
+							}
+							bitmapSrcPtr++;
+							surfaceData++;
+						}
+
+						bitmapSrcPtr += rowSeek;
+						surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
 					}
 
-					bitmapSrcPtr += rowSeek;
-					surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+					DDCOLORKEY key;
+					key.dwColorSpaceHighValue = 31775;
+					key.dwColorSpaceLowValue = 31775;
+					surface->SetColorKey(8, &key);
 				}
-			}
+				else {
+					for (int y = heightAbs; y > 0; y--) {
+						for (int x = widthNormal; x > 0; x--) {
+							*surfaceData++ = m_16bitPal[*bitmapSrcPtr++];
+						}
 
-			surface->Unlock(ddsd.lpSurface);
+						bitmapSrcPtr += rowSeek;
+						surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+					}
+				}
+
+				surface->Unlock(ddsd.lpSurface);
+			}
 		}
 	}
 
+done:
 	return surface;
 }
 
