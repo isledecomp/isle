@@ -703,53 +703,53 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 	ddsd.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
-	if (draw->CreateSurface(&ddsd, &newSurface, NULL) == S_OK) {
+	if (draw->CreateSurface(&ddsd, &newSurface, NULL) != S_OK) {
 		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
-		if (draw->CreateSurface(&ddsd, &newSurface, NULL) == S_OK) {
-			memset(&ddsd, 0, sizeof(ddsd));
-			ddsd.dwSize = sizeof(ddsd);
+		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != S_OK)
+			goto done;
+	}
 
-			if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != S_OK) {
-				if (newSurface) {
-					newSurface->Release();
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != S_OK)
+		goto done;
+	else {
+		MxU16* surface = (MxU16*) ddsd.lpSurface;
+		MxLong pitch = ddsd.lPitch;
+
+		// draw a simple cursor to the surface
+		for (MxS32 x = 0; x < 16; x++) {
+			MxU16* surface2 = surface;
+			for (MxS32 y = 0; y < 16; y++) {
+				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
+					if (x + y > 10)
+						*surface2 = 31775;
+					else
+						*surface2 = -1;
 				}
-
-				return NULL;
-			}
-			else {
-				MxU16* surface = (MxU16*) ddsd.lpSurface;
-
-				// draw a simple cursor to the surface
-				for (MxS32 x = 0; x < 16; x++) {
-					MxU16* surface2 = surface;
-					for (MxS32 y = 0; y < 16; y++) {
-						for (y = 0; y < 16; ++y) {
-							if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
-								if (x + y > 10)
-									*surface2 = 31775;
-								else
-									*surface2 = -1;
-							}
-							else {
-								*surface2 = 0;
-							}
-							surface2++;
-						}
-					}
-					surface = (MxU16*) ((MxU8*) surface + ddsd.lPitch);
+				else {
+					*surface2 = 0;
 				}
-
-				newSurface->Unlock(ddsd.lpSurface);
-				DDCOLORKEY colorkey;
-				colorkey.dwColorSpaceHighValue = 31775;
-				colorkey.dwColorSpaceLowValue = 31775;
-				newSurface->SetColorKey(DDCKEY_SRCBLT, &colorkey);
-
-				return newSurface;
+				surface2++;
 			}
+			surface = (MxU16*) ((MxU8*) surface + pitch);
 		}
+
+		newSurface->Unlock(ddsd.lpSurface);
+		DDCOLORKEY colorkey;
+		colorkey.dwColorSpaceHighValue = 31775;
+		colorkey.dwColorSpaceLowValue = 31775;
+		newSurface->SetColorKey(DDCKEY_SRCBLT, &colorkey);
+
+		return newSurface;
+	}
+
+done:
+	if (newSurface) {
+		newSurface->Release();
 	}
 
 	return NULL;
