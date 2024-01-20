@@ -41,3 +41,9 @@ void LegoHideAnimPresenter::Destroy()
 {
 	Destroy(FALSE);
 }
+
+// STUB: LEGO1 0x1006dae0
+void LegoHideAnimPresenter::ReadyTickle()
+{
+	// TODO
+}

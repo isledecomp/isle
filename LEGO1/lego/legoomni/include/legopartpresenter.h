@@ -20,6 +20,8 @@ public:
 		return !strcmp(p_name, LegoPartPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
+	virtual void ReadyTickle() override; // vtable+0x18
+
 	__declspec(dllexport) static void configureLegoPartPresenter(MxS32, MxS32);
 
 	// SYNTHETIC: LEGO1 0x1000d060

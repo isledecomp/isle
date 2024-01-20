@@ -11,3 +11,9 @@ void LegoLocomotionAnimPresenter::Init()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x1006d5d0
+void LegoLocomotionAnimPresenter::ReadyTickle()
+{
+	// TODO
+}

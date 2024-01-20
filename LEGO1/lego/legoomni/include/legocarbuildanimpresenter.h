@@ -23,6 +23,8 @@ public:
 		return !strcmp(p_name, LegoCarBuildAnimPresenter::ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
 
+	virtual void ReadyTickle() override; // vtable+0x18
+
 	// SYNTHETIC: LEGO1 0x10078660
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
 };

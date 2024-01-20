@@ -11,3 +11,9 @@ LegoCarBuildAnimPresenter::~LegoCarBuildAnimPresenter()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x100788c0
+void LegoCarBuildAnimPresenter::ReadyTickle()
+{
+	// TODO
+}

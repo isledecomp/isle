@@ -24,7 +24,8 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
 
-	virtual void Destroy() override; // vtable+0x38
+	virtual void ReadyTickle() override; // vtable+0x18
+	virtual void Destroy() override;     // vtable+0x38
 
 private:
 	void Init();

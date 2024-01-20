@@ -22,6 +22,8 @@ public:
 		return !strcmp(p_name, LegoAnimMMPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
 
+	virtual void ReadyTickle() override; // vtable+0x18
+
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'
 };

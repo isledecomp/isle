@@ -132,6 +132,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoloopinganimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
   LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
   LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp

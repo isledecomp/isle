@@ -31,7 +31,9 @@ public:
 	virtual void ReadyTickle() override;                                                           // vtable+0x18
 	virtual void StartingTickle() override;                                                        // vtable+0x1c
 	virtual void StreamingTickle() override;                                                       // vtable+0x20
+	virtual void DoneTickle() override;                                                            // vtable+0x2c
 	virtual void ParseExtra() override;                                                            // vtable+0x30
+	virtual MxResult AddToManager() override;                                                      // vtable+0x34
 	virtual void Destroy() override;                                                               // vtable+0x38
 	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	virtual void EndAction() override;                                                             // vtable+0x40

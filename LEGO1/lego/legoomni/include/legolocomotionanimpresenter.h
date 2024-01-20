@@ -21,6 +21,8 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoLoopingAnimPresenter::IsA(p_name);
 	}
 
+	virtual void ReadyTickle() override; // vtable+0x18
+
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
 

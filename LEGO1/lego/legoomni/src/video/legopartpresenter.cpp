@@ -12,3 +12,9 @@ void LegoPartPresenter::configureLegoPartPresenter(MxS32 p_partPresenterConfig1,
 	g_partPresenterConfig1 = p_partPresenterConfig1;
 	g_partPresenterConfig2 = p_partPresenterConfig2;
 }
+
+// STUB: LEGO1 0x1007deb0
+void LegoPartPresenter::ReadyTickle()
+{
+	// TODO
+}
