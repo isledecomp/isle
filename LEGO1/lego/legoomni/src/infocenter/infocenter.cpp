@@ -457,7 +457,7 @@ MxResult Infocenter::Tickle()
 {
 	if (m_worldStarted == FALSE) {
 		LegoWorld::Tickle();
-		return 0;
+		return SUCCESS;
 	}
 
 	if (m_infoManDialogueTimer != 0 && (m_infoManDialogueTimer += 100) > 25000) {
@@ -474,17 +474,17 @@ MxResult Infocenter::Tickle()
 		m_unk0x1d6 += 100;
 		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
 			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
-			return 0;
+			return SUCCESS;
 		}
 
 		if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
 			ControlManager()->FUN_100293c0(0x10, m_atom, 0);
-			return 0;
+			return SUCCESS;
 		}
 
 		if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
 			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
-			return 0;
+			return SUCCESS;
 		}
 
 		if (4400 < m_unk0x1d6) {
@@ -493,7 +493,7 @@ MxResult Infocenter::Tickle()
 		}
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10070c20
