@@ -170,10 +170,10 @@ private:
 	InfocenterUnkDataEntry m_entries[7];    // 0x120
 	MxS16 m_unk0x1c8;                       // 0x1c8
 	undefined4 m_unk0x1cc;                  // 0x1cc
-	MxU16 m_unk0x1d0;                       // 0x1d0
-	MxU16 m_unk0x1d2;                       // 0x1d2
+	MxS16 m_infoManDialogueTimer;           // 0x1d0
+	MxS16 m_bookAnimationTimer;             // 0x1d2
 	MxU16 m_unk0x1d4;                       // 0x1d4
-	MxU16 m_unk0x1d6;                       // 0x1d6
+	MxS16 m_unk0x1d6;                       // 0x1d6
 };
 
 #endif // INFOCENTER_H

@@ -36,6 +36,9 @@ public:
 
 	// SYNTHETIC: LEGO1 0x100378d0
 	// InfocenterDoor::`scalar deleting destructor'
+
+private:
+	MxS32 m_unk0xf8;
 };
 
 #endif // INFOCENTERDOOR_H

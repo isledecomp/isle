@@ -41,8 +41,8 @@ Infocenter::Infocenter()
 	SetAppCursor(1);
 	NotificationManager()->Register(this);
 
-	m_unk0x1d0 = 0;
-	m_unk0x1d2 = 0;
+	m_infoManDialogueTimer = 0;
+	m_bookAnimationTimer = 0;
 	m_unk0x1d4 = 0;
 	m_unk0x1d6 = 0;
 }
@@ -130,7 +130,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 			break;
 		case c_notificationTransitioned:
 			StopBookAnimation();
-			m_unk0x1d2 = 0;
+			m_bookAnimationTimer = 0;
 
 			if (m_infocenterState->GetUnknown0x74() == 0xc) {
 				StartCredits();
@@ -232,7 +232,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		m_currentCutscene = e_noIntro;
 
 		if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
-			m_unk0x1d2 = 1;
+			m_bookAnimationTimer = 1;
 			return 1;
 		}
 		break;
@@ -278,7 +278,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		if (m_infocenterState->GetInfocenterBufferElement(0) == 0 && m_currentInfomainScript != 40 &&
 			m_currentInfomainScript != 41 && m_currentInfomainScript != 42 && m_currentInfomainScript != 43 &&
 			m_currentInfomainScript != 44) {
-			m_unk0x1d0 = 1;
+			m_infoManDialogueTimer = 1;
 			PlayMusic(11);
 		}
 
@@ -299,8 +299,8 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 // STUB: LEGO1 0x1006f4e0
 void Infocenter::VTable0x50()
 {
-	m_unk0x1d0 = 0;
-	m_unk0x1d2 = 0;
+	m_infoManDialogueTimer = 0;
+	m_bookAnimationTimer = 0;
 	m_unk0x1d4 = 0;
 	m_unk0x1d6 = 0;
 
@@ -319,7 +319,7 @@ void Infocenter::VTable0x50()
 		case 4:
 			m_infocenterState->SetUnknown0x74(2);
 			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
-				m_unk0x1d2 = 1;
+				m_bookAnimationTimer = 1;
 			}
 
 			PlayAction(c_letsGetStartedDialogue);
@@ -337,7 +337,7 @@ void Infocenter::VTable0x50()
 			return;
 		case 0xf:
 			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
-				m_unk0x1d2 = 1;
+				m_bookAnimationTimer = 1;
 			}
 
 			PlayAction(c_clickOnInfomanDialogue);
@@ -383,7 +383,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			m_infocenterState->SetUnknown0x74(1);
 
 			if (m_infocenterState->GetInfocenterBufferElement(0) == 0) {
-				m_unk0x1d2 = 1;
+				m_bookAnimationTimer = 1;
 				return 1;
 			}
 			break;
@@ -452,11 +452,48 @@ void Infocenter::VTable0x68(MxBool p_add)
 	}
 }
 
-// STUB: LEGO1 0x10070af0
+// FUNCTION: LEGO1 0x10070af0
 MxResult Infocenter::Tickle()
 {
-	// TODO
-	return LegoWorld::Tickle();
+	if (m_worldStarted == FALSE) {
+		LegoWorld::Tickle();
+		return 0;
+	}
+
+	if (m_infoManDialogueTimer != 0 && (m_infoManDialogueTimer += 100) > 25000) {
+		PlayAction(c_clickOnInfomanDialogue);
+		m_infoManDialogueTimer = 0;
+	}
+
+	if (m_bookAnimationTimer != 0 && (m_bookAnimationTimer += 100) > 3000) {
+		PlayBookAnimation();
+		m_bookAnimationTimer = 1;
+	}
+
+	if (m_unk0x1d6 != 0) {
+		m_unk0x1d6 += 100;
+		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
+			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
+			return 0;
+		}
+
+		if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
+			ControlManager()->FUN_100293c0(0x10, m_atom, 0);
+			return 0;
+		}
+
+		if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
+			ControlManager()->FUN_100293c0(0x10, m_atom, 1);
+			return 0;
+		}
+
+		if (4400 < m_unk0x1d6) {
+			ControlManager()->FUN_100293c0(0x10, m_atom, 0);
+			m_unk0x1d6 = 0;
+		}
+	}
+
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10070c20
