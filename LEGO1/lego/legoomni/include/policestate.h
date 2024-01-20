@@ -1,6 +1,7 @@
 #ifndef POLICESTATE_H
 #define POLICESTATE_H
 
+#include "decomp.h"
 #include "legostate.h"
 
 // VTABLE: LEGO1 0x100d8af0
@@ -24,6 +25,10 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0x8; // 0x8
+	undefined4 m_unk0xc; // 0xc
 };
 
 #endif // POLICESTATE_H
