@@ -105,6 +105,7 @@ public:
 
 	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
 	void AddWorld(LegoWorld* p_world);
+	void DeleteEntity(LegoEntity* p_entity);
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }

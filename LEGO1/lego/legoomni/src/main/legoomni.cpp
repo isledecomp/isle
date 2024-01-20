@@ -19,6 +19,7 @@
 #include "mxdsfile.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
+#include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
@@ -605,6 +606,11 @@ void LegoOmni::AddWorld(LegoWorld* p_world)
 	m_worldList->Append(p_world);
 }
 
+// STUB: LEGO1 0x1005adb0
+void LegoOmni::DeleteEntity(LegoEntity* p_entity)
+{
+}
+
 // STUB: LEGO1 0x1005af10
 void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 {
@@ -628,10 +634,32 @@ LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_ent
 	return NULL;
 }
 
-// STUB: LEGO1 0x1005b1d0
+// FUNCTION: LEGO1 0x1005b1d0
 void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
-	// TODO
+	if (p_dsAction.GetAtomId().GetInternal() != NULL) {
+		LegoEntity* entity = FindByEntityIdOrAtomId(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+		if (entity) {
+			DeleteEntity(entity);
+			return;
+		}
+
+		if (m_currentWorld != NULL) {
+			MxCore* entity2 = m_currentWorld->FUN_10021790(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+			m_currentWorld->EndAction(entity2);
+
+			if (entity2->IsA("MxPresenter")) {
+				Streamer()->FUN_100b98f0(((MxPresenter*) entity2)->GetAction());
+				((MxPresenter*) entity2)->EndAction();
+
+			}
+			else {
+				delete entity2;
+			}
+			return;
+		}
+	}
+	MxOmni::DeleteObject(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x1005b2f0

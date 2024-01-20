@@ -163,6 +163,12 @@ MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_nam
 	return NULL;
 }
 
+// STUB: LEGO1 0x10021790
+MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_objectId)
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x10021a70
 void LegoWorld::VTable0x68(MxBool p_add)
 {
