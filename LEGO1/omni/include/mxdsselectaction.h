@@ -32,6 +32,9 @@ public:
 	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	virtual MxDSAction* Clone() override;                                // vtable+2c;
 
+	// SYNTHETIC: LEGO1 0x100cb840
+	// MxDSSelectAction::`scalar deleting destructor'
+
 private:
 	MxString m_unk0x9c;
 	MxStringList* m_unk0xac;

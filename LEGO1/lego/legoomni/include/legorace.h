@@ -28,7 +28,7 @@ public:
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+0x18
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual MxBool VTable0x64() override;                     // vtable+0x64
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+0x68
@@ -37,6 +37,9 @@ public:
 	virtual undefined4 VTable0x74(undefined4);                // vtable+0x74
 	virtual undefined4 VTable0x78(undefined4);                // vtable+0x78
 	virtual void VTable0x7c(undefined4, undefined4);          // vtable+0x7c
+
+	// SYNTHETIC: LEGO1 0x10015cc0
+	// LegoRace::`scalar deleting destructor'
 
 private:
 	undefined4 m_unk0xf8;  // 0xf8

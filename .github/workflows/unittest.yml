@@ -1,9 +1,10 @@
-name: Unit Tests
+name: Test
 
 on: [push, pull_request]
 
 jobs:
   pytest-win:
+    name: 'Python Windows'
     runs-on: windows-latest
 
     steps:
@@ -20,6 +21,7 @@ jobs:
         pytest tools/isledecomp
 
   pytest-ubuntu:
+    name: 'Python Linux'
     runs-on: ubuntu-latest
 
     steps:

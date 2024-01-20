@@ -15,7 +15,7 @@ MxDSMediaAction::MxDSMediaAction()
 	this->m_paletteManagement = 1;
 	this->m_unk0xb4 = -1;
 	this->m_sustainTime = 0;
-	this->SetType(MxDSType_MediaAction);
+	this->SetType(e_mediaAction);
 }
 
 // FUNCTION: LEGO1 0x100c8cf0
@@ -47,6 +47,17 @@ MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 	return *this;
 }
 
+// FUNCTION: LEGO1 0x100c8df0
+MxDSAction* MxDSMediaAction::Clone()
+{
+	MxDSMediaAction* clone = new MxDSMediaAction();
+
+	if (clone)
+		*clone = *this;
+
+	return clone;
+}
+
 // FUNCTION: LEGO1 0x100c8e80
 void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 {
@@ -62,6 +73,12 @@ void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 	}
 	else
 		this->m_mediaSrcPath = NULL;
+}
+
+// FUNCTION: LEGO1 0x100c8f00
+undefined4 MxDSMediaAction::VTable0x14()
+{
+	return MxDSAction::VTable0x14();
 }
 
 // FUNCTION: LEGO1 0x100c8f10

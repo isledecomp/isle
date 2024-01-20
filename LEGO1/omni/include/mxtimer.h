@@ -22,6 +22,9 @@ public:
 			return g_lastTimeCalculated - this->m_startTime;
 	}
 
+	// SYNTHETIC: LEGO1 0x100ae0d0
+	// MxTimer::`scalar deleting destructor'
+
 private:
 	MxLong m_startTime;
 	MxBool m_isRunning;

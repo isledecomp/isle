@@ -174,7 +174,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 		if (!buffer)
 			return FAILURE;
 
-		if (buffer->AllocateBuffer(GetFileSize(), MxDSBufferType_Allocate) != SUCCESS) {
+		if (buffer->AllocateBuffer(GetFileSize(), MxDSBuffer::e_allocate) != SUCCESS) {
 			delete buffer;
 			return FAILURE;
 		}
@@ -215,18 +215,20 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+	MxDSBuffer* buffer;
+
 	{
 		MxAutoLocker lock(&m_criticalSection);
 
 		if (!m_list.PopFrontStreamingAction(streamingAction))
-			return;
+			goto done;
 	}
 
 	if (streamingAction->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 		g_unk0x10102878--;
 	}
 
-	MxDSBuffer* buffer = streamingAction->GetUnknowna0();
+	buffer = streamingAction->GetUnknowna0();
 
 	if (m_pFile->GetPosition() == streamingAction->GetBufferOffset() ||
 		m_pFile->Seek(streamingAction->GetBufferOffset(), 0) == 0) {
@@ -251,6 +253,7 @@ void MxDiskStreamProvider::PerformWork()
 		}
 	}
 
+done:
 	if (streamingAction) {
 		controller->FUN_100c8670(streamingAction);
 	}
@@ -279,7 +282,7 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 	MxU32 size = p_action->GetUnknowna0()->GetWriteOffset() - p_action->GetUnknown94() + p_action->GetBufferOffset() +
 				 (p_action->GetUnknowna4() ? p_action->GetUnknowna4()->GetWriteOffset() : 0);
 
-	if (buffer->AllocateBuffer(size, MxDSBufferType_Allocate) != SUCCESS) {
+	if (buffer->AllocateBuffer(size, MxDSBuffer::e_allocate) != SUCCESS) {
 		if (!buffer)
 			return FAILURE;
 
@@ -327,12 +330,12 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 				if (!buffer3)
 					return FAILURE;
 
-				if (buffer3->AllocateBuffer(size, MxDSBufferType_Allocate) == SUCCESS) {
+				if (buffer3->AllocateBuffer(size, MxDSBuffer::e_allocate) == SUCCESS) {
 					memcpy(buffer3->GetBuffer(), p_action->GetUnknowna4()->GetBuffer(), size);
-					p_action->GetUnknowna4()->SetMode(MxDSBufferType_Allocate);
+					p_action->GetUnknowna4()->SetMode(MxDSBuffer::e_allocate);
 					delete p_action->GetUnknowna4();
 
-					buffer3->SetMode(MxDSBufferType_Unknown);
+					buffer3->SetMode(MxDSBuffer::e_unknown);
 					p_action->SetUnknowna4(buffer3);
 					MxDSBuffer* buffer4 = p_action->GetUnknowna0();
 					MxU32 unk0x14 = buffer4->GetUnknown14();
@@ -349,6 +352,8 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 					p_action->SetUnknown94(unk0x14);
 					p_action->SetBufferOffset(p_action->GetUnknowna0()->GetUnknown14());
 					delete p_action->GetUnknowna0();
+					p_action->SetUnknowna0(NULL);
+					((MxDiskStreamController*) m_pLookup)->FUN_100c7890(p_action);
 					return SUCCESS;
 				}
 				else {

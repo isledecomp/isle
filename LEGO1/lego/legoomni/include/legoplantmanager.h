@@ -1,6 +1,7 @@
 #ifndef LEGOPLANTMANAGER_H
 #define LEGOPLANTMANAGER_H
 
+#include "decomp.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d6758
@@ -18,6 +19,11 @@ public:
 		// STRING: LEGO1 0x100f318c
 		return "LegoPlantManager";
 	}
+
+	void FUN_10026360(undefined4 p_world);
+
+	// SYNTHETIC: LEGO1 0x100262a0
+	// LegoPlantManager::`scalar deleting destructor'
 
 private:
 	void Init();

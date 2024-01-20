@@ -113,7 +113,7 @@ BOOL MxDirect3D::CreateIDirect3D()
 // FUNCTION: LEGO1 0x1009b310
 BOOL MxDirect3D::D3DSetMode()
 {
-	if (m_assignedDevice->m_flags & MxAssignedDevice::Flag_HardwareMode) {
+	if (m_assignedDevice->m_flags & MxAssignedDevice::c_hardwareMode) {
 		if (m_bOnlySoftRender) {
 			Error("Failed to place vital surfaces in video memory for hardware driver", DDERR_GENERIC);
 			return FALSE;
@@ -265,7 +265,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 			);
 
 			if (i == 0)
-				assignedDevice->m_flags |= MxAssignedDevice::Flag_PrimaryDevice;
+				assignedDevice->m_flags |= MxAssignedDevice::c_primaryDevice;
 
 			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 				MxDevice& device = *it2;
@@ -276,7 +276,7 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 
 				D3DDEVICEDESC* desc;
 				if (device.m_HWDesc.dcmColorModel) {
-					assignedDevice->m_flags |= MxAssignedDevice::Flag_HardwareMode;
+					assignedDevice->m_flags |= MxAssignedDevice::c_hardwareMode;
 					desc = &device.m_HWDesc;
 				}
 				else

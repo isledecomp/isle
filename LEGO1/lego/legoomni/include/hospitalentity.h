@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, HospitalEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f820
+	// HospitalEntity::`scalar deleting destructor'
 };
 
 #endif // HOSPITALENTITY_H

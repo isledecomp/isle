@@ -7,8 +7,6 @@
 // SIZE 0x68
 class BeachHouseEntity : public BuildingEntity {
 public:
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+04
-
 	// FUNCTION: LEGO1 0x1000ee80
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -21,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, BeachHouseEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f970
+	// BeachHouseEntity::`scalar deleting destructor'
 };
 
 #endif // BEACHHOUSEENTITY_H

@@ -41,6 +41,9 @@ public:
 		}
 	}
 
+	// SYNTHETIC: LEGO1 0x1004e060
+	// TowTrackMissionState::`scalar deleting destructor'
+
 protected:
 	undefined4 m_unk0x08; // 0x08
 	undefined4 m_unk0x0c; // 0x0c

@@ -10,6 +10,7 @@
 // the text "END_OF_VARIABLES" in it.
 // TODO: make g_endOfVariables reference the actual end of the variable array.
 // GLOBAL: LEGO1 0x100f3e50
+// STRING: LEGO1 0x100f3e00
 const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // Very likely but not certain sizes.
@@ -166,18 +167,18 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 		fclose(m_hFile);
 
 	modeString[0] = '\0';
-	if (p_mode & ReadBit) {
+	if (p_mode & c_readBit) {
 		m_mode = LEGOSTREAM_MODE_READ;
 		strcat(modeString, "r");
 	}
 
-	if (p_mode & WriteBit) {
+	if (p_mode & c_writeBit) {
 		if (m_mode != LEGOSTREAM_MODE_READ)
 			m_mode = LEGOSTREAM_MODE_WRITE;
 		strcat(modeString, "w");
 	}
 
-	if ((p_mode & 4) != 0)
+	if ((p_mode & c_binaryBit) != 0)
 		strcat(modeString, "b");
 	else
 		strcat(modeString, "t");

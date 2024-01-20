@@ -25,6 +25,9 @@ public:
 	virtual void DoneTickle() override;       // vtable+0x2c
 	virtual MxResult AddToManager() override; // vtable+0x34
 	virtual MxResult PutData() override;      // vtable+0x4c
+
+	// SYNTHETIC: LEGO1 0x1000cf40
+	// LegoTexturePresenter::`scalar deleting destructor'
 };
 
 #endif // LEGOTEXTUREPRESENTER_H

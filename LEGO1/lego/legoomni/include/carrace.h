@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, CarRace::ClassName()) || LegoRace::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x10016c70
+	// CarRace::`scalar deleting destructor'
+
 private:
 	undefined m_unk0x144[12]; // 0x144
 	undefined4 m_unk0x150;    // 0x150

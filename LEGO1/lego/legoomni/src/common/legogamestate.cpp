@@ -1,9 +1,13 @@
 #include "legogamestate.h"
 
 #include "infocenterstate.h"
+#include "legoanimationmanager.h"
 #include "legoomni.h"
 #include "legostate.h"
 #include "legostream.h"
+#include "legoutil.h"
+#include "legovideomanager.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"
@@ -15,14 +19,17 @@
 // There may be other members that come after.
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
-// GLOBAL: LEGO1 0x100f3e24
-const char* g_historyGSI = "History.gsi";
+// GLOBAL: LEGO1 0x100f3e40
+// STRING: LEGO1 0x100f3e3c
+const char* g_fileExtensionGS = ".GS";
 
-// GLOBAL: LEGO1 0x100f3e30
+// GLOBAL: LEGO1 0x100f3e44
+// STRING: LEGO1 0x100f3e30
 const char* g_playersGSI = "Players.gsi";
 
-// GLOBAL: LEGO1 0x100f3e40
-const char* g_fileExtensionGS = ".GS";
+// GLOBAL: LEGO1 0x100f3e48
+// STRING: LEGO1 0x100f3e24
+const char* g_historyGSI = "History.gsi";
 
 // GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
@@ -53,7 +60,15 @@ LegoGameState::LegoGameState()
 	// TODO
 	SetROIHandlerFunction();
 
-	m_stateCount = 0;
+	this->m_stateCount = 0;
+	this->m_unk0xc = 0;
+	this->m_savePath = NULL;
+	this->m_unk0x424 = 0;
+	this->m_prevArea = 0;
+	this->m_unk0x42c = 0;
+	this->m_isDirty = FALSE;
+	this->m_currentAct = -1;
+
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
 
@@ -85,12 +100,19 @@ LegoGameState::~LegoGameState()
 	delete[] m_savePath;
 }
 
+// STUB: LEGO1 0x10039780
+void LegoGameState::FUN_10039780(MxU8)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
 	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
-	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == 0)
+
+	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == NULL)
 		result = SUCCESS;
 	else {
 		result = FAILURE;
@@ -98,7 +120,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		MxString savePath;
 		GetFileSavePath(&savePath, p_slot);
 		LegoFileStream fileStream;
-		if (fileStream.Open(savePath.GetData(), LegoStream::WriteBit) != FAILURE) {
+		if (fileStream.Open(savePath.GetData(), LegoStream::c_writeBit) != FAILURE) {
 			MxU32 maybeVersion = 0x1000C;
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
@@ -164,7 +186,7 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 		strcpy(path, m_savePath);
 
 	// Slot: "G0", "G1", ...
-	strcat(path, "G");
+	strcat(path, "\\G");
 	baseForSlot[0] += p_slotn;
 	strcat(path, baseForSlot);
 
@@ -186,9 +208,30 @@ void LegoGameState::FUN_1003a720(MxU32)
 }
 
 // STUB: LEGO1 0x1003b060
-void LegoGameState::HandleAction(MxU32)
+void LegoGameState::HandleAction(MxU32 p_area)
 {
-	// TODO
+	m_prevArea = p_area;
+	BackgroundAudioManager()->Stop();
+	AnimationManager()->FUN_1005ef10();
+	VideoManager()->SetUnk0x554(0);
+
+	MxAtomId* script = g_isleScript;
+	switch (p_area) {
+	case 1:
+		break;
+	case 2:
+		VideoManager()->SetUnk0x554(1);
+		script = g_infomainScript;
+		break;
+	case 3:
+		VideoManager()->SetUnk0x554(1);
+		script = g_infodoorScript;
+		break;
+
+		// TODO: implement other cases
+	}
+
+	InvokeAction(Extra::ActionType::e_opendisk, *script, 0, NULL);
 }
 
 // FUNCTION: LEGO1 0x1003bac0
@@ -282,7 +325,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 	savePath += "\\";
 	savePath += g_historyGSI;
 
-	if (p_flags == LegoStream::WriteBit) {
+	if (p_flags == LegoStream::c_writeBit) {
 		m_unk0xa6.WriteScoreHistory();
 	}
 

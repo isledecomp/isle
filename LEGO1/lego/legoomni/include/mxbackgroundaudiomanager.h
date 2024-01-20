@@ -46,6 +46,9 @@ public:
 	void LowerVolume();
 	void RaiseVolume();
 
+	// SYNTHETIC: LEGO1 0x1007ec00
+	// MxBackgroundAudioManager::`scalar deleting destructor'
+
 private:
 	void Init();
 	MxResult OpenMusic(MxAtomId& p_script);

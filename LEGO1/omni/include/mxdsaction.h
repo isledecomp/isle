@@ -2,8 +2,8 @@
 #define MXDSACTION_H
 
 #include "mxdsobject.h"
+#include "mxgeometry/mxgeometry3d.h"
 #include "mxtypes.h"
-#include "realtime/vector.h"
 
 class MxOmni;
 
@@ -12,16 +12,16 @@ class MxOmni;
 class MxDSAction : public MxDSObject {
 public:
 	enum {
-		Flag_Looping = 0x01,
-		Flag_Bit3 = 0x04,
-		Flag_Bit4 = 0x08,
-		Flag_Bit5 = 0x10,
-		Flag_Enabled = 0x20,
-		Flag_Bit7 = 0x40,
-		Flag_World = 0x80,
-		Flag_Bit9 = 0x100,
-		Flag_Bit10 = 0x200,
-		Flag_Bit11 = 0x400,
+		c_looping = 0x01,
+		c_bit3 = 0x04,
+		c_bit4 = 0x08,
+		c_bit5 = 0x10,
+		c_enabled = 0x20,
+		c_bit7 = 0x40,
+		c_world = 0x80,
+		c_bit9 = 0x100,
+		c_bit10 = 0x200,
+		c_bit11 = 0x400,
 	};
 
 	__declspec(dllexport) MxDSAction();
@@ -43,6 +43,7 @@ public:
 		return !strcmp(p_name, MxDSAction::ClassName()) || MxDSObject::IsA(p_name);
 	}
 
+	virtual undefined4 VTable0x14() override;                            // vtable+14;
 	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
 	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	virtual MxLong GetDuration();                                        // vtable+24;
@@ -63,40 +64,43 @@ public:
 	inline MxLong GetStartTime() const { return m_startTime; }
 	inline MxS32 GetLoopCount() { return m_loopCount; }
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
-	inline Vector3Data& GetLocation() { return m_location; }
-	inline Vector3Data& GetDirection() { return m_direction; }
-	inline Vector3Data& GetUp() { return m_up; }
+	inline Mx3DPointFloat& GetLocation() { return m_location; }
+	inline Mx3DPointFloat& GetDirection() { return m_direction; }
+	inline Mx3DPointFloat& GetUp() { return m_up; }
 	inline MxCore* GetUnknown84() { return m_unk0x84; }
 	inline void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	inline MxCore* GetOrigin() { return m_origin; }
 	inline void SetOrigin(MxCore* p_origin) { m_origin = p_origin; }
 
-	inline MxBool IsLooping() const { return m_flags & Flag_Looping; }
-	inline MxBool IsBit3() const { return m_flags & Flag_Bit3; }
+	inline MxBool IsLooping() const { return m_flags & c_looping; }
+	inline MxBool IsBit3() const { return m_flags & c_bit3; }
 
 	inline void CopyFlags(MxU32 p_flags)
 	{
-		if (p_flags & MxDSAction::Flag_Looping)
-			SetFlags(GetFlags() | MxDSAction::Flag_Looping);
-		else if (p_flags & MxDSAction::Flag_Bit3)
-			SetFlags(GetFlags() | MxDSAction::Flag_Bit3);
+		if (p_flags & MxDSAction::c_looping)
+			SetFlags(GetFlags() | MxDSAction::c_looping);
+		else if (p_flags & MxDSAction::c_bit3)
+			SetFlags(GetFlags() | MxDSAction::c_bit3);
 	}
 
+	// SYNTHETIC: LEGO1 0x100ada60
+	// MxDSAction::`scalar deleting destructor'
+
 protected:
-	MxU32 m_sizeOnDisk;      // 0x2c
-	MxU32 m_flags;           // 0x30
-	MxLong m_startTime;      // 0x34
-	MxLong m_duration;       // 0x38
-	MxS32 m_loopCount;       // 0x3c
-	Vector3Data m_location;  // 0x40
-	Vector3Data m_direction; // 0x54
-	Vector3Data m_up;        // 0x68
-	char* m_extraData;       // 0x7c
-	MxU16 m_extraLength;     // 0x80
-	MxCore* m_unk0x84;       // 0x84
-	undefined4 m_unk0x88;    // 0x88
-	MxCore* m_origin;        // 0x8c
-	MxLong m_unk0x90;        // 0x90
+	MxU32 m_sizeOnDisk;         // 0x2c
+	MxU32 m_flags;              // 0x30
+	MxLong m_startTime;         // 0x34
+	MxLong m_duration;          // 0x38
+	MxS32 m_loopCount;          // 0x3c
+	Mx3DPointFloat m_location;  // 0x40
+	Mx3DPointFloat m_direction; // 0x54
+	Mx3DPointFloat m_up;        // 0x68
+	char* m_extraData;          // 0x7c
+	MxU16 m_extraLength;        // 0x80
+	MxCore* m_unk0x84;          // 0x84
+	undefined4 m_unk0x88;       // 0x88
+	MxCore* m_origin;           // 0x8c
+	MxLong m_unk0x90;           // 0x90
 };
 
 #endif // MXDSACTION_H

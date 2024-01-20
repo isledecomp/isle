@@ -47,3 +47,9 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStream* p_stream)
 	}
 	return result;
 }
+
+// STUB: LEGO1 0x10083db0
+void LegoUnkSaveDataWriter::FUN_10083db0(LegoROI* p_roi)
+{
+	// TODO
+}

@@ -24,6 +24,7 @@ public:
 		}
 	}
 
+	// FUNCTION: LEGO1 0x100b9110
 	~MxStreamerSubClass1() { delete[] m_buffer; }
 
 	undefined4 GetSize() const { return m_size; }
@@ -48,6 +49,7 @@ public:
 	inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
 };
 
+// VTABLE: LEGO1 0x100dc760
 class MxStreamerNotification : public MxNotificationParam {
 public:
 	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
@@ -55,8 +57,6 @@ public:
 	{
 		m_controller = p_ctrlr;
 	}
-
-	virtual ~MxStreamerNotification() override {}
 
 	virtual MxNotificationParam* Clone() override;
 
@@ -71,7 +71,7 @@ private:
 class MxStreamer : public MxCore {
 public:
 	enum OpenMode {
-		e_DiskStream,
+		e_diskStream = 0,
 		e_RAMStream
 	};
 
@@ -100,6 +100,7 @@ public:
 
 	MxBool FUN_100b9b30(MxDSObject& p_dsObject);
 	MxStreamController* GetOpenStream(const char* p_name);
+	void FUN_100b98f0(MxDSAction* p_action);
 	MxResult AddStreamControllerToOpenList(MxStreamController* p_stream);
 	MxResult FUN_100b99b0(MxDSAction* p_action);
 	MxResult DeleteObject(MxDSAction* p_dsAction);
@@ -113,7 +114,21 @@ private:
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };
 
+// clang-format off
+// TEMPLATE: LEGO1 0x100b9090
+// list<MxStreamController *,allocator<MxStreamController *> >::~list<MxStreamController *,allocator<MxStreamController *> >
+// clang-format on
+
 // SYNTHETIC: LEGO1 0x100b9120
 // MxStreamer::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b9140
+// List<MxStreamController *>::~List<MxStreamController *>
+
+// SYNTHETIC: LEGO1 0x100b97b0
+// MxStreamerNotification::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100b9820
+// MxStreamerNotification::~MxStreamerNotification
 
 #endif // MXSTREAMER_H

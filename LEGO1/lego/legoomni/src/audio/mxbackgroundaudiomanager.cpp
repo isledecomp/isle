@@ -77,13 +77,13 @@ void MxBackgroundAudioManager::DestroyMusic()
 MxResult MxBackgroundAudioManager::Tickle()
 {
 	switch (m_unk0x13c) {
-	case MxPresenter::TickleState_Starting:
+	case MxPresenter::e_starting:
 		FadeInOrFadeOut();
 		return SUCCESS;
-	case MxPresenter::TickleState_Streaming:
+	case MxPresenter::e_streaming:
 		FUN_1007ee70();
 		return SUCCESS;
-	case MxPresenter::TickleState_Repeating:
+	case MxPresenter::e_repeating:
 		FUN_1007ef40();
 		return SUCCESS;
 	default:

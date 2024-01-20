@@ -3,6 +3,7 @@
 
 #include "mxdsmediaaction.h"
 
+// VTABLE: LEGO1 0x100dce18
 class MxDSEvent : public MxDSMediaAction {
 public:
 	MxDSEvent();
@@ -25,6 +26,9 @@ public:
 	}
 
 	virtual MxDSAction* Clone() override; // vtable+2c;
+
+	// SYNTHETIC: LEGO1 0x100c9780
+	// MxDSEvent::`scalar deleting destructor'
 };
 
 #endif // MXDSEVENT_H

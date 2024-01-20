@@ -9,7 +9,7 @@
 // SIZE 0x68
 class LegoActionControlPresenter : public MxMediaPresenter {
 public:
-	inline LegoActionControlPresenter() { m_unk0x50 = ExtraActionType_none; }
+	inline LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
 	virtual ~LegoActionControlPresenter() override { Destroy(TRUE); }; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000d0e0
@@ -32,9 +32,9 @@ public:
 	virtual void Destroy(MxBool p_fromDestructor); // vtable+0x5c
 
 private:
-	ExtraActionType m_unk0x50; // 0x50
-	MxString m_unk0x54;        // 0x54
-	undefined4 m_unk0x64;      // 0x64
+	Extra::ActionType m_unk0x50; // 0x50
+	MxString m_unk0x54;          // 0x54
+	undefined4 m_unk0x64;        // 0x64
 };
 
 // SYNTHETIC: LEGO1 0x1000d1d0

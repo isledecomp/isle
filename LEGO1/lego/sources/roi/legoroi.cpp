@@ -38,18 +38,18 @@ MxS32 g_roiConfig = 100;
 ROIHandler g_someHandlerFunction = NULL;
 
 // FUNCTION: LEGO1 0x100a46a0
-void LegoROI::WrappedSetLocalTransform(Matrix4Impl& p_transform)
+void LegoROI::WrappedSetLocalTransform(Matrix4& p_transform)
 {
 	SetLocalTransform(p_transform);
 }
 
 // STUB: LEGO1 0x100a46b0
-void LegoROI::FUN_100a46b0(Matrix4Impl& p_transform)
+void LegoROI::FUN_100a46b0(Matrix4& p_transform)
 {
 }
 
 // STUB: LEGO1 0x100a58f0
-void LegoROI::FUN_100a58f0(Matrix4Impl& p_transform)
+void LegoROI::FUN_100a58f0(Matrix4& p_transform)
 {
 }
 

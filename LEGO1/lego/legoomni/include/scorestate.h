@@ -26,6 +26,9 @@ public:
 	inline MxBool GetTutorialFlag() { return m_playCubeTutorial; }
 	inline void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }
 
+	// SYNTHETIC: LEGO1 0x1000df00
+	// ScoreState::`scalar deleting destructor'
+
 private:
 	MxBool m_playCubeTutorial;
 };

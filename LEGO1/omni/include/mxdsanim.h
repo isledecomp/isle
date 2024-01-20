@@ -27,6 +27,9 @@ public:
 	}
 
 	virtual MxDSAction* Clone() override; // vtable+2c;
+
+	// SYNTHETIC: LEGO1 0x100c9180
+	// MxDSAnim::`scalar deleting destructor'
 };
 
 #endif // MXDSANIM_H

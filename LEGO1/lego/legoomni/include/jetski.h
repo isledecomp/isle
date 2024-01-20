@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, Jetski::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x1007e5c0
+	// Jetski::`scalar deleting destructor'
+
 private:
 	// TODO: Jetski fields
 	undefined m_unk0x160[4];

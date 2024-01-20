@@ -100,6 +100,12 @@ MxResult LegoPointOfViewController::Create(Lego3DView* p_lego3DView)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100658a0
+void LegoPointOfViewController::OnViewSize(int p_width, int p_height)
+{
+	m_nav->SetControlMax(p_width, p_height);
+}
+
 // FUNCTION: LEGO1 0x100658c0
 void LegoPointOfViewController::LeftDown(int p_x, int p_y)
 {

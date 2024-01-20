@@ -25,6 +25,9 @@ public:
 	{
 		return !strcmp(p_name, Police::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1005e300
+	// Police::`scalar deleting destructor'
 };
 
 #endif // POLICE_H

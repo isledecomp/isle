@@ -13,7 +13,7 @@ MxVideoManager::MxVideoManager()
 }
 
 // FUNCTION: LEGO1 0x100be270
-void MxVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+void MxVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 }
 

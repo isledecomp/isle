@@ -23,6 +23,9 @@ public:
 
 	friend class MxRegionCursor;
 
+	// SYNTHETIC: LEGO1 0x100c3670
+	// MxRegion::`scalar deleting destructor'
+
 private:
 	MxRegionTopBottomList* m_list; // 0x08
 	MxRect32 m_rect;               // 0x0c

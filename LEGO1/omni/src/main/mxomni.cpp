@@ -3,6 +3,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxatomidcounter.h"
 #include "mxautolocker.h"
+#include "mxdsmultiaction.h"
 #include "mxeventmanager.h"
 #include "mxmusicmanager.h"
 #include "mxnotificationmanager.h"
@@ -26,26 +27,6 @@ MxBool g_use3dSound;
 
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;
-
-// FUNCTION: LEGO1 0x100159e0
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
-{
-	MxDSAction action;
-
-	action.SetAtomId(*p_id);
-	action.SetUnknown24(-2);
-
-	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
-		action.SetObjectId(first);
-		DeleteObject(action);
-	}
-}
-
-// FUNCTION: LEGO1 0x10058a90
-MxBool MxOmni::IsTimerRunning()
-{
-	return m_timerRunning;
-}
 
 // FUNCTION: LEGO1 0x100acea0
 MxObjectFactory* ObjectFactory()
@@ -111,6 +92,12 @@ MxMusicManager* MusicManager()
 MxEventManager* EventManager()
 {
 	return MxOmni::GetInstance()->GetEventManager();
+}
+
+// FUNCTION: LEGO1 0x100acf50
+MxResult Start(MxDSAction* p_dsAction)
+{
+	return MxOmni::GetInstance()->Start(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100acf70
@@ -391,11 +378,23 @@ void MxOmni::DestroyInstance()
 	}
 }
 
-// STUB: LEGO1 0x100b06b0
-MxBool MxOmni::FUN_100b06b0(MxDSAction* p_action, const char* p_name)
+// FUNCTION: LEGO1 0x100b06b0
+MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 {
-	// TODO
-	return FAILURE;
+	if (!strcmp(p_action->GetSourceName(), p_name))
+		return TRUE;
+
+	if (p_action->IsA("MxDSMultiAction")) {
+		MxDSActionListCursor cursor(((MxDSMultiAction*) p_action)->GetActionList());
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			if (ActionSourceEquals(action, p_name))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100b07f0
@@ -418,7 +417,7 @@ MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 	if (controller != NULL) {
 		action = controller->GetUnk0x54().Find(action, FALSE);
 		if (action) {
-			if (FUN_100b06b0(action, "LegoLoopingAnimPresenter") == FALSE) {
+			if (ActionSourceEquals(action, "LegoLoopingAnimPresenter") == FALSE) {
 				delete controller->GetUnk0x54().Find(action, TRUE);
 			}
 		}

@@ -25,10 +25,10 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	virtual void VTable0x68();                         // vtable+0x68
-	virtual void VTable0x6c();                         // vtable+0x6c
-	virtual void VTable0x70(float p_float);            // vtable+0x70
-	virtual void VTable0x74(Matrix4Impl& p_transform); // vtable+0x74
+	virtual void VTable0x68();                     // vtable+0x68
+	virtual void VTable0x6c();                     // vtable+0x6c
+	virtual void VTable0x70(float p_float);        // vtable+0x70
+	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
 	// FUNCTION: LEGO1 0x10002d20
 	virtual void VTable0x78(MxU8 p_unk0xea) { m_unk0xea = p_unk0xea; } // vtable+0x78
 	// FUNCTION: LEGO1 0x10002d30
@@ -65,6 +65,9 @@ public:
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
 	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
+
+	// SYNTHETIC: LEGO1 0x1002d800
+	// LegoPathActor::`scalar deleting destructor'
 
 protected:
 	undefined m_unk0x78[0x64]; // 0x78

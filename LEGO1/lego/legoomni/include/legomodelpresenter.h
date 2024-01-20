@@ -26,8 +26,15 @@ public:
 	virtual void ParseExtra() override;  // vtable+0x30
 	virtual void Destroy() override;     // vtable+0x38
 
+	// SYNTHETIC: LEGO1 0x1000cdd0
+	// LegoModelPresenter::`scalar deleting destructor'
+
 protected:
 	void Destroy(MxBool p_fromDestructor);
+
+private:
+	undefined4 m_unk0x64; // 0x64
+	MxBool m_addedToView; // 0x68
 };
 
 #endif // LEGOMODELPRESENTER_H

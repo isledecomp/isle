@@ -26,6 +26,9 @@ public:
 		return !strcmp(p_name, Hospital::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100747d0
+	// Hospital::`scalar deleting destructor'
+
 private:
 	undefined2 m_unk0xf8;    // 0xf8
 	undefined4 m_unk0xfc;    // 0xfc

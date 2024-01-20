@@ -33,7 +33,7 @@ MxResult MxEventPresenter::AddToManager()
 
 	if (EventManager()) {
 		ret = SUCCESS;
-		EventManager()->AddPresenter(*this);
+		EventManager()->RegisterPresenter(*this);
 	}
 
 	return ret;
@@ -43,7 +43,7 @@ MxResult MxEventPresenter::AddToManager()
 void MxEventPresenter::Destroy()
 {
 	if (EventManager())
-		EventManager()->RemovePresenter(*this);
+		EventManager()->UnregisterPresenter(*this);
 
 	m_criticalSection.Enter();
 
@@ -71,20 +71,17 @@ void MxEventPresenter::ReadyTickle()
 		CopyData(chunk);
 		m_subscriber->DestroyChunk(chunk);
 		ParseExtra();
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Starting;
+		ProgressTickleState(e_starting);
 	}
 }
 
 // FUNCTION: LEGO1 0x100c2eb0
 void MxEventPresenter::StartingTickle()
 {
-	MxStreamChunk* chunk = NextChunk();
+	MxStreamChunk* chunk = CurrentChunk();
 
-	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Streaming;
-	}
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
+		ProgressTickleState(e_streaming);
 }
 
 // FUNCTION: LEGO1 0x100c2ef0
@@ -93,8 +90,8 @@ MxResult MxEventPresenter::PutData()
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (IsEnabled()) {
-		if (m_currentTickleState >= TickleState_Streaming &&
-			(m_currentTickleState <= TickleState_Repeating || m_currentTickleState == TickleState_Done)) {
+		if (m_currentTickleState >= e_streaming &&
+			(m_currentTickleState <= e_repeating || m_currentTickleState == e_done)) {
 			if (m_currentChunk && m_currentChunk->GetLength()) {
 				if (m_data[12] == 2) {
 					const char* data = (const char*) m_currentChunk->GetData();
@@ -106,7 +103,7 @@ MxResult MxEventPresenter::PutData()
 					variableTable->SetVariable(key, value);
 				}
 
-				if (m_currentTickleState == TickleState_Streaming)
+				if (m_currentTickleState == e_streaming)
 					m_subscriber->DestroyChunk(m_currentChunk);
 				m_currentChunk = NULL;
 			}

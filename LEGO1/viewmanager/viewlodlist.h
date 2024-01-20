@@ -89,9 +89,28 @@ public:
 	void Dump(void (*pTracer)(const char*, ...)) const;
 #endif
 
+	// SYNTHETIC: LEGO1 0x100a70c0
+	// ViewLODListManager::`scalar deleting destructor'
+
 private:
 	ViewLODListMap m_map;
 };
+
+// FUNCTION: LEGO1 0x1001dde0
+// _Lockit::~_Lockit
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100a7890
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100a80a0
+// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x100a70e0
+// Map<char const *,ViewLODList *,ROINameComparator>::~Map<char const *,ViewLODList *,ROINameComparator>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -118,5 +137,12 @@ inline int ViewLODList::Release()
 		m_owner->Destroy(this);
 	return m_refCount;
 }
+
+#ifdef _DEBUG
+inline void ViewLODList::Dump(void (*pTracer)(const char*, ...)) const
+{
+	// FIXME: dump something
+}
+#endif
 
 #endif // VIEWLODLIST_H

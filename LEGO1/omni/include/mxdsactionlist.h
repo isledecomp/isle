@@ -27,6 +27,9 @@ public:
 	// FUNCTION: LEGO1 0x100c9cb0
 	static void Destroy(MxDSAction* p_action) { delete p_action; }
 
+	// SYNTHETIC: LEGO1 0x100c9dc0
+	// MxDSActionList::`scalar deleting destructor'
+
 private:
 	undefined m_unk0x18;
 };
@@ -35,6 +38,7 @@ private:
 // class MxListCursor<MxDSAction *>
 
 // VTABLE: LEGO1 0x100d7e50
+// SIZE 0x10
 class MxDSActionListCursor : public MxListCursor<MxDSAction*> {
 public:
 	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list){};
@@ -42,6 +46,9 @@ public:
 
 // TEMPLATE: LEGO1 0x100c9cc0
 // MxCollection<MxDSAction *>::Compare
+
+// TEMPLATE: LEGO1 0x100c9cd0
+// MxCollection<MxDSAction *>::~MxCollection<MxDSAction *>
 
 // TEMPLATE: LEGO1 0x100c9d20
 // MxCollection<MxDSAction *>::Destroy

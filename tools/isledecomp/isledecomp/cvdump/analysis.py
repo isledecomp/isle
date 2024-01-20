@@ -94,7 +94,11 @@ class CvdumpNode:
     def name(self) -> Optional[str]:
         """Prefer "friendly" name if we have it.
         This is what we have been using to match functions."""
-        return self.friendly_name or self.decorated_name
+        return (
+            self.friendly_name
+            if self.friendly_name is not None
+            else self.decorated_name
+        )
 
     def size(self) -> Optional[int]:
         if self.confirmed_size is not None:

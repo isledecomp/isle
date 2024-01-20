@@ -5,12 +5,6 @@ DECOMP_SIZE_ASSERT(MxAudioManager, 0x30);
 // GLOBAL: LEGO1 0x10102108
 MxS32 MxAudioManager::g_count = 0;
 
-// FUNCTION: LEGO1 0x10029910
-MxS32 MxAudioManager::GetVolume()
-{
-	return this->m_volume;
-}
-
 // FUNCTION: LEGO1 0x100b8d00
 MxAudioManager::MxAudioManager()
 {

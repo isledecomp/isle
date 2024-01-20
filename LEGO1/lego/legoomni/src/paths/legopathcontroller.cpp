@@ -6,8 +6,14 @@ LegoPathController::LegoPathController()
 	// TODO
 }
 
-// STUB: LEGO1 0x10045740
-LegoPathController::~LegoPathController()
+// STUB: LEGO1 0x10045880
+void LegoPathController::VTable0x14()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10045b20
+void LegoPathController::Destroy()
 {
 	// TODO
 }

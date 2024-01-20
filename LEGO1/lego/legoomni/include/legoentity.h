@@ -3,7 +3,7 @@
 
 #include "decomp.h"
 #include "extra.h"
-#include "mxdsobject.h"
+#include "mxdsaction.h"
 #include "mxentity.h"
 #include "realtime/vector.h"
 #include "roi/legoroi.h"
@@ -12,10 +12,19 @@
 // SIZE 0x68 (probably)
 class LegoEntity : public MxEntity {
 public:
+	enum {
+		c_bit1 = 0x01
+	};
+
 	// Inlined at 0x100853f7
 	inline LegoEntity() { Init(); }
 
-	__declspec(dllexport) virtual ~LegoEntity() override; // vtable+0x0
+#ifdef ISLE_APP
+	__declspec(dllexport) virtual ~LegoEntity() override;
+#else
+	// FUNCTION: LEGO1 0x1000c290
+	__declspec(dllexport) virtual ~LegoEntity() override { Destroy(TRUE); }
+#endif
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
@@ -32,12 +41,13 @@ public:
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSObject& p_dsObject);                                           // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);                                             // vtable+0x1c
-	virtual void ParseAction(char*);                                                           // vtable+0x20
-	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2);                       // vtable+0x24
-	virtual void SetWorldTransform(Vector3Impl& p_loc, Vector3Impl& p_dir, Vector3Impl& p_up); // vtable+0x28
-	virtual void ResetWorldTransform(MxBool p_inVehicle);                                      // vtable+0x2c
+	virtual MxResult Create(MxDSAction& p_dsAction);                     // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
+	virtual void ParseAction(char*);                                     // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
+	virtual void SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir,
+								   const Vector3& p_up);  // vtable+0x28
+	virtual void ResetWorldTransform(MxBool p_inVehicle); // vtable+0x2c
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 	virtual void VTable0x34();                                                        // vtable+0x34
@@ -49,26 +59,31 @@ public:
 	virtual void VTable0x4c();                                                        // vtable+0x4c
 
 	void FUN_10010c30();
-	void SetLocation(Vector3Data& p_location, Vector3Data& p_direction, Vector3Data& p_up, MxBool);
+	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
+
+	inline LegoROI* GetROI() { return m_roi; }
 
 protected:
 	void Init();
 	void SetWorld();
 
-	undefined m_unk0x10;
-	undefined m_unk0x11;
-	Vector3Data m_worldLocation;  // 0x14
-	Vector3Data m_worldDirection; // 0x28
-	Vector3Data m_worldUp;        // 0x3c
-	MxFloat m_worldSpeed;         // 0x50
-	LegoROI* m_roi;               // 0x54
-	MxBool m_cameraFlag;          // 0x58
-	undefined m_unk0x59;
+	undefined m_unk0x10;             // 0x10
+	MxU8 m_flags;                    // 0x11
+	Mx3DPointFloat m_worldLocation;  // 0x14
+	Mx3DPointFloat m_worldDirection; // 0x28
+	Mx3DPointFloat m_worldUp;        // 0x3c
+	MxFloat m_worldSpeed;            // 0x50
+	LegoROI* m_roi;                  // 0x54
+	MxBool m_cameraFlag;             // 0x58
+	undefined m_unk0x59;             // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
-	ExtraActionType m_actionType; // 0x5c
-	char* m_actionArgString;      // 0x60
-	MxS32 m_actionArgNumber;      // 0x64
+	Extra::ActionType m_actionType; // 0x5c
+	char* m_actionArgString;        // 0x60
+	MxS32 m_actionArgNumber;        // 0x64
 };
+
+// SYNTHETIC: LEGO1 0x1000c3b0
+// LegoEntity::`scalar deleting destructor'
 
 #endif // LEGOENTITY_H

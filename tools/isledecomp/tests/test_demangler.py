@@ -14,6 +14,7 @@ string_demangle_cases = [
         14,
         True,
     ),
+    ("??_C@_00A@?$AA@", 0, False),
 ]
 
 

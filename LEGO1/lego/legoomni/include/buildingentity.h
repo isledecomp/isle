@@ -10,6 +10,8 @@ public:
 	BuildingEntity();
 	virtual ~BuildingEntity() override; // vtable+0x0
 
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+
 	// FUNCTION: LEGO1 0x10014f20
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -22,6 +24,9 @@ public:
 	{
 		return !strcmp(p_name, BuildingEntity::ClassName()) || LegoEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x10015010
+	// BuildingEntity::`scalar deleting destructor'
 };
 
 #endif // BUILDINGENTITY_H

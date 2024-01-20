@@ -1,6 +1,7 @@
 #ifndef LEGOHIDEANIMPRESENTER_H
 #define LEGOHIDEANIMPRESENTER_H
 
+#include "decomp.h"
 #include "legoloopinganimpresenter.h"
 
 // VTABLE: LEGO1 0x100d9278
@@ -8,6 +9,7 @@
 class LegoHideAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoHideAnimPresenter();
+	virtual ~LegoHideAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006d880
 	inline const char* ClassName() const override // vtable+0xc
@@ -22,8 +24,16 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
 
+	virtual void Destroy() override; // vtable+0x38
+
 private:
 	void Init();
+	void Destroy(MxBool p_fromDestructor);
+
+	undefined4* m_unk0xc0; // 0xc0
 };
+
+// SYNTHETIC: LEGO1 0x1006d9d0
+// LegoHideAnimPresenter::`scalar deleting destructor'
 
 #endif // LEGOHIDEANIMPRESENTER_H

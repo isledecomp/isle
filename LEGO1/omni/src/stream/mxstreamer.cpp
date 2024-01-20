@@ -50,7 +50,7 @@ MxStreamController* MxStreamer::Open(const char* p_name, MxU16 p_lookupType)
 
 	if (!GetOpenStream(p_name)) {
 		switch (p_lookupType) {
-		case e_DiskStream:
+		case e_diskStream:
 			stream = new MxDiskStreamController();
 			break;
 		case e_RAMStream:
@@ -84,11 +84,11 @@ MxLong MxStreamer::Close(const char* p_name)
 			else {
 #ifdef COMPAT_MODE
 				{
-					MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+					MxStreamerNotification notification(c_notificationStreamer, NULL, c);
 					NotificationManager()->Send(this, &notification);
 				}
 #else
-				NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+				NotificationManager()->Send(this, &MxStreamerNotification(c_notificationStreamer, NULL, c));
 #endif
 			}
 
@@ -119,6 +119,15 @@ MxStreamController* MxStreamer::GetOpenStream(const char* p_name)
 	}
 
 	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100b98f0
+void MxStreamer::FUN_100b98f0(MxDSAction* p_action)
+{
+	MxStreamController* controller = GetOpenStream(p_action->GetAtomId().GetInternal());
+	if (controller && controller->IsA("MxDiskStreamController")) {
+		((MxDiskStreamController*) controller)->FUN_100c8120(p_action);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b9930
@@ -184,7 +193,7 @@ MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 // FUNCTION: LEGO1 0x100b9b60
 MxLong MxStreamer::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p_param).GetNotification() == MXSTREAMER_DELETE_NOTIFY) {
+	if (((MxNotificationParam&) p_param).GetNotification() == c_notificationStreamer) {
 		MxDSAction ds;
 
 		ds.SetUnknown24(-2);
@@ -196,11 +205,11 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 		else {
 #ifdef COMPAT_MODE
 			{
-				MxStreamerNotification notification(MXSTREAMER_DELETE_NOTIFY, NULL, c);
+				MxStreamerNotification notification(c_notificationStreamer, NULL, c);
 				NotificationManager()->Send(this, &notification);
 			}
 #else
-			NotificationManager()->Send(this, &MxStreamerNotification(MXSTREAMER_DELETE_NOTIFY, NULL, c));
+			NotificationManager()->Send(this, &MxStreamerNotification(c_notificationStreamer, NULL, c));
 #endif
 		}
 	}

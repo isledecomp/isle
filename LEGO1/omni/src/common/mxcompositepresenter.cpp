@@ -8,14 +8,6 @@
 
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
-// FUNCTION: LEGO1 0x1000caf0
-MxBool MxCompositePresenter::VTable0x64(undefined4 p_undefined)
-{
-	if (m_compositePresenter)
-		return m_compositePresenter->VTable0x64(p_undefined);
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x100b60b0
 MxCompositePresenter::MxCompositePresenter()
 {
@@ -120,7 +112,7 @@ MxLong MxCompositePresenter::Notify(MxParam& p_param)
 	case c_notificationEndAction:
 		VTable0x58((MxEndActionNotificationParam&) p_param);
 		break;
-	case MXPRESENTER_NOTIFICATION:
+	case c_notificationPresenter:
 		VTable0x5c((MxNotificationParam&) p_param);
 	}
 
@@ -163,8 +155,8 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 	else {
 		if (m_action->IsA("MxDSSerialAction") && it != m_list.end()) {
 			MxPresenter* presenter = *it;
-			if (presenter->GetCurrentTickleState() == TickleState_Idle)
-				presenter->SetTickleState(TickleState_Ready);
+			if (presenter->GetCurrentTickleState() == e_idle)
+				presenter->SetTickleState(e_ready);
 		}
 	}
 }
@@ -179,8 +171,8 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 			if (*it == presenter) {
 				m_list.erase(it++);
 
-				if (presenter->GetCurrentTickleState() == TickleState_Idle)
-					presenter->SetTickleState(TickleState_Ready);
+				if (presenter->GetCurrentTickleState() == e_idle)
+					presenter->SetTickleState(e_ready);
 
 				MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
 				MxDSActionListCursor cursor(actions);
@@ -194,8 +186,8 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 				else {
 					if (m_action->IsA("MxDSSerialAction")) {
 						MxPresenter* presenter = *it;
-						if (presenter->GetCurrentTickleState() == TickleState_Idle)
-							presenter->SetTickleState(TickleState_Ready);
+						if (presenter->GetCurrentTickleState() == e_idle)
+							presenter->SetTickleState(e_ready);
 					}
 				}
 
@@ -218,8 +210,8 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 			}
 			else if (m_action->IsA("MxDSSerialAction")) {
 				MxPresenter* presenter = *it;
-				if (presenter->GetCurrentTickleState() == TickleState_Idle)
-					presenter->SetTickleState(TickleState_Ready);
+				if (presenter->GetCurrentTickleState() == e_idle)
+					presenter->SetTickleState(e_ready);
 			}
 			return;
 		}
@@ -229,14 +221,13 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 // FUNCTION: LEGO1 0x100b6bc0
 void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 {
-	m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-	m_currentTickleState = p_tickleState;
+	ProgressTickleState(p_tickleState);
 
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		MxPresenter* presenter = *it;
 		presenter->SetTickleState(p_tickleState);
 
-		if (m_action->IsA("MxDSSerialAction") && p_tickleState == TickleState_Ready)
+		if (m_action->IsA("MxDSSerialAction") && p_tickleState == e_ready)
 			return;
 	}
 }

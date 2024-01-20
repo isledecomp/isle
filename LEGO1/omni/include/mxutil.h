@@ -3,8 +3,11 @@
 
 #include "mxtypes.h"
 
+#include <string.h>
+
 class MxDSFile;
 class MxDSObject;
+class MxDSAction;
 
 template <class T>
 inline T Abs(T p_t)
@@ -53,21 +56,22 @@ inline void GetString(MxU8** p_source, char** p_dest, T* p_obj, void (T::*p_sett
 	*p_source += strlen(*p_dest) + 1;
 }
 
-MxBool FUN_100b6e10(
-	MxS32 p_bitmapWidth,
-	MxS32 p_bitmapHeight,
-	MxS32 p_videoParamWidth,
-	MxS32 p_videoParamHeight,
-	MxS32* p_left,
-	MxS32* p_top,
-	MxS32* p_right,
-	MxS32* p_bottom,
+MxBool GetRectIntersection(
+	MxS32 p_rect1Width,
+	MxS32 p_rect1Height,
+	MxS32 p_rect2Width,
+	MxS32 p_rect2Height,
+	MxS32* p_rect1Left,
+	MxS32* p_rect1Top,
+	MxS32* p_rect2Left,
+	MxS32* p_rect2Top,
 	MxS32* p_width,
 	MxS32* p_height
 );
 
 __declspec(dllexport) void MakeSourceName(char*, const char*);
 __declspec(dllexport) void SetOmniUserMessage(void (*)(const char*, int));
+void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
 __declspec(dllexport) MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
 
 MxBool KeyValueStringParse(char*, const char*, const char*);

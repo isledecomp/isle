@@ -10,11 +10,11 @@
 class MxDSChunk : public MxCore {
 public:
 	enum {
-		Flag_Bit1 = 0x01,
-		Flag_End = 0x02,
-		Flag_Bit3 = 0x04,
-		Flag_Split = 0x10,
-		Flag_Bit16 = 0x8000
+		c_bit1 = 0x01,
+		c_end = 0x02,
+		c_bit3 = 0x04,
+		c_split = 0x10,
+		c_bit16 = 0x8000
 	};
 
 	MxDSChunk();
@@ -56,6 +56,9 @@ public:
 		if (m_data)
 			delete[] m_data;
 	}
+
+	// SYNTHETIC: LEGO1 0x100be150
+	// MxDSChunk::`scalar deleting destructor'
 
 protected:
 	MxU16 m_flags;    // 0x8

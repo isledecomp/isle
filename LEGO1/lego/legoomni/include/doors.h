@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, Doors::ClassName()) || LegoPathActor::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000e580
+	// Doors::`scalar deleting destructor'
 };
 
 #endif // DOORS_H

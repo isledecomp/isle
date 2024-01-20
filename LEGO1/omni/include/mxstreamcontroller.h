@@ -118,4 +118,7 @@ protected:
 // TEMPLATE: LEGO1 0x100c1240
 // List<MxNextActionDataStart *>::~List<MxNextActionDataStart *>
 
+// TEMPLATE: LEGO1 0x100c1bc0
+// list<MxDSAction *,allocator<MxDSAction *> >::insert
+
 #endif // MXSTREAMCONTROLLER_H

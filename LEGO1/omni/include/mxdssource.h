@@ -11,6 +11,9 @@ class MxDSSource : public MxCore {
 public:
 	MxDSSource() : m_lengthInDWords(0), m_pBuffer(NULL), m_position(-1) {}
 
+	// FUNCTION: LEGO1 0x100bff60
+	virtual ~MxDSSource() override { delete[] m_pBuffer; }
+
 	// FUNCTION: LEGO1 0x100c0010
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
@@ -40,5 +43,8 @@ protected:
 	MxU32* m_pBuffer;         // 0x0c
 	MxLong m_position;        // 0x10
 };
+
+// SYNTHETIC: LEGO1 0x100c00a0
+// MxDSSource::`scalar deleting destructor'
 
 #endif // MXDSSOURCE_H

@@ -27,6 +27,9 @@ public:
 	inline void SetUnkown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
 	inline void SetUnkown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
 
+	// SYNTHETIC: LEGO1 0x10072630
+	// Act3::`scalar deleting destructor'
+
 protected:
 	undefined m_unk0xf8[0x4114]; // 0xf8
 	MxEntity* m_unk0x420c;       // 0x420c

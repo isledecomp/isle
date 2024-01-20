@@ -31,8 +31,8 @@ public:
 	// SYNTHETIC: LEGO1 0x100011e0
 	// Score::`scalar deleting destructor'
 
-	virtual MxResult Create(MxDSObject& p_dsObject) override; // vtable+18
-	virtual void Stop() override;                             // vtable+50
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+18
+	virtual void VTable0x50() override;                       // vtable+50
 	virtual MxBool VTable0x5c() override;                     // vtable+5c
 	virtual MxBool VTable0x64() override;                     // vtable+64
 	virtual void VTable0x68(MxBool p_add) override;           // vtable+68

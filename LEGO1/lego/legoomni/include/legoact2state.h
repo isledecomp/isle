@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, LegoAct2State::ClassName()) || LegoState::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000e040
+	// LegoAct2State::`scalar deleting destructor'
 };
 
 #endif // LEGOACT2STATE_H

@@ -18,6 +18,9 @@ public:
 
 	virtual MxS8 Compare(MxVariable*, MxVariable*) override; // vtable+0x14
 	virtual MxU32 Hash(MxVariable*) override;                // vtable+0x18
+
+	// SYNTHETIC: LEGO1 0x100afdd0
+	// MxVariableTable::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dc1b0
@@ -25,6 +28,9 @@ public:
 
 // VTABLE: LEGO1 0x100dc1e8
 // class MxHashTable<MxVariable *>
+
+// VTABLE: LEGO1 0x100dc680
+// class MxHashTableCursor<MxVariable *>
 
 // TEMPLATE: LEGO1 0x100afcd0
 // MxCollection<MxVariable *>::Compare
@@ -49,6 +55,12 @@ public:
 
 // SYNTHETIC: LEGO1 0x100b0ca0
 // MxHashTable<MxVariable *>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100b7680
+// MxHashTableCursor<MxVariable *>::~MxHashTableCursor<MxVariable *>
+
+// SYNTHETIC: LEGO1 0x100b76d0
+// MxHashTableCursor<MxVariable *>::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x100b7ab0
 // MxHashTable<MxVariable *>::Resize

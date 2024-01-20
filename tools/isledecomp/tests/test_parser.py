@@ -442,3 +442,82 @@ def test_static_variable(parser):
     )
     assert len(parser.variables) == 2
     assert parser.variables[1].is_static is True
+
+
+def test_reject_global_return(parser):
+    """Previously we had annotated strings with the GLOBAL marker.
+    For example: if a function returned a string. We now want these to be
+    annotated with the STRING marker."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x5555",
+            "void test_function() {",
+            "  // GLOBAL: TEST 0x8888",
+            '  return "test";',
+            "}",
+        ]
+    )
+    assert len(parser.variables) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_NOT_VARIABLE
+
+
+def test_global_string(parser):
+    """We now allow GLOBAL and STRING markers for the same item."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// STRING: TEXT 0x5555",
+            'char* g_test = "hello";',
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.strings) == 1
+    assert len(parser.alerts) == 0
+
+    assert parser.variables[0].name == "g_test"
+    assert parser.strings[0].name == "hello"
+
+
+def test_comment_variables(parser):
+    """Match on hidden variables from libraries."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// g_test",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "g_test"
+
+
+def test_flexible_variable_prefix(parser):
+    """Don't alert to library variables that lack the g_ prefix.
+    This is out of our control."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// some_other_variable",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.alerts) == 0
+    assert parser.variables[0].name == "some_other_variable"
+
+
+def test_string_ignore_g_prefix(parser):
+    """String annotations above a regular variable should not alert to
+    the missing g_ prefix. This is only required for GLOBAL markers."""
+
+    parser.read_lines(
+        [
+            "// STRING: TEST 0x1234",
+            'const char* value = "";',
+        ]
+    )
+    assert len(parser.strings) == 1
+    assert len(parser.alerts) == 0

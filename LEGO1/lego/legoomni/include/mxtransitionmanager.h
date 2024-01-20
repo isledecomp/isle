@@ -32,18 +32,21 @@ public:
 	virtual MxResult GetDDrawSurfaceFromVideoManager(); // vtable+0x14
 
 	enum TransitionType {
-		NOT_TRANSITIONING,
-		NO_ANIMATION,
-		DISSOLVE,
-		PIXELATION,
-		SCREEN_WIPE,
-		WINDOWS,
-		BROKEN // Unknown what this is supposed to be, it locks the game up
+		e_notTransitioning = 0,
+		e_noAnimation,
+		e_dissolve,
+		e_pixelation,
+		e_screenWipe,
+		e_windows,
+		e_broken // Unknown what this is supposed to be, it locks the game up
 	};
 
 	MxResult StartTransition(TransitionType p_animationType, MxS32 p_speed, MxBool p_doCopy, MxBool p_playMusicInAnim);
 
 	inline TransitionType GetTransitionType() { return m_transitionType; }
+
+	// SYNTHETIC: LEGO1 0x1004b9e0
+	// MxTransitionManager::`scalar deleting destructor'
 
 private:
 	void EndTransition(MxBool p_notifyWorld);

@@ -15,14 +15,14 @@ MxU16 g_sep = TWOCC(',', ' ');
 // FUNCTION: LEGO1 0x100ad810
 MxDSAction::MxDSAction()
 {
-	this->m_flags = MxDSAction::Flag_Enabled;
+	this->m_flags = MxDSAction::c_enabled;
 	this->m_startTime = INT_MIN;
 	this->m_extraData = NULL;
 	this->m_extraLength = 0;
 	this->m_duration = INT_MIN;
 	this->m_loopCount = -1;
 
-	this->SetType(MxDSType_Action);
+	this->SetType(e_action);
 	this->m_location.Fill(FLT_MAX);
 	this->m_direction.Fill(FLT_MAX);
 	this->m_up.Fill(FLT_MAX);
@@ -86,6 +86,12 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_unk0x88 = p_dsAction.m_unk0x88;
 	this->m_origin = p_dsAction.m_origin;
 	this->m_unk0x90 = p_dsAction.m_unk0x90;
+}
+
+// FUNCTION: LEGO1 0x100adbd0
+undefined4 MxDSAction::VTable0x14()
+{
+	return MxDSObject::VTable0x14();
 }
 
 // FUNCTION: LEGO1 0x100adbe0

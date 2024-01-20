@@ -38,6 +38,9 @@ public:
 
 	inline MxDSActionList* GetActionList() const { return m_actions; };
 
+	// SYNTHETIC: LEGO1 0x100ca040
+	// MxDSMultiAction::`scalar deleting destructor'
+
 protected:
 	MxU32 m_sizeOnDisk;        // 0x94
 	MxDSActionList* m_actions; // 0x98

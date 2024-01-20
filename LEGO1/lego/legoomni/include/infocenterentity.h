@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, InfoCenterEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x1000f7b0
+	// InfoCenterEntity::`scalar deleting destructor'
 };
 
 #endif // INFOCENTERENTITY_H

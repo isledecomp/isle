@@ -32,7 +32,7 @@ public:
 
 	__declspec(dllexport) void InvalidateRect(MxRect32&);
 	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*);            // vtable+0x30
-	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
+	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
 
 	MxResult Init();
 	void Destroy(MxBool p_fromDestructor);
@@ -43,6 +43,9 @@ public:
 	inline LPDIRECTDRAW GetDirectDraw() { return this->m_pDirectDraw; }
 	inline MxDisplaySurface* GetDisplaySurface() { return this->m_displaySurface; }
 	inline MxRegion* GetRegion() { return this->m_region; }
+
+	// SYNTHETIC: LEGO1 0x100be280
+	// MxVideoManager::`scalar deleting destructor'
 
 protected:
 	MxVideoParam m_videoParam;          // 0x2c

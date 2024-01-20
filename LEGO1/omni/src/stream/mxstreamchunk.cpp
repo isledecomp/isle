@@ -54,7 +54,7 @@ MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, 
 {
 	for (MxStreamListMxDSSubscriber::iterator it = p_subscriberList.begin(); it != p_subscriberList.end(); it++) {
 		if ((*it)->GetObjectId() == m_objectId && (*it)->GetUnknown48() == p_obj24val) {
-			if (m_flags & MxDSChunk::Flag_End && m_buffer) {
+			if (m_flags & MxDSChunk::c_end && m_buffer) {
 				m_buffer->ReleaseRef(this);
 				m_buffer = NULL;
 			}

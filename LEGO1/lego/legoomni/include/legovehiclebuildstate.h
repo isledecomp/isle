@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x100260a0
+	// LegoVehicleBuildState::`scalar deleting destructor'
+
 public:
 	struct UnkStruct {
 		undefined4 m_unk0x00;

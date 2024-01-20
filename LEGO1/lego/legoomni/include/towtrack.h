@@ -23,6 +23,9 @@ public:
 		return !strcmp(p_name, TowTrack::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	// SYNTHETIC: LEGO1 0x1004c950
+	// TowTrack::`scalar deleting destructor'
+
 private:
 	// TODO: TowTrack field types
 	undefined m_unk0x154[4];

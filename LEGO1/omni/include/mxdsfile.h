@@ -38,6 +38,9 @@ public:
 
 	inline MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
 
+	// SYNTHETIC: LEGO1 0x100c01e0
+	// MxDSFile::`scalar deleting destructor'
+
 private:
 	MxLong ReadChunks();
 	struct ChunkHeader {

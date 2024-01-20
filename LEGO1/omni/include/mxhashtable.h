@@ -32,10 +32,10 @@ public:
 template <class T>
 class MxHashTable : protected MxCollection<T> {
 public:
-	enum HashTableOpt {
-		HashTableOpt_NoExpand = 0,
-		HashTableOpt_ExpandAdd = 1,
-		HashTableOpt_ExpandMultiply = 2,
+	enum Option {
+		e_noExpand = 0,
+		e_expandAll,
+		e_expandMultiply,
 	};
 
 	MxHashTable()
@@ -43,7 +43,7 @@ public:
 		m_numSlots = HASH_TABLE_INIT_SIZE;
 		m_slots = new MxHashTableNode<T>*[HASH_TABLE_INIT_SIZE];
 		memset(m_slots, 0, sizeof(MxHashTableNode<T>*) * m_numSlots);
-		m_resizeOption = HashTableOpt_NoExpand;
+		m_resizeOption = e_noExpand;
 	}
 
 	virtual ~MxHashTable() override;
@@ -62,7 +62,7 @@ protected:
 	MxHashTableNode<T>** m_slots; // 0x10
 	MxU32 m_numSlots;             // 0x14
 	MxU32 m_autoResizeRatio;      // 0x18
-	HashTableOpt m_resizeOption;  // 0x1c
+	Option m_resizeOption;        // 0x1c
 	// FIXME: or FIXME? This qword is used as an integer or double depending
 	// on the value of m_resizeOption. Hard to say whether this is how the devs
 	// did it, but a simple cast in either direction doesn't match.
@@ -177,10 +177,10 @@ inline void MxHashTable<T>::Resize()
 	MxHashTableNode<T>** oldTable = m_slots;
 
 	switch (m_resizeOption) {
-	case HashTableOpt_ExpandAdd:
+	case e_expandAll:
 		m_numSlots += m_increaseAmount;
 		break;
-	case HashTableOpt_ExpandMultiply:
+	case e_expandMultiply:
 		m_numSlots *= m_increaseFactor;
 		break;
 	}

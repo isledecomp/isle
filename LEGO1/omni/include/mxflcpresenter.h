@@ -28,10 +28,14 @@ public:
 
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
 	virtual void CreateBitmap() override;                     // vtable+0x60
+	virtual void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
 	virtual void RealizePalette() override;                   // vtable+0x70
 
+	// SYNTHETIC: LEGO1 0x100b3400
+	// MxFlcPresenter::`scalar deleting destructor'
+
 protected:
-	FLIC_HEADER* m_flicHeader;
+	FLIC_HEADER* m_flcHeader; // 0x64
 };
 
 #endif // MXFLCPRESENTER_H

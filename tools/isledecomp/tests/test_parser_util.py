@@ -10,6 +10,7 @@ from isledecomp.parser.util import (
     is_blank_or_comment,
     get_class_name,
     get_variable_name,
+    get_string_contents,
 )
 
 
@@ -158,3 +159,18 @@ variable_name_cases = [
 @pytest.mark.parametrize("line,name", variable_name_cases)
 def test_get_variable_name(line: str, name: str):
     assert get_variable_name(line) == name
+
+
+string_match_cases = [
+    ('return "hello world";', "hello world"),
+    ('"hello\\\\"', "hello\\"),
+    ('"hello \\"world\\""', 'hello "world"'),
+    ('"hello\\nworld"', "hello\nworld"),
+    # Only match first string if there are multiple options
+    ('Method("hello", "world");', "hello"),
+]
+
+
+@pytest.mark.parametrize("line, string", string_match_cases)
+def test_get_string_contents(line: str, string: str):
+    assert get_string_contents(line) == string

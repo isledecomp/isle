@@ -68,7 +68,7 @@
 #include "doors.h"
 #include "jetski.h"
 #include "legoanimmmpresenter.h"
-#include "motorcycle.h"
+#include "motocycle.h"
 #include "racecar.h"
 #include "towtrack.h"
 #include "towtrackmissionstate.h"
@@ -106,7 +106,7 @@
 // FUNCTION: LEGO1 0x10006e40
 LegoObjectFactory::LegoObjectFactory()
 {
-#define X(V) this->m_id##V = MxAtomId(#V, LookupMode_Exact);
+#define X(V) this->m_id##V = MxAtomId(#V, e_exact);
 	FOR_LEGOOBJECTFACTORY_OBJECTS(X)
 #undef X
 }
@@ -114,7 +114,7 @@ LegoObjectFactory::LegoObjectFactory()
 // FUNCTION: LEGO1 0x10009a90
 MxCore* LegoObjectFactory::Create(const char* p_name)
 {
-	MxAtomId atom(p_name, LookupMode_Exact);
+	MxAtomId atom(p_name, e_exact);
 
 #define X(V)                                                                                                           \
 	if (this->m_id##V == atom) {                                                                                       \

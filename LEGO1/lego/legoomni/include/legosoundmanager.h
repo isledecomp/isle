@@ -14,6 +14,9 @@ public:
 	virtual void Destroy() override;                                              // vtable+18
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
 
+	// SYNTHETIC: LEGO1 0x10029920
+	// LegoSoundManager::`scalar deleting destructor'
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);

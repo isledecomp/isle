@@ -30,7 +30,7 @@ public:
 	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 		override;                                                                          // vtable+0x2c
 	virtual MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
-	virtual void VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
+	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
 	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
 	// FUNCTION: LGEO1 0x1007ab10
 	virtual LegoUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c
@@ -41,6 +41,7 @@ public:
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }
+	inline void SetUnk0x554(MxBool p_unk0x554) { this->m_unk0x554 = p_unk0x554; }
 
 private:
 	MxResult CreateDirect3D();

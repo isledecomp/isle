@@ -24,6 +24,9 @@ public:
 	{
 		return !strcmp(p_name, HistoryBook::ClassName()) || LegoWorld::IsA(p_name);
 	}
+
+	// SYNTHETIC: LEGO1 0x100824b0
+	// HistoryBook::`scalar deleting destructor'
 };
 
 #endif // HISTORYBOOK_H

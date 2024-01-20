@@ -5,7 +5,7 @@ DECOMP_SIZE_ASSERT(MxDSAnim, 0xb8)
 // FUNCTION: LEGO1 0x100c8ff0
 MxDSAnim::MxDSAnim()
 {
-	this->SetType(MxDSType_Anim);
+	this->SetType(e_anim);
 }
 
 // FUNCTION: LEGO1 0x100c91a0

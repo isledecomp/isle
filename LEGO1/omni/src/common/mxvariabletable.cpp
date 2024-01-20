@@ -50,6 +50,8 @@ void MxVariableTable::SetVariable(MxVariable* p_var)
 // FUNCTION: LEGO1 0x100b78f0
 const char* MxVariableTable::GetVariable(const char* p_key)
 {
+	// STRING: ISLE 0x41008c
+	// STRING: LEGO1 0x100f01d4
 	const char* value = "";
 	MxHashTableCursor<MxVariable*> cursor(this);
 	MxVariable* var = new MxVariable(p_key);

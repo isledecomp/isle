@@ -4,8 +4,12 @@
 #include "assert.h"
 #include "lego3dview.h"
 
-class Tgl::Renderer;
-class Tgl::Group;
+namespace Tgl
+{
+class Renderer;
+class Group;
+} // namespace Tgl
+
 class ViewROI;
 
 // ??? for now
@@ -52,6 +56,9 @@ public:
 	Lego3DView* GetLego3DView();
 	// ??? for now
 	ViewLODListManager* GetViewLODListManager();
+
+	// SYNTHETIC: LEGO1 0x100ab340
+	// Lego3DManager::`scalar deleting destructor'
 
 private:
 	Tgl::Renderer* m_pRenderer; // 0x04

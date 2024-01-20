@@ -43,4 +43,50 @@ struct MxAtomIdCounterCompare {
 
 class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare> {};
 
+// SYNTHETIC: LEGO1 0x100ad170
+// MxAtomIdCounter::~MxAtomIdCounter
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100ad480
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::iterator::_Dec
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100ad780
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Lbound
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100ad4d0
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Insert
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100af6d0
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::~_Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCou
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100af7a0
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::iterator::_Inc
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100af7e0
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::erase
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100afc40
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Erase
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100afc80
+// set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::~set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x100afe40
+// Set<MxAtomIdCounter *,MxAtomIdCounterCompare>::~Set<MxAtomIdCounter *,MxAtomIdCounterCompare>
+
 #endif // MXATOMIDCOUNTER_H

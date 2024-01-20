@@ -10,6 +10,7 @@
 
 DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
 DECOMP_SIZE_ASSERT(MxStopWatch, 0x18);
+DECOMP_SIZE_ASSERT(MxFrequencyMeter, 0x20);
 
 // FUNCTION: LEGO1 0x1007aa20
 LegoVideoManager::LegoVideoManager()
@@ -64,10 +65,10 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	MxResult result = FAILURE;
 
 	MxDeviceEnumerate100d9cc8 deviceEnumerate;
-	Vector3Data posVec(0.0, 1.25, -50.0);
-	Vector3Data dirVec(0.0, 0.0, 1.0);
-	Vector3Data upVec(0.0, 1.0, 0.0);
-	Matrix4Data outMatrix;
+	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
+	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
+	Mx3DPointFloat upVec(0.0, 1.0, 0.0);
+	MxMatrix outMatrix;
 	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
 	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
 	MxS32 deviceNum = -1;
@@ -229,7 +230,7 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 MxResult LegoVideoManager::Tickle()
 {
 	if (m_unk0x554 && !m_videoParam.Flags().GetFlipSurfaces() &&
-		TransitionManager()->GetTransitionType() == MxTransitionManager::NOT_TRANSITIONING)
+		TransitionManager()->GetTransitionType() == MxTransitionManager::e_notTransitioning)
 		Sleep(30);
 
 	m_stopWatch->Stop();
@@ -368,7 +369,7 @@ void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable, MxBool p_scale)
 			m_fullScreenMovie = TRUE;
 		}
 		else {
-			m_displaySurface->FUN_100ba640();
+			m_displaySurface->ClearScreen();
 			m_displaySurface->GetVideoParam().Flags().SetF1bit3(FALSE);
 
 			// restore previous pallete
@@ -422,7 +423,7 @@ void LegoVideoManager::OverrideSkyColor(MxBool p_shouldOverride)
 }
 
 // FUNCTION: LEGO1 0x1007c4d0
-void LegoVideoManager::VTable0x34(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
+void LegoVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height)
 {
 	if (p_width == 0) {
 		p_width = m_videoParam.GetRect().GetWidth();
@@ -461,7 +462,7 @@ MxResult LegoVideoManager::ConfigureD3DRM()
 
 	MxAssignedDevice* assignedDevice = m_direct3d->GetAssignedDevice();
 
-	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::Flag_HardwareMode) {
+	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::c_hardwareMode) {
 		if (assignedDevice->GetDesc().dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR)
 			d3drm->SetTextureQuality(D3DRMTEXTURE_LINEAR);
 

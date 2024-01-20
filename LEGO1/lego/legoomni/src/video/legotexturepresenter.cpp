@@ -7,13 +7,13 @@
 // FUNCTION: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()
 {
-	VideoManager()->RemovePresenter(*this);
+	VideoManager()->UnregisterPresenter(*this);
 }
 
 // FUNCTION: LEGO1 0x1004ebb0
 MxResult LegoTexturePresenter::AddToManager()
 {
-	VideoManager()->AddPresenter(*this);
+	VideoManager()->RegisterPresenter(*this);
 	return SUCCESS;
 }
 
@@ -28,7 +28,7 @@ MxResult LegoTexturePresenter::PutData()
 void LegoTexturePresenter::DoneTickle()
 {
 	if (this->m_compositePresenter && !this->m_compositePresenter->VTable0x64(2)) {
-		SetTickleState(TickleState_Idle);
+		SetTickleState(e_idle);
 		return;
 	}
 

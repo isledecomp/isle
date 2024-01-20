@@ -2,8 +2,24 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "Building ${bits}-bit LEGO Island")
+if (NOT bits EQUAL 32)
+    message(WARNING "Only 32-bit executables are supported")
+endif()
+
+set(MSVC_FOR_DECOMP FALSE)
+if (MSVC)
+    # Visual C++ 4.2 -> cl version 10.2.0
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
+        set(MSVC_FOR_DECOMP TRUE)
+    endif()
+endif()
+
+message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
+
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC})
+option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(lego1 SHARED
@@ -42,7 +58,9 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
+  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
@@ -81,7 +99,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/jukebox.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxentity.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
-  LEGO1/lego/legoomni/src/isle/motorcycle.cpp
+  LEGO1/lego/legoomni/src/isle/motocycle.cpp
   LEGO1/lego/legoomni/src/isle/radio.cpp
   LEGO1/lego/legoomni/src/isle/radiostate.cpp
   LEGO1/lego/legoomni/src/isle/skateboard.cpp
@@ -123,8 +141,11 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
+  LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
+  LEGO1/mxgeometry/mxgeometry3d.cpp
+  LEGO1/mxgeometry/mxmatrix.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
   LEGO1/omni/src/action/mxdsevent.cpp
@@ -161,11 +182,9 @@ add_library(lego1 SHARED
   LEGO1/omni/src/common/mxutil.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
-  LEGO1/omni/src/control/mxcontrolpresenter.cpp
   LEGO1/omni/src/entity/mxentity.cpp
   LEGO1/omni/src/event/mxeventmanager.cpp
   LEGO1/omni/src/event/mxeventpresenter.cpp
-  LEGO1/omni/src/main/mxmain.cpp
   LEGO1/omni/src/main/mxomni.cpp
   LEGO1/omni/src/main/mxomnicreateflags.cpp
   LEGO1/omni/src/main/mxomnicreateparam.cpp
@@ -259,9 +278,10 @@ if (ISLE_USE_DX5)
 endif()
 
 target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
+target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack)
+target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack flic)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -274,6 +294,8 @@ if (ISLE_BUILD_APP)
     ISLE/isleapp.cpp
     ISLE/define.cpp
   )
+
+  target_compile_definitions(isle PRIVATE ISLE_APP)
 
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
   target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
@@ -300,6 +322,29 @@ if (ISLE_BUILD_APP)
 endif()
 
 if (MSVC)
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
+    target_compile_definitions(lego1 PRIVATE _CRT_SECURE_NO_WARNINGS)
+    if (ISLE_BUILD_APP)
+      target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
+    endif()
+  endif()
+  # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
+    target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
+    if (ISLE_BUILD_APP)
+      target_compile_options(isle PRIVATE "-Zc:__cplusplus")
+    endif()
+  endif()
+endif()
+
+if (MSVC_FOR_DECOMP)
+    target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
+    if (ISLE_BUILD_APP)
+        target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
+    endif()
+endif()
+
+if (MSVC_FOR_DECOMP)
   # These flags have been taken from the defaults for a Visual C++ 4.20 project (the compiler the
   # game was originally built with) and tweaked slightly to produce more debugging info for reccmp.
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.

@@ -18,6 +18,9 @@ public:
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	}; // vtable+0x14
+
+	// SYNTHETIC: LEGO1 0x1001ceb0
+	// MxPresenterList::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100d6488
@@ -52,6 +55,9 @@ public:
 
 // TEMPLATE: LEGO1 0x1001ce20
 // MxList<MxPresenter *>::~MxList<MxPresenter *>
+
+// TEMPLATE: LEGO1 0x1001cf20
+// MxPtrList<MxPresenter>::~MxPtrList<MxPresenter>
 
 // SYNTHETIC: LEGO1 0x1001cf70
 // MxCollection<MxPresenter *>::`scalar deleting destructor'

@@ -20,10 +20,8 @@ void MxLoopingMIDIPresenter::StreamingTickle()
 		return;
 	}
 
-	if (m_chunk->GetTime() + m_action->GetDuration() <= m_action->GetElapsedTime()) {
-		m_previousTickleStates |= 1 << (unsigned char) m_currentTickleState;
-		m_currentTickleState = TickleState_Done;
-	}
+	if (m_chunk->GetTime() + m_action->GetDuration() <= m_action->GetElapsedTime())
+		ProgressTickleState(e_done);
 }
 
 // FUNCTION: LEGO1 0x100c2ae0
@@ -40,9 +38,9 @@ MxResult MxLoopingMIDIPresenter::PutData()
 {
 	m_criticalSection.Enter();
 
-	if (m_currentTickleState == TickleState_Streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
+	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());
-		MusicManager()->FUN_100c09c0(m_chunk->GetData(), !m_action->GetLoopCount() ? -1 : m_action->GetLoopCount());
+		MusicManager()->InitializeMIDI(m_chunk->GetData(), !m_action->GetLoopCount() ? -1 : m_action->GetLoopCount());
 	}
 
 	m_criticalSection.Leave();
