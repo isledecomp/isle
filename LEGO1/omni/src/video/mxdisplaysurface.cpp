@@ -238,7 +238,7 @@ void MxDisplaySurface::Destroy()
 	}
 
 	if (this->m_16bitPal)
-		delete this->m_16bitPal;
+		delete[] this->m_16bitPal;
 
 	this->Init();
 }
@@ -567,7 +567,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 	*p_ret = 0;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
-	if (draw->CreateSurface(&ddsd, &surface, NULL) != S_OK) {
+	if (draw->CreateSurface(&ddsd, &surface, NULL) != DD_OK) {
 		if (*p_ret) {
 			*p_ret = 0;
 
@@ -575,7 +575,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 			ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
 			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
-			if (draw->CreateSurface(&ddsd, &surface, NULL) != S_OK) {
+			if (draw->CreateSurface(&ddsd, &surface, NULL) != DD_OK) {
 				surface = NULL;
 			}
 		}
@@ -587,7 +587,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 
-		if (surface->Lock(NULL, &ddsd, DDLOCK_WAIT, 0) != S_OK) {
+		if (surface->Lock(NULL, &ddsd, DDLOCK_WAIT, 0) != DD_OK) {
 			surface->Release();
 			surface = NULL;
 			goto done;
@@ -690,7 +690,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 
-	if (draw->GetDisplayMode(&ddsd) != S_OK) {
+	if (draw->GetDisplayMode(&ddsd) != DD_OK) {
 		return NULL;
 	}
 
@@ -703,18 +703,18 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 	ddsd.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
-	if (draw->CreateSurface(&ddsd, &newSurface, NULL) != S_OK) {
+	if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK) {
 		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
-		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != S_OK)
+		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK)
 			goto done;
 	}
 
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 
-	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != S_OK)
+	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK)
 		goto done;
 	else {
 		MxU16* surface = (MxU16*) ddsd.lpSurface;
