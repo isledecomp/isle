@@ -1,7 +1,11 @@
 #ifndef POLICE_H
 #define POLICE_H
 
+#include "decomp.h"
 #include "legoworld.h"
+#include "mxdsaction.h"
+#include "policestate.h"
+#include "radio.h"
 
 // VTABLE: LEGO1 0x100d8a80
 // SIZE 0x110
@@ -28,6 +32,14 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1005e300
 	// Police::`scalar deleting destructor'
+
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual void VTable0x50() override;
+
+private:
+	Radio m_radio;              // 0xf8
+	PoliceState* m_policeState; // 0x108
+	undefined4 m_unk0x10c;      // 0x10c
 };
 
 #endif // POLICE_H
