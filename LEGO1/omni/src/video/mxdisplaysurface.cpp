@@ -328,30 +328,7 @@ void MxDisplaySurface::VTable0x28(
 		}
 
 		if (hr == DD_OK) {
-			MxU8* data;
-
-			switch (p_bitmap->GetBmiHeader()->biCompression) {
-			case BI_RGB: {
-				MxS32 rowsBeforeTop;
-				if (p_bitmap->GetBmiHeight() < 0)
-					rowsBeforeTop = p_top;
-				else
-					rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - p_top - 1;
-				data = p_bitmap->GetBitmapData() + p_left + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-				break;
-			}
-			case BI_RGB_TOPDOWN:
-				data = p_bitmap->GetBitmapData();
-				break;
-			default: {
-				MxS32 rowsBeforeTop;
-				if (p_bitmap->GetBmiHeight() < 0)
-					rowsBeforeTop = 0;
-				else
-					rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-				data = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-			}
-			}
+			MxU8* data = p_bitmap->GetStart(p_left, p_top);
 
 			if (m_videoParam.Flags().GetF1bit3()) {
 				p_bottom *= 2;
@@ -620,38 +597,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 			goto done;
 		}
 
-		// The goal here is to enable us to walk through the bitmap's rows
-		// in order, regardless of the orientation. We want to end up at the
-		// start of the first row, which is either at position 0, or at
-		// (image_stride * biHeight) - 1.
-
-		// Reminder: Negative biHeight means this is a top-down DIB.
-		// Otherwise it is bottom-up.
-
-		MxU8* bitmapSrcPtr;
-		switch (p_bitmap->GetBmiHeader()->biCompression) {
-		case BI_RGB: {
-			MxS32 rowsBeforeTop;
-			if (p_bitmap->GetBmiHeight() < 0)
-				rowsBeforeTop = 0;
-			else
-				rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-			bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-			break;
-		}
-		case BI_RGB_TOPDOWN:
-			bitmapSrcPtr = p_bitmap->GetBitmapData();
-			break;
-		default: {
-			MxS32 rowsBeforeTop;
-			if (p_bitmap->GetBmiHeight() < 0)
-				rowsBeforeTop = 0;
-			else
-				rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-			bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-		}
-		}
-
+		MxU8* bitmapSrcPtr = p_bitmap->GetStart(0, 0);
 		MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
 		MxU32 widthNormal = p_bitmap->GetBmiWidth();
 		MxU32 heightAbs = p_bitmap->GetBmiHeightAbs();
@@ -660,7 +606,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 		// (i.e. the image stride)
 		// If this is a bottom-up DIB, we will walk it in reverse.
 		// TODO: Same rounding trick as in MxBitmap
-		MxS32 rowSeek = ((p_bitmap->GetBmiWidth() + 3) & -4);
+		MxS32 rowSeek = p_bitmap->GetBmiStride();
 		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
 			rowSeek = -rowSeek;
 
