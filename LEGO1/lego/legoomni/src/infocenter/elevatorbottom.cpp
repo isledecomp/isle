@@ -1,5 +1,6 @@
 #include "elevatorbottom.h"
 
+#include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -67,7 +68,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 void ElevatorBottom::VTable0x50()
 {
 	LegoWorld::VTable0x50();
-	PlayMusic(11);
+	PlayMusic(JukeBox::e_informationCenter);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 

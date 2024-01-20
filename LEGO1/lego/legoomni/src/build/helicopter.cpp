@@ -3,6 +3,7 @@
 #include "act1state.h"
 #include "act3.h"
 #include "isle.h"
+#include "jukebox.h"
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -102,7 +103,7 @@ MxU32 Helicopter::VTable0xcc()
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, TRUE);
 		SetUnknownDC(4);
-		PlayMusic(9);
+		PlayMusic(JukeBox::e_jail);
 		break;
 	case 1:
 		m_script = *g_act2mainScript;

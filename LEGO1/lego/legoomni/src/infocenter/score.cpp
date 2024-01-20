@@ -2,6 +2,7 @@
 
 #include "ambulancemissionstate.h"
 #include "gifmanager.h"
+#include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -119,7 +120,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 0x1f5:
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			m_state->SetTutorialFlag(FALSE);
 		}
 	}
@@ -145,7 +146,7 @@ void Score::VTable0x50()
 		Start(&action);
 	}
 	else
-		PlayMusic(11);
+		PlayMusic(JukeBox::e_informationCenter);
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
