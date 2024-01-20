@@ -599,21 +599,18 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 
 		MxU8* bitmapSrcPtr = p_bitmap->GetStart(0, 0);
 		MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
-		MxU32 widthNormal = p_bitmap->GetBmiWidth();
-		MxU32 heightAbs = p_bitmap->GetBmiHeightAbs();
+		MxLong widthNormal = p_bitmap->GetBmiWidth();
+		MxLong heightAbs = p_bitmap->GetBmiHeightAbs();
 
-		// How many bytes are there for each row of the bitmap?
-		// (i.e. the image stride)
-		// If this is a bottom-up DIB, we will walk it in reverse.
-		// TODO: Same rounding trick as in MxBitmap
+		// TODO: Probably p_bitmap->GetAdjustedStride()
 		MxS32 rowSeek = p_bitmap->GetBmiStride();
 		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
 			rowSeek = -rowSeek;
 
-		MxU32 newPitch = ddsd.lPitch;
+		MxLong newPitch = ddsd.lPitch;
 		switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
 		case 8: {
-			for (heightAbs > 0; heightAbs--;) {
+			for (MxS32 y = heightAbs; y > 0; y--) {
 				memcpy(surfaceData, bitmapSrcPtr, p_bitmap->GetBmiHeight());
 				bitmapSrcPtr += rowSeek;
 				surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
@@ -663,8 +660,8 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 					surface->SetColorKey(DDCKEY_SRCBLT, &key);
 				}
 				else {
-					for (int y = heightAbs; y > 0; y--) {
-						for (int x = widthNormal; x > 0; x--) {
+					for (MxS32 y = heightAbs; y > 0; y--) {
+						for (MxS32 x = widthNormal; x > 0; x--) {
 							*surfaceData++ = m_16bitPal[*bitmapSrcPtr++];
 						}
 
