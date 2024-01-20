@@ -28,7 +28,7 @@ public:
 
 private:
 	undefined4 m_unk0x8; // 0x8
-	undefined4 m_unk0xc; // 0xc - might be an object id
+	undefined4 m_unk0xc; // 0xc
 };
 
 #endif // POLICESTATE_H
