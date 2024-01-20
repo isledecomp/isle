@@ -694,7 +694,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				for (int y = heightAbs; y > 0; y--) {
 					for (int x = widthNormal; x > 0; x--) {
 						if (*bitmapSrcPtr) {
-							*surfaceData = m_16bitPal[*bitmapSrcPtr++];
+							*surfaceData = m_16bitPal[*bitmapSrcPtr];
 						}
 						else {
 							*surfaceData = 31775;
