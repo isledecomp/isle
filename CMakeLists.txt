@@ -75,6 +75,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legorace.cpp
   LEGO1/lego/legoomni/src/entity/legoraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoracecar.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
   LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
   LEGO1/lego/legoomni/src/gasstation/gasstation.cpp
@@ -97,6 +98,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
   LEGO1/lego/legoomni/src/isle/bike.cpp
   LEGO1/lego/legoomni/src/isle/bumpbouy.cpp
+  LEGO1/lego/legoomni/src/isle/doors.cpp
   LEGO1/lego/legoomni/src/isle/historybook.cpp
   LEGO1/lego/legoomni/src/isle/isleactor.cpp
   LEGO1/lego/legoomni/src/isle/isle.cpp
