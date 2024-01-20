@@ -19,10 +19,24 @@ GasStation::GasStation()
 	NotificationManager()->Register(this);
 }
 
+// STUB: LEGO1 0x10004770
+MxBool GasStation::VTable0x5c()
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x100048c0
 GasStation::~GasStation()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10004990
+MxResult GasStation::Create(MxDSAction& p_dsAction)
+{
+	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10004a60
@@ -33,10 +47,29 @@ MxLong GasStation::Notify(MxParam& p_param)
 	return 0;
 }
 
+// STUB: LEGO1 0x10004b30
+void GasStation::VTable0x50()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10005c40
+void GasStation::VTable0x68(MxBool p_add)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10005c90
 MxResult GasStation::Tickle()
 {
 	// TODO
 
 	return 0;
+}
+
+// STUB: LEGO1 0x10005e70
+MxBool GasStation::VTable0x64()
+{
+	// TODO
+	return FALSE;
 }

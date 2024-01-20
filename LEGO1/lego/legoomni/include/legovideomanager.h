@@ -32,7 +32,7 @@ public:
 	virtual MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
 	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
 	virtual void VTable0x38(undefined4, undefined4);                                       // vtable+0x38
-	// FUNCTION: LGEO1 0x1007ab10
+	// FUNCTION: LEGO1 0x1007ab10
 	virtual LegoUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);

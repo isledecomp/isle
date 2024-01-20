@@ -38,6 +38,9 @@ public:
 
 	virtual MxResult Tickle() override; // vtable+0x8
 
+	// FUNCTION: LEGO1 0x1005b8c0
+	virtual MxResult PutData() { return SUCCESS; }; // vtable+0x4c
+
 	MxResult Create(HWND p_hwnd);
 	void Destroy();
 	void CreateAndAcquireKeyboard(HWND p_hwnd);

@@ -37,7 +37,8 @@ public:
 	);
 
 	LegoNavController();
-	virtual ~LegoNavController() override; // vtable+0x0
+	virtual ~LegoNavController() override;            // vtable+0x0
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x10054b80
 	inline const char* ClassName() const override // vtable+0xc

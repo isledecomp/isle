@@ -19,6 +19,11 @@ public:
 		return !strcmp(p_name, LegoJetskiRaceActor::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}
 
+	virtual void VTable0x6c() override;              // vtable+0x6c
+	virtual void VTable0x70(float p_float) override; // vtable+0x70
+	virtual void VTable0x98() override;              // vtable+0x98
+	virtual void VTable0x9c() override;              // vtable+0x9c
+
 	// SYNTHETIC: LEGO1 0x10081d40
 	// LegoJetskiRaceActor::`scalar deleting destructor'
 };

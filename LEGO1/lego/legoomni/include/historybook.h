@@ -25,6 +25,10 @@ public:
 		return !strcmp(p_name, HistoryBook::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual void VTable0x50();                                // vtable+0x50
+	virtual MxBool VTable0x64();                              // vtable+0x64
+
 	// SYNTHETIC: LEGO1 0x100824b0
 	// HistoryBook::`scalar deleting destructor'
 };

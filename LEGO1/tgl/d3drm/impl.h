@@ -63,7 +63,6 @@ public:
 
 	// vtable+0x20
 	virtual Unk* CreateUnk() override;
-	virtual Texture* CreateTexture() override;
 	virtual Texture* CreateTexture(
 		int width,
 		int height,
@@ -73,6 +72,8 @@ public:
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
 	) override;
+	virtual Texture* CreateTexture() override;
+
 	virtual Result SetTextureDefaultShadeCount(unsigned long) override;
 
 	// vtable+0x30
@@ -307,12 +308,12 @@ public:
 	virtual Result SetTexture(const Texture*);
 	virtual Result GetTexture(Texture*&);
 	virtual Result SetMaterialMode(MaterialMode);
-	virtual Result Add(const Group*);
+	virtual Result Add(const Mesh*);
 
 	// vtable+0x20
-	virtual Result Add(const Mesh*);
-	virtual Result Remove(const Group*);
+	virtual Result Add(const Group*);
 	virtual Result Remove(const Mesh*);
+	virtual Result Remove(const Group*);
 	virtual Result RemoveAll();
 
 	// vtable+0x30

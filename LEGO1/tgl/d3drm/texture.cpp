@@ -150,7 +150,7 @@ Result TextureImpl::Changed(int texelsChanged, int paletteChanged)
 	return ResultVal(m_data->Changed(texelsChanged, paletteChanged));
 }
 
-// FUNCTION: LEGO1 0x100a3d00
+// FUNCTION: LEGO1 0x100a3cc0
 Result TextureImpl::GetBufferAndPalette(
 	int* width,
 	int* height,

@@ -15,20 +15,22 @@ public:
 	Pizza();
 	virtual ~Pizza() override;
 
-	virtual MxResult Tickle() override; // vtable+08
+	virtual MxResult Tickle() override; // vtable+0x8
 
 	// FUNCTION: LEGO1 0x10037f90
-	inline const char* ClassName() const // vtable+0c
+	inline const char* ClassName() const // vtable+0xc
 	{
 		// STRING: LEGO1 0x100f038c
 		return "Pizza";
 	}
 
 	// FUNCTION: LEGO1 0x10037fa0
-	inline MxBool IsA(const char* p_name) const override // vtable+10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
+
+	virtual MxResult Create(MxDSAction& p_dsAction); // vtable+0x18
 
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'

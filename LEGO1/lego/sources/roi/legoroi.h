@@ -17,6 +17,7 @@ class LegoROI : public ViewROI {
 public:
 	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time);
 
+	virtual float IntrinsicImportance() const override; // vtable+0x4
 	// Note: Actually part of parent class (doesn't exist yet)
 	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
 

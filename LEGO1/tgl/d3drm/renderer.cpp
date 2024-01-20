@@ -34,7 +34,7 @@ Result RendererImpl::Create()
 	return (m_data != NULL) ? Success : Error;
 }
 
-// FUNCTION: LEGO1 0x100a1894
+// FUNCTION: LEGO1 0x100a1830
 Device* RendererImpl::CreateDevice(const DeviceDirect3DCreateData& data)
 {
 	DeviceImpl* device = new DeviceImpl();
