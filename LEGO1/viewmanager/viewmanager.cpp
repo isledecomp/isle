@@ -16,6 +16,11 @@ void ViewManager::RemoveAll(ViewROI*)
 	// TODO
 }
 
+// STUB: LEGO1 0x100a6930
+void ViewManager::Update(float p_previousRenderTime, float p_und2)
+{
+}
+
 // STUB: LEGO1 0x100a6d50
 void ViewManager::SetResolution(int width, int height)
 {
