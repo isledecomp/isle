@@ -1,5 +1,6 @@
 #include "police.h"
 
+#include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -64,6 +65,6 @@ MxLong Police::Notify(MxParam& p_param)
 void Police::VTable0x50()
 {
 	LegoWorld::VTable0x50();
-	PlayMusic(0xc);
+	PlayMusic(JukeBox::e_policeStation);
 	FUN_10015820(0, 7);
 }
