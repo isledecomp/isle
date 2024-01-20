@@ -25,7 +25,6 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1005d810
 	// JukeBox::`scalar deleting destructor'
-public:
 	enum JukeBoxScript {
 		e_mamaPapaBrickolini,
 		e_jailUnused,
