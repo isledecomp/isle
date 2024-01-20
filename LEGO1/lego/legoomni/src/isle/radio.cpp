@@ -23,6 +23,13 @@ Radio::~Radio()
 	// TODO
 }
 
+// STUB: LEGO1 0x1002ca30
+MxLong Radio::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x1002cde0
 void Radio::CreateRadioState()
 {

@@ -10,6 +10,8 @@
 // SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
+	virtual MxNotificationParam* Clone() override; // vtable+0x4
+
 	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(
 		NotificationId p_type,
