@@ -680,7 +680,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100bc070
-LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
+LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 {
 	LPDIRECTDRAWSURFACE newSurface = NULL;
 	IDirectDraw* draw = MVideoManager()->GetDirectDraw();
@@ -700,17 +700,18 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
 
 	ddsd.dwWidth = 16;
 	ddsd.dwHeight = 16;
-	ddsd.dwFlags = 4103;
-	ddsd.ddsCaps.dwCaps = 16448;
+	ddsd.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
 	if (draw->CreateSurface(&ddsd, &newSurface, NULL) == S_OK) {
-		ddsd.ddsCaps.dwCaps &= ~0x4000;
-		ddsd.ddsCaps.dwCaps |= 0x800;
+		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
+		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
+
 		if (draw->CreateSurface(&ddsd, &newSurface, NULL) == S_OK) {
 			memset(&ddsd, 0, sizeof(ddsd));
 			ddsd.dwSize = sizeof(ddsd);
 
-			if (newSurface->Lock(NULL, &ddsd, 1, NULL) != S_OK) {
+			if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != S_OK) {
 				if (newSurface) {
 					newSurface->Release();
 				}
@@ -718,18 +719,18 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
 				return NULL;
 			}
 			else {
-				MxU8* surface = (MxU8*) ddsd.lpSurface;
+				MxU16* surface = (MxU16*) ddsd.lpSurface;
 
-				for (MxU32 x = 0; x < 16; x++) {
-
-					MxU8* surface2 = surface;
-					for (MxU32 y = 0; y < 16; y++) {
+				// draw a simple cursor to the surface
+				for (MxS32 x = 0; x < 16; x++) {
+					MxU16* surface2 = surface;
+					for (MxS32 y = 0; y < 16; y++) {
 						for (y = 0; y < 16; ++y) {
 							if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
-								if (x + y <= 10)
-									*surface2 = -1;
-								else
+								if (x + y > 10)
 									*surface2 = 31775;
+								else
+									*surface2 = -1;
 							}
 							else {
 								*surface2 = 0;
@@ -737,7 +738,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
 							surface2++;
 						}
 					}
-					surface += ddsd.lPitch;
+					surface = (MxU16*) ((MxU8*) surface + ddsd.lPitch);
 				}
 
 				newSurface->Unlock(ddsd.lpSurface);
