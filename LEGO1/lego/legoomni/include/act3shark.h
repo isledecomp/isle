@@ -21,8 +21,8 @@ public:
 
 	virtual void ParseAction(char*) override;                  // vtable+0x20
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	virtual void VTable0x70(float p_float);                    // vtable+0x70
-	virtual void VTable0x74(Matrix4& p_transform);             // vtable+0x74
+	virtual void VTable0x70(float p_float) override;           // vtable+0x70
+	virtual void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
 
 	// SYNTHETIC: LEGO1 0x10043020
 	// Act3Shark::`scalar deleting destructor'
