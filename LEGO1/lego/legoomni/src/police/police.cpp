@@ -60,13 +60,6 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 	return ret;
 }
 
-// STUB: LEGO1 0x1005e3e0
-MxResult Police::Create(MxDSAction& p_dsAction)
-{
-	// TODO
-	return SUCCESS;
-}
-
 // STUB: LEGO1 0x1005e480
 MxLong Police::Notify(MxParam& p_param)
 {
