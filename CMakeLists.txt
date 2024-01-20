@@ -32,6 +32,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/act3/act3.cpp
   LEGO1/lego/legoomni/src/act3/act3shark.cpp
   LEGO1/lego/legoomni/src/act3/act3state.cpp
+  LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
   LEGO1/lego/legoomni/src/audio/legocachesound.cpp
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
