@@ -138,15 +138,12 @@ BOOL Lego3DView::Moved(ViewROI& rROI)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100ab270
+// FUNCTION: LEGO1 0x100ab270
 double Lego3DView::Render(double p_und)
 {
-	// assert(m_pViewManager);
-
-	// m_pViewManager->Update(m_previousRenderTime);
-
-	// m_previousRenderTime = LegoView1::Render();
-
+	assert(m_pViewManager);
+	m_pViewManager->Update(m_previousRenderTime, p_und);
+	m_previousRenderTime = TglSurface::Render();
 	return m_previousRenderTime;
 }
 
