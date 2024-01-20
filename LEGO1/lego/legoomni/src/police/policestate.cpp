@@ -15,13 +15,16 @@ PoliceState::PoliceState()
 MxResult PoliceState::VTable0x1c(LegoFileStream* p_legoFileStream)
 {
 	if (p_legoFileStream->IsWriteMode()) {
-		p_legoFileStream->FUN_10006030(this->ClassName());
+		p_legoFileStream->FUN_10006030(ClassName());
 	}
+
 	if (p_legoFileStream->IsReadMode()) {
-		p_legoFileStream->Write(&m_unk0x8, sizeof(MxU32));
+		p_legoFileStream->Read(&m_unk0x8, sizeof(m_unk0x8));
 	}
-	else if (p_legoFileStream->IsWriteMode()) {
-		p_legoFileStream->Read(&m_unk0x8, sizeof(MxU32));
+	else {
+		undefined4 unk0x8 = m_unk0x8;
+		p_legoFileStream->Write(&unk0x8, sizeof(m_unk0x8));
 	}
+
 	return SUCCESS;
 }
