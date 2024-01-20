@@ -145,6 +145,12 @@ jobs:
       run: |
         python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
 
+    - name: Check Vtables
+      shell: bash
+      run: |
+        python3 tools/vtable/vtable.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
+        python3 tools/vtable/vtable.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
+
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
