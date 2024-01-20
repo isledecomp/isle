@@ -27,6 +27,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/act1/act1state.cpp
   LEGO1/lego/legoomni/src/act2/act2brick.cpp
   LEGO1/lego/legoomni/src/act2/act2policestation.cpp
+  LEGO1/lego/legoomni/src/act2/legoact2.cpp
   LEGO1/lego/legoomni/src/act2/legoact2state.cpp
   LEGO1/lego/legoomni/src/act3/act3.cpp
   LEGO1/lego/legoomni/src/act3/act3shark.cpp
