@@ -6,15 +6,14 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)
 
 // FUNCTION: LEGO1 0x1005e130
 Police::Police()
 {
-	this->m_policeState = NULL;
-	this->m_unk0x10c = 0;
+	m_policeState = NULL;
+	m_unk0x10c = 0;
 	NotificationManager()->Register(this);
 }
 
@@ -41,13 +40,14 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 	InputManager()->Register(this);
-	LegoGameState* gs = GameState();
-	PoliceState* p = (PoliceState*) gs->GetState("PoliceState");
-	if (!p) {
-		p = (PoliceState*) gs->CreateState("PoliceState");
+
+	LegoGameState* gameState = GameState();
+	PoliceState* policeState = (PoliceState*) gameState->GetState("PoliceState");
+	if (!policeState) {
+		policeState = (PoliceState*) gameState->CreateState("PoliceState");
 	}
 
-	this->m_policeState = p;
+	m_policeState = policeState;
 	GameState()->SetUnknown424(0x22);
 	GameState()->FUN_1003a720(0);
 	return ret;
@@ -66,5 +66,5 @@ void Police::VTable0x50()
 {
 	LegoWorld::VTable0x50();
 	PlayMusic(JukeBox::e_policeStation);
-	FUN_10015820(0, 7);
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
