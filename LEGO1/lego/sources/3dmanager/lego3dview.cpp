@@ -139,7 +139,7 @@ BOOL Lego3DView::Moved(ViewROI& rROI)
 }
 
 // FUNCTION: LEGO1 0x100ab270
-double Lego3DView::Render(double p_und)
+MxDouble Lego3DView::Render(MxDouble p_und)
 {
 	assert(m_pViewManager);
 	m_pViewManager->Update(m_previousRenderTime, p_und);

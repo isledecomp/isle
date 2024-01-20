@@ -23,7 +23,7 @@ public:
 	BOOL Moved(ViewROI&);
 	BOOL SetPointOfView(ViewROI&);
 
-	double Render(double p_und);
+	MxDouble Render(MxDouble p_und);
 
 	ViewROI* Pick(unsigned long x, unsigned long y);
 
