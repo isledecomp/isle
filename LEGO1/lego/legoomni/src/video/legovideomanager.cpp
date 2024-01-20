@@ -30,7 +30,7 @@ LegoVideoManager::LegoVideoManager()
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
-	m_unk0x514 = NULL;
+	m_cursorSurface = NULL;
 	m_fullScreenMovie = FALSE;
 	m_drawFPS = FALSE;
 	m_unk0x528 = 0;
