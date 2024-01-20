@@ -564,10 +564,170 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 		this->m_ddSurface2->ReleaseDC(p_hdc);
 }
 
-// STUB: LEGO1 0x100bbc60
-LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4)
+// FUNCTION: LEGO1 0x100bbc60
+LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
+	MxBitmap* p_bitmap,
+	undefined4* p_ret,
+	undefined4 p_doNotWriteToSurface,
+	undefined4 p_transparent
+)
 {
-	return NULL;
+	LPDIRECTDRAWSURFACE surface = NULL;
+	LPDIRECTDRAW draw = MVideoManager()->GetDirectDraw();
+	MVideoManager();
+
+	DDSURFACEDESC ddsd;
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (draw->GetDisplayMode(&ddsd))
+		return NULL;
+
+	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
+	ddsd.dwWidth = p_bitmap->GetBmiWidth();
+	ddsd.dwHeight = p_bitmap->GetBmiHeightAbs();
+
+	*p_ret = 0;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+	if (draw->CreateSurface(&ddsd, &surface, NULL) != S_OK) {
+		if (!*p_ret) {
+			*p_ret = 0;
+
+			// Try creating bitmap surface in vram if system ram ran out
+			ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
+
+			if (draw->CreateSurface(&ddsd, &surface, NULL) != S_OK) {
+				surface = NULL;
+			}
+		}
+	}
+
+	if (!surface) {
+		return NULL;
+	}
+
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (surface->Lock(NULL, &ddsd, 1, 0) != S_OK) {
+		surface->Release();
+		return NULL;
+	}
+
+	if (p_doNotWriteToSurface) {
+		return surface;
+	}
+
+	BITMAPINFOHEADER* hdr = p_bitmap->GetBmiHeader();
+	MxU32 rowsBeforeTop;
+	MxU8* bitmapSrcPtr;
+
+	// The goal here is to enable us to walk through the bitmap's rows
+	// in order, regardless of the orientation. We want to end up at the
+	// start of the first row, which is either at position 0, or at
+	// (image_stride * biHeight) - 1.
+
+	// Reminder: Negative biHeight means this is a top-down DIB.
+	// Otherwise it is bottom-up.
+
+	switch (p_bitmap->GetBmiHeader()->biCompression) {
+	case BI_RGB: {
+		if (p_bitmap->GetBmiHeight() < 0)
+			rowsBeforeTop = 0;
+		else
+			rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
+		break;
+	}
+	case BI_RGB_TOPDOWN:
+		bitmapSrcPtr = p_bitmap->GetBitmapData();
+		break;
+	default: {
+		if (p_bitmap->GetBmiHeight() < 0)
+			rowsBeforeTop = 0;
+		else
+			rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
+		bitmapSrcPtr = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
+	}
+	}
+
+	MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
+	MxU32 widthNormal = p_bitmap->GetBmiWidth();
+	MxU32 heightAbs = p_bitmap->GetBmiHeightAbs();
+
+	// How many bytes are there for each row of the bitmap?
+	// (i.e. the image stride)
+	// If this is a bottom-up DIB, we will walk it in reverse.
+	// TODO: Same rounding trick as in MxBitmap
+	MxS32 rowSeek = ((p_bitmap->GetBmiWidth() + 3) & -4);
+	if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
+		rowSeek = -rowSeek;
+	MxU32 newPitch = ddsd.lPitch;
+	switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
+	case 8: {
+		for (heightAbs > 0; heightAbs--;) {
+			memcpy(surfaceData, bitmapSrcPtr, p_bitmap->GetBmiHeight());
+			bitmapSrcPtr += rowSeek;
+			surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+		}
+		surface->Unlock(ddsd.lpSurface);
+		if (p_transparent && surface) {
+			DDCOLORKEY key;
+			surface->SetColorKey(8, &key);
+		}
+		break;
+	}
+	case 16:
+		if (m_16bitPal == NULL) {
+			if (surface) {
+				surface->Release();
+			}
+			return NULL;
+		}
+		else {
+			rowSeek -= p_bitmap->GetBmiWidth();
+			newPitch -= 2 * p_bitmap->GetBmiWidth();
+
+			if (p_transparent) {
+				for (int y = heightAbs; y > 0; y--) {
+					for (int x = widthNormal; x > 0; x--) {
+						if (*bitmapSrcPtr) {
+							*surfaceData = m_16bitPal[*bitmapSrcPtr++];
+						}
+						else {
+							*surfaceData = 31775;
+						}
+						bitmapSrcPtr++;
+						surfaceData++;
+					}
+
+					bitmapSrcPtr += rowSeek;
+					surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+				}
+
+				DDCOLORKEY key;
+				key.dwColorSpaceHighValue = 31775;
+				key.dwColorSpaceLowValue = 31775;
+				surface->SetColorKey(8, &key);
+			}
+			else {
+				for (int y = heightAbs; y > 0; y--) {
+					for (int x = widthNormal; x > 0; x--) {
+						*surfaceData++ = m_16bitPal[*bitmapSrcPtr++];
+					}
+
+					bitmapSrcPtr += rowSeek;
+					surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+				}
+			}
+
+			surface->Unlock(ddsd.lpSurface);
+		}
+	}
+
+	return surface;
 }
 
 // STUB: LEGO1 0x100bc070
