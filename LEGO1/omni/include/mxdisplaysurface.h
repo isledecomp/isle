@@ -80,10 +80,15 @@ public:
 		MxS32 p_top2,
 		MxS32 p_width,
 		MxS32 p_height
-	);                                                                                      // vtable+0x38
-	virtual void GetDC(HDC* p_hdc);                                                         // vtable+0x3c
-	virtual void ReleaseDC(HDC p_hdc);                                                      // vtable+0x40
-	virtual LPDIRECTDRAWSURFACE VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4); // vtable+0x44
+	);                                 // vtable+0x38
+	virtual void GetDC(HDC* p_hdc);    // vtable+0x3c
+	virtual void ReleaseDC(HDC p_hdc); // vtable+0x40
+	virtual LPDIRECTDRAWSURFACE VTable0x44(
+		MxBitmap* p_bitmap,
+		undefined4* p_ret,
+		undefined4 p_doNotWriteToSurface,
+		undefined4 p_transparent
+	); // vtable+0x44
 
 	void ClearScreen();
 	static LPDIRECTDRAWSURFACE FUN_100bc070();
