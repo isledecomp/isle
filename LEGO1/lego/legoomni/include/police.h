@@ -39,9 +39,6 @@ public:
 	// SYNTHETIC: LEGO1 0x1005e300
 	// Police::`scalar deleting destructor'
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void VTable0x50() override;                       // vtable+0x50
-
 private:
 	Radio m_radio;              // 0xf8
 	PoliceState* m_policeState; // 0x108

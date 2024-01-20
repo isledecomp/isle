@@ -28,8 +28,6 @@ public:
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
 
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
-
 private:
 	undefined4 m_unk0x8; // 0x8
 	undefined4 m_unk0xc; // 0xc
