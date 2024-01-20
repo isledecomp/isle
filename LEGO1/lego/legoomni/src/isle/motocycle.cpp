@@ -1,4 +1,4 @@
-#include "Motocycle.h"
+#include "motocycle.h"
 
 DECOMP_SIZE_ASSERT(Motocycle, 0x16c);
 
