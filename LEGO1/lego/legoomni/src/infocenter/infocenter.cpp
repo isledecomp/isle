@@ -1,6 +1,7 @@
 #include "infocenter.h"
 
 #include "infocenterstate.h"
+#include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -165,7 +166,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		}
 
 		if (!m_unk0x1d4) {
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			GameState()->FUN_10039780(m_unk0xfc);
 
 			switch (m_unk0xfc) {
@@ -279,7 +280,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 			m_currentInfomainScript != 41 && m_currentInfomainScript != 42 && m_currentInfomainScript != 43 &&
 			m_currentInfomainScript != 44) {
 			m_infoManDialogueTimer = 1;
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 		}
 
 		m_infocenterState->SetUnknown0x74(2);
@@ -323,15 +324,15 @@ void Infocenter::VTable0x50()
 			}
 
 			PlayAction(c_letsGetStartedDialogue);
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		default:
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			// TODO
 			break;
 		case 8:
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			PlayAction(c_exitConfirmationDialogue);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
@@ -341,7 +342,7 @@ void Infocenter::VTable0x50()
 			}
 
 			PlayAction(c_clickOnInfomanDialogue);
-			PlayMusic(11);
+			PlayMusic(JukeBox::e_informationCenter);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			return;
 		}
