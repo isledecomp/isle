@@ -618,10 +618,14 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				bitmapSrcPtr += rowSeek;
 				surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
 			}
+
 			surface->Unlock(ddsd.lpSurface);
+
 			if (p_transparent && surface) {
 				DDCOLORKEY key;
-				surface->SetColorKey(8, &key);
+				key.dwColorSpaceHighValue = 0;
+				key.dwColorSpaceLowValue = 0;
+				surface->SetColorKey(DDCKEY_SRCBLT, &key);
 			}
 			break;
 		}
