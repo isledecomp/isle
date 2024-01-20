@@ -19,3 +19,63 @@ Ambulance::Ambulance()
 	this->m_unk0x13c = 40.0;
 	this->m_unk0x17c = 1.0;
 }
+
+// STUB: LEGO1 0x10035f90
+void Ambulance::Destroy(MxBool p_fromDestructor)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100361d0
+MxResult Ambulance::Create(MxDSAction& p_dsAction)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10036300
+void Ambulance::VTable0x70(float p_float)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10036420
+MxLong Ambulance::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10036860
+MxU32 Ambulance::VTable0xdc(MxType19NotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10036ce0
+MxU32 Ambulance::VTable0xcc()
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10036e90
+void Ambulance::VTable0xe4()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10036f90
+MxU32 Ambulance::VTable0xd4(MxType17NotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10037160
+MxResult Ambulance::Tickle()
+{
+	// TODO
+	return SUCCESS;
+}

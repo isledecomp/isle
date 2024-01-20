@@ -13,3 +13,17 @@ RaceCar::~RaceCar()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10028490
+MxResult RaceCar::Create(MxDSAction& p_dsAction)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100284d0
+MxU32 RaceCar::VTable0xcc()
+{
+	// TODO
+	return 0;
+}

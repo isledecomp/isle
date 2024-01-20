@@ -23,6 +23,13 @@ public:
 		return !strcmp(p_name, DuneBuggy::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
+	virtual void VTable0x70(float p_float) override;                       // vtable+0x70
+	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
+	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
+	virtual MxU32 VTable0xdc(MxType19NotificationParam& p_param) override; // vtable+0xdc
+	virtual void VTable0xe4() override;                                    // vtable+0xe4
+
 	// SYNTHETIC: LEGO1 0x10067dc0
 	// DuneBuggy::`scalar deleting destructor'
 
