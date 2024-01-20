@@ -28,7 +28,7 @@ public:
 	void FUN_10028df0(MxPresenterList* p_presenterList);
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
-	void FUN_100293c0(undefined4, const MxAtomId&, undefined2);
+	void FUN_100293c0(undefined4, const char*, undefined2);
 
 	// SYNTHETIC: LEGO1 0x10028d40
 	// LegoControlManager::`scalar deleting destructor'

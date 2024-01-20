@@ -40,6 +40,8 @@ public:
 
 private:
 	undefined4 m_unk0xf8; // 0xf8
+
+	MxLong HandleNotification17(MxParam& p_param);
 };
 
 #endif // ELEVATORBOTTOM_H

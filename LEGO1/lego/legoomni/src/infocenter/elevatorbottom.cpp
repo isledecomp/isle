@@ -1,13 +1,13 @@
 #include "elevatorbottom.h"
 
-DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
-
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
+
+DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
 
 // FUNCTION: LEGO1 0x10017e90
 ElevatorBottom::ElevatorBottom()
@@ -43,11 +43,24 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x10018150
+// FUNCTION: LEGO1 0x10018150
 MxLong ElevatorBottom::Notify(MxParam& p_param)
 {
-	// TODO
-	return LegoWorld::Notify(p_param);
+	MxLong ret = 0;
+	LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetType()) {
+		case c_notificationType17:
+			ret = HandleNotification17(p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->HandleAction(m_unk0xf8);
+			break;
+		}
+	}
+
+	return ret;
 }
 
 // FUNCTION: LEGO1 0x100181b0
@@ -56,6 +69,12 @@ void ElevatorBottom::VTable0x50()
 	LegoWorld::VTable0x50();
 	PlayMusic(11);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+}
+
+// STUB: LEGO1 0x100181d0
+MxLong ElevatorBottom::HandleNotification17(MxParam& p_param)
+{
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100182c0
