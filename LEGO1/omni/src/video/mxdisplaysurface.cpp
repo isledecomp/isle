@@ -641,8 +641,8 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				newPitch -= 2 * p_bitmap->GetBmiWidth();
 
 				if (p_transparent) {
-					for (int y = heightAbs; y > 0; y--) {
-						for (int x = widthNormal; x > 0; x--) {
+					for (MxS32 y = heightAbs; y > 0; y--) {
+						for (MxS32 x = widthNormal; x > 0; x--) {
 							if (*bitmapSrcPtr) {
 								*surfaceData = m_16bitPal[*bitmapSrcPtr];
 							}
@@ -660,7 +660,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 					DDCOLORKEY key;
 					key.dwColorSpaceHighValue = 31775;
 					key.dwColorSpaceLowValue = 31775;
-					surface->SetColorKey(8, &key);
+					surface->SetColorKey(DDCKEY_SRCBLT, &key);
 				}
 				else {
 					for (int y = heightAbs; y > 0; y--) {
