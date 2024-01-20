@@ -15,6 +15,7 @@ public:
 	void SetPOVSource(const OrientableROI* point_of_view);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
+	void Update(float p_previousRenderTime, float p_und2);
 
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
