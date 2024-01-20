@@ -1,24 +1,47 @@
 #include "infocenterdoor.h"
 
+#include "legocontrolmanager.h"
+#include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "mxnotificationmanager.h"
 
-// STUB: LEGO1 0x10037730
+DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
+
+// FUNCTION: LEGO1 0x10037730
 InfocenterDoor::InfocenterDoor()
 {
-	// TODO
+	m_unk0xf8 = 0;
+
+	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x100378f0
+// FUNCTION: LEGO1 0x100378f0
 InfocenterDoor::~InfocenterDoor()
 {
-	// TODO
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	ControlManager()->Unregister(this);
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10037980
+// FUNCTION: LEGO1 0x10037980
 MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 {
-	return SUCCESS;
+	MxResult result = LegoWorld::Create(p_dsAction);
+	if (result == SUCCESS) {
+		InputManager()->SetWorld(this);
+		ControlManager()->Register(this);
+	}
+
+	SetIsWorldActive(FALSE);
+
+	GameState()->SetUnknown424(3);
+	GameState()->FUN_1003a720(0);
+
+	return result;
 }
 
 // STUB: LEGO1 0x100379e0
@@ -52,8 +75,10 @@ void InfocenterDoor::VTable0x68(MxBool p_add)
 	}
 }
 
-// STUB: LEGO1 0x10037cd0
+// FUNCTION: LEGO1 0x10037cd0
 MxBool InfocenterDoor::VTable0x64()
 {
+	DeleteObjects(&m_atom, 500, 510);
+	m_unk0xf8 = 2;
 	return TRUE;
 }

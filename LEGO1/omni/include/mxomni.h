@@ -57,7 +57,7 @@ public:
 	virtual MxBool IsTimerRunning() { return m_timerRunning; }; // vtable+40
 
 	static void SetInstance(MxOmni* p_instance);
-	static MxBool FUN_100b06b0(MxDSAction* p_action, const char* p_name);
+	static MxBool ActionSourceEquals(MxDSAction* p_action, const char* p_name);
 
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }

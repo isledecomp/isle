@@ -6,7 +6,10 @@ assume fs:nothing
 
 public DecodeFLCFrame
 
-.text SEGMENT PARA PUBLIC 'CODE'
+; This is so reccmp can detect the end of DecodeFLCFrame
+public EndOfSection
+
+.text SEGMENT BYTE PUBLIC 'CODE'
 
 ?_25162 LABEL NEAR
         mov     ax, word ptr [esp+0CH]                  ; 100BD530 _ 66: 8B. 44 24, 0C
@@ -37,10 +40,8 @@ public DecodeFLCFrame
 
 ; Filling space: 0DH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25164 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD580 _ 8D. 44 24, 18
@@ -89,10 +90,8 @@ ALIGN   16
 
 ; Filling space: 0CH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25168 LABEL NEAR
         mov     ecx, dword ptr [esp+8H]                 ; 100BD600 _ 8B. 4C 24, 08
@@ -149,9 +148,7 @@ ALIGN   16
 
 ; Filling space: 8H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25173 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD680 _ 8D. 44 24, 18
@@ -188,10 +185,8 @@ ALIGN   16
 
 ; Filling space: 0AH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH
 
 ?_25176 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD6E0 _ 8D. 44 24, 18
@@ -238,9 +233,7 @@ ALIGN   16
 
 ; Filling space: 3H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH
-
-ALIGN   8
+        db 0CCH, 0CCH, 0CCH
 
 ?_25180 LABEL NEAR
         mov     eax, dword ptr [esp+18H]                ; 100BD760 _ 8B. 44 24, 18
@@ -373,10 +366,8 @@ ALIGN   8
 
 ; Filling space: 0DH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25195 LABEL NEAR
         mov     eax, dword ptr [esp+8H]                 ; 100BD8A0 _ 8B. 44 24, 08
@@ -447,9 +438,7 @@ ALIGN   16
 
 ; Filling space: 8H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25202 LABEL NEAR
         mov     eax, dword ptr [esp+8H]                 ; 100BD940 _ 8B. 44 24, 08
@@ -462,10 +451,8 @@ ALIGN   16
 
 ; Filling space: 0DH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25203 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BD960 _ 8B. 44 24, 10
@@ -539,10 +526,8 @@ ALIGN   16
 
 ; Filling space: 0CH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25213 LABEL NEAR
         mov     ecx, dword ptr [esp+0CH]                ; 100BDA10 _ 8B. 4C 24, 0C
@@ -621,9 +606,7 @@ ALIGN   16
 
 ; Filling space: 3H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH
-
-ALIGN   8
+        db 0CCH, 0CCH, 0CCH
 
 ?_25220 LABEL NEAR
         mov     edx, dword ptr [esp+10H]                ; 100BDAC0 _ 8B. 54 24, 10
@@ -738,9 +721,7 @@ ALIGN   8
 
 ; Filling space: 3H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH
-
-ALIGN   8
+        db 0CCH, 0CCH, 0CCH
 
 ?_25227 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BDC00 _ 8B. 44 24, 10
@@ -798,10 +779,8 @@ ALIGN   8
 
 ; Filling space: 0CH
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-;       db 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   16
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
+        db 0CCH, 0CCH, 0CCH, 0CCH
 
 ?_25231 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BDC90 _ 8B. 44 24, 10
@@ -839,9 +818,7 @@ ALIGN   16
 
 ; Filling space: 7H
 ; Filler type: INT 3 Debug breakpoint
-;       db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
-
-ALIGN   8
+        db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
 DecodeFLCFrame LABEL NEAR
         mov     ecx, dword ptr [esp+10H]                ; 100BDCE0 _ 8B. 4C 24, 10
@@ -862,6 +839,12 @@ DecodeFLCFrame LABEL NEAR
         call    ?_25180                                 ; 100BDD05 _ E8, FFFFFA56
         add     esp, 24                                 ; 100BDD0A _ 83. C4, 18
 ?_25235:ret                                             ; 100BDD0D _ C3
+
+; Filling space: 2H
+; Filler type: INT 3 Debug breakpoint
+        db 0CCH, 0CCH
+
+EndOfSection LABEL NEAR
 
 .text ENDS
 

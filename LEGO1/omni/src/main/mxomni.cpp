@@ -3,6 +3,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxatomidcounter.h"
 #include "mxautolocker.h"
+#include "mxdsmultiaction.h"
 #include "mxeventmanager.h"
 #include "mxmusicmanager.h"
 #include "mxnotificationmanager.h"
@@ -377,11 +378,23 @@ void MxOmni::DestroyInstance()
 	}
 }
 
-// STUB: LEGO1 0x100b06b0
-MxBool MxOmni::FUN_100b06b0(MxDSAction* p_action, const char* p_name)
+// FUNCTION: LEGO1 0x100b06b0
+MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 {
-	// TODO
-	return FAILURE;
+	if (!strcmp(p_action->GetSourceName(), p_name))
+		return TRUE;
+
+	if (p_action->IsA("MxDSMultiAction")) {
+		MxDSActionListCursor cursor(((MxDSMultiAction*) p_action)->GetActionList());
+		MxDSAction* action;
+
+		while (cursor.Next(action)) {
+			if (ActionSourceEquals(action, p_name))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100b07f0
@@ -404,7 +417,7 @@ MxLong MxOmni::HandleActionEnd(MxParam& p_param)
 	if (controller != NULL) {
 		action = controller->GetUnk0x54().Find(action, FALSE);
 		if (action) {
-			if (FUN_100b06b0(action, "LegoLoopingAnimPresenter") == FALSE) {
+			if (ActionSourceEquals(action, "LegoLoopingAnimPresenter") == FALSE) {
 				delete controller->GetUnk0x54().Find(action, TRUE);
 			}
 		}

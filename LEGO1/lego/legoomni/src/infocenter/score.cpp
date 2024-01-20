@@ -227,8 +227,7 @@ void Score::VTable0x68(MxBool p_add)
 // FUNCTION: LEGO1 0x100019d0
 void Score::Paint()
 {
-	GifManager* gm = GetGifManager();
-	GifData* gd = gm->Get("bigcube.gif");
+	GifData* gd = GetGifManager()->Get("bigcube.gif");
 
 	if (gd) {
 		RaceState* l78 = (RaceState*) GameState()->GetState("JetskiRaceState");
