@@ -1,13 +1,13 @@
 #include "elevatorbottom.h"
 
-DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
-
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
+
+DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
 
 // FUNCTION: LEGO1 0x10017e90
 ElevatorBottom::ElevatorBottom()
