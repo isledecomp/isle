@@ -153,7 +153,7 @@ void MxControlPresenter::ParseExtra()
 					MxS16 count = atoi(str);
 					m_unk0x58 = new MxS16[count + 1];
 					*m_unk0x58 = count;
-					for (MxU16 i = 1; i <= count; i++) {
+					for (MxS16 i = 1; i <= count; i++) {
 						m_unk0x58[i] = atoi(strtok(NULL, g_parseExtraTokens));
 					}
 				}
