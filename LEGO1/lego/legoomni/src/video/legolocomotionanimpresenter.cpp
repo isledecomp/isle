@@ -3,6 +3,8 @@
 #include "legoomni.h"
 #include "legoworld.h"
 
+DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)
+
 // FUNCTION: LEGO1 0x1006cdd0
 LegoLocomotionAnimPresenter::LegoLocomotionAnimPresenter()
 {
