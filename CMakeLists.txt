@@ -358,7 +358,9 @@ if (MSVC_FOR_DECOMP)
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
     target_compile_options(isle PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+    target_link_options(isle PRIVATE "/OPT:REF")
   endif()
+
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
