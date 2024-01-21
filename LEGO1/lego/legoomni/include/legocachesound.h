@@ -30,7 +30,7 @@ public:
 private:
 	void Init();
 
-	undefined m_padding0x8[0x80]; // 0x08
+	undefined m_padding0x08[0x80]; // 0x08
 };
 
 #endif // LEGOCACHESOUND_H

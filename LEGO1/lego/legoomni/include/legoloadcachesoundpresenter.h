@@ -33,8 +33,8 @@ private:
 	undefined4* m_unk0x70;        // 0x70
 	undefined4* m_unk0x74;        // 0x74
 	undefined4 m_unk0x78;         // 0x78
-	undefined m_unk0x7c;          // 0x4c
-	undefined4 m_waveFormat2;     // 0x54
+	undefined m_unk0x7c;          // 0x7c
+	undefined4 m_waveFormat2;     // 0x7d
 	undefined4 m_samplesPerSec;   // 0x81
 	undefined4 m_avgBytesPerSec;  // 0x85
 	undefined4 m_blockalign;      // 0x89
