@@ -6,6 +6,7 @@
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxstreamchunk.h"
+#include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
 DECOMP_SIZE_ASSERT(LegoAnimClassBase, 0x08)
@@ -161,11 +162,10 @@ void LegoAnimPresenter::DoneTickle()
 	// TODO
 }
 
-// STUB: LEGO1 0x1006b8d0
+// FUNCTION: LEGO1 0x1006b8d0
 MxResult LegoAnimPresenter::AddToManager()
 {
-	// TODO
-	return SUCCESS;
+	return MxVideoPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006b8e0

@@ -42,7 +42,7 @@ public:
 
 	// 6 more virtual functions here
 
-private:
+protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
