@@ -16,7 +16,7 @@
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
-DECOMP_SIZE_ASSERT(InfocenterUnkDataEntry, 0x18)
+DECOMP_SIZE_ASSERT(InfocenterMapEntry, 0x18)
 
 // GLOBAL: LEGO1 0x100f76a0
 const char* g_object2x4red = "2x4red";
@@ -30,13 +30,13 @@ Infocenter::Infocenter()
 	m_unk0xfc = 0;
 	m_unk0x11c = 0;
 	m_infocenterState = NULL;
-	m_unk0x1cc = 0;
+	m_frameHotBitmap = 0;
 	m_unk0x11c = 0;
 	m_unk0x104 = 0;
 	m_currentInfomainScript = c_noInfomain;
 	m_currentCutscene = e_noIntro;
 
-	memset(&m_entries, 0, sizeof(m_entries));
+	memset(&m_mapAreas, 0, sizeof(m_mapAreas));
 
 	m_unk0x1c8 = -1;
 	SetAppCursor(1);
@@ -310,7 +310,7 @@ void Infocenter::VTable0x50()
 
 	switch (GameState()->GetUnknown10()) {
 	case 0:
-		// bg->Enable(1); // TODO: Uncomment once LegoWorld::FindPresenter and LegoWorld::VTable0x58 are implemented.
+		bg->Enable(1);
 		InitializeBitmaps();
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 3:
@@ -360,10 +360,80 @@ void Infocenter::VTable0x50()
 	}
 }
 
-// STUB: LEGO1 0x1006f9a0
+// FUNCTION: LEGO1 0x1006f9a0
 void Infocenter::InitializeBitmaps()
 {
-	// TODO: Infocenter class size is wrong
+	m_radio.Initialize(TRUE);
+
+	FUN_10021790(m_atom, c_leftArrowCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_rightArrowCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_infoCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_boatCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_raceCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_pizzaCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_gasCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_medCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_copCtl)->Enable(TRUE);
+
+	FUN_10021790(m_atom, c_mamaCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_papaCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_pepperCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_nickCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_lauraCtl)->Enable(TRUE);
+	FUN_10021790(m_atom, c_radioCtl)->Enable(TRUE);
+
+	m_mapAreas[0].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Info_A_Bitmap");
+	m_mapAreas[0].m_unk0x08 = 391;
+	m_mapAreas[0].m_unk0x0c = 182;
+	m_mapAreas[0].m_unk0x10 = 427;
+	m_mapAreas[0].m_unk0x14 = 230;
+	m_mapAreas[0].m_unk0x04 = 3;
+
+	m_mapAreas[1].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Boat_A_Bitmap");
+	m_mapAreas[1].m_unk0x08 = 304;
+	m_mapAreas[1].m_unk0x0c = 225;
+	m_mapAreas[1].m_unk0x10 = 350;
+	m_mapAreas[1].m_unk0x14 = 268;
+	m_mapAreas[1].m_unk0x04 = 10;
+
+	m_mapAreas[2].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Race_A_Bitmap");
+	m_mapAreas[2].m_unk0x08 = 301;
+	m_mapAreas[2].m_unk0x0c = 133;
+	m_mapAreas[2].m_unk0x10 = 347;
+	m_mapAreas[2].m_unk0x14 = 181;
+	m_mapAreas[2].m_unk0x04 = 11;
+
+	m_mapAreas[3].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Pizza_A_Bitmap");
+	m_mapAreas[3].m_unk0x08 = 289;
+	m_mapAreas[3].m_unk0x0c = 182;
+	m_mapAreas[3].m_unk0x10 = 335;
+	m_mapAreas[3].m_unk0x14 = 225;
+	m_mapAreas[3].m_unk0x04 = 12;
+
+	m_mapAreas[4].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Gas_A_Bitmap");
+	m_mapAreas[4].m_unk0x10 = 391;
+	m_mapAreas[4].m_unk0x08 = 350;
+	m_mapAreas[4].m_unk0x0c = 161;
+	m_mapAreas[4].m_unk0x14 = 209;
+	m_mapAreas[4].m_unk0x04 = 13;
+
+	m_mapAreas[5].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Med_A_Bitmap");
+	m_mapAreas[5].m_unk0x08 = 392;
+	m_mapAreas[5].m_unk0x0c = 130;
+	m_mapAreas[5].m_unk0x10 = 438;
+	m_mapAreas[5].m_unk0x14 = 176;
+	m_mapAreas[5].m_unk0x04 = 14;
+
+	m_mapAreas[6].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Cop_A_Bitmap");
+	m_mapAreas[6].m_unk0x08 = 396;
+	m_mapAreas[6].m_unk0x0c = 229;
+	m_mapAreas[6].m_unk0x10 = 442;
+	m_mapAreas[6].m_unk0x14 = 272;
+	m_mapAreas[6].m_unk0x04 = 15;
+
+	m_frameHotBitmap = (MxStillPresenter*) FindPresenter("MxStillPresenter", "FrameHot_Bitmap");
+
+	FUN_10070dc0(TRUE);
 }
 
 // STUB: LEGO1 0x1006fd00

@@ -5,13 +5,19 @@
 #include "radio.h"
 
 class InfocenterState;
+class MxStillPresenter;
 
 // SIZE 0x18
-struct InfocenterUnkDataEntry {
+struct InfocenterMapEntry {
 	// FUNCTION: LEGO1 0x1006ec80
-	InfocenterUnkDataEntry() {}
+	InfocenterMapEntry() {}
 
-	undefined m_pad[0x18];
+	MxStillPresenter* m_presenter; // 0x00
+	undefined4 m_unk0x04;          // 0x04
+	undefined4 m_unk0x08;          // 0x08
+	undefined4 m_unk0x0c;          // 0x0c
+	undefined4 m_unk0x10;          // 0x10
+	undefined4 m_unk0x14;          // 0x14
 };
 
 // VTABLE: LEGO1 0x100d9338
@@ -30,6 +36,22 @@ public:
 
 	enum InfomainScript {
 		c_noInfomain = -1,
+
+		c_leftArrowCtl = 1,
+		c_rightArrowCtl = 2,
+		c_infoCtl = 3,
+		c_boatCtl = 10,
+		c_raceCtl = 11,
+		c_pizzaCtl = 12,
+		c_gasCtl = 13,
+		c_medCtl = 14,
+		c_copCtl = 15,
+		c_radioCtl = 18,
+		c_mamaCtl = 21,
+		c_papaCtl = 22,
+		c_pepperCtl = 23,
+		c_nickCtl = 24,
+		c_lauraCtl = 25,
 
 		c_welcomeDialogue = 500,
 		c_goodJobDialogue = 501,
@@ -167,9 +189,9 @@ private:
 	Cutscene m_currentCutscene;             // 0x108
 	Radio m_radio;                          // 0x10c
 	undefined4 m_unk0x11c;                  // 0x11c
-	InfocenterUnkDataEntry m_entries[7];    // 0x120
+	InfocenterMapEntry m_mapAreas[7];       // 0x120
 	MxS16 m_unk0x1c8;                       // 0x1c8
-	undefined4 m_unk0x1cc;                  // 0x1cc
+	MxStillPresenter* m_frameHotBitmap;     // 0x1cc
 	MxS16 m_infoManDialogueTimer;           // 0x1d0
 	MxS16 m_bookAnimationTimer;             // 0x1d2
 	MxU16 m_unk0x1d4;                       // 0x1d4
