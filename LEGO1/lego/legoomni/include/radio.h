@@ -25,6 +25,8 @@ public:
 		return !strcmp(p_name, Radio::ClassName()) || MxCore::IsA(p_name);
 	}
 
+	void Initialize(MxBool p_und);
+
 	// SYNTHETIC: LEGO1 0x1002c970
 	// Radio::`scalar deleting destructor'
 
