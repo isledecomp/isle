@@ -29,7 +29,7 @@ void LegoLoadCacheSoundPresenter::Init()
 // FUNCTION: LEGO1 0x100184f0
 void LegoLoadCacheSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
-	delete this->m_unk0x70;
+	delete[] this->m_unk0x70;
 	MxWavePresenter::Destroy(p_fromDestructor);
 }
 
@@ -37,19 +37,17 @@ void LegoLoadCacheSoundPresenter::Destroy(MxBool p_fromDestructor)
 void LegoLoadCacheSoundPresenter::ReadyTickle()
 {
 	MxStreamChunk* chunk = NextChunk();
+
 	if (chunk) {
 		WaveFormat* header = (WaveFormat*) chunk->GetData();
 		m_unk0x78 = 0;
-		undefined4* buf = new undefined4[header->m_dataSize];
-		m_unk0x70 = buf;
-		m_unk0x74 = buf;
-		m_cacheSound = new LegoCacheSound();
 
-		// parse header
-		m_waveFormat2 = header->m_waveFormatEx.wFormatTag; // TODO: Match
-		m_samplesPerSec = header->m_waveFormatEx.nSamplesPerSec;
-		m_avgBytesPerSec = header->m_waveFormatEx.nAvgBytesPerSec;
-		m_blockalign = header->m_waveFormatEx.nBlockAlign;
+		MxU8* data = new MxU8[header->m_dataSize];
+		m_unk0x70 = data;
+		m_unk0x74 = data;
+
+		m_cacheSound = new LegoCacheSound;
+		memcpy(&m_pcmWaveFormat, &header->m_pcmWaveFormat.wf, sizeof(m_pcmWaveFormat));
 
 		m_subscriber->DestroyChunk(chunk);
 		ProgressTickleState(e_streaming);

@@ -29,15 +29,12 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	LegoCacheSound* m_cacheSound; // 0x6c
-	undefined4* m_unk0x70;        // 0x70
-	undefined4* m_unk0x74;        // 0x74
-	undefined4 m_unk0x78;         // 0x78
-	undefined m_unk0x7c;          // 0x7c
-	undefined4 m_waveFormat2;     // 0x7d
-	undefined4 m_samplesPerSec;   // 0x81
-	undefined4 m_avgBytesPerSec;  // 0x85
-	undefined4 m_blockalign;      // 0x89
+	LegoCacheSound* m_cacheSound;  // 0x6c
+	undefined* m_unk0x70;          // 0x70
+	undefined* m_unk0x74;          // 0x74
+	undefined4 m_unk0x78;          // 0x78
+	undefined m_unk0x7c;           // 0x7c
+	PCMWAVEFORMAT m_pcmWaveFormat; // 0x7d
 };
 
 // SYNTHETIC: LEGO1 0x10018460

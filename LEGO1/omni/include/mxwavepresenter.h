@@ -49,12 +49,11 @@ public:
 	// FUNCTION: LEGO1 0x1000d6b0
 	virtual MxBool IsPaused() { return m_paused; }; // vtable+0x6c
 
-	// Reference: https://github.com/itsmattkc/SIEdit/blob/master/lib/othertypes.h
-	// SIZE 0x1c
+	// SIZE 0x18
 	struct WaveFormat {
-		WAVEFORMATEX m_waveFormatEx;
-		MxU32 m_dataSize;
-		MxU32 m_flags;
+		PCMWAVEFORMAT m_pcmWaveFormat; // 0x00
+		MxU32 m_dataSize;              // 0x10
+		MxU32 m_flags;                 // 0x14
 	};
 
 	// SYNTHETIC: LEGO1 0x1000d810
