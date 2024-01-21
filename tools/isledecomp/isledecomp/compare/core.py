@@ -409,6 +409,9 @@ class Compare:
 
     ## Public API
 
+    def get_all(self) -> List[MatchInfo]:
+        return self._db.get_all()
+
     def get_functions(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.FUNCTION)
 
