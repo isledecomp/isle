@@ -9,15 +9,21 @@ LegoLocomotionAnimPresenter::LegoLocomotionAnimPresenter()
 	Init();
 }
 
+// FUNCTION: LEGO1 0x1006d050
+LegoLocomotionAnimPresenter::~LegoLocomotionAnimPresenter()
+{
+	Destroy(TRUE);
+}
+
 // FUNCTION: LEGO1 0x1006d0b0
 void LegoLocomotionAnimPresenter::Init()
 {
 	m_unk0xc0 = 0;
 	m_unk0xc4 = 0;
-	m_unk0xd4 = 0;
 	m_unk0xcc = -1;
 	m_unk0xd0 = -1;
 	m_unk0xc8 = 0;
+	m_unk0xd4 = 0;
 }
 
 // FUNCTION: LEGO1 0x1006d0e0
@@ -32,8 +38,10 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 	if (m_unk0xc8) {
 		delete m_unk0xc8;
 	}
+
 	m_unk0x68 = 0;
 	Init();
+
 	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {

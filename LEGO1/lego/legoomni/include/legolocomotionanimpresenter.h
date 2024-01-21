@@ -4,10 +4,11 @@
 #include "legoloopinganimpresenter.h"
 
 // VTABLE: LEGO1 0x100d9170
-// SIZE 0xD8
+// SIZE 0xd8
 class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoLocomotionAnimPresenter();
+	virtual ~LegoLocomotionAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006ce50
 	inline const char* ClassName() const override // vtable+0xc
