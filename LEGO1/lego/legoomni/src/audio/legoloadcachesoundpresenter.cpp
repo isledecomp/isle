@@ -1,5 +1,9 @@
 #include "legoloadcachesoundpresenter.h"
 
+#include "legocachesound.h"
+#include "mxstreamchunk.h"
+#include "mxwavepresenter.h"
+
 DECOMP_SIZE_ASSERT(LegoLoadCacheSoundPresenter, 0x90)
 
 // FUNCTION: LEGO1 0x10018340
@@ -29,22 +33,42 @@ void LegoLoadCacheSoundPresenter::Destroy(MxBool p_fromDestructor)
 	MxWavePresenter::Destroy(p_fromDestructor);
 }
 
-// STUB: LEGO1 0x10018510
+// FUNCTION: LEGO1 0x10018510
 void LegoLoadCacheSoundPresenter::ReadyTickle()
 {
-	// TODO
+	MxStreamChunk* chunk = NextChunk();
+	if (chunk) {
+		WaveFormat* header = (WaveFormat*) chunk->GetData();
+		m_unk0x78 = 0;
+		undefined4* buf = new undefined4[header->m_dataSize];
+		m_unk0x70 = buf;
+		m_unk0x74 = buf;
+		m_cacheSound = new LegoCacheSound();
+
+		// parse header
+		m_waveFormat2 = header->m_waveFormatEx.wFormatTag; // TODO: Match
+		m_samplesPerSec = header->m_waveFormatEx.nSamplesPerSec;
+		m_avgBytesPerSec = header->m_waveFormatEx.nAvgBytesPerSec;
+		m_blockalign = header->m_waveFormatEx.nBlockAlign;
+
+		m_subscriber->DestroyChunk(chunk);
+		ProgressTickleState(e_streaming);
+	}
 }
 
 // STUB: LEGO1 0x100185f0
 void LegoLoadCacheSoundPresenter::StreamingTickle()
 {
 	// TODO
+	EndAction();
 }
 
-// STUB: LEGO1 0x100186f0
+// FUNCTION: LEGO1 0x100186f0
 void LegoLoadCacheSoundPresenter::DoneTickle()
 {
-	// TODO
+	if (m_unk0x7c != 0) {
+		EndAction();
+	}
 }
 
 // STUB: LEGO1 0x10018700
