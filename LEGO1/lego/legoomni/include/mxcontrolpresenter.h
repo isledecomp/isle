@@ -46,7 +46,7 @@ private:
 	MxBool m_unk0x50;      // 0x50
 	undefined2 m_unk0x52;  // 0x52
 	undefined2 m_unk0x54;  // 0x54
-	undefined4* m_unk0x58; // 0x58
+	MxS16* m_unk0x58; // 0x58
 };
 
 // SYNTHETIC: LEGO1 0x100440f0

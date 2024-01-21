@@ -1,9 +1,26 @@
 #include "mxcontrolpresenter.h"
 
+#include "define.h"
 #include "mxticklemanager.h"
 #include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
+
+// GLOBAL: LEGO1 0x10102064
+// STRING: LEGO1 0x10101fec
+const char* g_style = "STYLE";
+
+// GLOBAL: LEGO1 0x10102068
+// STRING: LEGO1 0x10101fe4
+const char* g_grid = "GRID";
+
+// GLOBAL: LEGO1 0x1010206c
+// STRING: LEGO1 0x10101fe0
+const char* g_map = "MAP";
+
+// GLOBAL: LEGO1 0x10102074
+// STRING: LEGO1 0x10101fd0
+const char* g_toggle = "TOGGLE";
 
 // FUNCTION: LEGO1 0x10043f50
 MxControlPresenter::MxControlPresenter()
@@ -109,10 +126,49 @@ void MxControlPresenter::ReadyTickle()
 	ProgressTickleState(e_repeating);
 }
 
-// STUB: LEGO1 0x10044640
+// FUNCTION: LEGO1 0x10044640
 void MxControlPresenter::ParseExtra()
 {
-	// TODO
+	char result[256];
+	MxU16 len = m_action->GetExtraLength();
+	if (len) {
+		char buffer[256];
+		memcpy(buffer, m_action->GetExtraData(), m_action->GetExtraLength());
+		buffer[len] = 0;
+
+		if (KeyValueStringParse(result, g_style, buffer)) {
+			char* str = strtok(result, g_parseExtraTokens);
+			if (!strcmpi(str, g_toggle)) {
+				m_unk0x4c = 1;
+			}
+			else if (!strcmpi(str, g_grid)) {
+				m_unk0x4c = 2;
+				m_unk0x52 = atoi(strtok(NULL, g_parseExtraTokens));
+				m_unk0x54 = atoi(strtok(NULL, g_parseExtraTokens));
+			}
+			else if (!strcmpi(str, g_map)) {
+				m_unk0x4c = 3;
+				str = strtok(NULL, g_parseExtraTokens);
+				if (str) {
+					MxS16 count = atoi(str);
+					m_unk0x58 = new MxS16[count + 1];
+					*m_unk0x58 = count;
+					for (MxU16 i = 1; i <= count; i++) {
+						m_unk0x58[i] = atoi(strtok(NULL, g_parseExtraTokens));
+					}
+				}
+			}
+			else {
+				m_unk0x4c = 0;
+			}
+		}
+
+		if (KeyValueStringParse(result, g_strVISIBILITY, buffer)) {
+			if (!strcmpi(result, "FALSE")) {
+				Enable(FALSE);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10044820
