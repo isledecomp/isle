@@ -9,7 +9,7 @@
 #include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
-DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x1c);
+DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x18);
 
 // FUNCTION: LEGO1 0x100b1ad0
 void MxWavePresenter::Init()
@@ -134,12 +134,12 @@ void MxWavePresenter::StartingTickle()
 		m_chunkLength = length;
 		memset(&waveFormatEx, 0, sizeof(waveFormatEx));
 
-		waveFormatEx.wFormatTag = m_waveFormat->m_waveFormatEx.wFormatTag;
-		waveFormatEx.nChannels = m_waveFormat->m_waveFormatEx.nChannels;
-		waveFormatEx.nSamplesPerSec = m_waveFormat->m_waveFormatEx.nSamplesPerSec;
-		waveFormatEx.nAvgBytesPerSec = m_waveFormat->m_waveFormatEx.nAvgBytesPerSec;
-		waveFormatEx.nBlockAlign = m_waveFormat->m_waveFormatEx.nBlockAlign;
-		waveFormatEx.wBitsPerSample = m_waveFormat->m_waveFormatEx.wBitsPerSample;
+		waveFormatEx.wFormatTag = m_waveFormat->m_pcmWaveFormat.wf.wFormatTag;
+		waveFormatEx.nChannels = m_waveFormat->m_pcmWaveFormat.wf.nChannels;
+		waveFormatEx.nSamplesPerSec = m_waveFormat->m_pcmWaveFormat.wf.nSamplesPerSec;
+		waveFormatEx.nAvgBytesPerSec = m_waveFormat->m_pcmWaveFormat.wf.nAvgBytesPerSec;
+		waveFormatEx.nBlockAlign = m_waveFormat->m_pcmWaveFormat.wf.nBlockAlign;
+		waveFormatEx.wBitsPerSample = m_waveFormat->m_pcmWaveFormat.wBitsPerSample;
 
 		if (waveFormatEx.wBitsPerSample == 8)
 			m_silenceData = 0x7F;
@@ -157,7 +157,7 @@ void MxWavePresenter::StartingTickle()
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;
 
 		if (m_action->GetFlags() & MxDSAction::c_looping)
-			desc.dwBufferBytes = m_waveFormat->m_waveFormatEx.nAvgBytesPerSec *
+			desc.dwBufferBytes = m_waveFormat->m_pcmWaveFormat.wf.nAvgBytesPerSec *
 								 (m_action->GetDuration() / m_action->GetLoopCount()) / 1000;
 		else
 			desc.dwBufferBytes = 2 * length;

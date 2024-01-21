@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "mxwavepresenter.h"
 
+class LegoCacheSound;
+
 // VTABLE: LEGO1 0x100d5fa8
 // SIZE 0x90
 class LegoLoadCacheSoundPresenter : public MxWavePresenter {
@@ -27,12 +29,12 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4* m_unk0x6c;   // 0x6c
-	undefined4* m_unk0x70;   // 0x70
-	undefined4 m_unk0x74;    // 0x74
-	undefined4 m_unk0x78;    // 0x78
-	undefined m_unk0x7c;     // 0x7c
-	undefined4 m_unk0x80[4]; // 0x80
+	LegoCacheSound* m_cacheSound;  // 0x6c
+	undefined* m_unk0x70;          // 0x70
+	undefined* m_unk0x74;          // 0x74
+	undefined4 m_unk0x78;          // 0x78
+	undefined m_unk0x7c;           // 0x7c
+	PCMWAVEFORMAT m_pcmWaveFormat; // 0x7d
 };
 
 // SYNTHETIC: LEGO1 0x10018460

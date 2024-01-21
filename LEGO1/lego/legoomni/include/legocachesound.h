@@ -1,6 +1,7 @@
 #ifndef LEGOCACHESOUND_H
 #define LEGOCACHESOUND_H
 
+#include "decomp.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d4718
@@ -28,6 +29,8 @@ public:
 
 private:
 	void Init();
+
+	undefined m_padding0x08[0x80]; // 0x08
 };
 
 #endif // LEGOCACHESOUND_H
