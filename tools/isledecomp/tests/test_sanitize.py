@@ -177,3 +177,37 @@ def test_jump_to_function():
     inst = DisasmLiteInst(0x1000, 2, "jmp", "0x6557")
     (_, op_str) = p.sanitize(inst)
     assert op_str == "0x5555"
+
+
+def test_float_replacement():
+    """Floating point constants often appear as pointers to data.
+    A good example is ViewROI::IntrinsicImportance and the subclass override
+    LegoROI::IntrinsicImportance. Both return 0.5, but this is done via the
+    FLD instruction and a dword value at 0x100dbdec. In this case it is more
+    valuable to just read the constant value rather than use a placeholder.
+    The float constants don't appear to be deduplicated (like strings are)
+    because there is another 0.5 at 0x100d40b0."""
+
+    def substitute_float(addr: int, _: int) -> str:
+        return "zero-point-five" if addr == 0x1234 else None
+
+    p = ParseAsm(float_lookup=substitute_float)
+    inst = DisasmLiteInst(0x1000, 6, "fld", "dword ptr [0x1234]")
+    (_, op_str) = p.sanitize(inst)
+    assert op_str == "dword ptr [zero-point-five (FLOAT)]"
+
+
+def test_float_variable():
+    """If there is a variable at the address referenced by a float instruction,
+    use the name instead of calling into the float replacement handler."""
+
+    def name_lookup(addr: int) -> Optional[str]:
+        return "g_myFloatVariable" if addr == 0x1234 else None
+
+    def substitute_float(_: int, __: int) -> str:
+        return ""
+
+    p = ParseAsm(name_lookup=name_lookup, float_lookup=substitute_float)
+    inst = DisasmLiteInst(0x1000, 6, "fld", "dword ptr [0x1234]")
+    (_, op_str) = p.sanitize(inst)
+    assert op_str == "dword ptr [g_myFloatVariable]"

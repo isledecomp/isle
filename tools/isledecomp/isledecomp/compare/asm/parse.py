@@ -13,7 +13,7 @@ from capstone import Cs, CS_ARCH_X86, CS_MODE_32
 
 disassembler = Cs(CS_ARCH_X86, CS_MODE_32)
 
-ptr_replace_regex = re.compile(r"ptr \[(0x[0-9a-fA-F]+)\]")
+ptr_replace_regex = re.compile(r"(?P<data_size>\w+) ptr \[(?P<addr>0x[0-9a-fA-F]+)\]")
 
 DisasmLiteInst = namedtuple("DisasmLiteInst", "address, size, mnemonic, op_str")
 
@@ -27,14 +27,20 @@ def from_hex(string: str) -> Optional[int]:
     return None
 
 
+def get_float_size(size_str: str) -> int:
+    return 8 if size_str == "qword" else 4
+
+
 class ParseAsm:
     def __init__(
         self,
         relocate_lookup: Optional[Callable[[int], bool]] = None,
         name_lookup: Optional[Callable[[int], str]] = None,
+        float_lookup: Optional[Callable[[int, int], Optional[str]]] = None,
     ) -> None:
         self.relocate_lookup = relocate_lookup
         self.name_lookup = name_lookup
+        self.float_lookup = float_lookup
         self.replacements = {}
         self.number_placeholders = True
 
@@ -46,6 +52,14 @@ class ParseAsm:
             return self.relocate_lookup(addr)
 
         return False
+
+    def float_replace(self, addr: int, data_size: int) -> Optional[str]:
+        if callable(self.float_lookup):
+            float_str = self.float_lookup(addr, data_size)
+            if float_str is not None:
+                return f"{float_str} (FLOAT)"
+
+        return None
 
     def lookup(self, addr: int) -> Optional[str]:
         """Return a replacement name for this address if we find one."""
@@ -108,18 +122,45 @@ class ParseAsm:
 
         def filter_out_ptr(match):
             """Helper for re.sub, see below"""
-            offset = from_hex(match.group(1))
+            offset = from_hex(match.group("addr"))
 
             if offset is not None:
                 # We assume this is always an address to replace
                 placeholder = self.replace(offset)
-                return f"ptr [{placeholder}]"
+                return f'{match.group("data_size")} ptr [{placeholder}]'
 
             # Strict regex should ensure we can read the hex number.
             # But just in case: return the string with no changes
             return match.group(0)
 
-        op_str = ptr_replace_regex.sub(filter_out_ptr, inst.op_str)
+        def float_ptr_replace(match):
+            offset = from_hex(match.group("addr"))
+
+            if offset is not None:
+                # If we can find a variable name for this pointer, use it.
+                placeholder = self.lookup(offset)
+
+                # Read what's under the pointer and show the decimal value.
+                if placeholder is None:
+                    placeholder = self.float_replace(
+                        offset, get_float_size(match.group("data_size"))
+                    )
+
+                # If we can't read the float, use a regular placeholder.
+                if placeholder is None:
+                    placeholder = self.replace(offset)
+
+                return f'{match.group("data_size")} ptr [{placeholder}]'
+
+            # Strict regex should ensure we can read the hex number.
+            # But just in case: return the string with no changes
+            return match.group(0)
+
+        if inst.mnemonic.startswith("f"):
+            # If floating point instruction
+            op_str = ptr_replace_regex.sub(float_ptr_replace, inst.op_str)
+        else:
+            op_str = ptr_replace_regex.sub(filter_out_ptr, inst.op_str)
 
         # Performance hack:
         # Skip this step if there is nothing left to consider replacing.
