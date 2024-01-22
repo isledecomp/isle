@@ -68,4 +68,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001d090
 // MxPtrList<MxPresenter>::`scalar deleting destructor'
 
+// SYNTHETIC: LEGO1 0x1001d100
+// MxPresenterList::~MxPresenterList
+
 #endif // MXPRESENTERLIST_H

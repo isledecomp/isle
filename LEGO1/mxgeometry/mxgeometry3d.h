@@ -15,6 +15,9 @@ public:
 		m_elements[2] = p_z;
 	}
 
+	// SYNTHETIC: LEGO1 0x1001d170
+	// Mx3DPointFloat::Mx3DPointFloat
+
 	// FUNCTION: LEGO1 0x10003c10
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
 

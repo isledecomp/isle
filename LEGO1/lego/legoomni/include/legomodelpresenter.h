@@ -3,6 +3,8 @@
 
 #include "mxvideopresenter.h"
 
+class AutoROI;
+
 // VTABLE: LEGO1 0x100d4e50
 // SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
 class LegoModelPresenter : public MxVideoPresenter {
@@ -33,7 +35,7 @@ protected:
 	void Destroy(MxBool p_fromDestructor);
 
 private:
-	undefined4 m_unk0x64; // 0x64
+	AutoROI* m_unk0x64;   // 0x64
 	MxBool m_addedToView; // 0x68
 };
 

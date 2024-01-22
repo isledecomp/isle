@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxtypes.h"
 
+class AutoROI;
 class LegoROI;
 class LegoStream;
 
@@ -35,6 +36,7 @@ struct LegoSaveDataEntry3 {
 class LegoUnkSaveDataWriter {
 public:
 	MxResult WriteSaveData3(LegoStream* p_stream);
+	AutoROI* FUN_10083500(undefined4, undefined4);
 	void FUN_10083db0(LegoROI* p_roi);
 };
 
