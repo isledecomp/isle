@@ -82,6 +82,17 @@ class CompareDb:
 
         return [string for (string,) in cur.fetchall()]
 
+    def get_all(self) -> List[MatchInfo]:
+        cur = self._db.execute(
+            """SELECT compare_type, orig_addr, recomp_addr, name, size
+            FROM `symbols`
+            ORDER BY orig_addr NULLS LAST
+            """,
+        )
+        cur.row_factory = matchinfo_factory
+
+        return cur.fetchall()
+
     def get_matches(self) -> Optional[MatchInfo]:
         cur = self._db.execute(
             """SELECT compare_type, orig_addr, recomp_addr, name, size
