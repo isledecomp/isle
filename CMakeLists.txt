@@ -252,6 +252,7 @@ add_library(lego1 SHARED
   LEGO1/viewmanager/viewlodlist.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
+  LEGO1/flic.cpp
 )
 
 if (MINGW)
