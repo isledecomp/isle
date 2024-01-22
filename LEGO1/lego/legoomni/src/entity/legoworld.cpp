@@ -17,12 +17,17 @@ DECOMP_SIZE_ASSERT(LegoEntityListCursor, 0x10)
 DECOMP_SIZE_ASSERT(MxCoreList, 0x18)
 DECOMP_SIZE_ASSERT(MxCoreListCursor, 0x10)
 
-// STUB: LEGO1 0x1001ca40
+// FUNCTION: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
 {
-	// TODO
-	m_worldStarted = FALSE;
 	m_unk0xf4 = 4;
+	m_cameraController = NULL;
+	m_entityList = NULL;
+	m_coreList = NULL;
+	m_unk0xa4 = 0; // MxBool?
+	m_unk0xf0 = 0;
+	m_worldStarted = FALSE;
+
 	NotificationManager()->Register(this);
 }
 

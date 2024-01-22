@@ -11,6 +11,9 @@ class LegoEntity;
 // Note: There is an extra class between LegoROI and ViewROI,
 // maybe called "AutoROI". VTABLE 0x100dbe38
 
+// TODO: Set as superclass of LegoROI
+class AutoROI : public ViewROI {};
+
 // VTABLE: LEGO1 0x100dbea8
 // SIZE 0x10c
 class LegoROI : public ViewROI {

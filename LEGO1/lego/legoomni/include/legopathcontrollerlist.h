@@ -48,6 +48,9 @@ public:
 // TEMPLATE: LEGO1 0x1001d3c0
 // MxPtrList<LegoPathController>::Destroy
 
+// TEMPLATE: LEGO1 0x1001d440
+// MxPtrList<LegoPathController>::~MxPtrList<LegoPathController>
+
 // SYNTHETIC: LEGO1 0x1001d490
 // MxCollection<LegoPathController *>::`scalar deleting destructor'
 
@@ -56,5 +59,8 @@ public:
 
 // SYNTHETIC: LEGO1 0x1001d5b0
 // MxPtrList<LegoPathController>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001d620
+// LegoPathControllerList::~LegoPathControllerList
 
 #endif // LEGOPATHCONTROLLERLIST_H
