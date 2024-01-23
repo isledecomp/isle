@@ -22,6 +22,24 @@ option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
+add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
+# Use internal DirectX 5 if required
+if (ISLE_USE_DX5)
+  target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+  target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
+
+add_library(Smacker::Smacker STATIC IMPORTED)
+set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
+set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
+
+add_library(FLIC::FLIC STATIC IMPORTED)
+set_property(TARGET FLIC::FLIC PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/flic/flic.lib")
+set_property(TARGET FLIC::FLIC PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/flic")
+
+add_library(Vec::Vec INTERFACE IMPORTED)
+target_include_directories(Vec::Vec INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/vec")
+
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/act1/act1state.cpp
@@ -258,16 +276,11 @@ if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/util")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
-
-# Additional include directories
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 if (ISLE_USE_SMARTHEAP)
   add_library(SmartHeap::SmartHeap STATIC IMPORTED)
@@ -279,17 +292,8 @@ if (ISLE_USE_SMARTHEAP)
   target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
 endif()
 
-# Use internal DirectX 5 if required
-if (ISLE_USE_DX5)
-  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-endif()
-
-target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
-target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack flic)
+target_link_libraries(lego1 PRIVATE DirectX5::DirectX5 Vec::Vec ddraw dsound dinput dxguid winmm d3drm Smacker::Smacker FLIC::FLIC)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -299,17 +303,11 @@ set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 if (ISLE_BUILD_APP)
   add_executable(isle WIN32
     ISLE/res/isle.rc
-    ISLE/define.cpp
     ISLE/isleapp.cpp
+    ISLE/define.cpp
   )
 
   target_compile_definitions(isle PRIVATE ISLE_APP)
-
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
   # Use internal DirectX 5 if required
   if (ISLE_USE_DX5)
