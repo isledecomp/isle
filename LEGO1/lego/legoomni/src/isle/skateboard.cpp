@@ -1,4 +1,4 @@
-#include "SkateBoard.h"
+#include "skateboard.h"
 
 #include "decomp.h"
 #include "mxnotificationmanager.h"
