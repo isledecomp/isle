@@ -221,8 +221,11 @@ add_library(lego1 SHARED
   LEGO1/omni/src/system/mxsemaphore.cpp
   LEGO1/omni/src/system/mxthread.cpp
   LEGO1/omni/src/video/mxbitmap.cpp
+  LEGO1/omni/src/video/mxcolor.cpp
   LEGO1/omni/src/video/mxdisplaysurface.cpp
   LEGO1/omni/src/video/mxflcpresenter.cpp
+  LEGO1/omni/src/video/mximage.cpp
+  LEGO1/omni/src/video/mximageptr.cpp
   LEGO1/omni/src/video/mxloopingflcpresenter.cpp
   LEGO1/omni/src/video/mxloopingsmkpresenter.cpp
   LEGO1/omni/src/video/mxpalette.cpp

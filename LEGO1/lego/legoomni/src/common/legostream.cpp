@@ -179,9 +179,9 @@ MxResult LegoFileStream::Open(const char* p_filename, OpenFlags p_mode)
 	}
 
 	if ((p_mode & c_binaryBit) != 0)
-		strcat(modeString, "b");
-	else
 		strcat(modeString, "t");
+	else
+		strcat(modeString, "b");
 
 	return (m_hFile = fopen(p_filename, modeString)) ? SUCCESS : FAILURE;
 }
