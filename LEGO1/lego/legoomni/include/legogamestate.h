@@ -2,10 +2,11 @@
 #define LEGOGAMESTATE_H
 
 #include "decomp.h"
+#include "lego/sources/misc/LegoStorage.h"
 #include "legobackgroundcolor.h"
 #include "legofullscreenmovie.h"
-#include "legostream.h"
 #include "mxtypes.h"
+#include "mxvariabletable.h"
 
 class LegoState;
 class MxVariable;
@@ -47,7 +48,7 @@ public:
 
 	struct ScoreStruct {
 		void WriteScoreHistory();
-		void FUN_1003ccf0(LegoFileStream&);
+		void FUN_1003ccf0(LegoFile&);
 
 		MxU16 m_unk0x00;
 		undefined m_unk0x02[0x2c][20];
@@ -55,7 +56,9 @@ public:
 
 private:
 	void RegisterState(LegoState* p_state);
-	MxResult WriteEndOfVariables(LegoStream* p_stream);
+	MxResult WriteVariable(LegoStorage* p_stream, MxVariableTable* p_from, const char* p_variableName);
+	MxResult WriteEndOfVariables(LegoStorage* p_stream);
+	MxS32 ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to);
 	void SetROIHandlerFunction();
 
 	char* m_savePath;                           // 0x0

@@ -28,7 +28,7 @@ public:
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 

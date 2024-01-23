@@ -14,7 +14,7 @@ Act1State::Act1State()
 }
 
 // STUB: LEGO1 0x10033ac0
-MxResult Act1State::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult Act1State::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return SUCCESS;

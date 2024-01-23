@@ -12,18 +12,18 @@ PoliceState::PoliceState()
 }
 
 // FUNCTION: LEGO1 0x1005e990
-MxResult PoliceState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 {
-	if (p_legoFileStream->IsWriteMode()) {
-		p_legoFileStream->FUN_10006030(ClassName());
+	if (p_legoFile->IsWriteMode()) {
+		p_legoFile->FUN_10006030(ClassName());
 	}
 
-	if (p_legoFileStream->IsReadMode()) {
-		p_legoFileStream->Read(&m_unk0x8, sizeof(m_unk0x8));
+	if (p_legoFile->IsReadMode()) {
+		p_legoFile->Read(&m_unk0x8, sizeof(m_unk0x8));
 	}
 	else {
 		undefined4 unk0x8 = m_unk0x8;
-		p_legoFileStream->Write(&unk0x8, sizeof(m_unk0x8));
+		p_legoFile->Write(&unk0x8, sizeof(m_unk0x8));
 	}
 
 	return SUCCESS;

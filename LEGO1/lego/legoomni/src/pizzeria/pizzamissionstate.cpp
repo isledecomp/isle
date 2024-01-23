@@ -4,7 +4,7 @@ DECOMP_SIZE_ASSERT(PizzaMissionStateEntry, 0x20)
 DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb0)
 
 // STUB: LEGO1 0x100393c0
-MxResult PizzaMissionState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult PizzaMissionState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return SUCCESS;
