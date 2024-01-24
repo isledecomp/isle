@@ -69,7 +69,7 @@ add_library(tglrl STATIC
 register_lego1_target(tglrl)
 set_property(TARGET tglrl PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>")
 target_include_directories(tglrl PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(tglrl PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5> d3drm)
+target_link_libraries(tglrl PRIVATE d3drm)
 
 add_library(realtime STATIC
   LEGO1/realtime/matrix.cpp
@@ -100,7 +100,7 @@ add_library(mxdirectx STATIC
 register_lego1_target(mxdirectx)
 set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
 target_include_directories(mxdirectx PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(mxdirectx PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5> ddraw)
+target_link_libraries(mxdirectx PRIVATE ddraw)
 
 add_library(roi STATIC
   LEGO1/lego/sources/roi/legoroi.cpp
@@ -335,10 +335,13 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni
 target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi Vec::Vec dsound dinput dxguid winmm Smacker::Smacker FLIC::FLIC)
 
 if (ISLE_USE_SMARTHEAP)
-  foreach(lego1_target IN LISTS lego1_targets)
-    target_link_libraries(${lego1_target} PRIVATE SmartHeap::SmartHeap)
+  foreach(tgt IN LISTS lego1_targets)
+    target_link_libraries(${tgt} PRIVATE SmartHeap::SmartHeap)
   endforeach()
 endif()
+foreach(tgt IN LISTS lego1_targets)
+  target_link_libraries(${tgt} PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
+endforeach()
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -371,15 +374,19 @@ endif()
 
 if (MSVC)
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
-    target_compile_definitions(lego1 PRIVATE _CRT_SECURE_NO_WARNINGS)
-    if (ISLE_BUILD_APP)
+    foreach(tgt IN LISTS lego1_targets)
+      target_compile_definitions(${tgt} PRIVATE _CRT_SECURE_NO_WARNINGS)
+    endforeach()
+    if (TARGET isle)
       target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
     endif()
   endif()
   # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
-    target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
-    if (ISLE_BUILD_APP)
+    foreach(tgt IN LISTS lego1_targets)
+      target_compile_options(${tgt} PRIVATE "-Zc:__cplusplus")
+    endforeach()
+    if (TARGET isle)
       target_compile_options(isle PRIVATE "-Zc:__cplusplus")
     endif()
   endif()
