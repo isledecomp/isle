@@ -22,10 +22,10 @@ MxVideoParam::MxVideoParam()
 
 // FUNCTION: LEGO1 0x100beca0
 MxVideoParam::MxVideoParam(
-	COMPAT_CONST MxRect32& p_rect,
+	MxRect32& p_rect,
 	MxPalette* p_palette,
 	MxULong p_backBuffers,
-	COMPAT_CONST MxVideoParamFlags& p_flags
+	MxVideoParamFlags& p_flags
 )
 {
 	this->m_rect = p_rect;

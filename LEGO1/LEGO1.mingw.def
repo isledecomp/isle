@@ -67,10 +67,8 @@ EXPORTS
   _ZN12MxDirectDraw18GetPrimaryBitDepthEv
   _ZN12MxDirectDraw5PauseEi@4 = _ZN12MxDirectDraw5PauseEi
   _ZN12MxVideoParam13SetDeviceNameEPc@4 = _ZN12MxVideoParam13SetDeviceNameEPc
-  _ZN12MxVideoParamC1ERK8MxRect32P9MxPalettejRK17MxVideoParamFlags@16 = _ZN12MxVideoParamC1ERK8MxRect32P9MxPalettejRK17MxVideoParamFlags
   _ZN12MxVideoParamC1ERS_@4 = _ZN12MxVideoParamC1ERS_
   _ZN12MxVideoParamC1Ev
-  _ZN12MxVideoParamC2ERK8MxRect32P9MxPalettejRK17MxVideoParamFlags@16 = _ZN12MxVideoParamC2ERK8MxRect32P9MxPalettejRK17MxVideoParamFlags
   _ZN12MxVideoParamC2ERS_@4 = _ZN12MxVideoParamC2ERS_
   _ZN12MxVideoParamC2Ev
   _ZN12MxVideoParamD1Ev

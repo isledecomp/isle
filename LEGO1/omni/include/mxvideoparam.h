@@ -16,10 +16,10 @@ public:
 	__declspec(dllexport) MxVideoParam();
 	__declspec(dllexport) MxVideoParam(MxVideoParam& p_videoParam);
 	__declspec(dllexport) MxVideoParam(
-		COMPAT_CONST MxRect32& p_rect,
+		MxRect32& p_rect,
 		MxPalette* p_palette,
 		MxULong p_backBuffers,
-		COMPAT_CONST MxVideoParamFlags& p_flags
+		MxVideoParamFlags& p_flags
 	);
 	__declspec(dllexport) MxVideoParam& operator=(const MxVideoParam& p_videoParam);
 	__declspec(dllexport) ~MxVideoParam();
