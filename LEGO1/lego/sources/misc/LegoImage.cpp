@@ -1,7 +1,7 @@
-#include "LegoImage.h"
+#include "legoimage.h"
 
-#include "LegoStorage.h"
 #include "decomp.h"
+#include "legostorage.h"
 #include "memory.h"
 
 DECOMP_SIZE_ASSERT(LegoPaletteEntry, 0x3);

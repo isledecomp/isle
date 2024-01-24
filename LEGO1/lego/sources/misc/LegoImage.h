@@ -1,7 +1,7 @@
 #ifndef __LEGOIMAGE_H
 #define __LEGOIMAGE_H
 
-#include "LegoTypes.h"
+#include "legotypes.h"
 
 class LegoStorage;
 

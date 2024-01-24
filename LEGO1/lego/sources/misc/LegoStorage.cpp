@@ -1,4 +1,4 @@
-#include "LegoStorage.h"
+#include "legostorage.h"
 
 #include "decomp.h"
 

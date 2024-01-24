@@ -13,7 +13,7 @@ class IslePathActor;
 class LegoPathBoundary;
 
 struct PresenterSetCompare {
-	int operator()(MxPresenter* const& p_a, MxPresenter* const& p_b) const { return p_a > p_b; }
+	MxS32 operator()(MxPresenter* const& p_a, MxPresenter* const& p_b) const { return p_a > p_b; }
 };
 
 typedef set<MxPresenter*, PresenterSetCompare> MxPresenterSet;
@@ -23,7 +23,7 @@ typedef set<MxPresenter*, PresenterSetCompare> MxPresenterSet;
 class LegoWorld : public LegoEntity {
 public:
 	__declspec(dllexport) LegoWorld();
-	__declspec(dllexport) virtual ~LegoWorld(); // vtable+0x0
+	__declspec(dllexport) virtual ~LegoWorld() override; // vtable+0x0
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 	virtual MxResult Tickle() override;               // vtable+0x8
@@ -119,7 +119,7 @@ protected:
 
 // TEMPLATE: LEGO1 0x1001df00
 // Set<MxPresenter *,PresenterSetCompare>::~Set<MxPresenter *,PresenterSetCompare>
-// clang-format om
+// clang-format on
 
 // SYNTHETIC: LEGO1 0x1001eed0
 // MxPresenterListCursor::`scalar deleting destructor'
@@ -143,6 +143,7 @@ protected:
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
 
 // GLOBAL: LEGO1 0x100f11a0
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *>
+// >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
 
 #endif // LEGOWORLD_H

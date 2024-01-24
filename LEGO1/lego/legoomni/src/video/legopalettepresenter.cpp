@@ -1,6 +1,6 @@
 #include "legopalettepresenter.h"
 
-#include "lego/sources/misc/LegoStorage.h"
+#include "lego/sources/misc/legostorage.h"
 #include "legoomni.h"
 #include "legovideomanager.h"
 #include "mxstreamchunk.h"

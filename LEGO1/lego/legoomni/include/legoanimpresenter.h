@@ -1,7 +1,7 @@
 #ifndef LEGOANIMPRESENTER_H
 #define LEGOANIMPRESENTER_H
 
-#include "lego/sources/misc/LegoStorage.h"
+#include "lego/sources/misc/legostorage.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxvideopresenter.h"
 

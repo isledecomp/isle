@@ -1,8 +1,8 @@
-#include "LegoTexture.h"
+#include "legotexture.h"
 
-#include "LegoImage.h"
-#include "LegoStorage.h"
 #include "decomp.h"
+#include "legoimage.h"
+#include "legostorage.h"
 
 DECOMP_SIZE_ASSERT(LegoTexture, 0x4);
 
