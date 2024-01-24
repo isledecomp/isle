@@ -142,7 +142,7 @@ LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 			m_width = m_height;
 		}
 
-		delete m_bits;
+		delete[] m_bits;
 		m_bits = newBits;
 	}
 
