@@ -40,6 +40,53 @@ set_property(TARGET FLIC::FLIC PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_S
 add_library(Vec::Vec INTERFACE IMPORTED)
 target_include_directories(Vec::Vec INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 
+add_library(SmartHeap::SmartHeap STATIC IMPORTED)
+set_property(TARGET SmartHeap::SmartHeap PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
+
+add_library(mxgeometry STATIC
+  LEGO1/mxgeometry/mxgeometry3d.cpp
+  LEGO1/mxgeometry/mxmatrix.cpp
+)
+set_property(TARGET mxgeometry PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>")
+target_include_directories(mxgeometry PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+
+add_library(tglrl STATIC
+  LEGO1/tgl/d3drm/camera.cpp
+  LEGO1/tgl/d3drm/device.cpp
+  LEGO1/tgl/d3drm/group.cpp
+  LEGO1/tgl/d3drm/light.cpp
+  LEGO1/tgl/d3drm/mesh.cpp
+  LEGO1/tgl/d3drm/renderer.cpp
+  LEGO1/tgl/d3drm/texture.cpp
+  LEGO1/tgl/d3drm/unk.cpp
+  LEGO1/tgl/d3drm/view.cpp
+)
+set_property(TARGET tglrl PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>")
+target_include_directories(tglrl PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(tglrl PRIVATE DirectX5::DirectX5 d3drm)
+
+add_library(realtime STATIC
+  LEGO1/realtime/matrix.cpp
+  LEGO1/realtime/orientableroi.cpp
+  LEGO1/realtime/realtime.cpp
+  LEGO1/realtime/realtimeview.cpp
+  LEGO1/realtime/vector.cpp
+)
+set_property(TARGET realtime PROPERTY ARCHIVE_OUTPUT_NAME "realtime$<$<CONFIG:Debug>:d>")
+target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(realtime PRIVATE Vec::Vec)
+
+add_library(viewmanager STATIC
+  LEGO1/viewmanager/viewlodlist.cpp
+  LEGO1/viewmanager/viewmanager.cpp
+  LEGO1/viewmanager/viewroi.cpp
+)
+set_property(TARGET viewmanager PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager<$<CONFIG:Debug>:d>")
+target_include_directories(viewmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(viewmanager PRIVATE Vec::Vec)
+
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/act1/act1state.cpp
@@ -170,8 +217,6 @@ add_library(lego1 SHARED
   LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
   LEGO1/mxdirectx/mxdirectdraw.cpp
-  LEGO1/mxgeometry/mxgeometry3d.cpp
-  LEGO1/mxgeometry/mxmatrix.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
   LEGO1/omni/src/action/mxdsevent.cpp
@@ -253,23 +298,6 @@ add_library(lego1 SHARED
   LEGO1/omni/src/video/mxvideoparam.cpp
   LEGO1/omni/src/video/mxvideoparamflags.cpp
   LEGO1/omni/src/video/mxvideopresenter.cpp
-  LEGO1/realtime/matrix.cpp
-  LEGO1/realtime/orientableroi.cpp
-  LEGO1/realtime/realtime.cpp
-  LEGO1/realtime/realtimeview.cpp
-  LEGO1/realtime/vector.cpp
-  LEGO1/tgl/d3drm/camera.cpp
-  LEGO1/tgl/d3drm/device.cpp
-  LEGO1/tgl/d3drm/group.cpp
-  LEGO1/tgl/d3drm/light.cpp
-  LEGO1/tgl/d3drm/mesh.cpp
-  LEGO1/tgl/d3drm/renderer.cpp
-  LEGO1/tgl/d3drm/texture.cpp
-  LEGO1/tgl/d3drm/unk.cpp
-  LEGO1/tgl/d3drm/view.cpp
-  LEGO1/viewmanager/viewlodlist.cpp
-  LEGO1/viewmanager/viewmanager.cpp
-  LEGO1/viewmanager/viewroi.cpp
 )
 
 if (MINGW)
@@ -293,7 +321,7 @@ if (ISLE_USE_SMARTHEAP)
 endif()
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE DirectX5::DirectX5 Vec::Vec ddraw dsound dinput dxguid winmm d3drm Smacker::Smacker FLIC::FLIC)
+target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry DirectX5::DirectX5 Vec::Vec ddraw dsound dinput dxguid winmm Smacker::Smacker FLIC::FLIC)
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
