@@ -20,7 +20,7 @@ AmbulanceMissionState::AmbulanceMissionState()
 }
 
 // STUB: LEGO1 0x10037440
-MxResult AmbulanceMissionState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult AmbulanceMissionState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return 0;

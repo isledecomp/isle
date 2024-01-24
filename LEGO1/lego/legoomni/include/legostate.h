@@ -2,7 +2,7 @@
 #define LEGOSTATE_H
 
 #include "decomp.h"
-#include "legostream.h"
+#include "lego/sources/misc/legostorage.h"
 #include "mxcore.h"
 #include "mxstring.h"
 
@@ -24,9 +24,9 @@ public:
 		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxBool VTable0x14();                                   // vtable+0x14
-	virtual MxBool SetFlag();                                      // vtable+0x18
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream); // vtable+0x1C
+	virtual MxBool VTable0x14();                       // vtable+0x14
+	virtual MxBool SetFlag();                          // vtable+0x18
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile); // vtable+0x1C
 
 	// SYNTHETIC: LEGO1 0x10006160
 	// LegoState::`scalar deleting destructor'

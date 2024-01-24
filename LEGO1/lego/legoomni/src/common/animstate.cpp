@@ -18,7 +18,7 @@ AnimState::~AnimState()
 }
 
 // STUB: LEGO1 0x100652d0
-MxResult AnimState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult AnimState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return FAILURE;

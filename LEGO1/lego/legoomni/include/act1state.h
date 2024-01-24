@@ -22,8 +22,8 @@ public:
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	};
 
-	virtual MxBool SetFlag() override;                                      // vtable+0x18
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+	virtual MxBool SetFlag() override;                          // vtable+0x18
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
 	inline MxU32 GetUnknown18() { return m_unk0x18; }

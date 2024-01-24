@@ -55,7 +55,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
-  LEGO1/lego/legoomni/src/common/legostream.cpp
   LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
@@ -148,6 +147,9 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/lego3dview.cpp
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
+  LEGO1/lego/sources/misc/legoimage.cpp
+  LEGO1/lego/sources/misc/legostorage.cpp
+  LEGO1/lego/sources/misc/legotexture.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
   LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp

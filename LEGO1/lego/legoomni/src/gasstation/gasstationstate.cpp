@@ -18,7 +18,7 @@ GasStationState::GasStationState()
 }
 
 // STUB: LEGO1 0x10006300
-MxResult GasStationState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult GasStationState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return SUCCESS;

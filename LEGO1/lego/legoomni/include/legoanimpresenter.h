@@ -1,11 +1,11 @@
 #ifndef LEGOANIMPRESENTER_H
 #define LEGOANIMPRESENTER_H
 
+#include "lego/sources/misc/legostorage.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxvideopresenter.h"
 
 class LegoWorld;
-class LegoMemoryStream;
 class LegoAnimClass;
 
 // VTABLE: LEGO1 0x100d90c8
@@ -97,9 +97,9 @@ public:
 	LegoAnimClass();
 	virtual ~LegoAnimClass() override;
 
-	virtual void VTable0x8() override;                              // vtable+0x08
-	virtual void VTable0xc() override;                              // vtable+0x0c
-	virtual MxResult VTable0x10(LegoMemoryStream* p_stream, MxS32); // vtable+0x10
+	virtual void VTable0x8() override;                        // vtable+0x08
+	virtual void VTable0xc() override;                        // vtable+0x0c
+	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32); // vtable+0x10
 
 	MxLong m_unk0x8;      // 0x08
 	undefined4 m_unk0xc;  // 0x0c

@@ -20,23 +20,10 @@ MxBool LegoState::SetFlag()
 }
 
 // FUNCTION: LEGO1 0x10005fb0
-MxResult LegoState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult LegoState::VTable0x1c(LegoFile* p_legoFile)
 {
-	if (p_legoFileStream->IsWriteMode()) {
-		p_legoFileStream->FUN_10006030(this->ClassName());
+	if (p_legoFile->IsWriteMode()) {
+		p_legoFile->FUN_10006030(this->ClassName());
 	}
 	return SUCCESS;
-}
-
-// FUNCTION: LEGO1 0x10006030
-LegoFileStream* LegoFileStream::FUN_10006030(MxString p_str)
-{
-	const char* data = p_str.GetData();
-	MxU32 fullLength = strlen(data);
-
-	MxU16 limitedLength = fullLength;
-	Write(&limitedLength, sizeof(limitedLength));
-	Write(data, (MxS16) fullLength);
-
-	return this;
 }
