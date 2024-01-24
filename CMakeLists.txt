@@ -109,6 +109,16 @@ set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
 target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(roi PRIVATE realtime)
 
+add_library(misc STATIC
+  LEGO1/lego/sources/misc/legoimage.cpp
+  LEGO1/lego/sources/misc/legostorage.cpp
+  LEGO1/lego/sources/misc/legotexture.cpp
+)
+register_lego1_target(misc)
+set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
+target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(misc PRIVATE )
+
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/act1/act1state.cpp
@@ -234,9 +244,6 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/lego3dview.cpp
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
-  LEGO1/lego/sources/misc/legoimage.cpp
-  LEGO1/lego/sources/misc/legostorage.cpp
-  LEGO1/lego/sources/misc/legotexture.cpp
   LEGO1/main.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
@@ -334,7 +341,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi Vec::Vec dsound dinput dxguid winmm Smacker::Smacker FLIC::FLIC)
+target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi FLIC::FLIC Vec::Vec dsound dinput dxguid winmm Smacker::Smacker misc)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)
@@ -435,13 +442,16 @@ if (MSVC_FOR_DECOMP)
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
   if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
-    set_property(GLOBAL PROPERTY JOB_POOLS "msvc_lego=1;msvc_lego1=1")
+    foreach(tgt IN LISTS lego1_taregets)
+      set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_${tgt}=1;msvc_lego1=1")
+      set_property(TARGET ${tgt} PROPERTY JOB_POOL_COMPILE msvc_${tgt})
+      set_property(TARGET ${tgt} PROPERTY JOB_POOL_LINK msvc_${tgt})
+    endforeach()
     if (TARGET isle)
-      set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_lego)
-      set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_lego)
+      set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_isle=1")
+      set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_isle)
+      set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_isle)
     endif()
-    set_property(TARGET ${lego1_targets} PROPERTY JOB_POOL_COMPILE msvc_lego1)
-    set_property(TARGET ${lego1_targets} PROPERTY JOB_POOL_LINK msvc_lego1)
   endif()
 endif()
 
