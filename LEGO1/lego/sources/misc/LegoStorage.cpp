@@ -7,7 +7,7 @@
 
 DECOMP_SIZE_ASSERT(LegoStorage, 0x8);
 DECOMP_SIZE_ASSERT(LegoMemory, 0x10);
-DECOMP_SIZE_ASSERT(LegoFile, 0xC);
+DECOMP_SIZE_ASSERT(LegoFile, 0xc);
 
 // FUNCTION: LEGO1 0x10099080
 LegoMemory::LegoMemory(void* p_buffer) : LegoStorage()
@@ -105,12 +105,12 @@ LegoResult LegoFile::Open(const char* p_name, LegoU32 p_mode)
 	char mode[4];
 	mode[0] = '\0';
 	if (p_mode & c_read) {
-		m_mode = LEGOSTREAM_MODE_READ;
+		m_mode = c_read;
 		strcat(mode, "r");
 	}
 	if (p_mode & c_write) {
-		if (m_mode != LEGOSTREAM_MODE_READ)
-			m_mode = LEGOSTREAM_MODE_WRITE;
+		if (m_mode != c_read)
+			m_mode = c_write;
 		strcat(mode, "w");
 	}
 	if ((p_mode & c_text) != 0)
@@ -130,6 +130,7 @@ LegoResult LegoMemory::GetPosition(LegoU32& p_position)
 	p_position = m_position;
 	return SUCCESS;
 }
+
 // FUNCTION: LEGO1 0x100994b0
 LegoResult LegoMemory::SetPosition(LegoU32 p_position)
 {

@@ -98,13 +98,16 @@ LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 	if ((result = p_storage->Read(m_bits, m_width * m_height)) != SUCCESS) {
 		return result;
 	}
+
 	if (p_square && m_width != m_height) {
 		LegoU8* newBits;
+
 		if (m_height < m_width) {
 			LegoU32 aspect = m_width / m_height;
 			newBits = new LegoU8[m_width * m_width];
 			LegoU8* src = m_bits;
 			LegoU8* dst = newBits;
+
 			for (LegoU32 row = 0; row < m_height; row++) {
 				for (LegoU32 dup = aspect; dup; dup--) {
 					memcpy(dst, src, m_width);
@@ -112,6 +115,7 @@ LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 				}
 				src += m_width;
 			}
+
 			m_height = m_width;
 		}
 		else {
@@ -119,20 +123,25 @@ LegoResult LegoImage::Read(LegoStorage* p_storage, LegoU32 p_square)
 			newBits = new LegoU8[m_height * m_height];
 			LegoU8* src = m_bits;
 			LegoU8* dst = newBits;
+
 			for (LegoU32 row = 0; row < m_height; row++) {
 				for (LegoU32 col = 0; col < m_width; col++) {
 					for (LegoU32 dup = aspect; dup; dup--) {
 						*dst = *src;
 						dst++;
 					}
+
 					src++;
 				}
 			}
+
 			m_width = m_height;
 		}
+
 		delete m_bits;
 		m_bits = newBits;
 	}
+
 	return SUCCESS;
 }
 

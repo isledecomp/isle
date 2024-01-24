@@ -5,6 +5,7 @@
 
 class LegoStorage;
 
+// SIZE 0x3
 class LegoPaletteEntry {
 public:
 	LegoPaletteEntry();
@@ -19,11 +20,12 @@ public:
 	LegoResult Write(LegoStorage* p_storage);
 
 protected:
-	LegoU8 m_red;
-	LegoU8 m_green;
-	LegoU8 m_blue;
+	LegoU8 m_red;   // 0x00
+	LegoU8 m_green; // 0x01
+	LegoU8 m_blue;  // 0x02
 };
 
+// 0x310
 class LegoImage {
 public:
 	LegoImage();
@@ -42,11 +44,11 @@ public:
 	LegoResult Write(LegoStorage* p_storage);
 
 protected:
-	LegoU32 m_width;
-	LegoU32 m_height;
-	LegoU32 m_count;
-	LegoPaletteEntry m_palette[256];
-	LegoU8* m_bits;
+	LegoU32 m_width;                 // 0x00
+	LegoU32 m_height;                // 0x04
+	LegoU32 m_count;                 // 0x08
+	LegoPaletteEntry m_palette[256]; // 0x0c
+	LegoU8* m_bits;                  // 0x30c
 };
 
 #endif // __LEGOIMAGE_H
