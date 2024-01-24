@@ -203,13 +203,8 @@ add_library(omni STATIC
   LEGO1/omni/src/video/mxvideopresenter.cpp
 )
 register_lego1_target(omni)
-set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni<$<CONFIG:Debug>:d>")
-target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
-#target_include_directories(omni PUBLIC "${CMAKE_SOURCE_DIR}/util")
-target_include_directories(omni PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
-#target_include_directories(omni PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-#target_include_directories(omni PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-#target_include_directories(omni PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
+set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
+target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
 
 add_library(lego1 SHARED
@@ -346,6 +341,12 @@ if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
+if (MSVC)
+  target_sources(lego1 PRIVATE LEGO1/LEGO1.msvc.def)
+else()
+  target_sources(lego1 PRIVATE LEGO1/LEGO1.mingw.def)
+endif()
+
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/util")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
@@ -430,6 +431,9 @@ if (MSVC_FOR_DECOMP)
   endif()
 
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  foreach(tgt IN LISTS lego1_targets)
+    target_compile_options(${tgt} PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  endforeach()
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
   set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")
