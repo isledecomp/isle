@@ -16,6 +16,11 @@ if (MSVC)
     endif()
 endif()
 
+set(lego1_targets )
+macro(register_lego1_target __target)
+  list(APPEND lego1_targets ${__target})
+endmacro()
+
 message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
@@ -23,11 +28,8 @@ option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
-# Use internal DirectX 5 if required
-if (ISLE_USE_DX5)
-  target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-  target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-endif()
+target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
 
 add_library(Smacker::Smacker STATIC IMPORTED)
 set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
@@ -49,6 +51,7 @@ add_library(mxgeometry STATIC
   LEGO1/mxgeometry/mxgeometry3d.cpp
   LEGO1/mxgeometry/mxmatrix.cpp
 )
+register_lego1_target(mxgeometry)
 set_property(TARGET mxgeometry PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>")
 target_include_directories(mxgeometry PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 
@@ -63,9 +66,10 @@ add_library(tglrl STATIC
   LEGO1/tgl/d3drm/unk.cpp
   LEGO1/tgl/d3drm/view.cpp
 )
+register_lego1_target(tglrl)
 set_property(TARGET tglrl PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>")
 target_include_directories(tglrl PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(tglrl PRIVATE DirectX5::DirectX5 d3drm)
+target_link_libraries(tglrl PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5> d3drm)
 
 add_library(realtime STATIC
   LEGO1/realtime/matrix.cpp
@@ -74,6 +78,7 @@ add_library(realtime STATIC
   LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
 )
+register_lego1_target(realtime)
 set_property(TARGET realtime PROPERTY ARCHIVE_OUTPUT_NAME "realtime$<$<CONFIG:Debug>:d>")
 target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(realtime PRIVATE Vec::Vec)
@@ -83,9 +88,27 @@ add_library(viewmanager STATIC
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
 )
-set_property(TARGET viewmanager PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager<$<CONFIG:Debug>:d>")
+register_lego1_target(viewmanager)
+set_property(TARGET viewmanager PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>")
 target_include_directories(viewmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(viewmanager PRIVATE Vec::Vec)
+
+add_library(mxdirectx STATIC
+  LEGO1/mxdirectx/mxdirect3d.cpp
+  LEGO1/mxdirectx/mxdirectdraw.cpp
+)
+register_lego1_target(mxdirectx)
+set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
+target_include_directories(mxdirectx PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(mxdirectx PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5> ddraw)
+
+add_library(roi STATIC
+  LEGO1/lego/sources/roi/legoroi.cpp
+)
+register_lego1_target(roi)
+set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
+target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(roi PRIVATE realtime)
 
 add_library(lego1 SHARED
   LEGO1/define.cpp
@@ -213,10 +236,7 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/lego3dview.cpp
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
-  LEGO1/lego/sources/roi/legoroi.cpp
   LEGO1/main.cpp
-  LEGO1/mxdirectx/mxdirect3d.cpp
-  LEGO1/mxdirectx/mxdirectdraw.cpp
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
   LEGO1/omni/src/action/mxdsevent.cpp
@@ -299,6 +319,7 @@ add_library(lego1 SHARED
   LEGO1/omni/src/video/mxvideoparamflags.cpp
   LEGO1/omni/src/video/mxvideopresenter.cpp
 )
+register_lego1_target(lego1)
 
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
@@ -310,18 +331,14 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
-if (ISLE_USE_SMARTHEAP)
-  add_library(SmartHeap::SmartHeap STATIC IMPORTED)
-  set_target_properties(SmartHeap::SmartHeap PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB"
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap"
-    INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
-
-  target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
-endif()
-
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry DirectX5::DirectX5 Vec::Vec ddraw dsound dinput dxguid winmm Smacker::Smacker FLIC::FLIC)
+target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi Vec::Vec dsound dinput dxguid winmm Smacker::Smacker FLIC::FLIC)
+
+if (ISLE_USE_SMARTHEAP)
+  foreach(lego1_target IN LISTS lego1_targets)
+    target_link_libraries(${lego1_target} PRIVATE SmartHeap::SmartHeap)
+  endforeach()
+endif()
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -338,10 +355,7 @@ if (ISLE_BUILD_APP)
   target_compile_definitions(isle PRIVATE ISLE_APP)
 
   # Use internal DirectX 5 if required
-  if (ISLE_USE_DX5)
-    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-  endif()
+  target_link_libraries(isle PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
 
   if (ISLE_USE_SMARTHEAP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
@@ -401,6 +415,8 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
+  set(CMAKE_STATIC_LINKER_FLAGS "/machine:I386")
+
   set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386")
   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
@@ -409,12 +425,14 @@ if (MSVC_FOR_DECOMP)
 
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
-  if(CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
+  if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
     set_property(GLOBAL PROPERTY JOB_POOLS "msvc_lego=1;msvc_lego1=1")
-    set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_lego)
-    set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_lego)
-    set_property(TARGET lego1 PROPERTY JOB_POOL_COMPILE msvc_lego1)
-    set_property(TARGET lego1 PROPERTY JOB_POOL_LINK msvc_lego1)
+    if (TARGET isle)
+      set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_lego)
+      set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_lego)
+    endif()
+    set_property(TARGET ${lego1_targets} PROPERTY JOB_POOL_COMPILE msvc_lego1)
+    set_property(TARGET ${lego1_targets} PROPERTY JOB_POOL_LINK msvc_lego1)
   endif()
 endif()
 
