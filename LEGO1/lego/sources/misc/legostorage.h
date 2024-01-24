@@ -65,7 +65,7 @@ protected:
 class LegoFile : public LegoStorage {
 public:
 	LegoFile();
-	virtual ~LegoFile();
+	virtual ~LegoFile() override;
 	virtual LegoResult Read(void* p_buffer, LegoU32 p_size);
 	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size);
 	virtual LegoResult GetPosition(LegoU32& p_position);
