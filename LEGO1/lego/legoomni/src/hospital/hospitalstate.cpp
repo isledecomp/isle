@@ -14,7 +14,7 @@ HospitalState::HospitalState()
 }
 
 // STUB: LEGO1 0x10076530
-MxResult HospitalState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult HospitalState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return 0;

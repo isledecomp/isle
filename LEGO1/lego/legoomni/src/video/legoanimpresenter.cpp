@@ -1,7 +1,6 @@
 #include "legoanimpresenter.h"
 
 #include "legoomni.h"
-#include "legostream.h"
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
@@ -60,7 +59,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
 	MxResult result = FAILURE;
-	LegoMemoryStream stream((char*) p_chunk->GetData());
+	LegoMemory stream((char*) p_chunk->GetData());
 
 	MxS32 magicSig;
 	MxS32 val2 = 0;
@@ -238,7 +237,7 @@ LegoAnimClass::~LegoAnimClass()
 }
 
 // STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10(LegoMemoryStream* p_stream, MxS32)
+MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
 {
 	return SUCCESS;
 }

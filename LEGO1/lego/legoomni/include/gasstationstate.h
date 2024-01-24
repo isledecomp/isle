@@ -22,7 +22,7 @@ public:
 		return !strcmp(p_name, GasStationState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'

@@ -4,7 +4,6 @@
 #include "legoanimationmanager.h"
 #include "legoomni.h"
 #include "legostate.h"
-#include "legostream.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxbackgroundaudiomanager.h"
@@ -30,6 +29,13 @@ const char* g_playersGSI = "Players.gsi";
 // GLOBAL: LEGO1 0x100f3e48
 // STRING: LEGO1 0x100f3e24
 const char* g_historyGSI = "History.gsi";
+
+// This is a pointer to the end of the global variable name table, which has
+// the text "END_OF_VARIABLES" in it.
+// TODO: make g_endOfVariables reference the actual end of the variable array.
+// GLOBAL: LEGO1 0x100f3e50
+// STRING: LEGO1 0x100f3e00
+const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
@@ -119,8 +125,8 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		MxVariableTable* variableTable = VariableTable();
 		MxString savePath;
 		GetFileSavePath(&savePath, p_slot);
-		LegoFileStream fileStream;
-		if (fileStream.Open(savePath.GetData(), LegoStream::c_writeBit) != FAILURE) {
+		LegoFile fileStream;
+		if (fileStream.Open(savePath.GetData(), LegoFile::c_write) != FAILURE) {
 			MxU32 maybeVersion = 0x1000C;
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
@@ -128,12 +134,12 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			fileStream.Write(&m_unk0xc, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
-				if (LegoStream::WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)
+				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)
 					return result;
 			}
 
-			if (LegoStream::WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
-				if (LegoStream::WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE) {
+			if (WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
+				if (WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE) {
 					WriteEndOfVariables(&fileStream);
 
 					// TODO: Calls down to more aggregate writing functions
@@ -166,13 +172,62 @@ void LegoGameState::SetSavePath(char* p_savePath)
 		m_savePath = NULL;
 }
 
+// FUNCTION: LEGO1 0x10039f70
+MxResult LegoGameState::WriteVariable(LegoStorage* p_stream, MxVariableTable* p_from, const char* p_variableName)
+{
+	MxResult result = FAILURE;
+	const char* variableValue = p_from->GetVariable(p_variableName);
+
+	if (variableValue) {
+		MxU8 length = strlen(p_variableName);
+		if (p_stream->Write((char*) &length, 1) == SUCCESS) {
+			if (p_stream->Write(p_variableName, length) == SUCCESS) {
+				length = strlen(variableValue);
+				if (p_stream->Write((char*) &length, 1) == SUCCESS)
+					result = p_stream->Write((char*) variableValue, length);
+			}
+		}
+	}
+	return result;
+}
+
 // FUNCTION: LEGO1 0x1003a020
-MxResult LegoGameState::WriteEndOfVariables(LegoStream* p_stream)
+MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_stream)
 {
 	MxU8 len = strlen(g_endOfVariables);
 	if (p_stream->Write(&len, 1) == SUCCESS)
 		return p_stream->Write(g_endOfVariables, len);
 	return FAILURE;
+}
+
+// 95% match, just some instruction ordering differences on the call to
+// MxVariableTable::SetVariable at the end.
+// FUNCTION: LEGO1 0x1003a080
+MxS32 LegoGameState::ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to)
+{
+	MxS32 result = 1;
+	MxU8 length;
+
+	if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+		char nameBuffer[256];
+		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
+			nameBuffer[length] = '\0';
+			if (strcmp(nameBuffer, g_endOfVariables) == 0)
+				// 2 -> "This was the last entry, done reading."
+				result = 2;
+			else {
+				if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+					char valueBuffer[256];
+					if (p_stream->Read(valueBuffer, length) == SUCCESS) {
+						result = 0;
+						valueBuffer[length] = '\0';
+						p_to->SetVariable(nameBuffer, valueBuffer);
+					}
+				}
+			}
+		}
+	}
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1003a170
@@ -312,7 +367,7 @@ void LegoGameState::ScoreStruct::WriteScoreHistory()
 }
 
 // STUB: LEGO1 0x1003ccf0
-void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFileStream&)
+void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFile&)
 {
 	// TODO
 }
@@ -320,16 +375,16 @@ void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFileStream&)
 // FUNCTION: LEGO1 0x1003cdd0
 void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 {
-	LegoFileStream stream;
+	LegoFile stream;
 	MxString savePath(m_savePath);
 	savePath += "\\";
 	savePath += g_historyGSI;
 
-	if (p_flags == LegoStream::c_writeBit) {
+	if (p_flags == LegoFile::c_write) {
 		m_unk0xa6.WriteScoreHistory();
 	}
 
-	if (stream.Open(savePath.GetData(), (LegoStream::OpenFlags) p_flags) == SUCCESS) {
+	if (stream.Open(savePath.GetData(), p_flags) == SUCCESS) {
 		m_unk0xa6.FUN_1003ccf0(stream);
 	}
 }

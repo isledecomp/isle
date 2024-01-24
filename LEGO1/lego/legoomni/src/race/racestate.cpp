@@ -12,7 +12,7 @@ RaceState::RaceState()
 }
 
 // STUB: LEGO1 0x10016140
-MxResult RaceState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult RaceState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return SUCCESS;

@@ -2,11 +2,11 @@
 #define LEGOUNKSAVEDATAWRITER_H
 
 #include "decomp.h"
+#include "lego/sources/misc/legostorage.h"
 #include "mxtypes.h"
 
 class AutoROI;
 class LegoROI;
-class LegoStream;
 
 struct LegoSaveDataEntry3 {
 	char* m_name;
@@ -35,7 +35,7 @@ struct LegoSaveDataEntry3 {
 
 class LegoUnkSaveDataWriter {
 public:
-	MxResult WriteSaveData3(LegoStream* p_stream);
+	MxResult WriteSaveData3(LegoStorage* p_stream);
 	AutoROI* FUN_10083500(undefined4, undefined4);
 	void FUN_10083db0(LegoROI* p_roi);
 };

@@ -1,7 +1,7 @@
 #include "legopalettepresenter.h"
 
+#include "lego/sources/misc/legostorage.h"
 #include "legoomni.h"
-#include "legostream.h"
 #include "legovideomanager.h"
 #include "mxstreamchunk.h"
 
@@ -52,7 +52,7 @@ MxResult LegoPalettePresenter::ParsePalette(MxStreamChunk* p_chunk)
 	RGBQUAD palette[256];
 	MxResult result = FAILURE;
 
-	LegoMemoryStream stream((char*) p_chunk->GetData());
+	LegoMemory stream((char*) p_chunk->GetData());
 	if (stream.Read(buffer, sizeof(buffer)) == SUCCESS) {
 		if (stream.Read(palette, sizeof(palette)) == SUCCESS) {
 			m_palette = new MxPalette(palette);
