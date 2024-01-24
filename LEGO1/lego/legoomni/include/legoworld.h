@@ -119,7 +119,6 @@ protected:
 
 // TEMPLATE: LEGO1 0x1001df00
 // Set<MxPresenter *,PresenterSetCompare>::~Set<MxPresenter *,PresenterSetCompare>
-// clang-format on
 
 // SYNTHETIC: LEGO1 0x1001eed0
 // MxPresenterListCursor::`scalar deleting destructor'
@@ -143,7 +142,7 @@ protected:
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
 
 // GLOBAL: LEGO1 0x100f11a0
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *>
-// >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *>>::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
+// clang-format on
 
 #endif // LEGOWORLD_H

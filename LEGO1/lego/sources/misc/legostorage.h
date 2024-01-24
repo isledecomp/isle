@@ -27,10 +27,10 @@ public:
 	virtual LegoResult SetPosition(LegoU32 p_position) = 0;
 
 	// FUNCTION: LEGO1 0x10045ae0
-	virtual LegoBool IsWriteMode() { return m_mode == c_read; }
+	virtual LegoBool IsWriteMode() { return m_mode == c_write; }
 
 	// FUNCTION: LEGO1 0x10045af0
-	virtual LegoBool IsReadMode() { return m_mode == c_write; }
+	virtual LegoBool IsReadMode() { return m_mode == c_read; }
 
 	// SYNTHETIC: LEGO1 0x10045b00
 	// LegoStorage::`scalar deleting destructor'
