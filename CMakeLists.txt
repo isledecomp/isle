@@ -75,7 +75,6 @@ add_library(realtime STATIC
   LEGO1/realtime/matrix.cpp
   LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
-  LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
 )
 register_lego1_target(realtime)
@@ -318,6 +317,7 @@ add_library(lego1 SHARED
   LEGO1/omni/src/video/mxvideoparam.cpp
   LEGO1/omni/src/video/mxvideoparamflags.cpp
   LEGO1/omni/src/video/mxvideopresenter.cpp
+  LEGO1/realtime/realtimeview.cpp
 )
 register_lego1_target(lego1)
 
