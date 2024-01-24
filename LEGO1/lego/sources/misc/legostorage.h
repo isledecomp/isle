@@ -49,6 +49,9 @@ public:
 	virtual LegoResult GetPosition(LegoU32& p_position);
 	virtual LegoResult SetPosition(LegoU32 p_position);
 
+	// SYNTHETIC: LEGO1 0x10045a80
+	// LegoMemory::~LegoMemory
+
 	// SYNTHETIC: LEGO1 0x100990f0
 	// LegoMemory::`scalar deleting destructor'
 
