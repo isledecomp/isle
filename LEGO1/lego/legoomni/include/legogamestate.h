@@ -20,13 +20,13 @@ struct ColorStringStruct {
 // SIZE 0x430
 class LegoGameState {
 public:
-	__declspec(dllexport) LegoGameState();
-	__declspec(dllexport) ~LegoGameState();
-	__declspec(dllexport) MxResult Load(MxULong);
-	__declspec(dllexport) MxResult Save(MxULong);
-	__declspec(dllexport) void SerializePlayersInfo(MxS16);
-	__declspec(dllexport) void SerializeScoreHistory(MxS16 p_flags);
-	__declspec(dllexport) void SetSavePath(char*);
+	LegoGameState();
+	~LegoGameState();
+	MxResult Load(MxULong);
+	MxResult Save(MxULong);
+	void SerializePlayersInfo(MxS16);
+	void SerializeScoreHistory(MxS16 p_flags);
+	void SetSavePath(char*);
 
 	LegoState* GetState(const char* p_stateName);
 	LegoState* CreateState(const char* p_stateName);

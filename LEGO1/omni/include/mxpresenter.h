@@ -28,14 +28,10 @@ public:
 
 	MxPresenter() { Init(); }
 
-#ifdef ISLE_APP
-	__declspec(dllexport) virtual ~MxPresenter() override; // vtable+0x00
-#else
 	// FUNCTION: LEGO1 0x1000bf00
-	__declspec(dllexport) virtual ~MxPresenter() override{}; // vtable+0x00
-#endif
+	virtual ~MxPresenter() override{}; // vtable+0x00
 
-	__declspec(dllexport) virtual MxResult Tickle() override; // vtable+0x08
+	virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000bfe0
 	inline virtual const char* ClassName() const override // vtable+0xc
@@ -73,14 +69,10 @@ public:
 	virtual void Unk5Tickle() { ProgressTickleState(e_done); }; // vtable+0x28
 
 protected:
-#ifdef ISLE_APP
-	__declspec(dllexport) virtual void DoneTickle(); // vtable+0x2c
-#else
 	// FUNCTION: LEGO1 0x1000bee0
-	__declspec(dllexport) virtual void DoneTickle() { ProgressTickleState(e_idle); }; // vtable+0x2c
-#endif
+	virtual void DoneTickle() { ProgressTickleState(e_idle); }; // vtable+0x2c
 
-	__declspec(dllexport) virtual void ParseExtra(); // vtable+0x30
+	virtual void ParseExtra(); // vtable+0x30
 
 	inline void ProgressTickleState(TickleState p_tickleState)
 	{
@@ -95,8 +87,8 @@ public:
 	// FUNCTION: LEGO1 0x1000bf80
 	virtual void Destroy() { Init(); }; // vtable+0x38
 
-	__declspec(dllexport) virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
-	__declspec(dllexport) virtual void EndAction();                                       // vtable+0x40
+	virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
+	virtual void EndAction();                                       // vtable+0x40
 
 	// FUNCTION: LEGO1 0x1000bf90
 	virtual void SetTickleState(TickleState p_tickleState) { ProgressTickleState(p_tickleState); } // vtable+0x44
@@ -113,7 +105,7 @@ public:
 	// FUNCTION: LEGO1 0x1000bfd0
 	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) { return FALSE; }; // vtable+0x50
 
-	__declspec(dllexport) virtual void Enable(MxBool p_enable); // vtable+0x54
+	virtual void Enable(MxBool p_enable); // vtable+0x54
 
 	MxEntity* CreateEntity(const char* p_name);
 	void SendToCompositePresenter(MxOmni*);
@@ -133,7 +125,7 @@ public:
 	// MxPresenter::`scalar deleting destructor'
 
 protected:
-	__declspec(dllexport) void Init();
+	void Init();
 
 	TickleState m_currentTickleState;           // 0x8
 	MxU32 m_previousTickleStates;               // 0x0c

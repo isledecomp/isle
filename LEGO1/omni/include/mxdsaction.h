@@ -24,8 +24,8 @@ public:
 		c_bit11 = 0x400,
 	};
 
-	__declspec(dllexport) MxDSAction();
-	__declspec(dllexport) virtual ~MxDSAction();
+	MxDSAction();
+	virtual ~MxDSAction();
 
 	void CopyFrom(MxDSAction& p_dsAction);
 	MxDSAction& operator=(MxDSAction& p_dsAction);

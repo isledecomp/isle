@@ -19,12 +19,8 @@ public:
 	// Inlined at 0x100853f7
 	inline LegoEntity() { Init(); }
 
-#ifdef ISLE_APP
-	__declspec(dllexport) virtual ~LegoEntity() override;
-#else
 	// FUNCTION: LEGO1 0x1000c290
-	__declspec(dllexport) virtual ~LegoEntity() override { Destroy(TRUE); }
-#endif
+	virtual ~LegoEntity() override { Destroy(TRUE); }
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 

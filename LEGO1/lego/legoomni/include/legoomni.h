@@ -68,11 +68,11 @@ public:
 		c_clearScreen = 0x04
 	};
 
-	__declspec(dllexport) void CreateBackgroundAudio();
-	__declspec(dllexport) void RemoveWorld(const MxAtomId&, MxLong);
-	__declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
-	__declspec(dllexport) static void CreateInstance();
-	__declspec(dllexport) static LegoOmni* GetInstance();
+	void CreateBackgroundAudio();
+	void RemoveWorld(const MxAtomId&, MxLong);
+	static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
+	static void CreateInstance();
+	static LegoOmni* GetInstance();
 
 	LegoOmni();
 	virtual ~LegoOmni(); // vtable+00
@@ -153,16 +153,16 @@ private:
 	MxBool m_unk0x13c;                           // 0x13c
 };
 
-__declspec(dllexport) MxBackgroundAudioManager* BackgroundAudioManager();
-__declspec(dllexport) LegoGameState* GameState();
-__declspec(dllexport) const char* GetNoCD_SourceName();
-__declspec(dllexport) LegoInputManager* InputManager();
-__declspec(dllexport) LegoOmni* Lego();
-__declspec(dllexport) LegoEntity* PickEntity(MxLong, MxLong);
-__declspec(dllexport) LegoROI* PickROI(MxLong, MxLong);
-__declspec(dllexport) LegoSoundManager* SoundManager();
-__declspec(dllexport) MxTransitionManager* TransitionManager();
-__declspec(dllexport) LegoVideoManager* VideoManager();
+MxBackgroundAudioManager* BackgroundAudioManager();
+LegoGameState* GameState();
+const char* GetNoCD_SourceName();
+LegoInputManager* InputManager();
+LegoOmni* Lego();
+LegoEntity* PickEntity(MxLong, MxLong);
+LegoROI* PickROI(MxLong, MxLong);
+LegoSoundManager* SoundManager();
+MxTransitionManager* TransitionManager();
+LegoVideoManager* VideoManager();
 
 LegoAnimationManager* AnimationManager();
 LegoBuildingManager* BuildingManager();

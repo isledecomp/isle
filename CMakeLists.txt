@@ -384,8 +384,6 @@ if (ISLE_BUILD_APP)
     ISLE/define.cpp
   )
 
-  target_compile_definitions(isle PRIVATE ISLE_APP)
-
   # Use internal DirectX 5 if required
   target_link_libraries(isle PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
 

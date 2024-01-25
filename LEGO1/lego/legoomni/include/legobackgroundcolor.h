@@ -7,7 +7,7 @@
 // SIZE 0x30
 class LegoBackgroundColor : public MxVariable {
 public:
-	__declspec(dllexport) LegoBackgroundColor(const char* p_key, const char* p_value);
+	LegoBackgroundColor(const char* p_key, const char* p_value);
 	virtual void SetValue(const char* p_colorString) override;
 
 private:

@@ -10,7 +10,7 @@ public:
 	ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view);
 	virtual ~ViewManager();
 
-	__declspec(dllexport) void RemoveAll(ViewROI*);
+	void RemoveAll(ViewROI*);
 
 	void SetPOVSource(const OrientableROI* point_of_view);
 	void SetResolution(int width, int height);

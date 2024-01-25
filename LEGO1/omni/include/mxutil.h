@@ -69,10 +69,10 @@ MxBool GetRectIntersection(
 	MxS32* p_height
 );
 
-__declspec(dllexport) void MakeSourceName(char*, const char*);
-__declspec(dllexport) void SetOmniUserMessage(void (*)(const char*, int));
+void MakeSourceName(char*, const char*);
+void SetOmniUserMessage(void (*)(const char*, int));
 void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
-__declspec(dllexport) MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
+MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
 
 MxBool KeyValueStringParse(char*, const char*, const char*);
 

@@ -22,8 +22,8 @@ typedef set<MxPresenter*, PresenterSetCompare> MxPresenterSet;
 // SIZE 0xf8
 class LegoWorld : public LegoEntity {
 public:
-	__declspec(dllexport) LegoWorld();
-	__declspec(dllexport) virtual ~LegoWorld() override; // vtable+0x0
+	LegoWorld();
+	virtual ~LegoWorld() override; // vtable+0x0
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 	virtual MxResult Tickle() override;               // vtable+0x8

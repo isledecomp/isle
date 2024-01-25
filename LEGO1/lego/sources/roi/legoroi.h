@@ -23,8 +23,8 @@ public:
 	// Note: Actually part of parent class (doesn't exist yet)
 	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
-	__declspec(dllexport) void SetDisplayBB(int p_displayBB);
-	__declspec(dllexport) static void configureLegoROI(int p_roi);
+	void SetDisplayBB(int p_displayBB);
+	static void configureLegoROI(int p_roi);
 
 	static void SetSomeHandlerFunction(ROIHandler p_func);
 	static unsigned char CallTheHandlerFunction(
