@@ -75,6 +75,7 @@ add_library(realtime STATIC
   LEGO1/realtime/matrix.cpp
   LEGO1/realtime/orientableroi.cpp
   LEGO1/realtime/realtime.cpp
+  LEGO1/realtime/realtimeview.cpp
   LEGO1/realtime/vector.cpp
 )
 register_lego1_target(realtime)
@@ -333,7 +334,6 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
   LEGO1/main.cpp
-  LEGO1/realtime/realtimeview.cpp
 )
 register_lego1_target(lego1)
 
