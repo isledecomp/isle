@@ -353,7 +353,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid Smacker::Smacker misc 3dmanager omni)
+target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)
