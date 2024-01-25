@@ -120,6 +120,17 @@ set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>"
 target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(misc PRIVATE)
 
+add_library(3dmanager STATIC
+  LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
+  LEGO1/lego/sources/3dmanager/lego3dview.cpp
+  LEGO1/lego/sources/3dmanager/legoview1.cpp
+  LEGO1/lego/sources/3dmanager/tglsurface.cpp
+)
+register_lego1_target(3dmanager)
+set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
+target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(3dmanager PRIVATE Vec::Vec)
+
 add_library(omni STATIC
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
@@ -207,17 +218,6 @@ register_lego1_target(omni)
 set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
 target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
-
-add_library(3dmanager STATIC
-  LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
-  LEGO1/lego/sources/3dmanager/lego3dview.cpp
-  LEGO1/lego/sources/3dmanager/legoview1.cpp
-  LEGO1/lego/sources/3dmanager/tglsurface.cpp
-)
-register_lego1_target(3dmanager)
-set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
-target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(3dmanager PRIVATE Vec::Vec)
 
 add_library(lego1 SHARED
   LEGO1/define.cpp
