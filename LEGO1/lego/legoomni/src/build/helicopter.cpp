@@ -13,6 +13,9 @@
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
+DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)
+DECOMP_SIZE_ASSERT(Mx4DPointFloat, 0x18)
+DECOMP_SIZE_ASSERT(MxMatrix, 0x48)
 
 // FUNCTION: LEGO1 0x10001e60
 Helicopter::Helicopter()

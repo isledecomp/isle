@@ -47,14 +47,6 @@ set_property(TARGET SmartHeap::SmartHeap PROPERTY IMPORTED_LOCATION "${CMAKE_SOU
 set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
 set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
 
-add_library(mxgeometry STATIC
-  LEGO1/mxgeometry/mxgeometry3d.cpp
-  LEGO1/mxgeometry/mxmatrix.cpp
-)
-register_lego1_target(mxgeometry)
-set_property(TARGET mxgeometry PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>")
-target_include_directories(mxgeometry PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-
 add_library(tglrl STATIC
   LEGO1/tgl/d3drm/camera.cpp
   LEGO1/tgl/d3drm/device.cpp
@@ -361,7 +353,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid Smacker::Smacker misc 3dmanager omni)
+target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid Smacker::Smacker misc 3dmanager omni)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)
