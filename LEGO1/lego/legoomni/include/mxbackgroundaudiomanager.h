@@ -39,7 +39,7 @@ public:
 	void FUN_1007ef40();
 	void FadeInOrFadeOut();
 
-	__declspec(dllexport) void Enable(MxBool p_enable);
+	void Enable(MxBool p_enable);
 	virtual MxResult Create(MxAtomId& p_script, MxU32 p_frequencyMS);
 
 	void Stop();

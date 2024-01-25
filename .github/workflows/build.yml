@@ -41,7 +41,7 @@ jobs:
         with:
           arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build
         run: |
@@ -53,9 +53,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         repository: 'itsmattkc/msvc420'
         path: msvc420
@@ -165,7 +165,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         repository: 'probonopd/uploadtool'
 

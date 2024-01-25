@@ -32,7 +32,7 @@ public:
 	void CopyFrom(MxDSObject& p_dsObject);
 	MxDSObject& operator=(MxDSObject& p_dsObject);
 
-	__declspec(dllexport) void SetObjectName(const char* p_objectName);
+	void SetObjectName(const char* p_objectName);
 	void SetSourceName(const char* p_sourceName);
 
 	// FUNCTION: LEGO1 0x100bf730

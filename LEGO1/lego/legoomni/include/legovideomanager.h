@@ -19,11 +19,11 @@ public:
 	LegoVideoManager();
 	virtual ~LegoVideoManager() override;
 
-	__declspec(dllexport) int EnableRMDevice();
-	__declspec(dllexport) int DisableRMDevice();
+	int EnableRMDevice();
+	int DisableRMDevice();
 	void EnableFullScreenMovie(MxBool p_enable);
-	__declspec(dllexport) void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
-	__declspec(dllexport) void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
+	void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
+	void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
 
 	virtual MxResult Tickle() override; // vtable+0x8
 	virtual void Destroy() override;    // vtable+0x18

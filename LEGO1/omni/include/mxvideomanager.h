@@ -30,8 +30,8 @@ public:
 	);                                                                                               // vtable+0x28
 	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x2c
 
-	__declspec(dllexport) void InvalidateRect(MxRect32&);
-	__declspec(dllexport) virtual MxResult RealizePalette(MxPalette*);            // vtable+0x30
+	void InvalidateRect(MxRect32&);
+	virtual MxResult RealizePalette(MxPalette*);                                  // vtable+0x30
 	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height); // vtable+0x34
 
 	MxResult Init();

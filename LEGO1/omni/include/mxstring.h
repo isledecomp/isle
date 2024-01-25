@@ -7,9 +7,9 @@
 // SIZE 0x10
 class MxString : public MxCore {
 public:
-	__declspec(dllexport) MxString(const MxString& p_str);
-	__declspec(dllexport) virtual ~MxString();
-	__declspec(dllexport) const MxString& operator=(const char* p_data);
+	MxString(const MxString& p_str);
+	virtual ~MxString();
+	const MxString& operator=(const char* p_data);
 
 	MxString();
 	MxString(const char*);

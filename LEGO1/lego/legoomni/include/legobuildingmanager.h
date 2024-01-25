@@ -19,7 +19,7 @@ public:
 		return "LegoBuildingManager";
 	}
 
-	__declspec(dllexport) static void configureLegoBuildingManager(MxS32);
+	static void configureLegoBuildingManager(MxS32);
 
 	void FUN_1002fa00();
 

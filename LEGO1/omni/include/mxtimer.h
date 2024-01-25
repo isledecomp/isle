@@ -12,7 +12,7 @@ public:
 	void Start();
 	void Stop();
 
-	__declspec(dllexport) MxLong GetRealTime();
+	MxLong GetRealTime();
 
 	inline MxLong GetTime()
 	{

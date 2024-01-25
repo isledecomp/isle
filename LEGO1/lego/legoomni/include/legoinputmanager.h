@@ -32,9 +32,9 @@ public:
 	LegoInputManager();
 	virtual ~LegoInputManager() override;
 
-	__declspec(dllexport) void QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key);
-	__declspec(dllexport) void Register(MxCore*);
-	__declspec(dllexport) void UnRegister(MxCore*);
+	void QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key);
+	void Register(MxCore*);
+	void UnRegister(MxCore*);
 
 	virtual MxResult Tickle() override; // vtable+0x8
 

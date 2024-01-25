@@ -13,7 +13,7 @@ public:
 	MxTransitionManager();
 	virtual ~MxTransitionManager() override; // vtable+0x0
 
-	__declspec(dllexport) void SetWaitIndicator(MxVideoPresenter* p_waitIndicator);
+	void SetWaitIndicator(MxVideoPresenter* p_waitIndicator);
 
 	virtual MxResult Tickle(); // vtable+0x8
 

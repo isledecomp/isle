@@ -14,9 +14,9 @@ enum LookupMode {
 // SIZE 0x04
 class MxAtomId {
 public:
-	__declspec(dllexport) MxAtomId(const char*, LookupMode);
-	__declspec(dllexport) MxAtomId& operator=(const MxAtomId& p_atomId);
-	__declspec(dllexport) ~MxAtomId();
+	MxAtomId(const char*, LookupMode);
+	MxAtomId& operator=(const MxAtomId& p_atomId);
+	~MxAtomId();
 
 	MxAtomId() { this->m_internal = 0; }
 

@@ -10,8 +10,8 @@
 // SIZE 0x414
 class MxPalette : public MxCore {
 public:
-	__declspec(dllexport) MxBool operator==(MxPalette& p_other);
-	__declspec(dllexport) void Detach();
+	MxBool operator==(MxPalette& p_other);
+	void Detach();
 
 	MxPalette();
 	MxPalette(const RGBQUAD*);

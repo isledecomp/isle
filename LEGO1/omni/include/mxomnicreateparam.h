@@ -11,7 +11,7 @@
 // VTABLE: LEGO1 0x100dc218
 class MxOmniCreateParam : public MxParam {
 public:
-	__declspec(dllexport) MxOmniCreateParam(
+	MxOmniCreateParam(
 		const char* p_mediaPath,
 		struct HWND__* p_windowHandle,
 		MxVideoParam& p_vparam,
