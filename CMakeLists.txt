@@ -349,9 +349,9 @@ if (MINGW)
 endif()
 
 if (MSVC)
-  target_sources(lego1 PRIVATE LEGO1/LEGO1.msvc.def)
+  target_sources(lego1 PRIVATE LEGO1/LegoOmni.def)
 else()
-  target_sources(lego1 PRIVATE LEGO1/LEGO1.mingw.def)
+  target_sources(lego1 PRIVATE LEGO1/LegoOmni.mingw.def)
 endif()
 
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/util")
