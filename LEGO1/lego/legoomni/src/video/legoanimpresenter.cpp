@@ -8,7 +8,6 @@
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
-DECOMP_SIZE_ASSERT(LegoAnimClassBase, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimClass, 0x18)
 
 // FUNCTION: LEGO1 0x10068420
@@ -74,7 +73,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
 								m_unk0x64 = new LegoAnimClass();
 								if (m_unk0x64) {
-									if (m_unk0x64->VTable0x10(&stream, val2) == SUCCESS) {
+									if (m_unk0x64->CreateData(&stream, val2) == SUCCESS) {
 										result = SUCCESS;
 									}
 								}
@@ -194,33 +193,6 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
-// FUNCTION: LEGO1 0x10099dd0
-LegoAnimClassBase::LegoAnimClassBase()
-{
-	m_unk0x4 = 0;
-}
-
-// STUB: LEGO1 0x10099e00
-LegoAnimClassBase::~LegoAnimClassBase()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10099e20
-void LegoAnimClassBase::VTable0x4()
-{
-}
-
-// STUB: LEGO1 0x10099e40
-void LegoAnimClassBase::VTable0x8()
-{
-}
-
-// STUB: LEGO1 0x10099f70
-void LegoAnimClassBase::VTable0xc()
-{
-}
-
 // FUNCTION: LEGO1 0x100a0b30
 LegoAnimClass::LegoAnimClass()
 {
@@ -237,19 +209,19 @@ LegoAnimClass::~LegoAnimClass()
 }
 
 // STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
+MxResult LegoAnimClass::CreateData(LegoMemory* p_stream, MxS32)
 {
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a0e30
-void LegoAnimClass::VTable0x8()
+void LegoAnimClass::Read()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x100a1040
-void LegoAnimClass::VTable0xc()
+void LegoAnimClass::Write()
 {
 	// TODO
 }

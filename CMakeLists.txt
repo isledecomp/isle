@@ -150,6 +150,7 @@ add_library(lego1 SHARED
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp
   LEGO1/lego/sources/misc/legotexture.cpp
+  LEGO1/lego/sources/misc/legotree.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
   LEGO1/main.cpp
   LEGO1/mxdirectx/mxdirect3d.cpp
