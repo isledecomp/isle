@@ -53,13 +53,13 @@ IsleApp::IsleApp()
 	m_windowActive = 1;
 
 #ifdef COMPAT_MODE
-    {
-        MxRect32 r(0, 0, 639, 479);
-        MxVideoParamFlags flags;
-        m_videoParam = MxVideoParam(r, NULL, 1, flags);
-    }
+	{
+		MxRect32 r(0, 0, 639, 479);
+		MxVideoParamFlags flags;
+		m_videoParam = MxVideoParam(r, NULL, 1, flags);
+	}
 #else
-    m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
+	m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
 #endif
 	m_videoParam.Flags().Set16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 

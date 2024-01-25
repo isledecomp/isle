@@ -16,7 +16,7 @@ if (MSVC)
     endif()
 endif()
 
-set(lego1_targets )
+set(lego1_targets)
 macro(register_lego1_target __target)
   list(APPEND lego1_targets ${__target})
 endmacro()
