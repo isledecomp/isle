@@ -108,7 +108,7 @@ add_library(roi STATIC
 register_lego1_target(roi)
 set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
 target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(roi PRIVATE realtime)
+target_link_libraries(roi PRIVATE)
 
 add_library(misc STATIC
   LEGO1/lego/sources/misc/legoimage.cpp
