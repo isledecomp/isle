@@ -7,10 +7,10 @@ DECOMP_SIZE_ASSERT(LegoROI, 0x10c);
 // SIZE 0x14
 typedef struct {
 	const char* m_name;
-	MxS32 m_red;
-	MxS32 m_green;
-	MxS32 m_blue;
-	MxS32 m_unk0x10;
+	int m_red;
+	int m_green;
+	int m_blue;
+	int m_unk0x10;
 } ROIColorAlias;
 
 // GLOBAL: LEGO1 0x100dbe28
@@ -32,7 +32,7 @@ ROIColorAlias g_roiColorAliases[22] = {
 };
 
 // GLOBAL: LEGO1 0x10101368
-MxS32 g_roiConfig = 100;
+int g_roiConfig = 100;
 
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
@@ -54,24 +54,24 @@ void LegoROI::FUN_100a58f0(Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a81c0
-void LegoROI::configureLegoROI(MxS32 p_roiConfig)
+void LegoROI::configureLegoROI(int p_roiConfig)
 {
 	g_roiConfig = p_roiConfig;
 }
 
 // STUB: LEGO1 0x100a9a50
-LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time) : ViewROI(p_renderer, p_lodList)
+LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time) : ViewROI(p_renderer, p_lodList)
 {
 	m_time = p_time;
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-MxBool LegoROI::CallTheHandlerFunction(
+unsigned char LegoROI::CallTheHandlerFunction(
 	char* p_param,
-	MxFloat& p_red,
-	MxFloat& p_green,
-	MxFloat& p_blue,
-	MxFloat& p_other
+	float& p_red,
+	float& p_green,
+	float& p_blue,
+	float& p_other
 )
 {
 	// TODO
@@ -88,11 +88,11 @@ MxBool LegoROI::CallTheHandlerFunction(
 }
 
 // FUNCTION: LEGO1 0x100a9c50
-MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green, MxFloat& p_blue, MxFloat& p_other)
+unsigned char LegoROI::ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
 {
 	// TODO: this seems awfully hacky for these devs. is there a dynamic way
 	// to represent `the end of this array` that would improve this?
-	MxU32 i = 0;
+	unsigned int i = 0;
 	do {
 		if (strcmpi(g_roiColorAliases[i].m_name, p_param) == 0) {
 			p_red = g_roiColorAliases[i].m_red * g_normalizeByteToFloat;
@@ -102,7 +102,7 @@ MxBool LegoROI::ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green
 			return TRUE;
 		}
 		i++;
-	} while ((MxS32*) &g_roiColorAliases[i] < &g_roiConfig);
+	} while ((int*) &g_roiColorAliases[i] < &g_roiConfig);
 
 	return FALSE;
 }
@@ -114,7 +114,7 @@ void LegoROI::SetSomeHandlerFunction(ROIHandler p_func)
 }
 
 // FUNCTION: LEGO1 0x100a9e10
-void LegoROI::SetDisplayBB(MxS32 p_displayBB)
+void LegoROI::SetDisplayBB(int p_displayBB)
 {
 	// Intentionally empty function
 }

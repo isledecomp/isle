@@ -107,7 +107,7 @@ add_library(roi STATIC
 )
 register_lego1_target(roi)
 set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
-target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(roi PRIVATE realtime)
 
 add_library(misc STATIC
@@ -118,7 +118,7 @@ add_library(misc STATIC
 register_lego1_target(misc)
 set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
 target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(misc PRIVATE )
+target_link_libraries(misc PRIVATE)
 
 add_library(omni STATIC
   LEGO1/omni/src/action/mxdsaction.cpp
@@ -216,7 +216,7 @@ add_library(3dmanager STATIC
 )
 register_lego1_target(3dmanager)
 set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
-target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(3dmanager PRIVATE Vec::Vec)
 
 add_library(lego1 SHARED
