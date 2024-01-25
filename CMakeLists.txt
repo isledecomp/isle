@@ -208,6 +208,17 @@ set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>"
 target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
 
+add_library(3dmanager STATIC
+  LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
+  LEGO1/lego/sources/3dmanager/lego3dview.cpp
+  LEGO1/lego/sources/3dmanager/legoview1.cpp
+  LEGO1/lego/sources/3dmanager/tglsurface.cpp
+)
+register_lego1_target(3dmanager)
+set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
+target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(3dmanager PRIVATE Vec::Vec)
+
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/act1/act1state.cpp
@@ -329,10 +340,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legovideomanager.cpp
   LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
-  LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
-  LEGO1/lego/sources/3dmanager/lego3dview.cpp
-  LEGO1/lego/sources/3dmanager/legoview1.cpp
-  LEGO1/lego/sources/3dmanager/tglsurface.cpp
   LEGO1/main.cpp
 )
 register_lego1_target(lego1)
@@ -354,7 +361,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid Smacker::Smacker misc omni)
+target_link_libraries(lego1 PRIVATE tglrl realtime viewmanager mxgeometry mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid Smacker::Smacker misc 3dmanager omni)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)
