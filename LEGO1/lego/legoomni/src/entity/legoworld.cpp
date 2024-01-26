@@ -230,19 +230,19 @@ MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
 			return entity;
 	}
 
-	MxPresenterListCursor controlPresentersCursor(&m_controlPresenters);
+	MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
 	MxPresenter* presenter;
 
-	while (controlPresentersCursor.Next(presenter)) {
+	while (controlPresenterCursor.Next(presenter)) {
 		MxDSAction* action = presenter->GetAction();
 
 		if (action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
 			return presenter;
 	}
 
-	MxPresenterListCursor animPresentersCursor(&m_animPresenters);
+	MxPresenterListCursor animPresenterCursor(&m_animPresenters);
 
-	while (animPresentersCursor.Next(presenter)) {
+	while (animPresenterCursor.Next(presenter)) {
 		MxDSAction* action = presenter->GetAction();
 
 		if (action && action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
