@@ -183,24 +183,29 @@ MxCore* LegoWorld::FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId)
 	MxPresenter* presenter;
 
 	while (presenterCursor0xb8.Next(presenter)) {
-		if (presenter->GetAction()->GetAtomId() == p_atom && presenter->GetAction()->GetObjectId() == p_entityId)
+		MxDSAction* action = presenter->GetAction();
+
+		if (action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
 			return presenter;
 	}
 
 	MxPresenterListCursor presenterCursor0x80(&m_list0x80);
 
 	while (presenterCursor0x80.Next(presenter)) {
-		if (presenter->GetAction() && presenter->GetAction()->GetAtomId() == p_atom &&
-			presenter->GetAction()->GetObjectId() == p_entityId)
+		MxDSAction* action = presenter->GetAction();
+
+		if (action && action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
 			return presenter;
 	}
 
 	for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
 		MxCore* core = *it;
+
 		if (core->IsA("MxPresenter")) {
-			presenter = (MxPresenter*) *it;
+			MxPresenter* presenter = (MxPresenter*) *it;
+
 			if (presenter->GetAction()->GetAtomId() == p_atom && presenter->GetAction()->GetObjectId() == p_entityId)
-				return presenter;
+				return *it;
 		}
 	}
 
