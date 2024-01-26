@@ -13,7 +13,7 @@
 // STUB: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
-	// TOOD
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x1003e300

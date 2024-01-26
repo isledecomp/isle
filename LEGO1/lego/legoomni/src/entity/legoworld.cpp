@@ -205,8 +205,8 @@ void LegoWorld::Add(MxCore* p_object)
 			m_cacheSoundList->Append(sound);
 		}
 		else {
-			if (m_set0xa8.find((MxPresenter*) p_object) == m_set0xa8.end())
-				m_set0xa8.insert((MxPresenter*) p_object);
+			if (m_set0xa8.find(p_object) == m_set0xa8.end())
+				m_set0xa8.insert(p_object);
 		}
 
 		if (!m_set0xd0.empty() && p_object->IsA("MxPresenter")) {
@@ -268,7 +268,7 @@ MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 		return NULL;
 	}
 	else {
-		for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+		for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
 			if ((*it)->IsA(p_class) && (*it)->IsA("MxPresenter")) {
 				MxPresenter* presenter = (MxPresenter*) *it;
 				MxDSAction* action = presenter->GetAction();
@@ -312,7 +312,7 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 			return presenter;
 	}
 
-	for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+	for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
 		MxCore* core = *it;
 
 		if (core->IsA("MxPresenter")) {
