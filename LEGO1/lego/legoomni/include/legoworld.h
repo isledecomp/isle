@@ -129,7 +129,7 @@ protected:
 // MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
 
 // SYNTHETIC: LEGO1 0x1001ef90
-// MxListCursor<MxCore *>::`scalar deleting destructor'
+// MxListCursor<MxPresenter *>::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x1001f000
 // MxPtrListCursor<MxPresenter>::`scalar deleting destructor'
