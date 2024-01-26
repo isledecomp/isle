@@ -92,4 +92,7 @@ public:
 // TEMPLATE: LEGO1 0x10020840
 // MxListCursor<LegoCacheSound *>::MxListCursor<LegoCacheSound *>
 
+// TEMPLATE: LEGO1 0x100224e0
+// MxList<LegoCacheSound *>::InsertEntry
+
 #endif // MXCORELIST_H

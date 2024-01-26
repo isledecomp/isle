@@ -71,4 +71,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001d100
 // MxPresenterList::~MxPresenterList
 
+// TEMPLATE: LEGO1 0x10022380
+// MxList<MxPresenter *>::InsertEntry
+
 #endif // MXPRESENTERLIST_H

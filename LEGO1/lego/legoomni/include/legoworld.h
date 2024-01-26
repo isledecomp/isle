@@ -143,8 +143,31 @@ protected:
 // TEMPLATE: LEGO1 0x10020760
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
 
+// TEMPLATE: LEGO1 0x100208b0
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::insert
+
+// TEMPLATE: LEGO1 0x10020b20
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::iterator::_Dec
+
+// XTEMPLATE: LEGO1 0x10020b70
+
+// TEMPLATE: LEGO1 0x10020bb0
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10020bd0
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Insert
+
+// TEMPLATE: LEGO1 0x10020e50
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Lrotate
+
+// TEMPLATE: LEGO1 0x10020eb0
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x10022360
+// _Construct
+
 // GLOBAL: LEGO1 0x100f11a0
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *>>::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
+// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
 // clang-format on
 
 #endif // LEGOWORLD_H

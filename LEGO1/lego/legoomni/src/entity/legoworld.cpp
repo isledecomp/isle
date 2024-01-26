@@ -168,37 +168,45 @@ void LegoWorld::Add(MxCore* p_object)
 			MxPresenterListCursor cursor(&m_controlPresenters);
 			MxPresenter* presenter = (MxPresenter*) p_object;
 
-			if (!cursor.Find(presenter))
-				m_controlPresenters.Append(presenter);
+			if (cursor.Find(presenter))
+				return;
+
+			m_controlPresenters.Append(presenter);
 		}
 		else if (p_object->IsA("MxEntity")) {
 			LegoEntityListCursor cursor(m_entityList);
 			LegoEntity* entity = (LegoEntity*) p_object;
 
-			if (!cursor.Find(entity))
-				m_entityList->Append(entity);
+			if (cursor.Find(entity))
+				return;
+
+			m_entityList->Append(entity);
 		}
 		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
 			MxPresenterListCursor cursor(&m_animPresenters);
 			MxPresenter* presenter = (MxPresenter*) p_object;
 
-			if (!cursor.Find(presenter)) {
-				presenter->SendToCompositePresenter(Lego());
-				m_animPresenters.Append(presenter);
+			if (cursor.Find(presenter))
+				return;
 
-				if (p_object->IsA("LegoHideAnimPresenter"))
-					m_hideAnimPresenter = (LegoHideAnimPresenter*) presenter;
-			}
+			presenter->SendToCompositePresenter(Lego());
+			m_animPresenters.Append(presenter);
+
+			if (p_object->IsA("LegoHideAnimPresenter"))
+				m_hideAnimPresenter = (LegoHideAnimPresenter*) presenter;
 		}
 		else if (p_object->IsA("LegoCacheSound")) {
 			LegoCacheSoundListCursor cursor(m_cacheSoundList);
 			LegoCacheSound* sound = (LegoCacheSound*) p_object;
 
-			if (!cursor.Find(sound))
-				m_cacheSoundList->Append(sound);
+			if (cursor.Find(sound))
+				return;
+
+			m_cacheSoundList->Append(sound);
 		}
 		else {
-			m_set0xa8.insert((MxPresenter*) p_object);
+			if (m_set0xa8.find((MxPresenter*) p_object) == m_set0xa8.end())
+				m_set0xa8.insert((MxPresenter*) p_object);
 		}
 
 		if (!m_set0xd0.empty() && p_object->IsA("MxPresenter")) {
@@ -206,7 +214,7 @@ void LegoWorld::Add(MxCore* p_object)
 
 			if (presenter->IsEnabled()) {
 				presenter->Enable(FALSE);
-				m_set0xd0.erase(presenter);
+				m_set0xd0.insert(presenter);
 			}
 		}
 	}
