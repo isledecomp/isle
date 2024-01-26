@@ -210,11 +210,9 @@ void LegoWorld::Add(MxCore* p_object)
 		}
 
 		if (!m_set0xd0.empty() && p_object->IsA("MxPresenter")) {
-			MxPresenter* presenter = (MxPresenter*) p_object;
-
-			if (presenter->IsEnabled()) {
-				presenter->Enable(FALSE);
-				m_set0xd0.insert(presenter);
+			if (((MxPresenter*) p_object)->IsEnabled()) {
+				((MxPresenter*) p_object)->Enable(FALSE);
+				m_set0xd0.insert(p_object);
 			}
 		}
 	}
