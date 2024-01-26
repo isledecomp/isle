@@ -168,9 +168,42 @@ MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_nam
 	return NULL;
 }
 
-// STUB: LEGO1 0x10021790
-MxPresenter* LegoWorld::FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId)
+// FUNCTION: LEGO1 0x10021790
+MxCore* LegoWorld::FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId)
 {
+	LegoEntityListCursor entityCursor(m_entityList);
+	LegoEntity* entity;
+
+	while (entityCursor.Next(entity)) {
+		if (entity->GetAtom() == p_atom && entity->GetEntityId() == p_entityId)
+			return entity;
+	}
+
+	MxPresenterListCursor presenterCursor0xb8(&m_list0xb8);
+	MxPresenter* presenter;
+
+	while (presenterCursor0xb8.Next(presenter)) {
+		if (presenter->GetAction()->GetAtomId() == p_atom && presenter->GetAction()->GetObjectId() == p_entityId)
+			return presenter;
+	}
+
+	MxPresenterListCursor presenterCursor0x80(&m_list0x80);
+
+	while (presenterCursor0x80.Next(presenter)) {
+		if (presenter->GetAction() && presenter->GetAction()->GetAtomId() == p_atom &&
+			presenter->GetAction()->GetObjectId() == p_entityId)
+			return presenter;
+	}
+
+	for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+		MxCore* core = *it;
+		if (core->IsA("MxPresenter")) {
+			presenter = (MxPresenter*) *it;
+			if (presenter->GetAction()->GetAtomId() == p_atom && presenter->GetAction()->GetObjectId() == p_entityId)
+				return presenter;
+		}
+	}
+
 	return NULL;
 }
 
