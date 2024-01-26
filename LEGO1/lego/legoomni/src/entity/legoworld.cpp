@@ -158,6 +158,7 @@ void LegoWorld::Add(MxCore* p_object)
 	if (p_object && !p_object->IsA("LegoWorld") && !p_object->IsA("LegoWorldPresenter")) {
 		if (p_object->IsA("LegoAnimPresenter")) {
 			LegoAnimPresenter* animPresenter = (LegoAnimPresenter*) p_object;
+
 			if (!strcmpi(animPresenter->GetAction()->GetObjectName(), "ConfigAnimation")) {
 				FUN_1003e050(animPresenter);
 				animPresenter->GetAction()->SetDuration(animPresenter->GetUnknown0x64()->GetUnknown0x8());
@@ -166,43 +167,39 @@ void LegoWorld::Add(MxCore* p_object)
 
 		if (p_object->IsA("MxControlPresenter")) {
 			MxPresenterListCursor cursor(&m_controlPresenters);
-			MxPresenter* presenter = (MxPresenter*) p_object;
 
-			if (cursor.Find(presenter))
+			if (cursor.Find((MxPresenter*) p_object))
 				return;
 
-			m_controlPresenters.Append(presenter);
+			m_controlPresenters.Append((MxPresenter*) p_object);
 		}
 		else if (p_object->IsA("MxEntity")) {
 			LegoEntityListCursor cursor(m_entityList);
-			LegoEntity* entity = (LegoEntity*) p_object;
 
-			if (cursor.Find(entity))
+			if (cursor.Find((LegoEntity*) p_object))
 				return;
 
-			m_entityList->Append(entity);
+			m_entityList->Append((LegoEntity*) p_object);
 		}
 		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
 			MxPresenterListCursor cursor(&m_animPresenters);
-			MxPresenter* presenter = (MxPresenter*) p_object;
 
-			if (cursor.Find(presenter))
+			if (cursor.Find((MxPresenter*) p_object))
 				return;
 
-			presenter->SendToCompositePresenter(Lego());
-			m_animPresenters.Append(presenter);
+			((MxPresenter*) p_object)->SendToCompositePresenter(Lego());
+			m_animPresenters.Append(((MxPresenter*) p_object));
 
 			if (p_object->IsA("LegoHideAnimPresenter"))
-				m_hideAnimPresenter = (LegoHideAnimPresenter*) presenter;
+				m_hideAnimPresenter = (LegoHideAnimPresenter*) p_object;
 		}
 		else if (p_object->IsA("LegoCacheSound")) {
 			LegoCacheSoundListCursor cursor(m_cacheSoundList);
-			LegoCacheSound* sound = (LegoCacheSound*) p_object;
 
-			if (cursor.Find(sound))
+			if (cursor.Find((LegoCacheSound*) p_object))
 				return;
 
-			m_cacheSoundList->Append(sound);
+			m_cacheSoundList->Append((LegoCacheSound*) p_object);
 		}
 		else {
 			if (m_set0xa8.find(p_object) == m_set0xa8.end())
