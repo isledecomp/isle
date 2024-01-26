@@ -73,13 +73,13 @@ public:
 
 protected:
 	LegoPathControllerList m_list0x68;        // 0x68
-	MxPresenterList m_list0x80;               // 0x80
+	MxPresenterList m_animPresenters;         // 0x80
 	LegoCameraController* m_cameraController; // 0x98
 	LegoEntityList* m_entityList;             // 0x9c
 	MxCoreList* m_coreList;                   // 0xa0
 	undefined m_unk0xa4;                      // 0xa4
 	MxPresenterSet m_set0xa8;                 // 0xa8
-	MxPresenterList m_list0xb8;               // 0xb8
+	MxPresenterList m_controlPresenters;      // 0xb8
 	MxPresenterSet m_set0xd0;                 // 0xd0
 	list<AutoROI*> m_list0xe0;                // 0xe0
 	undefined4 m_unk0xec;                     // 0xec

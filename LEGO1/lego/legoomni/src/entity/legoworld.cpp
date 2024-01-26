@@ -74,7 +74,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 		}
 
 		SetCurrentWorld(this);
-		ControlManager()->FUN_10028df0(&m_list0xb8);
+		ControlManager()->FUN_10028df0(&m_controlPresenters);
 	}
 
 	SetIsWorldActive(TRUE);
@@ -167,7 +167,7 @@ void LegoWorld::EndAction(MxCore* p_object)
 MxCore* LegoWorld::FUN_100213a0(const char* p_class, const char* p_name)
 {
 	if (!strcmp(p_class, "MxControlPresenter")) {
-		MxPresenterListCursor cursor(&m_list0xb8);
+		MxPresenterListCursor cursor(&m_controlPresenters);
 		MxPresenter* presenter;
 
 		while (cursor.Next(presenter)) {
@@ -194,7 +194,7 @@ MxCore* LegoWorld::FUN_100213a0(const char* p_class, const char* p_name)
 		return NULL;
 	}
 	else if (!strcmp(p_class, "LegoAnimPresenter")) {
-		MxPresenterListCursor cursor(&m_list0x80);
+		MxPresenterListCursor cursor(&m_animPresenters);
 		MxPresenter* presenter;
 
 		while (cursor.Next(presenter)) {
@@ -230,7 +230,7 @@ MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
 			return entity;
 	}
 
-	MxPresenterListCursor presenterCursor0xb8(&m_list0xb8);
+	MxPresenterListCursor presenterCursor0xb8(&m_controlPresenters);
 	MxPresenter* presenter;
 
 	while (presenterCursor0xb8.Next(presenter)) {
@@ -240,7 +240,7 @@ MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
 			return presenter;
 	}
 
-	MxPresenterListCursor presenterCursor0x80(&m_list0x80);
+	MxPresenterListCursor presenterCursor0x80(&m_animPresenters);
 
 	while (presenterCursor0x80.Next(presenter)) {
 		MxDSAction* action = presenter->GetAction();
