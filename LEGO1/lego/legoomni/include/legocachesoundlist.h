@@ -1,5 +1,5 @@
-#ifndef MXCORELIST_H
-#define MXCORELIST_H
+#ifndef LEGOCACHESOUNDLIST_H
+#define LEGOCACHESOUNDLIST_H
 
 #include "mxlist.h"
 #include "mxtypes.h"
@@ -95,4 +95,4 @@ public:
 // TEMPLATE: LEGO1 0x100224e0
 // MxList<LegoCacheSound *>::InsertEntry
 
-#endif // MXCORELIST_H
+#endif // LEGOCACHESOUNDLIST_H
