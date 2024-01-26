@@ -1,15 +1,14 @@
 #include "helicopterstate.h"
 
-// STUB: LEGO1 0x1000e0b0
+// FUNCTION: LEGO1 0x1000e0b0
 MxBool HelicopterState::VTable0x14()
 {
-	// TODO
 	return FALSE;
 }
 
-// STUB: LEGO1 0x1000e0c0
+// FUNCTION: LEGO1 0x1000e0c0
 MxBool HelicopterState::SetFlag()
 {
-	// TODO
-	return FALSE;
+	this->m_unk0x8 = 0;
+	return TRUE;
 }
