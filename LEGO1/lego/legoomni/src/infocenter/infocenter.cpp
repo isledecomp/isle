@@ -365,22 +365,22 @@ void Infocenter::InitializeBitmaps()
 {
 	m_radio.Initialize(TRUE);
 
-	FUN_10021790(m_atom, c_leftArrowCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_rightArrowCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_infoCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_boatCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_raceCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_pizzaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_gasCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_medCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_copCtl)->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_leftArrowCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_rightArrowCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_infoCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_boatCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_raceCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_pizzaCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_gasCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_medCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_copCtl))->Enable(TRUE);
 
-	FUN_10021790(m_atom, c_mamaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_papaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_pepperCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_nickCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_lauraCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_radioCtl)->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_mamaCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_papaCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_pepperCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_nickCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_lauraCtl))->Enable(TRUE);
+	((MxPresenter*) FUN_10021790(m_atom, c_radioCtl))->Enable(TRUE);
 
 	m_mapAreas[0].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Info_A_Bitmap");
 	m_mapAreas[0].m_unk0x08 = 391;
