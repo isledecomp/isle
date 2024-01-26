@@ -45,7 +45,7 @@ public:
 	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	virtual void VTable0x50();                                // vtable+0x50
 	virtual LegoCameraController* VTable0x54();               // vtable+0x54
-	virtual void VTable0x58(MxCore* p_object);                // vtable+0x58
+	virtual void Add(MxCore* p_object);                       // vtable+0x58
 	virtual MxBool VTable0x5c();                              // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x100010a0
@@ -58,15 +58,15 @@ public:
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 
 	undefined FUN_100220e0();
-	void EndAction(MxCore* p_object);
+	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
 	MxBool FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
 	void FUN_10073400();
 	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
-	MxCore* FUN_100213a0(const char* p_class, const char* p_name);
-	MxCore* FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId);
+	MxCore* Find(const char* p_class, const char* p_name);
+	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'

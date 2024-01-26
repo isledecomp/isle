@@ -96,7 +96,7 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationEndAction: {
 		MxPresenter* presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
-		EndAction(presenter);
+		Remove(presenter);
 		ret = 1;
 		break;
 	}
@@ -153,18 +153,19 @@ MxS32 LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // STUB: LEGO1 0x10020220
-void LegoWorld::VTable0x58(MxCore* p_object)
+void LegoWorld::Add(MxCore* p_object)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10020f10
-void LegoWorld::EndAction(MxCore* p_object)
+void LegoWorld::Remove(MxCore* p_object)
 {
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100213a0
-MxCore* LegoWorld::FUN_100213a0(const char* p_class, const char* p_name)
+MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 {
 	if (!strcmp(p_class, "MxControlPresenter")) {
 		MxPresenterListCursor cursor(&m_controlPresenters);
@@ -220,7 +221,7 @@ MxCore* LegoWorld::FUN_100213a0(const char* p_class, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10021790
-MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
+MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 {
 	LegoEntityListCursor entityCursor(m_entityList);
 	LegoEntity* entity;

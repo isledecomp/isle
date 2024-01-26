@@ -71,7 +71,7 @@ void LegoEntity::SetWorld()
 {
 	LegoWorld* world = GetCurrentWorld();
 	if (world != NULL && world != (LegoWorld*) this) {
-		world->VTable0x58(this);
+		world->Add(this);
 	}
 }
 
