@@ -66,7 +66,7 @@ public:
 	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxCore* FUN_100213a0(const char* p_class, const char* p_name);
-	MxPresenter* FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId);
+	MxCore* FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId);
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'
