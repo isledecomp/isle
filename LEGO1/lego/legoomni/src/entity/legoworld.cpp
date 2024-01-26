@@ -1,5 +1,6 @@
 #include "legoworld.h"
 
+#include "legoanimpresenter.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
@@ -73,7 +74,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 		}
 
 		SetCurrentWorld(this);
-		ControlManager()->FUN_10028df0(&m_list0xb8);
+		ControlManager()->FUN_10028df0(&m_controlPresenters);
 	}
 
 	SetIsWorldActive(TRUE);
@@ -95,7 +96,7 @@ MxLong LegoWorld::Notify(MxParam& p_param)
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationEndAction: {
 		MxPresenter* presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
-		EndAction(presenter);
+		Remove(presenter);
 		ret = 1;
 		break;
 	}
@@ -152,24 +153,75 @@ MxS32 LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // STUB: LEGO1 0x10020220
-void LegoWorld::VTable0x58(MxCore* p_object)
+void LegoWorld::Add(MxCore* p_object)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10020f10
-void LegoWorld::EndAction(MxCore* p_object)
+void LegoWorld::Remove(MxCore* p_object)
 {
+	// TODO
 }
 
-// STUB: LEGO1 0x100213a0
-MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_name)
+// FUNCTION: LEGO1 0x100213a0
+MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 {
-	return NULL;
+	if (!strcmp(p_class, "MxControlPresenter")) {
+		MxPresenterListCursor cursor(&m_controlPresenters);
+		MxPresenter* presenter;
+
+		while (cursor.Next(presenter)) {
+			MxDSAction* action = presenter->GetAction();
+			if (!strcmp(action->GetObjectName(), p_name))
+				return presenter;
+		}
+
+		return NULL;
+	}
+	else if (!strcmp(p_class, "MxEntity")) {
+		LegoEntityListCursor cursor(m_entityList);
+		LegoEntity* entity;
+
+		while (cursor.Next(entity)) {
+			if (!p_name)
+				return entity;
+
+			LegoROI* roi = entity->GetROI();
+			if (roi && !strcmpi(roi->GetUnknown0xe4(), p_name))
+				return entity;
+		}
+
+		return NULL;
+	}
+	else if (!strcmp(p_class, "LegoAnimPresenter")) {
+		MxPresenterListCursor cursor(&m_animPresenters);
+		MxPresenter* presenter;
+
+		while (cursor.Next(presenter)) {
+			if (!strcmpi(((LegoAnimPresenter*) presenter)->GetActionObjectName(), p_name))
+				return presenter;
+		}
+
+		return NULL;
+	}
+	else {
+		for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+			if ((*it)->IsA(p_class) && (*it)->IsA("MxPresenter")) {
+				MxPresenter* presenter = (MxPresenter*) *it;
+				MxDSAction* action = presenter->GetAction();
+
+				if (!strcmp(action->GetObjectName(), p_name))
+					return *it;
+			}
+		}
+
+		return NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10021790
-MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
+MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 {
 	LegoEntityListCursor entityCursor(m_entityList);
 	LegoEntity* entity;
@@ -179,19 +231,19 @@ MxCore* LegoWorld::FUN_10021790(const MxAtomId& p_atom, MxS32 p_entityId)
 			return entity;
 	}
 
-	MxPresenterListCursor presenterCursor0xb8(&m_list0xb8);
+	MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
 	MxPresenter* presenter;
 
-	while (presenterCursor0xb8.Next(presenter)) {
+	while (controlPresenterCursor.Next(presenter)) {
 		MxDSAction* action = presenter->GetAction();
 
 		if (action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
 			return presenter;
 	}
 
-	MxPresenterListCursor presenterCursor0x80(&m_list0x80);
+	MxPresenterListCursor animPresenterCursor(&m_animPresenters);
 
-	while (presenterCursor0x80.Next(presenter)) {
+	while (animPresenterCursor.Next(presenter)) {
 		MxDSAction* action = presenter->GetAction();
 
 		if (action && action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)

@@ -20,7 +20,6 @@ class Act1State;
 
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140
-// Radio at 0x12c
 class Isle : public LegoWorld {
 public:
 	Isle();
@@ -42,7 +41,7 @@ public:
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void VTable0x50() override;                       // vtable+50
-	virtual void VTable0x58(MxCore* p_object) override;       // vtable+58
+	virtual void Add(MxCore* p_object) override;              // vtable+58
 	// FUNCTION: LEGO1 0x10030900
 	virtual MxBool VTable0x5c() override { return TRUE; } // vtable+5c
 	// FUNCTION: LEGO1 0x10033170

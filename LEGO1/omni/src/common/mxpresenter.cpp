@@ -94,7 +94,7 @@ void MxPresenter::ParseExtra()
 
 			token = strtok(NULL, g_parseExtraTokens);
 			MxS32 val = token ? atoi(token) : 0;
-			MxEntity* result = MxOmni::GetInstance()->FindWorld(buf, val, this);
+			MxEntity* result = MxOmni::GetInstance()->AddToWorld(buf, val, this);
 
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_world);
 

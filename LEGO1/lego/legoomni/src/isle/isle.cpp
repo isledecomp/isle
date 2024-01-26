@@ -201,9 +201,9 @@ MxLong Isle::HandleTransitionEnd()
 }
 
 // FUNCTION: LEGO1 0x10032f10
-void Isle::VTable0x58(MxCore* p_object)
+void Isle::Add(MxCore* p_object)
 {
-	LegoWorld::VTable0x58(p_object);
+	LegoWorld::Add(p_object);
 
 	if (p_object->IsA("Pizza")) {
 		m_pizza = (Pizza*) p_object;
@@ -246,7 +246,7 @@ void Isle::VTable0x58(MxCore* p_object)
 // FUNCTION: LEGO1 0x10033050
 void Isle::VTable0x6c(IslePathActor* p_actor)
 {
-	LegoWorld::EndAction(p_actor);
+	LegoWorld::Remove(p_actor);
 
 	if (p_actor->IsA("Helicopter")) {
 		m_helicopter = NULL;

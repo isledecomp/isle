@@ -48,7 +48,7 @@ public:
 	virtual void DeleteObject(MxDSAction& p_dsAction);                                        // vtable+24
 	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);                                   // vtable+28
 	virtual MxResult CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action); // vtable+2c
-	virtual MxEntity* FindWorld(const char*, MxS32, MxPresenter*);                            // vtable+30
+	virtual MxEntity* AddToWorld(const char*, MxS32, MxPresenter*);                           // vtable+30
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param);                           // vtable+34
 	virtual void StartTimer();                                                                // vtable+38
 	virtual void StopTimer();                                                                 // vtable+3c

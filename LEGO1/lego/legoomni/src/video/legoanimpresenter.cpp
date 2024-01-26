@@ -173,6 +173,12 @@ void LegoAnimPresenter::Destroy()
 	Destroy(FALSE);
 }
 
+// FUNCTION: LEGO1 0x1006b8f0
+const char* LegoAnimPresenter::GetActionObjectName()
+{
+	return m_action->GetObjectName();
+}
+
 // STUB: LEGO1 0x1006bac0
 void LegoAnimPresenter::ParseExtra()
 {

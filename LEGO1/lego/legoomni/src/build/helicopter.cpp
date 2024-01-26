@@ -41,7 +41,7 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 	}
 	world = GetWorld();
 	if (world)
-		world->VTable0x58(this);
+		world->Add(this);
 	GetState();
 	return result;
 }
