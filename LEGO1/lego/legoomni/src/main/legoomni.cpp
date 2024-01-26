@@ -179,7 +179,7 @@ IslePathActor* GetCurrentVehicle()
 // FUNCTION: LEGO1 0x100157a0
 LegoWorld* GetCurrentWorld()
 {
-	return LegoOmni::GetInstance()->GetCurrentOmniWorld();
+	return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 
 // FUNCTION: LEGO1 0x100157b0
@@ -219,7 +219,7 @@ void FUN_10015860(const char*, MxU8)
 }
 
 // FUNCTION: LEGO1 0x100158c0
-LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
+LegoEntity* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	return LegoOmni::GetInstance()->FindWorld(p_atom, p_entityid);
 }
@@ -674,11 +674,11 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x1005b400
 MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
-	if (GetCurrentWorld() == NULL) {
+	if (::GetCurrentWorld() == NULL) {
 		return -1;
 	}
 
-	return GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
+	return ::GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
 // FUNCTION: LEGO1 0x1005b4f0

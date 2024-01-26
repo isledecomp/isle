@@ -398,13 +398,13 @@ void LegoGameState::SetSomeEnumState(undefined4 p_state)
 // FUNCTION: LEGO1 0x1003ceb0
 void LegoGameState::FUN_1003ceb0()
 {
-	if (FindEntityByAtomIdOrEntityId(*g_isleScript, 0)) {
+	if (FindWorld(*g_isleScript, 0)) {
 		m_currentAct = 0;
 	}
-	else if (FindEntityByAtomIdOrEntityId(*g_act2mainScript, 0)) {
+	else if (FindWorld(*g_act2mainScript, 0)) {
 		m_currentAct = 1;
 	}
-	else if (FindEntityByAtomIdOrEntityId(*g_act3Script, 0)) {
+	else if (FindWorld(*g_act3Script, 0)) {
 		m_currentAct = 2;
 	}
 	else {
