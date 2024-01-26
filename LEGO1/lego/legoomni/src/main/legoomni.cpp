@@ -219,7 +219,7 @@ void FUN_10015860(const char*, MxU8)
 }
 
 // FUNCTION: LEGO1 0x100158c0
-LegoEntity* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
+LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	return LegoOmni::GetInstance()->FindWorld(p_atom, p_entityid);
 }

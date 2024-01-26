@@ -174,7 +174,7 @@ LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void FUN_10015860(const char*, MxU8);
-LegoEntity* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
+LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 
 void PlayMusic(MxU32 p_index);
