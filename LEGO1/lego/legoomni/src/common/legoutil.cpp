@@ -10,9 +10,10 @@
 #include <process.h>
 #include <string.h>
 
-// FUNCTION: LEGO1 0x1003e050
+// STUB: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
+	// TOOD
 }
 
 // FUNCTION: LEGO1 0x1003e300
