@@ -1,22 +1,24 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
+#include "legocachesound.h"
+#include "legocachesoundlist.h"
 #include "legocameracontroller.h"
 #include "legoentity.h"
 #include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
-#include "mxcorelist.h"
 #include "mxpresenter.h"
 #include "mxpresenterlist.h"
 
 class IslePathActor;
 class LegoPathBoundary;
+class LegoHideAnimPresenter;
 
-struct PresenterSetCompare {
-	MxS32 operator()(MxPresenter* const& p_a, MxPresenter* const& p_b) const { return p_a > p_b; }
+struct CoreSetCompare {
+	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return p_a > p_b; }
 };
 
-typedef set<MxPresenter*, PresenterSetCompare> MxPresenterSet;
+typedef set<MxCore*, CoreSetCompare> MxCoreSet;
 
 // VTABLE: LEGO1 0x100d6280
 // SIZE 0xf8
@@ -72,38 +74,38 @@ public:
 	// LegoWorld::`scalar deleting destructor'
 
 protected:
-	LegoPathControllerList m_list0x68;        // 0x68
-	MxPresenterList m_animPresenters;         // 0x80
-	LegoCameraController* m_cameraController; // 0x98
-	LegoEntityList* m_entityList;             // 0x9c
-	MxCoreList* m_coreList;                   // 0xa0
-	undefined m_unk0xa4;                      // 0xa4
-	MxPresenterSet m_set0xa8;                 // 0xa8
-	MxPresenterList m_controlPresenters;      // 0xb8
-	MxPresenterSet m_set0xd0;                 // 0xd0
-	list<AutoROI*> m_list0xe0;                // 0xe0
-	undefined4 m_unk0xec;                     // 0xec
-	undefined4 m_unk0xf0;                     // 0xf0
-	MxS16 m_unk0xf4;                          // 0xf4
-	MxBool m_worldStarted;                    // 0xf6
-	undefined m_unk0xf7;                      // 0xf7
+	LegoPathControllerList m_list0x68;          // 0x68
+	MxPresenterList m_animPresenters;           // 0x80
+	LegoCameraController* m_cameraController;   // 0x98
+	LegoEntityList* m_entityList;               // 0x9c
+	LegoCacheSoundList* m_cacheSoundList;       // 0xa0
+	undefined m_unk0xa4;                        // 0xa4
+	MxCoreSet m_set0xa8;                        // 0xa8
+	MxPresenterList m_controlPresenters;        // 0xb8
+	MxCoreSet m_set0xd0;                        // 0xd0
+	list<AutoROI*> m_list0xe0;                  // 0xe0
+	undefined4 m_unk0xec;                       // 0xec
+	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
+	MxS16 m_unk0xf4;                            // 0xf4
+	MxBool m_worldStarted;                      // 0xf6
+	undefined m_unk0xf7;                        // 0xf7
 };
 
 // clang-format off
 // TEMPLATE: LEGO1 0x1001d780
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::~_Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::~_Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >
 
 // TEMPLATE: LEGO1 0x1001d850
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::iterator::_Inc
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::iterator::_Inc
 
 // TEMPLATE: LEGO1 0x1001d890
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::erase
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::erase
 
 // TEMPLATE: LEGO1 0x1001dcf0
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Erase
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Erase
 
 // TEMPLATE: LEGO1 0x1001dd30
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Init
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Init
 
 // TEMPLATE: LEGO1 0x1001ddf0
 // list<AutoROI *,allocator<AutoROI *> >::~list<AutoROI *,allocator<AutoROI *> >
@@ -115,10 +117,10 @@ protected:
 // list<AutoROI *,allocator<AutoROI *> >::_Buynode
 
 // TEMPLATE: LEGO1 0x1001de90
-// set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >::~set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *> >
+// set<MxCore *,CoreSetCompare,allocator<MxCore *> >::~set<MxCore *,CoreSetCompare,allocator<MxCore *> >
 
 // TEMPLATE: LEGO1 0x1001df00
-// Set<MxPresenter *,PresenterSetCompare>::~Set<MxPresenter *,PresenterSetCompare>
+// Set<MxCore *,CoreSetCompare>::~Set<MxCore *,CoreSetCompare>
 
 // SYNTHETIC: LEGO1 0x1001eed0
 // MxPresenterListCursor::`scalar deleting destructor'
@@ -141,8 +143,31 @@ protected:
 // TEMPLATE: LEGO1 0x10020760
 // MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
 
+// TEMPLATE: LEGO1 0x100208b0
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::insert
+
+// TEMPLATE: LEGO1 0x10020b20
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::iterator::_Dec
+
+// XTEMPLATE LEGO1 0x10020b70
+
+// TEMPLATE: LEGO1 0x10020bb0
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10020bd0
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Insert
+
+// TEMPLATE: LEGO1 0x10020e50
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Lrotate
+
+// TEMPLATE: LEGO1 0x10020eb0
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x10022360
+// _Construct
+
 // GLOBAL: LEGO1 0x100f11a0
-// _Tree<MxPresenter *,MxPresenter *,set<MxPresenter *,PresenterSetCompare,allocator<MxPresenter *>>::_Kfn,PresenterSetCompare,allocator<MxPresenter *> >::_Nil
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Nil
 // clang-format on
 
 #endif // LEGOWORLD_H

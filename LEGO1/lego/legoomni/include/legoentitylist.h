@@ -92,4 +92,7 @@ public:
 // TEMPLATE: LEGO1 0x100207d0
 // MxListCursor<LegoEntity *>::MxListCursor<LegoEntity *>
 
+// TEMPLATE: LEGO1 0x10022430
+// MxList<LegoEntity *>::InsertEntry
+
 #endif // LEGOENTITYLIST_H
