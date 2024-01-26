@@ -203,8 +203,9 @@ MxCore* LegoWorld::FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId)
 
 		if (core->IsA("MxPresenter")) {
 			MxPresenter* presenter = (MxPresenter*) *it;
+			MxDSAction* action = presenter->GetAction();
 
-			if (presenter->GetAction()->GetAtomId() == p_atom && presenter->GetAction()->GetObjectId() == p_entityId)
+			if (action->GetAtomId() == p_atom && action->GetObjectId() == p_entityId)
 				return *it;
 		}
 	}

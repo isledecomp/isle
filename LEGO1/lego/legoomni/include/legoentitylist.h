@@ -86,7 +86,7 @@ public:
 // FUNCTION: LEGO1 0x1001f2b0
 // MxListCursor<LegoEntity *>::~MxListCursor<LegoEntity *>
 
-// FUNCTION: LEGO1 0x1001edc6
+// FUNCTION: LEGO1 0x1001f300
 // LegoEntityListCursor::~LegoEntityListCursor
 
 // TEMPLATE: LEGO1 0x100207d0
