@@ -1,5 +1,6 @@
 #include "legoworld.h"
 
+#include "legoanimpresenter.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
@@ -162,10 +163,60 @@ void LegoWorld::EndAction(MxCore* p_object)
 {
 }
 
-// STUB: LEGO1 0x100213a0
-MxPresenter* LegoWorld::FindPresenter(const char* p_presenter, const char* p_name)
+// FUNCTION: LEGO1 0x100213a0
+MxCore* LegoWorld::FUN_100213a0(const char* p_class, const char* p_name)
 {
-	return NULL;
+	if (!strcmp(p_class, "MxControlPresenter")) {
+		MxPresenterListCursor cursor(&m_list0xb8);
+		MxPresenter* presenter;
+
+		while (cursor.Next(presenter)) {
+			MxDSAction* action = presenter->GetAction();
+			if (!strcmp(action->GetObjectName(), p_name))
+				return presenter;
+		}
+
+		return NULL;
+	}
+	else if (!strcmp(p_class, "MxEntity")) {
+		LegoEntityListCursor cursor(m_entityList);
+		LegoEntity* entity;
+
+		while (cursor.Next(entity)) {
+			if (!p_name)
+				return entity;
+
+			LegoROI* roi = entity->GetROI();
+			if (roi && !strcmpi(roi->GetUnknown0xe4(), p_name))
+				return entity;
+		}
+
+		return NULL;
+	}
+	else if (!strcmp(p_class, "LegoAnimPresenter")) {
+		MxPresenterListCursor cursor(&m_list0x80);
+		MxPresenter* presenter;
+
+		while (cursor.Next(presenter)) {
+			if (!strcmpi(((LegoAnimPresenter*) presenter)->GetActionObjectName(), p_name))
+				return presenter;
+		}
+
+		return NULL;
+	}
+	else {
+		for (MxPresenterSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+			if ((*it)->IsA(p_class) && (*it)->IsA("MxPresenter")) {
+				MxPresenter* presenter = (MxPresenter*) *it;
+				MxDSAction* action = presenter->GetAction();
+
+				if (!strcmp(action->GetObjectName(), p_name))
+					return *it;
+			}
+		}
+
+		return NULL;
+	}
 }
 
 // STUB: LEGO1 0x10021790

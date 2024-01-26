@@ -40,6 +40,7 @@ public:
 	void FUN_100a46b0(Matrix4& p_transform);
 	void FUN_100a58f0(Matrix4& p_transform);
 
+	inline const char* GetUnknown0xe4() { return m_unk0xe4; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
 	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
 
@@ -47,9 +48,11 @@ public:
 	// LegoROI::`scalar deleting destructor'
 
 private:
-	undefined m_pad[0x24];  // 0xe0
-	LegoEntity* m_unk0x104; // 0x104
-	int m_time;             // 0x108
+	undefined4 m_unk0xe0;      // 0xe0
+	const char* m_unk0xe4;     // 0xe4
+	undefined m_unk0xe8[0x1c]; // 0xe8
+	LegoEntity* m_unk0x104;    // 0x104
+	int m_time;                // 0x108
 };
 
 #endif // LEGOROI_H

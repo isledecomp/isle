@@ -65,7 +65,7 @@ public:
 	void FUN_10073400();
 	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
-	MxPresenter* FindPresenter(const char* p_presenter, const char* p_name);
+	MxCore* FUN_100213a0(const char* p_class, const char* p_name);
 	MxPresenter* FUN_10021790(MxAtomId& p_atom, MxS32 p_entityId);
 
 	// SYNTHETIC: LEGO1 0x1001dee0

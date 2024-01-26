@@ -51,6 +51,7 @@ public:
 
 	inline Type GetType() const { return (Type) this->m_type; }
 	inline const char* GetSourceName() const { return this->m_sourceName; }
+	inline const char* GetObjectName() const { return this->m_objectName; }
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
