@@ -1,16 +1,18 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
+#include "legocachesound.h"
+#include "legocachesoundlist.h"
 #include "legocameracontroller.h"
 #include "legoentity.h"
 #include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
-#include "mxcorelist.h"
 #include "mxpresenter.h"
 #include "mxpresenterlist.h"
 
 class IslePathActor;
 class LegoPathBoundary;
+class LegoHideAnimPresenter;
 
 struct PresenterSetCompare {
 	MxS32 operator()(MxPresenter* const& p_a, MxPresenter* const& p_b) const { return p_a > p_b; }
@@ -72,21 +74,21 @@ public:
 	// LegoWorld::`scalar deleting destructor'
 
 protected:
-	LegoPathControllerList m_list0x68;        // 0x68
-	MxPresenterList m_animPresenters;         // 0x80
-	LegoCameraController* m_cameraController; // 0x98
-	LegoEntityList* m_entityList;             // 0x9c
-	MxCoreList* m_coreList;                   // 0xa0
-	undefined m_unk0xa4;                      // 0xa4
-	MxPresenterSet m_set0xa8;                 // 0xa8
-	MxPresenterList m_controlPresenters;      // 0xb8
-	MxPresenterSet m_set0xd0;                 // 0xd0
-	list<AutoROI*> m_list0xe0;                // 0xe0
-	undefined4 m_unk0xec;                     // 0xec
-	undefined4 m_unk0xf0;                     // 0xf0
-	MxS16 m_unk0xf4;                          // 0xf4
-	MxBool m_worldStarted;                    // 0xf6
-	undefined m_unk0xf7;                      // 0xf7
+	LegoPathControllerList m_list0x68;          // 0x68
+	MxPresenterList m_animPresenters;           // 0x80
+	LegoCameraController* m_cameraController;   // 0x98
+	LegoEntityList* m_entityList;               // 0x9c
+	LegoCacheSoundList* m_cacheSoundList;       // 0xa0
+	undefined m_unk0xa4;                        // 0xa4
+	MxPresenterSet m_set0xa8;                   // 0xa8
+	MxPresenterList m_controlPresenters;        // 0xb8
+	MxPresenterSet m_set0xd0;                   // 0xd0
+	list<AutoROI*> m_list0xe0;                  // 0xe0
+	undefined4 m_unk0xec;                       // 0xec
+	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
+	MxS16 m_unk0xf4;                            // 0xf4
+	MxBool m_worldStarted;                      // 0xf6
+	undefined m_unk0xf7;                        // 0xf7
 };
 
 // clang-format off

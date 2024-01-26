@@ -15,8 +15,8 @@
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
 DECOMP_SIZE_ASSERT(LegoEntityListCursor, 0x10)
-DECOMP_SIZE_ASSERT(MxCoreList, 0x18)
-DECOMP_SIZE_ASSERT(MxCoreListCursor, 0x10)
+DECOMP_SIZE_ASSERT(LegoCacheSoundList, 0x18)
+DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
 
 // FUNCTION: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
@@ -24,9 +24,9 @@ LegoWorld::LegoWorld() : m_list0x68(TRUE)
 	m_unk0xf4 = 4;
 	m_cameraController = NULL;
 	m_entityList = NULL;
-	m_coreList = NULL;
+	m_cacheSoundList = NULL;
 	m_unk0xa4 = 0; // MxBool?
-	m_unk0xf0 = 0;
+	m_hideAnimPresenter = NULL;
 	m_worldStarted = FALSE;
 
 	NotificationManager()->Register(this);
@@ -60,9 +60,9 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	if (!m_entityList)
 		return FAILURE;
 
-	m_coreList = new MxCoreList(TRUE);
+	m_cacheSoundList = new LegoCacheSoundList(TRUE);
 
-	if (!m_coreList)
+	if (!m_cacheSoundList)
 		return FAILURE;
 
 	if (!VTable0x54())
@@ -152,10 +152,64 @@ MxS32 LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 	return 0;
 }
 
-// STUB: LEGO1 0x10020220
+// FUNCTION: LEGO1 0x10020220
 void LegoWorld::Add(MxCore* p_object)
 {
-	// TODO
+	if (p_object && !p_object->IsA("LegoWorld") && !p_object->IsA("LegoWorldPresenter")) {
+		if (p_object->IsA("LegoAnimPresenter")) {
+			LegoAnimPresenter* animPresenter = (LegoAnimPresenter*) p_object;
+			if (!strcmpi(animPresenter->GetAction()->GetObjectName(), "ConfigAnimation")) {
+				FUN_1003e050(animPresenter);
+				animPresenter->GetAction()->SetDuration(animPresenter->GetUnknown0x64()->GetUnknown0x8());
+			}
+		}
+
+		if (p_object->IsA("MxControlPresenter")) {
+			MxPresenterListCursor cursor(&m_controlPresenters);
+			MxPresenter* presenter = (MxPresenter*) p_object;
+
+			if (!cursor.Find(presenter))
+				m_controlPresenters.Append(presenter);
+		}
+		else if (p_object->IsA("MxEntity")) {
+			LegoEntityListCursor cursor(m_entityList);
+			LegoEntity* entity = (LegoEntity*) p_object;
+
+			if (!cursor.Find(entity))
+				m_entityList->Append(entity);
+		}
+		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+			MxPresenterListCursor cursor(&m_animPresenters);
+			MxPresenter* presenter = (MxPresenter*) p_object;
+
+			if (!cursor.Find(presenter)) {
+				presenter->SendToCompositePresenter(Lego());
+				m_animPresenters.Append(presenter);
+
+				if (p_object->IsA("LegoHideAnimPresenter"))
+					m_hideAnimPresenter = (LegoHideAnimPresenter*) presenter;
+			}
+		}
+		else if (p_object->IsA("LegoCacheSound")) {
+			LegoCacheSoundListCursor cursor(m_cacheSoundList);
+			LegoCacheSound* sound = (LegoCacheSound*) p_object;
+
+			if (!cursor.Find(sound))
+				m_cacheSoundList->Append(sound);
+		}
+		else {
+			m_set0xa8.insert((MxPresenter*) p_object);
+		}
+
+		if (!m_set0xd0.empty() && p_object->IsA("MxPresenter")) {
+			MxPresenter* presenter = (MxPresenter*) p_object;
+
+			if (presenter->IsEnabled()) {
+				presenter->Enable(FALSE);
+				m_set0xd0.erase(presenter);
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x10020f10

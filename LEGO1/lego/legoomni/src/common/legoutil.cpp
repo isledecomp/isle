@@ -10,6 +10,11 @@
 #include <process.h>
 #include <string.h>
 
+// FUNCTION: LEGO1 0x1003e050
+void FUN_1003e050(LegoAnimPresenter* p_presenter)
+{
+}
+
 // FUNCTION: LEGO1 0x1003e300
 Extra::ActionType MatchActionString(const char* p_str)
 {
