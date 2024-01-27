@@ -42,7 +42,7 @@ protected:
 	virtual MxS8 Compare(MxCore* p_element1, MxCore* p_element2) override
 	{
 		return p_element1 == p_element2 ? 0 : p_element1 < p_element2 ? -1 : 1;
-	}
+	} // vtable+0x14
 
 public:
 	LegoNotifyList(MxBool p_ownership = FALSE) : MxPtrList<MxCore>(p_ownership) {}
