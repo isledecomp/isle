@@ -55,19 +55,11 @@ public:
 // class MxPtrListCursor<MxCore>
 
 // VTABLE: LEGO1 0x100d6aa8
+// SIZE 0x10
 class LegoNotifyListCursor : public MxPtrListCursor<MxCore> {
 public:
 	LegoNotifyListCursor(LegoNotifyList* p_list) : MxPtrListCursor<MxCore>(p_list) {}
 };
-
-// SYNTHETIC: LEGO1 0x10028fd0
-// LegoNotifyListCursor::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x10029090
-// MxListCursor<MxCore *>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x10029100
-// MxPtrListCursor<MxCore>::`scalar deleting destructor'
 
 // VTABLE: LEGO1 0x100d8760
 // SIZE 0x338
@@ -177,6 +169,15 @@ private:
 
 // SYNTHETIC: LEGO1 0x10028b30
 // MxPtrList<MxCore>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10028fd0
+// LegoNotifyListCursor::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10029090
+// MxListCursor<MxCore *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10029100
+// MxPtrListCursor<MxCore>::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1005bb80
 // MxCollection<LegoEventNotificationParam>::Compare
