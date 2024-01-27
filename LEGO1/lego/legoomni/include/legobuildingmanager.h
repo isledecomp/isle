@@ -22,6 +22,7 @@ public:
 	static void configureLegoBuildingManager(MxS32);
 
 	void FUN_1002fa00();
+	void FUN_1002fb30();
 
 	// SYNTHETIC: LEGO1 0x1002f940
 	// LegoBuildingManager::`scalar deleting destructor'

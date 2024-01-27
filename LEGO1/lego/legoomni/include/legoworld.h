@@ -79,7 +79,7 @@ protected:
 	LegoCameraController* m_cameraController;   // 0x98
 	LegoEntityList* m_entityList;               // 0x9c
 	LegoCacheSoundList* m_cacheSoundList;       // 0xa0
-	undefined m_unk0xa4;                        // 0xa4
+	MxBool m_destroyed;                         // 0xa4
 	MxCoreSet m_set0xa8;                        // 0xa8
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
@@ -121,6 +121,9 @@ protected:
 
 // TEMPLATE: LEGO1 0x1001df00
 // Set<MxCore *,CoreSetCompare>::~Set<MxCore *,CoreSetCompare>
+
+// TEMPLATE: LEGO1 0x1001f590
+// list<AutoROI *,allocator<AutoROI *> >::erase
 
 // TEMPLATE: LEGO1 0x100208b0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::insert

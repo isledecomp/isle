@@ -35,6 +35,13 @@ public:
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
 
+	inline undefined2 DecrementUnknown0xd4()
+	{
+		if (m_unk0xd4 != 0)
+			--m_unk0xd4;
+		return m_unk0xd4;
+	}
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
