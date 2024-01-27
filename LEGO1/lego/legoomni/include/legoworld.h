@@ -15,7 +15,7 @@ class LegoPathBoundary;
 class LegoHideAnimPresenter;
 
 struct CoreSetCompare {
-	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return p_a > p_b; }
+	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return (MxS32) p_a < (MxS32) p_b; }
 };
 
 typedef set<MxCore*, CoreSetCompare> MxCoreSet;
