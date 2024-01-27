@@ -220,6 +220,8 @@ void LegoWorld::Add(MxCore* p_object)
 void LegoWorld::Remove(MxCore* p_object)
 {
 	if (p_object) {
+		MxCoreSet::iterator it;
+
 		if (p_object->IsA("MxControlPresenter")) {
 			MxPresenterListCursor cursor(&m_controlPresenters);
 
@@ -256,12 +258,12 @@ void LegoWorld::Remove(MxCore* p_object)
 				cursor.Detach();
 		}
 		else {
-			MxCoreSet::iterator it = m_set0xa8.find(p_object);
+			it = m_set0xa8.find(p_object);
 			if (it != m_set0xa8.end())
 				m_set0xa8.erase(it);
 		}
 
-		MxCoreSet::iterator it = m_set0xd0.find(p_object);
+		it = m_set0xd0.find(p_object);
 		if (it != m_set0xd0.end())
 			m_set0xd0.erase(it);
 	}
