@@ -32,6 +32,9 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10028d40
 	// LegoControlManager::`scalar deleting destructor'
+
+private:
+	undefined m_padding0x08[0x58]; // 0x08
 };
 
 #endif // LEGOCONTROLMANAGER_H
