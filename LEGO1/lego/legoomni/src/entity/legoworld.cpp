@@ -502,7 +502,7 @@ MxResult LegoWorld::Tickle()
 			VTable0x50();
 			return TRUE;
 		case 2:
-			if (FUN_100220e0() == 1)
+			if (PresentersPending())
 				break;
 		default:
 			m_unk0xf4--;
@@ -511,10 +511,42 @@ MxResult LegoWorld::Tickle()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100220e0
-undefined LegoWorld::FUN_100220e0()
+// FUNCTION: LEGO1 0x100220e0
+MxBool LegoWorld::PresentersPending()
 {
-	return 0;
+	MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
+	MxPresenter* presenter;
+
+	while (controlPresenterCursor.Next(presenter)) {
+		if (presenter->IsEnabled() && !presenter->HasTickleStatePassed(MxPresenter::e_starting))
+			return TRUE;
+	}
+
+	MxPresenterListCursor animPresenterCursor(&m_animPresenters);
+
+	while (animPresenterCursor.Next(presenter)) {
+		if (presenter->IsEnabled()) {
+			if (presenter->IsA("LegoLocomotionAnimPresenter")) {
+				if (!presenter->HasTickleStatePassed(MxPresenter::e_ready))
+					return TRUE;
+			}
+			else {
+				if (!presenter->HasTickleStatePassed(MxPresenter::e_starting))
+					return TRUE;
+			}
+		}
+	}
+
+	for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+		if ((*it)->IsA("MxPresenter")) {
+			presenter = (MxPresenter*) *it;
+
+			if (presenter->IsEnabled() && !presenter->HasTickleStatePassed(MxPresenter::e_starting))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10022340

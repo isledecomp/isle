@@ -59,7 +59,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 
-	undefined FUN_100220e0();
+	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
