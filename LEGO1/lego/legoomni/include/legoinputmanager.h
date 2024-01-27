@@ -38,8 +38,8 @@ class LegoEventQueue : public MxQueue<LegoEventNotificationParam> {};
 // SIZE 0x18
 class LegoNotifyList : public MxPtrList<MxCore> {
 protected:
-	// FUNCTION: LGEO1 0x10028830
-	virtual MxS8 Compare(MxCore* p_element1, MxCore* p_element2)
+	// FUNCTION: LEGO1 0x10028830
+	virtual MxS8 Compare(MxCore* p_element1, MxCore* p_element2) override
 	{
 		return p_element1 == p_element2 ? 0 : p_element1 < p_element2 ? -1 : 1;
 	}
@@ -102,7 +102,7 @@ public:
 
 private:
 	MxCriticalSection m_criticalSection;     // 0x58
-	LegoNotifyList* m_notifyList;            // 0x5c
+	LegoNotifyList* m_keyboardNotifyList;    // 0x5c
 	LegoCameraController* m_camera;          // 0x60
 	LegoWorld* m_world;                      // 0x64
 	LegoEventQueue* m_eventQueue;            // 0x68
@@ -119,7 +119,7 @@ private:
 	IDirectInputDevice* m_directInputDevice; // 0x90
 	undefined m_unk0x94;                     // 0x94
 	undefined4 m_unk0x98;                    // 0x98
-	undefined m_unk0x9c[0xF8];               // 0x9c
+	undefined m_unk0x9c[0xf8];               // 0x9c
 	undefined m_unk0x194;                    // 0x194
 	MxBool m_unk0x195;                       // 0x195
 	MxS32 m_joyid;                           // 0x198
