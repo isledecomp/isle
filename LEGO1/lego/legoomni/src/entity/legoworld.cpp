@@ -1,9 +1,13 @@
 #include "legoworld.h"
 
 #include "legoanimpresenter.h"
+#include "legobuildingmanager.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
+#include "legolocomotionanimpresenter.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
+#include "legosoundmanager.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
@@ -26,7 +30,7 @@ LegoWorld::LegoWorld() : m_list0x68(TRUE)
 	m_cameraController = NULL;
 	m_entityList = NULL;
 	m_cacheSoundList = NULL;
-	m_unk0xa4 = 0; // MxBool?
+	m_destroyed = FALSE;
 	m_hideAnimPresenter = NULL;
 	m_worldStarted = FALSE;
 
@@ -45,10 +49,13 @@ MxBool LegoWorld::VTable0x64()
 	return FALSE;
 }
 
-// STUB: LEGO1 0x1001dfa0
+// FUNCTION: LEGO1 0x1001dfa0
 LegoWorld::~LegoWorld()
 {
-	// TODO
+	Destroy(TRUE);
+
+	TickleManager()->UnregisterClient(this);
+	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x1001e0b0
@@ -84,10 +91,118 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1001e9d0
+// FUNCTION: LEGO1 0x1001e9d0
 void LegoWorld::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
+	m_destroyed = TRUE;
+
+	if (GetCurrentWorld() == this) {
+		ControlManager()->FUN_10028df0(NULL);
+		SetCurrentWorld(NULL);
+	}
+
+	m_list0x68.DeleteAll();
+
+	if (m_cameraController) {
+		delete m_cameraController;
+		m_cameraController = NULL;
+	}
+
+	MxPresenterListCursor animPresenterCursor(&m_animPresenters);
+	MxPresenter* presenter;
+
+	while (animPresenterCursor.First(presenter)) {
+		animPresenterCursor.Detach();
+
+		MxDSAction* action = presenter->GetAction();
+		if (action) {
+			if (presenter->IsA("LegoLocomotionAnimPresenter")) {
+				LegoLocomotionAnimPresenter* animPresenter = (LegoLocomotionAnimPresenter*) presenter;
+
+				animPresenter->DecrementUnknown0xd4();
+				if (animPresenter->GetUnknown0xd4() == 0) {
+					FUN_100b7220(action, MxDSAction::c_world, FALSE);
+					presenter->EndAction();
+				}
+			}
+			else {
+				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				presenter->EndAction();
+			}
+		}
+	}
+
+	while (!m_set0xa8.empty()) {
+		MxCoreSet::iterator it = m_set0xa8.begin();
+		MxCore* object = *it;
+		m_set0xa8.erase(it);
+
+		if (object->IsA("MxPresenter")) {
+			MxPresenter* presenter = (MxPresenter*) object;
+			MxDSAction* action = presenter->GetAction();
+
+			if (action) {
+				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				presenter->EndAction();
+			}
+		}
+		else
+			delete object;
+	}
+
+	MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
+
+	while (controlPresenterCursor.First(presenter)) {
+		controlPresenterCursor.Detach();
+
+		MxDSAction* action = presenter->GetAction();
+		if (action) {
+			FUN_100b7220(action, MxDSAction::c_world, FALSE);
+			presenter->EndAction();
+		}
+	}
+
+	if (m_unk0xec != -1 && m_set0xd0.empty()) {
+		PlantManager()->FUN_100263a0(m_unk0xec);
+		BuildingManager()->FUN_1002fb30();
+	}
+
+	if (m_entityList) {
+		LegoEntityListCursor cursor(m_entityList);
+		LegoEntity* entity;
+
+		while (cursor.First(entity)) {
+			cursor.Detach();
+
+			if (!(entity->GetFlags() & LegoEntity::c_bit2))
+				delete entity;
+		}
+
+		delete m_entityList;
+		m_entityList = NULL;
+	}
+
+	if (m_cacheSoundList) {
+		LegoCacheSoundListCursor cursor(m_cacheSoundList);
+		LegoCacheSound* sound;
+
+		while (cursor.First(sound)) {
+			cursor.Detach();
+			SoundManager()->GetUnknown0x40()->FUN_1003dc40(&sound);
+		}
+
+		delete m_cacheSoundList;
+		m_cacheSoundList = NULL;
+	}
+
+	while (!m_list0xe0.empty()) {
+		AutoROI* roi = m_list0xe0.front();
+		m_list0xe0.pop_front();
+		delete roi;
+	}
+
+	if (!p_fromDestructor)
+		LegoEntity::Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x1001f5e0

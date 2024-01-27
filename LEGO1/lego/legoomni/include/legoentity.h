@@ -13,7 +13,8 @@
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		c_bit1 = 0x01
+		c_bit1 = 0x01,
+		c_bit2 = 0x02
 	};
 
 	// Inlined at 0x100853f7
@@ -58,6 +59,7 @@ public:
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
 	inline LegoROI* GetROI() { return m_roi; }
+	inline MxU8 GetFlags() { return m_flags; }
 
 protected:
 	void Init();
