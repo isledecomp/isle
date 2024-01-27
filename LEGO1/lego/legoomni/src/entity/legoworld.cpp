@@ -117,7 +117,12 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		MxDSAction* action = presenter->GetAction();
 		if (action) {
 			if (presenter->IsA("LegoLocomotionAnimPresenter")) {
-				if (((LegoLocomotionAnimPresenter*) presenter)->DecrementUnknown0xd4() == 0) {
+				LegoLocomotionAnimPresenter* animPresenter = (LegoLocomotionAnimPresenter*) presenter;
+
+				if (animPresenter->GetUnknown0xd4() != 0)
+					animPresenter->DecrementUnknown0xd4();
+
+				if (animPresenter->GetUnknown0xd4() == 0) {
 					FUN_100b7220(action, MxDSAction::c_world, FALSE);
 					presenter->EndAction();
 				}
@@ -193,10 +198,6 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 	}
 
 	while (!m_list0xe0.empty()) {
-		/*list<AutoROI*>::iterator it = m_list0xe0.begin();
-		AutoROI* roi = *it;
-		m_list0xe0.erase(it);*/
-
 		AutoROI* roi = m_list0xe0.front();
 		m_list0xe0.pop_front();
 		delete roi;
