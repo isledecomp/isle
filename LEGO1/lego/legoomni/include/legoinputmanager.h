@@ -151,38 +151,23 @@ private:
 	MxBool m_unk0x336;                       // 0x336
 };
 
-// TEMPLATE: LEGO1 0x1005bb80
-// MxCollection<LegoEventNotificationParam>::Compare
-
-// TEMPLATE: LEGO1 0x100288b0
-// MxCollection<MxCore *>::Destroy
-
 // TEMPLATE: LEGO1 0x10028850
 // MxCollection<MxCore *>::Compare
-
-// TEMPLATE: LEGO1 0x1005bbe0
-// MxCollection<LegoEventNotificationParam>::~MxCollection<LegoEventNotificationParam>
 
 // TEMPLATE: LEGO1 0x10028860
 // MxCollection<MxCore *>::~MxCollection<MxCore *>
 
-// TEMPLATE: LEGO1 0x1005bc30
-// MxCollection<LegoEventNotificationParam>::Destroy
-
-// TEMPLATE: LEGO1 0x1005bc80
-// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
+// TEMPLATE: LEGO1 0x100288b0
+// MxCollection<MxCore *>::Destroy
 
 // TEMPLATE: LEGO1 0x100288c0
 // MxList<MxCore *>::~MxList<MxCore *>
 
-// SYNTHETIC: LEGO1 0x1005bd50
-// MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
+// SYNTHETIC: LEGO1 0x10028950
+// LegoNotifyList::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x1005bdc0
-// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1005beb0
-// LegoEventQueue::`scalar deleting destructor'
+// TEMPLATE: LEGO1 0x100289c0
+// MxPtrList<MxCore>::~MxPtrList<MxCore>
 
 // SYNTHETIC: LEGO1 0x10028a10
 // MxCollection<MxCore *>::`scalar deleting destructor'
@@ -193,14 +178,29 @@ private:
 // SYNTHETIC: LEGO1 0x10028b30
 // MxPtrList<MxCore>::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x10028950
-// LegoNotifyList::`scalar deleting destructor'
+// TEMPLATE: LEGO1 0x1005bb80
+// MxCollection<LegoEventNotificationParam>::Compare
+
+// TEMPLATE: LEGO1 0x1005bbe0
+// MxCollection<LegoEventNotificationParam>::~MxCollection<LegoEventNotificationParam>
+
+// TEMPLATE: LEGO1 0x1005bc30
+// MxCollection<LegoEventNotificationParam>::Destroy
+
+// TEMPLATE: LEGO1 0x1005bc80
+// MxList<LegoEventNotificationParam>::~MxList<LegoEventNotificationParam>
+
+// SYNTHETIC: LEGO1 0x1005bd50
+// MxCollection<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1005bdc0
+// MxList<LegoEventNotificationParam>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1005beb0
+// LegoEventQueue::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1005bf20
 // MxQueue<LegoEventNotificationParam>::~MxQueue<LegoEventNotificationParam>
-
-// TEMPLATE: LEGO1 0x100289c0
-// MxPtrList<MxCore>::~MxPtrList<MxCore>
 
 // SYNTHETIC: LEGO1 0x1005bf70
 // MxQueue<LegoEventNotificationParam>::`scalar deleting destructor'
