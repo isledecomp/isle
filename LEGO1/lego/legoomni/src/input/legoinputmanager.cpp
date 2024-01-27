@@ -4,8 +4,9 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
 
-DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
-DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18);
+DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
+DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
+DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 
 // GLOBAL: LEGO1 0x100f31b0
 MxS32 g_unk0x100f31b0 = -1;
@@ -16,7 +17,7 @@ MxS32 g_unk0x100f31b4 = 0;
 // FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
-	m_unk0x5c = NULL;
+	m_keyboardNotifyList = NULL;
 	m_world = NULL;
 	m_camera = NULL;
 	m_eventQueue = NULL;
@@ -40,7 +41,7 @@ LegoInputManager::LegoInputManager()
 	m_timeout = 1000;
 }
 
-// STUB: LEGO1 0x1005b8b0
+// FUNCTION: LEGO1 0x1005b8b0
 MxResult LegoInputManager::Tickle()
 {
 	ProcessEvents();
@@ -56,10 +57,25 @@ LegoInputManager::~LegoInputManager()
 // FUNCTION: LEGO1 0x1005b960
 MxResult LegoInputManager::Create(HWND p_hwnd)
 {
-	// TODO
-	if (m_eventQueue == NULL)
-		m_eventQueue = new LegoEventQueue();
-	return SUCCESS;
+	MxResult result = SUCCESS;
+
+	m_controlManager = new LegoControlManager;
+
+	if (!m_keyboardNotifyList)
+		m_keyboardNotifyList = new LegoNotifyList;
+
+	if (!m_eventQueue)
+		m_eventQueue = new LegoEventQueue;
+
+	CreateAndAcquireKeyboard(p_hwnd);
+	GetJoystickId();
+
+	if (!m_keyboardNotifyList || !m_eventQueue || !m_directInputDevice) {
+		Destroy();
+		result = FAILURE;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1005bfe0
@@ -67,9 +83,9 @@ void LegoInputManager::Destroy()
 {
 	ReleaseDX();
 
-	if (m_unk0x5c)
-		delete m_unk0x5c;
-	m_unk0x5c = NULL;
+	if (m_keyboardNotifyList)
+		delete m_keyboardNotifyList;
+	m_keyboardNotifyList = NULL;
 
 	if (m_eventQueue)
 		delete m_eventQueue;

@@ -1,5 +1,7 @@
 #include "legocontrolmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoControlManager, 0x60);
+
 // STUB: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()
 {
