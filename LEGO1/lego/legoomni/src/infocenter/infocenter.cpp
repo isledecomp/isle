@@ -298,7 +298,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1006f4e0
-void Infocenter::VTable0x50()
+void Infocenter::ReadyWorld()
 {
 	m_infoManDialogueTimer = 0;
 	m_bookAnimationTimer = 0;

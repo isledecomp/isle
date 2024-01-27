@@ -54,7 +54,7 @@ MxLong Act3::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10073270
-void Act3::VTable0x50()
+void Act3::ReadyWorld()
 {
 	// TODO
 }

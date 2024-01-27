@@ -40,7 +40,7 @@ public:
 	}
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void VTable0x50() override;                       // vtable+50
+	virtual void ReadyWorld() override;                       // vtable+50
 	virtual void Add(MxCore* p_object) override;              // vtable+58
 	// FUNCTION: LEGO1 0x10030900
 	virtual MxBool VTable0x5c() override { return TRUE; } // vtable+5c

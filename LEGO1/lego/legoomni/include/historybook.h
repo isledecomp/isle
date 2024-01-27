@@ -26,7 +26,7 @@ public:
 	}
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void VTable0x50() override;                       // vtable+0x50
+	virtual void ReadyWorld() override;                       // vtable+0x50
 	virtual MxBool VTable0x64() override;                     // vtable+0x64
 
 	// SYNTHETIC: LEGO1 0x100824b0

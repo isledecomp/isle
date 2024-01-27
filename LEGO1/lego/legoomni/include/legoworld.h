@@ -24,6 +24,14 @@ typedef set<MxCore*, CoreSetCompare> MxCoreSet;
 // SIZE 0xf8
 class LegoWorld : public LegoEntity {
 public:
+	enum StartupTicks {
+		e_start = 0,
+		e_one,
+		e_two,
+		e_three,
+		e_four
+	};
+
 	LegoWorld();
 	virtual ~LegoWorld() override; // vtable+0x0
 
@@ -45,7 +53,7 @@ public:
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void VTable0x50();                                // vtable+0x50
+	virtual void ReadyWorld();                                // vtable+0x50
 	virtual LegoCameraController* VTable0x54();               // vtable+0x54
 	virtual void Add(MxCore* p_object);                       // vtable+0x58
 	virtual MxBool VTable0x5c();                              // vtable+0x5c
@@ -59,7 +67,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 
-	undefined FUN_100220e0();
+	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
@@ -82,7 +90,7 @@ protected:
 	list<AutoROI*> m_list0xe0;                  // 0xe0
 	undefined4 m_unk0xec;                       // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
-	MxS16 m_unk0xf4;                            // 0xf4
+	MxS16 m_startupTicks;                       // 0xf4
 	MxBool m_worldStarted;                      // 0xf6
 	undefined m_unk0xf7;                        // 0xf7
 };

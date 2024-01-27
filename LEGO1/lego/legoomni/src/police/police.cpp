@@ -69,9 +69,9 @@ MxLong Police::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1005e530
-void Police::VTable0x50()
+void Police::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 	PlayMusic(JukeBox::e_policeStation);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }

@@ -52,7 +52,7 @@ MxLong Hospital::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10074a60
-void Hospital::VTable0x50()
+void Hospital::ReadyWorld()
 {
 	// TODO
 }

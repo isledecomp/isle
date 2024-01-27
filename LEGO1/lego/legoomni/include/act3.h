@@ -29,7 +29,7 @@ public:
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void VTable0x50() override;                       // vtable+0x50
+	virtual void ReadyWorld() override;                       // vtable+0x50
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual void VTable0x60() override;                       // vtable+0x60
 	virtual MxBool VTable0x64() override;                     // vtable+0x64

@@ -48,7 +48,7 @@ MxLong GasStation::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10004b30
-void GasStation::VTable0x50()
+void GasStation::ReadyWorld()
 {
 	// TODO
 }

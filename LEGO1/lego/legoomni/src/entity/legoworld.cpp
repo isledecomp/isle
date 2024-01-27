@@ -26,7 +26,7 @@ DECOMP_SIZE_ASSERT(LegoCacheSoundListCursor, 0x10)
 // FUNCTION: LEGO1 0x1001ca40
 LegoWorld::LegoWorld() : m_list0x68(TRUE)
 {
-	m_unk0xf4 = 4;
+	m_startupTicks = e_four;
 	m_cameraController = NULL;
 	m_entityList = NULL;
 	m_cacheSoundList = NULL;
@@ -495,30 +495,63 @@ void LegoWorld::VTable0x68(MxBool p_add)
 MxResult LegoWorld::Tickle()
 {
 	if (!m_worldStarted) {
-		switch (m_unk0xf4) {
-		case 0:
+		switch (m_startupTicks) {
+		case e_start:
 			m_worldStarted = TRUE;
 			SetAppCursor(0);
-			VTable0x50();
+			ReadyWorld();
 			return TRUE;
-		case 2:
-			if (FUN_100220e0() == 1)
+		case e_two:
+			if (PresentersPending())
 				break;
 		default:
-			m_unk0xf4--;
+			m_startupTicks--;
 		}
 	}
+
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100220e0
-undefined LegoWorld::FUN_100220e0()
+// FUNCTION: LEGO1 0x100220e0
+MxBool LegoWorld::PresentersPending()
 {
-	return 0;
+	MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
+	MxPresenter* presenter;
+
+	while (controlPresenterCursor.Next(presenter)) {
+		if (presenter->IsEnabled() && !presenter->HasTickleStatePassed(MxPresenter::e_starting))
+			return TRUE;
+	}
+
+	MxPresenterListCursor animPresenterCursor(&m_animPresenters);
+
+	while (animPresenterCursor.Next(presenter)) {
+		if (presenter->IsEnabled()) {
+			if (presenter->IsA("LegoLocomotionAnimPresenter")) {
+				if (!presenter->HasTickleStatePassed(MxPresenter::e_ready))
+					return TRUE;
+			}
+			else {
+				if (!presenter->HasTickleStatePassed(MxPresenter::e_starting))
+					return TRUE;
+			}
+		}
+	}
+
+	for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+		if ((*it)->IsA("MxPresenter")) {
+			presenter = (MxPresenter*) *it;
+
+			if (presenter->IsEnabled() && !presenter->HasTickleStatePassed(MxPresenter::e_starting))
+				return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10022340
-void LegoWorld::VTable0x50()
+void LegoWorld::ReadyWorld()
 {
 	TickleManager()->UnregisterClient(this);
 }
