@@ -4,8 +4,9 @@
 #include "legoomni.h"
 #include "mxautolocker.h"
 
-DECOMP_SIZE_ASSERT(LegoInputManager, 0x338);
-DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18);
+DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
+DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
+DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 
 // GLOBAL: LEGO1 0x100f31b0
 MxS32 g_unk0x100f31b0 = -1;
