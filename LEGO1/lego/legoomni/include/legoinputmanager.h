@@ -48,6 +48,27 @@ public:
 	LegoNotifyList(MxBool p_ownership = FALSE) : MxPtrList<MxCore>(p_ownership) {}
 };
 
+// VTABLE: LEGO1 0x100d6ac0
+// class MxListCursor<MxCore *>
+
+// VTABLE: LEGO1 0x100d6ad8
+// class MxPtrListCursor<MxCore>
+
+// VTABLE: LEGO1 0x100d6aa8
+class LegoNotifyListCursor : public MxPtrListCursor<MxCore> {
+public:
+	LegoNotifyListCursor(LegoNotifyList* p_list) : MxPtrListCursor<MxCore>(p_list) {}
+};
+
+// SYNTHETIC: LEGO1 0x10028fd0
+// LegoNotifyListCursor::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10029090
+// MxListCursor<MxCore *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10029100
+// MxPtrListCursor<MxCore>::`scalar deleting destructor'
+
 // VTABLE: LEGO1 0x100d8760
 // SIZE 0x338
 class LegoInputManager : public MxPresenter {
@@ -186,5 +207,14 @@ private:
 
 // TEMPLATE: LEGO1 0x1005d010
 // MxListEntry<LegoEventNotificationParam>::GetValue
+
+// TEMPLATE: LEGO1 0x10029170
+// MxListCursor<MxCore *>::~MxListCursor<MxCore *>
+
+// TEMPLATE: LEGO1 0x10029040
+// MxPtrListCursor<MxCore>::~MxPtrListCursor<MxCore>
+
+// TEMPLATE: LEGO1 0x100291c0
+// LegoNotifyListCursor::~LegoNotifyListCursor
 
 #endif // LEGOINPUTMANAGER_H

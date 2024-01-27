@@ -211,16 +211,24 @@ MxResult LegoInputManager::GetJoystickState(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1005c470
-void LegoInputManager::Register(MxCore*)
+// FUNCTION: LEGO1 0x1005c470
+void LegoInputManager::Register(MxCore* p_notify)
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	LegoNotifyListCursor cursor(m_keyboardNotifyList);
+	if (!cursor.Find(p_notify))
+		m_keyboardNotifyList->Append(p_notify);
 }
 
-// STUB: LEGO1 0x1005c5c0
-void LegoInputManager::UnRegister(MxCore*)
+// FUNCTION: LEGO1 0x1005c5c0
+void LegoInputManager::UnRegister(MxCore* p_notify)
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	LegoNotifyListCursor cursor(m_keyboardNotifyList);
+	if (cursor.Find(p_notify))
+		cursor.Detach();
 }
 
 // FUNCTION: LEGO1 0x1005c700
