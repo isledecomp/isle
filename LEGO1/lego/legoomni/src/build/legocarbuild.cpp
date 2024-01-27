@@ -43,7 +43,7 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x100242c0
-void LegoCarBuild::VTable0x50()
+void LegoCarBuild::ReadyWorld()
 {
 	// TODO
 }

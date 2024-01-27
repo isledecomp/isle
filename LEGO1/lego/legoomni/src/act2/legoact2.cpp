@@ -29,7 +29,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10050a80
-void LegoAct2::VTable0x50()
+void LegoAct2::ReadyWorld()
 {
 	// TODO
 }

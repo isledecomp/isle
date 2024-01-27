@@ -153,9 +153,9 @@ MxLong Isle::StopAction(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10030fc0
-void Isle::VTable0x50()
+void Isle::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 
 	if (m_act1state->GetUnknown21()) {
 		GameState()->HandleAction(2);

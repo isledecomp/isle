@@ -12,7 +12,7 @@ class LegoAct2 : public LegoWorld {
 	virtual MxLong Notify(MxParam& p_param) override;         // vtable+0x04
 	virtual MxResult Tickle() override;                       // vtable+0x08
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void VTable0x50() override;                       // vtable+0x50
+	virtual void ReadyWorld() override;                       // vtable+0x50
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual void VTable0x60() override;                       // vtable+0x60
 	virtual MxBool VTable0x64() override;                     // vtable+0x64

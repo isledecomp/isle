@@ -29,7 +29,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10077cc0
-void RegistrationBook::VTable0x50()
+void RegistrationBook::ReadyWorld()
 {
 	// TODO
 }

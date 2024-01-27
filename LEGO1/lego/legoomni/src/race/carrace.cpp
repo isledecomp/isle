@@ -17,7 +17,7 @@ MxResult CarRace::Create(MxDSAction& p_dsAction)
 }
 
 // STUB: LEGO1 0x10016dd0
-void CarRace::VTable0x50()
+void CarRace::ReadyWorld()
 {
 	// TODO
 }
