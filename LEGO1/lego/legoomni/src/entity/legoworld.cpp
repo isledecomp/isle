@@ -522,25 +522,3 @@ void LegoWorld::VTable0x50()
 {
 	TickleManager()->UnregisterClient(this);
 }
-
-// STUB: LEGO1 0x100727e0
-MxBool LegoWorld::FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
-{
-	return FALSE;
-}
-
-// STUB: LEGO1 0x10072980
-MxBool LegoWorld::FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
-{
-	return FALSE;
-}
-
-// STUB: LEGO1 0x10073400
-void LegoWorld::FUN_10073400()
-{
-}
-
-// STUB: LEGO1 0x10073430
-void LegoWorld::FUN_10073430()
-{
-}

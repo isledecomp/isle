@@ -197,9 +197,9 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 				va4.EqualsCross(v68, dir);
 				v7c.EqualsCross(va4, v90);
 				if (ret)
-					if (m_world->FUN_100727e0(m_unk0x138, loc, dir, v7c))
+					if (((Act3*) m_world)->FUN_100727e0(m_unk0x138, loc, dir, v7c))
 						break;
-					else if (m_world->FUN_10072980(m_unk0x138, loc, dir, v7c))
+					else if (((Act3*) m_world)->FUN_10072980(m_unk0x138, loc, dir, v7c))
 						break;
 			}
 			ret = 1;
@@ -329,9 +329,9 @@ void Helicopter::VTable0x70(float p_float)
 		}
 		else {
 			if (state == 4)
-				m_world->FUN_10073400();
+				((Act3*) m_world)->FUN_10073400();
 			else
-				m_world->FUN_10073430();
+				((Act3*) m_world)->FUN_10073430();
 			m_unk0xdc = 4;
 		}
 	}

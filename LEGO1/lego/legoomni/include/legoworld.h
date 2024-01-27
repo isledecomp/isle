@@ -62,10 +62,6 @@ public:
 	undefined FUN_100220e0();
 	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
-	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
-	MxBool FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
-	void FUN_10073400();
-	void FUN_10073430();
 	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxCore* Find(const char* p_class, const char* p_name);
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);

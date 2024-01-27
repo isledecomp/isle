@@ -41,6 +41,11 @@ public:
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
 
+	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	MxBool FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	void FUN_10073400();
+	void FUN_10073430();
+
 protected:
 	undefined m_unk0xf8[0x4114]; // 0xf8
 	MxEntity* m_unk0x420c;       // 0x420c
