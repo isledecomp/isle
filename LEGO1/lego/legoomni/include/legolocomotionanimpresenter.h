@@ -35,7 +35,11 @@ public:
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
 
-	inline void DecrementUnknown0xd4() { --m_unk0xd4; }
+	inline void DecrementUnknown0xd4()
+	{
+		if (m_unk0xd4)
+			--m_unk0xd4;
+	}
 
 	inline undefined2 GetUnknown0xd4() { return m_unk0xd4; }
 
