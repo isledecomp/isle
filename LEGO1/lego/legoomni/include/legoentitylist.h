@@ -95,4 +95,7 @@ public:
 // TEMPLATE: LEGO1 0x10022430
 // MxList<LegoEntity *>::InsertEntry
 
+// TEMPLATE: LEGO1 0x10022630
+// MxList<LegoEntity *>::DeleteEntry
+
 #endif // LEGOENTITYLIST_H

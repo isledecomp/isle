@@ -74,7 +74,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001f350
 // LegoCacheSoundListCursor::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f3c0
+// TEMPLATE: LEGO1 0x1001f3c0
 // MxPtrListCursor<LegoCacheSound>::~MxPtrListCursor<LegoCacheSound>
 
 // SYNTHETIC: LEGO1 0x1001f410
@@ -83,7 +83,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001f480
 // MxPtrListCursor<LegoCacheSound>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f4f0
+// TEMPLATE: LEGO1 0x1001f4f0
 // MxListCursor<LegoCacheSound *>::~MxListCursor<LegoCacheSound *>
 
 // FUNCTION: LEGO1 0x1001f540
@@ -94,5 +94,11 @@ public:
 
 // TEMPLATE: LEGO1 0x100224e0
 // MxList<LegoCacheSound *>::InsertEntry
+
+// TEMPLATE: LEGO1 0x10022590
+// MxListCursor<LegoCacheSound *>::Find
+
+// TEMPLATE: LEGO1 0x10022680
+// MxList<LegoCacheSound *>::DeleteEntry
 
 #endif // LEGOCACHESOUNDLIST_H

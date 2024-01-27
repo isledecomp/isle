@@ -15,7 +15,7 @@ class LegoPathBoundary;
 class LegoHideAnimPresenter;
 
 struct CoreSetCompare {
-	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return p_a > p_b; }
+	MxS32 operator()(MxCore* const& p_a, MxCore* const& p_b) const { return (MxS32) p_a < (MxS32) p_b; }
 };
 
 typedef set<MxCore*, CoreSetCompare> MxCoreSet;
@@ -122,27 +122,6 @@ protected:
 // TEMPLATE: LEGO1 0x1001df00
 // Set<MxCore *,CoreSetCompare>::~Set<MxCore *,CoreSetCompare>
 
-// SYNTHETIC: LEGO1 0x1001eed0
-// MxPresenterListCursor::`scalar deleting destructor'
-
-// TEMPLATE: LEGO1 0x1001ef40
-// MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
-
-// SYNTHETIC: LEGO1 0x1001ef90
-// MxListCursor<MxPresenter *>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x1001f000
-// MxPtrListCursor<MxPresenter>::`scalar deleting destructor'
-
-// TEMPLATE: LEGO1 0x1001f070
-// MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
-
-// FUNCTION: LEGO1 0x1001f0c0
-// MxPresenterListCursor::~MxPresenterListCursor
-
-// TEMPLATE: LEGO1 0x10020760
-// MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
-
 // TEMPLATE: LEGO1 0x100208b0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::insert
 
@@ -162,6 +141,9 @@ protected:
 
 // TEMPLATE: LEGO1 0x10020eb0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x10021340
+// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::find
 
 // TEMPLATE: LEGO1 0x10022360
 // _Construct

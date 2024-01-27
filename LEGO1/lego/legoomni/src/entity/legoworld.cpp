@@ -7,6 +7,7 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
+#include "mxcontrolpresenter.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxomni.h"
@@ -215,10 +216,57 @@ void LegoWorld::Add(MxCore* p_object)
 	}
 }
 
-// STUB: LEGO1 0x10020f10
+// FUNCTION: LEGO1 0x10020f10
 void LegoWorld::Remove(MxCore* p_object)
 {
-	// TODO
+	if (p_object) {
+		MxCoreSet::iterator it;
+
+		if (p_object->IsA("MxControlPresenter")) {
+			MxPresenterListCursor cursor(&m_controlPresenters);
+
+			if (cursor.Find((MxControlPresenter*) p_object)) {
+				cursor.Detach();
+				((MxControlPresenter*) p_object)->GetAction()->SetOrigin(Lego());
+				((MxControlPresenter*) p_object)->VTable0x68(TRUE);
+			}
+		}
+		else if (p_object->IsA("LegoLocomotionAnimPresenter") || p_object->IsA("LegoHideAnimPresenter") || p_object->IsA("LegoLoopingAnimPresenter")) {
+			MxPresenterListCursor cursor(&m_animPresenters);
+
+			if (cursor.Find((MxPresenter*) p_object))
+				cursor.Detach();
+
+			if (p_object->IsA("LegoHideAnimPresenter"))
+				m_hideAnimPresenter = NULL;
+		}
+		else if (p_object->IsA("MxEntity")) {
+			if (p_object->IsA("LegoPathActor"))
+				FUN_1001fc80((IslePathActor*) p_object);
+
+			if (m_entityList) {
+				LegoEntityListCursor cursor(m_entityList);
+
+				if (cursor.Find((LegoEntity*) p_object))
+					cursor.Detach();
+			}
+		}
+		else if (p_object->IsA("LegoCacheSound")) {
+			LegoCacheSoundListCursor cursor(m_cacheSoundList);
+
+			if (cursor.Find((LegoCacheSound*) p_object))
+				cursor.Detach();
+		}
+		else {
+			it = m_set0xa8.find(p_object);
+			if (it != m_set0xa8.end())
+				m_set0xa8.erase(it);
+		}
+
+		it = m_set0xd0.find(p_object);
+		if (it != m_set0xd0.end())
+			m_set0xd0.erase(it);
+	}
 }
 
 // FUNCTION: LEGO1 0x100213a0
