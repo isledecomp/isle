@@ -6,6 +6,7 @@
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
 DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
+DECOMP_SIZE_ASSERT(LegoNotifyListCursor, 0x10)
 DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 
 // GLOBAL: LEGO1 0x100f31b0
@@ -211,16 +212,24 @@ MxResult LegoInputManager::GetJoystickState(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1005c470
-void LegoInputManager::Register(MxCore*)
+// FUNCTION: LEGO1 0x1005c470
+void LegoInputManager::Register(MxCore* p_notify)
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	LegoNotifyListCursor cursor(m_keyboardNotifyList);
+	if (!cursor.Find(p_notify))
+		m_keyboardNotifyList->Append(p_notify);
 }
 
-// STUB: LEGO1 0x1005c5c0
-void LegoInputManager::UnRegister(MxCore*)
+// FUNCTION: LEGO1 0x1005c5c0
+void LegoInputManager::UnRegister(MxCore* p_notify)
 {
-	// TODO
+	MxAutoLocker lock(&m_criticalSection);
+
+	LegoNotifyListCursor cursor(m_keyboardNotifyList);
+	if (cursor.Find(p_notify))
+		cursor.Detach();
 }
 
 // FUNCTION: LEGO1 0x1005c700
