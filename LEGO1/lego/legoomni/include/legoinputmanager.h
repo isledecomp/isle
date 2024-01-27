@@ -173,11 +173,20 @@ private:
 // SYNTHETIC: LEGO1 0x10028fd0
 // LegoNotifyListCursor::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x10029040
+// MxPtrListCursor<MxCore>::~MxPtrListCursor<MxCore>
+
 // SYNTHETIC: LEGO1 0x10029090
 // MxListCursor<MxCore *>::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x10029100
 // MxPtrListCursor<MxCore>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x10029170
+// MxListCursor<MxCore *>::~MxListCursor<MxCore *>
+
+// TEMPLATE: LEGO1 0x100291c0
+// LegoNotifyListCursor::~LegoNotifyListCursor
 
 // TEMPLATE: LEGO1 0x1005bb80
 // MxCollection<LegoEventNotificationParam>::Compare
@@ -208,14 +217,5 @@ private:
 
 // TEMPLATE: LEGO1 0x1005d010
 // MxListEntry<LegoEventNotificationParam>::GetValue
-
-// TEMPLATE: LEGO1 0x10029170
-// MxListCursor<MxCore *>::~MxListCursor<MxCore *>
-
-// TEMPLATE: LEGO1 0x10029040
-// MxPtrListCursor<MxCore>::~MxPtrListCursor<MxCore>
-
-// TEMPLATE: LEGO1 0x100291c0
-// LegoNotifyListCursor::~LegoNotifyListCursor
 
 #endif // LEGOINPUTMANAGER_H
