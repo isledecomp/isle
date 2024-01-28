@@ -1,10 +1,10 @@
 #ifndef SCORE_H
 #define SCORE_H
 
+#include "legocontrolmanager.h"
 #include "legoeventnotificationparam.h"
 #include "legoworld.h"
 #include "mxactionnotificationparam.h"
-#include "legocontrolmanager.h"
 #include "scorestate.h"
 
 // VTABLE: LEGO1 0x100d4018
