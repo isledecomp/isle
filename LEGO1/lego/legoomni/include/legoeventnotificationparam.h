@@ -11,7 +11,14 @@
 // SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	// FUNCTION: LEGO1 0x10028690
+	virtual MxNotificationParam* Clone() override
+	{
+		LegoEventNotificationParam* clone =
+			new LegoEventNotificationParam(m_type, m_sender, m_modifier, m_x, m_y, m_key);
+		clone->m_unk0x1c = m_unk0x1c;
+		return clone;
+	}; // vtable+0x4
 
 	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(
@@ -26,6 +33,7 @@ public:
 	{
 	}
 
+	inline MxU8 GetModifier() { return m_modifier; }
 	inline MxU8 GetKey() const { return m_key; }
 	inline MxS32 GetX() const { return m_x; }
 	inline MxS32 GetY() const { return m_y; }
