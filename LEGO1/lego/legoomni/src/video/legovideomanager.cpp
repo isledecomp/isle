@@ -336,11 +336,12 @@ MxPresenter* LegoVideoManager::GetPresenterAt(MxS32 p_x, MxS32 p_y)
 	MxPresenterListCursor cursor(m_presenters);
 	MxPresenter* presenter;
 
-	while (cursor.Next(presenter)) {
+	while (cursor.Prev(presenter)) {
 		if (presenter->IsHit(p_x, p_y)) {
 			return presenter;
 		}
 	}
+
 	return NULL;
 }
 
