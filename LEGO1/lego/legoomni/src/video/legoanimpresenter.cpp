@@ -139,17 +139,17 @@ void LegoAnimPresenter::StreamingTickle()
 		m_subscriber->DestroyChunk(chunk);
 	}
 
-	if (m_unk0x95 == 0) {
-		if (m_unk0x64->m_unk0x8 + m_action->GetStartTime() < m_action->GetElapsedTime()) {
-			m_unk0x95 = 1;
-		}
-	}
-	else {
+	if (m_unk0x95) {
 		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 				m_compositePresenter->VTable0x60(this);
 			}
+		}
+	}
+	else {
+		if (m_action->GetElapsedTime() > m_unk0x64->GetUnknown0x8() + m_action->GetStartTime()) {
+			m_unk0x95 = 1;
 		}
 	}
 }

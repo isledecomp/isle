@@ -89,7 +89,7 @@ public:
 
 	inline MxLong GetUnknown0x8() { return m_unk0x8; }
 
-	// private:
+private:
 	MxLong m_unk0x8;      // 0x08
 	undefined4 m_unk0xc;  // 0x0c
 	undefined4 m_unk0x10; // 0x10
