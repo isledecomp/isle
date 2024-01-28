@@ -7,14 +7,24 @@ from ast import literal_eval
 # flexibility in the formatting seems OK
 templateCommentRegex = re.compile(r"\s*//\s+(.*)")
 
-
 # To remove any comment (//) or block comment (/*) and its leading spaces
 # from the end of a code line
 trailingCommentRegex = re.compile(r"(\s*(?://|/\*).*)$")
 
+# Get char contents, ignore escape characters
+singleQuoteRegex = re.compile(r"('(?:[^\'\\]|\\.)')")
+
+# Match contents of block comment on one line
+blockCommentRegex = re.compile(r"(/\*.*?\*/)")
+
+# Match contents of single comment on one line
+regularCommentRegex = re.compile(r"(//.*)")
 
 # Get string contents, ignore escape characters that might interfere
 doubleQuoteRegex = re.compile(r"(\"(?:[^\"\\]|\\.)*\")")
+
+# Detect a line that would cause us to enter a new scope
+scopeDetectRegex = re.compile(r"(?:class|struct|namespace) (?P<name>\w+).*(?:{)?")
 
 
 def get_synthetic_name(line: str) -> Optional[str]:
@@ -26,6 +36,20 @@ def get_synthetic_name(line: str) -> Optional[str]:
         return template_match.group(1)
 
     return None
+
+
+def sanitize_code_line(line: str) -> str:
+    """Helper for scope manager. Removes sections from a code line
+    that would cause us to incorrectly detect curly brackets.
+    This is a very naive implementation and fails entirely on multi-line
+    strings or comments."""
+
+    line = singleQuoteRegex.sub("''", line)
+    line = doubleQuoteRegex.sub('""', line)
+    line = blockCommentRegex.sub("", line)
+    line = regularCommentRegex.sub("", line)
+
+    return line.strip()
 
 
 def remove_trailing_comment(line: str) -> str:
@@ -75,8 +99,8 @@ def get_class_name(line: str) -> Optional[str]:
     return None
 
 
-global_regex = re.compile(r"(?P<name>g_\w+)")
-less_strict_global_regex = re.compile(r"(?P<name>\w+)(?:\)\(|\[.*|\s*=.*|;)")
+global_regex = re.compile(r"(?P<name>(?:\w+::)*g_\w+)")
+less_strict_global_regex = re.compile(r"(?P<name>(?:\w+::)*\w+)(?:\)\(|\[.*|\s*=.*|;)")
 
 
 def get_variable_name(line: str) -> Optional[str]:
