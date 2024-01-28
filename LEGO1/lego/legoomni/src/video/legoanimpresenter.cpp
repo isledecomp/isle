@@ -73,7 +73,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
 								m_unk0x64 = new LegoAnimClass();
 								if (m_unk0x64) {
-									if (m_unk0x64->CreateData(&stream, val2) == SUCCESS) {
+									if (m_unk0x64->VTable0x10(&stream, val2) == SUCCESS) {
 										result = SUCCESS;
 									}
 								}
@@ -215,19 +215,21 @@ LegoAnimClass::~LegoAnimClass()
 }
 
 // STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::CreateData(LegoMemory* p_stream, MxS32)
+MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
 {
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a0e30
-void LegoAnimClass::Read()
+LegoResult LegoAnimClass::Write(LegoStorage* p_storage)
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a1040
-void LegoAnimClass::Write()
+LegoTreeNodeData* LegoAnimClass::CreateData()
 {
 	// TODO
+	return NULL;
 }

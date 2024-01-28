@@ -76,9 +76,6 @@ protected:
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
 
-// SYNTHETIC: LEGO1 0x10099de0
-// LegoAnimClassBase::`scalar deleting destructor'
-
 // VTABLE: LEGO1 0x100db8d8
 // SIZE 0x18
 class LegoAnimClass : public LegoTree {
@@ -86,9 +83,9 @@ public:
 	LegoAnimClass();
 	virtual ~LegoAnimClass() override;
 
-	virtual void Read() override;                             // vtable+0x08
-	virtual void Write() override;                            // vtable+0x0c
-	virtual MxResult CreateData(LegoMemory* p_stream, MxS32); // vtable+0x10
+	virtual LegoResult Write(LegoStorage* p_storage) override; // vtable+0x08
+	virtual LegoTreeNodeData* CreateData() override;           // vtable+0x0c
+	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32);  // vtable+0x10
 
 	inline MxLong GetUnknown0x8() { return m_unk0x8; }
 
