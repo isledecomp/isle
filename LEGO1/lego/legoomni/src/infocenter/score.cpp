@@ -155,6 +155,7 @@ void Score::ReadyWorld()
 MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 {
 	MxS16 l = p_param.GetUnknown0x28();
+
 	if (l == 1 || p_param.GetClickedObjectId() == 4) {
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
