@@ -1,9 +1,9 @@
 #ifndef ISLEPATHACTOR_H
 #define ISLEPATHACTOR_H
 
+#include "legocontrolmanager.h"
 #include "legopathactor.h"
 #include "legoworld.h"
-#include "legocontrolmanager.h"
 #include "mxtype18notificationparam.h"
 #include "mxtype19notificationparam.h"
 #include "mxtypes.h"
