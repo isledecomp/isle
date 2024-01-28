@@ -41,7 +41,7 @@ public:
 	virtual void VTable0x70(float p_float) override;                       // vtable+0x70
 	virtual void VTable0x74(Matrix4& p_transform) override;                // vtable+0x74
 	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
-	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
+	virtual MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
 	virtual MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
 	virtual void VTable0xe4() override;                                    // vtable+0xe4
 

@@ -31,7 +31,7 @@ MxU32 Bike::VTable0xcc()
 }
 
 // STUB: LEGO1 0x10076aa0
-MxU32 Bike::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 Bike::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

@@ -39,6 +39,10 @@ public:
 	inline MxS32 GetY() const { return m_y; }
 
 	inline void SetROI(LegoROI* p_roi) { m_roi = p_roi; }
+	inline void SetModifier(MxU8 p_modifier) { m_modifier = p_modifier; }
+	inline void SetKey(MxU8 p_key) { m_key = p_key; }
+	inline void SetX(MxS32 p_x) { m_x = p_x; }
+	inline void SetY(MxS32 p_y) { m_y = p_y; }
 
 protected:
 	MxU8 m_modifier; // 0x0c

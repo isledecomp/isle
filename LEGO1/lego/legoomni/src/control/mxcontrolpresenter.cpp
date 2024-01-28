@@ -1,6 +1,7 @@
 #include "mxcontrolpresenter.h"
 
 #include "define.h"
+#include "legocontrolmanager.h"
 #include "mxticklemanager.h"
 #include "mxutil.h"
 
@@ -99,21 +100,45 @@ void MxControlPresenter::EndAction()
 }
 
 // STUB: LEGO1 0x10044270
-MxBool MxControlPresenter::FUN_10044270(undefined4, undefined4, undefined4*)
+MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
 {
 	// TODO
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10044480
-MxBool MxControlPresenter::FUN_10044480(undefined4, undefined4*)
+// FUNCTION: LEGO1 0x10044480
+MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter)
 {
-	// TODO
-	return TRUE;
+	if (IsEnabled()) {
+		switch (p_event->GetType()) {
+		case c_notificationButtonUp:
+			if (m_unk0x4c == 0 || m_unk0x4c == 2 || m_unk0x4c == 3) {
+				p_event->SetClickedObjectId(m_action->GetObjectId());
+				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
+				VTable0x6c(0);
+				p_event->SetType(c_notificationType17);
+				p_event->SetUnknown0x28(m_unk0x4e);
+				return TRUE;
+			}
+			break;
+		case c_notificationButtonDown:
+			if (FUN_10044270(p_event->GetX(), p_event->GetY(), p_presenter)) {
+				p_event->SetClickedObjectId(m_action->GetObjectId());
+				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
+				VTable0x6c(m_unk0x56);
+				p_event->SetType(c_notificationType17);
+				p_event->SetUnknown0x28(m_unk0x4e);
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	return FALSE;
 }
 
 // STUB: LEGO1 0x10044540
-void MxControlPresenter::VTable0x6c(undefined4)
+void MxControlPresenter::VTable0x6c(undefined2)
 {
 	// TODO
 }

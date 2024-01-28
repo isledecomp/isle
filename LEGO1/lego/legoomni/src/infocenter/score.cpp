@@ -92,7 +92,7 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = 1;
 			break;
 		case c_notificationType17:
-			ret = FUN_100016d0((MxType17NotificationParam&) p_param);
+			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
@@ -152,12 +152,12 @@ void Score::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x100016d0
-MxLong Score::FUN_100016d0(MxType17NotificationParam& p_param)
+MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 {
-	MxS16 l = p_param.GetUnknown28();
+	MxS16 l = p_param.GetUnknown0x28();
 
-	if (l == 1 || p_param.GetUnknown20() == 4) {
-		switch (p_param.GetUnknown20()) {
+	if (l == 1 || p_param.GetClickedObjectId() == 4) {
+		switch (p_param.GetClickedObjectId()) {
 		case 1:
 			m_unk0xf8 = 2;
 			DeleteScript();

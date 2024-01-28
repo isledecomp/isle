@@ -64,7 +64,7 @@ void TowTrack::VTable0xe4()
 }
 
 // STUB: LEGO1 0x1004d9e0
-MxU32 TowTrack::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 TowTrack::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

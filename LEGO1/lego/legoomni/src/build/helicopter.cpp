@@ -123,7 +123,7 @@ MxU32 Helicopter::VTable0xcc()
 }
 
 // FUNCTION: LEGO1 0x100035e0
-MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;
@@ -138,8 +138,8 @@ MxU32 Helicopter::VTable0xd4(MxType17NotificationParam& p_param)
 		script = *g_act3Script;
 		break;
 	}
-	if (p_param.GetUnknown28() == 1) {
-		switch (p_param.GetUnknown20()) {
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
 		case 0x17:
 			if (*g_act3Script == script) {
 				((Act3*) GetCurrentWorld())->SetUnkown4270(2);
