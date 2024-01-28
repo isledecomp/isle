@@ -86,7 +86,16 @@ public:
 // FUNCTION: LEGO1 0x1001f2b0
 // MxListCursor<LegoEntity *>::~MxListCursor<LegoEntity *>
 
-// FUNCTION: LEGO1 0x1001edc6
+// FUNCTION: LEGO1 0x1001f300
 // LegoEntityListCursor::~LegoEntityListCursor
+
+// TEMPLATE: LEGO1 0x100207d0
+// MxListCursor<LegoEntity *>::MxListCursor<LegoEntity *>
+
+// TEMPLATE: LEGO1 0x10022430
+// MxList<LegoEntity *>::InsertEntry
+
+// TEMPLATE: LEGO1 0x10022630
+// MxList<LegoEntity *>::DeleteEntry
 
 #endif // LEGOENTITYLIST_H

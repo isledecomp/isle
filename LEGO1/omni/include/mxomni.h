@@ -28,14 +28,14 @@ class MxStreamController;
 // SIZE 0x68
 class MxOmni : public MxCore {
 public:
-	__declspec(dllexport) static void DestroyInstance();
-	__declspec(dllexport) static const char* GetCD();
-	__declspec(dllexport) static const char* GetHD();
-	__declspec(dllexport) static MxOmni* GetInstance();
-	__declspec(dllexport) static MxBool IsSound3D();
-	__declspec(dllexport) static void SetCD(const char* p_cd);
-	__declspec(dllexport) static void SetHD(const char* p_hd);
-	__declspec(dllexport) static void SetSound3D(MxBool p_use3dSound);
+	static void DestroyInstance();
+	static const char* GetCD();
+	static const char* GetHD();
+	static MxOmni* GetInstance();
+	static MxBool IsSound3D();
+	static void SetCD(const char* p_cd);
+	static void SetHD(const char* p_hd);
+	static void SetSound3D(MxBool p_use3dSound);
 
 	MxOmni();
 	virtual ~MxOmni() override;
@@ -48,7 +48,7 @@ public:
 	virtual void DeleteObject(MxDSAction& p_dsAction);                                        // vtable+24
 	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);                                   // vtable+28
 	virtual MxResult CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action); // vtable+2c
-	virtual MxEntity* FindWorld(const char*, MxS32, MxPresenter*);                            // vtable+30
+	virtual MxEntity* AddToWorld(const char*, MxS32, MxPresenter*);                           // vtable+30
 	virtual void NotifyCurrentEntity(MxNotificationParam* p_param);                           // vtable+34
 	virtual void StartTimer();                                                                // vtable+38
 	virtual void StopTimer();                                                                 // vtable+3c
@@ -96,15 +96,15 @@ protected:
 	MxBool m_timerRunning;                        // 0x64
 };
 
-__declspec(dllexport) MxTickleManager* TickleManager();
-__declspec(dllexport) MxTimer* Timer();
-__declspec(dllexport) MxStreamer* Streamer();
-__declspec(dllexport) MxSoundManager* MSoundManager();
-__declspec(dllexport) MxVariableTable* VariableTable();
-__declspec(dllexport) MxMusicManager* MusicManager();
-__declspec(dllexport) MxEventManager* EventManager();
-__declspec(dllexport) MxResult Start(MxDSAction*);
-__declspec(dllexport) MxNotificationManager* NotificationManager();
+MxTickleManager* TickleManager();
+MxTimer* Timer();
+MxStreamer* Streamer();
+MxSoundManager* MSoundManager();
+MxVariableTable* VariableTable();
+MxMusicManager* MusicManager();
+MxEventManager* EventManager();
+MxResult Start(MxDSAction*);
+MxNotificationManager* NotificationManager();
 
 MxVideoManager* MVideoManager();
 MxAtomIdCounterSet* AtomIdCounterSet();

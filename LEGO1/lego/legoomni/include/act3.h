@@ -29,7 +29,7 @@ public:
 
 	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void VTable0x50() override;                       // vtable+0x50
+	virtual void ReadyWorld() override;                       // vtable+0x50
 	virtual MxBool VTable0x5c() override;                     // vtable+0x5c
 	virtual void VTable0x60() override;                       // vtable+0x60
 	virtual MxBool VTable0x64() override;                     // vtable+0x64
@@ -40,6 +40,11 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'
+
+	MxBool FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	MxBool FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up);
+	void FUN_10073400();
+	void FUN_10073430();
 
 protected:
 	undefined m_unk0xf8[0x4114]; // 0xf8

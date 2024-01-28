@@ -65,9 +65,9 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100181b0
-void ElevatorBottom::VTable0x50()
+void ElevatorBottom::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 	PlayMusic(JukeBox::e_informationCenter);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }

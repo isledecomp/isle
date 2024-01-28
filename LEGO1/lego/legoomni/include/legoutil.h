@@ -9,7 +9,9 @@
 
 class MxAtomId;
 class LegoEntity;
+class LegoAnimPresenter;
 
+void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender);
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);

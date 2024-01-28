@@ -129,9 +129,9 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001580
-void Score::VTable0x50()
+void Score::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 
 	MxDSAction action;
 	action.SetObjectId(0x1f4);

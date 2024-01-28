@@ -41,7 +41,9 @@ public:
 	virtual void PutFrame() override;                                                              // vtable+0x6c
 	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                           // vtable+0x88
 
-	// 6 more virtual functions here
+	inline LegoAnimClass* GetUnknown0x64() { return m_unk0x64; }
+
+	const char* GetActionObjectName();
 
 protected:
 	void Init();
@@ -88,6 +90,9 @@ public:
 	virtual void Write() override;                            // vtable+0x0c
 	virtual MxResult CreateData(LegoMemory* p_stream, MxS32); // vtable+0x10
 
+	inline MxLong GetUnknown0x8() { return m_unk0x8; }
+
+	// private:
 	MxLong m_unk0x8;      // 0x08
 	undefined4 m_unk0xc;  // 0x0c
 	undefined4 m_unk0x10; // 0x10

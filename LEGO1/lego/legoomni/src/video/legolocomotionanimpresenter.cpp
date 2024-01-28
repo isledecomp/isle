@@ -82,7 +82,7 @@ void LegoLocomotionAnimPresenter::ReadyTickle()
 	LegoAnimPresenter::ReadyTickle();
 
 	if (m_currentWorld != NULL && m_currentTickleState == e_starting) {
-		m_currentWorld->VTable0x58(this);
+		m_currentWorld->Add(this);
 		if (m_compositePresenter != NULL) {
 			SendToCompositePresenter(Lego());
 		}

@@ -78,8 +78,8 @@ public:
 	MxStreamer();
 	virtual ~MxStreamer() override; // vtable+0x0
 
-	__declspec(dllexport) MxStreamController* Open(const char* p_name, MxU16 p_openMode);
-	__declspec(dllexport) MxLong Close(const char* p_name);
+	MxStreamController* Open(const char* p_name, MxU16 p_openMode);
+	MxLong Close(const char* p_name);
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 

@@ -48,6 +48,8 @@ public:
 	inline MxCore* GetSender() const { return m_sender; }
 	inline NotificationId GetType() const { return m_type; }
 
+	inline void SetType(NotificationId p_type) { m_type = p_type; }
+
 protected:
 	NotificationId m_type; // 0x04
 	MxCore* m_sender;      // 0x08

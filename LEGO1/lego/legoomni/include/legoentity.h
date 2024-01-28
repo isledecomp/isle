@@ -13,18 +13,15 @@
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		c_bit1 = 0x01
+		c_bit1 = 0x01,
+		c_bit2 = 0x02
 	};
 
 	// Inlined at 0x100853f7
 	inline LegoEntity() { Init(); }
 
-#ifdef ISLE_APP
-	__declspec(dllexport) virtual ~LegoEntity() override;
-#else
 	// FUNCTION: LEGO1 0x1000c290
-	__declspec(dllexport) virtual ~LegoEntity() override { Destroy(TRUE); }
-#endif
+	virtual ~LegoEntity() override { Destroy(TRUE); }
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
@@ -62,6 +59,7 @@ public:
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
 	inline LegoROI* GetROI() { return m_roi; }
+	inline MxU8 GetFlags() { return m_flags; }
 
 protected:
 	void Init();

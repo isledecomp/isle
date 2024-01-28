@@ -1,5 +1,10 @@
 #include "legocontrolmanager.h"
 
+#include "legoeventnotificationparam.h"
+#include "mxpresenter.h"
+
+DECOMP_SIZE_ASSERT(LegoControlManager, 0x60);
+
 // STUB: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()
 {
@@ -28,6 +33,12 @@ void LegoControlManager::Register(MxCore* p_listener)
 void LegoControlManager::Unregister(MxCore* p_listener)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10029210
+MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
+{
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100293c0

@@ -521,3 +521,111 @@ def test_string_ignore_g_prefix(parser):
     )
     assert len(parser.strings) == 1
     assert len(parser.alerts) == 0
+
+
+def test_class_variable(parser):
+    """We should accurately name static variables that are class members."""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "protected:",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_test;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Test::g_test"
+
+
+def test_namespace_variable(parser):
+    """We should identify a namespace surrounding any global variables"""
+
+    parser.read_lines(
+        [
+            "namespace Test {",
+            "// GLOBAL: TEST 0x1234",
+            "int g_test = 1234;",
+            "}",
+            "// GLOBAL: TEST 0x5555",
+            "int g_second = 2;",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_test"
+    assert parser.variables[1].name == "g_second"
+
+
+def test_namespace_vtable(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "// VTABLE: TEST 0x1234",
+            "class Renderer {",
+            "};",
+            "}",
+            "// VTABLE: TEST 0x5555",
+            "class Hello { };",
+        ]
+    )
+
+    assert len(parser.vtables) == 2
+    assert parser.vtables[0].name == "Tgl::Renderer"
+    assert parser.vtables[1].name == "Hello"
+
+
+def test_global_prefix_namespace(parser):
+    """Should correctly identify namespaces before checking for the g_ prefix"""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "  // GLOBAL: TEST 0x5555",
+            "  static int count = 0;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_count"
+    assert parser.variables[1].name == "Test::count"
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_MISSING_PREFIX
+
+
+def test_nested_namespace(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "class Renderer {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "};",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Tgl::Renderer::g_count"
+
+
+def test_match_qualified_variable(parser):
+    """If a variable belongs to a scope and we use a fully qualified reference
+    below a GLOBAL marker, make sure we capture the full name."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "int MxTest::g_count = 0;",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "MxTest::g_count"
+    assert len(parser.alerts) == 0

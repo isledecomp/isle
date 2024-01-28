@@ -10,7 +10,7 @@ public:
 	LegoWorldPresenter();
 	virtual ~LegoWorldPresenter() override; // vtable+0x0
 
-	__declspec(dllexport) static void configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality);
+	static void configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality);
 
 	// FUNCTION: LEGO1 0x10066630
 	inline virtual const char* ClassName() const override // vtable+0x0c

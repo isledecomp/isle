@@ -3,6 +3,7 @@
 
 #include "mxnotificationparam.h"
 #include "mxtypes.h"
+#include "roi/legoroi.h"
 
 #include <stdlib.h>
 
@@ -10,7 +11,14 @@
 // SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	// FUNCTION: LEGO1 0x10028690
+	virtual MxNotificationParam* Clone() override
+	{
+		LegoEventNotificationParam* clone =
+			new LegoEventNotificationParam(m_type, m_sender, m_modifier, m_x, m_y, m_key);
+		clone->m_roi = m_roi;
+		return clone;
+	}; // vtable+0x4
 
 	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(
@@ -21,20 +29,23 @@ public:
 		MxS32 p_y,
 		MxU8 p_key
 	)
-		: MxNotificationParam(p_type, p_sender), m_modifier(p_modifier), m_x(p_x), m_y(p_y), m_key(p_key), m_unk0x1c(0)
+		: MxNotificationParam(p_type, p_sender), m_modifier(p_modifier), m_x(p_x), m_y(p_y), m_key(p_key), m_roi(NULL)
 	{
 	}
 
+	inline MxU8 GetModifier() { return m_modifier; }
 	inline MxU8 GetKey() const { return m_key; }
 	inline MxS32 GetX() const { return m_x; }
 	inline MxS32 GetY() const { return m_y; }
+
+	inline void SetROI(LegoROI* p_roi) { m_roi = p_roi; }
 
 protected:
 	MxU8 m_modifier; // 0x0c
 	MxS32 m_x;       // 0x10
 	MxS32 m_y;       // 0x14
 	MxU8 m_key;      // 0x18
-	MxU32 m_unk0x1c; // 0x1c
+	LegoROI* m_roi;  // 0x1c
 };
 
 // SYNTHETIC: LEGO1 0x10028770

@@ -28,7 +28,7 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x100826f0
-void HistoryBook::VTable0x50()
+void HistoryBook::ReadyWorld()
 {
 	// TODO
 }

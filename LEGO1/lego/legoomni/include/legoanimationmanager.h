@@ -32,7 +32,7 @@ public:
 	void FUN_1005f720(undefined4);
 	void FUN_10064670(MxBool);
 
-	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
+	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
 	// SYNTHETIC: LEGO1 0x1005ed10
 	// LegoAnimationManager::`scalar deleting destructor'

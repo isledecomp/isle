@@ -53,9 +53,9 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10037a70
-void InfocenterDoor::VTable0x50()
+void InfocenterDoor::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 	PlayMusic(JukeBox::e_informationCenter);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }

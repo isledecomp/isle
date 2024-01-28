@@ -10,6 +10,12 @@
 #include <process.h>
 #include <string.h>
 
+// STUB: LEGO1 0x1003e050
+void FUN_1003e050(LegoAnimPresenter* p_presenter)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1003e300
 Extra::ActionType MatchActionString(const char* p_str)
 {
@@ -99,7 +105,8 @@ void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetE
 // FUNCTION: LEGO1 0x1003e670
 MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_entityId)
 {
-	LegoWorld* world = (LegoWorld*) FindEntityByAtomIdOrEntityId(MxAtomId(p_filename, e_lowerCase2), p_entityId);
+	LegoWorld* world = FindWorld(MxAtomId(p_filename, e_lowerCase2), p_entityId);
+
 	if (world) {
 		world->VTable0x68(p_enable);
 		return TRUE;

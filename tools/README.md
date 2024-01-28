@@ -109,9 +109,9 @@ Classes should be annotated using the `SIZE` marker to indicate their size. If y
 // SIZE 0x1c
 class MxCriticalSection {
 public:
-	__declspec(dllexport) MxCriticalSection();
-	__declspec(dllexport) ~MxCriticalSection();
-	__declspec(dllexport) static void SetDoMutex();
+	MxCriticalSection();
+	~MxCriticalSection();
+	static void SetDoMutex();
 ```
 
 ## Member variables (**WIP**)

@@ -12,7 +12,7 @@
 class MXIOINFO {
 public:
 	MXIOINFO();
-	__declspec(dllexport) ~MXIOINFO();
+	~MXIOINFO();
 
 	MxU16 Open(const char*, MxULong);
 	MxU16 Close(MxLong);

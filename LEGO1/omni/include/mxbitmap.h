@@ -34,14 +34,14 @@ struct MxBITMAPINFO {
 // VTABLE: LEGO1 0x100dc7b0
 class MxBitmap : public MxCore {
 public:
-	__declspec(dllexport) MxBitmap();
-	__declspec(dllexport) virtual ~MxBitmap(); // vtable+00
+	MxBitmap();
+	virtual ~MxBitmap(); // vtable+00
 
 	virtual MxResult ImportBitmap(MxBitmap* p_bitmap);                                     // vtable+14
 	virtual MxResult ImportBitmapInfo(MxBITMAPINFO* p_info);                               // vtable+18
 	virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool); // vtable+1c
 	virtual MxResult LoadFile(HANDLE p_handle);                                            // vtable+20
-	__declspec(dllexport) virtual MxLong Read(const char* p_filename);                     // vtable+24
+	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
 	virtual int VTable0x28(int) { return -1; }; // vtable+28
@@ -63,10 +63,10 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);                                                        // vtable+30
-	__declspec(dllexport) virtual MxPalette* CreatePalette(); // vtable+34
-	virtual void ImportPalette(MxPalette* p_palette);         // vtable+38
-	virtual MxResult SetBitDepth(MxBool);                     // vtable+3c
+	);                                                // vtable+30
+	virtual MxPalette* CreatePalette();               // vtable+34
+	virtual void ImportPalette(MxPalette* p_palette); // vtable+38
+	virtual MxResult SetBitDepth(MxBool);             // vtable+3c
 	virtual MxResult StretchBits(
 		HDC p_hdc,
 		MxS32 p_xSrc,

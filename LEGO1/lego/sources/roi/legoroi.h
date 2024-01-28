@@ -1,10 +1,9 @@
 #ifndef LEGOROI_H
 #define LEGOROI_H
 
-#include "mxtypes.h"
 #include "viewmanager/viewroi.h"
 
-typedef MxBool (*ROIHandler)(char*, char*, MxU32);
+typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);
 
 class LegoEntity;
 
@@ -18,39 +17,43 @@ class AutoROI : public ViewROI {};
 // SIZE 0x10c
 class LegoROI : public ViewROI {
 public:
-	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, MxTime p_time);
+	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time);
 
 	virtual float IntrinsicImportance() const override; // vtable+0x4
 	// Note: Actually part of parent class (doesn't exist yet)
 	virtual void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
-	__declspec(dllexport) void SetDisplayBB(MxS32 p_displayBB);
-	__declspec(dllexport) static void configureLegoROI(MxS32 p_roi);
+	void SetDisplayBB(int p_displayBB);
+	static void configureLegoROI(int p_roi);
 
 	static void SetSomeHandlerFunction(ROIHandler p_func);
-	static MxBool CallTheHandlerFunction(
+	static unsigned char CallTheHandlerFunction(
 		char* p_param,
-		MxFloat& p_red,
-		MxFloat& p_green,
-		MxFloat& p_blue,
-		MxFloat& p_other
+		float& p_red,
+		float& p_green,
+		float& p_blue,
+		float& p_other
 	);
-	static MxBool ColorAliasLookup(char* p_param, MxFloat& p_red, MxFloat& p_green, MxFloat& p_blue, MxFloat& p_other);
+	static unsigned char ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
 
 	void WrappedSetLocalTransform(Matrix4& p_transform);
 	void FUN_100a46b0(Matrix4& p_transform);
 	void FUN_100a58f0(Matrix4& p_transform);
 
+	inline const char* GetUnknown0xe4() { return m_unk0xe4; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
+
 	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
 
 	// SYNTHETIC: LEGO1 0x100a9ad0
 	// LegoROI::`scalar deleting destructor'
 
 private:
-	undefined m_pad[0x24];  // 0xe0
-	LegoEntity* m_unk0x104; // 0x104
-	MxTime m_time;          // 0x108
+	undefined4 m_unk0xe0;      // 0xe0
+	const char* m_unk0xe4;     // 0xe4
+	undefined m_unk0xe8[0x1c]; // 0xe8
+	LegoEntity* m_unk0x104;    // 0x104
+	int m_time;                // 0x108
 };
 
 #endif // LEGOROI_H

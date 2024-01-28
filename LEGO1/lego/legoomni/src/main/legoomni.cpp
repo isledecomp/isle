@@ -179,7 +179,7 @@ IslePathActor* GetCurrentVehicle()
 // FUNCTION: LEGO1 0x100157a0
 LegoWorld* GetCurrentWorld()
 {
-	return LegoOmni::GetInstance()->GetCurrentOmniWorld();
+	return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 
 // FUNCTION: LEGO1 0x100157b0
@@ -219,9 +219,9 @@ void FUN_10015860(const char*, MxU8)
 }
 
 // FUNCTION: LEGO1 0x100158c0
-LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid)
+LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
-	return LegoOmni::GetInstance()->FindByEntityIdOrAtomId(p_atom, p_entityid);
+	return LegoOmni::GetInstance()->FindWorld(p_atom, p_entityid);
 }
 
 // FUNCTION: LEGO1 0x100158e0
@@ -612,11 +612,11 @@ void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
 }
 
 // FUNCTION: LEGO1 0x1005b0c0
-LegoEntity* LegoOmni::FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid)
+LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {
 	if (m_worldList) {
-		LegoWorld* world;
 		LegoWorldListCursor cursor(m_worldList);
+		LegoWorld* world;
 
 		while (cursor.Next(world)) {
 			if ((p_entityid == -1 || world->GetEntityId() == p_entityid) &&
@@ -635,21 +635,22 @@ void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x1005b2f0
-MxEntity* LegoOmni::FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
+MxEntity* LegoOmni::AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter)
 {
-	LegoWorld* foundEntity = NULL;
+	LegoWorld* world = NULL;
+
 	if (strcmpi(p_id, g_current)) {
-		foundEntity = (LegoWorld*) FindByEntityIdOrAtomId(MxAtomId(p_id, e_lowerCase2), p_entityId);
+		world = FindWorld(MxAtomId(p_id, e_lowerCase2), p_entityId);
 	}
 	else {
-		foundEntity = this->m_currentWorld;
+		world = this->m_currentWorld;
 	}
 
-	if (foundEntity != NULL) {
-		foundEntity->VTable0x58(p_presenter);
+	if (world != NULL) {
+		world->Add(p_presenter);
 	}
 
-	return foundEntity;
+	return world;
 }
 
 // FUNCTION: LEGO1 0x1005b3a0
@@ -663,7 +664,7 @@ void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
 MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
 	if (MxOmni::DoesEntityExist(p_dsAction)) {
-		if (FindByEntityIdOrAtomId(p_dsAction.GetAtomId(), p_dsAction.GetObjectId()) == NULL) {
+		if (FindWorld(p_dsAction.GetAtomId(), p_dsAction.GetObjectId()) == NULL) {
 			return TRUE;
 		}
 	}
@@ -673,11 +674,11 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x1005b400
 MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
-	if (GetCurrentWorld() == NULL) {
+	if (::GetCurrentWorld() == NULL) {
 		return -1;
 	}
 
-	return GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
+	return ::GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
 // FUNCTION: LEGO1 0x1005b4f0

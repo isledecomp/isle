@@ -35,7 +35,7 @@ MxLong JukeBox::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1005d9f0
-void JukeBox::VTable0x50()
+void JukeBox::ReadyWorld()
 {
 	// TODO
 }

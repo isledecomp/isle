@@ -298,15 +298,15 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1006f4e0
-void Infocenter::VTable0x50()
+void Infocenter::ReadyWorld()
 {
 	m_infoManDialogueTimer = 0;
 	m_bookAnimationTimer = 0;
 	m_unk0x1d4 = 0;
 	m_unk0x1d6 = 0;
 
-	MxStillPresenter* bg = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Background_Bitmap");
-	MxStillPresenter* bgRed = (MxStillPresenter*) FindPresenter("MxStillPresenter", "BackgroundRed_Bitmap");
+	MxStillPresenter* bg = (MxStillPresenter*) Find("MxStillPresenter", "Background_Bitmap");
+	MxStillPresenter* bgRed = (MxStillPresenter*) Find("MxStillPresenter", "BackgroundRed_Bitmap");
 
 	switch (GameState()->GetUnknown10()) {
 	case 0:
@@ -365,73 +365,73 @@ void Infocenter::InitializeBitmaps()
 {
 	m_radio.Initialize(TRUE);
 
-	FUN_10021790(m_atom, c_leftArrowCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_rightArrowCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_infoCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_boatCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_raceCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_pizzaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_gasCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_medCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_copCtl)->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_leftArrowCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_rightArrowCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_infoCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_boatCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_raceCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_pizzaCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_gasCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_medCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_copCtl))->Enable(TRUE);
 
-	FUN_10021790(m_atom, c_mamaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_papaCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_pepperCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_nickCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_lauraCtl)->Enable(TRUE);
-	FUN_10021790(m_atom, c_radioCtl)->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_mamaCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_papaCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_pepperCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_nickCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_lauraCtl))->Enable(TRUE);
+	((MxPresenter*) Find(m_atom, c_radioCtl))->Enable(TRUE);
 
-	m_mapAreas[0].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Info_A_Bitmap");
+	m_mapAreas[0].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
 	m_mapAreas[0].m_unk0x08 = 391;
 	m_mapAreas[0].m_unk0x0c = 182;
 	m_mapAreas[0].m_unk0x10 = 427;
 	m_mapAreas[0].m_unk0x14 = 230;
 	m_mapAreas[0].m_unk0x04 = 3;
 
-	m_mapAreas[1].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Boat_A_Bitmap");
+	m_mapAreas[1].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Boat_A_Bitmap");
 	m_mapAreas[1].m_unk0x08 = 304;
 	m_mapAreas[1].m_unk0x0c = 225;
 	m_mapAreas[1].m_unk0x10 = 350;
 	m_mapAreas[1].m_unk0x14 = 268;
 	m_mapAreas[1].m_unk0x04 = 10;
 
-	m_mapAreas[2].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Race_A_Bitmap");
+	m_mapAreas[2].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Race_A_Bitmap");
 	m_mapAreas[2].m_unk0x08 = 301;
 	m_mapAreas[2].m_unk0x0c = 133;
 	m_mapAreas[2].m_unk0x10 = 347;
 	m_mapAreas[2].m_unk0x14 = 181;
 	m_mapAreas[2].m_unk0x04 = 11;
 
-	m_mapAreas[3].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Pizza_A_Bitmap");
+	m_mapAreas[3].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Pizza_A_Bitmap");
 	m_mapAreas[3].m_unk0x08 = 289;
 	m_mapAreas[3].m_unk0x0c = 182;
 	m_mapAreas[3].m_unk0x10 = 335;
 	m_mapAreas[3].m_unk0x14 = 225;
 	m_mapAreas[3].m_unk0x04 = 12;
 
-	m_mapAreas[4].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Gas_A_Bitmap");
+	m_mapAreas[4].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Gas_A_Bitmap");
 	m_mapAreas[4].m_unk0x10 = 391;
 	m_mapAreas[4].m_unk0x08 = 350;
 	m_mapAreas[4].m_unk0x0c = 161;
 	m_mapAreas[4].m_unk0x14 = 209;
 	m_mapAreas[4].m_unk0x04 = 13;
 
-	m_mapAreas[5].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Med_A_Bitmap");
+	m_mapAreas[5].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Med_A_Bitmap");
 	m_mapAreas[5].m_unk0x08 = 392;
 	m_mapAreas[5].m_unk0x0c = 130;
 	m_mapAreas[5].m_unk0x10 = 438;
 	m_mapAreas[5].m_unk0x14 = 176;
 	m_mapAreas[5].m_unk0x04 = 14;
 
-	m_mapAreas[6].m_presenter = (MxStillPresenter*) FindPresenter("MxStillPresenter", "Cop_A_Bitmap");
+	m_mapAreas[6].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Cop_A_Bitmap");
 	m_mapAreas[6].m_unk0x08 = 396;
 	m_mapAreas[6].m_unk0x0c = 229;
 	m_mapAreas[6].m_unk0x10 = 442;
 	m_mapAreas[6].m_unk0x14 = 272;
 	m_mapAreas[6].m_unk0x04 = 15;
 
-	m_frameHotBitmap = (MxStillPresenter*) FindPresenter("MxStillPresenter", "FrameHot_Bitmap");
+	m_frameHotBitmap = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");
 
 	FUN_10070dc0(TRUE);
 }
