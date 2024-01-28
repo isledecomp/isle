@@ -8,7 +8,6 @@
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
-DECOMP_SIZE_ASSERT(LegoAnimClassBase, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimClass, 0x18)
 
 // FUNCTION: LEGO1 0x10068420
@@ -140,17 +139,17 @@ void LegoAnimPresenter::StreamingTickle()
 		m_subscriber->DestroyChunk(chunk);
 	}
 
-	if (m_unk0x95 == 0) {
-		if (m_unk0x64->m_unk0x8 + m_action->GetStartTime() < m_action->GetElapsedTime()) {
-			m_unk0x95 = 1;
-		}
-	}
-	else {
+	if (m_unk0x95) {
 		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
 				m_compositePresenter->VTable0x60(this);
 			}
+		}
+	}
+	else {
+		if (m_action->GetElapsedTime() > m_unk0x64->GetUnknown0x8() + m_action->GetStartTime()) {
+			m_unk0x95 = 1;
 		}
 	}
 }
@@ -200,33 +199,6 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
-// FUNCTION: LEGO1 0x10099dd0
-LegoAnimClassBase::LegoAnimClassBase()
-{
-	m_unk0x4 = 0;
-}
-
-// STUB: LEGO1 0x10099e00
-LegoAnimClassBase::~LegoAnimClassBase()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10099e20
-void LegoAnimClassBase::VTable0x4()
-{
-}
-
-// STUB: LEGO1 0x10099e40
-void LegoAnimClassBase::VTable0x8()
-{
-}
-
-// STUB: LEGO1 0x10099f70
-void LegoAnimClassBase::VTable0xc()
-{
-}
-
 // FUNCTION: LEGO1 0x100a0b30
 LegoAnimClass::LegoAnimClass()
 {
@@ -249,13 +221,15 @@ MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
 }
 
 // STUB: LEGO1 0x100a0e30
-void LegoAnimClass::VTable0x8()
+LegoResult LegoAnimClass::Write(LegoStorage* p_storage)
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a1040
-void LegoAnimClass::VTable0xc()
+LegoTreeNodeData* LegoAnimClass::CreateData()
 {
 	// TODO
+	return NULL;
 }

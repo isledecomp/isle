@@ -106,6 +106,7 @@ add_library(misc STATIC
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp
   LEGO1/lego/sources/misc/legotexture.cpp
+  LEGO1/lego/sources/misc/legotree.cpp
 )
 register_lego1_target(misc)
 set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
