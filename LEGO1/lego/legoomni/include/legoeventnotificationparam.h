@@ -29,7 +29,7 @@ public:
 		MxS32 p_y,
 		MxU8 p_key
 	)
-		: MxNotificationParam(p_type, p_sender), m_modifier(p_modifier), m_x(p_x), m_y(p_y), m_key(p_key), m_roi(0)
+		: MxNotificationParam(p_type, p_sender), m_modifier(p_modifier), m_x(p_x), m_y(p_y), m_key(p_key), m_roi(NULL)
 	{
 	}
 

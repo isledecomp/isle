@@ -331,7 +331,7 @@ void LegoVideoManager::DrawFPS()
 }
 
 // FUNCTION: LEGO1 0x1007c080
-MxPresenter* LegoVideoManager::VTable0x38(MxS32 p_x, MxS32 p_y)
+MxPresenter* LegoVideoManager::GetPresenterAt(MxS32 p_x, MxS32 p_y)
 {
 	MxPresenterListCursor cursor(m_presenters);
 	MxPresenter* presenter;

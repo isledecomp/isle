@@ -42,7 +42,7 @@ private:
 	undefined4 m_unk0x08;          // 0x08
 	undefined4 m_unk0x0c;          // 0x0c
 	undefined m_unk0x10;           // 0x10
-	undefined m_padding0x08[0x4c]; // 0x14
+	undefined m_padding0x14[0x4c]; // 0x14
 };
 
 #endif // LEGOCONTROLMANAGER_H

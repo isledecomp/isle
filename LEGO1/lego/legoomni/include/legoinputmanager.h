@@ -109,7 +109,6 @@ public:
 
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
-
 	MxBool FUN_1005cdf0(LegoEventNotificationParam& p_param);
 
 	// SYNTHETIC: LEGO1 0x1005b8d0
