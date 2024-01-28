@@ -13,7 +13,7 @@
 class LegoControlManager;
 
 extern MxS32 g_unk0x100f31b0;
-extern const MxAtomId* g_unk0x100f31b4;
+extern const char* g_unk0x100f31b4;
 
 // VTABLE: LEGO1 0x100d87b8
 // class MxCollection<LegoEventNotificationParam>
@@ -173,6 +173,9 @@ private:
 
 // SYNTHETIC: LEGO1 0x10028b30
 // MxPtrList<MxCore>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x10028ba0
+// LegoNotifyList::~LegoNotifyList
 
 // SYNTHETIC: LEGO1 0x10028fd0
 // LegoNotifyListCursor::`scalar deleting destructor'

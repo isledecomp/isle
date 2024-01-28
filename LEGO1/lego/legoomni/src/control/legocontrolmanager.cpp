@@ -5,16 +5,16 @@
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
 
-DECOMP_SIZE_ASSERT(LegoControlManager, 0x60);
-DECOMP_SIZE_ASSERT(LegoControlManagerEvent, 0x2c);
+DECOMP_SIZE_ASSERT(LegoControlManager, 0x60)
+DECOMP_SIZE_ASSERT(LegoControlManagerEvent, 0x2c)
 
 // FUNCTION: LEGO1 0x10028520
 LegoControlManager::LegoControlManager()
 {
-	m_presenterList = 0;
+	m_presenterList = NULL;
 	m_unk0x08 = 0;
 	m_unk0x0c = 0;
-	m_unk0x10 = 0;
+	m_unk0x10 = FALSE;
 	m_unk0x14 = NULL;
 	TickleManager()->RegisterClient(this, 10);
 }
@@ -30,7 +30,7 @@ void LegoControlManager::FUN_10028df0(MxPresenterList* p_presenterList)
 {
 	m_presenterList = p_presenterList;
 	g_unk0x100f31b0 = -1;
-	g_unk0x100f31b4 = 0;
+	g_unk0x100f31b4 = NULL;
 }
 
 // FUNCTION: LEGO1 0x10028e10
@@ -51,7 +51,6 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
 {
 	if (m_presenterList != NULL && m_presenterList->GetCount() != 0) {
-
 		m_unk0x14 = p_presenter;
 
 		if (p_param.GetType() == c_notificationButtonUp || p_param.GetType() == c_notificationButtonDown) {
@@ -68,7 +67,7 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 					return TRUE;
 				}
 
-				if (g_unk0x100f31b0 != -1 && g_unk0x100f31b4 != 0) {
+				if (g_unk0x100f31b0 != -1 && g_unk0x100f31b4 != NULL) {
 					if (m_unk0x08 == 2) {
 						return FUN_10029750();
 					}
@@ -81,28 +80,38 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 			else if (p_param.GetType() == c_notificationButtonDown) {
 				if (m_unk0x0c == 1) {
 					m_unk0x10 = TRUE;
+					return TRUE;
 				}
 				else {
 					return FUN_10029630();
 				}
 			}
 		}
+
+		return FALSE;
 	}
 	else {
 		g_unk0x100f31b0 = -1;
-		g_unk0x100f31b4 = 0;
-	}
+		g_unk0x100f31b4 = NULL;
 
-	return FALSE;
+		return FALSE;
+	}
 }
 
 // FUNCTION: LEGO1 0x100292e0
 void LegoControlManager::FUN_100292e0()
 {
 	LegoNotifyListCursor cursor(&m_notifyList);
-	MxCore* object;
-	while (cursor.Next(object)) {
-		object->Notify(m_event);
+	MxCore* target;
+
+	// The usual cursor.Next() loop doesn't match here, even though
+	// the logic is the same. It does match when "deconstructed" into
+	// the following Head(), Current() and NextFragment() calls,
+	// but this seems unlikely to be the original code.
+	cursor.Head();
+	while (cursor.Current(target)) {
+		cursor.NextFragment();
+		target->Notify(m_event);
 	}
 }
 
@@ -135,12 +144,13 @@ MxBool LegoControlManager::FUN_10029630()
 {
 	MxPresenterListCursor cursor(m_presenterList);
 	MxPresenter* presenter;
+
 	while (cursor.Next(presenter)) {
 		if (((MxControlPresenter*) presenter)->FUN_10044480(&m_event, m_unk0x14)) {
 			g_unk0x100f31b0 = m_event.GetClickedObjectId();
 			g_unk0x100f31b4 = m_event.GetClickedAtom();
 			FUN_100292e0();
-			m_unk0x08 = TRUE;
+			m_unk0x08 = 1;
 			return TRUE;
 		}
 	}
@@ -153,9 +163,10 @@ MxBool LegoControlManager::FUN_10029750()
 {
 	MxPresenterListCursor cursor(m_presenterList);
 	MxPresenter* presenter;
+
 	while (cursor.Next(presenter)) {
 		if (presenter->GetAction() && presenter->GetAction()->GetObjectId() == g_unk0x100f31b0 &&
-			presenter->GetAction()->GetAtomId() == *g_unk0x100f31b4) {
+			presenter->GetAction()->GetAtomId().GetInternal() == g_unk0x100f31b4) {
 			if (((MxControlPresenter*) presenter)->FUN_10044480(&m_event, m_unk0x14)) {
 				FUN_100292e0();
 			}

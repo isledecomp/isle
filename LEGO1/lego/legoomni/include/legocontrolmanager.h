@@ -7,6 +7,7 @@
 #include "mxpresenterlist.h"
 
 // VTABLE: LEGO1 0x100d6a98
+// SIZE 0x2c
 class LegoControlManagerEvent : public LegoEventNotificationParam {
 public:
 	inline LegoControlManagerEvent() : LegoEventNotificationParam()
@@ -16,17 +17,17 @@ public:
 	}
 
 	inline MxS32 GetClickedObjectId() const { return m_clickedObjectId; }
-	inline const MxAtomId* GetClickedAtom() const { return m_clickedAtom; }
+	inline const char* GetClickedAtom() const { return m_clickedAtom; }
 	inline MxS16 GetUnknown0x28() const { return m_unk0x28; }
 
 	inline void SetClickedObjectId(MxS32 p_clickedObjectId) { m_clickedObjectId = p_clickedObjectId; }
-	inline void SetClickedAtom(const MxAtomId* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
+	inline void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
 	inline void SetUnknown0x28(MxS16 p_unk0x28) { m_unk0x28 = p_unk0x28; }
 
 private:
-	MxS32 m_clickedObjectId;       // 0x20
-	const MxAtomId* m_clickedAtom; // 0x24
-	MxS16 m_unk0x28;               // 0x28
+	MxS32 m_clickedObjectId;   // 0x20
+	const char* m_clickedAtom; // 0x24
+	MxS16 m_unk0x28;           // 0x28
 };
 
 // SYNTHETIC: LEGO1 0x10028bf0
