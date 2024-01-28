@@ -19,6 +19,7 @@
 #include "mxdsfile.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
+#include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 
@@ -605,10 +606,46 @@ void LegoOmni::AddWorld(LegoWorld* p_world)
 	m_worldList->Append(p_world);
 }
 
-// STUB: LEGO1 0x1005af10
-void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
+// FUNCTION: LEGO1 0x1005adb0
+void LegoOmni::DeleteWorld(LegoWorld* p_world)
 {
-	// TODO
+	if (m_worldList) {
+		LegoWorldListCursor cursor(m_worldList);
+
+		if (cursor.Find(p_world)) {
+			cursor.Detach();
+
+			if (m_currentWorld == p_world) {
+				m_currentWorld = NULL;
+			}
+
+			delete p_world;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x1005af10
+void LegoOmni::RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId)
+{
+	if (m_worldList) {
+		LegoWorldListCursor a(m_worldList);
+		LegoWorldListCursor b(m_worldList);
+		LegoWorld* world;
+
+		a.Head();
+		while (a.Current(world)) {
+			b = a;
+			b.Next();
+
+			if ((p_objectId == -1 || world->GetEntityId() == p_objectId) &&
+				(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
+				a.Detach();
+				delete world;
+			}
+
+			a = b;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1005b0c0
@@ -628,10 +665,33 @@ LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 	return NULL;
 }
 
-// STUB: LEGO1 0x1005b1d0
+// FUNCTION: LEGO1 0x1005b1d0
 void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
-	// TODO
+	if (p_dsAction.GetAtomId().GetInternal() != NULL) {
+		LegoWorld* world = FindWorld(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+		if (world) {
+			DeleteWorld(world);
+			return;
+		}
+
+		if (m_currentWorld != NULL) {
+			MxCore* entity = m_currentWorld->Find(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+			if (entity) {
+				m_currentWorld->Remove(entity);
+
+				if (entity->IsA("MxPresenter")) {
+					Streamer()->FUN_100b98f0(((MxPresenter*) entity)->GetAction());
+					((MxPresenter*) entity)->EndAction();
+				}
+				else {
+					delete entity;
+				}
+				return;
+			}
+		}
+	}
+	MxOmni::DeleteObject(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x1005b2f0
