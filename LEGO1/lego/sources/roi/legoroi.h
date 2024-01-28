@@ -42,6 +42,7 @@ public:
 
 	inline const char* GetUnknown0xe4() { return m_unk0xe4; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
+
 	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
 
 	// SYNTHETIC: LEGO1 0x100a9ad0

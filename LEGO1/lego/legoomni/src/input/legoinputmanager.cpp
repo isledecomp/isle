@@ -2,7 +2,9 @@
 
 #include "legocontrolmanager.h"
 #include "legoomni.h"
+#include "legovideomanager.h"
 #include "mxautolocker.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
 DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
@@ -23,7 +25,7 @@ LegoInputManager::LegoInputManager()
 	m_camera = NULL;
 	m_eventQueue = NULL;
 	m_unk0x80 = 0;
-	m_timer = 0;
+	m_autoDragTimerID = 0;
 	m_unk0x6c = 0;
 	m_unk0x70 = 0;
 	m_controlManager = NULL;
@@ -39,7 +41,7 @@ LegoInputManager::LegoInputManager()
 	m_unk0x335 = FALSE;
 	m_unk0x336 = FALSE;
 	m_unk0x74 = 0x19;
-	m_timeout = 1000;
+	m_autoDragTime = 1000;
 }
 
 // FUNCTION: LEGO1 0x1005b8b0
@@ -279,28 +281,142 @@ void LegoInputManager::ProcessEvents()
 	}
 }
 
-// STUB: LEGO1 0x1005c9c0
+// FUNCTION: LEGO1 0x1005c9c0
 MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
+{
+	MxBool processRoi;
+
+	if (p_param.GetType() == c_notificationKeyPress) {
+		if (!Lego()->IsTimerRunning() || p_param.GetKey() == 0x13) {
+			if (p_param.GetKey() == 0x10) {
+				if (m_unk0x195) {
+					m_unk0x80 = 0;
+					p_param.SetType(c_notificationDrag);
+
+					if (m_camera) {
+						m_camera->Notify(p_param);
+					}
+				}
+
+				m_unk0x195 = !m_unk0x195;
+				return TRUE;
+			}
+
+			LegoNotifyListCursor cursor(m_keyboardNotifyList);
+			MxCore* target;
+
+			while (cursor.Next(target)) {
+				if (target->Notify(p_param) != 0) {
+					return TRUE;
+				}
+			}
+		}
+	}
+	else {
+		if (!Lego()->IsTimerRunning()) {
+			processRoi = TRUE;
+
+			if (m_unk0x335 != 0) {
+				if (p_param.GetType() == c_notificationButtonDown) {
+					LegoEventNotificationParam notification(c_notificationKeyPress, NULL, 0, 0, 0, ' ');
+					LegoNotifyListCursor cursor(m_keyboardNotifyList);
+					MxCore* target;
+
+					while (cursor.Next(target)) {
+						if (target->Notify(notification) != 0) {
+							return TRUE;
+						}
+					}
+				}
+
+				return TRUE;
+			}
+
+			if (m_unk0x195 && p_param.GetType() == c_notificationButtonDown) {
+				m_unk0x195 = 0;
+				return TRUE;
+			}
+
+			if (m_world != NULL && m_world->Notify(p_param) != 0) {
+				return TRUE;
+			}
+
+			if (p_param.GetType() == c_notificationButtonDown) {
+				MxPresenter* presenter = VideoManager()->GetPresenterAt(p_param.GetX(), p_param.GetY());
+
+				if (presenter) {
+					if (presenter->GetDisplayZ() < 0) {
+						processRoi = FALSE;
+
+						if (m_controlManager->FUN_10029210(p_param, presenter)) {
+							return TRUE;
+						}
+					}
+					else {
+						LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+
+						if (roi == NULL && m_controlManager->FUN_10029210(p_param, presenter)) {
+							return TRUE;
+						}
+					}
+				}
+			}
+			else if (p_param.GetType() == c_notificationButtonUp) {
+				if (g_unk0x100f31b0 != -1 || m_controlManager->GetUnknown0x10() ||
+					m_controlManager->GetUnknown0x0c() == 1) {
+					MxBool result = m_controlManager->FUN_10029210(p_param, NULL);
+					StopAutoDragTimer();
+
+					m_unk0x80 = 0;
+					m_unk0x81 = 0;
+					return result;
+				}
+			}
+
+			if (FUN_1005cdf0(p_param)) {
+				if (processRoi && p_param.GetType() == c_notificationType11) {
+					LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+					p_param.SetROI(roi);
+
+					if (roi && roi->GetUnk0x0c() == 1) {
+						for (OrientableROI* oroi = roi->GetUnknown0xd4(); oroi; oroi = oroi->GetUnknown0xd4())
+							roi = (LegoROI*) oroi;
+
+						LegoEntity* entity = roi->GetUnknown0x104();
+						if (entity && entity->Notify(p_param) != 0) {
+							return TRUE;
+						}
+					}
+				}
+
+				if (m_camera && m_camera->Notify(p_param) != 0) {
+					return TRUE;
+				}
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1005cdf0
+MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x1005cfb0
-void LegoInputManager::SetTimer()
+void LegoInputManager::StartAutoDragTimer()
 {
-	LegoOmni* omni = LegoOmni::GetInstance();
-	UINT timer = ::SetTimer(omni->GetWindowHandle(), 1, m_timeout, NULL);
-	m_timer = timer;
+	m_autoDragTimerID = ::SetTimer(LegoOmni::GetInstance()->GetWindowHandle(), 1, m_autoDragTime, NULL);
 }
 
 // FUNCTION: LEGO1 0x1005cfd0
-void LegoInputManager::KillTimer()
+void LegoInputManager::StopAutoDragTimer()
 {
-	if (m_timer != 0) {
-		LegoOmni* omni = LegoOmni::GetInstance();
-		::KillTimer(omni->GetWindowHandle(), m_timer);
-	}
+	if (m_autoDragTimerID)
+		::KillTimer(LegoOmni::GetInstance()->GetWindowHandle(), m_autoDragTimerID);
 }
 
 // FUNCTION: LEGO1 0x1005cff0
