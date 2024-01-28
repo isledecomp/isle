@@ -4,7 +4,7 @@
 #include "legoeventnotificationparam.h"
 #include "legoworld.h"
 #include "mxactionnotificationparam.h"
-#include "mxtype17notificationparam.h"
+#include "legocontrolmanager.h"
 #include "scorestate.h"
 
 // VTABLE: LEGO1 0x100d4018
@@ -39,7 +39,7 @@ public:
 
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
-	MxLong FUN_100016d0(MxType17NotificationParam& p_param);
+	MxLong FUN_100016d0(LegoControlManagerEvent& p_param);
 	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
 
 protected:

@@ -15,7 +15,7 @@ DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 MxS32 g_unk0x100f31b0 = -1;
 
 // GLOBAL: LEGO1 0x100f31b4
-MxS32 g_unk0x100f31b4 = 0;
+const MxAtomId* g_unk0x100f31b4 = 0;
 
 // FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()

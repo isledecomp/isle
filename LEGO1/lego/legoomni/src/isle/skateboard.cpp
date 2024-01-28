@@ -38,7 +38,7 @@ MxU32 SkateBoard::VTable0xcc()
 }
 
 // STUB: LEGO1 0x10010230
-MxU32 SkateBoard::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

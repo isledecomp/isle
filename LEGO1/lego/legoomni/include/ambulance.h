@@ -29,7 +29,7 @@ public:
 	virtual void Destroy(MxBool p_fromDestructor) override;                // vtable+0x1c
 	virtual void VTable0x70(float p_float) override;                       // vtable+0x70
 	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
-	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
+	virtual MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) override;         // vtable+0xdc
 	virtual void VTable0xe4() override;                                    // vtable+0xe4
 

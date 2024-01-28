@@ -38,7 +38,7 @@ MxU32 Motocycle::VTable0xcc()
 }
 
 // STUB: LEGO1 0x10035d70
-MxU32 Motocycle::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 Motocycle::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

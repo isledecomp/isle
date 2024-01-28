@@ -38,7 +38,7 @@ MxU32 DuneBuggy::VTable0xcc()
 }
 
 // STUB: LEGO1 0x100681b0
-MxU32 DuneBuggy::VTable0xd4(MxType17NotificationParam& p_param)
+MxU32 DuneBuggy::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

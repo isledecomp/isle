@@ -170,7 +170,6 @@ add_library(omni STATIC
   LEGO1/omni/src/notify/mxactionnotificationparam.cpp
   LEGO1/omni/src/notify/mxnotificationmanager.cpp
   LEGO1/omni/src/notify/mxnotificationparam.cpp
-  LEGO1/omni/src/notify/mxtype17notificationparam.cpp
   LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp
   LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
   LEGO1/omni/src/stream/mxdsbuffer.cpp

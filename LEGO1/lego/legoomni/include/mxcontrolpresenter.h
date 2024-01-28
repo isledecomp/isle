@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "mxcompositepresenter.h"
 
+class LegoControlManagerEvent;
+
 // VTABLE: LEGO1 0x100d7b88
 // SIZE 0x5c
 class MxControlPresenter : public MxCompositePresenter {
@@ -36,9 +38,10 @@ public:
 	virtual void VTable0x68(MxBool p_unk0x50);                               // vtable+0x68
 	virtual void VTable0x6c(undefined4);                                     // vtable+0x6c
 
+	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
+
 private:
-	MxBool FUN_10044270(undefined4, undefined4, undefined4*);
-	MxBool FUN_10044480(undefined4, undefined4*);
+	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter);
 	void FUN_10044540(undefined2);
 
 	undefined2 m_unk0x4c; // 0x4c
@@ -46,6 +49,7 @@ private:
 	MxBool m_unk0x50;     // 0x50
 	undefined2 m_unk0x52; // 0x52
 	undefined2 m_unk0x54; // 0x54
+	undefined2 m_unk0x56; // 0x56
 	MxS16* m_unk0x58;     // 0x58
 };
 

@@ -3,7 +3,7 @@
 
 #include "legopathactor.h"
 #include "legoworld.h"
-#include "mxtype17notificationparam.h"
+#include "legocontrolmanager.h"
 #include "mxtype18notificationparam.h"
 #include "mxtype19notificationparam.h"
 #include "mxtypes.h"
@@ -39,7 +39,7 @@ public:
 	// FUNCTION: LEGO1 0x10002df0
 	virtual MxU32 VTable0xd0() { return 0; } // vtable+0xd0
 	// FUNCTION: LEGO1 0x10002e80
-	virtual MxU32 VTable0xd4(MxType17NotificationParam&) { return 0; } // vtable+0xd4
+	virtual MxU32 VTable0xd4(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
 	// FUNCTION: LEGO1 0x10002e90
 	virtual MxU32 VTable0xd8(MxType18NotificationParam&) { return 0; } // vtable+0xd8
 	// FUNCTION: LEGO1 0x10002e00
