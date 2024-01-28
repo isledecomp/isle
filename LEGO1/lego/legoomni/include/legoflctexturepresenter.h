@@ -17,6 +17,10 @@ public:
 		return "LegoFlcTexturePresenter";
 	}
 
+	virtual void StartingTickle() override;                  // vtable+0x1c
+	virtual void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
+	virtual void PutFrame() override;                        // vtable+0x6c
+
 	// SYNTHETIC: LEGO1 0x1005df00
 	// LegoFlcTexturePresenter::`scalar deleting destructor'
 

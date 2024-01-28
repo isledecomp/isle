@@ -1,6 +1,6 @@
 import logging
 import struct
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from dataclasses import dataclass
 from collections import namedtuple
 
@@ -364,6 +364,14 @@ class Bin:
         """Convenience function for converting section:offset pairs from cvdump
         into an absolute vaddr."""
         return self.get_section_offset_by_index(section) + offset
+
+    def get_relative_addr(self, addr: int) -> Tuple[int, int]:
+        """Convert an absolute address back into a (section, offset) pair."""
+        for i, section in enumerate(self.sections):
+            if section.contains_vaddr(addr):
+                return (i + 1, addr - section.virtual_address)
+
+        return (0, 0)
 
     def get_raw_addr(self, vaddr: int) -> int:
         """Returns the raw offset in the PE binary for the given virtual address."""

@@ -10,6 +10,9 @@ public:
 	inline MxMatrix() : Matrix4(m_elements) {}
 	inline MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
+	// FUNCTION: LEGO1 0x10002850
+	virtual void operator=(const Matrix4& p_matrix) { Equals(p_matrix); } // vtable+0x28
+
 	// No idea why there's another equals. Maybe to some other type like the
 	// DirectX Retained Mode Matrix type which is also a float* alias?
 	// FUNCTION: LEGO1 0x10002860

@@ -112,7 +112,7 @@ Result GroupImpl::RemoveAll()
 	return Error;
 }
 
-// STUB: LEGO1 0x100a34c0
+// STUB: LEGO1 0x100a3540
 Result GroupImpl::Unknown()
 {
 	return Error;

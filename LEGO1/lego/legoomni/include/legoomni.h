@@ -68,11 +68,11 @@ public:
 		c_clearScreen = 0x04
 	};
 
-	__declspec(dllexport) void CreateBackgroundAudio();
-	__declspec(dllexport) void RemoveWorld(const MxAtomId&, MxLong);
-	__declspec(dllexport) static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
-	__declspec(dllexport) static void CreateInstance();
-	__declspec(dllexport) static LegoOmni* GetInstance();
+	void CreateBackgroundAudio();
+	void RemoveWorld(const MxAtomId&, MxLong);
+	static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
+	static void CreateInstance();
+	static LegoOmni* GetInstance();
 
 	LegoOmni();
 	virtual ~LegoOmni(); // vtable+00
@@ -92,18 +92,18 @@ public:
 		return !strcmp(p_name, LegoOmni::ClassName()) || MxOmni::IsA(p_name);
 	}
 
-	virtual void Init() override;                                                                       // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p_param) override;                                       // vtable+18
-	virtual void Destroy() override;                                                                    // vtable+1c
-	virtual MxResult Start(MxDSAction* p_dsAction) override;                                            // vtable+20
-	virtual void DeleteObject(MxDSAction& p_dsAction) override;                                         // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                    // vtable+28
-	virtual MxEntity* FindWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
-	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                            // vtable+34
-	virtual void StartTimer() override;                                                                 // vtable+38
-	virtual void StopTimer() override;                                                                  // vtable+3c
+	virtual void Init() override;                                                                        // vtable+14
+	virtual MxResult Create(MxOmniCreateParam& p_param) override;                                        // vtable+18
+	virtual void Destroy() override;                                                                     // vtable+1c
+	virtual MxResult Start(MxDSAction* p_dsAction) override;                                             // vtable+20
+	virtual void DeleteObject(MxDSAction& p_dsAction) override;                                          // vtable+24
+	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                     // vtable+28
+	virtual MxEntity* AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
+	virtual void NotifyCurrentEntity(MxNotificationParam* p_param) override;                             // vtable+34
+	virtual void StartTimer() override;                                                                  // vtable+38
+	virtual void StopTimer() override;                                                                   // vtable+3c
 
-	LegoEntity* FindByEntityIdOrAtomId(const MxAtomId& p_atom, MxS32 p_entityid);
+	LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 	void AddWorld(LegoWorld* p_world);
 	void DeleteEntity(LegoEntity* p_entity);
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
@@ -112,7 +112,7 @@ public:
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
 	LegoInputManager* GetInputManager() { return m_inputMgr; }
 	GifManager* GetGifManager() { return m_gifManager; }
-	LegoWorld* GetCurrentOmniWorld() { return m_currentWorld; }
+	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
 	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
@@ -154,16 +154,16 @@ private:
 	MxBool m_unk0x13c;                           // 0x13c
 };
 
-__declspec(dllexport) MxBackgroundAudioManager* BackgroundAudioManager();
-__declspec(dllexport) LegoGameState* GameState();
-__declspec(dllexport) const char* GetNoCD_SourceName();
-__declspec(dllexport) LegoInputManager* InputManager();
-__declspec(dllexport) LegoOmni* Lego();
-__declspec(dllexport) LegoEntity* PickEntity(MxLong, MxLong);
-__declspec(dllexport) LegoROI* PickROI(MxLong, MxLong);
-__declspec(dllexport) LegoSoundManager* SoundManager();
-__declspec(dllexport) MxTransitionManager* TransitionManager();
-__declspec(dllexport) LegoVideoManager* VideoManager();
+MxBackgroundAudioManager* BackgroundAudioManager();
+LegoGameState* GameState();
+const char* GetNoCD_SourceName();
+LegoInputManager* InputManager();
+LegoOmni* Lego();
+LegoEntity* PickEntity(MxLong, MxLong);
+LegoROI* PickROI(MxLong, MxLong);
+LegoSoundManager* SoundManager();
+MxTransitionManager* TransitionManager();
+LegoVideoManager* VideoManager();
 
 LegoAnimationManager* AnimationManager();
 LegoBuildingManager* BuildingManager();
@@ -175,7 +175,7 @@ LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void FUN_10015860(const char*, MxU8);
-LegoEntity* FindEntityByAtomIdOrEntityId(const MxAtomId& p_atom, MxS32 p_entityid);
+LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
 
 void PlayMusic(MxU32 p_index);

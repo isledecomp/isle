@@ -13,17 +13,13 @@
 // SIZE 0x24
 class MxVideoParam {
 public:
-	__declspec(dllexport) MxVideoParam();
-	__declspec(dllexport) MxVideoParam(MxVideoParam& p_videoParam);
-	__declspec(dllexport) MxVideoParam(
-		COMPAT_CONST MxRect32& p_rect,
-		MxPalette* p_palette,
-		MxULong p_backBuffers,
-		COMPAT_CONST MxVideoParamFlags& p_flags
-	);
-	__declspec(dllexport) MxVideoParam& operator=(const MxVideoParam& p_videoParam);
-	__declspec(dllexport) ~MxVideoParam();
-	__declspec(dllexport) void SetDeviceName(char* p_deviceId);
+	MxVideoParam();
+	MxVideoParam(MxVideoParam& p_videoParam);
+	__declspec(dllexport)
+		MxVideoParam(MxRect32& p_rect, MxPalette* p_palette, MxULong p_backBuffers, MxVideoParamFlags& p_flags);
+	MxVideoParam& operator=(const MxVideoParam& p_videoParam);
+	~MxVideoParam();
+	void SetDeviceName(char* p_deviceId);
 
 	inline MxVideoParamFlags& Flags() { return m_flags; }
 

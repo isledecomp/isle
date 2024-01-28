@@ -238,7 +238,7 @@ void MxDisplaySurface::Destroy()
 	}
 
 	if (this->m_16bitPal)
-		delete this->m_16bitPal;
+		delete[] this->m_16bitPal;
 
 	this->Init();
 }
@@ -328,30 +328,7 @@ void MxDisplaySurface::VTable0x28(
 		}
 
 		if (hr == DD_OK) {
-			MxU8* data;
-
-			switch (p_bitmap->GetBmiHeader()->biCompression) {
-			case BI_RGB: {
-				MxS32 rowsBeforeTop;
-				if (p_bitmap->GetBmiHeight() < 0)
-					rowsBeforeTop = p_top;
-				else
-					rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - p_top - 1;
-				data = p_bitmap->GetBitmapData() + p_left + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-				break;
-			}
-			case BI_RGB_TOPDOWN:
-				data = p_bitmap->GetBitmapData();
-				break;
-			default: {
-				MxS32 rowsBeforeTop;
-				if (p_bitmap->GetBmiHeight() < 0)
-					rowsBeforeTop = 0;
-				else
-					rowsBeforeTop = p_bitmap->GetBmiHeightAbs() - 1;
-				data = p_bitmap->GetBitmapData() + (p_bitmap->GetBmiStride() * rowsBeforeTop);
-			}
-			}
+			MxU8* data = p_bitmap->GetStart(p_left, p_top);
 
 			if (m_videoParam.Flags().GetF1bit3()) {
 				p_bottom *= 2;
@@ -564,15 +541,217 @@ void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 		this->m_ddSurface2->ReleaseDC(p_hdc);
 }
 
-// STUB: LEGO1 0x100bbc60
-LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(MxBitmap*, undefined4*, undefined4, undefined4)
+// FUNCTION: LEGO1 0x100bbc60
+LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
+	MxBitmap* p_bitmap,
+	undefined4* p_ret,
+	undefined4 p_doNotWriteToSurface,
+	undefined4 p_transparent
+)
 {
-	return NULL;
+	LPDIRECTDRAWSURFACE surface = NULL;
+	LPDIRECTDRAW draw = MVideoManager()->GetDirectDraw();
+	MVideoManager();
+
+	DDSURFACEDESC ddsd;
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (draw->GetDisplayMode(&ddsd))
+		return NULL;
+
+	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
+	ddsd.dwWidth = p_bitmap->GetBmiWidth();
+	ddsd.dwHeight = p_bitmap->GetBmiHeightAbs();
+
+	*p_ret = 0;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+	if (draw->CreateSurface(&ddsd, &surface, NULL) != DD_OK) {
+		if (*p_ret) {
+			*p_ret = 0;
+
+			// Try creating bitmap surface in vram if system ram ran out
+			ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
+
+			if (draw->CreateSurface(&ddsd, &surface, NULL) != DD_OK) {
+				surface = NULL;
+			}
+		}
+		else
+			surface = NULL;
+	}
+
+	if (surface) {
+		memset(&ddsd, 0, sizeof(ddsd));
+		ddsd.dwSize = sizeof(ddsd);
+
+		if (surface->Lock(NULL, &ddsd, DDLOCK_WAIT, 0) != DD_OK) {
+			surface->Release();
+			surface = NULL;
+			goto done;
+		}
+
+		if (p_doNotWriteToSurface) {
+			goto done;
+		}
+
+		MxU8* bitmapSrcPtr = p_bitmap->GetStart(0, 0);
+		MxU16* surfaceData = (MxU16*) ddsd.lpSurface;
+		MxLong widthNormal = p_bitmap->GetBmiWidth();
+		MxLong heightAbs = p_bitmap->GetBmiHeightAbs();
+
+		// TODO: Probably p_bitmap->GetAdjustedStride()
+		MxS32 rowSeek = p_bitmap->GetBmiStride();
+		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
+			rowSeek = -rowSeek;
+
+		MxLong newPitch = ddsd.lPitch;
+		switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
+		case 8: {
+			for (MxS32 y = heightAbs; y > 0; y--) {
+				memcpy(surfaceData, bitmapSrcPtr, p_bitmap->GetBmiHeight());
+				bitmapSrcPtr += rowSeek;
+				surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+			}
+
+			surface->Unlock(ddsd.lpSurface);
+
+			if (p_transparent && surface) {
+				DDCOLORKEY key;
+				key.dwColorSpaceHighValue = 0;
+				key.dwColorSpaceLowValue = 0;
+				surface->SetColorKey(DDCKEY_SRCBLT, &key);
+			}
+			break;
+		}
+		case 16:
+			if (m_16bitPal == NULL) {
+				if (surface) {
+					surface->Release();
+				}
+				return NULL;
+			}
+			else {
+				rowSeek -= p_bitmap->GetBmiWidth();
+				newPitch -= 2 * p_bitmap->GetBmiWidth();
+
+				if (p_transparent) {
+					for (MxS32 y = heightAbs; y > 0; y--) {
+						for (MxS32 x = widthNormal; x > 0; x--) {
+							if (*bitmapSrcPtr) {
+								*surfaceData = m_16bitPal[*bitmapSrcPtr];
+							}
+							else {
+								*surfaceData = 31775;
+							}
+							bitmapSrcPtr++;
+							surfaceData++;
+						}
+
+						bitmapSrcPtr += rowSeek;
+						surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+					}
+
+					DDCOLORKEY key;
+					key.dwColorSpaceHighValue = 31775;
+					key.dwColorSpaceLowValue = 31775;
+					surface->SetColorKey(DDCKEY_SRCBLT, &key);
+				}
+				else {
+					for (MxS32 y = heightAbs; y > 0; y--) {
+						for (MxS32 x = widthNormal; x > 0; x--) {
+							*surfaceData++ = m_16bitPal[*bitmapSrcPtr++];
+						}
+
+						bitmapSrcPtr += rowSeek;
+						surfaceData = (MxU16*) ((MxU8*) surfaceData + newPitch);
+					}
+				}
+
+				surface->Unlock(ddsd.lpSurface);
+			}
+		}
+	}
+
+done:
+	return surface;
 }
 
-// STUB: LEGO1 0x100bc070
-LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc070()
+// FUNCTION: LEGO1 0x100bc070
+LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 {
+	LPDIRECTDRAWSURFACE newSurface = NULL;
+	IDirectDraw* draw = MVideoManager()->GetDirectDraw();
+	MVideoManager();
+
+	DDSURFACEDESC ddsd;
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (draw->GetDisplayMode(&ddsd) != DD_OK) {
+		return NULL;
+	}
+
+	if (ddsd.ddpfPixelFormat.dwRGBBitCount != 16) {
+		return NULL;
+	}
+
+	ddsd.dwWidth = 16;
+	ddsd.dwHeight = 16;
+	ddsd.dwFlags = DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+	if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK) {
+		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
+		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
+
+		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK)
+			goto done;
+	}
+
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK)
+		goto done;
+	else {
+		MxU16* surface = (MxU16*) ddsd.lpSurface;
+		MxLong pitch = ddsd.lPitch;
+
+		// draw a simple cursor to the surface
+		for (MxS32 x = 0; x < 16; x++) {
+			MxU16* surface2 = surface;
+			for (MxS32 y = 0; y < 16; y++) {
+				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
+					if (x + y > 10)
+						*surface2 = 31775;
+					else
+						*surface2 = -1;
+				}
+				else {
+					*surface2 = 0;
+				}
+				surface2++;
+			}
+			surface = (MxU16*) ((MxU8*) surface + pitch);
+		}
+
+		newSurface->Unlock(ddsd.lpSurface);
+		DDCOLORKEY colorkey;
+		colorkey.dwColorSpaceHighValue = 31775;
+		colorkey.dwColorSpaceLowValue = 31775;
+		newSurface->SetColorKey(DDCKEY_SRCBLT, &colorkey);
+
+		return newSurface;
+	}
+
+done:
+	if (newSurface) {
+		newSurface->Release();
+	}
+
 	return NULL;
 }
 

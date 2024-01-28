@@ -20,7 +20,11 @@ public:
 		return !strcmp(p_name, LegoPartPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	__declspec(dllexport) static void configureLegoPartPresenter(MxS32, MxS32);
+	virtual void ReadyTickle() override;      // vtable+0x18
+	virtual MxResult AddToManager() override; // vtable+0x34
+	virtual void Destroy() override;          // vtable+0x38
+
+	static void configureLegoPartPresenter(MxS32, MxS32);
 
 	// SYNTHETIC: LEGO1 0x1000d060
 	// LegoPartPresenter::`scalar deleting destructor'

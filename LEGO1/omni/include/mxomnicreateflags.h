@@ -21,7 +21,7 @@ public:
 		c_createStreamer = 0x04
 	};
 
-	__declspec(dllexport) MxOmniCreateFlags();
+	MxOmniCreateFlags();
 
 	inline const MxBool CreateObjectFactory() const { return this->m_flags1 & c_createObjectFactory; }
 	inline const MxBool CreateVariableTable() const { return this->m_flags1 & c_createVariableTable; }

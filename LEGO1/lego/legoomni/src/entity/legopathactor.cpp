@@ -68,6 +68,12 @@ void LegoPathActor::VTable0x68()
 	// TODO
 }
 
+// STUB: LEGO1 0x1002f020
+void LegoPathActor::ParseAction(char*)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1002f1b0
 void LegoPathActor::VTable0x9c()
 {

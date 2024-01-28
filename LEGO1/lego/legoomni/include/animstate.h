@@ -23,8 +23,8 @@ public:
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxBool SetFlag() override;                                      // vtable+0x18
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1C
+	virtual MxBool SetFlag() override;                          // vtable+0x18
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1C
 
 	// SYNTHETIC: LEGO1 0x10065130
 	// AnimState::`scalar deleting destructor'

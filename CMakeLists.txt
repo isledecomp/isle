@@ -16,136 +16,115 @@ if (MSVC)
     endif()
 endif()
 
+set(lego1_targets)
+macro(register_lego1_target __target)
+  list(APPEND lego1_targets ${__target})
+endmacro()
+
 message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 
-add_library(lego1 SHARED
-  LEGO1/define.cpp
-  LEGO1/lego/legoomni/src/act1/act1state.cpp
-  LEGO1/lego/legoomni/src/act2/act2brick.cpp
-  LEGO1/lego/legoomni/src/act2/act2policestation.cpp
-  LEGO1/lego/legoomni/src/act2/legoact2state.cpp
-  LEGO1/lego/legoomni/src/act3/act3.cpp
-  LEGO1/lego/legoomni/src/act3/act3shark.cpp
-  LEGO1/lego/legoomni/src/act3/act3state.cpp
-  LEGO1/lego/legoomni/src/audio/legocachesound.cpp
-  LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
-  LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
-  LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
-  LEGO1/lego/legoomni/src/build/buildingentity.cpp
-  LEGO1/lego/legoomni/src/build/dunebuggy.cpp
-  LEGO1/lego/legoomni/src/build/helicopter.cpp
-  LEGO1/lego/legoomni/src/build/helicopterstate.cpp
-  LEGO1/lego/legoomni/src/build/jetski.cpp
-  LEGO1/lego/legoomni/src/build/legobuildingmanager.cpp
-  LEGO1/lego/legoomni/src/build/legocarbuild.cpp
-  LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
-  LEGO1/lego/legoomni/src/build/racecar.cpp
-  LEGO1/lego/legoomni/src/common/animstate.cpp
-  LEGO1/lego/legoomni/src/common/gifmanager.cpp
-  LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
-  LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
-  LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
-  LEGO1/lego/legoomni/src/common/legogamestate.cpp
-  LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
-  LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
-  LEGO1/lego/legoomni/src/common/legostate.cpp
-  LEGO1/lego/legoomni/src/common/legostream.cpp
-  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
-  LEGO1/lego/legoomni/src/common/legoutil.cpp
-  LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
-  LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
-  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
-  LEGO1/lego/legoomni/src/entity/legoactor.cpp
-  LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
-  LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
-  LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legoentity.cpp
-  LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
-  LEGO1/lego/legoomni/src/entity/legojetski.cpp
-  LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legopathactor.cpp
-  LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legorace.cpp
-  LEGO1/lego/legoomni/src/entity/legoworld.cpp
-  LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstation.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstationentity.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstationstate.cpp
-  LEGO1/lego/legoomni/src/hospital/ambulance.cpp
-  LEGO1/lego/legoomni/src/hospital/ambulancemissionstate.cpp
-  LEGO1/lego/legoomni/src/hospital/hospital.cpp
-  LEGO1/lego/legoomni/src/hospital/hospitalentity.cpp
-  LEGO1/lego/legoomni/src/hospital/hospitalstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/elevatorbottom.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenter.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterdoor.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterentity.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/registrationbook.cpp
-  LEGO1/lego/legoomni/src/infocenter/score.cpp
-  LEGO1/lego/legoomni/src/infocenter/scorestate.cpp
-  LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
-  LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
-  LEGO1/lego/legoomni/src/isle/bike.cpp
-  LEGO1/lego/legoomni/src/isle/bumpbouy.cpp
-  LEGO1/lego/legoomni/src/isle/historybook.cpp
-  LEGO1/lego/legoomni/src/isle/isleactor.cpp
-  LEGO1/lego/legoomni/src/isle/isle.cpp
-  LEGO1/lego/legoomni/src/isle/islepathactor.cpp
-  LEGO1/lego/legoomni/src/isle/jukebox.cpp
-  LEGO1/lego/legoomni/src/isle/jukeboxentity.cpp
-  LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
-  LEGO1/lego/legoomni/src/isle/motocycle.cpp
-  LEGO1/lego/legoomni/src/isle/radio.cpp
-  LEGO1/lego/legoomni/src/isle/radiostate.cpp
-  LEGO1/lego/legoomni/src/isle/skateboard.cpp
-  LEGO1/lego/legoomni/src/main/legoomni.cpp
-  LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
-  LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
-  LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizza.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzeria.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
-  LEGO1/lego/legoomni/src/police/police.cpp
-  LEGO1/lego/legoomni/src/police/policeentity.cpp
-  LEGO1/lego/legoomni/src/police/policestate.cpp
-  LEGO1/lego/legoomni/src/race/carrace.cpp
-  LEGO1/lego/legoomni/src/race/jetskirace.cpp
-  LEGO1/lego/legoomni/src/race/racestandsentity.cpp
-  LEGO1/lego/legoomni/src/race/racestate.cpp
-  LEGO1/lego/legoomni/src/towtrack/towtrack.cpp
-  LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
-  LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp
-  LEGO1/lego/legoomni/src/video/legoanimationmanager.cpp
-  LEGO1/lego/legoomni/src/video/legoanimmmpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
-  LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp
-  LEGO1/lego/legoomni/src/video/legopartpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
-  LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
-  LEGO1/lego/legoomni/src/video/legovideomanager.cpp
-  LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
+add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
+target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
+target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+
+add_library(Smacker::Smacker STATIC IMPORTED)
+set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
+set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
+
+add_library(FLIC::FLIC STATIC IMPORTED)
+set_property(TARGET FLIC::FLIC PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/flic/flic.lib")
+set_property(TARGET FLIC::FLIC PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/flic")
+
+add_library(Vec::Vec INTERFACE IMPORTED)
+target_include_directories(Vec::Vec INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/vec")
+
+add_library(SmartHeap::SmartHeap STATIC IMPORTED)
+set_property(TARGET SmartHeap::SmartHeap PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap")
+set_property(TARGET SmartHeap::SmartHeap PROPERTY INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
+
+add_library(tglrl STATIC
+  LEGO1/tgl/d3drm/camera.cpp
+  LEGO1/tgl/d3drm/device.cpp
+  LEGO1/tgl/d3drm/group.cpp
+  LEGO1/tgl/d3drm/light.cpp
+  LEGO1/tgl/d3drm/mesh.cpp
+  LEGO1/tgl/d3drm/renderer.cpp
+  LEGO1/tgl/d3drm/texture.cpp
+  LEGO1/tgl/d3drm/unk.cpp
+  LEGO1/tgl/d3drm/view.cpp
+)
+register_lego1_target(tglrl)
+set_property(TARGET tglrl PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>")
+target_include_directories(tglrl PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(tglrl PRIVATE d3drm)
+
+add_library(realtime STATIC
+  LEGO1/realtime/matrix.cpp
+  LEGO1/realtime/orientableroi.cpp
+  LEGO1/realtime/realtime.cpp
+  LEGO1/realtime/realtimeview.cpp
+  LEGO1/realtime/vector.cpp
+)
+register_lego1_target(realtime)
+set_property(TARGET realtime PROPERTY ARCHIVE_OUTPUT_NAME "realtime$<$<CONFIG:Debug>:d>")
+target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(realtime PRIVATE Vec::Vec)
+
+add_library(viewmanager STATIC
+  LEGO1/viewmanager/viewlodlist.cpp
+  LEGO1/viewmanager/viewmanager.cpp
+  LEGO1/viewmanager/viewroi.cpp
+)
+register_lego1_target(viewmanager)
+set_property(TARGET viewmanager PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>")
+target_include_directories(viewmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(viewmanager PRIVATE Vec::Vec)
+
+add_library(mxdirectx STATIC
+  LEGO1/mxdirectx/mxdirect3d.cpp
+  LEGO1/mxdirectx/mxdirectdraw.cpp
+)
+register_lego1_target(mxdirectx)
+set_property(TARGET mxdirectx PROPERTY ARCHIVE_OUTPUT_NAME "MxDirectX$<$<CONFIG:Debug>:d>")
+target_include_directories(mxdirectx PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(mxdirectx PRIVATE ddraw)
+
+add_library(roi STATIC
+  LEGO1/lego/sources/roi/legoroi.cpp
+)
+register_lego1_target(roi)
+set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
+target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(roi PRIVATE)
+
+add_library(misc STATIC
+  LEGO1/lego/sources/misc/legoimage.cpp
+  LEGO1/lego/sources/misc/legostorage.cpp
+  LEGO1/lego/sources/misc/legotexture.cpp
+  LEGO1/lego/sources/misc/legotree.cpp
+)
+register_lego1_target(misc)
+set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
+target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(misc PRIVATE)
+
+add_library(3dmanager STATIC
   LEGO1/lego/sources/3dmanager/lego3dmanager.cpp
   LEGO1/lego/sources/3dmanager/lego3dview.cpp
   LEGO1/lego/sources/3dmanager/legoview1.cpp
   LEGO1/lego/sources/3dmanager/tglsurface.cpp
-  LEGO1/lego/sources/roi/legoroi.cpp
-  LEGO1/main.cpp
-  LEGO1/mxdirectx/mxdirect3d.cpp
-  LEGO1/mxdirectx/mxdirectdraw.cpp
-  LEGO1/mxgeometry/mxgeometry3d.cpp
-  LEGO1/mxgeometry/mxmatrix.cpp
+)
+register_lego1_target(3dmanager)
+set_property(TARGET 3dmanager PROPERTY ARCHIVE_OUTPUT_NAME "3dmanager$<$<CONFIG:Debug>:d>")
+target_include_directories(3dmanager PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(3dmanager PRIVATE Vec::Vec)
+
+add_library(omni STATIC
   LEGO1/omni/src/action/mxdsaction.cpp
   LEGO1/omni/src/action/mxdsanim.cpp
   LEGO1/omni/src/action/mxdsevent.cpp
@@ -227,61 +206,165 @@ add_library(lego1 SHARED
   LEGO1/omni/src/video/mxvideoparam.cpp
   LEGO1/omni/src/video/mxvideoparamflags.cpp
   LEGO1/omni/src/video/mxvideopresenter.cpp
-  LEGO1/realtime/matrix.cpp
-  LEGO1/realtime/orientableroi.cpp
-  LEGO1/realtime/realtime.cpp
-  LEGO1/realtime/realtimeview.cpp
-  LEGO1/realtime/vector.cpp
-  LEGO1/tgl/d3drm/camera.cpp
-  LEGO1/tgl/d3drm/device.cpp
-  LEGO1/tgl/d3drm/group.cpp
-  LEGO1/tgl/d3drm/light.cpp
-  LEGO1/tgl/d3drm/mesh.cpp
-  LEGO1/tgl/d3drm/renderer.cpp
-  LEGO1/tgl/d3drm/texture.cpp
-  LEGO1/tgl/d3drm/unk.cpp
-  LEGO1/tgl/d3drm/view.cpp
-  LEGO1/viewmanager/viewlodlist.cpp
-  LEGO1/viewmanager/viewmanager.cpp
-  LEGO1/viewmanager/viewroi.cpp
 )
+register_lego1_target(omni)
+set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
+target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
+
+add_library(lego1 SHARED
+  LEGO1/define.cpp
+  LEGO1/lego/legoomni/src/act1/act1state.cpp
+  LEGO1/lego/legoomni/src/act2/act2brick.cpp
+  LEGO1/lego/legoomni/src/act2/act2policestation.cpp
+  LEGO1/lego/legoomni/src/act2/legoact2.cpp
+  LEGO1/lego/legoomni/src/act2/legoact2state.cpp
+  LEGO1/lego/legoomni/src/act3/act3.cpp
+  LEGO1/lego/legoomni/src/act3/act3shark.cpp
+  LEGO1/lego/legoomni/src/act3/act3state.cpp
+  LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
+  LEGO1/lego/legoomni/src/audio/legocachesound.cpp
+  LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
+  LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
+  LEGO1/lego/legoomni/src/audio/legounknown100d6b4c.cpp
+  LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
+  LEGO1/lego/legoomni/src/build/buildingentity.cpp
+  LEGO1/lego/legoomni/src/build/dunebuggy.cpp
+  LEGO1/lego/legoomni/src/build/helicopter.cpp
+  LEGO1/lego/legoomni/src/build/helicopterstate.cpp
+  LEGO1/lego/legoomni/src/build/jetski.cpp
+  LEGO1/lego/legoomni/src/build/legobuildingmanager.cpp
+  LEGO1/lego/legoomni/src/build/legocarbuild.cpp
+  LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
+  LEGO1/lego/legoomni/src/build/racecar.cpp
+  LEGO1/lego/legoomni/src/common/animstate.cpp
+  LEGO1/lego/legoomni/src/common/gifmanager.cpp
+  LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
+  LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
+  LEGO1/lego/legoomni/src/common/legogamestate.cpp
+  LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
+  LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
+  LEGO1/lego/legoomni/src/common/legostate.cpp
+  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
+  LEGO1/lego/legoomni/src/common/legoutil.cpp
+  LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
+  LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
+  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/entity/legoactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
+  LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
+  LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
+  LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoentity.cpp
+  LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
+  LEGO1/lego/legoomni/src/entity/legojetski.cpp
+  LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
+  LEGO1/lego/legoomni/src/entity/legopathactor.cpp
+  LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
+  LEGO1/lego/legoomni/src/entity/legorace.cpp
+  LEGO1/lego/legoomni/src/entity/legoraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legoracecar.cpp
+  LEGO1/lego/legoomni/src/entity/legoworld.cpp
+  LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
+  LEGO1/lego/legoomni/src/gasstation/gasstation.cpp
+  LEGO1/lego/legoomni/src/gasstation/gasstationentity.cpp
+  LEGO1/lego/legoomni/src/gasstation/gasstationstate.cpp
+  LEGO1/lego/legoomni/src/hospital/ambulance.cpp
+  LEGO1/lego/legoomni/src/hospital/ambulancemissionstate.cpp
+  LEGO1/lego/legoomni/src/hospital/hospital.cpp
+  LEGO1/lego/legoomni/src/hospital/hospitalentity.cpp
+  LEGO1/lego/legoomni/src/hospital/hospitalstate.cpp
+  LEGO1/lego/legoomni/src/infocenter/elevatorbottom.cpp
+  LEGO1/lego/legoomni/src/infocenter/infocenter.cpp
+  LEGO1/lego/legoomni/src/infocenter/infocenterdoor.cpp
+  LEGO1/lego/legoomni/src/infocenter/infocenterentity.cpp
+  LEGO1/lego/legoomni/src/infocenter/infocenterstate.cpp
+  LEGO1/lego/legoomni/src/infocenter/registrationbook.cpp
+  LEGO1/lego/legoomni/src/infocenter/score.cpp
+  LEGO1/lego/legoomni/src/infocenter/scorestate.cpp
+  LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
+  LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
+  LEGO1/lego/legoomni/src/isle/bike.cpp
+  LEGO1/lego/legoomni/src/isle/bumpbouy.cpp
+  LEGO1/lego/legoomni/src/isle/doors.cpp
+  LEGO1/lego/legoomni/src/isle/historybook.cpp
+  LEGO1/lego/legoomni/src/isle/isleactor.cpp
+  LEGO1/lego/legoomni/src/isle/isle.cpp
+  LEGO1/lego/legoomni/src/isle/islepathactor.cpp
+  LEGO1/lego/legoomni/src/isle/jukebox.cpp
+  LEGO1/lego/legoomni/src/isle/jukeboxentity.cpp
+  LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
+  LEGO1/lego/legoomni/src/isle/motocycle.cpp
+  LEGO1/lego/legoomni/src/isle/radio.cpp
+  LEGO1/lego/legoomni/src/isle/radiostate.cpp
+  LEGO1/lego/legoomni/src/isle/skateboard.cpp
+  LEGO1/lego/legoomni/src/main/legoomni.cpp
+  LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
+  LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
+  LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
+  LEGO1/lego/legoomni/src/pizzeria/pizza.cpp
+  LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
+  LEGO1/lego/legoomni/src/pizzeria/pizzeria.cpp
+  LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
+  LEGO1/lego/legoomni/src/police/police.cpp
+  LEGO1/lego/legoomni/src/police/policeentity.cpp
+  LEGO1/lego/legoomni/src/police/policestate.cpp
+  LEGO1/lego/legoomni/src/race/carrace.cpp
+  LEGO1/lego/legoomni/src/race/jetskirace.cpp
+  LEGO1/lego/legoomni/src/race/racestandsentity.cpp
+  LEGO1/lego/legoomni/src/race/racestate.cpp
+  LEGO1/lego/legoomni/src/towtrack/towtrack.cpp
+  LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
+  LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp
+  LEGO1/lego/legoomni/src/video/legoanimationmanager.cpp
+  LEGO1/lego/legoomni/src/video/legoanimmmpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legoloopinganimpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legopartpresenter.cpp
+  LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
+  LEGO1/lego/legoomni/src/video/legovideomanager.cpp
+  LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
+  LEGO1/main.cpp
+)
+register_lego1_target(lego1)
 
 if (MINGW)
   target_compile_definitions(lego1 PRIVATE DIRECTINPUT_VERSION=0x0500)
 endif()
 
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/util")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
-
-# Additional include directories
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/3rdparty/vec")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
-
-if (ISLE_USE_SMARTHEAP)
-  add_library(SmartHeap::SmartHeap STATIC IMPORTED)
-  set_target_properties(SmartHeap::SmartHeap PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SHLW32MT.LIB"
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smartheap"
-    INTERFACE_COMPILE_OPTIONS "/FI${CMAKE_SOURCE_DIR}/3rdparty/smartheap/SMRTHEAP.HPP")
-
-  target_link_libraries(lego1 PRIVATE SmartHeap::SmartHeap)
+if (MSVC)
+  target_sources(lego1 PRIVATE LEGO1/LegoOmni.def)
+else()
+  target_sources(lego1 PRIVATE LEGO1/LegoOmni.mingw.def)
 endif()
 
-# Use internal DirectX 5 if required
-if (ISLE_USE_DX5)
-  target_include_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-  target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-endif()
-
-target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
-target_link_directories(lego1 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/flic")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE ddraw dsound dinput dxguid winmm d3drm smack flic)
+target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
+
+if (ISLE_USE_SMARTHEAP)
+  foreach(tgt IN LISTS lego1_targets)
+    target_link_libraries(${tgt} PRIVATE SmartHeap::SmartHeap)
+  endforeach()
+endif()
+foreach(tgt IN LISTS lego1_targets)
+  target_link_libraries(${tgt} PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
+endforeach()
 
 # Make sure filenames are ALL CAPS
 set_property(TARGET lego1 PROPERTY OUTPUT_NAME LEGO1)
@@ -295,19 +378,8 @@ if (ISLE_BUILD_APP)
     ISLE/define.cpp
   )
 
-  target_compile_definitions(isle PRIVATE ISLE_APP)
-
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/util")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
-  target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
-
   # Use internal DirectX 5 if required
-  if (ISLE_USE_DX5)
-    target_include_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-    target_link_directories(isle PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
-  endif()
+  target_link_libraries(isle PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)
 
   if (ISLE_USE_SMARTHEAP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
@@ -323,15 +395,19 @@ endif()
 
 if (MSVC)
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
-    target_compile_definitions(lego1 PRIVATE _CRT_SECURE_NO_WARNINGS)
-    if (ISLE_BUILD_APP)
+    foreach(tgt IN LISTS lego1_targets)
+      target_compile_definitions(${tgt} PRIVATE _CRT_SECURE_NO_WARNINGS)
+    endforeach()
+    if (TARGET isle)
       target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
     endif()
   endif()
   # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.14.26428")
-    target_compile_options(lego1 PRIVATE "-Zc:__cplusplus")
-    if (ISLE_BUILD_APP)
+    foreach(tgt IN LISTS lego1_targets)
+      target_compile_options(${tgt} PRIVATE "-Zc:__cplusplus")
+    endforeach()
+    if (TARGET isle)
       target_compile_options(isle PRIVATE "-Zc:__cplusplus")
     endif()
   endif()
@@ -350,8 +426,13 @@ if (MSVC_FOR_DECOMP)
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
     target_compile_options(isle PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+    target_link_options(isle PRIVATE "/OPT:REF")
   endif()
+
   target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  foreach(tgt IN LISTS lego1_targets)
+    target_compile_options(${tgt} PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  endforeach()
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
   set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")
@@ -365,6 +446,8 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
+  set(CMAKE_STATIC_LINKER_FLAGS "/machine:I386")
+
   set(CMAKE_SHARED_LINKER_FLAGS "/machine:I386")
   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "/incremental:yes /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "/incremental:no")
@@ -373,12 +456,17 @@ if (MSVC_FOR_DECOMP)
 
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
-  if(CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
-    set_property(GLOBAL PROPERTY JOB_POOLS "msvc_lego=1;msvc_lego1=1")
-    set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_lego)
-    set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_lego)
-    set_property(TARGET lego1 PROPERTY JOB_POOL_COMPILE msvc_lego1)
-    set_property(TARGET lego1 PROPERTY JOB_POOL_LINK msvc_lego1)
+  if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
+    foreach(tgt IN LISTS lego1_taregets)
+      set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_${tgt}=1;msvc_lego1=1")
+      set_property(TARGET ${tgt} PROPERTY JOB_POOL_COMPILE msvc_${tgt})
+      set_property(TARGET ${tgt} PROPERTY JOB_POOL_LINK msvc_${tgt})
+    endforeach()
+    if (TARGET isle)
+      set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_isle=1")
+      set_property(TARGET isle PROPERTY JOB_POOL_COMPILE msvc_isle)
+      set_property(TARGET isle PROPERTY JOB_POOL_LINK msvc_isle)
+    endif()
   endif()
 endif()
 

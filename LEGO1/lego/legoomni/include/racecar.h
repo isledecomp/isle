@@ -24,6 +24,9 @@ public:
 		return !strcmp(p_name, RaceCar::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
+	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	virtual MxU32 VTable0xcc() override;                      // vtable+0xcc
+
 	// SYNTHETIC: LEGO1 0x10028400
 	// RaceCar::`scalar deleting destructor'
 

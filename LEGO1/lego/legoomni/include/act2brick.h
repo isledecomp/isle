@@ -26,6 +26,8 @@ public:
 		return !strcmp(p_name, Act2Brick::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
+	virtual MxS32 VTable0x94() override; // vtable+0x94
+
 	// SYNTHETIC: LEGO1 0x1007a450
 	// Act2Brick::`scalar deleting destructor'
 };

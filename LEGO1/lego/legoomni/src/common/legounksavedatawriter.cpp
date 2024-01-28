@@ -1,8 +1,7 @@
-
 #include "legounksavedatawriter.h"
 
 #include "legogamestate.h"
-#include "legostream.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
 
@@ -10,7 +9,7 @@ DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
 LegoSaveDataEntry3 g_saveData3[66];
 
 // FUNCTION: LEGO1 0x10083310
-MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStream* p_stream)
+MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 {
 	MxResult result = FAILURE;
 
@@ -46,6 +45,14 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStream* p_stream)
 		}
 	}
 	return result;
+}
+
+// STUB: LEGO1 0x10083500
+AutoROI* LegoUnkSaveDataWriter::FUN_10083500(undefined4, undefined4)
+{
+	// TODO
+	// involves an STL map with a _Nil node at 0x100fc508
+	return NULL;
 }
 
 // STUB: LEGO1 0x10083db0

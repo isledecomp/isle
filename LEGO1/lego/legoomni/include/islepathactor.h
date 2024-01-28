@@ -17,6 +17,8 @@ public:
 	// FUNCTION: LEGO1 0x10002e10
 	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); } // vtable+0x0
 
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+
 	// FUNCTION: LEGO1 0x10002ea0
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{

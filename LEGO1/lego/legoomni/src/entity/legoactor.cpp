@@ -17,3 +17,15 @@ LegoActor::~LegoActor()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x1002d390
+void LegoActor::ParseAction(char*)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1002d670
+void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
+{
+	// TODO
+}

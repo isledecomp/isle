@@ -20,6 +20,11 @@ public:
 		return !strcmp(p_name, Lego3DWavePresenter::ClassName()) || MxWavePresenter::IsA(p_name);
 	}
 
+	virtual void StartingTickle() override;   // vtable+0x1c
+	virtual void StreamingTickle() override;  // vtable+0x20
+	virtual MxResult AddToManager() override; // vtable+0x34
+	virtual void Destroy() override;          // vtable+0x38
+
 	// SYNTHETIC: LEGO1 0x1000f4b0
 	// Lego3DWavePresenter::`scalar deleting destructor'
 };

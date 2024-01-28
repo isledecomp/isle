@@ -25,6 +25,7 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
+	virtual void ParseAction(char*) override;      // vtable+0x20
 	virtual void VTable0x68();                     // vtable+0x68
 	virtual void VTable0x6c();                     // vtable+0x6c
 	virtual void VTable0x70(float p_float);        // vtable+0x70

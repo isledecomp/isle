@@ -48,6 +48,7 @@ vtable_cases = [
     ("??_7LegoCarBuildAnimPresenter@@6B@", "LegoCarBuildAnimPresenter"),
     ("??_7?$MxCollection@PAVLegoWorld@@@@6B@", "MxCollection<LegoWorld *>"),
     ("??_7?$MxPtrList@VLegoPathController@@@@6B@", "MxPtrList<LegoPathController>"),
+    ("??_7Renderer@Tgl@@6B@", "Tgl::Renderer"),
 ]
 
 

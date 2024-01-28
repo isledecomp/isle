@@ -18,3 +18,10 @@ AmbulanceMissionState::AmbulanceMissionState()
 	m_color4 = 0;
 	m_color5 = 0;
 }
+
+// STUB: LEGO1 0x10037440
+MxResult AmbulanceMissionState::VTable0x1c(LegoFile* p_legoFile)
+{
+	// TODO
+	return 0;
+}

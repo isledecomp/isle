@@ -6,9 +6,9 @@
 // SIZE 0x1c
 class MxCriticalSection {
 public:
-	__declspec(dllexport) MxCriticalSection();
-	__declspec(dllexport) ~MxCriticalSection();
-	__declspec(dllexport) static void SetDoMutex();
+	MxCriticalSection();
+	~MxCriticalSection();
+	static void SetDoMutex();
 	void Enter();
 	void Leave();
 

@@ -222,3 +222,10 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 
 	return newVel;
 }
+
+// STUB: LEGO1 0x10055a60
+MxLong LegoNavController::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}

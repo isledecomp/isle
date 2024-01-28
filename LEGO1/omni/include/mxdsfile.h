@@ -11,8 +11,8 @@
 // VTABLE: LEGO1 0x100dc890
 class MxDSFile : public MxDSSource {
 public:
-	__declspec(dllexport) MxDSFile(const char* p_filename, MxULong p_skipReadingChunks);
-	__declspec(dllexport) virtual ~MxDSFile(); // vtable+0x0
+	MxDSFile(const char* p_filename, MxULong p_skipReadingChunks);
+	virtual ~MxDSFile(); // vtable+0x0
 
 	// FUNCTION: LEGO1 0x100c0120
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -27,12 +27,12 @@ public:
 		return !strcmp(p_name, MxDSFile::ClassName()) || MxDSSource::IsA(p_name);
 	}
 
-	__declspec(dllexport) virtual MxLong Open(MxULong);                   // vtable+0x14
-	__declspec(dllexport) virtual MxLong Close();                         // vtable+0x18
-	__declspec(dllexport) virtual MxResult Read(unsigned char*, MxULong); // vtable+0x20
-	__declspec(dllexport) virtual MxLong Seek(MxLong, int);               // vtable+0x24
-	__declspec(dllexport) virtual MxULong GetBufferSize();                // vtable+0x28
-	__declspec(dllexport) virtual MxULong GetStreamBuffersNum();          // vtable+0x2c
+	virtual MxLong Open(MxULong);                   // vtable+0x14
+	virtual MxLong Close();                         // vtable+0x18
+	virtual MxResult Read(unsigned char*, MxULong); // vtable+0x20
+	virtual MxLong Seek(MxLong, int);               // vtable+0x24
+	virtual MxULong GetBufferSize();                // vtable+0x28
+	virtual MxULong GetStreamBuffersNum();          // vtable+0x2c
 
 	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
 

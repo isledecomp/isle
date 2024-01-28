@@ -20,6 +20,11 @@ public:
 		return "LegoPhonemePresenter";
 	}
 
+	virtual void StartingTickle() override;                  // vtable+0x1c
+	virtual void EndAction() override;                       // vtable+0x40
+	virtual void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
+	virtual void PutFrame() override;                        // vtable+0x6c
+
 	// SYNTHETIC: LEGO1 0x1004e320
 	// LegoPhonemePresenter::`scalar deleting destructor'
 

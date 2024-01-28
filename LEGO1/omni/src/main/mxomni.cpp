@@ -113,7 +113,7 @@ MxOmni::MxOmni()
 }
 
 // FUNCTION: LEGO1 0x100aefb0
-MxEntity* MxOmni::FindWorld(const char*, MxS32, MxPresenter*)
+MxEntity* MxOmni::AddToWorld(const char*, MxS32, MxPresenter*)
 {
 	return NULL;
 }

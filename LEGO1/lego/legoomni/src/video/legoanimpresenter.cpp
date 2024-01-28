@@ -1,14 +1,13 @@
 #include "legoanimpresenter.h"
 
 #include "legoomni.h"
-#include "legostream.h"
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxstreamchunk.h"
+#include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
-DECOMP_SIZE_ASSERT(LegoAnimClassBase, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimClass, 0x18)
 
 // FUNCTION: LEGO1 0x10068420
@@ -59,7 +58,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
 	MxResult result = FAILURE;
-	LegoMemoryStream stream((char*) p_chunk->GetData());
+	LegoMemory stream((char*) p_chunk->GetData());
 
 	MxS32 magicSig;
 	MxS32 val2 = 0;
@@ -140,12 +139,7 @@ void LegoAnimPresenter::StreamingTickle()
 		m_subscriber->DestroyChunk(chunk);
 	}
 
-	if (m_unk0x95 == 0) {
-		if (m_unk0x64->m_unk0x8 + m_action->GetStartTime() < m_action->GetElapsedTime()) {
-			m_unk0x95 = 1;
-		}
-	}
-	else {
+	if (m_unk0x95) {
 		ProgressTickleState(e_done);
 		if (m_compositePresenter) {
 			if (m_compositePresenter->IsA("LegoAnimMMPresenter")) {
@@ -153,12 +147,35 @@ void LegoAnimPresenter::StreamingTickle()
 			}
 		}
 	}
+	else {
+		if (m_action->GetElapsedTime() > m_unk0x64->GetUnknown0x8() + m_action->GetStartTime()) {
+			m_unk0x95 = 1;
+		}
+	}
+}
+
+// STUB: LEGO1 0x1006b8c0
+void LegoAnimPresenter::DoneTickle()
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1006b8d0
+MxResult LegoAnimPresenter::AddToManager()
+{
+	return MxVideoPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006b8e0
 void LegoAnimPresenter::Destroy()
 {
 	Destroy(FALSE);
+}
+
+// FUNCTION: LEGO1 0x1006b8f0
+const char* LegoAnimPresenter::GetActionObjectName()
+{
+	return m_action->GetObjectName();
 }
 
 // STUB: LEGO1 0x1006bac0
@@ -182,33 +199,6 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
-// FUNCTION: LEGO1 0x10099dd0
-LegoAnimClassBase::LegoAnimClassBase()
-{
-	m_unk0x4 = 0;
-}
-
-// STUB: LEGO1 0x10099e00
-LegoAnimClassBase::~LegoAnimClassBase()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x10099e20
-void LegoAnimClassBase::VTable0x4()
-{
-}
-
-// STUB: LEGO1 0x10099e40
-void LegoAnimClassBase::VTable0x8()
-{
-}
-
-// STUB: LEGO1 0x10099f70
-void LegoAnimClassBase::VTable0xc()
-{
-}
-
 // FUNCTION: LEGO1 0x100a0b30
 LegoAnimClass::LegoAnimClass()
 {
@@ -225,19 +215,21 @@ LegoAnimClass::~LegoAnimClass()
 }
 
 // STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10(LegoMemoryStream* p_stream, MxS32)
+MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
 {
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a0e30
-void LegoAnimClass::VTable0x8()
+LegoResult LegoAnimClass::Write(LegoStorage* p_storage)
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x100a1040
-void LegoAnimClass::VTable0xc()
+LegoTreeNodeData* LegoAnimClass::CreateData()
 {
 	// TODO
+	return NULL;
 }

@@ -22,6 +22,8 @@ public:
 		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+
 	inline MxU16 GetColor(MxU8 p_id)
 	{
 		switch (p_id) {

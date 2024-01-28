@@ -19,6 +19,9 @@ public:
 	{
 		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
+
+	virtual void StreamingTickle() override; // vtable+0x20
+	virtual void PutFrame() override;        // vtable+0x6c
 };
 
 // SYNTHETIC: LEGO1 0x1006d000

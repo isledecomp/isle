@@ -24,6 +24,13 @@ void IslePathActor::Destroy(MxBool p_fromDestructor)
 		LegoPathActor::Destroy(FALSE);
 }
 
+// STUB: LEGO1 0x1001a2c0
+MxLong IslePathActor::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
 // STUB: LEGO1 0x1001a350
 void IslePathActor::VTable0xe0()
 {

@@ -13,6 +13,7 @@ class DumpOpt(Enum):
     GLOBALS = 2
     PUBLICS = 3
     SECTION_CONTRIB = 4
+    MODULES = 5
 
 
 cvdump_opt_map = {
@@ -21,6 +22,7 @@ cvdump_opt_map = {
     DumpOpt.GLOBALS: "-g",
     DumpOpt.PUBLICS: "-p",
     DumpOpt.SECTION_CONTRIB: "-seccontrib",
+    DumpOpt.MODULES: "-m",
 }
 
 
@@ -47,6 +49,10 @@ class Cvdump:
 
     def section_contributions(self):
         self._options.add(DumpOpt.SECTION_CONTRIB)
+        return self
+
+    def modules(self):
+        self._options.add(DumpOpt.MODULES)
         return self
 
     def cmd_line(self) -> List[str]:

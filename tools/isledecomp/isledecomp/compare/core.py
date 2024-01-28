@@ -3,7 +3,8 @@ import logging
 import difflib
 import struct
 from dataclasses import dataclass
-from typing import Iterable, List, Optional
+from typing import Callable, Iterable, List, Optional
+from isledecomp.bin import Bin as IsleBin
 from isledecomp.cvdump.demangler import demangle_string_const
 from isledecomp.cvdump import Cvdump, CvdumpAnalysis
 from isledecomp.parser import DecompCodebase
@@ -36,9 +37,39 @@ class DiffReport:
         return f"{self.name} (0x{self.orig_addr:x}) {self.ratio*100:.02f}%{'*' if self.is_effective_match else ''}"
 
 
+def create_reloc_lookup(bin_file: IsleBin) -> Callable[[int], bool]:
+    """Function generator for relocation table lookup"""
+
+    def lookup(addr: int) -> bool:
+        return addr > bin_file.imagebase and bin_file.is_relocated_addr(addr)
+
+    return lookup
+
+
+def create_float_lookup(bin_file: IsleBin) -> Callable[[int, int], Optional[str]]:
+    """Function generator for floating point lookup"""
+
+    def lookup(addr: int, size: int) -> Optional[str]:
+        data = bin_file.read(addr, size)
+        # If this is a float constant, it should be initialized data.
+        if data is None:
+            return None
+
+        struct_str = "<f" if size == 4 else "<d"
+        try:
+            (float_value,) = struct.unpack(struct_str, data)
+            return str(float_value)
+        except struct.error:
+            return None
+
+    return lookup
+
+
 class Compare:
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, orig_bin, recomp_bin, pdb_file, code_dir):
+    def __init__(
+        self, orig_bin: IsleBin, recomp_bin: IsleBin, pdb_file: str, code_dir: str
+    ):
         self.orig_bin = orig_bin
         self.recomp_bin = recomp_bin
         self.pdb_file = pdb_file
@@ -229,17 +260,6 @@ class Compare:
         orig_raw = self.orig_bin.read(match.orig_addr, match.size)
         recomp_raw = self.recomp_bin.read(match.recomp_addr, match.size)
 
-        def orig_should_replace(addr: int) -> bool:
-            return addr > self.orig_bin.imagebase and self.orig_bin.is_relocated_addr(
-                addr
-            )
-
-        def recomp_should_replace(addr: int) -> bool:
-            return (
-                addr > self.recomp_bin.imagebase
-                and self.recomp_bin.is_relocated_addr(addr)
-            )
-
         def orig_lookup(addr: int) -> Optional[str]:
             m = self._db.get_by_orig(addr)
             if m is None:
@@ -254,11 +274,21 @@ class Compare:
 
             return m.match_name()
 
+        orig_should_replace = create_reloc_lookup(self.orig_bin)
+        recomp_should_replace = create_reloc_lookup(self.recomp_bin)
+
+        orig_float = create_float_lookup(self.orig_bin)
+        recomp_float = create_float_lookup(self.recomp_bin)
+
         orig_parse = ParseAsm(
-            relocate_lookup=orig_should_replace, name_lookup=orig_lookup
+            relocate_lookup=orig_should_replace,
+            name_lookup=orig_lookup,
+            float_lookup=orig_float,
         )
         recomp_parse = ParseAsm(
-            relocate_lookup=recomp_should_replace, name_lookup=recomp_lookup
+            relocate_lookup=recomp_should_replace,
+            name_lookup=recomp_lookup,
+            float_lookup=recomp_float,
         )
 
         orig_asm = orig_parse.parse_asm(orig_raw, match.orig_addr)
@@ -378,6 +408,9 @@ class Compare:
         return None
 
     ## Public API
+
+    def get_all(self) -> List[MatchInfo]:
+        return self._db.get_all()
 
     def get_functions(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.FUNCTION)

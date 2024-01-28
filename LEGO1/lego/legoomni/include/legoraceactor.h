@@ -2,6 +2,7 @@
 #define LEGORACEACTOR_H
 
 #include "legoanimactor.h"
+#include "realtime/matrix.h"
 
 // VTABLE: LEGO1 0x100d5b88
 class LegoRaceActor : public LegoAnimActor {
@@ -18,6 +19,14 @@ public:
 	{
 		return !strcmp(p_name, LegoRaceActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
+
+	virtual void ParseAction(char*) override;                  // vtable+0x20
+	virtual void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
+	virtual void VTable0x68() override;                        // vtable+0x68
+	virtual void VTable0x70(float p_float) override;           // vtable+0x70
+	virtual void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
+	virtual MxS32 VTable0x90() override;                       // vtable+0x90
+	virtual MxS32 VTable0x94() override;                       // vtable+0x94
 
 	// SYNTHETIC: LEGO1 0x10014ab0
 	// LegoRaceActor::`scalar deleting destructor'

@@ -34,9 +34,9 @@ public:
 		void* m_unk0x178;  // 0x178
 	};
 
-	__declspec(dllexport) int FlipToGDISurface();
-	__declspec(dllexport) static int GetPrimaryBitDepth();
-	__declspec(dllexport) int Pause(int);
+	int FlipToGDISurface();
+	static int GetPrimaryBitDepth();
+	int Pause(int);
 
 	MxDirectDraw();
 	virtual ~MxDirectDraw();

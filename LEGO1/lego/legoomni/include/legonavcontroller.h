@@ -9,7 +9,7 @@
 // SIZE 0x70
 class LegoNavController : public MxCore {
 public:
-	__declspec(dllexport) static void GetDefaults(
+	static void GetDefaults(
 		int* p_mouseDeadzone,
 		float* p_movementMaxSpeed,
 		float* p_turnMaxSpeed,
@@ -22,7 +22,7 @@ public:
 		float* p_rotationSensitivity,
 		MxBool* p_turnUseVelocity
 	);
-	__declspec(dllexport) static void SetDefaults(
+	static void SetDefaults(
 		int p_mouseDeadzone,
 		float p_movementMaxSpeed,
 		float p_turnMaxSpeed,
@@ -37,7 +37,8 @@ public:
 	);
 
 	LegoNavController();
-	virtual ~LegoNavController() override; // vtable+0x0
+	virtual ~LegoNavController() override;            // vtable+0x0
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
 
 	// FUNCTION: LEGO1 0x10054b80
 	inline const char* ClassName() const override // vtable+0xc

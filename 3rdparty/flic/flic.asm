@@ -4,6 +4,21 @@ option dotname
 .model flat, c
 assume fs:nothing
 
+public FUN_100bd530
+public FUN_100bd580
+public FUN_100bd600
+public FUN_100bd680
+public FUN_100bd6e0
+public FUN_100bd760
+public FUN_100bd880
+public FUN_100bd8a0
+public FUN_100bd8f0
+public FUN_100bd940
+public FUN_100bd960
+public FUN_100bda10
+public FUN_100bdac0
+public FUN_100bdc00
+public FUN_100bdc90
 public DecodeFLCFrame
 
 ; This is so reccmp can detect the end of DecodeFLCFrame
@@ -11,7 +26,7 @@ public EndOfSection
 
 .text SEGMENT BYTE PUBLIC 'CODE'
 
-?_25162 LABEL NEAR
+FUN_100bd530 LABEL NEAR
         mov     ax, word ptr [esp+0CH]                  ; 100BD530 _ 66: 8B. 44 24, 0C
         push    esi                                     ; 100BD535 _ 56
         test    ax, ax                                  ; 100BD536 _ 66: 85. C0
@@ -43,7 +58,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25164 LABEL NEAR
+FUN_100bd580 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD580 _ 8D. 44 24, 18
         push    esi                                     ; 100BD584 _ 56
         mov     si, word ptr [esp+10H]                  ; 100BD585 _ 66: 8B. 74 24, 10
@@ -55,7 +70,7 @@ public EndOfSection
         mov     edi, dword ptr [esp+14H]                ; 100BD595 _ 8B. 7C 24, 14
         push    edx                                     ; 100BD599 _ 52
         push    edi                                     ; 100BD59A _ 57
-        call    ?_25168                                 ; 100BD59B _ E8, 00000060
+        call    FUN_100bd600                            ; 100BD59B _ E8, 00000060
         add     esp, 16                                 ; 100BD5A0 _ 83. C4, 10
         test    eax, eax                                ; 100BD5A3 _ 85. C0
         jz      ?_25167                                 ; 100BD5A5 _ 74, 4A
@@ -93,7 +108,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25168 LABEL NEAR
+FUN_100bd600 LABEL NEAR
         mov     ecx, dword ptr [esp+8H]                 ; 100BD600 _ 8B. 4C 24, 08
         push    ebx                                     ; 100BD604 _ 53
         mov     bx, word ptr [ecx]                      ; 100BD605 _ 66: 8B. 19
@@ -150,7 +165,7 @@ public EndOfSection
 ; Filler type: INT 3 Debug breakpoint
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25173 LABEL NEAR
+FUN_100bd680 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD680 _ 8D. 44 24, 18
         push    esi                                     ; 100BD684 _ 56
         lea     ecx, [esp+14H]                          ; 100BD685 _ 8D. 4C 24, 14
@@ -160,7 +175,7 @@ public EndOfSection
         mov     esi, dword ptr [esp+10H]                ; 100BD68F _ 8B. 74 24, 10
         push    edx                                     ; 100BD693 _ 52
         push    esi                                     ; 100BD694 _ 56
-        call    ?_25168                                 ; 100BD695 _ E8, FFFFFF66
+        call    FUN_100bd600                            ; 100BD695 _ E8, FFFFFF66
         add     esp, 16                                 ; 100BD69A _ 83. C4, 10
         test    eax, eax                                ; 100BD69D _ 85. C0
         jz      ?_25175                                 ; 100BD69F _ 74, 33
@@ -188,7 +203,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH
 
-?_25176 LABEL NEAR
+FUN_100bd6e0 LABEL NEAR
         lea     eax, [esp+18H]                          ; 100BD6E0 _ 8D. 44 24, 18
         push    ebx                                     ; 100BD6E4 _ 53
         lea     ecx, [esp+14H]                          ; 100BD6E5 _ 8D. 4C 24, 14
@@ -200,7 +215,7 @@ public EndOfSection
         shl     word ptr [esp+28H], 1                   ; 100BD6F4 _ 66: C1. 64 24, 28, 01
         push    edx                                     ; 100BD6FA _ 52
         push    esi                                     ; 100BD6FB _ 56
-        call    ?_25168                                 ; 100BD6FC _ E8, FFFFFEFF
+        call    FUN_100bd600                            ; 100BD6FC _ E8, FFFFFEFF
         add     esp, 16                                 ; 100BD701 _ 83. C4, 10
         test    eax, eax                                ; 100BD704 _ 85. C0
         jz      ?_25179                                 ; 100BD706 _ 74, 52
@@ -235,7 +250,7 @@ public EndOfSection
 ; Filler type: INT 3 Debug breakpoint
         db 0CCH, 0CCH, 0CCH
 
-?_25180 LABEL NEAR
+FUN_100bd760 LABEL NEAR
         mov     eax, dword ptr [esp+18H]                ; 100BD760 _ 8B. 44 24, 18
         sub     esp, 4                                  ; 100BD764 _ 83. EC, 04
 ; Note: Length-changing prefix causes delay on Intel processors
@@ -267,7 +282,7 @@ public EndOfSection
         add     ecx, 6                                  ; 100BD7BA _ 83. C1, 06
         push    ecx                                     ; 100BD7BD _ 51
         push    esi                                     ; 100BD7BE _ 56
-        call    ?_25194                                 ; 100BD7BF _ E8, 000000BC
+        call    FUN_100bd880                            ; 100BD7BF _ E8, 000000BC
         mov     eax, dword ptr [esp+34H]                ; 100BD7C4 _ 8B. 44 24, 34
         add     esp, 8                                  ; 100BD7C8 _ 83. C4, 08
         mov     byte ptr [eax], 1                       ; 100BD7CB _ C6. 00, 01
@@ -279,14 +294,14 @@ public EndOfSection
         push    ecx                                     ; 100BD7D4 _ 51
         push    edi                                     ; 100BD7D5 _ 57
         push    esi                                     ; 100BD7D6 _ 56
-        call    ?_25220                                 ; 100BD7D7 _ E8, 000002E4
+        call    FUN_100bdac0                            ; 100BD7D7 _ E8, 000002E4
         jmp     ?_25189                                 ; 100BD7DC _ EB, 4C
 
 ?_25184 LABEL NEAR
         add     ecx, 6                                  ; 100BD7DE _ 83. C1, 06
         push    ecx                                     ; 100BD7E1 _ 51
         push    esi                                     ; 100BD7E2 _ 56
-        call    ?_25202                                 ; 100BD7E3 _ E8, 00000158
+        call    FUN_100bd940                            ; 100BD7E3 _ E8, 00000158
         mov     eax, dword ptr [esp+34H]                ; 100BD7E8 _ 8B. 44 24, 34
         add     esp, 8                                  ; 100BD7EC _ 83. C4, 08
         mov     byte ptr [eax], 1                       ; 100BD7EF _ C6. 00, 01
@@ -298,7 +313,7 @@ public EndOfSection
         push    ecx                                     ; 100BD7F8 _ 51
         push    edi                                     ; 100BD7F9 _ 57
         push    esi                                     ; 100BD7FA _ 56
-        call    ?_25213                                 ; 100BD7FB _ E8, 00000210
+        call    FUN_100bda10                            ; 100BD7FB _ E8, 00000210
         jmp     ?_25189                                 ; 100BD800 _ EB, 28
 
 ?_25186 LABEL NEAR
@@ -307,7 +322,7 @@ public EndOfSection
         push    ecx                                     ; 100BD806 _ 51
         push    edi                                     ; 100BD807 _ 57
         push    esi                                     ; 100BD808 _ 56
-        call    ?_25227                                 ; 100BD809 _ E8, 000003F2
+        call    FUN_100bdc00                            ; 100BD809 _ E8, 000003F2
         jmp     ?_25189                                 ; 100BD80E _ EB, 1A
 
 ?_25187 LABEL NEAR
@@ -316,7 +331,7 @@ public EndOfSection
         push    ecx                                     ; 100BD814 _ 51
         push    edi                                     ; 100BD815 _ 57
         push    esi                                     ; 100BD816 _ 56
-        call    ?_25203                                 ; 100BD817 _ E8, 00000144
+        call    FUN_100bd960                            ; 100BD817 _ E8, 00000144
         jmp     ?_25189                                 ; 100BD81C _ EB, 0C
 
 ?_25188 LABEL NEAR
@@ -325,7 +340,7 @@ public EndOfSection
         push    ecx                                     ; 100BD822 _ 51
         push    edi                                     ; 100BD823 _ 57
         push    esi                                     ; 100BD824 _ 56
-        call    ?_25231                                 ; 100BD825 _ E8, 00000466
+        call    FUN_100bdc90                            ; 100BD825 _ E8, 00000466
 ?_25189:add     esp, 16                                 ; 100BD82A _ 83. C4, 10
 
 ?_25190 LABEL NEAR
@@ -355,12 +370,12 @@ public EndOfSection
 ?_25193 db 00H, 07H, 07H, 01H, 07H, 07H, 07H, 02H       ; 100BD870 _ ........
         db 03H, 04H, 07H, 05H, 06H, 0CCH, 0CCH, 0CCH    ; 100BD878 _ ........
 
-?_25194 LABEL NEAR
+FUN_100bd880 LABEL NEAR
         mov     eax, dword ptr [esp+8H]                 ; 100BD880 _ 8B. 44 24, 08
         mov     ecx, dword ptr [esp+4H]                 ; 100BD884 _ 8B. 4C 24, 04
         push    eax                                     ; 100BD888 _ 50
         push    ecx                                     ; 100BD889 _ 51
-        call    ?_25195                                 ; 100BD88A _ E8, 00000011
+        call    FUN_100bd8a0                            ; 100BD88A _ E8, 00000011
         add     esp, 8                                  ; 100BD88F _ 83. C4, 08
         ret                                             ; 100BD892 _ C3
 
@@ -369,7 +384,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25195 LABEL NEAR
+FUN_100bd8a0 LABEL NEAR
         mov     eax, dword ptr [esp+8H]                 ; 100BD8A0 _ 8B. 44 24, 08
         push    ebx                                     ; 100BD8A4 _ 53
         mov     bx, word ptr [eax]                      ; 100BD8A5 _ 66: 8B. 18
@@ -395,7 +410,7 @@ public EndOfSection
         push    edi                                     ; 100BD8D2 _ 57
         add     si, bp                                  ; 100BD8D3 _ 66: 03. F5
         push    eax                                     ; 100BD8D6 _ 50
-        call    ?_25199                                 ; 100BD8D7 _ E8, 00000014
+        call    FUN_100bd8f0                            ; 100BD8D7 _ E8, 00000014
         movsx   eax, bp                                 ; 100BD8DC _ 0F BF. C5
         add     esp, 16                                 ; 100BD8DF _ 83. C4, 10
         lea     ecx, [eax+eax*2]                        ; 100BD8E2 _ 8D. 0C 40
@@ -408,7 +423,7 @@ public EndOfSection
         pop     ebx                                     ; 100BD8EE _ 5B
         ret                                             ; 100BD8EF _ C3
 
-?_25199 LABEL NEAR
+FUN_100bd8f0 LABEL NEAR
         mov     dx, word ptr [esp+10H]                  ; 100BD8F0 _ 66: 8B. 54 24, 10
         push    esi                                     ; 100BD8F5 _ 56
         movsx   ecx, word ptr [esp+10H]                 ; 100BD8F6 _ 0F BF. 4C 24, 10
@@ -440,12 +455,12 @@ public EndOfSection
 ; Filler type: INT 3 Debug breakpoint
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25202 LABEL NEAR
+FUN_100bd940 LABEL NEAR
         mov     eax, dword ptr [esp+8H]                 ; 100BD940 _ 8B. 44 24, 08
         mov     ecx, dword ptr [esp+4H]                 ; 100BD944 _ 8B. 4C 24, 04
         push    eax                                     ; 100BD948 _ 50
         push    ecx                                     ; 100BD949 _ 51
-        call    ?_25195                                 ; 100BD94A _ E8, FFFFFF51
+        call    FUN_100bd8a0                            ; 100BD94A _ E8, FFFFFF51
         add     esp, 8                                  ; 100BD94F _ 83. C4, 08
         ret                                             ; 100BD952 _ C3
 
@@ -454,7 +469,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25203 LABEL NEAR
+FUN_100bd960 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BD960 _ 8B. 44 24, 10
         sub     esp, 8                                  ; 100BD964 _ 83. EC, 08
         mov     dx, word ptr [eax+8H]                   ; 100BD967 _ 66: 8B. 50, 08
@@ -529,7 +544,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25213 LABEL NEAR
+FUN_100bda10 LABEL NEAR
         mov     ecx, dword ptr [esp+0CH]                ; 100BDA10 _ 8B. 4C 24, 0C
         sub     esp, 4                                  ; 100BDA14 _ 83. EC, 04
         mov     eax, dword ptr [esp+14H]                ; 100BDA17 _ 8B. 44 24, 14
@@ -572,7 +587,7 @@ public EndOfSection
         push    edi                                     ; 100BDA70 _ 57
         push    edx                                     ; 100BDA71 _ 52
         push    eax                                     ; 100BDA72 _ 50
-        call    ?_25173                                 ; 100BDA73 _ E8, FFFFFC08
+        call    FUN_100bd680                            ; 100BDA73 _ E8, FFFFFC08
         add     esp, 24                                 ; 100BDA78 _ 83. C4, 18
         jmp     ?_25217                                 ; 100BDA7B _ EB, 23
 
@@ -586,7 +601,7 @@ public EndOfSection
         push    edi                                     ; 100BDA90 _ 57
         push    ecx                                     ; 100BDA91 _ 51
         push    edx                                     ; 100BDA92 _ 52
-        call    ?_25164                                 ; 100BDA93 _ E8, FFFFFAE8
+        call    FUN_100bd580                            ; 100BDA93 _ E8, FFFFFAE8
         movsx   ecx, bp                                 ; 100BDA98 _ 0F BF. CD
         add     esp, 24                                 ; 100BDA9B _ 83. C4, 18
         add     esi, ecx                                ; 100BDA9E _ 03. F1
@@ -608,7 +623,7 @@ public EndOfSection
 ; Filler type: INT 3 Debug breakpoint
         db 0CCH, 0CCH, 0CCH
 
-?_25220 LABEL NEAR
+FUN_100bdac0 LABEL NEAR
         mov     edx, dword ptr [esp+10H]                ; 100BDAC0 _ 8B. 54 24, 10
         sub     esp, 8                                  ; 100BDAC4 _ 83. EC, 08
         mov     ax, word ptr [edx+8H]                   ; 100BDAC7 _ 66: 8B. 42, 08
@@ -643,7 +658,7 @@ public EndOfSection
         push    eax                                     ; 100BDB18 _ 50
         push    ecx                                     ; 100BDB19 _ 51
         push    edx                                     ; 100BDB1A _ 52
-        call    ?_25162                                 ; 100BDB1B _ E8, FFFFFA10
+        call    FUN_100bd530                            ; 100BDB1B _ E8, FFFFFA10
         mov     ecx, dword ptr [esp+28H]                ; 100BDB20 _ 8B. 4C 24, 28
         add     esp, 20                                 ; 100BDB24 _ 83. C4, 14
         mov     bx, word ptr [ecx]                      ; 100BDB27 _ 66: 8B. 19
@@ -677,7 +692,7 @@ public EndOfSection
         push    ecx                                     ; 100BDB7F _ 51
         add     di, bp                                  ; 100BDB80 _ 66: 03. FD
         push    edx                                     ; 100BDB83 _ 52
-        call    ?_25164                                 ; 100BDB84 _ E8, FFFFF9F7
+        call    FUN_100bd580                            ; 100BDB84 _ E8, FFFFF9F7
         movsx   ecx, bp                                 ; 100BDB89 _ 0F BF. CD
         add     dword ptr [esp+2CH], ecx                ; 100BDB8C _ 01. 4C 24, 2C
         add     esp, 24                                 ; 100BDB90 _ 83. C4, 18
@@ -704,7 +719,7 @@ public EndOfSection
         add     di, bp                                  ; 100BDBCD _ 66: 03. FD
         push    edx                                     ; 100BDBD0 _ 52
         push    ecx                                     ; 100BDBD1 _ 51
-        call    ?_25176                                 ; 100BDBD2 _ E8, FFFFFB09
+        call    FUN_100bd6e0                            ; 100BDBD2 _ E8, FFFFFB09
         add     esp, 24                                 ; 100BDBD7 _ 83. C4, 18
         dec     bx                                      ; 100BDBDA _ 66: 4B
         jne     ?_25224                                 ; 100BDBDC _ 0F 85, FFFFFF6A
@@ -723,7 +738,7 @@ public EndOfSection
 ; Filler type: INT 3 Debug breakpoint
         db 0CCH, 0CCH, 0CCH
 
-?_25227 LABEL NEAR
+FUN_100bdc00 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BDC00 _ 8B. 44 24, 10
         sub     esp, 8                                  ; 100BDC04 _ 83. EC, 08
         mov     cx, word ptr [eax+8H]                   ; 100BDC07 _ 66: 8B. 48, 08
@@ -755,7 +770,7 @@ public EndOfSection
         push    0                                       ; 100BDC52 _ 6A, 00
         push    ebx                                     ; 100BDC54 _ 53
         push    edi                                     ; 100BDC55 _ 57
-        call    ?_25176                                 ; 100BDC56 _ E8, FFFFFA85
+        call    FUN_100bd6e0                            ; 100BDC56 _ E8, FFFFFA85
         add     esp, 24                                 ; 100BDC5B _ 83. C4, 18
         test    si, si                                  ; 100BDC5E _ 66: 85. F6
         jz      ?_25229                                 ; 100BDC61 _ 74, 15
@@ -766,7 +781,7 @@ public EndOfSection
         push    eax                                     ; 100BDC6D _ 50
         push    ebx                                     ; 100BDC6E _ 53
         push    edi                                     ; 100BDC6F _ 57
-        call    ?_25162                                 ; 100BDC70 _ E8, FFFFF8BB
+        call    FUN_100bd530                            ; 100BDC70 _ E8, FFFFF8BB
         add     esp, 20                                 ; 100BDC75 _ 83. C4, 14
 ?_25229:dec     bp                                      ; 100BDC78 _ 66: 4D
         jns     ?_25228                                 ; 100BDC7A _ 79, CB
@@ -782,7 +797,7 @@ public EndOfSection
         db 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH, 0CCH
         db 0CCH, 0CCH, 0CCH, 0CCH
 
-?_25231 LABEL NEAR
+FUN_100bdc90 LABEL NEAR
         mov     eax, dword ptr [esp+10H]                ; 100BDC90 _ 8B. 44 24, 10
         sub     esp, 4                                  ; 100BDC94 _ 83. EC, 04
         push    ebx                                     ; 100BDC97 _ 53
@@ -804,7 +819,7 @@ public EndOfSection
         push    0                                       ; 100BDCBD _ 6A, 00
         push    eax                                     ; 100BDCBF _ 50
         push    esi                                     ; 100BDCC0 _ 56
-        call    ?_25164                                 ; 100BDCC1 _ E8, FFFFF8BA
+        call    FUN_100bd580                            ; 100BDCC1 _ E8, FFFFF8BA
         add     ebp, dword ptr [esp+28H]                ; 100BDCC6 _ 03. 6C 24, 28
         add     esp, 24                                 ; 100BDCCA _ 83. C4, 18
         dec     bx                                      ; 100BDCCD _ 66: 4B
@@ -836,7 +851,7 @@ DecodeFLCFrame LABEL NEAR
         push    ecx                                     ; 100BDD02 _ 51
         push    eax                                     ; 100BDD03 _ 50
         push    edx                                     ; 100BDD04 _ 52
-        call    ?_25180                                 ; 100BDD05 _ E8, FFFFFA56
+        call    FUN_100bd760                            ; 100BDD05 _ E8, FFFFFA56
         add     esp, 24                                 ; 100BDD0A _ 83. C4, 18
 ?_25235:ret                                             ; 100BDD0D _ C3
 

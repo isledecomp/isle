@@ -30,7 +30,7 @@ LegoVideoManager::LegoVideoManager()
 	m_cursorX = m_cursorY;
 	m_cursorYCopy = m_cursorY;
 	m_cursorXCopy = m_cursorY;
-	m_unk0x514 = NULL;
+	m_cursorSurface = NULL;
 	m_fullScreenMovie = FALSE;
 	m_drawFPS = FALSE;
 	m_unk0x528 = 0;
@@ -309,18 +309,19 @@ inline void LegoVideoManager::DrawCursor()
 
 	LPDIRECTDRAWSURFACE ddSurface2 = m_displaySurface->GetDirectDrawSurface2();
 
-	if (!m_unk0x514) {
-		m_unk0x518.top = 0;
-		m_unk0x518.left = 0;
-		m_unk0x518.bottom = 16;
-		m_unk0x518.right = 16;
-		m_unk0x514 = MxDisplaySurface::FUN_100bc070();
+	if (!m_cursorSurface) {
+		m_cursorRect.top = 0;
+		m_cursorRect.left = 0;
+		m_cursorRect.bottom = 16;
+		m_cursorRect.right = 16;
+		m_cursorSurface = MxDisplaySurface::CreateCursorSurface();
 
-		if (!m_unk0x514)
+		if (!m_cursorSurface)
 			m_drawCursor = FALSE;
 	}
 
-	ddSurface2->BltFast(m_cursorXCopy, m_cursorYCopy, m_unk0x514, &m_unk0x518, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
+	ddSurface2
+		->BltFast(m_cursorXCopy, m_cursorYCopy, m_cursorSurface, &m_cursorRect, DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
 }
 
 // STUB: LEGO1 0x1007bbc0
@@ -329,10 +330,19 @@ void LegoVideoManager::DrawFPS()
 	// TODO
 }
 
-// STUB: LEGO1 0x1007c080
-void LegoVideoManager::VTable0x38(undefined4, undefined4)
+// FUNCTION: LEGO1 0x1007c080
+MxPresenter* LegoVideoManager::GetPresenterAt(MxS32 p_x, MxS32 p_y)
 {
-	// TODO
+	MxPresenterListCursor cursor(m_presenters);
+	MxPresenter* presenter;
+
+	while (cursor.Prev(presenter)) {
+		if (presenter->IsHit(p_x, p_y)) {
+			return presenter;
+		}
+	}
+
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1007c290
