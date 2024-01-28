@@ -612,7 +612,7 @@ void LegoOmni::DeleteWorld(LegoWorld* p_world)
 	if (m_worldList) {
 		LegoWorldListCursor cursor(m_worldList);
 
-		while (cursor.Find(p_world)) {
+		if (cursor.Find(p_world)) {
 			cursor.Detach();
 
 			if (m_currentWorld == p_world) {
@@ -620,7 +620,6 @@ void LegoOmni::DeleteWorld(LegoWorld* p_world)
 			}
 
 			delete p_world;
-			break;
 		}
 	}
 }
@@ -629,19 +628,22 @@ void LegoOmni::DeleteWorld(LegoWorld* p_world)
 void LegoOmni::RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId)
 {
 	if (m_worldList) {
-		LegoWorldListCursor cursor(m_worldList);
-		LegoWorldListCursor cursor2(m_worldList); // not sure why there are 2 cursors used.
+		LegoWorldListCursor a(m_worldList);
+		LegoWorldListCursor b(m_worldList);
 		LegoWorld* world;
 
-		while (cursor.Next(world)) {
-			{
-				if ((p_objectId == -1 || world->GetEntityId() == p_objectId) &&
-					(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
-					cursor.Detach();
+		a.Head();
+		while (a.Current(world)) {
+			b = a;
+			b.Next();
 
-					delete world;
-				}
+			if ((p_objectId == -1 || world->GetEntityId() == p_objectId) &&
+				(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
+				a.Detach();
+				delete world;
 			}
+
+			a = b;
 		}
 	}
 }

@@ -86,4 +86,7 @@ public:
 // SYNTHETIC: LEGO1 0x10059be0
 // MxPtrList<LegoWorld>::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x1005b740
+// MxList<LegoWorld *>::DeleteEntry
+
 #endif // LEGOWORLDLIST_H
