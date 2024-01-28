@@ -606,15 +606,44 @@ void LegoOmni::AddWorld(LegoWorld* p_world)
 	m_worldList->Append(p_world);
 }
 
-// STUB: LEGO1 0x1005adb0
-void LegoOmni::DeleteEntity(LegoEntity* p_entity)
+// FUNCTION: LEGO1 0x1005adb0
+void LegoOmni::DeleteWorld(LegoWorld* p_world)
 {
+	if (m_worldList) {
+		LegoWorldListCursor cursor(m_worldList);
+
+		while (cursor.Find(p_world)) {
+			cursor.Detach();
+
+			if (m_currentWorld == p_world) {
+				m_currentWorld = NULL;
+			}
+
+			delete p_world;
+			break;
+		}
+	}
 }
 
-// STUB: LEGO1 0x1005af10
-void LegoOmni::RemoveWorld(const MxAtomId&, MxLong)
+// FUNCTION: LEGO1 0x1005af10
+void LegoOmni::RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId)
 {
-	// TODO
+	if (m_worldList) {
+		LegoWorldListCursor cursor(m_worldList);
+		LegoWorldListCursor cursor2(m_worldList); // not sure why there are 2 cursors used.
+		LegoWorld* world;
+
+		while (cursor.Next(world)) {
+			{
+				if ((p_objectId == -1 || world->GetEntityId() == p_objectId) &&
+					(!p_atom.GetInternal() || world->GetAtom() == p_atom)) {
+					cursor.Detach();
+
+					delete world;
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1005b0c0
@@ -638,25 +667,26 @@ LegoWorld* LegoOmni::FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 {
 	if (p_dsAction.GetAtomId().GetInternal() != NULL) {
-		LegoEntity* entity = FindByEntityIdOrAtomId(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
-		if (entity) {
-			DeleteEntity(entity);
+		LegoWorld* world = FindWorld(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+		if (world) {
+			DeleteWorld(world);
 			return;
 		}
 
 		if (m_currentWorld != NULL) {
-			MxCore* entity2 = m_currentWorld->FUN_10021790(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
-			m_currentWorld->EndAction(entity2);
+			MxCore* entity = m_currentWorld->Find(p_dsAction.GetAtomId(), p_dsAction.GetObjectId());
+			if (entity) {
+				m_currentWorld->Remove(entity);
 
-			if (entity2->IsA("MxPresenter")) {
-				Streamer()->FUN_100b98f0(((MxPresenter*) entity2)->GetAction());
-				((MxPresenter*) entity2)->EndAction();
-
+				if (entity->IsA("MxPresenter")) {
+					Streamer()->FUN_100b98f0(((MxPresenter*) entity)->GetAction());
+					((MxPresenter*) entity)->EndAction();
+				}
+				else {
+					delete entity;
+				}
+				return;
 			}
-			else {
-				delete entity2;
-			}
-			return;
 		}
 	}
 	MxOmni::DeleteObject(p_dsAction);
