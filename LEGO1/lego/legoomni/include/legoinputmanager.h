@@ -83,8 +83,8 @@ public:
 	void ReleaseDX();
 	MxResult GetJoystickId();
 	MxResult GetJoystickState(MxU32* p_joystickX, MxU32* p_joystickY, DWORD* p_buttonsState, MxU32* p_povPosition);
-	void SetTimer();
-	void KillTimer();
+	void StartAutoDragTimer();
+	void StopAutoDragTimer();
 	void EnableInputProcessing();
 	void SetCamera(LegoCameraController* p_camera);
 	void ClearCamera();
@@ -123,8 +123,8 @@ private:
 	undefined4 m_unk0x6c;                    // 0x6c
 	undefined4 m_unk0x70;                    // 0x70
 	undefined4 m_unk0x74;                    // 0x74
-	UINT m_timer;                            // 0x78
-	UINT m_timeout;                          // 0x7c
+	UINT m_autoDragTimerID;                  // 0x78
+	UINT m_autoDragTime;                     // 0x7c
 	undefined m_unk0x80;                     // 0x80
 	undefined m_unk0x81;                     // 0x81
 	LegoControlManager* m_controlManager;    // 0x84
