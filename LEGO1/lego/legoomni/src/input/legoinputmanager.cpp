@@ -2,7 +2,9 @@
 
 #include "legocontrolmanager.h"
 #include "legoomni.h"
+#include "legovideomanager.h"
 #include "mxautolocker.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
 DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
@@ -279,8 +281,112 @@ void LegoInputManager::ProcessEvents()
 	}
 }
 
-// STUB: LEGO1 0x1005c9c0
+// FUNCTION: LEGO1 0x1005c9c0
 MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
+{
+	MxBool processRoi;
+	if (p_param.GetType() == c_notificationKeyPress) {
+		if (!Lego()->IsTimerRunning() || p_param.GetKey() == 0x13) {
+			if (p_param.GetKey() == 16) {
+				if (m_unk0x195) {
+					m_unk0x80 = 0;
+					p_param.SetType(c_notificationDrag);
+					if (m_camera) {
+						m_camera->Notify(p_param);
+					}
+				}
+
+				m_unk0x195 = !m_unk0x195;
+				return TRUE;
+			}
+
+			LegoNotifyListCursor cursor(m_keyboardNotifyList);
+			MxCore* obj;
+			while (cursor.Next(obj)) {
+				if (obj->Notify(p_param) != 0) {
+					return TRUE;
+				}
+			}
+		}
+	}
+	else {
+		if (!Lego()->IsTimerRunning()) {
+			processRoi = TRUE;
+			if (m_unk0x335 != 0) {
+				if (p_param.GetType() == c_notificationButtonDown) {
+					LegoEventNotificationParam notification(c_notificationKeyPress, NULL, 0, 0, 0, ' ');
+
+					LegoNotifyListCursor cursor(m_keyboardNotifyList);
+					MxCore* obj;
+					while (cursor.Next(obj)) {
+						if (obj->Notify(p_param) != 0) {
+							return TRUE;
+						}
+					}
+				}
+
+				return TRUE;
+			}
+
+			if (m_unk0x195 && p_param.GetType() == c_notificationButtonDown) {
+				m_unk0x195 = 0;
+				return TRUE;
+			}
+
+			if (m_world != NULL && m_world->Notify(p_param) != 0) {
+				return TRUE;
+			}
+
+			if (p_param.GetType() == c_notificationButtonDown) {
+				MxPresenter* presenter = VideoManager()->VTable0x38(p_param.GetX(), p_param.GetY());
+				if (presenter) {
+					if (presenter->GetDisplayZ() < 0) {
+						processRoi = FALSE;
+						if (m_controlManager->FUN_10029210(p_param, presenter)) {
+							return TRUE;
+						}
+					}
+					else {
+						LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+						if (roi == NULL && m_controlManager->FUN_10029210(p_param, presenter)) {
+							return TRUE;
+						}
+					}
+				}
+			}
+
+			if (p_param.GetType() == c_notificationButtonUp) {
+				if (g_unk0x100f31b0 != -1 || !m_controlManager->GetUnknown0x10() ||
+					m_controlManager->GetUnknown0x0c() == 1) {
+					MxBool result2 = m_controlManager->FUN_10029210(p_param, NULL);
+					KillTimer();
+					m_unk0x80 = 0;
+					m_unk0x81 = 0;
+					return result2;
+				}
+				else {
+					if (FUN_1005cdf0(p_param)) {
+						if (processRoi && p_param.GetType() == c_notificationType11) {
+							LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+							p_param.SetROI(roi);
+							if (roi && roi->GetUnk0x0c() == 1) {
+								// TODO: enumerate through some list in ROI
+							}
+						}
+
+						if (m_camera && m_camera->Notify(p_param) != 0) {
+							return TRUE;
+						}
+					}
+				}
+			}
+		}
+	}
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1005cdf0
+MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return FALSE;

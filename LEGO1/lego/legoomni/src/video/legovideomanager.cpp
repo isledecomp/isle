@@ -330,10 +330,18 @@ void LegoVideoManager::DrawFPS()
 	// TODO
 }
 
-// STUB: LEGO1 0x1007c080
-void LegoVideoManager::VTable0x38(undefined4, undefined4)
+// FUNCTION: LEGO1 0x1007c080
+MxPresenter* LegoVideoManager::VTable0x38(MxS32 p_x, MxS32 p_y)
 {
-	// TODO
+	MxPresenterListCursor cursor(m_presenters);
+	MxPresenter* presenter;
+
+	while (cursor.Next(presenter)) {
+		if (presenter->IsHit(p_x, p_y)) {
+			return presenter;
+		}
+	}
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1007c290

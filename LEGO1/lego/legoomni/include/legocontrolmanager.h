@@ -1,6 +1,7 @@
 #ifndef LEGOCONTROLMANAGER_H
 #define LEGOCONTROLMANAGER_H
 
+#include "legoeventnotificationparam.h"
 #include "mxcore.h"
 #include "mxpresenterlist.h"
 
@@ -28,13 +29,20 @@ public:
 	void FUN_10028df0(MxPresenterList* p_presenterList);
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
+	MxBool FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
 	void FUN_100293c0(undefined4, const char*, undefined2);
+
+	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
+	inline undefined GetUnknown0x10() { return m_unk0x10; }
 
 	// SYNTHETIC: LEGO1 0x10028d40
 	// LegoControlManager::`scalar deleting destructor'
 
 private:
-	undefined m_padding0x08[0x58]; // 0x08
+	undefined4 m_unk0x08;          // 0x08
+	undefined4 m_unk0x0c;          // 0x0c
+	undefined m_unk0x10;           // 0x10
+	undefined m_padding0x08[0x4c]; // 0x14
 };
 
 #endif // LEGOCONTROLMANAGER_H
