@@ -13,7 +13,7 @@ public:
 	MxVideoPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c740
-	virtual ~MxVideoPresenter() override { Destroy(TRUE); }; // vtable+0x00
+	virtual ~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000c820
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -36,7 +36,7 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000c7a0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	virtual void EndAction() override;                   // vtable+0x40
 	virtual MxResult PutData() override;                 // vtable+0x4c
@@ -61,16 +61,16 @@ public:
 	virtual undefined VTable0x74(); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000c7b0
-	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; }; // vtable+0x78
+	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000c7c0
-	virtual MxBool VTable0x7c() { return (m_bitmap != NULL) || (m_alpha != NULL); }; // vtable+0x7c
+	virtual MxBool VTable0x7c() { return (m_bitmap != NULL) || (m_alpha != NULL); } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
-	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); }; // vtable+0x80
+	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); } // vtable+0x80
 
 	// FUNCTION: LEGO1 0x1000c800
-	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); }; // vtable+0x84
+	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); } // vtable+0x84
 
 	// VTABLE: LEGO1 0x100dc2bc
 	// SIZE 0x0c

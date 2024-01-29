@@ -13,7 +13,7 @@ public:
 	inline MxMediaPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c550
-	virtual ~MxMediaPresenter() override { Destroy(TRUE); };
+	virtual ~MxMediaPresenter() override { Destroy(TRUE); }
 
 	virtual MxResult Tickle() override; // vtable+0x08
 
@@ -35,7 +35,7 @@ public:
 	virtual void DoneTickle() override;      // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x1000c5b0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	virtual MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
 	virtual void EndAction() override;                                       // vtable+0x40

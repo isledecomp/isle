@@ -17,7 +17,7 @@ public:
 	virtual MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
-	}; // vtable+0x14
+	} // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x1001ceb0
 	// MxPresenterList::`scalar deleting destructor'

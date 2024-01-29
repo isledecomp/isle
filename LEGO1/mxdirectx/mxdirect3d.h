@@ -62,7 +62,7 @@ public:
 	DWORD GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice);
 	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
-	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
+	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; }
 	inline IDirect3D2* GetDirect3D() { return this->m_pDirect3d; }
 	inline IDirect3DDevice2* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
 

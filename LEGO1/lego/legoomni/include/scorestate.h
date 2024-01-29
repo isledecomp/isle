@@ -12,13 +12,13 @@ public:
 	{
 		// STRING: LEGO1 0x100f0084
 		return "ScoreState";
-	};
+	}
 
 	// FUNCTION: LEGO1 0x1000de50
 	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ScoreState::ClassName()) || LegoState::IsA(p_name);
-	};
+	}
 
 	virtual MxBool VTable0x14() override; // vtable+0x14
 	virtual MxBool SetFlag() override;    // vtable+0x18

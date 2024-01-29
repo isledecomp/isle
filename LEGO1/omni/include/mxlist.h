@@ -53,8 +53,8 @@ public:
 
 	virtual ~MxList() override;
 
-	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); };
-	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); };
+	void Append(T p_obj) { InsertEntry(p_obj, this->m_last, NULL); }
+	void Prepend(T p_obj) { InsertEntry(p_obj, NULL, this->m_first); }
 	void DeleteAll(MxBool p_destroy = TRUE);
 	MxU32 GetCount() { return this->m_count; }
 
@@ -75,7 +75,7 @@ class MxPtrList : public MxList<T*> {
 public:
 	MxPtrList(MxBool p_ownership) { SetOwnership(p_ownership); }
 
-	static void Destroy(T* p_obj) { delete p_obj; };
+	static void Destroy(T* p_obj) { delete p_obj; }
 
 	void SetOwnership(MxBool p_ownership)
 	{

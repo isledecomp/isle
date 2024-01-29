@@ -14,13 +14,13 @@ public:
 	{
 		// STRING: LEGO1 0x100f0154
 		return "Act1State";
-	};
+	}
 
 	// FUNCTION: LEGO1 0x100338b0
 	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
-	};
+	}
 
 	virtual MxBool SetFlag() override;                          // vtable+0x18
 	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c

@@ -36,7 +36,7 @@ public:
 		this->m_mxEntityId = p_id;
 		this->m_atom = p_atom;
 		return SUCCESS;
-	}; // vtable+0x14
+	} // vtable+0x14
 
 	inline MxResult Create(MxDSAction& p_dsAction)
 	{

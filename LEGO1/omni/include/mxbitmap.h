@@ -44,7 +44,7 @@ public:
 	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
-	virtual int VTable0x28(int) { return -1; }; // vtable+28
+	virtual int VTable0x28(int) { return -1; } // vtable+28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,

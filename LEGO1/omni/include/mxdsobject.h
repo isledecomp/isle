@@ -36,13 +36,13 @@ public:
 	void SetSourceName(const char* p_sourceName);
 
 	// FUNCTION: LEGO1 0x100bf730
-	inline virtual const char* ClassName() const override { return "MxDSObject"; }; // vtable+0c
+	inline virtual const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
 
 	// FUNCTION: LEGO1 0x100bf740
 	inline virtual MxBool IsA(const char* p_name) const override
 	{
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
-	}; // vtable+10;
+	} // vtable+10;
 
 	virtual undefined4 VTable0x14();                                                // vtable+14;
 	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;

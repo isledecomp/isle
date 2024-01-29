@@ -11,7 +11,7 @@ public:
 	MxStillPresenter() { m_bitmapInfo = NULL; }
 
 	// FUNCTION: LEGO1 0x10043550
-	virtual ~MxStillPresenter() override { Destroy(TRUE); }; // vtable+0x00
+	virtual ~MxStillPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100435c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -32,7 +32,7 @@ public:
 	virtual void ParseExtra() override;      // vtable+0x30
 
 	// FUNCTION: LEGO1 0x100435b0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	virtual void Enable(MxBool p_enable) override;            // vtable+0x54
 	virtual void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c
