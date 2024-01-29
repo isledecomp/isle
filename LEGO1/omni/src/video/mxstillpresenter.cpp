@@ -242,11 +242,11 @@ MxStillPresenter* MxStillPresenter::Clone()
 
 				if (m_alpha)
 					presenter->m_alpha = new MxVideoPresenter::AlphaMask(*m_alpha);
+
+				result = SUCCESS;
 			}
 		}
 	}
-
-	result = SUCCESS;
 
 done:
 	if (result != SUCCESS) {
