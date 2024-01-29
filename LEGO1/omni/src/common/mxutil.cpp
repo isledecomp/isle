@@ -1,10 +1,12 @@
 #include "mxutil.h"
 
+#include "mxcompositepresenter.h"
 #include "mxdsaction.h"
 #include "mxdsactionlist.h"
 #include "mxdsfile.h"
 #include "mxdsmultiaction.h"
 #include "mxdsobject.h"
+#include "mxpresenterlist.h"
 #include "mxrect32.h"
 
 // GLOBAL: LEGO1 0x101020e8
@@ -113,6 +115,19 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
 {
 	g_omniUserMessage = p_userMsg;
+}
+
+// FUNCTION: LEGO1 0x100b7170
+MxBool HasCompositePresenter(MxCompositePresenterList* p_presenterList, MxPresenter* p_presenter)
+{
+	for (MxCompositePresenterList::iterator it = p_presenterList->begin(); it != p_presenterList->end(); it++) {
+		if (p_presenter == *it || (*it)->IsA("MxCompositePresenter") &&
+									  HasCompositePresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter)) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100b7220

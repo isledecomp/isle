@@ -99,6 +99,7 @@ public:
 
 	inline MxS32 PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc);
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
+	inline AlphaMask* GetAlphaMask() { return m_alpha; }
 
 	// SYNTHETIC: LEGO1 0x1000c910
 	// MxVideoPresenter::`scalar deleting destructor'

@@ -36,7 +36,7 @@ public:
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
 	virtual MxBool VTable0x64(undefined4 p_undefined) override;              // vtable+0x64
 	virtual void VTable0x68(MxBool p_unk0x50);                               // vtable+0x68
-	virtual void VTable0x6c(undefined2);                                     // vtable+0x6c
+	virtual void VTable0x6c(MxS16);                                          // vtable+0x6c
 
 	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
 

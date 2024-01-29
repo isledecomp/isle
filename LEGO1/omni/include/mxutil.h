@@ -8,6 +8,8 @@
 class MxDSFile;
 class MxDSObject;
 class MxDSAction;
+class MxCompositePresenterList;
+class MxPresenter;
 
 template <class T>
 inline T Abs(T p_t)
@@ -71,6 +73,7 @@ MxBool GetRectIntersection(
 
 void MakeSourceName(char*, const char*);
 void SetOmniUserMessage(void (*)(const char*, int));
+MxBool HasCompositePresenter(MxCompositePresenterList* p_presenterList, MxPresenter* p_presenter);
 void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
 MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
 
