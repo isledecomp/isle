@@ -117,16 +117,16 @@ void MxVideoPresenter::Init()
 	m_unk0x5c = 1;
 	m_unk0x58 = NULL;
 	m_unk0x60 = -1;
-	m_flags &= ~c_bit1;
+	SetBit0(FALSE);
 
 	if (MVideoManager() != NULL) {
 		MVideoManager();
-		m_flags |= c_bit2;
-		m_flags &= ~c_bit3;
+		SetBit1(TRUE);
+		SetBit2(FALSE);
 	}
 
-	m_flags &= ~c_bit4;
-	m_flags &= ~c_bit5;
+	SetBit3(FALSE);
+	SetBit4(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b27b0
@@ -138,8 +138,8 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 	if (m_unk0x58) {
 		m_unk0x58->Release();
 		m_unk0x58 = NULL;
-		m_flags &= ~c_bit2;
-		m_flags &= ~c_bit3;
+		SetBit1(FALSE);
+		SetBit2(FALSE);
 	}
 
 	if (MVideoManager() && (m_alpha || m_bitmap)) {
@@ -230,8 +230,7 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 		pixel = m_bitmap->GetBmiStride() * height + m_bitmap->GetBitmapData();
 	}
 
-	// DECOMP: m_flags is 1 byte, so no enum here
-	if (m_flags & 0x10)
+	if (GetBit4())
 		return (MxBool) *pixel;
 
 	if ((GetAction()->GetFlags() & MxDSAction::c_bit4) && *pixel == 0)
@@ -429,13 +428,13 @@ void MxVideoPresenter::StreamingTickle()
 			LoadFrame(m_currentChunk);
 			m_subscriber->DestroyChunk(m_currentChunk);
 			m_currentChunk = NULL;
-			m_flags |= c_bit1;
+			SetBit0(TRUE);
 
 			if (m_currentTickleState != e_streaming)
 				break;
 		}
 
-		if (m_flags & c_bit1)
+		if (GetBit0())
 			m_unk0x5c = 5;
 	}
 }
@@ -467,13 +466,13 @@ void MxVideoPresenter::RepeatingTickle()
 
 				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
-				m_flags |= c_bit1;
+				SetBit0(TRUE);
 
 				if (m_currentTickleState != e_repeating)
 					break;
 			}
 
-			if (m_flags & c_bit1)
+			if (GetBit0())
 				m_unk0x5c = 5;
 		}
 	}
