@@ -5,6 +5,7 @@
 #include "mxcompositepresenter.h"
 
 class LegoControlManagerEvent;
+class MxVideoPresenter;
 
 // VTABLE: LEGO1 0x100d7b88
 // SIZE 0x5c
@@ -36,12 +37,12 @@ public:
 	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
 	virtual MxBool VTable0x64(undefined4 p_undefined) override;              // vtable+0x64
 	virtual void VTable0x68(MxBool p_unk0x50);                               // vtable+0x68
-	virtual void VTable0x6c(undefined2);                                     // vtable+0x6c
+	virtual void VTable0x6c(MxS16);                                          // vtable+0x6c
 
 	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
 
 private:
-	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter);
+	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
 	void FUN_10044540(undefined2);
 
 	undefined2 m_unk0x4c; // 0x4c

@@ -2,8 +2,11 @@
 
 #include "define.h"
 #include "legocontrolmanager.h"
+#include "mxdsmultiaction.h"
 #include "mxticklemanager.h"
+#include "mxtimer.h"
 #include "mxutil.h"
+#include "mxvideopresenter.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
@@ -99,11 +102,90 @@ void MxControlPresenter::EndAction()
 	}
 }
 
-// STUB: LEGO1 0x10044270
-MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
+// FUNCTION: LEGO1 0x10044270
+MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter)
 {
-	// TODO
-	return TRUE;
+	if (m_unk0x4c == 3) {
+		MxVideoPresenter* frontPresenter = (MxVideoPresenter*) m_list.front();
+
+		if (p_presenter == frontPresenter || frontPresenter->GetDisplayZ() < frontPresenter->GetDisplayZ()) {
+			if (p_presenter->VTable0x7c()) {
+				MxS32 height = frontPresenter->GetHeight();
+				MxS32 width = frontPresenter->GetWidth();
+
+				if (frontPresenter->GetLocation().GetX() <= p_x &&
+					p_x < width - 1 + frontPresenter->GetLocation().GetY() &&
+					frontPresenter->GetLocation().GetY() <= p_y &&
+					p_y < height - 1 + frontPresenter->GetLocation().GetY()) {
+					MxU8* start;
+
+					if (frontPresenter->GetAlphaMask() == NULL) {
+						start = frontPresenter->GetBitmap()->GetStart(
+							p_x - frontPresenter->GetLocation().GetX(),
+							p_y - frontPresenter->GetLocation().GetY()
+						);
+					}
+					else {
+						start = NULL;
+					}
+
+					m_unk0x56 = 0;
+					if (m_unk0x58 == NULL) {
+						if (*start != 0) {
+							m_unk0x56 = 1;
+						}
+					}
+					else {
+						for (MxS16 i = 1; i <= *m_unk0x58; i++) {
+							if (m_unk0x58[i] == *start) {
+								m_unk0x56 = i;
+								break;
+							}
+						}
+					}
+
+					if (m_unk0x56) {
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+	else {
+		if (ContainsPresenter(m_list, p_presenter)) {
+			if (m_unk0x4c == 2) {
+				MxS32 width = p_presenter->GetWidth();
+				MxS32 height = p_presenter->GetHeight();
+
+				if (m_unk0x52 == 2 && m_unk0x54 == 2) {
+					MxS16 val;
+					if (p_x < p_presenter->GetLocation().GetX() + width / 2) {
+						val = 3;
+						if (p_y < p_presenter->GetLocation().GetY() + height / 2) {
+							val = 1;
+						}
+						m_unk0x56 = val;
+						return TRUE;
+					}
+
+					val = 4;
+					if (p_y < p_presenter->GetLocation().GetY() + height / 2) {
+						val = 2;
+					}
+
+					m_unk0x56 = val;
+					return TRUE;
+				}
+			}
+			else {
+				m_unk0x56 = -1;
+			}
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10044480
@@ -122,7 +204,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 			}
 			break;
 		case c_notificationButtonDown:
-			if (FUN_10044270(p_event->GetX(), p_event->GetY(), p_presenter)) {
+			if (FUN_10044270(p_event->GetX(), p_event->GetY(), (MxVideoPresenter*) p_presenter)) {
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(m_unk0x56);
@@ -137,10 +219,28 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10044540
-void MxControlPresenter::VTable0x6c(undefined2)
+// FUNCTION: LEGO1 0x10044540
+void MxControlPresenter::VTable0x6c(MxS16 p_val)
 {
-	// TODO
+	if (p_val == -1) {
+		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetCount() - m_unk0x4e == 1) {
+			m_unk0x4e = 0;
+		}
+		else {
+			m_unk0x4e++;
+		}
+	}
+	else {
+		m_unk0x4e = p_val;
+	}
+
+	m_action->SetUnknown90(Timer()->GetTime());
+
+	MxS16 i = 0;
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		(*it)->Enable((m_unk0x4c == 3 && m_unk0x4e == 0 || !IsEnabled()) ? FALSE : m_unk0x4e == i);
+		i++;
+	}
 }
 
 // FUNCTION: LEGO1 0x10044610
