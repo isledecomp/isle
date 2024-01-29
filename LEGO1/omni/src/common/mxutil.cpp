@@ -112,11 +112,11 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 }
 
 // FUNCTION: LEGO1 0x100b7170
-MxBool HasCompositePresenter(MxCompositePresenterList* p_presenterList, MxPresenter* p_presenter)
+MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter)
 {
-	for (MxCompositePresenterList::iterator it = p_presenterList->begin(); it != p_presenterList->end(); it++) {
+	for (MxCompositePresenterList::iterator it = p_presenterList.begin(); it != p_presenterList.end(); it++) {
 		if (p_presenter == *it || (*it)->IsA("MxCompositePresenter") &&
-									  HasCompositePresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter)) {
+									  ContainsPresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter)) {
 			return TRUE;
 		}
 	}

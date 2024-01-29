@@ -2,7 +2,7 @@
 
 #include "define.h"
 #include "legocontrolmanager.h"
-#include "mxdsparallelaction.h"
+#include "mxdsmultiaction.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutil.h"
@@ -103,53 +103,59 @@ void MxControlPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x10044270
-MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_presenter)
+MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter)
 {
 	if (m_unk0x4c == 3) {
-		MxPresenter* first = *m_list.begin();
-		if (p_presenter == first || first->GetDisplayZ() < first->GetDisplayZ()) {
-			MxS32 height = ((MxVideoPresenter*) first)->GetHeight();
-			MxS32 width = ((MxVideoPresenter*) first)->GetWidth();
+		MxVideoPresenter* frontPresenter = (MxVideoPresenter*) m_list.front();
 
-			if (first->GetLocation().GetX() <= p_x && p_x < width - 1 + first->GetLocation().GetY() &&
-				first->GetLocation().GetY() <= p_y && p_y < height - 1 + first->GetLocation().GetY()) {
+		if (p_presenter == frontPresenter || frontPresenter->GetDisplayZ() < frontPresenter->GetDisplayZ()) {
+			if (p_presenter->VTable0x7c()) {
+				MxS32 height = frontPresenter->GetHeight();
+				MxS32 width = frontPresenter->GetWidth();
 
-				MxU8* start;
-				MxBitmap* bitmap = ((MxVideoPresenter*) first)->GetBitmap();
+				if (frontPresenter->GetLocation().GetX() <= p_x &&
+					p_x < width - 1 + frontPresenter->GetLocation().GetY() &&
+					frontPresenter->GetLocation().GetY() <= p_y &&
+					p_y < height - 1 + frontPresenter->GetLocation().GetY()) {
+					MxU8* start;
 
-				if (((MxVideoPresenter*) first)->GetAlphaMask() == NULL) {
-					start = bitmap->GetStart(p_x - first->GetLocation().GetX(), p_y - first->GetLocation().GetY());
-				}
-				else {
-					start = NULL;
-				}
-				m_unk0x56 = 0;
-
-				if (m_unk0x58 == NULL) {
-					if (*start != 0) {
-						m_unk0x56 = 1;
+					if (frontPresenter->GetAlphaMask() == NULL) {
+						start = frontPresenter->GetBitmap()->GetStart(
+							p_x - frontPresenter->GetLocation().GetX(),
+							p_y - frontPresenter->GetLocation().GetY()
+						);
 					}
-				}
-				else {
-					for (MxS16 i = 1; i <= *m_unk0x58; i++) {
-						if (m_unk0x58[i] == *start) {
-							m_unk0x56 = i;
-							break;
+					else {
+						start = NULL;
+					}
+
+					m_unk0x56 = 0;
+					if (m_unk0x58 == NULL) {
+						if (*start != 0) {
+							m_unk0x56 = 1;
 						}
 					}
-				}
+					else {
+						for (MxS16 i = 1; i <= *m_unk0x58; i++) {
+							if (m_unk0x58[i] == *start) {
+								m_unk0x56 = i;
+								break;
+							}
+						}
+					}
 
-				if (m_unk0x56) {
-					return TRUE;
+					if (m_unk0x56) {
+						return TRUE;
+					}
 				}
 			}
 		}
 	}
 	else {
-		if (HasCompositePresenter(&m_list, p_presenter)) {
+		if (ContainsPresenter(m_list, p_presenter)) {
 			if (m_unk0x4c == 2) {
-				MxS32 width = ((MxVideoPresenter*) p_presenter)->GetWidth();
-				MxS32 height = ((MxVideoPresenter*) p_presenter)->GetHeight();
+				MxS32 width = p_presenter->GetWidth();
+				MxS32 height = p_presenter->GetHeight();
 
 				if (m_unk0x52 == 2 && m_unk0x54 == 2) {
 					MxS16 val;
@@ -178,6 +184,7 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -197,7 +204,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 			}
 			break;
 		case c_notificationButtonDown:
-			if (FUN_10044270(p_event->GetX(), p_event->GetY(), p_presenter)) {
+			if (FUN_10044270(p_event->GetX(), p_event->GetY(), (MxVideoPresenter*) p_presenter)) {
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(m_unk0x56);
@@ -216,7 +223,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 void MxControlPresenter::VTable0x6c(MxS16 p_val)
 {
 	if (p_val == -1) {
-		if ((MxS16) ((MxDSParallelAction*) m_action)->GetActionList()->GetCount() - m_unk0x4e == 1) {
+		if ((MxS16) ((MxDSMultiAction*) m_action)->GetActionList()->GetCount() - m_unk0x4e == 1) {
 			m_unk0x4e = 0;
 		}
 		else {

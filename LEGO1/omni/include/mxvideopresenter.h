@@ -72,7 +72,7 @@ public:
 	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; }; // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000c7c0
-	virtual MxBool VTable0x7c() { return (m_bitmap != NULL) || (m_alpha != NULL); }; // vtable+0x7c
+	virtual MxBool VTable0x7c() { return m_bitmap != NULL || m_alpha != NULL; }; // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
 	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); }; // vtable+0x80
