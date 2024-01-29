@@ -8,7 +8,7 @@
 class LegoPathController : public MxCore {
 public:
 	LegoPathController();
-	virtual ~LegoPathController() override { Destroy(); };
+	virtual ~LegoPathController() override { Destroy(); }
 
 	virtual MxResult Tickle() override; // vtable+08
 

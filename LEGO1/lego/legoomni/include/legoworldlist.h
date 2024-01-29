@@ -25,7 +25,7 @@ public:
 	virtual MxS8 Compare(LegoWorld* p_a, LegoWorld* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
-	}; // vtable+0x14
+	} // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x10059a00
 	// LegoWorldList::`scalar deleting destructor'

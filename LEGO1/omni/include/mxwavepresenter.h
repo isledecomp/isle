@@ -13,7 +13,7 @@ public:
 	MxWavePresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000d640
-	virtual ~MxWavePresenter() override { Destroy(TRUE); }; // vtable+0x00
+	virtual ~MxWavePresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000d6c0
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -36,7 +36,7 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000d6a0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	virtual void EndAction() override;                       // vtable+0x40
 	virtual MxResult PutData() override;                     // vtable+0x4c
@@ -47,7 +47,7 @@ public:
 	virtual void Resume();                                   // vtable+0x68
 
 	// FUNCTION: LEGO1 0x1000d6b0
-	virtual MxBool IsPaused() { return m_paused; }; // vtable+0x6c
+	virtual MxBool IsPaused() { return m_paused; } // vtable+0x6c
 
 	// SIZE 0x18
 	struct WaveFormat {

@@ -54,7 +54,7 @@ public:
 	virtual void StopTimer();                                                                 // vtable+3c
 
 	// FUNCTION: LEGO1 0x10058a90
-	virtual MxBool IsTimerRunning() { return m_timerRunning; }; // vtable+40
+	virtual MxBool IsTimerRunning() { return m_timerRunning; } // vtable+40
 
 	static void SetInstance(MxOmni* p_instance);
 	static MxBool ActionSourceEquals(MxDSAction* p_action, const char* p_name);

@@ -60,17 +60,17 @@ public:
 	virtual void StartingTickle() { ProgressTickleState(e_streaming); } // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x1000be80
-	virtual void StreamingTickle() { ProgressTickleState(e_repeating); }; // vtable+0x20
+	virtual void StreamingTickle() { ProgressTickleState(e_repeating); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x1000bea0
-	virtual void RepeatingTickle() { ProgressTickleState(e_unk5); }; // vtable+0x24
+	virtual void RepeatingTickle() { ProgressTickleState(e_unk5); } // vtable+0x24
 
 	// FUNCTION: LEGO1 0x1000bec0
-	virtual void Unk5Tickle() { ProgressTickleState(e_done); }; // vtable+0x28
+	virtual void Unk5Tickle() { ProgressTickleState(e_done); } // vtable+0x28
 
 protected:
 	// FUNCTION: LEGO1 0x1000bee0
-	virtual void DoneTickle() { ProgressTickleState(e_idle); }; // vtable+0x2c
+	virtual void DoneTickle() { ProgressTickleState(e_idle); } // vtable+0x2c
 
 	virtual void ParseExtra(); // vtable+0x30
 
@@ -82,10 +82,10 @@ protected:
 
 public:
 	// FUNCTION: LEGO1 0x1000bf70
-	virtual MxResult AddToManager() { return SUCCESS; }; // vtable+0x34
+	virtual MxResult AddToManager() { return SUCCESS; } // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000bf80
-	virtual void Destroy() { Init(); }; // vtable+0x38
+	virtual void Destroy() { Init(); } // vtable+0x38
 
 	virtual MxResult StartAction(MxStreamController*, MxDSAction*); // vtable+0x3c
 	virtual void EndAction();                                       // vtable+0x40
@@ -97,13 +97,13 @@ public:
 	virtual MxBool HasTickleStatePassed(TickleState p_tickleState)
 	{
 		return m_previousTickleStates & (1 << (MxU8) p_tickleState);
-	}; // vtable+0x48
+	} // vtable+0x48
 
 	// FUNCTION: LEGO1 0x1000bfc0
-	virtual MxResult PutData() { return SUCCESS; }; // vtable+0x4c
+	virtual MxResult PutData() { return SUCCESS; } // vtable+0x4c
 
 	// FUNCTION: LEGO1 0x1000bfd0
-	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) { return FALSE; }; // vtable+0x50
+	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) { return FALSE; } // vtable+0x50
 
 	virtual void Enable(MxBool p_enable); // vtable+0x54
 

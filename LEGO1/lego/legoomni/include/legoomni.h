@@ -126,7 +126,7 @@ public:
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
 	inline void SetWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
-	inline void SetExit(MxBool p_exit) { m_exit = p_exit; };
+	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 
 	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
 

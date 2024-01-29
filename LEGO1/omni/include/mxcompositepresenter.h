@@ -44,7 +44,7 @@ public:
 		if (m_compositePresenter)
 			return m_compositePresenter->VTable0x64(p_undefined);
 		return TRUE;
-	}; // vtable+0x64
+	} // vtable+0x64
 
 protected:
 	MxCompositePresenterList m_list; // 0x40

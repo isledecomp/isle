@@ -47,7 +47,7 @@ public:
 	virtual MxNotificationParam* Clone() override
 	{
 		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
-	}; // vtable+0x04
+	} // vtable+0x04
 
 	inline MxDSAction* GetAction() { return m_action; }
 
@@ -96,7 +96,7 @@ public:
 			this->m_action,
 			this->m_realloc
 		);
-	}; // vtable+0x04
+	} // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100dc208

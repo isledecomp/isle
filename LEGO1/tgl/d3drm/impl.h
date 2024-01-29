@@ -40,7 +40,7 @@ class UnkImpl;
 class RendererImpl : public Renderer {
 public:
 	RendererImpl() : m_data(0) {}
-	~RendererImpl() { Destroy(); };
+	~RendererImpl() { Destroy(); }
 
 	virtual void* ImplementationDataPtr() override;
 

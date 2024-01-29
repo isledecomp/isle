@@ -22,13 +22,13 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1003bea0
-	virtual MxString* GetValue() { return &m_value; };
+	virtual MxString* GetValue() { return &m_value; }
 
 	// FUNCTION: LEGO1 0x1003beb0
-	virtual void SetValue(const char* p_value) { m_value = p_value; };
+	virtual void SetValue(const char* p_value) { m_value = p_value; }
 
 	// FUNCTION: LEGO1 0x1003bec0
-	virtual void Destroy() { delete this; };
+	virtual void Destroy() { delete this; }
 
 	inline const MxString* GetKey() const { return &m_key; }
 
