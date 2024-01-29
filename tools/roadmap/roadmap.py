@@ -38,6 +38,13 @@ class ModuleMap:
             if binfile.is_valid_section(sizeref.section)
         ]
 
+    def get_all_cmake_modules(self) -> List[str]:
+        return [
+            obj
+            for (_, (__, obj)) in self.module_lookup.items()
+            if obj.startswith("CMakeFiles")
+        ]
+
     def get_module(self, addr: int) -> Optional[str]:
         for start, size, module_id in self.section_contrib:
             if start <= addr < start + size:
@@ -132,14 +139,14 @@ class DeltaCollector:
             self.disp_map[row.module].append(row.displacement)
 
 
-def suggest_order(results: List[RoadmapRow], match_type: str):
+def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_type: str):
     """Suggest the order of modules for CMakeLists.txt"""
 
     dc = DeltaCollector(match_type)
     for row in results:
         dc.read_row(row)
 
-    leftover_modules = set(mod for mod in dc.seen if mod.startswith("CMakeFiles"))
+    leftover_modules = set(cmake_modules)
 
     # A little convoluted, but we want to take the first two tokens
     # of the string with '/' as the delimiter.
@@ -358,7 +365,7 @@ def main():
         results = list(map(to_roadmap_row, engine.get_all()))
 
         if args.order is not None:
-            suggest_order(results, args.order)
+            suggest_order(results, module_map.get_all_cmake_modules(), args.order)
             return
 
         if args.csv is None:
