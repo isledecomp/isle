@@ -28,13 +28,13 @@ public:
 	// GasStationState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08[3];
-	undefined4 m_unk0x14;
-	undefined2 m_unk0x18;
-	undefined2 m_unk0x1a;
-	undefined2 m_unk0x1c;
-	undefined2 m_unk0x1e;
-	undefined2 m_unk0x20;
+	undefined4 m_unk0x08[3]; // 0x08
+	undefined4 m_unk0x14;    // 0x14
+	undefined2 m_unk0x18;    // 0x18
+	undefined2 m_unk0x1a;    // 0x1a
+	undefined2 m_unk0x1c;    // 0x1c
+	undefined2 m_unk0x1e;    // 0x1e
+	undefined2 m_unk0x20;    // 0x20
 };
 
 #endif // GASSTATIONSTATE_H

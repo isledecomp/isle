@@ -41,9 +41,9 @@ private:
 	RaceStateEntry* GetState(MxU8 p_id);
 
 protected:
-	RaceStateEntry m_state[5];
-	undefined2 m_unk0x26[2];
-	undefined4 m_unk0x28;
+	RaceStateEntry m_state[5]; // 0x08
+	undefined2 m_unk0x26[2];   // 0x26
+	undefined4 m_unk0x28;      // 0x28
 };
 
 #endif // RACESTATE_H

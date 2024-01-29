@@ -7,9 +7,11 @@
 #include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d46c0
+// SIZE 0x08
 class LegoState : public MxCore {
 public:
-	virtual ~LegoState() override; // vtable+0x00
+	// FUNCTION: LEGO1 0x10005f40
+	virtual ~LegoState() override {}
 
 	// FUNCTION: LEGO1 0x100060d0
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -24,9 +26,20 @@ public:
 		return !strcmp(p_name, LegoState::ClassName()) || MxCore::IsA(p_name);
 	}
 
-	virtual MxBool VTable0x14();                       // vtable+0x14
-	virtual MxBool SetFlag();                          // vtable+0x18
-	virtual MxResult VTable0x1c(LegoFile* p_legoFile); // vtable+0x1C
+	// FUNCTION: LEGO1 0x10005f90
+	virtual MxBool VTable0x14() { return TRUE; } // vtable+0x14
+
+	// FUNCTION: LEGO1 0x10005fa0
+	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
+
+	// FUNCTION: LEGO1 0x10005fb0
+	virtual MxResult VTable0x1c(LegoFile* p_legoFile)
+	{
+		if (p_legoFile->IsWriteMode()) {
+			p_legoFile->FUN_10006030(this->ClassName());
+		}
+		return SUCCESS;
+	} // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10006160
 	// LegoState::`scalar deleting destructor'

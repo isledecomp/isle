@@ -30,7 +30,7 @@ public:
 	// ScoreState::`scalar deleting destructor'
 
 private:
-	MxBool m_playCubeTutorial;
+	MxBool m_playCubeTutorial; // 0x08
 };
 
 #endif // SCORESTATE_H
