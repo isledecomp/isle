@@ -111,12 +111,6 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 	return didMatch;
 }
 
-// FUNCTION: LEGO1 0x100b7210
-void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
-{
-	g_omniUserMessage = p_userMsg;
-}
-
 // FUNCTION: LEGO1 0x100b7170
 MxBool HasCompositePresenter(MxCompositePresenterList* p_presenterList, MxPresenter* p_presenter)
 {
@@ -128,6 +122,12 @@ MxBool HasCompositePresenter(MxCompositePresenterList* p_presenterList, MxPresen
 	}
 
 	return FALSE;
+}
+
+// FUNCTION: LEGO1 0x100b7210
+void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
+{
+	g_omniUserMessage = p_userMsg;
 }
 
 // FUNCTION: LEGO1 0x100b7220
