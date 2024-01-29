@@ -9,6 +9,7 @@
 class PoliceState : public LegoState {
 public:
 	PoliceState();
+	virtual ~PoliceState() override {}
 
 	// FUNCTION: LEGO1 0x1005e860
 	inline virtual const char* ClassName() const override // vtable+0x0c

@@ -6,7 +6,7 @@
 #include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d66e0
-// SIZE 0x50 (from 1000acd7)
+// SIZE 0x50
 class LegoVehicleBuildState : public LegoState {
 public:
 	LegoVehicleBuildState(char* p_classType);
@@ -30,10 +30,10 @@ public:
 
 public:
 	struct UnkStruct {
-		undefined4 m_unk0x00;
-		undefined2 m_unk0x04;
-		undefined2 m_unk0x06;
-		undefined2 m_unk0x08;
+		undefined4 m_unk0x00; // 0x00
+		undefined2 m_unk0x04; // 0x04
+		undefined2 m_unk0x06; // 0x06
+		undefined2 m_unk0x08; // 0x08
 
 		UnkStruct();
 	};
