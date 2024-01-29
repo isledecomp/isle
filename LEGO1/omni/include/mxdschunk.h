@@ -61,8 +61,8 @@ public:
 	// MxDSChunk::`scalar deleting destructor'
 
 protected:
-	MxU16 m_flags;    // 0x8
-	MxU32 m_objectId; // 0xc
+	MxU16 m_flags;    // 0x08
+	MxU32 m_objectId; // 0x0c
 	MxLong m_time;    // 0x10
 	MxU32 m_length;   // 0x14
 	MxU8* m_data;     // 0x18

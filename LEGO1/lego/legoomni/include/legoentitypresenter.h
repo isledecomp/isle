@@ -10,10 +10,10 @@ class LegoEntity;
 class LegoEntityPresenter : public MxCompositePresenter {
 public:
 	LegoEntityPresenter();
-	virtual ~LegoEntityPresenter() override; // vtable+0x0
+	virtual ~LegoEntityPresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100534b0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f06b8
 		return "LegoEntityPresenter";

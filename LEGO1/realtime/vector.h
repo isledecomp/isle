@@ -263,7 +263,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d45a0
-// SIZE 0x8
+// SIZE 0x08
 class Vector4 : public Vector3 {
 public:
 	inline Vector4(float* p_data) : Vector3(p_data) {}

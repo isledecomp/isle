@@ -4,8 +4,8 @@ using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(D3DRMVERTEX, 0x24);
 
-DECOMP_SIZE_ASSERT(Mesh, 0x4);
-DECOMP_SIZE_ASSERT(MeshImpl, 0x8);
+DECOMP_SIZE_ASSERT(Mesh, 0x04);
+DECOMP_SIZE_ASSERT(MeshImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3ed0
 void* MeshImpl::ImplementationDataPtr()

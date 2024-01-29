@@ -9,7 +9,7 @@
 class LegoCacheSound : public MxCore {
 public:
 	LegoCacheSound();
-	virtual ~LegoCacheSound() override; // vtable+0x0
+	virtual ~LegoCacheSound() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10006580
 	inline virtual const char* ClassName() const override // vtable+0x0c

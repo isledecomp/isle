@@ -7,8 +7,8 @@ DECOMP_SIZE_ASSERT(PoliceState, 0x10)
 // FUNCTION: LEGO1 0x1005e7c0
 PoliceState::PoliceState()
 {
-	m_unk0xc = 0;
-	m_unk0x8 = (rand() % 2 == 0) ? 501 : 500;
+	m_unk0x0c = 0;
+	m_unk0x08 = (rand() % 2 == 0) ? 501 : 500;
 }
 
 // FUNCTION: LEGO1 0x1005e990
@@ -19,11 +19,11 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 	}
 
 	if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_unk0x8, sizeof(m_unk0x8));
+		p_legoFile->Read(&m_unk0x08, sizeof(m_unk0x08));
 	}
 	else {
-		undefined4 unk0x8 = m_unk0x8;
-		p_legoFile->Write(&unk0x8, sizeof(m_unk0x8));
+		undefined4 unk0x8 = m_unk0x08;
+		p_legoFile->Write(&unk0x8, sizeof(m_unk0x08));
 	}
 
 	return SUCCESS;

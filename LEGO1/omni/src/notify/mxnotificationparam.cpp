@@ -2,4 +2,4 @@
 
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(MxNotificationParam, 0xc);
+DECOMP_SIZE_ASSERT(MxNotificationParam, 0x0c);

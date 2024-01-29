@@ -4,7 +4,7 @@
 #include "legostate.h"
 
 // VTABLE: LEGO1 0x100d4fc8
-// SIZE 0xc
+// SIZE 0x0c
 class Act3State : public LegoState {
 public:
 	inline Act3State() { m_unk0x08 = 0; }

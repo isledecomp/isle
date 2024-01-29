@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 #include "mxtypes.h"
 
-DECOMP_SIZE_ASSERT(MxNotification, 0x8);
+DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
 // FUNCTION: LEGO1 0x100ac220

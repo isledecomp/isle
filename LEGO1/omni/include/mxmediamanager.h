@@ -27,8 +27,8 @@ public:
 	// MxMediaManager::`scalar deleting destructor'
 
 protected:
-	MxPresenterList* m_presenters;       // 0x8
-	MxThread* m_thread;                  // 0xc
+	MxPresenterList* m_presenters;       // 0x08
+	MxThread* m_thread;                  // 0x0c
 	MxCriticalSection m_criticalSection; // 0x10
 };
 

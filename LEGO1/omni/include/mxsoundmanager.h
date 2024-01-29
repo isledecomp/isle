@@ -12,7 +12,7 @@
 class MxSoundManager : public MxAudioManager {
 public:
 	MxSoundManager();
-	virtual ~MxSoundManager() override; // vtable+0x0
+	virtual ~MxSoundManager() override; // vtable+0x00
 
 	virtual void Destroy() override;                                     // vtable+0x18
 	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+0x2c

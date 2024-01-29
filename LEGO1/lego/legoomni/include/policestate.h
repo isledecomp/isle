@@ -30,8 +30,8 @@ public:
 	// PoliceState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x8; // 0x8
-	undefined4 m_unk0xc; // 0xc
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
 };
 
 #endif // POLICESTATE_H

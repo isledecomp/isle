@@ -8,7 +8,7 @@
 class AnimState : public LegoState {
 public:
 	AnimState();
-	virtual ~AnimState() override; // vtable+0x0
+	virtual ~AnimState() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10065070
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -30,8 +30,8 @@ public:
 	// AnimState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x8;  // 0x08
-	undefined4 m_unk0xc;  // 0x0c
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
 	void* m_unk0x10;      // 0x10
 	undefined4 m_unk0x14; // 0x14
 	void* m_unk0x18;      // 0x18

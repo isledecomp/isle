@@ -2,8 +2,8 @@
 
 using namespace TglImpl;
 
-DECOMP_SIZE_ASSERT(Camera, 0x4);
-DECOMP_SIZE_ASSERT(CameraImpl, 0x8);
+DECOMP_SIZE_ASSERT(Camera, 0x04);
+DECOMP_SIZE_ASSERT(CameraImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a36f0
 void* CameraImpl::ImplementationDataPtr()

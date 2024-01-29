@@ -12,7 +12,7 @@
 class MxDSFile : public MxDSSource {
 public:
 	MxDSFile(const char* p_filename, MxULong p_skipReadingChunks);
-	virtual ~MxDSFile(); // vtable+0x0
+	virtual ~MxDSFile(); // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100c0120
 	inline virtual const char* ClassName() const override // vtable+0x0c

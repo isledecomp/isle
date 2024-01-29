@@ -8,7 +8,7 @@
 class LegoCarBuildAnimPresenter : public LegoAnimPresenter {
 public:
 	LegoCarBuildAnimPresenter();
-	virtual ~LegoCarBuildAnimPresenter() override; // vtable+0x0
+	virtual ~LegoCarBuildAnimPresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10078510
 	inline virtual const char* ClassName() const override // vtable+0x0c

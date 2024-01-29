@@ -9,7 +9,7 @@
 class MxParam;
 
 // VTABLE: LEGO1 0x100dc0f8
-// SIZE 0x8
+// SIZE 0x08
 class MxCore {
 public:
 	MxCore();

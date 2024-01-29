@@ -14,7 +14,7 @@ public:
 	virtual ~LegoLoadCacheSoundPresenter() override;
 
 	// FUNCTION: LEGO1 0x10018450
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f05a0
 		return "LegoLoadCacheSoundPresenter";

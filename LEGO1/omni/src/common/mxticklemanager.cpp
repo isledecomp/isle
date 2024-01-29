@@ -5,7 +5,7 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
-#define TICKLE_MANAGER_FLAG_DESTROY 0x1
+#define TICKLE_MANAGER_FLAG_DESTROY 0x01
 
 DECOMP_SIZE_ASSERT(MxTickleClient, 0x10);
 DECOMP_SIZE_ASSERT(MxTickleManager, 0x14);

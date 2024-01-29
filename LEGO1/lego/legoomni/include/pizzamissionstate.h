@@ -6,9 +6,9 @@
 // SIZE 0x20
 struct PizzaMissionStateEntry {
 public:
-	undefined2 m_unk0x0;
+	undefined2 m_unk0x00;
 	MxU8 m_id;
-	undefined m_unk0x3[0x15];
+	undefined m_unk0x03[0x15];
 	MxU16 m_color;
 	undefined m_unk0x18[6];
 };
@@ -41,8 +41,8 @@ private:
 	PizzaMissionStateEntry* GetState(MxU8 p_id);
 
 protected:
-	undefined4 m_unk0x8;               // 0x08
-	undefined4 m_unk0xc;               // 0x0c
+	undefined4 m_unk0x08;              // 0x08
+	undefined4 m_unk0x0c;              // 0x0c
 	PizzaMissionStateEntry m_state[5]; // 0x10
 };
 

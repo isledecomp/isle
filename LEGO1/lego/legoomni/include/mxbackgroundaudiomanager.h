@@ -54,8 +54,8 @@ private:
 	MxResult OpenMusic(MxAtomId& p_script);
 	void DestroyMusic();
 
-	MxBool m_musicEnabled; // 0x8
-	MxDSAction m_action1;  // 0xc
+	MxBool m_musicEnabled; // 0x08
+	MxDSAction m_action1;  // 0x0c
 	MxAudioPresenter* m_unk0xa0;
 	MxDSAction m_action2; // 0xa4
 	MxAudioPresenter* m_unk0x138;

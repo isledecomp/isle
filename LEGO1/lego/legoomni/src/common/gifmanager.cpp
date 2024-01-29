@@ -47,7 +47,7 @@ void GifManager::FUN_10099cc0(GifData* p_data)
 	for (GifList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 #endif
 		if (*it == p_data) {
-			// TODO: This is wrong, but what is at +0xc on the iterator?
+			// TODO: This is wrong, but what is at +0x0c on the iterator?
 			*it = NULL;
 
 			if (p_data->m_texture->Release() == TRUE) {

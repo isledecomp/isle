@@ -46,18 +46,18 @@ public:
 	// AmbulanceMissionState::`scalar deleting destructor'
 
 protected:
-	undefined4 m_unk0x8; // 0x08
-	undefined4 m_unk0xc; // 0x0c
-	MxU16 m_unk0x10;     // 0x10
-	MxU16 m_unk0x12;     // 0x12
-	MxU16 m_unk0x14;     // 0x14
-	MxU16 m_unk0x16;     // 0x16
-	MxU16 m_unk0x18;     // 0x18
-	MxU16 m_color1;      // 0x1a
-	MxU16 m_color2;      // 0x1c
-	MxU16 m_color3;      // 0x1e
-	MxU16 m_color4;      // 0x20
-	MxU16 m_color5;      // 0x22
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
+	MxU16 m_unk0x10;      // 0x10
+	MxU16 m_unk0x12;      // 0x12
+	MxU16 m_unk0x14;      // 0x14
+	MxU16 m_unk0x16;      // 0x16
+	MxU16 m_unk0x18;      // 0x18
+	MxU16 m_color1;       // 0x1a
+	MxU16 m_color2;       // 0x1c
+	MxU16 m_color3;       // 0x1e
+	MxU16 m_color4;       // 0x20
+	MxU16 m_color5;       // 0x22
 };
 
 #endif // AMBULANCEMISSIONSTATE_H

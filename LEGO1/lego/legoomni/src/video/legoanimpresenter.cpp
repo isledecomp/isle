@@ -202,8 +202,8 @@ void LegoAnimPresenter::EndAction()
 // FUNCTION: LEGO1 0x100a0b30
 LegoAnimClass::LegoAnimClass()
 {
-	m_unk0x8 = 0;
-	m_unk0xc = 0;
+	m_unk0x08 = 0;
+	m_unk0x0c = 0;
 	m_unk0x10 = 0;
 	m_unk0x14 = 0;
 }

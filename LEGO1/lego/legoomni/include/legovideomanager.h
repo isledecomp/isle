@@ -25,7 +25,7 @@ public:
 	void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
 	void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 	virtual void Destroy() override;    // vtable+0x18
 	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 		override;                                                                          // vtable+0x2c

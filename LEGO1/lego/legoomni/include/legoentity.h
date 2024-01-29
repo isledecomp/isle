@@ -22,10 +22,10 @@ public:
 	// FUNCTION: LEGO1 0x1000c290
 	virtual ~LegoEntity() override { Destroy(TRUE); }
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000c2f0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0064
 		return "LegoEntity";

@@ -10,7 +10,7 @@ struct UnknownMatrixType {
 };
 
 // VTABLE: LEGO1 0x100d4350
-// SIZE 0x8
+// SIZE 0x08
 class Matrix4 {
 public:
 	inline Matrix4(float (*p_data)[4]) { SetData(p_data); }

@@ -7,7 +7,7 @@
 // VTABLE: LEGO1 0x100d6790
 class BumpBouy : public LegoAnimActor {
 public:
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100274e0
 	inline virtual const char* ClassName() const override // vtable+0x0c
