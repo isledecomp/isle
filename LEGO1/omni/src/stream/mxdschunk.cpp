@@ -22,5 +22,5 @@ MxDSChunk::~MxDSChunk()
 // FUNCTION: LEGO1 0x100be1e0
 MxU32 MxDSChunk::GetHeaderSize()
 {
-	return 0xe;
+	return 0x0e;
 }

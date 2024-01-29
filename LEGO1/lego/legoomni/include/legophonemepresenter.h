@@ -11,10 +11,10 @@
 class LegoPhonemePresenter : public MxFlcPresenter {
 public:
 	LegoPhonemePresenter();
-	virtual ~LegoPhonemePresenter() override; // vtable+0x0
+	virtual ~LegoPhonemePresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1004e310
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f064c
 		return "LegoPhonemePresenter";

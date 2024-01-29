@@ -10,8 +10,8 @@ class JukeBox : public LegoWorld {
 public:
 	JukeBox();
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
-	virtual MxResult Tickle() override;               // vtable+0x8
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	virtual MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005d6f0
 	inline virtual const char* ClassName() const override // vtable+0x0c

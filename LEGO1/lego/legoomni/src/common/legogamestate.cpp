@@ -67,7 +67,7 @@ LegoGameState::LegoGameState()
 	SetROIHandlerFunction();
 
 	this->m_stateCount = 0;
-	this->m_unk0xc = 0;
+	this->m_unk0x0c = 0;
 	this->m_savePath = NULL;
 	this->m_unk0x424 = 0;
 	this->m_prevArea = 0;
@@ -131,7 +131,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
 			fileStream.Write(&m_unk0x10, 2);
-			fileStream.Write(&m_unk0xc, 1);
+			fileStream.Write(&m_unk0x0c, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
 				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)

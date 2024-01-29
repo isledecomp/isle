@@ -9,6 +9,7 @@
 class PoliceState : public LegoState {
 public:
 	PoliceState();
+	virtual ~PoliceState() override {}
 
 	// FUNCTION: LEGO1 0x1005e860
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -29,8 +30,8 @@ public:
 	// PoliceState::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x8; // 0x8
-	undefined4 m_unk0xc; // 0xc
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
 };
 
 #endif // POLICESTATE_H

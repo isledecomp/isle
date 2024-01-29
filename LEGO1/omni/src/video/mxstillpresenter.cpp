@@ -75,12 +75,12 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRect32 rect(x, y, width + x, height + y);
 	MVideoManager()->InvalidateRect(rect);
 
-	if (m_flags & c_bit2) {
+	if (GetBit1()) {
 		undefined4 und = 0;
 		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
 			m_bitmap,
 			&und,
-			(m_flags & c_bit4) / 8,
+			GetBit3(),
 			m_action->GetFlags() & MxDSAction::c_bit4
 		);
 
@@ -91,9 +91,9 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		m_bitmap = NULL;
 
 		if (m_unk0x58 && und)
-			m_flags |= c_bit3;
+			SetBit2(TRUE);
 		else
-			m_flags &= ~c_bit3;
+			SetBit2(FALSE);
 	}
 }
 
@@ -186,7 +186,7 @@ void MxStillPresenter::ParseExtra()
 	MxPresenter::ParseExtra();
 
 	if (m_action->GetFlags() & MxDSAction::c_bit5)
-		m_flags |= c_bit4;
+		SetBit3(TRUE);
 
 	MxU32 len = m_action->GetExtraLength();
 
@@ -207,15 +207,52 @@ void MxStillPresenter::ParseExtra()
 	}
 
 	if (KeyValueStringParse(output, g_strBmpIsmap, buf)) {
-		m_flags |= c_bit5;
-		m_flags &= ~c_bit2;
-		m_flags &= ~c_bit3;
+		SetBit4(TRUE);
+		SetBit1(FALSE);
+		SetBit2(FALSE);
 	}
 }
 
-// STUB: LEGO1 0x100ba2c0
+// FUNCTION: LEGO1 0x100ba2c0
 MxStillPresenter* MxStillPresenter::Clone()
 {
-	// TODO
-	return NULL;
+	MxResult result = FAILURE;
+	MxStillPresenter* presenter = new MxStillPresenter;
+
+	if (presenter) {
+		if (presenter->AddToManager() == SUCCESS) {
+			MxDSAction* action = presenter->GetAction()->Clone();
+
+			if (action && presenter->StartAction(NULL, action) == SUCCESS) {
+				presenter->SetBit0(GetBit0());
+				presenter->SetBit1(GetBit1());
+				presenter->SetBit2(GetBit2());
+				presenter->SetBit3(GetBit3());
+				presenter->SetBit4(GetBit4());
+
+				if (m_bitmap) {
+					presenter->m_bitmap = new MxBitmap;
+
+					if (!presenter->m_bitmap || presenter->m_bitmap->ImportBitmap(m_bitmap) != SUCCESS)
+						goto done;
+				}
+
+				if (m_unk0x58)
+					presenter->m_unk0x58 = MxDisplaySurface::FUN_100bbfb0(m_unk0x58);
+
+				if (m_alpha)
+					presenter->m_alpha = new MxVideoPresenter::AlphaMask(*m_alpha);
+
+				result = SUCCESS;
+			}
+		}
+	}
+
+done:
+	if (result != SUCCESS) {
+		delete presenter;
+		presenter = NULL;
+	}
+
+	return presenter;
 }

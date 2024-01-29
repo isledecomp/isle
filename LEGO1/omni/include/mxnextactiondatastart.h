@@ -16,7 +16,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100c1900
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025a0
 		return "MxNextActionDataStart";

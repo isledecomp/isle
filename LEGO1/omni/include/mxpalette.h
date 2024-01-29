@@ -33,7 +33,7 @@ public:
 
 private:
 	LPDIRECTDRAWPALETTE m_palette;
-	PALETTEENTRY m_entries[256]; // 0xc
+	PALETTEENTRY m_entries[256]; // 0x0c
 	MxBool m_overrideSkyColor;   // 0x40c
 	PALETTEENTRY m_skyColor;     // 0x40d
 };

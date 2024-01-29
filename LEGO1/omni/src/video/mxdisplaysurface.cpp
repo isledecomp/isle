@@ -679,6 +679,13 @@ done:
 	return surface;
 }
 
+// STUB: LEGO1 0x100bbfb0
+LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bbfb0(LPDIRECTDRAWSURFACE p_und)
+{
+	// TODO
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x100bc070
 LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 {

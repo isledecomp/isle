@@ -9,7 +9,7 @@
 class MxParam;
 
 // VTABLE: LEGO1 0x100dc0f8
-// SIZE 0x8
+// SIZE 0x08
 class MxCore {
 public:
 	MxCore();
@@ -17,7 +17,7 @@ public:
 	virtual MxLong Notify(MxParam& p_param); // vtable+04
 
 	// FUNCTION: LEGO1 0x10001f70
-	virtual MxResult Tickle() { return SUCCESS; }; // vtable+08
+	virtual MxResult Tickle() { return SUCCESS; } // vtable+08
 
 	// FUNCTION: LEGO1 0x100144c0
 	inline virtual const char* ClassName() const // vtable+0c

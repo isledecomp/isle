@@ -1,9 +1,9 @@
 #include "mxstreamlist.h"
 
 // Wrappers around STL list that are used by the MxStream* classes.
-DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0xc);
-DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0xc);
-DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0xc);
+DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0x0c);
+DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0x0c);
+DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0x0c);
 
 // FUNCTION: LEGO1 0x100b8450
 MxDSSubscriber* MxStreamListMxDSSubscriber::Find(MxDSObject* p_object)

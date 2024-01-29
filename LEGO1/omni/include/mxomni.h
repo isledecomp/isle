@@ -54,7 +54,7 @@ public:
 	virtual void StopTimer();                                                                 // vtable+3c
 
 	// FUNCTION: LEGO1 0x10058a90
-	virtual MxBool IsTimerRunning() { return m_timerRunning; }; // vtable+40
+	virtual MxBool IsTimerRunning() { return m_timerRunning; } // vtable+40
 
 	static void SetInstance(MxOmni* p_instance);
 	static MxBool ActionSourceEquals(MxDSAction* p_action, const char* p_name);
@@ -79,7 +79,7 @@ public:
 protected:
 	static MxOmni* g_instance;
 
-	MxString m_mediaPath;                         // 0x8
+	MxString m_mediaPath;                         // 0x08
 	HWND m_windowHandle;                          // 0x18
 	MxObjectFactory* m_objectFactory;             // 0x1C
 	MxVariableTable* m_variableTable;             // 0x20

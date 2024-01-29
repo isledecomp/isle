@@ -10,7 +10,7 @@
 class LegoActionControlPresenter : public MxMediaPresenter {
 public:
 	inline LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
-	virtual ~LegoActionControlPresenter() override { Destroy(TRUE); }; // vtable+0x00
+	virtual ~LegoActionControlPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000d0e0
 	inline virtual const char* ClassName() const override // vtable+0x0c

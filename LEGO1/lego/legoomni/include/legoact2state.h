@@ -7,6 +7,8 @@
 // SIZE 0x10
 class LegoAct2State : public LegoState {
 public:
+	virtual ~LegoAct2State() override {}
+
 	// FUNCTION: LEGO1 0x1000df80
 	inline virtual const char* ClassName() const override // vtable+0x0c
 	{

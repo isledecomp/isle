@@ -25,7 +25,7 @@ public:
 	virtual MxS8 Compare(LegoCacheSound* p_a, LegoCacheSound* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
-	}; // vtable+0x14
+	} // vtable+0x14
 };
 
 // VTABLE: LEGO1 0x100d64a0

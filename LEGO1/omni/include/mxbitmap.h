@@ -44,7 +44,7 @@ public:
 	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
-	virtual int VTable0x28(int) { return -1; }; // vtable+28
+	virtual int VTable0x28(int) { return -1; } // vtable+28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,
@@ -134,8 +134,8 @@ public:
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
 
-	MxBITMAPINFO* m_info;          // 0x8
-	BITMAPINFOHEADER* m_bmiHeader; // 0xc
+	MxBITMAPINFO* m_info;          // 0x08
+	BITMAPINFOHEADER* m_bmiHeader; // 0x0c
 	RGBQUAD* m_paletteData;        // 0x10
 	MxU8* m_data;                  // 0x14
 	MxBool m_isHighColor;          // 0x18

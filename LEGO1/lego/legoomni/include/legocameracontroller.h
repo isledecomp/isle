@@ -12,7 +12,7 @@
 class LegoCameraController : public LegoPointOfViewController {
 public:
 	LegoCameraController();
-	virtual ~LegoCameraController() override; // vtable+0x0
+	virtual ~LegoCameraController() override; // vtable+0x00
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+04
 

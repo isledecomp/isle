@@ -49,9 +49,9 @@ class LODObject {
 public:
 	// LODObject();
 	virtual ~LODObject() {}
-	virtual float Cost(float pixels_covered) const = 0; // vtable+0x4
-	virtual float AveragePolyArea() const = 0;          // vtable+0x8
-	virtual int NVerts() const = 0;                     // vtable+0xc
+	virtual float Cost(float pixels_covered) const = 0; // vtable+0x04
+	virtual float AveragePolyArea() const = 0;          // vtable+0x08
+	virtual int NVerts() const = 0;                     // vtable+0x0c
 };
 
 /*
@@ -81,7 +81,7 @@ public:
 	{
 		m_comp = 0;
 		m_lods = 0;
-		m_unk0xc = 1;
+		m_unk0x0c = 1;
 	}
 	virtual ~ROI()
 	{
@@ -89,9 +89,9 @@ public:
 		assert(!m_comp);
 		assert(!m_lods);
 	}
-	virtual float IntrinsicImportance() const = 0;                    // vtable+0x4
-	virtual const float* GetWorldVelocity() const = 0;                // vtable+0x8
-	virtual const BoundingBox& GetWorldBoundingBox() const = 0;       // vtable+0xc
+	virtual float IntrinsicImportance() const = 0;                    // vtable+0x04
+	virtual const float* GetWorldVelocity() const = 0;                // vtable+0x08
+	virtual const BoundingBox& GetWorldBoundingBox() const = 0;       // vtable+0x0c
 	virtual const BoundingSphere& GetWorldBoundingSphere() const = 0; // vtable+0x10
 
 	const LODListBase* GetLODs() const { return m_lods; }
@@ -103,15 +103,15 @@ public:
 	int GetLODCount() const { return m_lods ? m_lods->Size() : 0; }
 	const CompoundObject* GetComp() const { return m_comp; }
 
-	inline undefined GetUnk0x0c() { return m_unk0xc; }
+	inline undefined GetUnk0x0c() { return m_unk0x0c; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60
 	// ROI::`scalar deleting destructor'
 
 protected:
-	CompoundObject* m_comp; // 0x4
-	LODListBase* m_lods;    // 0x8
-	undefined m_unk0xc;     // 0xc
+	CompoundObject* m_comp; // 0x04
+	LODListBase* m_lods;    // 0x08
+	undefined m_unk0x0c;    // 0x0c
 };
 
 // SYNTHETIC: LEGO1 0x100a5d50

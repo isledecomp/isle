@@ -12,7 +12,7 @@ public:
 	virtual ~MxEventPresenter() override;
 
 	// FUNCTION: LEGO1 0x100c2c30
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101dcc
 		return "MxEventPresenter";

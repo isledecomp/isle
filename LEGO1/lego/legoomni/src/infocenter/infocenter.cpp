@@ -133,7 +133,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 			StopBookAnimation();
 			m_bookAnimationTimer = 0;
 
-			if (m_infocenterState->GetUnknown0x74() == 0xc) {
+			if (m_infocenterState->GetUnknown0x74() == 0x0c) {
 				StartCredits();
 				m_infocenterState->SetUnknown0x74(0xd);
 			}

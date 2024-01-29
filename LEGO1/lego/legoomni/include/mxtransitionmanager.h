@@ -11,11 +11,11 @@
 class MxTransitionManager : public MxCore {
 public:
 	MxTransitionManager();
-	virtual ~MxTransitionManager() override; // vtable+0x0
+	virtual ~MxTransitionManager() override; // vtable+0x00
 
 	void SetWaitIndicator(MxVideoPresenter* p_waitIndicator);
 
-	virtual MxResult Tickle(); // vtable+0x8
+	virtual MxResult Tickle(); // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1004b950
 	inline virtual const char* ClassName() const override // vtable+0x0c

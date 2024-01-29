@@ -24,7 +24,7 @@ class Isle : public LegoWorld {
 public:
 	Isle();
 	virtual ~Isle() override;
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10030910
 	inline virtual const char* ClassName() const override // vtable+0x0c

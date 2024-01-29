@@ -76,12 +76,12 @@ public:
 	};
 
 	MxStreamer();
-	virtual ~MxStreamer() override; // vtable+0x0
+	virtual ~MxStreamer() override; // vtable+0x00
 
 	MxStreamController* Open(const char* p_name, MxU16 p_openMode);
 	MxLong Close(const char* p_name);
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100b9000
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -109,7 +109,7 @@ public:
 	inline const MxStreamerSubClass3& GetSubclass2() { return m_subclass2; }
 
 private:
-	list<MxStreamController*> m_openStreams; // 0x8
+	list<MxStreamController*> m_openStreams; // 0x08
 	MxStreamerSubClass2 m_subclass1;         // 0x14
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };

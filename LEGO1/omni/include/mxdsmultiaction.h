@@ -36,7 +36,7 @@ public:
 	virtual MxBool HasId(MxU32 p_objectId) override;                     // vtable+34;
 	virtual void SetUnknown90(MxLong p_unk0x90) override;                // vtable+38;
 
-	inline MxDSActionList* GetActionList() const { return m_actions; };
+	inline MxDSActionList* GetActionList() const { return m_actions; }
 
 	// SYNTHETIC: LEGO1 0x100ca040
 	// MxDSMultiAction::`scalar deleting destructor'

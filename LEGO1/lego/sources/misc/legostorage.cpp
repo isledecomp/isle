@@ -5,9 +5,9 @@
 #include <memory.h>
 #include <string.h>
 
-DECOMP_SIZE_ASSERT(LegoStorage, 0x8);
+DECOMP_SIZE_ASSERT(LegoStorage, 0x08);
 DECOMP_SIZE_ASSERT(LegoMemory, 0x10);
-DECOMP_SIZE_ASSERT(LegoFile, 0xc);
+DECOMP_SIZE_ASSERT(LegoFile, 0x0c);
 
 // FUNCTION: LEGO1 0x10099080
 LegoMemory::LegoMemory(void* p_buffer) : LegoStorage()

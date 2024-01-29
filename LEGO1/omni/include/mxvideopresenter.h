@@ -10,18 +10,10 @@
 // SIZE 0x64
 class MxVideoPresenter : public MxMediaPresenter {
 public:
-	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02,
-		c_bit3 = 0x04,
-		c_bit4 = 0x08,
-		c_bit5 = 0x10,
-	};
-
 	MxVideoPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c740
-	virtual ~MxVideoPresenter() override { Destroy(TRUE); }; // vtable+0x0
+	virtual ~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000c820
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -44,7 +36,7 @@ public:
 	virtual MxResult AddToManager() override; // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000c7a0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
 	virtual void EndAction() override;                   // vtable+0x40
 	virtual MxResult PutData() override;                 // vtable+0x4c
@@ -69,19 +61,19 @@ public:
 	virtual undefined VTable0x74(); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x1000c7b0
-	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; }; // vtable+0x78
+	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000c7c0
-	virtual MxBool VTable0x7c() { return m_bitmap != NULL || m_alpha != NULL; }; // vtable+0x7c
+	virtual MxBool VTable0x7c() { return m_bitmap != NULL || m_alpha != NULL; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
-	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); }; // vtable+0x80
+	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); } // vtable+0x80
 
 	// FUNCTION: LEGO1 0x1000c800
-	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); }; // vtable+0x84
+	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); } // vtable+0x84
 
 	// VTABLE: LEGO1 0x100dc2bc
-	// SIZE 0xc
+	// SIZE 0x0c
 	struct AlphaMask {
 		MxU8* m_bitmask;
 		MxU16 m_width;
@@ -101,6 +93,18 @@ public:
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
 	inline AlphaMask* GetAlphaMask() { return m_alpha; }
 
+	inline void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
+	inline void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
+	inline void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
+	inline void SetBit3(BOOL p_e) { m_flags.m_bit3 = p_e; }
+	inline void SetBit4(BOOL p_e) { m_flags.m_bit4 = p_e; }
+
+	inline BYTE GetBit0() { return m_flags.m_bit0; }
+	inline BYTE GetBit1() { return m_flags.m_bit1; }
+	inline BYTE GetBit2() { return m_flags.m_bit2; }
+	inline BYTE GetBit3() { return m_flags.m_bit3; }
+	inline BYTE GetBit4() { return m_flags.m_bit4; }
+
 	// SYNTHETIC: LEGO1 0x1000c910
 	// MxVideoPresenter::`scalar deleting destructor'
 
@@ -114,7 +118,7 @@ protected:
 	AlphaMask* m_alpha;            // 0x54
 	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
 	MxS16 m_unk0x5c;               // 0x5c
-	MxU8 m_flags;                  // 0x5e
+	FlagBitfield m_flags;          // 0x5e
 	MxLong m_unk0x60;              // 0x60
 };
 

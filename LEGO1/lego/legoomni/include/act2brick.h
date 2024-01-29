@@ -8,9 +8,9 @@
 class Act2Brick : public LegoPathActor {
 public:
 	Act2Brick();
-	virtual ~Act2Brick() override; // vtable+0x0
+	virtual ~Act2Brick() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	virtual MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1007a360

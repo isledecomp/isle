@@ -9,10 +9,10 @@
 class MxLoopingSmkPresenter : public MxSmkPresenter {
 public:
 	MxLoopingSmkPresenter();
-	virtual ~MxLoopingSmkPresenter() override; // vtable+0x0
+	virtual ~MxLoopingSmkPresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100b4920
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e08
 		return "MxLoopingSmkPresenter";

@@ -12,7 +12,7 @@ class MxCompositePresenterList : public list<MxPresenter*> {};
 class MxCompositePresenter : public MxPresenter {
 public:
 	MxCompositePresenter();
-	virtual ~MxCompositePresenter() override; // vtable+0x0
+	virtual ~MxCompositePresenter() override; // vtable+0x00
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
@@ -44,7 +44,7 @@ public:
 		if (m_compositePresenter)
 			return m_compositePresenter->VTable0x64(p_undefined);
 		return TRUE;
-	}; // vtable+0x64
+	} // vtable+0x64
 
 	inline MxCompositePresenterList& GetList() { return m_list; }
 

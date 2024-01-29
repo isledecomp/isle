@@ -18,7 +18,7 @@ public:
 			new LegoEventNotificationParam(m_type, m_sender, m_modifier, m_x, m_y, m_key);
 		clone->m_roi = m_roi;
 		return clone;
-	}; // vtable+0x4
+	} // vtable+0x04
 
 	inline LegoEventNotificationParam() : MxNotificationParam(c_notificationType0, NULL) {}
 	inline LegoEventNotificationParam(

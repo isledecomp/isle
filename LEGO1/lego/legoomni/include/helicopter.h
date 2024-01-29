@@ -12,7 +12,7 @@ public:
 	MxResult FUN_100040a0(Vector4& p_v, float p_f);
 
 private:
-	Mx4DPointFloat m_unk0x0;  // 0x0
+	Mx4DPointFloat m_unk0x00; // 0x00
 	Mx4DPointFloat m_unk0x18; // 0x18
 	undefined4 m_unk0x30;     // 0x30
 };
@@ -22,7 +22,7 @@ private:
 class Helicopter : public IslePathActor {
 public:
 	Helicopter();
-	virtual ~Helicopter() override; // vtable+0x0
+	virtual ~Helicopter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10003070
 	inline virtual const char* ClassName() const override // vtable+0x0c

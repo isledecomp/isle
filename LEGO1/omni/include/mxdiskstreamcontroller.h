@@ -17,7 +17,7 @@ public:
 	MxDiskStreamController();
 	virtual ~MxDiskStreamController() override;
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x100c7360
 	inline virtual const char* ClassName() const override // vtable+0x0c
