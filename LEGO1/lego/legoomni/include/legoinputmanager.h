@@ -75,7 +75,7 @@ public:
 	void Register(MxCore*);
 	void UnRegister(MxCore*);
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005b8c0
 	virtual MxResult PutData() override { return SUCCESS; }; // vtable+0x4c

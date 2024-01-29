@@ -4,7 +4,7 @@
 #include "legoimage.h"
 #include "legostorage.h"
 
-DECOMP_SIZE_ASSERT(LegoTexture, 0x4);
+DECOMP_SIZE_ASSERT(LegoTexture, 0x04);
 
 // FUNCTION: LEGO1 0x10098fb0
 LegoTexture::LegoTexture()

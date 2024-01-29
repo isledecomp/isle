@@ -15,10 +15,10 @@ public:
 	// FUNCTION: LEGO1 0x1000c550
 	virtual ~MxMediaPresenter() override { Destroy(TRUE); };
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000c5c0
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f074c
 		return "MxMediaPresenter";

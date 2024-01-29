@@ -8,7 +8,7 @@
 class LegoWorldPresenter : public LegoEntityPresenter {
 public:
 	LegoWorldPresenter();
-	virtual ~LegoWorldPresenter() override; // vtable+0x0
+	virtual ~LegoWorldPresenter() override; // vtable+0x00
 
 	static void configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality);
 

@@ -5,7 +5,7 @@
 
 class LegoStorage;
 
-// SIZE 0x3
+// SIZE 0x03
 class LegoPaletteEntry {
 public:
 	LegoPaletteEntry();

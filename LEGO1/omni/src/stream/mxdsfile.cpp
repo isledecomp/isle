@@ -62,7 +62,7 @@ MxLong MxDSFile::ReadChunks()
 		return -1;
 	}
 
-	m_io.Read(&m_header, 0xc);
+	m_io.Read(&m_header, 0x0c);
 	if ((m_header.m_majorVersion == SI_MAJOR_VERSION) && (m_header.m_minorVersion == SI_MINOR_VERSION)) {
 		childChunk.ckid = FOURCC('M', 'x', 'O', 'f');
 		if (m_io.Descend(&childChunk, &topChunk, 0) != 0) {

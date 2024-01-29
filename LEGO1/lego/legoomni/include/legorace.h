@@ -11,12 +11,12 @@
 class LegoRace : public LegoWorld {
 public:
 	LegoRace();
-	virtual ~LegoRace() override; // vtable+0x0
+	virtual ~LegoRace() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10015ba0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f07c4
 		return "LegoRace";

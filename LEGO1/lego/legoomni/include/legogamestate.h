@@ -35,7 +35,7 @@ public:
 	void FUN_1003a720(MxU32);
 	void HandleAction(MxU32);
 
-	inline MxU8 GetUnknownC() { return m_unk0xc; }
+	inline MxU8 GetUnknownC() { return m_unk0x0c; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
 	inline undefined4 GetUnknown424() { return m_unk0x424; }
@@ -61,10 +61,10 @@ private:
 	MxS32 ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to);
 	void SetROIHandlerFunction();
 
-	char* m_savePath;                           // 0x0
-	MxS16 m_stateCount;                         // 0x4
-	LegoState** m_stateArray;                   // 0x8
-	MxU8 m_unk0xc;                              // 0xc
+	char* m_savePath;                           // 0x00
+	MxS16 m_stateCount;                         // 0x04
+	LegoState** m_stateArray;                   // 0x08
+	MxU8 m_unk0x0c;                             // 0x0c
 	MxU32 m_unk0x10;                            // 0x10
 	MxS32 m_currentAct;                         // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18

@@ -87,11 +87,11 @@ public:
 	virtual LegoTreeNodeData* CreateData() override;           // vtable+0x0c
 	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32);  // vtable+0x10
 
-	inline MxLong GetUnknown0x8() { return m_unk0x8; }
+	inline MxLong GetUnknown0x8() { return m_unk0x08; }
 
 private:
-	MxLong m_unk0x8;      // 0x08
-	undefined4 m_unk0xc;  // 0x0c
+	MxLong m_unk0x08;     // 0x08
+	undefined4 m_unk0x0c; // 0x0c
 	undefined4 m_unk0x10; // 0x10
 	undefined4 m_unk0x14; // 0x14
 };

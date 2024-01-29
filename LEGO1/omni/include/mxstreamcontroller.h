@@ -19,10 +19,10 @@ class MxDSStreamingAction;
 class MxStreamController : public MxCore {
 public:
 	MxStreamController();
-	virtual ~MxStreamController() override; // vtable+0x0
+	virtual ~MxStreamController() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100c0f10
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102130
 		return "MxStreamController";
@@ -60,7 +60,7 @@ public:
 	inline MxStreamListMxDSSubscriber& GetSubscriberList() { return m_subscriberList; };
 
 protected:
-	MxCriticalSection m_criticalSection;                // 0x8
+	MxCriticalSection m_criticalSection;                // 0x08
 	MxAtomId m_atom;                                    // 0x24
 	MxStreamProvider* m_provider;                       // 0x28
 	undefined4* m_unk0x2c;                              // 0x2c

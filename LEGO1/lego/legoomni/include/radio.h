@@ -32,7 +32,7 @@ public:
 
 private:
 	RadioState* m_state; // 0x08
-	MxBool m_unk0xc;     // 0x0c
+	MxBool m_unk0x0c;    // 0x0c
 
 	void CreateRadioState();
 };

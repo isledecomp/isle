@@ -8,7 +8,7 @@
 class LegoPartPresenter : public MxMediaPresenter {
 public:
 	// FUNCTION: LEGO1 0x1000cf70
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f05d8
 		return "LegoPartPresenter";

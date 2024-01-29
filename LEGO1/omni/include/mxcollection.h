@@ -20,8 +20,8 @@ public:
 	virtual MxS8 Compare(T, T) { return 0; }
 
 protected:
-	MxU32 m_count;                 // 0x8
-	void (*m_customDestructor)(T); // 0xc
+	MxU32 m_count;                 // 0x08
+	void (*m_customDestructor)(T); // 0x0c
 };
 
 #endif // MXCOLLECTION_H

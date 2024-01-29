@@ -24,7 +24,7 @@ public:
 	MxObjectFactory();
 
 	// FUNCTION: LEGO1 0x10008f70
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0730
 		return "MxObjectFactory";

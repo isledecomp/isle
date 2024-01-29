@@ -4,7 +4,7 @@
 #include "legostate.h"
 
 // VTABLE: LEGO1 0x100d53f8
-// SIZE 0xc
+// SIZE 0x0c
 class ScoreState : public LegoState {
 public:
 	// FUNCTION: LEGO1 0x1000de40

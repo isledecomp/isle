@@ -20,7 +20,7 @@ public:
 	}
 };
 
-// SIZE 0xc
+// SIZE 0x0c
 class MxStreamListMxDSAction : public MxStreamList<MxDSAction*> {
 public:
 	MxDSAction* Find(MxDSAction* p_action, MxBool p_delete);
@@ -38,14 +38,14 @@ public:
 	}
 };
 
-// SIZE 0xc
+// SIZE 0x0c
 class MxStreamListMxNextActionDataStart : public MxStreamList<MxNextActionDataStart*> {
 public:
 	MxNextActionDataStart* Find(MxU32 p_id, MxS16 p_value);
 	MxNextActionDataStart* FindAndErase(MxU32 p_id, MxS16 p_value);
 };
 
-// SIZE 0xc
+// SIZE 0x0c
 class MxStreamListMxDSSubscriber : public MxStreamList<MxDSSubscriber*> {
 public:
 	MxDSSubscriber* Find(MxDSObject* p_object);

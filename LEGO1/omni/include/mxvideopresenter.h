@@ -13,7 +13,7 @@ public:
 	MxVideoPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c740
-	virtual ~MxVideoPresenter() override { Destroy(TRUE); }; // vtable+0x0
+	virtual ~MxVideoPresenter() override { Destroy(TRUE); }; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000c820
 	inline virtual const char* ClassName() const override // vtable+0x0c
@@ -73,7 +73,7 @@ public:
 	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); }; // vtable+0x84
 
 	// VTABLE: LEGO1 0x100dc2bc
-	// SIZE 0xc
+	// SIZE 0x0c
 	struct AlphaMask {
 		MxU8* m_bitmask;
 		MxU16 m_width;

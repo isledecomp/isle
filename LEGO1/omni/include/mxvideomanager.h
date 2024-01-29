@@ -16,7 +16,7 @@ public:
 	MxVideoManager();
 	virtual ~MxVideoManager() override;
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 	virtual void Destroy() override;    // vtable+0x18
 	virtual MxResult VTable0x28(
 		MxVideoParam& p_videoParam,

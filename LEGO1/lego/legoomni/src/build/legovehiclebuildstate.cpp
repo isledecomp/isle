@@ -3,7 +3,7 @@
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50); // 1000acd7
-DECOMP_SIZE_ASSERT(LegoVehicleBuildState::UnkStruct, 0xc);
+DECOMP_SIZE_ASSERT(LegoVehicleBuildState::UnkStruct, 0x0c);
 
 // FUNCTION: LEGO1 0x10017c00
 LegoVehicleBuildState::UnkStruct::UnkStruct()

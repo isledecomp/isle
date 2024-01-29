@@ -12,7 +12,7 @@ public:
 	virtual ~MxLoopingFlcPresenter() override;
 
 	// FUNCTION: LEGO1 0x100b4380
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e20
 		return "MxLoopingFlcPresenter";

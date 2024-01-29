@@ -6,7 +6,7 @@
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
-DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0xc);
+DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
 
 // FUNCTION: LEGO1 0x100b24f0
 MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)

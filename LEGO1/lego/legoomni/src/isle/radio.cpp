@@ -13,7 +13,7 @@ Radio::Radio()
 	NotificationManager()->Register(this);
 	ControlManager()->Register(this);
 
-	m_unk0xc = TRUE;
+	m_unk0x0c = TRUE;
 	CreateRadioState();
 }
 
@@ -33,8 +33,8 @@ MxLong Radio::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x1002cdc0
 void Radio::Initialize(MxBool p_und)
 {
-	if (m_unk0xc != p_und) {
-		m_unk0xc = p_und;
+	if (m_unk0x0c != p_und) {
+		m_unk0x0c = p_und;
 		CreateRadioState();
 	}
 }

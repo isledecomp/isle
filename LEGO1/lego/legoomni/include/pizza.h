@@ -15,10 +15,10 @@ public:
 	Pizza();
 	virtual ~Pizza() override;
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	virtual MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10037f90
-	inline const char* ClassName() const // vtable+0xc
+	inline const char* ClassName() const // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f038c
 		return "Pizza";

@@ -79,7 +79,7 @@ public:
 protected:
 	static MxOmni* g_instance;
 
-	MxString m_mediaPath;                         // 0x8
+	MxString m_mediaPath;                         // 0x08
 	HWND m_windowHandle;                          // 0x18
 	MxObjectFactory* m_objectFactory;             // 0x1C
 	MxVariableTable* m_variableTable;             // 0x20

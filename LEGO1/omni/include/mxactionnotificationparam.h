@@ -47,12 +47,12 @@ public:
 	virtual MxNotificationParam* Clone() override
 	{
 		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
-	}; // vtable+0x4
+	}; // vtable+0x04
 
 	inline MxDSAction* GetAction() { return m_action; }
 
 protected:
-	MxDSAction* m_action; // 0xc
+	MxDSAction* m_action; // 0x0c
 	MxBool m_realloc;     // 0x10
 };
 
@@ -70,7 +70,7 @@ public:
 	{
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	virtual MxNotificationParam* Clone() override; // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100d8358
@@ -96,7 +96,7 @@ public:
 			this->m_action,
 			this->m_realloc
 		);
-	}; // vtable+0x4
+	}; // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100dc208
@@ -109,7 +109,7 @@ public:
 		m_unk0x14 = p_unk0x14;
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	virtual MxNotificationParam* Clone() override; // vtable+0x04
 
 private:
 	MxPresenter* m_unk0x14; // 0x14

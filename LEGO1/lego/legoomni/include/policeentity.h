@@ -8,7 +8,7 @@
 class PoliceEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ed60
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0328
 		return "PoliceEntity";

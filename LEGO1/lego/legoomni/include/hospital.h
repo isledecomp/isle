@@ -9,7 +9,7 @@
 class Hospital : public LegoWorld {
 public:
 	Hospital();
-	virtual ~Hospital() override; // vtable+0x0
+	virtual ~Hospital() override; // vtable+0x00
 
 	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	virtual MxResult Tickle() override;               // vtable+0x08

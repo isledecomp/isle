@@ -30,10 +30,10 @@ public:
 	virtual void RightUp(int, int);   // vtable+0x28
 
 private:
-	BOOL m_isButtonDown; // 0x08
-	undefined4 m_unk0xc; // 0x0c
-	MxDouble m_buttonX;  // 0x10
-	MxDouble m_buttonY;  // 0x18
+	BOOL m_isButtonDown;  // 0x08
+	undefined4 m_unk0x0c; // 0x0c
+	MxDouble m_buttonX;   // 0x10
+	MxDouble m_buttonY;   // 0x18
 };
 
 // SYNTHETIC: LEGO1 0x100655b0

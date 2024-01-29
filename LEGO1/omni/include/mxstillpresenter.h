@@ -14,7 +14,7 @@ public:
 	virtual ~MxStillPresenter() override { Destroy(TRUE); }; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100435c0
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline virtual const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0184
 		return "MxStillPresenter";

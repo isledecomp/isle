@@ -9,9 +9,9 @@
 class ElevatorBottom : public LegoWorld {
 public:
 	ElevatorBottom();
-	virtual ~ElevatorBottom() override; // vtable+0x0
+	virtual ~ElevatorBottom() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10017f20
 	inline virtual const char* ClassName() const override // vtable+0x0c

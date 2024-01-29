@@ -303,12 +303,12 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 	data[0] = 0x11;
 	data[17] = 0x28;
 	data[18] = 0x28;
-	data[1] = 0xf;
+	data[1] = 0x0f;
 	MxU32 size = data[p_x + 14];
 	MxU8* ptr = data[p_x + 4] + data[p_y + 9] + m_surface;
 	MxS32 count = data[p_y + 19];
-	data[2] = 0x8;
-	data[3] = 0x5;
+	data[2] = 0x08;
+	data[3] = 0x05;
 	MxU32 value = data[p_color];
 	for (; count > 0; count--) {
 		memset(ptr++, value, size);

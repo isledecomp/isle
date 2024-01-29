@@ -68,8 +68,8 @@ public:
 	// MxDSObject::`scalar deleting destructor'
 
 private:
-	MxU32 m_sizeOnDisk;     // 0x8
-	MxU16 m_type;           // 0xc
+	MxU32 m_sizeOnDisk;     // 0x08
+	MxU16 m_type;           // 0x0c
 	char* m_sourceName;     // 0x10
 	undefined4 m_unk0x14;   // 0x14
 	char* m_objectName;     // 0x18

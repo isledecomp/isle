@@ -13,7 +13,7 @@ public:
 	virtual ~LegoPathActor() override;
 
 	// FUNCTION: LEGO1 0x1000c430
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0114
 		return "LegoPathActor";
