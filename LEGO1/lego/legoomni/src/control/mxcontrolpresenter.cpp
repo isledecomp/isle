@@ -118,34 +118,7 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxPresenter* p_pre
 				MxBitmap* bitmap = ((MxVideoPresenter*) first)->GetBitmap();
 
 				if (((MxVideoPresenter*) first)->GetAlphaMask() == NULL) {
-					MxLong biCompression = bitmap->GetBmiHeader()->biCompression;
-					MxLong height = bitmap->GetBmiHeight();
-					MxLong seekRow;
-
-					// DECOMP: Same basic layout as AlphaMask constructor
-					// The idea here is to again seek to the correct place in the bitmap's
-					// m_data buffer. The x,y args are (most likely) screen x and y, so we
-					// need to shift that to coordinates local to the bitmap by removing
-					// the MxPresenter location x and y coordinates.
-					if (biCompression == BI_RGB) {
-						if (biCompression == BI_RGB_TOPDOWN || height < 0) {
-							seekRow = p_y - first->GetLocation().GetY();
-						}
-						else {
-							height = height > 0 ? height : -height;
-							seekRow = height - p_y - 1 + first->GetLocation().GetY();
-						}
-						start = bitmap->GetBmiStride() * seekRow + bitmap->GetBitmapData() -
-								first->GetLocation().GetX() + p_x;
-					}
-					else if (biCompression == BI_RGB_TOPDOWN) {
-						start = bitmap->GetBitmapData();
-					}
-					else {
-						height = height > 0 ? height : -height;
-						height--;
-						start = bitmap->GetBmiStride() * height + bitmap->GetBitmapData();
-					}
+					start = bitmap->GetStart(p_x - first->GetLocation().GetX(), p_y - first->GetLocation().GetY());
 				}
 				else {
 					start = NULL;
