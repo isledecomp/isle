@@ -22,8 +22,8 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 		p_legoFile->Read(&m_unk0x08, sizeof(m_unk0x08));
 	}
 	else {
-		undefined4 unk0x8 = m_unk0x08;
-		p_legoFile->Write(&unk0x8, sizeof(m_unk0x08));
+		undefined4 unk0x08 = m_unk0x08;
+		p_legoFile->Write(&unk0x08, sizeof(m_unk0x08));
 	}
 
 	return SUCCESS;
