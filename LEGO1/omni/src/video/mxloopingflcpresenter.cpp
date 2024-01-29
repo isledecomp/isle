@@ -20,8 +20,8 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 void MxLoopingFlcPresenter::Init()
 {
 	this->m_elapsedDuration = 0;
-	this->m_flags &= ~c_bit2;
-	this->m_flags &= ~c_bit3;
+	SetBit1(FALSE);
+	SetBit2(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b4430

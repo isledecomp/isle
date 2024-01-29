@@ -10,14 +10,6 @@
 // SIZE 0x64
 class MxVideoPresenter : public MxMediaPresenter {
 public:
-	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02,
-		c_bit3 = 0x04,
-		c_bit4 = 0x08,
-		c_bit5 = 0x10,
-	};
-
 	MxVideoPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c740
@@ -100,6 +92,18 @@ public:
 	inline MxS32 PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc);
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
 
+	inline void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
+	inline void SetBit1(BOOL p_e) { m_flags.m_bit1 = p_e; }
+	inline void SetBit2(BOOL p_e) { m_flags.m_bit2 = p_e; }
+	inline void SetBit3(BOOL p_e) { m_flags.m_bit3 = p_e; }
+	inline void SetBit4(BOOL p_e) { m_flags.m_bit4 = p_e; }
+
+	inline BYTE GetBit0() { return m_flags.m_bit0; }
+	inline BYTE GetBit1() { return m_flags.m_bit1; }
+	inline BYTE GetBit2() { return m_flags.m_bit2; }
+	inline BYTE GetBit3() { return m_flags.m_bit3; }
+	inline BYTE GetBit4() { return m_flags.m_bit4; }
+
 	// SYNTHETIC: LEGO1 0x1000c910
 	// MxVideoPresenter::`scalar deleting destructor'
 
@@ -113,7 +117,7 @@ protected:
 	AlphaMask* m_alpha;            // 0x54
 	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
 	MxS16 m_unk0x5c;               // 0x5c
-	MxU8 m_flags;                  // 0x5e
+	FlagBitfield m_flags;          // 0x5e
 	MxLong m_unk0x60;              // 0x60
 };
 
