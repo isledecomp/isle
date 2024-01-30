@@ -34,19 +34,19 @@ public:
 	// SYNTHETIC: LEGO1 0x10076f30
 	// RegistrationBook::`scalar deleting destructor'
 private:
-	undefined4 m_unk0xf8;
-	undefined m_unk0xfc;
-	undefined2 m_unk0x28e;
-	undefined4 m_unk0x280;
-	undefined4 m_unk0x284;
-	undefined4 m_unk0x288;
-	undefined2 m_unk0x28c;
-	undefined2 m_unk0x2b8;
-	undefined4 m_unk0x2bc;
-	undefined m_unk0x2c1;
-	undefined4 m_unk0x2c4;
-	undefined4 m_unk0x2c8;
-	undefined4 m_unk0x2cc;
+	undefined4 m_unk0xf8; // 0xf8
+	undefined m_unk0xfc; // 0xfc
+	undefined2 m_unk0x28e; // 0x28e
+	undefined4 m_unk0x280; // 0x280
+	undefined4 m_unk0x284; // 0x284
+	undefined4 m_unk0x288; // 0x288
+	undefined2 m_unk0x28c; // 0x28c
+	undefined2 m_unk0x2b8; // 0x2b8
+	undefined4 m_unk0x2bc; // 0x2bc
+	undefined m_unk0x2c1; // 0x2c1
+	undefined4 m_unk0x2c4; // 0x2c4
+	undefined4 m_unk0x2c8; // 0x2c8
+	undefined4 m_unk0x2cc; // 0x2cc
 };
 
 #endif // REGISTRATIONBOOK_H
