@@ -26,6 +26,11 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1002d020
 	// RadioState::`scalar deleting destructor'
+
+private:
+	StateStruct m_unk0x08[3]; // 0x08
+	MxU16 m_unk0x2c;          // 0x2c
+	undefined m_unk0x2e;      // 0x2e
 };
 
 #endif // RADIOSTATE_H

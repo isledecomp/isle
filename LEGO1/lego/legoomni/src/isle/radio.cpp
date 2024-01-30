@@ -20,7 +20,6 @@ Radio::Radio()
 // STUB: LEGO1 0x1002c990
 Radio::~Radio()
 {
-	// TODO
 }
 
 // STUB: LEGO1 0x1002ca30

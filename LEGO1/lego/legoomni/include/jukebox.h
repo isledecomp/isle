@@ -34,6 +34,7 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1005d810
 	// JukeBox::`scalar deleting destructor'
+
 	enum JukeBoxScript {
 		e_mamaPapaBrickolini,
 		e_jailUnused,
@@ -65,29 +66,18 @@ public:
 		e_legoRadioReminder2,
 
 		e_legoRadioRacingAd,
-
 		e_legoRadioNews1,
 		e_legoRadioNews2,
-
 		e_legoRadioPizzaAd1,
-
 		e_legoRadioBricksterPSA,
-
 		e_legoRadioSports1,
-
 		e_legoRadioIntermission1,
 		e_legoRadioIntermission2,
-
 		e_legoRadioPizzaAd2,
-
 		e_legoRadioWeatherReport,
-
 		e_legoRadioSports2,
-
 		e_legoRadioPizzaAd3,
-
 		e_legoRadioIntermission3,
-
 		e_legoRadioSuperStoreAd,
 
 		e_legoRadioLuckyYou,

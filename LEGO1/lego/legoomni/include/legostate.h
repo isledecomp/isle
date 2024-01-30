@@ -43,6 +43,16 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10006160
 	// LegoState::`scalar deleting destructor'
+
+	// SIZE 0x0c
+	struct StateStruct {
+		void* m_unk0x00;      // 0x00
+		undefined2 m_unk0x04; // 0x04
+		undefined2 m_unk0x06; // 0x06
+		MxS16 m_unk0x08;      // 0x08
+
+		StateStruct();
+	};
 };
 
 #endif // LEGOSTATE_H

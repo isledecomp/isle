@@ -5,6 +5,7 @@
 #include "radiostate.h"
 
 // VTABLE: LEGO1 0x100d6d10
+// SIZE 0x10
 class Radio : public MxCore {
 public:
 	Radio();
