@@ -43,7 +43,6 @@ public:
 
 private:
 	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
-	void FUN_10044540(undefined2);
 
 	undefined2 m_unk0x4c; // 0x4c
 	MxS16 m_unk0x4e;      // 0x4e

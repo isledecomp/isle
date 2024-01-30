@@ -28,18 +28,8 @@ public:
 	// SYNTHETIC: LEGO1 0x100260a0
 	// LegoVehicleBuildState::`scalar deleting destructor'
 
-public:
-	struct UnkStruct {
-		undefined4 m_unk0x00; // 0x00
-		undefined2 m_unk0x04; // 0x04
-		undefined2 m_unk0x06; // 0x06
-		undefined2 m_unk0x08; // 0x08
-
-		UnkStruct();
-	};
-
 private:
-	UnkStruct m_unk0x08[4]; // 0x08
+	StateStruct m_unk0x08[4]; // 0x08
 
 	// This can be one of the following:
 	// * LegoRaceCarBuildState
