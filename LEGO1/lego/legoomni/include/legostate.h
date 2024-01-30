@@ -49,7 +49,7 @@ public:
 		void* m_unk0x00;      // 0x00
 		undefined2 m_unk0x04; // 0x04
 		undefined2 m_unk0x06; // 0x06
-		MxS16 m_unk0x08;      // 0x08
+		MxU16 m_unk0x08;      // 0x08
 
 		StateStruct();
 	};

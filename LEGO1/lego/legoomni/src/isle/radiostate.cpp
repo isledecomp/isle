@@ -50,8 +50,8 @@ RadioState::RadioState()
 {
 	srand(Timer()->GetTime());
 
-	MxU32 random = rand();
-	m_unk0x2c = (MxS32) random % 3;
+	MxS32 random = rand();
+	m_unk0x2c = random % 3;
 
 	m_unk0x08[0].m_unk0x00 = m_unk0x100f3218;
 	m_unk0x08[0].m_unk0x04 = 6;
@@ -64,7 +64,7 @@ RadioState::RadioState()
 	m_unk0x08[1].m_unk0x04 = 14;
 	m_unk0x08[1].m_unk0x06 = 0;
 	m_unk0x08[1].m_unk0x08 = 0;
-	m_unk0x08[0].m_unk0x08 = random % 6;
+	m_unk0x08[0].m_unk0x08 = (MxU32) random % 6;
 
 	random = rand();
 
@@ -72,11 +72,11 @@ RadioState::RadioState()
 	m_unk0x08[2].m_unk0x04 = 9;
 	m_unk0x08[2].m_unk0x06 = 0;
 	m_unk0x08[2].m_unk0x08 = 0;
-	m_unk0x08[1].m_unk0x08 = random % 14;
+	m_unk0x08[1].m_unk0x08 = (MxU32) random % 14;
 
 	random = rand();
 
-	m_unk0x08[2].m_unk0x08 = random % 9;
+	m_unk0x08[2].m_unk0x08 = (MxU32) random % 9;
 
 	m_unk0x2e = 0;
 }
