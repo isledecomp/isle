@@ -53,10 +53,12 @@ RadioState::RadioState()
 	MxS32 random = rand();
 	m_unk0x2c = random % 3;
 
-	m_unk0x08[0].m_unk0x08 = 0;
-	m_unk0x08[0].m_unk0x06 = 0;
+	// TODO: Most likely inline function
+
 	m_unk0x08[0].m_unk0x04 = 6;
 	m_unk0x08[0].m_unk0x00 = m_unk0x100f3218;
+	m_unk0x08[0].m_unk0x08 = 0;
+	m_unk0x08[0].m_unk0x06 = 0;
 
 	random = rand();
 
@@ -78,12 +80,36 @@ RadioState::RadioState()
 
 	m_unk0x08[2].m_unk0x08 = (MxU32) random % 9;
 
-	m_unk0x2e = 0;
+	m_active = FALSE;
 }
 
-// STUB: LEGO1 0x1002cf50
+// FUNCTION: LEGO1 0x1002cf50
 MxBool RadioState::VTable0x14()
 {
-	// TODO
+	return FALSE;
+}
+
+// FUNCTION: LEGO1 0x1002d090
+MxU32 RadioState::FUN_1002d090()
+{
+	if (m_unk0x2c == 2) {
+		m_unk0x2c = 0;
+	}
+	else {
+		m_unk0x2c++;
+	}
+
+	return m_unk0x08[m_unk0x2c].FUN_10014d00();
+}
+
+// FUNCTION: LEGO1 0x1002d0c0
+MxBool RadioState::FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId)
+{
+	if (*g_jukeboxScript == p_atom) {
+		for (MxS16 i = 0; i < 3; i++)
+			if (m_unk0x08[i].FUN_10014de0(p_objectId))
+				return TRUE;
+	}
+
 	return FALSE;
 }

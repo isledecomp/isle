@@ -31,6 +31,8 @@ public:
 		return !strcmp(p_name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(p_name);
 	}
 
+	inline MxBool GetMusicEnabled() { return m_musicEnabled; }
+
 	void StartAction(MxParam& p_param);
 	void StopAction(MxParam& p_param);
 	MxResult PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c);

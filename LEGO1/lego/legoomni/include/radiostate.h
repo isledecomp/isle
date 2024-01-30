@@ -2,6 +2,7 @@
 #define RADIOSTATE_H
 
 #include "legostate.h"
+#include "mxdsaction.h"
 
 // VTABLE: LEGO1 0x100d6d28
 // SIZE 0x30
@@ -27,10 +28,17 @@ public:
 	// SYNTHETIC: LEGO1 0x1002d020
 	// RadioState::`scalar deleting destructor'
 
+	inline MxBool IsActive() { return m_active; }
+
+	inline void SetActive(MxBool p_active) { m_active = p_active; }
+
+	undefined4 FUN_1002d090();
+	MxBool FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId);
+
 private:
 	StateStruct m_unk0x08[3]; // 0x08
 	MxS16 m_unk0x2c;          // 0x2c
-	undefined m_unk0x2e;      // 0x2e
+	MxBool m_active;          // 0x2e
 };
 
 #endif // RADIOSTATE_H

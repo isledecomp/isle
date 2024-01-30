@@ -1,6 +1,8 @@
 #ifndef RADIO_H
 #define RADIO_H
 
+#include "legocontrolmanager.h"
+#include "mxactionnotificationparam.h"
 #include "mxcore.h"
 #include "radiostate.h"
 
@@ -32,10 +34,15 @@ public:
 	// Radio::`scalar deleting destructor'
 
 private:
-	RadioState* m_state; // 0x08
-	MxBool m_unk0x0c;    // 0x0c
+	RadioState* m_state;               // 0x08
+	MxBool m_unk0x0c;                  // 0x0c
+	MxBool m_bgAudioPreviouslyEnabled; // 0x0d
 
 	void CreateRadioState();
+	void Play();
+	void Stop();
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleNotification17(LegoControlManagerEvent& p_param);
 };
 
 #endif // RADIO_H

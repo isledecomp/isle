@@ -52,6 +52,9 @@ public:
 		MxU16 m_unk0x08;      // 0x08
 
 		StateStruct();
+
+		MxU32 FUN_10014d00();
+		MxBool FUN_10014de0(MxU32 p_objectId);
 	};
 };
 
