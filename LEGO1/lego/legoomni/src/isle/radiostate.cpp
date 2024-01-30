@@ -5,7 +5,7 @@
 #include "mxtimer.h"
 
 // GLOBAL: LEGO1 0x100f3218
-JukeBox::JukeBoxScript m_unk0x100f3218[6] = {
+JukeBox::JukeBoxScript g_unk0x100f3218[6] = {
 	JukeBox::e_legoRadioReminder1,
 	JukeBox::e_legoRadioJingle1,
 	JukeBox::e_legoRadioJingle2,
@@ -15,7 +15,7 @@ JukeBox::JukeBoxScript m_unk0x100f3218[6] = {
 };
 
 // GLOBAL: LEGO1 0x100f3230
-JukeBox::JukeBoxScript m_unk0x100f3230[14] = {
+JukeBox::JukeBoxScript g_unk0x100f3230[14] = {
 	JukeBox::e_legoRadioRacingAd,
 	JukeBox::e_legoRadioNews1,
 	JukeBox::e_legoRadioNews2,
@@ -33,7 +33,7 @@ JukeBox::JukeBoxScript m_unk0x100f3230[14] = {
 };
 
 // GLOBAL: LEGO1 0x100f3268
-JukeBox::JukeBoxScript m_unk0x100f3268[9] = {
+JukeBox::JukeBoxScript g_unk0x100f3268[9] = {
 	JukeBox::e_centralRoads,
 	JukeBox::e_beachBlvd,
 	JukeBox::e_residentialArea,
@@ -56,7 +56,7 @@ RadioState::RadioState()
 	// TODO: Most likely inline function
 
 	m_unk0x08[0].m_unk0x04 = 6;
-	m_unk0x08[0].m_unk0x00 = m_unk0x100f3218;
+	m_unk0x08[0].m_unk0x00 = g_unk0x100f3218;
 	m_unk0x08[0].m_unk0x08 = 0;
 	m_unk0x08[0].m_unk0x06 = 0;
 
@@ -65,7 +65,7 @@ RadioState::RadioState()
 	m_unk0x08[1].m_unk0x08 = 0;
 	m_unk0x08[1].m_unk0x06 = 0;
 	m_unk0x08[1].m_unk0x04 = 14;
-	m_unk0x08[1].m_unk0x00 = m_unk0x100f3230;
+	m_unk0x08[1].m_unk0x00 = g_unk0x100f3230;
 
 	m_unk0x08[0].m_unk0x08 = (MxU32) random % 6;
 	random = rand();
@@ -73,7 +73,7 @@ RadioState::RadioState()
 	m_unk0x08[2].m_unk0x08 = 0;
 	m_unk0x08[2].m_unk0x06 = 0;
 	m_unk0x08[2].m_unk0x04 = 9;
-	m_unk0x08[2].m_unk0x00 = m_unk0x100f3268;
+	m_unk0x08[2].m_unk0x00 = g_unk0x100f3268;
 
 	m_unk0x08[1].m_unk0x08 = (MxU32) random % 14;
 	random = rand();
