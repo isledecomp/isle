@@ -2,10 +2,26 @@
 
 #include "legoomni.h"
 
+#include "mxnotificationmanager.h"
+
 // STUB: LEGO1 0x10076d20
 RegistrationBook::RegistrationBook()
 {
-	// TODO
+	this->m_unk0xf8 = 0x80000000;
+	this->m_unk0xfc = 1;
+	this->m_unk0x28e = 0;
+	this->m_unk0x280 = -1;
+	this->m_unk0x284 = -1;
+	this->m_unk0x288 = -1;
+	this->m_unk0x28c = -1;
+	this->m_unk0x2b8 = 0;
+	this->m_unk0x2bc = 0;
+	this->m_unk0x2c1 = 0;
+	this->m_unk0x2c4 = 0;
+	this->m_unk0x2c8 = 0;
+	this->m_unk0x2cc = 0;
+
+	NotificationManager()->Register(this);
 }
 
 // STUB: LEGO1 0x10076f50
