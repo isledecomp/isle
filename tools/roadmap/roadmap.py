@@ -5,7 +5,8 @@ in the original binary."""
 import os
 import argparse
 import logging
-from typing import List, Optional
+import statistics
+from typing import Iterator, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp import Bin as IsleBin
 from isledecomp.cvdump import Cvdump
@@ -90,6 +91,19 @@ def truncate_module_name(prefix: str, module: str) -> str:
     return module
 
 
+def avg_remove_outliers(entries: List[int]) -> int:
+    """Compute the average from this list of entries (addresses)
+    after removing outlier values."""
+
+    if len(entries) == 1:
+        return entries[0]
+
+    avg = statistics.mean(entries)
+    sd = statistics.pstdev(entries)
+
+    return int(statistics.mean([e for e in entries if abs(e - avg) <= 2 * sd]))
+
+
 RoadmapRow = namedtuple(
     "RoadmapRow",
     [
@@ -110,10 +124,17 @@ class DeltaCollector:
     """Reads each row of the results and aggregates information about the
     placement of each module."""
 
-    def __init__(self, match_type: str = "fun"):
+    def __init__(self, match_type: str = "fun") -> None:
+        # The displacement for each symbol from each module
         self.disp_map = {}
+
+        # Each address for each module
+        self.addresses = {}
+
+        # The earliest address for each module
         self.earliest = {}
-        self.seen = set()
+
+        # String abbreviation for which symbol type we are checking
         self.match_type = "fun"
 
         match_type = str(match_type).strip().lower()[:3]
@@ -124,11 +145,15 @@ class DeltaCollector:
         if row.module is None:
             return
 
-        self.seen.add(row.module)
         if row.sym_type != self.match_type:
             return
 
         if row.orig_addr is not None:
+            if row.module not in self.addresses:
+                self.addresses[row.module] = []
+
+            self.addresses[row.module].append(row.orig_addr)
+
             if row.orig_addr < self.earliest.get(row.module, 0xFFFFFFFFF):
                 self.earliest[row.module] = row.orig_addr
 
@@ -137,6 +162,15 @@ class DeltaCollector:
                 self.disp_map[row.module] = []
 
             self.disp_map[row.module].append(row.displacement)
+
+    def iter_sorted(self) -> Iterator[Tuple[int, int]]:
+        """Compute the average address for each module, then generate them
+        in ascending order."""
+        avg_address = {
+            mod: avg_remove_outliers(values) for mod, values in self.addresses.items()
+        }
+        for mod, avg in sorted(avg_address.items(), key=lambda x: x[1]):
+            yield (avg, mod)
 
 
 def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_type: str):
@@ -156,14 +190,12 @@ def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_typ
         set("/".join(mod.split("/", 2)[:2]) + "/" for mod in leftover_modules)
     )
 
-    # These may already be sorted by earliest, but make sure
-    first_function = [(earliest, module) for (module, earliest) in dc.earliest.items()]
-    first_function.sort()
+    computed_order = list(dc.iter_sorted())
 
     for prefix in cmake_prefixes:
         print(prefix)
-        # Show modules ordered by the first appearance of whichever symbol type.
-        for start, module in first_function:
+        # Show modules ordered by the computed average of addresses
+        for _, module in computed_order:
             if not module.startswith(prefix):
                 continue
 
@@ -172,10 +204,11 @@ def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_typ
             avg_displacement = None
             displacements = dc.disp_map.get(module)
             if displacements is not None and len(displacements) > 0:
-                avg_displacement = int(sum(displacements) / len(displacements))
+                avg_displacement = int(statistics.mean(displacements))
 
+            earliest = dc.earliest.get(module)
             code_file = truncate_module_name(prefix, module)
-            print(f"0x{start:08x}  {or_blank(avg_displacement):10}  {code_file}")
+            print(f"0x{earliest:08x}  {avg_displacement:10}  {code_file}")
 
         # These modules are included in the final binary (in some form) but
         # they are not represented by whichever type of symbol we were checking.
