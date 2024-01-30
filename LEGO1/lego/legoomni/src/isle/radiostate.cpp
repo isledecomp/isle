@@ -55,7 +55,7 @@ RadioState::RadioState()
 
 	// TODO: Most likely inline function
 
-	m_unk0x08[0].m_unk0x04 = 6;
+	m_unk0x08[0].m_unk0x04 = sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]);
 	m_unk0x08[0].m_unk0x00 = g_unk0x100f3218;
 	m_unk0x08[0].m_unk0x08 = 0;
 	m_unk0x08[0].m_unk0x06 = 0;
@@ -64,21 +64,21 @@ RadioState::RadioState()
 
 	m_unk0x08[1].m_unk0x08 = 0;
 	m_unk0x08[1].m_unk0x06 = 0;
-	m_unk0x08[1].m_unk0x04 = 14;
+	m_unk0x08[1].m_unk0x04 = sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]);
 	m_unk0x08[1].m_unk0x00 = g_unk0x100f3230;
 
-	m_unk0x08[0].m_unk0x08 = (MxU32) random % 6;
+	m_unk0x08[0].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]));
 	random = rand();
 
 	m_unk0x08[2].m_unk0x08 = 0;
 	m_unk0x08[2].m_unk0x06 = 0;
-	m_unk0x08[2].m_unk0x04 = 9;
+	m_unk0x08[2].m_unk0x04 = sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]);
 	m_unk0x08[2].m_unk0x00 = g_unk0x100f3268;
 
-	m_unk0x08[1].m_unk0x08 = (MxU32) random % 14;
+	m_unk0x08[1].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]));
 	random = rand();
 
-	m_unk0x08[2].m_unk0x08 = (MxU32) random % 9;
+	m_unk0x08[2].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]));
 
 	m_active = FALSE;
 }
