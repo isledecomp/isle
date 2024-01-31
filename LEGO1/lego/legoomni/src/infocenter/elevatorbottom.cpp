@@ -82,6 +82,7 @@ void ElevatorBottom::ReadyWorld()
 MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 {
 	MxLong result = 0;
+
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
@@ -97,9 +98,11 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 		case 3:
 			LegoGameState* gs = GameState();
 			Act1State* state = (Act1State*) gs->GetState("Act1State");
+
 			if (state == NULL) {
 				state = (Act1State*) gs->CreateState("Act1State");
 			}
+
 			state->SetUnknown1c(1);
 			m_unk0xf8 = 6;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -108,6 +111,7 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 			break;
 		}
 	}
+
 	return result;
 }
 

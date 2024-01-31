@@ -30,6 +30,7 @@ public:
 
 	inline MxS16 GetInfocenterBufferSize() { return sizeof(m_buffer) / sizeof(m_buffer[0]); }
 	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
+	inline StateStruct& GetUnknown0x68() { return m_unk0x68; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
@@ -38,35 +39,10 @@ public:
 	// InfocenterState::`scalar deleting destructor'
 
 private:
-	// Members should be renamed with their offsets before use
-	/*
-	  struct UnkStruct
-	  {
-		undefined4 unk1;
-		undefined2 unk2;
-		undefined2 unk3;
-		undefined2 unk4;
-	  };
-
-	  undefined2 unk1;
-	  undefined2 unk2;
-	  undefined4 unk3;
-	  undefined4 padding1;
-	  void *unk4;
-	  undefined2 unk5;
-	  undefined2 unk6;
-	  undefined2 unk7;
-	  undefined2 padding2;
-	  void *unk8;
-	  undefined2 unk9;
-	  undefined2 unk10;
-	  undefined2 unk11;
-	  undefined2 padding3;
-	  UnkStruct unk12[6];
-	  undefined4 unk13;
-	*/
-
-	undefined m_pad[0x6c];
+	undefined m_unk0x08[0x18];     // 0x08
+	StateStruct m_unk0x20[3];      // 0x20
+	StateStruct m_unk0x44[3];      // 0x44
+	StateStruct m_unk0x68;         // 0x68
 	MxU32 m_unk0x74;               // 0x74
 	MxStillPresenter* m_buffer[7]; // 0x78
 };

@@ -457,6 +457,7 @@ MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 		FUN_10070d10(p_x, p_y);
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -518,9 +519,12 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		m_infoManDialogueTimer = 0;
+
 		InfomainScript actionToPlay = c_noInfomain;
 		StopCurrentAction();
 		InfomainScript characterBitmap = c_noInfomain;
+
+		GameState();
 
 		switch (p_param.GetClickedObjectId()) {
 		case c_leftArrowCtl:
@@ -532,8 +536,10 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_transitionDestination = 5;
 			}
 			else {
-				// todo
+				MxU32 objectId = m_infocenterState->GetUnknown0x68().FUN_10014d00();
+				PlayAction((InfomainScript) objectId);
 			}
+
 			break;
 		case c_rightArrowCtl:
 			m_infocenterState->SetUnknown0x74(14);
