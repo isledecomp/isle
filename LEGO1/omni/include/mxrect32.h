@@ -71,11 +71,6 @@ public:
 		return m_left < p_rect.m_right && p_rect.m_left < m_right && m_top < p_rect.m_bottom && p_rect.m_top < m_bottom;
 	}
 
-	inline MxBool ContainsPoint(MxS32 p_x, MxS32 p_y)
-	{
-		return m_left <= p_x && p_x <= m_right && m_top <= p_y && p_y <= m_bottom;
-	}
-
 	inline MxS32 GetWidth() const { return (m_right - m_left) + 1; }
 	inline MxS32 GetHeight() const { return (m_bottom - m_top) + 1; }
 

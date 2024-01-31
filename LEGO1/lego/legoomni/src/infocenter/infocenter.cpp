@@ -741,10 +741,14 @@ MxBool Infocenter::VTable0x5c()
 void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 {
 	MxS16 i;
-	for (i = 0; i < sizeof(m_mapAreas) / sizeof(m_mapAreas[0]); i++) {
-		if (m_mapAreas[i].m_area.ContainsPoint(p_x, p_y)) {
+	for (i = 0; i < (MxS32) (sizeof(m_mapAreas) / sizeof(m_mapAreas[0])); i++) {
+		MxS32 right = m_mapAreas[i].m_area.GetRight();
+		MxS32 bottom = m_mapAreas[i].m_area.GetBottom();
+		MxS32 left = m_mapAreas[i].m_area.GetLeft();
+		MxS32 top = m_mapAreas[i].m_area.GetTop();
+
+		if (left <= p_x && p_x <= right && top <= p_y && p_y <= bottom)
 			break;
-		}
 	}
 
 	if (i == 7) {
