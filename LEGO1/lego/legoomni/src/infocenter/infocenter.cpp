@@ -139,7 +139,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 			}
 			else if (m_transitionDestination != 0) {
 				BackgroundAudioManager()->RaiseVolume();
-				GameState()->HandleAction(m_transitionDestination);
+				GameState()->SwitchArea(m_transitionDestination);
 				m_transitionDestination = 0;
 			}
 			break;
@@ -589,7 +589,7 @@ MxU8 Infocenter::HandleNotification17(LegoControlManagerEvent& p_param)
 			m_infocenterState->SetUnknown0x74(4);
 			actionToPlay = GameState()->GetUnknown10() ? c_goToRegBookRed : c_goToRegBook;
 			m_radio.Stop();
-			GameState()->SetUnknown424(GameState()->GetPrevArea());
+			GameState()->SetCurrentArea(GameState()->GetPreviousArea());
 			InputManager()->DisableInputProcessing();
 			break;
 		case c_mamaCtl:

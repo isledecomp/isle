@@ -195,6 +195,35 @@ MxBool FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x1003ee80
+MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId)
+{
+	LegoWorld* world = FindWorld(p_worldAtom, p_worldEntityId);
+
+	if (world) {
+		MxCore* object = world->Find(p_entityAtom, p_entityId);
+
+		if (object) {
+			world->Remove(object);
+
+			if (!object->IsA("MxPresenter")) {
+				delete object;
+			}
+			else {
+				if (((MxPresenter*) object)->GetAction()) {
+					FUN_100b7220(((MxPresenter*) object)->GetAction(), MxDSAction::c_world, FALSE);
+				}
+
+				((MxPresenter*) object)->EndAction();
+			}
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 // STUB: LEGO1 0x1003ef00
 void FUN_1003ef00(MxBool)
 {

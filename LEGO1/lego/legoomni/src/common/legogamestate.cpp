@@ -69,8 +69,8 @@ LegoGameState::LegoGameState()
 	this->m_stateCount = 0;
 	this->m_unk0x0c = 0;
 	this->m_savePath = NULL;
-	this->m_unk0x424 = 0;
-	this->m_prevArea = 0;
+	this->m_currentArea = 0;
+	this->m_previousArea = 0;
 	this->m_unk0x42c = 0;
 	this->m_isDirty = FALSE;
 	this->m_currentAct = -1;
@@ -256,16 +256,176 @@ void LegoGameState::SerializePlayersInfo(MxS16)
 	// TODO
 }
 
-// STUB: LEGO1 0x1003a720
-void LegoGameState::FUN_1003a720(MxU32)
+// FUNCTION: LEGO1 0x1003a720
+void LegoGameState::StopArea(MxU32 p_area)
 {
-	// TODO
+	if (p_area == 0) {
+		p_area = m_previousArea;
+	}
+
+	switch (p_area) {
+	case 1:
+		InvokeAction(Extra::e_stop, *g_isleScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_isleScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_sndAnimScript, 0, NULL);
+		break;
+	case 2:
+		InvokeAction(Extra::e_stop, *g_infomainScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infomainScript, 0, NULL);
+		break;
+	case 3:
+		InvokeAction(Extra::e_stop, *g_infodoorScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infodoorScript, 0, NULL);
+		break;
+	case 5:
+		InvokeAction(Extra::e_stop, *g_elevbottScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_elevbottScript, 0, NULL);
+		break;
+	case 6:
+	case 7:
+		RemoveFromWorld(*g_isleScript, 0x41b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 1052, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x41d, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x41e, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x420, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x422, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x424, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x426, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x428, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x42a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x42b, *g_isleScript, 0);
+		break;
+	case 8:
+		RemoveFromWorld(*g_isleScript, 0x45b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x45c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x45d, *g_isleScript, 0);
+		break;
+	case 9:
+		RemoveFromWorld(*g_isleScript, 0x475, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x476, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x477, *g_isleScript, 0);
+		break;
+	case 10:
+		RemoveFromWorld(*g_isleScript, 0x45f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x460, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x461, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x462, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x463, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x464, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x465, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x466, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x467, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x469, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x468, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46d, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46e, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x471, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x472, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x12, *g_isleScript, 0);
+		break;
+	case 0xb:
+		RemoveFromWorld(*g_isleScript, 0x47a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47d, *g_isleScript, 0);
+		break;
+	case 0xc:
+		InvokeAction(Extra::e_stop, *g_regbookScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_regbookScript, 0, NULL);
+		break;
+	case 0xd:
+		InvokeAction(Extra::e_stop, *g_infoscorScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infoscorScript, 0, NULL);
+		break;
+	case 0xe:
+		InvokeAction(Extra::e_stop, *g_jetraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetracerScript, 0, NULL);
+		break;
+	case 0x12:
+		InvokeAction(Extra::e_stop, *g_carraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_carraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_carracerScript, 0, NULL);
+		break;
+	case 0x1a:
+		Lego()->RemoveWorld(*g_garageScript, 0);
+		InvokeAction(Extra::e_stop, *g_garageScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_garageScript, 0, NULL);
+		break;
+	case 0x1b:
+		RemoveFromWorld(*g_isleScript, 0x489, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48c, *g_isleScript, 0);
+		break;
+	case 0x1e:
+		InvokeAction(Extra::e_stop, *g_hospitalScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_hospitalScript, 0, NULL);
+		break;
+	case 0x22:
+		InvokeAction(Extra::e_stop, *g_policeScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_policeScript, 0, NULL);
+		break;
+	case 0x23:
+		RemoveFromWorld(*g_isleScript, 0x47f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x480, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x481, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x482, *g_isleScript, 0);
+		break;
+	case 0x24:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x2f, NULL);
+		InvokeAction(Extra::e_stop, *g_copterScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_copterScript, 0, NULL);
+		break;
+	case 0x25:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x31, NULL);
+		InvokeAction(Extra::e_stop, *g_dunecarScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_dunecarScript, 0, NULL);
+		break;
+	case 0x26:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x33, NULL);
+		InvokeAction(Extra::e_stop, *g_jetskiScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetskiScript, 0, NULL);
+		break;
+	case 0x27:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x35, NULL);
+		InvokeAction(Extra::e_stop, *g_racecarScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_racecarScript, 0, NULL);
+		break;
+	case 0x2e:
+		if (m_currentArea != 2) {
+			InvokeAction(Extra::e_stop, *g_act2mainScript, 0, NULL);
+			InvokeAction(Extra::e_close, *g_act2mainScript, 0, NULL);
+		}
+		break;
+	case 0x2f:
+		if (m_currentArea != 2) {
+			InvokeAction(Extra::e_stop, *g_act3Script, 0, NULL);
+			InvokeAction(Extra::e_close, *g_act3Script, 0, NULL);
+		}
+		break;
+	case 0x35:
+		InvokeAction(Extra::e_stop, *g_jukeboxwScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jukeboxwScript, 0, NULL);
+		break;
+	case 0x38:
+		InvokeAction(Extra::e_disable, *g_histbookScript, 0, NULL);
+		InvokeAction(Extra::e_stop, *g_histbookScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_histbookScript, 0, NULL);
+		break;
+	}
 }
 
 // STUB: LEGO1 0x1003b060
-void LegoGameState::HandleAction(MxU32 p_area)
+void LegoGameState::SwitchArea(MxU32 p_area)
 {
-	m_prevArea = p_area;
+	m_previousArea = m_currentArea;
+	m_currentArea = p_area;
+
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
 	VideoManager()->SetUnk0x554(0);
