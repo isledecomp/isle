@@ -813,7 +813,8 @@ MxBool Infocenter::VTable0x64()
 		else if (val != 8) {
 #ifdef COMPAT_MODE
 			{
-				MxNotificationParam param(c_notificationType0, NULL) Notify(param);
+				MxNotificationParam param(c_notificationType0, NULL);
+				Notify(param);
 			}
 #else
 			Notify(MxNotificationParam(c_notificationType0, NULL));
