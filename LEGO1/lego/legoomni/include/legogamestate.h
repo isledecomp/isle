@@ -38,9 +38,10 @@ public:
 	inline MxU8 GetUnknownC() { return m_unk0x0c; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
-	inline undefined4 GetUnknown424() { return m_currentArea; }
+	inline MxU32 GetCurrentArea() { return m_currentArea; }
+
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
-	inline void SetUnknown424(undefined4 p_unk0x424) { m_currentArea = p_unk0x424; }
+	inline void SetCurrentArea(MxU32 p_currentArea) { m_currentArea = p_currentArea; }
 
 	void SetSomeEnumState(undefined4 p_state);
 	void FUN_1003ceb0();
@@ -75,8 +76,8 @@ private:
 	ScoreStruct m_unk0xa6;                      // 0xa6
 	undefined m_unk0x41a[8];                    // 0x41a - might be part of the structure at 0xa6
 	MxBool m_isDirty;                           // 0x420
-	undefined4 m_currentArea;                   // 0x424
-	undefined4 m_previousArea;                  // 0x428
+	MxU32 m_currentArea;                        // 0x424
+	MxU32 m_previousArea;                       // 0x428
 	undefined4 m_unk0x42c;                      // 0x42c
 };
 

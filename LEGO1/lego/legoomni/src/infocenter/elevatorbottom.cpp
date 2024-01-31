@@ -38,7 +38,7 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetUnknown424(5);
+	GameState()->SetCurrentArea(5);
 	GameState()->StopArea();
 
 	return result;

@@ -75,8 +75,8 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 			m_unk0x13c = 2;
 		}
 
-		if (GameState()->GetUnknown424() == 1) {
-			GameState()->SetUnknown424(0);
+		if (GameState()->GetCurrentArea() == 1) {
+			GameState()->SetCurrentArea(0);
 		}
 
 		LegoGameState* gameState = GameState();

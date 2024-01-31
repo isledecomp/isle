@@ -52,7 +52,7 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		LegoGameState* gs = GameState();
 		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
-		GameState()->SetUnknown424(0xd);
+		GameState()->SetCurrentArea(0xd);
 		GameState()->StopArea();
 	}
 
