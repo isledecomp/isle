@@ -428,18 +428,18 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
-	VideoManager()->SetUnk0x554(0);
+	VideoManager()->SetUnk0x554(FALSE);
 
 	MxAtomId* script = g_isleScript;
 	switch (p_area) {
 	case 1:
 		break;
 	case 2:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_infomainScript;
 		break;
 	case 3:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_infodoorScript;
 		break;
 		// TODO
@@ -447,11 +447,11 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 		script = g_elevbottScript;
 		break;
 	case 12:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_regbookScript;
 		break;
 	case 13:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_infoscorScript;
 		break;
 

@@ -91,7 +91,7 @@ MxLong Score::Notify(MxParam& p_param)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:

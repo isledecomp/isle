@@ -183,7 +183,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxU8 HandleMouseMove(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
-	MxU8 HandleNotification17(LegoControlManagerEvent& p_param);
+	MxU8 HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleEndAction(MxParam& p_param);
 	MxLong HandleNotification0(MxParam&);
 

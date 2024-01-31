@@ -63,11 +63,11 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 				result = 1;
 			}
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->HandleAction(m_unk0xf8);
+			GameState()->SwitchArea(m_unk0xf8);
 			result = 1;
 			break;
 		}

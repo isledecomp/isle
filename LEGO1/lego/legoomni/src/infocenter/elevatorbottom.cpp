@@ -58,8 +58,8 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetType()) {
-		case c_notificationType17:
-			ret = HandleNotification17((LegoControlManagerEvent&) p_param);
+		case c_notificationClick:
+			ret = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_unk0xf8);
@@ -79,7 +79,7 @@ void ElevatorBottom::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x100181d0
-MxLong ElevatorBottom::HandleNotification17(LegoControlManagerEvent& p_param)
+MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 {
 	MxLong result = 0;
 	if (p_param.GetUnknown0x28() == 1) {

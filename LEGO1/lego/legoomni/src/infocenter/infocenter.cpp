@@ -126,8 +126,8 @@ MxLong Infocenter::Notify(MxParam& p_param)
 				((LegoEventNotificationParam&) p_param).GetY()
 			);
 			break;
-		case c_notificationType17:
-			result = HandleNotification17((LegoControlManagerEvent&) p_param);
+		case c_notificationClick:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			StopBookAnimation();
@@ -514,7 +514,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 }
 
 // FUNCTION: LEGO1 0x10070370
-MxU8 Infocenter::HandleNotification17(LegoControlManagerEvent& p_param)
+MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		m_infoManDialogueTimer = 0;

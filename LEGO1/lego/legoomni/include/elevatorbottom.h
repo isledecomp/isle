@@ -43,7 +43,7 @@ public:
 private:
 	undefined4 m_unk0xf8; // 0xf8
 
-	MxLong HandleNotification17(LegoControlManagerEvent& p_param);
+	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };
 
 #endif // ELEVATORBOTTOM_H
