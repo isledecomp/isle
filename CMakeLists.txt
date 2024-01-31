@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+include(CMakeDependentOption)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy")
 if (ENABLE_CLANG_TIDY)
@@ -34,10 +36,13 @@ message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
+cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
 target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+if(ISLE_USE_DX5_LIBS)
+    target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
 
 add_library(Smacker::Smacker STATIC IMPORTED)
 set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
