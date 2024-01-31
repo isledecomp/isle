@@ -199,8 +199,10 @@ MxBool FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId)
 {
 	LegoWorld* world = FindWorld(p_worldAtom, p_worldEntityId);
+
 	if (world) {
 		MxCore* object = world->Find(p_entityAtom, p_entityId);
+
 		if (object) {
 			world->Remove(object);
 
@@ -218,6 +220,7 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 

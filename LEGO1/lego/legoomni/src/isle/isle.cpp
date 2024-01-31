@@ -62,14 +62,14 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
-		GameState()->StopPreviousAction(0);
+		GameState()->StopArea();
 
 		switch (GameState()->GetCurrentAct()) {
 		case 1:
-			GameState()->StopPreviousAction(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case 2:
-			GameState()->StopPreviousAction(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case -1:
 			m_unk0x13c = 2;
@@ -158,7 +158,7 @@ void Isle::ReadyWorld()
 	LegoWorld::ReadyWorld();
 
 	if (m_act1state->GetUnknown21()) {
-		GameState()->HandleAction(2);
+		GameState()->SwitchArea(2);
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}

@@ -69,8 +69,8 @@ LegoGameState::LegoGameState()
 	this->m_stateCount = 0;
 	this->m_unk0x0c = 0;
 	this->m_savePath = NULL;
-	this->m_unk0x424 = 0;
-	this->m_prevArea = 0;
+	this->m_currentArea = 0;
+	this->m_previousArea = 0;
 	this->m_unk0x42c = 0;
 	this->m_isDirty = FALSE;
 	this->m_currentAct = -1;
@@ -257,10 +257,10 @@ void LegoGameState::SerializePlayersInfo(MxS16)
 }
 
 // FUNCTION: LEGO1 0x1003a720
-void LegoGameState::StopPreviousAction(MxU32 p_area)
+void LegoGameState::StopArea(MxU32 p_area)
 {
 	if (p_area == 0) {
-		p_area = m_prevArea;
+		p_area = m_previousArea;
 	}
 
 	switch (p_area) {
@@ -397,13 +397,13 @@ void LegoGameState::StopPreviousAction(MxU32 p_area)
 		InvokeAction(Extra::e_close, *g_racecarScript, 0, NULL);
 		break;
 	case 0x2e:
-		if (m_unk0x424 != 2) {
+		if (m_currentArea != 2) {
 			InvokeAction(Extra::e_stop, *g_act2mainScript, 0, NULL);
 			InvokeAction(Extra::e_close, *g_act2mainScript, 0, NULL);
 		}
 		break;
 	case 0x2f:
-		if (m_unk0x424 != 2) {
+		if (m_currentArea != 2) {
 			InvokeAction(Extra::e_stop, *g_act3Script, 0, NULL);
 			InvokeAction(Extra::e_close, *g_act3Script, 0, NULL);
 		}
@@ -421,10 +421,11 @@ void LegoGameState::StopPreviousAction(MxU32 p_area)
 }
 
 // STUB: LEGO1 0x1003b060
-void LegoGameState::HandleAction(MxU32 p_area)
+void LegoGameState::SwitchArea(MxU32 p_area)
 {
-	m_prevArea = m_unk0x424;
-	m_unk0x424 = p_area;
+	m_previousArea = m_currentArea;
+	m_currentArea = p_area;
+
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
 	VideoManager()->SetUnk0x554(0);
