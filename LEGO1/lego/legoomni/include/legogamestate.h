@@ -32,7 +32,7 @@ public:
 	LegoState* CreateState(const char* p_stateName);
 
 	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
-	void FUN_1003a720(MxU32);
+	void StopPreviousAction(MxU32);
 	void HandleAction(MxU32);
 
 	inline MxU8 GetUnknownC() { return m_unk0x0c; }

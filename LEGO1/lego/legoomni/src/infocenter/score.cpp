@@ -53,7 +53,7 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
 		GameState()->SetUnknown424(0xd);
-		GameState()->FUN_1003a720(0);
+		GameState()->StopPreviousAction(0);
 	}
 
 	return result;

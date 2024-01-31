@@ -39,7 +39,7 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 	SetIsWorldActive(FALSE);
 
 	GameState()->SetUnknown424(5);
-	GameState()->FUN_1003a720(0);
+	GameState()->StopPreviousAction(0);
 
 	return result;
 }

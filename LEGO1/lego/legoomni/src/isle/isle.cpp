@@ -62,14 +62,14 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
-		GameState()->FUN_1003a720(0);
+		GameState()->StopPreviousAction(0);
 
 		switch (GameState()->GetCurrentAct()) {
 		case 1:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopPreviousAction(0x2e);
 			break;
 		case 2:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopPreviousAction(0x2e);
 			break;
 		case -1:
 			m_unk0x13c = 2;

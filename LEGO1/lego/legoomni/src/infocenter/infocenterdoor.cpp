@@ -40,7 +40,7 @@ MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 	SetIsWorldActive(FALSE);
 
 	GameState()->SetUnknown424(3);
-	GameState()->FUN_1003a720(0);
+	GameState()->StopPreviousAction(0);
 
 	return result;
 }
