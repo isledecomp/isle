@@ -32,7 +32,7 @@ Infocenter::Infocenter()
 	m_infocenterState = NULL;
 	m_frameHotBitmap = 0;
 	m_unk0x11c = 0;
-	m_unk0x104 = 0;
+	m_transitionDestination = 0;
 	m_currentInfomainScript = c_noInfomain;
 	m_currentCutscene = e_noIntro;
 
@@ -127,7 +127,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 			);
 			break;
 		case c_notificationType17:
-			result = HandleNotification17(p_param);
+			result = HandleNotification17((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			StopBookAnimation();
@@ -137,10 +137,10 @@ MxLong Infocenter::Notify(MxParam& p_param)
 				StartCredits();
 				m_infocenterState->SetUnknown0x74(0xd);
 			}
-			else if (m_unk0x104 != 0) {
+			else if (m_transitionDestination != 0) {
 				BackgroundAudioManager()->RaiseVolume();
-				GameState()->HandleAction(m_unk0x104);
-				m_unk0x104 = 0;
+				GameState()->HandleAction(m_transitionDestination);
+				m_transitionDestination = 0;
 			}
 			break;
 		}
@@ -189,7 +189,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 				break;
 			}
 
-			FUN_10070dc0(TRUE);
+			UpdateFrameHot(TRUE);
 		}
 	}
 
@@ -433,13 +433,31 @@ void Infocenter::InitializeBitmaps()
 
 	m_frameHotBitmap = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");
 
-	FUN_10070dc0(TRUE);
+	UpdateFrameHot(TRUE);
 }
 
-// STUB: LEGO1 0x1006fd00
+// FUNCTION: LEGO1 0x1006fd00
 MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 {
-	return 1;
+	if (m_unk0x11c) {
+		if (!m_unk0x11c->IsEnabled()) {
+			MxS32 oldDisplayZ = m_unk0x11c->GetDisplayZ();
+
+			m_unk0x11c->SetDisplayZ(1000);
+			VideoManager()->SortPresenterList();
+			m_unk0x11c->Enable(TRUE);
+			m_unk0x11c->VTable0x88(p_x, p_y);
+
+			m_unk0x11c->SetDisplayZ(oldDisplayZ);
+		}
+		else {
+			m_unk0x11c->VTable0x88(p_x, p_y);
+		}
+
+		FUN_10070d10(p_x, p_y);
+		return 1;
+	}
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x1006fda0
@@ -492,12 +510,119 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 // STUB: LEGO1 0x1006feb0
 MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 {
-	return 1;
+	return FALSE;
 }
 
-// STUB: LEGO1 0x10070370
-MxU8 Infocenter::HandleNotification17(MxParam&)
+// FUNCTION: LEGO1 0x10070370
+MxU8 Infocenter::HandleNotification17(LegoControlManagerEvent& p_param)
 {
+	if (p_param.GetUnknown0x28() == 1) {
+		m_infoManDialogueTimer = 0;
+		InfomainScript actionToPlay = c_noInfomain;
+		StopCurrentAction();
+		InfomainScript characterBitmap = c_noInfomain;
+
+		switch (p_param.GetClickedObjectId()) {
+		case c_leftArrowCtl:
+			m_infocenterState->SetUnknown0x74(14);
+			StopCurrentAction();
+			if (GameState()->GetUnknown10() == 0) {
+				m_radio.Stop();
+				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				m_transitionDestination = 5;
+			}
+			else {
+				// todo
+			}
+			break;
+		case c_rightArrowCtl:
+			m_infocenterState->SetUnknown0x74(14);
+			StopCurrentAction();
+			if (GameState()->GetUnknown10() == 0) {
+				m_radio.Stop();
+				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				m_transitionDestination = 13;
+			}
+			else {
+				// todo
+			}
+			break;
+		case c_infoCtl:
+			m_radio.Stop();
+			break;
+		case c_doorCtl:
+			if (m_infocenterState->GetUnknown0x74() != 8) {
+				actionToPlay = c_exitConfirmationDialogue;
+				m_radio.Stop();
+				m_infocenterState->SetUnknown0x74(8);
+			}
+			break;
+		case c_boatCtl:
+			actionToPlay = c_boatCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_raceCtl:
+			actionToPlay = c_raceCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_pizzaCtl:
+			actionToPlay = c_pizzaCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_gasCtl:
+			actionToPlay = c_gasCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_medCtl:
+			actionToPlay = c_medCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_copCtlDescription:
+			actionToPlay = c_medCtlDescription;
+			m_radio.Stop();
+			break;
+		case c_bigInfoCtl:
+			// TODO
+			break;
+		case c_bookCtl:
+			m_transitionDestination = 12;
+			m_infocenterState->SetUnknown0x74(4);
+			actionToPlay = GameState()->GetUnknown10() ? c_goToRegBookRed : c_goToRegBook;
+			m_radio.Stop();
+			GameState()->SetUnknown424(GameState()->GetPrevArea());
+			InputManager()->DisableInputProcessing();
+			break;
+		case c_mamaCtl:
+			characterBitmap = c_mamaSelected;
+			UpdateFrameHot(FALSE);
+			break;
+		case c_papaCtl:
+			characterBitmap = c_papaSelected;
+			UpdateFrameHot(FALSE);
+			break;
+		case c_pepperCtl:
+			characterBitmap = c_pepperSelected;
+			UpdateFrameHot(FALSE);
+			break;
+		case c_nickCtl:
+			characterBitmap = c_nickSelected;
+			UpdateFrameHot(FALSE);
+			break;
+		case c_lauraCtl:
+			characterBitmap = c_lauraCtl;
+			UpdateFrameHot(FALSE);
+			break;
+		}
+
+		if (actionToPlay != c_noInfomain) {
+			PlayAction(actionToPlay);
+		}
+
+		if (characterBitmap != c_noInfomain)
+		{
+			m_unk0x11c = (MxStillPresenter*)Find(m_atom, characterBitmap);
+		}
+	}
 	return 1;
 }
 
@@ -595,15 +720,78 @@ void Infocenter::StopCutscene()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
+// FUNCTION: LEGO1 0x10070d10
+void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
+{
+	MxS16 i;
+	for (i = 0; i < sizeof(m_mapAreas) / sizeof(InfocenterMapEntry); i++) {
+		if (m_mapAreas[i].m_unk0x08 <= p_x && p_x <= m_mapAreas[i].m_unk0x10 && m_mapAreas[i].m_unk0x0c <= p_y &&
+			p_y <= m_mapAreas[i].m_unk0x14) {
+			break;
+		}
+	}
+
+	if (i == 7) {
+		i = -1;
+	}
+
+	if (i != m_unk0x1c8) {
+		if (m_unk0x1c8 != -1) {
+			m_mapAreas[i].m_presenter->Enable(FALSE);
+		}
+
+		m_unk0x1c8 = i;
+		if (i != -1) {
+			m_mapAreas[i].m_presenter->Enable(TRUE);
+		}
+	}
+}
+
 // FUNCTION: LEGO1 0x10070d00
 MxBool Infocenter::VTable0x5c()
 {
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10070dc0
-void Infocenter::FUN_10070dc0(MxBool)
+// FUNCTION: LEGO1 0x10070dc0
+void Infocenter::UpdateFrameHot(MxBool p_display)
 {
+	if (p_display) {
+		MxU32 x;
+		switch (GameState()->GetUnknownC()) {
+		case 1:
+			x = 302;
+			break;
+		case 2:
+			x = 204;
+			break;
+		case 3:
+			x = 253;
+			break;
+		case 4:
+			x = 353;
+			break;
+		case 5:
+			x = 399;
+			break;
+		default:
+			return;
+		}
+
+		MxS32 oldZ = m_frameHotBitmap->GetDisplayZ();
+
+		m_frameHotBitmap->SetDisplayZ(1000);
+		VideoManager()->SortPresenterList();
+		m_frameHotBitmap->Enable(TRUE);
+		m_frameHotBitmap->VTable0x88(x, 81);
+
+		m_frameHotBitmap->SetDisplayZ(oldZ);
+	}
+	else {
+		if (m_frameHotBitmap) {
+			m_frameHotBitmap->Enable(FALSE);
+		}
+	}
 }
 
 // STUB: LEGO1 0x10070e90
@@ -611,9 +799,23 @@ void Infocenter::FUN_10070e90()
 {
 }
 
-// STUB: LEGO1 0x10070f60
+// FUNCTION: LEGO1 0x10070f60
 MxBool Infocenter::VTable0x64()
 {
+	if (m_infocenterState != NULL) {
+		MxU32 val = m_infocenterState->GetUnknown0x74();
+		if (val == 0) {
+			StopCutscene();
+			m_infocenterState->SetUnknown0x74(1);
+		}
+		else if (val == 13) {
+			StopCredits();
+		}
+		else if (val != 8) {
+			Notify(MxNotificationParam(c_notificationType0, NULL));
+		}
+	}
+
 	return FALSE;
 }
 

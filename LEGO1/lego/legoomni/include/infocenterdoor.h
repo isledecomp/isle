@@ -3,6 +3,8 @@
 
 #include "legoworld.h"
 
+class LegoControlManagerEvent;
+
 // VTABLE: LEGO1 0x100d72d8
 // SIZE 0xfc
 class InfocenterDoor : public LegoWorld {
@@ -39,6 +41,8 @@ public:
 
 private:
 	MxS32 m_unk0xf8; // 0xf8
+
+	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };
 
 #endif // INFOCENTERDOOR_H

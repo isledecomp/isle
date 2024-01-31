@@ -1,11 +1,15 @@
 #include "infocenterdoor.h"
 
+#include "infocenterstate.h"
 #include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "mxactionnotificationparam.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxnotificationmanager.h"
+#include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
 
@@ -45,11 +49,79 @@ MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x100379e0
+// FUNCTION: LEGO1 0x100379e0
 MxLong InfocenterDoor::Notify(MxParam& p_param)
 {
-	// TODO
-	return LegoWorld::Notify(p_param);
+	MxLong result = 0;
+	LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetType()) {
+		case c_notificationEndAction:
+			if (((MxEndActionNotificationParam&) p_param).GetAction()->GetAtomId() == m_atom) {
+				BackgroundAudioManager()->RaiseVolume();
+				result = 1;
+			}
+			break;
+		case c_notificationType17:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->HandleAction(m_unk0xf8);
+			result = 1;
+			break;
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x10037a90
+MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
+{
+	if (p_param.GetUnknown0x28() == 1) {
+		DeleteObjects(&m_atom, 500, 510);
+
+		switch (p_param.GetClickedObjectId()) {
+		case 1:
+			m_unk0xf8 = 13;
+			break;
+		case 2:
+			m_unk0xf8 = 5;
+			break;
+		case 3:
+			m_unk0xf8 = 2;
+			break;
+		case 4:
+			if (GameState()->GetUnknownC()) {
+				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
+				if (state->GetInfocenterBufferElement(0) != NULL) {
+					m_unk0xf8 = 4;
+				}
+				else {
+					MxDSAction action;
+					action.SetObjectId(503);
+					action.SetAtomId(*g_infodoorScript);
+					BackgroundAudioManager()->LowerVolume();
+					Start(&action);
+					return 1;
+				}
+			}
+			else {
+				MxDSAction action;
+				action.SetObjectId(500);
+				action.SetAtomId(*g_infodoorScript);
+				BackgroundAudioManager()->LowerVolume();
+				Start(&action);
+				return 1;
+			}
+		default:
+			return 0;
+		}
+		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10037a70

@@ -282,6 +282,18 @@ void LegoGameState::HandleAction(MxU32 p_area)
 		VideoManager()->SetUnk0x554(1);
 		script = g_infodoorScript;
 		break;
+		// TODO
+	case 5:
+		script = g_elevbottScript;
+		break;
+	case 12:
+		VideoManager()->SetUnk0x554(1);
+		script = g_regbookScript;
+		break;
+	case 13:
+		VideoManager()->SetUnk0x554(1);
+		script = g_infoscorScript;
+		break;
 
 		// TODO: implement other cases
 	}

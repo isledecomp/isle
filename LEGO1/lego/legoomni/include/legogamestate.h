@@ -39,6 +39,7 @@ public:
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
 	inline undefined4 GetUnknown424() { return m_unk0x424; }
+	inline undefined4 GetPrevArea() { return m_prevArea; }
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetUnknown424(undefined4 p_unk0x424) { m_unk0x424 = p_unk0x424; }
 

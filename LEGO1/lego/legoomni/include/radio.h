@@ -29,18 +29,19 @@ public:
 	}
 
 	void Initialize(MxBool p_und);
+	void Play();
+	void Stop();
 
 	// SYNTHETIC: LEGO1 0x1002c970
 	// Radio::`scalar deleting destructor'
 
 private:
+	void CreateRadioState();
+
 	RadioState* m_state;               // 0x08
 	MxBool m_unk0x0c;                  // 0x0c
 	MxBool m_bgAudioPreviouslyEnabled; // 0x0d
 
-	void CreateRadioState();
-	void Play();
-	void Stop();
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleNotification17(LegoControlManagerEvent& p_param);
 };
