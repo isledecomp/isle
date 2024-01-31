@@ -771,35 +771,41 @@ void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 void Infocenter::UpdateFrameHot(MxBool p_display)
 {
 	if (p_display) {
-		MxU32 x;
+		MxS32 x, y;
+
 		switch (GameState()->GetUnknownC()) {
 		case 1:
 			x = 302;
+			y = 81;
 			break;
 		case 2:
 			x = 204;
+			y = 81;
 			break;
 		case 3:
 			x = 253;
+			y = 81;
 			break;
 		case 4:
 			x = 353;
+			y = 81;
 			break;
 		case 5:
 			x = 399;
+			y = 81;
 			break;
 		default:
 			return;
 		}
 
-		MxS32 oldZ = m_frameHotBitmap->GetDisplayZ();
+		MxS32 originalDisplayZ = m_frameHotBitmap->GetDisplayZ();
 
 		m_frameHotBitmap->SetDisplayZ(1000);
 		VideoManager()->SortPresenterList();
-		m_frameHotBitmap->Enable(TRUE);
-		m_frameHotBitmap->VTable0x88(x, 81);
 
-		m_frameHotBitmap->SetDisplayZ(oldZ);
+		m_frameHotBitmap->Enable(TRUE);
+		m_frameHotBitmap->VTable0x88(x, y);
+		m_frameHotBitmap->SetDisplayZ(originalDisplayZ);
 	}
 	else {
 		if (m_frameHotBitmap) {
