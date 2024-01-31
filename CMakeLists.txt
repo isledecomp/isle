@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy")
+if (ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_BIN NAMES "clang-tidy")
+    set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_BIN}")
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_BIN}")
+endif()
+
 math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
 message(STATUS "Building ${bits}-bit LEGO Island")
 if (NOT bits EQUAL 32)

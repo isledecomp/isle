@@ -14,18 +14,20 @@ jobs:
       matrix:
         toolchain:
         - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
-        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', setup-msys2: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true }
+        - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true }
 
     steps:
       - name: Set up MSYS2
-        if: matrix.toolchain.setup-msys2
+        if: ${{ !!matrix.toolchain.msystem }}
         uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw32
+          msystem: ${{ matrix.toolchain.msystem }}
           install: >-
-            mingw-w64-i686-cc
-            mingw-w64-i686-cmake
-            mingw-w64-i686-ninja
+            ${{ matrix.toolchain.msys-env }}-cc
+            ${{ matrix.toolchain.msys-env }}-cmake
+            ${{ matrix.toolchain.msys-env }}-ninja
+            ${{ matrix.toolchain.msys-env }}-clang-tools-extra
 
       - name: Setup cmake
         if: matrix.toolchain.setup-cmake
@@ -45,7 +47,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja -Werror=dev
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja -Werror=dev -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }}
           cmake --build build
 
   build:
