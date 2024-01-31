@@ -530,6 +530,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 		case c_leftArrowCtl:
 			m_infocenterState->SetUnknown0x74(14);
 			StopCurrentAction();
+
 			if (GameState()->GetUnknown10() == 0) {
 				m_radio.Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -544,14 +545,17 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 		case c_rightArrowCtl:
 			m_infocenterState->SetUnknown0x74(14);
 			StopCurrentAction();
+
 			if (GameState()->GetUnknown10() == 0) {
 				m_radio.Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 				m_transitionDestination = 13;
 			}
 			else {
-				// todo
+				MxU32 objectId = m_infocenterState->GetUnknown0x68().FUN_10014d00();
+				PlayAction((InfomainScript) objectId);
 			}
+
 			break;
 		case c_infoCtl:
 			m_radio.Stop();
@@ -562,6 +566,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_radio.Stop();
 				m_infocenterState->SetUnknown0x74(8);
 			}
+
 			break;
 		case c_boatCtl:
 			actionToPlay = c_boatCtlDescription;
@@ -584,7 +589,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_radio.Stop();
 			break;
 		case c_copCtlDescription:
-			actionToPlay = c_medCtlDescription;
+			actionToPlay = c_copCtlDescription;
 			m_radio.Stop();
 			break;
 		case c_bigInfoCtl:
@@ -628,6 +633,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_unk0x11c = (MxStillPresenter*) Find(m_atom, characterBitmap);
 		}
 	}
+
 	return 1;
 }
 
