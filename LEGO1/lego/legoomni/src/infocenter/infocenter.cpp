@@ -618,9 +618,8 @@ MxU8 Infocenter::HandleNotification17(LegoControlManagerEvent& p_param)
 			PlayAction(actionToPlay);
 		}
 
-		if (characterBitmap != c_noInfomain)
-		{
-			m_unk0x11c = (MxStillPresenter*)Find(m_atom, characterBitmap);
+		if (characterBitmap != c_noInfomain) {
+			m_unk0x11c = (MxStillPresenter*) Find(m_atom, characterBitmap);
 		}
 	}
 	return 1;
