@@ -824,6 +824,7 @@ MxBool Infocenter::VTable0x64()
 {
 	if (m_infocenterState != NULL) {
 		MxU32 val = m_infocenterState->GetUnknown0x74();
+
 		if (val == 0) {
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(1);
@@ -832,6 +833,8 @@ MxBool Infocenter::VTable0x64()
 			StopCredits();
 		}
 		else if (val != 8) {
+			m_infocenterState->SetUnknown0x74(8);
+
 #ifdef COMPAT_MODE
 			{
 				MxNotificationParam param(c_notificationType0, NULL);
