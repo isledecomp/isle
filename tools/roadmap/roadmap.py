@@ -29,6 +29,7 @@ class ModuleMap:
     def __init__(self, pdb, binfile) -> None:
         cvdump = Cvdump(pdb).section_contributions().modules().run()
         self.module_lookup = {m.id: (m.lib, m.obj) for m in cvdump.modules}
+        self.library_lookup = {m.obj: m.lib for m in cvdump.modules}
         self.section_contrib = [
             (
                 binfile.get_abs_addr(sizeref.section, sizeref.offset),
@@ -38,6 +39,9 @@ class ModuleMap:
             for sizeref in cvdump.sizerefs
             if binfile.is_valid_section(sizeref.section)
         ]
+
+    def get_lib_for_module(self, module: str) -> Optional[str]:
+        return self.library_lookup.get(module)
 
     def get_all_cmake_modules(self) -> List[str]:
         return [
@@ -75,6 +79,15 @@ def match_type_abbreviation(mtype: Optional[SymbolType]) -> str:
         return ""
 
     return mtype.name.lower()[:3]
+
+
+def get_cmakefiles_prefix(module: str) -> str:
+    """For the given .obj, get the "CMakeFiles/something.dir/" prefix.
+    For lack of a better option, this is the library for this module."""
+    if module.startswith("CMakeFiles"):
+        return "/".join(module.split("/", 2)[:2]) + "/"
+
+    return module
 
 
 def truncate_module_name(prefix: str, module: str) -> str:
@@ -173,27 +186,33 @@ class DeltaCollector:
             yield (avg, mod)
 
 
-def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_type: str):
+def suggest_order(results: List[RoadmapRow], module_map: ModuleMap, match_type: str):
     """Suggest the order of modules for CMakeLists.txt"""
 
     dc = DeltaCollector(match_type)
     for row in results:
         dc.read_row(row)
 
-    leftover_modules = set(cmake_modules)
+    # First, show the order of .obj files for the "CMake Modules"
+    # Meaning: the modules where the .obj file begins with "CMakeFiles".
+    # These are the libraries where we directly control the order.
+    # The library name (from cvdump) doesn't make it obvious that these are
+    # our libraries so we derive the name based on the CMakeFiles prefix.
+    leftover_modules = set(module_map.get_all_cmake_modules())
 
     # A little convoluted, but we want to take the first two tokens
     # of the string with '/' as the delimiter.
     # i.e. CMakeFiles/isle.dir/
     # The idea is to print exactly what appears in CMakeLists.txt.
-    cmake_prefixes = sorted(
-        set("/".join(mod.split("/", 2)[:2]) + "/" for mod in leftover_modules)
-    )
+    cmake_prefixes = sorted(set(get_cmakefiles_prefix(mod) for mod in leftover_modules))
 
+    # Save this off because we'll use it again later.
     computed_order = list(dc.iter_sorted())
 
     for prefix in cmake_prefixes:
         print(prefix)
+
+        last_earliest = 0
         # Show modules ordered by the computed average of addresses
         for _, module in computed_order:
             if not module.startswith(prefix):
@@ -206,16 +225,22 @@ def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_typ
             if displacements is not None and len(displacements) > 0:
                 avg_displacement = int(statistics.mean(displacements))
 
+            # Call attention to any modules where ordering by earliest
+            # address is different from the computed order we display.
             earliest = dc.earliest.get(module)
+            ooo_mark = "*" if earliest < last_earliest else " "
+            last_earliest = earliest
+
             code_file = truncate_module_name(prefix, module)
-            print(f"0x{earliest:08x}  {avg_displacement:10}  {code_file}")
+            print(f"0x{earliest:08x}{ooo_mark} {avg_displacement:10}  {code_file}")
 
         # These modules are included in the final binary (in some form) but
-        # they are not represented by whichever type of symbol we were checking.
-        # n.b. There could still be other modules that are part of CMakeLists.txt
-        # but are not included in the pdb for whatever reason.
-        # In other words: don't take the list we provide as the final word on what
-        # should or should not be included. This is merely a suggestion of the order.
+        # don't contribute any symbols of the type we are checking.
+        # n.b. There could still be other modules that are part of
+        # CMakeLists.txt but are not included in the pdb for whatever reason.
+        # In other words: don't take the list we provide as the final word on
+        # what should or should not be included.
+        # This is merely a suggestion of the order.
         for module in leftover_modules:
             if not module.startswith(prefix):
                 continue
@@ -225,6 +250,25 @@ def suggest_order(results: List[RoadmapRow], cmake_modules: List[str], match_typ
             print(f"      no suggestion     {code_file}")
 
         print()
+
+    # Now display the order of all libaries in the final file.
+    library_order = {}
+
+    for module, start in dc.earliest.items():
+        lib = module_map.get_lib_for_module(module)
+        if lib is None:
+            lib = get_cmakefiles_prefix(module)
+
+        if start < library_order.get(lib, 0xFFFFFFFFF):
+            library_order[lib] = start
+
+    print("Library order (average address shown):")
+    for lib, start in sorted(library_order.items(), key=lambda x: x[1]):
+        # Strip off any OS path for brevity
+        if not lib.startswith("CMakeFiles"):
+            lib = os.path.basename(lib)
+
+        print(f"{lib:40} {start:08x}")
 
 
 def print_text_report(results: List[RoadmapRow]):
@@ -398,7 +442,7 @@ def main():
         results = list(map(to_roadmap_row, engine.get_all()))
 
         if args.order is not None:
-            suggest_order(results, module_map.get_all_cmake_modules(), args.order)
+            suggest_order(results, module_map, args.order)
             return
 
         if args.csv is None:
