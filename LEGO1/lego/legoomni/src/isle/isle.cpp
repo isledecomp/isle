@@ -62,21 +62,21 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
-		GameState()->FUN_1003a720(0);
+		GameState()->StopArea();
 
 		switch (GameState()->GetCurrentAct()) {
 		case 1:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case 2:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case -1:
 			m_unk0x13c = 2;
 		}
 
-		if (GameState()->GetUnknown424() == 1) {
-			GameState()->SetUnknown424(0);
+		if (GameState()->GetCurrentArea() == 1) {
+			GameState()->SetCurrentArea(0);
 		}
 
 		LegoGameState* gameState = GameState();
@@ -115,7 +115,7 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			result = HandleType17Notification(p_param);
 			break;
 		case c_notificationType18:
@@ -158,7 +158,7 @@ void Isle::ReadyWorld()
 	LegoWorld::ReadyWorld();
 
 	if (m_act1state->GetUnknown21()) {
-		GameState()->HandleAction(2);
+		GameState()->SwitchArea(2);
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}

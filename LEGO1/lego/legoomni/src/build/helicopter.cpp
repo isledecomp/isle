@@ -62,7 +62,7 @@ void Helicopter::VTable0xe4()
 	}
 	IslePathActor::VTable0xe4();
 	if (!GameState()->GetUnknown10()) {
-		GameState()->SetUnknown424(0x3c);
+		GameState()->SetCurrentArea(0x3c);
 		if (GetCurrentVehicle()) {
 			if (GetCurrentVehicle()->IsA("IslePathActor")) {
 				((IslePathActor*) GetCurrentVehicle())->VTable0xe8(0x37, TRUE, 7);
@@ -148,7 +148,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			else if (m_state->GetUnkown8() != 0)
 				break;
 			VTable0xe4();
-			GameState()->SetUnknown424(0x42);
+			GameState()->SetCurrentArea(0x42);
 			ret = 1;
 			break;
 		case 0x18: {

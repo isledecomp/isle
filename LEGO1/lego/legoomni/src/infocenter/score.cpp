@@ -52,8 +52,8 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		LegoGameState* gs = GameState();
 		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
-		GameState()->SetUnknown424(0xd);
-		GameState()->FUN_1003a720(0);
+		GameState()->SetCurrentArea(0xd);
+		GameState()->StopArea();
 	}
 
 	return result;
@@ -91,13 +91,13 @@ MxLong Score::Notify(MxParam& p_param)
 				DeleteScript(); // Shutting down
 			ret = 1;
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
 			if (m_unk0xf8)
-				GameState()->HandleAction(m_unk0xf8);
+				GameState()->SwitchArea(m_unk0xf8);
 			ret = 1;
 			break;
 		default:

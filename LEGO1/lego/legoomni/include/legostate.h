@@ -51,7 +51,14 @@ public:
 		undefined2 m_unk0x06; // 0x06
 		MxU16 m_unk0x08;      // 0x08
 
-		StateStruct();
+		// FUNCTION: LEGO1 0x10017c00
+		StateStruct()
+		{
+			m_unk0x04 = 0;
+			m_unk0x00 = NULL;
+			m_unk0x06 = 0;
+			m_unk0x08 = 0;
+		}
 
 		MxU32 FUN_10014d00();
 		MxBool FUN_10014de0(MxU32 p_objectId);

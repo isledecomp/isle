@@ -27,8 +27,11 @@ public:
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
 	inline MxU32 GetUnknown18() { return m_unk0x18; }
-	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x21 = p_unk0x21; }
+	inline MxU32 GetUnknown1c() { return m_unk0x1c; }
 	inline MxS16 GetUnknown21() { return m_unk0x21; }
+
+	inline void SetUnknown1c(MxU32 p_unk0x1c) { m_unk0x1c = p_unk0x1c; }
+	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x21 = p_unk0x21; }
 
 	void FUN_10034d00();
 

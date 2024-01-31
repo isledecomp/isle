@@ -1,5 +1,6 @@
 #include "elevatorbottom.h"
 
+#include "act1state.h"
 #include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -7,8 +8,13 @@
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
+#include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
+
+// STRING: LEGO1 0x100f0d34
+// GLOBAL: LEGO1 0x100f3a44
+char* g_cameraLoc = "CAMERA_LOCATION";
 
 // FUNCTION: LEGO1 0x10017e90
 ElevatorBottom::ElevatorBottom()
@@ -38,8 +44,8 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetUnknown424(5);
-	GameState()->FUN_1003a720(0);
+	GameState()->SetCurrentArea(5);
+	GameState()->StopArea();
 
 	return result;
 }
@@ -52,11 +58,11 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetType()) {
-		case c_notificationType17:
-			ret = HandleNotification17(p_param);
+		case c_notificationClick:
+			ret = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->HandleAction(m_unk0xf8);
+			GameState()->SwitchArea(m_unk0xf8);
 			break;
 		}
 	}
@@ -72,10 +78,41 @@ void ElevatorBottom::ReadyWorld()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
-// STUB: LEGO1 0x100181d0
-MxLong ElevatorBottom::HandleNotification17(MxParam& p_param)
+// FUNCTION: LEGO1 0x100181d0
+MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 {
-	return 0;
+	MxLong result = 0;
+
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case 1:
+			m_unk0xf8 = 3;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			result = 1;
+			break;
+		case 2:
+			m_unk0xf8 = 2;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			result = 1;
+			break;
+		case 3:
+			LegoGameState* gs = GameState();
+			Act1State* state = (Act1State*) gs->GetState("Act1State");
+
+			if (state == NULL) {
+				state = (Act1State*) gs->CreateState("Act1State");
+			}
+
+			state->SetUnknown1c(1);
+			m_unk0xf8 = 6;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			VariableTable()->SetVariable(g_cameraLoc, "LCAMZI1,90");
+			result = 1;
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100182c0
