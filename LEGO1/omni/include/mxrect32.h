@@ -65,6 +65,7 @@ public:
 	}
 
 	inline MxBool IsValid() const { return m_left < m_right && m_top < m_bottom; }
+
 	inline MxBool IntersectsWith(const MxRect32& p_rect) const
 	{
 		return m_left < p_rect.m_right && p_rect.m_left < m_right && m_top < p_rect.m_bottom && p_rect.m_top < m_bottom;

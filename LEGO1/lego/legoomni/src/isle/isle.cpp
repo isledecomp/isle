@@ -115,7 +115,7 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			result = HandleType17Notification(p_param);
 			break;
 		case c_notificationType18:

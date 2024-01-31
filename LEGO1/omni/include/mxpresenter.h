@@ -121,6 +121,8 @@ public:
 		m_compositePresenter = p_compositePresenter;
 	}
 
+	inline void SetDisplayZ(MxS32 p_displayZ) { m_displayZ = p_displayZ; }
+
 	// SYNTHETIC: LEGO1 0x1000c070
 	// MxPresenter::`scalar deleting destructor'
 

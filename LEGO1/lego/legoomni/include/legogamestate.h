@@ -39,6 +39,7 @@ public:
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
 	inline MxU32 GetCurrentArea() { return m_currentArea; }
+	inline MxU32 GetPreviousArea() { return m_previousArea; }
 
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetCurrentArea(MxU32 p_currentArea) { m_currentArea = p_currentArea; }

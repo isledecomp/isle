@@ -2,10 +2,12 @@
 #define INFOCENTER_H
 
 #include "legoworld.h"
+#include "mxrect32.h"
 #include "radio.h"
 
 class InfocenterState;
 class MxStillPresenter;
+class LegoControlManagerEvent;
 
 // SIZE 0x18
 struct InfocenterMapEntry {
@@ -14,10 +16,7 @@ struct InfocenterMapEntry {
 
 	MxStillPresenter* m_presenter; // 0x00
 	undefined4 m_unk0x04;          // 0x04
-	undefined4 m_unk0x08;          // 0x08
-	undefined4 m_unk0x0c;          // 0x0c
-	undefined4 m_unk0x10;          // 0x10
-	undefined4 m_unk0x14;          // 0x14
+	MxRect32 m_area;               // 0x08
 };
 
 // VTABLE: LEGO1 0x100d9338
@@ -40,18 +39,30 @@ public:
 		c_leftArrowCtl = 1,
 		c_rightArrowCtl = 2,
 		c_infoCtl = 3,
+		c_doorCtl = 4,
 		c_boatCtl = 10,
 		c_raceCtl = 11,
 		c_pizzaCtl = 12,
 		c_gasCtl = 13,
 		c_medCtl = 14,
 		c_copCtl = 15,
+		c_bigInfoCtl = 16,
+		c_bookCtl = 17,
 		c_radioCtl = 18,
 		c_mamaCtl = 21,
 		c_papaCtl = 22,
 		c_pepperCtl = 23,
 		c_nickCtl = 24,
 		c_lauraCtl = 25,
+
+		c_mamaSelected = 30,
+		c_papaSelected = 31,
+		c_pepperSelected = 32,
+		c_nickSelected = 33,
+		c_lauraSelected = 34,
+
+		c_goToRegBook = 70,
+		c_goToRegBookRed = 71,
 
 		c_welcomeDialogue = 500,
 		c_goodJobDialogue = 501,
@@ -114,6 +125,13 @@ public:
 		c_noCDDialogueUnused1 = 552,
 		c_noCDDialogueUnused2 = 553,
 
+		c_gasCtlDescription = 555,
+		c_medCtlDescription = 556,
+		c_boatCtlDescription = 558,
+		c_copCtlDescription = 559,
+		c_pizzaCtlDescription = 560,
+		c_raceCtlDescription = 561,
+
 		c_leaveInfoCenterDialogue1 = 562,
 		c_leaveInfoCenterDialogue2 = 563,
 		c_leaveInfoCenterDialogue3 = 564,
@@ -163,15 +181,17 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxU8 HandleMouseMove(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
-	MxU8 HandleNotification17(MxParam&);
+	MxU8 HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleEndAction(MxParam& p_param);
 	MxLong HandleNotification0(MxParam&);
 
-	void FUN_10070dc0(MxBool);
+	void UpdateFrameHot(MxBool p_display);
 	void FUN_10070e90();
 
 	void PlayCutscene(Cutscene p_entityId, MxBool p_scale);
 	void StopCutscene();
+
+	void FUN_10070d10(MxS32 p_x, MxS32 p_y);
 
 	void StartCredits();
 	void StopCredits();
@@ -185,10 +205,10 @@ private:
 	InfomainScript m_currentInfomainScript; // 0xf8
 	MxS16 m_unk0xfc;                        // 0xfc
 	InfocenterState* m_infocenterState;     // 0x100
-	undefined4 m_unk0x104;                  // 0x104
+	undefined4 m_transitionDestination;     // 0x104
 	Cutscene m_currentCutscene;             // 0x108
 	Radio m_radio;                          // 0x10c
-	undefined4 m_unk0x11c;                  // 0x11c
+	MxStillPresenter* m_unk0x11c;           // 0x11c
 	InfocenterMapEntry m_mapAreas[7];       // 0x120
 	MxS16 m_unk0x1c8;                       // 0x1c8
 	MxStillPresenter* m_frameHotBitmap;     // 0x1cc

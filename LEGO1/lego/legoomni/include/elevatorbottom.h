@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "legoworld.h"
 
+class LegoControlManagerEvent;
+
 // VTABLE: LEGO1 0x100d5f20
 // SIZE: 0xfc (from inlined ctor at 0x1000a8aa)
 class ElevatorBottom : public LegoWorld {
@@ -41,7 +43,7 @@ public:
 private:
 	undefined4 m_unk0xf8; // 0xf8
 
-	MxLong HandleNotification17(MxParam& p_param);
+	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };
 
 #endif // ELEVATORBOTTOM_H
