@@ -76,6 +76,14 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x10037a70
+void InfocenterDoor::ReadyWorld()
+{
+	LegoWorld::ReadyWorld();
+	PlayMusic(JukeBox::e_informationCenter);
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+}
+
 // FUNCTION: LEGO1 0x10037a90
 MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 {
@@ -122,14 +130,6 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 	}
 
 	return 1;
-}
-
-// FUNCTION: LEGO1 0x10037a70
-void InfocenterDoor::ReadyWorld()
-{
-	LegoWorld::ReadyWorld();
-	PlayMusic(JukeBox::e_informationCenter);
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x10037c80

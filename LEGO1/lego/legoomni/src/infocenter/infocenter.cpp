@@ -720,6 +720,12 @@ void Infocenter::StopCutscene()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
+// FUNCTION: LEGO1 0x10070d00
+MxBool Infocenter::VTable0x5c()
+{
+	return TRUE;
+}
+
 // FUNCTION: LEGO1 0x10070d10
 void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 {
@@ -745,12 +751,6 @@ void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 			m_mapAreas[i].m_presenter->Enable(TRUE);
 		}
 	}
-}
-
-// FUNCTION: LEGO1 0x10070d00
-MxBool Infocenter::VTable0x5c()
-{
-	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10070dc0
