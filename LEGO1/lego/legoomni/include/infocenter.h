@@ -2,6 +2,7 @@
 #define INFOCENTER_H
 
 #include "legoworld.h"
+#include "mxrect32.h"
 #include "radio.h"
 
 class InfocenterState;
@@ -15,10 +16,7 @@ struct InfocenterMapEntry {
 
 	MxStillPresenter* m_presenter; // 0x00
 	undefined4 m_unk0x04;          // 0x04
-	undefined4 m_unk0x08;          // 0x08
-	undefined4 m_unk0x0c;          // 0x0c
-	undefined4 m_unk0x10;          // 0x10
-	undefined4 m_unk0x14;          // 0x14
+	MxRect32 m_area;               // 0x08
 };
 
 // VTABLE: LEGO1 0x100d9338

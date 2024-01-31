@@ -383,52 +383,52 @@ void Infocenter::InitializeBitmaps()
 	((MxPresenter*) Find(m_atom, c_radioCtl))->Enable(TRUE);
 
 	m_mapAreas[0].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Info_A_Bitmap");
-	m_mapAreas[0].m_unk0x08 = 391;
-	m_mapAreas[0].m_unk0x0c = 182;
-	m_mapAreas[0].m_unk0x10 = 427;
-	m_mapAreas[0].m_unk0x14 = 230;
+	m_mapAreas[0].m_area.SetLeft(391);
+	m_mapAreas[0].m_area.SetTop(182);
+	m_mapAreas[0].m_area.SetRight(427);
+	m_mapAreas[0].m_area.SetBottom(230);
 	m_mapAreas[0].m_unk0x04 = 3;
 
 	m_mapAreas[1].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Boat_A_Bitmap");
-	m_mapAreas[1].m_unk0x08 = 304;
-	m_mapAreas[1].m_unk0x0c = 225;
-	m_mapAreas[1].m_unk0x10 = 350;
-	m_mapAreas[1].m_unk0x14 = 268;
+	m_mapAreas[1].m_area.SetLeft(304);
+	m_mapAreas[1].m_area.SetTop(225);
+	m_mapAreas[1].m_area.SetRight(350);
+	m_mapAreas[1].m_area.SetBottom(268);
 	m_mapAreas[1].m_unk0x04 = 10;
 
 	m_mapAreas[2].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Race_A_Bitmap");
-	m_mapAreas[2].m_unk0x08 = 301;
-	m_mapAreas[2].m_unk0x0c = 133;
-	m_mapAreas[2].m_unk0x10 = 347;
-	m_mapAreas[2].m_unk0x14 = 181;
+	m_mapAreas[2].m_area.SetLeft(301);
+	m_mapAreas[2].m_area.SetTop(133);
+	m_mapAreas[2].m_area.SetRight(347);
+	m_mapAreas[2].m_area.SetBottom(181);
 	m_mapAreas[2].m_unk0x04 = 11;
 
 	m_mapAreas[3].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Pizza_A_Bitmap");
-	m_mapAreas[3].m_unk0x08 = 289;
-	m_mapAreas[3].m_unk0x0c = 182;
-	m_mapAreas[3].m_unk0x10 = 335;
-	m_mapAreas[3].m_unk0x14 = 225;
+	m_mapAreas[3].m_area.SetLeft(289);
+	m_mapAreas[3].m_area.SetTop(182);
+	m_mapAreas[3].m_area.SetRight(335);
+	m_mapAreas[3].m_area.SetBottom(225);
 	m_mapAreas[3].m_unk0x04 = 12;
 
 	m_mapAreas[4].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Gas_A_Bitmap");
-	m_mapAreas[4].m_unk0x10 = 391;
-	m_mapAreas[4].m_unk0x08 = 350;
-	m_mapAreas[4].m_unk0x0c = 161;
-	m_mapAreas[4].m_unk0x14 = 209;
+	m_mapAreas[4].m_area.SetLeft(350);
+	m_mapAreas[4].m_area.SetTop(161);
+	m_mapAreas[4].m_area.SetRight(391);
+	m_mapAreas[4].m_area.SetBottom(209);
 	m_mapAreas[4].m_unk0x04 = 13;
 
 	m_mapAreas[5].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Med_A_Bitmap");
-	m_mapAreas[5].m_unk0x08 = 392;
-	m_mapAreas[5].m_unk0x0c = 130;
-	m_mapAreas[5].m_unk0x10 = 438;
-	m_mapAreas[5].m_unk0x14 = 176;
+	m_mapAreas[5].m_area.SetLeft(392);
+	m_mapAreas[5].m_area.SetTop(130);
+	m_mapAreas[5].m_area.SetRight(438);
+	m_mapAreas[5].m_area.SetBottom(176);
 	m_mapAreas[5].m_unk0x04 = 14;
 
 	m_mapAreas[6].m_presenter = (MxStillPresenter*) Find("MxStillPresenter", "Cop_A_Bitmap");
-	m_mapAreas[6].m_unk0x08 = 396;
-	m_mapAreas[6].m_unk0x0c = 229;
-	m_mapAreas[6].m_unk0x10 = 442;
-	m_mapAreas[6].m_unk0x14 = 272;
+	m_mapAreas[6].m_area.SetLeft(396);
+	m_mapAreas[6].m_area.SetTop(229);
+	m_mapAreas[6].m_area.SetRight(442);
+	m_mapAreas[6].m_area.SetBottom(272);
 	m_mapAreas[6].m_unk0x04 = 15;
 
 	m_frameHotBitmap = (MxStillPresenter*) Find("MxStillPresenter", "FrameHot_Bitmap");
@@ -741,9 +741,8 @@ MxBool Infocenter::VTable0x5c()
 void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 {
 	MxS16 i;
-	for (i = 0; i < sizeof(m_mapAreas) / sizeof(InfocenterMapEntry); i++) {
-		if (m_mapAreas[i].m_unk0x08 <= p_x && p_x <= m_mapAreas[i].m_unk0x10 && m_mapAreas[i].m_unk0x0c <= p_y &&
-			p_y <= m_mapAreas[i].m_unk0x14) {
+	for (i = 0; i < sizeof(m_mapAreas) / sizeof(m_mapAreas[0]); i++) {
+		if (m_mapAreas[i].m_area.ContainsPoint(p_x, p_y)) {
 			break;
 		}
 	}
