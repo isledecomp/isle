@@ -49,9 +49,8 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-	if (this->m_action == NULL) {
+	if (this->m_action == NULL)
 		return;
-	}
 
 	MxAutoLocker lock(&this->m_criticalSection);
 
