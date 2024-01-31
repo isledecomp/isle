@@ -95,14 +95,17 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
 			m_unk0xf8 = 13;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 2:
 			m_unk0xf8 = 5;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 3:
 			m_unk0xf8 = 2;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 4:
@@ -126,11 +129,11 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 				BackgroundAudioManager()->LowerVolume();
 				Start(&action);
 			}
+
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		}
-
-		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 	}
 
 	return result;
