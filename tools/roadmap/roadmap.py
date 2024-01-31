@@ -56,10 +56,17 @@ class ModuleMap:
 
     def get_module(self, addr: int) -> Optional[str]:
         i = bisect.bisect_left(self.contrib_starts, addr)
+        # If the addr matches the section contribution start, we are in the
+        # right spot. Otherwise, we need to subtract one here.
+        # We don't want the insertion point given by bisect, but the
+        # section contribution that contains the address.
 
-        # Clamp to final section contribution for a very high address
-        if i >= len(self.section_contrib):
-            i = len(self.section_contrib) - 1
+        (potential_start, _, __) = self.section_contrib[i]
+        if potential_start != addr:
+            i -= 1
+
+        # Safety catch: clamp to range of indices from section_contrib.
+        i = max(0, min(i, len(self.section_contrib) - 1))
 
         (start, size, module_id) = self.section_contrib[i]
         if start <= addr < start + size:
