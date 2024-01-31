@@ -21,8 +21,9 @@ void MxDSSerialAction::SetDuration(MxLong p_duration)
 // FUNCTION: LEGO1 0x100cac10
 MxDSSerialAction::~MxDSSerialAction()
 {
-	if (this->m_cursor)
+	if (this->m_cursor) {
 		delete this->m_cursor;
+	}
 
 	this->m_cursor = NULL;
 }
@@ -35,8 +36,9 @@ void MxDSSerialAction::CopyFrom(MxDSSerialAction& p_dsSerialAction)
 // FUNCTION: LEGO1 0x100caca0
 MxDSSerialAction& MxDSSerialAction::operator=(MxDSSerialAction& p_dsSerialAction)
 {
-	if (this == &p_dsSerialAction)
+	if (this == &p_dsSerialAction) {
 		return *this;
+	}
 
 	MxDSMultiAction::operator=(p_dsSerialAction);
 	this->CopyFrom(p_dsSerialAction);
@@ -48,8 +50,9 @@ MxDSAction* MxDSSerialAction::Clone()
 {
 	MxDSSerialAction* clone = new MxDSSerialAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
@@ -57,23 +60,26 @@ MxDSAction* MxDSSerialAction::Clone()
 // FUNCTION: LEGO1 0x100cad60
 MxLong MxDSSerialAction::GetDuration()
 {
-	if (this->m_duration)
+	if (this->m_duration) {
 		return this->m_duration;
+	}
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 
 	while (cursor.Next(action)) {
-		if (!action)
+		if (!action) {
 			continue;
+		}
 
 		this->m_duration += action->GetDuration() + action->GetStartTime();
 
 		if (action->IsA("MxDSMediaAction")) {
 			MxLong sustainTime = ((MxDSMediaAction*) action)->GetSustainTime();
 
-			if (sustainTime && sustainTime != -1)
+			if (sustainTime && sustainTime != -1) {
 				this->m_duration += sustainTime;
+			}
 		}
 	}
 

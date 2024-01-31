@@ -30,11 +30,13 @@ void MxEventManager::Destroy(MxBool p_fromDestructor)
 		m_thread->Terminate();
 		delete m_thread;
 	}
-	else
+	else {
 		TickleManager()->UnregisterClient(this);
+	}
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMediaManager::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c04a0
@@ -50,21 +52,25 @@ MxResult MxEventManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 			locked = TRUE;
 			this->m_thread = new MxTickleThread(this, p_frequencyMS);
 
-			if (!this->m_thread || this->m_thread->Start(0, 0) != SUCCESS)
+			if (!this->m_thread || this->m_thread->Start(0, 0) != SUCCESS) {
 				goto done;
+			}
 		}
-		else
+		else {
 			TickleManager()->RegisterClient(this, p_frequencyMS);
+		}
 
 		status = SUCCESS;
 	}
 
 done:
-	if (status != SUCCESS)
+	if (status != SUCCESS) {
 		Destroy();
+	}
 
-	if (locked)
+	if (locked) {
 		this->m_criticalSection.Leave();
+	}
 
 	return status;
 }

@@ -12,27 +12,27 @@
 class MxDSFile : public MxDSSource {
 public:
 	MxDSFile(const char* p_filename, MxULong p_skipReadingChunks);
-	virtual ~MxDSFile(); // vtable+0x00
+	~MxDSFile() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100c0120
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102594
 		return "MxDSFile";
 	}
 
 	// FUNCTION: LEGO1 0x100c0130
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSFile::ClassName()) || MxDSSource::IsA(p_name);
 	}
 
-	virtual MxLong Open(MxULong);                   // vtable+0x14
-	virtual MxLong Close();                         // vtable+0x18
-	virtual MxResult Read(unsigned char*, MxULong); // vtable+0x20
-	virtual MxLong Seek(MxLong, int);               // vtable+0x24
-	virtual MxULong GetBufferSize();                // vtable+0x28
-	virtual MxULong GetStreamBuffersNum();          // vtable+0x2c
+	MxLong Open(MxULong) override;                   // vtable+0x14
+	MxLong Close() override;                         // vtable+0x18
+	MxResult Read(unsigned char*, MxULong) override; // vtable+0x20
+	MxLong Seek(MxLong, int) override;               // vtable+0x24
+	MxULong GetBufferSize() override;                // vtable+0x28
+	MxULong GetStreamBuffersNum() override;          // vtable+0x2c
 
 	inline void SetFileName(const char* p_filename) { m_filename = p_filename; }
 

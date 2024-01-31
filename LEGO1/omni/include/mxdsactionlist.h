@@ -19,7 +19,7 @@ public:
 	MxDSActionList() { this->m_unk0x18 = 0; }
 
 	// FUNCTION: LEGO1 0x100c9c90
-	virtual MxS8 Compare(MxDSAction* p_a, MxDSAction* p_b) override
+	MxS8 Compare(MxDSAction* p_a, MxDSAction* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14

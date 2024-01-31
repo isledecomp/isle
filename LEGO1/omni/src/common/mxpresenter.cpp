@@ -49,8 +49,9 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100b4e40
 void MxPresenter::EndAction()
 {
-	if (this->m_action == NULL)
+	if (this->m_action == NULL) {
 		return;
+	}
 
 	MxAutoLocker lock(&this->m_criticalSection);
 
@@ -98,8 +99,9 @@ void MxPresenter::ParseExtra()
 
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_world);
 
-			if (result)
+			if (result) {
 				SendToCompositePresenter(MxOmni::GetInstance());
+			}
 		}
 	}
 }
@@ -133,28 +135,33 @@ MxResult MxPresenter::Tickle()
 	case e_ready:
 		this->ReadyTickle();
 
-		if (m_currentTickleState != e_starting)
+		if (m_currentTickleState != e_starting) {
 			break;
+		}
 	case e_starting:
 		this->StartingTickle();
 
-		if (m_currentTickleState != e_streaming)
+		if (m_currentTickleState != e_streaming) {
 			break;
+		}
 	case e_streaming:
 		this->StreamingTickle();
 
-		if (m_currentTickleState != e_repeating)
+		if (m_currentTickleState != e_repeating) {
 			break;
+		}
 	case e_repeating:
 		this->RepeatingTickle();
 
-		if (m_currentTickleState != e_unk5)
+		if (m_currentTickleState != e_unk5) {
 			break;
+		}
 	case e_unk5:
 		this->Unk5Tickle();
 
-		if (m_currentTickleState != e_done)
+		if (m_currentTickleState != e_done) {
 			break;
+		}
 	case e_done:
 		this->DoneTickle();
 	default:
@@ -170,10 +177,12 @@ void MxPresenter::Enable(MxBool p_enable)
 	if (this->m_action && this->IsEnabled() != p_enable) {
 		MxU32 flags = this->m_action->GetFlags();
 
-		if (p_enable)
+		if (p_enable) {
 			this->m_action->SetFlags(flags | MxDSAction::c_enabled);
-		else
+		}
+		else {
 			this->m_action->SetFlags(flags & ~MxDSAction::c_enabled);
+		}
 	}
 }
 

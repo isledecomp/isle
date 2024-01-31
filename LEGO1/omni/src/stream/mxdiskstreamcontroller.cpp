@@ -35,8 +35,9 @@ MxDiskStreamController::~MxDiskStreamController()
 	}
 
 	MxDSAction* action;
-	while (m_unk0x3c.PopFront(action))
+	while (m_unk0x3c.PopFront(action)) {
 		delete action;
+	}
 
 	if (m_provider) {
 		delete m_provider;
@@ -45,11 +46,13 @@ MxDiskStreamController::~MxDiskStreamController()
 
 	FUN_100c8720();
 
-	while (m_list0x80.PopFront(action))
+	while (m_list0x80.PopFront(action)) {
 		FUN_100c7cb0((MxDSStreamingAction*) action);
+	}
 
-	while (m_list0x64.PopFront(action))
+	while (m_list0x64.PopFront(action)) {
 		FUN_100c7cb0((MxDSStreamingAction*) action);
+	}
 
 	while (!m_list0x74.empty()) {
 		MxDSBuffer* buffer = m_list0x74.front();
@@ -130,15 +133,17 @@ void MxDiskStreamController::FUN_100c7980()
 			buffer = new MxDSBuffer();
 
 			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBuffer::e_chunk) != SUCCESS) {
-				if (buffer)
+				if (buffer) {
 					delete buffer;
+				}
 				return;
 			}
 
 			action = VTable0x28();
 			if (!action) {
-				if (buffer)
+				if (buffer) {
 					delete buffer;
+				}
 				return;
 			}
 
@@ -228,8 +233,9 @@ MxResult MxDiskStreamController::FUN_100c7d10()
 	MxAutoLocker lock(&this->m_criticalSection);
 	MxDSStreamingAction* action = FUN_100c7db0();
 
-	if (!action)
+	if (!action) {
 		return FAILURE;
+	}
 
 	if (FUN_100c8360(action) != SUCCESS) {
 		VTable0x24(action);
@@ -290,11 +296,13 @@ MxResult MxDiskStreamController::VTable0x20(MxDSAction* p_action)
 
 		FUN_100c7f40(action);
 
-		if (VTable0x2c(p_action, entry->GetUnknown94()) != SUCCESS)
+		if (VTable0x2c(p_action, entry->GetUnknown94()) != SUCCESS) {
 			return FAILURE;
+		}
 	}
-	else if (MxStreamController::VTable0x20(p_action) != SUCCESS)
+	else if (MxStreamController::VTable0x20(p_action) != SUCCESS) {
 		return FAILURE;
+	}
 
 	m_unk0x70 = TRUE;
 	m_unk0xc4 = TRUE;
@@ -312,8 +320,9 @@ void MxDiskStreamController::FUN_100c8120(MxDSAction* p_action)
 
 	while (TRUE) {
 		MxDSAction* found = m_unk0x54.Find(p_action, TRUE);
-		if (!found)
+		if (!found) {
 			break;
+		}
 		delete found;
 	}
 }
@@ -408,8 +417,9 @@ void MxDiskStreamController::FUN_100c8540()
 			m_list0x74.erase(it++);
 			FUN_100c7ce0(buf);
 		}
-		else
+		else {
 			it++;
+		}
 	}
 
 	if (m_nextActionList.empty()) {

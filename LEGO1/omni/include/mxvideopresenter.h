@@ -13,34 +13,34 @@ public:
 	MxVideoPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c740
-	virtual ~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
+	~MxVideoPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000c820
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0760
 		return "MxVideoPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x1000c830
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxVideoPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;      // vtable+0x18
-	virtual void StartingTickle() override;   // vtable+0x1c
-	virtual void StreamingTickle() override;  // vtable+0x20
-	virtual void RepeatingTickle() override;  // vtable+0x24
-	virtual void Unk5Tickle() override;       // vtable+0x28
-	virtual MxResult AddToManager() override; // vtable+0x34
+	void ReadyTickle() override;      // vtable+0x18
+	void StartingTickle() override;   // vtable+0x1c
+	void StreamingTickle() override;  // vtable+0x20
+	void RepeatingTickle() override;  // vtable+0x24
+	void Unk5Tickle() override;       // vtable+0x28
+	MxResult AddToManager() override; // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000c7a0
-	virtual void Destroy() override { Destroy(FALSE); } // vtable+0x38
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
-	virtual void EndAction() override;                   // vtable+0x40
-	virtual MxResult PutData() override;                 // vtable+0x4c
-	virtual MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
+	void EndAction() override;                   // vtable+0x40
+	MxResult PutData() override;                 // vtable+0x4c
+	MxBool IsHit(MxS32 p_x, MxS32 p_y) override; // vtable+0x50
 
 	// FUNCTION: LEGO1 0x1000c700
 	virtual void LoadHeader(MxStreamChunk* p_chunk){}; // vtable+0x5c

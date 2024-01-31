@@ -11,7 +11,7 @@ class LegoCacheSound;
 class LegoLoadCacheSoundPresenter : public MxWavePresenter {
 public:
 	LegoLoadCacheSoundPresenter();
-	virtual ~LegoLoadCacheSoundPresenter() override;
+	~LegoLoadCacheSoundPresenter() override;
 
 	// FUNCTION: LEGO1 0x10018450
 	inline const char* ClassName() const override // vtable+0x0c
@@ -20,10 +20,10 @@ public:
 		return "LegoLoadCacheSoundPresenter";
 	}
 
-	virtual void ReadyTickle() override;     // vtable+0x18
-	virtual void StreamingTickle() override; // vtable+0x20
-	virtual void DoneTickle() override;      // vtable+0x2c
-	virtual MxResult PutData() override;     // vtable+0x4c
+	void ReadyTickle() override;     // vtable+0x18
+	void StreamingTickle() override; // vtable+0x20
+	void DoneTickle() override;      // vtable+0x2c
+	MxResult PutData() override;     // vtable+0x4c
 
 private:
 	void Init();

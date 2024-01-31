@@ -9,11 +9,11 @@
 class LegoSoundManager : public MxSoundManager {
 public:
 	LegoSoundManager();
-	virtual ~LegoSoundManager() override;
+	~LegoSoundManager() override;
 
-	virtual MxResult Tickle() override;                                           // vtable+08
-	virtual void Destroy() override;                                              // vtable+18
-	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
+	MxResult Tickle() override;                                           // vtable+08
+	void Destroy() override;                                              // vtable+18
+	MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
 
 	// SYNTHETIC: LEGO1 0x10029920
 	// LegoSoundManager::`scalar deleting destructor'

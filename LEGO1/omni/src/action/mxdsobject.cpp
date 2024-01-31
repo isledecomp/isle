@@ -52,8 +52,9 @@ void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 // FUNCTION: LEGO1 0x100bf8c0
 MxDSObject& MxDSObject::operator=(MxDSObject& p_dsObject)
 {
-	if (this == &p_dsObject)
+	if (this == &p_dsObject) {
 		return *this;
+	}
 
 	this->CopyFrom(p_dsObject);
 	return *this;
@@ -108,17 +109,21 @@ MxU32 MxDSObject::GetSizeOnDisk()
 {
 	MxU32 sizeOnDisk;
 
-	if (this->m_sourceName)
+	if (this->m_sourceName) {
 		sizeOnDisk = strlen(this->m_sourceName) + 3;
-	else
+	}
+	else {
 		sizeOnDisk = 3;
+	}
 
 	sizeOnDisk += 4;
 
-	if (this->m_objectName)
+	if (this->m_objectName) {
 		sizeOnDisk += strlen(this->m_objectName) + 1;
-	else
+	}
+	else {
 		sizeOnDisk++;
+	}
 
 	sizeOnDisk += 4;
 	this->m_sizeOnDisk = sizeOnDisk;

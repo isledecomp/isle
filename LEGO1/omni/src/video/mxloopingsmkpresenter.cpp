@@ -32,8 +32,9 @@ void MxLoopingSmkPresenter::Destroy(MxBool p_fromDestructor)
 	Init();
 	m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxSmkPresenter::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b4a00
@@ -51,8 +52,9 @@ void MxLoopingSmkPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::c_end)
+	if (chunk->GetFlags() & MxDSChunk::c_end) {
 		ProgressTickleState(e_repeating);
+	}
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);
@@ -65,8 +67,9 @@ void MxLoopingSmkPresenter::NextFrame()
 // FUNCTION: LEGO1 0x100b4a90
 void MxLoopingSmkPresenter::VTable0x8c()
 {
-	if (m_action->GetDuration() < m_elapsedDuration)
+	if (m_action->GetDuration() < m_elapsedDuration) {
 		ProgressTickleState(e_unk5);
+	}
 	else {
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);
@@ -92,8 +95,9 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 			time += 1000 / ((MxDSMediaAction*) m_action)->GetFramesPerSecond();
 
 			cursor.Reset();
-			while (cursor.Next(chunk))
+			while (cursor.Next(chunk)) {
 				chunk->SetTime(chunk->GetTime() + time);
+			}
 
 			m_loopingChunkCursor->Next();
 		}
@@ -101,15 +105,17 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);
 
-		if (m_action->GetElapsedTime() < chunk->GetTime())
+		if (m_action->GetElapsedTime() < chunk->GetTime()) {
 			break;
+		}
 
 		VTable0x8c();
 
 		m_loopingChunkCursor->Next(chunk);
 
-		if (m_currentTickleState != e_repeating)
+		if (m_currentTickleState != e_repeating) {
 			break;
+		}
 	}
 }
 

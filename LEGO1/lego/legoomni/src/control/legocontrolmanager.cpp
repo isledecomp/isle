@@ -43,8 +43,9 @@ void LegoControlManager::Register(MxCore* p_listener)
 void LegoControlManager::Unregister(MxCore* p_listener)
 {
 	LegoNotifyListCursor cursor(&m_notifyList);
-	if (cursor.Find(p_listener))
+	if (cursor.Find(p_listener)) {
 		cursor.Detach();
+	}
 }
 
 // FUNCTION: LEGO1 0x10029210

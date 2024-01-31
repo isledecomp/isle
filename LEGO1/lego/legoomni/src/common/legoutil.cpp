@@ -21,26 +21,36 @@ Extra::ActionType MatchActionString(const char* p_str)
 {
 	Extra::ActionType result = Extra::ActionType::e_unknown;
 
-	if (!strcmpi("openram", p_str))
+	if (!strcmpi("openram", p_str)) {
 		result = Extra::ActionType::e_openram;
-	else if (!strcmpi("opendisk", p_str))
+	}
+	else if (!strcmpi("opendisk", p_str)) {
 		result = Extra::ActionType::e_opendisk;
-	else if (!strcmpi("close", p_str))
+	}
+	else if (!strcmpi("close", p_str)) {
 		result = Extra::ActionType::e_close;
-	else if (!strcmpi("start", p_str))
+	}
+	else if (!strcmpi("start", p_str)) {
 		result = Extra::ActionType::e_start;
-	else if (!strcmpi("stop", p_str))
+	}
+	else if (!strcmpi("stop", p_str)) {
 		result = Extra::ActionType::e_stop;
-	else if (!strcmpi("run", p_str))
+	}
+	else if (!strcmpi("run", p_str)) {
 		result = Extra::ActionType::e_run;
-	else if (!strcmpi("exit", p_str))
+	}
+	else if (!strcmpi("exit", p_str)) {
 		result = Extra::ActionType::e_exit;
-	else if (!strcmpi("enable", p_str))
+	}
+	else if (!strcmpi("enable", p_str)) {
 		result = Extra::ActionType::e_enable;
-	else if (!strcmpi("disable", p_str))
+	}
+	else if (!strcmpi("disable", p_str)) {
 		result = Extra::ActionType::e_disable;
-	else if (!strcmpi("notify", p_str))
+	}
+	else if (!strcmpi("notify", p_str)) {
 		result = Extra::ActionType::e_notify;
+	}
 
 	return result;
 }
@@ -133,10 +143,12 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 
 	double sDbl = p_s;
 
-	if (p_s > 0.5f)
+	if (p_s > 0.5f) {
 		calc = (1.0f - p_v) * p_s + p_v;
-	else
+	}
+	else {
 		calc = (p_v + 1.0) * sDbl;
+	}
 	if (calc <= 0.0) {
 		*p_gOut = 0.0f;
 		*p_bOut = 0.0f;

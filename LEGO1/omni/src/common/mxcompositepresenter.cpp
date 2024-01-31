@@ -50,16 +50,18 @@ MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxD
 
 			if (presenter && presenter->AddToManager() == SUCCESS) {
 				presenter->SetCompositePresenter(this);
-				if (presenter->StartAction(p_controller, action) == SUCCESS)
+				if (presenter->StartAction(p_controller, action) == SUCCESS) {
 					success = TRUE;
+				}
 			}
 
 			if (success) {
 				action->SetOrigin(this);
 				m_list.push_back(presenter);
 			}
-			else if (presenter)
+			else if (presenter) {
 				delete presenter;
+			}
 		}
 
 		result = SUCCESS;
@@ -73,8 +75,9 @@ void MxCompositePresenter::EndAction()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (!m_action)
+	if (!m_action) {
 		return;
+	}
 
 	((MxDSMultiAction*) m_action)->GetActionList()->DeleteAll(FALSE);
 
@@ -139,15 +142,18 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 		MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
 		MxDSActionListCursor cursor(actions);
 
-		if (cursor.Find(action))
+		if (cursor.Find(action)) {
 			cursor.Detach();
+		}
 	}
 
-	if (presenter)
+	if (presenter) {
 		delete presenter;
+	}
 
-	if (action)
+	if (action) {
 		delete action;
+	}
 
 	if (m_list.empty()) {
 		EndAction();
@@ -155,8 +161,9 @@ void MxCompositePresenter::VTable0x58(MxEndActionNotificationParam& p_param)
 	else {
 		if (m_action->IsA("MxDSSerialAction") && it != m_list.end()) {
 			MxPresenter* presenter = *it;
-			if (presenter->GetCurrentTickleState() == e_idle)
+			if (presenter->GetCurrentTickleState() == e_idle) {
 				presenter->SetTickleState(e_ready);
+			}
 		}
 	}
 }
@@ -171,14 +178,16 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 			if (*it == presenter) {
 				m_list.erase(it++);
 
-				if (presenter->GetCurrentTickleState() == e_idle)
+				if (presenter->GetCurrentTickleState() == e_idle) {
 					presenter->SetTickleState(e_ready);
+				}
 
 				MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
 				MxDSActionListCursor cursor(actions);
 
-				if (cursor.Find(presenter->GetAction()))
+				if (cursor.Find(presenter->GetAction())) {
 					cursor.Detach();
+				}
 
 				if (m_list.empty()) {
 					EndAction();
@@ -186,8 +195,9 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 				else {
 					if (m_action->IsA("MxDSSerialAction")) {
 						MxPresenter* presenter = *it;
-						if (presenter->GetCurrentTickleState() == e_idle)
+						if (presenter->GetCurrentTickleState() == e_idle) {
 							presenter->SetTickleState(e_ready);
+						}
 					}
 				}
 
@@ -205,13 +215,15 @@ void MxCompositePresenter::VTable0x60(MxPresenter* p_presenter)
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		if (*it == p_presenter) {
 			if (++it == m_list.end()) {
-				if (m_compositePresenter)
+				if (m_compositePresenter) {
 					m_compositePresenter->VTable0x60(this);
+				}
 			}
 			else if (m_action->IsA("MxDSSerialAction")) {
 				MxPresenter* presenter = *it;
-				if (presenter->GetCurrentTickleState() == e_idle)
+				if (presenter->GetCurrentTickleState() == e_idle) {
 					presenter->SetTickleState(e_ready);
+				}
 			}
 			return;
 		}
@@ -227,8 +239,9 @@ void MxCompositePresenter::SetTickleState(TickleState p_tickleState)
 		MxPresenter* presenter = *it;
 		presenter->SetTickleState(p_tickleState);
 
-		if (m_action->IsA("MxDSSerialAction") && p_tickleState == e_ready)
+		if (m_action->IsA("MxDSSerialAction") && p_tickleState == e_ready) {
 			return;
+		}
 	}
 }
 
@@ -248,8 +261,9 @@ MxBool MxCompositePresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		MxPresenter* presenter = *it;
-		if (!presenter->HasTickleStatePassed(p_tickleState))
+		if (!presenter->HasTickleStatePassed(p_tickleState)) {
 			return FALSE;
+		}
 	}
 
 	return TRUE;

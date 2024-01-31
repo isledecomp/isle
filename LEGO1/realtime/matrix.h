@@ -64,8 +64,9 @@ public:
 	// FUNCTION: LEGO1 0x10002430
 	virtual Matrix4& operator+=(float (*p_data)[4])
 	{
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++) {
 			((float*) m_data)[i] += ((float*) p_data)[i];
+		}
 		return *this;
 	} // vtable+0x2c
 

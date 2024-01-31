@@ -9,23 +9,23 @@
 class HelicopterState : public LegoState {
 public:
 	// FUNCTION: LEGO1 0x1000e0d0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0144
 		return "HelicopterState";
 	}
 
 	// FUNCTION: LEGO1 0x1000e0e0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, HelicopterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	// FUNCTION: LEGO1 0x1000e0b0
-	virtual MxBool VTable0x14() override { return FALSE; } // vtable+0x14
+	MxBool VTable0x14() override { return FALSE; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x1000e0c0
-	virtual MxBool SetFlag() override
+	MxBool SetFlag() override
 	{
 		m_unk0x08 = 0;
 		return TRUE;

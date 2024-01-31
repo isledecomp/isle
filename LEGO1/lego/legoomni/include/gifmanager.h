@@ -77,7 +77,7 @@ protected:
 class GifManager : public GifManagerBase {
 public:
 	GifManager() { m_ownership = TRUE; }
-	virtual ~GifManager() override;
+	~GifManager() override;
 
 	// SYNTHETIC: LEGO1 0x1005a580
 	// GifManager::`scalar deleting destructor'

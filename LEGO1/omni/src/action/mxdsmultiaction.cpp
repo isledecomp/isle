@@ -15,8 +15,9 @@ MxDSMultiAction::MxDSMultiAction()
 // FUNCTION: LEGO1 0x100ca060
 MxDSMultiAction::~MxDSMultiAction()
 {
-	if (this->m_actions)
+	if (this->m_actions) {
 		delete this->m_actions;
+	}
 }
 
 // FUNCTION: LEGO1 0x100ca0d0
@@ -26,15 +27,17 @@ void MxDSMultiAction::CopyFrom(MxDSMultiAction& p_dsMultiAction)
 
 	MxDSActionListCursor cursor(p_dsMultiAction.m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		this->m_actions->Append(action->Clone());
+	}
 }
 
 // FUNCTION: LEGO1 0x100ca260
 MxDSMultiAction& MxDSMultiAction::operator=(MxDSMultiAction& p_dsMultiAction)
 {
-	if (this == &p_dsMultiAction)
+	if (this == &p_dsMultiAction) {
 		return *this;
+	}
 
 	MxDSAction::operator=(p_dsMultiAction);
 	this->CopyFrom(p_dsMultiAction);
@@ -48,8 +51,9 @@ void MxDSMultiAction::SetUnknown90(MxLong p_unk0x90)
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		action->SetUnknown90(p_unk0x90);
+	}
 }
 
 // FUNCTION: LEGO1 0x100ca370
@@ -59,21 +63,24 @@ void MxDSMultiAction::MergeFrom(MxDSAction& p_dsMultiAction)
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		action->MergeFrom(p_dsMultiAction);
+	}
 }
 
 // FUNCTION: LEGO1 0x100ca450
 MxBool MxDSMultiAction::HasId(MxU32 p_objectId)
 {
-	if (this->GetObjectId() == p_objectId)
+	if (this->GetObjectId() == p_objectId) {
 		return TRUE;
+	}
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
 	while (cursor.Next(action)) {
-		if (action->HasId(p_objectId))
+		if (action->HasId(p_objectId)) {
 			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -84,8 +91,9 @@ MxDSAction* MxDSMultiAction::Clone()
 {
 	MxDSMultiAction* clone = new MxDSMultiAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
@@ -97,8 +105,9 @@ undefined4 MxDSMultiAction::VTable0x14()
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		result += action->VTable0x14();
+	}
 
 	return result;
 }
@@ -110,8 +119,9 @@ MxU32 MxDSMultiAction::GetSizeOnDisk()
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		totalSizeOnDisk += action->GetSizeOnDisk();
+	}
 
 	this->m_sizeOnDisk = totalSizeOnDisk - MxDSAction::GetSizeOnDisk();
 
@@ -151,6 +161,7 @@ void MxDSMultiAction::SetAtomId(MxAtomId p_atomId)
 
 	MxDSActionListCursor cursor(this->m_actions);
 	MxDSAction* action;
-	while (cursor.Next(action))
+	while (cursor.Next(action)) {
 		action->SetAtomId(p_atomId);
+	}
 }

@@ -12,18 +12,18 @@ public:
 	LegoVehicleBuildState(char* p_classType);
 
 	// FUNCTION: LEGO1 0x10025ff0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		return this->m_className.GetData();
 	}
 
 	// FUNCTION: LEGO1 0x10026000
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x100260a0
 	// LegoVehicleBuildState::`scalar deleting destructor'

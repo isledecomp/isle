@@ -59,46 +59,55 @@ MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult status = FAILURE;
 	MxBool locked = FALSE;
 
-	if (MxAudioManager::InitPresenters() != SUCCESS)
+	if (MxAudioManager::InitPresenters() != SUCCESS) {
 		goto done;
+	}
 
 	m_criticalSection.Enter();
 	locked = TRUE;
 
-	if (DirectSoundCreate(NULL, &m_directSound, NULL) != DS_OK)
+	if (DirectSoundCreate(NULL, &m_directSound, NULL) != DS_OK) {
 		goto done;
+	}
 
-	if (m_directSound->SetCooperativeLevel(MxOmni::GetInstance()->GetWindowHandle(), DSSCL_PRIORITY) != DS_OK)
+	if (m_directSound->SetCooperativeLevel(MxOmni::GetInstance()->GetWindowHandle(), DSSCL_PRIORITY) != DS_OK) {
 		goto done;
+	}
 
 	DSBUFFERDESC desc;
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
 
-	if (MxOmni::IsSound3D())
+	if (MxOmni::IsSound3D()) {
 		desc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRL3D;
-	else
+	}
+	else {
 		desc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRLVOLUME;
+	}
 
 	if (m_directSound->CreateSoundBuffer(&desc, &m_dsBuffer, NULL) != DS_OK) {
-		if (!MxOmni::IsSound3D())
+		if (!MxOmni::IsSound3D()) {
 			goto done;
+		}
 
 		MxOmni::SetSound3D(FALSE);
 		desc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRLVOLUME;
 
-		if (m_directSound->CreateSoundBuffer(&desc, &m_dsBuffer, NULL) != DS_OK)
+		if (m_directSound->CreateSoundBuffer(&desc, &m_dsBuffer, NULL) != DS_OK) {
 			goto done;
+		}
 	}
 
 	WAVEFORMATEX format;
 
 	format.wFormatTag = WAVE_FORMAT_PCM;
 
-	if (MxOmni::IsSound3D())
+	if (MxOmni::IsSound3D()) {
 		format.nChannels = 2;
-	else
+	}
+	else {
 		format.nChannels = 1;
+	}
 
 	format.nSamplesPerSec = 11025; // KHz
 	format.wBitsPerSample = 16;
@@ -111,20 +120,24 @@ MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	if (p_createThread) {
 		m_thread = new MxTickleThread(this, p_frequencyMS);
 
-		if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+		if (!m_thread || m_thread->Start(0, 0) != SUCCESS) {
 			goto done;
+		}
 	}
-	else
+	else {
 		TickleManager()->RegisterClient(this, p_frequencyMS);
+	}
 
 	status = SUCCESS;
 
 done:
-	if (status != SUCCESS)
+	if (status != SUCCESS) {
 		Destroy();
+	}
 
-	if (locked)
+	if (locked) {
 		m_criticalSection.Leave();
+	}
 	return status;
 }
 
@@ -144,8 +157,9 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		((MxAudioPresenter*) presenter)->SetVolume(((MxAudioPresenter*) presenter)->GetVolume());
+	}
 
 	m_criticalSection.Leave();
 }
@@ -160,8 +174,9 @@ MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_obje
 
 	while (cursor.Next(presenter)) {
 		if (presenter->GetAction()->GetAtomId().GetInternal() == p_atomId.GetInternal() &&
-			presenter->GetAction()->GetObjectId() == p_objectId)
+			presenter->GetAction()->GetObjectId() == p_objectId) {
 			return presenter;
+		}
 	}
 
 	return NULL;
@@ -170,8 +185,9 @@ MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_obje
 // FUNCTION: LEGO1 0x100aecf0
 MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_undefined)
 {
-	if (!p_undefined)
+	if (!p_undefined) {
 		return -10000;
+	}
 	return g_mxcoreCount[p_undefined];
 }
 
@@ -183,9 +199,11 @@ void MxSoundManager::Pause()
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
 
-	while (cursor.Next(presenter))
-		if (presenter->IsA("MxWavePresenter"))
+	while (cursor.Next(presenter)) {
+		if (presenter->IsA("MxWavePresenter")) {
 			((MxWavePresenter*) presenter)->Pause();
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100aee10
@@ -196,7 +214,9 @@ void MxSoundManager::Resume()
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
 
-	while (cursor.Next(presenter))
-		if (presenter->IsA("MxWavePresenter"))
+	while (cursor.Next(presenter)) {
+		if (presenter->IsA("MxWavePresenter")) {
 			((MxWavePresenter*) presenter)->Resume();
+		}
+	}
 }

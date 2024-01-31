@@ -13,10 +13,10 @@
 class Lego3DView : public LegoView1 {
 public:
 	Lego3DView();
-	virtual ~Lego3DView() override;
+	~Lego3DView() override;
 
 	BOOL Create(const CreateStruct&, Tgl::Renderer*);
-	virtual void Destroy() override; // vtable+0x08
+	void Destroy() override; // vtable+0x08
 
 	BOOL Add(ViewROI&);
 	BOOL Remove(ViewROI&);

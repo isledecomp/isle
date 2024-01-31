@@ -40,8 +40,9 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 
 			// TODO
 			for (MxU32 i = 0; i < FRAME_COUNT(p_mxSmack); i++) {
-				if (p_mxSmack->m_maxFrameSize < frameSizes[i])
+				if (p_mxSmack->m_maxFrameSize < frameSizes[i]) {
 					p_mxSmack->m_maxFrameSize = frameSizes[i];
+				}
 			}
 
 			frameTypes = new MxU8[FRAME_COUNT(p_mxSmack)];
@@ -54,8 +55,9 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 				p_data += FRAME_COUNT(p_mxSmack);
 
 				MxU32 treeSize = p_mxSmack->m_smackTag.tablesize + 0x1000;
-				if (treeSize <= 0x2000)
+				if (treeSize <= 0x2000) {
 					treeSize = 0x2000;
+				}
 
 				huffmanTrees = new MxU8[treeSize];
 
@@ -127,16 +129,21 @@ MxResult MxSmack::LoadHeader(MxU8* p_data, MxSmack* p_mxSmack)
 // FUNCTION: LEGO1 0x100c5d40
 void MxSmack::Destroy(MxSmack* p_mxSmack)
 {
-	if (p_mxSmack->m_frameSizes)
+	if (p_mxSmack->m_frameSizes) {
 		delete[] p_mxSmack->m_frameSizes;
-	if (p_mxSmack->m_frameTypes)
+	}
+	if (p_mxSmack->m_frameTypes) {
 		delete[] p_mxSmack->m_frameTypes;
-	if (p_mxSmack->m_huffmanTrees)
+	}
+	if (p_mxSmack->m_huffmanTrees) {
 		delete[] p_mxSmack->m_huffmanTrees;
-	if (p_mxSmack->m_huffmanTables)
+	}
+	if (p_mxSmack->m_huffmanTables) {
 		delete[] p_mxSmack->m_huffmanTables;
-	if (p_mxSmack->m_unk0x6b4)
+	}
+	if (p_mxSmack->m_unk0x6b4) {
 		delete[] p_mxSmack->m_unk0x6b4;
+	}
 }
 
 // This should be refactored to somewhere else
@@ -223,12 +230,14 @@ MxBool MxSmack::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect
 {
 	u32 left, bottom, top, right;
 
-	if (!*p_und)
+	if (!*p_und) {
 		return FALSE;
+	}
 
 	if (*p_und == 1) {
-		if (!SmackGetRect(p_unk0x6b4, p_smackRect))
+		if (!SmackGetRect(p_unk0x6b4, p_smackRect)) {
 			return FALSE;
+		}
 		*p_und = 2;
 	}
 
@@ -238,10 +247,12 @@ MxBool MxSmack::GetRect(MxU8* p_unk0x6b4, MxU16* p_und, u32* p_smackRect, MxRect
 	bottom = p_smackRect[3] + p_smackRect[1];
 
 	while (SmackGetRect(p_unk0x6b4, p_smackRect)) {
-		if (left > p_smackRect[0])
+		if (left > p_smackRect[0]) {
 			left = p_smackRect[0];
-		if (right < p_smackRect[0] + p_smackRect[2])
+		}
+		if (right < p_smackRect[0] + p_smackRect[2]) {
 			right = p_smackRect[0] + p_smackRect[2];
+		}
 
 		bottom = p_smackRect[1] + p_smackRect[3];
 	}

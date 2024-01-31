@@ -51,8 +51,9 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
 		if (m_flags & c_bit1) {
-			if (m_roi->GetUnknown0x104() == this)
+			if (m_roi->GetUnknown0x104() == this) {
 				m_roi->SetUnknown0x104(NULL);
+			}
 
 			GetUnkSaveDataWriter()->FUN_10083db0(m_roi);
 		}
@@ -92,8 +93,9 @@ void LegoEntity::FUN_10010c30()
 {
 	LegoWorld* world = GetCurrentWorld();
 
-	if (m_cameraFlag && world && world->GetCamera() && m_roi)
+	if (m_cameraFlag && world && world->GetCamera() && m_roi) {
 		world->GetCamera()->FUN_100123e0(m_roi->GetLocal2World(), 1);
+	}
 }
 
 // FUNCTION: LEGO1 0x10010e10

@@ -8,7 +8,7 @@
 class Act3Actor : public MxCore {
 public:
 	// FUNCTION: LEGO1 0x100431b0
-	inline virtual const char* ClassName() const override
+	inline const char* ClassName() const override
 	{
 		// STRING: LEGO1 0x100f03ac
 		return "Act3Actor";

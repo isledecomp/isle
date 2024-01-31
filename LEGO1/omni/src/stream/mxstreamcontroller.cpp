@@ -45,12 +45,14 @@ MxStreamController::~MxStreamController()
 	MxAutoLocker lock(&m_criticalSection);
 
 	MxDSSubscriber* subscriber;
-	while (m_subscriberList.PopFront(subscriber))
+	while (m_subscriberList.PopFront(subscriber)) {
 		delete subscriber;
+	}
 
 	MxDSAction* action;
-	while (m_unk0x3c.PopFront(action))
+	while (m_unk0x3c.PopFront(action)) {
 		delete action;
+	}
 
 	if (m_provider) {
 		MxStreamProvider* provider = m_provider;
@@ -71,8 +73,9 @@ MxStreamController::~MxStreamController()
 		m_unk0x2c = NULL;
 	}
 
-	while (m_unk0x54.PopFront(action))
+	while (m_unk0x54.PopFront(action)) {
 		delete action;
+	}
 }
 
 // FUNCTION: LEGO1 0x100c1520
@@ -109,13 +112,16 @@ MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 	MxS32 objectId = p_action->GetObjectId();
 	MxStreamProvider* provider = m_provider;
 
-	if ((MxS32) provider->GetLengthInDWords() > objectId)
+	if ((MxS32) provider->GetLengthInDWords() > objectId) {
 		offset = provider->GetBufferForDWords()[objectId];
+	}
 
-	if (offset)
+	if (offset) {
 		result = VTable0x2c(p_action, offset);
-	else
+	}
+	else {
 		result = FAILURE;
+	}
 
 	return result;
 }
@@ -159,16 +165,18 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		for (MxStreamListMxDSAction::iterator it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
 			MxDSAction* action = *it;
 
-			if (action->GetObjectId() == p_action->GetObjectId())
+			if (action->GetObjectId() == p_action->GetObjectId()) {
 				newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+			}
 		}
 
 		if (newUnknown24 == -1) {
 			for (MxStreamListMxDSAction::iterator it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
 				MxDSAction* action = *it;
 
-				if (action->GetObjectId() == p_action->GetObjectId())
+				if (action->GetObjectId() == p_action->GetObjectId()) {
 					newUnknown24 = Max(newUnknown24, action->GetUnknown24());
+				}
 			}
 
 			if (newUnknown24 == -1) {
@@ -176,8 +184,9 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 					 it++) {
 					MxDSSubscriber* subscriber = *it;
 
-					if (subscriber->GetObjectId() == p_action->GetObjectId())
+					if (subscriber->GetObjectId() == p_action->GetObjectId()) {
 						newUnknown24 = Max(newUnknown24, subscriber->GetUnknown48());
+					}
 				}
 			}
 		}
@@ -185,14 +194,16 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		p_action->SetUnknown24(newUnknown24 + 1);
 	}
 	else {
-		if (m_unk0x3c.Find(p_action, FALSE))
+		if (m_unk0x3c.Find(p_action, FALSE)) {
 			return FAILURE;
+		}
 	}
 
 	MxDSStreamingAction* streamingAction = new MxDSStreamingAction(*p_action, p_offset);
 
-	if (!streamingAction)
+	if (!streamingAction) {
 		return FAILURE;
+	}
 
 	MxU32 fileSize = m_provider->GetFileSize();
 	streamingAction->SetBufferOffset(fileSize * (p_offset / fileSize));
@@ -268,14 +279,16 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 	MxU32 objectId = p_action->GetObjectId();
 	MxStreamChunk* chunk = new MxStreamChunk;
 
-	if (!chunk)
+	if (!chunk) {
 		return FAILURE;
+	}
 
 	chunk->SetFlags(MxDSChunk::c_bit3);
 	chunk->SetObjectId(objectId);
 
-	if (chunk->SendChunk(m_subscriberList, FALSE, p_action->GetUnknown24()) != SUCCESS)
+	if (chunk->SendChunk(m_subscriberList, FALSE, p_action->GetUnknown24()) != SUCCESS) {
 		delete chunk;
+	}
 
 	if (p_action->IsA("MxDSMultiAction")) {
 		MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();
@@ -283,8 +296,9 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			if (FUN_100c1f00(action) != SUCCESS)
+			if (FUN_100c1f00(action) != SUCCESS) {
 				return FAILURE;
+			}
 		}
 	}
 
@@ -300,8 +314,9 @@ MxNextActionDataStart* MxStreamController::FindNextActionDataStartFromStreamingA
 // FUNCTION: LEGO1 0x100c20d0
 MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 {
-	if (m_subscriberList.Find(&p_obj))
+	if (m_subscriberList.Find(&p_obj)) {
 		return FALSE;
+	}
 
 	if (p_obj.IsA("MxDSMultiAction")) {
 		MxDSActionList* actions = ((MxDSMultiAction&) p_obj).GetActionList();
@@ -309,8 +324,9 @@ MxBool MxStreamController::FUN_100c20d0(MxDSObject& p_obj)
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			if (!FUN_100c20d0(*action))
+			if (!FUN_100c20d0(*action)) {
 				return FALSE;
+			}
 		}
 	}
 

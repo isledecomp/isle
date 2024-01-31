@@ -38,9 +38,9 @@ public:
 	static void SetSound3D(MxBool p_use3dSound);
 
 	MxOmni();
-	virtual ~MxOmni() override;
+	~MxOmni() override;
 
-	virtual MxLong Notify(MxParam& p_param) override;                                         // vtable+04
+	MxLong Notify(MxParam& p_param) override;                                                 // vtable+04
 	virtual void Init();                                                                      // vtable+14
 	virtual MxResult Create(MxOmniCreateParam& p_param);                                      // vtable+18
 	virtual void Destroy();                                                                   // vtable+1c

@@ -57,10 +57,12 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 				if (presenter->StartAction(p_controller, action) == SUCCESS) {
 					presenter->SetTickleState(e_idle);
 
-					if (presenter->IsA("MxVideoPresenter"))
+					if (presenter->IsA("MxVideoPresenter")) {
 						VideoManager()->UnregisterPresenter(*presenter);
-					else if (presenter->IsA("MxAudioPresenter"))
+					}
+					else if (presenter->IsA("MxAudioPresenter")) {
 						SoundManager()->UnregisterPresenter(*presenter);
+					}
 
 					success = TRUE;
 				}
@@ -70,8 +72,9 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 				action->SetOrigin(this);
 				m_list.push_back(presenter);
 			}
-			else if (presenter)
+			else if (presenter) {
 				delete presenter;
+			}
 		}
 
 		if (!m_compositePresenter) {
@@ -97,8 +100,9 @@ void MxCompositeMediaPresenter::StartingTickle()
 				(*it)->Tickle();
 
 				if ((*it)->GetCurrentTickleState() == e_streaming ||
-					((*it)->GetAction() && (*it)->GetAction()->GetStartTime()))
+					((*it)->GetAction() && (*it)->GetAction()->GetStartTime())) {
 					m_unk0x4c++;
+				}
 			}
 		}
 
@@ -107,8 +111,9 @@ void MxCompositeMediaPresenter::StartingTickle()
 			m_unk0x4c = 0;
 
 			for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-				if (!(*it)->GetAction()->GetStartTime())
+				if (!(*it)->GetAction()->GetStartTime()) {
 					m_unk0x4c++;
+				}
 			}
 		}
 	}
@@ -145,8 +150,9 @@ MxResult MxCompositeMediaPresenter::Tickle()
 	case e_repeating:
 	case e_unk5:
 	case e_done: {
-		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++)
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			(*it)->Tickle();
+		}
 		break;
 	}
 	default:
@@ -162,8 +168,9 @@ MxResult MxCompositeMediaPresenter::PutData()
 	MxAutoLocker lock(&m_criticalSection);
 
 	if (m_currentTickleState >= e_streaming && m_currentTickleState <= e_done) {
-		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++)
+		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			(*it)->PutData();
+		}
 	}
 
 	return SUCCESS;

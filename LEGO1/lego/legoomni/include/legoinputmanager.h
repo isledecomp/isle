@@ -42,7 +42,7 @@ class LegoEventQueue : public MxQueue<LegoEventNotificationParam> {};
 class LegoNotifyList : public MxPtrList<MxCore> {
 protected:
 	// FUNCTION: LEGO1 0x10028830
-	virtual MxS8 Compare(MxCore* p_element1, MxCore* p_element2) override
+	MxS8 Compare(MxCore* p_element1, MxCore* p_element2) override
 	{
 		return p_element1 == p_element2 ? 0 : p_element1 < p_element2 ? -1 : 1;
 	} // vtable+0x14
@@ -69,19 +69,19 @@ public:
 class LegoInputManager : public MxPresenter {
 public:
 	LegoInputManager();
-	virtual ~LegoInputManager() override;
+	~LegoInputManager() override;
 
 	void QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key);
 	void Register(MxCore*);
 	void UnRegister(MxCore*);
 
-	virtual MxResult Tickle() override; // vtable+0x08
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005b8c0
-	virtual MxResult PutData() override { return SUCCESS; } // vtable+0x4c
+	MxResult PutData() override { return SUCCESS; } // vtable+0x4c
 
 	MxResult Create(HWND p_hwnd);
-	void Destroy();
+	void Destroy() override;
 	void CreateAndAcquireKeyboard(HWND p_hwnd);
 	void ReleaseDX();
 	MxResult GetJoystickId();

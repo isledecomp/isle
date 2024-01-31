@@ -8,7 +8,7 @@
 class LegoLocomotionAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoLocomotionAnimPresenter();
-	virtual ~LegoLocomotionAnimPresenter() override;
+	~LegoLocomotionAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006ce50
 	inline const char* ClassName() const override // vtable+0x0c
@@ -23,22 +23,23 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoLoopingAnimPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;                          // vtable+0x18
-	virtual void StartingTickle() override;                       // vtable+0x1c
-	virtual void StreamingTickle() override;                      // vtable+0x20
-	virtual MxResult AddToManager() override;                     // vtable+0x34
-	virtual void Destroy() override;                              // vtable+0x38
-	virtual void EndAction() override;                            // vtable+0x40
-	virtual void PutFrame() override;                             // vtable+0x6c
-	virtual MxResult VTable0x88(MxStreamChunk* p_chunk) override; // vtable+0x88
+	void ReadyTickle() override;                          // vtable+0x18
+	void StartingTickle() override;                       // vtable+0x1c
+	void StreamingTickle() override;                      // vtable+0x20
+	MxResult AddToManager() override;                     // vtable+0x34
+	void Destroy() override;                              // vtable+0x38
+	void EndAction() override;                            // vtable+0x40
+	void PutFrame() override;                             // vtable+0x6c
+	MxResult VTable0x88(MxStreamChunk* p_chunk) override; // vtable+0x88
 
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
 
 	inline void DecrementUnknown0xd4()
 	{
-		if (m_unk0xd4)
+		if (m_unk0xd4) {
 			--m_unk0xd4;
+		}
 	}
 
 	inline undefined2 GetUnknown0xd4() { return m_unk0xd4; }

@@ -106,9 +106,11 @@ MxU32 RadioState::FUN_1002d090()
 MxBool RadioState::FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId)
 {
 	if (*g_jukeboxScript == p_atom) {
-		for (MxS16 i = 0; i < 3; i++)
-			if (m_unk0x08[i].FUN_10014de0(p_objectId))
+		for (MxS16 i = 0; i < 3; i++) {
+			if (m_unk0x08[i].FUN_10014de0(p_objectId)) {
 				return TRUE;
+			}
+		}
 	}
 
 	return FALSE;

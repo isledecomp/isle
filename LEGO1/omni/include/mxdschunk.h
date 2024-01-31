@@ -18,17 +18,17 @@ public:
 	};
 
 	MxDSChunk();
-	virtual ~MxDSChunk() override;
+	~MxDSChunk() override;
 
 	// FUNCTION: LEGO1 0x100be0c0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e6c
 		return "MxDSChunk";
 	}
 
 	// FUNCTION: LEGO1 0x100be0d0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSChunk::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -53,8 +53,9 @@ public:
 
 	inline void Release()
 	{
-		if (m_data)
+		if (m_data) {
 			delete[] m_data;
+		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100be150

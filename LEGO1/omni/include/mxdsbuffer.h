@@ -22,10 +22,10 @@ public:
 	};
 
 	MxDSBuffer();
-	virtual ~MxDSBuffer() override;
+	~MxDSBuffer() override;
 
 	// FUNCTION: LEGO1 0x100c6500
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025b8
 		return "MxDSBuffer";
