@@ -264,7 +264,7 @@ def suggest_order(results: List[RoadmapRow], module_map: ModuleMap, match_type: 
     # Now display the order of all libaries in the final file.
     library_order = {}
 
-    for module, start in dc.earliest.items():
+    for start, module in computed_order:
         lib = module_map.get_lib_for_module(module)
         if lib is None:
             lib = get_cmakefiles_prefix(module)
@@ -272,7 +272,7 @@ def suggest_order(results: List[RoadmapRow], module_map: ModuleMap, match_type: 
         if start < library_order.get(lib, 0xFFFFFFFFF):
             library_order[lib] = start
 
-    print("Library order (earliest address shown):")
+    print("Library order (average address shown):")
     for lib, start in sorted(library_order.items(), key=lambda x: x[1]):
         # Strip off any OS path for brevity
         if not lib.startswith("CMakeFiles"):
