@@ -423,7 +423,8 @@ void LegoGameState::StopPreviousAction(MxU32 p_area)
 // STUB: LEGO1 0x1003b060
 void LegoGameState::HandleAction(MxU32 p_area)
 {
-	m_prevArea = p_area;
+	m_prevArea = m_unk0x424;
+	m_unk0x424 = p_area;
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
 	VideoManager()->SetUnk0x554(0);
