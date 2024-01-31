@@ -42,9 +42,6 @@ _Z5Timerv
 _Z7PickROIii
 _Z8Streamerv
 _Z9GameStatev
-_ZN10LegoEntityD0Ev
-_ZN10LegoEntityD1Ev
-_ZN10LegoEntityD2Ev
 _ZN10MxDSActionC1Ev
 _ZN10MxDSActionC2Ev
 _ZN10MxDSActionD0Ev
@@ -60,9 +57,6 @@ _ZN11MxPresenter4InitEv
 _ZN11MxPresenter6EnableEh
 _ZN11MxPresenter6TickleEv
 _ZN11MxPresenter9EndActionEv
-_ZN11MxPresenterD0Ev
-_ZN11MxPresenterD1Ev
-_ZN11MxPresenterD2Ev
 _ZN11MxScheduler11GetInstanceEv
 _ZN11MxScheduler17StartMultiTaskingEj
 _ZN11ViewManager9RemoveAllEP7ViewROI
