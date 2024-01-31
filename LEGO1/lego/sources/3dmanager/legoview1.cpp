@@ -42,8 +42,9 @@ LegoView::~LegoView()
 BOOL LegoView::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Renderer* pRenderer)
 {
 	float viewAngle = 45;
-	if (rCreateStruct.m_isWideViewAngle)
+	if (rCreateStruct.m_isWideViewAngle) {
 		viewAngle = 90;
+	}
 
 	float frontClippingDistance = 0.1;
 	float backClippingDistance = 500;

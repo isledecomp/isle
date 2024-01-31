@@ -35,15 +35,17 @@ MxBool GetRectIntersection(
 	MxRect32 rect(0, 0, *p_width, *p_height);
 	rect.AddPoint(rect1Origin);
 
-	if (!rect.IntersectsWith(rect1))
+	if (!rect.IntersectsWith(rect1)) {
 		return FALSE;
+	}
 
 	rect.Intersect(rect1);
 	rect.SubtractPoint(rect1Origin);
 	rect.AddPoint(rect2Origin);
 
-	if (!rect.IntersectsWith(rect2))
+	if (!rect.IntersectsWith(rect2)) {
 		return FALSE;
+	}
 
 	rect.Intersect(rect2);
 	rect.SubtractPoint(rect2Origin);
@@ -93,8 +95,9 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 				char* cur = &token[strlen(p_key)];
 				cur++;
 				while (*cur != ',') {
-					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r')
+					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r') {
 						break;
+					}
 					*p_outputValue++ = *cur++;
 				}
 				*p_outputValue = '\0';

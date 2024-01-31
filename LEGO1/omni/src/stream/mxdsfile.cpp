@@ -98,8 +98,9 @@ MxLong MxDSFile::Close()
 // FUNCTION: LEGO1 0x100cc780
 MxResult MxDSFile::Read(unsigned char* p_buf, MxULong p_nbytes)
 {
-	if (m_io.Read(p_buf, p_nbytes) != p_nbytes)
+	if (m_io.Read(p_buf, p_nbytes) != p_nbytes) {
 		return FAILURE;
+	}
 
 	m_position += p_nbytes;
 	return SUCCESS;

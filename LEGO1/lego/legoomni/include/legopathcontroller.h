@@ -8,9 +8,9 @@
 class LegoPathController : public MxCore {
 public:
 	LegoPathController();
-	virtual ~LegoPathController() override { Destroy(); }
+	~LegoPathController() override { Destroy(); }
 
-	virtual MxResult Tickle() override; // vtable+08
+	MxResult Tickle() override; // vtable+08
 
 	// FUNCTION: LEGO1 0x10045110
 	inline const char* ClassName() const override // vtable+0x0c

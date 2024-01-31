@@ -169,8 +169,9 @@ void MxNotificationManager::Register(MxCore* p_listener)
 	MxAutoLocker lock(&m_lock);
 
 	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-	if (it != m_listenerIds.end())
+	if (it != m_listenerIds.end()) {
 		return;
+	}
 
 	m_listenerIds.push_back(p_listener->GetId());
 }

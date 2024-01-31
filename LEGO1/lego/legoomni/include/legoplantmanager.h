@@ -9,9 +9,9 @@
 class LegoPlantManager : public MxCore {
 public:
 	LegoPlantManager();
-	virtual ~LegoPlantManager() override; // vtable+0x00
+	~LegoPlantManager() override; // vtable+0x00
 
-	virtual MxResult Tickle() override; // vtable+0x08
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10026290
 	inline const char* ClassName() const override // vtable+0x0c

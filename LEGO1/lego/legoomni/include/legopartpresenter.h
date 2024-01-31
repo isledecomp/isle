@@ -20,9 +20,9 @@ public:
 		return !strcmp(p_name, LegoPartPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;      // vtable+0x18
-	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
+	void ReadyTickle() override;      // vtable+0x18
+	MxResult AddToManager() override; // vtable+0x34
+	void Destroy() override;          // vtable+0x38
 
 	static void configureLegoPartPresenter(MxS32, MxS32);
 

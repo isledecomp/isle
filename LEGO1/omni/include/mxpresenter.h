@@ -29,19 +29,19 @@ public:
 	MxPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000bf00
-	virtual ~MxPresenter() override{}; // vtable+0x00
+	~MxPresenter() override{}; // vtable+0x00
 
-	virtual MxResult Tickle() override; // vtable+0x08
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000bfe0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0740
 		return "MxPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x1000bff0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxPresenter::ClassName()) || MxCore::IsA(p_name);
 	}

@@ -17,7 +17,7 @@ class LegoROI;
 class LegoVideoManager : public MxVideoManager {
 public:
 	LegoVideoManager();
-	virtual ~LegoVideoManager() override;
+	~LegoVideoManager() override;
 
 	int EnableRMDevice();
 	int DisableRMDevice();
@@ -25,13 +25,12 @@ public:
 	void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
 	void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
 
-	virtual MxResult Tickle() override; // vtable+0x08
-	virtual void Destroy() override;    // vtable+0x18
-	virtual MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
-		override;                                                                          // vtable+0x2c
-	virtual MxResult RealizePalette(MxPalette*) override;                                  // vtable+0x30
-	virtual void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override; // vtable+0x34
-	virtual MxPresenter* GetPresenterAt(MxS32 p_x, MxS32 p_y);                             // vtable+0x38
+	MxResult Tickle() override;                                                                       // vtable+0x08
+	void Destroy() override;                                                                          // vtable+0x18
+	MxResult Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x2c
+	MxResult RealizePalette(MxPalette*) override;                                                     // vtable+0x30
+	void UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_height) override;                    // vtable+0x34
+	virtual MxPresenter* GetPresenterAt(MxS32 p_x, MxS32 p_y);                                        // vtable+0x38
 
 	// FUNCTION: LEGO1 0x1007ab10
 	virtual LegoUnknown100d9d00* VTable0x3c() { return m_unk0x100d9d00; } // vtable+0x3c

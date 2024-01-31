@@ -7,22 +7,22 @@
 // SIZE 0x10
 class LegoAct2State : public LegoState {
 public:
-	virtual ~LegoAct2State() override {}
+	~LegoAct2State() override {}
 
 	// FUNCTION: LEGO1 0x1000df80
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0428
 		return "LegoAct2State";
 	}
 
 	// FUNCTION: LEGO1 0x1000df90
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAct2State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxBool VTable0x14() override; // vtable+0x14
+	MxBool VTable0x14() override; // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x1000e040
 	// LegoAct2State::`scalar deleting destructor'

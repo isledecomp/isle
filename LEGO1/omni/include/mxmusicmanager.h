@@ -11,10 +11,10 @@
 class MxMusicManager : public MxAudioManager {
 public:
 	MxMusicManager();
-	virtual ~MxMusicManager() override;
+	~MxMusicManager() override;
 
-	virtual void Destroy() override;                                     // vtable+18
-	virtual void SetVolume(MxS32 p_volume) override;                     // vtable+2c
+	void Destroy() override;                                             // vtable+18
+	void SetVolume(MxS32 p_volume) override;                             // vtable+2c
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+30
 
 	inline MxBool GetMIDIInitialized() { return m_midiInitialized; }

@@ -80,8 +80,9 @@ void LegoActionControlPresenter::ParseExtra()
 {
 	MxU32 len = m_action->GetExtraLength();
 
-	if (len == 0)
+	if (len == 0) {
 		return;
+	}
 
 	len &= MAXWORD;
 

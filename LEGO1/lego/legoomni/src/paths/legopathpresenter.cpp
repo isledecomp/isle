@@ -39,16 +39,18 @@ MxResult LegoPathPresenter::AddToManager()
 // FUNCTION: LEGO1 0x10044b70
 void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 {
-	if (VideoManager())
+	if (VideoManager()) {
 		VideoManager()->UnregisterPresenter(*this);
+	}
 
 	{
 		MxAutoLocker lock(&this->m_criticalSection);
 		Init();
 	}
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMediaPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x10044c10
@@ -81,8 +83,9 @@ void LegoPathPresenter::StreamingTickle()
 // FUNCTION: LEGO1 0x10044d40
 void LegoPathPresenter::RepeatingTickle()
 {
-	if (this->m_action->GetDuration() == -1)
+	if (this->m_action->GetDuration() == -1) {
 		return;
+	}
 
 	EndAction();
 }

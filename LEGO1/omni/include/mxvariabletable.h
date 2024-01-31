@@ -16,8 +16,8 @@ public:
 
 	static void Destroy(MxVariable* p_obj) { p_obj->Destroy(); }
 
-	virtual MxS8 Compare(MxVariable*, MxVariable*) override; // vtable+0x14
-	virtual MxU32 Hash(MxVariable*) override;                // vtable+0x18
+	MxS8 Compare(MxVariable*, MxVariable*) override; // vtable+0x14
+	MxU32 Hash(MxVariable*) override;                // vtable+0x18
 
 	// SYNTHETIC: LEGO1 0x100afdd0
 	// MxVariableTable::`scalar deleting destructor'

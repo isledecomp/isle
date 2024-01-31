@@ -19,17 +19,17 @@ class MxDSStreamingAction;
 class MxStreamController : public MxCore {
 public:
 	MxStreamController();
-	virtual ~MxStreamController() override; // vtable+0x00
+	~MxStreamController() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100c0f10
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102130
 		return "MxStreamController";
 	}
 
 	// FUNCTION: LEGO1 0x100c0f20
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamController::ClassName()) || MxCore::IsA(p_name);
 	}

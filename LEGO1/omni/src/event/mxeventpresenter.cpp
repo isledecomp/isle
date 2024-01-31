@@ -42,13 +42,15 @@ MxResult MxEventPresenter::AddToManager()
 // FUNCTION: LEGO1 0x100c2de0
 void MxEventPresenter::Destroy()
 {
-	if (EventManager())
+	if (EventManager()) {
 		EventManager()->UnregisterPresenter(*this);
+	}
 
 	m_criticalSection.Enter();
 
-	if (m_data)
+	if (m_data) {
 		delete[] m_data;
+	}
 
 	Init();
 
@@ -80,8 +82,9 @@ void MxEventPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = CurrentChunk();
 
-	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		ProgressTickleState(e_streaming);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2ef0
@@ -103,8 +106,9 @@ MxResult MxEventPresenter::PutData()
 					variableTable->SetVariable(key, value);
 				}
 
-				if (m_currentTickleState == e_streaming)
+				if (m_currentTickleState == e_streaming) {
 					m_subscriber->DestroyChunk(m_currentChunk);
+				}
 				m_currentChunk = NULL;
 			}
 		}

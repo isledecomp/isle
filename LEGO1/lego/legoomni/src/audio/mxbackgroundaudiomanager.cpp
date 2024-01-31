@@ -47,8 +47,9 @@ MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyM
 // FUNCTION: LEGO1 0x1007ed20
 MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& p_script)
 {
-	if (m_script.GetInternal())
+	if (m_script.GetInternal()) {
 		DestroyMusic();
+	}
 
 	MxResult result = FAILURE;
 
@@ -264,15 +265,17 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 // FUNCTION: LEGO1 0x1007f470
 void MxBackgroundAudioManager::Stop()
 {
-	if (m_action2.GetObjectId() != -1)
+	if (m_action2.GetObjectId() != -1) {
 		DeleteObject(m_action2);
+	}
 
 	m_unk0x138 = 0;
 	m_action2.SetAtomId(MxAtomId());
 	m_action2.SetObjectId(-1);
 
-	if (m_action1.GetObjectId() != -1)
+	if (m_action1.GetObjectId() != -1) {
 		DeleteObject(m_action1);
+	}
 
 	m_unk0xa0 = 0;
 	m_action1.SetAtomId(MxAtomId());

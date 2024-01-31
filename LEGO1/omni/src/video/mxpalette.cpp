@@ -110,18 +110,23 @@ LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
 {
 	MxS32 i;
 	if (this->m_palette == NULL) {
-		for (i = 0; i < 10; i++)
+		for (i = 0; i < 10; i++) {
 			this->m_entries[i].peFlags = 0x80;
-		for (i = 10; i < 136; i++)
+		}
+		for (i = 10; i < 136; i++) {
 			this->m_entries[i].peFlags = 0x44;
-		for (i = 136; i < 140; i++)
+		}
+		for (i = 136; i < 140; i++) {
 			this->m_entries[i].peFlags = 0x84;
+		}
 		this->m_entries[140].peFlags = 0x84;
 		this->m_entries[141].peFlags = 0x44;
-		for (i = 142; i < 246; i++)
+		for (i = 142; i < 246; i++) {
 			this->m_entries[i].peFlags = 0x84;
-		for (i = 246; i < 256; i++)
+		}
+		for (i = 246; i < 256; i++) {
 			this->m_entries[i].peFlags = 0x80;
+		}
 
 		if (MVideoManager() && MVideoManager()->GetDirectDraw()) {
 			MVideoManager()->GetDirectDraw()->CreatePalette(4, this->m_entries, &this->m_palette, NULL);
@@ -154,8 +159,9 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 	MxResult status = SUCCESS;
 
 	if (this->m_palette) {
-		for (i = 0; i < 10; i++)
+		for (i = 0; i < 10; i++) {
 			this->m_entries[i].peFlags = 0x80;
+		}
 		for (i = 10; i < 136; i++) {
 			this->m_entries[i].peFlags = 68;
 			this->m_entries[i].peRed = p_entries[i].peRed;
@@ -186,11 +192,13 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 			this->m_entries[i].peBlue = p_entries[i].peBlue;
 		}
 
-		for (i = 246; i < 256; i++)
+		for (i = 246; i < 256; i++) {
 			this->m_entries[i].peFlags = 0x80;
+		}
 
-		if (this->m_palette->SetEntries(0, 0, 256, this->m_entries))
+		if (this->m_palette->SetEntries(0, 0, 256, this->m_entries)) {
 			status = FAILURE;
+		}
 	}
 
 	return status;
@@ -222,12 +230,15 @@ void MxPalette::Detach()
 MxBool MxPalette::operator==(MxPalette& p_other)
 {
 	for (MxS32 i = 0; i < 256; i++) {
-		if (this->m_entries[i].peRed != p_other.m_entries[i].peRed)
+		if (this->m_entries[i].peRed != p_other.m_entries[i].peRed) {
 			return FALSE;
-		if (this->m_entries[i].peGreen != p_other.m_entries[i].peGreen)
+		}
+		if (this->m_entries[i].peGreen != p_other.m_entries[i].peGreen) {
 			return FALSE;
-		if (this->m_entries[i].peBlue != p_other.m_entries[i].peBlue)
+		}
+		if (this->m_entries[i].peBlue != p_other.m_entries[i].peBlue) {
 			return FALSE;
+		}
 	}
 	return TRUE;
 }

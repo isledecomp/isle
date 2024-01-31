@@ -75,13 +75,15 @@ unsigned char LegoROI::CallTheHandlerFunction(
 )
 {
 	// TODO
-	if (p_param == NULL)
+	if (p_param == NULL) {
 		return FALSE;
+	}
 
 	if (g_someHandlerFunction) {
 		char buf[32];
-		if (g_someHandlerFunction(p_param, buf, 32))
+		if (g_someHandlerFunction(p_param, buf, 32)) {
 			p_param = buf;
+		}
 	}
 
 	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_other);

@@ -15,7 +15,7 @@ public:
 
 	MxPalette();
 	MxPalette(const RGBQUAD*);
-	virtual ~MxPalette();
+	~MxPalette() override;
 
 	void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
 	MxPalette* Clone();

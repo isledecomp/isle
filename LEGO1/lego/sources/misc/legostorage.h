@@ -44,10 +44,10 @@ protected:
 class LegoMemory : public LegoStorage {
 public:
 	LegoMemory(void* p_buffer);
-	virtual LegoResult Read(void* p_buffer, LegoU32 p_size);
-	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size);
-	virtual LegoResult GetPosition(LegoU32& p_position);
-	virtual LegoResult SetPosition(LegoU32 p_position);
+	LegoResult Read(void* p_buffer, LegoU32 p_size) override;
+	LegoResult Write(const void* p_buffer, LegoU32 p_size) override;
+	LegoResult GetPosition(LegoU32& p_position) override;
+	LegoResult SetPosition(LegoU32 p_position) override;
 
 	// SYNTHETIC: LEGO1 0x10045a80
 	// LegoMemory::~LegoMemory
@@ -65,11 +65,11 @@ protected:
 class LegoFile : public LegoStorage {
 public:
 	LegoFile();
-	virtual ~LegoFile() override;
-	virtual LegoResult Read(void* p_buffer, LegoU32 p_size);
-	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size);
-	virtual LegoResult GetPosition(LegoU32& p_position);
-	virtual LegoResult SetPosition(LegoU32 p_position);
+	~LegoFile() override;
+	LegoResult Read(void* p_buffer, LegoU32 p_size) override;
+	LegoResult Write(const void* p_buffer, LegoU32 p_size) override;
+	LegoResult GetPosition(LegoU32& p_position) override;
+	LegoResult SetPosition(LegoU32 p_position) override;
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
 	// FUNCTION: LEGO1 0x10006030

@@ -108,8 +108,9 @@ MxU32 MxDSAction::GetSizeOnDisk()
 // FUNCTION: LEGO1 0x100adc10
 MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
 {
-	if (this == &p_dsAction)
+	if (this == &p_dsAction) {
 		return *this;
+	}
 
 	MxDSObject::operator=(p_dsAction);
 	this->CopyFrom(p_dsAction);
@@ -121,8 +122,9 @@ MxDSAction* MxDSAction::Clone()
 {
 	MxDSAction* clone = new MxDSAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
@@ -136,35 +138,47 @@ MxLong MxDSAction::GetElapsedTime()
 // FUNCTION: LEGO1 0x100add00
 void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 {
-	if (p_dsAction.m_startTime != INT_MIN)
+	if (p_dsAction.m_startTime != INT_MIN) {
 		this->m_startTime = p_dsAction.m_startTime;
+	}
 
-	if (p_dsAction.GetDuration() != INT_MIN)
+	if (p_dsAction.GetDuration() != INT_MIN) {
 		this->m_duration = p_dsAction.GetDuration();
+	}
 
-	if (p_dsAction.m_loopCount != -1)
+	if (p_dsAction.m_loopCount != -1) {
 		this->m_loopCount = p_dsAction.m_loopCount;
+	}
 
-	if (p_dsAction.m_location[0] != FLT_MAX)
+	if (p_dsAction.m_location[0] != FLT_MAX) {
 		this->m_location[0] = p_dsAction.m_location[0];
-	if (p_dsAction.m_location[1] != FLT_MAX)
+	}
+	if (p_dsAction.m_location[1] != FLT_MAX) {
 		this->m_location[1] = p_dsAction.m_location[1];
-	if (p_dsAction.m_location[2] != FLT_MAX)
+	}
+	if (p_dsAction.m_location[2] != FLT_MAX) {
 		this->m_location[2] = p_dsAction.m_location[2];
+	}
 
-	if (p_dsAction.m_direction[0] != FLT_MAX)
+	if (p_dsAction.m_direction[0] != FLT_MAX) {
 		this->m_direction[0] = p_dsAction.m_direction[0];
-	if (p_dsAction.m_direction[1] != FLT_MAX)
+	}
+	if (p_dsAction.m_direction[1] != FLT_MAX) {
 		this->m_direction[1] = p_dsAction.m_direction[1];
-	if (p_dsAction.m_direction[2] != FLT_MAX)
+	}
+	if (p_dsAction.m_direction[2] != FLT_MAX) {
 		this->m_direction[2] = p_dsAction.m_up[2]; // This is correct
+	}
 
-	if (p_dsAction.m_up[0] != FLT_MAX)
+	if (p_dsAction.m_up[0] != FLT_MAX) {
 		this->m_up[0] = p_dsAction.m_up[0];
-	if (p_dsAction.m_up[1] != FLT_MAX)
+	}
+	if (p_dsAction.m_up[1] != FLT_MAX) {
 		this->m_up[1] = p_dsAction.m_up[1];
-	if (p_dsAction.m_up[2] != FLT_MAX)
+	}
+	if (p_dsAction.m_up[2] != FLT_MAX) {
 		this->m_up[2] = p_dsAction.m_up[2];
+	}
 
 	MxU16 extraLength = p_dsAction.m_extraLength;
 	char* extraData = p_dsAction.m_extraData;
@@ -185,8 +199,9 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x100ade60
 void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 {
-	if (this->m_extraData == p_extraData || !p_extraData)
+	if (this->m_extraData == p_extraData || !p_extraData) {
 		return;
+	}
 
 	if (this->m_extraLength) {
 		char* concat = new char[p_extraLength + this->m_extraLength + sizeof(g_sep)];

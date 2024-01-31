@@ -21,7 +21,7 @@ public:
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
 	}
-	inline ~ViewROI()
+	inline ~ViewROI() override
 	{
 		// SetLODList() will decrease refCount of LODList
 		SetLODList(0);
@@ -44,18 +44,18 @@ public:
 			reinterpret_cast<ViewLODList*>(m_lods)->AddRef();
 		}
 	}
-	virtual float IntrinsicImportance() const override;                  // vtable+0x04
-	virtual void VTable0x1c() override;                                  // vtable+0x1c
-	virtual void SetLocalTransform(const Matrix4& p_transform) override; // vtable+0x20
-	virtual void VTable0x24(const MxMatrix& p_transform) override;       // vtable+0x24
-	virtual const Tgl::Group* GetGeometry() const;                       // vtable+0x34
-	virtual Tgl::Group* GetGeometry();                                   // vtable+0x30
+	float IntrinsicImportance() const override;                  // vtable+0x04
+	void VTable0x1c() override;                                  // vtable+0x1c
+	void SetLocalTransform(const Matrix4& p_transform) override; // vtable+0x20
+	void VTable0x24(const MxMatrix& p_transform) override;       // vtable+0x24
+	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
+	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
 
 	static undefined SetUnk101013d8(undefined p_flag);
 
 protected:
 	Tgl::Group* geometry;
-	void UpdateWorldData(const MxMatrix& parent2world);
+	void UpdateWorldData(const MxMatrix& parent2world) override;
 };
 
 // SYNTHETIC: LEGO1 0x100aa250

@@ -8,13 +8,13 @@
 class LegoMeterPresenter : public MxStillPresenter {
 public:
 	LegoMeterPresenter();
-	virtual ~LegoMeterPresenter() override;
+	~LegoMeterPresenter() override;
 
 	// MxStillPresenter's `::ClassName` and `::IsA` are used.
 
-	virtual void StreamingTickle() override; // vtable+0x20
-	virtual void RepeatingTickle() override; // vtable+0x24
-	virtual void ParseExtra() override;      // vtable+0x30
+	void StreamingTickle() override; // vtable+0x20
+	void RepeatingTickle() override; // vtable+0x24
+	void ParseExtra() override;      // vtable+0x30
 
 private:
 	void FUN_10043a50();

@@ -34,14 +34,16 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 
 	m_criticalSection.Enter();
 
-	if (m_subscriber && m_chunk)
+	if (m_subscriber && m_chunk) {
 		m_subscriber->DestroyChunk(m_chunk);
+	}
 	Init();
 
 	m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMusicPresenter::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2890
@@ -61,24 +63,28 @@ void MxMIDIPresenter::StartingTickle()
 {
 	MxStreamChunk* chunk = CurrentChunk();
 
-	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime())
+	if (chunk && m_action->GetElapsedTime() >= chunk->GetTime()) {
 		ProgressTickleState(e_streaming);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2910
 void MxMIDIPresenter::StreamingTickle()
 {
-	if (m_chunk)
+	if (m_chunk) {
 		ProgressTickleState(e_done);
-	else
+	}
+	else {
 		m_chunk = NextChunk();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2940
 void MxMIDIPresenter::DoneTickle()
 {
-	if (!MusicManager()->GetMIDIInitialized())
+	if (!MusicManager()->GetMIDIInitialized()) {
 		EndAction();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2960
@@ -95,8 +101,9 @@ MxResult MxMIDIPresenter::PutData()
 	if (m_currentTickleState == e_streaming && m_chunk && !MusicManager()->GetMIDIInitialized()) {
 		SetVolume(((MxDSSound*) m_action)->GetVolume());
 
-		if (MusicManager()->InitializeMIDI(m_chunk->GetData(), 1) != SUCCESS)
+		if (MusicManager()->InitializeMIDI(m_chunk->GetData(), 1) != SUCCESS) {
 			EndAction();
+		}
 	}
 
 	m_criticalSection.Leave();

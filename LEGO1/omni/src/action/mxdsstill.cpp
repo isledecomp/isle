@@ -21,8 +21,9 @@ void MxDSStill::CopyFrom(MxDSStill& p_dsStill)
 // FUNCTION: LEGO1 0x100c9ad0
 MxDSStill& MxDSStill::operator=(MxDSStill& p_dsStill)
 {
-	if (this == &p_dsStill)
+	if (this == &p_dsStill) {
 		return *this;
+	}
 
 	MxDSMediaAction::operator=(p_dsStill);
 	this->CopyFrom(p_dsStill);
@@ -34,8 +35,9 @@ MxDSAction* MxDSStill::Clone()
 {
 	MxDSStill* clone = new MxDSStill();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }

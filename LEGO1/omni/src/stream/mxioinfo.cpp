@@ -72,8 +72,9 @@ MxU16 MXIOINFO::Close(MxLong p_unused)
 		_lclose((HFILE) m_info.hmmio);
 		m_info.hmmio = 0;
 
-		if (m_info.dwFlags & MMIO_ALLOCBUF)
+		if (m_info.dwFlags & MMIO_ALLOCBUF) {
 			delete[] m_info.pchBuffer;
+		}
 
 		m_info.pchEndWrite = 0;
 		m_info.pchEndRead = 0;
@@ -95,8 +96,9 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 		while (p_len > 0) {
 
 			if (bytesLeft > 0) {
-				if (p_len < bytesLeft)
+				if (p_len < bytesLeft) {
 					bytesLeft = p_len;
+				}
 
 				memcpy(p_buf, m_info.pchNext, bytesLeft);
 				p_len -= bytesLeft;
@@ -105,12 +107,14 @@ MxLong MXIOINFO::Read(void* p_buf, MxLong p_len)
 				bytesRead += bytesLeft;
 			}
 
-			if (p_len <= 0 || Advance(0))
+			if (p_len <= 0 || Advance(0)) {
 				break;
+			}
 
 			bytesLeft = m_info.pchEndRead - m_info.pchNext;
-			if (bytesLeft <= 0)
+			if (bytesLeft <= 0) {
 				break;
+			}
 		}
 	}
 	else if (m_info.hmmio && p_len > 0) {
@@ -381,8 +385,9 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 {
 	MxU16 result = 0;
 
-	if (!p_chunkInfo)
+	if (!p_chunkInfo) {
 		return MMIOERR_BASE; // ?
+	}
 
 	if (!p_descend) {
 		p_chunkInfo->dwFlags = 0;
@@ -406,8 +411,9 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 	else {
 		MxULong ofs = MAXLONG;
 
-		if (p_parentInfo)
+		if (p_parentInfo) {
 			ofs = p_parentInfo->cksize + p_parentInfo->dwDataOffset;
+		}
 
 		BOOL running = TRUE;
 		BOOL readOk = FALSE;
@@ -452,8 +458,9 @@ MxU16 MXIOINFO::Descend(MMCKINFO* p_chunkInfo, const MMCKINFO* p_parentInfo, MxU
 			}
 		}
 
-		if (!result)
+		if (!result) {
 			memcpy(p_chunkInfo, &tmp, sizeof(MMCKINFO));
+		}
 	}
 
 	return result;
