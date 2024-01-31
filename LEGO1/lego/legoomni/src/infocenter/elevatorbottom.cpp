@@ -38,8 +38,8 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetUnknown424(5);
-	GameState()->FUN_1003a720(0);
+	GameState()->SetCurrentArea(5);
+	GameState()->StopArea();
 
 	return result;
 }
@@ -56,7 +56,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 			ret = HandleNotification17(p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->HandleAction(m_unk0xf8);
+			GameState()->SwitchArea(m_unk0xf8);
 			break;
 		}
 	}

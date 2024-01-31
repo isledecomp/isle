@@ -139,7 +139,7 @@ MxLong Infocenter::Notify(MxParam& p_param)
 			}
 			else if (m_unk0x104 != 0) {
 				BackgroundAudioManager()->RaiseVolume();
-				GameState()->HandleAction(m_unk0x104);
+				GameState()->SwitchArea(m_unk0x104);
 				m_unk0x104 = 0;
 			}
 			break;

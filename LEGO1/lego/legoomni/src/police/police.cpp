@@ -55,8 +55,8 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 	}
 
 	m_policeState = policeState;
-	GameState()->SetUnknown424(0x22);
-	GameState()->FUN_1003a720(0);
+	GameState()->SetCurrentArea(0x22);
+	GameState()->StopArea();
 	return ret;
 }
 

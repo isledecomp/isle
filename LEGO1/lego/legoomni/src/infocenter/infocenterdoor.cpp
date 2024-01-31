@@ -39,8 +39,8 @@ MxResult InfocenterDoor::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetUnknown424(3);
-	GameState()->FUN_1003a720(0);
+	GameState()->SetCurrentArea(3);
+	GameState()->StopArea();
 
 	return result;
 }
