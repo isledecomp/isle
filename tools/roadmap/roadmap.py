@@ -6,6 +6,7 @@ import os
 import argparse
 import logging
 import statistics
+import bisect
 from typing import Iterator, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp import Bin as IsleBin
@@ -40,6 +41,9 @@ class ModuleMap:
             if binfile.is_valid_section(sizeref.section)
         ]
 
+        # For bisect performance enhancement
+        self.contrib_starts = [start for (start, _, __) in self.section_contrib]
+
     def get_lib_for_module(self, module: str) -> Optional[str]:
         return self.library_lookup.get(module)
 
@@ -51,10 +55,16 @@ class ModuleMap:
         ]
 
     def get_module(self, addr: int) -> Optional[str]:
-        for start, size, module_id in self.section_contrib:
-            if start <= addr < start + size:
-                if (module := self.module_lookup.get(module_id)) is not None:
-                    return module
+        i = bisect.bisect_left(self.contrib_starts, addr)
+
+        # Clamp to final section contribution for a very high address
+        if i >= len(self.section_contrib):
+            i = len(self.section_contrib) - 1
+
+        (start, size, module_id) = self.section_contrib[i]
+        if start <= addr < start + size:
+            if (module := self.module_lookup.get(module_id)) is not None:
+                return module
 
         return None
 
@@ -262,7 +272,7 @@ def suggest_order(results: List[RoadmapRow], module_map: ModuleMap, match_type: 
         if start < library_order.get(lib, 0xFFFFFFFFF):
             library_order[lib] = start
 
-    print("Library order (average address shown):")
+    print("Library order (earliest address shown):")
     for lib, start in sorted(library_order.items(), key=lambda x: x[1]):
         # Strip off any OS path for brevity
         if not lib.startswith("CMakeFiles"):
