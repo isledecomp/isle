@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+include(CheckCXXSourceCompiles)
 include(CMakeDependentOption)
+include(CMakePushCheckState)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy")
@@ -31,12 +33,38 @@ macro(register_lego1_target __target)
   list(APPEND lego1_targets ${__target})
 endmacro()
 
+function(check_cxx_has_option VAR OPTION)
+    cmake_push_check_state(RESET)
+    set(CMAKE_REQUIRED_FLAGS "${OPTION} ")
+    if(MSVC)
+        string(APPEND CMAKE_REQUIRED_FLAGS "/WX")
+    else()
+        string(APPEND CMAKE_REQUIRED_FLAGS "-Werror")
+    endif()
+    check_cxx_source_compiles("int main() { return 0; }" ${VAR})
+    cmake_pop_check_state()
+endfunction()
+
 message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
+option(ISLE_WERROR "Treat warnings as errors" OFF)
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
+
+if(ISLE_WERROR)
+    if(MSVC)
+        add_compile_options(-WX)
+    else()
+        add_compile_options(-Werror)
+    endif()
+endif()
+
+check_cxx_has_option(COMPILER_SUPPORTS_Wparentheses -Wparentheses)
+if(COMPILER_SUPPORTS_Wparentheses)
+    add_compile_options(-Wparentheses)
+endif()
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
 target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")

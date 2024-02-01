@@ -47,7 +47,12 @@ jobs:
 
       - name: Build
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -GNinja -Werror=dev -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }}
+          cmake -S . -B build -GNinja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} \
+            -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }} \
+            -DISLE_WERROR=ON \
+            -Werror=dev -- -k0
           cmake --build build
 
   build:
