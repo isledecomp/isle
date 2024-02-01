@@ -56,6 +56,14 @@ public:
 			m_unk0x08 = 0;
 		}
 
+		Shuffle(MxU32* p_objectIds, MxU16 p_length)
+		{
+			m_objectIds = p_objectIds;
+			m_length = p_length;
+			m_unk0x06 = 0;
+			m_unk0x08 = 0;
+		}
+
 		// FUNCTION: LEGO1 0x10071800
 		Shuffle& operator=(const Shuffle& p_shuffle)
 		{
@@ -64,14 +72,6 @@ public:
 			m_unk0x08 = p_shuffle.m_unk0x08;
 			m_unk0x06 = p_shuffle.m_unk0x06;
 			return *this;
-		}
-
-		Shuffle(MxU32* p_objectIds, MxU16 p_length)
-		{
-			m_objectIds = p_objectIds;
-			m_length = p_length;
-			m_unk0x06 = 0;
-			m_unk0x08 = 0;
 		}
 
 		MxU32 FUN_10014d00();
