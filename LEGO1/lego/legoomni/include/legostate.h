@@ -66,12 +66,12 @@ public:
 			return *this;
 		}
 
-		Shuffle(MxU32* p_objectIds, MxU16 p_length, undefined2 p_unk0x06, MxU16 p_unk0x08)
+		Shuffle(MxU32* p_objectIds, MxU16 p_length)
 		{
 			m_objectIds = p_objectIds;
 			m_length = p_length;
-			m_unk0x06 = p_unk0x06;
-			m_unk0x08 = p_unk0x08;
+			m_unk0x06 = 0;
+			m_unk0x08 = 0;
 		}
 
 		MxU32 FUN_10014d00();
