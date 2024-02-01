@@ -656,10 +656,12 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 		case 5: {
 			m_infoManDialogueTimer = 0;
 
-			LegoState::StateStruct& state = !GameState()->GetUnknown10() ? m_infocenterState->GetUnknown0x08()
-																		 : m_infocenterState->GetUnknown0x14();
+			InfomainScript objectId;
+			if (GameState()->GetUnknown10())
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x14().FUN_10014d00();
+			else
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x08().FUN_10014d00();
 
-			InfomainScript objectId = (InfomainScript) state.FUN_10014d00();
 			PlayAction(objectId);
 			FUN_10015860(g_object2x4red, 0);
 			FUN_10015860(g_object2x4grn, 0);
