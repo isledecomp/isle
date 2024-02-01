@@ -153,14 +153,14 @@ MxLong Infocenter::Notify(MxParam& p_param)
 MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxDSAction* action = p_param.GetAction();
-	if (action->GetAtomId() == *g_creditsScript && action->GetObjectId() == 499) {
+	if (action->GetAtomId() == *g_creditsScript && action->GetObjectId() == c_unk499) {
 		Lego()->CloseMainWindow();
 		return 1;
 	}
 
 	if (action->GetAtomId() == m_atom &&
-		(action->GetObjectId() == 40 || action->GetObjectId() == 41 || action->GetObjectId() == 42 ||
-		 action->GetObjectId() == 43 || action->GetObjectId() == 44)) {
+		(action->GetObjectId() == c_unk40 || action->GetObjectId() == c_unk41 || action->GetObjectId() == c_unk42 ||
+		 action->GetObjectId() == c_unk43 || action->GetObjectId() == c_unk44)) {
 		if (m_unk0x1d4) {
 			m_unk0x1d4--;
 		}
@@ -259,7 +259,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		BackgroundAudioManager()->RaiseVolume();
 		return 1;
 	case 4:
-		if (action->GetObjectId() == 70 || action->GetObjectId() == 71) {
+		if (action->GetObjectId() == c_goToRegBook || action->GetObjectId() == c_goToRegBookRed) {
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
 			return 1;

@@ -70,6 +70,8 @@ public:
 		c_goToRegBook = 70,
 		c_goToRegBookRed = 71,
 
+		c_unk499 = 499,
+
 		c_welcomeDialogue = 500,
 		c_goodJobDialogue = 501,
 
