@@ -52,8 +52,8 @@ jobs:
             -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} \
             -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }} \
             -DISLE_WERROR=ON \
-            -Werror=dev -- -k0
-          cmake --build build
+            -Werror=dev
+          cmake --build build -- -k0
 
   build:
     name: 'MSVC 4.20'
