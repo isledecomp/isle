@@ -32,6 +32,8 @@ public:
 	void Play();
 	void Stop();
 
+	inline RadioState* GetState() { return m_state; }
+
 	// SYNTHETIC: LEGO1 0x1002c970
 	// Radio::`scalar deleting destructor'
 
