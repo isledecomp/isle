@@ -109,14 +109,17 @@ LegoResult LegoFile::Open(const char* p_name, LegoU32 p_mode)
 		strcat(mode, "r");
 	}
 	if (p_mode & c_write) {
-		if (m_mode != c_read)
+		if (m_mode != c_read) {
 			m_mode = c_write;
+		}
 		strcat(mode, "w");
 	}
-	if ((p_mode & c_text) != 0)
+	if ((p_mode & c_text) != 0) {
 		strcat(mode, "t");
-	else
+	}
+	else {
 		strcat(mode, "b");
+	}
 
 	if (!(m_file = fopen(p_name, mode))) {
 		return FAILURE;

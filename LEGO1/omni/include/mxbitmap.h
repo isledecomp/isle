@@ -35,7 +35,7 @@ struct MxBITMAPINFO {
 class MxBitmap : public MxCore {
 public:
 	MxBitmap();
-	virtual ~MxBitmap(); // vtable+00
+	~MxBitmap() override; // vtable+00
 
 	virtual MxResult ImportBitmap(MxBitmap* p_bitmap);                                     // vtable+14
 	virtual MxResult ImportBitmapInfo(MxBITMAPINFO* p_info);                               // vtable+18
@@ -102,30 +102,37 @@ public:
 	}
 	inline MxLong GetAdjustedStride()
 	{
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
 			return GetBmiStride();
-		else
+		}
+		else {
 			return -GetBmiStride();
+		}
 	}
 
 	inline MxLong GetLine(MxS32 p_top)
 	{
 		MxS32 height;
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
 			height = p_top;
-		else
+		}
+		else {
 			height = GetBmiHeightAbs() - p_top - 1;
+		}
 		return GetBmiStride() * height;
 	}
 
 	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
 	{
-		if (m_bmiHeader->biCompression == BI_RGB)
+		if (m_bmiHeader->biCompression == BI_RGB) {
 			return GetLine(p_top) + m_data + p_left;
-		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN)
+		}
+		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
 			return m_data;
-		else
+		}
+		else {
 			return GetLine(0) + m_data;
+		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100bc9f0

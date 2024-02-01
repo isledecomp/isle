@@ -40,13 +40,15 @@ void MxWavePresenter::Destroy(MxBool p_fromDestructor)
 		m_dsBuffer->Release();
 	}
 
-	if (m_waveFormat)
+	if (m_waveFormat) {
 		delete[] ((MxU8*) m_waveFormat);
+	}
 
 	Init();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxSoundPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b1b60
@@ -55,8 +57,9 @@ MxS8 MxWavePresenter::GetPlayedChunks()
 	DWORD dwCurrentPlayCursor, dwCurrentWriteCursor;
 	MxS8 playedChunks = -1;
 
-	if (m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor) == DS_OK)
+	if (m_dsBuffer->GetCurrentPosition(&dwCurrentPlayCursor, &dwCurrentWriteCursor) == DS_OK) {
 		playedChunks = dwCurrentPlayCursor / m_chunkLength;
+	}
 
 	return playedChunks;
 }
@@ -141,26 +144,32 @@ void MxWavePresenter::StartingTickle()
 		waveFormatEx.nBlockAlign = m_waveFormat->m_pcmWaveFormat.wf.nBlockAlign;
 		waveFormatEx.wBitsPerSample = m_waveFormat->m_pcmWaveFormat.wBitsPerSample;
 
-		if (waveFormatEx.wBitsPerSample == 8)
+		if (waveFormatEx.wBitsPerSample == 8) {
 			m_silenceData = 0x7F;
+		}
 
-		if (waveFormatEx.wBitsPerSample == 16)
+		if (waveFormatEx.wBitsPerSample == 16) {
 			m_silenceData = 0;
+		}
 
 		DSBUFFERDESC desc;
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (m_unk0x66)
+		if (m_unk0x66) {
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRL3D | DSBCAPS_CTRLVOLUME;
-		else
+		}
+		else {
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;
+		}
 
-		if (m_action->GetFlags() & MxDSAction::c_looping)
+		if (m_action->GetFlags() & MxDSAction::c_looping) {
 			desc.dwBufferBytes = m_waveFormat->m_pcmWaveFormat.wf.nAvgBytesPerSec *
 								 (m_action->GetDuration() / m_action->GetLoopCount()) / 1000;
-		else
+		}
+		else {
 			desc.dwBufferBytes = 2 * length;
+		}
 
 		desc.lpwfxFormat = &waveFormatEx;
 
@@ -209,19 +218,22 @@ void MxWavePresenter::DoneTickle()
 
 		MxS8 playedChunks = dwCurrentPlayCursor / m_chunkLength;
 		if (m_action->GetFlags() & MxDSAction::c_bit7 || m_action->GetFlags() & MxDSAction::c_looping ||
-			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor)
+			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor) {
 			MxMediaPresenter::DoneTickle();
+		}
 	}
-	else
+	else {
 		MxMediaPresenter::DoneTickle();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b2130
 void MxWavePresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
 	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
-	if (IsEnabled())
+	if (IsEnabled()) {
 		m_subscriber->DestroyChunk(p_chunk);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b2160
@@ -241,18 +253,21 @@ MxResult MxWavePresenter::PutData()
 			if (!m_started) {
 				m_dsBuffer->SetCurrentPosition(0);
 
-				if (m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING) == DS_OK)
+				if (m_dsBuffer->Play(0, 0, DSBPLAY_LOOPING) == DS_OK) {
 					m_started = TRUE;
+				}
 			}
 			break;
 		case e_repeating:
-			if (m_started)
+			if (m_started) {
 				break;
+			}
 
 			m_dsBuffer->SetCurrentPosition(0);
 
-			if (m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1) == DS_OK)
+			if (m_dsBuffer->Play(0, 0, m_action->GetLoopCount() > 1) == DS_OK) {
 				m_started = TRUE;
+			}
 		}
 	}
 
@@ -266,8 +281,9 @@ void MxWavePresenter::EndAction()
 		MxAutoLocker lock(&m_criticalSection);
 		MxMediaPresenter::EndAction();
 
-		if (m_dsBuffer)
+		if (m_dsBuffer) {
 			m_dsBuffer->Stop();
+		}
 	}
 }
 
@@ -296,8 +312,9 @@ void MxWavePresenter::Enable(MxBool p_enable)
 			m_writtenChunks = 0;
 			m_started = FALSE;
 		}
-		else if (m_dsBuffer)
+		else if (m_dsBuffer) {
 			m_dsBuffer->Stop();
+		}
 	}
 }
 
@@ -317,8 +334,9 @@ void MxWavePresenter::ParseExtra()
 
 		char soundValue[512];
 		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {
-			if (!strcmpi(soundValue, "FALSE"))
+			if (!strcmpi(soundValue, "FALSE")) {
 				Enable(FALSE);
+			}
 		}
 	}
 }
@@ -327,8 +345,9 @@ void MxWavePresenter::ParseExtra()
 void MxWavePresenter::Pause()
 {
 	if (!m_paused && m_started) {
-		if (m_dsBuffer)
+		if (m_dsBuffer) {
 			m_dsBuffer->Stop();
+		}
 		m_paused = TRUE;
 	}
 }

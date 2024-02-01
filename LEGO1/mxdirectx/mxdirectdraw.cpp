@@ -510,8 +510,9 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 		ddsd.dwWidth = m_currentMode.width;
 		ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
-		if (m_bOnlySystemMemory)
+		if (m_bOnlySystemMemory) {
 			ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY;
+		}
 		result = CreateDDSurface(&ddsd, &m_pBackBuffer, NULL);
 		if (result != DD_OK) {
 			Error("CreateSurface for window back buffer failed", result);
@@ -666,8 +667,9 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	ddsd.dwSize = sizeof(ddsd);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-	if (m_bOnlySystemMemory)
+	if (m_bOnlySystemMemory) {
 		ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+	}
 	ddsd.dwHeight = m_text1SizeOnSurface.cy;
 	ddsd.dwWidth = m_text1SizeOnSurface.cx;
 
@@ -687,8 +689,9 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	ddsd.dwSize = sizeof(ddsd);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-	if (m_bOnlySystemMemory)
+	if (m_bOnlySystemMemory) {
 		ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+	}
 	ddsd.dwHeight = m_text2SizeOnSurface.cy;
 	ddsd.dwWidth = m_text2SizeOnSurface.cx;
 

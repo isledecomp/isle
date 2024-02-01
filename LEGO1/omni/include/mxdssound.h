@@ -8,27 +8,27 @@
 class MxDSSound : public MxDSMediaAction {
 public:
 	MxDSSound();
-	virtual ~MxDSSound() override;
+	~MxDSSound() override;
 
 	void CopyFrom(MxDSSound& p_dsSound);
 	MxDSSound& operator=(MxDSSound& p_dsSound);
 
 	// FUNCTION: LEGO1 0x100c9330
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101025e4
 		return "MxDSSound";
 	}
 
 	// FUNCTION: LEGO1 0x100c9340
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSound::ClassName()) || MxDSMediaAction::IsA(p_name);
 	}
 
-	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	virtual MxDSAction* Clone() override;                                // vtable+2c;
+	MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	MxDSAction* Clone() override;                                // vtable+2c;
 
 	inline MxS32 GetVolume() const { return m_volume; }
 

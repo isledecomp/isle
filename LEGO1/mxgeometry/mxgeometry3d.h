@@ -28,8 +28,9 @@ public:
 
 		float* dest = m_elements;
 		const float* src = p_other.m_elements;
-		for (size_t i = sizeof(m_elements) / sizeof(float); i > 0; --i)
+		for (size_t i = sizeof(m_elements) / sizeof(float); i > 0; --i) {
 			*dest++ = *src++;
+		}
 	}
 
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }

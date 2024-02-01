@@ -148,8 +148,9 @@ void LegoNavController::SetDefaults(
 // FUNCTION: LEGO1 0x10054e40
 void LegoNavController::SetTargets(int p_hPos, int p_vPos, MxBool p_accel)
 {
-	if (this->m_trackDefault != FALSE)
+	if (this->m_trackDefault != FALSE) {
 		ResetToDefault();
+	}
 
 	if (p_accel != FALSE) {
 		this->m_targetTurnSpeed = CalculateNewTargetSpeed(p_hPos, this->m_hMax / 2, this->m_turnMaxSpeed);
@@ -178,12 +179,15 @@ float LegoNavController::CalculateNewTargetSpeed(int p_pos, int p_center, float 
 	float result;
 	int diff = p_pos - p_center;
 
-	if (diff > this->m_mouseDeadzone)
+	if (diff > this->m_mouseDeadzone) {
 		result = (diff - m_mouseDeadzone) * p_maxSpeed / (p_center - m_mouseDeadzone);
-	else if (diff < -m_mouseDeadzone)
+	}
+	else if (diff < -m_mouseDeadzone) {
 		result = (diff + m_mouseDeadzone) * p_maxSpeed / (p_center - m_mouseDeadzone);
-	else
+	}
+	else {
 		result = 0.0f;
+	}
 
 	return result;
 }
@@ -196,8 +200,9 @@ float LegoNavController::CalculateNewAccel(int p_pos, int p_center, float p_maxA
 
 	result = Abs(diff) * p_maxAccel / p_center;
 
-	if (result < p_minAccel)
+	if (result < p_minAccel) {
 		result = (float) p_minAccel;
+	}
 
 	return result;
 }
@@ -214,10 +219,12 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 		float deltaVel = p_accel * p_time;
 		newVel = p_currentVel + (deltaVel * vSign);
 
-		if (vSign > 0)
+		if (vSign > 0) {
 			newVel = Min(newVel, p_targetVel);
-		else
+		}
+		else {
 			newVel = Max(newVel, p_targetVel);
+		}
 	}
 
 	return newVel;

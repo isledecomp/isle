@@ -58,7 +58,7 @@ public:
 		m_controller = p_ctrlr;
 	}
 
-	virtual MxNotificationParam* Clone() override;
+	MxNotificationParam* Clone() override;
 
 	MxStreamController* GetController() { return m_controller; }
 
@@ -76,22 +76,22 @@ public:
 	};
 
 	MxStreamer();
-	virtual ~MxStreamer() override; // vtable+0x00
+	~MxStreamer() override; // vtable+0x00
 
 	MxStreamController* Open(const char* p_name, MxU16 p_openMode);
 	MxLong Close(const char* p_name);
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100b9000
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010210c
 		return "MxStreamer";
 	}
 
 	// FUNCTION: LEGO1 0x100b9010
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);
 	}

@@ -37,8 +37,9 @@ GifManager::~GifManager()
 // FUNCTION: LEGO1 0x10099cc0
 void GifManager::FUN_10099cc0(GifData* p_data)
 {
-	if (p_data == NULL)
+	if (p_data == NULL) {
 		return;
+	}
 
 #ifdef COMPAT_MODE
 	GifList::iterator it;

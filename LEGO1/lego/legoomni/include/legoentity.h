@@ -20,9 +20,9 @@ public:
 	inline LegoEntity() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c290
-	virtual ~LegoEntity() override { Destroy(TRUE); }
+	~LegoEntity() override { Destroy(TRUE); }
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000c2f0
 	inline const char* ClassName() const override // vtable+0x0c

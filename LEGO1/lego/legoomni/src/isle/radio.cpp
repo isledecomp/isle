@@ -79,8 +79,9 @@ void Radio::Stop()
 
 		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtom(), 18);
 
-		if (presenter)
+		if (presenter) {
 			presenter->VTable0x6c(0);
+		}
 
 		BackgroundAudioManager()->Stop();
 		BackgroundAudioManager()->Enable(m_bgAudioPreviouslyEnabled);

@@ -50,8 +50,9 @@ void MxMediaManager::Destroy()
 {
 	MxAutoLocker lock(&this->m_criticalSection);
 
-	if (this->m_presenters)
+	if (this->m_presenters) {
 		delete this->m_presenters;
+	}
 
 	Init();
 }
@@ -63,13 +64,15 @@ MxResult MxMediaManager::Tickle()
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(this->m_presenters);
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		presenter->Tickle();
+	}
 
 	cursor.Reset();
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		presenter->PutData();
+	}
 
 	return SUCCESS;
 }
@@ -88,8 +91,9 @@ void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 	MxAutoLocker lock(&this->m_criticalSection);
 	MxPresenterListCursor cursor(this->m_presenters);
 
-	if (cursor.Find(&p_presenter))
+	if (cursor.Find(&p_presenter)) {
 		cursor.Detach();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b8ac0
@@ -99,6 +103,7 @@ void MxMediaManager::StopPresenters()
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(this->m_presenters);
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		presenter->EndAction();
+	}
 }

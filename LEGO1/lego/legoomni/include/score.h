@@ -12,18 +12,18 @@
 class Score : public LegoWorld {
 public:
 	Score();
-	virtual ~Score() override;                        // vtable+0x00
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	~Score() override;                        // vtable+0x00
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010c0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0050
 		return "Score";
 	}
 
 	// FUNCTION: LEGO1 0x100010d0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Score::ClassName()) || LegoWorld::IsA(p_name);
 	}
@@ -31,11 +31,11 @@ public:
 	// SYNTHETIC: LEGO1 0x100011e0
 	// Score::`scalar deleting destructor'
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+18
-	virtual void ReadyWorld() override;                       // vtable+50
-	virtual MxBool VTable0x5c() override;                     // vtable+5c
-	virtual MxBool VTable0x64() override;                     // vtable+64
-	virtual void VTable0x68(MxBool p_add) override;           // vtable+68
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+18
+	void ReadyWorld() override;                       // vtable+50
+	MxBool VTable0x5c() override;                     // vtable+5c
+	MxBool VTable0x64() override;                     // vtable+64
+	void VTable0x68(MxBool p_add) override;           // vtable+68
 
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);

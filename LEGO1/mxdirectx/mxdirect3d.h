@@ -41,9 +41,9 @@ struct MxDevice;
 class MxDirect3D : public MxDirectDraw {
 public:
 	MxDirect3D();
-	virtual ~MxDirect3D();
+	~MxDirect3D() override;
 
-	virtual BOOL Create(
+	BOOL Create(
 		HWND hWnd,
 		BOOL fullscreen_1,
 		BOOL surface_fullscreen,
@@ -53,9 +53,9 @@ public:
 		int bpp,
 		const PALETTEENTRY* pPaletteEntries,
 		int paletteEntryCount
-	) override;                                      // vtable+0x04
-	virtual void Destroy() override;                 // vtable+0x08
-	virtual void DestroyButNotDirectDraw() override; // vtable+0x0c
+	) override;                              // vtable+0x04
+	void Destroy() override;                 // vtable+0x08
+	void DestroyButNotDirectDraw() override; // vtable+0x0c
 
 	BOOL CreateIDirect3D();
 	BOOL D3DSetMode();

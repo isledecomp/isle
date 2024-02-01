@@ -79,8 +79,9 @@ MxLong MxStreamer::Close(const char* p_name)
 		if (!p_name || !strcmp(p_name, c->GetAtom().GetInternal())) {
 			m_openStreams.erase(it);
 
-			if (c->FUN_100c20d0(ds))
+			if (c->FUN_100c20d0(ds)) {
 				delete c;
+			}
 			else {
 #ifdef COMPAT_MODE
 				{
@@ -185,8 +186,9 @@ MxResult MxStreamer::DeleteObject(MxDSAction* p_dsAction)
 MxBool MxStreamer::FUN_100b9b30(MxDSObject& p_dsObject)
 {
 	MxStreamController* controller = GetOpenStream(p_dsObject.GetAtomId().GetInternal());
-	if (controller)
+	if (controller) {
 		return controller->FUN_100c20d0(p_dsObject);
+	}
 	return TRUE;
 }
 
@@ -200,8 +202,9 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 
 		MxStreamController* c = static_cast<MxStreamerNotification&>(p_param).GetController();
 
-		if (c->FUN_100c20d0(ds))
+		if (c->FUN_100c20d0(ds)) {
 			delete c;
+		}
 		else {
 #ifdef COMPAT_MODE
 			{

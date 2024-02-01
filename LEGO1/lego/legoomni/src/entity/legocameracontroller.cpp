@@ -64,10 +64,12 @@ void LegoCameraController::OnRButtonUp(MxPoint32 p_point)
 // FUNCTION: LEGO1 0x10012230
 void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
 {
-	if (p_modifier & c_lButtonState)
+	if (p_modifier & c_lButtonState) {
 		LeftDrag(p_point.GetX(), p_point.GetY());
-	else if (p_modifier & c_rButtonState)
+	}
+	else if (p_modifier & c_rButtonState) {
 		RightDrag(p_point.GetX(), p_point.GetY());
+	}
 }
 
 // FUNCTION: LEGO1 0x10012260
@@ -90,8 +92,9 @@ Mx3DPointFloat LegoCameraController::GetWorldUp()
 		vec = m_lego3DView->GetPointOfView()->GetWorldUp();
 		return Mx3DPointFloat(vec[0], vec[1], vec[2]);
 	}
-	else
+	else {
 		return Mx3DPointFloat(0, 0, 0);
+	}
 }
 
 // FUNCTION: LEGO1 0x100127f0
@@ -102,8 +105,9 @@ Mx3DPointFloat LegoCameraController::GetWorldLocation()
 		vec = m_lego3DView->GetPointOfView()->GetWorldPosition();
 		return Mx3DPointFloat(vec[0], vec[1] - m_entityOffsetUp, vec[2]);
 	}
-	else
+	else {
 		return Mx3DPointFloat(0, 0, 0);
+	}
 }
 
 // FUNCTION: LEGO1 0x100128a0
@@ -114,6 +118,7 @@ Mx3DPointFloat LegoCameraController::GetWorldDirection()
 		vec = m_lego3DView->GetPointOfView()->GetWorldDirection();
 		return Mx3DPointFloat(vec[0], vec[1], vec[2]);
 	}
-	else
+	else {
 		return Mx3DPointFloat(0, 0, 0);
+	}
 }

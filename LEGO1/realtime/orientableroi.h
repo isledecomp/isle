@@ -16,9 +16,9 @@ public:
 
 	OrientableROI();
 
-	virtual const float* GetWorldVelocity() const override;                // vtable+0x08
-	virtual const BoundingBox& GetWorldBoundingBox() const override;       // vtable+0x0c
-	virtual const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
+	const float* GetWorldVelocity() const override;                // vtable+0x08
+	const BoundingBox& GetWorldBoundingBox() const override;       // vtable+0x0c
+	const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
 	// FUNCTION: LEGO1 0x100a5db0
 	virtual void VTable0x14() { VTable0x1c(); }                 // vtable+0x14
 	virtual void UpdateWorldBoundingVolumes() = 0;              // vtable+0x18

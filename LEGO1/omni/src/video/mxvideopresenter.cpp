@@ -33,10 +33,12 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 
 	switch (p_bitmap.GetBmiHeader()->biCompression) {
 	case BI_RGB: {
-		if (p_bitmap.GetBmiHeight() < 0)
+		if (p_bitmap.GetBmiHeight() < 0) {
 			rowsBeforeTop = 0;
-		else
+		}
+		else {
 			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		}
 		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
 		break;
 	}
@@ -44,10 +46,12 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 		bitmapSrcPtr = p_bitmap.GetBitmapData();
 		break;
 	default: {
-		if (p_bitmap.GetBmiHeight() < 0)
+		if (p_bitmap.GetBmiHeight() < 0) {
 			rowsBeforeTop = 0;
-		else
+		}
+		else {
 			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
+		}
 		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
 	}
 	}
@@ -57,8 +61,9 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 	// If this is a bottom-up DIB, we will walk it in reverse.
 	// TODO: Same rounding trick as in MxBitmap
 	MxS32 rowSeek = ((m_width + 3) & -4);
-	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() > 0)
+	if (p_bitmap.GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap.GetBmiHeight() > 0) {
 		rowSeek = -rowSeek;
+	}
 
 	// The actual offset into the m_bitmask array. The two for-loops
 	// are just for counting the pixels.
@@ -95,15 +100,17 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxVideoPresenter::AlphaMask& p_alph
 // FUNCTION: LEGO1 0x100b26d0
 MxVideoPresenter::AlphaMask::~AlphaMask()
 {
-	if (m_bitmask)
+	if (m_bitmask) {
 		delete[] m_bitmask;
+	}
 }
 
 // FUNCTION: LEGO1 0x100b26f0
 MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 {
-	if (p_x >= m_width || p_y >= m_height)
+	if (p_x >= m_width || p_y >= m_height) {
 		return 0;
+	}
 
 	MxS32 pos = p_y * m_width + p_x;
 	return m_bitmask[pos / 8] & (1 << abs(abs(pos) & 7)) ? 1 : 0;
@@ -132,8 +139,9 @@ void MxVideoPresenter::Init()
 // FUNCTION: LEGO1 0x100b27b0
 void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 {
-	if (MVideoManager() != NULL)
+	if (MVideoManager() != NULL) {
 		MVideoManager()->UnregisterPresenter(*this);
+	}
 
 	if (m_unk0x58) {
 		m_unk0x58->Release();
@@ -159,8 +167,9 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 
 	Init();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMediaPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b28b0
@@ -183,11 +192,13 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
 	if ((action == NULL) || (((action->GetFlags() & MxDSAction::c_bit11) == 0) && !IsEnabled()) ||
-		(!m_bitmap && !m_alpha))
+		(!m_bitmap && !m_alpha)) {
 		return FALSE;
+	}
 
-	if (!m_bitmap)
+	if (!m_bitmap) {
 		return m_alpha->IsHit(p_x - m_location.GetX(), p_y - m_location.GetY());
+	}
 
 	MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
 
@@ -197,8 +208,9 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	MxLong maxY = minY + heightAbs;
 	MxLong maxX = minX + m_bitmap->GetBmiWidth();
 
-	if (p_x < minX || p_x >= maxX || p_y < minY || p_y >= maxY)
+	if (p_x < minX || p_x >= maxX || p_y < minY || p_y >= maxY) {
 		return FALSE;
+	}
 
 	MxU8* pixel;
 
@@ -230,11 +242,13 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 		pixel = m_bitmap->GetBmiStride() * height + m_bitmap->GetBitmapData();
 	}
 
-	if (GetBit4())
+	if (GetBit4()) {
 		return (MxBool) *pixel;
+	}
 
-	if ((GetAction()->GetFlags() & MxDSAction::c_bit4) && *pixel == 0)
+	if ((GetAction()->GetFlags() & MxDSAction::c_bit4) && *pixel == 0) {
 		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -242,32 +256,40 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 inline MxS32 MxVideoPresenter::PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc)
 {
 	if (p_rectDest.GetTop() > 480 || p_rectDest.GetLeft() > 640 || p_rectSrc.GetTop() > 480 ||
-		p_rectSrc.GetLeft() > 640)
+		p_rectSrc.GetLeft() > 640) {
 		return -1;
+	}
 
-	if (p_rectDest.GetBottom() > 480)
+	if (p_rectDest.GetBottom() > 480) {
 		p_rectDest.SetBottom(480);
+	}
 
-	if (p_rectDest.GetRight() > 640)
+	if (p_rectDest.GetRight() > 640) {
 		p_rectDest.SetRight(640);
+	}
 
-	if (p_rectSrc.GetBottom() > 480)
+	if (p_rectSrc.GetBottom() > 480) {
 		p_rectSrc.SetBottom(480);
+	}
 
-	if (p_rectSrc.GetRight() > 640)
+	if (p_rectSrc.GetRight() > 640) {
 		p_rectSrc.SetRight(640);
+	}
 
 	MxS32 height = p_rectDest.GetHeight();
-	if (height <= 1)
+	if (height <= 1) {
 		return -1;
+	}
 
 	MxS32 width = p_rectDest.GetWidth();
-	if (width <= 1)
+	if (width <= 1) {
 		return -1;
+	}
 
 	if (p_rectSrc.GetRight() - width - p_rectSrc.GetLeft() == -1 &&
-		p_rectSrc.GetBottom() - height - p_rectSrc.GetTop() == -1)
+		p_rectSrc.GetBottom() - height - p_rectSrc.GetTop() == -1) {
 		return 1;
+	}
 
 	p_rectSrc.SetRight(p_rectSrc.GetLeft() + width - 1);
 	p_rectSrc.SetBottom(p_rectSrc.GetTop() + height - 1);
@@ -325,7 +347,7 @@ void MxVideoPresenter::PutFrame()
 		MxRegionCursor cursor(region);
 		MxRect32* regionRect;
 
-		while (regionRect = cursor.VTable0x24(rect)) {
+		while ((regionRect = cursor.VTable0x24(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				if (m_unk0x58) {
 					rectSrc.SetLeft(regionRect->GetLeft() - m_location.GetX());
@@ -341,8 +363,9 @@ void MxVideoPresenter::PutFrame()
 
 				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_unk0x58) {
-						if (PrepareRects(rectDest, rectSrc) >= 0)
+						if (PrepareRects(rectDest, rectSrc) >= 0) {
 							ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
+						}
 					}
 					else {
 						displaySurface->VTable0x30(
@@ -358,8 +381,9 @@ void MxVideoPresenter::PutFrame()
 					}
 				}
 				else if (m_unk0x58) {
-					if (PrepareRects(rectDest, rectSrc) >= 0)
+					if (PrepareRects(rectDest, rectSrc) >= 0) {
 						ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, 0, NULL);
+					}
 				}
 				else {
 					displaySurface->VTable0x28(
@@ -405,8 +429,9 @@ void MxVideoPresenter::StartingTickle()
 void MxVideoPresenter::StreamingTickle()
 {
 	if (m_action->GetFlags() & MxDSAction::c_bit10) {
-		if (!m_currentChunk)
+		if (!m_currentChunk) {
 			MxMediaPresenter::StreamingTickle();
+		}
 
 		if (m_currentChunk) {
 			LoadFrame(m_currentChunk);
@@ -418,24 +443,28 @@ void MxVideoPresenter::StreamingTickle()
 			if (!m_currentChunk) {
 				MxMediaPresenter::StreamingTickle();
 
-				if (!m_currentChunk)
+				if (!m_currentChunk) {
 					break;
+				}
 			}
 
-			if (m_action->GetElapsedTime() < m_currentChunk->GetTime())
+			if (m_action->GetElapsedTime() < m_currentChunk->GetTime()) {
 				break;
+			}
 
 			LoadFrame(m_currentChunk);
 			m_subscriber->DestroyChunk(m_currentChunk);
 			m_currentChunk = NULL;
 			SetBit0(TRUE);
 
-			if (m_currentTickleState != e_streaming)
+			if (m_currentTickleState != e_streaming) {
 				break;
+			}
 		}
 
-		if (GetBit0())
+		if (GetBit0()) {
 			m_unk0x5c = 5;
+		}
 	}
 }
 
@@ -444,8 +473,9 @@ void MxVideoPresenter::RepeatingTickle()
 {
 	if (IsEnabled()) {
 		if (m_action->GetFlags() & MxDSAction::c_bit10) {
-			if (!m_currentChunk)
+			if (!m_currentChunk) {
 				MxMediaPresenter::RepeatingTickle();
+			}
 
 			if (m_currentChunk) {
 				LoadFrame(m_currentChunk);
@@ -457,23 +487,27 @@ void MxVideoPresenter::RepeatingTickle()
 				if (!m_currentChunk) {
 					MxMediaPresenter::RepeatingTickle();
 
-					if (!m_currentChunk)
+					if (!m_currentChunk) {
 						break;
+					}
 				}
 
-				if (m_action->GetElapsedTime() % m_action->GetLoopCount() < m_currentChunk->GetTime())
+				if (m_action->GetElapsedTime() % m_action->GetLoopCount() < m_currentChunk->GetTime()) {
 					break;
+				}
 
 				LoadFrame(m_currentChunk);
 				m_currentChunk = NULL;
 				SetBit0(TRUE);
 
-				if (m_currentTickleState != e_repeating)
+				if (m_currentTickleState != e_repeating) {
 					break;
+				}
 			}
 
-			if (GetBit0())
+			if (GetBit0()) {
 				m_unk0x5c = 5;
+			}
 		}
 	}
 }
@@ -485,14 +519,17 @@ void MxVideoPresenter::Unk5Tickle()
 
 	if (sustainTime != -1) {
 		if (sustainTime) {
-			if (m_unk0x60 == -1)
+			if (m_unk0x60 == -1) {
 				m_unk0x60 = m_action->GetElapsedTime();
+			}
 
-			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime())
+			if (m_action->GetElapsedTime() >= m_unk0x60 + ((MxDSMediaAction*) m_action)->GetSustainTime()) {
 				ProgressTickleState(e_done);
+			}
 		}
-		else
+		else {
 			ProgressTickleState(e_done);
+		}
 	}
 }
 
@@ -534,8 +571,9 @@ MxResult MxVideoPresenter::PutData()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5)
+	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5) {
 		PutFrame();
+	}
 
 	return SUCCESS;
 }

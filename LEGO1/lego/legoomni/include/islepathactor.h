@@ -15,25 +15,25 @@ public:
 	IslePathActor();
 
 	// FUNCTION: LEGO1 0x10002e10
-	inline virtual ~IslePathActor() override { IslePathActor::Destroy(TRUE); } // vtable+0x00
+	inline ~IslePathActor() override { IslePathActor::Destroy(TRUE); } // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10002ea0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0104
 		return "IslePathActor";
 	}
 
 	// FUNCTION: LEGO1 0x10002eb0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, IslePathActor::ClassName()) || LegoPathActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 	// FUNCTION: LEGO1 0x10002e70
 	virtual MxU32 VTable0xcc() { return 0; } // vtable+0xcc
 	// FUNCTION: LEGO1 0x10002df0

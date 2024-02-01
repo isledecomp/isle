@@ -21,8 +21,9 @@ void MxDSObjectAction::CopyFrom(MxDSObjectAction& p_dsObjectAction)
 // FUNCTION: LEGO1 0x100c8a80
 MxDSObjectAction& MxDSObjectAction::operator=(MxDSObjectAction& p_dsObjectAction)
 {
-	if (this == &p_dsObjectAction)
+	if (this == &p_dsObjectAction) {
 		return *this;
+	}
 
 	MxDSMediaAction::operator=(p_dsObjectAction);
 	this->CopyFrom(p_dsObjectAction);
@@ -34,8 +35,9 @@ MxDSAction* MxDSObjectAction::Clone()
 {
 	MxDSObjectAction* clone = new MxDSObjectAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }

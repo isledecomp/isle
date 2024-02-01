@@ -22,8 +22,9 @@ MxBool MxRegion::VTable0x20()
 // FUNCTION: LEGO1 0x100c3690
 MxRegion::~MxRegion()
 {
-	if (m_list)
+	if (m_list) {
 		delete m_list;
+	}
 }
 
 // FUNCTION: LEGO1 0x100c3700
@@ -88,17 +89,20 @@ void MxRegion::VTable0x18(MxRect32& p_rect)
 // FUNCTION: LEGO1 0x100c3e20
 MxBool MxRegion::VTable0x1c(MxRect32& p_rect)
 {
-	if (!m_rect.IntersectsWith(p_rect))
+	if (!m_rect.IntersectsWith(p_rect)) {
 		return FALSE;
+	}
 
 	MxRegionTopBottomListCursor cursor(m_list);
 	MxRegionTopBottom* topBottom;
 
 	while (cursor.Next(topBottom)) {
-		if (topBottom->GetTop() >= p_rect.GetBottom())
+		if (topBottom->GetTop() >= p_rect.GetBottom()) {
 			return FALSE;
-		if (topBottom->GetBottom() > p_rect.GetTop() && topBottom->FUN_100c57b0(p_rect))
+		}
+		if (topBottom->GetBottom() > p_rect.GetTop() && topBottom->FUN_100c57b0(p_rect)) {
 			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -130,27 +134,31 @@ void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
 	MxRegionLeftRightListCursor b(m_leftRightList);
 
 	MxRegionLeftRight* leftRight;
-	while (a.Next(leftRight) && leftRight->GetRight() < p_left)
+	while (a.Next(leftRight) && leftRight->GetRight() < p_left) {
 		;
+	}
 
 	if (!a.HasMatch()) {
 		MxRegionLeftRight* copy = new MxRegionLeftRight(p_left, p_right);
 		m_leftRightList->Append(copy);
 	}
 	else {
-		if (p_left > leftRight->GetLeft())
+		if (p_left > leftRight->GetLeft()) {
 			p_left = leftRight->GetLeft();
+		}
 
 		while (leftRight->GetLeft() < p_right) {
-			if (p_right < leftRight->GetRight())
+			if (p_right < leftRight->GetRight()) {
 				p_right = leftRight->GetRight();
+			}
 
 			b = a;
 			b.Next();
 			a.Destroy();
 
-			if (!b.Current(leftRight))
+			if (!b.Current(leftRight)) {
 				break;
+			}
 
 			a = b;
 		}
@@ -174,8 +182,9 @@ MxRegionTopBottom* MxRegionTopBottom::Clone()
 	MxRegionLeftRightListCursor cursor(m_leftRightList);
 	MxRegionLeftRight* leftRight;
 
-	while (cursor.Next(leftRight))
+	while (cursor.Next(leftRight)) {
 		clone->m_leftRightList->Append(leftRight->Clone());
+	}
 
 	return clone;
 }
@@ -187,10 +196,12 @@ MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32& p_rect)
 	MxRegionLeftRight* leftRight;
 
 	while (cursor.Next(leftRight)) {
-		if (p_rect.GetRight() <= leftRight->GetLeft())
+		if (p_rect.GetRight() <= leftRight->GetLeft()) {
 			return FALSE;
-		if (leftRight->GetRight() > p_rect.GetLeft())
+		}
+		if (leftRight->GetRight() > p_rect.GetLeft()) {
 			return TRUE;
+		}
 	}
 
 	return FALSE;

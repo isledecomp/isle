@@ -53,11 +53,12 @@ void OrientableROI::UpdateWorldData(const MxMatrix& p_transform)
 	UpdateWorldVelocity();
 
 	// iterate over comps
-	if (m_comp)
+	if (m_comp) {
 		for (CompoundObject::iterator iter = m_comp->begin(); !(iter == m_comp->end()); iter++) {
 			ROI* child = *iter;
 			static_cast<OrientableROI*>(child)->UpdateWorldData(p_transform);
 		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100a5a50

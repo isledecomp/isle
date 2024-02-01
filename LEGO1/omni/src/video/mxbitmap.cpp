@@ -25,12 +25,15 @@ MxBitmap::MxBitmap()
 // FUNCTION: LEGO1 0x100bca10
 MxBitmap::~MxBitmap()
 {
-	if (this->m_info)
+	if (this->m_info) {
 		delete m_info;
-	if (this->m_data)
+	}
+	if (this->m_data) {
 		delete m_data;
-	if (this->m_palette)
+	}
+	if (this->m_palette) {
 		delete m_palette;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bcaa0
@@ -152,11 +155,13 @@ MxLong MxBitmap::Read(const char* p_filename)
 	HANDLE handle =
 		CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle))
+	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle)) {
 		result = SUCCESS;
+	}
 
-	if (handle)
+	if (handle) {
 		CloseHandle(handle);
+	}
 
 	return result;
 }
@@ -280,8 +285,9 @@ void MxBitmap::BitBltTransparent(
 
 		for (MxS32 h = 0; h < p_height; h++) {
 			for (MxS32 w = 0; w < p_width; w++) {
-				if (*srcStart)
+				if (*srcStart) {
 					*dstStart = *srcStart;
+				}
 				srcStart++;
 				dstStart++;
 			}
@@ -302,15 +308,17 @@ MxPalette* MxBitmap::CreatePalette()
 	case FALSE:
 		palette = new MxPalette(this->m_paletteData);
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 
 		break;
 	case TRUE:
 		palette = this->m_palette->Clone();
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 
 		break;
 	default:
@@ -361,8 +369,9 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 	switch (p_isHighColor) {
 	case FALSE:
 		ImportColorsToPalette(m_paletteData, m_palette);
-		if (m_palette)
+		if (m_palette) {
 			delete m_palette;
+		}
 
 		m_palette = NULL;
 		break;
@@ -370,8 +379,9 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 		pal = NULL;
 		pal = new MxPalette(m_paletteData);
 
-		if (!pal)
+		if (!pal) {
 			goto done;
+		}
 
 		m_palette = pal;
 
@@ -392,8 +402,9 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 done:
 	// If we were unsuccessful overall but did manage to alloc
 	// the MxPalette, free it.
-	if (ret && pal)
+	if (ret && pal) {
 		delete pal;
+	}
 
 	return ret;
 }
@@ -438,13 +449,15 @@ MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palett
 	PALETTEENTRY entries[256];
 
 	if (p_palette) {
-		if (p_palette->GetEntries(entries))
+		if (p_palette->GetEntries(entries)) {
 			goto done;
+		}
 	}
 	else {
 		MxPalette palette;
-		if (palette.GetEntries(entries))
+		if (palette.GetEntries(entries)) {
 			goto done;
+		}
 	}
 
 	MxS32 i;

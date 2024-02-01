@@ -26,8 +26,9 @@ void MxDSSound::CopyFrom(MxDSSound& p_dsSound)
 // FUNCTION: LEGO1 0x100c94e0
 MxDSSound& MxDSSound::operator=(MxDSSound& p_dsSound)
 {
-	if (this == &p_dsSound)
+	if (this == &p_dsSound) {
 		return *this;
+	}
 
 	MxDSMediaAction::operator=(p_dsSound);
 	this->CopyFrom(p_dsSound);
@@ -39,8 +40,9 @@ MxDSAction* MxDSSound::Clone()
 {
 	MxDSSound* clone = new MxDSSound();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
