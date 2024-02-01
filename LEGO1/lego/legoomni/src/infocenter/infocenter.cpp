@@ -640,6 +640,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 // FUNCTION: LEGO1 0x10070870
 MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
+	// MxLong result
 	MxCore* sender = p_param.GetSender();
 
 	if (sender == NULL) {
