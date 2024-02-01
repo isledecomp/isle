@@ -29,7 +29,7 @@ public:
 	// LegoVehicleBuildState::`scalar deleting destructor'
 
 private:
-	StateStruct m_unk0x08[4]; // 0x08
+	Shuffle m_unk0x08[4]; // 0x08
 
 	// This can be one of the following:
 	// * LegoRaceCarBuildState

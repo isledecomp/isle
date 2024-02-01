@@ -53,32 +53,17 @@ RadioState::RadioState()
 	MxS32 random = rand();
 	m_unk0x2c = random % 3;
 
-	// TODO: Most likely inline function
+	m_unk0x08[0] =
+		LegoState::Shuffle((MxU32*) g_unk0x100f3218, sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]), 0, 0);
+	m_unk0x08[0].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0])));
 
-	m_unk0x08[0].m_unk0x04 = sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]);
-	m_unk0x08[0].m_unk0x00 = g_unk0x100f3218;
-	m_unk0x08[0].m_unk0x08 = 0;
-	m_unk0x08[0].m_unk0x06 = 0;
+	m_unk0x08[1] =
+		LegoState::Shuffle((MxU32*) g_unk0x100f3230, sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]), 0, 0);
+	m_unk0x08[1].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0])));
 
-	random = rand();
-
-	m_unk0x08[1].m_unk0x08 = 0;
-	m_unk0x08[1].m_unk0x06 = 0;
-	m_unk0x08[1].m_unk0x04 = sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]);
-	m_unk0x08[1].m_unk0x00 = g_unk0x100f3230;
-
-	m_unk0x08[0].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3218) / sizeof(g_unk0x100f3218[0]));
-	random = rand();
-
-	m_unk0x08[2].m_unk0x08 = 0;
-	m_unk0x08[2].m_unk0x06 = 0;
-	m_unk0x08[2].m_unk0x04 = sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]);
-	m_unk0x08[2].m_unk0x00 = g_unk0x100f3268;
-
-	m_unk0x08[1].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3230) / sizeof(g_unk0x100f3230[0]));
-	random = rand();
-
-	m_unk0x08[2].m_unk0x08 = (MxU32) random % (sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]));
+	m_unk0x08[2] =
+		LegoState::Shuffle((MxU32*) g_unk0x100f3268, sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0]), 0, 0);
+	m_unk0x08[2].SetUnknown0x08(rand() % (sizeof(g_unk0x100f3268) / sizeof(g_unk0x100f3268[0])));
 
 	m_active = FALSE;
 }
