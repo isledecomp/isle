@@ -61,8 +61,16 @@ public:
 		c_nickSelected = 33,
 		c_lauraSelected = 34,
 
+		c_unk40 = 40,
+		c_unk41 = 41,
+		c_unk42 = 42,
+		c_unk43 = 43,
+		c_unk44 = 44,
+
 		c_goToRegBook = 70,
 		c_goToRegBookRed = 71,
+
+		c_unk499 = 499,
 
 		c_welcomeDialogue = 500,
 		c_goodJobDialogue = 501,
@@ -127,6 +135,7 @@ public:
 
 		c_gasCtlDescription = 555,
 		c_medCtlDescription = 556,
+		c_unk557 = 557,
 		c_boatCtlDescription = 558,
 		c_copCtlDescription = 559,
 		c_pizzaCtlDescription = 560,
@@ -182,8 +191,8 @@ private:
 	MxU8 HandleMouseMove(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleClick(LegoControlManagerEvent& p_param);
-	MxLong HandleEndAction(MxParam& p_param);
-	MxLong HandleNotification0(MxParam&);
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleNotification0(MxNotificationParam& p_param);
 
 	void UpdateFrameHot(MxBool p_display);
 	void FUN_10070e90();

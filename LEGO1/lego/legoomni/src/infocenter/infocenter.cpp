@@ -106,10 +106,10 @@ MxLong Infocenter::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationType0:
-			result = HandleNotification0(p_param);
+			result = HandleNotification0((MxNotificationParam&) p_param);
 			break;
 		case c_notificationEndAction:
-			result = HandleEndAction(p_param);
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
 			result = HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
@@ -150,17 +150,17 @@ MxLong Infocenter::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1006f080
-MxLong Infocenter::HandleEndAction(MxParam& p_param)
+MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	MxDSAction* action = ((MxEndActionNotificationParam&) p_param).GetAction();
-	if (action->GetAtomId() == *g_creditsScript && action->GetObjectId() == 499) {
+	MxDSAction* action = p_param.GetAction();
+	if (action->GetAtomId() == *g_creditsScript && action->GetObjectId() == c_unk499) {
 		Lego()->CloseMainWindow();
 		return 1;
 	}
 
 	if (action->GetAtomId() == m_atom &&
-		(action->GetObjectId() == 40 || action->GetObjectId() == 41 || action->GetObjectId() == 42 ||
-		 action->GetObjectId() == 43 || action->GetObjectId() == 44)) {
+		(action->GetObjectId() == c_unk40 || action->GetObjectId() == c_unk41 || action->GetObjectId() == c_unk42 ||
+		 action->GetObjectId() == c_unk43 || action->GetObjectId() == c_unk44)) {
 		if (m_unk0x1d4) {
 			m_unk0x1d4--;
 		}
@@ -260,7 +260,7 @@ MxLong Infocenter::HandleEndAction(MxParam& p_param)
 		BackgroundAudioManager()->RaiseVolume();
 		return 1;
 	case 4:
-		if (action->GetObjectId() == 70 || action->GetObjectId() == 71) {
+		if (action->GetObjectId() == c_goToRegBook || action->GetObjectId() == c_goToRegBookRed) {
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
 			return 1;
@@ -638,9 +638,73 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 	return 1;
 }
 
-// STUB: LEGO1 0x10070870
-MxLong Infocenter::HandleNotification0(MxParam&)
+// FUNCTION: LEGO1 0x10070870
+MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
+	// MxLong result
+	MxCore* sender = p_param.GetSender();
+
+	if (sender == NULL) {
+		if (m_infocenterState->GetUnknown0x74() == 8) {
+			m_infoManDialogueTimer = 0;
+			StopCutscene();
+			PlayAction(c_exitConfirmationDialogue);
+		}
+	}
+	else if (sender->IsA("MxEntity") && m_infocenterState->GetUnknown0x74() != 5 && m_infocenterState->GetUnknown0x74() != 12) {
+		switch (((MxEntity*) sender)->GetEntityId()) {
+		case 5: {
+			m_infoManDialogueTimer = 0;
+
+			InfomainScript objectId;
+			if (GameState()->GetUnknown10()) {
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x14().FUN_10014d00();
+			}
+			else {
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x08().FUN_10014d00();
+			}
+
+			PlayAction(objectId);
+			FUN_10015860(g_object2x4red, 0);
+			FUN_10015860(g_object2x4grn, 0);
+			return 1;
+		}
+		case 6:
+			if (m_infocenterState->GetUnknown0x74() == 8) {
+				StopCurrentAction();
+				FUN_10015860(g_object2x4red, 0);
+				FUN_10015860(g_object2x4grn, 0);
+				m_infocenterState->SetUnknown0x74(2);
+				PlayAction(c_infomanSneeze);
+				return 1;
+			}
+		case 7:
+			if (m_infocenterState->GetUnknown0x74() == 8) {
+				if (m_infocenterState->GetInfocenterBufferElement(0)) {
+					GameState()->Save(0);
+				}
+
+				m_infocenterState->SetUnknown0x74(12);
+				PlayAction(c_exitGameDialogue);
+				InputManager()->DisableInputProcessing();
+				InputManager()->SetUnknown336(TRUE);
+				return 1;
+			}
+		}
+	}
+	else {
+		if (sender->IsA("Radio") && m_radio.GetState()->IsActive()) {
+			if (m_currentInfomainScript == c_unk40 || m_currentInfomainScript == c_unk41 ||
+				m_currentInfomainScript == c_unk42 || m_currentInfomainScript == c_unk43 ||
+				m_currentInfomainScript == c_unk44 || m_currentInfomainScript == c_unk557 ||
+				m_currentInfomainScript == c_boatCtlDescription || m_currentInfomainScript == c_raceCtlDescription ||
+				m_currentInfomainScript == c_pizzaCtlDescription || m_currentInfomainScript == c_gasCtlDescription ||
+				m_currentInfomainScript == c_medCtlDescription || m_currentInfomainScript == c_copCtlDescription) {
+				StopCurrentAction();
+			}
+		}
+	}
+
 	return 1;
 }
 
