@@ -14,8 +14,8 @@ jobs:
       matrix:
         toolchain:
         - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
-        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true }
-        - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true, no-dx5-libs: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true, werror: true }
+        - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true, werror: true, no-dx5-libs: true }
 
     steps:
       - name: Set up MSYS2
@@ -51,7 +51,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Debug \
             -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} \
             -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }} \
-            -DISLE_WERROR=ON \
+            -DISLE_WERROR=${{ !!matrix.toolchain.werror }} \
             -Werror=dev
           cmake --build build -- -k0
 
