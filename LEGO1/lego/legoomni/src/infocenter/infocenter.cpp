@@ -640,6 +640,8 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 // FUNCTION: LEGO1 0x10070870
 MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
+	MxLong result;
+
 	if (p_param.GetSender() == NULL) {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
 			m_infoManDialogueTimer = 0;
@@ -647,17 +649,15 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 			PlayAction(c_exitConfirmationDialogue);
 		}
 
-		return 1;
+		result = 1;
 	}
-
-	if (p_param.GetSender()->IsA("MxEntity") && m_infocenterState->GetUnknown0x74() != 5 &&
-		m_infocenterState->GetUnknown0x74() != 12) {
+	else if (p_param.GetSender()->IsA("MxEntity") && m_infocenterState->GetUnknown0x74() != 5 && m_infocenterState->GetUnknown0x74() != 12) {
 		switch (((MxEntity*) p_param.GetSender())->GetEntityId()) {
 		case 5: {
 			m_infoManDialogueTimer = 0;
 
-			LegoState::StateStruct& state =
-				GameState()->GetUnknown10() ? m_infocenterState->GetUnknown0x14() : m_infocenterState->GetUnknown0x08();
+			LegoState::StateStruct& state = !GameState()->GetUnknown10() ? m_infocenterState->GetUnknown0x08()
+																		 : m_infocenterState->GetUnknown0x14();
 
 			InfomainScript objectId = (InfomainScript) state.FUN_10014d00();
 			PlayAction(objectId);
@@ -697,12 +697,13 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 				m_currentInfomainScript == c_pizzaCtlDescription || m_currentInfomainScript == c_gasCtlDescription ||
 				m_currentInfomainScript == c_medCtlDescription || m_currentInfomainScript == c_copCtlDescription) {
 				StopCurrentAction();
-				return 1;
+				result = 1;
 			}
 		}
 	}
 
-	return 1;
+	result = 1;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10070aa0
