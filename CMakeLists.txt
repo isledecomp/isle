@@ -64,14 +64,6 @@ option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 
-if(ISLE_WERROR)
-    if(MSVC)
-        add_compile_options(-WX)
-    else()
-        add_compile_options(-Werror)
-    endif()
-endif()
-
 add_cxx_warning(parentheses)
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
