@@ -63,8 +63,8 @@ MxResult MxThread::Start(MxS32 p_stack, MxS32 p_flag)
 {
 	MxResult result = FAILURE;
 	if (m_semaphore.Init(0, 1) == SUCCESS) {
-		if (m_hThread =
-				_beginthreadex(NULL, p_stack << 2, (ThreadFunc) &MxThread::ThreadProc, this, p_flag, &m_threadId)) {
+		if ((m_hThread =
+				 _beginthreadex(NULL, p_stack << 2, (ThreadFunc) &MxThread::ThreadProc, this, p_flag, &m_threadId))) {
 			result = SUCCESS;
 		}
 	}

@@ -537,7 +537,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		return FAILURE;
 	}
 
-	if (m_soundManager = new LegoSoundManager()) {
+	if ((m_soundManager = new LegoSoundManager())) {
 		if (m_soundManager->Create(10, 0) != SUCCESS) {
 			delete m_soundManager;
 			m_soundManager = NULL;
@@ -545,14 +545,14 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		}
 	}
 
-	if (m_videoManager = new LegoVideoManager()) {
+	if ((m_videoManager = new LegoVideoManager())) {
 		if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 			delete m_videoManager;
 			m_videoManager = NULL;
 		}
 	}
 
-	if (m_inputMgr = new LegoInputManager()) {
+	if ((m_inputMgr = new LegoInputManager())) {
 		if (m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
 			delete m_inputMgr;
 			m_inputMgr = NULL;

@@ -118,8 +118,8 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter)
 {
 	for (MxCompositePresenterList::iterator it = p_presenterList.begin(); it != p_presenterList.end(); it++) {
-		if (p_presenter == *it || (*it)->IsA("MxCompositePresenter") &&
-									  ContainsPresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter)) {
+		if (p_presenter == *it || ((*it)->IsA("MxCompositePresenter") &&
+								   ContainsPresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter))) {
 			return TRUE;
 		}
 	}

@@ -190,7 +190,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateNotificationManager()) {
-		if (m_notificationManager = new MxNotificationManager()) {
+		if ((m_notificationManager = new MxNotificationManager())) {
 			if (m_notificationManager->Create(100, 0) != SUCCESS) {
 				goto done;
 			}
@@ -207,7 +207,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateVideoManager()) {
-		if (m_videoManager = new MxVideoManager()) {
+		if ((m_videoManager = new MxVideoManager())) {
 			if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 				delete m_videoManager;
 				m_videoManager = NULL;
@@ -216,7 +216,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateSoundManager()) {
-		if (m_soundManager = new MxSoundManager()) {
+		if ((m_soundManager = new MxSoundManager())) {
 			if (m_soundManager->Create(10, 0) != SUCCESS) {
 				delete m_soundManager;
 				m_soundManager = NULL;
@@ -225,7 +225,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateMusicManager()) {
-		if (m_musicManager = new MxMusicManager()) {
+		if ((m_musicManager = new MxMusicManager())) {
 			if (m_musicManager->Create(50, 0) != SUCCESS) {
 				delete m_musicManager;
 				m_musicManager = NULL;
@@ -234,7 +234,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateEventManager()) {
-		if (m_eventManager = new MxEventManager()) {
+		if ((m_eventManager = new MxEventManager())) {
 			if (m_eventManager->Create(50, 0) != SUCCESS) {
 				delete m_eventManager;
 				m_eventManager = NULL;
@@ -243,6 +243,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	result = SUCCESS;
+
 done:
 	if (result != SUCCESS) {
 		Destroy();

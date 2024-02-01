@@ -347,7 +347,7 @@ void MxVideoPresenter::PutFrame()
 		MxRegionCursor cursor(region);
 		MxRect32* regionRect;
 
-		while (regionRect = cursor.VTable0x24(rect)) {
+		while ((regionRect = cursor.VTable0x24(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
 				if (m_unk0x58) {
 					rectSrc.SetLeft(regionRect->GetLeft() - m_location.GetX());

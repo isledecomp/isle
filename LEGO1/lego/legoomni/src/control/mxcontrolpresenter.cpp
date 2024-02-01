@@ -239,7 +239,7 @@ void MxControlPresenter::VTable0x6c(MxS16 p_val)
 
 	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		(*it)->Enable((m_unk0x4c == 3 && m_unk0x4e == 0 || !IsEnabled()) ? FALSE : m_unk0x4e == i);
+		(*it)->Enable(((m_unk0x4c == 3 && m_unk0x4e == 0) || !IsEnabled()) ? FALSE : m_unk0x4e == i);
 		i++;
 	}
 }

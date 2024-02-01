@@ -747,7 +747,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 			}
 
 			if ((und && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
-				(*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0) {
+				((*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0)) {
 				k = j;
 			}
 

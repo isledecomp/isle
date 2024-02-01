@@ -169,7 +169,7 @@ MxResult MxDSBuffer::FUN_100c67b0(
 	}
 
 	MxU8* data;
-	while (data = (MxU8*) SkipToData()) {
+	while ((data = (MxU8*) SkipToData())) {
 		if (*p_streamingAction == NULL) {
 			result = CreateObject(p_controller, (MxU32*) data, p_action, p_streamingAction);
 
