@@ -146,6 +146,15 @@ public:
 		c_leaveInfoCenterDialogue3 = 564,
 		c_leaveInfoCenterDialogue4 = 565,
 
+		c_unk566 = 566,
+		c_unk567 = 567,
+		c_unk568 = 568,
+
+		c_unk569 = 569,
+		c_unk570 = 570,
+		c_unk571 = 571,
+		c_unk572 = 572,
+
 		c_registerToContinueDialogue = 573,
 
 		c_bricksterDialogue = 574,
