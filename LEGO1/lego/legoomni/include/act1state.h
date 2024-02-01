@@ -10,20 +10,20 @@ public:
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0154
 		return "Act1State";
 	}
 
 	// FUNCTION: LEGO1 0x100338b0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxBool SetFlag() override;                          // vtable+0x18
-	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxBool SetFlag() override;                          // vtable+0x18
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x18 = p_unk0x18; }
 	inline MxU32 GetUnknown18() { return m_unk0x18; }

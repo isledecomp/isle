@@ -11,19 +11,19 @@
 class Radio : public MxCore {
 public:
 	Radio();
-	virtual ~Radio() override;
+	~Radio() override;
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1002c8e0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f328c
 		return "Radio";
 	}
 
 	// FUNCTION: LEGO1 0x1002c8f0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Radio::ClassName()) || MxCore::IsA(p_name);
 	}

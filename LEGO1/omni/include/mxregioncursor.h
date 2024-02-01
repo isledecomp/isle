@@ -8,7 +8,7 @@
 class MxRegionCursor : public MxCore {
 public:
 	MxRegionCursor(MxRegion* p_region);
-	virtual ~MxRegionCursor() override;
+	~MxRegionCursor() override;
 
 	virtual MxRect32* VTable0x14(MxRect32& p_rect); // vtable+0x14
 	virtual MxRect32* VTable0x18();                 // vtable+0x18

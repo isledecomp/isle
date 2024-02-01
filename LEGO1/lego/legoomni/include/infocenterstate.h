@@ -10,23 +10,23 @@
 class InfocenterState : public LegoState {
 public:
 	InfocenterState();
-	virtual ~InfocenterState() override;
+	~InfocenterState() override;
 
 	// FUNCTION: LEGO1 0x10071840
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f04dc
 		return "InfocenterState";
 	}
 
 	// FUNCTION: LEGO1 0x10071850
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, InfocenterState::ClassName()) || LegoState::IsA(p_name);
 	}
 
 	// FUNCTION: LEGO1 0x10071830
-	virtual MxBool VTable0x14() override { return FALSE; } // vtable+0x14
+	MxBool VTable0x14() override { return FALSE; } // vtable+0x14
 
 	inline MxS16 GetInfocenterBufferSize() { return sizeof(m_buffer) / sizeof(m_buffer[0]); }
 	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }

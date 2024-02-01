@@ -13,20 +13,20 @@
 class MxBackgroundAudioManager : public MxCore {
 public:
 	MxBackgroundAudioManager();
-	virtual ~MxBackgroundAudioManager() override;
+	~MxBackgroundAudioManager() override;
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
-	virtual MxResult Tickle() override;               // vtable+0x08
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1007eb70
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7ac4
 		return "MxBackgroundAudioManager";
 	}
 
 	// FUNCTION: LEGO1 0x1007eb80
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxBackgroundAudioManager::ClassName()) || MxCore::IsA(p_name);
 	}

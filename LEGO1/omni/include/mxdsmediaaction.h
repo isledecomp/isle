@@ -10,20 +10,20 @@
 class MxDSMediaAction : public MxDSAction {
 public:
 	MxDSMediaAction();
-	virtual ~MxDSMediaAction() override;
+	~MxDSMediaAction() override;
 
 	void CopyFrom(MxDSMediaAction& p_dsMediaAction);
 	MxDSMediaAction& operator=(MxDSMediaAction& p_dsMediaAction);
 
 	// FUNCTION: LEGO1 0x100c8be0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7624
 		return "MxDSMediaAction";
 	}
 
 	// FUNCTION: LEGO1 0x100c8bf0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSMediaAction::ClassName()) || MxDSAction::IsA(p_name);
 	}
@@ -31,10 +31,10 @@ public:
 	// SYNTHETIC: LEGO1 0x100c8cd0
 	// MxDSMediaAction::`scalar deleting destructor'
 
-	virtual undefined4 VTable0x14();                                     // vtable+14;
-	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	virtual MxDSAction* Clone() override;                                // vtable+2c;
+	undefined4 VTable0x14() override;                            // vtable+14;
+	MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	MxDSAction* Clone() override;                                // vtable+2c;
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 

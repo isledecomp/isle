@@ -8,7 +8,7 @@
 class MxString : public MxCore {
 public:
 	MxString(const MxString& p_str);
-	virtual ~MxString();
+	~MxString() override;
 	const MxString& operator=(const char* p_data);
 
 	MxString();

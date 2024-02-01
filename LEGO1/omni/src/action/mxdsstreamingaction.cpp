@@ -17,8 +17,9 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset)
 // FUNCTION: LEGO1 0x100cd090
 MxBool MxDSStreamingAction::HasId(MxU32 p_objectId)
 {
-	if (this->m_internalAction)
+	if (this->m_internalAction) {
 		return this->m_internalAction->HasId(p_objectId);
+	}
 	return FALSE;
 }
 
@@ -32,12 +33,15 @@ MxDSStreamingAction::MxDSStreamingAction(MxDSStreamingAction& p_dsStreamingActio
 // FUNCTION: LEGO1 0x100cd150
 MxDSStreamingAction::~MxDSStreamingAction()
 {
-	if (this->m_unk0xa0)
+	if (this->m_unk0xa0) {
 		delete this->m_unk0xa0;
-	if (this->m_unk0xa4)
+	}
+	if (this->m_unk0xa4) {
 		delete this->m_unk0xa4;
-	if (this->m_internalAction)
+	}
+	if (this->m_internalAction) {
 		delete this->m_internalAction;
+	}
 }
 
 // FUNCTION: LEGO1 0x100cd1e0
@@ -73,16 +77,18 @@ MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStre
 // FUNCTION: LEGO1 0x100cd2a0
 void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
 {
-	if (this->m_internalAction)
+	if (this->m_internalAction) {
 		delete this->m_internalAction;
+	}
 	this->m_internalAction = p_dsAction;
 }
 
 // FUNCTION: LEGO1 0x100cd2d0
 void MxDSStreamingAction::FUN_100cd2d0()
 {
-	if (this->m_duration == -1)
+	if (this->m_duration == -1) {
 		return;
+	}
 
 	MxLong duration = this->m_duration / this->m_loopCount;
 	this->m_loopCount--;

@@ -209,11 +209,13 @@ void MxTransitionManager::TransitionDissolve()
 
 		for (MxS32 col = 0; col < 640; col++) {
 			// Select 16 columns on each tick
-			if (m_animationTimer * 16 > m_columnOrder[col])
+			if (m_animationTimer * 16 > m_columnOrder[col]) {
 				continue;
+			}
 
-			if (m_animationTimer * 16 + 15 < m_columnOrder[col])
+			if (m_animationTimer * 16 + 15 < m_columnOrder[col]) {
 				continue;
+			}
 
 			for (MxS32 row = 0; row < 480; row++) {
 				// Shift the chosen column a different amount at each scanline.
@@ -291,11 +293,13 @@ void MxTransitionManager::TransitionPixelation()
 
 		for (MxS32 col = 0; col < 64; col++) {
 			// Select 4 columns on each tick
-			if (m_animationTimer * 4 > m_columnOrder[col])
+			if (m_animationTimer * 4 > m_columnOrder[col]) {
 				continue;
+			}
 
-			if (m_animationTimer * 4 + 3 < m_columnOrder[col])
+			if (m_animationTimer * 4 + 3 < m_columnOrder[col]) {
 				continue;
+			}
 
 			for (MxS32 row = 0; row < 48; row++) {
 				// To do the pixelation, we subdivide the 640x480 surface into
@@ -549,8 +553,9 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 			(const MxU8*) p_ddsc->lpSurface + m_copyRect.top * p_ddsc->lPitch + bytesPerPixel * m_copyRect.left;
 
 		m_copyBuffer = new MxU8[bytesPerPixel * width * height];
-		if (!m_copyBuffer)
+		if (!m_copyBuffer) {
 			return;
+		}
 
 		// Copy into the copy buffer
 		MxU8* dst = m_copyBuffer;

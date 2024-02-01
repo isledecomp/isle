@@ -34,8 +34,9 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 	m_value.ToLowerCase();
 
 	LegoVideoManager* videomanager = VideoManager();
-	if (!videomanager || !p_colorString)
+	if (!videomanager || !p_colorString) {
 		return;
+	}
 
 	float convertedR, convertedG, convertedB;
 	char* colorStringCopy = strcpy(new char[strlen(p_colorString) + 1], p_colorString);
@@ -43,14 +44,17 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 
 	if (!strcmp(colorStringSplit, g_set)) {
 		colorStringSplit = strtok(0, g_delimiter);
-		if (colorStringSplit)
+		if (colorStringSplit) {
 			m_h = (float) (atoi(colorStringSplit) * 0.01);
+		}
 		colorStringSplit = strtok(0, g_delimiter);
-		if (colorStringSplit)
+		if (colorStringSplit) {
 			m_s = (float) (atoi(colorStringSplit) * 0.01);
+		}
 		colorStringSplit = strtok(0, g_delimiter);
-		if (colorStringSplit)
+		if (colorStringSplit) {
 			m_v = (float) (atoi(colorStringSplit) * 0.01);
+		}
 
 		ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
 		videomanager->SetSkyColor(convertedR, convertedG, convertedB);

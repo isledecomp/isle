@@ -35,8 +35,9 @@ void MxFlcPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b34d0
 void MxFlcPresenter::CreateBitmap()
 {
-	if (m_bitmap)
+	if (m_bitmap) {
 		delete m_bitmap;
+	}
 
 	m_bitmap = new MxBitmap;
 	m_bitmap->SetSize(m_flcHeader->width, m_flcHeader->height, NULL, FALSE);
@@ -62,8 +63,9 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		&decodedColorMap
 	);
 
-	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && decodedColorMap)
+	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && decodedColorMap) {
 		RealizePalette();
+	}
 
 	for (MxS32 i = 0; i < rectCount; i++) {
 		MxRect32 rect(rects[i]);

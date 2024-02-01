@@ -81,8 +81,9 @@ MxU8 MxDisplaySurface::CountTotalBitsSetTo1(MxU32 p_param)
 {
 	MxU8 count = 0;
 
-	for (; p_param; p_param >>= 1)
+	for (; p_param; p_param >>= 1) {
 		count += ((MxU8) p_param & 1);
+	}
 
 	return count;
 }
@@ -92,8 +93,9 @@ MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
 {
 	MxU8 count = 0;
 
-	for (; (p_param & 1) == 0; p_param >>= 1)
+	for (; (p_param & 1) == 0; p_param >>= 1) {
 		count++;
+	}
 
 	return count;
 }
@@ -117,8 +119,9 @@ MxResult MxDisplaySurface::Init(
 	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
 	this->m_surfaceDesc.dwSize = sizeof(this->m_surfaceDesc);
 
-	if (this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc))
+	if (this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc)) {
 		result = FAILURE;
+	}
 
 	return result;
 }
@@ -134,8 +137,9 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	this->m_initialized = TRUE;
 	this->m_videoParam = p_videoParam;
 
-	if (!this->m_videoParam.Flags().GetFullScreen())
+	if (!this->m_videoParam.Flags().GetFullScreen()) {
 		this->m_videoParam.Flags().SetFlipSurfaces(FALSE);
+	}
 
 	if (!this->m_videoParam.Flags().GetFlipSurfaces()) {
 		this->m_videoParam.SetBackBuffers(1);
@@ -143,10 +147,12 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 	else {
 		MxU32 backBuffers = this->m_videoParam.GetBackBuffers();
 
-		if (backBuffers < 1)
+		if (backBuffers < 1) {
 			this->m_videoParam.SetBackBuffers(1);
-		else if (backBuffers > 2)
+		}
+		else if (backBuffers > 2) {
 			this->m_videoParam.SetBackBuffers(2);
+		}
 
 		this->m_videoParam.Flags().SetBackBuffers(TRUE);
 	}
@@ -155,20 +161,23 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		MxS32 width = this->m_videoParam.GetRect().GetWidth();
 		MxS32 height = this->m_videoParam.GetRect().GetHeight();
 
-		if (lpDirectDraw->SetCooperativeLevel(hWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN))
+		if (lpDirectDraw->SetCooperativeLevel(hWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN)) {
 			goto done;
+		}
 
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
 
-		if (lpDirectDraw->GetDisplayMode(&ddsd))
+		if (lpDirectDraw->GetDisplayMode(&ddsd)) {
 			goto done;
+		}
 
 		MxS32 bitdepth = !this->m_videoParam.Flags().Get16Bit() ? 8 : 16;
 
 		if (ddsd.dwWidth != width || ddsd.dwHeight != height || ddsd.ddpfPixelFormat.dwRGBBitCount != bitdepth) {
-			if (lpDirectDraw->SetDisplayMode(width, height, bitdepth))
+			if (lpDirectDraw->SetDisplayMode(width, height, bitdepth)) {
 				goto done;
+			}
 		}
 	}
 
@@ -179,13 +188,15 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL))
+		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL)) {
 			goto done;
+		}
 
 		ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
 
-		if (this->m_ddSurface1->GetAttachedSurface(&ddsd.ddsCaps, &this->m_ddSurface2))
+		if (this->m_ddSurface1->GetAttachedSurface(&ddsd.ddsCaps, &this->m_ddSurface2)) {
 			goto done;
+		}
 	}
 	else {
 		memset(&ddsd, 0, sizeof(ddsd));
@@ -193,8 +204,9 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwFlags = DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL))
+		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface1, NULL)) {
 			goto done;
+		}
 
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
@@ -203,11 +215,13 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwHeight = this->m_videoParam.GetRect().GetHeight();
 		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
-		if (!this->m_videoParam.Flags().GetBackBuffers())
+		if (!this->m_videoParam.Flags().GetBackBuffers()) {
 			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+		}
 
-		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface2, NULL))
+		if (lpDirectDraw->CreateSurface(&ddsd, &this->m_ddSurface2, NULL)) {
 			goto done;
+		}
 	}
 
 	memset(&this->m_surfaceDesc, 0, sizeof(this->m_surfaceDesc));
@@ -215,8 +229,9 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 
 	if (!this->m_ddSurface2->GetSurfaceDesc(&this->m_surfaceDesc)) {
 		if (!lpDirectDraw->CreateClipper(0, &this->m_ddClipper, NULL) && !this->m_ddClipper->SetHWnd(0, hWnd) &&
-			!this->m_ddSurface1->SetClipper(this->m_ddClipper))
+			!this->m_ddSurface1->SetClipper(this->m_ddClipper)) {
 			result = SUCCESS;
+		}
 	}
 
 done:
@@ -227,18 +242,22 @@ done:
 void MxDisplaySurface::Destroy()
 {
 	if (this->m_initialized) {
-		if (this->m_ddSurface2)
+		if (this->m_ddSurface2) {
 			this->m_ddSurface2->Release();
+		}
 
-		if (this->m_ddSurface1)
+		if (this->m_ddSurface1) {
 			this->m_ddSurface1->Release();
+		}
 
-		if (this->m_ddClipper)
+		if (this->m_ddClipper) {
 			this->m_ddClipper->Release();
+		}
 	}
 
-	if (this->m_16bitPal)
+	if (this->m_16bitPal) {
 		delete[] this->m_16bitPal;
+	}
 
 	this->Init();
 }
@@ -273,8 +292,9 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 	}
 
 	if (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount == 16) {
-		if (!m_16bitPal)
+		if (!m_16bitPal) {
 			m_16bitPal = new MxU16[256];
+		}
 
 		PALETTEENTRY palette[256];
 		p_palette->GetEntries(palette);
@@ -287,9 +307,9 @@ void MxDisplaySurface::SetPalette(MxPalette* p_palette)
 		MxU8 totalBitsBlue = CountTotalBitsSetTo1(m_surfaceDesc.ddpfPixelFormat.dwBBitMask);
 
 		for (MxS32 i = 0; i < 256; i++) {
-			m_16bitPal[i] = (((palette[i].peRed >> (8 - totalBitsRed & 0x1f)) << (contiguousBitsRed & 0x1f))) |
-							(((palette[i].peGreen >> (8 - totalBitsGreen & 0x1f)) << (contiguousBitsGreen & 0x1f))) |
-							(((palette[i].peBlue >> (8 - totalBitsBlue & 0x1f)) << (contiguousBitsBlue & 0x1f)));
+			m_16bitPal[i] = (((palette[i].peRed >> ((8 - totalBitsRed) & 0x1f)) << (contiguousBitsRed & 0x1f))) |
+							(((palette[i].peGreen >> ((8 - totalBitsGreen) & 0x1f)) << (contiguousBitsGreen & 0x1f))) |
+							(((palette[i].peBlue >> ((8 - totalBitsBlue) & 0x1f)) << (contiguousBitsBlue & 0x1f)));
 		}
 	}
 }
@@ -528,8 +548,9 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 // FUNCTION: LEGO1 0x100bbc10
 void MxDisplaySurface::GetDC(HDC* p_hdc)
 {
-	if (this->m_ddSurface2 && !this->m_ddSurface2->GetDC(p_hdc))
+	if (this->m_ddSurface2 && !this->m_ddSurface2->GetDC(p_hdc)) {
 		return;
+	}
 
 	*p_hdc = NULL;
 }
@@ -537,8 +558,9 @@ void MxDisplaySurface::GetDC(HDC* p_hdc)
 // FUNCTION: LEGO1 0x100bbc40
 void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 {
-	if (this->m_ddSurface2 && p_hdc)
+	if (this->m_ddSurface2 && p_hdc) {
 		this->m_ddSurface2->ReleaseDC(p_hdc);
+	}
 }
 
 // FUNCTION: LEGO1 0x100bbc60
@@ -557,8 +579,9 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 
-	if (draw->GetDisplayMode(&ddsd))
+	if (draw->GetDisplayMode(&ddsd)) {
 		return NULL;
+	}
 
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 	ddsd.dwWidth = p_bitmap->GetBmiWidth();
@@ -579,8 +602,9 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 				surface = NULL;
 			}
 		}
-		else
+		else {
 			surface = NULL;
+		}
 	}
 
 	if (surface) {
@@ -604,8 +628,9 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::VTable0x44(
 
 		// TODO: Probably p_bitmap->GetAdjustedStride()
 		MxS32 rowSeek = p_bitmap->GetBmiStride();
-		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0)
+		if (p_bitmap->GetBmiHeader()->biCompression != BI_RGB_TOPDOWN && p_bitmap->GetBmiHeight() >= 0) {
 			rowSeek = -rowSeek;
+		}
 
 		MxLong newPitch = ddsd.lPitch;
 		switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
@@ -714,15 +739,17 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 		ddsd.ddsCaps.dwCaps &= ~DDSCAPS_VIDEOMEMORY;
 		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
-		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK)
+		if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK) {
 			goto done;
+		}
 	}
 
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 
-	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK)
+	if (newSurface->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK) {
 		goto done;
+	}
 	else {
 		MxU16* surface = (MxU16*) ddsd.lpSurface;
 		MxLong pitch = ddsd.lPitch;
@@ -732,10 +759,12 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 			MxU16* surface2 = surface;
 			for (MxS32 y = 0; y < 16; y++) {
 				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
-					if (x + y > 10)
+					if (x + y > 10) {
 						*surface2 = 31775;
-					else
+					}
+					else {
 						*surface2 = -1;
+					}
 				}
 				else {
 					*surface2 = 0;

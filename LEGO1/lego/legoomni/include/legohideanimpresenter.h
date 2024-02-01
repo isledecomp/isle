@@ -9,7 +9,7 @@
 class LegoHideAnimPresenter : public LegoLoopingAnimPresenter {
 public:
 	LegoHideAnimPresenter();
-	virtual ~LegoHideAnimPresenter() override;
+	~LegoHideAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x1006d880
 	inline const char* ClassName() const override // vtable+0x0c
@@ -24,12 +24,12 @@ public:
 		return !strcmp(p_name, ClassName()) || LegoAnimPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;      // vtable+0x18
-	virtual void StartingTickle() override;   // vtable+0x18
-	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
-	virtual void EndAction() override;        // vtable+0x40
-	virtual void PutFrame() override;         // vtable+0x6c
+	void ReadyTickle() override;      // vtable+0x18
+	void StartingTickle() override;   // vtable+0x18
+	MxResult AddToManager() override; // vtable+0x34
+	void Destroy() override;          // vtable+0x38
+	void EndAction() override;        // vtable+0x40
+	void PutFrame() override;         // vtable+0x6c
 
 private:
 	void Init();

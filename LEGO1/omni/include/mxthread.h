@@ -47,7 +47,7 @@ protected:
 class MxTickleThread : public MxThread {
 public:
 	MxTickleThread(MxCore* p_target, MxS32 p_frequencyMS);
-	virtual ~MxTickleThread() {}
+	~MxTickleThread() override {}
 
 	MxResult Run() override;
 

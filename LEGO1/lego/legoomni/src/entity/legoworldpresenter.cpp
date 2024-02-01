@@ -100,8 +100,9 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 				action->SetOrigin(this);
 				m_list.push_back(presenter);
 			}
-			else if (presenter)
+			else if (presenter) {
 				delete presenter;
+			}
 		}
 
 		VideoManager()->RegisterPresenter(*this);

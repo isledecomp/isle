@@ -11,7 +11,7 @@
 class LegoPhonemePresenter : public MxFlcPresenter {
 public:
 	LegoPhonemePresenter();
-	virtual ~LegoPhonemePresenter() override; // vtable+0x00
+	~LegoPhonemePresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1004e310
 	inline const char* ClassName() const override // vtable+0x0c
@@ -20,10 +20,10 @@ public:
 		return "LegoPhonemePresenter";
 	}
 
-	virtual void StartingTickle() override;                  // vtable+0x1c
-	virtual void EndAction() override;                       // vtable+0x40
-	virtual void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
-	virtual void PutFrame() override;                        // vtable+0x6c
+	void StartingTickle() override;                  // vtable+0x1c
+	void EndAction() override;                       // vtable+0x40
+	void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
+	void PutFrame() override;                        // vtable+0x6c
 
 	// SYNTHETIC: LEGO1 0x1004e320
 	// LegoPhonemePresenter::`scalar deleting destructor'

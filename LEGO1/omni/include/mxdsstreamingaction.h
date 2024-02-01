@@ -11,7 +11,7 @@ class MxDSStreamingAction : public MxDSAction {
 public:
 	MxDSStreamingAction(MxDSAction& p_dsAction, MxU32 p_offset);
 	MxDSStreamingAction(MxDSStreamingAction& p_dsStreamingAction);
-	virtual ~MxDSStreamingAction();
+	~MxDSStreamingAction() override;
 
 	MxDSStreamingAction* CopyFrom(MxDSStreamingAction& p_dsStreamingAction);
 	MxDSStreamingAction& operator=(MxDSAction& p_dsAction)
@@ -25,7 +25,7 @@ public:
 		return *this;
 	}
 
-	virtual MxBool HasId(MxU32 p_objectId) override; // vtable+34;
+	MxBool HasId(MxU32 p_objectId) override; // vtable+34;
 
 	MxResult Init();
 	void SetInternalAction(MxDSAction* p_dsAction);

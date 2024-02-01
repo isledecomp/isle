@@ -18,7 +18,7 @@ public:
 	LegoUnknown100d9d00() { SetDestroy(Destroy); }
 
 	// STUB: LEGO1 0x1007b210
-	virtual MxS8 Compare(LegoUnknown100d7c88* p_a, LegoUnknown100d7c88* p_b) override { return -1; } // vtable+0x14
+	MxS8 Compare(LegoUnknown100d7c88* p_a, LegoUnknown100d7c88* p_b) override { return -1; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x1007b2e0
 	static void Destroy(LegoUnknown100d7c88* p_element) { delete p_element; }

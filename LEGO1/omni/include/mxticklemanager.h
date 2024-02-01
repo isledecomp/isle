@@ -36,9 +36,9 @@ typedef list<MxTickleClient*> MxTickleClientPtrList;
 class MxTickleManager : public MxCore {
 public:
 	inline MxTickleManager() {}
-	virtual ~MxTickleManager(); // vtable+0x00 (scalar deleting destructor)
+	~MxTickleManager() override; // vtable+0x00 (scalar deleting destructor)
 
-	virtual MxResult Tickle();                                                 // vtable+0x08
+	MxResult Tickle() override;                                                // vtable+0x08
 	virtual void RegisterClient(MxCore* p_client, MxTime p_interval);          // vtable+0x14
 	virtual void UnregisterClient(MxCore* p_client);                           // vtable+0x18
 	virtual void SetClientTickleInterval(MxCore* p_client, MxTime p_interval); // vtable+0x1c

@@ -40,8 +40,9 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 		((Act3*) GetWorld())->SetUnkown420c(this);
 	}
 	world = GetWorld();
-	if (world)
+	if (world) {
 		world->Add(this);
+	}
 	GetState();
 	return result;
 }
@@ -50,8 +51,9 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 void Helicopter::GetState()
 {
 	m_state = (HelicopterState*) GameState()->GetState("HelicopterState");
-	if (!m_state)
+	if (!m_state) {
 		m_state = (HelicopterState*) GameState()->CreateState("HelicopterState");
+	}
 }
 
 // FUNCTION: LEGO1 0x10003360
@@ -87,10 +89,12 @@ void Helicopter::VTable0xe4()
 // FUNCTION: LEGO1 0x10003480
 MxU32 Helicopter::VTable0xcc()
 {
-	if (!FUN_1003ef60())
+	if (!FUN_1003ef60()) {
 		return 1;
-	if (!m_world)
+	}
+	if (!m_world) {
 		m_world = GetCurrentWorld();
+	}
 	AnimationManager()->FUN_1005f6d0(FALSE);
 	if (GetCurrentVehicle()) {
 		if (GetCurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
@@ -145,15 +149,17 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				((Act3*) GetCurrentWorld())->SetUnkown4270(2);
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			}
-			else if (m_state->GetUnkown8() != 0)
+			else if (m_state->GetUnkown8() != 0) {
 				break;
+			}
 			VTable0xe4();
 			GameState()->SetCurrentArea(0x42);
 			ret = 1;
 			break;
 		case 0x18: {
-			if (*g_act3Script == script)
+			if (*g_act3Script == script) {
 				break;
+			}
 			Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 			if (m_state->GetUnkown8() == 0) {
 				state->SetUnknown18(4);
@@ -166,8 +172,9 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			break;
 		}
 		case 0x19:
-			if (*g_act3Script == script)
+			if (*g_act3Script == script) {
 				break;
+			}
 			if (m_state->GetUnkown8() == 2) {
 				m_state->SetUnknown8(3);
 				m_world->FUN_1001fc80(this);
@@ -177,13 +184,15 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			ret = 1;
 			break;
 		case 0x1a:
-			if (*g_act3Script != script)
+			if (*g_act3Script != script) {
 				break;
+			}
 			ret = 1;
 			/* fall through */
 		case 0x1b:
-			if (*g_act3Script != script)
+			if (*g_act3Script != script) {
 				break;
+			}
 			if (m_world && m_world->GetCamera()) {
 				Mx3DPointFloat loc, dir, lookat;
 				loc.CopyFrom(m_world->GetCamera()->GetWorldLocation());
@@ -196,11 +205,14 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				v68.CopyFrom(m_world->GetCamera()->GetWorldUp());
 				va4.EqualsCross(v68, dir);
 				v7c.EqualsCross(va4, v90);
-				if (ret)
-					if (((Act3*) m_world)->FUN_100727e0(m_unk0x138, loc, dir, v7c))
+				if (ret) {
+					if (((Act3*) m_world)->FUN_100727e0(m_unk0x138, loc, dir, v7c)) {
 						break;
-					else if (((Act3*) m_world)->FUN_10072980(m_unk0x138, loc, dir, v7c))
+					}
+					else if (((Act3*) m_world)->FUN_10072980(m_unk0x138, loc, dir, v7c)) {
 						break;
+					}
+				}
 			}
 			ret = 1;
 			break;
@@ -231,8 +243,9 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(4);
 			VTable0xe8(0x2a, TRUE, 7);
 		}
-		else
+		else {
 			VTable0xe8(0x31, TRUE, 7);
+		}
 
 		m_state->SetUnknown8(2);
 
@@ -267,8 +280,9 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
 			VTable0xe8(0x29, TRUE, 7);
 		}
-		else
+		else {
 			VTable0xe8(0x30, TRUE, 7);
+		}
 
 		m_state->SetUnknown8(0);
 		ret = 1;
@@ -289,8 +303,9 @@ void Helicopter::VTable0x74(Matrix4& p_transform)
 	else {
 		m_roi->FUN_100a58f0(p_transform);
 		m_roi->VTable0x14();
-		if (m_cameraFlag)
+		if (m_cameraFlag) {
 			FUN_10010c30();
+		}
 	}
 }
 
@@ -307,10 +322,12 @@ void Helicopter::VTable0x70(float p_float)
 		float f = m_unk0x1f0 - p_float + 3000;
 		if (f >= 0) {
 			float f2 = f / 3000 + 1;
-			if (f2 < 0)
+			if (f2 < 0) {
 				f2 = 0;
-			if (1.0f < f2)
+			}
+			if (1.0f < f2) {
 				f2 = 1.0f;
+			}
 			Vector3 v(m_unk0x160[3]);
 			MxMatrix mat;
 			Vector3 v2(m_unk0x1a8[3]);
@@ -328,10 +345,12 @@ void Helicopter::VTable0x70(float p_float)
 			m_world->GetCamera()->FUN_100123e0(mat, 0);
 		}
 		else {
-			if (state == 4)
+			if (state == 4) {
 				((Act3*) m_world)->FUN_10073400();
-			else
+			}
+			else {
 				((Act3*) m_world)->FUN_10073430();
+			}
 			m_unk0xdc = 4;
 		}
 	}
@@ -380,6 +399,7 @@ MxResult HelicopterSubclass::FUN_100040a0(Vector4& p_v, float p_f)
 		}
 		return SUCCESS;
 	}
-	else
+	else {
 		return FAILURE;
+	}
 }

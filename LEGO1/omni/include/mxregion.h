@@ -11,7 +11,7 @@
 class MxRegion : public MxCore {
 public:
 	MxRegion();
-	virtual ~MxRegion() override;
+	~MxRegion() override;
 
 	virtual void Reset();                        // vtable+0x14
 	virtual void VTable0x18(MxRect32& p_rect);   // vtable+0x18

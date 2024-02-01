@@ -14,6 +14,7 @@ void MxAtomIdCounter::Inc()
 // FUNCTION: LEGO1 0x100ad800
 void MxAtomIdCounter::Dec()
 {
-	if (m_value)
+	if (m_value) {
 		m_value--;
+	}
 }

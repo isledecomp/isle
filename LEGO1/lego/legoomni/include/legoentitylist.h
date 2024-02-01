@@ -22,7 +22,7 @@ public:
 	LegoEntityList(MxBool p_ownership = FALSE) : MxPtrList<LegoEntity>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001e2d0
-	virtual MxS8 Compare(LegoEntity* p_a, LegoEntity* p_b) override
+	MxS8 Compare(LegoEntity* p_a, LegoEntity* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14

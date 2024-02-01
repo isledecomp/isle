@@ -36,9 +36,9 @@ private:
 
 public:
 	MxNotificationManager();
-	virtual ~MxNotificationManager(); // vtable+0x00 (scalar deleting destructor)
+	~MxNotificationManager() override; // vtable+0x00 (scalar deleting destructor)
 
-	virtual MxResult Tickle(); // vtable+0x08
+	MxResult Tickle() override; // vtable+0x08
 	// TODO: Where does this method come from?
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x14
 	void Register(MxCore* p_listener);

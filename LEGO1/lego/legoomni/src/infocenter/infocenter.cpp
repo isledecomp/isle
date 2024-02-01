@@ -195,8 +195,9 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 	MxLong result = m_radio.Notify(p_param);
 
-	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript))
+	if (result || (action->GetAtomId() != m_atom && action->GetAtomId() != *g_introScript)) {
 		return result;
+	}
 
 	if (action->GetObjectId() == c_returnBackGuidanceDialogue2) {
 		ControlManager()->FUN_100293c0(0x10, action->GetAtomId().GetInternal(), 0);
@@ -811,8 +812,9 @@ void Infocenter::FUN_10070d10(MxS32 p_x, MxS32 p_y)
 		MxS32 left = m_mapAreas[i].m_area.GetLeft();
 		MxS32 top = m_mapAreas[i].m_area.GetTop();
 
-		if (left <= p_x && p_x <= right && top <= p_y && p_y <= bottom)
+		if (left <= p_x && p_x <= right && top <= p_y && p_y <= bottom) {
 			break;
+		}
 	}
 
 	if (i == 7) {

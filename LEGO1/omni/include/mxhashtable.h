@@ -46,7 +46,7 @@ public:
 		m_resizeOption = e_noExpand;
 	}
 
-	virtual ~MxHashTable() override;
+	~MxHashTable() override;
 
 	void Resize();
 	void Add(T);
@@ -99,8 +99,9 @@ MxBool MxHashTableCursor<T>::Find(T p_obj)
 	MxHashTableNode<T>* t = m_table->m_slots[bucket];
 
 	while (t) {
-		if (t->m_hash == hash && !m_table->Compare(t->m_obj, p_obj))
+		if (t->m_hash == hash && !m_table->Compare(t->m_obj, p_obj)) {
 			m_match = t;
+		}
 		t = t->m_next;
 	}
 
@@ -122,8 +123,9 @@ void MxHashTableCursor<T>::DeleteMatch()
 {
 	// Cut the matching node out of the linked list
 	// by updating pointer references.
-	if (m_match == NULL)
+	if (m_match == NULL) {
 		return;
+	}
 
 	if (m_match->m_prev) {
 		m_match->m_prev->m_next = m_match->m_next;
@@ -134,8 +136,9 @@ void MxHashTableCursor<T>::DeleteMatch()
 		m_table->m_slots[bucket] = m_match->m_next;
 	}
 
-	if (m_match->m_next)
+	if (m_match->m_next) {
 		m_match->m_next->m_prev = m_match->m_prev;
+	}
 
 	m_table->m_customDestructor(m_match->m_obj);
 	delete m_match;
@@ -210,8 +213,9 @@ inline void MxHashTable<T>::NodeInsert(MxHashTableNode<T>* p_node)
 
 	p_node->m_next = m_slots[bucket];
 
-	if (m_slots[bucket])
+	if (m_slots[bucket]) {
 		m_slots[bucket]->m_prev = p_node;
+	}
 
 	m_slots[bucket] = p_node;
 	this->m_count++;
@@ -220,8 +224,9 @@ inline void MxHashTable<T>::NodeInsert(MxHashTableNode<T>* p_node)
 template <class T>
 inline void MxHashTable<T>::Add(T p_newobj)
 {
-	if (m_resizeOption && ((this->m_count + 1) / m_numSlots) > m_autoResizeRatio)
+	if (m_resizeOption && ((this->m_count + 1) / m_numSlots) > m_autoResizeRatio) {
 		MxHashTable<T>::Resize();
+	}
 
 	MxU32 hash = Hash(p_newobj);
 	MxHashTableNode<T>* node = new MxHashTableNode<T>(p_newobj, hash);

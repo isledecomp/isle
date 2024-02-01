@@ -16,7 +16,7 @@ public:
 
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 
-	virtual ~MxCollection() {}
+	~MxCollection() override {}
 	virtual MxS8 Compare(T, T) { return 0; }
 
 protected:

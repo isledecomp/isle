@@ -770,12 +770,15 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		return;
 	}
 
-	if (!Lego())
+	if (!Lego()) {
 		return;
-	if (!TickleManager())
+	}
+	if (!TickleManager()) {
 		return;
-	if (!Timer())
+	}
+	if (!Timer()) {
 		return;
+	}
 
 	MxLong currentTime = Timer()->GetRealTime();
 	if (currentTime < g_lastFrameTime) {
@@ -828,8 +831,9 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			this->m_gameStarted = 1;
 		}
 	}
-	else if (sleepIfNotNextFrame != 0)
+	else if (sleepIfNotNextFrame != 0) {
 		Sleep(0);
+	}
 }
 
 // FUNCTION: ISLE 0x402e80

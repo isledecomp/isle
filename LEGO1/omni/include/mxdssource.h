@@ -12,17 +12,17 @@ public:
 	MxDSSource() : m_lengthInDWords(0), m_pBuffer(NULL), m_position(-1) {}
 
 	// FUNCTION: LEGO1 0x100bff60
-	virtual ~MxDSSource() override { delete[] m_pBuffer; }
+	~MxDSSource() override { delete[] m_pBuffer; }
 
 	// FUNCTION: LEGO1 0x100c0010
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102588
 		return "MxDSSource";
 	}
 
 	// FUNCTION: LEGO1 0x100c0020
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSource::ClassName()) || MxCore::IsA(p_name);
 	}
