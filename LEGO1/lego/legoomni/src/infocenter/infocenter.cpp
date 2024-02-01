@@ -640,19 +640,17 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 // FUNCTION: LEGO1 0x10070870
 MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 {
-	MxLong result;
+	MxCore* sender = p_param.GetSender();
 
-	if (p_param.GetSender() == NULL) {
+	if (sender == NULL) {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
 			m_infoManDialogueTimer = 0;
 			StopCutscene();
 			PlayAction(c_exitConfirmationDialogue);
 		}
-
-		result = 1;
 	}
-	else if (p_param.GetSender()->IsA("MxEntity") && m_infocenterState->GetUnknown0x74() != 5 && m_infocenterState->GetUnknown0x74() != 12) {
-		switch (((MxEntity*) p_param.GetSender())->GetEntityId()) {
+	else if (sender->IsA("MxEntity") && m_infocenterState->GetUnknown0x74() != 5 && m_infocenterState->GetUnknown0x74() != 12) {
+		switch (((MxEntity*) sender)->GetEntityId()) {
 		case 5: {
 			m_infoManDialogueTimer = 0;
 
@@ -691,7 +689,7 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 		}
 	}
 	else {
-		if (p_param.GetSender()->IsA("Radio") && m_radio.GetState()->IsActive()) {
+		if (sender->IsA("Radio") && m_radio.GetState()->IsActive()) {
 			if (m_currentInfomainScript == c_unk40 || m_currentInfomainScript == c_unk41 ||
 				m_currentInfomainScript == c_unk42 || m_currentInfomainScript == c_unk43 ||
 				m_currentInfomainScript == c_unk44 || m_currentInfomainScript == c_unk557 ||
@@ -699,13 +697,11 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 				m_currentInfomainScript == c_pizzaCtlDescription || m_currentInfomainScript == c_gasCtlDescription ||
 				m_currentInfomainScript == c_medCtlDescription || m_currentInfomainScript == c_copCtlDescription) {
 				StopCurrentAction();
-				result = 1;
 			}
 		}
 	}
 
-	result = 1;
-	return result;
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10070aa0
