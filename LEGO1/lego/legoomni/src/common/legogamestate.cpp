@@ -482,12 +482,6 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 		break;
 
 		// TODO: implement other cases
-
-	default: {
-		char cad[512];
-		sprintf(cad, "LegoGameState::SwitchArea: unknown area %d\n", p_area);
-		OutputDebugString(cad);
-	} break;
 	}
 
 	InvokeAction(Extra::ActionType::e_opendisk, *script, 0, NULL);
