@@ -86,6 +86,7 @@ public:
 	void OnViewSize(int p_width, int p_height);
 
 	inline LegoEntity* GetEntity() { return m_entity; }
+	inline LegoNavController* GetNavController() { return m_nav; }
 
 protected:
 	void AffectPointOfView();

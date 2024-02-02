@@ -1,10 +1,13 @@
 #include "legoworld.h"
 
+#include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
 #include "legocontrolmanager.h"
+#include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocomotionanimpresenter.h"
+#include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
@@ -80,8 +83,8 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	}
 
 	if (p_dsAction.GetFlags() & MxDSAction::c_enabled) {
-		if (GetCurrentWorld()) {
-			GetCurrentWorld()->VTable0x68(0);
+		if (CurrentWorld()) {
+			CurrentWorld()->Enable(0);
 		}
 
 		SetCurrentWorld(this);
@@ -99,7 +102,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 {
 	m_destroyed = TRUE;
 
-	if (GetCurrentWorld() == this) {
+	if (CurrentWorld() == this) {
 		ControlManager()->FUN_10028df0(NULL);
 		SetCurrentWorld(NULL);
 	}
@@ -513,10 +516,119 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10021a70
-void LegoWorld::VTable0x68(MxBool p_add)
+// FUNCTION: LEGO1 0x10021a70
+void LegoWorld::Enable(MxBool p_enable)
 {
-	// TODO
+	if (p_enable && !m_set0xd0.empty()) {
+		if (CurrentWorld() != this) {
+			if (CurrentWorld()) {
+				AnimationManager()->FUN_10061010(0);
+				CurrentWorld()->Enable(FALSE);
+
+				LegoEntityListCursor cursor(m_entityList);
+				LegoEntity* entity;
+
+				while (cursor.Next(entity)) {
+					if (entity->GetROI()) {
+						entity->GetROI()->SetUnknown0x104(entity);
+						GetViewManager()->AddToUnknown0x08(entity->GetROI());
+					}
+				}
+			}
+
+			while (!m_set0xd0.empty()) {
+				MxCoreSet::iterator it = m_set0xd0.begin();
+
+				if ((*it)->IsA("MxPresenter")) {
+					((MxPresenter*) *it)->Enable(TRUE);
+				}
+				else if ((*it)->IsA("LegoPathController")) {
+					((LegoPathController*) *it)->Enable(TRUE);
+				}
+
+				m_set0xd0.erase(it);
+			}
+
+			SetCurrentWorld(this);
+			ControlManager()->FUN_10028df0(&m_controlPresenters);
+			InputManager()->SetCamera(m_cameraController);
+
+			if (m_cameraController) {
+				InputManager()->Register(m_cameraController->GetNavController());
+				Lego()->SetNavController(m_cameraController->GetNavController());
+			}
+
+			if (m_unk0xec != -1) {
+				PlantManager()->FUN_10026360(m_unk0xec);
+				AnimationManager()->FUN_1005f720(m_unk0xec);
+				BuildingManager()->FUN_1002fa00();
+				AnimationManager()->FUN_1005f0b0();
+			}
+
+			GameState()->FUN_10039940();
+			SetIsWorldActive(TRUE);
+		}
+	}
+	else if (!p_enable && m_set0xd0.empty()) {
+		MxPresenter* presenter;
+		LegoPathController* controller;
+		IslePathActor* vehicle = CurrentVehicle();
+
+		if (vehicle) {
+			FUN_1001fc80(vehicle);
+		}
+
+		AnimationManager()->FUN_1005ee80(FALSE);
+		m_set0xd0.insert(this);
+
+		if (m_unk0xec != -1) {
+			PlantManager()->FUN_100263a0(m_unk0xec);
+			BuildingManager()->FUN_1002fb30();
+		}
+
+		MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
+
+		while (controlPresenterCursor.Next(presenter)) {
+			if (presenter->IsEnabled()) {
+				m_set0xd0.insert(presenter);
+				presenter->Enable(FALSE);
+			}
+		}
+
+		for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
+			if ((*it)->IsA("LegoActionControlPresenter") ||
+				((*it)->IsA("MxPresenter") && ((MxPresenter*) *it)->IsEnabled())) {
+				m_set0xd0.insert(*it);
+				((MxPresenter*) *it)->Enable(FALSE);
+			}
+		}
+
+		if (CurrentWorld() && CurrentWorld() == this) {
+			ControlManager()->FUN_10028df0(NULL);
+			Lego()->SetCurrentWorld(NULL);
+		}
+
+		if (InputManager()->GetCamera() == m_cameraController) {
+			InputManager()->ClearCamera();
+		}
+
+		if (m_cameraController) {
+			InputManager()->UnRegister(m_cameraController->GetNavController());
+
+			if (NavController() == m_cameraController->GetNavController()) {
+				Lego()->SetNavController(NULL);
+			}
+		}
+
+		LegoPathControllerListCursor pathControllerCursor(&m_list0x68);
+
+		while (pathControllerCursor.Next(controller)) {
+			controller->Enable(FALSE);
+			m_set0xd0.insert(controller);
+		}
+
+		GetViewManager()->RemoveAll(NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x10022080

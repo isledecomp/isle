@@ -29,7 +29,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x64() override;                     // vtable+0x64
-	void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x10076f30
 	// RegistrationBook::`scalar deleting destructor'

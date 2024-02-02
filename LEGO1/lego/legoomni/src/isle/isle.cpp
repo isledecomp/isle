@@ -46,8 +46,8 @@ Isle::~Isle()
 		InputManager()->ClearWorld();
 	}
 
-	if (GetCurrentVehicle() != NULL) {
-		VTable0x6c(GetCurrentVehicle());
+	if (CurrentVehicle() != NULL) {
+		VTable0x6c(CurrentVehicle());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -121,7 +121,7 @@ MxLong Isle::Notify(MxParam& p_param)
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
-				result = GetCurrentVehicle()->Notify(p_param);
+				result = CurrentVehicle()->Notify(p_param);
 				break;
 			case 8:
 				result = m_towtrack->Notify(p_param);
@@ -135,7 +135,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			result = HandleType19Notification(p_param);
 			break;
 		case c_notificationType20:
-			VTable0x68(TRUE);
+			Enable(TRUE);
 			break;
 		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
@@ -183,9 +183,23 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10031820
-void Isle::VTable0x68(MxBool p_add)
+void Isle::Enable(MxBool p_enable)
 {
-	// TODO
+	if (m_set0xd0.empty() == p_enable) {
+		return;
+	}
+
+	LegoWorld::Enable(p_enable);
+	m_radio.Initialize(p_enable);
+
+	if (p_enable) {
+		// TODO
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
 // STUB: LEGO1 0x10032620

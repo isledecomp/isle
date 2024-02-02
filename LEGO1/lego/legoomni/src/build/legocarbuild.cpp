@@ -49,7 +49,7 @@ void LegoCarBuild::ReadyWorld()
 }
 
 // STUB: LEGO1 0x100256c0
-void LegoCarBuild::VTable0x68(MxBool p_add)
+void LegoCarBuild::Enable(MxBool p_enable)
 {
 	// TODO
 }

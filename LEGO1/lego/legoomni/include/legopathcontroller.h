@@ -30,6 +30,8 @@ public:
 
 	virtual void VTable0x14(); // vtable+0x14
 	virtual void Destroy();    // vtable+0x18
+
+	void Enable(MxBool p_enable);
 };
 
 #endif // LEGOPATHCONTROLLER_H

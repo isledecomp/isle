@@ -102,7 +102,7 @@ void LegoAnimPresenter::PutFrame()
 // FUNCTION: LEGO1 0x1006b550
 void LegoAnimPresenter::ReadyTickle()
 {
-	m_currentWorld = GetCurrentWorld();
+	m_currentWorld = CurrentWorld();
 
 	if (m_currentWorld) {
 		MxStreamChunk* chunk = m_subscriber->CurrentChunk();

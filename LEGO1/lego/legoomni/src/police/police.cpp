@@ -77,7 +77,7 @@ void Police::ReadyWorld()
 }
 
 // STUB: LEGO1 0x1005e740
-void Police::VTable0x68(MxBool p_add)
+void Police::Enable(MxBool p_enable)
 {
 	// TODO
 }

@@ -217,11 +217,11 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001980
-void Score::VTable0x68(MxBool p_add)
+void Score::Enable(MxBool p_enable)
 {
-	LegoWorld::VTable0x68(p_add);
+	LegoWorld::Enable(p_enable);
 
-	if (p_add) {
+	if (p_enable) {
 		InputManager()->SetWorld(this);
 		SetIsWorldActive(FALSE);
 	}

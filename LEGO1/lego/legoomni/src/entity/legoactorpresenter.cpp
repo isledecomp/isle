@@ -6,7 +6,7 @@
 // FUNCTION: LEGO1 0x10076c30
 void LegoActorPresenter::ReadyTickle()
 {
-	if (GetCurrentWorld()) {
+	if (CurrentWorld()) {
 		m_entity = (LegoEntity*) CreateEntity("LegoActor");
 		if (m_entity) {
 			SetEntityLocation(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp());

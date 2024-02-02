@@ -24,3 +24,9 @@ MxResult LegoPathController::Tickle()
 	// TODO
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10046be0
+void LegoPathController::Enable(MxBool p_enable)
+{
+	// TODO
+}

@@ -118,7 +118,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 	LegoWorld* world = FindWorld(MxAtomId(p_filename, e_lowerCase2), p_entityId);
 
 	if (world) {
-		world->VTable0x68(p_enable);
+		world->Enable(p_enable);
 		return TRUE;
 	}
 	else {

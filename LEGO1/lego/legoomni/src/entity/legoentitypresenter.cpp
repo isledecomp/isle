@@ -62,7 +62,7 @@ MxResult LegoEntityPresenter::StartAction(MxStreamController* p_controller, MxDS
 // FUNCTION: LEGO1 0x100536c0
 void LegoEntityPresenter::ReadyTickle()
 {
-	if (GetCurrentWorld()) {
+	if (CurrentWorld()) {
 		m_entity = (LegoEntity*) MxPresenter::CreateEntity("LegoEntity");
 		if (m_entity) {
 			m_entity->Create(*m_action);
