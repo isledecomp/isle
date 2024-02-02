@@ -104,7 +104,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 		for (MxS16 i = 0; i < count; i++) {
 			MxStillPresenter* still = m_infocenterState->GetInfocenterBufferElement(i);
 			if (still) {
-				still->Enable(FALSE);
+				still->Enable(TRUE);
 				still->SetTickleState(MxPresenter::e_repeating);
 				still->VTable0x88(((7 - count) / 2 + i), 45);
 			}

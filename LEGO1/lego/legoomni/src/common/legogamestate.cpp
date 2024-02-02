@@ -6,6 +6,7 @@
 #include "legostate.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
@@ -447,6 +448,7 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 
 	MxAtomId* script = g_isleScript;
 	LegoWorld* world;
+
 	switch (p_area) {
 	case 1:
 		break;
@@ -465,6 +467,7 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 	case 6:
 	case 7:
 		world = FindWorld(*g_isleScript, 0);
+
 		if (world == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
 		}
@@ -472,10 +475,10 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 #ifdef COMPAT_MODE
 			{
 				MxNotificationParam param(c_notificationType20, NULL);
-				NotificationManager()->Send((MxCore*) world, &param);
+				NotificationManager()->Send(world, &param);
 			}
 #else
-			NotificationManager()->Send((MxCore*) world, &MxNotificationParam(c_notificationType20, NULL));
+			NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
 #endif
 		}
 		break;

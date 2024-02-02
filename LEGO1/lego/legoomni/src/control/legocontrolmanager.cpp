@@ -128,11 +128,10 @@ MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 {
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
-
+		MxPresenter* control;
 		MxVideoPresenter* presenter = (MxVideoPresenter*) VideoManager()->GetPresenterAt(p_x, p_y);
-		if (presenter) {
-			MxPresenter* control;
 
+		if (presenter) {
 			while (cursor.Next(control)) {
 				if (((MxControlPresenter*) control)->FUN_10044270(p_x, p_y, presenter)) {
 					return (MxControlPresenter*) control;
