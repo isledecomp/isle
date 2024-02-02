@@ -116,4 +116,7 @@ protected:
 	MxCore* m_unk0x268;       // 0x268
 };
 
+// FUNCTION: LEGO1 0x10033a70
+// Act1State::NamedPlane::~NamedPlane
+
 #endif // ACT1STATE_H
