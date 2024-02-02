@@ -185,6 +185,7 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 // STUB: LEGO1 0x10031820
 void Isle::VTable0x68(MxBool p_add)
 {
+	LegoWorld::VTable0x68(p_add);
 	// TODO
 }
 
