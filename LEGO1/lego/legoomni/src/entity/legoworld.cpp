@@ -537,14 +537,13 @@ void LegoWorld::VTable0x68(MxBool p_und)
 			}
 
 			while (!m_set0xd0.empty()) {
-				MxCoreSet::iterator it = m_set0xa8.begin();
-				MxCore* object = *it;
+				MxCoreSet::iterator it = m_set0xd0.begin();
 
-				if (object->IsA("MxPresenter")) {
-					((MxPresenter*) object)->Enable(TRUE);
+				if ((*it)->IsA("MxPresenter")) {
+					((MxPresenter*) *it)->Enable(TRUE);
 				}
-				else if (object->IsA("LegoPathController")) {
-					((LegoPathController*) object)->Enable(TRUE);
+				else if ((*it)->IsA("LegoPathController")) {
+					((LegoPathController*) *it)->Enable(TRUE);
 				}
 
 				m_set0xd0.erase(it);
