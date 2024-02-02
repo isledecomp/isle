@@ -568,15 +568,9 @@ void LegoWorld::VTable0x68(MxBool p_und)
 
 			GameState()->FUN_10039940();
 			SetIsWorldActive(TRUE);
-
-			return;
 		}
-
-		if (p_und)
-			return;
 	}
-
-	if (m_set0xd0.empty()) {
+	else if (m_set0xd0.empty()) {
 		IslePathActor* vehicle = CurrentVehicle();
 
 		if (vehicle) {
@@ -602,11 +596,8 @@ void LegoWorld::VTable0x68(MxBool p_und)
 		}
 
 		for (MxCoreSet::iterator it = m_set0xa8.begin(); it != m_set0xa8.end(); it++) {
-			if ((*it)->IsA("LegoActionControlPresenter")) {
-				m_set0xd0.insert(*it);
-				((MxPresenter*) *it)->Enable(FALSE);
-			}
-			else if ((*it)->IsA("MxPresenter") && ((MxPresenter*) *it)->IsEnabled()) {
+			if ((*it)->IsA("LegoActionControlPresenter") ||
+				((*it)->IsA("MxPresenter") && ((MxPresenter*) *it)->IsEnabled())) {
 				m_set0xd0.insert(*it);
 				((MxPresenter*) *it)->Enable(FALSE);
 			}

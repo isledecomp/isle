@@ -79,7 +79,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001f830
 // LegoPathControllerListCursor::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f8a0
+// TEMPLATE: LEGO1 0x1001f8a0
 // MxPtrListCursor<LegoPathController>::~MxPtrListCursor<LegoPathController>
 
 // SYNTHETIC: LEGO1 0x1001f8f0
@@ -88,9 +88,10 @@ public:
 // SYNTHETIC: LEGO1 0x1001f960
 // MxPtrListCursor<LegoPathController>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f9d0
+// TEMPLATE: LEGO1 0x1001f9d0
 // MxListCursor<LegoPathController *>::~MxListCursor<LegoPathController *>
 
+// FUNCTION: LEGO1 0x1001fa20
 // LegoPathControllerListCursor::~LegoPathControllerListCursor
 
 #endif // LEGOPATHCONTROLLERLIST_H
