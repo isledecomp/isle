@@ -531,7 +531,7 @@ void LegoWorld::VTable0x68(MxBool p_und)
 				while (cursor.Next(entity)) {
 					if (entity->GetROI()) {
 						entity->GetROI()->SetUnknown0x104(entity);
-						GetViewManager()->GetUnknown0x08().push_back(entity->GetROI());
+						GetViewManager()->AddToUnknown0x08(entity->GetROI());
 					}
 				}
 			}
