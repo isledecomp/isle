@@ -22,6 +22,7 @@
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10);
@@ -172,21 +173,27 @@ LegoNavController* NavController()
 }
 
 // FUNCTION: LEGO1 0x10015790
-IslePathActor* GetCurrentVehicle()
+IslePathActor* CurrentVehicle()
 {
 	return LegoOmni::GetInstance()->GetCurrentVehicle();
 }
 
 // FUNCTION: LEGO1 0x100157a0
-LegoWorld* GetCurrentWorld()
+LegoWorld* CurrentWorld()
 {
 	return LegoOmni::GetInstance()->GetCurrentWorld();
 }
 
 // FUNCTION: LEGO1 0x100157b0
-LegoUnkSaveDataWriter* GetUnkSaveDataWriter()
+LegoUnkSaveDataWriter* UnkSaveDataWriter()
 {
 	return LegoOmni::GetInstance()->GetUnkSaveDataWriter();
+}
+
+// FUNCTION: LEGO1 0x100157c0
+ViewManager* GetViewManager()
+{
+	return VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
 }
 
 // FUNCTION: LEGO1 0x100157e0
@@ -234,7 +241,7 @@ MxDSAction& GetCurrentAction()
 // FUNCTION: LEGO1 0x100158f0
 void SetCurrentWorld(LegoWorld* p_world)
 {
-	LegoOmni::GetInstance()->SetWorld(p_world);
+	LegoOmni::GetInstance()->SetCurrentWorld(p_world);
 }
 
 // FUNCTION: LEGO1 0x10015900
@@ -740,11 +747,11 @@ MxBool LegoOmni::DoesEntityExist(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x1005b400
 MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
-	if (::GetCurrentWorld() == NULL) {
+	if (::CurrentWorld() == NULL) {
 		return -1;
 	}
 
-	return ::GetCurrentWorld()->GetCurrPathInfo(p_path, p_value);
+	return ::CurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
 // FUNCTION: LEGO1 0x1005b4f0

@@ -28,6 +28,7 @@ class MxBackgroundAudioManager;
 class MxDSFile;
 class MxTransitionManager;
 class ViewLODListManager;
+class ViewManager;
 
 extern MxAtomId* g_copterScript;
 extern MxAtomId* g_dunecarScript;
@@ -125,7 +126,7 @@ public:
 	LegoUnkSaveDataWriter* GetUnkSaveDataWriter() { return m_saveDataWriter; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-	inline void SetWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 
 	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
@@ -164,14 +165,15 @@ LegoROI* PickROI(MxLong, MxLong);
 LegoSoundManager* SoundManager();
 MxTransitionManager* TransitionManager();
 LegoVideoManager* VideoManager();
-
 LegoAnimationManager* AnimationManager();
+LegoNavController* NavController();
 LegoBuildingManager* BuildingManager();
 LegoControlManager* ControlManager();
-IslePathActor* GetCurrentVehicle();
+IslePathActor* CurrentVehicle();
+ViewManager* GetViewManager();
 LegoPlantManager* PlantManager();
-LegoWorld* GetCurrentWorld();
-LegoUnkSaveDataWriter* GetUnkSaveDataWriter();
+LegoWorld* CurrentWorld();
+LegoUnkSaveDataWriter* UnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void FUN_10015860(const char*, MxU8);

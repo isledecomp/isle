@@ -137,7 +137,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 		TickleManager()->UnregisterClient(this);
 
 		if (p_notifyWorld) {
-			LegoWorld* world = GetCurrentWorld();
+			LegoWorld* world = CurrentWorld();
 
 			if (world) {
 #ifdef COMPAT_MODE

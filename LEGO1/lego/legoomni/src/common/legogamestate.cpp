@@ -113,6 +113,12 @@ void LegoGameState::FUN_10039780(MxU8)
 	// TODO
 }
 
+// STUB: LEGO1 0x10039940
+void LegoGameState::FUN_10039940()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {

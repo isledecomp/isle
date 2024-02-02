@@ -20,8 +20,11 @@ public:
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
 
+	inline CompoundObject& GetUnknown0x08() { return m_unk0x08; }
+
 private:
-	undefined m_pad[0x1b8];
+	CompoundObject m_unk0x08; // 0x08
+	undefined m_pad[0x1cc];   // 0x14
 };
 
 #endif // VIEWMANAGER_H
