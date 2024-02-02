@@ -14,10 +14,13 @@ jobs:
       run: |
         find LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
         pipx run "clang-format>=17,<18" \
-          --Werror \
-          --dry-run \
+          ${{ github.event_name == 'push' && '--Werror --dry-run' }} \
           --style=file \
           -i
+    - uses: stefanzweifel/git-auto-commit-action@latest
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        commit_message: clang-format fixes
 
   python-format:
     name: 'Python'
