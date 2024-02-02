@@ -2,12 +2,6 @@
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Act1State::NamedPlane, 0x4c)
-DECOMP_SIZE_ASSERT(Act1State::NamedTexture, 0x14)
-
-// Forward declarations
-Act1State::NamedTexture* ReadNamedTexture(LegoFile* p_file);
-void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture);
-void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 
 // GLOBAL: ISLE 0x100f37f0
 MxS32 g_unk0x100f37f0[] = {
@@ -178,24 +172,6 @@ MxResult Act1State::VTable0x1c(LegoFile* p_legoFile)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x100344d0
-MxS32 Act1State::NamedPlane::Serialize(LegoFile* p_file)
-{
-	if (p_file->IsWriteMode()) {
-		p_file->FUN_10006030(m_name);
-		p_file->WriteVector3(m_point1);
-		p_file->WriteVector3(m_point2);
-		p_file->WriteVector3(m_point3);
-	}
-	else if (p_file->IsReadMode()) {
-		p_file->ReadString(&m_name);
-		p_file->ReadVector3(&m_point1);
-		p_file->ReadVector3(&m_point2);
-		p_file->ReadVector3(&m_point3);
-	}
-	return 0;
-}
-
 // FUNCTION: LEGO1 0x100346d0
 MxBool Act1State::SetFlag()
 {
@@ -266,22 +242,4 @@ MxBool Act1State::SetFlag()
 void Act1State::FUN_10034d00()
 {
 	// TODO
-}
-
-// STUB: LEGO1 0x1003f3b0
-Act1State::NamedTexture* ReadNamedTexture(LegoFile* p_file)
-{
-	return NULL;
-}
-
-// STUB: LEGO1 0x1003f540
-void FUN_1003f540(LegoFile* p_file, const char* p_filename)
-{
-}
-
-// FUNCTION: LEGO1 0x1003f8a0
-void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture)
-{
-	p_file->FUN_10006030(*p_texture->GetName());
-	p_texture->GetTexture()->Write(p_file);
 }

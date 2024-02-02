@@ -2,10 +2,8 @@
 #define ACT1STATE_H
 
 #include "legostate.h"
-#include "misc/legotexture.h"
+#include "legoutil.h"
 #include "roi/legoroi.h"
-
-class LegoTexture;
 
 // VTABLE: LEGO1 0x100d7028
 // SIZE 0x26c
@@ -56,26 +54,29 @@ public:
 
 		inline void SetName(const char* p_name) { m_name = p_name; }
 		inline const MxString* GetName() const { return &m_name; }
-		MxS32 Serialize(LegoFile* p_file);
+		// FUNCTION: LEGO1 0x100344d0
+		MxS32 Serialize(LegoFile* p_file)
+		{
+			if (p_file->IsWriteMode()) {
+				p_file->FUN_10006030(m_name);
+				p_file->WriteVector3(m_point1);
+				p_file->WriteVector3(m_point2);
+				p_file->WriteVector3(m_point3);
+			}
+			else if (p_file->IsReadMode()) {
+				p_file->ReadString(&m_name);
+				p_file->ReadVector3(&m_point1);
+				p_file->ReadVector3(&m_point2);
+				p_file->ReadVector3(&m_point3);
+			}
+			return 0;
+		}
 
 	private:
 		MxString m_name;         // 0x00
 		Mx3DPointFloat m_point1; // 0x10
 		Mx3DPointFloat m_point2; // 0x24
 		Mx3DPointFloat m_point3; // 0x38
-	};
-
-	// SIZE 0x14
-	class NamedTexture {
-	public:
-		~NamedTexture() { delete m_texture; }
-		// FUNCTION: LEGO1 0x1003f920
-		const MxString* GetName() const { return &m_name; }
-		LegoTexture* GetTexture() { return m_texture; }
-
-	private:
-		MxString m_name;        // 0x00
-		LegoTexture* m_texture; // 0x4
 	};
 
 protected:
