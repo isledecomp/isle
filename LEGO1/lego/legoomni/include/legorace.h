@@ -31,7 +31,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	MxBool VTable0x5c() override;                     // vtable+0x5c
 	MxBool VTable0x64() override;                     // vtable+0x64
-	void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 	virtual undefined4 VTable0x6c(undefined4) = 0;    // vtable+0x6c
 	virtual undefined4 VTable0x70(undefined4);        // vtable+0x70
 	virtual undefined4 VTable0x74(undefined4);        // vtable+0x74

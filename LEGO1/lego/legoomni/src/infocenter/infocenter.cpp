@@ -709,11 +709,11 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10070aa0
-void Infocenter::VTable0x68(MxBool p_add)
+void Infocenter::Enable(MxBool p_enable)
 {
-	LegoWorld::VTable0x68(p_add);
+	LegoWorld::Enable(p_enable);
 
-	if (p_add) {
+	if (p_enable) {
 		InputManager()->SetWorld(this);
 		SetIsWorldActive(FALSE);
 	}

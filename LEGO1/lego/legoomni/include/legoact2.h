@@ -16,7 +16,7 @@ class LegoAct2 : public LegoWorld {
 	MxBool VTable0x5c() override;                     // vtable+0x5c
 	void VTable0x60() override;                       // vtable+0x60
 	MxBool VTable0x64() override;                     // vtable+0x64
-	void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'

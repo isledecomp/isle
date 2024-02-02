@@ -7,7 +7,7 @@ DECOMP_SIZE_ASSERT(LegoState::Shuffle, 0x0c)
 MxU32 LegoState::Shuffle::FUN_10014d00()
 {
 	// TODO
-	return 0;
+	return m_objectIds[0];
 }
 
 // STUB: LEGO1 0x10014de0

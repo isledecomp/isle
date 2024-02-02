@@ -47,7 +47,7 @@ public:
 	// FUNCTION: LEGO1 0x10033170
 	void VTable0x60() override {}                    // vtable+60
 	MxBool VTable0x64() override;                    // vtable+64
-	void VTable0x68(MxBool p_add) override;          // vtable+68
+	void Enable(MxBool p_enable) override;           // vtable+68
 	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
 
 	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }

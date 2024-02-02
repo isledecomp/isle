@@ -31,7 +31,7 @@ public:
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x5c() override;                     // vtable+0x5c
 	MxBool VTable0x64() override;                     // vtable+0x64
-	void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x100747d0
 	// Hospital::`scalar deleting destructor'

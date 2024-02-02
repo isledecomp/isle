@@ -35,7 +35,7 @@ public:
 	void ReadyWorld() override;                       // vtable+50
 	MxBool VTable0x5c() override;                     // vtable+5c
 	MxBool VTable0x64() override;                     // vtable+64
-	void VTable0x68(MxBool p_add) override;           // vtable+68
+	void Enable(MxBool p_enable) override;            // vtable+68
 
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);

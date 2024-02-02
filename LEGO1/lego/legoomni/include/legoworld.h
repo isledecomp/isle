@@ -61,8 +61,8 @@ public:
 	// FUNCTION: LEGO1 0x100010a0
 	virtual void VTable0x60() {} // vtable+0x60
 
-	virtual MxBool VTable0x64();           // vtable+0x64
-	virtual void VTable0x68(MxBool p_add); // vtable+0x68
+	virtual MxBool VTable0x64();          // vtable+0x64
+	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }

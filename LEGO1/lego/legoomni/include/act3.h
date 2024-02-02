@@ -33,7 +33,7 @@ public:
 	MxBool VTable0x5c() override;                     // vtable+0x5c
 	void VTable0x60() override;                       // vtable+0x60
 	MxBool VTable0x64() override;                     // vtable+0x64
-	void VTable0x68(MxBool p_add) override;           // vtable+0x68
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	inline void SetUnkown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
 	inline void SetUnkown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }

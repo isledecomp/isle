@@ -84,7 +84,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 
 	if (p_dsAction.GetFlags() & MxDSAction::c_enabled) {
 		if (CurrentWorld()) {
-			CurrentWorld()->VTable0x68(0);
+			CurrentWorld()->Enable(0);
 		}
 
 		SetCurrentWorld(this);
@@ -517,13 +517,13 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 }
 
 // FUNCTION: LEGO1 0x10021a70
-void LegoWorld::VTable0x68(MxBool p_add)
+void LegoWorld::Enable(MxBool p_enable)
 {
-	if (p_add && !m_set0xd0.empty()) {
+	if (p_enable && !m_set0xd0.empty()) {
 		if (CurrentWorld() != this) {
 			if (CurrentWorld()) {
 				AnimationManager()->FUN_10061010(0);
-				CurrentWorld()->VTable0x68(FALSE);
+				CurrentWorld()->Enable(FALSE);
 
 				LegoEntityListCursor cursor(m_entityList);
 				LegoEntity* entity;
@@ -569,7 +569,7 @@ void LegoWorld::VTable0x68(MxBool p_add)
 			SetIsWorldActive(TRUE);
 		}
 	}
-	else if (!p_add && m_set0xd0.empty()) {
+	else if (!p_enable && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
 		IslePathActor* vehicle = CurrentVehicle();
