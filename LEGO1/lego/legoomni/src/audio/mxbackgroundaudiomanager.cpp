@@ -115,9 +115,10 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 
 	if (m_unk0xa0 == NULL) {
 		if (m_unk0x138) {
-			compare = 30;
-
-			if (m_unk0x148 == 0) {
+			if (m_unk0x148 != 0) {
+				compare = 30;
+			}
+			else {
 				compare = m_targetVolume;
 			}
 
