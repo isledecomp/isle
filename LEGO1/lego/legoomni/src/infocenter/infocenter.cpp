@@ -94,28 +94,30 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 			m_infocenterState->SetUnknown0x74(2);
 		}
 
-		MxS16 count;
-		for (count = 0; count < 7; count++) {
+		MxS16 count, i;
+		for (count = 0; count < m_infocenterState->GetInfocenterBufferSize(); count++) {
 			if (m_infocenterState->GetInfocenterBufferElement(count) == NULL) {
 				break;
 			}
 		}
 
-		for (MxS16 i = 0; i < count; i++) {
-			MxStillPresenter* still = m_infocenterState->GetInfocenterBufferElement(i);
-			if (still) {
-				still->Enable(TRUE);
-				still->SetTickleState(MxPresenter::e_repeating);
-				still->VTable0x88(((7 - count) / 2 + i), 45);
+		for (i = 0; i < count; i++) {
+			if (m_infocenterState->GetInfocenterBufferElement(i)) {
+				m_infocenterState->GetInfocenterBufferElement(i)->Enable(TRUE);
+				m_infocenterState->GetInfocenterBufferElement(i)->SetTickleState(MxPresenter::e_repeating);
+				m_infocenterState->GetInfocenterBufferElement(i)->VTable0x88(((7 - count) / 2 + i) * 29 + 223, 45);
 			}
 		}
 	}
 
 	GameState()->SetCurrentArea(2);
 	GameState()->StopArea(0);
+
 	if (m_infocenterState->GetUnknown0x74() == 4) {
-		GameState()->SetPreviousArea(GameState()->GetUnknown0x42c());
+		LegoGameState* state = GameState();
+		state->SetPreviousArea(GameState()->GetUnknown0x42c());
 	}
+
 	InputManager()->Register(this);
 	SetIsWorldActive(FALSE);
 
