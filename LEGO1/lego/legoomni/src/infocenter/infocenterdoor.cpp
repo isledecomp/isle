@@ -120,8 +120,7 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 					action.SetAtomId(*g_infodoorScript);
 					BackgroundAudioManager()->LowerVolume();
 					Start(&action);
-					result = 1;
-					return 0;
+					goto done;
 				}
 			}
 			else {
@@ -130,11 +129,12 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 				action.SetAtomId(*g_infodoorScript);
 				BackgroundAudioManager()->LowerVolume();
 				Start(&action);
-				result = 1;
-				return 0;
+				goto done;
 			}
 
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+
+		done:
 			result = 1;
 			break;
 		}
