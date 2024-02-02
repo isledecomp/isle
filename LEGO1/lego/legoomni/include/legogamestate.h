@@ -40,9 +40,12 @@ public:
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
 	inline MxU32 GetCurrentArea() { return m_currentArea; }
 	inline MxU32 GetPreviousArea() { return m_previousArea; }
+	inline MxU32 GetUnknown0x42c() { return m_unk0x42c; }
 
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetCurrentArea(MxU32 p_currentArea) { m_currentArea = p_currentArea; }
+	inline void SetPreviousArea(MxU32 p_previousArea) { m_previousArea = p_previousArea; }
+	inline void SetUnknown0x0c(MxU8 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	void SetSomeEnumState(undefined4 p_state);
 	void FUN_1003ceb0();

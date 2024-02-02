@@ -446,6 +446,7 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 	VideoManager()->SetUnk0x554(FALSE);
 
 	MxAtomId* script = g_isleScript;
+	LegoWorld* world;
 	switch (p_area) {
 	case 1:
 		break;
@@ -461,6 +462,16 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 	case 5:
 		script = g_elevbottScript;
 		break;
+	case 6:
+	case 7:
+		world = FindWorld(*g_isleScript, 0);
+		if (world == NULL) {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
+		}
+		else {
+			NotificationManager()->Send((MxCore*) world, &MxNotificationParam(c_notificationType20, NULL));
+		}
+		break;
 	case 12:
 		VideoManager()->SetUnk0x554(TRUE);
 		script = g_regbookScript;
@@ -470,7 +481,14 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 		script = g_infoscorScript;
 		break;
 
+
 		// TODO: implement other cases
+
+	default: {
+		char cad[512];
+		sprintf(cad, "LegoGameState::SwitchArea: unknown area %d\n", p_area);
+		OutputDebugString(cad);
+	} break;
 	}
 
 	InvokeAction(Extra::ActionType::e_opendisk, *script, 0, NULL);

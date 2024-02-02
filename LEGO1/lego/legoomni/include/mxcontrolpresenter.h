@@ -40,10 +40,9 @@ public:
 	virtual void VTable0x6c(MxS16);                                  // vtable+0x6c
 
 	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
-
-private:
 	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
 
+private:
 	undefined2 m_unk0x4c; // 0x4c
 	MxS16 m_unk0x4e;      // 0x4e
 	MxBool m_unk0x50;     // 0x50

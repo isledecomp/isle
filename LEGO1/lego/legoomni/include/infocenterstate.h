@@ -34,6 +34,7 @@ public:
 	inline Playlist& GetUnknown0x14() { return m_unk0x14; }
 	inline Playlist& GetUnknown0x68() { return m_unk0x68; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
+	inline Playlist* GetUnknown0x44() { return m_unk0x44; }
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 

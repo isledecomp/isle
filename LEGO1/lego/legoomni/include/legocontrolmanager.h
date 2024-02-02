@@ -6,6 +6,8 @@
 #include "mxcore.h"
 #include "mxpresenterlist.h"
 
+class MxControlPresenter;
+
 // VTABLE: LEGO1 0x100d6a98
 // SIZE 0x2c
 class LegoControlManagerEvent : public LegoEventNotificationParam {
@@ -62,7 +64,7 @@ public:
 	void Unregister(MxCore* p_listener);
 	MxBool FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
 	void FUN_100293c0(undefined4, const char*, undefined2);
-	void FUN_100294e0(MxS32 p_x, MxS32 p_y);
+	MxControlPresenter* FUN_100294e0(MxS32 p_x, MxS32 p_y);
 	MxBool FUN_10029630();
 	MxBool FUN_10029750();
 	void FUN_100292e0();
