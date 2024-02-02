@@ -45,45 +45,52 @@ public:
 	// LegoState::`scalar deleting destructor'
 
 	// SIZE 0x0c
-	class Shuffle {
+	class Playlist {
 	public:
+		enum Mode {
+			e_loop,
+			e_once,
+			e_random,
+			e_loopSkipFirst
+		};
+
 		// FUNCTION: LEGO1 0x10017c00
-		Shuffle()
+		Playlist()
 		{
 			m_objectIds = NULL;
 			m_length = 0;
-			m_unk0x06 = 0;
-			m_unk0x08 = 0;
+			m_mode = e_loop;
+			m_nextIndex = 0;
 		}
 
-		Shuffle(MxU32* p_objectIds, MxU16 p_length)
+		Playlist(MxU32* p_objectIds, MxS16 p_length)
 		{
 			m_objectIds = p_objectIds;
 			m_length = p_length;
-			m_unk0x06 = 0;
-			m_unk0x08 = 0;
+			m_mode = e_loop;
+			m_nextIndex = 0;
 		}
 
 		// FUNCTION: LEGO1 0x10071800
-		Shuffle& operator=(const Shuffle& p_shuffle)
+		Playlist& operator=(const Playlist& p_shuffle)
 		{
 			m_objectIds = p_shuffle.m_objectIds;
 			m_length = p_shuffle.m_length;
-			m_unk0x08 = p_shuffle.m_unk0x08;
-			m_unk0x06 = p_shuffle.m_unk0x06;
+			m_nextIndex = p_shuffle.m_nextIndex;
+			m_mode = p_shuffle.m_mode;
 			return *this;
 		}
 
-		MxU32 FUN_10014d00();
-		MxBool FUN_10014de0(MxU32 p_objectId);
+		MxU32 Next();
+		MxBool Contains(MxU32 p_objectId);
 
-		inline void SetUnknown0x08(MxU16 p_unk0x08) { m_unk0x08 = p_unk0x08; }
+		inline void SetUnknown0x08(MxS16 p_unk0x08) { m_nextIndex = p_unk0x08; }
 
 	private:
-		MxU32* m_objectIds;   // 0x00
-		MxU16 m_length;       // 0x04
-		undefined2 m_unk0x06; // 0x06
-		MxU16 m_unk0x08;      // 0x08
+		MxU32* m_objectIds; // 0x00
+		MxS16 m_length;     // 0x04
+		MxS16 m_mode;       // 0x06
+		MxS16 m_nextIndex;  // 0x08
 	};
 };
 

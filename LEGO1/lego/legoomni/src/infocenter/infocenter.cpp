@@ -538,7 +538,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_transitionDestination = 5;
 			}
 			else {
-				MxU32 objectId = m_infocenterState->GetUnknown0x68().FUN_10014d00();
+				MxU32 objectId = m_infocenterState->GetUnknown0x68().Next();
 				PlayAction((InfomainScript) objectId);
 			}
 
@@ -553,7 +553,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_transitionDestination = 13;
 			}
 			else {
-				MxU32 objectId = m_infocenterState->GetUnknown0x68().FUN_10014d00();
+				MxU32 objectId = m_infocenterState->GetUnknown0x68().Next();
 				PlayAction((InfomainScript) objectId);
 			}
 
@@ -658,10 +658,10 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 
 			InfomainScript objectId;
 			if (GameState()->GetUnknown10()) {
-				objectId = (InfomainScript) m_infocenterState->GetUnknown0x14().FUN_10014d00();
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x14().Next();
 			}
 			else {
-				objectId = (InfomainScript) m_infocenterState->GetUnknown0x08().FUN_10014d00();
+				objectId = (InfomainScript) m_infocenterState->GetUnknown0x08().Next();
 			}
 
 			PlayAction(objectId);
