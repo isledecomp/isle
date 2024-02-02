@@ -519,8 +519,8 @@ MxCore* LegoWorld::Find(const MxAtomId& p_atom, MxS32 p_entityId)
 // FUNCTION: LEGO1 0x10021a70
 void LegoWorld::VTable0x68(MxBool p_add)
 {
-	if (p_add) {
-		if (!m_set0xd0.empty() && CurrentWorld() != this) {
+	if (p_add && !m_set0xd0.empty()) {
+		if (CurrentWorld() != this) {
 			if (CurrentWorld()) {
 				AnimationManager()->FUN_10061010(0);
 				CurrentWorld()->VTable0x68(FALSE);
@@ -569,7 +569,7 @@ void LegoWorld::VTable0x68(MxBool p_add)
 			SetIsWorldActive(TRUE);
 		}
 	}
-	else if (m_set0xd0.empty()) {
+	else if (!p_add && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
 		IslePathActor* vehicle = CurrentVehicle();
