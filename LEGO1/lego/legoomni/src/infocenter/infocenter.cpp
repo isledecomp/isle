@@ -610,6 +610,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 		else {
 			if (m_unk0x1c8 != -1) {
 				m_infoManDialogueTimer = 0;
+
 				switch (m_mapAreas[m_unk0x1c8].m_unk0x04) {
 				case 3:
 					GameState()->FUN_10039780(m_unk0xfc);
@@ -677,6 +678,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 		if (m_infocenterState->GetUnknown0x74() == 5) {
 			InfomainScript dialogueToPlay;
+
 			if (GameState()->GetUnknown10() == 0) {
 				if (m_infocenterState->GetInfocenterBufferElement(0) == NULL) {
 					m_infocenterState->SetUnknown0x74(2);
@@ -722,6 +724,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 		UpdateFrameHot(TRUE);
 		FUN_10070d10(0, 0);
 	}
+
 	return FALSE;
 }
 
