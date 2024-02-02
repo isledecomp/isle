@@ -185,8 +185,9 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 // STUB: LEGO1 0x10031820
 void Isle::Enable(MxBool p_enable)
 {
-	if (m_set0xd0.empty() == p_enable)
+	if (m_set0xd0.empty() == p_enable) {
 		return;
+	}
 
 	LegoWorld::Enable(p_enable);
 	m_radio.Initialize(p_enable);
