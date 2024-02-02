@@ -469,7 +469,14 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 			InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
 		}
 		else {
+#ifdef COMPAT_MODE
+			{
+				MxNotificationParam param(c_notificationType20, NULL);
+				NotificationManager()->Send((MxCore*) world, &param);
+			}
+#else
 			NotificationManager()->Send((MxCore*) world, &MxNotificationParam(c_notificationType20, NULL));
+#endif
 		}
 		break;
 	case 12:
