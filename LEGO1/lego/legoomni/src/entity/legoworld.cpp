@@ -570,6 +570,8 @@ void LegoWorld::VTable0x68(MxBool p_add)
 		}
 	}
 	else if (m_set0xd0.empty()) {
+		MxPresenter* presenter;
+		LegoPathController* controller;
 		IslePathActor* vehicle = CurrentVehicle();
 
 		if (vehicle) {
@@ -585,7 +587,6 @@ void LegoWorld::VTable0x68(MxBool p_add)
 		}
 
 		MxPresenterListCursor controlPresenterCursor(&m_controlPresenters);
-		MxPresenter* presenter;
 
 		while (controlPresenterCursor.Next(presenter)) {
 			if (presenter->IsEnabled()) {
@@ -620,7 +621,6 @@ void LegoWorld::VTable0x68(MxBool p_add)
 		}
 
 		LegoPathControllerListCursor pathControllerCursor(&m_list0x68);
-		LegoPathController* controller;
 
 		while (pathControllerCursor.Next(controller)) {
 			controller->Enable(FALSE);
