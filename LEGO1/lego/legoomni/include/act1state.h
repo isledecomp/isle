@@ -11,6 +11,12 @@ class LegoTexture;
 // SIZE 0x26c
 class Act1State : public LegoState {
 public:
+	enum {
+		e_unk953 = 953,
+		e_unk954 = 954,
+		e_unk955 = 955,
+	};
+
 	Act1State();
 
 	// FUNCTION: LEGO1 0x100338a0
@@ -50,7 +56,7 @@ public:
 
 		inline void SetName(const char* p_name) { m_name = p_name; }
 		inline const MxString* GetName() const { return &m_name; }
-		int Serialize(LegoFile* p_file);
+		MxS32 Serialize(LegoFile* p_file);
 
 	private:
 		MxString m_name;         // 0x00
@@ -73,7 +79,7 @@ public:
 	};
 
 protected:
-	int* m_unk0x008; // 0x008
+	MxS32* m_unk0x008; // 0x008
 	// FIXME: count for m_unk0x008
 	MxS16 m_unk0x00c;         // 0x00c
 	undefined2 m_unk0x00e;    // 0x00e

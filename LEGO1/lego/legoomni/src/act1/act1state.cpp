@@ -9,17 +9,11 @@ Act1State::NamedTexture* ReadNamedTexture(LegoFile* p_file);
 void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 
-enum {
-	e_unk953 = 953,
-	e_unk954 = 954,
-	e_unk955 = 955,
-};
-
 // GLOBAL: ISLE 0x100f37f0
-int g_unk0x100f37f0[] = {
-	e_unk953,
-	e_unk954,
-	e_unk955,
+MxS32 g_unk0x100f37f0[] = {
+	Act1State::e_unk953,
+	Act1State::e_unk954,
+	Act1State::e_unk955,
 };
 
 // STUB: LEGO1 0x100334b0
@@ -185,7 +179,7 @@ MxResult Act1State::VTable0x1c(LegoFile* p_legoFile)
 }
 
 // FUNCTION: LEGO1 0x100344d0
-int Act1State::NamedPlane::Serialize(LegoFile* p_file)
+MxS32 Act1State::NamedPlane::Serialize(LegoFile* p_file)
 {
 	if (p_file->IsWriteMode()) {
 		p_file->FUN_10006030(m_name);
