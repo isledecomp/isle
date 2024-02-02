@@ -24,8 +24,8 @@ private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	undefined4 m_unk0x3c;           // 0x3c
-	LegoUnknown100d6b4c* m_unk0x40; // 0x40
+	IDirectSound3DListener* m_listener; // 0x3c
+	LegoUnknown100d6b4c* m_unk0x40;     // 0x40
 };
 
 #endif // LEGOSOUNDMANAGER_H

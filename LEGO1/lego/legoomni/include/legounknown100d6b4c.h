@@ -2,6 +2,7 @@
 #define LEGOUNKNOWN100D6B4C_H
 
 #include "decomp.h"
+#include "mxtypes.h"
 
 class LegoCacheSound;
 
@@ -9,6 +10,11 @@ class LegoCacheSound;
 // SIZE 0x20
 class LegoUnknown100d6b4c {
 public:
+	LegoUnknown100d6b4c();
+	~LegoUnknown100d6b4c();
+
+	virtual MxResult Tickle(); // vtable+0x0
+
 	void FUN_1003dc40(LegoCacheSound** p_und);
 };
 
