@@ -3,7 +3,6 @@
 
 #include "legotypes.h"
 #include "mxstring.h"
-
 #include "vector.h"
 
 #include <stdio.h>
@@ -74,33 +73,36 @@ public:
 	LegoResult SetPosition(LegoU32 p_position) override;
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
-    // FUNCTION: LEGO1 0x10034430
-    LegoStorage *ReadVector3(Vector3 *p_vec3) {
-        Read(&(*p_vec3)[0], sizeof(float));
-        Read(&(*p_vec3)[1], sizeof(float));
-        Read(&(*p_vec3)[2], sizeof(float));
-        return this;
-    }
+	// FUNCTION: LEGO1 0x10034430
+	LegoStorage* ReadVector3(Vector3* p_vec3)
+	{
+		Read(&(*p_vec3)[0], sizeof(float));
+		Read(&(*p_vec3)[1], sizeof(float));
+		Read(&(*p_vec3)[2], sizeof(float));
+		return this;
+	}
 
-    // FUNCTION: LEGO1 0x100343d0
-    LegoStorage *WriteVector3(Vector3 p_vec3) {
-        Write(&p_vec3[0], sizeof(float));
-        Write(&p_vec3[1], sizeof(float));
-        Write(&p_vec3[2], sizeof(float));
-        return this;
-    }
+	// FUNCTION: LEGO1 0x100343d0
+	LegoStorage* WriteVector3(Vector3 p_vec3)
+	{
+		Write(&p_vec3[0], sizeof(float));
+		Write(&p_vec3[1], sizeof(float));
+		Write(&p_vec3[2], sizeof(float));
+		return this;
+	}
 
-    // FUNCTION: LEGO1 0x10034470
-    LegoStorage *ReadString(MxString *p_str) {
-        MxU16 len;
-        Read(&len, sizeof(MxU16));
-        char *text = new char[len + 1];
-        Read(text, len);
-        text[len] = '\0';
-        *p_str = text;
-        delete[] text;
-        return this;
-    }
+	// FUNCTION: LEGO1 0x10034470
+	LegoStorage* ReadString(MxString* p_str)
+	{
+		MxU16 len;
+		Read(&len, sizeof(MxU16));
+		char* text = new char[len + 1];
+		Read(text, len);
+		text[len] = '\0';
+		*p_str = text;
+		delete[] text;
+		return this;
+	}
 
 	// FUNCTION: LEGO1 0x10006030
 	LegoStorage* FUN_10006030(MxString p_str)
