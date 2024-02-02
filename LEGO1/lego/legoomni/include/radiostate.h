@@ -36,9 +36,9 @@ public:
 	MxBool FUN_1002d0c0(const MxAtomId& p_atom, MxU32 p_objectId);
 
 private:
-	Shuffle m_unk0x08[3]; // 0x08
-	MxS16 m_unk0x2c;      // 0x2c
-	MxBool m_active;      // 0x2e
+	Playlist m_unk0x08[3]; // 0x08
+	MxS16 m_unk0x2c;       // 0x2c
+	MxBool m_active;       // 0x2e
 };
 
 #endif // RADIOSTATE_H
