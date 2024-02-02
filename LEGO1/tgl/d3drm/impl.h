@@ -1,14 +1,15 @@
 
-#include "../tgl.h"
+#include "compat.h"
 #include "decomp.h"
+#include "tgl/tgl.h"
 
 #include <d3drm.h>
 
 // Forward declare D3D types
-struct IDirect3DRM;
-struct IDirect3DRMDevice;
+struct IDirect3DRM2;
+struct IDirect3DRMDevice2;
 struct IDirect3DRMViewport;
-struct IDirect3DRMFrame;
+struct IDirect3DRMFrame2;
 struct IDirect3DRMMesh;
 struct IDirect3DRMMeshBuilder;
 struct IDirect3DRMTexture;
@@ -35,35 +36,34 @@ class MeshImpl;
 class TextureImpl;
 class UnkImpl;
 
-// VTABLE 0x100db910
+// VTABLE: LEGO1 0x100db910
 class RendererImpl : public Renderer {
 public:
 	RendererImpl() : m_data(0) {}
-	~RendererImpl() { Destroy(); };
+	~RendererImpl() override { Destroy(); }
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Device* CreateDevice(const DeviceDirect3DCreateData&);
-	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&);
+	Device* CreateDevice(const DeviceDirectDrawCreateData&) override;
+	Device* CreateDevice(const DeviceDirect3DCreateData&) override;
 
 	// vtable+0x10
-	virtual View* CreateView(
+	View* CreateView(
 		const Device*,
 		const Camera*,
 		unsigned long x,
 		unsigned long y,
 		unsigned long width,
 		unsigned long height
-	);
-	virtual Camera* CreateCamera();
-	virtual Light* CreateLight(LightType, float r, float g, float b);
-	virtual Group* CreateGroup(const Group* pParent);
+	) override;
+	Camera* CreateCamera() override;
+	Light* CreateLight(LightType, float r, float g, float b) override;
+	Group* CreateGroup(const Group* pParent) override;
 
 	// vtable+0x20
-	virtual Unk* CreateUnk();
-	virtual Texture* CreateTexture();
-	virtual Texture* CreateTexture(
+	Unk* CreateUnk() override;
+	Texture* CreateTexture(
 		int width,
 		int height,
 		int bitsPerTexel,
@@ -71,25 +71,46 @@ public:
 		int pTexelsArePersistent,
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
-	);
-	virtual Result SetTextureDefaultShadeCount(unsigned long);
+	) override;
+	Texture* CreateTexture() override;
+
+	Result SetTextureDefaultShadeCount(unsigned long) override;
 
 	// vtable+0x30
-	virtual Result SetTextureDefaultColorCount(unsigned long);
+	Result SetTextureDefaultColorCount(unsigned long) override;
 
 public:
 	inline Result Create();
 	inline void Destroy();
 
 private:
-	IDirect3DRM* m_data;
+	IDirect3DRM2* m_data;
 };
 
-// VTABLE 0x100db988
+extern IDirect3DRM2* g_pD3DRM;
+
+inline void RendererDestroy(IDirect3DRM2* pRenderer)
+{
+	int refCount = pRenderer->Release();
+	if (refCount <= 0) {
+		g_pD3DRM = NULL;
+	}
+}
+
+// Inlined only
+void RendererImpl::Destroy()
+{
+	if (m_data) {
+		RendererDestroy(m_data);
+		m_data = NULL;
+	}
+}
+
+// VTABLE: LEGO1 0x100db988
 class DeviceImpl : public Device {
 public:
 	DeviceImpl() : m_data(0) {}
-	~DeviceImpl()
+	~DeviceImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -97,36 +118,36 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual unsigned long GetWidth();
-	virtual unsigned long GetHeight();
+	unsigned long GetWidth() override;
+	unsigned long GetHeight() override;
 
 	// vtable+0x10
-	virtual Result SetColorModel(ColorModel);
-	virtual Result SetShadingModel(ShadingModel);
-	virtual Result SetShadeCount(unsigned long);
-	virtual Result SetDither(int);
+	Result SetColorModel(ColorModel) override;
+	Result SetShadingModel(ShadingModel) override;
+	Result SetShadeCount(unsigned long) override;
+	Result SetDither(int) override;
 
 	// vtable+0x20
-	virtual Result Update();
-	virtual void InitFromD3DDevice(Device*);
-	virtual void InitFromWindowsDevice(Device*);
+	Result Update() override;
+	void InitFromD3DDevice(Device*) override;
+	void InitFromWindowsDevice(Device*) override;
 
-	inline IDirect3DRMDevice* ImplementationData() const { return m_data; }
+	inline IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMDevice* m_data;
+	IDirect3DRMDevice2* m_data;
 };
 
-// VTABLE 0x100db9e8
+// VTABLE: LEGO1 0x100db9e8
 class ViewImpl : public View {
 public:
 	ViewImpl() : m_data(0) {}
-	~ViewImpl()
+	~ViewImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -134,39 +155,39 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result Add(const Light*);
-	virtual Result Remove(const Light*);
+	Result Add(const Light*) override;
+	Result Remove(const Light*) override;
 
 	// vtable+0x10
-	virtual Result SetCamera(const Camera*);
-	virtual Result SetProjection(ProjectionType);
-	virtual Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees);
-	virtual Result SetBackgroundColor(float r, float g, float b);
+	Result SetCamera(const Camera*) override;
+	Result SetProjection(ProjectionType) override;
+	Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees) override;
+	Result SetBackgroundColor(float r, float g, float b) override;
 
 	// vtable+0x20
-	virtual Result GetBackgroundColor(float* r, float* g, float* b);
-	virtual Result Clear();
-	virtual Result Render(const Light*);
-	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height);
+	Result GetBackgroundColor(float* r, float* g, float* b) override;
+	Result Clear() override;
+	Result Render(const Light*) override;
+	Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) override;
 
 	// vtable+0x30
-	virtual Result TransformWorldToScreen(const float world[3], float screen[4]);
-	virtual Result TransformScreenToWorld(const float screen[4], float world[3]);
-	virtual Result Pick(
+	Result TransformWorldToScreen(const float world[3], float screen[4]) override;
+	Result TransformScreenToWorld(const float screen[4], float world[3]) override;
+	Result Pick(
 		unsigned long x,
 		unsigned long y,
 		const Group** ppGroupsToPickFrom,
 		int groupsToPickFromCount,
 		const Group**& rppPickedGroups,
 		int& rPickedGroupCount
-	);
+	) override;
 
 	inline IDirect3DRMViewport* ImplementationData() const { return m_data; }
 
-	static Result ViewportCreateAppData(IDirect3DRM*, IDirect3DRMViewport*, IDirect3DRMFrame*);
+	static Result ViewportCreateAppData(IDirect3DRM2*, IDirect3DRMViewport*, IDirect3DRMFrame2*);
 
 	friend class RendererImpl;
 
@@ -174,11 +195,11 @@ private:
 	IDirect3DRMViewport* m_data;
 };
 
-// VTABLE 0x100dbad8
+// VTABLE: LEGO1 0x100dbad8
 class CameraImpl : public Camera {
 public:
 	CameraImpl() : m_data(0) {}
-	~CameraImpl()
+	~CameraImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -186,24 +207,24 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix4&);
+	Result SetTransformation(FloatMatrix4&) override;
 
-	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
+	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbaf8
+// VTABLE: LEGO1 0x100dbaf8
 class LightImpl : public Light {
 public:
 	LightImpl() : m_data(0) {}
-	~LightImpl()
+	~LightImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -211,25 +232,25 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix4&);
-	virtual Result SetColor(float r, float g, float b);
+	Result SetTransformation(FloatMatrix4&) override;
+	Result SetColor(float r, float g, float b) override;
 
-	inline IDirect3DRMFrame* ImplementationData() const { return m_data; }
+	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbb88
+// VTABLE: LEGO1 0x100dbb88
 class MeshImpl : public Mesh {
 public:
 	MeshImpl() : m_data(0) {}
-	~MeshImpl()
+	~MeshImpl() override
 	{
 		if (m_data) {
 			delete m_data;
@@ -237,20 +258,20 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetColor(float r, float g, float b, float a);
-	virtual Result SetTexture(const Texture*);
+	Result SetColor(float r, float g, float b, float a) override;
+	Result SetTexture(const Texture*) override;
 
 	// vtable+0x10
-	virtual Result GetTexture(Texture*&);
-	virtual Result SetTextureMappingMode(ProjectionType);
-	virtual Result SetShadingModel(ShadingModel);
-	virtual Mesh* DeepClone(Unk*);
+	Result GetTexture(Texture*&) override;
+	Result SetTextureMappingMode(ProjectionType) override;
+	Result SetShadingModel(ShadingModel) override;
+	Mesh* DeepClone(Unk*) override;
 
 	// vtable+0x20
-	virtual Mesh* ShallowClone(Unk*);
+	Mesh* ShallowClone(Unk*) override;
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
@@ -265,11 +286,11 @@ private:
 	MeshData* m_data;
 };
 
-// VTABLE 0x100dba68
+// VTABLE: LEGO1 0x100dba68
 class GroupImpl : public Group {
 public:
 	GroupImpl() : m_data(0) {}
-	~GroupImpl()
+	~GroupImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -277,38 +298,38 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(const FloatMatrix4&);
-	virtual Result SetColor(float r, float g, float b, float a);
+	Result SetTransformation(FloatMatrix4&) override;
+	Result SetColor(float r, float g, float b, float a) override;
 
 	// vtable+0x10
-	virtual Result SetTexture(const Texture*);
-	virtual Result GetTexture(Texture*&);
-	virtual Result SetMaterialMode(MaterialMode);
-	virtual Result Add(const Group*);
+	Result SetTexture(const Texture*) override;
+	Result GetTexture(Texture*&) override;
+	Result SetMaterialMode(MaterialMode) override;
+	Result Add(const Mesh*) override;
 
 	// vtable+0x20
-	virtual Result Add(const Mesh*);
-	virtual Result Remove(const Group*);
-	virtual Result Remove(const Mesh*);
-	virtual Result RemoveAll();
+	Result Add(const Group*) override;
+	Result Remove(const Mesh*) override;
+	Result Remove(const Group*) override;
+	Result RemoveAll() override;
 
 	// vtable+0x30
-	virtual Result Unknown();
+	Result Unknown() override;
 
 	friend class RendererImpl;
 
 private:
-	IDirect3DRMFrame* m_data;
+	IDirect3DRMFrame2* m_data;
 };
 
-// VTABLE 0x100dbb18
+// VTABLE: LEGO1 0x100dbb18
 class UnkImpl : public Unk {
 public:
 	UnkImpl() : m_data(0) {}
-	~UnkImpl()
+	~UnkImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -316,10 +337,10 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetMeshData(
+	Result SetMeshData(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		const float (*pPositions)[3],
@@ -327,11 +348,11 @@ public:
 		const float (*pTextureCoordinates)[2],
 		unsigned long vertexPerFaceCount,
 		unsigned long* pFaceData
-	);
-	virtual Result GetBoundingBox(float min[3], float max[3]);
+	) override;
+	Result GetBoundingBox(float min[3], float max[3]) override;
 
 	// vtable+0x10
-	virtual Unk* Clone();
+	Unk* Clone() override;
 
 	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
@@ -364,11 +385,11 @@ public:
 	int m_texelsAllocatedByClient;
 };
 
-// VTABLE 0x100dbb48
+// VTABLE: LEGO1 0x100dbb48
 class TextureImpl : public Texture {
 public:
 	TextureImpl() : m_data(0) {}
-	~TextureImpl()
+	~TextureImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -376,23 +397,23 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels);
-	virtual void FillRowsOfTexture(int y, int height, void* pBuffer);
+	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) override;
+	void FillRowsOfTexture(int y, int height, void* pBuffer) override;
 
 	// vtable+0x10
-	virtual Result Changed(int texelsChanged, int paletteChanged);
-	virtual Result GetBufferAndPalette(
+	Result Changed(int texelsChanged, int paletteChanged) override;
+	Result GetBufferAndPalette(
 		int* pWidth,
 		int* pHeight,
 		int* pDepth,
 		void** ppBuffer,
 		int* ppPaletteSize,
 		PaletteEntry** ppPalette
-	);
-	virtual Result SetPalette(int entryCount, PaletteEntry* entries);
+	) override;
+	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 
 	inline IDirect3DRMTexture* ImplementationData() const { return m_data; }
 	inline void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }
@@ -454,7 +475,7 @@ inline D3DRMPROJECTIONTYPE Translate(ProjectionType tglProjectionType)
 // Yes this function serves no purpose, originally they intended it to
 // convert from doubles to floats but ended up using floats throughout
 // the software stack.
-inline D3DRMMATRIX4D* Translate(const FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DRMMatrix4x4)
+inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DRMMatrix4x4)
 {
 	for (int i = 0; i < (sizeof(rD3DRMMatrix4x4) / sizeof(rD3DRMMatrix4x4[0])); i++) {
 		for (int j = 0; j < (sizeof(rD3DRMMatrix4x4[0]) / sizeof(rD3DRMMatrix4x4[0][0])); j++) {

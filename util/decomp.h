@@ -1,7 +1,7 @@
 #ifndef DECOMP_H
 #define DECOMP_H
 
-#if defined(_MSC_VER)
+#if defined(ENABLE_DECOMP_ASSERTS)
 #define DECOMP_STATIC_ASSERT(V)                                                                                        \
 	namespace                                                                                                          \
 	{                                                                                                                  \

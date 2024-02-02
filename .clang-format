@@ -30,6 +30,7 @@ QualifierOrder:
   - const
   - volatile
   - type
+RemoveSemicolon: true
 SpaceAfterCStyleCast: true
 TabWidth: 4
 UseTab: ForContinuationAndIndentation

@@ -115,7 +115,7 @@ def test_different_markers_same_module(parser):
 
     # Use first marker declaration, don't replace
     assert len(parser.functions) == 1
-    assert parser.functions[0].is_stub is False
+    assert parser.functions[0].should_skip() is False
 
     # Should alert to this
     assert len(parser.alerts) == 1
@@ -193,7 +193,7 @@ def test_multiple_vtables(parser):
     )
     assert len(parser.alerts) == 0
     assert len(parser.vtables) == 2
-    assert parser.vtables[0].class_name == "MxString"
+    assert parser.vtables[0].name == "MxString"
 
 
 def test_multiple_vtables_same_module(parser):
@@ -247,7 +247,7 @@ def test_synthetic_no_comment(parser):
     )
     assert len(parser.functions) == 0
     assert len(parser.alerts) == 1
-    assert parser.alerts[0].code == ParserError.BAD_SYNTHETIC
+    assert parser.alerts[0].code == ParserError.BAD_NAMEREF
     assert parser.state == ReaderState.SEARCH
 
 
@@ -375,3 +375,257 @@ def test_unexpected_eof(parser):
     assert len(parser.functions) == 1
     assert len(parser.alerts) == 1
     assert parser.alerts[0].code == ParserError.UNEXPECTED_END_OF_FILE
+
+
+def test_global_variable_prefix(parser):
+    """Global and static variables should have the g_ prefix."""
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            'const char* g_msg = "hello";',
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.alerts) == 0
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEXT 0x5555",
+            "int test = 5;",
+        ]
+    )
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_MISSING_PREFIX
+    # In spite of that, we should still grab the variable name.
+    assert parser.variables[1].name == "test"
+
+
+def test_global_nomatch(parser):
+    """We do our best to grab the variable name, even without the g_ prefix
+    but this (by design) will not match everything."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "FunctionCall();",
+        ]
+    )
+    assert len(parser.variables) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.NO_SUITABLE_NAME
+
+
+def test_static_variable(parser):
+    """We can detect whether a variable is a static function variable
+    based on the parser's state when we detect it.
+    Checking for the word `static` alone is not a good test.
+    Static class variables are filed as S_GDATA32, same as regular globals.
+    Only function statics are filed as S_LDATA32."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "int g_test = 1234;",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert parser.variables[0].is_static is False
+
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x5555",
+            "void test_function() {",
+            "// GLOBAL: TEST 0x8888",
+            "int g_internal = 0;",
+            "}",
+        ]
+    )
+    assert len(parser.variables) == 2
+    assert parser.variables[1].is_static is True
+
+
+def test_reject_global_return(parser):
+    """Previously we had annotated strings with the GLOBAL marker.
+    For example: if a function returned a string. We now want these to be
+    annotated with the STRING marker."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x5555",
+            "void test_function() {",
+            "  // GLOBAL: TEST 0x8888",
+            '  return "test";',
+            "}",
+        ]
+    )
+    assert len(parser.variables) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_NOT_VARIABLE
+
+
+def test_global_string(parser):
+    """We now allow GLOBAL and STRING markers for the same item."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// STRING: TEXT 0x5555",
+            'char* g_test = "hello";',
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.strings) == 1
+    assert len(parser.alerts) == 0
+
+    assert parser.variables[0].name == "g_test"
+    assert parser.strings[0].name == "hello"
+
+
+def test_comment_variables(parser):
+    """Match on hidden variables from libraries."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// g_test",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "g_test"
+
+
+def test_flexible_variable_prefix(parser):
+    """Don't alert to library variables that lack the g_ prefix.
+    This is out of our control."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "// some_other_variable",
+        ]
+    )
+    assert len(parser.variables) == 1
+    assert len(parser.alerts) == 0
+    assert parser.variables[0].name == "some_other_variable"
+
+
+def test_string_ignore_g_prefix(parser):
+    """String annotations above a regular variable should not alert to
+    the missing g_ prefix. This is only required for GLOBAL markers."""
+
+    parser.read_lines(
+        [
+            "// STRING: TEST 0x1234",
+            'const char* value = "";',
+        ]
+    )
+    assert len(parser.strings) == 1
+    assert len(parser.alerts) == 0
+
+
+def test_class_variable(parser):
+    """We should accurately name static variables that are class members."""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "protected:",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_test;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Test::g_test"
+
+
+def test_namespace_variable(parser):
+    """We should identify a namespace surrounding any global variables"""
+
+    parser.read_lines(
+        [
+            "namespace Test {",
+            "// GLOBAL: TEST 0x1234",
+            "int g_test = 1234;",
+            "}",
+            "// GLOBAL: TEST 0x5555",
+            "int g_second = 2;",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_test"
+    assert parser.variables[1].name == "g_second"
+
+
+def test_namespace_vtable(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "// VTABLE: TEST 0x1234",
+            "class Renderer {",
+            "};",
+            "}",
+            "// VTABLE: TEST 0x5555",
+            "class Hello { };",
+        ]
+    )
+
+    assert len(parser.vtables) == 2
+    assert parser.vtables[0].name == "Tgl::Renderer"
+    assert parser.vtables[1].name == "Hello"
+
+
+def test_global_prefix_namespace(parser):
+    """Should correctly identify namespaces before checking for the g_ prefix"""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "  // GLOBAL: TEST 0x5555",
+            "  static int count = 0;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_count"
+    assert parser.variables[1].name == "Test::count"
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_MISSING_PREFIX
+
+
+def test_nested_namespace(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "class Renderer {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "};",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Tgl::Renderer::g_count"
+
+
+def test_match_qualified_variable(parser):
+    """If a variable belongs to a scope and we use a fully qualified reference
+    below a GLOBAL marker, make sure we capture the full name."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "int MxTest::g_count = 0;",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "MxTest::g_count"
+    assert len(parser.alerts) == 0

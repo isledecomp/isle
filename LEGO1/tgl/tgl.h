@@ -57,8 +57,8 @@ struct PaletteEntry {
 };
 
 struct DeviceDirect3DCreateData {
-	IDirect3D* m_pDirect3D;
-	IDirect3DDevice* m_pDirect3DDevice;
+	IDirect3D2* m_pDirect3D;
+	IDirect3DDevice2* m_pDirect3DDevice;
 };
 
 struct DeviceDirectDrawCreateData {
@@ -98,20 +98,23 @@ class Mesh;
 class Texture;
 class Unk;
 
-// VTABLE 0x100db980
+// VTABLE: LEGO1 0x100db980
 class Object {
 public:
 	virtual ~Object() {}
 
 	virtual void* ImplementationDataPtr() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2250
+	// Tgl::Object::`scalar deleting destructor'
 };
 
-// VTABLE 0x100db948
+// VTABLE: LEGO1 0x100db948
 class Renderer : public Object {
 public:
 	// vtable+0x08
-	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) = 0;
 	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) = 0;
+	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) = 0;
 
 	// vtable+0x10
 	virtual View* CreateView(
@@ -128,7 +131,6 @@ public:
 
 	// vtable+0x20
 	virtual Unk* CreateUnk() = 0;
-	virtual Texture* CreateTexture() = 0;
 	virtual Texture* CreateTexture(
 		int width,
 		int height,
@@ -138,15 +140,19 @@ public:
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
 	) = 0;
+	virtual Texture* CreateTexture() = 0;
 	virtual Result SetTextureDefaultShadeCount(unsigned long) = 0;
 
 	// vtable+0x30
 	virtual Result SetTextureDefaultColorCount(unsigned long) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a17c0
+	// Tgl::Renderer::`scalar deleting destructor'
 };
 
 Renderer* CreateRenderer();
 
-// VTABLE 0x100db9b8
+// VTABLE: LEGO1 0x100db9b8
 class Device : public Object {
 public:
 	// vtable+0x08
@@ -163,9 +169,12 @@ public:
 	virtual Result Update() = 0;
 	virtual void InitFromD3DDevice(Device*) = 0;
 	virtual void InitFromWindowsDevice(Device*) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a28e0
+	// Tgl::Device::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dba28
+// VTABLE: LEGO1 0x100dba28
 class View : public Object {
 public:
 	virtual Result Add(const Light*) = 0;
@@ -217,22 +226,31 @@ public:
 		const Group**& rppPickedGroups,
 		int& rPickedGroupCount
 	) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2950
+	// Tgl::View::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dbae8
+// VTABLE: LEGO1 0x100dbae8
 class Camera : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2a30
+	// Tgl::Camera::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dbb08
+// VTABLE: LEGO1 0x100dbb08
 class Light : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2aa0
+	// Tgl::Light::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dbbb0
+// VTABLE: LEGO1 0x100dbbb0
 class Mesh : public Object {
 public:
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
@@ -247,31 +265,37 @@ public:
 
 	// Just get another Group pointing to the same underlying data
 	virtual Mesh* ShallowClone(Unk*) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a3e60
+	// Tgl::Mesh::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dbaa0
+// VTABLE: LEGO1 0x100dbaa0
 class Group : public Object {
 public:
-	virtual Result SetTransformation(const FloatMatrix4&) = 0;
+	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 	virtual Result SetMaterialMode(MaterialMode) = 0;
-	virtual Result Add(const Group*) = 0;
 	virtual Result Add(const Mesh*) = 0;
-	virtual Result Remove(const Group*) = 0;
+	virtual Result Add(const Group*) = 0;
 	virtual Result Remove(const Mesh*) = 0;
+	virtual Result Remove(const Group*) = 0;
 	virtual Result RemoveAll() = 0;
 
 	// This is TransformLocalToWorld in the leak, however it seems
 	// to have been replaced by something else in the shipped code.
 	virtual Result Unknown() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a29c0
+	// Tgl::Group::`scalar deleting destructor'
 };
 
 // Don't know what this is. Seems like another Tgl object which
 // was not in the leaked Tgl code. My suspicion is that it's
 // some kind of builder class for creating meshes.
-// VTABLE 0x100dbb30
+// VTABLE: LEGO1 0x100dbb30
 class Unk : public Object {
 public:
 	virtual Result SetMeshData(
@@ -285,9 +309,12 @@ public:
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2b10
+	// Tgl::Unk::`scalar deleting destructor'
 };
 
-// VTABLE 0x100dbb68
+// VTABLE: LEGO1 0x100dbb68
 class Texture : public Object {
 public:
 	// vtable+0x08
@@ -305,6 +332,9 @@ public:
 		PaletteEntry** ppPalette
 	) = 0;
 	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2b80
+	// Tgl::Texture::`scalar deleting destructor'
 };
 
 } // namespace Tgl

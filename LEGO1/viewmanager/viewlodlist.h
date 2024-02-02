@@ -1,9 +1,12 @@
 #ifndef VIEWLODLIST_H
 #define VIEWLODLIST_H
 
-#include "../realtime/lodlist.h"
 #include "assert.h"
 #include "compat.h"
+#include "mxstl/stlcompat.h"
+#include "realtime/lodlist.h"
+
+#include <string.h>
 
 #pragma warning(disable : 4237)
 #pragma warning(disable : 4786)
@@ -24,7 +27,7 @@ class ViewLODList : public LODList<ViewLOD> {
 
 protected:
 	ViewLODList(size_t capacity);
-	~ViewLODList();
+	~ViewLODList() override;
 
 public:
 	inline int AddRef();
@@ -59,6 +62,8 @@ struct ROINameComparator {
 // It stores ViewLODLists under a name, the name of the ROI where
 // the ViewLODList belongs.
 
+// VTABLE: LEGO1 0x100dbdbc
+// SIZE 0x14
 class ViewLODListManager {
 
 	typedef map<ROIName, ViewLODList*, ROINameComparator> ViewLODListMap;
@@ -72,7 +77,7 @@ public:
 	// creates an LODList with room for lodCount LODs for a named ROI
 	// returned LODList has a refCount of 1, i.e. caller must call Release()
 	// when it no longer holds on to the list
-	ViewLODList* Create(const ROIName&, int lodCount);
+	ViewLODList* Create(const ROIName& rROIName, int lodCount);
 
 	// returns an LODList for a named ROI
 	// returned LODList's refCount is increased, i.e. caller must call Release()
@@ -84,9 +89,28 @@ public:
 	void Dump(void (*pTracer)(const char*, ...)) const;
 #endif
 
+	// SYNTHETIC: LEGO1 0x100a70c0
+	// ViewLODListManager::`scalar deleting destructor'
+
 private:
 	ViewLODListMap m_map;
 };
+
+// FUNCTION: LEGO1 0x1001dde0
+// _Lockit::~_Lockit
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100a7890
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
+// clang-format on
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100a80a0
+// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
+// clang-format on
+
+// TEMPLATE: LEGO1 0x100a70e0
+// Map<char const *,ViewLODList *,ROINameComparator>::~Map<char const *,ViewLODList *,ROINameComparator>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -109,9 +133,17 @@ inline int ViewLODList::AddRef()
 inline int ViewLODList::Release()
 {
 	assert(m_refCount > 0);
-	if (!--m_refCount)
+	if (!--m_refCount) {
 		m_owner->Destroy(this);
+	}
 	return m_refCount;
 }
+
+#ifdef _DEBUG
+inline void ViewLODList::Dump(void (*pTracer)(const char*, ...)) const
+{
+	// FIXME: dump something
+}
+#endif
 
 #endif // VIEWLODLIST_H

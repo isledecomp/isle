@@ -3,13 +3,66 @@ name: Build
 on: [push, pull_request]
 
 jobs:
+  build-current-toolchain:
+    name: 'Current ${{ matrix.toolchain.name }}'
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: ${{ matrix.toolchain.shell }}
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+        - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
+        - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true, werror: true }
+        - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true, werror: true, no-dx5-libs: true }
+
+    steps:
+      - name: Set up MSYS2
+        if: ${{ !!matrix.toolchain.msystem }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.toolchain.msystem }}
+          install: >-
+            ${{ matrix.toolchain.msys-env }}-cc
+            ${{ matrix.toolchain.msys-env }}-cmake
+            ${{ matrix.toolchain.msys-env }}-ninja
+            ${{ matrix.toolchain.msys-env }}-clang-tools-extra
+
+      - name: Setup cmake
+        if: matrix.toolchain.setup-cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+
+      - name: Setup ninja
+        if: matrix.toolchain.setup-ninja
+        uses: ashutoshvarma/setup-ninja@master
+
+      - name: Setup vcvars
+        if: matrix.toolchain.setup-msvc
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
+
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          cmake -S . -B build -GNinja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} \
+            -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }} \
+            -DISLE_WERROR=${{ !!matrix.toolchain.werror }} \
+            -Werror=dev
+          cmake --build build -- -k0
+
   build:
+    name: 'MSVC 4.20'
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         repository: 'itsmattkc/msvc420'
         path: msvc420
@@ -28,10 +81,8 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
-        cmake --build .
+        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
+        cmake --build build
 
     - name: Upload Artifact
       uses: actions/upload-artifact@master
@@ -44,6 +95,7 @@ jobs:
           build/LEGO1.PDB
 
   compare:
+    name: 'Compare with master'
     needs: build
     runs-on: windows-latest
     steps:
@@ -100,6 +152,12 @@ jobs:
       run: |
         python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
 
+    - name: Check Vtables
+      shell: bash
+      run: |
+        python3 tools/vtable/vtable.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
+        python3 tools/vtable/vtable.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
+
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -109,11 +167,12 @@ jobs:
           LEGO1PROGRESS.*
 
   upload:
+    name: 'Upload artifacts'
     needs: [build, compare]
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         repository: 'probonopd/uploadtool'
 

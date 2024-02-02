@@ -1,7 +1,7 @@
 from typing import List, Optional
 from .parser import DecompParser
 from .error import ParserAlert, ParserError
-from .node import ParserSymbol
+from .node import ParserSymbol, ParserString
 
 
 def get_checkorder_filter(module):
@@ -19,6 +19,9 @@ class DecompLinter:
         # This is _not_ reset between files and is intended to report offset reuse
         # when scanning the entire directory.
         self._offsets_used = set()
+        # Keep track of strings we have seen. Persists across files.
+        # Module/offset can be repeated for string markers but the strings must match.
+        self._strings = {}
 
     def reset(self, full_reset: bool = False):
         self.alerts = []
@@ -28,6 +31,7 @@ class DecompLinter:
 
         if full_reset:
             self._offsets_used.clear()
+            self._strings = {}
 
     def file_is_header(self):
         return self._filename.lower().endswith(".h")
@@ -36,17 +40,31 @@ class DecompLinter:
         """Helper for loading (module, offset) tuples while the DecompParser
         has them broken up into three different lists."""
         for marker in marker_list:
+            is_string = isinstance(marker, ParserString)
+
             value = (marker.module, marker.offset)
             if value in self._offsets_used:
-                self.alerts.append(
-                    ParserAlert(
-                        code=ParserError.DUPLICATE_OFFSET,
-                        line_number=marker.line_number,
-                        line=f"0x{marker.offset:08x}",
+                if is_string:
+                    if self._strings[value] != marker.name:
+                        self.alerts.append(
+                            ParserAlert(
+                                code=ParserError.WRONG_STRING,
+                                line_number=marker.line_number,
+                                line=f"0x{marker.offset:08x}, {repr(self._strings[value])} vs. {repr(marker.name)}",
+                            )
+                        )
+                else:
+                    self.alerts.append(
+                        ParserAlert(
+                            code=ParserError.DUPLICATE_OFFSET,
+                            line_number=marker.line_number,
+                            line=f"0x{marker.offset:08x}",
+                        )
                     )
-                )
             else:
                 self._offsets_used.add(value)
+                if is_string:
+                    self._strings[value] = marker.name
 
     def _check_function_order(self):
         """Rules:
@@ -82,6 +100,7 @@ class DecompLinter:
         self._load_offsets_from_list(self._parser.functions)
         self._load_offsets_from_list(self._parser.vtables)
         self._load_offsets_from_list(self._parser.variables)
+        self._load_offsets_from_list(self._parser.strings)
 
     def _check_byname_allowed(self):
         if self.file_is_header():

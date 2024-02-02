@@ -8,11 +8,9 @@
 #include "legomodelpresenter.h"
 #include "legoomni.h"
 #include "legopartpresenter.h"
-#include "legoroi.h"
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"
 #include "mxbackgroundaudiomanager.h"
-#include "mxdirectdraw.h"
 #include "mxdsaction.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
@@ -21,6 +19,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "res/resource.h"
+#include "viewmanager/viewmanager.h"
 
 #include <dsound.h>
 
@@ -53,7 +52,15 @@ IsleApp::IsleApp()
 	m_frameDelta = 10;
 	m_windowActive = 1;
 
+#ifdef COMPAT_MODE
+	{
+		MxRect32 r(0, 0, 639, 479);
+		MxVideoParamFlags flags;
+		m_videoParam = MxVideoParam(r, NULL, 1, flags);
+	}
+#else
 	m_videoParam = MxVideoParam(MxRect32(0, 0, 639, 479), NULL, 1, MxVideoParamFlags());
+#endif
 	m_videoParam.Flags().Set16Bit(MxDirectDraw::GetPrimaryBitDepth() == 16);
 
 	m_windowHandle = NULL;
@@ -132,9 +139,18 @@ BOOL IsleApp::SetupLegoOmni()
 	char mediaPath[256];
 	GetProfileStringA("LEGO Island", "MediaPath", "", mediaPath, sizeof(mediaPath));
 
+#ifdef COMPAT_MODE
+	BOOL failure;
+	{
+		MxOmniCreateParam param(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags());
+		failure = Lego()->Create(param) == FAILURE;
+	}
+#else
 	BOOL failure =
 		Lego()->Create(MxOmniCreateParam(mediaPath, (struct HWND__*) m_windowHandle, m_videoParam, MxOmniCreateFlags())
 		) == FAILURE;
+#endif
+
 	if (!failure) {
 		VariableTable()->SetVariable("ACTOR_01", "");
 		TickleManager()->SetClientTickleInterval(VideoManager(), 10);
@@ -388,7 +404,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_DISPLAYCHANGE:
 		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D()) {
-			if (VideoManager()->GetDirect3D()->GetDeviceModeFinder()) {
+			if (VideoManager()->GetDirect3D()->GetAssignedDevice()) {
 				int targetDepth = wParam;
 				int targetWidth = LOWORD(lParam);
 				int targetHeight = HIWORD(lParam);
@@ -606,8 +622,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	LegoAnimationManager::configureLegoAnimationManager(m_islandQuality);
 	if (LegoOmni::GetInstance()) {
 		if (LegoOmni::GetInstance()->GetInputManager()) {
-			LegoOmni::GetInstance()->GetInputManager()->m_useJoystick = m_useJoystick;
-			LegoOmni::GetInstance()->GetInputManager()->m_joystickIndex = m_joystickIndex;
+			LegoOmni::GetInstance()->GetInputManager()->SetUseJoystick(m_useJoystick);
+			LegoOmni::GetInstance()->GetInputManager()->SetJoystickIndex(m_joystickIndex);
 		}
 	}
 	if (m_fullScreen) {
@@ -754,12 +770,15 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		return;
 	}
 
-	if (!Lego())
+	if (!Lego()) {
 		return;
-	if (!TickleManager())
+	}
+	if (!TickleManager()) {
 		return;
-	if (!Timer())
+	}
+	if (!Timer()) {
 		return;
+	}
 
 	MxLong currentTime = Timer()->GetRealTime();
 	if (currentTime < g_lastFrameTime) {
@@ -784,11 +803,11 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 		LegoOmni::GetInstance()->CreateBackgroundAudio();
 		BackgroundAudioManager()->Enable(this->m_useMusic);
 
-		MxStreamController* stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", MxStreamer::e_DiskStream);
+		MxStreamController* stream = Streamer()->Open("\\lego\\scripts\\isle\\isle", MxStreamer::e_diskStream);
 		MxDSAction ds;
 
 		if (!stream) {
-			stream = Streamer()->Open("\\lego\\scripts\\nocd", MxStreamer::e_DiskStream);
+			stream = Streamer()->Open("\\lego\\scripts\\nocd", MxStreamer::e_diskStream);
 			if (!stream) {
 				return;
 			}
@@ -812,8 +831,9 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			this->m_gameStarted = 1;
 		}
 	}
-	else if (sleepIfNotNextFrame != 0)
+	else if (sleepIfNotNextFrame != 0) {
 		Sleep(0);
+	}
 }
 
 // FUNCTION: ISLE 0x402e80

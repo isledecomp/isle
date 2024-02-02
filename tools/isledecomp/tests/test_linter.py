@@ -112,3 +112,33 @@ def test_duplicate_offsets(linter):
     # Full reset will forget seen offsets.
     linter.reset(True)
     assert linter.check_lines(lines, "test.h", "TEST") is True
+
+
+def test_duplicate_strings(linter):
+    """Duplicate string markers are okay if the string value is the same."""
+    string_lines = [
+        "// STRING: TEST 0x1000",
+        'return "hello world";',
+    ]
+
+    # No problem to use this marker twice.
+    assert linter.check_lines(string_lines, "test.h", "TEST") is True
+    assert linter.check_lines(string_lines, "test.h", "TEST") is True
+
+    different_string = [
+        "// STRING: TEST 0x1000",
+        'return "hi there";',
+    ]
+
+    # Same address but the string is different
+    assert linter.check_lines(different_string, "greeting.h", "TEST") is False
+    assert len(linter.alerts) == 1
+    assert linter.alerts[0].code == ParserError.WRONG_STRING
+
+    same_addr_reused = [
+        "// GLOBAL:TEXT 0x1000",
+        "int g_test = 123;",
+    ]
+
+    # This will fail like any other offset reuse.
+    assert linter.check_lines(same_addr_reused, "other.h", "TEST") is False

@@ -2,8 +2,8 @@
 
 using namespace TglImpl;
 
-DECOMP_SIZE_ASSERT(Unk, 0x4);
-DECOMP_SIZE_ASSERT(UnkImpl, 0x8);
+DECOMP_SIZE_ASSERT(Unk, 0x04);
+DECOMP_SIZE_ASSERT(UnkImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3830
 void* UnkImpl::ImplementationDataPtr()

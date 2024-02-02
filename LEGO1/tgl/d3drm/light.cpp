@@ -2,8 +2,8 @@
 
 using namespace TglImpl;
 
-DECOMP_SIZE_ASSERT(Light, 0x4);
-DECOMP_SIZE_ASSERT(LightImpl, 0x8);
+DECOMP_SIZE_ASSERT(Light, 0x04);
+DECOMP_SIZE_ASSERT(LightImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3770
 void* LightImpl::ImplementationDataPtr()
@@ -12,7 +12,7 @@ void* LightImpl::ImplementationDataPtr()
 }
 
 // FUNCTION: LEGO1 0x100a3780
-Result LightImpl::SetTransformation(const FloatMatrix4& matrix)
+Result LightImpl::SetTransformation(FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* d3dMatrix = Translate(matrix, helper);

@@ -9,7 +9,7 @@ void* GroupImpl::ImplementationDataPtr()
 }
 
 // FUNCTION: LEGO1 0x100a31e0
-Result GroupImpl::SetTransformation(const FloatMatrix4& matrix)
+Result GroupImpl::SetTransformation(FloatMatrix4& matrix)
 {
 	D3DRMMATRIX4D helper;
 	D3DRMMATRIX4D* d3dMatrix = Translate(matrix, helper);
@@ -112,7 +112,7 @@ Result GroupImpl::RemoveAll()
 	return Error;
 }
 
-// STUB: LEGO1 0x100a34c0
+// STUB: LEGO1 0x100a3540
 Result GroupImpl::Unknown()
 {
 	return Error;

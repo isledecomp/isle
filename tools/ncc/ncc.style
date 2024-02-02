@@ -1,7 +1,7 @@
 ClassName: '^[A-Z][a-zA-Z0-9]+$'
 CppMethod: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,8}$|^(?!VTable)[A-Z][a-zA-Z0-9]+$'
-# EnumConstantName
 EnumName: '^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
+EnumConstantName: '^(c_|e_)[a-z][a-zA-Z0-9]+$'
 FunctionName: '^operator|^FUN_[a-f0-9]{8}$|^VTable0x[a-f0-9]{1,8}$|^(?!VTable)[A-Z][a-zA-Z0-9]+$'
 ParameterName: '^p_(unk0x[a-f0-9]{1,8}$|(?!unk)[a-z][a-zA-Z0-9]*)$|^$'
 StructName: '^\(anon|^\(unnamed|^[A-Z][a-zA-Z0-9]+$'
