@@ -481,7 +481,6 @@ void LegoGameState::SwitchArea(MxU32 p_area)
 		script = g_infoscorScript;
 		break;
 
-
 		// TODO: implement other cases
 
 	default: {

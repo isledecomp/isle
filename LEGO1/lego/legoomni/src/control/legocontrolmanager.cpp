@@ -135,7 +135,7 @@ MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 
 			while (cursor.Next(control)) {
 				if (((MxControlPresenter*) control)->FUN_10044270(p_x, p_y, presenter)) {
-					return (MxControlPresenter*)control;
+					return (MxControlPresenter*) control;
 				}
 			}
 		}
