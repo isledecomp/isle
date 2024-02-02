@@ -10,16 +10,16 @@ void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 
 enum {
-	e_unk_953 = 953,
-	e_unk_954 = 954,
-	e_unk_955 = 955,
+	e_unk953 = 953,
+	e_unk954 = 954,
+	e_unk955 = 955,
 };
 
 // GLOBAL: ISLE 0x100f37f0
 int g_unk0x100f37f0[] = {
-	e_unk_953,
-	e_unk_954,
-	e_unk_955,
+	e_unk953,
+	e_unk954,
+	e_unk955,
 };
 
 // STUB: LEGO1 0x100334b0
