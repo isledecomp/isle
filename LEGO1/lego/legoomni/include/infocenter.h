@@ -61,11 +61,11 @@ public:
 		c_nickSelected = 33,
 		c_lauraSelected = 34,
 
-		c_unk40 = 40,
-		c_unk41 = 41,
-		c_unk42 = 42,
-		c_unk43 = 43,
-		c_unk44 = 44,
+		c_mamaMovie = 40,
+		c_papaMovie = 41,
+		c_pepperMovie = 42,
+		c_nickMovie = 43,
+		c_lauraMovie = 44,
 
 		c_goToRegBook = 70,
 		c_goToRegBookRed = 71,

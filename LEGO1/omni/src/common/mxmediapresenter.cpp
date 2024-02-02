@@ -229,8 +229,7 @@ void MxMediaPresenter::RepeatingTickle()
 // FUNCTION: LEGO1 0x100b5ef0
 void MxMediaPresenter::DoneTickle()
 {
-	m_previousTickleStates |= 1 << m_currentTickleState;
-	m_currentTickleState = e_idle;
+	ProgressTickleState(e_idle);
 	EndAction();
 }
 

@@ -1,6 +1,8 @@
 #include "legocontrolmanager.h"
 
 #include "legoeventnotificationparam.h"
+#include "legoomni.h"
+#include "legovideomanager.h"
 #include "mxcontrolpresenter.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
@@ -121,9 +123,24 @@ void LegoControlManager::FUN_100293c0(undefined4, const char*, undefined2)
 {
 }
 
-// STUB: LEGO1 0x100294e0
-void LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
+// FUNCTION: LEGO1 0x100294e0
+MxControlPresenter* LegoControlManager::FUN_100294e0(MxS32 p_x, MxS32 p_y)
 {
+	if (m_presenterList) {
+		MxPresenterListCursor cursor(m_presenterList);
+		MxPresenter* control;
+		MxVideoPresenter* presenter = (MxVideoPresenter*) VideoManager()->GetPresenterAt(p_x, p_y);
+
+		if (presenter) {
+			while (cursor.Next(control)) {
+				if (((MxControlPresenter*) control)->FUN_10044270(p_x, p_y, presenter)) {
+					return (MxControlPresenter*) control;
+				}
+			}
+		}
+	}
+
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x10029600
