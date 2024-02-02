@@ -48,7 +48,7 @@ public:
 		// FUNCTION: LEGO1 0x10033800
 		NamedPlane() {}
 
-		inline void SetName(const char* name) { m_name = name; }
+		inline void SetName(const char* p_name) { m_name = p_name; }
 		inline const MxString* GetName() const { return &m_name; }
 		int Serialize(LegoFile* p_file);
 

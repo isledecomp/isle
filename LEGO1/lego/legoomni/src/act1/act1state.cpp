@@ -12,16 +12,16 @@ void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 
 enum {
-	eUnk_953 = 953,
-	eUnk_954 = 954,
-	eUnk_955 = 955,
+	e_unk_953 = 953,
+	e_unk_954 = 954,
+	e_unk_955 = 955,
 };
 
 // GLOBAL: ISLE 0x100f37f0
-int g_act1_ints[] = {
-	eUnk_953,
-	eUnk_954,
-	eUnk_955,
+int g_unk0x100f37f0[] = {
+	e_unk_953,
+	e_unk_954,
+	e_unk_955,
 };
 
 // STUB: LEGO1 0x100334b0
@@ -33,7 +33,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x020 = 0;
 	m_unk0x00e = 0;
 	m_unk0x01f = 0;
-	m_unk0x008 = g_act1_ints;
+	m_unk0x008 = g_unk0x100f37f0;
 	m_unk0x014 = -1;
 	m_unk0x022 = 0;
 	m_unk0x154 = NULL;
@@ -43,7 +43,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
 	m_unk0x01c = 1;
-	m_unk0x00c = isle_asize(g_act1_ints);
+	m_unk0x00c = isle_asize(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
 	m_unk0x1b8 = NULL;
 	m_unk0x208 = NULL;
