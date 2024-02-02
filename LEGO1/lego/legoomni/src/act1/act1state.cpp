@@ -4,8 +4,6 @@ DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Act1State::NamedPlane, 0x4c)
 DECOMP_SIZE_ASSERT(Act1State::NamedTexture, 0x14)
 
-#define isle_asize(ARR) (sizeof(ARR) / sizeof((ARR)[0]))
-
 // Forward declarations
 Act1State::NamedTexture* ReadNamedTexture(LegoFile* p_file);
 void WriteNamedTexture(LegoFile* p_file, Act1State::NamedTexture* p_texture);
@@ -43,7 +41,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
 	m_unk0x01c = 1;
-	m_unk0x00c = isle_asize(g_unk0x100f37f0);
+	m_unk0x00c = _countof(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
 	m_unk0x1b8 = NULL;
 	m_unk0x208 = NULL;
