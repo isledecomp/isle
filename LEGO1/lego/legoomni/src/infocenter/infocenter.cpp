@@ -29,10 +29,9 @@ const char* g_object2x4grn = "2x4grn";
 Infocenter::Infocenter()
 {
 	m_unk0xfc = 0;
-	m_unk0x11c = 0;
+	m_unk0x11c = NULL;
 	m_infocenterState = NULL;
-	m_frameHotBitmap = 0;
-	m_unk0x11c = 0;
+	m_frameHotBitmap = NULL;
 	m_transitionDestination = 0;
 	m_currentInfomainScript = c_noInfomain;
 	m_currentCutscene = e_noIntro;
@@ -834,7 +833,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			UpdateFrameHot(FALSE);
 			break;
 		case c_lauraCtl:
-			characterBitmap = c_lauraCtl;
+			characterBitmap = c_lauraSelected;
 			UpdateFrameHot(FALSE);
 			break;
 		}
