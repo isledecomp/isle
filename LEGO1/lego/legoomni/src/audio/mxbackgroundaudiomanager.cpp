@@ -80,16 +80,15 @@ MxResult MxBackgroundAudioManager::Tickle()
 	switch (m_unk0x13c) {
 	case MxPresenter::e_starting:
 		FadeInOrFadeOut();
-		return SUCCESS;
+		break;
 	case MxPresenter::e_streaming:
 		FUN_1007ee70();
-		return SUCCESS;
+		break;
 	case MxPresenter::e_repeating:
 		FUN_1007ef40();
-		return SUCCESS;
-	default:
-		return SUCCESS;
 	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1007ee70
@@ -112,19 +111,23 @@ void MxBackgroundAudioManager::FUN_1007ee70()
 // FUNCTION: LEGO1 0x1007ef40
 void MxBackgroundAudioManager::FUN_1007ef40()
 {
-	MxU32 compare;
-	MxU32 volume;
+	MxS32 compare, volume;
+
 	if (m_unk0xa0 == NULL) {
 		if (m_unk0x138) {
-			compare = 30;
-			if (m_unk0x148 == 0) {
-				compare = m_unk0x148;
+			if (m_unk0x148 != 0) {
+				compare = 30;
 			}
+			else {
+				compare = m_targetVolume;
+			}
+
 			volume = m_unk0x138->GetVolume();
 			if (volume < compare) {
 				if (m_unk0x140 + m_unk0x138->GetVolume() <= compare) {
-					compare = m_unk0x140 + compare;
+					compare = m_unk0x140 + m_unk0x138->GetVolume();
 				}
+
 				m_unk0x138->SetVolume(compare);
 			}
 			else {
@@ -143,12 +146,14 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 			DeleteObject(*m_unk0xa0->GetAction());
 		}
 		else {
-			compare = m_unk0xa0->GetVolume();
-			volume = 0;
-			if (compare != m_unk0x140 && -1 < compare - m_unk0x140) {
+			if (m_unk0xa0->GetVolume() - m_unk0x140 > 0) {
 				volume = m_unk0xa0->GetVolume() - m_unk0x140;
 			}
-			m_unk0x138->SetVolume(volume);
+			else {
+				volume = 0;
+			}
+
+			m_unk0xa0->SetVolume(volume);
 		}
 	}
 }

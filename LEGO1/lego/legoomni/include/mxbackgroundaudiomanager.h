@@ -56,16 +56,16 @@ private:
 	MxResult OpenMusic(MxAtomId& p_script);
 	void DestroyMusic();
 
-	MxBool m_musicEnabled; // 0x08
-	MxDSAction m_action1;  // 0x0c
-	MxAudioPresenter* m_unk0xa0;
-	MxDSAction m_action2; // 0xa4
-	MxAudioPresenter* m_unk0x138;
-	MxS32 m_unk0x13c;
-	MxS32 m_unk0x140;
-	MxS32 m_targetVolume;
-	MxS16 m_unk0x148;
-	MxAtomId m_script;
+	MxBool m_musicEnabled;        // 0x08
+	MxDSAction m_action1;         // 0x0c
+	MxAudioPresenter* m_unk0xa0;  // 0xa0
+	MxDSAction m_action2;         // 0xa4
+	MxAudioPresenter* m_unk0x138; // 0x138
+	MxS32 m_unk0x13c;             // 0x13c
+	MxS32 m_unk0x140;             // 0x140
+	MxS32 m_targetVolume;         // 0x144
+	MxS16 m_unk0x148;             // 0x148
+	MxAtomId m_script;            // 0x14c
 };
 
 #endif // MXBACKGROUNDAUDIOMANAGER_H
