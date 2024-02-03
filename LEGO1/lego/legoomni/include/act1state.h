@@ -54,6 +54,7 @@ public:
 
 		inline void SetName(const char* p_name) { m_name = p_name; }
 		inline const MxString* GetName() const { return &m_name; }
+
 		// FUNCTION: LEGO1 0x100344d0
 		MxS32 Serialize(LegoFile* p_file)
 		{
@@ -69,6 +70,7 @@ public:
 				p_file->ReadVector3(&m_point2);
 				p_file->ReadVector3(&m_point3);
 			}
+
 			return 0;
 		}
 

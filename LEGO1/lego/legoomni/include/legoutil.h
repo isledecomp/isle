@@ -20,8 +20,10 @@ class LegoTexture;
 class NamedTexture {
 public:
 	~NamedTexture() { delete m_texture; }
+
 	// FUNCTION: LEGO1 0x1003f920
 	const MxString* GetName() const { return &m_name; }
+
 	LegoTexture* GetTexture() { return m_texture; }
 
 private:
@@ -41,5 +43,8 @@ MxBool RemoveFromWorld(MxAtomId& p_atomId1, MxS32 p_id1, MxAtomId& p_atomId2, Mx
 NamedTexture* ReadNamedTexture(LegoFile* p_file);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 void WriteNamedTexture(LegoFile* p_file, NamedTexture* p_texture);
+
+// SYNTHETIC: LEGO1 0x10034b40
+// LegoTexture::`scalar deleting destructor'
 
 #endif // LEGOUTIL_H

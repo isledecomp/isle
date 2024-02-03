@@ -180,61 +180,78 @@ MxBool Act1State::SetFlag()
 	m_unk0x0bc.SetName("");
 	m_unk0x022 = 0;
 	m_unk0x108.SetName("");
+
 	if (m_unk0x154) {
 		delete m_unk0x154;
 		m_unk0x154 = NULL;
 	}
+
 	if (m_unk0x158) {
 		delete m_unk0x158;
 		m_unk0x158 = NULL;
 	}
+
 	if (m_unk0x15c) {
 		delete m_unk0x15c;
 		m_unk0x15c = NULL;
 	}
+
 	if (m_unk0x160) {
 		delete m_unk0x160;
 		m_unk0x160 = NULL;
 	}
+
 	m_unk0x164.SetName("");
+
 	if (m_unk0x1b0) {
 		delete m_unk0x1b0;
 		m_unk0x1b0 = NULL;
 	}
+
 	if (m_unk0x1b4) {
 		delete m_unk0x1b4;
 		m_unk0x1b4 = NULL;
 	}
+
 	if (m_unk0x1b8) {
 		delete m_unk0x1b8;
 		m_unk0x1b8 = NULL;
 	}
+
 	m_unk0x1bc.SetName("");
+
 	if (m_unk0x208) {
 		delete m_unk0x208;
 		m_unk0x208 = NULL;
 	}
+
 	if (m_unk0x20c) {
 		delete m_unk0x20c;
 		m_unk0x20c = NULL;
 	}
+
 	m_unk0x210.SetName("");
+
 	if (m_unk0x25c) {
 		delete m_unk0x25c;
 		m_unk0x25c = NULL;
 	}
+
 	if (m_unk0x260) {
 		delete m_unk0x260;
 		m_unk0x260 = NULL;
 	}
+
 	if (m_unk0x264) {
 		delete m_unk0x264;
 		m_unk0x264 = NULL;
 	}
+
 	if (m_unk0x268) {
 		delete m_unk0x268;
 		m_unk0x268 = NULL;
 	}
+
 	return TRUE;
 }
 
