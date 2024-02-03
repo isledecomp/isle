@@ -33,7 +33,7 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10076f30
 	// RegistrationBook::`scalar deleting destructor'
-protected:
+private:
 	undefined4 m_unk0xf8;  // 0xf8
 	undefined m_unk0xfc;  // 0xfc
 	undefined m_unk0xfd[0x192]; // 0xfd
