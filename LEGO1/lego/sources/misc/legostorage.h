@@ -2,8 +2,8 @@
 #define __LEGOSTORAGE_H
 
 #include "legotypes.h"
+#include "mxgeometry/mxgeometry3d.h"
 #include "mxstring.h"
-#include "vector.h"
 
 #include <stdio.h>
 
@@ -74,7 +74,7 @@ public:
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
 	// FUNCTION: LEGO1 0x10034430
-	LegoStorage* ReadVector3(Vector3* p_vec3)
+	LegoStorage* ReadVector3(Mx3DPointFloat* p_vec3)
 	{
 		Read(&(*p_vec3)[0], sizeof(float));
 		Read(&(*p_vec3)[1], sizeof(float));
@@ -83,7 +83,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100343d0
-	LegoStorage* WriteVector3(Vector3 p_vec3)
+	LegoStorage* WriteVector3(Mx3DPointFloat p_vec3)
 	{
 		Write(&p_vec3[0], sizeof(float));
 		Write(&p_vec3[1], sizeof(float));

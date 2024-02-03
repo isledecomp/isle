@@ -26,7 +26,7 @@ public:
 
 private:
 	MxString m_name;        // 0x00
-	LegoTexture* m_texture; // 0x4
+	LegoTexture* m_texture; // 0x04
 };
 
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
