@@ -56,7 +56,7 @@ MxDSBuffer::~MxDSBuffer()
 			}
 			case 0x80: {
 				MxU32 a =
-					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
+					(m_pBuffer - streamer->GetSubclass2().GetBuffer()) / (streamer->GetSubclass2().GetSize() << 10);
 
 				MxU32 bit = 1 << ((MxU8) a & 0x1f);
 				MxU32 index = (a & ~0x18u) >> 3;
