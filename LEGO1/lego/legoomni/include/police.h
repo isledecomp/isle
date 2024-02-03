@@ -40,9 +40,13 @@ public:
 	// Police::`scalar deleting destructor'
 
 private:
-	Radio m_radio;              // 0xf8
-	PoliceState* m_policeState; // 0x108
-	undefined4 m_unk0x10c;      // 0x10c
+	MxLong HandleNotification11(MxNotificationParam& p_param);
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
+
+	Radio m_radio;                      // 0xf8
+	PoliceState* m_policeState;         // 0x108
+	undefined4 m_transitionDestination; // 0x10c
 };
 
 #endif // POLICE_H

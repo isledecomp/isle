@@ -13,15 +13,14 @@ DECOMP_SIZE_ASSERT(Police, 0x110)
 Police::Police()
 {
 	m_policeState = NULL;
-	m_unk0x10c = 0;
+	m_transitionDestination = 0;
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x1005e1d0
+// FUNCTION: LEGO1 0x1005e1d0
 MxBool Police::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1005e320
@@ -60,12 +59,30 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 	return ret;
 }
 
-// STUB: LEGO1 0x1005e480
+// FUNCTION: LEGO1 0x1005e480
 MxLong Police::Notify(MxParam& p_param)
 {
-	// TODO
+	MxLong result = 0;
+	LegoWorld::Notify(p_param);
 
-	return 0;
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		case c_notificationEndAction:
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
+			break;
+		case c_notificationKeyPress:
+			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
+			break;
+		case c_notificationType11:
+			result = HandleNotification11((MxNotificationParam&) p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->SwitchArea(m_transitionDestination);
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1005e530
@@ -74,6 +91,27 @@ void Police::ReadyWorld()
 	LegoWorld::ReadyWorld();
 	PlayMusic(JukeBox::e_policeStation);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+}
+
+// STUB: LEGO1 0x1005e550
+MxLong Police::HandleNotification11(MxNotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x1005e6a0
+MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x1005e6f0
+MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
+{
+	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x1005e740
