@@ -13,9 +13,12 @@ public:
 	LegoUnknown100d6b4c();
 	~LegoUnknown100d6b4c();
 
-	virtual MxResult Tickle(); // vtable+0x0
+	virtual MxResult Tickle(); // vtable+0x00
 
 	void FUN_1003dc40(LegoCacheSound** p_und);
+
+private:
+	undefined m_pad[0x1c];
 };
 
 #endif // LEGOUNKNOWN100D6B4C_H

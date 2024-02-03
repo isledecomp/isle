@@ -37,30 +37,36 @@ MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 {
 	MxBool locked = FALSE;
 	MxResult result = FAILURE;
+
 	if (MxSoundManager::Create(10, FALSE) == SUCCESS) {
 		m_criticalSection.Enter();
 		locked = TRUE;
-		if (MxOmni::IsSound3D()) {
-			if (m_dsBuffer->QueryInterface(IID_IDirectSound3DListener, (LPVOID*) &m_listener) == S_OK) {
-				MxOmni* omni = MxOmni::GetInstance();
-				IDirectSound* sound;
-				if (omni && omni->GetSoundManager() && (sound = omni->GetSoundManager()->GetDirectSound())) {
-					DSCAPS caps;
-					memset(&caps, 0, sizeof(DSCAPS));
-					caps.dwSize = sizeof(DSCAPS);
 
-					if (sound->GetCaps(&caps) == S_OK && caps.dwMaxHw3DAllBuffers == 0) {
-						m_listener->SetDistanceFactor(0.026315790f, 0);
-						m_listener->SetRolloffFactor(10, 0);
-					}
+		if (MxOmni::IsSound3D()) {
+			if (m_dsBuffer->QueryInterface(IID_IDirectSound3DListener, (LPVOID*) &m_listener) != S_OK) {
+				goto done;
+			}
+
+			MxOmni* omni = MxOmni::GetInstance();
+			LPDIRECTSOUND sound;
+
+			if (omni && omni->GetSoundManager() && (sound = omni->GetSoundManager()->GetDirectSound())) {
+				DSCAPS caps;
+				memset(&caps, 0, sizeof(DSCAPS));
+				caps.dwSize = sizeof(DSCAPS);
+
+				if (sound->GetCaps(&caps) == S_OK && caps.dwMaxHw3DAllBuffers == 0) {
+					m_listener->SetDistanceFactor(0.026315790f, 0);
+					m_listener->SetRolloffFactor(10, 0);
 				}
 			}
 		}
 
-		m_unk0x40 = new LegoUnknown100d6b4c();
+		m_unk0x40 = new LegoUnknown100d6b4c;
 		result = SUCCESS;
 	}
 
+done:
 	if (result != SUCCESS) {
 		Destroy();
 	}
@@ -68,6 +74,7 @@ MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	if (locked) {
 		m_criticalSection.Leave();
 	}
+
 	return result;
 }
 
@@ -81,7 +88,7 @@ void LegoSoundManager::Destroy()
 MxResult LegoSoundManager::Tickle()
 {
 	MxMediaManager::Tickle();
-	MxAutoLocker lock(&this->m_criticalSection);
 
+	MxAutoLocker lock(&m_criticalSection);
 	return m_unk0x40->Tickle();
 }
