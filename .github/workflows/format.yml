@@ -14,10 +14,9 @@ jobs:
       run: |
         find LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
         pipx run "clang-format>=17,<18" \
-          --Werror \
-          --dry-run \
           --style=file \
           -i
+        git diff --exit-code
 
   python-format:
     name: 'Python'

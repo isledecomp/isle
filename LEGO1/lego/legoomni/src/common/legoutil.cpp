@@ -10,6 +10,8 @@
 #include <process.h>
 #include <string.h>
 
+DECOMP_SIZE_ASSERT(NamedTexture, 0x14)
+
 // STUB: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
@@ -252,4 +254,22 @@ void SetAppCursor(WPARAM p_wparam)
 MxBool FUN_1003ef60()
 {
 	return TRUE;
+}
+
+// STUB: LEGO1 0x1003f3b0
+NamedTexture* ReadNamedTexture(LegoFile* p_file)
+{
+	return NULL;
+}
+
+// STUB: LEGO1 0x1003f540
+void FUN_1003f540(LegoFile* p_file, const char* p_filename)
+{
+}
+
+// FUNCTION: LEGO1 0x1003f8a0
+void WriteNamedTexture(LegoFile* p_file, NamedTexture* p_texture)
+{
+	p_file->FUN_10006030(*p_texture->GetName());
+	p_texture->GetTexture()->Write(p_file);
 }
