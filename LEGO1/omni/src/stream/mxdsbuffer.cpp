@@ -526,6 +526,8 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 		case FOURCC('M', 'x', 'H', 'd'):
 			current += (((MxU32*) current)[1] + 8);
 			break;
+		default:
+			return NULL;
 		}
 	}
 
