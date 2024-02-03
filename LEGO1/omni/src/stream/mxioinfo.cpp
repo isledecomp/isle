@@ -338,6 +338,7 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 					m_info.pchNext = m_info.pchBuffer;
 					m_info.pchEndRead = m_info.pchBuffer;
 					m_info.dwFlags &= ~MMIO_DIRTY;
+					goto skipSeek;
 				}
 				else {
 					result = MMIOERR_CANNOTWRITE;
@@ -347,6 +348,7 @@ MxU16 MXIOINFO::Advance(MxU16 p_option)
 			m_info.lDiskOffset = _llseek((HFILE) m_info.hmmio, 0, SEEK_CUR);
 		}
 
+	skipSeek:
 		m_info.lBufOffset += cch;
 		if ((!rwmode || rwmode == MMIO_READWRITE) && cch > 0) {
 			if (m_info.lBufOffset != m_info.lDiskOffset) {
