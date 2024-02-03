@@ -9,6 +9,7 @@
 #include <mmsystem.h>
 // clang-format on
 
+// SIZE 0x48
 class MXIOINFO {
 public:
 	MXIOINFO();
