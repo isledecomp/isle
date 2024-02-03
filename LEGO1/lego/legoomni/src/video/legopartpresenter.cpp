@@ -1,5 +1,8 @@
 #include "legopartpresenter.h"
 
+#include "legoomni.h"
+#include "legovideomanager.h"
+
 // GLOBAL: LEGO1 0x100f7aa0
 int g_partPresenterConfig1 = 1;
 
@@ -19,10 +22,10 @@ void LegoPartPresenter::configureLegoPartPresenter(MxS32 p_partPresenterConfig1,
 	g_partPresenterConfig2 = p_partPresenterConfig2;
 }
 
-// STUB: LEGO1 0x1007c9b0
+// FUNCTION: LEGO1 0x1007c9b0
 MxResult LegoPartPresenter::AddToManager()
 {
-	// TODO
+	VideoManager()->RegisterPresenter(*this);
 	return SUCCESS;
 }
 
