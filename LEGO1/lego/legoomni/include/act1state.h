@@ -56,7 +56,7 @@ public:
 		inline const MxString* GetName() const { return &m_name; }
 
 		// FUNCTION: LEGO1 0x100344d0
-		MxS32 Serialize(LegoFile* p_file)
+		MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsWriteMode()) {
 				p_file->FUN_10006030(m_name);
@@ -71,7 +71,7 @@ public:
 				p_file->ReadVector3(m_point3);
 			}
 
-			return 0;
+			return SUCCESS;
 		}
 
 	private:
