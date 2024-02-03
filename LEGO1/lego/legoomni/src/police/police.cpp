@@ -71,7 +71,7 @@ MxLong Police::Notify(MxParam& p_param)
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			result = HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
+			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
 			break;
 		case c_notificationType11:
 			result = HandleNotification11((MxNotificationParam&) p_param);
@@ -108,7 +108,7 @@ MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x1005e6f0
-MxLong Police::HandleKeyPress(MxS8 p_key)
+MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return 0;

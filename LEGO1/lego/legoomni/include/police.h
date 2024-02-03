@@ -42,7 +42,7 @@ public:
 private:
 	MxLong HandleNotification11(MxNotificationParam& p_param);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleKeyPress(MxS8 p_key);
+	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
 
 	Radio m_radio;                      // 0xf8
 	PoliceState* m_policeState;         // 0x108
