@@ -73,21 +73,26 @@ public:
 	LegoResult SetPosition(LegoU32 p_position) override;
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
+	// FUNCTION: LEGO1 0x100343d0
+	LegoStorage* WriteVector3(Mx3DPointFloat p_vec3)
+	{
+		float data = p_vec3[0];
+		Write(&data, sizeof(float));
+
+		data = p_vec3[1];
+		Write(&data, sizeof(float));
+
+		data = p_vec3[2];
+		Write(&data, sizeof(float));
+		return this;
+	}
+
 	// FUNCTION: LEGO1 0x10034430
 	LegoStorage* ReadVector3(Mx3DPointFloat& p_vec3)
 	{
 		Read(&p_vec3[0], sizeof(float));
 		Read(&p_vec3[1], sizeof(float));
 		Read(&p_vec3[2], sizeof(float));
-		return this;
-	}
-
-	// FUNCTION: LEGO1 0x100343d0
-	LegoStorage* WriteVector3(Mx3DPointFloat p_vec3)
-	{
-		Write(&p_vec3[0], sizeof(float));
-		Write(&p_vec3[1], sizeof(float));
-		Write(&p_vec3[2], sizeof(float));
 		return this;
 	}
 
