@@ -65,10 +65,10 @@ public:
 				p_file->WriteVector3(m_point3);
 			}
 			else if (p_file->IsReadMode()) {
-				p_file->ReadString(&m_name);
-				p_file->ReadVector3(&m_point1);
-				p_file->ReadVector3(&m_point2);
-				p_file->ReadVector3(&m_point3);
+				p_file->ReadString(m_name);
+				p_file->ReadVector3(m_point1);
+				p_file->ReadVector3(m_point2);
+				p_file->ReadVector3(m_point3);
 			}
 
 			return 0;

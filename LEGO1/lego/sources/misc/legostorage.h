@@ -74,11 +74,11 @@ public:
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
 	// FUNCTION: LEGO1 0x10034430
-	LegoStorage* ReadVector3(Mx3DPointFloat* p_vec3)
+	LegoStorage* ReadVector3(Mx3DPointFloat& p_vec3)
 	{
-		Read(&(*p_vec3)[0], sizeof(float));
-		Read(&(*p_vec3)[1], sizeof(float));
-		Read(&(*p_vec3)[2], sizeof(float));
+		Read(&p_vec3[0], sizeof(float));
+		Read(&p_vec3[1], sizeof(float));
+		Read(&p_vec3[2], sizeof(float));
 		return this;
 	}
 
@@ -92,15 +92,18 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10034470
-	LegoStorage* ReadString(MxString* p_str)
+	LegoStorage* ReadString(MxString& p_str)
 	{
-		MxU16 len;
-		Read(&len, sizeof(MxU16));
+		MxS16 len;
+		Read(&len, sizeof(MxS16));
+
 		char* text = new char[len + 1];
 		Read(text, len);
+
 		text[len] = '\0';
-		*p_str = text;
+		p_str = text;
 		delete[] text;
+
 		return this;
 	}
 
