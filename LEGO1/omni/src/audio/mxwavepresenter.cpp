@@ -20,7 +20,7 @@ void MxWavePresenter::Init()
 	m_lockSize = 0;
 	m_writtenChunks = 0;
 	m_started = FALSE;
-	m_unk0x66 = FALSE;
+	m_is3d = FALSE;
 	m_paused = FALSE;
 }
 
@@ -156,7 +156,7 @@ void MxWavePresenter::StartingTickle()
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
 
-		if (m_unk0x66) {
+		if (m_is3d) {
 			desc.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_CTRL3D | DSBCAPS_CTRLVOLUME;
 		}
 		else {

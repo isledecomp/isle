@@ -60,10 +60,9 @@ public:
 	// MxWavePresenter::`scalar deleting destructor'
 
 protected:
+	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-private:
-	void Init();
 	MxS8 GetPlayedChunks();
 	MxBool FUN_100b1ba0();
 	void WriteToSoundBuffer(void* p_audioPtr, MxU32 p_length);
@@ -74,7 +73,7 @@ private:
 	MxU32 m_lockSize;               // 0x60
 	MxU8 m_writtenChunks;           // 0x64
 	MxBool m_started;               // 0x65
-	MxBool m_unk0x66;               // 0x66
+	MxBool m_is3d;                  // 0x66
 	MxS8 m_silenceData;             // 0x67
 	MxBool m_paused;                // 0x68
 };

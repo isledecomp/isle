@@ -38,11 +38,10 @@ void LegoHideAnimPresenter::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// STUB: LEGO1 0x1006dab0
+// FUNCTION: LEGO1 0x1006dab0
 MxResult LegoHideAnimPresenter::AddToManager()
 {
-	// TODO
-	return SUCCESS;
+	return LegoAnimPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006dac0
