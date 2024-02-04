@@ -107,22 +107,39 @@ MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x1005e6f0
+// FUNCTION: LEGO1 0x1005e6f0
 MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 {
-	// TODO
+	MxLong result = 0;
+
+	if (p_param.GetKey() == ' ' && m_policeState->GetUnknown0x0C() == 1) {
+		DeleteObjects(&m_atom, 500, 501);
+		m_policeState->SetUnknown0x0C(0);
+		return 1;
+	}
 	return 0;
 }
 
-// STUB: LEGO1 0x1005e740
+// FUNCTION: LEGO1 0x1005e740
 void Police::Enable(MxBool p_enable)
 {
-	// TODO
+	LegoWorld::Enable(p_enable);
+
+	if (p_enable) {
+		InputManager()->SetWorld(this);
+		SetIsWorldActive(FALSE);
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
-// STUB: LEGO1 0x1005e790
+// FUNCTION: LEGO1 0x1005e790
 MxBool Police::VTable0x64()
 {
-	// TODO
-	return FALSE;
+	DeleteObjects(&m_atom, 500, 510);
+	m_transitionDestination = 2;
+	return 1;
 }
