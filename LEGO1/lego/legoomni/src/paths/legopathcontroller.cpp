@@ -31,14 +31,14 @@ undefined4 LegoPathController::FUN_10046770(IslePathActor* p_actor)
 	return 0;
 }
 
-// STUB: LEGO1 0x10046be0
-void LegoPathController::Enable(MxBool p_enable)
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x10046b30
 MxS32 LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value)
 {
 	return 0;
+}
+
+// STUB: LEGO1 0x10046be0
+void LegoPathController::Enable(MxBool p_enable)
+{
+	// TODO
 }
