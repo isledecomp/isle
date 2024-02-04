@@ -670,7 +670,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 		return "Operation requires the application to have exclusive mode but the application does not have exclusive "
 			   "mode.";
 	case DDERR_NOCOLORKEYHW:
-		return "Operation could not be carried out because there is no hardware support of the destination co lor key.";
+		return "Operation could not be carried out because there is no hardware support of the destination color key.";
 	case DDERR_NOGDI:
 		return "There is no GDI present.";
 	case DDERR_NOFLIPHW:
@@ -680,7 +680,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_NOMIRRORHW:
 		return "Operation could not be carried out because there is no hardware present or available.";
 	case DDERR_NORASTEROPHW:
-		return "Operation could not be carried out because there is no appropriate raster op hardware prese nt or "
+		return "Operation could not be carried out because there is no appropriate raster op hardware present or "
 			   "available.";
 	case DDERR_NOOVERLAYHW:
 		return "Operation could not be carried out because there is no overlay hardware present or available.";
@@ -701,7 +701,8 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_NOZBUFFERHW:
 		return "Operation could not be carried out because there is no hardware support for zbuffer blitting.";
 	case DDERR_NOVSYNCHW:
-		return "Operation could not be carried out because there is no hardware support for zbuffer blitting.";
+		return "Operation could not be carried out because there is no hardware support for vertical blank "
+			   "synchronized operations.";
 	case DDERR_OUTOFCAPS:
 		return "The hardware needed for the requested operation has already been allocated.";
 	case DDERR_NOZOVERLAYHW:
@@ -728,7 +729,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_SURFACENOTATTACHED:
 		return "The requested surface is not attached.";
 	case DDERR_SURFACELOST:
-		return "Access to this surface is being refused because the surface memory is gone. The DirectDrawS urface "
+		return "Access to this surface is being refused because the surface memory is gone. The DirectDrawSurface "
 			   "object representing this surface should have Restore called on it.";
 	case DDERR_TOOBIGSIZE:
 		return "Size requested by DirectDraw is too large, but the individual height and width are OK.";
@@ -745,14 +746,14 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_XALIGN:
 		return "Rectangle provided was not horizontally aligned on required boundary.";
 	case DDERR_WASSTILLDRAWING:
-		return "Informs DirectDraw that the previous Blt which is transfering information to or from this S urface is "
+		return "Informs DirectDraw that the previous Blt which is transfering information to or from this Surface is "
 			   "incomplete.";
 	case DDERR_INVALIDDIRECTDRAWGUID:
 		return "The GUID passed to DirectDrawCreate is not a valid DirectDraw driver identifier.";
 	case DDERR_DIRECTDRAWALREADYCREATED:
 		return "A DirectDraw object representing this driver has already been created for this process.";
 	case DDERR_NODIRECTDRAWHW:
-		return "A hardware-only DirectDraw object creation was attempted but the driver did not support a ny hardware.";
+		return "A hardware-only DirectDraw object creation was attempted but the driver did not support any hardware.";
 	case DDERR_PRIMARYSURFACEALREADYEXISTS:
 		return "This process already has created a primary surface.";
 	case DDERR_NOEMULATION:
@@ -764,10 +765,9 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_NOCLIPPERATTACHED:
 		return "No clipper object attached to surface object.";
 	case DDERR_NOHWND:
-		return "Clipper notification requires an HWND or no HWND has previously been set as the Cooperati veLevel "
-			   "HWND.";
+		return "Clipper notification requires an HWND or no HWND has previously been set as the CooperativeLevel HWND.";
 	case DDERR_HWNDSUBCLASSED:
-		return "HWND used by DirectDraw CooperativeLevel has been subclassed, this prevents DirectDraw fr om restoring "
+		return "HWND used by DirectDraw CooperativeLevel has been subclassed, this prevents DirectDraw from restoring "
 			   "state.";
 	case DDERR_HWNDALREADYSET:
 		return "The CooperativeLevel HWND has already been set. It can not be reset while the process has surfaces or "
@@ -785,7 +785,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_OVERLAYNOTVISIBLE:
 		return "Returned when GetOverlayPosition is called on a hidden overlay.";
 	case DDERR_NOOVERLAYDEST:
-		return "Returned when GetOverlayPosition is called on an overlay that UpdateOverlay has never bee n called on "
+		return "Returned when GetOverlayPosition is called on an overlay that UpdateOverlay has never been called on "
 			   "to establish a destination.";
 	case DDERR_INVALIDPOSITION:
 		return "Returned when the position of the overlay on the destination is no longer legal for that destination.";
