@@ -69,12 +69,6 @@ public:
 		c_clearScreen = 0x04
 	};
 
-	void CreateBackgroundAudio();
-	void RemoveWorld(const MxAtomId&, MxLong);
-	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
-	static void CreateInstance();
-	static LegoOmni* GetInstance();
-
 	LegoOmni();
 	~LegoOmni() override; // vtable+00
 
@@ -108,6 +102,12 @@ public:
 	void AddWorld(LegoWorld* p_world);
 	void DeleteWorld(LegoWorld* p_world);
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
+	void CreateBackgroundAudio();
+	void RemoveWorld(const MxAtomId&, MxLong);
+
+	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
+	static void CreateInstance();
+	static LegoOmni* GetInstance();
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
