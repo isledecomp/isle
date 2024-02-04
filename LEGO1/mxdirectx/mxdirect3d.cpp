@@ -687,7 +687,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_NOSTRETCHHW:
 		return "Operation could not be carried out because there is no hardware support for stretching.";
 	case DDERR_NOROTATIONHW:
-		return "Operation could not be carried out because there is no rotation hardware present or available .";
+		return "Operation could not be carried out because there is no rotation hardware present or available.";
 	case DDERR_NOTEXTUREHW:
 		return "Operation could not be carried out because there is no texture mapping hardware present or available.";
 	case DDERR_NOT4BITCOLOR:
@@ -725,7 +725,7 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 	case DDERR_SURFACEISOBSCURED:
 		return "Access to surface refused because the surface is obscured.";
 	case DDERR_SURFACEBUSY:
-		return "Access to this surface is being refused because the surface is already locked by another th read.";
+		return "Access to this surface is being refused because the surface is already locked by another thread.";
 	case DDERR_SURFACENOTATTACHED:
 		return "The requested surface is not attached.";
 	case DDERR_SURFACELOST:
