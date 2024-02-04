@@ -26,11 +26,11 @@ public:
 
 	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
-	inline undefined4 GetUnknown0x0C() { return m_unk0x0c; }
-	inline void SetUnknown0x0C(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
-
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
+
+	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
+	inline void SetUnknown0x0c(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 private:
 	undefined4 m_unk0x08; // 0x08
