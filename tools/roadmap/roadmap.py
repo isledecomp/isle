@@ -80,7 +80,7 @@ def print_sections(sections):
     print("    name |    start |   v.size | raw size")
     print("---------|----------|----------|----------")
     for sect in sections:
-        name = sect.name.decode("ascii").rstrip("\x00")
+        name = sect.name
         print(
             f"{name:>8} | {sect.virtual_address:8x} | {sect.virtual_size:8x} | {sect.size_of_raw_data:8x}"
         )
