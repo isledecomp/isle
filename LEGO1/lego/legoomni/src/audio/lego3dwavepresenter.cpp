@@ -7,9 +7,11 @@ MxResult Lego3DWavePresenter::AddToManager()
 {
 	MxResult result = MxWavePresenter::AddToManager();
 	MxWavePresenter::Init();
+
 	if (MxOmni::IsSound3D()) {
 		m_is3d = TRUE;
 	}
+
 	return result;
 }
 
@@ -30,6 +32,7 @@ void Lego3DWavePresenter::StartingTickle()
 	if (MxOmni::IsSound3D()) {
 		m_is3d = TRUE;
 	}
+
 	MxWavePresenter::StartingTickle();
 
 	// TODO

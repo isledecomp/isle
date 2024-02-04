@@ -7,6 +7,7 @@
 #include "mxpresenter.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
@@ -161,26 +162,24 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 // FUNCTION: LEGO1 0x1007f0e0
 void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
-	// This function probably is the fade in/out routine
+	MxS32 volume, compare;
+
 	if (m_unk0xa0 != NULL) {
-		undefined4 volume = m_unk0xa0->GetVolume();
-		MxU32 compare = 30;
-		if (m_unk0x148 == 0) {
+		volume = m_unk0xa0->GetVolume();
+
+		if (m_unk0x148 != 0) {
+			compare = 30;
+		}
+		else {
 			compare = m_targetVolume;
 		}
 
 		if (volume < compare) {
-			volume = m_unk0x140 + volume;
-			if (compare <= volume) {
-				volume = compare;
-			}
+			volume = Min(volume + m_unk0x140, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else if (compare < volume) {
-			volume = volume - m_unk0x140;
-			if (volume <= compare) {
-				volume = compare;
-			}
+			volume = Max(volume - m_unk0x140, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else {
