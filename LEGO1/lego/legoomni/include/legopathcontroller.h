@@ -1,7 +1,11 @@
 #ifndef LEGOPATHCONTROLLER_H
 #define LEGOPATHCONTROLLER_H
 
+#include "decomp.h"
 #include "mxcore.h"
+
+class IslePathActor;
+class LegoPathBoundary;
 
 // VTABLE: LEGO1 0x100d7d60
 // SIZE 0x40
@@ -31,6 +35,8 @@ public:
 	virtual void VTable0x14(); // vtable+0x14
 	virtual void Destroy();    // vtable+0x18
 
+	undefined4 FUN_10046770(IslePathActor* p_actor);
+	MxResult FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value);
 	void Enable(MxBool p_enable);
 };
 

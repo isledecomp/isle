@@ -265,16 +265,32 @@ done:
 	return m_cameraController;
 }
 
-// STUB: LEGO1 0x1001fc80
+// FUNCTION: LEGO1 0x1001fc80
 void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (!controller->FUN_10046770(p_actor)) {
+			break;
+		}
+	}
 }
 
-// STUB: LEGO1 0x10020120
-MxS32 LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
+// FUNCTION: LEGO1 0x10020120
+MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
-	// TODO
-	return 0;
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	cursor.Next(controller);
+
+	if (!controller) {
+		return FAILURE;
+	}
+
+	return controller->FUN_10046b30(p_path, p_value);
 }
 
 // FUNCTION: LEGO1 0x10020220
