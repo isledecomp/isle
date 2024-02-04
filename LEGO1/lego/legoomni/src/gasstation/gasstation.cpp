@@ -5,16 +5,16 @@
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
-	this->m_unk0xf8 = 0;
-	this->m_unk0x100 = 0;
-	this->m_unk0xfc = 0;
-	this->m_unk0x108 = 0;
-	this->m_unk0x104 = 0;
-	this->m_unk0x114 = 0;
-	this->m_unk0x106 = 0;
-	this->m_unk0x10c = 0;
-	this->m_unk0x115 = 0;
-	this->m_unk0x110 = 0;
+	m_unk0xf8 = 0;
+	m_unk0x100 = 0;
+	m_unk0xfc = 0;
+	m_unk0x108 = 0;
+	m_unk0x104 = 0;
+	m_unk0x114 = 0;
+	m_unk0x106 = 0;
+	m_unk0x10c = 0;
+	m_unk0x115 = 0;
+	m_unk0x110 = 0;
 
 	NotificationManager()->Register(this);
 }
