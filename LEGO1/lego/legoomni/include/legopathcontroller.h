@@ -36,7 +36,7 @@ public:
 	virtual void Destroy();    // vtable+0x18
 
 	undefined4 FUN_10046770(IslePathActor* p_actor);
-	MxS32 FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value);
+	MxResult FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value);
 	void Enable(MxBool p_enable);
 };
 
