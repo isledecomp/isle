@@ -660,7 +660,6 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 		return "There is no 3D present.";
 	case DDERR_NOCOLORCONVHW:
 		return "Operation could not be carried out because there is no color conversion hardware present or available.";
-		;
 	case DDERR_NOCLIPLIST:
 		return "No cliplist available.";
 	case DDERR_NOCOLORKEY:
@@ -771,8 +770,8 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 		return "HWND used by DirectDraw CooperativeLevel has been subclassed, this prevents DirectDraw fr om restoring "
 			   "state.";
 	case DDERR_HWNDALREADYSET:
-		"The CooperativeLevel HWND has already been set. It can not be reset while the process has surfaces or "
-		"palettes created.";
+		return "The CooperativeLevel HWND has already been set. It can not be reset while the process has surfaces or "
+			   "palettes created.";
 	case DDERR_NOPALETTEATTACHED:
 		return "No palette object attached to this surface.";
 	case DDERR_NOPALETTEHW:
