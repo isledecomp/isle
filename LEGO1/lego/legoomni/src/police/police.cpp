@@ -141,5 +141,5 @@ MxBool Police::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 510);
 	m_transitionDestination = 2;
-	return 1;
+	return TRUE;
 }
