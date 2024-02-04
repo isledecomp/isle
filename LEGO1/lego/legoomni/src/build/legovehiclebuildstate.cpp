@@ -7,11 +7,11 @@ DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
 // FUNCTION: LEGO1 0x10025f30
 LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
 {
-	this->m_className = p_classType;
-	this->m_unk0x4c = 0;
-	this->m_unk0x4d = 0;
-	this->m_unk0x4e = 0;
-	this->m_placedPartCount = 0;
+	m_className = p_classType;
+	m_unk0x4c = 0;
+	m_unk0x4d = 0;
+	m_unk0x4e = 0;
+	m_placedPartCount = 0;
 }
 
 // STUB: LEGO1 0x10026120
