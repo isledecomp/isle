@@ -216,8 +216,8 @@ public:
 		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
-	static undefined4 FUN_1009d1a0();
-	static undefined4 FUN_1009d1e0();
+	static int SupportsMMX();
+	static int SupportsCPUID();
 
 	friend class MxDirect3D;
 

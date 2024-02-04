@@ -734,7 +734,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	int i = 0;
 	int j = 0;
 	int k = -1;
-	unsigned int und = FUN_1009d1a0();
+	unsigned int cpu_mmx = SupportsMMX();
 
 	for (list<MxDriver>::iterator it = m_list.begin();; it++) {
 		if (it == m_list.end()) {
@@ -746,7 +746,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 				return j;
 			}
 
-			if ((und && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
+			if ((cpu_mmx && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
 				((*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0)) {
 				k = j;
 			}
@@ -760,16 +760,76 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	return -1;
 }
 
-// STUB: LEGO1 0x1009d1a0
-undefined4 MxDeviceEnumerate::FUN_1009d1a0()
+// FUNCTION: LEGO1 0x1009d1a0
+int MxDeviceEnumerate::SupportsMMX()
 {
-	return 1;
+	int supports_mmx = SupportsCPUID();
+	if (supports_mmx) {
+#ifdef _MSC_VER
+		__asm {
+			mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
+#if _MSC_VER > 1100
+			cpuid                   ; Run CPUID
+#else
+			__emit 0x0f
+			__emit 0xa2
+#endif
+			mov eax, 0x1            ; EAX=1: Processor Info and Feature Bits (unused)
+#if _MSC_VER > 1100
+			cpuid                   ; Run CPUID
+#else
+			__emit 0x0f
+			__emit 0xa2
+#endif
+			xor eax, eax            ; Zero EAX register
+			bt edx, 0x17            ; Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+			adc eax, eax            ; Add with carry: EAX = EAX + EAX + CF = CF
+			mov supports_mmx, eax   ; Save eax into C variable
+		}
+#else
+		__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
+				"cpuid\n\t"             // Run CPUID\n"
+				"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
+				"cpuid\n\t"             // Run CPUID
+				"xorl %%eax, %%eax\n\t" // Zero EAX register
+				"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+				"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
+				: "=a"(supports_mmx)    // supports_mmx == EAX
+		);
+#endif
+	}
+	return supports_mmx;
 }
 
-// STUB: LEGO1 0x1009d1e0
-undefined4 MxDeviceEnumerate::FUN_1009d1e0()
+// FUNCTION: LEGO1 0x1009d1e0
+int MxDeviceEnumerate::SupportsCPUID()
 {
-	return 1;
+	int has_cpuid;
+#ifdef _MSC_VER
+	__asm {
+		xor eax, eax                    ; Zero EAX register
+		pushfd                          ; Push EFLAGS register value on the stack
+		or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+		popfd                           ; Write the updated value into the EFLAGS register
+		pushfd                          ; Push EFLAGS register value on the stack (again)
+		btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
+		adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
+		popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+		mov has_cpuid, eax              ; Save eax into C variable
+	}
+#else
+	__asm__("xorl %%eax, %%eax\n\t"      // Zero EAX register
+			"pushfl\n\t"                 // Push EFLAGS register value on the stack
+			"orl $0x200000, (%%esp)\n\t" // Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+			"popfl\n\t"                  // Write the updated value into the EFLAGS register
+			"pushfl\n\t"                 // Push EFLAGS register value on the stack (again)
+			"btrl $0x15, (%%esp)\n\t"    // Test bit 0x15 (21) and reset (set CF)
+			"adc %%eax, %%eax\n\t"       // Add with carry: EAX = EAX + EAX + CF = CF
+			"popfl" // Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+			: "=a"(has_cpuid) // has_cpuid == EAX
+	);
+#endif
+	return has_cpuid;
 }
 
 // FUNCTION: LEGO1 0x1009d210
