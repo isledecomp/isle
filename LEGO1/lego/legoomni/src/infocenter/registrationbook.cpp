@@ -3,24 +3,29 @@
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 
-// STUB: LEGO1 0x10076d20
-RegistrationBook::RegistrationBook()
+DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
+
+// FUNCTION: LEGO1 0x10076d20
+RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 {
-	m_unk0xf8 = 0x80000000;
-	m_unk0xfc = 1;
-	m_unk0x28e = 0;
-	m_unk0x280 = -1;
-	m_unk0x284 = -1;
-	m_unk0x288 = -1;
-	m_unk0x28c = -1;
+	memset(m_unk0x100, 0, sizeof(m_unk0x100));
+	memset(m_unk0x168, 0, sizeof(m_unk0x168));
+
+	// Maybe not be part of the struct, but then it would need packing
+	m_unk0x280.m_unk0x0e = 0;
+
+	memset(m_unk0x290, 0, sizeof(m_unk0x290));
+	memset(&m_unk0x280, -1, sizeof(m_unk0x280) - 2);
+
 	m_unk0x2b8 = 0;
 	m_unk0x2bc = 0;
+
+	NotificationManager()->Register(this);
+
 	m_unk0x2c1 = 0;
 	m_unk0x2c4 = 0;
 	m_unk0x2c8 = 0;
 	m_unk0x2cc = 0;
-
-	NotificationManager()->Register(this);
 }
 
 // STUB: LEGO1 0x10076f50
