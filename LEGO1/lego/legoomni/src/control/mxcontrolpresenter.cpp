@@ -58,8 +58,9 @@ void MxControlPresenter::VTable0x68(MxBool p_unk0x50)
 // FUNCTION: LEGO1 0x10044110
 MxControlPresenter::~MxControlPresenter()
 {
-	if (m_unk0x58)
+	if (m_unk0x58) {
 		delete m_unk0x58;
+	}
 }
 
 // FUNCTION: LEGO1 0x10044180
@@ -108,13 +109,13 @@ MxBool MxControlPresenter::FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* 
 	if (m_unk0x4c == 3) {
 		MxVideoPresenter* frontPresenter = (MxVideoPresenter*) m_list.front();
 
-		if (p_presenter == frontPresenter || frontPresenter->GetDisplayZ() < frontPresenter->GetDisplayZ()) {
+		if (p_presenter == frontPresenter || frontPresenter->GetDisplayZ() < p_presenter->GetDisplayZ()) {
 			if (p_presenter->VTable0x7c()) {
 				MxS32 height = frontPresenter->GetHeight();
 				MxS32 width = frontPresenter->GetWidth();
 
 				if (frontPresenter->GetLocation().GetX() <= p_x &&
-					p_x < width - 1 + frontPresenter->GetLocation().GetY() &&
+					p_x < width - 1 + frontPresenter->GetLocation().GetX() &&
 					frontPresenter->GetLocation().GetY() <= p_y &&
 					p_y < height - 1 + frontPresenter->GetLocation().GetY()) {
 					MxU8* start;
@@ -198,7 +199,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(0);
-				p_event->SetType(c_notificationType17);
+				p_event->SetType(c_notificationClick);
 				p_event->SetUnknown0x28(m_unk0x4e);
 				return TRUE;
 			}
@@ -208,7 +209,7 @@ MxBool MxControlPresenter::FUN_10044480(LegoControlManagerEvent* p_event, MxPres
 				p_event->SetClickedObjectId(m_action->GetObjectId());
 				p_event->SetClickedAtom(m_action->GetAtomId().GetInternal());
 				VTable0x6c(m_unk0x56);
-				p_event->SetType(c_notificationType17);
+				p_event->SetType(c_notificationClick);
 				p_event->SetUnknown0x28(m_unk0x4e);
 				return TRUE;
 			}
@@ -238,7 +239,7 @@ void MxControlPresenter::VTable0x6c(MxS16 p_val)
 
 	MxS16 i = 0;
 	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-		(*it)->Enable((m_unk0x4c == 3 && m_unk0x4e == 0 || !IsEnabled()) ? FALSE : m_unk0x4e == i);
+		(*it)->Enable(((m_unk0x4c == 3 && m_unk0x4e == 0) || !IsEnabled()) ? FALSE : m_unk0x4e == i);
 		i++;
 	}
 }
@@ -322,8 +323,9 @@ void MxControlPresenter::Enable(MxBool p_enable)
 MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	MxCompositePresenterList::iterator it = m_list.begin();
-	for (MxS16 i = m_unk0x4e; i > 0; i--, it++)
+	for (MxS16 i = m_unk0x4e; i > 0; i--, it++) {
 		;
+	}
 
 	return (*it)->HasTickleStatePassed(p_tickleState);
 }

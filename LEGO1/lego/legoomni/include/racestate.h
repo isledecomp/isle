@@ -18,19 +18,19 @@ public:
 	RaceState();
 
 	// FUNCTION: LEGO1 0x10016010
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f07d0
 		return "RaceState";
 	}
 
 	// FUNCTION: LEGO1 0x10016020
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 

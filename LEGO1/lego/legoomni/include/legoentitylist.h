@@ -22,7 +22,7 @@ public:
 	LegoEntityList(MxBool p_ownership = FALSE) : MxPtrList<LegoEntity>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001e2d0
-	virtual MxS8 Compare(LegoEntity* p_a, LegoEntity* p_b) override
+	MxS8 Compare(LegoEntity* p_a, LegoEntity* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14
@@ -74,7 +74,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001f110
 // LegoEntityListCursor::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f180
+// TEMPLATE: LEGO1 0x1001f180
 // MxPtrListCursor<LegoEntity>::~MxPtrListCursor<LegoEntity>
 
 // SYNTHETIC: LEGO1 0x1001f1d0
@@ -83,7 +83,7 @@ public:
 // SYNTHETIC: LEGO1 0x1001f240
 // MxPtrListCursor<LegoEntity>::`scalar deleting destructor'
 
-// FUNCTION: LEGO1 0x1001f2b0
+// TEMPLATE: LEGO1 0x1001f2b0
 // MxListCursor<LegoEntity *>::~MxListCursor<LegoEntity *>
 
 // FUNCTION: LEGO1 0x1001f300

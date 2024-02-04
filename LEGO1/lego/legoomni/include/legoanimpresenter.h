@@ -14,32 +14,32 @@ class LegoAnimClass;
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	LegoAnimPresenter();
-	virtual ~LegoAnimPresenter() override;
+	~LegoAnimPresenter() override;
 
 	// FUNCTION: LEGO1 0x10068530
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f071c
 		return "LegoAnimPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x10068540
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;                                                           // vtable+0x18
-	virtual void StartingTickle() override;                                                        // vtable+0x1c
-	virtual void StreamingTickle() override;                                                       // vtable+0x20
-	virtual void DoneTickle() override;                                                            // vtable+0x2c
-	virtual void ParseExtra() override;                                                            // vtable+0x30
-	virtual MxResult AddToManager() override;                                                      // vtable+0x34
-	virtual void Destroy() override;                                                               // vtable+0x38
-	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
-	virtual void EndAction() override;                                                             // vtable+0x40
-	virtual void PutFrame() override;                                                              // vtable+0x6c
-	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                           // vtable+0x88
+	void ReadyTickle() override;                                                           // vtable+0x18
+	void StartingTickle() override;                                                        // vtable+0x1c
+	void StreamingTickle() override;                                                       // vtable+0x20
+	void DoneTickle() override;                                                            // vtable+0x2c
+	void ParseExtra() override;                                                            // vtable+0x30
+	MxResult AddToManager() override;                                                      // vtable+0x34
+	void Destroy() override;                                                               // vtable+0x38
+	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
+	void EndAction() override;                                                             // vtable+0x40
+	void PutFrame() override;                                                              // vtable+0x6c
+	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                   // vtable+0x88
 
 	inline LegoAnimClass* GetUnknown0x64() { return m_unk0x64; }
 
@@ -81,11 +81,11 @@ protected:
 class LegoAnimClass : public LegoTree {
 public:
 	LegoAnimClass();
-	virtual ~LegoAnimClass() override;
+	~LegoAnimClass() override;
 
-	virtual LegoResult Write(LegoStorage* p_storage) override; // vtable+0x08
-	virtual LegoTreeNodeData* CreateData() override;           // vtable+0x0c
-	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32);  // vtable+0x10
+	LegoResult Write(LegoStorage* p_storage) override;        // vtable+0x08
+	LegoTreeNodeData* CreateData() override;                  // vtable+0x0c
+	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32); // vtable+0x10
 
 	inline MxLong GetUnknown0x8() { return m_unk0x08; }
 

@@ -35,7 +35,7 @@ void LegoAct2::ReadyWorld()
 }
 
 // STUB: LEGO1 0x10050cf0
-void LegoAct2::VTable0x68(MxBool p_add)
+void LegoAct2::Enable(MxBool p_enable)
 {
 	// TODO
 }

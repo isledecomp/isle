@@ -1,0 +1,6 @@
+Checks: >
+  -*,
+  readability-braces-around-statements,
+  modernize-use-override
+WarningsAsErrors: '-*,readability-braces-around-statements,modernize-use-override'
+HeaderFilterRegex: ".*"

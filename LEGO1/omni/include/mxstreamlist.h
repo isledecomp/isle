@@ -11,8 +11,9 @@ class MxStreamList : public list<T> {
 public:
 	MxBool PopFront(T& p_obj)
 	{
-		if (this->empty())
+		if (this->empty()) {
 			return FALSE;
+		}
 
 		p_obj = this->front();
 		this->pop_front();
@@ -29,8 +30,9 @@ public:
 	// instead of MxDSAction. Until then, we use this helper.
 	MxBool PopFrontStreamingAction(MxDSStreamingAction*& p_obj)
 	{
-		if (empty())
+		if (empty()) {
 			return FALSE;
+		}
 
 		p_obj = (MxDSStreamingAction*) front();
 		pop_front();

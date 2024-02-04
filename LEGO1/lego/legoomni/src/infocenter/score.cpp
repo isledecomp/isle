@@ -32,8 +32,9 @@ MxBool Score::VTable0x5c()
 // FUNCTION: LEGO1 0x10001200
 Score::~Score()
 {
-	if (InputManager()->GetWorld() == this)
+	if (InputManager()->GetWorld() == this) {
 		InputManager()->ClearWorld();
+	}
 	InputManager()->UnRegister(this);
 	ControlManager()->Unregister(this);
 	NotificationManager()->Unregister(this);
@@ -52,8 +53,8 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		LegoGameState* gs = GameState();
 		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
-		GameState()->SetUnknown424(0xd);
-		GameState()->FUN_1003a720(0);
+		GameState()->SetCurrentArea(0xd);
+		GameState()->StopArea();
 	}
 
 	return result;
@@ -87,17 +88,19 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = FUN_10001510((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			if (((LegoEventNotificationParam&) p_param).GetKey() == 0x20)
+			if (((LegoEventNotificationParam&) p_param).GetKey() == 0x20) {
 				DeleteScript(); // Shutting down
+			}
 			ret = 1;
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
-			if (m_unk0xf8)
-				GameState()->HandleAction(m_unk0xf8);
+			if (m_unk0xf8) {
+				GameState()->SwitchArea(m_unk0xf8);
+			}
 			ret = 1;
 			break;
 		default:
@@ -145,8 +148,9 @@ void Score::ReadyWorld()
 		action.SetAtomId(*g_infoscorScript);
 		Start(&action);
 	}
-	else
+	else {
 		PlayMusic(JukeBox::e_informationCenter);
+	}
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
@@ -213,16 +217,17 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10001980
-void Score::VTable0x68(MxBool p_add)
+void Score::Enable(MxBool p_enable)
 {
-	LegoWorld::VTable0x68(p_add);
+	LegoWorld::Enable(p_enable);
 
-	if (p_add) {
+	if (p_enable) {
 		InputManager()->SetWorld(this);
 		SetIsWorldActive(FALSE);
 	}
-	else if (InputManager()->GetWorld() == this)
+	else if (InputManager()->GetWorld() == this) {
 		InputManager()->ClearWorld();
+	}
 }
 
 // FUNCTION: LEGO1 0x100019d0
@@ -249,25 +254,30 @@ void Score::Paint()
 			for (MxU8 id = 1; id <= 5; id++) {
 				m_surface = (MxU8*) desc.lpSurface;
 				MxU16 color = 0;
-				if (l70)
+				if (l70) {
 					color = l70->GetColor(id);
+				}
 				MxU32 row = id - 1;
 				FillArea(0, row, color);
 				color = 0;
-				if (l78)
+				if (l78) {
 					color = l78->GetColor(id);
+				}
 				FillArea(1, row, color);
 				color = 0;
-				if (l74)
+				if (l74) {
 					color = l74->GetColor(id);
+				}
 				FillArea(2, row, color);
 				color = 0;
-				if (lesi)
+				if (lesi) {
 					color = lesi->GetColor(id);
+				}
 				FillArea(3, row, color);
 				color = 0;
-				if (lebp)
+				if (lebp) {
 					color = lebp->GetColor(id);
+				}
 				FillArea(4, row, color);
 			}
 

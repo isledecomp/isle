@@ -54,7 +54,7 @@ void GasStation::ReadyWorld()
 }
 
 // STUB: LEGO1 0x10005c40
-void GasStation::VTable0x68(MxBool p_add)
+void GasStation::Enable(MxBool p_enable)
 {
 	// TODO
 }

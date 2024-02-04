@@ -6,6 +6,7 @@
 #include "legostate.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
@@ -69,8 +70,8 @@ LegoGameState::LegoGameState()
 	this->m_stateCount = 0;
 	this->m_unk0x0c = 0;
 	this->m_savePath = NULL;
-	this->m_unk0x424 = 0;
-	this->m_prevArea = 0;
+	this->m_currentArea = 0;
+	this->m_previousArea = 0;
 	this->m_unk0x42c = 0;
 	this->m_isDirty = FALSE;
 	this->m_currentAct = -1;
@@ -96,8 +97,9 @@ LegoGameState::~LegoGameState()
 	if (m_stateCount) {
 		for (MxS16 i = 0; i < m_stateCount; i++) {
 			LegoState* state = m_stateArray[i];
-			if (state)
+			if (state) {
 				delete state;
+			}
 		}
 
 		delete[] m_stateArray;
@@ -112,14 +114,21 @@ void LegoGameState::FUN_10039780(MxU8)
 	// TODO
 }
 
+// STUB: LEGO1 0x10039940
+void LegoGameState::FUN_10039940()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
 	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 
-	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == NULL)
+	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == NULL) {
 		result = SUCCESS;
+	}
 	else {
 		result = FAILURE;
 		MxVariableTable* variableTable = VariableTable();
@@ -134,8 +143,9 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			fileStream.Write(&m_unk0x0c, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
-				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE)
+				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
 					return result;
+				}
 			}
 
 			if (WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
@@ -161,15 +171,17 @@ MxResult LegoGameState::Load(MxULong)
 // FUNCTION: LEGO1 0x10039f00
 void LegoGameState::SetSavePath(char* p_savePath)
 {
-	if (m_savePath != NULL)
+	if (m_savePath != NULL) {
 		delete[] m_savePath;
+	}
 
 	if (p_savePath) {
 		m_savePath = new char[strlen(p_savePath) + 1];
 		strcpy(m_savePath, p_savePath);
 	}
-	else
+	else {
 		m_savePath = NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x10039f70
@@ -183,8 +195,9 @@ MxResult LegoGameState::WriteVariable(LegoStorage* p_stream, MxVariableTable* p_
 		if (p_stream->Write((char*) &length, 1) == SUCCESS) {
 			if (p_stream->Write(p_variableName, length) == SUCCESS) {
 				length = strlen(variableValue);
-				if (p_stream->Write((char*) &length, 1) == SUCCESS)
+				if (p_stream->Write((char*) &length, 1) == SUCCESS) {
 					result = p_stream->Write((char*) variableValue, length);
+				}
 			}
 		}
 	}
@@ -195,8 +208,9 @@ MxResult LegoGameState::WriteVariable(LegoStorage* p_stream, MxVariableTable* p_
 MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_stream)
 {
 	MxU8 len = strlen(g_endOfVariables);
-	if (p_stream->Write(&len, 1) == SUCCESS)
+	if (p_stream->Write(&len, 1) == SUCCESS) {
 		return p_stream->Write(g_endOfVariables, len);
+	}
 	return FAILURE;
 }
 
@@ -212,9 +226,10 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to)
 		char nameBuffer[256];
 		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
 			nameBuffer[length] = '\0';
-			if (strcmp(nameBuffer, g_endOfVariables) == 0)
+			if (strcmp(nameBuffer, g_endOfVariables) == 0) {
 				// 2 -> "This was the last entry, done reading."
 				result = 2;
+			}
 			else {
 				if (p_stream->Read((char*) &length, 1) == SUCCESS) {
 					char valueBuffer[256];
@@ -237,8 +252,9 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 	char path[1024] = "";
 
 	// Save path base
-	if (m_savePath != NULL)
+	if (m_savePath != NULL) {
 		strcpy(path, m_savePath);
+	}
 
 	// Slot: "G0", "G1", ...
 	strcat(path, "\\G");
@@ -256,31 +272,223 @@ void LegoGameState::SerializePlayersInfo(MxS16)
 	// TODO
 }
 
-// STUB: LEGO1 0x1003a720
-void LegoGameState::FUN_1003a720(MxU32)
+// FUNCTION: LEGO1 0x1003a720
+void LegoGameState::StopArea(MxU32 p_area)
 {
-	// TODO
+	if (p_area == 0) {
+		p_area = m_previousArea;
+	}
+
+	switch (p_area) {
+	case 1:
+		InvokeAction(Extra::e_stop, *g_isleScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_isleScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_sndAnimScript, 0, NULL);
+		break;
+	case 2:
+		InvokeAction(Extra::e_stop, *g_infomainScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infomainScript, 0, NULL);
+		break;
+	case 3:
+		InvokeAction(Extra::e_stop, *g_infodoorScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infodoorScript, 0, NULL);
+		break;
+	case 5:
+		InvokeAction(Extra::e_stop, *g_elevbottScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_elevbottScript, 0, NULL);
+		break;
+	case 6:
+	case 7:
+		RemoveFromWorld(*g_isleScript, 0x41b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 1052, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x41d, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x41e, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x420, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x422, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x424, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x426, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x428, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x42a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x42b, *g_isleScript, 0);
+		break;
+	case 8:
+		RemoveFromWorld(*g_isleScript, 0x45b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x45c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x45d, *g_isleScript, 0);
+		break;
+	case 9:
+		RemoveFromWorld(*g_isleScript, 0x475, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x476, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x477, *g_isleScript, 0);
+		break;
+	case 10:
+		RemoveFromWorld(*g_isleScript, 0x45f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x460, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x461, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x462, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x463, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x464, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x465, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x466, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x467, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x469, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x468, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46d, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46e, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x46f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x471, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x472, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x12, *g_isleScript, 0);
+		break;
+	case 0xb:
+		RemoveFromWorld(*g_isleScript, 0x47a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47c, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x47d, *g_isleScript, 0);
+		break;
+	case 0xc:
+		InvokeAction(Extra::e_stop, *g_regbookScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_regbookScript, 0, NULL);
+		break;
+	case 0xd:
+		InvokeAction(Extra::e_stop, *g_infoscorScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_infoscorScript, 0, NULL);
+		break;
+	case 0xe:
+		InvokeAction(Extra::e_stop, *g_jetraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetracerScript, 0, NULL);
+		break;
+	case 0x12:
+		InvokeAction(Extra::e_stop, *g_carraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_carraceScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_carracerScript, 0, NULL);
+		break;
+	case 0x1a:
+		Lego()->RemoveWorld(*g_garageScript, 0);
+		InvokeAction(Extra::e_stop, *g_garageScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_garageScript, 0, NULL);
+		break;
+	case 0x1b:
+		RemoveFromWorld(*g_isleScript, 0x489, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48a, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48b, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x48c, *g_isleScript, 0);
+		break;
+	case 0x1e:
+		InvokeAction(Extra::e_stop, *g_hospitalScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_hospitalScript, 0, NULL);
+		break;
+	case 0x22:
+		InvokeAction(Extra::e_stop, *g_policeScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_policeScript, 0, NULL);
+		break;
+	case 0x23:
+		RemoveFromWorld(*g_isleScript, 0x47f, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x480, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x481, *g_isleScript, 0);
+		RemoveFromWorld(*g_isleScript, 0x482, *g_isleScript, 0);
+		break;
+	case 0x24:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x2f, NULL);
+		InvokeAction(Extra::e_stop, *g_copterScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_copterScript, 0, NULL);
+		break;
+	case 0x25:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x31, NULL);
+		InvokeAction(Extra::e_stop, *g_dunecarScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_dunecarScript, 0, NULL);
+		break;
+	case 0x26:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x33, NULL);
+		InvokeAction(Extra::e_stop, *g_jetskiScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jetskiScript, 0, NULL);
+		break;
+	case 0x27:
+		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x35, NULL);
+		InvokeAction(Extra::e_stop, *g_racecarScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_racecarScript, 0, NULL);
+		break;
+	case 0x2e:
+		if (m_currentArea != 2) {
+			InvokeAction(Extra::e_stop, *g_act2mainScript, 0, NULL);
+			InvokeAction(Extra::e_close, *g_act2mainScript, 0, NULL);
+		}
+		break;
+	case 0x2f:
+		if (m_currentArea != 2) {
+			InvokeAction(Extra::e_stop, *g_act3Script, 0, NULL);
+			InvokeAction(Extra::e_close, *g_act3Script, 0, NULL);
+		}
+		break;
+	case 0x35:
+		InvokeAction(Extra::e_stop, *g_jukeboxwScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_jukeboxwScript, 0, NULL);
+		break;
+	case 0x38:
+		InvokeAction(Extra::e_disable, *g_histbookScript, 0, NULL);
+		InvokeAction(Extra::e_stop, *g_histbookScript, 0, NULL);
+		InvokeAction(Extra::e_close, *g_histbookScript, 0, NULL);
+		break;
+	}
 }
 
 // STUB: LEGO1 0x1003b060
-void LegoGameState::HandleAction(MxU32 p_area)
+void LegoGameState::SwitchArea(MxU32 p_area)
 {
-	m_prevArea = p_area;
+	m_previousArea = m_currentArea;
+	m_currentArea = p_area;
+
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
-	VideoManager()->SetUnk0x554(0);
+	VideoManager()->SetUnk0x554(FALSE);
 
 	MxAtomId* script = g_isleScript;
+	LegoWorld* world;
+
 	switch (p_area) {
 	case 1:
 		break;
 	case 2:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_infomainScript;
 		break;
 	case 3:
-		VideoManager()->SetUnk0x554(1);
+		VideoManager()->SetUnk0x554(TRUE);
 		script = g_infodoorScript;
+		break;
+		// TODO
+	case 5:
+		script = g_elevbottScript;
+		break;
+	case 6:
+	case 7:
+		world = FindWorld(*g_isleScript, 0);
+
+		if (world == NULL) {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
+		}
+		else {
+#ifdef COMPAT_MODE
+			{
+				MxNotificationParam param(c_notificationType20, NULL);
+				NotificationManager()->Send(world, &param);
+			}
+#else
+			NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
+#endif
+		}
+		break;
+	case 12:
+		VideoManager()->SetUnk0x554(TRUE);
+		script = g_regbookScript;
+		break;
+	case 13:
+		VideoManager()->SetUnk0x554(TRUE);
+		script = g_infoscorScript;
 		break;
 
 		// TODO: implement other cases
@@ -319,9 +527,11 @@ MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen)
 // FUNCTION: LEGO1 0x1003bbb0
 LegoState* LegoGameState::GetState(const char* p_stateName)
 {
-	for (MxS32 i = 0; i < m_stateCount; ++i)
-		if (m_stateArray[i]->IsA(p_stateName))
+	for (MxS32 i = 0; i < m_stateCount; ++i) {
+		if (m_stateArray[i]->IsA(p_stateName)) {
 			return m_stateArray[i];
+		}
+	}
 	return NULL;
 }
 
@@ -338,9 +548,11 @@ LegoState* LegoGameState::CreateState(const char* p_stateName)
 void LegoGameState::RegisterState(LegoState* p_state)
 {
 	MxS32 targetIndex;
-	for (targetIndex = 0; targetIndex < m_stateCount; ++targetIndex)
-		if (m_stateArray[targetIndex]->IsA(p_state->ClassName()))
+	for (targetIndex = 0; targetIndex < m_stateCount; ++targetIndex) {
+		if (m_stateArray[targetIndex]->IsA(p_state->ClassName())) {
 			break;
+		}
+	}
 
 	if (targetIndex == m_stateCount) {
 		LegoState** newBuffer = new LegoState*[m_stateCount + 1];
@@ -355,8 +567,9 @@ void LegoGameState::RegisterState(LegoState* p_state)
 		return;
 	}
 
-	if (m_stateArray[targetIndex])
+	if (m_stateArray[targetIndex]) {
 		delete m_stateArray[targetIndex];
+	}
 	m_stateArray[targetIndex] = p_state;
 }
 

@@ -1,15 +1,14 @@
 #include "mxdsfile.h"
 
+#include "decomp.h"
+
 #include <stdio.h>
 
 #define SI_MAJOR_VERSION 2
 #define SI_MINOR_VERSION 2
 
-// FUNCTION: LEGO1 0x100bfed0
-MxDSFile::~MxDSFile()
-{
-	Close();
-}
+DECOMP_SIZE_ASSERT(MxDSFile::ChunkHeader, 0x0c)
+DECOMP_SIZE_ASSERT(MxDSFile, 0x7c)
 
 // FUNCTION: LEGO1 0x100cc4b0
 MxDSFile::MxDSFile(const char* p_filename, MxULong p_skipReadingChunks)
@@ -37,10 +36,10 @@ MxLong MxDSFile::Open(MxULong p_uStyle)
 	}
 
 	if (longResult != 0) {
-		Close(); // vtable + 0x18
+		Close();
 	}
 	else {
-		Seek(0, 0); // vtable + 0x24
+		Seek(0, 0);
 	}
 
 	return longResult;
@@ -98,8 +97,9 @@ MxLong MxDSFile::Close()
 // FUNCTION: LEGO1 0x100cc780
 MxResult MxDSFile::Read(unsigned char* p_buf, MxULong p_nbytes)
 {
-	if (m_io.Read(p_buf, p_nbytes) != p_nbytes)
+	if (m_io.Read(p_buf, p_nbytes) != p_nbytes) {
 		return FAILURE;
+	}
 
 	m_position += p_nbytes;
 	return SUCCESS;

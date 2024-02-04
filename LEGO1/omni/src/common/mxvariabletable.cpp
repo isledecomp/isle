@@ -41,8 +41,9 @@ void MxVariableTable::SetVariable(MxVariable* p_var)
 	MxHashTableCursor<MxVariable*> cursor(this);
 	MxBool found = cursor.Find(p_var);
 
-	if (found)
+	if (found) {
 		cursor.DeleteMatch();
+	}
 
 	MxHashTable<MxVariable*>::Add(p_var);
 }

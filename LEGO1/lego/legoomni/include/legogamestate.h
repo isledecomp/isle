@@ -32,19 +32,25 @@ public:
 	LegoState* CreateState(const char* p_stateName);
 
 	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
-	void FUN_1003a720(MxU32);
-	void HandleAction(MxU32);
+	void StopArea(MxU32 p_area = 0);
+	void SwitchArea(MxU32 p_area);
 
 	inline MxU8 GetUnknownC() { return m_unk0x0c; }
 	inline MxU32 GetUnknown10() { return m_unk0x10; }
 	inline MxS32 GetCurrentAct() { return m_currentAct; }
-	inline undefined4 GetUnknown424() { return m_unk0x424; }
+	inline MxU32 GetCurrentArea() { return m_currentArea; }
+	inline MxU32 GetPreviousArea() { return m_previousArea; }
+	inline MxU32 GetUnknown0x42c() { return m_unk0x42c; }
+
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
-	inline void SetUnknown424(undefined4 p_unk0x424) { m_unk0x424 = p_unk0x424; }
+	inline void SetCurrentArea(MxU32 p_currentArea) { m_currentArea = p_currentArea; }
+	inline void SetPreviousArea(MxU32 p_previousArea) { m_previousArea = p_previousArea; }
+	inline void SetUnknown0x0c(MxU8 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	void SetSomeEnumState(undefined4 p_state);
 	void FUN_1003ceb0();
 	void FUN_10039780(MxU8);
+	void FUN_10039940();
 
 	struct ScoreStruct {
 		void WriteScoreHistory();
@@ -75,8 +81,8 @@ private:
 	ScoreStruct m_unk0xa6;                      // 0xa6
 	undefined m_unk0x41a[8];                    // 0x41a - might be part of the structure at 0xa6
 	MxBool m_isDirty;                           // 0x420
-	undefined4 m_unk0x424;                      // 0x424
-	undefined4 m_prevArea;                      // 0x428
+	MxU32 m_currentArea;                        // 0x424
+	MxU32 m_previousArea;                       // 0x428
 	undefined4 m_unk0x42c;                      // 0x42c
 };
 

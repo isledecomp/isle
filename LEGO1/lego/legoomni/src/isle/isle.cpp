@@ -46,8 +46,8 @@ Isle::~Isle()
 		InputManager()->ClearWorld();
 	}
 
-	if (GetCurrentVehicle() != NULL) {
-		VTable0x6c(GetCurrentVehicle());
+	if (CurrentVehicle() != NULL) {
+		VTable0x6c(CurrentVehicle());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -62,21 +62,21 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
-		GameState()->FUN_1003a720(0);
+		GameState()->StopArea();
 
 		switch (GameState()->GetCurrentAct()) {
 		case 1:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case 2:
-			GameState()->FUN_1003a720(0x2e);
+			GameState()->StopArea(0x2e);
 			break;
 		case -1:
 			m_unk0x13c = 2;
 		}
 
-		if (GameState()->GetUnknown424() == 1) {
-			GameState()->SetUnknown424(0);
+		if (GameState()->GetCurrentArea() == 1) {
+			GameState()->SetCurrentArea(0);
 		}
 
 		LegoGameState* gameState = GameState();
@@ -115,13 +115,13 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			result = HandleType17Notification(p_param);
 			break;
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
-				result = GetCurrentVehicle()->Notify(p_param);
+				result = CurrentVehicle()->Notify(p_param);
 				break;
 			case 8:
 				result = m_towtrack->Notify(p_param);
@@ -135,7 +135,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			result = HandleType19Notification(p_param);
 			break;
 		case c_notificationType20:
-			VTable0x68(TRUE);
+			Enable(TRUE);
 			break;
 		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
@@ -158,7 +158,7 @@ void Isle::ReadyWorld()
 	LegoWorld::ReadyWorld();
 
 	if (m_act1state->GetUnknown21()) {
-		GameState()->HandleAction(2);
+		GameState()->SwitchArea(2);
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}
@@ -183,9 +183,23 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10031820
-void Isle::VTable0x68(MxBool p_add)
+void Isle::Enable(MxBool p_enable)
 {
-	// TODO
+	if (m_set0xd0.empty() == p_enable) {
+		return;
+	}
+
+	LegoWorld::Enable(p_enable);
+	m_radio.Initialize(p_enable);
+
+	if (p_enable) {
+		// TODO
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
 // STUB: LEGO1 0x10032620

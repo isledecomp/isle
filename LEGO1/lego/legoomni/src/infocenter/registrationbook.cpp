@@ -57,7 +57,7 @@ MxResult RegistrationBook::Tickle()
 }
 
 // STUB: LEGO1 0x10078180
-void RegistrationBook::VTable0x68(MxBool p_add)
+void RegistrationBook::Enable(MxBool p_enable)
 {
 	// TODO
 }

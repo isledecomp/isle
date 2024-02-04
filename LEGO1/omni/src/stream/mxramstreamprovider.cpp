@@ -71,8 +71,9 @@ MxResult MxRAMStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 			path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
 			m_pFile->SetFileName(path.GetData());
 
-			if (m_pFile->Open(0) != 0)
+			if (m_pFile->Open(0) != 0) {
 				goto done;
+			}
 		}
 
 		m_fileSize = m_pFile->CalcFileSize();
@@ -131,23 +132,27 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 								MxDSBuffer::Append(data2, data3);
 								continue;
 							}
-							else
+							else {
 								*MxStreamChunk::IntoFlags(data2) &= ~MxDSChunk::c_split;
+							}
 						}
 
 						data2 += MxDSChunk::Size(*MxDSChunk::IntoLength(data2));
 						memcpy(data2, data3, MxDSChunk::Size(*psize));
 
 						if (*MxStreamChunk::IntoObjectId(data2) == id &&
-							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::c_end))
+							(*MxStreamChunk::IntoFlags(data2) & MxDSChunk::c_end)) {
 							break;
+						}
 					}
-					else
+					else {
 						data++;
+					}
 				}
 			}
-			else
+			else {
 				data++;
+			}
 		} while (data < end);
 	}
 

@@ -27,7 +27,7 @@ public:
 	};
 
 	MxDSObject();
-	virtual ~MxDSObject() override;
+	~MxDSObject() override;
 
 	void CopyFrom(MxDSObject& p_dsObject);
 	MxDSObject& operator=(MxDSObject& p_dsObject);
@@ -36,10 +36,10 @@ public:
 	void SetSourceName(const char* p_sourceName);
 
 	// FUNCTION: LEGO1 0x100bf730
-	inline virtual const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
+	inline const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
 
 	// FUNCTION: LEGO1 0x100bf740
-	inline virtual MxBool IsA(const char* p_name) const override
+	inline MxBool IsA(const char* p_name) const override
 	{
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
 	} // vtable+10;

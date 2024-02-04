@@ -8,7 +8,7 @@
 class LegoFullScreenMovie : public MxVariable {
 public:
 	LegoFullScreenMovie(const char* p_key, const char* p_value);
-	virtual void SetValue(const char* p_option) override;
+	void SetValue(const char* p_option) override;
 };
 
 #endif // LEGOFULLSCREENMOVIE_H

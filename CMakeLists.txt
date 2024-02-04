@@ -2,6 +2,18 @@ cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
 project(isle CXX)
 
+include(CheckCXXSourceCompiles)
+include(CMakeDependentOption)
+include(CMakePushCheckState)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy")
+if (ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_BIN NAMES "clang-tidy")
+    set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_BIN}")
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_BIN}")
+endif()
+
 math(EXPR bits "8 * ${CMAKE_SIZEOF_VOID_P}")
 message(STATUS "Building ${bits}-bit LEGO Island")
 if (NOT bits EQUAL 32)
@@ -21,15 +33,44 @@ macro(register_lego1_target __target)
   list(APPEND lego1_targets ${__target})
 endmacro()
 
+function(add_cxx_warning WARNING)
+    if(ISLE_WERROR)
+        set(compiler_option "-Werror=${WARNING}")
+    else()
+        set(compiler_option "-W${WARNING}")
+    endif()
+    string(MAKE_C_IDENTIFIER "COMPILER_SUPPORTS${compiler_option}" varname)
+
+    cmake_push_check_state(RESET)
+    set(CMAKE_REQUIRED_FLAGS "${compiler_option} ")
+    if(MSVC)
+        string(APPEND CMAKE_REQUIRED_FLAGS "/WX")
+    else()
+        string(APPEND CMAKE_REQUIRED_FLAGS "-Werror")
+    endif()
+    check_cxx_source_compiles("int main() { return 0; }" ${varname})
+    cmake_pop_check_state()
+
+    if(${varname})
+        add_compile_options(${compiler_option})
+    endif()
+endfunction()
+
 message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
+option(ISLE_WERROR "Treat warnings as errors" OFF)
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
+cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
+
+add_cxx_warning(parentheses)
 
 add_library(DirectX5::DirectX5 INTERFACE IMPORTED)
 target_include_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/inc")
-target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+if(ISLE_USE_DX5_LIBS)
+    target_link_directories(DirectX5::DirectX5 INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/dx5/lib")
+endif()
 
 add_library(Smacker::Smacker STATIC IMPORTED)
 set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
@@ -110,7 +151,7 @@ add_library(misc STATIC
 )
 register_lego1_target(misc)
 set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
-target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/realtime" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(misc PRIVATE)
 
 add_library(3dmanager STATIC
@@ -208,7 +249,7 @@ add_library(omni STATIC
 )
 register_lego1_target(omni)
 set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
-target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
 
 add_library(lego1 SHARED
@@ -352,6 +393,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/realtime")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
@@ -376,6 +418,8 @@ if (ISLE_BUILD_APP)
     ISLE/isleapp.cpp
     ISLE/define.cpp
   )
+
+  target_compile_definitions(isle PRIVATE ISLE_APP)
 
   # Use internal DirectX 5 if required
   target_link_libraries(isle PRIVATE $<$<BOOL:${ISLE_USE_DX5}>:DirectX5::DirectX5>)

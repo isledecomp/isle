@@ -20,8 +20,9 @@ MxResult IslePathActor::Create(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x1001a2a0
 void IslePathActor::Destroy(MxBool p_fromDestructor)
 {
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		LegoPathActor::Destroy(FALSE);
+	}
 }
 
 // STUB: LEGO1 0x1001a2c0

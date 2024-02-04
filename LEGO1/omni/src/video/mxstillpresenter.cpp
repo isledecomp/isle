@@ -19,21 +19,24 @@ void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
 
-	if (m_bitmapInfo)
+	if (m_bitmapInfo) {
 		delete m_bitmapInfo;
+	}
 	m_bitmapInfo = NULL;
 
 	m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxVideoPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b9cc0
 void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 {
-	if (m_bitmapInfo)
+	if (m_bitmapInfo) {
 		delete m_bitmapInfo;
+	}
 
 	MxU8* data = new MxU8[p_chunk->GetLength()];
 	m_bitmapInfo = (MxBITMAPINFO*) data;
@@ -43,8 +46,9 @@ void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b9d10
 void MxStillPresenter::CreateBitmap()
 {
-	if (m_bitmap)
+	if (m_bitmap) {
 		delete m_bitmap;
+	}
 
 	m_bitmap = new MxBitmap;
 	m_bitmap->ImportBitmapInfo(m_bitmapInfo);
@@ -90,10 +94,12 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		delete m_bitmap;
 		m_bitmap = NULL;
 
-		if (m_unk0x58 && und)
+		if (m_unk0x58 && und) {
 			SetBit2(TRUE);
-		else
+		}
+		else {
 			SetBit2(FALSE);
+		}
 	}
 }
 
@@ -110,8 +116,9 @@ void MxStillPresenter::StartingTickle()
 {
 	MxVideoPresenter::StartingTickle();
 
-	if (m_currentTickleState == e_streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement())
+	if (m_currentTickleState == e_streaming && ((MxDSMediaAction*) m_action)->GetPaletteManagement()) {
 		RealizePalette();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b9f90
@@ -124,8 +131,9 @@ void MxStillPresenter::StreamingTickle()
 		NextFrame();
 		ProgressTickleState(e_repeating);
 
-		if (m_action->GetDuration() == -1 && m_compositePresenter)
+		if (m_action->GetDuration() == -1 && m_compositePresenter) {
 			m_compositePresenter->VTable0x60(this);
+		}
 	}
 }
 
@@ -133,8 +141,9 @@ void MxStillPresenter::StreamingTickle()
 void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
-		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
+		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
 			ProgressTickleState(e_unk5);
+		}
 	}
 }
 
@@ -185,13 +194,15 @@ void MxStillPresenter::ParseExtra()
 {
 	MxPresenter::ParseExtra();
 
-	if (m_action->GetFlags() & MxDSAction::c_bit5)
+	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		SetBit3(TRUE);
+	}
 
 	MxU32 len = m_action->GetExtraLength();
 
-	if (len == 0)
+	if (len == 0) {
 		return;
+	}
 
 	len &= MAXWORD;
 
@@ -233,15 +244,18 @@ MxStillPresenter* MxStillPresenter::Clone()
 				if (m_bitmap) {
 					presenter->m_bitmap = new MxBitmap;
 
-					if (!presenter->m_bitmap || presenter->m_bitmap->ImportBitmap(m_bitmap) != SUCCESS)
+					if (!presenter->m_bitmap || presenter->m_bitmap->ImportBitmap(m_bitmap) != SUCCESS) {
 						goto done;
+					}
 				}
 
-				if (m_unk0x58)
+				if (m_unk0x58) {
 					presenter->m_unk0x58 = MxDisplaySurface::FUN_100bbfb0(m_unk0x58);
+				}
 
-				if (m_alpha)
+				if (m_alpha) {
 					presenter->m_alpha = new MxVideoPresenter::AlphaMask(*m_alpha);
+				}
 
 				result = SUCCESS;
 			}

@@ -64,11 +64,13 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 
 	m_controlManager = new LegoControlManager;
 
-	if (!m_keyboardNotifyList)
+	if (!m_keyboardNotifyList) {
 		m_keyboardNotifyList = new LegoNotifyList;
+	}
 
-	if (!m_eventQueue)
+	if (!m_eventQueue) {
 		m_eventQueue = new LegoEventQueue;
+	}
 
 	CreateAndAcquireKeyboard(p_hwnd);
 	GetJoystickId();
@@ -86,16 +88,19 @@ void LegoInputManager::Destroy()
 {
 	ReleaseDX();
 
-	if (m_keyboardNotifyList)
+	if (m_keyboardNotifyList) {
 		delete m_keyboardNotifyList;
+	}
 	m_keyboardNotifyList = NULL;
 
-	if (m_eventQueue)
+	if (m_eventQueue) {
 		delete m_eventQueue;
+	}
 	m_eventQueue = NULL;
 
-	if (m_controlManager)
+	if (m_controlManager) {
 		delete m_controlManager;
+	}
 }
 
 // FUNCTION: LEGO1 0x1005c030
@@ -183,8 +188,9 @@ MxResult LegoInputManager::GetJoystickState(
 		if ((capabilities & JOYCAPS_HASPOV) != 0) {
 			joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS;
 
-			if ((capabilities & JOYCAPS_POVCTS) != 0)
+			if ((capabilities & JOYCAPS_POVCTS) != 0) {
 				joyinfoex.dwFlags = JOY_RETURNX | JOY_RETURNY | JOY_RETURNPOV | JOY_RETURNBUTTONS | JOY_RETURNPOVCTS;
+			}
 		}
 
 		MMRESULT mmresult = joyGetPosEx(m_joyid, &joyinfoex);
@@ -220,8 +226,9 @@ void LegoInputManager::Register(MxCore* p_notify)
 	MxAutoLocker lock(&m_criticalSection);
 
 	LegoNotifyListCursor cursor(m_keyboardNotifyList);
-	if (!cursor.Find(p_notify))
+	if (!cursor.Find(p_notify)) {
 		m_keyboardNotifyList->Append(p_notify);
+	}
 }
 
 // FUNCTION: LEGO1 0x1005c5c0
@@ -230,8 +237,9 @@ void LegoInputManager::UnRegister(MxCore* p_notify)
 	MxAutoLocker lock(&m_criticalSection);
 
 	LegoNotifyListCursor cursor(m_keyboardNotifyList);
-	if (cursor.Find(p_notify))
+	if (cursor.Find(p_notify)) {
 		cursor.Detach();
+	}
 }
 
 // FUNCTION: LEGO1 0x1005c700
@@ -276,8 +284,9 @@ void LegoInputManager::ProcessEvents()
 
 	LegoEventNotificationParam event;
 	while (m_eventQueue->Dequeue(event)) {
-		if (ProcessOneEvent(event))
+		if (ProcessOneEvent(event)) {
 			break;
+		}
 	}
 }
 
@@ -379,8 +388,9 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 					p_param.SetROI(roi);
 
 					if (roi && roi->GetUnk0x0c() == 1) {
-						for (OrientableROI* oroi = roi->GetUnknown0xd4(); oroi; oroi = oroi->GetUnknown0xd4())
+						for (OrientableROI* oroi = roi->GetUnknown0xd4(); oroi; oroi = oroi->GetUnknown0xd4()) {
 							roi = (LegoROI*) oroi;
+						}
 
 						LegoEntity* entity = roi->GetUnknown0x104();
 						if (entity && entity->Notify(p_param) != 0) {
@@ -415,8 +425,9 @@ void LegoInputManager::StartAutoDragTimer()
 // FUNCTION: LEGO1 0x1005cfd0
 void LegoInputManager::StopAutoDragTimer()
 {
-	if (m_autoDragTimerID)
+	if (m_autoDragTimerID) {
 		::KillTimer(LegoOmni::GetInstance()->GetWindowHandle(), m_autoDragTimerID);
+	}
 }
 
 // FUNCTION: LEGO1 0x1005cff0

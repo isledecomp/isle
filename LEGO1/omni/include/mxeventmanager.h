@@ -9,9 +9,9 @@
 class MxEventManager : public MxMediaManager {
 public:
 	MxEventManager();
-	virtual ~MxEventManager() override;
+	~MxEventManager() override;
 
-	virtual void Destroy() override;                                     // vtable+18
+	void Destroy() override;                                             // vtable+18
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+28
 
 	// SYNTHETIC: LEGO1 0x100c03d0

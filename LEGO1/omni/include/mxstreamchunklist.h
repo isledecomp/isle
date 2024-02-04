@@ -19,7 +19,7 @@ public:
 	MxStreamChunkList() { m_customDestructor = Destroy; }
 
 	// FUNCTION: LEGO1 0x100b5900
-	virtual MxS8 Compare(MxStreamChunk* p_a, MxStreamChunk* p_b) override
+	MxS8 Compare(MxStreamChunk* p_a, MxStreamChunk* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14

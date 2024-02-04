@@ -42,32 +42,39 @@ void MxVideoManager::Destroy(MxBool p_fromDestructor)
 		m_thread->Terminate();
 		delete m_thread;
 	}
-	else
+	else {
 		TickleManager()->UnregisterClient(this);
+	}
 
 	m_criticalSection.Enter();
 
-	if (m_displaySurface)
+	if (m_displaySurface) {
 		delete m_displaySurface;
+	}
 
-	if (m_region)
+	if (m_region) {
 		delete m_region;
+	}
 
-	if (m_videoParam.GetPalette())
+	if (m_videoParam.GetPalette()) {
 		delete m_videoParam.GetPalette();
+	}
 
 	if (m_unk0x60) {
-		if (m_pDirectDraw)
+		if (m_pDirectDraw) {
 			m_pDirectDraw->Release();
-		if (m_pDirect3D)
+		}
+		if (m_pDirect3D) {
 			m_pDirect3D->Release();
+		}
 	}
 
 	Init();
 	m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMediaManager::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100be3e0
@@ -85,8 +92,9 @@ void MxVideoManager::UpdateRegion()
 // FUNCTION: LEGO1 0x100be440
 void MxVideoManager::SortPresenterList()
 {
-	if (this->m_presenters->GetCount() <= 1)
+	if (this->m_presenters->GetCount() <= 1) {
 		return;
+	}
 
 	MxPresenterListCursor a(this->m_presenters);
 	MxPresenterListCursor b(this->m_presenters);
@@ -132,8 +140,9 @@ MxResult MxVideoManager::VTable0x28(
 
 	m_unk0x60 = FALSE;
 
-	if (MxMediaManager::InitPresenters() != SUCCESS)
+	if (MxMediaManager::InitPresenters() != SUCCESS) {
 		goto done;
+	}
 
 	m_criticalSection.Enter();
 	locked = TRUE;
@@ -141,8 +150,9 @@ MxResult MxVideoManager::VTable0x28(
 	m_videoParam = p_videoParam;
 	m_region = new MxRegion();
 
-	if (!m_region)
+	if (!m_region) {
 		goto done;
+	}
 
 	m_pDirectDraw = p_pDirectDraw;
 	m_pDirect3D = p_pDirect3D;
@@ -152,15 +162,17 @@ MxResult MxVideoManager::VTable0x28(
 		palette = new MxPalette();
 		m_videoParam.SetPalette(palette);
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 	}
 	else {
 		palette = p_videoParam.GetPalette()->Clone();
 		m_videoParam.SetPalette(palette);
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 	}
 
 	m_displaySurface = new MxDisplaySurface();
@@ -170,21 +182,25 @@ MxResult MxVideoManager::VTable0x28(
 		if (p_createThread) {
 			m_thread = new MxTickleThread(this, p_frequencyMS);
 
-			if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+			if (!m_thread || m_thread->Start(0, 0) != SUCCESS) {
 				goto done;
+			}
 		}
-		else
+		else {
 			TickleManager()->RegisterClient(this, p_frequencyMS);
+		}
 
 		status = SUCCESS;
 	}
 
 done:
-	if (status != SUCCESS)
+	if (status != SUCCESS) {
 		Destroy();
+	}
 
-	if (locked)
+	if (locked) {
 		m_criticalSection.Leave();
+	}
 
 	return status;
 }
@@ -197,8 +213,9 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 
 	m_unk0x60 = TRUE;
 
-	if (MxMediaManager::InitPresenters() != SUCCESS)
+	if (MxMediaManager::InitPresenters() != SUCCESS) {
 		goto done;
+	}
 
 	m_criticalSection.Enter();
 	locked = TRUE;
@@ -206,29 +223,34 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 	m_videoParam = p_videoParam;
 	m_region = new MxRegion();
 
-	if (!m_region)
+	if (!m_region) {
 		goto done;
+	}
 
-	if (DirectDrawCreate(NULL, &m_pDirectDraw, NULL) != DD_OK)
+	if (DirectDrawCreate(NULL, &m_pDirectDraw, NULL) != DD_OK) {
 		goto done;
+	}
 
-	if (m_pDirectDraw->SetCooperativeLevel(MxOmni::GetInstance()->GetWindowHandle(), DDSCL_NORMAL) != DD_OK)
+	if (m_pDirectDraw->SetCooperativeLevel(MxOmni::GetInstance()->GetWindowHandle(), DDSCL_NORMAL) != DD_OK) {
 		goto done;
+	}
 
 	MxPalette* palette;
 	if (p_videoParam.GetPalette() == NULL) {
 		palette = new MxPalette();
 		m_videoParam.SetPalette(palette);
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 	}
 	else {
 		palette = p_videoParam.GetPalette()->Clone();
 		m_videoParam.SetPalette(palette);
 
-		if (!palette)
+		if (!palette) {
 			goto done;
+		}
 	}
 
 	m_displaySurface = new MxDisplaySurface();
@@ -238,21 +260,25 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 		if (p_createThread) {
 			m_thread = new MxTickleThread(this, p_frequencyMS);
 
-			if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+			if (!m_thread || m_thread->Start(0, 0) != SUCCESS) {
 				goto done;
+			}
 		}
-		else
+		else {
 			TickleManager()->RegisterClient(this, p_frequencyMS);
+		}
 
 		status = SUCCESS;
 	}
 
 done:
-	if (status != SUCCESS)
+	if (status != SUCCESS) {
 		Destroy();
+	}
 
-	if (locked)
+	if (locked) {
 		m_criticalSection.Leave();
+	}
 
 	return status;
 }
@@ -268,8 +294,9 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 {
 	m_criticalSection.Enter();
 
-	if (m_region)
+	if (m_region) {
 		m_region->VTable0x18(p_rect);
+	}
 
 	m_criticalSection.Leave();
 }
@@ -284,13 +311,15 @@ MxResult MxVideoManager::Tickle()
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(this->m_presenters);
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		presenter->Tickle();
+	}
 
 	cursor.Reset();
 
-	while (cursor.Next(presenter))
+	while (cursor.Next(presenter)) {
 		presenter->PutData();
+	}
 
 	UpdateRegion();
 	m_region->Reset();

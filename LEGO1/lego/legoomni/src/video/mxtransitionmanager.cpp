@@ -137,7 +137,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 		TickleManager()->UnregisterClient(this);
 
 		if (p_notifyWorld) {
-			LegoWorld* world = GetCurrentWorld();
+			LegoWorld* world = CurrentWorld();
 
 			if (world) {
 #ifdef COMPAT_MODE
@@ -209,11 +209,13 @@ void MxTransitionManager::TransitionDissolve()
 
 		for (MxS32 col = 0; col < 640; col++) {
 			// Select 16 columns on each tick
-			if (m_animationTimer * 16 > m_columnOrder[col])
+			if (m_animationTimer * 16 > m_columnOrder[col]) {
 				continue;
+			}
 
-			if (m_animationTimer * 16 + 15 < m_columnOrder[col])
+			if (m_animationTimer * 16 + 15 < m_columnOrder[col]) {
 				continue;
+			}
 
 			for (MxS32 row = 0; row < 480; row++) {
 				// Shift the chosen column a different amount at each scanline.
@@ -223,10 +225,12 @@ void MxTransitionManager::TransitionDissolve()
 
 				// Set the chosen pixel to black
 				if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
-					((MxU8*) ddsd.lpSurface)[row * ddsd.lPitch + xShift] = 0;
+					MxU8* surf = (MxU8*) ddsd.lpSurface + ddsd.lPitch * row + xShift;
+					*surf = 0;
 				}
 				else {
-					((MxU16*) ddsd.lpSurface)[row * ddsd.lPitch + xShift] = 0;
+					MxU8* surf = (MxU8*) ddsd.lpSurface + ddsd.lPitch * row + xShift * 2;
+					*(MxU16*) surf = 0;
 				}
 			}
 		}
@@ -289,60 +293,47 @@ void MxTransitionManager::TransitionPixelation()
 
 		for (MxS32 col = 0; col < 64; col++) {
 			// Select 4 columns on each tick
-			if (m_animationTimer * 4 > m_columnOrder[col])
+			if (m_animationTimer * 4 > m_columnOrder[col]) {
 				continue;
+			}
 
-			if (m_animationTimer * 4 + 3 < m_columnOrder[col])
+			if (m_animationTimer * 4 + 3 < m_columnOrder[col]) {
 				continue;
+			}
 
 			for (MxS32 row = 0; row < 48; row++) {
-				MxS32 xShift = 10 * ((m_randomShift[row] + col) % 64);
-
 				// To do the pixelation, we subdivide the 640x480 surface into
 				// 10x10 pixel blocks. At the chosen block, we sample the top-leftmost
 				// color and set the other 99 pixels to that value.
 
-				// Find the pixel to sample
-				MxS32 sampleOfs = 10 * row * ddsd.lPitch + xShift;
+				// First, get the offset of the 10x10 block that we will sample for this row.
+				MxS32 xShift = 10 * ((m_randomShift[row] + col) % 64);
+
+				// Combine xShift with this value to target the correct location in the buffer.
 				MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
 
-				// Save this cast from void* to save time.
-				// Seems to help accuracy doing it this way.
-				MxU8* surface = (MxU8*) ddsd.lpSurface;
-				MxU8* source = surface + sampleOfs * bytesPerPixel;
+				// Seek to the sample position.
+				MxU8* source = (MxU8*) ddsd.lpSurface + 10 * row * ddsd.lPitch + bytesPerPixel * xShift;
 
+				// Sample byte or word depending on display mode.
 				MxU32 sample = bytesPerPixel == 1 ? *source : *(MxU16*) source;
 
+				// For each of the 10 rows in the 10x10 square:
 				for (MxS32 k = 10 * row; k < 10 * row + 10; k++) {
 					if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
-						// TODO: This block and the next don't match, but they are
-						// hopefully correct in principle.
-						MxU16 colorWord = MAKEWORD(LOBYTE(sample), LOBYTE(sample));
-						MxU32 newColor = MAKELONG(colorWord, colorWord);
+						MxU8* pos = (MxU8*) ddsd.lpSurface + k * ddsd.lPitch + xShift;
 
-						MxU8* pos = surface + k * ddsd.lPitch + xShift;
-						MxU32* dest = (MxU32*) pos;
-
-						// Sets 10 pixels (10 bytes)
-						dest[0] = newColor;
-						dest[1] = newColor;
-						MxU16* half = (MxU16*) (dest + 2);
-						*half = newColor;
+						for (MxS32 tt = 0; tt < 10; tt++) {
+							pos[tt] = sample;
+						}
 					}
 					else {
-						MxU32 newColor = MAKELONG(sample, sample);
+						// Need to double xShift because it measures pixels not bytes
+						MxU16* pos = (MxU16*) ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + 2 * xShift);
 
-						// You might expect a cast to MxU16* instead, but lPitch is
-						// bytes/scanline, not pixels/scanline. Therefore, we just
-						// need to double the xShift to get to the right spot.
-						MxU8* pos = surface + k * ddsd.lPitch + 2 * xShift;
-						MxU32* dest = (MxU32*) pos;
-						// Sets 10 pixels (20 bytes)
-						dest[0] = newColor;
-						dest[1] = newColor;
-						dest[2] = newColor;
-						dest[3] = newColor;
-						dest[4] = newColor;
+						for (MxS32 tt = 0; tt < 10; tt++) {
+							pos[tt] = sample;
+						}
 					}
 				}
 			}
@@ -562,8 +553,9 @@ void MxTransitionManager::SetupCopyRect(LPDDSURFACEDESC p_ddsc)
 			(const MxU8*) p_ddsc->lpSurface + m_copyRect.top * p_ddsc->lPitch + bytesPerPixel * m_copyRect.left;
 
 		m_copyBuffer = new MxU8[bytesPerPixel * width * height];
-		if (!m_copyBuffer)
+		if (!m_copyBuffer) {
 			return;
+		}
 
 		// Copy into the copy buffer
 		MxU8* dst = m_copyBuffer;

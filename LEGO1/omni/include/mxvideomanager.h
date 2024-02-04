@@ -14,10 +14,10 @@
 class MxVideoManager : public MxMediaManager {
 public:
 	MxVideoManager();
-	virtual ~MxVideoManager() override;
+	~MxVideoManager() override;
 
-	virtual MxResult Tickle() override; // vtable+0x08
-	virtual void Destroy() override;    // vtable+0x18
+	MxResult Tickle() override; // vtable+0x08
+	void Destroy() override;    // vtable+0x18
 	virtual MxResult VTable0x28(
 		MxVideoParam& p_videoParam,
 		LPDIRECTDRAW p_pDirectDraw,

@@ -9,23 +9,23 @@
 class LegoActor : public LegoEntity {
 public:
 	LegoActor();
-	virtual ~LegoActor() override;
+	~LegoActor() override;
 
 	// FUNCTION: LEGO1 0x1002d210
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0124
 		return "LegoActor";
 	}
 
 	// FUNCTION: LEGO1 0x1002d220
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual void ParseAction(char*) override;                                     // vtable+0x20
-	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
+	void ParseAction(char*) override;                                     // vtable+0x20
+	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10002cc0
 	virtual MxFloat VTable0x50() { return m_unk0x68; } // vtable+0x50

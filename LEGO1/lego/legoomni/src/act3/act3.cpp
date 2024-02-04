@@ -77,7 +77,7 @@ void Act3::FUN_10073430()
 }
 
 // STUB: LEGO1 0x10073a90
-void Act3::VTable0x68(MxBool p_add)
+void Act3::Enable(MxBool p_enable)
 {
 	// TODO
 }

@@ -39,8 +39,9 @@ void MxDSMediaAction::CopyFrom(MxDSMediaAction& p_dsMediaAction)
 // FUNCTION: LEGO1 0x100c8dc0
 MxDSMediaAction& MxDSMediaAction::operator=(MxDSMediaAction& p_dsMediaAction)
 {
-	if (this == &p_dsMediaAction)
+	if (this == &p_dsMediaAction) {
 		return *this;
+	}
 
 	MxDSAction::operator=(p_dsMediaAction);
 	this->CopyFrom(p_dsMediaAction);
@@ -52,8 +53,9 @@ MxDSAction* MxDSMediaAction::Clone()
 {
 	MxDSMediaAction* clone = new MxDSMediaAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
@@ -61,18 +63,21 @@ MxDSAction* MxDSMediaAction::Clone()
 // FUNCTION: LEGO1 0x100c8e80
 void MxDSMediaAction::CopyMediaSrcPath(const char* p_mediaSrcPath)
 {
-	if (this->m_mediaSrcPath == p_mediaSrcPath)
+	if (this->m_mediaSrcPath == p_mediaSrcPath) {
 		return;
+	}
 
 	delete[] this->m_mediaSrcPath;
 
 	if (p_mediaSrcPath) {
 		this->m_mediaSrcPath = new char[strlen(p_mediaSrcPath) + 1];
-		if (this->m_mediaSrcPath)
+		if (this->m_mediaSrcPath) {
 			strcpy(this->m_mediaSrcPath, p_mediaSrcPath);
+		}
 	}
-	else
+	else {
 		this->m_mediaSrcPath = NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x100c8f00
@@ -86,10 +91,12 @@ MxU32 MxDSMediaAction::GetSizeOnDisk()
 {
 	MxU32 totalSizeOnDisk = MxDSAction::GetSizeOnDisk();
 
-	if (this->m_mediaSrcPath)
+	if (this->m_mediaSrcPath) {
 		totalSizeOnDisk += strlen(this->m_mediaSrcPath) + 1;
-	else
+	}
+	else {
 		totalSizeOnDisk++;
+	}
 
 	totalSizeOnDisk += 24;
 	this->m_sizeOnDisk = totalSizeOnDisk - MxDSAction::GetSizeOnDisk();

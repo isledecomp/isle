@@ -14,7 +14,7 @@
 class MxDisplaySurface : public MxCore {
 public:
 	MxDisplaySurface();
-	virtual ~MxDisplaySurface() override;
+	~MxDisplaySurface() override;
 
 	virtual MxResult Init(
 		MxVideoParam& p_videoParam,

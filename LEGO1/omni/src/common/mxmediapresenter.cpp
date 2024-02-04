@@ -26,21 +26,25 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 	{
 		MxAutoLocker lock(&m_criticalSection);
 
-		if (m_currentChunk && m_subscriber)
+		if (m_currentChunk && m_subscriber) {
 			m_subscriber->DestroyChunk(m_currentChunk);
+		}
 
-		if (m_subscriber)
+		if (m_subscriber) {
 			delete m_subscriber;
+		}
 
-		if (m_loopingChunkCursor)
+		if (m_loopingChunkCursor) {
 			delete m_loopingChunkCursor;
+		}
 
 		if (m_loopingChunks) {
 			MxStreamChunkListCursor cursor(m_loopingChunks);
 			MxStreamChunk* chunk;
 
-			while (cursor.Next(chunk))
+			while (cursor.Next(chunk)) {
 				chunk->Release();
+			}
 
 			delete m_loopingChunks;
 		}
@@ -48,8 +52,9 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 		Init();
 	}
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxPresenter::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b5650
@@ -102,16 +107,18 @@ MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAct
 			m_loopingChunks = new MxStreamChunkList;
 			m_loopingChunkCursor = new MxStreamChunkListCursor(m_loopingChunks);
 
-			if (!m_loopingChunks && !m_loopingChunkCursor)
+			if (!m_loopingChunks && !m_loopingChunkCursor) {
 				goto done;
+			}
 		}
 
 		if (p_controller) {
 			m_subscriber = new MxDSSubscriber;
 
 			if (!m_subscriber ||
-				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS)
+				m_subscriber->Create(p_controller, p_action->GetObjectId(), p_action->GetUnknown24()) != SUCCESS) {
 				goto done;
+			}
 		}
 
 		result = SUCCESS;
@@ -126,8 +133,9 @@ void MxMediaPresenter::EndAction()
 {
 	MxAutoLocker lock(&m_criticalSection);
 
-	if (!m_action)
+	if (!m_action) {
 		return;
+	}
 
 	m_currentChunk = NULL;
 
@@ -198,18 +206,22 @@ void MxMediaPresenter::StreamingTickle()
 void MxMediaPresenter::RepeatingTickle()
 {
 	if (IsEnabled() && !m_currentChunk) {
-		if (m_loopingChunkCursor)
-			if (!m_loopingChunkCursor->Next(m_currentChunk))
+		if (m_loopingChunkCursor) {
+			if (!m_loopingChunkCursor->Next(m_currentChunk)) {
 				m_loopingChunkCursor->Next(m_currentChunk);
+			}
+		}
 
 		if (m_currentChunk) {
 			MxLong time = m_currentChunk->GetTime();
-			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount())
+			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount()) {
 				ProgressTickleState(e_unk5);
+			}
 		}
 		else {
-			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration())
+			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
 				ProgressTickleState(e_unk5);
+			}
 		}
 	}
 }
@@ -217,8 +229,7 @@ void MxMediaPresenter::RepeatingTickle()
 // FUNCTION: LEGO1 0x100b5ef0
 void MxMediaPresenter::DoneTickle()
 {
-	m_previousTickleStates |= 1 << m_currentTickleState;
-	m_currentTickleState = e_idle;
+	ProgressTickleState(e_idle);
 	EndAction();
 }
 
@@ -248,8 +259,9 @@ void MxMediaPresenter::Enable(MxBool p_enable)
 			SetTickleState(e_repeating);
 		}
 		else {
-			if (m_loopingChunkCursor)
+			if (m_loopingChunkCursor) {
 				m_loopingChunkCursor->Reset();
+			}
 			m_currentChunk = NULL;
 			SetTickleState(e_done);
 		}

@@ -14,7 +14,7 @@ public:
 	MxPresenterList(MxBool p_ownership = FALSE) : MxPtrList<MxPresenter>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001cd00
-	virtual MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
+	MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
 	} // vtable+0x14

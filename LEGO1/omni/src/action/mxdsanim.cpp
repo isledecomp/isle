@@ -21,8 +21,9 @@ void MxDSAnim::CopyFrom(MxDSAnim& p_dsAnim)
 // FUNCTION: LEGO1 0x100c9200
 MxDSAnim& MxDSAnim::operator=(MxDSAnim& p_dsAnim)
 {
-	if (this == &p_dsAnim)
+	if (this == &p_dsAnim) {
 		return *this;
+	}
 
 	MxDSMediaAction::operator=(p_dsAnim);
 	this->CopyFrom(p_dsAnim);
@@ -34,8 +35,9 @@ MxDSAction* MxDSAnim::Clone()
 {
 	MxDSAnim* clone = new MxDSAnim();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }

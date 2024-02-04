@@ -58,7 +58,7 @@ void Hospital::ReadyWorld()
 }
 
 // STUB: LEGO1 0x10076220
-void Hospital::VTable0x68(MxBool p_add)
+void Hospital::Enable(MxBool p_enable)
 {
 	// TODO
 }

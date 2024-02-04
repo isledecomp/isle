@@ -41,7 +41,7 @@ void JukeBox::ReadyWorld()
 }
 
 // STUB: LEGO1 0x1005dde0
-void JukeBox::VTable0x68(MxBool p_add)
+void JukeBox::Enable(MxBool p_enable)
 {
 	// TODO
 }

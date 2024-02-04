@@ -13,8 +13,10 @@ MxResult PizzaMissionState::VTable0x1c(LegoFile* p_legoFile)
 // FUNCTION: LEGO1 0x10039510
 PizzaMissionStateEntry* PizzaMissionState::GetState(MxU8 p_id)
 {
-	for (MxS16 i = 0; i < 5; i++)
-		if (m_state[i].m_id == p_id)
+	for (MxS16 i = 0; i < 5; i++) {
+		if (m_state[i].m_id == p_id) {
 			return m_state + i;
+		}
+	}
 	return NULL;
 }

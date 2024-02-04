@@ -27,7 +27,7 @@ class ViewLODList : public LODList<ViewLOD> {
 
 protected:
 	ViewLODList(size_t capacity);
-	~ViewLODList();
+	~ViewLODList() override;
 
 public:
 	inline int AddRef();
@@ -133,8 +133,9 @@ inline int ViewLODList::AddRef()
 inline int ViewLODList::Release()
 {
 	assert(m_refCount > 0);
-	if (!--m_refCount)
+	if (!--m_refCount) {
 		m_owner->Destroy(this);
+	}
 	return m_refCount;
 }
 

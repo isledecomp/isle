@@ -46,15 +46,17 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 // FUNCTION: LEGO1 0x100bed50
 MxVideoParam::~MxVideoParam()
 {
-	if (this->m_deviceId != NULL)
+	if (this->m_deviceId != NULL) {
 		delete[] this->m_deviceId;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bed70
 void MxVideoParam::SetDeviceName(char* p_deviceId)
 {
-	if (this->m_deviceId != NULL)
+	if (this->m_deviceId != NULL) {
 		delete[] this->m_deviceId;
+	}
 
 	if (p_deviceId != NULL) {
 		this->m_deviceId = new char[strlen(p_deviceId) + 1];

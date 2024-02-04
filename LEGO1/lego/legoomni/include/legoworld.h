@@ -33,36 +33,36 @@ public:
 	};
 
 	LegoWorld();
-	virtual ~LegoWorld() override; // vtable+0x00
+	~LegoWorld() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x04
-	virtual MxResult Tickle() override;               // vtable+0x08
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1001d690
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0058
 		return "LegoWorld";
 	}
 
 	// FUNCTION: LEGO1 0x1001d6a0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoWorld::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
-	virtual void ReadyWorld();                                // vtable+0x50
-	virtual LegoCameraController* VTable0x54();               // vtable+0x54
-	virtual void Add(MxCore* p_object);                       // vtable+0x58
-	virtual MxBool VTable0x5c();                              // vtable+0x5c
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
+	virtual void ReadyWorld();                        // vtable+0x50
+	virtual LegoCameraController* VTable0x54();       // vtable+0x54
+	virtual void Add(MxCore* p_object);               // vtable+0x58
+	virtual MxBool VTable0x5c();                      // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x100010a0
 	virtual void VTable0x60() {} // vtable+0x60
 
-	virtual MxBool VTable0x64();           // vtable+0x64
-	virtual void VTable0x68(MxBool p_add); // vtable+0x68
+	virtual MxBool VTable0x64();          // vtable+0x64
+	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }

@@ -5,11 +5,13 @@
 // FUNCTION: LEGO1 0x100acf90
 MxAtomId::MxAtomId(const char* p_str, LookupMode p_mode)
 {
-	if (!MxOmni::GetInstance())
+	if (!MxOmni::GetInstance()) {
 		return;
+	}
 
-	if (!AtomIdCounterSet())
+	if (!AtomIdCounterSet()) {
 		return;
+	}
 
 	MxAtomIdCounter* counter = GetCounter(p_str, p_mode);
 	m_internal = counter->GetKey()->GetData();
@@ -25,14 +27,17 @@ MxAtomId::~MxAtomId()
 // FUNCTION: LEGO1 0x100acfe0
 void MxAtomId::Destroy()
 {
-	if (!m_internal)
+	if (!m_internal) {
 		return;
+	}
 
-	if (!MxOmni::GetInstance())
+	if (!MxOmni::GetInstance()) {
 		return;
+	}
 
-	if (!AtomIdCounterSet())
+	if (!AtomIdCounterSet()) {
 		return;
+	}
 
 #ifdef COMPAT_MODE
 	MxAtomIdCounterSet::iterator it;
@@ -51,8 +56,9 @@ void MxAtomId::Destroy()
 // FUNCTION: LEGO1 0x100ad1c0
 MxAtomId& MxAtomId::operator=(const MxAtomId& p_atomId)
 {
-	if (m_internal)
+	if (m_internal) {
 		Destroy();
+	}
 
 	if (p_atomId.m_internal && MxOmni::GetInstance() && AtomIdCounterSet()) {
 		MxAtomIdCounter* counter = GetCounter(p_atomId.m_internal, e_exact);
