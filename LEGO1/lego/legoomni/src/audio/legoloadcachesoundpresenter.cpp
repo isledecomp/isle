@@ -21,15 +21,15 @@ LegoLoadCacheSoundPresenter::~LegoLoadCacheSoundPresenter()
 // FUNCTION: LEGO1 0x100184e0
 void LegoLoadCacheSoundPresenter::Init()
 {
-	this->m_unk0x70 = NULL;
-	this->m_unk0x78 = 0;
-	this->m_unk0x7c = 0;
+	m_unk0x70 = NULL;
+	m_unk0x78 = 0;
+	m_unk0x7c = 0;
 }
 
 // FUNCTION: LEGO1 0x100184f0
 void LegoLoadCacheSoundPresenter::Destroy(MxBool p_fromDestructor)
 {
-	delete[] this->m_unk0x70;
+	delete[] m_unk0x70;
 	MxWavePresenter::Destroy(p_fromDestructor);
 }
 
