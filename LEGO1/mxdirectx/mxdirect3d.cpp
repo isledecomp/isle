@@ -611,13 +611,208 @@ MxDeviceEnumerate::DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc
 	return deviceEnumerate->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
 }
 
-// STUB: LEGO1 0x1009c730
+// FUNCTION: LEGO1 0x1009c730
 const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
-	// TODO: This is a list of error messages, similar to the function in
-	// MxDirectDraw, except that this one now contains the Direct3D errors.
-	// Probably just copied from a sample file in the dx5 sdk.
-	return "";
+	switch (p_error) {
+	case DD_OK:
+		return "No error.";
+	case DDERR_GENERIC:
+		return "Generic failure.";
+	case DDERR_UNSUPPORTED:
+		return "Action not supported.";
+	case DDERR_INVALIDPARAMS:
+		return "One or more of the parameters passed to the function are incorrect.";
+	case DDERR_OUTOFMEMORY:
+		return "DirectDraw does not have enough memory to perform the operation.";
+	case DDERR_CANNOTATTACHSURFACE:
+		return "This surface can not be attached to the requested surface.";
+	case DDERR_ALREADYINITIALIZED:
+		return "This object is already initialized.";
+	case DDERR_CURRENTLYNOTAVAIL:
+		return "Support is currently not available.";
+	case DDERR_CANNOTDETACHSURFACE:
+		return "This surface can not be detached from the requested surface.";
+	case DDERR_HEIGHTALIGN:
+		return "Height of rectangle provided is not a multiple of reqd alignment.";
+	case DDERR_EXCEPTION:
+		return "An exception was encountered while performing the requested operation.";
+	case DDERR_INVALIDCAPS:
+		return "One or more of the caps bits passed to the callback are incorrect.";
+	case DDERR_INCOMPATIBLEPRIMARY:
+		return "Unable to match primary surface creation request with existing primary surface.";
+	case DDERR_INVALIDMODE:
+		return "DirectDraw does not support the requested mode.";
+	case DDERR_INVALIDCLIPLIST:
+		return "DirectDraw does not support the provided cliplist.";
+	case DDERR_INVALIDPIXELFORMAT:
+		return "The pixel format was invalid as specified.";
+	case DDERR_INVALIDOBJECT:
+		return "DirectDraw received a pointer that was an invalid DIRECTDRAW object.";
+	case DDERR_LOCKEDSURFACES:
+		return "Operation could not be carried out because one or more surfaces are locked.";
+	case DDERR_INVALIDRECT:
+		return "Rectangle provided was invalid.";
+	case DDERR_NOALPHAHW:
+		return "Operation could not be carried out because there is no alpha accleration hardware present or "
+			   "available.";
+	case DDERR_NO3D:
+		return "There is no 3D present.";
+	case DDERR_NOCOLORCONVHW:
+		return "Operation could not be carried out because there is no color conversion hardware present or available.";
+	case DDERR_NOCLIPLIST:
+		return "No cliplist available.";
+	case DDERR_NOCOLORKEY:
+		return "Surface doesn't currently have a color key";
+	case DDERR_NOCOOPERATIVELEVELSET:
+		return "Create function called without DirectDraw object method SetCooperativeLevel being called.";
+	case DDERR_NOEXCLUSIVEMODE:
+		return "Operation requires the application to have exclusive mode but the application does not have exclusive "
+			   "mode.";
+	case DDERR_NOCOLORKEYHW:
+		return "Operation could not be carried out because there is no hardware support of the destination color key.";
+	case DDERR_NOGDI:
+		return "There is no GDI present.";
+	case DDERR_NOFLIPHW:
+		return "Flipping visible surfaces is not supported.";
+	case DDERR_NOTFOUND:
+		return "Requested item was not found.";
+	case DDERR_NOMIRRORHW:
+		return "Operation could not be carried out because there is no hardware present or available.";
+	case DDERR_NORASTEROPHW:
+		return "Operation could not be carried out because there is no appropriate raster op hardware present or "
+			   "available.";
+	case DDERR_NOOVERLAYHW:
+		return "Operation could not be carried out because there is no overlay hardware present or available.";
+	case DDERR_NOSTRETCHHW:
+		return "Operation could not be carried out because there is no hardware support for stretching.";
+	case DDERR_NOROTATIONHW:
+		return "Operation could not be carried out because there is no rotation hardware present or available.";
+	case DDERR_NOTEXTUREHW:
+		return "Operation could not be carried out because there is no texture mapping hardware present or available.";
+	case DDERR_NOT4BITCOLOR:
+		return "DirectDrawSurface is not in 4 bit color palette and the requested operation requires 4 bit color "
+			   "palette.";
+	case DDERR_NOT4BITCOLORINDEX:
+		return "DirectDrawSurface is not in 4 bit color index palette and the requested operation requires 4 bit color "
+			   "index palette.";
+	case DDERR_NOT8BITCOLOR:
+		return "DirectDrawSurface is not in 8 bit color mode and the requested operation requires 8 bit color.";
+	case DDERR_NOZBUFFERHW:
+		return "Operation could not be carried out because there is no hardware support for zbuffer blitting.";
+	case DDERR_NOVSYNCHW:
+		return "Operation could not be carried out because there is no hardware support for vertical blank "
+			   "synchronized operations.";
+	case DDERR_OUTOFCAPS:
+		return "The hardware needed for the requested operation has already been allocated.";
+	case DDERR_NOZOVERLAYHW:
+		return "Overlay surfaces could not be z layered based on their BltOrder because the hardware does not support "
+			   "z layering of overlays.";
+	case DDERR_COLORKEYNOTSET:
+		return "No src color key specified for this operation.";
+	case DDERR_OUTOFVIDEOMEMORY:
+		return "DirectDraw does not have enough memory to perform the operation.";
+	case DDERR_OVERLAYCANTCLIP:
+		return "The hardware does not support clipped overlays.";
+	case DDERR_OVERLAYCOLORKEYONLYONEACTIVE:
+		return "Can only have ony color key active at one time for overlays.";
+	case DDERR_PALETTEBUSY:
+		return "Access to this palette is being refused because the palette is already locked by another thread.";
+	case DDERR_SURFACEALREADYDEPENDENT:
+		return "This surface is already a dependency of the surface it is being made a dependency of.";
+	case DDERR_SURFACEALREADYATTACHED:
+		return "This surface is already attached to the surface it is being attached to.";
+	case DDERR_SURFACEISOBSCURED:
+		return "Access to surface refused because the surface is obscured.";
+	case DDERR_SURFACEBUSY:
+		return "Access to this surface is being refused because the surface is already locked by another thread.";
+	case DDERR_SURFACENOTATTACHED:
+		return "The requested surface is not attached.";
+	case DDERR_SURFACELOST:
+		return "Access to this surface is being refused because the surface memory is gone. The DirectDrawSurface "
+			   "object representing this surface should have Restore called on it.";
+	case DDERR_TOOBIGSIZE:
+		return "Size requested by DirectDraw is too large, but the individual height and width are OK.";
+	case DDERR_TOOBIGHEIGHT:
+		return "Height requested by DirectDraw is too large.";
+	case DDERR_UNSUPPORTEDFORMAT:
+		return "FOURCC format requested is unsupported by DirectDraw.";
+	case DDERR_TOOBIGWIDTH:
+		return "Width requested by DirectDraw is too large.";
+	case DDERR_VERTICALBLANKINPROGRESS:
+		return "Vertical blank is in progress.";
+	case DDERR_UNSUPPORTEDMASK:
+		return "Bitmask in the pixel format requested is unsupported by DirectDraw.";
+	case DDERR_XALIGN:
+		return "Rectangle provided was not horizontally aligned on required boundary.";
+	case DDERR_WASSTILLDRAWING:
+		return "Informs DirectDraw that the previous Blt which is transfering information to or from this Surface is "
+			   "incomplete.";
+	case DDERR_INVALIDDIRECTDRAWGUID:
+		return "The GUID passed to DirectDrawCreate is not a valid DirectDraw driver identifier.";
+	case DDERR_DIRECTDRAWALREADYCREATED:
+		return "A DirectDraw object representing this driver has already been created for this process.";
+	case DDERR_NODIRECTDRAWHW:
+		return "A hardware-only DirectDraw object creation was attempted but the driver did not support any hardware.";
+	case DDERR_PRIMARYSURFACEALREADYEXISTS:
+		return "This process already has created a primary surface.";
+	case DDERR_NOEMULATION:
+		return "Software emulation not available.";
+	case DDERR_REGIONTOOSMALL:
+		return "Region passed to Clipper::GetClipList is too small.";
+	case DDERR_CLIPPERISUSINGHWND:
+		return "An attempt was made to set a cliplist for a clipper object that is already monitoring an hwnd.";
+	case DDERR_NOCLIPPERATTACHED:
+		return "No clipper object attached to surface object.";
+	case DDERR_NOHWND:
+		return "Clipper notification requires an HWND or no HWND has previously been set as the CooperativeLevel HWND.";
+	case DDERR_HWNDSUBCLASSED:
+		return "HWND used by DirectDraw CooperativeLevel has been subclassed, this prevents DirectDraw from restoring "
+			   "state.";
+	case DDERR_HWNDALREADYSET:
+		return "The CooperativeLevel HWND has already been set. It can not be reset while the process has surfaces or "
+			   "palettes created.";
+	case DDERR_NOPALETTEATTACHED:
+		return "No palette object attached to this surface.";
+	case DDERR_NOPALETTEHW:
+		return "No hardware support for 16 or 256 color palettes.";
+	case DDERR_BLTFASTCANTCLIP:
+		return "Return if a clipper object is attached to the source surface passed into a BltFast call.";
+	case DDERR_NOBLTHW:
+		return "No blitter hardware present.";
+	case DDERR_NODDROPSHW:
+		return "No DirectDraw ROP hardware.";
+	case DDERR_OVERLAYNOTVISIBLE:
+		return "Returned when GetOverlayPosition is called on a hidden overlay.";
+	case DDERR_NOOVERLAYDEST:
+		return "Returned when GetOverlayPosition is called on an overlay that UpdateOverlay has never been called on "
+			   "to establish a destination.";
+	case DDERR_INVALIDPOSITION:
+		return "Returned when the position of the overlay on the destination is no longer legal for that destination.";
+	case DDERR_NOTAOVERLAYSURFACE:
+		return "Returned when an overlay member is called for a non-overlay surface.";
+	case DDERR_EXCLUSIVEMODEALREADYSET:
+		return "An attempt was made to set the cooperative level when it was already set to exclusive.";
+	case DDERR_NOTFLIPPABLE:
+		return "An attempt has been made to flip a surface that is not flippable.";
+	case DDERR_CANTDUPLICATE:
+		return "Can't duplicate primary & 3D surfaces, or surfaces that are implicitly created.";
+	case DDERR_NOTLOCKED:
+		return "Surface was not locked.  An attempt to unlock a surface that was not locked at all, or by this "
+			   "process, has been attempted.";
+	case DDERR_CANTCREATEDC:
+		return "Windows can not create any more DCs.";
+	case DDERR_NODC:
+		return "No DC was ever created for this surface.";
+	case DDERR_WRONGMODE:
+		return "This surface can not be restored because it was created in a different mode.";
+	case DDERR_IMPLICITLYCREATED:
+		return "This surface can not be restored because it is an implicitly created surface.";
+	case DDERR_NOTPALETTIZED:
+		return "The surface being used is not a palette-based surface.";
+	default:
+		return "Unrecognized error value.";
+	}
 }
 
 // FUNCTION: LEGO1 0x1009ce60
@@ -734,7 +929,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	int i = 0;
 	int j = 0;
 	int k = -1;
-	unsigned int und = FUN_1009d1a0();
+	int cpu_mmx = SupportsMMX();
 
 	for (list<MxDriver>::iterator it = m_list.begin();; it++) {
 		if (it == m_list.end()) {
@@ -746,7 +941,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 				return j;
 			}
 
-			if ((und && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
+			if ((cpu_mmx && (*it2).m_HELDesc.dcmColorModel == D3DCOLOR_RGB && i == 0) ||
 				((*it2).m_HELDesc.dcmColorModel == D3DCOLOR_MONO && i == 0 && k < 0)) {
 				k = j;
 			}
@@ -760,16 +955,76 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	return -1;
 }
 
-// STUB: LEGO1 0x1009d1a0
-undefined4 MxDeviceEnumerate::FUN_1009d1a0()
+// FUNCTION: LEGO1 0x1009d1a0
+int MxDeviceEnumerate::SupportsMMX()
 {
-	return 1;
+	int supports_mmx = SupportsCPUID();
+	if (supports_mmx) {
+#ifdef _MSC_VER
+		__asm {
+			mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
+#if _MSC_VER > 1100
+			cpuid                   ; Run CPUID
+#else
+			__emit 0x0f
+			__emit 0xa2
+#endif
+			mov eax, 0x1            ; EAX=1: Processor Info and Feature Bits (unused)
+#if _MSC_VER > 1100
+			cpuid                   ; Run CPUID
+#else
+			__emit 0x0f
+			__emit 0xa2
+#endif
+			xor eax, eax            ; Zero EAX register
+			bt edx, 0x17            ; Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+			adc eax, eax            ; Add with carry: EAX = EAX + EAX + CF = CF
+			mov supports_mmx, eax   ; Save eax into C variable
+		}
+#else
+		__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
+				"cpuid\n\t"             // Run CPUID\n"
+				"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
+				"cpuid\n\t"             // Run CPUID
+				"xorl %%eax, %%eax\n\t" // Zero EAX register
+				"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+				"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
+				: "=a"(supports_mmx)    // supports_mmx == EAX
+		);
+#endif
+	}
+	return supports_mmx;
 }
 
-// STUB: LEGO1 0x1009d1e0
-undefined4 MxDeviceEnumerate::FUN_1009d1e0()
+// FUNCTION: LEGO1 0x1009d1e0
+int MxDeviceEnumerate::SupportsCPUID()
 {
-	return 1;
+	int has_cpuid;
+#ifdef _MSC_VER
+	__asm {
+		xor eax, eax                    ; Zero EAX register
+		pushfd                          ; Push EFLAGS register value on the stack
+		or dword ptr[esp], 0x200000     ; Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+		popfd                           ; Write the updated value into the EFLAGS register
+		pushfd                          ; Push EFLAGS register value on the stack (again)
+		btr dword ptr[esp], 0x15        ; Test bit 0x15 (21) and reset (set CF)
+		adc eax, eax                    ; Add with carry: EAX = EAX + EAX + CF = CF
+		popfd                           ; Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+		mov has_cpuid, eax              ; Save eax into C variable
+	}
+#else
+	__asm__("xorl %%eax, %%eax\n\t"      // Zero EAX register
+			"pushfl\n\t"                 // Push EFLAGS register value on the stack
+			"orl $0x200000, (%%esp)\n\t" // Set bit 0x200000: Able to use CPUID instruction (Pentium+)
+			"popfl\n\t"                  // Write the updated value into the EFLAGS register
+			"pushfl\n\t"                 // Push EFLAGS register value on the stack (again)
+			"btrl $0x15, (%%esp)\n\t"    // Test bit 0x15 (21) and reset (set CF)
+			"adc %%eax, %%eax\n\t"       // Add with carry: EAX = EAX + EAX + CF = CF
+			"popfl" // Push EFLAGS register value on the stack (again, and makes sure the stack remains the same)
+			: "=a"(has_cpuid) // has_cpuid == EAX
+	);
+#endif
+	return has_cpuid;
 }
 
 // FUNCTION: LEGO1 0x1009d210
