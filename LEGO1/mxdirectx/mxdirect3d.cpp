@@ -929,7 +929,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 	int i = 0;
 	int j = 0;
 	int k = -1;
-	unsigned int cpu_mmx = SupportsMMX();
+	int cpu_mmx = SupportsMMX();
 
 	for (list<MxDriver>::iterator it = m_list.begin();; it++) {
 		if (it == m_list.end()) {
