@@ -17,6 +17,7 @@ _SETUP_SQL = """
     );
     CREATE INDEX `symbols_or` ON `symbols` (orig_addr);
     CREATE INDEX `symbols_re` ON `symbols` (recomp_addr);
+    CREATE INDEX `symbols_na` ON `symbols` (name);
 """
 
 

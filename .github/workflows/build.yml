@@ -110,6 +110,7 @@ jobs:
       id: cache-original-binaries
       uses: actions/cache/restore@v3
       with:
+        enableCrossOsArchive: true
         path: legobin
         key: legobin
 
@@ -123,6 +124,7 @@ jobs:
       if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
       uses: actions/cache/save@v3
       with:
+        enableCrossOsArchive: true
         path: legobin
         key: legobin
 

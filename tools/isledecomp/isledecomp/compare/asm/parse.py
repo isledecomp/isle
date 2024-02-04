@@ -1,12 +1,13 @@
 """Converts x86 machine code into text (i.e. assembly). The end goal is to
 compare the code in the original and recomp binaries, using longest common
 subsequence (LCS), i.e. difflib.SequenceMatcher.
-The capstone library takes the raw bytes and gives us the mnemnonic
+The capstone library takes the raw bytes and gives us the mnemonic
 and operand(s) for each instruction. We need to "sanitize" the text further
 so that virtual addresses are replaced by symbol name or a generic
 placeholder string."""
 
 import re
+from functools import cache
 from typing import Callable, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp.bin import InvalidVirtualAddressError
@@ -19,6 +20,7 @@ ptr_replace_regex = re.compile(r"(?P<data_size>\w+) ptr \[(?P<addr>0x[0-9a-fA-F]
 DisasmLiteInst = namedtuple("DisasmLiteInst", "address, size, mnemonic, op_str")
 
 
+@cache
 def from_hex(string: str) -> Optional[int]:
     try:
         return int(string, 16)
@@ -97,6 +99,9 @@ class ParseAsm:
             # Nothing to sanitize
             return (inst.mnemonic, "")
 
+        if "0x" not in inst.op_str:
+            return (inst.mnemonic, inst.op_str)
+
         # For jumps or calls, if the entire op_str is a hex number, the value
         # is a relative offset.
         # Otherwise (i.e. it looks like `dword ptr [address]`) it is an
@@ -167,21 +172,20 @@ class ParseAsm:
         else:
             op_str = ptr_replace_regex.sub(filter_out_ptr, inst.op_str)
 
+        def replace_immediate(chunk: str) -> str:
+            if (inttest := from_hex(chunk)) is not None:
+                # If this value is a virtual address, it is referenced absolutely,
+                # which means it must be in the relocation table.
+                if self.is_relocated(inttest):
+                    return self.replace(inttest)
+
+            return chunk
+
         # Performance hack:
         # Skip this step if there is nothing left to consider replacing.
         if "0x" in op_str:
             # Replace immediate values with name or placeholder (where appropriate)
-            words = op_str.split(", ")
-            for i, word in enumerate(words):
-                try:
-                    inttest = int(word, 16)
-                    # If this value is a virtual address, it is referenced absolutely,
-                    # which means it must be in the relocation table.
-                    if self.is_relocated(inttest):
-                        words[i] = self.replace(inttest)
-                except ValueError:
-                    pass
-            op_str = ", ".join(words)
+            op_str = ", ".join(map(replace_immediate, op_str.split(", ")))
 
         return inst.mnemonic, op_str
 
