@@ -70,7 +70,7 @@ public:
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
-	MxS32 GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
+	MxResult GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxCore* Find(const char* p_class, const char* p_name);
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 

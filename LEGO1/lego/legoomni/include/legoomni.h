@@ -71,7 +71,7 @@ public:
 
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId&, MxLong);
-	static int GetCurrPathInfo(LegoPathBoundary**, MxS32&);
+	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
 	static void CreateInstance();
 	static LegoOmni* GetInstance();
 
