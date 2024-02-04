@@ -29,6 +29,9 @@ public:
 	// SYNTHETIC: LEGO1 0x1005e920
 	// PoliceState::`scalar deleting destructor'
 
+	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
+	inline void SetUnknown0x0c(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+
 private:
 	undefined4 m_unk0x08; // 0x08
 	undefined4 m_unk0x0c; // 0x0c
