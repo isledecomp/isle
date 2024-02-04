@@ -611,7 +611,7 @@ MxDeviceEnumerate::DirectDrawEnumerateCallback(LPGUID p_guid, LPSTR p_driverDesc
 	return deviceEnumerate->EnumDirectDrawCallback(p_guid, p_driverDesc, p_driverName);
 }
 
-// STUB: LEGO1 0x1009c730
+// FUNCTION: LEGO1 0x1009c730
 const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 {
 	switch (p_error) {
