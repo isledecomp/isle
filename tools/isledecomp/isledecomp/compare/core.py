@@ -134,7 +134,9 @@ class Compare:
                 except UnicodeDecodeError:
                     pass
 
-            self._db.set_recomp_symbol(addr, sym.node_type, sym.name(), sym.size())
+            self._db.set_recomp_symbol(
+                addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
+            )
 
         for lineref in cv.lines:
             addr = self.recomp_bin.get_abs_addr(lineref.section, lineref.offset)
@@ -168,7 +170,12 @@ class Compare:
                 self._db.skip_compare(fun.offset)
 
         for var in codebase.iter_variables():
-            self._db.match_variable(var.offset, var.name)
+            if var.is_static and var.parent_function is not None:
+                self._db.match_static_variable(
+                    var.offset, var.name, var.parent_function
+                )
+            else:
+                self._db.match_variable(var.offset, var.name)
 
         for tbl in codebase.iter_vtables():
             self._db.match_vtable(tbl.offset, tbl.name)

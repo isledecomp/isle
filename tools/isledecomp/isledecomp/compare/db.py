@@ -12,6 +12,7 @@ _SETUP_SQL = """
         orig_addr int,
         recomp_addr int,
         name text,
+        decorated_name text,
         size int,
         should_skip int default(FALSE)
     );
@@ -65,12 +66,13 @@ class CompareDb:
         addr: int,
         compare_type: Optional[SymbolType],
         name: Optional[str],
+        decorated_name: Optional[str],
         size: Optional[int],
     ):
         compare_value = compare_type.value if compare_type is not None else None
         self._db.execute(
-            "INSERT INTO `symbols` (recomp_addr, compare_type, name, size) VALUES (?,?,?,?)",
-            (addr, compare_value, name, size),
+            "INSERT INTO `symbols` (recomp_addr, compare_type, name, decorated_name, size) VALUES (?,?,?,?,?)",
+            (addr, compare_value, name, decorated_name, size),
         )
 
     def get_unmatched_strings(self) -> List[str]:
@@ -211,6 +213,56 @@ class CompareDb:
         did_match = self._match_on(SymbolType.VTABLE, addr, name)
         if not did_match:
             logger.error("Failed to find vtable for class: %s", name)
+
+        return did_match
+
+    def match_static_variable(self, addr: int, name: str, function_addr: int) -> bool:
+        """Matching a static function variable by combining the variable name
+        with the decorated (mangled) name of its parent function."""
+
+        cur = self._db.execute(
+            """SELECT name, decorated_name
+            FROM `symbols`
+            WHERE orig_addr = ?""",
+            (function_addr,),
+        )
+
+        if (result := cur.fetchone()) is None:
+            logger.error("No function for static variable: %s", name)
+            return False
+
+        # Get the friendly name for the "failed to match" error message
+        (function_name, decorated_name) = result
+
+        # Now we have to combine the variable name (read from the marker)
+        # and the decorated name of the enclosing function (the above variable)
+        # into a LIKE clause and try to match.
+        # For example, the variable "g_startupDelay" from function "IsleApp::Tick"
+        # has symbol: "?g_startupDelay@?1??Tick@IsleApp@@QAEXH@Z@4HA"
+        # The function's decorated name is: "?Tick@IsleApp@@QAEXH@Z"
+        cur = self._db.execute(
+            """UPDATE `symbols`
+            SET orig_addr = ?
+            WHERE name LIKE '%' || ? || '%' || ? || '%'
+            AND orig_addr IS NULL
+            AND (compare_type = ? OR compare_type = ? OR compare_type IS NULL)""",
+            (
+                addr,
+                name,
+                decorated_name,
+                SymbolType.DATA.value,
+                SymbolType.POINTER.value,
+            ),
+        )
+
+        did_match = cur.rowcount > 0
+
+        if not did_match:
+            logger.error(
+                "Failed to match static variable %s from function %s",
+                name,
+                function_name,
+            )
 
         return did_match
 

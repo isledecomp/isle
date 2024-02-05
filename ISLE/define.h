@@ -21,7 +21,5 @@ extern int g_targetWidth;
 extern int g_targetHeight;
 extern int g_targetDepth;
 extern int g_reqEnableRMDevice;
-extern int g_startupDelay;
-extern MxLong g_lastFrameTime;
 
 #endif // DEFINE_H

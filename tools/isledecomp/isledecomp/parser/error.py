@@ -47,6 +47,10 @@ class ParserError(Enum):
     # to ignore things like string literal that are not variables.
     GLOBAL_NOT_VARIABLE = 111
 
+    # WARN: A marked static variable inside a function needs to have its
+    # function marked too, and in the same module.
+    ORPHANED_STATIC_VARIABLE = 112
+
     # This code or higher is an error, not a warning
     DECOMP_ERROR_START = 200
 
