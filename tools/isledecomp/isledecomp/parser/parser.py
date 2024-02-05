@@ -13,6 +13,7 @@ from .util import (
 )
 from .marker import (
     DecompMarker,
+    MarkerCategory,
     match_marker,
     is_marker_exact,
 )
@@ -52,6 +53,9 @@ class MarkerDict:
 
         self.markers[key] = marker
         return False
+
+    def query(self, category: MarkerCategory, module: str) -> Optional[DecompMarker]:
+        return self.markers.get((category, module))
 
     def iter(self) -> Iterator[DecompMarker]:
         for _, marker in self.markers.items():
@@ -305,6 +309,23 @@ class DecompParser:
                     )
                 )
             else:
+                parent_function = None
+                is_static = self.state == ReaderState.IN_FUNC_GLOBAL
+
+                # If this is a static variable, we need to get the function
+                # where it resides so that we can match it up later with the
+                # mangled names of both variable and function from cvdump.
+                if is_static:
+                    fun_marker = self.fun_markers.query(
+                        MarkerCategory.FUNCTION, marker.module
+                    )
+
+                    if fun_marker is None:
+                        self._syntax_warning(ParserError.ORPHANED_STATIC_VARIABLE)
+                        continue
+
+                    parent_function = fun_marker.offset
+
                 self._symbols.append(
                     ParserVariable(
                         type=marker.type,
@@ -312,7 +333,8 @@ class DecompParser:
                         module=marker.module,
                         offset=marker.offset,
                         name=self.curly.get_prefix(variable_name),
-                        is_static=self.state == ReaderState.IN_FUNC_GLOBAL,
+                        is_static=is_static,
+                        parent_function=parent_function,
                     )
                 )
 
