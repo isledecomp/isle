@@ -693,15 +693,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					switch (m_selectedCharacter) {
 					case e_pepper:
 						dialogueToPlay = c_pepperCharacterSelect;
+						GameState()->SetUnknown0x0c(m_selectedCharacter);
 						break;
 					case e_mama:
 						dialogueToPlay = c_mamaCharacterSelect;
+						GameState()->SetUnknown0x0c(m_selectedCharacter);
 						break;
 					case e_papa:
 						dialogueToPlay = c_papaCharacterSelect;
+						GameState()->SetUnknown0x0c(m_selectedCharacter);
 						break;
 					case e_nick:
 						dialogueToPlay = c_nickCharacterSelect;
+						GameState()->SetUnknown0x0c(m_selectedCharacter);
 						break;
 					case e_laura:
 						dialogueToPlay = c_lauraCharacterSelect;
