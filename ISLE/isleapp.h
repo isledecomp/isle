@@ -1,6 +1,7 @@
 #ifndef ISLEAPP_H
 #define ISLEAPP_H
 
+#include "mxtypes.h"
 #include "mxvideoparam.h"
 
 #include <windows.h>
@@ -28,8 +29,8 @@ public:
 	MxResult SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine);
 
 	BOOL ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize);
-	int ReadRegBool(LPCSTR name, BOOL* out);
-	int ReadRegInt(LPCSTR name, int* out);
+	BOOL ReadRegBool(LPCSTR name, BOOL* out);
+	BOOL ReadRegInt(LPCSTR name, int* out);
 
 	void LoadConfig();
 	void Tick(BOOL sleepIfNotNextFrame);
@@ -63,8 +64,8 @@ private:
 	BOOL m_wideViewAngle;      // 0x38
 	int m_islandQuality;       // 0x3c
 	int m_islandTexture;       // 0x40
-	int m_gameStarted;         // 0x44
-	MxLong m_frameDelta;       // 0x48
+	BOOL m_gameStarted;        // 0x44
+	MxTime m_frameDelta;       // 0x48
 	MxVideoParam m_videoParam; // 0x4c
 	BOOL m_windowActive;       // 0x70
 	HWND m_windowHandle;       // 0x74
