@@ -33,6 +33,15 @@ public:
 		e_goodEndMovie
 	};
 
+	enum Character {
+		e_noCharacter = 0,
+		e_pepper,
+		e_mama,
+		e_papa,
+		e_nick,
+		e_laura
+	};
+
 	enum InfomainScript {
 		c_noInfomain = -1,
 
@@ -204,7 +213,7 @@ private:
 	MxLong HandleNotification0(MxNotificationParam& p_param);
 
 	void UpdateFrameHot(MxBool p_display);
-	void FUN_10070e90();
+	void Reset();
 
 	void PlayCutscene(Cutscene p_entityId, MxBool p_scale);
 	void StopCutscene();
@@ -221,7 +230,7 @@ private:
 	void StopBookAnimation();
 
 	InfomainScript m_currentInfomainScript; // 0xf8
-	MxS16 m_unk0xfc;                        // 0xfc
+	MxS16 m_selectedCharacter;              // 0xfc
 	InfocenterState* m_infocenterState;     // 0x100
 	undefined4 m_transitionDestination;     // 0x104
 	Cutscene m_currentCutscene;             // 0x108

@@ -603,7 +603,7 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003cea0
-void LegoGameState::SetSomeEnumState(undefined4 p_state)
+void LegoGameState::FUN_1003cea0(undefined4 p_state)
 {
 	m_unk0x10 = p_state;
 }

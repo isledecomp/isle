@@ -1,11 +1,16 @@
 #include "infocenter.h"
 
+#include "helicopterstate.h"
 #include "infocenterstate.h"
 #include "jukebox.h"
+#include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
+#include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
@@ -28,7 +33,7 @@ const char* g_object2x4grn = "2x4grn";
 // FUNCTION: LEGO1 0x1006ea20
 Infocenter::Infocenter()
 {
-	m_unk0xfc = 0;
+	m_selectedCharacter = e_noCharacter;
 	m_unk0x11c = NULL;
 	m_infocenterState = NULL;
 	m_frameHotBitmap = NULL;
@@ -194,22 +199,22 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 		if (!m_unk0x1d4) {
 			PlayMusic(JukeBox::e_informationCenter);
-			GameState()->FUN_10039780(m_unk0xfc);
+			GameState()->FUN_10039780(m_selectedCharacter);
 
-			switch (m_unk0xfc) {
-			case 1:
+			switch (m_selectedCharacter) {
+			case e_pepper:
 				PlayAction(c_pepperCharacterSelect);
 				break;
-			case 2:
+			case e_mama:
 				PlayAction(c_mamaCharacterSelect);
 				break;
-			case 3:
+			case e_papa:
 				PlayAction(c_papaCharacterSelect);
 				break;
-			case 4:
+			case e_nick:
 				PlayAction(c_nickCharacterSelect);
 				break;
-			case 5:
+			case e_laura:
 				PlayAction(c_lauraCharacterSelect);
 				break;
 			default:
@@ -295,8 +300,8 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 5:
 		if (action->GetObjectId() == m_currentInfomainScript) {
-			if (GameState()->GetUnknown10() != 2 && m_unk0xfc != 0) {
-				GameState()->FUN_10039780(m_unk0xfc);
+			if (GameState()->GetUnknown10() != 2 && m_selectedCharacter != e_noCharacter) {
+				GameState()->FUN_10039780(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
@@ -544,19 +549,19 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 		switch (m_unk0x11c->GetAction()->GetObjectId()) {
 		case c_mamaSelected:
-			m_unk0xfc = 2;
+			m_selectedCharacter = e_mama;
 			break;
 		case c_papaSelected:
-			m_unk0xfc = 3;
+			m_selectedCharacter = e_papa;
 			break;
 		case c_pepperSelected:
-			m_unk0xfc = 1;
+			m_selectedCharacter = e_pepper;
 			break;
 		case c_nickSelected:
-			m_unk0xfc = 4;
+			m_selectedCharacter = e_nick;
 			break;
 		case c_lauraSelected:
-			m_unk0xfc = 5;
+			m_selectedCharacter = e_laura;
 			break;
 		}
 
@@ -565,7 +570,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 			switch (control->GetAction()->GetObjectId()) {
 			case c_mamaCtl:
-				if (m_unk0xfc == 2) {
+				if (m_selectedCharacter == e_mama) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_mamaMovie);
@@ -573,7 +578,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case c_papaCtl:
-				if (m_unk0xfc == 3) {
+				if (m_selectedCharacter == e_papa) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_papaMovie);
@@ -581,7 +586,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case c_pepperCtl:
-				if (m_unk0xfc == 1) {
+				if (m_selectedCharacter == e_pepper) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_pepperMovie);
@@ -589,7 +594,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case c_nickCtl:
-				if (m_unk0xfc == 4) {
+				if (m_selectedCharacter == e_nick) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_nickMovie);
@@ -597,7 +602,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 				}
 				break;
 			case c_lauraCtl:
-				if (m_unk0xfc == 5) {
+				if (m_selectedCharacter == e_laura) {
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_lauraMovie);
@@ -612,58 +617,58 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 				switch (m_mapAreas[m_unk0x1c8].m_unk0x04) {
 				case 3:
-					GameState()->FUN_10039780(m_unk0xfc);
+					GameState()->FUN_10039780(m_selectedCharacter);
 
-					switch (m_unk0xfc) {
-					case 1:
+					switch (m_selectedCharacter) {
+					case e_pepper:
 						PlayAction(c_pepperCharacterSelect);
 						break;
-					case 2:
+					case e_mama:
 						PlayAction(c_mamaCharacterSelect);
 						break;
-					case 3:
+					case e_papa:
 						PlayAction(c_papaCharacterSelect);
 						break;
-					case 4:
+					case e_nick:
 						PlayAction(c_nickCharacterSelect);
 						break;
-					case 5:
+					case e_laura:
 						PlayAction(c_lauraCharacterSelect);
 						break;
 					}
 					break;
 				case 10:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 16;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 11:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 19;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 12:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 22;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 13:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 25;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 14:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 29;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 15:
-					if (m_unk0xfc) {
+					if (m_selectedCharacter) {
 						m_transitionDestination = 32;
 						m_infocenterState->SetUnknown0x74(5);
 					}
@@ -685,22 +690,22 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					dialogueToPlay = c_registerToContinueDialogue;
 				}
 				else {
-					switch (m_unk0xfc) {
-					case 1:
+					switch (m_selectedCharacter) {
+					case e_pepper:
 						dialogueToPlay = c_pepperCharacterSelect;
 						break;
-					case 2:
+					case e_mama:
 						dialogueToPlay = c_mamaCharacterSelect;
 						break;
-					case 3:
+					case e_papa:
 						dialogueToPlay = c_papaCharacterSelect;
 						break;
-					case 4:
+					case e_nick:
 						dialogueToPlay = c_nickCharacterSelect;
 						break;
-					case 5:
+					case e_laura:
 						dialogueToPlay = c_lauraCharacterSelect;
-						GameState()->SetUnknown0x0c(m_unk0xfc);
+						GameState()->SetUnknown0x0c(m_selectedCharacter);
 						break;
 					default:
 						dialogueToPlay =
@@ -987,9 +992,9 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 	VideoManager()->GetDisplaySurface()->ClearScreen();
 
 	if (m_currentCutscene != e_noIntro) {
-		// check if the cutscene is not an ending
+		// check if the cutscene is an ending
 		if (m_currentCutscene >= e_badEndMovie && m_currentCutscene <= e_goodEndMovie) {
-			FUN_10070e90();
+			Reset();
 		}
 		InvokeAction(Extra::ActionType::e_opendisk, *g_introScript, m_currentCutscene, NULL);
 	}
@@ -1092,9 +1097,36 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 	}
 }
 
-// STUB: LEGO1 0x10070e90
-void Infocenter::FUN_10070e90()
+// FUNCTION: LEGO1 0x10070e90
+void Infocenter::Reset()
 {
+	switch (GameState()->GetUnknown10()) {
+	case 1:
+		Lego()->RemoveWorld(*g_act2mainScript, 0);
+		break;
+	case 2:
+		Lego()->RemoveWorld(*g_act3Script, 0);
+		break;
+	}
+
+	PlantManager()->FUN_10027120();
+	BuildingManager()->FUN_10030590();
+	AnimationManager()->FUN_1005ee80(FALSE);
+	UnkSaveDataWriter()->FUN_100832a0();
+	GameState()->FUN_1003cea0(0);
+	GameState()->SetPreviousArea(0);
+	GameState()->SetUnknown0x42c(0);
+
+	InitializeBitmaps();
+	m_selectedCharacter = e_pepper;
+
+	GameState()->FUN_10039780(e_pepper);
+
+	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
+
+	if (state) {
+		state->SetFlag();
+	}
 }
 
 // FUNCTION: LEGO1 0x10070f60

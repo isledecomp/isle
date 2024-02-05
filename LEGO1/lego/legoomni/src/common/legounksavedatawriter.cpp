@@ -65,6 +65,12 @@ AutoROI* LegoUnkSaveDataWriter::FUN_10083500(undefined4, undefined4)
 	return NULL;
 }
 
+// STUB: LEGO1 0x100832a0
+void LegoUnkSaveDataWriter::FUN_100832a0()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10083db0
 void LegoUnkSaveDataWriter::FUN_10083db0(LegoROI* p_roi)
 {

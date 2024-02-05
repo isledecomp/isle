@@ -37,3 +37,9 @@ MxResult LegoPlantManager::Tickle()
 
 	return 0;
 }
+
+// STUB: LEGO1 0x10027120
+void LegoPlantManager::FUN_10027120()
+{
+	// TODO
+}
