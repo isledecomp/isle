@@ -1,7 +1,6 @@
 #include "isleapp.h"
 
 #include "decomp.h"
-#include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"
