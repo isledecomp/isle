@@ -7,6 +7,7 @@
 
 #include <d3d.h>
 
+#if !defined(MXDIRECTX_FOR_CONFIG)
 class MxDirect3D;
 
 // SIZE 0xe4
@@ -76,6 +77,7 @@ private:
 	BOOL m_unk0x88c;                     // 0x88c
 	undefined4 m_unk0x890;               // 0x890
 };
+#endif
 
 // SIZE 0x1a4
 struct MxDevice {
@@ -176,11 +178,13 @@ struct MxDriver {
 // SYNTHETIC: LEGO1 0x1009d470
 // MxDevice::`scalar deleting destructor'
 
+// VTABLE: CONFIG 0x00406000
 // VTABLE: LEGO1 0x100db814
 // SIZE 0x14
 class MxDeviceEnumerate {
 public:
 	MxDeviceEnumerate();
+	// FUNCTION: CONFIG 0x00401650
 	// FUNCTION: LEGO1 0x1009c010
 	~MxDeviceEnumerate() {}
 
@@ -199,9 +203,14 @@ public:
 	int ParseDeviceName(const char* p_deviceId);
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
 	int GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device);
+
+#if defined(MXDIRECTX_FOR_CONFIG)
+	int FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const MxDevice* p_device) const;
+#endif
+
 	int FUN_1009d0d0();
 	int FUN_1009d210();
-	unsigned char FUN_1009d370(MxDriver& p_driver);
+	unsigned char DriverSupportsRequiredDisplayMode(MxDriver& p_driver);
 	unsigned char FUN_1009d3d0(MxDevice& p_device);
 
 	static void BuildErrorString(const char*, ...);
@@ -220,6 +229,8 @@ public:
 	static int SupportsCPUID();
 
 	friend class MxDirect3D;
+
+	const list<MxDriver>& GetDriverList() const { return m_list; }
 
 private:
 	list<MxDriver> m_list;       // 0x04
