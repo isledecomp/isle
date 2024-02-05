@@ -1,5 +1,6 @@
 #include "isleapp.h"
 
+#include "decomp.h"
 #include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
@@ -23,9 +24,11 @@
 
 #include <dsound.h>
 
+DECOMP_SIZE_ASSERT(IsleApp, 0x8c)
+
 // Might be static functions of IsleApp
-BOOL FindExistingInstance(void);
-BOOL StartDirectSound(void);
+BOOL FindExistingInstance();
+BOOL StartDirectSound();
 
 // FUNCTION: ISLE 0x401000
 IsleApp::IsleApp()
@@ -299,7 +302,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 // FUNCTION: ISLE 0x401ca0
-BOOL FindExistingInstance(void)
+BOOL FindExistingInstance()
 {
 	HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
 	if (hWnd) {
@@ -312,7 +315,7 @@ BOOL FindExistingInstance(void)
 }
 
 // FUNCTION: ISLE 0x401ce0
-BOOL StartDirectSound(void)
+BOOL StartDirectSound()
 {
 	LPDIRECTSOUND lpDS = NULL;
 	HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
