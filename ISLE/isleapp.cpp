@@ -1,6 +1,6 @@
 #include "isleapp.h"
 
-#include "define.h"
+#include "decomp.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"
@@ -23,9 +23,50 @@
 
 #include <dsound.h>
 
+DECOMP_SIZE_ASSERT(IsleApp, 0x8c)
+
+// GLOBAL: ISLE 0x410030
+IsleApp* g_isle = NULL;
+
+// GLOBAL: ISLE 0x410034
+unsigned char g_mousedown = 0;
+
+// GLOBAL: ISLE 0x410038
+unsigned char g_mousemoved = 0;
+
+// GLOBAL: ISLE 0x41003c
+BOOL g_closed = FALSE;
+
+// GLOBAL: ISLE 0x410040
+RECT g_windowRect = {0, 0, 640, 480};
+
+// GLOBAL: ISLE 0x410050
+BOOL g_rmDisabled = FALSE;
+
+// GLOBAL: ISLE 0x410054
+BOOL g_waitingForTargetDepth = TRUE;
+
+// GLOBAL: ISLE 0x410058
+int g_targetWidth = 640;
+
+// GLOBAL: ISLE 0x41005c
+int g_targetHeight = 480;
+
+// GLOBAL: ISLE 0x410060
+int g_targetDepth = 16;
+
+// GLOBAL: ISLE 0x410064
+BOOL g_reqEnableRMDevice = FALSE;
+
+// STRING: ISLE 0x4101c4
+#define WNDCLASS_NAME "Lego Island MainNoM App"
+
+// STRING: ISLE 0x4101dc
+#define WINDOW_TITLE "LEGO\xAE"
+
 // Might be static functions of IsleApp
-BOOL FindExistingInstance(void);
-BOOL StartDirectSound(void);
+BOOL FindExistingInstance();
+BOOL StartDirectSound();
 
 // FUNCTION: ISLE 0x401000
 IsleApp::IsleApp()
@@ -34,23 +75,23 @@ IsleApp::IsleApp()
 	m_cdPath = NULL;
 	m_deviceId = NULL;
 	m_savePath = NULL;
-	m_fullScreen = 1;
-	m_flipSurfaces = 0;
-	m_backBuffersInVram = 1;
-	m_using8bit = 0;
-	m_using16bit = 1;
+	m_fullScreen = TRUE;
+	m_flipSurfaces = FALSE;
+	m_backBuffersInVram = TRUE;
+	m_using8bit = FALSE;
+	m_using16bit = TRUE;
 	m_unk0x24 = 0;
-	m_drawCursor = 0;
-	m_use3dSound = 1;
-	m_useMusic = 1;
-	m_useJoystick = 0;
+	m_drawCursor = FALSE;
+	m_use3dSound = TRUE;
+	m_useMusic = TRUE;
+	m_useJoystick = FALSE;
 	m_joystickIndex = 0;
-	m_wideViewAngle = 1;
+	m_wideViewAngle = TRUE;
 	m_islandQuality = 1;
 	m_islandTexture = 1;
-	m_gameStarted = 0;
+	m_gameStarted = FALSE;
 	m_frameDelta = 10;
-	m_windowActive = 1;
+	m_windowActive = TRUE;
 
 #ifdef COMPAT_MODE
 	{
@@ -235,8 +276,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Get reference to window
 	HWND window;
-	if (g_isle->m_windowHandle) {
-		window = g_isle->m_windowHandle;
+	if (g_isle->GetWindowHandle()) {
+		window = g_isle->GetWindowHandle();
 	}
 
 	// Load accelerators (this call actually achieves nothing - there is no "AppAccel" resource in the original - but
@@ -266,16 +307,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 
 			MSG nextMsg;
-			if (!g_isle || !g_isle->m_windowHandle || msg.message != WM_MOUSEMOVE ||
+			if (!g_isle || !g_isle->GetWindowHandle() || msg.message != WM_MOUSEMOVE ||
 				!PeekMessageA(&nextMsg, NULL, 0, 0, PM_NOREMOVE) || nextMsg.message != WM_MOUSEMOVE) {
 				TranslateMessage(&msg);
 				DispatchMessageA(&msg);
 			}
 
 			if (g_reqEnableRMDevice) {
-				g_reqEnableRMDevice = 0;
+				g_reqEnableRMDevice = FALSE;
 				VideoManager()->EnableRMDevice();
-				g_rmDisabled = 0;
+				g_rmDisabled = FALSE;
 				Lego()->StopTimer();
 			}
 
@@ -299,7 +340,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 // FUNCTION: ISLE 0x401ca0
-BOOL FindExistingInstance(void)
+BOOL FindExistingInstance()
 {
 	HWND hWnd = FindWindowA(WNDCLASS_NAME, WINDOW_TITLE);
 	if (hWnd) {
@@ -312,7 +353,7 @@ BOOL FindExistingInstance(void)
 }
 
 // FUNCTION: ISLE 0x401ce0
-BOOL StartDirectSound(void)
+BOOL StartDirectSound()
 {
 	LPDIRECTSOUND lpDS = NULL;
 	HRESULT ret = DirectSoundCreate(NULL, &lpDS, NULL);
@@ -341,7 +382,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_ACTIVATEAPP:
 		if (g_isle) {
-			if ((wParam != 0) && (g_isle->m_fullScreen)) {
+			if ((wParam != 0) && (g_isle->GetFullScreen())) {
 				MoveWindow(
 					hWnd,
 					g_windowRect.left,
@@ -351,7 +392,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					TRUE
 				);
 			}
-			g_isle->m_windowActive = wParam;
+			g_isle->SetWindowActive(wParam);
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_CLOSE:
@@ -376,41 +417,41 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (wParam == SC_SCREENSAVE) {
 			return 0;
 		}
-		if (wParam == SC_CLOSE && g_closed == 0) {
+		if (wParam == SC_CLOSE && g_closed == FALSE) {
 			if (g_isle) {
 				if (g_rmDisabled) {
-					ShowWindow(g_isle->m_windowHandle, SW_RESTORE);
+					ShowWindow(g_isle->GetWindowHandle(), SW_RESTORE);
 				}
-				PostMessageA(g_isle->m_windowHandle, WM_CLOSE, 0, 0);
+				PostMessageA(g_isle->GetWindowHandle(), WM_CLOSE, 0, 0);
 				return 0;
 			}
 		}
-		else if (g_isle && g_isle->m_fullScreen && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
+		else if (g_isle && g_isle->GetFullScreen() && (wParam == SC_MOVE || wParam == SC_KEYMENU)) {
 			return 0;
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_EXITMENULOOP:
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_MOVING:
-		if (g_isle && g_isle->m_fullScreen) {
+		if (g_isle && g_isle->GetFullScreen()) {
 			GetWindowRect(hWnd, (LPRECT) lParam);
 			return 0;
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_NCPAINT:
-		if (g_isle && g_isle->m_fullScreen) {
+		if (g_isle && g_isle->GetFullScreen()) {
 			return 0;
 		}
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_DISPLAYCHANGE:
-		if (g_isle && VideoManager() && g_isle->m_fullScreen && VideoManager()->GetDirect3D()) {
+		if (g_isle && VideoManager() && g_isle->GetFullScreen() && VideoManager()->GetDirect3D()) {
 			if (VideoManager()->GetDirect3D()->GetAssignedDevice()) {
 				int targetDepth = wParam;
 				int targetWidth = LOWORD(lParam);
 				int targetHeight = HIWORD(lParam);
 
 				if (g_waitingForTargetDepth) {
-					g_waitingForTargetDepth = 0;
+					g_waitingForTargetDepth = FALSE;
 					g_targetDepth = targetDepth;
 				}
 				else {
@@ -423,11 +464,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					if (g_rmDisabled) {
 						if (valid) {
-							g_reqEnableRMDevice = 1;
+							g_reqEnableRMDevice = TRUE;
 						}
 					}
 					else if (!valid) {
-						g_rmDisabled = 1;
+						g_rmDisabled = TRUE;
 						Lego()->StartTimer();
 						VideoManager()->DisableRMDevice();
 					}
@@ -466,9 +507,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_SETCURSOR:
-		if (g_isle && (g_isle->m_cursorCurrent == g_isle->m_cursorBusy ||
-					   g_isle->m_cursorCurrent == g_isle->m_cursorNo || !g_isle->m_cursorCurrent)) {
-			SetCursor(g_isle->m_cursorCurrent);
+		if (g_isle && (g_isle->GetCursorCurrent() == g_isle->GetCursorBusy() ||
+					   g_isle->GetCursorCurrent() == g_isle->GetCursorNo() || !g_isle->GetCursorCurrent())) {
+			SetCursor(g_isle->GetCursorCurrent());
 			return 0;
 		}
 		break;
@@ -480,7 +521,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (InputManager()) {
 			InputManager()->QueueEvent(type, wParam, LOWORD(lParam), HIWORD(lParam), keyCode);
 		}
-		if (g_isle && g_isle->m_drawCursor && type == c_notificationMouseMove) {
+		if (g_isle && g_isle->GetDrawCursor() && type == c_notificationMouseMove) {
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
 			if (x >= 640) {
@@ -662,7 +703,7 @@ BOOL IsleApp::ReadReg(LPCSTR name, LPSTR outValue, DWORD outSize)
 }
 
 // FUNCTION: ISLE 0x4027b0
-int IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
+BOOL IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 {
 	char buffer[256];
 
@@ -684,7 +725,7 @@ int IsleApp::ReadRegBool(LPCSTR name, BOOL* out)
 }
 
 // FUNCTION: ISLE 0x402880
-int IsleApp::ReadRegInt(LPCSTR name, int* out)
+BOOL IsleApp::ReadRegInt(LPCSTR name, int* out)
 {
 	char buffer[256];
 
@@ -771,7 +812,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 	// GLOBAL: ISLE 0x4101bc
 	static int g_startupDelay = 200;
 
-	if (!this->m_windowActive) {
+	if (!m_windowActive) {
 		Sleep(0);
 		return;
 	}
@@ -788,10 +829,10 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 
 	MxLong currentTime = Timer()->GetRealTime();
 	if (currentTime < g_lastFrameTime) {
-		g_lastFrameTime = -this->m_frameDelta;
+		g_lastFrameTime = -m_frameDelta;
 	}
 
-	if (this->m_frameDelta + g_lastFrameTime < currentTime) {
+	if (m_frameDelta + g_lastFrameTime < currentTime) {
 		if (!Lego()->IsTimerRunning()) {
 			TickleManager()->Tickle();
 		}
@@ -834,7 +875,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 			if (Start(&ds) != SUCCESS) {
 				return;
 			}
-			this->m_gameStarted = 1;
+			m_gameStarted = TRUE;
 		}
 	}
 	else if (sleepIfNotNextFrame != 0) {

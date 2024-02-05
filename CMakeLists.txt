@@ -415,7 +415,6 @@ set_property(TARGET lego1 PROPERTY SUFFIX ".DLL")
 if (ISLE_BUILD_APP)
   add_executable(isle WIN32
     ISLE/res/isle.rc
-    ISLE/define.cpp
     ISLE/isleapp.cpp
   )
 
