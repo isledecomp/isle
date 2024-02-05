@@ -144,7 +144,7 @@ public:
 
 		c_gasCtlDescription = 555,
 		c_medCtlDescription = 556,
-		c_unk557 = 557,
+		c_infoCtlDescription = 557,
 		c_boatCtlDescription = 558,
 		c_copCtlDescription = 559,
 		c_pizzaCtlDescription = 560,

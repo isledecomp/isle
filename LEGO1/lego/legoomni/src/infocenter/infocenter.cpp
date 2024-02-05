@@ -407,7 +407,6 @@ void Infocenter::InitializeBitmaps()
 	((MxPresenter*) Find(m_atom, c_gasCtl))->Enable(TRUE);
 	((MxPresenter*) Find(m_atom, c_medCtl))->Enable(TRUE);
 	((MxPresenter*) Find(m_atom, c_copCtl))->Enable(TRUE);
-
 	((MxPresenter*) Find(m_atom, c_mamaCtl))->Enable(TRUE);
 	((MxPresenter*) Find(m_atom, c_papaCtl))->Enable(TRUE);
 	((MxPresenter*) Find(m_atom, c_pepperCtl))->Enable(TRUE);
@@ -780,6 +779,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 
 			break;
 		case c_infoCtl:
+			actionToPlay = c_infoCtlDescription;
 			m_radio.Stop();
 			break;
 		case c_doorCtl:
@@ -810,7 +810,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			actionToPlay = c_medCtlDescription;
 			m_radio.Stop();
 			break;
-		case c_copCtlDescription:
+		case c_copCtl:
 			actionToPlay = c_copCtlDescription;
 			m_radio.Stop();
 			break;
@@ -917,7 +917,7 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 		if (sender->IsA("Radio") && m_radio.GetState()->IsActive()) {
 			if (m_currentInfomainScript == c_mamaMovie || m_currentInfomainScript == c_papaMovie ||
 				m_currentInfomainScript == c_pepperMovie || m_currentInfomainScript == c_nickMovie ||
-				m_currentInfomainScript == c_lauraMovie || m_currentInfomainScript == c_unk557 ||
+				m_currentInfomainScript == c_lauraMovie || m_currentInfomainScript == c_infoCtlDescription ||
 				m_currentInfomainScript == c_boatCtlDescription || m_currentInfomainScript == c_raceCtlDescription ||
 				m_currentInfomainScript == c_pizzaCtlDescription || m_currentInfomainScript == c_gasCtlDescription ||
 				m_currentInfomainScript == c_medCtlDescription || m_currentInfomainScript == c_copCtlDescription) {
