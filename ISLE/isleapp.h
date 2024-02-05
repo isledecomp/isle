@@ -65,7 +65,7 @@ private:
 	int m_islandQuality;       // 0x3c
 	int m_islandTexture;       // 0x40
 	BOOL m_gameStarted;        // 0x44
-	MxTime m_frameDelta;       // 0x48
+	MxLong m_frameDelta;       // 0x48
 	MxVideoParam m_videoParam; // 0x4c
 	BOOL m_windowActive;       // 0x70
 	HWND m_windowHandle;       // 0x74
