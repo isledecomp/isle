@@ -46,8 +46,9 @@ public:
 	inline void SetCurrentArea(MxU32 p_currentArea) { m_currentArea = p_currentArea; }
 	inline void SetPreviousArea(MxU32 p_previousArea) { m_previousArea = p_previousArea; }
 	inline void SetUnknown0x0c(MxU8 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	inline void SetUnknown0x42c(undefined4 p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
 
-	void SetSomeEnumState(undefined4 p_state);
+	void FUN_1003cea0(undefined4 p_state);
 	void FUN_1003ceb0();
 	void FUN_10039780(MxU8);
 	void FUN_10039940();

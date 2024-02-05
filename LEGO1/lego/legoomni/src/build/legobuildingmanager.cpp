@@ -45,3 +45,9 @@ MxResult LegoBuildingManager::Tickle()
 	// TODO
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10030590
+void LegoBuildingManager::FUN_10030590()
+{
+	// TODO
+}

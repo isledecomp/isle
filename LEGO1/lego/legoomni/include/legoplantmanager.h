@@ -22,6 +22,7 @@ public:
 
 	void FUN_10026360(undefined4 p_world);
 	void FUN_100263a0(undefined4 p_und);
+	void FUN_10027120();
 
 	// SYNTHETIC: LEGO1 0x100262a0
 	// LegoPlantManager::`scalar deleting destructor'

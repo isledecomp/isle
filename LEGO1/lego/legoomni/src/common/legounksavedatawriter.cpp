@@ -8,6 +8,12 @@ DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
 // GLOBAL: LEGO1 0x10104f20
 LegoSaveDataEntry3 g_saveData3[66];
 
+// STUB: LEGO1 0x100832a0
+void LegoUnkSaveDataWriter::FUN_100832a0()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10083310
 MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 {
