@@ -765,6 +765,12 @@ void IsleApp::LoadConfig()
 // FUNCTION: ISLE 0x402c20
 inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 {
+	// GLOBAL: ISLE 0x4101c0
+	static MxLong g_lastFrameTime = 0;
+
+	// GLOBAL: ISLE 0x4101bc
+	static int g_startupDelay = 200;
+
 	if (!this->m_windowActive) {
 		Sleep(0);
 		return;

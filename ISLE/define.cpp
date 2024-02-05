@@ -32,9 +32,3 @@ int g_targetDepth = 16;
 
 // GLOBAL: ISLE 0x410064
 int g_reqEnableRMDevice = 0;
-
-// GLOBAL: ISLE 0x4101bc
-int g_startupDelay = 200;
-
-// GLOBAL: ISLE 0x4101c0
-MxLong g_lastFrameTime = 0;
