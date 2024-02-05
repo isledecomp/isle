@@ -548,14 +548,14 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 		MxControlPresenter* control = InputManager()->GetControlManager()->FUN_100294e0(p_x - 1, p_y - 1);
 
 		switch (m_unk0x11c->GetAction()->GetObjectId()) {
+		case c_pepperSelected:
+			m_selectedCharacter = e_pepper;
+			break;
 		case c_mamaSelected:
 			m_selectedCharacter = e_mama;
 			break;
 		case c_papaSelected:
 			m_selectedCharacter = e_papa;
-			break;
-		case c_pepperSelected:
-			m_selectedCharacter = e_pepper;
 			break;
 		case c_nickSelected:
 			m_selectedCharacter = e_nick;
@@ -569,6 +569,14 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			m_infoManDialogueTimer = 0;
 
 			switch (control->GetAction()->GetObjectId()) {
+			case c_pepperCtl:
+				if (m_selectedCharacter == e_pepper) {
+					m_radio.Stop();
+					BackgroundAudioManager()->Stop();
+					PlayAction(c_pepperMovie);
+					m_unk0x1d4++;
+				}
+				break;
 			case c_mamaCtl:
 				if (m_selectedCharacter == e_mama) {
 					m_radio.Stop();
@@ -582,14 +590,6 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					m_radio.Stop();
 					BackgroundAudioManager()->Stop();
 					PlayAction(c_papaMovie);
-					m_unk0x1d4++;
-				}
-				break;
-			case c_pepperCtl:
-				if (m_selectedCharacter == e_pepper) {
-					m_radio.Stop();
-					BackgroundAudioManager()->Stop();
-					PlayAction(c_pepperMovie);
 					m_unk0x1d4++;
 				}
 				break;
