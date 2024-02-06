@@ -308,9 +308,15 @@ class Bin:
                     if lookup_addr == 0 or import_addr == 0:
                         break
 
-                    # Skip the "Hint" field, 2 bytes
-                    name_ofs = lookup_addr + self.imagebase + 2
-                    symbol_name = self.read_string(name_ofs).decode("ascii")
+                    # MSB set if this is an ordinal import
+                    if lookup_addr & 0x80000000 != 0:
+                        ordinal_num = lookup_addr & 0x7FFF
+                        symbol_name = f"Ordinal_{ordinal_num}"
+                    else:
+                        # Skip the "Hint" field, 2 bytes
+                        name_ofs = lookup_addr + self.imagebase + 2
+                        symbol_name = self.read_string(name_ofs).decode("ascii")
+
                     yield (dll_name, symbol_name, ofs_iat)
                     ofs_ilt += 4
                     ofs_iat += 4
@@ -384,7 +390,7 @@ class Bin:
         if section.contains_vaddr(addr):
             return (i + 1, addr - section.virtual_address)
 
-        raise InvalidVirtualAddressError(hex(addr))
+        raise InvalidVirtualAddressError(f"{self.filename} : {hex(addr)}")
 
     def is_valid_section(self, section_id: int) -> bool:
         """The PDB will refer to sections that are not listed in the headers
