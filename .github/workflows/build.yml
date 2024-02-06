@@ -67,6 +67,8 @@ jobs:
         repository: 'itsmattkc/msvc420'
         path: msvc420
 
+    - uses: action/setup-python@v5
+
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
@@ -75,7 +77,7 @@ jobs:
 
     - name: Patch MSVC 4.2
       run: |
-        python tools/patch_c2.py msvc420/bin/C2.EXE
+        tools/patch_c2.py msvc420/bin/C2.EXE
 
     - name: Build
       shell: cmd
@@ -89,6 +91,8 @@ jobs:
       with:
         name: Win32
         path: |
+          build/CONFIG.EXE
+          build/CONFIG.PDB
           build/ISLE.EXE
           build/ISLE.PDB
           build/LEGO1.DLL
@@ -100,6 +104,8 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
+
+    - uses: action/setup-python@v5
 
     - uses: actions/download-artifact@master
       with:
@@ -117,6 +123,7 @@ jobs:
     - name: Download original island binares
       if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
       run: |
+        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/CONFIG.EXE --directory-prefix=legobin
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
         C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
 
@@ -136,27 +143,31 @@ jobs:
     - name: Summarize Accuracy
       shell: bash
       run: |
+        python3 tools/reccmp/reccmp.py -S CONFIGPROGRESS.SVG -T 4252 --svg-icon tools/reccmp/config.png -H CONFIGPROGRESS.HTML legobin/CONFIG.DLL build/CONFIG.DLL build/CONFIG.PDB . | tee CONFIGPROGRESS.TXT
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB . | tee ISLEPROGRESS.TXT
-        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 4252 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
+        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
 
     - name: Compare Accuracy With Current Master
       shell: bash
       run: |
         # Compare with current master
+        curl -fLSs -o CONFIGPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/CONFIGPROGRESS.TXT
         curl -fLSs -o ISLEPROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/ISLEPROGRESS.TXT
         curl -fLSs -o LEGO1PROGRESS-OLD.TXT https://github.com/isledecomp/isle/releases/download/continuous/LEGO1PROGRESS.TXT
 
+        diff -u0 ISLEPROGRESS-OLD.TXT CONFIGPROGRESS.TXT || true
         diff -u0 ISLEPROGRESS-OLD.TXT ISLEPROGRESS.TXT || true
         diff -u0 LEGO1PROGRESS-OLD.TXT LEGO1PROGRESS.TXT || true
 
     - name: Test Exports
       shell: bash
       run: |
-        python3 tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
+        tools/verexp/verexp.py legobin/LEGO1.DLL build/LEGO1.DLL
 
     - name: Check Vtables
       shell: bash
       run: |
+        python3 tools/vtable/vtable.py legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB .
         python3 tools/vtable/vtable.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
         python3 tools/vtable/vtable.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
 
@@ -165,6 +176,7 @@ jobs:
       with:
         name: Accuracy Report
         path: |
+          CONFIGPROGRESS.*
           ISLEPROGRESS.*
           LEGO1PROGRESS.*
 
@@ -193,10 +205,13 @@ jobs:
         UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
       run: |
         ./upload.sh \
+          build/CONFIG.EXE \
           build/ISLE.EXE \
           build/LEGO1.DLL \
+          CONFIGPROGRESS.* \
           ISLEPROGRESS.* \
           LEGO1PROGRESS.*
 
+        curl -X POST -F key=$UPLOAD_KEY -F 'file=@CONFIGPROGRESS.SVG' https://legoisland.org/progress/
         curl -X POST -F key=$UPLOAD_KEY -F 'file=@ISLEPROGRESS.SVG' https://legoisland.org/progress/
         curl -X POST -F key=$UPLOAD_KEY -F 'file=@LEGO1PROGRESS.SVG' https://legoisland.org/progress/
