@@ -71,5 +71,4 @@ protected:
 // GLOBAL: CONFIG 0x00406128
 // CMainDialog::_messageEntries
 
-
 #endif // !defined(AFX_MAINDLG_H)
