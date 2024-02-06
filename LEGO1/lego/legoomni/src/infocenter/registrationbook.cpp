@@ -1,5 +1,9 @@
 #include "registrationbook.h"
 
+#include "infocenterstate.h"
+#include "legocontrolmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
 
@@ -18,7 +22,7 @@ RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 	memset(&m_unk0x280, -1, sizeof(m_unk0x280) - 2);
 
 	m_unk0x2b8 = 0;
-	m_unk0x2bc = 0;
+	m_infocenterState = NULL;
 
 	NotificationManager()->Register(this);
 
@@ -34,10 +38,22 @@ RegistrationBook::~RegistrationBook()
 	// TODO
 }
 
-// STUB: LEGO1 0x10077060
+// FUNCTION: LEGO1 0x10077060
 MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 {
-	return SUCCESS;
+	MxResult result = LegoWorld::Create(p_dsAction);
+	if (result == SUCCESS) {
+		InputManager()->SetWorld(this);
+		ControlManager()->Register(this);
+		SetIsWorldActive(FALSE);
+		InputManager()->Register(this);
+
+		GameState()->SetCurrentArea(12);
+		GameState()->StopArea(0);
+
+		m_infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x100770e0
@@ -61,10 +77,20 @@ MxResult RegistrationBook::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10078180
+// FUNCTION: LEGO1 0x10078180
 void RegistrationBook::Enable(MxBool p_enable)
 {
-	// TODO
+	LegoWorld::Enable(p_enable);
+
+	if (p_enable) {
+		InputManager()->SetWorld(this);
+		SetIsWorldActive(FALSE);
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100783e0
