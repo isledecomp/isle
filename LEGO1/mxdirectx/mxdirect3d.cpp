@@ -945,10 +945,10 @@ int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver
 				p_buffer,
 				"%d 0x%x 0x%x 0x%x 0x%x",
 				number,
-				((DWORD*)(p_device->m_guid))[0],
-				((DWORD*)(p_device->m_guid))[1],
-				((DWORD*)(p_device->m_guid))[2],
-				((DWORD*)(p_device->m_guid))[3]
+				((DWORD*) (p_device->m_guid))[0],
+				((DWORD*) (p_device->m_guid))[1],
+				((DWORD*) (p_device->m_guid))[2],
+				((DWORD*) (p_device->m_guid))[3]
 			);
 			return 0;
 		}
@@ -1002,11 +1002,11 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 int MxDeviceEnumerate::SupportsMMX()
 {
 	if (!SupportsCPUID()) {
-        return 0;
-    }
+		return 0;
+	}
 	int supports_mmx;
 #ifdef _MSC_VER
-		__asm {
+	__asm {
 			mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
 #if _MSC_VER > 1100
 			cpuid                   ; Run CPUID
@@ -1025,17 +1025,17 @@ int MxDeviceEnumerate::SupportsMMX()
 			bt edx, 0x17            ; Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
 			adc eax, eax            ; Add with carry: EAX = EAX + EAX + CF = CF
 			mov supports_mmx, eax   ; Save eax into C variable
-		}
+	}
 #else
-		__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
-				"cpuid\n\t"             // Run CPUID\n"
-				"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
-				"cpuid\n\t"             // Run CPUID
-				"xorl %%eax, %%eax\n\t" // Zero EAX register
-				"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
-				"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
-				: "=a"(supports_mmx)    // supports_mmx == EAX
-		);
+	__asm__("movl $0x0, %%eax\n\t"  // EAX=0: Highest Function Parameter and Manufacturer ID
+			"cpuid\n\t"             // Run CPUID\n"
+			"mov $0x1, %%eax\n\t"   // EAX=1: Processor Info and Feature Bits (unused)
+			"cpuid\n\t"             // Run CPUID
+			"xorl %%eax, %%eax\n\t" // Zero EAX register
+			"btl $0x15, %%edx\n\t"  // Test bit 0x17 (23): MMX instructions (64-bit SIMD) (Store in CF)
+			"adc %%eax, %%eax"      // Add with carry: EAX = EAX + EAX + CF = CF
+			: "=a"(supports_mmx)    // supports_mmx == EAX
+	);
 #endif
 	return supports_mmx;
 }

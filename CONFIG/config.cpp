@@ -11,7 +11,7 @@
 DECOMP_SIZE_ASSERT(CWinApp, 0xc4)
 DECOMP_SIZE_ASSERT(CConfigApp, 0x108)
 
-DECOMP_STATIC_ASSERT(offsetof(CConfigApp, m_display_bit_depth) ==  0xd0)
+DECOMP_STATIC_ASSERT(offsetof(CConfigApp, m_display_bit_depth) == 0xd0)
 
 // FIXME: are these tags correct?
 // FIXME: how to tag static in-method variables?
