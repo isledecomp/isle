@@ -147,9 +147,9 @@ jobs:
     - name: Summarize Accuracy
       shell: bash
       run: |
-        python3 tools/reccmp/reccmp.py -S CONFIGPROGRESS.SVG -T 4252 --svg-icon tools/reccmp/config.png -H CONFIGPROGRESS.HTML legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB . | tee CONFIGPROGRESS.TXT
+        python3 tools/reccmp/reccmp.py -S CONFIGPROGRESS.SVG --svg-icon tools/reccmp/config.png -H CONFIGPROGRESS.HTML legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB . | tee CONFIGPROGRESS.TXT
         python3 tools/reccmp/reccmp.py -S ISLEPROGRESS.SVG --svg-icon tools/reccmp/isle.png -H ISLEPROGRESS.HTML legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB . | tee ISLEPROGRESS.TXT
-        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
+        python3 tools/reccmp/reccmp.py -S LEGO1PROGRESS.SVG -T 4252 --svg-icon tools/reccmp/lego1.png -H LEGO1PROGRESS.HTML legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB . | tee LEGO1PROGRESS.TXT
 
     - name: Compare Accuracy With Current Master
       shell: bash
