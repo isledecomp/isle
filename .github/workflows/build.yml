@@ -67,7 +67,7 @@ jobs:
         repository: 'itsmattkc/msvc420'
         path: msvc420
 
-    - uses: action/setup-python@v5
+    - uses: actions/setup-python@v5
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
@@ -105,7 +105,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: action/setup-python@v5
+    - uses: actions/setup-python@v5
 
     - uses: actions/download-artifact@master
       with:
