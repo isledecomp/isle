@@ -431,4 +431,4 @@ int CConfigApp::ExitInstance()
 }
 
 // GLOBAL: CONFIG 0x00408e50
-CConfigApp theApp;
+CConfigApp g_theApp;
