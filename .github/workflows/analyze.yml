@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: action/setup-python@v5
+    - uses: actions/setup-python@v5
 
     - name: Install python libraries
       run: |
