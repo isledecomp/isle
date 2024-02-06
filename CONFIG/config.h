@@ -13,7 +13,7 @@ struct MxDriver;
 
 #define currentConfigApp ((CConfigApp*) afxCurrentWinApp)
 
-// SIZE 0x108
+// SIZE 0x10c
 class CConfigApp : public CWinApp {
 public:
 	CConfigApp();
@@ -56,10 +56,9 @@ private:
 	BOOL IsLegoNotRunning();
 
 public:
-	undefined m_unk0xc0;                    // 0x0c0
 	MxDeviceEnumerate* m_device_enumerator; // 0x0c4
 	MxDriver* m_driver;                     // 0x0c8
-	MxDevice* m_device;                     // 0x0cc
+    MxDevice* m_device;                     // 0x0cc
 	int m_display_bit_depth;                // 0x0d0
 	BOOL m_flip_surfaces;                   // 0x0d4
 	BOOL m_full_screen;                     // 0x0d8
@@ -74,6 +73,7 @@ public:
 	int m_texture_quality;                  // 0x0fc
 	undefined m_unk0x100[4];                // 0x100
 	BOOL m_music;                           // 0x104
+    undefined m_unk[4];
 };
 
 #endif // !defined(AFX_CONFIG_H)

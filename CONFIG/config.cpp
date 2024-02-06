@@ -8,6 +8,11 @@
 #include <mxdirectx/mxdirect3d.h>
 #include <process.h> // _spawnl
 
+DECOMP_SIZE_ASSERT(CWinApp, 0xc4)
+DECOMP_SIZE_ASSERT(CConfigApp, 0x10c)
+
+DECOMP_STATIC_ASSERT(offsetof(CConfigApp, m_display_bit_depth) ==  0xd0)
+
 // FIXME: are these tags correct?
 // FIXME: how to tag static in-method variables?
 
@@ -218,7 +223,7 @@ D3DCOLORMODEL CConfigApp::GetHardwareDeviceColorModel() const
 // FUNCTION: CONFIG 0x00403410
 BOOL CConfigApp::IsPrimaryDriver() const
 {
-	return &m_device_enumerator->GetDriverList().front() == m_driver;
+	return m_driver == &m_device_enumerator->GetDriverList().front();
 }
 
 // FUNCTION: CONFIG 0x00403430
