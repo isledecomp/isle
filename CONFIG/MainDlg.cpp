@@ -21,13 +21,6 @@ void CMainDialog::DoDataExchange(CDataExchange* pDX)
 {
 }
 
-// FIXME: are these tags correct?
-// FIXME: how to tag static in-method variables?
-
-// FUNCTION CMainDialog::GetMessageMap: CONFIG 0x00403e70
-// GLOBAL CMainDialog::GetThisMessageMap()::messageMap CONFIG 0x00406120
-// GLOBAL CMainDialog::GetThisMessageMap()::_messageEntries CONFIG 0x00406128
-
 BEGIN_MESSAGE_MAP(CMainDialog, CDialog)
 ON_WM_SYSCOMMAND()
 ON_WM_PAINT()

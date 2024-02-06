@@ -62,4 +62,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+// FUNCTION: CONFIG 0x00403e70
+// CMainDialog::GetMessageMap
+
+// GLOBAL: CONFIG 0x00406120
+// CMainDialog::messageMap
+
+// GLOBAL: CONFIG 0x00406128
+// CMainDialog::_messageEntries
+
+
 #endif // !defined(AFX_MAINDLG_H)

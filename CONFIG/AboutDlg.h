@@ -35,4 +35,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+// FUNCTION: CONFIG 0x00403d50
+// CAboutDialog::GetMessageMap
+
+// GLOBAL: CONFIG 0x00406100
+// CAboutDialog::messageMap
+
+// GLOBAL: CONFIG 0x00406108
+// CAboutDialog::_messageEntries
+
 #endif // !defined(AFX_ABOUTDLG_H)

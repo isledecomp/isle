@@ -26,13 +26,5 @@ void CAboutDialog::EndModalState()
 void CAboutDialog::DoDataExchange(CDataExchange* pDX)
 {
 }
-
-// FIXME: are these tags correct?
-// FIXME: how to tag static in-method variables?
-
-// FUNCTION CAboutDialog::GetMessageMap: CONFIG 0x00403d50
-// GLOBAL CAboutDialog::GetThisMessageMap()::messageMap CONFIG 0x00406100
-// GLOBAL CAboutDialog::GetThisMessageMap()::_messageEntries CONFIG 0x00406108
-
 BEGIN_MESSAGE_MAP(CAboutDialog, CDialog)
 END_MESSAGE_MAP()

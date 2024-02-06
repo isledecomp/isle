@@ -13,13 +13,6 @@ DECOMP_SIZE_ASSERT(CConfigApp, 0x108)
 
 DECOMP_STATIC_ASSERT(offsetof(CConfigApp, m_display_bit_depth) == 0xd0)
 
-// FIXME: are these tags correct?
-// FIXME: how to tag static in-method variables?
-
-// FUNCTION CConfigApp::GetMessageMap: CONFIG 0x00402c30
-// GLOBAL CConfigApp::GetThisMessageMap()::messageMap CONFIG 0x00406008
-// GLOBAL CConfigApp::GetThisMessageMap()::_messageEntries CONFIG 0x00406010
-
 BEGIN_MESSAGE_MAP(CConfigApp, CWinApp)
 ON_COMMAND(ID_HELP, OnHelp)
 END_MESSAGE_MAP()

@@ -75,4 +75,13 @@ public:
 	BOOL m_music;                           // 0x104
 };
 
+// FUNCTION: CONFIG 0x402c30
+// CConfigApp::GetMessageMap
+
+// GLOBAL: CONFIG 0x406008
+// CConfigApp::messageMap
+
+// GLOBAL: CONFIG 0x406010
+// CConfigApp::_messageEntries
+
 #endif // !defined(AFX_CONFIG_H)
