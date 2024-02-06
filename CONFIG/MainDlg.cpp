@@ -6,6 +6,7 @@
 
 #include <mxdirectx/mxdirect3d.h>
 
+DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
 
 // FUNCTION: CONFIG 0x00403d50

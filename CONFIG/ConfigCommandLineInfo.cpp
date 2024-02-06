@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 
+DECOMP_SIZE_ASSERT(CCommandLineInfo, 0x24)
 DECOMP_SIZE_ASSERT(CConfigCommandLineInfo, 0x24)
 
 // FUNCTION: CONFIG 0x00403b10

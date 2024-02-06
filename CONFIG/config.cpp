@@ -9,7 +9,7 @@
 #include <process.h> // _spawnl
 
 DECOMP_SIZE_ASSERT(CWinApp, 0xc4)
-DECOMP_SIZE_ASSERT(CConfigApp, 0x10c)
+DECOMP_SIZE_ASSERT(CConfigApp, 0x108)
 
 DECOMP_STATIC_ASSERT(offsetof(CConfigApp, m_display_bit_depth) ==  0xd0)
 
