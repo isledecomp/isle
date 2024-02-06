@@ -68,6 +68,8 @@ jobs:
         path: msvc420
 
     - uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
@@ -106,6 +108,8 @@ jobs:
     - uses: actions/checkout@master
 
     - uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
 
     - uses: actions/download-artifact@master
       with:
