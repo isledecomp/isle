@@ -52,7 +52,7 @@ BOOL CConfigApp::InitInstance()
 	CConfigCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 	if (_stricmp(afxCurrentAppName, "config") == 0) {
-		currentConfigApp->m_run_config_dialog = TRUE;
+		m_run_config_dialog = TRUE;
 	}
 	m_device_enumerator = new MxDeviceEnumerate;
 	if (m_device_enumerator->DoEnumerate()) {

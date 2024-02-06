@@ -63,7 +63,7 @@ message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
 option(ISLE_WERROR "Treat warnings as errors" OFF)
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
-cmake_dependent_option(ISLE_BUILD_CONFIG "Build ISLE.EXE application" ON "NOT MINGW" OFF)
+cmake_dependent_option(ISLE_BUILD_CONFIG "Build CONFIG.EXE application" ON "NOT MINGW" OFF)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)

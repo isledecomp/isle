@@ -945,10 +945,10 @@ int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver
 				p_buffer,
 				"%d 0x%x 0x%x 0x%x 0x%x",
 				number,
-				p_device->m_guid->Data1,
-				*(DWORD*) &p_device->m_guid->Data2,
-				*(DWORD*) &p_device->m_guid->Data4[0],
-				*(DWORD*) &p_device->m_guid->Data4[4]
+				((DWORD*)(p_device->m_guid))[0],
+				((DWORD*)(p_device->m_guid))[1],
+				((DWORD*)(p_device->m_guid))[2],
+				((DWORD*)(p_device->m_guid))[3]
 			);
 			return 0;
 		}
@@ -1001,8 +1001,10 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 // FUNCTION: LEGO1 0x1009d1a0
 int MxDeviceEnumerate::SupportsMMX()
 {
-	int supports_mmx = SupportsCPUID();
-	if (supports_mmx) {
+	if (!SupportsCPUID()) {
+        return 0;
+    }
+	int supports_mmx;
 #ifdef _MSC_VER
 		__asm {
 			mov eax, 0x0            ; EAX=0: Highest Function Parameter and Manufacturer ID
@@ -1035,7 +1037,6 @@ int MxDeviceEnumerate::SupportsMMX()
 				: "=a"(supports_mmx)    // supports_mmx == EAX
 		);
 #endif
-	}
 	return supports_mmx;
 }
 

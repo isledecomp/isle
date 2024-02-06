@@ -12,13 +12,13 @@ CAboutDialog::CAboutDialog() : CDialog(IDD)
 // FUNCTION: CONFIG 0x00403c90
 void CAboutDialog::BeginModalState()
 {
-	::EnableWindow(this->m_hWnd, FALSE);
+	::EnableWindow(m_hWnd, FALSE);
 }
 
 // FUNCTION: CONFIG 0x00403ca0
 void CAboutDialog::EndModalState()
 {
-	::EnableWindow(this->m_hWnd, TRUE);
+	::EnableWindow(m_hWnd, TRUE);
 }
 
 // FUNCTION: CONFIG 0x00403d20
