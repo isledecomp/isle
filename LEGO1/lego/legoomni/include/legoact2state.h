@@ -26,6 +26,12 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1000e040
 	// LegoAct2State::`scalar deleting destructor'
+
+	inline undefined4 GetUnknown0x08() { return m_unk0x08; }
+
+private:
+	undefined4 m_unk0x08; // 0x08
+	undefined4 m_unk0x0c; // 0x0c
 };
 
 #endif // LEGOACT2STATE_H
