@@ -62,6 +62,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+// SYNTHETIC: CONFIG 0x00403de0
+// CMainDialog::`scalar deleting destructor'
+
 // FUNCTION: CONFIG 0x00403e70
 // CMainDialog::GetMessageMap
 

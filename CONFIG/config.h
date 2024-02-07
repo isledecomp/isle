@@ -13,6 +13,7 @@ struct MxDriver;
 
 #define currentConfigApp ((CConfigApp*) afxCurrentWinApp)
 
+// VTABLE: CONFIG 0x00406040
 // SIZE 0x108
 class CConfigApp : public CWinApp {
 public:
@@ -74,6 +75,9 @@ public:
 	undefined m_unk0x100[4];                // 0x100
 	BOOL m_music;                           // 0x104
 };
+
+// SYNTHETIC: CONFIG 0x00402cd0
+// CConfigApp::`scalar deleting destructor'
 
 // FUNCTION: CONFIG 0x402c30
 // CConfigApp::GetMessageMap

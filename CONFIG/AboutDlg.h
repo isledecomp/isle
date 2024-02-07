@@ -35,6 +35,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+// SYNTHETIC: CONFIG 0x00403cb0
+// CAboutDialog::`scalar deleting destructor'
+
 // FUNCTION: CONFIG 0x00403d40
 // CAboutDialog::GetMessageMap
 
