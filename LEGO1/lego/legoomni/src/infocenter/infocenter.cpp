@@ -1281,10 +1281,57 @@ MxBool Infocenter::VTable0x64()
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10071030
+// FUNCTION: LEGO1 0x10071030
 void Infocenter::StartCredits()
 {
-	// TODO
+	MxPresenter* presenter;
+
+	while (!m_set0xa8.empty()) {
+		MxCoreSet::iterator it = m_set0xa8.begin();
+		MxCore* object = *it;
+		m_set0xa8.erase(it);
+
+		if (object->IsA("MxPresenter")) {
+			presenter = (MxPresenter*) object;
+			MxDSAction* action = presenter->GetAction();
+
+			if (action) {
+				FUN_100b7220(action, MxDSAction::c_world, FALSE);
+				presenter->EndAction();
+			}
+		}
+		else {
+			delete object;
+		}
+	}
+
+	MxPresenterListCursor cursor(&m_controlPresenters);
+
+	while (cursor.First(presenter)) {
+		cursor.Detach();
+
+		MxDSAction* action = presenter->GetAction();
+		if (action) {
+			FUN_100b7220(action, MxDSAction::c_world, FALSE);
+			presenter->EndAction();
+		}
+	}
+
+	BackgroundAudioManager()->Stop();
+
+	MxS16 i = 0;
+	do {
+		if (m_infocenterState->GetInfocenterBufferElement(i) != NULL) {
+			m_infocenterState->GetInfocenterBufferElement(i)->Enable(FALSE);
+		}
+		i++;
+	} while (i < m_infocenterState->GetInfocenterBufferSize());
+
+	VideoManager()->FUN_1007c520();
+	GetViewManager()->RemoveAll(NULL);
+
+	InvokeAction(Extra::e_opendisk, *g_creditsScript, c_unk499, NULL);
+	SetAppCursor(0);
 }
 
 // FUNCTION: LEGO1 0x10071250
