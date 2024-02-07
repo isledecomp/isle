@@ -1,9 +1,8 @@
 #if !defined(AFX_ABOUTDLG_H)
 #define AFX_ABOUTDLG_H
 
-#include "common.h"
-
 #include "afxwin.h"
+#include "common.h"
 #include "compat.h"
 #include "res/resource.h"
 

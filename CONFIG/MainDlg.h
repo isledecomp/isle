@@ -1,9 +1,8 @@
 #if !defined(AFX_MAINDLG_H)
 #define AFX_MAINDLG_H
 
-#include "common.h"
-
 #include "afxwin.h"
+#include "common.h"
 #include "compat.h"
 #include "decomp.h"
 #include "res/resource.h"
