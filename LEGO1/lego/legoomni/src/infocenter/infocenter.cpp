@@ -345,7 +345,7 @@ void Infocenter::ReadyWorld()
 
 	switch (GameState()->GetUnknown10()) {
 	case 0:
-		bg->Enable(1);
+		bg->Enable(TRUE);
 		InitializeBitmaps();
 
 		switch (m_infocenterState->GetUnknown0x74()) {
