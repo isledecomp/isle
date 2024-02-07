@@ -27,9 +27,10 @@ public:
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'
 
+	inline undefined4 GetUnknown0x08() { return m_unk0x08; }
+
 private:
-	// FIXME: May be part of LegoState? Uncertain...
-	MxU32 m_unk0x08;
+	undefined4 m_unk0x08; // 0x08
 };
 
 #endif // ACT3STATE_H
