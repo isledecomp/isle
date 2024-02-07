@@ -349,6 +349,7 @@ MxDriver::MxDriver(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 	Init(p_guid, p_driverDesc, p_driverName);
 }
 
+// FUNCTION: CONFIG 0x401280
 // FUNCTION: LEGO1 0x1009bb80
 MxDriver::~MxDriver()
 {
@@ -407,6 +408,7 @@ MxDevice::MxDevice(
 	Init(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
 }
 
+// FUNCTION: CONFIG 0x401460
 // FUNCTION: LEGO1 0x1009bd60
 MxDevice::~MxDevice()
 {
@@ -469,6 +471,12 @@ void MxDevice::Init(
 MxDeviceEnumerate::MxDeviceEnumerate()
 {
 	m_initialized = FALSE;
+}
+
+// FUNCTION: CONFIG 0x401710
+// FUNCTION: LEGO1 0x1009c010
+MxDeviceEnumerate::~MxDeviceEnumerate()
+{
 }
 
 // FUNCTION: CONFIG 0x00401770
