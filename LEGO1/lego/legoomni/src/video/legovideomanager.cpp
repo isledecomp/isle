@@ -471,6 +471,12 @@ void LegoVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_h
 	}
 }
 
+// STUB: LEGO1 0x1007c520
+void LegoVideoManager::FUN_1007c520()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1007c560
 int LegoVideoManager::EnableRMDevice()
 {
