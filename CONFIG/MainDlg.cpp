@@ -314,18 +314,16 @@ void CMainDialog::SwitchToAdvanced(BOOL p_advanced)
 	CWnd* button_advanced = GetDlgItem(IDC_BTN_ADVANCED);
 	m_advanced = p_advanced;
 	int height;
-	const char* new_text;
 	if (p_advanced) {
 		height = grp_advanced_rect.bottom - dialog_rect.top + 10;
 		GetDlgItem(IDC_BMP_SHARK)->EnableWindow(TRUE);
-		new_text = "Basic";
+		button_advanced->SetWindowText("Basic");
 	}
 	else {
 		height = grp_advanced_rect.top - dialog_rect.top;
 		GetDlgItem(IDC_BMP_SHARK)->EnableWindow(FALSE);
-		new_text = "Advanced";
+		button_advanced->SetWindowText("Advanced");
 	}
-	button_advanced->SetWindowText(new_text);
 	SetWindowPos(&wndTop, 0, 0, dialog_rect.right - dialog_rect.left, height, SWP_NOMOVE);
 }
 

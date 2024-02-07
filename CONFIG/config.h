@@ -24,9 +24,6 @@ public:
 	//{{AFX_VIRTUAL(CConfigApp)
 
 public:
-	void Serialize(CArchive& ar) override {}
-	void AssertValid() const override {}
-	void Dump(CDumpContext& dc) const override {}
 	BOOL InitInstance() override;
 	int ExitInstance() override;
 	//}}AFX_VIRTUAL

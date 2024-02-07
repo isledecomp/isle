@@ -139,36 +139,45 @@ struct MxDriver {
 };
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401000
 // TEMPLATE: LEGO1 0x1009b900
 // list<MxDevice,allocator<MxDevice> >::~list<MxDevice,allocator<MxDevice> >
 // clang-format on
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401070
 // TEMPLATE: LEGO1 0x1009b970
 // list<MxDisplayMode,allocator<MxDisplayMode> >::~list<MxDisplayMode,allocator<MxDisplayMode> >
 // clang-format on
 
+// TEMPLATE: CONFIG 0x4010e0
 // TEMPLATE: LEGO1 0x1009b9e0
 // List<MxDevice>::~List<MxDevice>
 
+// TEMPLATE: CONFIG 0x401130
 // TEMPLATE: LEGO1 0x1009ba30
 // List<MxDisplayMode>::~List<MxDisplayMode>
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401650
 // TEMPLATE: LEGO1 0x1009bf50
 // list<MxDriver,allocator<MxDriver> >::~list<MxDriver,allocator<MxDriver> >
 // clang-format on
 
+// TEMPLATE: CONFIG 0x4016c0
 // TEMPLATE: LEGO1 0x1009bfc0
 // List<MxDriver>::~List<MxDriver>
 
 // Compiler-generated copy ctor
+// SYNTHETIC: CONFIG 0x401990
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDriver::MxDriver
 
+// SYNTHETIC: CONFIG 0x401b00
 // SYNTHETIC: LEGO1 0x1009c400
 // list<MxDevice,allocator<MxDevice> >::insert
 
+// SYNTHETIC: CONFIG 0x401b60
 // SYNTHETIC: LEGO1 0x1009c460
 // list<MxDisplayMode,allocator<MxDisplayMode> >::insert
 
@@ -184,9 +193,7 @@ struct MxDriver {
 class MxDeviceEnumerate {
 public:
 	MxDeviceEnumerate();
-	// FUNCTION: CONFIG 0x00401650
-	// FUNCTION: LEGO1 0x1009c010
-	~MxDeviceEnumerate() {}
+	~MxDeviceEnumerate();
 
 	virtual int DoEnumerate(); // vtable+0x00
 
