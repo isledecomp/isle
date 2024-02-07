@@ -37,6 +37,7 @@ public:
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
+	void FUN_1007c520();
 
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
