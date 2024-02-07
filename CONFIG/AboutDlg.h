@@ -1,13 +1,15 @@
 #if !defined(AFX_ABOUTDLG_H)
 #define AFX_ABOUTDLG_H
 
+#include "common.h"
+
 #include "afxwin.h"
 #include "compat.h"
 #include "res/resource.h"
 
 // VTABLE: CONFIG 0x00406308
 // SIZE 0x60
-class CAboutDialog : public CDialog {
+class CAboutDialog : public CCommonDialog {
 public:
 	CAboutDialog();
 	// Dialog Data
@@ -22,8 +24,6 @@ public:
 
 protected:
 	void DoDataExchange(CDataExchange* pDX) override;
-	void BeginModalState() override;
-	void EndModalState() override;
 	//}}AFX_VIRTUAL
 	//    void UpdateInterface();
 	//    void SwitchToAdvanced(BOOL p_advanced);

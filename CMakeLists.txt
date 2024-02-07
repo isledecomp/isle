@@ -444,6 +444,7 @@ if (ISLE_BUILD_CONFIG)
     LEGO1/mxdirectx/mxdirect3d.cpp
     CONFIG/config.cpp
     CONFIG/ConfigCommandLineInfo.cpp
+    CONFIG/common.cpp
     CONFIG/AboutDlg.cpp
     CONFIG/MainDlg.cpp
     CONFIG/detectdx5.cpp

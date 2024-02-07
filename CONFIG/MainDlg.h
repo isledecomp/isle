@@ -1,6 +1,8 @@
 #if !defined(AFX_MAINDLG_H)
 #define AFX_MAINDLG_H
 
+#include "common.h"
+
 #include "afxwin.h"
 #include "compat.h"
 #include "decomp.h"
@@ -8,7 +10,7 @@
 
 // VTABLE: CONFIG 0x004063e0
 // SIZE 0x70
-class CMainDialog : public CDialog {
+class CMainDialog : public CCommonDialog {
 public:
 	CMainDialog(CWnd* pParent);
 	// Dialog Data
@@ -23,8 +25,6 @@ public:
 
 protected:
 	void DoDataExchange(CDataExchange* pDX) override;
-	void BeginModalState() override {}
-	void EndModalState() override {}
 	//}}AFX_VIRTUAL
 	void UpdateInterface();
 	void SwitchToAdvanced(BOOL p_advanced);
