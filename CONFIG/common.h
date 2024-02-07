@@ -5,13 +5,6 @@
 
 #include <afxwin.h>
 
-class CSerializer {
-public:
-	void Serialize(CArchive& ar);
-	void AssertValid() const;
-	void Dump(CDumpContext& dc) const;
-};
-
 class CCommonDialog : public CDialog {
 public:
 	CCommonDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL) : CDialog(nIDTemplate, pParentWnd) {}
