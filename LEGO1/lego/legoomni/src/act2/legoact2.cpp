@@ -1,10 +1,9 @@
 #include "legoact2.h"
 
-// STUB: LEGO1 0x1004fe10
+// FUNCTION: LEGO1 0x1004fe10
 MxBool LegoAct2::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004ff20
