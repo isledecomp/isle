@@ -1166,13 +1166,15 @@ MxBool Infocenter::VTable0x64()
 // FUNCTION: LEGO1 0x10071030
 void Infocenter::StartCredits()
 {
+	MxPresenter* presenter;
+
 	while (!m_set0xa8.empty()) {
 		MxCoreSet::iterator it = m_set0xa8.begin();
 		MxCore* object = *it;
 		m_set0xa8.erase(it);
 
 		if (object->IsA("MxPresenter")) {
-			MxPresenter* presenter = (MxPresenter*) object;
+			presenter = (MxPresenter*) object;
 			MxDSAction* action = presenter->GetAction();
 
 			if (action) {
@@ -1186,7 +1188,6 @@ void Infocenter::StartCredits()
 	}
 
 	MxPresenterListCursor cursor(&m_controlPresenters);
-	MxPresenter* presenter;
 
 	while (cursor.First(presenter)) {
 		cursor.Detach();
