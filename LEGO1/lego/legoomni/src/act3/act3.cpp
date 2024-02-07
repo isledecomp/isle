@@ -8,11 +8,10 @@ Act3::Act3()
 	// TODO
 }
 
-// STUB: LEGO1 0x10072500
+// FUNCTION: LEGO1 0x10072500
 MxBool Act3::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100726a0

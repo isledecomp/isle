@@ -23,11 +23,10 @@ Hospital::Hospital()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x100746a0
+// FUNCTION: LEGO1 0x100746a0
 MxBool Hospital::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100747f0

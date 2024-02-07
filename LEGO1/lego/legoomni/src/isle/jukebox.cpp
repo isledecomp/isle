@@ -13,11 +13,10 @@ JukeBox::JukeBox()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x1005d6e0
+// FUNCTION: LEGO1 0x1005d6e0
 MxBool JukeBox::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1005d8d0

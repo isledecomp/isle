@@ -6,11 +6,10 @@ LegoCarBuild::LegoCarBuild()
 	// TODO
 }
 
-// STUB: LEGO1 0x10022930
+// FUNCTION: LEGO1 0x10022930
 MxBool LegoCarBuild::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x10022a80

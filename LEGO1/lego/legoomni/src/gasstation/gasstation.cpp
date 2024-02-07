@@ -19,11 +19,10 @@ GasStation::GasStation()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10004770
+// FUNCTION: LEGO1 0x10004770
 MxBool GasStation::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100048c0
