@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+
+# MSVC runtime library flags are selected by an abstraction
+cmake_policy(SET CMP0091 NEW)
 
 project(isle CXX)
 
@@ -60,6 +63,7 @@ message(STATUS "MSVC for decompilation: ${MSVC_FOR_DECOMP}")
 
 option(ISLE_WERROR "Treat warnings as errors" OFF)
 option(ISLE_BUILD_APP "Build ISLE.EXE application" ON)
+cmake_dependent_option(ISLE_BUILD_CONFIG "Build CONFIG.EXE application" ON "NOT MINGW" OFF)
 option(ISLE_USE_SMARTHEAP "Build with SmartHeap" ${MSVC_FOR_DECOMP})
 option(ISLE_USE_DX5 "Build with internal DirectX 5 SDK" ON)
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
@@ -435,13 +439,37 @@ if (ISLE_BUILD_APP)
   set_property(TARGET isle PROPERTY SUFFIX ".EXE")
 endif()
 
+if (ISLE_BUILD_CONFIG)
+  add_executable(config WIN32
+    LEGO1/mxdirectx/mxdirect3d.cpp
+    CONFIG/config.cpp
+    CONFIG/ConfigCommandLineInfo.cpp
+    CONFIG/common.cpp
+    CONFIG/AboutDlg.cpp
+    CONFIG/MainDlg.cpp
+    CONFIG/detectdx5.cpp
+    CONFIG/res/config.rc
+  )
+  target_compile_definitions(config PRIVATE _AFXDLL MXDIRECTX_FOR_CONFIG)
+  target_include_directories(config PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/util" "${CMAKE_CURRENT_SOURCE_DIR}/LEGO1")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14)
+    target_link_libraries(config PRIVATE DirectX5::DirectX5)
+  endif()
+  target_compile_definitions(config PRIVATE DIRECT3D_VERSION=0x500)
+  target_link_libraries(config PRIVATE ddraw dxguid)
+  set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIG")
+  set_property(TARGET config PROPERTY SUFFIX ".EXE")
+  set_property(TARGET config PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>DLL)
+endif()
+
 if (MSVC)
   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15")
-    foreach(tgt IN LISTS lego1_targets)
-      target_compile_definitions(${tgt} PRIVATE _CRT_SECURE_NO_WARNINGS)
-    endforeach()
+    set_property(TARGET ${lego1_targets} APPEND PROPERTY COMPILE_DEFINITIONS "_CRT_SECURE_NO_WARNINGS")
     if (TARGET isle)
       target_compile_definitions(isle PRIVATE "_CRT_SECURE_NO_WARNINGS")
+    endif()
+    if (TARGET config)
+      target_compile_definitions(config PRIVATE "_CRT_SECURE_NO_WARNINGS")
     endif()
   endif()
   # Visual Studio 2017 version 15.7 needs "/Zc:__cplusplus" for __cplusplus
@@ -452,13 +480,19 @@ if (MSVC)
     if (TARGET isle)
       target_compile_options(isle PRIVATE "-Zc:__cplusplus")
     endif()
+    if (TARGET config)
+      target_compile_options(config PRIVATE "-Zc:__cplusplus")
+    endif()
   endif()
 endif()
 
 if (MSVC_FOR_DECOMP)
     target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
-    if (ISLE_BUILD_APP)
-        target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
+    if (TARGET isle)
+      target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
+    endif()
+    if (TARGET config)
+      target_compile_definitions(config PRIVATE "ENABLE_DECOMP_ASSERTS")
     endif()
 endif()
 
@@ -471,10 +505,8 @@ if (MSVC_FOR_DECOMP)
     target_link_options(isle PRIVATE "/OPT:REF")
   endif()
 
-  target_compile_options(lego1 PRIVATE "/MT$<$<CONFIG:Debug>:d>")
-  foreach(tgt IN LISTS lego1_targets)
-    target_compile_options(${tgt} PRIVATE "/MT$<$<CONFIG:Debug>:d>")
-  endforeach()
+  # Equivalent to target_compile_options(... PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  set_property(TARGET lego1 ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>)
 
   set(CMAKE_CXX_FLAGS "/W3 /GX /D \"WIN32\" /D \"_WINDOWS\"")
   set(CMAKE_CXX_FLAGS_DEBUG "/Gm /Zi /Od /D \"_DEBUG\"")

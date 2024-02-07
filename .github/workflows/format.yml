@@ -12,7 +12,7 @@ jobs:
 
     - name: Run clang-format
       run: |
-        find LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
+        find CONFIG LEGO1 ISLE -iname '*.h' -o -iname '*.cpp' | xargs \
         pipx run "clang-format>=17,<18" \
           --style=file \
           -i
