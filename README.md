@@ -6,7 +6,7 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 ## Status
 
-<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
+<img src="https://legoisland.org/progress/CONFIGPROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="33%">
 
 Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
 
