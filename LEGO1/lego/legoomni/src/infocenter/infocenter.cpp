@@ -863,7 +863,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 		StopCurrentAction();
 		InfomainScript characterBitmap = c_noInfomain;
 
-		GameState();
+		LegoGameState* state = GameState();
 
 		switch (p_param.GetClickedObjectId()) {
 		case c_leftArrowCtl:
@@ -933,14 +933,62 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_radio.Stop();
 			break;
 		case c_bigInfoCtl:
-			// TODO
+			switch (state->GetUnknown10()) {
+			case 0:
+				switch (state->GetPreviousArea()) {
+				case 3:
+				case 12:
+				case 13:
+					m_infocenterState->SetUnknown0x74(5);
+					m_transitionDestination = state->GetPreviousArea();
+					actionToPlay =
+						(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+					m_radio.Stop();
+					InputManager()->DisableInputProcessing();
+					InputManager()->SetUnknown336(TRUE);
+					break;
+				case 4:
+					if (state->GetUnknownC()) {
+						if (m_infocenterState->GetInfocenterBufferElement(0)) {
+							m_infocenterState->SetUnknown0x74(5);
+							m_transitionDestination = state->GetPreviousArea();
+							actionToPlay =
+								(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next(
+								);
+							m_radio.Stop();
+							InputManager()->DisableInputProcessing();
+							InputManager()->SetUnknown336(TRUE);
+						}
+						else {
+							PlayAction(c_registerToContinueDialogue);
+							m_infocenterState->SetUnknown0x74(2);
+						}
+					}
+					break;
+				}
+				break;
+			case 1:
+				m_infocenterState->SetUnknown0x74(5);
+				m_transitionDestination = 0x2e;
+				actionToPlay = (InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+				InputManager()->DisableInputProcessing();
+				InputManager()->SetUnknown336(TRUE);
+				break;
+			case 2:
+				m_infocenterState->SetUnknown0x74(5);
+				m_transitionDestination = 0x2f;
+				actionToPlay = (InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+				InputManager()->DisableInputProcessing();
+				InputManager()->SetUnknown336(TRUE);
+				break;
+			}
 			break;
 		case c_bookCtl:
 			m_transitionDestination = 12;
 			m_infocenterState->SetUnknown0x74(4);
 			actionToPlay = GameState()->GetUnknown10() ? c_goToRegBookRed : c_goToRegBook;
 			m_radio.Stop();
-			GameState()->SetCurrentArea(GameState()->GetPreviousArea());
+			GameState()->SetUnknown0x42c(GameState()->GetPreviousArea());
 			InputManager()->DisableInputProcessing();
 			break;
 		case c_mamaCtl:
