@@ -5,6 +5,12 @@
 DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880);
 DECOMP_SIZE_ASSERT(MxDirectDraw::DeviceModesInfo, 0x17c);
 
+#define RELEASE(x)                                                                                                     \
+	if (x != NULL) {                                                                                                   \
+		x->Release();                                                                                                  \
+		x = NULL;                                                                                                      \
+	}
+
 #ifndef DDSCAPS_3DDEVICE
 #define DDSCAPS_3DDEVICE 0x00002000l
 #endif
@@ -75,7 +81,7 @@ int MxDirectDraw::GetPrimaryBitDepth()
 // FUNCTION: LEGO1 0x1009d5e0
 BOOL MxDirectDraw::Create(
 	HWND hWnd,
-	BOOL fullscreen_1,
+	BOOL fullscreen,
 	BOOL surface_fullscreen,
 	BOOL onlySystemMemory,
 	int width,
@@ -96,10 +102,9 @@ BOOL MxDirectDraw::Create(
 	m_bFlipSurfaces = surface_fullscreen;
 	m_bOnlySystemMemory = onlySystemMemory;
 	m_bIsOnPrimaryDevice = !m_pCurrentDeviceModesList->m_guid;
-	BOOL fullscreen = 1;
 
-	if (m_bIsOnPrimaryDevice) {
-		fullscreen = fullscreen_1;
+	if (!m_bIsOnPrimaryDevice) {
+		fullscreen = TRUE;
 	}
 
 	if (!SetPaletteEntries(pPaletteEntries, paletteEntryCount, fullscreen)) {
@@ -120,23 +125,19 @@ BOOL MxDirectDraw::Create(
 // FUNCTION: LEGO1 0x1009d690
 BOOL MxDirectDraw::RecreateDirectDraw(GUID** ppGUID)
 {
-	if (m_pDirectDraw) {
-		m_pDirectDraw->Release();
-		m_pDirectDraw = NULL;
-	}
-
+	RELEASE(m_pDirectDraw);
 	return (DirectDrawCreate(*ppGUID, &m_pDirectDraw, 0) == DD_OK);
 }
 
 // FUNCTION: LEGO1 0x1009d6c0
 BOOL MxDirectDraw::CacheOriginalPaletteEntries()
 {
-	HDC dc;
+	HDC hdc;
 
 	if (g_isPaletteIndexed8) {
-		dc = GetDC(0);
-		GetSystemPaletteEntries(dc, 0, _countof(m_originalPaletteEntries), m_originalPaletteEntries);
-		ReleaseDC(0, dc);
+		hdc = GetDC(NULL);
+		GetSystemPaletteEntries(hdc, 0, (1 << 8), &m_originalPaletteEntries[0]);
+		ReleaseDC(NULL, hdc);
 	}
 	return TRUE;
 }
@@ -152,7 +153,7 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 
 	if (g_isPaletteIndexed8) {
 		hdc = GetDC(NULL);
-		GetSystemPaletteEntries(hdc, 0, arraySize, m_paletteEntries);
+		GetSystemPaletteEntries(hdc, 0, (1 << 8), m_paletteEntries);
 		ReleaseDC(NULL, hdc);
 	}
 
@@ -168,20 +169,21 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 		m_paletteEntries[i].peFlags = 0x84;
 	}
 
-	for (i = arraySize - reservedHighEntryCount; i < arraySize; i++) {
+	for (i = 256 - reservedHighEntryCount; i < 256; i++) {
 		m_paletteEntries[i].peFlags = 0x80;
 	}
 
 	if (paletteEntryCount != 0) {
-		for (i = reservedLowEntryCount; (i < paletteEntryCount) && (i < arraySize - reservedHighEntryCount); i++) {
+		for (i = reservedLowEntryCount; (i < paletteEntryCount) && (i < 256 - reservedHighEntryCount); i++) {
 			m_paletteEntries[i].peRed = pPaletteEntries[i].peRed;
 			m_paletteEntries[i].peGreen = pPaletteEntries[i].peGreen;
 			m_paletteEntries[i].peBlue = pPaletteEntries[i].peBlue;
 		}
 	}
 
-	if (m_pPalette != NULL) {
+	if (m_pPalette) {
 		HRESULT result;
+
 		result = m_pPalette->SetEntries(0, 0, _countof(m_paletteEntries), m_paletteEntries);
 		if (result != DD_OK) {
 			Error("SetEntries failed", result);
@@ -199,10 +201,7 @@ void MxDirectDraw::Destroy()
 
 	FUN_1009d920();
 
-	if (m_pDirectDraw != NULL) {
-		m_pDirectDraw->Release();
-		m_pDirectDraw = NULL;
-	}
+	RELEASE(m_pDirectDraw);
 
 	m_bIsOnPrimaryDevice = TRUE;
 
@@ -217,47 +216,20 @@ void MxDirectDraw::DestroyButNotDirectDraw()
 {
 	RestoreOriginalPaletteEntries();
 	if (m_bFullScreen) {
-		if (m_pDirectDraw != NULL) {
+		if (m_pDirectDraw) {
 			m_bIgnoreWMSIZE = TRUE;
 			m_pDirectDraw->RestoreDisplayMode();
 			m_bIgnoreWMSIZE = FALSE;
 		}
 	}
 
-	if (m_pPalette) {
-		m_pPalette->Release();
-		m_pPalette = NULL;
-	}
-
-	if (m_pClipper) {
-		m_pClipper->Release();
-		m_pClipper = NULL;
-	}
-
-	if (m_pText1Surface) {
-		m_pText1Surface->Release();
-		m_pText1Surface = NULL;
-	}
-
-	if (m_pText2Surface) {
-		m_pText2Surface->Release();
-		m_pText2Surface = NULL;
-	}
-
-	if (m_pZBuffer) {
-		m_pZBuffer->Release();
-		m_pZBuffer = NULL;
-	}
-
-	if (m_pBackBuffer) {
-		m_pBackBuffer->Release();
-		m_pBackBuffer = NULL;
-	}
-
-	if (m_pFrontBuffer) {
-		m_pFrontBuffer->Release();
-		m_pFrontBuffer = NULL;
-	}
+	RELEASE(m_pPalette);
+	RELEASE(m_pClipper);
+	RELEASE(m_pText1Surface);
+	RELEASE(m_pText2Surface);
+	RELEASE(m_pZBuffer);
+	RELEASE(m_pBackBuffer);
+	RELEASE(m_pFrontBuffer);
 }
 
 // FUNCTION: LEGO1 0x1009d920
@@ -366,16 +338,18 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 		DWORD dwStyle;
 
 		if (!m_bIsOnPrimaryDevice) {
-			Error("Attempt made enter a windowed mode on a DirectDraw device that is not the primary display", E_FAIL);
+			Error(
+				"Attempt made enter a windowed mode on a DirectDraw device that is not the primary display",
+				DDERR_GENERIC
+			);
 			return FALSE;
 		}
 
 		m_bIgnoreWMSIZE = TRUE;
 		dwStyle = GetWindowLong(m_hWndMain, GWL_STYLE);
 		dwStyle &= ~WS_POPUP;
-		dwStyle |= WS_CAPTION | WS_THICKFRAME | WS_OVERLAPPED;
+		dwStyle |= WS_OVERLAPPED | WS_CAPTION | WS_THICKFRAME;
 		SetWindowLong(m_hWndMain, GWL_STYLE, dwStyle);
-
 		SetRect(&rc, 0, 0, width - 1, height - 1);
 		AdjustWindowRectEx(
 			&rc,
@@ -443,9 +417,13 @@ BOOL MxDirectDraw::DDSetMode(int width, int height, int bpp)
 }
 
 // FUNCTION: LEGO1 0x1009dd80
-HRESULT MxDirectDraw::CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4)
+HRESULT MxDirectDraw::CreateDDSurface(
+	LPDDSURFACEDESC p_lpDDSurfDesc,
+	LPDIRECTDRAWSURFACE FAR* p_lpDDSurface,
+	IUnknown FAR* p_pUnkOuter
+)
 {
-	return m_pDirectDraw->CreateSurface(a2, a3, a4);
+	return m_pDirectDraw->CreateSurface(p_lpDDSurfDesc, p_lpDDSurface, p_pUnkOuter);
 }
 
 // FUNCTION: LEGO1 0x1009dda0
@@ -453,8 +431,8 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 {
 	HRESULT result;
 
-	memset(lpDDSurfDesc, 0, sizeof(*lpDDSurfDesc));
-	lpDDSurfDesc->dwSize = sizeof(*lpDDSurfDesc);
+	memset(lpDDSurfDesc, 0, sizeof(DDSURFACEDESC));
+	lpDDSurfDesc->dwSize = sizeof(DDSURFACEDESC);
 	result = lpDDSurf->GetSurfaceDesc(lpDDSurfDesc);
 	if (result != DD_OK) {
 		Error("Error getting a surface description", result);
@@ -467,25 +445,23 @@ BOOL MxDirectDraw::GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSU
 BOOL MxDirectDraw::DDCreateSurfaces()
 {
 	HRESULT result;
-	DDSCAPS ddscaps;
 	DDSURFACEDESC ddsd;
+	DDSCAPS ddscaps;
 
 	if (m_bFlipSurfaces) {
-		memset(&ddsd, 0, sizeof(ddsd));
+		memset(&ddsd, 0, sizeof(DDSURFACEDESC));
 		ddsd.dwSize = sizeof(ddsd);
 		ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_3DDEVICE | DDSCAPS_COMPLEX;
 		if (m_bOnlySystemMemory) {
-			ddsd.ddsCaps.dwCaps =
-				DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_3DDEVICE | DDSCAPS_COMPLEX | DDSCAPS_SYSTEMMEMORY;
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 		}
 		ddsd.dwBackBufferCount = 1;
-		result = CreateDDSurface(&ddsd, &m_pFrontBuffer, 0);
+		result = CreateDDSurface(&ddsd, &m_pFrontBuffer, NULL);
 		if (result != DD_OK) {
 			Error("CreateSurface for front/back fullScreen buffer failed", result);
 			return FALSE;
 		}
-
 		ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
 		result = m_pFrontBuffer->GetAttachedSurface(&ddscaps, &m_pBackBuffer);
 		if (result != DD_OK) {
@@ -497,8 +473,8 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 		}
 	}
 	else {
-		memset(&ddsd, 0, sizeof(ddsd));
-		ddsd.dwSize = sizeof(ddsd);
+		memset(&ddsd, 0, sizeof(DDSURFACEDESC));
+		ddsd.dwSize = sizeof(DDSURFACEDESC);
 		ddsd.dwFlags = DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 		result = CreateDDSurface(&ddsd, &m_pFrontBuffer, NULL);
@@ -506,19 +482,18 @@ BOOL MxDirectDraw::DDCreateSurfaces()
 			Error("CreateSurface for window front buffer failed", result);
 			return FALSE;
 		}
+		ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 		ddsd.dwHeight = m_currentMode.height;
 		ddsd.dwWidth = m_currentMode.width;
-		ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
 		if (m_bOnlySystemMemory) {
-			ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY;
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 		}
 		result = CreateDDSurface(&ddsd, &m_pBackBuffer, NULL);
 		if (result != DD_OK) {
 			Error("CreateSurface for window back buffer failed", result);
 			return FALSE;
 		}
-
 		if (!GetDDSurfaceDesc(&ddsd, m_pBackBuffer)) {
 			return FALSE;
 		}
@@ -590,7 +565,7 @@ BOOL MxDirectDraw::TextToTextSurface(const char* text, IDirectDrawSurface* pSurf
 	RECT rc;
 	size_t textLength;
 
-	if (pSurface == NULL) {
+	if (!pSurface) {
 		return FALSE;
 	}
 
@@ -632,15 +607,14 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	HRESULT result;
 	DDCOLORKEY ddck;
 	DDSURFACEDESC ddsd;
-	HDC dc;
+	HDC hdc;
 	char dummyinfo[] = "000x000x00 (RAMP) 0000";
 	char dummyfps[] = "000.00 fps (000.00 fps (000.00 fps) 00000 tps)";
 
 	if (m_hFont != NULL) {
 		DeleteObject(m_hFont);
 	}
-
-	m_hFont = CreateFontA(
+	m_hFont = CreateFont(
 		m_currentMode.width <= 600 ? 12 : 24,
 		0,
 		0,
@@ -657,28 +631,26 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 		"Arial"
 	);
 
-	dc = GetDC(NULL);
-	SelectObject(dc, m_hFont);
-	GetTextExtentPointA(dc, dummyfps, strlen(dummyfps), &m_text1SizeOnSurface);
-	GetTextExtentPointA(dc, dummyinfo, strlen(dummyinfo), &m_text2SizeOnSurface);
-	ReleaseDC(NULL, dc);
+	hdc = GetDC(NULL);
+	SelectObject(hdc, m_hFont);
+	GetTextExtentPoint(hdc, dummyfps, strlen(dummyfps), &m_text1SizeOnSurface);
+	GetTextExtentPoint(hdc, dummyinfo, strlen(dummyinfo), &m_text2SizeOnSurface);
+	ReleaseDC(NULL, hdc);
 
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 	if (m_bOnlySystemMemory) {
-		ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 	}
 	ddsd.dwHeight = m_text1SizeOnSurface.cy;
 	ddsd.dwWidth = m_text1SizeOnSurface.cx;
-
-	result = CreateDDSurface(&ddsd, &m_pText1Surface, 0);
+	result = CreateDDSurface(&ddsd, &m_pText1Surface, NULL);
 	if (result != DD_OK) {
 		Error("CreateSurface for text surface 1 failed", result);
 		return FALSE;
 	}
-
 	memset(&ddck, 0, sizeof(ddck));
 	m_pText1Surface->SetColorKey(DDCKEY_SRCBLT, &ddck);
 	if (!TextToTextSurface1(dummyfps)) {
@@ -690,17 +662,15 @@ BOOL MxDirectDraw::CreateTextSurfaces()
 	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 	if (m_bOnlySystemMemory) {
-		ddsd.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+		ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 	}
 	ddsd.dwHeight = m_text2SizeOnSurface.cy;
 	ddsd.dwWidth = m_text2SizeOnSurface.cx;
-
-	result = CreateDDSurface(&ddsd, &m_pText2Surface, 0);
+	result = CreateDDSurface(&ddsd, &m_pText2Surface, NULL);
 	if (result != DD_OK) {
 		Error("CreateSurface for text surface 2 failed", result);
 		return FALSE;
 	}
-
 	memset(&ddck, 0, sizeof(ddck));
 	m_pText2Surface->SetColorKey(DDCKEY_SRCBLT, &ddck);
 	if (!TextToTextSurface2(dummyinfo)) {
@@ -777,13 +747,13 @@ BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 
 	memset(&ddsd, 0, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
+	ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS | DDSD_ZBUFFERBITDEPTH;
 	ddsd.dwHeight = m_currentMode.height;
 	ddsd.dwWidth = m_currentMode.width;
 	ddsd.dwZBufferBitDepth = depth;
-	ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS | DDSD_ZBUFFERBITDEPTH;
 	ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER | memorytype;
-
 	result = CreateDDSurface(&ddsd, &lpZBuffer, 0);
+
 	if (result != DD_OK) {
 		Error("CreateSurface for fullScreen Z-buffer failed", result);
 		return FALSE;
@@ -800,10 +770,10 @@ BOOL MxDirectDraw::CreateZBuffer(DWORD memorytype, DWORD depth)
 }
 
 // FUNCTION: LEGO1 0x1009e6a0
-int MxDirectDraw::Pause(int p_increment)
+int MxDirectDraw::Pause(BOOL p_pause)
 {
-	if (p_increment) {
-		m_pauseCount++;
+	if (p_pause) {
+		++m_pauseCount;
 
 		if (m_pauseCount > 1) {
 			return TRUE;
@@ -823,11 +793,13 @@ int MxDirectDraw::Pause(int p_increment)
 		}
 	}
 	else {
-		m_pauseCount--;
+		--m_pauseCount;
+
 		if (m_pauseCount > 0) {
 			return TRUE;
 		}
-		else if (m_pauseCount < 0) {
+
+		if (m_pauseCount < 0) {
 			m_pauseCount = 0;
 		}
 
@@ -842,11 +814,13 @@ int MxDirectDraw::Pause(int p_increment)
 // FUNCTION: LEGO1 0x1009e750
 BOOL MxDirectDraw::RestorePaletteEntries()
 {
-	HRESULT result;
 
 	if (m_bFullScreen && m_bPrimaryPalettized) {
 		if (m_pPalette) {
-			result = m_pPalette->SetEntries(0, 0, _countof(m_paletteEntries), m_paletteEntries);
+			HRESULT result;
+
+			result =
+				m_pPalette->SetEntries(0, 0, sizeof(m_paletteEntries) / sizeof(m_paletteEntries[0]), m_paletteEntries);
 			if (result != DD_OK) {
 				Error("SetEntries failed", result);
 				return FALSE;
@@ -860,11 +834,16 @@ BOOL MxDirectDraw::RestorePaletteEntries()
 // FUNCTION: LEGO1 0x1009e7a0
 BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 {
-	HRESULT result;
-
 	if (m_bPrimaryPalettized) {
 		if (m_pPalette) {
-			result = m_pPalette->SetEntries(0, 0, 256, m_originalPaletteEntries);
+			HRESULT result;
+
+			result = m_pPalette->SetEntries(
+				0,
+				0,
+				sizeof(m_originalPaletteEntries) / sizeof(m_originalPaletteEntries[0]),
+				m_originalPaletteEntries
+			);
 			if (result != DD_OK) {
 				Error("SetEntries failed", result);
 				return FALSE;
@@ -878,17 +857,18 @@ BOOL MxDirectDraw::RestoreOriginalPaletteEntries()
 // FUNCTION: LEGO1 0x1009e7f0
 int MxDirectDraw::FlipToGDISurface()
 {
-	HRESULT ret;
 
 	if (m_pDirectDraw) {
-		ret = m_pDirectDraw->FlipToGDISurface();
-		if (ret != DD_OK) {
-			Error("FlipToGDISurface failed", ret);
+		HRESULT result;
+
+		result = m_pDirectDraw->FlipToGDISurface();
+		if (result != DD_OK) {
+			Error("FlipToGDISurface failed", result);
 		}
-		return !ret;
+		return (result == DD_OK);
 	}
 
-	return 1;
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1009e830

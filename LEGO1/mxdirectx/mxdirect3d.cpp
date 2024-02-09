@@ -6,18 +6,24 @@
 DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4);
 DECOMP_SIZE_ASSERT(MxDirect3D, 0x894);
 #endif
-DECOMP_SIZE_ASSERT(MxDevice, 0x1a4);
+DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4);
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c);
 DECOMP_SIZE_ASSERT(MxDriver, 0x190);
 DECOMP_SIZE_ASSERT(MxDeviceEnumerate, 0x14);
 
 #if !defined(MXDIRECTX_FOR_CONFIG)
+#define RELEASE(x)                                                                                                     \
+	if (x != NULL) {                                                                                                   \
+		x->Release();                                                                                                  \
+		x = NULL;                                                                                                      \
+	}
+
 // FUNCTION: LEGO1 0x1009b0a0
 MxDirect3D::MxDirect3D()
 {
 	this->m_pDirect3d = NULL;
 	this->m_pDirect3dDevice = NULL;
-	this->m_unk0x88c = 0;
+	this->m_bTexturesDisabled = FALSE;
 	this->m_assignedDevice = NULL;
 }
 
@@ -53,7 +59,7 @@ BOOL MxDirect3D::Create(
 		paletteEntryCount
 	);
 
-	if (ret && CreateIDirect3D() && D3DSetMode()) {
+	if (ret && D3DCreate() && D3DSetMode()) {
 		success = TRUE;
 	}
 
@@ -67,15 +73,8 @@ BOOL MxDirect3D::Create(
 // FUNCTION: LEGO1 0x1009b210
 void MxDirect3D::Destroy()
 {
-	if (this->m_pDirect3dDevice) {
-		this->m_pDirect3dDevice->Release();
-		this->m_pDirect3dDevice = NULL;
-	}
-
-	if (this->m_pDirect3d) {
-		this->m_pDirect3d->Release();
-		this->m_pDirect3d = NULL;
-	}
+	RELEASE(m_pDirect3dDevice);
+	RELEASE(m_pDirect3d);
 
 	if (this->m_assignedDevice) {
 		delete m_assignedDevice;
@@ -92,27 +91,21 @@ void MxDirect3D::Destroy()
 // FUNCTION: LEGO1 0x1009b290
 void MxDirect3D::DestroyButNotDirectDraw()
 {
-	if (this->m_pDirect3dDevice) {
-		this->m_pDirect3dDevice->Release();
-		this->m_pDirect3dDevice = NULL;
-	}
-	if (this->m_pDirect3d) {
-		this->m_pDirect3d->Release();
-		this->m_pDirect3d = NULL;
-	}
+	RELEASE(m_pDirect3dDevice);
+	RELEASE(m_pDirect3d);
 	MxDirectDraw::DestroyButNotDirectDraw();
 }
 
 // FUNCTION: LEGO1 0x1009b2d0
-BOOL MxDirect3D::CreateIDirect3D()
+BOOL MxDirect3D::D3DCreate()
 {
-	HRESULT ret = IDirect3D_QueryInterface(m_pDirectDraw, IID_IDirect3D2, (LPVOID*) &m_pDirect3d);
+	HRESULT result;
 
-	if (ret) {
-		Error("Creation of IDirect3D failed", ret);
+	result = DirectDraw()->QueryInterface(IID_IDirect3D2, (LPVOID*) &m_pDirect3d);
+	if (result != DD_OK) {
+		Error("Creation of IDirect3D failed", result);
 		return FALSE;
 	}
-
 	return TRUE;
 }
 
@@ -126,27 +119,25 @@ BOOL MxDirect3D::D3DSetMode()
 		}
 
 		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE) {
-			m_unk0x88c = FALSE;
+			m_bTexturesDisabled = FALSE;
 		}
 		else {
-			m_unk0x88c = TRUE;
+			m_bTexturesDisabled = TRUE;
 		}
 
-		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
-		if (!CreateZBuffer(DDSCAPS_VIDEOMEMORY, bitDepth)) {
+		if (!CreateZBuffer(DDSCAPS_VIDEOMEMORY, ZBufferDepth(m_assignedDevice))) {
 			return FALSE;
 		}
 	}
 	else {
 		if (m_assignedDevice->m_desc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE) {
-			m_unk0x88c = FALSE;
+			m_bTexturesDisabled = FALSE;
 		}
 		else {
-			m_unk0x88c = TRUE;
+			m_bTexturesDisabled = TRUE;
 		}
 
-		DWORD bitDepth = GetZBufferBitDepth(m_assignedDevice);
-		if (!CreateZBuffer(DDSCAPS_SYSTEMMEMORY, bitDepth)) {
+		if (!CreateZBuffer(DDSCAPS_SYSTEMMEMORY, ZBufferDepth(m_assignedDevice))) {
 			return FALSE;
 		}
 	}
@@ -160,9 +151,11 @@ BOOL MxDirect3D::D3DSetMode()
 
 	MxDirectDraw::Mode mode = m_currentMode;
 
-	if (m_bFullScreen && !IsSupportedMode(mode.width, mode.height, mode.bitsPerPixel)) {
-		Error("This device cannot support the current display mode", DDERR_GENERIC);
-		return FALSE;
+	if (IsFullScreen()) {
+		if (!IsSupportedMode(mode.width, mode.height, mode.bitsPerPixel)) {
+			Error("This device cannot support the current display mode", DDERR_GENERIC);
+			return FALSE;
+		}
 	}
 
 	LPDIRECTDRAWSURFACE frontBuffer = m_pFrontBuffer;
@@ -209,35 +202,38 @@ BOOL MxDirect3D::D3DSetMode()
 }
 
 // FUNCTION: LEGO1 0x1009b5a0
-DWORD MxDirect3D::GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice)
+int MxDirect3D::ZBufferDepth(MxAssignedDevice* p_assignedDevice)
 {
-	DWORD bitDepth;
+	int depth;
+	DWORD deviceDepth;
 
 	if (p_assignedDevice->m_desc.dwFlags & D3DDD_DEVICEZBUFFERBITDEPTH) {
-		bitDepth = p_assignedDevice->m_desc.dwDeviceZBufferBitDepth;
+		deviceDepth = p_assignedDevice->m_desc.dwDeviceZBufferBitDepth;
 	}
 	else {
-		bitDepth = 0;
+		deviceDepth = 0;
 	}
 
-	if (bitDepth & DDBD_32) {
-		return 32;
+	if (deviceDepth & DDBD_32) {
+		depth = 32;
 	}
-	if (bitDepth & DDBD_24) {
-		return 24;
+	else if (deviceDepth & DDBD_24) {
+		depth = 24;
 	}
-	if (bitDepth & DDBD_16) {
-		return 16;
+	else if (deviceDepth & DDBD_16) {
+		depth = 16;
 	}
-	if (bitDepth & DDBD_8) {
-		return 8;
+	else if (deviceDepth & DDBD_8) {
+		depth = 8;
 	}
+	else
+		depth = -1;
 
-	return -1;
+	return depth;
 }
 
 // FUNCTION: LEGO1 0x1009b5f0
-BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device)
+BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, Direct3DDeviceInfo* p_device)
 {
 	if (m_assignedDevice) {
 		delete m_assignedDevice;
@@ -286,8 +282,9 @@ BOOL MxDirect3D::SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_dri
 				assignedDevice->m_flags |= MxAssignedDevice::c_primaryDevice;
 			}
 
-			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
-				MxDevice& device = *it2;
+			for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();
+				 it2++) {
+				Direct3DDeviceInfo& device = *it2;
 				if (&device != p_device) {
 					continue;
 				}
@@ -395,7 +392,7 @@ void MxDriver::Init(LPGUID p_guid, LPSTR p_driverDesc, LPSTR p_driverName)
 }
 
 // FUNCTION: LEGO1 0x1009bd20
-MxDevice::MxDevice(
+Direct3DDeviceInfo::Direct3DDeviceInfo(
 	LPGUID p_guid,
 	LPSTR p_deviceDesc,
 	LPSTR p_deviceName,
@@ -405,12 +402,12 @@ MxDevice::MxDevice(
 {
 	memset(this, 0, sizeof(*this));
 
-	Init(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
+	Initialize(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
 }
 
 // FUNCTION: CONFIG 0x401460
 // FUNCTION: LEGO1 0x1009bd60
-MxDevice::~MxDevice()
+Direct3DDeviceInfo::~Direct3DDeviceInfo()
 {
 	if (m_guid) {
 		delete m_guid;
@@ -424,7 +421,7 @@ MxDevice::~MxDevice()
 }
 
 // FUNCTION: LEGO1 0x1009bda0
-void MxDevice::Init(
+void Direct3DDeviceInfo::Initialize(
 	LPGUID p_guid,
 	LPSTR p_deviceDesc,
 	LPSTR p_deviceName,
@@ -601,7 +598,7 @@ HRESULT MxDeviceEnumerate::EnumDevicesCallback(
 	LPD3DDEVICEDESC p_HELDesc
 )
 {
-	MxDevice device(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
+	Direct3DDeviceInfo device(p_guid, p_deviceDesc, p_deviceName, p_HWDesc, p_HELDesc);
 	m_list.back().m_devices.push_back(device);
 	memset(&device, 0, sizeof(device));
 	return DDENUMRET_OK;
@@ -899,7 +896,7 @@ int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 
 		GUID4 compareGuid;
 		MxDriver& driver = *it;
-		for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
+		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 			memcpy(&compareGuid, (*it2).m_guid, sizeof(GUID4));
 
 			if (compareGuid.m_data1 == deviceGuid.m_data1 && compareGuid.m_data2 == deviceGuid.m_data2 &&
@@ -919,7 +916,7 @@ int MxDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 
 // FUNCTION: CONFIG 0x00402730
 // FUNCTION: LEGO1 0x1009d030
-int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device)
+int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device)
 {
 	if (p_deviceNum >= 0 && m_initialized) {
 		int i = 0;
@@ -927,7 +924,8 @@ int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*
 		for (list<MxDriver>::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			p_driver = &*it;
 
-			for (list<MxDevice>::iterator it2 = p_driver->m_devices.begin(); it2 != p_driver->m_devices.end(); it2++) {
+			for (list<Direct3DDeviceInfo>::iterator it2 = p_driver->m_devices.begin(); it2 != p_driver->m_devices.end();
+				 it2++) {
 				if (i == p_deviceNum) {
 					p_device = &*it2;
 					return 0;
@@ -944,7 +942,8 @@ int MxDeviceEnumerate::GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*
 
 #if defined(MXDIRECTX_FOR_CONFIG)
 // FUNCTION: CONFIG 0x004027d0
-int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const MxDevice* p_device) const
+int MxDeviceEnumerate::FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const Direct3DDeviceInfo* p_device)
+	const
 {
 	int number = 0;
 	for (list<MxDriver>::const_iterator it = m_list.begin(); it != m_list.end(); it++) {
@@ -988,7 +987,7 @@ int MxDeviceEnumerate::FUN_1009d0d0()
 			return k;
 		}
 
-		for (list<MxDevice>::iterator it2 = (*it).m_devices.begin(); it2 != (*it).m_devices.end(); it2++) {
+		for (list<Direct3DDeviceInfo>::iterator it2 = (*it).m_devices.begin(); it2 != (*it).m_devices.end(); it2++) {
 			if ((*it2).m_HWDesc.dcmColorModel) {
 				return j;
 			}
@@ -1095,8 +1094,8 @@ int MxDeviceEnumerate::FUN_1009d210()
 			m_list.erase(it++);
 		}
 		else {
-			for (list<MxDevice>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
-				MxDevice& device = *it2;
+			for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end();) {
+				Direct3DDeviceInfo& device = *it2;
 
 				if (!FUN_1009d3d0(device)) {
 					driver.m_devices.erase(it2++);
@@ -1136,7 +1135,7 @@ unsigned char MxDeviceEnumerate::DriverSupportsRequiredDisplayMode(MxDriver& p_d
 
 // FUNCTION: CONFIG 0x00402b60
 // FUNCTION: LEGO1 0x1009d3d0
-unsigned char MxDeviceEnumerate::FUN_1009d3d0(MxDevice& p_device)
+unsigned char MxDeviceEnumerate::FUN_1009d3d0(Direct3DDeviceInfo& p_device)
 {
 	if (m_list.size() <= 0) {
 		return FALSE;
@@ -1147,7 +1146,8 @@ unsigned char MxDeviceEnumerate::FUN_1009d3d0(MxDevice& p_device)
 			   p_device.m_HWDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_PERSPECTIVE;
 	}
 
-	for (list<MxDevice>::iterator it = m_list.front().m_devices.begin(); it != m_list.front().m_devices.end(); it++) {
+	for (list<Direct3DDeviceInfo>::iterator it = m_list.front().m_devices.begin(); it != m_list.front().m_devices.end();
+		 it++) {
 		if ((&*it) == &p_device) {
 			return TRUE;
 		}

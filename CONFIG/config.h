@@ -8,7 +8,7 @@
 #include <d3d.h>
 
 class MxDeviceEnumerate;
-struct MxDevice;
+struct Direct3DDeviceInfo;
 struct MxDriver;
 
 #define currentConfigApp ((CConfigApp*) afxCurrentWinApp)
@@ -56,7 +56,7 @@ private:
 public:
 	MxDeviceEnumerate* m_device_enumerator; // 0x0c4
 	MxDriver* m_driver;                     // 0x0c8
-	MxDevice* m_device;                     // 0x0cc
+	Direct3DDeviceInfo* m_device;           // 0x0cc
 	int m_display_bit_depth;                // 0x0d0
 	BOOL m_flip_surfaces;                   // 0x0d4
 	BOOL m_full_screen;                     // 0x0d8

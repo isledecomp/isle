@@ -62,7 +62,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 {
 	MxBool paletteCreated = FALSE;
 	MxDriver* driver = NULL;
-	MxDevice* device = NULL;
+	Direct3DDeviceInfo* device = NULL;
 	MxResult result = FAILURE;
 
 	MxDeviceEnumerate100d9cc8 deviceEnumerate;
@@ -137,11 +137,11 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 
 	if (MxVideoManager::VTable0x28(
 			p_videoParam,
-			m_direct3d->GetDirectDraw(),
-			m_direct3d->GetDirect3D(),
-			m_direct3d->GetFrontBuffer(),
-			m_direct3d->GetBackBuffer(),
-			m_direct3d->GetClipper(),
+			m_direct3d->DirectDraw(),
+			m_direct3d->Direct3D(),
+			m_direct3d->FrontBuffer(),
+			m_direct3d->BackBuffer(),
+			m_direct3d->Clipper(),
 			p_frequencyMS,
 			p_createThread
 		) != SUCCESS) {
@@ -169,8 +169,8 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	createStruct.m_pPalette = m_videoParam.GetPalette()->CreateNativePalette();
 	createStruct.m_isFullScreen = FALSE;
 	createStruct.m_isWideViewAngle = m_videoParam.Flags().GetWideViewAngle();
-	createStruct.m_direct3d = m_direct3d->GetDirect3D();
-	createStruct.m_d3dDevice = m_direct3d->GetDirect3DDevice();
+	createStruct.m_direct3d = m_direct3d->Direct3D();
+	createStruct.m_d3dDevice = m_direct3d->Direct3DDevice();
 
 	if (!m_3dManager->Create(createStruct)) {
 		goto done;
@@ -501,7 +501,7 @@ MxResult LegoVideoManager::ConfigureD3DRM()
 		return FAILURE;
 	}
 
-	MxAssignedDevice* assignedDevice = m_direct3d->GetAssignedDevice();
+	MxAssignedDevice* assignedDevice = m_direct3d->AssignedDevice();
 
 	if (assignedDevice && assignedDevice->GetFlags() & MxAssignedDevice::c_hardwareMode) {
 		if (assignedDevice->GetDesc().dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEAR) {
