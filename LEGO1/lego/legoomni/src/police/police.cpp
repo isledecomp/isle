@@ -100,10 +100,20 @@ MxLong Police::HandleNotification11(MxNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x1005e6a0
+// FUNCTION: LEGO1 0x1005e6a0
 MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	// TODO
+	MxDSAction* action = p_param.GetAction();
+
+	if (m_radio.Notify(p_param) == 0 && m_atom == action->GetAtomId()) {
+		if (m_policeState->GetUnknown0x0c() == 1) {
+			m_policeState->SetUnknown0x0c(0);
+			return 1;
+		}
+
+		return 0;
+	}
+
 	return 0;
 }
 
