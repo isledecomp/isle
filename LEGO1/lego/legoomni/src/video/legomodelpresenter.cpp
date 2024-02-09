@@ -28,15 +28,17 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 	m_unk0x64 = 0;
 	m_addedToView = FALSE;
 	m_criticalSection.Leave();
+
 	if (!p_fromDestructor) {
 		MxVideoPresenter::Destroy(FALSE);
 	}
 }
 
 // STUB: LEGO1 0x1007f6b0
-void LegoModelPresenter::LoadModel(MxStreamChunk* p_chunk)
+undefined4 LegoModelPresenter::LoadModel(MxStreamChunk* p_chunk)
 {
 	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10080050
@@ -68,14 +70,16 @@ void LegoModelPresenter::ReadyTickle()
 	}
 	else {
 		MxStreamChunk* chunk = m_subscriber->CurrentChunk();
+
 		if (chunk != NULL && chunk->GetTime() <= m_action->GetElapsedTime()) {
 			chunk = m_subscriber->NextChunk();
-			LoadModel(chunk);
+			undefined4 und = LoadModel(chunk);
 			m_subscriber->DestroyChunk(chunk);
 
-			if (chunk == NULL) {
+			if (und == 0) {
 				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_unk0x64);
 				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_unk0x64);
+
 				if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter")) {
 					((LegoEntityPresenter*) m_compositePresenter)
 						->GetEntity()
@@ -93,7 +97,6 @@ void LegoModelPresenter::ReadyTickle()
 
 			EndAction();
 		}
-		return;
 	}
 }
 

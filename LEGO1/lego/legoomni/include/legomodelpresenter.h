@@ -38,7 +38,7 @@ private:
 	AutoROI* m_unk0x64;   // 0x64
 	MxBool m_addedToView; // 0x68
 
-	void LoadModel(MxStreamChunk* p_chunk);
+	undefined4 LoadModel(MxStreamChunk* p_chunk);
 };
 
 #endif // LEGOMODELPRESENTER_H
