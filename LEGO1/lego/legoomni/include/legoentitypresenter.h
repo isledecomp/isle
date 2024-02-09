@@ -35,6 +35,8 @@ public:
 
 	void SetEntityLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up);
 
+	inline LegoEntity* GetEntity() { return m_entity; }
+
 	// SYNTHETIC: LEGO1 0x100535a0
 	// LegoEntityPresenter::`scalar deleting destructor'
 
