@@ -104,14 +104,16 @@ MxLong Police::HandleNotification11(MxNotificationParam& p_param)
 MxLong Police::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxDSAction* action = p_param.GetAction();
-	MxLong result = m_radio.Notify(p_param);
-	if (result == 0 && m_atom == action->GetAtomId()) {
+
+	if (m_radio.Notify(p_param) == 0 && m_atom == action->GetAtomId()) {
 		if (m_policeState->GetUnknown0x0c() == 1) {
 			m_policeState->SetUnknown0x0c(0);
 			return 1;
 		}
+
 		return 0;
 	}
+
 	return 0;
 }
 
