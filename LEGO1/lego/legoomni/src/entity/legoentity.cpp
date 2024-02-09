@@ -163,6 +163,12 @@ void LegoEntity::VTable0x4c()
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x100114e0
+void LegoEntity::FUN_100114e0(MxU8 p_val)
+{
+	m_unk0x59 = p_val;
+}
+
 // STUB: LEGO1 0x100114f0
 MxLong LegoEntity::Notify(MxParam& p_param)
 {

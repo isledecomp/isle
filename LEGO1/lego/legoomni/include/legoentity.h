@@ -56,10 +56,13 @@ public:
 	virtual void VTable0x4c(); // vtable+0x4c
 
 	void FUN_10010c30();
+	void FUN_100114e0(MxU8 p_val);
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }
+
+	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 
 protected:
 	void Init();
