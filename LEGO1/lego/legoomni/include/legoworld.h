@@ -66,7 +66,6 @@ public:
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
-	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
