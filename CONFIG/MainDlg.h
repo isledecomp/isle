@@ -1,30 +1,22 @@
 #if !defined(AFX_MAINDLG_H)
 #define AFX_MAINDLG_H
 
-#include "afxwin.h"
-#include "common.h"
+#include "StdAfx.h"
 #include "compat.h"
 #include "decomp.h"
 #include "res/resource.h"
 
 // VTABLE: CONFIG 0x004063e0
 // SIZE 0x70
-class CMainDialog : public CCommonDialog {
+class CMainDialog : public CDialog {
 public:
 	CMainDialog(CWnd* pParent);
-	// Dialog Data
-	//{{AFX_DATA(CMainDialog)
 	enum {
 		IDD = IDD_MAIN
 	};
-	//}}AFX_DATA
-
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainDialog)
 
 protected:
 	void DoDataExchange(CDataExchange* pDX) override;
-	//}}AFX_VIRTUAL
 	void UpdateInterface();
 	void SwitchToAdvanced(BOOL p_advanced);
 
@@ -35,7 +27,6 @@ protected:
 							// Implementation
 
 protected:
-	//{{AFX_MSG(CMainDialog)
 	BOOL OnInitDialog() override;
 	void OnSysCommand(UINT nID, LPARAM lParam);
 	void OnPaint();
@@ -57,7 +48,7 @@ protected:
 	void OnButtonAdvanced();
 	void OnCheckboxDrawCursor();
 	void OnCheckboxMusic();
-	//}}AFX_MSG
+
 	DECLARE_MESSAGE_MAP()
 };
 

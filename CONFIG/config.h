@@ -1,10 +1,10 @@
 #if !defined(AFX_CONFIG_H)
 #define AFX_CONFIG_H
 
+#include "StdAfx.h"
 #include "compat.h"
 #include "decomp.h"
 
-#include <afxwin.h>
 #include <d3d.h>
 
 class MxDeviceEnumerate;

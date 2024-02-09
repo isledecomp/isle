@@ -10,7 +10,7 @@ DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
 
 // FUNCTION: CONFIG 0x00403d50
-CMainDialog::CMainDialog(CWnd* pParent) : CCommonDialog(IDD, pParent)
+CMainDialog::CMainDialog(CWnd* pParent) : CDialog(IDD, pParent)
 {
 	afxCurrentWinApp;
 	m_icon = LoadIconA(AfxFindResourceHandle(MAKEINTRESOURCE(IDI_CONFIG), RT_GROUP_ICON), MAKEINTRESOURCE(IDI_CONFIG));
