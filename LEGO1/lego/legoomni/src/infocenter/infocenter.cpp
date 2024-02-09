@@ -311,9 +311,9 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		break;
 	case 11:
-		if (m_infocenterState->GetInfocenterBufferElement(0) == NULL && m_currentInfomainScript != 40 &&
-			m_currentInfomainScript != 41 && m_currentInfomainScript != 42 && m_currentInfomainScript != 43 &&
-			m_currentInfomainScript != 44) {
+		if (m_infocenterState->GetInfocenterBufferElement(0) == NULL && m_currentInfomainScript != c_mamaMovie &&
+			m_currentInfomainScript != c_papaMovie && m_currentInfomainScript != c_pepperMovie &&
+			m_currentInfomainScript != c_nickMovie && m_currentInfomainScript != c_lauraMovie) {
 			m_infoManDialogueTimer = 1;
 			PlayMusic(JukeBox::e_informationCenter);
 		}
