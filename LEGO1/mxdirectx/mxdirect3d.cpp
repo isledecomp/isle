@@ -226,8 +226,9 @@ int MxDirect3D::ZBufferDepth(MxAssignedDevice* p_assignedDevice)
 	else if (deviceDepth & DDBD_8) {
 		depth = 8;
 	}
-	else
+	else {
 		depth = -1;
+	}
 
 	return depth;
 }
