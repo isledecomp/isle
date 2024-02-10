@@ -124,6 +124,7 @@ public:
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
 	LegoUnkSaveDataWriter* GetUnkSaveDataWriter() { return m_saveDataWriter; }
+	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
