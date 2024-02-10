@@ -138,10 +138,10 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 
 	if (entity == NULL) {
 		LegoWorldListCursor cursor(Lego()->GetWorldList());
-		LegoWorld* current;
+		LegoWorld* world;
 
-		while (cursor.Next(current)) {
-			entity = (LegoEntity*) current->Find(atom, p_entityId);
+		while (cursor.Next(world)) {
+			entity = (LegoEntity*) world->Find(atom, p_entityId);
 
 			if (entity != NULL)
 				break;
