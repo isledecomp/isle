@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DiffReport:
+    # pylint: disable=too-many-instance-attributes
     match_type: SymbolType
     orig_addr: int
     recomp_addr: int
@@ -27,6 +28,7 @@ class DiffReport:
     udiff: Optional[List[str]] = None
     ratio: float = 0.0
     is_effective_match: bool = False
+    is_stub: bool = False
 
     @property
     def effective_ratio(self) -> float:
@@ -130,7 +132,23 @@ class Compare:
 
                 raw = self.recomp_bin.read(addr, sym.size())
                 try:
-                    sym.friendly_name = raw.decode("latin1").rstrip("\x00")
+                    # We use the string length reported in the mangled symbol as the
+                    # data size, but this is not always accurate with respect to the
+                    # null terminator.
+                    # e.g. ??_C@_0BA@EFDM@MxObjectFactory?$AA@
+                    # reported length: 16 (includes null terminator)
+                    # c.f. ??_C@_03DPKJ@enz?$AA@
+                    # reported length: 3 (does NOT include terminator)
+                    # This will handle the case where the entire string contains "\x00"
+                    # because those are distinct from the empty string of length 0.
+                    decoded_string = raw.decode("latin1")
+                    rstrip_string = decoded_string.rstrip("\x00")
+
+                    if decoded_string != "" and rstrip_string != "":
+                        sym.friendly_name = rstrip_string
+                    else:
+                        sym.friendly_name = decoded_string
+
                 except UnicodeDecodeError:
                     pass
 
@@ -162,12 +180,12 @@ class Compare:
             if recomp_addr is not None:
                 self._db.set_function_pair(fun.offset, recomp_addr)
                 if fun.should_skip():
-                    self._db.skip_compare(fun.offset)
+                    self._db.mark_stub(fun.offset)
 
         for fun in codebase.iter_name_functions():
             self._db.match_function(fun.offset, fun.name)
             if fun.should_skip():
-                self._db.skip_compare(fun.offset)
+                self._db.mark_stub(fun.offset)
 
         for var in codebase.iter_variables():
             if var.is_static and var.parent_function is not None:
@@ -255,15 +273,6 @@ class Compare:
                 self._db.skip_compare(thunk_from_orig)
 
     def _compare_function(self, match: MatchInfo) -> DiffReport:
-        if match.size == 0:
-            # Report a failed match to make the user aware of the empty function.
-            return DiffReport(
-                match_type=SymbolType.FUNCTION,
-                orig_addr=match.orig_addr,
-                recomp_addr=match.recomp_addr,
-                name=match.name,
-            )
-
         orig_raw = self.orig_bin.read(match.orig_addr, match.size)
         recomp_raw = self.recomp_bin.read(match.recomp_addr, match.size)
 
@@ -406,6 +415,23 @@ class Compare:
 
     def _compare_match(self, match: MatchInfo) -> Optional[DiffReport]:
         """Router for comparison type"""
+
+        if match.size == 0:
+            return None
+
+        options = self._db.get_match_options(match.orig_addr)
+        if options.get("skip", False):
+            return None
+
+        if options.get("stub", False):
+            return DiffReport(
+                match_type=match.compare_type,
+                orig_addr=match.orig_addr,
+                recomp_addr=match.recomp_addr,
+                name=match.name,
+                is_stub=True,
+            )
+
         if match.compare_type == SymbolType.FUNCTION:
             return self._compare_function(match)
 
@@ -440,7 +466,9 @@ class Compare:
 
     def compare_functions(self) -> Iterable[DiffReport]:
         for match in self.get_functions():
-            yield self._compare_match(match)
+            diff = self._compare_match(match)
+            if diff is not None:
+                yield diff
 
     def compare_variables(self):
         pass
@@ -453,4 +481,6 @@ class Compare:
 
     def compare_vtables(self) -> Iterable[DiffReport]:
         for match in self.get_vtables():
-            yield self._compare_match(match)
+            diff = self._compare_match(match)
+            if diff is not None:
+                yield self._compare_match(match)

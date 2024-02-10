@@ -109,7 +109,14 @@
           var decCel = row.appendChild(document.createElement('td'));
           decCel.colSpan = 3;
           var diff = data[this.dataset.index].diff;
-          if (diff == '') {
+          const stub = "stub" in data[this.dataset.index];
+
+          if (stub) {
+            diff = document.createElement('div');
+            diff.className = 'identical';
+            diff.innerText = 'Stub. No diff.';
+            decCel.appendChild(diff);
+          } else if (diff == '') {
             diff = document.createElement('div');
             diff.className = 'identical';
             diff.innerText = 'Identical function - no diff';
@@ -131,7 +138,7 @@
         }
       }
 
-      const filterOptions = { text: '', hidePerfect: false };
+      const filterOptions = { text: '', hidePerfect: false, hideStub: false };
 
       function filter() {
         closeAllDiffs();
@@ -143,13 +150,15 @@
         for (var ele of collection) {
           var eledata = data[ele.dataset.index];
 
+          const stubOk = (!filterOptions.hideStub || !("stub" in eledata));
+
           const textOk = (ltext == ''
             || eledata.address.toLowerCase().includes(ltext)
             || eledata.name.toLowerCase().includes(ltext));
 
           const perfOk = (!filterOptions.hidePerfect || (eledata.matching < 1));
 
-          if (textOk && perfOk) {
+          if (stubOk && textOk && perfOk) {
             ele.style.display = '';
             searchCount++;
           } else {
@@ -232,9 +241,14 @@
           addrCel.innerText = addrCel.dataset.value = element.address;
           nameCel.innerText = nameCel.dataset.value = element.name;
 
-          var effectiveNote = (element.matching == 1 && element.diff != '') ? '*' : '';
-          matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%' + effectiveNote;
-          matchCel.dataset.value = element.matching;
+          if ("stub" in element) {
+            matchCel.innerHTML = 'stub'
+            matchCel.dataset.value = -1;
+          } else {
+            var effectiveNote = (element.matching == 1 && element.diff != '') ? '*' : '';
+            matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%' + effectiveNote;
+            matchCel.dataset.value = element.matching;
+          }
 
           row.classList.add('funcrow');
           row.addEventListener('click', rowClick);
@@ -254,6 +268,12 @@
           filter();
         })
 
+        const cbHideStub = document.querySelector('#cbHideStub');
+        cbHideStub.addEventListener('change', evt => {
+          filterOptions.hideStub = evt.target.checked;
+          filter();
+        })
+
         sortByColumn(0);
       });
     </script>
@@ -265,6 +285,8 @@
       <div class="filters">
         <label for="cbHidePerfect">Hide 100% match</label>
         <input type="checkbox" id="cbHidePerfect" />
+        <label for="cbHideStub">Hide stubs</label>
+        <input type="checkbox" id="cbHideStub" />
       </div>
       <table id="listing">
         <tr id='listingheader'><th style='width: 20%'>Address</th><th style="width:60%">Name</th><th style='width: 20%'>Matching</th></tr>
