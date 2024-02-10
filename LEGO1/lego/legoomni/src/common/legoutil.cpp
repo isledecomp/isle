@@ -143,8 +143,9 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 		while (cursor.Next(world)) {
 			entity = (LegoEntity*) world->Find(atom, p_entityId);
 
-			if (entity != NULL)
+			if (entity != NULL) {
 				break;
+			}
 		}
 	}
 
