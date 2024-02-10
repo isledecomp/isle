@@ -2,6 +2,7 @@
 #define ELEVATORBOTTOM_H
 
 #include "decomp.h"
+#include "legogamestate.h"
 #include "legoworld.h"
 
 class LegoControlManagerEvent;
@@ -41,7 +42,7 @@ public:
 	// ElevatorBottom::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0xf8; // 0xf8
+	LegoGameState::Area m_unk0xf8; // 0xf8
 
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };

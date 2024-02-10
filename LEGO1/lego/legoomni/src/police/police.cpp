@@ -13,7 +13,7 @@ DECOMP_SIZE_ASSERT(Police, 0x110)
 Police::Police()
 {
 	m_policeState = NULL;
-	m_transitionDestination = 0;
+	m_transitionDestination = LegoGameState::e_noArea;
 	NotificationManager()->Register(this);
 }
 
@@ -54,8 +54,8 @@ MxResult Police::Create(MxDSAction& p_dsAction)
 	}
 
 	m_policeState = policeState;
-	GameState()->SetCurrentArea(0x22);
-	GameState()->StopArea();
+	GameState()->SetCurrentArea(LegoGameState::e_unk22);
+	GameState()->StopArea(LegoGameState::e_previousArea);
 	return ret;
 }
 
@@ -151,6 +151,6 @@ void Police::Enable(MxBool p_enable)
 MxBool Police::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 510);
-	m_transitionDestination = 2;
+	m_transitionDestination = LegoGameState::e_infomain;
 	return TRUE;
 }

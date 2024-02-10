@@ -3,6 +3,7 @@
 
 #include "legocontrolmanager.h"
 #include "legoeventnotificationparam.h"
+#include "legogamestate.h"
 #include "legoworld.h"
 #include "mxactionnotificationparam.h"
 #include "scorestate.h"
@@ -43,7 +44,7 @@ public:
 	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
 
 protected:
-	undefined4 m_unk0xf8;
+	LegoGameState::Area m_unk0xf8;
 	ScoreState* m_state;
 	MxU8* m_surface;
 
