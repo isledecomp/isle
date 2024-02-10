@@ -135,17 +135,20 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 {
 	MxAtomId atom(p_filename, e_lowerCase2);
 	LegoEntity* entity = FindWorld(atom, p_entityId);
+
 	if (entity == NULL) {
 		LegoWorldListCursor cursor(Lego()->GetWorldList());
 		LegoWorld* current;
-		while (entity == NULL) {
-			cursor.Next(current);
+
+		while (cursor.Next(current)) {
 			entity = (LegoEntity*) current->Find(atom, p_entityId);
+
+			if (entity != NULL)
+				break;
 		}
 	}
 
 	if (entity != NULL) {
-
 #ifdef COMPAT_MODE
 		{
 			MxNotificationParam param(c_notificationType0, p_sender);
