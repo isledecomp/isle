@@ -754,6 +754,12 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 	return ::CurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
+// STUB: LEGO1 0x1005b490
+undefined4 LegoOmni::FUN_1005b490(char* p_worldName)
+{
+	return -1;
+}
+
 // FUNCTION: LEGO1 0x1005b4f0
 void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 {

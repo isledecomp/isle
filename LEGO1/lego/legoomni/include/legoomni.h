@@ -104,6 +104,7 @@ public:
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId&, MxLong);
+	undefined4 FUN_1005b490(char* p_worldName);
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
 	static void CreateInstance();

@@ -1,5 +1,6 @@
 #include "legoworldpresenter.h"
 
+#include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legoentity.h"
@@ -16,6 +17,7 @@
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
+#include "mxutil.h"
 
 // GLOBAL: LEGO1 0x100f75d4
 undefined4 g_legoWorldPresenterQuality = 1;
@@ -147,6 +149,11 @@ void LegoWorldPresenter::StartingTickle()
 	ProgressTickleState(e_streaming);
 }
 
+// STUB: LEGO1 0x10066b40
+void LoadWorld(char* p_worldName, LegoWorld* p_world)
+{
+}
+
 // FUNCTION: LEGO1 0x10067a70
 void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 {
@@ -170,7 +177,21 @@ void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 	}
 }
 
-// STUB: LEGO1 0x10067b00
+// FUNCTION: LEGO1 0x10067b00
 void LegoWorldPresenter::ParseExtra()
 {
+	char data[1024];
+	char output[1024];
+	MxU16 len = m_action->GetExtraLength();
+	*((MxU16*) &data[0]) = m_action->GetExtraLength();
+	if (len != 0) {
+		memcpy(data, m_action->GetExtraData(), len);
+		data[len] = 0;
+
+		if (KeyValueStringParse(output, g_strWORLD, data)) {
+			char* worldName = strtok(output, g_parseExtraTokens);
+			LoadWorld(worldName, (LegoWorld*) m_entity);
+			((LegoWorld*) m_entity)->SetUnknown0xec(Lego()->FUN_1005b490(worldName));
+		}
+	}
 }

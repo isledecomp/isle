@@ -65,6 +65,7 @@ public:
 	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
+	inline void SetUnknown0xec(undefined4 p_unk0xec) { m_unk0xec = p_unk0xec; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 
