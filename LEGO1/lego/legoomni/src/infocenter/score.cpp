@@ -19,7 +19,7 @@ DECOMP_SIZE_ASSERT(Score, 0x104)
 // FUNCTION: LEGO1 0x10001000
 Score::Score()
 {
-	m_unk0xf8 = 0;
+	m_unk0xf8 = LegoGameState::e_noArea;
 	NotificationManager()->Register(this);
 }
 
@@ -53,8 +53,8 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		LegoGameState* gs = GameState();
 		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
 		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
-		GameState()->SetCurrentArea(0xd);
-		GameState()->StopArea();
+		GameState()->SetCurrentArea(LegoGameState::e_infoscor);
+		GameState()->StopArea(LegoGameState::e_previousArea);
 	}
 
 	return result;
@@ -119,7 +119,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 		MxU32 id = action->GetObjectId();
 		switch (action->GetObjectId()) {
 		case 10:
-			m_unk0xf8 = 0x38;
+			m_unk0xf8 = LegoGameState::e_histbook;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 0x1f5:
@@ -163,12 +163,12 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 	if (l == 1 || p_param.GetClickedObjectId() == 4) {
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
-			m_unk0xf8 = 2;
+			m_unk0xf8 = LegoGameState::e_infomain;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 2:
-			m_unk0xf8 = 3;
+			m_unk0xf8 = LegoGameState::e_infodoor;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
@@ -330,6 +330,6 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 MxBool Score::VTable0x64()
 {
 	DeleteScript();
-	m_unk0xf8 = 2;
+	m_unk0xf8 = LegoGameState::e_infomain;
 	return TRUE;
 }

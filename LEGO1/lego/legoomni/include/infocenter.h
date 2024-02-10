@@ -1,6 +1,7 @@
 #ifndef INFOCENTER_H
 #define INFOCENTER_H
 
+#include "legogamestate.h"
 #include "legoworld.h"
 #include "mxrect32.h"
 #include "radio.h"
@@ -229,20 +230,20 @@ private:
 	void PlayBookAnimation();
 	void StopBookAnimation();
 
-	InfomainScript m_currentInfomainScript; // 0xf8
-	MxS16 m_selectedCharacter;              // 0xfc
-	InfocenterState* m_infocenterState;     // 0x100
-	undefined4 m_transitionDestination;     // 0x104
-	Cutscene m_currentCutscene;             // 0x108
-	Radio m_radio;                          // 0x10c
-	MxStillPresenter* m_unk0x11c;           // 0x11c
-	InfocenterMapEntry m_mapAreas[7];       // 0x120
-	MxS16 m_unk0x1c8;                       // 0x1c8
-	MxStillPresenter* m_frameHotBitmap;     // 0x1cc
-	MxS16 m_infoManDialogueTimer;           // 0x1d0
-	MxS16 m_bookAnimationTimer;             // 0x1d2
-	MxU16 m_unk0x1d4;                       // 0x1d4
-	MxS16 m_unk0x1d6;                       // 0x1d6
+	InfomainScript m_currentInfomainScript;      // 0xf8
+	MxS16 m_selectedCharacter;                   // 0xfc
+	InfocenterState* m_infocenterState;          // 0x100
+	LegoGameState::Area m_transitionDestination; // 0x104
+	Cutscene m_currentCutscene;                  // 0x108
+	Radio m_radio;                               // 0x10c
+	MxStillPresenter* m_unk0x11c;                // 0x11c
+	InfocenterMapEntry m_mapAreas[7];            // 0x120
+	MxS16 m_unk0x1c8;                            // 0x1c8
+	MxStillPresenter* m_frameHotBitmap;          // 0x1cc
+	MxS16 m_infoManDialogueTimer;                // 0x1d0
+	MxS16 m_bookAnimationTimer;                  // 0x1d2
+	MxU16 m_unk0x1d4;                            // 0x1d4
+	MxS16 m_unk0x1d6;                            // 0x1d6
 };
 
 #endif // INFOCENTER_H

@@ -1,6 +1,7 @@
 #ifndef INFOCENTERDOOR_H
 #define INFOCENTERDOOR_H
 
+#include "legogamestate.h"
 #include "legoworld.h"
 
 class LegoControlManagerEvent;
@@ -40,7 +41,7 @@ public:
 	// InfocenterDoor::`scalar deleting destructor'
 
 private:
-	MxS32 m_unk0xf8; // 0xf8
+	LegoGameState::Area m_unk0xf8; // 0xf8
 
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };

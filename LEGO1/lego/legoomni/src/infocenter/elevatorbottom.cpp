@@ -20,7 +20,7 @@ const char* g_cameraLoc = "CAMERA_LOCATION";
 ElevatorBottom::ElevatorBottom()
 {
 	NotificationManager()->Register(this);
-	this->m_unk0xf8 = 0;
+	this->m_unk0xf8 = LegoGameState::e_noArea;
 }
 
 // FUNCTION: LEGO1 0x10018060
@@ -44,8 +44,8 @@ MxResult ElevatorBottom::Create(MxDSAction& p_dsAction)
 
 	SetIsWorldActive(FALSE);
 
-	GameState()->SetCurrentArea(5);
-	GameState()->StopArea();
+	GameState()->SetCurrentArea(LegoGameState::e_elevbott);
+	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	return result;
 }
@@ -86,12 +86,12 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
-			m_unk0xf8 = 3;
+			m_unk0xf8 = LegoGameState::e_infodoor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 2:
-			m_unk0xf8 = 2;
+			m_unk0xf8 = LegoGameState::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			result = 1;
 			break;
@@ -104,7 +104,7 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			state->SetUnknown1c(1);
-			m_unk0xf8 = 6;
+			m_unk0xf8 = LegoGameState::e_unk6;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			VariableTable()->SetVariable(g_cameraLoc, "LCAMZI1,90");
 			result = 1;
@@ -135,6 +135,6 @@ void ElevatorBottom::Enable(MxBool p_enable)
 MxBool ElevatorBottom::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 999);
-	m_unk0xf8 = 2;
+	m_unk0xf8 = LegoGameState::e_infomain;
 	return TRUE;
 }

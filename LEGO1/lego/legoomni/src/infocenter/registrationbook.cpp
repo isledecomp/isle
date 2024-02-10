@@ -48,8 +48,8 @@ MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 		SetIsWorldActive(FALSE);
 		InputManager()->Register(this);
 
-		GameState()->SetCurrentArea(12);
-		GameState()->StopArea(0);
+		GameState()->SetCurrentArea(LegoGameState::e_regbook);
+		GameState()->StopArea(LegoGameState::e_previousArea);
 
 		m_infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 	}
