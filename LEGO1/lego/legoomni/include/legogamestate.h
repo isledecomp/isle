@@ -20,8 +20,16 @@ struct ColorStringStruct {
 // SIZE 0x430
 class LegoGameState {
 public:
+	enum Act {
+		e_actNotFound = -1,
+		e_act1 = 0,
+		e_act2 = 1,
+		e_act3 = 2
+	};
+
 	LegoGameState();
 	~LegoGameState();
+
 	MxResult Load(MxULong);
 	MxResult Save(MxULong);
 	void SerializePlayersInfo(MxS16);
@@ -36,8 +44,8 @@ public:
 	void SwitchArea(MxU32 p_area);
 
 	inline MxU8 GetUnknownC() { return m_unk0x0c; }
-	inline MxU32 GetUnknown10() { return m_unk0x10; }
-	inline MxS32 GetCurrentAct() { return m_currentAct; }
+	inline Act GetCurrentAct() { return m_currentAct; }
+	inline Act GetLoadedAct() { return m_loadedAct; }
 	inline MxU32 GetCurrentArea() { return m_currentArea; }
 	inline MxU32 GetPreviousArea() { return m_previousArea; }
 	inline MxU32 GetUnknown0x42c() { return m_unk0x42c; }
@@ -48,8 +56,8 @@ public:
 	inline void SetUnknown0x0c(MxU8 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 	inline void SetUnknown0x42c(undefined4 p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
 
-	void FUN_1003cea0(undefined4 p_state);
-	void FUN_1003ceb0();
+	void SetCurrentAct(Act p_currentAct);
+	void FindLoadedAct();
 	void FUN_10039780(MxU8);
 	void FUN_10039940();
 
@@ -72,8 +80,8 @@ private:
 	MxS16 m_stateCount;                         // 0x04
 	LegoState** m_stateArray;                   // 0x08
 	MxU8 m_unk0x0c;                             // 0x0c
-	MxU32 m_unk0x10;                            // 0x10
-	MxS32 m_currentAct;                         // 0x14
+	Act m_currentAct;                           // 0x10
+	Act m_loadedAct;                            // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20

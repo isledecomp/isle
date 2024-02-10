@@ -588,7 +588,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
 					m_notificationManager->Register(this);
 					SetAppCursor(1);
-					m_gameState->FUN_1003cea0(0);
+					m_gameState->SetCurrentAct(LegoGameState::e_act1);
 					return SUCCESS;
 				}
 			}

@@ -56,7 +56,7 @@ Isle::~Isle()
 // FUNCTION: LEGO1 0x10030b20
 MxResult Isle::Create(MxDSAction& p_dsAction)
 {
-	GameState()->FUN_1003ceb0();
+	GameState()->FindLoadedAct();
 
 	MxResult result = LegoWorld::Create(p_dsAction);
 	if (result == SUCCESS) {
@@ -64,14 +64,14 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		InputManager()->SetWorld(this);
 		GameState()->StopArea();
 
-		switch (GameState()->GetCurrentAct()) {
-		case 1:
+		switch (GameState()->GetLoadedAct()) {
+		case LegoGameState::e_act2:
 			GameState()->StopArea(0x2e);
 			break;
-		case 2:
+		case LegoGameState::e_act3:
 			GameState()->StopArea(0x2e);
 			break;
-		case -1:
+		case LegoGameState::e_actNotFound:
 			m_unk0x13c = 2;
 		}
 
@@ -162,7 +162,7 @@ void Isle::ReadyWorld()
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}
-	else if (GameState()->GetCurrentAct()) {
+	else if (GameState()->GetLoadedAct()) {
 		FUN_1003ef00(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
