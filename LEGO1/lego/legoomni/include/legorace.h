@@ -11,7 +11,7 @@
 class LegoRace : public LegoWorld {
 public:
 	LegoRace();
-	~LegoRace() override; // vtable+0x00
+	virtual ~LegoRace() override; // vtable+0x00
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
