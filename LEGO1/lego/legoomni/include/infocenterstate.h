@@ -30,12 +30,12 @@ public:
 
 	inline MxS16 GetInfocenterBufferSize() { return sizeof(m_buffer) / sizeof(m_buffer[0]); }
 	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
-	inline Playlist& GetUnknown0x08() { return m_unk0x08; }
-	inline Playlist& GetUnknown0x14() { return m_unk0x14; }
+	inline Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
+	inline Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	inline Playlist& GetUnknown0x68() { return m_unk0x68; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
-	inline Playlist* GetUnknown0x20() { return m_unk0x20; }
-	inline Playlist* GetUnknown0x44() { return m_unk0x44; }
+	inline Playlist* GetReturnDialogue() { return m_returnDialogue; }
+	inline Playlist* GetLeaveDialogue() { return m_leaveDialogue; }
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
@@ -43,10 +43,10 @@ public:
 	// InfocenterState::`scalar deleting destructor'
 
 private:
-	Playlist m_unk0x08;            // 0x08
-	Playlist m_unk0x14;            // 0x14
-	Playlist m_unk0x20[3];         // 0x20
-	Playlist m_unk0x44[3];         // 0x44
+	Playlist m_exitDialogueAct1;   // 0x08
+	Playlist m_exitDialogueAct23;  // 0x14
+	Playlist m_returnDialogue[3];  // 0x20
+	Playlist m_leaveDialogue[3];   // 0x44
 	Playlist m_unk0x68;            // 0x68
 	MxU32 m_unk0x74;               // 0x74
 	MxStillPresenter* m_buffer[7]; // 0x78
