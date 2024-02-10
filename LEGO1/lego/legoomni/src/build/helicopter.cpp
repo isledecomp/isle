@@ -59,11 +59,13 @@ void Helicopter::GetState()
 // FUNCTION: LEGO1 0x10003360
 void Helicopter::VTable0xe4()
 {
-	if (!GameState()->GetCurrentAct()) {
+	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		VTable0xe8(0x28, TRUE, 7);
 	}
+
 	IslePathActor::VTable0xe4();
-	if (!GameState()->GetCurrentAct()) {
+
+	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(0x3c);
 		if (CurrentVehicle()) {
 			if (CurrentVehicle()->IsA("IslePathActor")) {
@@ -71,6 +73,7 @@ void Helicopter::VTable0xe4()
 			}
 		}
 	}
+
 	m_state->SetUnknown8(0);
 	FUN_1003ee00(m_script, 0x16);
 	FUN_1003ee00(m_script, 0x17);
@@ -92,17 +95,21 @@ MxU32 Helicopter::VTable0xcc()
 	if (!FUN_1003ef60()) {
 		return 1;
 	}
+
 	if (!m_world) {
 		m_world = CurrentWorld();
 	}
+
 	AnimationManager()->FUN_1005f6d0(FALSE);
+
 	if (CurrentVehicle()) {
 		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
 			CurrentVehicle()->VTable0xe4();
 		}
 	}
+
 	switch (GameState()->GetCurrentAct()) {
-	case 0:
+	case LegoGameState::e_act1:
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(FALSE);
 		VTable0xe8(0x29, TRUE, 7);
@@ -112,13 +119,14 @@ MxU32 Helicopter::VTable0xcc()
 		SetUnknownDC(4);
 		PlayMusic(JukeBox::e_jail);
 		break;
-	case 1:
+	case LegoGameState::e_act2:
 		m_script = *g_act2mainScript;
 		break;
-	case 2:
+	case LegoGameState::e_act3:
 		m_script = *g_act3Script;
 		break;
 	}
+
 	VTable0xe0();
 	InvokeAction(Extra::ActionType::e_start, m_script, 0x15, NULL);
 	GetCurrentAction().SetObjectId(-1);
@@ -131,17 +139,19 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;
+
 	switch (GameState()->GetCurrentAct()) {
-	case 0:
+	case LegoGameState::e_act1:
 		script = *g_isleScript;
 		break;
-	case 1:
+	case LegoGameState::e_act2:
 		script = *g_act2mainScript;
 		break;
-	case 2:
+	case LegoGameState::e_act3:
 		script = *g_act3Script;
 		break;
 	}
+
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
 		case 0x17:
@@ -217,7 +227,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			ret = 1;
 			break;
 		case 0x1c:
-			if (GameState()->GetCurrentAct() == 0) {
+			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				((Isle*) CurrentWorld())->SetUnknown13c(2);
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 				VTable0xe4();
@@ -239,7 +249,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 
 	switch (m_state->GetUnkown8()) {
 	case 1: {
-		if (GameState()->GetCurrentAct() == 0) {
+		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(4);
 			VTable0xe8(0x2a, TRUE, 7);
 		}
@@ -276,7 +286,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 		at[1] = 1.25;
 		m_world->GetCamera()->SetWorldTransform(at, dir, up);
 
-		if (GameState()->GetCurrentAct() == 0) {
+		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
 			VTable0xe8(0x29, TRUE, 7);
 		}
