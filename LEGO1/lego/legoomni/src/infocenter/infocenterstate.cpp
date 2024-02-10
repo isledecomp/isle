@@ -1,7 +1,6 @@
 #include "infocenterstate.h"
 
 #include "infocenter.h"
-#include "legogamestate.h"
 
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94);
 
@@ -80,7 +79,7 @@ Infocenter::InfomainScript g_leaveDialogueAct3[4] = {
 };
 
 // GLOBAL: LEGO1 0x100f7760
-Infocenter::InfomainScript g_unk0x100f7760[2] = {Infocenter::c_bricksterDialogue, Infocenter::c_bricksterLaughs};
+Infocenter::InfomainScript g_bricksterDialogue[2] = {Infocenter::c_bricksterDialogue, Infocenter::c_bricksterLaughs};
 
 // FUNCTION: LEGO1 0x10071600
 InfocenterState::InfocenterState()
@@ -106,7 +105,7 @@ InfocenterState::InfocenterState()
 	m_leaveDialogue[LegoGameState::e_act3] =
 		LegoState::Playlist((MxU32*) g_leaveDialogueAct3, _countof(g_leaveDialogueAct3) - 1);
 
-	m_unk0x68 = LegoState::Playlist((MxU32*) g_unk0x100f7760, _countof(g_unk0x100f7760));
+	m_bricksterDialogue = LegoState::Playlist((MxU32*) g_bricksterDialogue, _countof(g_bricksterDialogue));
 
 	memset(m_buffer, 0, sizeof(m_buffer));
 }

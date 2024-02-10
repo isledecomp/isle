@@ -2,6 +2,7 @@
 #define INFOCENTERSTATE_H
 
 #include "decomp.h"
+#include "legogamestate.h"
 #include "legostate.h"
 #include "mxstillpresenter.h"
 
@@ -32,10 +33,10 @@ public:
 	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
 	inline Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	inline Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
-	inline Playlist& GetUnknown0x68() { return m_unk0x68; }
+	inline Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
+	inline Playlist& GetLeaveDialogue(LegoGameState::Act p_act) { return m_leaveDialogue[p_act]; }
+	inline Playlist& GetBricksterDialogue() { return m_bricksterDialogue; }
 	inline MxU32 GetUnknown0x74() { return m_unk0x74; }
-	inline Playlist* GetReturnDialogue() { return m_returnDialogue; }
-	inline Playlist* GetLeaveDialogue() { return m_leaveDialogue; }
 
 	inline void SetUnknown0x74(MxU32 p_unk0x74) { m_unk0x74 = p_unk0x74; }
 
@@ -47,7 +48,7 @@ private:
 	Playlist m_exitDialogueAct23;  // 0x14
 	Playlist m_returnDialogue[3];  // 0x20
 	Playlist m_leaveDialogue[3];   // 0x44
-	Playlist m_unk0x68;            // 0x68
+	Playlist m_bricksterDialogue;  // 0x68
 	MxU32 m_unk0x74;               // 0x74
 	MxStillPresenter* m_buffer[7]; // 0x78
 };

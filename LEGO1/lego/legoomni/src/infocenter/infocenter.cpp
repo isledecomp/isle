@@ -368,7 +368,7 @@ void Infocenter::ReadyWorld()
 			PlayMusic(JukeBox::e_informationCenter);
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetReturnDialogue()[GameState()->GetCurrentAct()].Next();
+				(InfomainScript) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 			PlayAction(script);
 
 			if (script == c_returnBackGuidanceDialogue2) {
@@ -434,7 +434,7 @@ void Infocenter::ReadyWorld()
 			m_transitionDestination = 0x2e;
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetReturnDialogue()[GameState()->GetCurrentAct()].Next();
+				(InfomainScript) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -444,7 +444,7 @@ void Infocenter::ReadyWorld()
 
 		PlayMusic(JukeBox::e_informationCenter);
 		InfomainScript script =
-			(InfomainScript) m_infocenterState->GetReturnDialogue()[GameState()->GetCurrentAct()].Next();
+			(InfomainScript) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
@@ -490,7 +490,7 @@ void Infocenter::ReadyWorld()
 			m_transitionDestination = 0x2f;
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetReturnDialogue()[GameState()->GetCurrentAct()].Next();
+				(InfomainScript) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -500,7 +500,7 @@ void Infocenter::ReadyWorld()
 
 		PlayMusic(JukeBox::e_informationCenter);
 		InfomainScript script =
-			(InfomainScript) m_infocenterState->GetReturnDialogue()[GameState()->GetCurrentAct()].Next();
+			(InfomainScript) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
@@ -830,7 +830,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 						break;
 					default:
 						dialogueToPlay =
-							(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()].Next();
+							(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
 						break;
 					}
 
@@ -840,7 +840,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			}
 			else {
 				dialogueToPlay =
-					(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()].Next();
+					(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
 			}
 
 			PlayAction(dialogueToPlay);
@@ -876,7 +876,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_transitionDestination = 5;
 			}
 			else {
-				MxU32 objectId = m_infocenterState->GetUnknown0x68().Next();
+				MxU32 objectId = m_infocenterState->GetBricksterDialogue().Next();
 				PlayAction((InfomainScript) objectId);
 			}
 
@@ -891,7 +891,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_transitionDestination = 13;
 			}
 			else {
-				MxU32 objectId = m_infocenterState->GetUnknown0x68().Next();
+				MxU32 objectId = m_infocenterState->GetBricksterDialogue().Next();
 				PlayAction((InfomainScript) objectId);
 			}
 
@@ -942,7 +942,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					m_infocenterState->SetUnknown0x74(5);
 					m_transitionDestination = state->GetPreviousArea();
 					actionToPlay =
-						(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()].Next();
+						(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
 					m_radio.Stop();
 					InputManager()->DisableInputProcessing();
 					InputManager()->SetUnknown336(TRUE);
@@ -953,7 +953,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 							m_infocenterState->SetUnknown0x74(5);
 							m_transitionDestination = state->GetPreviousArea();
 							actionToPlay =
-								(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()]
+								(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
 									.Next();
 							m_radio.Stop();
 							InputManager()->DisableInputProcessing();
@@ -971,7 +971,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_infocenterState->SetUnknown0x74(5);
 				m_transitionDestination = 0x2e;
 				actionToPlay =
-					(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()].Next();
+					(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
@@ -979,7 +979,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 				m_infocenterState->SetUnknown0x74(5);
 				m_transitionDestination = 0x2f;
 				actionToPlay =
-					(InfomainScript) m_infocenterState->GetLeaveDialogue()[GameState()->GetCurrentAct()].Next();
+					(InfomainScript) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
