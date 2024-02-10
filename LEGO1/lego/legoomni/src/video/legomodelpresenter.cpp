@@ -44,8 +44,6 @@ undefined4 LegoModelPresenter::LoadModel(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x10080050
 void LegoModelPresenter::ReadyTickle()
 {
-	ProgressTickleState(e_starting);
-	return;
 	if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter") &&
 		m_compositePresenter->GetCurrentTickleState() <= e_ready) {
 		return;
