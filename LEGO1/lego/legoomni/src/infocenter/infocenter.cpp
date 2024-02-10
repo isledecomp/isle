@@ -302,7 +302,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 5:
 		if (action->GetObjectId() == m_currentInfomainScript) {
-			if (GameState()->GetUnknown10() != 2 && m_selectedCharacter != e_noCharacter) {
+			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != e_noCharacter) {
 				GameState()->FUN_10039780(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -343,8 +343,8 @@ void Infocenter::ReadyWorld()
 	MxStillPresenter* bg = (MxStillPresenter*) Find("MxStillPresenter", "Background_Bitmap");
 	MxStillPresenter* bgRed = (MxStillPresenter*) Find("MxStillPresenter", "BackgroundRed_Bitmap");
 
-	switch (GameState()->GetUnknown10()) {
-	case 0:
+	switch (GameState()->GetCurrentAct()) {
+	case LegoGameState::e_act1:
 		bg->Enable(TRUE);
 		InitializeBitmaps();
 
@@ -368,7 +368,7 @@ void Infocenter::ReadyWorld()
 			PlayMusic(JukeBox::e_informationCenter);
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetUnknown10()].Next();
+				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetCurrentAct()].Next();
 			PlayAction(script);
 
 			if (script == c_returnBackGuidanceDialogue2) {
@@ -402,7 +402,7 @@ void Infocenter::ReadyWorld()
 			break;
 		}
 		return;
-	case 1: {
+	case LegoGameState::e_act2: {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
 			PlayMusic(JukeBox::e_informationCenter);
 			bgRed->Enable(TRUE);
@@ -412,7 +412,7 @@ void Infocenter::ReadyWorld()
 		}
 
 		LegoAct2State* state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
-		GameState()->FUN_1003ceb0();
+		GameState()->FindLoadedAct();
 
 		if (state && state->GetUnknown0x08() == 0x68) {
 			bg->Enable(TRUE);
@@ -424,7 +424,7 @@ void Infocenter::ReadyWorld()
 		if (m_infocenterState->GetUnknown0x74() == 4) {
 			bgRed->Enable(TRUE);
 
-			if (GameState()->GetUnknown10() == GameState()->GetCurrentAct()) {
+			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
 				GameState()->SetCurrentArea(0x2e);
 				GameState()->StopArea(0x2e);
 				GameState()->SetCurrentArea(0x02);
@@ -434,7 +434,7 @@ void Infocenter::ReadyWorld()
 			m_transitionDestination = 0x2e;
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetUnknown10()].Next();
+				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetCurrentAct()].Next();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -444,12 +444,12 @@ void Infocenter::ReadyWorld()
 
 		PlayMusic(JukeBox::e_informationCenter);
 		InfomainScript script =
-			(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetUnknown10()].Next();
+			(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetCurrentAct()].Next();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
 	}
-	case 2: {
+	case LegoGameState::e_act3: {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
 			PlayMusic(JukeBox::e_informationCenter);
 			bgRed->Enable(TRUE);
@@ -459,7 +459,7 @@ void Infocenter::ReadyWorld()
 		}
 
 		Act3State* state = (Act3State*) GameState()->GetState("Act3State");
-		GameState()->FUN_1003ceb0();
+		GameState()->FindLoadedAct();
 
 		if (state) {
 			if (state->GetUnknown0x08() == 3) {
@@ -480,7 +480,7 @@ void Infocenter::ReadyWorld()
 		if (m_infocenterState->GetUnknown0x74() == 4) {
 			bgRed->Enable(TRUE);
 
-			if (GameState()->GetUnknown10() == GameState()->GetCurrentAct()) {
+			if (GameState()->GetCurrentAct() == GameState()->GetLoadedAct()) {
 				GameState()->SetCurrentArea(0x2f);
 				GameState()->StopArea(0x2f);
 				GameState()->SetCurrentArea(0x02);
@@ -490,7 +490,7 @@ void Infocenter::ReadyWorld()
 			m_transitionDestination = 0x2f;
 
 			InfomainScript script =
-				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetUnknown10()].Next();
+				(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetCurrentAct()].Next();
 			PlayAction(script);
 
 			InputManager()->DisableInputProcessing();
@@ -500,7 +500,7 @@ void Infocenter::ReadyWorld()
 
 		PlayMusic(JukeBox::e_informationCenter);
 		InfomainScript script =
-			(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetUnknown10()].Next();
+			(InfomainScript) m_infocenterState->GetUnknown0x20()[GameState()->GetCurrentAct()].Next();
 		PlayAction(script);
 		bgRed->Enable(TRUE);
 		break;
@@ -800,7 +800,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 		if (m_infocenterState->GetUnknown0x74() == 5) {
 			InfomainScript dialogueToPlay;
 
-			if (GameState()->GetUnknown10() == 0) {
+			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				if (m_infocenterState->GetInfocenterBufferElement(0) == NULL) {
 					m_infocenterState->SetUnknown0x74(2);
 					m_transitionDestination = 0;
@@ -830,7 +830,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 						break;
 					default:
 						dialogueToPlay =
-							(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+							(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next();
 						break;
 					}
 
@@ -840,7 +840,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			}
 			else {
 				dialogueToPlay =
-					(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+					(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next();
 			}
 
 			PlayAction(dialogueToPlay);
@@ -870,7 +870,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_infocenterState->SetUnknown0x74(14);
 			StopCurrentAction();
 
-			if (GameState()->GetUnknown10() == 0) {
+			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				m_radio.Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 				m_transitionDestination = 5;
@@ -885,7 +885,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_infocenterState->SetUnknown0x74(14);
 			StopCurrentAction();
 
-			if (GameState()->GetUnknown10() == 0) {
+			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				m_radio.Stop();
 				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 				m_transitionDestination = 13;
@@ -933,8 +933,8 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 			m_radio.Stop();
 			break;
 		case c_bigInfoCtl:
-			switch (state->GetUnknown10()) {
-			case 0:
+			switch (state->GetCurrentAct()) {
+			case LegoGameState::e_act1:
 				switch (state->GetPreviousArea()) {
 				case 3:
 				case 12:
@@ -942,7 +942,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					m_infocenterState->SetUnknown0x74(5);
 					m_transitionDestination = state->GetPreviousArea();
 					actionToPlay =
-						(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+						(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next();
 					m_radio.Stop();
 					InputManager()->DisableInputProcessing();
 					InputManager()->SetUnknown336(TRUE);
@@ -953,7 +953,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 							m_infocenterState->SetUnknown0x74(5);
 							m_transitionDestination = state->GetPreviousArea();
 							actionToPlay =
-								(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next(
+								(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next(
 								);
 							m_radio.Stop();
 							InputManager()->DisableInputProcessing();
@@ -967,17 +967,19 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					break;
 				}
 				break;
-			case 1:
+			case LegoGameState::e_act2:
 				m_infocenterState->SetUnknown0x74(5);
 				m_transitionDestination = 0x2e;
-				actionToPlay = (InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+				actionToPlay =
+					(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
-			case 2:
+			case LegoGameState::e_act3:
 				m_infocenterState->SetUnknown0x74(5);
 				m_transitionDestination = 0x2f;
-				actionToPlay = (InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetUnknown10()].Next();
+				actionToPlay =
+					(InfomainScript) m_infocenterState->GetUnknown0x44()[GameState()->GetCurrentAct()].Next();
 				InputManager()->DisableInputProcessing();
 				InputManager()->SetUnknown336(TRUE);
 				break;
@@ -986,7 +988,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 		case c_bookCtl:
 			m_transitionDestination = 12;
 			m_infocenterState->SetUnknown0x74(4);
-			actionToPlay = GameState()->GetUnknown10() ? c_goToRegBookRed : c_goToRegBook;
+			actionToPlay = GameState()->GetCurrentAct() != LegoGameState::e_act1 ? c_goToRegBookRed : c_goToRegBook;
 			m_radio.Stop();
 			GameState()->SetUnknown0x42c(GameState()->GetPreviousArea());
 			InputManager()->DisableInputProcessing();
@@ -1044,7 +1046,7 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 			m_infoManDialogueTimer = 0;
 
 			InfomainScript objectId;
-			if (GameState()->GetUnknown10()) {
+			if (GameState()->GetCurrentAct() != LegoGameState::e_act1) {
 				objectId = (InfomainScript) m_infocenterState->GetUnknown0x14().Next();
 			}
 			else {
@@ -1270,11 +1272,11 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 // FUNCTION: LEGO1 0x10070e90
 void Infocenter::Reset()
 {
-	switch (GameState()->GetUnknown10()) {
-	case 1:
+	switch (GameState()->GetCurrentAct()) {
+	case LegoGameState::e_act2:
 		Lego()->RemoveWorld(*g_act2mainScript, 0);
 		break;
-	case 2:
+	case LegoGameState::e_act3:
 		Lego()->RemoveWorld(*g_act3Script, 0);
 		break;
 	}
@@ -1283,7 +1285,7 @@ void Infocenter::Reset()
 	BuildingManager()->FUN_10030590();
 	AnimationManager()->FUN_1005ee80(FALSE);
 	UnkSaveDataWriter()->FUN_100832a0();
-	GameState()->FUN_1003cea0(0);
+	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->SetPreviousArea(0);
 	GameState()->SetUnknown0x42c(0);
 

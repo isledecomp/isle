@@ -74,7 +74,7 @@ LegoGameState::LegoGameState()
 	this->m_previousArea = 0;
 	this->m_unk0x42c = 0;
 	this->m_isDirty = FALSE;
-	this->m_currentAct = -1;
+	this->m_loadedAct = e_actNotFound;
 
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
@@ -139,7 +139,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			MxU32 maybeVersion = 0x1000C;
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
-			fileStream.Write(&m_unk0x10, 2);
+			fileStream.Write(&m_currentAct, 2);
 			fileStream.Write(&m_unk0x0c, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
@@ -717,24 +717,24 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003cea0
-void LegoGameState::FUN_1003cea0(undefined4 p_state)
+void LegoGameState::SetCurrentAct(Act p_currentAct)
 {
-	m_unk0x10 = p_state;
+	m_currentAct = p_currentAct;
 }
 
 // FUNCTION: LEGO1 0x1003ceb0
-void LegoGameState::FUN_1003ceb0()
+void LegoGameState::FindLoadedAct()
 {
 	if (FindWorld(*g_isleScript, 0)) {
-		m_currentAct = 0;
+		m_loadedAct = e_act1;
 	}
 	else if (FindWorld(*g_act2mainScript, 0)) {
-		m_currentAct = 1;
+		m_loadedAct = e_act2;
 	}
 	else if (FindWorld(*g_act3Script, 0)) {
-		m_currentAct = 2;
+		m_loadedAct = e_act3;
 	}
 	else {
-		m_currentAct = -1;
+		m_loadedAct = e_actNotFound;
 	}
 }
