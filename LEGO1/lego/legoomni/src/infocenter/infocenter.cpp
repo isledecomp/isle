@@ -947,7 +947,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					InputManager()->DisableInputProcessing();
 					InputManager()->SetUnknown336(TRUE);
 					break;
-				case 4:
+				case LegoGameState::e_unk4:
 					if (state->GetUnknownC()) {
 						if (m_infocenterState->GetInfocenterBufferElement(0)) {
 							m_infocenterState->SetUnknown0x74(5);
