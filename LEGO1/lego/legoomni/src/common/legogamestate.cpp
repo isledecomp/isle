@@ -126,7 +126,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 
-	if (!infocenterState || infocenterState->GetInfocenterBufferElement(0) == NULL) {
+	if (!infocenterState || infocenterState->GetNameLetter(0) == NULL) {
 		result = SUCCESS;
 	}
 	else {
