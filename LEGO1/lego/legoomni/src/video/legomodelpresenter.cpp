@@ -132,12 +132,12 @@ void LegoModelPresenter::ParseExtra()
 		}
 		else if (KeyValueStringParse(output, g_dbCreate, buffer) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
-			for (list<AutoROI*>::iterator it = currentWorld->GetUnknownList0xe0()->begin();
-				 it != currentWorld->GetUnknownList0xe0()->end();
-				 it++) {
+			list<AutoROI*>& roiList = currentWorld->GetUnknownList0xe0();
+
+			for (list<AutoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
 				if (!strcmpi(((LegoROI*) (*it))->GetUnknown0xe4(), output)) {
 					m_roi = *it;
-					currentWorld->GetUnknownList0xe0()->erase(it);
+					roiList.erase(it);
 
 					m_addedToView = TRUE;
 					VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
