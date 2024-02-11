@@ -48,7 +48,7 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // STUB: LEGO1 0x1007f6b0
-undefined4 LegoModelPresenter::LoadModel(MxStreamChunk* p_chunk)
+MxResult LegoModelPresenter::CreateROI(MxStreamChunk* p_chunk)
 {
 	// TODO
 	return FAILURE;
@@ -84,10 +84,10 @@ void LegoModelPresenter::ReadyTickle()
 
 		if (chunk != NULL && chunk->GetTime() <= m_action->GetElapsedTime()) {
 			chunk = m_subscriber->NextChunk();
-			undefined4 und = LoadModel(chunk);
+			MxResult result = CreateROI(chunk);
 			m_subscriber->DestroyChunk(chunk);
 
-			if (und == 0) {
+			if (result == SUCCESS) {
 				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
 				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
 
