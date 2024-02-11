@@ -4,9 +4,9 @@
 #include "mxvariable.h"
 
 extern const char* g_varVISIBILITY;
-extern const char* g_varCAMERA_LOCATION;
+extern const char* g_varCAMERALOCATION;
 extern const char* g_varCURSOR;
-extern const char* g_varWHO_AM_I;
+extern const char* g_varWHOAMI;
 
 // VTABLE: LEGO1 0x100d86c8
 // SIZE 0x24
@@ -21,7 +21,7 @@ public:
 // SIZE 0x24
 class CameraLocationVariable : public MxVariable {
 public:
-	CameraLocationVariable() { m_key = g_varCAMERA_LOCATION; }
+	CameraLocationVariable() { m_key = g_varCAMERALOCATION; }
 
 	void SetValue(const char* p_value) override; // vtable+0x04
 };
@@ -39,7 +39,7 @@ public:
 // SIZE 0x24
 class WhoAmIVariable : public MxVariable {
 public:
-	WhoAmIVariable() { m_key = g_varWHO_AM_I; }
+	WhoAmIVariable() { m_key = g_varWHOAMI; }
 
 	void SetValue(const char* p_value) override; // vtable+0x04
 };
