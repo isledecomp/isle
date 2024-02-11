@@ -126,7 +126,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 
-	if (!infocenterState || !infocenterState->DoesNameExist()) {
+	if (!infocenterState || !infocenterState->ProfileSelected()) {
 		result = SUCCESS;
 	}
 	else {

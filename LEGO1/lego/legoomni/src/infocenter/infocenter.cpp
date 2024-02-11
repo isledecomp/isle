@@ -267,7 +267,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		PlayAction(c_welcomeDialogue);
 		m_currentCutscene = e_noIntro;
 
-		if (!m_infocenterState->DoesNameExist()) {
+		if (!m_infocenterState->ProfileSelected()) {
 			m_bookAnimationTimer = 1;
 			return 1;
 		}
@@ -311,7 +311,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		break;
 	case 11:
-		if (!m_infocenterState->DoesNameExist() && m_currentInfomainScript != c_mamaMovie &&
+		if (!m_infocenterState->ProfileSelected() && m_currentInfomainScript != c_mamaMovie &&
 			m_currentInfomainScript != c_papaMovie && m_currentInfomainScript != c_pepperMovie &&
 			m_currentInfomainScript != c_nickMovie && m_currentInfomainScript != c_lauraMovie) {
 			m_infoManDialogueTimer = 1;
@@ -355,7 +355,7 @@ void Infocenter::ReadyWorld()
 			break;
 		case 4:
 			m_infocenterState->SetUnknown0x74(2);
-			if (!m_infocenterState->DoesNameExist()) {
+			if (!m_infocenterState->ProfileSelected()) {
 				m_bookAnimationTimer = 1;
 			}
 
@@ -377,7 +377,7 @@ void Infocenter::ReadyWorld()
 
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 
-			if (!m_infocenterState->DoesNameExist()) {
+			if (!m_infocenterState->ProfileSelected()) {
 				m_bookAnimationTimer = 1;
 			}
 
@@ -392,7 +392,7 @@ void Infocenter::ReadyWorld()
 			break;
 		case 0xf:
 			m_infocenterState->SetUnknown0x74(2);
-			if (!m_infocenterState->DoesNameExist()) {
+			if (!m_infocenterState->ProfileSelected()) {
 				m_bookAnimationTimer = 1;
 			}
 
@@ -622,7 +622,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 			StopCutscene();
 			m_infocenterState->SetUnknown0x74(1);
 
-			if (!m_infocenterState->DoesNameExist()) {
+			if (!m_infocenterState->ProfileSelected()) {
 				m_bookAnimationTimer = 1;
 				return 1;
 			}
@@ -801,7 +801,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 			InfomainScript dialogueToPlay;
 
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-				if (!m_infocenterState->DoesNameExist()) {
+				if (!m_infocenterState->ProfileSelected()) {
 					m_infocenterState->SetUnknown0x74(2);
 					m_transitionDestination = LegoGameState::e_noArea;
 					dialogueToPlay = c_registerToContinueDialogue;
@@ -949,7 +949,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					break;
 				case LegoGameState::e_unk4:
 					if (state->GetUnknownC()) {
-						if (m_infocenterState->DoesNameExist()) {
+						if (m_infocenterState->ProfileSelected()) {
 							m_infocenterState->SetUnknown0x74(5);
 							m_transitionDestination = state->GetPreviousArea();
 							actionToPlay =
@@ -1069,7 +1069,7 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 			}
 		case 7:
 			if (m_infocenterState->GetUnknown0x74() == 8) {
-				if (m_infocenterState->DoesNameExist()) {
+				if (m_infocenterState->ProfileSelected()) {
 					GameState()->Save(0);
 				}
 
