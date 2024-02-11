@@ -74,6 +74,9 @@ public:
 // TEMPLATE: LEGO1 0x100599f0
 // MxPtrList<LegoWorld>::Destroy
 
+// TEMPLATE: LEGO1 0x10059a70
+// MxPtrList<LegoWorld>::~MxPtrList<LegoWorld>
+
 // SYNTHETIC: LEGO1 0x10059ac0
 // MxCollection<LegoWorld *>::`scalar deleting destructor'
 

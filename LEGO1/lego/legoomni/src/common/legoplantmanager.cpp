@@ -1,5 +1,7 @@
 #include "legoplantmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
+
 // FUNCTION: LEGO1 0x10026220
 LegoPlantManager::LegoPlantManager()
 {

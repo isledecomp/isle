@@ -64,6 +64,8 @@ public:
 		return NULL;
 	}
 
+	inline void SetOwnership(MxBool p_ownership) { m_ownership = p_ownership; }
+
 	// SYNTHETIC: LEGO1 0x1005a310
 	// GifManagerBase::`scalar deleting destructor'
 

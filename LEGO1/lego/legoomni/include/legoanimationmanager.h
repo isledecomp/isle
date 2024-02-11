@@ -42,6 +42,8 @@ public:
 
 private:
 	void Init();
+
+	undefined m_unk0x08[0x4f8]; // 0x08
 };
 
 #endif // LEGOANIMATIONMANAGER_H

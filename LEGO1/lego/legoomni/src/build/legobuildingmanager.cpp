@@ -1,5 +1,7 @@
 #include "legobuildingmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
+
 // GLOBAL: LEGO1 0x100f37cc
 int g_buildingManagerConfig = 1;
 

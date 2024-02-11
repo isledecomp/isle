@@ -33,12 +33,18 @@ struct LegoSaveDataEntry3 {
 	MxU8 m_savePart10; // 0x104
 };
 
+// SIZE 0x08
 class LegoUnkSaveDataWriter {
 public:
+	LegoUnkSaveDataWriter();
+
 	MxResult WriteSaveData3(LegoStorage* p_stream);
 	AutoROI* FUN_10083500(undefined4, undefined4);
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
+
+private:
+	undefined m_unk0x00[0x08]; // 0x00
 };
 
 #endif // LEGOUNKSAVEDATAWRITER_H
