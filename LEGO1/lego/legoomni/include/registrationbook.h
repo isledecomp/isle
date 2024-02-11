@@ -27,6 +27,7 @@ public:
 		c_check8ctl = 92,
 		c_check9ctl = 95,
 	};
+
 	RegistrationBook();
 	~RegistrationBook() override; // vtable+0x00
 

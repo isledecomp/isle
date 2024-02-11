@@ -63,6 +63,7 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
 	LegoWorld::Notify(p_param);
+
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetType()) {
 		case c_notificationEndAction:
@@ -74,7 +75,6 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 			break;
 		case c_notificationButtonDown:
 			m_unk0xf8 = Timer()->GetTime();
-			result = 0;
 			break;
 		case c_notificationClick:
 			result = HandleClick((LegoControlManagerEvent&) p_param);
@@ -87,8 +87,10 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 			break;
 		}
 	}
+
 	return result;
 }
+
 // STUB: LEGO1 0x10077210
 MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
@@ -122,6 +124,7 @@ MxResult RegistrationBook::Tickle()
 	else {
 		// TODO
 	}
+
 	return SUCCESS;
 }
 
