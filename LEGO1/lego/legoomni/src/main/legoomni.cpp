@@ -576,42 +576,51 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_worldList = new LegoWorldList(TRUE);
 
 	if (!m_viewLODListManager || !m_gifManager || !m_worldList || !m_saveDataWriter || !m_plantManager ||
-		!m_animationManager || !m_buildingManager)
+		!m_animationManager || !m_buildingManager) {
 		goto done;
+	}
 
 	MxVariable* variable;
 
-	if (!(variable = new VisibilityVariable()))
+	if (!(variable = new VisibilityVariable())) {
 		goto done;
+	}
 	m_variableTable->SetVariable(variable);
 
-	if (!(variable = new CameraLocationVariable()))
+	if (!(variable = new CameraLocationVariable())) {
 		goto done;
+	}
 	m_variableTable->SetVariable(variable);
 
-	if (!(variable = new CursorVariable()))
+	if (!(variable = new CursorVariable())) {
 		goto done;
+	}
 	m_variableTable->SetVariable(variable);
 
-	if (!(variable = new WhoAmIVariable()))
+	if (!(variable = new WhoAmIVariable())) {
 		goto done;
+	}
 	m_variableTable->SetVariable(variable);
 
 	RegisterScripts();
 	FUN_1001a700();
 	result = FUN_1005a5f0();
 
-	if (result != SUCCESS)
+	if (result != SUCCESS) {
 		goto done;
+	}
 
-	if (!(m_bkgAudioManager = new MxBackgroundAudioManager()))
+	if (!(m_bkgAudioManager = new MxBackgroundAudioManager())) {
 		goto done;
+	}
 
-	if (!(m_transitionManager = new MxTransitionManager()))
+	if (!(m_transitionManager = new MxTransitionManager())) {
 		goto done;
+	}
 
-	if (m_transitionManager->GetDDrawSurfaceFromVideoManager() != SUCCESS)
+	if (m_transitionManager->GetDDrawSurfaceFromVideoManager() != SUCCESS) {
 		goto done;
+	}
 
 	m_notificationManager->Register(this);
 	SetAppCursor(1);
