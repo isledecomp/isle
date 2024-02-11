@@ -39,7 +39,7 @@ public:
 	LegoUnkSaveDataWriter();
 
 	MxResult WriteSaveData3(LegoStorage* p_stream);
-	AutoROI* FUN_10083500(undefined4, undefined4);
+	AutoROI* FUN_10083500(char*, undefined4);
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 

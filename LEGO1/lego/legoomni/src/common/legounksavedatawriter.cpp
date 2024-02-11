@@ -71,7 +71,7 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 }
 
 // STUB: LEGO1 0x10083500
-AutoROI* LegoUnkSaveDataWriter::FUN_10083500(undefined4, undefined4)
+AutoROI* LegoUnkSaveDataWriter::FUN_10083500(char*, undefined4)
 {
 	// TODO
 	// involves an STL map with a _Nil node at 0x100fc508

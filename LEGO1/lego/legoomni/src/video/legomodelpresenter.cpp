@@ -1,13 +1,26 @@
 #include "legomodelpresenter.h"
 
+#include "define.h"
 #include "legoentity.h"
 #include "legoentitypresenter.h"
 #include "legoomni.h"
+#include "legounksavedatawriter.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "mxcompositepresenter.h"
+#include "mxutil.h"
+#include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f7ae0
 int g_modelPresenterConfig = 1;
+
+// GLOBAL: LEGO1 0x10102054
+// STRING: LEGO1 0x10102018
+char* g_autoCreate = "AUTO_CREATE";
+
+// GLOBAL: LEGO1 0x10102078
+// STRING: LEGO1 0x10101fc4
+char* g_dbCreate = "DB_CREATE";
 
 // FUNCTION: LEGO1 0x1000cca0
 void LegoModelPresenter::Destroy()
@@ -25,7 +38,7 @@ void LegoModelPresenter::configureLegoModelPresenter(MxS32 p_modelPresenterConfi
 void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
-	m_unk0x64 = 0;
+	m_roi = NULL;
 	m_addedToView = FALSE;
 	m_criticalSection.Leave();
 
@@ -35,10 +48,10 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // STUB: LEGO1 0x1007f6b0
-undefined4 LegoModelPresenter::LoadModel(MxStreamChunk* p_chunk)
+MxResult LegoModelPresenter::CreateROI(MxStreamChunk* p_chunk)
 {
 	// TODO
-	return 0;
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x10080050
@@ -51,11 +64,9 @@ void LegoModelPresenter::ReadyTickle()
 
 	ParseExtra();
 
-	if (m_unk0x64 != NULL) {
+	if (m_roi != NULL) {
 		if (m_compositePresenter && m_compositePresenter->IsA("LegoEntityPresenter")) {
-			((LegoEntityPresenter*) m_compositePresenter)
-				->GetEntity()
-				->SetROI((LegoROI*) m_unk0x64, m_addedToView, TRUE);
+			((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI((LegoROI*) m_roi, m_addedToView, TRUE);
 			((LegoEntityPresenter*) m_compositePresenter)
 				->GetEntity()
 				->SetFlags(
@@ -73,17 +84,15 @@ void LegoModelPresenter::ReadyTickle()
 
 		if (chunk != NULL && chunk->GetTime() <= m_action->GetElapsedTime()) {
 			chunk = m_subscriber->NextChunk();
-			undefined4 und = LoadModel(chunk);
+			MxResult result = CreateROI(chunk);
 			m_subscriber->DestroyChunk(chunk);
 
-			if (und == 0) {
-				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_unk0x64);
-				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_unk0x64);
+			if (result == SUCCESS) {
+				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
+				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
 
 				if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter")) {
-					((LegoEntityPresenter*) m_compositePresenter)
-						->GetEntity()
-						->SetROI((LegoROI*) m_unk0x64, TRUE, TRUE);
+					((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI((LegoROI*) m_roi, TRUE, TRUE);
 					((LegoEntityPresenter*) m_compositePresenter)
 						->GetEntity()
 						->SetFlags(
@@ -100,8 +109,42 @@ void LegoModelPresenter::ReadyTickle()
 	}
 }
 
-// STUB: LEGO1 0x100801b0
+// FUNCTION: LEGO1 0x100801b0
 void LegoModelPresenter::ParseExtra()
 {
-	// TODO
+	char output[1024];
+
+	MxU16 len = m_action->GetExtraLength();
+	char* extraData = m_action->GetExtraData();
+
+	if (len != 0) {
+		char buffer[1024];
+		output[0] = 0;
+		memcpy(buffer, extraData, len);
+		buffer[len] = 0;
+
+		if (KeyValueStringParse(output, g_autoCreate, buffer) != 0) {
+			char* token = strtok(output, g_parseExtraTokens);
+			if (m_roi == NULL) {
+				m_roi = UnkSaveDataWriter()->FUN_10083500(token, 0);
+				m_addedToView = FALSE;
+			}
+		}
+		else if (KeyValueStringParse(output, g_dbCreate, buffer) != 0 && m_roi == NULL) {
+			LegoWorld* currentWorld = CurrentWorld();
+			list<AutoROI*>& roiList = currentWorld->GetUnknownList0xe0();
+
+			for (list<AutoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
+				if (!strcmpi(((LegoROI*) (*it))->GetUnknown0xe4(), output)) {
+					m_roi = *it;
+					roiList.erase(it);
+
+					m_addedToView = TRUE;
+					VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
+					VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+					break;
+				}
+			}
+		}
+	}
 }
