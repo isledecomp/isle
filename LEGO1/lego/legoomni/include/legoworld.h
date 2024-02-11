@@ -68,6 +68,7 @@ public:
 	inline void SetUnknown0xec(undefined4 p_unk0xec) { m_unk0xec = p_unk0xec; }
 	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
+	inline list<AutoROI*>* GetUnknownList0xe0() { return &m_list0xe0; }
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
