@@ -107,7 +107,7 @@ InfocenterState::InfocenterState()
 
 	m_bricksterDialogue = LegoState::Playlist((MxU32*) g_bricksterDialogue, _countof(g_bricksterDialogue));
 
-	memset(m_buffer, 0, sizeof(m_buffer));
+	memset(m_letters, 0, sizeof(m_letters));
 }
 
 // FUNCTION: LEGO1 0x10071920
@@ -115,10 +115,10 @@ InfocenterState::~InfocenterState()
 {
 	MxS16 i = 0;
 	do {
-		if (GetInfocenterBufferElement(i) != NULL) {
-			delete GetInfocenterBufferElement(i)->GetAction();
-			delete GetInfocenterBufferElement(i);
+		if (GetNameLetter(i) != NULL) {
+			delete GetNameLetter(i)->GetAction();
+			delete GetNameLetter(i);
 		}
 		i++;
-	} while (i < GetInfocenterBufferSize());
+	} while (i < GetMaxNameLength());
 }

@@ -29,8 +29,9 @@ public:
 	// FUNCTION: LEGO1 0x10071830
 	MxBool VTable0x14() override { return FALSE; } // vtable+0x14
 
-	inline MxS16 GetInfocenterBufferSize() { return sizeof(m_buffer) / sizeof(m_buffer[0]); }
-	inline MxStillPresenter* GetInfocenterBufferElement(MxS32 p_index) { return m_buffer[p_index]; }
+	inline MxS16 GetMaxNameLength() { return _countof(m_letters); }
+	inline MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
+	inline MxBool HasRegistered() { return m_letters[0] != NULL; }
 	inline Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	inline Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }
 	inline Playlist& GetReturnDialogue(LegoGameState::Act p_act) { return m_returnDialogue[p_act]; }
@@ -44,13 +45,13 @@ public:
 	// InfocenterState::`scalar deleting destructor'
 
 private:
-	Playlist m_exitDialogueAct1;   // 0x08
-	Playlist m_exitDialogueAct23;  // 0x14
-	Playlist m_returnDialogue[3];  // 0x20
-	Playlist m_leaveDialogue[3];   // 0x44
-	Playlist m_bricksterDialogue;  // 0x68
-	MxU32 m_unk0x74;               // 0x74
-	MxStillPresenter* m_buffer[7]; // 0x78
+	Playlist m_exitDialogueAct1;    // 0x08
+	Playlist m_exitDialogueAct23;   // 0x14
+	Playlist m_returnDialogue[3];   // 0x20
+	Playlist m_leaveDialogue[3];    // 0x44
+	Playlist m_bricksterDialogue;   // 0x68
+	MxU32 m_unk0x74;                // 0x74
+	MxStillPresenter* m_letters[7]; // 0x78
 };
 
 #endif // INFOCENTERSTATE_H
