@@ -58,30 +58,6 @@ MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x10077210
-MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
-{
-	return 0;
-}
-
-// STUB: LEGO1 0x100772d0
-MxLong RegistrationBook::HandleKeyPress(char p_key)
-{
-	return 0;
-}
-
-// STUB: LEGO1 0x100774a0
-MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
-{
-	return 0;
-}
-
-// STUB: LEGO1 0x100781d0
-MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
-{
-	return 0;
-}
-
 // FUNCTION: LEGO1 0x100770e0
 MxLong RegistrationBook::Notify(MxParam& p_param)
 {
@@ -112,6 +88,23 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 		}
 	}
 	return result;
+}
+// STUB: LEGO1 0x10077210
+MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x100772d0
+MxLong RegistrationBook::HandleKeyPress(char p_key)
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x100774a0
+MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
+{
+	return 0;
 }
 
 // STUB: LEGO1 0x10077cc0
@@ -146,6 +139,12 @@ void RegistrationBook::Enable(MxBool p_enable)
 			InputManager()->ClearWorld();
 		}
 	}
+}
+
+// STUB: LEGO1 0x100781d0
+MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
+{
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100783e0
