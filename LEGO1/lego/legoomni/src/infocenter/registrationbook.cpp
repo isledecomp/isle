@@ -5,7 +5,9 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "mxactionnotificationparam.h"
 #include "mxnotificationmanager.h"
+#include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 
@@ -56,11 +58,54 @@ MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x100770e0
+// FUNCTION: LEGO1 0x100770e0
 MxLong RegistrationBook::Notify(MxParam& p_param)
 {
-	// TODO
+	MxLong result = 0;
+	LegoWorld::Notify(p_param);
 
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetType()) {
+		case c_notificationEndAction:
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
+			break;
+		case c_notificationKeyPress:
+			m_unk0xf8 = Timer()->GetTime();
+			result = HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
+			break;
+		case c_notificationButtonDown:
+			m_unk0xf8 = Timer()->GetTime();
+			break;
+		case c_notificationClick:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
+			break;
+		case c_notificationType19:
+			result = HandleNotification19(p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->SwitchArea(LegoGameState::e_infomain);
+			break;
+		}
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x10077210
+MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x100772d0
+MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x100774a0
+MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
+{
 	return 0;
 }
 
@@ -73,7 +118,13 @@ void RegistrationBook::ReadyWorld()
 // STUB: LEGO1 0x10077fd0
 MxResult RegistrationBook::Tickle()
 {
-	// TODO
+	if (!m_worldStarted) {
+		LegoWorld::Tickle();
+	}
+	else {
+		// TODO
+	}
+
 	return SUCCESS;
 }
 
@@ -91,6 +142,12 @@ void RegistrationBook::Enable(MxBool p_enable)
 			InputManager()->ClearWorld();
 		}
 	}
+}
+
+// STUB: LEGO1 0x100781d0
+MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
+{
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100783e0
