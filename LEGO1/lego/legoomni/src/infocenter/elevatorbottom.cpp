@@ -6,15 +6,12 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "legovariables.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
-
-// STRING: LEGO1 0x100f0d34
-// GLOBAL: LEGO1 0x100f3a44
-const char* g_cameraLoc = "CAMERA_LOCATION";
 
 // FUNCTION: LEGO1 0x10017e90
 ElevatorBottom::ElevatorBottom()
@@ -106,7 +103,7 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 			state->SetUnknown1c(1);
 			m_unk0xf8 = LegoGameState::e_unk6;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
-			VariableTable()->SetVariable(g_cameraLoc, "LCAMZI1,90");
+			VariableTable()->SetVariable(g_varCAMERALOCATION, "LCAMZI1,90");
 			result = 1;
 			break;
 		}

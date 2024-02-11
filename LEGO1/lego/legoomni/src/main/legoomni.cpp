@@ -10,6 +10,7 @@
 #include "legosoundmanager.h"
 #include "legounksavedatawriter.h"
 #include "legoutil.h"
+#include "legovariables.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
@@ -532,70 +533,110 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	p_param.CreateFlags().CreateTickleManager(FALSE);
 
 	if (!(m_tickleManager = new MxTickleManager())) {
-		return FAILURE;
+		goto done;
 	}
 
 	if (MxOmni::Create(p_param) != SUCCESS) {
-		return FAILURE;
+		goto done;
 	}
 
-	m_objectFactory = new LegoObjectFactory();
-	if (m_objectFactory == NULL) {
-		return FAILURE;
+	if (!(m_objectFactory = new LegoObjectFactory())) {
+		goto done;
 	}
 
-	if ((m_soundManager = new LegoSoundManager())) {
-		if (m_soundManager->Create(10, 0) != SUCCESS) {
-			delete m_soundManager;
-			m_soundManager = NULL;
-			return FAILURE;
-		}
+	if (!(m_soundManager = new LegoSoundManager()) || m_soundManager->Create(10, 0) != SUCCESS) {
+		delete m_soundManager;
+		m_soundManager = NULL;
+		goto done;
 	}
 
-	if ((m_videoManager = new LegoVideoManager())) {
-		if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
-			delete m_videoManager;
-			m_videoManager = NULL;
-		}
+	if (!(m_videoManager = new LegoVideoManager()) ||
+		m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
+		delete m_videoManager;
+		m_videoManager = NULL;
+		goto done;
 	}
 
-	if ((m_inputMgr = new LegoInputManager())) {
-		if (m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
-			delete m_inputMgr;
-			m_inputMgr = NULL;
-		}
+	if (!(m_inputMgr = new LegoInputManager()) || m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
+		delete m_inputMgr;
+		m_inputMgr = NULL;
+		goto done;
 	}
 
 	m_viewLODListManager = new ViewLODListManager();
 	m_gifManager = new GifManager();
-	// TODO: there is another class here
+	m_gifManager->SetOwnership(FALSE);
+	// FUN_10046c10
+
+	m_saveDataWriter = new LegoUnkSaveDataWriter();
 	m_plantManager = new LegoPlantManager();
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (m_viewLODListManager && m_gifManager && m_worldList && m_plantManager && m_animationManager &&
-		m_buildingManager) {
-		// TODO: initialize a bunch of MxVariables
-		RegisterScripts();
-		FUN_1001a700();
-		// todo: another function call. in legoomni maybe?
-		m_bkgAudioManager = new MxBackgroundAudioManager();
-		if (m_bkgAudioManager != NULL) {
-			m_transitionManager = new MxTransitionManager();
-			if (m_transitionManager != NULL) {
-				if (m_transitionManager->GetDDrawSurfaceFromVideoManager() == SUCCESS) {
-					m_notificationManager->Register(this);
-					SetAppCursor(1);
-					m_gameState->SetCurrentAct(LegoGameState::e_act1);
-					return SUCCESS;
-				}
-			}
-		}
+	if (!m_viewLODListManager || !m_gifManager || !m_worldList || !m_saveDataWriter || !m_plantManager ||
+		!m_animationManager || !m_buildingManager) {
+		goto done;
 	}
 
-	return FAILURE;
+	MxVariable* variable;
+
+	if (!(variable = new VisibilityVariable())) {
+		goto done;
+	}
+	m_variableTable->SetVariable(variable);
+
+	if (!(variable = new CameraLocationVariable())) {
+		goto done;
+	}
+	m_variableTable->SetVariable(variable);
+
+	if (!(variable = new CursorVariable())) {
+		goto done;
+	}
+	m_variableTable->SetVariable(variable);
+
+	if (!(variable = new WhoAmIVariable())) {
+		goto done;
+	}
+	m_variableTable->SetVariable(variable);
+
+	RegisterScripts();
+	FUN_1001a700();
+	result = FUN_1005a5f0();
+
+	if (result != SUCCESS) {
+		goto done;
+	}
+
+	if (!(m_bkgAudioManager = new MxBackgroundAudioManager())) {
+		goto done;
+	}
+
+	if (!(m_transitionManager = new MxTransitionManager())) {
+		goto done;
+	}
+
+	if (m_transitionManager->GetDDrawSurfaceFromVideoManager() != SUCCESS) {
+		goto done;
+	}
+
+	m_notificationManager->Register(this);
+	SetAppCursor(1);
+	m_gameState->SetCurrentAct(LegoGameState::e_act1);
+
+	result = SUCCESS;
+
+done:
+	return result;
+}
+
+// STUB: LEGO1 0x1005a5f0
+MxResult LegoOmni::FUN_1005a5f0()
+{
+	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1005ac90

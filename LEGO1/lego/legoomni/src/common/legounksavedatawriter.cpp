@@ -3,10 +3,17 @@
 #include "legogamestate.h"
 #include "roi/legoroi.h"
 
-DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108);
+DECOMP_SIZE_ASSERT(LegoUnkSaveDataWriter, 0x08)
+DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108)
 
 // GLOBAL: LEGO1 0x10104f20
 LegoSaveDataEntry3 g_saveData3[66];
+
+// STUB: LEGO1 0x10082a20
+LegoUnkSaveDataWriter::LegoUnkSaveDataWriter()
+{
+	// TODO
+}
 
 // STUB: LEGO1 0x100832a0
 void LegoUnkSaveDataWriter::FUN_100832a0()

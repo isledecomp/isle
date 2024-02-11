@@ -1,6 +1,7 @@
 #ifndef LEGOBUILDINGMANAGER_H
 #define LEGOBUILDINGMANAGER_H
 
+#include "decomp.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d6f50
@@ -30,6 +31,8 @@ public:
 
 private:
 	void Init();
+
+	undefined m_unk0x08[0x28]; // 0x08
 };
 
 #endif // LEGOBUILDINGMANAGER_H

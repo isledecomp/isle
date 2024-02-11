@@ -1,5 +1,7 @@
 #include "legoanimationmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
+
 // GLOBAL: LEGO1 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
 

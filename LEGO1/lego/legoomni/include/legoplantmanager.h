@@ -29,6 +29,8 @@ public:
 
 private:
 	void Init();
+
+	undefined m_unk0x08[0x24]; // 0x08
 };
 
 #endif // LEGOPLANTMANAGER_H
