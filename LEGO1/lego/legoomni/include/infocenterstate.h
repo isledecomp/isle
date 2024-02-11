@@ -29,7 +29,7 @@ public:
 	// FUNCTION: LEGO1 0x10071830
 	MxBool VTable0x14() override { return FALSE; } // vtable+0x14
 
-	inline MxS16 GetNameLength() { return _countof(m_letters); }
+	inline MxS16 GetMaxNameLength() { return _countof(m_letters); }
 	inline MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
 	inline MxBool DoesNameExist() { return m_letters[0] != NULL; }
 	inline Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }

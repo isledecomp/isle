@@ -120,5 +120,5 @@ InfocenterState::~InfocenterState()
 			delete GetNameLetter(i);
 		}
 		i++;
-	} while (i < GetNameLength());
+	} while (i < GetMaxNameLength());
 }

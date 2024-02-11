@@ -66,7 +66,7 @@ Infocenter::~Infocenter()
 			m_infocenterState->GetNameLetter(i)->Enable(FALSE);
 		}
 		i++;
-	} while (i < m_infocenterState->GetNameLength());
+	} while (i < m_infocenterState->GetMaxNameLength());
 
 	ControlManager()->Unregister(this);
 
@@ -101,7 +101,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 		}
 
 		MxS16 count, i;
-		for (count = 0; count < m_infocenterState->GetNameLength(); count++) {
+		for (count = 0; count < m_infocenterState->GetMaxNameLength(); count++) {
 			if (m_infocenterState->GetNameLetter(count) == NULL) {
 				break;
 			}
@@ -1375,7 +1375,7 @@ void Infocenter::StartCredits()
 			m_infocenterState->GetNameLetter(i)->Enable(FALSE);
 		}
 		i++;
-	} while (i < m_infocenterState->GetNameLength());
+	} while (i < m_infocenterState->GetMaxNameLength());
 
 	VideoManager()->FUN_1007c520();
 	GetViewManager()->RemoveAll(NULL);
