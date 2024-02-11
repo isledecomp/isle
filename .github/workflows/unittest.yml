@@ -3,9 +3,14 @@ name: Test
 on: [push, pull_request]
 
 jobs:
+  fetch-deps:
+    name: Download original binaries
+    uses: ./.github/workflows/legobin.yml
+
   pytest-win:
     name: 'Python Windows'
     runs-on: windows-latest
+    needs: fetch-deps
 
     steps:
     - uses: actions/checkout@v4
@@ -13,20 +18,6 @@ jobs:
     - name: Restore cached original binaries
       id: cache-original-binaries
       uses: actions/cache/restore@v3
-      with:
-        enableCrossOsArchive: true
-        path: legobin
-        key: legobin
-
-    - name: Download original island binares
-      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
-      run: |
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
-        C:\msys64\usr\bin\wget.exe https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
-
-    - name: Cache original binaries
-      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
-      uses: actions/cache/save@v3
       with:
         enableCrossOsArchive: true
         path: legobin
@@ -45,6 +36,7 @@ jobs:
   pytest-ubuntu:
     name: 'Python Linux'
     runs-on: ubuntu-latest
+    needs: fetch-deps
 
     steps:
     - uses: actions/checkout@v4
@@ -52,20 +44,6 @@ jobs:
     - name: Restore cached original binaries
       id: cache-original-binaries
       uses: actions/cache/restore@v3
-      with:
-        enableCrossOsArchive: true
-        path: legobin
-        key: legobin
-
-    - name: Download original island binares
-      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
-      run: |
-        wget https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
-        wget https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
-
-    - name: Cache original binaries
-      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
-      uses: actions/cache/save@v3
       with:
         enableCrossOsArchive: true
         path: legobin
