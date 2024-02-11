@@ -77,7 +77,7 @@ private:
 	undefined4 m_unk0x2cc;              // 0x2cc
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleKeyPress(char p_key);
+	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleNotification19(MxParam& p_param);
 };

@@ -98,7 +98,7 @@ MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x100772d0
-MxLong RegistrationBook::HandleKeyPress(char p_key)
+MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
 {
 	return 0;
 }
