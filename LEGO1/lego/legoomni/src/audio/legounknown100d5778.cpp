@@ -3,7 +3,7 @@
 #include "legoomni.h"
 #include "legounksavedatawriter.h"
 
-DECOMP_SIZE_ASSERT(LegoUnknown100d5778, 0x30);
+DECOMP_SIZE_ASSERT(LegoUnknown100d5778, 0x30)
 
 // FUNCTION: LEGO1 0x10011630
 LegoUnknown100d5778::LegoUnknown100d5778()
@@ -14,7 +14,7 @@ LegoUnknown100d5778::LegoUnknown100d5778()
 // FUNCTION: LEGO1 0x10011670
 LegoUnknown100d5778::~LegoUnknown100d5778()
 {
-	FUN_10011880();
+	Destroy();
 }
 
 // FUNCTION: LEGO1 0x10011680
@@ -30,9 +30,10 @@ void LegoUnknown100d5778::Init()
 }
 
 // STUB: LEGO1 0x100116a0
-MxResult LegoUnknown100d5778::FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4 p_two, undefined4 p_three)
+MxResult LegoUnknown100d5778::FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4, undefined4 p_unk0x2c)
 {
-	m_unk0x2c = p_three;
+	m_unk0x2c = p_unk0x2c;
+
 	if (MxOmni::IsSound3D()) {
 		p_dsound->QueryInterface(IID_IDirectSoundBuffer, (LPVOID*) &m_dsBuffer);
 		if (m_dsBuffer == NULL) {
@@ -48,7 +49,7 @@ MxResult LegoUnknown100d5778::FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4 p_
 }
 
 // FUNCTION: LEGO1 0x10011880
-void LegoUnknown100d5778::FUN_10011880()
+void LegoUnknown100d5778::Destroy()
 {
 	if (m_dsBuffer) {
 		m_dsBuffer->Release();

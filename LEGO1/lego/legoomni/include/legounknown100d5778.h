@@ -13,9 +13,10 @@ class LegoUnknown100d5778 {
 public:
 	LegoUnknown100d5778();
 	virtual ~LegoUnknown100d5778();
+
 	void Init();
-	MxResult FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4 p_two, undefined4 p_three);
-	void FUN_10011880();
+	MxResult FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4, undefined4 p_unk0x2c);
+	void Destroy();
 	undefined4 FUN_100118e0(LPDIRECTSOUNDBUFFER p_dsBuffer);
 	void FUN_10011ca0();
 

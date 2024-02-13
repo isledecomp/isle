@@ -6,15 +6,16 @@
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
+// SIZE 0x08
 struct Element100d6b4c {
-	Element100d6b4c() : m_sound(NULL), m_name(NULL){};
-	Element100d6b4c(LegoCacheSound* p_sound, const char* p_name) : m_sound(p_sound), m_name(p_name){};
-	Element100d6b4c(LegoCacheSound* p_sound) : m_sound(p_sound), m_name(p_sound->GetString0x48().GetData()){};
+	Element100d6b4c() : m_sound(NULL), m_name(NULL) {}
+	Element100d6b4c(LegoCacheSound* p_sound, const char* p_name) : m_sound(p_sound), m_name(p_name) {}
+	Element100d6b4c(LegoCacheSound* p_sound) : m_sound(p_sound), m_name(p_sound->GetString0x48().GetData()) {}
 
 	// FUNCTION: LEGO1 0x1003d030
 	~Element100d6b4c()
 	{
-		if (m_sound == NULL) {
+		if (m_sound == NULL && m_name != NULL) {
 			delete[] const_cast<char*>(m_name);
 		}
 	}
@@ -25,27 +26,28 @@ struct Element100d6b4c {
 	inline LegoCacheSound* GetSound() const { return m_sound; }
 	inline const char* GetName() const { return m_name; }
 
+	friend struct Set100d6b4cComparator;
+
 private:
-	LegoCacheSound* m_sound;
-	const char* m_name;
+	LegoCacheSound* m_sound; // 0x00
+	const char* m_name;      // 0x04
 };
 
 struct Set100d6b4cComparator {
 	bool operator()(const Element100d6b4c& p_a, const Element100d6b4c& p_b) const
 	{
-		return strcmpi(p_a.GetName(), p_b.GetName()) > 0;
+		return strcmpi(p_a.m_name, p_b.m_name) > 0;
 	}
 };
 
 typedef set<Element100d6b4c, Set100d6b4cComparator> Set100d6b4c;
-
 typedef list<Element100d6b4c> List100d6b4c;
 
 // VTABLE: LEGO1 0x100d6b4c
 // SIZE 0x20
 class LegoUnknown100d6b4c {
 public:
-	LegoUnknown100d6b4c(){};
+	LegoUnknown100d6b4c() {}
 	~LegoUnknown100d6b4c();
 
 	virtual MxResult Tickle(); // vtable+0x00
@@ -57,14 +59,13 @@ public:
 	void FUN_1003dc40(LegoCacheSound** p_und);
 
 private:
-	Set100d6b4c m_set;
-	List100d6b4c m_list;
+	Set100d6b4c m_set;   // 0x04
+	List100d6b4c m_list; // 0x14
 };
 
 // TODO: Function names subject to change.
 
 // clang-format off
-
 // TEMPLATE: LEGO1 0x10029c30
 // _Tree<Element100d6b4c,Element100d6b4c,set<Element100d6b4c,Set100d6b4cComparator,allocator<Element100d6b4c> >::_Kfn,Set100d6b4cComparator,allocator<Element100d6b4c> >::~_Tree<Element100d6b4c,Element100d6b4c,set<Element100d6b4c,Set100d6b4cComparator,allocator<Element100d6b4c> >::_Kfn,Set100d6b4cComparator,allocator<Element100d6b4c> >
 
@@ -112,7 +113,6 @@ private:
 
 // GLOBAL: LEGO1 0x100f31cc
 // _Tree<Element100d6b4c,Element100d6b4c,set<Element100d6b4c,Set100d6b4cComparator,allocator<Element100d6b4c> >::_Kfn,Set100d6b4cComparator,allocator<Element100d6b4c> >::_Nil
-
 // clang-format on
 
 #endif // LEGOUNKNOWN100D6B4C_H

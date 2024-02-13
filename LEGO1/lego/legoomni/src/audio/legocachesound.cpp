@@ -16,17 +16,17 @@ LegoCacheSound::LegoCacheSound()
 LegoCacheSound::~LegoCacheSound()
 {
 	// TODO
-	FUN_10006920();
+	Destroy();
 }
 
 // FUNCTION: LEGO1 0x100066d0
 void LegoCacheSound::Init()
 {
 	m_dsBuffer = NULL;
-	m_unk0x40 = 0;
+	m_unk0x40 = NULL;
 	m_unk0x58 = 0;
 	memset(&m_unk0x59, 0, sizeof(m_unk0x59));
-	m_unk0x6a = 0;
+	m_unk0x6a = FALSE;
 	m_unk0x70 = 0;
 	m_isLooping = TRUE;
 	m_unk0x6c = 79;
@@ -56,7 +56,7 @@ MxResult LegoCacheSound::FUN_10006710()
 }
 
 // FUNCTION: LEGO1 0x10006920
-void LegoCacheSound::FUN_10006920()
+void LegoCacheSound::Destroy()
 {
 	if (m_dsBuffer) {
 		m_dsBuffer->Stop();
@@ -76,7 +76,7 @@ LegoCacheSound* LegoCacheSound::FUN_10006960()
 }
 
 // STUB: LEGO1 0x10006a30
-MxResult LegoCacheSound::FUN_10006a30(char* p_str, MxBool p_unused)
+MxResult LegoCacheSound::FUN_10006a30(char* p_str, MxBool)
 {
 	// TODO
 	// gets param2 from FUN_1003db10
@@ -98,7 +98,7 @@ void LegoCacheSound::FUN_10006b80()
 	}
 
 	m_unk0x58 = 0;
-	m_unk0x6a = 0;
+	m_unk0x6a = FALSE;
 
 	m_unk0x10.FUN_10011ca0();
 	if (m_string0x74.GetLength() != 0) {
@@ -110,13 +110,14 @@ void LegoCacheSound::FUN_10006b80()
 void LegoCacheSound::FUN_10006be0()
 {
 	if (!m_isLooping) {
-
 		DWORD dwStatus;
 		m_dsBuffer->GetStatus(&dwStatus);
+
 		if (m_unk0x70) {
 			if (dwStatus == 0) {
 				return;
 			}
+
 			m_unk0x70 = 0;
 		}
 
@@ -139,11 +140,11 @@ void LegoCacheSound::FUN_10006be0()
 			}
 
 			m_dsBuffer->Stop();
-			m_unk0x6a = 1;
+			m_unk0x6a = TRUE;
 		}
 		else if (m_unk0x6a) {
 			m_dsBuffer->Play(0, 0, m_isLooping);
-			m_unk0x6a = 0;
+			m_unk0x6a = FALSE;
 		}
 	}
 }

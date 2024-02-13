@@ -3,7 +3,8 @@
 #include "legoomni.h"
 #include "legoworld.h"
 
-DECOMP_SIZE_ASSERT(LegoUnknown100d6b4c, 0x20);
+DECOMP_SIZE_ASSERT(Element100d6b4c, 0x08)
+DECOMP_SIZE_ASSERT(LegoUnknown100d6b4c, 0x20)
 
 // FUNCTION: LEGO1 0x1003cf20
 LegoUnknown100d6b4c::~LegoUnknown100d6b4c()
@@ -44,18 +45,16 @@ MxResult LegoUnknown100d6b4c::Tickle()
 	List100d6b4c::iterator listIter = m_list.begin();
 	while (listIter != m_list.end()) {
 		LegoCacheSound* sound = (*listIter).GetSound();
+
 		if (sound->GetUnk0x58()) {
 			sound->FUN_10006be0();
 			listIter++;
-			continue;
 		}
-		sound->FUN_10006b80();
-
-		List100d6b4c::iterator temp = listIter;
-		listIter++;
-
-		m_list.erase(temp);
-		delete sound;
+		else {
+			sound->FUN_10006b80();
+			m_list.erase(listIter++);
+			delete sound;
+		}
 	}
 
 	return SUCCESS;
@@ -89,9 +88,10 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d290(LegoCacheSound* p_sound)
 			m_list.push_back(Element100d6b4c(p_sound));
 			return p_sound;
 		}
-
-		delete p_sound;
-		return sound;
+		else {
+			delete p_sound;
+			return sound;
+		}
 	}
 
 	m_set.insert(Element100d6b4c(p_sound));
@@ -119,6 +119,7 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003db10(LegoCacheSound* p_one, char* p
 
 	if (p_one->GetUnk0x58()) {
 		LegoCacheSound* result = p_one->FUN_10006960();
+
 		if (result) {
 			LegoCacheSound* t = FUN_1003d290(result);
 			t->FUN_10006a30(p_two, p_three);
