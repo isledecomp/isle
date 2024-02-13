@@ -7,13 +7,14 @@
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
 
+// GLOBAL: LEGO1 0x100f0160
 undefined4 g_unk0x100f0160;
 
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
 	m_unk0xf8 = 0;
-	m_gasStationState = NULL;
+	m_state = NULL;
 	m_unk0xfc = 0;
 	m_unk0x108 = 0;
 	m_unk0x104 = 0;
@@ -49,22 +50,26 @@ GasStation::~GasStation()
 // FUNCTION: LEGO1 0x10004990
 MxResult GasStation::Create(MxDSAction& p_dsAction)
 {
-	MxResult ret = LegoWorld::Create(p_dsAction);
-	if (ret == SUCCESS) {
+	MxResult result = LegoWorld::Create(p_dsAction);
+	if (result == SUCCESS) {
 		InputManager()->SetWorld(this);
 		ControlManager()->Register(this);
 	}
 
 	InputManager()->SetCamera(NULL);
 
-	m_gasStationState = (GasStationState*) GameState()->GetState("GasStationState");
-	if (!m_gasStationState) {
-		m_gasStationState = (GasStationState*) GameState()->CreateState("GasStationState");
-		m_gasStationState->SetUnknown0x14(1);
+	m_state = (GasStationState*) GameState()->GetState("GasStationState");
+	if (!m_state) {
+		m_state = (GasStationState*) GameState()->CreateState("GasStationState");
+		m_state->GetUnknown0x14().SetUnknown0x00(1);
 	}
 	else {
-		if (m_gasStationState->GetUnknown0x14() != 4) {
-			m_gasStationState->SetUnknown0x14(3);
+		GasStationState::Unknown0x14& unk0x14 = m_state->GetUnknown0x14();
+		if (unk0x14.GetUnknown0x00() == 4) {
+			unk0x14.SetUnknown0x00(4);
+		}
+		else {
+			unk0x14.SetUnknown0x00(3);
 		}
 	}
 
@@ -73,7 +78,7 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 
 	InputManager()->Register(this);
 	SetIsWorldActive(FALSE);
-	return ret;
+	return result;
 }
 
 // STUB: LEGO1 0x10004a60
