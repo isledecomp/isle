@@ -21,6 +21,7 @@ public:
 
 	inline MxS8 Compare(const MxString& p_str) const { return strcmp(m_data, p_str.m_data); }
 	inline const char* GetData() const { return m_data; }
+	inline const MxU16 GetLength() const { return m_length; }
 
 	// SYNTHETIC: LEGO1 0x100ae280
 	// MxString::`scalar deleting destructor'
