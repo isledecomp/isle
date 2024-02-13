@@ -2,6 +2,7 @@
 #define GASSTATION_H
 
 #include "decomp.h"
+#include "gasstationstate.h"
 #include "legoworld.h"
 #include "radio.h"
 
@@ -39,18 +40,18 @@ public:
 	// GasStation::`scalar deleting destructor'
 
 private:
-	undefined2 m_unk0xf8;  // 0xf8
-	undefined2 m_unk0xfa;  // 0xfa
-	undefined4 m_unk0xfc;  // 0xfc
-	undefined4 m_unk0x100; // 0x100
-	undefined2 m_unk0x104; // 0x104
-	undefined2 m_unk0x106; // 0x106
-	undefined4 m_unk0x108; // 0x108
-	undefined4 m_unk0x10c; // 0x10c
-	undefined4 m_unk0x110; // 0x110
-	undefined m_unk0x114;  // 0x114
-	undefined m_unk0x115;  // 0x115
-	Radio m_radio;         // 0x118
+	undefined2 m_unk0xf8;     // 0xf8
+	undefined2 m_unk0xfa;     // 0xfa
+	undefined4 m_unk0xfc;     // 0xfc
+	GasStationState* m_state; // 0x100
+	undefined2 m_unk0x104;    // 0x104
+	undefined2 m_unk0x106;    // 0x106
+	undefined4 m_unk0x108;    // 0x108
+	undefined4 m_unk0x10c;    // 0x10c
+	undefined4 m_unk0x110;    // 0x110
+	undefined m_unk0x114;     // 0x114
+	undefined m_unk0x115;     // 0x115
+	Radio m_radio;            // 0x118
 };
 
 #endif // GASSTATION_H
