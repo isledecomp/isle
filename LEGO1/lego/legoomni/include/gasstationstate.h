@@ -27,6 +27,9 @@ public:
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'
 
+	inline undefined4 GetUnknown0x14() { return m_unk0x14; }
+	inline void SetUnknown0x14(undefined4 p_unk0x14) { m_unk0x14 = p_unk0x14; }
+
 private:
 	undefined4 m_unk0x08[3]; // 0x08
 	undefined4 m_unk0x14;    // 0x14
