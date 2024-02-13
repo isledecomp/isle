@@ -83,3 +83,9 @@ void LegoUnkSaveDataWriter::FUN_10083db0(LegoROI* p_roi)
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10083f10
+void LegoUnkSaveDataWriter::FUN_10083f10(LegoROI* p_roi)
+{
+	// TODO
+}

@@ -2,6 +2,8 @@
 
 #include "mxomni.h"
 
+DECOMP_SIZE_ASSERT(Lego3DWavePresenter, 0xa0)
+
 // FUNCTION: LEGO1 0x1004a7c0
 MxResult Lego3DWavePresenter::AddToManager()
 {
