@@ -24,17 +24,20 @@ JukeBoxEntity::~JukeBoxEntity()
 // FUNCTION: LEGO1 0x10085e40
 MxLong JukeBoxEntity::Notify(MxParam& p_param)
 {
-	if (((MxNotificationParam&) p_param).GetType() == 0xb) {
+	if (((MxNotificationParam&) p_param).GetType() == c_notificationType11) {
 		if (!FUN_1003ef60()) {
 			return 1;
 		}
+
 		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
 			CurrentVehicle()->VTable0xe4();
 		}
+
 		((Isle*) FindWorld(*g_isleScript, 0))->SetUnknown13c(0x35);
 		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -43,9 +46,10 @@ void JukeBoxEntity::StartAction()
 {
 	MxDSAction action;
 	BackgroundAudioManager()->Stop();
-	JukeBoxState* jbs = (JukeBoxState*) GameState()->GetState("JukeBoxState");
-	jbs->SetActive(TRUE);
-	switch (jbs->GetState()) {
+	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
+	state->SetActive(TRUE);
+
+	switch (state->GetState()) {
 	case 0:
 		InvokeAction(Extra::e_start, *g_isleScript, 0x319, NULL);
 		GameState()->SetUnknown0x41c(0x37);
@@ -71,46 +75,51 @@ void JukeBoxEntity::StartAction()
 		GameState()->SetUnknown0x41c(0x3c);
 		break;
 	}
+
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetObjectId(GameState()->GetUnknown0x41c());
-	m_enableBGA = BackgroundAudioManager()->GetMusicEnabled();
-	if (!m_enableBGA) {
+	m_audioEnabled = BackgroundAudioManager()->GetEnabled();
+
+	if (!m_audioEnabled) {
 		BackgroundAudioManager()->Enable(TRUE);
 	}
+
 	BackgroundAudioManager()->PlayMusic(action, 5, 4);
 }
 
 // FUNCTION: LEGO1 0x100860f0
 void JukeBoxEntity::StopAction(MxU32 p_state)
 {
-	JukeBoxState* jbs = (JukeBoxState*) GameState()->GetState("JukeBoxState");
-	if (jbs && jbs->IsActive()) {
+	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
+
+	if (state && state->IsActive()) {
 		switch (p_state) {
 		case 0x37:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x319, NULL);
 			break;
 		case 0x38:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x31e, NULL);
 			break;
 		case 0x39:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x31b, NULL);
 			break;
 		case 0x3a:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x31a, NULL);
 			break;
 		case 0x3b:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x31f, NULL);
 			break;
 		case 0x3c:
-			jbs->SetActive(FALSE);
+			state->SetActive(FALSE);
 			InvokeAction(Extra::e_stop, *g_isleScript, 0x31c, NULL);
 			break;
 		}
+
 		BackgroundAudioManager()->Enable(IsBackgroundAudioEnabled());
 	}
 }

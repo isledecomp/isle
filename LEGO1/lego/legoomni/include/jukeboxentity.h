@@ -28,13 +28,13 @@ public:
 	void StartAction();
 	void StopAction(MxU32 p_state);
 
-	inline MxBool IsBackgroundAudioEnabled() { return m_enableBGA; }
+	inline MxBool IsBackgroundAudioEnabled() { return m_audioEnabled; }
 
 	// SYNTHETIC: LEGO1 0x10085db0
 	// JukeBoxEntity::`scalar deleting destructor'
 
 protected:
-	MxBool m_enableBGA; // 0x68
+	MxBool m_audioEnabled; // 0x68
 };
 
 #endif // JUKEBOXENTITY_H
