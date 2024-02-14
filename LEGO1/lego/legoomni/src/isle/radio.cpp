@@ -61,8 +61,8 @@ void Radio::Play()
 		action.SetAtomId(*g_jukeboxScript);
 		action.SetLoopCount(1);
 
-		m_bgAudioPreviouslyEnabled = BackgroundAudioManager()->GetMusicEnabled();
-		if (!m_bgAudioPreviouslyEnabled) {
+		m_audioEnabled = BackgroundAudioManager()->GetEnabled();
+		if (!m_audioEnabled) {
 			BackgroundAudioManager()->Enable(TRUE);
 		}
 
@@ -84,7 +84,7 @@ void Radio::Stop()
 		}
 
 		BackgroundAudioManager()->Stop();
-		BackgroundAudioManager()->Enable(m_bgAudioPreviouslyEnabled);
+		BackgroundAudioManager()->Enable(m_audioEnabled);
 		m_state->SetActive(FALSE);
 	}
 }

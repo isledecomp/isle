@@ -21,7 +21,7 @@ MxBackgroundAudioManager::MxBackgroundAudioManager()
 	m_unk0x140 = 0;
 	m_targetVolume = 0;
 	m_unk0x148 = 0;
-	m_musicEnabled = FALSE;
+	m_enabled = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1007ec20
@@ -39,7 +39,7 @@ MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyM
 
 	if (result == SUCCESS) {
 		TickleManager()->RegisterClient(this, p_frequencyMS);
-		m_musicEnabled = TRUE;
+		m_enabled = TRUE;
 	}
 
 	return result;
@@ -71,7 +71,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 		ds.SetUnknown24(-2);
 		DeleteObject(ds);
 		Streamer()->Close(m_script.GetInternal());
-		m_musicEnabled = FALSE;
+		m_enabled = FALSE;
 	}
 }
 
@@ -237,9 +237,10 @@ void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 // FUNCTION: LEGO1 0x1007f2f0
 MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c)
 {
-	if (!m_musicEnabled) {
+	if (!m_enabled) {
 		return SUCCESS;
 	}
+
 	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId()) {
 		MxDSAction action;
 		action.SetAtomId(GetCurrentAction().GetAtomId());
@@ -261,8 +262,10 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 			m_unk0x13c = p_unk0x13c;
 			m_unk0x140 = p_unk0x140;
 		}
+
 		return result;
 	}
+
 	return FAILURE;
 }
 
@@ -317,8 +320,9 @@ void MxBackgroundAudioManager::RaiseVolume()
 // FUNCTION: LEGO1 0x1007f5f0
 void MxBackgroundAudioManager::Enable(MxBool p_enable)
 {
-	if (this->m_musicEnabled != p_enable) {
-		this->m_musicEnabled = p_enable;
+	if (this->m_enabled != p_enable) {
+		this->m_enabled = p_enable;
+
 		if (!p_enable) {
 			Stop();
 		}
