@@ -1,20 +1,116 @@
 #include "jukeboxentity.h"
 
-// STUB: LEGO1 0x10085bc0
+#include "isle.h"
+#include "islepathactor.h"
+#include "jukeboxstate.h"
+#include "legogamestate.h"
+#include "legoutil.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxnotificationmanager.h"
+#include "mxtransitionmanager.h"
+
+// FUNCTION: LEGO1 0x10085bc0
 JukeBoxEntity::JukeBoxEntity()
 {
-	// TODO
+	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10085dd0
+// FUNCTION: LEGO1 0x10085dd0
 JukeBoxEntity::~JukeBoxEntity()
 {
-	// TODO
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10085e40
+// FUNCTION: LEGO1 0x10085e40
 MxLong JukeBoxEntity::Notify(MxParam& p_param)
 {
-	// TODO
+	if (((MxNotificationParam&) p_param).GetType() == 0xb) {
+		if (!FUN_1003ef60()) {
+			return 1;
+		}
+		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
+			CurrentVehicle()->VTable0xe4();
+		}
+		((Isle*) FindWorld(*g_isleScript, 0))->SetUnknown13c(0x35);
+		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		return 1;
+	}
 	return 0;
+}
+
+// FUNCTION: LEGO1 0x10085ed0
+void JukeBoxEntity::StartAction()
+{
+	MxDSAction action;
+	BackgroundAudioManager()->Stop();
+	JukeBoxState* jbs = (JukeBoxState*) GameState()->GetState("JukeBoxState");
+	jbs->SetActive(TRUE);
+	switch (jbs->GetState()) {
+	case 0:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x319, NULL);
+		GameState()->SetUnknown0x41c(0x37);
+		break;
+	case 1:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x31e, NULL);
+		GameState()->SetUnknown0x41c(0x38);
+		break;
+	case 2:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x31b, NULL);
+		GameState()->SetUnknown0x41c(0x39);
+		break;
+	case 3:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x31a, NULL);
+		GameState()->SetUnknown0x41c(0x3a);
+		break;
+	case 4:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x31f, NULL);
+		GameState()->SetUnknown0x41c(0x3b);
+		break;
+	case 5:
+		InvokeAction(Extra::e_start, *g_isleScript, 0x31c, NULL);
+		GameState()->SetUnknown0x41c(0x3c);
+		break;
+	}
+	action.SetAtomId(*g_jukeboxScript);
+	action.SetObjectId(GameState()->GetUnknown0x41c());
+	m_enableBGA = BackgroundAudioManager()->GetMusicEnabled();
+	if (!m_enableBGA) {
+		BackgroundAudioManager()->Enable(TRUE);
+	}
+	BackgroundAudioManager()->PlayMusic(action, 5, 4);
+}
+
+// FUNCTION: LEGO1 0x100860f0
+void JukeBoxEntity::StopAction(MxU32 p_state)
+{
+	JukeBoxState* jbs = (JukeBoxState*) GameState()->GetState("JukeBoxState");
+	if (jbs && jbs->IsActive()) {
+		switch (p_state) {
+		case 0x37:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x319, NULL);
+			break;
+		case 0x38:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x31e, NULL);
+			break;
+		case 0x39:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x31b, NULL);
+			break;
+		case 0x3a:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x31a, NULL);
+			break;
+		case 0x3b:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x31f, NULL);
+			break;
+		case 0x3c:
+			jbs->SetActive(FALSE);
+			InvokeAction(Extra::e_stop, *g_isleScript, 0x31c, NULL);
+			break;
+		}
+		BackgroundAudioManager()->Enable(IsBackgroundAudioEnabled());
+	}
 }

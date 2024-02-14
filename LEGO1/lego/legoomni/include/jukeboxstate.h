@@ -22,8 +22,16 @@ public:
 
 	MxBool VTable0x14() override; // vtable+0x14
 
+	inline MxU32 IsActive() { return m_active; }
+	inline void SetActive(MxBool p_active) { m_active = p_active; }
+	inline MxU32 GetState() { return m_state; }
+
 	// SYNTHETIC: LEGO1 0x1000f3d0
 	// JukeBoxState::`scalar deleting destructor'
+
+protected:
+	MxU32 m_state;  // 0x8
+	MxU32 m_active; // 0xc
 };
 
 #endif // JUKEBOXSTATE_H
