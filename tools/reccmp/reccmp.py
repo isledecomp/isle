@@ -95,6 +95,10 @@ def print_match_verbose(match, show_both_addrs: bool = False, is_plain: bool = F
     else:
         addrs = hex(match.orig_addr)
 
+    if match.is_stub:
+        print(f"{addrs}: {match.name} is a stub. No diff.")
+        return
+
     if match.effective_ratio == 1.0:
         ok_text = (
             "OK!"
@@ -125,7 +129,10 @@ def print_match_oneline(match, show_both_addrs: bool = False, is_plain: bool = F
     else:
         addrs = hex(match.orig_addr)
 
-    print(f"  {match.name} ({addrs}) is {percenttext} similar to the original")
+    if match.is_stub:
+        print(f"  {match.name} ({addrs}) is a stub.")
+    else:
+        print(f"  {match.name} ({addrs}) is {percenttext} similar to the original")
 
 
 def parse_args() -> argparse.Namespace:
@@ -179,6 +186,11 @@ def parse_args() -> argparse.Namespace:
         "--print-rec-addr",
         action="store_true",
         help="Print addresses of recompiled functions too",
+    )
+    parser.add_argument(
+        "--silent",
+        action="store_true",
+        help="Don't display text summary of matches",
     )
 
     parser.set_defaults(loglevel=logging.INFO)
@@ -244,25 +256,31 @@ def main():
         htmlinsert = []
 
         for match in isle_compare.compare_all():
-            print_match_oneline(
-                match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
-            )
+            if not args.silent:
+                print_match_oneline(
+                    match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
+                )
 
-            if match.match_type == SymbolType.FUNCTION:
+            if match.match_type == SymbolType.FUNCTION and not match.is_stub:
                 function_count += 1
                 total_accuracy += match.ratio
                 total_effective_accuracy += match.effective_ratio
 
             # If html, record the diffs to an HTML file
             if args.html is not None:
-                htmlinsert.append(
-                    {
-                        "address": f"0x{match.orig_addr:x}",
-                        "name": match.name,
-                        "matching": match.effective_ratio,
-                        "diff": "\n".join(match.udiff),
-                    }
-                )
+                html_obj = {
+                    "address": f"0x{match.orig_addr:x}",
+                    "name": match.name,
+                    "matching": match.effective_ratio,
+                }
+
+                if match.udiff is not None:
+                    html_obj["diff"] = "\n".join(match.udiff)
+
+                if match.is_stub:
+                    html_obj["stub"] = True
+
+                htmlinsert.append(html_obj)
 
         ## Generate files and show summary.
 

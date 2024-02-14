@@ -4,6 +4,9 @@ import colorama
 
 
 def print_diff(udiff, plain):
+    if udiff is None:
+        return False
+
     has_diff = False
     for line in udiff:
         has_diff = True
