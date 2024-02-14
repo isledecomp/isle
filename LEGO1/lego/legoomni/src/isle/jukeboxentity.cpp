@@ -78,8 +78,8 @@ void JukeBoxEntity::StartAction()
 
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetObjectId(GameState()->GetUnknown0x41c());
-	m_audioEnabled = BackgroundAudioManager()->GetEnabled();
 
+	m_audioEnabled = BackgroundAudioManager()->GetEnabled();
 	if (!m_audioEnabled) {
 		BackgroundAudioManager()->Enable(TRUE);
 	}
