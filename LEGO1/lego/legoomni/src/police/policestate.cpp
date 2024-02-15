@@ -58,10 +58,12 @@ void PoliceState::FUN_1005ea40()
 																		   : Police::PoliceScript::c_lauraAnim;
 	}
 
-	MxDSAction action;
-	action.SetObjectId(policeScript);
-	action.SetAtomId(*g_policeScript);
-	Start(&action);
+	{
+		MxDSAction action;
+		action.SetObjectId(policeScript);
+		action.SetAtomId(*g_policeScript);
+		Start(&action);
+	}
 
 	m_unk0x0c = 1;
 }
