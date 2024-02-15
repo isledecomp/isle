@@ -6,6 +6,7 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxnotificationmanager.h"
+#include "policestate.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)
 
@@ -123,7 +124,7 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 	MxLong result = 0;
 
 	if (p_param.GetKey() == ' ' && m_policeState->GetUnknown0x0c() == 1) {
-		DeleteObjects(&m_atom, PoliceScript::c_nickAnim, PoliceScript::c_lauraAnim);
+		DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
 		m_policeState->SetUnknown0x0c(0);
 		return 1;
 	}

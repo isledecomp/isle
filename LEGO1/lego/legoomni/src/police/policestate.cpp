@@ -14,7 +14,7 @@ DECOMP_SIZE_ASSERT(PoliceState, 0x10)
 PoliceState::PoliceState()
 {
 	m_unk0x0c = 0;
-	m_action = (rand() % 2 == 0) ? Police::PoliceScript::c_lauraAnim : Police::PoliceScript::c_nickAnim;
+	m_policeScript = (rand() % 2 == 0) ? Police::PoliceScript::c_lauraAnim : Police::PoliceScript::c_nickAnim;
 }
 
 // FUNCTION: LEGO1 0x1005e990
@@ -25,11 +25,11 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 	}
 
 	if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_action, sizeof(m_action));
+		p_legoFile->Read(&m_policeScript, sizeof(m_policeScript));
 	}
 	else {
-		undefined4 unk0x08 = m_action;
-		p_legoFile->Write(&unk0x08, sizeof(m_action));
+		undefined4 unk0x08 = m_policeScript;
+		p_legoFile->Write(&unk0x08, sizeof(m_policeScript));
 	}
 
 	return SUCCESS;
@@ -38,27 +38,28 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 // FUNCTION: LEGO1 0x1005ea40
 void PoliceState::FUN_1005ea40()
 {
-	MxS32 actionId;
+	Police::PoliceScript policeScript;
 
 	if (m_unk0x0c == 1)
 		return;
+
 	switch (CurrentVehicle()->VTable0x60()) {
 	case 4:
-		actionId = Police::PoliceScript::c_lauraAnim;
+		policeScript = Police::PoliceScript::c_lauraAnim;
+		m_policeScript = policeScript;
 		break;
 	case 5:
-		actionId = Police::PoliceScript::c_nickAnim;
+		policeScript = Police::PoliceScript::c_nickAnim;
+		m_policeScript = policeScript;
 		break;
 	default:
-		actionId = m_action;
-		m_action = m_action == Police::PoliceScript::c_lauraAnim ? Police::PoliceScript::c_nickAnim
-																 : Police::PoliceScript::c_lauraAnim;
-		goto playAction;
+		policeScript = m_policeScript;
+		m_policeScript = m_policeScript == Police::PoliceScript::c_lauraAnim ? Police::PoliceScript::c_nickAnim
+																			 : Police::PoliceScript::c_lauraAnim;
 	}
-	m_action = actionId;
-playAction:
+
 	MxDSAction action;
-	action.SetObjectId(actionId);
+	action.SetObjectId(policeScript);
 	action.SetAtomId(*g_policeScript);
 	Start(&action);
 	m_unk0x0c = 1;

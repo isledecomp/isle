@@ -5,8 +5,9 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxdsaction.h"
-#include "policestate.h"
 #include "radio.h"
+
+class PoliceState;
 
 // VTABLE: LEGO1 0x100d8a80
 // SIZE 0x110
