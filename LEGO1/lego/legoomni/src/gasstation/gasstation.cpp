@@ -103,7 +103,6 @@ void GasStation::Enable(MxBool p_enable)
 	if (p_enable) {
 		InputManager()->SetWorld(this);
 		InputManager()->SetCamera(NULL);
-		return;
 	}
 	else {
 		if (InputManager()->GetWorld() == this) {

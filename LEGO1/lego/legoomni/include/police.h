@@ -5,14 +5,20 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxdsaction.h"
-#include "policestate.h"
 #include "radio.h"
+
+class PoliceState;
 
 // VTABLE: LEGO1 0x100d8a80
 // SIZE 0x110
 // Radio at 0xf8
 class Police : public LegoWorld {
 public:
+	enum PoliceScript {
+		c_nickAnim = 500,
+		c_lauraAnim = 501,
+	};
+
 	Police();
 	~Police() override; // vtable+0x00
 
