@@ -40,8 +40,9 @@ void PoliceState::FUN_1005ea40()
 {
 	Police::PoliceScript policeScript;
 
-	if (m_unk0x0c == 1)
+	if (m_unk0x0c == 1) {
 		return;
+	}
 
 	switch (CurrentVehicle()->VTable0x60()) {
 	case 4:
