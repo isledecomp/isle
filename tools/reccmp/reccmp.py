@@ -5,11 +5,14 @@ import base64
 import json
 import logging
 import os
+from datetime import datetime
 
 from isledecomp import (
     Bin,
     get_file_in_script_dir,
     print_diff,
+    diff_json,
+    percent_string,
 )
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.types import SymbolType
@@ -17,6 +20,31 @@ from pystache import Renderer
 import colorama
 
 colorama.init()
+
+
+def gen_json(json_file: str, orig_file: str, data):
+    """Create a JSON file that contains the comparison summary"""
+
+    # If the structure of the JSON file ever changes, we would run into a problem
+    # reading an older format file in the CI action. Mark which version we are
+    # generating so we could potentially address this down the road.
+    json_format_version = 1
+
+    # Remove the diff field
+    reduced_data = [
+        {key: value for (key, value) in obj.items() if key != "diff"} for obj in data
+    ]
+
+    with open(json_file, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "file": os.path.basename(orig_file).lower(),
+                "format": json_format_version,
+                "timestamp": datetime.now().timestamp(),
+                "data": reduced_data,
+            },
+            f,
+        )
 
 
 def gen_html(html_file, data):
@@ -49,40 +77,6 @@ def gen_svg(svg_file, name_svg, icon, svg_implemented_funcs, total_funcs, raw_ac
     )
     with open(svg_file, "w", encoding="utf-8") as svgfile:
         svgfile.write(output_data)
-
-
-def get_percent_color(value: float) -> str:
-    """Return colorama ANSI escape character for the given decimal value."""
-    if value == 1.0:
-        return colorama.Fore.GREEN
-    if value > 0.8:
-        return colorama.Fore.YELLOW
-
-    return colorama.Fore.RED
-
-
-def percent_string(
-    ratio: float, is_effective: bool = False, is_plain: bool = False
-) -> str:
-    """Helper to construct a percentage string from the given ratio.
-    If is_effective (i.e. effective match), indicate that with the asterisk.
-    If is_plain, don't use colorama ANSI codes."""
-
-    percenttext = f"{(ratio * 100):.2f}%"
-    effective_star = "*" if is_effective else ""
-
-    if is_plain:
-        return percenttext + effective_star
-
-    return "".join(
-        [
-            get_percent_color(ratio),
-            percenttext,
-            colorama.Fore.RED if is_effective else "",
-            effective_star,
-            colorama.Style.RESET_ALL,
-        ]
-    )
 
 
 def print_match_verbose(match, show_both_addrs: bool = False, is_plain: bool = False):
@@ -168,6 +162,16 @@ def parse_args() -> argparse.Namespace:
         metavar="<offset>",
         type=virtual_address,
         help="Print assembly diff for specific function (original file's offset)",
+    )
+    parser.add_argument(
+        "--json",
+        metavar="<file>",
+        help="Generate JSON file with match summary",
+    )
+    parser.add_argument(
+        "--diff",
+        metavar="<file>",
+        help="Diff against summary in JSON file",
     )
     parser.add_argument(
         "--html",
@@ -256,7 +260,7 @@ def main():
         htmlinsert = []
 
         for match in isle_compare.compare_all():
-            if not args.silent:
+            if not args.silent and args.diff is None:
                 print_match_oneline(
                     match, show_both_addrs=args.print_rec_addr, is_plain=args.no_color
                 )
@@ -267,22 +271,41 @@ def main():
                 total_effective_accuracy += match.effective_ratio
 
             # If html, record the diffs to an HTML file
-            if args.html is not None:
-                html_obj = {
-                    "address": f"0x{match.orig_addr:x}",
-                    "name": match.name,
-                    "matching": match.effective_ratio,
-                }
+            html_obj = {
+                "address": f"0x{match.orig_addr:x}",
+                "recomp": f"0x{match.recomp_addr:x}",
+                "name": match.name,
+                "matching": match.effective_ratio,
+            }
 
-                if match.udiff is not None:
-                    html_obj["diff"] = "\n".join(match.udiff)
+            if match.is_effective_match:
+                html_obj["effective"] = True
 
-                if match.is_stub:
-                    html_obj["stub"] = True
+            if match.udiff is not None:
+                html_obj["diff"] = "\n".join(match.udiff)
 
-                htmlinsert.append(html_obj)
+            if match.is_stub:
+                html_obj["stub"] = True
+
+            htmlinsert.append(html_obj)
+
+        # Compare with saved diff report.
+        if args.diff is not None:
+            with open(args.diff, "r", encoding="utf-8") as f:
+                saved_data = json.load(f)
+
+                diff_json(
+                    saved_data,
+                    htmlinsert,
+                    args.original,
+                    show_both_addrs=args.print_rec_addr,
+                    is_plain=args.no_color,
+                )
 
         ## Generate files and show summary.
+
+        if args.json is not None:
+            gen_json(args.json, args.original, htmlinsert)
 
         if args.html is not None:
             gen_html(args.html, json.dumps(htmlinsert))
