@@ -28,8 +28,8 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 		p_legoFile->Read(&m_policeScript, sizeof(m_policeScript));
 	}
 	else {
-		undefined4 unk0x08 = m_policeScript;
-		p_legoFile->Write(&unk0x08, sizeof(m_policeScript));
+		Police::PoliceScript policeScript = m_policeScript;
+		p_legoFile->Write(&policeScript, sizeof(m_policeScript));
 	}
 
 	return SUCCESS;
