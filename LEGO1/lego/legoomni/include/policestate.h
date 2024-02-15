@@ -32,8 +32,10 @@ public:
 	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
 	inline void SetUnknown0x0c(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
+	void FUN_1005ea40();
+
 private:
-	undefined4 m_unk0x08; // 0x08
+	undefined4 m_action;  // 0x08
 	undefined4 m_unk0x0c; // 0x0c
 };
 

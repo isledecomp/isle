@@ -123,7 +123,7 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 	MxLong result = 0;
 
 	if (p_param.GetKey() == ' ' && m_policeState->GetUnknown0x0c() == 1) {
-		DeleteObjects(&m_atom, 500, 501);
+		DeleteObjects(&m_atom, PoliceScript::c_nickAnim, PoliceScript::c_lauraAnim);
 		m_policeState->SetUnknown0x0c(0);
 		return 1;
 	}
@@ -150,7 +150,7 @@ void Police::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x1005e790
 MxBool Police::VTable0x64()
 {
-	DeleteObjects(&m_atom, 500, 510);
+	DeleteObjects(&m_atom, c_nickAnim, 510);
 	m_transitionDestination = LegoGameState::e_infomain;
 	return TRUE;
 }
