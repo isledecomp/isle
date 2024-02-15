@@ -54,13 +54,14 @@ void PoliceState::FUN_1005ea40()
 		break;
 	default:
 		policeScript = m_policeScript;
-		m_policeScript = m_policeScript == Police::PoliceScript::c_lauraAnim ? Police::PoliceScript::c_nickAnim
-																			 : Police::PoliceScript::c_lauraAnim;
+		m_policeScript = policeScript == Police::PoliceScript::c_lauraAnim ? Police::PoliceScript::c_nickAnim
+																		   : Police::PoliceScript::c_lauraAnim;
 	}
 
 	MxDSAction action;
 	action.SetObjectId(policeScript);
 	action.SetAtomId(*g_policeScript);
 	Start(&action);
+
 	m_unk0x0c = 1;
 }
