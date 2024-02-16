@@ -69,6 +69,41 @@ public:
 		c_clearScreen = 0x04
 	};
 
+	// SIZE 0x1c
+	struct ScriptContainer {
+		// FUNCTION: LEGO1 0x1005ac40
+		ScriptContainer()
+		{
+			m_index = -1;
+			m_script = NULL;
+		}
+
+		ScriptContainer(MxS32 p_index, const char* p_key, MxAtomId* p_script)
+		{
+			m_index = p_index;
+
+			if (p_key) {
+				strcpy(m_key, p_key);
+			}
+
+			m_script = p_script;
+		}
+
+		// FUNCTION: LEGO1 0x1005ac50
+		ScriptContainer& operator=(ScriptContainer& p_container)
+		{
+			m_index = p_container.m_index;
+			strcpy(m_key, p_container.m_key);
+			m_script = p_container.m_script;
+			return *this;
+		}
+
+	private:
+		MxS32 m_index;      // 0x00
+		char m_key[20];     // 0x04
+		MxAtomId* m_script; // 0x18
+	};
+
 	LegoOmni();
 	~LegoOmni() override; // vtable+00
 
@@ -104,7 +139,7 @@ public:
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId&, MxLong);
-	MxResult FUN_1005a5f0();
+	MxResult RegisterScripts();
 	undefined4 FUN_1005b490(char* p_worldName);
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
@@ -138,7 +173,7 @@ public:
 	// LegoOmni::`scalar deleting destructor'
 
 private:
-	undefined4* m_unk0x68;                       // 0x68
+	ScriptContainer* m_scripts;                  // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c
 	LegoInputManager* m_inputMgr;                // 0x70
 	GifManager* m_gifManager;                    // 0x74
@@ -186,8 +221,8 @@ MxDSAction& GetCurrentAction();
 void PlayMusic(MxU32 p_index);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
-void RegisterScripts();
-void UnregisterScripts();
+void CreateScripts();
+void DestroyScripts();
 void SetCurrentWorld(LegoWorld* p_world);
 
 #endif // LEGOOMNI_H
