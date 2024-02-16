@@ -2,6 +2,7 @@
 #define POLICE_H
 
 #include "decomp.h"
+#include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxdsaction.h"
@@ -15,6 +16,12 @@ class PoliceState;
 class Police : public LegoWorld {
 public:
 	enum PoliceScript {
+		c_leftArrowCtl = 1,
+		c_rightArrowCtl = 2,
+		c_infoCtl = 3,
+		c_doorCtl = 4,
+		c_donutCtl = 5,
+
 		c_nickAnim = 500,
 		c_lauraAnim = 501,
 	};
@@ -47,7 +54,7 @@ public:
 	// Police::`scalar deleting destructor'
 
 private:
-	MxLong HandleNotification11(MxNotificationParam& p_param);
+	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
 
