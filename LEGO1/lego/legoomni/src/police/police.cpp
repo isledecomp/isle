@@ -5,7 +5,9 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxnotificationmanager.h"
+#include "mxtransitionmanager.h"
 #include "policestate.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)
@@ -74,8 +76,8 @@ MxLong Police::Notify(MxParam& p_param)
 		case c_notificationKeyPress:
 			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
 			break;
-		case c_notificationType11:
-			result = HandleNotification11((MxNotificationParam&) p_param);
+		case c_notificationClick:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_transitionDestination);
@@ -94,11 +96,41 @@ void Police::ReadyWorld()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
-// STUB: LEGO1 0x1005e550
-MxLong Police::HandleNotification11(MxNotificationParam& p_param)
+// FUNCTION: LEGO1 0x1005e550
+MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return 0;
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case c_leftArrowCtl:
+		case c_rightArrowCtl:
+			if (m_policeState->GetUnknown0x0c() == 1) {
+				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
+			}
+			BackgroundAudioManager()->Stop();
+			m_transitionDestination = LegoGameState::Area::e_unk35;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			break;
+		case c_infoCtl:
+			if (m_policeState->GetUnknown0x0c() == 1) {
+				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
+			}
+			BackgroundAudioManager()->Stop();
+			m_transitionDestination = LegoGameState::Area::e_infomain;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			break;
+		case c_doorCtl:
+			if (m_policeState->GetUnknown0x0c() == 1) {
+				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
+			}
+			BackgroundAudioManager()->Stop();
+			m_transitionDestination = LegoGameState::Area::e_copter;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			break;
+		case c_donutCtl:
+			m_policeState->FUN_1005ea40();
+		}
+	}
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x1005e6a0
