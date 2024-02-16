@@ -25,8 +25,9 @@
 #include "mxtransitionmanager.h"
 #include "viewmanager/viewmanager.h"
 
-DECOMP_SIZE_ASSERT(LegoWorldList, 0x18);
-DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10);
+DECOMP_SIZE_ASSERT(LegoOmni::ScriptContainer, 0x1c)
+DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
+DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)
 
 // GLOBAL: LEGO1 0x100f451c
 MxAtomId* g_copterScript = NULL;
@@ -307,7 +308,7 @@ LegoEntity* PickEntity(MxLong, MxLong)
 }
 
 // FUNCTION: LEGO1 0x100528e0
-void RegisterScripts()
+void CreateScripts()
 {
 	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", e_lowerCase2);
 	g_dunecarScript = new MxAtomId("\\lego\\scripts\\build\\dunecar", e_lowerCase2);
@@ -340,7 +341,7 @@ void RegisterScripts()
 }
 
 // FUNCTION: LEGO1 0x100530c0
-void UnregisterScripts()
+void DestroyScripts()
 {
 	delete g_copterScript;
 	delete g_dunecarScript;
@@ -424,7 +425,7 @@ LegoOmni::~LegoOmni()
 void LegoOmni::Init()
 {
 	MxOmni::Init();
-	m_unk0x68 = 0;
+	m_scripts = NULL;
 	m_inputMgr = NULL;
 	m_viewLODListManager = NULL;
 	m_gifManager = NULL;
@@ -514,9 +515,9 @@ void LegoOmni::Destroy()
 	}
 
 	m_action.ClearAtom();
-	UnregisterScripts();
+	DestroyScripts();
 
-	delete[] m_unk0x68;
+	delete[] m_scripts;
 
 	MxOmni::Destroy();
 }
@@ -602,9 +603,9 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	}
 	m_variableTable->SetVariable(variable);
 
-	RegisterScripts();
+	CreateScripts();
 	FUN_1001a700();
-	result = FUN_1005a5f0();
+	result = RegisterScripts();
 
 	if (result != SUCCESS) {
 		goto done;
@@ -632,10 +633,35 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1005a5f0
-MxResult LegoOmni::FUN_1005a5f0()
+// FUNCTION: LEGO1 0x1005a5f0
+MxResult LegoOmni::RegisterScripts()
 {
-	// TODO
+	m_scripts = new ScriptContainer[19];
+
+	if (!m_scripts) {
+		return FAILURE;
+	}
+
+	m_scripts[0] = ScriptContainer();
+	m_scripts[1] = ScriptContainer(0, "ACT1", g_isleScript);
+	m_scripts[2] = ScriptContainer(1, "IMAIN", g_infomainScript);
+	m_scripts[3] = ScriptContainer(2, "ICUBE", g_infoscorScript);
+	m_scripts[4] = ScriptContainer(3, "IREG", g_regbookScript);
+	m_scripts[5] = ScriptContainer(4, "IELEV", g_elevbottScript);
+	m_scripts[6] = ScriptContainer(5, "IISLE", g_infodoorScript);
+	m_scripts[7] = ScriptContainer(6, "HOSP", g_hospitalScript);
+	m_scripts[8] = ScriptContainer(7, "POLICE", g_policeScript);
+	m_scripts[9] = ScriptContainer(8, "GMAIN", g_garageScript);
+	m_scripts[10] = ScriptContainer(9, "BLDH", g_copterScript);
+	m_scripts[11] = ScriptContainer(10, "BLDD", g_dunecarScript);
+	m_scripts[12] = ScriptContainer(11, "BLDJ", g_jetskiScript);
+	m_scripts[13] = ScriptContainer(12, "BLDR", g_racecarScript);
+	m_scripts[14] = ScriptContainer(13, "RACC", g_carraceScript);
+	m_scripts[15] = ScriptContainer(14, "RACJ", g_jetraceScript);
+	m_scripts[16] = ScriptContainer(15, "ACT2", g_act2mainScript);
+	m_scripts[17] = ScriptContainer(16, "ACT3", g_act3Script);
+	m_scripts[18] = ScriptContainer(17, "TEST", g_testScript);
+
 	return SUCCESS;
 }
 
