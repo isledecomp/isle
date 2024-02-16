@@ -9,10 +9,10 @@ int g_partPresenterConfig1 = 1;
 // GLOBAL: LEGO1 0x100f7aa4
 int g_partPresenterConfig2 = 100;
 
-// STUB: LEGO1 0x1000cf60
+// FUNCTION: LEGO1 0x1000cf60
 void LegoPartPresenter::Destroy()
 {
-	// TODO
+	Destroy(FALSE);
 }
 
 // FUNCTION: LEGO1 0x1007c990
@@ -27,6 +27,12 @@ MxResult LegoPartPresenter::AddToManager()
 {
 	VideoManager()->RegisterPresenter(*this);
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x1007c9d0
+void LegoPartPresenter::Destroy(MxBool p_fromDestructor)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x1007deb0

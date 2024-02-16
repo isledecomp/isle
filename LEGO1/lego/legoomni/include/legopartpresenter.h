@@ -7,6 +7,8 @@
 // SIZE 0x54 (from inlined construction at 0x10009fac)
 class LegoPartPresenter : public MxMediaPresenter {
 public:
+	~LegoPartPresenter() override { Destroy(TRUE); }
+
 	// FUNCTION: LEGO1 0x1000cf70
 	inline const char* ClassName() const override // vtable+0x0c
 	{
@@ -28,6 +30,9 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1000d060
 	// LegoPartPresenter::`scalar deleting destructor'
+
+private:
+	void Destroy(MxBool p_fromDestructor);
 };
 
 #endif // LEGOPARTPRESENTER_H

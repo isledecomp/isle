@@ -111,6 +111,9 @@ public:
 	// SYNTHETIC: LEGO1 0x10009000
 	// LegoObjectFactory::`scalar deleting destructor'
 
+	// SYNTHETIC: LEGO1 0x10009170
+	// LegoObjectFactory::~LegoObjectFactory
+
 private:
 #define X(V) MxAtomId m_id##V;
 	FOR_LEGOOBJECTFACTORY_OBJECTS(X)

@@ -9,6 +9,9 @@ class AutoROI;
 // SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
 class LegoModelPresenter : public MxVideoPresenter {
 public:
+	// inline in scalar dtor
+	~LegoModelPresenter() override { Destroy(TRUE); }
+
 	static void configureLegoModelPresenter(MxS32 p_modelPresenterConfig);
 
 	// FUNCTION: LEGO1 0x1000ccb0
