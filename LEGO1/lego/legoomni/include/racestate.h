@@ -34,6 +34,9 @@ public:
 
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 
+	// SYNTHETIC: LEGO1 0x1000f6f0
+	// RaceState::~RaceState
+
 	// SYNTHETIC: LEGO1 0x100160d0
 	// RaceState::`scalar deleting destructor'
 
