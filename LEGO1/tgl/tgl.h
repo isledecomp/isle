@@ -189,7 +189,7 @@ public:
 	// vtable+0x20
 	virtual Result GetBackgroundColor(float* r, float* g, float* b) = 0;
 	virtual Result Clear() = 0;
-	virtual Result Render(const Light*) = 0;
+	virtual Result Render(const Group*) = 0;
 	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) = 0;
 
 	// vtable+0x30
