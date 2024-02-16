@@ -90,7 +90,7 @@ public:
 		}
 
 		// FUNCTION: LEGO1 0x1005ac50
-		ScriptContainer& operator=(ScriptContainer& p_container)
+		ScriptContainer& operator=(const ScriptContainer& p_container)
 		{
 			m_index = p_container.m_index;
 			strcpy(m_key, p_container.m_key);
