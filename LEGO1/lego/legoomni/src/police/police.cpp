@@ -106,6 +106,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			if (m_policeState->GetUnknown0x0c() == 1) {
 				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
 			}
+
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_unk35;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -114,6 +115,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			if (m_policeState->GetUnknown0x0c() == 1) {
 				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
 			}
+
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -122,6 +124,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			if (m_policeState->GetUnknown0x0c() == 1) {
 				DeleteObjects(&m_atom, c_nickAnim, c_lauraAnim);
 			}
+
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_copter;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
@@ -130,6 +133,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			m_policeState->FUN_1005ea40();
 		}
 	}
+
 	return 1;
 }
 
