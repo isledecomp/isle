@@ -21,8 +21,8 @@ public:
 	Mx3DPointFloat& Max() { return max; }
 
 private:
-	Mx3DPointFloat min;
-	Mx3DPointFloat max;
+	Mx3DPointFloat min; // 0x00
+	Mx3DPointFloat max; // 0x14
 };
 
 /*
@@ -37,8 +37,8 @@ public:
 	float& Radius() { return radius; }
 
 private:
-	Mx3DPointFloat center;
-	float radius;
+	Mx3DPointFloat center; // 0x00
+	float radius;          // 0x14
 };
 
 /*
@@ -79,42 +79,44 @@ class ROI {
 public:
 	ROI()
 	{
-		m_comp = 0;
-		m_lods = 0;
+		comp = 0;
+		lods = 0;
 		m_unk0x0c = 1;
 	}
 	virtual ~ROI()
 	{
 		// if derived class set the comp and lods, it should delete them
-		assert(!m_comp);
-		assert(!m_lods);
+		assert(!comp);
+		assert(!lods);
 	}
 	virtual float IntrinsicImportance() const = 0;                    // vtable+0x04
 	virtual const float* GetWorldVelocity() const = 0;                // vtable+0x08
 	virtual const BoundingBox& GetWorldBoundingBox() const = 0;       // vtable+0x0c
 	virtual const BoundingSphere& GetWorldBoundingSphere() const = 0; // vtable+0x10
 
-	const LODListBase* GetLODs() const { return m_lods; }
+	const LODListBase* GetLODs() const { return lods; }
 	const LODObject* GetLOD(int i) const
 	{
-		assert(m_lods);
-		return (*m_lods)[i];
+		assert(lods);
+		return (*lods)[i];
 	}
-	int GetLODCount() const { return m_lods ? m_lods->Size() : 0; }
-	const CompoundObject* GetComp() const { return m_comp; }
+	int GetLODCount() const { return lods ? lods->Size() : 0; }
+	const CompoundObject* GetComp() const { return comp; }
 
 	inline undefined GetUnknown0x0c() { return m_unk0x0c; }
-
 	inline void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60
 	// ROI::`scalar deleting destructor'
 
 protected:
-	CompoundObject* m_comp; // 0x04
-	LODListBase* m_lods;    // 0x08
-	undefined m_unk0x0c;    // 0x0c
+	CompoundObject* comp; // 0x04
+	LODListBase* lods;    // 0x08
+	undefined m_unk0x0c;  // 0x0c
 };
+
+// TEMPLATE: LEGO1 0x10084930
+// list<ROI *,allocator<ROI *> >::~list<ROI *,allocator<ROI *> >
 
 // SYNTHETIC: LEGO1 0x100a5d50
 // ROI::~ROI

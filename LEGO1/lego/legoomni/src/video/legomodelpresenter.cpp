@@ -132,9 +132,9 @@ void LegoModelPresenter::ParseExtra()
 		}
 		else if (KeyValueStringParse(output, g_dbCreate, buffer) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
-			list<AutoROI*>& roiList = currentWorld->GetUnknownList0xe0();
+			list<LegoROI*>& roiList = currentWorld->GetUnknownList0xe0();
 
-			for (list<AutoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
+			for (list<LegoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
 				if (!strcmpi(((LegoROI*) (*it))->GetName(), output)) {
 					m_roi = *it;
 					roiList.erase(it);

@@ -204,7 +204,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 	}
 
 	while (!m_list0xe0.empty()) {
-		AutoROI* roi = m_list0xe0.front();
+		LegoROI* roi = m_list0xe0.front();
 		m_list0xe0.pop_front();
 		delete roi;
 	}

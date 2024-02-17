@@ -183,7 +183,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	}
 
 	pLODList = m_3dManager->GetViewLODListManager()->Create("CameraROI", 1);
-	m_viewROI = new LegoROI(m_renderer, pLODList, Timer()->GetTime());
+	m_viewROI = new TimeROI(m_renderer, pLODList, Timer()->GetTime());
 	pLODList->Release();
 
 	CalcLocalTransform(posVec, dirVec, upVec, outMatrix);

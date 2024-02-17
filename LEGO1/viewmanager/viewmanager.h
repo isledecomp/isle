@@ -27,7 +27,7 @@ public:
 private:
 	undefined4 m_unk0x04;     // 0x04
 	CompoundObject m_unk0x08; // 0x08
-	undefined m_pad[0x1c8];   // 0x14
+	undefined m_pad[0x1a8];   // 0x14
 };
 
 // TEMPLATE: LEGO1 0x10022030

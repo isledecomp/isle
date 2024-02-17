@@ -2,7 +2,8 @@
 
 #include <string.h>
 
-DECOMP_SIZE_ASSERT(LegoROI, 0x10c);
+DECOMP_SIZE_ASSERT(LegoROI, 0x108)
+DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
 
 // SIZE 0x14
 typedef struct {
@@ -59,8 +60,44 @@ void LegoROI::configureLegoROI(int p_roiConfig)
 	g_roiConfig = p_roiConfig;
 }
 
-// STUB: LEGO1 0x100a9a50
-LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time) : ViewROI(p_renderer, p_lodList)
+// FUNCTION: LEGO1 0x100a81d0
+LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL), m_unk0xe0(-1)
+{
+	m_unk0xd4 = NULL;
+	m_name = NULL;
+	m_unk0x104 = NULL;
+}
+
+// FUNCTION: LEGO1 0x100a82d0
+LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_renderer, p_lodList), m_unk0xe0(-1)
+{
+	m_unk0xd4 = NULL;
+	m_name = NULL;
+	m_unk0x104 = NULL;
+}
+
+// FUNCTION: LEGO1 0x100a83c0
+LegoROI::~LegoROI()
+{
+	if (comp) {
+		CompoundObject::iterator iterator;
+
+		for (iterator = comp->begin(); !(iterator == comp->end()); ++iterator) {
+			ROI* child = *iterator;
+
+			delete child;
+		}
+
+		delete comp;
+		comp = 0;
+	}
+	if (m_name) {
+		delete[] m_name;
+	}
+}
+
+// FUNCTION: LEGO1 0x100a9a50
+TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time) : LegoROI(p_renderer, p_lodList)
 {
 	m_time = p_time;
 }
@@ -127,7 +164,6 @@ float LegoROI::IntrinsicImportance() const
 	return .5;
 }
 
-// Note: Actually part of parent class (doesn't exist yet)
 // STUB: LEGO1 0x100aa350
 void LegoROI::UpdateWorldBoundingVolumes()
 {

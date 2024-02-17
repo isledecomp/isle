@@ -67,7 +67,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
-	inline list<AutoROI*>& GetUnknownList0xe0() { return m_list0xe0; }
+	inline list<LegoROI*>& GetUnknownList0xe0() { return m_list0xe0; }
 
 	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 
@@ -91,7 +91,7 @@ protected:
 	MxCoreSet m_set0xa8;                        // 0xa8
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
-	list<AutoROI*> m_list0xe0;                  // 0xe0
+	list<LegoROI*> m_list0xe0;                  // 0xe0
 	MxS32 m_scriptIndex;                        // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
 	MxS16 m_startupTicks;                       // 0xf4
@@ -116,13 +116,13 @@ protected:
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Init
 
 // TEMPLATE: LEGO1 0x1001ddf0
-// list<AutoROI *,allocator<AutoROI *> >::~list<AutoROI *,allocator<AutoROI *> >
+// list<LegoROI *,allocator<LegoROI *> >::~list<LegoROI *,allocator<LegoROI *> >
 
 // TEMPLATE: LEGO1 0x1001df50
-// List<AutoROI *>::~List<AutoROI *>
+// List<LegoROI *>::~List<LegoROI *>
 
 // TEMPLATE: LEGO1 0x1001de60
-// list<AutoROI *,allocator<AutoROI *> >::_Buynode
+// list<LegoROI *,allocator<LegoROI *> >::_Buynode
 
 // TEMPLATE: LEGO1 0x1001de90
 // set<MxCore *,CoreSetCompare,allocator<MxCore *> >::~set<MxCore *,CoreSetCompare,allocator<MxCore *> >
@@ -131,7 +131,7 @@ protected:
 // Set<MxCore *,CoreSetCompare>::~Set<MxCore *,CoreSetCompare>
 
 // TEMPLATE: LEGO1 0x1001f590
-// list<AutoROI *,allocator<AutoROI *> >::erase
+// list<LegoROI *,allocator<LegoROI *> >::erase
 
 // TEMPLATE: LEGO1 0x100208b0
 // _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::insert

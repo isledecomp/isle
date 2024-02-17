@@ -3,7 +3,7 @@
 
 #include "mxvideopresenter.h"
 
-class AutoROI;
+class LegoROI;
 
 // VTABLE: LEGO1 0x100d4e50
 // SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
@@ -38,7 +38,7 @@ protected:
 	void Destroy(MxBool p_fromDestructor);
 
 private:
-	AutoROI* m_roi;       // 0x64
+	LegoROI* m_roi;       // 0x64
 	MxBool m_addedToView; // 0x68
 
 	MxResult CreateROI(MxStreamChunk* p_chunk);
