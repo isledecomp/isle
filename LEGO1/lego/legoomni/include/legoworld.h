@@ -65,10 +65,11 @@ public:
 	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
-	inline void SetUnknown0xec(undefined4 p_unk0xec) { m_unk0xec = p_unk0xec; }
-	inline undefined4 GetUnknown0xec() { return m_unk0xec; }
+	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 	inline list<AutoROI*>& GetUnknownList0xe0() { return m_list0xe0; }
+
+	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
@@ -91,7 +92,7 @@ protected:
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
 	list<AutoROI*> m_list0xe0;                  // 0xe0
-	undefined4 m_unk0xec;                       // 0xec
+	undefined4 m_scriptIndex;                   // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
 	MxS16 m_startupTicks;                       // 0xf4
 	MxBool m_worldStarted;                      // 0xf6

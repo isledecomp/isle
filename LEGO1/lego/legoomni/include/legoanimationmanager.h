@@ -31,7 +31,7 @@ public:
 	void FUN_1005ef10();
 	void FUN_1005f0b0();
 	void FUN_1005f6d0(MxBool);
-	void FUN_1005f720(undefined4);
+	void FUN_1005f720(MxS32 p_scriptIndex);
 	void FUN_10061010(undefined4);
 	void FUN_10064670(MxBool);
 

@@ -98,6 +98,9 @@ public:
 			return *this;
 		}
 
+		inline MxS32 GetIndex() { return m_index; }
+		inline const char* GetKey() { return m_key; }
+
 	private:
 		MxS32 m_index;      // 0x00
 		char m_key[20];     // 0x04
@@ -200,7 +203,7 @@ public:
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId&, MxLong);
 	MxResult RegisterScripts();
-	undefined4 FUN_1005b490(char* p_worldName);
+	MxS32 GetScriptIndex(const char* p_key);
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
 	static void CreateInstance();

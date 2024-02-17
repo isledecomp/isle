@@ -92,7 +92,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 	}
 
 	SetIsWorldActive(TRUE);
-	m_unk0xec = -1;
+	m_scriptIndex = -1;
 
 	return SUCCESS;
 }
@@ -169,8 +169,8 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		}
 	}
 
-	if (m_unk0xec != -1 && m_set0xd0.empty()) {
-		PlantManager()->FUN_100263a0(m_unk0xec);
+	if (m_scriptIndex != -1 && m_set0xd0.empty()) {
+		PlantManager()->FUN_100263a0(m_scriptIndex);
 		BuildingManager()->FUN_1002fb30();
 	}
 
@@ -574,9 +574,9 @@ void LegoWorld::Enable(MxBool p_enable)
 				Lego()->SetNavController(m_cameraController->GetNavController());
 			}
 
-			if (m_unk0xec != -1) {
-				PlantManager()->FUN_10026360(m_unk0xec);
-				AnimationManager()->FUN_1005f720(m_unk0xec);
+			if (m_scriptIndex != -1) {
+				PlantManager()->FUN_10026360(m_scriptIndex);
+				AnimationManager()->FUN_1005f720(m_scriptIndex);
 				BuildingManager()->FUN_1002fa00();
 				AnimationManager()->FUN_1005f0b0();
 			}
@@ -597,8 +597,8 @@ void LegoWorld::Enable(MxBool p_enable)
 		AnimationManager()->FUN_1005ee80(FALSE);
 		m_set0xd0.insert(this);
 
-		if (m_unk0xec != -1) {
-			PlantManager()->FUN_100263a0(m_unk0xec);
+		if (m_scriptIndex != -1) {
+			PlantManager()->FUN_100263a0(m_scriptIndex);
 			BuildingManager()->FUN_1002fb30();
 		}
 
