@@ -61,7 +61,7 @@ void MxLoopingSmkPresenter::NextFrame()
 		m_elapsedDuration += 1000 / ((MxDSMediaAction*) m_action)->GetFramesPerSecond();
 	}
 
-	m_subscriber->DestroyChunk(chunk);
+	m_subscriber->FreeDataChunk(chunk);
 }
 
 // FUNCTION: LEGO1 0x100b4a90

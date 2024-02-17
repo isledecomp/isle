@@ -50,7 +50,7 @@ void MxLoopingFlcPresenter::NextFrame()
 		m_elapsedDuration += m_flcHeader->speed;
 	}
 
-	m_subscriber->DestroyChunk(chunk);
+	m_subscriber->FreeDataChunk(chunk);
 }
 
 // FUNCTION: LEGO1 0x100b44c0

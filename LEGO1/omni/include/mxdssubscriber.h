@@ -30,11 +30,11 @@ public:
 	}
 
 	MxResult Create(MxStreamController* p_controller, MxU32 p_objectId, MxS16 p_unk0x48);
-	void DeleteChunks();
-	MxResult AddChunk(MxStreamChunk* p_chunk, MxBool p_append);
-	MxStreamChunk* NextChunk();
-	MxStreamChunk* CurrentChunk();
-	void DestroyChunk(MxStreamChunk* p_chunk);
+	void DestroyData();
+	MxResult AddData(MxStreamChunk* p_chunk, MxBool p_append);
+	MxStreamChunk* PopData();
+	MxStreamChunk* PeekData();
+	void FreeDataChunk(MxStreamChunk* p_chunk);
 
 	inline MxU32 GetObjectId() { return m_objectId; }
 	inline MxS16 GetUnknown48() { return m_unk0x48; }

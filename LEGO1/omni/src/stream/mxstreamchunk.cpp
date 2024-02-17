@@ -59,7 +59,7 @@ MxResult MxStreamChunk::SendChunk(MxStreamListMxDSSubscriber& p_subscriberList, 
 				m_buffer = NULL;
 			}
 
-			(*it)->AddChunk(this, p_append);
+			(*it)->AddData(this, p_append);
 
 			return SUCCESS;
 		}

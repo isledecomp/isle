@@ -69,14 +69,14 @@ void LegoPathPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x10044d00
 void LegoPathPresenter::StreamingTickle()
 {
-	MxStreamChunk* chunk = m_subscriber->NextChunk();
+	MxStreamChunk* chunk = m_subscriber->PopData();
 
 	if (chunk) {
 		if (chunk->GetFlags() & MxStreamChunk::c_end) {
 			ProgressTickleState(e_repeating);
 		}
 
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 	}
 }
 

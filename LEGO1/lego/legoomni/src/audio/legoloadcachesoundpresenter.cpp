@@ -49,7 +49,7 @@ void LegoLoadCacheSoundPresenter::ReadyTickle()
 		m_cacheSound = new LegoCacheSound;
 		memcpy(&m_pcmWaveFormat, &header->m_pcmWaveFormat, sizeof(m_pcmWaveFormat));
 
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ProgressTickleState(e_streaming);
 	}
 }

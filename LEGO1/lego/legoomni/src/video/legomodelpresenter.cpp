@@ -80,12 +80,12 @@ void LegoModelPresenter::ReadyTickle()
 		EndAction();
 	}
 	else {
-		MxStreamChunk* chunk = m_subscriber->CurrentChunk();
+		MxStreamChunk* chunk = m_subscriber->PeekData();
 
 		if (chunk != NULL && chunk->GetTime() <= m_action->GetElapsedTime()) {
-			chunk = m_subscriber->NextChunk();
+			chunk = m_subscriber->PopData();
 			MxResult result = CreateROI(chunk);
-			m_subscriber->DestroyChunk(chunk);
+			m_subscriber->FreeDataChunk(chunk);
 
 			if (result == SUCCESS) {
 				VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
@@ -135,7 +135,7 @@ void LegoModelPresenter::ParseExtra()
 			list<LegoROI*>& roiList = currentWorld->GetUnknownList0xe0();
 
 			for (list<LegoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
-				if (!strcmpi(((LegoROI*) (*it))->GetName(), output)) {
+				if (!strcmpi((*it)->GetName(), output)) {
 					m_roi = *it;
 					roiList.erase(it);
 

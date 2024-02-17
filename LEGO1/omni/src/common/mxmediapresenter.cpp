@@ -27,7 +27,7 @@ void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 		MxAutoLocker lock(&m_criticalSection);
 
 		if (m_currentChunk && m_subscriber) {
-			m_subscriber->DestroyChunk(m_currentChunk);
+			m_subscriber->FreeDataChunk(m_currentChunk);
 		}
 
 		if (m_subscriber) {
@@ -63,12 +63,12 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 	MxStreamChunk* chunk = NULL;
 
 	if (m_subscriber) {
-		chunk = m_subscriber->CurrentChunk();
+		chunk = m_subscriber->PeekData();
 
 		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
-			m_subscriber->NextChunk();
-			m_subscriber->DestroyChunk(chunk);
+			m_subscriber->PopData();
+			m_subscriber->FreeDataChunk(chunk);
 			chunk = NULL;
 			ProgressTickleState(e_done);
 		}
@@ -83,11 +83,11 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 	MxStreamChunk* chunk = NULL;
 
 	if (m_subscriber) {
-		chunk = m_subscriber->NextChunk();
+		chunk = m_subscriber->PopData();
 
 		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
-			m_subscriber->DestroyChunk(chunk);
+			m_subscriber->FreeDataChunk(chunk);
 			chunk = NULL;
 			ProgressTickleState(e_done);
 		}
@@ -186,7 +186,7 @@ void MxMediaPresenter::StreamingTickle()
 
 		if (m_currentChunk) {
 			if (m_currentChunk->GetFlags() & MxDSChunk::c_end) {
-				m_subscriber->DestroyChunk(m_currentChunk);
+				m_subscriber->FreeDataChunk(m_currentChunk);
 				m_currentChunk = NULL;
 				ProgressTickleState(e_repeating);
 			}
@@ -194,7 +194,7 @@ void MxMediaPresenter::StreamingTickle()
 				LoopChunk(m_currentChunk);
 
 				if (!IsEnabled()) {
-					m_subscriber->DestroyChunk(m_currentChunk);
+					m_subscriber->FreeDataChunk(m_currentChunk);
 					m_currentChunk = NULL;
 				}
 			}

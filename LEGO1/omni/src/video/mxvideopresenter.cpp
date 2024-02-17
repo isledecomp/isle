@@ -178,12 +178,12 @@ void MxVideoPresenter::NextFrame()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk->GetFlags() & MxDSChunk::c_end) {
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ProgressTickleState(e_repeating);
 	}
 	else {
 		LoadFrame(chunk);
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 	}
 }
 
@@ -408,7 +408,7 @@ void MxVideoPresenter::ReadyTickle()
 
 	if (chunk) {
 		LoadHeader(chunk);
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ParseExtra();
 		ProgressTickleState(e_starting);
 	}
@@ -453,7 +453,7 @@ void MxVideoPresenter::StreamingTickle()
 			}
 
 			LoadFrame(m_currentChunk);
-			m_subscriber->DestroyChunk(m_currentChunk);
+			m_subscriber->FreeDataChunk(m_currentChunk);
 			m_currentChunk = NULL;
 			SetBit0(TRUE);
 

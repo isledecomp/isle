@@ -35,7 +35,7 @@ void MxMIDIPresenter::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Enter();
 
 	if (m_subscriber && m_chunk) {
-		m_subscriber->DestroyChunk(m_chunk);
+		m_subscriber->FreeDataChunk(m_chunk);
 	}
 	Init();
 
@@ -52,7 +52,7 @@ void MxMIDIPresenter::ReadyTickle()
 	MxStreamChunk* chunk = NextChunk();
 
 	if (chunk) {
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ParseExtra();
 		ProgressTickleState(e_starting);
 	}
