@@ -92,7 +92,7 @@ protected:
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
 	list<AutoROI*> m_list0xe0;                  // 0xe0
-	undefined4 m_scriptIndex;                   // 0xec
+	MxS32 m_scriptIndex;                        // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
 	MxS16 m_startupTicks;                       // 0xf4
 	MxBool m_worldStarted;                      // 0xf6
