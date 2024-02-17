@@ -883,9 +883,15 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 	return ::CurrentWorld()->GetCurrPathInfo(p_path, p_value);
 }
 
-// STUB: LEGO1 0x1005b490
-undefined4 LegoOmni::FUN_1005b490(char* p_worldName)
+// FUNCTION: LEGO1 0x1005b490
+MxS32 LegoOmni::GetScriptIndex(const char* p_key)
 {
+	for (MxS32 i = 0; i < 19; i++) {
+		if ((MxS32) &m_scripts[i] != -4 && !strcmpi(m_scripts[i].GetKey(), p_key)) {
+			return m_scripts[i].GetIndex();
+		}
+	}
+
 	return -1;
 }
 

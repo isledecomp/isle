@@ -39,9 +39,9 @@ LegoWorldPresenter::~LegoWorldPresenter()
 {
 	MxBool result = FALSE;
 	if (m_entity) {
-		undefined4 world = ((LegoWorld*) m_entity)->GetUnknown0xec();
-		PlantManager()->FUN_10026360(world);
-		AnimationManager()->FUN_1005f720(world);
+		MxS32 scriptIndex = ((LegoWorld*) m_entity)->GetScriptIndex();
+		PlantManager()->FUN_10026360(scriptIndex);
+		AnimationManager()->FUN_1005f720(scriptIndex);
 		BuildingManager()->FUN_1002fa00();
 		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
@@ -189,9 +189,9 @@ void LegoWorldPresenter::ParseExtra()
 		data[len] = 0;
 
 		if (KeyValueStringParse(output, g_strWORLD, data)) {
-			char* worldName = strtok(output, g_parseExtraTokens);
-			LoadWorld(worldName, (LegoWorld*) m_entity);
-			((LegoWorld*) m_entity)->SetUnknown0xec(Lego()->FUN_1005b490(worldName));
+			char* worldKey = strtok(output, g_parseExtraTokens);
+			LoadWorld(worldKey, (LegoWorld*) m_entity);
+			((LegoWorld*) m_entity)->SetScriptIndex(Lego()->GetScriptIndex(worldKey));
 		}
 	}
 }
