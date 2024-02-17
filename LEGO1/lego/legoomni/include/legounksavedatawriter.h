@@ -5,7 +5,7 @@
 #include "lego/sources/misc/legostorage.h"
 #include "mxtypes.h"
 
-class AutoROI;
+class LegoROI;
 class LegoROI;
 
 struct LegoSaveDataEntry3 {
@@ -39,7 +39,7 @@ public:
 	LegoUnkSaveDataWriter();
 
 	MxResult WriteSaveData3(LegoStorage* p_stream);
-	AutoROI* FUN_10083500(char*, undefined4);
+	LegoROI* FUN_10083500(char*, undefined4);
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);

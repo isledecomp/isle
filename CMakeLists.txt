@@ -489,7 +489,10 @@ if (MSVC)
 endif()
 
 if (MSVC_FOR_DECOMP)
-    target_compile_definitions(lego1 PRIVATE "ENABLE_DECOMP_ASSERTS")
+    foreach(tgt IN LISTS lego1_targets)
+      target_compile_definitions(${tgt} PRIVATE "ENABLE_DECOMP_ASSERTS")
+    endforeach()
+
     if (TARGET isle)
       target_compile_definitions(isle PRIVATE "ENABLE_DECOMP_ASSERTS")
     endif()
@@ -533,7 +536,7 @@ if (MSVC_FOR_DECOMP)
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
   if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12)
-    foreach(tgt IN LISTS lego1_taregets)
+    foreach(tgt IN LISTS lego1_targets)
       set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_${tgt}=1;msvc_lego1=1")
       set_property(TARGET ${tgt} PROPERTY JOB_POOL_COMPILE msvc_${tgt})
       set_property(TARGET ${tgt} PROPERTY JOB_POOL_LINK msvc_${tgt})

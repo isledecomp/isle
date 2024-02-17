@@ -53,8 +53,8 @@ void OrientableROI::UpdateWorldData(const MxMatrix& p_transform)
 	UpdateWorldVelocity();
 
 	// iterate over comps
-	if (m_comp) {
-		for (CompoundObject::iterator iter = m_comp->begin(); !(iter == m_comp->end()); iter++) {
+	if (comp) {
+		for (CompoundObject::iterator iter = comp->begin(); !(iter == comp->end()); iter++) {
 			ROI* child = *iter;
 			static_cast<OrientableROI*>(child)->UpdateWorldData(p_transform);
 		}
