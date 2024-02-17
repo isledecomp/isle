@@ -21,9 +21,11 @@ MxResult Bike::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = IslePathActor::Create(p_dsAction);
 	m_world = CurrentWorld();
+
 	if (m_world) {
 		m_world->Add(this);
 	}
+
 	return result;
 }
 
