@@ -38,6 +38,28 @@ int g_roiConfig = 100;
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
 
+// FUNCTION: LEGO1 0x100a46a0
+void LegoROI::WrappedSetLocalTransform(Matrix4& p_transform)
+{
+	SetLocalTransform(p_transform);
+}
+
+// STUB: LEGO1 0x100a46b0
+void LegoROI::FUN_100a46b0(Matrix4& p_transform)
+{
+}
+
+// STUB: LEGO1 0x100a58f0
+void LegoROI::FUN_100a58f0(Matrix4& p_transform)
+{
+}
+
+// FUNCTION: LEGO1 0x100a81c0
+void LegoROI::configureLegoROI(int p_roiConfig)
+{
+	g_roiConfig = p_roiConfig;
+}
+
 // FUNCTION: LEGO1 0x100a81d0
 LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL), m_unk0xe0(-1)
 {
@@ -72,28 +94,6 @@ LegoROI::~LegoROI()
 	if (m_name) {
 		delete[] m_name;
 	}
-}
-
-// FUNCTION: LEGO1 0x100a46a0
-void LegoROI::WrappedSetLocalTransform(Matrix4& p_transform)
-{
-	SetLocalTransform(p_transform);
-}
-
-// STUB: LEGO1 0x100a46b0
-void LegoROI::FUN_100a46b0(Matrix4& p_transform)
-{
-}
-
-// STUB: LEGO1 0x100a58f0
-void LegoROI::FUN_100a58f0(Matrix4& p_transform)
-{
-}
-
-// FUNCTION: LEGO1 0x100a81c0
-void LegoROI::configureLegoROI(int p_roiConfig)
-{
-	g_roiConfig = p_roiConfig;
 }
 
 // FUNCTION: LEGO1 0x100a9a50
