@@ -36,9 +36,9 @@ public:
 
 private:
 	LegoGameState::Area m_transitionDestination; // 0xf8
-	undefined m_bigData1[104];                   // 0xfc
-	undefined m_bigData2[560];                   // 0x164
-	undefined m_bigData3[80];                    // 0x394
+	undefined m_unk0xfc[104];                    // 0xfc
+	undefined m_unk0x164[560];                   // 0x164
+	undefined m_unk0x394[80];                    // 0x394
 };
 
 #endif // HISTORYBOOK_H
