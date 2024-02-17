@@ -45,6 +45,7 @@ MxResult HistoryBook::Create(MxDSAction& p_dsAction)
 MxLong HistoryBook::Notify(MxParam& p_param)
 {
 	LegoWorld::Notify(p_param);
+
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationButtonUp:
