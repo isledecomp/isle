@@ -6,7 +6,6 @@
 #include "mxtypes.h"
 
 class LegoROI;
-class LegoROI;
 
 struct LegoSaveDataEntry3 {
 	char* m_name;
