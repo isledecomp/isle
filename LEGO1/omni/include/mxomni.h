@@ -81,15 +81,15 @@ protected:
 
 	MxString m_mediaPath;                         // 0x08
 	HWND m_windowHandle;                          // 0x18
-	MxObjectFactory* m_objectFactory;             // 0x1C
+	MxObjectFactory* m_objectFactory;             // 0x1c
 	MxVariableTable* m_variableTable;             // 0x20
 	MxTickleManager* m_tickleManager;             // 0x24
 	MxNotificationManager* m_notificationManager; // 0x28
-	MxVideoManager* m_videoManager;               // 0x2C
+	MxVideoManager* m_videoManager;               // 0x2c
 	MxSoundManager* m_soundManager;               // 0x30
 	MxMusicManager* m_musicManager;               // 0x34
 	MxEventManager* m_eventManager;               // 0x38
-	MxTimer* m_timer;                             // 0x3C
+	MxTimer* m_timer;                             // 0x3c
 	MxStreamer* m_streamer;                       // 0x40
 	MxAtomIdCounterSet* m_atomIdCounterSet;       // 0x44
 	MxCriticalSection m_criticalsection;          // 0x48

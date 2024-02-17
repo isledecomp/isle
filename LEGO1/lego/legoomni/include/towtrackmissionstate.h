@@ -22,7 +22,7 @@ public:
 		return !strcmp(p_name, TowTrackMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1C
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline MxU16 GetColor(MxU8 p_id)
 	{

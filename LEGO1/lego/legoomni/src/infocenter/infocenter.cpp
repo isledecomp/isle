@@ -289,8 +289,8 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_currentCutscene = e_noIntro;
 		return 1;
 	case 2:
-		FUN_10015860(g_object2x4red, 0);
-		FUN_10015860(g_object2x4grn, 0);
+		SetROIUnknown0x0c(g_object2x4red, 0);
+		SetROIUnknown0x0c(g_object2x4grn, 0);
 		BackgroundAudioManager()->RaiseVolume();
 		return 1;
 	case 4:
@@ -319,7 +319,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 
 		m_infocenterState->SetUnknown0x74(2);
-		FUN_10015860("infoman", 1);
+		SetROIUnknown0x0c("infoman", 1);
 		return 1;
 	case 12:
 		if (action->GetObjectId() == m_currentInfomainScript) {
@@ -1054,15 +1054,15 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 			}
 
 			PlayAction(objectId);
-			FUN_10015860(g_object2x4red, 0);
-			FUN_10015860(g_object2x4grn, 0);
+			SetROIUnknown0x0c(g_object2x4red, 0);
+			SetROIUnknown0x0c(g_object2x4grn, 0);
 			return 1;
 		}
 		case 6:
 			if (m_infocenterState->GetUnknown0x74() == 8) {
 				StopCurrentAction();
-				FUN_10015860(g_object2x4red, 0);
-				FUN_10015860(g_object2x4grn, 0);
+				SetROIUnknown0x0c(g_object2x4red, 0);
+				SetROIUnknown0x0c(g_object2x4grn, 0);
 				m_infocenterState->SetUnknown0x74(2);
 				PlayAction(c_infomanSneeze);
 				return 1;

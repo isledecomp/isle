@@ -226,10 +226,20 @@ void FUN_10015820(MxBool p_disable, MxU16 p_flags)
 	LegoOmni::GetInstance()->FUN_1005b4f0(p_disable, p_flags);
 }
 
-// STUB: LEGO1 0x10015860
-void FUN_10015860(const char*, MxU8)
+// FUNCTION: LEGO1 0x10015840
+LegoROI* FindROI(const char* p_name)
 {
-	// TODO
+	return LegoOmni::GetInstance()->FindROI(p_name);
+}
+
+// FUNCTION: LEGO1 0x10015860
+void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c)
+{
+	LegoROI* roi = FindROI(p_name);
+
+	if (roi) {
+		roi->SetUnknown0x0c(p_unk0x0c);
+	}
 }
 
 // FUNCTION: LEGO1 0x100158c0
@@ -801,6 +811,28 @@ void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 		}
 	}
 	MxOmni::DeleteObject(p_dsAction);
+}
+
+// FUNCTION: LEGO1 0x1005b270
+LegoROI* LegoOmni::FindROI(const char* p_name)
+{
+	ViewManager* viewManager = GetVideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
+	CompoundObject& unk0x08 = viewManager->GetUnknown0x08();
+
+	if (p_name != NULL && *p_name != '\0' && unk0x08.size() > 0) {
+		for (CompoundObject::iterator it = unk0x08.begin(); it != unk0x08.end(); it++) {
+			LegoROI* roi = (LegoROI*) *it;
+			const char* name = roi->GetName();
+
+			if (name != NULL) {
+				if (!strcmpi(name, p_name)) {
+					return roi;
+				}
+			}
+		}
+	}
+
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1005b2f0
