@@ -15,7 +15,7 @@ GasStation::GasStation()
 {
 	m_unk0xf8 = 0;
 	m_state = NULL;
-	m_unk0xfc = 0;
+	m_transitionDestination = LegoGameState::e_noArea;
 	m_unk0x108 = 0;
 	m_unk0x104 = 0;
 	m_unk0x114 = 0;
@@ -81,18 +81,67 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 	return result;
 }
 
-// STUB: LEGO1 0x10004a60
+// FUNCTION: LEGO1 0x10004a60
 MxLong GasStation::Notify(MxParam& p_param)
 {
-	// TODO
+	MxResult result = 0;
+	LegoWorld::Notify(p_param);
 
-	return 0;
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		case c_notificationEndAction:
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
+			break;
+		case c_notificationKeyPress:
+			result = HandleKeyPress((((LegoEventNotificationParam&) p_param)).GetKey());
+			break;
+		case c_notificationButtonDown:
+			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
+			break;
+		case c_notificationClick:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->SwitchArea(m_transitionDestination);
+			break;
+		}
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10004b30
 void GasStation::ReadyWorld()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10005660
+MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10005920
+MxLong GasStation::HandleKeyPress(MxS8 p_key)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10005960
+MxLong GasStation::HandleButtonDown(LegoControlManagerEvent& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10005b20
+MxLong GasStation::HandleClick(LegoControlManagerEvent& p_param)
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10005c40
@@ -116,7 +165,7 @@ MxResult GasStation::Tickle()
 {
 	// TODO
 
-	return 0;
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10005e70
