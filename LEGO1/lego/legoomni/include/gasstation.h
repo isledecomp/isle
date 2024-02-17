@@ -9,7 +9,6 @@
 
 // VTABLE: LEGO1 0x100d4650
 // SIZE 0x128
-// Radio variable at 0x46, in constructor
 class GasStation : public LegoWorld {
 public:
 	GasStation();
@@ -31,12 +30,11 @@ public:
 		return !strcmp(p_name, GasStation::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool VTable0x64() override;                     // vtable+0x64
-	void Enable(MxBool p_enable) override;            // vtable+0x68
-
+	MxResult Create(MxDSAction& p_dsAction) override;             // vtable+0x18
+	void ReadyWorld() override;                                   // vtable+0x50
+	MxBool VTable0x5c() override;                                 // vtable+0x5c
+	MxBool VTable0x64() override;                                 // vtable+0x64
+	void Enable(MxBool p_enable) override;                        // vtable+0x68
 	virtual MxLong HandleClick(LegoControlManagerEvent& p_param); // vtable+0x6c
 
 	// SYNTHETIC: LEGO1 0x100048a0
@@ -44,7 +42,7 @@ public:
 
 private:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
+	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
 
 	undefined2 m_unk0xf8;                        // 0xf8

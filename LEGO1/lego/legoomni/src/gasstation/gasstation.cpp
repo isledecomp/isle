@@ -93,7 +93,7 @@ MxLong GasStation::Notify(MxParam& p_param)
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
+			result = HandleKeyPress((((LegoEventNotificationParam&) p_param)).GetKey());
 			break;
 		case c_notificationButtonDown:
 			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
@@ -124,7 +124,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x10005920
-MxLong GasStation::HandleKeyPress(LegoEventNotificationParam& p_param)
+MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
 	// TODO
 	return 0;
@@ -165,7 +165,7 @@ MxResult GasStation::Tickle()
 {
 	// TODO
 
-	return 0;
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10005e70
