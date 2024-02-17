@@ -84,7 +84,7 @@ MxResult LegoWorld::Create(MxDSAction& p_dsAction)
 
 	if (p_dsAction.GetFlags() & MxDSAction::c_enabled) {
 		if (CurrentWorld()) {
-			CurrentWorld()->Enable(0);
+			CurrentWorld()->Enable(FALSE);
 		}
 
 		SetCurrentWorld(this);
