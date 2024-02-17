@@ -103,7 +103,9 @@ public:
 	int GetLODCount() const { return m_lods ? m_lods->Size() : 0; }
 	const CompoundObject* GetComp() const { return m_comp; }
 
-	inline undefined GetUnk0x0c() { return m_unk0x0c; }
+	inline undefined GetUnknown0x0c() { return m_unk0x0c; }
+
+	inline void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60
 	// ROI::`scalar deleting destructor'

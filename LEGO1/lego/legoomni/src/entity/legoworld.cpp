@@ -448,7 +448,7 @@ MxCore* LegoWorld::Find(const char* p_class, const char* p_name)
 			}
 
 			LegoROI* roi = entity->GetROI();
-			if (roi && !strcmpi(roi->GetUnknown0xe4(), p_name)) {
+			if (roi && !strcmpi(roi->GetName(), p_name)) {
 				return entity;
 			}
 		}

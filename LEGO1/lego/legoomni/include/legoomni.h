@@ -193,6 +193,7 @@ public:
 	void StopTimer() override;                                                                   // vtable+3c
 
 	LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
+	LegoROI* FindROI(const char* p_name);
 	void AddWorld(LegoWorld* p_world);
 	void DeleteWorld(LegoWorld* p_world);
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
@@ -273,8 +274,9 @@ LegoWorld* CurrentWorld();
 LegoUnkSaveDataWriter* UnkSaveDataWriter();
 GifManager* GetGifManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
-void FUN_10015860(const char*, MxU8);
+void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
+LegoROI* FindROI(const char* p_name);
 MxDSAction& GetCurrentAction();
 
 void PlayMusic(MxU32 p_index);

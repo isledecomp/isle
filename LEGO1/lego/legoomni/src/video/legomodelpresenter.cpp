@@ -135,7 +135,7 @@ void LegoModelPresenter::ParseExtra()
 			list<AutoROI*>& roiList = currentWorld->GetUnknownList0xe0();
 
 			for (list<AutoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
-				if (!strcmpi(((LegoROI*) (*it))->GetUnknown0xe4(), output)) {
+				if (!strcmpi(((LegoROI*) (*it))->GetName(), output)) {
 					m_roi = *it;
 					roiList.erase(it);
 

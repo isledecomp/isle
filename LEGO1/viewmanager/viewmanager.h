@@ -20,6 +20,8 @@ public:
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
 
+	inline CompoundObject& GetUnknown0x08() { return m_unk0x08; }
+
 	inline void AddToUnknown0x08(ViewROI* p_roi) { m_unk0x08.push_back(p_roi); }
 
 private:
