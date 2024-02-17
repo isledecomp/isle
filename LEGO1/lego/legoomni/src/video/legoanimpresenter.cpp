@@ -105,12 +105,12 @@ void LegoAnimPresenter::ReadyTickle()
 	m_currentWorld = CurrentWorld();
 
 	if (m_currentWorld) {
-		MxStreamChunk* chunk = m_subscriber->CurrentChunk();
+		MxStreamChunk* chunk = m_subscriber->PeekData();
 
 		if (chunk && chunk->GetTime() + m_action->GetStartTime() <= m_action->GetElapsedTime()) {
-			chunk = m_subscriber->NextChunk();
+			chunk = m_subscriber->PopData();
 			MxResult result = VTable0x88(chunk);
-			m_subscriber->DestroyChunk(chunk);
+			m_subscriber->FreeDataChunk(chunk);
 
 			if (result == SUCCESS) {
 				ProgressTickleState(e_starting);
@@ -134,9 +134,9 @@ void LegoAnimPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x1006b840
 void LegoAnimPresenter::StreamingTickle()
 {
-	if (m_subscriber->CurrentChunk()) {
-		MxStreamChunk* chunk = m_subscriber->NextChunk();
-		m_subscriber->DestroyChunk(chunk);
+	if (m_subscriber->PeekData()) {
+		MxStreamChunk* chunk = m_subscriber->PopData();
+		m_subscriber->FreeDataChunk(chunk);
 	}
 
 	if (m_unk0x95) {

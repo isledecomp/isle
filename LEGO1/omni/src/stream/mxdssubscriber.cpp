@@ -20,7 +20,7 @@ MxDSSubscriber::~MxDSSubscriber()
 		m_controller->RemoveSubscriber(this);
 	}
 
-	DeleteChunks();
+	DestroyData();
 
 	if (m_pendingChunkCursor) {
 		delete m_pendingChunkCursor;
@@ -59,7 +59,7 @@ MxResult MxDSSubscriber::Create(MxStreamController* p_controller, MxU32 p_object
 }
 
 // FUNCTION: LEGO1 0x100b8030
-void MxDSSubscriber::DeleteChunks()
+void MxDSSubscriber::DestroyData()
 {
 	if (m_controller) {
 		MxStreamChunk* chunk = NULL;
@@ -77,7 +77,7 @@ void MxDSSubscriber::DeleteChunks()
 }
 
 // FUNCTION: LEGO1 0x100b8150
-MxResult MxDSSubscriber::AddChunk(MxStreamChunk* p_chunk, MxBool p_append)
+MxResult MxDSSubscriber::AddData(MxStreamChunk* p_chunk, MxBool p_append)
 {
 	if (m_pendingChunkCursor) {
 		if (p_append) {
@@ -92,7 +92,7 @@ MxResult MxDSSubscriber::AddChunk(MxStreamChunk* p_chunk, MxBool p_append)
 }
 
 // FUNCTION: LEGO1 0x100b8250
-MxStreamChunk* MxDSSubscriber::NextChunk()
+MxStreamChunk* MxDSSubscriber::PopData()
 {
 	MxStreamChunk* chunk = NULL;
 
@@ -109,7 +109,7 @@ MxStreamChunk* MxDSSubscriber::NextChunk()
 }
 
 // FUNCTION: LEGO1 0x100b8360
-MxStreamChunk* MxDSSubscriber::CurrentChunk()
+MxStreamChunk* MxDSSubscriber::PeekData()
 {
 	MxStreamChunk* chunk = NULL;
 
@@ -121,7 +121,7 @@ MxStreamChunk* MxDSSubscriber::CurrentChunk()
 }
 
 // FUNCTION: LEGO1 0x100b8390
-void MxDSSubscriber::DestroyChunk(MxStreamChunk* p_chunk)
+void MxDSSubscriber::FreeDataChunk(MxStreamChunk* p_chunk)
 {
 	if (p_chunk) {
 		if (m_consumedChunkCursor->Find(p_chunk)) {

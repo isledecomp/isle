@@ -62,7 +62,7 @@ void MxStillPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 	LoadFrame(chunk);
-	m_subscriber->DestroyChunk(chunk);
+	m_subscriber->FreeDataChunk(chunk);
 }
 
 // FUNCTION: LEGO1 0x100b9dd0

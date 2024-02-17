@@ -71,7 +71,7 @@ void MxEventPresenter::ReadyTickle()
 
 	if (chunk) {
 		CopyData(chunk);
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ParseExtra();
 		ProgressTickleState(e_starting);
 	}
@@ -107,7 +107,7 @@ MxResult MxEventPresenter::PutData()
 				}
 
 				if (m_currentTickleState == e_streaming) {
-					m_subscriber->DestroyChunk(m_currentChunk);
+					m_subscriber->FreeDataChunk(m_currentChunk);
 				}
 				m_currentChunk = NULL;
 			}

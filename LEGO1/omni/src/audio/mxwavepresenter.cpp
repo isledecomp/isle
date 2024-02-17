@@ -119,7 +119,7 @@ void MxWavePresenter::ReadyTickle()
 	if (chunk) {
 		m_waveFormat = (WaveFormat*) new MxU8[chunk->GetLength()];
 		memcpy(m_waveFormat, chunk->GetData(), chunk->GetLength());
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		ParseExtra();
 		ProgressTickleState(e_starting);
 	}
@@ -232,7 +232,7 @@ void MxWavePresenter::LoopChunk(MxStreamChunk* p_chunk)
 {
 	WriteToSoundBuffer(p_chunk->GetData(), p_chunk->GetLength());
 	if (IsEnabled()) {
-		m_subscriber->DestroyChunk(p_chunk);
+		m_subscriber->FreeDataChunk(p_chunk);
 	}
 }
 
@@ -246,7 +246,7 @@ MxResult MxWavePresenter::PutData()
 		case e_streaming:
 			if (m_currentChunk && FUN_100b1ba0()) {
 				WriteToSoundBuffer(m_currentChunk->GetData(), m_currentChunk->GetLength());
-				m_subscriber->DestroyChunk(m_currentChunk);
+				m_subscriber->FreeDataChunk(m_currentChunk);
 				m_currentChunk = NULL;
 			}
 
