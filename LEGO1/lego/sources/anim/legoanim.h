@@ -8,12 +8,16 @@
 // SIZE 0x08
 class LegoAnimKey {
 public:
+	enum Flags {
+		c_bit1 = 0x01
+	};
+
 	LegoAnimKey();
 	LegoResult Read(LegoStorage* p_storage);
 
 protected:
-	undefined m_unk0x00;  // 0x00
-	undefined4 m_unk0x04; // 0x04
+	undefined m_unk0x00; // 0x00
+	float m_unk0x04;     // 0x04
 };
 
 // SIZE 0x14
@@ -60,7 +64,7 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 
 protected:
-	undefined m_unk0x00; // 0x08
+	undefined m_unk0x08; // 0x08
 };
 
 // VTABLE: LEGO1 0x100db8c8
@@ -88,6 +92,23 @@ protected:
 	undefined m_unk0x20[0x14];             // 0x20
 };
 
+// SIZE 0x08
+struct LegoAnimActorEntry {
+	LegoChar* m_name;     // 0x00
+	undefined4 m_unk0x04; // 0x04
+};
+
+// SIZE 0x24
+class LegoAnimScene {
+public:
+	LegoAnimScene();
+	~LegoAnimScene();
+	LegoResult Read(LegoStorage* p_storage);
+
+private:
+	undefined m_unk0x00[0x24]; // 0x00
+};
+
 // VTABLE: LEGO1 0x100db8d8
 // SIZE 0x18
 class LegoAnim : public LegoTree {
@@ -95,17 +116,17 @@ public:
 	LegoAnim();
 	~LegoAnim() override;
 	LegoTime GetDuration() { return m_duration; }
-	LegoResult Write(LegoStorage* p_storage) override;        // vtable+0x08
-	virtual LegoResult Read(LegoStorage* p_storage, LegoS32); // vtable+0x10
+	LegoResult Write(LegoStorage* p_storage) override;                     // vtable+0x08
+	virtual LegoResult Read(LegoStorage* p_storage, LegoS32 p_parseScene); // vtable+0x10
 
 	// SYNTHETIC: LEGO1 0x100a0ba0
 	// LegoAnim::`scalar deleting destructor'
 
 protected:
-	LegoTime m_duration;  // 0x08
-	undefined4 m_unk0x0c; // 0x0c
-	undefined4 m_unk0x10; // 0x10
-	undefined4 m_unk0x14; // 0x14
+	LegoTime m_duration;          // 0x08
+	LegoAnimActorEntry* m_actors; // 0x0c
+	LegoU32 m_numActors;          // 0x10
+	LegoAnimScene* m_scene;       // 0x14
 
 	// FUNCTION: LEGO1 0x100a1040
 	LegoTreeNodeData* CreateData() override { return new LegoAnimNodeData(); } // vtable+0x0c
