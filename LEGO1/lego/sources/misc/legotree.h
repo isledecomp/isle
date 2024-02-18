@@ -13,6 +13,7 @@ class LegoStorage;
 class LegoTreeNodeData {
 public:
 	LegoTreeNodeData() {}
+	// FUNCTION: LEGO1 0x1009a0e0
 	virtual ~LegoTreeNodeData() {}
 
 	// FUNCTION: LEGO1 0x10099fe0

@@ -1,8 +1,7 @@
 #ifndef LEGOANIMPRESENTER_H
 #define LEGOANIMPRESENTER_H
 
-#include "lego/sources/misc/legostorage.h"
-#include "lego/sources/misc/legotree.h"
+#include "lego/sources/anim/legoanim.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxvideopresenter.h"
 
@@ -41,7 +40,7 @@ public:
 	void PutFrame() override;                                                              // vtable+0x6c
 	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                   // vtable+0x88
 
-	inline LegoAnimClass* GetUnknown0x64() { return m_unk0x64; }
+	inline LegoAnim* GetAnimation() { return m_anim; }
 
 	const char* GetActionObjectName();
 
@@ -49,7 +48,7 @@ protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	LegoAnimClass* m_unk0x64;  // 0x64
+	LegoAnim* m_anim;          // 0x64
 	undefined4 m_unk0x68;      // 0x68
 	undefined4 m_unk0x6c;      // 0x6c
 	undefined4 m_unk0x70;      // 0x70
@@ -75,28 +74,5 @@ protected:
 
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
-
-// VTABLE: LEGO1 0x100db8d8
-// SIZE 0x18
-class LegoAnimClass : public LegoTree {
-public:
-	LegoAnimClass();
-	~LegoAnimClass() override;
-
-	LegoResult Write(LegoStorage* p_storage) override;        // vtable+0x08
-	LegoTreeNodeData* CreateData() override;                  // vtable+0x0c
-	virtual MxResult VTable0x10(LegoMemory* p_stream, MxS32); // vtable+0x10
-
-	inline MxLong GetUnknown0x8() { return m_unk0x08; }
-
-private:
-	MxLong m_unk0x08;     // 0x08
-	undefined4 m_unk0x0c; // 0x0c
-	undefined4 m_unk0x10; // 0x10
-	undefined4 m_unk0x14; // 0x14
-};
-
-// SYNTHETIC: LEGO1 0x100a0ba0
-// LegoAnimClass::`scalar deleting destructor'
 
 #endif // LEGOANIMPRESENTER_H
