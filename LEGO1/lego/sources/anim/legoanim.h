@@ -106,7 +106,7 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 
 private:
-	undefined m_unk0x00[0x24];
+	undefined m_unk0x00[0x24]; // 0x00
 };
 
 // VTABLE: LEGO1 0x100db8d8
