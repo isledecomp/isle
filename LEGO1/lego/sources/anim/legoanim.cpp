@@ -223,7 +223,7 @@ LegoResult LegoAnim::Write(LegoStorage* p_storage)
 // FUNCTION: LEGO1 0x100a0f60
 LegoMorphKey::LegoMorphKey()
 {
-	m_name = NULL;
+	m_unk0x00 = NULL;
 }
 
 // STUB: LEGO1 0x100a0f70

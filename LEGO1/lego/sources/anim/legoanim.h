@@ -60,7 +60,7 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 
 protected:
-	LegoChar* m_name; // 0x08
+	undefined m_unk0x00; // 0x08
 };
 
 // VTABLE: LEGO1 0x100db8c8
