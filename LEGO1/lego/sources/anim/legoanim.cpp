@@ -67,19 +67,6 @@ LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// FUNCTION: LEGO1 0x100a0f60
-LegoMorphKey::LegoMorphKey()
-{
-	m_name = NULL;
-}
-
-// STUB: LEGO1 0x100a0f70
-LegoResult LegoMorphKey::Read(LegoStorage* p_storage)
-{
-	// TODO
-	return SUCCESS;
-}
-
 // STUB: LEGO1 0x1009fcf0
 LegoAnimNodeData::LegoAnimNodeData()
 {
@@ -228,6 +215,19 @@ LegoResult LegoAnim::Read(LegoStorage* p_storage, LegoS32)
 
 // STUB: LEGO1 0x100a0e30
 LegoResult LegoAnim::Write(LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100a0f60
+LegoMorphKey::LegoMorphKey()
+{
+	m_name = NULL;
+}
+
+// STUB: LEGO1 0x100a0f70
+LegoResult LegoMorphKey::Read(LegoStorage* p_storage)
 {
 	// TODO
 	return SUCCESS;
