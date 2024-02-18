@@ -302,7 +302,7 @@ void LegoWorld::Add(MxCore* p_object)
 
 			if (!strcmpi(animPresenter->GetAction()->GetObjectName(), "ConfigAnimation")) {
 				FUN_1003e050(animPresenter);
-				animPresenter->GetAction()->SetDuration(animPresenter->GetUnknown0x64()->GetUnknown0x8());
+				animPresenter->GetAction()->SetDuration(animPresenter->GetAnimation()->GetDuration());
 			}
 		}
 
