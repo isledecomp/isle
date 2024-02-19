@@ -93,16 +93,15 @@ void HistoryBook::ReadyWorld()
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
 	MxS32 scoreY = 0x79;
 
-	for (MxS16 j = 0; j < GameState()->GetScores()->m_count; j++) {
-		LegoGameState::Score* score = GameState()->GetScores()->GetScore(j);
+	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetScores()->m_count; scoreIndex++) {
+		LegoGameState::Score* score = GameState()->GetScores()->GetScore(scoreIndex);
 
-		MxS32 scoreIndex = j;
-		MxStillPresenter** scorebox = &m_scores[j];
+		MxStillPresenter** scorebox = &m_scores[scoreIndex];
 		*scorebox = scoreboxMaster->Clone();
 
 		MxS32 scoreX = 0x90;
-		if (j >= 10) {
-			if (j == 10) {
+		if (scoreIndex >= 10) {
+			if (scoreIndex == 10) {
 				scoreY = 0x79;
 			}
 
@@ -127,16 +126,17 @@ void HistoryBook::ReadyWorld()
 		(*scorebox)->SetPosition(scoreX + 0xa1, scoreY);
 
 		for (MxS16 letterIndex = 0; letterIndex < (MxS16) _countof(m_names[0]);) {
-			MxS16 letter = score->m_name.m_letters[letterIndex++];
+			MxS16 letter = score->m_name.m_letters[letterIndex];
 
 			if (letter == -1) {
 				break;
 			}
 
-			m_names[scoreIndex][letterIndex] = m_alphabet[letter]->Clone();
-			m_names[scoreIndex][letterIndex]->Enable(TRUE);
-			m_names[scoreIndex][letterIndex]->SetTickleState(MxPresenter::e_repeating);
-			m_names[scoreIndex][letterIndex]->SetPosition(scoreX, scoreY);
+			MxS16 nameIndex = letterIndex++;
+			m_names[scoreIndex][nameIndex] = m_alphabet[letter]->Clone();
+			m_names[scoreIndex][nameIndex]->Enable(TRUE);
+			m_names[scoreIndex][nameIndex]->SetTickleState(MxPresenter::e_repeating);
+			m_names[scoreIndex][nameIndex]->SetPosition(scoreX, scoreY);
 			scoreX += 0x17;
 		}
 
