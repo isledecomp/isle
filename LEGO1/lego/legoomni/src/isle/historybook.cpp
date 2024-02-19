@@ -91,7 +91,7 @@ void HistoryBook::ReadyWorld()
 	MxStillPresenter* scoreboxMaster = (MxStillPresenter*) Find("MxStillPresenter", "ScoreBox");
 	MxU8 scoreColors[3] =
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
-	MxU32 scoreY = 0x79;
+	MxS32 scoreY = 0x79;
 
 	for (MxS16 j = 0; j < GameState()->GetScores()->m_count; j++) {
 		LegoGameState::Score* score = GameState()->GetScores()->GetScore(j);
@@ -100,7 +100,7 @@ void HistoryBook::ReadyWorld()
 		MxStillPresenter** scorebox = &m_scores[j];
 		*scorebox = scoreboxMaster->Clone();
 
-		MxU32 scoreX = 0x90;
+		MxS32 scoreX = 0x90;
 		if (j >= 10) {
 			if (j == 10) {
 				scoreY = 0x79;
