@@ -689,7 +689,7 @@ void LegoGameState::RegisterState(LegoState* p_state)
 }
 
 // FUNCTION: LEGO1 0x1003c710
-LegoGameState::ScoreName* LegoGameState::ScoreName::operator=(ScoreName* const p_other)
+LegoGameState::ScoreName* LegoGameState::ScoreName::operator=(const ScoreName* p_other)
 {
 	memcpy(m_letters, p_other->m_letters, sizeof(m_letters));
 	return this;

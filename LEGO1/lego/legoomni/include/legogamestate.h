@@ -86,18 +86,19 @@ public:
 		e_unk66 = 66
 	};
 
-#pragma pack(push, 1)
-	// SIZE 0xc
+	// SIZE 0x0c
 	struct ScoreName {
 		// FUNCTION: LEGO1 0x1003c710
-		ScoreName* operator=(ScoreName* const p_other);
-		MxS16 m_letters[7]; // 0x0
+		ScoreName* operator=(const ScoreName* p_other);
+
+		MxS16 m_letters[7]; // 0x00
 	};
 
+#pragma pack(push, 1)
 	// SIZE 0x2c
 	struct Score {
-		undefined2 m_unk0x0;  // 0x0
-		MxU8 m_state[25];     // 0x2
+		undefined2 m_unk0x00; // 0x00
+		MxU8 m_state[25];     // 0x02
 		MxU8 m_pad;           // 0x1b
 		ScoreName m_name;     // 0x1c
 		undefined2 m_unk0x2a; // 0x2a
@@ -108,10 +109,10 @@ public:
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
-		inline Score* GetScore(MxU32 p_index) { return p_index >= m_count ? NULL : m_scores + p_index; }
+		inline Score* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : m_scores + p_index; }
 
-		MxU16 m_count;      // 0x0
-		Score m_scores[20]; // 0x2
+		MxS16 m_count;      // 0x00
+		Score m_scores[20]; // 0x02
 	};
 #pragma pack(pop)
 
