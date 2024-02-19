@@ -695,3 +695,19 @@ def test_static_variable_incomplete_coverage(parser):
     # Failed for TEST module
     assert len(parser.alerts) == 1
     assert parser.alerts[0].code == ParserError.ORPHANED_STATIC_VARIABLE
+
+
+def test_header_function_declaration(parser):
+    """This is either a forward reference or a declaration in a header file.
+    Meaning: The implementation is not here. This is not the correct place
+    for the FUNCTION marker and it will probably not match anything."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: HELLO 0x1234",
+            "void sample_function(int);",
+        ]
+    )
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.NO_IMPLEMENTATION

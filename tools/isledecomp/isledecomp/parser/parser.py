@@ -487,6 +487,9 @@ class DecompParser:
                 ):
                     self._function_starts_here()
                     self._function_done()
+                elif self.function_sig.endswith(");"):
+                    # Detect forward reference or declaration
+                    self._syntax_error(ParserError.NO_IMPLEMENTATION)
                 else:
                     self.state = ReaderState.WANT_CURLY
 

@@ -78,6 +78,11 @@ class ParserError(Enum):
     # they annotate are different.
     WRONG_STRING = 205
 
+    # ERROR: This lineref FUNCTION marker is next to a function declaration or
+    # forward reference. The correct place for the marker is where the function
+    # is implemented so we can match with the PDB.
+    NO_IMPLEMENTATION = 206
+
 
 @dataclass
 class ParserAlert:
