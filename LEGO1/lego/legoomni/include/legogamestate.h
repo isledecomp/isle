@@ -102,7 +102,6 @@ public:
 		undefined2 m_unk0x2a; // 0x2a
 	};
 
-#pragma pack(push, 1)
 	// SIZE 0x372
 	struct Scores {
 		void WriteScoreHistory();
@@ -113,7 +112,6 @@ public:
 		MxS16 m_count;      // 0x00
 		Score m_scores[20]; // 0x02
 	};
-#pragma pack(pop)
 
 	LegoGameState();
 	~LegoGameState();
