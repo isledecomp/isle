@@ -91,16 +91,16 @@ public:
 	struct ScoreName {
 		// FUNCTION: LEGO1 0x1003c710
 		ScoreName* operator=(ScoreName* const p_other);
-		MxS16 m_letters[7];
+		MxS16 m_letters[7]; // 0x0
 	};
 
 	// SIZE 0x2c
 	struct Score {
-		undefined2 m_unk0x0; // 0x0
-		MxU8 m_state[25];    // 0x2
-		MxU8 m_pad;          // 0x1b
-		ScoreName m_name;    // 0x1c
-		undefined2 m_unk2a;  // 0x2a
+		undefined2 m_unk0x0;  // 0x0
+		MxU8 m_state[25];     // 0x2
+		MxU8 m_pad;           // 0x1b
+		ScoreName m_name;     // 0x1c
+		undefined2 m_unk0x2a; // 0x2a
 	};
 
 	// SIZE 0x372
@@ -108,10 +108,10 @@ public:
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
-		inline Score* GetScore(MxU32 index) { return index >= m_count ? NULL : m_scores + index; }
+		inline Score* GetScore(MxU32 p_index) { return p_index >= m_count ? NULL : m_scores + p_index; }
 
-		MxU16 m_count;
-		Score m_scores[20];
+		MxU16 m_count;      // 0x0
+		Score m_scores[20]; // 0x2
 	};
 #pragma pack(pop)
 
