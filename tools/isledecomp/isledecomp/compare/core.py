@@ -12,6 +12,7 @@ from isledecomp.dir import walk_source_dir
 from isledecomp.types import SymbolType
 from isledecomp.compare.asm import ParseAsm, can_resolve_register_differences
 from .db import CompareDb, MatchInfo
+from .diff import combined_diff
 from .lines import LinesDb
 
 
@@ -307,8 +308,12 @@ class Compare:
             float_lookup=recomp_float,
         )
 
-        orig_asm = orig_parse.parse_asm(orig_raw, match.orig_addr)
-        recomp_asm = recomp_parse.parse_asm(recomp_raw, match.recomp_addr)
+        orig_combined = orig_parse.parse_asm(orig_raw, match.orig_addr)
+        recomp_combined = recomp_parse.parse_asm(recomp_raw, match.recomp_addr)
+
+        # Detach addresses from asm lines for the text diff.
+        orig_asm = [x[1] for x in orig_combined]
+        recomp_asm = [x[1] for x in recomp_combined]
 
         diff = difflib.SequenceMatcher(None, orig_asm, recomp_asm)
         ratio = diff.ratio()
@@ -317,7 +322,9 @@ class Compare:
             # Check whether we can resolve register swaps which are actually
             # perfect matches modulo compiler entropy.
             is_effective_match = can_resolve_register_differences(orig_asm, recomp_asm)
-            unified_diff = difflib.unified_diff(orig_asm, recomp_asm, n=10)
+            unified_diff = combined_diff(
+                diff, orig_combined, recomp_combined, context_size=10
+            )
         else:
             is_effective_match = False
             unified_diff = []
@@ -352,9 +359,7 @@ class Compare:
             [t for (t,) in struct.iter_unpack("<L", recomp_table)],
         )
 
-        def match_text(
-            i: int, m: Optional[MatchInfo], raw_addr: Optional[int] = None
-        ) -> str:
+        def match_text(m: Optional[MatchInfo], raw_addr: Optional[int] = None) -> str:
             """Format the function reference at this vtable index as text.
             If we have not identified this function, we have the option to
             display the raw address. This is only worth doing for the original addr
@@ -363,19 +368,18 @@ class Compare:
             should override the given function from the superclass, but we have not
             implemented this yet.
             """
-            index = f"vtable0x{i*4:02x}"
 
             if m is not None:
                 orig = hex(m.orig_addr) if m.orig_addr is not None else "no orig"
                 recomp = (
                     hex(m.recomp_addr) if m.recomp_addr is not None else "no recomp"
                 )
-                return f"{index:>12}  :  ({orig:10} / {recomp:10})  :  {m.name}"
+                return f"({orig} / {recomp})  :  {m.name}"
 
             if raw_addr is not None:
-                return f"{index:>12}  :  0x{raw_addr:x} from orig not annotated."
+                return f"0x{raw_addr:x} from orig not annotated."
 
-            return f"{index:>12}  :  (no match)"
+            return "(no match)"
 
         orig_text = []
         recomp_text = []
@@ -395,14 +399,22 @@ class Compare:
                 ratio += 1
 
             n_entries += 1
-            orig_text.append(match_text(i, orig, raw_orig))
-            recomp_text.append(match_text(i, recomp))
+            index = f"vtable0x{i*4:02x}"
+            orig_text.append((index, match_text(orig, raw_orig)))
+            recomp_text.append((index, match_text(recomp)))
 
         ratio = ratio / float(n_entries) if n_entries > 0 else 0
 
         # n=100: Show the entire table if there is a diff to display.
         # Otherwise it would be confusing if the table got cut off.
-        unified_diff = difflib.unified_diff(orig_text, recomp_text, n=100)
+
+        sm = difflib.SequenceMatcher(
+            None,
+            [x[1] for x in orig_text],
+            [x[1] for x in recomp_text],
+        )
+
+        unified_diff = combined_diff(sm, orig_text, recomp_text, context_size=100)
 
         return DiffReport(
             match_type=SymbolType.VTABLE,
