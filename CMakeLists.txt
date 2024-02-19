@@ -147,6 +147,14 @@ set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
 target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(roi PRIVATE)
 
+add_library(anim STATIC
+  LEGO1/lego/sources/anim/legoanim.cpp
+)
+register_lego1_target(anim)
+set_property(TARGET anim PROPERTY ARCHIVE_OUTPUT_NAME "anim$<$<CONFIG:Debug>:d>")
+target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_link_libraries(anim PRIVATE)
+
 add_library(misc STATIC
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp
@@ -402,7 +410,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/realtime")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
+target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi anim FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)

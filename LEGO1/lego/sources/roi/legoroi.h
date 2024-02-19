@@ -1,6 +1,7 @@
 #ifndef LEGOROI_H
 #define LEGOROI_H
 
+#include "lego/sources/misc/legotypes.h"
 #include "viewmanager/viewroi.h"
 
 typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);
@@ -45,7 +46,7 @@ public:
 
 private:
 	int m_unk0xe0;           // 0xe0
-	char* m_name;            // 0xe4
+	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
 	undefined4 m_unk0x100;   // 0x100
 	LegoEntity* m_unk0x104;  // 0x104

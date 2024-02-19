@@ -8,7 +8,6 @@
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
-DECOMP_SIZE_ASSERT(LegoAnimClass, 0x18)
 
 // FUNCTION: LEGO1 0x10068420
 LegoAnimPresenter::LegoAnimPresenter()
@@ -25,7 +24,7 @@ LegoAnimPresenter::~LegoAnimPresenter()
 // FUNCTION: LEGO1 0x100686f0
 void LegoAnimPresenter::Init()
 {
-	m_unk0x64 = NULL;
+	m_anim = NULL;
 	m_unk0x68 = 0;
 	m_unk0x6c = 0;
 	m_unk0x74 = 0;
@@ -71,9 +70,9 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 					if (stream.Read(&m_unk0xa8[2], sizeof(float)) == SUCCESS) {
 						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
 							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
-								m_unk0x64 = new LegoAnimClass();
-								if (m_unk0x64) {
-									if (m_unk0x64->VTable0x10(&stream, val2) == SUCCESS) {
+								m_anim = new LegoAnim();
+								if (m_anim) {
+									if (m_anim->Read(&stream, val2) == SUCCESS) {
 										result = SUCCESS;
 									}
 								}
@@ -86,7 +85,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 	}
 
 	if (result != SUCCESS) {
-		delete m_unk0x64;
+		delete m_anim;
 		Init();
 	}
 
@@ -148,7 +147,7 @@ void LegoAnimPresenter::StreamingTickle()
 		}
 	}
 	else {
-		if (m_action->GetElapsedTime() > m_unk0x64->GetUnknown0x8() + m_action->GetStartTime()) {
+		if (m_action->GetElapsedTime() > m_anim->GetDuration() + m_action->GetStartTime()) {
 			m_unk0x95 = 1;
 		}
 	}
@@ -197,39 +196,4 @@ void LegoAnimPresenter::EndAction()
 {
 	// TODO
 	MxVideoPresenter::EndAction();
-}
-
-// FUNCTION: LEGO1 0x100a0b30
-LegoAnimClass::LegoAnimClass()
-{
-	m_unk0x08 = 0;
-	m_unk0x0c = 0;
-	m_unk0x10 = 0;
-	m_unk0x14 = 0;
-}
-
-// STUB: LEGO1 0x100a0bc0
-LegoAnimClass::~LegoAnimClass()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x100a0c70
-MxResult LegoAnimClass::VTable0x10(LegoMemory* p_stream, MxS32)
-{
-	return SUCCESS;
-}
-
-// STUB: LEGO1 0x100a0e30
-LegoResult LegoAnimClass::Write(LegoStorage* p_storage)
-{
-	// TODO
-	return SUCCESS;
-}
-
-// STUB: LEGO1 0x100a1040
-LegoTreeNodeData* LegoAnimClass::CreateData()
-{
-	// TODO
-	return NULL;
 }
