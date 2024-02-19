@@ -15,8 +15,9 @@
 
 #include <stdio.h>
 
-// Based on the highest dword offset (0x42c) referenced in the constructor.
-// There may be other members that come after.
+DECOMP_SIZE_ASSERT(LegoGameState::ScoreName, 0xe)
+DECOMP_SIZE_ASSERT(LegoGameState::Score, 0x2c)
+DECOMP_SIZE_ASSERT(LegoGameState::Scores, 0x372)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
 // GLOBAL: LEGO1 0x100f3e40
@@ -687,14 +688,21 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
+// FUNCTION: LEGO1 0x1003c710
+LegoGameState::ScoreName* LegoGameState::ScoreName::operator=(ScoreName* const p_other)
+{
+	memcpy(m_letters, p_other->m_letters, sizeof(m_letters));
+	return this;
+}
+
 // STUB: LEGO1 0x1003c870
-void LegoGameState::ScoreStruct::WriteScoreHistory()
+void LegoGameState::Scores::WriteScoreHistory()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x1003ccf0
-void LegoGameState::ScoreStruct::FUN_1003ccf0(LegoFile&)
+void LegoGameState::Scores::FUN_1003ccf0(LegoFile&)
 {
 	// TODO
 }

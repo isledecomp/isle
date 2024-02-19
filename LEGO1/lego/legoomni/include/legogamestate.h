@@ -86,6 +86,35 @@ public:
 		e_unk66 = 66
 	};
 
+#pragma pack(push, 1)
+	// SIZE 0xc
+	struct ScoreName {
+		// FUNCTION: LEGO1 0x1003c710
+		ScoreName* operator=(ScoreName* const p_other);
+		MxS16 m_letters[7];
+	};
+
+	// SIZE 0x2c
+	struct Score {
+		undefined2 m_unk0x0; // 0x0
+		MxU8 m_state[25];    // 0x2
+		MxU8 m_pad;          // 0x1b
+		ScoreName m_name;    // 0x1c
+		undefined2 m_unk2a;  // 0x2a
+	};
+
+	// SIZE 0x372
+	struct Scores {
+		void WriteScoreHistory();
+		void FUN_1003ccf0(LegoFile&);
+
+		inline Score* GetScore(MxU32 index) { return index >= m_count ? NULL : m_scores + index; }
+
+		MxU16 m_count;
+		Score m_scores[20];
+	};
+#pragma pack(pop)
+
 	LegoGameState();
 	~LegoGameState();
 
@@ -109,6 +138,7 @@ public:
 	inline Area GetPreviousArea() { return m_previousArea; }
 	inline MxU32 GetUnknown0x41c() { return m_unk0x41c; }
 	inline Area GetUnknown0x42c() { return m_unk0x42c; }
+	inline Scores* GetScores() { return &m_unk0xa6; }
 
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
@@ -121,14 +151,6 @@ public:
 	void FindLoadedAct();
 	void FUN_10039780(MxU8);
 	void FUN_10039940();
-
-	struct ScoreStruct {
-		void WriteScoreHistory();
-		void FUN_1003ccf0(LegoFile&);
-
-		MxU16 m_unk0x00;
-		undefined m_unk0x02[0x2c][20];
-	};
 
 private:
 	void RegisterState(LegoState* p_state);
@@ -147,9 +169,9 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	undefined m_unk0x28[128];                   // 0x28
-	ScoreStruct m_unk0xa6;                      // 0xa6
-	undefined m_unk0x41a[2];                    // 0x41a - might be part of the structure at 0xa6
+	undefined m_unk0x26[128];                   // 0x26
+	Scores m_unk0xa6;                           // 0xa6
+	undefined4 m_unk0x418;                      // 0x418
 	undefined4 m_unk0x41c;                      // 0x41c
 	MxBool m_isDirty;                           // 0x420
 	Area m_currentArea;                         // 0x424
