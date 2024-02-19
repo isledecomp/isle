@@ -88,7 +88,6 @@ public:
 
 	// SIZE 0x0c
 	struct ScoreName {
-		// FUNCTION: LEGO1 0x1003c710
 		ScoreName* operator=(const ScoreName* p_other);
 
 		MxS16 m_letters[7]; // 0x00
