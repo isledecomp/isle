@@ -94,16 +94,15 @@ public:
 		MxS16 m_letters[7]; // 0x00
 	};
 
-#pragma pack(push, 1)
 	// SIZE 0x2c
 	struct Score {
 		undefined2 m_unk0x00; // 0x00
 		MxU8 m_state[25];     // 0x02
-		MxU8 m_pad;           // 0x1b
 		ScoreName m_name;     // 0x1c
 		undefined2 m_unk0x2a; // 0x2a
 	};
 
+#pragma pack(push, 1)
 	// SIZE 0x372
 	struct Scores {
 		void WriteScoreHistory();
