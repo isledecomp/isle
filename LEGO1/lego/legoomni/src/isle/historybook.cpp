@@ -94,7 +94,7 @@ void HistoryBook::ReadyWorld()
 	MxS32 scoreY = 0x79;
 
 	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetScores()->m_count; scoreIndex++) {
-		LegoGameState::Score* score = GameState()->GetScores()->GetScore(scoreIndex);
+		LegoGameState::ScoreItem* score = GameState()->GetScores()->GetScore(scoreIndex);
 
 		MxStillPresenter** scorebox = &m_scores[scoreIndex];
 		*scorebox = scoreboxMaster->Clone();

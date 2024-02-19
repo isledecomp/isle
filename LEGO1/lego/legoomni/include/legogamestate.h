@@ -94,7 +94,7 @@ public:
 	};
 
 	// SIZE 0x2c
-	struct Score {
+	struct ScoreItem {
 		undefined2 m_unk0x00; // 0x00
 		MxU8 m_state[25];     // 0x02
 		ScoreName m_name;     // 0x1c
@@ -106,10 +106,10 @@ public:
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
-		inline Score* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
+		inline ScoreItem* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
-		MxS16 m_count;      // 0x00
-		Score m_scores[20]; // 0x02
+		MxS16 m_count;          // 0x00
+		ScoreItem m_scores[20]; // 0x02
 	};
 
 	LegoGameState();

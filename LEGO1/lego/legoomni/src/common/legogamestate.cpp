@@ -16,7 +16,7 @@
 #include <stdio.h>
 
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreName, 0xe)
-DECOMP_SIZE_ASSERT(LegoGameState::Score, 0x2c)
+DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::Scores, 0x372)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
