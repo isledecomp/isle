@@ -126,8 +126,7 @@ void HistoryBook::ReadyWorld()
 		(*scorebox)->SetTickleState(MxPresenter::e_repeating);
 		(*scorebox)->SetPosition(scoreX + 0xa1, scoreY);
 
-		MxS16 letterIndex = 0;
-		do {
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) _countof(m_names[0]);) {
 			MxS16 letter = score->m_name.m_letters[letterIndex++];
 
 			if (letter == -1) {
@@ -139,7 +138,7 @@ void HistoryBook::ReadyWorld()
 			m_names[scoreIndex][letterIndex]->SetTickleState(MxPresenter::e_repeating);
 			m_names[scoreIndex][letterIndex]->SetPosition(scoreX, scoreY);
 			scoreX += 0x17;
-		} while (letterIndex < 7);
+		}
 
 		scoreY += 0x1b;
 	}
