@@ -62,7 +62,7 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 	return 0;
 }
 
-inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxU32 p_x, MxU32 p_y)
+inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxS32 p_x, MxS32 p_y)
 {
 	if (p_color) {
 		for (MxS32 lax = 0; lax < 4; lax++) {
