@@ -111,7 +111,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 			if (m_infocenterState->GetNameLetter(i)) {
 				m_infocenterState->GetNameLetter(i)->Enable(TRUE);
 				m_infocenterState->GetNameLetter(i)->SetTickleState(MxPresenter::e_repeating);
-				m_infocenterState->GetNameLetter(i)->VTable0x88(((7 - count) / 2 + i) * 29 + 223, 45);
+				m_infocenterState->GetNameLetter(i)->SetPosition(((7 - count) / 2 + i) * 29 + 223, 45);
 			}
 		}
 	}
@@ -596,12 +596,12 @@ MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 			m_unk0x11c->SetDisplayZ(1000);
 			VideoManager()->SortPresenterList();
 			m_unk0x11c->Enable(TRUE);
-			m_unk0x11c->VTable0x88(p_x, p_y);
+			m_unk0x11c->SetPosition(p_x, p_y);
 
 			m_unk0x11c->SetDisplayZ(oldDisplayZ);
 		}
 		else {
-			m_unk0x11c->VTable0x88(p_x, p_y);
+			m_unk0x11c->SetPosition(p_x, p_y);
 		}
 
 		FUN_10070d10(p_x, p_y);
@@ -1259,7 +1259,7 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 		VideoManager()->SortPresenterList();
 
 		m_frameHotBitmap->Enable(TRUE);
-		m_frameHotBitmap->VTable0x88(x, y);
+		m_frameHotBitmap->SetPosition(x, y);
 		m_frameHotBitmap->SetDisplayZ(originalDisplayZ);
 	}
 	else {

@@ -40,7 +40,7 @@ public:
 	void NextFrame() override;                        // vtable+0x64
 	void LoadFrame(MxStreamChunk* p_chunk) override;  // vtable+0x68
 	void RealizePalette() override;                   // vtable+0x70
-	virtual void VTable0x88(MxS32 p_x, MxS32 p_y);    // vtable+0x88
+	virtual void SetPosition(MxS32 p_x, MxS32 p_y);   // vtable+0x88
 	virtual MxStillPresenter* Clone();                // vtable+0x8c
 
 private:

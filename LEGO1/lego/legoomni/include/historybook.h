@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "legogamestate.h"
 #include "legoworld.h"
+#include "mxstillpresenter.h"
 
 // VTABLE: LEGO1 0x100da328
 // SIZE 0x3e4
@@ -36,9 +37,9 @@ public:
 
 private:
 	LegoGameState::Area m_transitionDestination; // 0xf8
-	undefined m_unk0xfc[104];                    // 0xfc
-	undefined m_unk0x164[560];                   // 0x164
-	undefined m_unk0x394[80];                    // 0x394
+	MxStillPresenter* m_alphabet[26];            // 0xfc
+	MxStillPresenter* m_names[20][7];            // 0x164
+	MxStillPresenter* m_scores[20];              // 0x394
 };
 
 #endif // HISTORYBOOK_H

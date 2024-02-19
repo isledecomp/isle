@@ -148,7 +148,7 @@ void MxStillPresenter::RepeatingTickle()
 }
 
 // FUNCTION: LEGO1 0x100ba040
-void MxStillPresenter::VTable0x88(MxS32 p_x, MxS32 p_y)
+void MxStillPresenter::SetPosition(MxS32 p_x, MxS32 p_y)
 {
 	MxS32 x = m_location.GetX();
 	MxS32 y = m_location.GetY();
