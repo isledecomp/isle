@@ -13,8 +13,18 @@ def print_combined_diff(udiff, plain: bool = False, show_both: bool = False):
     # Set this value for each address to try to line things up.
     padding_size = 0
 
-    for group in udiff:
-        for subgroup in group:
+    for slug, subgroups in udiff:
+        if plain:
+            print("---")
+            print("+++")
+            print(slug)
+        else:
+            print(f"{colorama.Fore.RED}---")
+            print(f"{colorama.Fore.GREEN}+++")
+            print(f"{colorama.Fore.BLUE}{slug}")
+            print(colorama.Style.RESET_ALL, end="")
+
+        for subgroup in subgroups:
             equal = subgroup.get("both") is not None
 
             if equal:
