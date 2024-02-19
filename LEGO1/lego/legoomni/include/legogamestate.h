@@ -107,7 +107,7 @@ public:
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
-		inline Score* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : m_scores + p_index; }
+		inline Score* GetScore(MxS16 p_index) { return p_index >= m_count ? NULL : &m_scores[p_index]; }
 
 		MxS16 m_count;      // 0x00
 		Score m_scores[20]; // 0x02

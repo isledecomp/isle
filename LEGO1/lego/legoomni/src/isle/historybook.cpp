@@ -62,11 +62,11 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 	return 0;
 }
 
-inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8 p_colors[], MxU32 p_x, MxU32 p_y)
+inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors, MxU32 p_x, MxU32 p_y)
 {
 	if (p_color) {
 		for (MxS32 lax = 0; lax < 4; lax++) {
-			if (p_presenter->GetAlphaMask()) {
+			if (p_presenter->GetAlphaMask() != NULL) {
 				memset(NULL, p_colors[p_color - 1], 4);
 			}
 			else {
@@ -97,7 +97,7 @@ void HistoryBook::ReadyWorld()
 		LegoGameState::Score* score = GameState()->GetScores()->GetScore(j);
 
 		MxS32 scoreIndex = j;
-		MxStillPresenter** scorebox = m_scores + j;
+		MxStillPresenter** scorebox = &m_scores[j];
 		*scorebox = scoreboxMaster->Clone();
 
 		MxU32 scoreX = 0x90;
@@ -129,15 +129,18 @@ void HistoryBook::ReadyWorld()
 		MxS16 letterIndex = 0;
 		do {
 			MxS16 letter = score->m_name.m_letters[letterIndex++];
+
 			if (letter == -1) {
 				break;
 			}
+
 			m_names[scoreIndex][letterIndex] = m_alphabet[letter]->Clone();
 			m_names[scoreIndex][letterIndex]->Enable(TRUE);
 			m_names[scoreIndex][letterIndex]->SetTickleState(MxPresenter::e_repeating);
 			m_names[scoreIndex][letterIndex]->SetPosition(scoreX, scoreY);
 			scoreX += 0x17;
 		} while (letterIndex < 7);
+
 		scoreY += 0x1b;
 	}
 
