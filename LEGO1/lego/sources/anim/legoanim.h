@@ -102,8 +102,8 @@ protected:
 	undefined2 m_unk0x20;                  // 0x20
 	undefined2 m_unk0x22;                  // 0x22
 	undefined4 m_unk0x24;                  // 0x24
-	undefined4 m_unk0x28;                  // 0x2c
-	undefined4 m_unk0x2c;                  // 0x28
+	undefined4 m_unk0x28;                  // 0x28
+	undefined4 m_unk0x2c;                  // 0x2c
 	undefined4 m_unk0x30;                  // 0x30
 };
 
