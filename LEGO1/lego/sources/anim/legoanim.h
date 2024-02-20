@@ -67,6 +67,16 @@ protected:
 	undefined m_unk0x08; // 0x08
 };
 
+// SIZE 0x0c
+class LegoUnknownKey : public LegoAnimKey {
+public:
+	LegoUnknownKey();
+	LegoResult Read(LegoStorage* p_storage);
+
+protected:
+	undefined4 m_unk0x08; // 0x08
+};
+
 // VTABLE: LEGO1 0x100db8c8
 // SIZE 0x34
 class LegoAnimNodeData : public LegoTreeNodeData {
@@ -89,7 +99,12 @@ protected:
 	LegoRotationKey* m_rotationKeys;       // 0x14
 	LegoScaleKey* m_scaleKeys;             // 0x18
 	LegoMorphKey* m_morphKeys;             // 0x1c
-	undefined m_unk0x20[0x14];             // 0x20
+	undefined2 m_unk0x20;                  // 0x20
+	undefined2 m_unk0x22;                  // 0x22
+	undefined4 m_unk0x24;                  // 0x24
+	undefined4 m_unk0x28;                  // 0x2c
+	undefined4 m_unk0x2c;                  // 0x28
+	undefined4 m_unk0x30;                  // 0x30
 };
 
 // SIZE 0x08
@@ -106,7 +121,15 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 
 private:
-	undefined m_unk0x00[0x24]; // 0x00
+	LegoU16 m_unk0x00;             // 0x00
+	LegoTranslationKey* m_unk0x04; // 0x04
+	LegoU16 m_unk0x08;             // 0x08
+	LegoTranslationKey* m_unk0x0c; // 0x0c
+	LegoU16 m_unk0x10;             // 0x10
+	LegoUnknownKey* m_unk0x14;     // 0x14
+	undefined4 m_unk0x18;          // 0x18
+	undefined4 m_unk0x1c;          // 0x1c
+	undefined4 m_unk0x20;          // 0x20
 };
 
 // VTABLE: LEGO1 0x100db8d8

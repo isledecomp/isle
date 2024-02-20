@@ -5,28 +5,131 @@ DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoRotationKey, 0x18)
 DECOMP_SIZE_ASSERT(LegoScaleKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoMorphKey, 0x0c)
+DECOMP_SIZE_ASSERT(LegoUnknownKey, 0x0c)
 DECOMP_SIZE_ASSERT(LegoAnimNodeData, 0x34)
 DECOMP_SIZE_ASSERT(LegoAnimActorEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimScene, 0x24)
 DECOMP_SIZE_ASSERT(LegoAnim, 0x18)
 
-// STUB: LEGO1 0x1009f0a0
+// FUNCTION: LEGO1 0x1009f000
+LegoUnknownKey::LegoUnknownKey()
+{
+	m_unk0x08 = 0;
+}
+
+// FUNCTION: LEGO1 0x1009f020
+LegoResult LegoUnknownKey::Read(LegoStorage* p_storage)
+{
+	LegoResult result;
+
+	if ((result = LegoAnimKey::Read(p_storage)) != SUCCESS) {
+		return result;
+	}
+
+	result = p_storage->Read(&m_unk0x08, sizeof(m_unk0x08));
+	return result == SUCCESS ? SUCCESS : result;
+}
+
+// FUNCTION: LEGO1 0x1009f0a0
 LegoAnimScene::LegoAnimScene()
 {
-	// TODO
+	m_unk0x00 = 0;
+	m_unk0x04 = NULL;
+	m_unk0x08 = 0;
+	m_unk0x0c = NULL;
+	m_unk0x10 = 0;
+	m_unk0x14 = NULL;
+	m_unk0x18 = 0;
+	m_unk0x1c = 0;
+	m_unk0x20 = 0;
 }
 
-// STUB: LEGO1 0x1009f0d0
+// FUNCTION: LEGO1 0x1009f0d0
 LegoAnimScene::~LegoAnimScene()
 {
-	// TODO
+	if (m_unk0x04 != NULL) {
+		delete[] m_unk0x04;
+		m_unk0x04 = NULL;
+	}
+
+	if (m_unk0x0c != NULL) {
+		delete[] m_unk0x0c;
+		m_unk0x0c = NULL;
+	}
+
+	if (m_unk0x14 != NULL) {
+		delete[] m_unk0x14;
+		m_unk0x14 = NULL;
+	}
 }
 
-// STUB: LEGO1 0x1009f200
+// FUNCTION: LEGO1 0x1009f200
 LegoResult LegoAnimScene::Read(LegoStorage* p_storage)
 {
-	// TODO
+	LegoResult result;
+	LegoS32 i;
+
+	if ((result = p_storage->Read(&m_unk0x00, sizeof(m_unk0x00))) != SUCCESS) {
+		return result;
+	}
+
+	if (m_unk0x00) {
+		m_unk0x04 = new LegoTranslationKey[m_unk0x00];
+		for (i = 0; i < m_unk0x00; i++) {
+			if ((result = m_unk0x04[i].Read(p_storage)) != SUCCESS) {
+				goto done;
+			}
+		}
+	}
+
+	if ((result = p_storage->Read(&m_unk0x08, sizeof(m_unk0x08))) != SUCCESS) {
+		return result;
+	}
+
+	if (m_unk0x08) {
+		m_unk0x0c = new LegoTranslationKey[m_unk0x08];
+		for (i = 0; i < m_unk0x08; i++) {
+			if ((result = m_unk0x0c[i].Read(p_storage)) != SUCCESS) {
+				goto done;
+			}
+		}
+	}
+
+	if ((result = p_storage->Read(&m_unk0x10, sizeof(m_unk0x10))) != SUCCESS) {
+		return result;
+	}
+
+	if (m_unk0x10) {
+		m_unk0x14 = new LegoUnknownKey[m_unk0x10];
+		for (i = 0; i < m_unk0x10; i++) {
+			if ((result = m_unk0x14[i].Read(p_storage)) != SUCCESS) {
+				goto done;
+			}
+		}
+	}
+
 	return SUCCESS;
+
+done:
+	if (m_unk0x04 != NULL) {
+		delete[] m_unk0x04;
+		m_unk0x00 = 0;
+		m_unk0x04 = NULL;
+	}
+
+	if (m_unk0x0c != NULL) {
+		delete[] m_unk0x0c;
+		m_unk0x08 = 0;
+		m_unk0x0c = NULL;
+	}
+
+	if (m_unk0x14 != NULL) {
+		delete[] m_unk0x14;
+		m_unk0x10 = 0;
+		m_unk0x14 = NULL;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1009f900
@@ -164,10 +267,25 @@ LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1009fcf0
+// FUNCTION: LEGO1 0x1009fcf0
 LegoAnimNodeData::LegoAnimNodeData()
 {
-	// TODO
+	m_numTranslationKeys = 0;
+	m_numRotationKeys = 0;
+	m_numScaleKeys = 0;
+	m_numMorphKeys = 0;
+
+	m_name = NULL;
+	m_translationKeys = NULL;
+	m_unk0x20 = 0;
+	m_rotationKeys = NULL;
+	m_unk0x22 = 0;
+	m_scaleKeys = NULL;
+	m_morphKeys = NULL;
+	m_unk0x24 = 0;
+	m_unk0x28 = 0;
+	m_unk0x2c = 0;
+	m_unk0x30 = 0;
 }
 
 // FUNCTION: LEGO1 0x1009fda0
@@ -389,7 +507,7 @@ LegoResult LegoAnim::Write(LegoStorage* p_storage)
 // FUNCTION: LEGO1 0x100a0f60
 LegoMorphKey::LegoMorphKey()
 {
-	m_unk0x08 = NULL;
+	m_unk0x08 = 0;
 }
 
 // FUNCTION: LEGO1 0x100a0f70
