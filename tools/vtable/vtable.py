@@ -7,7 +7,7 @@ from typing import List
 import colorama
 from isledecomp.bin import Bin as IsleBin
 from isledecomp.compare import Compare as IsleCompare
-from isledecomp.utils import print_diff
+from isledecomp.utils import print_combined_diff
 
 # Ignore all compare-db messages.
 logging.getLogger("isledecomp.compare").addHandler(logging.NullHandler())
@@ -53,13 +53,8 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def show_vtable_diff(udiff: List[str], verbose: bool = False, plain: bool = False):
-    lines = [
-        line
-        for line in udiff
-        if verbose or line.startswith("+") or line.startswith("-")
-    ]
-    print_diff(lines, plain)
+def show_vtable_diff(udiff: List, _: bool = False, plain: bool = False):
+    print_combined_diff(udiff, plain)
 
 
 def print_summary(vtable_count: int, problem_count: int):

@@ -192,11 +192,13 @@ class ParseAsm:
     def parse_asm(self, data: bytes, start_addr: Optional[int] = 0) -> List[str]:
         asm = []
 
-        for inst in disassembler.disasm_lite(data, start_addr):
+        for raw_inst in disassembler.disasm_lite(data, start_addr):
             # Use heuristics to disregard some differences that aren't representative
             # of the accuracy of a function (e.g. global offsets)
-            result = self.sanitize(DisasmLiteInst(*inst))
+            inst = DisasmLiteInst(*raw_inst)
+            result = self.sanitize(inst)
+
             # mnemonic + " " + op_str
-            asm.append(" ".join(result))
+            asm.append((hex(inst.address), " ".join(result)))
 
         return asm

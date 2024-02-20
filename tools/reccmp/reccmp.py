@@ -10,7 +10,7 @@ from datetime import datetime
 from isledecomp import (
     Bin,
     get_file_in_script_dir,
-    print_diff,
+    print_combined_diff,
     diff_json,
     percent_string,
 )
@@ -48,8 +48,12 @@ def gen_json(json_file: str, orig_file: str, data):
 
 
 def gen_html(html_file, data):
+    js_path = get_file_in_script_dir("reccmp.js")
+    with open(js_path, "r", encoding="utf-8") as f:
+        reccmp_js = f.read()
+
     output_data = Renderer().render_path(
-        get_file_in_script_dir("template.html"), {"data": data}
+        get_file_in_script_dir("template.html"), {"data": data, "reccmp_js": reccmp_js}
     )
 
     with open(html_file, "w", encoding="utf-8") as htmlfile:
@@ -106,7 +110,7 @@ def print_match_verbose(match, show_both_addrs: bool = False, is_plain: bool = F
                 f"{addrs}: {match.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n"
             )
     else:
-        print_diff(match.udiff, is_plain)
+        print_combined_diff(match.udiff, is_plain, show_both_addrs)
 
         print(
             f"\n{match.name} is only {percenttext} similar to the original, diff above"
@@ -282,7 +286,7 @@ def main():
                 html_obj["effective"] = True
 
             if match.udiff is not None:
-                html_obj["diff"] = "\n".join(match.udiff)
+                html_obj["diff"] = match.udiff
 
             if match.is_stub:
                 html_obj["stub"] = True

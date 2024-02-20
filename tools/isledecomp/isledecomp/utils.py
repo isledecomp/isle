@@ -5,7 +5,70 @@ import logging
 import colorama
 
 
+def print_combined_diff(udiff, plain: bool = False, show_both: bool = False):
+    if udiff is None:
+        return
+
+    # We don't know how long the address string will be ahead of time.
+    # Set this value for each address to try to line things up.
+    padding_size = 0
+
+    for slug, subgroups in udiff:
+        if plain:
+            print("---")
+            print("+++")
+            print(slug)
+        else:
+            print(f"{colorama.Fore.RED}---")
+            print(f"{colorama.Fore.GREEN}+++")
+            print(f"{colorama.Fore.BLUE}{slug}")
+            print(colorama.Style.RESET_ALL, end="")
+
+        for subgroup in subgroups:
+            equal = subgroup.get("both") is not None
+
+            if equal:
+                for orig_addr, line, recomp_addr in subgroup["both"]:
+                    padding_size = max(padding_size, len(orig_addr))
+                    if show_both:
+                        print(f"{orig_addr} / {recomp_addr} : {line}")
+                    else:
+                        print(f"{orig_addr} : {line}")
+            else:
+                for orig_addr, line in subgroup["orig"]:
+                    padding_size = max(padding_size, len(orig_addr))
+                    addr_prefix = (
+                        f"{orig_addr} / {'':{padding_size}}" if show_both else orig_addr
+                    )
+
+                    if plain:
+                        print(f"{addr_prefix} : -{line}")
+                    else:
+                        print(
+                            f"{addr_prefix} : {colorama.Fore.RED}-{line}{colorama.Style.RESET_ALL}"
+                        )
+
+                for recomp_addr, line in subgroup["recomp"]:
+                    padding_size = max(padding_size, len(recomp_addr))
+                    addr_prefix = (
+                        f"{'':{padding_size}} / {recomp_addr}"
+                        if show_both
+                        else recomp_addr
+                    )
+
+                    if plain:
+                        print(f"{addr_prefix} : +{line}")
+                    else:
+                        print(
+                            f"{addr_prefix} : {colorama.Fore.GREEN}+{line}{colorama.Style.RESET_ALL}"
+                        )
+
+        # Newline between each diff subgroup.
+        print()
+
+
 def print_diff(udiff, plain):
+    """Print diff in difflib.unified_diff format."""
     if udiff is None:
         return False
 
