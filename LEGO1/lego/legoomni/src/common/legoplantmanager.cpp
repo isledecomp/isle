@@ -44,11 +44,10 @@ void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 
 	if (p_value != NULL) {
 		g_customizeAnimFile = new char[strlen(p_value) + 1];
-		if (g_customizeAnimFile == NULL) {
-			return;
-		}
 
-		strcpy(g_customizeAnimFile, p_value);
+		if (g_customizeAnimFile != NULL) {
+			strcpy(g_customizeAnimFile, p_value);
+		}
 	}
 	else {
 		g_customizeAnimFile = NULL;
