@@ -34,6 +34,10 @@ def combined_diff(
         orig_addrs = set()
         recomp_addrs = set()
 
+        first, last = group[0], group[-1]
+        orig_range = len(orig_combined[first[1] : last[2]])
+        recomp_range = len(recomp_combined[first[3] : last[4]])
+
         for code, i1, i2, j1, j2 in group:
             if code == "equal":
                 # The sections are equal, so the list slices are guaranteed
@@ -74,7 +78,20 @@ def combined_diff(
         orig_sorted = sorted(orig_addrs)
         recomp_sorted = sorted(recomp_addrs)
 
-        diff_slug = f"@@ -{orig_sorted[0]},{orig_sorted[-1]} +{recomp_sorted[0]},{recomp_sorted[-1]} @@"
+        # We could get a diff group that has no original addresses.
+        # This might happen for a stub function where we are not able to
+        # produce even a single instruction from the original.
+        # In that case, show the best slug line that we can.
+        def peek_front(list_, default=""):
+            try:
+                return list_[0]
+            except IndexError:
+                return default
+
+        orig_first = peek_front(orig_sorted)
+        recomp_first = peek_front(recomp_sorted)
+
+        diff_slug = f"@@ -{orig_first},{orig_range} +{recomp_first},{recomp_range} @@"
 
         unified_diff.append((diff_slug, subgroups))
 

@@ -53,7 +53,7 @@ def print_combined_diff(udiff, plain: bool = False, show_both: bool = False):
                     addr_prefix = (
                         f"{'':{padding_size}} / {recomp_addr}"
                         if show_both
-                        else recomp_addr
+                        else " " * padding_size
                     )
 
                     if plain:
