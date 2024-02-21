@@ -1,18 +1,37 @@
 #include "legounksavedatawriter.h"
 
 #include "legogamestate.h"
+#include "legoomni.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoUnkSaveDataWriter, 0x08)
 DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108)
 
+// GLOBAL: LEGO1 0x100f80c0
+LegoSaveDataEntry3 g_saveDataInit[66]; // TODO: add data
+
+// GLOBAL: LEGO1 0x100fc4e4
+char* LegoUnkSaveDataWriter::g_customizeAnimFile = NULL;
+
 // GLOBAL: LEGO1 0x10104f20
 LegoSaveDataEntry3 g_saveData3[66];
 
-// STUB: LEGO1 0x10082a20
+// FUNCTION: LEGO1 0x10082a20
 LegoUnkSaveDataWriter::LegoUnkSaveDataWriter()
 {
-	// TODO
+	m_map = new LegoUnkSaveDataMap();
+	InitSaveData();
+
+	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
+	VariableTable()->SetVariable(m_customizeAnimFile);
+}
+
+// FUNCTION: LEGO1 0x10083270
+void LegoUnkSaveDataWriter::InitSaveData()
+{
+	for (MxS32 i = 0; i < 66; i++) {
+		g_saveData3[i] = g_saveDataInit[i];
+	}
 }
 
 // STUB: LEGO1 0x100832a0
@@ -71,7 +90,7 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 }
 
 // STUB: LEGO1 0x10083500
-LegoROI* LegoUnkSaveDataWriter::FUN_10083500(char*, undefined4)
+LegoROI* LegoUnkSaveDataWriter::FUN_10083500(char* p_key, MxBool p_option)
 {
 	// TODO
 	// involves an STL map with a _Nil node at 0x100fc508
@@ -88,4 +107,23 @@ void LegoUnkSaveDataWriter::FUN_10083db0(LegoROI* p_roi)
 void LegoUnkSaveDataWriter::FUN_10083f10(LegoROI* p_roi)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x100851a0
+void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
+{
+	if (g_customizeAnimFile != NULL) {
+		delete[] g_customizeAnimFile;
+	}
+
+	if (p_value != NULL) {
+		g_customizeAnimFile = new char[strlen(p_value) + 1];
+
+		if (g_customizeAnimFile != NULL) {
+			strcpy(g_customizeAnimFile, p_value);
+		}
+	}
+	else {
+		g_customizeAnimFile = NULL;
+	}
 }

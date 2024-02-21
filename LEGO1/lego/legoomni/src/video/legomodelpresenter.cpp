@@ -126,7 +126,7 @@ void LegoModelPresenter::ParseExtra()
 		if (KeyValueStringParse(output, g_autoCreate, buffer) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
 			if (m_roi == NULL) {
-				m_roi = UnkSaveDataWriter()->FUN_10083500(token, 0);
+				m_roi = UnkSaveDataWriter()->FUN_10083500(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}
