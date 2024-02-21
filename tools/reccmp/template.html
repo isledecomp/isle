@@ -39,19 +39,19 @@
         font-family: monospace;
       }
 
-      .funcrow:hover {
+      func-row:hover {
         background: #404040 !important;
       }
 
-      .funcrow:nth-child(odd of :not([hidden])), #listing > thead th {
+      func-row:nth-child(odd of :not([hidden])), #listing > thead th {
         background: #282828;
       }
 
-      .funcrow:nth-child(even of :not([hidden])) {
+      func-row:nth-child(even of :not([hidden])) {
         background: #383838;
       }
 
-      .funcrow > td, .diffRow > td, #listing > thead th {
+      #listing > thead th {
         border: 1px #f0f0f0 solid;
         padding: 0.5em;
         word-break: break-all !important;
@@ -169,5 +169,50 @@
         </table>
       </listing-table>
     </div>
+    <template id="funcrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+          contain: paint;
+        }
+
+        ::slotted(*) {
+          border: 1px #f0f0f0 solid;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+      </style>
+      <slot name="address"></slot>
+      <slot name="name"></slot>
+      <slot name="matching"></slot>
+    </template>
+    <template id="diffrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+          contain: paint;
+        }
+
+        td.singleCell {
+          border: 1px #f0f0f0 solid;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+      </style>
+      <td class="singleCell" colspan="3">
+        <slot></slot>
+      </td>
+    </template>
+    <template id="nodiff-template">
+      <style>
+        ::slotted(*) {
+          font-style: italic;
+          text-align: center;
+        }
+      </style>
+      <slot></slot>
+    </template>
   </body>
 </html>
