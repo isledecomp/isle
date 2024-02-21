@@ -251,8 +251,7 @@ class SortIndicator extends window.HTMLElement {
   }
 }
 
-// Wrapper for <tr>
-class FuncRow extends window.HTMLTableRowElement {
+class FuncRow extends window.HTMLElement {
   static observedAttributes = ['expanded'];
 
   constructor() {
@@ -262,27 +261,13 @@ class FuncRow extends window.HTMLTableRowElement {
   }
 
   connectedCallback() {
-    if (this.address === null) {
+    if (this.shadowRoot !== null) {
       return;
     }
 
-    if (this.querySelector('td')) {
-      return;
-    }
-
-    const obj = getDataByAddr(this.address);
-
-    const td0 = document.createElement('td');
-    const td1 = document.createElement('td');
-    const td2 = document.createElement('td');
-
-    td0.innerText = `${obj.address}`;
-    td1.innerText = `${obj.name}`;
-    td2.innerText = getMatchPercentText(obj);
-
-    this.appendChild(td0);
-    this.appendChild(td1);
-    this.appendChild(td2);
+    const template = document.querySelector('template#funcrow-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
   }
 
   get address() {
@@ -308,40 +293,36 @@ class FuncRow extends window.HTMLTableRowElement {
   }
 }
 
-// Wrapper for <tr>
-// Displays asm diff for the given @data-address value.
-class FuncRowChild extends window.HTMLTableRowElement {
-  constructor() {
-    super();
+class NoDiffMessage extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
 
-    const td = document.createElement('td');
-    td.setAttribute('colspan', 3);
-    this.appendChild(td);
+    const template = document.querySelector('template#nodiff-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+  }
+}
+
+// Displays asm diff for the given @data-address value.
+class DiffRow extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#diffrow-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
   }
 
-  connectedCallback() {
-    const td = this.querySelector('td');
+  get address() {
+    return this.getAttribute('data-address');
+  }
 
-    const addr = this.getAttribute('data-address');
-
-    const obj = getDataByAddr(addr);
-
-    if ('stub' in obj) {
-      const diff = document.createElement('div');
-      diff.className = 'identical';
-      diff.innerText = 'Stub. No diff.';
-      td.appendChild(diff);
-    } else if (obj.diff.length === 0) {
-      const diff = document.createElement('div');
-      diff.className = 'identical';
-      diff.innerText = 'Identical function - no diff';
-      td.appendChild(diff);
-    } else {
-      const dd = new DiffDisplay();
-      dd.option = '1';
-      dd.address = addr;
-      td.appendChild(dd);
-    }
+  set address(value) {
+    this.setAttribute('data-address', value);
   }
 }
 
@@ -497,17 +478,39 @@ class ListingTable extends window.HTMLElement {
 
   setRowExpand(address, shouldExpand) {
     const tbody = this.querySelector('tbody');
-    const funcrow = tbody.querySelector(`tr.funcrow[data-address="${address}"]`);
+    const funcrow = tbody.querySelector(`func-row[data-address="${address}"]`);
     if (funcrow === null) {
       return;
     }
 
-    const existing = tbody.querySelector(`tr.diffRow[data-address="${address}"]`);
+    const existing = tbody.querySelector(`diff-row[data-address="${address}"]`);
     if (shouldExpand) {
       if (existing === null) {
-        const diffrow = document.createElement('tr', { is: 'func-row-child' });
-        diffrow.className = 'diffRow';
-        diffrow.setAttribute('data-address', address);
+        const diffrow = document.createElement('diff-row');
+        diffrow.address = address;
+
+        // Decide what goes inside the diff row.
+        const obj = getDataByAddr(address);
+
+        if ('stub' in obj) {
+          const msg = document.createElement('no-diff');
+          const p = document.createElement('div');
+          p.innerText = 'Stub. No diff.';
+          msg.appendChild(p);
+          diffrow.appendChild(msg);
+        } else if (obj.diff.length === 0) {
+          const msg = document.createElement('no-diff');
+          const p = document.createElement('div');
+          p.innerText = 'Identical function - no diff';
+          msg.appendChild(p);
+          diffrow.appendChild(msg);
+        } else {
+          const dd = new DiffDisplay();
+          dd.option = '1';
+          dd.address = address;
+          diffrow.appendChild(dd);
+        }
+
         // Insert the diff row after the parent func row.
         tbody.insertBefore(diffrow, funcrow.nextSibling);
       }
@@ -530,12 +533,25 @@ class ListingTable extends window.HTMLElement {
 
     const tbody = this.querySelector('tbody');
 
-    for (const row of data) {
-      const tr = document.createElement('tr', { is: 'func-row' });
-      tr.className = 'funcrow';
-      tr.setAttribute('data-address', row.address);
-      tr.onchangeExpand = shouldExpand => this.setRowExpand(row.address, shouldExpand);
-      tbody.appendChild(tr);
+    for (const obj of data) {
+      const row = document.createElement('func-row');
+      row.setAttribute('data-address', obj.address); // ?
+
+      const items = [
+        ['address', obj.address],
+        ['name', obj.name],
+        ['matching', getMatchPercentText(obj)]
+      ];
+
+      items.forEach(([slotName, content]) => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', slotName);
+        div.innerText = content;
+        row.appendChild(div);
+      });
+
+      row.onchangeExpand = shouldExpand => this.setRowExpand(obj.address, shouldExpand);
+      tbody.appendChild(row);
     }
 
     this.sortRows();
@@ -560,7 +576,7 @@ class ListingTable extends window.HTMLElement {
     // Select only the function rows and the diff child row.
     // Exclude any nested tables used to *display* the diffs.
     const tbody = this.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr.funcrow[data-address], tr.diffRow[data-address]');
+    const rows = tbody.querySelectorAll('func-row[data-address], diff-row[data-address]');
 
     // Sort all rows according to chosen order
     const newRows = Array.from(rows);
@@ -582,7 +598,7 @@ class ListingTable extends window.HTMLElement {
 
   filterRows() {
     const tbody = this.querySelector('tbody');
-    const rows = tbody.querySelectorAll('tr.funcrow[data-address], tr.diffRow[data-address]');
+    const rows = tbody.querySelectorAll('func-row[data-address], diff-row[data-address]');
 
     rows.forEach(row => {
       const addr = row.getAttribute('data-address');
@@ -591,7 +607,7 @@ class ListingTable extends window.HTMLElement {
     });
 
     // Update row count
-    this.querySelector('#rowcount').textContent = `${tbody.querySelectorAll('tr.funcrow:not([hidden])').length}`;
+    this.querySelector('#rowcount').textContent = `${tbody.querySelectorAll('func-row:not([hidden])').length}`;
   }
 }
 
@@ -600,6 +616,7 @@ window.onload = () => {
   window.customElements.define('diff-display', DiffDisplay);
   window.customElements.define('diff-display-options', DiffDisplayOptions);
   window.customElements.define('sort-indicator', SortIndicator);
-  window.customElements.define('func-row', FuncRow, { extends: 'tr' });
-  window.customElements.define('func-row-child', FuncRowChild, { extends: 'tr' });
+  window.customElements.define('func-row', FuncRow);
+  window.customElements.define('diff-row', DiffRow);
+  window.customElements.define('no-diff', NoDiffMessage);
 };
