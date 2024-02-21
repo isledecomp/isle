@@ -1,5 +1,10 @@
 #include "legovariables.h"
 
+#include "legobuildingmanager.h"
+#include "legoomni.h"
+#include "legoplantmanager.h"
+#include "legounksavedatawriter.h"
+
 // GLOBAL: LEGO1 0x100f3a40
 // STRING: LEGO1 0x100f3808
 const char* g_varVISIBILITY = "VISIBILITY";
@@ -37,4 +42,17 @@ void CursorVariable::SetValue(const char* p_value)
 void WhoAmIVariable::SetValue(const char* p_value)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10085b50
+void CustomizeAnimFileVariable::SetValue(const char* p_value)
+{
+	// STRING: LEGO1 0x100fc4f4
+	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") != 0) {
+		return;
+	}
+
+	UnkSaveDataWriter()->SetCustomizeAnimFile(p_value);
+	PlantManager()->SetCustomizeAnimFile(p_value);
+	BuildingManager()->SetCustomizeAnimFile(p_value);
 }

@@ -24,10 +24,14 @@ public:
 	void FUN_100263a0(undefined4 p_und);
 	void FUN_10027120();
 
+	static void SetCustomizeAnimFile(const char* p_value);
+
 	// SYNTHETIC: LEGO1 0x100262a0
 	// LegoPlantManager::`scalar deleting destructor'
 
 private:
+	static char* g_customizeAnimFile;
+
 	void Init();
 
 	undefined m_unk0x08[0x24]; // 0x08

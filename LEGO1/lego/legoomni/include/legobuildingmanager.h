@@ -21,6 +21,7 @@ public:
 	}
 
 	static void configureLegoBuildingManager(MxS32);
+	static void SetCustomizeAnimFile(const char* p_value);
 
 	void FUN_1002fa00();
 	void FUN_1002fb30();
@@ -30,6 +31,8 @@ public:
 	// LegoBuildingManager::`scalar deleting destructor'
 
 private:
+	static char* g_customizeAnimFile;
+
 	void Init();
 
 	undefined m_unk0x08[0x28]; // 0x08
