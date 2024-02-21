@@ -44,15 +44,20 @@ void WhoAmIVariable::SetValue(const char* p_value)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x10085aa0
+CustomizeAnimFileVariable::CustomizeAnimFileVariable(const char* p_key)
+{
+	m_key = p_key;
+	m_key.ToUpperCase();
+}
+
 // FUNCTION: LEGO1 0x10085b50
 void CustomizeAnimFileVariable::SetValue(const char* p_value)
 {
 	// STRING: LEGO1 0x100fc4f4
-	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") != 0) {
-		return;
+	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") == 0) {
+		UnkSaveDataWriter()->SetCustomizeAnimFile(p_value);
+		PlantManager()->SetCustomizeAnimFile(p_value);
+		BuildingManager()->SetCustomizeAnimFile(p_value);
 	}
-
-	UnkSaveDataWriter()->SetCustomizeAnimFile(p_value);
-	PlantManager()->SetCustomizeAnimFile(p_value);
-	BuildingManager()->SetCustomizeAnimFile(p_value);
 }

@@ -2,7 +2,6 @@
 
 #include "legogamestate.h"
 #include "legoomni.h"
-#include "legovariables.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoUnkSaveDataWriter, 0x08)
@@ -23,9 +22,8 @@ LegoUnkSaveDataWriter::LegoUnkSaveDataWriter()
 	m_map = new LegoUnkSaveDataMap();
 	InitSaveData();
 
-	// DECOMP: this constructor is partially inlined
-	CustomizeAnimFileVariable* v = new CustomizeAnimFileVariable();
-	VariableTable()->SetVariable(v);
+	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
+	VariableTable()->SetVariable(m_customizeAnimFile);
 }
 
 // FUNCTION: LEGO1 0x10083270
@@ -125,8 +123,8 @@ void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
 		}
 
 		strcpy(g_customizeAnimFile, p_value);
-		return;
 	}
-
-	g_customizeAnimFile = NULL;
+	else {
+		g_customizeAnimFile = NULL;
+	}
 }

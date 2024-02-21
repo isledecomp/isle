@@ -58,10 +58,10 @@ void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 		}
 
 		strcpy(g_customizeAnimFile, p_value);
-		return;
 	}
-
-	g_customizeAnimFile = NULL;
+	else {
+		g_customizeAnimFile = NULL;
+	}
 }
 
 // STUB: LEGO1 0x10030220

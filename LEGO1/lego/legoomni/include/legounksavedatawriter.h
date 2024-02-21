@@ -3,10 +3,13 @@
 
 #include "decomp.h"
 #include "lego/sources/misc/legostorage.h"
+#include "legovariables.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
 class LegoROI;
+
+#pragma warning(disable : 4237)
 
 // TODO: generic string comparator?
 struct LegoUnkSaveDataMapComparator {
@@ -14,7 +17,7 @@ struct LegoUnkSaveDataMapComparator {
 };
 
 // TODO: pair instead?
-// SIZE 0x8
+// SIZE 0x08
 struct LegoUnkSaveDataMapValue {
 	LegoROI* m_roi;  // 0x00
 	MxU32 m_counter; // 0x04
@@ -54,18 +57,19 @@ public:
 
 	MxResult WriteSaveData3(LegoStorage* p_stream);
 	LegoROI* FUN_10083500(char*, MxBool);
-	void InitSaveData();
+
+	static void InitSaveData();
+	static void SetCustomizeAnimFile(const char* p_value);
+
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
 
-	static void SetCustomizeAnimFile(const char* p_value);
-
 private:
 	static char* g_customizeAnimFile;
 
-	LegoUnkSaveDataMap* m_map; // 0x00
-	undefined m_unk0x04[0x04]; // 0x04
+	LegoUnkSaveDataMap* m_map;                      // 0x00
+	CustomizeAnimFileVariable* m_customizeAnimFile; // 0x04
 };
 
 // clang-format off

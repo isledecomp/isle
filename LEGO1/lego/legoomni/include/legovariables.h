@@ -48,8 +48,7 @@ public:
 // SIZE 0x24
 class CustomizeAnimFileVariable : public MxVariable {
 public:
-	// FUNCTION: LEGO1 0x10085aa0
-	CustomizeAnimFileVariable() : MxVariable("CUSTOMIZE_ANIM_FILE") {}
+	CustomizeAnimFileVariable(const char* p_key);
 
 	void SetValue(const char* p_value) override; // vtable+0x04
 };
