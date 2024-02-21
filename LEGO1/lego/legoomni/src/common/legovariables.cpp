@@ -5,6 +5,12 @@
 #include "legoplantmanager.h"
 #include "legounksavedatawriter.h"
 
+DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
+DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)
+DECOMP_SIZE_ASSERT(CursorVariable, 0x24)
+DECOMP_SIZE_ASSERT(WhoAmIVariable, 0x24)
+DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
+
 // GLOBAL: LEGO1 0x100f3a40
 // STRING: LEGO1 0x100f3808
 const char* g_varVISIBILITY = "VISIBILITY";
