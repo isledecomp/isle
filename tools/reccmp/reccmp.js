@@ -418,26 +418,26 @@ class DiffDisplay extends window.HTMLElement {
     const div = document.createElement('div');
     const obj = getDataByAddr(this.address);
 
-    const createSingleCellRow = (text, className) => {
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      td.setAttribute('colspan', 3);
-      td.textContent = text;
-      td.className = className;
-      tr.appendChild(td);
-      return tr;
+    const createHeaderLine = (text, className) => {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.className = className;
+      return div;
     };
 
     const groups = obj.diff;
     groups.forEach(([slug, subgroups]) => {
       const secondTable = document.createElement('table');
-      secondTable.classList.add('diffTable', 'showOrig');
+      secondTable.classList.add('diffTable');
+
+      const hdr = document.createElement('div');
+      hdr.appendChild(createHeaderLine('---', 'diffneg'));
+      hdr.appendChild(createHeaderLine('+++', 'diffpos'));
+      hdr.appendChild(createHeaderLine(slug, 'diffslug'));
+      div.appendChild(hdr);
 
       const tbody = document.createElement('tbody');
       secondTable.appendChild(tbody);
-      tbody.appendChild(createSingleCellRow('---', 'diffneg'));
-      tbody.appendChild(createSingleCellRow('+++', 'diffpos'));
-      tbody.appendChild(createSingleCellRow(slug, 'diffslug'));
 
       const diffs = formatAsm(subgroups, this.option);
       for (const el of diffs) {
