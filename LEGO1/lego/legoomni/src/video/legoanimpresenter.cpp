@@ -59,7 +59,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 	MxResult result = FAILURE;
 	LegoMemory storage(p_chunk->GetData());
 	MxS32 magicSig;
-	LegoS32 p_parseScene = 0;
+	LegoS32 parseScene = 0;
 	MxS32 val3;
 
 	if (storage.Read(&magicSig, sizeof(magicSig)) != SUCCESS || magicSig != 0x11) {
@@ -77,7 +77,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 	if (storage.Read(&m_unk0xa8[2], sizeof(m_unk0xa8[2])) != SUCCESS) {
 		goto done;
 	}
-	if (storage.Read(&p_parseScene, sizeof(p_parseScene)) != SUCCESS) {
+	if (storage.Read(&parseScene, sizeof(parseScene)) != SUCCESS) {
 		goto done;
 	}
 	if (storage.Read(&val3, sizeof(val3)) != SUCCESS) {
@@ -89,7 +89,7 @@ MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 		goto done;
 	}
 
-	if (m_anim->Read(&storage, p_parseScene) != SUCCESS) {
+	if (m_anim->Read(&storage, parseScene) != SUCCESS) {
 		goto done;
 	}
 
