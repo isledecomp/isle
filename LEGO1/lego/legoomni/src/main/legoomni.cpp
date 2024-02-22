@@ -466,7 +466,7 @@ void LegoOmni::Init()
 {
 	MxOmni::Init();
 	m_scripts = NULL;
-	m_inputMgr = NULL;
+	m_inputManager = NULL;
 	m_viewLODListManager = NULL;
 	m_textureContainer = NULL;
 	m_worldList = NULL;
@@ -530,14 +530,14 @@ void LegoOmni::Destroy()
 		m_viewLODListManager = NULL;
 	}
 
-	if (m_inputMgr) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (m_inputManager) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 	}
 
-	if (m_inputMgr) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (m_inputManager) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 	}
 
 	// todo FUN_10046de0
@@ -598,9 +598,9 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		goto done;
 	}
 
-	if (!(m_inputMgr = new LegoInputManager()) || m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (!(m_inputManager = new LegoInputManager()) || m_inputManager->Create(p_param.GetWindowHandle()) != SUCCESS) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 		goto done;
 	}
 
@@ -900,7 +900,7 @@ void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 {
 	if (p_disable) {
 		if (p_flags & c_disableInput) {
-			m_inputMgr->DisableInputProcessing();
+			m_inputManager->DisableInputProcessing();
 		}
 
 		if (p_flags & c_disable3d) {
@@ -912,7 +912,7 @@ void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 		}
 	}
 	else {
-		m_inputMgr->EnableInputProcessing();
+		m_inputManager->EnableInputProcessing();
 		((LegoVideoManager*) m_videoManager)->SetRender3D(TRUE);
 		((LegoVideoManager*) m_videoManager)->UpdateView(0, 0, 0, 0);
 	}

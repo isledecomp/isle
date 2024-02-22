@@ -211,7 +211,7 @@ public:
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
-	LegoInputManager* GetInputManager() { return m_inputMgr; }
+	LegoInputManager* GetInputManager() { return m_inputManager; }
 	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
@@ -238,7 +238,7 @@ public:
 private:
 	ScriptContainer* m_scripts;                  // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c
-	LegoInputManager* m_inputMgr;                // 0x70
+	LegoInputManager* m_inputManager;            // 0x70
 	LegoTextureContainer* m_textureContainer;    // 0x74
 	LegoWorldList* m_worldList;                  // 0x78
 	LegoWorld* m_currentWorld;                   // 0x7c
