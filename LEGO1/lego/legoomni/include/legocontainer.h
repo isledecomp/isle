@@ -60,9 +60,9 @@ public:
 	inline T* Get(const char* p_name)
 	{
 #ifdef COMPAT_MODE
-		typename LegoContainerInfo<T>::iterator it;
+		typename LegoContainerInfo<T>::iterator it = m_map.find(p_name);
 #else
-		LegoContainerInfo<T>::iterator it;
+		LegoContainerInfo<T>::iterator it = m_map.find(p_name);
 #endif
 		if (it != m_map.end()) {
 			return (*it).second;
