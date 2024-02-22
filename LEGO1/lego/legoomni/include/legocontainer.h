@@ -138,6 +138,9 @@ protected:
 // TEMPLATE: LEGO1 0x1005a2c0
 // map<char const *,TextureData *,LegoContainerInfoComparator,allocator<TextureData *> >::~map<char const *,TextureData *,LegoContainerInfoComparator,allocator<TextureData *> >
 
+// TEMPLATE: LEGO1 0x1005a400
+// LegoContainerInfo<TextureData>::~LegoContainerInfo<TextureData>
+
 // TEMPLATE: LEGO1 0x1005a450
 // Map<char const *,TextureData *,LegoContainerInfoComparator>::~Map<char const *,TextureData *,LegoContainerInfoComparator>
 
