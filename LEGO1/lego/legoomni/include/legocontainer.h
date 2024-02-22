@@ -33,10 +33,7 @@ struct LegoContainerInfoComparator {
 
 // SIZE 0x10
 template <class T>
-class LegoContainerInfo : public map<const char*, T*, LegoContainerInfoComparator> {
-	// SYNTHETIC: LEGO1 0x1005a400
-	// LegoContainerInfo::~LegoContainerInfo
-};
+class LegoContainerInfo : public map<const char*, T*, LegoContainerInfoComparator> {};
 
 // SIZE 0x18
 template <class T>
