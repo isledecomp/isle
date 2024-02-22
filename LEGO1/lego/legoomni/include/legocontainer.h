@@ -39,7 +39,6 @@ class LegoContainerInfo : public map<const char*, T*, LegoContainerInfoComparato
 template <class T>
 class LegoContainer {
 public:
-	// FUNCTION: LEGO1 0x1005b660
 	virtual ~LegoContainer()
 	{
 		LegoContainerInfo<T>::iterator it;
@@ -66,9 +65,6 @@ public:
 
 	inline void SetOwnership(MxBool p_ownership) { m_ownership = p_ownership; }
 
-	// SYNTHETIC: LEGO1 0x1005a310
-	// LegoContainer<TextureData>::`scalar deleting destructor'
-
 protected:
 	MxBool m_ownership;         // 0x04
 	LegoContainerInfo<T> m_map; // 0x08
@@ -85,9 +81,6 @@ class LegoTextureContainer : public LegoContainer<TextureData> {
 public:
 	LegoTextureContainer() { m_ownership = TRUE; }
 	~LegoTextureContainer() override;
-
-	// SYNTHETIC: LEGO1 0x1005a580
-	// LegoTextureContainer::`scalar deleting destructor'
 
 	void FUN_10099cc0(TextureData* p_data);
 
@@ -135,14 +128,23 @@ protected:
 // TEMPLATE: LEGO1 0x1005a2c0
 // map<char const *,TextureData *,LegoContainerInfoComparator,allocator<TextureData *> >::~map<char const *,TextureData *,LegoContainerInfoComparator,allocator<TextureData *> >
 
+// TEMPLATE: LEGO1 0x1005a310
+// LegoContainer<TextureData>::`scalar deleting destructor'
+
 // TEMPLATE: LEGO1 0x1005a400
 // LegoContainerInfo<TextureData>::~LegoContainerInfo<TextureData>
 
 // TEMPLATE: LEGO1 0x1005a450
 // Map<char const *,TextureData *,LegoContainerInfoComparator>::~Map<char const *,TextureData *,LegoContainerInfoComparator>
 
+// SYNTHETIC: LEGO1 0x1005a580
+// LegoTextureContainer::`scalar deleting destructor'
+
 // TEMPLATE: LEGO1 0x1005a5a0
 // List<TextureData *>::~List<TextureData *>
+
+// TEMPLATE: LEGO1 0x1005b660
+// LegoContainer<TextureData>::~LegoContainer<TextureData>
 
 // GLOBAL: LEGO1 0x100f0100
 // _Tree<char const *,pair<char const * const,TextureData *>,map<char const *,TextureData *,LegoContainerInfoComparator,allocator<TextureData *> >::_Kfn,LegoContainerInfoComparator,allocator<TextureData *> >::_Nil
