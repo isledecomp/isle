@@ -79,6 +79,11 @@ public:
 	// vtable+0x30
 	Result SetTextureDefaultColorCount(unsigned long) override;
 
+	inline HRESULT CreateTextureFromSurface(LPDIRECTDRAWSURFACE pSurface, LPDIRECT3DRMTEXTURE2* pTexture2)
+	{
+		return m_data->CreateTextureFromSurface(pSurface, pTexture2);
+	}
+
 public:
 	inline Result Create();
 	inline void Destroy();

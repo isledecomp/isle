@@ -291,9 +291,9 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
   LEGO1/lego/legoomni/src/build/racecar.cpp
   LEGO1/lego/legoomni/src/common/animstate.cpp
-  LEGO1/lego/legoomni/src/common/gifmanager.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
+  LEGO1/lego/legoomni/src/common/legocontainer.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp

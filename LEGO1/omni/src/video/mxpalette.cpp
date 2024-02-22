@@ -129,7 +129,7 @@ LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
 		}
 
 		if (MVideoManager() && MVideoManager()->GetDirectDraw()) {
-			MVideoManager()->GetDirectDraw()->CreatePalette(4, this->m_entries, &this->m_palette, NULL);
+			MVideoManager()->GetDirectDraw()->CreatePalette(DDPCAPS_8BIT, this->m_entries, &this->m_palette, NULL);
 		}
 	}
 
