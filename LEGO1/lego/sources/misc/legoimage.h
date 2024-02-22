@@ -35,6 +35,7 @@ public:
 	void SetWidth(LegoU32 p_width) { m_width = p_width; }
 	LegoU32 GetHeight() { return m_height; }
 	void SetHeight(LegoU32 p_height) { m_height = p_height; }
+	LegoU32 GetCount() { return m_count; }
 	LegoPaletteEntry* GetPalette() { return m_palette; }
 	LegoPaletteEntry& GetPaletteEntry(LegoU32 p_i) { return m_palette[p_i]; }
 	void SetPaletteEntry(LegoU32 p_i, LegoPaletteEntry& p_paletteEntry) { m_palette[p_i] = p_paletteEntry; }

@@ -39,6 +39,7 @@ public:
 	void OverrideSkyColor(MxBool p_shouldOverride);
 	void FUN_1007c520();
 
+	inline Tgl::Renderer* GetRenderer() { return this->m_renderer; }
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }

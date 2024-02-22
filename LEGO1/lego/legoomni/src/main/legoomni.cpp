@@ -1,8 +1,8 @@
 #include "legoomni.h"
 
-#include "gifmanager.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legocontainer.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
@@ -215,9 +215,9 @@ LegoBuildingManager* BuildingManager()
 }
 
 // FUNCTION: LEGO1 0x10015800
-GifManager* GetGifManager()
+LegoTextureContainer* GetTextureContainer()
 {
-	return LegoOmni::GetInstance()->GetGifManager();
+	return LegoOmni::GetInstance()->GetTextureContainer();
 }
 
 // FUNCTION: LEGO1 0x10015820
@@ -466,9 +466,9 @@ void LegoOmni::Init()
 {
 	MxOmni::Init();
 	m_scripts = NULL;
-	m_inputMgr = NULL;
+	m_inputManager = NULL;
 	m_viewLODListManager = NULL;
-	m_gifManager = NULL;
+	m_textureContainer = NULL;
 	m_worldList = NULL;
 	m_currentWorld = NULL;
 	m_exit = FALSE;
@@ -520,9 +520,9 @@ void LegoOmni::Destroy()
 		m_buildingManager = NULL;
 	}
 
-	if (m_gifManager) {
-		delete m_gifManager;
-		m_gifManager = NULL;
+	if (m_textureContainer) {
+		delete m_textureContainer;
+		m_textureContainer = NULL;
 	}
 
 	if (m_viewLODListManager) {
@@ -530,14 +530,14 @@ void LegoOmni::Destroy()
 		m_viewLODListManager = NULL;
 	}
 
-	if (m_inputMgr) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (m_inputManager) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 	}
 
-	if (m_inputMgr) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (m_inputManager) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 	}
 
 	// todo FUN_10046de0
@@ -598,15 +598,15 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 		goto done;
 	}
 
-	if (!(m_inputMgr = new LegoInputManager()) || m_inputMgr->Create(p_param.GetWindowHandle()) != SUCCESS) {
-		delete m_inputMgr;
-		m_inputMgr = NULL;
+	if (!(m_inputManager = new LegoInputManager()) || m_inputManager->Create(p_param.GetWindowHandle()) != SUCCESS) {
+		delete m_inputManager;
+		m_inputManager = NULL;
 		goto done;
 	}
 
 	m_viewLODListManager = new ViewLODListManager();
-	m_gifManager = new GifManager();
-	m_gifManager->SetOwnership(FALSE);
+	m_textureContainer = new LegoTextureContainer();
+	m_textureContainer->SetOwnership(FALSE);
 	// FUN_10046c10
 
 	m_saveDataWriter = new LegoUnkSaveDataWriter();
@@ -616,7 +616,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (!m_viewLODListManager || !m_gifManager || !m_worldList || !m_saveDataWriter || !m_plantManager ||
+	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_saveDataWriter || !m_plantManager ||
 		!m_animationManager || !m_buildingManager) {
 		goto done;
 	}
@@ -900,7 +900,7 @@ void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 {
 	if (p_disable) {
 		if (p_flags & c_disableInput) {
-			m_inputMgr->DisableInputProcessing();
+			m_inputManager->DisableInputProcessing();
 		}
 
 		if (p_flags & c_disable3d) {
@@ -912,7 +912,7 @@ void LegoOmni::FUN_1005b4f0(MxBool p_disable, MxU16 p_flags)
 		}
 	}
 	else {
-		m_inputMgr->EnableInputProcessing();
+		m_inputManager->EnableInputProcessing();
 		((LegoVideoManager*) m_videoManager)->SetRender3D(TRUE);
 		((LegoVideoManager*) m_videoManager)->UpdateView(0, 0, 0, 0);
 	}

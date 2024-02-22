@@ -57,33 +57,45 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
 {
 	MxResult result = FAILURE;
-	LegoMemory stream((char*) p_chunk->GetData());
-
+	LegoMemory storage(p_chunk->GetData());
 	MxS32 magicSig;
-	MxS32 val2 = 0;
+	LegoS32 parseScene = 0;
 	MxS32 val3;
 
-	if (stream.Read(&magicSig, sizeof(MxS32)) == SUCCESS && magicSig == 0x11) {
-		if (stream.Read(&m_unk0xa4, sizeof(MxU32)) == SUCCESS) {
-			if (stream.Read(&m_unk0xa8[0], sizeof(float)) == SUCCESS) {
-				if (stream.Read(&m_unk0xa8[1], sizeof(float)) == SUCCESS) {
-					if (stream.Read(&m_unk0xa8[2], sizeof(float)) == SUCCESS) {
-						if (stream.Read(&val2, sizeof(MxS32)) == SUCCESS) {
-							if (stream.Read(&val3, sizeof(MxS32)) == SUCCESS) {
-								m_anim = new LegoAnim();
-								if (m_anim) {
-									if (m_anim->Read(&stream, val2) == SUCCESS) {
-										result = SUCCESS;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	if (storage.Read(&magicSig, sizeof(magicSig)) != SUCCESS || magicSig != 0x11) {
+		goto done;
+	}
+	if (storage.Read(&m_unk0xa4, sizeof(m_unk0xa4)) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&m_unk0xa8[0], sizeof(m_unk0xa8[0])) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&m_unk0xa8[1], sizeof(m_unk0xa8[1])) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&m_unk0xa8[2], sizeof(m_unk0xa8[2])) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&parseScene, sizeof(parseScene)) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&val3, sizeof(val3)) != SUCCESS) {
+		goto done;
 	}
 
+	m_anim = new LegoAnim();
+	if (!m_anim) {
+		goto done;
+	}
+
+	if (m_anim->Read(&storage, parseScene) != SUCCESS) {
+		goto done;
+	}
+
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
 		delete m_anim;
 		Init();

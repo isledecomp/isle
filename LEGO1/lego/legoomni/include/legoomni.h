@@ -5,7 +5,7 @@
 #include "mxdsaction.h"
 #include "mxomni.h"
 
-class GifManager;
+class LegoTextureContainer;
 class Isle;
 class IslePathActor;
 class LegoAnimationManager;
@@ -211,8 +211,8 @@ public:
 
 	LegoVideoManager* GetVideoManager() { return (LegoVideoManager*) m_videoManager; }
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
-	LegoInputManager* GetInputManager() { return m_inputMgr; }
-	GifManager* GetGifManager() { return m_gifManager; }
+	LegoInputManager* GetInputManager() { return m_inputManager; }
+	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
@@ -238,8 +238,8 @@ public:
 private:
 	ScriptContainer* m_scripts;                  // 0x68
 	ViewLODListManager* m_viewLODListManager;    // 0x6c
-	LegoInputManager* m_inputMgr;                // 0x70
-	GifManager* m_gifManager;                    // 0x74
+	LegoInputManager* m_inputManager;            // 0x70
+	LegoTextureContainer* m_textureContainer;    // 0x74
 	LegoWorldList* m_worldList;                  // 0x78
 	LegoWorld* m_currentWorld;                   // 0x7c
 	MxBool m_exit;                               // 0x80
@@ -275,7 +275,7 @@ ViewManager* GetViewManager();
 LegoPlantManager* PlantManager();
 LegoWorld* CurrentWorld();
 LegoUnkSaveDataWriter* UnkSaveDataWriter();
-GifManager* GetGifManager();
+LegoTextureContainer* GetTextureContainer();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
