@@ -9,27 +9,23 @@
 #include "roi/legoroi.h"
 
 // VTABLE: LEGO1 0x100d4858
-// SIZE 0x68 (probably)
+// SIZE 0x68
 class LegoEntity : public MxEntity {
 public:
 	enum {
-		c_bit1 = 0x01
+		c_bit1 = 0x01,
+		c_bit2 = 0x02
 	};
 
-	// Inlined at 0x100853f7
 	inline LegoEntity() { Init(); }
 
-#ifdef ISLE_APP
-	__declspec(dllexport) virtual ~LegoEntity() override;
-#else
 	// FUNCTION: LEGO1 0x1000c290
-	__declspec(dllexport) virtual ~LegoEntity() override { Destroy(TRUE); }
-#endif
+	~LegoEntity() override { Destroy(TRUE); }
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x1000c2f0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0064
 		return "LegoEntity";
@@ -41,27 +37,32 @@ public:
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction);                     // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
-	virtual void ParseAction(char*);                                     // vtable+0x20
-	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
-	virtual void SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir,
-								   const Vector3& p_up);  // vtable+0x28
-	virtual void ResetWorldTransform(MxBool p_inVehicle); // vtable+0x2c
+	virtual MxResult Create(MxDSAction& p_dsAction);                                                 // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor);                                                   // vtable+0x1c
+	virtual void ParseAction(char*);                                                                 // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2);                             // vtable+0x24
+	virtual void SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir, const Vector3& p_up); // vtable+0x28
+	virtual void ResetWorldTransform(MxBool p_inVehicle);                                            // vtable+0x2c
+
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
-	virtual void VTable0x34();                                                        // vtable+0x34
-	virtual void VTable0x38();                                                        // vtable+0x38
-	virtual void VTable0x3c();                                                        // vtable+0x3c
-	virtual void VTable0x40();                                                        // vtable+0x40
-	virtual void VTable0x44();                                                        // vtable+0x44
-	virtual void VTable0x48();                                                        // vtable+0x48
-	virtual void VTable0x4c();                                                        // vtable+0x4c
+
+	virtual void VTable0x34(); // vtable+0x34
+	virtual void VTable0x38(); // vtable+0x38
+	virtual void VTable0x3c(); // vtable+0x3c
+	virtual void VTable0x40(); // vtable+0x40
+	virtual void VTable0x44(); // vtable+0x44
+	virtual void VTable0x48(); // vtable+0x48
+	virtual void VTable0x4c(); // vtable+0x4c
 
 	void FUN_10010c30();
+	void FUN_100114e0(MxU8 p_unk0x59);
 	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
 
 	inline LegoROI* GetROI() { return m_roi; }
+	inline MxU8 GetFlags() { return m_flags; }
+
+	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 
 protected:
 	void Init();

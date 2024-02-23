@@ -8,21 +8,21 @@
 class MxLoopingMIDIPresenter : public MxMIDIPresenter {
 public:
 	// FUNCTION: LEGO1 0x100b1830
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101de0
 		return "MxLoopingMIDIPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x100b1840
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxLoopingMIDIPresenter::ClassName()) || MxMIDIPresenter::IsA(p_name);
 	}
 
-	virtual void StreamingTickle() override; // vtable+0x20
-	virtual void DoneTickle() override;      // vtable+0x2c
-	virtual MxResult PutData() override;     // vtable+0x4c
+	void StreamingTickle() override; // vtable+0x20
+	void DoneTickle() override;      // vtable+0x2c
+	MxResult PutData() override;     // vtable+0x4c
 };
 
 // SYNTHETIC: LEGO1 0x100b19c0

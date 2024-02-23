@@ -20,7 +20,7 @@ class LegoNavController;
 class LegoMouseController : public MxCore {
 public:
 	LegoMouseController();
-	virtual ~LegoMouseController() override;
+	~LegoMouseController() override;
 
 	virtual void LeftDown(int, int);  // vtable+0x14
 	virtual void LeftDrag(int, int);  // vtable+0x18
@@ -30,10 +30,10 @@ public:
 	virtual void RightUp(int, int);   // vtable+0x28
 
 private:
-	BOOL m_isButtonDown; // 0x08
-	undefined4 m_unk0xc; // 0x0c
-	MxDouble m_buttonX;  // 0x10
-	MxDouble m_buttonY;  // 0x18
+	BOOL m_isButtonDown;  // 0x08
+	undefined4 m_unk0x0c; // 0x0c
+	MxDouble m_buttonX;   // 0x10
+	MxDouble m_buttonY;   // 0x18
 };
 
 // SYNTHETIC: LEGO1 0x100655b0
@@ -44,14 +44,14 @@ private:
 class LegoPointOfViewController : public LegoMouseController {
 public:
 	LegoPointOfViewController();
-	virtual ~LegoPointOfViewController() override;
+	~LegoPointOfViewController() override;
 
-	virtual MxResult Tickle() override;               // vtable+0x08
-	virtual void LeftDown(int p_x, int p_y) override; // vtable+0x0c
-	virtual void LeftDrag(int p_x, int p_y) override; // vtable+0x10
+	MxResult Tickle() override;               // vtable+0x08
+	void LeftDown(int p_x, int p_y) override; // vtable+0x0c
+	void LeftDrag(int p_x, int p_y) override; // vtable+0x10
 
 	// FUNCTION: LEGO1 0x10011e40
-	virtual void LeftUp(int p_x, int p_y) override
+	void LeftUp(int p_x, int p_y) override
 	{
 		LegoMouseController::LeftUp(p_x, p_y);
 		AffectPointOfView();
@@ -59,7 +59,7 @@ public:
 	// vtable+0x14
 
 	// FUNCTION: LEGO1 0x10011e60
-	virtual void RightDown(int p_x, int p_y) override
+	void RightDown(int p_x, int p_y) override
 	{
 		LegoMouseController::RightDown(p_x, p_y);
 		AffectPointOfView();
@@ -67,7 +67,7 @@ public:
 	// vtable+0x20
 
 	// FUNCTION: LEGO1 0x10011e80
-	virtual void RightDrag(int p_x, int p_y) override
+	void RightDrag(int p_x, int p_y) override
 	{
 		LegoMouseController::RightDrag(p_x, p_y);
 		AffectPointOfView();
@@ -75,7 +75,7 @@ public:
 	// vtable+0x24
 
 	// FUNCTION: LEGO1 0x10011ea0
-	virtual void RightUp(int p_x, int p_y) override
+	void RightUp(int p_x, int p_y) override
 	{
 		LegoMouseController::RightUp(p_x, p_y);
 		AffectPointOfView();
@@ -86,6 +86,7 @@ public:
 	void OnViewSize(int p_width, int p_height);
 
 	inline LegoEntity* GetEntity() { return m_entity; }
+	inline LegoNavController* GetNavController() { return m_nav; }
 
 protected:
 	void AffectPointOfView();

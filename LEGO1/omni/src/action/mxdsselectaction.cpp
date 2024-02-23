@@ -19,8 +19,9 @@ MxDSSelectAction::MxDSSelectAction()
 // FUNCTION: LEGO1 0x100cb8d0
 MxDSSelectAction::~MxDSSelectAction()
 {
-	if (this->m_unk0xac)
+	if (this->m_unk0xac) {
 		delete this->m_unk0xac;
+	}
 }
 
 // FUNCTION: LEGO1 0x100cb950
@@ -32,8 +33,9 @@ void MxDSSelectAction::CopyFrom(MxDSSelectAction& p_dsSelectAction)
 
 	MxStringListCursor cursor(p_dsSelectAction.m_unk0xac);
 	MxString string;
-	while (cursor.Next(string))
+	while (cursor.Next(string)) {
 		this->m_unk0xac->Append(string);
+	}
 }
 
 // FUNCTION: LEGO1 0x100cbd50
@@ -51,8 +53,9 @@ MxDSAction* MxDSSelectAction::Clone()
 {
 	MxDSSelectAction* clone = new MxDSSelectAction();
 
-	if (clone)
+	if (clone) {
 		*clone = *this;
+	}
 
 	return clone;
 }
@@ -66,8 +69,9 @@ MxU32 MxDSSelectAction::GetSizeOnDisk()
 
 	MxStringListCursor cursor(this->m_unk0xac);
 	MxString string;
-	while (cursor.Next(string))
+	while (cursor.Next(string)) {
 		totalSizeOnDisk += strlen(string.GetData()) + 1;
+	}
 
 	// Note: unlike the other classes, MxDSSelectAction does not have its own
 	// sizeOnDisk member. Instead, it overrides the one from MxDSMultiAction.
@@ -95,8 +99,9 @@ void MxDSSelectAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 		MxS32 random = rand() % value;
 		string = itoa((MxS16) random, buffer, 10);
 	}
-	else
+	else {
 		string = VariableTable()->GetVariable((char*) *p_source);
+	}
 
 	*p_source += strlen((char*) *p_source) + 1;
 
@@ -109,8 +114,9 @@ void MxDSSelectAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 
 		MxU32 i;
 		for (i = 0; i < count; i++) {
-			if (!strcmp(string.GetData(), (char*) *p_source))
+			if (!strcmp(string.GetData(), (char*) *p_source)) {
 				index = i;
+			}
 
 			this->m_unk0xac->Append((char*) *p_source);
 			*p_source += strlen((char*) *p_source) + 1;
@@ -122,10 +128,12 @@ void MxDSSelectAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 
 			MxDSAction* action = (MxDSAction*) DeserializeDSObjectDispatch(p_source, p_unk0x24);
 
-			if (index == i)
+			if (index == i) {
 				this->m_actions->Append(action);
-			else
+			}
+			else {
 				delete action;
+			}
 
 			*p_source += extraFlag;
 		}

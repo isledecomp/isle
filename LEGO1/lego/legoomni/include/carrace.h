@@ -11,25 +11,25 @@ public:
 	CarRace();
 
 	// FUNCTION: LEGO1 0x10016b20
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0528
 		return "CarRace";
 	}
 
 	// FUNCTION: LEGO1 0x10016b30
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, CarRace::ClassName()) || LegoRace::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual void VTable0x50() override;                       // vtable+0x50
-	virtual MxBool VTable0x64() override;                     // vtable+0x64
-	virtual undefined4 VTable0x6c(undefined4) override;       // vtable+0x6c
-	virtual undefined4 VTable0x70(undefined4) override;       // vtable+0x70
-	virtual undefined4 VTable0x74(undefined4) override;       // vtable+0x74
-	virtual undefined4 VTable0x78(undefined4) override;       // vtable+0x78
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void ReadyWorld() override;                       // vtable+0x50
+	MxBool VTable0x64() override;                     // vtable+0x64
+	undefined4 VTable0x6c(undefined4) override;       // vtable+0x6c
+	undefined4 VTable0x70(undefined4) override;       // vtable+0x70
+	undefined4 VTable0x74(undefined4) override;       // vtable+0x74
+	undefined4 VTable0x78(undefined4) override;       // vtable+0x78
 
 	// SYNTHETIC: LEGO1 0x10016c70
 	// CarRace::`scalar deleting destructor'

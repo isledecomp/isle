@@ -16,9 +16,9 @@ public:
 
 	OrientableROI();
 
-	virtual const float* GetWorldVelocity() const override;                // vtable+0x8
-	virtual const BoundingBox& GetWorldBoundingBox() const override;       // vtable+0xc
-	virtual const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
+	const float* GetWorldVelocity() const override;                // vtable+0x08
+	const BoundingBox& GetWorldBoundingBox() const override;       // vtable+0x0c
+	const BoundingSphere& GetWorldBoundingSphere() const override; // vtable+0x10
 	// FUNCTION: LEGO1 0x100a5db0
 	virtual void VTable0x14() { VTable0x1c(); }                 // vtable+0x14
 	virtual void UpdateWorldBoundingVolumes() = 0;              // vtable+0x18
@@ -32,6 +32,7 @@ public:
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }
+	OrientableROI* GetUnknown0xd4() const { return m_unk0xd4; }
 
 protected:
 	MxMatrix m_local2world;           // 0x10
@@ -46,7 +47,7 @@ protected:
 	Mx3DPointFloat m_unk0x94;               // 0x94
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Mx3DPointFloat m_world_velocity;        // 0xc0
-	undefined4 m_unk0xd4;                   // 0xd4
+	OrientableROI* m_unk0xd4;               // 0xd4
 	undefined4 m_unk0xd8;                   // 0xd8
 };
 

@@ -15,6 +15,7 @@ string_demangle_cases = [
         True,
     ),
     ("??_C@_00A@?$AA@", 0, False),
+    ("??_C@_01A@?$AA?$AA@", 1, False),
 ]
 
 
@@ -48,6 +49,7 @@ vtable_cases = [
     ("??_7LegoCarBuildAnimPresenter@@6B@", "LegoCarBuildAnimPresenter"),
     ("??_7?$MxCollection@PAVLegoWorld@@@@6B@", "MxCollection<LegoWorld *>"),
     ("??_7?$MxPtrList@VLegoPathController@@@@6B@", "MxPtrList<LegoPathController>"),
+    ("??_7Renderer@Tgl@@6B@", "Tgl::Renderer"),
 ]
 
 

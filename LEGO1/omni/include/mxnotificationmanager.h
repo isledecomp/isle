@@ -16,8 +16,8 @@ public:
 	inline MxNotificationParam* GetParam() { return m_param; }
 
 private:
-	MxCore* m_target;             // 0x0
-	MxNotificationParam* m_param; // 0x4
+	MxCore* m_target;             // 0x00
+	MxNotificationParam* m_param; // 0x04
 };
 
 class MxIdList : public list<MxU32> {};
@@ -27,8 +27,8 @@ class MxNotificationPtrList : public list<MxNotification*> {};
 // VTABLE: LEGO1 0x100dc078
 class MxNotificationManager : public MxCore {
 private:
-	MxNotificationPtrList* m_queue;    // 0x8
-	MxNotificationPtrList* m_sendList; // 0xc
+	MxNotificationPtrList* m_queue;    // 0x08
+	MxNotificationPtrList* m_sendList; // 0x0c
 	MxCriticalSection m_lock;          // 0x10
 	MxS32 m_unk0x2c;                   // 0x2c
 	MxIdList m_listenerIds;            // 0x30
@@ -36,9 +36,9 @@ private:
 
 public:
 	MxNotificationManager();
-	virtual ~MxNotificationManager(); // vtable+0x0 (scalar deleting destructor)
+	~MxNotificationManager() override; // vtable+0x00 (scalar deleting destructor)
 
-	virtual MxResult Tickle(); // vtable+0x8
+	MxResult Tickle() override; // vtable+0x08
 	// TODO: Where does this method come from?
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x14
 	void Register(MxCore* p_listener);

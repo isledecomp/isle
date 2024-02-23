@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import argparse
@@ -92,8 +94,9 @@ def main():
 
     would_fail = error_count > 0 or (warning_count > 0 and args.warnfail)
     if would_fail:
-        sys.exit(1)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

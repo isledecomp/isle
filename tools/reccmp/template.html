@@ -39,21 +39,22 @@
         font-family: monospace;
       }
 
-      .funcrow:hover {
+      func-row:hover {
         background: #404040 !important;
       }
 
-      .funcrow:nth-child(odd), #listing th {
+      func-row:nth-child(odd of :not([hidden])), #listing > thead th {
         background: #282828;
       }
 
-      .funcrow:nth-child(even) {
+      func-row:nth-child(even of :not([hidden])) {
         background: #383838;
       }
 
-      #listing td, #listing th {
+      #listing > thead th {
         border: 1px #f0f0f0 solid;
         padding: 0.5em;
+        word-break: break-all !important;
       }
 
       .diffneg {
@@ -64,211 +65,154 @@
         color: #80FF80;
       }
 
+      .diffslug {
+        color: #8080FF;
+      }
+
       .identical {
         font-style: italic;
         text-align: center;
       }
 
-      #sortind {
+      sort-indicator {
         margin: 0 0.5em;
       }
 
       .filters {
+        align-items: top;
+        display: flex;
         font-size: 10pt;
-        text-align: center;
+        justify-content: space-between;
         margin: 0.5em 0 1em 0;
       }
+
+      .filters > fieldset {
+        /* checkbox and radio buttons v-aligned with text */
+        align-items: center;
+        display: flex;
+      }
+
+      .filters > fieldset > label {
+        margin-right: 10px;
+      }
+
+      table.diffTable {
+        border-collapse: collapse;
+      }
+
+      table.diffTable:not(:last-child) {
+        /* visual gap *between* diff context groups */
+        margin-bottom: 40px;
+      }
+
+      table.diffTable td, table.diffTable th {
+        border: 0 none;
+        padding: 0 10px 0 0;
+      }
+
+      table.diffTable th {
+        /* don't break address if asm line is long */
+        word-break: keep-all;
+      }
+
+      diff-display[data-option="0"] th:nth-child(1) {
+        display: none;
+      }
+
+      diff-display[data-option="0"] th:nth-child(2),
+      diff-display[data-option="1"] th:nth-child(2) {
+        display: none;
+      }
+
+      label {
+        user-select: none;
+      }
     </style>
-    <script>
-      var data = {{{data}}};
-
-      function diffCssClass(firstChar) {
-        return firstChar === '-' ? 'diffneg' : (firstChar === '+' ? 'diffpos' : '');
-      }
-
-      function asmLineToDiv(line) {
-        const diff_line = document.createElement('div');
-        diff_line.className = diffCssClass(line[0]);
-        diff_line.innerText = line;
-        return diff_line;
-      }
-
-      function formatAsm(asm) {
-        var lines = asm.split('\n');
-        return lines.filter(line => line.length > 0)
-                    .map(asmLineToDiv);
-      }
-
-      function rowClick() {
-        if (this.dataset.expanded === 'true') {
-          this.nextSibling.remove();
-          this.dataset.expanded = false;
-        } else {
-          var row = this.parentNode.insertBefore(document.createElement('tr'), this.nextSibling);
-          row.classList.add('diff');
-          var decCel = row.appendChild(document.createElement('td'));
-          decCel.colSpan = 3;
-          var diff = data[this.dataset.index].diff;
-          if (diff == '') {
-            diff = document.createElement('div');
-            diff.className = 'identical';
-            diff.innerText = 'Identical function - no diff';
-            decCel.appendChild(diff);
-          } else {
-            diff = formatAsm(diff);
-            for (const el of diff) {
-              decCel.appendChild(el);
-            }
-          }
-          this.dataset.expanded = true;
-        }
-      }
-
-      function closeAllDiffs() {
-        const collection = document.getElementsByClassName("diff");
-        for (var ele of collection) {
-          ele.remove();
-        }
-      }
-
-      const filterOptions = { text: '', hidePerfect: false };
-
-      function filter() {
-        closeAllDiffs();
-
-        var ltext = filterOptions.text.toLowerCase();
-
-        const collection = document.getElementsByClassName("funcrow");
-        var searchCount = 0;
-        for (var ele of collection) {
-          var eledata = data[ele.dataset.index];
-
-          const textOk = (ltext == ''
-            || eledata.address.toLowerCase().includes(ltext)
-            || eledata.name.toLowerCase().includes(ltext));
-
-          const perfOk = (!filterOptions.hidePerfect || (eledata.matching < 1));
-
-          if (textOk && perfOk) {
-            ele.style.display = '';
-            searchCount++;
-          } else {
-            ele.style.display = 'none';
-          }
-        }
-      }
-
-      var lastSortedCol = -1;
-      var ascending = true;
-
-      function sortByColumn(column) {
-        closeAllDiffs();
-
-        if (column == lastSortedCol) {
-          ascending = !ascending;
-        }
-        lastSortedCol = column;
-
-        const collection = document.getElementsByClassName("funcrow");
-
-        var newOrder = [];
-
-        for (var ele of collection) {
-          var inserted = false;
-
-          for (var i = 0; i < newOrder.length; i++) {
-            var cmpEle = newOrder[i];
-
-            var ourCol = ele.childNodes[column];
-            var cmpCol = cmpEle.childNodes[column];
-
-            if ((cmpCol.dataset.value > ourCol.dataset.value) == ascending) {
-              newOrder.splice(i, 0, ele);
-              inserted = true;
-              break;
-            }
-          }
-
-          if (!inserted) {
-            newOrder.push(ele);
-          }
-        }
-
-        for (var i = 1; i < newOrder.length; i++) {
-          newOrder[i - 1].after(newOrder[i]);
-        }
-
-        var sortIndicator = document.getElementById('sortind');
-        if (!sortIndicator) {
-          sortIndicator = document.createElement('span');
-          sortIndicator.id = 'sortind';
-        }
-        sortIndicator.innerHTML = ascending ? '&#9650;' : '&#9660;';
-
-        var th = document.getElementById('listingheader').childNodes[column];
-        th.appendChild(sortIndicator);
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        var listing = document.getElementById('listing');
-
-        const headers = listing.getElementsByTagName('th');
-        var headerCount = 0;
-        for (const header of headers) {
-          header.addEventListener('click', function(){
-            sortByColumn(this.dataset.column, true);
-          });
-
-          header.dataset.column = headerCount;
-          headerCount++;
-        }
-
-        data.forEach((element, index) => {
-          var row = listing.appendChild(document.createElement('tr'));
-          var addrCel = row.appendChild(document.createElement('td'));
-          var nameCel = row.appendChild(document.createElement('td'));
-          var matchCel = row.appendChild(document.createElement('td'));
-
-          addrCel.innerText = addrCel.dataset.value = element.address;
-          nameCel.innerText = nameCel.dataset.value = element.name;
-
-          var effectiveNote = (element.matching == 1 && element.diff != '') ? '*' : '';
-          matchCel.innerHTML = (element.matching * 100).toFixed(2) + '%' + effectiveNote;
-          matchCel.dataset.value = element.matching;
-
-          row.classList.add('funcrow');
-          row.addEventListener('click', rowClick);
-          row.dataset.index = index;
-          row.dataset.expanded = false;
-        });
-
-        var search = document.getElementById('search');
-        search.addEventListener('input', function (evt) {
-          filterOptions.text = search.value;
-          filter();
-        });
-
-        const cbHidePerfect = document.getElementById('cbHidePerfect');
-        cbHidePerfect.addEventListener('change', evt => {
-          filterOptions.hidePerfect = evt.target.checked;
-          filter();
-        })
-
-        sortByColumn(0);
-      });
+    <script>var data = {{{data}}};</script>
+    <script>{{{reccmp_js}}}</script>
     </script>
   </head>
   <body>
     <div class="main">
       <h1>Decompilation Status</h1>
-      <input id="search" type="search" placeholder="Search for offset or function name...">
-      <div class="filters">
-        <label for="cbHidePerfect">Hide 100% match</label>
-        <input type="checkbox" id="cbHidePerfect" />
-      </div>
-      <table id="listing">
-        <tr id='listingheader'><th style='width: 20%'>Address</th><th style="width:60%">Name</th><th style='width: 20%'>Matching</th></tr>
-      </table>
+      <listing-table>
+        <input id="search" type="search" placeholder="Search for offset or function name...">
+        <div class="filters">
+          <fieldset>
+            <legend>Options:</legend>
+            <input type="checkbox" id="cbHidePerfect" />
+            <label for="cbHidePerfect">Hide 100% match</label>
+            <input type="checkbox" id="cbHideStub" />
+            <label for="cbHideStub">Hide stubs</label>
+          </fieldset>
+          <fieldset>
+            <legend>Search filters on:</legend>
+            <input type="radio" name="filterType" id="filterName" value=1 checked />
+            <label for="filterName">Name/address</label>
+            <input type="radio" name="filterType" id="filterAsm" value=2 />
+            <label for="filterAsm">Asm output</label>
+            <input type="radio" name="filterType" id="filterDiff" value=3 />
+            <label for="filterDiff">Asm diffs only</label>
+          </fieldset>
+        </div>
+        <p>Results: <span id="rowcount"></span></p>
+        <table id="listing">
+          <thead>
+            <tr>
+              <th data-col="address" style="width: 20%">Address<sort-indicator/></th>
+              <th data-col="name" style="width: 60%">Name<sort-indicator/></th>
+              <th data-col="matching" style="width: 20%">Matching<sort-indicator/></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </listing-table>
     </div>
+    <template id="funcrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+          contain: paint;
+        }
+
+        ::slotted(*) {
+          border: 1px #f0f0f0 solid;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+      </style>
+      <slot name="address"></slot>
+      <slot name="name"></slot>
+      <slot name="matching"></slot>
+    </template>
+    <template id="diffrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+          contain: paint;
+        }
+
+        td.singleCell {
+          border: 1px #f0f0f0 solid;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+      </style>
+      <td class="singleCell" colspan="3">
+        <slot></slot>
+      </td>
+    </template>
+    <template id="nodiff-template">
+      <style>
+        ::slotted(*) {
+          font-style: italic;
+          text-align: center;
+        }
+      </style>
+      <slot></slot>
+    </template>
   </body>
 </html>

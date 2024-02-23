@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 #include "mxtypes.h"
 
-DECOMP_SIZE_ASSERT(MxNotification, 0x8);
+DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
 // FUNCTION: LEGO1 0x100ac220
@@ -128,9 +128,9 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 			MxNotificationPtrList::iterator it = m_sendList->begin();
 			while (it != m_sendList->end()) {
 				notif = *it;
-				if ((notif->GetTarget()->GetId() == p_listener->GetId()) ||
-					(notif->GetParam()->GetSender()) &&
-						(notif->GetParam()->GetSender()->GetId() == p_listener->GetId())) {
+				if (notif->GetTarget()->GetId() == p_listener->GetId() ||
+					(notif->GetParam()->GetSender() && notif->GetParam()->GetSender()->GetId() == p_listener->GetId()
+					)) {
 					m_sendList->erase(it++);
 					pending.push_back(notif);
 				}
@@ -143,8 +143,8 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 		MxNotificationPtrList::iterator it = m_queue->begin();
 		while (it != m_queue->end()) {
 			notif = *it;
-			if ((notif->GetTarget()->GetId() == p_listener->GetId()) ||
-				(notif->GetParam()->GetSender()) && (notif->GetParam()->GetSender()->GetId() == p_listener->GetId())) {
+			if (notif->GetTarget()->GetId() == p_listener->GetId() ||
+				(notif->GetParam()->GetSender() && notif->GetParam()->GetSender()->GetId() == p_listener->GetId())) {
 				m_queue->erase(it++);
 				pending.push_back(notif);
 			}
@@ -169,8 +169,9 @@ void MxNotificationManager::Register(MxCore* p_listener)
 	MxAutoLocker lock(&m_lock);
 
 	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-	if (it != m_listenerIds.end())
+	if (it != m_listenerIds.end()) {
 		return;
+	}
 
 	m_listenerIds.push_back(p_listener->GetId());
 }

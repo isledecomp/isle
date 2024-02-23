@@ -244,33 +244,40 @@ inline Result ViewPrepareFrameForRender(
 	return result;
 }
 
-// FUNCTION: LEGO1 0x100a2fd0
-Result ViewImpl::Render(const Light* pCamera)
+inline Result ViewRender(IDirect3DRMViewport* pViewport, const IDirect3DRMFrame2* pGroup)
 {
-	ViewportAppData* appdata = ViewportGetData(m_data);
+	ViewportAppData* pViewportAppData;
+	Result result;
 
-	IDirect3DRMFrame2* light = static_cast<const LightImpl*>(pCamera)->ImplementationData();
+	pViewportAppData = reinterpret_cast<ViewportAppData*>(pViewport->GetAppData());
 
-	IDirect3DRMFrame2* lastRendered = appdata->m_pLastRenderedFrame;
-	if (light != lastRendered) {
-		if (lastRendered) {
-			lastRendered->DeleteChild(appdata->m_pCamera);
-			// Some other call goes here, not sure what.
-			lastRendered->Release();
-		}
-		appdata->m_pLastRenderedFrame = light;
-		if (light) {
-			light->SetSceneBackgroundRGB(
-				appdata->m_backgroundColorRed,
-				appdata->m_backgroundColorGreen,
-				appdata->m_backgroundColorBlue
-			);
-			light->AddChild(appdata->m_pCamera);
-			// Some other call goes here, not sure what.
-			light->AddRef();
-		}
+	if (pViewportAppData->m_pLastRenderedFrame != pGroup) {
+		result = ViewRestoreFrameAfterRender(
+			pViewportAppData->m_pLastRenderedFrame,
+			pViewportAppData->m_pCamera,
+			pViewportAppData->m_pLightFrame
+		);
+
+		pViewportAppData->m_pLastRenderedFrame = const_cast<IDirect3DRMFrame2*>(pGroup);
+
+		result = ViewPrepareFrameForRender(
+			pViewportAppData->m_pLastRenderedFrame,
+			pViewportAppData->m_pCamera,
+			pViewportAppData->m_pLightFrame,
+			pViewportAppData->m_backgroundColorRed,
+			pViewportAppData->m_backgroundColorGreen,
+			pViewportAppData->m_backgroundColorBlue
+		);
 	}
-	return ResultVal(m_data->Render(light));
+
+	result = ResultVal(pViewport->Render(const_cast<IDirect3DRMFrame2*>(pGroup)));
+	return result;
+}
+
+// FUNCTION: LEGO1 0x100a2fd0
+Result ViewImpl::Render(const Group* pGroup)
+{
+	return ViewRender(m_data, static_cast<const GroupImpl*>(pGroup)->ImplementationData());
 }
 
 // FUNCTION: LEGO1 0x100a3080

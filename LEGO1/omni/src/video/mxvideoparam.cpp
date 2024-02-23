@@ -21,12 +21,7 @@ MxVideoParam::MxVideoParam()
 }
 
 // FUNCTION: LEGO1 0x100beca0
-MxVideoParam::MxVideoParam(
-	COMPAT_CONST MxRect32& p_rect,
-	MxPalette* p_palette,
-	MxULong p_backBuffers,
-	COMPAT_CONST MxVideoParamFlags& p_flags
-)
+MxVideoParam::MxVideoParam(MxRect32& p_rect, MxPalette* p_palette, MxULong p_backBuffers, MxVideoParamFlags& p_flags)
 {
 	this->m_rect = p_rect;
 	this->m_palette = p_palette;
@@ -51,15 +46,17 @@ MxVideoParam::MxVideoParam(MxVideoParam& p_videoParam)
 // FUNCTION: LEGO1 0x100bed50
 MxVideoParam::~MxVideoParam()
 {
-	if (this->m_deviceId != NULL)
+	if (this->m_deviceId != NULL) {
 		delete[] this->m_deviceId;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bed70
 void MxVideoParam::SetDeviceName(char* p_deviceId)
 {
-	if (this->m_deviceId != NULL)
+	if (this->m_deviceId != NULL) {
 		delete[] this->m_deviceId;
+	}
 
 	if (p_deviceId != NULL) {
 		this->m_deviceId = new char[strlen(p_deviceId) + 1];

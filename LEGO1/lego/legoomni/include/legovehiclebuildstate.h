@@ -6,40 +6,30 @@
 #include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d66e0
-// SIZE 0x50 (from 1000acd7)
+// SIZE 0x50
 class LegoVehicleBuildState : public LegoState {
 public:
 	LegoVehicleBuildState(char* p_classType);
 
 	// FUNCTION: LEGO1 0x10025ff0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		return this->m_className.GetData();
 	}
 
 	// FUNCTION: LEGO1 0x10026000
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
 	}
 
-	virtual MxResult VTable0x1c(LegoFileStream* p_legoFileStream) override; // vtable+0x1c
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x100260a0
 	// LegoVehicleBuildState::`scalar deleting destructor'
 
-public:
-	struct UnkStruct {
-		undefined4 m_unk0x00;
-		undefined2 m_unk0x04;
-		undefined2 m_unk0x06;
-		undefined2 m_unk0x08;
-
-		UnkStruct();
-	};
-
 private:
-	UnkStruct m_unk0x08[4]; // 0x08
+	Playlist m_unk0x08[4]; // 0x08
 
 	// This can be one of the following:
 	// * LegoRaceCarBuildState

@@ -15,13 +15,13 @@ public:
 	inline MxStreamProvider() : m_pLookup(NULL), m_pFile(NULL) {}
 
 	// FUNCTION: LEGO1 0x100d07e0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		return "MxStreamProvider";
 	}
 
 	// FUNCTION: LEGO1 0x100d07f0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamProvider::ClassName()) || MxCore::IsA(p_name);
 	}

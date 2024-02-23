@@ -14,27 +14,27 @@ class MxStreamController;
 class MxDSSubscriber : public MxCore {
 public:
 	MxDSSubscriber();
-	virtual ~MxDSSubscriber() override;
+	~MxDSSubscriber() override;
 
 	// FUNCTION: LEGO1 0x100b7d50
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101020f8
 		return "MxDSSubscriber";
 	}
 
 	// FUNCTION: LEGO1 0x100b7d60
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSSubscriber::ClassName()) || MxCore::IsA(p_name);
 	}
 
 	MxResult Create(MxStreamController* p_controller, MxU32 p_objectId, MxS16 p_unk0x48);
-	void DeleteChunks();
-	MxResult AddChunk(MxStreamChunk* p_chunk, MxBool p_append);
-	MxStreamChunk* NextChunk();
-	MxStreamChunk* CurrentChunk();
-	void DestroyChunk(MxStreamChunk* p_chunk);
+	void DestroyData();
+	MxResult AddData(MxStreamChunk* p_chunk, MxBool p_append);
+	MxStreamChunk* PopData();
+	MxStreamChunk* PeekData();
+	void FreeDataChunk(MxStreamChunk* p_chunk);
 
 	inline MxU32 GetObjectId() { return m_objectId; }
 	inline MxS16 GetUnknown48() { return m_unk0x48; }

@@ -1,10 +1,9 @@
 #include "legoact2.h"
 
-// STUB: LEGO1 0x1004fe10
+// FUNCTION: LEGO1 0x1004fe10
 MxBool LegoAct2::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004ff20
@@ -29,13 +28,13 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10050a80
-void LegoAct2::VTable0x50()
+void LegoAct2::ReadyWorld()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10050cf0
-void LegoAct2::VTable0x68(MxBool p_add)
+void LegoAct2::Enable(MxBool p_enable)
 {
 	// TODO
 }

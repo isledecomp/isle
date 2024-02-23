@@ -8,8 +8,8 @@
 // SIZE 0x10
 class MxType19NotificationParam : public MxNotificationParam {
 protected:
-	MxU16 m_unk0xc; // 0xc
-	MxU8 m_unk0xe;  // 0xe
+	MxU16 m_unk0x0c; // 0x0c
+	MxU8 m_unk0x0e;  // 0x0e
 };
 
 #endif // MXTYPE19NOTIFICATIONPARAM_H

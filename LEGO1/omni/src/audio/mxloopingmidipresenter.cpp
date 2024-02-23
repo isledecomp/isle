@@ -20,17 +20,20 @@ void MxLoopingMIDIPresenter::StreamingTickle()
 		return;
 	}
 
-	if (m_chunk->GetTime() + m_action->GetDuration() <= m_action->GetElapsedTime())
+	if (m_chunk->GetTime() + m_action->GetDuration() <= m_action->GetElapsedTime()) {
 		ProgressTickleState(e_done);
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2ae0
 void MxLoopingMIDIPresenter::DoneTickle()
 {
-	if (m_action->GetLoopCount())
+	if (m_action->GetLoopCount()) {
 		MxMIDIPresenter::DoneTickle();
-	else
+	}
+	else {
 		EndAction();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c2b00

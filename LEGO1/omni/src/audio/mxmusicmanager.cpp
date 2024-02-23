@@ -82,8 +82,9 @@ MxResult MxMusicManager::ResetStream()
 		}
 
 		if (m_midiHdrP->dwFlags & MHDR_DONE || m_midiHdrP->dwFlags & MHDR_PREPARED) {
-			if (midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR)) != MMSYSERR_NOERROR)
+			if (midiOutUnprepareHeader((HMIDIOUT) m_midiStreamH, m_midiHdrP, sizeof(MIDIHDR)) != MMSYSERR_NOERROR) {
 				goto done;
+			}
 
 			memset(m_midiHdrP, 0, sizeof(MIDIHDR));
 		}
@@ -131,8 +132,9 @@ void MxMusicManager::SetMIDIVolume()
 // FUNCTION: LEGO1 0x100c0820
 void CALLBACK MxMusicManager::MidiCallbackProc(HDRVR p_hdrvr, UINT p_uMsg, DWORD p_dwUser, DWORD p_dw1, DWORD p_dw2)
 {
-	if (p_uMsg == MOM_DONE)
+	if (p_uMsg == MOM_DONE) {
 		((MxMusicManager*) p_dwUser)->ResetStream();
+	}
 }
 
 // FUNCTION: LEGO1 0x100c0840
@@ -147,21 +149,25 @@ MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 			locked = TRUE;
 			m_thread = new MxTickleThread(this, p_frequencyMS);
 
-			if (!m_thread || m_thread->Start(0, 0) != SUCCESS)
+			if (!m_thread || m_thread->Start(0, 0) != SUCCESS) {
 				goto done;
+			}
 		}
-		else
+		else {
 			TickleManager()->RegisterClient(this, p_frequencyMS);
+		}
 
 		status = SUCCESS;
 	}
 
 done:
-	if (status != SUCCESS)
+	if (status != SUCCESS) {
 		Destroy();
+	}
 
-	if (locked)
+	if (locked) {
 		m_criticalSection.Leave();
+	}
 
 	return status;
 }
@@ -211,22 +217,26 @@ MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 		for (; device < total; device++) {
 			MIDIOUTCAPSA caps;
 			midiOutGetDevCapsA(device, &caps, sizeof(MIDIOUTCAPSA));
-			if (caps.wTechnology == MOD_FMSYNTH)
+			if (caps.wTechnology == MOD_FMSYNTH) {
 				break;
+			}
 		}
 
-		if (device >= total)
+		if (device >= total) {
 			device = -1;
+		}
 
 		if (midiStreamOpen(&m_midiStreamH, &device, 1, (DWORD) MidiCallbackProc, (DWORD) this, CALLBACK_FUNCTION) !=
-			MMSYSERR_NOERROR)
+			MMSYSERR_NOERROR) {
 			goto done;
+		}
 
 		GetMIDIVolume(m_midiVolume);
 
 		m_midiHdrP = new MIDIHDR();
-		if (!m_midiHdrP)
+		if (!m_midiHdrP) {
 			goto done;
+		}
 
 		memset(m_midiHdrP, 0, sizeof(MIDIHDR));
 
@@ -236,8 +246,9 @@ MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 		m_bufferOffset += 0x14;
 		timediv.dwTimeDiv = *((DWORD*) m_bufferOffset);
 
-		if (midiStreamProperty(m_midiStreamH, (LPBYTE) &timediv, MIDIPROP_SET | MIDIPROP_TIMEDIV) != MMSYSERR_NOERROR)
+		if (midiStreamProperty(m_midiStreamH, (LPBYTE) &timediv, MIDIPROP_SET | MIDIPROP_TIMEDIV) != MMSYSERR_NOERROR) {
 			goto done;
+		}
 
 		m_bufferOffset += 0x14;
 		m_bufferSize = *((MxU32*) m_bufferOffset);
@@ -246,12 +257,14 @@ MxResult MxMusicManager::InitializeMIDI(MxU8* p_data, MxS32 p_loopCount)
 		m_midiInitialized = TRUE;
 
 		ResetBuffer();
-		if (ResetStream() != SUCCESS)
+		if (ResetStream() != SUCCESS) {
 			goto done;
+		}
 
 		SetMIDIVolume();
-		if (midiStreamRestart(m_midiStreamH) != MMSYSERR_NOERROR)
+		if (midiStreamRestart(m_midiStreamH) != MMSYSERR_NOERROR) {
 			goto done;
+		}
 
 		result = SUCCESS;
 	}

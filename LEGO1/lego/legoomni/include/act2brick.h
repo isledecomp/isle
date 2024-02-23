@@ -8,25 +8,25 @@
 class Act2Brick : public LegoPathActor {
 public:
 	Act2Brick();
-	virtual ~Act2Brick() override; // vtable+0x0
+	~Act2Brick() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
-	virtual MxResult Tickle() override;               // vtable+0x08
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1007a360
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0438
 		return "Act2Brick";
 	}
 
 	// FUNCTION: LEGO1 0x1007a370
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Act2Brick::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	virtual MxS32 VTable0x94() override; // vtable+0x94
+	MxS32 VTable0x94() override; // vtable+0x94
 
 	// SYNTHETIC: LEGO1 0x1007a450
 	// Act2Brick::`scalar deleting destructor'

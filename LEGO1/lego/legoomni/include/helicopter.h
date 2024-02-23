@@ -12,7 +12,7 @@ public:
 	MxResult FUN_100040a0(Vector4& p_v, float p_f);
 
 private:
-	Mx4DPointFloat m_unk0x0;  // 0x0
+	Mx4DPointFloat m_unk0x00; // 0x00
 	Mx4DPointFloat m_unk0x18; // 0x18
 	undefined4 m_unk0x30;     // 0x30
 };
@@ -22,28 +22,28 @@ private:
 class Helicopter : public IslePathActor {
 public:
 	Helicopter();
-	virtual ~Helicopter() override; // vtable+0x0
+	~Helicopter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10003070
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0130
 		return "Helicopter";
 	}
 
 	// FUNCTION: LEGO1 0x10003080
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
-	virtual void VTable0x70(float p_float) override;                       // vtable+0x70
-	virtual void VTable0x74(Matrix4& p_transform) override;                // vtable+0x74
-	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
-	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
-	virtual MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
-	virtual void VTable0xe4() override;                                    // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
+	void VTable0x70(float p_float) override;                       // vtable+0x70
+	void VTable0x74(Matrix4& p_transform) override;                // vtable+0x74
+	MxU32 VTable0xcc() override;                                   // vtable+0xcc
+	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
+	MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
+	void VTable0xe4() override;                                    // vtable+0xe4
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'

@@ -58,7 +58,7 @@ public:
 		m_controller = p_ctrlr;
 	}
 
-	virtual MxNotificationParam* Clone() override;
+	MxNotificationParam* Clone() override;
 
 	MxStreamController* GetController() { return m_controller; }
 
@@ -76,22 +76,22 @@ public:
 	};
 
 	MxStreamer();
-	virtual ~MxStreamer() override; // vtable+0x0
+	~MxStreamer() override; // vtable+0x00
 
-	__declspec(dllexport) MxStreamController* Open(const char* p_name, MxU16 p_openMode);
-	__declspec(dllexport) MxLong Close(const char* p_name);
+	MxStreamController* Open(const char* p_name, MxU16 p_openMode);
+	MxLong Close(const char* p_name);
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100b9000
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x1010210c
 		return "MxStreamer";
 	}
 
 	// FUNCTION: LEGO1 0x100b9010
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamer::ClassName()) || MxCore::IsA(p_name);
 	}
@@ -109,7 +109,7 @@ public:
 	inline const MxStreamerSubClass3& GetSubclass2() { return m_subclass2; }
 
 private:
-	list<MxStreamController*> m_openStreams; // 0x8
+	list<MxStreamController*> m_openStreams; // 0x08
 	MxStreamerSubClass2 m_subclass1;         // 0x14
 	MxStreamerSubClass3 m_subclass2;         // 0x20
 };

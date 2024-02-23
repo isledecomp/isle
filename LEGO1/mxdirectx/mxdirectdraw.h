@@ -34,9 +34,7 @@ public:
 		void* m_unk0x178;  // 0x178
 	};
 
-	__declspec(dllexport) int FlipToGDISurface();
-	__declspec(dllexport) static int GetPrimaryBitDepth();
-	__declspec(dllexport) int Pause(int);
+	static int GetPrimaryBitDepth();
 
 	MxDirectDraw();
 	virtual ~MxDirectDraw();
@@ -51,37 +49,49 @@ public:
 		int bpp,
 		const PALETTEENTRY* pPaletteEntries,
 		int paletteEntryCount
-	);                                                  // vtable+0x04
-	virtual void Destroy();                             // vtable+0x08
-	virtual void DestroyButNotDirectDraw();             // vtable+0x0c
-	virtual const char* ErrorToString(HRESULT p_error); // vtable+0x10
+	);                                      // vtable+0x04
+	virtual void Destroy();                 // vtable+0x08
+	virtual void DestroyButNotDirectDraw(); // vtable+0x0c
 
-	BOOL CacheOriginalPaletteEntries();
-	HRESULT CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4);
-	BOOL CreateTextSurfaces();
-	BOOL CreateZBuffer(DWORD memorytype, DWORD depth);
-	BOOL DDCreateSurfaces();
-	BOOL DDInit(BOOL fullscreen);
-	BOOL DDSetMode(int width, int height, int bpp);
-	void Error(const char* p_message, int p_error);
+	inline IDirectDraw* DirectDraw() { return m_pDirectDraw; }
+	inline IDirectDrawSurface* FrontBuffer() { return m_pFrontBuffer; }
+	inline IDirectDrawSurface* BackBuffer() { return m_pBackBuffer; }
+	inline IDirectDrawClipper* Clipper() { return m_pClipper; }
 
-	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
+	BOOL IsFullScreen() { return m_bFullScreen; }
+
 	BOOL IsSupportedMode(int width, int height, int bpp);
-	BOOL RecreateDirectDraw(GUID** a2);
-	BOOL RestoreOriginalPaletteEntries();
-	BOOL RestorePaletteEntries();
+
+	int Pause(BOOL);
 	BOOL RestoreSurfaces();
-	BOOL SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen);
-	BOOL TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface);
+
 	BOOL TextToTextSurface1(const char* text);
 	BOOL TextToTextSurface2(const char* lpString);
+
+	virtual const char* ErrorToString(HRESULT p_error); // vtable+0x10
+	int FlipToGDISurface();
+
+protected:
+	BOOL SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int paletteEntryCount, BOOL fullscreen);
+	BOOL CacheOriginalPaletteEntries();
+	BOOL RestoreOriginalPaletteEntries();
+	BOOL RestorePaletteEntries();
+
+	BOOL DDInit(BOOL fullscreen);
+	BOOL DDSetMode(int width, int height, int bpp);
+	BOOL DDCreateSurfaces();
+	HRESULT CreateDDSurface(LPDDSURFACEDESC a2, LPDIRECTDRAWSURFACE* a3, IUnknown* a4);
+	BOOL GetDDSurfaceDesc(LPDDSURFACEDESC lpDDSurfDesc, LPDIRECTDRAWSURFACE lpDDSurf);
+	BOOL CreateZBuffer(DWORD memorytype, DWORD depth);
+
+	BOOL CreateTextSurfaces();
+	BOOL TextToTextSurface(const char* text, IDirectDrawSurface* pSurface, SIZE& textSizeOnSurface);
+
+	void Error(const char* p_message, int p_error);
+
+	BOOL RecreateDirectDraw(GUID** a2);
 	void FUN_1009e020();
 	void FUN_1009d920();
-
-	inline IDirectDraw* GetDirectDraw() { return m_pDirectDraw; }
-	inline IDirectDrawSurface* GetFrontBuffer() { return m_pFrontBuffer; }
-	inline IDirectDrawSurface* GetBackBuffer() { return m_pBackBuffer; }
-	inline IDirectDrawClipper* GetClipper() { return m_pClipper; }
 
 	// SYNTHETIC: LEGO1 0x1009d510
 	// MxDirectDraw::`scalar deleting destructor'

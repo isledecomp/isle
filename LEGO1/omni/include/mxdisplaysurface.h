@@ -14,7 +14,7 @@
 class MxDisplaySurface : public MxCore {
 public:
 	MxDisplaySurface();
-	virtual ~MxDisplaySurface() override;
+	~MxDisplaySurface() override;
 
 	virtual MxResult Init(
 		MxVideoParam& p_videoParam,
@@ -92,6 +92,7 @@ public:
 
 	void ClearScreen();
 	static LPDIRECTDRAWSURFACE CreateCursorSurface();
+	static LPDIRECTDRAWSURFACE FUN_100bbfb0(LPDIRECTDRAWSURFACE p_und);
 
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }

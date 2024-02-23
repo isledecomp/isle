@@ -56,7 +56,7 @@ MxDSBuffer::~MxDSBuffer()
 			}
 			case 0x80: {
 				MxU32 a =
-					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
+					(m_pBuffer - streamer->GetSubclass2().GetBuffer()) / (streamer->GetSubclass2().GetSize() << 10);
 
 				MxU32 bit = 1 << ((MxU8) a & 0x1f);
 				MxU32 index = (a & ~0x18u) >> 3;
@@ -164,19 +164,22 @@ MxResult MxDSBuffer::FUN_100c67b0(
 	MxResult result = FAILURE;
 
 	m_unk0x30 = (MxDSStreamingAction*) p_controller->GetUnk0x3c().Find(p_action, FALSE);
-	if (m_unk0x30 == NULL)
+	if (m_unk0x30 == NULL) {
 		return FAILURE;
+	}
 
 	MxU8* data;
-	while (data = (MxU8*) SkipToData()) {
+	while ((data = (MxU8*) SkipToData())) {
 		if (*p_streamingAction == NULL) {
 			result = CreateObject(p_controller, (MxU32*) data, p_action, p_streamingAction);
 
-			if (result == FAILURE)
+			if (result == FAILURE) {
 				return result;
+			}
 			// TODO: Not a MxResult value?
-			if (result == 1)
+			if (result == 1) {
 				break;
+			}
 		}
 		else {
 			MxDSBuffer* buffer = (*p_streamingAction)->GetUnknowna0();
@@ -226,8 +229,9 @@ MxResult MxDSBuffer::CreateObject(
 		return FAILURE;
 	}
 
-	if (*p_data == FOURCC('M', 'x', 'O', 'b'))
+	if (*p_data == FOURCC('M', 'x', 'O', 'b')) {
 		return StartPresenterFromAction(p_controller, p_action, (MxDSAction*) header);
+	}
 	else if (*p_data == FOURCC('M', 'x', 'C', 'h')) {
 		MxStreamChunk* chunk = (MxStreamChunk*) header;
 		if (!m_unk0x30->HasId((chunk)->GetObjectId())) {
@@ -316,8 +320,9 @@ MxResult MxDSBuffer::ParseChunk(
 			}
 		}
 
-		if (buffer)
+		if (buffer) {
 			delete buffer;
+		}
 
 		delete p_header;
 		return FAILURE;
@@ -337,8 +342,9 @@ MxResult MxDSBuffer::ParseChunk(
 						MxNextActionDataStart* data =
 							p_controller->FindNextActionDataStartFromStreamingAction(m_unk0x30);
 
-						if (data)
+						if (data) {
 							data->SetData(m_unk0x30->GetBufferOffset());
+						}
 
 						m_unk0x30->FUN_100cd2d0();
 					}
@@ -472,8 +478,9 @@ MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 		if (bytesRead <= m_bytesRemaining) {
 			memcpy(m_pBuffer + m_writeOffset - m_bytesRemaining, ptr, bytesRead);
 
-			if (m_writeOffset == m_bytesRemaining)
+			if (m_writeOffset == m_bytesRemaining) {
 				*(MxU32*) (m_pBuffer + 4) = *MxStreamChunk::IntoLength(m_pBuffer) + MxStreamChunk::GetHeaderSize();
+			}
 
 			m_bytesRemaining -= bytesRead;
 			result = SUCCESS;
@@ -510,14 +517,17 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 			break;
 		case FOURCC('M', 'x', 'O', 'b'):
 		case FOURCC('M', 'x', 'C', 'h'):
-			if (current != p_data)
+			if (current != p_data) {
 				return current;
+			}
 			current = ((MxU32) current & 1) + current;
 			current += 8;
 			break;
 		case FOURCC('M', 'x', 'H', 'd'):
 			current += (((MxU32*) current)[1] + 8);
 			break;
+		default:
+			return NULL;
 		}
 	}
 

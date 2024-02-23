@@ -27,22 +27,22 @@ public:
 	};
 
 	MxDSObject();
-	virtual ~MxDSObject() override;
+	~MxDSObject() override;
 
 	void CopyFrom(MxDSObject& p_dsObject);
 	MxDSObject& operator=(MxDSObject& p_dsObject);
 
-	__declspec(dllexport) void SetObjectName(const char* p_objectName);
+	void SetObjectName(const char* p_objectName);
 	void SetSourceName(const char* p_sourceName);
 
 	// FUNCTION: LEGO1 0x100bf730
-	inline virtual const char* ClassName() const override { return "MxDSObject"; }; // vtable+0c
+	inline const char* ClassName() const override { return "MxDSObject"; } // vtable+0c
 
 	// FUNCTION: LEGO1 0x100bf740
-	inline virtual MxBool IsA(const char* p_name) const override
+	inline MxBool IsA(const char* p_name) const override
 	{
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
-	}; // vtable+10;
+	} // vtable+10;
 
 	virtual undefined4 VTable0x14();                                                // vtable+14;
 	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
@@ -51,6 +51,7 @@ public:
 
 	inline Type GetType() const { return (Type) this->m_type; }
 	inline const char* GetSourceName() const { return this->m_sourceName; }
+	inline const char* GetObjectName() const { return this->m_objectName; }
 	inline MxU32 GetObjectId() { return this->m_objectId; }
 	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
 	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
@@ -67,8 +68,8 @@ public:
 	// MxDSObject::`scalar deleting destructor'
 
 private:
-	MxU32 m_sizeOnDisk;     // 0x8
-	MxU16 m_type;           // 0xc
+	MxU32 m_sizeOnDisk;     // 0x08
+	MxU16 m_type;           // 0x0c
 	char* m_sourceName;     // 0x10
 	undefined4 m_unk0x14;   // 0x14
 	char* m_objectName;     // 0x18

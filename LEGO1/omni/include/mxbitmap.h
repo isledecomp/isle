@@ -34,17 +34,17 @@ struct MxBITMAPINFO {
 // VTABLE: LEGO1 0x100dc7b0
 class MxBitmap : public MxCore {
 public:
-	__declspec(dllexport) MxBitmap();
-	__declspec(dllexport) virtual ~MxBitmap(); // vtable+00
+	MxBitmap();
+	~MxBitmap() override; // vtable+00
 
 	virtual MxResult ImportBitmap(MxBitmap* p_bitmap);                                     // vtable+14
 	virtual MxResult ImportBitmapInfo(MxBITMAPINFO* p_info);                               // vtable+18
 	virtual MxResult SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool); // vtable+1c
 	virtual MxResult LoadFile(HANDLE p_handle);                                            // vtable+20
-	__declspec(dllexport) virtual MxLong Read(const char* p_filename);                     // vtable+24
+	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
-	virtual int VTable0x28(int) { return -1; }; // vtable+28
+	virtual int VTable0x28(int) { return -1; } // vtable+28
 
 	virtual void BitBlt(
 		MxBitmap* p_src,
@@ -63,10 +63,10 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height
-	);                                                        // vtable+30
-	__declspec(dllexport) virtual MxPalette* CreatePalette(); // vtable+34
-	virtual void ImportPalette(MxPalette* p_palette);         // vtable+38
-	virtual MxResult SetBitDepth(MxBool);                     // vtable+3c
+	);                                                // vtable+30
+	virtual MxPalette* CreatePalette();               // vtable+34
+	virtual void ImportPalette(MxPalette* p_palette); // vtable+38
+	virtual MxResult SetBitDepth(MxBool);             // vtable+3c
 	virtual MxResult StretchBits(
 		HDC p_hdc,
 		MxS32 p_xSrc,
@@ -102,30 +102,37 @@ public:
 	}
 	inline MxLong GetAdjustedStride()
 	{
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
 			return GetBmiStride();
-		else
+		}
+		else {
 			return -GetBmiStride();
+		}
 	}
 
 	inline MxLong GetLine(MxS32 p_top)
 	{
 		MxS32 height;
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0)
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
 			height = p_top;
-		else
+		}
+		else {
 			height = GetBmiHeightAbs() - p_top - 1;
+		}
 		return GetBmiStride() * height;
 	}
 
 	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
 	{
-		if (m_bmiHeader->biCompression == BI_RGB)
+		if (m_bmiHeader->biCompression == BI_RGB) {
 			return GetLine(p_top) + m_data + p_left;
-		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN)
+		}
+		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
 			return m_data;
-		else
+		}
+		else {
 			return GetLine(0) + m_data;
+		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100bc9f0
@@ -134,8 +141,8 @@ public:
 private:
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
 
-	MxBITMAPINFO* m_info;          // 0x8
-	BITMAPINFOHEADER* m_bmiHeader; // 0xc
+	MxBITMAPINFO* m_info;          // 0x08
+	BITMAPINFOHEADER* m_bmiHeader; // 0x0c
 	RGBQUAD* m_paletteData;        // 0x10
 	MxU8* m_data;                  // 0x14
 	MxBool m_isHighColor;          // 0x18

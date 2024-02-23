@@ -8,17 +8,28 @@ Act3::Act3()
 	// TODO
 }
 
-// STUB: LEGO1 0x10072500
+// FUNCTION: LEGO1 0x10072500
 MxBool Act3::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x100726a0
 Act3::~Act3()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x100727e0
+MxBool Act3::FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+{
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10072980
+MxBool Act3::FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+{
+	return FALSE;
 }
 
 // STUB: LEGO1 0x10072c30
@@ -42,7 +53,7 @@ MxLong Act3::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10073270
-void Act3::VTable0x50()
+void Act3::ReadyWorld()
 {
 	// TODO
 }
@@ -54,8 +65,18 @@ MxResult Act3::Tickle()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10073400
+void Act3::FUN_10073400()
+{
+}
+
+// STUB: LEGO1 0x10073430
+void Act3::FUN_10073430()
+{
+}
+
 // STUB: LEGO1 0x10073a90
-void Act3::VTable0x68(MxBool p_add)
+void Act3::Enable(MxBool p_enable)
 {
 	// TODO
 }

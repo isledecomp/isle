@@ -9,10 +9,11 @@
 #include <mmsystem.h>
 // clang-format on
 
+// SIZE 0x48
 class MXIOINFO {
 public:
 	MXIOINFO();
-	__declspec(dllexport) ~MXIOINFO();
+	~MXIOINFO();
 
 	MxU16 Open(const char*, MxULong);
 	MxU16 Close(MxLong);

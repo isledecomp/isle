@@ -11,15 +11,15 @@ public:
 	LegoFlcTexturePresenter();
 
 	// FUNCTION: LEGO1 0x1005def0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0634
 		return "LegoFlcTexturePresenter";
 	}
 
-	virtual void StartingTickle() override;                  // vtable+0x1c
-	virtual void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
-	virtual void PutFrame() override;                        // vtable+0x6c
+	void StartingTickle() override;                  // vtable+0x1c
+	void LoadFrame(MxStreamChunk* p_chunk) override; // vtable+0x68
+	void PutFrame() override;                        // vtable+0x6c
 
 	// SYNTHETIC: LEGO1 0x1005df00
 	// LegoFlcTexturePresenter::`scalar deleting destructor'

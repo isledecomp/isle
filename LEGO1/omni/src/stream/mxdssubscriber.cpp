@@ -16,17 +16,20 @@ MxDSSubscriber::MxDSSubscriber()
 // FUNCTION: LEGO1 0x100b7e00
 MxDSSubscriber::~MxDSSubscriber()
 {
-	if (m_controller)
+	if (m_controller) {
 		m_controller->RemoveSubscriber(this);
+	}
 
-	DeleteChunks();
+	DestroyData();
 
-	if (m_pendingChunkCursor)
+	if (m_pendingChunkCursor) {
 		delete m_pendingChunkCursor;
+	}
 	m_pendingChunkCursor = NULL;
 
-	if (m_consumedChunkCursor)
+	if (m_consumedChunkCursor) {
 		delete m_consumedChunkCursor;
+	}
 	m_consumedChunkCursor = NULL;
 }
 
@@ -36,24 +39,27 @@ MxResult MxDSSubscriber::Create(MxStreamController* p_controller, MxU32 p_object
 	m_objectId = p_objectId;
 	m_unk0x48 = p_unk0x48;
 
-	if (!p_controller)
+	if (!p_controller) {
 		return FAILURE;
+	}
 	m_controller = p_controller;
 
 	m_pendingChunkCursor = new MxStreamChunkListCursor(&m_pendingChunks);
-	if (!m_pendingChunkCursor)
+	if (!m_pendingChunkCursor) {
 		return FAILURE;
+	}
 
 	m_consumedChunkCursor = new MxStreamChunkListCursor(&m_consumedChunks);
-	if (!m_consumedChunkCursor)
+	if (!m_consumedChunkCursor) {
 		return FAILURE;
+	}
 
 	m_controller->AddSubscriber(this);
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100b8030
-void MxDSSubscriber::DeleteChunks()
+void MxDSSubscriber::DestroyData()
 {
 	if (m_controller) {
 		MxStreamChunk* chunk = NULL;
@@ -71,25 +77,28 @@ void MxDSSubscriber::DeleteChunks()
 }
 
 // FUNCTION: LEGO1 0x100b8150
-MxResult MxDSSubscriber::AddChunk(MxStreamChunk* p_chunk, MxBool p_append)
+MxResult MxDSSubscriber::AddData(MxStreamChunk* p_chunk, MxBool p_append)
 {
 	if (m_pendingChunkCursor) {
-		if (p_append)
+		if (p_append) {
 			m_pendingChunks.Append(p_chunk);
-		else
+		}
+		else {
 			m_pendingChunks.Prepend(p_chunk);
+		}
 	}
 
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100b8250
-MxStreamChunk* MxDSSubscriber::NextChunk()
+MxStreamChunk* MxDSSubscriber::PopData()
 {
 	MxStreamChunk* chunk = NULL;
 
-	if (m_pendingChunkCursor)
+	if (m_pendingChunkCursor) {
 		m_pendingChunkCursor->First(chunk);
+	}
 
 	if (chunk) {
 		m_pendingChunkCursor->Detach();
@@ -100,26 +109,29 @@ MxStreamChunk* MxDSSubscriber::NextChunk()
 }
 
 // FUNCTION: LEGO1 0x100b8360
-MxStreamChunk* MxDSSubscriber::CurrentChunk()
+MxStreamChunk* MxDSSubscriber::PeekData()
 {
 	MxStreamChunk* chunk = NULL;
 
-	if (m_pendingChunkCursor)
+	if (m_pendingChunkCursor) {
 		m_pendingChunkCursor->First(chunk);
+	}
 
 	return chunk;
 }
 
 // FUNCTION: LEGO1 0x100b8390
-void MxDSSubscriber::DestroyChunk(MxStreamChunk* p_chunk)
+void MxDSSubscriber::FreeDataChunk(MxStreamChunk* p_chunk)
 {
 	if (p_chunk) {
 		if (m_consumedChunkCursor->Find(p_chunk)) {
 			m_consumedChunkCursor->Detach();
-			if (p_chunk)
+			if (p_chunk) {
 				delete p_chunk;
+			}
 		}
-		else if (p_chunk->GetFlags() & MxDSChunk::c_bit1 && p_chunk)
+		else if (p_chunk->GetFlags() & MxDSChunk::c_bit1 && p_chunk) {
 			delete p_chunk;
+		}
 	}
 }

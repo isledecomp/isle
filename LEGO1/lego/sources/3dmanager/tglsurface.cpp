@@ -181,8 +181,7 @@ double TglSurface::Render()
 		m_renderingRateMeter.StartOperation();
 		renderTimer.Start();
 
-		// TODO: Wrong interface
-		result = m_pView->Render((Tgl::Light*) m_pScene);
+		result = m_pView->Render(m_pScene);
 
 		renderTimer.Stop();
 		assert(Succeeded(result));

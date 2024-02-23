@@ -20,8 +20,8 @@ MxLoopingFlcPresenter::~MxLoopingFlcPresenter()
 void MxLoopingFlcPresenter::Init()
 {
 	this->m_elapsedDuration = 0;
-	this->m_flags &= ~c_bit2;
-	this->m_flags &= ~c_bit3;
+	SetBit1(FALSE);
+	SetBit2(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b4430
@@ -31,8 +31,9 @@ void MxLoopingFlcPresenter::Destroy(MxBool p_fromDestructor)
 	Init();
 	m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxFlcPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b4470
@@ -40,22 +41,24 @@ void MxLoopingFlcPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::c_end)
+	if (chunk->GetFlags() & MxDSChunk::c_end) {
 		ProgressTickleState(e_repeating);
+	}
 	else {
 		LoadFrame(chunk);
 		LoopChunk(chunk);
 		m_elapsedDuration += m_flcHeader->speed;
 	}
 
-	m_subscriber->DestroyChunk(chunk);
+	m_subscriber->FreeDataChunk(chunk);
 }
 
 // FUNCTION: LEGO1 0x100b44c0
 void MxLoopingFlcPresenter::VTable0x88()
 {
-	if (m_action->GetDuration() < m_elapsedDuration)
+	if (m_action->GetDuration() < m_elapsedDuration) {
 		ProgressTickleState(e_unk5);
+	}
 	else {
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);
@@ -81,8 +84,9 @@ void MxLoopingFlcPresenter::RepeatingTickle()
 			time += m_flcHeader->speed;
 
 			cursor.Reset();
-			while (cursor.Next(chunk))
+			while (cursor.Next(chunk)) {
 				chunk->SetTime(chunk->GetTime() + time);
+			}
 
 			m_loopingChunkCursor->Next();
 		}
@@ -90,15 +94,17 @@ void MxLoopingFlcPresenter::RepeatingTickle()
 		MxStreamChunk* chunk;
 		m_loopingChunkCursor->Current(chunk);
 
-		if (m_action->GetElapsedTime() < chunk->GetTime())
+		if (m_action->GetElapsedTime() < chunk->GetTime()) {
 			break;
+		}
 
 		VTable0x88();
 
 		m_loopingChunkCursor->Next(chunk);
 
-		if (m_currentTickleState != e_repeating)
+		if (m_currentTickleState != e_repeating) {
 			break;
+		}
 	}
 }
 
@@ -114,8 +120,9 @@ MxResult MxLoopingFlcPresenter::AddToManager()
 		result = SUCCESS;
 	}
 
-	if (locked)
+	if (locked) {
 		m_criticalSection.Leave();
+	}
 
 	return result;
 }

@@ -21,7 +21,7 @@ void LegoActionControlPresenter::ReadyTickle()
 		ParseExtra();
 		ProgressTickleState(e_starting);
 
-		m_subscriber->DestroyChunk(chunk);
+		m_subscriber->FreeDataChunk(chunk);
 		if (m_compositePresenter) {
 			if (m_action->GetDuration() == -1 || m_action->GetFlags() & 1) {
 				m_compositePresenter->VTable0x60(this);
@@ -80,8 +80,9 @@ void LegoActionControlPresenter::ParseExtra()
 {
 	MxU32 len = m_action->GetExtraLength();
 
-	if (len == 0)
+	if (len == 0) {
 		return;
+	}
 
 	len &= MAXWORD;
 

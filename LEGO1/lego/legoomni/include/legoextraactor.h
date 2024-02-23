@@ -7,7 +7,7 @@
 class LegoExtraActor : public LegoAnimActor {
 public:
 	// FUNCTION: LEGO1 0x1002b7a0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f3204
 		return "LegoExtraActor";

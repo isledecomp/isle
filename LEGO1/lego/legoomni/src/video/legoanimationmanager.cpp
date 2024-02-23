@@ -1,5 +1,7 @@
 #include "legoanimationmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
+
 // GLOBAL: LEGO1 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
 
@@ -21,9 +23,22 @@ LegoAnimationManager::~LegoAnimationManager()
 	// TODO
 }
 
+// STUB: LEGO1 0x1005ee80
+void LegoAnimationManager::FUN_1005ee80(MxBool)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1005ef10
 void LegoAnimationManager::FUN_1005ef10()
 {
+	// TODO
+}
+
+// STUB: LEGO1 0x1005f0b0
+void LegoAnimationManager::FUN_1005f0b0()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x1005f130
@@ -39,7 +54,13 @@ void LegoAnimationManager::FUN_1005f6d0(MxBool)
 }
 
 // STUB: LEGO1 0x1005f720
-void LegoAnimationManager::FUN_1005f720(undefined4)
+void LegoAnimationManager::FUN_1005f720(MxS32 p_scriptIndex)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10061010
+void LegoAnimationManager::FUN_10061010(undefined4)
 {
 	// TODO
 }

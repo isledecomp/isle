@@ -25,22 +25,23 @@ void LegoHideAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
 	m_criticalSection.Enter();
 
-	if (m_unk0xc0)
+	if (m_unk0xc0) {
 		delete m_unk0xc0;
+	}
 	Init();
 
 	m_criticalSection.Leave();
 
 	// This appears to be a bug, since it results in an endless loop
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		LegoHideAnimPresenter::Destroy();
+	}
 }
 
-// STUB: LEGO1 0x1006dab0
+// FUNCTION: LEGO1 0x1006dab0
 MxResult LegoHideAnimPresenter::AddToManager()
 {
-	// TODO
-	return SUCCESS;
+	return LegoAnimPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006dac0

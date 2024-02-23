@@ -1,5 +1,6 @@
 #include "legoworldpresenter.h"
 
+#include "define.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legoentity.h"
@@ -16,6 +17,7 @@
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
+#include "mxutil.h"
 
 // GLOBAL: LEGO1 0x100f75d4
 undefined4 g_legoWorldPresenterQuality = 1;
@@ -37,9 +39,9 @@ LegoWorldPresenter::~LegoWorldPresenter()
 {
 	MxBool result = FALSE;
 	if (m_entity) {
-		undefined4 world = ((LegoWorld*) m_entity)->GetUnknown0xec();
-		PlantManager()->FUN_10026360(world);
-		AnimationManager()->FUN_1005f720(world);
+		MxS32 scriptIndex = ((LegoWorld*) m_entity)->GetScriptIndex();
+		PlantManager()->FUN_10026360(scriptIndex);
+		AnimationManager()->FUN_1005f720(scriptIndex);
 		BuildingManager()->FUN_1002fa00();
 		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
@@ -100,8 +102,9 @@ MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSA
 				action->SetOrigin(this);
 				m_list.push_back(presenter);
 			}
-			else if (presenter)
+			else if (presenter) {
 				delete presenter;
+			}
 		}
 
 		VideoManager()->RegisterPresenter(*this);
@@ -146,6 +149,11 @@ void LegoWorldPresenter::StartingTickle()
 	ProgressTickleState(e_streaming);
 }
 
+// STUB: LEGO1 0x10066b40
+void LoadWorld(char* p_worldName, LegoWorld* p_world)
+{
+}
+
 // FUNCTION: LEGO1 0x10067a70
 void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 {
@@ -165,11 +173,25 @@ void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 	if (!p_presenter->IsA("LegoAnimPresenter") && !p_presenter->IsA("MxControlPresenter") &&
 		!p_presenter->IsA("MxCompositePresenter")) {
 		p_presenter->SendToCompositePresenter(Lego());
-		((LegoWorld*) m_entity)->VTable0x58(p_presenter);
+		((LegoWorld*) m_entity)->Add(p_presenter);
 	}
 }
 
-// STUB: LEGO1 0x10067b00
+// FUNCTION: LEGO1 0x10067b00
 void LegoWorldPresenter::ParseExtra()
 {
+	char data[1024];
+	char output[1024];
+	MxU16 len = m_action->GetExtraLength();
+	*((MxU16*) &data[0]) = m_action->GetExtraLength();
+	if (len != 0) {
+		memcpy(data, m_action->GetExtraData(), len);
+		data[len] = 0;
+
+		if (KeyValueStringParse(output, g_strWORLD, data)) {
+			char* worldKey = strtok(output, g_parseExtraTokens);
+			LoadWorld(worldKey, (LegoWorld*) m_entity);
+			((LegoWorld*) m_entity)->SetScriptIndex(Lego()->GetScriptIndex(worldKey));
+		}
+	}
 }

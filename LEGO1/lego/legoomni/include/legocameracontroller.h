@@ -12,19 +12,19 @@
 class LegoCameraController : public LegoPointOfViewController {
 public:
 	LegoCameraController();
-	virtual ~LegoCameraController() override; // vtable+0x0
+	~LegoCameraController() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+04
+	MxLong Notify(MxParam& p_param) override; // vtable+04
 
 	// FUNCTION: LEGO1 0x10011ec0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0850
 		return "LegoCameraController";
 	}
 
 	// FUNCTION: LEGO1 0x10011ed0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}

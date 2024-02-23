@@ -10,12 +10,12 @@
 // SIZE 0x414
 class MxPalette : public MxCore {
 public:
-	__declspec(dllexport) MxBool operator==(MxPalette& p_other);
-	__declspec(dllexport) void Detach();
+	MxBool operator==(MxPalette& p_other);
+	void Detach();
 
 	MxPalette();
 	MxPalette(const RGBQUAD*);
-	virtual ~MxPalette();
+	~MxPalette() override;
 
 	void ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries);
 	MxPalette* Clone();
@@ -33,7 +33,7 @@ public:
 
 private:
 	LPDIRECTDRAWPALETTE m_palette;
-	PALETTEENTRY m_entries[256]; // 0xc
+	PALETTEENTRY m_entries[256]; // 0x0c
 	MxBool m_overrideSkyColor;   // 0x40c
 	PALETTEENTRY m_skyColor;     // 0x40d
 };

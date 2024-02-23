@@ -40,16 +40,16 @@ class UnkImpl;
 class RendererImpl : public Renderer {
 public:
 	RendererImpl() : m_data(0) {}
-	~RendererImpl() { Destroy(); };
+	~RendererImpl() override { Destroy(); }
 
-	virtual void* ImplementationDataPtr() override;
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Device* CreateDevice(const DeviceDirectDrawCreateData&) override;
-	virtual Device* CreateDevice(const DeviceDirect3DCreateData&) override;
+	Device* CreateDevice(const DeviceDirectDrawCreateData&) override;
+	Device* CreateDevice(const DeviceDirect3DCreateData&) override;
 
 	// vtable+0x10
-	virtual View* CreateView(
+	View* CreateView(
 		const Device*,
 		const Camera*,
 		unsigned long x,
@@ -57,13 +57,13 @@ public:
 		unsigned long width,
 		unsigned long height
 	) override;
-	virtual Camera* CreateCamera() override;
-	virtual Light* CreateLight(LightType, float r, float g, float b) override;
-	virtual Group* CreateGroup(const Group* pParent) override;
+	Camera* CreateCamera() override;
+	Light* CreateLight(LightType, float r, float g, float b) override;
+	Group* CreateGroup(const Group* pParent) override;
 
 	// vtable+0x20
-	virtual Unk* CreateUnk() override;
-	virtual Texture* CreateTexture(
+	Unk* CreateUnk() override;
+	Texture* CreateTexture(
 		int width,
 		int height,
 		int bitsPerTexel,
@@ -72,12 +72,17 @@ public:
 		int paletteEntryCount,
 		const PaletteEntry* pEntries
 	) override;
-	virtual Texture* CreateTexture() override;
+	Texture* CreateTexture() override;
 
-	virtual Result SetTextureDefaultShadeCount(unsigned long) override;
+	Result SetTextureDefaultShadeCount(unsigned long) override;
 
 	// vtable+0x30
-	virtual Result SetTextureDefaultColorCount(unsigned long) override;
+	Result SetTextureDefaultColorCount(unsigned long) override;
+
+	inline HRESULT CreateTextureFromSurface(LPDIRECTDRAWSURFACE pSurface, LPDIRECT3DRMTEXTURE2* pTexture2)
+	{
+		return m_data->CreateTextureFromSurface(pSurface, pTexture2);
+	}
 
 public:
 	inline Result Create();
@@ -110,7 +115,7 @@ void RendererImpl::Destroy()
 class DeviceImpl : public Device {
 public:
 	DeviceImpl() : m_data(0) {}
-	~DeviceImpl()
+	~DeviceImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -118,22 +123,22 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual unsigned long GetWidth();
-	virtual unsigned long GetHeight();
+	unsigned long GetWidth() override;
+	unsigned long GetHeight() override;
 
 	// vtable+0x10
-	virtual Result SetColorModel(ColorModel);
-	virtual Result SetShadingModel(ShadingModel);
-	virtual Result SetShadeCount(unsigned long);
-	virtual Result SetDither(int);
+	Result SetColorModel(ColorModel) override;
+	Result SetShadingModel(ShadingModel) override;
+	Result SetShadeCount(unsigned long) override;
+	Result SetDither(int) override;
 
 	// vtable+0x20
-	virtual Result Update();
-	virtual void InitFromD3DDevice(Device*);
-	virtual void InitFromWindowsDevice(Device*);
+	Result Update() override;
+	void InitFromD3DDevice(Device*) override;
+	void InitFromWindowsDevice(Device*) override;
 
 	inline IDirect3DRMDevice2* ImplementationData() const { return m_data; }
 
@@ -147,7 +152,7 @@ private:
 class ViewImpl : public View {
 public:
 	ViewImpl() : m_data(0) {}
-	~ViewImpl()
+	~ViewImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -155,35 +160,35 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result Add(const Light*);
-	virtual Result Remove(const Light*);
+	Result Add(const Light*) override;
+	Result Remove(const Light*) override;
 
 	// vtable+0x10
-	virtual Result SetCamera(const Camera*);
-	virtual Result SetProjection(ProjectionType);
-	virtual Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees);
-	virtual Result SetBackgroundColor(float r, float g, float b);
+	Result SetCamera(const Camera*) override;
+	Result SetProjection(ProjectionType) override;
+	Result SetFrustrum(float frontClippingDistance, float backClippingDistance, float degrees) override;
+	Result SetBackgroundColor(float r, float g, float b) override;
 
 	// vtable+0x20
-	virtual Result GetBackgroundColor(float* r, float* g, float* b);
-	virtual Result Clear();
-	virtual Result Render(const Light*);
-	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height);
+	Result GetBackgroundColor(float* r, float* g, float* b) override;
+	Result Clear() override;
+	Result Render(const Group*) override;
+	Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) override;
 
 	// vtable+0x30
-	virtual Result TransformWorldToScreen(const float world[3], float screen[4]);
-	virtual Result TransformScreenToWorld(const float screen[4], float world[3]);
-	virtual Result Pick(
+	Result TransformWorldToScreen(const float world[3], float screen[4]) override;
+	Result TransformScreenToWorld(const float screen[4], float world[3]) override;
+	Result Pick(
 		unsigned long x,
 		unsigned long y,
 		const Group** ppGroupsToPickFrom,
 		int groupsToPickFromCount,
 		const Group**& rppPickedGroups,
 		int& rPickedGroupCount
-	);
+	) override;
 
 	inline IDirect3DRMViewport* ImplementationData() const { return m_data; }
 
@@ -199,7 +204,7 @@ private:
 class CameraImpl : public Camera {
 public:
 	CameraImpl() : m_data(0) {}
-	~CameraImpl()
+	~CameraImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -207,10 +212,10 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(FloatMatrix4&);
+	Result SetTransformation(FloatMatrix4&) override;
 
 	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
@@ -224,7 +229,7 @@ private:
 class LightImpl : public Light {
 public:
 	LightImpl() : m_data(0) {}
-	~LightImpl()
+	~LightImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -232,11 +237,11 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(FloatMatrix4&);
-	virtual Result SetColor(float r, float g, float b);
+	Result SetTransformation(FloatMatrix4&) override;
+	Result SetColor(float r, float g, float b) override;
 
 	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
@@ -250,7 +255,7 @@ private:
 class MeshImpl : public Mesh {
 public:
 	MeshImpl() : m_data(0) {}
-	~MeshImpl()
+	~MeshImpl() override
 	{
 		if (m_data) {
 			delete m_data;
@@ -258,20 +263,20 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetColor(float r, float g, float b, float a);
-	virtual Result SetTexture(const Texture*);
+	Result SetColor(float r, float g, float b, float a) override;
+	Result SetTexture(const Texture*) override;
 
 	// vtable+0x10
-	virtual Result GetTexture(Texture*&);
-	virtual Result SetTextureMappingMode(ProjectionType);
-	virtual Result SetShadingModel(ShadingModel);
-	virtual Mesh* DeepClone(Unk*);
+	Result GetTexture(Texture*&) override;
+	Result SetTextureMappingMode(ProjectionType) override;
+	Result SetShadingModel(ShadingModel) override;
+	Mesh* DeepClone(Unk*) override;
 
 	// vtable+0x20
-	virtual Mesh* ShallowClone(Unk*);
+	Mesh* ShallowClone(Unk*) override;
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
@@ -290,7 +295,7 @@ private:
 class GroupImpl : public Group {
 public:
 	GroupImpl() : m_data(0) {}
-	~GroupImpl()
+	~GroupImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -298,26 +303,28 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTransformation(FloatMatrix4&);
-	virtual Result SetColor(float r, float g, float b, float a);
+	Result SetTransformation(FloatMatrix4&) override;
+	Result SetColor(float r, float g, float b, float a) override;
 
 	// vtable+0x10
-	virtual Result SetTexture(const Texture*);
-	virtual Result GetTexture(Texture*&);
-	virtual Result SetMaterialMode(MaterialMode);
-	virtual Result Add(const Mesh*);
+	Result SetTexture(const Texture*) override;
+	Result GetTexture(Texture*&) override;
+	Result SetMaterialMode(MaterialMode) override;
+	Result Add(const Mesh*) override;
 
 	// vtable+0x20
-	virtual Result Add(const Group*);
-	virtual Result Remove(const Mesh*);
-	virtual Result Remove(const Group*);
-	virtual Result RemoveAll();
+	Result Add(const Group*) override;
+	Result Remove(const Mesh*) override;
+	Result Remove(const Group*) override;
+	Result RemoveAll() override;
 
 	// vtable+0x30
-	virtual Result Unknown();
+	Result Unknown() override;
+
+	inline IDirect3DRMFrame2* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
@@ -329,7 +336,7 @@ private:
 class UnkImpl : public Unk {
 public:
 	UnkImpl() : m_data(0) {}
-	~UnkImpl()
+	~UnkImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -337,10 +344,10 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetMeshData(
+	Result SetMeshData(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		const float (*pPositions)[3],
@@ -348,11 +355,11 @@ public:
 		const float (*pTextureCoordinates)[2],
 		unsigned long vertexPerFaceCount,
 		unsigned long* pFaceData
-	);
-	virtual Result GetBoundingBox(float min[3], float max[3]);
+	) override;
+	Result GetBoundingBox(float min[3], float max[3]) override;
 
 	// vtable+0x10
-	virtual Unk* Clone();
+	Unk* Clone() override;
 
 	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
@@ -389,7 +396,7 @@ public:
 class TextureImpl : public Texture {
 public:
 	TextureImpl() : m_data(0) {}
-	~TextureImpl()
+	~TextureImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -397,23 +404,23 @@ public:
 		}
 	}
 
-	virtual void* ImplementationDataPtr();
+	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	virtual Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels);
-	virtual void FillRowsOfTexture(int y, int height, void* pBuffer);
+	Result SetTexels(int width, int height, int bitsPerTexel, void* pTexels) override;
+	void FillRowsOfTexture(int y, int height, void* pBuffer) override;
 
 	// vtable+0x10
-	virtual Result Changed(int texelsChanged, int paletteChanged);
-	virtual Result GetBufferAndPalette(
+	Result Changed(int texelsChanged, int paletteChanged) override;
+	Result GetBufferAndPalette(
 		int* pWidth,
 		int* pHeight,
 		int* pDepth,
 		void** ppBuffer,
 		int* ppPaletteSize,
 		PaletteEntry** ppPalette
-	);
-	virtual Result SetPalette(int entryCount, PaletteEntry* entries);
+	) override;
+	Result SetPalette(int entryCount, PaletteEntry* entries) override;
 
 	inline IDirect3DRMTexture* ImplementationData() const { return m_data; }
 	inline void SetImplementation(IDirect3DRMTexture* pData) { m_data = pData; }

@@ -5,7 +5,7 @@
 #include "mxtimer.h"
 #include "mxtypes.h"
 
-#define TICKLE_MANAGER_FLAG_DESTROY 0x1
+#define TICKLE_MANAGER_FLAG_DESTROY 0x01
 
 DECOMP_SIZE_ASSERT(MxTickleClient, 0x10);
 DECOMP_SIZE_ASSERT(MxTickleManager, 0x14);
@@ -45,8 +45,9 @@ MxResult MxTickleManager::Tickle()
 		else {
 			it++;
 
-			if (client->GetLastUpdateTime() > time)
+			if (client->GetLastUpdateTime() > time) {
 				client->SetLastUpdateTime(-client->GetTickleInterval());
+			}
 
 			if ((client->GetTickleInterval() + client->GetLastUpdateTime()) < time) {
 				client->GetClient()->Tickle();
@@ -64,8 +65,9 @@ void MxTickleManager::RegisterClient(MxCore* p_client, MxTime p_interval)
 	MxTime interval = GetClientTickleInterval(p_client);
 	if (interval == TICKLE_MANAGER_NOT_FOUND) {
 		MxTickleClient* client = new MxTickleClient(p_client, p_interval);
-		if (client != NULL)
+		if (client != NULL) {
 			m_clients.push_back(client);
+		}
 	}
 }
 
@@ -102,8 +104,9 @@ MxTime MxTickleManager::GetClientTickleInterval(MxCore* p_client)
 	MxTickleClientPtrList::iterator it = m_clients.begin();
 	while (it != m_clients.end()) {
 		MxTickleClient* client = *it;
-		if ((client->GetClient() == p_client) && ((client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) == 0))
+		if ((client->GetClient() == p_client) && ((client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) == 0)) {
 			return client->GetTickleInterval();
+		}
 
 		it++;
 	}

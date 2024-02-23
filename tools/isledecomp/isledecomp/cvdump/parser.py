@@ -39,6 +39,9 @@ _gdata32_regex = re.compile(
     r"S_GDATA32: \[(?P<section>\w{4}):(?P<offset>\w{8})\], Type:\s*(?P<type>\S+), (?P<name>.+)"
 )
 
+# e.g. 0003 "CMakeFiles/isle.dir/ISLE/res/isle.rc.res"
+# e.g. 0004 "C:\work\lego-island\isle\3rdparty\smartheap\SHLW32MT.LIB" "check.obj"
+_module_regex = re.compile(r"(?P<id>\w{4})(?: \"(?P<lib>.+?)\")?(?: \"(?P<obj>.+?)\")")
 
 # User functions only
 LinesEntry = namedtuple("LinesEntry", "filename line_no section offset")
@@ -52,13 +55,16 @@ PublicsEntry = namedtuple("PublicsEntry", "type section offset flags name")
 SymbolsEntry = namedtuple("SymbolsEntry", "type section offset size name")
 
 # (Estimated) size of any symbol
-SizeRefEntry = namedtuple("SizeRefEntry", "section offset size")
+SizeRefEntry = namedtuple("SizeRefEntry", "module section offset size")
 
 # global variables
 GdataEntry = namedtuple("GdataEntry", "section offset type name")
 
+ModuleEntry = namedtuple("ModuleEntry", "id lib obj")
+
 
 class CvdumpParser:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self) -> None:
         self._section: str = ""
         self._lines_function: Tuple[str, int] = ("", 0)
@@ -68,6 +74,7 @@ class CvdumpParser:
         self.symbols = []
         self.sizerefs = []
         self.globals = []
+        self.modules = []
 
     def _lines_section(self, line: str):
         """Parsing entries from the LINES section. We only care about the pairs of
@@ -144,9 +151,23 @@ class CvdumpParser:
         if (match := _section_contrib_regex.match(line)) is not None:
             self.sizerefs.append(
                 SizeRefEntry(
+                    module=int(match.group("module"), 16),
                     section=int(match.group("section"), 16),
                     offset=int(match.group("offset"), 16),
                     size=int(match.group("size"), 16),
+                )
+            )
+
+    def _modules_section(self, line: str):
+        """Record the object file (and lib file, if used) linked into the binary.
+        The auto-incrementing id is cross-referenced in SECTION CONTRIBUTIONS
+        (and perhaps other locations)"""
+        if (match := _module_regex.match(line)) is not None:
+            self.modules.append(
+                ModuleEntry(
+                    id=int(match.group("id"), 16),
+                    lib=match.group("lib"),
+                    obj=match.group("obj"),
                 )
             )
 
@@ -173,6 +194,9 @@ class CvdumpParser:
 
         elif self._section == "GLOBALS":
             self._globals_section(line)
+
+        elif self._section == "MODULES":
+            self._modules_section(line)
 
     def read_lines(self, lines: Iterable[str]):
         for line in lines:

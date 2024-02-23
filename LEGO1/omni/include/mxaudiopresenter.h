@@ -11,23 +11,23 @@ public:
 	MxAudioPresenter() { m_volume = 100; }
 
 	// FUNCTION: LEGO1 0x1000d280
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f078c
 		return "MxAudioPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x1000d290
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxAudioPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
 	// FUNCTION: LEGO1 0x1000d260
-	virtual MxS32 GetVolume() { return m_volume; }; // vtable+0x5c
+	virtual MxS32 GetVolume() { return m_volume; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x1000d270
-	virtual void SetVolume(MxS32 p_volume) { m_volume = p_volume; }; // vtable+0x60
+	virtual void SetVolume(MxS32 p_volume) { m_volume = p_volume; } // vtable+0x60
 
 protected:
 	MxS32 m_volume;

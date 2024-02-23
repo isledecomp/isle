@@ -47,6 +47,10 @@ class ParserError(Enum):
     # to ignore things like string literal that are not variables.
     GLOBAL_NOT_VARIABLE = 111
 
+    # WARN: A marked static variable inside a function needs to have its
+    # function marked too, and in the same module.
+    ORPHANED_STATIC_VARIABLE = 112
+
     # This code or higher is an error, not a warning
     DECOMP_ERROR_START = 200
 
@@ -73,6 +77,11 @@ class ParserError(Enum):
     # ERROR: Two STRING markers have the same module and offset, but the strings
     # they annotate are different.
     WRONG_STRING = 205
+
+    # ERROR: This lineref FUNCTION marker is next to a function declaration or
+    # forward reference. The correct place for the marker is where the function
+    # is implemented so we can match with the PDB.
+    NO_IMPLEMENTATION = 206
 
 
 @dataclass

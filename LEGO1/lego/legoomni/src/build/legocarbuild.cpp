@@ -6,11 +6,10 @@ LegoCarBuild::LegoCarBuild()
 	// TODO
 }
 
-// STUB: LEGO1 0x10022930
+// FUNCTION: LEGO1 0x10022930
 MxBool LegoCarBuild::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x10022a80
@@ -43,13 +42,13 @@ MxLong LegoCarBuild::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x100242c0
-void LegoCarBuild::VTable0x50()
+void LegoCarBuild::ReadyWorld()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x100256c0
-void LegoCarBuild::VTable0x68(MxBool p_add)
+void LegoCarBuild::Enable(MxBool p_enable)
 {
 	// TODO
 }

@@ -1,8 +1,10 @@
 # Contributing
 
-## Learning Decompilation
+## Important Note
 
-Generally, decompilation is a fairly advanced skill. If you aren't already familiar with it, it will likely take you months, or even years, to learn the skills necessary to do it (depending on your current proficiency with C/C++ and x86 assembly). If you're still interested, [part 1 of the decompilation vlog](https://www.youtube.com/watch?v=MToTEqoVv3I) covers the overall process and should give you a starting point that you can dive in from.
+While we're thrilled that there is so much interest in reverse engineering LEGO Island and are happy to accept contributions from anyone who would like to help progress us further to our goal of a complete codebase, proposed changes to this repository must adhere to a certain degree of engineering quality. While the established contributors here are more than happy to provide code reviews and constructive criticism, it is not their job to teach potential contributors C++ or decompilation fundamentals. As a project that is largely an artifact of the free time of its contributors, the more of that (often scarce) resource that can be dedicated to efficient work, the faster the decompilation will progress. Unfortunately, this results in well-intentioned but poorly constructed contributions actually hurting progress in the long-term. While we are greatly appreciative of the sentiment, if you aren't very confident in your decompilation abilities, it is generally in the project's best interest that you return when you have a better grasp over the process.
+
+Generally, decompilation is a fairly advanced skill. Depending on your current proficiency with C/C++ and x86 assembly, it could take you months or even years to learn the skills necessary to do it adequately. If you're still interested in learning, [part 1 of the decompilation vlog](https://www.youtube.com/watch?v=MToTEqoVv3I) covers the overall process and should give you a starting point that you can dive in from. Once again, please make yourself familiar with this process before attempting to contribute code to this project.
 
 ## Ghidra Server
 
@@ -15,7 +17,7 @@ To access the Ghidra repository, use the following details:
 
 ## General Guidelines
 
-If you have contributions, feel free to create a pull request! Someone will review and merge it (or provide feedback) as soon as possible.
+If you feel fit to contribute, feel free to create a pull request! Someone will review and merge it (or provide feedback) as soon as possible.
 
 Please keep your pull requests small and understandable; you may be able to shoot ahead and make a lot of progress in a short amount of time, but this is a collaborative project, so you must allow others to catch up and follow along. Large pull requests become significantly more unwieldy to review, and as such make it exponentially more likely for a mistake or error to go undetected. They also make it harder to merge other pull requests because the more files you modify, the more likely it is for a merge conflict to occur. A general guideline is to keep submissions limited to one class at a time. Sometimes two or more classes may be too interlinked for this to be feasible, so this is not a hard rule, however if your PR is starting to modify more than 10 or so files, it's probably getting too big.
 

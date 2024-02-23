@@ -10,10 +10,10 @@
 class LegoPathActor : public LegoActor {
 public:
 	LegoPathActor();
-	virtual ~LegoPathActor() override;
+	~LegoPathActor() override;
 
 	// FUNCTION: LEGO1 0x1000c430
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0114
 		return "LegoPathActor";
@@ -25,7 +25,7 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	virtual void ParseAction(char*) override;      // vtable+0x20
+	void ParseAction(char*) override;              // vtable+0x20
 	virtual void VTable0x68();                     // vtable+0x68
 	virtual void VTable0x6c();                     // vtable+0x6c
 	virtual void VTable0x70(float p_float);        // vtable+0x70

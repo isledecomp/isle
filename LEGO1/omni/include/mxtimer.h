@@ -12,14 +12,16 @@ public:
 	void Start();
 	void Stop();
 
-	__declspec(dllexport) MxLong GetRealTime();
+	MxLong GetRealTime();
 
 	inline MxLong GetTime()
 	{
-		if (this->m_isRunning)
+		if (this->m_isRunning) {
 			return g_lastTimeTimerStarted;
-		else
+		}
+		else {
 			return g_lastTimeCalculated - this->m_startTime;
+		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100ae0d0

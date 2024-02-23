@@ -46,8 +46,8 @@ Isle::~Isle()
 		InputManager()->ClearWorld();
 	}
 
-	if (GetCurrentVehicle() != NULL) {
-		VTable0x6c(GetCurrentVehicle());
+	if (CurrentVehicle() != NULL) {
+		VTable0x6c(CurrentVehicle());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -56,27 +56,27 @@ Isle::~Isle()
 // FUNCTION: LEGO1 0x10030b20
 MxResult Isle::Create(MxDSAction& p_dsAction)
 {
-	GameState()->FUN_1003ceb0();
+	GameState()->FindLoadedAct();
 
 	MxResult result = LegoWorld::Create(p_dsAction);
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
-		GameState()->FUN_1003a720(0);
+		GameState()->StopArea(LegoGameState::e_previousArea);
 
-		switch (GameState()->GetCurrentAct()) {
-		case 1:
-			GameState()->FUN_1003a720(0x2e);
+		switch (GameState()->GetLoadedAct()) {
+		case LegoGameState::e_act2:
+			GameState()->StopArea(LegoGameState::e_act2main);
 			break;
-		case 2:
-			GameState()->FUN_1003a720(0x2e);
+		case LegoGameState::e_act3:
+			GameState()->StopArea(LegoGameState::e_act2main); // Looks like a bug
 			break;
-		case -1:
+		case LegoGameState::e_actNotFound:
 			m_unk0x13c = 2;
 		}
 
-		if (GameState()->GetUnknown424() == 1) {
-			GameState()->SetUnknown424(0);
+		if (GameState()->GetCurrentArea() == LegoGameState::e_isle) {
+			GameState()->SetCurrentArea(LegoGameState::e_noArea);
 		}
 
 		LegoGameState* gameState = GameState();
@@ -115,13 +115,13 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationType17:
+		case c_notificationClick:
 			result = HandleType17Notification(p_param);
 			break;
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
-				result = GetCurrentVehicle()->Notify(p_param);
+				result = CurrentVehicle()->Notify(p_param);
 				break;
 			case 8:
 				result = m_towtrack->Notify(p_param);
@@ -135,7 +135,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			result = HandleType19Notification(p_param);
 			break;
 		case c_notificationType20:
-			VTable0x68(TRUE);
+			Enable(TRUE);
 			break;
 		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
@@ -153,16 +153,16 @@ MxLong Isle::StopAction(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10030fc0
-void Isle::VTable0x50()
+void Isle::ReadyWorld()
 {
-	LegoWorld::VTable0x50();
+	LegoWorld::ReadyWorld();
 
 	if (m_act1state->GetUnknown21()) {
-		GameState()->HandleAction(2);
+		GameState()->SwitchArea(LegoGameState::e_infomain);
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}
-	else if (GameState()->GetCurrentAct()) {
+	else if (GameState()->GetLoadedAct()) {
 		FUN_1003ef00(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
@@ -183,9 +183,23 @@ MxLong Isle::HandleType19Notification(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10031820
-void Isle::VTable0x68(MxBool p_add)
+void Isle::Enable(MxBool p_enable)
 {
-	// TODO
+	if (m_set0xd0.empty() == p_enable) {
+		return;
+	}
+
+	LegoWorld::Enable(p_enable);
+	m_radio.Initialize(p_enable);
+
+	if (p_enable) {
+		// TODO
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
 // STUB: LEGO1 0x10032620
@@ -201,9 +215,9 @@ MxLong Isle::HandleTransitionEnd()
 }
 
 // FUNCTION: LEGO1 0x10032f10
-void Isle::VTable0x58(MxCore* p_object)
+void Isle::Add(MxCore* p_object)
 {
-	LegoWorld::VTable0x58(p_object);
+	LegoWorld::Add(p_object);
 
 	if (p_object->IsA("Pizza")) {
 		m_pizza = (Pizza*) p_object;
@@ -246,7 +260,7 @@ void Isle::VTable0x58(MxCore* p_object)
 // FUNCTION: LEGO1 0x10033050
 void Isle::VTable0x6c(IslePathActor* p_actor)
 {
-	LegoWorld::EndAction(p_actor);
+	LegoWorld::Remove(p_actor);
 
 	if (p_actor->IsA("Helicopter")) {
 		m_helicopter = NULL;

@@ -8,9 +8,12 @@ from .util import (
     get_synthetic_name,
     remove_trailing_comment,
     get_string_contents,
+    sanitize_code_line,
+    scopeDetectRegex,
 )
 from .marker import (
     DecompMarker,
+    MarkerCategory,
     match_marker,
     is_marker_exact,
 )
@@ -51,12 +54,66 @@ class MarkerDict:
         self.markers[key] = marker
         return False
 
+    def query(self, category: MarkerCategory, module: str) -> Optional[DecompMarker]:
+        return self.markers.get((category, module))
+
     def iter(self) -> Iterator[DecompMarker]:
         for _, marker in self.markers.items():
             yield marker
 
     def empty(self):
         self.markers = {}
+
+
+class CurlyManager:
+    """Overly simplified scope manager"""
+
+    def __init__(self):
+        self._stack = []
+
+    def reset(self):
+        self._stack = []
+
+    def _pop(self):
+        """Pop stack safely"""
+        try:
+            self._stack.pop()
+        except IndexError:
+            pass
+
+    def get_prefix(self, name: Optional[str] = None) -> str:
+        """Return the prefix for where we are."""
+
+        scopes = [t for t in self._stack if t != "{"]
+        if len(scopes) == 0:
+            return name if name is not None else ""
+
+        if name is not None and name not in scopes:
+            scopes.append(name)
+
+        return "::".join(scopes)
+
+    def read_line(self, raw_line: str):
+        """Read a line of code and update the stack."""
+        line = sanitize_code_line(raw_line)
+        if (match := scopeDetectRegex.match(line)) is not None:
+            if not line.endswith(";"):
+                self._stack.append(match.group("name"))
+
+        change = line.count("{") - line.count("}")
+        if change > 0:
+            for _ in range(change):
+                self._stack.append("{")
+        elif change < 0:
+            for _ in range(-change):
+                self._pop()
+
+            if len(self._stack) == 0:
+                return
+
+            last = self._stack[-1]
+            if last != "{":
+                self._pop()
 
 
 class DecompParser:
@@ -72,6 +129,8 @@ class DecompParser:
         self.state: ReaderState = ReaderState.SEARCH
 
         self.last_line: str = ""
+
+        self.curly = CurlyManager()
 
         # To allow for multiple markers where code is shared across different
         # modules, save lists of compatible markers that appear in sequence
@@ -109,6 +168,8 @@ class DecompParser:
         self.curly_indent_stops = 0
         self.function_start = 0
         self.function_sig = ""
+
+        self.curly.reset()
 
     @property
     def functions(self) -> List[ParserFunction]:
@@ -213,7 +274,7 @@ class DecompParser:
                     line_number=self.line_number,
                     module=marker.module,
                     offset=marker.offset,
-                    name=class_name,
+                    name=self.curly.get_prefix(class_name),
                 )
             )
 
@@ -248,14 +309,32 @@ class DecompParser:
                     )
                 )
             else:
+                parent_function = None
+                is_static = self.state == ReaderState.IN_FUNC_GLOBAL
+
+                # If this is a static variable, we need to get the function
+                # where it resides so that we can match it up later with the
+                # mangled names of both variable and function from cvdump.
+                if is_static:
+                    fun_marker = self.fun_markers.query(
+                        MarkerCategory.FUNCTION, marker.module
+                    )
+
+                    if fun_marker is None:
+                        self._syntax_warning(ParserError.ORPHANED_STATIC_VARIABLE)
+                        continue
+
+                    parent_function = fun_marker.offset
+
                 self._symbols.append(
                     ParserVariable(
                         type=marker.type,
                         line_number=self.line_number,
                         module=marker.module,
                         offset=marker.offset,
-                        name=variable_name,
-                        is_static=self.state == ReaderState.IN_FUNC_GLOBAL,
+                        name=self.curly.get_prefix(variable_name),
+                        is_static=is_static,
+                        parent_function=parent_function,
                     )
                 )
 
@@ -353,6 +432,8 @@ class DecompParser:
             self._handle_marker(marker)
             return
 
+        self.curly.read_line(line)
+
         line_strip = line.strip()
         if self.state in (
             ReaderState.IN_SYNTHETIC,
@@ -406,6 +487,9 @@ class DecompParser:
                 ):
                     self._function_starts_here()
                     self._function_done()
+                elif self.function_sig.endswith(");"):
+                    # Detect forward reference or declaration
+                    self._syntax_error(ParserError.NO_IMPLEMENTATION)
                 else:
                     self.state = ReaderState.WANT_CURLY
 
@@ -451,8 +535,11 @@ class DecompParser:
                     variable_name = get_variable_name(line)
                     # This is out of our control for library variables, but all of our
                     # variables should start with "g_".
-                    if variable_name is not None and not variable_name.startswith("g_"):
-                        self._syntax_warning(ParserError.GLOBAL_MISSING_PREFIX)
+                    if variable_name is not None:
+                        # Before checking for the prefix, remove the
+                        # namespace chain if there is one.
+                        if not variable_name.split("::")[-1].startswith("g_"):
+                            self._syntax_warning(ParserError.GLOBAL_MISSING_PREFIX)
 
             string_name = get_string_contents(line)
 

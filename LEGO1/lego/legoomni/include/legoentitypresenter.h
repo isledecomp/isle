@@ -10,10 +10,10 @@ class LegoEntity;
 class LegoEntityPresenter : public MxCompositePresenter {
 public:
 	LegoEntityPresenter();
-	virtual ~LegoEntityPresenter() override; // vtable+0x0
+	~LegoEntityPresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100534b0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f06b8
 		return "LegoEntityPresenter";
@@ -25,15 +25,17 @@ public:
 		return !strcmp(p_name, LegoEntityPresenter::ClassName()) || MxCompositePresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;                                                           // vtable+0x18
-	virtual void RepeatingTickle() override;                                                       // vtable+0x24
-	virtual void ParseExtra() override;                                                            // vtable+0x30
-	virtual void Destroy() override;                                                               // vtable+0x38
-	virtual MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
-	virtual void Init();                                                                           // vtable+0x68
-	virtual undefined4 SetEntity(LegoEntity* p_entity);                                            // vtable+0x6c
+	void ReadyTickle() override;                                                           // vtable+0x18
+	void RepeatingTickle() override;                                                       // vtable+0x24
+	void ParseExtra() override;                                                            // vtable+0x30
+	void Destroy() override;                                                               // vtable+0x38
+	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
+	virtual void Init();                                                                   // vtable+0x68
+	virtual undefined4 SetEntity(LegoEntity* p_entity);                                    // vtable+0x6c
 
 	void SetEntityLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up);
+
+	inline LegoEntity* GetEntity() { return m_entity; }
 
 	// SYNTHETIC: LEGO1 0x100535a0
 	// LegoEntityPresenter::`scalar deleting destructor'

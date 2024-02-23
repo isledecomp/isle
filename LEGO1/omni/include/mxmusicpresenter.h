@@ -8,23 +8,23 @@
 class MxMusicPresenter : public MxAudioPresenter {
 public:
 	MxMusicPresenter();
-	virtual ~MxMusicPresenter() override;
+	~MxMusicPresenter() override;
 
 	// FUNCTION: LEGO1 0x100c23a0
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e48
 		return "MxMusicPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x100c23b0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxMusicPresenter::ClassName()) || MxAudioPresenter::IsA(p_name);
 	}
 
-	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
+	MxResult AddToManager() override; // vtable+0x34
+	void Destroy() override;          // vtable+0x38
 
 	// SYNTHETIC: LEGO1 0x100c24c0
 	// MxMusicPresenter::`scalar deleting destructor'

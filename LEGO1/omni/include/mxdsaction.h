@@ -24,36 +24,36 @@ public:
 		c_bit11 = 0x400,
 	};
 
-	__declspec(dllexport) MxDSAction();
-	__declspec(dllexport) virtual ~MxDSAction();
+	MxDSAction();
+	~MxDSAction() override;
 
 	void CopyFrom(MxDSAction& p_dsAction);
 	MxDSAction& operator=(MxDSAction& p_dsAction);
 
 	// FUNCTION: LEGO1 0x100ad980
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101013f4
 		return "MxDSAction";
 	}
 
 	// FUNCTION: LEGO1 0x100ad990
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSAction::ClassName()) || MxDSObject::IsA(p_name);
 	}
 
-	virtual undefined4 VTable0x14() override;                            // vtable+14;
-	virtual MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
-	virtual MxLong GetDuration();                                        // vtable+24;
-	virtual void SetDuration(MxLong p_duration);                         // vtable+28;
-	virtual MxDSAction* Clone();                                         // vtable+2c;
-	virtual void MergeFrom(MxDSAction& p_dsAction);                      // vtable+30;
-	virtual MxBool HasId(MxU32 p_objectId);                              // vtable+34;
-	virtual void SetUnknown90(MxLong p_unk0x90);                         // vtable+38;
-	virtual MxLong GetUnknown90();                                       // vtable+3c;
-	virtual MxLong GetElapsedTime();                                     // vtable+40;
+	undefined4 VTable0x14() override;                            // vtable+14;
+	MxU32 GetSizeOnDisk() override;                              // vtable+18;
+	void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	virtual MxLong GetDuration();                                // vtable+24;
+	virtual void SetDuration(MxLong p_duration);                 // vtable+28;
+	virtual MxDSAction* Clone();                                 // vtable+2c;
+	virtual void MergeFrom(MxDSAction& p_dsAction);              // vtable+30;
+	virtual MxBool HasId(MxU32 p_objectId);                      // vtable+34;
+	virtual void SetUnknown90(MxLong p_unk0x90);                 // vtable+38;
+	virtual MxLong GetUnknown90();                               // vtable+3c;
+	virtual MxLong GetElapsedTime();                             // vtable+40;
 
 	void AppendData(MxU16 p_extraLength, const char* p_extraData);
 
@@ -77,10 +77,12 @@ public:
 
 	inline void CopyFlags(MxU32 p_flags)
 	{
-		if (p_flags & MxDSAction::c_looping)
+		if (p_flags & MxDSAction::c_looping) {
 			SetFlags(GetFlags() | MxDSAction::c_looping);
-		else if (p_flags & MxDSAction::c_bit3)
+		}
+		else if (p_flags & MxDSAction::c_bit3) {
 			SetFlags(GetFlags() | MxDSAction::c_bit3);
+		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100ada60

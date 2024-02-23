@@ -10,7 +10,7 @@ struct UnknownMatrixType {
 };
 
 // VTABLE: LEGO1 0x100d4350
-// SIZE 0x8
+// SIZE 0x08
 class Matrix4 {
 public:
 	inline Matrix4(float (*p_data)[4]) { SetData(p_data); }
@@ -25,28 +25,28 @@ public:
 	virtual void Equals(const Matrix4& p_matrix)
 	{
 		memcpy(m_data, p_matrix.m_data, sizeof(float) * 4 * 4);
-	}; // vtable+0x00
+	} // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10002360
 	virtual void SetData(float (*p_data)[4]) { m_data = p_data; } // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x10002370
-	virtual void SetData(UnknownMatrixType& p_matrix) { m_data = p_matrix.m_data; }; // vtable+0x08
+	virtual void SetData(UnknownMatrixType& p_matrix) { m_data = p_matrix.m_data; } // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10002380
-	virtual float (*GetData())[4] { return m_data; }; // vtable+0x14
+	virtual float (*GetData())[4] { return m_data; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10002390
-	virtual float (*GetData() const)[4] { return m_data; }; // vtable+0x10
+	virtual float (*GetData() const)[4] { return m_data; } // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100023a0
 	virtual float* Element(int p_row, int p_col) { return &m_data[p_row][p_col]; } // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x100023c0
-	virtual const float* Element(int p_row, int p_col) const { return &m_data[p_row][p_col]; }; // vtable+0x18
+	virtual const float* Element(int p_row, int p_col) const { return &m_data[p_row][p_col]; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x100023e0
-	virtual void Clear() { memset(m_data, 0, 16 * sizeof(float)); }; // vtable+0x20
+	virtual void Clear() { memset(m_data, 0, 16 * sizeof(float)); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x100023f0
 	virtual void SetIdentity()
@@ -64,8 +64,9 @@ public:
 	// FUNCTION: LEGO1 0x10002430
 	virtual Matrix4& operator+=(float (*p_data)[4])
 	{
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++) {
 			((float*) m_data)[i] += ((float*) p_data)[i];
+		}
 		return *this;
 	} // vtable+0x2c
 
@@ -98,7 +99,7 @@ public:
 				cur++;
 			}
 		}
-	}; // vtable+0x3c
+	} // vtable+0x3c
 
 	// FUNCTION: LEGO1 0x10002530
 	virtual void Product(const Matrix4& p_a, const Matrix4& p_b) { Product(p_a.m_data, p_b.m_data); } // vtable+0x38

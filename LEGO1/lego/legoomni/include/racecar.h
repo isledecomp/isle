@@ -9,23 +9,23 @@
 class RaceCar : public IslePathActor {
 public:
 	RaceCar();
-	virtual ~RaceCar() override; // vtable+0x0
+	~RaceCar() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10028270
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03e0
 		return "RaceCar";
 	}
 
 	// FUNCTION: LEGO1 0x10028280
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, RaceCar::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	virtual MxU32 VTable0xcc() override;                      // vtable+0xcc
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	MxU32 VTable0xcc() override;                      // vtable+0xcc
 
 	// SYNTHETIC: LEGO1 0x10028400
 	// RaceCar::`scalar deleting destructor'

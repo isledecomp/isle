@@ -4,31 +4,23 @@ on: [push, pull_request]
 
 jobs:
   decomplint-isle:
-    name: 'ISLE annotations'
+    name: '${{ matrix.who }} annotations'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        who:
+          - CONFIG
+          - ISLE
+          - LEGO1
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install python libraries
       run: |
-        pip install -r tools/requirements.txt
+        python -m pip install -r tools/requirements.txt
 
     - name: Run decomplint.py
       run: |
-        python3 tools/decomplint/decomplint.py ISLE --module ISLE --warnfail
-
-  decomplint-lego1:
-    name: 'LEGO1 annotations'
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Install python libraries
-      run: |
-        pip install -r tools/requirements.txt
-
-    - name: Run decomplint.py
-      run: |
-        python3 tools/decomplint/decomplint.py LEGO1 --module LEGO1 --warnfail
+        tools/decomplint/decomplint.py ${{ matrix.who }} --module ${{ matrix.who }} --warnfail

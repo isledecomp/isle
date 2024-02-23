@@ -13,34 +13,34 @@ public:
 	inline MxMediaPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c550
-	virtual ~MxMediaPresenter() override { Destroy(TRUE); };
+	~MxMediaPresenter() override { Destroy(TRUE); }
 
-	virtual MxResult Tickle() override; // vtable+0x8
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1000c5c0
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f074c
 		return "MxMediaPresenter";
 	}
 
 	// FUNCTION: LEGO1 0x1000c5d0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxMediaPresenter::ClassName()) || MxPresenter::IsA(p_name);
 	}
 
-	virtual void StreamingTickle() override; // vtable+0x20
-	virtual void RepeatingTickle() override; // vtable+0x24
-	virtual void DoneTickle() override;      // vtable+0x2c
+	void StreamingTickle() override; // vtable+0x20
+	void RepeatingTickle() override; // vtable+0x24
+	void DoneTickle() override;      // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x1000c5b0
-	virtual void Destroy() override { Destroy(FALSE); }; // vtable+0x38
+	void Destroy() override { Destroy(FALSE); } // vtable+0x38
 
-	virtual MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
-	virtual void EndAction() override;                                       // vtable+0x40
-	virtual void Enable(MxBool p_enable) override;                           // vtable+0x54
-	virtual void LoopChunk(MxStreamChunk* p_chunk);                          // vtable+0x58
+	MxResult StartAction(MxStreamController*, MxDSAction*) override; // vtable+0x3c
+	void EndAction() override;                                       // vtable+0x40
+	void Enable(MxBool p_enable) override;                           // vtable+0x54
+	virtual void LoopChunk(MxStreamChunk* p_chunk);                  // vtable+0x58
 
 	// SYNTHETIC: LEGO1 0x1000c680
 	// MxMediaPresenter::`scalar deleting destructor'

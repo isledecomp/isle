@@ -14,10 +14,10 @@ public:
 	MxPresenterList(MxBool p_ownership = FALSE) : MxPtrList<MxPresenter>(p_ownership) {}
 
 	// FUNCTION: LEGO1 0x1001cd00
-	virtual MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
+	MxS8 Compare(MxPresenter* p_a, MxPresenter* p_b) override
 	{
 		return p_a == p_b ? 0 : p_a < p_b ? -1 : 1;
-	}; // vtable+0x14
+	} // vtable+0x14
 
 	// SYNTHETIC: LEGO1 0x1001ceb0
 	// MxPresenterList::`scalar deleting destructor'
@@ -67,5 +67,35 @@ public:
 
 // SYNTHETIC: LEGO1 0x1001d090
 // MxPtrList<MxPresenter>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001d100
+// MxPresenterList::~MxPresenterList
+
+// SYNTHETIC: LEGO1 0x1001eed0
+// MxPresenterListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1001ef40
+// MxPtrListCursor<MxPresenter>::~MxPtrListCursor<MxPresenter>
+
+// SYNTHETIC: LEGO1 0x1001ef90
+// MxListCursor<MxPresenter *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1001f000
+// MxPtrListCursor<MxPresenter>::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1001f070
+// MxListCursor<MxPresenter *>::~MxListCursor<MxPresenter *>
+
+// FUNCTION: LEGO1 0x1001f0c0
+// MxPresenterListCursor::~MxPresenterListCursor
+
+// TEMPLATE: LEGO1 0x10020760
+// MxListCursor<MxPresenter *>::MxListCursor<MxPresenter *>
+
+// TEMPLATE: LEGO1 0x10022380
+// MxList<MxPresenter *>::InsertEntry
+
+// TEMPLATE: LEGO1 0x100225e0
+// MxList<MxPresenter *>::DeleteEntry
 
 #endif // MXPRESENTERLIST_H

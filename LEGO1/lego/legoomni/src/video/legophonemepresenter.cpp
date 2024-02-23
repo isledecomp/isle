@@ -26,6 +26,8 @@ void LegoPhonemePresenter::Init()
 void LegoPhonemePresenter::StartingTickle()
 {
 	// TODO
+
+	EndAction();
 }
 
 // STUB: LEGO1 0x1004e800
@@ -44,4 +46,8 @@ void LegoPhonemePresenter::PutFrame()
 void LegoPhonemePresenter::EndAction()
 {
 	// TODO
+
+	if (m_action != NULL) {
+		MxFlcPresenter::EndAction();
+	}
 }

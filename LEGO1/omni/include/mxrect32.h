@@ -65,6 +65,7 @@ public:
 	}
 
 	inline MxBool IsValid() const { return m_left < m_right && m_top < m_bottom; }
+
 	inline MxBool IntersectsWith(const MxRect32& p_rect) const
 	{
 		return m_left < p_rect.m_right && p_rect.m_left < m_right && m_top < p_rect.m_bottom && p_rect.m_top < m_bottom;
@@ -114,8 +115,8 @@ private:
 		return this;
 	}
 
-	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; };
-	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; };
+	inline static MxS32 Min(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_a : p_b; }
+	inline static MxS32 Max(MxS32 p_a, MxS32 p_b) { return p_a <= p_b ? p_b : p_a; }
 
 	MxS32 m_left;   // 0x00
 	MxS32 m_top;    // 0x04

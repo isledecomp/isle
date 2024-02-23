@@ -1,6 +1,7 @@
 #ifndef LEGOBUILDINGMANAGER_H
 #define LEGOBUILDINGMANAGER_H
 
+#include "decomp.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d6f50
@@ -8,26 +9,33 @@
 class LegoBuildingManager : public MxCore {
 public:
 	LegoBuildingManager();
-	virtual ~LegoBuildingManager() override;
+	~LegoBuildingManager() override;
 
-	virtual MxResult Tickle() override; // vtable+0x08
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1002f930
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f37d0
 		return "LegoBuildingManager";
 	}
 
-	__declspec(dllexport) static void configureLegoBuildingManager(MxS32);
+	static void configureLegoBuildingManager(MxS32);
+	static void SetCustomizeAnimFile(const char* p_value);
 
 	void FUN_1002fa00();
+	void FUN_1002fb30();
+	void FUN_10030590();
 
 	// SYNTHETIC: LEGO1 0x1002f940
 	// LegoBuildingManager::`scalar deleting destructor'
 
 private:
+	static char* g_customizeAnimFile;
+
 	void Init();
+
+	undefined m_unk0x08[0x28]; // 0x08
 };
 
 #endif // LEGOBUILDINGMANAGER_H

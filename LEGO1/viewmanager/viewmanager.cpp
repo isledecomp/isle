@@ -1,5 +1,9 @@
 #include "viewmanager.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
+
 // STUB: LEGO1 0x100a5eb0
 ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view)
 {

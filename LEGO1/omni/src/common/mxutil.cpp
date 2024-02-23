@@ -1,10 +1,12 @@
 #include "mxutil.h"
 
+#include "mxcompositepresenter.h"
 #include "mxdsaction.h"
 #include "mxdsactionlist.h"
 #include "mxdsfile.h"
 #include "mxdsmultiaction.h"
 #include "mxdsobject.h"
+#include "mxpresenterlist.h"
 #include "mxrect32.h"
 
 // GLOBAL: LEGO1 0x101020e8
@@ -33,15 +35,17 @@ MxBool GetRectIntersection(
 	MxRect32 rect(0, 0, *p_width, *p_height);
 	rect.AddPoint(rect1Origin);
 
-	if (!rect.IntersectsWith(rect1))
+	if (!rect.IntersectsWith(rect1)) {
 		return FALSE;
+	}
 
 	rect.Intersect(rect1);
 	rect.SubtractPoint(rect1Origin);
 	rect.AddPoint(rect2Origin);
 
-	if (!rect.IntersectsWith(rect2))
+	if (!rect.IntersectsWith(rect2)) {
 		return FALSE;
+	}
 
 	rect.Intersect(rect2);
 	rect.SubtractPoint(rect2Origin);
@@ -91,8 +95,9 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 				char* cur = &token[strlen(p_key)];
 				cur++;
 				while (*cur != ',') {
-					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r')
+					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r') {
 						break;
+					}
 					*p_outputValue++ = *cur++;
 				}
 				*p_outputValue = '\0';
@@ -107,6 +112,19 @@ MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p
 
 	delete[] temp;
 	return didMatch;
+}
+
+// FUNCTION: LEGO1 0x100b7170
+MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter)
+{
+	for (MxCompositePresenterList::iterator it = p_presenterList.begin(); it != p_presenterList.end(); it++) {
+		if (p_presenter == *it || ((*it)->IsA("MxCompositePresenter") &&
+								   ContainsPresenter(((MxCompositePresenter*) *it)->GetList(), p_presenter))) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100b7210

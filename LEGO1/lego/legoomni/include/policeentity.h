@@ -8,14 +8,14 @@
 class PoliceEntity : public BuildingEntity {
 public:
 	// FUNCTION: LEGO1 0x1000ed60
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0328
 		return "PoliceEntity";
 	}
 
 	// FUNCTION: LEGO1 0x1000ed70
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, PoliceEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}

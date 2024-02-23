@@ -7,6 +7,7 @@
 #include "mxpresenter.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
+#include "mxutil.h"
 
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
@@ -20,7 +21,7 @@ MxBackgroundAudioManager::MxBackgroundAudioManager()
 	m_unk0x140 = 0;
 	m_targetVolume = 0;
 	m_unk0x148 = 0;
-	m_musicEnabled = FALSE;
+	m_enabled = FALSE;
 }
 
 // FUNCTION: LEGO1 0x1007ec20
@@ -38,7 +39,7 @@ MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyM
 
 	if (result == SUCCESS) {
 		TickleManager()->RegisterClient(this, p_frequencyMS);
-		m_musicEnabled = TRUE;
+		m_enabled = TRUE;
 	}
 
 	return result;
@@ -47,8 +48,9 @@ MxResult MxBackgroundAudioManager::Create(MxAtomId& p_script, MxU32 p_frequencyM
 // FUNCTION: LEGO1 0x1007ed20
 MxResult MxBackgroundAudioManager::OpenMusic(MxAtomId& p_script)
 {
-	if (m_script.GetInternal())
+	if (m_script.GetInternal()) {
 		DestroyMusic();
+	}
 
 	MxResult result = FAILURE;
 
@@ -69,7 +71,7 @@ void MxBackgroundAudioManager::DestroyMusic()
 		ds.SetUnknown24(-2);
 		DeleteObject(ds);
 		Streamer()->Close(m_script.GetInternal());
-		m_musicEnabled = FALSE;
+		m_enabled = FALSE;
 	}
 }
 
@@ -79,16 +81,15 @@ MxResult MxBackgroundAudioManager::Tickle()
 	switch (m_unk0x13c) {
 	case MxPresenter::e_starting:
 		FadeInOrFadeOut();
-		return SUCCESS;
+		break;
 	case MxPresenter::e_streaming:
 		FUN_1007ee70();
-		return SUCCESS;
+		break;
 	case MxPresenter::e_repeating:
 		FUN_1007ef40();
-		return SUCCESS;
-	default:
-		return SUCCESS;
 	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1007ee70
@@ -111,19 +112,23 @@ void MxBackgroundAudioManager::FUN_1007ee70()
 // FUNCTION: LEGO1 0x1007ef40
 void MxBackgroundAudioManager::FUN_1007ef40()
 {
-	MxU32 compare;
-	MxU32 volume;
+	MxS32 compare, volume;
+
 	if (m_unk0xa0 == NULL) {
 		if (m_unk0x138) {
-			compare = 30;
-			if (m_unk0x148 == 0) {
-				compare = m_unk0x148;
+			if (m_unk0x148 != 0) {
+				compare = 30;
 			}
+			else {
+				compare = m_targetVolume;
+			}
+
 			volume = m_unk0x138->GetVolume();
 			if (volume < compare) {
 				if (m_unk0x140 + m_unk0x138->GetVolume() <= compare) {
-					compare = m_unk0x140 + compare;
+					compare = m_unk0x140 + m_unk0x138->GetVolume();
 				}
+
 				m_unk0x138->SetVolume(compare);
 			}
 			else {
@@ -142,12 +147,14 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 			DeleteObject(*m_unk0xa0->GetAction());
 		}
 		else {
-			compare = m_unk0xa0->GetVolume();
-			volume = 0;
-			if (compare != m_unk0x140 && -1 < compare - m_unk0x140) {
+			if (m_unk0xa0->GetVolume() - m_unk0x140 > 0) {
 				volume = m_unk0xa0->GetVolume() - m_unk0x140;
 			}
-			m_unk0x138->SetVolume(volume);
+			else {
+				volume = 0;
+			}
+
+			m_unk0xa0->SetVolume(volume);
 		}
 	}
 }
@@ -155,26 +162,24 @@ void MxBackgroundAudioManager::FUN_1007ef40()
 // FUNCTION: LEGO1 0x1007f0e0
 void MxBackgroundAudioManager::FadeInOrFadeOut()
 {
-	// This function probably is the fade in/out routine
+	MxS32 volume, compare;
+
 	if (m_unk0xa0 != NULL) {
-		undefined4 volume = m_unk0xa0->GetVolume();
-		MxU32 compare = 30;
-		if (m_unk0x148 == 0) {
+		volume = m_unk0xa0->GetVolume();
+
+		if (m_unk0x148 != 0) {
+			compare = 30;
+		}
+		else {
 			compare = m_targetVolume;
 		}
 
 		if (volume < compare) {
-			volume = m_unk0x140 + volume;
-			if (compare <= volume) {
-				volume = compare;
-			}
+			volume = Min(volume + m_unk0x140, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else if (compare < volume) {
-			volume = volume - m_unk0x140;
-			if (volume <= compare) {
-				volume = compare;
-			}
+			volume = Max(volume - m_unk0x140, compare);
 			m_unk0xa0->SetVolume(volume);
 		}
 		else {
@@ -232,9 +237,10 @@ void MxBackgroundAudioManager::StopAction(MxParam& p_param)
 // FUNCTION: LEGO1 0x1007f2f0
 MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_unk0x140, undefined4 p_unk0x13c)
 {
-	if (!m_musicEnabled) {
+	if (!m_enabled) {
 		return SUCCESS;
 	}
+
 	if (m_action2.GetObjectId() == -1 && m_action1.GetObjectId() != p_action.GetObjectId()) {
 		MxDSAction action;
 		action.SetAtomId(GetCurrentAction().GetAtomId());
@@ -256,23 +262,27 @@ MxResult MxBackgroundAudioManager::PlayMusic(MxDSAction& p_action, undefined4 p_
 			m_unk0x13c = p_unk0x13c;
 			m_unk0x140 = p_unk0x140;
 		}
+
 		return result;
 	}
+
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x1007f470
 void MxBackgroundAudioManager::Stop()
 {
-	if (m_action2.GetObjectId() != -1)
+	if (m_action2.GetObjectId() != -1) {
 		DeleteObject(m_action2);
+	}
 
 	m_unk0x138 = 0;
 	m_action2.SetAtomId(MxAtomId());
 	m_action2.SetObjectId(-1);
 
-	if (m_action1.GetObjectId() != -1)
+	if (m_action1.GetObjectId() != -1) {
 		DeleteObject(m_action1);
+	}
 
 	m_unk0xa0 = 0;
 	m_action1.SetAtomId(MxAtomId());
@@ -310,8 +320,9 @@ void MxBackgroundAudioManager::RaiseVolume()
 // FUNCTION: LEGO1 0x1007f5f0
 void MxBackgroundAudioManager::Enable(MxBool p_enable)
 {
-	if (this->m_musicEnabled != p_enable) {
-		this->m_musicEnabled = p_enable;
+	if (this->m_enabled != p_enable) {
+		this->m_enabled = p_enable;
+
 		if (!p_enable) {
 			Stop();
 		}

@@ -9,36 +9,41 @@
 class LegoAnimationManager : public MxCore {
 public:
 	LegoAnimationManager();
-	virtual ~LegoAnimationManager() override; // vtable+0x0
+	~LegoAnimationManager() override; // vtable+0x00
 
-	virtual MxLong Notify(MxParam& p_param) override; // vtable+0x4
-	virtual MxResult Tickle() override;               // vtable+0x8
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
+	MxResult Tickle() override;               // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1005ec80
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f7508
 		return "LegoAnimationManager";
 	}
 
 	// FUNCTION: LEGO1 0x1005ec90
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
+	void FUN_1005ee80(MxBool);
 	void FUN_1005ef10();
+	void FUN_1005f0b0();
 	void FUN_1005f6d0(MxBool);
-	void FUN_1005f720(undefined4);
+	void FUN_1005f720(MxS32 p_scriptIndex);
+	void FUN_10061010(undefined4);
 	void FUN_10064670(MxBool);
 
-	__declspec(dllexport) static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
+	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
 	// SYNTHETIC: LEGO1 0x1005ed10
 	// LegoAnimationManager::`scalar deleting destructor'
 
 private:
 	void Init();
+
+	undefined m_unk0x08[0x4f8]; // 0x08
 };
 
 #endif // LEGOANIMATIONMANAGER_H

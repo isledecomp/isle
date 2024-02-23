@@ -419,8 +419,7 @@ def test_static_variable(parser):
     """We can detect whether a variable is a static function variable
     based on the parser's state when we detect it.
     Checking for the word `static` alone is not a good test.
-    Static class variables are filed as S_GDATA32, same as regular globals.
-    Only function statics are filed as S_LDATA32."""
+    Static class variables are filed as S_GDATA32, same as regular globals."""
 
     parser.read_lines(
         [
@@ -436,7 +435,7 @@ def test_static_variable(parser):
             "// FUNCTION: TEST 0x5555",
             "void test_function() {",
             "// GLOBAL: TEST 0x8888",
-            "int g_internal = 0;",
+            "static int g_internal = 0;",
             "}",
         ]
     )
@@ -521,3 +520,194 @@ def test_string_ignore_g_prefix(parser):
     )
     assert len(parser.strings) == 1
     assert len(parser.alerts) == 0
+
+
+def test_class_variable(parser):
+    """We should accurately name static variables that are class members."""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "protected:",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_test;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Test::g_test"
+
+
+def test_namespace_variable(parser):
+    """We should identify a namespace surrounding any global variables"""
+
+    parser.read_lines(
+        [
+            "namespace Test {",
+            "// GLOBAL: TEST 0x1234",
+            "int g_test = 1234;",
+            "}",
+            "// GLOBAL: TEST 0x5555",
+            "int g_second = 2;",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_test"
+    assert parser.variables[1].name == "g_second"
+
+
+def test_namespace_vtable(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "// VTABLE: TEST 0x1234",
+            "class Renderer {",
+            "};",
+            "}",
+            "// VTABLE: TEST 0x5555",
+            "class Hello { };",
+        ]
+    )
+
+    assert len(parser.vtables) == 2
+    assert parser.vtables[0].name == "Tgl::Renderer"
+    assert parser.vtables[1].name == "Hello"
+
+
+def test_global_prefix_namespace(parser):
+    """Should correctly identify namespaces before checking for the g_ prefix"""
+
+    parser.read_lines(
+        [
+            "class Test {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "  // GLOBAL: TEST 0x5555",
+            "  static int count = 0;",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 2
+    assert parser.variables[0].name == "Test::g_count"
+    assert parser.variables[1].name == "Test::count"
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.GLOBAL_MISSING_PREFIX
+
+
+def test_nested_namespace(parser):
+    parser.read_lines(
+        [
+            "namespace Tgl {",
+            "class Renderer {",
+            "  // GLOBAL: TEST 0x1234",
+            "  static int g_count = 0;",
+            "};",
+            "};",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "Tgl::Renderer::g_count"
+
+
+def test_match_qualified_variable(parser):
+    """If a variable belongs to a scope and we use a fully qualified reference
+    below a GLOBAL marker, make sure we capture the full name."""
+
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x1234",
+            "int MxTest::g_count = 0;",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].name == "MxTest::g_count"
+    assert len(parser.alerts) == 0
+
+
+def test_static_variable_parent(parser):
+    """Report the address of the parent function that contains a static variable."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: TEST 0x1234",
+            "void test()",
+            "{",
+            "   // GLOBAL: TEST 0x5555",
+            "   static int g_count = 0;",
+            "}",
+        ]
+    )
+
+    assert len(parser.variables) == 1
+    assert parser.variables[0].is_static is True
+    assert parser.variables[0].parent_function == 0x1234
+
+
+@pytest.mark.xfail(
+    reason="""Without the FUNCTION marker we don't know that we are inside a function,
+    so we do not identify this variable as static."""
+)
+def test_static_variable_no_parent(parser):
+    """If the function that contains a static variable is not marked, we
+    cannot match it with cvdump so we should skip it and report an error."""
+
+    parser.read_lines(
+        [
+            "void test()",
+            "{",
+            "   // GLOBAL: TEST 0x5555",
+            "   static int g_count = 0;",
+            "}",
+        ]
+    )
+
+    # No way to match this variable so don't report it
+    assert len(parser.variables) == 0
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.ORPHANED_STATIC_VARIABLE
+
+
+def test_static_variable_incomplete_coverage(parser):
+    """If the function that contains a static variable is marked, but
+    not for each module used for the variable itself, this is an error."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: HELLO 0x1234",
+            "void test()",
+            "{",
+            "   // GLOBAL: HELLO 0x5555",
+            "   // GLOBAL: TEST 0x5555",
+            "   static int g_count = 0;",
+            "}",
+        ]
+    )
+
+    # Match for HELLO module
+    assert len(parser.variables) == 1
+
+    # Failed for TEST module
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.ORPHANED_STATIC_VARIABLE
+
+
+def test_header_function_declaration(parser):
+    """This is either a forward reference or a declaration in a header file.
+    Meaning: The implementation is not here. This is not the correct place
+    for the FUNCTION marker and it will probably not match anything."""
+
+    parser.read_lines(
+        [
+            "// FUNCTION: HELLO 0x1234",
+            "void sample_function(int);",
+        ]
+    )
+
+    assert len(parser.alerts) == 1
+    assert parser.alerts[0].code == ParserError.NO_IMPLEMENTATION

@@ -1,42 +1,59 @@
 #include "legostate.h"
 
-DECOMP_SIZE_ASSERT(LegoState, 0x08);
+#include <stdlib.h>
 
-// FUNCTION: LEGO1 0x10005f40
-LegoState::~LegoState()
-{
-}
+DECOMP_SIZE_ASSERT(LegoState, 0x08)
+DECOMP_SIZE_ASSERT(LegoState::Playlist, 0x0c)
 
-// FUNCTION: LEGO1 0x10005f90
-MxBool LegoState::VTable0x14()
+// FUNCTION: LEGO1 0x10014d00
+MxU32 LegoState::Playlist::Next()
 {
-	return TRUE;
-}
+	MxU32 objectId;
 
-// FUNCTION: LEGO1 0x10005fa0
-MxBool LegoState::SetFlag()
-{
-	return FALSE;
-}
+	switch (m_mode) {
+	case e_loop:
+		objectId = m_objectIds[m_nextIndex];
+		if (m_nextIndex - m_length == -1) {
+			m_nextIndex = 0;
+		}
+		else {
+			m_nextIndex++;
+		}
+		break;
 
-// FUNCTION: LEGO1 0x10005fb0
-MxResult LegoState::VTable0x1c(LegoFileStream* p_legoFileStream)
-{
-	if (p_legoFileStream->IsWriteMode()) {
-		p_legoFileStream->FUN_10006030(this->ClassName());
+	case e_once:
+		objectId = m_objectIds[m_nextIndex];
+		if (m_length > m_nextIndex + 1) {
+			m_nextIndex++;
+		}
+		break;
+
+	case e_random:
+		m_nextIndex = rand() % m_length;
+		objectId = m_objectIds[m_nextIndex];
+		break;
+
+	case e_loopSkipFirst:
+		objectId = m_objectIds[m_nextIndex];
+		if (m_nextIndex - m_length == -1) {
+			m_nextIndex = 1;
+		}
+		else {
+			m_nextIndex++;
+		}
 	}
-	return SUCCESS;
+
+	return objectId;
 }
 
-// FUNCTION: LEGO1 0x10006030
-LegoFileStream* LegoFileStream::FUN_10006030(MxString p_str)
+// FUNCTION: LEGO1 0x10014de0
+MxBool LegoState::Playlist::Contains(MxU32 p_objectId)
 {
-	const char* data = p_str.GetData();
-	MxU32 fullLength = strlen(data);
+	for (MxS16 i = 0; i < m_length; i++) {
+		if (m_objectIds[i] == p_objectId) {
+			return TRUE;
+		}
+	}
 
-	MxU16 limitedLength = fullLength;
-	Write(&limitedLength, sizeof(limitedLength));
-	Write(data, (MxS16) fullLength);
-
-	return this;
+	return FALSE;
 }

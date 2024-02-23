@@ -19,8 +19,9 @@ MxU32 g_unk0x10102878 = 0;
 // FUNCTION: LEGO1 0x100d0f30
 MxResult MxDiskStreamProviderThread::Run()
 {
-	if (m_target)
+	if (m_target) {
 		((MxDiskStreamProvider*) m_target)->WaitForWorkToComplete();
+	}
 	MxThread::Run();
 	// They should probably have writen "return MxThread::Run()" but they didn't.
 	return SUCCESS;
@@ -55,11 +56,13 @@ MxDiskStreamProvider::~MxDiskStreamProvider()
 			m_list.PopFrontStreamingAction(action);
 		}
 
-		if (!action)
+		if (!action) {
 			break;
+		}
 
-		if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+		if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 			g_unk0x10102878--;
+		}
 
 		((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
 	} while (action);
@@ -70,8 +73,9 @@ MxDiskStreamProvider::~MxDiskStreamProvider()
 		m_thread.Terminate();
 	}
 
-	if (m_pFile)
+	if (m_pFile) {
 		delete m_pFile;
+	}
 
 	m_pFile = NULL;
 }
@@ -91,8 +95,9 @@ MxResult MxDiskStreamProvider::SetResourceToGet(MxStreamController* p_resource)
 			path = MxString(MxOmni::GetCD()) + p_resource->GetAtom().GetInternal() + ".si";
 			m_pFile->SetFileName(path.GetData());
 
-			if (m_pFile->Open(0) != 0)
+			if (m_pFile->Open(0) != 0) {
 				goto done;
+			}
 		}
 
 		m_remainingWork = TRUE;
@@ -123,11 +128,13 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				m_list.PopFrontStreamingAction(action);
 			}
 
-			if (!action)
+			if (!action) {
 				return;
+			}
 
-			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 				g_unk0x10102878--;
+			}
 
 			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
 		} while (action);
@@ -139,11 +146,13 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 				action = (MxDSStreamingAction*) m_list.Find(p_action, TRUE);
 			}
 
-			if (!action)
+			if (!action) {
 				return;
+			}
 
-			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000)
+			if (action->GetUnknowna0()->GetWriteOffset() < 0x20000) {
 				g_unk0x10102878--;
+			}
 
 			((MxDiskStreamController*) m_pLookup)->FUN_100c8670(action);
 		} while (action);
@@ -155,8 +164,9 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 {
 	while (m_remainingWork) {
 		m_busySemaphore.Wait(INFINITE);
-		if (m_unk0x35)
+		if (m_unk0x35) {
 			PerformWork();
+		}
 	}
 
 	return SUCCESS;
@@ -165,14 +175,16 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 // FUNCTION: LEGO1 0x100d1780
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
-	if (!m_remainingWork)
+	if (!m_remainingWork) {
 		return FAILURE;
+	}
 
 	if (p_action->GetUnknown9c() > 0 && !p_action->GetUnknowna0()) {
 		MxDSBuffer* buffer = new MxDSBuffer();
 
-		if (!buffer)
+		if (!buffer) {
 			return FAILURE;
+		}
 
 		if (buffer->AllocateBuffer(GetFileSize(), MxDSBuffer::e_allocate) != SUCCESS) {
 			delete buffer;
@@ -220,8 +232,9 @@ void MxDiskStreamProvider::PerformWork()
 	{
 		MxAutoLocker lock(&m_criticalSection);
 
-		if (!m_list.PopFrontStreamingAction(streamingAction))
+		if (!m_list.PopFrontStreamingAction(streamingAction)) {
 			goto done;
+		}
 	}
 
 	if (streamingAction->GetUnknowna0()->GetWriteOffset() < 0x20000) {
@@ -276,15 +289,17 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 {
 	MxDSBuffer* buffer = new MxDSBuffer();
 
-	if (!buffer)
+	if (!buffer) {
 		return FAILURE;
+	}
 
 	MxU32 size = p_action->GetUnknowna0()->GetWriteOffset() - p_action->GetUnknown94() + p_action->GetBufferOffset() +
 				 (p_action->GetUnknowna4() ? p_action->GetUnknowna4()->GetWriteOffset() : 0);
 
 	if (buffer->AllocateBuffer(size, MxDSBuffer::e_allocate) != SUCCESS) {
-		if (!buffer)
+		if (!buffer) {
 			return FAILURE;
+		}
 
 		delete buffer;
 		return FAILURE;
@@ -327,8 +342,9 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 				size = ReadData(*pdata, buffer->GetWriteOffset());
 
 				MxDSBuffer* buffer3 = new MxDSBuffer();
-				if (!buffer3)
+				if (!buffer3) {
 					return FAILURE;
+				}
 
 				if (buffer3->AllocateBuffer(size, MxDSBuffer::e_allocate) == SUCCESS) {
 					memcpy(buffer3->GetBuffer(), p_action->GetUnknowna4()->GetBuffer(), size);
@@ -342,8 +358,9 @@ MxResult MxDiskStreamProvider::FUN_100d1b20(MxDSStreamingAction* p_action)
 					MxU8* data2 = buffer4->GetBuffer();
 
 					while (TRUE) {
-						if (*MxStreamChunk::IntoTime(data2) > p_action->GetUnknown9c())
+						if (*MxStreamChunk::IntoTime(data2) > p_action->GetUnknown9c()) {
 							break;
+						}
 
 						data += MxDSChunk::Size(*MxDSChunk::IntoLength(data));
 						unk0x14 += MxDSChunk::Size(*MxDSChunk::IntoLength(data));

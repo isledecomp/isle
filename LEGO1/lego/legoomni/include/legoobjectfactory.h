@@ -4,17 +4,17 @@
 #include "mxobjectfactory.h"
 
 #define FOR_LEGOOBJECTFACTORY_OBJECTS(X)                                                                               \
-	X(LegoModelPresenter)                                                                                              \
-	X(LegoTexturePresenter)                                                                                            \
-	X(LegoPhonemePresenter)                                                                                            \
-	X(LegoFlcTexturePresenter)                                                                                         \
 	X(LegoEntityPresenter)                                                                                             \
 	X(LegoActorPresenter)                                                                                              \
 	X(LegoWorldPresenter)                                                                                              \
 	X(LegoWorld)                                                                                                       \
+	X(LegoAnimPresenter)                                                                                               \
+	X(LegoModelPresenter)                                                                                              \
+	X(LegoTexturePresenter)                                                                                            \
+	X(LegoPhonemePresenter)                                                                                            \
+	X(LegoFlcTexturePresenter)                                                                                         \
 	X(LegoPalettePresenter)                                                                                            \
 	X(LegoPathPresenter)                                                                                               \
-	X(LegoAnimPresenter)                                                                                               \
 	X(LegoLoopingAnimPresenter)                                                                                        \
 	X(LegoLocomotionAnimPresenter)                                                                                     \
 	X(LegoHideAnimPresenter)                                                                                           \
@@ -28,7 +28,7 @@
 	X(LegoPathActor)                                                                                                   \
 	X(LegoRaceCar)                                                                                                     \
 	X(LegoJetski)                                                                                                      \
-	/*X(JetskiRace) \*/                                                                                                \
+	X(JetskiRace)                                                                                                      \
 	X(LegoEntity)                                                                                                      \
 	X(LegoCarRaceActor)                                                                                                \
 	X(LegoJetskiRaceActor)                                                                                             \
@@ -48,7 +48,7 @@
 	X(GasStation)                                                                                                      \
 	X(LegoAct2)                                                                                                        \
 	X(LegoAct2State)                                                                                                   \
-	/*X(CarRace)*/                                                                                                     \
+	X(CarRace)                                                                                                         \
 	X(HospitalState)                                                                                                   \
 	X(InfocenterState)                                                                                                 \
 	X(PoliceState)                                                                                                     \
@@ -93,7 +93,7 @@
 	X(RaceStandsEntity)                                                                                                \
 	X(JukeBoxEntity)                                                                                                   \
 	X(RadioState)                                                                                                      \
-	/*X(CaveEntity)*/                                                                                                  \
+	X(CaveEntity)                                                                                                      \
 	/*X(JailEntity)*/                                                                                                  \
 	X(MxCompositeMediaPresenter)                                                                                       \
 	X(JukeBox)                                                                                                         \
@@ -105,11 +105,14 @@
 class LegoObjectFactory : public MxObjectFactory {
 public:
 	LegoObjectFactory();
-	virtual MxCore* Create(const char* p_name) override; // vtable 0x14
-	virtual void Destroy(MxCore* p_object) override;     // vtable 0x18
+	MxCore* Create(const char* p_name) override; // vtable 0x14
+	void Destroy(MxCore* p_object) override;     // vtable 0x18
 
 	// SYNTHETIC: LEGO1 0x10009000
 	// LegoObjectFactory::`scalar deleting destructor'
+
+	// SYNTHETIC: LEGO1 0x10009170
+	// LegoObjectFactory::~LegoObjectFactory
 
 private:
 #define X(V) MxAtomId m_id##V;

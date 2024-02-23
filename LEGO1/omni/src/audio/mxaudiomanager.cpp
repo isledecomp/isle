@@ -31,8 +31,9 @@ void MxAudioManager::Destroy(MxBool p_fromDestructor)
 	Init();
 	this->m_criticalSection.Leave();
 
-	if (!p_fromDestructor)
+	if (!p_fromDestructor) {
 		MxMediaManager::Destroy();
+	}
 }
 
 // FUNCTION: LEGO1 0x100b8e40
@@ -48,11 +49,13 @@ MxResult MxAudioManager::InitPresenters()
 		g_count++;
 	}
 
-	if (result)
+	if (result) {
 		Destroy();
+	}
 
-	if (success)
+	if (success) {
 		this->m_criticalSection.Leave();
+	}
 
 	return result;
 }

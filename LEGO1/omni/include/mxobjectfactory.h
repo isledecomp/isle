@@ -24,14 +24,14 @@ public:
 	MxObjectFactory();
 
 	// FUNCTION: LEGO1 0x10008f70
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0730
 		return "MxObjectFactory";
 	}
 
 	// FUNCTION: LEGO1 0x10008f80
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxObjectFactory::ClassName()) || MxCore::IsA(p_name);
 	}

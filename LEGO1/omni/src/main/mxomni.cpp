@@ -113,7 +113,7 @@ MxOmni::MxOmni()
 }
 
 // FUNCTION: LEGO1 0x100aefb0
-MxEntity* MxOmni::FindWorld(const char*, MxS32, MxPresenter*)
+MxEntity* MxOmni::AddToWorld(const char*, MxS32, MxPresenter*)
 {
 	return NULL;
 }
@@ -158,48 +158,56 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
 
-	if (!(m_atomIdCounterSet = new MxAtomIdCounterSet()))
+	if (!(m_atomIdCounterSet = new MxAtomIdCounterSet())) {
 		goto done;
+	}
 
 	m_mediaPath = p_param.GetMediaPath();
 	m_windowHandle = p_param.GetWindowHandle();
 
 	if (p_param.CreateFlags().CreateObjectFactory()) {
-		if (!(m_objectFactory = new MxObjectFactory()))
+		if (!(m_objectFactory = new MxObjectFactory())) {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateVariableTable()) {
-		if (!(m_variableTable = new MxVariableTable()))
+		if (!(m_variableTable = new MxVariableTable())) {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateTimer()) {
-		if (!(m_timer = new MxTimer()))
+		if (!(m_timer = new MxTimer())) {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateTickleManager()) {
-		if (!(m_tickleManager = new MxTickleManager()))
+		if (!(m_tickleManager = new MxTickleManager())) {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateNotificationManager()) {
-		if (m_notificationManager = new MxNotificationManager()) {
-			if (m_notificationManager->Create(100, 0) != SUCCESS)
+		if ((m_notificationManager = new MxNotificationManager())) {
+			if (m_notificationManager->Create(100, 0) != SUCCESS) {
 				goto done;
+			}
 		}
-		else
+		else {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateStreamer()) {
-		if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS)
+		if (!(m_streamer = new MxStreamer()) || m_streamer->Create() != SUCCESS) {
 			goto done;
+		}
 	}
 
 	if (p_param.CreateFlags().CreateVideoManager()) {
-		if (m_videoManager = new MxVideoManager()) {
+		if ((m_videoManager = new MxVideoManager())) {
 			if (m_videoManager->Create(p_param.GetVideoParam(), 100, 0) != SUCCESS) {
 				delete m_videoManager;
 				m_videoManager = NULL;
@@ -208,7 +216,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateSoundManager()) {
-		if (m_soundManager = new MxSoundManager()) {
+		if ((m_soundManager = new MxSoundManager())) {
 			if (m_soundManager->Create(10, 0) != SUCCESS) {
 				delete m_soundManager;
 				m_soundManager = NULL;
@@ -217,7 +225,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateMusicManager()) {
-		if (m_musicManager = new MxMusicManager()) {
+		if ((m_musicManager = new MxMusicManager())) {
 			if (m_musicManager->Create(50, 0) != SUCCESS) {
 				delete m_musicManager;
 				m_musicManager = NULL;
@@ -226,7 +234,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	if (p_param.CreateFlags().CreateEventManager()) {
-		if (m_eventManager = new MxEventManager()) {
+		if ((m_eventManager = new MxEventManager())) {
 			if (m_eventManager->Create(50, 0) != SUCCESS) {
 				delete m_eventManager;
 				m_eventManager = NULL;
@@ -235,9 +243,11 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	result = SUCCESS;
+
 done:
-	if (result != SUCCESS)
+	if (result != SUCCESS) {
 		Destroy();
+	}
 
 	return result;
 }
@@ -255,8 +265,9 @@ void MxOmni::Destroy()
 	// TODO: private members
 	if (m_notificationManager) {
 		while (m_notificationManager->GetQueue()) {
-			if (m_notificationManager->GetQueue()->size() == 0)
+			if (m_notificationManager->GetQueue()->size() == 0) {
 				break;
+			}
 			m_notificationManager->Tickle();
 		}
 
@@ -317,16 +328,18 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 	if (object) {
 		if (object->AddToManager() == SUCCESS) {
 			MxPresenter* sender = p_action.GetUnknown28();
-			if (!sender)
+			if (!sender) {
 				sender = p_controller->FUN_100c1e70(p_action);
+			}
 
 			if (sender) {
 				p_action.SetOrigin(sender);
 				object->SetCompositePresenter((MxCompositePresenter*) sender);
 			}
 			else {
-				if (!p_action.GetOrigin())
+				if (!p_action.GetOrigin()) {
 					p_action.SetOrigin(this);
+				}
 				object->SetCompositePresenter(NULL);
 			}
 
@@ -381,16 +394,18 @@ void MxOmni::DestroyInstance()
 // FUNCTION: LEGO1 0x100b06b0
 MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 {
-	if (!strcmp(p_action->GetSourceName(), p_name))
+	if (!strcmp(p_action->GetSourceName(), p_name)) {
 		return TRUE;
+	}
 
 	if (p_action->IsA("MxDSMultiAction")) {
 		MxDSActionListCursor cursor(((MxDSMultiAction*) p_action)->GetActionList());
 		MxDSAction* action;
 
 		while (cursor.Next(action)) {
-			if (ActionSourceEquals(action, p_name))
+			if (ActionSourceEquals(action, p_name)) {
 				return TRUE;
+			}
 		}
 	}
 
@@ -402,8 +417,9 @@ MxLong MxOmni::Notify(MxParam& p_param)
 {
 	MxAutoLocker lock(&this->m_criticalsection);
 
-	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction)
+	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction) {
 		return 0;
+	}
 
 	return HandleActionEnd(p_param);
 }
@@ -476,8 +492,9 @@ MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 	if (m_streamer->FUN_100b9b30(p_dsAction)) {
 		MxNotificationPtrList* queue = m_notificationManager->GetQueue();
 
-		if (!queue || queue->size() == 0)
+		if (!queue || queue->size() == 0) {
 			return TRUE;
+		}
 	}
 	return FALSE;
 }

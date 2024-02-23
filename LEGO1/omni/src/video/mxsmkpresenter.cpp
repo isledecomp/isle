@@ -23,8 +23,8 @@ void MxSmkPresenter::Init()
 {
 	m_currentFrame = 0;
 	memset(&m_mxSmack, 0, sizeof(m_mxSmack));
-	m_flags &= ~c_bit2;
-	m_flags &= ~c_bit3;
+	SetBit1(FALSE);
+	SetBit2(FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3900
@@ -51,8 +51,9 @@ void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b3960
 void MxSmkPresenter::CreateBitmap()
 {
-	if (m_bitmap)
+	if (m_bitmap) {
 		delete m_bitmap;
+	}
 
 	m_bitmap = new MxBitmap;
 	m_bitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
@@ -72,8 +73,9 @@ void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	MxRectList list(TRUE);
 	MxSmack::LoadFrame(bitmapInfo, bitmapData, &m_mxSmack, chunkData, paletteChanged, &list);
 
-	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && paletteChanged)
+	if (((MxDSMediaAction*) m_action)->GetPaletteManagement() && paletteChanged) {
 		RealizePalette();
+	}
 
 	MxRect32 invalidateRect;
 	MxRectListCursor cursor(&list);
@@ -91,8 +93,9 @@ void MxSmkPresenter::VTable0x88()
 {
 	if ((m_mxSmack.m_smackTag.SmackerType & 1) != 0) {
 		MxU32 und = (m_currentFrame % m_mxSmack.m_smackTag.Frames);
-		if (1 < m_currentFrame && und == 1)
+		if (1 < m_currentFrame && und == 1) {
 			m_currentFrame = 1;
+		}
 	}
 	else {
 		if (m_mxSmack.m_smackTag.Frames == m_currentFrame) {

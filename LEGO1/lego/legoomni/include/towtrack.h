@@ -11,26 +11,26 @@ public:
 	TowTrack();
 
 	// FUNCTION: LEGO1 0x1004c7c0
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f03b8
 		return "TowTrack";
 	}
 
 	// FUNCTION: LEGO1 0x1004c7d0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, TowTrack::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	virtual MxLong Notify(MxParam& p_param) override;                      // vtable+0x04
-	virtual MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
-	virtual void VTable0x70(float p_float) override;                       // vtable+0x70
-	virtual MxU32 VTable0xcc() override;                                   // vtable+0xcc
-	virtual MxU32 VTable0xd4(MxType17NotificationParam& p_param) override; // vtable+0xd4
-	virtual MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
-	virtual MxU32 VTable0xdc(MxType19NotificationParam& p_param) override; // vtable+0xdc
-	virtual void VTable0xe4() override;                                    // vtable+0xe4
+	MxLong Notify(MxParam& p_param) override;                      // vtable+0x04
+	MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
+	void VTable0x70(float p_float) override;                       // vtable+0x70
+	MxU32 VTable0xcc() override;                                   // vtable+0xcc
+	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
+	MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
+	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override; // vtable+0xdc
+	void VTable0xe4() override;                                    // vtable+0xe4
 
 	// SYNTHETIC: LEGO1 0x1004c950
 	// TowTrack::`scalar deleting destructor'

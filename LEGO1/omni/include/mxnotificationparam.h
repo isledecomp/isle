@@ -23,7 +23,7 @@ enum NotificationId {
 	c_notificationDragStart = 13,
 	c_notificationDrag = 14,
 	c_notificationTimer = 15, // 100d6aa0
-	c_notificationType17 = 17,
+	c_notificationClick = 17,
 	c_notificationType18 = 18, // 100d7e80
 	c_notificationType19 = 19, // 100d6230
 	c_notificationType20 = 20,
@@ -42,11 +42,14 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10010390
-	virtual MxNotificationParam* Clone() { return new MxNotificationParam(m_type, m_sender); }; // vtable+0x4
+	virtual MxNotificationParam* Clone() { return new MxNotificationParam(m_type, m_sender); } // vtable+0x04
 
 	inline NotificationId GetNotification() const { return m_type; }
 	inline MxCore* GetSender() const { return m_sender; }
 	inline NotificationId GetType() const { return m_type; }
+
+	inline void SetType(NotificationId p_type) { m_type = p_type; }
+	inline void SetSender(MxCore* p_sender) { m_sender = p_sender; }
 
 protected:
 	NotificationId m_type; // 0x04

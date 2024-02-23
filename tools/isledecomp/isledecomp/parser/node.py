@@ -50,6 +50,7 @@ class ParserFunction(ParserSymbol):
 @dataclass
 class ParserVariable(ParserSymbol):
     is_static: bool = False
+    parent_function: Optional[int] = None
 
 
 @dataclass

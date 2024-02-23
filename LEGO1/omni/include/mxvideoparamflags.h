@@ -7,7 +7,7 @@
 
 class MxVideoParamFlags {
 public:
-	__declspec(dllexport) MxVideoParamFlags();
+	MxVideoParamFlags();
 
 	inline void SetFullScreen(BOOL p_e) { m_flags1.m_bit0 = p_e; }
 	inline void SetFlipSurfaces(BOOL p_e) { m_flags1.m_bit1 = p_e; }

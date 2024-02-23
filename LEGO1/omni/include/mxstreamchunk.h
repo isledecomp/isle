@@ -12,17 +12,17 @@ class MxStreamListMxDSSubscriber;
 class MxStreamChunk : public MxDSChunk {
 public:
 	inline MxStreamChunk() : m_buffer(NULL) {}
-	virtual ~MxStreamChunk() override;
+	~MxStreamChunk() override;
 
 	// FUNCTION: LEGO1 0x100b1fe0
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10101e5c
 		return "MxStreamChunk";
 	}
 
 	// FUNCTION: LEGO1 0x100b1ff0
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxStreamChunk::ClassName()) || MxDSChunk::IsA(p_name);
 	}

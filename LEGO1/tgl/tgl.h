@@ -101,6 +101,7 @@ class Unk;
 // VTABLE: LEGO1 0x100db980
 class Object {
 public:
+	// FUNCTION: LEGO1 0x100a2240
 	virtual ~Object() {}
 
 	virtual void* ImplementationDataPtr() = 0;
@@ -146,6 +147,9 @@ public:
 	// vtable+0x30
 	virtual Result SetTextureDefaultColorCount(unsigned long) = 0;
 
+	// SYNTHETIC: LEGO1 0x100a1770
+	// Tgl::Renderer::~Renderer
+
 	// SYNTHETIC: LEGO1 0x100a17c0
 	// Tgl::Renderer::`scalar deleting destructor'
 };
@@ -170,6 +174,9 @@ public:
 	virtual void InitFromD3DDevice(Device*) = 0;
 	virtual void InitFromWindowsDevice(Device*) = 0;
 
+	// SYNTHETIC: LEGO1 0x100a2350
+	// Tgl::Device::~Device
+
 	// SYNTHETIC: LEGO1 0x100a28e0
 	// Tgl::Device::`scalar deleting destructor'
 };
@@ -189,7 +196,7 @@ public:
 	// vtable+0x20
 	virtual Result GetBackgroundColor(float* r, float* g, float* b) = 0;
 	virtual Result Clear() = 0;
-	virtual Result Render(const Light*) = 0;
+	virtual Result Render(const Group*) = 0;
 	virtual Result ForceUpdate(unsigned long x, unsigned long y, unsigned long width, unsigned long height) = 0;
 
 	// vtable+0x30
@@ -227,6 +234,9 @@ public:
 		int& rPickedGroupCount
 	) = 0;
 
+	// SYNTHETIC: LEGO1 0x100a2430
+	// Tgl::View::~View
+
 	// SYNTHETIC: LEGO1 0x100a2950
 	// Tgl::View::`scalar deleting destructor'
 };
@@ -235,6 +245,9 @@ public:
 class Camera : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a25f0
+	// Tgl::Camera::~Camera
 
 	// SYNTHETIC: LEGO1 0x100a2a30
 	// Tgl::Camera::`scalar deleting destructor'
@@ -245,6 +258,9 @@ class Light : public Object {
 public:
 	virtual Result SetTransformation(FloatMatrix4&) = 0;
 	virtual Result SetColor(float r, float g, float b) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a26d0
+	// Tgl::Light::~Light
 
 	// SYNTHETIC: LEGO1 0x100a2aa0
 	// Tgl::Light::`scalar deleting destructor'
@@ -288,6 +304,9 @@ public:
 	// to have been replaced by something else in the shipped code.
 	virtual Result Unknown() = 0;
 
+	// SYNTHETIC: LEGO1 0x100a2510
+	// Tgl::Group::~Group
+
 	// SYNTHETIC: LEGO1 0x100a29c0
 	// Tgl::Group::`scalar deleting destructor'
 };
@@ -309,6 +328,9 @@ public:
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;
+
+	// SYNTHETIC: LEGO1 0x100a27b0
+	// Tgl::Unk::~Unk
 
 	// SYNTHETIC: LEGO1 0x100a2b10
 	// Tgl::Unk::`scalar deleting destructor'
@@ -332,6 +354,9 @@ public:
 		PaletteEntry** ppPalette
 	) = 0;
 	virtual Result SetPalette(int entryCount, PaletteEntry* pEntries) = 0;
+
+	// SYNTHETIC: LEGO1 0x100a2890
+	// Tgl::Texture::~Texture
 
 	// SYNTHETIC: LEGO1 0x100a2b80
 	// Tgl::Texture::`scalar deleting destructor'

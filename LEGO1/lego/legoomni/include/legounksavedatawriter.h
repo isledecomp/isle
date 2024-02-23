@@ -2,10 +2,28 @@
 #define LEGOUNKSAVEDATAWRITER_H
 
 #include "decomp.h"
+#include "legovariables.h"
+#include "misc/legostorage.h"
+#include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
 class LegoROI;
-class LegoStream;
+
+#pragma warning(disable : 4237)
+
+// TODO: generic string comparator?
+struct LegoUnkSaveDataMapComparator {
+	bool operator()(const char* const& p_a, const char* const& p_b) const { return strcmpi(p_a, p_b) > 0; }
+};
+
+// TODO: pair instead?
+// SIZE 0x08
+struct LegoUnkSaveDataMapValue {
+	LegoROI* m_roi;  // 0x00
+	MxU32 m_counter; // 0x04
+};
+
+typedef map<char*, LegoUnkSaveDataMapValue*, LegoUnkSaveDataMapComparator> LegoUnkSaveDataMap;
 
 struct LegoSaveDataEntry3 {
 	char* m_name;
@@ -32,10 +50,48 @@ struct LegoSaveDataEntry3 {
 	MxU8 m_savePart10; // 0x104
 };
 
+// SIZE 0x08
 class LegoUnkSaveDataWriter {
 public:
-	MxResult WriteSaveData3(LegoStream* p_stream);
+	LegoUnkSaveDataWriter();
+
+	MxResult WriteSaveData3(LegoStorage* p_stream);
+	LegoROI* FUN_10083500(char*, MxBool);
+
+	static void InitSaveData();
+	static void SetCustomizeAnimFile(const char* p_value);
+
+	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
+	void FUN_10083f10(LegoROI* p_roi);
+
+private:
+	static char* g_customizeAnimFile;
+
+	LegoUnkSaveDataMap* m_map;                      // 0x00
+	CustomizeAnimFileVariable* m_customizeAnimFile; // 0x04
 };
+
+// clang-format off
+
+// FUNCTION: LEGO1 0x10082b90
+// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::~_Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >
+
+// FUNCTION: LEGO1 0x10082c60
+// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::iterator::_Inc
+
+// FUNCTION: LEGO1 0x10082ca0
+// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::erase
+
+// FUNCTION: LEGO1 0x100830f0
+// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Erase
+
+// FUNCTION: LEGO1 0x10083130
+// map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::~map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >
+
+// GLOBAL: LEGO1 0x100fc508
+// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Nil
+
+// clang-format on
 
 #endif // LEGOUNKSAVEDATAWRITER_H

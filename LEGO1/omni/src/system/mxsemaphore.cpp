@@ -15,8 +15,9 @@ MxSemaphore::MxSemaphore()
 MxResult MxSemaphore::Init(MxU32 p_initialCount, MxU32 p_maxCount)
 {
 	MxResult result = FAILURE;
-	if (m_hSemaphore = CreateSemaphoreA(NULL, p_initialCount, p_maxCount, NULL))
+	if ((m_hSemaphore = CreateSemaphoreA(NULL, p_initialCount, p_maxCount, NULL))) {
 		result = SUCCESS;
+	}
 	return result;
 }
 

@@ -8,10 +8,10 @@
 class LegoPathPresenter : public MxMediaPresenter {
 public:
 	LegoPathPresenter();
-	virtual ~LegoPathPresenter() override;
+	~LegoPathPresenter() override;
 
 	// FUNCTION: LEGO1 0x100449a0
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0690
 		return "LegoPathPresenter";
@@ -23,12 +23,12 @@ public:
 		return !strcmp(p_name, LegoPathPresenter::ClassName()) || MxMediaPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override;      // vtable+0x18
-	virtual void StreamingTickle() override;  // vtable+0x20
-	virtual void RepeatingTickle() override;  // vtable+0x24
-	virtual void ParseExtra() override;       // vtable+0x30
-	virtual MxResult AddToManager() override; // vtable+0x34
-	virtual void Destroy() override;          // vtable+0x38
+	void ReadyTickle() override;      // vtable+0x18
+	void StreamingTickle() override;  // vtable+0x20
+	void RepeatingTickle() override;  // vtable+0x24
+	void ParseExtra() override;       // vtable+0x30
+	MxResult AddToManager() override; // vtable+0x34
+	void Destroy() override;          // vtable+0x38
 
 	// SYNTHETIC: LEGO1 0x10044a90
 	// LegoPathPresenter::`scalar deleting destructor'

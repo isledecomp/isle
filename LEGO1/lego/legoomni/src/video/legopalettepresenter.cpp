@@ -1,8 +1,8 @@
 #include "legopalettepresenter.h"
 
 #include "legoomni.h"
-#include "legostream.h"
 #include "legovideomanager.h"
+#include "misc/legostorage.h"
 #include "mxstreamchunk.h"
 
 DECOMP_SIZE_ASSERT(LegoPalettePresenter, 0x68)
@@ -52,7 +52,7 @@ MxResult LegoPalettePresenter::ParsePalette(MxStreamChunk* p_chunk)
 	RGBQUAD palette[256];
 	MxResult result = FAILURE;
 
-	LegoMemoryStream stream((char*) p_chunk->GetData());
+	LegoMemory stream((char*) p_chunk->GetData());
 	if (stream.Read(buffer, sizeof(buffer)) == SUCCESS) {
 		if (stream.Read(palette, sizeof(palette)) == SUCCESS) {
 			m_palette = new MxPalette(palette);
@@ -73,15 +73,15 @@ MxResult LegoPalettePresenter::ParsePalette(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x1007a230
 void LegoPalettePresenter::ReadyTickle()
 {
-	MxStreamChunk* chunk = m_subscriber->CurrentChunk();
+	MxStreamChunk* chunk = m_subscriber->PeekData();
 	if (chunk) {
 		if (chunk->GetTime() <= m_action->GetElapsedTime()) {
 			ParseExtra();
 			ProgressTickleState(e_starting);
 
-			chunk = m_subscriber->NextChunk();
+			chunk = m_subscriber->PopData();
 			MxResult result = ParsePalette(chunk);
-			m_subscriber->DestroyChunk(chunk);
+			m_subscriber->FreeDataChunk(chunk);
 
 			if (result == SUCCESS) {
 				VideoManager()->RealizePalette(m_palette);

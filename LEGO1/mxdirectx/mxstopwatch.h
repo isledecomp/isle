@@ -3,6 +3,7 @@
 
 #include "assert.h"
 
+#include <limits.h> // ULONG_MAX
 #include <math.h>
 #include <windows.h>
 

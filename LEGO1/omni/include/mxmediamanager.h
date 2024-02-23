@@ -12,9 +12,9 @@
 class MxMediaManager : public MxCore {
 public:
 	MxMediaManager();
-	virtual ~MxMediaManager() override;
+	~MxMediaManager() override;
 
-	virtual MxResult Tickle() override;                         // vtable+08
+	MxResult Tickle() override;                                 // vtable+08
 	virtual MxResult InitPresenters();                          // vtable+14
 	virtual void Destroy();                                     // vtable+18
 	virtual void RegisterPresenter(MxPresenter& p_presenter);   // vtable+1c
@@ -27,8 +27,8 @@ public:
 	// MxMediaManager::`scalar deleting destructor'
 
 protected:
-	MxPresenterList* m_presenters;       // 0x8
-	MxThread* m_thread;                  // 0xc
+	MxPresenterList* m_presenters;       // 0x08
+	MxThread* m_thread;                  // 0x0c
 	MxCriticalSection m_criticalSection; // 0x10
 };
 

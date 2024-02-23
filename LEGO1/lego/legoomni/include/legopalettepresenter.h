@@ -10,10 +10,10 @@
 class LegoPalettePresenter : public MxVideoPresenter {
 public:
 	LegoPalettePresenter();
-	virtual ~LegoPalettePresenter() override; // vtable+0x0
+	~LegoPalettePresenter() override; // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10079f30
-	inline const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f061c
 		return "LegoPalettePresenter";
@@ -25,8 +25,8 @@ public:
 		return !strcmp(p_name, ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	virtual void ReadyTickle() override; // vtable+0x18
-	virtual void Destroy() override;     // vtable+0x38
+	void ReadyTickle() override; // vtable+0x18
+	void Destroy() override;     // vtable+0x38
 
 	MxResult ParsePalette(MxStreamChunk* p_chunk);
 

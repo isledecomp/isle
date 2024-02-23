@@ -82,7 +82,7 @@ MxLong LegoRace::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x10015ed0
-void LegoRace::VTable0x68(MxBool p_add)
+void LegoRace::Enable(MxBool p_enable)
 {
 	// TODO
 }

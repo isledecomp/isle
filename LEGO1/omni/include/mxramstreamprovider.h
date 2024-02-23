@@ -8,26 +8,26 @@
 class MxRAMStreamProvider : public MxStreamProvider {
 public:
 	MxRAMStreamProvider();
-	virtual ~MxRAMStreamProvider() override;
+	~MxRAMStreamProvider() override;
 
 	// FUNCTION: LEGO1 0x100d0970
-	inline virtual const char* ClassName() const override // vtable+0xc
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x10102864
 		return "MxRAMStreamProvider";
 	}
 
 	// FUNCTION: LEGO1 0x100d0980
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxRAMStreamProvider::ClassName()) || MxStreamProvider::IsA(p_name);
 	}
 
-	virtual MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
-	virtual MxU32 GetFileSize() override;                                       // vtable+0x18
-	virtual MxS32 GetStreamBuffersNum() override;                               // vtable+0x1c
-	virtual MxU32 GetLengthInDWords() override;                                 // vtable+0x24
-	virtual MxU32* GetBufferForDWords() override;                               // vtable+0x28
+	MxResult SetResourceToGet(MxStreamController* p_resource) override; // vtable+0x14
+	MxU32 GetFileSize() override;                                       // vtable+0x18
+	MxS32 GetStreamBuffersNum() override;                               // vtable+0x1c
+	MxU32 GetLengthInDWords() override;                                 // vtable+0x24
+	MxU32* GetBufferForDWords() override;                               // vtable+0x28
 
 	inline MxU8* GetBufferOfFileSize() { return m_pBufferOfFileSize; }
 

@@ -192,7 +192,7 @@ public:
 	// Vector2 overrides
 
 	// FUNCTION: LEGO1 0x10003a60
-	virtual void AddImpl(float* p_value) override
+	void AddImpl(float* p_value) override
 	{
 		m_data[0] += p_value[0];
 		m_data[1] += p_value[1];
@@ -200,7 +200,7 @@ public:
 	} // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10003a90
-	virtual void AddImpl(float p_value) override
+	void AddImpl(float p_value) override
 	{
 		m_data[0] += p_value;
 		m_data[1] += p_value;
@@ -208,7 +208,7 @@ public:
 	} // vtable+0x00
 
 	// FUNCTION: LEGO1 0x10003ac0
-	virtual void SubImpl(float* p_value) override
+	void SubImpl(float* p_value) override
 	{
 		m_data[0] -= p_value[0];
 		m_data[1] -= p_value[1];
@@ -216,7 +216,7 @@ public:
 	} // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10003b20
-	virtual void MulScalarImpl(float* p_value) override
+	void MulScalarImpl(float* p_value) override
 	{
 		m_data[0] *= *p_value;
 		m_data[1] *= *p_value;
@@ -224,7 +224,7 @@ public:
 	} // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x10003af0
-	virtual void MulVectorImpl(float* p_value) override
+	void MulVectorImpl(float* p_value) override
 	{
 		m_data[0] *= p_value[0];
 		m_data[1] *= p_value[1];
@@ -232,7 +232,7 @@ public:
 	} // vtable+0x10
 
 	// FUNCTION: LEGO1 0x10003b50
-	virtual void DivScalarImpl(float* p_value) override
+	void DivScalarImpl(float* p_value) override
 	{
 		m_data[0] /= *p_value;
 		m_data[1] /= *p_value;
@@ -240,19 +240,19 @@ public:
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10003b80
-	virtual float DotImpl(float* p_a, float* p_b) const override
+	float DotImpl(float* p_a, float* p_b) const override
 	{
 		return p_a[0] * p_b[0] + p_a[2] * p_b[2] + p_a[1] * p_b[1];
 	} // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10003ba0
-	virtual void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
+	void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 3); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10003bc0
-	virtual void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
+	void Clear() override { memset(m_data, 0, sizeof(float) * 3); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10003bd0
-	virtual float LenSquared() const override
+	float LenSquared() const override
 	{
 		return m_data[1] * m_data[1] + m_data[0] * m_data[0] + m_data[2] * m_data[2];
 	} // vtable+0x40
@@ -263,7 +263,7 @@ public:
 };
 
 // VTABLE: LEGO1 0x100d45a0
-// SIZE 0x8
+// SIZE 0x08
 class Vector4 : public Vector3 {
 public:
 	inline Vector4(float* p_data) : Vector3(p_data) {}
@@ -289,7 +289,7 @@ public:
 	// Vector3 overrides
 
 	// FUNCTION: LEGO1 0x10002870
-	virtual void AddImpl(float* p_value) override
+	void AddImpl(float* p_value) override
 	{
 		m_data[0] += p_value[0];
 		m_data[1] += p_value[1];
@@ -298,7 +298,7 @@ public:
 	} // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100028b0
-	virtual void AddImpl(float p_value) override
+	void AddImpl(float p_value) override
 	{
 		m_data[0] += p_value;
 		m_data[1] += p_value;
@@ -307,7 +307,7 @@ public:
 	} // vtable+0x00
 
 	// FUNCTION: LEGO1 0x100028f0
-	virtual void SubImpl(float* p_value) override
+	void SubImpl(float* p_value) override
 	{
 		m_data[0] -= p_value[0];
 		m_data[1] -= p_value[1];
@@ -316,7 +316,7 @@ public:
 	} // vtable+0x08
 
 	// FUNCTION: LEGO1 0x10002970
-	virtual void MulScalarImpl(float* p_value) override
+	void MulScalarImpl(float* p_value) override
 	{
 		m_data[0] *= *p_value;
 		m_data[1] *= *p_value;
@@ -325,7 +325,7 @@ public:
 	} // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x10002930
-	virtual void MulVectorImpl(float* p_value) override
+	void MulVectorImpl(float* p_value) override
 	{
 		m_data[0] *= p_value[0];
 		m_data[1] *= p_value[1];
@@ -334,7 +334,7 @@ public:
 	} // vtable+0x10
 
 	// FUNCTION: LEGO1 0x100029b0
-	virtual void DivScalarImpl(float* p_value) override
+	void DivScalarImpl(float* p_value) override
 	{
 		m_data[0] /= *p_value;
 		m_data[1] /= *p_value;
@@ -343,25 +343,25 @@ public:
 	} // vtable+0x14
 
 	// FUNCTION: LEGO1 0x100029f0
-	virtual float DotImpl(float* p_a, float* p_b) const override
+	float DotImpl(float* p_a, float* p_b) const override
 	{
 		return p_a[0] * p_b[0] + p_a[2] * p_b[2] + (p_a[1] * p_b[1] + p_a[3] * p_b[3]);
 	} // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10002a20
-	virtual void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 4); } // vtable+0x20
+	void EqualsImpl(float* p_data) override { memcpy(m_data, p_data, sizeof(float) * 4); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x10002b00
-	virtual void Clear() override { memset(m_data, 0, sizeof(float) * 4); } // vtable+0x2c
+	void Clear() override { memset(m_data, 0, sizeof(float) * 4); } // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10002b20
-	virtual float LenSquared() const override
+	float LenSquared() const override
 	{
 		return m_data[1] * m_data[1] + m_data[0] * m_data[0] + m_data[2] * m_data[2] + m_data[3] * m_data[3];
 	} // vtable+0x40
 
 	// FUNCTION: LEGO1 0x10002b40
-	virtual void EqualsScalar(float* p_value) override
+	void EqualsScalar(float* p_value) override
 	{
 		m_data[0] = *p_value;
 		m_data[1] = *p_value;

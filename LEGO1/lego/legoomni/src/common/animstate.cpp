@@ -5,7 +5,7 @@ DECOMP_SIZE_ASSERT(AnimState, 0x1c);
 // FUNCTION: LEGO1 0x10064ff0
 AnimState::AnimState()
 {
-	m_unk0xc = 0;
+	m_unk0x0c = 0;
 	m_unk0x10 = NULL;
 	m_unk0x14 = 0;
 	m_unk0x18 = NULL;
@@ -18,7 +18,7 @@ AnimState::~AnimState()
 }
 
 // STUB: LEGO1 0x100652d0
-MxResult AnimState::VTable0x1c(LegoFileStream* p_legoFileStream)
+MxResult AnimState::VTable0x1c(LegoFile* p_legoFile)
 {
 	// TODO
 	return FAILURE;

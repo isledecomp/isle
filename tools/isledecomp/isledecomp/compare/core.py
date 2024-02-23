@@ -12,6 +12,7 @@ from isledecomp.dir import walk_source_dir
 from isledecomp.types import SymbolType
 from isledecomp.compare.asm import ParseAsm, can_resolve_register_differences
 from .db import CompareDb, MatchInfo
+from .diff import combined_diff
 from .lines import LinesDb
 
 
@@ -20,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DiffReport:
+    # pylint: disable=too-many-instance-attributes
     match_type: SymbolType
     orig_addr: int
     recomp_addr: int
@@ -27,6 +29,7 @@ class DiffReport:
     udiff: Optional[List[str]] = None
     ratio: float = 0.0
     is_effective_match: bool = False
+    is_stub: bool = False
 
     @property
     def effective_ratio(self) -> float:
@@ -130,11 +133,29 @@ class Compare:
 
                 raw = self.recomp_bin.read(addr, sym.size())
                 try:
-                    sym.friendly_name = raw.decode("latin1").rstrip("\x00")
+                    # We use the string length reported in the mangled symbol as the
+                    # data size, but this is not always accurate with respect to the
+                    # null terminator.
+                    # e.g. ??_C@_0BA@EFDM@MxObjectFactory?$AA@
+                    # reported length: 16 (includes null terminator)
+                    # c.f. ??_C@_03DPKJ@enz?$AA@
+                    # reported length: 3 (does NOT include terminator)
+                    # This will handle the case where the entire string contains "\x00"
+                    # because those are distinct from the empty string of length 0.
+                    decoded_string = raw.decode("latin1")
+                    rstrip_string = decoded_string.rstrip("\x00")
+
+                    if decoded_string != "" and rstrip_string != "":
+                        sym.friendly_name = rstrip_string
+                    else:
+                        sym.friendly_name = decoded_string
+
                 except UnicodeDecodeError:
                     pass
 
-            self._db.set_recomp_symbol(addr, sym.node_type, sym.name(), sym.size())
+            self._db.set_recomp_symbol(
+                addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
+            )
 
         for lineref in cv.lines:
             addr = self.recomp_bin.get_abs_addr(lineref.section, lineref.offset)
@@ -160,15 +181,20 @@ class Compare:
             if recomp_addr is not None:
                 self._db.set_function_pair(fun.offset, recomp_addr)
                 if fun.should_skip():
-                    self._db.skip_compare(fun.offset)
+                    self._db.mark_stub(fun.offset)
 
         for fun in codebase.iter_name_functions():
             self._db.match_function(fun.offset, fun.name)
             if fun.should_skip():
-                self._db.skip_compare(fun.offset)
+                self._db.mark_stub(fun.offset)
 
         for var in codebase.iter_variables():
-            self._db.match_variable(var.offset, var.name)
+            if var.is_static and var.parent_function is not None:
+                self._db.match_static_variable(
+                    var.offset, var.name, var.parent_function
+                )
+            else:
+                self._db.match_variable(var.offset, var.name)
 
         for tbl in codebase.iter_vtables():
             self._db.match_vtable(tbl.offset, tbl.name)
@@ -248,15 +274,6 @@ class Compare:
                 self._db.skip_compare(thunk_from_orig)
 
     def _compare_function(self, match: MatchInfo) -> DiffReport:
-        if match.size == 0:
-            # Report a failed match to make the user aware of the empty function.
-            return DiffReport(
-                match_type=SymbolType.FUNCTION,
-                orig_addr=match.orig_addr,
-                recomp_addr=match.recomp_addr,
-                name=match.name,
-            )
-
         orig_raw = self.orig_bin.read(match.orig_addr, match.size)
         recomp_raw = self.recomp_bin.read(match.recomp_addr, match.size)
 
@@ -291,8 +308,12 @@ class Compare:
             float_lookup=recomp_float,
         )
 
-        orig_asm = orig_parse.parse_asm(orig_raw, match.orig_addr)
-        recomp_asm = recomp_parse.parse_asm(recomp_raw, match.recomp_addr)
+        orig_combined = orig_parse.parse_asm(orig_raw, match.orig_addr)
+        recomp_combined = recomp_parse.parse_asm(recomp_raw, match.recomp_addr)
+
+        # Detach addresses from asm lines for the text diff.
+        orig_asm = [x[1] for x in orig_combined]
+        recomp_asm = [x[1] for x in recomp_combined]
 
         diff = difflib.SequenceMatcher(None, orig_asm, recomp_asm)
         ratio = diff.ratio()
@@ -301,7 +322,9 @@ class Compare:
             # Check whether we can resolve register swaps which are actually
             # perfect matches modulo compiler entropy.
             is_effective_match = can_resolve_register_differences(orig_asm, recomp_asm)
-            unified_diff = difflib.unified_diff(orig_asm, recomp_asm, n=10)
+            unified_diff = combined_diff(
+                diff, orig_combined, recomp_combined, context_size=10
+            )
         else:
             is_effective_match = False
             unified_diff = []
@@ -336,9 +359,7 @@ class Compare:
             [t for (t,) in struct.iter_unpack("<L", recomp_table)],
         )
 
-        def match_text(
-            i: int, m: Optional[MatchInfo], raw_addr: Optional[int] = None
-        ) -> str:
+        def match_text(m: Optional[MatchInfo], raw_addr: Optional[int] = None) -> str:
             """Format the function reference at this vtable index as text.
             If we have not identified this function, we have the option to
             display the raw address. This is only worth doing for the original addr
@@ -347,19 +368,18 @@ class Compare:
             should override the given function from the superclass, but we have not
             implemented this yet.
             """
-            index = f"vtable0x{i*4:02x}"
 
             if m is not None:
                 orig = hex(m.orig_addr) if m.orig_addr is not None else "no orig"
                 recomp = (
                     hex(m.recomp_addr) if m.recomp_addr is not None else "no recomp"
                 )
-                return f"{index:>12}  :  ({orig:10} / {recomp:10})  :  {m.name}"
+                return f"({orig} / {recomp})  :  {m.name}"
 
             if raw_addr is not None:
-                return f"{index:>12}  :  0x{raw_addr:x} from orig not annotated."
+                return f"0x{raw_addr:x} from orig not annotated."
 
-            return f"{index:>12}  :  (no match)"
+            return "(no match)"
 
         orig_text = []
         recomp_text = []
@@ -379,14 +399,22 @@ class Compare:
                 ratio += 1
 
             n_entries += 1
-            orig_text.append(match_text(i, orig, raw_orig))
-            recomp_text.append(match_text(i, recomp))
+            index = f"vtable0x{i*4:02x}"
+            orig_text.append((index, match_text(orig, raw_orig)))
+            recomp_text.append((index, match_text(recomp)))
 
         ratio = ratio / float(n_entries) if n_entries > 0 else 0
 
         # n=100: Show the entire table if there is a diff to display.
         # Otherwise it would be confusing if the table got cut off.
-        unified_diff = difflib.unified_diff(orig_text, recomp_text, n=100)
+
+        sm = difflib.SequenceMatcher(
+            None,
+            [x[1] for x in orig_text],
+            [x[1] for x in recomp_text],
+        )
+
+        unified_diff = combined_diff(sm, orig_text, recomp_text, context_size=100)
 
         return DiffReport(
             match_type=SymbolType.VTABLE,
@@ -399,6 +427,23 @@ class Compare:
 
     def _compare_match(self, match: MatchInfo) -> Optional[DiffReport]:
         """Router for comparison type"""
+
+        if match.size == 0:
+            return None
+
+        options = self._db.get_match_options(match.orig_addr)
+        if options.get("skip", False):
+            return None
+
+        if options.get("stub", False):
+            return DiffReport(
+                match_type=match.compare_type,
+                orig_addr=match.orig_addr,
+                recomp_addr=match.recomp_addr,
+                name=match.name,
+                is_stub=True,
+            )
+
         if match.compare_type == SymbolType.FUNCTION:
             return self._compare_function(match)
 
@@ -408,6 +453,9 @@ class Compare:
         return None
 
     ## Public API
+
+    def get_all(self) -> List[MatchInfo]:
+        return self._db.get_all()
 
     def get_functions(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.FUNCTION)
@@ -430,7 +478,9 @@ class Compare:
 
     def compare_functions(self) -> Iterable[DiffReport]:
         for match in self.get_functions():
-            yield self._compare_match(match)
+            diff = self._compare_match(match)
+            if diff is not None:
+                yield diff
 
     def compare_variables(self):
         pass
@@ -443,4 +493,6 @@ class Compare:
 
     def compare_vtables(self) -> Iterable[DiffReport]:
         for match in self.get_vtables():
-            yield self._compare_match(match)
+            diff = self._compare_match(match)
+            if diff is not None:
+                yield self._compare_match(match)

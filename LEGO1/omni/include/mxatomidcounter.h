@@ -25,8 +25,8 @@ public:
 
 	void Inc();
 	void Dec();
-	inline MxString* GetKey() { return &m_key; };
-	inline MxU16 GetValue() { return m_value; };
+	inline MxString* GetKey() { return &m_key; }
+	inline MxU16 GetValue() { return m_value; }
 
 private:
 	MxString m_key;

@@ -11,20 +11,20 @@
 class MxTransitionManager : public MxCore {
 public:
 	MxTransitionManager();
-	virtual ~MxTransitionManager() override; // vtable+0x0
+	~MxTransitionManager() override; // vtable+0x00
 
-	__declspec(dllexport) void SetWaitIndicator(MxVideoPresenter* p_waitIndicator);
+	void SetWaitIndicator(MxVideoPresenter* p_waitIndicator);
 
-	virtual MxResult Tickle(); // vtable+0x8
+	MxResult Tickle() override; // vtable+0x08
 
 	// FUNCTION: LEGO1 0x1004b950
-	inline virtual const char* ClassName() const override // vtable+0x0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		return "MxTransitionManager";
 	}
 
 	// FUNCTION: LEGO1 0x1004b960
-	inline virtual MxBool IsA(const char* p_name) const override // vtable+0x10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxTransitionManager::ClassName()) || MxCore::IsA(p_name);
 	}

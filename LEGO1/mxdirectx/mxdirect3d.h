@@ -7,6 +7,7 @@
 
 #include <d3d.h>
 
+#if !defined(MXDIRECTX_FOR_CONFIG)
 class MxDirect3D;
 
 // SIZE 0xe4
@@ -34,16 +35,16 @@ private:
 
 class MxDeviceEnumerate;
 struct MxDriver;
-struct MxDevice;
+struct Direct3DDeviceInfo;
 
 // VTABLE: LEGO1 0x100db800
 // SIZE 0x894
 class MxDirect3D : public MxDirectDraw {
 public:
 	MxDirect3D();
-	virtual ~MxDirect3D();
+	~MxDirect3D() override;
 
-	virtual BOOL Create(
+	BOOL Create(
 		HWND hWnd,
 		BOOL fullscreen_1,
 		BOOL surface_fullscreen,
@@ -53,18 +54,21 @@ public:
 		int bpp,
 		const PALETTEENTRY* pPaletteEntries,
 		int paletteEntryCount
-	) override;                                      // vtable+0x04
-	virtual void Destroy() override;                 // vtable+0x08
-	virtual void DestroyButNotDirectDraw() override; // vtable+0x0c
+	) override;                              // vtable+0x04
+	void Destroy() override;                 // vtable+0x08
+	void DestroyButNotDirectDraw() override; // vtable+0x0c
 
-	BOOL CreateIDirect3D();
+	inline MxAssignedDevice* AssignedDevice() { return this->m_assignedDevice; }
+	inline IDirect3D2* Direct3D() { return this->m_pDirect3d; }
+	inline IDirect3DDevice2* Direct3DDevice() { return this->m_pDirect3dDevice; }
+
+	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, Direct3DDeviceInfo* p_device);
+
+protected:
+	BOOL D3DCreate();
 	BOOL D3DSetMode();
-	DWORD GetZBufferBitDepth(MxAssignedDevice* p_assignedDevice);
-	BOOL SetDevice(MxDeviceEnumerate& p_deviceEnumerate, MxDriver* p_driver, MxDevice* p_device);
 
-	inline MxAssignedDevice* GetAssignedDevice() { return this->m_assignedDevice; };
-	inline IDirect3D2* GetDirect3D() { return this->m_pDirect3d; }
-	inline IDirect3DDevice2* GetDirect3DDevice() { return this->m_pDirect3dDevice; }
+	int ZBufferDepth(MxAssignedDevice* p_assignedDevice);
 
 	// SYNTHETIC: LEGO1 0x1009b120
 	// MxDirect3D::`scalar deleting destructor'
@@ -73,15 +77,16 @@ private:
 	MxAssignedDevice* m_assignedDevice;  // 0x880
 	IDirect3D2* m_pDirect3d;             // 0x884
 	IDirect3DDevice2* m_pDirect3dDevice; // 0x888
-	BOOL m_unk0x88c;                     // 0x88c
+	BOOL m_bTexturesDisabled;            // 0x88c
 	undefined4 m_unk0x890;               // 0x890
 };
+#endif
 
 // SIZE 0x1a4
-struct MxDevice {
-	MxDevice() {}
-	~MxDevice();
-	MxDevice(
+struct Direct3DDeviceInfo {
+	Direct3DDeviceInfo() {}
+	~Direct3DDeviceInfo();
+	Direct3DDeviceInfo(
 		LPGUID p_guid,
 		LPSTR p_deviceDesc,
 		LPSTR p_deviceName,
@@ -89,7 +94,7 @@ struct MxDevice {
 		LPD3DDEVICEDESC p_HELDesc
 	);
 
-	void Init(
+	void Initialize(
 		LPGUID p_guid,
 		LPSTR p_deviceDesc,
 		LPSTR p_deviceName,
@@ -103,8 +108,8 @@ struct MxDevice {
 	D3DDEVICEDESC m_HWDesc;  // 0x0c
 	D3DDEVICEDESC m_HELDesc; // 0xd8
 
-	int operator==(MxDevice) const { return 0; }
-	int operator<(MxDevice) const { return 0; }
+	int operator==(Direct3DDeviceInfo) const { return 0; }
+	int operator<(Direct3DDeviceInfo) const { return 0; }
 };
 
 // SIZE 0x0c
@@ -129,7 +134,7 @@ struct MxDriver {
 	char* m_driverDesc;                 // 0x04
 	char* m_driverName;                 // 0x08
 	DDCAPS m_ddCaps;                    // 0x0c
-	list<MxDevice> m_devices;           // 0x178
+	list<Direct3DDeviceInfo> m_devices; // 0x178
 	list<MxDisplayMode> m_displayModes; // 0x184
 
 	int operator==(MxDriver) const { return 0; }
@@ -137,36 +142,45 @@ struct MxDriver {
 };
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401000
 // TEMPLATE: LEGO1 0x1009b900
-// list<MxDevice,allocator<MxDevice> >::~list<MxDevice,allocator<MxDevice> >
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::~list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >
 // clang-format on
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401070
 // TEMPLATE: LEGO1 0x1009b970
 // list<MxDisplayMode,allocator<MxDisplayMode> >::~list<MxDisplayMode,allocator<MxDisplayMode> >
 // clang-format on
 
+// TEMPLATE: CONFIG 0x4010e0
 // TEMPLATE: LEGO1 0x1009b9e0
-// List<MxDevice>::~List<MxDevice>
+// List<Direct3DDeviceInfo>::~List<Direct3DDeviceInfo>
 
+// TEMPLATE: CONFIG 0x401130
 // TEMPLATE: LEGO1 0x1009ba30
 // List<MxDisplayMode>::~List<MxDisplayMode>
 
 // clang-format off
+// TEMPLATE: CONFIG 0x401650
 // TEMPLATE: LEGO1 0x1009bf50
 // list<MxDriver,allocator<MxDriver> >::~list<MxDriver,allocator<MxDriver> >
 // clang-format on
 
+// TEMPLATE: CONFIG 0x4016c0
 // TEMPLATE: LEGO1 0x1009bfc0
 // List<MxDriver>::~List<MxDriver>
 
 // Compiler-generated copy ctor
+// SYNTHETIC: CONFIG 0x401990
 // SYNTHETIC: LEGO1 0x1009c290
 // MxDriver::MxDriver
 
+// SYNTHETIC: CONFIG 0x401b00
 // SYNTHETIC: LEGO1 0x1009c400
-// list<MxDevice,allocator<MxDevice> >::insert
+// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::insert
 
+// SYNTHETIC: CONFIG 0x401b60
 // SYNTHETIC: LEGO1 0x1009c460
 // list<MxDisplayMode,allocator<MxDisplayMode> >::insert
 
@@ -174,15 +188,15 @@ struct MxDriver {
 // MxDriver::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x1009d470
-// MxDevice::`scalar deleting destructor'
+// Direct3DDeviceInfo::`scalar deleting destructor'
 
+// VTABLE: CONFIG 0x00406000
 // VTABLE: LEGO1 0x100db814
 // SIZE 0x14
 class MxDeviceEnumerate {
 public:
 	MxDeviceEnumerate();
-	// FUNCTION: LEGO1 0x1009c010
-	~MxDeviceEnumerate() {}
+	~MxDeviceEnumerate();
 
 	virtual int DoEnumerate(); // vtable+0x00
 
@@ -198,11 +212,16 @@ public:
 	const char* EnumerateErrorToString(HRESULT p_error);
 	int ParseDeviceName(const char* p_deviceId);
 	int ProcessDeviceBytes(int p_deviceNum, GUID& p_guid);
-	int GetDevice(int p_deviceNum, MxDriver*& p_driver, MxDevice*& p_device);
+	int GetDevice(int p_deviceNum, MxDriver*& p_driver, Direct3DDeviceInfo*& p_device);
+
+#if defined(MXDIRECTX_FOR_CONFIG)
+	int FormatDeviceName(char* p_buffer, const MxDriver* p_driver, const Direct3DDeviceInfo* p_device) const;
+#endif
+
 	int FUN_1009d0d0();
 	int FUN_1009d210();
-	unsigned char FUN_1009d370(MxDriver& p_driver);
-	unsigned char FUN_1009d3d0(MxDevice& p_device);
+	unsigned char DriverSupportsRequiredDisplayMode(MxDriver& p_driver);
+	unsigned char FUN_1009d3d0(Direct3DDeviceInfo& p_device);
 
 	static void BuildErrorString(const char*, ...);
 	static BOOL CALLBACK
@@ -216,10 +235,12 @@ public:
 		LPD3DDEVICEDESC p_HELDesc,
 		LPVOID p_context
 	);
-	static undefined4 FUN_1009d1a0();
-	static undefined4 FUN_1009d1e0();
+	static int SupportsMMX();
+	static int SupportsCPUID();
 
 	friend class MxDirect3D;
+
+	const list<MxDriver>& GetDriverList() const { return m_list; }
 
 private:
 	list<MxDriver> m_list;       // 0x04

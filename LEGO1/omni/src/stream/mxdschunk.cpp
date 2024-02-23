@@ -15,12 +15,13 @@ MxDSChunk::MxDSChunk()
 // FUNCTION: LEGO1 0x100be170
 MxDSChunk::~MxDSChunk()
 {
-	if (m_flags & c_bit1)
+	if (m_flags & c_bit1) {
 		delete[] m_data;
+	}
 }
 
 // FUNCTION: LEGO1 0x100be1e0
 MxU32 MxDSChunk::GetHeaderSize()
 {
-	return 0xe;
+	return 0x0e;
 }

@@ -21,8 +21,9 @@ public:
 		MxDSAction* oldAction = p_action;
 		this->m_realloc = p_reallocAction;
 
-		if (p_reallocAction)
+		if (p_reallocAction) {
 			this->m_action = new MxDSAction();
+		}
 		else {
 			this->m_action = oldAction;
 			return;
@@ -34,25 +35,27 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10051050
-	inline virtual ~MxActionNotificationParam() override
+	inline ~MxActionNotificationParam() override
 	{
-		if (!this->m_realloc)
+		if (!this->m_realloc) {
 			return;
+		}
 
-		if (this->m_action)
+		if (this->m_action) {
 			delete this->m_action;
+		}
 	}
 
 	// FUNCTION: LEGO1 0x100510c0
-	virtual MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() override
 	{
 		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
-	}; // vtable+0x4
+	} // vtable+0x04
 
 	inline MxDSAction* GetAction() { return m_action; }
 
 protected:
-	MxDSAction* m_action; // 0xc
+	MxDSAction* m_action; // 0x0c
 	MxBool m_realloc;     // 0x10
 };
 
@@ -70,7 +73,7 @@ public:
 	{
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	MxNotificationParam* Clone() override; // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100d8358
@@ -88,7 +91,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10051270
-	virtual MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() override
 	{
 		return new MxEndActionNotificationParam(
 			c_notificationEndAction,
@@ -96,7 +99,7 @@ public:
 			this->m_action,
 			this->m_realloc
 		);
-	}; // vtable+0x4
+	} // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100dc208
@@ -109,7 +112,7 @@ public:
 		m_unk0x14 = p_unk0x14;
 	}
 
-	virtual MxNotificationParam* Clone() override; // vtable+0x4
+	MxNotificationParam* Clone() override; // vtable+0x04
 
 private:
 	MxPresenter* m_unk0x14; // 0x14

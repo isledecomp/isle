@@ -13,11 +13,10 @@ JukeBox::JukeBox()
 	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x1005d6e0
+// FUNCTION: LEGO1 0x1005d6e0
 MxBool JukeBox::VTable0x5c()
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1005d8d0
@@ -35,13 +34,13 @@ MxLong JukeBox::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1005d9f0
-void JukeBox::VTable0x50()
+void JukeBox::ReadyWorld()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x1005dde0
-void JukeBox::VTable0x68(MxBool p_add)
+void JukeBox::Enable(MxBool p_enable)
 {
 	// TODO
 }

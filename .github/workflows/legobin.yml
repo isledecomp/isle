@@ -1,0 +1,32 @@
+name: Download legobin
+
+on:
+  workflow_call:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Restore cached original binaries
+      id: cache-original-binaries
+      uses: actions/cache/restore@v3
+      with:
+        enableCrossOsArchive: true
+        path: legobin
+        key: legobin
+
+    - name: Download original island binaries
+      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
+      run: |
+        wget https://legoisland.org/download/CONFIG.EXE --directory-prefix=legobin
+        wget https://legoisland.org/download/ISLE.EXE --directory-prefix=legobin
+        wget https://legoisland.org/download/LEGO1.DLL --directory-prefix=legobin
+
+    - name: Cache original binaries
+      if: ${{ !steps.cache-original-binaries.outputs.cache-hit }}
+      uses: actions/cache/save@v3
+      with:
+        enableCrossOsArchive: true
+        path: legobin
+        key: legobin

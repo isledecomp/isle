@@ -24,10 +24,10 @@ public:
 	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
 
 private:
-	MxCore* m_client;        // 0x0
-	MxTime m_interval;       // 0x4
-	MxTime m_lastUpdateTime; // 0x8
-	MxU16 m_flags;           // 0xc
+	MxCore* m_client;        // 0x00
+	MxTime m_interval;       // 0x04
+	MxTime m_lastUpdateTime; // 0x08
+	MxU16 m_flags;           // 0x0c
 };
 
 typedef list<MxTickleClient*> MxTickleClientPtrList;
@@ -36,9 +36,9 @@ typedef list<MxTickleClient*> MxTickleClientPtrList;
 class MxTickleManager : public MxCore {
 public:
 	inline MxTickleManager() {}
-	virtual ~MxTickleManager(); // vtable+0x0 (scalar deleting destructor)
+	~MxTickleManager() override; // vtable+0x00 (scalar deleting destructor)
 
-	virtual MxResult Tickle();                                                 // vtable+0x8
+	MxResult Tickle() override;                                                // vtable+0x08
 	virtual void RegisterClient(MxCore* p_client, MxTime p_interval);          // vtable+0x14
 	virtual void UnregisterClient(MxCore* p_client);                           // vtable+0x18
 	virtual void SetClientTickleInterval(MxCore* p_client, MxTime p_interval); // vtable+0x1c
@@ -48,7 +48,7 @@ public:
 	// MxTickleManager::`scalar deleting destructor'
 
 private:
-	MxTickleClientPtrList m_clients; // 0x8
+	MxTickleClientPtrList m_clients; // 0x08
 };
 
 #define TICKLE_MANAGER_NOT_FOUND 0x80000000

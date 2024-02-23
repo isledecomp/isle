@@ -1,9 +1,9 @@
 #include "mxstreamlist.h"
 
 // Wrappers around STL list that are used by the MxStream* classes.
-DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0xc);
-DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0xc);
-DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0xc);
+DECOMP_SIZE_ASSERT(MxStreamListMxDSAction, 0x0c);
+DECOMP_SIZE_ASSERT(MxStreamListMxNextActionDataStart, 0x0c);
+DECOMP_SIZE_ASSERT(MxStreamListMxDSSubscriber, 0x0c);
 
 // FUNCTION: LEGO1 0x100b8450
 MxDSSubscriber* MxStreamListMxDSSubscriber::Find(MxDSObject* p_object)
@@ -36,8 +36,9 @@ MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 			if (p_action->GetUnknown24() == -2 || p_action->GetUnknown24() == -3 ||
 				p_action->GetUnknown24() == (*it)->GetUnknown24()) {
 				found = *it;
-				if (p_action->GetUnknown24() != -3)
+				if (p_action->GetUnknown24() != -3) {
 					break;
+				}
 			}
 		}
 	}
@@ -53,8 +54,9 @@ MxDSAction* MxStreamListMxDSAction::Find(MxDSAction* p_action, MxBool p_delete)
 MxNextActionDataStart* MxStreamListMxNextActionDataStart::Find(MxU32 p_id, MxS16 p_value)
 {
 	for (iterator it = begin(); it != end(); it++) {
-		if (p_id == (*it)->GetObjectId() && p_value == (*it)->GetUnknown24())
+		if (p_id == (*it)->GetObjectId() && p_value == (*it)->GetUnknown24()) {
 			return *it;
+		}
 	}
 
 	return NULL;
