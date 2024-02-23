@@ -1,9 +1,9 @@
 #include "legotextureinfo.h"
 
-#include "lego/sources/misc/legoimage.h"
-#include "lego/sources/misc/legotexture.h"
 #include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc/legoimage.h"
+#include "misc/legotexture.h"
 #include "tgl/d3drm/impl.h"
 
 DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10);

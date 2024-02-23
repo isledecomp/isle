@@ -2,11 +2,11 @@
 
 #include "ambulancemissionstate.h"
 #include "jukebox.h"
-#include "lego/sources/misc/legocontainer.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "misc/legocontainer.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"

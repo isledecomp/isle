@@ -1,6 +1,5 @@
 #include "legoomni.h"
 
-#include "lego/sources/misc/legocontainer.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"
@@ -14,6 +13,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
+#include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"

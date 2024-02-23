@@ -2,8 +2,8 @@
 #define __LEGOANIM_H
 
 #include "decomp.h"
-#include "lego/sources/misc/legostorage.h"
-#include "lego/sources/misc/legotree.h"
+#include "misc/legostorage.h"
+#include "misc/legotree.h"
 
 // SIZE 0x08
 class LegoAnimKey {
