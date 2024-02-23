@@ -3,7 +3,7 @@
 DECOMP_SIZE_ASSERT(LegoActor, 0x78)
 
 // GLOBAL: LEGO1 0x100f32d0
-extern LegoChar* g_unk0x100f32d0[] = {"none", "pepper", "mama", "papa", "nick", "laura"};
+const char* g_unk0x100f32d0[] = {"none", "pepper", "mama", "papa", "nick", "laura", "The_Brickster!"};
 
 // FUNCTION: LEGO1 0x1002d110
 LegoActor::LegoActor()
@@ -32,12 +32,11 @@ void LegoActor::ParseAction(char*)
 // FUNCTION: LEGO1 0x1002d670
 void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
-	const LegoChar* name;
-
 	if (p_roi) {
-		name = p_roi->GetName();
-		for (int i = 1; i <= 5; i++) {
-			if (strcmpi(name, g_unk0x100f32d0[i]) == 0) {
+		const char* name = p_roi->GetName();
+
+		for (MxU32 i = 1; i <= _countof(g_unk0x100f32d0) - 1; i++) {
+			if (!strcmpi(name, g_unk0x100f32d0[i])) {
 				m_unk0x59 = 0;
 				m_unk0x74 = i;
 				break;

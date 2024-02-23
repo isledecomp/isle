@@ -4,7 +4,6 @@
 #include "decomp.h"
 #include "legocachesound.h"
 #include "legoentity.h"
-#include "misc/legotypes.h"
 
 // VTABLE: LEGO1 0x100d6d68
 // SIZE 0x78
@@ -31,14 +30,19 @@ public:
 
 	// FUNCTION: LEGO1 0x10002cc0
 	virtual MxFloat VTable0x50() { return m_unk0x68; } // vtable+0x50
+
 	// FUNCTION: LEGO1 0x10002cd0
 	virtual void VTable0x54(MxFloat p_unk0x68) { m_unk0x68 = p_unk0x68; } // vtable+0x54
+
 	// FUNCTION: LEGO1 0x10002ce0
 	virtual void VTable0x58(MxFloat p_unk0x70) { m_unk0x70 = p_unk0x70; } // vtable+0x58
+
 	// FUNCTION: LEGO1 0x10002cf0
 	virtual MxFloat VTable0x5c() { return m_unk0x70; } // vtable+0x5c
+
 	// FUNCTION: LEGO1 0x10002d00
 	virtual MxU8 VTable0x60() { return m_unk0x74; } // vtable+0x60
+
 	// FUNCTION: LEGO1 0x10002d10
 	virtual void VTable0x64(MxU8 p_unk0x74) { m_unk0x74 = p_unk0x74; } // vtable+0x64
 
@@ -46,7 +50,7 @@ private:
 	MxFloat m_unk0x68;       // 0x68
 	LegoCacheSound* m_sound; // 0x6c
 	MxFloat m_unk0x70;       // 0x70
-	LegoChar m_unk0x74;      // 0x74
+	MxU8 m_unk0x74;          // 0x74
 };
 
 // SYNTHETIC: LEGO1 0x1002d300
