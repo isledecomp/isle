@@ -11,10 +11,12 @@
 #include <algorithm>
 #include <list>
 #include <map>
+#include <pair>
 #include <set>
 #include <vector>
 using std::list;
 using std::map;
+using std::pair;
 using std::set;
 using std::vector;
 #endif
