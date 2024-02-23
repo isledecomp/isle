@@ -1,7 +1,7 @@
 #ifndef LEGOROI_H
 #define LEGOROI_H
 
-#include "lego/sources/misc/legotypes.h"
+#include "misc/legotypes.h"
 #include "viewmanager/viewroi.h"
 
 typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);

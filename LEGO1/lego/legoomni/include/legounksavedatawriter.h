@@ -2,8 +2,8 @@
 #define LEGOUNKSAVEDATAWRITER_H
 
 #include "decomp.h"
-#include "lego/sources/misc/legostorage.h"
 #include "legovariables.h"
+#include "misc/legostorage.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 

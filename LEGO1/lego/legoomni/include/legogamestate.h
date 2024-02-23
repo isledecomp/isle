@@ -2,9 +2,9 @@
 #define LEGOGAMESTATE_H
 
 #include "decomp.h"
-#include "lego/sources/misc/legostorage.h"
 #include "legobackgroundcolor.h"
 #include "legofullscreenmovie.h"
+#include "misc/legostorage.h"
 #include "mxtypes.h"
 #include "mxvariabletable.h"
 

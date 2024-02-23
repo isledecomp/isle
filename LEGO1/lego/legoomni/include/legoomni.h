@@ -275,7 +275,7 @@ ViewManager* GetViewManager();
 LegoPlantManager* PlantManager();
 LegoWorld* CurrentWorld();
 LegoUnkSaveDataWriter* UnkSaveDataWriter();
-LegoTextureContainer* GetTextureContainer();
+LegoTextureContainer* TextureContainer();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);

@@ -2,7 +2,6 @@
 
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
-#include "legocontainer.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
@@ -14,6 +13,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
+#include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
@@ -215,7 +215,7 @@ LegoBuildingManager* BuildingManager()
 }
 
 // FUNCTION: LEGO1 0x10015800
-LegoTextureContainer* GetTextureContainer()
+LegoTextureContainer* TextureContainer()
 {
 	return LegoOmni::GetInstance()->GetTextureContainer();
 }

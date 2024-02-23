@@ -2,11 +2,11 @@
 
 #include "ambulancemissionstate.h"
 #include "jukebox.h"
-#include "legocontainer.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
+#include "misc/legocontainer.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
@@ -233,7 +233,7 @@ void Score::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x100019d0
 void Score::Paint()
 {
-	TextureData* gd = GetTextureContainer()->Get("bigcube.gif");
+	LegoTextureInfo* gd = TextureContainer()->Get("bigcube.gif");
 
 	if (gd) {
 		RaceState* l78 = (RaceState*) GameState()->GetState("JetskiRaceState");

@@ -2,7 +2,7 @@
 #define LEGOSTATE_H
 
 #include "decomp.h"
-#include "lego/sources/misc/legostorage.h"
+#include "misc/legostorage.h"
 #include "mxcore.h"
 #include "mxstring.h"
 

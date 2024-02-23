@@ -144,7 +144,7 @@ add_library(roi STATIC
 )
 register_lego1_target(roi)
 set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
-target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(roi PRIVATE)
 
 add_library(anim STATIC
@@ -152,10 +152,11 @@ add_library(anim STATIC
 )
 register_lego1_target(anim)
 set_property(TARGET anim PROPERTY ARCHIVE_OUTPUT_NAME "anim$<$<CONFIG:Debug>:d>")
-target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(anim PRIVATE)
 
 add_library(misc STATIC
+  LEGO1/lego/sources/misc/legocontainer.cpp
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp
   LEGO1/lego/sources/misc/legotexture.cpp
@@ -163,7 +164,7 @@ add_library(misc STATIC
 )
 register_lego1_target(misc)
 set_property(TARGET misc PROPERTY ARCHIVE_OUTPUT_NAME "misc$<$<CONFIG:Debug>:d>")
-target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/realtime" "${CMAKE_SOURCE_DIR}/util")
+target_include_directories(misc PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
 target_link_libraries(misc PRIVATE)
 
 add_library(3dmanager STATIC
@@ -293,12 +294,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/animstate.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
-  LEGO1/lego/legoomni/src/common/legocontainer.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
+  LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
   LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
@@ -407,7 +408,6 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
-target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/realtime")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi anim FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)

@@ -30,11 +30,12 @@ public:
 
 private:
 	void Init();
-	int m_unk0x68;
-	int m_unk0x6c;
-	undefined m_unk0x70;
-	MxString m_string; // 0x74
-	undefined m_unk0x84;
+
+	undefined4 m_unk0x68; // 0x68
+	undefined4 m_unk0x6c; // 0x6c
+	undefined m_unk0x70;  // 0x70
+	MxString m_unk0x74;   // 0x74
+	undefined m_unk0x84;  // 0x84
 };
 
 #endif // LEGOPHONEMEPRESENTER_H
