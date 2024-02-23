@@ -66,7 +66,6 @@ protected:
 // VTABLE: LEGO1 0x100d86d4
 // class LegoContainer<LegoTextureInfo>
 
-// TODO: Element type
 typedef pair<LegoTextureInfo*, BOOL> LegoTextureListElement;
 typedef list<LegoTextureListElement> LegoTextureList;
 
