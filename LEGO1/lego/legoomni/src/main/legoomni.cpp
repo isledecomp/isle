@@ -215,7 +215,7 @@ LegoBuildingManager* BuildingManager()
 }
 
 // FUNCTION: LEGO1 0x10015800
-LegoTextureContainer* GetTextureContainer()
+LegoTextureContainer* TextureContainer()
 {
 	return LegoOmni::GetInstance()->GetTextureContainer();
 }

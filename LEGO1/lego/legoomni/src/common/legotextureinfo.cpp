@@ -1,4 +1,4 @@
-#include "legocontainer.h"
+#include "legotextureinfo.h"
 
 #include "lego/sources/misc/legoimage.h"
 #include "lego/sources/misc/legotexture.h"
@@ -6,13 +6,10 @@
 #include "legovideomanager.h"
 #include "tgl/d3drm/impl.h"
 
-DECOMP_SIZE_ASSERT(TextureData, 0x10);
-DECOMP_SIZE_ASSERT(LegoContainerInfo<LegoTexture>, 0x10);
-// DECOMP_SIZE_ASSERT(LegoContainer<LegoTexture>, 0x18);
-DECOMP_SIZE_ASSERT(LegoTextureContainer, 0x24);
+DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10);
 
 // FUNCTION: LEGO1 0x10065bf0
-TextureData::TextureData()
+LegoTextureInfo::LegoTextureInfo()
 {
 	m_name = NULL;
 	m_surface = NULL;
@@ -21,7 +18,7 @@ TextureData::TextureData()
 }
 
 // FUNCTION: LEGO1 0x10065c00
-TextureData::~TextureData()
+LegoTextureInfo::~LegoTextureInfo()
 {
 	if (m_name) {
 		delete[] m_name;
@@ -45,9 +42,9 @@ TextureData::~TextureData()
 }
 
 // FUNCTION: LEGO1 0x10065c60
-TextureData* TextureData::Create(const char* p_name, LegoTexture* p_texture)
+LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_texture)
 {
-	TextureData* texture = new TextureData();
+	LegoTextureInfo* texture = new LegoTextureInfo();
 
 	if (p_name == NULL || p_texture == NULL) {
 		return NULL;
@@ -153,36 +150,4 @@ done:
 	}
 
 	return NULL;
-}
-
-// FUNCTION: LEGO1 0x10099870
-LegoTextureContainer::~LegoTextureContainer()
-{
-}
-
-// FUNCTION: LEGO1 0x10099cc0
-void LegoTextureContainer::FUN_10099cc0(TextureData* p_data)
-{
-	if (p_data == NULL) {
-		return;
-	}
-
-#ifdef COMPAT_MODE
-	TextureList::iterator it;
-	for (it = m_list.begin(); it != m_list.end(); it++) {
-#else
-	for (TextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-#endif
-		if (*it == p_data) {
-			// TODO: This is wrong, but what is at +0x0c on the iterator?
-			*it = NULL;
-
-			if (p_data->m_texture->Release() == TRUE) {
-				delete p_data;
-				m_list.erase(it);
-			}
-
-			return;
-		}
-	}
 }

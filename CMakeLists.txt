@@ -156,6 +156,7 @@ target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include"
 target_link_libraries(anim PRIVATE)
 
 add_library(misc STATIC
+  LEGO1/lego/sources/misc/legocontainer.cpp
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp
   LEGO1/lego/sources/misc/legotexture.cpp
@@ -293,12 +294,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/animstate.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
-  LEGO1/lego/legoomni/src/common/legocontainer.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
+  LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
   LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
