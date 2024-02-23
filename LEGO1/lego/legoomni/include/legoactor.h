@@ -2,7 +2,9 @@
 #define LEGOACTOR_H
 
 #include "decomp.h"
+#include "legocachesound.h"
 #include "legoentity.h"
+#include "misc/legotypes.h"
 
 // VTABLE: LEGO1 0x100d6d68
 // SIZE 0x78
@@ -41,10 +43,10 @@ public:
 	virtual void VTable0x64(MxU8 p_unk0x74) { m_unk0x74 = p_unk0x74; } // vtable+0x64
 
 private:
-	MxFloat m_unk0x68;    // 0x68
-	undefined4 m_unk0x6c; // 0x6c
-	MxFloat m_unk0x70;    // 0x70
-	MxU8 m_unk0x74;       // 0x74
+	MxFloat m_unk0x68;       // 0x68
+	LegoCacheSound* m_sound; // 0x6c
+	MxFloat m_unk0x70;       // 0x70
+	LegoChar m_unk0x74;      // 0x74
 };
 
 // SYNTHETIC: LEGO1 0x1002d300
