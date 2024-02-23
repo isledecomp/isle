@@ -2,7 +2,7 @@
 
 #include "ambulancemissionstate.h"
 #include "jukebox.h"
-#include "legocontainer.h"
+#include "lego/sources/misc/legocontainer.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"

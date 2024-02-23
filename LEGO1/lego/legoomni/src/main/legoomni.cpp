@@ -1,8 +1,8 @@
 #include "legoomni.h"
 
+#include "lego/sources/misc/legocontainer.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
-#include "legocontainer.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
