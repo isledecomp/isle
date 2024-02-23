@@ -88,7 +88,7 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 			textureInfo->m_surface->Release();
 			textureInfo->m_palette->Release();
 			delete textureInfo;
-			textureInfo = NULL;
+			return NULL;
 		}
 		else {
 			if (((TglImpl::RendererImpl*) VideoManager()->GetRenderer())
@@ -96,11 +96,13 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 				textureInfo->m_surface->Release();
 				textureInfo->m_palette->Release();
 				delete textureInfo;
-				textureInfo = NULL;
+				return NULL;
 			}
 			else {
 				textureInfo->m_texture->SetAppData((DWORD) textureInfo);
 				m_list.push_back(LegoTextureListElement(textureInfo, TRUE));
+
+				textureInfo->m_texture->AddRef();
 
 				if (textureInfo->m_name != NULL) {
 					delete[] textureInfo->m_name;
