@@ -67,7 +67,7 @@ protected:
 // class LegoContainer<LegoTextureInfo>
 
 // TODO: Element type
-typedef pair<LegoTextureInfo*, undefined4> LegoTextureListElement;
+typedef pair<LegoTextureInfo*, BOOL> LegoTextureListElement;
 typedef list<LegoTextureListElement> LegoTextureList;
 
 // VTABLE: LEGO1 0x100d86fc
@@ -77,8 +77,8 @@ public:
 	LegoTextureContainer() { m_ownership = TRUE; }
 	~LegoTextureContainer() override;
 
-	LegoTextureInfo* Create(undefined* p_und);
-	void Destroy(LegoTextureInfo* p_data);
+	LegoTextureInfo* Insert(LegoTextureInfo* p_textureInfo);
+	void Erase(LegoTextureInfo* p_textureInfo);
 
 protected:
 	LegoTextureList m_list; // 0x18
@@ -119,7 +119,7 @@ protected:
 // _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Erase
 
 // TEMPLATE: LEGO1 0x1005a250
-// list<pair<LegoTextureInfo *,unsigned int>,allocator<pair<LegoTextureInfo *,unsigned int> > >::~list<pair<LegoTextureInfo *,unsigned int>,allocator<pair<LegoTextureInfo *,unsigned int> > >
+// list<pair<LegoTextureInfo *,int>,allocator<pair<LegoTextureInfo *,int> > >::~list<pair<LegoTextureInfo *,int>,allocator<pair<LegoTextureInfo *,int> > >
 
 // TEMPLATE: LEGO1 0x1005a2c0
 // map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::~map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >
@@ -137,7 +137,7 @@ protected:
 // LegoTextureContainer::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1005a5a0
-// List<pair<LegoTextureInfo *,unsigned int> >::~List<pair<LegoTextureInfo *,unsigned int> >
+// List<pair<LegoTextureInfo *,int> >::~List<pair<LegoTextureInfo *,int> >
 
 // TEMPLATE: LEGO1 0x1005b660
 // LegoContainer<LegoTextureInfo>::~LegoContainer<LegoTextureInfo>

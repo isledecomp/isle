@@ -44,15 +44,15 @@ LegoTextureInfo::~LegoTextureInfo()
 // FUNCTION: LEGO1 0x10065c60
 LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_texture)
 {
-	LegoTextureInfo* texture = new LegoTextureInfo();
+	LegoTextureInfo* textureInfo = new LegoTextureInfo();
 
 	if (p_name == NULL || p_texture == NULL) {
 		return NULL;
 	}
 
 	if (p_name) {
-		texture->m_name = new char[strlen(p_name) + 1];
-		strcpy(texture->m_name, p_name);
+		textureInfo->m_name = new char[strlen(p_name) + 1];
+		strcpy(textureInfo->m_name, p_name);
 	}
 
 	LPDIRECTDRAW pDirectDraw = VideoManager()->GetDirect3D()->DirectDraw();
@@ -73,7 +73,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 	LegoU8* bits;
 	MxU8* surface;
 
-	if (pDirectDraw->CreateSurface(&desc, &texture->m_surface, NULL) != DD_OK) {
+	if (pDirectDraw->CreateSurface(&desc, &textureInfo->m_surface, NULL) != DD_OK) {
 		goto done;
 	}
 
@@ -82,7 +82,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
 
-	if (texture->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) != DD_OK) {
+	if (textureInfo->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) != DD_OK) {
 		goto done;
 	}
 
@@ -98,7 +98,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 		}
 	}
 
-	texture->m_surface->Unlock(desc.lpSurface);
+	textureInfo->m_surface->Unlock(desc.lpSurface);
 
 	PALETTEENTRY entries[256];
 	memset(entries, 0, sizeof(entries));
@@ -115,38 +115,38 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 		}
 	}
 
-	if (pDirectDraw->CreatePalette(DDPCAPS_ALLOW256 | DDPCAPS_8BIT, entries, &texture->m_palette, NULL) != DD_OK) {
+	if (pDirectDraw->CreatePalette(DDPCAPS_ALLOW256 | DDPCAPS_8BIT, entries, &textureInfo->m_palette, NULL) != DD_OK) {
 		goto done;
 	}
 
-	texture->m_surface->SetPalette(texture->m_palette);
+	textureInfo->m_surface->SetPalette(textureInfo->m_palette);
 
 	if (((TglImpl::RendererImpl*) VideoManager()->GetRenderer())
-			->CreateTextureFromSurface(texture->m_surface, &texture->m_texture) != D3DRM_OK) {
+			->CreateTextureFromSurface(textureInfo->m_surface, &textureInfo->m_texture) != D3DRM_OK) {
 		goto done;
 	}
 
-	texture->m_texture->SetAppData((DWORD) texture);
-	return texture;
+	textureInfo->m_texture->SetAppData((DWORD) textureInfo);
+	return textureInfo;
 
 done:
-	if (texture->m_name != NULL) {
-		delete[] texture->m_name;
-		texture->m_name = NULL;
+	if (textureInfo->m_name != NULL) {
+		delete[] textureInfo->m_name;
+		textureInfo->m_name = NULL;
 	}
 
-	if (texture->m_palette != NULL) {
-		texture->m_palette->Release();
-		texture->m_palette = NULL;
+	if (textureInfo->m_palette != NULL) {
+		textureInfo->m_palette->Release();
+		textureInfo->m_palette = NULL;
 	}
 
-	if (texture->m_surface != NULL) {
-		texture->m_surface->Release();
-		texture->m_surface = NULL;
+	if (textureInfo->m_surface != NULL) {
+		textureInfo->m_surface->Release();
+		textureInfo->m_surface = NULL;
 	}
 
-	if (texture != NULL) {
-		delete texture;
+	if (textureInfo != NULL) {
+		delete textureInfo;
 	}
 
 	return NULL;
