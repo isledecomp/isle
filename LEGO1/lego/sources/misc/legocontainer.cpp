@@ -18,6 +18,7 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 {
 	DDSURFACEDESC desc, newDesc;
 	DWORD width, height;
+	LegoTextureInfo* textureInfo;
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
 
@@ -27,14 +28,10 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 		p_textureInfo->m_surface->Unlock(desc.lpSurface);
 	}
 
-#ifdef COMPAT_MODE
 	LegoTextureList::iterator it;
 	for (it = m_list.begin(); it != m_list.end(); it++) {
-#else
-	for (LegoTextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
-#endif
 		if ((*it).second == FALSE) {
-			LegoTextureInfo* textureInfo = (*it).first;
+			textureInfo = (*it).first;
 
 			if (textureInfo->m_texture->AddRef() != 0 && textureInfo->m_texture->Release() == 1) {
 				if (!strcmp(textureInfo->m_name, p_textureInfo->m_name)) {
@@ -60,7 +57,7 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 		}
 	}
 
-	LegoTextureInfo* textureInfo = new LegoTextureInfo();
+	textureInfo = new LegoTextureInfo();
 
 	textureInfo->m_palette = p_textureInfo->m_palette;
 	p_textureInfo->m_palette->Release();
