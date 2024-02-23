@@ -119,7 +119,7 @@ protected:
 // _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Erase
 
 // TEMPLATE: LEGO1 0x1005a250
-// list<LegoTextureInfo *,allocator<LegoTextureInfo *> >::~list<LegoTextureInfo *,allocator<LegoTextureInfo *> >
+// list<pair<LegoTextureInfo *,unsigned int>,allocator<pair<LegoTextureInfo *,unsigned int> > >::~list<pair<LegoTextureInfo *,unsigned int>,allocator<pair<LegoTextureInfo *,unsigned int> > >
 
 // TEMPLATE: LEGO1 0x1005a2c0
 // map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::~map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >
@@ -137,7 +137,7 @@ protected:
 // LegoTextureContainer::`scalar deleting destructor'
 
 // TEMPLATE: LEGO1 0x1005a5a0
-// List<LegoTextureInfo *>::~List<LegoTextureInfo *>
+// List<pair<LegoTextureInfo *,unsigned int> >::~List<pair<LegoTextureInfo *,unsigned int> >
 
 // TEMPLATE: LEGO1 0x1005b660
 // LegoContainer<LegoTextureInfo>::~LegoContainer<LegoTextureInfo>
