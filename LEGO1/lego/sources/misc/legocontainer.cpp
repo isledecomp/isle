@@ -18,7 +18,6 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 {
 	DDSURFACEDESC desc, newDesc;
 	DWORD width, height;
-	LegoTextureInfo* textureInfo;
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
 
@@ -28,36 +27,31 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 		p_textureInfo->m_surface->Unlock(desc.lpSurface);
 	}
 
-	LegoTextureList::iterator it;
-	for (it = m_list.begin(); it != m_list.end(); it++) {
-		if ((*it).second == FALSE) {
-			textureInfo = (*it).first;
+	for (LegoTextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if ((*it).second == FALSE && (*it).first->m_texture->AddRef() != 0 && (*it).first->m_texture->Release() == 1) {
+			if (!strcmp((*it).first->m_name, p_textureInfo->m_name)) {
+				memset(&newDesc, 0, sizeof(newDesc));
+				newDesc.dwSize = sizeof(newDesc);
 
-			if (textureInfo->m_texture->AddRef() != 0 && textureInfo->m_texture->Release() == 1) {
-				if (!strcmp(textureInfo->m_name, p_textureInfo->m_name)) {
-					memset(&newDesc, 0, sizeof(newDesc));
-					newDesc.dwSize = sizeof(newDesc);
+				if ((*it).first->m_surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+					BOOL und = FALSE;
+					if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
+						und = TRUE;
+					}
 
-					if (textureInfo->m_surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
-						BOOL und = FALSE;
-						if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
-							und = TRUE;
-						}
+					(*it).first->m_surface->Unlock(newDesc.lpSurface);
 
-						textureInfo->m_surface->Unlock(newDesc.lpSurface);
-
-						if (und) {
-							(*it).second = TRUE;
-							textureInfo->m_texture->AddRef();
-							return textureInfo;
-						}
+					if (und) {
+						(*it).second = TRUE;
+						(*it).first->m_texture->AddRef();
+						return (*it).first;
 					}
 				}
 			}
 		}
 	}
 
-	textureInfo = new LegoTextureInfo();
+	LegoTextureInfo* textureInfo = new LegoTextureInfo();
 
 	textureInfo->m_palette = p_textureInfo->m_palette;
 	p_textureInfo->m_palette->Release();
@@ -107,7 +101,6 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 
 				textureInfo->m_name = new char[strlen(p_textureInfo->m_name) + 1];
 				strcpy(textureInfo->m_name, p_textureInfo->m_name);
-
 				return textureInfo;
 			}
 		}
