@@ -16,7 +16,7 @@ LegoTextureContainer::~LegoTextureContainer()
 // FUNCTION: LEGO1 0x100998e0
 LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 {
-	DDSURFACEDESC desc;
+	DDSURFACEDESC desc, newDesc;
 	DWORD width, height;
 	memset(&desc, 0, sizeof(desc));
 	desc.dwSize = sizeof(desc);
@@ -38,17 +38,16 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 
 			if (textureInfo->m_texture->AddRef() != 0 && textureInfo->m_texture->Release() == 1) {
 				if (!strcmp(textureInfo->m_name, p_textureInfo->m_name)) {
-					DDSURFACEDESC desc;
-					memset(&desc, 0, sizeof(desc));
-					desc.dwSize = sizeof(desc);
+					memset(&newDesc, 0, sizeof(newDesc));
+					newDesc.dwSize = sizeof(newDesc);
 
-					if (textureInfo->m_surface->Lock(NULL, &desc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+					if (textureInfo->m_surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 						BOOL und = FALSE;
-						if (desc.dwWidth == width && desc.dwHeight == height) {
+						if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
 							und = TRUE;
 						}
 
-						textureInfo->m_surface->Unlock(desc.lpSurface);
+						textureInfo->m_surface->Unlock(newDesc.lpSurface);
 
 						if (und) {
 							(*it).second = TRUE;
@@ -66,7 +65,6 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 	textureInfo->m_palette = p_textureInfo->m_palette;
 	p_textureInfo->m_palette->Release();
 
-	DDSURFACEDESC newDesc;
 	memset(&newDesc, 0, sizeof(newDesc));
 	newDesc.dwWidth = desc.dwWidth;
 	newDesc.dwHeight = desc.dwHeight;
