@@ -1,5 +1,6 @@
 #include "legomodelpresenter.h"
 
+#include "anim/legoanim.h"
 #include "define.h"
 #include "legoentity.h"
 #include "legoentitypresenter.h"
@@ -7,6 +8,9 @@
 #include "legounksavedatawriter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc/legocontainer.h"
+#include "misc/legotexture.h"
+#include "misc/version.h"
 #include "mxcompositepresenter.h"
 #include "mxutil.h"
 #include "roi/legoroi.h"
@@ -47,11 +51,155 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 	}
 }
 
-// STUB: LEGO1 0x1007f6b0
+// FUNCTION: LEGO1 0x1007f6b0
 MxResult LegoModelPresenter::CreateROI(MxStreamChunk* p_chunk)
 {
-	// TODO
-	return FAILURE;
+	MxResult result = FAILURE;
+	LegoU32 numROIs;
+	Mx3DPointFloat vect;
+	LegoMemory storage(p_chunk->GetData());
+	LegoAnim anim;
+	LegoU32 version, textureInfoOffset, i, numTextures, skipTextures;
+	MxMatrix mat;
+	LegoChar* textureName = NULL;
+	LegoTexture* texture = NULL;
+	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetHardwareMode();
+
+	if (m_roi) {
+		delete m_roi;
+	}
+	if (!(m_roi = new LegoROI(VideoManager()->GetRenderer()))) {
+		goto done;
+	}
+	if (storage.Read(&version, sizeof(version)) != SUCCESS) {
+		goto done;
+	}
+	if (version != MODEL_VERSION) {
+		goto done;
+	}
+	if (storage.Read(&textureInfoOffset, sizeof(textureInfoOffset)) != SUCCESS) {
+		goto done;
+	}
+
+	storage.SetPosition(textureInfoOffset);
+
+	if (storage.Read(&numTextures, sizeof(numTextures)) != SUCCESS) {
+		goto done;
+	}
+	if (storage.Read(&skipTextures, sizeof(skipTextures)) != SUCCESS) {
+		goto done;
+	}
+
+	for (i = 0; i < numTextures; i++) {
+		LegoU32 textureNameLength;
+
+		storage.Read(&textureNameLength, sizeof(textureNameLength));
+		textureName = new LegoChar[textureNameLength + 1];
+		storage.Read(textureName, textureNameLength);
+		textureName[textureNameLength] = '\0';
+
+		strlwr(textureName);
+
+		if (textureName[0] == '^') {
+			strcpy(textureName, textureName + 1);
+
+			if (g_modelPresenterConfig) {
+				texture = new LegoTexture();
+				if (texture->Read(&storage, hardwareMode) != SUCCESS) {
+					goto done;
+				}
+
+				LegoTexture* discardTexture = new LegoTexture();
+				if (discardTexture->Read(&storage, FALSE) != SUCCESS) {
+					goto done;
+				}
+				delete discardTexture;
+			}
+			else {
+				LegoTexture* discardTexture = new LegoTexture();
+				if (discardTexture->Read(&storage, FALSE) != SUCCESS) {
+					goto done;
+				}
+				delete discardTexture;
+
+				texture = new LegoTexture();
+				if (texture->Read(&storage, hardwareMode) != SUCCESS) {
+					goto done;
+				}
+			}
+		}
+		else {
+			texture = new LegoTexture();
+			if (texture->Read(&storage, hardwareMode) != SUCCESS) {
+				goto done;
+			}
+		}
+
+		if (!skipTextures) {
+			if (TextureContainer()->Get(textureName) == NULL) {
+				LegoTextureInfo* textureInfo = LegoTextureInfo::Create(textureName, texture);
+
+				if (textureInfo == NULL) {
+					goto done;
+				}
+
+				TextureContainer()->Add(textureName, textureInfo);
+			}
+
+			delete[] textureName;
+			textureName = NULL;
+			delete texture;
+			texture = NULL;
+		}
+	}
+
+	storage.SetPosition(8);
+
+	if (storage.Read(&numROIs, sizeof(numROIs)) != SUCCESS) {
+		goto done;
+	}
+	if (anim.Read(&storage, FALSE) != SUCCESS) {
+		goto done;
+	}
+	if (m_roi->Read(NULL, VideoManager()->GetRenderer(), GetViewLODListManager(), TextureContainer(), &storage) !=
+		SUCCESS) {
+		goto done;
+	}
+	if (m_roi->SetFrame(&anim, 0) != SUCCESS) {
+		goto done;
+	}
+
+	// Get scripted location, direction and up vectors
+
+	CalcLocalTransform(
+		Mx3DPointFloat(m_action->GetLocation().GetX(), m_action->GetLocation().GetY(), m_action->GetLocation().GetZ()),
+		Mx3DPointFloat(
+			m_action->GetDirection().GetX(),
+			m_action->GetDirection().GetY(),
+			m_action->GetDirection().GetZ()
+		),
+		Mx3DPointFloat(m_action->GetUp().GetX(), m_action->GetUp().GetY(), m_action->GetUp().GetZ()),
+		mat
+	);
+	m_roi->FUN_100a46b0(mat);
+
+	result = SUCCESS;
+
+done:
+	if (textureName != NULL) {
+		delete[] textureName;
+	}
+	if (texture != NULL) {
+		delete texture;
+	}
+	if (result != SUCCESS) {
+		if (m_roi) {
+			delete m_roi;
+			m_roi = NULL;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10080050

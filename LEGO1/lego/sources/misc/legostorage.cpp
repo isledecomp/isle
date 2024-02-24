@@ -126,17 +126,3 @@ LegoResult LegoFile::Open(const char* p_name, LegoU32 p_mode)
 	}
 	return SUCCESS;
 }
-
-// FUNCTION: LEGO1 0x100994a0
-LegoResult LegoMemory::GetPosition(LegoU32& p_position)
-{
-	p_position = m_position;
-	return SUCCESS;
-}
-
-// FUNCTION: LEGO1 0x100994b0
-LegoResult LegoMemory::SetPosition(LegoU32 p_position)
-{
-	m_position = p_position;
-	return SUCCESS;
-}

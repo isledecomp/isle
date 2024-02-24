@@ -220,6 +220,12 @@ LegoTextureContainer* TextureContainer()
 	return LegoOmni::GetInstance()->GetTextureContainer();
 }
 
+// FUNCTION: LEGO1 0x10015810
+ViewLODListManager* GetViewLODListManager()
+{
+	return LegoOmni::GetInstance()->GetViewLODListManager();
+}
+
 // FUNCTION: LEGO1 0x10015820
 void FUN_10015820(MxBool p_disable, MxU16 p_flags)
 {
