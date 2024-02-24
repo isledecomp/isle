@@ -25,6 +25,7 @@ public:
 	inline MxU32 IsActive() { return m_active; }
 	inline void SetActive(MxU32 p_active) { m_active = p_active; }
 	inline MxU32 GetState() { return m_state; }
+	inline void SetState(MxU32 p_state) { m_state = p_state; }
 
 	// SYNTHETIC: LEGO1 0x1000f3d0
 	// JukeBoxState::`scalar deleting destructor'

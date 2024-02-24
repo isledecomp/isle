@@ -2,6 +2,8 @@
 #define JUKEBOX_H
 
 #include "decomp.h"
+#include "jukeboxstate.h"
+#include "legogamestate.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d8958
@@ -109,9 +111,9 @@ public:
 	};
 
 private:
-	undefined m_unk0xf8[4]; // 0xf8
-	undefined4 m_unk0xfc;   // 0xfc
-	undefined2 m_unk0x100;  // 0x100
+	LegoGameState::Area m_transitionDestination; // 0xf8
+	JukeBoxState* m_jukeBoxState;                // 0xfc
+	undefined2 m_unk0x100;                       // 0x100
 };
 
 #endif // JUKEBOX_H

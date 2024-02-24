@@ -1,7 +1,15 @@
 #include "jukebox.h"
 
+#include "jukeboxstate.h"
+#include "legocontrolmanager.h"
+#include "legogamestate.h"
+#include "legoinputmanager.h"
+#include "legoomni.h"
 #include "mxnotificationmanager.h"
 #include "mxomni.h"
+#include "mxstillpresenter.h"
+#include "mxticklemanager.h"
+#include "mxvideopresenter.h"
 
 DECOMP_SIZE_ASSERT(JukeBox, 0x104)
 
@@ -9,7 +17,7 @@ DECOMP_SIZE_ASSERT(JukeBox, 0x104)
 JukeBox::JukeBox()
 {
 	m_unk0x100 = 0;
-	m_unk0xfc = 0;
+	m_jukeBoxState = NULL;
 	NotificationManager()->Register(this);
 }
 
@@ -19,11 +27,29 @@ MxBool JukeBox::VTable0x5c()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1005d8d0
+// FUNCTION: LEGO1 0x1005d8d0
 MxResult JukeBox::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult ret = LegoWorld::Create(p_dsAction);
+	if (ret == SUCCESS) {
+		InputManager()->SetWorld(this);
+		ControlManager()->Register(this);
+	}
+
+	InputManager()->SetCamera(NULL);
+
+	LegoGameState* gameState = GameState();
+	JukeBoxState* jukeBoxState = (JukeBoxState*) gameState->GetState("JukeBoxState");
+	if (!jukeBoxState) {
+		jukeBoxState = (JukeBoxState*) gameState->CreateState("JukeBoxState");
+		jukeBoxState->SetState(0);
+	}
+
+	m_jukeBoxState = jukeBoxState;
+	GameState()->SetCurrentArea(LegoGameState::e_jukeboxw);
+	GameState()->StopArea(LegoGameState::e_previousArea);
+	TickleManager()->RegisterClient(this, 2000);
+	return ret;
 }
 
 // STUB: LEGO1 0x1005d980
@@ -33,28 +59,74 @@ MxLong JukeBox::Notify(MxParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x1005d9f0
+// FUNCTION: LEGO1 0x1005d9f0
 void JukeBox::ReadyWorld()
 {
-	// TODO
+	MxStillPresenter* bg;
+	char* objectName;
+
+	switch (m_jukeBoxState->GetState()) {
+	case 1:
+		objectName = "Right_Bitmap";
+		break;
+	case 2:
+		objectName = "Decal_Bitmap";
+		break;
+	case 3:
+		objectName = "Wallis_Bitmap";
+		break;
+	case 4:
+		objectName = "Nelson_Bitmap";
+		break;
+	case 5:
+		objectName = "Torpedos_Bitmap";
+		break;
+	default:
+		goto done;
+	}
+	bg = (MxStillPresenter*) Find("MxStillPresenter", objectName);
+done:
+	if (bg) {
+		bg->Enable(TRUE);
+	}
+	m_unk0x100 = 1;
 }
 
-// STUB: LEGO1 0x1005dde0
+// FUNCTION: LEGO1 0x1005dde0
 void JukeBox::Enable(MxBool p_enable)
 {
-	// TODO
+	LegoWorld::Enable(p_enable);
+
+	if (p_enable) {
+		InputManager()->SetWorld(this);
+		InputManager()->SetCamera(NULL);
+	}
+	else {
+		if (InputManager()->GetWorld() == this) {
+			InputManager()->ClearWorld();
+		}
+	}
 }
 
-// STUB: LEGO1 0x1005de30
+// FUNCTION: LEGO1 0x1005de30
 MxResult JukeBox::Tickle()
 {
-	// TODO
+	if (m_worldStarted == FALSE) {
+		LegoWorld::Tickle();
+		return SUCCESS;
+	}
+
+	if (m_unk0x100 == 1) {
+		m_unk0x100 = 0;
+		FUN_10015820(FALSE, 7);
+	}
+
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1005de70
+// FUNCTION: LEGO1 0x1005de70
 MxBool JukeBox::VTable0x64()
 {
-	// TODO
-	return FALSE;
+	m_transitionDestination = LegoGameState::e_infomain;
+	return TRUE;
 }
