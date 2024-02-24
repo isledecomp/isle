@@ -15,9 +15,9 @@ public:
 		m_elements[2] = p_z;
 	}
 
-	inline float GetX() { return m_elements[0]; }
-	inline float GetY() { return m_elements[1]; }
-	inline float GetZ() { return m_elements[2]; }
+	inline float GetX() { return m_data[0]; }
+	inline float GetY() { return m_data[1]; }
+	inline float GetZ() { return m_data[2]; }
 
 	// FUNCTION: LEGO1 0x100343a0
 	inline Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
