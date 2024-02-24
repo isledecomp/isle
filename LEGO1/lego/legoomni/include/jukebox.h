@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "jukeboxstate.h"
+#include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 
@@ -111,6 +112,8 @@ public:
 	};
 
 private:
+	MxBool HandleClick(LegoControlManagerEvent&);
+
 	LegoGameState::Area m_transitionDestination; // 0xf8
 	JukeBoxState* m_jukeBoxState;                // 0xfc
 	undefined2 m_unk0x100;                       // 0x100

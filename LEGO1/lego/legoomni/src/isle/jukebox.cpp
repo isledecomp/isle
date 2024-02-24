@@ -52,11 +52,24 @@ MxResult JukeBox::Create(MxDSAction& p_dsAction)
 	return ret;
 }
 
-// STUB: LEGO1 0x1005d980
+// FUNCTION: LEGO1 0x1005d980
 MxLong JukeBox::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	MxLong result = 0;
+	LegoWorld::Notify(p_param);
+
+	if (m_worldStarted) {
+		switch (((MxNotificationParam&) p_param).GetNotification()) {
+		case c_notificationClick:
+			result = HandleClick((LegoControlManagerEvent&) p_param);
+			break;
+		case c_notificationTransitioned:
+			GameState()->SwitchArea(m_transitionDestination);
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1005d9f0
@@ -90,6 +103,13 @@ done:
 		bg->Enable(TRUE);
 	}
 	m_unk0x100 = 1;
+}
+
+// FUNCTION: LEGO1 0x1005da70
+MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
+{
+	// TODO
+	return true;
 }
 
 // FUNCTION: LEGO1 0x1005dde0
