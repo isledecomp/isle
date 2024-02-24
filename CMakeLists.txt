@@ -80,10 +80,6 @@ add_library(Smacker::Smacker STATIC IMPORTED)
 set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/smacker/smack.lib")
 set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/smacker")
 
-add_library(FLIC::FLIC STATIC IMPORTED)
-set_property(TARGET FLIC::FLIC PROPERTY IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/3rdparty/flic/flic.lib")
-set_property(TARGET FLIC::FLIC PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/3rdparty/flic")
-
 add_library(Vec::Vec INTERFACE IMPORTED)
 target_include_directories(Vec::Vec INTERFACE "${CMAKE_SOURCE_DIR}/3rdparty/vec")
 
@@ -244,6 +240,7 @@ add_library(omni STATIC
   LEGO1/omni/src/system/mxscheduler.cpp
   LEGO1/omni/src/system/mxsemaphore.cpp
   LEGO1/omni/src/system/mxthread.cpp
+  LEGO1/omni/src/video/flic.cpp
   LEGO1/omni/src/video/mxbitmap.cpp
   LEGO1/omni/src/video/mxdisplaysurface.cpp
   LEGO1/omni/src/video/mxflcpresenter.cpp
@@ -263,7 +260,7 @@ add_library(omni STATIC
 register_lego1_target(omni)
 set_property(TARGET omni PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>")
 target_include_directories(omni PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include" "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(omni PRIVATE dsound winmm FLIC::FLIC Smacker::Smacker)
+target_link_libraries(omni PRIVATE dsound winmm Smacker::Smacker)
 
 add_library(lego1 SHARED
   LEGO1/define.cpp
@@ -410,7 +407,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources"
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
 
 # Link libraries
-target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi anim FLIC::FLIC Vec::Vec dinput dxguid misc 3dmanager omni)
+target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi anim Vec::Vec dinput dxguid misc 3dmanager omni)
 
 if (ISLE_USE_SMARTHEAP)
   foreach(tgt IN LISTS lego1_targets)
