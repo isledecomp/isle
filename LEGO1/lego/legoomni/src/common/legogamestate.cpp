@@ -1,7 +1,11 @@
 #include "legogamestate.h"
 
+#include "act1state.h"
+#include "define.h"
 #include "infocenterstate.h"
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
+#include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legostate.h"
 #include "legoutil.h"
@@ -298,8 +302,8 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_stop, *g_elevbottScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_elevbottScript, 0, NULL);
 		break;
-	case e_unk6:
-	case e_unk7:
+	case e_elevride:
+	case e_elevride2:
 		RemoveFromWorld(*g_isleScript, 0x41b, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 1052, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x41d, *g_isleScript, 0);
@@ -312,17 +316,17 @@ void LegoGameState::StopArea(Area p_area)
 		RemoveFromWorld(*g_isleScript, 0x42a, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x42b, *g_isleScript, 0);
 		break;
-	case e_unk8:
+	case e_elevopen:
 		RemoveFromWorld(*g_isleScript, 0x45b, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x45c, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x45d, *g_isleScript, 0);
 		break;
-	case e_unk9:
+	case e_seaview:
 		RemoveFromWorld(*g_isleScript, 0x475, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x476, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x477, *g_isleScript, 0);
 		break;
-	case e_unk10:
+	case e_observe:
 		RemoveFromWorld(*g_isleScript, 0x45f, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x460, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x461, *g_isleScript, 0);
@@ -344,7 +348,7 @@ void LegoGameState::StopArea(Area p_area)
 		RemoveFromWorld(*g_isleScript, 0x472, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x12, *g_isleScript, 0);
 		break;
-	case e_unk11:
+	case e_elevdown:
 		RemoveFromWorld(*g_isleScript, 0x47a, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x47b, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x47c, *g_isleScript, 0);
@@ -373,7 +377,7 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_stop, *g_garageScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_garageScript, 0, NULL);
 		break;
-	case e_unk27:
+	case e_garadoor:
 		RemoveFromWorld(*g_isleScript, 0x489, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x48a, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x48b, *g_isleScript, 0);
@@ -387,7 +391,7 @@ void LegoGameState::StopArea(Area p_area)
 		InvokeAction(Extra::e_stop, *g_policeScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_policeScript, 0, NULL);
 		break;
-	case e_unk35:
+	case e_polidoor:
 		RemoveFromWorld(*g_isleScript, 0x47f, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x480, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x481, *g_isleScript, 0);
@@ -437,6 +441,26 @@ void LegoGameState::StopArea(Area p_area)
 	}
 }
 
+inline void LoadIsle()
+{
+	LegoWorld* world = FindWorld(*g_isleScript, 0);
+	if (world != NULL) {
+		if (!world->GetUnknown0xd0().empty()) {
+#ifdef COMPAT_MODE
+			{
+				MxNotificationParam param(c_notificationType20, NULL);
+				NotificationManager()->Send(world, &param);
+			}
+#else
+			NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
+#endif
+		}
+	}
+	else {
+		InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
+	}
+}
+
 // FUNCTION: LEGO1 0x1003b060
 void LegoGameState::SwitchArea(Area p_area)
 {
@@ -447,8 +471,6 @@ void LegoGameState::SwitchArea(Area p_area)
 	BackgroundAudioManager()->Stop();
 	AnimationManager()->FUN_1005ef10();
 	VideoManager()->SetUnk0x554(FALSE);
-
-	LegoWorld* world;
 
 	switch (p_area) {
 	case e_isle:
@@ -463,17 +485,17 @@ void LegoGameState::SwitchArea(Area p_area)
 		InvokeAction(Extra::ActionType::e_opendisk, *g_infodoorScript, 0, NULL);
 		break;
 	case e_unk4:
-	case e_unk15:
-	case e_unk16:
+	case e_jetrace2:
+	case e_jetraceExterior:
 	case e_unk17:
-	case e_unk19:
+	case e_carraceExterior:
 	case e_unk20:
 	case e_unk21:
-	case e_unk22:
-	case e_unk25:
-	case e_unk29:
+	case e_pizzeriaExterior:
+	case e_garageExterior:
+	case e_hospitalExterior:
 	case e_unk31:
-	case e_unk32:
+	case e_policeExterior:
 	case e_unk57:
 	case e_unk58:
 	case e_unk59:
@@ -481,58 +503,27 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_unk61:
 	case e_unk64:
 	case e_unk66:
-		world = FindWorld(*g_isleScript, 0);
-		if (world != NULL) {
-			if (world->GetUnknown0xd0().empty()) {
-				break;
-			}
-			else {
-#ifdef COMPAT_MODE
-				{
-					MxNotificationParam param(c_notificationType20, NULL);
-					NotificationManager()->Send(world, &param);
-				}
-#else
-				NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
-#endif
-				break;
-			}
-		}
-		InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
+		LoadIsle();
 		break;
 	case e_elevbott:
 		InvokeAction(Extra::ActionType::e_opendisk, *g_elevbottScript, 0, NULL);
 		break;
-	case e_unk6:
-	case e_unk7:
-		world = FindWorld(*g_isleScript, 0);
-
-		if (world == NULL) {
-			InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
-		}
-		else if (!world->GetUnknown0xd0().empty()) {
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationType20, NULL);
-				NotificationManager()->Send(world, &param);
-			}
-#else
-			NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
-#endif
-		}
+	case e_elevride:
+	case e_elevride2:
+		LoadIsle();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1050, NULL);
 		break;
-	case e_unk8:
+	case e_elevopen:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1114, NULL);
 		break;
-	case e_unk9:
+	case e_seaview:
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1140, NULL);
 		break;
-	case e_unk10:
+	case e_observe:
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1118, NULL);
 		break;
-	case e_unk11:
+	case e_elevdown:
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1145, NULL);
 		break;
 	case e_regbook:
@@ -545,64 +536,110 @@ void LegoGameState::SwitchArea(Area p_area)
 		break;
 	case e_jetrace:
 		if (m_previousArea == e_infomain) {
-			m_currentArea = e_unk15;
-
-			world = FindWorld(*g_isleScript, 0);
-			if (world != NULL) {
-				if (world->GetUnknown0xd0().empty()) {
-					return;
-				}
-				else {
-#ifdef COMPAT_MODE
-					{
-						MxNotificationParam param(c_notificationType20, NULL);
-						NotificationManager()->Send(world, &param);
-					}
-#else
-					NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
-#endif
-				}
-				return;
-			}
-			else {
-				InvokeAction(Extra::ActionType::e_opendisk, *g_isleScript, 0, NULL);
-				break;
-			}
+			m_currentArea = e_jetrace2;
+			LoadIsle();
 		}
-
-		InvokeAction(Extra::ActionType::e_opendisk, *g_jetraceScript, 0, NULL);
+		else {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_jetraceScript, 0, NULL);
+		}
 		break;
 	case e_carrace:
 		if (m_previousArea == e_infomain) {
-			m_currentArea = e_unk19;
-
-			world = FindWorld(*g_isleScript, 0);
-			if (world != NULL) {
-				if (world->GetUnknown0xd0().empty()) {
-					return;
-				}
-				else {
-#ifdef COMPAT_MODE
-					{
-						MxNotificationParam param(c_notificationType20, NULL);
-						NotificationManager()->Send(world, &param);
-					}
-#else
-					NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
-#endif
-				}
-				return;
-			}
+			m_currentArea = e_carraceExterior;
+			LoadIsle();
 		}
-
-		InvokeAction(Extra::ActionType::e_opendisk, *g_carraceScript, 0, NULL);
+		else {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_carraceScript, 0, NULL);
+		}
 		break;
 	case e_garage:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_garageScript, 0, NULL);
 		break;
-
-	// TODO: implement other cases
+	case e_garadoor:
+		LoadIsle();
+		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
+		CurrentVehicle()->ResetWorldTransform(FALSE);
+		NavController()->SetLocation(0x3b);
+		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
+		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1160, NULL);
+		break;
+	case e_unk28: {
+		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		LoadIsle();
+		if (state->GetUnknown18() == 7) {
+			VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
+		}
+		else {
+			SetCameraControllerFromIsle();
+			CurrentVehicle()->ResetWorldTransform(TRUE);
+			AnimationManager()->FUN_1005f0b0();
+		}
+		CurrentVehicle()->VTable0xe8(p_area, TRUE, 7);
+		break;
+	}
+	case e_hospital:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_hospitalScript, 0, NULL);
+		break;
+	case e_unk33:
+		LoadIsle();
+		SetCameraControllerFromIsle();
+		CurrentVehicle()->ResetWorldTransform(TRUE);
+		AnimationManager()->FUN_1005f0b0();
+		CurrentVehicle()->VTable0xe8(p_area, TRUE, 7);
+		break;
+	case e_police:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_policeScript, 0, NULL);
+		break;
+	case e_polidoor:
+		LoadIsle();
+		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1150, NULL);
+		break;
+	case e_copter:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_copterScript, 0, NULL);
+		break;
+	case e_dunecar:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_dunecarScript, 0, NULL);
+		break;
+	case e_jetski:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_jetskiScript, 0, NULL);
+		break;
+	case e_racecar:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_racecarScript, 0, NULL);
+		break;
+	case e_act2main: {
+		LegoWorld* act2main = FindWorld(*g_act2mainScript, 0);
+		if (act2main == NULL) {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_act2mainScript, 0, NULL);
+		}
+		else {
+			act2main->Enable(TRUE);
+		}
+		break;
+	}
+	case e_act3script: {
+		LegoWorld* act3 = FindWorld(*g_act3Script, 0);
+		if (act3 == NULL) {
+			InvokeAction(Extra::ActionType::e_opendisk, *g_act3Script, 0, NULL);
+		}
+		else {
+			act3->Enable(TRUE);
+		}
+		break;
+	}
+	case e_jukeboxw:
+		VideoManager()->SetUnk0x554(TRUE);
+		InvokeAction(Extra::ActionType::e_opendisk, *g_jukeboxwScript, 0, NULL);
+		break;
+	case e_unk54:
+		LoadIsle();
+		break;
 	case e_histbook:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_histbookScript, 0, NULL);

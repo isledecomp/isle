@@ -1,5 +1,6 @@
 #include "legoutil.h"
 
+#include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
@@ -159,6 +160,12 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 		NotificationManager()->Send(entity, &MxNotificationParam(c_notificationType0, p_sender));
 #endif
 	}
+}
+
+// FUNCTION: LEGO1 0x1003eab0
+void SetCameraControllerFromIsle()
+{
+	InputManager()->SetCamera(FindWorld(*g_isleScript, 0)->GetCamera());
 }
 
 // FUNCTION: LEGO1 0x1003eae0
