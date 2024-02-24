@@ -46,10 +46,10 @@ typedef struct : FLIC_CHUNK {
 
 void DecodeFLCFrame(
 	LPBITMAPINFOHEADER p_bitmapHeader,
-	byte* p_pixelData,
+	BYTE* p_pixelData,
 	FLIC_HEADER* p_flcHeader,
 	FLIC_FRAME* p_flcFrame,
-	unsigned char* p_decodedColorMap
+	BYTE* p_decodedColorMap
 );
 
 #endif // FLIC_H
