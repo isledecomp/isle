@@ -40,7 +40,8 @@ void MxFlcPresenter::CreateBitmap()
 	}
 
 	m_bitmap = new MxBitmap;
-	m_bitmap->SetSize(m_flcHeader->width, m_flcHeader->height, NULL, FALSE);
+	// TODO: Unlikely that width/height are signed shorts
+	m_bitmap->SetSize((MxU16) m_flcHeader->width, (MxU16) m_flcHeader->height, NULL, FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3570
