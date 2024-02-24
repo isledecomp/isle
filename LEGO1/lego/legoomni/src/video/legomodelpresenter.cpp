@@ -63,9 +63,7 @@ MxResult LegoModelPresenter::CreateROI(MxStreamChunk* p_chunk)
 	MxMatrix mat;
 	LegoChar* textureName = NULL;
 	LegoTexture* texture = NULL;
-
-	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetFlags();
-	hardwareMode = (hardwareMode << 31) >> 31;
+	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetHardwareMode();
 
 	if (m_roi) {
 		delete m_roi;
