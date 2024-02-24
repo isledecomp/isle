@@ -33,4 +33,7 @@ jobs:
             LEGO1/omni/include \
             LEGO1/lego/legoomni/include \
             LEGO1/lego/sources \
+          --exclude \
+            LEGO1/omni/include/flic.h \
+            LEGO1/omni/src/video/flic.cpp \
           --path LEGO1/omni LEGO1/lego/legoomni
