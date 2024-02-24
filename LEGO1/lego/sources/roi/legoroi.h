@@ -7,6 +7,9 @@
 typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);
 
 class LegoEntity;
+class LegoTextureContainer;
+class LegoStorage;
+class LegoAnim;
 
 // VTABLE: LEGO1 0x100dbe38
 // SIZE 0x108
@@ -15,6 +18,15 @@ public:
 	LegoROI(Tgl::Renderer* p_renderer);
 	LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList);
 	~LegoROI() override;
+
+	LegoResult Read(
+		OrientableROI* p_unk0xd4,
+		Tgl::Renderer* p_renderer,
+		ViewLODListManager* p_viewLODListManager,
+		LegoTextureContainer* p_textureContainer,
+		LegoStorage* p_storage
+	);
+	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 
 	float IntrinsicImportance() const override; // vtable+0x04
 	void UpdateWorldBoundingVolumes() override; // vtable+0x18

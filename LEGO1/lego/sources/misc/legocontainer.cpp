@@ -14,7 +14,7 @@ LegoTextureContainer::~LegoTextureContainer()
 }
 
 // FUNCTION: LEGO1 0x100998e0
-LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
+LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 {
 	DDSURFACEDESC desc, newDesc;
 	DWORD width, height;
@@ -110,7 +110,7 @@ LegoTextureInfo* LegoTextureContainer::Insert(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x10099cc0
-void LegoTextureContainer::Erase(LegoTextureInfo* p_textureInfo)
+void LegoTextureContainer::EraseFromList(LegoTextureInfo* p_textureInfo)
 {
 	if (p_textureInfo == NULL) {
 		return;

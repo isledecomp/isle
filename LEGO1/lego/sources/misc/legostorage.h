@@ -47,8 +47,20 @@ public:
 	LegoMemory(void* p_buffer);
 	LegoResult Read(void* p_buffer, LegoU32 p_size) override;
 	LegoResult Write(const void* p_buffer, LegoU32 p_size) override;
-	LegoResult GetPosition(LegoU32& p_position) override;
-	LegoResult SetPosition(LegoU32 p_position) override;
+
+	// FUNCTION: LEGO1 0x100994a0
+	LegoResult GetPosition(LegoU32& p_position) override
+	{
+		p_position = m_position;
+		return SUCCESS;
+	}
+
+	// FUNCTION: LEGO1 0x100994b0
+	LegoResult SetPosition(LegoU32 p_position) override
+	{
+		m_position = p_position;
+		return SUCCESS;
+	}
 
 	// SYNTHETIC: LEGO1 0x10045a80
 	// LegoMemory::~LegoMemory

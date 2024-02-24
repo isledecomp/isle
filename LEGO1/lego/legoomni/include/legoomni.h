@@ -213,6 +213,7 @@ public:
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
 	LegoInputManager* GetInputManager() { return m_inputManager; }
 	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
+	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
@@ -276,6 +277,7 @@ LegoPlantManager* PlantManager();
 LegoWorld* CurrentWorld();
 LegoUnkSaveDataWriter* UnkSaveDataWriter();
 LegoTextureContainer* TextureContainer();
+ViewLODListManager* GetViewLODListManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
