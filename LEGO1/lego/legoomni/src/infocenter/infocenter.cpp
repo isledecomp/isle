@@ -756,37 +756,37 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					break;
 				case 10:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk16;
+						m_transitionDestination = LegoGameState::e_jetraceExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 11:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk19;
+						m_transitionDestination = LegoGameState::e_carraceExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 12:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk22;
+						m_transitionDestination = LegoGameState::e_pizzeriaExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 13:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk25;
+						m_transitionDestination = LegoGameState::e_garageExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 14:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk29;
+						m_transitionDestination = LegoGameState::e_hospitalExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;
 				case 15:
 					if (m_selectedCharacter) {
-						m_transitionDestination = LegoGameState::e_unk32;
+						m_transitionDestination = LegoGameState::e_policeExterior;
 						m_infocenterState->SetUnknown0x74(5);
 					}
 					break;

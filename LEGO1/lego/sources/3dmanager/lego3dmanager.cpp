@@ -94,3 +94,11 @@ double Lego3DManager::Render(double p_und)
 
 	return m_pLego3DView->Render(p_und);
 }
+
+// FUNCTION: LEGO1 0x100ab4d0
+int Lego3DManager::SetFrustrum(float p_fov, float p_front, float p_back)
+{
+	m_pLego3DView->GetView()->SetFrustrum(p_front, p_back, p_fov);
+	m_pLego3DView->GetViewManager()->SetFrustrum(p_fov, p_front, p_back);
+	return 0;
+}

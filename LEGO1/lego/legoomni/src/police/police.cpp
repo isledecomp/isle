@@ -108,7 +108,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_transitionDestination = LegoGameState::Area::e_unk35;
+			m_transitionDestination = LegoGameState::Area::e_polidoor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			break;
 		case c_infoCtl:
