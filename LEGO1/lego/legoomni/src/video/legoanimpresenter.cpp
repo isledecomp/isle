@@ -2,6 +2,7 @@
 
 #include "legoomni.h"
 #include "legounksavedatawriter.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
@@ -29,7 +30,7 @@ void LegoAnimPresenter::Init()
 	m_unk0x68 = 0;
 	m_unk0x6c = 0;
 	m_unk0x74 = NULL;
-	m_unk0x70 = 0;
+	m_unk0x70 = NULL;
 	m_unk0x78 = 0;
 	m_unk0x7c = 0;
 	m_unk0xa8.Clear();
@@ -108,6 +109,7 @@ done:
 // STUB: LEGO1 0x10069150
 LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar*)
 {
+	// TODO
 	return NULL;
 }
 
@@ -188,10 +190,52 @@ void LegoAnimPresenter::FUN_100692b0()
 	}
 }
 
+// FUNCTION: LEGO1 0x100695c0
+void LegoAnimPresenter::FUN_100695c0()
+{
+	m_unk0x70 = new LegoROIList();
+
+	if (m_unk0x70) {
+		CompoundObject& unk0x08 = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetUnknown0x08();
+		LegoU32 numActors = m_anim->GetNumActors();
+
+		for (LegoU32 i = 0; i < numActors; i++) {
+			if (FUN_100698b0(unk0x08, m_anim->GetActorName(i)) == FALSE) {
+				undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+
+				if (unk0x04 == 5 || unk0x04 == 6) {
+					LegoChar dest[256];
+					const LegoChar* str = m_anim->GetActorName(i);
+
+					LegoU32 len = strlen(str);
+					strcpy(dest, str);
+
+					for (LegoChar* i = &dest[len - 1]; isdigit(*i) || *i == '_'; i--) {
+						*i = '\0';
+					}
+
+					strlwr(dest);
+
+					UnkSaveDataWriter()->FUN_10085210(str, dest, 0);
+					FUN_100698b0(unk0x08, str);
+				}
+			}
+		}
+	}
+}
+
 // STUB: LEGO1 0x100697c0
 LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar*, LegoChar*)
 {
+	// TODO
 	return NULL;
+}
+
+// STUB: LEGO1 0x100698b0
+LegoBool LegoAnimPresenter::FUN_100698b0(CompoundObject&, const LegoChar*)
+{
+	// TODO
+	return FALSE;
 }
 
 // STUB: LEGO1 0x1006ad30
