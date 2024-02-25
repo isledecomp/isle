@@ -54,7 +54,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x10068fb0
-MxResult LegoAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
+MxResult LegoAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 {
 	MxResult result = FAILURE;
 	LegoMemory storage(p_chunk->GetData());
@@ -120,7 +120,7 @@ void LegoAnimPresenter::ReadyTickle()
 
 		if (chunk && chunk->GetTime() + m_action->GetStartTime() <= m_action->GetElapsedTime()) {
 			chunk = m_subscriber->PopData();
-			MxResult result = VTable0x88(chunk);
+			MxResult result = CreateAnim(chunk);
 			m_subscriber->FreeDataChunk(chunk);
 
 			if (result == SUCCESS) {

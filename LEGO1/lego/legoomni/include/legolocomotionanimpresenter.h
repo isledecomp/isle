@@ -30,7 +30,7 @@ public:
 	void Destroy() override;                              // vtable+0x38
 	void EndAction() override;                            // vtable+0x40
 	void PutFrame() override;                             // vtable+0x6c
-	MxResult VTable0x88(MxStreamChunk* p_chunk) override; // vtable+0x88
+	MxResult CreateAnim(MxStreamChunk* p_chunk) override; // vtable+0x88
 
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'

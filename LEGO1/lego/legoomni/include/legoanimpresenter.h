@@ -38,7 +38,7 @@ public:
 	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	void EndAction() override;                                                             // vtable+0x40
 	void PutFrame() override;                                                              // vtable+0x6c
-	virtual MxResult VTable0x88(MxStreamChunk* p_chunk);                                   // vtable+0x88
+	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                   // vtable+0x88
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
 

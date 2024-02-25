@@ -12,7 +12,7 @@ class MxStringList : public MxList<MxString> {};
 // SIZE 0x10
 class MxStringListCursor : public MxListCursor<MxString> {
 public:
-	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list){};
+	MxStringListCursor(MxStringList* p_list) : MxListCursor<MxString>(p_list) {}
 
 	// SYNTHETIC: LEGO1 0x100cb860
 	// MxStringList::`scalar deleting destructor'

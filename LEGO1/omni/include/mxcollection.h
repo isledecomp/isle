@@ -12,7 +12,7 @@ public:
 		SetDestroy(Destroy);
 	}
 
-	static void Destroy(T){};
+	static void Destroy(T) {}
 
 	void SetDestroy(void (*p_customDestructor)(T)) { this->m_customDestructor = p_customDestructor; }
 

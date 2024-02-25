@@ -52,9 +52,9 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x1006d140
-MxResult LegoLocomotionAnimPresenter::VTable0x88(MxStreamChunk* p_chunk)
+MxResult LegoLocomotionAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 {
-	MxResult result = LegoAnimPresenter::VTable0x88(p_chunk);
+	MxResult result = LegoAnimPresenter::CreateAnim(p_chunk);
 	return result == SUCCESS ? SUCCESS : result;
 }
 

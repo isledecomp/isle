@@ -37,7 +37,7 @@ public:
 // SIZE 0x10
 class LegoPathControllerListCursor : public MxPtrListCursor<LegoPathController> {
 public:
-	LegoPathControllerListCursor(LegoPathControllerList* p_list) : MxPtrListCursor<LegoPathController>(p_list){};
+	LegoPathControllerListCursor(LegoPathControllerList* p_list) : MxPtrListCursor<LegoPathController>(p_list) {}
 };
 
 // TEMPLATE: LEGO1 0x1001d230
