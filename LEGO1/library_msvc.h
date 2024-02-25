@@ -81,6 +81,9 @@
 // LIBRARY: LEGO1 0x1008c5c0
 // _fseek
 
+// LIBRARY: LEGO1 0x1008c6a0
+// _isdigit
+
 // LIBRARY: LEGO1 0x1008ca60
 // _abort
 

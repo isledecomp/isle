@@ -50,12 +50,14 @@ protected:
 	void Destroy(MxBool p_fromDestructor);
 	LegoChar* FUN_10069150(const LegoChar*);
 	void FUN_100692b0();
+	void FUN_100695c0();
 	LegoChar* FUN_100697c0(const LegoChar*, LegoChar*);
+	LegoBool FUN_100698b0(CompoundObject&, const LegoChar*);
 
 	LegoAnim* m_anim;          // 0x64
 	undefined4 m_unk0x68;      // 0x68
 	undefined4 m_unk0x6c;      // 0x6c
-	undefined4 m_unk0x70;      // 0x70
+	LegoROIList* m_unk0x70;    // 0x70
 	LegoROIList* m_unk0x74;    // 0x74
 	undefined4 m_unk0x78;      // 0x78
 	undefined4 m_unk0x7c;      // 0x7c
