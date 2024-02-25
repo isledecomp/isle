@@ -158,13 +158,12 @@ void LegoAnimPresenter::FUN_100692b0()
 				LegoChar* src = new LegoChar[strlen(str)];
 				strcpy(src, str + 1);
 
-				LegoS32 len = strlen(src) - 1;
-				for (LegoU32 i = 0; i < len; i++) {
-					if ((src[i] < '0' || src[i] > '9') && src[i] != '_') {
+				for (LegoChar* i = &src[strlen(src) - 1]; i > src; i--) {
+					if ((*i < '0' || *i > '9') && *i != '_') {
 						break;
 					}
 
-					src[i] = '\0';
+					*i = '\0';
 				}
 
 				strlwr(src);
