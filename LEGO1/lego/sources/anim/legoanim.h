@@ -139,8 +139,12 @@ public:
 	LegoAnim();
 	~LegoAnim() override;
 	LegoTime GetDuration() { return m_duration; }
+	LegoU32 GetNumActors() { return m_numActors; }
 	LegoResult Write(LegoStorage* p_storage) override;                     // vtable+0x08
 	virtual LegoResult Read(LegoStorage* p_storage, LegoS32 p_parseScene); // vtable+0x10
+
+	const LegoChar* GetActorName(LegoU32 p_index);
+	undefined4 GetActorUnknown0x04(LegoU32 p_index);
 
 	// SYNTHETIC: LEGO1 0x100a0ba0
 	// LegoAnim::`scalar deleting destructor'

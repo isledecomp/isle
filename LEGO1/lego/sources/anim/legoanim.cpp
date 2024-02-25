@@ -504,6 +504,26 @@ LegoResult LegoAnim::Write(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100a0f20
+const LegoChar* LegoAnim::GetActorName(LegoU32 p_index)
+{
+	if (p_index < m_numActors) {
+		return m_actors[p_index].m_name;
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100a0f40
+undefined4 LegoAnim::GetActorUnknown0x04(LegoU32 p_index)
+{
+	if (p_index < m_numActors) {
+		return m_actors[p_index].m_unk0x04;
+	}
+
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x100a0f60
 LegoMorphKey::LegoMorphKey()
 {

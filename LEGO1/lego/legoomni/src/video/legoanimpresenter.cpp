@@ -1,6 +1,7 @@
 #include "legoanimpresenter.h"
 
 #include "legoomni.h"
+#include "legounksavedatawriter.h"
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
@@ -27,7 +28,7 @@ void LegoAnimPresenter::Init()
 	m_anim = NULL;
 	m_unk0x68 = 0;
 	m_unk0x6c = 0;
-	m_unk0x74 = 0;
+	m_unk0x74 = NULL;
 	m_unk0x70 = 0;
 	m_unk0x78 = 0;
 	m_unk0x7c = 0;
@@ -104,6 +105,95 @@ done:
 	return result;
 }
 
+// STUB: LEGO1 0x10069150
+LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar*)
+{
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100692b0
+void LegoAnimPresenter::FUN_100692b0()
+{
+	m_unk0x74 = new LegoROIList();
+
+	if (m_unk0x74) {
+		LegoU32 numActors = m_anim->GetNumActors();
+
+		for (LegoU32 i = 0; i < numActors; i++) {
+			LegoChar* str = FUN_100697c0(m_anim->GetActorName(i), NULL);
+			undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
+			LegoROI* roi = NULL;
+
+			if (unk0x04 == 2) {
+				LegoChar* src;
+				if (str[0] == '*') {
+					src = str + 1;
+				}
+				else {
+					src = str;
+				}
+
+				roi = UnkSaveDataWriter()->FUN_10083500(src, TRUE);
+
+				if (roi != NULL && str[0] == '*') {
+					roi->SetUnknown0x0c(0);
+				}
+			}
+			else if (unk0x04 == 4) {
+				LegoChar* src = new LegoChar[strlen(str)];
+				strcpy(src, str + 1);
+				strlwr(src);
+
+				LegoChar* und = FUN_10069150(str);
+				roi = UnkSaveDataWriter()->FUN_10085a80(und, src, 1);
+
+				if (roi != NULL) {
+					roi->SetUnknown0x0c(0);
+				}
+
+				delete[] src;
+				delete[] und;
+			}
+			else if (unk0x04 == 3) {
+				LegoChar* src = new LegoChar[strlen(str)];
+				strcpy(src, str + 1);
+
+				for (LegoChar* i = &src[strlen(src) - 1]; i > src; i--) {
+					if ((*i < '0' || *i > '9') && *i != '_') {
+						break;
+					}
+
+					*i = '\0';
+				}
+
+				strlwr(src);
+
+				LegoChar* und = FUN_10069150(str);
+				roi = UnkSaveDataWriter()->FUN_10085210(und, src, 1);
+
+				if (roi != NULL) {
+					roi->SetUnknown0x0c(0);
+				}
+
+				delete[] src;
+				delete[] und;
+			}
+
+			if (roi != NULL) {
+				m_unk0x74->Append(roi);
+			}
+
+			delete[] str;
+		}
+	}
+}
+
+// STUB: LEGO1 0x100697c0
+LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar*, LegoChar*)
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x1006ad30
 void LegoAnimPresenter::PutFrame()
 {
@@ -165,10 +255,10 @@ void LegoAnimPresenter::StreamingTickle()
 	}
 }
 
-// STUB: LEGO1 0x1006b8c0
+// FUNCTION: LEGO1 0x1006b8c0
 void LegoAnimPresenter::DoneTickle()
 {
-	// TODO
+	MxVideoPresenter::DoneTickle();
 }
 
 // FUNCTION: LEGO1 0x1006b8d0
