@@ -127,3 +127,15 @@ void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
 		g_customizeAnimFile = NULL;
 	}
 }
+
+// STUB: LEGO1 0x10085210
+LegoROI* LegoUnkSaveDataWriter::FUN_10085210(LegoChar*, LegoChar*, undefined)
+{
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10085a80
+LegoROI* LegoUnkSaveDataWriter::FUN_10085a80(LegoChar* p_und1, LegoChar* p_und2, undefined p_und3)
+{
+	return FUN_10085210(p_und1, p_und2, p_und3);
+}
