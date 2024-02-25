@@ -1,5 +1,6 @@
 #include "jukebox.h"
 
+#include "act1state.h"
 #include "jukeboxstate.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -9,6 +10,7 @@
 #include "mxomni.h"
 #include "mxstillpresenter.h"
 #include "mxticklemanager.h"
+#include "mxtransitionmanager.h"
 #include "mxvideopresenter.h"
 
 DECOMP_SIZE_ASSERT(JukeBox, 0x104)
@@ -25,6 +27,18 @@ JukeBox::JukeBox()
 MxBool JukeBox::VTable0x5c()
 {
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x1005d830
+JukeBox::~JukeBox()
+{
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	ControlManager()->Unregister(this);
+	TickleManager()->UnregisterClient(this);
+	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x1005d8d0
@@ -65,6 +79,7 @@ MxLong JukeBox::Notify(MxParam& p_param)
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_transitionDestination);
+			result = 1;
 			break;
 		}
 	}
@@ -108,8 +123,120 @@ done:
 // FUNCTION: LEGO1 0x1005da70
 MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return true;
+	MxStillPresenter* bg;
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case c_dBackCtl:
+			switch (m_jukeBoxState->GetState()) {
+			case JukeBoxScript::e_mamaPapaBrickolini:
+				m_jukeBoxState->SetState(JukeBoxScript::e_residentialArea);
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_jailUnused:
+				m_jukeBoxState->SetState(JukeBoxScript::e_mamaPapaBrickolini);
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
+				bg->Enable(FALSE);
+				break;
+			case JukeBoxScript::e_act2Cave:
+				m_jukeBoxState->SetState(JukeBoxScript::e_jailUnused);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_bricksterChase:
+				m_jukeBoxState->SetState(JukeBoxScript::e_act2Cave);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_brickHunt:
+				m_jukeBoxState->SetState(JukeBoxScript::e_bricksterChase);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_residentialArea:
+				m_jukeBoxState->SetState(JukeBoxScript::e_brickHunt);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			}
+			return TRUE;
+			break;
+		case JukeBoxWorldScript::c_dFwdCtl:
+			switch (m_jukeBoxState->GetState()) {
+			case JukeBoxScript::e_mamaPapaBrickolini:
+				m_jukeBoxState->SetState(JukeBoxScript::e_jailUnused);
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_jailUnused:
+				m_jukeBoxState->SetState(JukeBoxScript::e_act2Cave);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_act2Cave:
+				m_jukeBoxState->SetState(JukeBoxScript::e_bricksterChase);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_bricksterChase:
+				m_jukeBoxState->SetState(JukeBoxScript::e_brickHunt);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_brickHunt:
+				m_jukeBoxState->SetState(JukeBoxScript::e_residentialArea);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
+				bg->Enable(FALSE);
+
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
+				bg->Enable(TRUE);
+				break;
+			case JukeBoxScript::e_residentialArea:
+				m_jukeBoxState->SetState(JukeBoxScript::e_mamaPapaBrickolini);
+				bg = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
+				bg->Enable(FALSE);
+				break;
+			}
+			break;
+		case JukeBoxWorldScript::c_noteCtl:
+			LegoGameState* gameState = GameState();
+			Act1State* act1State = (Act1State*) gameState->GetState("Act1State");
+			act1State->SetUnknown18(11);
+			m_transitionDestination = LegoGameState::Area::e_unk54;
+			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, 0, FALSE);
+			break;
+		}
+	}
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1005dde0

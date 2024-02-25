@@ -11,7 +11,17 @@
 // SIZE 0x104
 class JukeBox : public LegoWorld {
 public:
+	// JUKEBOXW.SI
+	enum JukeBoxWorldScript {
+		c_volDownCtl = 1,
+		c_volUpCtl = 2,
+		c_dBackCtl = 3,
+		c_dFwdCtl = 4,
+		c_noteCtl = 5,
+	};
+
 	JukeBox();
+	~JukeBox() override; // vtable+0x00
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
@@ -38,6 +48,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1005d810
 	// JukeBox::`scalar deleting destructor'
 
+	// JUKEBOX.SI (the actual audio)
 	enum JukeBoxScript {
 		e_mamaPapaBrickolini,
 		e_jailUnused,
