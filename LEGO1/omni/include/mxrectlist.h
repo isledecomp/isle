@@ -20,7 +20,7 @@ public:
 // VTABLE: LEGO1 0x100dc420
 class MxRectListCursor : public MxPtrListCursor<MxRect32> {
 public:
-	MxRectListCursor(MxRectList* p_list) : MxPtrListCursor<MxRect32>(p_list){};
+	MxRectListCursor(MxRectList* p_list) : MxPtrListCursor<MxRect32>(p_list) {}
 };
 
 // VTABLE: LEGO1 0x100dc3d8

@@ -38,7 +38,7 @@ public:
 // SIZE 0x10
 class LegoCacheSoundListCursor : public MxPtrListCursor<LegoCacheSound> {
 public:
-	LegoCacheSoundListCursor(LegoCacheSoundList* p_list) : MxPtrListCursor<LegoCacheSound>(p_list){};
+	LegoCacheSoundListCursor(LegoCacheSoundList* p_list) : MxPtrListCursor<LegoCacheSound>(p_list) {}
 };
 
 // TEMPLATE: LEGO1 0x1001e670

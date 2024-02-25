@@ -214,7 +214,7 @@ void LegoModelPresenter::ReadyTickle()
 
 	if (m_roi != NULL) {
 		if (m_compositePresenter && m_compositePresenter->IsA("LegoEntityPresenter")) {
-			((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI((LegoROI*) m_roi, m_addedToView, TRUE);
+			((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI(m_roi, m_addedToView, TRUE);
 			((LegoEntityPresenter*) m_compositePresenter)
 				->GetEntity()
 				->SetFlags(
@@ -240,7 +240,7 @@ void LegoModelPresenter::ReadyTickle()
 				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
 
 				if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter")) {
-					((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI((LegoROI*) m_roi, TRUE, TRUE);
+					((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI(m_roi, TRUE, TRUE);
 					((LegoEntityPresenter*) m_compositePresenter)
 						->GetEntity()
 						->SetFlags(

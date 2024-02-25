@@ -20,7 +20,7 @@ public:
 	LegoStorage() : m_mode(0) {}
 
 	// FUNCTION: LEGO1 0x10045ad0
-	virtual ~LegoStorage(){};
+	virtual ~LegoStorage() {}
 
 	virtual LegoResult Read(void* p_buffer, LegoU32 p_size) = 0;
 	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size) = 0;

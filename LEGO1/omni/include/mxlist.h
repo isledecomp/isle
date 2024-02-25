@@ -135,7 +135,7 @@ private:
 template <class T>
 class MxPtrListCursor : public MxListCursor<T*> {
 public:
-	MxPtrListCursor(MxPtrList<T>* p_list) : MxListCursor<T*>(p_list){};
+	MxPtrListCursor(MxPtrList<T>* p_list) : MxListCursor<T*>(p_list) {}
 };
 
 template <class T>
