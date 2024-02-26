@@ -224,11 +224,31 @@ void LegoAnimPresenter::FUN_100695c0()
 	}
 }
 
-// STUB: LEGO1 0x100697c0
-LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar*, LegoChar*)
+// FUNCTION: LEGO1 0x100697c0
+LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2)
 {
-	// TODO
-	return NULL;
+	const LegoChar* str = p_und1;
+	const char* var = VariableTable()->GetVariable(p_und1);
+
+	if (*var) {
+		str = var;
+	}
+
+	LegoU32 len = strlen(str) + (p_und2 ? strlen(p_und2) : 0) + 2;
+	LegoChar* result = new LegoChar[len];
+
+	if (result != NULL) {
+		*result = '\0';
+
+		if (p_und2) {
+			strcpy(result, p_und2);
+			strcat(result, ":");
+		}
+
+		strcat(result, str);
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x100698b0
