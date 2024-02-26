@@ -46,7 +46,7 @@ public:
 
 	void WrappedSetLocalTransform(Matrix4& p_transform);
 	void FUN_100a46b0(Matrix4& p_transform);
-	void FUN_100a58f0(Matrix4& p_transform);
+	void FUN_100a58f0(const Matrix4& p_transform);
 
 	inline const char* GetName() const { return m_name; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }

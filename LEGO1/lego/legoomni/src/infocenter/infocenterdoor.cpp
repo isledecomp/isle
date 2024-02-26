@@ -109,7 +109,7 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 			result = 1;
 			break;
 		case 4:
-			if (GameState()->GetUnknownC()) {
+			if (GameState()->GetActorId()) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {
 					m_unk0xf8 = LegoGameState::e_unk4;

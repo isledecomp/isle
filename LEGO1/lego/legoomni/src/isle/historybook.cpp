@@ -80,7 +80,7 @@ inline void SetColor(MxStillPresenter* p_presenter, MxU8 p_color, MxU8* p_colors
 void HistoryBook::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
-	GameState()->GetScores()->WriteScoreHistory();
+	GameState()->GetHistory()->WriteScoreHistory();
 
 	char bitmap[] = "A_Bitmap";
 	for (MxS16 i = 0; i < 26; i++) {
@@ -93,8 +93,8 @@ void HistoryBook::ReadyWorld()
 		{0x76, 0x4c, 0x38}; // yellow - #FFB900, blue - #00548C, red - #CB1220, background - #CECECE, border - #74818B
 	MxS32 scoreY = 0x79;
 
-	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetScores()->m_count; scoreIndex++) {
-		LegoGameState::ScoreItem* score = GameState()->GetScores()->GetScore(scoreIndex);
+	for (MxS16 scoreIndex = 0; scoreIndex < GameState()->GetHistory()->m_count; scoreIndex++) {
+		LegoGameState::ScoreItem* score = GameState()->GetHistory()->GetScore(scoreIndex);
 
 		MxStillPresenter** scorebox = &m_scores[scoreIndex];
 		*scorebox = scoreboxMaster->Clone();
@@ -110,14 +110,14 @@ void HistoryBook::ReadyWorld()
 
 		MxS32 scoreboxX = 1;
 		MxS32 scoreboxRow = 5;
-		MxU8* scoreState = score->m_state;
+		MxS32 scoreState = 0;
 
 		for (; scoreboxRow > 0; scoreboxRow--) {
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
-				SetColor(*scorebox, scoreState[scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
+				SetColor(*scorebox, score->m_state[scoreState][scoreBoxColumn], scoreColors, scoreboxX, scoreboxY);
 			}
 
-			scoreState += 5;
+			scoreState++;
 			scoreboxX += 5;
 		}
 

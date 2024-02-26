@@ -248,6 +248,12 @@ void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c)
 	}
 }
 
+// FUNCTION: LEGO1 0x10015880
+void SetCurrentVehicle(IslePathActor* p_currentVehicle)
+{
+	LegoOmni::GetInstance()->SetCurrentVehicle(p_currentVehicle);
+}
+
 // FUNCTION: LEGO1 0x100158c0
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 {

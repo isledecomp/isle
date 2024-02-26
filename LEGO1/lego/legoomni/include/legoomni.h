@@ -228,6 +228,7 @@ public:
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
+	inline void SetCurrentVehicle(IslePathActor* p_currentVehicle) { m_currentVehicle = p_currentVehicle; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 
@@ -280,6 +281,7 @@ LegoTextureContainer* TextureContainer();
 ViewLODListManager* GetViewLODListManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
+void SetCurrentVehicle(IslePathActor* p_currentVehicle);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 LegoROI* FindROI(const char* p_name);
 MxDSAction& GetCurrentAction();

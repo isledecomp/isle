@@ -103,7 +103,7 @@ MxU32 Helicopter::VTable0xcc()
 	AnimationManager()->FUN_1005f6d0(FALSE);
 
 	if (CurrentVehicle()) {
-		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
+		if (CurrentVehicle()->GetActorId() != GameState()->GetActorId()) {
 			CurrentVehicle()->VTable0xe4();
 		}
 	}

@@ -201,7 +201,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 		if (!m_unk0x1d4) {
 			PlayMusic(JukeBox::e_informationCenter);
-			GameState()->FUN_10039780(m_selectedCharacter);
+			GameState()->SetVehicle(m_selectedCharacter);
 
 			switch (m_selectedCharacter) {
 			case e_pepper:
@@ -303,7 +303,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case 5:
 		if (action->GetObjectId() == m_currentInfomainScript) {
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != e_noCharacter) {
-				GameState()->FUN_10039780(m_selectedCharacter);
+				GameState()->SetVehicle(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
@@ -734,7 +734,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 				switch (m_mapAreas[m_unk0x1c8].m_unk0x04) {
 				case 3:
-					GameState()->FUN_10039780(m_selectedCharacter);
+					GameState()->SetVehicle(m_selectedCharacter);
 
 					switch (m_selectedCharacter) {
 					case e_pepper:
@@ -810,23 +810,23 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 					switch (m_selectedCharacter) {
 					case e_pepper:
 						dialogueToPlay = c_pepperCharacterSelect;
-						GameState()->SetUnknown0x0c(m_selectedCharacter);
+						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					case e_mama:
 						dialogueToPlay = c_mamaCharacterSelect;
-						GameState()->SetUnknown0x0c(m_selectedCharacter);
+						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					case e_papa:
 						dialogueToPlay = c_papaCharacterSelect;
-						GameState()->SetUnknown0x0c(m_selectedCharacter);
+						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					case e_nick:
 						dialogueToPlay = c_nickCharacterSelect;
-						GameState()->SetUnknown0x0c(m_selectedCharacter);
+						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					case e_laura:
 						dialogueToPlay = c_lauraCharacterSelect;
-						GameState()->SetUnknown0x0c(m_selectedCharacter);
+						GameState()->SetActorId(m_selectedCharacter);
 						break;
 					default:
 						dialogueToPlay =
@@ -948,7 +948,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					InputManager()->SetUnknown336(TRUE);
 					break;
 				case LegoGameState::e_unk4:
-					if (state->GetUnknownC()) {
+					if (state->GetActorId()) {
 						if (m_infocenterState->HasRegistered()) {
 							m_infocenterState->SetUnknown0x74(5);
 							m_transitionDestination = state->GetPreviousArea();
@@ -1228,7 +1228,7 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 	if (p_display) {
 		MxS32 x, y;
 
-		switch (GameState()->GetUnknownC()) {
+		switch (GameState()->GetActorId()) {
 		case 1:
 			x = 302;
 			y = 81;
@@ -1292,7 +1292,7 @@ void Infocenter::Reset()
 	InitializeBitmaps();
 	m_selectedCharacter = e_pepper;
 
-	GameState()->FUN_10039780(e_pepper);
+	GameState()->SetVehicle(e_pepper);
 
 	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
 

@@ -29,7 +29,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 			return 1;
 		}
 
-		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
+		if (CurrentVehicle()->GetActorId() != GameState()->GetActorId()) {
 			CurrentVehicle()->VTable0xe4();
 		}
 

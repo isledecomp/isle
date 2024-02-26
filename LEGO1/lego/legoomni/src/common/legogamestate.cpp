@@ -8,6 +8,7 @@
 #include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legostate.h"
+#include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -19,9 +20,9 @@
 
 #include <stdio.h>
 
-DECOMP_SIZE_ASSERT(LegoGameState::ScoreName, 0xe)
+DECOMP_SIZE_ASSERT(LegoGameState::Username, 0xe)
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
-DECOMP_SIZE_ASSERT(LegoGameState::Scores, 0x372)
+DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
 
 // GLOBAL: LEGO1 0x100f3e40
@@ -45,21 +46,28 @@ const char* g_endOfVariables = "END_OF_VARIABLES";
 
 // GLOBAL: LEGO1 0x100f3e58
 ColorStringStruct g_colorSaveData[43] = {
-	{"c_dbbkfny0", "lego red"},    {"c_dbbkxly0", "lego white"},  {"c_chbasey0", "lego black"},
-	{"c_chbacky0", "lego black"},  {"c_chdishy0", "lego white"},  {"c_chhorny0", "lego black"},
-	{"c_chljety1", "lego black"},  {"c_chrjety1", "lego black"},  {"c_chmidly0", "lego black"},
-	{"c_chmotry0", "lego blue"},   {"c_chsidly0", "lego black"},  {"c_chsidry0", "lego black"},
-	{"c_chstuty0", "lego black"},  {"c_chtaily0", "lego black"},  {"c_chwindy1", "lego black"},
-	{"c_dbfbrdy0", "lego red"},    {"c_dbflagy0", "lego yellow"}, {"c_dbfrfny4", "lego red"},
-	{"c_dbfrxly0", "lego white"},  {"c_dbhndly0", "lego white"},  {"c_dbltbry0", "lego white"},
-	{"c_jsdashy0", "lego white"},  {"c_jsexhy0", "lego black"},   {"c_jsfrnty5", "lego black"},
-	{"c_jshndly0", "lego red"},    {"c_jslsidy0", "lego black"},  {"c_jsrsidy0", "lego black"},
-	{"c_jsskiby0", "lego red"},    {"c_jswnshy5", "lego white"},  {"c_rcbacky6", "lego green"},
-	{"c_rcedgey0", "lego green"},  {"c_rcfrmey0", "lego red"},    {"c_rcfrnty6", "lego green"},
-	{"c_rcmotry0", "lego white"},  {"c_rcsidey0", "lego green"},  {"c_rcstery0", "lego white"},
-	{"c_rcstrpy0", "lego yellow"}, {"c_rctailya", "lego white"},  {"c_rcwhl1y0", "lego white"},
-	{"c_rcwhl2y0", "lego white"},  {"c_jsbasey0", "lego white"},  {"c_chblady0", "lego black"},
-	{"c_chseaty0", "lego white"},
+	{"c_dbbkfny0", "lego red"},    {"c_dbbkxly0", "lego white"}, // dunebuggy back fender, dunebuggy back axle
+	{"c_chbasey0", "lego black"},  {"c_chbacky0", "lego black"}, // copter base, copter back
+	{"c_chdishy0", "lego white"},  {"c_chhorny0", "lego black"}, // copter dish, copter horn
+	{"c_chljety1", "lego black"},  {"c_chrjety1", "lego black"}, // copter left jet, copter right jet
+	{"c_chmidly0", "lego black"},  {"c_chmotry0", "lego blue"},  // copter middle, copter motor
+	{"c_chsidly0", "lego black"},  {"c_chsidry0", "lego black"}, // copter side left, copter side right
+	{"c_chstuty0", "lego black"},  {"c_chtaily0", "lego black"}, // copter ???, copter tail
+	{"c_chwindy1", "lego black"},  {"c_dbfbrdy0", "lego red"},   // copter ???, dunebuggy ???
+	{"c_dbflagy0", "lego yellow"}, {"c_dbfrfny4", "lego red"},   // dunebuggy flag, dunebuggy front fender
+	{"c_dbfrxly0", "lego white"},  {"c_dbhndly0", "lego white"}, // dunebuggy front axle, dunebuggy handlebar
+	{"c_dbltbry0", "lego white"},  {"c_jsdashy0", "lego white"}, // dunebuggy ???,  jetski dash
+	{"c_jsexhy0", "lego black"},   {"c_jsfrnty5", "lego black"}, // jetski exhaust, jetski front
+	{"c_jshndly0", "lego red"},    {"c_jslsidy0", "lego black"}, // jetski handlebar, jetski left side
+	{"c_jsrsidy0", "lego black"},  {"c_jsskiby0", "lego red"},   // jetski right side, jetski ???
+	{"c_jswnshy5", "lego white"},  {"c_rcbacky6", "lego green"}, // jetski windshield, racecar back
+	{"c_rcedgey0", "lego green"},  {"c_rcfrmey0", "lego red"},   // racecar edge, racecar frame
+	{"c_rcfrnty6", "lego green"},  {"c_rcmotry0", "lego white"}, // racecar front, racecar motor
+	{"c_rcsidey0", "lego green"},  {"c_rcstery0", "lego white"}, // racecar side, racecar steering wheel
+	{"c_rcstrpy0", "lego yellow"}, {"c_rctailya", "lego white"}, // racecar stripe, racecar tail
+	{"c_rcwhl1y0", "lego white"},  {"c_rcwhl2y0", "lego white"}, // racecar wheels 1, racecar wheels 2
+	{"c_jsbasey0", "lego white"},  {"c_chblady0", "lego black"}, // jetski base, copter blades
+	{"c_chseaty0", "lego white"},                                // copter seat
 };
 
 // NOTE: This offset = the end of the variables table, the last entry
@@ -69,17 +77,21 @@ extern const char* g_endOfVariables;
 // FUNCTION: LEGO1 0x10039550
 LegoGameState::LegoGameState()
 {
-	// TODO
+	SetColors();
 	SetROIHandlerFunction();
 
-	this->m_stateCount = 0;
-	this->m_unk0x0c = 0;
-	this->m_savePath = NULL;
-	this->m_currentArea = e_noArea;
-	this->m_previousArea = e_noArea;
-	this->m_unk0x42c = e_noArea;
-	this->m_isDirty = FALSE;
-	this->m_loadedAct = e_actNotFound;
+	m_stateCount = 0;
+	m_actorId = 0;
+	m_savePath = NULL;
+	m_stateArray = NULL;
+	m_unk0x41c = -1;
+	m_unk0x26 = 0;
+	m_currentArea = e_noArea;
+	m_previousArea = e_noArea;
+	m_unk0x42c = e_noArea;
+	m_isDirty = FALSE;
+	m_loadedAct = e_actNotFound;
+	SetCurrentAct(e_act1);
 
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
@@ -113,10 +125,29 @@ LegoGameState::~LegoGameState()
 	delete[] m_savePath;
 }
 
-// STUB: LEGO1 0x10039780
-void LegoGameState::FUN_10039780(MxU8)
+// FUNCTION: LEGO1 0x10039780
+void LegoGameState::SetVehicle(MxU8 p_actorId)
 {
-	// TODO
+	if (p_actorId) {
+		m_actorId = p_actorId;
+	}
+	IslePathActor* oldVehicle = CurrentVehicle();
+	SetCurrentVehicle(NULL);
+	IslePathActor* newVehicle = new IslePathActor();
+	LegoROI* roi = UnkSaveDataWriter()->FUN_10083500(LegoActor::GetActorName(m_actorId), FALSE);
+	MxDSAction action;
+	action.SetAtomId(*g_isleScript);
+	action.SetObjectId(100000);
+	newVehicle->Create(action);
+	newVehicle->SetActorId(p_actorId);
+	newVehicle->SetROI(roi, FALSE, FALSE);
+	if (oldVehicle) {
+		newVehicle->GetROI()->FUN_100a58f0(oldVehicle->GetROI()->GetLocal2World());
+		newVehicle->SetUnknown88(oldVehicle->GetUnknown88());
+		delete oldVehicle;
+	}
+	newVehicle->ClearFlag(0x2);
+	SetCurrentVehicle(newVehicle);
 }
 
 // STUB: LEGO1 0x10039940
@@ -145,7 +176,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			fileStream.Write(&maybeVersion, 4);
 			fileStream.Write(&m_unk0x24, 2);
 			fileStream.Write(&m_currentAct, 2);
-			fileStream.Write(&m_unk0x0c, 1);
+			fileStream.Write(&m_actorId, 1);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
 				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
@@ -649,6 +680,15 @@ void LegoGameState::SwitchArea(Area p_area)
 	}
 }
 
+// FUNCTION: LEGO1 0x1003ba90
+void LegoGameState::SetColors()
+{
+	MxVariableTable* variables = VariableTable();
+	for (int i = 0; i < _countof(g_colorSaveData); i++) {
+		variables->SetVariable(g_colorSaveData[i].m_targetName, g_colorSaveData[i].m_colorName);
+	}
+}
+
 // FUNCTION: LEGO1 0x1003bac0
 void LegoGameState::SetROIHandlerFunction()
 {
@@ -725,21 +765,50 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
+// FUNCTION: LEGO1 0x1003c670
+LegoGameState::Username::Username()
+{
+	memset(m_letters, 0, sizeof(m_letters));
+}
+
+// FUNCTION: LEGO1 0x1003c690
+MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_stream)
+{
+	if (p_stream->IsReadMode()) {
+		for (MxS16 i = 0; i < 7; i++) {
+			p_stream->Read(&m_letters[i], 2);
+		}
+	}
+	else if (p_stream->IsWriteMode()) {
+		for (MxS16 i = 0; i < 7; i++) {
+			p_stream->Write(&m_letters[i], 2);
+		}
+	}
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1003c710
-LegoGameState::ScoreName* LegoGameState::ScoreName::operator=(const ScoreName* p_other)
+LegoGameState::Username* LegoGameState::Username::operator=(const Username* p_other)
 {
 	memcpy(m_letters, p_other->m_letters, sizeof(m_letters));
 	return this;
 }
 
+// FUNCTION: LEGO1 0x1003c830
+LegoGameState::History::History()
+{
+	m_count = 0;
+	m_unk0x372 = 0;
+}
+
 // STUB: LEGO1 0x1003c870
-void LegoGameState::Scores::WriteScoreHistory()
+void LegoGameState::History::WriteScoreHistory()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x1003ccf0
-void LegoGameState::Scores::FUN_1003ccf0(LegoFile&)
+void LegoGameState::History::FUN_1003ccf0(LegoFile&)
 {
 	// TODO
 }
@@ -753,11 +822,11 @@ void LegoGameState::SerializeScoreHistory(MxS16 p_flags)
 	savePath += g_historyGSI;
 
 	if (p_flags == LegoFile::c_write) {
-		m_unk0xa6.WriteScoreHistory();
+		m_history.WriteScoreHistory();
 	}
 
 	if (stream.Open(savePath.GetData(), p_flags) == SUCCESS) {
-		m_unk0xa6.FUN_1003ccf0(stream);
+		m_history.FUN_1003ccf0(stream);
 	}
 }
 

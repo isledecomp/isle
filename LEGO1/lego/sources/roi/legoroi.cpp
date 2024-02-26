@@ -50,7 +50,7 @@ void LegoROI::FUN_100a46b0(Matrix4& p_transform)
 }
 
 // STUB: LEGO1 0x100a58f0
-void LegoROI::FUN_100a58f0(Matrix4& p_transform)
+void LegoROI::FUN_100a58f0(const Matrix4& p_transform)
 {
 }
 
