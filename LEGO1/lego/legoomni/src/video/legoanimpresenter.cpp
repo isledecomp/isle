@@ -264,13 +264,13 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_und1, const Leg
 	}
 
 	if (str != NULL && *str != '\0' && p_und1.size() > 0) {
-		for (CompoundObject::iterator it = p_und1.begin(); it != p_und1.end(); it++) {
+		for (CompoundObject::const_iterator it = p_und1.begin(); it != p_und1.end(); it++) {
 			LegoROI* roi = (LegoROI*) *it;
 			const char* name = roi->GetName();
 
 			if (name != NULL) {
 				if (!strcmpi(name, str)) {
-					m_unk0x70->Append(((LegoROI*) *it));
+					m_unk0x70->Append(roi);
 					result = TRUE;
 					break;
 				}
