@@ -44,7 +44,7 @@ void PoliceState::FUN_1005ea40()
 		return;
 	}
 
-	switch (CurrentVehicle()->GetActorId()) {
+	switch (CurrentActor()->GetActorId()) {
 	case 4:
 		policeScript = Police::PoliceScript::c_lauraAnim;
 		m_policeScript = policeScript;

@@ -85,10 +85,10 @@ LegoGameState::LegoGameState()
 	m_savePath = NULL;
 	m_stateArray = NULL;
 	m_unk0x41c = -1;
-	m_unk0x26 = 0;
 	m_currentArea = e_noArea;
 	m_previousArea = e_noArea;
 	m_unk0x42c = e_noArea;
+	m_unk0x26 = 0;
 	m_isDirty = FALSE;
 	m_loadedAct = e_actNotFound;
 	SetCurrentAct(e_act1);
@@ -96,7 +96,7 @@ LegoGameState::LegoGameState()
 	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
 	VariableTable()->SetVariable(m_backgroundColor);
 
-	m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundcolor", "set 56 54 68");
+	m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundColor", "set 56 54 68");
 	VariableTable()->SetVariable(m_tempBackgroundColor);
 
 	m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
@@ -126,28 +126,34 @@ LegoGameState::~LegoGameState()
 }
 
 // FUNCTION: LEGO1 0x10039780
-void LegoGameState::SetVehicle(MxU8 p_actorId)
+void LegoGameState::SetActor(MxU8 p_actorId)
 {
 	if (p_actorId) {
 		m_actorId = p_actorId;
 	}
-	IslePathActor* oldVehicle = CurrentVehicle();
-	SetCurrentVehicle(NULL);
-	IslePathActor* newVehicle = new IslePathActor();
-	LegoROI* roi = UnkSaveDataWriter()->FUN_10083500(LegoActor::GetActorName(m_actorId), FALSE);
+
+	IslePathActor* oldActor = CurrentActor();
+	SetCurrentActor(NULL);
+
+	IslePathActor* newActor = new IslePathActor();
+	const char* actorName = LegoActor::GetActorName(m_actorId);
+	LegoROI* roi = UnkSaveDataWriter()->FUN_10083500(actorName, FALSE);
 	MxDSAction action;
+
 	action.SetAtomId(*g_isleScript);
 	action.SetObjectId(100000);
-	newVehicle->Create(action);
-	newVehicle->SetActorId(p_actorId);
-	newVehicle->SetROI(roi, FALSE, FALSE);
-	if (oldVehicle) {
-		newVehicle->GetROI()->FUN_100a58f0(oldVehicle->GetROI()->GetLocal2World());
-		newVehicle->SetUnknown88(oldVehicle->GetUnknown88());
-		delete oldVehicle;
+	newActor->Create(action);
+	newActor->SetActorId(p_actorId);
+	newActor->SetROI(roi, FALSE, FALSE);
+
+	if (oldActor) {
+		newActor->GetROI()->FUN_100a58f0(oldActor->GetROI()->GetLocal2World());
+		newActor->SetUnknown88(oldActor->GetUnknown88());
+		delete oldActor;
 	}
-	newVehicle->ClearFlag(0x2);
-	SetCurrentVehicle(newVehicle);
+
+	newActor->ClearFlag(0x02);
+	SetCurrentActor(newActor);
 }
 
 // STUB: LEGO1 0x10039940
@@ -221,55 +227,58 @@ void LegoGameState::SetSavePath(char* p_savePath)
 }
 
 // FUNCTION: LEGO1 0x10039f70
-MxResult LegoGameState::WriteVariable(LegoStorage* p_stream, MxVariableTable* p_from, const char* p_variableName)
+MxResult LegoGameState::WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName)
 {
 	MxResult result = FAILURE;
 	const char* variableValue = p_from->GetVariable(p_variableName);
 
 	if (variableValue) {
 		MxU8 length = strlen(p_variableName);
-		if (p_stream->Write((char*) &length, 1) == SUCCESS) {
-			if (p_stream->Write(p_variableName, length) == SUCCESS) {
+		if (p_storage->Write((char*) &length, 1) == SUCCESS) {
+			if (p_storage->Write(p_variableName, length) == SUCCESS) {
 				length = strlen(variableValue);
-				if (p_stream->Write((char*) &length, 1) == SUCCESS) {
-					result = p_stream->Write((char*) variableValue, length);
+				if (p_storage->Write((char*) &length, 1) == SUCCESS) {
+					result = p_storage->Write((char*) variableValue, length);
 				}
 			}
 		}
 	}
+
 	return result;
 }
 
 // FUNCTION: LEGO1 0x1003a020
-MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_stream)
+MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_storage)
 {
 	MxU8 len = strlen(g_endOfVariables);
-	if (p_stream->Write(&len, 1) == SUCCESS) {
-		return p_stream->Write(g_endOfVariables, len);
+
+	if (p_storage->Write(&len, 1) == SUCCESS) {
+		return p_storage->Write(g_endOfVariables, len);
 	}
+
 	return FAILURE;
 }
 
 // 95% match, just some instruction ordering differences on the call to
 // MxVariableTable::SetVariable at the end.
 // FUNCTION: LEGO1 0x1003a080
-MxS32 LegoGameState::ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to)
+MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 {
 	MxS32 result = 1;
 	MxU8 length;
 
-	if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+	if (p_storage->Read((char*) &length, 1) == SUCCESS) {
 		char nameBuffer[256];
-		if (p_stream->Read(nameBuffer, length) == SUCCESS) {
+		if (p_storage->Read(nameBuffer, length) == SUCCESS) {
 			nameBuffer[length] = '\0';
 			if (strcmp(nameBuffer, g_endOfVariables) == 0) {
 				// 2 -> "This was the last entry, done reading."
 				result = 2;
 			}
 			else {
-				if (p_stream->Read((char*) &length, 1) == SUCCESS) {
+				if (p_storage->Read((char*) &length, 1) == SUCCESS) {
 					char valueBuffer[256];
-					if (p_stream->Read(valueBuffer, length) == SUCCESS) {
+					if (p_storage->Read(valueBuffer, length) == SUCCESS) {
 						result = 0;
 						valueBuffer[length] = '\0';
 						p_to->SetVariable(nameBuffer, valueBuffer);
@@ -278,6 +287,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to)
 			}
 		}
 	}
+
 	return result;
 }
 
@@ -590,7 +600,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_garadoor:
 		LoadIsle();
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
-		CurrentVehicle()->ResetWorldTransform(FALSE);
+		CurrentActor()->ResetWorldTransform(FALSE);
 		NavController()->SetLocation(0x3b);
 		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1160, NULL);
@@ -603,10 +613,10 @@ void LegoGameState::SwitchArea(Area p_area)
 		}
 		else {
 			SetCameraControllerFromIsle();
-			CurrentVehicle()->ResetWorldTransform(TRUE);
+			CurrentActor()->ResetWorldTransform(TRUE);
 			AnimationManager()->FUN_1005f0b0();
 		}
-		CurrentVehicle()->VTable0xe8(p_area, TRUE, 7);
+		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	}
 	case e_hospital:
@@ -616,9 +626,9 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_unk33:
 		LoadIsle();
 		SetCameraControllerFromIsle();
-		CurrentVehicle()->ResetWorldTransform(TRUE);
+		CurrentActor()->ResetWorldTransform(TRUE);
 		AnimationManager()->FUN_1005f0b0();
-		CurrentVehicle()->VTable0xe8(p_area, TRUE, 7);
+		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	case e_police:
 		VideoManager()->SetUnk0x554(TRUE);
@@ -683,9 +693,10 @@ void LegoGameState::SwitchArea(Area p_area)
 // FUNCTION: LEGO1 0x1003ba90
 void LegoGameState::SetColors()
 {
-	MxVariableTable* variables = VariableTable();
-	for (int i = 0; i < _countof(g_colorSaveData); i++) {
-		variables->SetVariable(g_colorSaveData[i].m_targetName, g_colorSaveData[i].m_colorName);
+	MxVariableTable* variableTable = VariableTable();
+
+	for (MxS32 i = 0; i < _countof(g_colorSaveData); i++) {
+		variableTable->SetVariable(g_colorSaveData[i].m_targetName, g_colorSaveData[i].m_colorName);
 	}
 }
 
@@ -768,22 +779,24 @@ void LegoGameState::RegisterState(LegoState* p_state)
 // FUNCTION: LEGO1 0x1003c670
 LegoGameState::Username::Username()
 {
-	memset(m_letters, 0, sizeof(m_letters));
+	memset(m_letters, -1, sizeof(m_letters));
 }
 
 // FUNCTION: LEGO1 0x1003c690
-MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_stream)
+MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_storage)
 {
-	if (p_stream->IsReadMode()) {
+	if (p_storage->IsReadMode()) {
 		for (MxS16 i = 0; i < 7; i++) {
-			p_stream->Read(&m_letters[i], 2);
+			p_storage->Read(&m_letters[i], sizeof(m_letters[i]));
 		}
 	}
-	else if (p_stream->IsWriteMode()) {
+	else if (p_storage->IsWriteMode()) {
 		for (MxS16 i = 0; i < 7; i++) {
-			p_stream->Write(&m_letters[i], 2);
+			MxS16 letter = m_letters[i];
+			p_storage->Write(&letter, sizeof(letter));
 		}
 	}
+
 	return SUCCESS;
 }
 

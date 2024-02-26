@@ -29,8 +29,8 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 			return 1;
 		}
 
-		if (CurrentVehicle()->GetActorId() != GameState()->GetActorId()) {
-			CurrentVehicle()->VTable0xe4();
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			CurrentActor()->VTable0xe4();
 		}
 
 		((Isle*) FindWorld(*g_isleScript, 0))->SetUnknown13c(0x35);

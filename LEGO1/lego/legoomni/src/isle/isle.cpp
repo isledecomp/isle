@@ -46,8 +46,8 @@ Isle::~Isle()
 		InputManager()->ClearWorld();
 	}
 
-	if (CurrentVehicle() != NULL) {
-		VTable0x6c(CurrentVehicle());
+	if (CurrentActor() != NULL) {
+		VTable0x6c(CurrentActor());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -121,7 +121,7 @@ MxLong Isle::Notify(MxParam& p_param)
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
 			case 4:
-				result = CurrentVehicle()->Notify(p_param);
+				result = CurrentActor()->Notify(p_param);
 				break;
 			case 8:
 				result = m_towtrack->Notify(p_param);

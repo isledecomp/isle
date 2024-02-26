@@ -90,7 +90,7 @@ public:
 	// SIZE 0x0c
 	struct Username {
 		Username();
-		MxResult ReadWrite(LegoStorage* p_stream);
+		MxResult ReadWrite(LegoStorage* p_storage);
 		Username* operator=(const Username* p_other);
 
 		MxS16 m_letters[7]; // 0x00
@@ -151,14 +151,14 @@ public:
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
-	void SetVehicle(MxU8 p_actorId);
+	void SetActor(MxU8 p_actorId);
 	void FUN_10039940();
 
 private:
 	void RegisterState(LegoState* p_state);
-	MxResult WriteVariable(LegoStorage* p_stream, MxVariableTable* p_from, const char* p_variableName);
-	MxResult WriteEndOfVariables(LegoStorage* p_stream);
-	MxS32 ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to);
+	MxResult WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName);
+	MxResult WriteEndOfVariables(LegoStorage* p_storage);
+	MxS32 ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to);
 	void SetColors();
 	void SetROIHandlerFunction();
 
@@ -184,5 +184,8 @@ private:
 };
 
 MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen);
+
+// SYNTHETIC: LEGO1 0x1003c860
+// LegoGameState::ScoreItem::ScoreItem
 
 #endif // LEGOGAMESTATE_H

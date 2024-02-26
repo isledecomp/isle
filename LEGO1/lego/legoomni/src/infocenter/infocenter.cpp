@@ -201,7 +201,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 
 		if (!m_unk0x1d4) {
 			PlayMusic(JukeBox::e_informationCenter);
-			GameState()->SetVehicle(m_selectedCharacter);
+			GameState()->SetActor(m_selectedCharacter);
 
 			switch (m_selectedCharacter) {
 			case e_pepper:
@@ -303,7 +303,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case 5:
 		if (action->GetObjectId() == m_currentInfomainScript) {
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != e_noCharacter) {
-				GameState()->SetVehicle(m_selectedCharacter);
+				GameState()->SetActor(m_selectedCharacter);
 			}
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
@@ -734,7 +734,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 
 				switch (m_mapAreas[m_unk0x1c8].m_unk0x04) {
 				case 3:
-					GameState()->SetVehicle(m_selectedCharacter);
+					GameState()->SetActor(m_selectedCharacter);
 
 					switch (m_selectedCharacter) {
 					case e_pepper:
@@ -1292,7 +1292,7 @@ void Infocenter::Reset()
 	InitializeBitmaps();
 	m_selectedCharacter = e_pepper;
 
-	GameState()->SetVehicle(e_pepper);
+	GameState()->SetActor(e_pepper);
 
 	HelicopterState* state = (HelicopterState*) GameState()->GetState("HelicopterState");
 
