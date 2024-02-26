@@ -251,11 +251,35 @@ LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar* p_und1, const LegoChar
 	return result;
 }
 
-// STUB: LEGO1 0x100698b0
-LegoBool LegoAnimPresenter::FUN_100698b0(CompoundObject&, const LegoChar*)
+// FUNCTION: LEGO1 0x100698b0
+LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_und1, const LegoChar* p_und2)
 {
-	// TODO
-	return FALSE;
+	LegoBool result = FALSE;
+
+	LegoChar* str;
+	if (*(str = FUN_100697c0(p_und2, NULL)) == '*') {
+		LegoChar* tmp = FUN_10069150(str);
+		delete[] str;
+		str = tmp;
+	}
+
+	if (str != NULL && *str != '\0' && p_und1.size() > 0) {
+		for (CompoundObject::iterator it = p_und1.begin(); it != p_und1.end(); it++) {
+			LegoROI* roi = (LegoROI*) *it;
+			const char* name = roi->GetName();
+
+			if (name != NULL) {
+				if (!strcmpi(name, str)) {
+					m_unk0x70->Append(((LegoROI*) *it));
+					result = TRUE;
+					break;
+				}
+			}
+		}
+	}
+
+	delete[] str;
+	return result;
 }
 
 // STUB: LEGO1 0x1006ad30
