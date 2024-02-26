@@ -179,9 +179,9 @@ LegoNavController* NavController()
 }
 
 // FUNCTION: LEGO1 0x10015790
-IslePathActor* CurrentVehicle()
+IslePathActor* CurrentActor()
 {
-	return LegoOmni::GetInstance()->GetCurrentVehicle();
+	return LegoOmni::GetInstance()->GetCurrentActor();
 }
 
 // FUNCTION: LEGO1 0x100157a0
@@ -246,6 +246,12 @@ void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c)
 	if (roi) {
 		roi->SetUnknown0x0c(p_unk0x0c);
 	}
+}
+
+// FUNCTION: LEGO1 0x10015880
+void SetCurrentActor(IslePathActor* p_currentActor)
+{
+	LegoOmni::GetInstance()->SetCurrentActor(p_currentActor);
 }
 
 // FUNCTION: LEGO1 0x100158c0
@@ -478,7 +484,7 @@ void LegoOmni::Init()
 	m_worldList = NULL;
 	m_currentWorld = NULL;
 	m_exit = FALSE;
-	m_currentVehicle = NULL;
+	m_currentActor = NULL;
 	m_saveDataWriter = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;

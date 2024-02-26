@@ -67,9 +67,9 @@ void Helicopter::VTable0xe4()
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_unk60);
-		if (CurrentVehicle()) {
-			if (CurrentVehicle()->IsA("IslePathActor")) {
-				((IslePathActor*) CurrentVehicle())->VTable0xe8(0x37, TRUE, 7);
+		if (CurrentActor()) {
+			if (CurrentActor()->IsA("IslePathActor")) {
+				((IslePathActor*) CurrentActor())->VTable0xe8(0x37, TRUE, 7);
 			}
 		}
 	}
@@ -102,9 +102,9 @@ MxU32 Helicopter::VTable0xcc()
 
 	AnimationManager()->FUN_1005f6d0(FALSE);
 
-	if (CurrentVehicle()) {
-		if (CurrentVehicle()->VTable0x60() != GameState()->GetUnknownC()) {
-			CurrentVehicle()->VTable0xe4();
+	if (CurrentActor()) {
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			CurrentActor()->VTable0xe4();
 		}
 	}
 

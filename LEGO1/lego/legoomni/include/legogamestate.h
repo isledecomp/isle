@@ -88,8 +88,10 @@ public:
 	};
 
 	// SIZE 0x0c
-	struct ScoreName {
-		ScoreName* operator=(const ScoreName* p_other);
+	struct Username {
+		Username();
+		MxResult ReadWrite(LegoStorage* p_storage);
+		Username* operator=(const Username* p_other);
 
 		MxS16 m_letters[7]; // 0x00
 	};
@@ -97,13 +99,14 @@ public:
 	// SIZE 0x2c
 	struct ScoreItem {
 		undefined2 m_unk0x00; // 0x00
-		MxU8 m_state[25];     // 0x02
-		ScoreName m_name;     // 0x1c
+		MxU8 m_state[5][5];   // 0x02
+		Username m_name;      // 0x1c
 		undefined2 m_unk0x2a; // 0x2a
 	};
 
 	// SIZE 0x372
-	struct Scores {
+	struct History {
+		History();
 		void WriteScoreHistory();
 		void FUN_1003ccf0(LegoFile&);
 
@@ -111,6 +114,7 @@ public:
 
 		MxS16 m_count;          // 0x00
 		ScoreItem m_scores[20]; // 0x02
+		undefined2 m_unk0x372;  // 0x372
 	};
 
 	LegoGameState();
@@ -129,47 +133,49 @@ public:
 	void StopArea(Area p_area);
 	void SwitchArea(Area p_area);
 
-	inline MxU8 GetUnknownC() { return m_unk0x0c; }
+	inline MxU8 GetActorId() { return m_actorId; }
 	inline Act GetCurrentAct() { return m_currentAct; }
 	inline Act GetLoadedAct() { return m_loadedAct; }
 	inline Area GetCurrentArea() { return m_currentArea; }
 	inline Area GetPreviousArea() { return m_previousArea; }
 	inline MxU32 GetUnknown0x41c() { return m_unk0x41c; }
 	inline Area GetUnknown0x42c() { return m_unk0x42c; }
-	inline Scores* GetScores() { return &m_unk0xa6; }
+	inline History* GetHistory() { return &m_history; }
 
 	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
 	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
 	inline void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
-	inline void SetUnknown0x0c(MxU8 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
 	inline void SetUnknown0x41c(undefined4 p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
 	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
-	void FUN_10039780(MxU8);
+	void SetActor(MxU8 p_actorId);
 	void FUN_10039940();
 
 private:
 	void RegisterState(LegoState* p_state);
-	MxResult WriteVariable(LegoStorage* p_stream, MxVariableTable* p_from, const char* p_variableName);
-	MxResult WriteEndOfVariables(LegoStorage* p_stream);
-	MxS32 ReadVariable(LegoStorage* p_stream, MxVariableTable* p_to);
+	MxResult WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName);
+	MxResult WriteEndOfVariables(LegoStorage* p_storage);
+	MxS32 ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to);
+	void SetColors();
 	void SetROIHandlerFunction();
 
 	char* m_savePath;                           // 0x00
 	MxS16 m_stateCount;                         // 0x04
 	LegoState** m_stateArray;                   // 0x08
-	MxU8 m_unk0x0c;                             // 0x0c
+	MxU8 m_actorId;                             // 0x0c
 	Act m_currentAct;                           // 0x10
 	Act m_loadedAct;                            // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	undefined m_unk0x26[128];                   // 0x26
-	Scores m_unk0xa6;                           // 0xa6
-	undefined4 m_unk0x418;                      // 0x418
+	undefined2 m_unk0x26;                       // 0x26
+	Username m_players[9];                      // 0x28
+	History m_history;                          // 0xa6
+	undefined2 m_unk0x41a;                      // 0x41a
 	undefined4 m_unk0x41c;                      // 0x41c
 	MxBool m_isDirty;                           // 0x420
 	Area m_currentArea;                         // 0x424
@@ -178,5 +184,8 @@ private:
 };
 
 MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen);
+
+// SYNTHETIC: LEGO1 0x1003c860
+// LegoGameState::ScoreItem::ScoreItem
 
 #endif // LEGOGAMESTATE_H

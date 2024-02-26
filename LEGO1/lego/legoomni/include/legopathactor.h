@@ -65,13 +65,18 @@ public:
 	// FUNCTION: LEGO1 0x10002de0
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
+	inline MxU32 GetUnknown88() { return m_unk0x88; }
+
+	inline void SetUnknown88(MxU32 p_unk0x88) { m_unk0x88 = p_unk0x88; }
 	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
-	undefined m_unk0x78[0x64]; // 0x78
+	undefined m_unk0x78[0x10]; // 0x78
+	MxU32 m_unk0x88;           // 0x88
+	undefined m_unk0x8c[0x50]; // 0x8c
 	MxU32 m_unk0xdc;           // 0xdc
 	undefined m_unk0xe0[0xa];  // 0xe0
 	MxU8 m_unk0xea;            // 0xea

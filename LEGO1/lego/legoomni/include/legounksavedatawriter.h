@@ -55,8 +55,8 @@ class LegoUnkSaveDataWriter {
 public:
 	LegoUnkSaveDataWriter();
 
-	MxResult WriteSaveData3(LegoStorage* p_stream);
-	LegoROI* FUN_10083500(char*, MxBool);
+	MxResult WriteSaveData3(LegoStorage* p_storage);
+	LegoROI* FUN_10083500(const char*, MxBool);
 
 	static void InitSaveData();
 	static void SetCustomizeAnimFile(const char* p_value);

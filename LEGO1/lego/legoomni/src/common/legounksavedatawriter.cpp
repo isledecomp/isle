@@ -41,7 +41,7 @@ void LegoUnkSaveDataWriter::FUN_100832a0()
 }
 
 // FUNCTION: LEGO1 0x10083310
-MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
+MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
@@ -51,34 +51,34 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 	const LegoSaveDataEntry3* end = &g_saveData3[66];
 
 	while (TRUE) {
-		if (p_stream->Write(&entry->m_savePart1, 4) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart1, 4) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart2, 4) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart2, 4) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart3, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart3, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_currentFrame, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_currentFrame, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart5, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart5, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart6, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart6, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart7, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart7, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart8, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart8, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart9, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart9, 1) != SUCCESS) {
 			break;
 		}
-		if (p_stream->Write(&entry->m_savePart10, 1) != SUCCESS) {
+		if (p_storage->Write(&entry->m_savePart10, 1) != SUCCESS) {
 			break;
 		}
 		if (++entry >= end) {
@@ -86,11 +86,12 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_stream)
 			break;
 		}
 	}
+
 	return result;
 }
 
 // STUB: LEGO1 0x10083500
-LegoROI* LegoUnkSaveDataWriter::FUN_10083500(char* p_key, MxBool p_option)
+LegoROI* LegoUnkSaveDataWriter::FUN_10083500(const char* p_key, MxBool p_option)
 {
 	// TODO
 	// involves an STL map with a _Nil node at 0x100fc508

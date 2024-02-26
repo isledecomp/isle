@@ -588,10 +588,10 @@ void LegoWorld::Enable(MxBool p_enable)
 	else if (!p_enable && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
-		IslePathActor* vehicle = CurrentVehicle();
+		IslePathActor* actor = CurrentActor();
 
-		if (vehicle) {
-			FUN_1001fc80(vehicle);
+		if (actor) {
+			FUN_1001fc80(actor);
 		}
 
 		AnimationManager()->FUN_1005ee80(FALSE);
