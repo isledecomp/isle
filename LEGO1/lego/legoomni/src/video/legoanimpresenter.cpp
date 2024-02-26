@@ -234,7 +234,7 @@ LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar* p_und1, const LegoChar
 		str = var;
 	}
 
-	MxU32 len = strlen(str) + (p_und2 ? strlen(p_und2) : 0) + 2;
+	LegoU32 len = strlen(str) + (p_und2 ? strlen(p_und2) : 0) + 2;
 	LegoChar* result = new LegoChar[len];
 
 	if (result != NULL) {
