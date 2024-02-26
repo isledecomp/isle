@@ -51,4 +51,7 @@ public:
 // SYNTHETIC: LEGO1 0x1005f660
 // MxPtrList<LegoROI>::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x1006ea00
+// MxListEntry<LegoROI *>::MxListEntry<LegoROI *>
+
 #endif // LEGOROILIST_H

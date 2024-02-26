@@ -52,7 +52,7 @@ protected:
 	void FUN_100692b0();
 	void FUN_100695c0();
 	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);
-	LegoBool FUN_100698b0(CompoundObject&, const LegoChar*);
+	LegoBool FUN_100698b0(const CompoundObject& p_und1, const LegoChar* p_und2);
 
 	LegoAnim* m_anim;          // 0x64
 	undefined4 m_unk0x68;      // 0x68
