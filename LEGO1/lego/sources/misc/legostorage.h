@@ -47,7 +47,7 @@ inline void Read(LegoStorage* p_storage, T* p_variable, LegoU32 p_size = sizeof(
 }
 
 template <class T>
-inline void WriteScalar(LegoStorage* p_storage, T p_variable)
+inline void Write(LegoStorage* p_storage, T p_variable)
 {
 	p_storage->Write(&p_variable, sizeof(p_variable));
 }
