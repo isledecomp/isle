@@ -250,23 +250,29 @@ MxResult LegoGameState::DeleteState()
 {
 	MxS16 stateCount = m_stateCount;
 	LegoState** stateArray = m_stateArray;
+
 	m_stateCount = 0;
 	m_stateArray = NULL;
+
 	if (stateCount > 0) {
 		MxS32 count = stateCount;
-		LegoState** iter = stateArray;
+		LegoState** it = stateArray;
+
 		do {
-			if (!(*iter)->SetFlag() && (*iter)->VTable0x14()) {
-				delete *iter;
+			if (!(*it)->SetFlag() && (*it)->VTable0x14()) {
+				delete *it;
 			}
 			else {
-				RegisterState(*iter);
-				*iter = NULL;
+				RegisterState(*it);
+				*it = NULL;
 			}
-			iter++;
+
+			it++;
 		} while (--count);
 	}
+
 	delete[] stateArray;
+
 	return SUCCESS;
 }
 
