@@ -36,6 +36,8 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'
+
+	MxBool FUN_1004b8b0();
 };
 
 #endif // LEGOANIMMMPRESENTER_H

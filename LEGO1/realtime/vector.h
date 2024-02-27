@@ -145,7 +145,7 @@ public:
 	inline const float& operator[](size_t idx) const { return m_data[idx]; }
 
 protected:
-	float* m_data;
+	float* m_data; // 0x04
 };
 
 // VTABLE: LEGO1 0x100d4518

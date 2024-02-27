@@ -30,6 +30,8 @@ public:
 	void Destroy() override;          // vtable+0x38
 	void EndAction() override;        // vtable+0x40
 	void PutFrame() override;         // vtable+0x6c
+	void VTable0x8c() override;       // vtable+0x8c
+	void VTable0x90() override;       // vtable+0x90
 
 private:
 	void Init();

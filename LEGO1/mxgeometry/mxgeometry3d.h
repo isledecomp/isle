@@ -43,7 +43,7 @@ public:
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
 
 private:
-	float m_elements[3];
+	float m_elements[3]; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d41e8

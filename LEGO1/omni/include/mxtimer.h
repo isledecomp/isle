@@ -28,8 +28,9 @@ public:
 	// MxTimer::`scalar deleting destructor'
 
 private:
-	MxLong m_startTime;
-	MxBool m_isRunning;
+	MxLong m_startTime; // 0x08
+	MxBool m_isRunning; // 0x0c
+
 	static MxLong g_lastTimeCalculated;
 	static MxLong g_lastTimeTimerStarted;
 };
