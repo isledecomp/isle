@@ -199,25 +199,10 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		goto done;
 	}
 
-	{
-		MxU32 version = 0x1000C;
-		((LegoStorage*) &fileStream)->Write(&version, sizeof(version));
-	}
-
-	{
-		MxU16 unk0x24 = m_unk0x24;
-		((LegoStorage*) &fileStream)->Write(&unk0x24, sizeof(unk0x24));
-	}
-
-	{
-		MxU16 act = m_currentAct;
-		((LegoStorage*) &fileStream)->Write(&act, sizeof(act));
-	}
-
-	{
-		MxU8 actorId = m_actorId;
-		((LegoStorage*) &fileStream)->Write(&actorId, sizeof(actorId));
-	}
+	WriteScalar(&fileStream, 0x1000c);
+	WriteScalar(&fileStream, m_unk0x24);
+	WriteScalar(&fileStream, (MxU16) m_currentAct);
+	WriteScalar(&fileStream, m_actorId);
 
 	for (i = 0; i < _countof(g_colorSaveData); i++) {
 		if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
@@ -243,10 +228,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		}
 	}
 
-	{
-		MxU16 c = count;
-		((LegoStorage*) &fileStream)->Write(&c, sizeof(c));
-	}
+	WriteScalar(&fileStream, count);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->VTable0x14()) {
@@ -255,7 +237,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	area = m_unk0x42c;
-	Write(&fileStream, &area);
+	WriteScalar(&fileStream, (MxU16) area);
 	SerializeScoreHistory(2);
 	m_isDirty = FALSE;
 
