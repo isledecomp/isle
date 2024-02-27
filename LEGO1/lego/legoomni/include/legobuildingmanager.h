@@ -2,6 +2,7 @@
 #define LEGOBUILDINGMANAGER_H
 
 #include "decomp.h"
+#include "lego/sources/misc/legostorage.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d6f50
@@ -25,6 +26,8 @@ public:
 
 	void FUN_1002fa00();
 	void FUN_1002fb30();
+	MxResult Save(LegoStorage* p_storage);
+	MxResult Load(LegoStorage* p_storage);
 	void FUN_10030590();
 
 	// SYNTHETIC: LEGO1 0x1002f940

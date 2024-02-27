@@ -44,6 +44,18 @@ void LegoBuildingManager::FUN_1002fb30()
 	// TODO
 }
 
+// STUB: LEGO1 0x1002fb80
+MxResult LegoBuildingManager::Save(LegoStorage* p_storage)
+{
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x1002fc10
+MxResult LegoBuildingManager::Load(LegoStorage* p_storage)
+{
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x1002ff90
 void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 {

@@ -35,6 +35,18 @@ void LegoPlantManager::FUN_100263a0(undefined4 p_und)
 	// TODO
 }
 
+// STUB: LEGO1 0x10026720
+void LegoPlantManager::Save(LegoStorage* p_storage)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100267b0
+MxResult LegoPlantManager::Load(LegoStorage* p_storage)
+{
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x10026be0
 void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 {

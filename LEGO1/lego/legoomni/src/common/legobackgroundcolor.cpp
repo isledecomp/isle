@@ -66,3 +66,16 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 
 	delete[] colorStringCopy;
 }
+
+// STUB: LEGO1 0x1003c400
+void LegoBackgroundColor::SetLights(float p_r, float p_g, float p_b)
+{
+}
+
+// FUNCTION: LEGO1 0x1003c4b0
+void LegoBackgroundColor::SetLights()
+{
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	SetLights(convertedR, convertedG, convertedB);
+}

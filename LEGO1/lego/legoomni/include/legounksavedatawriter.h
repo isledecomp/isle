@@ -56,6 +56,7 @@ public:
 	LegoUnkSaveDataWriter();
 
 	MxResult WriteSaveData3(LegoStorage* p_storage);
+	MxResult ReadSaveData3(LegoStorage* p_storage);
 	LegoROI* FUN_10083500(const char*, MxBool);
 
 	static void InitSaveData();

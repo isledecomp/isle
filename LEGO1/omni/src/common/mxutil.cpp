@@ -127,10 +127,21 @@ MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter*
 	return FALSE;
 }
 
-// FUNCTION: LEGO1 0x100b7210
-void SetOmniUserMessage(void (*p_userMsg)(const char*, int))
+// FUNCTION: LEGO1 0x100b71e0
+void OmniError(const char* p_message, MxS32 p_status)
 {
-	g_omniUserMessage = p_userMsg;
+	if (g_omniUserMessage) {
+		g_omniUserMessage(p_message, p_status);
+	}
+	else if (p_status) {
+		abort();
+	}
+}
+
+// FUNCTION: LEGO1 0x100b7210
+void SetOmniUserMessage(void (*p_omniUserMessage)(const char*, MxS32))
+{
+	g_omniUserMessage = p_omniUserMessage;
 }
 
 // FUNCTION: LEGO1 0x100b7220

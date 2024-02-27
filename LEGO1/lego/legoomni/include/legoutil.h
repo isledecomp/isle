@@ -41,6 +41,7 @@ void FUN_1003ef00(MxBool);
 void SetAppCursor(WPARAM p_wparam);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_atomId1, MxS32 p_id1, MxAtomId& p_atomId2, MxS32 p_id2);
+void SetLightPosition(MxU32);
 NamedTexture* ReadNamedTexture(LegoFile* p_file);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 void WriteNamedTexture(LegoFile* p_file, NamedTexture* p_texture);

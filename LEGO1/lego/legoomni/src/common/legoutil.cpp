@@ -291,6 +291,11 @@ MxBool FUN_1003ef60()
 	return TRUE;
 }
 
+// STUB: LEGO1 0x1003f0d0
+void SetLightPosition(MxU32)
+{
+}
+
 // STUB: LEGO1 0x1003f3b0
 NamedTexture* ReadNamedTexture(LegoFile* p_file)
 {
