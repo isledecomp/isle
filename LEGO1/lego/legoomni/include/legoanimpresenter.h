@@ -48,8 +48,11 @@ public:
 	virtual void VTable0x90();                                                             // vtable+0x90
 	virtual void VTable0x94();                                                             // vtable+0x94
 	virtual void VTable0x98();                                                             // vtable+0x98
-	virtual void VTable0x9c();                                                             // vtable+0x9c
-	virtual void VTable0x100();                                                            // vtable+0x100
+
+	// STUB: LEGO1 0x1000c990
+	virtual void VTable0x9c() {} // vtable+0x9c
+
+	virtual void VTable0xa0(); // vtable+0xa0
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
 

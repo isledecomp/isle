@@ -466,7 +466,7 @@ void LegoAnimPresenter::ParseExtra()
 }
 
 // STUB: LEGO1 0x1006c570
-void LegoAnimPresenter::VTable0x100()
+void LegoAnimPresenter::VTable0xa0()
 {
 	// TODO
 }
@@ -506,12 +506,6 @@ void LegoAnimPresenter::FUN_1006c8a0(LegoBool)
 
 // STUB: LEGO1 0x1006c8f0
 void LegoAnimPresenter::VTable0x94()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x1006c990
-void LegoAnimPresenter::VTable0x9c()
 {
 	// TODO
 }
