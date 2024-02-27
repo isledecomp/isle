@@ -8,6 +8,18 @@ LegoHideAnimPresenter::LegoHideAnimPresenter()
 	Init();
 }
 
+// STUB: LEGO1 0x1006d860
+void LegoHideAnimPresenter::VTable0x8c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006d870
+void LegoHideAnimPresenter::VTable0x90()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1006d9f0
 LegoHideAnimPresenter::~LegoHideAnimPresenter()
 {
