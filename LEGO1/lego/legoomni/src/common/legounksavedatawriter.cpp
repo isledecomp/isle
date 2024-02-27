@@ -110,6 +110,13 @@ void LegoUnkSaveDataWriter::FUN_10083f10(LegoROI* p_roi)
 	// TODO
 }
 
+// STUB: LEGO1 0x10084c00
+MxBool LegoUnkSaveDataWriter::FUN_10084c00(const LegoChar*)
+{
+	// TODO
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x100851a0
 void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
 {

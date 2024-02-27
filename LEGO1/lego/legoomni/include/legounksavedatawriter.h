@@ -60,6 +60,7 @@ public:
 
 	static void InitSaveData();
 	static void SetCustomizeAnimFile(const char* p_value);
+	static MxBool FUN_10084c00(const LegoChar*);
 
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
