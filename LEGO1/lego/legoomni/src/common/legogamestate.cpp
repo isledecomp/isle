@@ -281,7 +281,10 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) == FAILURE)
 		goto done;
 
-	MxU32 version;
+	MxU32 version, status;
+	MxS16 count, area, act;
+	const char* lightPosition;
+
 	Read(&fileStream, &version);
 
 	if (version != 0x1000c) {
@@ -291,7 +294,6 @@ MxResult LegoGameState::Load(MxULong p_slot)
 
 	Read(&fileStream, &m_unk0x24);
 
-	MxS16 act;
 	Read(&fileStream, &act);
 	SetCurrentAct((Act) act);
 
@@ -300,8 +302,6 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		SetActor(m_actorId);
 	}
 
-	const char* lightPosition;
-	MxU32 status;
 	do {
 		status = ReadVariable(&fileStream, variableTable);
 		if (status == 1) {
@@ -329,7 +329,6 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		goto done;
 	}
 
-	MxS16 count;
 	char stateName[80];
 	Read(&fileStream, &count);
 
@@ -353,7 +352,6 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		}
 	}
 
-	MxS16 area;
 	Read(&fileStream, &area);
 
 	if (m_currentAct == 0) {
