@@ -20,18 +20,18 @@ public:
 	LegoStorage() : m_mode(0) {}
 
 	// FUNCTION: LEGO1 0x10045ad0
-	virtual ~LegoStorage() {}
+	virtual ~LegoStorage() {} // 0x00
 
-	virtual LegoResult Read(void* p_buffer, LegoU32 p_size) = 0;
-	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size) = 0;
-	virtual LegoResult GetPosition(LegoU32& p_position) = 0;
-	virtual LegoResult SetPosition(LegoU32 p_position) = 0;
+	virtual LegoResult Read(void* p_buffer, LegoU32 p_size) = 0;        // 0x04
+	virtual LegoResult Write(const void* p_buffer, LegoU32 p_size) = 0; // 0x08
+	virtual LegoResult GetPosition(LegoU32& p_position) = 0;            // 0x0c
+	virtual LegoResult SetPosition(LegoU32 p_position) = 0;             // 0x10
 
 	// FUNCTION: LEGO1 0x10045ae0
-	virtual LegoBool IsWriteMode() { return m_mode == c_write; }
+	virtual LegoBool IsWriteMode() { return m_mode == c_write; } // 0x14
 
 	// FUNCTION: LEGO1 0x10045af0
-	virtual LegoBool IsReadMode() { return m_mode == c_read; }
+	virtual LegoBool IsReadMode() { return m_mode == c_read; } // 0x14
 
 	// SYNTHETIC: LEGO1 0x10045b00
 	// LegoStorage::`scalar deleting destructor'
@@ -40,23 +40,36 @@ protected:
 	LegoU8 m_mode; // 0x04
 };
 
+template <class T>
+inline void Read(LegoStorage* p_storage, T* p_variable, const MxS32 p_size)
+{
+	p_storage->Read(p_variable, p_size);
+}
+
+template <class T>
+inline void Write(LegoStorage* p_storage, T* p_variable)
+{
+	T variable = *p_variable;
+	p_storage->Write(&variable, sizeof(variable));
+}
+
 // VTABLE: LEGO1 0x100db710
 // SIZE 0x10
 class LegoMemory : public LegoStorage {
 public:
 	LegoMemory(void* p_buffer);
-	LegoResult Read(void* p_buffer, LegoU32 p_size) override;
-	LegoResult Write(const void* p_buffer, LegoU32 p_size) override;
+	LegoResult Read(void* p_buffer, LegoU32 p_size) override;        // 0x04
+	LegoResult Write(const void* p_buffer, LegoU32 p_size) override; // 0x08
 
 	// FUNCTION: LEGO1 0x100994a0
-	LegoResult GetPosition(LegoU32& p_position) override
+	LegoResult GetPosition(LegoU32& p_position) override // 0x0c
 	{
 		p_position = m_position;
 		return SUCCESS;
 	}
 
 	// FUNCTION: LEGO1 0x100994b0
-	LegoResult SetPosition(LegoU32 p_position) override
+	LegoResult SetPosition(LegoU32 p_position) override // 0x10
 	{
 		m_position = p_position;
 		return SUCCESS;
@@ -78,11 +91,11 @@ protected:
 class LegoFile : public LegoStorage {
 public:
 	LegoFile();
-	~LegoFile() override;
-	LegoResult Read(void* p_buffer, LegoU32 p_size) override;
-	LegoResult Write(const void* p_buffer, LegoU32 p_size) override;
-	LegoResult GetPosition(LegoU32& p_position) override;
-	LegoResult SetPosition(LegoU32 p_position) override;
+	~LegoFile() override;                                            // 0x00
+	LegoResult Read(void* p_buffer, LegoU32 p_size) override;        // 0x04
+	LegoResult Write(const void* p_buffer, LegoU32 p_size) override; // 0x08
+	LegoResult GetPosition(LegoU32& p_position) override;            // 0x0c
+	LegoResult SetPosition(LegoU32 p_position) override;             // 0x10
 	LegoResult Open(const char* p_name, LegoU32 p_mode);
 
 	// FUNCTION: LEGO1 0x100343d0

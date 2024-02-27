@@ -581,7 +581,7 @@ void LegoWorld::Enable(MxBool p_enable)
 				AnimationManager()->FUN_1005f0b0();
 			}
 
-			GameState()->FUN_10039940();
+			GameState()->ResetROI();
 			SetIsWorldActive(TRUE);
 		}
 	}

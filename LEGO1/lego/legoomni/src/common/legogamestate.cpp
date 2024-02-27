@@ -5,8 +5,10 @@
 #include "infocenterstate.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
+#include "legobuildingmanager.h"
 #include "legonavcontroller.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
 #include "legostate.h"
 #include "legounksavedatawriter.h"
 #include "legoutil.h"
@@ -156,10 +158,19 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 	SetCurrentActor(newActor);
 }
 
-// STUB: LEGO1 0x10039940
-void LegoGameState::FUN_10039940()
+// FUNCTION: LEGO1 0x10039940
+void LegoGameState::ResetROI()
 {
-	// TODO
+	if (m_actorId) {
+		IslePathActor* actor = CurrentActor();
+		if (actor) {
+			LegoROI* roi = actor->GetROI();
+			if (roi) {
+				VideoManager()->Get3DManager()->GetLego3DView()->Remove(*roi);
+				VideoManager()->Get3DManager()->GetLego3DView()->Add(*roi);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10039980
@@ -173,16 +184,18 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 	else {
 		result = FAILURE;
+		LegoFile fileStream;
 		MxVariableTable* variableTable = VariableTable();
+		MxU16 count = 0;
 		MxString savePath;
 		GetFileSavePath(&savePath, p_slot);
-		LegoFile fileStream;
 		if (fileStream.Open(savePath.GetData(), LegoFile::c_write) != FAILURE) {
-			MxU32 maybeVersion = 0x1000C;
-			fileStream.Write(&maybeVersion, 4);
-			fileStream.Write(&m_unk0x24, 2);
-			fileStream.Write(&m_currentAct, 2);
-			fileStream.Write(&m_actorId, 1);
+			MxU32 version = 0x1000C;
+			Write(&fileStream, &version);
+			Write(&fileStream, &m_unk0x24);
+			MxU16 act = m_currentAct;
+			Write(&fileStream, &act);
+			Write(&fileStream, &m_actorId);
 
 			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
 				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
@@ -193,21 +206,142 @@ MxResult LegoGameState::Save(MxULong p_slot)
 			if (WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
 				if (WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE) {
 					WriteEndOfVariables(&fileStream);
-
-					// TODO: Calls down to more aggregate writing functions
-					return SUCCESS;
+					UnkSaveDataWriter()->WriteSaveData3(&fileStream);
+					PlantManager()->Save(&fileStream);
+					result = BuildingManager()->Save(&fileStream);
+					for (MxS32 i = 0; i < m_stateCount; i++) {
+						if (m_stateArray[i]->VTable0x14()) {
+							count++;
+						}
+					}
+					Write(&fileStream, &count);
+					for (MxS32 j = 0; j < m_stateCount; j++) {
+						if (m_stateArray[j]->VTable0x14()) {
+							m_stateArray[j]->VTable0x1c(&fileStream);
+						}
+					}
+					MxU16 area = m_unk0x42c;
+					Write(&fileStream, &area);
+					SerializeScoreHistory(2);
+					m_isDirty = FALSE;
 				}
 			}
+			return result;
 		}
 	}
 	return result;
 }
 
-// STUB: LEGO1 0x10039c60
-MxResult LegoGameState::Load(MxULong)
+// FUNCTION: LEGO1 0x10039bf0
+MxResult LegoGameState::DeleteState()
 {
-	// TODO
-	return 0;
+	MxS16 stateCount = m_stateCount;
+	LegoState** stateArray = m_stateArray;
+	m_stateCount = 0;
+	m_stateArray = NULL;
+	if (stateCount > 0) {
+		MxS32 count = stateCount;
+		LegoState** iter = stateArray;
+		do {
+			if (!(*iter)->SetFlag() && (*iter)->VTable0x14()) {
+				delete *iter;
+			}
+			else {
+				RegisterState(*iter);
+				*iter = NULL;
+			}
+			iter++;
+		} while (--count);
+	}
+	delete[] stateArray;
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10039c60
+MxResult LegoGameState::Load(MxULong p_slot)
+{
+	MxResult result = FAILURE;
+	LegoFile fileStream;
+	MxVariableTable* variableTable = VariableTable();
+	MxString savePath;
+	GetFileSavePath(&savePath, p_slot);
+	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) != FAILURE) {
+		MxU32 version;
+		Read(&fileStream, &version, 4);
+		if (version != 0x1000C) {
+			OmniError("Saved game version mismatch", 0);
+			goto checkErr;
+		}
+		Read(&fileStream, &m_unk0x24, 2);
+		MxS16 act;
+		Read(&fileStream, &act, 2);
+		SetCurrentAct((Act) act);
+		Read(&fileStream, &m_actorId, 1);
+		if (m_actorId) {
+			SetActor(m_actorId);
+		}
+		MxU32 status;
+		do {
+			MxU32 status = ReadVariable(&fileStream, variableTable);
+			if (status == 1) {
+				goto checkErr;
+			}
+		} while (status != 2);
+		m_backgroundColor->SetLights();
+		const char* lightPosition = VariableTable()->GetVariable("lightposition");
+		if (lightPosition) {
+			SetLightPosition(atoi(lightPosition));
+		}
+
+		if (UnkSaveDataWriter()->ReadSaveData3(&fileStream) == FAILURE) {
+			goto checkErr;
+		}
+
+		if (PlantManager()->Load(&fileStream) == FAILURE) {
+			goto checkErr;
+		}
+
+		if (BuildingManager()->Load(&fileStream) == FAILURE) {
+			goto checkErr;
+		}
+
+		if (DeleteState() != SUCCESS) {
+			goto checkErr;
+		}
+
+		MxS16 count;
+		MxS16 stateNameLength;
+		char stateName[80];
+		Read(&fileStream, &count, 2);
+		for (MxS16 i = 0; i < count; i++) {
+			Read(&fileStream, &stateNameLength, 2);
+			Read(&fileStream, stateName, (int) stateNameLength);
+			stateName[stateNameLength] = 0;
+			LegoState* state = GetState(stateName);
+			if (!state) {
+				state = CreateState(stateName);
+				if (!state) {
+					goto checkErr;
+				}
+			}
+			state->VTable0x1c(&fileStream);
+		}
+		MxS16 area;
+		Read(&fileStream, &area, 2);
+		if (m_currentAct == 0) {
+			m_unk0x42c = e_noArea;
+		}
+		else {
+			m_unk0x42c = (Area) area;
+		}
+		result = SUCCESS;
+		m_isDirty = FALSE;
+	}
+checkErr:
+	if (result != SUCCESS) {
+		OmniError("Game state loading was not successful!", 0);
+	}
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10039f00

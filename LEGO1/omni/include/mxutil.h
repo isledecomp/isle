@@ -72,6 +72,7 @@ MxBool GetRectIntersection(
 );
 
 void MakeSourceName(char*, const char*);
+void OmniError(char* p_message, int p_status);
 void SetOmniUserMessage(void (*)(const char*, int));
 MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter);
 void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);

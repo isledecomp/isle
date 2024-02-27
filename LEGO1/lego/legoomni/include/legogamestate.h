@@ -120,8 +120,9 @@ public:
 	LegoGameState();
 	~LegoGameState();
 
-	MxResult Load(MxULong);
 	MxResult Save(MxULong);
+	MxResult DeleteState();
+	MxResult Load(MxULong);
 	void SerializePlayersInfo(MxS16);
 	void SerializeScoreHistory(MxS16 p_flags);
 	void SetSavePath(char*);
@@ -152,7 +153,7 @@ public:
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
 	void SetActor(MxU8 p_actorId);
-	void FUN_10039940();
+	void ResetROI();
 
 private:
 	void RegisterState(LegoState* p_state);

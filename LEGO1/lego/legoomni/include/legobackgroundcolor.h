@@ -9,6 +9,8 @@ class LegoBackgroundColor : public MxVariable {
 public:
 	LegoBackgroundColor(const char* p_key, const char* p_value);
 	void SetValue(const char* p_colorString) override;
+	void SetLights(float p_r, float p_g, float p_b);
+	void SetLights();
 
 private:
 	float m_h;

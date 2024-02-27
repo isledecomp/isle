@@ -90,6 +90,12 @@ MxResult LegoUnkSaveDataWriter::WriteSaveData3(LegoStorage* p_storage)
 	return result;
 }
 
+// STUB: LEGO1 0x100833f0
+MxResult LegoUnkSaveDataWriter::ReadSaveData3(LegoStorage* p_storage)
+{
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x10083500
 LegoROI* LegoUnkSaveDataWriter::FUN_10083500(const char* p_key, MxBool p_option)
 {
