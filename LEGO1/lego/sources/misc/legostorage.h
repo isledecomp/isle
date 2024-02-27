@@ -41,16 +41,9 @@ protected:
 };
 
 template <class T>
-inline void Read(LegoStorage* p_storage, T* p_variable, const MxS32 p_size)
+inline void Read(LegoStorage* p_storage, T* p_variable, LegoU32 p_size = sizeof(T))
 {
 	p_storage->Read(p_variable, p_size);
-}
-
-template <class T>
-inline void Write(LegoStorage* p_storage, T* p_variable)
-{
-	T variable = *p_variable;
-	p_storage->Write(&variable, sizeof(variable));
 }
 
 template <class T>

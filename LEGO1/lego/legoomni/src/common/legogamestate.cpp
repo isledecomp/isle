@@ -274,84 +274,101 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	MxResult result = FAILURE;
 	LegoFile fileStream;
 	MxVariableTable* variableTable = VariableTable();
+
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
+
 	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) != FAILURE) {
 		MxU32 version;
-		Read(&fileStream, &version, 4);
-		if (version != 0x1000C) {
+		Read(&fileStream, &version);
+
+		if (version != 0x1000c) {
 			OmniError("Saved game version mismatch", 0);
-			goto checkErr;
+			goto done;
 		}
-		Read(&fileStream, &m_unk0x24, 2);
+
+		Read(&fileStream, &m_unk0x24);
+
 		MxS16 act;
-		Read(&fileStream, &act, 2);
+		Read(&fileStream, &act);
 		SetCurrentAct((Act) act);
-		Read(&fileStream, &m_actorId, 1);
+
+		Read(&fileStream, &m_actorId);
 		if (m_actorId) {
 			SetActor(m_actorId);
 		}
+
 		MxU32 status;
 		do {
-			MxU32 status = ReadVariable(&fileStream, variableTable);
+			status = ReadVariable(&fileStream, variableTable);
 			if (status == 1) {
-				goto checkErr;
+				goto done;
 			}
 		} while (status != 2);
+
 		m_backgroundColor->SetLights();
 		const char* lightPosition = VariableTable()->GetVariable("lightposition");
+
 		if (lightPosition) {
 			SetLightPosition(atoi(lightPosition));
 		}
 
 		if (UnkSaveDataWriter()->ReadSaveData3(&fileStream) == FAILURE) {
-			goto checkErr;
+			goto done;
 		}
-
 		if (PlantManager()->Load(&fileStream) == FAILURE) {
-			goto checkErr;
+			goto done;
 		}
-
 		if (BuildingManager()->Load(&fileStream) == FAILURE) {
-			goto checkErr;
+			goto done;
 		}
-
 		if (DeleteState() != SUCCESS) {
-			goto checkErr;
+			goto done;
 		}
 
 		MxS16 count;
-		MxS16 stateNameLength;
 		char stateName[80];
-		Read(&fileStream, &count, 2);
-		for (MxS16 i = 0; i < count; i++) {
-			Read(&fileStream, &stateNameLength, 2);
-			Read(&fileStream, stateName, (int) stateNameLength);
-			stateName[stateNameLength] = 0;
-			LegoState* state = GetState(stateName);
-			if (!state) {
-				state = CreateState(stateName);
+		Read(&fileStream, &count);
+
+		if (count) {
+			for (MxS16 i = 0; i < count; i++) {
+				MxS16 stateNameLength;
+				Read(&fileStream, &stateNameLength);
+				Read(&fileStream, stateName, (MxULong) stateNameLength);
+				stateName[stateNameLength] = 0;
+
+				LegoState* state = GetState(stateName);
 				if (!state) {
-					goto checkErr;
+					state = CreateState(stateName);
+
+					if (!state) {
+						goto done;
+					}
 				}
+
+				state->VTable0x1c(&fileStream);
 			}
-			state->VTable0x1c(&fileStream);
 		}
+
 		MxS16 area;
-		Read(&fileStream, &area, 2);
+		Read(&fileStream, &area);
+
 		if (m_currentAct == 0) {
 			m_unk0x42c = e_noArea;
 		}
 		else {
 			m_unk0x42c = (Area) area;
 		}
+
 		result = SUCCESS;
 		m_isDirty = FALSE;
 	}
-checkErr:
+
+done:
 	if (result != SUCCESS) {
 		OmniError("Game state loading was not successful!", 0);
 	}
+
 	return result;
 }
 
