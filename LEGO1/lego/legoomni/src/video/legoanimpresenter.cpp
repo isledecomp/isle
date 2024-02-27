@@ -1,5 +1,6 @@
 #include "legoanimpresenter.h"
 
+#include "legoanimmmpresenter.h"
 #include "legoomni.h"
 #include "legounksavedatawriter.h"
 #include "legovideomanager.h"
@@ -7,6 +8,7 @@
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxstreamchunk.h"
+#include "mxtimer.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
@@ -27,11 +29,11 @@ LegoAnimPresenter::~LegoAnimPresenter()
 void LegoAnimPresenter::Init()
 {
 	m_anim = NULL;
-	m_unk0x68 = 0;
+	m_unk0x68 = NULL;
 	m_unk0x6c = 0;
 	m_unk0x74 = NULL;
 	m_unk0x70 = NULL;
-	m_unk0x78 = 0;
+	m_unk0x78 = NULL;
 	m_unk0x7c = 0;
 	m_unk0xa8.Clear();
 	m_unk0xa4 = 0;
@@ -44,7 +46,7 @@ void LegoAnimPresenter::Init()
 	m_unk0x8c = 0;
 	m_unk0x90 = 0;
 	m_unk0x94 = 0;
-	m_unk0x96 = 1;
+	m_unk0x96 = TRUE;
 	m_unk0xa0 = 0;
 }
 
@@ -302,6 +304,31 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_und1, const Leg
 	return result;
 }
 
+// STUB: LEGO1 0x10069b10
+void LegoAnimPresenter::FUN_10069b10()
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1006aba0
+LegoBool LegoAnimPresenter::FUN_1006aba0()
+{
+	return FUN_1006abb0(m_anim->GetRoot(), 0);
+}
+
+// STUB: LEGO1 0x1006abb0
+LegoBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode*, undefined4)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1006ac90
+void LegoAnimPresenter::FUN_1006ac90()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1006ad30
 void LegoAnimPresenter::PutFrame()
 {
@@ -332,12 +359,57 @@ void LegoAnimPresenter::ReadyTickle()
 	}
 }
 
-// STUB: LEGO1 0x1006b5e0
+// FUNCTION: LEGO1 0x1006b5e0
 void LegoAnimPresenter::StartingTickle()
 {
-	// TODO
-	ProgressTickleState(e_streaming);
-	EndAction(); // Allow game to start
+	FUN_1006ac90();
+	FUN_100692b0();
+	FUN_100695c0();
+
+	if ((m_unk0x7c & c_bit2) == 0 || FUN_1006aba0()) {
+		FUN_10069b10();
+		FUN_1006c8a0(TRUE);
+
+		if (m_unk0x78 == NULL) {
+			if (fabs(m_action->GetDirection().GetX()) >= 0.00000047683716F ||
+				fabs(m_action->GetDirection().GetY()) >= 0.00000047683716F ||
+				fabs(m_action->GetDirection().GetZ()) >= 0.00000047683716F) {
+				m_unk0x78 = new MxMatrix();
+				CalcLocalTransform(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), *m_unk0x78);
+			}
+			else if (m_unk0x68) {
+				MxU8* und = (MxU8*) m_unk0x68[1];
+
+				if (und) {
+					MxMatrix mat;
+					mat = *(Matrix4*) (und + 0x10);
+					m_unk0x78 = new MxMatrix(mat);
+				}
+			}
+		}
+
+		if ((m_action->GetDuration() == -1 || ((MxDSMediaAction*) m_action)->GetSustainTime() == -1) &&
+			m_compositePresenter) {
+			m_compositePresenter->VTable0x60(this);
+		}
+		else {
+			m_action->SetUnknown90(Timer()->GetTime());
+		}
+
+		ProgressTickleState(e_streaming);
+
+		if (m_compositePresenter && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
+			m_unk0x96 = ((LegoAnimMMPresenter*) m_compositePresenter)->FUN_1004b8b0();
+			m_compositePresenter->VTable0x60(this);
+		}
+
+		VTable0x8c();
+	}
+
+	if (m_unk0x70 != NULL) {
+		delete m_unk0x70;
+		m_unk0x70 = NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x1006b840
@@ -393,6 +465,12 @@ void LegoAnimPresenter::ParseExtra()
 	// TODO
 }
 
+// STUB: LEGO1 0x1006c570
+void LegoAnimPresenter::VTable0x100()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1006c620
 MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
@@ -406,4 +484,40 @@ void LegoAnimPresenter::EndAction()
 {
 	// TODO
 	MxVideoPresenter::EndAction();
+}
+
+// STUB: LEGO1 0x1006c7d0
+void LegoAnimPresenter::VTable0x8c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006c860
+void LegoAnimPresenter::VTable0x90()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006c8a0
+void LegoAnimPresenter::FUN_1006c8a0(LegoBool)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006c8f0
+void LegoAnimPresenter::VTable0x94()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006c990
+void LegoAnimPresenter::VTable0x9c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1006ca50
+void LegoAnimPresenter::VTable0x98()
+{
+	// TODO
 }
