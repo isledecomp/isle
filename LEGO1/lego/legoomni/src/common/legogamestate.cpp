@@ -278,8 +278,9 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
 
-	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) == FAILURE)
+	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) == FAILURE) {
 		goto done;
+	}
 
 	MxU32 version, status;
 	MxS16 count, area, act;
