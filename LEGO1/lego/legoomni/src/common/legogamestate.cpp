@@ -178,82 +178,88 @@ void LegoGameState::ResetROI()
 // FUNCTION: LEGO1 0x10039980
 MxResult LegoGameState::Save(MxULong p_slot)
 {
-	MxResult result;
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 
 	if (!infocenterState || !infocenterState->HasRegistered()) {
 		return SUCCESS;
 	}
-	else {
-		result = FAILURE;
 
-		LegoFile fileStream;
-		MxVariableTable* variableTable = VariableTable();
-		MxS16 count = 0;
+	MxResult result = FAILURE;
+	LegoFile fileStream;
+	MxVariableTable* variableTable = VariableTable();
+	MxS16 count = 0;
+	MxU32 i;
+	MxS32 j;
+	MxU16 area;
 
-		MxString savePath;
-		GetFileSavePath(&savePath, p_slot);
+	MxString savePath;
+	GetFileSavePath(&savePath, p_slot);
 
-		if (fileStream.Open(savePath.GetData(), LegoFile::c_write) != FAILURE) {
-			{
-				MxU32 version = 0x1000C;
-				((LegoStorage*) &fileStream)->Write(&version, sizeof(version));
-			}
+	if (fileStream.Open(savePath.GetData(), LegoFile::c_write) == FAILURE) {
+		goto done;
+	}
 
-			{
-				MxU16 unk0x24 = m_unk0x24;
-				((LegoStorage*) &fileStream)->Write(&unk0x24, sizeof(unk0x24));
-			}
+	{
+		MxU32 version = 0x1000C;
+		((LegoStorage*) &fileStream)->Write(&version, sizeof(version));
+	}
 
-			{
-				MxU16 act = m_currentAct;
-				((LegoStorage*) &fileStream)->Write(&act, sizeof(act));
-			}
+	{
+		MxU16 unk0x24 = m_unk0x24;
+		((LegoStorage*) &fileStream)->Write(&unk0x24, sizeof(unk0x24));
+	}
 
-			{
-				MxU8 actorId = m_actorId;
-				((LegoStorage*) &fileStream)->Write(&actorId, sizeof(actorId));
-			}
+	{
+		MxU16 act = m_currentAct;
+		((LegoStorage*) &fileStream)->Write(&act, sizeof(act));
+	}
 
-			for (MxU32 i = 0; i < _countof(g_colorSaveData); i++) {
-				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
-					return result;
-				}
-			}
+	{
+		MxU8 actorId = m_actorId;
+		((LegoStorage*) &fileStream)->Write(&actorId, sizeof(actorId));
+	}
 
-			if (WriteVariable(&fileStream, variableTable, "backgroundcolor") != FAILURE) {
-				if (WriteVariable(&fileStream, variableTable, "lightposition") != FAILURE) {
-					WriteEndOfVariables(&fileStream);
-					UnkSaveDataWriter()->WriteSaveData3(&fileStream);
-					PlantManager()->Save(&fileStream);
-					result = BuildingManager()->Save(&fileStream);
-
-					for (MxS32 i = 0; i < m_stateCount; i++) {
-						if (m_stateArray[i]->VTable0x14()) {
-							count++;
-						}
-					}
-
-					{
-						MxU16 c = count;
-						((LegoStorage*) &fileStream)->Write(&c, sizeof(c));
-					}
-
-					for (MxS32 j = 0; j < m_stateCount; j++) {
-						if (m_stateArray[j]->VTable0x14()) {
-							m_stateArray[j]->VTable0x1c(&fileStream);
-						}
-					}
-
-					MxU16 area = m_unk0x42c;
-					Write(&fileStream, &area);
-					SerializeScoreHistory(2);
-					m_isDirty = FALSE;
-				}
-			}
+	for (i = 0; i < _countof(g_colorSaveData); i++) {
+		if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
+			goto done;
 		}
 	}
 
+	if (WriteVariable(&fileStream, variableTable, "backgroundcolor") == FAILURE) {
+		goto done;
+	}
+	if (WriteVariable(&fileStream, variableTable, "lightposition") == FAILURE) {
+		goto done;
+	}
+
+	WriteEndOfVariables(&fileStream);
+	UnkSaveDataWriter()->WriteSaveData3(&fileStream);
+	PlantManager()->Save(&fileStream);
+	result = BuildingManager()->Save(&fileStream);
+
+	for (j = 0; j < m_stateCount; j++) {
+		if (m_stateArray[j]->VTable0x14()) {
+			count++;
+		}
+	}
+
+	{
+		MxU16 c = count;
+		((LegoStorage*) &fileStream)->Write(&c, sizeof(c));
+	}
+
+	for (j = 0; j < m_stateCount; j++) {
+		if (m_stateArray[j]->VTable0x14()) {
+			m_stateArray[j]->VTable0x1c(&fileStream);
+		}
+	}
+
+	area = m_unk0x42c;
+	Write(&fileStream, &area);
+	SerializeScoreHistory(2);
+	m_isDirty = FALSE;
+
+done:
 	return result;
 }
 
