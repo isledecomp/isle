@@ -48,7 +48,7 @@ public:
 protected:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	LegoChar* FUN_10069150(const LegoChar*);
+	LegoChar* FUN_10069150(const LegoChar* p_und1);
 	void FUN_100692b0();
 	void FUN_100695c0();
 	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);

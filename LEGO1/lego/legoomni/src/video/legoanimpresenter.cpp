@@ -106,11 +106,31 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x10069150
-LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar*)
+// FUNCTION: LEGO1 0x10069150
+LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 {
-	// TODO
-	return NULL;
+	LegoChar* str;
+
+	if (LegoUnkSaveDataWriter::FUN_10084c00(p_und1 + 1)) {
+		str = new LegoChar[strlen(p_und1)];
+
+		if (str != NULL) {
+			strcpy(str, p_und1 + 1);
+		}
+	}
+	else {
+		LegoChar buffer[32];
+		sprintf(buffer, "%d", m_action->GetUnknown24());
+		str = new LegoChar[strlen(p_und1) + strlen(buffer) + strlen(GetActionObjectName()) + 1];
+
+		if (str != NULL) {
+			strcpy(str, p_und1);
+			strcat(str, buffer);
+			strcat(str, GetActionObjectName());
+		}
+	}
+
+	return str;
 }
 
 // FUNCTION: LEGO1 0x100692b0
