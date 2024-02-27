@@ -163,8 +163,10 @@ void LegoGameState::ResetROI()
 {
 	if (m_actorId) {
 		IslePathActor* actor = CurrentActor();
+
 		if (actor) {
 			LegoROI* roi = actor->GetROI();
+
 			if (roi) {
 				VideoManager()->Get3DManager()->GetLego3DView()->Remove(*roi);
 				VideoManager()->Get3DManager()->GetLego3DView()->Add(*roi);
@@ -180,24 +182,40 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 
 	if (!infocenterState || !infocenterState->HasRegistered()) {
-		result = SUCCESS;
+		return SUCCESS;
 	}
 	else {
 		result = FAILURE;
+
 		LegoFile fileStream;
 		MxVariableTable* variableTable = VariableTable();
-		MxU16 count = 0;
+		MxS16 count = 0;
+
 		MxString savePath;
 		GetFileSavePath(&savePath, p_slot);
-		if (fileStream.Open(savePath.GetData(), LegoFile::c_write) != FAILURE) {
-			MxU32 version = 0x1000C;
-			Write(&fileStream, &version);
-			Write(&fileStream, &m_unk0x24);
-			MxU16 act = m_currentAct;
-			Write(&fileStream, &act);
-			Write(&fileStream, &m_actorId);
 
-			for (MxS32 i = 0; i < sizeof(g_colorSaveData) / sizeof(g_colorSaveData[0]); ++i) {
+		if (fileStream.Open(savePath.GetData(), LegoFile::c_write) != FAILURE) {
+			{
+				MxU32 version = 0x1000C;
+				((LegoStorage*) &fileStream)->Write(&version, sizeof(version));
+			}
+
+			{
+				MxU16 unk0x24 = m_unk0x24;
+				((LegoStorage*) &fileStream)->Write(&unk0x24, sizeof(unk0x24));
+			}
+
+			{
+				MxU16 act = m_currentAct;
+				((LegoStorage*) &fileStream)->Write(&act, sizeof(act));
+			}
+
+			{
+				MxU8 actorId = m_actorId;
+				((LegoStorage*) &fileStream)->Write(&actorId, sizeof(actorId));
+			}
+
+			for (MxU32 i = 0; i < _countof(g_colorSaveData); i++) {
 				if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
 					return result;
 				}
@@ -209,26 +227,33 @@ MxResult LegoGameState::Save(MxULong p_slot)
 					UnkSaveDataWriter()->WriteSaveData3(&fileStream);
 					PlantManager()->Save(&fileStream);
 					result = BuildingManager()->Save(&fileStream);
+
 					for (MxS32 i = 0; i < m_stateCount; i++) {
 						if (m_stateArray[i]->VTable0x14()) {
 							count++;
 						}
 					}
-					Write(&fileStream, &count);
+
+					{
+						MxU16 c = count;
+						((LegoStorage*) &fileStream)->Write(&c, sizeof(c));
+					}
+
 					for (MxS32 j = 0; j < m_stateCount; j++) {
 						if (m_stateArray[j]->VTable0x14()) {
 							m_stateArray[j]->VTable0x1c(&fileStream);
 						}
 					}
+
 					MxU16 area = m_unk0x42c;
 					Write(&fileStream, &area);
 					SerializeScoreHistory(2);
 					m_isDirty = FALSE;
 				}
 			}
-			return result;
 		}
 	}
+
 	return result;
 }
 

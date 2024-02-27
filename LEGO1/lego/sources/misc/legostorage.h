@@ -53,6 +53,12 @@ inline void Write(LegoStorage* p_storage, T* p_variable)
 	p_storage->Write(&variable, sizeof(variable));
 }
 
+template <class T>
+inline void WriteScalar(LegoStorage* p_storage, T p_variable)
+{
+	p_storage->Write(&p_variable, sizeof(p_variable));
+}
+
 // VTABLE: LEGO1 0x100db710
 // SIZE 0x10
 class LegoMemory : public LegoStorage {
