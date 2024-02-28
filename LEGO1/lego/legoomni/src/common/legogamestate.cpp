@@ -199,7 +199,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	MxResult result = FAILURE;
-	LegoFile fileStream;
+	LegoFile fileStorage;
 	MxVariableTable* variableTable = VariableTable();
 	MxS16 count = 0;
 	MxU32 i;
@@ -209,32 +209,32 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
 
-	if (fileStream.Open(savePath.GetData(), LegoFile::c_write) == FAILURE) {
+	if (fileStorage.Open(savePath.GetData(), LegoFile::c_write) == FAILURE) {
 		goto done;
 	}
 
-	Write(&fileStream, 0x1000c);
-	Write(&fileStream, m_unk0x24);
-	Write(&fileStream, (MxU16) m_currentAct);
-	Write(&fileStream, m_actorId);
+	Write(&fileStorage, 0x1000c);
+	Write(&fileStorage, m_unk0x24);
+	Write(&fileStorage, (MxU16) m_currentAct);
+	Write(&fileStorage, m_actorId);
 
 	for (i = 0; i < _countof(g_colorSaveData); i++) {
-		if (WriteVariable(&fileStream, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
+		if (WriteVariable(&fileStorage, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
 			goto done;
 		}
 	}
 
-	if (WriteVariable(&fileStream, variableTable, "backgroundcolor") == FAILURE) {
+	if (WriteVariable(&fileStorage, variableTable, "backgroundcolor") == FAILURE) {
 		goto done;
 	}
-	if (WriteVariable(&fileStream, variableTable, "lightposition") == FAILURE) {
+	if (WriteVariable(&fileStorage, variableTable, "lightposition") == FAILURE) {
 		goto done;
 	}
 
-	WriteEndOfVariables(&fileStream);
-	UnkSaveDataWriter()->WriteSaveData3(&fileStream);
-	PlantManager()->Save(&fileStream);
-	result = BuildingManager()->Save(&fileStream);
+	WriteEndOfVariables(&fileStorage);
+	UnkSaveDataWriter()->WriteSaveData3(&fileStorage);
+	PlantManager()->Save(&fileStorage);
+	result = BuildingManager()->Save(&fileStorage);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->VTable0x14()) {
@@ -242,16 +242,16 @@ MxResult LegoGameState::Save(MxULong p_slot)
 		}
 	}
 
-	Write(&fileStream, count);
+	Write(&fileStorage, count);
 
 	for (j = 0; j < m_stateCount; j++) {
 		if (m_stateArray[j]->VTable0x14()) {
-			m_stateArray[j]->VTable0x1c(&fileStream);
+			m_stateArray[j]->VTable0x1c(&fileStorage);
 		}
 	}
 
 	area = m_unk0x42c;
-	Write(&fileStream, (MxU16) area);
+	Write(&fileStorage, (MxU16) area);
 	SerializeScoreHistory(2);
 	m_isDirty = FALSE;
 
@@ -286,13 +286,13 @@ MxResult LegoGameState::DeleteState()
 MxResult LegoGameState::Load(MxULong p_slot)
 {
 	MxResult result = FAILURE;
-	LegoFile fileStream;
+	LegoFile fileStorage;
 	MxVariableTable* variableTable = VariableTable();
 
 	MxString savePath;
 	GetFileSavePath(&savePath, p_slot);
 
-	if (fileStream.Open(savePath.GetData(), LegoFile::c_read) == FAILURE) {
+	if (fileStorage.Open(savePath.GetData(), LegoFile::c_read) == FAILURE) {
 		goto done;
 	}
 
@@ -300,25 +300,25 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	MxS16 count, area, act;
 	const char* lightPosition;
 
-	Read(&fileStream, &version);
+	Read(&fileStorage, &version);
 
 	if (version != 0x1000c) {
 		OmniError("Saved game version mismatch", 0);
 		goto done;
 	}
 
-	Read(&fileStream, &m_unk0x24);
+	Read(&fileStorage, &m_unk0x24);
 
-	Read(&fileStream, &act);
+	Read(&fileStorage, &act);
 	SetCurrentAct((Act) act);
 
-	Read(&fileStream, &m_actorId);
+	Read(&fileStorage, &m_actorId);
 	if (m_actorId) {
 		SetActor(m_actorId);
 	}
 
 	do {
-		status = ReadVariable(&fileStream, variableTable);
+		status = ReadVariable(&fileStorage, variableTable);
 		if (status == 1) {
 			goto done;
 		}
@@ -331,13 +331,13 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		SetLightPosition(atoi(lightPosition));
 	}
 
-	if (UnkSaveDataWriter()->ReadSaveData3(&fileStream) == FAILURE) {
+	if (UnkSaveDataWriter()->ReadSaveData3(&fileStorage) == FAILURE) {
 		goto done;
 	}
-	if (PlantManager()->Load(&fileStream) == FAILURE) {
+	if (PlantManager()->Load(&fileStorage) == FAILURE) {
 		goto done;
 	}
-	if (BuildingManager()->Load(&fileStream) == FAILURE) {
+	if (BuildingManager()->Load(&fileStorage) == FAILURE) {
 		goto done;
 	}
 	if (DeleteState() != SUCCESS) {
@@ -345,13 +345,13 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	}
 
 	char stateName[80];
-	Read(&fileStream, &count);
+	Read(&fileStorage, &count);
 
 	if (count) {
 		for (MxS16 i = 0; i < count; i++) {
 			MxS16 stateNameLength;
-			Read(&fileStream, &stateNameLength);
-			Read(&fileStream, stateName, (MxULong) stateNameLength);
+			Read(&fileStorage, &stateNameLength);
+			Read(&fileStorage, stateName, (MxULong) stateNameLength);
 			stateName[stateNameLength] = 0;
 
 			LegoState* state = GetState(stateName);
@@ -363,11 +363,11 @@ MxResult LegoGameState::Load(MxULong p_slot)
 				}
 			}
 
-			state->VTable0x1c(&fileStream);
+			state->VTable0x1c(&fileStorage);
 		}
 	}
 
-	Read(&fileStream, &area);
+	Read(&fileStorage, &area);
 
 	if (m_currentAct == 0) {
 		m_unk0x42c = e_noArea;
@@ -411,11 +411,11 @@ MxResult LegoGameState::WriteVariable(LegoStorage* p_storage, MxVariableTable* p
 
 	if (variableValue) {
 		MxU8 length = strlen(p_variableName);
-		if (p_storage->Write((char*) &length, 1) == SUCCESS) {
+		if (p_storage->Write(&length, 1) == SUCCESS) {
 			if (p_storage->Write(p_variableName, length) == SUCCESS) {
 				length = strlen(variableValue);
-				if (p_storage->Write((char*) &length, 1) == SUCCESS) {
-					result = p_storage->Write((char*) variableValue, length);
+				if (p_storage->Write(&length, 1) == SUCCESS) {
+					result = p_storage->Write(variableValue, length);
 				}
 			}
 		}
@@ -442,7 +442,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 	MxS32 result = 1;
 	MxU8 length;
 
-	if (p_storage->Read((char*) &length, 1) == SUCCESS) {
+	if (p_storage->Read(&length, 1) == SUCCESS) {
 		char nameBuffer[256];
 		if (p_storage->Read(nameBuffer, length) == SUCCESS) {
 			nameBuffer[length] = '\0';
@@ -451,7 +451,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 				result = 2;
 			}
 			else {
-				if (p_storage->Read((char*) &length, 1) == SUCCESS) {
+				if (p_storage->Read(&length, 1) == SUCCESS) {
 					char valueBuffer[256];
 					if (p_storage->Read(valueBuffer, length) == SUCCESS) {
 						valueBuffer[length] = '\0';
@@ -490,19 +490,22 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxU8 p_slotn)
 // FUNCTION: LEGO1 0x1003a2e0
 void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 {
-	LegoFile fileStream;
+	LegoFile fileStorage;
 	MxString playersGSI = MxString(m_savePath);
+
 	playersGSI += "\\";
 	playersGSI += g_playersGSI;
-	if (fileStream.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
-		if (fileStream.IsReadMode()) {
-			Read(&fileStream, &m_playerCount);
+
+	if (fileStorage.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
+		if (fileStorage.IsReadMode()) {
+			Read(&fileStorage, &m_playerCount);
 		}
-		else if (fileStream.IsWriteMode()) {
-			Write(&fileStream, m_playerCount);
+		else if (fileStorage.IsWriteMode()) {
+			Write(&fileStorage, m_playerCount);
 		}
+
 		for (MxS16 i = 0; i < m_playerCount; i++) {
-			m_players[i].ReadWrite(&fileStream);
+			m_players[i].ReadWrite(&fileStorage);
 		}
 	}
 }
@@ -511,23 +514,27 @@ void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 MxResult LegoGameState::AddPlayer(Username& p_player)
 {
 	MxString from, to;
+
 	if (m_playerCount == 9) {
 		GetFileSavePath(&from, 8);
 		DeleteFile(from.GetData());
 		m_playerCount--;
 	}
+
 	for (MxS16 i = m_playerCount; i > 0; i--) {
 		m_players[i] = m_players[i - 1];
 		GetFileSavePath(&from, i - 1);
 		GetFileSavePath(&to, i);
 		MoveFile(from.GetData(), to.GetData());
 	}
+
 	m_playerCount++;
 	m_players[0].Set(p_player);
 	m_unk0x24 = m_history.m_unk0x372;
 	m_history.m_unk0x372 = m_unk0x24 + 1;
 	m_history.WriteScoreHistory();
 	SetCurrentAct(e_act1);
+
 	return DeleteState();
 }
 
@@ -536,20 +543,26 @@ void LegoGameState::SwitchPlayer(MxS16 p_playerId)
 {
 	if (p_playerId > 0) {
 		MxString from, temp, to;
+
 		GetFileSavePath(&from, p_playerId);
 		GetFileSavePath(&temp, 36);
+
 		Username selectedName(m_players[p_playerId]);
+
 		MoveFile(from.GetData(), temp.GetData());
+
 		for (MxS16 i = p_playerId; i > 0; i--) {
 			m_players[i] = m_players[i - 1];
 			GetFileSavePath(&from, i - 1);
 			GetFileSavePath(&to, i);
 			MoveFile(from.GetData(), to.GetData());
 		}
+
 		m_players[0] = selectedName;
 		GetFileSavePath(&from, 0);
 		MoveFile(temp.GetData(), from.GetData());
 	}
+
 	if (Load(0) != SUCCESS) {
 		Init();
 	}
@@ -559,10 +572,11 @@ void LegoGameState::SwitchPlayer(MxS16 p_playerId)
 MxS16 LegoGameState::FindPlayer(Username& p_player)
 {
 	for (MxS16 i = 0; i < m_playerCount; i++) {
-		if (memcmp(&m_players[i], &p_player, sizeof(Username)) == 0) {
+		if (memcmp(&m_players[i], &p_player, sizeof(p_player)) == 0) {
 			return i;
 		}
 	}
+
 	return -1;
 }
 
@@ -1042,26 +1056,31 @@ void LegoGameState::Init()
 	m_isDirty = FALSE;
 	FindLoadedAct();
 	SetCurrentAct(e_act1);
+
 	if (m_loadedAct == e_act1) {
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
+
 		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, 1);
 		if (copter) {
 			isle->FUN_1001fc80(copter);
 			isle->VTable0x6c(copter);
 			delete copter;
 		}
+
 		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, 2);
 		if (dunebuggy) {
 			isle->FUN_1001fc80(dunebuggy);
 			isle->VTable0x6c(dunebuggy);
 			delete dunebuggy;
 		}
+
 		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, 3);
 		if (jetski) {
 			isle->FUN_1001fc80(jetski);
 			isle->VTable0x6c(jetski);
 			delete jetski;
 		}
+
 		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, 4);
 		if (racecar) {
 			isle->FUN_1001fc80(racecar);
@@ -1069,6 +1088,7 @@ void LegoGameState::Init()
 			delete racecar;
 		}
 	}
+
 	m_unk0x42c = e_noArea;
 }
 

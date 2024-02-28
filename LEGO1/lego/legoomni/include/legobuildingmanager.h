@@ -2,7 +2,7 @@
 #define LEGOBUILDINGMANAGER_H
 
 #include "decomp.h"
-#include "lego/sources/misc/legostorage.h"
+#include "misc/legostorage.h"
 #include "mxcore.h"
 
 // VTABLE: LEGO1 0x100d6f50
