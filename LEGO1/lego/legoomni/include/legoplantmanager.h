@@ -21,6 +21,7 @@ public:
 		return "LegoPlantManager";
 	}
 
+	void Init();
 	void FUN_10026360(MxS32 p_scriptIndex);
 	void FUN_100263a0(undefined4 p_und);
 	void Save(LegoStorage* p_storage);
@@ -34,8 +35,6 @@ public:
 
 private:
 	static char* g_customizeAnimFile;
-
-	void Init();
 
 	undefined m_unk0x08[0x24]; // 0x08
 };

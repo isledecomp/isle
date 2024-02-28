@@ -2,8 +2,12 @@
 
 #include "act1state.h"
 #include "define.h"
+#include "dunebuggy.h"
+#include "helicopter.h"
 #include "infocenterstate.h"
+#include "isle.h"
 #include "islepathactor.h"
+#include "jetski.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legonavcontroller.h"
@@ -18,6 +22,7 @@
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"
+#include "racecar.h"
 #include "roi/legoroi.h"
 
 #include <stdio.h>
@@ -90,7 +95,7 @@ LegoGameState::LegoGameState()
 	m_currentArea = e_noArea;
 	m_previousArea = e_noArea;
 	m_unk0x42c = e_noArea;
-	m_unk0x26 = 0;
+	m_playerCount = 0;
 	m_isDirty = FALSE;
 	m_loadedAct = e_actNotFound;
 	SetCurrentAct(e_act1);
@@ -156,6 +161,15 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 
 	newActor->ClearFlag(0x02);
 	SetCurrentActor(newActor);
+}
+
+// FUNCTION: LEGO1 0x10039910
+void LegoGameState::RemoveActor()
+{
+	IslePathActor* actor = CurrentActor();
+	SetCurrentActor(NULL);
+	delete actor;
+	m_actorId = 0;
 }
 
 // FUNCTION: LEGO1 0x10039940
@@ -422,8 +436,6 @@ MxResult LegoGameState::WriteEndOfVariables(LegoStorage* p_storage)
 	return FAILURE;
 }
 
-// 95% match, just some instruction ordering differences on the call to
-// MxVariableTable::SetVariable at the end.
 // FUNCTION: LEGO1 0x1003a080
 MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 {
@@ -442,9 +454,9 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 				if (p_storage->Read((char*) &length, 1) == SUCCESS) {
 					char valueBuffer[256];
 					if (p_storage->Read(valueBuffer, length) == SUCCESS) {
-						result = 0;
 						valueBuffer[length] = '\0';
 						p_to->SetVariable(nameBuffer, valueBuffer);
+						result = SUCCESS;
 					}
 				}
 			}
@@ -455,7 +467,7 @@ MxS32 LegoGameState::ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to)
 }
 
 // FUNCTION: LEGO1 0x1003a170
-void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
+void LegoGameState::GetFileSavePath(MxString* p_outPath, MxU8 p_slotn)
 {
 	char baseForSlot[2] = "0";
 	char path[1024] = "";
@@ -475,10 +487,83 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxULong p_slotn)
 	*p_outPath = MxString(path);
 }
 
-// STUB: LEGO1 0x1003a2e0
-void LegoGameState::SerializePlayersInfo(MxS16)
+// FUNCTION: LEGO1 0x1003a2e0
+void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 {
-	// TODO
+	LegoFile fileStream;
+	MxString playersGSI = MxString(m_savePath);
+	playersGSI += "\\";
+	playersGSI += g_playersGSI;
+	if (fileStream.Open(playersGSI.GetData(), p_flags) == SUCCESS) {
+		if (fileStream.IsReadMode()) {
+			Read(&fileStream, &m_playerCount);
+		}
+		else if (fileStream.IsWriteMode()) {
+			Write(&fileStream, m_playerCount);
+		}
+		for (MxS16 i = 0; i < m_playerCount; i++) {
+			m_players[i].ReadWrite(&fileStream);
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x1003a3f0
+MxResult LegoGameState::AddPlayer(Username& p_player)
+{
+	MxString from, to;
+	if (m_playerCount == 9) {
+		GetFileSavePath(&from, 8);
+		DeleteFile(from.GetData());
+		m_playerCount--;
+	}
+	for (MxS16 i = m_playerCount; i > 0; i--) {
+		m_players[i] = m_players[i - 1];
+		GetFileSavePath(&from, i - 1);
+		GetFileSavePath(&to, i);
+		MoveFile(from.GetData(), to.GetData());
+	}
+	m_playerCount++;
+	m_players[0].Set(p_player);
+	m_unk0x24 = m_history.m_unk0x372;
+	m_history.m_unk0x372 = m_unk0x24 + 1;
+	m_history.WriteScoreHistory();
+	SetCurrentAct(e_act1);
+	return DeleteState();
+}
+
+// FUNCTION: LEGO1 0x1003a540
+void LegoGameState::SwitchPlayer(MxS16 p_playerId)
+{
+	if (p_playerId > 0) {
+		MxString from, temp, to;
+		GetFileSavePath(&from, p_playerId);
+		GetFileSavePath(&temp, 36);
+		Username selectedName(m_players[p_playerId]);
+		MoveFile(from.GetData(), temp.GetData());
+		for (MxS16 i = p_playerId; i > 0; i--) {
+			m_players[i] = m_players[i - 1];
+			GetFileSavePath(&from, i - 1);
+			GetFileSavePath(&to, i);
+			MoveFile(from.GetData(), to.GetData());
+		}
+		m_players[0] = selectedName;
+		GetFileSavePath(&from, 0);
+		MoveFile(temp.GetData(), from.GetData());
+	}
+	if (Load(0) != SUCCESS) {
+		Init();
+	}
+}
+
+// FUNCTION: LEGO1 0x1003a6e0
+MxS16 LegoGameState::FindPlayer(Username& p_player)
+{
+	for (MxS16 i = 0; i < m_playerCount; i++) {
+		if (memcmp(&m_players[i], &p_player, sizeof(Username)) == 0) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x1003a720
@@ -939,6 +1024,54 @@ void LegoGameState::RegisterState(LegoState* p_state)
 	m_stateArray[targetIndex] = p_state;
 }
 
+// FUNCTION: LEGO1 0x1003bd00
+void LegoGameState::Init()
+{
+	m_backgroundColor->SetValue("set 56 54 68");
+	m_backgroundColor->SetLights();
+	m_tempBackgroundColor->SetValue("set 56 54 68");
+	VariableTable()->SetVariable("lightposition", "2");
+	SetLightPosition(2);
+	PlantManager()->Init();
+	BuildingManager()->Init();
+	UnkSaveDataWriter()->InitSaveData();
+	AnimationManager()->FUN_1005ee80(TRUE);
+	SetColors();
+	RemoveActor();
+	DeleteState();
+	m_isDirty = FALSE;
+	FindLoadedAct();
+	SetCurrentAct(e_act1);
+	if (m_loadedAct == e_act1) {
+		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
+		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, 1);
+		if (copter) {
+			isle->FUN_1001fc80(copter);
+			isle->VTable0x6c(copter);
+			delete copter;
+		}
+		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, 2);
+		if (dunebuggy) {
+			isle->FUN_1001fc80(dunebuggy);
+			isle->VTable0x6c(dunebuggy);
+			delete dunebuggy;
+		}
+		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, 3);
+		if (jetski) {
+			isle->FUN_1001fc80(jetski);
+			isle->VTable0x6c(jetski);
+			delete jetski;
+		}
+		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, 4);
+		if (racecar) {
+			isle->FUN_1001fc80(racecar);
+			isle->VTable0x6c(racecar);
+			delete racecar;
+		}
+	}
+	m_unk0x42c = e_noArea;
+}
+
 // FUNCTION: LEGO1 0x1003c670
 LegoGameState::Username::Username()
 {
@@ -964,10 +1097,10 @@ MxResult LegoGameState::Username::ReadWrite(LegoStorage* p_storage)
 }
 
 // FUNCTION: LEGO1 0x1003c710
-LegoGameState::Username* LegoGameState::Username::operator=(const Username* p_other)
+LegoGameState::Username& LegoGameState::Username::operator=(const Username& p_other)
 {
-	memcpy(m_letters, p_other->m_letters, sizeof(m_letters));
-	return this;
+	memcpy(m_letters, p_other.m_letters, sizeof(m_letters));
+	return *this;
 }
 
 // FUNCTION: LEGO1 0x1003c830

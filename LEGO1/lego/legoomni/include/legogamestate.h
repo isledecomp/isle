@@ -90,8 +90,11 @@ public:
 	// SIZE 0x0c
 	struct Username {
 		Username();
+		inline Username(Username& p_other) { Set(p_other); }
+		inline void Set(Username& p_other) { memcpy(m_letters, p_other.m_letters, sizeof(m_letters)); }
+
 		MxResult ReadWrite(LegoStorage* p_storage);
-		Username* operator=(const Username* p_other);
+		Username& operator=(const Username& p_other);
 
 		MxS16 m_letters[7]; // 0x00
 	};
@@ -120,19 +123,29 @@ public:
 	LegoGameState();
 	~LegoGameState();
 
+	void SetActor(MxU8 p_actorId);
+	void RemoveActor();
+	void ResetROI();
+
 	MxResult Save(MxULong);
 	MxResult DeleteState();
 	MxResult Load(MxULong);
-	void SerializePlayersInfo(MxS16);
+
+	void SerializePlayersInfo(MxS16 p_flags);
+	MxResult AddPlayer(Username& p_player);
+	void SwitchPlayer(MxS16 p_playerId);
+	MxS16 FindPlayer(Username& p_player);
+
 	void SerializeScoreHistory(MxS16 p_flags);
 	void SetSavePath(char*);
 
 	LegoState* GetState(const char* p_stateName);
 	LegoState* CreateState(const char* p_stateName);
 
-	void GetFileSavePath(MxString* p_outPath, MxULong p_slotn);
+	void GetFileSavePath(MxString* p_outPath, MxU8 p_slotn);
 	void StopArea(Area p_area);
 	void SwitchArea(Area p_area);
+	void Init();
 
 	inline MxU8 GetActorId() { return m_actorId; }
 	inline Act GetCurrentAct() { return m_currentAct; }
@@ -152,8 +165,6 @@ public:
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
-	void SetActor(MxU8 p_actorId);
-	void ResetROI();
 
 private:
 	void RegisterState(LegoState* p_state);
@@ -173,7 +184,7 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	undefined2 m_unk0x26;                       // 0x26
+	MxS16 m_playerCount;                        // 0x26
 	Username m_players[9];                      // 0x28
 	History m_history;                          // 0xa6
 	undefined2 m_unk0x41a;                      // 0x41a
