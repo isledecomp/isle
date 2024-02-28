@@ -59,7 +59,7 @@ public:
 	MxResult ReadSaveData3(LegoStorage* p_storage);
 	LegoROI* FUN_10083500(const char*, MxBool);
 
-	static void InitSaveData();
+	void InitSaveData();
 	static void SetCustomizeAnimFile(const char* p_value);
 	static MxBool FUN_10084c00(const LegoChar*);
 
