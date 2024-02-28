@@ -51,6 +51,8 @@ public:
 
 	double Render(double p_und);
 
+	int SetFrustrum(float p_fov, float p_front, float p_back);
+
 	Tgl::Renderer* GetRenderer();
 	Tgl::Group* GetScene();
 	Lego3DView* GetLego3DView();

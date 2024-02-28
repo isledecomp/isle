@@ -50,7 +50,7 @@ void LegoROI::FUN_100a46b0(Matrix4& p_transform)
 }
 
 // STUB: LEGO1 0x100a58f0
-void LegoROI::FUN_100a58f0(Matrix4& p_transform)
+void LegoROI::FUN_100a58f0(const Matrix4& p_transform)
 {
 }
 
@@ -94,6 +94,24 @@ LegoROI::~LegoROI()
 	if (m_name) {
 		delete[] m_name;
 	}
+}
+
+// STUB: LEGO1 0x100a84a0
+LegoResult LegoROI::Read(
+	OrientableROI* p_unk0xd4,
+	Tgl::Renderer* p_renderer,
+	ViewLODListManager* p_viewLODListManager,
+	LegoTextureContainer* p_textureContainer,
+	LegoStorage* p_storage
+)
+{
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100a90f0
+LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
+{
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100a9a50

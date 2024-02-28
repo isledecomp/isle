@@ -41,16 +41,18 @@ public:
 	virtual MxFloat VTable0x5c() { return m_unk0x70; } // vtable+0x5c
 
 	// FUNCTION: LEGO1 0x10002d00
-	virtual MxU8 VTable0x60() { return m_unk0x74; } // vtable+0x60
+	virtual MxU8 GetActorId() { return m_actorId; } // vtable+0x60
 
 	// FUNCTION: LEGO1 0x10002d10
-	virtual void VTable0x64(MxU8 p_unk0x74) { m_unk0x74 = p_unk0x74; } // vtable+0x64
+	virtual void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; } // vtable+0x64
+
+	static const char* GetActorName(MxU8 p_id);
 
 private:
 	MxFloat m_unk0x68;       // 0x68
 	LegoCacheSound* m_sound; // 0x6c
 	MxFloat m_unk0x70;       // 0x70
-	MxU8 m_unk0x74;          // 0x74
+	MxU8 m_actorId;          // 0x74
 };
 
 // SYNTHETIC: LEGO1 0x1002d300

@@ -1,5 +1,6 @@
 #include "legoutil.h"
 
+#include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
@@ -161,6 +162,12 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 	}
 }
 
+// FUNCTION: LEGO1 0x1003eab0
+void SetCameraControllerFromIsle()
+{
+	InputManager()->SetCamera(FindWorld(*g_isleScript, 0)->GetCamera());
+}
+
 // FUNCTION: LEGO1 0x1003eae0
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut)
 {
@@ -282,6 +289,11 @@ void SetAppCursor(WPARAM p_wparam)
 MxBool FUN_1003ef60()
 {
 	return TRUE;
+}
+
+// STUB: LEGO1 0x1003f0d0
+void SetLightPosition(MxU32)
+{
 }
 
 // STUB: LEGO1 0x1003f3b0

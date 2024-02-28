@@ -55,15 +55,19 @@ class LegoUnkSaveDataWriter {
 public:
 	LegoUnkSaveDataWriter();
 
-	MxResult WriteSaveData3(LegoStorage* p_stream);
-	LegoROI* FUN_10083500(char*, MxBool);
+	MxResult WriteSaveData3(LegoStorage* p_storage);
+	MxResult ReadSaveData3(LegoStorage* p_storage);
+	LegoROI* FUN_10083500(const char*, MxBool);
 
-	static void InitSaveData();
+	void InitSaveData();
 	static void SetCustomizeAnimFile(const char* p_value);
+	static MxBool FUN_10084c00(const LegoChar*);
 
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
+	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);
+	LegoROI* FUN_10085a80(LegoChar* p_und1, LegoChar* p_und2, undefined p_und3);
 
 private:
 	static char* g_customizeAnimFile;

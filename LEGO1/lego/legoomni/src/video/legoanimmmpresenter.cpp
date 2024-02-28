@@ -67,3 +67,10 @@ void LegoAnimMMPresenter::ParseExtra()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x1004b8b0
+MxBool LegoAnimMMPresenter::FUN_1004b8b0()
+{
+	// TODO
+	return FALSE;
+}

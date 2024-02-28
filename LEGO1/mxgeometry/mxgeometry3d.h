@@ -15,6 +15,10 @@ public:
 		m_elements[2] = p_z;
 	}
 
+	inline float GetX() { return m_data[0]; }
+	inline float GetY() { return m_data[1]; }
+	inline float GetZ() { return m_data[2]; }
+
 	// FUNCTION: LEGO1 0x100343a0
 	inline Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
@@ -39,7 +43,7 @@ public:
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
 
 private:
-	float m_elements[3];
+	float m_elements[3]; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d41e8

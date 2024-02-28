@@ -56,6 +56,7 @@ public:
 	void SetControlMax(int p_hMax, int p_vMax);
 	void ResetToDefault();
 	void SetTargets(int p_hPos, int p_vPos, MxBool p_accel);
+	static void SetLocation(MxU32 p_location);
 	float CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed);
 	float CalculateNewAccel(int p_pos, int p_center, float p_maxAccel, int p_minAccel);
 	float CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time);

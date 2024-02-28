@@ -41,7 +41,7 @@ private:
 // SIZE 0x10
 class MxDSActionListCursor : public MxListCursor<MxDSAction*> {
 public:
-	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list){};
+	MxDSActionListCursor(MxDSActionList* p_list) : MxListCursor<MxDSAction*>(p_list) {}
 };
 
 // TEMPLATE: LEGO1 0x100c9cc0

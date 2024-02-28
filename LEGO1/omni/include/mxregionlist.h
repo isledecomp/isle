@@ -54,7 +54,7 @@ public:
 // VTABLE: LEGO1 0x100dcc10
 class MxRegionLeftRightListCursor : public MxPtrListCursor<MxRegionLeftRight> {
 public:
-	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list){};
+	MxRegionLeftRightListCursor(MxRegionLeftRightList* p_list) : MxPtrListCursor<MxRegionLeftRight>(p_list) {}
 };
 
 // SIZE 0x0c
@@ -116,7 +116,7 @@ public:
 // VTABLE: LEGO1 0x100dcb88
 class MxRegionTopBottomListCursor : public MxPtrListCursor<MxRegionTopBottom> {
 public:
-	MxRegionTopBottomListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list){};
+	MxRegionTopBottomListCursor(MxPtrList<MxRegionTopBottom>* p_list) : MxPtrListCursor<MxRegionTopBottom>(p_list) {}
 };
 
 // TEMPLATE: LEGO1 0x100c32e0

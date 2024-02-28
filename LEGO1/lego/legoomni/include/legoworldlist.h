@@ -38,7 +38,7 @@ public:
 // SIZE 0x10
 class LegoWorldListCursor : public MxPtrListCursor<LegoWorld> {
 public:
-	LegoWorldListCursor(LegoWorldList* p_list) : MxPtrListCursor<LegoWorld>(p_list){};
+	LegoWorldListCursor(LegoWorldList* p_list) : MxPtrListCursor<LegoWorld>(p_list) {}
 };
 
 // SYNTHETIC: LEGO1 0x1003e870

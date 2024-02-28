@@ -213,9 +213,10 @@ public:
 	LegoSoundManager* GetSoundManager() { return (LegoSoundManager*) m_soundManager; }
 	LegoInputManager* GetInputManager() { return m_inputManager; }
 	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
+	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
-	IslePathActor* GetCurrentVehicle() { return m_currentVehicle; }
+	IslePathActor* GetCurrentActor() { return m_currentActor; }
 	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 	LegoBuildingManager* GetLegoBuildingManager() { return m_buildingManager; }
@@ -227,6 +228,7 @@ public:
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
+	inline void SetCurrentActor(IslePathActor* p_currentActor) { m_currentActor = p_currentActor; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 
@@ -244,7 +246,7 @@ private:
 	LegoWorld* m_currentWorld;                   // 0x7c
 	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
-	IslePathActor* m_currentVehicle;             // 0x88
+	IslePathActor* m_currentActor;               // 0x88
 	LegoUnkSaveDataWriter* m_saveDataWriter;     // 0x8c
 	LegoPlantManager* m_plantManager;            // 0x90
 	LegoAnimationManager* m_animationManager;    // 0x94
@@ -270,14 +272,16 @@ LegoAnimationManager* AnimationManager();
 LegoNavController* NavController();
 LegoBuildingManager* BuildingManager();
 LegoControlManager* ControlManager();
-IslePathActor* CurrentVehicle();
+IslePathActor* CurrentActor();
 ViewManager* GetViewManager();
 LegoPlantManager* PlantManager();
 LegoWorld* CurrentWorld();
 LegoUnkSaveDataWriter* UnkSaveDataWriter();
 LegoTextureContainer* TextureContainer();
+ViewLODListManager* GetViewLODListManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
+void SetCurrentActor(IslePathActor* p_currentActor);
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 LegoROI* FindROI(const char* p_name);
 MxDSAction& GetCurrentAction();

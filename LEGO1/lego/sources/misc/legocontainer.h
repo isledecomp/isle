@@ -13,7 +13,10 @@
 #pragma warning(disable : 4237)
 
 struct LegoContainerInfoComparator {
-	bool operator()(const char* const& p_key0, const char* const& p_key1) const { return strcmp(p_key0, p_key1) > 0; }
+	LegoBool operator()(const char* const& p_key0, const char* const& p_key1) const
+	{
+		return strcmp(p_key0, p_key1) > 0;
+	}
 };
 
 // SIZE 0x10
@@ -44,16 +47,45 @@ public:
 
 	inline T* Get(const char* p_name)
 	{
+		// TODO: Score::Paint matches better with no `value` on the stack,
+		// while LegoModelPresenter::CreateROI only matches with `value`
+		T* value = NULL;
+
 #ifdef COMPAT_MODE
 		typename LegoContainerInfo<T>::iterator it = m_map.find(p_name);
 #else
 		LegoContainerInfo<T>::iterator it = m_map.find(p_name);
 #endif
+
 		if (it != m_map.end()) {
-			return (*it).second;
+			value = (*it).second;
 		}
 
-		return NULL;
+		return value;
+	}
+
+	inline void Add(const char* p_name, T* p_value)
+	{
+#ifdef COMPAT_MODE
+		typename LegoContainerInfo<T>::iterator it = m_map.find(p_name);
+#else
+		LegoContainerInfo<T>::iterator it = m_map.find(p_name);
+#endif
+
+		char* name;
+		if (it != m_map.end()) {
+			name = const_cast<char*>((*it).first);
+
+			if (m_ownership) {
+				delete (*it).second;
+			}
+		}
+		else {
+			name = new char[strlen(p_name) + 1];
+			strcpy(name, p_name);
+		}
+
+		m_map[name] = p_value;
 	}
 
 	inline void SetOwnership(LegoBool p_ownership) { m_ownership = p_ownership; }
@@ -76,8 +108,8 @@ public:
 	LegoTextureContainer() { m_ownership = TRUE; }
 	~LegoTextureContainer() override;
 
-	LegoTextureInfo* Insert(LegoTextureInfo* p_textureInfo);
-	void Erase(LegoTextureInfo* p_textureInfo);
+	LegoTextureInfo* AddToList(LegoTextureInfo* p_textureInfo);
+	void EraseFromList(LegoTextureInfo* p_textureInfo);
 
 protected:
 	LegoTextureList m_list; // 0x18
@@ -89,6 +121,9 @@ protected:
 // clang-format off
 // TEMPLATE: LEGO1 0x10001cc0
 // _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Lbound
+
+// TEMPLATE: LEGO1 0x1004f960
+// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::iterator::_Dec
 
 // TEMPLATE: LEGO1 0x1004f9b0
 // _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Insert
