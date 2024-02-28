@@ -95,7 +95,6 @@ void LegoLocomotionAnimPresenter::ReadyTickle()
 void LegoLocomotionAnimPresenter::StartingTickle()
 {
 	// TODO
-	EndAction();
 }
 
 // FUNCTION: LEGO1 0x1006d660
