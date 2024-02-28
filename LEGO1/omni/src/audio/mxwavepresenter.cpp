@@ -218,7 +218,8 @@ void MxWavePresenter::DoneTickle()
 
 		MxS8 playedChunks = dwCurrentPlayCursor / m_chunkLength;
 		if (m_action->GetFlags() & MxDSAction::c_bit7 || m_action->GetFlags() & MxDSAction::c_looping ||
-			m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor) {
+			(!(m_action->GetFlags() & MxDSAction::c_looping) &&
+			 (m_writtenChunks != playedChunks || m_lockSize + (m_chunkLength * playedChunks) <= dwCurrentPlayCursor))) {
 			MxMediaPresenter::DoneTickle();
 		}
 	}
