@@ -322,16 +322,16 @@ void MxWavePresenter::Enable(MxBool p_enable)
 // FUNCTION: LEGO1 0x100b23a0
 void MxWavePresenter::ParseExtra()
 {
-	char extraCopy[512];
-
 	MxSoundPresenter::ParseExtra();
-	*((MxU16*) &extraCopy[0]) = m_action->GetExtraLength();
-	char* extraData = m_action->GetExtraData();
 
-	if (*((MxU16*) &extraCopy[0])) {
-		MxU16 len = *((MxU16*) &extraCopy[0]);
-		memcpy(extraCopy, extraData, len);
-		extraCopy[len] = '\0';
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
+
+	if (extraLength & MAXWORD) {
+		char extraCopy[512];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
 
 		char soundValue[512];
 		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {

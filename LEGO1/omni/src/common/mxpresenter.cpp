@@ -78,14 +78,15 @@ void MxPresenter::EndAction()
 void MxPresenter::ParseExtra()
 {
 	MxAutoLocker lock(&m_criticalSection);
-	MxU16 len = m_action->GetExtraLength();
-	char* extraData = m_action->GetExtraData();
 
-	if (len) {
-		// len &= MAXWORD;
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
+
+	if (extraLength & MAXWORD) {
 		char extraCopy[512];
-		memcpy(extraCopy, extraData, len);
-		extraCopy[len] = '\0';
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
 
 		char worldValue[512];
 		if (KeyValueStringParse(worldValue, g_strWORLD, extraCopy)) {

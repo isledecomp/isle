@@ -57,6 +57,12 @@ public:
 
 	void AppendData(MxU16 p_extraLength, const char* p_extraData);
 
+	inline void GetExtra(MxU16& p_extraLength, char*& p_extraData)
+	{
+		p_extraLength = m_extraLength;
+		p_extraData = m_extraData;
+	}
+
 	inline MxU32 GetFlags() { return m_flags; }
 	inline void SetFlags(MxU32 p_flags) { m_flags = p_flags; }
 	inline char* GetExtraData() { return m_extraData; }
