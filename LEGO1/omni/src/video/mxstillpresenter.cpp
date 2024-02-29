@@ -198,29 +198,27 @@ void MxStillPresenter::ParseExtra()
 		SetBit3(TRUE);
 	}
 
-	MxU32 len = m_action->GetExtraLength();
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-	if (len == 0) {
-		return;
-	}
+	if (extraLength & MAXWORD) {
+		char extraCopy[512];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
 
-	len &= MAXWORD;
-
-	char buf[512];
-	memcpy(buf, m_action->GetExtraData(), len);
-	buf[len] = '\0';
-
-	char output[512];
-	if (KeyValueStringParse(output, g_strVISIBILITY, buf)) {
-		if (strcmpi(output, "FALSE") == 0) {
-			Enable(FALSE);
+		char output[512];
+		if (KeyValueStringParse(output, g_strVISIBILITY, extraCopy)) {
+			if (strcmpi(output, "FALSE") == 0) {
+				Enable(FALSE);
+			}
 		}
-	}
 
-	if (KeyValueStringParse(output, g_strBmpIsmap, buf)) {
-		SetBit4(TRUE);
-		SetBit1(FALSE);
-		SetBit2(FALSE);
+		if (KeyValueStringParse(output, g_strBmpIsmap, extraCopy)) {
+			SetBit4(TRUE);
+			SetBit1(FALSE);
+			SetBit2(FALSE);
+		}
 	}
 }
 
