@@ -247,32 +247,35 @@ void DecodeColors64(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_data)
 // FUNCTION: LEGO1 0x100bd960
 void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
+	BYTE* data = p_data;
+	short width = p_flcHeader->width;
+	short height = p_flcHeader->height;
 	BYTE* offset = ((p_bitmapHeader->biWidth + 3) & -4) * (p_flcHeader->height - 1) + p_pixelData;
-	short line = p_flcHeader->height;
 
-	while (--line >= 0) {
-		p_data++;
+	for (short line = height - 1; line >= 0; line--) {
+		data++;
 
-		for (short p_pixel = 0; p_pixel < p_flcHeader->width;) {
-			char p_count = *p_data++;
+		for (short pixel = 0; pixel < width;) {
+			char count = *data++;
 
-			if (p_count >= 0) {
-				for (short i = p_count; i > 0; i--) {
-					*offset++ = *p_data;
+			if (count >= 0) {
+				for (short i = 0; i < count; i++) {
+					*offset++ = *data;
 				}
 
-				p_data++;
+				data++;
 			}
 			else {
-				for (short i = -p_count; i > 0; i--) {
-					*offset++ = *p_data++;
+				count = -count;
+				for (short i = 0; i < count; i++) {
+					*offset++ = *data++;
 				}
 			}
 
-			p_pixel += p_count;
+			pixel += count;
 		}
 
-		offset -= (((p_bitmapHeader->biWidth + 3) & -4) + p_flcHeader->width);
+		offset -= (((p_bitmapHeader->biWidth + 3) & -4) + width);
 	}
 }
 
@@ -280,30 +283,26 @@ void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_da
 void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
 	short row = p_flcHeader->height - *((short*) p_data) - 1;
-	BYTE* pixels = p_data + 4;
-	short numLines = *((short*) (p_data + 2));
+	BYTE* data = p_data + 4;
 
-	while (--numLines >= 0) {
+	for (short lines = *((short*) (p_data + 2)) - 1; lines >= 0; lines--) {
 		WORD column = 0;
-		BYTE i = *pixels++;
+		BYTE packets = *data++;
 
-		while (i) {
-			column += *pixels++;
-			char type = *pixels++;
-			short p_count;
+		for (BYTE i = 0; i < packets; i++) {
+			column += *data++;
+			char type = *((char*) data++);
 
 			if (type < 0) {
-				p_count = -type;
-				WritePixelRun(p_bitmapHeader, p_pixelData, column, row, *pixels++, p_count);
+				type = -type;
+				WritePixelRun(p_bitmapHeader, p_pixelData, column, row, *data++, type);
+				column += type;
 			}
 			else {
-				p_count = type;
-				WritePixels(p_bitmapHeader, p_pixelData, column, row, pixels, p_count);
-				pixels += p_count;
+				WritePixels(p_bitmapHeader, p_pixelData, column, row, data, type);
+				data += type;
+				column += type;
 			}
-
-			column += p_count;
-			i--;
 		}
 
 		row--;
@@ -315,40 +314,41 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 {
 	short width = p_flcHeader->width - 1;
 	short row = p_flcHeader->height - 1;
-	short lines = *p_data;
+	short lines = *((short*) p_data);
 	BYTE* data = p_data + 2;
 
-	do {
+	while (--lines > 0) {
 		short token;
 		while (TRUE) {
-			token = *((WORD*) data);
+			token = *((short*) data);
 			data += 2;
-
 			if (token < 0) {
 				if (token & 0x4000) {
 					row += token;
-					continue;
+				}
+				else {
+					WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
+					token = *((WORD*) data);
+					data += 2;
+
+					if (!token) {
+						row--;
+						if (--lines <= 0) {
+							return;
+						}
+					}
+					else {
+						break;
+					}
 				}
 			}
-
-			break;
+			else
+				break;
 		}
-
-		if (token < 0) {
-			WritePixel(p_bitmapHeader, p_pixelData, width, row, token);
-			token = *((WORD*) data);
-			data += 2;
-
-			if (!token) {
-				row--;
-				continue;
-			}
-		}
-
 		short column = 0;
 		do {
 			column += *(data++);
-			short type = ((short) *(data++));
+			short type = *((char*) data++);
 			type += type;
 
 			if (type >= 0) {
@@ -360,29 +360,29 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 				type = -type;
 				short p_pixel = *((WORD*) data);
 				data += 2;
-				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type);
+				WritePixelPairs(p_bitmapHeader, p_pixelData, column, row, p_pixel, type >> 1);
 				column += type;
 			}
 		} while (--token);
-	} while (--lines > 0);
+		row--;
+	}
 }
 
 // FUNCTION: LEGO1 0x100bdc00
 void DecodeBlack(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
+	short line = p_flcHeader->height;
 	short width = p_flcHeader->width;
 
 	BYTE pixel[2];
 	pixel[1] = 0;
 	pixel[0] = 0;
 
-	short line = p_flcHeader->height;
-
 	while (--line >= 0) {
-		short p_count = width / 2;
+		short count = width / 2;
 		short odd = width & 1;
 
-		WritePixelPairs(p_bitmapHeader, p_pixelData, 0, line, *((WORD*) pixel), p_count);
+		WritePixelPairs(p_bitmapHeader, p_pixelData, 0, line, *((WORD*) pixel), count);
 
 		if (odd) {
 			WritePixel(p_bitmapHeader, p_pixelData, width - 1, line, 0);
@@ -394,10 +394,10 @@ void DecodeBlack(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_d
 void DecodeCopy(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
 	short line = p_flcHeader->height;
-	int width = p_flcHeader->width;
+	short width = p_flcHeader->width;
 
 	while (--line >= 0) {
-		WritePixels(p_bitmapHeader, p_pixelData, 0, line, p_data, p_flcHeader->width);
+		WritePixels(p_bitmapHeader, p_pixelData, 0, line, p_data, width);
 		p_data += width;
 	}
 }
