@@ -27,17 +27,16 @@ typedef struct {
 
 typedef struct : FLIC_CHUNK {
 	WORD frames; /* Number of frames in first segment */ // 0x06
-	// TODO: See signed issue in MxFlcPresenter::CreateBitmap()
-	short width; /* FLIC width in pixels */      // 0x08
-	short height; /* FLIC height in pixels */    // 0x0a
-	WORD depth; /* Bits per pixel (usually 8) */ // 0x0c
-	WORD flags; /* Set to zero or to three */    // 0x0e
-	DWORD speed; /* Delay between frames */      // 0x10
+	WORD width; /* FLIC width in pixels */               // 0x08
+	WORD height; /* FLIC height in pixels */             // 0x0a
+	WORD depth; /* Bits per pixel (usually 8) */         // 0x0c
+	WORD flags; /* Set to zero or to three */            // 0x0e
+	DWORD speed; /* Delay between frames */              // 0x10
 } FLIC_HEADER;
 #pragma pack(pop)
 
 typedef struct : FLIC_CHUNK {
-	short chunks; /* Number of subchunks */                // 0x06
+	WORD chunks; /* Number of subchunks */                 // 0x06
 	WORD delay; /* Delay in milliseconds */                // 0x08
 	WORD reserved; /* Always zero */                       // 0x0a
 	WORD width; /* Frame width override (if non-zero) */   // 0x0c

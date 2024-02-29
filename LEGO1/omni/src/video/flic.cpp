@@ -170,7 +170,7 @@ short DecodeChunks(
 {
 	*p_decodedColorMap = FALSE;
 
-	for (short subchunk = 0; subchunk < p_flcFrame->chunks; subchunk++) {
+	for (short subchunk = 0; subchunk < (short) p_flcFrame->chunks; subchunk++) {
 		FLIC_CHUNK* chunk = (FLIC_CHUNK*) p_flcSubchunks;
 		p_flcSubchunks += chunk->size;
 
@@ -260,7 +260,7 @@ void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_da
 	BYTE* data = p_data;
 	short width = p_flcHeader->width;
 	short height = p_flcHeader->height;
-	BYTE* offset = ((p_bitmapHeader->biWidth + 3) & -4) * (p_flcHeader->height - 1) + p_pixelData;
+	BYTE* offset = ((p_bitmapHeader->biWidth + 3) & -4) * (height - 1) + p_pixelData;
 
 	for (short line = height - 1; line >= 0; line--) {
 		data++;
@@ -292,7 +292,7 @@ void DecodeBrun(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_da
 // FUNCTION: LEGO1 0x100bda10
 void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-	short row = p_flcHeader->height - *((short*) p_data) - 1;
+	short row = (short) p_flcHeader->height - *((short*) p_data) - 1;
 	BYTE* data = p_data + 4;
 
 	for (short lines = *((short*) (p_data + 2)) - 1; lines >= 0; lines--) {
@@ -322,8 +322,8 @@ void DecodeLC(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data
 // FUNCTION: LEGO1 0x100bdac0
 void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_data, FLIC_HEADER* p_flcHeader)
 {
-	short width = p_flcHeader->width - 1;
-	short row = p_flcHeader->height - 1;
+	short width = (short) p_flcHeader->width - 1;
+	short row = (short) p_flcHeader->height - 1;
 	short lines = *((short*) p_data);
 	BYTE* data = p_data + 2;
 
