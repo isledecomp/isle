@@ -78,26 +78,36 @@ void WritePixels(
 // FUNCTION: LEGO1 0x100bd600
 int ClampLine(LPBITMAPINFOHEADER p_bitmapHeader, short& p_column, short& p_row, short& p_count)
 {
-	short lp_count;
-	short end = p_column + p_count;
+	short column = p_column;
+	short row = p_row;
+	short count = p_count;
+	short end = column + count;
+	int result;
 
-	if (p_row >= 0 && p_row < p_bitmapHeader->biHeight && end >= 0 && p_column < p_bitmapHeader->biWidth) {
-		if (p_column < 0) {
-			lp_count = end;
+	if (row < 0 || p_bitmapHeader->biHeight <= row || end < 0 || p_bitmapHeader->biWidth <= column) {
+		result = 0;
+	}
+	else {
+		if (column < 0) {
+			count += column;
 			p_count = end;
 			p_column = 0;
 		}
 
-		if (end > p_bitmapHeader->biWidth) {
-			lp_count -= end;
-			lp_count += p_bitmapHeader->biWidth;
-			p_count = lp_count;
+		if (p_bitmapHeader->biWidth < end) {
+			count -= end - p_bitmapHeader->biWidth;
+			p_count = count;
 		}
 
-		return lp_count >= 0;
+		if (count < 0) {
+			result = 0;
+		}
+		else {
+			result = 1;
+		}
 	}
 
-	return 0;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100bd680
@@ -319,9 +329,11 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 
 	while (--lines > 0) {
 		short token;
+
 		while (TRUE) {
 			token = *((short*) data);
 			data += 2;
+
 			if (token < 0) {
 				if (token & 0x4000) {
 					row += token;
@@ -346,6 +358,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 				break;
 			}
 		}
+
 		short column = 0;
 		do {
 			column += *(data++);
@@ -365,6 +378,7 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 				column += type;
 			}
 		} while (--token);
+
 		row--;
 	}
 }
