@@ -28,12 +28,15 @@ void LegoActorPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x10076cc0
 void LegoActorPresenter::ParseExtra()
 {
-	char buffer[512];
-	char* extraData = m_action->GetExtraData();
-	if (m_action->GetExtraLength()) {
-		memcpy(buffer, extraData, m_action->GetExtraLength());
-		buffer[m_action->GetExtraLength()] = 0;
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-		m_entity->ParseAction(buffer);
+	if (extraLength & MAXWORD) {
+		char extraCopy[512];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		m_entity->ParseAction(extraCopy);
 	}
 }

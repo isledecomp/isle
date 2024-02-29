@@ -96,13 +96,15 @@ void LegoEntityPresenter::SetEntityLocation(
 // FUNCTION: LEGO1 0x10053750
 void LegoEntityPresenter::ParseExtra()
 {
-	char data[512];
-	MxU16 len = m_action->GetExtraLength();
-	if (len) {
-		memcpy(data, m_action->GetExtraData(), len);
-		data[len] = 0;
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-		len &= MAXWORD;
-		m_entity->ParseAction(data);
+	if (extraLength & MAXWORD) {
+		char extraCopy[512];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		m_entity->ParseAction(extraCopy);
 	}
 }

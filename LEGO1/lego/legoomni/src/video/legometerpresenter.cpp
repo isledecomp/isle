@@ -53,39 +53,39 @@ LegoMeterPresenter::~LegoMeterPresenter()
 // FUNCTION: LEGO1 0x10043800
 void LegoMeterPresenter::ParseExtra()
 {
-	char buffer[256];
-
 	MxStillPresenter::ParseExtra();
-	*((MxU16*) &buffer[0]) = m_action->GetExtraLength();
-	char* extraData = m_action->GetExtraData();
 
-	if (*((MxU16*) &buffer[0])) {
-		MxU16 len = *((MxU16*) &buffer[0]);
-		memcpy(buffer, extraData, len);
-		buffer[len] = '\0';
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-		char result[256];
-		if (KeyValueStringParse(buffer, g_type, result)) {
-			if (!strcmpi(result, g_leftToRight)) {
+	if (extraLength & MAXWORD) {
+		char extraCopy[256];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		char output[256];
+		if (KeyValueStringParse(extraCopy, g_type, output)) {
+			if (!strcmpi(output, g_leftToRight)) {
 				m_layout = 0;
 			}
-			else if (!strcmpi(result, g_rightToLeft)) {
+			else if (!strcmpi(output, g_rightToLeft)) {
 				m_layout = 1;
 			}
-			else if (!strcmpi(result, g_bottomToTop)) {
+			else if (!strcmpi(output, g_bottomToTop)) {
 				m_layout = 2;
 			}
-			else if (!strcmpi(result, g_topToBottom)) {
+			else if (!strcmpi(output, g_topToBottom)) {
 				m_layout = 3;
 			}
 		}
 
-		if (KeyValueStringParse(buffer, g_filterIndex, result)) {
-			m_type = atoi(result);
+		if (KeyValueStringParse(extraCopy, g_filterIndex, output)) {
+			m_type = atoi(output);
 		}
 
-		if (KeyValueStringParse(buffer, g_variable, result)) {
-			m_variable = result;
+		if (KeyValueStringParse(extraCopy, g_variable, output)) {
+			m_variable = output;
 		}
 		else {
 			EndAction();
