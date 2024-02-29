@@ -78,27 +78,27 @@ void LegoActionControlPresenter::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x10043e50
 void LegoActionControlPresenter::ParseExtra()
 {
-	MxU32 len = m_action->GetExtraLength();
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-	if (len == 0) {
-		return;
-	}
+	if (extraLength & MAXWORD) {
+		char extraCopy[1024];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
 
-	len &= MAXWORD;
+		char output[1024];
+		if (KeyValueStringParse(output, g_strACTION, extraCopy)) {
+			m_unk0x50 = MatchActionString(strtok(output, g_parseExtraTokens));
 
-	char buf[1024];
-	memcpy(buf, m_action->GetExtraData(), len);
-	buf[len] = '\0';
+			if (m_unk0x50 != Extra::ActionType::e_exit) {
+				MakeSourceName(extraCopy, strtok(NULL, g_parseExtraTokens));
 
-	char output[1024];
-	if (KeyValueStringParse(output, g_strACTION, buf)) {
-		m_unk0x50 = MatchActionString(strtok(output, g_parseExtraTokens));
-		if (m_unk0x50 != Extra::ActionType::e_exit) {
-			MakeSourceName(buf, strtok(NULL, g_parseExtraTokens));
-			m_unk0x54 = buf;
-			m_unk0x54.ToLowerCase();
-			if (m_unk0x50 != Extra::ActionType::e_run) {
-				m_unk0x64 = atoi(strtok(NULL, g_parseExtraTokens));
+				m_unk0x54 = extraCopy;
+				m_unk0x54.ToLowerCase();
+				if (m_unk0x50 != Extra::ActionType::e_run) {
+					m_unk0x64 = atoi(strtok(NULL, g_parseExtraTokens));
+				}
 			}
 		}
 	}

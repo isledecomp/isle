@@ -255,15 +255,19 @@ void MxControlPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x10044640
 void MxControlPresenter::ParseExtra()
 {
-	char result[256];
-	MxU16 len = m_action->GetExtraLength();
-	if (len) {
-		char buffer[256];
-		memcpy(buffer, m_action->GetExtraData(), m_action->GetExtraLength());
-		buffer[len] = 0;
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-		if (KeyValueStringParse(result, g_style, buffer)) {
-			char* str = strtok(result, g_parseExtraTokens);
+	if (extraLength & MAXWORD) {
+		char extraCopy[256];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		char output[256];
+		if (KeyValueStringParse(output, g_style, extraCopy)) {
+			char* str = strtok(output, g_parseExtraTokens);
+
 			if (!strcmpi(str, g_toggle)) {
 				m_unk0x4c = 1;
 			}
@@ -275,10 +279,12 @@ void MxControlPresenter::ParseExtra()
 			else if (!strcmpi(str, g_map)) {
 				m_unk0x4c = 3;
 				str = strtok(NULL, g_parseExtraTokens);
+
 				if (str) {
 					MxS16 count = atoi(str);
 					m_unk0x58 = new MxS16[count + 1];
 					*m_unk0x58 = count;
+
 					for (MxS16 i = 1; i <= count; i++) {
 						m_unk0x58[i] = atoi(strtok(NULL, g_parseExtraTokens));
 					}
@@ -289,8 +295,8 @@ void MxControlPresenter::ParseExtra()
 			}
 		}
 
-		if (KeyValueStringParse(result, g_strVISIBILITY, buffer)) {
-			if (!strcmpi(result, "FALSE")) {
+		if (KeyValueStringParse(output, g_strVISIBILITY, extraCopy)) {
+			if (!strcmpi(output, "FALSE")) {
 				Enable(FALSE);
 			}
 		}

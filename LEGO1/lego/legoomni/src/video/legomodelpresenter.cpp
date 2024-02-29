@@ -260,25 +260,25 @@ void LegoModelPresenter::ReadyTickle()
 // FUNCTION: LEGO1 0x100801b0
 void LegoModelPresenter::ParseExtra()
 {
-	char output[1024];
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-	MxU16 len = m_action->GetExtraLength();
-	char* extraData = m_action->GetExtraData();
+	if (extraLength & MAXWORD) {
+		char extraCopy[1024], output[1024];
+		output[0] = '\0';
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
 
-	if (len != 0) {
-		char buffer[1024];
-		output[0] = 0;
-		memcpy(buffer, extraData, len);
-		buffer[len] = 0;
-
-		if (KeyValueStringParse(output, g_autoCreate, buffer) != 0) {
+		if (KeyValueStringParse(output, g_autoCreate, extraCopy) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
+
 			if (m_roi == NULL) {
 				m_roi = UnkSaveDataWriter()->FUN_10083500(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}
-		else if (KeyValueStringParse(output, g_dbCreate, buffer) != 0 && m_roi == NULL) {
+		else if (KeyValueStringParse(output, g_dbCreate, extraCopy) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
 			list<LegoROI*>& roiList = currentWorld->GetUnknownList0xe0();
 

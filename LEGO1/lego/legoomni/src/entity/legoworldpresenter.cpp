@@ -150,7 +150,7 @@ void LegoWorldPresenter::StartingTickle()
 }
 
 // STUB: LEGO1 0x10066b40
-void LoadWorld(char* p_worldName, LegoWorld* p_world)
+void LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 {
 }
 
@@ -180,15 +180,17 @@ void LegoWorldPresenter::VTable0x60(MxPresenter* p_presenter)
 // FUNCTION: LEGO1 0x10067b00
 void LegoWorldPresenter::ParseExtra()
 {
-	char data[1024];
-	char output[1024];
-	MxU16 len = m_action->GetExtraLength();
-	*((MxU16*) &data[0]) = m_action->GetExtraLength();
-	if (len != 0) {
-		memcpy(data, m_action->GetExtraData(), len);
-		data[len] = 0;
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
 
-		if (KeyValueStringParse(output, g_strWORLD, data)) {
+	if (extraLength & MAXWORD) {
+		char extraCopy[1024];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		char output[1024];
+		if (KeyValueStringParse(output, g_strWORLD, extraCopy)) {
 			char* worldKey = strtok(output, g_parseExtraTokens);
 			LoadWorld(worldKey, (LegoWorld*) m_entity);
 			((LegoWorld*) m_entity)->SetScriptIndex(Lego()->GetScriptIndex(worldKey));
