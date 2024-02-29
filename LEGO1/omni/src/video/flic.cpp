@@ -342,8 +342,9 @@ void DecodeSS2(LPBITMAPINFOHEADER p_bitmapHeader, BYTE* p_pixelData, BYTE* p_dat
 					}
 				}
 			}
-			else
+			else {
 				break;
+			}
 		}
 		short column = 0;
 		do {
