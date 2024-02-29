@@ -59,7 +59,7 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 		&m_bitmap->GetBitmapInfo()->m_bmiHeader,
 		m_bitmap->GetBitmapData(),
 		m_flcHeader,
-		data,
+		(FLIC_FRAME*) data,
 		&decodedColorMap
 	);
 
