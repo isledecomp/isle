@@ -28,7 +28,7 @@ Tgl::Group* ViewROI::GetGeometry()
 }
 
 // FUNCTION: LEGO1 0x100a9ee0
-void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
+void ViewROI::UpdateWorldData(const Matrix4& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
 
@@ -42,7 +42,7 @@ void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
 }
 
 // STUB: LEGO1 0x100a9fc0
-void ViewROI::VTable0x24(const MxMatrix& p_transform)
+void ViewROI::VTable0x24(const Matrix4& p_transform)
 {
 	// TODO
 }

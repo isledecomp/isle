@@ -52,14 +52,14 @@ public:
 	float IntrinsicImportance() const override;                  // vtable+0x04
 	void VTable0x1c() override;                                  // vtable+0x1c
 	void SetLocalTransform(const Matrix4& p_transform) override; // vtable+0x20
-	void VTable0x24(const MxMatrix& p_transform) override;       // vtable+0x24
+	void VTable0x24(const Matrix4& p_transform) override;        // vtable+0x24
 	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
 	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
 
 	static undefined SetUnk101013d8(undefined p_flag);
 
 protected:
-	void UpdateWorldData(const MxMatrix& parent2world) override;
+	void UpdateWorldData(const Matrix4& parent2world) override;
 
 	Tgl::Group* geometry; // 0xdc
 	int m_unk0xe0;        // 0xe0
