@@ -60,11 +60,11 @@ MxResult LegoVideoManager::CreateDirect3D()
 // FUNCTION: LEGO1 0x1007ac40
 MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS, MxBool p_createThread)
 {
-	MxBool paletteCreated = FALSE;
-	MxDriver* driver = NULL;
-	Direct3DDeviceInfo* device = NULL;
 	MxResult result = FAILURE;
-
+	MxBool paletteCreated = FALSE;
+	MxS32 deviceNum = -1;
+	Direct3DDeviceInfo* device = NULL;
+	MxDriver* driver = NULL;
 	MxDeviceEnumerate100d9cc8 deviceEnumerate;
 	Mx3DPointFloat posVec(0.0, 1.25, -50.0);
 	Mx3DPointFloat dirVec(0.0, 0.0, 1.0);
@@ -72,13 +72,12 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	MxMatrix outMatrix;
 	HWND hwnd = MxOmni::GetInstance()->GetWindowHandle();
 	MxS32 bits = p_videoParam.Flags().Get16Bit() ? 16 : 8;
-	MxS32 deviceNum = -1;
 
 	if (!p_videoParam.GetPalette()) {
 		MxPalette* palette = new MxPalette;
 		p_videoParam.SetPalette(palette);
 
-		if (!palette) {
+		if (!p_videoParam.GetPalette()) {
 			goto done;
 		}
 		paletteCreated = TRUE;
@@ -107,7 +106,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	if (deviceNum < 0) {
 		deviceEnumerate.FUN_1009d210();
 		deviceNum = deviceEnumerate.FUN_1009d0d0();
-		deviceEnumerate.GetDevice(deviceNum, driver, device);
+		deviceNum = deviceEnumerate.GetDevice(deviceNum, driver, device);
 	}
 
 	m_direct3d->SetDevice(deviceEnumerate, driver, device);
@@ -193,7 +192,7 @@ MxResult LegoVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyM
 	m_3dManager->SetPointOfView(*m_viewROI);
 
 	m_unk0x100d9d00 = new LegoUnknown100d9d00;
-	m_render3d = FALSE;
+	SetRender3D(FALSE);
 	m_stopWatch = new MxStopWatch;
 	m_stopWatch->Start();
 
