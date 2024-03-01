@@ -275,7 +275,7 @@ inline MxS32 MxVideoPresenter::PrepareRects(RECT& p_rectDest, RECT& p_rectSrc)
 		p_rectSrc.right = 640;
 	}
 
-	MxS32 height, width;
+	LONG height, width;
 	if ((height = (p_rectDest.bottom - p_rectDest.top) + 1) <= 1 ||
 		(width = (p_rectDest.right - p_rectDest.left) + 1) <= 1) {
 		return -1;
@@ -284,8 +284,8 @@ inline MxS32 MxVideoPresenter::PrepareRects(RECT& p_rectDest, RECT& p_rectSrc)
 		return 1;
 	}
 	else {
-		p_rectSrc.right = p_rectSrc.left + width - 1;
-		p_rectSrc.bottom = p_rectSrc.top + height - 1;
+		p_rectSrc.right = (p_rectSrc.left + width) - 1;
+		p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
 		return 0;
 	}
 }
