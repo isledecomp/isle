@@ -28,9 +28,15 @@ public:
 	virtual void UpdateWorldBoundingVolumes() = 0;              // vtable+0x18
 	virtual void VTable0x1c();                                  // vtable+0x1c
 	virtual void SetLocalTransform(const Matrix4& p_transform); // vtable+0x20
-	virtual void VTable0x24(const MxMatrix& p_transform);       // vtable+0x24
-	virtual void UpdateWorldData(const MxMatrix& p_transform);  // vtable+0x28
+	virtual void VTable0x24(const Matrix4& p_transform);        // vtable+0x24
+	virtual void UpdateWorldData(const Matrix4& p_transform);   // vtable+0x28
 	virtual void UpdateWorldVelocity();                         // vtable+0x2c
+
+	void WrappedSetLocalTransform(const Matrix4& p_transform);
+	void FUN_100a46b0(Matrix4& p_transform);
+	void WrappedVTable0x24(const Matrix4& p_transform);
+	void FUN_100a58f0(const Matrix4& p_transform);
+	void FUN_100a5a30(const Vector3& p_vector);
 
 	const MxMatrix& GetLocal2World() const { return m_local2world; }
 	const float* GetWorldPosition() const { return m_local2world[3]; }
