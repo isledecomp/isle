@@ -89,9 +89,9 @@ void OrientableROI::UpdateWorldData(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a5a30
-void OrientableROI::FUN_100a5a30(const Vector3& p_vector)
+void OrientableROI::FUN_100a5a30(const Vector3& p_world_velocity)
 {
-	m_world_velocity = p_vector;
+	m_world_velocity = p_world_velocity;
 }
 
 // FUNCTION: LEGO1 0x100a5a50

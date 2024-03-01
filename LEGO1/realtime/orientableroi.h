@@ -36,7 +36,7 @@ public:
 	void FUN_100a46b0(Matrix4& p_transform);
 	void WrappedVTable0x24(const Matrix4& p_transform);
 	void FUN_100a58f0(const Matrix4& p_transform);
-	void FUN_100a5a30(const Vector3& p_vector);
+	void FUN_100a5a30(const Vector3& p_world_velocity);
 
 	const MxMatrix& GetLocal2World() const { return m_local2world; }
 	const float* GetWorldPosition() const { return m_local2world[3]; }
