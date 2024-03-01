@@ -137,8 +137,8 @@ BOOL LegoView1::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Rende
 		pRenderer->CreateLight(Tgl::Directional, g_directionalLightRGB, g_directionalLightRGB, g_directionalLightRGB);
 	m_pAmbientLight = pRenderer->CreateLight(Tgl::Ambient, g_ambientLightRGB, g_ambientLightRGB, g_ambientLightRGB);
 
-	Mx3DPointFloat direction(0.0, -1.0, 0.0);
-	Mx3DPointFloat position(0.0, 0.0, 0.0);
+	Mx3DPointFloat direction(0.0, 0.0, 0.0);
+	Mx3DPointFloat position(0.0, -1.0, 0.0);
 	Mx3DPointFloat up(1.0, 0.0, 0.0);
 
 	Tgl::FloatMatrix4 matrix;
