@@ -33,12 +33,12 @@ MxTickleManager::~MxTickleManager()
 MxResult MxTickleManager::Tickle()
 {
 	MxTime time = Timer()->GetTime();
+	MxTickleClientPtrList::iterator it;
 
-	for (MxTickleClientPtrList::iterator it = m_clients.begin(); it != m_clients.end();) {
+	for (it = m_clients.begin(); !(it == m_clients.end());) {
 		MxTickleClient* client = *it;
 
-		// TODO: Match.
-		if ((MxU8) client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) {
+		if ((MxBool) client->GetFlags() & TICKLE_MANAGER_FLAG_DESTROY) {
 			m_clients.erase(it++);
 			delete client;
 		}
