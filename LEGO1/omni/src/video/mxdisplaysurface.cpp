@@ -518,28 +518,23 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 			m_ddSurface1->Flip(NULL, DDFLIP_WAIT);
 		}
 		else {
-			POINT point = {0, 0};
-			ClientToScreen(MxOmni::GetInstance()->GetWindowHandle(), &point);
+			MxPoint32 point(0, 0);
+			ClientToScreen(MxOmni::GetInstance()->GetWindowHandle(), (LPPOINT) &point);
 
-			// TODO: Match
-			RECT rect1, rect2;
-			rect1.left = p_left2 + m_videoParam.GetRect().GetLeft() + point.x;
-			rect2.left = p_left;
-			rect1.top = p_top2 + m_videoParam.GetRect().GetTop() + point.y;
-			rect2.right = p_left + p_width;
-			rect2.top = p_top;
-			rect2.bottom = p_top + p_height;
-			rect1.right = rect1.left + p_width;
-			rect1.bottom = rect1.top + p_height;
+			p_left2 += m_videoParam.GetRect().GetLeft() + point.GetX();
+			p_top2 += m_videoParam.GetRect().GetTop() + point.GetY();
+
+			MxRect32 a(MxPoint32(p_left, p_top), MxSize32(p_width + 1, p_height + 1));
+			MxRect32 b(MxPoint32(p_left2, p_top2), MxSize32(p_width + 1, p_height + 1));
 
 			DDBLTFX data;
 			memset(&data, 0, sizeof(data));
 			data.dwSize = sizeof(data);
 			data.dwDDFX = 8;
 
-			if (m_ddSurface1->Blt(&rect1, m_ddSurface2, &rect2, 0, &data) == DDERR_SURFACELOST) {
+			if (m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, 0, &data) == DDERR_SURFACELOST) {
 				m_ddSurface1->Restore();
-				m_ddSurface1->Blt(&rect1, m_ddSurface2, &rect2, 0, &data);
+				m_ddSurface1->Blt((LPRECT) &b, m_ddSurface2, (LPRECT) &a, 0, &data);
 			}
 		}
 	}
