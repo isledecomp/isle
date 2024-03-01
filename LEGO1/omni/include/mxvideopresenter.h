@@ -89,7 +89,7 @@ public:
 		// MxVideoPresenter::AlphaMask::`scalar deleting destructor'
 	};
 
-	inline MxS32 PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc);
+	inline MxS32 PrepareRects(RECT& p_rectDest, RECT& p_rectSrc);
 	inline MxBitmap* GetBitmap() { return m_bitmap; }
 	inline AlphaMask* GetAlphaMask() { return m_alpha; }
 

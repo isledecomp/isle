@@ -253,47 +253,41 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 	return TRUE;
 }
 
-inline MxS32 MxVideoPresenter::PrepareRects(MxRect32& p_rectDest, MxRect32& p_rectSrc)
+inline MxS32 MxVideoPresenter::PrepareRects(RECT& p_rectDest, RECT& p_rectSrc)
 {
-	if (p_rectDest.GetTop() > 480 || p_rectDest.GetLeft() > 640 || p_rectSrc.GetTop() > 480 ||
-		p_rectSrc.GetLeft() > 640) {
+	if (p_rectDest.top > 480 || p_rectDest.left > 640 || p_rectSrc.top > 480 || p_rectSrc.left > 640) {
 		return -1;
 	}
 
-	if (p_rectDest.GetBottom() > 480) {
-		p_rectDest.SetBottom(480);
+	if (p_rectDest.bottom > 480) {
+		p_rectDest.bottom = 480;
 	}
 
-	if (p_rectDest.GetRight() > 640) {
-		p_rectDest.SetRight(640);
+	if (p_rectDest.right > 640) {
+		p_rectDest.right = 640;
 	}
 
-	if (p_rectSrc.GetBottom() > 480) {
-		p_rectSrc.SetBottom(480);
+	if (p_rectSrc.bottom > 480) {
+		p_rectSrc.bottom = 480;
 	}
 
-	if (p_rectSrc.GetRight() > 640) {
-		p_rectSrc.SetRight(640);
+	if (p_rectSrc.right > 640) {
+		p_rectSrc.right = 640;
 	}
 
-	MxS32 height = p_rectDest.GetHeight();
-	if (height <= 1) {
+	LONG height, width;
+	if ((height = (p_rectDest.bottom - p_rectDest.top) + 1) <= 1 ||
+		(width = (p_rectDest.right - p_rectDest.left) + 1) <= 1) {
 		return -1;
 	}
-
-	MxS32 width = p_rectDest.GetWidth();
-	if (width <= 1) {
-		return -1;
-	}
-
-	if (p_rectSrc.GetRight() - width - p_rectSrc.GetLeft() == -1 &&
-		p_rectSrc.GetBottom() - height - p_rectSrc.GetTop() == -1) {
+	else if ((p_rectSrc.right - p_rectSrc.left + 1) == width && (p_rectSrc.bottom - p_rectSrc.top + 1) == height) {
 		return 1;
 	}
-
-	p_rectSrc.SetRight(p_rectSrc.GetLeft() + width - 1);
-	p_rectSrc.SetBottom(p_rectSrc.GetTop() + height - 1);
-	return 0;
+	else {
+		p_rectSrc.right = (p_rectSrc.left + width) - 1;
+		p_rectSrc.bottom = (p_rectSrc.top + height) - 1;
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x100b2a70
@@ -301,33 +295,29 @@ void MxVideoPresenter::PutFrame()
 {
 	MxDisplaySurface* displaySurface = MVideoManager()->GetDisplaySurface();
 	MxRegion* region = MVideoManager()->GetRegion();
-	MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
+	MxRect32 rect(MxPoint32(0, 0), MxSize32(GetWidth(), GetHeight()));
+	rect.AddPoint(GetLocation());
 	LPDIRECTDRAWSURFACE ddSurface = displaySurface->GetDirectDrawSurface2();
 
-	MxRect32 rectSrc, rectDest;
 	if (m_action->GetFlags() & MxDSAction::c_bit5) {
 		if (m_unk0x58) {
-			// TODO: Match
-			rectSrc.SetPoint(MxPoint32(0, 0));
-			rectSrc.SetRight(GetWidth());
-			rectSrc.SetBottom(GetHeight());
+			RECT src, dest;
+			src.top = 0;
+			src.left = 0;
+			src.right = GetWidth();
+			src.bottom = GetHeight();
 
-			rectDest.SetPoint(m_location);
-			rectDest.SetRight(rectDest.GetLeft() + GetWidth());
-			rectDest.SetBottom(rectDest.GetTop() + GetHeight());
+			dest.left = GetX();
+			dest.top = GetY();
+			dest.right = dest.left + GetWidth();
+			dest.bottom = dest.top + GetHeight();
 
-			switch (PrepareRects(rectDest, rectSrc)) {
+			switch (PrepareRects(src, dest)) {
 			case 0:
-				ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
+				ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
 				break;
 			case 1:
-				ddSurface->BltFast(
-					rectDest.GetLeft(),
-					rectDest.GetTop(),
-					m_unk0x58,
-					(LPRECT) &rectSrc,
-					DDBLTFAST_SRCCOLORKEY | DDBLTFAST_WAIT
-				);
+				ddSurface->BltFast(dest.left, dest.top, m_unk0x58, &src, DDBLTFAST_SRCCOLORKEY | DDBLTFAST_WAIT);
 			}
 		}
 		else {
@@ -349,29 +339,31 @@ void MxVideoPresenter::PutFrame()
 
 		while ((regionRect = cursor.VTable0x24(rect))) {
 			if (regionRect->GetWidth() >= 1 && regionRect->GetHeight() >= 1) {
-				if (m_unk0x58) {
-					rectSrc.SetLeft(regionRect->GetLeft() - m_location.GetX());
-					rectSrc.SetTop(regionRect->GetTop() - m_location.GetY());
-					rectSrc.SetRight(rectSrc.GetLeft() + regionRect->GetWidth());
-					rectSrc.SetBottom(rectSrc.GetTop() + regionRect->GetHeight());
+				RECT src, dest;
 
-					rectDest.SetLeft(regionRect->GetLeft());
-					rectDest.SetTop(regionRect->GetTop());
-					rectDest.SetRight(rectDest.GetLeft() + regionRect->GetWidth());
-					rectDest.SetBottom(rectDest.GetTop() + regionRect->GetHeight());
+				if (m_unk0x58) {
+					src.left = regionRect->GetLeft() - GetX();
+					src.top = regionRect->GetTop() - GetY();
+					src.right = src.left + regionRect->GetWidth();
+					src.bottom = src.top + regionRect->GetHeight();
+
+					dest.left = regionRect->GetLeft();
+					dest.top = regionRect->GetTop();
+					dest.right = dest.left + regionRect->GetWidth();
+					dest.bottom = dest.top + regionRect->GetHeight();
 				}
 
 				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_unk0x58) {
-						if (PrepareRects(rectDest, rectSrc) >= 0) {
-							ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, DDBLT_KEYSRC, NULL);
+						if (PrepareRects(src, dest) >= 0) {
+							ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
 						}
 					}
 					else {
 						displaySurface->VTable0x30(
 							m_bitmap,
-							regionRect->GetLeft() - m_location.GetX(),
-							regionRect->GetTop() - m_location.GetY(),
+							regionRect->GetLeft() - GetX(),
+							regionRect->GetTop() - GetY(),
 							regionRect->GetLeft(),
 							regionRect->GetTop(),
 							regionRect->GetWidth(),
@@ -381,15 +373,15 @@ void MxVideoPresenter::PutFrame()
 					}
 				}
 				else if (m_unk0x58) {
-					if (PrepareRects(rectDest, rectSrc) >= 0) {
-						ddSurface->Blt((LPRECT) &rectDest, m_unk0x58, (LPRECT) &rectSrc, 0, NULL);
+					if (PrepareRects(src, dest) >= 0) {
+						ddSurface->Blt(&dest, m_unk0x58, &src, 0, NULL);
 					}
 				}
 				else {
 					displaySurface->VTable0x28(
 						m_bitmap,
-						regionRect->GetLeft() - m_location.GetX(),
-						regionRect->GetTop() - m_location.GetY(),
+						regionRect->GetLeft() - GetX(),
+						regionRect->GetTop() - GetY(),
 						regionRect->GetLeft(),
 						regionRect->GetTop(),
 						regionRect->GetWidth(),
