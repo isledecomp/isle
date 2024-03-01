@@ -107,13 +107,9 @@ void LegoControlManager::FUN_100292e0()
 	LegoNotifyListCursor cursor(&m_notifyList);
 	MxCore* target;
 
-	// The usual cursor.Next() loop doesn't match here, even though
-	// the logic is the same. It does match when "deconstructed" into
-	// the following Head(), Current() and NextFragment() calls,
-	// but this seems unlikely to be the original code.
 	cursor.Head();
 	while (cursor.Current(target)) {
-		cursor.NextFragment();
+		cursor.Next();
 		target->Notify(m_event);
 	}
 }

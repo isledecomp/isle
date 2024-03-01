@@ -81,16 +81,6 @@ public:
 	inline MxBool IsLooping() const { return m_flags & c_looping; }
 	inline MxBool IsBit3() const { return m_flags & c_bit3; }
 
-	inline void CopyFlags(MxU32 p_flags)
-	{
-		if (p_flags & MxDSAction::c_looping) {
-			SetFlags(GetFlags() | MxDSAction::c_looping);
-		}
-		else if (p_flags & MxDSAction::c_bit3) {
-			SetFlags(GetFlags() | MxDSAction::c_bit3);
-		}
-	}
-
 	// SYNTHETIC: LEGO1 0x100ada60
 	// MxDSAction::`scalar deleting destructor'
 
