@@ -59,7 +59,7 @@ public:
 	static undefined SetUnk101013d8(undefined p_flag);
 
 protected:
-	void UpdateWorldData(const Matrix4& parent2world) override;
+	void UpdateWorldData(const Matrix4& parent2world) override; // vtable+0x28
 
 	Tgl::Group* geometry; // 0xdc
 	int m_unk0xe0;        // 0xe0
