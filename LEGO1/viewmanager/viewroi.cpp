@@ -4,7 +4,7 @@
 
 #include <vec.h>
 
-DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
+DECOMP_SIZE_ASSERT(ViewROI, 0xe4)
 
 // GLOBAL: LEGO1 0x101013d8
 undefined g_unk101013d8 = 0;
@@ -28,7 +28,7 @@ Tgl::Group* ViewROI::GetGeometry()
 }
 
 // FUNCTION: LEGO1 0x100a9ee0
-void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
+void ViewROI::UpdateWorldData(const Matrix4& parent2world)
 {
 	OrientableROI::UpdateWorldData(parent2world);
 
@@ -42,7 +42,7 @@ void ViewROI::UpdateWorldData(const MxMatrix& parent2world)
 }
 
 // STUB: LEGO1 0x100a9fc0
-void ViewROI::VTable0x24(const MxMatrix& p_transform)
+void ViewROI::VTable0x24(const Matrix4& p_transform)
 {
 	// TODO
 }

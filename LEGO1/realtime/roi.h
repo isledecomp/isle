@@ -15,10 +15,10 @@
 // SIZE 0x28
 class BoundingBox {
 public:
-	const Mx3DPointFloat& Min() const { return min; }
-	Mx3DPointFloat& Min() { return min; }
-	const Mx3DPointFloat& Max() const { return max; }
-	Mx3DPointFloat& Max() { return max; }
+	const Vector3& Min() const { return min; }
+	Vector3& Min() { return min; }
+	const Vector3& Max() const { return max; }
+	Vector3& Max() { return max; }
 
 private:
 	Mx3DPointFloat min; // 0x00
@@ -31,8 +31,8 @@ private:
 // SIZE 0x18
 class BoundingSphere {
 public:
-	const Mx3DPointFloat& Center() const { return center; }
-	Mx3DPointFloat& Center() { return center; }
+	const Vector3& Center() const { return center; }
+	Vector3& Center() { return center; }
 	const float& Radius() const { return radius; }
 	float& Radius() { return radius; }
 

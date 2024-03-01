@@ -16,8 +16,35 @@ OrientableROI::OrientableROI()
 	ZEROVEC3(m_world_velocity);
 	IDENTMAT4(m_local2world);
 
-	m_unk0xd4 = 0;
-	m_unk0xd8 |= c_bit1 | c_bit2;
+	m_unk0xd4 = NULL;
+	ToggleUnknown0xd8(TRUE);
+}
+
+// Maybe an overload based on MxMatrix type
+// FUNCTION: LEGO1 0x100a46a0
+void OrientableROI::WrappedSetLocalTransform(const Matrix4& p_transform)
+{
+	SetLocalTransform(p_transform);
+}
+
+// STUB: LEGO1 0x100a46b0
+void OrientableROI::FUN_100a46b0(Matrix4& p_transform)
+{
+	// TODO
+}
+
+// Maybe an overload based on MxMatrix type
+// FUNCTION: LEGO1 0x100a5090
+void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
+{
+	VTable0x24(p_transform);
+}
+
+// FUNCTION: LEGO1 0x100a58f0
+void OrientableROI::FUN_100a58f0(const Matrix4& p_transform)
+{
+	m_local2world = p_transform;
+	ToggleUnknown0xd8(TRUE);
 }
 
 // FUNCTION: LEGO1 0x100a5910
@@ -30,13 +57,13 @@ void OrientableROI::VTable0x1c()
 // FUNCTION: LEGO1 0x100a5930
 void OrientableROI::SetLocalTransform(const Matrix4& p_transform)
 {
-	reinterpret_cast<Matrix4&>(m_local2world) = p_transform;
+	m_local2world = p_transform;
 	UpdateWorldBoundingVolumes();
 	UpdateWorldVelocity();
 }
 
 // FUNCTION: LEGO1 0x100a5960
-void OrientableROI::VTable0x24(const MxMatrix& p_transform)
+void OrientableROI::VTable0x24(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
 	m_local2world.Product(p_transform, l_matrix);
@@ -45,7 +72,7 @@ void OrientableROI::VTable0x24(const MxMatrix& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a59b0
-void OrientableROI::UpdateWorldData(const MxMatrix& p_transform)
+void OrientableROI::UpdateWorldData(const Matrix4& p_transform)
 {
 	MxMatrix l_matrix(m_local2world);
 	m_local2world.Product(l_matrix, p_transform);
@@ -59,6 +86,12 @@ void OrientableROI::UpdateWorldData(const MxMatrix& p_transform)
 			static_cast<OrientableROI*>(child)->UpdateWorldData(p_transform);
 		}
 	}
+}
+
+// FUNCTION: LEGO1 0x100a5a30
+void OrientableROI::FUN_100a5a30(const Vector3& p_world_velocity)
+{
+	m_world_velocity = p_world_velocity;
 }
 
 // FUNCTION: LEGO1 0x100a5a50

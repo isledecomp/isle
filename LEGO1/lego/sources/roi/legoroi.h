@@ -44,10 +44,6 @@ public:
 	);
 	static unsigned char ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
 
-	void WrappedSetLocalTransform(Matrix4& p_transform);
-	void FUN_100a46b0(Matrix4& p_transform);
-	void FUN_100a58f0(const Matrix4& p_transform);
-
 	inline const char* GetName() const { return m_name; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
 
@@ -57,7 +53,6 @@ public:
 	// LegoROI::`scalar deleting destructor'
 
 private:
-	int m_unk0xe0;           // 0xe0
 	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
 	undefined4 m_unk0x100;   // 0x100
