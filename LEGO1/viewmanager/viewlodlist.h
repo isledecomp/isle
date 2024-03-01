@@ -108,20 +108,29 @@ private:
 // TEMPLATE: LEGO1 0x100a70e0
 // Map<char const *,ViewLODList *,ROINameComparator>::~Map<char const *,ViewLODList *,ROINameComparator>
 
+// TEMPLATE: LEGO1 0x100a77e0
+// LODListBase::~LODListBase
+
 // TEMPLATE: LEGO1 0x100a7800
 // _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Dec
 
+// TEMPLATE: LEGO1 0x100a7850
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Inc
+
 // TEMPLATE: LEGO1 0x100a7890
 // _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
+
+// TEMPLATE: LEGO1 0x100a7960
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::erase
+
+// TEMPLATE: LEGO1 0x100a7db0
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Erase
 
 // TEMPLATE: LEGO1 0x100a7df0
 // _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Insert
 
 // TEMPLATE: LEGO1 0x100a80a0
 // map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
-
-// TEMPLATE: LEGO1 0x100a77e0
-// LODListBase::~LODListBase
 
 // TEMPLATE: LEGO1 0x100a8160
 // LODList<ViewLOD>::~LODList<ViewLOD>

@@ -201,7 +201,7 @@ public:
 	void DeleteWorld(LegoWorld* p_world);
 	void FUN_1005b4f0(MxBool p_disable, MxU16 p_flags);
 	void CreateBackgroundAudio();
-	void RemoveWorld(const MxAtomId&, MxLong);
+	void RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId);
 	MxResult RegisterScripts();
 	MxS32 GetScriptIndex(const char* p_key);
 
