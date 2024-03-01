@@ -36,21 +36,24 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 	MxDSAction* action;
 
 	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
-		// The usual cursor.Next() loop doesn't match here, even though
-		// the logic is the same. It does match when "deconstructed" into
-		// the following Head(), Current() and NextFragment() calls,
-		// but this seems unlikely to be the original code.
-		// The alpha debug build also uses Next().
-		// cursor.Head();
-		// while (cursor.Current(action)) {
-		// cursor.NextFragment();
-		while (cursor.Next(action)) {
+		cursor.Head();
+
+		while (cursor.Current(action)) {
 			MxBool success = FALSE;
+			const char* presenterName;
+			MxPresenter* presenter = NULL;
 
-			action->CopyFlags(m_action->GetFlags());
+			cursor.Next();
 
-			const char* presenterName = PresenterNameDispatch(*action);
-			MxPresenter* presenter = (MxPresenter*) ObjectFactory()->Create(presenterName);
+			if (m_action->GetFlags() & MxDSAction::c_looping) {
+				action->SetFlags(action->GetFlags() | MxDSAction::c_looping);
+			}
+			else if (m_action->GetFlags() & MxDSAction::c_bit3) {
+				action->SetFlags(action->GetFlags() | MxDSAction::c_bit3);
+			}
+
+			presenterName = PresenterNameDispatch(*action);
+			presenter = (MxPresenter*) ObjectFactory()->Create(presenterName);
 
 			if (presenter && presenter->AddToManager() == SUCCESS) {
 				presenter->SetCompositePresenter(this);
