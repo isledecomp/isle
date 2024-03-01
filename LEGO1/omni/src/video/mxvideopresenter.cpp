@@ -312,7 +312,7 @@ void MxVideoPresenter::PutFrame()
 			dest.right = dest.left + GetWidth();
 			dest.bottom = dest.top + GetHeight();
 
-			switch (PrepareRects(src, dest)) {
+			switch (PrepareRects(dest, src)) {
 			case 0:
 				ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
 				break;
