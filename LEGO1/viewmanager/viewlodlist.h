@@ -22,12 +22,17 @@ class ViewLODListManager;
 // ViewLODLists are managed (created and destroyed) by ViewLODListManager.
 //
 
+// VTABLE: LEGO1 0x100dbdc4
+// SIZE 0x18
 class ViewLODList : public LODList<ViewLOD> {
 	friend ViewLODListManager;
 
 protected:
-	ViewLODList(size_t capacity);
+	ViewLODList(size_t capacity, ViewLODListManager* owner);
 	~ViewLODList() override;
+
+	// SYNTHETIC: LEGO1 0x100a80f0
+	// ViewLODList::`scalar deleting destructor'
 
 public:
 	inline int AddRef();
@@ -38,8 +43,8 @@ public:
 #endif
 
 private:
-	int m_refCount;
-	ViewLODListManager* m_owner;
+	int m_refCount;              // 0x10
+	ViewLODListManager* m_owner; // 0x14
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -48,7 +53,7 @@ private:
 // ??? for now, until we have symbol management
 typedef const char* ROIName;
 struct ROINameComparator {
-	bool operator()(const ROIName& rName1, const ROIName& rName2) const
+	unsigned char operator()(const ROIName& rName1, const ROIName& rName2) const
 	{
 		return strcmp((const char*) rName1, (const char*) rName2) > 0;
 	}
@@ -96,28 +101,51 @@ private:
 	ViewLODListMap m_map;
 };
 
+// clang-format off
 // FUNCTION: LEGO1 0x1001dde0
 // _Lockit::~_Lockit
 
-// clang-format off
-// TEMPLATE: LEGO1 0x100a7890
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
-// clang-format on
-
-// clang-format off
-// TEMPLATE: LEGO1 0x100a80a0
-// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
-// clang-format on
-
 // TEMPLATE: LEGO1 0x100a70e0
 // Map<char const *,ViewLODList *,ROINameComparator>::~Map<char const *,ViewLODList *,ROINameComparator>
+
+// TEMPLATE: LEGO1 0x100a77e0
+// LODListBase::~LODListBase
+
+// TEMPLATE: LEGO1 0x100a7800
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x100a7850
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x100a7890
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
+
+// TEMPLATE: LEGO1 0x100a7960
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::erase
+
+// TEMPLATE: LEGO1 0x100a7db0
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Erase
+
+// TEMPLATE: LEGO1 0x100a7df0
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Insert
+
+// TEMPLATE: LEGO1 0x100a80a0
+// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
+
+// TEMPLATE: LEGO1 0x100a8160
+// LODList<ViewLOD>::~LODList<ViewLOD>
+
+// GLOBAL: LEGO1 0x10101068
+// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Nil
+// clang-format on
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // ViewLODList implementation
 
-inline ViewLODList::ViewLODList(size_t capacity) : LODList<ViewLOD>(capacity), m_refCount(0)
+inline ViewLODList::ViewLODList(size_t capacity, ViewLODListManager* owner) : LODList<ViewLOD>(capacity), m_refCount(0)
 {
+	m_owner = owner;
 }
 
 inline ViewLODList::~ViewLODList()

@@ -19,6 +19,8 @@ class LODObject;
 // geometric representation than the one preceeding it.
 //
 
+// VTABLE: LEGO1 0x100dbdc8
+// SIZE 0x10
 class LODListBase {
 protected:
 	LODListBase(size_t capacity);
@@ -36,6 +38,9 @@ public:
 	// maximum number of LODObject* LODListBase can hold
 	size_t Capacity() const;
 
+	// SYNTHETIC: LEGO1 0x100a77b0
+	// LODListBase::`scalar deleting destructor'
+
 #ifdef _DEBUG
 	virtual void Dump(void (*pTracer)(const char*, ...)) const;
 #endif
@@ -46,9 +51,9 @@ private:
 	LODListBase& operator=(const LODListBase&);
 
 private:
-	const LODObject** m_ppLODObject;
-	size_t m_capacity;
-	size_t m_size;
+	const LODObject** m_ppLODObject; // 0x04
+	size_t m_capacity;               // 0x08
+	size_t m_size;                   // 0x0c
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -56,6 +61,7 @@ private:
 // LODList
 //
 
+// SIZE 0x10
 template <class T>
 class LODList : public LODListBase {
 public:
@@ -173,6 +179,12 @@ inline const T* LODList<T>::PopBack()
 {
 	return static_cast<const T*>(LODListBase::PopBack());
 }
+
+// VTABLE: LEGO1 0x100dbdc0
+// class LODList<ViewLOD>
+
+// SYNTHETIC: LEGO1 0x100a7740
+// LODList<ViewLOD>::`scalar deleting destructor'
 
 // re-enable: identifier was truncated to '255' characters in the debug information
 #pragma warning(default : 4786)
