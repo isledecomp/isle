@@ -312,7 +312,7 @@ void MxVideoPresenter::PutFrame()
 			dest.right = dest.left + GetWidth();
 			dest.bottom = dest.top + GetHeight();
 
-			switch (PrepareRects(dest, src)) {
+			switch (PrepareRects(src, dest)) {
 			case 0:
 				ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
 				break;
@@ -355,7 +355,7 @@ void MxVideoPresenter::PutFrame()
 
 				if (m_action->GetFlags() & MxDSAction::c_bit4) {
 					if (m_unk0x58) {
-						if (PrepareRects(dest, src) >= 0) {
+						if (PrepareRects(src, dest) >= 0) {
 							ddSurface->Blt(&dest, m_unk0x58, &src, DDBLT_KEYSRC, NULL);
 						}
 					}
@@ -373,7 +373,7 @@ void MxVideoPresenter::PutFrame()
 					}
 				}
 				else if (m_unk0x58) {
-					if (PrepareRects(dest, src) >= 0) {
+					if (PrepareRects(src, dest) >= 0) {
 						ddSurface->Blt(&dest, m_unk0x58, &src, 0, NULL);
 					}
 				}
