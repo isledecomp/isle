@@ -16,8 +16,8 @@ OrientableROI::OrientableROI()
 	ZEROVEC3(m_world_velocity);
 	IDENTMAT4(m_local2world);
 
-	m_unk0xd4 = 0;
-	m_unk0xd8 |= c_bit1 | c_bit2;
+	m_unk0xd4 = NULL;
+	ToggleUnknown0xd8(TRUE);
 }
 
 // FUNCTION: LEGO1 0x100a5910

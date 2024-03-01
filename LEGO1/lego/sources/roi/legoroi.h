@@ -57,7 +57,6 @@ public:
 	// LegoROI::`scalar deleting destructor'
 
 private:
-	int m_unk0xe0;           // 0xe0
 	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
 	undefined4 m_unk0x100;   // 0x100

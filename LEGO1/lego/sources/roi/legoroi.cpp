@@ -61,7 +61,7 @@ void LegoROI::configureLegoROI(int p_roiConfig)
 }
 
 // FUNCTION: LEGO1 0x100a81d0
-LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL), m_unk0xe0(-1)
+LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL)
 {
 	m_unk0xd4 = NULL;
 	m_name = NULL;
@@ -69,7 +69,7 @@ LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL), m_unk0x
 }
 
 // FUNCTION: LEGO1 0x100a82d0
-LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_renderer, p_lodList), m_unk0xe0(-1)
+LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_renderer, p_lodList)
 {
 	m_unk0xd4 = NULL;
 	m_name = NULL;

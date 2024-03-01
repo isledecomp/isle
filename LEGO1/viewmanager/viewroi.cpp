@@ -4,7 +4,7 @@
 
 #include <vec.h>
 
-DECOMP_SIZE_ASSERT(ViewROI, 0xe0)
+DECOMP_SIZE_ASSERT(ViewROI, 0xe4)
 
 // GLOBAL: LEGO1 0x101013d8
 undefined g_unk101013d8 = 0;

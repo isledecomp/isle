@@ -5,6 +5,7 @@
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
+// SIZE 0x10
 class MxTickleClient {
 public:
 	MxTickleClient(MxCore* p_client, MxTime p_interval);
@@ -33,10 +34,11 @@ private:
 typedef list<MxTickleClient*> MxTickleClientPtrList;
 
 // VTABLE: LEGO1 0x100d86d8
+// SIZE 0x14
 class MxTickleManager : public MxCore {
 public:
 	inline MxTickleManager() {}
-	~MxTickleManager() override; // vtable+0x00 (scalar deleting destructor)
+	~MxTickleManager() override;
 
 	MxResult Tickle() override;                                                // vtable+0x08
 	virtual void RegisterClient(MxCore* p_client, MxTime p_interval);          // vtable+0x14

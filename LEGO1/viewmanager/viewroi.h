@@ -13,13 +13,14 @@
 */
 
 // VTABLE: LEGO1 0x100dbe70
-// SIZE 0xe0
+// SIZE 0xe4
 class ViewROI : public OrientableROI {
 public:
 	inline ViewROI(Tgl::Renderer* pRenderer, ViewLODList* lodList)
 	{
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
+		m_unk0xe0 = -1;
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
@@ -61,6 +62,7 @@ protected:
 	void UpdateWorldData(const MxMatrix& parent2world) override;
 
 	Tgl::Group* geometry; // 0xdc
+	int m_unk0xe0;        // 0xe0
 };
 
 // SYNTHETIC: LEGO1 0x100aa250
