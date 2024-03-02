@@ -218,7 +218,7 @@ void LegoAnimPresenter::FUN_100695c0()
 	m_unk0x70 = new LegoROIList();
 
 	if (m_unk0x70) {
-		CompoundObject& rois = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetROIs();
+		const CompoundObject& rois = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetROIs();
 		LegoU32 numActors = m_anim->GetNumActors();
 
 		for (LegoU32 i = 0; i < numActors; i++) {

@@ -31,7 +31,7 @@ public:
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
 
-	inline CompoundObject& GetROIs() { return rois; }
+	inline const CompoundObject& GetROIs() { return rois; }
 
 	inline void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
