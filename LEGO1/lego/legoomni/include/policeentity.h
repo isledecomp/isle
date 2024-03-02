@@ -20,6 +20,9 @@ public:
 		return !strcmp(p_name, PoliceEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 
+	// STUB: LEGO1 0x10015310
+	MxLong VTable0x50(MxParam& p_param) override { return 0; }
+
 	// SYNTHETIC: LEGO1 0x1000f900
 	// PoliceEntity::`scalar deleting destructor'
 };

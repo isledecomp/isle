@@ -1,21 +1,26 @@
 #include "buildingentity.h"
 
-// STUB: LEGO1 0x10014e20
+#include "legoomni.h"
+#include "mxnotificationmanager.h"
+
+// FUNCTION: LEGO1 0x10014e20
 BuildingEntity::BuildingEntity()
 {
-	// TODO
+	NotificationManager()->Register(this);
 }
 
-// STUB: LEGO1 0x10015030
+// FUNCTION: LEGO1 0x10015030
 BuildingEntity::~BuildingEntity()
 {
-	// TODO
+	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x100150a0
+// FUNCTION: LEGO1 0x100150a0
 MxLong BuildingEntity::Notify(MxParam& p_param)
 {
-	// TODO
+	if (((MxNotificationParam&) p_param).GetType() == c_notificationType11) {
+		return VTable0x50(p_param);
+	}
 
 	return 0;
 }

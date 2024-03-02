@@ -20,6 +20,9 @@ public:
 		return !strcmp(p_name, BeachHouseEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 
+	// STUB: LEGO1 0x100153b0
+	MxLong VTable0x50(MxParam& p_param) override { return 0; }
+
 	// SYNTHETIC: LEGO1 0x1000f970
 	// BeachHouseEntity::`scalar deleting destructor'
 };

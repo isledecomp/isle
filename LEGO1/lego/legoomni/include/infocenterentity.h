@@ -20,6 +20,9 @@ public:
 		return !strcmp(p_name, InfoCenterEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 
+	// STUB: LEGO1 0x100150c0
+	MxLong VTable0x50(MxParam& p_param) override { return 0; }
+
 	// SYNTHETIC: LEGO1 0x1000f7b0
 	// InfoCenterEntity::`scalar deleting destructor'
 };
