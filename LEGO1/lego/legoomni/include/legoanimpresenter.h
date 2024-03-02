@@ -65,7 +65,7 @@ protected:
 	void FUN_100692b0();
 	void FUN_100695c0();
 	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);
-	LegoBool FUN_100698b0(const CompoundObject& rois, const LegoChar* p_und2);
+	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
 	void FUN_10069b10();
 	LegoBool FUN_1006aba0();
 	LegoBool FUN_1006abb0(LegoTreeNode*, undefined4);
