@@ -25,6 +25,8 @@ public:
 		return !strcmp(p_name, BuildingEntity::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
+	virtual MxLong VTable0x50(MxParam& p_param) = 0;
+
 	// SYNTHETIC: LEGO1 0x10015010
 	// BuildingEntity::`scalar deleting destructor'
 };

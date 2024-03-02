@@ -20,6 +20,9 @@ public:
 		return !strcmp(p_name, HospitalEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 
+	// STUB: LEGO1 0x10015270
+	virtual MxLong VTable0x50(MxParam& p_param) override { return 0; }
+
 	// SYNTHETIC: LEGO1 0x1000f820
 	// HospitalEntity::`scalar deleting destructor'
 };
