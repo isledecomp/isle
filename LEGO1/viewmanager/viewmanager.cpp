@@ -49,10 +49,10 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 		}
 
 		p_roi->SetUnknown0xe0(-1);
-		CompoundObject* comp = const_cast<CompoundObject*>(p_roi->GetComp());
+		const CompoundObject* comp = p_roi->GetComp();
 
 		if (comp != NULL) {
-			for (CompoundObject::iterator it = comp->begin(); !(it == comp->end()); it++) {
+			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
 				ViewROI* roi = (ViewROI*) *it;
 
 				if (roi != NULL) {
