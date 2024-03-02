@@ -32,8 +32,39 @@ ViewManager::~ViewManager()
 	SetPOVSource(NULL);
 }
 
-// STUB: LEGO1 0x100a64d0
-void ViewManager::RemoveAll(ViewROI*)
+// FUNCTION: LEGO1 0x100a64d0
+void ViewManager::RemoveAll(ViewROI* p_roi)
+{
+	if (p_roi == NULL) {
+		for (CompoundObject::iterator it = rois.begin(); !(it == rois.end()); it++) {
+			ViewROI* roi = (ViewROI*) *it;
+			RemoveAll(roi);
+		}
+
+		rois.erase(rois.begin(), rois.end());
+	}
+	else {
+		if (p_roi->GetUnknown0xe0() >= 0) {
+			FUN_100a66a0(p_roi);
+		}
+
+		p_roi->SetUnknown0xe0(-1);
+		const CompoundObject* comp = p_roi->GetComp();
+
+		if (comp != NULL) {
+			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+				ViewROI* roi = (ViewROI*) *it;
+
+				if (roi != NULL) {
+					RemoveAll(roi);
+				}
+			}
+		}
+	}
+}
+
+// STUB: LEGO1 0x100a66a0
+void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 {
 	// TODO
 }

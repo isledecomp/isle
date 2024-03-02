@@ -829,10 +829,10 @@ void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 LegoROI* LegoOmni::FindROI(const char* p_name)
 {
 	ViewManager* viewManager = GetVideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
-	CompoundObject& unk0x08 = viewManager->GetUnknown0x08();
+	const CompoundObject& rois = viewManager->GetROIs();
 
-	if (p_name != NULL && *p_name != '\0' && unk0x08.size() > 0) {
-		for (CompoundObject::iterator it = unk0x08.begin(); it != unk0x08.end(); it++) {
+	if (p_name != NULL && *p_name != '\0' && rois.size() > 0) {
+		for (CompoundObject::const_iterator it = rois.begin(); it != rois.end(); it++) {
 			LegoROI* roi = (LegoROI*) *it;
 			const char* name = roi->GetName();
 
