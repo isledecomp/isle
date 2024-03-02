@@ -38,7 +38,7 @@ public:
 	void FUN_100a58f0(const Matrix4& p_transform);
 	void FUN_100a5a30(const Vector3& p_world_velocity);
 
-	const MxMatrix& GetLocal2World() const { return m_local2world; }
+	const Matrix4& GetLocal2World() const { return m_local2world; }
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }

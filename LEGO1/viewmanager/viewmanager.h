@@ -43,12 +43,12 @@ private:
 	float unk0x28;            // 0x28
 	undefined4 unk0x2c;       // 0x2c
 	unsigned int flags;       // 0x30
-	float unk0x34;            // 0x34
-	float unk0x38;            // 0x38
-	float unk0x3c;            // 0x3c
-	MxMatrix unk0x40;         // 0x40
-	float unk0x88;            // 0x88
-	float unk0x8c;            // 0x8c
+	float width;              // 0x34
+	float height;             // 0x38
+	float view_angle;         // 0x3c
+	MxMatrix pov;             // 0x40
+	float front;              // 0x88
+	float back;               // 0x8c
 	undefined unk0x90[0x60];  // 0x90
 	undefined unk0xf0[0x60];  // 0xf0
 	undefined unk0x150[0x60]; // 0x150
