@@ -26,10 +26,10 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	seconds_allowed = 1.0;
 }
 
-// STUB: LEGO1 0x100a60c0
+// FUNCTION: LEGO1 0x100a60c0
 ViewManager::~ViewManager()
 {
-	// TODO
+	SetPOVSource(NULL);
 }
 
 // STUB: LEGO1 0x100a64d0
