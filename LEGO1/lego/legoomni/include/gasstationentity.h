@@ -21,7 +21,7 @@ public:
 	}
 
 	// STUB: LEGO1 0x100151d0
-	virtual MxLong VTable0x50(MxParam& p_param) override { return 0; }
+	MxLong VTable0x50(MxParam& p_param) override { return 0; }
 
 	// SYNTHETIC: LEGO1 0x1000f890
 	// GasStationEntity::`scalar deleting destructor'

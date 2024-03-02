@@ -20,7 +20,7 @@ class RaceStandsEntity : public BuildingEntity {
 	}
 
 	// STUB: LEGO1 0x10015450
-	virtual MxLong VTable0x50(MxParam& p_param) override { return 0; }
+	MxLong VTable0x50(MxParam& p_param) override { return 0; }
 
 	// SYNTHETIC: LEGO1 0x1000f9e0
 	// RaceStandsEntity::`scalar deleting destructor'
