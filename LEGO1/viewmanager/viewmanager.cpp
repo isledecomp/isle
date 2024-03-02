@@ -15,12 +15,12 @@ ViewManager::ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const Orie
 	unk0x28 = 0.09;
 	SetD3DRM(d3drm, pRenderer);
 	SetFrame(frame, scene);
-	unk0x34 = 0.0;
-	unk0x38 = 0.0;
-	unk0x3c = 0.0;
-	unk0x40.SetIdentity();
-	unk0x88 = 0.0;
-	unk0x8c = 0.0;
+	width = 0.0;
+	height = 0.0;
+	view_angle = 0.0;
+	pov.SetIdentity();
+	front = 0.0;
+	back = 0.0;
 
 	memset(unk0xf0, 0, sizeof(unk0xf0));
 	seconds_allowed = 1.0;
@@ -44,22 +44,30 @@ void ViewManager::Update(float p_previousRenderTime, float p_und2)
 	// TODO
 }
 
-// STUB: LEGO1 0x100a6d50
+// FUNCTION: LEGO1 0x100a6d50
 void ViewManager::SetResolution(int width, int height)
 {
-	// TODO
+	flags |= c_bit3;
+	this->width = width;
+	this->height = height;
 }
 
-// STUB: LEGO1 0x100a6d70
+// FUNCTION: LEGO1 0x100a6d70
 void ViewManager::SetFrustrum(float fov, float front, float back)
 {
-	// TODO
+	this->front = front;
+	this->back = back;
+	flags |= c_bit3;
+	view_angle = fov * 0.017453292519944444;
 }
 
-// STUB: LEGO1 0x100a6da0
+// FUNCTION: LEGO1 0x100a6da0
 void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 {
-	// TODO
+	if (point_of_view != NULL) {
+		pov = point_of_view->GetLocal2World();
+		flags |= c_bit2;
+	}
 }
 
 inline undefined4 SetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer)
