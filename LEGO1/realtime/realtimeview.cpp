@@ -14,6 +14,17 @@ float g_userMaxLod = 3.6f;
 // GLOBAL: LEGO1 0x1010104c
 float g_partsThreshold = 1000.0f;
 
+// FUNCTION: LEGO1 0x100a5dc0
+RealtimeView::RealtimeView()
+{
+	UpdateMaxLOD();
+}
+
+// FUNCTION: LEGO1 0x100a5dd0
+RealtimeView::~RealtimeView()
+{
+}
+
 // FUNCTION: LEGO1 0x100a5de0
 void RealtimeView::SetUserMaxLOD(float p_lod)
 {
