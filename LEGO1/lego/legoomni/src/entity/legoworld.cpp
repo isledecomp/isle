@@ -547,7 +547,7 @@ void LegoWorld::Enable(MxBool p_enable)
 				while (cursor.Next(entity)) {
 					if (entity->GetROI()) {
 						entity->GetROI()->SetUnknown0x104(entity);
-						GetViewManager()->AddToUnknown0x08(entity->GetROI());
+						GetViewManager()->Add(entity->GetROI());
 					}
 				}
 			}

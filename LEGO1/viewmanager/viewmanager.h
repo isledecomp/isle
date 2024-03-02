@@ -21,8 +21,8 @@ public:
 	ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view);
 	virtual ~ViewManager();
 
-	void RemoveAll(ViewROI*);
-
+	void RemoveAll(ViewROI* p_roi);
+	void FUN_100a66a0(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
@@ -31,13 +31,13 @@ public:
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
 
-	inline CompoundObject& GetUnknown0x08() { return unk0x08; }
+	inline CompoundObject& GetROIs() { return rois; }
 
-	inline void AddToUnknown0x08(ViewROI* p_roi) { unk0x08.push_back(p_roi); }
+	inline void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
 
 private:
 	Tgl::Group* scene;        // 0x04
-	CompoundObject unk0x08;   // 0x08
+	CompoundObject rois;      // 0x08
 	RealtimeView rt_view;     // 0x14
 	ROIList visible_rois;     // 0x18
 	float unk0x28;            // 0x28

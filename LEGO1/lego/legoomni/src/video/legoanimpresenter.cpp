@@ -218,11 +218,11 @@ void LegoAnimPresenter::FUN_100695c0()
 	m_unk0x70 = new LegoROIList();
 
 	if (m_unk0x70) {
-		CompoundObject& unk0x08 = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetUnknown0x08();
+		CompoundObject& rois = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->GetROIs();
 		LegoU32 numActors = m_anim->GetNumActors();
 
 		for (LegoU32 i = 0; i < numActors; i++) {
-			if (FUN_100698b0(unk0x08, m_anim->GetActorName(i)) == FALSE) {
+			if (FUN_100698b0(rois, m_anim->GetActorName(i)) == FALSE) {
 				undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
 
 				if (unk0x04 == 5 || unk0x04 == 6) {
@@ -239,7 +239,7 @@ void LegoAnimPresenter::FUN_100695c0()
 					strlwr(dest);
 
 					UnkSaveDataWriter()->FUN_10085210(str, dest, 0);
-					FUN_100698b0(unk0x08, str);
+					FUN_100698b0(rois, str);
 				}
 			}
 		}
@@ -274,7 +274,7 @@ LegoChar* LegoAnimPresenter::FUN_100697c0(const LegoChar* p_und1, const LegoChar
 }
 
 // FUNCTION: LEGO1 0x100698b0
-LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_und1, const LegoChar* p_und2)
+LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& rois, const LegoChar* p_und2)
 {
 	LegoBool result = FALSE;
 
@@ -285,8 +285,8 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_und1, const Leg
 		str = tmp;
 	}
 
-	if (str != NULL && *str != '\0' && p_und1.size() > 0) {
-		for (CompoundObject::const_iterator it = p_und1.begin(); it != p_und1.end(); it++) {
+	if (str != NULL && *str != '\0' && rois.size() > 0) {
+		for (CompoundObject::const_iterator it = rois.begin(); it != rois.end(); it++) {
 			LegoROI* roi = (LegoROI*) *it;
 			const char* name = roi->GetName();
 

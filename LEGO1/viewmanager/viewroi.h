@@ -56,6 +56,9 @@ public:
 	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
 	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
 
+	inline int GetUnknown0xe0() { return m_unk0xe0; }
+	inline void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
+
 	static undefined SetUnk101013d8(undefined p_flag);
 
 protected:
