@@ -84,6 +84,8 @@ public:
 		return m_data->CreateTextureFromSurface(pSurface, pTexture2);
 	}
 
+	inline IDirect3DRM2* ImplementationData() const { return m_data; }
+
 public:
 	inline Result Create();
 	inline void Destroy();

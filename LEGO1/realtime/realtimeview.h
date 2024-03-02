@@ -3,6 +3,9 @@
 
 class RealtimeView {
 public:
+	RealtimeView();
+	~RealtimeView();
+
 	static float GetPartsThreshold();
 	static float GetUserMaxLOD();
 	static void SetPartsThreshold(float);
