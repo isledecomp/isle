@@ -261,7 +261,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	ModelDbPart* part;
 
 	while (cursor.Next(part)) {
-		if (GetViewLODListManager()->Lookup(part->m_name.GetData()) == NULL &&
+		if (GetViewLODListManager()->Lookup(part->m_roiName.GetData()) == NULL &&
 			FUN_10067360(*part, wdbFile) != SUCCESS) {
 			return FAILURE;
 		}

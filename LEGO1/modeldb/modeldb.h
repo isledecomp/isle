@@ -12,7 +12,7 @@
 struct ModelDbPart {
 	MxResult Read(FILE* p_file);
 
-	MxString m_name;      // 0x00
+	MxString m_roiName;   // 0x00
 	undefined4 m_unk0x10; // 0x10
 	undefined4 m_unk0x14; // 0x14
 };
@@ -32,7 +32,7 @@ public:
 	// FUNCTION: LEGO1 0x10027c40
 	MxS8 Compare(ModelDbPart* p_a, ModelDbPart* p_b) override
 	{
-		MxS32 compare = strcmpi(p_a->m_name.GetData(), p_b->m_name.GetData());
+		MxS32 compare = strcmpi(p_a->m_roiName.GetData(), p_b->m_roiName.GetData());
 
 		if (compare == 0) {
 			p_b->m_unk0x10 = p_a->m_unk0x10;
