@@ -11,7 +11,7 @@ MxResult ModelDbModel::Read(FILE* p_file)
 {
 	MxU32 len;
 
-	if (fread(&len, sizeof(MxU32), 1, p_file) != 1) {
+	if (fread(&len, sizeof(len), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
