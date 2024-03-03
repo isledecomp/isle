@@ -1,7 +1,5 @@
 #include "modeldb.h"
 
-#include "windows.h"
-
 DECOMP_SIZE_ASSERT(ModelDbWorld, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbPart, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbModel, 0x38)
