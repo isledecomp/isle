@@ -285,10 +285,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle_hi")) {
 					continue;
 				}
-				break;
 			}
-
-			goto ok;
 		}
 		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_models[j].m_modelName, "haus", 4)) {
 			if (worlds[i].m_models[j].m_modelName[4] == '3') {
@@ -304,12 +301,12 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 					return FAILURE;
 				}
 			}
+
+			continue;
 		}
-		else {
-		ok:
-			if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
-				return FAILURE;
-			}
+
+		if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+			return FAILURE;
 		}
 	}
 
