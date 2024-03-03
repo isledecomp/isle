@@ -14,6 +14,7 @@ class DumpOpt(Enum):
     PUBLICS = 3
     SECTION_CONTRIB = 4
     MODULES = 5
+    TYPES = 6
 
 
 cvdump_opt_map = {
@@ -23,6 +24,7 @@ cvdump_opt_map = {
     DumpOpt.PUBLICS: "-p",
     DumpOpt.SECTION_CONTRIB: "-seccontrib",
     DumpOpt.MODULES: "-m",
+    DumpOpt.TYPES: "-t",
 }
 
 
@@ -53,6 +55,10 @@ class Cvdump:
 
     def modules(self):
         self._options.add(DumpOpt.MODULES)
+        return self
+
+    def types(self):
+        self._options.add(DumpOpt.TYPES)
         return self
 
     def cmd_line(self) -> List[str]:

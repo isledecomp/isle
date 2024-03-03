@@ -1,9 +1,10 @@
 import re
 from typing import Iterable, Tuple
 from collections import namedtuple
+from .types import CvdumpTypesParser
 
 # e.g. `*** PUBLICS`
-_section_change_regex = re.compile(r"^\*\*\* (?P<section>[A-Z/ ]+)")
+_section_change_regex = re.compile(r"^\*\*\* (?P<section>[A-Z/ ]+)$")
 
 # e.g. `     27 00034EC0     28 00034EE2     29 00034EE7     30 00034EF4`
 _line_addr_pairs_findall = re.compile(r"\s+(?P<line_no>\d+) (?P<addr>[A-F0-9]{8})")
@@ -75,6 +76,8 @@ class CvdumpParser:
         self.sizerefs = []
         self.globals = []
         self.modules = []
+
+        self.types = CvdumpTypesParser()
 
     def _lines_section(self, line: str):
         """Parsing entries from the LINES section. We only care about the pairs of
@@ -197,6 +200,9 @@ class CvdumpParser:
 
         elif self._section == "MODULES":
             self._modules_section(line)
+
+        elif self._section == "TYPES":
+            self.types.read_line(line)
 
     def read_lines(self, lines: Iterable[str]):
         for line in lines:
