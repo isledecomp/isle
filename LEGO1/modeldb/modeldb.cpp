@@ -57,6 +57,8 @@ MxResult ModelDbPart::Read(FILE* p_file)
 	if (fread(&len, sizeof(len), 1, p_file) != 1) {
 		return FAILURE;
 	}
+
+	// Critical bug: buffer overrun
 	if (fread(buff, len, 1, p_file) != 1) {
 		return FAILURE;
 	}
