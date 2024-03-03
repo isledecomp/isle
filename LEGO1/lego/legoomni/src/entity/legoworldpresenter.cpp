@@ -189,6 +189,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 	ModelDbWorld* worlds = NULL;
 	MxS32 numWorlds;
+	MxS32 i, j;
 	FILE* wdbFile = fopen(wdbPath, "rb");
 
 	if (wdbFile == NULL) {
@@ -197,7 +198,6 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 	ReadModelDbWorlds(wdbFile, worlds, numWorlds);
 
-	MxS32 i;
 	for (i = 0; i < numWorlds; i++) {
 		if (!strcmpi(worlds[i].m_worldName, p_worldName)) {
 			break;
@@ -268,7 +268,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 	}
 
-	for (MxS32 j = 0; j < worlds[i].m_numModels; j++) {
+	for (j = 0; j < worlds[i].m_numModels; j++) {
 		if (!strnicmp(worlds[i].m_models[j].m_modelName, "isle", 4)) {
 			switch (g_legoWorldPresenterQuality) {
 			case 0:
@@ -288,30 +288,27 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 				break;
 			}
 
-			if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
-				return FAILURE;
-			}
+			goto ok;
 		}
-		else {
-			if (g_legoWorldPresenterQuality < 1 && !strcmpi(worlds[i].m_models[j].m_modelName, "haus")) {
+		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_models[j].m_modelName, "haus", 4)) {
+			if (worlds[i].m_models[j].m_modelName[4] == '3') {
 				if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
 					return FAILURE;
 				}
-			}
-			else {
-				if (worlds[i].m_models[j].m_modelName[4] == '3') {
-					if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
-						return FAILURE;
-					}
 
-					if (FUN_100674b0(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
-						return FAILURE;
-					}
-
-					if (FUN_100674b0(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
-						return FAILURE;
-					}
+				if (FUN_100674b0(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
+					return FAILURE;
 				}
+
+				if (FUN_100674b0(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
+					return FAILURE;
+				}
+			}
+		}
+		else {
+		ok:
+			if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+				return FAILURE;
 			}
 		}
 	}

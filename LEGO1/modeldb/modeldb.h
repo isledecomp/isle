@@ -86,6 +86,9 @@ public:
 // SYNTHETIC: LEGO1 0x10027fc0
 // MxListCursor<ModelDbPart *>::`scalar deleting destructor'
 
+// TEMPLATE: LEGO1 0x10028030
+// ModelDbPartListCursor::~ModelDbPartListCursor
+
 // SIZE 0x38
 struct ModelDbModel {
 	MxResult Read(FILE* p_file);
