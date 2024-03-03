@@ -188,8 +188,9 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	}
 
 	ModelDbWorld* worlds = NULL;
-	MxS32 numWorlds;
-	MxS32 i, j;
+	MxS32 numWorlds, i, j;
+	MxU32 size;
+	MxU8* buff;
 	FILE* wdbFile = fopen(wdbPath, "rb");
 
 	if (wdbFile == NULL) {
@@ -209,12 +210,11 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	}
 
 	if (g_wdbOffset == 0) {
-		MxU32 size;
 		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
-		MxU8* buff = new MxU8[size];
+		buff = new MxU8[size];
 		if (fread(buff, size, 1, wdbFile) != 1) {
 			return FAILURE;
 		}
@@ -229,7 +229,6 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 
 		delete[] buff;
-		// buff = NULL;
 
 		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
 			return FAILURE;
