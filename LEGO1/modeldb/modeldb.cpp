@@ -9,64 +9,65 @@ DECOMP_SIZE_ASSERT(ModelDbPartListCursor, 0x10)
 // FUNCTION: LEGO1 0x100276b0
 MxResult ModelDbModel::Read(FILE* p_file)
 {
-	MxU32 charSize;
+	MxU32 len;
 
-	if (fread(&charSize, sizeof(MxU32), 1, p_file) != 1) {
-		return FAILURE;
-	}
-	m_modelName = new char[charSize];
-
-	if (fread(m_modelName, charSize, 1, p_file) != 1) {
+	if (fread(&len, sizeof(MxU32), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
-	if (fread(&m_unk0x04, sizeof(undefined4), 1, p_file) != 1) {
-		return FAILURE;
-	}
-	if (fread(&m_unk0x08, sizeof(undefined4), 1, p_file) != 1) {
-		return FAILURE;
-	}
-
-	if (fread(&charSize, sizeof(MxU32), 1, p_file) != 1) {
+	m_modelName = new char[len];
+	if (fread(m_modelName, len, 1, p_file) != 1) {
 		return FAILURE;
 	}
 
-	m_presenter = new char[charSize];
-	if (fread(m_presenter, charSize, 1, p_file) != 1) {
+	if (fread(&m_unk0x04, sizeof(m_unk0x04), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x08, sizeof(m_unk0x08), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	if (fread(&len, sizeof(len), 1, p_file) != 1) {
 		return FAILURE;
 	}
 
-	if (fread(&m_unk0x10, sizeof(undefined4), 3, p_file) != 3) {
-		return FAILURE;
-	}
-	if (fread(&m_unk0x1c, sizeof(undefined4), 3, p_file) != 3) {
-		return FAILURE;
-	}
-	if (fread(&m_unk0x28, sizeof(undefined4), 3, p_file) != 3) {
+	m_presenterName = new char[len];
+	if (fread(m_presenterName, len, 1, p_file) != 1) {
 		return FAILURE;
 	}
 
-	return fread(&m_unk0x34, sizeof(undefined), 1, p_file) == 1 ? SUCCESS : FAILURE;
+	if (fread(&m_unk0x10, sizeof(*m_unk0x10), 3, p_file) != 3) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x1c, sizeof(*m_unk0x1c), 3, p_file) != 3) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x28, sizeof(*m_unk0x28), 3, p_file) != 3) {
+		return FAILURE;
+	}
+
+	return fread(&m_unk0x34, sizeof(m_unk0x34), 1, p_file) == 1 ? SUCCESS : FAILURE;
 }
 
 // FUNCTION: LEGO1 0x10027850
 MxResult ModelDbPart::Read(FILE* p_file)
 {
-	MxU32 size;
-	char roiNameBuffer[128];
-	if (fread(&size, sizeof(MxU32), 1, p_file) != 1) {
-		return FAILURE;
-	}
-	if (fread(roiNameBuffer, size, 1, p_file) != 1) {
-		return FAILURE;
-	}
-	m_roiName = roiNameBuffer;
+	MxU32 len;
+	char buff[128];
 
-	if (fread(&m_unk0x10, sizeof(undefined4), 1, p_file) != 1) {
+	if (fread(&len, sizeof(len), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	if (fread(buff, len, 1, p_file) != 1) {
 		return FAILURE;
 	}
 
-	return fread(&m_unk0x14, sizeof(undefined4), 1, p_file) == 1 ? SUCCESS : FAILURE;
+	m_roiName = buff;
+
+	if (fread(&m_unk0x10, sizeof(m_unk0x10), 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	return fread(&m_unk0x14, sizeof(m_unk0x14), 1, p_file) == 1 ? SUCCESS : FAILURE;
 }
 
 // FUNCTION: LEGO1 0x10027910
