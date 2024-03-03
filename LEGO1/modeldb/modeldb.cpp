@@ -1,21 +1,74 @@
 #include "modeldb.h"
 
+#include "windows.h"
+
 DECOMP_SIZE_ASSERT(ModelDbWorld, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbPart, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbModel, 0x38)
 DECOMP_SIZE_ASSERT(ModelDbPartList, 0x1c)
 DECOMP_SIZE_ASSERT(ModelDbPartListCursor, 0x10)
 
-// STUB: LEGO1 0x100276b0
+// FUNCTION: LEGO1 0x100276b0
 MxResult ModelDbModel::Read(FILE* p_file)
 {
-	return SUCCESS;
+	MxU32 charSize;
+
+	if (fread(&charSize, sizeof(MxU32), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	m_modelName = new char[charSize];
+
+	if (fread(m_modelName, charSize, 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	if (fread(&m_unk0x04, sizeof(undefined4), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x08, sizeof(undefined4), 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	if (fread(&charSize, sizeof(MxU32), 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	m_presenter = new char[charSize];
+	if (fread(m_presenter, charSize, 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	if (fread(&m_unk0x10, sizeof(undefined4), 3, p_file) != 3) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x1c, sizeof(undefined4), 3, p_file) != 3) {
+		return FAILURE;
+	}
+	if (fread(&m_unk0x28, sizeof(undefined4), 3, p_file) != 3) {
+		return FAILURE;
+	}
+
+	return fread(&m_unk0x34, sizeof(undefined), 1, p_file) == 1 ? SUCCESS : FAILURE;
 }
 
-// STUB: LEGO1 0x10027850
+// FUNCTION: LEGO1 0x10027850
 MxResult ModelDbPart::Read(FILE* p_file)
 {
-	return SUCCESS;
+	MxU32 size;
+	char roiNameBuffer[128];
+	if (fread(&size, sizeof(MxU32), 1, p_file) != 1) {
+		return FAILURE;
+	}
+	if (fread(roiNameBuffer, size, 1, p_file) != 1) {
+		return FAILURE;
+	}
+	m_roiName = roiNameBuffer;
+
+	if (fread(&m_unk0x10, sizeof(undefined4), 1, p_file) != 1) {
+		return FAILURE;
+	}
+
+	return fread(&m_unk0x14, sizeof(undefined4), 1, p_file) == 1 ? SUCCESS : FAILURE;
 }
 
 // FUNCTION: LEGO1 0x10027910

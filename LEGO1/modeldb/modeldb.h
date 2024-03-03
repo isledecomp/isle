@@ -93,8 +93,14 @@ public:
 struct ModelDbModel {
 	MxResult Read(FILE* p_file);
 
-	char* m_modelName;         // 0x00
-	undefined m_unk0x04[0x34]; // 0x04
+	char* m_modelName;       // 0x00
+	undefined4 m_unk0x04;    // 0x04
+	undefined4 m_unk0x08;    // 0x08
+	char* m_presenter;       // 0x0c
+	undefined4 m_unk0x10[3]; // 0x10
+	undefined4 m_unk0x1c[3]; // 0x1c
+	undefined4 m_unk0x28[3]; // 0x28
+	undefined m_unk0x34;     // 0x34
 };
 
 // SIZE 0x18
