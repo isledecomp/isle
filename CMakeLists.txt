@@ -387,6 +387,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/video/legovideomanager.cpp
   LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
   LEGO1/main.cpp
+  LEGO1/modeldb/modeldb.cpp
 )
 register_lego1_target(lego1)
 

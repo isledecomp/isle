@@ -7,6 +7,9 @@
 // SIZE 0x54 (from inlined construction at 0x10009fac)
 class LegoPartPresenter : public MxMediaPresenter {
 public:
+	LegoPartPresenter() { Reset(); }
+
+	// FUNCTION: LEGO1 0x10067300
 	~LegoPartPresenter() override { Destroy(TRUE); }
 
 	// FUNCTION: LEGO1 0x1000cf70
@@ -31,8 +34,15 @@ public:
 	// SYNTHETIC: LEGO1 0x1000d060
 	// LegoPartPresenter::`scalar deleting destructor'
 
+	inline void Reset() { m_partData = NULL; }
+
+	MxResult ParsePart(MxDSChunk& p_chunk);
+	void FUN_1007df20();
+
 private:
 	void Destroy(MxBool p_fromDestructor);
+
+	MxDSChunk* m_partData; // 0x54
 };
 
 #endif // LEGOPARTPRESENTER_H

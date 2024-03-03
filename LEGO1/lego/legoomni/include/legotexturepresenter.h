@@ -7,6 +7,7 @@
 // SIZE 0x54 (from inlined construction at 0x10009bb5)
 class LegoTexturePresenter : public MxMediaPresenter {
 public:
+	LegoTexturePresenter() : m_textureData(NULL) {}
 	~LegoTexturePresenter() override;
 
 	// FUNCTION: LEGO1 0x1000ce50
@@ -28,6 +29,12 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1000cf40
 	// LegoTexturePresenter::`scalar deleting destructor'
+
+	MxResult ParseTexture(MxDSChunk& p_chunk);
+	void FUN_1004f290();
+
+private:
+	MxDSChunk* m_textureData; // 0x54
 };
 
 #endif // LEGOTEXTUREPRESENTER_H

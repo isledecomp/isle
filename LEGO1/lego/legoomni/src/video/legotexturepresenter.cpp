@@ -4,6 +4,8 @@
 #include "legovideomanager.h"
 #include "mxcompositepresenter.h"
 
+DECOMP_SIZE_ASSERT(LegoTexturePresenter, 0x54)
+
 // FUNCTION: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()
 {
@@ -15,6 +17,19 @@ MxResult LegoTexturePresenter::AddToManager()
 {
 	VideoManager()->RegisterPresenter(*this);
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x1004ebd0
+MxResult LegoTexturePresenter::ParseTexture(MxDSChunk& p_chunk)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x1004f290
+void LegoTexturePresenter::FUN_1004f290()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x1004fc60

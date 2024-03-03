@@ -5,12 +5,16 @@
 #include "legobuildingmanager.h"
 #include "legoentity.h"
 #include "legoomni.h"
+#include "legopartpresenter.h"
 #include "legoplantmanager.h"
+#include "legotexturepresenter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsactionlist.h"
+#include "mxdschunk.h"
 #include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
 #include "mxnotificationmanager.h"
@@ -19,8 +23,13 @@
 #include "mxstl/stlcompat.h"
 #include "mxutil.h"
 
+#include <io.h>
+
 // GLOBAL: LEGO1 0x100f75d4
-undefined4 g_legoWorldPresenterQuality = 1;
+MxS32 g_legoWorldPresenterQuality = 1;
+
+// GLOBAL: LEGO1 0x100f75d8
+long g_wdbOffset = 0;
 
 // FUNCTION: LEGO1 0x100665b0
 void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality)
@@ -152,9 +161,171 @@ void LegoWorldPresenter::StartingTickle()
 	ProgressTickleState(e_streaming);
 }
 
-// STUB: LEGO1 0x10066b40
-void LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
+// FUNCTION: LEGO1 0x10066b40
+MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 {
+	char wdbPath[512];
+	sprintf(wdbPath, "%s", MxOmni::GetHD());
+
+	if (wdbPath[strlen(wdbPath) - 1] != '\\') {
+		strcat(wdbPath, "\\");
+	}
+
+	strcat(wdbPath, "lego\\data\\world.wdb");
+
+	if (access(wdbPath, 4) != 0) {
+		sprintf(wdbPath, "%s", MxOmni::GetCD());
+
+		if (wdbPath[strlen(wdbPath) - 1] != '\\') {
+			strcat(wdbPath, "\\");
+		}
+
+		strcat(wdbPath, "lego\\data\\world.wdb");
+
+		if (access(wdbPath, 4) != 0) {
+			return FAILURE;
+		}
+	}
+
+	ModelDbWorld* worlds = NULL;
+	MxS32 numWorlds, i, j;
+	MxU32 size;
+	MxU8* buff;
+	FILE* wdbFile = fopen(wdbPath, "rb");
+
+	if (wdbFile == NULL) {
+		return FAILURE;
+	}
+
+	ReadModelDbWorlds(wdbFile, worlds, numWorlds);
+
+	for (i = 0; i < numWorlds; i++) {
+		if (!strcmpi(worlds[i].m_worldName, p_worldName)) {
+			break;
+		}
+	}
+
+	if (i == numWorlds) {
+		return FAILURE;
+	}
+
+	if (g_wdbOffset == 0) {
+		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		buff = new MxU8[size];
+		if (fread(buff, size, 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		MxDSChunk chunk;
+		chunk.SetLength(size);
+		chunk.SetData(buff);
+
+		LegoTexturePresenter texturePresenter;
+		if (texturePresenter.ParseTexture(chunk) == SUCCESS) {
+			texturePresenter.FUN_1004f290();
+		}
+
+		delete[] buff;
+
+		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		buff = new MxU8[size];
+		if (fread(buff, size, 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		chunk.SetLength(size);
+		chunk.SetData(buff);
+
+		LegoPartPresenter partPresenter;
+		if (partPresenter.ParsePart(chunk) == SUCCESS) {
+			partPresenter.FUN_1007df20();
+		}
+
+		delete[] buff;
+
+		g_wdbOffset = ftell(wdbFile);
+	}
+	else {
+		if (fseek(wdbFile, g_wdbOffset, SEEK_SET) != 0) {
+			return FAILURE;
+		}
+	}
+
+	ModelDbPartListCursor cursor(worlds[i].m_partList);
+	ModelDbPart* part;
+
+	while (cursor.Next(part)) {
+		if (GetViewLODListManager()->Lookup(part->m_roiName.GetData()) == NULL &&
+			FUN_10067360(*part, wdbFile) != SUCCESS) {
+			return FAILURE;
+		}
+	}
+
+	for (j = 0; j < worlds[i].m_numModels; j++) {
+		if (!strnicmp(worlds[i].m_models[j].m_modelName, "isle", 4)) {
+			switch (g_legoWorldPresenterQuality) {
+			case 0:
+				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle_lo")) {
+					continue;
+				}
+				break;
+			case 1:
+				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle")) {
+					continue;
+				}
+				break;
+			case 2:
+				if (strcmpi(worlds[i].m_models[j].m_modelName, "isle_hi")) {
+					continue;
+				}
+			}
+		}
+		else if (g_legoWorldPresenterQuality <= 1 && !strnicmp(worlds[i].m_models[j].m_modelName, "haus", 4)) {
+			if (worlds[i].m_models[j].m_modelName[4] == '3') {
+				if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+					return FAILURE;
+				}
+
+				if (FUN_100674b0(worlds[i].m_models[j - 2], wdbFile, p_world) != SUCCESS) {
+					return FAILURE;
+				}
+
+				if (FUN_100674b0(worlds[i].m_models[j - 1], wdbFile, p_world) != SUCCESS) {
+					return FAILURE;
+				}
+			}
+
+			continue;
+		}
+
+		if (FUN_100674b0(worlds[i].m_models[j], wdbFile, p_world) != SUCCESS) {
+			return FAILURE;
+		}
+	}
+
+	FreeModelDbWorlds(worlds, numWorlds);
+	fclose(wdbFile);
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10067360
+MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100674b0
+MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
+{
+	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10067a70
