@@ -28,26 +28,24 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 	}
 
 	ModelDbWorld* worlds = new ModelDbWorld[numWorlds];
+	MxS32 worldNameLen, numParts, i, j;
 
-	for (MxS32 i = 0; i < numWorlds; i++) {
-		MxU32 worldNameLen;
+	for (i = 0; i < numWorlds; i++) {
 		if (fread(&worldNameLen, sizeof(worldNameLen), 1, p_file) != 1) {
 			return FAILURE;
 		}
 
 		worlds[i].m_worldName = new char[worldNameLen];
-		if (fread(&worlds[i].m_worldName, worldNameLen, 1, p_file) != 1) {
+		if (fread(worlds[i].m_worldName, worldNameLen, 1, p_file) != 1) {
 			return FAILURE;
 		}
 
-		MxS32 numParts;
 		if (fread(&numParts, sizeof(numParts), 1, p_file) != 1) {
 			return FAILURE;
 		}
 
 		worlds[i].m_partList = new ModelDbPartList();
 
-		MxS32 j;
 		for (j = 0; j < numParts; j++) {
 			ModelDbPart* part = new ModelDbPart();
 

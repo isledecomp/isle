@@ -78,8 +78,8 @@ struct ModelDbModel {
 struct ModelDbWorld {
 	char* m_worldName;           // 0x00
 	ModelDbPartList* m_partList; // 0x04
-	MxS32 m_numModels;           // 0x08
-	ModelDbModel* m_models;      // 0x0c
+	ModelDbModel* m_models;      // 0x08
+	MxS32 m_numModels;           // 0x0c
 	undefined m_unk0x10[0x08];   // 0x10
 };
 
