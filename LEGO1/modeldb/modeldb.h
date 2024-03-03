@@ -49,6 +49,16 @@ private:
 	undefined m_unk0x18;
 };
 
+// VTABLE: LEGO1 0x100d68d0
+// class MxListCursor<ModelDbPart *>
+
+// VTABLE: LEGO1 0x100d68e8
+// SIZE 0x10
+class ModelDbPartListCursor : public MxListCursor<ModelDbPart*> {
+public:
+	ModelDbPartListCursor(ModelDbPartList* p_list) : MxListCursor<ModelDbPart*>(p_list) {}
+};
+
 // TEMPLATE: LEGO1 0x10027c70
 // MxCollection<ModelDbPart *>::Compare
 
@@ -67,11 +77,21 @@ private:
 // SYNTHETIC: LEGO1 0x10027e50
 // MxList<ModelDbPart *>::`scalar deleting destructor'
 
+// SYNTHETIC: LEGO1 0x10027f00
+// ModelDbPartListCursor::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x10027f70
+// MxListCursor<ModelDbPart *>::~MxListCursor<ModelDbPart *>
+
+// SYNTHETIC: LEGO1 0x10027fc0
+// MxListCursor<ModelDbPart *>::`scalar deleting destructor'
+
 // SIZE 0x38
 struct ModelDbModel {
 	MxResult Read(FILE* p_file);
 
-	undefined m_unk0x00[0x38]; // 0x00
+	char* m_modelName;         // 0x00
+	undefined m_unk0x04[0x34]; // 0x04
 };
 
 // SIZE 0x18

@@ -3,6 +3,8 @@
 DECOMP_SIZE_ASSERT(ModelDbWorld, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbPart, 0x18)
 DECOMP_SIZE_ASSERT(ModelDbModel, 0x38)
+DECOMP_SIZE_ASSERT(ModelDbPartList, 0x1c)
+DECOMP_SIZE_ASSERT(ModelDbPartListCursor, 0x10)
 
 // STUB: LEGO1 0x100276b0
 MxResult ModelDbModel::Read(FILE* p_file)

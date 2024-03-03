@@ -8,6 +8,8 @@
 class LegoPartPresenter : public MxMediaPresenter {
 public:
 	LegoPartPresenter() { Reset(); }
+
+	// FUNCTION: LEGO1 0x10067300
 	~LegoPartPresenter() override { Destroy(TRUE); }
 
 	// FUNCTION: LEGO1 0x1000cf70
