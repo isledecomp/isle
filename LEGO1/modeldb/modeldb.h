@@ -104,5 +104,6 @@ struct ModelDbWorld {
 };
 
 MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWorlds);
+void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds);
 
 #endif // MODELDB_H

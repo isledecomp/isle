@@ -75,3 +75,9 @@ MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWo
 	p_numWorlds = numWorlds;
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10028080
+void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds)
+{
+	// TODO
+}

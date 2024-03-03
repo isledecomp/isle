@@ -316,6 +316,8 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 	}
 
+	FreeModelDbWorlds(worlds, numWorlds);
+	fclose(wdbFile);
 	return SUCCESS;
 }
 
