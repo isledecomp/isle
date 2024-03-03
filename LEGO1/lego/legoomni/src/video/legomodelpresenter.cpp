@@ -202,6 +202,16 @@ done:
 	return result;
 }
 
+// STUB: LEGO1 0x1007ff70
+void LegoModelPresenter::FUN_1007ff70(
+	MxDSChunk p_chunk,
+	LegoEntity* p_entity,
+	undefined4 p_modelUnknown0x34,
+	LegoWorld* p_world
+)
+{
+}
+
 // FUNCTION: LEGO1 0x10080050
 void LegoModelPresenter::ReadyTickle()
 {

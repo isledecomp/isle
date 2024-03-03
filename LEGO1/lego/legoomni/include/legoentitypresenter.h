@@ -33,9 +33,10 @@ public:
 	virtual void Init();                                                                   // vtable+0x68
 	virtual undefined4 SetEntity(LegoEntity* p_entity);                                    // vtable+0x6c
 
-	void SetEntityLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up);
+	void SetEntityLocation(Vector3& p_location, Vector3& p_direction, Vector3& p_up);
 
 	inline LegoEntity* GetEntity() { return m_entity; }
+	inline void SetInternalEntity(LegoEntity* p_entity) { m_entity = p_entity; }
 
 	// SYNTHETIC: LEGO1 0x100535a0
 	// LegoEntityPresenter::`scalar deleting destructor'

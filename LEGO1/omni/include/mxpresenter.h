@@ -117,6 +117,7 @@ public:
 	inline MxS32 GetY() const { return this->m_location.GetY(); }
 	inline MxS32 GetDisplayZ() const { return this->m_displayZ; }
 	inline MxDSAction* GetAction() const { return this->m_action; }
+	inline void SetAction(MxDSAction* p_action) { m_action = p_action; }
 
 	inline void SetCompositePresenter(MxCompositePresenter* p_compositePresenter)
 	{

@@ -4,6 +4,9 @@
 #include "mxvideopresenter.h"
 
 class LegoROI;
+class LegoWorld;
+class LegoEntity;
+class MxDSChunk;
 
 // VTABLE: LEGO1 0x100d4e50
 // SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
@@ -30,6 +33,14 @@ public:
 	void ReadyTickle() override; // vtable+0x18
 	void ParseExtra() override;  // vtable+0x30
 	void Destroy() override;     // vtable+0x38
+
+	void FUN_1007ff70(MxDSChunk p_chunk, LegoEntity* p_entity, undefined4 p_modelUnknown0x34, LegoWorld* p_world);
+
+	inline void Clear()
+	{
+		m_roi = NULL;
+		m_addedToView = FALSE;
+	}
 
 	// SYNTHETIC: LEGO1 0x1000cdd0
 	// LegoModelPresenter::`scalar deleting destructor'

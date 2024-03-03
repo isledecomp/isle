@@ -13,6 +13,8 @@ public:
 	// FUNCTION: LEGO1 0x1000c0f0
 	inline Vector2(float* p_data) { SetData(p_data); }
 
+	inline Vector2() {}
+
 	// Note: virtual function overloads appear in the virtual table
 	// in reverse order of appearance.
 
@@ -154,6 +156,8 @@ class Vector3 : public Vector2 {
 public:
 	// FUNCTION: LEGO1 0x1001d150
 	inline Vector3(float* p_data) : Vector2(p_data) {}
+
+	inline Vector3() {}
 
 	// Hack: Some code initializes a Vector3 from a (most likely) const float* source.
 	// Example: LegoCameraController::GetWorldUp

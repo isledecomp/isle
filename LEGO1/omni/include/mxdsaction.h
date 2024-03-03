@@ -73,6 +73,9 @@ public:
 	inline Mx3DPointFloat& GetLocation() { return m_location; }
 	inline Mx3DPointFloat& GetDirection() { return m_direction; }
 	inline Mx3DPointFloat& GetUp() { return m_up; }
+	inline void SetLocation(Vector3& p_location) { m_location = p_location; }
+	inline void SetDirection(Vector3& p_direction) { m_direction = p_direction; }
+	inline void SetUp(Vector3& p_up) { m_up = p_up; }
 	inline MxCore* GetUnknown84() { return m_unk0x84; }
 	inline void SetUnknown84(MxCore* p_unk0x84) { m_unk0x84 = p_unk0x84; }
 	inline MxCore* GetOrigin() { return m_origin; }

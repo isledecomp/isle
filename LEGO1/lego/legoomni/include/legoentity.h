@@ -57,7 +57,7 @@ public:
 
 	void FUN_10010c30();
 	void FUN_100114e0(MxU8 p_unk0x59);
-	void SetLocation(Mx3DPointFloat& p_location, Mx3DPointFloat& p_direction, Mx3DPointFloat& p_up, MxBool);
+	void SetLocation(Vector3& p_location, Vector3& p_direction, Vector3& p_up, MxBool);
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }
