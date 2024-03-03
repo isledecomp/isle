@@ -17,13 +17,13 @@
 #include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x101015b8
-char g_hdPath[1024];
+char g_hdPath[1024] = "";
 
 // GLOBAL: LEGO1 0x101019b8
-char g_cdPath[1024];
+char g_cdPath[1024] = "E:";
 
 // GLOBAL: LEGO1 0x10101db8
-MxBool g_use3dSound;
+MxBool g_use3dSound = FALSE;
 
 // GLOBAL: LEGO1 0x101015b0
 MxOmni* MxOmni::g_instance = NULL;

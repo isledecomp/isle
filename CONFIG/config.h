@@ -76,6 +76,9 @@ public:
 // SYNTHETIC: CONFIG 0x00402cd0
 // CConfigApp::`scalar deleting destructor'
 
+// FUNCTION: CONFIG 0x402c20
+// CConfigApp::_GetBaseMessageMap
+
 // FUNCTION: CONFIG 0x402c30
 // CConfigApp::GetMessageMap
 

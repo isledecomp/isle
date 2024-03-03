@@ -10,7 +10,7 @@
 #include "mxrect32.h"
 
 // GLOBAL: LEGO1 0x101020e8
-void (*g_omniUserMessage)(const char*, int);
+void (*g_omniUserMessage)(const char*, int) = NULL;
 
 // FUNCTION: LEGO1 0x100b6e10
 MxBool GetRectIntersection(

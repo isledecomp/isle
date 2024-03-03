@@ -55,6 +55,9 @@ protected:
 // SYNTHETIC: CONFIG 0x00403de0
 // CMainDialog::`scalar deleting destructor'
 
+// FUNCTION: CONFIG 0x00403e60
+// CMainDialog::_GetBaseMessageMap
+
 // FUNCTION: CONFIG 0x00403e70
 // CMainDialog::GetMessageMap
 
