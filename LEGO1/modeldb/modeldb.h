@@ -97,7 +97,7 @@ struct ModelDbModel {
 	undefined4 m_unk0x04;  // 0x04
 	undefined4 m_unk0x08;  // 0x08
 	char* m_presenterName; // 0x0c
-	float m_locatation[3]; // 0x10
+	float m_location[3];   // 0x10
 	float m_direction[3];  // 0x1c
 	float m_up[3];         // 0x28
 	undefined m_unk0x34;   // 0x34

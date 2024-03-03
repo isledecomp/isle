@@ -354,7 +354,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 	chunk.SetData(buffer);
 
 	MxDSAction action;
-	action.SetLocation(Vector3(p_model.m_locatation));
+	action.SetLocation(Vector3(p_model.m_location));
 	action.SetDirection(Vector3(p_model.m_direction));
 	Vector3 up = Vector3(Vector3(p_model.m_direction));
 	action.SetUp(up);

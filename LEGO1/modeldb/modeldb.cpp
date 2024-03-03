@@ -35,7 +35,7 @@ MxResult ModelDbModel::Read(FILE* p_file)
 		return FAILURE;
 	}
 
-	if (fread(&m_locatation, sizeof(*m_locatation), 3, p_file) != 3) {
+	if (fread(&m_location, sizeof(*m_location), 3, p_file) != 3) {
 		return FAILURE;
 	}
 	if (fread(&m_direction, sizeof(*m_direction), 3, p_file) != 3) {
