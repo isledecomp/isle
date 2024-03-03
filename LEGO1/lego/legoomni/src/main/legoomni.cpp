@@ -122,7 +122,7 @@ const char* g_current = "current";
 MxBool g_isWorldActive = TRUE;
 
 // GLOBAL: LEGO1 0x10102b28
-LegoOmni::PathContainer g_extraPaths[29];
+static LegoOmni::PathContainer g_extraPaths[29];
 
 // FUNCTION: LEGO1 0x10015700
 LegoOmni* Lego()
