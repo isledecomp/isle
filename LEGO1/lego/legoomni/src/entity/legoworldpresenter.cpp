@@ -215,7 +215,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 
 		MxU8* buff = new MxU8[size];
-		if (fread(&buff, size, 1, wdbFile) != 1) {
+		if (fread(buff, size, 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
@@ -236,7 +236,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		}
 
 		buff = new MxU8[size];
-		if (fread(&buff, size, 1, wdbFile) != 1) {
+		if (fread(buff, size, 1, wdbFile) != 1) {
 			return FAILURE;
 		}
 
