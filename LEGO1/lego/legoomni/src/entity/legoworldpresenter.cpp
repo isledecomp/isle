@@ -5,12 +5,16 @@
 #include "legobuildingmanager.h"
 #include "legoentity.h"
 #include "legoomni.h"
+#include "legopartpresenter.h"
 #include "legoplantmanager.h"
+#include "legotexturepresenter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxdsactionlist.h"
+#include "mxdschunk.h"
 #include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
 #include "mxnotificationmanager.h"
@@ -19,8 +23,13 @@
 #include "mxstl/stlcompat.h"
 #include "mxutil.h"
 
+#include <io.h>
+
 // GLOBAL: LEGO1 0x100f75d4
-undefined4 g_legoWorldPresenterQuality = 1;
+MxS32 g_legoWorldPresenterQuality = 1;
+
+// GLOBAL: LEGO1 0x100f75d8
+long g_wdbOffset = 0;
 
 // FUNCTION: LEGO1 0x100665b0
 void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality)
@@ -152,9 +161,103 @@ void LegoWorldPresenter::StartingTickle()
 	ProgressTickleState(e_streaming);
 }
 
-// STUB: LEGO1 0x10066b40
-void LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
+// FUNCTION: LEGO1 0x10066b40
+MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 {
+	char wdbPath[512];
+	sprintf(wdbPath, "%s", MxOmni::GetHD());
+
+	if (wdbPath[strlen(wdbPath) - 1] != '\\') {
+		strcat(wdbPath, "\\");
+	}
+
+	strcat(wdbPath, "lego\\data\\world.wdb");
+
+	if (access(wdbPath, 4) != 0) {
+		sprintf(wdbPath, "%s", MxOmni::GetCD());
+
+		if (wdbPath[strlen(wdbPath) - 1] != '\\') {
+			strcat(wdbPath, "\\");
+		}
+
+		strcat(wdbPath, "lego\\data\\world.wdb");
+
+		if (access(wdbPath, 4) != 0) {
+			return FAILURE;
+		}
+	}
+
+	ModelDbWorld* worlds;
+	MxS32 numWorlds;
+	FILE* wdbFile = fopen(wdbPath, "rb");
+
+	if (wdbFile == NULL) {
+		return FAILURE;
+	}
+
+	ReadModelDbWorlds(wdbFile, worlds, numWorlds);
+
+	MxS32 i;
+	for (i = 0; i < numWorlds; i++) {
+		if (!strcmpi(worlds[i].m_worldName, p_worldName)) {
+			break;
+		}
+	}
+
+	if (i == numWorlds) {
+		return FAILURE;
+	}
+
+	if (g_wdbOffset == 0) {
+		MxU32 size;
+		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		MxU8* buff = new MxU8[size];
+		if (fread(&buff, size, 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		MxDSChunk chunk;
+		chunk.SetLength(size);
+		chunk.SetData(buff);
+
+		LegoTexturePresenter texturePresenter;
+		if (texturePresenter.ParseTexture(chunk) == SUCCESS) {
+			texturePresenter.FUN_1004f290();
+		}
+
+		delete[] buff;
+		// buff = NULL;
+
+		if (fread(&size, sizeof(size), 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		if (fread(&buff, size, 1, wdbFile) != 1) {
+			return FAILURE;
+		}
+
+		chunk.SetLength(size);
+		chunk.SetData(buff);
+
+		LegoPartPresenter partPresenter;
+		if (partPresenter.ParsePart(chunk) == SUCCESS) {
+			partPresenter.FUN_1007df20();
+		}
+
+		delete[] buff;
+
+		g_wdbOffset = ftell(wdbFile);
+	}
+	else {
+		if (fseek(wdbFile, g_wdbOffset, SEEK_SET) != 0) {
+			return FAILURE;
+		}
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10067a70

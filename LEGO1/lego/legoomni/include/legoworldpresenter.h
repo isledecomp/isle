@@ -33,7 +33,7 @@ public:
 	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	void VTable0x60(MxPresenter* p_presenter) override;                                    // vtable+0x60
 
-	void LoadWorld(char* p_worldName, LegoWorld* p_world);
+	MxResult LoadWorld(char* p_worldName, LegoWorld* p_world);
 
 	// SYNTHETIC: LEGO1 0x10066750
 	// LegoWorldPresenter::`scalar deleting destructor'
