@@ -33,7 +33,7 @@ public:
 	virtual void Init();                                                                   // vtable+0x68
 	virtual undefined4 SetEntity(LegoEntity* p_entity);                                    // vtable+0x6c
 
-	void SetEntityLocation(Vector3& p_location, Vector3& p_direction, Vector3& p_up);
+	void SetEntityLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up);
 
 	inline LegoEntity* GetInternalEntity() { return m_entity; }
 	inline void SetInternalEntity(LegoEntity* p_entity) { m_entity = p_entity; }
