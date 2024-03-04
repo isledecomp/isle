@@ -1,3 +1,6 @@
+#ifndef VIEWLOD_H
+#define VIEWLOD_H
+
 #include "decomp.h"
 #include "realtime/roi.h"
 #include "tgl/tgl.h"
@@ -30,3 +33,5 @@ protected:
 	Tgl::Group* m_meshGroup; // 0x04
 	undefined4 m_unk0x08;    // 0x08
 };
+
+#endif // VIEWLOD_H
