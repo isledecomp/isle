@@ -12,9 +12,9 @@
 struct ModelDbPart {
 	MxResult Read(FILE* p_file);
 
-	MxString m_roiName;   // 0x00
-	undefined4 m_unk0x10; // 0x10
-	undefined4 m_unk0x14; // 0x14
+	MxString m_roiName;          // 0x00
+	undefined4 m_partDataLength; // 0x10
+	undefined4 m_partDataOffset; // 0x14
 };
 
 // VTABLE: LEGO1 0x100d6888
@@ -35,8 +35,8 @@ public:
 		MxS32 compare = strcmpi(p_a->m_roiName.GetData(), p_b->m_roiName.GetData());
 
 		if (compare == 0) {
-			p_b->m_unk0x10 = p_a->m_unk0x10;
-			p_b->m_unk0x14 = p_a->m_unk0x14;
+			p_b->m_partDataLength = p_a->m_partDataLength;
+			p_b->m_partDataOffset = p_a->m_partDataOffset;
 		}
 
 		return compare;
@@ -93,14 +93,14 @@ public:
 struct ModelDbModel {
 	MxResult Read(FILE* p_file);
 
-	char* m_modelName;       // 0x00
-	undefined4 m_unk0x04;    // 0x04
-	undefined4 m_unk0x08;    // 0x08
-	char* m_presenterName;   // 0x0c
-	undefined4 m_unk0x10[3]; // 0x10
-	undefined4 m_unk0x1c[3]; // 0x1c
-	undefined4 m_unk0x28[3]; // 0x28
-	undefined m_unk0x34;     // 0x34
+	char* m_modelName;     // 0x00
+	undefined4 m_unk0x04;  // 0x04
+	undefined4 m_unk0x08;  // 0x08
+	char* m_presenterName; // 0x0c
+	float m_location[3];   // 0x10
+	float m_direction[3];  // 0x1c
+	float m_up[3];         // 0x28
+	undefined m_unk0x34;   // 0x34
 };
 
 // SIZE 0x18

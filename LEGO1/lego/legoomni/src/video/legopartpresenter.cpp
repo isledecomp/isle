@@ -36,7 +36,7 @@ void LegoPartPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // STUB: LEGO1 0x1007ca30
-MxResult LegoPartPresenter::ParsePart(MxDSChunk& p_chunk)
+MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 {
 	// TODO
 	return SUCCESS;

@@ -82,11 +82,7 @@ void LegoEntityPresenter::RepeatingTickle()
 }
 
 // FUNCTION: LEGO1 0x10053730
-void LegoEntityPresenter::SetEntityLocation(
-	Mx3DPointFloat& p_location,
-	Mx3DPointFloat& p_direction,
-	Mx3DPointFloat& p_up
-)
+void LegoEntityPresenter::SetEntityLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up)
 {
 	if (m_entity) {
 		m_entity->SetLocation(p_location, p_direction, p_up, TRUE);

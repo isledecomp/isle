@@ -1,9 +1,11 @@
 #include "legoworldpresenter.h"
 
 #include "define.h"
+#include "legoactorpresenter.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legoentity.h"
+#include "legomodelpresenter.h"
 #include "legoomni.h"
 #include "legopartpresenter.h"
 #include "legoplantmanager.h"
@@ -29,7 +31,7 @@
 MxS32 g_legoWorldPresenterQuality = 1;
 
 // GLOBAL: LEGO1 0x100f75d8
-long g_wdbOffset = 0;
+MxLong g_wdbOffset = 0;
 
 // FUNCTION: LEGO1 0x100665b0
 void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality)
@@ -224,7 +226,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		chunk.SetData(buff);
 
 		LegoTexturePresenter texturePresenter;
-		if (texturePresenter.ParseTexture(chunk) == SUCCESS) {
+		if (texturePresenter.Read(chunk) == SUCCESS) {
 			texturePresenter.FUN_1004f290();
 		}
 
@@ -243,7 +245,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		chunk.SetData(buff);
 
 		LegoPartPresenter partPresenter;
-		if (partPresenter.ParsePart(chunk) == SUCCESS) {
+		if (partPresenter.Read(chunk) == SUCCESS) {
 			partPresenter.FUN_1007df20();
 		}
 
@@ -314,17 +316,89 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10067360
+// FUNCTION: LEGO1 0x10067360
 MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result;
+	MxU8* buff = new MxU8[p_part.m_partDataLength];
+
+	fseek(p_wdbFile, p_part.m_partDataOffset, 0);
+	if (fread(buff, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
+		return FAILURE;
+	}
+
+	MxDSChunk chunk;
+	chunk.SetLength(p_part.m_partDataLength);
+	chunk.SetData(buff);
+
+	LegoPartPresenter part;
+	result = part.Read(chunk);
+
+	if (result == SUCCESS) {
+		part.FUN_1007df20();
+	}
+
+	delete[] buff;
+	return result;
 }
 
-// STUB: LEGO1 0x100674b0
+// FUNCTION: LEGO1 0x100674b0
 MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
 {
-	// TODO
+	MxU8* buff = new MxU8[p_model.m_unk0x04];
+
+	fseek(p_wdbFile, p_model.m_unk0x08, 0);
+	if (fread(buff, p_model.m_unk0x04, 1, p_wdbFile) != 1) {
+		return FAILURE;
+	}
+
+	MxDSChunk chunk;
+	chunk.SetLength(p_model.m_unk0x04);
+	chunk.SetData(buff);
+
+	MxDSAction action;
+	MxAtomId atom;
+	action.SetLocation(p_model.m_location);
+	action.SetDirection(p_model.m_direction);
+	action.SetUp(p_model.m_up);
+
+	MxU32 objectId = m_unk0x50;
+	m_unk0x50++;
+	action.SetObjectId(objectId);
+
+	action.SetAtomId(atom);
+
+	LegoEntity* createdEntity = NULL;
+
+	if (!strcmp(p_model.m_presenterName, "LegoActorPresenter")) {
+		LegoActorPresenter presenter;
+		presenter.SetAction(&action);
+		LegoEntity* entity = (LegoEntity*) presenter.CreateEntity("LegoActor");
+		presenter.SetInternalEntity(entity);
+		presenter.SetEntityLocation(p_model.m_location, p_model.m_direction, p_model.m_up);
+		entity->Create(action);
+	}
+	else if (!strcmp(p_model.m_presenterName, "LegoEntityPresenter")) {
+		LegoEntityPresenter presenter;
+		presenter.SetAction(&action);
+		createdEntity = (LegoEntity*) presenter.CreateEntity("LegoEntity");
+		presenter.SetInternalEntity(createdEntity);
+		presenter.SetEntityLocation(p_model.m_location, p_model.m_direction, p_model.m_up);
+		createdEntity->Create(action);
+	}
+
+	LegoModelPresenter modelPresenter;
+
+	if (createdEntity != NULL) {
+		action.SetLocation(Mx3DPointFloat(0.0, 0.0, 0.0));
+		action.SetUp(Mx3DPointFloat(0.0, 0.0, 1.0));
+		action.SetDirection(Mx3DPointFloat(0.0, 1.0, 0.0));
+	}
+
+	modelPresenter.SetAction(&action);
+	modelPresenter.FUN_1007ff70(chunk, createdEntity, p_model.m_unk0x34, p_world);
+	delete[] buff;
+
 	return SUCCESS;
 }
 

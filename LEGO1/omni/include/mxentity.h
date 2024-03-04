@@ -15,7 +15,7 @@ public:
 	MxEntity() { this->m_mxEntityId = -1; }
 
 	// FUNCTION: LEGO1 0x1000c110
-	~MxEntity() override{};
+	~MxEntity() override {}
 
 	// FUNCTION: LEGO1 0x1000c180
 	inline const char* ClassName() const override // vtable+0x0c
