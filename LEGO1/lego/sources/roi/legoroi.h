@@ -23,7 +23,7 @@ public:
 	int NumPolys() const override { return m_numPolys; } // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x100aae80
-	double VTable0x10() override { return 0.0; } // vtable+0x10
+	float VTable0x10() override { return 0.0; } // vtable+0x10
 
 	// SYNTHETIC: LEGO1 0x100aa430
 	// LegoLOD::`scalar deleting destructor'

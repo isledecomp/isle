@@ -57,7 +57,7 @@ public:
 	virtual double AveragePolyArea() const = 0; // vtable+0x04
 	virtual int NVerts() const = 0;             // vtable+0x08
 	virtual int NumPolys() const = 0;           // vtable+0x0c
-	virtual double VTable0x10() = 0;            // vtable+0x10
+	virtual float VTable0x10() = 0;             // vtable+0x10
 
 	// SYNTHETIC: LEGO1 0x100a6f10
 	// LODObject::`scalar deleting destructor'
