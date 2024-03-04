@@ -16,7 +16,7 @@
 #include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f7ae0
-int g_modelPresenterConfig = 1;
+MxS32 g_modelPresenterConfig = 1;
 
 // GLOBAL: LEGO1 0x10102054
 // STRING: LEGO1 0x10102018
