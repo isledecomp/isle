@@ -11,7 +11,6 @@
 class ViewLOD : public LODObject {
 public:
 	ViewLOD(Tgl::Renderer* pRenderer) : m_meshGroup(NULL), m_unk0x08(3) {}
-
 	~ViewLOD() override;
 
 	// FUNCTION: LEGO1 0x100a6f30
