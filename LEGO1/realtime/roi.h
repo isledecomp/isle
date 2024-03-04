@@ -49,7 +49,7 @@ private:
 // SIZE 0x04
 class LODObject {
 public:
-	LODObject() {}
+	// LODObject();
 
 	// FUNCTION: LEGO1 0x100a6f00
 	virtual ~LODObject() {}
