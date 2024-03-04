@@ -331,11 +331,11 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 	chunk.SetLength(p_part.m_partDataLength);
 	chunk.SetData(buff);
 
-	LegoPartPresenter part;
-	result = part.Read(chunk);
+	LegoPartPresenter partPresenter;
+	result = partPresenter.Read(chunk);
 
 	if (result == SUCCESS) {
-		part.FUN_1007df20();
+		partPresenter.FUN_1007df20();
 	}
 
 	delete[] buff;

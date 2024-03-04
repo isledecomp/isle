@@ -79,31 +79,33 @@ Result GroupImpl::SetMaterialMode(MaterialMode mode)
 }
 
 // FUNCTION: LEGO1 0x100a3410
-Result GroupImpl::Add(const Mesh* pMesh)
-{
-	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
-	return ResultVal(m_data->AddVisual(pMeshImpl->ImplementationData()->groupMesh));
-}
-
-// FUNCTION: LEGO1 0x100a3430
 Result GroupImpl::Add(const Group* pGroup)
 {
 	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
 	return ResultVal(m_data->AddVisual(pGroupImpl->m_data));
 }
 
+// FUNCTION: LEGO1 0x100a3430
+Result GroupImpl::Add(const Mesh* pMesh)
+{
+	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
+	// TODO: Incorrect structure
+	return ResultVal(m_data->AddVisual((IDirect3DRMMesh*) pMeshImpl->ImplementationData()));
+}
+
 // FUNCTION: LEGO1 0x100a3450
+Result GroupImpl::Remove(const Mesh* pMesh)
+{
+	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
+	// TODO: Incorrect structure
+	return ResultVal(m_data->DeleteVisual((IDirect3DRMMesh*) pMeshImpl->ImplementationData()));
+}
+
+// FUNCTION: LEGO1 0x100a3480
 Result GroupImpl::Remove(const Group* pGroup)
 {
 	const GroupImpl* pGroupImpl = static_cast<const GroupImpl*>(pGroup);
 	return ResultVal(m_data->DeleteVisual(pGroupImpl->m_data));
-}
-
-// FUNCTION: LEGO1 0x100a3480
-Result GroupImpl::Remove(const Mesh* pMesh)
-{
-	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
-	return ResultVal(m_data->DeleteVisual(pMeshImpl->ImplementationData()->groupMesh));
 }
 
 // STUB: LEGO1 0x100a34b0

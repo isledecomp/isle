@@ -45,13 +45,22 @@ private:
  * Abstract base class representing a single LOD version of
  * a geometric object.
  */
+// VTABLE: LEGO1 0x100dbd90
+// SIZE 0x04
 class LODObject {
 public:
 	// LODObject();
+
+	// FUNCTION: LEGO1 0x100a6f00
 	virtual ~LODObject() {}
-	virtual float Cost(float pixels_covered) const = 0; // vtable+0x04
-	virtual float AveragePolyArea() const = 0;          // vtable+0x08
-	virtual int NVerts() const = 0;                     // vtable+0x0c
+
+	virtual double AveragePolyArea() const = 0; // vtable+0x04
+	virtual int NVerts() const = 0;             // vtable+0x08
+	virtual int NumPolys() const = 0;           // vtable+0x0c
+	virtual float VTable0x10() = 0;             // vtable+0x10
+
+	// SYNTHETIC: LEGO1 0x100a6f10
+	// LODObject::`scalar deleting destructor'
 };
 
 /*

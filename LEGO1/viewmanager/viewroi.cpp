@@ -16,13 +16,13 @@ float ViewROI::IntrinsicImportance() const
 } // for now
 
 // FUNCTION: LEGO1 0x100a9ec0
-const Tgl::Group* ViewROI::GetGeometry() const
+Tgl::Group* ViewROI::GetGeometry()
 {
 	return geometry;
 }
 
 // FUNCTION: LEGO1 0x100a9ed0
-Tgl::Group* ViewROI::GetGeometry()
+const Tgl::Group* ViewROI::GetGeometry() const
 {
 	return geometry;
 }

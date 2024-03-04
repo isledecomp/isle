@@ -117,6 +117,7 @@ target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE
 target_link_libraries(realtime PRIVATE Vec::Vec)
 
 add_library(viewmanager STATIC
+  LEGO1/viewmanager/viewlod.cpp
   LEGO1/viewmanager/viewlodlist.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp
@@ -141,7 +142,7 @@ add_library(roi STATIC
 register_lego1_target(roi)
 set_property(TARGET roi PROPERTY ARCHIVE_OUTPUT_NAME "roi$<$<CONFIG:Debug>:d>")
 target_include_directories(roi PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources" "${CMAKE_SOURCE_DIR}/util")
-target_link_libraries(roi PRIVATE)
+target_link_libraries(roi PRIVATE viewmanager)
 
 add_library(anim STATIC
   LEGO1/lego/sources/anim/legoanim.cpp
