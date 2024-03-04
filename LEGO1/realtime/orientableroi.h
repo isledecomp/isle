@@ -35,6 +35,7 @@ public:
 	void WrappedSetLocalTransform(const Matrix4& p_transform);
 	void FUN_100a46b0(Matrix4& p_transform);
 	void WrappedVTable0x24(const Matrix4& p_transform);
+	void GetLocalTransform(Matrix4& p_transform);
 	void FUN_100a58f0(const Matrix4& p_transform);
 	void FUN_100a5a30(const Vector3& p_world_velocity);
 

@@ -21,9 +21,11 @@ public:
 	ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view);
 	virtual ~ViewManager();
 
+	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
 	void FUN_100a66a0(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
+	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
 	void Update(float p_previousRenderTime, float p_und2);

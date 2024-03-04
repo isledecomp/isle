@@ -29,7 +29,6 @@ public:
 
 	ViewROI* GetPointOfView();
 	ViewManager* GetViewManager();
-	// double GetTargetRenderingRate() const;
 
 private:
 	ViewManager* m_pViewManager; // 0x88
