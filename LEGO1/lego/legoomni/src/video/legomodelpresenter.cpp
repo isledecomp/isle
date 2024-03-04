@@ -52,7 +52,7 @@ void LegoModelPresenter::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x1007f6b0
-MxResult LegoModelPresenter::CreateROI(MxStreamChunk* p_chunk)
+MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 {
 	MxResult result = FAILURE;
 	LegoU32 numROIs;
@@ -202,14 +202,36 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1007ff70
-void LegoModelPresenter::FUN_1007ff70(
+// FUNCTION: LEGO1 0x1007ff70
+MxResult LegoModelPresenter::FUN_1007ff70(
 	MxDSChunk& p_chunk,
 	LegoEntity* p_entity,
 	undefined p_modelUnknown0x34,
 	LegoWorld* p_world
 )
 {
+	MxResult result = SUCCESS;
+
+	ParseExtra();
+
+	if (m_roi == NULL && (result = CreateROI(&p_chunk)) == SUCCESS && p_entity != NULL) {
+		VideoManager()->Get3DManager()->GetLego3DView()->Add(*m_roi);
+		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+	}
+
+	if (m_roi != NULL) {
+		m_roi->SetUnknown0x0c(p_modelUnknown0x34);
+	}
+
+	if (p_entity != NULL) {
+		p_entity->SetROI(m_roi, TRUE, TRUE);
+		p_entity->ClearFlag(LegoEntity::c_bit2);
+	}
+	else {
+		p_world->GetROIList().push_back(m_roi);
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10080050
@@ -291,7 +313,7 @@ void LegoModelPresenter::ParseExtra()
 		}
 		else if (KeyValueStringParse(output, g_dbCreate, extraCopy) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
-			list<LegoROI*>& roiList = currentWorld->GetUnknownList0xe0();
+			list<LegoROI*>& roiList = currentWorld->GetROIList();
 
 			for (list<LegoROI*>::iterator it = roiList.begin(); it != roiList.end(); it++) {
 				if (!strcmpi((*it)->GetName(), output)) {
