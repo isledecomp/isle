@@ -204,9 +204,9 @@ done:
 
 // STUB: LEGO1 0x1007ff70
 void LegoModelPresenter::FUN_1007ff70(
-	MxDSChunk p_chunk,
+	MxDSChunk& p_chunk,
 	LegoEntity* p_entity,
-	undefined4 p_modelUnknown0x34,
+	undefined p_modelUnknown0x34,
 	LegoWorld* p_world
 )
 {
@@ -224,13 +224,13 @@ void LegoModelPresenter::ReadyTickle()
 
 	if (m_roi != NULL) {
 		if (m_compositePresenter && m_compositePresenter->IsA("LegoEntityPresenter")) {
-			((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI(m_roi, m_addedToView, TRUE);
+			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetROI(m_roi, m_addedToView, TRUE);
 			((LegoEntityPresenter*) m_compositePresenter)
-				->GetEntity()
+				->GetInternalEntity()
 				->SetFlags(
-					((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->GetFlags() & ~LegoEntity::c_bit2
+					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() & ~LegoEntity::c_bit2
 				);
-			((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->FUN_100114e0(0);
+			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->FUN_100114e0(0);
 		}
 
 		ParseExtra();
@@ -250,11 +250,12 @@ void LegoModelPresenter::ReadyTickle()
 				VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
 
 				if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoEntityPresenter")) {
-					((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->SetROI(m_roi, TRUE, TRUE);
+					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetROI(m_roi, TRUE, TRUE);
 					((LegoEntityPresenter*) m_compositePresenter)
-						->GetEntity()
+						->GetInternalEntity()
 						->SetFlags(
-							((LegoEntityPresenter*) m_compositePresenter)->GetEntity()->GetFlags() & ~LegoEntity::c_bit2
+							((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() &
+							~LegoEntity::c_bit2
 						);
 				}
 

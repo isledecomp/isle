@@ -12,7 +12,9 @@ class MxDSChunk;
 // SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
 class LegoModelPresenter : public MxVideoPresenter {
 public:
-	// inline in scalar dtor
+	LegoModelPresenter() { Reset(); }
+
+	// FUNCTION: LEGO1 0x10067a10
 	~LegoModelPresenter() override { Destroy(TRUE); }
 
 	static void configureLegoModelPresenter(MxS32 p_modelPresenterConfig);
@@ -34,9 +36,9 @@ public:
 	void ParseExtra() override;  // vtable+0x30
 	void Destroy() override;     // vtable+0x38
 
-	void FUN_1007ff70(MxDSChunk p_chunk, LegoEntity* p_entity, undefined4 p_modelUnknown0x34, LegoWorld* p_world);
+	void FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, undefined p_modelUnknown0x34, LegoWorld* p_world);
 
-	inline void Clear()
+	inline void Reset()
 	{
 		m_roi = NULL;
 		m_addedToView = FALSE;

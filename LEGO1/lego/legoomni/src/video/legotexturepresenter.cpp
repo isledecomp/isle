@@ -20,7 +20,7 @@ MxResult LegoTexturePresenter::AddToManager()
 }
 
 // STUB: LEGO1 0x1004ebd0
-MxResult LegoTexturePresenter::ParseTexture(MxDSChunk& p_chunk)
+MxResult LegoTexturePresenter::Read(MxDSChunk& p_chunk)
 {
 	// TODO
 	return SUCCESS;

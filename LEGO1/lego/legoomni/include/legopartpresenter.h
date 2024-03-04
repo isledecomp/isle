@@ -36,7 +36,7 @@ public:
 
 	inline void Reset() { m_partData = NULL; }
 
-	MxResult ParsePart(MxDSChunk& p_chunk);
+	MxResult Read(MxDSChunk& p_chunk);
 	void FUN_1007df20();
 
 private:

@@ -226,7 +226,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		chunk.SetData(buff);
 
 		LegoTexturePresenter texturePresenter;
-		if (texturePresenter.ParseTexture(chunk) == SUCCESS) {
+		if (texturePresenter.Read(chunk) == SUCCESS) {
 			texturePresenter.FUN_1004f290();
 		}
 
@@ -245,7 +245,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 		chunk.SetData(buff);
 
 		LegoPartPresenter partPresenter;
-		if (partPresenter.ParsePart(chunk) == SUCCESS) {
+		if (partPresenter.Read(chunk) == SUCCESS) {
 			partPresenter.FUN_1007df20();
 		}
 
@@ -321,6 +321,7 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 {
 	MxResult result;
 	MxU8* buffer = new MxU8[p_part.m_partDataLength];
+
 	fseek(p_wdbFile, p_part.m_partDataOffset, 0);
 	if (fread(buffer, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
 		return FAILURE;
@@ -331,7 +332,8 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 	chunk.SetData(buffer);
 
 	LegoPartPresenter part;
-	result = part.ParsePart(chunk);
+	result = part.Read(chunk);
+
 	if (result == SUCCESS) {
 		part.FUN_1007df20();
 	}
@@ -343,47 +345,51 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 // FUNCTION: LEGO1 0x100674b0
 MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world)
 {
-	MxU8* buffer = new MxU8[p_model.m_unk0x04];
+	MxU8* buff = new MxU8[p_model.m_unk0x04];
+
 	fseek(p_wdbFile, p_model.m_unk0x08, 0);
-	if (fread(buffer, p_model.m_unk0x04, 1, p_wdbFile) != 1) {
+	if (fread(buff, p_model.m_unk0x04, 1, p_wdbFile) != 1) {
 		return FAILURE;
 	}
 
 	MxDSChunk chunk;
 	chunk.SetLength(p_model.m_unk0x04);
-	chunk.SetData(buffer);
+	chunk.SetData(buff);
 
 	MxDSAction action;
+	MxAtomId atom;
 	action.SetLocation(Vector3(p_model.m_location));
 	action.SetDirection(Vector3(p_model.m_direction));
-	Vector3 up = Vector3(Vector3(p_model.m_direction));
-	action.SetUp(up);
+	action.SetUp(Vector3(p_model.m_direction));
 
-	action.SetObjectId(m_unk0x50);
+	MxU32 objectId = m_unk0x50;
 	m_unk0x50++;
-	action.SetAtomId(MxAtomId());
+	action.SetObjectId(objectId);
 
-	LegoEntity* createdEntity;
+	action.SetAtomId(atom);
 
-	if (strcmp(p_model.m_presenterName, "LegoActorPresenter") == 0) {
-		LegoActorPresenter actor;
-		LegoEntity* entity = (LegoEntity*) actor.CreateEntity("LegoActor");
-		actor.SetInternalEntity(entity);
-		createdEntity = entity;
-		actor.SetEntityLocation(Vector3(), Vector3(), Vector3());
+	LegoEntity* createdEntity = NULL;
+
+	if (!strcmp(p_model.m_presenterName, "LegoActorPresenter")) {
+		LegoActorPresenter presenter;
+		presenter.SetAction(&action);
+		LegoEntity* entity = (LegoEntity*) presenter.CreateEntity("LegoActor");
+		presenter.SetInternalEntity(entity);
+		presenter
+			.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_direction));
 		entity->Create(action);
 	}
-	else if (strcmp(p_model.m_presenterName, "LegoEntityPresenter") == 0) {
-		LegoActorPresenter actor;
-		LegoEntity* entity = (LegoEntity*) actor.CreateEntity("LegoEntity");
-		actor.SetInternalEntity(entity);
-		createdEntity = entity;
-		actor.SetEntityLocation(Vector3(), Vector3(), Vector3());
-		entity->Create(action);
+	else if (!strcmp(p_model.m_presenterName, "LegoEntityPresenter")) {
+		LegoEntityPresenter presenter;
+		presenter.SetAction(&action);
+		createdEntity = (LegoEntity*) presenter.CreateEntity("LegoEntity");
+		presenter.SetInternalEntity(createdEntity);
+		presenter
+			.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_direction));
+		createdEntity->Create(action);
 	}
 
 	LegoModelPresenter modelPresenter;
-	modelPresenter.Clear();
 
 	if (createdEntity != NULL) {
 		action.SetLocation(Mx3DPointFloat(0.0, 0.0, 0.0));
@@ -393,7 +399,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 
 	modelPresenter.SetAction(&action);
 	modelPresenter.FUN_1007ff70(chunk, createdEntity, p_model.m_unk0x34, p_world);
-	delete buffer;
+	delete[] buff;
 
 	return SUCCESS;
 }

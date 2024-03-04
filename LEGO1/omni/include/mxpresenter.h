@@ -29,7 +29,7 @@ public:
 	MxPresenter() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000bf00
-	~MxPresenter() override{}; // vtable+0x00
+	~MxPresenter() override {} // vtable+0x00
 
 	MxResult Tickle() override; // vtable+0x08
 

@@ -30,7 +30,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000cf40
 	// LegoTexturePresenter::`scalar deleting destructor'
 
-	MxResult ParseTexture(MxDSChunk& p_chunk);
+	MxResult Read(MxDSChunk& p_chunk);
 	void FUN_1004f290();
 
 private:

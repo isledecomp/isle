@@ -7,7 +7,10 @@
 // SIZE 0x50
 class LegoActorPresenter : public LegoEntityPresenter {
 public:
-	~LegoActorPresenter() override{};
+	// LegoActorPresenter() {}
+
+	// FUNCTION: LEGO1 0x100679c0
+	~LegoActorPresenter() override {}
 
 	// FUNCTION: LEGO1 0x1000cb10
 	inline const char* ClassName() const override // vtable+0x0c
