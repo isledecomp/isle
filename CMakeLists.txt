@@ -117,6 +117,7 @@ target_include_directories(realtime PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAKE
 target_link_libraries(realtime PRIVATE Vec::Vec)
 
 add_library(viewmanager STATIC
+  LEGO1/viewmanager/viewlod.cpp
   LEGO1/viewmanager/viewlodlist.cpp
   LEGO1/viewmanager/viewmanager.cpp
   LEGO1/viewmanager/viewroi.cpp

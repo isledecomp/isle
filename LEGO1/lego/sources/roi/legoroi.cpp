@@ -1,9 +1,16 @@
 #include "legoroi.h"
 
+#include "tgl/d3drm/impl.h"
+
 #include <string.h>
 
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
+DECOMP_SIZE_ASSERT(LODObject, 0x04)
+DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)
+DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
+
+inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
 
 // SIZE 0x14
 typedef struct {
@@ -37,6 +44,9 @@ int g_roiConfig = 100;
 
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_someHandlerFunction = NULL;
+
+// GLOBAL: LEGO1 0x101013d4
+LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 
 // FUNCTION: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(int p_roiConfig)
@@ -99,7 +109,7 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 }
 
 // FUNCTION: LEGO1 0x100a9a50
-TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time) : LegoROI(p_renderer, p_lodList)
+TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time) : LegoROI(p_renderer, p_lodList)
 {
 	m_time = p_time;
 }
@@ -170,4 +180,29 @@ float LegoROI::IntrinsicImportance() const
 void LegoROI::UpdateWorldBoundingVolumes()
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x100aa380
+LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
+{
+	if (g_unk0x101013d4 == NULL) {
+		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
+	}
+
+	m_unk0x0c = 0;
+	m_unk0x10 = 0;
+	m_unk0x14 = 0;
+	m_numPolys = 0;
+	m_unk0x1c = 0;
+}
+
+// STUB: LEGO1 0x100aa450
+LegoLOD::~LegoLOD()
+{
+	// TODO
+}
+
+inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer)
+{
+	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }

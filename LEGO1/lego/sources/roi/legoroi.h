@@ -2,6 +2,7 @@
 #define LEGOROI_H
 
 #include "misc/legotypes.h"
+#include "viewmanager/viewlod.h"
 #include "viewmanager/viewroi.h"
 
 typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);
@@ -10,6 +11,31 @@ class LegoEntity;
 class LegoTextureContainer;
 class LegoStorage;
 class LegoAnim;
+
+// VTABLE: LEGO1 0x100dbf10
+// SIZE 0x20
+class LegoLOD : public ViewLOD {
+public:
+	LegoLOD(Tgl::Renderer*);
+	~LegoLOD() override;
+
+	// FUNCTION: LEGO1 0x100aae70
+	int NumPolys() const override { return m_numPolys; } // vtable+0x0c
+
+	// FUNCTION: LEGO1 0x100aae80
+	double VTable0x10() override { return 0.0; } // vtable+0x10
+
+	// SYNTHETIC: LEGO1 0x100aa430
+	// LegoLOD::`scalar deleting destructor'
+
+protected:
+	// TODO: Review 1996 version
+	undefined4 m_unk0x0c; // 0x0c
+	undefined4 m_unk0x10; // 0x10
+	undefined4 m_unk0x14; // 0x14
+	LegoU32 m_numPolys;   // 0x18
+	undefined4 m_unk0x1c; // 0x1c
+};
 
 // VTABLE: LEGO1 0x100dbe38
 // SIZE 0x108
@@ -44,7 +70,7 @@ public:
 	);
 	static unsigned char ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
 
-	inline const char* GetName() const { return m_name; }
+	inline const LegoChar* GetName() const { return m_name; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
 
 	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
@@ -63,13 +89,13 @@ private:
 // SIZE 0x10c
 class TimeROI : public LegoROI {
 public:
-	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, int p_time);
+	TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time);
 
 	// SYNTHETIC: LEGO1 0x100a9ad0
 	// TimeROI::`scalar deleting destructor'
 
 private:
-	int m_time; // 0x108
+	LegoTime m_time; // 0x108
 };
 
 #endif // LEGOROI_H

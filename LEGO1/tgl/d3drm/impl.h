@@ -315,12 +315,12 @@ public:
 	Result SetTexture(const Texture*) override;
 	Result GetTexture(Texture*&) override;
 	Result SetMaterialMode(MaterialMode) override;
-	Result Add(const Mesh*) override;
+	Result Add(const Group*) override;
 
 	// vtable+0x20
-	Result Add(const Group*) override;
-	Result Remove(const Mesh*) override;
+	Result Add(const Mesh*) override;
 	Result Remove(const Group*) override;
+	Result Remove(const Mesh*) override;
 	Result RemoveAll() override;
 
 	// vtable+0x30

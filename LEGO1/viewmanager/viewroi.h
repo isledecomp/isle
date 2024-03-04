@@ -53,8 +53,8 @@ public:
 	void VTable0x1c() override;                                  // vtable+0x1c
 	void SetLocalTransform(const Matrix4& p_transform) override; // vtable+0x20
 	void VTable0x24(const Matrix4& p_transform) override;        // vtable+0x24
-	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
 	virtual Tgl::Group* GetGeometry();                           // vtable+0x30
+	virtual const Tgl::Group* GetGeometry() const;               // vtable+0x34
 
 	inline int GetUnknown0xe0() { return m_unk0xe0; }
 	inline void SetUnknown0xe0(int p_unk0xe0) { m_unk0xe0 = p_unk0xe0; }
