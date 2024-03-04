@@ -31,7 +31,7 @@
 MxS32 g_legoWorldPresenterQuality = 1;
 
 // GLOBAL: LEGO1 0x100f75d8
-long g_wdbOffset = 0;
+MxLong g_wdbOffset = 0;
 
 // FUNCTION: LEGO1 0x100665b0
 void LegoWorldPresenter::configureLegoWorldPresenter(MxS32 p_legoWorldPresenterQuality)
@@ -320,16 +320,16 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 {
 	MxResult result;
-	MxU8* buffer = new MxU8[p_part.m_partDataLength];
+	MxU8* buff = new MxU8[p_part.m_partDataLength];
 
 	fseek(p_wdbFile, p_part.m_partDataOffset, 0);
-	if (fread(buffer, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
+	if (fread(buff, p_part.m_partDataLength, 1, p_wdbFile) != 1) {
 		return FAILURE;
 	}
 
 	MxDSChunk chunk;
 	chunk.SetLength(p_part.m_partDataLength);
-	chunk.SetData(buffer);
+	chunk.SetData(buff);
 
 	LegoPartPresenter part;
 	result = part.Read(chunk);
@@ -338,7 +338,7 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 		part.FUN_1007df20();
 	}
 
-	delete buffer;
+	delete[] buff;
 	return result;
 }
 
