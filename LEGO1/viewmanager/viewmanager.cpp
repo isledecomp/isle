@@ -32,19 +32,38 @@ ViewManager::~ViewManager()
 	SetPOVSource(NULL);
 }
 
-// STUB: LEGO1 0x100a6410
+// FUNCTION: LEGO1 0x100a6410
 void ViewManager::Remove(ViewROI* p_roi)
 {
-	// TODO
+	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
+		if (*it == p_roi) {
+			rois.erase(it);
+
+			if (p_roi->GetUnknown0xe0() >= 0) {
+				FUN_100a66a0(p_roi);
+			}
+
+			const CompoundObject* comp = p_roi->GetComp();
+
+			if (comp != NULL) {
+				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+					if (((ViewROI*) *it)->GetUnknown0xe0() >= 0) {
+						FUN_100a66a0((ViewROI*) *it);
+					}
+				}
+			}
+
+			return;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100a64d0
 void ViewManager::RemoveAll(ViewROI* p_roi)
 {
 	if (p_roi == NULL) {
-		for (CompoundObject::iterator it = rois.begin(); !(it == rois.end()); it++) {
-			ViewROI* roi = (ViewROI*) *it;
-			RemoveAll(roi);
+		for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
+			RemoveAll((ViewROI*) *it);
 		}
 
 		rois.erase(rois.begin(), rois.end());
@@ -59,10 +78,8 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 
 		if (comp != NULL) {
 			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-				ViewROI* roi = (ViewROI*) *it;
-
-				if (roi != NULL) {
-					RemoveAll(roi);
+				if ((ViewROI*) *it != NULL) {
+					RemoveAll((ViewROI*) *it);
 				}
 			}
 		}
