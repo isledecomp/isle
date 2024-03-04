@@ -203,9 +203,9 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		m_cacheSoundList = NULL;
 	}
 
-	while (!m_list0xe0.empty()) {
-		LegoROI* roi = m_list0xe0.front();
-		m_list0xe0.pop_front();
+	while (!m_roiList.empty()) {
+		LegoROI* roi = m_roiList.front();
+		m_roiList.pop_front();
 		delete roi;
 	}
 

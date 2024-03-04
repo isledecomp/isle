@@ -36,7 +36,7 @@ public:
 	void ParseExtra() override;  // vtable+0x30
 	void Destroy() override;     // vtable+0x38
 
-	void FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, undefined p_modelUnknown0x34, LegoWorld* p_world);
+	MxResult FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, undefined p_modelUnknown0x34, LegoWorld* p_world);
 
 	inline void Reset()
 	{
@@ -54,7 +54,7 @@ private:
 	LegoROI* m_roi;       // 0x64
 	MxBool m_addedToView; // 0x68
 
-	MxResult CreateROI(MxStreamChunk* p_chunk);
+	MxResult CreateROI(MxDSChunk* p_chunk);
 };
 
 #endif // LEGOMODELPRESENTER_H

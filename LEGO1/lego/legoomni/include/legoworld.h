@@ -67,7 +67,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
-	inline list<LegoROI*>& GetUnknownList0xe0() { return m_list0xe0; }
+	inline list<LegoROI*>& GetROIList() { return m_roiList; }
 
 	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 
@@ -91,7 +91,7 @@ protected:
 	MxCoreSet m_set0xa8;                        // 0xa8
 	MxPresenterList m_controlPresenters;        // 0xb8
 	MxCoreSet m_set0xd0;                        // 0xd0
-	list<LegoROI*> m_list0xe0;                  // 0xe0
+	list<LegoROI*> m_roiList;                   // 0xe0
 	MxS32 m_scriptIndex;                        // 0xec
 	LegoHideAnimPresenter* m_hideAnimPresenter; // 0xf0
 	MxS16 m_startupTicks;                       // 0xf4
