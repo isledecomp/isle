@@ -375,8 +375,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 		presenter.SetAction(&action);
 		LegoEntity* entity = (LegoEntity*) presenter.CreateEntity("LegoActor");
 		presenter.SetInternalEntity(entity);
-		presenter
-			.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_direction));
+		presenter.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_up));
 		entity->Create(action);
 	}
 	else if (!strcmp(p_model.m_presenterName, "LegoEntityPresenter")) {
@@ -384,8 +383,7 @@ MxResult LegoWorldPresenter::FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile
 		presenter.SetAction(&action);
 		createdEntity = (LegoEntity*) presenter.CreateEntity("LegoEntity");
 		presenter.SetInternalEntity(createdEntity);
-		presenter
-			.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_direction));
+		presenter.SetEntityLocation(Vector3(p_model.m_location), Vector3(p_model.m_direction), Vector3(p_model.m_up));
 		createdEntity->Create(action);
 	}
 
