@@ -107,7 +107,7 @@ public:
 
 	virtual void Enable(MxBool p_enable); // vtable+0x54
 
-	MxEntity* CreateEntity(const char* p_name);
+	MxEntity* CreateEntity(const char* p_defaultName);
 	void SendToCompositePresenter(MxOmni*);
 	MxBool IsEnabled();
 

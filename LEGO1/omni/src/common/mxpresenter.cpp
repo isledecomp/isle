@@ -239,24 +239,26 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100b5410
-MxEntity* MxPresenter::CreateEntity(const char* p_name)
+MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
 {
+	char objectName[512];
 	char buffer[512];
-	char buffer2[512];
-	strcpy(buffer, p_name);
 
+	// create an object from LegoObjectFactory based on OBJECT: value in extra data. If that is missing, p_defaultName
+	// is used
+
+	strcpy(objectName, p_defaultName);
 	MxU16 extraLen = m_action->GetExtraLength();
 
 	buffer[0] = extraLen;
 	buffer[1] = extraLen >> 8;
-	if (extraLen) {
-		extraLen &= MAXWORD;
-		memcpy(buffer2 + 2, m_action->GetExtraData(), extraLen);
-		buffer2[extraLen + 2] = 0;
-		KeyValueStringParse(buffer, g_strOBJECT, buffer2 + 2);
+	if (extraLen & MAXWORD) {
+		memcpy(buffer + 2, m_action->GetExtraData(), extraLen & MAXWORD);
+		buffer[extraLen + 2] = 0;
+		KeyValueStringParse(objectName, g_strOBJECT, buffer + 2);
 	}
 
-	return (MxEntity*) ObjectFactory()->Create(buffer);
+	return (MxEntity*) ObjectFactory()->Create(objectName);
 }
 
 // FUNCTION: LEGO1 0x100b54c0
