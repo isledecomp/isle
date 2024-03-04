@@ -32,6 +32,12 @@ ViewManager::~ViewManager()
 	SetPOVSource(NULL);
 }
 
+// STUB: LEGO1 0x100a6410
+void ViewManager::Remove(ViewROI* p_roi)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100a64d0
 void ViewManager::RemoveAll(ViewROI* p_roi)
 {
@@ -99,6 +105,13 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 		pov = point_of_view->GetLocal2World();
 		flags |= c_bit2;
 	}
+}
+
+// STUB: LEGO1 0x100a6e00
+ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
+{
+	// TODO
+	return NULL;
 }
 
 inline undefined4 SetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer)

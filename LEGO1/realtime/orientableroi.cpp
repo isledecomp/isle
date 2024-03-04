@@ -40,6 +40,12 @@ void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
 	VTable0x24(p_transform);
 }
 
+// STUB: LEGO1 0x100a50a0
+void OrientableROI::GetLocalTransform(Matrix4& p_transform)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100a58f0
 void OrientableROI::FUN_100a58f0(const Matrix4& p_transform)
 {
