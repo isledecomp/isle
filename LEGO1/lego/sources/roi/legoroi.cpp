@@ -114,12 +114,13 @@ LegoResult LegoROI::Read(
 )
 {
 	LegoResult result = FAILURE;
-	LegoU32 i;
-	LegoU32 numLODs;
+	LegoU32 i, j;
+	LegoU32 numLODs, surplusLODs;
 	LegoROI* roi;
 	LegoLOD* lod;
-	LegoU32 length;
-	LegoChar* textureName;
+	LegoU32 length, roiLength;
+	LegoChar *roiName, *textureName;
+	LegoTextureInfo* textureInfo;
 	ViewLODList* lodList;
 	LegoU32 numROIs;
 	LegoSphere sphere;
@@ -173,14 +174,12 @@ LegoResult LegoROI::Read(
 	}
 
 	if (m_unk0x100) {
-		LegoU32 roiLength; // TODO
-
 		for (roiLength = strlen(m_name); roiLength; roiLength--) {
 			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9')
 				break;
 		}
 
-		LegoChar* roiName = new LegoChar[roiLength + 1];
+		roiName = new LegoChar[roiLength + 1];
 		memcpy(roiName, m_name, roiLength);
 		roiName[roiLength] = '\0';
 
@@ -207,7 +206,6 @@ LegoResult LegoROI::Read(
 				goto done;
 			}
 
-			LegoU32 surplusLODs;
 			if (numLODs > g_roiConfig) {
 				surplusLODs = numLODs - g_roiConfig;
 				numLODs = g_roiConfig;
@@ -216,7 +214,7 @@ LegoResult LegoROI::Read(
 				surplusLODs = 0;
 			}
 
-			if (g_roiConfig < 3) {
+			if (g_roiConfig <= 2) {
 				for (i = 0; g_unk0x10101380[i] != NULL; i++) {
 					if (!strnicmp(m_name, g_unk0x10101380[i], 4)) {
 						roiName = g_unk0x10101380[i];
@@ -234,7 +232,6 @@ LegoResult LegoROI::Read(
 			}
 
 			if ((lodList = p_viewLODListManager->Lookup(roiName))) {
-				LegoU32 j;
 				for (j = 0; g_unk0x10101390[j] != NULL; j++) {
 					if (!strcmpi(g_unk0x10101390[j], roiName)) {
 						break;
@@ -253,7 +250,7 @@ LegoResult LegoROI::Read(
 						}
 
 						if (j == 0) {
-							if (surplusLODs != 0 && lod->GetUnknown0x0cTest()) {
+							if (surplusLODs != 0 && lod->GetUnknown0x08Test()) {
 								numLODs++;
 							}
 						}
@@ -270,7 +267,7 @@ LegoResult LegoROI::Read(
 					}
 
 					if (i == 0) {
-						if (surplusLODs != 0 && lod->GetUnknown0x0cTest()) {
+						if (surplusLODs != 0 && lod->GetUnknown0x08Test()) {
 							numLODs++;
 						}
 					}
@@ -295,7 +292,7 @@ LegoResult LegoROI::Read(
 
 	if (textureName != NULL) {
 		if (!strnicmp(textureName, "t_", 2)) {
-			LegoTextureInfo* textureInfo = p_textureContainer->Get(textureName + 2);
+			textureInfo = p_textureContainer->Get(textureName + 2);
 
 			if (textureInfo == NULL) {
 				goto done;

@@ -28,8 +28,6 @@ public:
 
 	LegoResult Read(Tgl::Renderer*, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
 
-	inline LegoBool GetUnknown0x0cTest() { return m_unk0x0c & 0xffffff08; }
-
 	// SYNTHETIC: LEGO1 0x100aa430
 	// LegoLOD::`scalar deleting destructor'
 
