@@ -1,6 +1,9 @@
 #include "legosphere.h"
 
+#include "decomp.h"
 #include "misc/legostorage.h"
+
+DECOMP_SIZE_ASSERT(LegoSphere, 0x10)
 
 // FUNCTION: LEGO1 0x100d3770
 LegoResult LegoSphere::Read(LegoStorage* p_storage)

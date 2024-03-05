@@ -175,8 +175,9 @@ LegoResult LegoROI::Read(
 
 	if (m_unk0x100) {
 		for (roiLength = strlen(m_name); roiLength; roiLength--) {
-			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9')
+			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9') {
 				break;
+			}
 		}
 
 		roiName = new LegoChar[roiLength + 1];
