@@ -24,6 +24,7 @@ public:
 
 	Tgl::Group* GetGeometry() { return m_meshGroup; }
 	const Tgl::Group* GetGeometry() const { return m_meshGroup; }
+	unsigned char GetUnknown0x08Test() { return m_unk0x08 & 0xffffff08; }
 
 	// SYNTHETIC: LEGO1 0x100a6f60
 	// ViewLOD::`scalar deleting destructor'

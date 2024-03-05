@@ -195,7 +195,7 @@ private:
 	Area m_unk0x42c;                            // 0x42c
 };
 
-MxBool ROIHandlerFunction(char* p_input, char* p_output, MxU32 p_copyLen);
+MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen);
 
 // SYNTHETIC: LEGO1 0x1003c860
 // LegoGameState::ScoreItem::ScoreItem
