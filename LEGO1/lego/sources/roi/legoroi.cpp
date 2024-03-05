@@ -57,7 +57,7 @@ const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
 const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
 
 // GLOBAL: LEGO1 0x101013ac
-ROIHandler m_func = NULL;
+ROIHandler g_unk0x101013ac = NULL;
 
 // GLOBAL: LEGO1 0x101013d4
 LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
@@ -371,9 +371,9 @@ unsigned char LegoROI::FUN_100a9bf0(const char* p_param, float& p_red, float& p_
 		return FALSE;
 	}
 
-	if (m_func) {
+	if (g_unk0x101013ac) {
 		char buf[32];
-		if (m_func(p_param, buf, 32)) {
+		if (g_unk0x101013ac(p_param, buf, 32)) {
 			p_param = buf;
 		}
 	}
@@ -410,7 +410,7 @@ unsigned char LegoROI::ColorAliasLookup(
 // FUNCTION: LEGO1 0x100a9d30
 void LegoROI::FUN_100a9d30(ROIHandler p_func)
 {
-	m_func = p_func;
+	g_unk0x101013ac = p_func;
 }
 
 // FUNCTION: LEGO1 0x100a9e10
