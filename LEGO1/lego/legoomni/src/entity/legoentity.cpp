@@ -52,7 +52,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 	if (m_roi) {
 		if (m_flags & c_bit1) {
 			if (m_roi->GetUnknown0x104() == this) {
-				m_roi->SetUnknown0x104(NULL);
+				m_roi->SetEntity(NULL);
 			}
 
 			UnkSaveDataWriter()->FUN_10083db0(m_roi);
@@ -76,10 +76,34 @@ void LegoEntity::SetWorld()
 	}
 }
 
-// STUB: LEGO1 0x100108a0
+// FUNCTION: LEGO1 0x100108a0
 void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 {
-	// TODO
+	m_roi = p_roi;
+
+	if (m_roi != NULL) {
+		if (p_bool2) {
+			MxMatrix mat;
+			CalcLocalTransform(
+				Mx3DPointFloat(m_worldLocation.GetX(), m_worldLocation.GetY(), m_worldLocation.GetZ()),
+				Mx3DPointFloat(m_worldDirection.GetX(), m_worldDirection.GetY(), m_worldDirection.GetZ()),
+				Mx3DPointFloat(m_worldUp.GetX(), m_worldUp.GetY(), m_worldUp.GetZ()),
+				mat
+			);
+
+			m_roi->FUN_100a46b0(mat);
+		}
+
+		m_roi->SetEntity(this);
+		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
+
+		if (p_bool1) {
+			ClearFlag(c_bit1);
+		}
+		else {
+			SetFlag(c_bit1);
+		}
+	}
 }
 
 // STUB: LEGO1 0x100109b0

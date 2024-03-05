@@ -76,9 +76,9 @@ public:
 	);
 
 	inline const LegoChar* GetName() const { return m_name; }
-	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
+	inline LegoEntity* GetUnknown0x104() { return m_entity; }
 
-	inline void SetUnknown0x104(LegoEntity* p_unk0x104) { m_unk0x104 = p_unk0x104; }
+	inline void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
 	// LegoROI::`scalar deleting destructor'
@@ -87,7 +87,7 @@ private:
 	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
 	undefined m_unk0x100;    // 0x100
-	LegoEntity* m_unk0x104;  // 0x104
+	LegoEntity* m_entity;    // 0x104
 };
 
 // VTABLE: LEGO1 0x100dbea8

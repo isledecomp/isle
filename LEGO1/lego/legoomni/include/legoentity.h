@@ -63,6 +63,7 @@ public:
 	inline MxU8 GetFlags() { return m_flags; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
+	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
 	inline void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
 
 protected:

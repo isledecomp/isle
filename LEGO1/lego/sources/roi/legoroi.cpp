@@ -73,7 +73,7 @@ LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL)
 {
 	m_unk0xd4 = NULL;
 	m_name = NULL;
-	m_unk0x104 = NULL;
+	m_entity = NULL;
 }
 
 // FUNCTION: LEGO1 0x100a82d0
@@ -81,7 +81,7 @@ LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_
 {
 	m_unk0xd4 = NULL;
 	m_name = NULL;
-	m_unk0x104 = NULL;
+	m_entity = NULL;
 }
 
 // FUNCTION: LEGO1 0x100a83c0
