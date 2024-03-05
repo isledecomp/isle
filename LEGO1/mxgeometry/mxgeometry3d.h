@@ -35,7 +35,6 @@ public:
 	inline Mx3DPointFloat& operator=(const Mx3DPointFloat& p_other)
 	{
 		((Vector3&) *this).operator=(p_other);
-		// EqualsImpl(p_other.m_data);
 
 		for (size_t i = 0; i < sizeof(m_elements) / sizeof(float); i++) {
 			m_elements[i] = p_other.m_elements[i];
