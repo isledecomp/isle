@@ -1,6 +1,7 @@
 #include "viewlodlist.h"
 
 #include "decomp.h"
+#include "viewlod.h"
 
 #include <stdio.h>
 
@@ -17,10 +18,33 @@ ViewLODListManager::ViewLODListManager()
 {
 }
 
-// STUB: LEGO1 0x100a7130
+// FUNCTION: LEGO1 0x100a7130
 ViewLODListManager::~ViewLODListManager()
 {
-	// TODO
+	ViewLODListMap::iterator iterator;
+
+	// delete all ViewLODLists
+	for (iterator = m_map.begin(); !(iterator == m_map.end()); ++iterator) {
+		const ROIName& rROIName = (*iterator).first;
+		ViewLODList* pLODList = (*iterator).second;
+
+		// LODList's refCount should be 0
+		assert(pLODList->m_refCount == 0);
+
+		// ???who pops and deletes LODObjects
+		while (pLODList->Size() > 0) {
+			delete const_cast<ViewLOD*>(pLODList->PopBack());
+		}
+
+		delete pLODList;
+		// ??? for now
+		delete[] const_cast<char*>(rROIName);
+	}
+
+	// ??? correct way of "emptying" map
+	m_map.erase(m_map.begin(), m_map.end());
+
+	assert(m_map.begin() == m_map.end());
 }
 
 // FUNCTION: LEGO1 0x100a72c0
@@ -63,10 +87,23 @@ ViewLODList* ViewLODListManager::Create(const ROIName& rROIName, int lodCount)
 	return pLODList;
 }
 
-// STUB: LEGO1 0x100a75b0
-ViewLODList* ViewLODListManager::Lookup(const ROIName&) const
+// FUNCTION: LEGO1 0x100a75b0
+ViewLODList* ViewLODListManager::Lookup(const ROIName& p_roiName) const
 {
-	return NULL;
+	// returned ViewLODList's refCount is increased, i.e. caller must call Release()
+	// when it no longer holds on to the list
+
+	ViewLODListMap::const_iterator iterator = m_map.find(p_roiName);
+	ViewLODList* pLODList = 0;
+
+	if (!(iterator == m_map.end())) {
+		pLODList = (*iterator).second;
+
+		assert(pLODList);
+		pLODList->AddRef();
+	}
+
+	return pLODList;
 }
 
 // STUB: LEGO1 0x100a7680
