@@ -181,6 +181,20 @@ def do_the_comparison(args: argparse.Namespace) -> Iterable[ComparisonItem]:
             orig_raw = origfile.read(var.orig_addr, data_size)
             recomp_raw = recompfile.read(var.recomp_addr, data_size)
 
+            # If either read exceeded the raw data size for the section,
+            # assume the entire variable is uninitialized.
+            # TODO: This is not correct, strictly speaking. However,
+            # it is probably impossible for a variable to exceed
+            # the virtual size of the section, so all that is left is
+            # the uninitialized data.
+            # If the variable falls at the end of the section like this,
+            # it is highly likely to be uninitialized.
+            if orig_raw is not None and len(orig_raw) < data_size:
+                orig_raw = None
+
+            if recomp_raw is not None and len(recomp_raw) < data_size:
+                recomp_raw = None
+
             # If both variables are uninitialized, we consider them equal.
             # Otherwise, this is a diff but there is nothing to compare.
             if orig_raw is None or recomp_raw is None:
