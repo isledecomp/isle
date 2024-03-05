@@ -41,22 +41,40 @@ void ViewROI::UpdateWorldData(const Matrix4& parent2world)
 	}
 }
 
-// STUB: LEGO1 0x100a9fc0
+// FUNCTION: LEGO1 0x100a9fc0
 void ViewROI::VTable0x24(const Matrix4& p_transform)
 {
-	// TODO
+	OrientableROI::VTable0x24(p_transform);
+	if (geometry) {
+		Tgl::FloatMatrix4 matrix;
+		Matrix4 in(matrix);
+		SETMAT4(in, m_local2world);
+		geometry->SetTransformation(matrix);
+	}
 }
 
-// STUB: LEGO1 0x100aa0a0
+// FUNCTION: LEGO1 0x100aa0a0
 void ViewROI::SetLocalTransform(const Matrix4& p_transform)
 {
-	// TODO
+	OrientableROI::SetLocalTransform(p_transform);
+	if (geometry) {
+		Tgl::FloatMatrix4 matrix;
+		Matrix4 in(matrix);
+		SETMAT4(in, m_local2world);
+		geometry->SetTransformation(matrix);
+	}
 }
 
-// STUB: LEGO1 0x100aa180
+// FUNCTION: LEGO1 0x100aa180
 void ViewROI::VTable0x1c()
 {
-	// TODO
+	OrientableROI::VTable0x1c();
+	if (geometry) {
+		Tgl::FloatMatrix4 matrix;
+		Matrix4 in(matrix);
+		SETMAT4(in, m_local2world);
+		geometry->SetTransformation(matrix);
+	}
 }
 
 // FUNCTION: LEGO1 0x100aa500
