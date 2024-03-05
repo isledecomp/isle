@@ -76,11 +76,9 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_startTime = p_dsAction.m_startTime;
 	this->m_duration = p_dsAction.m_duration;
 	this->m_loopCount = p_dsAction.m_loopCount;
-
-	this->m_location.CopyFrom(p_dsAction.m_location);
-	this->m_direction.CopyFrom(p_dsAction.m_direction);
-	this->m_up.CopyFrom(p_dsAction.m_up);
-
+	this->m_location = p_dsAction.m_location;
+	this->m_direction = p_dsAction.m_direction;
+	this->m_up = p_dsAction.m_up;
 	AppendData(p_dsAction.m_extraLength, p_dsAction.m_extraData);
 	this->m_unk0x84 = p_dsAction.m_unk0x84;
 	this->m_unk0x88 = p_dsAction.m_unk0x88;

@@ -31,16 +31,16 @@ public:
 	// FUNCTION: LEGO1 0x10003c10
 	virtual void operator=(const Vector3& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x88
 
-	inline void CopyFrom(const Mx3DPointFloat& p_other)
+	// FUNCTION: LEGO1 0x10010c00
+	inline Mx3DPointFloat& operator=(const Mx3DPointFloat& p_other)
 	{
-		// ALPHA: 0x10010860, multiple indirections to this call
-		EqualsImpl(p_other.m_data);
+		((Vector3&) *this).operator=(p_other);
 
-		float* dest = m_elements;
-		const float* src = p_other.m_elements;
-		for (size_t i = sizeof(m_elements) / sizeof(float); i > 0; --i) {
-			*dest++ = *src++;
+		for (size_t i = 0; i < sizeof(m_elements) / sizeof(float); i++) {
+			m_elements[i] = p_other.m_elements[i];
 		}
+
+		return *this;
 	}
 
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }

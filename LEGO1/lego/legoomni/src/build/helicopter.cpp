@@ -205,14 +205,14 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			}
 			if (m_world && m_world->GetCamera()) {
 				Mx3DPointFloat loc, dir, lookat;
-				loc.CopyFrom(m_world->GetCamera()->GetWorldLocation());
-				dir.CopyFrom(m_world->GetCamera()->GetWorldDirection());
+				loc = m_world->GetCamera()->GetWorldLocation();
+				dir = m_world->GetCamera()->GetWorldDirection();
 				lookat = dir;
 				float scale = 3;
 				lookat.Mul(scale);
 				lookat.Add(&loc);
 				Mx3DPointFloat v68, v7c, v90(0, 1, 0), va4;
-				v68.CopyFrom(m_world->GetCamera()->GetWorldUp());
+				v68 = m_world->GetCamera()->GetWorldUp();
 				va4.EqualsCross(v68, dir);
 				v7c.EqualsCross(va4, v90);
 				if (ret) {
