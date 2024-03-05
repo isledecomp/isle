@@ -290,13 +290,17 @@ LegoResult LegoROI::Read(
 	SetLODList(lodList);
 
 	if (lodList != NULL) {
-		// lodList->AddRef();
 		lodList->Release();
 	}
 
 	if (textureName != NULL) {
 		if (!strnicmp(textureName, "t_", 2)) {
 			LegoTextureInfo* textureInfo = p_textureContainer->Get(textureName + 2);
+
+			if (textureInfo == NULL) {
+				goto done;
+			}
+
 			FUN_100a9210(textureInfo);
 			FUN_100a9170(1.0F, 1.0F, 1.0F, 0.0F);
 		}
