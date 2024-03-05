@@ -94,7 +94,7 @@
 	X(JukeBoxEntity)                                                                                                   \
 	X(RadioState)                                                                                                      \
 	X(CaveEntity)                                                                                                      \
-	/*X(JailEntity)*/                                                                                                  \
+	X(JailEntity)                                                                                                      \
 	X(MxCompositeMediaPresenter)                                                                                       \
 	X(JukeBox)                                                                                                         \
 	X(JukeBoxState)                                                                                                    \
