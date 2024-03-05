@@ -1,5 +1,5 @@
 #ifndef JAILENTITY_H
-#define RACEJAILENTITY_HSTANDSENTITY_H
+#define JAILENTITY_H
 
 #include "buildingentity.h"
 
