@@ -1,8 +1,13 @@
 #include "legoroi.h"
 
+#include "geom/legobox.h"
+#include "geom/legosphere.h"
+#include "misc/legocontainer.h"
+#include "misc/legostorage.h"
 #include "tgl/d3drm/impl.h"
 
 #include <string.h>
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
@@ -42,8 +47,17 @@ ROIColorAlias g_roiColorAliases[22] = {
 // GLOBAL: LEGO1 0x10101368
 int g_roiConfig = 100;
 
+// GLOBAL: LEGO1 0x10101370
+const char* g_unk0x10101370[] = {"bike", "moto", NULL};
+
+// GLOBAL: LEGO1 0x10101380
+const char* g_unk0x10101380[] = {"bike", "moto", "haus", NULL};
+
+// GLOBAL: LEGO1 0x10101390
+const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "chtrbody", "chtrshld", NULL};
+
 // GLOBAL: LEGO1 0x101013ac
-ROIHandler g_someHandlerFunction = NULL;
+ROIHandler m_func = NULL;
 
 // GLOBAL: LEGO1 0x101013d4
 LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
@@ -90,7 +104,7 @@ LegoROI::~LegoROI()
 	}
 }
 
-// STUB: LEGO1 0x100a84a0
+// FUNCTION: LEGO1 0x100a84a0
 LegoResult LegoROI::Read(
 	OrientableROI* p_unk0xd4,
 	Tgl::Renderer* p_renderer,
@@ -99,12 +113,245 @@ LegoResult LegoROI::Read(
 	LegoStorage* p_storage
 )
 {
-	return SUCCESS;
+	LegoResult result = FAILURE;
+	LegoU32 i;
+	LegoU32 numLODs;
+	LegoROI* roi;
+	LegoLOD* lod;
+	LegoU32 length;
+	LegoChar* textureName;
+	ViewLODList* lodList;
+	LegoU32 numROIs;
+	LegoSphere sphere;
+	LegoBox box;
+
+	m_unk0xd4 = p_unk0xd4;
+
+	if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
+		goto done;
+	}
+	m_name = new LegoChar[length + 1];
+	if (p_storage->Read(m_name, length) != SUCCESS) {
+		goto done;
+	}
+	m_name[length] = '\0';
+	strlwr(m_name);
+
+	if (sphere.Read(p_storage) != SUCCESS) {
+		goto done;
+	}
+
+	SET3(m_sphere.Center(), sphere.GetCenter());
+	m_sphere.Radius() = sphere.GetRadius();
+	m_world_bounding_sphere.Radius() = m_sphere.Radius();
+
+	if (box.Read(p_storage) != SUCCESS) {
+		goto done;
+	}
+
+	SET3(m_unk0x80.Min(), box.GetMin());
+	SET3(m_unk0x80.Max(), box.GetMax());
+
+	if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
+		goto done;
+	}
+
+	if (length != 0) {
+		textureName = new LegoChar[length + 1];
+		if (p_storage->Read(textureName, length) != SUCCESS) {
+			goto done;
+		}
+		textureName[length] = '\0';
+		strlwr(textureName);
+	}
+	else {
+		textureName = NULL;
+	}
+
+	if (p_storage->Read(&m_unk0x100, sizeof(m_unk0x100)) != SUCCESS) {
+		goto done;
+	}
+
+	if (m_unk0x100) {
+		LegoU32 roiLength; // TODO
+
+		for (roiLength = strlen(m_name); roiLength; roiLength--) {
+			if (m_name[roiLength - 1] < '0' || m_name[roiLength - 1] > '9')
+				break;
+		}
+
+		LegoChar* roiName = new LegoChar[roiLength + 1];
+		memcpy(roiName, m_name, roiLength);
+		roiName[roiLength] = '\0';
+
+		lodList = p_viewLODListManager->Lookup(roiName);
+		delete[] roiName;
+
+		if (lodList == NULL) {
+			goto done;
+		}
+	}
+	else {
+		if (p_storage->Read(&numLODs, sizeof(numLODs)) != SUCCESS) {
+			goto done;
+		}
+
+		if (!numLODs) {
+			lodList = NULL;
+		}
+		else {
+			const LegoChar* roiName = m_name;
+			LegoU32 offset;
+
+			if (p_storage->Read(&offset, sizeof(offset)) != SUCCESS) {
+				goto done;
+			}
+
+			LegoU32 surplusLODs;
+			if (numLODs > g_roiConfig) {
+				surplusLODs = numLODs - g_roiConfig;
+				numLODs = g_roiConfig;
+			}
+			else {
+				surplusLODs = 0;
+			}
+
+			if (g_roiConfig < 3) {
+				for (i = 0; g_unk0x10101380[i] != NULL; i++) {
+					if (!strnicmp(m_name, g_unk0x10101380[i], 4)) {
+						roiName = g_unk0x10101380[i];
+						break;
+					}
+				}
+			}
+			else {
+				for (i = 0; g_unk0x10101370[i] != NULL; i++) {
+					if (!strnicmp(m_name, g_unk0x10101370[i], 4)) {
+						roiName = g_unk0x10101370[i];
+						break;
+					}
+				}
+			}
+
+			if ((lodList = p_viewLODListManager->Lookup(roiName))) {
+				LegoU32 j;
+				for (j = 0; g_unk0x10101390[j] != NULL; j++) {
+					if (!strcmpi(g_unk0x10101390[j], roiName)) {
+						break;
+					}
+				}
+
+				if (g_unk0x10101390[j] != NULL) {
+					while (lodList->Size()) {
+						delete const_cast<ViewLOD*>(lodList->PopBack());
+					}
+
+					for (j = 0; j < numLODs; j++) {
+						lod = new LegoLOD(p_renderer);
+						if (lod->Read(p_renderer, p_textureContainer, p_storage) != SUCCESS) {
+							goto done;
+						}
+
+						if (j == 0) {
+							if (surplusLODs != 0 && lod->GetUnknown0x0cTest()) {
+								numLODs++;
+							}
+						}
+
+						lodList->PushBack(lod);
+					}
+				}
+			}
+			else {
+				for (i = 0; i < numLODs; i++) {
+					lod = new LegoLOD(p_renderer);
+					if (lod->Read(p_renderer, p_textureContainer, p_storage) != SUCCESS) {
+						goto done;
+					}
+
+					if (i == 0) {
+						if (surplusLODs != 0 && lod->GetUnknown0x0cTest()) {
+							numLODs++;
+						}
+					}
+
+					if (i == 0 && (lodList = p_viewLODListManager->Create(roiName, numLODs)) == NULL) {
+						goto done;
+					}
+
+					lodList->PushBack(lod);
+				}
+			}
+
+			p_storage->SetPosition(offset);
+		}
+	}
+
+	SetLODList(lodList);
+
+	if (lodList != NULL) {
+		// lodList->AddRef();
+		lodList->Release();
+	}
+
+	if (textureName != NULL) {
+		if (!strnicmp(textureName, "t_", 2)) {
+			LegoTextureInfo* textureInfo = p_textureContainer->Get(textureName + 2);
+			FUN_100a9210(textureInfo);
+			FUN_100a9170(1.0F, 1.0F, 1.0F, 0.0F);
+		}
+		else {
+			LegoFloat red = 1.0F;
+			LegoFloat green = 0.0F;
+			LegoFloat blue = 1.0F;
+			LegoFloat other = 0.0F;
+			FUN_100a9bf0(textureName, red, green, blue, other);
+			FUN_100a9170(red, green, blue, other);
+		}
+	}
+
+	if (p_storage->Read(&numROIs, sizeof(numROIs)) != SUCCESS) {
+		goto done;
+	}
+
+	if (numROIs > 0) {
+		comp = new CompoundObject;
+	}
+
+	for (i = 0; i < numROIs; i++) {
+		// Create and initialize a sub-component
+		roi = new LegoROI(p_renderer);
+		if (roi->Read(this, p_renderer, p_viewLODListManager, p_textureContainer, p_storage) != SUCCESS) {
+			goto done;
+		}
+		// Add the new sub-component to this ROI's protected list
+		comp->push_back(roi);
+	}
+
+	result = SUCCESS;
+
+done:
+	return result;
 }
 
 // STUB: LEGO1 0x100a90f0
 LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 {
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100a9170
+LegoResult LegoROI::FUN_100a9170(LegoFloat, LegoFloat, LegoFloat, LegoFloat)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100a9210
+LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
+{
+	// TODO
 	return SUCCESS;
 }
 
@@ -115,22 +362,16 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-unsigned char LegoROI::CallTheHandlerFunction(
-	char* p_param,
-	float& p_red,
-	float& p_green,
-	float& p_blue,
-	float& p_other
-)
+unsigned char LegoROI::FUN_100a9bf0(const char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
 {
 	// TODO
 	if (p_param == NULL) {
 		return FALSE;
 	}
 
-	if (g_someHandlerFunction) {
+	if (m_func) {
 		char buf[32];
-		if (g_someHandlerFunction(p_param, buf, 32)) {
+		if (m_func(p_param, buf, 32)) {
 			p_param = buf;
 		}
 	}
@@ -139,7 +380,13 @@ unsigned char LegoROI::CallTheHandlerFunction(
 }
 
 // FUNCTION: LEGO1 0x100a9c50
-unsigned char LegoROI::ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
+unsigned char LegoROI::ColorAliasLookup(
+	const char* p_param,
+	float& p_red,
+	float& p_green,
+	float& p_blue,
+	float& p_other
+)
 {
 	// TODO: this seems awfully hacky for these devs. is there a dynamic way
 	// to represent `the end of this array` that would improve this?
@@ -159,9 +406,9 @@ unsigned char LegoROI::ColorAliasLookup(char* p_param, float& p_red, float& p_gr
 }
 
 // FUNCTION: LEGO1 0x100a9d30
-void LegoROI::SetSomeHandlerFunction(ROIHandler p_func)
+void LegoROI::FUN_100a9d30(ROIHandler p_func)
 {
-	g_someHandlerFunction = p_func;
+	m_func = p_func;
 }
 
 // FUNCTION: LEGO1 0x100a9e10
@@ -200,6 +447,13 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 LegoLOD::~LegoLOD()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x100aa510
+LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
 }
 
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer)

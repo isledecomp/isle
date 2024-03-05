@@ -5,10 +5,11 @@
 #include "viewmanager/viewlod.h"
 #include "viewmanager/viewroi.h"
 
-typedef unsigned char (*ROIHandler)(char*, char*, unsigned int);
+typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
 
 class LegoEntity;
 class LegoTextureContainer;
+struct LegoTextureInfo;
 class LegoStorage;
 class LegoAnim;
 
@@ -24,6 +25,10 @@ public:
 
 	// FUNCTION: LEGO1 0x100aae80
 	float VTable0x10() override { return 0.0; } // vtable+0x10
+
+	LegoResult Read(Tgl::Renderer*, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
+
+	inline LegoBool GetUnknown0x0cTest() { return m_unk0x0c & 0xffffff08; }
 
 	// SYNTHETIC: LEGO1 0x100aa430
 	// LegoLOD::`scalar deleting destructor'
@@ -52,6 +57,8 @@ public:
 		LegoTextureContainer* p_textureContainer,
 		LegoStorage* p_storage
 	);
+	LegoResult FUN_100a9170(LegoFloat, LegoFloat, LegoFloat, LegoFloat);
+	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 
 	float IntrinsicImportance() const override; // vtable+0x04
@@ -60,15 +67,15 @@ public:
 	void SetDisplayBB(int p_displayBB);
 	static void configureLegoROI(int p_roi);
 
-	static void SetSomeHandlerFunction(ROIHandler p_func);
-	static unsigned char CallTheHandlerFunction(
-		char* p_param,
+	static void FUN_100a9d30(ROIHandler p_func);
+	static unsigned char FUN_100a9bf0(const char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
+	static unsigned char ColorAliasLookup(
+		const char* p_param,
 		float& p_red,
 		float& p_green,
 		float& p_blue,
 		float& p_other
 	);
-	static unsigned char ColorAliasLookup(char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
 
 	inline const LegoChar* GetName() const { return m_name; }
 	inline LegoEntity* GetUnknown0x104() { return m_unk0x104; }
@@ -81,7 +88,7 @@ public:
 private:
 	LegoChar* m_name;        // 0xe4
 	BoundingSphere m_sphere; // 0xe8
-	undefined4 m_unk0x100;   // 0x100
+	undefined m_unk0x100;    // 0x100
 	LegoEntity* m_unk0x104;  // 0x104
 };
 
