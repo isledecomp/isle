@@ -139,8 +139,16 @@ public:
 	virtual void SetVector(float* p_other) { EqualsImpl(p_other); } // vtable+0x70
 
 	// FUNCTION: LEGO1 0x10002260
-	virtual void SetVector(Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
+	virtual void SetVector(const Vector2* p_other) { EqualsImpl(p_other->m_data); } // vtable+0x6c
 
+	// SYNTHETIC: LEGO1 0x10010be0
+	// Vector3::operator=
+
+	inline Vector2& operator=(const Vector2& p_other)
+	{
+		Vector2::SetVector(&p_other);
+		return *this;
+	}
 	inline float& operator[](size_t idx) { return m_data[idx]; }
 	inline const float& operator[](size_t idx) const { return m_data[idx]; }
 
