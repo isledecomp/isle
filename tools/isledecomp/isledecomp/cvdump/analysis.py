@@ -1,45 +1,9 @@
 """For collating the results from parsing cvdump.exe into a more directly useful format."""
-from typing import List, Optional, Tuple
+from typing import List, Optional
 from isledecomp.types import SymbolType
 from .parser import CvdumpParser
 from .demangler import demangle_string_const, demangle_vtable
-
-
-def data_type_info(type_name: str) -> Optional[Tuple[int, bool]]:
-    """cvdump type aliases are listed here:
-    https://github.com/microsoft/microsoft-pdb/blob/master/include/cvinfo.h
-    For the given type, return tuple(size, is_pointer) if possible."""
-    # pylint: disable=too-many-return-statements
-    # TODO: refactor to be as simple as possble
-
-    # Ignore complex types. We can get the size of those from the TYPES section.
-    if not type_name.startswith("T"):
-        return None
-
-    # if 32-bit pointer
-    if type_name.startswith("T_32P"):
-        return (4, True)
-
-    if type_name.endswith("QUAD") or type_name.endswith("64"):
-        return (8, False)
-
-    if (
-        type_name.endswith("LONG")
-        or type_name.endswith("INT4")
-        or type_name.endswith("32")
-    ):
-        return (4, False)
-
-    if type_name.endswith("SHORT") or type_name.endswith("WCHAR"):
-        return (2, False)
-
-    if "CHAR" in type_name:
-        return (1, False)
-
-    if type_name in ("T_NOTYPE", "T_VOID"):
-        return (0, False)
-
-    return None
+from .types import CvdumpKeyError, CvdumpIntegrityError
 
 
 class CvdumpNode:
@@ -146,11 +110,21 @@ class CvdumpAnalysis:
             node_dict[key].node_type = SymbolType.DATA
             node_dict[key].friendly_name = glo.name
 
-            if (g_info := data_type_info(glo.type)) is not None:
-                (size, is_pointer) = g_info
-                node_dict[key].confirmed_size = size
-                if is_pointer:
-                    node_dict[key].node_type = SymbolType.POINTER
+            try:
+                # Check our types database for type information.
+                # If we did not parse the TYPES section, we can only
+                # get information for built-in "T_" types.
+                g_info = parser.types.get(glo.type)
+                node_dict[key].confirmed_size = g_info.size
+                # Previously we set the symbol type to POINTER here if
+                # the variable was known to be a pointer. We can derive this
+                # information later when it's time to compare the variable,
+                # so let's set these to symbol type DATA instead.
+                # POINTER will be reserved for non-variable pointer data.
+                # e.g. thunks, unwind section.
+            except (CvdumpKeyError, CvdumpIntegrityError):
+                # No big deal if we don't have complete type information.
+                pass
 
         for lin in parser.lines:
             key = (lin.section, lin.offset)

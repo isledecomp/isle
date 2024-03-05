@@ -8,7 +8,7 @@
 #include "mxticklemanager.h"
 
 // GLOBAL: LEGO1 0x100f0160
-undefined4 g_unk0x100f0160;
+undefined4 g_unk0x100f0160 = 3;
 
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()

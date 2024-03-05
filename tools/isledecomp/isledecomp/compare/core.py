@@ -95,6 +95,7 @@ class Compare:
             .publics()
             .symbols()
             .section_contributions()
+            .types()
             .run()
         )
         res = CvdumpAnalysis(cv)
@@ -454,6 +455,25 @@ class Compare:
 
     ## Public API
 
+    def is_pointer_match(self, orig_addr, recomp_addr) -> bool:
+        """Check whether these pointers point at the same thing"""
+
+        # Null pointers considered matching
+        if orig_addr == 0 and recomp_addr == 0:
+            return True
+
+        match = self._db.get_by_orig(orig_addr)
+        if match is None:
+            return False
+
+        return match.recomp_addr == recomp_addr
+
+    def get_by_orig(self, addr: int) -> Optional[MatchInfo]:
+        return self._db.get_by_orig(addr)
+
+    def get_by_recomp(self, addr: int) -> Optional[MatchInfo]:
+        return self._db.get_by_recomp(addr)
+
     def get_all(self) -> List[MatchInfo]:
         return self._db.get_all()
 
@@ -462,6 +482,9 @@ class Compare:
 
     def get_vtables(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.VTABLE)
+
+    def get_variables(self) -> List[MatchInfo]:
+        return self._db.get_matches_by_type(SymbolType.DATA)
 
     def compare_address(self, addr: int) -> Optional[DiffReport]:
         match = self._db.get_one_match(addr)

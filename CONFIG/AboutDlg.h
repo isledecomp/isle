@@ -24,6 +24,9 @@ protected:
 // SYNTHETIC: CONFIG 0x00403cb0
 // CAboutDialog::`scalar deleting destructor'
 
+// FUNCTION: CONFIG 0x00403d30
+// CAboutDialog::_GetBaseMessageMap
+
 // FUNCTION: CONFIG 0x00403d40
 // CAboutDialog::GetMessageMap
 
