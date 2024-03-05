@@ -297,7 +297,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
   LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
-  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
@@ -353,6 +352,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/radiostate.cpp
   LEGO1/lego/legoomni/src/isle/skateboard.cpp
   LEGO1/lego/legoomni/src/main/legoomni.cpp
+  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
