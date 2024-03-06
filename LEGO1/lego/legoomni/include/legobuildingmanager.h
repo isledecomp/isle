@@ -5,6 +5,8 @@
 #include "misc/legostorage.h"
 #include "mxcore.h"
 
+class LegoROI;
+
 // VTABLE: LEGO1 0x100d6f50
 // SIZE 0x30
 class LegoBuildingManager : public MxCore {
@@ -29,6 +31,7 @@ public:
 	void FUN_1002fb30();
 	MxResult Save(LegoStorage* p_storage);
 	MxResult Load(LegoStorage* p_storage);
+	MxU32 FUN_1002ff40(LegoROI*, MxBool);
 	void FUN_10030590();
 
 	// SYNTHETIC: LEGO1 0x1002f940
