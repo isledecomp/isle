@@ -123,6 +123,13 @@ MxBool LegoUnkSaveDataWriter::FUN_10084c00(const LegoChar*)
 	return FALSE;
 }
 
+// STUB: LEGO1 0x10085140
+MxU32 LegoUnkSaveDataWriter::FUN_10085140(LegoROI*, MxBool)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100851a0
 void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
 {
@@ -140,13 +147,6 @@ void LegoUnkSaveDataWriter::SetCustomizeAnimFile(const char* p_value)
 	else {
 		g_customizeAnimFile = NULL;
 	}
-}
-
-// STUB: LEGO1 0x10085140
-MxU32 LegoUnkSaveDataWriter::FUN_10085140(LegoROI*, MxBool)
-{
-	// TODO
-	return 0;
 }
 
 // STUB: LEGO1 0x10085210
