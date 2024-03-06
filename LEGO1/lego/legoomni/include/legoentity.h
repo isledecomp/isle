@@ -69,7 +69,7 @@ public:
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }
-	inline MxBool GetUnknown0x10IsSet(MxU8 p_bit) { return m_unk0x10 & p_bit; }
+	inline MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
