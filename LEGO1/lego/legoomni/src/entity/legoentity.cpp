@@ -25,16 +25,45 @@ void LegoEntity::Init()
 	m_unk0x59 = 4;
 }
 
-// STUB: LEGO1 0x10010650
-void LegoEntity::ResetWorldTransform(MxBool p_inVehicle)
+// FUNCTION: LEGO1 0x10010650
+void LegoEntity::ResetWorldTransform(MxBool p_cameraFlag)
 {
-	// TODO
+	LegoWorld* world = CurrentWorld();
+
+	if (world != NULL && world->GetCamera() != NULL) {
+		m_cameraFlag = p_cameraFlag;
+
+		if (m_cameraFlag) {
+			world->GetCamera()->SetEntity(this);
+			world->GetCamera()->SetWorldTransform(
+				Mx3DPointFloat(0.0F, 1.25F, 0.0F),
+				Mx3DPointFloat(0.0F, 0.0F, 1.0F),
+				Mx3DPointFloat(0.0F, 1.0F, 0.0F)
+			);
+		}
+		else {
+			if (world->GetCamera()->GetEntity() == this) {
+				world->GetCamera()->SetEntity(NULL);
+				world->GetCamera()->SetWorldTransform(
+					Mx3DPointFloat(0.0F, 0.0F, 0.0F),
+					Mx3DPointFloat(0.0F, 0.0F, 1.0F),
+					Mx3DPointFloat(0.0F, 1.0F, 0.0F)
+				);
+			}
+		}
+	}
 }
 
-// STUB: LEGO1 0x10010790
-void LegoEntity::SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir, const Vector3& p_up)
+// FUNCTION: LEGO1 0x10010790
+void LegoEntity::SetWorldTransform(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up)
 {
-	// TODO
+	LegoWorld* world = CurrentWorld();
+
+	if (world != NULL && world->GetCamera() != NULL) {
+		m_cameraFlag = TRUE;
+		world->GetCamera()->SetEntity(this);
+		world->GetCamera()->SetWorldTransform(p_location, p_direction, p_up);
+	}
 }
 
 // FUNCTION: LEGO1 0x100107e0
@@ -71,6 +100,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 void LegoEntity::SetWorld()
 {
 	LegoWorld* world = CurrentWorld();
+
 	if (world != NULL && world != (LegoWorld*) this) {
 		world->Add(this);
 	}

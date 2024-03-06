@@ -37,12 +37,16 @@ public:
 		return !strcmp(p_name, LegoEntity::ClassName()) || MxEntity::IsA(p_name);
 	}
 
-	virtual MxResult Create(MxDSAction& p_dsAction);                                                 // vtable+0x18
-	virtual void Destroy(MxBool p_fromDestructor);                                                   // vtable+0x1c
-	virtual void ParseAction(char*);                                                                 // vtable+0x20
-	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2);                             // vtable+0x24
-	virtual void SetWorldTransform(const Vector3& p_loc, const Vector3& p_dir, const Vector3& p_up); // vtable+0x28
-	virtual void ResetWorldTransform(MxBool p_inVehicle);                                            // vtable+0x2c
+	virtual MxResult Create(MxDSAction& p_dsAction);                     // vtable+0x18
+	virtual void Destroy(MxBool p_fromDestructor);                       // vtable+0x1c
+	virtual void ParseAction(char* p_extra);                             // vtable+0x20
+	virtual void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2); // vtable+0x24
+	virtual void SetWorldTransform(
+		const Vector3& p_location,
+		const Vector3& p_direction,
+		const Vector3& p_up
+	);                                                     // vtable+0x28
+	virtual void ResetWorldTransform(MxBool p_cameraFlag); // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
