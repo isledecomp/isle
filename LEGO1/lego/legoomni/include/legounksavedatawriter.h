@@ -66,8 +66,11 @@ public:
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
+	MxU32 FUN_10085140(LegoROI*, MxBool);
 	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);
 	LegoROI* FUN_10085a80(LegoChar* p_und1, LegoChar* p_und2, undefined p_und3);
+
+	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 private:
 	static char* g_customizeAnimFile;

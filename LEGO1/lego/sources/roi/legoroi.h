@@ -76,7 +76,7 @@ public:
 	);
 
 	inline const LegoChar* GetName() const { return m_name; }
-	inline LegoEntity* GetUnknown0x104() { return m_entity; }
+	inline LegoEntity* GetEntity() { return m_entity; }
 
 	inline void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
 

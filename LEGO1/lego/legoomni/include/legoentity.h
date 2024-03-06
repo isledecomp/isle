@@ -17,6 +17,10 @@ public:
 		c_bit2 = 0x02
 	};
 
+	enum {
+		c_altBit1 = 0x01
+	};
+
 	inline LegoEntity() { Init(); }
 
 	// FUNCTION: LEGO1 0x1000c290
@@ -51,13 +55,13 @@ public:
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
-	virtual void VTable0x34(); // vtable+0x34
-	virtual void VTable0x38(); // vtable+0x38
-	virtual void VTable0x3c(); // vtable+0x3c
-	virtual void VTable0x40(); // vtable+0x40
-	virtual void VTable0x44(); // vtable+0x44
-	virtual void VTable0x48(); // vtable+0x48
-	virtual void VTable0x4c(); // vtable+0x4c
+	virtual void VTable0x34(MxBool p_und); // vtable+0x34
+	virtual void VTable0x38();             // vtable+0x38
+	virtual void VTable0x3c();             // vtable+0x3c
+	virtual void VTable0x40();             // vtable+0x40
+	virtual void VTable0x44();             // vtable+0x44
+	virtual void VTable0x48();             // vtable+0x48
+	virtual void VTable0x4c();             // vtable+0x4c
 
 	void FUN_10010c30();
 	void FUN_100114e0(MxU8 p_unk0x59);
@@ -65,6 +69,7 @@ public:
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }
+	inline MxBool GetUnknown0x10IsSet(MxU8 p_bit) { return m_unk0x10 & p_bit; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
@@ -74,7 +79,7 @@ protected:
 	void Init();
 	void SetWorld();
 
-	undefined m_unk0x10;             // 0x10
+	MxU8 m_unk0x10;                  // 0x10
 	MxU8 m_flags;                    // 0x11
 	Mx3DPointFloat m_worldLocation;  // 0x14
 	Mx3DPointFloat m_worldDirection; // 0x28

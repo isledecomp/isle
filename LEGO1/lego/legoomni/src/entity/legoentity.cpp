@@ -1,7 +1,9 @@
 #include "legoentity.h"
 
 #include "define.h"
+#include "legobuildingmanager.h"
 #include "legoomni.h"
+#include "legoplantmanager.h"
 #include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
@@ -80,7 +82,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 {
 	if (m_roi) {
 		if (m_flags & c_bit1) {
-			if (m_roi->GetUnknown0x104() == this) {
+			if (m_roi->GetEntity() == this) {
 				m_roi->SetEntity(NULL);
 			}
 
@@ -203,10 +205,35 @@ void LegoEntity::ParseAction(char* p_extra)
 	}
 }
 
-// STUB: LEGO1 0x10010f10
-void LegoEntity::VTable0x34()
+// FUNCTION: LEGO1 0x10010f10
+void LegoEntity::VTable0x34(MxBool p_und)
 {
-	// TODO
+	if (!GetUnknown0x10IsSet(c_altBit1)) {
+		MxU32 objectId = 0;
+		const LegoChar* roiName = m_roi->GetName();
+
+		switch (m_unk0x59) {
+		case 0:
+			objectId = UnkSaveDataWriter()->FUN_10085140(m_roi, p_und);
+			break;
+		case 1:
+			break;
+		case 2:
+			objectId = PlantManager()->FUN_10026ba0(m_roi, p_und);
+			break;
+		case 3:
+			objectId = BuildingManager()->FUN_1002ff40(m_roi, p_und);
+			break;
+		}
+
+		if (objectId) {
+			MxDSAction action;
+			action.SetAtomId(MxAtomId(UnkSaveDataWriter()->GetCustomizeAnimFile(), e_lowerCase2));
+			action.SetObjectId(objectId);
+			action.AppendData(strlen(roiName) + 1, roiName);
+			Start(&action);
+		}
+	}
 }
 
 // STUB: LEGO1 0x10011070

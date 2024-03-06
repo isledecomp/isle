@@ -5,6 +5,8 @@
 #include "misc/legostorage.h"
 #include "mxcore.h"
 
+class LegoROI;
+
 // VTABLE: LEGO1 0x100d6758
 // SIZE 0x2c
 class LegoPlantManager : public MxCore {
@@ -26,6 +28,7 @@ public:
 	void FUN_100263a0(undefined4 p_und);
 	void Save(LegoStorage* p_storage);
 	MxResult Load(LegoStorage* p_storage);
+	MxU32 FUN_10026ba0(LegoROI*, MxBool);
 	void FUN_10027120();
 
 	static void SetCustomizeAnimFile(const char* p_value);

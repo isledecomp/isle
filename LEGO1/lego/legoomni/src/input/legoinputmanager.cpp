@@ -392,7 +392,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 							roi = (LegoROI*) oroi;
 						}
 
-						LegoEntity* entity = roi->GetUnknown0x104();
+						LegoEntity* entity = roi->GetEntity();
 						if (entity && entity->Notify(p_param) != 0) {
 							return TRUE;
 						}

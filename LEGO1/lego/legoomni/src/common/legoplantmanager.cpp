@@ -47,6 +47,13 @@ MxResult LegoPlantManager::Load(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10026ba0
+MxU32 LegoPlantManager::FUN_10026ba0(LegoROI*, MxBool)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x10026be0
 void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 {
