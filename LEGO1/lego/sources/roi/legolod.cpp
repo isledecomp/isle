@@ -53,9 +53,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	float(*normals)[3] = NULL;
 	float(*vertices)[3] = NULL;
 	float(*textureVertices)[2] = NULL;
-	LegoU32 numVerts = 0;
-	LegoU32 numNormals = 0;
-	LegoU32 numTextureVertices = 0;
+	LegoS32 numVerts = 0;
+	LegoS32 numNormals = 0;
+	LegoS32 numTextureVertices = 0;
 	LegoMesh* mesh = NULL;
 	LegoU32(*polyIndices)[3] = NULL;
 	LegoU32(*textureIndices)[3] = NULL;
@@ -69,7 +69,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		goto done;
 	}
 
-	if (GetUnknown0x08Test8()) {
+	if (GetUnknown0x08Test4()) {
 		return SUCCESS;
 	}
 
@@ -84,7 +84,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		return SUCCESS;
 	}
 
-	// SetUnknown0x08Flag0x10(); // maybe TODO
 	SetFlag(c_bit4);
 
 	m_meshes = new Mesh[m_numMeshes];
@@ -106,21 +105,21 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	// probably TODO
-	if ((LegoS32) numVerts > 0) {
+	if (numVerts > 0) {
 		vertices = new float[numVerts][_countof(*vertices)];
 		if (p_storage->Read(vertices, numVerts * sizeof(*vertices)) != SUCCESS) {
 			goto done;
 		}
 	}
 
-	if ((LegoS32) numNormals > 0) {
+	if (numNormals > 0) {
 		normals = new float[numNormals][_countof(*normals)];
 		if (p_storage->Read(normals, numNormals * sizeof(*normals)) != SUCCESS) {
 			goto done;
 		}
 	}
 
-	if ((LegoS32) numTextureVertices > 0) {
+	if (numTextureVertices > 0) {
 		textureVertices = new float[numTextureVertices][_countof(*textureVertices)];
 		if (p_storage->Read(textureVertices, numTextureVertices * sizeof(*textureVertices)) != SUCCESS) {
 			goto done;
@@ -166,7 +165,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			goto done;
 		}
 
-		// Maybe TODO return type
 		switch (mesh->GetShading()) {
 		case LegoMesh::e_flat:
 			shadingModel = Tgl::Flat;
