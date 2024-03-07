@@ -231,9 +231,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 				LegoROI::FUN_100a9bf0(materialName, red, green, blue, alpha);
 			}
 			else {
-				red = (double) mesh->GetColor().GetRed() / 255.0;
-				green = (double) mesh->GetColor().GetGreen() / 255.0;
-				blue = (double) mesh->GetColor().GetBlue() / 255.0;
+				red = mesh->GetColor().GetRed() / 255.0;
+				green = mesh->GetColor().GetGreen() / 255.0;
+				blue = mesh->GetColor().GetBlue() / 255.0;
 				alpha = mesh->GetAlpha();
 			}
 
