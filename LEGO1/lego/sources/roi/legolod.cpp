@@ -62,7 +62,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoTextureInfo* textureInfo = NULL;
 
 	LegoU32 i, meshUnd1, meshUnd2, tempNumVertsAndNormals;
-	Tgl::ShadingModel shadingModel;
 	unsigned char paletteEntries[256];
 
 	if (p_storage->Read(&m_unk0x08, sizeof(m_unk0x08)) != SUCCESS) {
@@ -96,7 +95,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		goto done;
 	}
 
-	// probably TODO
 	numVerts = *((LegoU16*) &tempNumVertsAndNormals) & MAXSHORT;
 	numNormals = (*((LegoU16*) &tempNumVertsAndNormals + 1) >> 1) & MAXSHORT;
 
@@ -129,6 +127,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	for (i = 0; i < m_numMeshes; i++) {
 		LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
 		const LegoChar *textureName, *materialName;
+		Tgl::ShadingModel shadingModel;
 
 		if (p_storage->Read(&numPolys, 2) != SUCCESS) {
 			goto done;
