@@ -63,8 +63,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoBool und = FALSE;
 
 	LegoU32 i, meshUnd1, meshUnd2, tempNumVertsAndNormals;
-	Tgl::PaletteEntry paletteEntries[256];
 	Tgl::ShadingModel shadingModel;
+	unsigned char paletteEntries[256];
 
 	if (p_storage->Read(&m_unk0x08, sizeof(m_unk0x08)) != SUCCESS) {
 		goto done;

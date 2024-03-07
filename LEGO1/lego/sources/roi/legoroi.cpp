@@ -394,7 +394,7 @@ LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float&
 }
 
 // STUB: LEGO1 0x100a9cf0
-LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, Tgl::PaletteEntry* paletteEntries, LegoU32 p_numEntries)
+LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries)
 {
 	// TODO
 	return FALSE;

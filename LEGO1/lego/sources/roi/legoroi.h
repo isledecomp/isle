@@ -46,7 +46,7 @@ public:
 		float& p_blue,
 		float& p_alpha
 	);
-	static LegoBool FUN_100a9cf0(const LegoChar* p_param, Tgl::PaletteEntry* paletteEntries, LegoU32 p_numEntries);
+	static LegoBool FUN_100a9cf0(const LegoChar* p_param, unsigned char* paletteEntries, LegoU32 p_numEntries);
 
 	inline const LegoChar* GetName() const { return m_name; }
 	inline LegoEntity* GetEntity() { return m_entity; }
