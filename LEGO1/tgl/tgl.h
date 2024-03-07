@@ -297,7 +297,7 @@ public:
 	virtual Result Add(const Group*) = 0;
 	virtual Result Add(const Mesh*) = 0;
 	virtual Result Remove(const Group*) = 0;
-	virtual Result Remove(const Mesh*) = 0;
+	virtual Result Remove(const Unk*) = 0;
 	virtual Result RemoveAll() = 0;
 
 	// This is TransformLocalToWorld in the leak, however it seems
@@ -317,14 +317,15 @@ public:
 // VTABLE: LEGO1 0x100dbb30
 class Unk : public Object {
 public:
-	virtual Result SetMeshData(
+	virtual Tgl::Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
-		const float (*pPositions)[3],
-		const float (*pNormals)[3],
-		const float (*pTextureCoordinates)[2],
-		unsigned long vertexPerFaceCount,
-		unsigned long* pFaceData
+		float (*pPositions)[3],
+		float (*pNormals)[3],
+		float (*pTextureCoordinates)[2],
+		unsigned long (*pFaceIndices)[3],
+		unsigned long (*pTextureIndices)[3],
+		Tgl::ShadingModel shadingModel
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;

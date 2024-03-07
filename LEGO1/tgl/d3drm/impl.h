@@ -282,7 +282,7 @@ public:
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
-		int groupIndex;
+		D3DRMGROUPINDEX groupIndex;
 	};
 
 	inline MeshData* ImplementationData() const { return m_data; }
@@ -320,7 +320,7 @@ public:
 	// vtable+0x20
 	Result Add(const Mesh*) override;
 	Result Remove(const Group*) override;
-	Result Remove(const Mesh*) override;
+	Result Remove(const Unk*) override;
 	Result RemoveAll() override;
 
 	// vtable+0x30
@@ -349,14 +349,15 @@ public:
 	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	Result SetMeshData(
+	Tgl::Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
-		const float (*pPositions)[3],
-		const float (*pNormals)[3],
-		const float (*pTextureCoordinates)[2],
-		unsigned long vertexPerFaceCount,
-		unsigned long* pFaceData
+		float (*pPositions)[3],
+		float (*pNormals)[3],
+		float (*pTextureCoordinates)[2],
+		unsigned long (*pFaceIndices)[3],
+		unsigned long (*pTextureIndices)[3],
+		Tgl::ShadingModel shadingModel
 	) override;
 	Result GetBoundingBox(float min[3], float max[3]) override;
 

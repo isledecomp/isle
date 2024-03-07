@@ -12,17 +12,18 @@ void* UnkImpl::ImplementationDataPtr()
 }
 
 // STUB: LEGO1 0x100a3840
-Result UnkImpl::SetMeshData(
+Tgl::Mesh* UnkImpl::CreateMesh(
 	unsigned long faceCount,
 	unsigned long vertexCount,
-	const float (*pPositions)[3],
-	const float (*pNormals)[3],
-	const float (*pTextureCoordinates)[2],
-	unsigned long vertexPerFaceCount,
-	unsigned long* pFaceData
+	float (*pPositions)[3],
+	float (*pNormals)[3],
+	float (*pTextureCoordinates)[2],
+	unsigned long (*pFaceIndices)[3],
+	unsigned long (*pTextureIndices)[3],
+	Tgl::ShadingModel shadingModel
 )
 {
-	return Error;
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x100a3ae0

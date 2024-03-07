@@ -94,11 +94,11 @@ Result GroupImpl::Add(const Mesh* pMesh)
 }
 
 // FUNCTION: LEGO1 0x100a3450
-Result GroupImpl::Remove(const Mesh* pMesh)
+Result GroupImpl::Remove(const Unk* pUnk)
 {
-	const MeshImpl* pMeshImpl = static_cast<const MeshImpl*>(pMesh);
+	const UnkImpl* pUnkImpl = static_cast<const UnkImpl*>(pUnk);
 	// TODO: Incorrect structure
-	return ResultVal(m_data->DeleteVisual((IDirect3DRMMesh*) pMeshImpl->ImplementationData()));
+	return ResultVal(m_data->DeleteVisual((IDirect3DRMMesh*) pUnkImpl->ImplementationData()));
 }
 
 // FUNCTION: LEGO1 0x100a3480

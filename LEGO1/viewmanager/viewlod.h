@@ -13,7 +13,11 @@
 // SIZE 0x0c
 class ViewLOD : public LODObject {
 public:
-	ViewLOD(Tgl::Renderer* pRenderer) : m_meshGroup(NULL), m_unk0x08(3) {}
+	enum {
+		c_bit4 = 0x10
+	};
+
+	ViewLOD(Tgl::Renderer* pRenderer) : m_unk0x04(NULL), m_unk0x08(3) {}
 	~ViewLOD() override;
 
 	// FUNCTION: LEGO1 0x100a6f30
@@ -22,17 +26,20 @@ public:
 	// FUNCTION: LEGO1 0x100a6f50
 	int NVerts() const override { return NumPolys() * 2; } // vtable+0x08
 
-	Tgl::Group* GetGeometry() { return m_meshGroup; }
-	const Tgl::Group* GetGeometry() const { return m_meshGroup; }
-	unsigned char GetUnknown0x08Test() { return m_unk0x08 & 0xffffff08; }
+	Tgl::Unk* GetUnknown0x04() { return m_unk0x04; }
+	const Tgl::Unk* GetUnknown0x04() const { return m_unk0x04; }
+	unsigned char GetUnknown0x08Test4() { return m_unk0x08 & 0xffffff04; }
+	unsigned char GetUnknown0x08Test8() { return m_unk0x08 & 0xffffff08; }
+
+	void SetFlag(unsigned char p_flag) { m_unk0x08 |= p_flag; }
+	void ClearFlag(unsigned char p_flag) { m_unk0x08 &= ~p_flag; }
 
 	// SYNTHETIC: LEGO1 0x100a6f60
 	// ViewLOD::`scalar deleting destructor'
 
 protected:
-	// TODO: m_meshGroup unconfirmed (based on 1996)
-	Tgl::Group* m_meshGroup; // 0x04
-	undefined4 m_unk0x08;    // 0x08
+	Tgl::Unk* m_unk0x04;  // 0x04
+	undefined4 m_unk0x08; // 0x08
 };
 
 #endif // VIEWLOD_H
