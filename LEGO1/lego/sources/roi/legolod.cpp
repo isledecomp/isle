@@ -60,7 +60,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32(*polyIndices)[3] = NULL;
 	LegoU32(*textureIndices)[3] = NULL;
 	LegoTextureInfo* textureInfo = NULL;
-	LegoBool und = FALSE;
 
 	LegoU32 i, meshUnd1, meshUnd2, tempNumVertsAndNormals;
 	Tgl::ShadingModel shadingModel;
@@ -129,8 +128,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	for (i = 0; i < m_numMeshes; i++) {
-		und = FALSE;
-
 		LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
 		const LegoChar *textureName, *materialName;
 
