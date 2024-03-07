@@ -102,7 +102,6 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		goto done;
 	}
 
-	// probably TODO
 	if (numVerts > 0) {
 		vertices = new float[numVerts][_countof(*vertices)];
 		if (p_storage->Read(vertices, numVerts * sizeof(*vertices)) != SUCCESS) {
