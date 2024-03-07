@@ -137,6 +137,7 @@ target_include_directories(mxdirectx PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1" "${CMAK
 target_link_libraries(mxdirectx PRIVATE ddraw)
 
 add_library(roi STATIC
+  LEGO1/lego/sources/roi/legolod.cpp
   LEGO1/lego/sources/roi/legoroi.cpp
 )
 register_lego1_target(roi)
@@ -146,6 +147,7 @@ target_link_libraries(roi PRIVATE viewmanager Vec::Vec)
 
 add_library(geom STATIC
   LEGO1/lego/sources/geom/legobox.cpp
+  LEGO1/lego/sources/geom/legomesh.cpp
   LEGO1/lego/sources/geom/legosphere.cpp
   LEGO1/lego/sources/geom/legovertex.cpp
 )
@@ -163,6 +165,7 @@ target_include_directories(anim PRIVATE "${CMAKE_SOURCE_DIR}/LEGO1/omni/include"
 target_link_libraries(anim PRIVATE)
 
 add_library(misc STATIC
+  LEGO1/lego/sources/misc/legocolor.cpp
   LEGO1/lego/sources/misc/legocontainer.cpp
   LEGO1/lego/sources/misc/legoimage.cpp
   LEGO1/lego/sources/misc/legostorage.cpp

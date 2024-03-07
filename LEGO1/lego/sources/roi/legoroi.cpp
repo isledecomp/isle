@@ -2,20 +2,15 @@
 
 #include "geom/legobox.h"
 #include "geom/legosphere.h"
+#include "legolod.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
-#include "tgl/d3drm/impl.h"
 
 #include <string.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoROI, 0x108)
 DECOMP_SIZE_ASSERT(TimeROI, 0x10c)
-DECOMP_SIZE_ASSERT(LODObject, 0x04)
-DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)
-DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
-
-inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
 
 // SIZE 0x14
 typedef struct {
@@ -23,7 +18,7 @@ typedef struct {
 	int m_red;
 	int m_green;
 	int m_blue;
-	int m_unk0x10;
+	int m_alpha;
 } ROIColorAlias;
 
 // GLOBAL: LEGO1 0x100dbe28
@@ -58,9 +53,6 @@ const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "ch
 
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_unk0x101013ac = NULL;
-
-// GLOBAL: LEGO1 0x101013d4
-LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 
 // FUNCTION: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(int p_roiConfig)
@@ -251,7 +243,7 @@ LegoResult LegoROI::Read(
 						}
 
 						if (j == 0) {
-							if (surplusLODs != 0 && lod->GetUnknown0x08Test()) {
+							if (surplusLODs != 0 && lod->GetUnknown0x08Test8()) {
 								numLODs++;
 							}
 						}
@@ -268,7 +260,7 @@ LegoResult LegoROI::Read(
 					}
 
 					if (i == 0) {
-						if (surplusLODs != 0 && lod->GetUnknown0x08Test()) {
+						if (surplusLODs != 0 && lod->GetUnknown0x08Test8()) {
 							numLODs++;
 						}
 					}
@@ -306,9 +298,9 @@ LegoResult LegoROI::Read(
 			LegoFloat red = 1.0F;
 			LegoFloat green = 0.0F;
 			LegoFloat blue = 1.0F;
-			LegoFloat other = 0.0F;
-			FUN_100a9bf0(textureName, red, green, blue, other);
-			FUN_100a9170(red, green, blue, other);
+			LegoFloat alpha = 0.0F;
+			FUN_100a9bf0(textureName, red, green, blue, alpha);
+			FUN_100a9170(red, green, blue, alpha);
 		}
 	}
 
@@ -364,7 +356,7 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
-unsigned char LegoROI::FUN_100a9bf0(const char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other)
+LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
 	// TODO
 	if (p_param == NULL) {
@@ -378,17 +370,11 @@ unsigned char LegoROI::FUN_100a9bf0(const char* p_param, float& p_red, float& p_
 		}
 	}
 
-	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_other);
+	return ColorAliasLookup(p_param, p_red, p_green, p_blue, p_alpha);
 }
 
 // FUNCTION: LEGO1 0x100a9c50
-unsigned char LegoROI::ColorAliasLookup(
-	const char* p_param,
-	float& p_red,
-	float& p_green,
-	float& p_blue,
-	float& p_other
-)
+LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
 	// TODO: this seems awfully hacky for these devs. is there a dynamic way
 	// to represent `the end of this array` that would improve this?
@@ -398,12 +384,19 @@ unsigned char LegoROI::ColorAliasLookup(
 			p_red = g_roiColorAliases[i].m_red * g_normalizeByteToFloat;
 			p_green = g_roiColorAliases[i].m_green * g_normalizeByteToFloat;
 			p_blue = g_roiColorAliases[i].m_blue * g_normalizeByteToFloat;
-			p_other = g_roiColorAliases[i].m_unk0x10 * g_normalizeByteToFloat;
+			p_alpha = g_roiColorAliases[i].m_alpha * g_normalizeByteToFloat;
 			return TRUE;
 		}
 		i++;
 	} while ((int*) &g_roiColorAliases[i] < &g_roiConfig);
 
+	return FALSE;
+}
+
+// STUB: LEGO1 0x100a9cf0
+LegoBool LegoROI::FUN_100a9cf0(const LegoChar* p_param, Tgl::PaletteEntry* paletteEntries, LegoU32 p_numEntries)
+{
+	// TODO
 	return FALSE;
 }
 
@@ -429,36 +422,4 @@ float LegoROI::IntrinsicImportance() const
 void LegoROI::UpdateWorldBoundingVolumes()
 {
 	// TODO
-}
-
-// FUNCTION: LEGO1 0x100aa380
-LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
-{
-	if (g_unk0x101013d4 == NULL) {
-		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
-	}
-
-	m_unk0x0c = 0;
-	m_unk0x10 = 0;
-	m_unk0x14 = 0;
-	m_numPolys = 0;
-	m_unk0x1c = 0;
-}
-
-// STUB: LEGO1 0x100aa450
-LegoLOD::~LegoLOD()
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x100aa510
-LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage)
-{
-	// TODO
-	return SUCCESS;
-}
-
-inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer)
-{
-	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }

@@ -2,7 +2,6 @@
 #define LEGOROI_H
 
 #include "misc/legotypes.h"
-#include "viewmanager/viewlod.h"
 #include "viewmanager/viewroi.h"
 
 typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
@@ -12,33 +11,6 @@ class LegoTextureContainer;
 struct LegoTextureInfo;
 class LegoStorage;
 class LegoAnim;
-
-// VTABLE: LEGO1 0x100dbf10
-// SIZE 0x20
-class LegoLOD : public ViewLOD {
-public:
-	LegoLOD(Tgl::Renderer*);
-	~LegoLOD() override;
-
-	// FUNCTION: LEGO1 0x100aae70
-	int NumPolys() const override { return m_numPolys; } // vtable+0x0c
-
-	// FUNCTION: LEGO1 0x100aae80
-	float VTable0x10() override { return 0.0; } // vtable+0x10
-
-	LegoResult Read(Tgl::Renderer*, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
-
-	// SYNTHETIC: LEGO1 0x100aa430
-	// LegoLOD::`scalar deleting destructor'
-
-protected:
-	// TODO: Review 1996 version
-	undefined4 m_unk0x0c; // 0x0c
-	undefined4 m_unk0x10; // 0x10
-	undefined4 m_unk0x14; // 0x14
-	LegoU32 m_numPolys;   // 0x18
-	undefined4 m_unk0x1c; // 0x1c
-};
 
 // VTABLE: LEGO1 0x100dbe38
 // SIZE 0x108
@@ -66,14 +38,15 @@ public:
 	static void configureLegoROI(int p_roi);
 
 	static void FUN_100a9d30(ROIHandler p_func);
-	static unsigned char FUN_100a9bf0(const char* p_param, float& p_red, float& p_green, float& p_blue, float& p_other);
-	static unsigned char ColorAliasLookup(
-		const char* p_param,
+	static LegoBool FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
+	static LegoBool ColorAliasLookup(
+		const LegoChar* p_param,
 		float& p_red,
 		float& p_green,
 		float& p_blue,
-		float& p_other
+		float& p_alpha
 	);
+	static LegoBool FUN_100a9cf0(const LegoChar* p_param, Tgl::PaletteEntry* paletteEntries, LegoU32 p_numEntries);
 
 	inline const LegoChar* GetName() const { return m_name; }
 	inline LegoEntity* GetEntity() { return m_entity; }
