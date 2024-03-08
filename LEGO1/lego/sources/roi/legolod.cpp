@@ -311,6 +311,13 @@ done:
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x100aad00
+LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x100aae20
 LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 {
@@ -321,13 +328,6 @@ LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 	}
 
 	return FALSE;
-}
-
-// STUB: LEGO1 0x100aad00
-LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
-{
-	// TODO
-	return SUCCESS;
 }
 
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh)
