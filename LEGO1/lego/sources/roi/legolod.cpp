@@ -311,6 +311,13 @@ done:
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x100aacb0
+LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x100aad00
 LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 {

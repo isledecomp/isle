@@ -418,11 +418,30 @@ LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 	return FUN_100a8da0(root, mat, p_time, this);
 }
 
-// STUB: LEGO1 0x100a9170
-LegoResult LegoROI::FUN_100a9170(LegoFloat, LegoFloat, LegoFloat, LegoFloat)
+// FUNCTION: LEGO1 0x100a9170
+LegoResult LegoROI::FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
-	// TODO
-	return SUCCESS;
+	LegoResult result = SUCCESS;
+	CompoundObject::iterator it;
+
+	int lodCount = GetLODCount();
+	for (LegoU32 i = 0; i < lodCount; i++) {
+		LegoLOD* lod = (LegoLOD*) GetLOD(i);
+
+		if (lod->FUN_100aacb0(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
+			result = FAILURE;
+		}
+	}
+
+	if (comp != NULL) {
+		for (it = comp->begin(); it != comp->end(); it++) {
+			if (((LegoROI*) *it)->FUN_100a9170(p_red, p_green, p_blue, p_alpha) != SUCCESS) {
+				result = FAILURE;
+			}
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100a9210
