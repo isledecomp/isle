@@ -96,7 +96,7 @@ class Camera;
 class Group;
 class Mesh;
 class Texture;
-class Unk;
+class MeshBuilder;
 
 // VTABLE: LEGO1 0x100db980
 class Object {
@@ -131,7 +131,7 @@ public:
 	virtual Group* CreateGroup(const Group* pParent = 0) = 0;
 
 	// vtable+0x20
-	virtual Unk* CreateUnk() = 0;
+	virtual MeshBuilder* CreateMeshBuilder() = 0;
 	virtual Texture* CreateTexture(
 		int width,
 		int height,
@@ -269,18 +269,21 @@ public:
 // VTABLE: LEGO1 0x100dbbb0
 class Mesh : public Object {
 public:
+	// SYNTHETIC: LEGO1 0x100a3e10
+	// Tgl::Mesh::~Mesh
+
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 
-	virtual Result SetTextureMappingMode(ProjectionType) = 0;
+	virtual Result SetTextureMappingMode(TextureMappingMode) = 0;
 	virtual Result SetShadingModel(ShadingModel) = 0;
 
 	// Clone data in underlying group
-	virtual Mesh* DeepClone(Unk*) = 0;
+	virtual Mesh* DeepClone(MeshBuilder*) = 0;
 
 	// Just get another Group pointing to the same underlying data
-	virtual Mesh* ShallowClone(Unk*) = 0;
+	virtual Mesh* ShallowClone(MeshBuilder*) = 0;
 
 	// SYNTHETIC: LEGO1 0x100a3e60
 	// Tgl::Mesh::`scalar deleting destructor'
@@ -297,7 +300,7 @@ public:
 	virtual Result Add(const Group*) = 0;
 	virtual Result Add(const Mesh*) = 0;
 	virtual Result Remove(const Group*) = 0;
-	virtual Result Remove(const Unk*) = 0;
+	virtual Result Remove(const MeshBuilder*) = 0;
 	virtual Result RemoveAll() = 0;
 
 	// This is TransformLocalToWorld in the leak, however it seems
@@ -315,9 +318,9 @@ public:
 // was not in the leaked Tgl code. My suspicion is that it's
 // some kind of builder class for creating meshes.
 // VTABLE: LEGO1 0x100dbb30
-class Unk : public Object {
+class MeshBuilder : public Object {
 public:
-	virtual Tgl::Mesh* CreateMesh(
+	virtual Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		float (*pPositions)[3],
@@ -325,16 +328,16 @@ public:
 		float (*pTextureCoordinates)[2],
 		unsigned long (*pFaceIndices)[3],
 		unsigned long (*pTextureIndices)[3],
-		Tgl::ShadingModel shadingModel
+		ShadingModel shadingModel
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
-	virtual Unk* Clone() = 0;
+	virtual MeshBuilder* Clone() = 0;
 
 	// SYNTHETIC: LEGO1 0x100a27b0
-	// Tgl::Unk::~Unk
+	// Tgl::MeshBuilder::~MeshBuilder
 
 	// SYNTHETIC: LEGO1 0x100a2b10
-	// Tgl::Unk::`scalar deleting destructor'
+	// Tgl::MeshBuilder::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb68

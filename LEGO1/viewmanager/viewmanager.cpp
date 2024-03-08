@@ -93,13 +93,13 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetUnknown0xe0());
 
 	if (lod != NULL) {
-		const Tgl::Unk* unk = NULL;
+		const Tgl::MeshBuilder* meshBuilder = NULL;
 		Tgl::Group* roiGeometry = p_roi->GetGeometry();
 
-		unk = lod->GetUnknown0x04();
+		meshBuilder = lod->GetMeshBuilder();
 
-		if (unk != NULL) {
-			roiGeometry->Remove(unk);
+		if (meshBuilder != NULL) {
+			roiGeometry->Remove(meshBuilder);
 		}
 
 		scene->Remove(roiGeometry);

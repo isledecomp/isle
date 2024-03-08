@@ -72,7 +72,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		return SUCCESS;
 	}
 
-	m_unk0x04 = p_renderer->CreateUnk();
+	m_meshBuilder = p_renderer->CreateMeshBuilder();
 
 	if (p_storage->Read(&m_numMeshes, sizeof(m_numMeshes)) != SUCCESS) {
 		goto done;
@@ -188,7 +188,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			meshUnd2++;
 		}
 
-		m_meshes[meshIndex].m_tglMesh = m_unk0x04->CreateMesh(
+		m_meshes[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
 			numPolys & MAXWORD,
 			numVertices & MAXWORD,
 			vertices,

@@ -34,7 +34,7 @@ class CameraImpl;
 class GroupImpl;
 class MeshImpl;
 class TextureImpl;
-class UnkImpl;
+class MeshBuilderImpl;
 
 // VTABLE: LEGO1 0x100db910
 class RendererImpl : public Renderer {
@@ -62,7 +62,7 @@ public:
 	Group* CreateGroup(const Group* pParent) override;
 
 	// vtable+0x20
-	Unk* CreateUnk() override;
+	MeshBuilder* CreateMeshBuilder() override;
 	Texture* CreateTexture(
 		int width,
 		int height,
@@ -273,24 +273,27 @@ public:
 
 	// vtable+0x10
 	Result GetTexture(Texture*&) override;
-	Result SetTextureMappingMode(ProjectionType) override;
+	Result SetTextureMappingMode(TextureMappingMode) override;
 	Result SetShadingModel(ShadingModel) override;
-	Mesh* DeepClone(Unk*) override;
+	Mesh* DeepClone(MeshBuilder*) override;
 
 	// vtable+0x20
-	Mesh* ShallowClone(Unk*) override;
+	Mesh* ShallowClone(MeshBuilder*) override;
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
 		D3DRMGROUPINDEX groupIndex;
 	};
 
-	inline MeshData* ImplementationData() const { return m_data; }
+	typedef MeshData* MeshDataType;
+
+	inline const MeshDataType& ImplementationData() const { return m_data; }
+	inline MeshDataType& ImplementationData() { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	MeshData* m_data;
+	MeshDataType m_data;
 };
 
 // VTABLE: LEGO1 0x100dba68
@@ -320,7 +323,7 @@ public:
 	// vtable+0x20
 	Result Add(const Mesh*) override;
 	Result Remove(const Group*) override;
-	Result Remove(const Unk*) override;
+	Result Remove(const MeshBuilder*) override;
 	Result RemoveAll() override;
 
 	// vtable+0x30
@@ -335,10 +338,10 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbb18
-class UnkImpl : public Unk {
+class MeshBuilderImpl : public MeshBuilder {
 public:
-	UnkImpl() : m_data(0) {}
-	~UnkImpl() override
+	MeshBuilderImpl() : m_data(0) {}
+	~MeshBuilderImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -349,7 +352,7 @@ public:
 	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	Tgl::Mesh* CreateMesh(
+	Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		float (*pPositions)[3],
@@ -357,18 +360,30 @@ public:
 		float (*pTextureCoordinates)[2],
 		unsigned long (*pFaceIndices)[3],
 		unsigned long (*pTextureIndices)[3],
-		Tgl::ShadingModel shadingModel
+		ShadingModel shadingModel
 	) override;
 	Result GetBoundingBox(float min[3], float max[3]) override;
 
 	// vtable+0x10
-	Unk* Clone() override;
+	MeshBuilder* Clone() override;
 
 	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
 
 	friend class RendererImpl;
 
 private:
+	inline Result CreateMeshImpl(
+		MeshImpl* pMeshImpl,
+		unsigned long faceCount,
+		unsigned long vertexCount,
+		float (*pPositions)[3],
+		float (*pNormals)[3],
+		float (*pTextureCoordinates)[2],
+		unsigned long (*pFaceIndices)[3],
+		unsigned long (*pTextureIndices)[3],
+		ShadingModel shadingModel
+	);
+
 	IDirect3DRMMesh* m_data;
 };
 
@@ -514,7 +529,7 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 // TglImpl::LightImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2720
-// TglImpl::UnkImpl::`scalar deleting destructor'
+// TglImpl::MeshBuilderImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2800
 // TglImpl::TextureImpl::`scalar deleting destructor'

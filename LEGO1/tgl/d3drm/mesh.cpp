@@ -38,9 +38,9 @@ Result MeshImpl::SetTexture(const Texture* pTexture)
 }
 
 // FUNCTION: LEGO1 0x100a3f80
-Result MeshImpl::SetTextureMappingMode(ProjectionType projType)
+Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
 {
-	if (projType == Perspective) {
+	if (mode == PerspectiveCorrect) {
 		return ResultVal(m_data->groupMesh->SetGroupMapping(m_data->groupIndex, D3DRMMAP_PERSPCORRECT));
 	}
 	else {
@@ -73,7 +73,7 @@ Result MeshImpl::SetShadingModel(ShadingModel model)
 }
 
 // FUNCTION: LEGO1 0x100a4030
-Mesh* MeshImpl::DeepClone(Unk* pUnk)
+Mesh* MeshImpl::DeepClone(MeshBuilder* pMeshBuilder)
 {
 	// Create group
 	MeshImpl* newMesh = new MeshImpl();
@@ -96,7 +96,7 @@ Mesh* MeshImpl::DeepClone(Unk* pUnk)
 	D3DCOLOR color = m_data->groupMesh->GetGroupColor(m_data->groupIndex);
 
 	// Push information to new group
-	UnkImpl* target = static_cast<UnkImpl*>(pUnk);
+	MeshBuilderImpl* target = static_cast<MeshBuilderImpl*>(pMeshBuilder);
 	D3DRMGROUPINDEX index;
 	target->ImplementationData()->AddGroup(vcount, fcount, vperface, faceBuffer, &index);
 	newMesh->m_data->groupIndex = index;
@@ -118,14 +118,14 @@ Mesh* MeshImpl::DeepClone(Unk* pUnk)
 }
 
 // FUNCTION: LEGO1 0x100a4240
-Mesh* MeshImpl::ShallowClone(Unk* pUnk)
+Mesh* MeshImpl::ShallowClone(MeshBuilder* pMeshBuilder)
 {
 	MeshImpl* newGroup = new MeshImpl();
 	MeshData* newData = new MeshData();
 	newGroup->m_data = newData;
 	if (newData) {
 		newData->groupIndex = m_data->groupIndex;
-		newData->groupMesh = static_cast<UnkImpl*>(pUnk)->ImplementationData();
+		newData->groupMesh = static_cast<MeshBuilderImpl*>(pMeshBuilder)->ImplementationData();
 	}
 	else {
 		delete newGroup;
