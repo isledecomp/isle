@@ -15,6 +15,9 @@ DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 // GLOBAL: LEGO1 0x101013d4
 LPDIRECT3DRMMATERIAL g_unk0x101013d4 = NULL;
 
+// GLOBAL: LEGO1 0x101013dc
+const char* g_unk0x101013dc = "inh";
+
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
 
@@ -41,10 +44,21 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 	m_unk0x1c = 0;
 }
 
-// STUB: LEGO1 0x100aa450
+// FUNCTION: LEGO1 0x100aa450
 LegoLOD::~LegoLOD()
 {
-	// TODO
+	if (m_numMeshes && m_meshes != NULL) {
+		for (LegoU32 i = 0; i < m_numMeshes; i++) {
+			if (m_meshes[i].m_tglMesh != NULL) {
+				delete m_meshes[i].m_tglMesh;
+				m_meshes[i].m_tglMesh = NULL;
+			}
+		}
+	}
+
+	if (m_meshes) {
+		delete[] m_meshes;
+	}
 }
 
 // FUNCTION: LEGO1 0x100aa510
@@ -297,10 +311,15 @@ done:
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100aae20
-LegoBool LegoLOD::FUN_100aae20(const LegoChar*)
+// FUNCTION: LEGO1 0x100aae20
+LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 {
-	// TODO
+	if (p_name != NULL) {
+		if (!strnicmp(p_name, g_unk0x101013dc, strlen(g_unk0x101013dc))) {
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
