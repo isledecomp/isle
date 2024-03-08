@@ -425,11 +425,30 @@ LegoResult LegoROI::FUN_100a9170(LegoFloat, LegoFloat, LegoFloat, LegoFloat)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100a9210
+// FUNCTION: LEGO1 0x100a9210
 LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
 {
-	// TODO
-	return SUCCESS;
+	LegoResult result = SUCCESS;
+	CompoundObject::iterator it;
+
+	int lodCount = GetLODCount();
+	for (LegoU32 i = 0; i < lodCount; i++) {
+		LegoLOD* lod = (LegoLOD*) GetLOD(i);
+
+		if (lod->FUN_100aad00(p_textureInfo) != SUCCESS) {
+			result = FAILURE;
+		}
+	}
+
+	if (comp != NULL) {
+		for (it = comp->begin(); it != comp->end(); it++) {
+			if (((LegoROI*) *it)->FUN_100a9210(p_textureInfo) != SUCCESS) {
+				result = FAILURE;
+			}
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100a9a50
