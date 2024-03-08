@@ -34,7 +34,7 @@ class CameraImpl;
 class GroupImpl;
 class MeshImpl;
 class TextureImpl;
-class UnkImpl;
+class MeshBuilderImpl;
 
 // VTABLE: LEGO1 0x100db910
 class RendererImpl : public Renderer {
@@ -62,7 +62,7 @@ public:
 	Group* CreateGroup(const Group* pParent) override;
 
 	// vtable+0x20
-	Unk* CreateUnk() override;
+	MeshBuilder* CreateMeshBuilder() override;
 	Texture* CreateTexture(
 		int width,
 		int height,
@@ -275,10 +275,10 @@ public:
 	Result GetTexture(Texture*&) override;
 	Result SetTextureMappingMode(ProjectionType) override;
 	Result SetShadingModel(ShadingModel) override;
-	Mesh* DeepClone(Unk*) override;
+	Mesh* DeepClone(MeshBuilder*) override;
 
 	// vtable+0x20
-	Mesh* ShallowClone(Unk*) override;
+	Mesh* ShallowClone(MeshBuilder*) override;
 
 	struct MeshData {
 		IDirect3DRMMesh* groupMesh;
@@ -323,7 +323,7 @@ public:
 	// vtable+0x20
 	Result Add(const Mesh*) override;
 	Result Remove(const Group*) override;
-	Result Remove(const Unk*) override;
+	Result Remove(const MeshBuilder*) override;
 	Result RemoveAll() override;
 
 	// vtable+0x30
@@ -338,10 +338,10 @@ private:
 };
 
 // VTABLE: LEGO1 0x100dbb18
-class UnkImpl : public Unk {
+class MeshBuilderImpl : public MeshBuilder {
 public:
-	UnkImpl() : m_data(0) {}
-	~UnkImpl() override
+	MeshBuilderImpl() : m_data(0) {}
+	~MeshBuilderImpl() override
 	{
 		if (m_data) {
 			m_data->Release();
@@ -365,7 +365,7 @@ public:
 	Result GetBoundingBox(float min[3], float max[3]) override;
 
 	// vtable+0x10
-	Unk* Clone() override;
+	MeshBuilder* Clone() override;
 
 	inline IDirect3DRMMesh* ImplementationData() const { return m_data; }
 

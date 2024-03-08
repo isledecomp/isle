@@ -94,9 +94,9 @@ add_library(tglrl STATIC
   LEGO1/tgl/d3drm/group.cpp
   LEGO1/tgl/d3drm/light.cpp
   LEGO1/tgl/d3drm/mesh.cpp
+  LEGO1/tgl/d3drm/meshbuilder.cpp
   LEGO1/tgl/d3drm/renderer.cpp
   LEGO1/tgl/d3drm/texture.cpp
-  LEGO1/tgl/d3drm/unk.cpp
   LEGO1/tgl/d3drm/view.cpp
 )
 register_lego1_target(tglrl)

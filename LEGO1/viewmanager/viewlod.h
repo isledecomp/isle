@@ -17,7 +17,7 @@ public:
 		c_bit4 = 0x10
 	};
 
-	ViewLOD(Tgl::Renderer* pRenderer) : m_unk0x04(NULL), m_unk0x08(3) {}
+	ViewLOD(Tgl::Renderer* pRenderer) : m_meshBuilder(NULL), m_unk0x08(3) {}
 	~ViewLOD() override;
 
 	// FUNCTION: LEGO1 0x100a6f30
@@ -26,8 +26,8 @@ public:
 	// FUNCTION: LEGO1 0x100a6f50
 	int NVerts() const override { return NumPolys() * 2; } // vtable+0x08
 
-	Tgl::Unk* GetUnknown0x04() { return m_unk0x04; }
-	const Tgl::Unk* GetUnknown0x04() const { return m_unk0x04; }
+	Tgl::MeshBuilder* GetMeshBuilder() { return m_meshBuilder; }
+	const Tgl::MeshBuilder* GetMeshBuilder() const { return m_meshBuilder; }
 	unsigned char GetUnknown0x08Test4() { return m_unk0x08 & 0xffffff04; }
 	unsigned char GetUnknown0x08Test8() { return m_unk0x08 & 0xffffff08; }
 
@@ -38,8 +38,8 @@ public:
 	// ViewLOD::`scalar deleting destructor'
 
 protected:
-	Tgl::Unk* m_unk0x04;  // 0x04
-	undefined4 m_unk0x08; // 0x08
+	Tgl::MeshBuilder* m_meshBuilder; // 0x04
+	undefined4 m_unk0x08;            // 0x08
 };
 
 #endif // VIEWLOD_H

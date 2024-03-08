@@ -94,10 +94,10 @@ Result GroupImpl::Add(const Mesh* pMesh)
 }
 
 // FUNCTION: LEGO1 0x100a3450
-Result GroupImpl::Remove(const Unk* pUnk)
+Result GroupImpl::Remove(const MeshBuilder* pMeshBuilder)
 {
-	const UnkImpl* pUnkImpl = static_cast<const UnkImpl*>(pUnk);
-	return ResultVal(m_data->DeleteVisual(pUnkImpl->ImplementationData()));
+	const MeshBuilderImpl* pMeshBuilderImpl = static_cast<const MeshBuilderImpl*>(pMeshBuilder);
+	return ResultVal(m_data->DeleteVisual(pMeshBuilderImpl->ImplementationData()));
 }
 
 // FUNCTION: LEGO1 0x100a3480

@@ -2,17 +2,17 @@
 
 using namespace TglImpl;
 
-DECOMP_SIZE_ASSERT(Unk, 0x04);
-DECOMP_SIZE_ASSERT(UnkImpl, 0x08);
+DECOMP_SIZE_ASSERT(MeshBuilder, 0x04);
+DECOMP_SIZE_ASSERT(MeshBuilderImpl, 0x08);
 
 // FUNCTION: LEGO1 0x100a3830
-void* UnkImpl::ImplementationDataPtr()
+void* MeshBuilderImpl::ImplementationDataPtr()
 {
 	return reinterpret_cast<void*>(&m_data);
 }
 
 // FUNCTION: LEGO1 0x100a3840
-Mesh* UnkImpl::CreateMesh(
+Mesh* MeshBuilderImpl::CreateMesh(
 	unsigned long faceCount,
 	unsigned long vertexCount,
 	float (*pPositions)[3],
@@ -132,7 +132,7 @@ inline Result CreateMesh(
 	return result;
 }
 
-inline Result UnkImpl::CreateMeshImpl(
+inline Result MeshBuilderImpl::CreateMeshImpl(
 	MeshImpl* pMeshImpl,
 	unsigned long faceCount,
 	unsigned long vertexCount,
@@ -159,7 +159,7 @@ inline Result UnkImpl::CreateMeshImpl(
 }
 
 // FUNCTION: LEGO1 0x100a3ae0
-Result UnkImpl::GetBoundingBox(float min[3], float max[3])
+Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3])
 {
 	D3DRMBOX box;
 	Result result = ResultVal(m_data->GetBox(&box));
@@ -175,9 +175,9 @@ Result UnkImpl::GetBoundingBox(float min[3], float max[3])
 }
 
 // FUNCTION: LEGO1 0x100a3b40
-Unk* UnkImpl::Clone()
+MeshBuilder* MeshBuilderImpl::Clone()
 {
-	UnkImpl* mesh = new UnkImpl();
+	MeshBuilderImpl* mesh = new MeshBuilderImpl();
 	int ret = m_data->Clone(0, IID_IDirect3DRMMeshBuilder, (void**) &mesh->m_data);
 	if (ret < 0) {
 		delete mesh;
