@@ -1,5 +1,6 @@
 #include "legoroi.h"
 
+#include "anim/legoanim.h"
 #include "geom/legobox.h"
 #include "geom/legosphere.h"
 #include "legolod.h"
@@ -53,6 +54,11 @@ const char* g_unk0x10101390[] = {"rcuser", "jsuser", "dunebugy", "chtrblad", "ch
 
 // GLOBAL: LEGO1 0x101013ac
 ROIHandler g_unk0x101013ac = NULL;
+
+// FUNCTION: LEGO1 0x100a81b0
+void LegoROI::FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name)
+{
+}
 
 // FUNCTION: LEGO1 0x100a81c0
 void LegoROI::configureLegoROI(int p_roiConfig)
@@ -328,11 +334,88 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100a90f0
+// FUNCTION: LEGO1 0x100a8cb0
+LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix)
+{
+	p_matrix.SetIdentity();
+	p_data->FUN_100a03c0(p_time, p_matrix);
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100a8ce0
+LegoROI* LegoROI::FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi)
+{
+	CompoundObject::iterator it;
+	const LegoChar* name = p_roi->GetName();
+
+	if (name != NULL && *name != '\0' && !strcmpi(name, p_name)) {
+		return p_roi;
+	}
+
+	const CompoundObject* comp = p_roi->GetComp();
+	if (comp != NULL) {
+		for (it = comp->begin(); it != comp->end(); it++) {
+			LegoROI* roi = (LegoROI*) *it;
+			name = roi->GetName();
+
+			if (name != NULL && *name != '\0' && !strcmpi(name, p_name)) {
+				return roi;
+			}
+		}
+
+		for (it = comp->begin(); it != comp->end(); it++) {
+			LegoROI* roi = FUN_100a8ce0(p_name, (LegoROI*) *it);
+
+			if (roi != NULL) {
+				return roi;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x100a8da0
+LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi)
+{
+	MxMatrix mat;
+	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
+	const LegoChar* name = data->GetName();
+	LegoROI* roi = FUN_100a8ce0(name, p_roi);
+
+	if (roi == NULL) {
+		roi = FUN_100a8ce0(name, this);
+	}
+
+	if (roi != NULL) {
+		FUN_100a8cb0(data, p_time, mat);
+		roi->m_local2world.Product(mat, p_matrix);
+		roi->VTable0x1c();
+
+		LegoBool und = data->FUN_100a0990(p_time);
+		roi->SetUnknown0x0c(und);
+
+		for (LegoU32 i = 0; i < data->GetNumTranslationKeys(); i++) {
+			FUN_100a8da0(p_node->GetChild(i), roi->m_local2world, p_time, roi);
+		}
+	}
+	else {
+		FUN_100a81b0("%s ROI Not found\n", name);
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100a90f0
 LegoResult LegoROI::SetFrame(LegoAnim* p_anim, LegoTime p_time)
 {
-	// TODO
-	return SUCCESS;
+	LegoTreeNode* root = p_anim->GetRoot();
+	MxMatrix mat;
+
+	mat = m_local2world;
+	mat.SetIdentity();
+
+	return FUN_100a8da0(root, mat, p_time, this);
 }
 
 // STUB: LEGO1 0x100a9170

@@ -11,6 +11,8 @@ class LegoTextureContainer;
 struct LegoTextureInfo;
 class LegoStorage;
 class LegoAnim;
+class LegoAnimNodeData;
+class LegoTreeNode;
 
 // VTABLE: LEGO1 0x100dbe38
 // SIZE 0x108
@@ -27,16 +29,20 @@ public:
 		LegoTextureContainer* p_textureContainer,
 		LegoStorage* p_storage
 	);
+	LegoROI* FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi);
+	LegoResult FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi);
+	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 	LegoResult FUN_100a9170(LegoFloat, LegoFloat, LegoFloat, LegoFloat);
 	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
-	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 
 	float IntrinsicImportance() const override; // vtable+0x04
 	void UpdateWorldBoundingVolumes() override; // vtable+0x18
 
 	void SetDisplayBB(int p_displayBB);
-	static void configureLegoROI(int p_roi);
 
+	static LegoResult FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix);
+	static void FUN_100a81b0(const LegoChar* p_error, const LegoChar* p_name);
+	static void configureLegoROI(int p_roi);
 	static void FUN_100a9d30(ROIHandler p_func);
 	static LegoBool FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha);
 	static LegoBool ColorAliasLookup(
