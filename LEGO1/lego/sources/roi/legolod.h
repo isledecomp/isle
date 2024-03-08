@@ -29,7 +29,7 @@ public:
 
 	LegoResult Read(Tgl::Renderer*, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
 
-	static LegoBool FUN_100aae20(const LegoChar*);
+	static LegoBool FUN_100aae20(const LegoChar* p_name);
 
 	// SYNTHETIC: LEGO1 0x100aa430
 	// LegoLOD::`scalar deleting destructor'
