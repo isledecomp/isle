@@ -91,7 +91,6 @@ public:
 	LegoBool FUN_100a0990(LegoFloat p_time);
 
 	const LegoChar* GetName() { return m_name; }
-	LegoU32 GetNumTranslationKeys() { return (LegoU32) m_numTranslationKeys; }
 
 	LegoResult FUN_100a03c0(LegoTime p_time, Matrix4& p_matrix) { return FUN_100a03c0((LegoFloat) p_time, p_matrix); }
 	LegoBool FUN_100a0990(LegoTime p_time) { return FUN_100a0990((LegoFloat) p_time); }
