@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "misc/legostorage.h"
 #include "misc/legotree.h"
+#include "realtime/matrix.h"
 
 // SIZE 0x08
 class LegoAnimKey {
@@ -85,6 +86,14 @@ public:
 	~LegoAnimNodeData() override;
 	LegoResult Read(LegoStorage* p_storage) override;  // vtable+0x04
 	LegoResult Write(LegoStorage* p_storage) override; // vtable+0x08
+
+	LegoResult FUN_100a03c0(LegoFloat p_time, Matrix4& p_matrix);
+	LegoBool FUN_100a0990(LegoFloat p_time);
+
+	const LegoChar* GetName() { return m_name; }
+
+	LegoResult FUN_100a03c0(LegoTime p_time, Matrix4& p_matrix) { return FUN_100a03c0((LegoFloat) p_time, p_matrix); }
+	LegoBool FUN_100a0990(LegoTime p_time) { return FUN_100a0990((LegoFloat) p_time); }
 
 	// SYNTHETIC: LEGO1 0x1009fd80
 	// LegoAnimNodeData::`scalar deleting destructor'

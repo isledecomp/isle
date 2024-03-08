@@ -406,6 +406,20 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100a03c0
+LegoResult LegoAnimNodeData::FUN_100a03c0(LegoFloat p_time, Matrix4& p_matrix)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100a0990
+LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
+{
+	// TODO
+	return TRUE;
+}
+
 // FUNCTION: LEGO1 0x100a0b30
 LegoAnim::LegoAnim()
 {
