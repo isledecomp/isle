@@ -334,10 +334,10 @@ public:
 	virtual MeshBuilder* Clone() = 0;
 
 	// SYNTHETIC: LEGO1 0x100a27b0
-	// Tgl::Unk::~Unk
+	// Tgl::Unk::~MeshBuilder
 
 	// SYNTHETIC: LEGO1 0x100a2b10
-	// Tgl::Unk::`scalar deleting destructor'
+	// Tgl::MeshBuilder::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100dbb68
