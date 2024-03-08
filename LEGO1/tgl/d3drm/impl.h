@@ -273,7 +273,7 @@ public:
 
 	// vtable+0x10
 	Result GetTexture(Texture*&) override;
-	Result SetTextureMappingMode(ProjectionType) override;
+	Result SetTextureMappingMode(TextureMappingMode) override;
 	Result SetShadingModel(ShadingModel) override;
 	Mesh* DeepClone(MeshBuilder*) override;
 

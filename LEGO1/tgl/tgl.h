@@ -276,7 +276,7 @@ public:
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
 
-	virtual Result SetTextureMappingMode(ProjectionType) = 0;
+	virtual Result SetTextureMappingMode(TextureMappingMode) = 0;
 	virtual Result SetShadingModel(ShadingModel) = 0;
 
 	// Clone data in underlying group

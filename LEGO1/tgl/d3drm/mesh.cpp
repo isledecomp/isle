@@ -38,9 +38,9 @@ Result MeshImpl::SetTexture(const Texture* pTexture)
 }
 
 // FUNCTION: LEGO1 0x100a3f80
-Result MeshImpl::SetTextureMappingMode(ProjectionType projType)
+Result MeshImpl::SetTextureMappingMode(TextureMappingMode mode)
 {
-	if (projType == Perspective) {
+	if (mode == PerspectiveCorrect) {
 		return ResultVal(m_data->groupMesh->SetGroupMapping(m_data->groupIndex, D3DRMMAP_PERSPCORRECT));
 	}
 	else {
