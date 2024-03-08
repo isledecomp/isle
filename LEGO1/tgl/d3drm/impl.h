@@ -529,7 +529,7 @@ inline D3DRMMATRIX4D* Translate(FloatMatrix4& tglMatrix4x4, D3DRMMATRIX4D& rD3DR
 // TglImpl::LightImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2720
-// TglImpl::UnkImpl::`scalar deleting destructor'
+// TglImpl::MeshBuilderImpl::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x100a2800
 // TglImpl::TextureImpl::`scalar deleting destructor'
