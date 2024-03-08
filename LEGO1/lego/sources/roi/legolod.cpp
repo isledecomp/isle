@@ -311,10 +311,29 @@ done:
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100aad00
+// FUNCTION: LEGO1 0x100aacb0
+LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
+{
+	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
+		if (!m_meshes[i].m_unk0x04) {
+			m_meshes[i].m_tglMesh->SetColor(p_red, p_green, p_blue, p_alpha);
+		}
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100aad00
 LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 {
-	// TODO
+	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
+		if (m_meshes[i].m_unk0x04) {
+			SetGroupTexture(m_meshes[i].m_tglMesh, p_textureInfo);
+			m_meshes[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
+			m_meshes[i].m_unk0x04 = TRUE;
+		}
+	}
+
 	return SUCCESS;
 }
 

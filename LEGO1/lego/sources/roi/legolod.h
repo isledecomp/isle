@@ -28,6 +28,7 @@ public:
 	float VTable0x10() override { return 0.0; } // vtable+0x10
 
 	LegoResult Read(Tgl::Renderer*, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
+	LegoResult FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult FUN_100aad00(LegoTextureInfo* p_textureInfo);
 
 	static LegoBool FUN_100aae20(const LegoChar* p_name);
