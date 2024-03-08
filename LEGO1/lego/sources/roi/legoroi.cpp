@@ -352,7 +352,7 @@ LegoROI* LegoROI::FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi)
 		return p_roi;
 	}
 
-	const CompoundObject* comp = p_roi->GetComp();
+	CompoundObject* comp = p_roi->comp;
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
 			LegoROI* roi = (LegoROI*) *it;
