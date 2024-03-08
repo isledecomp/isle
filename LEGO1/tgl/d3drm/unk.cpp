@@ -79,7 +79,7 @@ inline Result CreateMesh(
 	rpMesh->groupMesh = pD3DRM;
 
 	for (int i = 0; i < count; i++) {
-		if (*((unsigned char*) &faceIndices[i] + 3) & 0x80) {
+		if (*((unsigned char*) ((unsigned short*) &faceIndices[i] + 1) + 1) & 0x80) {
 			unsigned long j = *(unsigned short*) &faceIndices[i];
 			vertices[index].position.x = pPositions[j][0];
 			vertices[index].position.y = pPositions[j][1];
@@ -112,8 +112,10 @@ inline Result CreateMesh(
 	}
 
 	if (!Succeeded(result)) {
-		delete rpMesh->groupMesh;
-		rpMesh->groupMesh = NULL;
+		if (rpMesh) {
+			delete rpMesh;
+		}
+		rpMesh = NULL;
 	}
 	else {
 		result = MeshSetTextureMappingMode(rpMesh, PerspectiveCorrect);
@@ -125,10 +127,6 @@ inline Result CreateMesh(
 
 	if (vertices != NULL) {
 		delete[] vertices;
-	}
-
-	if (!Succeeded(result)) {
-		delete rpMesh;
 	}
 
 	return result;
