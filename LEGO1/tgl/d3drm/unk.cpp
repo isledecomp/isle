@@ -23,9 +23,9 @@ Mesh* UnkImpl::CreateMesh(
 	ShadingModel shadingModel
 )
 {
-	MeshImpl* mesh = new MeshImpl();
+	MeshImpl* pMeshImpl = new MeshImpl;
 	if (CreateMeshImpl(
-			mesh,
+			pMeshImpl,
 			faceCount,
 			vertexCount,
 			pPositions,
@@ -35,11 +35,11 @@ Mesh* UnkImpl::CreateMesh(
 			pTextureIndices,
 			shadingModel
 		) == Error) {
-		delete mesh;
-		mesh = NULL;
+		delete pMeshImpl;
+		pMeshImpl = NULL;
 	}
 
-	return mesh;
+	return pMeshImpl;
 }
 
 inline Result MeshSetTextureMappingMode(MeshImpl::MeshData* pMesh, TextureMappingMode mode)
@@ -133,7 +133,7 @@ inline Result CreateMesh(
 }
 
 inline Result UnkImpl::CreateMeshImpl(
-	MeshImpl* mesh,
+	MeshImpl* pMeshImpl,
 	unsigned long faceCount,
 	unsigned long vertexCount,
 	float (*pPositions)[3],
@@ -154,7 +154,7 @@ inline Result UnkImpl::CreateMeshImpl(
 		pFaceIndices,
 		pTextureIndices,
 		shadingModel,
-		mesh->ImplementationData()
+		pMeshImpl->ImplementationData()
 	);
 }
 

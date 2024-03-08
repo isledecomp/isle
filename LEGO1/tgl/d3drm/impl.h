@@ -373,7 +373,7 @@ public:
 
 private:
 	inline Result CreateMeshImpl(
-		MeshImpl* mesh,
+		MeshImpl* pMeshImpl,
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		float (*pPositions)[3],
