@@ -285,12 +285,15 @@ public:
 		D3DRMGROUPINDEX groupIndex;
 	};
 
-	inline MeshData* ImplementationData() const { return m_data; }
+	typedef MeshData* MeshDataType;
+
+	inline const MeshDataType& ImplementationData() const { return m_data; }
+	inline MeshDataType& ImplementationData() { return m_data; }
 
 	friend class RendererImpl;
 
 private:
-	MeshData* m_data;
+	MeshDataType m_data;
 };
 
 // VTABLE: LEGO1 0x100dba68
@@ -349,7 +352,7 @@ public:
 	void* ImplementationDataPtr() override;
 
 	// vtable+0x08
-	Tgl::Mesh* CreateMesh(
+	Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		float (*pPositions)[3],
@@ -357,7 +360,7 @@ public:
 		float (*pTextureCoordinates)[2],
 		unsigned long (*pFaceIndices)[3],
 		unsigned long (*pTextureIndices)[3],
-		Tgl::ShadingModel shadingModel
+		ShadingModel shadingModel
 	) override;
 	Result GetBoundingBox(float min[3], float max[3]) override;
 
@@ -369,6 +372,18 @@ public:
 	friend class RendererImpl;
 
 private:
+	inline Result CreateMeshImpl(
+		MeshImpl* mesh,
+		unsigned long faceCount,
+		unsigned long vertexCount,
+		float (*pPositions)[3],
+		float (*pNormals)[3],
+		float (*pTextureCoordinates)[2],
+		unsigned long (*pFaceIndices)[3],
+		unsigned long (*pTextureIndices)[3],
+		ShadingModel shadingModel
+	);
+
 	IDirect3DRMMesh* m_data;
 };
 

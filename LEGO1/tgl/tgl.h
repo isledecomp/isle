@@ -269,6 +269,9 @@ public:
 // VTABLE: LEGO1 0x100dbbb0
 class Mesh : public Object {
 public:
+	// SYNTHETIC: LEGO1 0x100a3e10
+	// Tgl::Mesh::~Mesh
+
 	virtual Result SetColor(float r, float g, float b, float a) = 0;
 	virtual Result SetTexture(const Texture*) = 0;
 	virtual Result GetTexture(Texture*&) = 0;
@@ -317,7 +320,7 @@ public:
 // VTABLE: LEGO1 0x100dbb30
 class Unk : public Object {
 public:
-	virtual Tgl::Mesh* CreateMesh(
+	virtual Mesh* CreateMesh(
 		unsigned long faceCount,
 		unsigned long vertexCount,
 		float (*pPositions)[3],
@@ -325,7 +328,7 @@ public:
 		float (*pTextureCoordinates)[2],
 		unsigned long (*pFaceIndices)[3],
 		unsigned long (*pTextureIndices)[3],
-		Tgl::ShadingModel shadingModel
+		ShadingModel shadingModel
 	) = 0;
 	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
 	virtual Unk* Clone() = 0;
