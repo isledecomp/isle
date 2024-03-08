@@ -79,7 +79,7 @@ inline Result CreateMesh(
 	rpMesh->groupMesh = pD3DRM;
 
 	for (int i = 0; i < count; i++) {
-		if (*((unsigned char*) ((unsigned short*) &faceIndices[i] + 1) + 1) & 0x80) {
+		if ((*((unsigned short*) &faceIndices[i] + 1) >> 0x0f) & 0x01) {
 			unsigned long j = *(unsigned short*) &faceIndices[i];
 			vertices[index].position.x = pPositions[j][0];
 			vertices[index].position.y = pPositions[j][1];
