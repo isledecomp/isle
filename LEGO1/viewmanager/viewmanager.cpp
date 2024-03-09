@@ -138,10 +138,10 @@ void ViewManager::FUN_100a6b90()
 		Vector3 u(unk0x150[i]);
 
 		x = c;
-		((Vector3&) x).Sub(&b); // TODO: Fix type awareness
+		((Vector3&) x).Sub(&b); // TODO: Fix call
 
 		y = a;
-		((Vector3&) y).Sub(&b); // TODO: Fix type awareness
+		((Vector3&) y).Sub(&b); // TODO: Fix call
 
 		u.EqualsCross(&x, &y);
 		u.Unitize();
