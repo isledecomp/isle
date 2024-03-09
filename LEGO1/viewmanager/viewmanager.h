@@ -28,6 +28,7 @@ public:
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
+	void FUN_100a6b90();
 	void Update(float p_previousRenderTime, float p_und2);
 
 	// SYNTHETIC: LEGO1 0x100a6000
@@ -51,9 +52,9 @@ private:
 	MxMatrix pov;             // 0x40
 	float front;              // 0x88
 	float back;               // 0x8c
-	undefined unk0x90[0x60];  // 0x90
-	undefined unk0xf0[0x60];  // 0xf0
-	undefined unk0x150[0x60]; // 0x150
+	float unk0x90[8][3];      // 0x90
+	float unk0xf0[8][3];      // 0xf0
+	float unk0x150[6][4];     // 0x150
 	IDirect3DRM2* d3drm;      // 0x1b0
 	IDirect3DRMFrame2* frame; // 0x1b4
 	float seconds_allowed;    // 0x1b8
