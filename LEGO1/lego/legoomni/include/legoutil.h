@@ -6,7 +6,7 @@
 #include "misc/legotexture.h"
 #include "mxstring.h"
 #include "mxtypes.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <windows.h>
 

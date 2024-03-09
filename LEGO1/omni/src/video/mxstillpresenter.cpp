@@ -6,7 +6,7 @@
 #include "mxdsmediaaction.h"
 #include "mxmisc.h"
 #include "mxomni.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);

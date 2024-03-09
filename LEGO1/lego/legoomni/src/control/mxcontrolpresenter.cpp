@@ -6,7 +6,7 @@
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 #include "mxvideopresenter.h"
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)

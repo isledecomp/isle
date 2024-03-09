@@ -222,7 +222,7 @@ add_library(omni STATIC
   LEGO1/omni/src/common/mxstring.cpp
   LEGO1/omni/src/common/mxticklemanager.cpp
   LEGO1/omni/src/common/mxtimer.cpp
-  LEGO1/omni/src/common/mxutil.cpp
+  LEGO1/omni/src/common/mxutilities.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
   LEGO1/omni/src/entity/mxentity.cpp

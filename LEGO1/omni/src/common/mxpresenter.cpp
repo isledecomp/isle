@@ -14,7 +14,7 @@
 #include "mxomni.h"
 #include "mxparam.h"
 #include "mxstreamer.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <string.h>
 

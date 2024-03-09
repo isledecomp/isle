@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 #include "mxbitmap.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
 

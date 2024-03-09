@@ -25,7 +25,7 @@
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <io.h>
 

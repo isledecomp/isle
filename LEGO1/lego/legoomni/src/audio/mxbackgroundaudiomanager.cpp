@@ -8,7 +8,7 @@
 #include "mxpresenter.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 

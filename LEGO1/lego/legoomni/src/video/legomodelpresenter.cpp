@@ -12,7 +12,7 @@
 #include "misc/legotexture.h"
 #include "misc/version.h"
 #include "mxcompositepresenter.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 #include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f7ae0
