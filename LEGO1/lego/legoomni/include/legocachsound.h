@@ -1,5 +1,5 @@
-#ifndef LEGOCACHESOUND_H
-#define LEGOCACHESOUND_H
+#ifndef LEGOCACHSOUND_H
+#define LEGOCACHSOUND_H
 
 #include "decomp.h"
 #include "legounknown100d5778.h"
@@ -60,4 +60,4 @@ private:
 	undefined m_unk0x84;            // 0x84
 };
 
-#endif // LEGOCACHESOUND_H
+#endif // LEGOCACHSOUND_H

@@ -1,7 +1,7 @@
 #include "mxtransitionmanager.h"
 
 #include "legoinputmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"

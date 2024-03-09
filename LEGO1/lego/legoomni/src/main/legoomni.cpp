@@ -8,7 +8,7 @@
 #include "legoobjectfactory.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovariables.h"
 #include "legovideomanager.h"
 #include "legoworld.h"

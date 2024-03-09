@@ -13,7 +13,7 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoplantmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"

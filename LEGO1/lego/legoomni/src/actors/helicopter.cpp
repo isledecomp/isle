@@ -8,7 +8,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxtransitionmanager.h"

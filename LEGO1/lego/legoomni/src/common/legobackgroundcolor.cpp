@@ -1,7 +1,7 @@
 #include "legobackgroundcolor.h"
 
 #include "decomp.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
 

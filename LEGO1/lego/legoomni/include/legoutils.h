@@ -1,5 +1,5 @@
-#ifndef LEGOUTIL_H
-#define LEGOUTIL_H
+#ifndef LEGOUTILS_H
+#define LEGOUTILS_H
 
 #include "extra.h"
 #include "misc/legostorage.h"
@@ -33,4 +33,4 @@ void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture);
 // SYNTHETIC: LEGO1 0x10034b40
 // LegoTexture::`scalar deleting destructor'
 
-#endif // LEGOUTIL_H
+#endif // LEGOUTILS_H

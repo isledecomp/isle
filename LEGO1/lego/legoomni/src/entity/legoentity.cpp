@@ -4,7 +4,7 @@
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
 #include "legoplantmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"

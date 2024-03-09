@@ -1,6 +1,6 @@
 #include "legoloadcachesoundpresenter.h"
 
-#include "legocachesound.h"
+#include "legocachsound.h"
 #include "mxstreamchunk.h"
 #include "mxwavepresenter.h"
 

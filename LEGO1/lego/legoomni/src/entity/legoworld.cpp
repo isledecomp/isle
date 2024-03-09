@@ -11,7 +11,7 @@
 #include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"

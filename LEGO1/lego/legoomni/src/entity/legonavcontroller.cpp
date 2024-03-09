@@ -1,7 +1,7 @@
 #include "legonavcontroller.h"
 
 #include "legoinputmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxmisc.h"

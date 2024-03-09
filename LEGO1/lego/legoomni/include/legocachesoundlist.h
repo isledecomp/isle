@@ -1,10 +1,9 @@
 #ifndef LEGOCACHESOUNDLIST_H
 #define LEGOCACHESOUNDLIST_H
 
+#include "legocachsound.h"
 #include "mxlist.h"
 #include "mxtypes.h"
-
-class LegoCacheSound;
 
 // VTABLE: LEGO1 0x100d63b0
 // class MxCollection<LegoCacheSound *>

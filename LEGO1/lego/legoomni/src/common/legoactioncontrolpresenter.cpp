@@ -3,7 +3,7 @@
 #include "define.h"
 #include "extra.h"
 #include "legoomni.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "mxcompositepresenter.h"
 #include "mxmediapresenter.h"
 #include "mxmisc.h"
