@@ -12,6 +12,7 @@
 #include "legotexturepresenter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
@@ -19,11 +20,12 @@
 #include "mxdschunk.h"
 #include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <io.h>
 

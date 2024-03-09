@@ -2,12 +2,13 @@
 
 #include "define.h"
 #include "legobuildingmanager.h"
-#include "legoomni.h"
+#include "legocharactermanager.h"
 #include "legoplantmanager.h"
-#include "legounksavedatawriter.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
+#include "mxmisc.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 
@@ -86,7 +87,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 				m_roi->SetEntity(NULL);
 			}
 
-			UnkSaveDataWriter()->FUN_10083db0(m_roi);
+			CharacterManager()->FUN_10083db0(m_roi);
 		}
 		else {
 			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
@@ -214,7 +215,7 @@ void LegoEntity::VTable0x34(MxBool p_und)
 
 		switch (m_unk0x59) {
 		case 0:
-			objectId = UnkSaveDataWriter()->FUN_10085140(m_roi, p_und);
+			objectId = CharacterManager()->FUN_10085140(m_roi, p_und);
 			break;
 		case 1:
 			break;
@@ -228,7 +229,7 @@ void LegoEntity::VTable0x34(MxBool p_und)
 
 		if (objectId) {
 			MxDSAction action;
-			action.SetAtomId(MxAtomId(UnkSaveDataWriter()->GetCustomizeAnimFile(), e_lowerCase2));
+			action.SetAtomId(MxAtomId(CharacterManager()->GetCustomizeAnimFile(), e_lowerCase2));
 			action.SetObjectId(objectId);
 			action.AppendData(strlen(roiName) + 1, roiName);
 			Start(&action);

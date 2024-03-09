@@ -2,7 +2,7 @@
 #define LEGOACTOR_H
 
 #include "decomp.h"
-#include "legocachesound.h"
+#include "legocachsound.h"
 #include "legoentity.h"
 
 // VTABLE: LEGO1 0x100d6d68

@@ -8,11 +8,13 @@
 #include "mxdsanim.h"
 #include "mxdssound.h"
 #include "mxentity.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
+#include "mxomni.h"
 #include "mxparam.h"
 #include "mxstreamer.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <string.h>
 

@@ -5,9 +5,9 @@
 #include "mxcriticalsection.h"
 #include "mxstring.h"
 
-class MxAtomId;
 class MxAtomIdCounterSet;
 class MxDSAction;
+class MxEntity;
 class MxEventManager;
 class MxMusicManager;
 class MxNotificationManager;
@@ -17,12 +17,11 @@ class MxOmniCreateParam;
 class MxPresenter;
 class MxSoundManager;
 class MxStreamer;
+class MxStreamController;
 class MxTickleManager;
 class MxTimer;
 class MxVariableTable;
 class MxVideoManager;
-class MxEntity;
-class MxStreamController;
 
 // VTABLE: LEGO1 0x100dc168
 // SIZE 0x68
@@ -95,20 +94,5 @@ protected:
 	MxCriticalSection m_criticalsection;          // 0x48
 	MxBool m_timerRunning;                        // 0x64
 };
-
-MxTickleManager* TickleManager();
-MxTimer* Timer();
-MxStreamer* Streamer();
-MxSoundManager* MSoundManager();
-MxVariableTable* VariableTable();
-MxMusicManager* MusicManager();
-MxEventManager* EventManager();
-MxResult Start(MxDSAction*);
-MxNotificationManager* NotificationManager();
-
-MxVideoManager* MVideoManager();
-MxAtomIdCounterSet* AtomIdCounterSet();
-MxObjectFactory* ObjectFactory();
-void DeleteObject(MxDSAction& p_dsAction);
 
 #endif // MXOMNI_H

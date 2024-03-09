@@ -1,13 +1,15 @@
 #ifndef MXTRANSITIONMANAGER_H
 #define MXTRANSITIONMANAGER_H
 
-#include "legoomni.h"
+#include "decomp.h"
 #include "mxcore.h"
-#include "mxvideopresenter.h"
 
 #include <ddraw.h>
 
+class MxVideoPresenter;
+
 // VTABLE: LEGO1 0x100d7ea0
+// SIZE 0x900
 class MxTransitionManager : public MxCore {
 public:
 	MxTransitionManager();

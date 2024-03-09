@@ -2,7 +2,7 @@
 #define LEGOUNKNOWN100D6B4C_H
 
 #include "decomp.h"
-#include "legocachesound.h"
+#include "legocachsound.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 

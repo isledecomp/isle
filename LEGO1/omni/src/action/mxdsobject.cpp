@@ -11,7 +11,7 @@
 #include "mxdsserialaction.h"
 #include "mxdssound.h"
 #include "mxdsstill.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 #include <stdlib.h>
 #include <string.h>

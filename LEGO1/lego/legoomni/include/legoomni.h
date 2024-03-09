@@ -5,12 +5,11 @@
 #include "mxdsaction.h"
 #include "mxomni.h"
 
-class LegoTextureContainer;
 class Isle;
 class IslePathActor;
 class LegoAnimationManager;
 class LegoBuildingManager;
-class LegoControlManager;
+class LegoCharacterManager;
 class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
@@ -19,16 +18,14 @@ class LegoPathBoundary;
 class LegoPlantManager;
 class LegoROI;
 class LegoSoundManager;
-class LegoUnkSaveDataWriter;
+class LegoTextureContainer;
 class LegoVideoManager;
 class LegoWorld;
 class LegoWorldList;
 class MxAtomId;
 class MxBackgroundAudioManager;
-class MxDSFile;
 class MxTransitionManager;
 class ViewLODListManager;
-class ViewManager;
 
 extern MxAtomId* g_copterScript;
 extern MxAtomId* g_dunecarScript;
@@ -224,7 +221,7 @@ public:
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
-	LegoUnkSaveDataWriter* GetUnkSaveDataWriter() { return m_saveDataWriter; }
+	LegoCharacterManager* GetCharacterManager() { return m_characterManager; }
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
@@ -247,7 +244,7 @@ private:
 	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
 	IslePathActor* m_currentActor;               // 0x88
-	LegoUnkSaveDataWriter* m_saveDataWriter;     // 0x8c
+	LegoCharacterManager* m_characterManager;    // 0x8c
 	LegoPlantManager* m_plantManager;            // 0x90
 	LegoAnimationManager* m_animationManager;    // 0x94
 	LegoBuildingManager* m_buildingManager;      // 0x98
@@ -258,39 +255,12 @@ private:
 	MxBool m_unk0x13c;                           // 0x13c
 };
 
-MxBackgroundAudioManager* BackgroundAudioManager();
-LegoGameState* GameState();
 const char* GetNoCD_SourceName();
-LegoInputManager* InputManager();
-LegoOmni* Lego();
+
 LegoEntity* PickEntity(MxLong, MxLong);
 LegoROI* PickROI(MxLong, MxLong);
-LegoSoundManager* SoundManager();
-MxTransitionManager* TransitionManager();
-LegoVideoManager* VideoManager();
-LegoAnimationManager* AnimationManager();
-LegoNavController* NavController();
-LegoBuildingManager* BuildingManager();
-LegoControlManager* ControlManager();
-IslePathActor* CurrentActor();
-ViewManager* GetViewManager();
-LegoPlantManager* PlantManager();
-LegoWorld* CurrentWorld();
-LegoUnkSaveDataWriter* UnkSaveDataWriter();
-LegoTextureContainer* TextureContainer();
-ViewLODListManager* GetViewLODListManager();
-void FUN_10015820(MxBool p_disable, MxU16 p_flags);
-void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
-void SetCurrentActor(IslePathActor* p_currentActor);
-LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
-LegoROI* FindROI(const char* p_name);
-MxDSAction& GetCurrentAction();
 
-void PlayMusic(MxU32 p_index);
-void SetIsWorldActive(MxBool p_isWorldActive);
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void CreateScripts();
 void DestroyScripts();
-void SetCurrentWorld(LegoWorld* p_world);
 
 #endif // LEGOOMNI_H

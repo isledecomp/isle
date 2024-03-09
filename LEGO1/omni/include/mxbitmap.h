@@ -82,7 +82,7 @@ public:
 	// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
 	inline MxLong AlignToFourByte(MxLong p_value) const { return (p_value + 3) & -4; }
 
-	// Same as the one from legoutil.h, but flipped the other way
+	// Same as the one from legoutils.h, but flipped the other way
 	// TODO: While it's not outside the realm of possibility that they
 	// reimplemented Abs for only this file, that seems odd, right?
 	inline MxLong AbsFlipped(MxLong p_value) const { return p_value > 0 ? p_value : -p_value; }

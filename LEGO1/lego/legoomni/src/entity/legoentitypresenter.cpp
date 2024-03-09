@@ -1,8 +1,8 @@
 #include "legoentitypresenter.h"
 
 #include "islepathactor.h"
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoEntityPresenter, 0x50);
 

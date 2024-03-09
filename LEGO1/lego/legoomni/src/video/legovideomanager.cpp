@@ -1,6 +1,8 @@
 #include "legovideomanager.h"
 
 #include "legoomni.h"
+#include "misc.h"
+#include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "realtime/matrix.h"

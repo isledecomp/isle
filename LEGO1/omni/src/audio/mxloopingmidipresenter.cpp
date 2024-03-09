@@ -2,8 +2,8 @@
 
 #include "decomp.h"
 #include "mxdssound.h"
+#include "mxmisc.h"
 #include "mxmusicmanager.h"
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxLoopingMIDIPresenter, 0x58);
 

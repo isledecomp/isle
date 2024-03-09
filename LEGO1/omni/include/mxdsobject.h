@@ -2,7 +2,7 @@
 #define MXDSOBJECT_H
 
 #include "decomp.h"
-#include "mxatomid.h"
+#include "mxatom.h"
 #include "mxcore.h"
 
 class MxPresenter;

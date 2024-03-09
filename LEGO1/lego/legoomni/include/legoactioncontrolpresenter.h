@@ -2,7 +2,7 @@
 #define LEGOACTIONCONTROLPRESENTER_H
 
 #include "decomp.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "mxmediapresenter.h"
 
 // VTABLE: LEGO1 0x100d5118

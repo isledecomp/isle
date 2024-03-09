@@ -10,15 +10,17 @@
 #include "jetski.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legocharactermanager.h"
 #include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legostate.h"
-#include "legounksavedatawriter.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"
@@ -144,7 +146,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 
 	IslePathActor* newActor = new IslePathActor();
 	const char* actorName = LegoActor::GetActorName(m_actorId);
-	LegoROI* roi = UnkSaveDataWriter()->FUN_10083500(actorName, FALSE);
+	LegoROI* roi = CharacterManager()->FUN_10083500(actorName, FALSE);
 	MxDSAction action;
 
 	action.SetAtomId(*g_isleScript);
@@ -232,7 +234,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	WriteEndOfVariables(&fileStorage);
-	UnkSaveDataWriter()->WriteSaveData3(&fileStorage);
+	CharacterManager()->WriteSaveData3(&fileStorage);
 	PlantManager()->Save(&fileStorage);
 	result = BuildingManager()->Save(&fileStorage);
 
@@ -331,7 +333,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		SetLightPosition(atoi(lightPosition));
 	}
 
-	if (UnkSaveDataWriter()->ReadSaveData3(&fileStorage) == FAILURE) {
+	if (CharacterManager()->ReadSaveData3(&fileStorage) == FAILURE) {
 		goto done;
 	}
 	if (PlantManager()->Load(&fileStorage) == FAILURE) {
@@ -1048,7 +1050,7 @@ void LegoGameState::Init()
 	SetLightPosition(2);
 	PlantManager()->Init();
 	BuildingManager()->Init();
-	UnkSaveDataWriter()->InitSaveData();
+	CharacterManager()->InitSaveData();
 	AnimationManager()->FUN_1005ee80(TRUE);
 	SetColors();
 	RemoveActor();

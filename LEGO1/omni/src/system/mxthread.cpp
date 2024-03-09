@@ -1,7 +1,7 @@
 #include "mxthread.h"
 
 #include "decomp.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxtimer.h"
 
 #include <process.h>

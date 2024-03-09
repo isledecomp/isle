@@ -2,17 +2,17 @@
 
 #include "anim/legoanim.h"
 #include "define.h"
+#include "legocharactermanager.h"
 #include "legoentity.h"
 #include "legoentitypresenter.h"
-#include "legoomni.h"
-#include "legounksavedatawriter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "misc/legocontainer.h"
 #include "misc/legotexture.h"
 #include "misc/version.h"
 #include "mxcompositepresenter.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 #include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f7ae0
@@ -308,7 +308,7 @@ void LegoModelPresenter::ParseExtra()
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
-				m_roi = UnkSaveDataWriter()->FUN_10083500(token, FALSE);
+				m_roi = CharacterManager()->FUN_10083500(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}

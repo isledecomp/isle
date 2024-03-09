@@ -1,8 +1,8 @@
 #include "legofullscreenmovie.h"
 
 #include "decomp.h"
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxtypes.h"
 
 DECOMP_SIZE_ASSERT(LegoFullScreenMovie, 0x24)

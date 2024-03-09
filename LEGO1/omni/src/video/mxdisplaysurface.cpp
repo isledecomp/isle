@@ -1,6 +1,8 @@
 #include "mxdisplaysurface.h"
 
-#include "mxutil.h"
+#include "mxmisc.h"
+#include "mxomni.h"
+#include "mxutilities.h"
 #include "mxvideomanager.h"
 
 #include <windows.h>

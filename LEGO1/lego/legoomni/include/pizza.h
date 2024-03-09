@@ -3,10 +3,6 @@
 
 #include "decomp.h"
 #include "isleactor.h"
-#include "mxcore.h"
-#include "mxomni.h"
-#include "mxticklemanager.h"
-#include "mxtypes.h"
 
 // VTABLE: LEGO1 0x100d7380
 // SIZE 0x9c

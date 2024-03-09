@@ -1,7 +1,7 @@
 #include "mxbitmap.h"
 
 #include "decomp.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
 DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);

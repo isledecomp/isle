@@ -1,32 +1,44 @@
 #include "legonavcontroller.h"
 
 #include "legoinputmanager.h"
-#include "legoomni.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
+#include "misc.h"
+#include "mxmisc.h"
 
 // GLOBAL: LEGO1 0x100f4c28
 int g_mouseDeadzone = 40;
+
 // GLOBAL: LEGO1 0x100f4c2c
 float g_zeroThreshold = 0.001f;
+
 // GLOBAL: LEGO1 0x100f4c30
 float g_movementMaxSpeed = 40.0f;
+
 // GLOBAL: LEGO1 0x100f4c34
 float g_turnMaxSpeed = 20.0f;
+
 // GLOBAL: LEGO1 0x100f4c38
 float g_movementMaxAccel = 15.0f;
+
 // GLOBAL: LEGO1 0x100f4c3c
 float g_turnMaxAccel = 30.0f;
+
 // GLOBAL: LEGO1 0x100f4c40
 float g_movementMinAccel = 4.0f;
+
 // GLOBAL: LEGO1 0x100f4c44
 float g_turnMinAccel = 15.0f;
+
 // GLOBAL: LEGO1 0x100f4c48
 float g_movementDecel = 50.0f;
+
 // GLOBAL: LEGO1 0x100f4c4c
 float g_turnDecel = 50.0f;
+
 // GLOBAL: LEGO1 0x100f4c50
 float g_turnSensitivity = 0.4f;
+
 // GLOBAL: LEGO1 0x100f4c54
 MxBool g_turnUseVelocity = FALSE;
 

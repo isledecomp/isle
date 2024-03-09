@@ -2,22 +2,24 @@
 
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
-#include "legounksavedatawriter.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovariables.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
+#include "misc.h"
 #include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
+#include "mxmisc.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
 #include "mxstreamer.h"
@@ -118,199 +120,8 @@ MxAtomId* g_nocdSourceName = NULL;
 // STRING: LEGO1 0x100f6710
 const char* g_current = "current";
 
-// GLOBAL: LEGO1 0x100f4c58
-MxBool g_isWorldActive = TRUE;
-
 // GLOBAL: LEGO1 0x10102b28
 LegoOmni::PathContainer g_extraPaths[29];
-
-// FUNCTION: LEGO1 0x10015700
-LegoOmni* Lego()
-{
-	return LegoOmni::GetInstance();
-}
-
-// FUNCTION: LEGO1 0x10015710
-LegoSoundManager* SoundManager()
-{
-	return LegoOmni::GetInstance()->GetSoundManager();
-}
-
-// FUNCTION: LEGO1 0x10015720
-LegoVideoManager* VideoManager()
-{
-	return LegoOmni::GetInstance()->GetVideoManager();
-}
-
-// FUNCTION: LEGO1 0x10015730
-MxBackgroundAudioManager* BackgroundAudioManager()
-{
-	return LegoOmni::GetInstance()->GetBackgroundAudioManager();
-}
-
-// FUNCTION: LEGO1 0x10015740
-LegoInputManager* InputManager()
-{
-	return LegoOmni::GetInstance()->GetInputManager();
-}
-
-// FUNCTION: LEGO1 0x10015750
-LegoControlManager* ControlManager()
-{
-	return LegoOmni::GetInstance()->GetInputManager()->GetControlManager();
-}
-
-// FUNCTION: LEGO1 0x10015760
-LegoGameState* GameState()
-{
-	return LegoOmni::GetInstance()->GetGameState();
-}
-
-// FUNCTION: LEGO1 0x10015770
-LegoAnimationManager* AnimationManager()
-{
-	return LegoOmni::GetInstance()->GetAnimationManager();
-}
-
-// FUNCTION: LEGO1 0x10015780
-LegoNavController* NavController()
-{
-	return LegoOmni::GetInstance()->GetNavController();
-}
-
-// FUNCTION: LEGO1 0x10015790
-IslePathActor* CurrentActor()
-{
-	return LegoOmni::GetInstance()->GetCurrentActor();
-}
-
-// FUNCTION: LEGO1 0x100157a0
-LegoWorld* CurrentWorld()
-{
-	return LegoOmni::GetInstance()->GetCurrentWorld();
-}
-
-// FUNCTION: LEGO1 0x100157b0
-LegoUnkSaveDataWriter* UnkSaveDataWriter()
-{
-	return LegoOmni::GetInstance()->GetUnkSaveDataWriter();
-}
-
-// FUNCTION: LEGO1 0x100157c0
-ViewManager* GetViewManager()
-{
-	return VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
-}
-
-// FUNCTION: LEGO1 0x100157e0
-LegoPlantManager* PlantManager()
-{
-	return LegoOmni::GetInstance()->GetLegoPlantManager();
-}
-
-// FUNCTION: LEGO1 0x100157f0
-LegoBuildingManager* BuildingManager()
-{
-	return LegoOmni::GetInstance()->GetLegoBuildingManager();
-}
-
-// FUNCTION: LEGO1 0x10015800
-LegoTextureContainer* TextureContainer()
-{
-	return LegoOmni::GetInstance()->GetTextureContainer();
-}
-
-// FUNCTION: LEGO1 0x10015810
-ViewLODListManager* GetViewLODListManager()
-{
-	return LegoOmni::GetInstance()->GetViewLODListManager();
-}
-
-// FUNCTION: LEGO1 0x10015820
-void FUN_10015820(MxBool p_disable, MxU16 p_flags)
-{
-	LegoOmni::GetInstance()->FUN_1005b4f0(p_disable, p_flags);
-}
-
-// FUNCTION: LEGO1 0x10015840
-LegoROI* FindROI(const char* p_name)
-{
-	return LegoOmni::GetInstance()->FindROI(p_name);
-}
-
-// FUNCTION: LEGO1 0x10015860
-void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c)
-{
-	LegoROI* roi = FindROI(p_name);
-
-	if (roi) {
-		roi->SetUnknown0x0c(p_unk0x0c);
-	}
-}
-
-// FUNCTION: LEGO1 0x10015880
-void SetCurrentActor(IslePathActor* p_currentActor)
-{
-	LegoOmni::GetInstance()->SetCurrentActor(p_currentActor);
-}
-
-// FUNCTION: LEGO1 0x100158c0
-LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
-{
-	return LegoOmni::GetInstance()->FindWorld(p_atom, p_entityid);
-}
-
-// FUNCTION: LEGO1 0x100158e0
-MxDSAction& GetCurrentAction()
-{
-	return LegoOmni::GetInstance()->GetCurrentAction();
-}
-
-// FUNCTION: LEGO1 0x100158f0
-void SetCurrentWorld(LegoWorld* p_world)
-{
-	LegoOmni::GetInstance()->SetCurrentWorld(p_world);
-}
-
-// FUNCTION: LEGO1 0x10015900
-MxTransitionManager* TransitionManager()
-{
-	return LegoOmni::GetInstance()->GetTransitionManager();
-}
-
-// FUNCTION: LEGO1 0x10015910
-void PlayMusic(MxU32 p_index)
-{
-	// index is the entityid of the music in jukebox.si
-	MxDSAction action;
-	action.SetAtomId(*g_jukeboxScript);
-	action.SetObjectId(p_index);
-
-	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
-}
-
-// FUNCTION: LEGO1 0x100159c0
-void SetIsWorldActive(MxBool p_isWorldActive)
-{
-	if (!p_isWorldActive) {
-		LegoOmni::GetInstance()->GetInputManager()->SetCamera(NULL);
-	}
-	g_isWorldActive = p_isWorldActive;
-}
-
-// FUNCTION: LEGO1 0x100159e0
-void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last)
-{
-	MxDSAction action;
-
-	action.SetAtomId(*p_id);
-	action.SetUnknown24(-2);
-
-	for (MxS32 first = p_first, last = p_last; first <= last; first++) {
-		action.SetObjectId(first);
-		DeleteObject(action);
-	}
-}
 
 // FUNCTION: LEGO1 0x1001a700
 void RegisterExtraPaths()
@@ -485,7 +296,7 @@ void LegoOmni::Init()
 	m_currentWorld = NULL;
 	m_exit = FALSE;
 	m_currentActor = NULL;
-	m_saveDataWriter = NULL;
+	m_characterManager = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;
 	m_animationManager = NULL;
@@ -517,9 +328,9 @@ void LegoOmni::Destroy()
 		m_animationManager = NULL;
 	}
 
-	if (m_saveDataWriter) {
-		delete m_saveDataWriter;
-		m_saveDataWriter = NULL;
+	if (m_characterManager) {
+		delete m_characterManager;
+		m_characterManager = NULL;
 	}
 
 	if (m_plantManager) {
@@ -621,14 +432,14 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_textureContainer->SetOwnership(FALSE);
 	// FUN_10046c10
 
-	m_saveDataWriter = new LegoUnkSaveDataWriter();
+	m_characterManager = new LegoCharacterManager();
 	m_plantManager = new LegoPlantManager();
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_saveDataWriter || !m_plantManager ||
+	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_characterManager || !m_plantManager ||
 		!m_animationManager || !m_buildingManager) {
 		goto done;
 	}

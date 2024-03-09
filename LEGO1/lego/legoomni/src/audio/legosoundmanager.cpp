@@ -1,6 +1,7 @@
 #include "legosoundmanager.h"
 
 #include "mxautolocker.h"
+#include "mxomni.h"
 
 // FUNCTION: LEGO1 0x100298a0
 LegoSoundManager::LegoSoundManager()

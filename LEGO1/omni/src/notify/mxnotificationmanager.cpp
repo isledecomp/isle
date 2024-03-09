@@ -3,7 +3,7 @@
 #include "compat.h"
 #include "decomp.h"
 #include "mxautolocker.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
 #include "mxtypes.h"

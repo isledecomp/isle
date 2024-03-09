@@ -1,8 +1,8 @@
 #include "mxstreamer.h"
 
 #include "mxdiskstreamcontroller.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 #include "mxramstreamcontroller.h"
 
 #include <algorithm>

@@ -4,9 +4,10 @@
 #include "define.h"
 #include "mxautolocker.h"
 #include "mxdssound.h"
+#include "mxmisc.h"
 #include "mxomni.h"
 #include "mxsoundmanager.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(MxWavePresenter, 0x6c);
 DECOMP_SIZE_ASSERT(MxWavePresenter::WaveFormat, 0x18);

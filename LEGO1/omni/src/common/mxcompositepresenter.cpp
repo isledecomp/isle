@@ -3,6 +3,7 @@
 #include "decomp.h"
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 

@@ -1,7 +1,7 @@
 #include "legotexturepresenter.h"
 
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "misc/legocontainer.h"
 #include "misc/legoimage.h"
 #include "misc/legostorage.h"

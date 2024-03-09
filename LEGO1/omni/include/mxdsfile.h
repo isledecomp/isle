@@ -2,7 +2,7 @@
 #define MXDSFILE_H
 
 #include "mxdssource.h"
-#include "mxioinfo.h"
+#include "mxio.h"
 #include "mxstring.h"
 #include "mxtypes.h"
 

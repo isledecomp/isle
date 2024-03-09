@@ -11,13 +11,14 @@
 #include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxcontrolpresenter.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
-#include "mxomni.h"
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)

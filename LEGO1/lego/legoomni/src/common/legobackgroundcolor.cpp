@@ -1,9 +1,9 @@
 #include "legobackgroundcolor.h"
 
 #include "decomp.h"
-#include "legoomni.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoBackgroundColor, 0x30)
 

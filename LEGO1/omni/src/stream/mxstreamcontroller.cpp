@@ -3,12 +3,12 @@
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
+#include "mxmisc.h"
 #include "mxnextactiondatastart.h"
-#include "mxomni.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)

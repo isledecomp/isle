@@ -211,18 +211,18 @@ add_library(omni STATIC
   LEGO1/omni/src/audio/mxsoundmanager.cpp
   LEGO1/omni/src/audio/mxsoundpresenter.cpp
   LEGO1/omni/src/audio/mxwavepresenter.cpp
-  LEGO1/omni/src/common/mxatomidcounter.cpp
-  LEGO1/omni/src/common/mxatomid.cpp
+  LEGO1/omni/src/common/mxatom.cpp
   LEGO1/omni/src/common/mxcompositepresenter.cpp
   LEGO1/omni/src/common/mxcore.cpp
   LEGO1/omni/src/common/mxmediamanager.cpp
   LEGO1/omni/src/common/mxmediapresenter.cpp
+  LEGO1/omni/src/common/mxmisc.cpp
   LEGO1/omni/src/common/mxobjectfactory.cpp
   LEGO1/omni/src/common/mxpresenter.cpp
   LEGO1/omni/src/common/mxstring.cpp
   LEGO1/omni/src/common/mxticklemanager.cpp
   LEGO1/omni/src/common/mxtimer.cpp
-  LEGO1/omni/src/common/mxutil.cpp
+  LEGO1/omni/src/common/mxutilities.cpp
   LEGO1/omni/src/common/mxvariable.cpp
   LEGO1/omni/src/common/mxvariabletable.cpp
   LEGO1/omni/src/entity/mxentity.cpp
@@ -241,7 +241,7 @@ add_library(omni STATIC
   LEGO1/omni/src/stream/mxdsfile.cpp
   LEGO1/omni/src/stream/mxdssource.cpp
   LEGO1/omni/src/stream/mxdssubscriber.cpp
-  LEGO1/omni/src/stream/mxioinfo.cpp
+  LEGO1/omni/src/stream/mxio.cpp
   LEGO1/omni/src/stream/mxramstreamcontroller.cpp
   LEGO1/omni/src/stream/mxramstreamprovider.cpp
   LEGO1/omni/src/stream/mxstreamchunk.cpp
@@ -279,47 +279,62 @@ target_link_libraries(omni PRIVATE dsound winmm Smacker::Smacker)
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/act1/act1state.cpp
-  LEGO1/lego/legoomni/src/act2/act2brick.cpp
-  LEGO1/lego/legoomni/src/act2/act2policestation.cpp
-  LEGO1/lego/legoomni/src/act2/legoact2.cpp
   LEGO1/lego/legoomni/src/act2/legoact2state.cpp
-  LEGO1/lego/legoomni/src/act3/act3.cpp
   LEGO1/lego/legoomni/src/act3/act3shark.cpp
   LEGO1/lego/legoomni/src/act3/act3state.cpp
+  LEGO1/lego/legoomni/src/actors/ambulance.cpp
+  LEGO1/lego/legoomni/src/actors/bike.cpp
+  LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
+  LEGO1/lego/legoomni/src/actors/doors.cpp
+  LEGO1/lego/legoomni/src/actors/dunebuggy.cpp
+  LEGO1/lego/legoomni/src/actors/helicopter.cpp
+  LEGO1/lego/legoomni/src/actors/isleactor.cpp
+  LEGO1/lego/legoomni/src/actors/islepathactor.cpp
+  LEGO1/lego/legoomni/src/actors/jetski.cpp
+  LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
+  LEGO1/lego/legoomni/src/actors/motorcycle.cpp
+  LEGO1/lego/legoomni/src/actors/pizza.cpp
+  LEGO1/lego/legoomni/src/actors/pizzeria.cpp
+  LEGO1/lego/legoomni/src/actors/racecar.cpp
+  LEGO1/lego/legoomni/src/actors/radio.cpp
+  LEGO1/lego/legoomni/src/actors/skateboard.cpp
+  LEGO1/lego/legoomni/src/actors/towtrack.cpp
   LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
-  LEGO1/lego/legoomni/src/audio/legocachesound.cpp
+  LEGO1/lego/legoomni/src/audio/legocachsound.cpp
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
   LEGO1/lego/legoomni/src/audio/legounknown100d5778.cpp
   LEGO1/lego/legoomni/src/audio/legounknown100d6b4c.cpp
   LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/lego/legoomni/src/build/buildingentity.cpp
-  LEGO1/lego/legoomni/src/build/dunebuggy.cpp
-  LEGO1/lego/legoomni/src/build/helicopter.cpp
   LEGO1/lego/legoomni/src/build/helicopterstate.cpp
-  LEGO1/lego/legoomni/src/build/jetski.cpp
   LEGO1/lego/legoomni/src/build/legobuildingmanager.cpp
   LEGO1/lego/legoomni/src/build/legocarbuild.cpp
   LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
-  LEGO1/lego/legoomni/src/build/racecar.cpp
   LEGO1/lego/legoomni/src/common/animstate.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp
+  LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
+  LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
   LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
-  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
-  LEGO1/lego/legoomni/src/common/legoutil.cpp
+  LEGO1/lego/legoomni/src/common/legoutils.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
+  LEGO1/lego/legoomni/src/common/misc.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
+  LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
-  LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp
+  LEGO1/lego/legoomni/src/control/legometerpresenter.cpp
+  LEGO1/lego/legoomni/src/entity/act2brick.cpp
+  LEGO1/lego/legoomni/src/entity/act2policestation.cpp
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
-  LEGO1/lego/legoomni/src/entity/legoanimactor.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
   LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
@@ -327,79 +342,65 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legojetski.cpp
   LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legopathactor.cpp
   LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legorace.cpp
-  LEGO1/lego/legoomni/src/entity/legoraceactor.cpp
-  LEGO1/lego/legoomni/src/entity/legoracecar.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
   LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstation.cpp
   LEGO1/lego/legoomni/src/gasstation/gasstationentity.cpp
   LEGO1/lego/legoomni/src/gasstation/gasstationstate.cpp
-  LEGO1/lego/legoomni/src/hospital/ambulance.cpp
   LEGO1/lego/legoomni/src/hospital/ambulancemissionstate.cpp
-  LEGO1/lego/legoomni/src/hospital/hospital.cpp
   LEGO1/lego/legoomni/src/hospital/hospitalentity.cpp
   LEGO1/lego/legoomni/src/hospital/hospitalstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/elevatorbottom.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenter.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterdoor.cpp
   LEGO1/lego/legoomni/src/infocenter/infocenterentity.cpp
   LEGO1/lego/legoomni/src/infocenter/infocenterstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/registrationbook.cpp
-  LEGO1/lego/legoomni/src/infocenter/score.cpp
   LEGO1/lego/legoomni/src/infocenter/scorestate.cpp
   LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
   LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
-  LEGO1/lego/legoomni/src/isle/bike.cpp
-  LEGO1/lego/legoomni/src/isle/bumpbouy.cpp
-  LEGO1/lego/legoomni/src/isle/doors.cpp
-  LEGO1/lego/legoomni/src/isle/historybook.cpp
-  LEGO1/lego/legoomni/src/isle/isleactor.cpp
-  LEGO1/lego/legoomni/src/isle/isle.cpp
-  LEGO1/lego/legoomni/src/isle/islepathactor.cpp
-  LEGO1/lego/legoomni/src/isle/jukebox.cpp
-  LEGO1/lego/legoomni/src/isle/jukeboxentity.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
-  LEGO1/lego/legoomni/src/isle/motocycle.cpp
-  LEGO1/lego/legoomni/src/isle/radio.cpp
   LEGO1/lego/legoomni/src/isle/radiostate.cpp
-  LEGO1/lego/legoomni/src/isle/skateboard.cpp
   LEGO1/lego/legoomni/src/main/legoomni.cpp
   LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
+  LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
+  LEGO1/lego/legoomni/src/paths/legopathactor.cpp
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizza.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzeria.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
-  LEGO1/lego/legoomni/src/police/police.cpp
   LEGO1/lego/legoomni/src/police/policeentity.cpp
   LEGO1/lego/legoomni/src/police/policestate.cpp
   LEGO1/lego/legoomni/src/race/carrace.cpp
   LEGO1/lego/legoomni/src/race/jetskirace.cpp
+  LEGO1/lego/legoomni/src/race/legorace.cpp
+  LEGO1/lego/legoomni/src/race/legoraceactor.cpp
+  LEGO1/lego/legoomni/src/race/legoracecar.cpp
   LEGO1/lego/legoomni/src/race/racestandsentity.cpp
   LEGO1/lego/legoomni/src/race/racestate.cpp
-  LEGO1/lego/legoomni/src/towtrack/towtrack.cpp
   LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
   LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp
-  LEGO1/lego/legoomni/src/video/legoanimationmanager.cpp
-  LEGO1/lego/legoomni/src/video/legoanimmmpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoloopinganimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legometerpresenter.cpp
   LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
   LEGO1/lego/legoomni/src/video/legopalettepresenter.cpp
   LEGO1/lego/legoomni/src/video/legopartpresenter.cpp
   LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp
   LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legovideomanager.cpp
-  LEGO1/lego/legoomni/src/video/mxtransitionmanager.cpp
+  LEGO1/lego/legoomni/src/worlds/act3.cpp
+  LEGO1/lego/legoomni/src/worlds/elevatorbottom.cpp
+  LEGO1/lego/legoomni/src/worlds/gasstation.cpp
+  LEGO1/lego/legoomni/src/worlds/historybook.cpp
+  LEGO1/lego/legoomni/src/worlds/hospital.cpp
+  LEGO1/lego/legoomni/src/worlds/infocenter.cpp
+  LEGO1/lego/legoomni/src/worlds/infocenterdoor.cpp
+  LEGO1/lego/legoomni/src/worlds/isle.cpp
+  LEGO1/lego/legoomni/src/worlds/jukebox.cpp
+  LEGO1/lego/legoomni/src/worlds/legoact2.cpp
+  LEGO1/lego/legoomni/src/worlds/police.cpp
+  LEGO1/lego/legoomni/src/worlds/registrationbook.cpp
+  LEGO1/lego/legoomni/src/worlds/score.cpp
   LEGO1/main.cpp
   LEGO1/modeldb/modeldb.cpp
 )

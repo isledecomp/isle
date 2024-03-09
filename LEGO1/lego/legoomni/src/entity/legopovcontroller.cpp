@@ -1,6 +1,7 @@
 #include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legopointofviewcontroller.h"
+#include "mxmisc.h"
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(LegoMouseController, 0x20);

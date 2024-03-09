@@ -4,6 +4,7 @@
 #include "mxautolocker.h"
 #include "mxdiskstreamprovider.h"
 #include "mxdsstreamingaction.h"
+#include "mxmisc.h"
 #include "mxomni.h"
 #include "mxticklemanager.h"
 

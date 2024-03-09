@@ -1,9 +1,9 @@
 #include "legovariables.h"
 
 #include "legobuildingmanager.h"
-#include "legoomni.h"
+#include "legocharactermanager.h"
 #include "legoplantmanager.h"
-#include "legounksavedatawriter.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
 DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)
@@ -62,7 +62,7 @@ void CustomizeAnimFileVariable::SetValue(const char* p_value)
 {
 	// STRING: LEGO1 0x100fc4f4
 	if (strcmp(m_key.GetData(), "CUSTOMIZE_ANIM_FILE") == 0) {
-		UnkSaveDataWriter()->SetCustomizeAnimFile(p_value);
+		CharacterManager()->SetCustomizeAnimFile(p_value);
 		PlantManager()->SetCustomizeAnimFile(p_value);
 		BuildingManager()->SetCustomizeAnimFile(p_value);
 	}

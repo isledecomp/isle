@@ -1,7 +1,7 @@
 #include "legotextureinfo.h"
 
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "misc/legoimage.h"
 #include "misc/legotexture.h"
 #include "tgl/d3drm/impl.h"

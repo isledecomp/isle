@@ -2,7 +2,7 @@
 
 #include "mxdsbuffer.h"
 #include "mxstreamlist.h"
-#include "mxutil.h"
+#include "mxutilities.h"
 
 // FUNCTION: LEGO1 0x100c2fe0
 MxStreamChunk::~MxStreamChunk()

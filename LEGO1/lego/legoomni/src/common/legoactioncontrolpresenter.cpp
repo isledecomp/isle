@@ -3,10 +3,10 @@
 #include "define.h"
 #include "extra.h"
 #include "legoomni.h"
-#include "legoutil.h"
+#include "legoutils.h"
 #include "mxcompositepresenter.h"
 #include "mxmediapresenter.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxstreamchunk.h"
 #include "mxticklemanager.h"
 

@@ -5,7 +5,6 @@
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
-#include "mxomni.h"
 #include "mxpoint32.h"
 
 class MxCompositePresenter;
