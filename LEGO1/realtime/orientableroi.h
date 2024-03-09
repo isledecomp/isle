@@ -33,7 +33,7 @@ public:
 	virtual void UpdateWorldVelocity();                         // vtable+0x2c
 
 	void WrappedSetLocalTransform(const Matrix4& p_transform);
-	void FUN_100a46b0(Matrix4& p_transform);
+	void FUN_100a46b0(const Matrix4& p_transform);
 	void WrappedVTable0x24(const Matrix4& p_transform);
 	void GetLocalTransform(Matrix4& p_transform);
 	void FUN_100a58f0(const Matrix4& p_transform);
@@ -43,7 +43,7 @@ public:
 	const float* GetWorldPosition() const { return m_local2world[3]; }
 	const float* GetWorldDirection() const { return m_local2world[2]; }
 	const float* GetWorldUp() const { return m_local2world[1]; }
-	OrientableROI* GetUnknown0xd4() const { return m_unk0xd4; }
+	OrientableROI* GetParentROI() const { return m_parentROI; }
 
 	void ToggleUnknown0xd8(BOOL p_enable)
 	{
@@ -61,7 +61,7 @@ protected:
 	BoundingBox m_unk0x80;                  // 0x80
 	BoundingSphere m_world_bounding_sphere; // 0xa8
 	Mx3DPointFloat m_world_velocity;        // 0xc0
-	OrientableROI* m_unk0xd4;               // 0xd4
+	OrientableROI* m_parentROI;             // 0xd4
 	undefined4 m_unk0xd8;                   // 0xd8
 };
 
