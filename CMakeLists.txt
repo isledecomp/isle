@@ -211,8 +211,7 @@ add_library(omni STATIC
   LEGO1/omni/src/audio/mxsoundmanager.cpp
   LEGO1/omni/src/audio/mxsoundpresenter.cpp
   LEGO1/omni/src/audio/mxwavepresenter.cpp
-  LEGO1/omni/src/common/mxatomidcounter.cpp
-  LEGO1/omni/src/common/mxatomid.cpp
+  LEGO1/omni/src/common/mxatom.cpp
   LEGO1/omni/src/common/mxcompositepresenter.cpp
   LEGO1/omni/src/common/mxcore.cpp
   LEGO1/omni/src/common/mxmediamanager.cpp

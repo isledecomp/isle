@@ -1,7 +1,12 @@
-#include "mxatomid.h"
+#include "mxatom.h"
 
+#include "decomp.h"
 #include "mxmisc.h"
 #include "mxomni.h"
+
+DECOMP_SIZE_ASSERT(MxAtomId, 0x04);
+DECOMP_SIZE_ASSERT(MxAtomIdCounter, 0x14);
+DECOMP_SIZE_ASSERT(MxAtomIdCounterSet, 0x10);
 
 // FUNCTION: LEGO1 0x100acf90
 MxAtomId::MxAtomId(const char* p_str, LookupMode p_mode)
@@ -107,4 +112,18 @@ void MxAtomId::Clear()
 	// Reset but do not delete MxAtomId object.
 	Destroy();
 	m_internal = NULL;
+}
+
+// FUNCTION: LEGO1 0x100ad7f0
+void MxAtomIdCounter::Inc()
+{
+	m_value++;
+}
+
+// FUNCTION: LEGO1 0x100ad800
+void MxAtomIdCounter::Dec()
+{
+	if (m_value) {
+		m_value--;
+	}
 }

@@ -1,7 +1,7 @@
 #ifndef MXOBJECTFACTORY_H
 #define MXOBJECTFACTORY_H
 
-#include "mxatomid.h"
+#include "mxatom.h"
 #include "mxcore.h"
 
 #define FOR_MXOBJECTFACTORY_OBJECTS(X)                                                                                 \

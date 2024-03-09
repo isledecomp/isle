@@ -2,7 +2,7 @@
 #define MXENTITY_H
 
 #include "decomp.h"
-#include "mxatomid.h"
+#include "mxatom.h"
 #include "mxcore.h"
 #include "mxdsaction.h"
 #include "mxtypes.h"

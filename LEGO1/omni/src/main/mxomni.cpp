@@ -1,7 +1,7 @@
 #include "mxomni.h"
 
 #include "mxactionnotificationparam.h"
-#include "mxatomidcounter.h"
+#include "mxatom.h"
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxeventmanager.h"

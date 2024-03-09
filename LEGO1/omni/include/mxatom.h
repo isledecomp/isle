@@ -1,8 +1,9 @@
-#ifndef MXATOMIDCOUNTER_H
-#define MXATOMIDCOUNTER_H
+#ifndef MXATOM_H
+#define MXATOM_H
 
 #include "mxstl/stlcompat.h"
 #include "mxstring.h"
+#include "mxtypes.h"
 
 // Counts the number of existing MxAtomId objects based
 // on the matching char* string. A <map> seems fit for purpose here:
@@ -42,6 +43,36 @@ struct MxAtomIdCounterCompare {
 };
 
 class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare> {};
+
+enum LookupMode {
+	e_exact = 0,
+	e_lowerCase,
+	e_upperCase,
+	e_lowerCase2,
+};
+
+// SIZE 0x04
+class MxAtomId {
+public:
+	MxAtomId(const char*, LookupMode);
+	MxAtomId& operator=(const MxAtomId& p_atomId);
+	~MxAtomId();
+
+	MxAtomId() { this->m_internal = 0; }
+
+	inline MxBool operator==(const MxAtomId& p_atomId) const { return this->m_internal == p_atomId.m_internal; }
+	inline MxBool operator!=(const MxAtomId& p_atomId) const { return this->m_internal != p_atomId.m_internal; }
+
+	void Clear();
+
+	const char* GetInternal() const { return m_internal; }
+
+private:
+	MxAtomIdCounter* GetCounter(const char*, LookupMode);
+	void Destroy();
+
+	const char* m_internal; // 0x00
+};
 
 // SYNTHETIC: LEGO1 0x100ad170
 // MxAtomIdCounter::~MxAtomIdCounter
@@ -89,4 +120,4 @@ class MxAtomIdCounterSet : public set<MxAtomIdCounter*, MxAtomIdCounterCompare> 
 // TEMPLATE: LEGO1 0x100afe40
 // Set<MxAtomIdCounter *,MxAtomIdCounterCompare>::~Set<MxAtomIdCounter *,MxAtomIdCounterCompare>
 
-#endif // MXATOMIDCOUNTER_H
+#endif // MXATOM_H

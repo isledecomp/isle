@@ -2,7 +2,7 @@
 #define MXSTREAMCONTROLLER_H
 
 #include "decomp.h"
-#include "mxatomid.h"
+#include "mxatom.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxdsaction.h"
