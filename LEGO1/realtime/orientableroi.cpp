@@ -16,7 +16,7 @@ OrientableROI::OrientableROI()
 	ZEROVEC3(m_world_velocity);
 	IDENTMAT4(m_local2world);
 
-	m_unk0xd4 = NULL;
+	m_parentROI = NULL;
 	ToggleUnknown0xd8(TRUE);
 }
 
@@ -27,10 +27,36 @@ void OrientableROI::WrappedSetLocalTransform(const Matrix4& p_transform)
 	SetLocalTransform(p_transform);
 }
 
-// STUB: LEGO1 0x100a46b0
-void OrientableROI::FUN_100a46b0(Matrix4& p_transform)
+// FUNCTION: LEGO1 0x100a46b0
+void OrientableROI::FUN_100a46b0(const Matrix4& p_transform)
 {
-	// TODO
+	MxMatrix mat;
+
+	double local2world[4][4];
+	double local2parent[4][4];
+	int i, j;
+
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			local2world[i][j] = p_transform[i][j];
+			local2parent[i][j] = m_local2world[i][j];
+		}
+	}
+
+	double local_inverse[4][4];
+	INVERTMAT4d(local_inverse, local2parent);
+
+	double parent2world[4][4];
+	MXM4(parent2world, local_inverse, local2world);
+
+	unsigned int k, l;
+	for (k = 0; k < 4; k++) {
+		for (l = 0; l < 4; l++) {
+			mat[k][l] = parent2world[k][l];
+		}
+	}
+
+	UpdateWorldData(mat);
 }
 
 // Maybe an overload based on MxMatrix type
@@ -43,7 +69,7 @@ void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
 // STUB: LEGO1 0x100a50a0
 void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 {
-	// TODO
+	p_transform = m_local2world;
 }
 
 // FUNCTION: LEGO1 0x100a58f0

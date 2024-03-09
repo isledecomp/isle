@@ -69,7 +69,7 @@ void LegoROI::configureLegoROI(int p_roiConfig)
 // FUNCTION: LEGO1 0x100a81d0
 LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL)
 {
-	m_unk0xd4 = NULL;
+	m_parentROI = NULL;
 	m_name = NULL;
 	m_entity = NULL;
 }
@@ -77,7 +77,7 @@ LegoROI::LegoROI(Tgl::Renderer* p_renderer) : ViewROI(p_renderer, NULL)
 // FUNCTION: LEGO1 0x100a82d0
 LegoROI::LegoROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList) : ViewROI(p_renderer, p_lodList)
 {
-	m_unk0xd4 = NULL;
+	m_parentROI = NULL;
 	m_name = NULL;
 	m_entity = NULL;
 }
@@ -124,7 +124,7 @@ LegoResult LegoROI::Read(
 	LegoSphere sphere;
 	LegoBox box;
 
-	m_unk0xd4 = p_unk0xd4;
+	m_parentROI = p_unk0xd4;
 
 	if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
 		goto done;
