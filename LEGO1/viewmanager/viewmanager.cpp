@@ -5,6 +5,9 @@
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
+// GLOBAL: LEGO1 0x100dbcd8
+int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
+
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
 
@@ -106,6 +109,47 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 	}
 
 	p_roi->SetUnknown0xe0(-1);
+}
+
+// FUNCTION: LEGO1 0x100a6b90
+void ViewManager::FUN_100a6b90()
+{
+	flags &= ~c_bit2;
+
+	// TODO: Should be signed, but worsens match
+	unsigned int i, j, k;
+
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 3; j++) {
+			unk0xf0[i][j] = pov[3][j];
+
+			for (k = 0; k < 3; k++) {
+				unk0xf0[i][j] += pov[k][j] * unk0x90[i][k];
+			}
+		}
+	}
+
+	for (i = 0; i < 6; i++) {
+		Vector3 a(unk0xf0[g_unk0x100dbcd8[i * 3]]);
+		Vector3 b(unk0xf0[g_unk0x100dbcd8[i * 3 + 1]]);
+		Vector3 c(unk0xf0[g_unk0x100dbcd8[i * 3 + 2]]);
+		Mx3DPointFloat x;
+		Mx3DPointFloat y;
+		Vector3 u(unk0x150[i]);
+
+		x = c;
+		((Vector3&) x).Sub(&b); // TODO: Fix type awareness
+
+		y = a;
+		((Vector3&) y).Sub(&b); // TODO: Fix type awareness
+
+		u.EqualsCross(&x, &y);
+		u.Unitize();
+
+		unk0x150[i][3] = -u.Dot(&u, &a);
+	}
+
+	flags |= c_bit4;
 }
 
 // STUB: LEGO1 0x100a6930
