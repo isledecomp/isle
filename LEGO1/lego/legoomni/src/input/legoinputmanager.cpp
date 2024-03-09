@@ -388,8 +388,8 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 					p_param.SetROI(roi);
 
 					if (roi && roi->GetUnknown0x0c() == 1) {
-						for (OrientableROI* oroi = roi->GetParentROI(); oroi; oroi = oroi->GetParentROI()) {
-							roi = (LegoROI*) oroi;
+						for (OrientableROI* parent = roi->GetParentROI(); parent; parent = parent->GetParentROI()) {
+							roi = (LegoROI*) parent;
 						}
 
 						LegoEntity* entity = roi->GetEntity();
