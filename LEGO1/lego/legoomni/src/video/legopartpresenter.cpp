@@ -5,6 +5,7 @@
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "misc/legotexture.h"
+#include "viewmanager/viewlodlist.h"
 
 DECOMP_SIZE_ASSERT(LegoLODList, 0x18)
 DECOMP_SIZE_ASSERT(LegoNamedPart, 0x14)
@@ -216,8 +217,34 @@ void LegoPartPresenter::ReadyTickle()
 	// TODO
 }
 
-// STUB: LEGO1 0x1007df20
-void LegoPartPresenter::FUN_1007df20()
+// FUNCTION: LEGO1 0x1007df20
+void LegoPartPresenter::Store()
 {
-	// TODO
+	LegoNamedPartListCursor partCursor(m_parts);
+	LegoNamedPart* part;
+
+	while (partCursor.Next(part)) {
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(part->GetName()->GetData());
+
+		if (lodList == NULL) {
+			lodList = GetViewLODListManager()->Create(part->GetName()->GetData(), part->GetList()->GetCount());
+
+			LegoLODListCursor lodCursor(part->GetList());
+			LegoLOD* lod;
+
+			while (lodCursor.First(lod)) {
+				lodCursor.Detach();
+				lodList->PushBack(lod);
+			}
+		}
+		else {
+			lodList->Release();
+		}
+	}
+
+	if (m_parts != NULL) {
+		delete m_parts;
+	}
+
+	m_parts = NULL;
 }
