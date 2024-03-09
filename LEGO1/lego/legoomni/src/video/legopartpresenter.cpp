@@ -141,7 +141,6 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 	}
 
 	for (i = 0; i < numROIs; i++) {
-
 		if (storage.Read(&roiNameLength, sizeof(roiNameLength)) != SUCCESS) {
 			goto done;
 		}
