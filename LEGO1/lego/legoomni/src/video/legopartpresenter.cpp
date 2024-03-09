@@ -49,6 +49,9 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 	LegoU32 numROIs, numLODs;
 	LegoMemory storage(p_chunk.GetData());
 	LegoU32 textureInfoOffset, i, j, numTextures;
+	LegoU32 roiNameLength, roiInfoOffset, surplusLODs;
+	LegoLODList* lods;
+	LegoNamedPart* namedPart;
 	LegoChar* roiName = NULL;
 	LegoChar* textureName = NULL;
 	LegoTexture* texture = NULL;
@@ -137,9 +140,6 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 	}
 
 	for (i = 0; i < numROIs; i++) {
-		LegoU32 roiNameLength, roiInfoOffset, surplusLODs;
-		LegoLODList* lods;
-		LegoNamedPart* namedPart;
 
 		if (storage.Read(&roiNameLength, sizeof(roiNameLength)) != SUCCESS) {
 			goto done;
