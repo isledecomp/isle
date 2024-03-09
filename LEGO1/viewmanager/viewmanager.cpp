@@ -111,6 +111,12 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 	p_roi->SetUnknown0xe0(-1);
 }
 
+// STUB: LEGO1 0x100a6930
+void ViewManager::Update(float p_previousRenderTime, float p_und2)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::FUN_100a6b90()
 {
@@ -150,12 +156,6 @@ void ViewManager::FUN_100a6b90()
 	}
 
 	flags |= c_bit4;
-}
-
-// STUB: LEGO1 0x100a6930
-void ViewManager::Update(float p_previousRenderTime, float p_und2)
-{
-	// TODO
 }
 
 // FUNCTION: LEGO1 0x100a6d50
