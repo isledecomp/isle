@@ -10,6 +10,7 @@
 DECOMP_SIZE_ASSERT(LegoTexturePresenter, 0x54)
 DECOMP_SIZE_ASSERT(LegoNamedTexture, 0x14)
 DECOMP_SIZE_ASSERT(LegoNamedTextureList, 0x18)
+DECOMP_SIZE_ASSERT(LegoNamedTextureListCursor, 0x10)
 
 // FUNCTION: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()

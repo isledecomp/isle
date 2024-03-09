@@ -37,14 +37,15 @@ public:
 	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
 	void VTable0x60(MxPresenter* p_presenter) override;                                    // vtable+0x60
 
-	MxResult FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile);
-	MxResult FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world);
 	MxResult LoadWorld(char* p_worldName, LegoWorld* p_world);
 
 	// SYNTHETIC: LEGO1 0x10066750
 	// LegoWorldPresenter::`scalar deleting destructor'
 
 private:
+	MxResult FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile);
+	MxResult FUN_100674b0(ModelDbModel& p_model, FILE* p_wdbFile, LegoWorld* p_world);
+
 	undefined4 m_unk0x50;
 };
 
