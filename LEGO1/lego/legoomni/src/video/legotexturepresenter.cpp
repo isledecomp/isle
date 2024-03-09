@@ -2,9 +2,12 @@
 
 #include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc/legostorage.h"
 #include "mxcompositepresenter.h"
 
 DECOMP_SIZE_ASSERT(LegoTexturePresenter, 0x54)
+DECOMP_SIZE_ASSERT(LegoNamedTexture, 0x14)
+DECOMP_SIZE_ASSERT(LegoNamedTextureList, 0x18)
 
 // FUNCTION: LEGO1 0x1004eb40
 LegoTexturePresenter::~LegoTexturePresenter()
@@ -19,11 +22,62 @@ MxResult LegoTexturePresenter::AddToManager()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1004ebd0
+// FUNCTION: LEGO1 0x1004ebd0
 MxResult LegoTexturePresenter::Read(MxDSChunk& p_chunk)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = FAILURE;
+	LegoMemory storage(p_chunk.GetData());
+	LegoChar* textureName = NULL;
+	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetHardwareMode();
+
+	m_textures = new LegoNamedTextureList();
+
+	LegoU32 numTextures, i;
+	if (storage.Read(&numTextures, sizeof(numTextures)) != SUCCESS) {
+		goto done;
+	}
+
+	for (i = 0; i < numTextures; i++) {
+		LegoU32 textureNameLength;
+		LegoTexture* texture;
+		LegoNamedTexture* namedTexture;
+
+		if (storage.Read(&textureNameLength, sizeof(textureNameLength)) != SUCCESS) {
+			goto done;
+		}
+
+		textureName = new LegoChar[textureNameLength + 1];
+		if (storage.Read(textureName, textureNameLength) != SUCCESS) {
+			goto done;
+		}
+
+		textureName[textureNameLength] = '\0';
+		strlwr(textureName);
+
+		texture = new LegoTexture();
+		if (texture->Read(&storage, hardwareMode) != SUCCESS) {
+			goto done;
+		}
+
+		namedTexture = new LegoNamedTexture(textureName, texture);
+		m_textures->Append(namedTexture);
+
+		delete[] textureName;
+		textureName = NULL;
+	}
+
+	result = SUCCESS;
+
+done:
+	if (textureName != NULL) {
+		delete[] textureName;
+	}
+	if (result != SUCCESS && m_textures != NULL) {
+		delete m_textures;
+		m_textures = NULL;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x1004f290

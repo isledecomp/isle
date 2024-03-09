@@ -1,6 +1,7 @@
 #include "legoutil.h"
 
 #include "legoinputmanager.h"
+#include "legonamedtexture.h"
 #include "legoomni.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
@@ -12,8 +13,6 @@
 
 #include <process.h>
 #include <string.h>
-
-DECOMP_SIZE_ASSERT(NamedTexture, 0x14)
 
 // STUB: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
@@ -297,7 +296,7 @@ void SetLightPosition(MxU32)
 }
 
 // STUB: LEGO1 0x1003f3b0
-NamedTexture* ReadNamedTexture(LegoFile* p_file)
+LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 {
 	return NULL;
 }
@@ -308,7 +307,7 @@ void FUN_1003f540(LegoFile* p_file, const char* p_filename)
 }
 
 // FUNCTION: LEGO1 0x1003f8a0
-void WriteNamedTexture(LegoFile* p_file, NamedTexture* p_texture)
+void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture)
 {
 	p_file->FUN_10006030(*p_texture->GetName());
 	p_texture->GetTexture()->Write(p_file);
