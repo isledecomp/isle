@@ -1,13 +1,14 @@
 #ifndef LEGOTEXTUREPRESENTER_H
 #define LEGOTEXTUREPRESENTER_H
 
+#include "legonamedtexturelist.h"
 #include "mxmediapresenter.h"
 
 // VTABLE: LEGO1 0x100d4d90
 // SIZE 0x54 (from inlined construction at 0x10009bb5)
 class LegoTexturePresenter : public MxMediaPresenter {
 public:
-	LegoTexturePresenter() : m_textureData(NULL) {}
+	LegoTexturePresenter() : m_textures(NULL) {}
 	~LegoTexturePresenter() override;
 
 	// FUNCTION: LEGO1 0x1000ce50
@@ -31,10 +32,10 @@ public:
 	// LegoTexturePresenter::`scalar deleting destructor'
 
 	MxResult Read(MxDSChunk& p_chunk);
-	void FUN_1004f290();
+	MxResult Store();
 
 private:
-	MxDSChunk* m_textureData; // 0x54
+	LegoNamedTextureList* m_textures; // 0x50
 };
 
 #endif // LEGOTEXTUREPRESENTER_H

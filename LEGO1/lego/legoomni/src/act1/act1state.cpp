@@ -1,5 +1,7 @@
 #include "act1state.h"
 
+#include "legoutil.h"
+
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
 DECOMP_SIZE_ASSERT(Act1State::NamedPlane, 0x4c)
 

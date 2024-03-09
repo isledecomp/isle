@@ -8,7 +8,7 @@ typedef unsigned char (*ROIHandler)(const char*, char*, unsigned int);
 
 class LegoEntity;
 class LegoTextureContainer;
-struct LegoTextureInfo;
+class LegoTextureInfo;
 class LegoStorage;
 class LegoAnim;
 class LegoAnimNodeData;

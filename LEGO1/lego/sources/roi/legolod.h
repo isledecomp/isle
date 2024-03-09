@@ -5,7 +5,7 @@
 #include "viewmanager/viewlod.h"
 
 class LegoTextureContainer;
-struct LegoTextureInfo;
+class LegoTextureInfo;
 class LegoStorage;
 
 // VTABLE: LEGO1 0x100dbf10

@@ -13,23 +13,7 @@
 class MxAtomId;
 class LegoEntity;
 class LegoAnimPresenter;
-
-class LegoTexture;
-
-// SIZE 0x14
-class NamedTexture {
-public:
-	~NamedTexture() { delete m_texture; }
-
-	// FUNCTION: LEGO1 0x1003f920
-	const MxString* GetName() const { return &m_name; }
-
-	LegoTexture* GetTexture() { return m_texture; }
-
-private:
-	MxString m_name;        // 0x00
-	LegoTexture* m_texture; // 0x04
-};
+class LegoNamedTexture;
 
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
@@ -42,9 +26,9 @@ void SetAppCursor(WPARAM p_wparam);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_atomId1, MxS32 p_id1, MxAtomId& p_atomId2, MxS32 p_id2);
 void SetLightPosition(MxU32);
-NamedTexture* ReadNamedTexture(LegoFile* p_file);
+LegoNamedTexture* ReadNamedTexture(LegoFile* p_file);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
-void WriteNamedTexture(LegoFile* p_file, NamedTexture* p_texture);
+void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture);
 
 // SYNTHETIC: LEGO1 0x10034b40
 // LegoTexture::`scalar deleting destructor'

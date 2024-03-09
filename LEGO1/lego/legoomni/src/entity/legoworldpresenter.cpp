@@ -227,7 +227,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 		LegoTexturePresenter texturePresenter;
 		if (texturePresenter.Read(chunk) == SUCCESS) {
-			texturePresenter.FUN_1004f290();
+			texturePresenter.Store();
 		}
 
 		delete[] buff;

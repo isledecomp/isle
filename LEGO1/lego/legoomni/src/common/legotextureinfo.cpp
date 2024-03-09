@@ -151,3 +151,18 @@ done:
 
 	return NULL;
 }
+
+// STUB: LEGO1 0x10065f60
+BOOL LegoTextureInfo::SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo)
+{
+	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
+	data->groupMesh->SetGroupTexture(data->groupIndex, p_textureInfo->m_texture);
+	return TRUE;
+}
+
+// STUB: LEGO1 0x10066010
+LegoResult LegoTextureInfo::FUN_10066010(LegoU8* p_bits)
+{
+	// TODO
+	return SUCCESS;
+}
