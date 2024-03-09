@@ -62,7 +62,7 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 		goto done;
 	}
 	if (storage.SetPosition(textureInfoOffset) != SUCCESS) {
-		goto done; // maybe no check
+		goto done;
 	}
 	if (storage.Read(&numTextures, sizeof(numTextures)) != SUCCESS) {
 		goto done;
@@ -125,12 +125,12 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 
 		delete[] textureName;
 		textureName = NULL;
-		delete texture; // maybe TODO
+		delete texture;
 		texture = NULL;
 	}
 
 	if (storage.SetPosition(4) != SUCCESS) {
-		goto done; // maybe no check
+		goto done;
 	}
 
 	m_parts = new LegoNamedPartList();
@@ -190,7 +190,7 @@ MxResult LegoPartPresenter::Read(MxDSChunk& p_chunk)
 		storage.SetPosition(roiInfoOffset);
 
 		namedPart = new LegoNamedPart(roiName, lods);
-		m_parts->Append(namedPart); // maybe temporary
+		m_parts->Append(namedPart);
 
 		delete[] roiName;
 		roiName = NULL;
