@@ -161,7 +161,7 @@ BOOL LegoTextureInfo::SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textu
 }
 
 // STUB: LEGO1 0x10066010
-LegoResult LegoTextureInfo::FUN_10066010(LegoU8* m_bits)
+LegoResult LegoTextureInfo::FUN_10066010(LegoU8* p_bits)
 {
 	// TODO
 	return SUCCESS;
