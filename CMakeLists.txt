@@ -241,7 +241,7 @@ add_library(omni STATIC
   LEGO1/omni/src/stream/mxdsfile.cpp
   LEGO1/omni/src/stream/mxdssource.cpp
   LEGO1/omni/src/stream/mxdssubscriber.cpp
-  LEGO1/omni/src/stream/mxioinfo.cpp
+  LEGO1/omni/src/stream/mxio.cpp
   LEGO1/omni/src/stream/mxramstreamcontroller.cpp
   LEGO1/omni/src/stream/mxramstreamprovider.cpp
   LEGO1/omni/src/stream/mxstreamchunk.cpp

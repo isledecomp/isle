@@ -1,5 +1,5 @@
-#ifndef MXUTIL_H
-#define MXUTIL_H
+#ifndef MXUTILITIES_H
+#define MXUTILITIES_H
 
 #include "mxtypes.h"
 
@@ -77,7 +77,6 @@ void SetOmniUserMessage(void (*p_omniUserMessage)(const char*, MxS32));
 MxBool ContainsPresenter(MxCompositePresenterList& p_presenterList, MxPresenter* p_presenter);
 void FUN_100b7220(MxDSAction* p_action, MxU32 p_newFlags, MxBool p_setFlags);
 MxDSObject* CreateStreamObject(MxDSFile*, MxS16);
-
 MxBool KeyValueStringParse(char*, const char*, const char*);
 
-#endif // MXUTIL_H
+#endif // MXUTILITIES_H

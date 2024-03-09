@@ -1,5 +1,5 @@
-#ifndef MXIOINFO_H
-#define MXIOINFO_H
+#ifndef MXIO_H
+#define MXIO_H
 
 #include "mxtypes.h"
 
@@ -29,4 +29,4 @@ public:
 	MMIOINFO m_info;
 };
 
-#endif // MXIOINFO_H
+#endif // MXIO_H
