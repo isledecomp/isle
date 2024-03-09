@@ -11,6 +11,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legoutil.h"
 #include "legovideomanager.h"

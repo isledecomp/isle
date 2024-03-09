@@ -6,6 +6,7 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legomodelpresenter.h"
+#include "legoomni.h"
 #include "legopartpresenter.h"
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"

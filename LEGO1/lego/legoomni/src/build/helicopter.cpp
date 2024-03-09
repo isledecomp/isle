@@ -7,6 +7,7 @@
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
+#include "legoomni.h"
 #include "legoutil.h"
 #include "legoworld.h"
 #include "misc.h"

@@ -9,6 +9,7 @@
 #include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
+#include "mxvideopresenter.h"
 
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900);
 

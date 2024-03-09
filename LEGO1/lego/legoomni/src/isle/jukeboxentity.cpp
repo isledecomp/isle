@@ -4,6 +4,7 @@
 #include "islepathactor.h"
 #include "jukeboxstate.h"
 #include "legogamestate.h"
+#include "legoomni.h"
 #include "legoutil.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"

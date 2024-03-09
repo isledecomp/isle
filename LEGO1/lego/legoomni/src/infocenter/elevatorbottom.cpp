@@ -5,6 +5,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legoomni.h"
 #include "legovariables.h"
 #include "misc.h"
 #include "mxmisc.h"
