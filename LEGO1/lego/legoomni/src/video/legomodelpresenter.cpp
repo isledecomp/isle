@@ -63,6 +63,7 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 	MxMatrix mat;
 	LegoChar* textureName = NULL;
 	LegoTexture* texture = NULL;
+	LegoTextureInfo* textureInfo = NULL;
 	LegoS32 hardwareMode = VideoManager()->GetDirect3D()->AssignedDevice()->GetHardwareMode();
 
 	if (m_roi) {
@@ -137,7 +138,7 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 
 		if (!skipTextures) {
 			if (TextureContainer()->Get(textureName) == NULL) {
-				LegoTextureInfo* textureInfo = LegoTextureInfo::Create(textureName, texture);
+				textureInfo = LegoTextureInfo::Create(textureName, texture);
 
 				if (textureInfo == NULL) {
 					goto done;
