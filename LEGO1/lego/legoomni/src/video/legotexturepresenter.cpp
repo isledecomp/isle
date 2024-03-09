@@ -2,6 +2,8 @@
 
 #include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc/legocontainer.h"
+#include "misc/legoimage.h"
 #include "misc/legostorage.h"
 #include "mxcompositepresenter.h"
 
@@ -80,10 +82,35 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1004f290
-void LegoTexturePresenter::FUN_1004f290()
+// FUNCTION: LEGO1 0x1004f290
+MxResult LegoTexturePresenter::Store()
 {
-	// TODO
+	LegoNamedTextureListCursor cursor(m_textures);
+	LegoNamedTexture* namedTexture;
+	VideoManager();
+
+	while (cursor.Next(namedTexture)) {
+		LegoTexture* texture = namedTexture->GetTexture();
+		LegoTextureInfo* textureInfo = TextureContainer()->Get(namedTexture->GetName()->GetData());
+
+		if (textureInfo == NULL) {
+			textureInfo = LegoTextureInfo::Create(namedTexture->GetName()->GetData(), texture);
+
+			if (textureInfo != NULL) {
+				TextureContainer()->Add(namedTexture->GetName()->GetData(), textureInfo);
+			}
+		}
+		else {
+			textureInfo->FUN_10066010(texture->GetImage()->GetBits());
+		}
+	}
+
+	if (m_textures != NULL) {
+		delete m_textures;
+	}
+
+	m_textures = NULL;
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1004fc60

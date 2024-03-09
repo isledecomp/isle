@@ -23,6 +23,37 @@ public:
 	// LegoNamedTextureList::`scalar deleting destructor'
 };
 
+// VTABLE: LEGO1 0x100d8170
+// class MxListCursor<LegoNamedTexture *>
+
+// VTABLE: LEGO1 0x100d8188
+// class MxPtrListCursor<LegoNamedTexture>
+
+// VTABLE: LEGO1 0x100d81a0
+// SIZE 0x10
+class LegoNamedTextureListCursor : public MxPtrListCursor<LegoNamedTexture> {
+public:
+	LegoNamedTextureListCursor(LegoNamedTextureList* p_list) : MxPtrListCursor<LegoNamedTexture>(p_list) {}
+};
+
+// SYNTHETIC: LEGO1 0x1004f500
+// LegoNamedTextureListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1004f570
+// MxPtrListCursor<LegoNamedTexture>::~MxPtrListCursor<LegoNamedTexture>
+
+// SYNTHETIC: LEGO1 0x1004f5c0
+// MxListCursor<LegoNamedTexture *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1004f630
+// MxPtrListCursor<LegoNamedTexture>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1004f6a0
+// MxListCursor<LegoNamedTexture *>::~MxListCursor<LegoNamedTexture *>
+
+// FUNCTION: LEGO1 0x1004f6f0
+// LegoNamedTextureListCursor::~LegoNamedTextureListCursor
+
 // TEMPLATE: LEGO1 0x1004eec0
 // MxCollection<LegoNamedTexture *>::Compare
 

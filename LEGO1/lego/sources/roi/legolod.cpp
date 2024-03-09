@@ -21,15 +21,6 @@ const char* g_unk0x101013dc = "inh";
 inline IDirect3DRM2* GetD3DRM(Tgl::Renderer* pRenderer);
 inline BOOL GetMeshData(IDirect3DRMMesh*& mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
 
-// TODO: Find out which unit this belongs to
-// STUB: LEGO1 0x10065f60
-BOOL SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo)
-{
-	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
-	data->groupMesh->SetGroupTexture(data->groupIndex, p_textureInfo->m_texture);
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x100aa380
 LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 {
@@ -231,7 +222,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			}
 
 			m_meshes[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
-			SetGroupTexture(m_meshes[meshIndex].m_tglMesh, textureInfo);
+			LegoTextureInfo::SetGroupTexture(m_meshes[meshIndex].m_tglMesh, textureInfo);
 			m_meshes[meshIndex].m_unk0x04 = TRUE;
 		}
 		else {
@@ -328,7 +319,7 @@ LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 {
 	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
 		if (m_meshes[i].m_unk0x04) {
-			SetGroupTexture(m_meshes[i].m_tglMesh, p_textureInfo);
+			LegoTextureInfo::SetGroupTexture(m_meshes[i].m_tglMesh, p_textureInfo);
 			m_meshes[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
 			m_meshes[i].m_unk0x04 = TRUE;
 		}

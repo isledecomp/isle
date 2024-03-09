@@ -32,7 +32,7 @@ public:
 	// LegoTexturePresenter::`scalar deleting destructor'
 
 	MxResult Read(MxDSChunk& p_chunk);
-	void FUN_1004f290();
+	MxResult Store();
 
 private:
 	LegoNamedTextureList* m_textures; // 0x50
