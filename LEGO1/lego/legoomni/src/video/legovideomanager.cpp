@@ -1,5 +1,6 @@
 #include "legovideomanager.h"
 
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"

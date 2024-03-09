@@ -315,6 +315,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
+  LEGO1/lego/legoomni/src/common/misc.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp
   LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp
   LEGO1/lego/legoomni/src/control/mxcontrolpresenter.cpp

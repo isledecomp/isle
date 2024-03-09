@@ -5,6 +5,7 @@
 #include "legoomni.h"
 #include "legoutil.h"
 #include "legoworld.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(Bike, 0x164);
 

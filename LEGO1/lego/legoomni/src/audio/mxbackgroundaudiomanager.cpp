@@ -1,6 +1,7 @@
 #include "mxbackgroundaudiomanager.h"
 
 #include "legoomni.h"
+#include "misc.h"
 #include "mxcompositepresenter.h"
 #include "mxdssound.h"
 #include "mxmisc.h"

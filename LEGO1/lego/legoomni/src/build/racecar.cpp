@@ -1,7 +1,7 @@
 #include "racecar.h"
 
 #include "legocontrolmanager.h"
-#include "legoomni.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(RaceCar, 0x164);
 

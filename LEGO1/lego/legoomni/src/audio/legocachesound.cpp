@@ -1,7 +1,7 @@
 #include "legocachesound.h"
 
-#include "legoomni.h"
 #include "legosoundmanager.h"
+#include "misc.h"
 #include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(LegoCacheSound, 0x88)

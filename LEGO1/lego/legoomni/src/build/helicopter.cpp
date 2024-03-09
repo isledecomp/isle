@@ -7,9 +7,9 @@
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legoutil.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)

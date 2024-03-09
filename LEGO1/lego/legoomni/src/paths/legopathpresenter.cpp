@@ -1,7 +1,7 @@
 #include "legopathpresenter.h"
 
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxautolocker.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54);

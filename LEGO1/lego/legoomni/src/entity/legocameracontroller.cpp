@@ -2,8 +2,8 @@
 
 #include "legoinputmanager.h"
 #include "legonotify.h"
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
 

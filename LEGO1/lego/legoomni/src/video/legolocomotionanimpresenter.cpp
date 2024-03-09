@@ -2,6 +2,7 @@
 
 #include "legoomni.h"
 #include "legoworld.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)
 

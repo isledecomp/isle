@@ -2,9 +2,9 @@
 
 #include "legoanimmmpresenter.h"
 #include "legocharactermanager.h"
-#include "legoomni.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxmisc.h"

@@ -18,6 +18,7 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxobjectfactory.h"

@@ -1,7 +1,8 @@
 #include "legounknown100d5778.h"
 
 #include "legocharactermanager.h"
-#include "legoomni.h"
+#include "misc.h"
+#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(LegoUnknown100d5778, 0x30)
 

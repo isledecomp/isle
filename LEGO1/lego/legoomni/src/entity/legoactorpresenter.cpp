@@ -1,7 +1,7 @@
 #include "legoactorpresenter.h"
 
 #include "legoentity.h"
-#include "legoomni.h"
+#include "misc.h"
 
 // FUNCTION: LEGO1 0x10076c30
 void LegoActorPresenter::ReadyTickle()

@@ -1,8 +1,8 @@
 #include "mxcompositemediapresenter.h"
 
-#include "legoomni.h"
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxmediapresenter.h"

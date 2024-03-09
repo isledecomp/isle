@@ -3,11 +3,11 @@
 #include "define.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
-#include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "mxmisc.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)

@@ -1,7 +1,7 @@
 #include "legounknown100d6b4c.h"
 
-#include "legoomni.h"
 #include "legoworld.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(Element100d6b4c, 0x08)
 DECOMP_SIZE_ASSERT(LegoUnknown100d6b4c, 0x20)

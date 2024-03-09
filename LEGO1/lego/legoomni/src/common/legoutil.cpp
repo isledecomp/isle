@@ -5,6 +5,7 @@
 #include "legoomni.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
+#include "misc.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"

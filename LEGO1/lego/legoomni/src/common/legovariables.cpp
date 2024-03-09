@@ -2,8 +2,8 @@
 
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
-#include "legoomni.h"
 #include "legoplantmanager.h"
+#include "misc.h"
 
 DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
 DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)

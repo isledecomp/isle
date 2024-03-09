@@ -3,6 +3,7 @@
 #include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"

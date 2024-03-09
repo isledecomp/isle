@@ -9,6 +9,7 @@
 #include "legopartpresenter.h"
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"
+#include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"

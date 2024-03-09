@@ -12,6 +12,7 @@
 #include "legotexturepresenter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "misc.h"
 #include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
 #include "mxautolocker.h"

@@ -13,6 +13,7 @@
 #include "legosoundmanager.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"

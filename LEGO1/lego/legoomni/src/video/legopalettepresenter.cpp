@@ -1,7 +1,7 @@
 #include "legopalettepresenter.h"
 
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "misc/legostorage.h"
 #include "mxstreamchunk.h"
 

@@ -7,6 +7,7 @@
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoutil.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"

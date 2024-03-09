@@ -5,6 +5,7 @@
 #include "jukeboxstate.h"
 #include "legogamestate.h"
 #include "legoutil.h"
+#include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"

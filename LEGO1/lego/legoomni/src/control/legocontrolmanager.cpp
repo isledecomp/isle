@@ -1,8 +1,8 @@
 #include "legocontrolmanager.h"
 
 #include "legoeventnotificationparam.h"
-#include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"
 #include "mxpresenter.h"

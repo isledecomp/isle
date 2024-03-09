@@ -1,9 +1,9 @@
 #include "legonavcontroller.h"
 
 #include "legoinputmanager.h"
-#include "legoomni.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxmisc.h"
 
 // GLOBAL: LEGO1 0x100f4c28

@@ -3,6 +3,7 @@
 #include "legocontrolmanager.h"
 #include "legoomni.h"
 #include "legovideomanager.h"
+#include "misc.h"
 #include "mxautolocker.h"
 #include "roi/legoroi.h"
 

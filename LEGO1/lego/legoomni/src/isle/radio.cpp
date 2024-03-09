@@ -3,6 +3,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
+#include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"
