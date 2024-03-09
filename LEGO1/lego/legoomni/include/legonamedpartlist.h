@@ -23,6 +23,37 @@ public:
 	// LegoNamedPartList::`scalar deleting destructor'
 };
 
+// VTABLE: LEGO1 0x100d9e68
+// class MxListCursor<LegoNamedPart *>
+
+// VTABLE: LEGO1 0x100d9e38
+// class MxPtrListCursor<LegoNamedPart>
+
+// VTABLE: LEGO1 0x100d9e50
+// SIZE 0x10
+class LegoNamedPartListCursor : public MxPtrListCursor<LegoNamedPart> {
+public:
+	LegoNamedPartListCursor(LegoNamedPartList* p_list) : MxPtrListCursor<LegoNamedPart>(p_list) {}
+};
+
+// SYNTHETIC: LEGO1 0x1007e170
+// LegoNamedPartListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1007e1e0
+// MxPtrListCursor<LegoNamedPart>::~MxPtrListCursor<LegoNamedPart>
+
+// SYNTHETIC: LEGO1 0x1007e230
+// MxListCursor<LegoNamedPart *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x1007e2a0
+// MxPtrListCursor<LegoNamedPart>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x1007e310
+// MxListCursor<LegoNamedPart *>::~MxListCursor<LegoNamedPart *>
+
+// FUNCTION: LEGO1 0x1007e360
+// LegoNamedPartListCursor::~LegoNamedPartListCursor
+
 // TEMPLATE: LEGO1 0x1007d760
 // MxCollection<LegoNamedPart *>::Compare
 

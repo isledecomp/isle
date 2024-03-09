@@ -246,7 +246,7 @@ MxResult LegoWorldPresenter::LoadWorld(char* p_worldName, LegoWorld* p_world)
 
 		LegoPartPresenter partPresenter;
 		if (partPresenter.Read(chunk) == SUCCESS) {
-			partPresenter.FUN_1007df20();
+			partPresenter.Store();
 		}
 
 		delete[] buff;
@@ -335,7 +335,7 @@ MxResult LegoWorldPresenter::FUN_10067360(ModelDbPart& p_part, FILE* p_wdbFile)
 	result = partPresenter.Read(chunk);
 
 	if (result == SUCCESS) {
-		partPresenter.FUN_1007df20();
+		partPresenter.Store();
 	}
 
 	delete[] buff;

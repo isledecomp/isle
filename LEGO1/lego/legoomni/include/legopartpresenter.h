@@ -38,7 +38,7 @@ public:
 	inline void Reset() { m_parts = NULL; }
 
 	MxResult Read(MxDSChunk& p_chunk);
-	void FUN_1007df20();
+	void Store();
 
 private:
 	void Destroy(MxBool p_fromDestructor);

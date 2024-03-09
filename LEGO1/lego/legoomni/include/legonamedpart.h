@@ -15,7 +15,6 @@ public:
 	~LegoNamedPart() { delete m_list; }
 
 	const MxString* GetName() const { return &m_name; }
-
 	LegoLODList* GetList() { return m_list; }
 
 private:
