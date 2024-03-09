@@ -211,10 +211,25 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1007deb0
+// FUNCTION: LEGO1 0x1007deb0
 void LegoPartPresenter::ReadyTickle()
 {
-	// TODO
+	MxStreamChunk* chunk = m_subscriber->PeekData();
+
+	if (chunk != NULL && chunk->GetTime() <= m_action->GetElapsedTime()) {
+		ParseExtra();
+		ProgressTickleState(e_starting);
+
+		chunk = m_subscriber->PopData();
+		MxResult result = Read(*chunk);
+		m_subscriber->FreeDataChunk(chunk);
+
+		if (result == SUCCESS) {
+			Store();
+		}
+
+		EndAction();
+	}
 }
 
 // FUNCTION: LEGO1 0x1007df20
