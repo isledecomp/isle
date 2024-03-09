@@ -1,8 +1,8 @@
 #include "legoanimpresenter.h"
 
 #include "legoanimmmpresenter.h"
+#include "legocharactermanager.h"
 #include "legoomni.h"
-#include "legounksavedatawriter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
@@ -113,7 +113,7 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 {
 	LegoChar* str;
 
-	if (LegoUnkSaveDataWriter::FUN_10084c00(p_und1 + 1)) {
+	if (LegoCharacterManager::FUN_10084c00(p_und1 + 1)) {
 		str = new LegoChar[strlen(p_und1)];
 
 		if (str != NULL) {
@@ -157,7 +157,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					src = str;
 				}
 
-				roi = UnkSaveDataWriter()->FUN_10083500(src, TRUE);
+				roi = CharacterManager()->FUN_10083500(src, TRUE);
 
 				if (roi != NULL && str[0] == '*') {
 					roi->SetUnknown0x0c(0);
@@ -169,7 +169,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(src);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = UnkSaveDataWriter()->FUN_10085a80(und, src, 1);
+				roi = CharacterManager()->FUN_10085a80(und, src, 1);
 
 				if (roi != NULL) {
 					roi->SetUnknown0x0c(0);
@@ -193,7 +193,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(src);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = UnkSaveDataWriter()->FUN_10085210(und, src, 1);
+				roi = CharacterManager()->FUN_10085210(und, src, 1);
 
 				if (roi != NULL) {
 					roi->SetUnknown0x0c(0);
@@ -238,7 +238,7 @@ void LegoAnimPresenter::FUN_100695c0()
 
 					strlwr(dest);
 
-					UnkSaveDataWriter()->FUN_10085210(str, dest, 0);
+					CharacterManager()->FUN_10085210(str, dest, 0);
 					FUN_100698b0(rois, str);
 				}
 			}

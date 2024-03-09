@@ -19,7 +19,7 @@ class LegoPathBoundary;
 class LegoPlantManager;
 class LegoROI;
 class LegoSoundManager;
-class LegoUnkSaveDataWriter;
+class LegoCharacterManager;
 class LegoVideoManager;
 class LegoWorld;
 class LegoWorldList;
@@ -224,7 +224,7 @@ public:
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
-	LegoUnkSaveDataWriter* GetUnkSaveDataWriter() { return m_saveDataWriter; }
+	LegoCharacterManager* GetCharacterManager() { return m_characterManager; }
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
@@ -247,7 +247,7 @@ private:
 	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
 	IslePathActor* m_currentActor;               // 0x88
-	LegoUnkSaveDataWriter* m_saveDataWriter;     // 0x8c
+	LegoCharacterManager* m_characterManager;    // 0x8c
 	LegoPlantManager* m_plantManager;            // 0x90
 	LegoAnimationManager* m_animationManager;    // 0x94
 	LegoBuildingManager* m_buildingManager;      // 0x98
@@ -276,7 +276,7 @@ IslePathActor* CurrentActor();
 ViewManager* GetViewManager();
 LegoPlantManager* PlantManager();
 LegoWorld* CurrentWorld();
-LegoUnkSaveDataWriter* UnkSaveDataWriter();
+LegoCharacterManager* CharacterManager();
 LegoTextureContainer* TextureContainer();
 ViewLODListManager* GetViewLODListManager();
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);

@@ -7,12 +7,12 @@
 #include "legoact2state.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legocharactermanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoplantmanager.h"
-#include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "mxactionnotificationparam.h"
@@ -1284,7 +1284,7 @@ void Infocenter::Reset()
 	PlantManager()->FUN_10027120();
 	BuildingManager()->FUN_10030590();
 	AnimationManager()->FUN_1005ee80(FALSE);
-	UnkSaveDataWriter()->FUN_100832a0();
+	CharacterManager()->FUN_100832a0();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->SetPreviousArea(LegoGameState::e_noArea);
 	GameState()->SetUnknown0x42c(LegoGameState::e_noArea);

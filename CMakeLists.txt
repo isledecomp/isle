@@ -305,13 +305,13 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/animstate.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
+  LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
   LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
-  LEGO1/lego/legoomni/src/common/legounksavedatawriter.cpp
   LEGO1/lego/legoomni/src/common/legoutil.cpp
   LEGO1/lego/legoomni/src/common/legovariables.cpp
   LEGO1/lego/legoomni/src/common/mxcompositemediapresenter.cpp

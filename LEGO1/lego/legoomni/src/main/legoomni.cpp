@@ -2,12 +2,12 @@
 
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
+#include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoobjectfactory.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
-#include "legounksavedatawriter.h"
 #include "legoutil.h"
 #include "legovariables.h"
 #include "legovideomanager.h"
@@ -191,9 +191,9 @@ LegoWorld* CurrentWorld()
 }
 
 // FUNCTION: LEGO1 0x100157b0
-LegoUnkSaveDataWriter* UnkSaveDataWriter()
+LegoCharacterManager* CharacterManager()
 {
-	return LegoOmni::GetInstance()->GetUnkSaveDataWriter();
+	return LegoOmni::GetInstance()->GetCharacterManager();
 }
 
 // FUNCTION: LEGO1 0x100157c0
@@ -485,7 +485,7 @@ void LegoOmni::Init()
 	m_currentWorld = NULL;
 	m_exit = FALSE;
 	m_currentActor = NULL;
-	m_saveDataWriter = NULL;
+	m_characterManager = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;
 	m_animationManager = NULL;
@@ -517,9 +517,9 @@ void LegoOmni::Destroy()
 		m_animationManager = NULL;
 	}
 
-	if (m_saveDataWriter) {
-		delete m_saveDataWriter;
-		m_saveDataWriter = NULL;
+	if (m_characterManager) {
+		delete m_characterManager;
+		m_characterManager = NULL;
 	}
 
 	if (m_plantManager) {
@@ -621,14 +621,14 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_textureContainer->SetOwnership(FALSE);
 	// FUN_10046c10
 
-	m_saveDataWriter = new LegoUnkSaveDataWriter();
+	m_characterManager = new LegoCharacterManager();
 	m_plantManager = new LegoPlantManager();
 	m_animationManager = new LegoAnimationManager();
 	m_buildingManager = new LegoBuildingManager();
 	m_gameState = new LegoGameState();
 	m_worldList = new LegoWorldList(TRUE);
 
-	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_saveDataWriter || !m_plantManager ||
+	if (!m_viewLODListManager || !m_textureContainer || !m_worldList || !m_characterManager || !m_plantManager ||
 		!m_animationManager || !m_buildingManager) {
 		goto done;
 	}

@@ -1,5 +1,5 @@
-#ifndef LEGOUNKSAVEDATAWRITER_H
-#define LEGOUNKSAVEDATAWRITER_H
+#ifndef LEGOCHARACTERMANAGER_H
+#define LEGOCHARACTERMANAGER_H
 
 #include "decomp.h"
 #include "legovariables.h"
@@ -51,9 +51,9 @@ struct LegoSaveDataEntry3 {
 };
 
 // SIZE 0x08
-class LegoUnkSaveDataWriter {
+class LegoCharacterManager {
 public:
-	LegoUnkSaveDataWriter();
+	LegoCharacterManager();
 
 	MxResult WriteSaveData3(LegoStorage* p_storage);
 	MxResult ReadSaveData3(LegoStorage* p_storage);
@@ -80,7 +80,6 @@ private:
 };
 
 // clang-format off
-
 // FUNCTION: LEGO1 0x10082b90
 // _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::~_Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >
 
@@ -98,7 +97,6 @@ private:
 
 // GLOBAL: LEGO1 0x100fc508
 // _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Nil
-
 // clang-format on
 
-#endif // LEGOUNKSAVEDATAWRITER_H
+#endif // LEGOCHARACTERMANAGER_H

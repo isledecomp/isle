@@ -2,10 +2,10 @@
 
 #include "anim/legoanim.h"
 #include "define.h"
+#include "legocharactermanager.h"
 #include "legoentity.h"
 #include "legoentitypresenter.h"
 #include "legoomni.h"
-#include "legounksavedatawriter.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc/legocontainer.h"
@@ -308,7 +308,7 @@ void LegoModelPresenter::ParseExtra()
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
-				m_roi = UnkSaveDataWriter()->FUN_10083500(token, FALSE);
+				m_roi = CharacterManager()->FUN_10083500(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}

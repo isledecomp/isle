@@ -1,7 +1,7 @@
 #include "legounknown100d5778.h"
 
+#include "legocharactermanager.h"
 #include "legoomni.h"
-#include "legounksavedatawriter.h"
 
 DECOMP_SIZE_ASSERT(LegoUnknown100d5778, 0x30)
 
@@ -56,12 +56,12 @@ void LegoUnknown100d5778::Destroy()
 		m_dsBuffer = NULL;
 	}
 
-	if (m_unk0x14 && m_unk0xc && UnkSaveDataWriter()) {
+	if (m_unk0x14 && m_unk0xc && CharacterManager()) {
 		if (m_unk0x15) {
-			UnkSaveDataWriter()->FUN_10083db0(m_unk0xc);
+			CharacterManager()->FUN_10083db0(m_unk0xc);
 		}
 		else {
-			UnkSaveDataWriter()->FUN_10083f10(m_unk0xc);
+			CharacterManager()->FUN_10083f10(m_unk0xc);
 		}
 	}
 
