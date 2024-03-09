@@ -3,6 +3,7 @@
 #include "mxdiskstreamcontroller.h"
 #include "mxdschunk.h"
 #include "mxdsstreamingaction.h"
+#include "mxmisc.h"
 #include "mxomni.h"
 #include "mxstreamchunk.h"
 #include "mxstreamcontroller.h"

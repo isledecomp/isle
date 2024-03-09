@@ -8,6 +8,7 @@
 #include "legoutil.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
+#include "mxmisc.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 

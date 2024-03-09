@@ -2,7 +2,6 @@
 #define MXSOUNDPRESENTER_H
 
 #include "mxaudiopresenter.h"
-#include "mxomni.h"
 
 // VTABLE: LEGO1 0x100d4b08
 // SIZE 0x54

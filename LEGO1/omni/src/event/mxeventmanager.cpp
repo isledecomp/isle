@@ -1,7 +1,7 @@
 #include "mxeventmanager.h"
 
 #include "mxcriticalsection.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxthread.h"
 #include "mxticklemanager.h"
 

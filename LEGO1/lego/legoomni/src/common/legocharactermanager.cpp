@@ -1,7 +1,7 @@
 #include "legocharactermanager.h"
 
 #include "legogamestate.h"
-#include "legoomni.h"
+#include "mxmisc.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)

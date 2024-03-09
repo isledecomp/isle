@@ -3,7 +3,7 @@
 #include "islepathactor.h"
 #include "legoomni.h"
 #include "mxdsaction.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "police.h"
 
 #include <stdlib.h>

@@ -1,6 +1,6 @@
 #include "mxpalette.h"
 
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x10102188

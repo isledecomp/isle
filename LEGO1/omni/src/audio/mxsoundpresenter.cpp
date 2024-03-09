@@ -1,6 +1,7 @@
 #include "mxsoundpresenter.h"
 
 #include "decomp.h"
+#include "mxmisc.h"
 #include "mxsoundmanager.h"
 
 DECOMP_SIZE_ASSERT(MxSoundPresenter, 0x54)

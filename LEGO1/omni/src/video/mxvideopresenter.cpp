@@ -2,6 +2,7 @@
 
 #include "mxautolocker.h"
 #include "mxdsmediaaction.h"
+#include "mxmisc.h"
 #include "mxregioncursor.h"
 #include "mxvideomanager.h"
 

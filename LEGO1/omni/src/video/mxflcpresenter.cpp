@@ -3,7 +3,7 @@
 #include "decomp.h"
 #include "mxbitmap.h"
 #include "mxdsmediaaction.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxpalette.h"
 #include "mxvideomanager.h"
 

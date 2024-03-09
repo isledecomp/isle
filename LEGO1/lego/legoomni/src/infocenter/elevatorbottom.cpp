@@ -7,8 +7,8 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legovariables.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)

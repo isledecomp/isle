@@ -1,6 +1,6 @@
 #include "mxmusicmanager.h"
 
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxticklemanager.h"
 
 #include <windows.h>

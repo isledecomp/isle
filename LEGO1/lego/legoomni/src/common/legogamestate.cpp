@@ -19,6 +19,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
 #include "mxvariabletable.h"

@@ -3,6 +3,7 @@
 #include "define.h"
 #include "legocontrolmanager.h"
 #include "mxdsmultiaction.h"
+#include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutil.h"

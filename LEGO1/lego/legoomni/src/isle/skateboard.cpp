@@ -1,8 +1,8 @@
 #include "skateboard.h"
 
 #include "decomp.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(SkateBoard, 0x168);
 

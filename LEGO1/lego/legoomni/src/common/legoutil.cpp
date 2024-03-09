@@ -6,8 +6,8 @@
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "mxdsaction.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 #include "mxstreamer.h"
 #include "mxtypes.h"
 

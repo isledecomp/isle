@@ -4,6 +4,7 @@
 #include "legoomni.h"
 #include "legovideomanager.h"
 #include "mxcontrolpresenter.h"
+#include "mxmisc.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
 

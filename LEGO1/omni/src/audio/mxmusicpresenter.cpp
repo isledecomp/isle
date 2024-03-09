@@ -1,8 +1,8 @@
 #include "mxmusicpresenter.h"
 
 #include "decomp.h"
+#include "mxmisc.h"
 #include "mxmusicmanager.h"
-#include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(MxMusicPresenter, 0x54);
 

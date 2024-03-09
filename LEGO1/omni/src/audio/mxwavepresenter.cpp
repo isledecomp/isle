@@ -4,6 +4,7 @@
 #include "define.h"
 #include "mxautolocker.h"
 #include "mxdssound.h"
+#include "mxmisc.h"
 #include "mxomni.h"
 #include "mxsoundmanager.h"
 #include "mxutil.h"

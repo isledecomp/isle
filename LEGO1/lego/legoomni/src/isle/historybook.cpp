@@ -3,9 +3,8 @@
 #include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
-#include "mxomni.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(HistoryBook, 0x3e4)

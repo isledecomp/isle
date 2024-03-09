@@ -3,7 +3,7 @@
 #include "legoomni.h"
 #include "mxcompositepresenter.h"
 #include "mxdssound.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxpresenter.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"

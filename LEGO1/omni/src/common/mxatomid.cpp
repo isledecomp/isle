@@ -1,5 +1,6 @@
 #include "mxatomid.h"
 
+#include "mxmisc.h"
 #include "mxomni.h"
 
 // FUNCTION: LEGO1 0x100acf90

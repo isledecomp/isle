@@ -1,6 +1,6 @@
 #include "mxdsselectaction.h"
 
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxvariabletable.h"
 

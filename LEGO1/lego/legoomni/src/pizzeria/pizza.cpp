@@ -1,5 +1,8 @@
 #include "pizza.h"
 
+#include "mxmisc.h"
+#include "mxticklemanager.h"
+
 DECOMP_SIZE_ASSERT(Pizza, 0x9c);
 
 // FUNCTION: LEGO1 0x10037ef0

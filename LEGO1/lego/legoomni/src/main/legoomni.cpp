@@ -18,6 +18,7 @@
 #include "mxautolocker.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
+#include "mxmisc.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
 #include "mxstreamer.h"

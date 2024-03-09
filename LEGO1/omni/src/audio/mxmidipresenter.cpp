@@ -3,6 +3,7 @@
 #include "decomp.h"
 #include "mxautolocker.h"
 #include "mxdssound.h"
+#include "mxmisc.h"
 #include "mxmusicmanager.h"
 
 DECOMP_SIZE_ASSERT(MxMIDIPresenter, 0x58);

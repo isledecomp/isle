@@ -19,6 +19,7 @@
 #include "mxdschunk.h"
 #include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxpresenter.h"

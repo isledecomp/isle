@@ -2,8 +2,9 @@
 
 #include "define.h"
 #include "mxautolocker.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxpresenter.h"
+#include "mxomni.h"
 #include "mxticklemanager.h"
 #include "mxwavepresenter.h"
 

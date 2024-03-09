@@ -7,6 +7,7 @@
 #include "legoworld.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
+#include "mxmisc.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
 #include "mxvideomanager.h"

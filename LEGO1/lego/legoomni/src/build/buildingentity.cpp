@@ -1,6 +1,6 @@
 #include "buildingentity.h"
 
-#include "legoomni.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
 // FUNCTION: LEGO1 0x10014e20

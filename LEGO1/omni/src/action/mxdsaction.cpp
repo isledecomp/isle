@@ -1,6 +1,6 @@
 #include "mxdsaction.h"
 
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxutil.h"
 

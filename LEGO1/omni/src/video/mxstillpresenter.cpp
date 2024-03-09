@@ -4,6 +4,7 @@
 #include "define.h"
 #include "mxcompositepresenter.h"
 #include "mxdsmediaaction.h"
+#include "mxmisc.h"
 #include "mxomni.h"
 #include "mxutil.h"
 #include "mxvideomanager.h"

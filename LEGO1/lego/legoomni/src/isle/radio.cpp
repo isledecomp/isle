@@ -5,6 +5,7 @@
 #include "legoomni.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
 DECOMP_SIZE_ASSERT(Radio, 0x10);

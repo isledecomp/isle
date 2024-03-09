@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "mxdsmediaaction.h"
+#include "mxmisc.h"
 #include "mxvideomanager.h"
 
 DECOMP_SIZE_ASSERT(MxSmkPresenter, 0x720);

@@ -3,7 +3,7 @@
 #include "decomp.h"
 #include "mxautolocker.h"
 #include "mxeventmanager.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxvariabletable.h"
 
 DECOMP_SIZE_ASSERT(MxEventPresenter, 0x54);

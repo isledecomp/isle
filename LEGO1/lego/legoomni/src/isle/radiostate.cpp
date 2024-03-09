@@ -2,6 +2,7 @@
 
 #include "jukebox.h"
 #include "legoomni.h"
+#include "mxmisc.h"
 #include "mxtimer.h"
 
 // GLOBAL: LEGO1 0x100f3218

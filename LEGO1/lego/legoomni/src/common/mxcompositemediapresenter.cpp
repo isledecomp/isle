@@ -6,6 +6,7 @@
 #include "mxautolocker.h"
 #include "mxdsmultiaction.h"
 #include "mxmediapresenter.h"
+#include "mxmisc.h"
 #include "mxobjectfactory.h"
 #include "mxtimer.h"
 

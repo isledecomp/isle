@@ -6,7 +6,7 @@
 #include "legoutil.h"
 #include "mxcompositepresenter.h"
 #include "mxmediapresenter.h"
-#include "mxomni.h"
+#include "mxmisc.h"
 #include "mxstreamchunk.h"
 #include "mxticklemanager.h"
 

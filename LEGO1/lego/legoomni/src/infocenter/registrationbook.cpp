@@ -6,6 +6,7 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "mxactionnotificationparam.h"
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtimer.h"
 

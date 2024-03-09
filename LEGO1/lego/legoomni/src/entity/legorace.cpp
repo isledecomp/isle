@@ -1,5 +1,6 @@
 #include "legorace.h"
 
+#include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoRace, 0x144)

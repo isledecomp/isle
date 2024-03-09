@@ -5,6 +5,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
 
