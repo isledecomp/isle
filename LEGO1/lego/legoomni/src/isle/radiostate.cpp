@@ -36,7 +36,7 @@ JukeboxScript::Script g_unk0x100f3230[14] = {
 // GLOBAL: LEGO1 0x100f3268
 JukeboxScript::Script g_unk0x100f3268[9] = {
 	JukeboxScript::c_CentralRoads_Music,
-	JukeboxScript::c_Beach_Music,
+	JukeboxScript::c_BeachBlvd_Music,
 	JukeboxScript::c_ResidentalArea_Music,
 	JukeboxScript::c_Radio1_Music,
 	JukeboxScript::c_Radio2_Music,
