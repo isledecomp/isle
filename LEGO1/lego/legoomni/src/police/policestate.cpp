@@ -57,7 +57,7 @@ void PoliceState::FUN_1005ea40()
 	default:
 		policeScript = m_policeScript;
 		m_policeScript = policeScript == PoliceScript::c_nps002la_RunAnim ? PoliceScript::c_nps001ni_RunAnim
-																		   : PoliceScript::c_nps002la_RunAnim;
+																		  : PoliceScript::c_nps002la_RunAnim;
 	}
 
 	{

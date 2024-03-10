@@ -195,10 +195,11 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		return 1;
 	}
 
-	if (action->GetAtomId() == m_atom &&
-		(action->GetObjectId() == InfomainScript::c_Mama_All_Movie || action->GetObjectId() == InfomainScript::c_Papa_All_Movie ||
-		 action->GetObjectId() == InfomainScript::c_Pepper_All_Movie || action->GetObjectId() == InfomainScript::c_Nick_All_Movie ||
-		 action->GetObjectId() == InfomainScript::c_Laura_All_Movie)) {
+	if (action->GetAtomId() == m_atom && (action->GetObjectId() == InfomainScript::c_Mama_All_Movie ||
+										  action->GetObjectId() == InfomainScript::c_Papa_All_Movie ||
+										  action->GetObjectId() == InfomainScript::c_Pepper_All_Movie ||
+										  action->GetObjectId() == InfomainScript::c_Nick_All_Movie ||
+										  action->GetObjectId() == InfomainScript::c_Laura_All_Movie)) {
 		if (m_unk0x1d4) {
 			m_unk0x1d4--;
 		}
@@ -298,7 +299,8 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		BackgroundAudioManager()->RaiseVolume();
 		return 1;
 	case 4:
-		if (action->GetObjectId() == InfomainScript::c_GoTo_RegBook || action->GetObjectId() == InfomainScript::c_GoTo_RegBook_Red) {
+		if (action->GetObjectId() == InfomainScript::c_GoTo_RegBook ||
+			action->GetObjectId() == InfomainScript::c_GoTo_RegBook_Red) {
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
 			return 1;
@@ -316,8 +318,10 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 11:
 		if (!m_infocenterState->HasRegistered() && m_currentInfomainScript != InfomainScript::c_Mama_All_Movie &&
-			m_currentInfomainScript != InfomainScript::c_Papa_All_Movie && m_currentInfomainScript != InfomainScript::c_Pepper_All_Movie &&
-			m_currentInfomainScript != InfomainScript::c_Nick_All_Movie && m_currentInfomainScript != InfomainScript::c_Laura_All_Movie) {
+			m_currentInfomainScript != InfomainScript::c_Papa_All_Movie &&
+			m_currentInfomainScript != InfomainScript::c_Pepper_All_Movie &&
+			m_currentInfomainScript != InfomainScript::c_Nick_All_Movie &&
+			m_currentInfomainScript != InfomainScript::c_Laura_All_Movie) {
 			m_infoManDialogueTimer = 1;
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 		}
@@ -834,7 +838,8 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 						break;
 					default:
 						dialogueToPlay =
-							(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
+							(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
+								.Next();
 						break;
 					}
 
@@ -946,7 +951,8 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 					m_infocenterState->SetUnknown0x74(5);
 					m_transitionDestination = state->GetPreviousArea();
 					actionToPlay =
-						(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct()).Next();
+						(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
+							.Next();
 					m_radio.Stop();
 					InputManager()->DisableInputProcessing();
 					InputManager()->SetUnknown336(TRUE);
@@ -956,9 +962,9 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 						if (m_infocenterState->HasRegistered()) {
 							m_infocenterState->SetUnknown0x74(5);
 							m_transitionDestination = state->GetPreviousArea();
-							actionToPlay =
-								(InfomainScript::Script) m_infocenterState->GetLeaveDialogue(GameState()->GetCurrentAct())
-									.Next();
+							actionToPlay = (InfomainScript::Script) m_infocenterState
+											   ->GetLeaveDialogue(GameState()->GetCurrentAct())
+											   .Next();
 							m_radio.Stop();
 							InputManager()->DisableInputProcessing();
 							InputManager()->SetUnknown336(TRUE);
@@ -992,7 +998,8 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 		case InfomainScript::c_Book_Ctl:
 			m_transitionDestination = LegoGameState::e_regbook;
 			m_infocenterState->SetUnknown0x74(4);
-			actionToPlay = GameState()->GetCurrentAct() != LegoGameState::e_act1 ? InfomainScript::c_GoTo_RegBook_Red : InfomainScript::c_GoTo_RegBook;
+			actionToPlay = GameState()->GetCurrentAct() != LegoGameState::e_act1 ? InfomainScript::c_GoTo_RegBook_Red
+																				 : InfomainScript::c_GoTo_RegBook;
 			m_radio.Stop();
 			GameState()->SetUnknown0x42c(GameState()->GetPreviousArea());
 			InputManager()->DisableInputProcessing();
@@ -1087,12 +1094,18 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 	}
 	else {
 		if (sender->IsA("Radio") && m_radio.GetState()->IsActive()) {
-			if (m_currentInfomainScript == InfomainScript::c_Mama_All_Movie || m_currentInfomainScript == InfomainScript::c_Papa_All_Movie ||
-				m_currentInfomainScript == InfomainScript::c_Pepper_All_Movie || m_currentInfomainScript == InfomainScript::c_Nick_All_Movie ||
-				m_currentInfomainScript == InfomainScript::c_Laura_All_Movie || m_currentInfomainScript == InfomainScript::c_iic007ra_PlayWav ||
-				m_currentInfomainScript == InfomainScript::c_ijs002ra_PlayWav || m_currentInfomainScript == InfomainScript::c_irt001ra_PlayWav ||
-				m_currentInfomainScript == InfomainScript::c_ipz006ra_PlayWav || m_currentInfomainScript == InfomainScript::c_igs004ra_PlayWav ||
-				m_currentInfomainScript == InfomainScript::c_iho003ra_PlayWav || m_currentInfomainScript == InfomainScript::c_ips005ra_PlayWav) {
+			if (m_currentInfomainScript == InfomainScript::c_Mama_All_Movie ||
+				m_currentInfomainScript == InfomainScript::c_Papa_All_Movie ||
+				m_currentInfomainScript == InfomainScript::c_Pepper_All_Movie ||
+				m_currentInfomainScript == InfomainScript::c_Nick_All_Movie ||
+				m_currentInfomainScript == InfomainScript::c_Laura_All_Movie ||
+				m_currentInfomainScript == InfomainScript::c_iic007ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_ijs002ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_irt001ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_ipz006ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_igs004ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_iho003ra_PlayWav ||
+				m_currentInfomainScript == InfomainScript::c_ips005ra_PlayWav) {
 				StopCurrentAction();
 			}
 		}

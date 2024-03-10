@@ -123,7 +123,7 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
-        case JukeboxwScript::c_Dback_Ctl:
+		case JukeboxwScript::c_Dback_Ctl:
 			switch (m_state->GetState()) {
 			case JukeboxScript::c_MusicTheme1:
 				m_state->SetState(JukeboxScript::c_ResidentalArea_Music);

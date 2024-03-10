@@ -5,13 +5,13 @@
 
 class NocdScript {
 public:
-    enum Script {
-        c_noneNocd = -1,
+	enum Script {
+		c_noneNocd = -1,
 
-        c_NoCD_Movie = 0,
-        c_CDSpin1_Smk = 1,
-        c_Iicx62In_Wave = 2
-    };
+		c_NoCD_Movie = 0,
+		c_CDSpin1_Smk = 1,
+		c_Iicx62In_Wave = 2
+	};
 };
 
 #endif // NOCD_ACTIONS_H

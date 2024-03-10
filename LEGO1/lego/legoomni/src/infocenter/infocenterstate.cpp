@@ -67,8 +67,12 @@ InfomainScript::Script g_leaveDialogueAct1[4] = {
 };
 
 // GLOBAL: LEGO1 0x100f7740
-InfomainScript::Script g_leaveDialogueAct2[4] =
-	{InfomainScript::c_iic051in_PlayWav, InfomainScript::c_iic052in_PlayWav, InfomainScript::c_iic053in_PlayWav, InfomainScript::c_iic054in_PlayWav};
+InfomainScript::Script g_leaveDialogueAct2[4] = {
+	InfomainScript::c_iic051in_PlayWav,
+	InfomainScript::c_iic052in_PlayWav,
+	InfomainScript::c_iic053in_PlayWav,
+	InfomainScript::c_iic054in_PlayWav
+};
 
 // GLOBAL: LEGO1 0x100f7750
 InfomainScript::Script g_leaveDialogueAct3[4] = {
@@ -79,7 +83,10 @@ InfomainScript::Script g_leaveDialogueAct3[4] = {
 };
 
 // GLOBAL: LEGO1 0x100f7760
-InfomainScript::Script g_bricksterDialogue[2] = {InfomainScript::c_sbleh2br_PlayWav, InfomainScript::c_snshahbr_PlayWav};
+InfomainScript::Script g_bricksterDialogue[2] = {
+	InfomainScript::c_sbleh2br_PlayWav,
+	InfomainScript::c_snshahbr_PlayWav
+};
 
 // FUNCTION: LEGO1 0x10071600
 InfocenterState::InfocenterState()
