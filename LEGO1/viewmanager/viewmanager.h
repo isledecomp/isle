@@ -28,8 +28,10 @@ public:
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
+	void FUN_100a66f0(ViewROI* p_roi, undefined4 p_und);
+	void Update(float p_previousRenderTime, float);
+	inline int Unknown();
 	void FUN_100a6b90();
-	void Update(float p_previousRenderTime, float p_und2);
 
 	// SYNTHETIC: LEGO1 0x100a6000
 	// ViewManager::`scalar deleting destructor'
@@ -44,7 +46,7 @@ private:
 	RealtimeView rt_view;     // 0x14
 	ROIList visible_rois;     // 0x18
 	float unk0x28;            // 0x28
-	undefined4 unk0x2c;       // 0x2c
+	float unk0x2c;            // 0x2c
 	unsigned int flags;       // 0x30
 	float width;              // 0x34
 	float height;             // 0x38
