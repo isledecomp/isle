@@ -130,13 +130,13 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeboxScript::c_Jail_Music:
+			case JukeboxScript::c_MusicTheme3:
 				m_state->SetState(JukeboxScript::c_MusicTheme1);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(FALSE);
 				break;
 			case JukeboxScript::c_Act2Cave:
-				m_state->SetState(JukeboxScript::c_Jail_Music);
+				m_state->SetState(JukeboxScript::c_MusicTheme3);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
@@ -168,11 +168,11 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 		case JukeboxwScript::c_Dfwd_Ctl:
 			switch (m_state->GetState()) {
 			case JukeboxScript::c_MusicTheme1:
-				m_state->SetState(JukeboxScript::c_Jail_Music);
+				m_state->SetState(JukeboxScript::c_MusicTheme3);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeboxScript::c_Jail_Music:
+			case JukeboxScript::c_MusicTheme3:
 				m_state->SetState(JukeboxScript::c_Act2Cave);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(FALSE);
