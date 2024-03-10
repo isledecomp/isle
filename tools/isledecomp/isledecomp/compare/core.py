@@ -158,9 +158,9 @@ class Compare:
                 addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
             )
 
-        for lineref in cv.lines:
-            addr = self.recomp_bin.get_abs_addr(lineref.section, lineref.offset)
-            self._lines_db.add_line(lineref.filename, lineref.line_no, addr)
+        for (section, offset), (filename, line_no) in res.verified_lines.items():
+            addr = self.recomp_bin.get_abs_addr(section, offset)
+            self._lines_db.add_line(filename, line_no, addr)
 
         # The _entry symbol is referenced in the PE header so we get this match for free.
         self._db.set_function_pair(self.orig_bin.entry, self.recomp_bin.entry)

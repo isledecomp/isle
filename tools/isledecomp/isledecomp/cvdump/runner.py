@@ -1,3 +1,4 @@
+import io
 from os import name as os_name
 from enum import Enum
 from typing import List
@@ -71,8 +72,12 @@ class Cvdump:
         return ["wine", cvdump_exe, *flags, winepath_unix_to_win(self._pdb)]
 
     def run(self) -> CvdumpParser:
-        p = CvdumpParser()
+        parser = CvdumpParser()
         call = self.cmd_line()
-        lines = subprocess.check_output(call).decode("utf-8").split("\r\n")
-        p.read_lines(lines)
-        return p
+        with subprocess.Popen(call, stdout=subprocess.PIPE) as proc:
+            for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
+                # Blank lines are there to help the reader; they have no context significance
+                if line != "\n":
+                    parser.read_line(line)
+
+        return parser
