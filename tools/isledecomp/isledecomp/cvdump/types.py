@@ -56,11 +56,11 @@ def normalize_type_id(key: str) -> str:
     If key begins with "T_" it is a built-in type.
     Else it is a hex string. We prefer lower case letters and
     no leading zeroes. (UDT identifier pads to 8 characters.)"""
-    if key.startswith("T_"):
-        # Remove numeric value for "T_" type. We don't use this.
-        return key[: key.index("(")] if "(" in key else key
+    if key[0] == "0":
+        return f"0x{key[-4:].lower()}"
 
-    return hex(int(key, 16)).lower()
+    # Remove numeric value for "T_" type. We don't use this.
+    return key.partition("(")[0]
 
 
 def scalar_type_pointer(type_name: str) -> bool:
@@ -203,8 +203,18 @@ class CvdumpTypesParser:
     # LF_MODIFIER, type being modified
     MODIFIES_RE = re.compile(r".*modifies type (?P<type>.*)$")
 
+    MODES_OF_INTEREST = {
+        "LF_ARRAY",
+        "LF_CLASS",
+        "LF_ENUM",
+        "LF_FIELDLIST",
+        "LF_MODIFIER",
+        "LF_POINTER",
+        "LF_STRUCTURE",
+    }
+
     def __init__(self) -> None:
-        self.mode = ""
+        self.mode: Optional[str] = None
         self.last_key = ""
         self.keys = {}
 
@@ -370,13 +380,19 @@ class CvdumpTypesParser:
 
     def read_line(self, line: str):
         if (match := self.INDEX_RE.match(line)) is not None:
-            self.last_key = normalize_type_id(match.group("key"))
-            self.mode = match.group("type")
-            self._new_type()
+            type_ = match.group(2)
+            if type_ not in self.MODES_OF_INTEREST:
+                self.mode = None
+                return
 
-            # We don't need to read anything else from here (for now)
-            if self.mode in ("LF_ENUM", "LF_POINTER"):
-                self._set("size", 4)
+            # Don't need to normalize, it's already in the format we want
+            self.last_key = match.group(1)
+            self.mode = type_
+            self._new_type()
+            return
+
+        if self.mode is None:
+            return
 
         if self.mode == "LF_MODIFIER":
             if (match := self.MODIFIES_RE.match(line)) is not None:
@@ -385,14 +401,14 @@ class CvdumpTypesParser:
                 self._set("is_forward_ref", True)
                 self._set("modifies", normalize_type_id(match.group("type")))
 
-        if self.mode == "LF_ARRAY":
+        elif self.mode == "LF_ARRAY":
             if (match := self.ARRAY_ELEMENT_RE.match(line)) is not None:
                 self._set("array_type", normalize_type_id(match.group("type")))
 
-            if (match := self.ARRAY_LENGTH_RE.match(line)) is not None:
+            elif (match := self.ARRAY_LENGTH_RE.match(line)) is not None:
                 self._set("size", int(match.group("length")))
 
-        if self.mode == "LF_FIELDLIST":
+        elif self.mode == "LF_FIELDLIST":
             # If this class has a vtable, create a mock member at offset 0
             if (match := self.VTABLE_RE.match(line)) is not None:
                 # For our purposes, any pointer type will do
@@ -400,20 +416,20 @@ class CvdumpTypesParser:
                 self._set_member_name("vftable")
 
             # Superclass is set here in the fieldlist rather than in LF_CLASS
-            if (match := self.SUPERCLASS_RE.match(line)) is not None:
+            elif (match := self.SUPERCLASS_RE.match(line)) is not None:
                 self._set("super", normalize_type_id(match.group("type")))
 
             # Member offset and type given on the first of two lines.
-            if (match := self.LIST_RE.match(line)) is not None:
+            elif (match := self.LIST_RE.match(line)) is not None:
                 self._add_member(
                     int(match.group("offset")), normalize_type_id(match.group("type"))
                 )
 
             # Name of the member read on the second of two lines.
-            if (match := self.MEMBER_RE.match(line)) is not None:
+            elif (match := self.MEMBER_RE.match(line)) is not None:
                 self._set_member_name(match.group("name"))
 
-        if self.mode in ("LF_STRUCTURE", "LF_CLASS"):
+        else:  # LF_CLASS or LF_STRUCTURE
             # Match the reference to the associated LF_FIELDLIST
             if (match := self.CLASS_FIELD_RE.match(line)) is not None:
                 if match.group("field_type") == "0x0000":
@@ -427,7 +443,7 @@ class CvdumpTypesParser:
             # Last line has the vital information.
             # If this is a FORWARD REF, we need to follow the UDT pointer
             # to get the actual class details.
-            if (match := self.CLASS_NAME_RE.match(line)) is not None:
+            elif (match := self.CLASS_NAME_RE.match(line)) is not None:
                 self._set("name", match.group("name"))
                 self._set("udt", normalize_type_id(match.group("udt")))
                 self._set("size", int(match.group("size")))

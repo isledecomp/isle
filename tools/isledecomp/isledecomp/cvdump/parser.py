@@ -4,7 +4,7 @@ from collections import namedtuple
 from .types import CvdumpTypesParser
 
 # e.g. `*** PUBLICS`
-_section_change_regex = re.compile(r"^\*\*\* (?P<section>[A-Z/ ]+)$")
+_section_change_regex = re.compile(r"\*\*\* (?P<section>[A-Z/ ]{2,})")
 
 # e.g. `     27 00034EC0     28 00034EE2     29 00034EE7     30 00034EF4`
 _line_addr_pairs_findall = re.compile(r"\s+(?P<line_no>\d+) (?P<addr>[A-F0-9]{8})")
@@ -70,7 +70,7 @@ class CvdumpParser:
         self._section: str = ""
         self._lines_function: Tuple[str, int] = ("", 0)
 
-        self.lines = []
+        self.lines = {}
         self.publics = []
         self.symbols = []
         self.sizerefs = []
@@ -95,14 +95,8 @@ class CvdumpParser:
 
         # Match any pairs as we find them
         for line_no, offset in _line_addr_pairs_findall.findall(line):
-            self.lines.append(
-                LinesEntry(
-                    filename=self._lines_function[0],
-                    line_no=int(line_no),
-                    section=self._lines_function[1],
-                    offset=int(offset, 16),
-                )
-            )
+            key = (self._lines_function[1], int(offset, 16))
+            self.lines[key] = (self._lines_function[0], int(line_no))
 
     def _publics_section(self, line: str):
         """Match each line from PUBLICS and pull out the symbol information.
@@ -175,22 +169,21 @@ class CvdumpParser:
             )
 
     def read_line(self, line: str):
-        # Blank lines are there to help the reader; they have no context significance
-        if line.strip() == "":
-            return
-
         if (match := _section_change_regex.match(line)) is not None:
             self._section = match.group(1)
             return
 
-        if self._section == "LINES":
+        if self._section == "TYPES":
+            self.types.read_line(line)
+
+        elif self._section == "SYMBOLS":
+            self._symbols_section(line)
+
+        elif self._section == "LINES":
             self._lines_section(line)
 
         elif self._section == "PUBLICS":
             self._publics_section(line)
-
-        elif self._section == "SYMBOLS":
-            self._symbols_section(line)
 
         elif self._section == "SECTION CONTRIBUTIONS":
             self._section_contributions(line)
@@ -200,9 +193,6 @@ class CvdumpParser:
 
         elif self._section == "MODULES":
             self._modules_section(line)
-
-        elif self._section == "TYPES":
-            self.types.read_line(line)
 
     def read_lines(self, lines: Iterable[str]):
         for line in lines:

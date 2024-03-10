@@ -1,5 +1,5 @@
 """For collating the results from parsing cvdump.exe into a more directly useful format."""
-from typing import List, Optional
+from typing import Dict, List, Tuple, Optional
 from isledecomp.types import SymbolType
 from .parser import CvdumpParser
 from .demangler import demangle_string_const, demangle_vtable
@@ -81,6 +81,7 @@ class CvdumpAnalysis:
     These can then be analyzed by a downstream tool."""
 
     nodes = List[CvdumpNode]
+    verified_lines = Dict[Tuple[str, str], Tuple[str, str]]
 
     def __init__(self, parser: CvdumpParser):
         """Read in as much information as we have from the parser.
@@ -126,12 +127,20 @@ class CvdumpAnalysis:
                 # No big deal if we don't have complete type information.
                 pass
 
-        for lin in parser.lines:
-            key = (lin.section, lin.offset)
+        for key, _ in parser.lines.items():
             # Here we only set if the section:offset already exists
             # because our values include offsets inside of the function.
             if key in node_dict:
                 node_dict[key].node_type = SymbolType.FUNCTION
+
+        # The LINES section contains every code line in the file, naturally.
+        # There isn't an obvious separation between functions, so we have to
+        # read everything. However, any function that would be in LINES
+        # has to be somewhere else in the PDB (probably PUBLICS).
+        # Isolate the lines that we actually care about for matching.
+        self.verified_lines = {
+            key: value for (key, value) in parser.lines.items() if key in node_dict
+        }
 
         for sym in parser.symbols:
             key = (sym.section, sym.offset)
