@@ -2,6 +2,7 @@
 
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/impl.h"
+#include "vec.h"
 #include "viewlod.h"
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
@@ -433,11 +434,17 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 	}
 }
 
-// STUB: LEGO1 0x100a6dc0
+// FUNCTION: LEGO1 0x100a6dc0
 float ViewManager::FUN_100a6dc0(const BoundingSphere& p_bounding_sphere)
 {
-	// TODO
-	return 0.0F;
+	const float* data = p_bounding_sphere.Center().GetData();
+	float(*matrixData)[4] = pov.GetData();
+
+	double points[3];
+
+	VMV3(points, data, matrixData[3]);
+
+	return (p_bounding_sphere.Radius() * p_bounding_sphere.Radius() * 3.14159265359) / DOT3(data, points) * unk0x2c;
 }
 
 // STUB: LEGO1 0x100a6e00
