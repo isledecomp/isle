@@ -204,7 +204,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 
 		if (!m_unk0x1d4) {
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			GameState()->SetActor(m_selectedCharacter);
 
 			switch (m_selectedCharacter) {
@@ -319,7 +319,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_currentInfomainScript != InfomainScript::c_Papa_All_Movie && m_currentInfomainScript != InfomainScript::c_Pepper_All_Movie &&
 			m_currentInfomainScript != InfomainScript::c_Nick_All_Movie && m_currentInfomainScript != InfomainScript::c_Laura_All_Movie) {
 			m_infoManDialogueTimer = 1;
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 		}
 
 		m_infocenterState->SetUnknown0x74(2);
@@ -364,12 +364,12 @@ void Infocenter::ReadyWorld()
 			}
 
 			PlayAction(InfomainScript::c_iicx18in_RunAnim);
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			break;
 		case 5:
 		default: {
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
 			InfomainScript::Script script =
 				(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
@@ -390,7 +390,7 @@ void Infocenter::ReadyWorld()
 			break;
 		}
 		case 8:
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			break;
@@ -401,14 +401,14 @@ void Infocenter::ReadyWorld()
 			}
 
 			PlayAction(InfomainScript::c_iicx17in_RunAnim);
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 			break;
 		}
 		return;
 	case LegoGameState::e_act2: {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			bgRed->Enable(TRUE);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
@@ -446,7 +446,7 @@ void Infocenter::ReadyWorld()
 			return;
 		}
 
-		PlayMusic(JukeBox::e_informationCenter);
+		PlayMusic(JukeboxScript::c_InformationCenter_Music);
 		InfomainScript::Script script =
 			(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 		PlayAction(script);
@@ -455,7 +455,7 @@ void Infocenter::ReadyWorld()
 	}
 	case LegoGameState::e_act3: {
 		if (m_infocenterState->GetUnknown0x74() == 8) {
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			bgRed->Enable(TRUE);
 			PlayAction(InfomainScript::c_iic043in_RunAnim);
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
@@ -502,7 +502,7 @@ void Infocenter::ReadyWorld()
 			return;
 		}
 
-		PlayMusic(JukeBox::e_informationCenter);
+		PlayMusic(JukeboxScript::c_InformationCenter_Music);
 		InfomainScript::Script script =
 			(InfomainScript::Script) m_infocenterState->GetReturnDialogue(GameState()->GetCurrentAct()).Next();
 		PlayAction(script);

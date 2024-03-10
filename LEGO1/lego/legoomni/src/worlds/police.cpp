@@ -94,7 +94,7 @@ MxLong Police::Notify(MxParam& p_param)
 void Police::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
-	PlayMusic(JukeBox::e_policeStation);
+	PlayMusic(JukeboxScript::c_PoliceStation_Music);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
