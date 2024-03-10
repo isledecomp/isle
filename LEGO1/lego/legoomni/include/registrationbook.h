@@ -11,23 +11,6 @@ class LegoControlManagerEvent;
 // SIZE 0x2d0
 class RegistrationBook : public LegoWorld {
 public:
-	enum RegistrationBookScript {
-		c_alphabetCtl = 5,
-		c_aBitmap = 6,
-		c_backgroundBitmap = 36,
-		c_checkHiLiteBitmap = 37,
-		c_check0ctl = 68,
-		c_check1ctl = 71,
-		c_check2ctl = 74,
-		c_check3ctl = 77,
-		c_check4ctl = 80,
-		c_check5ctl = 83,
-		c_check6ctl = 86,
-		c_check7ctl = 89,
-		c_check8ctl = 92,
-		c_check9ctl = 95,
-	};
-
 	RegistrationBook();
 	~RegistrationBook() override; // vtable+0x00
 
