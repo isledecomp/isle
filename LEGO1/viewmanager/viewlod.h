@@ -28,6 +28,7 @@ public:
 
 	Tgl::MeshBuilder* GetMeshBuilder() { return m_meshBuilder; }
 	const Tgl::MeshBuilder* GetMeshBuilder() const { return m_meshBuilder; }
+	undefined4 GetUnknown0x08() { return m_unk0x08; }
 	unsigned char GetUnknown0x08Test4() { return m_unk0x08 & 0xffffff04; }
 	unsigned char GetUnknown0x08Test8() { return m_unk0x08 & 0xffffff08; }
 

@@ -321,7 +321,7 @@ public:
 	Result Add(const Group*) override;
 
 	// vtable+0x20
-	Result Add(const Mesh*) override;
+	Result Add(const MeshBuilder*) override;
 	Result Remove(const Group*) override;
 	Result Remove(const MeshBuilder*) override;
 	Result RemoveAll() override;
