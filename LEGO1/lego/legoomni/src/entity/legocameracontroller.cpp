@@ -4,6 +4,7 @@
 #include "legonotify.h"
 #include "legovideomanager.h"
 #include "misc.h"
+#include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
 

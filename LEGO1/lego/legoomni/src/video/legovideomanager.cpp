@@ -6,6 +6,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "realtime/matrix.h"
+#include "realtime/realtime.h"
 #include "roi/legoroi.h"
 #include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
