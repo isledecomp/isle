@@ -66,10 +66,35 @@ void OrientableROI::WrappedVTable0x24(const Matrix4& p_transform)
 	VTable0x24(p_transform);
 }
 
-// STUB: LEGO1 0x100a50a0
+// FUNCTION: LEGO1 0x100a50a0
 void OrientableROI::GetLocalTransform(Matrix4& p_transform)
 {
-	p_transform = m_local2world;
+	MxMatrix mat;
+
+	if (m_parentROI != NULL) {
+		double local2parent[4][4];
+		unsigned int i, j;
+
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < 4; j++) {
+				local2parent[i][j] = m_parentROI->GetLocal2World()[i][j];
+			}
+		}
+
+		double local_inverse[4][4];
+		INVERTMAT4d(local_inverse, local2parent);
+
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < 4; j++) {
+				mat[i][j] = local_inverse[i][j];
+			}
+		}
+
+		MXM4(p_transform, m_local2world, mat);
+	}
+	else {
+		p_transform = m_local2world;
+	}
 }
 
 // FUNCTION: LEGO1 0x100a58f0
