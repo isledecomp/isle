@@ -10,7 +10,7 @@ DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
 // GLOBAL: LEGO1 0x10101060
-float elapsedSeconds = 0;
+float g_elapsedSeconds = 0;
 
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
@@ -142,7 +142,7 @@ void ViewManager::Update(float p_previousRenderTime, float)
 	}
 
 	stopWatch.Stop();
-	elapsedSeconds = stopWatch.ElapsedSeconds();
+	g_elapsedSeconds = stopWatch.ElapsedSeconds();
 }
 
 inline int ViewManager::Unknown()
