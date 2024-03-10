@@ -1,5 +1,6 @@
 #include "viewmanager.h"
 
+#include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/impl.h"
 #include "viewlod.h"
 
@@ -7,6 +8,9 @@ DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbcd8
 int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
+
+// GLOBAL: LEGO1 0x10101060
+float g_elapsedSeconds = 0;
 
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
@@ -111,10 +115,87 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 	p_roi->SetUnknown0xe0(-1);
 }
 
-// STUB: LEGO1 0x100a6930
-void ViewManager::Update(float p_previousRenderTime, float p_und2)
+// STUB: LEGO1 0x100a66f0
+void ViewManager::FUN_100a66f0(ViewROI* p_roi, undefined4 p_und)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x100a6930
+void ViewManager::Update(float p_previousRenderTime, float)
+{
+	MxStopWatch stopWatch;
+	stopWatch.Start();
+
+	unk0x28 = p_previousRenderTime;
+	flags |= c_bit1;
+
+	if (flags & c_bit3) {
+		Unknown();
+	}
+	else if (flags & c_bit2) {
+		FUN_100a6b90();
+	}
+
+	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
+		FUN_100a66f0((ViewROI*) *it, -1);
+	}
+
+	stopWatch.Stop();
+	g_elapsedSeconds = stopWatch.ElapsedSeconds();
+}
+
+inline int ViewManager::Unknown()
+{
+	flags &= ~c_bit3;
+
+	if (height == 0.0F || front == 0.0F) {
+		return -1;
+	}
+	else {
+		float fVar7 = tan(view_angle / 2.0F);
+		unk0x2c = view_angle * view_angle * 4.0F;
+
+		float fVar1 = front * fVar7;
+		float fVar2 = (width / height) * fVar1;
+		float uVar6 = front;
+		float fVar3 = back + front;
+		float fVar4 = fVar3 / front;
+		float fVar5 = fVar4 * fVar1;
+		fVar4 = fVar4 * fVar2;
+
+		float* unk0x90 = (float*) this->unk0x90;
+
+		// clang-format off
+		*unk0x90 = fVar2; unk0x90++;
+		*unk0x90 = fVar1; unk0x90++;
+		*unk0x90 = uVar6; unk0x90++;
+		*unk0x90 = fVar2; unk0x90++;
+		*unk0x90 = -fVar1; unk0x90++;
+		*unk0x90 = uVar6; unk0x90++;
+		*unk0x90 = -fVar2; unk0x90++;
+		*unk0x90 = -fVar1; unk0x90++;
+		*unk0x90 = uVar6; unk0x90++;
+		*unk0x90 = -fVar2; unk0x90++;
+		*unk0x90 = fVar1; unk0x90++;
+		*unk0x90 = uVar6; unk0x90++;
+		*unk0x90 = fVar4; unk0x90++;
+		*unk0x90 = fVar5; unk0x90++;
+		*unk0x90 = fVar3; unk0x90++;
+		*unk0x90 = fVar4; unk0x90++;
+		*unk0x90 = -fVar5; unk0x90++;
+		*unk0x90 = fVar3; unk0x90++;
+		*unk0x90 = -fVar4; unk0x90++;
+		*unk0x90 = -fVar5; unk0x90++;
+		*unk0x90 = fVar3; unk0x90++;
+		*unk0x90 = -fVar4; unk0x90++;
+		*unk0x90 = fVar5; unk0x90++;
+		*unk0x90 = fVar3;
+		// clang-format on
+
+		FUN_100a6b90();
+		return 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x100a6b90
