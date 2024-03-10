@@ -298,7 +298,7 @@ public:
 	virtual Result GetTexture(Texture*&) = 0;
 	virtual Result SetMaterialMode(MaterialMode) = 0;
 	virtual Result Add(const Group*) = 0;
-	virtual Result Add(const Mesh*) = 0;
+	virtual Result Add(const MeshBuilder*) = 0;
 	virtual Result Remove(const Group*) = 0;
 	virtual Result Remove(const MeshBuilder*) = 0;
 	virtual Result RemoveAll() = 0;

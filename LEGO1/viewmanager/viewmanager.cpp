@@ -24,6 +24,7 @@ float g_unk0x1010105c = 0.000125F;
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
 
+inline void SetAppData(ViewROI* p_roi, DWORD data);
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 inline undefined4 GetFrame(IDirect3DRMFrame2*& frame, Tgl::Group* scene);
 
@@ -106,10 +107,57 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 	}
 }
 
-// STUB: LEGO1 0x100a65b0
+// FUNCTION: LEGO1 0x100a65b0
 void ViewManager::FUN_100a65b0(ViewROI* p_roi, int p_und)
 {
-	// TODO
+	if (p_roi->GetLODCount() <= p_und) {
+		p_und = p_roi->GetLODCount() - 1;
+	}
+
+	int unk0xe0 = p_roi->GetUnknown0xe0();
+
+	if (unk0xe0 == p_und) {
+		return;
+	}
+
+	Tgl::Group* group = p_roi->GetGeometry();
+	Tgl::MeshBuilder* meshBuilder;
+	ViewLOD* lod;
+
+	if (unk0xe0 < 0) {
+		lod = (ViewLOD*) p_roi->GetLOD(p_und);
+
+		if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+			scene->Add((Tgl::MeshBuilder*) group);
+			SetAppData(p_roi, (DWORD) p_roi);
+		}
+	}
+	else {
+		lod = (ViewLOD*) p_roi->GetLOD(unk0xe0);
+
+		if (lod != NULL) {
+			meshBuilder = lod->GetMeshBuilder();
+
+			if (meshBuilder != NULL) {
+				group->Remove(meshBuilder);
+			}
+		}
+
+		lod = (ViewLOD*) p_roi->GetLOD(p_und);
+	}
+
+	if (lod->GetUnknown0x08() & ViewLOD::c_bit4) {
+		meshBuilder = lod->GetMeshBuilder();
+
+		if (meshBuilder != NULL) {
+			group->Add(meshBuilder);
+			SetAppData(p_roi, (DWORD) p_roi);
+			p_roi->SetUnknown0xe0(p_und);
+			return;
+		}
+	}
+
+	p_roi->SetUnknown0xe0(-1);
 }
 
 // FUNCTION: LEGO1 0x100a66a0
@@ -397,6 +445,15 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 {
 	// TODO
 	return NULL;
+}
+
+inline void SetAppData(ViewROI* p_roi, DWORD data)
+{
+	IDirect3DRMFrame2* frame = NULL;
+
+	if (GetFrame(frame, p_roi->GetGeometry()) == 0) {
+		frame->SetAppData(data);
+	}
 }
 
 inline undefined4 GetD3DRM(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer)
