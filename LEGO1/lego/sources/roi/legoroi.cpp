@@ -6,6 +6,7 @@
 #include "legolod.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
+#include "realtime/realtime.h"
 
 #include <string.h>
 #include <vec.h>
@@ -539,8 +540,8 @@ float LegoROI::IntrinsicImportance() const
 	return .5;
 }
 
-// STUB: LEGO1 0x100aa350
+// FUNCTION: LEGO1 0x100aa350
 void LegoROI::UpdateWorldBoundingVolumes()
 {
-	// TODO
+	CalcWorldBoundingVolumes(m_sphere, m_local2world, m_world_bounding_box, m_world_bounding_sphere);
 }

@@ -131,6 +131,32 @@ void OrientableROI::UpdateWorldVelocity()
 {
 }
 
+// FUNCTION: LEGO1 0x100a5a60
+void CalcWorldBoundingVolumes(
+	const BoundingSphere& modelling_sphere,
+	const Matrix4& local2world,
+	BoundingBox& world_bounding_box,
+	BoundingSphere& world_bounding_sphere
+)
+{
+	// calculate world bounding volumes given a bounding sphere in modelling
+	// space and local2world transform
+
+	// ??? we need to transform the radius too... if scaling...
+
+	V3XM4(world_bounding_sphere.Center(), modelling_sphere.Center(), local2world);
+
+	world_bounding_sphere.Radius() = modelling_sphere.Radius();
+
+	// update world_bounding_box
+	world_bounding_box.Min()[0] = world_bounding_sphere.Center()[0] - world_bounding_sphere.Radius();
+	world_bounding_box.Min()[1] = world_bounding_sphere.Center()[1] - world_bounding_sphere.Radius();
+	world_bounding_box.Min()[2] = world_bounding_sphere.Center()[2] - world_bounding_sphere.Radius();
+	world_bounding_box.Max()[0] = world_bounding_sphere.Center()[0] + world_bounding_sphere.Radius();
+	world_bounding_box.Max()[1] = world_bounding_sphere.Center()[1] + world_bounding_sphere.Radius();
+	world_bounding_box.Max()[2] = world_bounding_sphere.Center()[2] + world_bounding_sphere.Radius();
+}
+
 // FUNCTION: LEGO1 0x100a5d80
 const float* OrientableROI::GetWorldVelocity() const
 {

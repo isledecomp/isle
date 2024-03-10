@@ -9,6 +9,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxmisc.h"
+#include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)
 

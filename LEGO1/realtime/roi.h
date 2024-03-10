@@ -4,10 +4,10 @@
 // ROI stands for Real-time Object Instance.
 
 #include "compat.h"
+#include "decomp.h"
 #include "lodlist.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxstl/stlcompat.h"
-#include "realtime/realtime.h"
 
 /*
  * A simple bounding box object with Min and Max accessor methods.

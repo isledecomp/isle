@@ -11,6 +11,7 @@
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
 #include "mxvideomanager.h"
+#include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
 

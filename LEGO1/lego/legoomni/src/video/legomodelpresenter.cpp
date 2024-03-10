@@ -13,6 +13,7 @@
 #include "misc/version.h"
 #include "mxcompositepresenter.h"
 #include "mxutilities.h"
+#include "realtime/realtime.h"
 #include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f7ae0
