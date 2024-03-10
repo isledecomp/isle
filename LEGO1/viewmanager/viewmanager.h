@@ -23,22 +23,26 @@ public:
 
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
+	void FUN_100a65b0(ViewROI* p_roi, int p_und);
 	void FUN_100a66a0(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
+	float FUN_100a6dc0(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	void FUN_100a66f0(ViewROI* p_roi, undefined4 p_und);
+	inline void FUN_100a66f0(ViewROI* p_roi, int p_und);
 	void Update(float p_previousRenderTime, float);
 	inline int Unknown();
 	void FUN_100a6b90();
 
-	// SYNTHETIC: LEGO1 0x100a6000
-	// ViewManager::`scalar deleting destructor'
+	inline static int Unknown2(float p_und1, float p_und2, ViewROI* p_roi);
+	inline static int Unknown3(ViewROI* p_roi);
 
 	inline const CompoundObject& GetROIs() { return rois; }
-
 	inline void Add(ViewROI* p_roi) { rois.push_back(p_roi); }
+
+	// SYNTHETIC: LEGO1 0x100a6000
+	// ViewManager::`scalar deleting destructor'
 
 private:
 	Tgl::Group* scene;        // 0x04

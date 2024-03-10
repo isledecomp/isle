@@ -9,6 +9,18 @@ DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 // GLOBAL: LEGO1 0x100dbcd8
 int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
+// GLOBAL: LEGO1 0x10101050
+float g_unk0x10101050 = 4.0F;
+
+// GLOBAL: LEGO1 0x10101054
+float g_unk0x10101054 = 0.00097656297;
+
+// GLOBAL: LEGO1 0x10101058
+int g_unk0x10101058 = 6;
+
+// GLOBAL: LEGO1 0x1010105c
+float g_unk0x1010105c = 0.000125F;
+
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
 
@@ -94,6 +106,12 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 	}
 }
 
+// STUB: LEGO1 0x100a65b0
+void ViewManager::FUN_100a65b0(ViewROI* p_roi, int p_und)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100a66a0
 void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 {
@@ -115,10 +133,58 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 	p_roi->SetUnknown0xe0(-1);
 }
 
-// STUB: LEGO1 0x100a66f0
-void ViewManager::FUN_100a66f0(ViewROI* p_roi, undefined4 p_und)
+// FUNCTION: LEGO1 0x100a66f0
+inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 {
-	// TODO
+	if (p_roi->GetUnknown0x0c() == FALSE && p_und != -2) {
+		FUN_100a66f0(p_roi, -2);
+	}
+	else {
+		const CompoundObject* comp = p_roi->GetComp();
+
+		if (p_und == -1) {
+			if (p_roi->GetWorldBoundingSphere().Radius() > 0.001F) {
+				float und = FUN_100a6dc0(p_roi->GetWorldBoundingSphere());
+
+				if (und < seconds_allowed * g_unk0x1010105c) {
+					if (p_roi->GetUnknown0xe0() == -2) {
+						return;
+					}
+
+					FUN_100a66f0(p_roi, -2);
+					return;
+				}
+
+				p_und = Unknown2(und, RealtimeView::GetUserMaxLodPower() * seconds_allowed, p_roi);
+			}
+		}
+
+		if (p_und == -2) {
+			if (p_roi->GetUnknown0xe0() >= 0) {
+				FUN_100a66a0(p_roi);
+				p_roi->SetUnknown0xe0(-2);
+			}
+
+			if (comp != NULL) {
+				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+					FUN_100a66f0((ViewROI*) *it, p_und);
+				}
+			}
+		}
+		else if (comp == NULL) {
+			if (p_roi->GetLODs() != NULL && p_roi->GetLODCount() > 0) {
+				FUN_100a65b0(p_roi, p_und);
+				return;
+			}
+		}
+		else {
+			p_roi->SetUnknown0xe0(-1);
+
+			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+				FUN_100a66f0((ViewROI*) *it, p_und);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100a6930
@@ -198,6 +264,60 @@ inline int ViewManager::Unknown()
 	}
 }
 
+inline int ViewManager::Unknown2(float p_und1, float p_und2, ViewROI* p_roi)
+{
+	int result;
+	float i;
+
+	if (Unknown3(p_roi) != 0) {
+		if (p_und1 < g_unk0x10101054) {
+			return 0;
+		}
+
+		result = 1;
+	}
+	else {
+		result = 0;
+	}
+
+	for (i = p_und2; result < g_unk0x10101058 && p_und1 >= i; i *= g_unk0x10101050) {
+		result++;
+	}
+
+	return result;
+}
+
+inline int ViewManager::Unknown3(ViewROI* p_roi)
+{
+	const LODListBase* lods = p_roi->GetLODs();
+
+	if (lods != NULL && lods->Size() > 0) {
+		if (((ViewLOD*) p_roi->GetLOD(0))->GetUnknown0x08Test8()) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	const CompoundObject* comp = p_roi->GetComp();
+
+	if (comp != NULL) {
+		for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+			const LODListBase* lods = ((ViewROI*) *it)->GetLODs();
+
+			if (lods != NULL && lods->Size() > 0) {
+				if (((ViewLOD*) ((ViewROI*) *it)->GetLOD(0))->GetUnknown0x08Test8()) {
+					return 1;
+				}
+
+				return 0;
+			}
+		}
+	}
+
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100a6b90
 void ViewManager::FUN_100a6b90()
 {
@@ -263,6 +383,13 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 		pov = point_of_view->GetLocal2World();
 		flags |= c_bit2;
 	}
+}
+
+// STUB: LEGO1 0x100a6dc0
+float ViewManager::FUN_100a6dc0(const BoundingSphere& p_bounding_sphere)
+{
+	// TODO
+	return 0.0F;
 }
 
 // STUB: LEGO1 0x100a6e00
