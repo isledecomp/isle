@@ -39,5 +39,5 @@ jobs:
           --exclude \
             LEGO1/omni/include/flic.h \
             LEGO1/omni/src/video/flic.cpp \
-	    $action_headers \
+            $action_headers \
           --path LEGO1/omni LEGO1/lego/legoomni
