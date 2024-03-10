@@ -118,7 +118,7 @@ MxU32 Helicopter::VTable0xcc()
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, TRUE);
 		SetUnknownDC(4);
-		PlayMusic(JukeBox::e_jail);
+		PlayMusic(JukeboxScript::c_Jail_Music);
 		break;
 	case LegoGameState::e_act2:
 		m_script = *g_act2mainScript;

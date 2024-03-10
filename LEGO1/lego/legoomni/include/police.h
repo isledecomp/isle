@@ -6,6 +6,7 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxdsaction.h"
+#include "police_actions.h"
 #include "radio.h"
 
 class PoliceState;
@@ -15,17 +16,6 @@ class PoliceState;
 // Radio at 0xf8
 class Police : public LegoWorld {
 public:
-	enum PoliceScript {
-		c_leftArrowCtl = 1,
-		c_rightArrowCtl = 2,
-		c_infoCtl = 3,
-		c_doorCtl = 4,
-		c_donutCtl = 5,
-
-		c_nickAnim = 500,
-		c_lauraAnim = 501,
-	};
-
 	Police();
 	~Police() override; // vtable+0x00
 

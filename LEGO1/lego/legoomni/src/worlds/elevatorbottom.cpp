@@ -72,7 +72,7 @@ MxLong ElevatorBottom::Notify(MxParam& p_param)
 void ElevatorBottom::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
-	PlayMusic(JukeBox::e_informationCenter);
+	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 

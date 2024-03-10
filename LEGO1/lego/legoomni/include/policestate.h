@@ -36,7 +36,7 @@ public:
 	void FUN_1005ea40();
 
 private:
-	Police::PoliceScript m_policeScript; // 0x08
+	PoliceScript::Script m_policeScript; // 0x08
 	undefined4 m_unk0x0c;                // 0x0c
 };
 

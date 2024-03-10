@@ -2,7 +2,9 @@
 #define JUKEBOX_H
 
 #include "decomp.h"
+#include "jukebox_actions.h"
 #include "jukeboxstate.h"
+#include "jukeboxw_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
@@ -11,89 +13,6 @@
 // SIZE 0x104
 class JukeBox : public LegoWorld {
 public:
-	// JUKEBOXW.SI
-	enum JukeBoxWorldScript {
-		c_volDownCtl = 1,
-		c_volUpCtl = 2,
-		c_dBackCtl = 3,
-		c_dFwdCtl = 4,
-		c_noteCtl = 5
-	};
-
-	// JUKEBOX.SI (the actual audio)
-	enum JukeBoxScript {
-		e_mamaPapaBrickolini,
-		e_jailUnused,
-		e_act2Cave,
-		e_bricksterChase,
-		e_brickHunt,
-		e_residentialArea,
-		e_beachBlvd,
-		e_cave,
-		e_centralRoads,
-		e_jail,
-		e_hospital,
-		e_informationCenter,
-		e_policeStation,
-		e_park,
-		e_centralNorthRoad,
-		e_garageArea,
-		e_raceTrack,
-		e_beach,
-		e_quietChirping,
-		e_jetskiRace,
-		e_act3Pursuit,
-
-		e_legoRadioReminder1,
-		e_legoRadioJingle1,
-		e_legoRadioJingle2,
-		e_legoRadioJingle3,
-		e_legoRadioJingle4,
-		e_legoRadioReminder2,
-
-		e_legoRadioRacingAd,
-		e_legoRadioNews1,
-		e_legoRadioNews2,
-		e_legoRadioPizzaAd1,
-		e_legoRadioBricksterPSA,
-		e_legoRadioSports1,
-		e_legoRadioIntermission1,
-		e_legoRadioIntermission2,
-		e_legoRadioPizzaAd2,
-		e_legoRadioWeatherReport,
-		e_legoRadioSports2,
-		e_legoRadioPizzaAd3,
-		e_legoRadioIntermission3,
-		e_legoRadioSuperStoreAd,
-
-		e_legoRadioLuckyYou,
-		e_legoRadioJazzInterlude,
-		e_legoRadioPianoInterlude1,
-		e_legoRadioPoliceStation,
-		e_legoRadioPianoInterlude2,
-		e_legoRadioCredits,
-
-		e_helicopterBuild,
-		e_padding1,
-		e_duneBuggyBuild,
-		e_padding2,
-		e_jetskiBuild,
-		e_padding3,
-		e_raceCarBuild,
-		e_padding4,
-
-		e_jukeBoxMamaPapaBrickolini,
-		e_jukeBoxBrickByBrick,
-		e_jukeBoxTheBrickster,
-		e_jukeBoxBuildMeABridgeToday,
-		e_jukeBoxBaroqueInBrick,
-		e_jukeBoxMantaRay,
-
-		e_observationDeck,
-		e_elevator,
-		e_pizzaMission,
-	};
-
 	JukeBox();
 	~JukeBox() override;
 

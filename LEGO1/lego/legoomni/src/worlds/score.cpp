@@ -125,7 +125,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
 			break;
 		case 0x1f5:
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			m_state->SetTutorialFlag(FALSE);
 		}
 	}
@@ -151,7 +151,7 @@ void Score::ReadyWorld()
 		Start(&action);
 	}
 	else {
-		PlayMusic(JukeBox::e_informationCenter);
+		PlayMusic(JukeboxScript::c_InformationCenter_Music);
 	}
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);

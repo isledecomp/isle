@@ -143,7 +143,7 @@ void HistoryBook::ReadyWorld()
 		scoreY += 0x1b;
 	}
 
-	PlayMusic(JukeBox::e_informationCenter);
+	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 }
 
 // FUNCTION: LEGO1 0x10082a10

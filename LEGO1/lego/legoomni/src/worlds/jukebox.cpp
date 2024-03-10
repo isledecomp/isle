@@ -123,41 +123,41 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
-		case c_dBackCtl:
+		case JukeboxwScript::c_Dback_Ctl:
 			switch (m_state->GetState()) {
-			case JukeBoxScript::e_mamaPapaBrickolini:
-				m_state->SetState(JukeBoxScript::e_residentialArea);
+			case JukeboxScript::c_MusicTheme1:
+				m_state->SetState(JukeboxScript::c_ResidentalArea_Music);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_jailUnused:
-				m_state->SetState(JukeBoxScript::e_mamaPapaBrickolini);
+			case JukeboxScript::c_Jail_Music:
+				m_state->SetState(JukeboxScript::c_MusicTheme1);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(FALSE);
 				break;
-			case JukeBoxScript::e_act2Cave:
-				m_state->SetState(JukeBoxScript::e_jailUnused);
+			case JukeboxScript::c_Act2Cave:
+				m_state->SetState(JukeboxScript::c_Jail_Music);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_bricksterChase:
-				m_state->SetState(JukeBoxScript::e_act2Cave);
+			case JukeboxScript::c_BrickstrChase:
+				m_state->SetState(JukeboxScript::c_Act2Cave);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_brickHunt:
-				m_state->SetState(JukeBoxScript::e_bricksterChase);
+			case JukeboxScript::c_BrickHunt:
+				m_state->SetState(JukeboxScript::c_BrickstrChase);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_residentialArea:
-				m_state->SetState(JukeBoxScript::e_brickHunt);
+			case JukeboxScript::c_ResidentalArea_Music:
+				m_state->SetState(JukeboxScript::c_BrickHunt);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
@@ -165,49 +165,49 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 				break;
 			}
 			break;
-		case JukeBoxWorldScript::c_dFwdCtl:
+		case JukeboxwScript::c_Dfwd_Ctl:
 			switch (m_state->GetState()) {
-			case JukeBoxScript::e_mamaPapaBrickolini:
-				m_state->SetState(JukeBoxScript::e_jailUnused);
+			case JukeboxScript::c_MusicTheme1:
+				m_state->SetState(JukeboxScript::c_Jail_Music);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_jailUnused:
-				m_state->SetState(JukeBoxScript::e_act2Cave);
+			case JukeboxScript::c_Jail_Music:
+				m_state->SetState(JukeboxScript::c_Act2Cave);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Right_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_act2Cave:
-				m_state->SetState(JukeBoxScript::e_bricksterChase);
+			case JukeboxScript::c_Act2Cave:
+				m_state->SetState(JukeboxScript::c_BrickstrChase);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Decal_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_bricksterChase:
-				m_state->SetState(JukeBoxScript::e_brickHunt);
+			case JukeboxScript::c_BrickstrChase:
+				m_state->SetState(JukeboxScript::c_BrickHunt);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Wallis_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_brickHunt:
-				m_state->SetState(JukeBoxScript::e_residentialArea);
+			case JukeboxScript::c_BrickHunt:
+				m_state->SetState(JukeboxScript::c_ResidentalArea_Music);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Nelson_Bitmap");
 				presenter->Enable(FALSE);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
 				presenter->Enable(TRUE);
 				break;
-			case JukeBoxScript::e_residentialArea:
-				m_state->SetState(JukeBoxScript::e_mamaPapaBrickolini);
+			case JukeboxScript::c_ResidentalArea_Music:
+				m_state->SetState(JukeboxScript::c_MusicTheme1);
 				presenter = (MxStillPresenter*) Find("MxStillPresenter", "Torpedos_Bitmap");
 				presenter->Enable(FALSE);
 				break;
 			}
 			break;
-		case JukeBoxWorldScript::c_noteCtl:
+		case JukeboxwScript::c_Note_Ctl:
 			LegoGameState* gameState = GameState();
 			Act1State* act1State = (Act1State*) gameState->GetState("Act1State");
 			act1State->SetUnknown18(11);
