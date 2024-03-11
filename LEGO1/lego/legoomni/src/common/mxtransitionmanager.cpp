@@ -326,7 +326,7 @@ void MxTransitionManager::MosaicTransition()
 					for (MxS32 k = 10 * row; k < 10 * row + 10; k++) {
 						if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
 							// Optimization: If the pixel is only one byte, we can use memset
-							MxU16* pos = (MxU16*) ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + xShift);
+							MxU8* pos = ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + xShift);
 							memset(pos, sample, 10);
 						}
 						else {
