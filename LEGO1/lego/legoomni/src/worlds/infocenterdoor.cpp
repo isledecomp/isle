@@ -97,17 +97,17 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
 			m_unk0xf8 = LegoGameState::e_infoscor;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 2:
 			m_unk0xf8 = LegoGameState::e_elevbott;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 3:
 			m_unk0xf8 = LegoGameState::e_infomain;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 4:
@@ -134,7 +134,7 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 				goto done;
 			}
 
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
 		done:
 			result = 1;

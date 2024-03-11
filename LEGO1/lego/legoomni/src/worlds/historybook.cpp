@@ -51,7 +51,7 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationButtonUp:
 			m_transitionDestination = LegoGameState::Area::e_infoscor;
-			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_transitionDestination);

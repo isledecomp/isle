@@ -111,7 +111,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_polidoor;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Info_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {
@@ -120,7 +120,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_infomain;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Door_Ctl:
 			if (m_policeState->GetUnknown0x0c() == 1) {
@@ -129,7 +129,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 
 			BackgroundAudioManager()->Stop();
 			m_transitionDestination = LegoGameState::Area::e_copter;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Donut_Ctl:
 			m_policeState->FUN_1005ea40();

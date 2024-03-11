@@ -116,7 +116,7 @@ MxU32 Helicopter::VTable0xcc()
 		VTable0xe8(0x29, TRUE, 7);
 		((Isle*) CurrentWorld())->SetUnknown13c(0x3c);
 		FUN_10015820(TRUE, 0);
-		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, TRUE);
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
 		SetUnknownDC(4);
 		PlayMusic(JukeboxScript::c_Jail_Music);
 		break;
@@ -158,7 +158,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 		case 0x17:
 			if (*g_act3Script == script) {
 				((Act3*) CurrentWorld())->SetUnkown4270(2);
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 			else if (m_state->GetUnkown8() != 0) {
 				break;
@@ -230,7 +230,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 		case 0x1c:
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				((Isle*) CurrentWorld())->SetUnknown13c(2);
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				VTable0xe4();
 			}
 			ret = 1;

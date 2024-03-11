@@ -64,19 +64,19 @@ MxResult MxTransitionManager::Tickle()
 		TransitionNone();
 		break;
 	case e_dissolve:
-		TransitionDissolve();
+		DissolveTransition();
 		break;
-	case e_pixelation:
-		TransitionPixelation();
+	case e_mosaic:
+		MosaicTransition();
 		break;
-	case e_screenWipe:
-		TransitionWipe();
+	case e_wipeDown:
+		WipeDownTransition();
 		break;
 	case e_windows:
-		TransitionWindows();
+		WindowsTransition();
 		break;
 	case e_broken:
-		TransitionBroken();
+		BrokenTransition();
 		break;
 	}
 	return SUCCESS;
@@ -165,7 +165,7 @@ void MxTransitionManager::TransitionNone()
 }
 
 // FUNCTION: LEGO1 0x1004bd10
-void MxTransitionManager::TransitionDissolve()
+void MxTransitionManager::DissolveTransition()
 {
 	// If the animation is finished
 	if (m_animationTimer == 40) {
@@ -251,7 +251,7 @@ void MxTransitionManager::TransitionDissolve()
 }
 
 // FUNCTION: LEGO1 0x1004bed0
-void MxTransitionManager::TransitionPixelation()
+void MxTransitionManager::MosaicTransition()
 {
 	if (m_animationTimer == 16) {
 		m_animationTimer = 0;
@@ -355,7 +355,7 @@ void MxTransitionManager::TransitionPixelation()
 }
 
 // FUNCTION: LEGO1 0x1004c170
-void MxTransitionManager::TransitionWipe()
+void MxTransitionManager::WipeDownTransition()
 {
 	// If the animation is finished
 	if (m_animationTimer == 240) {
@@ -394,7 +394,7 @@ void MxTransitionManager::TransitionWipe()
 }
 
 // FUNCTION: LEGO1 0x1004c270
-void MxTransitionManager::TransitionWindows()
+void MxTransitionManager::WindowsTransition()
 {
 	if (m_animationTimer == 240) {
 		m_animationTimer = 0;
@@ -440,7 +440,7 @@ void MxTransitionManager::TransitionWindows()
 }
 
 // FUNCTION: LEGO1 0x1004c3e0
-void MxTransitionManager::TransitionBroken()
+void MxTransitionManager::BrokenTransition()
 {
 	// This function has no actual animation logic.
 	// It also never calls EndTransition to

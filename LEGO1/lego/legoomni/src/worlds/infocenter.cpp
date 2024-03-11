@@ -301,7 +301,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case 4:
 		if (action->GetObjectId() == InfomainScript::c_GoTo_RegBook ||
 			action->GetObjectId() == InfomainScript::c_GoTo_RegBook_Red) {
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
 			return 1;
 		}
@@ -311,7 +311,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act3 && m_selectedCharacter != e_noCharacter) {
 				GameState()->SetActor(m_selectedCharacter);
 			}
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			m_infocenterState->SetUnknown0x74(14);
 			return 1;
 		}
@@ -331,7 +331,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		return 1;
 	case 12:
 		if (action->GetObjectId() == m_currentInfomainScript) {
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}
 
@@ -881,7 +881,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				m_radio.Stop();
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				m_transitionDestination = LegoGameState::e_elevbott;
 			}
 			else {
@@ -896,7 +896,7 @@ MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
 
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				m_radio.Stop();
-				TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				m_transitionDestination = LegoGameState::e_infoscor;
 			}
 			else {

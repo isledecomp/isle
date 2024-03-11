@@ -212,7 +212,7 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 			Act1State* act1State = (Act1State*) gameState->GetState("Act1State");
 			act1State->SetUnknown18(11);
 			m_transitionDestination = LegoGameState::Area::e_unk54;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, 0, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, 0, FALSE);
 			break;
 		}
 	}

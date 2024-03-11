@@ -122,7 +122,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 		switch (action->GetObjectId()) {
 		case 10:
 			m_unk0xf8 = LegoGameState::e_histbook;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 0x1f5:
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
@@ -167,12 +167,12 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 		case 1:
 			m_unk0xf8 = LegoGameState::e_infomain;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 2:
 			m_unk0xf8 = LegoGameState::e_infodoor;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 3: {
 			LegoInputManager* im = InputManager();
