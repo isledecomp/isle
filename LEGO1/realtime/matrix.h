@@ -104,6 +104,16 @@ public:
 	// FUNCTION: LEGO1 0x10002530
 	virtual void Product(const Matrix4& p_a, const Matrix4& p_b) { Product(p_a.m_data, p_b.m_data); } // vtable+0x38
 
+	// FUNCTION: LEGO1 0x100a0ff0
+	inline void Scale(const float& p_x, const float& p_y, const float& p_z)
+	{
+		for (int i = 0; i < 4; i++) {
+			m_data[i][0] *= p_x;
+			m_data[i][1] *= p_y;
+			m_data[i][2] *= p_z;
+		}
+	}
+
 	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
 	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
 
