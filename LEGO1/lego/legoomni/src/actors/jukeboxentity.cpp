@@ -37,7 +37,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 		}
 
 		((Isle*) FindWorld(*g_isleScript, 0))->SetUnknown13c(0x35);
-		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		return 1;
 	}
 
