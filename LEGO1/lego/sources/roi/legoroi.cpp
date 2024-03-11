@@ -339,7 +339,7 @@ done:
 LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix)
 {
 	p_matrix.SetIdentity();
-	p_data->FUN_100a03c0(p_time, p_matrix);
+	p_data->CreateLocalTransform(p_time, p_matrix);
 	return SUCCESS;
 }
 

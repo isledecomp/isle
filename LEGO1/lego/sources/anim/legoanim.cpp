@@ -1,5 +1,9 @@
 #include "legoanim.h"
 
+#include "mxgeometry/mxmatrix.h"
+
+#include <limits.h>
+
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
 DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
 DECOMP_SIZE_ASSERT(LegoRotationKey, 0x18)
@@ -135,8 +139,8 @@ done:
 // FUNCTION: LEGO1 0x1009f900
 LegoAnimKey::LegoAnimKey()
 {
-	m_unk0x00 = 0;
-	m_unk0x04 = 0;
+	m_flags = 0;
+	m_time = 0;
 }
 
 // FUNCTION: LEGO1 0x1009f910
@@ -149,8 +153,8 @@ LegoResult LegoAnimKey::Read(LegoStorage* p_storage)
 		return result;
 	}
 
-	m_unk0x00 = (LegoU32) und >> 24;
-	m_unk0x04 = und & 0xffffff;
+	m_flags = (LegoU32) und >> 24;
+	m_time = und & 0xffffff;
 	return SUCCESS;
 }
 
@@ -184,7 +188,7 @@ LegoResult LegoTranslationKey::Read(LegoStorage* p_storage)
 	}
 
 	if (m_x > 1e-05F || m_x < -1e-05F || m_y > 1e-05F || m_y < -1e-05F || m_z > 1e-05F || m_z < -1e-05F) {
-		m_unk0x00 |= c_bit1;
+		m_flags |= c_bit1;
 	}
 
 	return SUCCESS;
@@ -225,7 +229,7 @@ LegoResult LegoRotationKey::Read(LegoStorage* p_storage)
 	}
 
 	if (m_angle != 1.0F) {
-		m_unk0x00 |= c_bit1;
+		m_flags |= c_bit1;
 	}
 
 	return SUCCESS;
@@ -261,7 +265,7 @@ LegoResult LegoScaleKey::Read(LegoStorage* p_storage)
 	}
 
 	if (m_x > 1.00001 || m_x < 0.99999 || m_y > 1.00001 || m_y < 0.99999 || m_z > 1.00001 || m_z < 0.99999) {
-		m_unk0x00 |= c_bit1;
+		m_flags |= c_bit1;
 	}
 
 	return SUCCESS;
@@ -282,9 +286,9 @@ LegoAnimNodeData::LegoAnimNodeData()
 	m_unk0x22 = 0;
 	m_scaleKeys = NULL;
 	m_morphKeys = NULL;
-	m_unk0x24 = 0;
-	m_unk0x28 = 0;
-	m_unk0x2c = 0;
+	m_translationIndex = 0;
+	m_rotationIndex = 0;
+	m_scaleIndex = 0;
 	m_unk0x30 = 0;
 }
 
@@ -406,11 +410,147 @@ LegoResult LegoAnimNodeData::Write(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100a03c0
-LegoResult LegoAnimNodeData::FUN_100a03c0(LegoFloat p_time, Matrix4& p_matrix)
+// FUNCTION: LEGO1 0x100a03c0
+LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_matrix)
+{
+	LegoU32 index;
+
+	if (m_scaleKeys != NULL) {
+		index = GetScaleIndex();
+		GetScale(m_numScaleKeys, m_scaleKeys, p_time, p_matrix, index);
+		SetScaleIndex(index);
+
+		if (m_rotationKeys != NULL) {
+			MxMatrix a, b;
+			a.SetIdentity();
+
+			index = GetRotationIndex();
+			GetRotation(m_numRotationKeys, m_rotationKeys, p_time, a, index);
+			SetRotationIndex(index);
+
+			b = p_matrix;
+			p_matrix.Product(b, a);
+		}
+	}
+	else if (m_rotationKeys != NULL) {
+		index = GetRotationIndex();
+		GetRotation(m_numRotationKeys, m_rotationKeys, p_time, p_matrix, index);
+		SetRotationIndex(index);
+	}
+
+	if (m_translationKeys != NULL) {
+		index = GetTranslationIndex();
+		GetTranslation(m_numTranslationKeys, m_translationKeys, p_time, p_matrix, index);
+		SetTranslationIndex(index);
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100a0600
+inline void LegoAnimNodeData::GetTranslation(
+	LegoU32 p_numTranslationKeys,
+	LegoTranslationKey* p_translationKeys,
+	LegoFloat p_time,
+	Matrix4& p_matrix,
+	LegoU32& p_old_index
+)
+{
+	LegoU32 i, n;
+	LegoFloat x, y, z;
+	n = FindKeys(
+		p_time,
+		p_numTranslationKeys & USHRT_MAX,
+		p_translationKeys,
+		sizeof(*p_translationKeys),
+		i,
+		p_old_index
+	);
+
+	switch (n) {
+	case 0:
+		return;
+	case 1:
+		if (!p_translationKeys[i].TestBit1()) {
+			return;
+		}
+
+		x = p_translationKeys[i].GetX();
+		y = p_translationKeys[i].GetY();
+		z = p_translationKeys[i].GetZ();
+		break;
+	case 2:
+		if (!p_translationKeys[i].TestBit1() && !p_translationKeys[i + 1].TestBit1()) {
+			return;
+		}
+
+		x = Interpolate(
+			p_time,
+			p_translationKeys[i],
+			p_translationKeys[i].GetX(),
+			p_translationKeys[i + 1],
+			p_translationKeys[i + 1].GetX()
+		);
+		y = Interpolate(
+			p_time,
+			p_translationKeys[i],
+			p_translationKeys[i].GetY(),
+			p_translationKeys[i + 1],
+			p_translationKeys[i + 1].GetY()
+		);
+		z = Interpolate(
+			p_time,
+			p_translationKeys[i],
+			p_translationKeys[i].GetZ(),
+			p_translationKeys[i + 1],
+			p_translationKeys[i + 1].GetZ()
+		);
+		break;
+	}
+
+	p_matrix.TranslateBy(&x, &y, &z);
+}
+
+// STUB: LEGO1 0x100a06f0
+/*inline*/ void LegoAnimNodeData::GetRotation(
+	LegoU32 p_numRotationKeys,
+	LegoRotationKey* p_rotationKeys,
+	LegoFloat p_time,
+	Matrix4& p_matrix,
+	LegoU32& p_old_index
+)
 {
 	// TODO
-	return SUCCESS;
+}
+
+inline void LegoAnimNodeData::GetScale(
+	LegoU32 p_numScaleKeys,
+	LegoScaleKey* p_scaleKeys,
+	LegoFloat p_time,
+	Matrix4& p_matrix,
+	LegoU32& p_old_index
+)
+{
+	LegoU32 i, n;
+	LegoFloat x, y, z;
+	n = FindKeys(p_time, p_numScaleKeys & USHRT_MAX, p_scaleKeys, sizeof(*p_scaleKeys), i, p_old_index);
+
+	switch (n) {
+	case 0:
+		return;
+	case 1:
+		x = p_scaleKeys[i].GetX();
+		y = p_scaleKeys[i].GetY();
+		z = p_scaleKeys[i].GetZ();
+		break;
+	case 2:
+		x = Interpolate(p_time, p_scaleKeys[i], p_scaleKeys[i].GetX(), p_scaleKeys[i + 1], p_scaleKeys[i + 1].GetX());
+		y = Interpolate(p_time, p_scaleKeys[i], p_scaleKeys[i].GetY(), p_scaleKeys[i + 1], p_scaleKeys[i + 1].GetY());
+		z = Interpolate(p_time, p_scaleKeys[i], p_scaleKeys[i].GetZ(), p_scaleKeys[i + 1], p_scaleKeys[i + 1].GetZ());
+		break;
+	}
+
+	p_matrix.Scale(x, y, z);
 }
 
 // STUB: LEGO1 0x100a0990
@@ -418,6 +558,32 @@ LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 {
 	// TODO
 	return TRUE;
+}
+
+// STUB: LEGO1 0x100a0a00
+LegoU32 LegoAnimNodeData::FindKeys(
+	LegoFloat p_time,
+	LegoU32 p_numKeys,
+	LegoAnimKey* p_keys,
+	LegoU32 p_size,
+	LegoU32& p_new_index,
+	LegoU32& p_old_index
+)
+{
+	// TODO
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x100a0b00
+inline LegoFloat LegoAnimNodeData::Interpolate(
+	LegoFloat p_time,
+	LegoAnimKey& p_key1,
+	LegoFloat p_value1,
+	LegoAnimKey& p_key2,
+	LegoFloat p_value2
+)
+{
+	return p_value1 + (p_value2 - p_value1) * (p_time - p_key1.GetTime()) / (p_key2.GetTime() - p_key1.GetTime());
 }
 
 // FUNCTION: LEGO1 0x100a0b30
