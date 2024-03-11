@@ -258,99 +258,98 @@ void MxTransitionManager::MosaicTransition()
 		EndTransition(TRUE);
 		return;
 	}
+	else {
+		if (m_animationTimer == 0) {
 
-	if (m_animationTimer == 0) {
-		// Same init/shuffle steps as the dissolve transition, except that
-		// we are using big blocky pixels and only need 64 columns.
-		MxS32 i;
-		for (i = 0; i < 64; i++) {
-			m_columnOrder[i] = i;
-		}
-
-		for (i = 0; i < 64; i++) {
-			MxS32 swap = rand() % 64;
-			MxU16 t = m_columnOrder[i];
-			m_columnOrder[i] = m_columnOrder[swap];
-			m_columnOrder[swap] = t;
-		}
-
-		// The same is true here. We only need 48 rows.
-		for (i = 0; i < 48; i++) {
-			m_randomShift[i] = rand() % 64;
-		}
-	}
-
-	// Run one tick of the animation
-	DDSURFACEDESC ddsd;
-	memset(&ddsd, 0, sizeof(ddsd));
-	ddsd.dwSize = sizeof(ddsd);
-
-	HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
-	if (res == DDERR_SURFACELOST) {
-		m_ddSurface->Restore();
-		res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
-	}
-
-	if (res == DD_OK) {
-		SubmitCopyRect(&ddsd);
-
-		for (MxS32 col = 0; col < 64; col++) {
-			// Select 4 columns on each tick
-			if (m_animationTimer * 4 > m_columnOrder[col]) {
-				continue;
+			// Same init/shuffle steps as the dissolve transition, except that
+			// we are using big blocky pixels and only need 64 columns.
+			MxS32 i;
+			for (i = 0; i < 64; i++) {
+				m_columnOrder[i] = i;
 			}
 
-			if (m_animationTimer * 4 + 3 < m_columnOrder[col]) {
-				continue;
+			for (i = 0; i < 64; i++) {
+				MxS32 swap = rand() % 64;
+				MxU16 t = m_columnOrder[i];
+				m_columnOrder[i] = m_columnOrder[swap];
+				m_columnOrder[swap] = t;
 			}
 
-			for (MxS32 row = 0; row < 48; row++) {
-				// To do the pixelation, we subdivide the 640x480 surface into
-				// 10x10 pixel blocks. At the chosen block, we sample the top-leftmost
-				// color and set the other 99 pixels to that value.
+			// The same is true here. We only need 48 rows.
+			for (i = 0; i < 48; i++) {
+				m_randomShift[i] = rand() % 64;
+			}
+		}
 
-				// First, get the offset of the 10x10 block that we will sample for this row.
-				MxS32 xShift = 10 * ((m_randomShift[row] + col) % 64);
+		// Run one tick of the animation
+		DDSURFACEDESC ddsd;
+		memset(&ddsd, 0, sizeof(ddsd));
+		ddsd.dwSize = sizeof(ddsd);
 
-				// Combine xShift with this value to target the correct location in the buffer.
-				MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
+		HRESULT res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+		if (res == DDERR_SURFACELOST) {
+			m_ddSurface->Restore();
+			res = m_ddSurface->Lock(NULL, &ddsd, 1, NULL);
+		}
 
-				// Seek to the sample position.
-				MxU8* source = (MxU8*) ddsd.lpSurface + 10 * row * ddsd.lPitch + bytesPerPixel * xShift;
+		if (res == DD_OK) {
+			SubmitCopyRect(&ddsd);
 
-				// Sample byte or word depending on display mode.
-				MxU32 sample = bytesPerPixel == 1 ? *source : *(MxU16*) source;
+			for (MxS32 col = 0; col < 64; col++) {
+				// Select 4 columns on each tick
+				if (m_animationTimer * 4 > m_columnOrder[col]) {
+					continue;
+				}
 
-				// For each of the 10 rows in the 10x10 square:
-				for (MxS32 k = 10 * row; k < 10 * row + 10; k++) {
-					if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
-						MxU8* pos = (MxU8*) ddsd.lpSurface + k * ddsd.lPitch + xShift;
+				if (m_animationTimer * 4 + 3 < m_columnOrder[col]) {
+					continue;
+				}
 
-						for (MxS32 tt = 0; tt < 10; tt++) {
-							pos[tt] = sample;
+				for (MxS32 row = 0; row < 48; row++) {
+					// To do the mosaic effect, we subdivide the 640x480 surface into
+					// 10x10 pixel blocks. At the chosen block, we sample the top-leftmost
+					// color and set the other 99 pixels to that value.
+
+					// First, get the offset of the 10x10 block that we will sample for this row.
+					MxS32 xShift = 10 * ((m_randomShift[row] + col) % 64);
+
+					// Combine xShift with this value to target the correct location in the buffer.
+					MxS32 bytesPerPixel = ddsd.ddpfPixelFormat.dwRGBBitCount / 8;
+
+					// Seek to the sample position.
+					MxU8* source = (MxU8*) ddsd.lpSurface + 10 * row * ddsd.lPitch + bytesPerPixel * xShift;
+
+					// Sample byte or word depending on display mode.
+					MxU32 sample = bytesPerPixel == 1 ? *source : *(MxU16*) source;
+
+					// For each of the 10 rows in the 10x10 square:
+					for (MxS32 k = 10 * row; k < 10 * row + 10; k++) {
+						if (ddsd.ddpfPixelFormat.dwRGBBitCount == 8) {
+							MxU16* pos = (MxU16*) ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + xShift);
+							memset(pos, sample, 10);
 						}
-					}
-					else {
-						// Need to double xShift because it measures pixels not bytes
-						MxU16* pos = (MxU16*) ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + 2 * xShift);
+						else {
+							// Need to double xShift because it measures pixels not bytes
+							MxU16* pos = (MxU16*) ((MxU8*) ddsd.lpSurface + k * ddsd.lPitch + 2 * xShift);
 
-						for (MxS32 tt = 0; tt < 10; tt++) {
-							pos[tt] = sample;
+							for (MxS32 tt = 0; tt < 10; tt++) {
+								pos[tt] = sample;
+							}
 						}
 					}
 				}
 			}
+
+			SetupCopyRect(&ddsd);
+			m_ddSurface->Unlock(ddsd.lpSurface);
+
+			if (VideoManager()->GetVideoParam().Flags().GetFlipSurfaces()) {
+				LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
+				surf->BltFast(0, 0, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
+			}
+
+			m_animationTimer++;
 		}
-
-		SetupCopyRect(&ddsd);
-		m_ddSurface->Unlock(ddsd.lpSurface);
-
-		if (VideoManager()->GetVideoParam().Flags().GetFlipSurfaces()) {
-			LPDIRECTDRAWSURFACE surf = VideoManager()->GetDisplaySurface()->GetDirectDrawSurface1();
-			surf->BltFast(0, 0, m_ddSurface, &g_fullScreenRect, DDBLTFAST_WAIT);
-		}
-
-		m_animationTimer++;
 	}
 }
 
