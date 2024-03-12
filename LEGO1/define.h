@@ -3,7 +3,6 @@
 
 #include "mxtypes.h"
 
-extern MxS32 g_mxcoreCount[101];
 extern const char* g_parseExtraTokens;
 extern const char* g_strWORLD;
 extern const char* g_strSOUND;

@@ -22,7 +22,7 @@ public:
 
 	inline LPDIRECTSOUND GetDirectSound() { return m_directSound; }
 
-	MxS32 FUN_100aecf0(MxU32 p_undefined);
+	MxS32 GetAttenuation(MxU32 p_volume);
 
 protected:
 	void Init();
