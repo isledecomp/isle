@@ -338,7 +338,7 @@ MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 // FUNCTION: LEGO1 0x100b07f0
 MxLong MxOmni::Notify(MxParam& p_param)
 {
-	MxAutoLocker lock(&this->m_criticalsection);
+	AUTOLOCK(m_criticalSection);
 
 	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction) {
 		return 0;

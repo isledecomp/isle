@@ -241,7 +241,7 @@ void MxWavePresenter::LoopChunk(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b2160
 MxResult MxWavePresenter::PutData()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (IsEnabled()) {
 		switch (m_currentTickleState) {
@@ -280,7 +280,7 @@ MxResult MxWavePresenter::PutData()
 void MxWavePresenter::EndAction()
 {
 	if (m_action) {
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 		MxMediaPresenter::EndAction();
 
 		if (m_dsBuffer) {

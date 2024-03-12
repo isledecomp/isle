@@ -122,7 +122,7 @@ void MxLoopingSmkPresenter::RepeatingTickle()
 // FUNCTION: LEGO1 0x100b4cd0
 MxResult MxLoopingSmkPresenter::AddToManager()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	return MxSmkPresenter::AddToManager();
 }
 

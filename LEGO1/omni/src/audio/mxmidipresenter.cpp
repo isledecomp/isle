@@ -115,7 +115,7 @@ MxResult MxMIDIPresenter::PutData()
 void MxMIDIPresenter::EndAction()
 {
 	if (m_action) {
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 		MxMediaPresenter::EndAction();
 		MusicManager()->DeinitializeMIDI();

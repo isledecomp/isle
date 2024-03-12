@@ -34,7 +34,7 @@ void MxPresenter::Init()
 // FUNCTION: LEGO1 0x100b4d80
 MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	this->m_action = p_action;
 
@@ -55,7 +55,7 @@ void MxPresenter::EndAction()
 		return;
 	}
 
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (!this->m_compositePresenter) {
 #ifdef COMPAT_MODE
@@ -79,7 +79,7 @@ void MxPresenter::EndAction()
 // FUNCTION: LEGO1 0x100b4fc0
 void MxPresenter::ParseExtra()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxU16 extraLength;
 	char* extraData;
@@ -113,7 +113,7 @@ void MxPresenter::ParseExtra()
 void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 {
 	if (m_compositePresenter) {
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 #ifdef COMPAT_MODE
 		{
@@ -132,7 +132,7 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 // FUNCTION: LEGO1 0x100b5200
 MxResult MxPresenter::Tickle()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	switch (this->m_currentTickleState) {
 	case e_ready:

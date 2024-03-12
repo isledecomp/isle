@@ -90,7 +90,7 @@ void MxEventPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x100c2ef0
 MxResult MxEventPresenter::PutData()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (IsEnabled()) {
 		if (m_currentTickleState >= e_streaming &&

@@ -168,7 +168,7 @@ void MxSoundManager::SetVolume(MxS32 p_volume)
 // FUNCTION: LEGO1 0x100aebd0
 MxPresenter* MxSoundManager::FUN_100aebd0(const MxAtomId& p_atomId, MxU32 p_objectId)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
@@ -195,7 +195,7 @@ MxS32 MxSoundManager::FUN_100aecf0(MxU32 p_undefined)
 // FUNCTION: LEGO1 0x100aed10
 void MxSoundManager::Pause()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
@@ -210,7 +210,7 @@ void MxSoundManager::Pause()
 // FUNCTION: LEGO1 0x100aee10
 void MxSoundManager::Resume()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(m_presenters);
