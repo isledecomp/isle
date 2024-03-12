@@ -3,7 +3,7 @@
 
 #include "mxcriticalsection.h"
 
-#define AUTOLOCK(CS) MxAutoLock lock(&CS);
+#define AUTOLOCK(CS) MxAutoLock lock(&CS)
 
 class MxAutoLock {
 public:
