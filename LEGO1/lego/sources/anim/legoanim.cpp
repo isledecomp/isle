@@ -449,7 +449,7 @@ LegoResult LegoAnimNodeData::CreateLocalTransform(LegoFloat p_time, Matrix4& p_m
 
 // FUNCTION: LEGO1 0x100a0600
 inline void LegoAnimNodeData::GetTranslation(
-	LegoU32 p_numTranslationKeys,
+	LegoU16 p_numTranslationKeys,
 	LegoTranslationKey* p_translationKeys,
 	LegoFloat p_time,
 	Matrix4& p_matrix,
@@ -513,7 +513,7 @@ inline void LegoAnimNodeData::GetTranslation(
 
 // FUNCTION: LEGO1 0x100a06f0
 /*inline*/ void LegoAnimNodeData::GetRotation(
-	LegoU32 p_numRotationKeys,
+	LegoU16 p_numRotationKeys,
 	LegoRotationKey* p_rotationKeys,
 	LegoFloat p_time,
 	Matrix4& p_matrix,
@@ -576,7 +576,7 @@ inline void LegoAnimNodeData::GetTranslation(
 }
 
 inline void LegoAnimNodeData::GetScale(
-	LegoU32 p_numScaleKeys,
+	LegoU16 p_numScaleKeys,
 	LegoScaleKey* p_scaleKeys,
 	LegoFloat p_time,
 	Matrix4& p_matrix,

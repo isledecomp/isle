@@ -133,21 +133,21 @@ public:
 	LegoBool FUN_100a0990(LegoTime p_time) { return FUN_100a0990((LegoFloat) p_time); }
 
 	inline static void GetTranslation(
-		LegoU32 p_numTranslationKeys,
+		LegoU16 p_numTranslationKeys,
 		LegoTranslationKey* p_translationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
 	/*inline*/ static void GetRotation(
-		LegoU32 p_numRotationKeys,
+		LegoU16 p_numRotationKeys,
 		LegoRotationKey* p_rotationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
 	inline static void GetScale(
-		LegoU32 p_numScaleKeys,
+		LegoU16 p_numScaleKeys,
 		LegoScaleKey* p_scaleKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
