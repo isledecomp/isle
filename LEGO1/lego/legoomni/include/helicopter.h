@@ -5,18 +5,6 @@
 #include "islepathactor.h"
 #include "realtime/matrix.h"
 
-// SIZE 0x34
-class HelicopterSubclass {
-public:
-	inline HelicopterSubclass() : m_unk0x30(0) {}
-	MxResult FUN_100040a0(Vector4& p_v, float p_f);
-
-private:
-	Mx4DPointFloat m_unk0x00; // 0x00
-	Mx4DPointFloat m_unk0x18; // 0x18
-	undefined4 m_unk0x30;     // 0x30
-};
-
 // VTABLE: LEGO1 0x100d40f8
 // SIZE 0x230
 class Helicopter : public IslePathActor {
@@ -49,12 +37,12 @@ public:
 	// Helicopter::`scalar deleting destructor'
 
 protected:
-	MxMatrix m_unk0x160;           // 0x160
-	MxMatrix m_unk0x1a8;           // 0x1a8
-	float m_unk0x1f0;              // 0x1f0
-	HelicopterSubclass m_unk0x1f4; // 0x1f4
-	HelicopterState* m_state;      // 0x228
-	MxAtomId m_script;             // 0x22c
+	MxMatrix m_unk0x160;              // 0x160
+	MxMatrix m_unk0x1a8;              // 0x1a8
+	float m_unk0x1f0;                 // 0x1f0
+	UnknownMx4DPointFloat m_unk0x1f4; // 0x1f4
+	HelicopterState* m_state;         // 0x228
+	MxAtomId m_script;                // 0x22c
 
 private:
 	void GetState();

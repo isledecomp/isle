@@ -10,7 +10,9 @@
 class LegoAnimKey {
 public:
 	enum Flags {
-		c_bit1 = 0x01
+		c_bit1 = 0x01,
+		c_bit2 = 0x02,
+		c_bit3 = 0x04
 	};
 
 	LegoAnimKey();
@@ -18,6 +20,8 @@ public:
 	LegoFloat GetTime() { return m_time; }
 	void SetTime(LegoFloat p_time) { m_time = p_time; }
 	LegoU32 TestBit1() { return m_flags & c_bit1; }
+	LegoU32 TestBit2() { return m_flags & c_bit2; }
+	LegoU32 TestBit3() { return m_flags & c_bit3; }
 
 protected:
 	LegoU8 m_flags;   // 0x00
@@ -47,6 +51,14 @@ class LegoRotationKey : public LegoAnimKey {
 public:
 	LegoRotationKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoFloat GetAngle() { return m_angle; }
+	void SetAngle(LegoFloat p_angle) { m_angle = p_angle; }
+	LegoFloat GetX() { return m_x; }
+	void SetX(LegoFloat p_x) { m_x = p_x; }
+	LegoFloat GetY() { return m_y; }
+	void SetY(LegoFloat p_y) { m_y = p_y; }
+	LegoFloat GetZ() { return m_z; }
+	void SetZ(LegoFloat p_z) { m_z = p_z; }
 
 protected:
 	LegoFloat m_angle; // 0x08
@@ -121,21 +133,21 @@ public:
 	LegoBool FUN_100a0990(LegoTime p_time) { return FUN_100a0990((LegoFloat) p_time); }
 
 	inline static void GetTranslation(
-		LegoU32 p_numTranslationKeys,
+		LegoU16 p_numTranslationKeys,
 		LegoTranslationKey* p_translationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
 	/*inline*/ static void GetRotation(
-		LegoU32 p_numRotationKeys,
+		LegoU16 p_numRotationKeys,
 		LegoRotationKey* p_rotationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
 	inline static void GetScale(
-		LegoU32 p_numScaleKeys,
+		LegoU16 p_numScaleKeys,
 		LegoScaleKey* p_scaleKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,

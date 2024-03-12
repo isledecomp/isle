@@ -291,8 +291,8 @@ public:
 	// FUNCTION: LEGO1 0x10002ae0
 	virtual void SetMatrixProduct(Vector4* p_a, float* p_b) { SetMatrixProduct(p_a->m_data, p_b); } // vtable+0x88
 
-	inline virtual int NormalizeQuaternion();                            // vtable+90
-	inline virtual void UnknownQuaternionOp(Vector4* p_a, Vector4* p_b); // vtable+94
+	inline virtual int NormalizeQuaternion();                            // vtable+0x90
+	inline virtual void UnknownQuaternionOp(Vector4* p_a, Vector4* p_b); // vtable+0x94
 
 	// Vector3 overrides
 
@@ -376,6 +376,8 @@ public:
 		m_data[2] = *p_value;
 		m_data[3] = *p_value;
 	} // vtable+0x84
+
+	friend class Mx4DPointFloat;
 };
 
 // Note close yet, included because I'm at least confident I know what operation
