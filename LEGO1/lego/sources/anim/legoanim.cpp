@@ -511,7 +511,7 @@ inline void LegoAnimNodeData::GetTranslation(
 	p_matrix.TranslateBy(&x, &y, &z);
 }
 
-// STUB: LEGO1 0x100a06f0
+// FUNCTION: LEGO1 0x100a06f0
 /*inline*/ void LegoAnimNodeData::GetRotation(
 	LegoU32 p_numRotationKeys,
 	LegoRotationKey* p_rotationKeys,
@@ -520,7 +520,59 @@ inline void LegoAnimNodeData::GetTranslation(
 	LegoU32& p_old_index
 )
 {
-	// TODO
+	LegoU32 i, n;
+	n = FindKeys(p_time, p_numRotationKeys & USHRT_MAX, p_rotationKeys, sizeof(*p_rotationKeys), i, p_old_index);
+
+	switch (n) {
+	case 0:
+		return;
+	case 1:
+		if (p_rotationKeys[i].TestBit1()) {
+			p_matrix.FromQuaternion(Mx4DPointFloat(
+				p_rotationKeys[i].GetX(),
+				p_rotationKeys[i].GetY(),
+				p_rotationKeys[i].GetZ(),
+				p_rotationKeys[i].GetAngle()
+			));
+		}
+		break;
+	case 2:
+		Mx4DPointFloat a;
+		UnknownMx4DPointFloat b;
+
+		if (p_rotationKeys[i].TestBit1() || p_rotationKeys[i + 1].TestBit1()) {
+			a[0] = p_rotationKeys[i].GetX();
+			a[1] = p_rotationKeys[i].GetY();
+			a[2] = p_rotationKeys[i].GetZ();
+			a[3] = p_rotationKeys[i].GetAngle();
+
+			if (p_rotationKeys[i + 1].TestBit3()) {
+				p_matrix.FromQuaternion(a);
+				return;
+			}
+
+			Mx4DPointFloat c;
+			if (p_rotationKeys[i + 1].TestBit2()) {
+				c[0] = -p_rotationKeys[i + 1].GetX();
+				c[1] = -p_rotationKeys[i + 1].GetY();
+				c[2] = -p_rotationKeys[i + 1].GetZ();
+				c[3] = -p_rotationKeys[i + 1].GetAngle();
+			}
+			else {
+				c[0] = p_rotationKeys[i + 1].GetX();
+				c[1] = p_rotationKeys[i + 1].GetY();
+				c[2] = p_rotationKeys[i + 1].GetZ();
+				c[3] = p_rotationKeys[i + 1].GetAngle();
+			}
+
+			b.Unknown1(a);
+			b.Unknown2(c);
+			b.Unknown_100040a0(
+				p_matrix,
+				(p_time - p_rotationKeys[i].GetTime()) / (p_rotationKeys[i + 1].GetTime() - p_rotationKeys[i].GetTime())
+			);
+		}
+	}
 }
 
 inline void LegoAnimNodeData::GetScale(
