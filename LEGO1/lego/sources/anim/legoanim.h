@@ -90,9 +90,10 @@ class LegoMorphKey : public LegoAnimKey {
 public:
 	LegoMorphKey();
 	LegoResult Read(LegoStorage* p_storage);
+	LegoBool GetUnknown0x08() { return m_unk0x08; }
 
 protected:
-	undefined m_unk0x08; // 0x08
+	LegoBool m_unk0x08; // 0x08
 };
 
 // SIZE 0x0c
@@ -121,10 +122,12 @@ public:
 	LegoU32 GetTranslationIndex() { return m_translationIndex; }
 	LegoU32 GetRotationIndex() { return m_rotationIndex; }
 	LegoU32 GetScaleIndex() { return m_scaleIndex; }
+	LegoU32 GetMorphIndex() { return m_morphIndex; }
 
 	void SetTranslationIndex(LegoU32 p_translationIndex) { m_translationIndex = p_translationIndex; }
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
+	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
 
 	LegoResult CreateLocalTransform(LegoTime p_time, Matrix4& p_matrix)
 	{
@@ -188,7 +191,7 @@ protected:
 	LegoU32 m_translationIndex;            // 0x24
 	LegoU32 m_rotationIndex;               // 0x28
 	LegoU32 m_scaleIndex;                  // 0x2c
-	undefined4 m_unk0x30;                  // 0x30
+	LegoU32 m_morphIndex;                  // 0x30
 };
 
 // SIZE 0x08
