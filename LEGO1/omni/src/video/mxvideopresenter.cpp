@@ -1,6 +1,6 @@
 #include "mxvideopresenter.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmediaaction.h"
 #include "mxmisc.h"
 #include "mxregioncursor.h"
@@ -544,7 +544,7 @@ void MxVideoPresenter::EndAction()
 {
 	if (m_action) {
 		MxMediaPresenter::EndAction();
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 		if (m_bitmap) {
 			MxLong height = m_bitmap->GetBmiHeightAbs();
@@ -562,7 +562,7 @@ void MxVideoPresenter::EndAction()
 // FUNCTION: LEGO1 0x100b3280
 MxResult MxVideoPresenter::PutData()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5) {
 		PutFrame();

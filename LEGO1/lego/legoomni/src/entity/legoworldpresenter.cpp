@@ -15,7 +15,7 @@
 #include "misc.h"
 #include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsactionlist.h"
 #include "mxdschunk.h"
 #include "mxdsmediaaction.h"
@@ -78,7 +78,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 // FUNCTION: LEGO1 0x10066870
 MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxResult result = FAILURE;
 	MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();

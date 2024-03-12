@@ -249,7 +249,7 @@ add_library(omni STATIC
   LEGO1/omni/src/stream/mxstreamer.cpp
   LEGO1/omni/src/stream/mxstreamlist.cpp
   LEGO1/omni/src/stream/mxstreamprovider.cpp
-  LEGO1/omni/src/system/mxautolocker.cpp
+  LEGO1/omni/src/system/mxautolock.cpp
   LEGO1/omni/src/system/mxcriticalsection.cpp
   LEGO1/omni/src/system/mxscheduler.cpp
   LEGO1/omni/src/system/mxsemaphore.cpp

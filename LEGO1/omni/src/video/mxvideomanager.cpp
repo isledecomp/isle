@@ -1,6 +1,6 @@
 #include "mxvideomanager.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
@@ -306,7 +306,7 @@ void MxVideoManager::InvalidateRect(MxRect32& p_rect)
 // FUNCTION: LEGO1 0x100bea90
 MxResult MxVideoManager::Tickle()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	SortPresenterList();
 

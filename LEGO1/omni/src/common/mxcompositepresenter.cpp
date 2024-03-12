@@ -1,7 +1,7 @@
 #include "mxcompositepresenter.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
@@ -24,7 +24,7 @@ MxCompositePresenter::~MxCompositePresenter()
 // FUNCTION: LEGO1 0x100b6410
 MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxResult result = FAILURE;
 	MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();
@@ -77,7 +77,7 @@ MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxD
 // FUNCTION: LEGO1 0x100b65e0
 void MxCompositePresenter::EndAction()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (!m_action) {
 		return;
@@ -113,7 +113,7 @@ void MxCompositePresenter::EndAction()
 // FUNCTION: LEGO1 0x100b6760
 MxLong MxCompositePresenter::Notify(MxParam& p_param)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationEndAction:

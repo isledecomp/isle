@@ -91,7 +91,7 @@ protected:
 	MxTimer* m_timer;                             // 0x3c
 	MxStreamer* m_streamer;                       // 0x40
 	MxAtomIdCounterSet* m_atomIdCounterSet;       // 0x44
-	MxCriticalSection m_criticalsection;          // 0x48
+	MxCriticalSection m_criticalSection;          // 0x48
 	MxBool m_timerRunning;                        // 0x64
 };
 

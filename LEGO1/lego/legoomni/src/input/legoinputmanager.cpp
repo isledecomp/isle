@@ -4,7 +4,7 @@
 #include "legoomni.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)
@@ -224,7 +224,7 @@ MxResult LegoInputManager::GetJoystickState(
 // FUNCTION: LEGO1 0x1005c470
 void LegoInputManager::Register(MxCore* p_notify)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	LegoNotifyListCursor cursor(m_keyboardNotifyList);
 	if (!cursor.Find(p_notify)) {
@@ -235,7 +235,7 @@ void LegoInputManager::Register(MxCore* p_notify)
 // FUNCTION: LEGO1 0x1005c5c0
 void LegoInputManager::UnRegister(MxCore* p_notify)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	LegoNotifyListCursor cursor(m_keyboardNotifyList);
 	if (cursor.Find(p_notify)) {
@@ -281,7 +281,7 @@ void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p
 // FUNCTION: LEGO1 0x1005c820
 void LegoInputManager::ProcessEvents()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	LegoEventNotificationParam event;
 	while (m_eventQueue->Dequeue(event)) {

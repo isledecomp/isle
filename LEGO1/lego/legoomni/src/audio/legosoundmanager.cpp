@@ -1,6 +1,6 @@
 #include "legosoundmanager.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxomni.h"
 
 // FUNCTION: LEGO1 0x100298a0
@@ -90,6 +90,6 @@ MxResult LegoSoundManager::Tickle()
 {
 	MxSoundManager::Tickle();
 
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	return m_unk0x40->Tickle();
 }

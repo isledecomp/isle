@@ -2,7 +2,7 @@
 
 #include "compat.h"
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
@@ -36,7 +36,7 @@ MxNotificationManager::MxNotificationManager() : MxCore(), m_lock(), m_listenerI
 // FUNCTION: LEGO1 0x100ac450
 MxNotificationManager::~MxNotificationManager()
 {
-	MxAutoLocker lock(&m_lock);
+	AUTOLOCK(m_lock);
 	Tickle();
 	delete m_queue;
 	m_queue = NULL;
@@ -63,7 +63,7 @@ MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThrea
 // FUNCTION: LEGO1 0x100ac6c0
 MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_param)
 {
-	MxAutoLocker lock(&m_lock);
+	AUTOLOCK(m_lock);
 
 	if (m_active == FALSE) {
 		return FAILURE;
@@ -94,7 +94,7 @@ MxResult MxNotificationManager::Tickle()
 	}
 	else {
 		{
-			MxAutoLocker lock(&m_lock);
+			AUTOLOCK(m_lock);
 			MxNotificationPtrList* temp1 = m_queue;
 			MxNotificationPtrList* temp2 = m_sendList;
 			m_queue = temp2;
@@ -121,7 +121,7 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 	MxNotification* notif;
 
 	{
-		MxAutoLocker lock(&m_lock);
+		AUTOLOCK(m_lock);
 
 		// Find all notifications from, and addressed to, p_listener.
 		if (m_sendList != NULL) {
@@ -166,7 +166,7 @@ void MxNotificationManager::FlushPending(MxCore* p_listener)
 // FUNCTION: LEGO1 0x100acd20
 void MxNotificationManager::Register(MxCore* p_listener)
 {
-	MxAutoLocker lock(&m_lock);
+	AUTOLOCK(m_lock);
 
 	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
 	if (it != m_listenerIds.end()) {
@@ -179,7 +179,7 @@ void MxNotificationManager::Register(MxCore* p_listener)
 // FUNCTION: LEGO1 0x100acdf0
 void MxNotificationManager::Unregister(MxCore* p_listener)
 {
-	MxAutoLocker lock(&m_lock);
+	AUTOLOCK(m_lock);
 
 	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
 

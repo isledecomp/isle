@@ -1,6 +1,6 @@
 #include "mxstreamcontroller.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
 #include "mxmisc.h"
@@ -42,7 +42,7 @@ MxStreamController::MxStreamController()
 // FUNCTION: LEGO1 0x100c1290
 MxStreamController::~MxStreamController()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxDSSubscriber* subscriber;
 	while (m_subscriberList.PopFront(subscriber)) {
@@ -82,7 +82,7 @@ MxStreamController::~MxStreamController()
 MxResult MxStreamController::Open(const char* p_filename)
 {
 	char sourceName[256];
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MakeSourceName(sourceName, p_filename);
 	this->m_atom = MxAtomId(sourceName, e_lowerCase2);
@@ -104,7 +104,7 @@ void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 // FUNCTION: LEGO1 0x100c1690
 MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxResult result;
 	MxU32 offset = 0;
@@ -129,7 +129,7 @@ MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100c1740
 MxResult MxStreamController::VTable0x24(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	VTable0x30(p_action);
 	m_action0x60 = m_unk0x54.Find(p_action, TRUE);
 	if (m_action0x60 == NULL) {
@@ -219,7 +219,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 // FUNCTION: LEGO1 0x100c1c10
 MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	if (FUN_100c1a00(p_action, p_bufferval) != SUCCESS) {
 		return FAILURE;
 	}
@@ -229,7 +229,7 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 // FUNCTION: LEGO1 0x100c1ce0
 MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxResult result = FAILURE;
 	MxDSAction* action = m_unk0x3c.Find(p_action, TRUE);
 	if (action != NULL) {
@@ -244,7 +244,7 @@ MxResult MxStreamController::VTable0x30(MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100c1da0
 MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxDSAction* action = p_action->Clone();
 
 	if (action == NULL) {
@@ -259,7 +259,7 @@ MxResult MxStreamController::InsertActionToList54(MxDSAction* p_action)
 // FUNCTION: LEGO1 0x100c1e70
 MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxPresenter* result = NULL;
 	if (p_action.GetObjectId() != -1) {
 		MxDSAction* action = m_unk0x3c.Find(&p_action, FALSE);
@@ -274,7 +274,7 @@ MxPresenter* MxStreamController::FUN_100c1e70(MxDSAction& p_action)
 // FUNCTION: LEGO1 0x100c1f00
 MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxU32 objectId = p_action->GetObjectId();
 	MxStreamChunk* chunk = new MxStreamChunk;

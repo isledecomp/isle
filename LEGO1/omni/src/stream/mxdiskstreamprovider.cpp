@@ -1,6 +1,6 @@
 #include "mxdiskstreamprovider.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxdsbuffer.h"
 #include "mxdsstreamingaction.h"
@@ -52,7 +52,7 @@ MxDiskStreamProvider::~MxDiskStreamProvider()
 		action = NULL;
 
 		{
-			MxAutoLocker lock(&m_criticalSection);
+			AUTOLOCK(m_criticalSection);
 			m_list.PopFrontStreamingAction(action);
 		}
 
@@ -124,7 +124,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 			action = NULL;
 
 			{
-				MxAutoLocker lock(&m_criticalSection);
+				AUTOLOCK(m_criticalSection);
 				m_list.PopFrontStreamingAction(action);
 			}
 
@@ -142,7 +142,7 @@ void MxDiskStreamProvider::VTable0x20(MxDSAction* p_action)
 	else {
 		do {
 			{
-				MxAutoLocker lock(&m_criticalSection);
+				AUTOLOCK(m_criticalSection);
 				action = (MxDSStreamingAction*) m_list.Find(p_action, TRUE);
 			}
 
@@ -199,7 +199,7 @@ MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 	}
 
 	{
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 		m_list.push_back(p_action);
 	}
 
@@ -215,7 +215,7 @@ void MxDiskStreamProvider::PerformWork()
 	MxDSStreamingAction* streamingAction = NULL;
 
 	{
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 		if (!m_list.empty()) {
 			streamingAction = (MxDSStreamingAction*) m_list.front();
 
@@ -230,7 +230,7 @@ void MxDiskStreamProvider::PerformWork()
 	MxDSBuffer* buffer;
 
 	{
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 		if (!m_list.PopFrontStreamingAction(streamingAction)) {
 			goto done;

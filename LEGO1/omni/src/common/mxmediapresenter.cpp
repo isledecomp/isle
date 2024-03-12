@@ -1,7 +1,7 @@
 #include "mxmediapresenter.h"
 
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
@@ -25,7 +25,7 @@ void MxMediaPresenter::Init()
 void MxMediaPresenter::Destroy(MxBool p_fromDestructor)
 {
 	{
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 		if (m_currentChunk && m_subscriber) {
 			m_subscriber->FreeDataChunk(m_currentChunk);
@@ -101,7 +101,7 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 MxResult MxMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
 	MxResult result = FAILURE;
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
 		if (m_action->GetFlags() & MxDSAction::c_looping) {
@@ -132,7 +132,7 @@ done:
 // FUNCTION: LEGO1 0x100b5bc0
 void MxMediaPresenter::EndAction()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (!m_action) {
 		return;
@@ -172,7 +172,7 @@ void MxMediaPresenter::EndAction()
 // FUNCTION: LEGO1 0x100b5d10
 MxResult MxMediaPresenter::Tickle()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	CurrentChunk();
 
