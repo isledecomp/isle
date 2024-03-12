@@ -61,7 +61,7 @@ MxResult MxTransitionManager::Tickle()
 
 	switch (this->m_transitionType) {
 	case e_noAnimation:
-		TransitionNone();
+		NoTransition();
 		break;
 	case e_dissolve:
 		DissolveTransition();
@@ -157,7 +157,7 @@ void MxTransitionManager::EndTransition(MxBool p_notifyWorld)
 }
 
 // FUNCTION: LEGO1 0x1004bcf0
-void MxTransitionManager::TransitionNone()
+void MxTransitionManager::NoTransition()
 {
 	LegoVideoManager* videoManager = VideoManager();
 	videoManager->GetDisplaySurface()->ClearScreen();

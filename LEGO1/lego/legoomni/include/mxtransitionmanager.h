@@ -52,7 +52,7 @@ public:
 
 private:
 	void EndTransition(MxBool p_notifyWorld);
-	void TransitionNone();
+	void NoTransition();
 	void DissolveTransition();
 	void MosaicTransition();
 	void WipeDownTransition();
