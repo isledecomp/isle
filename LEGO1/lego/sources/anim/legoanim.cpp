@@ -289,7 +289,7 @@ LegoAnimNodeData::LegoAnimNodeData()
 	m_translationIndex = 0;
 	m_rotationIndex = 0;
 	m_scaleIndex = 0;
-	m_unk0x30 = 0;
+	m_morphIndex = 0;
 }
 
 // FUNCTION: LEGO1 0x1009fda0
@@ -605,11 +605,27 @@ inline void LegoAnimNodeData::GetScale(
 	p_matrix.Scale(x, y, z);
 }
 
-// STUB: LEGO1 0x100a0990
+// FUNCTION: LEGO1 0x100a0990
 LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 {
-	// TODO
-	return TRUE;
+	LegoU32 i, n;
+	LegoU32 index = GetMorphIndex();
+	LegoBool result;
+
+	n = FindKeys(p_time, m_numMorphKeys, m_morphKeys, sizeof(*m_morphKeys), i, index);
+	SetMorphIndex(index);
+
+	switch (n) {
+	case 0:
+		result = TRUE;
+		break;
+	case 1:
+	case 2:
+		result = m_morphKeys[i].GetUnknown0x08();
+		break;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x100a0a00
