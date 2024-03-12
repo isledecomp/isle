@@ -2,7 +2,7 @@
 
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54);
 

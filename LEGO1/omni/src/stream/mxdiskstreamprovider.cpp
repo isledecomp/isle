@@ -1,6 +1,6 @@
 #include "mxdiskstreamprovider.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxdsbuffer.h"
 #include "mxdsstreamingaction.h"

@@ -16,7 +16,7 @@
 #include "misc.h"
 #include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
 #include "mxmisc.h"

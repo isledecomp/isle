@@ -1,7 +1,7 @@
-#include "mxautolocker.h"
+#include "mxautolock.h"
 
 // FUNCTION: LEGO1 0x100b8ed0
-MxAutoLocker::MxAutoLocker(MxCriticalSection* p_criticalSection)
+MxAutoLock::MxAutoLock(MxCriticalSection* p_criticalSection)
 {
 	this->m_criticalSection = p_criticalSection;
 	if (this->m_criticalSection != 0) {
@@ -10,7 +10,7 @@ MxAutoLocker::MxAutoLocker(MxCriticalSection* p_criticalSection)
 }
 
 // FUNCTION: LEGO1 0x100b8ef0
-MxAutoLocker::~MxAutoLocker()
+MxAutoLock::~MxAutoLock()
 {
 	if (this->m_criticalSection != 0) {
 		this->m_criticalSection->Leave();

@@ -4,7 +4,7 @@
 #include "legoomni.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoInputManager, 0x338)

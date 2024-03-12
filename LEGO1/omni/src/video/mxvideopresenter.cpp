@@ -1,6 +1,6 @@
 #include "mxvideopresenter.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmediaaction.h"
 #include "mxmisc.h"
 #include "mxregioncursor.h"

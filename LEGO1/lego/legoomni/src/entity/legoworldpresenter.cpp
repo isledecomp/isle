@@ -15,7 +15,7 @@
 #include "misc.h"
 #include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsactionlist.h"
 #include "mxdschunk.h"
 #include "mxdsmediaaction.h"

@@ -1,7 +1,7 @@
 #include "mxdiskstreamcontroller.h"
 
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdiskstreamprovider.h"
 #include "mxdsstreamingaction.h"
 #include "mxmisc.h"

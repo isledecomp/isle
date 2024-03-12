@@ -2,7 +2,7 @@
 
 #include "compat.h"
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"

@@ -1,7 +1,7 @@
 #include "mxmediamanager.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"

@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 #include "define.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
 #include "mxomni.h"

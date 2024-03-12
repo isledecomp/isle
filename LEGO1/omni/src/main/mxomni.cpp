@@ -2,7 +2,7 @@
 
 #include "mxactionnotificationparam.h"
 #include "mxatom.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxeventmanager.h"
 #include "mxmisc.h"

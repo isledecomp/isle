@@ -1,7 +1,7 @@
 #include "mxeventpresenter.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxeventmanager.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"

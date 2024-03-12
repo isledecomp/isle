@@ -1,7 +1,7 @@
 #include "mxmidipresenter.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
 #include "mxmusicmanager.h"

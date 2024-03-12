@@ -1,6 +1,6 @@
 #include "mxramstreamcontroller.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsstreamingaction.h"
 #include "mxramstreamprovider.h"
 

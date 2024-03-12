@@ -1,6 +1,6 @@
 #include "mxloopingsmkpresenter.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmediaaction.h"
 
 DECOMP_SIZE_ASSERT(MxLoopingSmkPresenter, 0x724);

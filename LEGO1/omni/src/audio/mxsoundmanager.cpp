@@ -1,7 +1,7 @@
 #include "mxsoundmanager.h"
 
 #include "define.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpresenter.h"

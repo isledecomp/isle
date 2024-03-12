@@ -1,7 +1,7 @@
 #include "mxmediapresenter.h"
 
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"

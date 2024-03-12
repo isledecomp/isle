@@ -1,6 +1,6 @@
 #include "mxstreamcontroller.h"
 
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxdsstreamingaction.h"
 #include "mxmisc.h"

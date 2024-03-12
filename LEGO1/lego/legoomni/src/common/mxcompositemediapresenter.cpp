@@ -3,7 +3,7 @@
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxmediapresenter.h"
 #include "mxmisc.h"

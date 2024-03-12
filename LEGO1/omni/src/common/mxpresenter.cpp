@@ -3,7 +3,7 @@
 #include "decomp.h"
 #include "define.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxdssound.h"
