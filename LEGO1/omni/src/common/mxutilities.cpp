@@ -83,12 +83,12 @@ void MakeSourceName(char* p_output, const char* p_input)
 MxBool KeyValueStringParse(char* p_output, const char* p_command, const char* p_string)
 {
 	MxBool didMatch = FALSE;
-	assert(p_string);  // 90
-	assert(p_command); // 91
+	assert(p_string);
+	assert(p_command);
 
 	MxS16 len = strlen(p_string);
 	char* string = new char[len + 1];
-	assert(string); // 95
+	assert(string);
 	strcpy(string, p_string);
 
 	for (char* token = strtok(string, ", \t\r\n:"); token; token = strtok(NULL, ", \t\r\n:")) {
