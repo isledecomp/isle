@@ -21,7 +21,7 @@ DECOMP_SIZE_ASSERT(Score, 0x104)
 // FUNCTION: LEGO1 0x10001000
 Score::Score()
 {
-	m_unk0xf8 = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 	NotificationManager()->Register(this);
 }
 
@@ -100,8 +100,8 @@ MxLong Score::Notify(MxParam& p_param)
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
-			if (m_unk0xf8) {
-				GameState()->SwitchArea(m_unk0xf8);
+			if (m_destLocation) {
+				GameState()->SwitchArea(m_destLocation);
 			}
 			ret = 1;
 			break;
@@ -121,7 +121,7 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 		MxU32 id = action->GetObjectId();
 		switch (action->GetObjectId()) {
 		case 10:
-			m_unk0xf8 = LegoGameState::e_histbook;
+			m_destLocation = LegoGameState::e_histbook;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 0x1f5:
@@ -165,12 +165,12 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 	if (l == 1 || p_param.GetClickedObjectId() == 4) {
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
-			m_unk0xf8 = LegoGameState::e_infomain;
+			m_destLocation = LegoGameState::e_infomain;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 2:
-			m_unk0xf8 = LegoGameState::e_infodoor;
+			m_destLocation = LegoGameState::e_infodoor;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
@@ -332,6 +332,6 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 MxBool Score::VTable0x64()
 {
 	DeleteScript();
-	m_unk0xf8 = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

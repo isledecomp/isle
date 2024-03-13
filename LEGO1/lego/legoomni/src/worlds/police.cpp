@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(Police, 0x110)
 Police::Police()
 {
 	m_policeState = NULL;
-	m_transitionDestination = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 	NotificationManager()->Register(this);
 }
 
@@ -82,7 +82,7 @@ MxLong Police::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_transitionDestination);
+			GameState()->SwitchArea(m_destLocation);
 			break;
 		}
 	}
@@ -110,7 +110,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_transitionDestination = LegoGameState::Area::e_polidoor;
+			m_destLocation = LegoGameState::Area::e_polidoor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Info_Ctl:
@@ -119,7 +119,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_transitionDestination = LegoGameState::Area::e_infomain;
+			m_destLocation = LegoGameState::Area::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Door_Ctl:
@@ -128,7 +128,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_transitionDestination = LegoGameState::Area::e_copter;
+			m_destLocation = LegoGameState::Area::e_copter;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Donut_Ctl:
@@ -190,6 +190,6 @@ void Police::Enable(MxBool p_enable)
 MxBool Police::VTable0x64()
 {
 	DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, 510);
-	m_transitionDestination = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

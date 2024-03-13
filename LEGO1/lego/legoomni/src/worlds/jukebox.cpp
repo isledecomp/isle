@@ -77,7 +77,7 @@ MxLong JukeBox::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_transitionDestination);
+			GameState()->SwitchArea(m_destLocation);
 			result = 1;
 			break;
 		}
@@ -211,7 +211,7 @@ MxBool JukeBox::HandleClick(LegoControlManagerEvent& p_param)
 			LegoGameState* gameState = GameState();
 			Act1State* act1State = (Act1State*) gameState->GetState("Act1State");
 			act1State->SetUnknown18(11);
-			m_transitionDestination = LegoGameState::Area::e_unk54;
+			m_destLocation = LegoGameState::Area::e_unk54;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, 0, FALSE);
 			break;
 		}
@@ -255,6 +255,6 @@ MxResult JukeBox::Tickle()
 // FUNCTION: LEGO1 0x1005de70
 MxBool JukeBox::VTable0x64()
 {
-	m_transitionDestination = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

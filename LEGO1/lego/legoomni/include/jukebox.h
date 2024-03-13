@@ -44,9 +44,9 @@ public:
 private:
 	MxBool HandleClick(LegoControlManagerEvent& p_param);
 
-	LegoGameState::Area m_transitionDestination; // 0xf8
-	JukeBoxState* m_state;                       // 0xfc
-	undefined2 m_unk0x100;                       // 0x100
+	LegoGameState::Area m_destLocation; // 0xf8
+	JukeBoxState* m_state;              // 0xfc
+	undefined2 m_unk0x100;              // 0x100
 };
 
 #endif // JUKEBOX_H

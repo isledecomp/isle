@@ -94,9 +94,9 @@ LegoGameState::LegoGameState()
 	m_savePath = NULL;
 	m_stateArray = NULL;
 	m_unk0x41c = -1;
-	m_currentArea = e_noArea;
-	m_previousArea = e_noArea;
-	m_unk0x42c = e_noArea;
+	m_currentArea = e_undefined;
+	m_previousArea = e_undefined;
+	m_unk0x42c = e_undefined;
 	m_playerCount = 0;
 	m_isDirty = FALSE;
 	m_loadedAct = e_actNotFound;
@@ -372,7 +372,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	Read(&fileStorage, &area);
 
 	if (m_currentAct == 0) {
-		m_unk0x42c = e_noArea;
+		m_unk0x42c = e_undefined;
 	}
 	else {
 		m_unk0x42c = (Area) area;
@@ -1091,7 +1091,7 @@ void LegoGameState::Init()
 		}
 	}
 
-	m_unk0x42c = e_noArea;
+	m_unk0x42c = e_undefined;
 }
 
 // FUNCTION: LEGO1 0x1003c670

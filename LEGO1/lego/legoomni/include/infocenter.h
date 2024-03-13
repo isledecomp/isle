@@ -102,7 +102,7 @@ private:
 	InfomainScript::Script m_currentInfomainScript; // 0xf8
 	MxS16 m_selectedCharacter;                      // 0xfc
 	InfocenterState* m_infocenterState;             // 0x100
-	LegoGameState::Area m_transitionDestination;    // 0x104
+	LegoGameState::Area m_destLocation;             // 0x104
 	Cutscene m_currentCutscene;                     // 0x108
 	Radio m_radio;                                  // 0x10c
 	MxStillPresenter* m_unk0x11c;                   // 0x11c
