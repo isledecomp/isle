@@ -11,12 +11,14 @@ public:
 	LegoSoundManager();
 	~LegoSoundManager() override;
 
-	MxResult Tickle() override;                                           // vtable+08
-	void Destroy() override;                                              // vtable+18
+	MxResult Tickle() override;                                           // vtable+0x08
+	void Destroy() override;                                              // vtable+0x18
 	MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread) override; // vtable+0x30
 
 	// SYNTHETIC: LEGO1 0x10029920
 	// LegoSoundManager::`scalar deleting destructor'
+
+	void FUN_1002a410(const float* p_pos, const float* p_dir, const float* p_up, const float* p_vel);
 
 	inline LegoUnknown100d6b4c* GetUnknown0x40() { return m_unk0x40; }
 

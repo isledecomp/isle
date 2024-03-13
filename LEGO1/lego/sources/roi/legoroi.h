@@ -78,6 +78,8 @@ public:
 	// SYNTHETIC: LEGO1 0x100a9ad0
 	// TimeROI::`scalar deleting destructor'
 
+	void FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time);
+
 private:
 	LegoTime m_time; // 0x108
 };

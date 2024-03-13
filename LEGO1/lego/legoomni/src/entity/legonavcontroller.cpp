@@ -242,6 +242,19 @@ float LegoNavController::CalculateNewVel(float p_targetVel, float p_currentVel, 
 	return newVel;
 }
 
+// STUB: LEGO1 0x10055080
+MxBool LegoNavController::CalculateNewPosDir(
+	const Vector3& p_curPos,
+	const Vector3& p_curDir,
+	Vector3& p_newPos,
+	Vector3& p_newDir,
+	undefined* p_und
+)
+{
+	// TODO
+	return TRUE;
+}
+
 // STUB: LEGO1 0x10055620
 void LegoNavController::SetLocation(MxU32 p_location)
 {

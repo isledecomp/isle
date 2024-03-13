@@ -93,3 +93,9 @@ MxResult LegoSoundManager::Tickle()
 	AUTOLOCK(m_criticalSection);
 	return m_unk0x40->Tickle();
 }
+
+// STUB: LEGO1 0x1002a410
+void LegoSoundManager::FUN_1002a410(const float* p_pos, const float* p_dir, const float* p_up, const float* p_vel)
+{
+	// TODO
+}
