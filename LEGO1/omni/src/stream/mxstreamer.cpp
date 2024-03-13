@@ -18,17 +18,11 @@ MxStreamer::MxStreamer()
 // FUNCTION: LEGO1 0x100b9190
 MxResult MxStreamer::Create()
 {
-	undefined* b = new undefined[m_subclass1.GetSize() * 0x5800];
-	m_subclass1.SetBuffer(b);
-	if (b) {
-		b = new undefined[m_subclass2.GetSize() * 0x800];
-		m_subclass2.SetBuffer(b);
-		if (b) {
-			return SUCCESS;
-		}
+	if (m_pool1.Allocate() || m_pool2.Allocate()) {
+		return FAILURE;
 	}
 
-	return FAILURE;
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100b91d0
