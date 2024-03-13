@@ -68,7 +68,7 @@ public:
 	void SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und);
 	Mx3DPointFloat GetEntitydDirection();
 	Mx3DPointFloat GetEntityUp();
-	Mx3DPointFloat GetEntityLocation();
+	Mx3DPointFloat GetEntityPosition();
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }

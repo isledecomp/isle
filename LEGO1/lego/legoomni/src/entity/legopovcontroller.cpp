@@ -199,9 +199,9 @@ void LegoPointOfViewController::SetEntity(LegoEntity* p_entity)
 
 		CalcLocalTransform(
 			Mx3DPointFloat(
-				m_entity->GetEntityLocation()[0],
-				m_entity->GetEntityLocation()[1] + m_entityOffsetUp,
-				m_entity->GetEntityLocation()[2]
+				m_entity->GetEntityPosition()[0],
+				m_entity->GetEntityPosition()[1] + m_entityOffsetUp,
+				m_entity->GetEntityPosition()[2]
 			),
 			m_entity->GetEntitydDirection(),
 			m_entity->GetEntityUp(),

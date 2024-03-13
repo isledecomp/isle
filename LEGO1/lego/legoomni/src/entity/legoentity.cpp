@@ -184,22 +184,36 @@ void LegoEntity::FUN_10010c30()
 	}
 }
 
-// STUB: LEGO1 0x10010c60
+// FUNCTION: LEGO1 0x10010c60
 Mx3DPointFloat LegoEntity::GetEntitydDirection()
 {
-	return Mx3DPointFloat(0, 0, 0);
+	if (m_roi != NULL) {
+		m_worldDirection =
+			Mx3DPointFloat(m_roi->GetWorldDirection()[0], m_roi->GetWorldDirection()[1], m_roi->GetWorldDirection()[2]);
+	}
+
+	return m_worldDirection;
 }
 
-// STUB: LEGO1 0x10010cf0
+// FUNCTION: LEGO1 0x10010cf0
 Mx3DPointFloat LegoEntity::GetEntityUp()
 {
-	return Mx3DPointFloat(0, 0, 0);
+	if (m_roi != NULL) {
+		m_worldUp = Mx3DPointFloat(m_roi->GetWorldUp()[0], m_roi->GetWorldUp()[1], m_roi->GetWorldUp()[2]);
+	}
+
+	return m_worldUp;
 }
 
-// STUB: LEGO1 0x10010d80
-Mx3DPointFloat LegoEntity::GetEntityLocation()
+// FUNCTION: LEGO1 0x10010d80
+Mx3DPointFloat LegoEntity::GetEntityPosition()
 {
-	return Mx3DPointFloat(0, 0, 0);
+	if (m_roi != NULL) {
+		m_worldLocation =
+			Mx3DPointFloat(m_roi->GetWorldPosition()[0], m_roi->GetWorldPosition()[1], m_roi->GetWorldPosition()[2]);
+	}
+
+	return m_worldLocation;
 }
 
 // FUNCTION: LEGO1 0x10010e10
