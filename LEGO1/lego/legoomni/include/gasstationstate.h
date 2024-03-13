@@ -9,10 +9,6 @@ class GasStationState : public LegoState {
 public:
 	// SIZE 0x04
 	struct Unknown0x14 {
-		inline void SetUnknown0x00(undefined4 p_unk0x00) { m_unk0x00 = p_unk0x00; }
-		inline undefined4 GetUnknown0x00() { return m_unk0x00; }
-
-	private:
 		undefined4 m_unk0x00; // 0x00
 	};
 
@@ -36,7 +32,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'
 
-	inline Unknown0x14& GetUnknown0x14() { return m_unk0x14; }
+	friend class GasStation;
 
 private:
 	undefined4 m_unk0x08[3]; // 0x08
