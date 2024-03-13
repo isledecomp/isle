@@ -174,6 +174,16 @@ void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_directi
 	}
 }
 
+// FUNCTION: LEGO1 0x10010c30
+void LegoEntity::FUN_10010c30()
+{
+	LegoWorld* world = CurrentWorld();
+
+	if (m_cameraFlag && world && world->GetCamera() && m_roi) {
+		world->GetCamera()->FUN_100123e0(m_roi->GetLocal2World(), 1);
+	}
+}
+
 // STUB: LEGO1 0x10010c60
 Mx3DPointFloat LegoEntity::GetEntitydDirection()
 {
@@ -190,16 +200,6 @@ Mx3DPointFloat LegoEntity::GetEntityUp()
 Mx3DPointFloat LegoEntity::GetEntityLocation()
 {
 	return Mx3DPointFloat(0, 0, 0);
-}
-
-// FUNCTION: LEGO1 0x10010c30
-void LegoEntity::FUN_10010c30()
-{
-	LegoWorld* world = CurrentWorld();
-
-	if (m_cameraFlag && world && world->GetCamera() && m_roi) {
-		world->GetCamera()->FUN_100123e0(m_roi->GetLocal2World(), 1);
-	}
 }
 
 // FUNCTION: LEGO1 0x10010e10
