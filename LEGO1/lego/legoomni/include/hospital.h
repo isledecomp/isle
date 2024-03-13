@@ -43,7 +43,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxBool HandleClick(LegoControlManagerEvent& p_param);
 
 	undefined2 m_unk0xf8;               // 0xf8
 	LegoGameState::Area m_destLocation; // 0xfc

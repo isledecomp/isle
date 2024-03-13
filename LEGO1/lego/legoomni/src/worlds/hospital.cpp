@@ -145,7 +145,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 }
 
 // STUB: LEGO1 0x10075f90
-MxLong Hospital::HandleClick(LegoControlManagerEvent& p_param)
+MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;
