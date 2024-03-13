@@ -9,6 +9,8 @@
 #include "mxpresenterlist.h"
 #include "mxrect32.h"
 
+#include <assert.h>
+
 // GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, int) = NULL;
 
@@ -78,39 +80,37 @@ void MakeSourceName(char* p_output, const char* p_input)
 }
 
 // FUNCTION: LEGO1 0x100b7050
-MxBool KeyValueStringParse(char* p_outputValue, const char* p_key, const char* p_source)
+MxBool KeyValueStringParse(char* p_output, const char* p_command, const char* p_string)
 {
 	MxBool didMatch = FALSE;
+	assert(p_string);
+	assert(p_command);
 
-	MxS16 len = strlen(p_source);
-	char* temp = new char[len + 1];
-	strcpy(temp, p_source);
+	MxS16 len = strlen(p_string);
+	char* string = new char[len + 1];
+	assert(string);
+	strcpy(string, p_string);
 
-	char* token = strtok(temp, ", \t\r\n:");
-	while (token) {
+	for (char* token = strtok(string, ", \t\r\n:"); token; token = strtok(NULL, ", \t\r\n:")) {
 		len -= (strlen(token) + 1);
 
-		if (strcmpi(token, p_key) == 0) {
-			if (p_outputValue && len > 0) {
-				char* cur = &token[strlen(p_key)];
+		if (strcmpi(token, p_command) == 0) {
+			if (p_output && len > 0) {
+				char* output = p_output;
+				char* cur = &token[strlen(p_command)];
 				cur++;
-				while (*cur != ',') {
-					if (*cur == ' ' || *cur == '\0' || *cur == '\t' || *cur == '\n' || *cur == '\r') {
-						break;
-					}
-					*p_outputValue++ = *cur++;
+				while (*cur != ',' && *cur != ' ' && *cur != '\0' && *cur != '\t' && *cur != '\n' && *cur != '\r') {
+					*output++ = *cur++;
 				}
-				*p_outputValue = '\0';
+				*output = '\0';
 			}
 
 			didMatch = TRUE;
 			break;
 		}
-
-		token = strtok(NULL, ", \t\r\n:");
 	}
 
-	delete[] temp;
+	delete[] string;
 	return didMatch;
 }
 
