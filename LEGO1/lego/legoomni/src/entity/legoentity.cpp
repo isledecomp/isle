@@ -184,6 +184,24 @@ void LegoEntity::FUN_10010c30()
 	}
 }
 
+// STUB: LEGO1 0x10010c60
+Mx3DPointFloat LegoEntity::GetEntitydDirection()
+{
+	return Mx3DPointFloat(0, 0, 0);
+}
+
+// STUB: LEGO1 0x10010cf0
+Mx3DPointFloat LegoEntity::GetEntityUp()
+{
+	return Mx3DPointFloat(0, 0, 0);
+}
+
+// STUB: LEGO1 0x10010d80
+Mx3DPointFloat LegoEntity::GetEntityLocation()
+{
+	return Mx3DPointFloat(0, 0, 0);
+}
+
 // FUNCTION: LEGO1 0x10010e10
 void LegoEntity::ParseAction(char* p_extra)
 {

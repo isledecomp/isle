@@ -1,4 +1,5 @@
 #include "3dmanager/lego3dview.h"
+#include "legoentity.h"
 #include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legopointofviewcontroller.h"
@@ -185,8 +186,31 @@ MxResult LegoPointOfViewController::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10065ae0
+// FUNCTION: LEGO1 0x10065ae0
 void LegoPointOfViewController::SetEntity(LegoEntity* p_entity)
 {
-	// TODO
+	TickleManager()->UnregisterClient(this);
+	m_entity = p_entity;
+
+	ViewROI* pov = m_lego3DView->GetPointOfView();
+
+	if (m_entity != NULL && pov != NULL) {
+		MxMatrix mat;
+
+		CalcLocalTransform(
+			Mx3DPointFloat(
+				m_entity->GetEntityLocation()[0],
+				m_entity->GetEntityLocation()[1] + m_entityOffsetUp,
+				m_entity->GetEntityLocation()[2]
+			),
+			m_entity->GetEntitydDirection(),
+			m_entity->GetEntityUp(),
+			mat
+		);
+
+		pov->WrappedSetLocalTransform(mat);
+	}
+	else {
+		TickleManager()->RegisterClient(this, 10);
+	}
 }
