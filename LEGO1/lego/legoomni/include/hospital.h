@@ -40,8 +40,8 @@ public:
 	// Hospital::`scalar deleting destructor'
 
 private:
-	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxS8 p_key);
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 

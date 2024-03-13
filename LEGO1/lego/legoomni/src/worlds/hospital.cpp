@@ -123,15 +123,15 @@ void Hospital::ReadyWorld()
 	// TODO
 }
 
-// STUB: LEGO1 0x10074e00
-MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
+// STUB: LEGO1 0x10074dd0
+MxLong Hospital::HandleKeyPress(MxS8 p_key)
 {
 	// TODO
 	return 0;
 }
 
-// STUB: LEGO1 0x10074dd0
-MxLong Hospital::HandleKeyPress(MxS8 p_key)
+// STUB: LEGO1 0x10074e00
+MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	// TODO
 	return 0;
