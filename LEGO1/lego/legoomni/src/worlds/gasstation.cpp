@@ -62,16 +62,13 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 	m_state = (GasStationState*) GameState()->GetState("GasStationState");
 	if (!m_state) {
 		m_state = (GasStationState*) GameState()->CreateState("GasStationState");
-		m_state->GetUnknown0x14().SetUnknown0x00(1);
+		m_state->m_unk0x14.m_unk0x00 = 1;
+	}
+	else if (m_state->m_unk0x14.m_unk0x00 == 4) {
+		m_state->m_unk0x14.m_unk0x00 = 4;
 	}
 	else {
-		GasStationState::Unknown0x14& unk0x14 = m_state->GetUnknown0x14();
-		if (unk0x14.GetUnknown0x00() == 4) {
-			unk0x14.SetUnknown0x00(4);
-		}
-		else {
-			unk0x14.SetUnknown0x00(3);
-		}
+		m_state->m_unk0x14.m_unk0x00 = 3;
 	}
 
 	GameState()->SetCurrentArea(LegoGameState::e_garage);
