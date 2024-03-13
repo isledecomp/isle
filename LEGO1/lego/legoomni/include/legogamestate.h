@@ -28,7 +28,7 @@ public:
 	};
 
 	enum Area {
-		e_noArea = 0,
+		e_undefined = 0,
 		e_previousArea = 0,
 		e_isle,
 		e_infomain,

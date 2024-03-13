@@ -16,7 +16,7 @@ GasStation::GasStation()
 {
 	m_unk0xf8 = 0;
 	m_state = NULL;
-	m_transitionDestination = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x108 = 0;
 	m_unk0x104 = 0;
 	m_unk0x114 = 0;
@@ -100,7 +100,7 @@ MxLong GasStation::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_transitionDestination);
+			GameState()->SwitchArea(m_destLocation);
 			break;
 		}
 	}

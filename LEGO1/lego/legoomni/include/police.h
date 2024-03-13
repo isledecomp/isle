@@ -48,9 +48,9 @@ private:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(LegoEventNotificationParam& p_param);
 
-	Radio m_radio;                               // 0xf8
-	PoliceState* m_policeState;                  // 0x108
-	LegoGameState::Area m_transitionDestination; // 0x10c
+	Radio m_radio;                      // 0xf8
+	PoliceState* m_policeState;         // 0x108
+	LegoGameState::Area m_destLocation; // 0x10c
 };
 
 #endif // POLICE_H

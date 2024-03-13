@@ -42,7 +42,7 @@ public:
 	// ElevatorBottom::`scalar deleting destructor'
 
 private:
-	LegoGameState::Area m_unk0xf8; // 0xf8
+	LegoGameState::Area m_destLocation; // 0xf8
 
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 };

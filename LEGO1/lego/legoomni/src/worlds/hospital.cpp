@@ -1,7 +1,6 @@
 #include "hospital.h"
 
 #include "legocontrolmanager.h"
-#include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legoutils.h"
 #include "misc.h"
@@ -17,7 +16,7 @@ Hospital::Hospital()
 	m_unk0x100 = 0;
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
-	m_unk0xfc = 0;
+	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x10c = 0;
 	m_unk0x110 = 0;
 	m_unk0x114 = 0;

@@ -18,7 +18,7 @@ DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
 // FUNCTION: LEGO1 0x10037730
 InfocenterDoor::InfocenterDoor()
 {
-	m_unk0xf8 = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 
 	NotificationManager()->Register(this);
 }
@@ -69,7 +69,7 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_unk0xf8);
+			GameState()->SwitchArea(m_destLocation);
 			result = 1;
 			break;
 		}
@@ -96,17 +96,17 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 
 		switch (p_param.GetClickedObjectId()) {
 		case 1:
-			m_unk0xf8 = LegoGameState::e_infoscor;
+			m_destLocation = LegoGameState::e_infoscor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 2:
-			m_unk0xf8 = LegoGameState::e_elevbott;
+			m_destLocation = LegoGameState::e_elevbott;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
 		case 3:
-			m_unk0xf8 = LegoGameState::e_infomain;
+			m_destLocation = LegoGameState::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
@@ -114,7 +114,7 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 			if (GameState()->GetActorId()) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {
-					m_unk0xf8 = LegoGameState::e_unk4;
+					m_destLocation = LegoGameState::e_unk4;
 				}
 				else {
 					MxDSAction action;
@@ -165,6 +165,6 @@ void InfocenterDoor::Enable(MxBool p_enable)
 MxBool InfocenterDoor::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 510);
-	m_unk0xf8 = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }
