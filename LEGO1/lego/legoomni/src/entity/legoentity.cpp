@@ -185,7 +185,7 @@ void LegoEntity::FUN_10010c30()
 }
 
 // FUNCTION: LEGO1 0x10010c60
-Mx3DPointFloat LegoEntity::GetEntitydDirection()
+Mx3DPointFloat LegoEntity::GetWorldDirection()
 {
 	if (m_roi != NULL) {
 		m_worldDirection =
@@ -196,7 +196,7 @@ Mx3DPointFloat LegoEntity::GetEntitydDirection()
 }
 
 // FUNCTION: LEGO1 0x10010cf0
-Mx3DPointFloat LegoEntity::GetEntityUp()
+Mx3DPointFloat LegoEntity::GetWorldUp()
 {
 	if (m_roi != NULL) {
 		m_worldUp = Mx3DPointFloat(m_roi->GetWorldUp()[0], m_roi->GetWorldUp()[1], m_roi->GetWorldUp()[2]);
@@ -206,7 +206,7 @@ Mx3DPointFloat LegoEntity::GetEntityUp()
 }
 
 // FUNCTION: LEGO1 0x10010d80
-Mx3DPointFloat LegoEntity::GetEntityPosition()
+Mx3DPointFloat LegoEntity::GetWorldPosition()
 {
 	if (m_roi != NULL) {
 		m_worldLocation =
