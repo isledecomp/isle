@@ -5,6 +5,7 @@
 #include "hospitalstate.h"
 #include "legogamestate.h"
 #include "legoworld.h"
+#include "radio.h"
 
 // VTABLE: LEGO1 0x100d9730
 // SIZE 0x12c
@@ -39,6 +40,11 @@ public:
 	// Hospital::`scalar deleting destructor'
 
 private:
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
+	MxLong HandleKeyPress(MxS8 p_key);
+	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
+	MxLong HandleClick(LegoControlManagerEvent& p_param);
+
 	undefined2 m_unk0xf8;               // 0xf8
 	LegoGameState::Area m_destLocation; // 0xfc
 	undefined2 m_unk0x100;              // 0x100
