@@ -1,11 +1,19 @@
+#include "3dmanager/lego3dview.h"
 #include "legonavcontroller.h"
 #include "legoomni.h"
 #include "legopointofviewcontroller.h"
+#include "legosoundmanager.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
+#include "realtime/realtime.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoMouseController, 0x20);
 DECOMP_SIZE_ASSERT(LegoPointOfViewController, 0x38);
+
+// GLOBAL: LEGO1 0x100f75ac
+MxBool g_unk0x100f75ac = FALSE;
 
 //////////////////////////////////////////////////////////////////////
 
@@ -121,16 +129,59 @@ void LegoPointOfViewController::LeftDrag(int p_x, int p_y)
 	AffectPointOfView();
 }
 
-// STUB: LEGO1 0x10065900
+// FUNCTION: LEGO1 0x10065900
 void LegoPointOfViewController::AffectPointOfView()
 {
-	// TODO
+	m_nav->SetTargets(GetButtonX(), GetButtonY(), GetIsButtonDown());
 }
 
-// STUB: LEGO1 0x10065930
+// FUNCTION: LEGO1 0x10065930
 MxResult LegoPointOfViewController::Tickle()
 {
-	// TODO
+	ViewROI* pov = m_lego3DView->GetPointOfView();
+
+	if (pov != NULL && m_nav != NULL && m_entity == NULL) {
+		Mx3DPointFloat newDir, newPos;
+
+		Vector3 pos(pov->GetWorldPosition());
+		Vector3 dir(pov->GetWorldDirection());
+
+		if (m_nav->CalculateNewPosDir(pos, dir, newDir, newPos, NULL)) {
+			MxMatrix mat;
+
+			CalcLocalTransform(newPos, newDir, pov->GetWorldUp(), mat);
+			((TimeROI*) pov)->FUN_100a9b40(mat, Timer()->GetTime());
+			pov->WrappedSetLocalTransform(mat);
+			m_lego3DView->Moved(*pov);
+
+			SoundManager()->FUN_1002a410(
+				pov->GetWorldPosition(),
+				pov->GetWorldDirection(),
+				pov->GetWorldUp(),
+				pov->GetWorldVelocity()
+			);
+
+			g_unk0x100f75ac = FALSE;
+		}
+		else {
+			if (g_unk0x100f75ac == FALSE) {
+				Mx3DPointFloat vel;
+
+				vel.Clear();
+				pov->FUN_100a5a30(vel);
+
+				SoundManager()->FUN_1002a410(
+					pov->GetWorldPosition(),
+					pov->GetWorldDirection(),
+					pov->GetWorldUp(),
+					pov->GetWorldVelocity()
+				);
+
+				g_unk0x100f75ac = TRUE;
+			}
+		}
+	}
+
 	return SUCCESS;
 }
 

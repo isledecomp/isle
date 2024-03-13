@@ -1,9 +1,11 @@
 #ifndef LEGONAVCONTROLLER_H
 #define LEGONAVCONTROLLER_H
 
+#include "decomp.h"
 #include "mxcore.h"
 #include "mxtimer.h"
 #include "mxtypes.h"
+#include "realtime/vector.h"
 
 // VTABLE: LEGO1 0x100d85b8
 // SIZE 0x70
@@ -60,6 +62,13 @@ public:
 	float CalculateNewTargetSpeed(int p_pos, int p_center, float p_maxSpeed);
 	float CalculateNewAccel(int p_pos, int p_center, float p_maxAccel, int p_minAccel);
 	float CalculateNewVel(float p_targetVel, float p_currentVel, float p_accel, float p_time);
+	MxBool CalculateNewPosDir(
+		const Vector3& p_curPos,
+		const Vector3& p_curDir,
+		Vector3& p_newPos,
+		Vector3& p_newDir,
+		undefined* p_und
+	);
 
 	inline void SetTrackDefaultParams(MxBool p_trackDefault) { m_trackDefault = p_trackDefault; }
 
