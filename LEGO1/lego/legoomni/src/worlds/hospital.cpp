@@ -6,8 +6,12 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
+
+// GLOBAL: LEGO1 0x100f7918
+undefined4 g_unk0x100f7918 = 3;
 
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
@@ -33,10 +37,21 @@ MxBool Hospital::VTable0x5c()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x100747f0
+// FUNCTION: LEGO1 0x100747f0
 Hospital::~Hospital()
 {
-	// TODO
+	InputManager()->UnRegister(this);
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	ControlManager()->Unregister(this);
+	TickleManager()->UnregisterClient(this);
+
+	m_hospitalState->m_unk0x08.m_unk0x00 = 3;
+
+	NotificationManager()->Unregister(this);
+	g_unk0x100f7918 = 3;
 }
 
 // FUNCTION: LEGO1 0x100748c0
