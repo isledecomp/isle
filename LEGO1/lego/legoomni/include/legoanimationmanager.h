@@ -5,18 +5,11 @@
 #include "decomp.h"
 #include "mxcore.h"
 
+// SIZE 0x18
 struct Character {
-	char* m_name;
-	undefined m_unk0x4[0x10]; // 0x04
-	MxBool m_active;          // 0x14
-	undefined m_unk0x15;      // 0x15
-	undefined m_unk0x16;      // 0x16
-	undefined m_unk0x17;      // 0x17
-};
-
-struct Vehicle {
-	char* m_name;        // 0x00
-	undefined4 m_unk0x4; // 0x04
+	char* m_name;              // 0x00
+	undefined m_unk0x04[0x10]; // 0x04
+	MxBool m_active;           // 0x14
 };
 
 void LegoUnknown100d8ca8Handler();
