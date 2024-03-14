@@ -156,8 +156,9 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 					MxU32 k;
 					if (FUN_10060140(m_anims[i].m_models[j2].m_modelName, k) && m_anims[i].m_models[j2].m_unk0x2c) {
 						m_anims[i].m_unk0x2a[count++] = k;
-						if (count > 3)
+						if (count > 3) {
 							break;
+						}
 					}
 				}
 			}
@@ -197,7 +198,7 @@ void LegoUnknown100d8cd8Handler()
 }
 
 // STUB: LEGO1 0x10060140
-MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& index)
+MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& p_index)
 {
 	return FALSE;
 }
