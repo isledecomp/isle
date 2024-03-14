@@ -13,7 +13,7 @@ class MxBitset {
 public:
 	MxBitset() { Tidy(); }
 
-	// SIZE 0x8
+	// SIZE 0x08
 	class Reference {
 		friend class MxBitset<N>;
 

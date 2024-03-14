@@ -8,10 +8,10 @@
 #include <algorithm>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
-DECOMP_SIZE_ASSERT(MxMemoryPool64, 0xc);
-DECOMP_SIZE_ASSERT(MxMemoryPool128, 0xc);
-DECOMP_SIZE_ASSERT(MxBitset<22>, 0x4);
-DECOMP_SIZE_ASSERT(MxBitset<2>, 0x4);
+DECOMP_SIZE_ASSERT(MxMemoryPool64, 0x0c);
+DECOMP_SIZE_ASSERT(MxMemoryPool128, 0x0c);
+DECOMP_SIZE_ASSERT(MxBitset<22>, 0x04);
+DECOMP_SIZE_ASSERT(MxBitset<2>, 0x04);
 
 // FUNCTION: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
