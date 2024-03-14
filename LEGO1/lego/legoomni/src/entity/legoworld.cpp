@@ -577,7 +577,7 @@ void LegoWorld::Enable(MxBool p_enable)
 
 			if (m_scriptIndex != -1) {
 				PlantManager()->FUN_10026360(m_scriptIndex);
-				AnimationManager()->FUN_1005f720(m_scriptIndex);
+				AnimationManager()->LoadScriptInfo(m_scriptIndex);
 				BuildingManager()->FUN_1002fa00();
 				AnimationManager()->FUN_1005f0b0();
 			}

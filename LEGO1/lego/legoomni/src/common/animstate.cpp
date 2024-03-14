@@ -17,6 +17,16 @@ AnimState::~AnimState()
 	// TODO
 }
 
+// STUB: LEGO1 0x100651d0
+void AnimState::FUN_100651d0(MxU32, AnimInfo*, MxU32&)
+{
+}
+
+// STUB: LEGO1 0x10065240
+void AnimState::FUN_10065240(MxU32, AnimInfo*, MxU32)
+{
+}
+
 // STUB: LEGO1 0x100652d0
 MxResult AnimState::VTable0x1c(LegoFile* p_legoFile)
 {
