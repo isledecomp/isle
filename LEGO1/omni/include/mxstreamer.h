@@ -4,50 +4,16 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxdsobject.h"
+#include "mxmemorypool.h"
 #include "mxnotificationparam.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
+#include <assert.h>
 #include <list>
 
-// NOTE: This feels like some kind of templated class, maybe something from the
-//       STL. But I haven't figured out what yet (it's definitely not a vector).
-class MxStreamerSubClass1 {
-public:
-	inline MxStreamerSubClass1(undefined4 p_size)
-	{
-		m_buffer = NULL;
-		m_size = p_size;
-		undefined4* ptr = &m_unk0x08;
-		for (int i = 0; i >= 0; i--) {
-			ptr[i] = 0;
-		}
-	}
-
-	// FUNCTION: LEGO1 0x100b9110
-	~MxStreamerSubClass1() { delete[] m_buffer; }
-
-	undefined4 GetSize() const { return m_size; }
-
-	void SetBuffer(undefined* p_buf) { m_buffer = p_buf; }
-	inline undefined* GetBuffer() const { return m_buffer; }
-	inline undefined* GetUnk08Ref() const { return (undefined*) &m_unk0x08; }
-
-private:
-	undefined* m_buffer;
-	undefined4 m_size;
-	undefined4 m_unk0x08;
-};
-
-class MxStreamerSubClass2 : public MxStreamerSubClass1 {
-public:
-	inline MxStreamerSubClass2() : MxStreamerSubClass1(0x40) {}
-};
-
-class MxStreamerSubClass3 : public MxStreamerSubClass1 {
-public:
-	inline MxStreamerSubClass3() : MxStreamerSubClass1(0x80) {}
-};
+typedef MxMemoryPool<64, 22> MxMemoryPool64;
+typedef MxMemoryPool<128, 2> MxMemoryPool128;
 
 // VTABLE: LEGO1 0x100dc760
 class MxStreamerNotification : public MxNotificationParam {
@@ -105,19 +71,56 @@ public:
 	MxResult FUN_100b99b0(MxDSAction* p_action);
 	MxResult DeleteObject(MxDSAction* p_dsAction);
 
-	inline const MxStreamerSubClass2& GetSubclass1() { return m_subclass1; }
-	inline const MxStreamerSubClass3& GetSubclass2() { return m_subclass2; }
+	MxU8* GetMemoryBlock(MxU32 p_blockSize)
+	{
+		switch (p_blockSize) {
+		case 0x40:
+			return m_pool64.Get();
+
+		case 0x80:
+			return m_pool128.Get();
+
+		default:
+			assert("Invalid block size for memory pool" == NULL);
+			break;
+		}
+
+		return NULL;
+	}
+
+	void ReleaseMemoryBlock(MxU8* p_block, MxU32 p_blockSize)
+	{
+		switch (p_blockSize) {
+		case 0x40:
+			m_pool64.Release(p_block);
+			break;
+
+		case 0x80:
+			m_pool128.Release(p_block);
+			break;
+
+		default:
+			assert("Invalid block size for memory pool" == NULL);
+			break;
+		}
+	}
 
 private:
 	list<MxStreamController*> m_openStreams; // 0x08
-	MxStreamerSubClass2 m_subclass1;         // 0x14
-	MxStreamerSubClass3 m_subclass2;         // 0x20
+	MxMemoryPool64 m_pool64;                 // 0x14
+	MxMemoryPool128 m_pool128;               // 0x20
 };
 
 // clang-format off
 // TEMPLATE: LEGO1 0x100b9090
 // list<MxStreamController *,allocator<MxStreamController *> >::~list<MxStreamController *,allocator<MxStreamController *> >
 // clang-format on
+
+// TEMPLATE: LEGO1 0x100b9100
+// MxMemoryPool<64,22>::~MxMemoryPool<64,22>
+
+// TEMPLATE: LEGO1 0x100b9110
+// MxMemoryPool<128,2>::~MxMemoryPool<128,2>
 
 // SYNTHETIC: LEGO1 0x100b9120
 // MxStreamer::`scalar deleting destructor'

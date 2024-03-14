@@ -14,7 +14,7 @@ DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 // FUNCTION: LEGO1 0x100c6470
 MxDSBuffer::MxDSBuffer()
 {
-	m_refcount = 0;
+	m_referenceCount = 0;
 	m_pBuffer = NULL;
 	m_pIntoBuffer = NULL;
 	m_pIntoBuffer2 = NULL;
@@ -30,6 +30,8 @@ MxDSBuffer::MxDSBuffer()
 // FUNCTION: LEGO1 0x100c6530
 MxDSBuffer::~MxDSBuffer()
 {
+	assert(m_referenceCount == 0);
+
 	if (m_pBuffer != NULL) {
 		switch (m_mode) {
 		case e_allocate:
@@ -37,39 +39,12 @@ MxDSBuffer::~MxDSBuffer()
 			delete[] m_pBuffer;
 			break;
 
-		case e_chunk: {
-			MxU32 offset = m_writeOffset / 1024;
-			MxStreamer* streamer = Streamer();
+		case e_chunk:
+			Streamer()->ReleaseMemoryBlock(m_pBuffer, m_writeOffset / 1024);
+			break;
 
-			switch (offset) {
-			case 0x40: {
-				MxU32 a =
-					(m_pBuffer - streamer->GetSubclass1().GetBuffer()) / (streamer->GetSubclass1().GetSize() << 10);
-
-				MxU32 bit = 1 << ((MxU8) a & 0x1f);
-				MxU32 index = (a & ~0x18u) >> 3;
-
-				if ((*(MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index])) & bit) {
-					MxU32* ptr = (MxU32*) (&streamer->GetSubclass1().GetUnk08Ref()[index]);
-					*ptr = *ptr ^ bit;
-				}
-				break;
-			}
-			case 0x80: {
-				MxU32 a =
-					(m_pBuffer - streamer->GetSubclass2().GetBuffer()) / (streamer->GetSubclass2().GetSize() << 10);
-
-				MxU32 bit = 1 << ((MxU8) a & 0x1f);
-				MxU32 index = (a & ~0x18u) >> 3;
-
-				if ((*(MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index])) & bit) {
-					MxU32* ptr = (MxU32*) (&streamer->GetSubclass2().GetUnk08Ref()[index]);
-					*ptr = *ptr ^ bit;
-				}
-				break;
-			}
-			}
-		}
+		case e_preallocated:
+			break;
 		}
 	}
 
@@ -85,58 +60,21 @@ MxResult MxDSBuffer::AllocateBuffer(MxU32 p_bufferSize, Type p_mode)
 	switch (p_mode) {
 	case e_allocate:
 		m_pBuffer = new MxU8[p_bufferSize];
+		assert(m_pBuffer); // m_firstRiffChunk?
 		break;
 
-	case e_chunk: {
-		MxStreamer* streamer = Streamer();
-
-		switch (p_bufferSize / 1024) {
-		case 0x40: {
-			for (MxU32 i = 0; i < 22; i++) {
-				if (((1 << (i & 0x1f)) & (*(MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(i & ~0x18u) >> 3])) == 0) {
-					MxU32* ptr = (MxU32*) &streamer->GetSubclass1().GetUnk08Ref()[(i & 0xffffffe7) >> 3];
-
-					*ptr = *ptr ^ 1 << (i & 0x1f);
-
-					m_pBuffer =
-						(MxU8*) (streamer->GetSubclass1().GetSize() * i * 0x400 + streamer->GetSubclass1().GetBuffer());
-					goto done;
-				}
-			}
-
-			m_pBuffer = NULL;
-			break;
-		}
-		case 0x80: {
-			for (MxU32 i = 0; i < 2; i++) {
-				if (((1 << (i & 0x1f)) & (*(MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(i & ~0x18u) >> 3])) == 0) {
-					MxU32* ptr = (MxU32*) &streamer->GetSubclass2().GetUnk08Ref()[(i & 0xffffffe7) >> 3];
-
-					*ptr = *ptr ^ 1 << (i & 0x1f);
-
-					m_pBuffer =
-						(MxU8*) (streamer->GetSubclass2().GetSize() * i * 0x400 + streamer->GetSubclass2().GetBuffer());
-					goto done;
-				}
-			}
-
-			m_pBuffer = NULL;
-			break;
-		}
-		default:
-			m_pBuffer = NULL;
-		}
-	}
+	case e_chunk:
+		m_pBuffer = Streamer()->GetMemoryBlock(p_bufferSize / 1024);
+		break;
 	}
 
-done:
 	m_pIntoBuffer = m_pBuffer;
 	m_pIntoBuffer2 = m_pBuffer;
 
 	if (m_pBuffer != NULL) {
-		m_mode = p_mode;
 		m_bytesRemaining = p_bufferSize;
-		m_writeOffset = p_bufferSize;
+		m_writeOffset = m_bytesRemaining;
+		m_mode = p_mode;
 		result = SUCCESS;
 	}
 
@@ -444,8 +382,8 @@ done:
 // FUNCTION: LEGO1 0x100c6ec0
 MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 {
-	if (m_refcount != 0) {
-		m_refcount--;
+	if (m_referenceCount != 0) {
+		m_referenceCount--;
 	}
 	return 0;
 }
@@ -454,7 +392,7 @@ MxU8 MxDSBuffer::ReleaseRef(MxDSChunk*)
 void MxDSBuffer::AddRef(MxDSChunk* p_chunk)
 {
 	if (p_chunk) {
-		m_refcount++;
+		m_referenceCount++;
 	}
 }
 

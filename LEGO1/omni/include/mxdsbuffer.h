@@ -66,7 +66,7 @@ public:
 	inline MxU8* GetBuffer() { return m_pBuffer; }
 	inline MxU8** GetBufferRef() { return &m_pBuffer; }
 	inline undefined4 GetUnknown14() { return m_unk0x14; }
-	inline MxU16 GetRefCount() { return m_refcount; }
+	inline MxU16 GetRefCount() { return m_referenceCount; }
 	inline Type GetMode() { return m_mode; }
 	inline MxU32 GetWriteOffset() { return m_writeOffset; }
 	inline MxU32 GetBytesRemaining() { return m_bytesRemaining; }
@@ -85,7 +85,7 @@ private:
 	undefined4 m_unk0x14;           // 0x14
 	undefined4 m_unk0x18;           // 0x18
 	undefined4 m_unk0x1c;           // 0x1c
-	MxU16 m_refcount;               // 0x20
+	MxU16 m_referenceCount;         // 0x20
 	Type m_mode;                    // 0x24
 	MxU32 m_writeOffset;            // 0x28
 	MxU32 m_bytesRemaining;         // 0x2c
