@@ -10,7 +10,7 @@
 template <size_t BS, size_t NB>
 class MxMemoryPool {
 public:
-	MxMemoryPool() : m_pool(NULL), m_blockSize(BS){};
+	MxMemoryPool() : m_pool(NULL), m_blockSize(BS) {}
 	~MxMemoryPool() { delete[] m_pool; }
 
 	MxResult Allocate();
@@ -20,9 +20,9 @@ public:
 	MxU32 GetPoolSize() const { return m_blockRef.Size(); }
 
 private:
-	MxU8* m_pool;
-	MxU32 m_blockSize;
-	MxBitset<NB> m_blockRef;
+	MxU8* m_pool;            // 0x00
+	MxU32 m_blockSize;       // 0x04
+	MxBitset<NB> m_blockRef; // 0x08
 };
 
 template <size_t BS, size_t NB>

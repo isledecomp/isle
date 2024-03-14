@@ -13,6 +13,7 @@ class MxBitset {
 public:
 	MxBitset() { Tidy(); }
 
+	// SIZE 0x8
 	class Reference {
 		friend class MxBitset<N>;
 
@@ -27,8 +28,8 @@ public:
 
 	private:
 		Reference(MxBitset<N>& p_bitset, size_t p_offset) : m_bitset(&p_bitset), m_offset(p_offset) {}
-		MxBitset<N>* m_bitset;
-		size_t m_offset;
+		MxBitset<N>* m_bitset; // 0x00
+		size_t m_offset;       // 0x04
 	};
 
 	Reference operator[](size_t p_bit) { return (Reference(*this, p_bit)); }
@@ -44,7 +45,7 @@ public:
 
 	size_t Count()
 	{
-		// debug only
+		// debug only, intentionally unimplemented
 		return 0;
 	}
 
@@ -88,7 +89,7 @@ private:
 		e_blocksRequired = N == 0 ? 0 : (N - 1) / e_bitsPerBlock
 	};
 
-	MxU32 m_blocks[e_blocksRequired + 1]; // 0x0
+	MxU32 m_blocks[e_blocksRequired + 1]; // 0x00
 };
 
 #endif // MXBITSET_H

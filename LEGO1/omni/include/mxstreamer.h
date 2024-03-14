@@ -12,6 +12,9 @@
 #include <assert.h>
 #include <list>
 
+typedef MxMemoryPool<64, 22> MxMemoryPool64;
+typedef MxMemoryPool<128, 2> MxMemoryPool128;
+
 // VTABLE: LEGO1 0x100dc760
 class MxStreamerNotification : public MxNotificationParam {
 public:
@@ -72,10 +75,10 @@ public:
 	{
 		switch (p_blockSize) {
 		case 0x40:
-			return m_pool1.Get();
+			return m_pool64.Get();
 
 		case 0x80:
-			return m_pool2.Get();
+			return m_pool128.Get();
 
 		default:
 			assert("Invalid block size for memory pool" == NULL);
@@ -89,11 +92,11 @@ public:
 	{
 		switch (p_blockSize) {
 		case 0x40:
-			m_pool1.Release(p_block);
+			m_pool64.Release(p_block);
 			break;
 
 		case 0x80:
-			m_pool2.Release(p_block);
+			m_pool128.Release(p_block);
 			break;
 
 		default:
@@ -104,8 +107,8 @@ public:
 
 private:
 	list<MxStreamController*> m_openStreams; // 0x08
-	MxMemoryPool<0x40, 22> m_pool1;          // 0x14
-	MxMemoryPool<0x80, 2> m_pool2;           // 0x20
+	MxMemoryPool64 m_pool64;                 // 0x14
+	MxMemoryPool128 m_pool128;               // 0x20
 };
 
 // clang-format off

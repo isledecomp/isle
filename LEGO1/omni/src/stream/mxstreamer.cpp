@@ -8,6 +8,10 @@
 #include <algorithm>
 
 DECOMP_SIZE_ASSERT(MxStreamer, 0x2c);
+DECOMP_SIZE_ASSERT(MxMemoryPool64, 0xc);
+DECOMP_SIZE_ASSERT(MxMemoryPool128, 0xc);
+DECOMP_SIZE_ASSERT(MxBitset<22>, 0x4);
+DECOMP_SIZE_ASSERT(MxBitset<2>, 0x4);
 
 // FUNCTION: LEGO1 0x100b8f00
 MxStreamer::MxStreamer()
@@ -18,7 +22,7 @@ MxStreamer::MxStreamer()
 // FUNCTION: LEGO1 0x100b9190
 MxResult MxStreamer::Create()
 {
-	if (m_pool1.Allocate() || m_pool2.Allocate()) {
+	if (m_pool64.Allocate() || m_pool128.Allocate()) {
 		return FAILURE;
 	}
 
