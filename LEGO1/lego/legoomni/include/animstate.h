@@ -5,7 +5,7 @@
 
 struct ModelInfo {
 	char* m_modelName;      // 0x00
-	MxU8 m_unk0x4;          // 0x04
+	MxU8 m_unk0x04;         // 0x04
 	float m_location[3];    // 0x08
 	float m_direction[3];   // 0x14
 	float m_up[3];          // 0x20
@@ -15,12 +15,12 @@ struct ModelInfo {
 
 struct AnimInfo {
 	char* m_animName;       // 0x00
-	undefined4 m_unk0x4;    // 0x04
-	MxS16 m_unk0x8;         // 0x08
-	MxU8 m_unk0xa;          // 0x0a
-	MxU8 m_unk0xb;          // 0x0b
-	MxU8 m_unk0xc;          // 0x0c
-	MxU8 m_unk0xd;          // 0x0d
+	undefined4 m_unk0x04;   // 0x04
+	MxS16 m_unk0x08;        // 0x08
+	MxU8 m_unk0x0a;         // 0x0a
+	MxU8 m_unk0x0b;         // 0x0b
+	MxU8 m_unk0x0c;         // 0x0c
+	MxU8 m_unk0x0d;         // 0x0d
 	MxU32 m_unk0x10[4];     // 0x10
 	MxU8 m_modelCount;      // 0x20
 	ModelInfo* m_models;    // 0x24

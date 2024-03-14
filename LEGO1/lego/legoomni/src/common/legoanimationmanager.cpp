@@ -10,7 +10,7 @@
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 
 // GLOBAL: LEGO1 0x100f7048
-Character g_characters[0x2f];
+Character g_characters[47]; // TODO: Initialize this
 
 // GLOBAL: LEGO1 0x100f74f8
 int g_legoAnimationManagerConfig = 1;
@@ -143,7 +143,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 				for (int j = 0; j < 3; j++) {
 					m_anims[i].m_unk0x2a[j] = -1;
 				}
-				if (m_anims[i].m_unk0x8 == -1) {
+				if (m_anims[i].m_unk0x08 == -1) {
 					for (int j = 0; j < m_anims[i].m_modelCount; j++) {
 						MxS32 index = FUN_10062360(m_anims[i].m_models[j].m_modelName);
 						if (index >= 0) {
@@ -162,8 +162,8 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 				}
 			}
 			m_unk0x08 = p_scriptIndex;
-			m_tranInfoList = new C100d8c90();
-			m_tranInfoList2 = new C100d8c90();
+			m_tranInfoList = new LegoUnknown100d8c90();
+			m_tranInfoList2 = new LegoUnknown100d8c90();
 			FUN_100617c0(-1, m_unk0x0e, m_unk0x10);
 			result = SUCCESS;
 			m_unk0x402 = 1;
@@ -187,6 +187,15 @@ done:
 	return result;
 }
 
+// FUNCTION: LEGO1 0x1005fe50
+void LegoUnknown100d8ca8Handler()
+{
+}
+
+void LegoUnknown100d8cd8Handler()
+{
+}
+
 // STUB: LEGO1 0x10060140
 MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& index)
 {
@@ -207,22 +216,22 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info)
 		goto fail;
 	}
 	p_info->m_animName[length] = 0;
-	if (p_file->Read(&p_info->m_unk0x4, 4) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x04, 4) == FAILURE) {
 		goto fail;
 	}
-	if (p_file->Read(&p_info->m_unk0x8, 2) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x08, 2) == FAILURE) {
 		goto fail;
 	}
-	if (p_file->Read(&p_info->m_unk0xa, 1) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x0a, 1) == FAILURE) {
 		goto fail;
 	}
-	if (p_file->Read(&p_info->m_unk0xb, 1) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x0b, 1) == FAILURE) {
 		goto fail;
 	}
-	if (p_file->Read(&p_info->m_unk0xc, 1) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x0c, 1) == FAILURE) {
 		goto fail;
 	}
-	if (p_file->Read(&p_info->m_unk0xd, 1) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x0d, 1) == FAILURE) {
 		goto fail;
 	}
 	for (i = 0; i < 4; i++) {
@@ -258,7 +267,7 @@ MxResult LegoAnimationManager::ReadModelInfo(LegoFile* p_file, ModelInfo* p_info
 		goto fail;
 	}
 	p_info->m_modelName[length] = 0;
-	if (p_file->Read(&p_info->m_unk0x4, 1) == FAILURE) {
+	if (p_file->Read(&p_info->m_unk0x04, 1) == FAILURE) {
 		goto fail;
 	}
 	if (p_file->Read(p_info->m_location, 12) != SUCCESS) {
@@ -318,14 +327,5 @@ MxS8 LegoAnimationManager::FUN_10062360(char*)
 
 // STUB: LEGO1 0x10064670
 void LegoAnimationManager::FUN_10064670(MxBool)
-{
-}
-
-// STUB: LEGO1 0x1005fe50
-void C100d8ca8_Handler()
-{
-}
-
-void C100d8cd8_Handler()
 {
 }
