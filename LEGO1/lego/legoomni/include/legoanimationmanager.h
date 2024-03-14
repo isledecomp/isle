@@ -36,7 +36,7 @@ public:
 	inline void SetHandler(void (*p_handler)()) { m_unk0xc = p_handler; }
 
 	// SYNTHETIC: LEGO1 0x1005ffb0
-	// LegoAnimationManager::`scalar deleting destructor'
+	// LegoUnknown100d8ca8::`scalar deleting destructor'
 
 private:
 	MxU32 m_unk0x8;     // 0x08
@@ -50,7 +50,7 @@ public:
 	inline LegoUnknown100d8cc0() { m_unk0x10 = m_unk0x14 = 0; }
 
 	// SYNTHETIC: LEGO1 0x10060020
-	// LegoAnimationManager::`scalar deleting destructor'
+	// LegoUnknown100d8cc0::`scalar deleting destructor'
 
 private:
 	MxU32 m_unk0x10; // 0x10
@@ -68,7 +68,7 @@ public:
 	}
 
 	// SYNTHETIC: LEGO1 0x100600d0
-	// LegoAnimationManager::`scalar deleting destructor'
+	// LegoUnknown100d8cd8::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100d8c90
@@ -78,7 +78,7 @@ public:
 	inline LegoUnknown100d8c90() : LegoUnknown100d8cd8(FALSE) {}
 
 	// SYNTHETIC: LEGO1 0x1005fef0
-	// LegoAnimationManager::`scalar deleting destructor'
+	// LegoUnknown100d8c90::`scalar deleting destructor'
 };
 
 // VTABLE: LEGO1 0x100d8c18
