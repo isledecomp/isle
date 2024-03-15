@@ -189,13 +189,13 @@ MxResult Hospital::Tickle()
 		MxLong time = Timer()->GetTime();
 
 		if (m_unk0x118 != 0) {
-			if (300 < (MxLong)(time - m_unk0x11c)) {
+			if (300 < (MxLong) (time - m_unk0x11c)) {
 				m_unk0x11c = time;
 				g_unk0x100f791c = !g_unk0x100f791c;
 				m_unk0x110->Enable(g_unk0x100f791c);
 			}
 
-			if (200 < (MxLong)(time - m_unk0x120)) {
+			if (200 < (MxLong) (time - m_unk0x120)) {
 				m_unk0x120 = time;
 				g_unk0x100f7920 = !g_unk0x100f7920;
 				m_unk0x114->Enable(g_unk0x100f7920);
