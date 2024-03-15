@@ -26,6 +26,8 @@ class MxTransitionManager;
 class ViewLODListManager;
 class ViewManager;
 
+extern MxBool g_isWorldActive;
+
 LegoOmni* Lego();
 LegoInputManager* InputManager();
 LegoSoundManager* SoundManager();

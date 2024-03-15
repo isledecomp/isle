@@ -16,3 +16,8 @@ e_RAMStream: 'Allow this enum constant'
 p_milliseconds: 'Probably a bug with function call'
 m_increaseAmount: "Can't currently detect member in union"
 m_increaseFactor: "Can't currently detect member in union"
+delta_rad: "Allow original naming from 1996"
+delta_pos: "Allow original naming from 1996"
+rot_mat: "Allow original naming from 1996"
+new_pos: "Allow original naming from 1996"
+new_dir: "Allow original naming from 1996"

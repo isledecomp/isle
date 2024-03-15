@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
+#include "mxtimer.h"
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"
 
