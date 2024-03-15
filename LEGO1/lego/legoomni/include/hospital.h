@@ -5,6 +5,7 @@
 #include "hospitalstate.h"
 #include "legogamestate.h"
 #include "legoworld.h"
+#include "mxstillpresenter.h"
 #include "radio.h"
 
 // VTABLE: LEGO1 0x100d9730
@@ -51,8 +52,8 @@ private:
 	HospitalState* m_hospitalState;     // 0x104
 	undefined2 m_unk0x108;              // 0x108
 	undefined4 m_unk0x10c;              // 0x10c
-	undefined4 m_unk0x110;              // 0x110
-	undefined4 m_unk0x114;              // 0x114
+	MxStillPresenter* m_unk0x110;       // 0x110
+	MxStillPresenter* m_unk0x114;       // 0x114
 	undefined m_unk0x118;               // 0x118
 	undefined4 m_unk0x11c;              // 0x11c
 	undefined4 m_unk0x120;              // 0x120

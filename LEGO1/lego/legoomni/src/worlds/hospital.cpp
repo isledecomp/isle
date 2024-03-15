@@ -7,11 +7,18 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
+#include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 
 // GLOBAL: LEGO1 0x100f7918
 undefined4 g_unk0x100f7918 = 3;
+
+// GLOBAL: LEGO1 0x100f791c
+undefined g_unk0x100f791c = 0;
+
+// GLOBAL: LEGO1 0x100f7920
+undefined g_unk0x100f7920 = 0;
 
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
@@ -167,10 +174,34 @@ void Hospital::Enable(MxBool p_enable)
 	}
 }
 
-// STUB: LEGO1 0x10076270
+// FUNCTION: LEGO1 0x10076270
 MxResult Hospital::Tickle()
 {
-	// TODO
+	if (!m_worldStarted) {
+		LegoWorld::Tickle();
+		return SUCCESS;
+	}
+	else {
+		if (g_unk0x100f7918 != 0) {
+			g_unk0x100f7918 -= 1;
+		}
+
+		MxLong time = Timer()->GetTime();
+
+		if (m_unk0x118 != 0) {
+			if (300 < (MxLong)(time - m_unk0x11c)) {
+				m_unk0x11c = time;
+				g_unk0x100f791c = !g_unk0x100f791c;
+				m_unk0x110->Enable(g_unk0x100f791c);
+			}
+
+			if (200 < (MxLong)(time - m_unk0x120)) {
+				m_unk0x120 = time;
+				g_unk0x100f7920 = !g_unk0x100f7920;
+				m_unk0x114->Enable(g_unk0x100f7920);
+			}
+		}
+	}
 	return SUCCESS;
 }
 
