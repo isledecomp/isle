@@ -85,6 +85,7 @@ class Compare:
         self._load_markers()
         self._find_original_strings()
         self._match_thunks()
+        self._match_exports()
 
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
@@ -166,12 +167,11 @@ class Compare:
         self._db.set_function_pair(self.orig_bin.entry, self.recomp_bin.entry)
 
     def _load_markers(self):
-        # Guess at module name from PDB file name
-        # reccmp checks the original binary filename; we could use this too
-        (module, _) = os.path.splitext(os.path.basename(self.pdb_file))
+        # Assume module name is the base filename of the original binary.
+        (module, _) = os.path.splitext(os.path.basename(self.orig_bin.filename))
 
         codefiles = list(walk_source_dir(self.code_dir))
-        codebase = DecompCodebase(codefiles, module)
+        codebase = DecompCodebase(codefiles, module.upper())
 
         # Match lineref functions first because this is a guaranteed match.
         # If we have two functions that share the same name, and one is
@@ -273,6 +273,17 @@ class Compare:
                 # because we are searching for a match to register this as a
                 # function in the first place.
                 self._db.skip_compare(thunk_from_orig)
+
+    def _match_exports(self):
+        # invert for name lookup
+        orig_exports = {y: x for (x, y) in self.orig_bin.exports}
+
+        for recomp_addr, export_name in self.recomp_bin.exports:
+            orig_addr = orig_exports.get(export_name)
+            if orig_addr is not None and self._db.set_pair_tentative(
+                orig_addr, recomp_addr
+            ):
+                logger.debug("Matched export %s", repr(export_name))
 
     def _compare_function(self, match: MatchInfo) -> DiffReport:
         orig_raw = self.orig_bin.read(match.orig_addr, match.size)

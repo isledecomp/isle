@@ -112,6 +112,7 @@ class Bin:
         self._relocated_addrs = set()
         self.imports = []
         self.thunks = []
+        self.exports: List[Tuple[int, str]] = []
 
     def __enter__(self):
         logger.debug("Bin %s Enter", self.filename)
@@ -136,6 +137,11 @@ class Bin:
         (self.imagebase,) = struct.unpack("<i", optional_hdr[0x1C:0x20])
         (entry,) = struct.unpack("<i", optional_hdr[0x10:0x14])
         self.entry = entry + self.imagebase
+
+        (number_of_rva,) = struct.unpack("<i", optional_hdr[0x5C:0x60])
+        data_dictionaries = [
+            *struct.iter_unpack("<2I", optional_hdr[0x60 : 0x60 + number_of_rva * 8])
+        ]
 
         headers_view = optional_hdr[
             pe_hdr.SizeOfOptionalHeader : pe_hdr.SizeOfOptionalHeader
@@ -164,6 +170,8 @@ class Bin:
         self._populate_relocations()
         self._populate_imports()
         self._populate_thunks()
+        # Export dir is always first
+        self._populate_exports(*data_dictionaries[0])
 
         # This is a (semi) expensive lookup that is not necesssary in every case.
         # We can find strings in the original if we have coverage using STRING markers.
@@ -343,6 +351,42 @@ class Bin:
                     # Record the address of the jmp instruction and the destination in .idata
                     thunk_ofs = ofs + shift + i * 6
                     self.thunks.append((thunk_ofs, jmp_ofs))
+
+    def _populate_exports(self, export_rva: int, _: int):
+        """If you are missing a lot of annotations in your file
+        (e.g. debug builds) then you can at least match up the
+        export symbol names."""
+
+        # Null = no exports
+        if export_rva == 0:
+            return
+
+        export_start = self.imagebase + export_rva
+
+        # TODO: namedtuple
+        export_table = struct.unpack("<2L2H7L", self.read(export_start, 40))
+
+        # TODO: if the number of functions doesn't match the number of names,
+        # are the remaining functions ordinals?
+        n_functions = export_table[6]
+
+        func_start = export_start + 40
+        func_addrs = [
+            self.imagebase + rva
+            for rva, in struct.iter_unpack("<L", self.read(func_start, 4 * n_functions))
+        ]
+
+        name_start = func_start + 4 * n_functions
+        name_addrs = [
+            self.imagebase + rva
+            for rva, in struct.iter_unpack("<L", self.read(name_start, 4 * n_functions))
+        ]
+
+        combined = zip(func_addrs, name_addrs)
+        self.exports = [
+            (func_addr, self.read_string(name_addr))
+            for (func_addr, name_addr) in combined
+        ]
 
     def get_section_by_name(self, name: str) -> Section:
         section = next(
