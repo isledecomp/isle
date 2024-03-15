@@ -166,7 +166,7 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
-	if (m_infocenterState->HasRegistered()) {
+	if (!m_infocenterState->HasRegistered()) {
 		MxDSAction action;
 		action.SetAtomId(*g_regbookScript);
 		action.SetObjectId(RegbookScript::c_iic006in_RunAnim);
