@@ -122,7 +122,8 @@ void RegistrationBook::ReadyWorld()
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
 	char letterBuffer[] = "A_Bitmap";
-	for (MxS16 i = 0; i < 26; i++) {
+	MxS16 i = 0;
+	for (i = 0; i < 26; i++) {
 		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
 
 		// We need to loop through the entire alphabet,
@@ -147,7 +148,7 @@ void RegistrationBook::ReadyWorld()
 	if (playerCount > 0) {
 		for (i = 1; i <= playerCount; i++) {
 			for (MxS16 j = 0; j < 7; j++) {
-				if (GameState()->m_players[i].m_letters[j] != -1) {
+				if (gameState->m_players[i].m_letters[j] != -1) {
 					if (!j) {
 						m_checkmark[i]->Enable(TRUE);
 					}
@@ -165,7 +166,7 @@ void RegistrationBook::ReadyWorld()
 		}
 	}
 
-	if (m_infocenterState->GetNameLetter(0) == NULL) {
+	if (m_infocenterState->HasRegistered()) {
 		MxDSAction action;
 		action.SetAtomId(*g_regbookScript);
 		action.SetObjectId(RegbookScript::c_iic006in_RunAnim);
