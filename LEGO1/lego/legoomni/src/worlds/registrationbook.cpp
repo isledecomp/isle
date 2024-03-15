@@ -153,14 +153,14 @@ void RegistrationBook::ReadyWorld()
 						m_checkmark[i]->Enable(TRUE);
 					}
 
-					// Start building the player name using a two-dimensional array
+					// Start building the player names using a two-dimensional array
 					m_name[i][j] = m_alphabet[gameState->m_players[i].m_letters[j]]->Clone();
 
-					// Enable the presenter to actually show the letter
+					// Enable the presenter to actually show the letter in the grid
 					m_name[i][j]->Enable(TRUE);
 
 					m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
-					m_name[i][j]->SetPosition((23 * j + 343), 27 * i + 121);
+					m_name[i][j]->SetPosition(23 * j + 343, 27 * i + 121);
 				}
 			}
 		}

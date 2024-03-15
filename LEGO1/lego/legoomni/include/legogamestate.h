@@ -168,7 +168,7 @@ public:
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
 
-public:
+private:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName);
 	MxResult WriteEndOfVariables(LegoStorage* p_storage);
@@ -187,7 +187,10 @@ public:
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
 	MxS16 m_playerCount;                        // 0x26
+public:
+	// This member is accessed directly by foreign classes
 	Username m_players[9];                      // 0x28
+private:
 	History m_history;                          // 0xa6
 	undefined2 m_unk0x41a;                      // 0x41a
 	undefined4 m_unk0x41c;                      // 0x41c
