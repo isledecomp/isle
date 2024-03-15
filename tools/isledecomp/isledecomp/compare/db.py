@@ -86,7 +86,7 @@ class CompareDb:
     ):
         # Ignore collisions here. The same recomp address can have
         # multiple names (e.g. _strlwr and __strlwr)
-        if self.recomp_used(addr):
+        if self._recomp_used(addr):
             return
 
         compare_value = compare_type.value if compare_type is not None else None
@@ -166,24 +166,50 @@ class CompareDb:
 
         return cur.fetchall()
 
-    def orig_used(self, addr: int) -> bool:
+    def _orig_used(self, addr: int) -> bool:
         cur = self._db.execute("SELECT 1 FROM symbols WHERE orig_addr = ?", (addr,))
         return cur.fetchone() is not None
 
-    def recomp_used(self, addr: int) -> bool:
+    def _recomp_used(self, addr: int) -> bool:
         cur = self._db.execute("SELECT 1 FROM symbols WHERE recomp_addr = ?", (addr,))
         return cur.fetchone() is not None
 
     def set_pair(
         self, orig: int, recomp: int, compare_type: Optional[SymbolType] = None
     ) -> bool:
-        if self.orig_used(orig):
+        if self._orig_used(orig):
             logger.error("Original address %s not unique!", hex(orig))
             return False
 
         compare_value = compare_type.value if compare_type is not None else None
         cur = self._db.execute(
             "UPDATE `symbols` SET orig_addr = ?, compare_type = ? WHERE recomp_addr = ?",
+            (orig, compare_value, recomp),
+        )
+
+        return cur.rowcount > 0
+
+    def set_pair_tentative(
+        self, orig: int, recomp: int, compare_type: Optional[SymbolType] = None
+    ) -> bool:
+        """Declare a match for the original and recomp addresses given, but only if:
+        1. The original address is not used elsewhere (as with set_pair)
+        2. The recomp address has not already been matched
+        If the compare_type is given, update this also, but only if NULL in the db.
+
+        The purpose here is to set matches found via some automated analysis
+        but to not overwrite a match provided by the human operator."""
+        if self._orig_used(orig):
+            # Probable and expected situation. Just ignore it.
+            return False
+
+        compare_value = compare_type.value if compare_type is not None else None
+
+        cur = self._db.execute(
+            """UPDATE `symbols`
+            SET orig_addr = ?, compare_type = coalesce(compare_type, ?)
+            WHERE recomp_addr = ?
+            AND orig_addr IS NULL""",
             (orig, compare_value, recomp),
         )
 
