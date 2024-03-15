@@ -181,27 +181,27 @@ MxResult Hospital::Tickle()
 		LegoWorld::Tickle();
 		return SUCCESS;
 	}
-	else {
-		if (g_unk0x100f7918 != 0) {
-			g_unk0x100f7918 -= 1;
+
+	if (g_unk0x100f7918 != 0) {
+		g_unk0x100f7918 -= 1;
+	}
+
+	MxLong time = Timer()->GetTime();
+
+	if (m_unk0x118 != 0) {
+		if (time - m_unk0x11c > 300) {
+			m_unk0x11c = time;
+			g_unk0x100f791c = !g_unk0x100f791c;
+			m_unk0x110->Enable(g_unk0x100f791c);
 		}
 
-		MxLong time = Timer()->GetTime();
-
-		if (m_unk0x118 != 0) {
-			if (300 < (MxLong) (time - m_unk0x11c)) {
-				m_unk0x11c = time;
-				g_unk0x100f791c = !g_unk0x100f791c;
-				m_unk0x110->Enable(g_unk0x100f791c);
-			}
-
-			if (200 < (MxLong) (time - m_unk0x120)) {
-				m_unk0x120 = time;
-				g_unk0x100f7920 = !g_unk0x100f7920;
-				m_unk0x114->Enable(g_unk0x100f7920);
-			}
+		if (time - m_unk0x120 > 200) {
+			m_unk0x120 = time;
+			g_unk0x100f7920 = !g_unk0x100f7920;
+			m_unk0x114->Enable(g_unk0x100f7920);
 		}
 	}
+
 	return SUCCESS;
 }
 

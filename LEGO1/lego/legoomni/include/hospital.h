@@ -55,8 +55,8 @@ private:
 	MxStillPresenter* m_unk0x110;       // 0x110
 	MxStillPresenter* m_unk0x114;       // 0x114
 	undefined m_unk0x118;               // 0x118
-	undefined4 m_unk0x11c;              // 0x11c
-	undefined4 m_unk0x120;              // 0x120
+	MxLong m_unk0x11c;                  // 0x11c
+	MxLong m_unk0x120;                  // 0x120
 	undefined m_unk0x124[4];            // 0x124
 	undefined m_unk0x128;               // 0x128
 };
