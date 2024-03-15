@@ -187,9 +187,8 @@ private:
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
 	MxS16 m_playerCount;                        // 0x26
-public:
 	// This member is accessed directly by foreign classes
-	Username m_players[9];                      // 0x28
+	public: Username m_players[9];              // 0x28
 private:
 	History m_history;                          // 0xa6
 	undefined2 m_unk0x41a;                      // 0x41a
