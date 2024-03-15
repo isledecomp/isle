@@ -121,7 +121,7 @@ void RegistrationBook::ReadyWorld()
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
-	char letterBuffer[12] = "A_Bitmap";
+	char letterBuffer[] = "A_Bitmap";
 	for (MxS16 i = 0; i < 26; i++) {
 		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
 
