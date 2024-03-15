@@ -113,7 +113,7 @@ protected:
 
 	// one copy of defaults (these can be set by App.)
 	static int g_defdeadZone;
-	static float m_defzeroThreshold;
+	static float g_defzeroThreshold;
 	static float g_defmaxLinearVel;
 	static float g_defmaxRotationalVel;
 	static float g_defmaxLinearAccel;

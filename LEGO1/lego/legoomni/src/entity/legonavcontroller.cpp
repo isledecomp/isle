@@ -25,7 +25,7 @@
 int LegoNavController::g_defdeadZone = 40;
 
 // GLOBAL: LEGO1 0x100f4c2c
-float LegoNavController::m_defzeroThreshold = 0.001f;
+float LegoNavController::g_defzeroThreshold = 0.001f;
 
 // GLOBAL: LEGO1 0x100f4c30
 float LegoNavController::g_defmaxLinearVel = 40.0f;
@@ -102,7 +102,7 @@ void LegoNavController::SetControlMax(int p_hMax, int p_vMax)
 void LegoNavController::SetToDefaultParams()
 {
 	m_deadZone = g_defdeadZone;
-	m_zeroThreshold = m_defzeroThreshold;
+	m_zeroThreshold = g_defzeroThreshold;
 	m_maxRotationalAccel = g_defmaxRotationalAccel;
 	m_maxLinearAccel = g_defmaxLinearAccel;
 	m_minRotationalAccel = g_defminRotationalAccel;
