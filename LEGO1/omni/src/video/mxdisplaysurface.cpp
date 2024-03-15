@@ -701,11 +701,30 @@ done:
 	return surface;
 }
 
-// STUB: LEGO1 0x100bbfb0
-LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bbfb0(LPDIRECTDRAWSURFACE p_und)
+// FUNCTION: LEGO1 0x100bbfb0
+LPDIRECTDRAWSURFACE MxDisplaySurface::CopySurface(LPDIRECTDRAWSURFACE p_src)
 {
-	// TODO
-	return NULL;
+	LPDIRECTDRAWSURFACE newSurface = NULL;
+	IDirectDraw* draw = MVideoManager()->GetDirectDraw();
+
+	DDSURFACEDESC ddsd;
+	memset(&ddsd, 0, sizeof(ddsd));
+	ddsd.dwSize = sizeof(ddsd);
+
+	p_src->GetSurfaceDesc(&ddsd);
+
+	if (draw->CreateSurface(&ddsd, &newSurface, NULL) != DD_OK) {
+		return NULL;
+	}
+
+	RECT rect = {0, 0, ddsd.dwWidth, ddsd.dwHeight};
+
+	if (newSurface->BltFast(0, 0, p_src, &rect, 16) != DD_OK) {
+		newSurface->Release();
+		return NULL;
+	}
+
+	return newSurface;
 }
 
 // FUNCTION: LEGO1 0x100bc070

@@ -249,7 +249,7 @@ MxStillPresenter* MxStillPresenter::Clone()
 				}
 
 				if (m_unk0x58) {
-					presenter->m_unk0x58 = MxDisplaySurface::FUN_100bbfb0(m_unk0x58);
+					presenter->m_unk0x58 = MxDisplaySurface::CopySurface(m_unk0x58);
 				}
 
 				if (m_alpha) {
