@@ -162,11 +162,13 @@ public:
 	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
 	inline void SetUnknown0x41c(undefined4 p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
 	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
+	inline Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
+	inline MxS16 GetPlayerCount() { return m_playerCount; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
 
-private:
+public:
 	void RegisterState(LegoState* p_state);
 	MxResult WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName);
 	MxResult WriteEndOfVariables(LegoStorage* p_storage);
