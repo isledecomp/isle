@@ -228,6 +228,6 @@ MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
 // FUNCTION: LEGO1 0x100783e0
 MxBool RegistrationBook::VTable0x64()
 {
-	DeleteObjects(&m_atom, 500, 506);
+	DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 	return TRUE;
 }
