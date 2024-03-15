@@ -717,7 +717,7 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CopySurface(LPDIRECTDRAWSURFACE p_src)
 		return NULL;
 	}
 
-	RECT rect = {0, 0, ddsd.dwWidth, ddsd.dwHeight};
+	RECT rect = {0, 0, (LONG) ddsd.dwWidth, (LONG) ddsd.dwHeight};
 
 	if (newSurface->BltFast(0, 0, p_src, &rect, 16) != DD_OK) {
 		newSurface->Release();
