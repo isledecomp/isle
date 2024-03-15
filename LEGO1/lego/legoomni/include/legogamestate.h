@@ -187,16 +187,19 @@ private:
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
 	MxS16 m_playerCount;                        // 0x26
-	// This member is accessed directly by foreign classes
-	public: Username m_players[9];              // 0x28
+												// This member is accessed directly by foreign classes
+
+public:
+	Username m_players[9]; // 0x28
+
 private:
-	History m_history;                          // 0xa6
-	undefined2 m_unk0x41a;                      // 0x41a
-	undefined4 m_unk0x41c;                      // 0x41c
-	MxBool m_isDirty;                           // 0x420
-	Area m_currentArea;                         // 0x424
-	Area m_previousArea;                        // 0x428
-	Area m_unk0x42c;                            // 0x42c
+	History m_history;     // 0xa6
+	undefined2 m_unk0x41a; // 0x41a
+	undefined4 m_unk0x41c; // 0x41c
+	MxBool m_isDirty;      // 0x420
+	Area m_currentArea;    // 0x424
+	Area m_previousArea;   // 0x428
+	Area m_unk0x42c;       // 0x42c
 };
 
 MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen);
