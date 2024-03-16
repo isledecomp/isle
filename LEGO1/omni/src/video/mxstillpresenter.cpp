@@ -231,7 +231,7 @@ MxStillPresenter* MxStillPresenter::Clone()
 
 	if (presenter) {
 		if (presenter->AddToManager() == SUCCESS) {
-			MxDSAction* action = presenter->GetAction()->Clone();
+			MxDSAction* action = GetAction()->Clone();
 
 			if (action && presenter->StartAction(NULL, action) == SUCCESS) {
 				presenter->SetBit0(GetBit0());
@@ -249,7 +249,7 @@ MxStillPresenter* MxStillPresenter::Clone()
 				}
 
 				if (m_unk0x58) {
-					presenter->m_unk0x58 = MxDisplaySurface::FUN_100bbfb0(m_unk0x58);
+					presenter->m_unk0x58 = MxDisplaySurface::CopySurface(m_unk0x58);
 				}
 
 				if (m_alpha) {
