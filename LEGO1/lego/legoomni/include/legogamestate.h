@@ -186,10 +186,11 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	MxS16 m_playerCount;                        // 0x26
-												// This member is accessed directly by foreign classes
+
+	// Member visibility needs to be refactored, since most members are accessed directly.
 
 public:
+	MxS16 m_playerCount;   // 0x26
 	Username m_players[9]; // 0x28
 
 private:

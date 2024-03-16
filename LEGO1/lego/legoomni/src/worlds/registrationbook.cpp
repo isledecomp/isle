@@ -15,6 +15,9 @@
 
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 
+// GLOBAL: LEGO1 0x100d9924
+const char* g_infoman = "infoman";
+
 // FUNCTION: LEGO1 0x10076d20
 RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 {
@@ -48,6 +51,7 @@ RegistrationBook::~RegistrationBook()
 MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
+
 	if (result == SUCCESS) {
 		InputManager()->SetWorld(this);
 		ControlManager()->Register(this);
@@ -59,6 +63,7 @@ MxResult RegistrationBook::Create(MxDSAction& p_dsAction)
 
 		m_infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 	}
+
 	return result;
 }
 
@@ -118,11 +123,11 @@ void RegistrationBook::ReadyWorld()
 {
 	LegoGameState* gameState = GameState();
 	gameState->GetHistory()->WriteScoreHistory();
+	MxS16 i;
 
 	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 
 	char letterBuffer[] = "A_Bitmap";
-	MxS16 i = 0;
 	for (i = 0; i < 26; i++) {
 		m_alphabet[i] = (MxStillPresenter*) Find("MxStillPresenter", letterBuffer);
 
@@ -142,52 +147,48 @@ void RegistrationBook::ReadyWorld()
 		checkmarkBuffer[5]++;
 	}
 
-	MxS16 playerCount = GameState()->GetPlayerCount();
+	LegoGameState::Username* players = GameState()->m_players;
 
-	// Optimization: Just skip the whole loop if there's no player data
-	if (playerCount > 0) {
-		for (i = 1; i <= playerCount; i++) {
-			for (MxS16 j = 0; j < 7; j++) {
-				if (gameState->m_players[i].m_letters[j] != -1) {
-					if (!j) {
-						m_checkmark[i]->Enable(TRUE);
-					}
-
-					// Start building the player names using a two-dimensional array
-					m_name[i][j] = m_alphabet[gameState->m_players[i].m_letters[j]]->Clone();
-
-					// Enable the presenter to actually show the letter in the grid
-					m_name[i][j]->Enable(TRUE);
-
-					m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
-					m_name[i][j]->SetPosition(23 * j + 343, 27 * i + 121);
+	for (i = 1; i <= GameState()->m_playerCount; i++) {
+		for (MxS16 j = 0; j < 7; j++) {
+			if (players[i - 1].m_letters[j] != -1) {
+				if (j == 0) {
+					m_checkmark[i]->Enable(TRUE);
 				}
+
+				// Start building the player names using a two-dimensional array
+				m_name[i][j] = m_alphabet[players[i - 1].m_letters[j]]->Clone();
+
+				// Enable the presenter to actually show the letter in the grid
+				m_name[i][j]->Enable(TRUE);
+
+				m_name[i][j]->SetTickleState(MxPresenter::e_repeating);
+				m_name[i][j]->SetPosition(23 * j + 343, 27 * i + 121);
 			}
 		}
 	}
 
-	if (!m_infocenterState->HasRegistered()) {
-		MxDSAction action;
-		action.SetAtomId(*g_regbookScript);
-		action.SetObjectId(RegbookScript::c_iic006in_RunAnim);
+	if (m_infocenterState->HasRegistered()) {
+		PlayAction(RegbookScript::c_iic008in_PlayWav);
 
-		BackgroundAudioManager()->LowerVolume();
-		Start(&action);
-	}
-	else {
-		LegoROI* infoman = FindROI("infoman");
-
-		MxDSAction action;
-		action.SetAtomId(*g_regbookScript);
-		action.SetObjectId(RegbookScript::c_iic008in_PlayWav);
-
-		BackgroundAudioManager()->LowerVolume();
-		Start(&action);
-
+		LegoROI* infoman = FindROI(g_infoman);
 		if (infoman != NULL) {
 			infoman->SetUnknown0x0c(0);
 		}
 	}
+	else {
+		PlayAction(RegbookScript::c_iic006in_RunAnim);
+	}
+}
+
+inline void RegistrationBook::PlayAction(MxU32 p_objectId)
+{
+	MxDSAction action;
+	action.SetAtomId(*g_regbookScript);
+	action.SetObjectId(p_objectId);
+
+	BackgroundAudioManager()->LowerVolume();
+	Start(&action);
 }
 
 // STUB: LEGO1 0x10077fd0

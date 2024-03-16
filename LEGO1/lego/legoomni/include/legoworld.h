@@ -69,14 +69,14 @@ public:
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
 
-	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
-
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	MxResult GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxCore* Find(const char* p_class, const char* p_name);
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
+
+	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 
 	// SYNTHETIC: LEGO1 0x1001dee0
 	// LegoWorld::`scalar deleting destructor'
