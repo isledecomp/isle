@@ -24,6 +24,7 @@ class Isle : public LegoWorld {
 public:
 	Isle();
 	~Isle() override;
+
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10030910
@@ -42,21 +43,24 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+50
 	void Add(MxCore* p_object) override;              // vtable+58
+
 	// FUNCTION: LEGO1 0x10030900
 	MxBool VTable0x5c() override { return TRUE; } // vtable+5c
+
 	// FUNCTION: LEGO1 0x10033170
-	void VTable0x60() override {}                    // vtable+60
+	void VTable0x60() override {} // vtable+60
+
 	MxBool VTable0x64() override;                    // vtable+64
 	void Enable(MxBool p_enable) override;           // vtable+68
 	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
-
-	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 	MxLong StopAction(MxParam& p_param);
 	MxLong HandleType17Notification(MxParam& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
 	void FUN_10032620();
+
+	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 	// SYNTHETIC: LEGO1 0x10030a30
 	// Isle::`scalar deleting destructor'

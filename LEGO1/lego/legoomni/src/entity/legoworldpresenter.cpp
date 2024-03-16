@@ -54,7 +54,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 	if (m_entity) {
 		MxS32 scriptIndex = ((LegoWorld*) m_entity)->GetScriptIndex();
 		PlantManager()->FUN_10026360(scriptIndex);
-		AnimationManager()->FUN_1005f720(scriptIndex);
+		AnimationManager()->LoadScriptInfo(scriptIndex);
 		BuildingManager()->FUN_1002fa00();
 		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
