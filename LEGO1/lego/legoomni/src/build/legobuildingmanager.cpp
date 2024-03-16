@@ -56,6 +56,13 @@ MxResult LegoBuildingManager::Load(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x1002fdb0
+MxBool LegoBuildingManager::FUN_1002fdb0(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x1002ff40
 MxU32 LegoBuildingManager::FUN_1002ff40(LegoROI*, MxBool)
 {
