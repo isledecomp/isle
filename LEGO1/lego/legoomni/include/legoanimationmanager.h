@@ -3,8 +3,8 @@
 
 #include "animstate.h"
 #include "decomp.h"
+#include "legotraninfolist.h"
 #include "mxcore.h"
-#include "traninfo.h"
 
 // SIZE 0x18
 struct Character {
@@ -18,7 +18,7 @@ struct Character {
 class LegoAnimationManager : public MxCore {
 public:
 	LegoAnimationManager();
-	~LegoAnimationManager() override; // vtable+0x00
+	~LegoAnimationManager() override;
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
@@ -58,34 +58,34 @@ public:
 private:
 	void Init();
 
-	undefined4 m_unk0x08;          // 0x08
-	MxU16 m_animCount;             // 0x0c
-	MxU16 m_unk0x0e;               // 0x0e
-	MxU32 m_unk0x10;               // 0x10
-	AnimInfo* m_anims;             // 0x14
-	undefined m_unk0x018[8];       // 0x18
-	TranInfoList* m_tranInfoList;  // 0x20
-	TranInfoList* m_tranInfoList2; // 0x24
-	undefined4 m_unk0x28[2];       // 0x28
-	undefined4 m_unk0x30[2];       // 0x30
-	undefined m_unk0x38;           // 0x38
-	undefined m_unk0x39;           // 0x39
-	undefined m_unk0x3a;           // 0x3a
-	undefined m_unk0x3b[0x3c1];    // 0x3b
-	undefined4 m_unk0x3fc;         // 0x3fc
-	MxU8 m_unk0x400;               // 0x400
-	undefined m_unk0x401;          // 0x401
-	MxU8 m_unk0x402;               // 0x402
-	undefined m_unk0x403[0x1d];    // 0x403
-	AnimState* m_animState;        // 0x420
-	undefined4 m_unk0x424;         // 0x424
-	undefined m_unk0x428;          // 0x428
-	undefined m_unk0x429;          // 0x429
-	undefined m_unk0x42a;          // 0x42a
-	undefined m_unk0x42b;          // 0x42b
-	undefined4 m_unk0x42c;         // 0x42c
-	undefined m_unk0x430;          // 0x430
-	undefined m_unk0x431[0xcf];    // 0x431
+	undefined4 m_unk0x08;              // 0x08
+	MxU16 m_animCount;                 // 0x0c
+	MxU16 m_unk0x0e;                   // 0x0e
+	MxU32 m_unk0x10;                   // 0x10
+	AnimInfo* m_anims;                 // 0x14
+	undefined m_unk0x018[8];           // 0x18
+	LegoTranInfoList* m_tranInfoList;  // 0x20
+	LegoTranInfoList* m_tranInfoList2; // 0x24
+	undefined4 m_unk0x28[2];           // 0x28
+	undefined4 m_unk0x30[2];           // 0x30
+	undefined m_unk0x38;               // 0x38
+	undefined m_unk0x39;               // 0x39
+	undefined m_unk0x3a;               // 0x3a
+	undefined m_unk0x3b[0x3c1];        // 0x3b
+	undefined4 m_unk0x3fc;             // 0x3fc
+	MxU8 m_unk0x400;                   // 0x400
+	undefined m_unk0x401;              // 0x401
+	MxU8 m_unk0x402;                   // 0x402
+	undefined m_unk0x403[0x1d];        // 0x403
+	AnimState* m_animState;            // 0x420
+	undefined4 m_unk0x424;             // 0x424
+	undefined m_unk0x428;              // 0x428
+	undefined m_unk0x429;              // 0x429
+	undefined m_unk0x42a;              // 0x42a
+	undefined m_unk0x42b;              // 0x42b
+	undefined4 m_unk0x42c;             // 0x42c
+	undefined m_unk0x430;              // 0x430
+	undefined m_unk0x431[0xcf];        // 0x431
 };
 
 #endif // LEGOANIMATIONMANAGER_H
