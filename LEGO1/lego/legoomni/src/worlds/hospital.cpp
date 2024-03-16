@@ -32,7 +32,7 @@ Hospital::Hospital()
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
 	m_destLocation = LegoGameState::e_undefined;
-	m_unk0x10c = 0;
+	m_unk0x10c = HospitalScript::c__StartUp;
 	m_copLedBitmap = NULL;
 	m_pizzaLedBitmap = NULL;
 	m_unk0x118 = 0;

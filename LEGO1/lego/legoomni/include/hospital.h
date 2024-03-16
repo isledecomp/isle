@@ -53,7 +53,7 @@ private:
 	undefined2 m_unk0x100;              // 0x100
 	HospitalState* m_hospitalState;     // 0x104
 	undefined2 m_unk0x108;              // 0x108
-	undefined4 m_unk0x10c;              // 0x10c
+	HospitalScript::Script m_unk0x10c;  // 0x10c
 	MxStillPresenter* m_copLedBitmap;   // 0x110
 	MxStillPresenter* m_pizzaLedBitmap; // 0x114
 	undefined m_unk0x118;               // 0x118
