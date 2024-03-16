@@ -227,6 +227,7 @@ done:
 // STUB: LEGO1 0x10060140
 MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& p_index)
 {
+	// TODO
 	return FALSE;
 }
 
@@ -366,6 +367,7 @@ MxResult LegoAnimationManager::Tickle()
 // STUB: LEGO1 0x10062360
 MxS8 LegoAnimationManager::FUN_10062360(char*)
 {
+	// TODO
 	return 0;
 }
 
