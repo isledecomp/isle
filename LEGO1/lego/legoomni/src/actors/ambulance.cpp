@@ -60,6 +60,12 @@ MxU32 Ambulance::VTable0xcc()
 	return 0;
 }
 
+// STUB: LEGO1 0x10036e60
+void Ambulance::FUN_10036e60()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10036e90
 void Ambulance::VTable0xe4()
 {

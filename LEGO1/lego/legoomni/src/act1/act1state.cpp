@@ -267,6 +267,12 @@ MxBool Act1State::SetFlag()
 	return TRUE;
 }
 
+// STUB: LEGO1 0x10034b60
+void Act1State::FUN_10034b60()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10034d00
 void Act1State::FUN_10034d00()
 {

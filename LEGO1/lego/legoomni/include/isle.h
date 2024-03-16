@@ -1,6 +1,7 @@
 #ifndef ISLE_H
 #define ISLE_H
 
+#include "legogamestate.h"
 #include "legoworld.h"
 #include "radio.h"
 
@@ -22,6 +23,11 @@ class Act1State;
 // SIZE 0x140
 class Isle : public LegoWorld {
 public:
+	// For g_unk0x100f1198
+	enum {
+		c_bit7 = 0x40
+	};
+
 	Isle();
 	~Isle() override;
 
@@ -59,28 +65,29 @@ public:
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
 	void FUN_10032620();
+	void FUN_100330e0();
 
-	inline void SetUnknown13c(MxU32 p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
+	inline void SetUnknown13c(LegoGameState::Area p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 	// SYNTHETIC: LEGO1 0x10030a30
 	// Isle::`scalar deleting destructor'
 
 protected:
-	Act1State* m_act1state;   // 0xf8
-	Pizza* m_pizza;           // 0xfc
-	Pizzeria* m_pizzeria;     // 0x100
-	TowTrack* m_towtrack;     // 0x104
-	Ambulance* m_ambulance;   // 0x108
-	JukeBoxEntity* m_jukebox; // 0x10c
-	Helicopter* m_helicopter; // 0x110
-	Bike* m_bike;             // 0x114
-	DuneBuggy* m_dunebuggy;   // 0x118
-	Motocycle* m_motocycle;   // 0x11c
-	SkateBoard* m_skateboard; // 0x120
-	RaceCar* m_racecar;       // 0x124
-	Jetski* m_jetski;         // 0x128
-	Radio m_radio;            // 0x12c
-	MxU32 m_unk0x13c;         // 0x13c
+	Act1State* m_act1state;         // 0xf8
+	Pizza* m_pizza;                 // 0xfc
+	Pizzeria* m_pizzeria;           // 0x100
+	TowTrack* m_towtrack;           // 0x104
+	Ambulance* m_ambulance;         // 0x108
+	JukeBoxEntity* m_jukebox;       // 0x10c
+	Helicopter* m_helicopter;       // 0x110
+	Bike* m_bike;                   // 0x114
+	DuneBuggy* m_dunebuggy;         // 0x118
+	Motocycle* m_motocycle;         // 0x11c
+	SkateBoard* m_skateboard;       // 0x120
+	RaceCar* m_racecar;             // 0x124
+	Jetski* m_jetski;               // 0x128
+	Radio m_radio;                  // 0x12c
+	LegoGameState::Area m_unk0x13c; // 0x13c
 };
 
 #endif // ISLE_H

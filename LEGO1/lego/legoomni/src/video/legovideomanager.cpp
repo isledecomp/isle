@@ -383,6 +383,20 @@ MxResult LegoVideoManager::RealizePalette(MxPalette* p_pallete)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x1007c2d0
+MxResult LegoVideoManager::ResetPalette(MxBool p_ignoreSkyColor)
+{
+	MxResult result = FAILURE;
+
+	if (m_videoParam.GetPalette() != NULL) {
+		m_videoParam.GetPalette()->Reset(p_ignoreSkyColor);
+		m_displaySurface->SetPalette(m_videoParam.GetPalette());
+		result = SUCCESS;
+	}
+
+	return result;
+}
+
 // FUNCTION: LEGO1 0x1007c300
 void LegoVideoManager::EnableFullScreenMovie(MxBool p_enable)
 {

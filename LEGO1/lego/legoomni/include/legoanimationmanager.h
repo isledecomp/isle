@@ -40,15 +40,29 @@ public:
 	void FUN_1005ef10();
 	void FUN_1005f0b0();
 	void FUN_1005f6d0(MxBool);
+	void FUN_1005f700(MxBool);
 	MxResult LoadScriptInfo(MxS32 p_scriptIndex);
 	MxBool FUN_10060140(char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_100603c0();
+	undefined4 FUN_10060dc0(
+		undefined4,
+		undefined4,
+		undefined,
+		undefined,
+		undefined4,
+		undefined,
+		undefined,
+		undefined,
+		undefined
+	);
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU32&);
 	MxS8 FUN_10062360(char*);
+	void FUN_100629b0(MxU32, MxBool);
 	void FUN_10064670(MxBool);
+	void FUN_10064740(MxBool);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 

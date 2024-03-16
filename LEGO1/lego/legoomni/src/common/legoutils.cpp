@@ -64,7 +64,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender);
 
 // FUNCTION: LEGO1 0x1003e430
-void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
+void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender)
 {
 	MxDSAction action;
 	action.SetAtomId(p_pAtom);
