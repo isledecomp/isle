@@ -80,7 +80,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_tranInfoList2 = NULL;
 		}
 
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < (MxS32) _countof(m_unk0x28); i++) {
 			m_unk0x28[i] = 0;
 			m_unk0x30[i] = 0;
 		}
@@ -90,7 +90,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 		m_unk0x430 = 0;
 		m_unk0x42c = 0;
 
-		for (j = 0; j < 0x2f; j++) { // TODO countof
+		for (j = 0; j < (MxS32) _countof(g_characters); j++) {
 			g_characters[j].m_active = FALSE;
 		}
 
