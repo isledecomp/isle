@@ -33,8 +33,8 @@ Hospital::Hospital()
 	m_unk0x108 = 0;
 	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x10c = 0;
-	m_copLedBitmap = 0;
-	m_pizzaLedBitmap = 0;
+	m_copLedBitmap = NULL;
+	m_pizzaLedBitmap = NULL;
 	m_unk0x118 = 0;
 	m_unk0x11c = 0;
 	m_unk0x120 = 0;
@@ -196,7 +196,6 @@ void Hospital::ReadyWorld()
 		m_hospitalState->m_unk0x08.m_unk0x00 = 5;
 
 		PlayAction(hospitalScript[m_hospitalState->m_unk0x0c]);
-
 		m_unk0x10c = hospitalScript[m_hospitalState->m_unk0x0c];
 	}
 	else {
