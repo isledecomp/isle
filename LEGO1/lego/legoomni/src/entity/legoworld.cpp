@@ -266,6 +266,13 @@ done:
 	return m_cameraController;
 }
 
+// STUB: LEGO1 0x1001fa70
+undefined4 LegoWorld::FUN_1001fa70(IslePathActor* p_actor)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x1001fc80
 void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {

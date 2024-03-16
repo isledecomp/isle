@@ -32,6 +32,8 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override; // vtable+0xdc
 	void VTable0xe4() override;                                    // vtable+0xe4
 
+	void FUN_1004dab0();
+
 	// SYNTHETIC: LEGO1 0x1004c950
 	// TowTrack::`scalar deleting destructor'
 

@@ -63,6 +63,12 @@ void LegoAnimationManager::FUN_1005f6d0(MxBool)
 	// TODO
 }
 
+// STUB: LEGO1 0x1005f700
+void LegoAnimationManager::FUN_1005f700(MxBool)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1005f720
 MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 {
@@ -338,6 +344,14 @@ void LegoAnimationManager::FUN_100603c0()
 	// TODO
 }
 
+// STUB: LEGO1 0x10060dc0
+undefined4 LegoAnimationManager::
+	FUN_10060dc0(undefined4, undefined4, undefined, undefined, undefined4, undefined, undefined, undefined, undefined)
+{
+	// TODO
+	return 0;
+}
+
 // STUB: LEGO1 0x10061010
 void LegoAnimationManager::FUN_10061010(undefined4)
 {
@@ -371,8 +385,20 @@ MxS8 LegoAnimationManager::FUN_10062360(char*)
 	return 0;
 }
 
+// STUB: LEGO1 0x100629b0
+void LegoAnimationManager::FUN_100629b0(MxU32, MxBool)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10064670
 void LegoAnimationManager::FUN_10064670(MxBool)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10064740
+void LegoAnimationManager::FUN_10064740(MxBool)
 {
 	// TODO
 }

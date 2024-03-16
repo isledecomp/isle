@@ -114,7 +114,7 @@ MxU32 Helicopter::VTable0xcc()
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(FALSE);
 		VTable0xe8(0x29, TRUE, 7);
-		((Isle*) CurrentWorld())->SetUnknown13c(0x3c);
+		((Isle*) CurrentWorld())->SetUnknown13c(LegoGameState::e_unk60);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
 		SetUnknownDC(4);
@@ -229,7 +229,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			break;
 		case 0x1c:
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-				((Isle*) CurrentWorld())->SetUnknown13c(2);
+				((Isle*) CurrentWorld())->SetUnknown13c(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 				VTable0xe4();
 			}
