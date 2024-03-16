@@ -1,9 +1,13 @@
 #include "hospital.h"
 
+#include "islepathactor.h"
+#include "jukebox.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
+#include "legoomni.h"
 #include "legoutils.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
@@ -23,14 +27,14 @@ undefined g_unk0x100f7920 = 0;
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
 {
-	m_unk0xf8 = 0;
+	m_currentActorId = 0;
 	m_unk0x100 = 0;
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
 	m_destLocation = LegoGameState::e_undefined;
-	m_unk0x10c = 0;
-	m_unk0x110 = 0;
-	m_unk0x114 = 0;
+	m_unk0x10c = HospitalScript::c__StartUp;
+	m_copLedBitmap = NULL;
+	m_pizzaLedBitmap = NULL;
 	m_unk0x118 = 0;
 	m_unk0x11c = 0;
 	m_unk0x120 = 0;
@@ -124,10 +128,89 @@ MxLong Hospital::Notify(MxParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10074a60
+// FUNCTION: LEGO1 0x10074a60
 void Hospital::ReadyWorld()
 {
-	// TODO
+	PlayMusic(JukeboxScript::c_Hospital_Music);
+
+	m_copLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "CopLed_Bitmap");
+	m_pizzaLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "PizzaLed_Bitmap");
+
+	if (CurrentActor() == NULL) {
+		m_currentActorId = 5;
+	}
+	else {
+		m_currentActorId = CurrentActor()->GetActorId();
+	}
+
+	switch (m_currentActorId) {
+	case 1:
+		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x0e;
+
+		if (m_hospitalState->m_unk0x0e < 5) {
+			m_hospitalState->m_unk0x0e += 1;
+		}
+
+		break;
+	case 2:
+		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x10;
+
+		if (m_hospitalState->m_unk0x10 < 5) {
+			m_hospitalState->m_unk0x10 += 1;
+		}
+
+		break;
+	case 3:
+		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x12;
+
+		if (m_hospitalState->m_unk0x12 < 5) {
+			m_hospitalState->m_unk0x12 += 1;
+		}
+
+		break;
+	case 4:
+		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x14;
+
+		if (m_hospitalState->m_unk0x14 < 5) {
+			m_hospitalState->m_unk0x14 += 1;
+		}
+
+		break;
+	case 5:
+		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x16;
+
+		if (m_hospitalState->m_unk0x16 < 5) {
+			m_hospitalState->m_unk0x16 += 1;
+		}
+
+		break;
+	}
+
+	if (m_hospitalState->m_unk0x0c < 3) {
+		HospitalScript::Script hospitalScript[] = {
+			HospitalScript::c_hho002cl_RunAnim,
+			HospitalScript::c_hho004jk_RunAnim,
+			HospitalScript::c_hho007p1_RunAnim
+		};
+
+		m_hospitalState->m_unk0x08.m_unk0x00 = 5;
+
+		PlayAction(hospitalScript[m_hospitalState->m_unk0x0c]);
+		m_unk0x10c = hospitalScript[m_hospitalState->m_unk0x0c];
+	}
+	else {
+		m_unk0x100 = 1;
+		m_unk0x124 = Timer()->GetTime();
+
+		m_hospitalState->m_unk0x08.m_unk0x00 = 6;
+
+		PlayAction(HospitalScript::c_hho003cl_RunAnim);
+		m_unk0x10c = HospitalScript::c_hho003cl_RunAnim;
+	}
+
+	m_unk0x108 = 1;
+
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // STUB: LEGO1 0x10074dd0
@@ -174,6 +257,16 @@ void Hospital::Enable(MxBool p_enable)
 	}
 }
 
+inline void Hospital::PlayAction(MxU32 p_objectId)
+{
+	MxDSAction action;
+	action.SetAtomId(*g_hospitalScript);
+	action.SetObjectId(p_objectId);
+
+	BackgroundAudioManager()->LowerVolume();
+	Start(&action);
+}
+
 // FUNCTION: LEGO1 0x10076270
 MxResult Hospital::Tickle()
 {
@@ -192,13 +285,13 @@ MxResult Hospital::Tickle()
 		if (time - m_unk0x11c > 300) {
 			m_unk0x11c = time;
 			g_unk0x100f791c = !g_unk0x100f791c;
-			m_unk0x110->Enable(g_unk0x100f791c);
+			m_copLedBitmap->Enable(g_unk0x100f791c);
 		}
 
 		if (time - m_unk0x120 > 200) {
 			m_unk0x120 = time;
 			g_unk0x100f7920 = !g_unk0x100f7920;
-			m_unk0x114->Enable(g_unk0x100f7920);
+			m_pizzaLedBitmap->Enable(g_unk0x100f7920);
 		}
 	}
 

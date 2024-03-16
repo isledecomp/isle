@@ -37,6 +37,8 @@ public:
 	MxBool VTable0x64() override;                     // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
+	inline void PlayAction(MxU32 p_objectId);
+
 	// SYNTHETIC: LEGO1 0x100747d0
 	// Hospital::`scalar deleting destructor'
 
@@ -46,18 +48,18 @@ private:
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
 	MxBool HandleClick(LegoControlManagerEvent& p_param);
 
-	undefined2 m_unk0xf8;               // 0xf8
+	MxS16 m_currentActorId;             // 0xf8
 	LegoGameState::Area m_destLocation; // 0xfc
 	undefined2 m_unk0x100;              // 0x100
 	HospitalState* m_hospitalState;     // 0x104
 	undefined2 m_unk0x108;              // 0x108
-	undefined4 m_unk0x10c;              // 0x10c
-	MxStillPresenter* m_unk0x110;       // 0x110
-	MxStillPresenter* m_unk0x114;       // 0x114
+	HospitalScript::Script m_unk0x10c;  // 0x10c
+	MxStillPresenter* m_copLedBitmap;   // 0x110
+	MxStillPresenter* m_pizzaLedBitmap; // 0x114
 	undefined m_unk0x118;               // 0x118
 	MxLong m_unk0x11c;                  // 0x11c
 	MxLong m_unk0x120;                  // 0x120
-	undefined m_unk0x124[4];            // 0x124
+	MxLong m_unk0x124;                  // 0x124
 	undefined m_unk0x128;               // 0x128
 };
 
