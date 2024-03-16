@@ -163,8 +163,8 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 				}
 			}
 			m_unk0x08 = p_scriptIndex;
-			m_tranInfoList = new LegoUnknown100d8c90();
-			m_tranInfoList2 = new LegoUnknown100d8c90();
+			m_tranInfoList = new TranInfoList();
+			m_tranInfoList2 = new TranInfoList();
 			FUN_100617c0(-1, m_unk0x0e, m_unk0x10);
 			result = SUCCESS;
 			m_unk0x402 = 1;
@@ -186,15 +186,6 @@ done:
 		FUN_100603c0();
 	}
 	return result;
-}
-
-// FUNCTION: LEGO1 0x1005fe50
-void LegoUnknown100d8ca8Handler()
-{
-}
-
-void LegoUnknown100d8cd8Handler()
-{
 }
 
 // STUB: LEGO1 0x10060140
