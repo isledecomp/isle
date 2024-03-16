@@ -1,5 +1,7 @@
 #include "legoplantmanager.h"
 
+#include "legoentity.h"
+
 DECOMP_SIZE_ASSERT(LegoPlantManager, 0x2c)
 
 // GLOBAL: LEGO1 0x100f3188
@@ -45,6 +47,13 @@ void LegoPlantManager::Save(LegoStorage* p_storage)
 MxResult LegoPlantManager::Load(LegoStorage* p_storage)
 {
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100269e0
+MxBool LegoPlantManager::FUN_100269e0(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
 }
 
 // STUB: LEGO1 0x10026ba0

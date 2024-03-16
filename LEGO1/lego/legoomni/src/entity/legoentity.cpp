@@ -276,10 +276,23 @@ void LegoEntity::VTable0x38()
 	// TODO
 }
 
-// STUB: LEGO1 0x10011300
+// FUNCTION: LEGO1 0x10011300
 void LegoEntity::VTable0x3c()
 {
-	// TODO
+	switch (m_unk0x59) {
+	case 0:
+		CharacterManager()->FUN_10084ec0(m_roi);
+		break;
+	case 2:
+		PlantManager()->FUN_100269e0(this);
+		break;
+	case 3:
+		BuildingManager()->FUN_1002fdb0(this);
+		break;
+	}
+
+	VTable0x34(FALSE);
+	VTable0x38();
 }
 
 // STUB: LEGO1 0x10011360

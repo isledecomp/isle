@@ -5,6 +5,7 @@
 #include "misc/legostorage.h"
 #include "mxcore.h"
 
+class LegoEntity;
 class LegoROI;
 
 // VTABLE: LEGO1 0x100d6758
@@ -28,6 +29,7 @@ public:
 	void FUN_100263a0(undefined4 p_und);
 	void Save(LegoStorage* p_storage);
 	MxResult Load(LegoStorage* p_storage);
+	MxBool FUN_100269e0(LegoEntity* p_entity);
 	MxU32 FUN_10026ba0(LegoROI*, MxBool);
 	void FUN_10027120();
 
