@@ -610,15 +610,15 @@ void Isle::VTable0x6c(IslePathActor* p_actor)
 	}
 }
 
+// STUB: LEGO1 0x100330e0
+void Isle::FUN_100330e0()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10033180
 MxBool Isle::VTable0x64()
 {
 	// TODO
 	return FALSE;
-}
-
-// STUB: LEGO1 0x100330e0
-void Isle::FUN_100330e0()
-{
-	// TODO
 }
