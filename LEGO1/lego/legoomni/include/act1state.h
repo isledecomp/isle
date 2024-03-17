@@ -94,7 +94,7 @@ protected:
 	MxU32 m_unk0x018;             // 0x018
 	MxU16 m_unk0x01c;             // 0x01c
 	undefined m_unk0x01e;         // 0x01e
-	undefined m_unk0x01f;         // 0x01f
+	MxBool m_unk0x01f;            // 0x01f
 	undefined m_unk0x020;         // 0x020
 	undefined m_unk0x021;         // 0x021
 	undefined m_unk0x022;         // 0x022
