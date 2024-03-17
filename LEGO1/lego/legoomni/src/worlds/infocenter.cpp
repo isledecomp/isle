@@ -4,7 +4,9 @@
 #include "credits_actions.h"
 #include "helicopterstate.h"
 #include "infocenterstate.h"
+#include "infomain_actions.h"
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legoact2state.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
@@ -1412,14 +1414,14 @@ void Infocenter::StopCredits()
 }
 
 // FUNCTION: LEGO1 0x10071300
-void Infocenter::PlayAction(InfomainScript::Script p_objectId)
+void Infocenter::PlayAction(InfomainScript::Script p_script)
 {
 	MxDSAction action;
-	action.SetObjectId(p_objectId);
+	action.SetObjectId(p_script);
 	action.SetAtomId(*g_infomainScript);
 	StopCurrentAction();
 
-	m_currentInfomainScript = p_objectId;
+	m_currentInfomainScript = p_script;
 	BackgroundAudioManager()->LowerVolume();
 	Start(&action);
 }

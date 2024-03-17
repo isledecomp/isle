@@ -81,8 +81,9 @@ public:
 		e_unk59,
 		e_unk60,
 		e_unk61,
-
-		e_unk64 = 64,
+		e_unk62,
+		e_unk63,
+		e_unk64,
 
 		e_unk66 = 66
 	};

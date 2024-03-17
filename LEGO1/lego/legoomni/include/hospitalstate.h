@@ -2,7 +2,6 @@
 #define HOSPITALSTATE_H
 
 #include "decomp.h"
-#include "hospital_actions.h"
 #include "legostate.h"
 
 // VTABLE: LEGO1 0x100d97a0

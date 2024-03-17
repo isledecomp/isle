@@ -30,6 +30,8 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam&) override;       // vtable+0xdc
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	void FUN_10035e10();
+
 	// SYNTHETIC: LEGO1 0x100359d0
 	// Motocycle::`scalar deleting destructor'
 

@@ -30,12 +30,17 @@ public:
 	MxU32 VTable0xd4(LegoControlManagerEvent&) override; // vtable+0xd4
 	void VTable0xe4() override;                          // vtable+0xe4
 
+	void FUN_1007e990();
+
+	inline MxS16 GetUnknown0x160() { return m_unk0x160; }
+
 	// SYNTHETIC: LEGO1 0x1007e5c0
 	// Jetski::`scalar deleting destructor'
 
 private:
 	// TODO: Jetski fields
-	undefined m_unk0x160[4];
+	MxS16 m_unk0x160;        // 0x160
+	undefined m_unk0x162[2]; // 0x162
 };
 
 #endif // JETSKI_H

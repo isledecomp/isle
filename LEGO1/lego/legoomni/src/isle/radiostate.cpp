@@ -1,6 +1,7 @@
 #include "radiostate.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legoomni.h"
 #include "mxmisc.h"
 #include "mxtimer.h"

@@ -5,6 +5,11 @@
 #include "legostate.h"
 #include "police.h"
 
+namespace PoliceScript
+{
+enum Script;
+}
+
 // VTABLE: LEGO1 0x100d8af0
 // SIZE 0x10
 class PoliceState : public LegoState {

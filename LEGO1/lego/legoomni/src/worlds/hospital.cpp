@@ -1,7 +1,9 @@
 #include "hospital.h"
 
+#include "hospital_actions.h"
 #include "islepathactor.h"
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"

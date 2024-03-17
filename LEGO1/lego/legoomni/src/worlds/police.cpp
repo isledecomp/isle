@@ -1,6 +1,7 @@
 #include "police.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -10,6 +11,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
+#include "police_actions.h"
 #include "policestate.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)

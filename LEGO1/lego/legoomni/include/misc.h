@@ -26,6 +26,11 @@ class MxTransitionManager;
 class ViewLODListManager;
 class ViewManager;
 
+namespace JukeboxScript
+{
+enum Script;
+}
+
 extern MxBool g_isWorldActive;
 
 LegoOmni* Lego();
@@ -49,7 +54,7 @@ ViewLODListManager* GetViewLODListManager();
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 LegoROI* FindROI(const char* p_name);
 MxDSAction& GetCurrentAction();
-void PlayMusic(MxU32 p_index);
+void PlayMusic(JukeboxScript::Script p_script);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void SetCurrentWorld(LegoWorld* p_world);

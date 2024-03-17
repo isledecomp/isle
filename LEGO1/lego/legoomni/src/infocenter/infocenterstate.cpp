@@ -1,6 +1,7 @@
 #include "infocenterstate.h"
 
 #include "infocenter.h"
+#include "infomain_actions.h"
 
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94);
 

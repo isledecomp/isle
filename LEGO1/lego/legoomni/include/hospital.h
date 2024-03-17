@@ -8,6 +8,11 @@
 #include "mxstillpresenter.h"
 #include "radio.h"
 
+namespace HospitalScript
+{
+enum Script;
+}
+
 // VTABLE: LEGO1 0x100d9730
 // SIZE 0x12c
 class Hospital : public LegoWorld {

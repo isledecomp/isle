@@ -79,6 +79,12 @@ MxU32 Ambulance::VTable0xd4(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
+// STUB: LEGO1 0x10037060
+void Ambulance::FUN_10037060()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10037160
 MxResult Ambulance::Tickle()
 {

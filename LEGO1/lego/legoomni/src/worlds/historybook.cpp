@@ -1,6 +1,7 @@
 #include "historybook.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "misc.h"

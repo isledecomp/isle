@@ -164,12 +164,11 @@ MxTransitionManager* TransitionManager()
 }
 
 // FUNCTION: LEGO1 0x10015910
-void PlayMusic(MxU32 p_index)
+void PlayMusic(JukeboxScript::Script p_script)
 {
-	// index is the entityid of the music in jukebox.si
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
-	action.SetObjectId(p_index);
+	action.SetObjectId(p_script);
 
 	LegoOmni::GetInstance()->GetBackgroundAudioManager()->PlayMusic(action, 5, 4);
 }

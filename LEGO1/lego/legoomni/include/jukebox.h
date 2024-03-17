@@ -2,9 +2,7 @@
 #define JUKEBOX_H
 
 #include "decomp.h"
-#include "jukebox_actions.h"
 #include "jukeboxstate.h"
-#include "jukeboxw_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"

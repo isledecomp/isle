@@ -1,7 +1,9 @@
 #include "jukebox.h"
 
 #include "act1state.h"
+#include "jukebox_actions.h"
 #include "jukeboxstate.h"
+#include "jukeboxw_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
