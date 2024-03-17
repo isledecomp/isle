@@ -12,8 +12,12 @@ class LegoControlManagerEvent;
 
 namespace InfomainScript
 {
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
 enum Script;
-}
+#endif
+} // namespace InfomainScript
 
 // SIZE 0x18
 struct InfocenterMapEntry {

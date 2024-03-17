@@ -10,8 +10,12 @@
 
 namespace HospitalScript
 {
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
 enum Script;
-}
+#endif
+} // namespace HospitalScript
 
 // VTABLE: LEGO1 0x100d9730
 // SIZE 0x12c

@@ -21,13 +21,21 @@ class Act1State;
 
 namespace IsleScript
 {
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
 enum Script;
-}
+#endif
+} // namespace IsleScript
 
 namespace JukeboxScript
 {
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
 enum Script;
-}
+#endif
+} // namespace JukeboxScript
 
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140

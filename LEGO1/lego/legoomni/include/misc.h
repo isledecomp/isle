@@ -28,8 +28,12 @@ class ViewManager;
 
 namespace JukeboxScript
 {
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
 enum Script;
-}
+#endif
+} // namespace JukeboxScript
 
 extern MxBool g_isWorldActive;
 
