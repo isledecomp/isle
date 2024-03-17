@@ -5,7 +5,11 @@
 
 namespace JetraceScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneJetrace = -1,
 
 	c__JetRace_World = 0,

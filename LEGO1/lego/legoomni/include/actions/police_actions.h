@@ -5,7 +5,11 @@
 
 namespace PoliceScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_nonePolice = -1,
 
 	c__StartUp = 0,

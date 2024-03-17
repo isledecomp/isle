@@ -5,7 +5,11 @@
 
 namespace Act3Script
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneAct3 = -1,
 
 	c__Act3 = 0,

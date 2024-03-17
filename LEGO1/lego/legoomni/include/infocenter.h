@@ -1,7 +1,6 @@
 #ifndef INFOCENTER_H
 #define INFOCENTER_H
 
-#include "infomain_actions.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxrect32.h"
@@ -10,6 +9,15 @@
 class InfocenterState;
 class MxStillPresenter;
 class LegoControlManagerEvent;
+
+namespace InfomainScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace InfomainScript
 
 // SIZE 0x18
 struct InfocenterMapEntry {
@@ -93,7 +101,7 @@ private:
 	void StartCredits();
 	void StopCredits();
 
-	void PlayAction(InfomainScript::Script p_objectId);
+	void PlayAction(InfomainScript::Script p_script);
 	void StopCurrentAction();
 
 	void PlayBookAnimation();

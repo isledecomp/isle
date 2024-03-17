@@ -5,7 +5,11 @@
 
 namespace IsleScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneIsle = -1,
 
 	c__Isle = 0,
@@ -2435,6 +2439,12 @@ enum Script {
 	c_hho141cl_Pho_684 = 2427,
 	c_hho142cl_0_sfx = 2428,
 	c_hho142cl_1_sfx = 2429,
+};
+#ifdef COMPAT_MODE
+enum Script2 : int {
+#else
+enum Script2 {
+#endif
 	c_hho142cl_2_sfx = 2430,
 	c_hho142cl_3_sfx = 2431,
 	c_hho142cl_4_sfx = 2432,
@@ -3671,7 +3681,7 @@ enum Script {
 	c_srt004in_Anim = 3663,
 	c_IRTX08RA_Wav_868 = 3664,
 	c_nrtflag0_Anim = 3665,
-	c_WNS050P1_Wav = 3666,
+	c_WNS050P1_Wav_X = 3666,
 	c_wns050p1_0_sfx = 3667,
 	c_wns050p1_1_sfx = 3668,
 	c_wns050p1_Anim = 3669,

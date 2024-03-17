@@ -2,6 +2,7 @@
 
 #include "infocenterstate.h"
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"

@@ -1,6 +1,7 @@
 #include "police.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -10,6 +11,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
+#include "police_actions.h"
 #include "policestate.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)
@@ -128,7 +130,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_destLocation = LegoGameState::Area::e_copter;
+			m_destLocation = LegoGameState::Area::e_copterbuild;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Donut_Ctl:

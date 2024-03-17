@@ -5,7 +5,11 @@
 
 namespace IntroScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneIntro = -1,
 
 	c_Lego_Movie = 0,

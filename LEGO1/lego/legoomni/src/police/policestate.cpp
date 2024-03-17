@@ -6,6 +6,7 @@
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "police.h"
+#include "police_actions.h"
 
 #include <stdlib.h>
 

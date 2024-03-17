@@ -5,7 +5,11 @@
 
 namespace HospitalScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneHospital = -1,
 
 	c__StartUp = 0,

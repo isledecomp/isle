@@ -6,7 +6,6 @@
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "mxdsaction.h"
-#include "police_actions.h"
 #include "radio.h"
 
 class PoliceState;

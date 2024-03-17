@@ -50,3 +50,9 @@ MxU32 DuneBuggy::VTable0xdc(MxType19NotificationParam& p_param)
 	// TODO
 	return 0;
 }
+
+// STUB: LEGO1 0x10068350
+void DuneBuggy::FUN_10068350()
+{
+	// TODO
+}

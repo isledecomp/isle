@@ -50,3 +50,9 @@ MxU32 Motocycle::VTable0xdc(MxType19NotificationParam& p_param)
 	// TODO
 	return 0;
 }
+
+// STUB: LEGO1 0x10035e10
+void Motocycle::FUN_10035e10()
+{
+	// TODO
+}

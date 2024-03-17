@@ -5,7 +5,11 @@
 
 namespace InfomainScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneInfomain = -1,
 
 	c__InfoMain = 0,

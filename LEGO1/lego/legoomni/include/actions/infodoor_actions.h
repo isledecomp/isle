@@ -5,7 +5,11 @@
 
 namespace InfodoorScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneInfodoor = -1,
 
 	c__StartUp = 0,

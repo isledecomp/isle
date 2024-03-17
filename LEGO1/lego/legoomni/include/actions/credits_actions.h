@@ -5,7 +5,11 @@
 
 namespace CreditsScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneCredits = -1,
 
 	c_Credits_Wav = 0,

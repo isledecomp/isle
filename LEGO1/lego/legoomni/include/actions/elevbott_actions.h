@@ -5,7 +5,11 @@
 
 namespace ElevbottScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneElevbott = -1,
 
 	c__StartUp = 0,

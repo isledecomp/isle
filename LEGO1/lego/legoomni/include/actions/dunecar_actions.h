@@ -5,7 +5,11 @@
 
 namespace DunecarScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneDunecar = -1,
 
 	c__StartUp = 0,

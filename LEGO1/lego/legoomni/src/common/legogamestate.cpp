@@ -702,22 +702,22 @@ void LegoGameState::StopArea(Area p_area)
 		RemoveFromWorld(*g_isleScript, 0x481, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x482, *g_isleScript, 0);
 		break;
-	case e_copter:
+	case e_copterbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x2f, NULL);
 		InvokeAction(Extra::e_stop, *g_copterScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_copterScript, 0, NULL);
 		break;
-	case e_dunecar:
+	case e_dunecarbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x31, NULL);
 		InvokeAction(Extra::e_stop, *g_dunecarScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_dunecarScript, 0, NULL);
 		break;
-	case e_jetski:
+	case e_jetskibuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x33, NULL);
 		InvokeAction(Extra::e_stop, *g_jetskiScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_jetskiScript, 0, NULL);
 		break;
-	case e_racecar:
+	case e_racecarbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x35, NULL);
 		InvokeAction(Extra::e_stop, *g_racecarScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_racecarScript, 0, NULL);
@@ -801,12 +801,12 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_hospitalExterior:
 	case e_unk31:
 	case e_policeExterior:
-	case e_unk57:
-	case e_unk58:
-	case e_unk59:
-	case e_unk60:
-	case e_unk61:
-	case e_unk64:
+	case e_bike:
+	case e_dunecar:
+	case e_motocycle:
+	case e_copter:
+	case e_skateboard:
+	case e_jetski:
 	case e_unk66:
 		LoadIsle();
 		break;
@@ -902,19 +902,19 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1150, NULL);
 		break;
-	case e_copter:
+	case e_copterbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_copterScript, 0, NULL);
 		break;
-	case e_dunecar:
+	case e_dunecarbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_dunecarScript, 0, NULL);
 		break;
-	case e_jetski:
+	case e_jetskibuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_jetskiScript, 0, NULL);
 		break;
-	case e_racecar:
+	case e_racecarbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_racecarScript, 0, NULL);
 		break;

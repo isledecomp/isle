@@ -42,3 +42,9 @@ MxU32 Jetski::VTable0xd4(LegoControlManagerEvent& p_param)
 	// TODO
 	return 0;
 }
+
+// STUB: LEGO1 0x1007e990
+void Jetski::FUN_1007e990()
+{
+	// TODO
+}

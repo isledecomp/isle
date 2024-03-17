@@ -5,7 +5,11 @@
 
 namespace JetskiScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneJetski = -1,
 
 	c__StartUp = 0,

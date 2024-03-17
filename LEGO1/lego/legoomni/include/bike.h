@@ -28,6 +28,8 @@ public:
 	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	void FUN_10076b60();
+
 	// SYNTHETIC: LEGO1 0x10076880
 	// Bike::`scalar deleting destructor'
 
