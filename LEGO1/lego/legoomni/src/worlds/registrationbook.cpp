@@ -117,11 +117,13 @@ MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
 // FUNCTION: LEGO1 0x100774a0
 MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 {
-	MxS16 l = p_param.GetUnknown0x28();
-	if (1 <= l && 28 >= l) {
+	MxS16 unk0x28 = p_param.GetUnknown0x28();
+
+	if (unk0x28 >= 1 && unk0x28 <= 28) {
 		if (p_param.GetClickedObjectId() == RegbookScript::c_Alphabet_Ctl) {
-			if (l == 28) {
+			if (unk0x28 == 28) {
 				DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+
 				if (GameState()->GetCurrentAct() == 0) {
 					m_infocenterState->SetUnknown0x74(15);
 				}
@@ -132,25 +134,28 @@ MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 			else {
-				if (28 < l) {
+				if (unk0x28 > 28) {
 					return 1;
 				}
 
-				HandleKeyPress(l < 27 ? l + 0x40 : 8);
+				HandleKeyPress(unk0x28 < 27 ? unk0x28 + 64 : 8);
 			}
 		}
 		else {
 			InputManager()->DisableInputProcessing();
 			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+
 			MxS16 i;
 			for (i = 0; i < 10; i++) {
 				if (m_checkmark[i]->GetAction()->GetObjectId() == p_param.GetClickedObjectId()) {
 					break;
 				}
 			}
+
 			FUN_100775c0(i);
 		}
 	}
+
 	return 1;
 }
 
