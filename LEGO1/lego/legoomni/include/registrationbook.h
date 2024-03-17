@@ -68,7 +68,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleNotification19(MxParam& p_param);
-	void FUN_100775c(MxS16 p_playerIndex);
+	void FUN_100775c0(MxS16 p_playerIndex);
 };
 
 #endif // REGISTRATIONBOOK_H

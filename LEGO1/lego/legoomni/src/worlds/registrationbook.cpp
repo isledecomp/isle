@@ -148,14 +148,14 @@ MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 					break;
 				}
 			}
-			FUN_100775c(i);
+			FUN_100775c0(i);
 		}
 	}
 	return 1;
 }
 
 // STUB: LEGO1 0x100775c0
-void RegistrationBook::FUN_100775c(MxS16 p_playerIndex)
+void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 {
 }
 
