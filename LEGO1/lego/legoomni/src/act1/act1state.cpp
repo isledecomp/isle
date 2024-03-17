@@ -20,7 +20,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x010 = 0;
 	m_unk0x020 = 0;
 	m_unk0x00e = 0;
-	m_unk0x01f = 0;
+	m_unk0x01f = FALSE;
 	m_unk0x008 = g_unk0x100f37f0;
 	m_unk0x014 = -1;
 	m_unk0x022 = 0;

@@ -17,6 +17,7 @@
 #include "legoinputmanager.h"
 #include "legoomni.h"
 #include "legoutils.h"
+#include "legovariables.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "motocycle.h"
@@ -562,7 +563,7 @@ MxLong Isle::HandleTransitionEnd()
 		m_destLocation = LegoGameState::e_undefined;
 		break;
 	case LegoGameState::e_elevride:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide infocen");
 		FUN_10032d30(IsleScript::c_ElevRide_Background_Bitmap, JukeboxScript::c_Elevator_Music, "LCAMZI1,90", FALSE);
 		break;
@@ -606,7 +607,7 @@ MxLong Isle::HandleTransitionEnd()
 		);
 		break;
 	case LegoGameState::e_garadoor:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
 		FUN_10032d30(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
 		break;
@@ -631,7 +632,7 @@ MxLong Isle::HandleTransitionEnd()
 		SetIsWorldActive(TRUE);
 		break;
 	case LegoGameState::e_polidoor:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
 		FUN_10032d30(
 			IsleScript::c_PoliDoor_Background_Bitmap,
@@ -641,64 +642,64 @@ MxLong Isle::HandleTransitionEnd()
 		);
 		break;
 	case LegoGameState::e_bike:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30(IsleScript::c_BikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_bike->FUN_10076b60();
 		}
 		break;
 	case LegoGameState::e_dunecar:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30(IsleScript::c_DuneCarFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_dunebuggy->FUN_10068350();
 		}
 		break;
 	case LegoGameState::e_motocycle:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_motocycle->FUN_10035e10();
 		}
 		break;
 	case LegoGameState::e_copter:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30(IsleScript::c_HelicopterDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 		break;
 	case LegoGameState::e_skateboard:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_skateboard->FUN_10010510();
 		}
 		break;
 	case LegoGameState::e_ambulance:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		m_act1state->m_unk0x018 = 10;
 		FUN_10032d30(IsleScript::c_AmbulanceFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_ambulance->FUN_10037060();
 		}
 		break;
 	case LegoGameState::e_towtrack:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		m_act1state->m_unk0x018 = 8;
 		FUN_10032d30(IsleScript::c_TowFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_towtrack->FUN_1004dad0();
 		}
 		break;
 	case LegoGameState::e_jetski:
-		m_act1state->m_unk0x01f = 1;
+		m_act1state->m_unk0x01f = TRUE;
 		FUN_10032d30((IsleScript::Script) m_jetski->GetUnknown0x160(), JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
-		if (m_act1state->m_unk0x01f == 0) {
+		if (!m_act1state->m_unk0x01f) {
 			m_jetski->FUN_1007e990();
 		}
 		break;
@@ -710,7 +711,7 @@ MxLong Isle::HandleTransitionEnd()
 	return 1;
 }
 
-// STUB: LEGO1 0x10032d30
+// FUNCTION: LEGO1 0x10032d30
 void Isle::FUN_10032d30(
 	IsleScript::Script p_script,
 	JukeboxScript::Script p_music,
@@ -718,7 +719,56 @@ void Isle::FUN_10032d30(
 	MxBool p_und
 )
 {
-	// TODO
+	if (m_act1state->m_unk0x01f) {
+		MxPresenter* presenter = (MxPresenter*) Find(m_atom, p_script);
+
+		if (presenter != NULL && presenter->GetCurrentTickleState() == MxPresenter::e_repeating) {
+			if (p_music != JukeboxScript::c_MusicTheme1) {
+				PlayMusic(p_music);
+			}
+
+			if (p_und) {
+				InputManager()->SetCamera(m_cameraController);
+			}
+			else {
+				InputManager()->SetCamera(NULL);
+			}
+
+			if (p_cameraLocation != NULL) {
+				VariableTable()->SetVariable(g_varCAMERALOCATION, p_cameraLocation);
+			}
+
+			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+			SetAppCursor(0);
+			m_destLocation = LegoGameState::e_undefined;
+			m_act1state->m_unk0x01f = FALSE;
+		}
+		else {
+#ifdef COMPAT_MODE
+			{
+				MxNotificationParam param(c_notificationTransitioned, NULL);
+				NotificationManager()->Send(this, &param);
+			}
+#else
+			NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
+#endif
+		}
+	}
+	else {
+		GameState()->SwitchArea(m_destLocation);
+		GameState()->StopArea(LegoGameState::e_previousArea);
+
+#ifdef COMPAT_MODE
+		{
+			MxNotificationParam param(c_notificationTransitioned, NULL);
+			NotificationManager()->Send(this, &param);
+		}
+#else
+		NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
+#endif
+
+		m_act1state->m_unk0x01f = TRUE;
+	}
 }
 
 // FUNCTION: LEGO1 0x10032f10

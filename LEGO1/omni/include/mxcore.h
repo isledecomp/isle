@@ -39,6 +39,7 @@ public:
 
 private:
 	static MxU32 g_nextCoreId;
+
 	MxU32 m_id; // 0x04
 };
 
