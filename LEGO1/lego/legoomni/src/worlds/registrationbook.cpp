@@ -12,6 +12,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtimer.h"
+#include "mxtransitionmanager.h"
 #include "regbook_actions.h"
 
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
@@ -113,10 +114,54 @@ MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
 	return 0;
 }
 
-// STUB: LEGO1 0x100774a0
+// FUNCTION: LEGO1 0x100774a0
 MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 {
-	return 0;
+	MxS16 unk0x28 = p_param.GetUnknown0x28();
+
+	if (unk0x28 >= 1 && unk0x28 <= 28) {
+		if (p_param.GetClickedObjectId() == RegbookScript::c_Alphabet_Ctl) {
+			if (unk0x28 == 28) {
+				DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+
+				if (GameState()->GetCurrentAct() == 0) {
+					m_infocenterState->SetUnknown0x74(15);
+				}
+				else {
+					m_infocenterState->SetUnknown0x74(2);
+				}
+
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			}
+			else {
+				if (unk0x28 > 28) {
+					return 1;
+				}
+
+				HandleKeyPress(unk0x28 < 27 ? unk0x28 + 64 : 8);
+			}
+		}
+		else {
+			InputManager()->DisableInputProcessing();
+			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+
+			MxS16 i;
+			for (i = 0; i < 10; i++) {
+				if (m_checkmark[i]->GetAction()->GetObjectId() == p_param.GetClickedObjectId()) {
+					break;
+				}
+			}
+
+			FUN_100775c0(i);
+		}
+	}
+
+	return 1;
+}
+
+// STUB: LEGO1 0x100775c0
+void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
+{
 }
 
 // FUNCTION: LEGO1 0x10077cc0
