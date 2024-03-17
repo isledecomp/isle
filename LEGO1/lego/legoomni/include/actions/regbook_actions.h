@@ -5,7 +5,11 @@
 
 namespace RegbookScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneRegbook = -1,
 
 	c__StartUp = 0,

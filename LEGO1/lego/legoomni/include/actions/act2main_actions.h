@@ -5,7 +5,11 @@
 
 namespace Act2mainScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneAct2main = -1,
 
 	c__Act2Main = 0,

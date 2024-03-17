@@ -5,7 +5,11 @@
 
 namespace SndanimScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneSndanim = -1,
 
 	c_SoundAndAnim_Action = 0,

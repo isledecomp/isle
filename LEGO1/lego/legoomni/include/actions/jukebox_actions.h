@@ -5,7 +5,11 @@
 
 namespace JukeboxScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneJukebox = -1,
 
 	c_MusicTheme1 = 0,

@@ -5,7 +5,11 @@
 
 namespace CarraceScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneCarrace = -1,
 
 	c__CarRace_World = 0,

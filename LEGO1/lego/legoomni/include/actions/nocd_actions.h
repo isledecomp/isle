@@ -5,7 +5,11 @@
 
 namespace NocdScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneNocd = -1,
 
 	c_NoCD_Movie = 0,

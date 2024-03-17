@@ -5,7 +5,11 @@
 
 namespace HistbookScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneHistbook = -1,
 
 	c__StartUp = 0,

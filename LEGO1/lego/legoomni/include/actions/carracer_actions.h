@@ -5,7 +5,11 @@
 
 namespace CarracerScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneCarracer = -1,
 
 	c_nrt002pz_Anim = 0,

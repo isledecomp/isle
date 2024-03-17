@@ -5,7 +5,11 @@
 
 namespace RacecarScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneRacecar = -1,
 
 	c__StartUp = 0,

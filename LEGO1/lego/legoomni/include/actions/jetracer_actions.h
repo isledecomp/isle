@@ -5,7 +5,11 @@
 
 namespace JetracerScript
 {
+#ifdef COMPAT_MODE
+enum Script : int {
+#else
 enum Script {
+#endif
 	c_noneJetracer = -1,
 
 	c_Trigger200_Drown = 200,
