@@ -318,7 +318,7 @@ void Isle::Enable(MxBool p_enable)
 
 			SetIsWorldActive(FALSE);
 			break;
-		case LegoGameState::e_unk57:
+		case LegoGameState::e_bike:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -331,7 +331,7 @@ void Isle::Enable(MxBool p_enable)
 			m_bike->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
 #endif
 			break;
-		case LegoGameState::e_unk58:
+		case LegoGameState::e_dunecar:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -344,7 +344,7 @@ void Isle::Enable(MxBool p_enable)
 			m_dunebuggy->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
 #endif
 			break;
-		case LegoGameState::e_unk59:
+		case LegoGameState::e_motocycle:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -357,7 +357,7 @@ void Isle::Enable(MxBool p_enable)
 			m_motocycle->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
 #endif
 			break;
-		case LegoGameState::e_unk60:
+		case LegoGameState::e_copter:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -370,7 +370,7 @@ void Isle::Enable(MxBool p_enable)
 			m_helicopter->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
 #endif
 			break;
-		case LegoGameState::e_unk61:
+		case LegoGameState::e_skateboard:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -383,7 +383,7 @@ void Isle::Enable(MxBool p_enable)
 			m_skateboard->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
 #endif
 			break;
-		case LegoGameState::e_unk64:
+		case LegoGameState::e_jetski:
 			FUN_1001fa70(CurrentActor());
 			SetIsWorldActive(TRUE);
 
@@ -514,12 +514,12 @@ void Isle::Enable(MxBool p_enable)
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_elevride) &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_polidoor) &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_garadoor) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk57) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk58) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk59) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk60) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk64) &&
-			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_unk61) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_bike) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_dunecar) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_motocycle) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_copter) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_jetski) &&
+			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_skateboard) &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_jetrace2)) {
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
@@ -551,7 +551,7 @@ MxLong Isle::HandleTransitionEnd()
 	InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_Avo917In_PlayWav, NULL);
 	DeleteObjects(&m_atom, IsleScript::c_Avo900Ps_PlayWav, IsleScript::c_Avo907Ps_PlayWav);
 
-	if (m_destLocation != LegoGameState::e_unk61) {
+	if (m_destLocation != LegoGameState::e_skateboard) {
 		m_act1state->m_unk0x018 = 0;
 	}
 
@@ -640,7 +640,7 @@ MxLong Isle::HandleTransitionEnd()
 			FALSE
 		);
 		break;
-	case LegoGameState::e_unk57:
+	case LegoGameState::e_bike:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30(IsleScript::c_BikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
@@ -648,7 +648,7 @@ MxLong Isle::HandleTransitionEnd()
 			m_bike->FUN_10076b60();
 		}
 		break;
-	case LegoGameState::e_unk58:
+	case LegoGameState::e_dunecar:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30(IsleScript::c_DuneCarFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
@@ -656,7 +656,7 @@ MxLong Isle::HandleTransitionEnd()
 			m_dunebuggy->FUN_10068350();
 		}
 		break;
-	case LegoGameState::e_unk59:
+	case LegoGameState::e_motocycle:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30(IsleScript::c_MotoBikeDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
@@ -664,11 +664,11 @@ MxLong Isle::HandleTransitionEnd()
 			m_motocycle->FUN_10035e10();
 		}
 		break;
-	case LegoGameState::e_unk60:
+	case LegoGameState::e_copter:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30(IsleScript::c_HelicopterDashboard_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 		break;
-	case LegoGameState::e_unk61:
+	case LegoGameState::e_skateboard:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
@@ -676,7 +676,7 @@ MxLong Isle::HandleTransitionEnd()
 			m_skateboard->FUN_10010510();
 		}
 		break;
-	case LegoGameState::e_unk62:
+	case LegoGameState::e_ambulance:
 		m_act1state->m_unk0x01f = 1;
 		m_act1state->m_unk0x018 = 10;
 		FUN_10032d30(IsleScript::c_AmbulanceFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
@@ -685,7 +685,7 @@ MxLong Isle::HandleTransitionEnd()
 			m_ambulance->FUN_10037060();
 		}
 		break;
-	case LegoGameState::e_unk63:
+	case LegoGameState::e_towtrack:
 		m_act1state->m_unk0x01f = 1;
 		m_act1state->m_unk0x018 = 8;
 		FUN_10032d30(IsleScript::c_TowFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
@@ -694,7 +694,7 @@ MxLong Isle::HandleTransitionEnd()
 			m_towtrack->FUN_1004dad0();
 		}
 		break;
-	case LegoGameState::e_unk64:
+	case LegoGameState::e_jetski:
 		m_act1state->m_unk0x01f = 1;
 		FUN_10032d30((IsleScript::Script) m_jetski->GetUnknown0x160(), JukeboxScript::c_MusicTheme1, NULL, TRUE);
 

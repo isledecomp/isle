@@ -34,7 +34,7 @@ MxResult Bike::Create(MxDSAction& p_dsAction)
 void Bike::VTable0xe4()
 {
 	IslePathActor::VTable0xe4();
-	GameState()->SetCurrentArea(LegoGameState::Area::e_unk57);
+	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
 	FUN_1003ee00(*g_isleScript, 11);
 	FUN_1003ee00(*g_isleScript, 12);
 	FUN_1003ee00(*g_isleScript, 15);

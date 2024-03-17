@@ -68,7 +68,7 @@ void Helicopter::VTable0xe4()
 	IslePathActor::VTable0xe4();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-		GameState()->SetCurrentArea(LegoGameState::e_unk60);
+		GameState()->SetCurrentArea(LegoGameState::e_copter);
 		if (CurrentActor()) {
 			if (CurrentActor()->IsA("IslePathActor")) {
 				((IslePathActor*) CurrentActor())->VTable0xe8(0x37, TRUE, 7);
@@ -115,7 +115,7 @@ MxU32 Helicopter::VTable0xcc()
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(FALSE);
 		VTable0xe8(0x29, TRUE, 7);
-		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_unk60);
+		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
 		SetUnknownDC(4);

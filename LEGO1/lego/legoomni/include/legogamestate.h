@@ -64,10 +64,10 @@ public:
 		e_unk33,
 		e_police,
 		e_polidoor,
-		e_copter,
-		e_dunecar,
-		e_jetski,
-		e_racecar,
+		e_copterbuild,
+		e_dunecarbuild,
+		e_jetskibuild,
+		e_racecarbuild,
 
 		e_act2main = 46,
 		e_act3script,
@@ -76,14 +76,14 @@ public:
 		e_unk54,
 
 		e_histbook = 56,
-		e_unk57,
-		e_unk58,
-		e_unk59,
-		e_unk60,
-		e_unk61,
-		e_unk62,
-		e_unk63,
-		e_unk64,
+		e_bike,
+		e_dunecar,
+		e_motocycle,
+		e_copter,
+		e_skateboard,
+		e_ambulance,
+		e_towtrack,
+		e_jetski,
 
 		e_unk66 = 66
 	};

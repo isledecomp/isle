@@ -130,7 +130,7 @@ MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
 			}
 
 			BackgroundAudioManager()->Stop();
-			m_destLocation = LegoGameState::Area::e_copter;
+			m_destLocation = LegoGameState::Area::e_copterbuild;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case PoliceScript::c_Donut_Ctl:
