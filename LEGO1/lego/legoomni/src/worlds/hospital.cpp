@@ -215,11 +215,17 @@ void Hospital::ReadyWorld()
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
-// STUB: LEGO1 0x10074dd0
+// FUNCTION: LEGO1 0x10074dd0
 MxLong Hospital::HandleKeyPress(MxS8 p_key)
 {
-	// TODO
-	return 0;
+	MxLong result = 0;
+
+	if (p_key == ' ' && g_unk0x100f7918 == 0) {
+		DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+		result = 1;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10074e00
