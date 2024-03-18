@@ -8,6 +8,7 @@
 #include "isle.h"
 #include "islepathactor.h"
 #include "jetski.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
@@ -93,7 +94,7 @@ LegoGameState::LegoGameState()
 	m_actorId = 0;
 	m_savePath = NULL;
 	m_stateArray = NULL;
-	m_unk0x41c = -1;
+	m_unk0x41c = JukeboxScript::c_noneJukebox;
 	m_currentArea = e_undefined;
 	m_previousArea = e_undefined;
 	m_unk0x42c = e_undefined;
