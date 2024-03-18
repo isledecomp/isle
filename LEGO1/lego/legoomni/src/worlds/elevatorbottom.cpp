@@ -1,6 +1,7 @@
 #include "elevatorbottom.h"
 
 #include "act1state.h"
+#include "elevbott_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
@@ -84,17 +85,17 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
-		case 1:
+		case ElevbottScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infodoor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 2:
+		case ElevbottScript::c_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 3:
+		case ElevbottScript::c_ElevBott_Elevator_Ctl:
 			LegoGameState* gs = GameState();
 			Act1State* state = (Act1State*) gs->GetState("Act1State");
 
