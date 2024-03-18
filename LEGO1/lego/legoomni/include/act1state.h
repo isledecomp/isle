@@ -100,7 +100,7 @@ protected:
 	undefined m_unk0x012;         // 0x012
 	MxS32 m_unk0x014;             // 0x014
 	MxU32 m_unk0x018;             // 0x018
-	MxU16 m_elevFloor;            // 0x01c
+	MxS16 m_elevFloor;            // 0x01c
 	undefined m_unk0x01e;         // 0x01e
 	MxBool m_unk0x01f;            // 0x01f
 	MxBool m_planeActive;         // 0x020
