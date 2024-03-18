@@ -124,7 +124,7 @@ MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 			if (unk0x28 == 28) {
 				DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 
-				if (GameState()->GetCurrentAct() == 0) {
+				if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 					m_infocenterState->SetUnknown0x74(15);
 				}
 				else {

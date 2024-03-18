@@ -2,6 +2,7 @@
 #define ISLEPATHACTOR_H
 
 #include "legocontrolmanager.h"
+#include "legogamestate.h"
 #include "legopathactor.h"
 #include "legoworld.h"
 #include "mxtype18notificationparam.h"
@@ -50,10 +51,10 @@ public:
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void VTable0xe0();                    // vtable+0xe0
-	virtual void VTable0xe4();                    // vtable+0xe4
-	virtual void VTable0xe8(MxU32, MxBool, MxU8); // vtable+0xe8
-	virtual void VTable0xec();                    // vtable+0xec
+	virtual void VTable0xe0();                                  // vtable+0xe0
+	virtual void VTable0xe4();                                  // vtable+0xe4
+	virtual void VTable0xe8(LegoGameState::Area, MxBool, MxU8); // vtable+0xe8
+	virtual void VTable0xec(MxMatrix, MxU32, MxBool);           // vtable+0xec
 
 	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'

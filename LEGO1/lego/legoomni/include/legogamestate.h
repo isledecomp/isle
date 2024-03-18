@@ -68,14 +68,20 @@ public:
 		e_dunecarbuild,
 		e_jetskibuild,
 		e_racecarbuild,
+		e_unk40,
+		e_unk41,
+		e_unk42,
 
-		e_act2main = 46,
+		e_unk45 = 45,
+		e_act2main,
 		e_act3script,
+		e_unk48,
+		e_unk49,
 
 		e_jukeboxw = 53,
 		e_unk54,
-
-		e_histbook = 56,
+		e_unk55,
+		e_histbook,
 		e_bike,
 		e_dunecar,
 		e_motocycle,

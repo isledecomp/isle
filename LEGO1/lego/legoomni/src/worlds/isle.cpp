@@ -51,7 +51,7 @@ Isle::Isle()
 	m_skateboard = NULL;
 	m_racecar = NULL;
 	m_jetski = NULL;
-	m_act1state = 0;
+	m_act1state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 
 	NotificationManager()->Register(this);
@@ -137,7 +137,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationClick:
-			result = HandleType17Notification(p_param);
+			result = HandleClick(p_param);
 			break;
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
@@ -183,7 +183,7 @@ void Isle::ReadyWorld()
 		m_act1state->SetUnknown18(0);
 		m_act1state->SetUnknown21(0);
 	}
-	else if (GameState()->GetLoadedAct()) {
+	else if (GameState()->GetLoadedAct() != LegoGameState::e_act1) {
 		FUN_1003ef00(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
@@ -192,7 +192,7 @@ void Isle::ReadyWorld()
 }
 
 // STUB: LGEO1 0x10031030
-MxLong Isle::HandleType17Notification(MxParam& p_param)
+MxLong Isle::HandleClick(MxParam& p_param)
 {
 	return 0;
 }
@@ -252,7 +252,7 @@ void Isle::Enable(MxBool p_enable)
 
 		if (CurrentActor() != NULL && CurrentActor()->IsA("Jetski")) {
 			IslePathActor* actor = CurrentActor();
-			actor->VTable0xe8(0x2d, FALSE, 7);
+			actor->VTable0xe8(LegoGameState::e_unk45, FALSE, 7);
 			actor->SetUnknownDC(0);
 		}
 		else {
@@ -428,7 +428,7 @@ void Isle::Enable(MxBool p_enable)
 			}
 			break;
 		case 5: {
-			CurrentActor()->VTable0xe8(0xf, FALSE, 7);
+			CurrentActor()->VTable0xe8(LegoGameState::e_jetrace2, FALSE, 7);
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -456,8 +456,7 @@ void Isle::Enable(MxBool p_enable)
 		}
 		case 6: {
 			GameState()->m_currentArea = LegoGameState::e_carraceExterior;
-			CurrentActor()->VTable0xe8(0x15, FALSE, 7);
-
+			CurrentActor()->VTable0xe8(LegoGameState::e_unk21, FALSE, 7);
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -502,7 +501,7 @@ void Isle::Enable(MxBool p_enable)
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
-			CurrentActor()->VTable0xe8(0x36, TRUE, 7);
+			CurrentActor()->VTable0xe8(LegoGameState::e_unk54, TRUE, 7);
 			GameState()->m_currentArea = LegoGameState::e_unk66;
 			FUN_1003ef00(TRUE);
 			m_jukebox->StartAction();
@@ -540,10 +539,32 @@ void Isle::Enable(MxBool p_enable)
 	}
 }
 
-// STUB: LEGO1 0x10032620
+// FUNCTION: LEGO1 0x10032620
 void Isle::FUN_10032620()
 {
-	// TODO
+	VideoManager()->Get3DManager()->SetFrustrum(90.0, 0.1, 250.0);
+
+	switch (GameState()->m_currentArea) {
+	case LegoGameState::e_unk66: {
+		MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
+		MxU32 unk0x88 = CurrentActor()->GetUnknown88();
+		CurrentActor()->VTable0xec(mat, unk0x88, TRUE);
+		break;
+	}
+	case LegoGameState::e_unk4:
+	case LegoGameState::e_jetraceExterior:
+	case LegoGameState::e_unk17:
+	case LegoGameState::e_carraceExterior:
+	case LegoGameState::e_unk20:
+	case LegoGameState::e_pizzeriaExterior:
+	case LegoGameState::e_garageExterior:
+	case LegoGameState::e_hospitalExterior:
+	case LegoGameState::e_unk31:
+	case LegoGameState::e_policeExterior:
+		CurrentActor()->VTable0xe8(GameState()->m_currentArea, TRUE, 7);
+		GameState()->m_currentArea = LegoGameState::e_unk66;
+		break;
+	}
 }
 
 // FUNCTION: LEGO1 0x100327a0
