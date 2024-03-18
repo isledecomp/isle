@@ -1,6 +1,7 @@
 #include "infocenterdoor.h"
 
 #include "infocenterstate.h"
+#include "infodoor_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
@@ -96,22 +97,22 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 		DeleteObjects(&m_atom, 500, 510);
 
 		switch (p_param.GetClickedObjectId()) {
-		case 1:
+		case InfodoorScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infoscor;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 2:
+		case InfodoorScript::c_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_elevbott;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 3:
+		case InfodoorScript::c_Info_Ctl:
 			m_destLocation = LegoGameState::e_infomain;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 4:
+		case InfodoorScript::c_Door_Ctl:
 			if (GameState()->GetActorId()) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {

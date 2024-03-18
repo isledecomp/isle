@@ -2,7 +2,9 @@
 
 #include "act1state.h"
 #include "act3.h"
+#include "act3_actions.h"
 #include "isle.h"
+#include "isle_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
@@ -156,7 +158,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
-		case 0x17:
+		case IsleScript::c_HelicopterArms_Ctl:
 			if (*g_act3Script == script) {
 				((Act3*) CurrentWorld())->SetUnkown4270(2);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -168,7 +170,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			GameState()->SetCurrentArea(LegoGameState::e_unk66);
 			ret = 1;
 			break;
-		case 0x18: {
+		case IsleScript::c_Helicopter_TakeOff_Ctl: {
 			if (*g_act3Script == script) {
 				break;
 			}
@@ -183,7 +185,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			ret = 1;
 			break;
 		}
-		case 0x19:
+		case IsleScript::c_Helicopter_Land_Ctl:
 			if (*g_act3Script == script) {
 				break;
 			}
@@ -195,13 +197,13 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			}
 			ret = 1;
 			break;
-		case 0x1a:
+		case Act3Script::c_Helicopter_Pizza_Ctl:
 			if (*g_act3Script != script) {
 				break;
 			}
 			ret = 1;
 			/* fall through */
-		case 0x1b:
+		case Act3Script::c_Helicopter_Donut_Ctl:
 			if (*g_act3Script != script) {
 				break;
 			}
@@ -228,7 +230,8 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			}
 			ret = 1;
 			break;
-		case 0x1c:
+		/* case Act3Script::c_Helicopter_Info_Ctl: */
+		case IsleScript::c_Helicopter_Info_Ctl:
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);

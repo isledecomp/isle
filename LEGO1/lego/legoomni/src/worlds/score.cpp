@@ -1,6 +1,7 @@
 #include "score.h"
 
 #include "ambulancemissionstate.h"
+#include "infoscor_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
@@ -165,17 +166,17 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 
 	if (l == 1 || p_param.GetClickedObjectId() == 4) {
 		switch (p_param.GetClickedObjectId()) {
-		case 1:
+		case InfoscorScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infomain;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
-		case 2:
+		case InfoscorScript::c_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_infodoor;
 			DeleteScript();
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
-		case 3: {
+		case InfoscorScript::c_Book_Ctl: {
 			LegoInputManager* im = InputManager();
 			im->SetUnknown88(TRUE);
 			im->SetUnknown336(FALSE);
@@ -187,7 +188,7 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 			Start(&action);
 			break;
 		}
-		case 4: {
+		case InfoscorScript::c_LegoBox_Ctl: {
 			switch (l) {
 			case 1: {
 				MxDSAction action;
