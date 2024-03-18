@@ -344,11 +344,11 @@ MxLong MxOmni::Notify(MxParam& p_param)
 		return 0;
 	}
 
-	return HandleActionEnd(p_param);
+	return HandleEndAction(p_param);
 }
 
 // FUNCTION: LEGO1 0x100b0880
-MxLong MxOmni::HandleActionEnd(MxParam& p_param)
+MxLong MxOmni::HandleEndAction(MxParam& p_param)
 {
 	MxDSAction* action = ((MxEndActionNotificationParam&) p_param).GetAction();
 	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());

@@ -17,6 +17,15 @@ struct ColorStringStruct {
 	const char* m_colorName;
 };
 
+namespace JukeboxScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace JukeboxScript
+
 // SIZE 0x430
 class LegoGameState {
 public:
@@ -159,7 +168,7 @@ public:
 	inline Act GetLoadedAct() { return m_loadedAct; }
 	inline Area GetCurrentArea() { return m_currentArea; }
 	inline Area GetPreviousArea() { return m_previousArea; }
-	inline MxU32 GetUnknown0x41c() { return m_unk0x41c; }
+	inline JukeboxScript::Script GetUnknown0x41c() { return m_unk0x41c; }
 	inline Area GetUnknown0x42c() { return m_unk0x42c; }
 	inline History* GetHistory() { return &m_history; }
 
@@ -167,7 +176,7 @@ public:
 	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
 	inline void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	inline void SetUnknown0x41c(undefined4 p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
+	inline void SetUnknown0x41c(JukeboxScript::Script p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
 	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
 	inline Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
 	inline MxS16 GetPlayerCount() { return m_playerCount; }
@@ -202,10 +211,10 @@ public:
 	Username m_players[9]; // 0x28
 
 private:
-	History m_history;     // 0xa6
-	undefined2 m_unk0x41a; // 0x41a
-	undefined4 m_unk0x41c; // 0x41c
-	MxBool m_isDirty;      // 0x420
+	History m_history;                // 0xa6
+	undefined2 m_unk0x41a;            // 0x41a
+	JukeboxScript::Script m_unk0x41c; // 0x41c
+	MxBool m_isDirty;                 // 0x420
 
 public:
 	Area m_currentArea;  // 0x424

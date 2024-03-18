@@ -21,6 +21,7 @@
 #include "legovideomanager.h"
 #include "misc.h"
 #include "motocycle.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
@@ -123,7 +124,7 @@ MxLong Isle::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationEndAction:
-			result = StopAction(p_param);
+			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationButtonUp:
 		case c_notificationButtonDown:
@@ -167,10 +168,90 @@ MxLong Isle::Notify(MxParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10030d90
-MxLong Isle::StopAction(MxParam& p_param)
+// FUNCTION: LEGO1 0x10030d90
+MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	return 0;
+	MxLong result;
+
+	switch (m_act1state->m_unk0x018) {
+	case 2:
+		HandleElevatorEndAction();
+		result = 1;
+		break;
+	case 3:
+		result = m_pizza->Notify(p_param);
+		break;
+	case 8:
+		result = m_towtrack->Notify(p_param);
+		break;
+	case 10:
+		result = m_ambulance->Notify(p_param);
+		break;
+	default:
+		result = m_radio.Notify(p_param);
+
+		if (result == 0) {
+			MxDSAction* action = p_param.GetAction();
+
+			// TODO: Should be signed, but worsens match
+			MxU32 script;
+
+			if (action->GetAtomId() == *g_jukeboxScript) {
+				script = action->GetObjectId();
+
+				if (script >= JukeboxScript::c_JBMusic1 && script <= JukeboxScript::c_JBMusic6) {
+					m_jukebox->StopAction((JukeboxScript::Script) script);
+					result = 1;
+				}
+			}
+			else if (m_act1state->m_planeActive) {
+				script = action->GetObjectId();
+
+				if (script >= IsleScript::c_nic002pr_RunAnim && script <= IsleScript::c_nic004pr_RunAnim) {
+					m_act1state->m_planeActive = FALSE;
+				}
+			}
+			else {
+				script = action->GetObjectId();
+
+				if (script == IsleScript::c_Avo917In_PlayWav ||
+					(script >= IsleScript::c_Avo900Ps_PlayWav && script <= IsleScript::c_Avo907Ps_PlayWav)) {
+					BackgroundAudioManager()->RaiseVolume();
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x10030ef0
+void Isle::HandleElevatorEndAction()
+{
+	switch (m_act1state->m_elevFloor) {
+	case Act1State::c_floor1:
+		m_destLocation = LegoGameState::e_infomain;
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+		m_act1state->m_unk0x018 = 0;
+		break;
+	case Act1State::c_floor2:
+		if (m_act1state->m_unk0x01e) {
+			m_act1state->m_unk0x01e = FALSE;
+			m_act1state->m_unk0x018 = 0;
+			InputManager()->EnableInputProcessing();
+		}
+		else {
+			InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Floor2, NULL);
+			InputManager()->EnableInputProcessing();
+			m_act1state->m_unk0x01e = TRUE;
+		}
+		break;
+	case Act1State::c_floor3:
+		m_destLocation = LegoGameState::e_elevopen;
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+		m_act1state->m_unk0x018 = 0;
+		break;
+	}
 }
 
 // FUNCTION: LEGO1 0x10030fc0
@@ -228,7 +309,7 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 				break;
 			case Act1State::c_floor2:
 				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Floor2, NULL);
-				m_act1state->m_unk0x01e = 1;
+				m_act1state->m_unk0x01e = TRUE;
 				break;
 			case Act1State::c_floor3:
 				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev3_2_Ride, NULL);

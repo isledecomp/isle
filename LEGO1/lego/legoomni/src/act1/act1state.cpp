@@ -17,7 +17,7 @@ extern MxAtomId* g_isleScript;
 // STUB: LEGO1 0x100334b0
 Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x010(0)
 {
-	m_unk0x01e = 0;
+	m_unk0x01e = FALSE;
 	m_unk0x018 = 1;
 	m_unk0x010 = 0;
 	m_planeActive = FALSE;

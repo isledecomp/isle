@@ -78,10 +78,11 @@ public:
 	void Enable(MxBool p_enable) override;           // vtable+68
 	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
 
-	MxLong StopAction(MxParam& p_param);
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
+	void HandleElevatorEndAction();
 	void FUN_10031590();
 	void FUN_10032620();
 	void FUN_100330e0();
