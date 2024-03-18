@@ -62,7 +62,7 @@ void Helicopter::GetState()
 void Helicopter::VTable0xe4()
 {
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-		VTable0xe8(0x28, TRUE, 7);
+		VTable0xe8(LegoGameState::e_unk40, TRUE, 7);
 	}
 
 	IslePathActor::VTable0xe4();
@@ -71,7 +71,7 @@ void Helicopter::VTable0xe4()
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
 		if (CurrentActor()) {
 			if (CurrentActor()->IsA("IslePathActor")) {
-				((IslePathActor*) CurrentActor())->VTable0xe8(0x37, TRUE, 7);
+				((IslePathActor*) CurrentActor())->VTable0xe8(LegoGameState::e_unk55, TRUE, 7);
 			}
 		}
 	}
@@ -114,7 +114,7 @@ MxU32 Helicopter::VTable0xcc()
 	case LegoGameState::e_act1:
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(FALSE);
-		VTable0xe8(0x29, TRUE, 7);
+		VTable0xe8(LegoGameState::e_unk41, TRUE, 7);
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
@@ -253,10 +253,10 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 	case 1: {
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(4);
-			VTable0xe8(0x2a, TRUE, 7);
+			VTable0xe8(LegoGameState::e_unk42, TRUE, 7);
 		}
 		else {
-			VTable0xe8(0x31, TRUE, 7);
+			VTable0xe8(LegoGameState::e_unk49, TRUE, 7);
 		}
 
 		m_state->SetUnknown8(2);
@@ -290,10 +290,10 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
-			VTable0xe8(0x29, TRUE, 7);
+			VTable0xe8(LegoGameState::e_unk41, TRUE, 7);
 		}
 		else {
-			VTable0xe8(0x30, TRUE, 7);
+			VTable0xe8(LegoGameState::e_unk48, TRUE, 7);
 		}
 
 		m_state->SetUnknown8(0);

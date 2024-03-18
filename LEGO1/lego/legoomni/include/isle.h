@@ -79,7 +79,7 @@ public:
 	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
 
 	MxLong StopAction(MxParam& p_param);
-	MxLong HandleType17Notification(MxParam& p_param);
+	MxLong HandleClick(MxParam& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
 	void FUN_10032620();

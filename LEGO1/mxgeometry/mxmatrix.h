@@ -8,7 +8,11 @@
 class MxMatrix : public Matrix4 {
 public:
 	inline MxMatrix() : Matrix4(m_elements) {}
+
+	// FUNCTION: LEGO1 0x10032770
 	inline MxMatrix(const MxMatrix& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
+
+	inline MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
 	float* operator[](size_t idx) { return m_data[idx]; }
 	const float* operator[](size_t idx) const { return m_data[idx]; }

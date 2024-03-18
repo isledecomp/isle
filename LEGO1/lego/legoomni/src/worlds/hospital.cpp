@@ -102,7 +102,7 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x10074990
 MxLong Hospital::Notify(MxParam& p_param)
 {
-	MxResult result = SUCCESS;
+	MxLong result = 0;
 	LegoWorld::Notify(p_param);
 
 	if (m_worldStarted) {
