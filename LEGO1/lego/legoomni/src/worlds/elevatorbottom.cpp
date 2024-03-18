@@ -103,7 +103,7 @@ MxLong ElevatorBottom::HandleClick(LegoControlManagerEvent& p_param)
 				state = (Act1State*) gs->CreateState("Act1State");
 			}
 
-			state->SetUnknown1c(1);
+			state->SetElevatorFloor(Act1State::c_floor1);
 			m_destLocation = LegoGameState::e_elevride;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			VariableTable()->SetVariable(g_varCAMERALOCATION, "LCAMZI1,90");

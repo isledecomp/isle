@@ -67,6 +67,18 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 	delete[] colorStringCopy;
 }
 
+// STUB: LEGO1 0x1003c230
+void LegoBackgroundColor::ToggleDayNight(MxBool)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1003c330
+void LegoBackgroundColor::ToggleSkyColor()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x1003c400
 void LegoBackgroundColor::SetLights(float p_r, float p_g, float p_b)
 {

@@ -171,6 +171,7 @@ public:
 	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
 	inline Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
 	inline MxS16 GetPlayerCount() { return m_playerCount; }
+	inline LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
