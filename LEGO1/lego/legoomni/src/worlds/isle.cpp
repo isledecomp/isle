@@ -271,9 +271,6 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 		case IsleScript::c_Observe_LeftArrow_Ctl:
 			m_act1state->FUN_100346a0();
 			m_radio.Stop();
-			m_destLocation = LegoGameState::e_elevopen;
-			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-			break; // TODO: Maybe fallthrough
 		case IsleScript::c_SeaView_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_elevopen;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
@@ -281,9 +278,6 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 		case IsleScript::c_Observe_RightArrow_Ctl:
 			m_act1state->FUN_100346a0();
 			m_radio.Stop();
-			m_destLocation = LegoGameState::e_elevdown;
-			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-			break; // TODO: Maybe fallthrough
 		case IsleScript::c_SeaView_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_elevdown;
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
