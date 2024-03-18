@@ -9,6 +9,12 @@
 // SIZE 0x26c
 class Act1State : public LegoState {
 public:
+	enum ElevatorFloor {
+		c_floor1 = 1,
+		c_floor2,
+		c_floor3
+	};
+
 	enum {
 		e_unk953 = 953,
 		e_unk954 = 954,
@@ -68,15 +74,17 @@ public:
 	MxBool SetFlag() override;                          // vtable+0x18
 	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
+	void FUN_10034660();
+	void FUN_100346a0();
 	void FUN_10034b60();
 	void FUN_10034d00();
 
 	inline MxU32 GetUnknown18() { return m_unk0x018; }
-	inline MxU32 GetUnknown1c() { return m_unk0x01c; }
+	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
 	inline MxS16 GetUnknown21() { return m_unk0x021; }
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
-	inline void SetUnknown1c(MxU32 p_unk0x1c) { m_unk0x01c = p_unk0x1c; }
+	inline void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
 	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x021 = p_unk0x21; }
 
 	// SYNTHETIC: LEGO1 0x10033960
@@ -92,10 +100,10 @@ protected:
 	undefined m_unk0x012;         // 0x012
 	MxS32 m_unk0x014;             // 0x014
 	MxU32 m_unk0x018;             // 0x018
-	MxU16 m_unk0x01c;             // 0x01c
+	MxS16 m_elevFloor;            // 0x01c
 	undefined m_unk0x01e;         // 0x01e
 	MxBool m_unk0x01f;            // 0x01f
-	undefined m_unk0x020;         // 0x020
+	MxBool m_planeActive;         // 0x020
 	undefined m_unk0x021;         // 0x021
 	undefined m_unk0x022;         // 0x022
 	undefined m_unk0x023;         // 0x023

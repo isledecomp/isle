@@ -137,7 +137,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationClick:
-			result = HandleClick(p_param);
+			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationType18:
 			switch (m_act1state->GetUnknown18()) {
@@ -191,10 +191,178 @@ void Isle::ReadyWorld()
 	}
 }
 
-// STUB: LGEO1 0x10031030
-MxLong Isle::HandleClick(MxParam& p_param)
+// FUNCTION: LEGO1 0x10031030
+MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 {
+	if (p_param.GetUnknown0x28() == 1) {
+		MxDSAction action;
+
+		switch (p_param.GetClickedObjectId()) {
+		case IsleScript::c_ElevRide_Info_Ctl:
+			m_act1state->m_unk0x018 = 2;
+
+			switch (m_act1state->m_elevFloor) {
+			case Act1State::c_floor1:
+				m_destLocation = LegoGameState::e_infomain;
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+				break;
+			case Act1State::c_floor2:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev2_1_Ride, NULL);
+				InputManager()->DisableInputProcessing();
+				break;
+			case Act1State::c_floor3:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev3_1_Ride, NULL);
+				InputManager()->DisableInputProcessing();
+				break;
+			}
+
+			m_act1state->m_elevFloor = Act1State::c_floor1;
+			break;
+		case IsleScript::c_ElevRide_Two_Ctl:
+			m_act1state->m_unk0x018 = 2;
+
+			switch (m_act1state->m_elevFloor) {
+			case Act1State::c_floor1:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev1_2_Ride, NULL);
+				InputManager()->DisableInputProcessing();
+				break;
+			case Act1State::c_floor2:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Floor2, NULL);
+				m_act1state->m_unk0x01e = 1;
+				break;
+			case Act1State::c_floor3:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev3_2_Ride, NULL);
+				InputManager()->DisableInputProcessing();
+				break;
+			}
+
+			m_act1state->m_elevFloor = Act1State::c_floor2;
+			break;
+		case IsleScript::c_ElevRide_Three_Ctl:
+			m_act1state->m_unk0x018 = 2;
+
+			switch (m_act1state->m_elevFloor) {
+			case Act1State::c_floor1:
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev1_3_Ride, NULL);
+				InputManager()->DisableInputProcessing();
+				break;
+			case Act1State::c_floor2:
+				InputManager()->DisableInputProcessing();
+				InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_Elev2_3_Ride, NULL);
+				break;
+			case Act1State::c_floor3:
+				m_destLocation = LegoGameState::e_elevopen;
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+				break;
+			}
+
+			m_act1state->m_elevFloor = Act1State::c_floor3;
+			break;
+		case IsleScript::c_ElevOpen_LeftArrow_Ctl:
+		case IsleScript::c_ElevDown_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_seaview;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_ElevOpen_RightArrow_Ctl:
+		case IsleScript::c_ElevDown_LeftArrow_Ctl:
+			m_destLocation = LegoGameState::e_observe;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_Observe_LeftArrow_Ctl:
+			m_act1state->FUN_100346a0();
+			m_radio.Stop();
+		case IsleScript::c_SeaView_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_elevopen;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_Observe_RightArrow_Ctl:
+			m_act1state->FUN_100346a0();
+			m_radio.Stop();
+		case IsleScript::c_SeaView_LeftArrow_Ctl:
+			m_destLocation = LegoGameState::e_elevdown;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_Observe_Plane_Ctl:
+			if (!m_act1state->m_planeActive) {
+				switch (rand() % 3) {
+				case 0:
+					InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_nic002pr_RunAnim, NULL);
+					break;
+				case 1:
+					InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_nic003pr_RunAnim, NULL);
+					break;
+				case 2:
+					InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_nic004pr_RunAnim, NULL);
+					break;
+				}
+
+				m_act1state->m_planeActive = TRUE;
+			}
+			break;
+		case IsleScript::c_Observe_Sun_Ctl:
+			GameState()->GetBackgroundColor()->ToggleDayNight(TRUE);
+			break;
+		case IsleScript::c_Observe_Moon_Ctl:
+			GameState()->GetBackgroundColor()->ToggleDayNight(FALSE);
+			break;
+		case IsleScript::c_Observe_SkyColor_Ctl:
+			GameState()->GetBackgroundColor()->ToggleSkyColor();
+			break;
+		case IsleScript::c_Observe_LCab_Ctl:
+			action.SetAtomId(*g_isleScript);
+			action.SetObjectId(IsleScript::c_Observe_Monkey_Flc);
+			action.SetUnknown24(0);
+			Start(&action);
+			break;
+		case IsleScript::c_Observe_RCab_Ctl:
+			FUN_10031590();
+			break;
+		case IsleScript::c_Observe_GlobeLArrow_Ctl:
+			FUN_1003f050(-1);
+			FUN_10031590();
+			break;
+		case IsleScript::c_Observe_GlobeRArrow_Ctl:
+			FUN_1003f050(1);
+			FUN_10031590();
+			break;
+		case IsleScript::c_Observe_Draw1_Ctl:
+		case IsleScript::c_Observe_Draw2_Ctl:
+			m_act1state->FUN_10034660();
+			break;
+		case IsleScript::c_ElevDown_Elevator_Ctl:
+			m_destLocation = LegoGameState::e_elevride2;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_PoliDoor_LeftArrow_Ctl:
+		case IsleScript::c_PoliDoor_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_police;
+			VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_PoliDoor_Door_Ctl:
+			m_destLocation = LegoGameState::e_unk33;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_GaraDoor_LeftArrow_Ctl:
+		case IsleScript::c_GaraDoor_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_garage;
+			VariableTable()->SetVariable("VISIBILITY", "Show Gas");
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case IsleScript::c_GaraDoor_Door_Ctl:
+			m_destLocation = LegoGameState::e_unk28;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		}
+	}
+
 	return 0;
+}
+
+// STUB: LEGO1 0x10031590
+void Isle::FUN_10031590()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x100315f0
