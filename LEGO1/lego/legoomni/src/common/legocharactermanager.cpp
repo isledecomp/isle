@@ -133,6 +133,7 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 
 	if (character != NULL) {
 		if (p_createEntity && character->m_roi->GetEntity() == NULL) {
+			// TODO: Match
 			LegoAnimActor* actor = new LegoAnimActor(1);
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
