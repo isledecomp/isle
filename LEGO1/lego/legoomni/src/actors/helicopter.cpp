@@ -79,13 +79,13 @@ void Helicopter::VTable0xe4()
 	}
 
 	m_state->SetUnknown8(0);
-	RemoveFromCurrentWorld(m_script, 0x16);
-	RemoveFromCurrentWorld(m_script, 0x17);
-	RemoveFromCurrentWorld(m_script, 0x18);
-	RemoveFromCurrentWorld(m_script, 0x19);
-	RemoveFromCurrentWorld(m_script, 0x1a);
-	RemoveFromCurrentWorld(m_script, 0x1b);
-	RemoveFromCurrentWorld(m_script, 0x1c);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterDashboard_Bitmap);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterArms_Ctl);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_TakeOff_Ctl);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_Land_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Pizza_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Donut_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Info_Ctl);
 	RemoveFromCurrentWorld(m_script, 0x1d);
 	RemoveFromCurrentWorld(m_script, 0x1e);
 	RemoveFromCurrentWorld(m_script, 0x1f);

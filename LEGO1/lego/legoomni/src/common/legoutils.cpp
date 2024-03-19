@@ -242,6 +242,7 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 MxBool RemoveFromCurrentWorld(MxAtomId& p_atomId, MxS32 p_id)
 {
 	LegoWorld* world = CurrentWorld();
+
 	if (world) {
 		MxCore* object = world->Find(p_atomId, p_id);
 
