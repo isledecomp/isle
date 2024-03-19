@@ -145,11 +145,6 @@ void LegoNavController::GetDefaults(
 	*p_urs = g_defuseRotationalVel;
 }
 
-// STUB: LEGO1 0x10055500
-void LegoNavController::UpdateCameraLocation(char* p_location)
-{
-}
-
 // FUNCTION: LEGO1 0x10054dd0
 void LegoNavController::SetDefaults(
 	int p_dz,
@@ -364,6 +359,11 @@ MxBool LegoNavController::CalculateNewPosDir(
 	}
 
 	return changed;
+}
+
+// STUB: LEGO1 0x10055500
+void LegoNavController::UpdateCameraLocation(char* p_location)
+{
 }
 
 // STUB: LEGO1 0x10055620
