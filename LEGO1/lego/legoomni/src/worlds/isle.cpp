@@ -773,11 +773,11 @@ void Isle::Enable(MxBool p_enable)
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
 
-		SetROIVisible("stretch", 0);
-		SetROIVisible("bird", 0);
-		SetROIVisible("rcred", 0);
-		SetROIVisible("towtk", 0);
-		SetROIVisible("pizpie", 0);
+		SetROIVisible("stretch", FALSE);
+		SetROIVisible("bird", FALSE);
+		SetROIVisible("rcred", FALSE);
+		SetROIVisible("towtk", FALSE);
+		SetROIVisible("pizpie", FALSE);
 	}
 	else {
 		if (InputManager()->GetWorld() == this) {

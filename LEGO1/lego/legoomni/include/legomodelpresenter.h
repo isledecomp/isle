@@ -36,7 +36,7 @@ public:
 	void ParseExtra() override;  // vtable+0x30
 	void Destroy() override;     // vtable+0x38
 
-	MxResult FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, undefined p_modelUnknown0x34, LegoWorld* p_world);
+	MxResult FUN_1007ff70(MxDSChunk& p_chunk, LegoEntity* p_entity, MxBool p_roiVisible, LegoWorld* p_world);
 
 	inline void Reset()
 	{

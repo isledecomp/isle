@@ -31,6 +31,10 @@ const char* g_varCURSOR = "CURSOR";
 // STRING: LEGO1 0x100f3a1c
 const char* g_varWHOAMI = "WHO_AM_I";
 
+// GLOBAL: LEGO1 0x100f3a50
+// STRING: LEGO1 0x100f3a18
+const char* g_delimiter2 = " \t";
+
 // GLOBAL: LEGO1 0x100f3a54
 // STRING: LEGO1 0x100f3a10
 const char* g_varHIDE = "HIDE";
@@ -59,15 +63,14 @@ const char* g_nick = "Nick";
 // STRING: LEGO1 0x100f39e0
 const char* g_laura = "Laura";
 
-extern const char* g_delimiter;
-
 // FUNCTION: LEGO1 0x10037d00
 void VisibilityVariable::SetValue(const char* p_value)
 {
 	MxVariable::SetValue(p_value);
+
 	if (p_value) {
-		char* instruction = strtok(m_value.GetDataPtr(), g_delimiter);
-		char* name = strtok(NULL, g_delimiter);
+		char* instruction = strtok(m_value.GetDataPtr(), g_delimiter2);
+		char* name = strtok(NULL, g_delimiter2);
 		MxBool show;
 
 		if (!strcmpi(instruction, g_varHIDE)) {

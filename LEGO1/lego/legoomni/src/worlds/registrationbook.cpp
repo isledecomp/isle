@@ -324,7 +324,7 @@ void RegistrationBook::ReadyWorld()
 
 		LegoROI* infoman = FindROI(g_infoman);
 		if (infoman != NULL) {
-			infoman->SetVisibility(0);
+			infoman->SetVisibility(FALSE);
 		}
 	}
 	else {

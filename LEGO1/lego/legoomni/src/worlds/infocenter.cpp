@@ -296,8 +296,8 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_currentCutscene = e_noIntro;
 		return 1;
 	case 2:
-		SetROIVisible(g_object2x4red, 0);
-		SetROIVisible(g_object2x4grn, 0);
+		SetROIVisible(g_object2x4red, FALSE);
+		SetROIVisible(g_object2x4grn, FALSE);
 		BackgroundAudioManager()->RaiseVolume();
 		return 1;
 	case 4:
@@ -329,7 +329,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 
 		m_infocenterState->SetUnknown0x74(2);
-		SetROIVisible("infoman", 1);
+		SetROIVisible("infoman", TRUE);
 		return 1;
 	case 12:
 		if (action->GetObjectId() == m_currentInfomainScript) {
@@ -1067,15 +1067,15 @@ MxLong Infocenter::HandleNotification0(MxNotificationParam& p_param)
 			}
 
 			PlayAction(objectId);
-			SetROIVisible(g_object2x4red, 0);
-			SetROIVisible(g_object2x4grn, 0);
+			SetROIVisible(g_object2x4red, FALSE);
+			SetROIVisible(g_object2x4grn, FALSE);
 			return 1;
 		}
 		case 6:
 			if (m_infocenterState->GetUnknown0x74() == 8) {
 				StopCurrentAction();
-				SetROIVisible(g_object2x4red, 0);
-				SetROIVisible(g_object2x4grn, 0);
+				SetROIVisible(g_object2x4red, FALSE);
+				SetROIVisible(g_object2x4grn, FALSE);
 				m_infocenterState->SetUnknown0x74(2);
 				PlayAction(InfomainScript::c_iicb28in_RunAnim);
 				return 1;

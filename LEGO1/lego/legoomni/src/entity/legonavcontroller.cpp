@@ -362,8 +362,9 @@ MxBool LegoNavController::CalculateNewPosDir(
 }
 
 // STUB: LEGO1 0x10055500
-void LegoNavController::UpdateCameraLocation(char* p_location)
+void LegoNavController::UpdateCameraLocation(const char* p_location)
 {
+	// TODO
 }
 
 // STUB: LEGO1 0x10055620
