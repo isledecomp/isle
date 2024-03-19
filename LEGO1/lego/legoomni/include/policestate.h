@@ -1,18 +1,10 @@
 #ifndef POLICESTATE_H
 #define POLICESTATE_H
 
+#include "actionsfwd.h"
 #include "decomp.h"
 #include "legostate.h"
 #include "police.h"
-
-namespace PoliceScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace PoliceScript
 
 // VTABLE: LEGO1 0x100d8af0
 // SIZE 0x10

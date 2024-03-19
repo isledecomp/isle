@@ -1,16 +1,8 @@
 #ifndef JUKEBOXENTITY_H
 #define JUKEBOXENTITY_H
 
+#include "actionsfwd.h"
 #include "legoentity.h"
-
-namespace JukeboxScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace JukeboxScript
 
 // VTABLE: LEGO1 0x100da8a0
 // SIZE 0x6c
