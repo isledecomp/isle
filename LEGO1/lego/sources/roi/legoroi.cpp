@@ -394,7 +394,7 @@ LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, 
 		roi->VTable0x1c();
 
 		LegoBool und = data->FUN_100a0990(p_time);
-		roi->SetUnknown0x0c(und);
+		roi->SetVisibility(und);
 
 		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
 			FUN_100a8da0(p_node->GetChild(i), roi->m_local2world, p_time, roi);

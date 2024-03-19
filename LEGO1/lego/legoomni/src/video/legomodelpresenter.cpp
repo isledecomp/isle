@@ -222,7 +222,7 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 	}
 
 	if (m_roi != NULL) {
-		m_roi->SetUnknown0x0c(p_modelUnknown0x34);
+		m_roi->SetVisibility(p_modelUnknown0x34);
 	}
 
 	if (p_entity != NULL) {

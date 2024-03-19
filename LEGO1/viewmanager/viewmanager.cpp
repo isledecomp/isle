@@ -184,7 +184,7 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 // FUNCTION: LEGO1 0x100a66f0
 inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 {
-	if (p_roi->GetUnknown0x0c() == FALSE && p_und != -2) {
+	if (!p_roi->GetVisibility() && p_und != -2) {
 		FUN_100a66f0(p_roi, -2);
 	}
 	else {

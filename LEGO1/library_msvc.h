@@ -45,6 +45,9 @@
 // LIBRARY: LEGO1 0x1008b680
 // _strncmp
 
+// LIBRARY: LEGO1 0x1008b6c0
+// _atof
+
 // LIBRARY: LEGO1 0x1008b730
 // _fprintf
 

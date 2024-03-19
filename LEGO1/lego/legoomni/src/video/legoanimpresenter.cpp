@@ -162,7 +162,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				roi = CharacterManager()->FUN_10083500(src, TRUE);
 
 				if (roi != NULL && str[0] == '*') {
-					roi->SetUnknown0x0c(0);
+					roi->SetVisibility(0);
 				}
 			}
 			else if (unk0x04 == 4) {
@@ -174,7 +174,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				roi = CharacterManager()->FUN_10085a80(und, src, 1);
 
 				if (roi != NULL) {
-					roi->SetUnknown0x0c(0);
+					roi->SetVisibility(0);
 				}
 
 				delete[] src;
@@ -198,7 +198,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				roi = CharacterManager()->FUN_10085210(und, src, 1);
 
 				if (roi != NULL) {
-					roi->SetUnknown0x0c(0);
+					roi->SetVisibility(FALSE);
 				}
 
 				delete[] src;

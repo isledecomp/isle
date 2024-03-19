@@ -124,12 +124,12 @@ LegoROI* FindROI(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10015860
-void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c)
+void SetROIVisible(const char* p_name, MxBool p_visible)
 {
 	LegoROI* roi = FindROI(p_name);
 
 	if (roi) {
-		roi->SetUnknown0x0c(p_unk0x0c);
+		roi->SetVisibility(p_visible);
 	}
 }
 

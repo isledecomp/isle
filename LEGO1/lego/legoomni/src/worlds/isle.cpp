@@ -773,11 +773,11 @@ void Isle::Enable(MxBool p_enable)
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		}
 
-		SetROIUnknown0x0c("stretch", 0);
-		SetROIUnknown0x0c("bird", 0);
-		SetROIUnknown0x0c("rcred", 0);
-		SetROIUnknown0x0c("towtk", 0);
-		SetROIUnknown0x0c("pizpie", 0);
+		SetROIVisible("stretch", 0);
+		SetROIVisible("bird", 0);
+		SetROIVisible("rcred", 0);
+		SetROIVisible("towtk", 0);
+		SetROIVisible("pizpie", 0);
 	}
 	else {
 		if (InputManager()->GetWorld() == this) {
@@ -828,7 +828,7 @@ MxLong Isle::HandleTransitionEnd()
 
 	switch (m_destLocation) {
 	case LegoGameState::e_infomain:
-		((LegoEntity*) Find(*g_isleScript, IsleScript::c_InfoCenter_Entity))->GetROI()->SetUnknown0x0c(1);
+		((LegoEntity*) Find(*g_isleScript, IsleScript::c_InfoCenter_Entity))->GetROI()->SetVisibility(TRUE);
 		GameState()->SwitchArea(m_destLocation);
 		m_destLocation = LegoGameState::e_undefined;
 		break;
