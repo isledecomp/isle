@@ -1,6 +1,7 @@
 #ifndef LEGOGAMESTATE_H
 #define LEGOGAMESTATE_H
 
+#include "actionsfwd.h"
 #include "decomp.h"
 #include "legobackgroundcolor.h"
 #include "legofullscreenmovie.h"
@@ -16,15 +17,6 @@ struct ColorStringStruct {
 	const char* m_targetName;
 	const char* m_colorName;
 };
-
-namespace JukeboxScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace JukeboxScript
 
 // SIZE 0x430
 class LegoGameState {

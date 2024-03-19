@@ -19,9 +19,6 @@ struct LegoCharacterComparator {
 
 // SIZE 0x08
 struct LegoCharacter {
-	LegoROI* m_roi;   // 0x00
-	MxU32 m_refCount; // 0x04
-
 	LegoCharacter(LegoROI* p_roi)
 	{
 		m_roi = p_roi;
@@ -29,6 +26,9 @@ struct LegoCharacter {
 	}
 
 	inline void AddRef() { m_refCount++; }
+
+	LegoROI* m_roi;   // 0x00
+	MxU32 m_refCount; // 0x04
 };
 
 typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;

@@ -1,9 +1,10 @@
 #ifndef MISC_H
 #define MISC_H
 
-#include "actionsfwd.h"
 #include "compat.h"
 #include "decomp.h"
+// Long include path due to dependency of misc library on LegoOmni
+#include "lego/legoomni/include/actions/actionsfwd.h"
 #include "mxtypes.h"
 
 class IslePathActor;
