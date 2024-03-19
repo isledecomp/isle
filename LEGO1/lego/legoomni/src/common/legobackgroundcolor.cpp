@@ -98,8 +98,9 @@ void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
 void LegoBackgroundColor::ToggleSkyColor()
 {
 	char buffer[30];
+
 	m_h += 0.05;
-	if (1.0 < m_h) {
+	if (m_h > 1.0) {
 		m_h -= 1.0;
 	}
 
