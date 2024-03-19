@@ -1,9 +1,13 @@
 #include "legocharactermanager.h"
 
+#include "legoanimactor.h"
 #include "legogamestate.h"
+#include "legovideomanager.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "roi/legoroi.h"
 
+DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108)
 
@@ -19,7 +23,7 @@ LegoSaveDataEntry3 g_saveData3[66];
 // FUNCTION: LEGO1 0x10082a20
 LegoCharacterManager::LegoCharacterManager()
 {
-	m_map = new LegoUnkSaveDataMap();
+	m_characters = new LegoCharacterMap();
 	InitSaveData();
 
 	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
@@ -96,11 +100,51 @@ MxResult LegoCharacterManager::ReadSaveData3(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10083500
-LegoROI* LegoCharacterManager::FUN_10083500(const char* p_key, MxBool p_option)
+// FUNCTION: LEGO1 0x10083500
+LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 {
-	// TODO
-	// involves an STL map with a _Nil node at 0x100fc508
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it = m_characters->find(p_key);
+
+	if (it != m_characters->end()) {
+		character = (*it).second;
+		character->AddRef();
+	}
+
+	if (character == NULL) {
+		LegoROI* roi = CreateROI(p_key);
+		roi->SetUnknown0x0c(0);
+
+		if (roi != NULL) {
+			character = new LegoCharacter(roi);
+			char* key = new char[strlen(p_key) + 1];
+
+			if (key != NULL) {
+				strcpy(key, p_key);
+				(*m_characters)[key] = character;
+				VideoManager()->Get3DManager()->Add(*roi);
+			}
+		}
+	}
+	else {
+		VideoManager()->Get3DManager()->Remove(*character->m_roi);
+		VideoManager()->Get3DManager()->Add(*character->m_roi);
+	}
+
+	if (character != NULL) {
+		if (p_createEntity && character->m_roi->GetEntity() == NULL) {
+			// TODO: Match
+			LegoAnimActor* actor = new LegoAnimActor(1);
+
+			actor->SetROI(character->m_roi, FALSE, FALSE);
+			actor->FUN_100114e0(0);
+			actor->SetFlag(LegoActor::c_bit2);
+			FUN_10084c60(p_key)->m_actor = actor;
+		}
+
+		return character->m_roi;
+	}
+
 	return NULL;
 }
 
@@ -116,11 +160,23 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 	// TODO
 }
 
+// STUB: LEGO1 0x10084030
+LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
+{
+	return NULL;
+}
+
 // STUB: LEGO1 0x10084c00
 MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 {
 	// TODO
 	return FALSE;
+}
+
+// STUB: LEGO1 0x10084c60
+LegoSaveDataEntry3* LegoCharacterManager::FUN_10084c60(const char* p_key)
+{
+	return NULL;
 }
 
 // STUB: LEGO1 0x10084ec0

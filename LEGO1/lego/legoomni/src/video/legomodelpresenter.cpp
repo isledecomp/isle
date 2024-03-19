@@ -309,7 +309,7 @@ void LegoModelPresenter::ParseExtra()
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
-				m_roi = CharacterManager()->FUN_10083500(token, FALSE);
+				m_roi = CharacterManager()->GetROI(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}

@@ -26,7 +26,7 @@ public:
 	void FUN_100a65b0(ViewROI* p_roi, int p_und);
 	void FUN_100a66a0(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
-	float FUN_100a6dc0(const BoundingSphere& p_bounding_sphere);
+	float ProjectedSize(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
@@ -50,7 +50,7 @@ private:
 	RealtimeView rt_view;     // 0x14
 	ROIList visible_rois;     // 0x18
 	float unk0x28;            // 0x28
-	float unk0x2c;            // 0x2c
+	float view_area_at_one;   // 0x2c
 	unsigned int flags;       // 0x30
 	float width;              // 0x34
 	float height;             // 0x38
