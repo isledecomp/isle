@@ -103,7 +103,7 @@ public:
 		e_unk66 = 66
 	};
 
-	// SIZE 0x0c
+	// SIZE 0x0e
 	struct Username {
 		Username();
 		inline Username(Username& p_other) { Set(p_other); }

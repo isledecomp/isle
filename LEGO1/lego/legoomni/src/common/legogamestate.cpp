@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 
-DECOMP_SIZE_ASSERT(LegoGameState::Username, 0xe)
+DECOMP_SIZE_ASSERT(LegoGameState::Username, 0x0e)
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)

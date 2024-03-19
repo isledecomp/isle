@@ -25,8 +25,6 @@ RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
 	memset(m_name, 0, sizeof(m_name));
-
-	// May not be part of the struct, but then it would need packing
 	m_unk0x280.m_unk0x0e = 0;
 
 	memset(m_checkmark, 0, sizeof(m_checkmark));
@@ -43,10 +41,30 @@ RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 	m_unk0x2cc = 0;
 }
 
-// STUB: LEGO1 0x10076f50
+// FUNCTION: LEGO1 0x10076f50
 RegistrationBook::~RegistrationBook()
 {
-	// TODO
+	for (MxS16 i = 0; i < 10; i++) {
+		for (MxS16 j = 0; j < 7; j++) {
+			if (m_name[i][j] != NULL) {
+				delete m_name[i][j]->GetAction();
+				delete m_name[i][j];
+				m_name[i][j] = NULL;
+			}
+		}
+	}
+
+	InputManager()->UnRegister(this);
+	if (InputManager()->GetWorld() == this) {
+		InputManager()->ClearWorld();
+	}
+
+	ControlManager()->Unregister(this);
+	NotificationManager()->Unregister(this);
+
+	if (m_unk0x2cc) {
+		m_unk0x2cc->Release();
+	}
 }
 
 // FUNCTION: LEGO1 0x10077060
@@ -102,10 +120,30 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10077210
+// FUNCTION: LEGO1 0x10077210
 MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	return 0;
+	if (p_param.GetAction()->GetAtomId() != m_atom) {
+		return 0;
+	}
+
+	switch ((MxS32) p_param.GetAction()->GetObjectId()) {
+	case RegbookScript::c_Textures:
+		m_unk0x2c1 = 0;
+
+		if (m_unk0x2b8 == 0) {
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+		}
+		break;
+	case RegbookScript::c_iic006in_RunAnim:
+	case RegbookScript::c_iic007in_PlayWav:
+	case RegbookScript::c_iic008in_PlayWav:
+		BackgroundAudioManager()->RaiseVolume();
+		m_unk0xf8 = Timer()->GetTime();
+		break;
+	}
+
+	return 1;
 }
 
 // STUB: LEGO1 0x100772d0
@@ -159,9 +197,76 @@ MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
 	return 1;
 }
 
-// STUB: LEGO1 0x100775c0
+// FUNCTION: LEGO1 0x100775c0
 void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 {
+	if (m_infocenterState->HasRegistered()) {
+		GameState()->Save(0);
+	}
+
+	// TODO: structure incorrect
+	MxS16 player = p_playerIndex == 0 ? GameState()->FindPlayer(*(LegoGameState::Username*) &m_unk0x280.m_letters)
+									  : p_playerIndex - 1;
+
+	switch (player) {
+	case 0:
+		if (!m_infocenterState->HasRegistered()) {
+			GameState()->SwitchPlayer(0);
+			WriteInfocenterLetters(1);
+			FUN_100778c0();
+		}
+		break;
+	case -1:
+		GameState()->Init();
+
+		PlayAction(RegbookScript::c_Textures);
+
+		m_unk0x2c1 = 1;
+
+		// TOOD: structure incorrect
+		GameState()->AddPlayer(*(LegoGameState::Username*) &m_unk0x280.m_letters);
+		GameState()->Save(0);
+
+		WriteInfocenterLetters(0);
+		GameState()->SerializePlayersInfo(2);
+		FUN_100778c0();
+		break;
+	default:
+		GameState()->Init();
+
+		PlayAction(RegbookScript::c_Textures);
+
+		m_unk0x2c1 = 1;
+
+		GameState()->SwitchPlayer(player);
+
+		WriteInfocenterLetters(player + 1);
+		GameState()->SerializePlayersInfo(2);
+		FUN_100778c0();
+		break;
+	}
+
+	m_infocenterState->SetUnknown0x74(4);
+	if (m_unk0x2b8 == 0 && m_unk0x2c1 == 0) {
+		DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+	}
+}
+
+// FUNCTION: LEGO1 0x10077860
+void RegistrationBook::WriteInfocenterLetters(MxS16 p_user)
+{
+	for (MxS16 i = 0; i < 7; i++) {
+		delete m_infocenterState->GetNameLetter(i);
+		m_infocenterState->SetNameLetter(i, m_name[p_user][i]);
+		m_name[p_user][i] = NULL;
+	}
+}
+
+// STUB: LEGO1 0x100778c0
+void RegistrationBook::FUN_100778c0()
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10077cc0
