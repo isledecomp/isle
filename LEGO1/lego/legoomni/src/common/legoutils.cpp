@@ -95,7 +95,7 @@ void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targe
 		break;
 	case Extra::ActionType::e_stop:
 		action.SetUnknown24(-2);
-		if (!FUN_1003ee00(p_pAtom, p_targetEntityId)) {
+		if (!RemoveFromCurrentWorld(p_pAtom, p_targetEntityId)) {
 			DeleteObject(action);
 		}
 		break;
@@ -238,10 +238,32 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
-// STUB: LEGO1 0x1003ee00
-MxBool FUN_1003ee00(MxAtomId& p_atomId, MxS32 p_id)
+// FUNCTION: LEGO1 0x1003ee00
+MxBool RemoveFromCurrentWorld(MxAtomId& p_atomId, MxS32 p_id)
 {
-	return TRUE;
+	LegoWorld* world = CurrentWorld();
+	if (world) {
+		MxCore* object = world->Find(p_atomId, p_id);
+
+		if (object) {
+			world->Remove(object);
+
+			if (!object->IsA("MxPresenter")) {
+				delete object;
+			}
+			else {
+				if (((MxPresenter*) object)->GetAction()) {
+					FUN_100b7220(((MxPresenter*) object)->GetAction(), MxDSAction::c_world, FALSE);
+				}
+
+				((MxPresenter*) object)->EndAction();
+			}
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x1003ee80

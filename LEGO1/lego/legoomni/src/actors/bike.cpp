@@ -35,11 +35,11 @@ void Bike::VTable0xe4()
 {
 	IslePathActor::VTable0xe4();
 	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
-	FUN_1003ee00(*g_isleScript, 11);
-	FUN_1003ee00(*g_isleScript, 12);
-	FUN_1003ee00(*g_isleScript, 15);
-	FUN_1003ee00(*g_isleScript, 14);
-	FUN_1003ee00(*g_isleScript, 13);
+	RemoveFromCurrentWorld(*g_isleScript, 11);
+	RemoveFromCurrentWorld(*g_isleScript, 12);
+	RemoveFromCurrentWorld(*g_isleScript, 15);
+	RemoveFromCurrentWorld(*g_isleScript, 14);
+	RemoveFromCurrentWorld(*g_isleScript, 13);
 	ControlManager()->Unregister(this);
 }
 
