@@ -79,16 +79,16 @@ void Helicopter::VTable0xe4()
 	}
 
 	m_state->SetUnknown8(0);
-	FUN_1003ee00(m_script, 0x16);
-	FUN_1003ee00(m_script, 0x17);
-	FUN_1003ee00(m_script, 0x18);
-	FUN_1003ee00(m_script, 0x19);
-	FUN_1003ee00(m_script, 0x1a);
-	FUN_1003ee00(m_script, 0x1b);
-	FUN_1003ee00(m_script, 0x1c);
-	FUN_1003ee00(m_script, 0x1d);
-	FUN_1003ee00(m_script, 0x1e);
-	FUN_1003ee00(m_script, 0x1f);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterDashboard_Bitmap);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_HelicopterArms_Ctl);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_TakeOff_Ctl);
+	RemoveFromCurrentWorld(m_script, IsleScript::c_Helicopter_Land_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Pizza_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Donut_Ctl);
+	RemoveFromCurrentWorld(m_script, Act3Script::c_Helicopter_Info_Ctl);
+	RemoveFromCurrentWorld(m_script, 0x1d);
+	RemoveFromCurrentWorld(m_script, 0x1e);
+	RemoveFromCurrentWorld(m_script, 0x1f);
 	AnimationManager()->FUN_1005f6d0(TRUE);
 	ControlManager()->Unregister(this);
 }

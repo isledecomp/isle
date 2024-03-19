@@ -1,5 +1,6 @@
 #include "bike.h"
 
+#include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
@@ -35,11 +36,11 @@ void Bike::VTable0xe4()
 {
 	IslePathActor::VTable0xe4();
 	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
-	FUN_1003ee00(*g_isleScript, 11);
-	FUN_1003ee00(*g_isleScript, 12);
-	FUN_1003ee00(*g_isleScript, 15);
-	FUN_1003ee00(*g_isleScript, 14);
-	FUN_1003ee00(*g_isleScript, 13);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeDashboard_Bitmap);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeArms_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeHorn_Ctl);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeHorn_Sound);
+	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeInfo_Ctl);
 	ControlManager()->Unregister(this);
 }
 
