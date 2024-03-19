@@ -7,28 +7,36 @@
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
+class LegoActor;
 class LegoROI;
 
 #pragma warning(disable : 4237)
 
 // TODO: generic string comparator?
-struct LegoUnkSaveDataMapComparator {
-	bool operator()(const char* const& p_a, const char* const& p_b) const { return strcmpi(p_a, p_b) > 0; }
+struct LegoCharacterComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmpi(p_a, p_b) < 0; }
 };
 
-// TODO: pair instead?
 // SIZE 0x08
-struct LegoUnkSaveDataMapValue {
-	LegoROI* m_roi;  // 0x00
-	MxU32 m_counter; // 0x04
+struct LegoCharacter {
+	LegoROI* m_roi;   // 0x00
+	MxU32 m_refCount; // 0x04
+
+	LegoCharacter(LegoROI* p_roi)
+	{
+		m_roi = p_roi;
+		m_refCount = 1;
+	}
+
+	inline void AddRef() { m_refCount++; }
 };
 
-typedef map<char*, LegoUnkSaveDataMapValue*, LegoUnkSaveDataMapComparator> LegoUnkSaveDataMap;
+typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
 struct LegoSaveDataEntry3 {
 	char* m_name;
 	void* m_unk0x04;
-	void* m_unk0x08;
+	LegoActor* m_actor;
 	MxS32 m_savePart1;
 	MxS32 m_savePart2;
 	MxU8 m_savePart3;
@@ -57,7 +65,7 @@ public:
 
 	MxResult WriteSaveData3(LegoStorage* p_storage);
 	MxResult ReadSaveData3(LegoStorage* p_storage);
-	LegoROI* FUN_10083500(const char*, MxBool);
+	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
 
 	void InitSaveData();
 	static void SetCustomizeAnimFile(const char* p_value);
@@ -66,6 +74,7 @@ public:
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
+	LegoSaveDataEntry3* FUN_10084c60(const char* p_key);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI*, MxBool);
 	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);
@@ -74,30 +83,38 @@ public:
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 private:
+	LegoROI* CreateROI(const char* p_key);
+
 	static char* g_customizeAnimFile;
 
-	LegoUnkSaveDataMap* m_map;                      // 0x00
+	LegoCharacterMap* m_characters;                 // 0x00
 	CustomizeAnimFileVariable* m_customizeAnimFile; // 0x04
 };
 
 // clang-format off
-// FUNCTION: LEGO1 0x10082b90
-// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::~_Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >
+// TEMPLATE: LEGO1 0x10082b90
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::~_Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >
 
-// FUNCTION: LEGO1 0x10082c60
-// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10082c60
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::iterator::_Inc
 
-// FUNCTION: LEGO1 0x10082ca0
-// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::erase
+// TEMPLATE: LEGO1 0x10082ca0
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::erase
 
-// FUNCTION: LEGO1 0x100830f0
-// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Erase
+// TEMPLATE: LEGO1 0x100830f0
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Erase
 
-// FUNCTION: LEGO1 0x10083130
-// map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::~map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >
+// TEMPLATE: LEGO1 0x10083130
+// map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::~map<char *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >
+
+// TEMPLATE: LEGO1 0x10083840
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x10083890
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Insert
 
 // GLOBAL: LEGO1 0x100fc508
-// _Tree<char *,pair<char * const,LegoUnkSaveDataMapValue *>,map<char *,LegoUnkSaveDataMapValue *,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Kfn,LegoUnkSaveDataMapComparator,allocator<LegoUnkSaveDataMapValue *> >::_Nil
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Nil
 // clang-format on
 
 #endif // LEGOCHARACTERMANAGER_H

@@ -147,7 +147,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 
 	IslePathActor* newActor = new IslePathActor();
 	const char* actorName = LegoActor::GetActorName(m_actorId);
-	LegoROI* roi = CharacterManager()->FUN_10083500(actorName, FALSE);
+	LegoROI* roi = CharacterManager()->GetROI(actorName, FALSE);
 	MxDSAction action;
 
 	action.SetAtomId(*g_isleScript);
