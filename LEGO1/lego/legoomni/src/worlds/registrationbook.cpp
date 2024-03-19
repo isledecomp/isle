@@ -204,11 +204,9 @@ void RegistrationBook::FUN_100775c0(MxS16 p_playerIndex)
 		GameState()->Save(0);
 	}
 
-	MxS16 player;
-
-	// TOOD: structure incorrect
-	player = p_playerIndex == 0 ? GameState()->FindPlayer(*(LegoGameState::Username*) &m_unk0x280.m_letters)
-								: p_playerIndex - 1;
+	// TODO: structure incorrect
+	MxS16 player = p_playerIndex == 0 ? GameState()->FindPlayer(*(LegoGameState::Username*) &m_unk0x280.m_letters)
+									  : p_playerIndex - 1;
 
 	switch (player) {
 	case 0:
@@ -268,6 +266,7 @@ void RegistrationBook::WriteInfocenterLetters(MxS16 p_user)
 // STUB: LEGO1 0x100778c0
 void RegistrationBook::FUN_100778c0()
 {
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10077cc0
