@@ -5,7 +5,7 @@
 
 namespace SndanimScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -14,7 +14,7 @@ enum Script;
 
 namespace NocdScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -23,7 +23,7 @@ enum Script;
 
 namespace CreditsScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -32,7 +32,7 @@ enum Script;
 
 namespace IntroScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -41,7 +41,7 @@ enum Script;
 
 namespace HospitalScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -50,7 +50,7 @@ enum Script;
 
 namespace CarraceScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -59,7 +59,7 @@ enum Script;
 
 namespace JetraceScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -68,7 +68,7 @@ enum Script;
 
 namespace CarracerScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -77,7 +77,7 @@ enum Script;
 
 namespace JetracerScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -86,7 +86,7 @@ enum Script;
 
 namespace InfoscorScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -95,7 +95,7 @@ enum Script;
 
 namespace RegbookScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -104,7 +104,7 @@ enum Script;
 
 namespace HistbookScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -113,7 +113,7 @@ enum Script;
 
 namespace InfomainScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -122,7 +122,7 @@ enum Script;
 
 namespace ElevbottScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -131,7 +131,7 @@ enum Script;
 
 namespace InfodoorScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -140,7 +140,7 @@ enum Script;
 
 namespace RacecarScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -149,7 +149,7 @@ enum Script;
 
 namespace DunecarScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -158,7 +158,7 @@ enum Script;
 
 namespace CopterScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -167,7 +167,7 @@ enum Script;
 
 namespace JetskiScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -176,7 +176,7 @@ enum Script;
 
 namespace GarageScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -185,7 +185,7 @@ enum Script;
 
 namespace Act3Script
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -194,7 +194,7 @@ enum Script;
 
 namespace Act2mainScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -203,7 +203,7 @@ enum Script;
 
 namespace JukeboxwScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -212,13 +212,13 @@ enum Script;
 
 namespace IsleScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
 #endif
 
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script2 : int;
 #else
 enum Script2;
@@ -227,7 +227,7 @@ enum Script2;
 
 namespace JukeboxScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;
@@ -236,7 +236,7 @@ enum Script;
 
 namespace PoliceScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int;
 #else
 enum Script;

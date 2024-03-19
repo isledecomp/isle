@@ -5,7 +5,7 @@
 
 namespace Act2mainScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int {
 #else
 enum Script {

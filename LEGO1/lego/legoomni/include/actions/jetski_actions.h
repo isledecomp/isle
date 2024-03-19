@@ -5,7 +5,7 @@
 
 namespace JetskiScript
 {
-#if __cplusplus < 201103L
+#if __cplusplus >= 201103L
 enum Script : int {
 #else
 enum Script {
