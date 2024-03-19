@@ -3,6 +3,8 @@
 
 #include "compat.h"
 #include "decomp.h"
+// Long include path due to dependency of misc library on LegoOmni
+#include "lego/legoomni/include/actions/actionsfwd.h"
 #include "mxtypes.h"
 
 class IslePathActor;
@@ -26,15 +28,6 @@ class MxDSAction;
 class MxTransitionManager;
 class ViewLODListManager;
 class ViewManager;
-
-namespace JukeboxScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace JukeboxScript
 
 extern MxBool g_isWorldActive;
 

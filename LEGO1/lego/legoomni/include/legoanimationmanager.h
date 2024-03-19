@@ -1,6 +1,7 @@
 #ifndef LEGOANIMATIONMANAGER_H
 #define LEGOANIMATIONMANAGER_H
 
+#include "actionsfwd.h"
 #include "animstate.h"
 #include "decomp.h"
 #include "legotraninfolist.h"
@@ -12,15 +13,6 @@ struct Character {
 	undefined m_unk0x04[0x10]; // 0x04
 	MxBool m_active;           // 0x14
 };
-
-namespace IsleScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace IsleScript
 
 // VTABLE: LEGO1 0x100d8c18
 // SIZE 0x500

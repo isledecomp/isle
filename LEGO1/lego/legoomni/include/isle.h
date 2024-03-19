@@ -1,6 +1,7 @@
 #ifndef ISLE_H
 #define ISLE_H
 
+#include "actionsfwd.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "radio.h"
@@ -18,24 +19,6 @@ class SkateBoard;
 class RaceCar;
 class Jetski;
 class Act1State;
-
-namespace IsleScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace IsleScript
-
-namespace JukeboxScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace JukeboxScript
 
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140

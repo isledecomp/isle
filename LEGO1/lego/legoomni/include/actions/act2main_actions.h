@@ -5,7 +5,7 @@
 
 namespace Act2mainScript
 {
-#ifdef COMPAT_MODE
+#if __cplusplus >= 201103L
 enum Script : int {
 #else
 enum Script {

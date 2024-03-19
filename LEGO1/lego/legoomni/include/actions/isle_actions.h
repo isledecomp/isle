@@ -5,7 +5,7 @@
 
 namespace IsleScript
 {
-#ifdef COMPAT_MODE
+#if __cplusplus >= 201103L
 enum Script : int {
 #else
 enum Script {
@@ -2017,7 +2017,7 @@ enum Script {
 	c_frt139df_10_sfx = 2005
 };
 
-#ifdef COMPAT_MODE
+#if __cplusplus >= 201103L
 enum Script2 : int {
 #else
 enum Script2 {
