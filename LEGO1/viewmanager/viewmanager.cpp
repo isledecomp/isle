@@ -193,7 +193,7 @@ inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 
 		if (p_und == -1) {
 			if (p_roi->GetWorldBoundingSphere().Radius() > 0.001F) {
-				float und = FUN_100a6dc0(p_roi->GetWorldBoundingSphere());
+				float und = ProjectedSize(p_roi->GetWorldBoundingSphere());
 
 				if (und < seconds_allowed * g_unk0x1010105c) {
 					if (p_roi->GetUnknown0xe0() == -2) {
@@ -269,7 +269,7 @@ inline int ViewManager::Unknown()
 	}
 	else {
 		float fVar7 = tan(view_angle / 2.0F);
-		unk0x2c = view_angle * view_angle * 4.0F;
+		view_area_at_one = view_angle * view_angle * 4.0F;
 
 		float fVar1 = front * fVar7;
 		float fVar2 = (width / height) * fVar1;
@@ -435,16 +435,17 @@ void ViewManager::SetPOVSource(const OrientableROI* point_of_view)
 }
 
 // FUNCTION: LEGO1 0x100a6dc0
-float ViewManager::FUN_100a6dc0(const BoundingSphere& p_bounding_sphere)
+float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
 {
-	const float* data = p_bounding_sphere.Center().GetData();
-	float(*matrixData)[4] = pov.GetData();
-
-	double points[3];
-
-	VMV3(points, data, matrixData[3]);
-
-	return (p_bounding_sphere.Radius() * p_bounding_sphere.Radius() * 3.14159265359) / DOT3(data, points) * unk0x2c;
+	// The algorithm projects the radius of bounding sphere onto the perpendicular
+	// plane one unit in front of the camera. That value is simply the ratio of the
+	// radius to the distance from the camera to the sphere center. The projected size
+	// is then the ratio of the area of that projected circle to the view surface area
+	// at Z == 1.0.
+	//
+	float sphere_projected_area = 3.14159265359 * (p_bounding_sphere.Radius() * p_bounding_sphere.Radius());
+	float square_dist_to_sphere = DISTSQRD3(p_bounding_sphere.Center(), pov[3]);
+	return sphere_projected_area / view_area_at_one / square_dist_to_sphere;
 }
 
 // STUB: LEGO1 0x100a6e00
