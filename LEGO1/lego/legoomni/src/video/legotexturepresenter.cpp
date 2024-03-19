@@ -118,7 +118,8 @@ MxResult LegoTexturePresenter::Store()
 MxResult LegoTexturePresenter::PutData()
 {
 	MxResult result = SUCCESS;
-	if (MxPresenter::IsEnabled() && m_currentChunk) {
+
+	if (MxPresenter::IsEnabled() && m_currentChunk != NULL) {
 		result = Read(*m_currentChunk);
 		if (result == SUCCESS) {
 			Store();
@@ -129,6 +130,7 @@ MxResult LegoTexturePresenter::PutData()
 		}
 		m_currentChunk = NULL;
 	}
+
 	return result;
 }
 

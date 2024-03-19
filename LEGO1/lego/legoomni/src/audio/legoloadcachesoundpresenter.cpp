@@ -75,10 +75,12 @@ void LegoLoadCacheSoundPresenter::DoneTickle()
 MxResult LegoLoadCacheSoundPresenter::PutData()
 {
 	m_criticalSection.Enter();
+
 	if (m_currentTickleState == e_done) {
 		m_cacheSound = SoundManager()->GetUnknown0x40()->FUN_1003d290(m_cacheSound);
 		m_unk0x7c = 1;
 	}
+
 	m_criticalSection.Leave();
 	return SUCCESS;
 }
