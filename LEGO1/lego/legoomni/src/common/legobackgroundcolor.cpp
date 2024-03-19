@@ -99,8 +99,9 @@ void LegoBackgroundColor::ToggleSkyColor()
 {
 	char buffer[30];
 	m_h += 0.05;
-	if (1.0 < m_h)
+	if (1.0 < m_h) {
 		m_h -= 1.0;
+	}
 
 	sprintf(buffer, "set %d %d %d", (MxU32) (m_h * 100.0f), (MxU32) (m_s * 100.0f), (MxU32) (m_v * 100.0f));
 	m_value = buffer;
