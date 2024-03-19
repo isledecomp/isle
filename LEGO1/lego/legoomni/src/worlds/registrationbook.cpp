@@ -46,14 +46,10 @@ RegistrationBook::~RegistrationBook()
 {
 	for (MxS16 i = 0; i < 10; i++) {
 		for (MxS16 j = 0; j < 7; j++) {
-			MxStillPresenter* presenter = m_name[i][j];
-			if (presenter != NULL) {
-				if (presenter->GetAction() != NULL) {
-					delete presenter->GetAction();
-				}
-
-				delete presenter;
-				presenter = NULL;
+			if (m_name[i][j] != NULL) {
+				delete m_name[i][j]->GetAction();
+				delete m_name[i][j];
+				m_name[i][j] = NULL;
 			}
 		}
 	}
@@ -130,9 +126,11 @@ MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 	if (p_param.GetAction()->GetAtomId() != m_atom) {
 		return 0;
 	}
-	switch ((MxS16) p_param.GetAction()->GetObjectId()) {
+
+	switch ((MxS32) p_param.GetAction()->GetObjectId()) {
 	case RegbookScript::c_Textures:
 		m_unk0x2c1 = 0;
+
 		if (m_unk0x2b8 == 0) {
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
@@ -144,6 +142,7 @@ MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_unk0xf8 = Timer()->GetTime();
 		break;
 	}
+
 	return 1;
 }
 
