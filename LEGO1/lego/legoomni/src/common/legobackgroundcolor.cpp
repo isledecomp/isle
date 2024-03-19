@@ -74,7 +74,7 @@ void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
 
 	if (p_sun) {
 		m_s += 0.1;
-		if (0.9 < m_s) {
+		if (m_s > 0.9) {
 			m_s = 1.0;
 		}
 	}
