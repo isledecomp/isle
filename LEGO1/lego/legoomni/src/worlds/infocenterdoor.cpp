@@ -1,7 +1,9 @@
 #include "infocenterdoor.h"
 
 #include "infocenterstate.h"
+#include "infodoor_actions.h"
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -18,7 +20,7 @@ DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
 // FUNCTION: LEGO1 0x10037730
 InfocenterDoor::InfocenterDoor()
 {
-	m_unk0xf8 = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 
 	NotificationManager()->Register(this);
 }
@@ -69,7 +71,7 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_unk0xf8);
+			GameState()->SwitchArea(m_destLocation);
 			result = 1;
 			break;
 		}
@@ -82,7 +84,7 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 void InfocenterDoor::ReadyWorld()
 {
 	LegoWorld::ReadyWorld();
-	PlayMusic(JukeBox::e_informationCenter);
+	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
@@ -95,26 +97,26 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 		DeleteObjects(&m_atom, 500, 510);
 
 		switch (p_param.GetClickedObjectId()) {
-		case 1:
-			m_unk0xf8 = LegoGameState::e_infoscor;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		case InfodoorScript::c_LeftArrow_Ctl:
+			m_destLocation = LegoGameState::e_infoscor;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 2:
-			m_unk0xf8 = LegoGameState::e_elevbott;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		case InfodoorScript::c_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_elevbott;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 3:
-			m_unk0xf8 = LegoGameState::e_infomain;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		case InfodoorScript::c_Info_Ctl:
+			m_destLocation = LegoGameState::e_infomain;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			result = 1;
 			break;
-		case 4:
+		case InfodoorScript::c_Door_Ctl:
 			if (GameState()->GetActorId()) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {
-					m_unk0xf8 = LegoGameState::e_unk4;
+					m_destLocation = LegoGameState::e_unk4;
 				}
 				else {
 					MxDSAction action;
@@ -134,7 +136,7 @@ MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
 				goto done;
 			}
 
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
 		done:
 			result = 1;
@@ -165,6 +167,6 @@ void InfocenterDoor::Enable(MxBool p_enable)
 MxBool InfocenterDoor::VTable0x64()
 {
 	DeleteObjects(&m_atom, 500, 510);
-	m_unk0xf8 = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

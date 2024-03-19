@@ -17,6 +17,15 @@ struct ColorStringStruct {
 	const char* m_colorName;
 };
 
+namespace JukeboxScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace JukeboxScript
+
 // SIZE 0x430
 class LegoGameState {
 public:
@@ -28,7 +37,7 @@ public:
 	};
 
 	enum Area {
-		e_noArea = 0,
+		e_undefined = 0,
 		e_previousArea = 0,
 		e_isle,
 		e_infomain,
@@ -64,30 +73,37 @@ public:
 		e_unk33,
 		e_police,
 		e_polidoor,
-		e_copter,
-		e_dunecar,
-		e_jetski,
-		e_racecar,
+		e_copterbuild,
+		e_dunecarbuild,
+		e_jetskibuild,
+		e_racecarbuild,
+		e_unk40,
+		e_unk41,
+		e_unk42,
 
-		e_act2main = 46,
+		e_unk45 = 45,
+		e_act2main,
 		e_act3script,
+		e_unk48,
+		e_unk49,
 
 		e_jukeboxw = 53,
 		e_unk54,
-
-		e_histbook = 56,
-		e_unk57,
-		e_unk58,
-		e_unk59,
-		e_unk60,
-		e_unk61,
-
-		e_unk64 = 64,
+		e_unk55,
+		e_histbook,
+		e_bike,
+		e_dunecar,
+		e_motocycle,
+		e_copter,
+		e_skateboard,
+		e_ambulance,
+		e_towtrack,
+		e_jetski,
 
 		e_unk66 = 66
 	};
 
-	// SIZE 0x0c
+	// SIZE 0x0e
 	struct Username {
 		Username();
 		inline Username(Username& p_other) { Set(p_other); }
@@ -152,7 +168,7 @@ public:
 	inline Act GetLoadedAct() { return m_loadedAct; }
 	inline Area GetCurrentArea() { return m_currentArea; }
 	inline Area GetPreviousArea() { return m_previousArea; }
-	inline MxU32 GetUnknown0x41c() { return m_unk0x41c; }
+	inline JukeboxScript::Script GetUnknown0x41c() { return m_unk0x41c; }
 	inline Area GetUnknown0x42c() { return m_unk0x42c; }
 	inline History* GetHistory() { return &m_history; }
 
@@ -160,8 +176,11 @@ public:
 	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
 	inline void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	inline void SetUnknown0x41c(undefined4 p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
+	inline void SetUnknown0x41c(JukeboxScript::Script p_unk0x41c) { m_unk0x41c = p_unk0x41c; }
 	inline void SetUnknown0x42c(Area p_unk0x42c) { m_unk0x42c = p_unk0x42c; }
+	inline Username* GetPlayersIndex(MxS32 p_index) { return &m_players[p_index]; }
+	inline MxS16 GetPlayerCount() { return m_playerCount; }
+	inline LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
@@ -184,15 +203,25 @@ private:
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	MxS16 m_playerCount;                        // 0x26
-	Username m_players[9];                      // 0x28
-	History m_history;                          // 0xa6
-	undefined2 m_unk0x41a;                      // 0x41a
-	undefined4 m_unk0x41c;                      // 0x41c
-	MxBool m_isDirty;                           // 0x420
-	Area m_currentArea;                         // 0x424
-	Area m_previousArea;                        // 0x428
-	Area m_unk0x42c;                            // 0x42c
+
+	// Member visibility needs to be refactored, since most members are accessed directly.
+
+public:
+	MxS16 m_playerCount;   // 0x26
+	Username m_players[9]; // 0x28
+
+private:
+	History m_history;                // 0xa6
+	undefined2 m_unk0x41a;            // 0x41a
+	JukeboxScript::Script m_unk0x41c; // 0x41c
+	MxBool m_isDirty;                 // 0x420
+
+public:
+	Area m_currentArea;  // 0x424
+	Area m_previousArea; // 0x428
+
+private:
+	Area m_unk0x42c; // 0x42c
 };
 
 MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen);

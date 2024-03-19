@@ -1,6 +1,7 @@
 #ifndef MISC_H
 #define MISC_H
 
+#include "compat.h"
 #include "decomp.h"
 #include "mxtypes.h"
 
@@ -26,6 +27,17 @@ class MxTransitionManager;
 class ViewLODListManager;
 class ViewManager;
 
+namespace JukeboxScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace JukeboxScript
+
+extern MxBool g_isWorldActive;
+
 LegoOmni* Lego();
 LegoInputManager* InputManager();
 LegoSoundManager* SoundManager();
@@ -47,7 +59,7 @@ ViewLODListManager* GetViewLODListManager();
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 LegoROI* FindROI(const char* p_name);
 MxDSAction& GetCurrentAction();
-void PlayMusic(MxU32 p_index);
+void PlayMusic(JukeboxScript::Script p_script);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void SetCurrentWorld(LegoWorld* p_world);

@@ -31,6 +31,7 @@ public:
 
 	inline MxS16 GetMaxNameLength() { return _countof(m_letters); }
 	inline MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
+	inline void SetNameLetter(MxS32 p_index, MxStillPresenter* p_letter) { m_letters[p_index] = p_letter; }
 	inline MxBool HasRegistered() { return m_letters[0] != NULL; }
 	inline Playlist& GetExitDialogueAct1() { return m_exitDialogueAct1; }
 	inline Playlist& GetExitDialogueAct23() { return m_exitDialogueAct23; }

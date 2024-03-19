@@ -5,6 +5,15 @@
 #include "legostate.h"
 #include "police.h"
 
+namespace PoliceScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace PoliceScript
+
 // VTABLE: LEGO1 0x100d8af0
 // SIZE 0x10
 class PoliceState : public LegoState {
@@ -36,7 +45,7 @@ public:
 	void FUN_1005ea40();
 
 private:
-	Police::PoliceScript m_policeScript; // 0x08
+	PoliceScript::Script m_policeScript; // 0x08
 	undefined4 m_unk0x0c;                // 0x0c
 };
 

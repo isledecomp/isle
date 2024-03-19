@@ -1,6 +1,8 @@
 #include "legoloadcachesoundpresenter.h"
 
 #include "legocachsound.h"
+#include "legosoundmanager.h"
+#include "misc.h"
 #include "mxstreamchunk.h"
 #include "mxwavepresenter.h"
 
@@ -69,9 +71,16 @@ void LegoLoadCacheSoundPresenter::DoneTickle()
 	}
 }
 
-// STUB: LEGO1 0x10018700
+// FUNCTION: LEGO1 0x10018700
 MxResult LegoLoadCacheSoundPresenter::PutData()
 {
-	// TODO
+	m_criticalSection.Enter();
+
+	if (m_currentTickleState == e_done) {
+		m_cacheSound = SoundManager()->GetUnknown0x40()->FUN_1003d290(m_cacheSound);
+		m_unk0x7c = 1;
+	}
+
+	m_criticalSection.Leave();
 	return SUCCESS;
 }

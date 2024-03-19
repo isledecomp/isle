@@ -123,6 +123,13 @@ MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 	return FALSE;
 }
 
+// STUB: LEGO1 0x10084ec0
+MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x10085140
 MxU32 LegoCharacterManager::FUN_10085140(LegoROI*, MxBool)
 {

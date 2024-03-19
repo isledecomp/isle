@@ -64,7 +64,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender);
 
 // FUNCTION: LEGO1 0x1003e430
-void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, int p_targetEntityId, LegoEntity* p_sender)
+void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender)
 {
 	MxDSAction action;
 	action.SetAtomId(p_pAtom);
@@ -289,6 +289,13 @@ void SetAppCursor(WPARAM p_wparam)
 MxBool FUN_1003ef60()
 {
 	return TRUE;
+}
+
+// STUB: LEGO1 0x1003f050
+MxS32 FUN_1003f050(MxS32)
+{
+	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x1003f0d0

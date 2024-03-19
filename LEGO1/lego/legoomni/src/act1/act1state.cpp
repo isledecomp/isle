@@ -12,15 +12,17 @@ MxS32 g_unk0x100f37f0[] = {
 	Act1State::e_unk955,
 };
 
+extern MxAtomId* g_isleScript;
+
 // STUB: LEGO1 0x100334b0
 Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x010(0)
 {
-	m_unk0x01e = 0;
+	m_unk0x01e = FALSE;
 	m_unk0x018 = 1;
 	m_unk0x010 = 0;
-	m_unk0x020 = 0;
+	m_planeActive = FALSE;
 	m_unk0x00e = 0;
-	m_unk0x01f = 0;
+	m_unk0x01f = FALSE;
 	m_unk0x008 = g_unk0x100f37f0;
 	m_unk0x014 = -1;
 	m_unk0x022 = 0;
@@ -30,7 +32,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x160 = NULL;
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
-	m_unk0x01c = 1;
+	m_elevFloor = Act1State::c_floor1;
 	m_unk0x00c = _countof(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
 	m_unk0x1b8 = NULL;
@@ -184,6 +186,21 @@ MxResult Act1State::VTable0x1c(LegoFile* p_legoFile)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10034660
+void Act1State::FUN_10034660()
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x100346a0
+void Act1State::FUN_100346a0()
+{
+	if (m_unk0x014 != -1) {
+		InvokeAction(Extra::e_stop, *g_isleScript, m_unk0x014, NULL);
+		m_unk0x014 = -1;
+	}
+}
+
 // FUNCTION: LEGO1 0x100346d0
 MxBool Act1State::SetFlag()
 {
@@ -265,6 +282,12 @@ MxBool Act1State::SetFlag()
 	}
 
 	return TRUE;
+}
+
+// STUB: LEGO1 0x10034b60
+void Act1State::FUN_10034b60()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x10034d00

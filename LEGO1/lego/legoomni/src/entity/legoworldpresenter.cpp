@@ -15,7 +15,7 @@
 #include "misc.h"
 #include "modeldb/modeldb.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsactionlist.h"
 #include "mxdschunk.h"
 #include "mxdsmediaaction.h"
@@ -54,7 +54,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 	if (m_entity) {
 		MxS32 scriptIndex = ((LegoWorld*) m_entity)->GetScriptIndex();
 		PlantManager()->FUN_10026360(scriptIndex);
-		AnimationManager()->FUN_1005f720(scriptIndex);
+		AnimationManager()->LoadScriptInfo(scriptIndex);
 		BuildingManager()->FUN_1002fa00();
 		result = ((LegoWorld*) m_entity)->VTable0x5c();
 	}
@@ -78,7 +78,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 // FUNCTION: LEGO1 0x10066870
 MxResult LegoWorldPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxResult result = FAILURE;
 	MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();

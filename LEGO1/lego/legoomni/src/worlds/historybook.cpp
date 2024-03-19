@@ -1,6 +1,7 @@
 #include "historybook.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "misc.h"
@@ -50,11 +51,11 @@ MxLong HistoryBook::Notify(MxParam& p_param)
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationButtonUp:
-			m_transitionDestination = LegoGameState::Area::e_infoscor;
-			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_pixelation, 50, FALSE, FALSE);
+			m_destLocation = LegoGameState::Area::e_infoscor;
+			TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_transitionDestination);
+			GameState()->SwitchArea(m_destLocation);
 			break;
 		}
 	}
@@ -143,12 +144,12 @@ void HistoryBook::ReadyWorld()
 		scoreY += 0x1b;
 	}
 
-	PlayMusic(JukeBox::e_informationCenter);
+	PlayMusic(JukeboxScript::c_InformationCenter_Music);
 }
 
 // FUNCTION: LEGO1 0x10082a10
 MxBool HistoryBook::VTable0x64()
 {
-	m_transitionDestination = LegoGameState::Area::e_infomain;
+	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;
 }

@@ -16,7 +16,7 @@ GasStation::GasStation()
 {
 	m_unk0xf8 = 0;
 	m_state = NULL;
-	m_transitionDestination = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 	m_unk0x108 = 0;
 	m_unk0x104 = 0;
 	m_unk0x114 = 0;
@@ -62,16 +62,13 @@ MxResult GasStation::Create(MxDSAction& p_dsAction)
 	m_state = (GasStationState*) GameState()->GetState("GasStationState");
 	if (!m_state) {
 		m_state = (GasStationState*) GameState()->CreateState("GasStationState");
-		m_state->GetUnknown0x14().SetUnknown0x00(1);
+		m_state->m_unk0x14.m_unk0x00 = 1;
+	}
+	else if (m_state->m_unk0x14.m_unk0x00 == 4) {
+		m_state->m_unk0x14.m_unk0x00 = 4;
 	}
 	else {
-		GasStationState::Unknown0x14& unk0x14 = m_state->GetUnknown0x14();
-		if (unk0x14.GetUnknown0x00() == 4) {
-			unk0x14.SetUnknown0x00(4);
-		}
-		else {
-			unk0x14.SetUnknown0x00(3);
-		}
+		m_state->m_unk0x14.m_unk0x00 = 3;
 	}
 
 	GameState()->SetCurrentArea(LegoGameState::e_garage);
@@ -103,7 +100,7 @@ MxLong GasStation::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			GameState()->SwitchArea(m_transitionDestination);
+			GameState()->SwitchArea(m_destLocation);
 			break;
 		}
 	}

@@ -3,6 +3,15 @@
 
 #include "legoentity.h"
 
+namespace JukeboxScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace JukeboxScript
+
 // VTABLE: LEGO1 0x100da8a0
 // SIZE 0x6c
 class JukeBoxEntity : public LegoEntity {
@@ -26,7 +35,7 @@ public:
 	}
 
 	void StartAction();
-	void StopAction(MxU32 p_state);
+	void StopAction(JukeboxScript::Script p_script);
 
 	inline MxBool IsBackgroundAudioEnabled() { return m_audioEnabled; }
 

@@ -2,7 +2,7 @@
 
 #include "mxactionnotificationparam.h"
 #include "mxatom.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxeventmanager.h"
 #include "mxmisc.h"
@@ -338,17 +338,17 @@ MxBool MxOmni::ActionSourceEquals(MxDSAction* p_action, const char* p_name)
 // FUNCTION: LEGO1 0x100b07f0
 MxLong MxOmni::Notify(MxParam& p_param)
 {
-	MxAutoLocker lock(&this->m_criticalsection);
+	AUTOLOCK(m_criticalSection);
 
 	if (((MxNotificationParam&) p_param).GetNotification() != c_notificationEndAction) {
 		return 0;
 	}
 
-	return HandleActionEnd(p_param);
+	return HandleEndAction(p_param);
 }
 
 // FUNCTION: LEGO1 0x100b0880
-MxLong MxOmni::HandleActionEnd(MxParam& p_param)
+MxLong MxOmni::HandleEndAction(MxParam& p_param)
 {
 	MxDSAction* action = ((MxEndActionNotificationParam&) p_param).GetAction();
 	MxStreamController* controller = Streamer()->GetOpenStream(action->GetAtomId().GetInternal());

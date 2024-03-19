@@ -144,3 +144,9 @@ THUNKS = (
 @pytest.mark.parametrize("thunk_ref", THUNKS)
 def test_thunks(thunk_ref: Tuple[int, int], binfile: IsleBin):
     assert thunk_ref in binfile.thunks
+
+
+def test_exports(binfile: IsleBin):
+    assert len(binfile.exports) == 130
+    assert (0x1003BFB0, b"??0LegoBackgroundColor@@QAE@PBD0@Z") in binfile.exports
+    assert (0x10091EE0, b"_DllMain@12") in binfile.exports

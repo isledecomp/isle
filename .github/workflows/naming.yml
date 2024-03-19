@@ -21,6 +21,9 @@ jobs:
 
     - name: Run ncc
       run: |
+        action_headers=$(find LEGO1/lego/legoomni/include/actions \
+          -name '*.h' -print0 | xargs -0 echo)
+
         python3 tools/ncc/ncc.py \
           --clang-lib ${{ env.LLVM_PATH }}/lib/libclang.so \
           --recurse \
@@ -36,4 +39,5 @@ jobs:
           --exclude \
             LEGO1/omni/include/flic.h \
             LEGO1/omni/src/video/flic.cpp \
+            $action_headers \
           --path LEGO1/omni LEGO1/lego/legoomni

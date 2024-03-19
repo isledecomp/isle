@@ -37,6 +37,7 @@ public:
 
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
+	MxResult ResetPalette(MxBool p_ignoreSkyColor);
 	void FUN_1007c520();
 
 	inline Tgl::Renderer* GetRenderer() { return this->m_renderer; }

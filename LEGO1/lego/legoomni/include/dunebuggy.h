@@ -30,6 +30,8 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override; // vtable+0xdc
 	void VTable0xe4() override;                                    // vtable+0xe4
 
+	void FUN_10068350();
+
 	// SYNTHETIC: LEGO1 0x10067dc0
 	// DuneBuggy::`scalar deleting destructor'
 

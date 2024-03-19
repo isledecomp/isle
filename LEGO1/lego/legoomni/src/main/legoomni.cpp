@@ -16,7 +16,7 @@
 #include "misc.h"
 #include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxdsfile.h"
 #include "mxmisc.h"
@@ -309,7 +309,7 @@ void LegoOmni::Init()
 // FUNCTION: LEGO1 0x10058c30
 void LegoOmni::Destroy()
 {
-	MxAutoLocker lock(&this->m_criticalsection);
+	AUTOLOCK(m_criticalSection);
 
 	m_notificationManager->Unregister(this);
 
@@ -389,7 +389,7 @@ void LegoOmni::Destroy()
 MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
-	MxAutoLocker lock(&this->m_criticalsection);
+	AUTOLOCK(m_criticalSection);
 
 	p_param.CreateFlags().CreateObjectFactory(FALSE);
 	p_param.CreateFlags().CreateVideoManager(FALSE);
@@ -704,6 +704,18 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 	}
 
 	return ::CurrentWorld()->GetCurrPathInfo(p_path, p_value);
+}
+
+// FUNCTION: LEGO1 0x1005b430
+const char* LegoOmni::FindScript(MxU32 p_index)
+{
+	for (MxS32 i = 0; i < 19; i++) {
+		if (m_scripts[i].m_index == p_index) {
+			return m_scripts[i].m_key;
+		}
+	}
+
+	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1005b490

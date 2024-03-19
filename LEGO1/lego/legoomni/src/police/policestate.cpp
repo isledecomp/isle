@@ -6,6 +6,7 @@
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "police.h"
+#include "police_actions.h"
 
 #include <stdlib.h>
 
@@ -15,7 +16,7 @@ DECOMP_SIZE_ASSERT(PoliceState, 0x10)
 PoliceState::PoliceState()
 {
 	m_unk0x0c = 0;
-	m_policeScript = (rand() % 2 == 0) ? Police::PoliceScript::c_lauraAnim : Police::PoliceScript::c_nickAnim;
+	m_policeScript = (rand() % 2 == 0) ? PoliceScript::c_nps002la_RunAnim : PoliceScript::c_nps001ni_RunAnim;
 }
 
 // FUNCTION: LEGO1 0x1005e990
@@ -29,7 +30,7 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 		p_legoFile->Read(&m_policeScript, sizeof(m_policeScript));
 	}
 	else {
-		Police::PoliceScript policeScript = m_policeScript;
+		PoliceScript::Script policeScript = m_policeScript;
 		p_legoFile->Write(&policeScript, sizeof(m_policeScript));
 	}
 
@@ -39,7 +40,7 @@ MxResult PoliceState::VTable0x1c(LegoFile* p_legoFile)
 // FUNCTION: LEGO1 0x1005ea40
 void PoliceState::FUN_1005ea40()
 {
-	Police::PoliceScript policeScript;
+	PoliceScript::Script policeScript;
 
 	if (m_unk0x0c == 1) {
 		return;
@@ -47,17 +48,17 @@ void PoliceState::FUN_1005ea40()
 
 	switch (CurrentActor()->GetActorId()) {
 	case 4:
-		policeScript = Police::PoliceScript::c_lauraAnim;
+		policeScript = PoliceScript::c_nps002la_RunAnim;
 		m_policeScript = policeScript;
 		break;
 	case 5:
-		policeScript = Police::PoliceScript::c_nickAnim;
+		policeScript = PoliceScript::c_nps001ni_RunAnim;
 		m_policeScript = policeScript;
 		break;
 	default:
 		policeScript = m_policeScript;
-		m_policeScript = policeScript == Police::PoliceScript::c_lauraAnim ? Police::PoliceScript::c_nickAnim
-																		   : Police::PoliceScript::c_lauraAnim;
+		m_policeScript = policeScript == PoliceScript::c_nps002la_RunAnim ? PoliceScript::c_nps001ni_RunAnim
+																		  : PoliceScript::c_nps002la_RunAnim;
 	}
 
 	{

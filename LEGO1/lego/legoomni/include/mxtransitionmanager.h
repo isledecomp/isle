@@ -37,8 +37,8 @@ public:
 		e_notTransitioning = 0,
 		e_noAnimation,
 		e_dissolve,
-		e_pixelation,
-		e_screenWipe,
+		e_mosaic,
+		e_wipeDown,
 		e_windows,
 		e_broken // Unknown what this is supposed to be, it locks the game up
 	};
@@ -52,12 +52,12 @@ public:
 
 private:
 	void EndTransition(MxBool p_notifyWorld);
-	void TransitionNone();
-	void TransitionDissolve();
-	void TransitionPixelation();
-	void TransitionWipe();
-	void TransitionWindows();
-	void TransitionBroken();
+	void NoTransition();
+	void DissolveTransition();
+	void MosaicTransition();
+	void WipeDownTransition();
+	void WindowsTransition();
+	void BrokenTransition();
 
 	void SubmitCopyRect(LPDDSURFACEDESC p_ddsc);
 	void SetupCopyRect(LPDDSURFACEDESC p_ddsc);

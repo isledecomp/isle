@@ -98,7 +98,6 @@ public:
 		inline MxS32 GetIndex() { return m_index; }
 		inline const char* GetKey() { return m_key; }
 
-	private:
 		MxS32 m_index;      // 0x00
 		char m_key[20];     // 0x04
 		MxAtomId* m_script; // 0x18
@@ -203,6 +202,7 @@ public:
 	MxS32 GetScriptIndex(const char* p_key);
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
+	const char* FindScript(MxU32 p_id);
 	static void CreateInstance();
 	static LegoOmni* GetInstance();
 

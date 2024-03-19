@@ -3,12 +3,15 @@
 
 #include "legostate.h"
 
+// SIZE 0x06
 struct RaceStateEntry {
 public:
-	MxU8 m_id;
-	undefined m_unk0x01[1];
-	MxU16 m_unk0x02;
-	MxU16 m_color;
+	inline MxS16 GetUnknown0x02() { return m_unk0x02; }
+
+	// TODO: Possibly private
+	MxU8 m_id;       // 0x00
+	MxS16 m_unk0x02; // 0x02
+	MxU16 m_color;   // 0x04
 };
 
 // VTABLE: LEGO1 0x100d5e30
@@ -32,7 +35,10 @@ public:
 
 	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
+	RaceStateEntry* GetState(MxU8 p_id);
+
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
+	inline undefined4 GetUnknown0x28() { return m_unk0x28; }
 
 	// SYNTHETIC: LEGO1 0x1000f6f0
 	// RaceState::~RaceState
@@ -40,12 +46,8 @@ public:
 	// SYNTHETIC: LEGO1 0x100160d0
 	// RaceState::`scalar deleting destructor'
 
-private:
-	RaceStateEntry* GetState(MxU8 p_id);
-
 protected:
 	RaceStateEntry m_state[5]; // 0x08
-	undefined2 m_unk0x26[2];   // 0x26
 	undefined4 m_unk0x28;      // 0x28
 };
 

@@ -37,10 +37,22 @@ MxResult LegoPartPresenter::AddToManager()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1007c9d0
+// FUNCTION: LEGO1 0x1007c9d0
 void LegoPartPresenter::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
+	m_criticalSection.Enter();
+	VideoManager()->UnregisterPresenter(*this);
+
+	if (m_parts) {
+		delete m_parts;
+		m_parts = NULL;
+	}
+	m_parts = NULL;
+
+	m_criticalSection.Leave();
+	if (!p_fromDestructor) {
+		MxMediaPresenter::Destroy(FALSE);
+	}
 }
 
 // FUNCTION: LEGO1 0x1007ca30

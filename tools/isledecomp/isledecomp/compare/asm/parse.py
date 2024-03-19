@@ -12,10 +12,15 @@ from typing import Callable, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp.bin import InvalidVirtualAddressError
 from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+from .const import JUMP_MNEMONICS, SINGLE_OPERAND_INSTS
 
 disassembler = Cs(CS_ARCH_X86, CS_MODE_32)
 
-ptr_replace_regex = re.compile(r"(?P<data_size>\w+) ptr \[(?P<addr>0x[0-9a-fA-F]+)\]")
+ptr_replace_regex = re.compile(r"\[(0x[0-9a-f]+)\]")
+
+# For matching an immediate value on its own.
+# Preceded by start-of-string (first operand) or comma-space (second operand)
+immediate_replace_regex = re.compile(r"(?:^|, )(0x[0-9a-f]+)")
 
 DisasmLiteInst = namedtuple("DisasmLiteInst", "address, size, mnemonic, op_str")
 
@@ -28,10 +33,6 @@ def from_hex(string: str) -> Optional[int]:
         pass
 
     return None
-
-
-def get_float_size(size_str: str) -> int:
-    return 8 if size_str == "qword" else 4
 
 
 class ParseAsm:
@@ -94,14 +95,41 @@ class ParseAsm:
         self.replacements[addr] = placeholder
         return placeholder
 
+    def hex_replace_always(self, match: re.Match) -> str:
+        """If a pointer value was matched, always insert a placeholder"""
+        value = int(match.group(1), 16)
+        return match.group(0).replace(match.group(1), self.replace(value))
+
+    def hex_replace_relocated(self, match: re.Match) -> str:
+        """For replacing immediate value operands. We only want to
+        use the placeholder if we are certain that this is a valid address.
+        We can check the relocation table to find out."""
+        value = int(match.group(1), 16)
+        if self.is_relocated(value):
+            return match.group(0).replace(match.group(1), self.replace(value))
+
+        return match.group(0)
+
+    def hex_replace_float(self, match: re.Match) -> str:
+        """Special case for replacements on float instructions.
+        If the pointer is a float constant, read it from the binary."""
+        value = int(match.group(1), 16)
+
+        # If we can find a variable name for this pointer, use it.
+        placeholder = self.lookup(value)
+
+        # Read what's under the pointer and show the decimal value.
+        if placeholder is None:
+            float_size = 8 if "qword" in match.string else 4
+            placeholder = self.float_replace(value, float_size)
+
+        # If we can't read the float, use a regular placeholder.
+        if placeholder is None:
+            placeholder = self.replace(value)
+
+        return match.group(0).replace(match.group(1), placeholder)
+
     def sanitize(self, inst: DisasmLiteInst) -> Tuple[str, str]:
-        if len(inst.op_str) == 0:
-            # Nothing to sanitize
-            return (inst.mnemonic, "")
-
-        if "0x" not in inst.op_str:
-            return (inst.mnemonic, inst.op_str)
-
         # For jumps or calls, if the entire op_str is a hex number, the value
         # is a relative offset.
         # Otherwise (i.e. it looks like `dword ptr [address]`) it is an
@@ -109,11 +137,20 @@ class ParseAsm:
         # Providing the starting address of the function to capstone.disasm has
         # automatically resolved relative offsets to an absolute address.
         # We will have to undo this for some of the jumps or they will not match.
-        op_str_address = from_hex(inst.op_str)
 
-        if op_str_address is not None:
+        if (
+            inst.mnemonic in SINGLE_OPERAND_INSTS
+            and (op_str_address := from_hex(inst.op_str)) is not None
+        ):
             if inst.mnemonic == "call":
                 return (inst.mnemonic, self.replace(op_str_address))
+
+            if inst.mnemonic == "push":
+                if self.is_relocated(op_str_address):
+                    return (inst.mnemonic, self.replace(op_str_address))
+
+                # To avoid falling into jump handling
+                return (inst.mnemonic, inst.op_str)
 
             if inst.mnemonic == "jmp":
                 # The unwind section contains JMPs to other functions.
@@ -124,70 +161,19 @@ class ParseAsm:
                 if potential_name is not None:
                     return (inst.mnemonic, potential_name)
 
-            if inst.mnemonic.startswith("j"):
-                # i.e. if this is any jump
-                # Show the jump offset rather than the absolute address
-                jump_displacement = op_str_address - (inst.address + inst.size)
-                return (inst.mnemonic, hex(jump_displacement))
-
-        def filter_out_ptr(match):
-            """Helper for re.sub, see below"""
-            offset = from_hex(match.group("addr"))
-
-            if offset is not None:
-                # We assume this is always an address to replace
-                placeholder = self.replace(offset)
-                return f'{match.group("data_size")} ptr [{placeholder}]'
-
-            # Strict regex should ensure we can read the hex number.
-            # But just in case: return the string with no changes
-            return match.group(0)
-
-        def float_ptr_replace(match):
-            offset = from_hex(match.group("addr"))
-
-            if offset is not None:
-                # If we can find a variable name for this pointer, use it.
-                placeholder = self.lookup(offset)
-
-                # Read what's under the pointer and show the decimal value.
-                if placeholder is None:
-                    placeholder = self.float_replace(
-                        offset, get_float_size(match.group("data_size"))
-                    )
-
-                # If we can't read the float, use a regular placeholder.
-                if placeholder is None:
-                    placeholder = self.replace(offset)
-
-                return f'{match.group("data_size")} ptr [{placeholder}]'
-
-            # Strict regex should ensure we can read the hex number.
-            # But just in case: return the string with no changes
-            return match.group(0)
+            # Else: this is any jump
+            # Show the jump offset rather than the absolute address
+            jump_displacement = op_str_address - (inst.address + inst.size)
+            return (inst.mnemonic, hex(jump_displacement))
 
         if inst.mnemonic.startswith("f"):
             # If floating point instruction
-            op_str = ptr_replace_regex.sub(float_ptr_replace, inst.op_str)
+            op_str = ptr_replace_regex.sub(self.hex_replace_float, inst.op_str)
         else:
-            op_str = ptr_replace_regex.sub(filter_out_ptr, inst.op_str)
+            op_str = ptr_replace_regex.sub(self.hex_replace_always, inst.op_str)
 
-        def replace_immediate(chunk: str) -> str:
-            if (inttest := from_hex(chunk)) is not None:
-                # If this value is a virtual address, it is referenced absolutely,
-                # which means it must be in the relocation table.
-                if self.is_relocated(inttest):
-                    return self.replace(inttest)
-
-            return chunk
-
-        # Performance hack:
-        # Skip this step if there is nothing left to consider replacing.
-        if "0x" in op_str:
-            # Replace immediate values with name or placeholder (where appropriate)
-            op_str = ", ".join(map(replace_immediate, op_str.split(", ")))
-
-        return inst.mnemonic, op_str
+        op_str = immediate_replace_regex.sub(self.hex_replace_relocated, op_str)
+        return (inst.mnemonic, op_str)
 
     def parse_asm(self, data: bytes, start_addr: Optional[int] = 0) -> List[str]:
         asm = []
@@ -196,7 +182,22 @@ class ParseAsm:
             # Use heuristics to disregard some differences that aren't representative
             # of the accuracy of a function (e.g. global offsets)
             inst = DisasmLiteInst(*raw_inst)
-            result = self.sanitize(inst)
+
+            # If there is no pointer or immediate value in the op_str,
+            # there is nothing to sanitize.
+            # This leaves us with cases where a small immediate value or
+            # small displacement (this.member or vtable calls) appears.
+            # If we assume that instructions we want to sanitize need to be 5
+            # bytes -- 1 for the opcode and 4 for the address -- exclude cases
+            # where the hex value could not be an address.
+            # The exception is jumps which are as small as 2 bytes
+            # but are still useful to sanitize.
+            if "0x" in inst.op_str and (
+                inst.mnemonic in JUMP_MNEMONICS or inst.size > 4
+            ):
+                result = self.sanitize(inst)
+            else:
+                result = (inst.mnemonic, inst.op_str)
 
             # mnemonic + " " + op_str
             asm.append((hex(inst.address), " ".join(result)))

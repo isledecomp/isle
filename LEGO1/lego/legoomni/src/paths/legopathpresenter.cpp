@@ -2,7 +2,7 @@
 
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54);
 
@@ -44,7 +44,7 @@ void LegoPathPresenter::Destroy(MxBool p_fromDestructor)
 	}
 
 	{
-		MxAutoLocker lock(&this->m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 		Init();
 	}
 

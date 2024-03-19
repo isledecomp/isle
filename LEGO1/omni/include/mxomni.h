@@ -70,7 +70,7 @@ public:
 	MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
 	MxEventManager* GetEventManager() const { return this->m_eventManager; }
 	MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
-	MxLong HandleActionEnd(MxParam& p_param);
+	MxLong HandleEndAction(MxParam& p_param);
 
 	// SYNTHETIC: LEGO1 0x100aefd0
 	// MxOmni::`scalar deleting destructor'
@@ -91,7 +91,7 @@ protected:
 	MxTimer* m_timer;                             // 0x3c
 	MxStreamer* m_streamer;                       // 0x40
 	MxAtomIdCounterSet* m_atomIdCounterSet;       // 0x44
-	MxCriticalSection m_criticalsection;          // 0x48
+	MxCriticalSection m_criticalSection;          // 0x48
 	MxBool m_timerRunning;                        // 0x64
 };
 

@@ -184,6 +184,38 @@ void LegoEntity::FUN_10010c30()
 	}
 }
 
+// FUNCTION: LEGO1 0x10010c60
+Mx3DPointFloat LegoEntity::GetWorldDirection()
+{
+	if (m_roi != NULL) {
+		m_worldDirection =
+			Mx3DPointFloat(m_roi->GetWorldDirection()[0], m_roi->GetWorldDirection()[1], m_roi->GetWorldDirection()[2]);
+	}
+
+	return m_worldDirection;
+}
+
+// FUNCTION: LEGO1 0x10010cf0
+Mx3DPointFloat LegoEntity::GetWorldUp()
+{
+	if (m_roi != NULL) {
+		m_worldUp = Mx3DPointFloat(m_roi->GetWorldUp()[0], m_roi->GetWorldUp()[1], m_roi->GetWorldUp()[2]);
+	}
+
+	return m_worldUp;
+}
+
+// FUNCTION: LEGO1 0x10010d80
+Mx3DPointFloat LegoEntity::GetWorldPosition()
+{
+	if (m_roi != NULL) {
+		m_worldLocation =
+			Mx3DPointFloat(m_roi->GetWorldPosition()[0], m_roi->GetWorldPosition()[1], m_roi->GetWorldPosition()[2]);
+	}
+
+	return m_worldLocation;
+}
+
 // FUNCTION: LEGO1 0x10010e10
 void LegoEntity::ParseAction(char* p_extra)
 {
@@ -244,10 +276,23 @@ void LegoEntity::VTable0x38()
 	// TODO
 }
 
-// STUB: LEGO1 0x10011300
+// FUNCTION: LEGO1 0x10011300
 void LegoEntity::VTable0x3c()
 {
-	// TODO
+	switch (m_unk0x59) {
+	case 0:
+		CharacterManager()->FUN_10084ec0(m_roi);
+		break;
+	case 2:
+		PlantManager()->FUN_100269e0(this);
+		break;
+	case 3:
+		BuildingManager()->FUN_1002fdb0(this);
+		break;
+	}
+
+	VTable0x34(FALSE);
+	VTable0x38();
 }
 
 // STUB: LEGO1 0x10011360

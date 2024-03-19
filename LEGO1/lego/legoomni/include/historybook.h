@@ -36,10 +36,10 @@ public:
 	// HistoryBook::`scalar deleting destructor'
 
 private:
-	LegoGameState::Area m_transitionDestination; // 0xf8
-	MxStillPresenter* m_alphabet[26];            // 0xfc
-	MxStillPresenter* m_names[20][7];            // 0x164
-	MxStillPresenter* m_scores[20];              // 0x394
+	LegoGameState::Area m_destLocation; // 0xf8
+	MxStillPresenter* m_alphabet[26];   // 0xfc
+	MxStillPresenter* m_names[20][7];   // 0x164
+	MxStillPresenter* m_scores[20];     // 0x394
 };
 
 #endif // HISTORYBOOK_H

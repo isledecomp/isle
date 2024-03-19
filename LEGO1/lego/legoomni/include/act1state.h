@@ -9,42 +9,17 @@
 // SIZE 0x26c
 class Act1State : public LegoState {
 public:
+	enum ElevatorFloor {
+		c_floor1 = 1,
+		c_floor2,
+		c_floor3
+	};
+
 	enum {
 		e_unk953 = 953,
 		e_unk954 = 954,
 		e_unk955 = 955,
 	};
-
-	Act1State();
-
-	// FUNCTION: LEGO1 0x100338a0
-	inline const char* ClassName() const override // vtable+0x0c
-	{
-		// STRING: LEGO1 0x100f0154
-		return "Act1State";
-	}
-
-	// FUNCTION: LEGO1 0x100338b0
-	inline MxBool IsA(const char* p_name) const override // vtable+0x10
-	{
-		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
-	}
-
-	MxBool SetFlag() override;                          // vtable+0x18
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
-
-	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
-	inline MxU32 GetUnknown18() { return m_unk0x018; }
-	inline MxU32 GetUnknown1c() { return m_unk0x01c; }
-	inline MxS16 GetUnknown21() { return m_unk0x021; }
-
-	inline void SetUnknown1c(MxU32 p_unk0x1c) { m_unk0x01c = p_unk0x1c; }
-	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x021 = p_unk0x21; }
-
-	void FUN_10034d00();
-
-	// SYNTHETIC: LEGO1 0x10033960
-	// Act1State::`scalar deleting destructor'
 
 	// SIZE 0x4c
 	class NamedPlane {
@@ -81,19 +56,54 @@ public:
 		Mx3DPointFloat m_point3; // 0x38
 	};
 
+	Act1State();
+
+	// FUNCTION: LEGO1 0x100338a0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		// STRING: LEGO1 0x100f0154
+		return "Act1State";
+	}
+
+	// FUNCTION: LEGO1 0x100338b0
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
+	{
+		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
+	}
+
+	MxBool SetFlag() override;                          // vtable+0x18
+	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+
+	void FUN_10034660();
+	void FUN_100346a0();
+	void FUN_10034b60();
+	void FUN_10034d00();
+
+	inline MxU32 GetUnknown18() { return m_unk0x018; }
+	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
+	inline MxS16 GetUnknown21() { return m_unk0x021; }
+
+	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
+	inline void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
+	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x021 = p_unk0x21; }
+
+	// SYNTHETIC: LEGO1 0x10033960
+	// Act1State::`scalar deleting destructor'
+
+	friend class Isle;
+
 protected:
-	MxS32* m_unk0x008; // 0x008
-	// FIXME: count for m_unk0x008
+	MxS32* m_unk0x008;            // 0x008 FIXME: count for m_unk0x008
 	MxS16 m_unk0x00c;             // 0x00c
 	undefined2 m_unk0x00e;        // 0x00e
 	undefined2 m_unk0x010;        // 0x010
 	undefined m_unk0x012;         // 0x012
 	MxS32 m_unk0x014;             // 0x014
 	MxU32 m_unk0x018;             // 0x018
-	MxU16 m_unk0x01c;             // 0x01c
-	undefined m_unk0x01e;         // 0x01e
-	undefined m_unk0x01f;         // 0x01f
-	undefined m_unk0x020;         // 0x020
+	MxS16 m_elevFloor;            // 0x01c
+	MxBool m_unk0x01e;            // 0x01e
+	MxBool m_unk0x01f;            // 0x01f
+	MxBool m_planeActive;         // 0x020
 	undefined m_unk0x021;         // 0x021
 	undefined m_unk0x022;         // 0x022
 	undefined m_unk0x023;         // 0x023

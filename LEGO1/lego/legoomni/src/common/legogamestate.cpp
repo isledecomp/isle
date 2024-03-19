@@ -8,6 +8,7 @@
 #include "isle.h"
 #include "islepathactor.h"
 #include "jetski.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
@@ -29,7 +30,7 @@
 
 #include <stdio.h>
 
-DECOMP_SIZE_ASSERT(LegoGameState::Username, 0xe)
+DECOMP_SIZE_ASSERT(LegoGameState::Username, 0x0e)
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
@@ -93,10 +94,10 @@ LegoGameState::LegoGameState()
 	m_actorId = 0;
 	m_savePath = NULL;
 	m_stateArray = NULL;
-	m_unk0x41c = -1;
-	m_currentArea = e_noArea;
-	m_previousArea = e_noArea;
-	m_unk0x42c = e_noArea;
+	m_unk0x41c = JukeboxScript::c_noneJukebox;
+	m_currentArea = e_undefined;
+	m_previousArea = e_undefined;
+	m_unk0x42c = e_undefined;
 	m_playerCount = 0;
 	m_isDirty = FALSE;
 	m_loadedAct = e_actNotFound;
@@ -372,7 +373,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	Read(&fileStorage, &area);
 
 	if (m_currentAct == 0) {
-		m_unk0x42c = e_noArea;
+		m_unk0x42c = e_undefined;
 	}
 	else {
 		m_unk0x42c = (Area) area;
@@ -702,22 +703,22 @@ void LegoGameState::StopArea(Area p_area)
 		RemoveFromWorld(*g_isleScript, 0x481, *g_isleScript, 0);
 		RemoveFromWorld(*g_isleScript, 0x482, *g_isleScript, 0);
 		break;
-	case e_copter:
+	case e_copterbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x2f, NULL);
 		InvokeAction(Extra::e_stop, *g_copterScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_copterScript, 0, NULL);
 		break;
-	case e_dunecar:
+	case e_dunecarbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x31, NULL);
 		InvokeAction(Extra::e_stop, *g_dunecarScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_dunecarScript, 0, NULL);
 		break;
-	case e_jetski:
+	case e_jetskibuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x33, NULL);
 		InvokeAction(Extra::e_stop, *g_jetskiScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_jetskiScript, 0, NULL);
 		break;
-	case e_racecar:
+	case e_racecarbuild:
 		InvokeAction(Extra::e_stop, *g_jukeboxScript, 0x35, NULL);
 		InvokeAction(Extra::e_stop, *g_racecarScript, 0, NULL);
 		InvokeAction(Extra::e_close, *g_racecarScript, 0, NULL);
@@ -801,12 +802,12 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_hospitalExterior:
 	case e_unk31:
 	case e_policeExterior:
-	case e_unk57:
-	case e_unk58:
-	case e_unk59:
-	case e_unk60:
-	case e_unk61:
-	case e_unk64:
+	case e_bike:
+	case e_dunecar:
+	case e_motocycle:
+	case e_copter:
+	case e_skateboard:
+	case e_jetski:
 	case e_unk66:
 		LoadIsle();
 		break;
@@ -872,6 +873,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_unk28: {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		LoadIsle();
+
 		if (state->GetUnknown18() == 7) {
 			VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		}
@@ -880,6 +882,7 @@ void LegoGameState::SwitchArea(Area p_area)
 			CurrentActor()->ResetWorldTransform(TRUE);
 			AnimationManager()->FUN_1005f0b0();
 		}
+
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	}
@@ -902,40 +905,44 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 1150, NULL);
 		break;
-	case e_copter:
+	case e_copterbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_copterScript, 0, NULL);
 		break;
-	case e_dunecar:
+	case e_dunecarbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_dunecarScript, 0, NULL);
 		break;
-	case e_jetski:
+	case e_jetskibuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_jetskiScript, 0, NULL);
 		break;
-	case e_racecar:
+	case e_racecarbuild:
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_racecarScript, 0, NULL);
 		break;
 	case e_act2main: {
 		LegoWorld* act2main = FindWorld(*g_act2mainScript, 0);
+
 		if (act2main == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act2mainScript, 0, NULL);
 		}
 		else {
 			act2main->Enable(TRUE);
 		}
+
 		break;
 	}
 	case e_act3script: {
 		LegoWorld* act3 = FindWorld(*g_act3Script, 0);
+
 		if (act3 == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act3Script, 0, NULL);
 		}
 		else {
 			act3->Enable(TRUE);
 		}
+
 		break;
 	}
 	case e_jukeboxw:
@@ -1091,7 +1098,7 @@ void LegoGameState::Init()
 		}
 	}
 
-	m_unk0x42c = e_noArea;
+	m_unk0x42c = e_undefined;
 }
 
 // FUNCTION: LEGO1 0x1003c670

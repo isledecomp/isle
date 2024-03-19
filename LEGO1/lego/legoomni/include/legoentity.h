@@ -66,6 +66,9 @@ public:
 	void FUN_10010c30();
 	void FUN_100114e0(MxU8 p_unk0x59);
 	void SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und);
+	Mx3DPointFloat GetWorldDirection();
+	Mx3DPointFloat GetWorldUp();
+	Mx3DPointFloat GetWorldPosition();
 
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetFlags() { return m_flags; }

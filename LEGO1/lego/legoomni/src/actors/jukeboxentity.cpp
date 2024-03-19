@@ -1,7 +1,9 @@
 #include "jukeboxentity.h"
 
 #include "isle.h"
+#include "isle_actions.h"
 #include "islepathactor.h"
+#include "jukebox_actions.h"
 #include "jukeboxstate.h"
 #include "legogamestate.h"
 #include "legoomni.h"
@@ -36,8 +38,8 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 			CurrentActor()->VTable0xe4();
 		}
 
-		((Isle*) FindWorld(*g_isleScript, 0))->SetUnknown13c(0x35);
-		TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 50, FALSE, FALSE);
+		((Isle*) FindWorld(*g_isleScript, 0))->SetDestLocation(LegoGameState::e_jukeboxw);
+		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		return 1;
 	}
 
@@ -54,28 +56,28 @@ void JukeBoxEntity::StartAction()
 
 	switch (state->GetState()) {
 	case 0:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x319, NULL);
-		GameState()->SetUnknown0x41c(0x37);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz001bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic1);
 		break;
 	case 1:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x31e, NULL);
-		GameState()->SetUnknown0x41c(0x38);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz006bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic2);
 		break;
 	case 2:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x31b, NULL);
-		GameState()->SetUnknown0x41c(0x39);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz003bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic3);
 		break;
 	case 3:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x31a, NULL);
-		GameState()->SetUnknown0x41c(0x3a);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz002bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic4);
 		break;
 	case 4:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x31f, NULL);
-		GameState()->SetUnknown0x41c(0x3b);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz007bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic5);
 		break;
 	case 5:
-		InvokeAction(Extra::e_start, *g_isleScript, 0x31c, NULL);
-		GameState()->SetUnknown0x41c(0x3c);
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz004bd_RunAnim, NULL);
+		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic6);
 		break;
 	}
 
@@ -91,35 +93,35 @@ void JukeBoxEntity::StartAction()
 }
 
 // FUNCTION: LEGO1 0x100860f0
-void JukeBoxEntity::StopAction(MxU32 p_state)
+void JukeBoxEntity::StopAction(JukeboxScript::Script p_script)
 {
 	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
 
 	if (state && state->IsActive()) {
-		switch (p_state) {
-		case 0x37:
+		switch (p_script) {
+		case JukeboxScript::c_JBMusic1:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x319, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz001bd_RunAnim, NULL);
 			break;
-		case 0x38:
+		case JukeboxScript::c_JBMusic2:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x31e, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz006bd_RunAnim, NULL);
 			break;
-		case 0x39:
+		case JukeboxScript::c_JBMusic3:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x31b, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz003bd_RunAnim, NULL);
 			break;
-		case 0x3a:
+		case JukeboxScript::c_JBMusic4:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x31a, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz002bd_RunAnim, NULL);
 			break;
-		case 0x3b:
+		case JukeboxScript::c_JBMusic5:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x31f, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz007bd_RunAnim, NULL);
 			break;
-		case 0x3c:
+		case JukeboxScript::c_JBMusic6:
 			state->SetActive(FALSE);
-			InvokeAction(Extra::e_stop, *g_isleScript, 0x31c, NULL);
+			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz004bd_RunAnim, NULL);
 			break;
 		}
 

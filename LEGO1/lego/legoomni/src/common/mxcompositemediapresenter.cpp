@@ -3,7 +3,7 @@
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxmediapresenter.h"
 #include "mxmisc.h"
@@ -29,7 +29,7 @@ MxCompositeMediaPresenter::~MxCompositeMediaPresenter()
 // FUNCTION: LEGO1 0x10074090
 MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	MxResult result = FAILURE;
 	MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();
@@ -96,7 +96,7 @@ MxResult MxCompositeMediaPresenter::StartAction(MxStreamController* p_controller
 // FUNCTION: LEGO1 0x100742e0
 void MxCompositeMediaPresenter::StartingTickle()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (!m_unk0x4e) {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
@@ -142,7 +142,7 @@ void MxCompositeMediaPresenter::StartingTickle()
 // FUNCTION: LEGO1 0x10074470
 MxResult MxCompositeMediaPresenter::Tickle()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	switch (m_currentTickleState) {
 	case e_ready:
@@ -169,7 +169,7 @@ MxResult MxCompositeMediaPresenter::Tickle()
 // FUNCTION: LEGO1 0x10074540
 MxResult MxCompositeMediaPresenter::PutData()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (m_currentTickleState >= e_streaming && m_currentTickleState <= e_done) {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {

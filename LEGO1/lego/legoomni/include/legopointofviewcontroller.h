@@ -29,6 +29,10 @@ public:
 	virtual void RightDrag(int, int); // vtable+0x24
 	virtual void RightUp(int, int);   // vtable+0x28
 
+	BOOL GetIsButtonDown() { return m_isButtonDown; }
+	MxDouble GetButtonX() { return m_buttonX; }
+	MxDouble GetButtonY() { return m_buttonY; }
+
 private:
 	BOOL m_isButtonDown;  // 0x08
 	undefined4 m_unk0x0c; // 0x0c

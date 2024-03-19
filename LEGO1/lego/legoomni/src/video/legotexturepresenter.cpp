@@ -114,11 +114,24 @@ MxResult LegoTexturePresenter::Store()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1004fc60
+// FUNCTION: LEGO1 0x1004fc60
 MxResult LegoTexturePresenter::PutData()
 {
-	// TODO
-	return FAILURE;
+	MxResult result = SUCCESS;
+
+	if (MxPresenter::IsEnabled() && m_currentChunk != NULL) {
+		result = Read(*m_currentChunk);
+		if (result == SUCCESS) {
+			Store();
+		}
+
+		if (m_currentTickleState == e_streaming) {
+			m_subscriber->FreeDataChunk(m_currentChunk);
+		}
+		m_currentChunk = NULL;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1004fcb0

@@ -18,6 +18,9 @@
 // LIBRARY: LEGO1 0x1008b020
 // ___CxxFrameHandler
 
+// LIBRARY: LEGO1 0x1008b3dc
+// __CIacos
+
 // LIBRARY: LEGO1 0x1008b400
 // _atol
 

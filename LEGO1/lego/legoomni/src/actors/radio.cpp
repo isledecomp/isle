@@ -1,5 +1,6 @@
 #include "radio.h"
 
+#include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
@@ -97,7 +98,7 @@ MxLong Radio::HandleClick(LegoControlManagerEvent& p_param)
 	MxDSAction action; // Unused
 	MxS32 objectId = p_param.GetClickedObjectId();
 
-	if (objectId == 18) {
+	if (objectId == IsleScript::c_Radio_Ctl) {
 		if (m_state->IsActive()) {
 			Stop();
 		}

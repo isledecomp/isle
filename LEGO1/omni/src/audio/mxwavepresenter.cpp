@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 #include "define.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
 #include "mxomni.h"
@@ -241,7 +241,7 @@ void MxWavePresenter::LoopChunk(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b2160
 MxResult MxWavePresenter::PutData()
 {
-	MxAutoLocker lock(&m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (IsEnabled()) {
 		switch (m_currentTickleState) {
@@ -280,7 +280,7 @@ MxResult MxWavePresenter::PutData()
 void MxWavePresenter::EndAction()
 {
 	if (m_action) {
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 		MxMediaPresenter::EndAction();
 
 		if (m_dsBuffer) {
@@ -297,7 +297,7 @@ void MxWavePresenter::SetVolume(MxS32 p_volume)
 	m_volume = p_volume;
 	if (m_dsBuffer != NULL) {
 		MxS32 volume = p_volume * MxOmni::GetInstance()->GetSoundManager()->GetVolume() / 100;
-		MxS32 otherVolume = MxOmni::GetInstance()->GetSoundManager()->FUN_100aecf0(volume);
+		MxS32 otherVolume = MxOmni::GetInstance()->GetSoundManager()->GetAttenuation(volume);
 		m_dsBuffer->SetVolume(otherVolume);
 	}
 

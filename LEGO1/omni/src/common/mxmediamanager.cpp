@@ -1,7 +1,7 @@
 #include "mxmediamanager.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"
@@ -33,7 +33,7 @@ MxResult MxMediaManager::Init()
 // FUNCTION: LEGO1 0x100b85e0
 MxResult MxMediaManager::InitPresenters()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	this->m_presenters = new MxPresenterList;
 
@@ -48,7 +48,7 @@ MxResult MxMediaManager::InitPresenters()
 // FUNCTION: LEGO1 0x100b8710
 void MxMediaManager::Destroy()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	if (this->m_presenters) {
 		delete this->m_presenters;
@@ -60,7 +60,7 @@ void MxMediaManager::Destroy()
 // FUNCTION: LEGO1 0x100b8790
 MxResult MxMediaManager::Tickle()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(this->m_presenters);
 
@@ -80,7 +80,7 @@ MxResult MxMediaManager::Tickle()
 // FUNCTION: LEGO1 0x100b88c0
 void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 
 	this->m_presenters->Append(&p_presenter);
 }
@@ -88,7 +88,7 @@ void MxMediaManager::RegisterPresenter(MxPresenter& p_presenter)
 // FUNCTION: LEGO1 0x100b8980
 void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxPresenterListCursor cursor(this->m_presenters);
 
 	if (cursor.Find(&p_presenter)) {
@@ -99,7 +99,7 @@ void MxMediaManager::UnregisterPresenter(MxPresenter& p_presenter)
 // FUNCTION: LEGO1 0x100b8ac0
 void MxMediaManager::StopPresenters()
 {
-	MxAutoLocker lock(&this->m_criticalSection);
+	AUTOLOCK(m_criticalSection);
 	MxPresenter* presenter;
 	MxPresenterListCursor cursor(this->m_presenters);
 

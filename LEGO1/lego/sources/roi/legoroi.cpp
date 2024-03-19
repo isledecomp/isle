@@ -339,7 +339,7 @@ done:
 LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matrix4& p_matrix)
 {
 	p_matrix.SetIdentity();
-	p_data->FUN_100a03c0(p_time, p_matrix);
+	p_data->CreateLocalTransform(p_time, p_matrix);
 	return SUCCESS;
 }
 
@@ -475,6 +475,12 @@ LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
 TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time) : LegoROI(p_renderer, p_lodList)
 {
 	m_time = p_time;
+}
+
+// STUB: LEGO1 0x100a9b40
+void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100a9bf0

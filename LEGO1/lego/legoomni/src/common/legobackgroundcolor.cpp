@@ -67,6 +67,52 @@ void LegoBackgroundColor::SetValue(const char* p_colorString)
 	delete[] colorStringCopy;
 }
 
+// FUNCTION: LEGO1 0x1003c230
+void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
+{
+	char buffer[30];
+
+	if (p_sun) {
+		m_s += 0.1;
+		if (m_s > 0.9) {
+			m_s = 1.0;
+		}
+	}
+	else {
+		m_s -= 0.1;
+		if (m_s < 0.1) {
+			m_s = 0.1;
+		}
+	}
+
+	sprintf(buffer, "set %d %d %d", (MxU32) (m_h * 100.0f), (MxU32) (m_s * 100.0f), (MxU32) (m_v * 100.0f));
+	m_value = buffer;
+
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
+	SetLights(convertedR, convertedG, convertedB);
+}
+
+// FUNCTION: LEGO1 0x1003c330
+void LegoBackgroundColor::ToggleSkyColor()
+{
+	char buffer[30];
+
+	m_h += 0.05;
+	if (m_h > 1.0) {
+		m_h -= 1.0;
+	}
+
+	sprintf(buffer, "set %d %d %d", (MxU32) (m_h * 100.0f), (MxU32) (m_s * 100.0f), (MxU32) (m_v * 100.0f));
+	m_value = buffer;
+
+	float convertedR, convertedG, convertedB;
+	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
+	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
+	SetLights(convertedR, convertedG, convertedB);
+}
+
 // STUB: LEGO1 0x1003c400
 void LegoBackgroundColor::SetLights(float p_r, float p_g, float p_b)
 {

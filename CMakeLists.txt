@@ -249,7 +249,7 @@ add_library(omni STATIC
   LEGO1/omni/src/stream/mxstreamer.cpp
   LEGO1/omni/src/stream/mxstreamlist.cpp
   LEGO1/omni/src/stream/mxstreamprovider.cpp
-  LEGO1/omni/src/system/mxautolocker.cpp
+  LEGO1/omni/src/system/mxautolock.cpp
   LEGO1/omni/src/system/mxcriticalsection.cpp
   LEGO1/omni/src/system/mxscheduler.cpp
   LEGO1/omni/src/system/mxsemaphore.cpp
@@ -421,6 +421,7 @@ target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/omni/include")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/sources")
 target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include")
+target_include_directories(lego1 PUBLIC "${CMAKE_SOURCE_DIR}/LEGO1/lego/legoomni/include/actions")
 
 # Link libraries
 target_link_libraries(lego1 PRIVATE tglrl viewmanager realtime mxdirectx roi geom anim Vec::Vec dinput dxguid misc 3dmanager omni)

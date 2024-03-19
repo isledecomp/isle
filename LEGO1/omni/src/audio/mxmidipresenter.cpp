@@ -1,7 +1,7 @@
 #include "mxmidipresenter.h"
 
 #include "decomp.h"
-#include "mxautolocker.h"
+#include "mxautolock.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
 #include "mxmusicmanager.h"
@@ -115,7 +115,7 @@ MxResult MxMIDIPresenter::PutData()
 void MxMIDIPresenter::EndAction()
 {
 	if (m_action) {
-		MxAutoLocker lock(&m_criticalSection);
+		AUTOLOCK(m_criticalSection);
 
 		MxMediaPresenter::EndAction();
 		MusicManager()->DeinitializeMIDI();

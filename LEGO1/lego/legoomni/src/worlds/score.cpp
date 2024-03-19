@@ -1,7 +1,9 @@
 #include "score.h"
 
 #include "ambulancemissionstate.h"
+#include "infoscor_actions.h"
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -21,7 +23,7 @@ DECOMP_SIZE_ASSERT(Score, 0x104)
 // FUNCTION: LEGO1 0x10001000
 Score::Score()
 {
-	m_unk0xf8 = LegoGameState::e_noArea;
+	m_destLocation = LegoGameState::e_undefined;
 	NotificationManager()->Register(this);
 }
 
@@ -100,8 +102,8 @@ MxLong Score::Notify(MxParam& p_param)
 			break;
 		case c_notificationTransitioned:
 			DeleteObjects(g_infoscorScript, 7, 9);
-			if (m_unk0xf8) {
-				GameState()->SwitchArea(m_unk0xf8);
+			if (m_destLocation) {
+				GameState()->SwitchArea(m_destLocation);
 			}
 			ret = 1;
 			break;
@@ -121,11 +123,11 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 		MxU32 id = action->GetObjectId();
 		switch (action->GetObjectId()) {
 		case 10:
-			m_unk0xf8 = LegoGameState::e_histbook;
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			m_destLocation = LegoGameState::e_histbook;
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
 		case 0x1f5:
-			PlayMusic(JukeBox::e_informationCenter);
+			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			m_state->SetTutorialFlag(FALSE);
 		}
 	}
@@ -151,7 +153,7 @@ void Score::ReadyWorld()
 		Start(&action);
 	}
 	else {
-		PlayMusic(JukeBox::e_informationCenter);
+		PlayMusic(JukeboxScript::c_InformationCenter_Music);
 	}
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
@@ -164,17 +166,17 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 
 	if (l == 1 || p_param.GetClickedObjectId() == 4) {
 		switch (p_param.GetClickedObjectId()) {
-		case 1:
-			m_unk0xf8 = LegoGameState::e_infomain;
+		case InfoscorScript::c_LeftArrow_Ctl:
+			m_destLocation = LegoGameState::e_infomain;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
-		case 2:
-			m_unk0xf8 = LegoGameState::e_infodoor;
+		case InfoscorScript::c_RightArrow_Ctl:
+			m_destLocation = LegoGameState::e_infodoor;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_pixelation, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
 			break;
-		case 3: {
+		case InfoscorScript::c_Book_Ctl: {
 			LegoInputManager* im = InputManager();
 			im->SetUnknown88(TRUE);
 			im->SetUnknown336(FALSE);
@@ -186,7 +188,7 @@ MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 			Start(&action);
 			break;
 		}
-		case 4: {
+		case InfoscorScript::c_LegoBox_Ctl: {
 			switch (l) {
 			case 1: {
 				MxDSAction action;
@@ -332,6 +334,6 @@ void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
 MxBool Score::VTable0x64()
 {
 	DeleteScript();
-	m_unk0xf8 = LegoGameState::e_infomain;
+	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
 }

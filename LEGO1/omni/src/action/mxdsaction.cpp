@@ -178,13 +178,10 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 		this->m_up[2] = p_dsAction.m_up[2];
 	}
 
-	MxU16 extraLength = p_dsAction.m_extraLength;
-	char* extraData = p_dsAction.m_extraData;
+	MxU16 extraLength;
+	char* extraData;
+	p_dsAction.GetExtra(extraLength, extraData);
 
-	// Taking those references forces the compiler to move the values onto the stack.
-	// The original code most likely looked different, but this yields a 100% match.
-	MxU16& extraLengthRef = extraLength;
-	char*& extraDataRef = extraData;
 	if (extraLength && extraData) {
 		if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
 			delete[] this->m_extraData;

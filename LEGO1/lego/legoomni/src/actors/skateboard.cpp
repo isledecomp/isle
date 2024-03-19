@@ -50,3 +50,9 @@ MxU32 SkateBoard::VTable0xd0()
 	// TODO
 	return 0;
 }
+
+// STUB: LEGO1 0x10010510
+void SkateBoard::FUN_10010510()
+{
+	// TODO
+}

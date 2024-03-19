@@ -1,85 +1,93 @@
 #include "infocenterstate.h"
 
 #include "infocenter.h"
+#include "infomain_actions.h"
 
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94);
 
 // GLOBAL: LEGO1 0x100f76a8
-Infocenter::InfomainScript g_exitDialogueAct1[14] = {
-	Infocenter::c_clickOnObjectsGuidanceDialogue,
-	Infocenter::c_arrowNavigationGuidanceDialogue,
-	Infocenter::c_elevatorGuidanceDialogue,
-	Infocenter::c_radioGuidanceDialogue,
-	Infocenter::c_exitGuidanceDialogue1,
-	Infocenter::c_goOutsideGuidanceDialogue,
-	Infocenter::c_experimentGuidanceDialogue,
-	Infocenter::c_returnBackGuidanceDialogue1,
-	Infocenter::c_bricksterWarningDialogue,
-	Infocenter::c_infomanHiccup,
-	Infocenter::c_infomanSneeze,
-	Infocenter::c_infomanLaughs,
-	Infocenter::c_newGameGuidanceDialogue,
-	Infocenter::c_returnBackGuidanceDialogue3
+InfomainScript::Script g_exitDialogueAct1[14] = {
+	InfomainScript::c_iic019in_RunAnim,
+	InfomainScript::c_iic020in_RunAnim,
+	InfomainScript::c_iic021in_RunAnim,
+	InfomainScript::c_iic022in_RunAnim,
+	InfomainScript::c_iic023in_RunAnim,
+	InfomainScript::c_iic024in_RunAnim,
+	InfomainScript::c_iic025in_RunAnim,
+	InfomainScript::c_iic026in_RunAnim,
+	InfomainScript::c_iic027in_RunAnim,
+	InfomainScript::c_iica28in_RunAnim,
+	InfomainScript::c_iicb28in_RunAnim,
+	InfomainScript::c_iicc28in_RunAnim,
+	InfomainScript::c_iic029in_RunAnim,
+	InfomainScript::c_iic032in_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f76e0
-Infocenter::InfomainScript g_exitDialogueAct23[6] = {
-	Infocenter::c_bricksterWarningDialogue,
-	Infocenter::c_newGameGuidanceDialogue,
-	Infocenter::c_bricksterEscapedDialogue1,
-	Infocenter::c_bricksterEscapedDialogue5,
-	Infocenter::c_exitGuidanceDialogue2
+InfomainScript::Script g_exitDialogueAct23[6] = {
+	InfomainScript::c_iic027in_RunAnim,
+	InfomainScript::c_iic029in_RunAnim,
+	InfomainScript::c_iic048in_RunAnim,
+	InfomainScript::c_iic056in_RunAnim,
+	InfomainScript::c_iicx23in_RunAnim
 	// Zero-terminated
 };
 
 // GLOBAL: LEGO1 0x100f76f8
-Infocenter::InfomainScript g_returnDialogueAct1[6] = {
-	Infocenter::c_returnBackGuidanceDialogue2,
-	Infocenter::c_reenterInfoCenterDialogue1,
-	Infocenter::c_reenterInfoCenterDialogue2,
-	Infocenter::c_reenterInfoCenterDialogue3,
-	Infocenter::c_reenterInfoCenterDialogue4
+InfomainScript::Script g_returnDialogueAct1[6] = {
+	InfomainScript::c_iicx26in_RunAnim,
+	InfomainScript::c_iic033in_RunAnim,
+	InfomainScript::c_iic034in_RunAnim,
+	InfomainScript::c_iic035in_RunAnim,
+	InfomainScript::c_iic036in_RunAnim
 	// Zero-terminated
 };
 
 // GLOBAL: LEGO1 0x100f7710
-Infocenter::InfomainScript g_returnDialogueAct2[4] = {
-	Infocenter::c_bricksterEscapedDialogue1,
-	Infocenter::c_bricksterEscapedDialogue2,
-	Infocenter::c_bricksterEscapedDialogue3,
+InfomainScript::Script g_returnDialogueAct2[4] = {
+	InfomainScript::c_iic048in_RunAnim,
+	InfomainScript::c_iic049in_RunAnim,
+	InfomainScript::c_iic050in_RunAnim,
 	// Zero-terminated
 };
 
 // GLOBAL: LEGO1 0x100f7720
-Infocenter::InfomainScript g_returnDialogueAct3[4] = {
-	Infocenter::c_bricksterEscapedDialogue4,
-	Infocenter::c_bricksterEscapedDialogue5,
-	Infocenter::c_bricksterEscapedDialogue6,
-	Infocenter::c_bricksterEscapedDialogue7
+InfomainScript::Script g_returnDialogueAct3[4] = {
+	InfomainScript::c_iic055in_RunAnim,
+	InfomainScript::c_iic056in_RunAnim,
+	InfomainScript::c_iic057in_RunAnim,
+	InfomainScript::c_iic058in_RunAnim
 };
 
 // GLOBAL: LEGO1 0x100f7730
-Infocenter::InfomainScript g_leaveDialogueAct1[4] = {
-	Infocenter::c_leaveInfoCenterDialogue1,
-	Infocenter::c_leaveInfoCenterDialogue2,
-	Infocenter::c_leaveInfoCenterDialogue3,
-	Infocenter::c_leaveInfoCenterDialogue4
+InfomainScript::Script g_leaveDialogueAct1[4] = {
+	InfomainScript::c_iic039in_PlayWav,
+	InfomainScript::c_iic040in_PlayWav,
+	InfomainScript::c_iic041in_PlayWav,
+	InfomainScript::c_iic042in_PlayWav
 };
 
 // GLOBAL: LEGO1 0x100f7740
-Infocenter::InfomainScript g_leaveDialogueAct2[4] =
-	{Infocenter::c_unk569, Infocenter::c_unk570, Infocenter::c_unk571, Infocenter::c_unk572};
+InfomainScript::Script g_leaveDialogueAct2[4] = {
+	InfomainScript::c_iic051in_PlayWav,
+	InfomainScript::c_iic052in_PlayWav,
+	InfomainScript::c_iic053in_PlayWav,
+	InfomainScript::c_iic054in_PlayWav
+};
 
 // GLOBAL: LEGO1 0x100f7750
-Infocenter::InfomainScript g_leaveDialogueAct3[4] = {
-	Infocenter::c_unk566,
-	Infocenter::c_unk567,
-	Infocenter::c_unk568,
+InfomainScript::Script g_leaveDialogueAct3[4] = {
+	InfomainScript::c_iic059in_PlayWav,
+	InfomainScript::c_iic060in_PlayWav,
+	InfomainScript::c_iic061in_PlayWav,
 	// Zero-terminated
 };
 
 // GLOBAL: LEGO1 0x100f7760
-Infocenter::InfomainScript g_bricksterDialogue[2] = {Infocenter::c_bricksterDialogue, Infocenter::c_bricksterLaughs};
+InfomainScript::Script g_bricksterDialogue[2] = {
+	InfomainScript::c_sbleh2br_PlayWav,
+	InfomainScript::c_snshahbr_PlayWav
+};
 
 // FUNCTION: LEGO1 0x10071600
 InfocenterState::InfocenterState()

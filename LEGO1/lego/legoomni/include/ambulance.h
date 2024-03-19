@@ -33,6 +33,9 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam&) override;       // vtable+0xdc
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	void FUN_10036e60();
+	void FUN_10037060();
+
 	// SYNTHETIC: LEGO1 0x10036130
 	// Ambulance::`scalar deleting destructor'
 

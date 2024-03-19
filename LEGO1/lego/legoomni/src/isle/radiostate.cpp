@@ -1,49 +1,50 @@
 #include "radiostate.h"
 
 #include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legoomni.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 
 // GLOBAL: LEGO1 0x100f3218
-JukeBox::JukeBoxScript g_unk0x100f3218[6] = {
-	JukeBox::e_legoRadioReminder1,
-	JukeBox::e_legoRadioJingle1,
-	JukeBox::e_legoRadioJingle2,
-	JukeBox::e_legoRadioJingle3,
-	JukeBox::e_legoRadioJingle4,
-	JukeBox::e_legoRadioReminder2
+JukeboxScript::Script g_unk0x100f3218[6] = {
+	JukeboxScript::c_sns002ra_Audio,
+	JukeboxScript::c_sns001ja_Audio,
+	JukeboxScript::c_snsc01js_Audio,
+	JukeboxScript::c_snsb01js_Audio,
+	JukeboxScript::c_snsa01js_Audio,
+	JukeboxScript::c_sns009ra_Audio
 };
 
 // GLOBAL: LEGO1 0x100f3230
-JukeBox::JukeBoxScript g_unk0x100f3230[14] = {
-	JukeBox::e_legoRadioRacingAd,
-	JukeBox::e_legoRadioNews1,
-	JukeBox::e_legoRadioNews2,
-	JukeBox::e_legoRadioPizzaAd1,
-	JukeBox::e_legoRadioBricksterPSA,
-	JukeBox::e_legoRadioSports1,
-	JukeBox::e_legoRadioIntermission1,
-	JukeBox::e_legoRadioIntermission2,
-	JukeBox::e_legoRadioPizzaAd2,
-	JukeBox::e_legoRadioWeatherReport,
-	JukeBox::e_legoRadioSports2,
-	JukeBox::e_legoRadioPizzaAd3,
-	JukeBox::e_legoRadioIntermission3,
-	JukeBox::e_legoRadioSuperStoreAd,
+JukeboxScript::Script g_unk0x100f3230[14] = {
+	JukeboxScript::c_ham035ra_Audio,
+	JukeboxScript::c_ham039ra_Audio,
+	JukeboxScript::c_sns005ra_Audio,
+	JukeboxScript::c_sns078pa_Audio,
+	JukeboxScript::c_ham036ra_Audio,
+	JukeboxScript::c_sns006ra_Audio,
+	JukeboxScript::c_sns013ra_Audio,
+	JukeboxScript::c_sns004ra_Audio,
+	JukeboxScript::c_sns079pa_Audio,
+	JukeboxScript::c_sns007ra_Audio,
+	JukeboxScript::c_sns008ra_Audio,
+	JukeboxScript::c_hpz037ma_Audio,
+	JukeboxScript::c_sns003ra_Audio,
+	JukeboxScript::c_sns010ra_Audio,
 };
 
 // GLOBAL: LEGO1 0x100f3268
-JukeBox::JukeBoxScript g_unk0x100f3268[9] = {
-	JukeBox::e_centralRoads,
-	JukeBox::e_beachBlvd,
-	JukeBox::e_residentialArea,
-	JukeBox::e_legoRadioLuckyYou,
-	JukeBox::e_legoRadioJazzInterlude,
-	JukeBox::e_legoRadioPianoInterlude1,
-	JukeBox::e_legoRadioPoliceStation,
-	JukeBox::e_legoRadioPianoInterlude2,
-	JukeBox::e_legoRadioCredits,
+JukeboxScript::Script g_unk0x100f3268[9] = {
+	JukeboxScript::c_CentralRoads_Music,
+	JukeboxScript::c_BeachBlvd_Music,
+	JukeboxScript::c_ResidentalArea_Music,
+	JukeboxScript::c_Radio1_Music,
+	JukeboxScript::c_Radio2_Music,
+	JukeboxScript::c_Radio3_Music,
+	JukeboxScript::c_Radio4_Music,
+	JukeboxScript::c_Radio5_Music,
+	JukeboxScript::c_Radio6_Music,
 };
 
 // FUNCTION: LEGO1 0x1002ce10
