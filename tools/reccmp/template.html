@@ -51,10 +51,41 @@
         background: #383838;
       }
 
-      #listing > thead th {
+      table#listing {
         border: 1px #f0f0f0 solid;
+      }
+
+      #listing > thead th {
         padding: 0.5em;
-        word-break: break-all !important;
+        user-select: none;
+        width: 10%;
+        text-align: left;
+      }
+
+      #listing:not([show-recomp]) > thead th[data-col="recomp"] {
+        display: none;
+      }
+
+      #listing > thead th > div {
+        display: flex;
+        column-gap: 0.5em;
+      }
+
+      #listing > thead th > div > span {
+        cursor: pointer;
+      }
+
+      #listing > thead th > div > span:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      #listing > thead th:last-child > div {
+        justify-content: right;
+      }
+
+      #listing > thead th[data-col="name"] {
+        width: 60%;
       }
 
       .diffneg {
@@ -75,7 +106,7 @@
       }
 
       sort-indicator {
-        margin: 0 0.5em;
+        user-select: none;
       }
 
       .filters {
@@ -90,6 +121,10 @@
         /* checkbox and radio buttons v-aligned with text */
         align-items: center;
         display: flex;
+      }
+
+      .filters > fieldset > input, .filters > fieldset > label {
+        cursor: pointer;
       }
 
       .filters > fieldset > label {
@@ -127,6 +162,23 @@
       label {
         user-select: none;
       }
+
+      #pageDisplay > button {
+        cursor: pointer;
+        padding: 0.25em 0.5em;
+      }
+
+      #pageDisplay select {
+        cursor: pointer;
+        padding: 0.25em;
+        margin: 0 0.5em;
+      }
+
+      p.rowcount {
+        align-self: flex-end;
+        font-size: 1.2em;
+        margin-bottom: 0;
+      }
     </style>
     <script>var data = {{{data}}};</script>
     <script>{{{reccmp_js}}}</script>
@@ -135,7 +187,7 @@
   <body>
     <div class="main">
       <h1>Decompilation Status</h1>
-      <listing-table>
+      <listing-options>
         <input id="search" type="search" placeholder="Search for offset or function name...">
         <div class="filters">
           <fieldset>
@@ -144,6 +196,8 @@
             <label for="cbHidePerfect">Hide 100% match</label>
             <input type="checkbox" id="cbHideStub" />
             <label for="cbHideStub">Hide stubs</label>
+            <input type="checkbox" id="cbShowRecomp" />
+            <label for="cbShowRecomp">Show recomp address</label>
           </fieldset>
           <fieldset>
             <legend>Search filters on:</legend>
@@ -155,13 +209,46 @@
             <label for="filterDiff">Asm diffs only</label>
           </fieldset>
         </div>
-        <p>Results: <span id="rowcount"></span></p>
+        <div class="filters">
+          <p class="rowcount">Results: <span id="rowcount"></span></p>
+          <fieldset id="pageDisplay">
+            <legend>Page</legend>
+            <button id="pagePrev">prev</button>
+            <select id="pageSelect">
+            </select>
+            <button id="pageNext">next</button>
+          </fieldset>
+        </div>
+      </listing-options>
+      <listing-table>
         <table id="listing">
           <thead>
             <tr>
-              <th data-col="address" style="width: 20%">Address<sort-indicator/></th>
-              <th data-col="name" style="width: 60%">Name<sort-indicator/></th>
-              <th data-col="matching" style="width: 20%">Matching<sort-indicator/></th>
+              <th data-col="address">
+                <div>
+                  <span>Address</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="recomp">
+                <div>
+                  <span>Recomp</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="name">
+                <div>
+                  <span>Name</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="diffs" data-no-sort></th>
+              <th data-col="matching">
+                <div>
+                  <sort-indicator></sort-indicator>
+                  <span>Matching</span>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -173,19 +260,41 @@
       <style>
         :host(:not([hidden])) {
           display: table-row;
-          contain: paint;
         }
 
-        ::slotted(*) {
-          border: 1px #f0f0f0 solid;
+        :host(:not([show-recomp])) > div[data-col="recomp"] {
+          display: none;
+        }
+
+        div[data-col="name"]:hover {
+          cursor: pointer;
+        }
+
+        div[data-col="name"]:hover > ::slotted(*) {
+          text-decoration: underline;
+          text-decoration-style: dotted;
+        }
+
+        ::slotted(*:not([slot="name"])) {
+          white-space: nowrap;
+        }
+
+        :host > div {
+          border-top: 1px #f0f0f0 solid;
           display: table-cell;
           padding: 0.5em;
           word-break: break-all !important;
         }
+
+        :host > div:last-child {
+          text-align: right;
+        }
       </style>
-      <slot name="address"></slot>
-      <slot name="name"></slot>
-      <slot name="matching"></slot>
+      <div data-col="address"><can-copy><slot name="address"></slot></can-copy></div>
+      <div data-col="recomp"><can-copy><slot name="recomp"></slot></can-copy></div>
+      <div data-col="name"><slot name="name"></slot></div>
+      <div data-col="diffs"><slot name="diffs"></slot></div>
+      <div data-col="matching"><slot name="matching"></slot></div>
     </template>
     <template id="diffrow-template">
       <style>
@@ -196,12 +305,13 @@
 
         td.singleCell {
           border: 1px #f0f0f0 solid;
+          border-bottom: 0px none;
           display: table-cell;
           padding: 0.5em;
           word-break: break-all !important;
         }
       </style>
-      <td class="singleCell" colspan="3">
+      <td class="singleCell" colspan="5">
         <slot></slot>
       </td>
     </template>
@@ -210,6 +320,43 @@
         ::slotted(*) {
           font-style: italic;
           text-align: center;
+        }
+      </style>
+      <slot></slot>
+    </template>
+    <template id="can-copy-template">
+      <style>
+        :host {
+          position: relative;
+        }
+        ::slotted(*) {
+          cursor: pointer;
+        }
+        slot::after {
+          background-color: #fff;
+          color: #222;
+          display: none;
+          font-size: 12px;
+          padding: 1px 2px;
+          width: fit-content;
+          border-radius: 1px;
+          text-align: center;
+          bottom: 120%;
+          box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+          position: absolute;
+          white-space: nowrap;
+          transition: .1s;
+          content: 'Copy to clipboard';
+        }
+        ::slotted(*:hover) {
+          text-decoration: underline;
+          text-decoration-style: dotted;
+        }
+        slot:hover::after {
+          display: block;
+        }
+        :host([copied]) > slot:hover::after {
+          content: 'Copied!';
         }
       </style>
       <slot></slot>
