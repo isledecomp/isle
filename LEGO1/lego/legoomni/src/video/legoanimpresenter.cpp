@@ -159,7 +159,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					src = str;
 				}
 
-				roi = CharacterManager()->FUN_10083500(src, TRUE);
+				roi = CharacterManager()->GetROI(src, TRUE);
 
 				if (roi != NULL && str[0] == '*') {
 					roi->SetUnknown0x0c(0);
