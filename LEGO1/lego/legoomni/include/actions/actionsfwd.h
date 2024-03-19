@@ -10,7 +10,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Sndanim
+} // namespace SndanimScript
 
 namespace NocdScript
 {
@@ -19,7 +19,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Nocd
+} // namespace NocdScript
 
 namespace CreditsScript
 {
@@ -28,7 +28,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Credits
+} // namespace CreditsScript
 
 namespace IntroScript
 {
@@ -37,7 +37,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Intro
+} // namespace IntroScript
 
 namespace HospitalScript
 {
@@ -46,7 +46,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Hospital
+} // namespace HospitalScript
 
 namespace CarraceScript
 {
@@ -55,7 +55,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Carrace
+} // namespace CarraceScript
 
 namespace JetraceScript
 {
@@ -64,7 +64,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Jetrace
+} // namespace JetraceScript
 
 namespace CarracerScript
 {
@@ -73,7 +73,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Carracer
+} // namespace CarracerScript
 
 namespace JetracerScript
 {
@@ -82,7 +82,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Jetracer
+} // namespace JetracerScript
 
 namespace InfoscorScript
 {
@@ -91,7 +91,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Infoscor
+} // namespace InfoscorScript
 
 namespace RegbookScript
 {
@@ -100,7 +100,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Regbook
+} // namespace RegbookScript
 
 namespace HistbookScript
 {
@@ -109,7 +109,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Histbook
+} // namespace HistbookScript
 
 namespace InfomainScript
 {
@@ -118,7 +118,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Infomain
+} // namespace InfomainScript
 
 namespace ElevbottScript
 {
@@ -127,7 +127,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Elevbott
+} // namespace ElevbottScript
 
 namespace InfodoorScript
 {
@@ -136,7 +136,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Infodoor
+} // namespace InfodoorScript
 
 namespace RacecarScript
 {
@@ -145,7 +145,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Racecar
+} // namespace RacecarScript
 
 namespace DunecarScript
 {
@@ -154,7 +154,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Dunecar
+} // namespace DunecarScript
 
 namespace CopterScript
 {
@@ -163,7 +163,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Copter
+} // namespace CopterScript
 
 namespace JetskiScript
 {
@@ -172,7 +172,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Jetski
+} // namespace JetskiScript
 
 namespace GarageScript
 {
@@ -181,7 +181,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Garage
+} // namespace GarageScript
 
 namespace Act3Script
 {
@@ -190,7 +190,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Act3
+} // namespace Act3Script
 
 namespace Act2mainScript
 {
@@ -199,7 +199,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Act2main
+} // namespace Act2mainScript
 
 namespace JukeboxwScript
 {
@@ -208,7 +208,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Jukeboxw
+} // namespace JukeboxwScript
 
 namespace IsleScript
 {
@@ -223,7 +223,7 @@ enum Script2 : int;
 #else
 enum Script2;
 #endif
-} // namespace Isle
+} // namespace IsleScript
 
 namespace JukeboxScript
 {
@@ -232,7 +232,7 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Jukebox
+} // namespace JukeboxScript
 
 namespace PoliceScript
 {
@@ -241,6 +241,6 @@ enum Script : int;
 #else
 enum Script;
 #endif
-} // namespace Police
+} // namespace PoliceScript
 
 #endif // ACTIONSFWD_H
