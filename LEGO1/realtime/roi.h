@@ -90,7 +90,7 @@ public:
 	{
 		comp = 0;
 		lods = 0;
-		m_unk0x0c = 1;
+		m_visible = true;
 	}
 	virtual ~ROI()
 	{
@@ -112,16 +112,16 @@ public:
 	int GetLODCount() const { return lods ? lods->Size() : 0; }
 	const CompoundObject* GetComp() const { return comp; }
 
-	inline undefined GetUnknown0x0c() { return m_unk0x0c; }
-	inline void SetUnknown0x0c(undefined p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
+	inline unsigned char GetVisibility() { return m_visible; }
+	inline void SetVisibility(unsigned char p_visible) { m_visible = p_visible; }
 
 	// SYNTHETIC: LEGO1 0x100a5d60
 	// ROI::`scalar deleting destructor'
 
 protected:
-	CompoundObject* comp; // 0x04
-	LODListBase* lods;    // 0x08
-	undefined m_unk0x0c;  // 0x0c
+	CompoundObject* comp;    // 0x04
+	LODListBase* lods;       // 0x08
+	unsigned char m_visible; // 0x0c
 };
 
 // TEMPLATE: LEGO1 0x10084930

@@ -64,7 +64,7 @@ void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 void SetCurrentWorld(LegoWorld* p_world);
 void FUN_10015820(MxBool p_disable, MxU16 p_flags);
-void SetROIUnknown0x0c(const char* p_name, undefined p_unk0x0c);
+void SetROIVisible(const char* p_name, MxBool p_visible);
 void SetCurrentActor(IslePathActor* p_currentActor);
 
 #endif // MISC_H

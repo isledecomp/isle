@@ -2,8 +2,12 @@
 
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
+#include "legogamestate.h"
+#include "legonavcontroller.h"
 #include "legoplantmanager.h"
+#include "legovideomanager.h"
 #include "misc.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(VisibilityVariable, 0x24)
 DECOMP_SIZE_ASSERT(CameraLocationVariable, 0x24)
@@ -27,16 +31,81 @@ const char* g_varCURSOR = "CURSOR";
 // STRING: LEGO1 0x100f3a1c
 const char* g_varWHOAMI = "WHO_AM_I";
 
-// STUB: LEGO1 0x10037d00
+// GLOBAL: LEGO1 0x100f3a50
+// STRING: LEGO1 0x100f3a18
+const char* g_delimiter2 = " \t";
+
+// GLOBAL: LEGO1 0x100f3a54
+// STRING: LEGO1 0x100f3a10
+const char* g_varHIDE = "HIDE";
+
+// GLOBAL: LEGO1 0x100f3a58
+// STRING: LEGO1 0x100f3a08
+const char* g_varSHOW = "SHOW";
+
+// GLOBAL: LEGO1 0x100f3a5c
+// STRING: LEGO1 0x100f3a00
+const char* g_papa = "Papa";
+
+// GLOBAL: LEGO1 0x100f3a60
+// STRING: LEGO1 0x100f39f8
+const char* g_mama = "Mama";
+
+// GLOBAL: LEGO1 0x100f3a64
+// STRING: LEGO1 0x100f39f0
+const char* g_pepper = "Pepper";
+
+// GLOBAL: LEGO1 0x100f3a68
+// STRING: LEGO1 0x100f39e8
+const char* g_nick = "Nick";
+
+// GLOBAL: LEGO1 0x100f3a6c
+// STRING: LEGO1 0x100f39e0
+const char* g_laura = "Laura";
+
+// FUNCTION: LEGO1 0x10037d00
 void VisibilityVariable::SetValue(const char* p_value)
 {
-	// TODO
+	MxVariable::SetValue(p_value);
+
+	if (p_value) {
+		char* instruction = strtok(m_value.GetDataPtr(), g_delimiter2);
+		char* name = strtok(NULL, g_delimiter2);
+		MxBool show;
+
+		if (!strcmpi(instruction, g_varHIDE)) {
+			show = FALSE;
+		}
+		else if (!strcmpi(instruction, g_varSHOW)) {
+			show = TRUE;
+		}
+		else {
+			return;
+		}
+
+		LegoROI* roi = FindROI(name);
+		if (roi) {
+			roi->SetVisibility(show);
+		}
+	}
 }
 
-// STUB: LEGO1 0x10037d80
+// FUNCTION: LEGO1 0x10037d80
 void CameraLocationVariable::SetValue(const char* p_value)
 {
-	// TODO
+	char buffer[256];
+	MxVariable::SetValue(p_value);
+
+	strcpy(buffer, p_value);
+
+	char* location = strtok(buffer, ",");
+	NavController()->UpdateCameraLocation(location);
+
+	location = strtok(NULL, ",");
+	if (location) {
+		MxFloat pov = (MxFloat) atof(location);
+		VideoManager()->Get3DManager()->SetFrustrum(pov, 0.1f, 250.0f);
+	}
 }
 
 // FUNCTION: LEGO1 0x10037e30
@@ -44,10 +113,26 @@ void CursorVariable::SetValue(const char* p_value)
 {
 }
 
-// STUB: LEGO1 0x10037e40
+// FUNCTION: LEGO1 0x10037e40
 void WhoAmIVariable::SetValue(const char* p_value)
 {
-	// TODO
+	MxVariable::SetValue(p_value);
+
+	if (!strcmpi(p_value, g_papa)) {
+		GameState()->SetActorId(3);
+	}
+	else if (!strcmpi(p_value, g_mama)) {
+		GameState()->SetActorId(2);
+	}
+	else if (!strcmpi(p_value, g_pepper)) {
+		GameState()->SetActorId(1);
+	}
+	else if (!strcmpi(p_value, g_nick)) {
+		GameState()->SetActorId(4);
+	}
+	else if (!strcmpi(p_value, g_laura)) {
+		GameState()->SetActorId(5);
+	}
 }
 
 // FUNCTION: LEGO1 0x10085aa0

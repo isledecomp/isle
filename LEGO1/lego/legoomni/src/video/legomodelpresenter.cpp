@@ -208,7 +208,7 @@ done:
 MxResult LegoModelPresenter::FUN_1007ff70(
 	MxDSChunk& p_chunk,
 	LegoEntity* p_entity,
-	undefined p_modelUnknown0x34,
+	MxBool p_roiVisible,
 	LegoWorld* p_world
 )
 {
@@ -222,7 +222,7 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 	}
 
 	if (m_roi != NULL) {
-		m_roi->SetUnknown0x0c(p_modelUnknown0x34);
+		m_roi->SetVisibility(p_roiVisible);
 	}
 
 	if (p_entity != NULL) {

@@ -113,7 +113,7 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 
 	if (character == NULL) {
 		LegoROI* roi = CreateROI(p_key);
-		roi->SetUnknown0x0c(0);
+		roi->SetVisibility(FALSE);
 
 		if (roi != NULL) {
 			character = new LegoCharacter(roi);

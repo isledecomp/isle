@@ -71,6 +71,7 @@ public:
 		MxBool p_urs
 	);
 	static void SetLocation(MxU32 p_location);
+	static void UpdateCameraLocation(const char* p_location);
 
 	// SYNTHETIC: LEGO1 0x10054c10
 	// LegoNavController::`scalar deleting destructor'
