@@ -1,6 +1,7 @@
 #ifndef MISC_H
 #define MISC_H
 
+#include "actionsfwd.h"
 #include "compat.h"
 #include "decomp.h"
 #include "mxtypes.h"
@@ -26,15 +27,6 @@ class MxDSAction;
 class MxTransitionManager;
 class ViewLODListManager;
 class ViewManager;
-
-namespace JukeboxScript
-{
-#ifdef COMPAT_MODE
-enum Script : int;
-#else
-enum Script;
-#endif
-} // namespace JukeboxScript
 
 extern MxBool g_isWorldActive;
 
