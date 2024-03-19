@@ -79,8 +79,8 @@ Isle::~Isle()
 MxResult Isle::Create(MxDSAction& p_dsAction)
 {
 	GameState()->FindLoadedAct();
-
 	MxResult result = LegoWorld::Create(p_dsAction);
+
 	if (result == SUCCESS) {
 		ControlManager()->Register(this);
 		InputManager()->SetWorld(this);
@@ -102,11 +102,11 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		}
 
 		LegoGameState* gameState = GameState();
-		Act1State* state = (Act1State*) gameState->GetState("Act1State");
-		if (state == NULL) {
-			state = (Act1State*) gameState->CreateState("Act1State");
+		Act1State* act1state = (Act1State*) gameState->GetState("Act1State");
+		if (act1state == NULL) {
+			act1state = (Act1State*) gameState->CreateState("Act1State");
 		}
-		m_act1state = state;
+		m_act1state = act1state;
 
 		FUN_1003ef00(TRUE);
 		GameState()->SetDirty(TRUE);
@@ -128,7 +128,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			break;
 		case c_notificationButtonUp:
 		case c_notificationButtonDown:
-			switch (m_act1state->GetUnknown18()) {
+			switch (m_act1state->m_unk0x018) {
 			case 3:
 				result = m_pizza->Notify(p_param);
 				break;
@@ -141,7 +141,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationType18:
-			switch (m_act1state->GetUnknown18()) {
+			switch (m_act1state->m_unk0x018) {
 			case 4:
 				result = CurrentActor()->Notify(p_param);
 				break;
@@ -681,21 +681,21 @@ void Isle::Enable(MxBool p_enable)
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
-				undefined4 und = -1;
+				IsleScript::Script script = IsleScript::c_noneIsle;
 
 				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {
 				case 1:
-					und = 0x35e;
+					script = IsleScript::c_sjs014in_RunAnim;
 					break;
 				case 2:
-					und = 0x35d;
+					script = IsleScript::c_sjs013in_RunAnim;
 					break;
 				case 3:
-					und = 0x35c;
+					script = IsleScript::c_sjs012in_RunAnim;
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(und, 0, 1, 1, 0, 0, 0, 1, 0);
+				AnimationManager()->FUN_10060dc0(script, 0, 1, 1, 0, 0, 0, 1, 0);
 			}
 
 			m_act1state->m_unk0x018 = 0;
@@ -709,21 +709,21 @@ void Isle::Enable(MxBool p_enable)
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
-				undefined4 und = -1;
+				IsleScript::Script script = IsleScript::c_noneIsle;
 
 				switch (raceState->GetState(GameState()->GetActorId())->GetUnknown0x02()) {
 				case 1:
-					und = 0x362;
+					script = IsleScript::c_srt003in_RunAnim;
 					break;
 				case 2:
-					und = 0x361;
+					script = IsleScript::c_srt002in_RunAnim;
 					break;
 				case 3:
-					und = 0x360;
+					script = IsleScript::c_srt001in_RunAnim;
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(und, 0, 1, 1, 0, 0, 0, 1, 0);
+				AnimationManager()->FUN_10060dc0(script, 0, 1, 1, 0, 0, 0, 1, 0);
 			}
 
 			m_act1state->m_unk0x018 = 0;

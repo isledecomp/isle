@@ -13,6 +13,15 @@ struct Character {
 	MxBool m_active;           // 0x14
 };
 
+namespace IsleScript
+{
+#ifdef COMPAT_MODE
+enum Script : int;
+#else
+enum Script;
+#endif
+} // namespace IsleScript
+
 // VTABLE: LEGO1 0x100d8c18
 // SIZE 0x500
 class LegoAnimationManager : public MxCore {
@@ -47,7 +56,7 @@ public:
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_100603c0();
 	undefined4 FUN_10060dc0(
-		undefined4,
+		IsleScript::Script,
 		undefined4,
 		undefined,
 		undefined,

@@ -345,8 +345,17 @@ void LegoAnimationManager::FUN_100603c0()
 }
 
 // STUB: LEGO1 0x10060dc0
-undefined4 LegoAnimationManager::
-	FUN_10060dc0(undefined4, undefined4, undefined, undefined, undefined4, undefined, undefined, undefined, undefined)
+undefined4 LegoAnimationManager::FUN_10060dc0(
+	IsleScript::Script,
+	undefined4,
+	undefined,
+	undefined,
+	undefined4,
+	undefined,
+	undefined,
+	undefined,
+	undefined
+)
 {
 	// TODO
 	return 0;

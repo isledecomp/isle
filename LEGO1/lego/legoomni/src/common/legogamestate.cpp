@@ -873,6 +873,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_unk28: {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		LoadIsle();
+
 		if (state->GetUnknown18() == 7) {
 			VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		}
@@ -881,6 +882,7 @@ void LegoGameState::SwitchArea(Area p_area)
 			CurrentActor()->ResetWorldTransform(TRUE);
 			AnimationManager()->FUN_1005f0b0();
 		}
+
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	}
@@ -921,22 +923,26 @@ void LegoGameState::SwitchArea(Area p_area)
 		break;
 	case e_act2main: {
 		LegoWorld* act2main = FindWorld(*g_act2mainScript, 0);
+
 		if (act2main == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act2mainScript, 0, NULL);
 		}
 		else {
 			act2main->Enable(TRUE);
 		}
+
 		break;
 	}
 	case e_act3script: {
 		LegoWorld* act3 = FindWorld(*g_act3Script, 0);
+
 		if (act3 == NULL) {
 			InvokeAction(Extra::ActionType::e_opendisk, *g_act3Script, 0, NULL);
 		}
 		else {
 			act3->Enable(TRUE);
 		}
+
 		break;
 	}
 	case e_jukeboxw:
