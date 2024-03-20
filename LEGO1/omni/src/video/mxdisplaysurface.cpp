@@ -479,7 +479,7 @@ void MxDisplaySurface::VTable0x30(
 	MxS32 p_bottom,
 	MxS32 p_width,
 	MxS32 p_height,
-	MxBool p_useOtherFunction
+	MxBool p_und
 )
 {
 	if (GetRectIntersection(
@@ -494,7 +494,6 @@ void MxDisplaySurface::VTable0x30(
 			&p_width,
 			&p_height
 		)) {
-
 		DDSURFACEDESC ddsd;
 		memset(&ddsd, 0, sizeof(ddsd));
 		ddsd.dwSize = sizeof(ddsd);
@@ -511,7 +510,7 @@ void MxDisplaySurface::VTable0x30(
 			switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
 			case 8: {
 				MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
-				if (p_useOtherFunction) {
+				if (p_und) {
 					FUN_100bb500(
 						&data,
 						&surface,
@@ -542,7 +541,7 @@ void MxDisplaySurface::VTable0x30(
 			}
 			case 16: {
 				MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
-				if (p_useOtherFunction) {
+				if (p_und) {
 					FUN_100bb500(
 						&data,
 						&surface,
