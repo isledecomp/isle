@@ -52,7 +52,7 @@ private:
 	MxStillPresenter* m_name[10][7];  // 0x168
 	struct {
 		MxS16 m_letters[7];                // 0x00
-		undefined2 m_unk0x0e;              // 0x0e
+		MxS16 m_cursorPos;                 // 0x0e
 	} m_unk0x280;                          // 0x280
 	MxControlPresenter* m_checkmark[10];   // 0x290
 	undefined2 m_unk0x2b8;                 // 0x2b8
@@ -65,7 +65,7 @@ private:
 	LPDIRECTDRAWSURFACE m_checkboxNormal;  // 0x2cc
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleKeyPress(MxS8 p_key);
+	MxLong HandleKeyPress(MxU8 p_key);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleNotification19(MxParam& p_param);
 	void FUN_100775c0(MxS16 p_playerIndex);

@@ -25,14 +25,14 @@ const char* g_infoman = "infoman";
 MxLong g_checkboxBlinkTimer = 0;
 
 // GLOBAL: LEGO1 0x100f7968
-MxBool g_nextCheckbox = 0;
+MxBool g_nextCheckbox = FALSE;
 
 // FUNCTION: LEGO1 0x10076d20
 RegistrationBook::RegistrationBook() : m_registerDialogueTimer(0x80000000), m_unk0xfc(1)
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
 	memset(m_name, 0, sizeof(m_name));
-	m_unk0x280.m_unk0x0e = 0;
+	m_unk0x280.m_cursorPos = 0;
 
 	memset(m_checkmark, 0, sizeof(m_checkmark));
 	memset(&m_unk0x280, -1, sizeof(m_unk0x280) - 2);
@@ -43,9 +43,9 @@ RegistrationBook::RegistrationBook() : m_registerDialogueTimer(0x80000000), m_un
 	NotificationManager()->Register(this);
 
 	m_unk0x2c1 = 0;
-	m_checkboxHilite = 0;
+	m_checkboxHilite = NULL;
 	m_checkboxSurface = NULL;
-	m_checkboxNormal = 0;
+	m_checkboxNormal = NULL;
 }
 
 // FUNCTION: LEGO1 0x10076f50
@@ -154,62 +154,56 @@ MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100772d0
-MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
+MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 {
-	MxS8 key;
-	if (p_key < 'a' || 'z' < p_key) {
-		key = p_key;
-	}
-	else {
+	MxS16 key;
+	if (p_key >= 'a' && p_key <= 'z') {
 		key = p_key - ' ';
 	}
+	else {
+		key = p_key;
+	}
 
-	switch (key) {
-	case ' ':
-		if (key < 'A' || key > 'Z') {
+	if ((key < 'A' || key > 'Z') && key != '\b') {
+		if (key == ' ') {
 			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 			BackgroundAudioManager()->RaiseVolume();
-			return 1;
 		}
-	case 8:
-		if (0 < m_unk0x280.m_unk0x0e) {
-			m_unk0x280.m_unk0x0e--;
+	}
+	else if (key != '\b' && m_unk0x280.m_cursorPos < 7) {
+		m_name[0][m_unk0x280.m_cursorPos] = m_alphabet[key - 'A']->Clone();
 
-			m_name[0][m_unk0x280.m_unk0x0e]->Enable(FALSE);
+		if (m_name[0][m_unk0x280.m_cursorPos] != NULL) {
+			m_alphabet[key - 'A']->GetAction()->SetUnknown24(m_alphabet[key - 'A']->GetAction()->GetUnknown24() + 1);
+			m_name[0][m_unk0x280.m_cursorPos]->Enable(TRUE);
+			m_name[0][m_unk0x280.m_cursorPos]->SetTickleState(MxPresenter::e_repeating);
+			m_name[0][m_unk0x280.m_cursorPos]->SetPosition(m_unk0x280.m_cursorPos * 23 + 343, 121);
 
-			delete m_name[0][m_unk0x280.m_unk0x0e];
-			m_name[0][m_unk0x280.m_unk0x0e] = NULL;
-
-			if (m_unk0x280.m_unk0x0e == 0) {
-				m_checkmark[0]->Enable(FALSE);
-			}
-
-			m_unk0x280.m_letters[m_unk0x280.m_unk0x0e] = -1;
-		}
-		break;
-	default:
-		if (m_unk0x280.m_unk0x0e < 7) {
-			MxStillPresenter* presenter = m_alphabet[key - 65];
-			m_name[0][m_unk0x280.m_unk0x0e] = presenter->Clone();
-
-			if (m_name[0][m_unk0x280.m_unk0x0e] == NULL) {
-				return 1;
-			}
-
-			presenter->GetAction()->SetUnknown24(presenter->GetAction()->GetUnknown24() + 1);
-			m_name[0][m_unk0x280.m_unk0x0e]->Enable(TRUE);
-			m_name[0][m_unk0x280.m_unk0x0e]->SetTickleState(MxPresenter::e_repeating);
-			m_name[0][m_unk0x280.m_unk0x0e]->SetPosition(m_unk0x280.m_unk0x0e * 23 + 343, 121);
-
-			if (m_unk0x280.m_unk0x0e == 0) {
+			if (m_unk0x280.m_cursorPos == 0) {
 				m_checkmark[0]->Enable(TRUE);
 			}
 
-			m_unk0x280.m_letters[m_unk0x280.m_unk0x0e] = key - 'A';
-			m_unk0x280.m_unk0x0e++;
+			m_unk0x280.m_letters[m_unk0x280.m_cursorPos] = key - 'A';
+			m_unk0x280.m_cursorPos++;
 		}
-		break;
 	}
+	else {
+		if (key == '\b' && m_unk0x280.m_cursorPos > 0) {
+			m_unk0x280.m_cursorPos--;
+
+			m_name[0][m_unk0x280.m_cursorPos]->Enable(FALSE);
+
+			delete m_name[0][m_unk0x280.m_cursorPos];
+			m_name[0][m_unk0x280.m_cursorPos] = NULL;
+
+			if (m_unk0x280.m_cursorPos == 0) {
+				m_checkmark[0]->Enable(FALSE);
+			}
+
+			m_unk0x280.m_letters[m_unk0x280.m_cursorPos] = -1;
+		}
+	}
+
 	return 1;
 }
 
