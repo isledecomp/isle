@@ -519,7 +519,7 @@ void MxDisplaySurface::VTable0x30(
 						p_width,
 						p_height,
 						ddsd.lPitch,
-						m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount
+						8
 					);
 				}
 				else {
@@ -550,7 +550,7 @@ void MxDisplaySurface::VTable0x30(
 						p_width,
 						p_height,
 						ddsd.lPitch,
-						m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount
+						16
 					);
 				}
 				else {
