@@ -60,7 +60,7 @@ private:
 	undefined m_unk0x118;               // 0x118
 	MxLong m_unk0x11c;                  // 0x11c
 	MxLong m_unk0x120;                  // 0x120
-	MxLong m_unk0x124;                  // 0x124
+	MxLong m_time;                      // 0x124
 	undefined m_unk0x128;               // 0x128
 };
 
