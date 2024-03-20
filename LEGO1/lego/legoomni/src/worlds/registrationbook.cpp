@@ -417,6 +417,7 @@ MxResult RegistrationBook::Tickle()
 				DDBLTFX op;
 				op.dwSize = sizeof(op);
 				op.dwROP = 0xcc0020;
+
 				if (g_nextCheckbox) {
 					m_checkboxSurface->Blt(NULL, m_checkboxHilite, NULL, DDBLT_ROP, &op);
 				}
@@ -427,6 +428,7 @@ MxResult RegistrationBook::Tickle()
 			else {
 				CreateSurface();
 			}
+
 			g_nextCheckbox = !g_nextCheckbox;
 		}
 	}
@@ -459,15 +461,24 @@ MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
 // FUNCTION: LEGO1 0x10078350
 MxBool RegistrationBook::CreateSurface()
 {
-	if (m_checkmark[0]) {
-		MxStillPresenter* back = (MxStillPresenter*) m_checkmark[0]->GetList().front();
-		if (back) {
-			m_checkboxSurface = back->VTable0x78();
+	MxCompositePresenterList* list = m_checkmark[0]->GetList();
+	MxStillPresenter *presenter, *uninitialized;
+
+	if (list) {
+		if (list->begin() != list->end()) {
+			presenter = (MxStillPresenter*) list->front();
+		}
+		else {
+			presenter = uninitialized; // intentionally uninitialized variable
 		}
 
-		MxStillPresenter* checkHilite = (MxStillPresenter*) Find("MxStillPresenter", "CheckHiLite_Bitmap");
-		if (checkHilite) {
-			m_checkboxHilite = checkHilite->VTable0x78();
+		if (presenter) {
+			m_checkboxSurface = presenter->VTable0x78();
+		}
+
+		presenter = (MxStillPresenter*) Find("MxStillPresenter", "CheckHiLite_Bitmap");
+		if (presenter) {
+			m_checkboxHilite = presenter->VTable0x78();
 		}
 
 		if (m_checkboxSurface && m_checkboxHilite) {

@@ -47,7 +47,7 @@ public:
 		return TRUE;
 	} // vtable+0x64
 
-	inline MxCompositePresenterList& GetList() { return m_list; }
+	inline MxCompositePresenterList* GetList() { return &m_list; }
 
 protected:
 	MxCompositePresenterList m_list; // 0x40
