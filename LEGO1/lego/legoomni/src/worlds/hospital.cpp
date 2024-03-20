@@ -355,7 +355,9 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		if (m_unk0x128 == 0) {
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_unk31;
-			goto transitionToDestLocation;
+
+			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 		break;
 	case 15:
@@ -363,7 +365,6 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_infomain;
 
-		transitionToDestLocation:
 			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
