@@ -20,9 +20,9 @@ struct Character {
 };
 
 struct Vehicle {
-	char* m_name;     // 0x00
-	undefined m_0x04; // 0x04
-	MxBool m_0x05;    // 0x05
+	char* m_name;        // 0x00
+	undefined m_unk0x04; // 0x04
+	MxBool m_unk0x05;    // 0x05
 };
 
 struct Unknown0x3c {

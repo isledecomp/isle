@@ -368,7 +368,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 						g_characters[characterId].m_unk0x07 = TRUE;
 						MxS32 vehicleId = g_characters[characterId].m_vehicleId;
 						if (vehicleId >= 0) {
-							g_vehicles[vehicleId].m_0x05 = FALSE;
+							g_vehicles[vehicleId].m_unk0x05 = FALSE;
 						}
 						break;
 					}
