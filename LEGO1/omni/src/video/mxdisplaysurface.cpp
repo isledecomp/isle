@@ -470,8 +470,8 @@ void MxDisplaySurface::VTable0x28(
 	}
 }
 
-// STUB: LEGO1 0x100bb1d0
-MxBool MxDisplaySurface::VTable0x30(
+// FUNCTION: LEGO1 0x100bb1d0
+void MxDisplaySurface::VTable0x30(
 	MxBitmap* p_bitmap,
 	MxS32 p_left,
 	MxS32 p_top,
@@ -479,10 +479,118 @@ MxBool MxDisplaySurface::VTable0x30(
 	MxS32 p_bottom,
 	MxS32 p_width,
 	MxS32 p_height,
-	MxBool
+	MxBool p_und
 )
 {
-	return 0;
+	if (GetRectIntersection(
+			p_bitmap->GetBmiWidth(),
+			p_bitmap->GetBmiHeightAbs(),
+			m_videoParam.GetRect().GetWidth(),
+			m_videoParam.GetRect().GetHeight(),
+			&p_left,
+			&p_top,
+			&p_right,
+			&p_bottom,
+			&p_width,
+			&p_height
+		)) {
+		DDSURFACEDESC ddsd;
+		memset(&ddsd, 0, sizeof(ddsd));
+		ddsd.dwSize = sizeof(ddsd);
+
+		HRESULT hr = m_ddSurface2->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+		if (hr == DDERR_SURFACELOST) {
+			m_ddSurface2->Restore();
+			hr = m_ddSurface2->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
+		}
+
+		if (hr == DD_OK) {
+			MxU8* data = p_bitmap->GetStart(p_left, p_top);
+
+			switch (m_surfaceDesc.ddpfPixelFormat.dwRGBBitCount) {
+			case 8: {
+				MxU8* surface = (MxU8*) ddsd.lpSurface + p_right + (p_bottom * ddsd.lPitch);
+				if (p_und) {
+					FUN_100bb500(
+						&data,
+						&surface,
+						p_bitmap->GetBmiHeader()->biSizeImage,
+						p_width,
+						p_height,
+						ddsd.lPitch,
+						8
+					);
+				}
+				else {
+					MxLong stride = p_bitmap->GetAdjustedStride();
+
+					MxLong length = ddsd.lPitch;
+					for (MxS32 i = 0; p_height > i; i++) {
+						for (MxS32 j = 0; p_width > j; j++) {
+							if (*data != 0) {
+								*(MxU8*) surface = *data;
+							}
+							data++;
+							surface++;
+						}
+
+						data += stride;
+						surface += length;
+					}
+				}
+				break;
+			}
+			case 16: {
+				MxU8* surface = (MxU8*) ddsd.lpSurface + (2 * p_right) + (p_bottom * ddsd.lPitch);
+				if (p_und) {
+					FUN_100bb500(
+						&data,
+						&surface,
+						p_bitmap->GetBmiHeader()->biSizeImage,
+						p_width,
+						p_height,
+						ddsd.lPitch,
+						16
+					);
+				}
+				else {
+					MxLong stride = p_bitmap->GetAdjustedStride();
+
+					MxLong v50 = stride - p_width;
+					MxLong length = ddsd.lPitch - (2 * p_width);
+					for (MxS32 i = 0; p_height > i; i++) {
+						for (MxS32 j = 0; p_width > j; j++) {
+							if (*data != 0) {
+								*(MxU16*) surface = m_16bitPal[*data];
+							}
+							data++;
+							surface += 2;
+						}
+
+						data += v50;
+						surface += length;
+					}
+				}
+			}
+			}
+
+			m_ddSurface2->Unlock(ddsd.lpSurface);
+		}
+	}
+}
+
+// STUB: LEGO1 0x100bb500
+void MxDisplaySurface::FUN_100bb500(
+	MxU8** p_bitmapData,
+	MxU8** p_surfaceData,
+	MxU32 p_bitmapSize,
+	MxS32 p_width,
+	MxS32 p_height,
+	MxLong p_pitch,
+	MxU32 p_bpp
+)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x100bb850

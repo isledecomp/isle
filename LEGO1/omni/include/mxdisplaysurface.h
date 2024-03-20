@@ -55,7 +55,7 @@ public:
 		undefined4,
 		MxBool
 	); // vtable+0x2c
-	virtual MxBool VTable0x30(
+	virtual void VTable0x30(
 		MxBitmap* p_bitmap,
 		MxS32 p_left,
 		MxS32 p_top,
@@ -63,7 +63,7 @@ public:
 		MxS32 p_bottom,
 		MxS32 p_width,
 		MxS32 p_height,
-		MxBool
+		MxBool p_und
 	); // vtable+0x30
 	virtual undefined4 VTable0x34(
 		undefined4,
@@ -97,6 +97,16 @@ public:
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface1() { return this->m_ddSurface1; }
 	inline LPDIRECTDRAWSURFACE GetDirectDrawSurface2() { return this->m_ddSurface2; }
 	inline MxVideoParam& GetVideoParam() { return this->m_videoParam; }
+
+	static void FUN_100bb500(
+		MxU8** p_bitmapData,
+		MxU8** p_surfaceData,
+		MxU32 p_bitmapSize,
+		MxS32 p_width,
+		MxS32 p_height,
+		MxLong p_pitch,
+		MxU32 p_bpp
+	);
 
 private:
 	MxU8 CountTotalBitsSetTo1(MxU32 p_param);
