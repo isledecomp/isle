@@ -352,14 +352,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		act1State = (Act1State*) GameState()->GetState("Act1State");
 		act1State->SetUnknown18(9);
 	case 14:
-		if (m_unk0x128 == '\0') {
+		if (m_unk0x128 == 0) {
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_unk31;
 			goto transitionToDestLocation;
 		}
 		break;
 	case 15:
-		if (m_unk0x128 == '\0') {
+		if (m_unk0x128 == 0) {
 			m_unk0x128 = 1;
 			m_destLocation = LegoGameState::e_infomain;
 
