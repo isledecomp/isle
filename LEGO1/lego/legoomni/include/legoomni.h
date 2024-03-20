@@ -200,6 +200,7 @@ public:
 	void RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId);
 	MxResult RegisterScripts();
 	MxS32 GetScriptIndex(const char* p_key);
+	void DeleteAction();
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
 	const char* FindScript(MxU32 p_id);
@@ -228,6 +229,13 @@ public:
 	inline void SetCurrentActor(IslePathActor* p_currentActor) { m_currentActor = p_currentActor; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
+	inline MxResult StartIfUnknown0x13c(MxDSAction& p_dsAction)
+	{
+		if (m_unk0x13c) {
+			return Start(&p_dsAction);
+		}
+		return SUCCESS;
+	}
 
 	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
 

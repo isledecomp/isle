@@ -1,8 +1,5 @@
 #include "misc.h"
 
-#include "legoinputmanager.h"
-#include "legoomni.h"
-#include "legovideomanager.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 
@@ -137,6 +134,12 @@ void SetROIVisible(const char* p_name, MxBool p_visible)
 void SetCurrentActor(IslePathActor* p_currentActor)
 {
 	LegoOmni::GetInstance()->SetCurrentActor(p_currentActor);
+}
+
+// FUNCTION: LEGO1 0x100158b0
+void DeleteAction()
+{
+	LegoOmni::GetInstance()->DeleteAction();
 }
 
 // FUNCTION: LEGO1 0x100158c0

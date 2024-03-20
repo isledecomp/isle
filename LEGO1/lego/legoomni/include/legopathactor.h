@@ -5,6 +5,8 @@
 #include "mxtypes.h"
 #include "realtime/matrix.h"
 
+class LegoPathController;
+
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
@@ -82,28 +84,35 @@ public:
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
 	inline MxU32 GetUnknown88() { return m_unk0x88; }
+	inline LegoPathController* GetController() { return m_controller; }
 
 	inline void SetUnknown88(MxU32 p_unk0x88) { m_unk0x88 = p_unk0x88; }
 	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
+	inline void ClearController() { m_controller = NULL; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
-	undefined m_unk0x78[0x10]; // 0x78
-	MxU32 m_unk0x88;           // 0x88
-	undefined m_unk0x8c[0x50]; // 0x8c
-	MxU32 m_unk0xdc;           // 0xdc
-	undefined m_unk0xe0[0xa];  // 0xe0
-	MxU8 m_unk0xea;            // 0xea
-	undefined m_unk0xef[0x4d]; // 0xef
-	MxU32 m_unk0x138;          // 0x138
-	MxFloat m_unk0x13c;        // 0x13c
-	MxFloat m_unk0x140;        // 0x140
-	MxFloat m_unk0x144;        // 0x144
-	MxU8 m_unk0x148;           // 0x148
-	MxS32 m_unk0x14c;          // 0x14c
-	MxFloat m_unk0x150;        // 0x150
+	undefined m_unk0x78[0xa];         // 0x78
+	MxBool m_userNavFlag;             // 0x82
+	undefined4 m_unk0x84;             // 0x84
+	MxU32 m_unk0x88;                  // 0x88
+	undefined4 m_boundary;            // 0x8c
+	undefined m_unk0x8c[0x4c];        // 0x90
+	MxU32 m_unk0xdc;                  // 0xdc
+	undefined4 m_unk0xe0;             // 0xe0
+	undefined4 m_destEdge;            // 0xe4
+	undefined2 m_unk0xe8;             // 0xe8
+	MxU8 m_unk0xea;                   // 0xea
+	undefined m_unk0xef[0x4d];        // 0xef
+	LegoPathController* m_controller; // 0x138
+	MxFloat m_unk0x13c;               // 0x13c
+	MxFloat m_unk0x140;               // 0x140
+	MxFloat m_unk0x144;               // 0x144
+	MxU8 m_unk0x148;                  // 0x148
+	MxS32 m_unk0x14c;                 // 0x14c
+	MxFloat m_unk0x150;               // 0x150
 };
 
 #endif // LEGOPATHACTOR_H

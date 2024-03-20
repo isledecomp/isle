@@ -1,13 +1,19 @@
 #include "legoanimationmanager.h"
 
+#include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
 #include "misc.h"
 #include "mxutilities.h"
+#include "roi/legoroi.h"
 
 #include <io.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
+
+// GLOBAL: LEGO1 0x100f6d10
+Vehicle g_vehicles[] = {"bikebd", 0,        FALSE, "bikepg", 0,        FALSE, "bikerd", 0,       FALSE, "bikesy", 0,
+						FALSE,    "motoni", 0,     FALSE,    "motola", 0,     FALSE,    "board", 0,     FALSE};
 
 // GLOBAL: LEGO1 0x100f7048
 Character g_characters[47]; // TODO: Initialize this
@@ -342,6 +348,38 @@ done:
 void LegoAnimationManager::FUN_100603c0()
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10060d00
+MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity)
+{
+	MxResult result = FAILURE;
+	LegoROI* roi = p_entity->GetROI();
+	if (p_entity->GetUnknown0x59() == 0) {
+		LegoPathActor* actor = CharacterManager()->FUN_10084c40(roi->GetName());
+		if (actor) {
+			LegoPathController* controller = actor->GetController();
+			if (controller) {
+				controller->FUN_10046770(actor);
+				actor->ClearController();
+				for (MxS32 i = 0; i < 40; i++) {
+					if (m_unk0x3c[i].m_roi == roi) {
+						MxU32 characterId = m_unk0x3c[i].m_id;
+						g_characters[characterId].m_unk0x07 = TRUE;
+						MxS32 vehicleId = g_characters[characterId].m_vehicleId;
+						if (vehicleId >= 0) {
+							g_vehicles[vehicleId].m_0x05 = FALSE;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (StartAction(p_dsAction) == SUCCESS) {
+		result = SUCCESS;
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x10060dc0

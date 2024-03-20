@@ -1,5 +1,6 @@
 #include "legoworld.h"
 
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"

@@ -4,14 +4,31 @@
 #include "actionsfwd.h"
 #include "animstate.h"
 #include "decomp.h"
+#include "legoentity.h"
 #include "legotraninfolist.h"
 #include "mxcore.h"
 
 // SIZE 0x18
 struct Character {
-	char* m_name;              // 0x00
-	undefined m_unk0x04[0x10]; // 0x04
-	MxBool m_active;           // 0x14
+	char* m_name;            // 0x00
+	undefined m_unk0x04;     // 0x04
+	MxS8 m_vehicleId;        // 0x05
+	undefined m_unk0x06;     // 0x06
+	MxBool m_unk0x07;        // 0x07
+	undefined m_unk0x08[12]; // 0x08
+	MxBool m_active;         // 0x14
+};
+
+struct Vehicle {
+	char* m_name;     // 0x00
+	undefined m_0x04; // 0x04
+	MxBool m_0x05;    // 0x05
+};
+
+struct Unknown0x3c {
+	LegoROI* m_roi;            // 0x00
+	MxU32 m_id;                // 0x04
+	undefined m_unk0x08[0x10]; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d8c18
@@ -47,6 +64,7 @@ public:
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_100603c0();
+	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	undefined4 FUN_10060dc0(
 		IsleScript::Script,
 		undefined4,
@@ -86,7 +104,7 @@ private:
 	undefined m_unk0x38;               // 0x38
 	undefined m_unk0x39;               // 0x39
 	undefined m_unk0x3a;               // 0x3a
-	undefined m_unk0x3b[0x3c1];        // 0x3b
+	Unknown0x3c m_unk0x3c[40];         // 0x3c
 	undefined4 m_unk0x3fc;             // 0x3fc
 	MxU8 m_unk0x400;                   // 0x400
 	undefined m_unk0x401;              // 0x401

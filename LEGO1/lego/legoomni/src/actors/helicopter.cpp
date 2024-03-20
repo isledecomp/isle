@@ -220,10 +220,10 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				va4.EqualsCross(v68, dir);
 				v7c.EqualsCross(va4, v90);
 				if (ret) {
-					if (((Act3*) m_world)->FUN_100727e0(m_unk0x138, loc, dir, v7c)) {
+					if (((Act3*) m_world)->FUN_100727e0(m_controller, loc, dir, v7c)) {
 						break;
 					}
-					else if (((Act3*) m_world)->FUN_10072980(m_unk0x138, loc, dir, v7c)) {
+					else if (((Act3*) m_world)->FUN_10072980(m_controller, loc, dir, v7c)) {
 						break;
 					}
 				}

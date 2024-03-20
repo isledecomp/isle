@@ -363,6 +363,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/main/legoomni.cpp
   LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
   LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
+  LEGO1/lego/legoomni/src/paths/legoextraactor.cpp
   LEGO1/lego/legoomni/src/paths/legopathactor.cpp
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
