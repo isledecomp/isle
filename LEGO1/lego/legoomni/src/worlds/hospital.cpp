@@ -266,83 +266,98 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case 11:
 		switch (m_currentActorId) {
 		case 1:
-			if (0 > m_hospitalState->m_unk0x0e || 1 >= m_hospitalState->m_unk0x0e) {
+			switch (m_hospitalState->m_unk0x0e) {
+			case 0:
+			case 1:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho017cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho017cl_RunAnim;
 				m_unk0x108 = 1;
-			}
-			else {
+				break;
+			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho018cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho018cl_RunAnim;
 				m_unk0x108 = 1;
+				break;
 			}
 			break;
 		case 2:
-			if (0 > m_hospitalState->m_unk0x10 || 1 >= m_hospitalState->m_unk0x10) {
+			switch (m_hospitalState->m_unk0x10) {
+			case 0:
+			case 1:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho019cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho019cl_RunAnim;
 				m_unk0x108 = 1;
-			}
-			else {
+				break;
+			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho020cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho020cl_RunAnim;
 				m_unk0x108 = 1;
+				break;
 			}
 			break;
 		case 3:
-			if (0 > m_hospitalState->m_unk0x12 || 1 >= m_hospitalState->m_unk0x12) {
+			switch (m_hospitalState->m_unk0x12) {
+			case 0:
+			case 1:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho023cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho023cl_RunAnim;
 				m_unk0x108 = 1;
-			}
-			else {
+				break;
+			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho024cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho024cl_RunAnim;
 				m_unk0x108 = 1;
+				break;
 			}
 			break;
 		case 4:
-			if (0 > m_hospitalState->m_unk0x14 || 1 >= m_hospitalState->m_unk0x14) {
+			switch (m_hospitalState->m_unk0x14) {
+			case 0:
+			case 1:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho021cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho021cl_RunAnim;
 				m_unk0x108 = 1;
-			}
-			else {
+				break;
+			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hhoa22cl_RunAnim;
 				m_unk0x108 = 1;
+				break;
 			}
 			break;
 		case 5:
-			if (0 > m_hospitalState->m_unk0x16 || 1 >= m_hospitalState->m_unk0x16) {
+			switch (m_hospitalState->m_unk0x16) {
+			case 0:
+			case 1:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho025cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho025cl_RunAnim;
 				m_unk0x108 = 1;
-			}
-			else {
+				break;
+			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho026cl_RunAnim);
 
 				m_unk0x10c = HospitalScript::c_hho026cl_RunAnim;
 				m_unk0x108 = 1;
+				break;
 			}
 			break;
 		}
