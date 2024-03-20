@@ -9,6 +9,7 @@
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtimer.h"
@@ -20,12 +21,18 @@ DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 // GLOBAL: LEGO1 0x100d9924
 const char* g_infoman = "infoman";
 
+// GLOBAL: LEGO1 0x100f7964
+MxLong g_checkboxBlinkTimer = 0;
+
+// GLOBAL: LEGO1 0x100f7968
+MxBool g_nextCheckbox = FALSE;
+
 // FUNCTION: LEGO1 0x10076d20
-RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
+RegistrationBook::RegistrationBook() : m_registerDialogueTimer(0x80000000), m_unk0xfc(1)
 {
 	memset(m_alphabet, 0, sizeof(m_alphabet));
 	memset(m_name, 0, sizeof(m_name));
-	m_unk0x280.m_unk0x0e = 0;
+	m_unk0x280.m_cursorPos = 0;
 
 	memset(m_checkmark, 0, sizeof(m_checkmark));
 	memset(&m_unk0x280, -1, sizeof(m_unk0x280) - 2);
@@ -36,9 +43,9 @@ RegistrationBook::RegistrationBook() : m_unk0xf8(0x80000000), m_unk0xfc(1)
 	NotificationManager()->Register(this);
 
 	m_unk0x2c1 = 0;
-	m_unk0x2c4 = 0;
-	m_unk0x2c8 = 0;
-	m_unk0x2cc = 0;
+	m_checkboxHilite = NULL;
+	m_checkboxSurface = NULL;
+	m_checkboxNormal = NULL;
 }
 
 // FUNCTION: LEGO1 0x10076f50
@@ -62,8 +69,8 @@ RegistrationBook::~RegistrationBook()
 	ControlManager()->Unregister(this);
 	NotificationManager()->Unregister(this);
 
-	if (m_unk0x2cc) {
-		m_unk0x2cc->Release();
+	if (m_checkboxNormal) {
+		m_checkboxNormal->Release();
 	}
 }
 
@@ -99,11 +106,11 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			m_unk0xf8 = Timer()->GetTime();
+			m_registerDialogueTimer = Timer()->GetTime();
 			result = HandleKeyPress(((LegoEventNotificationParam&) p_param).GetKey());
 			break;
 		case c_notificationButtonDown:
-			m_unk0xf8 = Timer()->GetTime();
+			m_registerDialogueTimer = Timer()->GetTime();
 			break;
 		case c_notificationClick:
 			result = HandleClick((LegoControlManagerEvent&) p_param);
@@ -139,17 +146,65 @@ MxLong RegistrationBook::HandleEndAction(MxEndActionNotificationParam& p_param)
 	case RegbookScript::c_iic007in_PlayWav:
 	case RegbookScript::c_iic008in_PlayWav:
 		BackgroundAudioManager()->RaiseVolume();
-		m_unk0xf8 = Timer()->GetTime();
+		m_registerDialogueTimer = Timer()->GetTime();
 		break;
 	}
 
 	return 1;
 }
 
-// STUB: LEGO1 0x100772d0
-MxLong RegistrationBook::HandleKeyPress(MxS8 p_key)
+// FUNCTION: LEGO1 0x100772d0
+MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 {
-	return 0;
+	MxS16 key;
+	if (p_key >= 'a' && p_key <= 'z') {
+		key = p_key - ' ';
+	}
+	else {
+		key = p_key;
+	}
+
+	if ((key < 'A' || key > 'Z') && key != '\b') {
+		if (key == ' ') {
+			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
+			BackgroundAudioManager()->RaiseVolume();
+		}
+	}
+	else if (key != '\b' && m_unk0x280.m_cursorPos < 7) {
+		m_name[0][m_unk0x280.m_cursorPos] = m_alphabet[key - 'A']->Clone();
+
+		if (m_name[0][m_unk0x280.m_cursorPos] != NULL) {
+			m_alphabet[key - 'A']->GetAction()->SetUnknown24(m_alphabet[key - 'A']->GetAction()->GetUnknown24() + 1);
+			m_name[0][m_unk0x280.m_cursorPos]->Enable(TRUE);
+			m_name[0][m_unk0x280.m_cursorPos]->SetTickleState(MxPresenter::e_repeating);
+			m_name[0][m_unk0x280.m_cursorPos]->SetPosition(m_unk0x280.m_cursorPos * 23 + 343, 121);
+
+			if (m_unk0x280.m_cursorPos == 0) {
+				m_checkmark[0]->Enable(TRUE);
+			}
+
+			m_unk0x280.m_letters[m_unk0x280.m_cursorPos] = key - 'A';
+			m_unk0x280.m_cursorPos++;
+		}
+	}
+	else {
+		if (key == '\b' && m_unk0x280.m_cursorPos > 0) {
+			m_unk0x280.m_cursorPos--;
+
+			m_name[0][m_unk0x280.m_cursorPos]->Enable(FALSE);
+
+			delete m_name[0][m_unk0x280.m_cursorPos];
+			m_name[0][m_unk0x280.m_cursorPos] = NULL;
+
+			if (m_unk0x280.m_cursorPos == 0) {
+				m_checkmark[0]->Enable(FALSE);
+			}
+
+			m_unk0x280.m_letters[m_unk0x280.m_cursorPos] = -1;
+		}
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x100774a0
@@ -342,14 +397,40 @@ inline void RegistrationBook::PlayAction(MxU32 p_objectId)
 	Start(&action);
 }
 
-// STUB: LEGO1 0x10077fd0
+// FUNCTION: LEGO1 0x10077fd0
 MxResult RegistrationBook::Tickle()
 {
 	if (!m_worldStarted) {
 		LegoWorld::Tickle();
 	}
 	else {
-		// TODO
+		MxLong time = Timer()->GetTime();
+		if (m_registerDialogueTimer != 0x80000000 && m_registerDialogueTimer + 30000 <= time) {
+			m_registerDialogueTimer = 0x80000000;
+			PlayAction(RegbookScript::c_iic007in_PlayWav);
+		}
+
+		if (g_checkboxBlinkTimer + 500 <= time) {
+			g_checkboxBlinkTimer = time;
+
+			if (m_checkboxHilite) {
+				DDBLTFX op;
+				op.dwSize = sizeof(op);
+				op.dwROP = 0xcc0020;
+
+				if (g_nextCheckbox) {
+					m_checkboxSurface->Blt(NULL, m_checkboxHilite, NULL, DDBLT_ROP, &op);
+				}
+				else {
+					m_checkboxSurface->Blt(NULL, m_checkboxNormal, NULL, DDBLT_ROP, &op);
+				}
+			}
+			else {
+				CreateSurface();
+			}
+
+			g_nextCheckbox = !g_nextCheckbox;
+		}
 	}
 
 	return SUCCESS;
@@ -375,6 +456,38 @@ void RegistrationBook::Enable(MxBool p_enable)
 MxLong RegistrationBook::HandleNotification19(MxParam& p_param)
 {
 	return 0;
+}
+
+// FUNCTION: LEGO1 0x10078350
+MxBool RegistrationBook::CreateSurface()
+{
+	MxCompositePresenterList* list = m_checkmark[0]->GetList();
+	MxStillPresenter *presenter, *uninitialized;
+
+	if (list) {
+		if (list->begin() != list->end()) {
+			presenter = (MxStillPresenter*) list->front();
+		}
+		else {
+			presenter = uninitialized; // intentionally uninitialized variable
+		}
+
+		if (presenter) {
+			m_checkboxSurface = presenter->VTable0x78();
+		}
+
+		presenter = (MxStillPresenter*) Find("MxStillPresenter", "CheckHiLite_Bitmap");
+		if (presenter) {
+			m_checkboxHilite = presenter->VTable0x78();
+		}
+
+		if (m_checkboxSurface && m_checkboxHilite) {
+			m_checkboxNormal = MxDisplaySurface::CopySurface(m_checkboxSurface);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x100783e0
