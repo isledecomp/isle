@@ -33,29 +33,24 @@ struct LegoCharacter {
 
 typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
-struct LegoSaveDataEntry3 {
-	char* m_name;
-	void* m_unk0x04;
-	LegoActor* m_actor;
-	MxS32 m_savePart1;
-	MxS32 m_savePart2;
-	MxU8 m_savePart3;
-	undefined4 m_unk0x18[6];
-	MxU8 m_frameOffsetInDwords; // 0x30
-	MxS32* m_pFrameData;
-	MxU8 m_currentFrame;
-	undefined4 m_unk0x3c[2];
-	MxU8 m_savePart5; // 0x44
-	undefined4 m_unk0x48[5];
-	MxU8 m_savePart6; // 0x5c
-	undefined4 m_unk0x60[11];
-	MxU8 m_savePart7; // 0x8c
-	undefined4 m_unk0x90[5];
-	MxU8 m_savePart8; // 0xa4
-	undefined4 m_unk0xa8[17];
-	MxU8 m_savePart9; // 0xec
-	undefined4 m_unk0xf0[5];
-	MxU8 m_savePart10; // 0x104
+// SIZE 0x108
+struct LegoCharacterData {
+	// SIZE 0x18
+	struct Unknown {
+		undefined m_unk0x00;     // 0x00 - offset used with unk0x04
+		undefined4 m_unk0x04;    // 0x04 - presumably pointer into global 100da40c
+		undefined m_unk0x08;     // 0x08 - offset used with unk0x04
+		undefined4 m_unk0x0c[2]; // 0x0c
+		undefined m_unk0x14;     // 0x14
+	};
+
+	char* m_name;          // 0x00
+	void* m_unk0x04;       // 0x04
+	LegoActor* m_actor;    // 0x08
+	MxS32 m_unk0x0c;       // 0x0c
+	MxS32 m_unk0x10;       // 0x10
+	MxU8 m_unk0x14;        // 0x14
+	Unknown m_unk0x18[10]; // 0x18
 };
 
 // SIZE 0x08
@@ -63,18 +58,18 @@ class LegoCharacterManager {
 public:
 	LegoCharacterManager();
 
-	MxResult WriteSaveData3(LegoStorage* p_storage);
-	MxResult ReadSaveData3(LegoStorage* p_storage);
+	MxResult FUN_10083310(LegoStorage* p_storage);
+	MxResult FUN_100833f0(LegoStorage* p_storage);
 	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
 
-	void InitSaveData();
+	void FUN_10083270();
 	static void SetCustomizeAnimFile(const char* p_value);
 	static MxBool FUN_10084c00(const LegoChar*);
 
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
-	LegoSaveDataEntry3* FUN_10084c60(const char* p_key);
+	LegoCharacterData* FUN_10084c60(const char* p_key);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI*, MxBool);
 	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);

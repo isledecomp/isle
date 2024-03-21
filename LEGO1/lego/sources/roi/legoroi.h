@@ -34,6 +34,7 @@ public:
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 	LegoResult FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
+	void SetName(const LegoChar* p_name);
 
 	float IntrinsicImportance() const override; // vtable+0x04
 	void UpdateWorldBoundingVolumes() override; // vtable+0x18
@@ -58,6 +59,9 @@ public:
 	inline LegoEntity* GetEntity() { return m_entity; }
 
 	inline void SetEntity(LegoEntity* p_entity) { m_entity = p_entity; }
+	inline void SetComp(CompoundObject* p_comp) { comp = p_comp; }
+	inline void SetBoundingSphere(const BoundingSphere& p_sphere) { m_sphere = m_world_bounding_sphere = p_sphere; }
+	inline void SetUnknown0x80(const BoundingBox& p_unk0x80) { m_unk0x80 = p_unk0x80; }
 
 	// SYNTHETIC: LEGO1 0x100a82b0
 	// LegoROI::`scalar deleting destructor'

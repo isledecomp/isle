@@ -9,32 +9,33 @@
 
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
-DECOMP_SIZE_ASSERT(LegoSaveDataEntry3, 0x108)
+DECOMP_SIZE_ASSERT(LegoCharacterData::Unknown, 0x18)
+DECOMP_SIZE_ASSERT(LegoCharacterData, 0x108)
 
 // GLOBAL: LEGO1 0x100f80c0
-LegoSaveDataEntry3 g_saveDataInit[66]; // TODO: add data
+LegoCharacterData g_characterDataInit[66]; // TODO: add data
 
 // GLOBAL: LEGO1 0x100fc4e4
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x10104f20
-LegoSaveDataEntry3 g_saveData3[66];
+LegoCharacterData g_characterData[66];
 
 // FUNCTION: LEGO1 0x10082a20
 LegoCharacterManager::LegoCharacterManager()
 {
 	m_characters = new LegoCharacterMap();
-	InitSaveData();
+	FUN_10083270();
 
 	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
 	VariableTable()->SetVariable(m_customizeAnimFile);
 }
 
 // FUNCTION: LEGO1 0x10083270
-void LegoCharacterManager::InitSaveData()
+void LegoCharacterManager::FUN_10083270()
 {
-	for (MxS32 i = 0; i < 66; i++) {
-		g_saveData3[i] = g_saveDataInit[i];
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+		g_characterData[i] = g_characterDataInit[i];
 	}
 }
 
@@ -45,57 +46,53 @@ void LegoCharacterManager::FUN_100832a0()
 }
 
 // FUNCTION: LEGO1 0x10083310
-MxResult LegoCharacterManager::WriteSaveData3(LegoStorage* p_storage)
+MxResult LegoCharacterManager::FUN_10083310(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	// This should probably be a for loop but I can't figure out how to
-	// make it match as a for loop.
-	LegoSaveDataEntry3* entry = g_saveData3;
-	const LegoSaveDataEntry3* end = &g_saveData3[66];
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+		LegoCharacterData* data = &g_characterData[i];
 
-	while (TRUE) {
-		if (p_storage->Write(&entry->m_savePart1, 4) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart2, 4) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x10, sizeof(data->m_unk0x10)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart3, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_currentFrame, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[1].m_unk0x08, sizeof(data->m_unk0x18[1].m_unk0x08)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart5, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[1].m_unk0x14, sizeof(data->m_unk0x18[1].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart6, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[2].m_unk0x14, sizeof(data->m_unk0x18[2].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart7, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[4].m_unk0x14, sizeof(data->m_unk0x18[4].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart8, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[5].m_unk0x14, sizeof(data->m_unk0x18[5].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart9, 1) != SUCCESS) {
-			break;
+		if (p_storage->Write(&data->m_unk0x18[8].m_unk0x14, sizeof(data->m_unk0x18[8].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
-		if (p_storage->Write(&entry->m_savePart10, 1) != SUCCESS) {
-			break;
-		}
-		if (++entry >= end) {
-			result = SUCCESS;
-			break;
+		if (p_storage->Write(&data->m_unk0x18[9].m_unk0x14, sizeof(data->m_unk0x18[9].m_unk0x14)) != SUCCESS) {
+			goto done;
 		}
 	}
 
+	result = SUCCESS;
+
+done:
 	return result;
 }
 
 // STUB: LEGO1 0x100833f0
-MxResult LegoCharacterManager::ReadSaveData3(LegoStorage* p_storage)
+MxResult LegoCharacterManager::FUN_100833f0(LegoStorage* p_storage)
 {
 	return SUCCESS;
 }
@@ -160,10 +157,66 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 	// TODO
 }
 
-// STUB: LEGO1 0x10084030
+// FUNCTION: LEGO1 0x10084030
 LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 {
-	return NULL;
+	MxBool success = FALSE;
+	LegoROI* roi = NULL;
+	BoundingSphere boundingSphere;
+	BoundingBox boundingBox;
+	MxMatrix mat;
+	CompoundObject* comp;
+
+	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
+	ViewLODListManager* lodManager = GetViewLODListManager();
+	LegoTextureContainer* textureContainer = TextureContainer();
+	LegoCharacterData* entry = FUN_10084c60(p_key);
+
+	if (entry == NULL) {
+		goto done;
+	}
+
+	if (!strcmpi(p_key, "pep")) {
+		LegoCharacterData* pepper = FUN_10084c60("pepper");
+
+		entry->m_unk0x0c = pepper->m_unk0x0c;
+		entry->m_unk0x10 = pepper->m_unk0x10;
+		entry->m_unk0x14 = pepper->m_unk0x14;
+
+		for (MxS32 i = 0; i < _countof(entry->m_unk0x18); i++) {
+			entry->m_unk0x18[i] = pepper->m_unk0x18[i];
+		}
+	}
+
+	roi = new LegoROI(renderer);
+	roi->SetName(p_key);
+
+	boundingSphere.Center()[0] = 0.000267f;
+	boundingSphere.Center()[1] = 0.78080797f;
+	boundingSphere.Center()[2] = -0.01906f;
+	boundingSphere.Radius() = 0.951612f;
+
+	roi->SetBoundingSphere(boundingSphere);
+
+	boundingBox.Min()[0] = -0.46116599f;
+	boundingBox.Min()[1] = -0.002794f;
+	boundingBox.Min()[2] = -0.29944199f;
+	boundingBox.Max()[0] = 0.46169999f;
+	boundingBox.Max()[1] = 1.56441f;
+	boundingBox.Max()[2] = 0.261321f;
+
+	roi->SetUnknown0x80(boundingBox);
+
+	comp = new CompoundObject();
+	roi->SetComp(comp);
+
+done:
+	if (!success && roi != NULL) {
+		delete roi;
+		roi = NULL;
+	}
+
+	return roi;
 }
 
 // STUB: LEGO1 0x10084c00
@@ -174,7 +227,7 @@ MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 }
 
 // STUB: LEGO1 0x10084c60
-LegoSaveDataEntry3* LegoCharacterManager::FUN_10084c60(const char* p_key)
+LegoCharacterData* LegoCharacterManager::FUN_10084c60(const char* p_key)
 {
 	return NULL;
 }
