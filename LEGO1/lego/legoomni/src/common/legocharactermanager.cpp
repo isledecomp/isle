@@ -31,14 +31,14 @@ LegoCharacterData g_characterData[66];
 LegoCharacterManager::LegoCharacterManager()
 {
 	m_characters = new LegoCharacterMap();
-	FUN_10083270();
+	Init();
 
 	m_customizeAnimFile = new CustomizeAnimFileVariable("CUSTOMIZE_ANIM_FILE");
 	VariableTable()->SetVariable(m_customizeAnimFile);
 }
 
 // FUNCTION: LEGO1 0x10083270
-void LegoCharacterManager::FUN_10083270()
+void LegoCharacterManager::Init()
 {
 	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
 		g_characterData[i] = g_characterDataInit[i];

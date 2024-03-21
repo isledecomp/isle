@@ -1057,7 +1057,7 @@ void LegoGameState::Init()
 	SetLightPosition(2);
 	PlantManager()->Init();
 	BuildingManager()->Init();
-	CharacterManager()->FUN_10083270();
+	CharacterManager()->Init();
 	AnimationManager()->FUN_1005ee80(TRUE);
 	SetColors();
 	RemoveActor();

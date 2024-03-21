@@ -62,7 +62,7 @@ public:
 	MxResult Read(LegoStorage* p_storage);
 	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
 
-	void FUN_10083270();
+	void Init();
 	static void SetCustomizeAnimFile(const char* p_value);
 	static MxBool FUN_10084c00(const LegoChar*);
 
