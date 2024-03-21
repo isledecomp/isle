@@ -414,10 +414,9 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
 
-				return TRUE;
+				break;
 			}
-
-			if (m_unk0x128 == 0) {
+			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
 				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
 				m_destLocation = LegoGameState::e_infomain;
@@ -439,10 +438,9 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
 
-				return TRUE;
+				break;
 			}
-
-			if (m_unk0x128 == 0) {
+			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
 				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
 				m_destLocation = LegoGameState::e_unk31;
