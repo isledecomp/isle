@@ -481,16 +481,17 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 {
 	LegoTime time = p_time - m_time;
+
 	if (time) {
 		m_time = p_time;
 
 		Mx3DPointFloat targetPosition(p_matrix[3]);
 
-		Vector3 worldPosition(GetWorldPosition());
-		targetPosition.Sub(&worldPosition);
+		// TODO: Figure out how to get type right for the call
+		((Vector3&) targetPosition).Sub(&Vector3(m_local2world[3]));
 
 		float division = time * 0.001;
-		targetPosition.Div(division);
+		((Vector3&) targetPosition).Div(division);
 
 		FUN_100a5a30(targetPosition);
 	}

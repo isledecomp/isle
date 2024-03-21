@@ -6,7 +6,10 @@
 class MxPoint32 {
 public:
 	MxPoint32() {}
+
+	// FUNCTION: LEGO1 0x10012170
 	MxPoint32(MxS32 p_x, MxS32 p_y) { CopyFrom(p_x, p_y); }
+
 	MxPoint32(const MxPoint32& p_point)
 	{
 		this->m_x = p_point.m_x;
@@ -29,8 +32,5 @@ private:
 	MxS32 m_x; // 0x00
 	MxS32 m_y; // 0x04
 };
-
-// SYNTHETIC: LEGO1 0x10012170
-// MxPoint32::MxPoint32
 
 #endif // MXPOINT32_H

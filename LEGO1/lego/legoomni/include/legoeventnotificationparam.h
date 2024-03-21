@@ -12,10 +12,10 @@
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
 	enum {
-		c_lButtonState = 1,
-		c_rButtonState = 2,
-		c_modKey1 = 4,
-		c_modKey2 = 8,
+		c_lButtonState = 0x01,
+		c_rButtonState = 0x02,
+		c_modKey1 = 0x04,
+		c_modKey2 = 0x08,
 	};
 
 	// FUNCTION: LEGO1 0x10028690
@@ -42,7 +42,11 @@ public:
 
 	inline MxU8 GetModifier() { return m_modifier; }
 	inline MxU8 GetKey() const { return m_key; }
+
+	// FUNCTION: LEGO1 0x10012190
 	inline MxS32 GetX() const { return m_x; }
+
+	// FUNCTION: LEGO1 0x100121a0
 	inline MxS32 GetY() const { return m_y; }
 
 	inline void SetROI(LegoROI* p_roi) { m_roi = p_roi; }
@@ -64,11 +68,5 @@ protected:
 
 // SYNTHETIC: LEGO1 0x100287e0
 // LegoEventNotificationParam::~LegoEventNotificationParam
-
-// SYNTHETIC: LEGO1 0x10012190
-// LegoEventNotificationParam::GetX
-
-// SYNTHETIC: LEGO1 0x100121a0
-// LegoEventNotificationParam::GetY
 
 #endif // LEGOEVENTNOTIFICATIONPARAM_H
