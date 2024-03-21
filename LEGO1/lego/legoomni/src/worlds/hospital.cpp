@@ -413,8 +413,6 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
-
-				break;
 			}
 			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
@@ -423,7 +421,6 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 
 				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-				break;
 			}
 
 			break;
@@ -437,8 +434,6 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
 				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
-
-				break;
 			}
 			else if (m_unk0x128 == 0) {
 				m_unk0x128 = 1;
@@ -447,7 +442,6 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 
 				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-				break;
 			}
 
 			break;
