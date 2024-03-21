@@ -30,4 +30,7 @@ private:
 	MxS32 m_y; // 0x04
 };
 
+// SYNTHETIC: LEGO1 0x10012170
+// MxPoint32::MxPoint32
+
 #endif // MXPOINT32_H

@@ -11,6 +11,13 @@
 // SIZE 0x20
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
+	enum {
+		c_lButtonState = 1,
+		c_rButtonState = 2,
+		c_modKey1 = 4,
+		c_modKey2 = 8,
+	};
+
 	// FUNCTION: LEGO1 0x10028690
 	MxNotificationParam* Clone() override
 	{
@@ -57,5 +64,11 @@ protected:
 
 // SYNTHETIC: LEGO1 0x100287e0
 // LegoEventNotificationParam::~LegoEventNotificationParam
+
+// SYNTHETIC: LEGO1 0x10012190
+// LegoEventNotificationParam::GetX
+
+// SYNTHETIC: LEGO1 0x100121a0
+// LegoEventNotificationParam::GetY
 
 #endif // LEGOEVENTNOTIFICATIONPARAM_H
