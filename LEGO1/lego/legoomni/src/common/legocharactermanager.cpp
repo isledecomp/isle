@@ -12,6 +12,12 @@ DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterData::Unknown, 0x18)
 DECOMP_SIZE_ASSERT(LegoCharacterData, 0x108)
 
+// GLOBAL: LEGO1 0x100da3bc
+float g_roiBoundingSphere[] = {0.000267, 0.78080797, -0.01906, 0.951612};
+
+// GLOBAL: LEGO1 0x100da3cc
+float g_roiBoundingBox[] = {-0.46116599, -0.002794, -0.29944199, 0.46169999, 1.56441, 0.261321};
+
 // GLOBAL: LEGO1 0x100f80c0
 LegoCharacterData g_characterDataInit[66]; // TODO: add data
 
@@ -191,19 +197,19 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	roi = new LegoROI(renderer);
 	roi->SetName(p_key);
 
-	boundingSphere.Center()[0] = 0.000267f;
-	boundingSphere.Center()[1] = 0.78080797f;
-	boundingSphere.Center()[2] = -0.01906f;
-	boundingSphere.Radius() = 0.951612f;
+	boundingSphere.Center()[0] = g_roiBoundingSphere[0];
+	boundingSphere.Center()[1] = g_roiBoundingSphere[1];
+	boundingSphere.Center()[2] = g_roiBoundingSphere[2];
+	boundingSphere.Radius() = g_roiBoundingSphere[3];
 
 	roi->SetBoundingSphere(boundingSphere);
 
-	boundingBox.Min()[0] = -0.46116599f;
-	boundingBox.Min()[1] = -0.002794f;
-	boundingBox.Min()[2] = -0.29944199f;
-	boundingBox.Max()[0] = 0.46169999f;
-	boundingBox.Max()[1] = 1.56441f;
-	boundingBox.Max()[2] = 0.261321f;
+	boundingBox.Min()[0] = g_roiBoundingBox[0];
+	boundingBox.Min()[1] = g_roiBoundingBox[1];
+	boundingBox.Min()[2] = g_roiBoundingBox[2];
+	boundingBox.Max()[0] = g_roiBoundingBox[3];
+	boundingBox.Max()[1] = g_roiBoundingBox[4];
+	boundingBox.Max()[2] = g_roiBoundingBox[5];
 
 	roi->SetUnknown0x80(boundingBox);
 
