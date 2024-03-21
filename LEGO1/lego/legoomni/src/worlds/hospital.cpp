@@ -398,11 +398,57 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10075f90
+// FUNCTION: LEGO1 0x10075f90
 MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return 0;
+	if (p_param.GetUnknown0x28() == 1) {
+		switch (p_param.GetClickedObjectId()) {
+		case HospitalScript::c_Info_Ctl:
+			BackgroundAudioManager()->RaiseVolume();
+			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+
+			if (m_unk0x100 == 1) {
+				m_hospitalState->m_unk0x08.m_unk0x00 = 14;
+
+				PlayAction(HospitalScript::c_hho016cl_RunAnim);
+				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
+				m_unk0x108 = 1;
+			}
+			else if (m_unk0x128 == 0) {
+				m_unk0x128 = 1;
+				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
+				m_destLocation = LegoGameState::e_infomain;
+
+				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			}
+
+			break;
+
+		case HospitalScript::c_Door_Ctl:
+			DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+
+			if (m_unk0x100 == 1) {
+				m_hospitalState->m_unk0x08.m_unk0x00 = 15;
+
+				PlayAction(HospitalScript::c_hho016cl_RunAnim);
+				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
+				m_unk0x108 = 1;
+			}
+			else if (m_unk0x128 == 0) {
+				m_unk0x128 = 1;
+				m_hospitalState->m_unk0x08.m_unk0x00 = 13;
+				m_destLocation = LegoGameState::e_unk31;
+
+				DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			}
+
+			break;
+		}
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10076220
