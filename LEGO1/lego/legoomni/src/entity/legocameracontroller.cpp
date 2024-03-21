@@ -31,11 +31,48 @@ MxResult LegoCameraController::Create()
 	return LegoPointOfViewController::Create(VideoManager()->Get3DManager()->GetLego3DView());
 }
 
-// STUB: LEGO1 0x10012020
+// FUNCTION: LEGO1 0x10012020
 MxLong LegoCameraController::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	switch (((MxNotificationParam&) p_param).GetNotification()) {
+	case c_notificationDragEnd: {
+		if ((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_lButtonState) {
+			OnLButtonDown(MxPoint32(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			));
+		}
+		else if ((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) {
+			OnRButtonDown(MxPoint32(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			));
+		}
+	} break;
+	case c_notificationDragStart: {
+		OnMouseMove(
+			((LegoEventNotificationParam&) p_param).GetModifier(),
+			MxPoint32(((LegoEventNotificationParam&) p_param).GetX(), ((LegoEventNotificationParam&) p_param).GetY())
+		);
+	} break;
+	case c_notificationDrag: {
+		if (((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_lButtonState) ==
+			0) {
+			OnLButtonUp(MxPoint32(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			));
+		}
+		else if (((((LegoEventNotificationParam&) p_param).GetModifier()) & LegoEventNotificationParam::c_rButtonState) == 0) {
+			OnRButtonUp(MxPoint32(
+				((LegoEventNotificationParam&) p_param).GetX(),
+				((LegoEventNotificationParam&) p_param).GetY()
+			));
+		}
+	} break;
+	}
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100121b0
@@ -83,6 +120,7 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 // STUB: LEGO1 0x100123e0
 void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32)
 {
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x10012740

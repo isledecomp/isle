@@ -477,16 +477,35 @@ TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_t
 	m_time = p_time;
 }
 
-// STUB: LEGO1 0x100a9b40
+// FUNCTION: LEGO1 0x100a9b40
 void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 {
-	// TODO
+	LegoTime time = p_time - m_time;
+
+	if (time) {
+		m_time = p_time;
+
+		Mx3DPointFloat targetPosition(p_matrix[3]);
+
+		// TODO: Figure out how to get type right for the call
+		// TODO: Fix constness of vector/matrix functions
+#ifdef COMPAT_MODE
+		Vector3 worldPosition(m_local2world[3]);
+		((Vector3&) targetPosition).Sub(&worldPosition);
+#else
+		((Vector3&) targetPosition).Sub(&Vector3(m_local2world[3]));
+#endif
+
+		float division = time * 0.001;
+		((Vector3&) targetPosition).Div(division);
+
+		FUN_100a5a30(targetPosition);
+	}
 }
 
 // FUNCTION: LEGO1 0x100a9bf0
 LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
-	// TODO
 	if (p_param == NULL) {
 		return FALSE;
 	}
