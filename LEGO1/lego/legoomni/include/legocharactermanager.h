@@ -58,8 +58,8 @@ class LegoCharacterManager {
 public:
 	LegoCharacterManager();
 
-	MxResult FUN_10083310(LegoStorage* p_storage);
-	MxResult FUN_100833f0(LegoStorage* p_storage);
+	MxResult Write(LegoStorage* p_storage);
+	MxResult Read(LegoStorage* p_storage);
 	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
 
 	void FUN_10083270();

@@ -52,7 +52,7 @@ void LegoCharacterManager::FUN_100832a0()
 }
 
 // FUNCTION: LEGO1 0x10083310
-MxResult LegoCharacterManager::FUN_10083310(LegoStorage* p_storage)
+MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
@@ -97,10 +97,50 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100833f0
-MxResult LegoCharacterManager::FUN_100833f0(LegoStorage* p_storage)
+// FUNCTION: LEGO1 0x100833f0
+MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 {
-	return SUCCESS;
+	MxResult result = FAILURE;
+
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+		LegoCharacterData* data = &g_characterData[i];
+
+		if (p_storage->Read(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x10, sizeof(data->m_unk0x10)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[1].m_unk0x08, sizeof(data->m_unk0x18[1].m_unk0x08)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[1].m_unk0x14, sizeof(data->m_unk0x18[1].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[2].m_unk0x14, sizeof(data->m_unk0x18[2].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[4].m_unk0x14, sizeof(data->m_unk0x18[4].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[5].m_unk0x14, sizeof(data->m_unk0x18[5].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[8].m_unk0x14, sizeof(data->m_unk0x18[8].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+		if (p_storage->Read(&data->m_unk0x18[9].m_unk0x14, sizeof(data->m_unk0x18[9].m_unk0x14)) != SUCCESS) {
+			goto done;
+		}
+	}
+
+	result = SUCCESS;
+
+done:
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10083500

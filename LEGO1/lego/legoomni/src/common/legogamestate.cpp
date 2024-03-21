@@ -235,7 +235,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	WriteEndOfVariables(&fileStorage);
-	CharacterManager()->FUN_10083310(&fileStorage);
+	CharacterManager()->Write(&fileStorage);
 	PlantManager()->Save(&fileStorage);
 	result = BuildingManager()->Save(&fileStorage);
 
@@ -334,7 +334,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		SetLightPosition(atoi(lightPosition));
 	}
 
-	if (CharacterManager()->FUN_100833f0(&fileStorage) == FAILURE) {
+	if (CharacterManager()->Read(&fileStorage) == FAILURE) {
 		goto done;
 	}
 	if (PlantManager()->Load(&fileStorage) == FAILURE) {
