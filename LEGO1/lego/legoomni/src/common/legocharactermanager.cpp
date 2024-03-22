@@ -49,7 +49,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
 		LegoCharacterData* data = &g_characterData[i];
 
 		if (p_storage->Write(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
@@ -95,7 +95,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
 		LegoCharacterData* data = &g_characterData[i];
 
 		if (p_storage->Read(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
@@ -175,7 +175,7 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 			actor->SetROI(character->m_roi, FALSE, FALSE);
 			actor->FUN_100114e0(0);
 			actor->SetFlag(LegoActor::c_bit2);
-			FUN_10084c60(p_key)->m_actor = actor;
+			Find(p_key)->m_actor = actor;
 		}
 
 		return character->m_roi;
@@ -210,14 +210,14 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
 	LegoTextureContainer* textureContainer = TextureContainer();
-	LegoCharacterData* characterData = FUN_10084c60(p_key);
+	LegoCharacterData* characterData = Find(p_key);
 
 	if (characterData == NULL) {
 		goto done;
 	}
 
 	if (!strcmpi(p_key, "pep")) {
-		LegoCharacterData* pepper = FUN_10084c60("pepper");
+		LegoCharacterData* pepper = Find("pepper");
 
 		characterData->m_unk0x0c = pepper->m_unk0x0c;
 		characterData->m_unk0x10 = pepper->m_unk0x10;
@@ -352,9 +352,19 @@ MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10084c60
-LegoCharacterData* LegoCharacterManager::FUN_10084c60(const char* p_key)
+// FUNCTION: LEGO1 0x10084c60
+LegoCharacterData* LegoCharacterManager::Find(const char* p_key)
 {
+	for (MxU32 i = 0; i < _countof(g_characterData) - 1; i++) {
+		if (!strcmpi(g_characterData[i].m_name, p_key)) {
+			break;
+		}
+	}
+
+	if (i < _countof(g_characterData)) {
+		return &g_characterData[i];
+	}
+
 	return NULL;
 }
 
