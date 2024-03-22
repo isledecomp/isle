@@ -28,7 +28,7 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 		GetD3DRM(p_renderer)->CreateMaterial(10.0, &g_unk0x101013d4);
 	}
 
-	m_meshes = NULL;
+	m_melems = NULL;
 	m_numMeshes = 0;
 	m_numVertices = 0;
 	m_numPolys = 0;
@@ -38,17 +38,17 @@ LegoLOD::LegoLOD(Tgl::Renderer* p_renderer) : ViewLOD(p_renderer)
 // FUNCTION: LEGO1 0x100aa450
 LegoLOD::~LegoLOD()
 {
-	if (m_numMeshes && m_meshes != NULL) {
+	if (m_numMeshes && m_melems != NULL) {
 		for (LegoU32 i = 0; i < m_numMeshes; i++) {
-			if (m_meshes[i].m_tglMesh != NULL) {
-				delete m_meshes[i].m_tglMesh;
-				m_meshes[i].m_tglMesh = NULL;
+			if (m_melems[i].m_tglMesh != NULL) {
+				delete m_melems[i].m_tglMesh;
+				m_melems[i].m_tglMesh = NULL;
 			}
 		}
 	}
 
-	if (m_meshes) {
-		delete[] m_meshes;
+	if (m_melems) {
+		delete[] m_melems;
 	}
 }
 
@@ -90,8 +90,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 	SetFlag(c_bit4);
 
-	m_meshes = new Mesh[m_numMeshes];
-	memset(m_meshes, 0, sizeof(*m_meshes) * m_numMeshes);
+	m_melems = new Mesh[m_numMeshes];
+	memset(m_melems, 0, sizeof(*m_melems) * m_numMeshes);
 
 	meshUnd1 = m_numMeshes - 1;
 	meshUnd2 = 0;
@@ -193,7 +193,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			meshUnd2++;
 		}
 
-		m_meshes[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
+		m_melems[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
 			numPolys & MAXWORD,
 			numVertices & MAXWORD,
 			vertices,
@@ -204,11 +204,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			shadingModel
 		);
 
-		if (m_meshes[meshIndex].m_tglMesh == NULL) {
+		if (m_melems[meshIndex].m_tglMesh == NULL) {
 			goto done;
 		}
 
-		m_meshes[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
+		m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
 
 		if (textureName != NULL) {
 			if (mesh->GetUnknown0x21()) {
@@ -221,9 +221,9 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 				goto done;
 			}
 
-			m_meshes[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
-			LegoTextureInfo::SetGroupTexture(m_meshes[meshIndex].m_tglMesh, textureInfo);
-			m_meshes[meshIndex].m_unk0x04 = TRUE;
+			m_melems[meshIndex].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
+			LegoTextureInfo::SetGroupTexture(m_melems[meshIndex].m_tglMesh, textureInfo);
+			m_melems[meshIndex].m_unk0x04 = TRUE;
 		}
 		else {
 			LegoFloat red = 1.0F;
@@ -241,13 +241,13 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 				alpha = mesh->GetAlpha();
 			}
 
-			m_meshes[meshIndex].m_tglMesh->SetColor(red, green, blue, alpha);
+			m_melems[meshIndex].m_tglMesh->SetColor(red, green, blue, alpha);
 		}
 
 		if (mesh->GetUnknown0x0d() > 0) {
 			IDirect3DRMMesh* mesh;
 			D3DRMGROUPINDEX index;
-			GetMeshData(mesh, index, m_meshes[meshIndex].m_tglMesh);
+			GetMeshData(mesh, index, m_melems[meshIndex].m_tglMesh);
 			mesh->SetGroupMaterial(index, g_unk0x101013d4);
 		}
 
@@ -302,12 +302,34 @@ done:
 	return FAILURE;
 }
 
+// FUNCTION: LEGO1 0x100aabb0
+LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
+{
+	LegoLOD* dupLod = new LegoLOD(p_renderer);
+
+	dupLod->m_meshBuilder = m_meshBuilder->Clone();
+	dupLod->m_melems = new Mesh[m_numMeshes];
+
+	for (LegoU32 i = 0; i < m_numMeshes; i++) {
+		dupLod->m_melems[i].m_tglMesh = m_melems[i].m_tglMesh->ShallowClone(dupLod->m_meshBuilder);
+		dupLod->m_melems[i].m_unk0x04 = m_melems[i].m_unk0x04;
+	}
+
+	dupLod->m_unk0x08 = m_unk0x08;
+	dupLod->m_numMeshes = m_numMeshes;
+	dupLod->m_numVertices = m_numVertices;
+	dupLod->m_numPolys = m_numPolys;
+	dupLod->m_unk0x1c = m_unk0x1c;
+
+	return dupLod;
+}
+
 // FUNCTION: LEGO1 0x100aacb0
 LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (!m_meshes[i].m_unk0x04) {
-			m_meshes[i].m_tglMesh->SetColor(p_red, p_green, p_blue, p_alpha);
+		if (!m_melems[i].m_unk0x04) {
+			m_melems[i].m_tglMesh->SetColor(p_red, p_green, p_blue, p_alpha);
 		}
 	}
 
@@ -318,10 +340,10 @@ LegoResult LegoLOD::FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p
 LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 {
 	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
-		if (m_meshes[i].m_unk0x04) {
-			LegoTextureInfo::SetGroupTexture(m_meshes[i].m_tglMesh, p_textureInfo);
-			m_meshes[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
-			m_meshes[i].m_unk0x04 = TRUE;
+		if (m_melems[i].m_unk0x04) {
+			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
+			m_melems[i].m_tglMesh->SetColor(1.0F, 1.0F, 1.0F, 0.0F);
+			m_melems[i].m_unk0x04 = TRUE;
 		}
 	}
 

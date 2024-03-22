@@ -5,6 +5,7 @@
 #include "mxtypes.h"
 
 class LegoActor;
+class LegoROI;
 
 // SIZE 0x108
 struct LegoCharacterData {
@@ -19,7 +20,7 @@ struct LegoCharacterData {
 	};
 
 	char* m_name;       // 0x00
-	void* m_unk0x04;    // 0x04
+	LegoROI* m_roi;     // 0x04
 	LegoActor* m_actor; // 0x08
 	MxS32 m_unk0x0c;    // 0x0c
 	MxS32 m_unk0x10;    // 0x10

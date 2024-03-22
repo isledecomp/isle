@@ -45,6 +45,8 @@ public:
 	const float* GetWorldUp() const { return m_local2world[1]; }
 	OrientableROI* GetParentROI() const { return m_parentROI; }
 
+	void SetParentROI(OrientableROI* p_parentROI) { m_parentROI = p_parentROI; }
+
 	void ToggleUnknown0xd8(BOOL p_enable)
 	{
 		if (p_enable) {
