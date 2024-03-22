@@ -251,7 +251,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	for (j = 0; j < _countof(g_characterLODs) - 1; j++) {
 		ViewLODList *lodList, *dupLodList;
 		LegoROI* childROI;
-		MxU32 lodSize;
+		MxS32 lodSize;
 		const char* parentName;
 		char lodName[64];
 
@@ -309,7 +309,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		if (g_characterLODs[j + 1].m_flags & LegoCharacterLOD::c_flag1 &&
 			(j != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
 
-			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_unk0x10[part.m_unk0x14]);
+			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
 
 			if (textureInfo != NULL) {
 				childROI->FUN_100a9210(textureInfo);
@@ -318,7 +318,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		}
 		else if (g_characterLODs[j + 1].m_flags & LegoCharacterLOD::c_flag2 || (j == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
 			LegoFloat red, green, blue, alpha;
-			childROI->FUN_100a9bf0(part.m_unk0x10[part.m_unk0x14], red, green, blue, alpha);
+			childROI->FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
 			childROI->FUN_100a9170(red, green, blue, alpha);
 		}
 

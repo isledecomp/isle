@@ -69,6 +69,12 @@ private:
 };
 
 // clang-format off
+// TEMPLATE: LEGO1 0x1001a690
+// list<ROI *,allocator<ROI *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10035790
+// _Construct
+
 // TEMPLATE: LEGO1 0x10082b90
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::~_Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >
 

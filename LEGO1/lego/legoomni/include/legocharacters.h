@@ -11,12 +11,12 @@ class LegoROI;
 struct LegoCharacterData {
 	// SIZE 0x18
 	struct Part {
-		MxS8* m_unk0x00;        // 0x00
+		MxU8* m_unk0x00;        // 0x00
 		const char** m_unk0x04; // 0x04
-		undefined m_unk0x08;    // 0x08
-		MxS8* m_unk0x0c;        // 0x0c
+		MxU8 m_unk0x08;         // 0x08
+		MxU8* m_unk0x0c;        // 0x0c
 		const char** m_unk0x10; // 0x10
-		undefined m_unk0x14;    // 0x14
+		MxU8 m_unk0x14;         // 0x14
 	};
 
 	char* m_name;       // 0x00
@@ -37,7 +37,7 @@ struct LegoCharacterLOD {
 
 	const char* m_name;        // 0x00
 	const char* m_parentName;  // 0x04
-	MxU8 m_flags;              // 0x08
+	MxU32 m_flags;             // 0x08
 	float m_boundingSphere[4]; // 0x0c
 	float m_boundingBox[6];    // 0x1c
 	float m_position[3];       // 0x34
