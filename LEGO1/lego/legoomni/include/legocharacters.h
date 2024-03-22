@@ -27,4 +27,24 @@ struct LegoCharacterData {
 	Part m_parts[10];   // 0x18
 };
 
+// SIZE 0x58
+struct LegoCharacterLOD {
+	enum {
+		c_flag1 = 0x01,
+		c_flag2 = 0x02
+	};
+
+	const char* m_name;        // 0x00
+	const char* m_parentName;  // 0x04
+	MxU8 m_flags;              // 0x08
+	float m_boundingSphere[4]; // 0x0c
+	float m_boundingBox[6];    // 0x1c
+	float m_position[3];       // 0x34
+	float m_direction[3];      // 0x40
+	float m_up[3];             // 0x4c
+};
+
+extern LegoCharacterData g_characterDataInit[66];
+extern LegoCharacterLOD g_characterLODs[11];
+
 #endif // LEGOCHARACTERS_H
