@@ -30,7 +30,7 @@ void LegoRaceCar::FUN_10012ea0(float p_worldSpeed)
 }
 
 // STUB: LEGO1 0x10012ff0
-void LegoRaceCar::FUN_10012bf0(float)
+void LegoRaceCar::FUN_10012ff0(float)
 {
 	// TODO
 }

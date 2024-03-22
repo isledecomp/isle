@@ -40,7 +40,7 @@ public:
 	void VTable0x9c() override;                        // vtable+0x9c
 
 	virtual void FUN_10012ea0(float p_worldSpeed);
-	virtual void FUN_10012bf0(float);
+	virtual void FUN_10012ff0(float);
 	virtual MxBool FUN_10013130(float);
 
 	// SYNTHETIC: LEGO1 0x10014230
