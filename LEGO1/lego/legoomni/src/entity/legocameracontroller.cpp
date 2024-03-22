@@ -128,7 +128,7 @@ Mx3DPointFloat LegoCameraController::GetWorldUp()
 {
 	if (m_lego3DView && m_lego3DView->GetPointOfView()) {
 		Mx3DPointFloat vec;
-		vec = Vector3(m_lego3DView->GetPointOfView()->GetWorldUp());
+		vec = m_lego3DView->GetPointOfView()->GetWorldUp();
 		return Mx3DPointFloat(vec[0], vec[1], vec[2]);
 	}
 	else {
@@ -141,7 +141,7 @@ Mx3DPointFloat LegoCameraController::GetWorldLocation()
 {
 	if (m_lego3DView && m_lego3DView->GetPointOfView()) {
 		Mx3DPointFloat vec;
-		vec = Vector3(m_lego3DView->GetPointOfView()->GetWorldPosition());
+		vec = m_lego3DView->GetPointOfView()->GetWorldPosition();
 		return Mx3DPointFloat(vec[0], vec[1] - m_entityOffsetUp, vec[2]);
 	}
 	else {
@@ -154,7 +154,7 @@ Mx3DPointFloat LegoCameraController::GetWorldDirection()
 {
 	if (m_lego3DView && m_lego3DView->GetPointOfView()) {
 		Mx3DPointFloat vec;
-		vec = Vector3(m_lego3DView->GetPointOfView()->GetWorldDirection());
+		vec = m_lego3DView->GetPointOfView()->GetWorldDirection();
 		return Mx3DPointFloat(vec[0], vec[1], vec[2]);
 	}
 	else {

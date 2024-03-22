@@ -553,6 +553,23 @@ void LegoROI::FUN_100a9d30(ROIHandler p_func)
 	g_unk0x101013ac = p_func;
 }
 
+// FUNCTION: LEGO1 0x100a9d40
+void LegoROI::SetName(const LegoChar* p_name)
+{
+	if (m_name != NULL) {
+		delete[] m_name;
+	}
+
+	if (p_name != NULL) {
+		m_name = new LegoChar[strlen(p_name) + 1];
+		strcpy(m_name, p_name);
+		strlwr(m_name);
+	}
+	else {
+		m_name = NULL;
+	}
+}
+
 // FUNCTION: LEGO1 0x100a9e10
 void LegoROI::SetDisplayBB(int p_displayBB)
 {

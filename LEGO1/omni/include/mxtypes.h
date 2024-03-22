@@ -52,6 +52,10 @@ typedef MxU8 MxBool;
 #define FALSE 0
 #endif
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 #define TWOCC(a, b) (((a) << 0) | ((b) << 8))
 #define FOURCC(a, b, c, d) (((a) << 0) | ((b) << 8) | ((c) << 16) | ((d) << 24))
 

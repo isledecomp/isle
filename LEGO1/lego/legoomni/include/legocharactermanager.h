@@ -31,50 +31,27 @@ struct LegoCharacter {
 	MxU32 m_refCount; // 0x04
 };
 
-typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
+struct LegoCharacterData;
 
-struct LegoSaveDataEntry3 {
-	char* m_name;
-	void* m_unk0x04;
-	LegoActor* m_actor;
-	MxS32 m_savePart1;
-	MxS32 m_savePart2;
-	MxU8 m_savePart3;
-	undefined4 m_unk0x18[6];
-	MxU8 m_frameOffsetInDwords; // 0x30
-	MxS32* m_pFrameData;
-	MxU8 m_currentFrame;
-	undefined4 m_unk0x3c[2];
-	MxU8 m_savePart5; // 0x44
-	undefined4 m_unk0x48[5];
-	MxU8 m_savePart6; // 0x5c
-	undefined4 m_unk0x60[11];
-	MxU8 m_savePart7; // 0x8c
-	undefined4 m_unk0x90[5];
-	MxU8 m_savePart8; // 0xa4
-	undefined4 m_unk0xa8[17];
-	MxU8 m_savePart9; // 0xec
-	undefined4 m_unk0xf0[5];
-	MxU8 m_savePart10; // 0x104
-};
+typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
 // SIZE 0x08
 class LegoCharacterManager {
 public:
 	LegoCharacterManager();
 
-	MxResult WriteSaveData3(LegoStorage* p_storage);
-	MxResult ReadSaveData3(LegoStorage* p_storage);
+	MxResult Write(LegoStorage* p_storage);
+	MxResult Read(LegoStorage* p_storage);
 	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
 
-	void InitSaveData();
+	void Init();
 	static void SetCustomizeAnimFile(const char* p_value);
 	static MxBool FUN_10084c00(const LegoChar*);
 
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
-	LegoSaveDataEntry3* FUN_10084c60(const char* p_key);
+	LegoCharacterData* Find(const char* p_key);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI*, MxBool);
 	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);
@@ -92,6 +69,12 @@ private:
 };
 
 // clang-format off
+// TEMPLATE: LEGO1 0x1001a690
+// list<ROI *,allocator<ROI *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x10035790
+// _Construct
+
 // TEMPLATE: LEGO1 0x10082b90
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::~_Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >
 

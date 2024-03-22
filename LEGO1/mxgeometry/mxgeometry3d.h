@@ -20,7 +20,7 @@ public:
 	// FUNCTION: LEGO1 0x100343a0
 	inline Mx3DPointFloat(const Mx3DPointFloat& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
-	inline Mx3DPointFloat(const float* p_other) : Vector3(m_elements) { EqualsImpl((float*) p_other); }
+	inline Mx3DPointFloat(const Vector3& p_other) : Vector3(m_elements) { EqualsImpl(p_other.m_data); }
 
 	// SYNTHETIC: LEGO1 0x1001d170
 	// Mx3DPointFloat::Mx3DPointFloat
