@@ -255,10 +255,10 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		const char* parentName;
 		char lodName[64];
 
-		// TODO
+		LegoCharacterData::Part& part = characterData->m_parts[j];
+
 		if (j == 0 || j == 1) {
-			parentName = characterData->m_parts[j]
-							 .m_unk0x04[characterData->m_parts[j].m_unk0x00[characterData->m_parts[j].m_unk0x08]];
+			parentName = part.m_unk0x04[part.m_unk0x00[part.m_unk0x08]];
 		}
 		else {
 			parentName = g_characterLODs[j + 1].m_parentName;
@@ -283,7 +283,6 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		childROI->SetParentROI(roi);
 
 		BoundingSphere childBoundingSphere;
-
 		childBoundingSphere.Center()[0] = g_characterLODs[j + 1].m_boundingSphere[0];
 		childBoundingSphere.Center()[1] = g_characterLODs[j + 1].m_boundingSphere[1];
 		childBoundingSphere.Center()[2] = g_characterLODs[j + 1].m_boundingSphere[2];
@@ -300,40 +299,38 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		childROI->SetUnknown0x80(childBoundingBox);
 
 		CalcLocalTransform(
-			g_characterLODs[j + 1].m_position,
-			g_characterLODs[j + 1].m_direction,
-			g_characterLODs[j + 1].m_up,
+			Mx3DPointFloat(g_characterLODs[j + 1].m_position),
+			Mx3DPointFloat(g_characterLODs[j + 1].m_direction),
+			Mx3DPointFloat(g_characterLODs[j + 1].m_up),
 			mat
 		);
 		childROI->WrappedSetLocalTransform(mat);
 
 		if (g_characterLODs[j + 1].m_flags & LegoCharacterLOD::c_flag1 &&
-			(j != 0 || characterData->m_parts[j].m_unk0x00[characterData->m_parts[j].m_unk0x08] != 0)) {
+			(j != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
 
-			LegoTextureInfo* textureInfo =
-				textureContainer->Get(characterData->m_parts[j].m_unk0x10[characterData->m_parts[j].m_unk0x14]);
+			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_unk0x10[part.m_unk0x14]);
 
 			if (textureInfo != NULL) {
 				childROI->FUN_100a9210(textureInfo);
 				childROI->FUN_100a9170(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
-		else if (g_characterLODs[j + 1].m_flags & LegoCharacterLOD::c_flag2 || (j == 0 && characterData->m_parts[j].m_unk0x00[characterData->m_parts[j].m_unk0x08] == 0)) {
+		else if (g_characterLODs[j + 1].m_flags & LegoCharacterLOD::c_flag2 || (j == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
 			LegoFloat red, green, blue, alpha;
-			childROI->FUN_100a9bf0(
-				characterData->m_parts[j].m_unk0x10[characterData->m_parts[j].m_unk0x14],
-				red,
-				green,
-				blue,
-				alpha
-			);
+			childROI->FUN_100a9bf0(part.m_unk0x10[part.m_unk0x14], red, green, blue, alpha);
 			childROI->FUN_100a9170(red, green, blue, alpha);
 		}
 
 		comp->push_back(childROI);
 	}
 
-	CalcLocalTransform(g_characterLODs[0].m_position, g_characterLODs[0].m_direction, g_characterLODs[0].m_up, mat);
+	CalcLocalTransform(
+		Mx3DPointFloat(g_characterLODs[0].m_position),
+		Mx3DPointFloat(g_characterLODs[0].m_direction),
+		Mx3DPointFloat(g_characterLODs[0].m_up),
+		mat
+	);
 	roi->WrappedSetLocalTransform(mat);
 
 	characterData->m_roi = roi;
