@@ -391,10 +391,159 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10075710
+// FUNCTION: LEGO1 0x10075710
 MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 {
-	// TODO
+	if (m_unk0x100 == 1) {
+		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+		if (roi != NULL) {
+			LegoChar* roiName = (LegoChar*) roi->GetName();
+
+			if (roiName[0] == '*') {
+				roiName += 1;
+			}
+
+			if (!strcmpi("actor_ha", roiName)) {
+				LegoInputManager* inputManager = InputManager();
+				inputManager->SetUnknown88(TRUE);
+				inputManager->SetUnknown336(FALSE);
+
+				m_unk0x100 = 3;
+
+				if (m_hospitalState->m_unk0x08.m_unk0x00 == 6) {
+					if (m_unk0x128 == 0) {
+						m_unk0x128 = 1;
+
+						TickleManager()->UnregisterClient(this);
+
+						m_hospitalState->m_unk0x08.m_unk0x00 = 9;
+						Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+						act1State->SetUnknown18(9);
+
+						m_destLocation = LegoGameState::e_unk31;
+						DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+						TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+					}
+				}
+				else if (m_hospitalState->m_unk0x08.m_unk0x00 == 10 || m_hospitalState->m_unk0x08.m_unk0x00 == 8) {
+					if (m_hospitalState->m_unk0x08.m_unk0x00 == 10) {
+						m_hospitalState->m_unk0x08.m_unk0x00 = 11;
+
+						BackgroundAudioManager()->RaiseVolume();
+						DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
+					}
+					else {
+						switch (m_currentActorId) {
+						case 1:
+							switch (m_hospitalState->m_unk0x0e) {
+							case 0:
+							case 1:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho017cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho017cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							default:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho018cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho018cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							}
+							break;
+						case 2:
+							switch (m_hospitalState->m_unk0x10) {
+							case 0:
+							case 1:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho019cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho019cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							default:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho020cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho020cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							}
+							break;
+						case 3:
+							switch (m_hospitalState->m_unk0x12) {
+							case 0:
+							case 1:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho023cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho023cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							default:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho024cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho024cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							}
+							break;
+						case 4:
+							switch (m_hospitalState->m_unk0x14) {
+							case 0:
+							case 1:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho021cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho021cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							default:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hhoa22cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							}
+							break;
+						case 5:
+							switch (m_hospitalState->m_unk0x16) {
+							case 0:
+							case 1:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho025cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho025cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							default:
+								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
+								PlayAction(HospitalScript::c_hho026cl_RunAnim);
+
+								m_unk0x10c = HospitalScript::c_hho026cl_RunAnim;
+								m_unk0x108 = 1;
+								break;
+							}
+							break;
+						}
+					}
+				}
+
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+	else {
+		return 0;
+	}
+
 	return 0;
 }
 
