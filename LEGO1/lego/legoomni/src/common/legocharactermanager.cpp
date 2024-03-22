@@ -355,7 +355,8 @@ MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 // FUNCTION: LEGO1 0x10084c60
 LegoCharacterData* LegoCharacterManager::Find(const char* p_key)
 {
-	for (MxU32 i = 0; i < _countof(g_characterData) - 1; i++) {
+	MxU32 i;
+	for (i = 0; i < _countof(g_characterData) - 1; i++) {
 		if (!strcmpi(g_characterData[i].m_name, p_key)) {
 			break;
 		}
