@@ -31,27 +31,9 @@ struct LegoCharacter {
 	MxU32 m_refCount; // 0x04
 };
 
+struct LegoCharacterData;
+
 typedef map<const char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
-
-// SIZE 0x108
-struct LegoCharacterData {
-	// SIZE 0x18
-	struct Unknown {
-		undefined m_unk0x00;     // 0x00 - offset used with unk0x04
-		undefined4 m_unk0x04;    // 0x04 - presumably pointer into global 100da40c
-		undefined m_unk0x08;     // 0x08 - offset used with unk0x04
-		undefined4 m_unk0x0c[2]; // 0x0c
-		undefined m_unk0x14;     // 0x14
-	};
-
-	char* m_name;          // 0x00
-	void* m_unk0x04;       // 0x04
-	LegoActor* m_actor;    // 0x08
-	MxS32 m_unk0x0c;       // 0x0c
-	MxS32 m_unk0x10;       // 0x10
-	MxU8 m_unk0x14;        // 0x14
-	Unknown m_unk0x18[10]; // 0x18
-};
 
 // SIZE 0x08
 class LegoCharacterManager {

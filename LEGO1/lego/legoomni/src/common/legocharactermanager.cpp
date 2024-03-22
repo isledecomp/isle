@@ -1,6 +1,7 @@
 #include "legocharactermanager.h"
 
 #include "legoanimactor.h"
+#include "legocharacters.h"
 #include "legogamestate.h"
 #include "legovideomanager.h"
 #include "misc.h"
@@ -9,8 +10,6 @@
 
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
-DECOMP_SIZE_ASSERT(LegoCharacterData::Unknown, 0x18)
-DECOMP_SIZE_ASSERT(LegoCharacterData, 0x108)
 
 // GLOBAL: LEGO1 0x100da3bc
 float g_roiBoundingSphere[] = {0.000267, 0.78080797, -0.01906, 0.951612};
@@ -18,14 +17,13 @@ float g_roiBoundingSphere[] = {0.000267, 0.78080797, -0.01906, 0.951612};
 // GLOBAL: LEGO1 0x100da3cc
 float g_roiBoundingBox[] = {-0.46116599, -0.002794, -0.29944199, 0.46169999, 1.56441, 0.261321};
 
-// GLOBAL: LEGO1 0x100f80c0
-LegoCharacterData g_characterDataInit[66]; // TODO: add data
-
 // GLOBAL: LEGO1 0x100fc4e4
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x10104f20
 LegoCharacterData g_characterData[66];
+
+extern LegoCharacterData g_characterDataInit[66];
 
 // FUNCTION: LEGO1 0x10082a20
 LegoCharacterManager::LegoCharacterManager()
@@ -68,25 +66,25 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[1].m_unk0x08, sizeof(data->m_unk0x18[1].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[1].m_unk0x08, sizeof(data->m_parts[1].m_unk0x08)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[1].m_unk0x14, sizeof(data->m_unk0x18[1].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[1].m_unk0x14, sizeof(data->m_parts[1].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[2].m_unk0x14, sizeof(data->m_unk0x18[2].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[2].m_unk0x14, sizeof(data->m_parts[2].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[4].m_unk0x14, sizeof(data->m_unk0x18[4].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[4].m_unk0x14, sizeof(data->m_parts[4].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[5].m_unk0x14, sizeof(data->m_unk0x18[5].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[5].m_unk0x14, sizeof(data->m_parts[5].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[8].m_unk0x14, sizeof(data->m_unk0x18[8].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[8].m_unk0x14, sizeof(data->m_parts[8].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_unk0x18[9].m_unk0x14, sizeof(data->m_unk0x18[9].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[9].m_unk0x14, sizeof(data->m_parts[9].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
 	}
@@ -114,25 +112,25 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[1].m_unk0x08, sizeof(data->m_unk0x18[1].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[1].m_unk0x08, sizeof(data->m_parts[1].m_unk0x08)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[1].m_unk0x14, sizeof(data->m_unk0x18[1].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[1].m_unk0x14, sizeof(data->m_parts[1].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[2].m_unk0x14, sizeof(data->m_unk0x18[2].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[2].m_unk0x14, sizeof(data->m_parts[2].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[4].m_unk0x14, sizeof(data->m_unk0x18[4].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[4].m_unk0x14, sizeof(data->m_parts[4].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[5].m_unk0x14, sizeof(data->m_unk0x18[5].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[5].m_unk0x14, sizeof(data->m_parts[5].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[8].m_unk0x14, sizeof(data->m_unk0x18[8].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[8].m_unk0x14, sizeof(data->m_parts[8].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_unk0x18[9].m_unk0x14, sizeof(data->m_unk0x18[9].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[9].m_unk0x14, sizeof(data->m_parts[9].m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
 	}
@@ -229,8 +227,8 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		entry->m_unk0x10 = pepper->m_unk0x10;
 		entry->m_unk0x14 = pepper->m_unk0x14;
 
-		for (MxS32 i = 0; i < _countof(entry->m_unk0x18); i++) {
-			entry->m_unk0x18[i] = pepper->m_unk0x18[i];
+		for (MxS32 i = 0; i < _countof(entry->m_parts); i++) {
+			entry->m_parts[i] = pepper->m_parts[i];
 		}
 	}
 

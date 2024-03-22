@@ -317,6 +317,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp
   LEGO1/lego/legoomni/src/common/legobackgroundcolor.cpp
   LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
+  LEGO1/lego/legoomni/src/common/legocharacters.cpp
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
