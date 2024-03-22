@@ -282,6 +282,8 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/act2/legoact2state.cpp
   LEGO1/lego/legoomni/src/act3/act3shark.cpp
   LEGO1/lego/legoomni/src/act3/act3state.cpp
+  LEGO1/lego/legoomni/src/actors/act2actor.cpp
+  LEGO1/lego/legoomni/src/actors/act3actor.cpp
   LEGO1/lego/legoomni/src/actors/ambulance.cpp
   LEGO1/lego/legoomni/src/actors/bike.cpp
   LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
@@ -373,7 +375,9 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/race/legorace.cpp
   LEGO1/lego/legoomni/src/race/legoraceactor.cpp
   LEGO1/lego/legoomni/src/race/legoracecar.cpp
+  LEGO1/lego/legoomni/src/race/legoracemap.cpp
   LEGO1/lego/legoomni/src/race/racestandsentity.cpp
+  LEGO1/lego/legoomni/src/race/raceskel.cpp
   LEGO1/lego/legoomni/src/race/racestate.cpp
   LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
   LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp

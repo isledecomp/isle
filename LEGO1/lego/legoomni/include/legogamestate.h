@@ -13,6 +13,7 @@ class LegoState;
 class MxVariable;
 class MxString;
 
+// SIZE 0x08
 struct ColorStringStruct {
 	const char* m_targetName;
 	const char* m_colorName;

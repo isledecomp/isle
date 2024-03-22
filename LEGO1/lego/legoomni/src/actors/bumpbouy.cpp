@@ -24,6 +24,11 @@ void BumpBouy::VTable0x74(Matrix4& p_transform)
 	// TODO
 }
 
+// STUB: LEGO1 0x10027220
+BumpBouy::BumpBouy()
+{
+}
+
 // STUB: LEGO1 0x100274d0
 MxLong BumpBouy::Notify(MxParam& p_param)
 {

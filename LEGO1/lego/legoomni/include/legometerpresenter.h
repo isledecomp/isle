@@ -4,7 +4,7 @@
 #include "mxstillpresenter.h"
 
 // VTABLE: LEGO1 0x100d7ac8
-// SIZE 0x94 (from 0x1000a163)
+// SIZE 0x94
 class LegoMeterPresenter : public MxStillPresenter {
 public:
 	LegoMeterPresenter();

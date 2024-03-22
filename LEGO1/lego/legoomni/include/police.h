@@ -12,7 +12,6 @@ class PoliceState;
 
 // VTABLE: LEGO1 0x100d8a80
 // SIZE 0x110
-// Radio at 0xf8
 class Police : public LegoWorld {
 public:
 	Police();

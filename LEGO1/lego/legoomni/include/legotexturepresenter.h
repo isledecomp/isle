@@ -5,7 +5,7 @@
 #include "mxmediapresenter.h"
 
 // VTABLE: LEGO1 0x100d4d90
-// SIZE 0x54 (from inlined construction at 0x10009bb5)
+// SIZE 0x54
 class LegoTexturePresenter : public MxMediaPresenter {
 public:
 	LegoTexturePresenter() : m_textures(NULL) {}

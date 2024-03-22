@@ -4,6 +4,7 @@
 #include "legoactor.h"
 
 // VTABLE: LEGO1 0x100d5178
+// SIZE 0x78
 class IsleActor : public LegoActor {
 public:
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04

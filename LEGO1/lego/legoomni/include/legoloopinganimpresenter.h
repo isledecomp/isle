@@ -4,7 +4,7 @@
 #include "legoanimpresenter.h"
 
 // VTABLE: LEGO1 0x100d4900
-// SIZE 0xc0 (discovered through inlined constructor at 0x10009ecd)
+// SIZE 0xc0
 class LegoLoopingAnimPresenter : public LegoAnimPresenter {
 public:
 	// FUNCTION: LEGO1 0x1000c9a0

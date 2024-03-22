@@ -3,9 +3,16 @@
 
 #include "legocarraceactor.h"
 
-// VTABLE: LEGO1 0x100da240
-class LegoJetskiRaceActor : public LegoCarRaceActor {
+/*
+	VTABLE: LEGO1 0x100da208 LegoCarRaceActor
+	VTABLE: LEGO1 0x100da228 LegoRaceActor
+	VTABLE: LEGO1 0x100da230 LegoAnimActor
+	VTABLE: LEGO1 0x100da240 LegoPathActor
+*/
+// SIZE 0x1a8
+class LegoJetskiRaceActor : public virtual LegoCarRaceActor {
 public:
+	LegoJetskiRaceActor();
 	// FUNCTION: LEGO1 0x10081d80
 	inline const char* ClassName() const override // vtable+0x0c
 	{

@@ -6,6 +6,13 @@ void LegoRaceActor::VTable0x74(Matrix4& p_transform)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x100145d0
+LegoRaceActor::LegoRaceActor()
+{
+	m_unk0x70 = 0;
+	m_unk0x08 = 0;
+}
+
 // STUB: LEGO1 0x10014ca0
 void LegoRaceActor::ParseAction(char*)
 {

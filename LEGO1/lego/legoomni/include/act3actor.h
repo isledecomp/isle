@@ -1,13 +1,18 @@
 #ifndef ACT3ACTOR_H
 #define ACT3ACTOR_H
 
-#include "mxcore.h"
+#include "legoanimactor.h"
 
-// FIXME: Uncertain location. There are three vtables which eventually call this
-//        class' ClassName() function, but none of them call it directly.
-class Act3Actor : public MxCore {
+/*
+	VTABLE : LEGO1 0x100d7668 LegoPathActor
+	VTABLE : LEGO1 0x100d7738 LegoAnimActor
+*/
+// SIZE 0x178
+class Act3Actor : public LegoAnimActor {
 public:
-	// FUNCTION: LEGO1 0x100431b0
+	Act3Actor();
+
+	// FUNCTION: LEGO1 0x100433b0
 	inline const char* ClassName() const override
 	{
 		// STRING: LEGO1 0x100f03ac
