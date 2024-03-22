@@ -4,44 +4,44 @@ DECOMP_SIZE_ASSERT(LegoCharacterData, 0x108)
 DECOMP_SIZE_ASSERT(LegoCharacterData::Part, 0x18)
 
 // GLOBAL: LEGO1 0x100da778
-undefined g_unk0x100da778[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, -1};
+MxS8 g_unk0x100da778[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, -1};
 
 // GLOBAL: LEGO1 0x100da790
-undefined g_unk0x100da790[] = {21, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, -1};
+MxS8 g_unk0x100da790[] = {21, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, -1};
 
 // GLOBAL: LEGO1 0x100da7a8
-undefined g_unk0x100da7a8[] = {22, -1};
+MxS8 g_unk0x100da7a8[] = {22, -1};
 
 // GLOBAL: LEGO1 0x100da7ac
-undefined g_unk0x100da7ac[] = {20, -1};
+MxS8 g_unk0x100da7ac[] = {20, -1};
 
 // GLOBAL: LEGO1 0x100da7b0
-undefined g_unk0x100da7b0[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da7b0[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da7c0
-undefined g_unk0x100da7c0[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da7c0[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da7d0
-undefined g_unk0x100da7d0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, -1};
+MxS8 g_unk0x100da7d0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, -1};
 
 // GLOBAL: LEGO1 0x100da7e0
-undefined g_unk0x100da7e0[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13,
-							   14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, -1};
+MxS8 g_unk0x100da7e0[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13,
+						  14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, -1};
 
 // GLOBAL: LEGO1 0x100da800
-undefined g_unk0x100da800[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da800[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da810
-undefined g_unk0x100da810[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da810[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da820
-undefined g_unk0x100da820[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da820[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da830
-undefined g_unk0x100da830[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da830[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100da840
-undefined g_unk0x100da840[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
+MxS8 g_unk0x100da840[] = {0, 1, 2, 3, 4, 5, 6, 7, -1};
 
 // GLOBAL: LEGO1 0x100f7f78
 const char* g_unk0x100f7f78[] = {"baseball", "chef",   "cap",     "cophat", "helmet", "ponytail", "pageboy", "shrthair",
