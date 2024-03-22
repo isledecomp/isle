@@ -61,6 +61,46 @@ function formatAsm(entries, addrOption) {
   return output;
 }
 
+// Special internal values to ensure this sort order for matching column:
+// 1. Stub
+// 2. Any match percentage [0.0, 1.0)
+// 3. Effective match
+// 4. Actual 100% match
+function matchingColAdjustment(row) {
+  if ('stub' in row) {
+    return -1;
+  }
+
+  if ('effective' in row) {
+    return 1.0;
+  }
+
+  if (row.matching === 1.0) {
+    return 1000;
+  }
+
+  return row.matching;
+}
+
+function getCppClass(str) {
+  const idx = str.indexOf('::');
+  if (idx !== -1) {
+    return str.slice(0, idx);
+  }
+
+  return str;
+}
+
+// Clamp string length to specified length and pad with ellipsis
+function stringTruncate(str, maxlen = 20) {
+  str = getCppClass(str);
+  if (str.length > maxlen) {
+    return `${str.slice(0, maxlen)}...`;
+  }
+
+  return str;
+}
+
 function getMatchPercentText(row) {
   if ('stub' in row) {
     return 'stub';
@@ -73,6 +113,18 @@ function getMatchPercentText(row) {
   return (row.matching * 100).toFixed(2) + '%';
 }
 
+function countDiffs(row) {
+  const { diff = '' } = row;
+  if (diff === '') {
+    return '';
+  }
+
+  const diffs = diff.map(([slug, subgroups]) => subgroups).flat();
+  const diffLength = diffs.filter(d => !('both' in d)).length;
+  const diffWord = diffLength === 1 ? 'diff' : 'diffs';
+  return diffLength === 0 ? '' : `${diffLength} ${diffWord}`;
+}
+
 // Helper for this set/remove attribute block
 function setBooleanAttribute(element, attribute, value) {
   if (value) {
@@ -81,6 +133,12 @@ function setBooleanAttribute(element, attribute, value) {
     element.removeAttribute(attribute);
   }
 }
+
+function copyToClipboard(value) {
+  navigator.clipboard.writeText(value);
+}
+
+const PAGE_SIZE = 200;
 
 //
 // Global state
@@ -91,9 +149,184 @@ class ListingState {
     this._query = '';
     this._sortCol = 'address';
     this._filterType = 1;
-    this.sortDesc = false;
-    this.hidePerfect = false;
-    this.hideStub = false;
+    this._sortDesc = false;
+    this._hidePerfect = false;
+    this._hideStub = false;
+    this._showRecomp = false;
+    this._expanded = {};
+    this._page = 0;
+
+    this._listeners = [];
+
+    this._results = [];
+    this.updateResults();
+  }
+
+  addListener(fn) {
+    this._listeners.push(fn);
+  }
+
+  callListeners() {
+    for (const fn of this._listeners) {
+      fn();
+    }
+  }
+
+  isExpanded(addr) {
+    return addr in this._expanded;
+  }
+
+  toggleExpanded(addr) {
+    this.setExpanded(addr, !this.isExpanded(addr));
+  }
+
+  setExpanded(addr, value) {
+    if (value) {
+      this._expanded[addr] = true;
+    } else {
+      delete this._expanded[addr];
+    }
+  }
+
+  updateResults() {
+    const filterFn = this.rowFilterFn.bind(this);
+    const sortFn = this.rowSortFn.bind(this);
+
+    this._results = data.filter(filterFn).sort(sortFn);
+
+    // Set _page directly to avoid double call to listeners.
+    this._page = this.pageClamp(this.page);
+    this.callListeners();
+  }
+
+  pageSlice() {
+    return this._results.slice(this.page * PAGE_SIZE, (this.page + 1) * PAGE_SIZE);
+  }
+
+  resultsCount() {
+    return this._results.length;
+  }
+
+  pageCount() {
+    return Math.ceil(this._results.length / PAGE_SIZE);
+  }
+
+  maxPage() {
+    return Math.max(0, this.pageCount() - 1);
+  }
+
+  // A list showing the range of each page based on the sort column and direction.
+  pageHeadings() {
+    if (this._results.length === 0) {
+      return [];
+    }
+
+    const headings = [];
+
+    for (let i = 0; i < this.pageCount(); i++) {
+      const startIdx = i * PAGE_SIZE;
+      const endIdx = Math.min(this._results.length, ((i + 1) * PAGE_SIZE)) - 1;
+
+      let start = this._results[startIdx][this.sortCol];
+      let end = this._results[endIdx][this.sortCol];
+
+      if (this.sortCol === 'matching') {
+        start = getMatchPercentText(this._results[startIdx]);
+        end = getMatchPercentText(this._results[endIdx]);
+      }
+
+      headings.push([i, stringTruncate(start), stringTruncate(end)]);
+    }
+
+    return headings;
+  }
+
+  rowFilterFn(row) {
+    // Destructuring sets defaults for optional values from this object.
+    const {
+      effective = false,
+      stub = false,
+      diff = '',
+      name,
+      address,
+      matching
+    } = row;
+
+    if (this.hidePerfect && (effective || matching >= 1)) {
+      return false;
+    }
+
+    if (this.hideStub && stub) {
+      return false;
+    }
+
+    if (this.query === '') {
+      return true;
+    }
+
+    // Name/addr search
+    if (this.filterType === 1) {
+      return (
+        address.includes(this.query) ||
+        name.toLowerCase().includes(this.query)
+      );
+    }
+
+    // no diff for review.
+    if (diff === '') {
+      return false;
+    }
+
+    // special matcher for combined diff
+    const anyLineMatch = ([addr, line]) => line.toLowerCase().trim().includes(this.query);
+
+    // Flatten all diff groups for the search
+    const diffs = diff.map(([slug, subgroups]) => subgroups).flat();
+    for (const subgroup of diffs) {
+      const { both = [], orig = [], recomp = [] } = subgroup;
+
+      // If search includes context
+      if (this.filterType === 2 && both.some(anyLineMatch)) {
+        return true;
+      }
+
+      if (orig.some(anyLineMatch) || recomp.some(anyLineMatch)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  rowSortFn(rowA, rowB) {
+    const valA = this.sortCol === 'matching'
+      ? matchingColAdjustment(rowA)
+      : rowA[this.sortCol];
+
+    const valB = this.sortCol === 'matching'
+      ? matchingColAdjustment(rowB)
+      : rowB[this.sortCol];
+
+    if (valA > valB) {
+      return this.sortDesc ? -1 : 1;
+    } else if (valA < valB) {
+      return this.sortDesc ? 1 : -1;
+    }
+
+    return 0;
+  }
+
+  pageClamp(page) {
+    return Math.max(0, Math.min(page, this.maxPage()));
+  }
+
+  get page() {
+    return this._page;
+  }
+
+  set page(page) {
+    this._page = this.pageClamp(page);
+    this.callListeners();
   }
 
   get filterType() {
@@ -105,6 +338,7 @@ class ListingState {
     if (value >= 1 && value <= 3) {
       this._filterType = value;
     }
+    this.updateResults();
   }
 
   get query() {
@@ -114,6 +348,21 @@ class ListingState {
   set query(value) {
     // Normalize search string
     this._query = value.toLowerCase().trim();
+    this.updateResults();
+  }
+
+  get showRecomp() {
+    return this._showRecomp;
+  }
+
+  set showRecomp(value) {
+    // Don't sort by the recomp column we are about to hide
+    if (!value && this.sortCol === 'recomp') {
+      this._sortCol = 'address';
+    }
+
+    this._showRecomp = value;
+    this.callListeners();
   }
 
   get sortCol() {
@@ -122,117 +371,43 @@ class ListingState {
 
   set sortCol(column) {
     if (column === this._sortCol) {
-      this.sortDesc = !this.sortDesc;
+      this._sortDesc = !this._sortDesc;
     } else {
       this._sortCol = column;
     }
+
+    this.updateResults();
+  }
+
+  get sortDesc() {
+    return this._sortDesc;
+  }
+
+  set sortDesc(value) {
+    this._sortDesc = value;
+    this.updateResults();
+  }
+
+  get hidePerfect() {
+    return this._hidePerfect;
+  }
+
+  set hidePerfect(value) {
+    this._hidePerfect = value;
+    this.updateResults();
+  }
+
+  get hideStub() {
+    return this._hideStub;
+  }
+
+  set hideStub(value) {
+    this._hideStub = value;
+    this.updateResults();
   }
 }
 
-const StateProxy = {
-  set(obj, prop, value) {
-    if (prop === 'onsort') {
-      this._onsort = value;
-      return true;
-    }
-
-    if (prop === 'onfilter') {
-      this._onfilter = value;
-      return true;
-    }
-
-    obj[prop] = value;
-
-    if (prop === 'sortCol' || prop === 'sortDesc') {
-      this._onsort();
-    } else {
-      this._onfilter();
-    }
-    return true;
-  }
-};
-
-const appState = new Proxy(new ListingState(), StateProxy);
-
-//
-// Stateful functions
-//
-
-function addrShouldAppear(addr) {
-  // Destructuring sets defaults for optional values from this object.
-  const {
-    effective = false,
-    stub = false,
-    diff = '',
-    name,
-    address,
-    matching
-  } = getDataByAddr(addr);
-
-  if (appState.hidePerfect && (effective || matching >= 1)) {
-    return false;
-  }
-
-  if (appState.hideStub && stub) {
-    return false;
-  }
-
-  if (appState.query === '') {
-    return true;
-  }
-
-  // Name/addr search
-  if (appState.filterType === 1) {
-    return (
-      address.includes(appState.query) ||
-      name.toLowerCase().includes(appState.query)
-    );
-  }
-
-  // no diff for review.
-  if (diff === '') {
-    return false;
-  }
-
-  // special matcher for combined diff
-  const anyLineMatch = ([addr, line]) => line.toLowerCase().trim().includes(appState.query);
-
-  // Flatten all diff groups for the search
-  const diffs = diff.map(([slug, subgroups]) => subgroups).flat();
-  for (const subgroup of diffs) {
-    const { both = [], orig = [], recomp = [] } = subgroup;
-
-    // If search includes context
-    if (appState.filterType === 2 && both.some(anyLineMatch)) {
-      return true;
-    }
-
-    if (orig.some(anyLineMatch) || recomp.some(anyLineMatch)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// Row comparator function, using our chosen sort column and direction.
-// -1 (A before B)
-//  1 (B before A)
-//  0 (equal)
-function rowSortOrder(addrA, addrB) {
-  const objA = getDataByAddr(addrA);
-  const objB = getDataByAddr(addrB);
-  const valA = objA[appState.sortCol];
-  const valB = objB[appState.sortCol];
-
-  if (valA > valB) {
-    return appState.sortDesc ? -1 : 1;
-  } else if (valA < valB) {
-    return appState.sortDesc ? 1 : -1;
-  }
-
-  return 0;
-}
+const appState = new ListingState();
 
 //
 // Custom elements
@@ -244,7 +419,8 @@ class SortIndicator extends window.HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (newValue === null) {
-      this.textContent = '';
+      // Reserve space for blank indicator so column width stays the same
+      this.innerHTML = '&nbsp;';
     } else {
       this.innerHTML = newValue === 'asc' ? '&#9650;' : '&#9660;';
     }
@@ -252,14 +428,6 @@ class SortIndicator extends window.HTMLElement {
 }
 
 class FuncRow extends window.HTMLElement {
-  static observedAttributes = ['expanded'];
-
-  constructor() {
-    super();
-
-    this.onclick = evt => (this.expanded = !this.expanded);
-  }
-
   connectedCallback() {
     if (this.shadowRoot !== null) {
       return;
@@ -268,28 +436,13 @@ class FuncRow extends window.HTMLElement {
     const template = document.querySelector('template#funcrow-template').content;
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(template.cloneNode(true));
+    shadow.querySelector(':host > div[data-col="name"]').addEventListener('click', evt => {
+      this.dispatchEvent(new Event('name-click'));
+    });
   }
 
   get address() {
     return this.getAttribute('data-address');
-  }
-
-  get expanded() {
-    return this.getAttribute('expanded') !== null;
-  }
-
-  set expanded(value) {
-    setBooleanAttribute(this, 'expanded', value);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name !== 'expanded') {
-      return;
-    }
-
-    if (this.onchangeExpand) {
-      this.onchangeExpand(this.expanded);
-    }
   }
 }
 
@@ -302,6 +455,36 @@ class NoDiffMessage extends window.HTMLElement {
     const template = document.querySelector('template#nodiff-template').content;
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(template.cloneNode(true));
+  }
+}
+
+class CanCopy extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#can-copy-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+
+    const el = shadow.querySelector('slot').assignedNodes()[0];
+    el.addEventListener('mouseout', evt => { this.copied = false; });
+    el.addEventListener('click', evt => {
+      copyToClipboard(evt.target.textContent);
+      this.copied = true;
+    });
+  }
+
+  get copied() {
+    return this.getAttribute('copied');
+  }
+
+  set copied(value) {
+    if (value) {
+      setTimeout(() => { this.copied = false; }, 2000);
+    }
+    setBooleanAttribute(this, 'copied', value);
   }
 }
 
@@ -346,6 +529,10 @@ class DiffDisplayOptions extends window.HTMLElement {
         label {
           margin-right: 10px;
           user-select: none;
+        }
+
+        label, input {
+          cursor: pointer;
         }
       </style>
       <fieldset>
@@ -448,14 +635,12 @@ class DiffDisplay extends window.HTMLElement {
   }
 }
 
-// Main application.
-class ListingTable extends window.HTMLElement {
+class ListingOptions extends window.HTMLElement {
   constructor() {
     super();
 
-    // Redraw the table on any changes.
-    appState.onsort = () => this.sortRows();
-    appState.onfilter = () => this.filterRows();
+    // Register to receive updates
+    appState.addListener(() => this.onUpdate());
 
     const input = this.querySelector('input[type=search]');
     input.oninput = evt => (appState.query = evt.target.value);
@@ -468,15 +653,84 @@ class ListingTable extends window.HTMLElement {
     hideStub.onchange = evt => (appState.hideStub = evt.target.checked);
     hideStub.checked = appState.hideStub;
 
+    const showRecomp = this.querySelector('input#cbShowRecomp');
+    showRecomp.onchange = evt => (appState.showRecomp = evt.target.checked);
+    showRecomp.checked = appState.showRecomp;
+
+    this.querySelector('button#pagePrev').addEventListener('click', evt => {
+      appState.page = appState.page - 1;
+    });
+
+    this.querySelector('button#pageNext').addEventListener('click', evt => {
+      appState.page = appState.page + 1;
+    });
+
+    this.querySelector('select#pageSelect').addEventListener('change', evt => {
+      appState.page = evt.target.value;
+    });
+
     this.querySelectorAll('input[name=filterType]').forEach(radio => {
       const checked = appState.filterType === parseInt(radio.getAttribute('value'));
       setBooleanAttribute(radio, 'checked', checked);
 
       radio.onchange = evt => (appState.filterType = radio.getAttribute('value'));
     });
+
+    this.onUpdate();
   }
 
-  setRowExpand(address, shouldExpand) {
+  onUpdate() {
+    // Update input placeholder based on search type
+    this.querySelector('input[type=search]').placeholder = appState.filterType === 1
+      ? 'Search for offset or function name...'
+      : 'Search for instruction...';
+
+    // Update page number and max page
+    this.querySelector('fieldset#pageDisplay > legend').textContent = `Page ${appState.page + 1} of ${Math.max(1, appState.pageCount())}`;
+
+    // Disable prev/next buttons on first/last page
+    setBooleanAttribute(this.querySelector('button#pagePrev'), 'disabled', appState.page === 0);
+    setBooleanAttribute(this.querySelector('button#pageNext'), 'disabled', appState.page === appState.maxPage());
+
+    // Update page select dropdown
+    const pageSelect = this.querySelector('select#pageSelect');
+    setBooleanAttribute(pageSelect, 'disabled', appState.resultsCount() === 0);
+    pageSelect.innerHTML = '';
+
+    if (appState.resultsCount() === 0) {
+      const opt = document.createElement('option');
+      opt.textContent = '- no results -';
+      pageSelect.appendChild(opt);
+    } else {
+      for (const row of appState.pageHeadings()) {
+        const opt = document.createElement('option');
+        opt.value = row[0];
+        if (appState.page === row[0]) {
+          opt.setAttribute('selected', '');
+        }
+
+        const [start, end] = [row[1], row[2]];
+
+        opt.textContent = `${appState.sortCol}: ${start} to ${end}`;
+        pageSelect.appendChild(opt);
+      }
+    }
+
+    // Update row count
+    this.querySelector('#rowcount').textContent = `${appState.resultsCount()}`;
+  }
+}
+
+// Main application.
+class ListingTable extends window.HTMLElement {
+  constructor() {
+    super();
+
+    // Register to receive updates
+    appState.addListener(() => this.somethingChanged());
+  }
+
+  setDiffRow(address, shouldExpand) {
     const tbody = this.querySelector('tbody');
     const funcrow = tbody.querySelector(`func-row[data-address="${address}"]`);
     if (funcrow === null) {
@@ -484,81 +738,66 @@ class ListingTable extends window.HTMLElement {
     }
 
     const existing = tbody.querySelector(`diff-row[data-address="${address}"]`);
-    if (shouldExpand) {
-      if (existing === null) {
-        const diffrow = document.createElement('diff-row');
-        diffrow.address = address;
-
-        // Decide what goes inside the diff row.
-        const obj = getDataByAddr(address);
-
-        if ('stub' in obj) {
-          const msg = document.createElement('no-diff');
-          const p = document.createElement('div');
-          p.innerText = 'Stub. No diff.';
-          msg.appendChild(p);
-          diffrow.appendChild(msg);
-        } else if (obj.diff.length === 0) {
-          const msg = document.createElement('no-diff');
-          const p = document.createElement('div');
-          p.innerText = 'Identical function - no diff';
-          msg.appendChild(p);
-          diffrow.appendChild(msg);
-        } else {
-          const dd = new DiffDisplay();
-          dd.option = '1';
-          dd.address = address;
-          diffrow.appendChild(dd);
-        }
-
-        // Insert the diff row after the parent func row.
-        tbody.insertBefore(diffrow, funcrow.nextSibling);
-      }
-    } else {
-      if (existing !== null) {
+    if (existing !== null) {
+      if (!shouldExpand) {
         tbody.removeChild(existing);
       }
+
+      return;
     }
+
+    const diffrow = document.createElement('diff-row');
+    diffrow.address = address;
+
+    // Decide what goes inside the diff row.
+    const obj = getDataByAddr(address);
+
+    if ('stub' in obj) {
+      const msg = document.createElement('no-diff');
+      const p = document.createElement('div');
+      p.innerText = 'Stub. No diff.';
+      msg.appendChild(p);
+      diffrow.appendChild(msg);
+    } else if (obj.diff.length === 0) {
+      const msg = document.createElement('no-diff');
+      const p = document.createElement('div');
+      p.innerText = 'Identical function - no diff';
+      msg.appendChild(p);
+      diffrow.appendChild(msg);
+    } else {
+      const dd = new DiffDisplay();
+      dd.option = '1';
+      dd.address = address;
+      diffrow.appendChild(dd);
+    }
+
+    // Insert the diff row after the parent func row.
+    tbody.insertBefore(diffrow, funcrow.nextSibling);
   }
 
   connectedCallback() {
     const thead = this.querySelector('thead');
-    const headers = thead.querySelectorAll('th');
+    const headers = thead.querySelectorAll('th:not([data-no-sort])'); // TODO
     headers.forEach(th => {
       const col = th.getAttribute('data-col');
       if (col) {
-        th.onclick = evt => (appState.sortCol = col);
+        const span = th.querySelector('span');
+        if (span) {
+          span.addEventListener('click', evt => { appState.sortCol = col; });
+        }
       }
     });
 
-    const tbody = this.querySelector('tbody');
-
-    for (const obj of data) {
-      const row = document.createElement('func-row');
-      row.setAttribute('data-address', obj.address); // ?
-
-      const items = [
-        ['address', obj.address],
-        ['name', obj.name],
-        ['matching', getMatchPercentText(obj)]
-      ];
-
-      items.forEach(([slotName, content]) => {
-        const div = document.createElement('div');
-        div.setAttribute('slot', slotName);
-        div.innerText = content;
-        row.appendChild(div);
-      });
-
-      row.onchangeExpand = shouldExpand => this.setRowExpand(obj.address, shouldExpand);
-      tbody.appendChild(row);
-    }
-
-    this.sortRows();
-    this.filterRows();
+    this.somethingChanged();
   }
 
-  sortRows() {
+  somethingChanged() {
+    // Toggle recomp/diffs column
+    setBooleanAttribute(this.querySelector('table'), 'show-recomp', appState.showRecomp);
+    this.querySelectorAll('func-row[data-address]').forEach(row => {
+      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
+    });
+
     const thead = this.querySelector('thead');
     const headers = thead.querySelectorAll('th');
 
@@ -566,6 +805,10 @@ class ListingTable extends window.HTMLElement {
     headers.forEach(th => {
       const col = th.getAttribute('data-col');
       const indicator = th.querySelector('sort-indicator');
+      if (indicator === null) {
+        return;
+      }
+
       if (appState.sortCol === col) {
         indicator.setAttribute('data-sort', appState.sortDesc ? 'desc' : 'asc');
       } else {
@@ -573,50 +816,52 @@ class ListingTable extends window.HTMLElement {
       }
     });
 
-    // Select only the function rows and the diff child row.
-    // Exclude any nested tables used to *display* the diffs.
+    // Add the rows
     const tbody = this.querySelector('tbody');
-    const rows = tbody.querySelectorAll('func-row[data-address], diff-row[data-address]');
+    tbody.innerHTML = ''; // ?
 
-    // Sort all rows according to chosen order
-    const newRows = Array.from(rows);
-    newRows.sort((rowA, rowB) => {
-      const addrA = rowA.getAttribute('data-address');
-      const addrB = rowB.getAttribute('data-address');
+    for (const obj of appState.pageSlice()) {
+      const row = document.createElement('func-row');
+      row.setAttribute('data-address', obj.address); // ?
+      row.addEventListener('name-click', evt => {
+        appState.toggleExpanded(obj.address);
+        this.setDiffRow(obj.address, appState.isExpanded(obj.address));
+      });
+      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
+      setBooleanAttribute(row, 'expanded', appState.isExpanded(row));
 
-      // Diff row always sorts after its parent row
-      if (addrA === addrB && rowB.className === 'diffRow') {
-        return -1;
+      const items = [
+        ['address', obj.address],
+        ['recomp', obj.recomp],
+        ['name', obj.name],
+        ['diffs', countDiffs(obj)],
+        ['matching', getMatchPercentText(obj)]
+      ];
+
+      items.forEach(([slotName, content]) => {
+        const div = document.createElement('span');
+        div.setAttribute('slot', slotName);
+        div.innerText = content;
+        row.appendChild(div);
+      });
+
+      tbody.appendChild(row);
+
+      if (appState.isExpanded(obj.address)) {
+        this.setDiffRow(obj.address, true);
       }
-
-      return rowSortOrder(addrA, addrB);
-    });
-
-    // Replace existing rows with updated order
-    newRows.forEach(row => tbody.appendChild(row));
-  }
-
-  filterRows() {
-    const tbody = this.querySelector('tbody');
-    const rows = tbody.querySelectorAll('func-row[data-address], diff-row[data-address]');
-
-    rows.forEach(row => {
-      const addr = row.getAttribute('data-address');
-      const hidden = !addrShouldAppear(addr);
-      setBooleanAttribute(row, 'hidden', hidden);
-    });
-
-    // Update row count
-    this.querySelector('#rowcount').textContent = `${tbody.querySelectorAll('func-row:not([hidden])').length}`;
+    }
   }
 }
 
 window.onload = () => {
   window.customElements.define('listing-table', ListingTable);
+  window.customElements.define('listing-options', ListingOptions);
   window.customElements.define('diff-display', DiffDisplay);
   window.customElements.define('diff-display-options', DiffDisplayOptions);
   window.customElements.define('sort-indicator', SortIndicator);
   window.customElements.define('func-row', FuncRow);
   window.customElements.define('diff-row', DiffRow);
   window.customElements.define('no-diff', NoDiffMessage);
+  window.customElements.define('can-copy', CanCopy);
 };
