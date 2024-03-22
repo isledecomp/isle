@@ -1,5 +1,7 @@
 #include "legoobjectfactory.h"
 
+#include "act2actor.h"
+#include "act2brick.h"
 #include "carrace.h"
 #include "decomp.h"
 #include "dunebuggy.h"
@@ -56,8 +58,6 @@
 #include "score.h"
 #include "scorestate.h"
 #include "skateboard.h"
-// #include "act2actor.h"
-#include "act2brick.h"
 // #include "act2genactor.h"
 #include "act2policestation.h"
 #include "act3.h"
@@ -77,6 +77,7 @@
 #include "act1state.h"
 #include "act3actor.h"
 #include "act3shark.h"
+#include "animstate.h"
 #include "beachhouseentity.h"
 #include "bumpbouy.h"
 #include "carracestate.h"
@@ -93,10 +94,9 @@
 #include "pizzeria.h"
 #include "pizzeriastate.h"
 #include "policeentity.h"
+#include "raceskel.h"
 #include "racestandsentity.h"
 #include "radiostate.h"
-// #include "raceskel.h"
-#include "animstate.h"
 
 // TODO: Before HospitalState, add all of the different LegoVehicleBuildState's
 

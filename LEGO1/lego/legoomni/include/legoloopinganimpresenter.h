@@ -22,6 +22,9 @@ public:
 
 	void StreamingTickle() override; // vtable+0x20
 	void PutFrame() override;        // vtable+0x6c
+
+private:
+	undefined4 m_unk0xbc; // 0xbc
 };
 
 // SYNTHETIC: LEGO1 0x1006d000

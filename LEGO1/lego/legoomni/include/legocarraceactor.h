@@ -47,7 +47,7 @@ public:
 	virtual void FUN_10012bf0(float p_unk0x18) { m_unk0x18 = p_unk0x18; }
 	// FUNCTION: LEGO1 0x10012c00
 	virtual float FUN_10012c00() { return m_unk0x18; }
-	virtual void FUN_10080740();
+	virtual void VTable0x1c(); // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10081610
 	// LegoCarRaceActor::`scalar deleting destructor'

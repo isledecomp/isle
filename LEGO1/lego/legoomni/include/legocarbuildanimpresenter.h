@@ -31,6 +31,24 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10078660
 	// LegoCarBuildAnimPresenter::`scalar deleting destructor'
+
+private:
+	undefined2 m_unk0xbc;  // 0xbc
+	undefined2 m_unk0xbe;  // 0xbe
+	undefined2 m_unk0xc0;  // 0xc0
+	undefined4 m_unk0xc4;  // 0xc4
+	LegoAnim m_unk0xc8;    // 0xc8
+	MxMatrix m_unk0xe0;    // 0xe0
+	undefined4 m_unk0x128; // 0x128
+	undefined4 m_unk0x12c; // 0x12c
+	undefined4 m_unk0x130; // 0x130
+	undefined4 m_unk0x134; // 0x134
+	undefined4 m_unk0x138; // 0x138
+	undefined4 m_unk0x13c; // 0x13c
+	undefined4 m_unk0x140; // 0x140
+	MxS32 m_unk0x144;      // 0x144
+	MxS32 m_unk0x148;      // 0x148
+	undefined4 m_unk0x14c; // 0x14c
 };
 
 #endif // LEGOCARBUILDANIMPRESENTER_H

@@ -4,7 +4,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
-DECOMP_SIZE_ASSERT(SkateBoard, 0x168);
+DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 
 // FUNCTION: LEGO1 0x1000fd40
 SkateBoard::SkateBoard()

@@ -3,6 +3,8 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoRaceCar, 0x200)
+
 // FUNCTION: LEGO1 0x10012950
 LegoRaceCar::LegoRaceCar()
 {

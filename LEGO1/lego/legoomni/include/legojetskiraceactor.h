@@ -30,6 +30,7 @@ public:
 	void VTable0x70(float p_float) override; // vtable+0x70
 	void VTable0x98() override;              // vtable+0x98
 	void VTable0x9c() override;              // vtable+0x9c
+	void VTable0x1c() override;              // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10081d40
 	// LegoJetskiRaceActor::`scalar deleting destructor'

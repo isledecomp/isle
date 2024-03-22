@@ -8,7 +8,7 @@
 #include "legoworld.h"
 #include "misc.h"
 
-DECOMP_SIZE_ASSERT(Bike, 0x164);
+DECOMP_SIZE_ASSERT(Bike, 0x164)
 
 // FUNCTION: LEGO1 0x10076670
 Bike::Bike()

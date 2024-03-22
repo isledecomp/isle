@@ -1,5 +1,7 @@
 #include "legoanimactor.h"
 
+DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
+
 // STUB: LEGO1 0x1001c1f0
 MxResult LegoAnimActor::FUN_1001c1f0(float& p_out)
 {

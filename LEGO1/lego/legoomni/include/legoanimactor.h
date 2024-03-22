@@ -35,8 +35,8 @@ public:
 	// LegoAnimActor::`scalar deleting destructor'
 
 private:
-	vector<void*> m_vector; // 0x00
-	MxU16 m_index;          // 0x14
+	vector<void*> m_unk0x08; // 0x08
+	MxU16 m_index;           // 0x18
 };
 
 #endif // LEGOANIMACTOR_H

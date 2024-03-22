@@ -1,5 +1,7 @@
 #include "bumpbouy.h"
 
+DECOMP_SIZE_ASSERT(BumpBouy, 0x174)
+
 // STUB: LEGO1 0x1000fd00
 void BumpBouy::ParseAction(char*)
 {

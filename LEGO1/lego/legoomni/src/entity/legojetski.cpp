@@ -3,6 +3,9 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
+// Currently wrong due to a missing compiler added top pointer (See also missing code block in constructor)
+
 // FUNCTION: LEGO1 0x100136f0
 void LegoJetski::FUN_100136f0(float p_worldSpeed)
 {

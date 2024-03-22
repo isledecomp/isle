@@ -30,6 +30,14 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1007a450
 	// Act2Brick::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0x154;      // 0x154
+	undefined m_unk0x158[0x0c]; // 0x158
+	undefined4 m_unk0x164;      // 0x164
+	Mx3DPointFloat m_unk0x168;  // 0x168
+	Mx3DPointFloat m_unk0x17c;  // 0x17c
+	undefined4 m_unk0x190;      // 0x190
 };
 
 #endif // ACT2BRICK_H

@@ -1,5 +1,7 @@
 #include "act3shark.h"
 
+DECOMP_SIZE_ASSERT(Act3Shark, 0x1a8)
+
 // STUB: LEGO1 0x1001a1c0
 void Act3Shark::VTable0x74(Matrix4& p_transform)
 {

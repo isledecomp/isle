@@ -1,6 +1,8 @@
 #include "legoextraactor.h"
 
-// STUB : LEGO1 0x1002a500
+DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
+
+// STUB: LEGO1 0x1002a500
 LegoExtraActor::LegoExtraActor()
 {
 }

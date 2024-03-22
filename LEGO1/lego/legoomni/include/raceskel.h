@@ -11,6 +11,9 @@
 class RaceSkel : public LegoAnimActor {
 public:
 	RaceSkel();
+
+private:
+	undefined4 m_unk0x1c; // 0x1c
 };
 
 #endif // RACESKEL_H

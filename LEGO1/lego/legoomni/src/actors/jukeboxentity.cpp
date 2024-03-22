@@ -14,6 +14,8 @@
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
 
+DECOMP_SIZE_ASSERT(JukeBoxEntity, 0x6c)
+
 // FUNCTION: LEGO1 0x10085bc0
 JukeBoxEntity::JukeBoxEntity()
 {

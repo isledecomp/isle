@@ -7,6 +7,8 @@
 // SIZE 0x84
 class Pizzeria : public IsleActor {
 public:
+	Pizzeria() : m_unk0x7c(0) {}
+
 	// FUNCTION: LEGO1 0x1000e780
 	inline const char* ClassName() const override // vtable+0x0c
 	{
@@ -24,6 +26,11 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1000e8d0
 	// Pizzeria::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0x78; // 0x78
+	undefined4 m_unk0x7c; // 0x7c
+	undefined4 m_unk0x80; // 0x80
 };
 
 #endif // PIZZERIA_H

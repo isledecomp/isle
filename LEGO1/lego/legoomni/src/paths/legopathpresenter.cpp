@@ -4,7 +4,7 @@
 #include "misc.h"
 #include "mxautolock.h"
 
-DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54);
+DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54)
 
 // FUNCTION: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()

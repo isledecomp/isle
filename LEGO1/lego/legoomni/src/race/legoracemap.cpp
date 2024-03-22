@@ -3,6 +3,8 @@
 #include "legocontrolmanager.h"
 #include "misc.h"
 
+DECOMP_SIZE_ASSERT(LegoRaceMap, 0x1b4)
+
 // FUNCTION: LEGO1 0x1005d0d0
 LegoRaceMap::LegoRaceMap()
 {

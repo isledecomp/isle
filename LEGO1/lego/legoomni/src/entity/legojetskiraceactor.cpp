@@ -1,5 +1,13 @@
 #include "legojetskiraceactor.h"
 
+DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
+
+// STUB: LEGO1 0x10014220
+void LegoJetskiRaceActor::VTable0x1c()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10080ef0
 LegoJetskiRaceActor::LegoJetskiRaceActor()
 {

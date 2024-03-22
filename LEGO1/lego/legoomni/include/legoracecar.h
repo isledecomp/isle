@@ -45,7 +45,9 @@ public:
 
 	// SYNTHETIC: LEGO1 0x10014230
 	// LegoRaceCar::`scalar deleting destructor'
-	byte m_unk0x54;           // 0x54
+
+private:
+	undefined m_unk0x54;      // 0x54
 	undefined4 m_unk0x58;     // 0x58
 	Mx3DPointFloat m_unk0x5c; // 0x5c
 	undefined4 m_unk0x70;     // 0x70

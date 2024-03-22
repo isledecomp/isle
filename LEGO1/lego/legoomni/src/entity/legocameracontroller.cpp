@@ -6,7 +6,7 @@
 #include "misc.h"
 #include "realtime/realtime.h"
 
-DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8);
+DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8)
 
 // FUNCTION: LEGO1 0x10011d50
 LegoCameraController::LegoCameraController()

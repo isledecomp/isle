@@ -1,5 +1,7 @@
 #include "legounknown100d7c88.h"
 
+DECOMP_SIZE_ASSERT(LegoUnknown100d7c88, 0x18)
+
 // FUNCTION: LEGO1 0x10044e50
 LegoUnknown100d7c88::~LegoUnknown100d7c88()
 {

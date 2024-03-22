@@ -6,6 +6,8 @@
 #include "mxmisc.h"
 #include "mxtimer.h"
 
+DECOMP_SIZE_ASSERT(RadioState, 0x30)
+
 // GLOBAL: LEGO1 0x100f3218
 JukeboxScript::Script g_unk0x100f3218[6] = {
 	JukeboxScript::c_sns002ra_Audio,

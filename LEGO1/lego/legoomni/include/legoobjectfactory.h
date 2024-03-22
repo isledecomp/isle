@@ -59,8 +59,8 @@
 	X(DuneBuggy)                                                                                                       \
 	X(Pizza)                                                                                                           \
 	X(PizzaMissionState)                                                                                               \
-	/*X(Act2Actor)*/                                                                                                   \
-	/*X(Act2Brick)*/                                                                                                   \
+	X(Act2Actor)                                                                                                       \
+	X(Act2Brick)                                                                                                       \
 	/*X(Act2GenActor)*/                                                                                                \
 	X(Act2PoliceStation)                                                                                               \
 	X(Act3)                                                                                                            \
@@ -98,7 +98,7 @@
 	X(MxCompositeMediaPresenter)                                                                                       \
 	X(JukeBox)                                                                                                         \
 	X(JukeBoxState)                                                                                                    \
-	/*X(RaceSkel)*/                                                                                                    \
+	X(RaceSkel)                                                                                                        \
 	X(AnimState)
 
 // VTABLE: LEGO1 0x100d4768

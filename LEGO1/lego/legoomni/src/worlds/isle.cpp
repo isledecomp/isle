@@ -32,7 +32,7 @@
 
 #include <vec.h>
 
-DECOMP_SIZE_ASSERT(Isle, 0x140);
+DECOMP_SIZE_ASSERT(Isle, 0x140)
 
 // GLOBAL: LEGO1 0x100f1198
 undefined4 g_unk0x100f1198 = 0x7f;

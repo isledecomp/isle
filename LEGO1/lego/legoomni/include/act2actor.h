@@ -1,3 +1,6 @@
+#ifndef ACT2ACTOR_H
+#define ACT2ACTOR_H
+
 #include "legoanimactor.h"
 
 /*
@@ -6,6 +9,7 @@
 */
 // SIZE 0x1a8
 class Act2Actor : public LegoAnimActor {
+public:
 	Act2Actor();
 
 	// SYNTHETIC: LEGO1 0x1001a090
@@ -14,3 +18,5 @@ class Act2Actor : public LegoAnimActor {
 private:
 	undefined m_unk0x1c[0x34]; // 0x1c
 };
+
+#endif // ACT2ACTOR_H

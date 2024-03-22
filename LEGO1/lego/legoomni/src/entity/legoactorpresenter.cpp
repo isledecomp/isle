@@ -3,6 +3,8 @@
 #include "legoentity.h"
 #include "misc.h"
 
+DECOMP_SIZE_ASSERT(LegoActorPresenter, 0x50)
+
 // FUNCTION: LEGO1 0x10076c30
 void LegoActorPresenter::ReadyTickle()
 {

@@ -1,5 +1,7 @@
 #include "legocarbuild.h"
 
+DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
+
 // STUB: LEGO1 0x100226d0
 LegoCarBuild::LegoCarBuild()
 {

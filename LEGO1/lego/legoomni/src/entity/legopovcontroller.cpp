@@ -11,8 +11,8 @@
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"
 
-DECOMP_SIZE_ASSERT(LegoMouseController, 0x20);
-DECOMP_SIZE_ASSERT(LegoPointOfViewController, 0x38);
+DECOMP_SIZE_ASSERT(LegoMouseController, 0x20)
+DECOMP_SIZE_ASSERT(LegoPointOfViewController, 0x38)
 
 // GLOBAL: LEGO1 0x100f75ac
 MxBool g_unk0x100f75ac = FALSE;

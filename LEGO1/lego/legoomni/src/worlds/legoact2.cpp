@@ -1,5 +1,7 @@
 #include "legoact2.h"
 
+DECOMP_SIZE_ASSERT(LegoAct2, 0x1154)
+
 // FUNCTION: LEGO1 0x1004fe10
 MxBool LegoAct2::VTable0x5c()
 {

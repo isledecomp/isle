@@ -1,5 +1,7 @@
 #include "act2brick.h"
 
+DECOMP_SIZE_ASSERT(Act2Brick, 0x194)
+
 // STUB: LEGO1 0x1007a2b0
 Act2Brick::Act2Brick()
 {

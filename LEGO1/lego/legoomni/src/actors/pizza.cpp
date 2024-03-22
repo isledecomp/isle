@@ -3,7 +3,7 @@
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 
-DECOMP_SIZE_ASSERT(Pizza, 0x9c);
+DECOMP_SIZE_ASSERT(Pizza, 0x9c)
 
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()

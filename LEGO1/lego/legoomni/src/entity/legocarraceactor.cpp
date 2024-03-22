@@ -3,6 +3,8 @@
 #include "mxmisc.h"
 #include "mxvariabletable.h"
 
+DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
+
 // GLOBAL: LEGO1 0x100f7af0
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
@@ -51,7 +53,7 @@ void LegoCarRaceActor::FUN_10080590()
 }
 
 // STUB: LEGO1 0x10080740
-void LegoCarRaceActor::FUN_10080740()
+void LegoCarRaceActor::VTable0x1c()
 {
 }
 
