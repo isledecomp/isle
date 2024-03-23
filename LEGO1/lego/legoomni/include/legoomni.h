@@ -229,7 +229,7 @@ public:
 	inline void SetCurrentActor(IslePathActor* p_currentActor) { m_currentActor = p_currentActor; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
-	inline MxResult StartIfUnknown0x13c(MxDSAction& p_dsAction)
+	inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
 	{
 		if (m_unk0x13c) {
 			return Start(&p_dsAction);

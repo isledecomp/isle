@@ -358,18 +358,23 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 {
 	MxResult result = FAILURE;
 	LegoROI* roi = p_entity->GetROI();
+
 	if (p_entity->GetUnknown0x59() == 0) {
 		LegoPathActor* actor = CharacterManager()->FUN_10084c40(roi->GetName());
+
 		if (actor) {
 			LegoPathController* controller = actor->GetController();
+
 			if (controller) {
 				controller->FUN_10046770(actor);
 				actor->ClearController();
-				for (MxS32 i = 0; i < 40; i++) {
+
+				for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
 					if (m_unk0x3c[i].m_roi == roi) {
 						MxU32 characterId = m_unk0x3c[i].m_id;
 						g_characters[characterId].m_unk0x07 = TRUE;
 						MxS32 vehicleId = g_characters[characterId].m_vehicleId;
+
 						if (vehicleId >= 0) {
 							g_vehicles[vehicleId].m_unk0x05 = FALSE;
 						}
@@ -379,9 +384,11 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 			}
 		}
 	}
-	if (StartAction(p_dsAction) == SUCCESS) {
+
+	if (StartActionIfUnknown0x13c(p_dsAction) == SUCCESS) {
 		result = SUCCESS;
 	}
+
 	return result;
 }
 

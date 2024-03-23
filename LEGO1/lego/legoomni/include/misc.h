@@ -54,7 +54,7 @@ void FUN_10015820(MxBool p_disable, MxU16 p_flags);
 LegoROI* FindROI(const char* p_name);
 void SetROIVisible(const char* p_name, MxBool p_visible);
 void SetCurrentActor(IslePathActor* p_currentActor);
-MxResult StartAction(MxDSAction& p_dsAction);
+MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction);
 void DeleteAction();
 LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 MxDSAction& GetCurrentAction();
@@ -65,9 +65,9 @@ void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 
 // FUNCTION: LEGO1 0x10015890
-inline MxResult StartAction(MxDSAction& p_dsAction)
+inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
 {
-	return LegoOmni::GetInstance()->StartIfUnknown0x13c(p_dsAction);
+	return LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction);
 }
 
 #endif // MISC_H
