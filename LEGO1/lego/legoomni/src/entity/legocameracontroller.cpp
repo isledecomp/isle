@@ -2,9 +2,14 @@
 
 #include "legoinputmanager.h"
 #include "legonotify.h"
+#include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "realtime/realtime.h"
+
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoCameraController, 0xc8)
 
@@ -117,10 +122,34 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 	m_matrix2 = m_matrix1;
 }
 
-// STUB: LEGO1 0x100123e0
-void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32)
+// FUNCTION: LEGO1 0x100123e0
+void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
 {
-	// TODO
+	if (m_lego3DView != NULL) {
+		ViewROI* pov = m_lego3DView->GetPointOfView();
+
+		if (pov != NULL) {
+			MxMatrix mat;
+
+			if (p_und) {
+				MXM4(mat, m_matrix1, p_transform);
+			}
+			else {
+				mat = p_transform;
+			}
+
+			((TimeROI*) pov)->FUN_100a9b40(mat, Timer()->GetTime());
+			pov->WrappedSetLocalTransform(mat);
+			m_lego3DView->Moved(*pov);
+
+			SoundManager()->FUN_1002a410(
+				pov->GetWorldPosition(),
+				pov->GetWorldDirection(),
+				pov->GetWorldUp(),
+				pov->GetWorldVelocity()
+			);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10012740
