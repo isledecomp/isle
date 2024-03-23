@@ -482,7 +482,7 @@ int LegoNavController::FUN_100558b0()
 	return -1;
 }
 
-// FUNCTION: LEGO1 0x10055a60
+// STUB: LEGO1 0x10055a60
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetType() == c_notificationKeyPress) {
