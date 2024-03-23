@@ -1,5 +1,7 @@
 #include "legocameralocations.h"
 
+DECOMP_SIZE_ASSERT(LegoCameraLocation, 0x60)
+
 // GLOBAL: LEGO1 0x100f4c60
 LegoCameraLocation g_cameraLocations[] = {
 	{0, "look at origin from z=-8", 0, 1.25, -8, 0, 0, 1, 0, 1, 0, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
