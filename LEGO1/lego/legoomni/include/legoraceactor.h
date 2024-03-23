@@ -13,6 +13,7 @@
 class LegoRaceActor : public virtual LegoAnimActor {
 public:
 	LegoRaceActor();
+
 	// FUNCTION: LEGO1 0x10014af0
 	inline const char* ClassName() const override // vtable+0x0c
 	{

@@ -13,6 +13,7 @@
 class LegoCarRaceActor : public virtual LegoRaceActor {
 public:
 	LegoCarRaceActor();
+
 	// FUNCTION: LEGO1 0x10081650
 	inline const char* ClassName() const override // vtable+0x0c
 	{
@@ -35,18 +36,25 @@ public:
 	void VTable0x9c() override;              // vtable+0x9c
 
 	virtual void FUN_10080590();
+
 	// FUNCTION: LEGO1 0x10012bb0
 	virtual void FUN_10012bb0(float p_unk0x14) { m_unk0x14 = p_unk0x14; }
+
 	// FUNCTION: LEGO1 0x10012bc0
 	virtual float FUN_10012bc0() { return m_unk0x14; }
+
 	// FUNCTION: LEGO1 0x10012bd0
 	virtual void FUN_10012bd0(float p_unk0x10) { m_unk0x10 = p_unk0x10; }
+
 	// FUNCTION: LEGO1 0x10012be0
 	virtual float FUN_10012be0() { return m_unk0x10; }
+
 	// FUNCTION: LEGO1 0x10012bf0
 	virtual void FUN_10012bf0(float p_unk0x18) { m_unk0x18 = p_unk0x18; }
+
 	// FUNCTION: LEGO1 0x10012c00
 	virtual float FUN_10012c00() { return m_unk0x18; }
+
 	virtual void VTable0x1c(); // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x10081610

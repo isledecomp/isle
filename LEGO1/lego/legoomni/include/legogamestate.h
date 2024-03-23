@@ -15,8 +15,8 @@ class MxString;
 
 // SIZE 0x08
 struct ColorStringStruct {
-	const char* m_targetName;
-	const char* m_colorName;
+	const char* m_targetName; // 0x00
+	const char* m_colorName;  // 0x04
 };
 
 // SIZE 0x430
