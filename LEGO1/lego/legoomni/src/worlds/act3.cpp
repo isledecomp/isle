@@ -21,13 +21,13 @@ Act3::~Act3()
 }
 
 // STUB: LEGO1 0x100727e0
-MxBool Act3::FUN_100727e0(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+MxBool Act3::FUN_100727e0(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
 {
 	return FALSE;
 }
 
 // STUB: LEGO1 0x10072980
-MxBool Act3::FUN_10072980(MxU32, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
+MxBool Act3::FUN_10072980(LegoPathController*, Mx3DPointFloat& p_loc, Mx3DPointFloat& p_dir, Mx3DPointFloat& p_up)
 {
 	return FALSE;
 }

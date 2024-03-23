@@ -2,6 +2,7 @@
 #define LEGOCHARACTERMANAGER_H
 
 #include "decomp.h"
+#include "legoextraactor.h"
 #include "legovariables.h"
 #include "misc/legostorage.h"
 #include "mxstl/stlcompat.h"
@@ -51,6 +52,7 @@ public:
 	void FUN_100832a0();
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
+	LegoExtraActor* FUN_10084c40(const LegoChar*);
 	LegoCharacterData* Find(const char* p_key);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI*, MxBool);

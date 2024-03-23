@@ -70,9 +70,10 @@ public:
 	Mx3DPointFloat GetWorldUp();
 	Mx3DPointFloat GetWorldPosition();
 
-	inline LegoROI* GetROI() { return m_roi; }
-	inline MxU8 GetFlags() { return m_flags; }
 	inline MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
+	inline MxU8 GetFlags() { return m_flags; }
+	inline LegoROI* GetROI() { return m_roi; }
+	inline MxU8 GetUnknown0x59() { return m_unk0x59; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
@@ -90,7 +91,7 @@ protected:
 	MxFloat m_worldSpeed;            // 0x50
 	LegoROI* m_roi;                  // 0x54
 	MxBool m_cameraFlag;             // 0x58
-	undefined m_unk0x59;             // 0x59
+	MxU8 m_unk0x59;                  // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	Extra::ActionType m_actionType; // 0x5c

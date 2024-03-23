@@ -170,7 +170,7 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 	if (character != NULL) {
 		if (p_createEntity && character->m_roi->GetEntity() == NULL) {
 			// TODO: Match
-			LegoAnimActor* actor = new LegoAnimActor();
+			LegoExtraActor* actor = new LegoExtraActor();
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
 			actor->FUN_100114e0(0);
@@ -352,6 +352,11 @@ MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
 	return FALSE;
 }
 
+// STUB: LEGO1 0x10084c40
+LegoExtraActor* LegoCharacterManager::FUN_10084c40(const LegoChar*)
+{
+	return NULL;
+}
 // FUNCTION: LEGO1 0x10084c60
 LegoCharacterData* LegoCharacterManager::Find(const char* p_key)
 {

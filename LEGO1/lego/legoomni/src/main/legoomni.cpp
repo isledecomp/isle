@@ -771,6 +771,15 @@ MxResult LegoOmni::Start(MxDSAction* p_dsAction)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x1005b5c0
+void LegoOmni::DeleteAction()
+{
+	if (m_action.GetObjectId() != -1) {
+		DeleteObject(m_action);
+		m_action.SetObjectId(-1);
+	}
+}
+
 // FUNCTION: LEGO1 0x1005b5f0
 MxLong LegoOmni::Notify(MxParam& p_param)
 {
