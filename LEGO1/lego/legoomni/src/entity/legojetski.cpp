@@ -3,7 +3,6 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
-// Currently wrong due to a missing compiler added top pointer (See also missing code block in constructor)
 DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
 
 // FUNCTION: LEGO1 0x100136f0
