@@ -1,13 +1,19 @@
 #include "legonavcontroller.h"
 
+#include "infocenterstate.h"
+#include "legoanimationmanager.h"
 #include "legocameralocations.h"
+#include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legoomni.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
+#include "mxtransitionmanager.h"
 #include "realtime/realtime.h"
 
 #include <vec.h>
@@ -61,6 +67,33 @@ float LegoNavController::g_defrotSensitivity = 0.4f;
 
 // GLOBAL: LEGO1 0x100f4c54
 MxBool LegoNavController::g_defuseRotationalVel = FALSE;
+
+// GLOBAL: LEGO1 0x100f66a0
+MxBool g_unk0x100f66a0 = FALSE;
+
+// GLOBAL: LEGO1 0x100f66a4
+MxBool g_unk0x100f66a4 = FALSE;
+
+// GLOBAL: LEGO1 0x100f66b0
+undefined4 g_unk0x100f66b0 = 0;
+
+// GLOBAL: LEGO1 0x100f66b4
+undefined4 g_unk0x100f66b4 = 0;
+
+// GLOBAL: LEGO1 0x100f66bc
+undefined4 g_unk0x100f66bc = 2;
+
+// GLOBAL: LEGO1 0x100f66c0
+char* g_debugPassword = "OGEL";
+
+// GLOBAL: LEGO1 0x100f66c8
+char* g_currentInput = g_debugPassword;
+
+// GLOBAL: LEGO1 0x100f66d0
+MxBool g_musicEnabled = TRUE;
+
+// GLOBAL: LEGO1 0x100f66d4
+undefined4 g_unk0x100f66d4 = 1;
 
 // FUNCTION: LEGO1 0x10054ac0
 LegoNavController::LegoNavController()
@@ -402,10 +435,37 @@ MxResult LegoNavController::UpdateCameraLocation(const char* p_location)
 	return result;
 }
 
-// STUB: LEGO1 0x10055620
-void LegoNavController::SetLocation(MxU32 p_location)
+// FUNCTION: LEGO1 0x10055620
+MxResult LegoNavController::SetLocation(MxU32 p_location)
 {
-	// TODO
+	MxResult result = FAILURE;
+	if (p_location < _countof(g_cameraLocations)) {
+		MxMatrix mat;
+		LegoROI* viewROI = VideoManager()->GetViewROI();
+
+		CalcLocalTransform(
+			g_cameraLocations[p_location].m_position,
+			g_cameraLocations[p_location].m_direction,
+			g_cameraLocations[p_location].m_up,
+			mat
+		);
+
+		Mx3DPointFloat vec;
+		vec.Clear();
+
+		viewROI->FUN_100a5a30(vec);
+		viewROI->WrappedSetLocalTransform(mat);
+		VideoManager()->Get3DManager()->Moved(*viewROI);
+
+		SoundManager()->FUN_1002a410(
+			viewROI->GetWorldPosition(),
+			viewROI->GetWorldDirection(),
+			viewROI->GetWorldUp(),
+			viewROI->GetWorldVelocity()
+		);
+		result = SUCCESS;
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x10055750
@@ -422,9 +482,173 @@ int LegoNavController::FUN_100558b0()
 	return -1;
 }
 
-// STUB: LEGO1 0x10055a60
+// FUNCTION: LEGO1 0x10055a60
 MxLong LegoNavController::Notify(MxParam& p_param)
 {
-	// TODO
+	if (((MxNotificationParam&) p_param).GetType() == c_notificationKeyPress) {
+		m_unk0x5d = TRUE;
+		switch (((LegoEventNotificationParam&) p_param).GetKey()) {
+		case VK_PAUSE:
+			if (Lego()->IsTimerRunning()) {
+				Lego()->StopTimer();
+			}
+			else {
+				Lego()->StartTimer();
+			}
+			break;
+
+		case VK_ESCAPE: {
+			LegoWorld* currentWorld = CurrentWorld();
+			if (currentWorld) {
+				InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+				if (infocenterState && infocenterState->GetUnknown0x74() != 8 && currentWorld->VTable0x64()) {
+					BackgroundAudioManager()->Stop();
+					TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+					infocenterState->SetUnknown0x74(8);
+				}
+			}
+			break;
+		}
+		case VK_SPACE:
+			AnimationManager()->FUN_10061010(1);
+			break;
+		case 'Z':
+			// TODO
+			break;
+		case 'k':
+		case 'm':
+			// TODO
+			break;
+		case '{': {
+			InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+			if (infocenterState && infocenterState->HasRegistered()) {
+				GameState()->Save(0);
+			}
+			break;
+		}
+		default:
+			// Check if the the key is part of the debug password
+			if (!*g_currentInput) {
+				// password "protected" debug shortcuts
+				switch (((LegoEventNotificationParam&) p_param).GetKey()) {
+				case VK_TAB:
+					VideoManager()->ToggleFPS(g_unk0x100f66d4);
+					if (g_unk0x100f66d4 == 0) {
+						g_unk0x100f66d4 = 1;
+						m_unk0x5d = FALSE;
+						break;
+					}
+					else {
+						g_unk0x100f66d4 = 0;
+					}
+					break;
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+					// TODO
+					break;
+				case 'A':
+					if (g_unk0x100f66b0 == 1) {
+						Lego()->SetUnknown13c(TRUE);
+						AnimationManager()->FUN_10060570(1);
+						g_unk0x100f66b0 = 0;
+					}
+					else {
+						LegoWorld* world = CurrentWorld();
+						if (world) {
+							MxDSAction action;
+							action.SetObjectId(1);
+							action.SetAtomId(world->GetAtom());
+							LegoOmni::GetInstance()->Start(&action);
+						}
+					}
+					break;
+				case 'C':
+					g_unk0x100f66a4 = TRUE;
+					break;
+				case 'D':
+					m_unk0x60 = -1.0;
+					break;
+				case 'F':
+					RealtimeView::SetUserMaxLOD(0.0);
+					break;
+				case 'G':
+					g_unk0x100f66b4 = 1;
+					break;
+				case 'H':
+					RealtimeView::SetUserMaxLOD(5.0);
+					break;
+				case 'I':
+					// TODO
+					break;
+				case 'J':
+					// TODO
+					break;
+				case 'K':
+					// TODO
+					break;
+				case 'L':
+					g_unk0x100f66a0 = TRUE;
+					break;
+				case 'M':
+					// TODO
+					break;
+				case 'N':
+					if (VideoManager()) {
+						VideoManager()->SetRender3D(!VideoManager()->GetRender3D());
+					}
+					break;
+				case 'P':
+					// TODO
+					break;
+				case 'S':
+					BackgroundAudioManager()->Enable(!g_musicEnabled);
+					break;
+				case 'U':
+					m_unk0x60 = 1.0;
+					break;
+				case 'V':
+					// TODO
+				case 'W':
+					// TODO
+					break;
+				case 'X':
+					RealtimeView::SetUserMaxLOD(3.6);
+					break;
+				case 'j':
+					// TODO
+					break;
+				case 'o':
+					GameState()->SetActorId(6);
+					break;
+				case 0xbd:
+					g_unk0x100f66bc = 1;
+					break;
+				default:
+					m_unk0x5d = FALSE;
+					break;
+				}
+			}
+			else {
+				if (*g_currentInput == ((LegoEventNotificationParam&) p_param).GetKey()) {
+					g_currentInput++;
+					break;
+				}
+				else {
+					g_currentInput = g_debugPassword;
+					break;
+				}
+			}
+			break;
+		}
+	}
+
 	return 0;
 }

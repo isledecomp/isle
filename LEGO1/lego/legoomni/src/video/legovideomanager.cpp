@@ -243,6 +243,19 @@ void LegoVideoManager::MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY)
 	}
 }
 
+// FUNCTION: LEGO1 0x1007b6f0
+void LegoVideoManager::ToggleFPS(MxBool p_visible)
+{
+	if (p_visible && !m_drawFPS) {
+		m_drawFPS = TRUE;
+		m_unk0x550 = 1.0;
+		m_unk0x54c = Timer()->GetTime();
+	}
+	else {
+		m_drawFPS = p_visible;
+	}
+}
+
 // FUNCTION: LEGO1 0x1007b770
 MxResult LegoVideoManager::Tickle()
 {

@@ -236,6 +236,7 @@ public:
 		}
 		return SUCCESS;
 	}
+	inline void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 
 	inline void CloseMainWindow() { PostMessageA(m_windowHandle, WM_CLOSE, 0, 0); }
 

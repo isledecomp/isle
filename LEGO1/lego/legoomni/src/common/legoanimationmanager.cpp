@@ -392,6 +392,12 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	return result;
 }
 
+// STUB: LEGO1 0x10060570
+void LegoAnimationManager::FUN_10060570(MxBool)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10060dc0
 undefined4 LegoAnimationManager::FUN_10060dc0(
 	IsleScript::Script,

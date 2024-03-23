@@ -70,7 +70,7 @@ public:
 		float p_rs,
 		MxBool p_urs
 	);
-	static void SetLocation(MxU32 p_location);
+	static MxResult SetLocation(MxU32 p_location);
 	static MxResult UpdateCameraLocation(const char* p_location);
 
 	// SYNTHETIC: LEGO1 0x10054c10
