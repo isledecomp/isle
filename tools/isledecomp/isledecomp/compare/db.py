@@ -4,6 +4,7 @@ import sqlite3
 import logging
 from typing import List, Optional
 from isledecomp.types import SymbolType
+from isledecomp.cvdump.demangler import get_vtordisp_name
 
 _SETUP_SQL = """
     DROP TABLE IF EXISTS `symbols`;
@@ -249,6 +250,37 @@ class CompareDb:
             for (option, value) in cur.fetchall()
         }
 
+    def is_vtordisp(self, recomp_addr: int) -> bool:
+        """Check whether this function is a vtordisp based on its
+        decorated name. If its demangled name is missing the vtordisp
+        indicator, correct that."""
+        row = self._db.execute(
+            """SELECT name, decorated_name
+            FROM `symbols`
+            WHERE recomp_addr = ?""",
+            (recomp_addr,),
+        ).fetchone()
+
+        if row is None:
+            return False
+
+        (name, decorated_name) = row
+        if "`vtordisp" in name:
+            return True
+
+        new_name = get_vtordisp_name(decorated_name)
+        if new_name is None:
+            return False
+
+        self._db.execute(
+            """UPDATE `symbols`
+            SET name = ?
+            WHERE recomp_addr = ?""",
+            (new_name, recomp_addr),
+        )
+
+        return True
+
     def _find_potential_match(
         self, name: str, compare_type: SymbolType
     ) -> Optional[int]:
@@ -323,12 +355,34 @@ class CompareDb:
 
         return did_match
 
-    def match_vtable(self, addr: int, name: str) -> bool:
-        did_match = self._match_on(SymbolType.VTABLE, addr, name)
-        if not did_match:
-            logger.error("Failed to find vtable for class: %s", name)
+    def match_vtable(
+        self, addr: int, name: str, base_class: Optional[str] = None
+    ) -> bool:
+        # Only allow a match against "Class:`vftable'"
+        # if this is the derived class.
+        name = (
+            f"{name}::`vftable'"
+            if base_class is None or base_class == name
+            else f"{name}::`vftable'{{for `{base_class}'}}"
+        )
 
-        return did_match
+        row = self._db.execute(
+            """
+            SELECT recomp_addr
+            FROM `symbols`
+            WHERE orig_addr IS NULL
+            AND name = ?
+            AND (compare_type = ?)
+            LIMIT 1
+            """,
+            (name, SymbolType.VTABLE.value),
+        ).fetchone()
+
+        if row is not None and self.set_pair(addr, row[0], SymbolType.VTABLE):
+            return True
+
+        logger.error("Failed to find vtable for class: %s", name)
+        return False
 
     def match_static_variable(self, addr: int, name: str, function_addr: int) -> bool:
         """Matching a static function variable by combining the variable name

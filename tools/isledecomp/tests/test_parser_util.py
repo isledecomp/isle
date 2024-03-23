@@ -65,6 +65,14 @@ marker_samples = [
     # TODO: These match but shouldn't.
     # (False, False, '// FUNCTION: LEGO1 0'),
     # (False, False, '// FUNCTION: LEGO1 0x'),
+    # Extra field
+    (True, True, "// VTABLE: HELLO 0x1234 Extra"),
+    # Extra with spaces
+    (True, True, "// VTABLE: HELLO 0x1234 Whatever<SubClass *>"),
+    # Extra, no space (if the first non-hex character is not in [a-f])
+    (True, False, "// VTABLE: HELLO 0x1234Hello"),
+    # Extra, many spaces
+    (True, False, "// VTABLE: HELLO 0x1234    Hello"),
 ]
 
 
@@ -174,3 +182,27 @@ string_match_cases = [
 @pytest.mark.parametrize("line, string", string_match_cases)
 def test_get_string_contents(line: str, string: str):
     assert get_string_contents(line) == string
+
+
+def test_marker_extra_spaces():
+    """The extra field can contain spaces"""
+    marker = match_marker("// VTABLE: TEST 0x1234 S p a c e s")
+    assert marker.extra == "S p a c e s"
+
+    # Trailing spaces removed
+    marker = match_marker("// VTABLE: TEST 0x8888 spaces    ")
+    assert marker.extra == "spaces"
+
+    # Trailing newline removed if present
+    marker = match_marker("// VTABLE: TEST 0x5555 newline\n")
+    assert marker.extra == "newline"
+
+
+def test_marker_trailing_spaces():
+    """Should ignore trailing spaces. (Invalid extra field)
+    Offset field not truncated, extra field set to None."""
+
+    marker = match_marker("// VTABLE: TEST 0x1234     ")
+    assert marker is not None
+    assert marker.offset == 0x1234
+    assert marker.extra is None

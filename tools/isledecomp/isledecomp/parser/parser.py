@@ -47,15 +47,16 @@ class MarkerDict:
 
     def insert(self, marker: DecompMarker) -> bool:
         """Return True if this insert would overwrite"""
-        key = (marker.category, marker.module)
-        if key in self.markers:
+        if marker.key in self.markers:
             return True
 
-        self.markers[key] = marker
+        self.markers[marker.key] = marker
         return False
 
-    def query(self, category: MarkerCategory, module: str) -> Optional[DecompMarker]:
-        return self.markers.get((category, module))
+    def query(
+        self, category: MarkerCategory, module: str, extra: Optional[str] = None
+    ) -> Optional[DecompMarker]:
+        return self.markers.get((category, module, extra))
 
     def iter(self) -> Iterator[DecompMarker]:
         for _, marker in self.markers.items():
@@ -275,6 +276,7 @@ class DecompParser:
                     module=marker.module,
                     offset=marker.offset,
                     name=self.curly.get_prefix(class_name),
+                    base_class=marker.extra,
                 )
             )
 

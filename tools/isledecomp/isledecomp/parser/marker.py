@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import Optional, Tuple
 from enum import Enum
 
 
@@ -29,18 +29,20 @@ class MarkerType(Enum):
 
 
 markerRegex = re.compile(
-    r"\s*//\s*(?P<type>\w+):\s*(?P<module>\w+)\s+(?P<offset>0x[a-f0-9]+)",
+    r"\s*//\s*(?P<type>\w+):\s*(?P<module>\w+)\s+(?P<offset>0x[a-f0-9]+) *(?P<extra>\S.+\S)?",
     flags=re.I,
 )
 
 
 markerExactRegex = re.compile(
-    r"\s*// (?P<type>[A-Z]+): (?P<module>[A-Z0-9]+) (?P<offset>0x[a-f0-9]+)$"
+    r"\s*// (?P<type>[A-Z]+): (?P<module>[A-Z0-9]+) (?P<offset>0x[a-f0-9]+)(?: (?P<extra>\S.+\S))?\n?$"
 )
 
 
 class DecompMarker:
-    def __init__(self, marker_type: str, module: str, offset: int) -> None:
+    def __init__(
+        self, marker_type: str, module: str, offset: int, extra: Optional[str] = None
+    ) -> None:
         try:
             self._type = MarkerType[marker_type.upper()]
         except KeyError:
@@ -51,6 +53,7 @@ class DecompMarker:
         # we will emit a syntax error.
         self._module: str = module.upper()
         self._offset: int = offset
+        self._extra: Optional[str] = extra
 
     @property
     def type(self) -> MarkerType:
@@ -63,6 +66,10 @@ class DecompMarker:
     @property
     def offset(self) -> int:
         return self._offset
+
+    @property
+    def extra(self) -> Optional[str]:
+        return self._extra
 
     @property
     def category(self) -> MarkerCategory:
@@ -80,6 +87,11 @@ class DecompMarker:
             return MarkerCategory.FUNCTION
 
         return MarkerCategory.ADDRESS
+
+    @property
+    def key(self) -> Tuple[str, str, Optional[str]]:
+        """For use with the MarkerDict. To detect/avoid marker collision."""
+        return (self.category, self.module, self.extra)
 
     def is_regular_function(self) -> bool:
         """Regular function, meaning: not an explicit byname lookup. FUNCTION
@@ -126,6 +138,7 @@ def match_marker(line: str) -> Optional[DecompMarker]:
         marker_type=match.group("type"),
         module=match.group("module"),
         offset=int(match.group("offset"), 16),
+        extra=match.group("extra"),
     )
 
 

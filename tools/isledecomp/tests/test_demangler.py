@@ -4,6 +4,7 @@ from isledecomp.cvdump.demangler import (
     demangle_vtable,
     parse_encoded_number,
     InvalidEncodedNumberError,
+    get_vtordisp_name,
 )
 
 string_demangle_cases = [
@@ -46,13 +47,37 @@ def test_invalid_encoded_number():
 
 
 vtable_cases = [
-    ("??_7LegoCarBuildAnimPresenter@@6B@", "LegoCarBuildAnimPresenter"),
-    ("??_7?$MxCollection@PAVLegoWorld@@@@6B@", "MxCollection<LegoWorld *>"),
-    ("??_7?$MxPtrList@VLegoPathController@@@@6B@", "MxPtrList<LegoPathController>"),
-    ("??_7Renderer@Tgl@@6B@", "Tgl::Renderer"),
+    ("??_7LegoCarBuildAnimPresenter@@6B@", "LegoCarBuildAnimPresenter::`vftable'"),
+    ("??_7?$MxCollection@PAVLegoWorld@@@@6B@", "MxCollection<LegoWorld *>::`vftable'"),
+    (
+        "??_7?$MxPtrList@VLegoPathController@@@@6B@",
+        "MxPtrList<LegoPathController>::`vftable'",
+    ),
+    ("??_7Renderer@Tgl@@6B@", "Tgl::Renderer::`vftable'"),
+    ("??_7LegoExtraActor@@6B0@@", "LegoExtraActor::`vftable'{for `LegoExtraActor'}"),
+    (
+        "??_7LegoExtraActor@@6BLegoAnimActor@@@",
+        "LegoExtraActor::`vftable'{for `LegoAnimActor'}",
+    ),
+    (
+        "??_7LegoAnimActor@@6B?$LegoContainer@PAM@@@",
+        "LegoAnimActor::`vftable'{for `LegoContainer<float *>'}",
+    ),
 ]
 
 
 @pytest.mark.parametrize("symbol, class_name", vtable_cases)
 def test_vtable(symbol, class_name):
     assert demangle_vtable(symbol) == class_name
+
+
+def test_vtordisp():
+    """Make sure we can accurately detect an adjuster thunk symbol"""
+    assert get_vtordisp_name("") is None
+    assert get_vtordisp_name("?ClassName@LegoExtraActor@@UBEPBDXZ") is None
+    assert (
+        get_vtordisp_name("?ClassName@LegoExtraActor@@$4PPPPPPPM@A@BEPBDXZ") is not None
+    )
+
+    # A function called vtordisp
+    assert get_vtordisp_name("?vtordisp@LegoExtraActor@@UBEPBDXZ") is None
