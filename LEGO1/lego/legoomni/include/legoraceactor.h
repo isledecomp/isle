@@ -5,9 +5,9 @@
 #include "realtime/matrix.h"
 
 /*
-	VTABLE: LEGO1 0x100d5b78 LegoAnimActor
-	VTABLE: LEGO1 0x100d5b88 LegoPathActor
-	VTABLE: LEGO1 0x100d5c54 LegoRaceActor
+	XVTABLE: LEGO1 0x100d5b78 LegoAnimActor
+	XVTABLE: LEGO1 0x100d5b88 LegoPathActor
+	XVTABLE: LEGO1 0x100d5c54 LegoRaceActor
 */
 // SIZE 0x180
 class LegoRaceActor : public virtual LegoAnimActor {

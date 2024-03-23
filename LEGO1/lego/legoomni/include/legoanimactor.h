@@ -5,8 +5,8 @@
 #include "legopathactor.h"
 
 /*
-	VTABLE: LEGO1 0x100d5440 LegoPathActor
-	VTABLE: LEGO1 0x100d5510 LegoAnimActor
+	XVTABLE: LEGO1 0x100d5440 LegoPathActor
+	XVTABLE: LEGO1 0x100d5510 LegoAnimActor
 */
 // SIZE 0x174
 class LegoAnimActor : public virtual LegoPathActor {
