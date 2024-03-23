@@ -19,12 +19,14 @@ struct Character {
 	MxBool m_active;         // 0x14
 };
 
+// SIZE 0x08
 struct Vehicle {
 	char* m_name;        // 0x00
 	undefined m_unk0x04; // 0x04
 	MxBool m_unk0x05;    // 0x05
 };
 
+// SIZE 0x18
 struct Unknown0x3c {
 	LegoROI* m_roi;            // 0x00
 	MxU32 m_id;                // 0x04

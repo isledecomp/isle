@@ -10,6 +10,9 @@
 #include <io.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
+DECOMP_SIZE_ASSERT(Character, 0x18)
+DECOMP_SIZE_ASSERT(Vehicle, 0x8)
+DECOMP_SIZE_ASSERT(Unknown0x3c, 0x18)
 
 // GLOBAL: LEGO1 0x100f6d10
 Vehicle g_vehicles[] = {"bikebd", 0,        FALSE, "bikepg", 0,        FALSE, "bikerd", 0,       FALSE, "bikesy", 0,
