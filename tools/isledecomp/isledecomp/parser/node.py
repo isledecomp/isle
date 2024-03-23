@@ -55,7 +55,7 @@ class ParserVariable(ParserSymbol):
 
 @dataclass
 class ParserVtable(ParserSymbol):
-    pass
+    base_class: Optional[str] = None
 
 
 @dataclass

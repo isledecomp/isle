@@ -5,3 +5,4 @@ colorama
 isledecomp
 pystache
 pyyaml
+git+https://github.com/wbenny/pydemangler.git

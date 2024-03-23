@@ -5,6 +5,7 @@ https://en.wikiversity.org/wiki/Visual_C%2B%2B_name_mangling
 import re
 from collections import namedtuple
 from typing import Optional
+import pydemangler
 
 
 class InvalidEncodedNumberError(Exception):
@@ -51,8 +52,52 @@ def demangle_string_const(symbol: str) -> Optional[StringConstInfo]:
     return StringConstInfo(len=strlen, is_utf16=is_utf16)
 
 
+def get_vtordisp_name(symbol: str) -> Optional[str]:
+    # pylint: disable=c-extension-no-member
+    """For adjuster thunk functions, the PDB will sometimes use a name
+    that contains "vtordisp" but often will just reuse the name of the
+    function being thunked. We want to use the vtordisp name if possible."""
+    name = pydemangler.demangle(symbol)
+    if name is None:
+        return None
+
+    if "`vtordisp" not in name:
+        return None
+
+    # Now we remove the parts of the friendly name that we don't need
+    try:
+        # Assuming this is the last of the function prefixes
+        thiscall_idx = name.index("__thiscall")
+        # To match the end of the `vtordisp{x,y}' string
+        end_idx = name.index("}'")
+        return name[thiscall_idx + 11 : end_idx + 2]
+    except ValueError:
+        return name
+
+
 def demangle_vtable(symbol: str) -> str:
+    # pylint: disable=c-extension-no-member
     """Get the class name referenced in the vtable symbol."""
+    raw = pydemangler.demangle(symbol)
+
+    if raw is None:
+        pass  # TODO: This shouldn't happen if MSVC behaves
+
+    # Remove storage class and other stuff we don't care about
+    return (
+        raw.replace("<class ", "<")
+        .replace("<struct ", "<")
+        .replace("const ", "")
+        .replace("volatile ", "")
+    )
+
+
+def demangle_vtable_ourselves(symbol: str) -> str:
+    """Parked implementation of MSVC symbol demangling.
+    We only use this for vtables and it works okay with the simple cases or
+    templates that refer to other classes/structs. Some namespace support.
+    Does not support backrefs, primitive types, or vtables with
+    virtual inheritance."""
 
     # Seek ahead 4 chars to strip off "??_7" prefix
     t = symbol[4:].split("@")
@@ -66,11 +111,11 @@ def demangle_vtable(symbol: str) -> str:
         else:
             generic = t[1][1:]
 
-        return f"{class_name}<{generic}>"
+        return f"{class_name}<{generic}>::`vftable'"
 
     # If we have two classes listed, it is a namespace hierarchy.
     # @@6B@ is a common generic suffix for these vtable symbols.
     if t[1] != "" and t[1] != "6B":
-        return t[1] + "::" + t[0]
+        return t[1] + "::" + t[0] + "::`vftable'"
 
-    return t[0]
+    return t[0] + "::`vftable'"

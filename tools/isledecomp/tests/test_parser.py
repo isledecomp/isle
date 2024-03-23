@@ -711,3 +711,46 @@ def test_header_function_declaration(parser):
 
     assert len(parser.alerts) == 1
     assert parser.alerts[0].code == ParserError.NO_IMPLEMENTATION
+
+
+def test_extra(parser):
+    """Allow a fourth field in the decomp annotation. Its use will vary
+    depending on the marker type. Currently this is only used to identify
+    a vtable with virtual inheritance."""
+
+    # Intentionally using non-vtable markers here.
+    # We might want to emit a parser warning for unnecessary extra info.
+    parser.read_lines(
+        [
+            "// GLOBAL: TEST 0x5555 Haha",
+            "int g_variable = 0;",
+            "// FUNCTION: TEST 0x1234 Something",
+            "void Test() { g_variable++; }",
+            "// LIBRARY: TEST 0x8080 Printf",
+            "// _printf",
+        ]
+    )
+
+    # We don't use this information (yet) but this is all fine.
+    assert len(parser.alerts) == 0
+
+
+def test_virtual_inheritance(parser):
+    """Indicate the base class for a vtable where the class uses
+    virtual inheritance."""
+    parser.read_lines(
+        [
+            "// VTABLE: HELLO 0x1234",
+            "// VTABLE: HELLO 0x1238 Greetings",
+            "// VTABLE: HELLO 0x123c Howdy",
+            "class HiThere : public virtual Greetings {",
+            "};",
+        ]
+    )
+
+    assert len(parser.alerts) == 0
+    assert len(parser.vtables) == 3
+    assert parser.vtables[0].base_class is None
+    assert parser.vtables[1].base_class == "Greetings"
+    assert parser.vtables[2].base_class == "Howdy"
+    assert all(v.name == "HiThere" for v in parser.vtables)
