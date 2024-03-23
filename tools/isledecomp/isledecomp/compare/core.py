@@ -372,6 +372,19 @@ class Compare:
         orig_raw = self.orig_bin.read(match.orig_addr, match.size)
         recomp_raw = self.recomp_bin.read(match.recomp_addr, match.size)
 
+        # It's unlikely that a function other than an adjuster thunk would
+        # start with a SUB instruction, so alert to a possible wrong
+        # annotation here.
+        # There's probably a better place to do this, but we're reading
+        # the function bytes here already.
+        try:
+            if orig_raw[0] == 0x2B and recomp_raw[0] != 0x2B:
+                logger.warning(
+                    "Possible thunk at 0x%x (%s)", match.orig_addr, match.name
+                )
+        except IndexError:
+            pass
+
         def orig_lookup(addr: int) -> Optional[str]:
             m = self._db.get_by_orig(addr)
             if m is None:
