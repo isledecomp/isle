@@ -436,9 +436,10 @@ MxResult LegoNavController::UpdateCameraLocation(const char* p_location)
 }
 
 // FUNCTION: LEGO1 0x10055620
-MxResult LegoNavController::SetLocation(MxU32 p_location)
+MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
 {
 	MxResult result = FAILURE;
+
 	if (p_location < _countof(g_cameraLocations)) {
 		MxMatrix mat;
 		LegoROI* viewROI = VideoManager()->GetViewROI();
@@ -463,8 +464,10 @@ MxResult LegoNavController::SetLocation(MxU32 p_location)
 			viewROI->GetWorldUp(),
 			viewROI->GetWorldVelocity()
 		);
+
 		result = SUCCESS;
 	}
+
 	return result;
 }
 
@@ -487,6 +490,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetType() == c_notificationKeyPress) {
 		m_unk0x5d = TRUE;
+
 		switch (((LegoEventNotificationParam&) p_param).GetKey()) {
 		case VK_PAUSE:
 			if (Lego()->IsTimerRunning()) {
@@ -496,7 +500,6 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				Lego()->StartTimer();
 			}
 			break;
-
 		case VK_ESCAPE: {
 			LegoWorld* currentWorld = CurrentWorld();
 			if (currentWorld) {
