@@ -1,11 +1,14 @@
 #include "legonavcontroller.h"
 
+#include "legocameralocations.h"
 #include "legoinputmanager.h"
+#include "legosoundmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
+#include "realtime/realtime.h"
 
 #include <vec.h>
 
@@ -361,10 +364,42 @@ MxBool LegoNavController::CalculateNewPosDir(
 	return changed;
 }
 
-// STUB: LEGO1 0x10055500
-void LegoNavController::UpdateCameraLocation(const char* p_location)
+// FUNCTION: LEGO1 0x10055500
+MxResult LegoNavController::UpdateCameraLocation(const char* p_location)
 {
-	// TODO
+	MxResult result = FAILURE;
+
+	for (MxS32 i = 0; i < (MxS32) _countof(g_cameraLocations); i++) {
+		if (!strcmpi(p_location, g_cameraLocations[i].m_name)) {
+			MxMatrix mat;
+			LegoROI* viewROI = VideoManager()->GetViewROI();
+
+			CalcLocalTransform(
+				g_cameraLocations[i].m_position,
+				g_cameraLocations[i].m_direction,
+				g_cameraLocations[i].m_up,
+				mat
+			);
+
+			Mx3DPointFloat vec;
+			vec.Clear();
+
+			viewROI->FUN_100a5a30(vec);
+			viewROI->WrappedSetLocalTransform(mat);
+			VideoManager()->Get3DManager()->Moved(*viewROI);
+
+			SoundManager()->FUN_1002a410(
+				viewROI->GetWorldPosition(),
+				viewROI->GetWorldDirection(),
+				viewROI->GetWorldUp(),
+				viewROI->GetWorldVelocity()
+			);
+
+			result = SUCCESS;
+		}
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10055620

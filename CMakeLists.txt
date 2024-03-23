@@ -339,6 +339,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
+  LEGO1/lego/legoomni/src/entity/legocameralocations.cpp
   LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
   LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
