@@ -4,10 +4,10 @@
 #include "legocarraceactor.h"
 
 /*
-	XVTABLE: LEGO1 0x100da208 LegoCarRaceActor
-	XVTABLE: LEGO1 0x100da228 LegoRaceActor
-	XVTABLE: LEGO1 0x100da230 LegoAnimActor
-	XVTABLE: LEGO1 0x100da240 LegoPathActor
+	VTABLE: LEGO1 0x100da208 LegoCarRaceActor
+	VTABLE: LEGO1 0x100da228 LegoRaceActor
+	VTABLE: LEGO1 0x100da230 LegoAnimActor
+	VTABLE: LEGO1 0x100da240 LegoPathActor
 */
 // SIZE 0x1a8
 class LegoJetskiRaceActor : public virtual LegoCarRaceActor {

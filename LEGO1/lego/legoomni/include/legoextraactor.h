@@ -4,9 +4,9 @@
 #include "legoanimactor.h"
 
 /*
-	XVTABLE: LEGO1 0x100d6c00 LegoAnimActor
-	XVTABLE: LEGO1 0x100d6c10 LegoPathActor
-	XVTABLE: LEGO1 0x100d6cdc LegoExtraActor
+	VTABLE: LEGO1 0x100d6c00 LegoAnimActor
+	VTABLE: LEGO1 0x100d6c10 LegoPathActor
+	VTABLE: LEGO1 0x100d6cdc LegoExtraActor
 */
 // SIZE 0x1dc
 class LegoExtraActor : public virtual LegoAnimActor {

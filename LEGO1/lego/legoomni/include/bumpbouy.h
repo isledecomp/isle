@@ -5,8 +5,8 @@
 #include "mxtypes.h"
 
 /*
-	XVTABLE: LEGO1 0x100d6790 LegoPathActor
-	XVTABLE: LEGO1 0x100d6860 LegoAnimActor
+	VTABLE: LEGO1 0x100d6790 LegoPathActor
+	VTABLE: LEGO1 0x100d6860 LegoAnimActor
 */
 // SIZE 0x174
 class BumpBouy : public LegoAnimActor {

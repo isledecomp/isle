@@ -4,8 +4,8 @@
 #include "legoanimactor.h"
 
 /*
-	XVTABLE: LEGO1 0x100d7920 LegoPathActor
-	XVTABLE: LEGO1 0x100d79f0 LegoAnimActor
+	VTABLE: LEGO1 0x100d7920 LegoPathActor
+	VTABLE: LEGO1 0x100d79f0 LegoAnimActor
 */
 // SIZE 0x1a8
 class Act3Shark : public LegoAnimActor {

@@ -5,11 +5,11 @@
 #include "legoracemap.h"
 
 /*
-	XVTABLE: LEGO1 0x100d5a08 LegoJetskiRaceActor
-	XVTABLE: LEGO1 0x100d5a28 LegoRaceActor
-	XVTABLE: LEGO1 0x100d5a30 LegoAnimActor
-	XVTABLE: LEGO1 0x100d5a40 LegoPathActor
-	XVTABLE: LEGO1 0x100d5b10 LegoRaceMap
+	VTABLE: LEGO1 0x100d5a08 LegoJetskiRaceActor
+	VTABLE: LEGO1 0x100d5a28 LegoRaceActor
+	VTABLE: LEGO1 0x100d5a30 LegoAnimActor
+	VTABLE: LEGO1 0x100d5a40 LegoPathActor
+	VTABLE: LEGO1 0x100d5b10 LegoRaceMap
 */
 // SIZE 0x1dc
 class LegoJetski : public LegoJetskiRaceActor, public LegoRaceMap {
