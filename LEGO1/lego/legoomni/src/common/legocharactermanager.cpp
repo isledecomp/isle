@@ -149,6 +149,11 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 
 	if (character == NULL) {
 		LegoROI* roi = CreateROI(p_key);
+
+		if (roi == NULL) {
+			goto done;
+		}
+
 		roi->SetVisibility(FALSE);
 
 		if (roi != NULL) {
@@ -167,9 +172,9 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 		VideoManager()->Get3DManager()->Add(*character->m_roi);
 	}
 
+done:
 	if (character != NULL) {
 		if (p_createEntity && character->m_roi->GetEntity() == NULL) {
-			// TODO: Match
 			LegoExtraActor* actor = new LegoExtraActor();
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
@@ -357,6 +362,7 @@ LegoExtraActor* LegoCharacterManager::FUN_10084c40(const LegoChar*)
 {
 	return NULL;
 }
+
 // FUNCTION: LEGO1 0x10084c60
 LegoCharacterData* LegoCharacterManager::Find(const char* p_key)
 {

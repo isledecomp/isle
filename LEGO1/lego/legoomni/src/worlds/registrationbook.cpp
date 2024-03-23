@@ -416,7 +416,7 @@ MxResult RegistrationBook::Tickle()
 			if (m_checkboxHilite) {
 				DDBLTFX op;
 				op.dwSize = sizeof(op);
-				op.dwROP = 0xcc0020;
+				op.dwROP = SRCCOPY;
 
 				if (g_nextCheckbox) {
 					m_checkboxSurface->Blt(NULL, m_checkboxHilite, NULL, DDBLT_ROP, &op);
