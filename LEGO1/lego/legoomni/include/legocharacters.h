@@ -19,7 +19,7 @@ struct LegoCharacterData {
 		MxU8 m_unk0x14;         // 0x14
 	};
 
-	char* m_name;            // 0x00
+	const char* m_name;      // 0x00
 	LegoROI* m_roi;          // 0x04
 	LegoExtraActor* m_actor; // 0x08
 	MxS32 m_unk0x0c;         // 0x0c
