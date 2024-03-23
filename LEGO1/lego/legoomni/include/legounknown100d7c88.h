@@ -5,6 +5,7 @@
 #include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d7c88
+// SIZE 0x18
 class LegoUnknown100d7c88 {
 public:
 	~LegoUnknown100d7c88();

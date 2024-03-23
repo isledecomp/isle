@@ -11,9 +11,9 @@
 #include "tgl/d3drm/impl.h"
 #include "viewmanager/viewroi.h"
 
-DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590);
-DECOMP_SIZE_ASSERT(MxStopWatch, 0x18);
-DECOMP_SIZE_ASSERT(MxFrequencyMeter, 0x20);
+DECOMP_SIZE_ASSERT(LegoVideoManager, 0x590)
+DECOMP_SIZE_ASSERT(MxStopWatch, 0x18)
+DECOMP_SIZE_ASSERT(MxFrequencyMeter, 0x20)
 
 // FUNCTION: LEGO1 0x1007aa20
 LegoVideoManager::LegoVideoManager()

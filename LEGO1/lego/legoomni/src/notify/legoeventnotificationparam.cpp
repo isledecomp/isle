@@ -2,4 +2,4 @@
 
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20);
+DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)

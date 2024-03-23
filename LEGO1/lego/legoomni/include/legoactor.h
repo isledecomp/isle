@@ -48,7 +48,7 @@ public:
 
 	static const char* GetActorName(MxU8 p_id);
 
-private:
+protected:
 	MxFloat m_unk0x68;       // 0x68
 	LegoCacheSound* m_sound; // 0x6c
 	MxFloat m_unk0x70;       // 0x70

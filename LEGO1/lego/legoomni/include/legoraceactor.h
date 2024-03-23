@@ -4,9 +4,16 @@
 #include "legoanimactor.h"
 #include "realtime/matrix.h"
 
-// VTABLE: LEGO1 0x100d5b88
-class LegoRaceActor : public LegoAnimActor {
+/*
+	VTABLE: LEGO1 0x100d5b78 LegoAnimActor
+	VTABLE: LEGO1 0x100d5b88 LegoPathActor
+	VTABLE: LEGO1 0x100d5c54 LegoRaceActor
+*/
+// SIZE 0x180
+class LegoRaceActor : public virtual LegoAnimActor {
 public:
+	LegoRaceActor();
+
 	// FUNCTION: LEGO1 0x10014af0
 	inline const char* ClassName() const override // vtable+0x0c
 	{
@@ -28,8 +35,14 @@ public:
 	MxS32 VTable0x90() override;                       // vtable+0x90
 	MxS32 VTable0x94() override;                       // vtable+0x94
 
+	// FUNCTION: LEGO1 0x10014aa0
+	virtual MxResult FUN_10014aa0() { return SUCCESS; }
+
 	// SYNTHETIC: LEGO1 0x10014ab0
 	// LegoRaceActor::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0x08; // 0x08
 };
 
 #endif // LEGORACEACTOR_H

@@ -1,6 +1,6 @@
 #include "towtrack.h"
 
-DECOMP_SIZE_ASSERT(TowTrack, 0x180);
+DECOMP_SIZE_ASSERT(TowTrack, 0x180)
 
 // FUNCTION: LEGO1 0x1004c720
 TowTrack::TowTrack()

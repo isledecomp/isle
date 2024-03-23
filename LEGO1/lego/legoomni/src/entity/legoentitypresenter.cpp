@@ -4,7 +4,7 @@
 #include "legovideomanager.h"
 #include "misc.h"
 
-DECOMP_SIZE_ASSERT(LegoEntityPresenter, 0x50);
+DECOMP_SIZE_ASSERT(LegoEntityPresenter, 0x50)
 
 // FUNCTION: LEGO1 0x10053440
 LegoEntityPresenter::LegoEntityPresenter()

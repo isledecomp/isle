@@ -1,5 +1,7 @@
 #include "legocarbuildanimpresenter.h"
 
+DECOMP_SIZE_ASSERT(LegoCarBuildAnimPresenter, 0x150)
+
 // STUB: LEGO1 0x10078400
 LegoCarBuildAnimPresenter::LegoCarBuildAnimPresenter()
 {

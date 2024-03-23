@@ -6,7 +6,7 @@
 #include "misc/legotexture.h"
 #include "tgl/d3drm/impl.h"
 
-DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10);
+DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10)
 
 // FUNCTION: LEGO1 0x10065bf0
 LegoTextureInfo::LegoTextureInfo()

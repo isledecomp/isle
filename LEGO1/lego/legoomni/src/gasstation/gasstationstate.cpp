@@ -1,6 +1,6 @@
 #include "gasstationstate.h"
 
-DECOMP_SIZE_ASSERT(GasStationState, 0x24);
+DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
 // FUNCTION: LEGO1 0x10005eb0
 GasStationState::GasStationState()

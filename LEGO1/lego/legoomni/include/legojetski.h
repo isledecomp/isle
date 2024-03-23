@@ -2,10 +2,20 @@
 #define LEGOJETSKI_H
 
 #include "legojetskiraceactor.h"
+#include "legoracemap.h"
 
-// VTABLE: LEGO1 0x100d5a40
-class LegoJetski : public LegoJetskiRaceActor {
+/*
+	VTABLE: LEGO1 0x100d5a08 LegoJetskiRaceActor
+	VTABLE: LEGO1 0x100d5a28 LegoRaceActor
+	VTABLE: LEGO1 0x100d5a30 LegoAnimActor
+	VTABLE: LEGO1 0x100d5a40 LegoPathActor
+	VTABLE: LEGO1 0x100d5b10 LegoRaceMap
+*/
+// SIZE 0x1dc
+class LegoJetski : public LegoJetskiRaceActor, public LegoRaceMap {
 public:
+	LegoJetski();
+
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10013e80
@@ -28,6 +38,8 @@ public:
 	MxS32 VTable0x94() override;                       // vtable+0x94
 	void VTable0x98() override;                        // vtable+0x98
 	void VTable0x9c() override;                        // vtable+0x9c
+
+	virtual void FUN_100136f0(float p_worldSpeed);
 
 	// SYNTHETIC: LEGO1 0x10013e20
 	// LegoJetski::`scalar deleting destructor'

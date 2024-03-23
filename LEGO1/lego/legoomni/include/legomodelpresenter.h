@@ -9,7 +9,7 @@ class LegoEntity;
 class MxDSChunk;
 
 // VTABLE: LEGO1 0x100d4e50
-// SIZE 0x6c (discovered through inline constructor at 0x10009ae6)
+// SIZE 0x6c
 class LegoModelPresenter : public MxVideoPresenter {
 public:
 	LegoModelPresenter() { Reset(); }

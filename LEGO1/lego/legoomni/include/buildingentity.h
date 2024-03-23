@@ -4,7 +4,7 @@
 #include "legoentity.h"
 
 // VTABLE: LEGO1 0x100d5c88
-// SIZE <= 0x68, hard to tell because it's always constructed as a derivative
+// SIZE 0x68
 class BuildingEntity : public LegoEntity {
 public:
 	BuildingEntity();

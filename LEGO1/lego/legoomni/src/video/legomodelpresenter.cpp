@@ -16,6 +16,8 @@
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"
 
+DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
+
 // GLOBAL: LEGO1 0x100f7ae0
 MxS32 g_modelPresenterConfig = 1;
 

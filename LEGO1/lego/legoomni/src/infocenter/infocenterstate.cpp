@@ -3,7 +3,7 @@
 #include "infocenter.h"
 #include "infomain_actions.h"
 
-DECOMP_SIZE_ASSERT(InfocenterState, 0x94);
+DECOMP_SIZE_ASSERT(InfocenterState, 0x94)
 
 // GLOBAL: LEGO1 0x100f76a8
 InfomainScript::Script g_exitDialogueAct1[14] = {

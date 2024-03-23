@@ -1,5 +1,7 @@
 #include "jetskirace.h"
 
+DECOMP_SIZE_ASSERT(JetskiRace, 0x144)
+
 // STUB: LEGO1 0x100162c0
 MxResult JetskiRace::Create(MxDSAction& p_dsAction)
 {

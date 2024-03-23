@@ -1,5 +1,29 @@
 #include "legojetski.h"
 
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+
+DECOMP_SIZE_ASSERT(LegoJetski, 0x1dc)
+
+// FUNCTION: LEGO1 0x100136f0
+void LegoJetski::FUN_100136f0(float p_worldSpeed)
+{
+	if (p_worldSpeed < 0) {
+		LegoCarRaceActor::m_unk0x0c = 2;
+		m_unk0x13c = 0;
+		SetWorldSpeed(0);
+	}
+	else {
+		m_unk0x13c = p_worldSpeed;
+	}
+}
+
+// FUNCTION: LEGO1 0x10013820
+LegoJetski::LegoJetski()
+{
+	NotificationManager()->Register(this);
+}
+
 // STUB: LEGO1 0x10013e70
 MxLong LegoJetski::Notify(MxParam& p_param)
 {

@@ -1,5 +1,7 @@
 #include "doors.h"
 
+DECOMP_SIZE_ASSERT(Doors, 0x1f8)
+
 // STUB: LEGO1 0x10066100
 MxS32 Doors::VTable0x94()
 {

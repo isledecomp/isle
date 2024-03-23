@@ -10,7 +10,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
-DECOMP_SIZE_ASSERT(Radio, 0x10);
+DECOMP_SIZE_ASSERT(Radio, 0x10)
 
 // FUNCTION: LEGO1 0x1002c850
 Radio::Radio()

@@ -1,6 +1,6 @@
 #include "motocycle.h"
 
-DECOMP_SIZE_ASSERT(Motocycle, 0x16c);
+DECOMP_SIZE_ASSERT(Motocycle, 0x16c)
 
 // FUNCTION: LEGO1 0x100357b0
 Motocycle::Motocycle()

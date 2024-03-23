@@ -10,7 +10,7 @@ class LegoWorld;
 class LegoAnimClass;
 
 // VTABLE: LEGO1 0x100d90c8
-// SIZE 0xc0
+// SIZE 0xbc
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	enum {
@@ -93,7 +93,6 @@ protected:
 	undefined4 m_unk0xa0;      // 0xa0
 	undefined4 m_unk0xa4;      // 0xa4
 	Mx3DPointFloat m_unk0xa8;  // 0xa8
-	undefined4 m_unk0xbc;      // 0xbc
 };
 
 // SYNTHETIC: LEGO1 0x10068650

@@ -8,6 +8,8 @@
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
 
+DECOMP_SIZE_ASSERT(GasStation, 0x128)
+
 // GLOBAL: LEGO1 0x100f0160
 undefined4 g_unk0x100f0160 = 3;
 

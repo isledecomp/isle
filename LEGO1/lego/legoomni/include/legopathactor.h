@@ -6,7 +6,7 @@
 #include "realtime/matrix.h"
 
 // VTABLE: LEGO1 0x100d6e28
-// SIZE 0x154 (from inlined construction at 0x1000a346)
+// SIZE 0x154
 class LegoPathActor : public LegoActor {
 public:
 	LegoPathActor();

@@ -1,6 +1,6 @@
 #include "jetski.h"
 
-DECOMP_SIZE_ASSERT(Jetski, 0x164);
+DECOMP_SIZE_ASSERT(Jetski, 0x164)
 
 // FUNCTION: LEGO1 0x1007e3b0
 Jetski::Jetski()

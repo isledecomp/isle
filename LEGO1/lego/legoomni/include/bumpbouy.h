@@ -4,9 +4,14 @@
 #include "legoanimactor.h"
 #include "mxtypes.h"
 
-// VTABLE: LEGO1 0x100d6790
+/*
+	VTABLE: LEGO1 0x100d6790 LegoPathActor
+	VTABLE: LEGO1 0x100d6860 LegoAnimActor
+*/
+// SIZE 0x174
 class BumpBouy : public LegoAnimActor {
 public:
+	BumpBouy();
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100274e0

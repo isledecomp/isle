@@ -1,5 +1,7 @@
 #include "bumpbouy.h"
 
+DECOMP_SIZE_ASSERT(BumpBouy, 0x174)
+
 // STUB: LEGO1 0x1000fd00
 void BumpBouy::ParseAction(char*)
 {
@@ -22,6 +24,11 @@ void BumpBouy::VTable0x70(float p_float)
 void BumpBouy::VTable0x74(Matrix4& p_transform)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10027220
+BumpBouy::BumpBouy()
+{
 }
 
 // STUB: LEGO1 0x100274d0

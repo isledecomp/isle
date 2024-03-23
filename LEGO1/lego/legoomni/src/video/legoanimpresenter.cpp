@@ -13,7 +13,7 @@
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
 
-DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xc0)
+DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 
 // FUNCTION: LEGO1 0x10068420
 LegoAnimPresenter::LegoAnimPresenter()

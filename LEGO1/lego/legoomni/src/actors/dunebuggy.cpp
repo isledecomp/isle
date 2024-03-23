@@ -2,7 +2,7 @@
 
 #include "decomp.h"
 
-DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c);
+DECOMP_SIZE_ASSERT(DuneBuggy, 0x16c)
 
 // FUNCTION: LEGO1 0x10067bb0
 DuneBuggy::DuneBuggy()

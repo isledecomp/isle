@@ -8,7 +8,7 @@
 class LegoControlManagerEvent;
 
 // VTABLE: LEGO1 0x100d5f20
-// SIZE: 0xfc (from inlined ctor at 0x1000a8aa)
+// SIZE 0xfc
 class ElevatorBottom : public LegoWorld {
 public:
 	ElevatorBottom();

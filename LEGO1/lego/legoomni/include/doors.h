@@ -26,6 +26,15 @@ public:
 
 	// SYNTHETIC: LEGO1 0x1000e580
 	// Doors::`scalar deleting destructor'
+
+private:
+	undefined4 m_unk0x154; // 0x154
+	undefined4 m_unk0x158; // 0x158
+	undefined4 m_unk0x15c; // 0x15c
+	undefined4 m_unk0x160; // 0x160
+	MxMatrix m_unk0x164;   // 0x164
+	MxMatrix m_unk0x1ac;   // 0x1ac
+	undefined4 m_unk0x1f4; // 0x1f4
 };
 
 #endif // DOORS_H

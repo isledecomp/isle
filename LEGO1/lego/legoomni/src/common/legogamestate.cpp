@@ -34,6 +34,7 @@ DECOMP_SIZE_ASSERT(LegoGameState::Username, 0x0e)
 DECOMP_SIZE_ASSERT(LegoGameState::ScoreItem, 0x2c)
 DECOMP_SIZE_ASSERT(LegoGameState::History, 0x374)
 DECOMP_SIZE_ASSERT(LegoGameState, 0x430)
+DECOMP_SIZE_ASSERT(ColorStringStruct, 0x08)
 
 // GLOBAL: LEGO1 0x100f3e40
 // STRING: LEGO1 0x100f3e3c
