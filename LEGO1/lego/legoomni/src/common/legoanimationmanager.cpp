@@ -14,7 +14,7 @@ DECOMP_SIZE_ASSERT(Character, 0x18)
 DECOMP_SIZE_ASSERT(Vehicle, 0x8)
 DECOMP_SIZE_ASSERT(Unknown0x3c, 0x18)
 
-// GLOBAL: LEGO1 0x100f6d10
+// GLOBAL: LEGO1 0x100f6d20
 Vehicle g_vehicles[] = {"bikebd", 0,        FALSE, "bikepg", 0,        FALSE, "bikerd", 0,       FALSE, "bikesy", 0,
 						FALSE,    "motoni", 0,     FALSE,    "motola", 0,     FALSE,    "board", 0,     FALSE};
 
