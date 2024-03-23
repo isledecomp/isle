@@ -889,7 +889,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
 		CurrentActor()->ResetWorldTransform(FALSE);
-		NavController()->SetLocation(0x3b);
+		NavController()->UpdateCameraLocation(59); // LCAMZG1 in g_cameraLocations
 		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_GaraDoor, NULL);
 		break;

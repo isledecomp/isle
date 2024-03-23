@@ -67,6 +67,7 @@ public:
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_100603c0();
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
+	void FUN_10060570(MxBool);
 	undefined4 FUN_10060dc0(
 		IsleScript::Script,
 		undefined4,

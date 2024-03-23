@@ -24,6 +24,7 @@ public:
 	void EnableFullScreenMovie(MxBool p_enable);
 	void EnableFullScreenMovie(MxBool p_enable, MxBool p_scale);
 	void MoveCursor(MxS32 p_cursorX, MxS32 p_cursorY);
+	void ToggleFPS(MxBool p_visible);
 
 	MxResult Tickle() override;                                                                       // vtable+0x08
 	void Destroy() override;                                                                          // vtable+0x18
@@ -38,12 +39,14 @@ public:
 	void SetSkyColor(float p_red, float p_green, float p_blue);
 	void OverrideSkyColor(MxBool p_shouldOverride);
 	MxResult ResetPalette(MxBool p_ignoreSkyColor);
+
 	void FUN_1007c520();
 
 	inline Tgl::Renderer* GetRenderer() { return this->m_renderer; }
 	inline Lego3DManager* Get3DManager() { return this->m_3dManager; }
 	inline LegoROI* GetViewROI() { return this->m_viewROI; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
+	inline MxBool GetRender3D() { return this->m_render3d; }
 	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }
 	inline void SetUnk0x554(MxBool p_unk0x554) { this->m_unk0x554 = p_unk0x554; }
 
@@ -83,7 +86,8 @@ private:
 	RECT m_fpsRect;                       // 0x530
 	HFONT m_arialFont;                    // 0x540
 	SIZE m_fpsSize;                       // 0x544
-	undefined m_pad0x54c[8];              // 0x54c
+	MxFloat m_unk0x54c;                   // 0x54c
+	MxFloat m_unk0x550;                   // 0x550
 	MxBool m_unk0x554;                    // 0x554
 	MxBool m_paused;                      // 0x555
 	undefined m_pad0x556[0x39];           // 0x556

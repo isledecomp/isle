@@ -353,6 +353,12 @@ void LegoAnimationManager::FUN_100603c0()
 	// TODO
 }
 
+// STUB: LEGO1 0x10060570
+void LegoAnimationManager::FUN_10060570(MxBool)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10060d00
 MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity)
 {
