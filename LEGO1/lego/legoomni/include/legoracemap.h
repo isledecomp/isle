@@ -13,6 +13,7 @@
 class LegoRaceMap : public virtual LegoRaceActor {
 public:
 	LegoRaceMap();
+
 	virtual void FUN_1005d4b0();
 
 	// SYNTHETIC: LEGO1 0x1005d5c0

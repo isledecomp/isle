@@ -1,5 +1,5 @@
-#ifndef LEGOCARRACE_H
-#define LEGOCARRACE_H
+#ifndef LEGORACECAR_H
+#define LEGORACECAR_H
 
 #include "legocarraceactor.h"
 #include "legopathactor.h"
@@ -56,4 +56,4 @@ private:
 	undefined4 m_unk0x7c;     // 0x7c
 };
 
-#endif // LEGOCARRACE_H
+#endif // LEGORACECAR_H

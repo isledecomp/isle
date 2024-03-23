@@ -15,6 +15,7 @@
 class LegoJetski : public LegoJetskiRaceActor, public LegoRaceMap {
 public:
 	LegoJetski();
+
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10013e80

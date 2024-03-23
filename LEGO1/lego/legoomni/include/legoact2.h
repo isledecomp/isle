@@ -9,7 +9,7 @@
 // VTABLE: LEGO1 0x100d82e0
 // SIZE 0x1154
 class LegoAct2 : public LegoWorld {
-
+public:
 	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
 	MxResult Tickle() override;                       // vtable+0x08
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
@@ -21,7 +21,9 @@ class LegoAct2 : public LegoWorld {
 
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'
-	Act2Brick m_bricks[10];      // 0xf8
+
+private:
+	Act2Brick m_bricks[10];      // 0x00f8
 	undefined m_unk0x10c0;       // 0x10c0
 	undefined m_unk0x10c1;       // 0x10c1
 	undefined m_unk0x10c2;       // 0x10c2

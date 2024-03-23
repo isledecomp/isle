@@ -35,6 +35,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10043020
 	// Act3Shark::`scalar deleting destructor'
 
+private:
 	list<void*> m_unk0x1c;     // 0x1c
 	undefined4 m_unk0x28;      // 0x28
 	undefined4 m_unk0x2c;      // 0x2c
