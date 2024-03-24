@@ -19,6 +19,7 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+
 		if (state->GetUnknown18() != 10) {
 			state->SetUnknown18(0);
 
@@ -30,9 +31,9 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 			isle->SetDestLocation(LegoGameState::Area::e_police);
 
 			AnimationManager()->FUN_10061010(NULL);
-
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}
+
 	return 1;
 }
