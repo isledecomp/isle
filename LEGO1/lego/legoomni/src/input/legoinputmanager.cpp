@@ -18,6 +18,9 @@ MxS32 g_unk0x100f31b0 = -1;
 // GLOBAL: LEGO1 0x100f31b4
 const char* g_unk0x100f31b4 = NULL;
 
+// GLOBAL: LEGO1 0x100f67b8
+MxBool g_unk0x100f67b8 = TRUE;
+
 // FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
@@ -133,6 +136,68 @@ void LegoInputManager::ReleaseDX()
 		m_directInput->Release();
 		m_directInput = NULL;
 	}
+}
+
+// FUNCTION: LEGO1 0x1005c0f0
+void LegoInputManager::FUN_1005c0f0()
+{
+	m_unk0x94 = 0;
+	if (m_directInputDevice) {
+		HRESULT hr = m_directInputDevice->GetDeviceState(256, &m_unk0x95);
+		if (hr == 0x8007001E || hr == 0x8007000c) {
+			if (m_directInputDevice->Acquire() == S_OK) {
+				hr = m_directInputDevice->GetDeviceState(256, &m_unk0x95);
+			}
+		}
+
+		if (hr == S_OK) {
+			m_unk0x94 = 1;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x1005c160
+MxResult LegoInputManager::FUN_1005c160(MxU32& p_keys)
+{
+	FUN_1005c0f0();
+	if (!m_unk0x94) {
+		return FAILURE;
+	}
+	if (g_unk0x100f67b8) {
+		if (m_unk0x95[DIK_LEFT] & 0x80 && GetAsyncKeyState(VK_LEFT) == 0) {
+			m_unk0x95[DIK_LEFT] = 0;
+		}
+
+		if (m_unk0x95[DIK_RIGHT] & 0x80 && GetAsyncKeyState(VK_RIGHT) == 0) {
+			m_unk0x95[DIK_RIGHT] = 0;
+		}
+	}
+
+	MxU32 value = 0;
+
+	if ((m_unk0x95[DIK_UP] | m_unk0x95[DIK_NUMPAD8]) & 0x80) {
+		value = 4;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD2] | m_unk0x95[DIK_DOWN]) & 0x80) {
+		value |= 8;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD4] | m_unk0x95[DIK_LEFT]) & 0x80) {
+		value |= 1;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD6] | m_unk0x95[DIK_RIGHT]) & 0x80) {
+		value |= 2;
+	}
+
+	if ((m_unk0x95[DIK_LCONTROL] | m_unk0x95[DIK_RCONTROL]) & 0x80) {
+		value |= 16;
+	}
+
+	p_keys = value;
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1005c240

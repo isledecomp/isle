@@ -113,6 +113,8 @@ public:
 	void ProcessEvents();
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
 	MxBool FUN_1005cdf0(LegoEventNotificationParam& p_param);
+	void FUN_1005c0f0();
+	MxResult FUN_1005c160(MxU32& p_keys);
 
 	// SYNTHETIC: LEGO1 0x1005b8d0
 	// LegoInputManager::`scalar deleting destructor'
@@ -135,9 +137,7 @@ private:
 	IDirectInput* m_directInput;             // 0x8c
 	IDirectInputDevice* m_directInputDevice; // 0x90
 	undefined m_unk0x94;                     // 0x94
-	undefined4 m_unk0x98;                    // 0x98
-	undefined m_unk0x9c[0xf8];               // 0x9c
-	undefined m_unk0x194;                    // 0x194
+	MxU8 m_unk0x95[256];                     // 0x95
 	MxBool m_unk0x195;                       // 0x195
 	MxS32 m_joyid;                           // 0x198
 	MxS32 m_joystickIndex;                   // 0x19c

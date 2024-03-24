@@ -307,8 +307,8 @@ MxBool LegoNavController::CalculateNewPosDir(
 	float deltaTime = (currentTime - m_lastTime) / 1000.0;
 	m_lastTime = currentTime;
 
-	if (FUN_100558b0() == -1) {
-		FUN_10055750(und);
+	if (ProcessKeyboardInput() == FAILURE) {
+		ProcessJoystickInput(und);
 	}
 
 	if (m_useRotationalVel) {
@@ -471,18 +471,116 @@ MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
 	return result;
 }
 
-// STUB: LEGO1 0x10055750
-int LegoNavController::FUN_10055750(MxBool& p_und)
+// FUNCTION: LEGO1 0x10055750
+MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 {
-	// TODO
-	return -1;
+	LegoOmni* instance = LegoOmni::GetInstance();
+	if (instance->GetInputManager()) {
+		MxS32 joystickX;
+		MxS32 joystickY;
+		DWORD buttonState;
+		MxS32 povPosition;
+
+		if (instance->GetInputManager()
+				->GetJoystickState((MxU32*) &joystickX, (MxU32*) &joystickY, &buttonState, (MxU32*) &povPosition) !=
+			FAILURE) {
+			MxU32 yVal = (joystickY * m_vMax) / 100;
+			MxU32 xVal = (joystickX * m_hMax) / 100;
+			if (joystickX <= 45 || joystickX >= 55 || joystickY <= 45 || joystickY >= 55) {
+				m_linearVel = CalculateNewTargetVel(m_vMax - xVal, m_vMax / 2, m_maxLinearVel);
+				m_linearAccel = CalculateNewAccel(m_vMax - xVal, m_vMax / 2, m_maxLinearAccel, (int) m_minLinearAccel);
+				m_targetRotationalVel = CalculateNewTargetVel(yVal, m_hMax / 2, m_maxRotationalVel);
+				m_rotationalAccel =
+					CalculateNewAccel(yVal, m_hMax / 2, m_maxRotationalAccel, (int) m_minRotationalAccel);
+			}
+			else {
+				m_targetRotationalVel = 0.0;
+				m_targetLinearVel = 0.0;
+				m_linearAccel = m_maxLinearDeccel;
+				m_rotationalAccel = m_maxRotationalDeccel;
+			}
+
+			if (povPosition >= 0) {
+				LegoWorld* world = CurrentWorld();
+				if (world && world->GetCamera()) {
+					world->GetCamera()->FUN_10012320(povPosition * 0.017453333333333335);
+					p_und = TRUE;
+				}
+			}
+
+			return SUCCESS;
+		}
+	}
+	return FAILURE;
 }
 
-// STUB: LEGO1 0x100558b0
-int LegoNavController::FUN_100558b0()
+// FUNCTION: LEGO1 0x100558b0
+MxResult LegoNavController::ProcessKeyboardInput()
 {
-	// TODO
-	return -1;
+	LegoOmni* instance = LegoOmni::GetInstance();
+	MxBool bool1 = FALSE;
+	MxBool bool2 = FALSE;
+
+	MxU32 keys;
+	if (!instance->GetInputManager() || instance->GetInputManager()->FUN_1005c160(keys) == FAILURE) {
+		return FAILURE;
+	}
+
+	if (m_unk0x6c) {
+		m_targetRotationalVel = 0.0;
+		m_targetLinearVel = 0.0;
+		m_rotationalAccel = m_maxRotationalDeccel;
+		m_linearAccel = m_maxLinearDeccel;
+		m_unk0x6c = FALSE;
+	}
+	else if (keys) {
+		m_unk0x6c = TRUE;
+
+		MxS32 hMax;
+		if ((keys & 3) == 1) {
+			hMax = 0;
+		}
+		else if ((keys & 3) == 2) {
+			hMax = m_hMax;
+		}
+		else {
+			bool1 = TRUE;
+			m_rotationalAccel = m_maxRotationalDeccel;
+			m_targetRotationalVel = 0.0;
+		}
+
+		MxS32 vMax;
+		if ((keys & 12) == 4) {
+			vMax = 0;
+		}
+		else if ((keys & 12) == 8) {
+			vMax = m_vMax;
+		}
+		else {
+			bool2 = TRUE;
+			m_targetLinearVel = 0.0;
+			m_linearAccel = m_maxRotationalDeccel;
+		}
+
+		MxFloat val = keys & 0x10 ? 1.0f : 4.0f;
+		MxFloat val2 = keys & 0x10 ? 1.0f : 2.0f;
+
+		if (!bool1) {
+			m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
+			m_rotationalAccel =
+				CalculateNewAccel(hMax, m_hMax / 2, m_maxRotationalAccel / val, (int) (m_minRotationalAccel / val2));
+		}
+
+		if (!bool2) {
+			m_targetLinearVel = CalculateNewTargetVel(m_vMax - vMax, m_vMax / 2, m_maxLinearVel);
+			m_linearAccel =
+				CalculateNewAccel(m_vMax - vMax, hMax / 2, m_maxLinearAccel / val, (int) (m_minLinearAccel / val2));
+		}
+
+		return SUCCESS;
+	}
+
+	return FAILURE;
 }
 
 // STUB: LEGO1 0x10055a60
