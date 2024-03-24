@@ -521,70 +521,71 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 // FUNCTION: LEGO1 0x100558b0
 MxResult LegoNavController::ProcessKeyboardInput()
 {
-	LegoOmni* instance = LegoOmni::GetInstance();
 	MxBool bool1 = FALSE;
 	MxBool bool2 = FALSE;
-
+	LegoInputManager* inputManager = LegoOmni::GetInstance()->GetInputManager();
 	MxU32 keys;
-	if (!instance->GetInputManager() || instance->GetInputManager()->FUN_1005c160(keys) == FAILURE) {
+
+	if (inputManager == NULL || inputManager->FUN_1005c160(keys) == FAILURE) {
 		return FAILURE;
 	}
 
-	if (m_unk0x6c) {
-		m_targetRotationalVel = 0.0;
-		m_targetLinearVel = 0.0;
-		m_rotationalAccel = m_maxRotationalDeccel;
-		m_linearAccel = m_maxLinearDeccel;
-		m_unk0x6c = FALSE;
-	}
-	else if (keys) {
-		m_unk0x6c = TRUE;
-
-		MxS32 hMax;
-		if ((keys & 3) == 1) {
-			hMax = 0;
-		}
-		else if ((keys & 3) == 2) {
-			hMax = m_hMax;
-		}
-		else {
-			bool1 = TRUE;
-			m_rotationalAccel = m_maxRotationalDeccel;
+	if (keys == 0) {
+		if (m_unk0x6c) {
 			m_targetRotationalVel = 0.0;
-		}
-
-		MxS32 vMax;
-		if ((keys & 12) == 4) {
-			vMax = 0;
-		}
-		else if ((keys & 12) == 8) {
-			vMax = m_vMax;
-		}
-		else {
-			bool2 = TRUE;
 			m_targetLinearVel = 0.0;
-			m_linearAccel = m_maxRotationalDeccel;
+			m_rotationalAccel = m_maxRotationalDeccel;
+			m_linearAccel = m_maxLinearDeccel;
+			m_unk0x6c = FALSE;
 		}
 
-		MxFloat val = keys & 0x10 ? 1.0f : 4.0f;
-		MxFloat val2 = keys & 0x10 ? 1.0f : 2.0f;
-
-		if (!bool1) {
-			m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
-			m_rotationalAccel =
-				CalculateNewAccel(hMax, m_hMax / 2, m_maxRotationalAccel / val, (int) (m_minRotationalAccel / val2));
-		}
-
-		if (!bool2) {
-			m_targetLinearVel = CalculateNewTargetVel(m_vMax - vMax, m_vMax / 2, m_maxLinearVel);
-			m_linearAccel =
-				CalculateNewAccel(m_vMax - vMax, hMax / 2, m_maxLinearAccel / val, (int) (m_minLinearAccel / val2));
-		}
-
-		return SUCCESS;
+		return FAILURE;
 	}
 
-	return FAILURE;
+	m_unk0x6c = TRUE;
+
+	MxS32 hMax;
+	if ((keys & 3) == 1) {
+		hMax = 0;
+	}
+	else if ((keys & 3) == 2) {
+		hMax = m_hMax;
+	}
+	else {
+		m_targetRotationalVel = 0.0;
+		m_rotationalAccel = m_maxRotationalDeccel;
+		bool1 = TRUE;
+	}
+
+	MxS32 vMax;
+	if ((keys & 12) == 4) {
+		vMax = 0;
+	}
+	else if ((keys & 12) == 8) {
+		vMax = m_vMax;
+	}
+	else {
+		m_targetLinearVel = 0.0;
+		m_linearAccel = m_maxLinearDeccel;
+		bool2 = TRUE;
+	}
+
+	MxFloat val = keys & 0x10 ? 1.0f : 4.0f;
+	MxFloat val2 = keys & 0x10 ? 1.0f : 2.0f;
+
+	if (!bool1) {
+		m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
+		m_rotationalAccel =
+			CalculateNewAccel(hMax, m_hMax / 2, m_maxRotationalAccel / val, (int) (m_minRotationalAccel / val2));
+	}
+
+	if (!bool2) {
+		m_targetLinearVel = CalculateNewTargetVel(m_vMax - vMax, m_vMax / 2, m_maxLinearVel);
+		m_linearAccel =
+			CalculateNewAccel(m_vMax - vMax, m_vMax / 2, m_maxLinearAccel / val, (int) (m_minLinearAccel / val2));
+	}
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10055a60

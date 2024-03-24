@@ -68,6 +68,14 @@ public:
 // SIZE 0x338
 class LegoInputManager : public MxPresenter {
 public:
+	enum Keys {
+		c_bit1 = 0x01,
+		c_bit2 = 0x02,
+		c_bit3 = 0x04,
+		c_bit4 = 0x08,
+		c_bit5 = 0x16
+	};
+
 	LegoInputManager();
 	~LegoInputManager() override;
 
