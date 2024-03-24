@@ -2,6 +2,7 @@
 
 #include "act1state.h"
 #include "isle.h"
+#include "isle_actions.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
@@ -25,7 +26,7 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 				CurrentActor()->VTable0xe4();
 			}
 
-			Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
+			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 			isle->SetDestLocation(LegoGameState::Area::e_police);
 
 			AnimationManager()->FUN_10061010(NULL);
