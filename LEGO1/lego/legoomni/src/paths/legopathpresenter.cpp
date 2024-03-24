@@ -9,7 +9,7 @@ DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54)
 
 // STRING: LEGO1 0x10101ef0
 // GLOBAL: LEGO1 0x101020c4
-char* g_triggersSource = "TRIGGERS_SOURCE";
+const char* g_triggersSource = "TRIGGERS_SOURCE";
 
 // FUNCTION: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()
@@ -68,11 +68,14 @@ void LegoPathPresenter::Destroy()
 void LegoPathPresenter::ReadyTickle()
 {
 	LegoWorld* currentWorld = CurrentWorld();
+
 	if (currentWorld) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
+
 		if (chunk) {
 			LegoPathController* controller = new LegoPathController();
-			if (controller == NULL) {
+
+			if (controller != NULL) {
 				EndAction();
 			}
 			else {
@@ -126,7 +129,7 @@ void LegoPathPresenter::ParseExtra()
 
 		strupr(extraCopy);
 
-		if (KeyValueStringParse(output, g_triggersSource, extraCopy) != 0) {
+		if (KeyValueStringParse(output, g_triggersSource, extraCopy) != FALSE) {
 			m_trigger = MxAtomId(output, e_lowerCase2);
 		}
 	}
