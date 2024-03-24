@@ -33,7 +33,7 @@ void Ambulance::Destroy(MxBool p_fromDestructor)
 {
 }
 
-// FUNCTION: LEGO1 0x10036160
+// FUNCTION: LEGO1 0x10036150
 Ambulance::~Ambulance()
 {
 	ControlManager()->Unregister(this);
@@ -44,15 +44,17 @@ Ambulance::~Ambulance()
 MxResult Ambulance::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = IslePathActor::Create(p_dsAction);
+
 	if (result == SUCCESS) {
 		m_world = CurrentWorld();
+
 		if (m_world) {
 			m_world->Add(this);
 		}
 
 		m_state = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 		if (!m_state) {
-			m_state = new AmbulanceMissionState;
+			m_state = new AmbulanceMissionState();
 			m_state->SetUnknown0x08(0);
 			GameState()->RegisterState(m_state);
 		}
