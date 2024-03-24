@@ -524,13 +524,13 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	MxBool bool1 = FALSE;
 	MxBool bool2 = FALSE;
 	LegoInputManager* inputManager = LegoOmni::GetInstance()->GetInputManager();
-	MxU32 p_keyFlags;
+	MxU32 keyFlags;
 
-	if (inputManager == NULL || inputManager->FUN_1005c160(p_keyFlags) == FAILURE) {
+	if (inputManager == NULL || inputManager->FUN_1005c160(keyFlags) == FAILURE) {
 		return FAILURE;
 	}
 
-	if (p_keyFlags == 0) {
+	if (keyFlags == 0) {
 		if (m_unk0x6c) {
 			m_targetRotationalVel = 0.0;
 			m_targetLinearVel = 0.0;
@@ -545,10 +545,10 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	m_unk0x6c = TRUE;
 
 	MxS32 hMax;
-	if ((p_keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_left) {
+	if ((keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_left) {
 		hMax = 0;
 	}
-	else if ((p_keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_right) {
+	else if ((keyFlags & LegoInputManager::c_leftOrRight) == LegoInputManager::c_right) {
 		hMax = m_hMax;
 	}
 	else {
@@ -558,10 +558,10 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	}
 
 	MxS32 vMax;
-	if ((p_keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_up) {
+	if ((keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_up) {
 		vMax = 0;
 	}
-	else if ((p_keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_down) {
+	else if ((keyFlags & LegoInputManager::c_upOrDown) == LegoInputManager::c_down) {
 		vMax = m_vMax;
 	}
 	else {
@@ -570,8 +570,8 @@ MxResult LegoNavController::ProcessKeyboardInput()
 		bool2 = TRUE;
 	}
 
-	MxFloat val = p_keyFlags & 0x10 ? 1.0f : 4.0f;
-	MxFloat val2 = p_keyFlags & 0x10 ? 1.0f : 2.0f;
+	MxFloat val = keyFlags & 0x10 ? 1.0f : 4.0f;
+	MxFloat val2 = keyFlags & 0x10 ? 1.0f : 2.0f;
 
 	if (!bool1) {
 		m_targetRotationalVel = CalculateNewTargetVel(hMax, m_hMax / 2, m_maxRotationalVel);
