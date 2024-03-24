@@ -6,3 +6,6 @@ isledecomp
 pystache
 pyyaml
 git+https://github.com/wbenny/pydemangler.git
+# requirement of capstone due to python dropping distutils.
+# see: https://github.com/capstone-engine/capstone/issues/2223
+setuptools ; python_version >= "3.12"
