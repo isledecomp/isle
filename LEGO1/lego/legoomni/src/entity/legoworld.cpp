@@ -287,6 +287,13 @@ void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 	}
 }
 
+// FUNCTION: LEGO1 0x1001ff80
+void LegoWorld::AddPath(LegoPathController* p_controller)
+{
+	p_controller->FUN_10046bb0(this);
+	m_list0x68.Append(p_controller);
+}
+
 // FUNCTION: LEGO1 0x10020120
 MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {

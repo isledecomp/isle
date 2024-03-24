@@ -84,7 +84,7 @@ undefined4 g_unk0x100f66b4 = 0;
 undefined4 g_unk0x100f66bc = 2;
 
 // GLOBAL: LEGO1 0x100f66c0
-char* g_debugPassword = "OGEL";
+char g_debugPassword[] = "OGEL";
 
 // GLOBAL: LEGO1 0x100f66c8
 char* g_currentInput = g_debugPassword;

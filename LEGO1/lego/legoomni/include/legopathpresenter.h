@@ -39,7 +39,7 @@ private:
 protected:
 	void Destroy(MxBool p_fromDestructor);
 
-	MxAtomId m_atomId; // 0x50
+	MxAtomId m_trigger; // 0x50
 };
 
 #endif // LEGOPATHPRESENTER_H

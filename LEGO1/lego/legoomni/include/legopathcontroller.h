@@ -5,6 +5,7 @@
 #include "legopathactor.h"
 #include "mxcore.h"
 class LegoPathBoundary;
+class LegoWorld;
 
 // VTABLE: LEGO1 0x100d7d60
 // SIZE 0x40
@@ -31,12 +32,13 @@ public:
 	// SYNTHETIC: LEGO1 0x10045740
 	// LegoPathController::`scalar deleting destructor'
 
-	virtual void VTable0x14(); // vtable+0x14
-	virtual void Destroy();    // vtable+0x18
+	virtual void VTable0x14(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger); // vtable+0x14
+	virtual void Destroy();                                                          // vtable+0x18
 
 	undefined4 FUN_10046770(LegoPathActor* p_actor);
 	MxResult FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value);
 	void Enable(MxBool p_enable);
+	void FUN_10046bb0(LegoWorld* world);
 
 private:
 	undefined4 m_unk0x08; // 0x08
