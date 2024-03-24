@@ -9,7 +9,7 @@ LegoPathController::LegoPathController()
 }
 
 // STUB: LEGO1 0x10045880
-void LegoPathController::VTable0x14()
+void LegoPathController::VTable0x14(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger)
 {
 	// TODO
 }
@@ -37,6 +37,12 @@ undefined4 LegoPathController::FUN_10046770(LegoPathActor* p_actor)
 MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value)
 {
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10046bb0
+void LegoPathController::FUN_10046bb0(LegoWorld* p_world)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x10046be0
