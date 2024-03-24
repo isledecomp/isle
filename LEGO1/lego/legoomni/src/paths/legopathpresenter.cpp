@@ -75,7 +75,7 @@ void LegoPathPresenter::ReadyTickle()
 		if (chunk) {
 			LegoPathController* controller = new LegoPathController();
 
-			if (controller != NULL) {
+			if (controller == NULL) {
 				EndAction();
 			}
 			else {
