@@ -475,6 +475,7 @@ MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
 MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 {
 	LegoOmni* instance = LegoOmni::GetInstance();
+
 	if (instance->GetInputManager()) {
 		MxS32 joystickX;
 		MxS32 joystickY;
@@ -486,12 +487,13 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 			FAILURE) {
 			MxU32 yVal = (joystickY * m_vMax) / 100;
 			MxU32 xVal = (joystickX * m_hMax) / 100;
+
 			if (joystickX <= 45 || joystickX >= 55 || joystickY <= 45 || joystickY >= 55) {
-				m_linearVel = CalculateNewTargetVel(m_vMax - xVal, m_vMax / 2, m_maxLinearVel);
-				m_linearAccel = CalculateNewAccel(m_vMax - xVal, m_vMax / 2, m_maxLinearAccel, (int) m_minLinearAccel);
-				m_targetRotationalVel = CalculateNewTargetVel(yVal, m_hMax / 2, m_maxRotationalVel);
+				m_targetLinearVel = CalculateNewTargetVel(m_vMax - yVal, m_vMax / 2, m_maxLinearVel);
+				m_linearAccel = CalculateNewAccel(m_vMax - yVal, m_vMax / 2, m_maxLinearAccel, (int) m_minLinearAccel);
+				m_targetRotationalVel = CalculateNewTargetVel(xVal, m_hMax / 2, m_maxRotationalVel);
 				m_rotationalAccel =
-					CalculateNewAccel(yVal, m_hMax / 2, m_maxRotationalAccel, (int) m_minRotationalAccel);
+					CalculateNewAccel(xVal, m_hMax / 2, m_maxRotationalAccel, (int) m_minRotationalAccel);
 			}
 			else {
 				m_targetRotationalVel = 0.0;
@@ -502,6 +504,7 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 
 			if (povPosition >= 0) {
 				LegoWorld* world = CurrentWorld();
+
 				if (world && world->GetCamera()) {
 					world->GetCamera()->FUN_10012320(povPosition * 0.017453333333333335);
 					p_und = TRUE;
@@ -511,6 +514,7 @@ MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 			return SUCCESS;
 		}
 	}
+
 	return FAILURE;
 }
 
