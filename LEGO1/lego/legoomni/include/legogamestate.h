@@ -177,9 +177,9 @@ public:
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
+	void RegisterState(LegoState* p_state);
 
 private:
-	void RegisterState(LegoState* p_state);
 	MxResult WriteVariable(LegoStorage* p_storage, MxVariableTable* p_from, const char* p_variableName);
 	MxResult WriteEndOfVariables(LegoStorage* p_storage);
 	MxS32 ReadVariable(LegoStorage* p_storage, MxVariableTable* p_to);

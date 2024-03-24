@@ -1,6 +1,7 @@
 #ifndef AMBULANCE_H
 #define AMBULANCE_H
 
+#include "ambulancemissionstate.h"
 #include "islepathactor.h"
 
 // VTABLE: LEGO1 0x100d71a8
@@ -8,6 +9,7 @@
 class Ambulance : public IslePathActor {
 public:
 	Ambulance();
+	~Ambulance() override;
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 	MxResult Tickle() override;               // vtable+0x08
@@ -42,7 +44,7 @@ public:
 private:
 	// TODO: Ambulance fields
 	undefined m_unk0x160[4];
-	MxS32 m_unk0x164;
+	AmbulanceMissionState* m_state; // 0x164
 	MxS16 m_unk0x168;
 	MxS16 m_unk0x16a;
 	MxS16 m_unk0x16c;
@@ -51,8 +53,8 @@ private:
 	MxS16 m_unk0x172;
 	MxS32 m_unk0x174;
 	MxS32 m_unk0x178;
-	MxFloat m_unk0x17c;
-	undefined m_unk0x180[4];
+	MxFloat m_unk0x17c; // fuel?
+	MxFloat m_time;     // 0x180
 };
 
 #endif // AMBULANCE_H
