@@ -1,6 +1,14 @@
 #include "ambulance.h"
 
 #include "decomp.h"
+#include "legocontrolmanager.h"
+#include "legogamestate.h"
+#include "legoomni.h"
+#include "legovariables.h"
+#include "misc.h"
+#include "mxmisc.h"
+#include "mxticklemanager.h"
+#include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 
@@ -9,7 +17,7 @@ Ambulance::Ambulance()
 {
 	this->m_unk0x168 = 0;
 	this->m_unk0x16a = -1;
-	this->m_unk0x164 = 0;
+	this->m_state = NULL;
 	this->m_unk0x16c = 0;
 	this->m_unk0x174 = -1;
 	this->m_unk0x16e = 0;
@@ -20,17 +28,43 @@ Ambulance::Ambulance()
 	this->m_unk0x17c = 1.0;
 }
 
-// STUB: LEGO1 0x10035f90
+// FUNCTION: LEGO1 0x10035f90
 void Ambulance::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
 }
 
-// STUB: LEGO1 0x100361d0
+// FUNCTION: LEGO1 0x10036150
+Ambulance::~Ambulance()
+{
+	ControlManager()->Unregister(this);
+	TickleManager()->UnregisterClient(this);
+}
+
+// FUNCTION: LEGO1 0x100361d0
 MxResult Ambulance::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = IslePathActor::Create(p_dsAction);
+
+	if (result == SUCCESS) {
+		m_world = CurrentWorld();
+
+		if (m_world) {
+			m_world->Add(this);
+		}
+
+		m_state = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
+		if (!m_state) {
+			m_state = new AmbulanceMissionState();
+			m_state->SetUnknown0x08(0);
+			GameState()->RegisterState(m_state);
+		}
+	}
+
+	VariableTable()->SetVariable(g_varAMBULFUEL, "1.0");
+	m_unk0x17c = 1.0;
+	m_time = Timer()->GetTime();
+
+	return result;
 }
 
 // STUB: LEGO1 0x10036300

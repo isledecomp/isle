@@ -24,6 +24,8 @@ public:
 
 	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
 
+	inline void SetUnknown0x08(undefined4 p_unk0x08) { m_unk0x08 = p_unk0x08; }
+
 	inline MxU16 GetColor(MxU8 p_id)
 	{
 		switch (p_id) {
