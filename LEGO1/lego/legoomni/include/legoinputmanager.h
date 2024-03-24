@@ -69,11 +69,14 @@ public:
 class LegoInputManager : public MxPresenter {
 public:
 	enum Keys {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02,
-		c_bit3 = 0x04,
-		c_bit4 = 0x08,
-		c_bit5 = 0x16
+		c_left = 0x01,
+		c_right = 0x02,
+		c_up = 0x04,
+		c_down = 0x08,
+		c_bit5 = 0x10,
+
+		c_leftOrRight = c_left | c_right,
+		c_upOrDown = c_up | c_down
 	};
 
 	LegoInputManager();
@@ -122,7 +125,7 @@ public:
 	MxBool ProcessOneEvent(LegoEventNotificationParam& p_param);
 	MxBool FUN_1005cdf0(LegoEventNotificationParam& p_param);
 	void FUN_1005c0f0();
-	MxResult FUN_1005c160(MxU32& p_keys);
+	MxResult FUN_1005c160(MxU32& p_keyFlags);
 
 	// SYNTHETIC: LEGO1 0x1005b8d0
 	// LegoInputManager::`scalar deleting destructor'
@@ -144,7 +147,7 @@ private:
 	MxBool m_unk0x88;                        // 0x88
 	IDirectInput* m_directInput;             // 0x8c
 	IDirectInputDevice* m_directInputDevice; // 0x90
-	undefined m_unk0x94;                     // 0x94
+	MxBool m_unk0x94;                        // 0x94
 	MxU8 m_unk0x95[256];                     // 0x95
 	MxBool m_unk0x195;                       // 0x195
 	MxS32 m_joyid;                           // 0x198
