@@ -18,6 +18,9 @@ MxS32 g_unk0x100f31b0 = -1;
 // GLOBAL: LEGO1 0x100f31b4
 const char* g_unk0x100f31b4 = NULL;
 
+// GLOBAL: LEGO1 0x100f67b8
+MxBool g_unk0x100f67b8 = TRUE;
+
 // FUNCTION: LEGO1 0x1005b790
 LegoInputManager::LegoInputManager()
 {
@@ -34,7 +37,7 @@ LegoInputManager::LegoInputManager()
 	m_unk0x88 = FALSE;
 	m_directInput = NULL;
 	m_directInputDevice = NULL;
-	m_unk0x94 = 0;
+	m_unk0x94 = FALSE;
 	m_unk0x195 = 0;
 	m_joyid = -1;
 	m_joystickIndex = -1;
@@ -133,6 +136,72 @@ void LegoInputManager::ReleaseDX()
 		m_directInput->Release();
 		m_directInput = NULL;
 	}
+}
+
+// FUNCTION: LEGO1 0x1005c0f0
+void LegoInputManager::FUN_1005c0f0()
+{
+	m_unk0x94 = FALSE;
+
+	if (m_directInputDevice) {
+		HRESULT hr = m_directInputDevice->GetDeviceState(_countof(m_unk0x95), &m_unk0x95);
+
+		if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED) {
+			if (m_directInputDevice->Acquire() == S_OK) {
+				hr = m_directInputDevice->GetDeviceState(_countof(m_unk0x95), &m_unk0x95);
+			}
+		}
+
+		if (hr == S_OK) {
+			m_unk0x94 = TRUE;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x1005c160
+MxResult LegoInputManager::FUN_1005c160(MxU32& p_keyFlags)
+{
+	FUN_1005c0f0();
+
+	if (!m_unk0x94) {
+		return FAILURE;
+	}
+
+	if (g_unk0x100f67b8) {
+		if (m_unk0x95[DIK_LEFT] & 0x80 && GetAsyncKeyState(VK_LEFT) == 0) {
+			m_unk0x95[DIK_LEFT] = 0;
+		}
+
+		if (m_unk0x95[DIK_RIGHT] & 0x80 && GetAsyncKeyState(VK_RIGHT) == 0) {
+			m_unk0x95[DIK_RIGHT] = 0;
+		}
+	}
+
+	MxU32 keyFlags = 0;
+
+	if ((m_unk0x95[DIK_NUMPAD8] | m_unk0x95[DIK_UP]) & 0x80) {
+		keyFlags |= c_up;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD2] | m_unk0x95[DIK_DOWN]) & 0x80) {
+		keyFlags |= c_down;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD4] | m_unk0x95[DIK_LEFT]) & 0x80) {
+		keyFlags |= c_left;
+	}
+
+	if ((m_unk0x95[DIK_NUMPAD6] | m_unk0x95[DIK_RIGHT]) & 0x80) {
+		keyFlags |= c_right;
+	}
+
+	if ((m_unk0x95[DIK_LCONTROL] | m_unk0x95[DIK_RCONTROL]) & 0x80) {
+		keyFlags |= c_bit5;
+	}
+
+	p_keyFlags = keyFlags;
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x1005c240

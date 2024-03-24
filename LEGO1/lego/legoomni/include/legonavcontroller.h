@@ -81,8 +81,8 @@ protected:
 	float CalculateNewTargetVel(int p_pos, int p_center, float p_max);
 	float CalculateNewAccel(int p_pos, int p_center, float p_max, int p_min);
 
-	int FUN_10055750(MxBool& p_und);
-	int FUN_100558b0();
+	MxResult ProcessJoystickInput(MxBool& p_und);
+	MxResult ProcessKeyboardInput();
 
 	int m_hMax;                  // 0x08
 	int m_vMax;                  // 0x0c

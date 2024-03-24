@@ -122,6 +122,12 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 	m_matrix2 = m_matrix1;
 }
 
+// STUB: LEGO1 0x10012320
+void LegoCameraController::FUN_10012320(MxFloat)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x100123e0
 void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
 {
