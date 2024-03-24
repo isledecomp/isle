@@ -42,6 +42,7 @@ MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_va
 // STUB: LEGO1 0x10046bb0
 void LegoPathController::FUN_10046bb0(LegoWorld* p_world)
 {
+	// TODO
 }
 
 // STUB: LEGO1 0x10046be0
