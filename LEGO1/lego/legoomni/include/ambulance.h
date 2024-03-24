@@ -42,7 +42,6 @@ public:
 	// Ambulance::`scalar deleting destructor'
 
 private:
-	// TODO: Ambulance fields
 	undefined m_unk0x160[4];        // 0x160
 	AmbulanceMissionState* m_state; // 0x164
 	MxS16 m_unk0x168;               // 0x168
