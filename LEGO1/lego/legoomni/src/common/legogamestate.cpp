@@ -1064,9 +1064,7 @@ void LegoGameState::RegisterState(LegoState* p_state)
 		return;
 	}
 
-	if (m_stateArray[targetIndex]) {
-		delete m_stateArray[targetIndex];
-	}
+	delete m_stateArray[targetIndex];
 	m_stateArray[targetIndex] = p_state;
 }
 
