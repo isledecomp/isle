@@ -236,7 +236,7 @@ float LegoNavController::CalculateNewTargetVel(int p_pos, int p_center, float p_
 	float newVel;
 	int diff = p_pos - p_center;
 
-	if (diff < m_deadZone) {
+	if (diff > m_deadZone) {
 		newVel = (diff - m_deadZone) * p_max / (p_center - m_deadZone);
 	}
 	else if (diff < -m_deadZone) {
@@ -375,7 +375,7 @@ MxBool LegoNavController::CalculateNewPosDir(
 		}
 
 		delta_pos[1] += m_unk0x60;
-		VPV3(p_newPos, delta_pos, new_pos);
+		VPV3(p_newPos, new_pos, delta_pos);
 
 		if (m_unk0x68 != 0.0f) {
 			float delta_rad = DTOR(m_unk0x68);
