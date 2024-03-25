@@ -49,19 +49,19 @@ private:
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
 	MxBool HandleClick(LegoControlManagerEvent& p_param);
 
-	MxS16 m_currentActorId;             // 0xf8
-	LegoGameState::Area m_destLocation; // 0xfc
-	undefined2 m_unk0x100;              // 0x100
-	HospitalState* m_hospitalState;     // 0x104
-	undefined2 m_unk0x108;              // 0x108
-	HospitalScript::Script m_unk0x10c;  // 0x10c
-	MxStillPresenter* m_copLedBitmap;   // 0x110
-	MxStillPresenter* m_pizzaLedBitmap; // 0x114
-	undefined m_unk0x118;               // 0x118
-	MxLong m_unk0x11c;                  // 0x11c
-	MxLong m_unk0x120;                  // 0x120
-	MxLong m_time;                      // 0x124
-	undefined m_unk0x128;               // 0x128
+	MxS16 m_currentActorId;                 // 0xf8
+	LegoGameState::Area m_destLocation;     // 0xfc
+	undefined2 m_unk0x100;                  // 0x100
+	HospitalState* m_hospitalState;         // 0x104
+	undefined2 m_unk0x108;                  // 0x108
+	HospitalScript::Script m_currentAction; // 0x10c
+	MxStillPresenter* m_copLedBitmap;       // 0x110
+	MxStillPresenter* m_pizzaLedBitmap;     // 0x114
+	undefined m_unk0x118;                   // 0x118
+	MxLong m_copLedAnimTimer;               // 0x11c
+	MxLong m_pizzaLedAnimTimer;             // 0x120
+	MxLong m_time;                          // 0x124
+	undefined m_unk0x128;                   // 0x128
 };
 
 #endif // HOSPITAL_H
