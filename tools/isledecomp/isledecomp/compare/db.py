@@ -358,24 +358,28 @@ class CompareDb:
     def match_vtable(
         self, addr: int, name: str, base_class: Optional[str] = None
     ) -> bool:
+        # Set up our potential match names
+        bare_vftable = f"{name}::`vftable'"
+        for_name = base_class if base_class is not None else name
+        for_vftable = f"{name}::`vftable'{{for `{for_name}'}}"
+
         # Only allow a match against "Class:`vftable'"
         # if this is the derived class.
-        name = (
-            f"{name}::`vftable'"
-            if base_class is None or base_class == name
-            else f"{name}::`vftable'{{for `{base_class}'}}"
-        )
+        if base_class is None or base_class == name:
+            name_options = (for_vftable, bare_vftable)
+        else:
+            name_options = (for_vftable, for_vftable)
 
         row = self._db.execute(
             """
             SELECT recomp_addr
             FROM `symbols`
             WHERE orig_addr IS NULL
-            AND name = ?
+            AND (name = ? OR name = ?)
             AND (compare_type = ?)
             LIMIT 1
             """,
-            (name, SymbolType.VTABLE.value),
+            (*name_options, SymbolType.VTABLE.value),
         ).fetchone()
 
         if row is not None and self.set_pair(addr, row[0], SymbolType.VTABLE):

@@ -43,6 +43,13 @@ class CvdumpNode:
             self.node_type = SymbolType.VTABLE
             self.friendly_name = demangle_vtable(self.decorated_name)
 
+        elif self.decorated_name.startswith("??_8"):
+            # This is the `vbtable' symbol for virtual inheritance.
+            # Should be okay to reuse demangle_vtable. We still want to
+            # remove things like "const" from the output.
+            self.node_type = SymbolType.DATA
+            self.friendly_name = demangle_vtable(self.decorated_name)
+
         elif self.decorated_name.startswith("??_C@"):
             self.node_type = SymbolType.STRING
             (strlen, _) = demangle_string_const(self.decorated_name)
