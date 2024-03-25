@@ -2,6 +2,7 @@
 #define LEGOPATHACTOR_H
 
 #include "legoactor.h"
+#include "legopathboundary.h"
 #include "mxtypes.h"
 #include "realtime/matrix.h"
 
@@ -34,10 +35,10 @@ public:
 	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20
-	virtual void VTable0x78(MxU8 p_unk0xea) { m_unk0xea = p_unk0xea; } // vtable+0x78
+	virtual void SetUserNavFlag(MxBool p_userNavFlag) { m_userNavFlag = p_userNavFlag; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x10002d30
-	virtual MxU8 VTable0x7c() { return m_unk0xea; } // vtable+0x7c
+	virtual MxU8 GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual void VTable0x80(); // vtable+0x80
 	virtual void VTable0x84(); // vtable+0x84
@@ -83,10 +84,10 @@ public:
 	// FUNCTION: LEGO1 0x10002de0
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
-	inline MxU32 GetUnknown88() { return m_unk0x88; }
+	inline LegoPathBoundary* GetBoundary() { return m_boundary; }
 	inline LegoPathController* GetController() { return m_controller; }
 
-	inline void SetUnknown88(MxU32 p_unk0x88) { m_unk0x88 = p_unk0x88; }
+	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
 	inline void ClearController() { m_controller = NULL; }
 
@@ -94,18 +95,21 @@ public:
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
-	undefined m_unk0x78[0xa];         // 0x78
-	MxBool m_userNavFlag;             // 0x82
-	undefined4 m_unk0x84;             // 0x84
-	MxU32 m_unk0x88;                  // 0x88
-	undefined4 m_boundary;            // 0x8c
-	undefined m_unk0x8c[0x4c];        // 0x90
+	MxFloat m_BADuration;             // 0x78
+	undefined4 m_unk0x7c;             // 0x7c
+	MxFloat m_unk0x80;                // 0x80
+	MxFloat m_unk0x84;                // 0x84
+	LegoPathBoundary* m_boundary;     // 0x88
+	undefined m_unk0x8c[0x14];        // 0x8c
+	MxFloat m_unk0xa0;                // 0xa0
+	undefined m_unk0xa4[0x38];        // 0xa4
 	MxU32 m_unk0xdc;                  // 0xdc
-	undefined4 m_unk0xe0;             // 0xe0
-	undefined4 m_destEdge;            // 0xe4
+	undefined4 m_destEdge;            // 0xe0
+	undefined4 m_unk0xe4;             // 0xe4
 	undefined2 m_unk0xe8;             // 0xe8
-	MxU8 m_unk0xea;                   // 0xea
-	undefined m_unk0xef[0x4d];        // 0xef
+	MxBool m_userNavFlag;             // 0xea
+	MxMatrix m_unk0xec;               // 0xec
+	undefined4 m_unk0x134;            // 0x134
 	LegoPathController* m_controller; // 0x138
 	MxFloat m_unk0x13c;               // 0x13c
 	MxFloat m_unk0x140;               // 0x140

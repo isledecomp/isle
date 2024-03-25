@@ -8,6 +8,7 @@
 
 class LegoWorld;
 class LegoAnimClass;
+class LegoAnimActor;
 
 // VTABLE: LEGO1 0x100d90c8
 // SIZE 0xbc
@@ -53,6 +54,8 @@ public:
 	virtual void VTable0x9c() {} // vtable+0x9c
 
 	virtual void VTable0xa0(); // vtable+0xa0
+
+	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
 

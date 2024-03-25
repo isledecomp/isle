@@ -1,6 +1,21 @@
-#ifndef LEGOPATHBOUNDARH_H
-#define LEGOPATHBOUNDARH_H
+#ifndef LEGOPATHBOUNDARY_H
+#define LEGOPATHBOUNDARY_H
 
-class LegoPathBoundary {};
+#include "misc/legowegedge.h"
+#include "mxstl/stlcompat.h"
 
-#endif // LEGOPATHBOUNDARH_H
+struct LegoPathBoundaryComparator {
+	MxBool operator()(const void*, const void*) const { return 0; }
+};
+
+// SIZE 0x74
+class LegoPathBoundary : public LegoWEGEdge {
+public:
+	LegoPathBoundary();
+
+private:
+	map<void*, void*, LegoPathBoundaryComparator> m_unk0x54; // 0x54
+	map<void*, void*, LegoPathBoundaryComparator> m_unk0x64; // 0x64
+};
+
+#endif // LEGOPATHBOUNDARY_H

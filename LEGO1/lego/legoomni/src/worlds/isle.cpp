@@ -796,8 +796,8 @@ void Isle::FUN_10032620()
 	switch (GameState()->m_currentArea) {
 	case LegoGameState::e_unk66: {
 		MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
-		MxU32 unk0x88 = CurrentActor()->GetUnknown88();
-		CurrentActor()->VTable0xec(mat, unk0x88, TRUE);
+		LegoPathBoundary* boundary = CurrentActor()->GetBoundary();
+		CurrentActor()->VTable0xec(mat, boundary, TRUE);
 		break;
 	}
 	case LegoGameState::e_unk4:
