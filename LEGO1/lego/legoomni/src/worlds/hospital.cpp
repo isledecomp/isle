@@ -23,10 +23,10 @@ DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 undefined4 g_unk0x100f7918 = 3;
 
 // GLOBAL: LEGO1 0x100f791c
-undefined g_unk0x100f791c = 0;
+MxBool g_copLedEnabled = FALSE;
 
 // GLOBAL: LEGO1 0x100f7920
-undefined g_unk0x100f7920 = 0;
+MxBool g_pizzaLedEnabled = FALSE;
 
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
@@ -36,12 +36,12 @@ Hospital::Hospital()
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
 	m_destLocation = LegoGameState::e_undefined;
-	m_unk0x10c = HospitalScript::c__StartUp;
+	m_currentAction = HospitalScript::c__StartUp;
 	m_copLedBitmap = NULL;
 	m_pizzaLedBitmap = NULL;
 	m_unk0x118 = 0;
-	m_unk0x11c = 0;
-	m_unk0x120 = 0;
+	m_copLedAnimTimer = 0;
+	m_pizzaLedAnimTimer = 0;
 	m_unk0x128 = 0;
 	NotificationManager()->Register(this);
 }
@@ -200,7 +200,7 @@ void Hospital::ReadyWorld()
 		m_hospitalState->m_unk0x08.m_unk0x00 = 5;
 
 		PlayAction(hospitalScript[m_hospitalState->m_unk0x0c]);
-		m_unk0x10c = hospitalScript[m_hospitalState->m_unk0x0c];
+		m_currentAction = hospitalScript[m_hospitalState->m_unk0x0c];
 	}
 	else {
 		m_unk0x100 = 1;
@@ -209,7 +209,7 @@ void Hospital::ReadyWorld()
 		m_hospitalState->m_unk0x08.m_unk0x00 = 6;
 
 		PlayAction(HospitalScript::c_hho003cl_RunAnim);
-		m_unk0x10c = HospitalScript::c_hho003cl_RunAnim;
+		m_currentAction = HospitalScript::c_hho003cl_RunAnim;
 	}
 
 	m_unk0x108 = 1;
@@ -248,7 +248,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		m_hospitalState->m_unk0x08.m_unk0x00 = 7;
 		PlayAction(HospitalScript::c_hho006cl_RunAnim);
 
-		m_unk0x10c = HospitalScript::c_hho006cl_RunAnim;
+		m_currentAction = HospitalScript::c_hho006cl_RunAnim;
 		m_unk0x108 = 1;
 		m_unk0x118 = 1;
 		g_unk0x100f7918 = 0;
@@ -272,14 +272,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho017cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho017cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho017cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho018cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho018cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho018cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			}
@@ -291,14 +291,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho019cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho019cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho019cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho020cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho020cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho020cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			}
@@ -310,14 +310,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho023cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho023cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho023cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho024cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho024cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho024cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			}
@@ -329,14 +329,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho021cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho021cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho021cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hhoa22cl_RunAnim;
+				m_currentAction = HospitalScript::c_hhoa22cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			}
@@ -348,14 +348,14 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho025cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho025cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho025cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			default:
 				m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 				PlayAction(HospitalScript::c_hho026cl_RunAnim);
 
-				m_unk0x10c = HospitalScript::c_hho026cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho026cl_RunAnim;
 				m_unk0x108 = 1;
 				break;
 			}
@@ -441,14 +441,14 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho017cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho017cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho017cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho018cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho018cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho018cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							}
@@ -460,14 +460,14 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho019cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho019cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho019cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho020cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho020cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho020cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							}
@@ -479,14 +479,14 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho023cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho023cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho023cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho024cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho024cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho024cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							}
@@ -498,14 +498,14 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho021cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho021cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho021cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hhoa22cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hhoa22cl_RunAnim;
+								m_currentAction = HospitalScript::c_hhoa22cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							}
@@ -517,14 +517,14 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho025cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho025cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho025cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							default:
 								m_hospitalState->m_unk0x08.m_unk0x00 = 12;
 								PlayAction(HospitalScript::c_hho026cl_RunAnim);
 
-								m_unk0x10c = HospitalScript::c_hho026cl_RunAnim;
+								m_currentAction = HospitalScript::c_hho026cl_RunAnim;
 								m_unk0x108 = 1;
 								break;
 							}
@@ -560,7 +560,7 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 14;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
-				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
 			}
 			else if (m_unk0x128 == 0) {
@@ -581,7 +581,7 @@ MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
 				m_hospitalState->m_unk0x08.m_unk0x00 = 15;
 
 				PlayAction(HospitalScript::c_hho016cl_RunAnim);
-				m_unk0x10c = HospitalScript::c_hho016cl_RunAnim;
+				m_currentAction = HospitalScript::c_hho016cl_RunAnim;
 				m_unk0x108 = 1;
 			}
 			else if (m_unk0x128 == 0) {
@@ -641,16 +641,16 @@ MxResult Hospital::Tickle()
 	MxLong time = Timer()->GetTime();
 
 	if (m_unk0x118 != 0) {
-		if (time - m_unk0x11c > 300) {
-			m_unk0x11c = time;
-			g_unk0x100f791c = !g_unk0x100f791c;
-			m_copLedBitmap->Enable(g_unk0x100f791c);
+		if (time - m_copLedAnimTimer > 300) {
+			m_copLedAnimTimer = time;
+			g_copLedEnabled = !g_copLedEnabled;
+			m_copLedBitmap->Enable(g_copLedEnabled);
 		}
 
-		if (time - m_unk0x120 > 200) {
-			m_unk0x120 = time;
-			g_unk0x100f7920 = !g_unk0x100f7920;
-			m_pizzaLedBitmap->Enable(g_unk0x100f7920);
+		if (time - m_pizzaLedAnimTimer > 200) {
+			m_pizzaLedAnimTimer = time;
+			g_pizzaLedEnabled = !g_pizzaLedEnabled;
+			m_pizzaLedBitmap->Enable(g_pizzaLedEnabled);
 		}
 	}
 
