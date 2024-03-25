@@ -148,7 +148,7 @@ MxResult LegoPointOfViewController::Tickle()
 		Vector3 pos(pov->GetWorldPosition());
 		Vector3 dir(pov->GetWorldDirection());
 
-		if (m_nav->CalculateNewPosDir(pos, dir, newDir, newPos, NULL)) {
+		if (m_nav->CalculateNewPosDir(pos, dir, newPos, newDir, NULL)) {
 			MxMatrix mat;
 
 			CalcLocalTransform(newPos, newDir, pov->GetWorldUp(), mat);
