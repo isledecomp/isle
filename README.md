@@ -6,11 +6,11 @@ This is a **work-in-progress** decompilation of LEGO Island (Version 1.1, Englis
 
 ## Status
 
-<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="50%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="50%">
+<img src="https://legoisland.org/progress/ISLEPROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/LEGO1PROGRESS.SVG" width="33%"><img src="https://legoisland.org/progress/CONFIGPROGRESS.SVG" width="33%">
 
-Currently, `ISLE.EXE` is completely decompiled and behaves identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
+Currently, `ISLE.EXE` and `CONFIG.EXE` are completely decompiled and behave identically to the original. A handful of stubborn instructions are not yet matching; however, we anticipate they will as more of the overall codebase is implemented.
 
-`LEGO1.DLL` is still incomplete and cannot be used for gameplay at this time. If you would like to use this, it is instead recommended to pair the recompiled `ISLE.EXE` with the `LEGO1.DLL` from the original game.
+`LEGO1.DLL` and is still incomplete and cannot be used for gameplay at this time. If you would like to use this, it is instead recommended to pair the recompiled `ISLE.EXE` with the `LEGO1.DLL` from the original game.
 
 ## Building
 
@@ -41,13 +41,13 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
   - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. `Debug` builds are not recommended because they are unlikely to be compatible with the retail `LEGO1.DLL`, which is currently the only way to use this decompilation for gameplay.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
 1. Build the project by running `nmake` or `cmake --build <build-folder>`
-1. When this is done, there should a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
+1. When this is done, there should a recompiled `ISLE.EXE`, `CONFIG.EXE` and `LEGO1.DLL` in the build folder.
 
 If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
 
 ## Usage
 
-Simply place the compiled `ISLE.EXE` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Unless you're a developer, disregard the compiled `LEGO1.DLL` for now as it is too incomplete to be usable. Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys (usually `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` or `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island`) point to the correct location for the asset files.
+Simply place the compiled `ISLE.EXE` and `CONFIG.EXE` into LEGO Island's install folder (usually `C:\Program Files\LEGO Island` or `C:\Program Files (x86)\LEGO Island`). Unless you're a developer, disregard the compiled `LEGO1.DLL` for now as it is too incomplete to be usable. Alternatively, LEGO Island can run from any directory as long as `ISLE.EXE` and `LEGO1.DLL` are in the same directory, and the registry keys (usually `HKEY_LOCAL_MACHINE\Software\Mindscape\LEGO Island` or `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Mindscape\LEGO Island`) point to the correct location for the asset files.
 
 ## Contributing
 
