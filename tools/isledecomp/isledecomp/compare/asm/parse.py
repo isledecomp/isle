@@ -11,12 +11,12 @@ from functools import cache
 from typing import Callable, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp.bin import InvalidVirtualAddressError
-from capstone import Cs, CS_ARCH_X86, CS_MODE_32
 from .const import JUMP_MNEMONICS, SINGLE_OPERAND_INSTS
-
-disassembler = Cs(CS_ARCH_X86, CS_MODE_32)
+from .instgen import InstructGen, SectionType
 
 ptr_replace_regex = re.compile(r"\[(0x[0-9a-f]+)\]")
+
+displace_replace_regex = re.compile(r"\+ (0x[0-9a-f]+)\]")
 
 # For matching an immediate value on its own.
 # Preceded by start-of-string (first operand) or comma-space (second operand)
@@ -172,34 +172,52 @@ class ParseAsm:
         else:
             op_str = ptr_replace_regex.sub(self.hex_replace_always, inst.op_str)
 
+            # We only want relocated addresses for pointer displacement.
+            # i.e. ptr [register + something]
+            # Otherwise we would use a placeholder for every stack variable,
+            # vtable call, or this->member access.
+            op_str = displace_replace_regex.sub(self.hex_replace_relocated, op_str)
+
         op_str = immediate_replace_regex.sub(self.hex_replace_relocated, op_str)
         return (inst.mnemonic, op_str)
 
     def parse_asm(self, data: bytes, start_addr: Optional[int] = 0) -> List[str]:
         asm = []
 
-        for raw_inst in disassembler.disasm_lite(data, start_addr):
-            # Use heuristics to disregard some differences that aren't representative
-            # of the accuracy of a function (e.g. global offsets)
-            inst = DisasmLiteInst(*raw_inst)
+        ig = InstructGen(data, start_addr)
 
-            # If there is no pointer or immediate value in the op_str,
-            # there is nothing to sanitize.
-            # This leaves us with cases where a small immediate value or
-            # small displacement (this.member or vtable calls) appears.
-            # If we assume that instructions we want to sanitize need to be 5
-            # bytes -- 1 for the opcode and 4 for the address -- exclude cases
-            # where the hex value could not be an address.
-            # The exception is jumps which are as small as 2 bytes
-            # but are still useful to sanitize.
-            if "0x" in inst.op_str and (
-                inst.mnemonic in JUMP_MNEMONICS or inst.size > 4
-            ):
-                result = self.sanitize(inst)
-            else:
-                result = (inst.mnemonic, inst.op_str)
+        for sect_type, sect_contents in ig.sections:
+            if sect_type == SectionType.CODE:
+                for inst in sect_contents:
+                    # Use heuristics to disregard some differences that aren't representative
+                    # of the accuracy of a function (e.g. global offsets)
 
-            # mnemonic + " " + op_str
-            asm.append((hex(inst.address), " ".join(result)))
+                    # If there is no pointer or immediate value in the op_str,
+                    # there is nothing to sanitize.
+                    # This leaves us with cases where a small immediate value or
+                    # small displacement (this.member or vtable calls) appears.
+                    # If we assume that instructions we want to sanitize need to be 5
+                    # bytes -- 1 for the opcode and 4 for the address -- exclude cases
+                    # where the hex value could not be an address.
+                    # The exception is jumps which are as small as 2 bytes
+                    # but are still useful to sanitize.
+                    if "0x" in inst.op_str and (
+                        inst.mnemonic in JUMP_MNEMONICS or inst.size > 4
+                    ):
+                        result = self.sanitize(inst)
+                    else:
+                        result = (inst.mnemonic, inst.op_str)
+
+                    # mnemonic + " " + op_str
+                    asm.append((hex(inst.address), " ".join(result)))
+            elif sect_type == SectionType.ADDR_TAB:
+                asm.append(("", "Jump table:"))
+                for i, (ofs, _) in enumerate(sect_contents):
+                    asm.append((hex(ofs), f"Jump_dest_{i}"))
+
+            elif sect_type == SectionType.DATA_TAB:
+                asm.append(("", "Data table:"))
+                for ofs, b in sect_contents:
+                    asm.append((hex(ofs), hex(b)))
 
         return asm
