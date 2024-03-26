@@ -10,7 +10,8 @@
 class LegoWEGEdge : public LegoWEEdge {
 public:
 	LegoWEGEdge();
-	~LegoWEGEdge() override;          // vtable+0x00
+	~LegoWEGEdge() override;
+
 	LegoResult VTable0x04() override; // vtable+0x04
 
 	inline LegoU32 GetFlag0x10() { return m_unk0x0c & 0x10 ? FALSE : TRUE; }

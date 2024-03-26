@@ -21,9 +21,10 @@ LegoWEEdge::~LegoWEEdge()
 // FUNCTION: LEGO1 0x1009a5b0
 LegoResult LegoWEEdge::VTable0x04()
 {
-	for (int i = 0; i < m_numEdges; i++) {
+	for (LegoS32 i = 0; i < m_numEdges; i++) {
 		Edge* e1 = m_edges[i];
 		Edge* e2 = (m_numEdges - i) == 1 ? m_edges[0] : m_edges[i + 1];
+
 		if (e2->m_pointA == e1->m_pointA) {
 			e1->m_faceA = this;
 			e2->m_faceB = this;
@@ -49,5 +50,6 @@ LegoResult LegoWEEdge::VTable0x04()
 			e2->m_cwA = e1;
 		}
 	}
+
 	return SUCCESS;
 }
