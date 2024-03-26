@@ -4,15 +4,14 @@
 #include "decomp.h"
 #include "lego/sources/anim/legoanim.h"
 #include "legopathactor.h"
-#include "mxstl/mxstl.h"
 
 // SIZE 0x20
 struct LegoAnimActorStruct {
-	LegoAnimActorStruct(float p_float, LegoAnim* p_LegoAnimPtr, LegoROI** p_roiMap, MxU32 p_numROIs);
+	LegoAnimActorStruct(float p_float, LegoAnim* p_animTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs);
 	~LegoAnimActorStruct();
 	float GetDuration();
 	float m_unk0x00;         // 0x00
-	LegoAnim* m_AnimTreePtr; // 0x04
+	LegoAnim* m_animTreePtr; // 0x04
 	LegoROI** m_roiMap;      // 0x08
 	MxU32 m_numROIs;         // 0x0c
 	vector<void*> m_unk0x10; // 0x10
@@ -46,7 +45,7 @@ public:
 
 	virtual MxResult FUN_1001c1f0(float& p_out);
 	virtual MxResult FUN_1001c360(float, Matrix4& p_transform);
-	virtual MxResult FUN_1001c450(LegoAnim* p_AnimTreePtr, float p_float, LegoROI** p_roiMap, MxU32 p_numROIs);
+	virtual MxResult FUN_1001c450(LegoAnim* p_animTreePtr, float p_float, LegoROI** p_roiMap, MxU32 p_numROIs);
 	virtual void ClearMaps();
 
 	// SYNTHETIC: LEGO1 0x1000fb60
