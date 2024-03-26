@@ -9,10 +9,14 @@ struct LegoPathBoundaryComparator {
 	MxBool operator()(const undefined*, const undefined*) const { return 0; }
 };
 
+// VTABLE: LEGO1 0x100d8618
 // SIZE 0x74
 class LegoPathBoundary : public LegoWEGEdge {
 public:
 	LegoPathBoundary();
+
+	// STUB: LEGO1 0x10047a80
+	// LegoPathBoundary::`scalar deleting destructor'
 
 private:
 	map<undefined*, undefined*, LegoPathBoundaryComparator> m_unk0x54; // 0x54

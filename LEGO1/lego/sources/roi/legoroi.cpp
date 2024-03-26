@@ -408,7 +408,7 @@ LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, 
 }
 
 // STUB: LEGO1 0x100a8e80
-void LegoROI::FUN_100a8e80(LegoTreeNode*, Matrix4&, LegoS32, LegoROI**)
+void LegoROI::FUN_100a8e80(LegoTreeNode*, Matrix4&, LegoTime, LegoROI**)
 {
 	// TODO
 }

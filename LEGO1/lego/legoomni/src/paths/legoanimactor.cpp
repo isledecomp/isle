@@ -136,6 +136,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
 	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_animTreePtr, p_roiMap, p_numROIs);
+
 	for (vector<LegoAnimActorStruct*>::iterator it = m_animMaps.begin(); it != m_animMaps.end(); it++) {
 		if (p_unk0x00 < (*it)->m_unk0x00) {
 			m_animMaps.insert(it, laas);
@@ -143,6 +144,7 @@ MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, L
 			return SUCCESS;
 		}
 	}
+
 	m_animMaps.push_back(laas);
 	SetWorldSpeed(m_worldSpeed);
 	return SUCCESS;
@@ -154,6 +156,7 @@ void LegoAnimActor::ClearMaps()
 	for (MxU32 i = 0; i < m_animMaps.size(); i++) {
 		delete m_animMaps[i];
 	}
+
 	m_animMaps.clear();
 	m_curAnim = -1;
 }
@@ -189,19 +192,25 @@ void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 void LegoAnimActor::ParseAction(char* p_extra)
 {
 	LegoPathActor::ParseAction(p_extra);
+
 	LegoWorld* world = CurrentWorld();
-	char value[0x100];
+	char value[256];
+
 	if (world) {
 		if (KeyValueStringParse(value, g_strANIMATION, p_extra)) {
 			char* token = strtok(value, g_parseExtraTokens);
+
 			while (token) {
-				LegoAnimPresenter* p = (LegoAnimPresenter*) world->Find("LegoAnimPresenter", token);
-				if (p) {
+				LegoAnimPresenter* presenter = (LegoAnimPresenter*) world->Find("LegoAnimPresenter", token);
+
+				if (presenter != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
+
 					if (token) {
-						p->FUN_1006d680(this, atof(token));
+						presenter->FUN_1006d680(this, atof(token));
 					}
 				}
+
 				token = strtok(NULL, g_parseExtraTokens);
 			}
 		}
