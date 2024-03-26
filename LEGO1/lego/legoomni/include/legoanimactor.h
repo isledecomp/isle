@@ -42,10 +42,10 @@ public:
 
 	void ParseAction(char* p_extra) override;          // vtable+0x20
 	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void VTable0x70(float p_float) override;           // vtable+0x70
+	void VTable0x70(float p_und) override;             // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
 
-	virtual MxResult FUN_1001c1f0(float& p_out);
+	virtual MxResult FUN_1001c1f0(float& p_und);
 	virtual MxResult FUN_1001c360(float, Matrix4& p_transform);
 	virtual MxResult FUN_1001c450(LegoAnim* p_AnimTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs);
 	virtual void ClearMaps();
