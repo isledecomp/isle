@@ -9,7 +9,7 @@ class LegoPathBoundary;
 class LegoWorld;
 
 struct LegoPathControllerComparator {
-	MxBool operator()(undefined*, undefined*) const { return 0; }
+	MxBool operator()(const undefined*, const undefined*) const { return 0; }
 };
 
 // VTABLE: LEGO1 0x100d7d60

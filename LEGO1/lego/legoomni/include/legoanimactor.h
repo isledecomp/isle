@@ -9,7 +9,9 @@
 struct LegoAnimActorStruct {
 	LegoAnimActorStruct(float p_unk0x00, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs);
 	~LegoAnimActorStruct();
+
 	float GetDuration();
+
 	float m_unk0x00;              // 0x00
 	LegoAnim* m_AnimTreePtr;      // 0x04
 	LegoROI** m_roiMap;           // 0x08

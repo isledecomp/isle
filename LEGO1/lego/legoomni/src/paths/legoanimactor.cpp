@@ -45,8 +45,8 @@ LegoAnimActor::~LegoAnimActor()
 // FUNCTION: LEGO1 0x1001c1f0
 MxResult LegoAnimActor::FUN_1001c1f0(float& p_out)
 {
-	p_out = m_unk0x80 - (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration() *
-							((MxS32) (m_unk0x80 / (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration()));
+	float duration = (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration();
+	p_out = m_unk0x80 - duration * ((MxS32) (m_unk0x80 / duration));
 	return SUCCESS;
 }
 
