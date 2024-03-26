@@ -154,9 +154,9 @@ void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 		m_worldSpeed = p_worldSpeed;
 	}
 	MxU32 size;
-	if (m_animMaps.begin() != NULL && (size = m_animMaps.size())) {
+	if (m_animMaps.begin() && (size = m_animMaps.size())) {
 		m_curAnim = 0;
-		if (m_worldSpeed >= m_animMaps[(m_animMaps.begin() != NULL ? size : 0) - 1]->m_unk0x00) {
+		if (m_worldSpeed >= m_animMaps[(m_animMaps.begin() ? size : 0) - 1]->m_unk0x00) {
 			if (!m_animMaps.begin()) {
 				m_curAnim = -1;
 			}
@@ -166,7 +166,7 @@ void LegoAnimActor::SetWorldSpeed(MxFloat p_worldSpeed)
 			return;
 		}
 		else {
-			for (MxU32 i = 0; m_animMaps.begin() != NULL && i < size; i++) {
+			for (MxU32 i = 0; m_animMaps.begin() && i < size; i++) {
 				if (m_worldSpeed <= m_animMaps[i]->m_unk0x00) {
 					m_curAnim = i;
 					break;

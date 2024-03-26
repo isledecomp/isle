@@ -23,7 +23,7 @@ struct LegoAnimActorStruct {
 class LegoAnimActor : public virtual LegoPathActor {
 public:
 	LegoAnimActor() { m_curAnim = -1; }
-	~LegoAnimActor();
+	~LegoAnimActor() override;
 
 	// FUNCTION: LEGO1 0x1000fba0
 	inline const char* ClassName() const override // vtable+0x0c
