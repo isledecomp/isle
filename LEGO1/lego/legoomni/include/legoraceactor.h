@@ -27,13 +27,13 @@ public:
 		return !strcmp(p_name, LegoRaceActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
 
-	void ParseAction(char*) override;                  // vtable+0x20
 	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void VTable0x68() override;                        // vtable+0x68
-	void VTable0x70(float p_float) override;           // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override;    // vtable+0x74
-	MxS32 VTable0x90() override;                       // vtable+0x90
-	MxS32 VTable0x94() override;                       // vtable+0x94
+	void VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
+		override;                                   // vtable+0x68
+	void VTable0x70(float p_float) override;        // vtable+0x70
+	void VTable0x74(Matrix4& p_transform) override; // vtable+0x74
+	MxS32 VTable0x90() override;                    // vtable+0x90
+	MxS32 VTable0x94() override;                    // vtable+0x94
 
 	// FUNCTION: LEGO1 0x10014aa0
 	virtual MxResult FUN_10014aa0() { return SUCCESS; }

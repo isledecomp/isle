@@ -27,7 +27,6 @@ public:
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
 	}
 
-	void VTable0x68() override;              // vtable+0x68
 	void VTable0x6c() override;              // vtable+0x6c
 	void VTable0x70(float p_float) override; // vtable+0x70
 	MxS32 VTable0x90() override;             // vtable+0x90

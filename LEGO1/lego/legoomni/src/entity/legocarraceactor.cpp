@@ -9,12 +9,6 @@ DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
 
-// STUB: LEGO1 0x10014130
-void LegoCarRaceActor::VTable0x68()
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x100141a0
 MxS32 LegoCarRaceActor::VTable0x90()
 {

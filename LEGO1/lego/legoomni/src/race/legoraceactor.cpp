@@ -15,12 +15,6 @@ LegoRaceActor::LegoRaceActor()
 	m_unk0x08 = 0;
 }
 
-// STUB: LEGO1 0x10014ca0
-void LegoRaceActor::ParseAction(char*)
-{
-	// TODO
-}
-
 // STUB: LEGO1 0x10014cb0
 void LegoRaceActor::SetWorldSpeed(MxFloat p_worldSpeed)
 {
@@ -28,7 +22,7 @@ void LegoRaceActor::SetWorldSpeed(MxFloat p_worldSpeed)
 }
 
 // STUB: LEGO1 0x10014cc0
-void LegoRaceActor::VTable0x68()
+void LegoRaceActor::VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
 {
 	// TODO
 }
