@@ -311,7 +311,7 @@ MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
 // FUNCTION: LEGO1 0x10003e90
 void Helicopter::VTable0x74(Matrix4& p_transform)
 {
-	if (m_unk0xea != 0) {
+	if (m_userNavFlag) {
 		m_roi->FUN_100a46b0(p_transform);
 		FUN_10010c30();
 	}

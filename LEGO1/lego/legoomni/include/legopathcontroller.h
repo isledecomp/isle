@@ -8,6 +8,10 @@
 class LegoPathBoundary;
 class LegoWorld;
 
+struct LegoPathControllerComparator {
+	MxBool operator()(const undefined*, const undefined*) const { return 0; }
+};
+
 // VTABLE: LEGO1 0x100d7d60
 // SIZE 0x40
 class LegoPathController : public MxCore {
@@ -42,17 +46,16 @@ public:
 	void FUN_10046bb0(LegoWorld* p_world);
 
 private:
-	undefined4 m_unk0x08; // 0x08
-	undefined4 m_unk0x0c; // 0x0c
-	undefined4 m_unk0x10; // 0x10
-	undefined4 m_unk0x14; // 0x14
-	undefined2 m_unk0x18; // 0x18
-	undefined2 m_unk0x1a; // 0x1a
-	undefined2 m_unk0x1c; // 0x1c
-	undefined2 m_unk0x1e; // 0x1e
-	// These 2 are some sort of template class
-	undefined m_unk0x20[0x10]; // 0x20
-	undefined m_unk0x30[0x10]; // 0x30
+	LegoPathBoundary* m_unk0x08;                                         // 0x08
+	undefined4 m_unk0x0c;                                                // 0x0c
+	undefined4 m_unk0x10;                                                // 0x10
+	undefined4 m_unk0x14;                                                // 0x14
+	MxS16 m_numL;                                                        // 0x18
+	MxS16 m_numE;                                                        // 0x1a
+	MxS16 m_numN;                                                        // 0x1c
+	MxS16 m_numT;                                                        // 0x1e
+	map<undefined*, undefined*, LegoPathControllerComparator> m_pfsE;    // 0x20
+	map<undefined*, undefined*, LegoPathControllerComparator> m_unk0x30; // 0x30
 };
 
 #endif // LEGOPATHCONTROLLER_H

@@ -72,7 +72,7 @@ void IslePathActor::VTable0xe8(LegoGameState::Area, MxBool, MxU8)
 }
 
 // STUB: LEGO1 0x1001b5b0
-void IslePathActor::VTable0xec(MxMatrix, MxU32, MxBool)
+void IslePathActor::VTable0xec(MxMatrix, LegoPathBoundary*, MxBool)
 {
 	// TODO
 }
