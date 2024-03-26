@@ -81,13 +81,23 @@ def test_jump_displacement():
     assert op_str == "-0x2"
 
 
-@pytest.mark.xfail(reason="Not implemented yet")
 def test_jmp_table():
-    """Should detect the characteristic jump table instruction
-    (for a switch statement) and use placeholder."""
+    """To ignore cases where it would be inappropriate to replace pointer
+    displacement (i.e. the vast majority of them) we require the address
+    to be relocated. This excludes any address less than the imagebase."""
     p = ParseAsm()
     inst = mock_inst("jmp", "dword ptr [eax*4 + 0x5555]")
     (_, op_str) = p.sanitize(inst)
+    # i.e. no change
+    assert op_str == "dword ptr [eax*4 + 0x5555]"
+
+    def relocate_lookup(addr: int) -> bool:
+        return addr == 0x5555
+
+    # Now add the relocation lookup
+    p = ParseAsm(relocate_lookup=relocate_lookup)
+    (_, op_str) = p.sanitize(inst)
+    # Should replace it now
     assert op_str == "dword ptr [eax*4 + <OFFSET1>]"
 
 
