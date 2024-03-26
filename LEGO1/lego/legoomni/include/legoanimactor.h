@@ -53,7 +53,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000fb60
 	// LegoAnimActor::`scalar deleting destructor'
 
-private:
+protected:
 	vector<LegoAnimActorStruct*> m_animMaps; // 0x08
 	MxS16 m_curAnim;                         // 0x18
 };

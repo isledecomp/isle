@@ -63,7 +63,7 @@ void LegoPathActor::VTable0x6c()
 }
 
 // STUB: LEGO1 0x1002ebe0
-void LegoPathActor::VTable0x68()
+void LegoPathActor::VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&)
 {
 	// TODO
 }
