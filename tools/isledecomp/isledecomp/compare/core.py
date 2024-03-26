@@ -174,6 +174,21 @@ class Compare:
         codefiles = list(walk_source_dir(self.code_dir))
         codebase = DecompCodebase(codefiles, module.upper())
 
+        def orig_bin_checker(addr: int) -> bool:
+            return self.orig_bin.is_valid_vaddr(addr)
+
+        # If the address of any annotation would cause an exception,
+        # remove it and report an error.
+        bad_annotations = codebase.prune_invalid_addrs(orig_bin_checker)
+
+        for sym in bad_annotations:
+            logger.error(
+                "Invalid address 0x%x on %s annotation in file: %s",
+                sym.offset,
+                sym.type.name,
+                sym.filename,
+            )
+
         # Match lineref functions first because this is a guaranteed match.
         # If we have two functions that share the same name, and one is
         # a lineref, we can match the nameref correctly because the lineref
