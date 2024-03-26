@@ -10,10 +10,10 @@ DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
 
 // FUNCTION: LEGO1 0x1001bf80
-LegoAnimActorStruct::LegoAnimActorStruct(float p_float, LegoAnim* p_animTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs)
+LegoAnimActorStruct::LegoAnimActorStruct(float p_unk0x00, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
-	m_unk0x00 = p_float;
-	m_animTreePtr = p_animTreePtr;
+	m_unk0x00 = p_unk0x00;
+	m_AnimTreePtr = p_AnimTreePtr;
 	m_roiMap = p_roiMap;
 	m_numROIs = p_numROIs;
 }
@@ -29,7 +29,7 @@ LegoAnimActorStruct::~LegoAnimActorStruct()
 // FUNCTION: LEGO1 0x1001c130
 float LegoAnimActorStruct::GetDuration()
 {
-	return m_animTreePtr->GetDuration();
+	return m_AnimTreePtr->GetDuration();
 }
 
 // FUNCTION: LEGO1 0x1001c140
@@ -45,8 +45,8 @@ LegoAnimActor::~LegoAnimActor()
 // FUNCTION: LEGO1 0x1001c1f0
 MxResult LegoAnimActor::FUN_1001c1f0(float& p_out)
 {
-	p_out = m_unk0x80 - (float) m_animMaps[m_curAnim]->m_animTreePtr->GetDuration() *
-							((int) (m_unk0x80 / (float) m_animMaps[m_curAnim]->m_animTreePtr->GetDuration()));
+	p_out = m_unk0x80 - (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration() *
+							((MxS32) (m_unk0x80 / (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration()));
 	return SUCCESS;
 }
 
@@ -89,7 +89,7 @@ MxResult LegoAnimActor::FUN_1001c360(float p_float, Matrix4& p_transform)
 		LegoROI** roiMap = anim->m_roiMap;
 		MxU32 numROIs = anim->m_numROIs;
 		if (m_boundary->GetFlag0x10()) {
-			LegoTreeNode* root = anim->m_animTreePtr->GetRoot();
+			LegoTreeNode* root = anim->m_AnimTreePtr->GetRoot();
 			m_roi->SetVisibility(TRUE);
 			for (MxU32 i = 0; i < numROIs; i++) {
 				if (roiMap[i] && (roiMap[i] != m_roi)) {
@@ -119,11 +119,11 @@ MxResult LegoAnimActor::FUN_1001c360(float p_float, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1001c450
-MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_float, LegoROI** p_roiMap, MxU32 p_numROIs)
+MxResult LegoAnimActor::FUN_1001c450(LegoAnim* p_animTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs)
 {
-	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_float, p_animTreePtr, p_roiMap, p_numROIs);
+	LegoAnimActorStruct* laas = new LegoAnimActorStruct(p_unk0x00, p_animTreePtr, p_roiMap, p_numROIs);
 	for (vector<LegoAnimActorStruct*>::iterator it = m_animMaps.begin(); it != m_animMaps.end(); it++) {
-		if (p_float < (*it)->m_unk0x00) {
+		if (p_unk0x00 < (*it)->m_unk0x00) {
 			m_animMaps.insert(it, laas);
 			SetWorldSpeed(m_worldSpeed);
 			return SUCCESS;

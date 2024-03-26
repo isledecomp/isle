@@ -95,7 +95,7 @@ public:
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
-	MxFloat m_bADuration;             // 0x78
+	MxFloat m_BADuration;             // 0x78
 	undefined4 m_unk0x7c;             // 0x7c
 	MxFloat m_unk0x80;                // 0x80
 	MxFloat m_unk0x84;                // 0x84

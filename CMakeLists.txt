@@ -150,8 +150,8 @@ add_library(geom STATIC
   LEGO1/lego/sources/geom/legomesh.cpp
   LEGO1/lego/sources/geom/legosphere.cpp
   LEGO1/lego/sources/geom/legovertex.cpp
-  "LEGO1/lego/sources/misc/legoweedge.cpp"
-  "LEGO1/lego/sources/misc/legowegedge.cpp"
+  LEGO1/lego/sources/geom/legoweedge.cpp
+  LEGO1/lego/sources/geom/legowegedge.cpp
 )
 register_lego1_target(geom)
 set_property(TARGET geom PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>")

@@ -1,20 +1,20 @@
 #ifndef LEGOANIMACTOR_H
 #define LEGOANIMACTOR_H
 
+#include "anim/legoanim.h"
 #include "decomp.h"
-#include "lego/sources/anim/legoanim.h"
 #include "legopathactor.h"
 
 // SIZE 0x20
 struct LegoAnimActorStruct {
-	LegoAnimActorStruct(float p_float, LegoAnim* p_animTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs);
+	LegoAnimActorStruct(float p_unk0x00, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs);
 	~LegoAnimActorStruct();
 	float GetDuration();
-	float m_unk0x00;         // 0x00
-	LegoAnim* m_animTreePtr; // 0x04
-	LegoROI** m_roiMap;      // 0x08
-	MxU32 m_numROIs;         // 0x0c
-	vector<void*> m_unk0x10; // 0x10
+	float m_unk0x00;              // 0x00
+	LegoAnim* m_AnimTreePtr;      // 0x04
+	LegoROI** m_roiMap;           // 0x08
+	MxU32 m_numROIs;              // 0x0c
+	vector<undefined*> m_unk0x10; // 0x10
 };
 
 // VTABLE: LEGO1 0x100d5440 LegoPathActor
@@ -45,7 +45,7 @@ public:
 
 	virtual MxResult FUN_1001c1f0(float& p_out);
 	virtual MxResult FUN_1001c360(float, Matrix4& p_transform);
-	virtual MxResult FUN_1001c450(LegoAnim* p_animTreePtr, float p_float, LegoROI** p_roiMap, MxU32 p_numROIs);
+	virtual MxResult FUN_1001c450(LegoAnim* p_AnimTreePtr, float p_unk0x00, LegoROI** p_roiMap, MxU32 p_numROIs);
 	virtual void ClearMaps();
 
 	// SYNTHETIC: LEGO1 0x1000fb60
@@ -60,10 +60,10 @@ private:
 // Vector<LegoAnimActorStruct *>::~Vector<LegoAnimActorStruct *>
 
 // TEMPLATE: LEGO1 0x1001c010
-// vector<void *,allocator<void *> >::~vector<void *,allocator<void *> >
+// vector<unsigned char *,allocator<unsigned char *> >::~vector<unsigned char *,allocator<unsigned char *> >
 
 // TEMPLATE: LEGO1 0x1001c050
-// Vector<void *>::~Vector<void *>
+// Vector<unsigned char *>::~Vector<unsigned char *>
 
 // TEMPLATE: LEGO1 0x1001c7c0
 // vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::size
