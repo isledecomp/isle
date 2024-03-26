@@ -1,5 +1,5 @@
 """For aggregating decomp markers read from an entire directory and for a single module."""
-from typing import Iterable, Iterator, List
+from typing import Callable, Iterable, Iterator, List
 from .parser import DecompParser
 from .node import (
     ParserSymbol,
@@ -23,6 +23,15 @@ class DecompCodebase:
             for sym in parser.iter_symbols(module):
                 sym.filename = filename
                 self._symbols.append(sym)
+
+    def prune_invalid_addrs(self, is_valid: Callable[int, bool]) -> List[ParserSymbol]:
+        """Some decomp annotations might have an invalid address.
+        Return the list of addresses where we fail the is_valid check,
+        and remove those from our list of symbols."""
+        invalid_symbols = [sym for sym in self._symbols if not is_valid(sym.offset)]
+        self._symbols = [sym for sym in self._symbols if is_valid(sym.offset)]
+
+        return invalid_symbols
 
     def iter_line_functions(self) -> Iterator[ParserFunction]:
         """Return lineref functions separately from nameref. Assuming the PDB matches
