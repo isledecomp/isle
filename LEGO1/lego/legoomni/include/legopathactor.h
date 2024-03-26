@@ -28,15 +28,11 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	void ParseAction(char*) override; // vtable+0x20
-	virtual void VTable0x68(
-		Mx3DPointFloat& p_point1,
-		Mx3DPointFloat& p_point2,
-		Mx3DPointFloat& p_point3
-	);                                             // vtable+0x68
-	virtual void VTable0x6c();                     // vtable+0x6c
-	virtual void VTable0x70(float p_float);        // vtable+0x70
-	virtual void VTable0x74(Matrix4& p_transform); // vtable+0x74
+	void ParseAction(char*) override;                                           // vtable+0x20
+	virtual void VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&); // vtable+0x68
+	virtual void VTable0x6c();                                                  // vtable+0x6c
+	virtual void VTable0x70(float p_float);                                     // vtable+0x70
+	virtual void VTable0x74(Matrix4& p_transform);                              // vtable+0x74
 
 	// FUNCTION: LEGO1 0x10002d20
 	virtual void SetUserNavFlag(MxBool p_userNavFlag) { m_userNavFlag = p_userNavFlag; } // vtable+0x78

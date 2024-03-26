@@ -29,7 +29,7 @@ public:
 	void VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
 		override;                                   // vtable+0x68
 	void VTable0x6c() override;                     // vtable+0x6c
-	void VTable0x70(float p_float) override;        // vtable+0x70
+	void VTable0x70(float) override;                // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override; // vtable+0x74
 	MxS32 VTable0x90() override;                    // vtable+0x90
 	MxS32 VTable0x94() override;                    // vtable+0x94

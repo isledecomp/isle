@@ -44,7 +44,7 @@ void LegoExtraActor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x1002b440
-void LegoExtraActor::VTable0x70(float p_float)
+void LegoExtraActor::VTable0x70(float)
 {
 	// TODO
 }
