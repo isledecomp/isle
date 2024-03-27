@@ -49,23 +49,19 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 
 			switch (m_axis) {
 			case e_posz: {
-				float angle = 0.7f;
-				p_transform.RotateZ(angle);
+				p_transform.RotateZ(0.7f);
 				break;
 			}
 			case e_negz: {
-				float angle = -0.7f;
-				p_transform.RotateZ(angle);
+				p_transform.RotateZ(-0.7f);
 				break;
 			}
 			case e_posx: {
-				float angle = 0.7f;
-				p_transform.RotateX(angle);
+				p_transform.RotateX(0.7f);
 				break;
 			}
 			case e_negx: {
-				float angle = -0.7f;
-				p_transform.RotateX(angle);
+				p_transform.RotateX(-0.7f);
 				break;
 			}
 			}
