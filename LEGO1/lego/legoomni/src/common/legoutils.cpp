@@ -327,9 +327,9 @@ MxBool FUN_1003ef60()
 
 		if (CurrentActor() == NULL || !CurrentActor()->IsA("TowTrack")) {
 			if (CurrentActor() == NULL || !CurrentActor()->IsA("Ambulance")) {
-				MxU32 unk18 = act1State->GetUnknown18();
+				MxU32 unk0x18 = act1State->GetUnknown18();
 
-				if (unk18 != 10 && unk18 != 8 && unk18 != 3) {
+				if (unk0x18 != 10 && unk0x18 != 8 && unk0x18 != 3) {
 					return TRUE;
 				}
 			}
