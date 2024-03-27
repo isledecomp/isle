@@ -384,7 +384,16 @@ class Compare:
                     self._db.set_function_pair(orig_addr, recomp_addr)
 
     def _compare_function(self, match: MatchInfo) -> DiffReport:
-        orig_raw = self.orig_bin.read(match.orig_addr, match.size)
+        # Detect when the recomp function size would cause us to read
+        # enough bytes from the original function that we cross into
+        # the next annotated function.
+        next_orig = self._db.get_next_orig_addr(match.orig_addr)
+        if next_orig is not None:
+            orig_size = min(next_orig - match.orig_addr, match.size)
+        else:
+            orig_size = match.size
+
+        orig_raw = self.orig_bin.read(match.orig_addr, orig_size)
         recomp_raw = self.recomp_bin.read(match.recomp_addr, match.size)
 
         # It's unlikely that a function other than an adjuster thunk would
