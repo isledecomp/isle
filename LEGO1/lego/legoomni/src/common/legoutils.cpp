@@ -1,5 +1,8 @@
 #include "legoutils.h"
 
+#include "act1state.h"
+#include "islepathactor.h"
+#include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legonamedtexture.h"
 #include "legoomni.h"
@@ -308,10 +311,32 @@ void SetAppCursor(WPARAM p_wparam)
 	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);
 }
 
-// STUB: LEGO1 0x1003ef60
+// FUNCTION: LEGO1 0x1003ef60
 MxBool FUN_1003ef60()
 {
-	return TRUE;
+	Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+
+	if (GameState()->m_currentArea != LegoGameState::e_elevride &&
+		GameState()->m_currentArea != LegoGameState::e_elevride2 &&
+		GameState()->m_currentArea != LegoGameState::e_elevopen &&
+		GameState()->m_currentArea != LegoGameState::e_seaview &&
+		GameState()->m_currentArea != LegoGameState::e_observe &&
+		GameState()->m_currentArea != LegoGameState::e_elevdown &&
+		GameState()->m_currentArea != LegoGameState::e_garadoor &&
+		GameState()->m_currentArea != LegoGameState::e_polidoor) {
+
+		if (CurrentActor() == NULL || !CurrentActor()->IsA("TowTrack")) {
+			if (CurrentActor() == NULL || !CurrentActor()->IsA("Ambulance")) {
+				MxU32 unk0x18 = act1State->GetUnknown18();
+
+				if (unk0x18 != 10 && unk0x18 != 8 && unk0x18 != 3) {
+					return TRUE;
+				}
+			}
+		}
+	}
+
+	return FALSE;
 }
 
 // STUB: LEGO1 0x1003f050
