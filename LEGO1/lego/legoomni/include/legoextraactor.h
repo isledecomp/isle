@@ -43,15 +43,22 @@ public:
 	// LegoExtraActor::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08; // 0x08
-	undefined m_unk0x0c;  // 0x0c
-	undefined m_unk0x0d;  // 0x0d
-	undefined m_unk0x0e;  // 0x0e
-	undefined4 m_unk0x10; // 0x10
-	MxU8 m_unk0x14;       // 0x14
-	MxMatrix m_unk0x18;   // 0x18
-	undefined4 m_unk0x60; // 0x60
-	undefined4 m_unk0x64; // 0x64
+	undefined4 m_unk0x08;           // 0x08
+	undefined m_unk0x0c;            // 0x0c
+	undefined m_unk0x0d;            // 0x0d
+	undefined m_unk0x0e;            // 0x0e
+	undefined4 m_unk0x10;           // 0x10
+	MxU8 m_unk0x14;                 // 0x14
+	MxU8 m_unk0x15;                 // 0x15
+	MxMatrix m_unk0x18;             // 0x18
+	LegoAnimActorStruct* m_unk0x60; // 0x60
+	LegoAnimActorStruct* m_unk0x64; // 0x64
 };
+
+// GLOBAL: LEGO1 0x100d6be8
+// LegoExtraActor::`vbtable'{for `LegoAnimActor'}
+
+// GLOBAL: LEGO1 0x100d6bf0
+// LegoExtraActor::`vbtable'{for `LegoExtraActor'}
 
 #endif // LEGOEXTRAACTOR_H

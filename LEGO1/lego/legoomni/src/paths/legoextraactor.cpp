@@ -2,14 +2,24 @@
 
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
-// STUB: LEGO1 0x1002a500
+// FUNCTION: LEGO1 0x1002a500
 LegoExtraActor::LegoExtraActor()
 {
+	m_unk0x70 = 0.0f;
+	m_unk0x08 = 0;
+	m_unk0x0c = 0;
+	m_unk0x0e = 0;
+	m_unk0x14 = 0;
+	m_unk0x60 = NULL;
+	m_unk0x64 = NULL;
+	m_unk0x15 = 0;
 }
 
-// STUB: LEGO1 0x1002a6b0
+// FUNCTION: LEGO1 0x1002a6b0
 LegoExtraActor::~LegoExtraActor()
 {
+	delete m_unk0x60;
+	delete m_unk0x64;
 }
 
 // STUB: LEGO1 0x1002a720

@@ -58,8 +58,15 @@ protected:
 	MxS16 m_curAnim;                         // 0x18
 };
 
+// clang-format off
+// TEMPLATE: LEGO1 0x1000da20
+// vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::~vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >
+
 // TEMPLATE: LEGO1 0x1000da60
 // Vector<LegoAnimActorStruct *>::~Vector<LegoAnimActorStruct *>
+
+// SYNTHETIC: LEGO1 0x10012b90
+// LegoAnimActor::`vbase destructor'
 
 // TEMPLATE: LEGO1 0x1001c010
 // vector<unsigned char *,allocator<unsigned char *> >::~vector<unsigned char *,allocator<unsigned char *> >
@@ -78,5 +85,6 @@ protected:
 
 // TEMPLATE: LEGO1 0x1001ca10
 // uninitialized_copy
+// clang-format on
 
 #endif // LEGOANIMACTOR_H
