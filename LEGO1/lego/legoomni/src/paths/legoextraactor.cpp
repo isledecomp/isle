@@ -2,11 +2,14 @@
 
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
+// GLOBAL: LEGO1 0x10104c18
+Mx3DPointFloat g_unk0x10104c18 = Mx3DPointFloat(0.0f, 2.5f, 0.0f);
+
 // FUNCTION: LEGO1 0x1002a500
 LegoExtraActor::LegoExtraActor()
 {
 	m_unk0x70 = 0.0f;
-	m_unk0x08 = 0;
+	m_scheduledTime = 0;
 	m_unk0x0c = 0;
 	m_unk0x0e = 0;
 	m_unk0x14 = 0;
@@ -22,10 +25,65 @@ LegoExtraActor::~LegoExtraActor()
 	delete m_unk0x64;
 }
 
-// STUB: LEGO1 0x1002a720
-MxS32 LegoExtraActor::VTable0x90()
+// FUNCTION: LEGO1 0x1002a720
+MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 {
-	return 0;
+	switch (m_unk0xdc & 0xff) {
+	case 0:
+	case 1:
+		return TRUE;
+	case 2:
+		m_scheduledTime = p_time + 2000.0f;
+		m_unk0xdc = 3;
+		m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
+		m_lastTime = p_time;
+		return FALSE;
+	case 3: {
+		Vector3 positionRef(p_transform[3]);
+		p_transform = m_roi->GetLocal2World();
+
+		if (p_time < m_scheduledTime) {
+			Mx3DPointFloat position;
+			position = positionRef;
+			positionRef.Clear();
+
+			switch (m_axis) {
+			case e_posz: {
+				p_transform.RotateZ(0.7f);
+				break;
+			}
+			case e_negz: {
+				p_transform.RotateZ(-0.7f);
+				break;
+			}
+			case e_posx: {
+				p_transform.RotateX(0.7f);
+				break;
+			}
+			case e_negx: {
+				p_transform.RotateX(-0.7f);
+				break;
+			}
+			}
+
+			positionRef = position;
+			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
+			m_lastTime = p_time;
+			VTable0x74(p_transform);
+			return FALSE;
+		}
+		else {
+			m_unk0xdc = 0;
+			m_scheduledTime = 0.0f;
+			((Vector3&) positionRef).Sub(&g_unk0x10104c18); // TODO: Fix call
+			m_roi->FUN_100a58f0(p_transform);
+			return TRUE;
+		}
+	}
+
+	default:
+		return FALSE;
+	}
 }
 
 // STUB: LEGO1 0x1002aa90

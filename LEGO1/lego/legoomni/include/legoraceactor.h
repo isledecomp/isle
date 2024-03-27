@@ -31,7 +31,7 @@ public:
 	void VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&) override; // vtable+0x68
 	void VTable0x70(float p_float) override;                                     // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;                              // vtable+0x74
-	MxS32 VTable0x90() override;                                                 // vtable+0x90
+	MxU32 VTable0x90(float, Matrix4&) override;                                  // vtable+0x90
 	MxS32 VTable0x94() override;                                                 // vtable+0x94
 
 	// FUNCTION: LEGO1 0x10014aa0
