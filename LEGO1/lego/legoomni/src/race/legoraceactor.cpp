@@ -34,7 +34,7 @@ void LegoRaceActor::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x10014ce0
-MxU32 LegoRaceActor::VTable0x90(float, MxMatrix&)
+MxU32 LegoRaceActor::VTable0x90(float, Matrix4&)
 {
 	// TODO
 	return 0;

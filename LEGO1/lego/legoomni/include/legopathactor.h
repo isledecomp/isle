@@ -46,7 +46,7 @@ public:
 	virtual void VTable0x8c(); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
-	virtual MxU32 VTable0x90(float, MxMatrix&) { return FALSE; } // vtable+0x90
+	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
 	virtual MxS32 VTable0x94() { return 0; } // vtable+0x94

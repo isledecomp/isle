@@ -114,7 +114,7 @@ public:
 		}
 	}
 
-	inline void RotateX(const float p_angle)
+	inline void RotateX(const float& p_angle)
 	{
 		float s = sin(p_angle);
 		float c = cos(p_angle);
@@ -126,7 +126,7 @@ public:
 		}
 	}
 
-	inline void RotateZ(const float p_angle)
+	inline void RotateZ(const float& p_angle)
 	{
 		float s = sin(p_angle);
 		float c = cos(p_angle);

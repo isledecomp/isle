@@ -26,7 +26,7 @@ LegoExtraActor::~LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a720
-MxU32 LegoExtraActor::VTable0x90(float p_time, MxMatrix& p_transform)
+MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 {
 	switch (m_unk0xdc & 0xff) {
 	case 0:
@@ -39,25 +39,37 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, MxMatrix& p_transform)
 		m_lastTime = p_time;
 		return FALSE;
 	case 3: {
-		Vector3 positionRef = Vector3(p_transform[3]);
+		Vector3 positionRef(p_transform[3]);
 		p_transform = m_roi->GetLocal2World();
+
 		if (p_time < m_scheduledTime) {
-			Mx3DPointFloat position = positionRef;
+			Mx3DPointFloat position;
+			position = positionRef;
 			positionRef.Clear();
+
 			switch (m_axis) {
-			case e_posz:
-				p_transform.RotateZ(0.7f);
-				break;
-			case e_negz:
-				p_transform.RotateZ(-0.7f);
-				break;
-			case e_posx:
-				p_transform.RotateX(0.7f);
-				break;
-			case e_negx:
-				p_transform.RotateX(-0.7f);
+			case e_posz: {
+				float angle = 0.7f;
+				p_transform.RotateZ(angle);
 				break;
 			}
+			case e_negz: {
+				float angle = -0.7f;
+				p_transform.RotateZ(angle);
+				break;
+			}
+			case e_posx: {
+				float angle = 0.7f;
+				p_transform.RotateX(angle);
+				break;
+			}
+			case e_negx: {
+				float angle = -0.7f;
+				p_transform.RotateX(angle);
+				break;
+			}
+			}
+
 			positionRef = position;
 			m_actorTime += (p_time - m_lastTime) * m_worldSpeed;
 			m_lastTime = p_time;
@@ -67,7 +79,7 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, MxMatrix& p_transform)
 		else {
 			m_unk0xdc = 0;
 			m_scheduledTime = 0.0f;
-			positionRef.Sub(&g_unk0x10104c18);
+			((Vector3&) positionRef).Sub(&g_unk0x10104c18); // TODO: Fix call
 			m_roi->FUN_100a58f0(p_transform);
 			return TRUE;
 		}
