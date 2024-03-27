@@ -113,6 +113,7 @@ class Bin:
         self.imports = []
         self.thunks = []
         self.exports: List[Tuple[int, str]] = []
+        self.is_debug: bool = False
 
     def __enter__(self):
         logger.debug("Bin %s Enter", self.filename)
@@ -142,6 +143,13 @@ class Bin:
         data_dictionaries = [
             *struct.iter_unpack("<2I", optional_hdr[0x60 : 0x60 + number_of_rva * 8])
         ]
+
+        # Check for presence of .debug subsection in .rdata
+        try:
+            if data_dictionaries[6][0] != 0:
+                self.is_debug = True
+        except IndexError:
+            pass
 
         headers_view = optional_hdr[
             pe_hdr.SizeOfOptionalHeader : pe_hdr.SizeOfOptionalHeader
@@ -337,9 +345,27 @@ class Bin:
         Search .text to find these functions."""
 
         text_sect = self.get_section_by_name(".text")
+        text_start = text_sect.virtual_address
+
+        # If this is a debug build, read the thunks at the start of .text
+        # Terminated by a big block of 0xcc padding bytes before the first
+        # real function in the section.
+        if self.is_debug:
+            ofs = 0
+            while True:
+                (opcode, operand) = struct.unpack("<Bi", text_sect.view[ofs : ofs + 5])
+                if opcode != 0xE9:
+                    break
+
+                thunk_ofs = text_start + ofs
+                jmp_ofs = text_start + ofs + 5 + operand
+                self.thunks.append((thunk_ofs, jmp_ofs))
+                ofs += 5
+
+        # Now check for import thunks which are present in debug and release.
+        # These use an absolute JMP with the 2 byte opcode: 0xff 0x25
         idata_sect = self.get_section_by_name(".idata")
-        start = text_sect.virtual_address
-        ofs = start
+        ofs = text_start
 
         for shift in (0, 2, 4):
             window = text_sect.view[shift:]

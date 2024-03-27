@@ -84,6 +84,7 @@ class Compare:
         self._load_cvdump()
         self._load_markers()
         self._find_original_strings()
+        self._match_imports()
         self._match_thunks()
         self._match_exports()
         self._find_vtordisp()
@@ -250,7 +251,9 @@ class Compare:
 
             self._db.match_string(addr, string)
 
-    def _match_thunks(self):
+    def _match_imports(self):
+        """We can match imported functions based on the DLL name and
+        function symbol name."""
         orig_byaddr = {
             addr: (dll.upper(), name) for (dll, name, addr) in self.orig_bin.imports
         }
@@ -268,27 +271,41 @@ class Compare:
         # Now: we have the IAT offset in each matched up, so we need to make
         # the connection between the thunk functions.
         # We already have the symbol name we need from the PDB.
-        orig_thunks = {
-            iat_ofs: func_ofs for (func_ofs, iat_ofs) in self.orig_bin.thunks
-        }
-        recomp_thunks = {
-            iat_ofs: func_ofs for (func_ofs, iat_ofs) in self.recomp_bin.thunks
-        }
-
         for orig, recomp in orig_to_recomp.items():
             self._db.set_pair(orig, recomp, SymbolType.POINTER)
-            thunk_from_orig = orig_thunks.get(orig, None)
-            thunk_from_recomp = recomp_thunks.get(recomp, None)
 
-            if thunk_from_orig is not None and thunk_from_recomp is not None:
-                self._db.set_function_pair(thunk_from_orig, thunk_from_recomp)
-                # Don't compare thunk functions for now. The comparison isn't
-                # "useful" in the usual sense. We are only looking at the 6
-                # bytes of the jmp instruction and not the larger context of
-                # where this function is. Also: these will always match 100%
-                # because we are searching for a match to register this as a
-                # function in the first place.
-                self._db.skip_compare(thunk_from_orig)
+    def _match_thunks(self):
+        """Thunks are (by nature) matched by indirection. If a thunk from orig
+        points at a function we have already matched, we can find the matching
+        thunk in recomp because it points to the same place."""
+
+        # Turn this one inside out for easy lookup
+        recomp_thunks = {
+            func_addr: thunk_addr for (thunk_addr, func_addr) in self.recomp_bin.thunks
+        }
+
+        for orig_thunk, orig_addr in self.orig_bin.thunks:
+            orig_func = self._db.get_by_orig(orig_addr)
+            if orig_func is None or orig_func.recomp_addr is None:
+                continue
+
+            # Check whether the thunk destination is a matched symbol
+            recomp_thunk = recomp_thunks.get(orig_func.recomp_addr)
+            if recomp_thunk is None:
+                continue
+
+            # The thunk symbol should already exist if it is the thunk of an
+            # imported function. Incremental build thunks have no symbol,
+            # so we need to give it a name for the asm diff output.
+            self._db.register_thunk(orig_thunk, recomp_thunk, orig_func.name)
+
+            # Don't compare thunk functions for now. The comparison isn't
+            # "useful" in the usual sense. We are only looking at the
+            # bytes of the jmp instruction and not the larger context of
+            # where this function is. Also: these will always match 100%
+            # because we are searching for a match to register this as a
+            # function in the first place.
+            self._db.skip_compare(orig_thunk)
 
     def _match_exports(self):
         # invert for name lookup
@@ -560,7 +577,7 @@ class Compare:
     def _compare_match(self, match: MatchInfo) -> Optional[DiffReport]:
         """Router for comparison type"""
 
-        if match.size == 0:
+        if match.size is None or match.size == 0:
             return None
 
         options = self._db.get_match_options(match.orig_addr)
