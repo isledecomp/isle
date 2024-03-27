@@ -73,6 +73,7 @@ logger = logging.getLogger(__name__)
 
 
 class CompareDb:
+    # pylint: disable=too-many-public-methods
     def __init__(self):
         self._db = sqlite3.connect(":memory:")
         self._db.executescript(_SETUP_SQL)
@@ -347,6 +348,21 @@ class CompareDb:
             return False
 
         return self.set_pair(addr, recomp_addr, compare_type)
+
+    def get_next_orig_addr(self, addr: int) -> Optional[int]:
+        """Return the original address (matched or not) that follows
+        the one given. If our recomp function size would cause us to read
+        too many bytes for the original function, we can adjust it."""
+        result = self._db.execute(
+            """SELECT orig_addr
+            FROM `symbols`
+            WHERE orig_addr > ?
+            ORDER BY orig_addr
+            LIMIT 1""",
+            (addr,),
+        ).fetchone()
+
+        return result[0] if result is not None else None
 
     def match_function(self, addr: int, name: str) -> bool:
         did_match = self._match_on(SymbolType.FUNCTION, addr, name)
