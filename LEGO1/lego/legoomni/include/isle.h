@@ -69,6 +69,7 @@ public:
 	void FUN_10031590();
 	void FUN_10032620();
 	void FUN_100330e0();
+	void FUN_10033350();
 	void FUN_10032d30(
 		IsleScript::Script p_script,
 		JukeboxScript::Script p_music,

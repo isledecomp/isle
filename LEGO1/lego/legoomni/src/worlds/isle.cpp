@@ -1115,3 +1115,9 @@ MxBool Isle::VTable0x64()
 	// TODO
 	return FALSE;
 }
+
+// STUB: LEGO1 0x10033350
+void Isle::FUN_10033350()
+{
+	// TODO
+}
