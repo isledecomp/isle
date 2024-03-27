@@ -46,7 +46,7 @@ public:
 	virtual void VTable0x8c(); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
-	virtual MxS32 VTable0x90() { return 0; } // vtable+0x90
+	virtual MxU32 VTable0x90(float, MxMatrix&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
 	virtual MxS32 VTable0x94() { return 0; } // vtable+0x94
@@ -97,8 +97,8 @@ public:
 protected:
 	MxFloat m_BADuration;             // 0x78
 	undefined4 m_unk0x7c;             // 0x7c
-	MxFloat m_unk0x80;                // 0x80
-	MxFloat m_unk0x84;                // 0x84
+	MxFloat m_actorTime;              // 0x80
+	MxFloat m_lastTime;               // 0x84
 	LegoPathBoundary* m_boundary;     // 0x88
 	undefined m_unk0x8c[0x14];        // 0x8c
 	MxFloat m_unk0xa0;                // 0xa0

@@ -114,6 +114,30 @@ public:
 		}
 	}
 
+	inline void RotateX(const float p_angle)
+	{
+		float s = sin(p_angle);
+		float c = cos(p_angle);
+		float matrix[4][4];
+		memcpy(matrix, m_data, sizeof(float) * 16);
+		for (int i = 0; i < 4; i++) {
+			m_data[i][1] = matrix[i][1] * c - matrix[i][2] * s;
+			m_data[i][2] = matrix[i][2] * c + matrix[i][1] * s;
+		}
+	}
+
+	inline void RotateZ(const float p_angle)
+	{
+		float s = sin(p_angle);
+		float c = cos(p_angle);
+		float matrix[4][4];
+		memcpy(matrix, m_data, sizeof(float) * 16);
+		for (int i = 0; i < 4; i++) {
+			m_data[i][0] = matrix[i][0] * c - matrix[i][1] * s;
+			m_data[i][1] = matrix[i][1] * c + matrix[i][0] * s;
+		}
+	}
+
 	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
 	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
 

@@ -46,7 +46,7 @@ LegoAnimActor::~LegoAnimActor()
 MxResult LegoAnimActor::FUN_1001c1f0(float& p_und)
 {
 	float duration = (float) m_animMaps[m_curAnim]->m_AnimTreePtr->GetDuration();
-	p_und = m_unk0x80 - duration * ((MxS32) (m_unk0x80 / duration));
+	p_und = m_actorTime - duration * ((MxS32) (m_actorTime / duration));
 	return SUCCESS;
 }
 
@@ -65,8 +65,8 @@ void LegoAnimActor::VTable0x74(Matrix4& p_transform)
 // FUNCTION: LEGO1 0x1001c290
 void LegoAnimActor::VTable0x70(float p_float)
 {
-	if (m_unk0x84 == 0) {
-		m_unk0x84 = p_float - 1.0f;
+	if (m_lastTime == 0) {
+		m_lastTime = p_float - 1.0f;
 	}
 
 	if (m_unk0xdc == 0 && !m_userNavFlag && m_worldSpeed <= 0) {
@@ -77,7 +77,7 @@ void LegoAnimActor::VTable0x70(float p_float)
 			FUN_1001c360(f, matrix);
 		}
 
-		m_unk0x84 = m_unk0x80 = p_float;
+		m_lastTime = m_actorTime = p_float;
 	}
 	else {
 		LegoPathActor::VTable0x70(p_float);

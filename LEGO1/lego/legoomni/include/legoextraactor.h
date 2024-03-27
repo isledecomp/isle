@@ -9,6 +9,13 @@
 // SIZE 0x1dc
 class LegoExtraActor : public virtual LegoAnimActor {
 public:
+	enum Axis {
+		e_posz,
+		e_negz,
+		e_posx,
+		e_negx
+	};
+
 	LegoExtraActor();
 	~LegoExtraActor() override;
 
@@ -27,15 +34,15 @@ public:
 
 	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
 	void VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
-		override;                                   // vtable+0x68
-	void VTable0x6c() override;                     // vtable+0x6c
-	void VTable0x70(float) override;                // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override; // vtable+0x74
-	MxS32 VTable0x90() override;                    // vtable+0x90
-	MxS32 VTable0x94() override;                    // vtable+0x94
-	void VTable0x9c() override;                     // vtable+0x9c
-	void VTable0xa4() override;                     // vtable+0xa4
-	void VTable0xc4() override;                     // vtable+0xc4
+		override;                                                 // vtable+0x68
+	void VTable0x6c() override;                                   // vtable+0x6c
+	void VTable0x70(float) override;                              // vtable+0x70
+	void VTable0x74(Matrix4& p_transform) override;               // vtable+0x74
+	MxU32 VTable0x90(float p_float, MxMatrix& p_matrix) override; // vtable+0x90
+	MxS32 VTable0x94() override;                                  // vtable+0x94
+	void VTable0x9c() override;                                   // vtable+0x9c
+	void VTable0xa4() override;                                   // vtable+0xa4
+	void VTable0xc4() override;                                   // vtable+0xc4
 
 	virtual MxResult FUN_1002aae0();
 
@@ -43,9 +50,9 @@ public:
 	// LegoExtraActor::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x08;           // 0x08
+	MxFloat m_scheduledTime;        // 0x08
 	undefined m_unk0x0c;            // 0x0c
-	undefined m_unk0x0d;            // 0x0d
+	MxU8 m_axis;                    // 0x0d
 	undefined m_unk0x0e;            // 0x0e
 	undefined4 m_unk0x10;           // 0x10
 	MxU8 m_unk0x14;                 // 0x14
