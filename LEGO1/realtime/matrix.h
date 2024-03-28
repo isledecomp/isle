@@ -9,6 +9,9 @@ struct UnknownMatrixType {
 	float m_data[4][4];
 };
 
+// Note: Many functions most likely take const references/pointers instead of non-const.
+// The class needs to undergo a very careful refactoring to fix that (no matches should break).
+
 // VTABLE: LEGO1 0x100d4350
 // SIZE 0x08
 class Matrix4 {

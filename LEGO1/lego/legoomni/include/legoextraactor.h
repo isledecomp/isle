@@ -41,7 +41,7 @@ public:
 	MxU32 VTable0x90(float p_float, Matrix4& p_matrix) override; // vtable+0x90
 	MxS32 VTable0x94() override;                                 // vtable+0x94
 	void VTable0x9c() override;                                  // vtable+0x9c
-	void VTable0xa4() override;                                  // vtable+0xa4
+	void VTable0xa4(MxU8& p_und1, MxS32& p_und2) override;       // vtable+0xa4
 	void VTable0xc4() override;                                  // vtable+0xc4
 
 	virtual MxResult FUN_1002aae0();

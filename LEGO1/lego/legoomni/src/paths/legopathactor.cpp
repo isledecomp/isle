@@ -81,7 +81,7 @@ void LegoPathActor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x1002f650
-void LegoPathActor::VTable0xa4()
+void LegoPathActor::VTable0xa4(MxU8&, MxS32&)
 {
 	// TODO
 }

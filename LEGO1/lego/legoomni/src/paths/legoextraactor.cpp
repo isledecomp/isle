@@ -86,16 +86,49 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 	}
 }
 
-// STUB: LEGO1 0x1002aa90
-void LegoExtraActor::VTable0xa4()
+// FUNCTION: LEGO1 0x1002aa90
+void LegoExtraActor::VTable0xa4(MxU8& p_und1, MxS32& p_und2)
 {
+	switch (m_unk0x0c) {
+	case 1:
+		p_und1 = 1;
+		p_und2 = 1;
+		break;
+	case 2:
+		p_und1 = 0;
+		p_und2 = 1;
+		break;
+	default:
+		p_und1 = 1;
+		p_und2 = rand() % p_und2 + 1;
+		break;
+	}
 }
 
-// STUB: LEGO1 0x1002aae0
+// FUNCTION: LEGO1 0x1002aae0
 MxResult LegoExtraActor::FUN_1002aae0()
 {
-	// TODO
-	VTable0x9c();
+	LegoPathBoundary* oldEdge = m_boundary;
+	Vector3 dir(m_unk0xec[0]);
+	Vector3 right(m_unk0xec[1]);
+	Vector3 up(m_unk0xec[2]);
+	Vector3 unused(m_unk0xec[3]);
+
+	up.Mul(-1.0f);
+	dir.EqualsCross(&right, &up);
+
+	if (m_boundary == m_destEdge->m_faceA) {
+		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceB;
+	}
+	else {
+		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceA;
+	}
+
+	if (!m_boundary) {
+		m_boundary = oldEdge;
+	}
+
+	LegoPathActor::VTable0x9c();
 	return SUCCESS;
 }
 

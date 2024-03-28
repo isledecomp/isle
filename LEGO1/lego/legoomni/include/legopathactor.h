@@ -57,8 +57,8 @@ public:
 	// FUNCTION: LEGO1 0x10002d60
 	virtual MxS32 VTable0xa0() { return 0; } // vtable+0xa0
 
-	virtual void VTable0xa4(); // vtable+0xa4
-	virtual void VTable0xa8(); // vtable+0xa8
+	virtual void VTable0xa4(MxU8&, MxS32&); // vtable+0xa4
+	virtual void VTable0xa8();              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
 	virtual void VTable0xac(MxFloat p_unk0x13c) { m_unk0x13c = p_unk0x13c; } // vtable+0xac
@@ -104,7 +104,7 @@ protected:
 	MxFloat m_unk0xa0;                // 0xa0
 	undefined m_unk0xa4[0x38];        // 0xa4
 	MxU32 m_unk0xdc;                  // 0xdc
-	undefined4 m_destEdge;            // 0xe0
+	Edge* m_destEdge;                 // 0xe0
 	undefined4 m_unk0xe4;             // 0xe4
 	undefined2 m_unk0xe8;             // 0xe8
 	MxBool m_userNavFlag;             // 0xea
