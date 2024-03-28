@@ -399,11 +399,11 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 			FUN_10031590();
 			break;
 		case IsleScript::c_Observe_GlobeLArrow_Ctl:
-			FUN_1003f050(-1);
+			UpdateLightPosition(-1);
 			FUN_10031590();
 			break;
 		case IsleScript::c_Observe_GlobeRArrow_Ctl:
-			FUN_1003f050(1);
+			UpdateLightPosition(1);
 			FUN_10031590();
 			break;
 		case IsleScript::c_Observe_Draw1_Ctl:

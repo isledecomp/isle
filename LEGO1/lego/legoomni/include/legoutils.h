@@ -25,7 +25,7 @@ void FUN_1003ef00(MxBool);
 void SetAppCursor(WPARAM p_wparam);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);
-MxS32 FUN_1003f050(MxS32);
+MxS32 UpdateLightPosition(MxS32 p_value);
 void SetLightPosition(MxU32);
 LegoNamedTexture* ReadNamedTexture(LegoFile* p_file);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
