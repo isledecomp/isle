@@ -10,13 +10,18 @@
 
 // SIZE 0x18
 struct Character {
-	char* m_name;            // 0x00
-	undefined m_unk0x04;     // 0x04
-	MxS8 m_vehicleId;        // 0x05
-	undefined m_unk0x06;     // 0x06
-	MxBool m_unk0x07;        // 0x07
-	undefined m_unk0x08[12]; // 0x08
-	MxBool m_active;         // 0x14
+	char* m_name;        // 0x00
+	MxBool m_unk0x04;    // 0x04
+	MxS8 m_vehicleId;    // 0x05
+	undefined m_unk0x06; // 0x06 (unused?)
+	MxBool m_unk0x07;    // 0x07
+	MxBool m_unk0x08;    // 0x08
+	MxBool m_unk0x09;    // 0x09
+	MxU32 m_unk0x0c;     // 0x0c
+	MxU32 m_unk0x10;     // 0x10
+	MxBool m_active;     // 0x14
+	MxU8 m_unk0x15;      // 0x15
+	MxU8 m_unk0x16;      // 0x16
 };
 
 // SIZE 0x08
