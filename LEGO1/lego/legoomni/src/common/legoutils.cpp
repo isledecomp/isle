@@ -314,11 +314,37 @@ MxBool FUN_1003ef60()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1003f050
-MxS32 FUN_1003f050(MxS32)
+// FUNCTION: LEGO1 0x1003f050
+MxS32 UpdateLightPosition(MxS32 p_value)
 {
-	// TODO
-	return 0;
+	// This function updates the light position
+	// relatively by the amount passed in p_value.
+	// Because it operates relatively, it does not set
+	// the light position to an arbitrary value.
+
+	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
+
+	if (p_value > 0) {
+		lightPosition += 1;
+		if (lightPosition > 5) {
+			lightPosition = 5;
+		}
+	}
+	else {
+		lightPosition -= 1;
+		if (lightPosition < 0) {
+			lightPosition = 0;
+		}
+	}
+
+	SetLightPosition(lightPosition);
+
+	char lightPositionBuffer[32];
+	sprintf(lightPositionBuffer, "%d", lightPosition);
+
+	VariableTable()->SetVariable("lightposition", lightPositionBuffer);
+
+	return lightPosition;
 }
 
 // STUB: LEGO1 0x1003f0d0
