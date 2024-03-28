@@ -390,12 +390,11 @@ LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 	if (texture != NULL) {
 		if (texture->Read(p_file, 0) != SUCCESS) {
 			delete texture;
-
 			return namedTexture;
 		}
 
 		namedTexture = new LegoNamedTexture(string.GetData(), texture);
-		if (namedTexture == NULL && texture != NULL) {
+		if (namedTexture == NULL) {
 			delete texture;
 		}
 	}
