@@ -377,10 +377,30 @@ void SetLightPosition(MxU32)
 {
 }
 
-// STUB: LEGO1 0x1003f3b0
+// FUNCTION: LEGO1 0x1003f3b0
 LegoNamedTexture* ReadNamedTexture(LegoFile* p_file)
 {
-	return NULL;
+	LegoTexture* texture = NULL;
+	LegoNamedTexture* namedTexture = NULL;
+	MxString string;
+
+	p_file->ReadString(string);
+
+	texture = new LegoTexture();
+	if (texture != NULL) {
+		if (texture->Read(p_file, 0) != SUCCESS) {
+			delete texture;
+
+			return namedTexture;
+		}
+
+		namedTexture = new LegoNamedTexture(string.GetData(), texture);
+		if (namedTexture == NULL && texture != NULL) {
+			delete texture;
+		}
+	}
+
+	return namedTexture;
 }
 
 // STUB: LEGO1 0x1003f540
