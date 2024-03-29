@@ -91,7 +91,7 @@ void LegoBackgroundColor::ToggleDayNight(MxBool p_sun)
 	float convertedR, convertedG, convertedB;
 	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
 	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
-	SetLights(convertedR, convertedG, convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
 }
 
 // FUNCTION: LEGO1 0x1003c330
@@ -110,18 +110,39 @@ void LegoBackgroundColor::ToggleSkyColor()
 	float convertedR, convertedG, convertedB;
 	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
 	VideoManager()->SetSkyColor(convertedR, convertedG, convertedB);
-	SetLights(convertedR, convertedG, convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
 }
 
-// STUB: LEGO1 0x1003c400
-void LegoBackgroundColor::SetLights(float p_r, float p_g, float p_b)
+// FUNCTION: LEGO1 0x1003c400
+void LegoBackgroundColor::SetLightColor(float p_r, float p_g, float p_b)
 {
+	if (!VideoManager()->GetVideoParam().Flags().GetF2bit0()) {
+		// TODO: Computed constants based on what?
+		p_r *= 4.3478260869565215;
+		p_g *= 1.5873015873015872;
+		p_b *= 1.1764705882352942;
+
+		if (p_r > 1.0) {
+			p_r = 1.0;
+		}
+
+		if (p_g > 1.0) {
+			p_g = 1.0;
+		}
+
+		if (p_b > 1.0) {
+			p_b = 1.0;
+		}
+
+		VideoManager()->Get3DManager()->GetLego3DView()->SetLightColor(FALSE, p_r, p_g, p_b);
+		VideoManager()->Get3DManager()->GetLego3DView()->SetLightColor(TRUE, p_r, p_g, p_b);
+	}
 }
 
 // FUNCTION: LEGO1 0x1003c4b0
-void LegoBackgroundColor::SetLights()
+void LegoBackgroundColor::SetLightColor()
 {
 	float convertedR, convertedG, convertedB;
 	ConvertHSVToRGB(m_h, m_s, m_v, &convertedR, &convertedG, &convertedB);
-	SetLights(convertedR, convertedG, convertedB);
+	SetLightColor(convertedR, convertedG, convertedB);
 }
