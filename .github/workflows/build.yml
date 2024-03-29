@@ -156,6 +156,13 @@ jobs:
         python3 tools/vtable/vtable.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
         python3 tools/vtable/vtable.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
 
+    - name: Check Variables
+      shell: bash
+      run: |
+        python3 tools/datacmp.py legobin/CONFIG.EXE build/CONFIG.EXE build/CONFIG.PDB .
+        python3 tools/datacmp.py legobin/ISLE.EXE build/ISLE.EXE build/ISLE.PDB .
+        python3 tools/datacmp.py legobin/LEGO1.DLL build/LEGO1.DLL build/LEGO1.PDB .
+
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
