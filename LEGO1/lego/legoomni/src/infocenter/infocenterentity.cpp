@@ -23,36 +23,32 @@ DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
 // FUNCTION: LEGO1 0x100150c0
 MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 {
-	Isle* isle;
-	LegoAct2* act2;
-	Act3* act3;
-	Act1State* act1state;
-	LegoAct2State* act2state;
-
 	switch (GameState()->GetCurrentAct()) {
-	case LegoGameState::Act::e_act1:
+	case LegoGameState::Act::e_act1: {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
 			CurrentActor()->VTable0xe4();
 		}
 
-		isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		isle->FUN_10033350();
 		isle->SetDestLocation(LegoGameState::Area::e_infomain);
 
-		act1state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
 		act1state->SetUnknown18(0);
 		break;
-	case LegoGameState::Act::e_act2:
-		act2 = (LegoAct2*) FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
+	}
+	case LegoGameState::Act::e_act2: {
+		LegoAct2* act2 = (LegoAct2*) FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
 		act2->SetUnknown0x1150(2);
 
-		act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
+		LegoAct2State* act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
 		if (act2state) {
-			act2state->SetUnknown0x0C(0);
+			act2state->SetUnknown0x0c(0);
 		}
 		break;
+	}
 	case LegoGameState::Act::e_act3:
-		act3 = (Act3*) FindWorld(*g_act3Script, Act3Script::c__Act3);
+		Act3* act3 = (Act3*) FindWorld(*g_act3Script, Act3Script::c__Act3);
 		act3->SetUnknown4270(2);
 		break;
 	}
