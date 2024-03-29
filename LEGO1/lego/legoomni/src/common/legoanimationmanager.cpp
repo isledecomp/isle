@@ -254,7 +254,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			for (MxS32 m = 0; m < m_anims[j].m_modelCount; m++) {
 				MxU32 n;
 
-				if (FUN_10060140(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
+				if (FindVehicle(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
 					m_anims[j].m_unk0x2a[count++] = n;
 					if (count > 3) {
 						break;
@@ -294,10 +294,16 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x10060140
-MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& p_index)
+// FUNCTION: LEGO1 0x10060140
+MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
 {
-	// TODO
+	for (MxS32 i = 0; i < _countof(g_vehicles); i++) {
+		if (!strcmpi(p_name, g_vehicles[i].m_name)) {
+			p_index = i;
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
