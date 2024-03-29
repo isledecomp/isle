@@ -2,11 +2,13 @@
 
 #include "act1state.h"
 #include "act2main_actions.h"
+#include "act3.h"
 #include "act3_actions.h"
 #include "act3state.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "islepathactor.h"
+#include "legoact2.h"
 #include "legoact2state.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
@@ -22,6 +24,11 @@ DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
 MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 {
 	Isle* isle;
+	LegoAct2* act2;
+	Act3* act3;
+	Act1State* act1state;
+	LegoAct2State* act2state;
+
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1:
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
@@ -30,17 +37,23 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 
 		isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		isle->FUN_10033350();
+		isle->SetDestLocation(LegoGameState::Area::e_infomain);
 
-		// Act1State* act1state = (Act1State*) GameState()->GetState("Act1State");
+		act1state = (Act1State*) GameState()->GetState("Act1State");
+		act1state->SetUnknown18(0);
 		break;
 	case LegoGameState::Act::e_act2:
-		isle = (Isle*) FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
-		// FIXME: something eles goes here
-		// LegoAct2State* act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
+		act2 = (LegoAct2*) FindWorld(*g_act2mainScript, Act2mainScript::c__Act2Main);
+		act2->SetUnknown0x1150(2);
+
+		act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
+		if(act2state) {
+			act2state->SetUnknown0x0C(0);
+		}
 		break;
 	case LegoGameState::Act::e_act3:
-		isle = (Isle*) FindWorld(*g_act3Script, Act3Script::c__Act3);
-		// TODO: something with the lists
+		act3 = (Act3*) FindWorld(*g_act3Script, Act3Script::c__Act3);
+		act3->SetUnkown4270(2);
 		break;
 	}
 

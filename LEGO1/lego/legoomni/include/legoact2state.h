@@ -28,6 +28,7 @@ public:
 	// LegoAct2State::`scalar deleting destructor'
 
 	inline undefined4 GetUnknown0x08() { return m_unk0x08; }
+	inline void SetUnknown0x0C(undefined4 p_unk0x0c) { m_unk0x0c = p_unk0x0c; }
 
 private:
 	undefined4 m_unk0x08; // 0x08

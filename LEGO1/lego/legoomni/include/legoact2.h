@@ -19,6 +19,8 @@ public:
 	MxBool VTable0x64() override;                     // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
+	inline void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }
+
 	// SYNTHETIC: LEGO1 0x1004fe20
 	// LegoAct2::`scalar deleting destructor'
 
