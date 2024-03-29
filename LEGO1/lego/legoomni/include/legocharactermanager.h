@@ -55,8 +55,9 @@ public:
 	void FUN_10083f10(LegoROI* p_roi);
 	LegoExtraActor* GetActor(const char* p_key);
 	LegoCharacterData* GetData(const char* p_key);
+	LegoCharacterData* GetData(LegoROI* p_roi);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
-	MxU32 FUN_10085140(LegoROI*, MxBool);
+	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	LegoROI* FUN_10085210(const char*, char*, undefined);
 	LegoROI* FUN_10085a80(char* p_und1, char* p_und2, undefined p_und3);
 

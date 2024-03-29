@@ -17,6 +17,12 @@ DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 // GLOBAL: LEGO1 0x100fc4e4
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
+// GLOBAL: LEGO1 0x100fc4d8
+MxU32 g_unk0x100fc4d8 = 50;
+
+// GLOBAL: LEGO1 0x100fc4dc
+MxU32 g_unk0x100fc4dc = 66;
+
 // GLOBAL: LEGO1 0x10104f20
 LegoCharacterData g_characterData[66];
 
@@ -425,6 +431,24 @@ LegoCharacterData* LegoCharacterManager::GetData(const char* p_key)
 	return NULL;
 }
 
+// FUNCTION: LEGO1 0x10084cb0
+LegoCharacterData* LegoCharacterManager::GetData(LegoROI* p_roi)
+{
+	MxU32 i;
+
+	for (i = 0; i < _countof(g_characterData); i++) {
+		if (g_characterData[i].m_roi == p_roi) {
+			break;
+		}
+	}
+
+	if (i < _countof(g_characterData)) {
+		return &g_characterData[i];
+	}
+
+	return NULL;
+}
+
 // STUB: LEGO1 0x10084ec0
 MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
 {
@@ -432,10 +456,19 @@ MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10085140
-MxU32 LegoCharacterManager::FUN_10085140(LegoROI*, MxBool)
+// FUNCTION: LEGO1 0x10085140
+MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 {
-	// TODO
+	LegoCharacterData* data = GetData(p_roi);
+
+	if (p_und) {
+		return data->m_unk0x14 + g_unk0x100fc4dc;
+	}
+
+	if (data != NULL) {
+		return data->m_unk0x0c + g_unk0x100fc4d8;
+	}
+
 	return 0;
 }
 
