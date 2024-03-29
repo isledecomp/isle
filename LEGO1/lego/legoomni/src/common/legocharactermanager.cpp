@@ -38,10 +38,26 @@ void LegoCharacterManager::Init()
 	}
 }
 
-// STUB: LEGO1 0x100832a0
+// FUNCTION: LEGO1 0x100832a0
 void LegoCharacterManager::FUN_100832a0()
 {
-	// TODO
+	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
+		LegoCharacterData* data = Find(g_characterData[i].m_name);
+
+		if (data != NULL) {
+			LegoExtraActor* actor = data->m_actor;
+
+			if (actor != NULL && actor->IsA("LegoExtraActor")) {
+				LegoROI* roi = g_characterData[i].m_roi;
+				undefined4 und = FUN_10083bc0(roi);
+
+				while (und) {
+					FUN_10083db0(roi);
+					und = FUN_10083bc0(roi);
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10083310
@@ -187,6 +203,13 @@ done:
 	}
 
 	return NULL;
+}
+
+// STUB: LEGO1 0x10083bc0
+undefined4 LegoCharacterManager::FUN_10083bc0(LegoROI* p_roi)
+{
+	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x10083db0
