@@ -342,11 +342,12 @@ MxBool FUN_1003ef60()
 }
 
 // FUNCTION: LEGO1 0x1003f050
-MxS32 UpdateLightPosition(MxS32 p_index)
+MxS32 UpdateLightPosition(MxS32 p_increase)
 {
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
-	if (p_index > 0) {
+	// Only ever increases by 1 irrespective of p_increase
+	if (p_increase > 0) {
 		lightPosition += 1;
 		if (lightPosition > 5) {
 			lightPosition = 5;
