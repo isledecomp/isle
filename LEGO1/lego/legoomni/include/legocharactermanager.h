@@ -50,7 +50,7 @@ public:
 	static MxBool FUN_10084c00(const LegoChar*);
 
 	void FUN_100832a0();
-	undefined4 FUN_10083bc0(LegoROI* p_roi);
+	MxU32 GetRefCount(LegoROI* p_roi);
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
 	LegoExtraActor* FUN_10084c40(const LegoChar*);
