@@ -15,7 +15,7 @@ Act2Brick::~Act2Brick()
 }
 
 // STUB: LEGO1 0x1007a750
-MxS32 Act2Brick::VTable0x94()
+MxResult Act2Brick::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// TODO
 	return 0;

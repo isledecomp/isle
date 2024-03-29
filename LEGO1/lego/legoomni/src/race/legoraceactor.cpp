@@ -41,7 +41,7 @@ MxU32 LegoRaceActor::VTable0x90(float, Matrix4&)
 }
 
 // STUB: LEGO1 0x10014cf0
-MxS32 LegoRaceActor::VTable0x94()
+MxResult LegoRaceActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// TODO
 	return 0;

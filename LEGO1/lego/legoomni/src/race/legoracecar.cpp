@@ -76,7 +76,7 @@ void LegoRaceCar::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x10014540
-MxS32 LegoRaceCar::VTable0x94()
+MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	// TODO
 	return 0;

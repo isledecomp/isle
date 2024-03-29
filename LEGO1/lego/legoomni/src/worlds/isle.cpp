@@ -502,7 +502,7 @@ void Isle::Enable(MxBool p_enable)
 		if (CurrentActor() != NULL && CurrentActor()->IsA("Jetski")) {
 			IslePathActor* actor = CurrentActor();
 			actor->VTable0xe8(LegoGameState::e_unk45, FALSE, 7);
-			actor->SetUnknownDC(0);
+			actor->SetState(0);
 		}
 		else {
 			FUN_10032620();

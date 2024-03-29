@@ -49,7 +49,7 @@ public:
 	virtual MxU32 VTable0x90(float, Matrix4&) { return FALSE; } // vtable+0x90
 
 	// FUNCTION: LEGO1 0x10002d50
-	virtual MxS32 VTable0x94() { return 0; } // vtable+0x94
+	virtual MxResult VTable0x94(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
 	virtual void VTable0x98(); // vtable+0x98
 	virtual void VTable0x9c(); // vtable+0x9c
@@ -85,10 +85,11 @@ public:
 	virtual void VTable0xc8(MxU8 p_unk0x148) { m_unk0x148 = p_unk0x148; } // vtable+0xc8
 
 	inline LegoPathBoundary* GetBoundary() { return m_boundary; }
+	inline MxU32 GetState() { return m_state; }
 	inline LegoPathController* GetController() { return m_controller; }
 
 	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
-	inline void SetUnknownDC(MxU32 p_unk0xdc) { m_unk0xdc = p_unk0xdc; }
+	inline void SetState(MxU32 p_state) { m_state = p_state; }
 	inline void ClearController() { m_controller = NULL; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
@@ -103,7 +104,7 @@ protected:
 	undefined m_unk0x8c[0x14];        // 0x8c
 	MxFloat m_unk0xa0;                // 0xa0
 	undefined m_unk0xa4[0x38];        // 0xa4
-	MxU32 m_unk0xdc;                  // 0xdc
+	MxU32 m_state;                    // 0xdc
 	Edge* m_destEdge;                 // 0xe0
 	undefined4 m_unk0xe4;             // 0xe4
 	undefined2 m_unk0xe8;             // 0xe8

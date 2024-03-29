@@ -20,9 +20,9 @@ public:
 		return !strcmp(p_name, Doors::ClassName()) || LegoPathActor::IsA(p_name);
 	}
 
-	void ParseAction(char*) override;        // vtable+0x20
-	void VTable0x70(float p_float) override; // vtable+0x70
-	MxS32 VTable0x94() override;             // vtable+0x94
+	void ParseAction(char*) override;                                    // vtable+0x20
+	void VTable0x70(float p_float) override;                             // vtable+0x70
+	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 
 	// SYNTHETIC: LEGO1 0x1000e580
 	// Doors::`scalar deleting destructor'
