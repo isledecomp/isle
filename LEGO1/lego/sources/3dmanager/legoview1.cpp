@@ -182,3 +182,24 @@ void LegoView1::Destroy()
 
 	LegoView::Destroy();
 }
+
+// FUNCTION: LEGO1 0x100abb60
+void LegoView1::SetLight(BOOL bDirectionalLight, Tgl::FloatMatrix4& rMatrix)
+{
+	Tgl::Light* light;
+
+	if (bDirectionalLight == FALSE) {
+		light = m_pSunLight;
+	}
+	else {
+		light = m_pDirectionalLight;
+	}
+
+	SetLight(light, rMatrix);
+}
+
+// FUNCTION: LEGO1 0x100abb80
+void LegoView1::SetLight(Tgl::Light* pLight, Tgl::FloatMatrix4& rMatrix)
+{
+	pLight->SetTransformation(rMatrix);
+}
