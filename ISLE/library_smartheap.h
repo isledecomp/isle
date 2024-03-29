@@ -297,7 +297,7 @@
 // GLOBAL: ISLE 0x4105b0
 // __shi_TaskRecord
 
-// GLOBAL: ISLE 0x4125f8
+// ~GLOBAL: ISLE 0x4125f8
 // ?_pnhHeap@@3P6AHI@ZA
 
 // GLOBAL: ISLE 0x412830
