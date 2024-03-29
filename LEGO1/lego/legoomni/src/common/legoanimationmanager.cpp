@@ -173,7 +173,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_animState->FUN_10065240(m_animCount, m_anims, m_unk0x3fc);
 		}
 
-		FUN_100603c0();
+		DeleteAnimations();
 
 		LegoFile file;
 
@@ -288,7 +288,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 done:
 	if (result == FAILURE) {
-		FUN_100603c0();
+		DeleteAnimations();
 	}
 
 	return result;
@@ -408,10 +408,29 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100603c0
-void LegoAnimationManager::FUN_100603c0()
+// FUNCTION: LEGO1 0x100603c0
+void LegoAnimationManager::DeleteAnimations()
 {
-	// TODO
+	undefined unk0x42b = m_unk0x42b;
+
+	if (m_anims != NULL) {
+		for (MxS32 i = 0; i < m_animCount; i++) {
+			delete m_anims[i].m_animName;
+
+			if (m_anims[i].m_models != NULL) {
+				for (MxS32 j = 0; j < m_anims[i].m_modelCount; j++) {
+					delete m_anims[i].m_models[j].m_modelName;
+				}
+
+				delete m_anims[i].m_models;
+			}
+		}
+
+		delete m_anims;
+	}
+
+	Init();
+	m_unk0x42b = unk0x42b;
 }
 
 // STUB: LEGO1 0x10060570

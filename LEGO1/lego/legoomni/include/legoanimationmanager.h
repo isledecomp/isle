@@ -70,7 +70,7 @@ public:
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
-	void FUN_100603c0();
+	void DeleteAnimations();
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	void FUN_10060570(MxBool);
 	undefined4 FUN_10060dc0(
