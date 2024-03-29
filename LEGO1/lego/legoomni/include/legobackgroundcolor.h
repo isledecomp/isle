@@ -10,8 +10,8 @@ public:
 	LegoBackgroundColor(const char* p_key, const char* p_value);
 
 	void SetValue(const char* p_colorString) override;
-	void SetLights(float p_r, float p_g, float p_b);
-	void SetLights();
+	void SetLightColor(float p_r, float p_g, float p_b);
+	void SetLightColor();
 	void ToggleDayNight(MxBool);
 	void ToggleSkyColor();
 

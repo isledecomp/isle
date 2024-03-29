@@ -403,8 +403,8 @@ void SetLightPosition(MxS32 p_index)
 	CalcLocalTransform(position, direction, up, transform);
 	SETMAT4(in, transform);
 
-	VideoManager()->Get3DManager()->GetLego3DView()->SetLight(FALSE, matrix);
-	VideoManager()->Get3DManager()->GetLego3DView()->SetLight(TRUE, matrix);
+	VideoManager()->Get3DManager()->GetLego3DView()->SetLightTransform(FALSE, matrix);
+	VideoManager()->Get3DManager()->GetLego3DView()->SetLightTransform(TRUE, matrix);
 }
 
 // FUNCTION: LEGO1 0x1003f3b0
