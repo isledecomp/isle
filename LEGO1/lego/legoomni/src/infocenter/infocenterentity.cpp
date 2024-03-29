@@ -47,13 +47,13 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 		act2->SetUnknown0x1150(2);
 
 		act2state = (LegoAct2State*) GameState()->GetState("LegoAct2State");
-		if(act2state) {
+		if (act2state) {
 			act2state->SetUnknown0x0C(0);
 		}
 		break;
 	case LegoGameState::Act::e_act3:
 		act3 = (Act3*) FindWorld(*g_act3Script, Act3Script::c__Act3);
-		act3->SetUnkown4270(2);
+		act3->SetUnknown4270(2);
 		break;
 	}
 
