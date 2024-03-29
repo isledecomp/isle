@@ -47,18 +47,18 @@ public:
 
 	void Init();
 	static void SetCustomizeAnimFile(const char* p_value);
-	static MxBool FUN_10084c00(const LegoChar*);
+	static MxBool Exists(const char* p_key);
 
 	void FUN_100832a0();
 	undefined4 FUN_10083bc0(LegoROI* p_roi);
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
-	LegoExtraActor* FUN_10084c40(const LegoChar*);
-	LegoCharacterData* Find(const char* p_key);
+	LegoExtraActor* GetActor(const char* p_key);
+	LegoCharacterData* GetData(const char* p_key);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI*, MxBool);
-	LegoROI* FUN_10085210(const LegoChar*, LegoChar*, undefined);
-	LegoROI* FUN_10085a80(LegoChar* p_und1, LegoChar* p_und2, undefined p_und3);
+	LegoROI* FUN_10085210(const char*, char*, undefined);
+	LegoROI* FUN_10085a80(char* p_und1, char* p_und2, undefined p_und3);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 

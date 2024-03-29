@@ -421,7 +421,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	LegoROI* roi = p_entity->GetROI();
 
 	if (p_entity->GetUnknown0x59() == 0) {
-		LegoPathActor* actor = CharacterManager()->FUN_10084c40(roi->GetName());
+		LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 		if (actor) {
 			LegoPathController* controller = actor->GetController();

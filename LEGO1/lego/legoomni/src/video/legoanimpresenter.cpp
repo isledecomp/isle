@@ -115,7 +115,7 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 {
 	LegoChar* str;
 
-	if (LegoCharacterManager::FUN_10084c00(p_und1 + 1)) {
+	if (LegoCharacterManager::Exists(p_und1 + 1)) {
 		str = new LegoChar[strlen(p_und1)];
 
 		if (str != NULL) {
