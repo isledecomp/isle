@@ -28,7 +28,7 @@ MxLong BeachHouseEntity::VTable0x50(MxParam& p_param)
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 		isle->SetDestLocation(LegoGameState::Area::e_jetskibuild);
 
-		AnimationManager()->FUN_10061010(NULL);
+		AnimationManager()->FUN_10061010(0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 	}
 
