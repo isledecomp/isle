@@ -49,11 +49,11 @@ void LegoCharacterManager::FUN_100832a0()
 
 			if (actor != NULL && actor->IsA("LegoExtraActor")) {
 				LegoROI* roi = g_characterData[i].m_roi;
-				undefined4 und = FUN_10083bc0(roi);
+				MxU32 refCount = GetRefCount(roi);
 
-				while (und) {
+				while (refCount != 0) {
 					FUN_10083db0(roi);
-					und = FUN_10083bc0(roi);
+					refCount = GetRefCount(roi);
 				}
 			}
 		}
@@ -205,10 +205,20 @@ done:
 	return NULL;
 }
 
-// STUB: LEGO1 0x10083bc0
-undefined4 LegoCharacterManager::FUN_10083bc0(LegoROI* p_roi)
+// FUNCTION: LEGO1 0x10083bc0
+MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 {
-	// TODO
+	LegoCharacterMap::iterator it;
+
+	for (it = m_characters->begin(); it != m_characters->end(); it++) {
+		LegoCharacter* character = (*it).second;
+		LegoROI* roi = character->m_roi;
+
+		if (roi == p_roi) {
+			return character->m_refCount;
+		}
+	}
+
 	return 0;
 }
 
