@@ -14,9 +14,11 @@
 #include "mxnotificationmanager.h"
 #include "mxstreamer.h"
 #include "mxtypes.h"
+#include "realtime/realtime.h"
 
 #include <process.h>
 #include <string.h>
+#include <vec.h>
 
 // STUB: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
@@ -340,16 +342,12 @@ MxBool FUN_1003ef60()
 }
 
 // FUNCTION: LEGO1 0x1003f050
-MxS32 UpdateLightPosition(MxS32 p_value)
+MxS32 UpdateLightPosition(MxS32 p_increase)
 {
-	// This function updates the light position
-	// relatively by the amount passed in p_value.
-	// Because it operates relatively, it does not set
-	// the light position to an arbitrary value.
-
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
-	if (p_value > 0) {
+	// Only ever increases by 1 irrespective of p_increase
+	if (p_increase > 0) {
 		lightPosition += 1;
 		if (lightPosition > 5) {
 			lightPosition = 5;
@@ -372,9 +370,41 @@ MxS32 UpdateLightPosition(MxS32 p_value)
 	return lightPosition;
 }
 
-// STUB: LEGO1 0x1003f0d0
-void SetLightPosition(MxU32)
+// FUNCTION: LEGO1 0x1003f0d0
+void SetLightPosition(MxS32 p_index)
 {
+	float lights[6][6] = {
+		{1.0, 0.0, 0.0, -150.0, 50.0, -50.0},
+		{0.809, -0.588, 0.0, -75.0, 50.0, -50.0},
+		{0.0, -1.0, 0.0, 0.0, 150.0, -150.0},
+		{-0.309, -0.951, 0.0, 25.0, 50.0, -50.0},
+		{-0.809, -0.588, 0.0, 75.0, 50.0, -50.0},
+		{-1.0, 0.0, 0.0, 150.0, 50.0, -50.0}
+	};
+
+	Mx3DPointFloat up(1.0, 0.0, 0.0);
+	Mx3DPointFloat direction;
+	Mx3DPointFloat position;
+
+	Tgl::FloatMatrix4 matrix;
+	Matrix4 in(matrix);
+	MxMatrix transform;
+
+	if (p_index < 0) {
+		p_index = 0;
+	}
+	else if (p_index > 5) {
+		p_index = 5;
+	}
+
+	direction = lights[p_index];
+	position = &lights[p_index][3];
+
+	CalcLocalTransform(position, direction, up, transform);
+	SETMAT4(in, transform);
+
+	VideoManager()->Get3DManager()->GetLego3DView()->SetLight(FALSE, matrix);
+	VideoManager()->Get3DManager()->GetLego3DView()->SetLight(TRUE, matrix);
 }
 
 // FUNCTION: LEGO1 0x1003f3b0
