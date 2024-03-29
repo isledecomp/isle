@@ -67,7 +67,7 @@ public:
 	void FUN_1005f6d0(MxBool);
 	void FUN_1005f700(MxBool);
 	MxResult LoadScriptInfo(MxS32 p_scriptIndex);
-	MxBool FUN_10060140(char* p_name, MxU32& p_index);
+	MxBool IsNotVehicle(char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void FUN_100603c0();

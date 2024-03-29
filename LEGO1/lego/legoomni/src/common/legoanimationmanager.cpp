@@ -294,10 +294,15 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x10060140
-MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& p_index)
+// FUNCTION: LEGO1 0x10060140
+MxBool LegoAnimationManager::IsNotVehicle(char* p_name, MxU32& p_index)
 {
-	// TODO
+	for (MxS32 i = 0; i < sizeof(g_vehicles); i++) {
+		if (!strcmpi(p_name, g_vehicles[i].m_name)) {
+			p_index = i;
+			return TRUE;
+		}
+	}
 	return FALSE;
 }
 
