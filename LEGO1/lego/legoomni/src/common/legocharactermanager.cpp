@@ -41,8 +41,8 @@ void LegoCharacterManager::Init()
 // FUNCTION: LEGO1 0x100832a0
 void LegoCharacterManager::FUN_100832a0()
 {
-	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
-		LegoCharacterData* data = Find(g_characterData[i].m_name);
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
+		LegoCharacterData* data = GetData(g_characterData[i].m_name);
 
 		if (data != NULL) {
 			LegoExtraActor* actor = data->m_actor;
@@ -65,7 +65,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
 		LegoCharacterData* data = &g_characterData[i];
 
 		if (p_storage->Write(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
@@ -111,7 +111,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_characterData) - 1; i++) {
+	for (MxS32 i = 0; i < _countof(g_characterData); i++) {
 		LegoCharacterData* data = &g_characterData[i];
 
 		if (p_storage->Read(&data->m_unk0x0c, sizeof(data->m_unk0x0c)) != SUCCESS) {
@@ -196,7 +196,7 @@ done:
 			actor->SetROI(character->m_roi, FALSE, FALSE);
 			actor->FUN_100114e0(0);
 			actor->SetFlag(LegoActor::c_bit2);
-			Find(p_key)->m_actor = actor;
+			GetData(p_key)->m_actor = actor;
 		}
 
 		return character->m_roi;
@@ -248,21 +248,21 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
 	LegoTextureContainer* textureContainer = TextureContainer();
-	LegoCharacterData* characterData = Find(p_key);
+	LegoCharacterData* data = GetData(p_key);
 
-	if (characterData == NULL) {
+	if (data == NULL) {
 		goto done;
 	}
 
 	if (!strcmpi(p_key, "pep")) {
-		LegoCharacterData* pepper = Find("pepper");
+		LegoCharacterData* pepper = GetData("pepper");
 
-		characterData->m_unk0x0c = pepper->m_unk0x0c;
-		characterData->m_unk0x10 = pepper->m_unk0x10;
-		characterData->m_unk0x14 = pepper->m_unk0x14;
+		data->m_unk0x0c = pepper->m_unk0x0c;
+		data->m_unk0x10 = pepper->m_unk0x10;
+		data->m_unk0x14 = pepper->m_unk0x14;
 
-		for (i = 0; i < _countof(characterData->m_parts); i++) {
-			characterData->m_parts[i] = pepper->m_parts[i];
+		for (i = 0; i < _countof(data->m_parts); i++) {
+			data->m_parts[i] = pepper->m_parts[i];
 		}
 	}
 
@@ -293,7 +293,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		const char* parentName;
 		char lodName[64];
 
-		LegoCharacterData::Part& part = characterData->m_parts[i];
+		LegoCharacterData::Part& part = data->m_parts[i];
 
 		if (i == 0 || i == 1) {
 			parentName = part.m_unk0x04[part.m_unk0x00[part.m_unk0x08]];
@@ -371,7 +371,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	);
 	roi->WrappedSetLocalTransform(mat);
 
-	characterData->m_roi = roi;
+	data->m_roi = roi;
 	success = TRUE;
 
 done:
@@ -383,25 +383,36 @@ done:
 	return roi;
 }
 
-// STUB: LEGO1 0x10084c00
-MxBool LegoCharacterManager::FUN_10084c00(const LegoChar*)
+// FUNCTION: LEGO1 0x10084c00
+MxBool LegoCharacterManager::Exists(const char* p_key)
 {
-	// TODO
+	for (MxU32 i = 0; i < _countof(g_characterData); i++) {
+		if (!strcmpi(g_characterData[i].m_name, p_key)) {
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10084c40
-LegoExtraActor* LegoCharacterManager::FUN_10084c40(const LegoChar*)
+// FUNCTION: LEGO1 0x10084c40
+LegoExtraActor* LegoCharacterManager::GetActor(const char* p_key)
 {
+	LegoCharacterData* data = GetData(p_key);
+
+	if (data != NULL) {
+		return data->m_actor;
+	}
+
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x10084c60
-LegoCharacterData* LegoCharacterManager::Find(const char* p_key)
+LegoCharacterData* LegoCharacterManager::GetData(const char* p_key)
 {
 	MxU32 i;
 
-	for (i = 0; i < _countof(g_characterData) - 1; i++) {
+	for (i = 0; i < _countof(g_characterData); i++) {
 		if (!strcmpi(g_characterData[i].m_name, p_key)) {
 			break;
 		}
@@ -448,13 +459,13 @@ void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 }
 
 // STUB: LEGO1 0x10085210
-LegoROI* LegoCharacterManager::FUN_10085210(const LegoChar*, LegoChar*, undefined)
+LegoROI* LegoCharacterManager::FUN_10085210(const char*, char*, undefined)
 {
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x10085a80
-LegoROI* LegoCharacterManager::FUN_10085a80(LegoChar* p_und1, LegoChar* p_und2, undefined p_und3)
+LegoROI* LegoCharacterManager::FUN_10085a80(char* p_und1, char* p_und2, undefined p_und3)
 {
 	return FUN_10085210(p_und1, p_und2, p_und3);
 }
