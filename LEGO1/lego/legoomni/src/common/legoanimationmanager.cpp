@@ -254,7 +254,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			for (MxS32 m = 0; m < m_anims[j].m_modelCount; m++) {
 				MxU32 n;
 
-				if (FUN_10060140(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
+				if (IsNotVehicle(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
 					m_anims[j].m_unk0x2a[count++] = n;
 					if (count > 3) {
 						break;
