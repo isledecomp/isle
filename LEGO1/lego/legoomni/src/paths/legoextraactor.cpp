@@ -8,13 +8,13 @@
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f31d0
-LegoWorld* g_unk0x100f31d0;
+LegoWorld* g_unk0x100f31d0 = NULL;
 
 // GLOBAL: LEGO1 0x100f31d4
-LegoAnimPresenter* m_assAnimP;
+LegoAnimPresenter* m_assAnimP = NULL;
 
 // GLOBAL: LEGO1 0x100f31d8
-LegoAnimPresenter* m_disAnimP;
+LegoAnimPresenter* m_disAnimP = NULL;
 
 // GLOBAL: LEGO1 0x100f31dc
 MxS32 g_unk0x100f31dc = 0;
@@ -233,8 +233,19 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				Vector3 positionRef(matrix3[3]);
 				((Vector3&) positionRef).Add(&g_unk0x10104c18);
 				roi->FUN_100a58f0(matrix3);
+#ifdef COMPAT_MODE
+				float dot;
+				float dot2;
+				{
+					Mx3DPointFloat tmp(1.0f, 0, 0);
+					dot = dir.Dot(&dir, &tmp);
+					Mx3DPointFloat tmp2(1.0f, 0, 0);
+					double dot2 = dir.Dot(&dir, &tmp2);
+				}
+#else
 				float dot = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
 				double dot2 = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
+#endif
 				double dot3 = dot;
 				if (abs(dot2) < abs(dot3)) {
 					m_axis = dot3 > 0.0 ? e_posz : e_negz;
