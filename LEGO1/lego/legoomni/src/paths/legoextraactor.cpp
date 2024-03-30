@@ -189,14 +189,12 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 {
 	if (p_actor->GetState() == 0 && m_state == 0) {
 		if (p_bool) {
-			if (m_unk0x15 == 0) {
-				m_unk0x15 = 100;
-				FUN_1002aae0();
-				return SUCCESS;
-			}
-			else {
+			if (m_unk0x15 != 0) {
 				return FAILURE;
 			}
+
+			m_unk0x15 = 100;
+			FUN_1002aae0();
 		}
 		else {
 			MxU32 b = FALSE;
@@ -266,13 +264,13 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 					m_axis = dot2 > 0.0 ? e_posx : e_negx;
 				}
 			}
-
-			return SUCCESS;
 		}
 	}
 	else {
 		return FAILURE;
 	}
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1002b290
