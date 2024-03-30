@@ -41,7 +41,7 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 	LegoWorld* world = CurrentWorld();
 	SetWorld(world);
 	if (world->IsA("Act3")) {
-		((Act3*) GetWorld())->SetUnkown420c(this);
+		((Act3*) GetWorld())->SetUnknown420c(this);
 	}
 	world = GetWorld();
 	if (world) {
@@ -160,7 +160,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 		switch (p_param.GetClickedObjectId()) {
 		case IsleScript::c_HelicopterArms_Ctl:
 			if (*g_act3Script == script) {
-				((Act3*) CurrentWorld())->SetUnkown4270(2);
+				((Act3*) CurrentWorld())->SetUnknown4270(2);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			}
 			else if (m_state->GetUnkown8() != 0) {

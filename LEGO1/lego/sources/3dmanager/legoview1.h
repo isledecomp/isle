@@ -8,7 +8,8 @@
 namespace Tgl
 {
 class Camera;
-}
+class Light;
+} // namespace Tgl
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView
@@ -64,7 +65,13 @@ public:
 	BOOL Create(const TglSurface::CreateStruct&, Tgl::Renderer*);
 	void Destroy() override; // vtable+0x08
 
+	void SetLightTransform(BOOL bDirectionalLight, Tgl::FloatMatrix4& rMatrix);
+	void SetLightColor(BOOL bDirectionalLight, float red, float green, float blue);
+
 private:
+	void SetLightTransform(Tgl::Light* pLight, Tgl::FloatMatrix4& rMatrix);
+	void SetLightColor(Tgl::Light* pLight, float red, float green, float blue);
+
 	Tgl::Light* m_pSunLight;         // 0x78
 	Tgl::Light* m_pDirectionalLight; // 0x7c
 	Tgl::Light* m_pAmbientLight;     // 0x80

@@ -350,7 +350,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		}
 	} while (status != 2);
 
-	m_backgroundColor->SetLights();
+	m_backgroundColor->SetLightColor();
 	lightPosition = VariableTable()->GetVariable("lightposition");
 
 	if (lightPosition) {
@@ -1072,7 +1072,7 @@ void LegoGameState::RegisterState(LegoState* p_state)
 void LegoGameState::Init()
 {
 	m_backgroundColor->SetValue("set 56 54 68");
-	m_backgroundColor->SetLights();
+	m_backgroundColor->SetLightColor();
 	m_tempBackgroundColor->SetValue("set 56 54 68");
 	VariableTable()->SetVariable("lightposition", "2");
 	SetLightPosition(2);

@@ -69,14 +69,16 @@ class ParseAsm:
 
         return None
 
-    def lookup(self, addr: int) -> Optional[str]:
+    def lookup(self, addr: int, use_cache: bool = True) -> Optional[str]:
         """Return a replacement name for this address if we find one."""
-        if (cached := self.replacements.get(addr, None)) is not None:
+        if use_cache and (cached := self.replacements.get(addr, None)) is not None:
             return cached
 
         if callable(self.name_lookup):
             if (name := self.name_lookup(addr)) is not None:
-                self.replacements[addr] = name
+                if use_cache:
+                    self.replacements[addr] = name
+
                 return name
 
         return None
@@ -107,6 +109,16 @@ class ParseAsm:
         value = int(match.group(1), 16)
         if self.is_relocated(value):
             return match.group(0).replace(match.group(1), self.replace(value))
+
+        return match.group(0)
+
+    def hex_replace_annotated(self, match: re.Match) -> str:
+        """For replacing immediate value operands. Here we replace the value
+        only if the name lookup returns something. Do not use a placeholder."""
+        value = int(match.group(1), 16)
+        placeholder = self.lookup(value, use_cache=False)
+        if placeholder is not None:
+            return match.group(0).replace(match.group(1), placeholder)
 
         return match.group(0)
 
@@ -178,7 +190,13 @@ class ParseAsm:
             # vtable call, or this->member access.
             op_str = displace_replace_regex.sub(self.hex_replace_relocated, op_str)
 
-        op_str = immediate_replace_regex.sub(self.hex_replace_relocated, op_str)
+        # In the event of pointer comparison, only replace the immediate value
+        # if it is a known address.
+        if inst.mnemonic == "cmp":
+            op_str = immediate_replace_regex.sub(self.hex_replace_annotated, op_str)
+        else:
+            op_str = immediate_replace_regex.sub(self.hex_replace_relocated, op_str)
+
         return (inst.mnemonic, op_str)
 
     def parse_asm(self, data: bytes, start_addr: Optional[int] = 0) -> List[str]:

@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Iterator, List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional
 
 
 class CvdumpTypeError(Exception):
@@ -109,38 +109,10 @@ def scalar_type_format_char(type_name: str) -> str:
     return char if scalar_type_signed(type_name) else char.upper()
 
 
-def member_string_iter(
-    members: List[ScalarType], size: Optional[int] = None
-) -> Iterator[str]:
-    if len(members) == 0:
-        yield "x" * (size or 0)
+def member_list_to_struct_string(members: List[ScalarType]) -> str:
+    """Create a string for use with struct.unpack"""
 
-    last_offset = 0
-    last_size = 0
-    for m in members:
-        padding = m.offset - last_offset - last_size
-        if padding > 0:
-            yield "x" * padding
-
-        yield m.format_char
-        last_offset = m.offset
-        last_size = m.size
-
-    if size is not None:
-        padding = size - (last_offset + last_size)
-        if padding > 0:
-            yield "x" * padding
-
-
-def member_list_to_struct_string(
-    members: List[ScalarType], size: Optional[int] = None
-) -> str:
-    """Create a string for use with struct.unpack
-    Will pad to `size` bytes if present."""
-    if len(members) == 0:
-        return "x" * (size or 0)
-
-    format_string = "".join(list(member_string_iter(members, size)))
+    format_string = "".join(m.format_char for m in members)
     if len(format_string) > 0:
         return "<" + format_string
 
@@ -372,11 +344,43 @@ class CvdumpTypesParser:
             for cm in self.get_scalars(m.type)
         ]
 
-    def get_format_string(self, type_key: str) -> str:
+    def get_scalars_gapless(self, type_key: str) -> List[ScalarType]:
+        """Reduce the given type to a list of scalars so we can
+        compare each component value."""
+
         obj = self.get(type_key)
-        members = self.get_scalars(type_key)
-        # We need both to pad the data to size
-        return member_list_to_struct_string(members, obj.size)
+        total_size = obj.size
+
+        scalars = self.get_scalars(type_key)
+
+        output = []
+        last_extent = total_size
+
+        # Walk the scalar list in reverse; we assume a gap could not
+        # come at the start of the struct.
+        for scalar in scalars[::-1]:
+            this_extent = scalar.offset + scalar_type_size(scalar.type)
+            size_diff = last_extent - this_extent
+            # We need to add the gap fillers in reverse here
+            for i in range(size_diff - 1, -1, -1):
+                # Push to front
+                output.insert(
+                    0,
+                    ScalarType(
+                        offset=this_extent + i,
+                        name="(padding)",
+                        type="T_UCHAR",
+                    ),
+                )
+
+            output.insert(0, scalar)
+            last_extent = scalar.offset
+
+        return output
+
+    def get_format_string(self, type_key: str) -> str:
+        members = self.get_scalars_gapless(type_key)
+        return member_list_to_struct_string(members)
 
     def read_line(self, line: str):
         if (match := self.INDEX_RE.match(line)) is not None:

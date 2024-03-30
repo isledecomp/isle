@@ -221,3 +221,38 @@ def test_float_variable():
     inst = DisasmLiteInst(0x1000, 6, "fld", "dword ptr [0x1234]")
     (_, op_str) = p.sanitize(inst)
     assert op_str == "dword ptr [g_myFloatVariable]"
+
+
+def test_pointer_compare():
+    """A loop on an array could get optimized into comparing on the address
+    that immediately follows the array. This may or may not be a valid address
+    and it may or may not be annotated. To avoid a situation where an
+    erroneous address value would get replaced with a placeholder and silently
+    pass the comparison check, we will only replace an immediate value on the
+    CMP instruction if it is a known address."""
+
+    # 0x1234 and 0x5555 are relocated and so are considered to be addresses.
+    def relocate_lookup(addr: int) -> bool:
+        return addr in (0x1234, 0x5555)
+
+    # Only 0x5555 is a "known" address
+    def name_lookup(addr: int) -> Optional[str]:
+        return "hello" if addr == 0x5555 else None
+
+    p = ParseAsm(relocate_lookup=relocate_lookup, name_lookup=name_lookup)
+
+    # Will always replace on MOV instruction
+    (_, op_str) = p.sanitize(mock_inst("mov", "eax, 0x1234"))
+    assert op_str == "eax, <OFFSET1>"
+    (_, op_str) = p.sanitize(mock_inst("mov", "eax, 0x5555"))
+    assert op_str == "eax, hello"
+
+    # n.b. We have already cached the replacement for 0x1234, but the
+    # special handling for CMP should skip the cache and not use it.
+
+    # Do not replace here
+    (_, op_str) = p.sanitize(mock_inst("cmp", "eax, 0x1234"))
+    assert op_str == "eax, 0x1234"
+    # Should replace here
+    (_, op_str) = p.sanitize(mock_inst("cmp", "eax, 0x5555"))
+    assert op_str == "eax, hello"

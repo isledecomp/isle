@@ -15,11 +15,66 @@ DECOMP_SIZE_ASSERT(Vehicle, 0x8)
 DECOMP_SIZE_ASSERT(Unknown0x3c, 0x18)
 
 // GLOBAL: LEGO1 0x100f6d20
-Vehicle g_vehicles[] = {"bikebd", 0,        FALSE, "bikepg", 0,        FALSE, "bikerd", 0,       FALSE, "bikesy", 0,
-						FALSE,    "motoni", 0,     FALSE,    "motola", 0,     FALSE,    "board", 0,     FALSE};
+Vehicle g_vehicles[] = {
+	{"bikebd", 0, FALSE},
+	{"bikepg", 0, FALSE},
+	{"bikerd", 0, FALSE},
+	{"bikesy", 0, FALSE},
+	{"motoni", 0, FALSE},
+	{"motola", 0, FALSE},
+	{"board", 0, FALSE}
+};
 
 // GLOBAL: LEGO1 0x100f7048
-Character g_characters[47]; // TODO: Initialize this
+Character g_characters[47] = {
+	{"pepper", FALSE, 6, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 50, 1},
+	{"mama", FALSE, -1, 0, FALSE, FALSE, FALSE, 1500, 20000, FALSE, 0, 2},
+	{"papa", FALSE, -1, 0, FALSE, FALSE, FALSE, 1500, 20000, FALSE, 0, 3},
+	{"nick", FALSE, 4, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 20, 4},
+	{"laura", FALSE, 5, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 20, 5},
+	{"brickstr", FALSE, -1, 0, FALSE, FALSE, FALSE, 1000, 20000, FALSE, 0, 6},
+	{"studs", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"rhoda", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"valerie", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"snap", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"pt", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"mg", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"bu", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"ml", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"nu", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"na", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"cl", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"en", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"re", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"ro", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"d1", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"d2", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"d3", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"d4", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l1", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l2", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l3", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l4", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l5", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"l6", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"b1", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"b2", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"b3", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"b4", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"cm", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"gd", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"rd", FALSE, 2, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 50, 9},
+	{"pg", FALSE, 1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 50, 8},
+	{"bd", FALSE, 0, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 100, 7},
+	{"sy", FALSE, 3, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 100, 10},
+	{"gn", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"df", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"bs", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"lt", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"st", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"bm", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0},
+	{"jk", FALSE, -1, 0, FALSE, FALSE, TRUE, 1500, 20000, FALSE, 0, 0}
+};
 
 // GLOBAL: LEGO1 0x100f74f8
 MxS32 g_legoAnimationManagerConfig = 1;
@@ -118,7 +173,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_animState->FUN_10065240(m_animCount, m_anims, m_unk0x3fc);
 		}
 
-		FUN_100603c0();
+		DeleteAnimations();
 
 		LegoFile file;
 
@@ -199,7 +254,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			for (MxS32 m = 0; m < m_anims[j].m_modelCount; m++) {
 				MxU32 n;
 
-				if (FUN_10060140(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
+				if (FindVehicle(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
 					m_anims[j].m_unk0x2a[count++] = n;
 					if (count > 3) {
 						break;
@@ -233,16 +288,22 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 done:
 	if (result == FAILURE) {
-		FUN_100603c0();
+		DeleteAnimations();
 	}
 
 	return result;
 }
 
-// STUB: LEGO1 0x10060140
-MxBool LegoAnimationManager::FUN_10060140(char* p_name, MxU32& p_index)
+// FUNCTION: LEGO1 0x10060140
+MxBool LegoAnimationManager::FindVehicle(const char* p_name, MxU32& p_index)
 {
-	// TODO
+	for (MxS32 i = 0; i < _countof(g_vehicles); i++) {
+		if (!strcmpi(p_name, g_vehicles[i].m_name)) {
+			p_index = i;
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
@@ -347,10 +408,29 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x100603c0
-void LegoAnimationManager::FUN_100603c0()
+// FUNCTION: LEGO1 0x100603c0
+void LegoAnimationManager::DeleteAnimations()
 {
-	// TODO
+	undefined unk0x42b = m_unk0x42b;
+
+	if (m_anims != NULL) {
+		for (MxS32 i = 0; i < m_animCount; i++) {
+			delete m_anims[i].m_animName;
+
+			if (m_anims[i].m_models != NULL) {
+				for (MxS32 j = 0; j < m_anims[i].m_modelCount; j++) {
+					delete m_anims[i].m_models[j].m_modelName;
+				}
+
+				delete m_anims[i].m_models;
+			}
+		}
+
+		delete m_anims;
+	}
+
+	Init();
+	m_unk0x42b = unk0x42b;
 }
 
 // STUB: LEGO1 0x10060570
@@ -366,7 +446,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	LegoROI* roi = p_entity->GetROI();
 
 	if (p_entity->GetUnknown0x59() == 0) {
-		LegoPathActor* actor = CharacterManager()->FUN_10084c40(roi->GetName());
+		LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 		if (actor) {
 			LegoPathController* controller = actor->GetController();

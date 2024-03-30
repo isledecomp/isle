@@ -23,9 +23,6 @@ typedef struct {
 	int m_alpha;
 } ROIColorAlias;
 
-// GLOBAL: LEGO1 0x100dbe28
-const double g_normalizeByteToFloat = 1.0 / 255;
-
 // GLOBAL: LEGO1 0x101011b0
 ROIColorAlias g_roiColorAliases[22] = {
 	{"lego black", 0x21, 0x21, 0x21, 0},       {"lego black f", 0x21, 0x21, 0x21, 0},
@@ -529,19 +526,15 @@ LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_g
 // FUNCTION: LEGO1 0x100a9c50
 LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
-	// TODO: this seems awfully hacky for these devs. is there a dynamic way
-	// to represent `the end of this array` that would improve this?
-	unsigned int i = 0;
-	do {
+	for (MxU32 i = 0; i < _countof(g_roiColorAliases); i++) {
 		if (strcmpi(g_roiColorAliases[i].m_name, p_param) == 0) {
-			p_red = g_roiColorAliases[i].m_red * g_normalizeByteToFloat;
-			p_green = g_roiColorAliases[i].m_green * g_normalizeByteToFloat;
-			p_blue = g_roiColorAliases[i].m_blue * g_normalizeByteToFloat;
-			p_alpha = g_roiColorAliases[i].m_alpha * g_normalizeByteToFloat;
+			p_red = g_roiColorAliases[i].m_red / 255.0;
+			p_green = g_roiColorAliases[i].m_green / 255.0;
+			p_blue = g_roiColorAliases[i].m_blue / 255.0;
+			p_alpha = g_roiColorAliases[i].m_alpha / 255.0;
 			return TRUE;
 		}
-		i++;
-	} while ((int*) &g_roiColorAliases[i] < &g_roiConfig);
+	}
 
 	return FALSE;
 }

@@ -35,8 +35,8 @@ public:
 	MxBool VTable0x64() override;                     // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
-	inline void SetUnkown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
-	inline void SetUnkown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
+	inline void SetUnknown420c(MxEntity* p_entity) { m_unk0x420c = p_entity; }
+	inline void SetUnknown4270(MxU32 p_unk0x4270) { m_unk0x4270 = p_unk0x4270; }
 
 	// SYNTHETIC: LEGO1 0x10072630
 	// Act3::`scalar deleting destructor'

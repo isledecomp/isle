@@ -313,14 +313,27 @@ def test_struct(parser):
 
 
 def test_struct_padding(parser):
-    """Struct format string should insert padding characters 'x'
-    where a value is padded to alignment size (probably 4 bytes)"""
+    """For data comparison purposes, make sure we have no gaps in the
+    list of scalar types. Any gap is filled by an unsigned char."""
 
+    # MxString, padded to 16 bytes. 4 actual members. 2 bytes of padding.
+    assert len(parser.get_scalars("0x4db6")) == 4
+    assert len(parser.get_scalars_gapless("0x4db6")) == 6
+
+    # MxVariable, with two MxStrings (and a vtable)
+    # Fill in the middle gap and the outer gap.
+    assert len(parser.get_scalars("0x22d5")) == 9
+    assert len(parser.get_scalars_gapless("0x22d5")) == 13
+
+
+def test_struct_format_string(parser):
+    """Generate the struct.unpack format string using the
+    list of scalars with padding filled in."""
     # MxString, padded to 16 bytes.
-    assert parser.get_format_string("0x4db6") == "<LLLHxx"
+    assert parser.get_format_string("0x4db6") == "<LLLHBB"
 
     # MxVariable, with two MxString members.
-    assert parser.get_format_string("0x22d5") == "<LLLLHxxLLLHxx"
+    assert parser.get_format_string("0x22d5") == "<LLLLHBBLLLHBB"
 
 
 def test_array(parser):

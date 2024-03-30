@@ -107,7 +107,7 @@ def print_match_verbose(match, show_both_addrs: bool = False, is_plain: bool = F
             print(f"{addrs}: {match.name} 100% match.\n\n{ok_text}\n\n")
         else:
             print(
-                f"{addrs}: {match.name} Effective 100%% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n"
+                f"{addrs}: {match.name} Effective 100% match. (Differs in register allocation only)\n\n{ok_text} (still differs in register allocation)\n\n"
             )
     else:
         print_combined_diff(match.udiff, is_plain, show_both_addrs)

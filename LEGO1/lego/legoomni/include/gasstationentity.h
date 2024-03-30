@@ -20,8 +20,7 @@ public:
 		return !strcmp(p_name, GasStationEntity::ClassName()) || BuildingEntity::IsA(p_name);
 	}
 
-	// STUB: LEGO1 0x100151d0
-	MxLong VTable0x50(MxParam& p_param) override { return 0; }
+	MxLong VTable0x50(MxParam& p_param) override;
 
 	// SYNTHETIC: LEGO1 0x1000f890
 	// GasStationEntity::`scalar deleting destructor'
