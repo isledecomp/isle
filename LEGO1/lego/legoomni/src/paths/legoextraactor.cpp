@@ -210,6 +210,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			Vector3 positionRef(matrix2[3]);
 			Mx3DPointFloat dir(matrix[2]);
 
+			// TODO: Fix calls
 			((Mx3DPointFloat&) dir).Mul(2.0f);
 			((Vector3&) positionRef).Add(&dir);
 
