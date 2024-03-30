@@ -247,8 +247,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				roi->FUN_100a58f0(matrix3);
 
 #ifdef COMPAT_MODE
-				float dot;
-				double dot2;
+				float dot, dot2;
 				{
 					Mx3DPointFloat tmp(1.0f, 0, 0);
 					dot = dir.Dot(&dir, &tmp);
@@ -257,12 +256,11 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				}
 #else
 				float dot = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
-				double dot2 = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
+				float dot2 = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
 #endif
 
-				double dot3 = dot;
-				if (abs(dot2) > abs(dot3)) {
-					m_axis = dot3 > 0.0 ? e_posz : e_negz;
+				if (abs(dot2) < abs(dot)) {
+					m_axis = dot > 0.0 ? e_posz : e_negz;
 				}
 				else {
 					m_axis = dot2 > 0.0 ? e_posx : e_negx;
