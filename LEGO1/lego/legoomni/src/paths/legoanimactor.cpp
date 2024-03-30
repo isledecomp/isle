@@ -69,7 +69,7 @@ void LegoAnimActor::VTable0x70(float p_float)
 		m_lastTime = p_float - 1.0f;
 	}
 
-	if (m_unk0xdc == 0 && !m_userNavFlag && m_worldSpeed <= 0) {
+	if (m_state == 0 && !m_userNavFlag && m_worldSpeed <= 0) {
 		if (m_curAnim >= 0) {
 			MxMatrix matrix(m_unk0xec);
 			float f;

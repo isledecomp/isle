@@ -34,7 +34,7 @@ public:
 	inline const undefined GetUnk0x58() const { return m_unk0x58; }
 
 	LegoCacheSound* FUN_10006960();
-	MxResult FUN_10006a30(char* p_str, MxBool);
+	MxResult FUN_10006a30(const char* p_str, MxBool);
 	void FUN_10006b80();
 	void FUN_10006be0();
 

@@ -32,7 +32,7 @@ public:
 	void VTable0x70(float p_float) override;                                     // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;                              // vtable+0x74
 	MxU32 VTable0x90(float, Matrix4&) override;                                  // vtable+0x90
-	MxS32 VTable0x94() override;                                                 // vtable+0x94
+	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override;         // vtable+0x94
 
 	// FUNCTION: LEGO1 0x10014aa0
 	virtual MxResult FUN_10014aa0() { return SUCCESS; }

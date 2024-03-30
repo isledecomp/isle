@@ -28,6 +28,8 @@ public:
 
 	virtual LegoResult VTable0x04(); // vtable+0x04
 
+	inline LegoU8 GetNumEdges() { return m_numEdges; }
+
 	// SYNTHETIC: LEGO1 0x1009a570
 	// LegoWEEdge::`scalar deleting destructor'
 

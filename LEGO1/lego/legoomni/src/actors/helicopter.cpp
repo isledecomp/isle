@@ -120,7 +120,7 @@ MxU32 Helicopter::VTable0xcc()
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
-		SetUnknownDC(4);
+		SetState(4);
 		PlayMusic(JukeboxScript::c_Jail_Music);
 		break;
 	case LegoGameState::e_act2:
@@ -180,7 +180,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				m_state->SetUnknown8(1);
 				m_world->FUN_1001fc80(this);
 				InvokeAction(Extra::ActionType::e_start, script, 0x20, NULL);
-				SetUnknownDC(0);
+				SetState(0);
 			}
 			ret = 1;
 			break;
@@ -193,7 +193,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				m_state->SetUnknown8(3);
 				m_world->FUN_1001fc80(this);
 				InvokeAction(Extra::ActionType::e_start, script, 0x21, NULL);
-				SetUnknownDC(4);
+				SetState(4);
 			}
 			ret = 1;
 			break;
@@ -366,7 +366,7 @@ void Helicopter::VTable0x70(float p_float)
 			else {
 				((Act3*) m_world)->FUN_10073430();
 			}
-			m_unk0xdc = 4;
+			LegoPathActor::m_state = 4;
 		}
 	}
 }

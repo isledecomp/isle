@@ -31,13 +31,13 @@ public:
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}
 
-	void ParseAction(char*) override;                  // vtable+0x20
-	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void VTable0x6c() override;                        // vtable+0x6c
-	void VTable0x70(float p_float) override;           // vtable+0x70
-	MxS32 VTable0x94() override;                       // vtable+0x94
-	void VTable0x98() override;                        // vtable+0x98
-	void VTable0x9c() override;                        // vtable+0x9c
+	void ParseAction(char*) override;                                    // vtable+0x20
+	void SetWorldSpeed(MxFloat p_worldSpeed) override;                   // vtable+0x30
+	void VTable0x6c() override;                                          // vtable+0x6c
+	void VTable0x70(float p_float) override;                             // vtable+0x70
+	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
+	void VTable0x98() override;                                          // vtable+0x98
+	void VTable0x9c() override;                                          // vtable+0x9c
 
 	virtual void FUN_10012ea0(float p_worldSpeed);
 	virtual void FUN_10012ff0(float);

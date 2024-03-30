@@ -12,6 +12,8 @@ struct LegoAnimActorStruct {
 
 	float GetDuration();
 
+	inline float GetUnknown0x00() { return m_unk0x00; }
+
 	float m_unk0x00;              // 0x00
 	LegoAnim* m_AnimTreePtr;      // 0x04
 	LegoROI** m_roiMap;           // 0x08
