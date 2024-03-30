@@ -104,14 +104,14 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d290(LegoCacheSound* p_sound)
 }
 
 // FUNCTION: LEGO1 0x1003dae0
-void LegoUnknown100d6b4c::FUN_1003dae0(char* p_one, char* p_two, MxBool p_three)
+void LegoUnknown100d6b4c::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
 {
 	// DECOMP: Second parameter is 0xe4 member of LegoPathActor subclass
 	FUN_1003db10(FUN_1003d170(p_one), p_two, p_three);
 }
 
 // FUNCTION: LEGO1 0x1003db10
-LegoCacheSound* LegoUnknown100d6b4c::FUN_1003db10(LegoCacheSound* p_one, char* p_two, MxBool p_three)
+LegoCacheSound* LegoUnknown100d6b4c::FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three)
 {
 	if (!p_one) {
 		return NULL;

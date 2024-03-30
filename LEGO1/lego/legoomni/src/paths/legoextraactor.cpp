@@ -152,25 +152,30 @@ MxResult LegoExtraActor::FUN_1002aae0()
 inline void LegoExtraActor::FUN_1002ad8a()
 {
 	LegoWorld* w = CurrentWorld();
+
 	if (g_unk0x100f31d0 != w) {
 		g_unk0x100f31d0 = w;
 		m_assAnimP = (LegoAnimPresenter*) w->Find("LegoAnimPresenter", "BNsAss01");
 		m_disAnimP = (LegoAnimPresenter*) w->Find("LegoAnimPresenter", "BNsDis01");
 	}
+
 	if (!m_assAnim) {
-		int index = 0;
+		MxS32 index = 0;
 		m_assAnimP->FUN_1006d680(this, -20.0f);
-		for (int i = 0; i < m_animMaps.size(); i++) {
+
+		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
 			if (m_animMaps[i]->GetUnknown0x00() == -20.0f) {
 				m_assAnim = new LegoAnimActorStruct(*m_animMaps[i]);
 				break;
 			}
 		}
 	}
+
 	if (!m_disAnim) {
-		int index = 0;
+		MxS32 index = 0;
 		m_disAnimP->FUN_1006d680(this, -21.0f);
-		for (int i = 0; i < m_animMaps.size(); i++) {
+
+		for (MxS32 i = 0; i < m_animMaps.size(); i++) {
 			if (m_animMaps[i]->GetUnknown0x00() == -21.0f) {
 				m_disAnim = new LegoAnimActorStruct(*m_animMaps[i]);
 				break;
@@ -195,26 +200,32 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		}
 		else {
 			MxU32 b = FALSE;
+
 			if (++g_unk0x100f31dc % 2 == 0) {
 				MxMatrix matrix(p_actor->GetROI()->GetLocal2World());
 				MxMatrix matrix2(m_roi->GetLocal2World());
+
 				m_unk0x18 = matrix2;
 				Vector3 positionRef(matrix2[3]);
 				Mx3DPointFloat dir(matrix[2]);
+
 				((Mx3DPointFloat&) dir).Mul(2.0f);
 				((Vector3&) positionRef).Add(&dir);
-				for (int i = 0; i < m_boundary->GetNumEdges(); i++) {
+
+				for (MxS32 i = 0; i < m_boundary->GetNumEdges(); i++) {
 					Mx4DPointFloat* normal = m_boundary->GetEdgeNormal(i);
+
 					if (positionRef.Dot(normal, &positionRef) + (*normal)[3] < -0.001) {
 						b = TRUE;
 						break;
 					}
 				}
+
 				if (!b) {
 					m_roi->FUN_100a58f0(matrix2);
 					m_roi->VTable0x14();
 					FUN_1002ad8a();
-					SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", (char*) m_roi->GetName(), FALSE);
+					SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 					m_scheduledTime = Timer()->GetTime() + m_disAnim->GetDuration();
 					m_unk0x10 = m_worldSpeed;
 					VTable0xc4();
@@ -223,9 +234,10 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 					m_state = 0x101;
 				}
 			}
+
 			if (b) {
 				LegoROI* roi = m_roi;
-				SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", (char*) m_roi->GetName(), FALSE);
+				SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 				VTable0xc4();
 				m_state = 0x102;
 				Mx3DPointFloat dir = p_actor->GetWorldDirection();
@@ -233,27 +245,30 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				Vector3 positionRef(matrix3[3]);
 				((Vector3&) positionRef).Add(&g_unk0x10104c18);
 				roi->FUN_100a58f0(matrix3);
+
 #ifdef COMPAT_MODE
 				float dot;
-				float dot2;
+				double dot2;
 				{
 					Mx3DPointFloat tmp(1.0f, 0, 0);
 					dot = dir.Dot(&dir, &tmp);
 					Mx3DPointFloat tmp2(1.0f, 0, 0);
-					double dot2 = dir.Dot(&dir, &tmp2);
+					dot2 = dir.Dot(&dir, &tmp2);
 				}
 #else
 				float dot = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
 				double dot2 = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
 #endif
+
 				double dot3 = dot;
-				if (abs(dot2) < abs(dot3)) {
+				if (abs(dot2) > abs(dot3)) {
 					m_axis = dot3 > 0.0 ? e_posz : e_negz;
 				}
 				else {
 					m_axis = dot2 > 0.0 ? e_posx : e_negx;
 				}
 			}
+
 			return SUCCESS;
 		}
 	}
