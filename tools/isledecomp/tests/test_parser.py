@@ -377,6 +377,7 @@ def test_unexpected_eof(parser):
     assert parser.alerts[0].code == ParserError.UNEXPECTED_END_OF_FILE
 
 
+@pytest.mark.xfail(reason="no longer applies")
 def test_global_variable_prefix(parser):
     """Global and static variables should have the g_ prefix."""
     parser.read_lines(
@@ -576,6 +577,7 @@ def test_namespace_vtable(parser):
     assert parser.vtables[1].name == "Hello"
 
 
+@pytest.mark.xfail(reason="no longer applies")
 def test_global_prefix_namespace(parser):
     """Should correctly identify namespaces before checking for the g_ prefix"""
 

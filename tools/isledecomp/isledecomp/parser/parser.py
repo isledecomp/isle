@@ -535,13 +535,6 @@ class DecompParser:
                     variable_name = get_synthetic_name(line)
                 else:
                     variable_name = get_variable_name(line)
-                    # This is out of our control for library variables, but all of our
-                    # variables should start with "g_".
-                    if variable_name is not None:
-                        # Before checking for the prefix, remove the
-                        # namespace chain if there is one.
-                        if not variable_name.split("::")[-1].startswith("g_"):
-                            self._syntax_warning(ParserError.GLOBAL_MISSING_PREFIX)
 
             string_name = get_string_contents(line)
 
