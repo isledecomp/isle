@@ -35,17 +35,8 @@ public:
 	inline float& operator[](size_t idx) { return m_data[idx]; }
 	inline const float& operator[](size_t idx) const { return m_data[idx]; }
 
-	// FUNCTION: LEGO1 0x10010c00
-	inline Mx3DPointFloat& operator=(const Mx3DPointFloat& p_other)
-	{
-		((Vector3&) *this).operator=(p_other);
-
-		for (size_t i = 0; i < sizeof(m_elements) / sizeof(float); i++) {
-			m_elements[i] = p_other.m_elements[i];
-		}
-
-		return *this;
-	}
+	// SYNTHETIC: LEGO1 0x10010c00
+	// Mx3DPointFloat::operator=
 
 	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
 
