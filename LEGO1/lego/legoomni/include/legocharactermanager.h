@@ -58,13 +58,14 @@ public:
 	LegoCharacterData* GetData(LegoROI* p_roi);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
-	LegoROI* FUN_10085210(const char*, char*, undefined);
-	LegoROI* FUN_10085a80(char* p_und1, char* p_und2, undefined p_und3);
+	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
+	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 private:
 	LegoROI* CreateROI(const char* p_key);
+	MxResult FUN_10085870(LegoROI* p_roi);
 
 	static char* g_customizeAnimFile;
 
@@ -99,6 +100,9 @@ private:
 
 // TEMPLATE: LEGO1 0x10083890
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Insert
+
+// TEMPLATE: LEGO1 0x10085500
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::insert
 
 // GLOBAL: LEGO1 0x100fc508
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Nil
