@@ -308,7 +308,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
   LEGO1/lego/legoomni/src/audio/legounknown100d5778.cpp
-  LEGO1/lego/legoomni/src/audio/legounknown100d6b4c.cpp
+  LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
   LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/lego/legoomni/src/build/buildingentity.cpp
   LEGO1/lego/legoomni/src/build/helicopterstate.cpp

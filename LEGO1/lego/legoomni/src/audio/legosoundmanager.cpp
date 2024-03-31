@@ -20,14 +20,14 @@ LegoSoundManager::~LegoSoundManager()
 // FUNCTION: LEGO1 0x100299a0
 void LegoSoundManager::Init()
 {
-	m_unk0x40 = NULL;
+	m_cacheSoundManager = NULL;
 	m_listener = NULL;
 }
 
 // FUNCTION: LEGO1 0x100299b0
 void LegoSoundManager::Destroy(MxBool p_fromDestructor)
 {
-	delete m_unk0x40;
+	delete m_cacheSoundManager;
 	Init();
 
 	if (!p_fromDestructor) {
@@ -65,7 +65,7 @@ MxResult LegoSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 			}
 		}
 
-		m_unk0x40 = new LegoUnknown100d6b4c;
+		m_cacheSoundManager = new LegoCacheSoundManager;
 		result = SUCCESS;
 	}
 
@@ -93,7 +93,7 @@ MxResult LegoSoundManager::Tickle()
 	MxSoundManager::Tickle();
 
 	AUTOLOCK(m_criticalSection);
-	return m_unk0x40->Tickle();
+	return m_cacheSoundManager->Tickle();
 }
 
 // STUB: LEGO1 0x1002a410
