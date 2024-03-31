@@ -23,6 +23,9 @@ MxU32 g_unk0x100fc4d8 = 50;
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_unk0x100fc4dc = 66;
 
+// GLOBAL: LEGO1 0x100fc4f0
+MxU32 g_unk0x100fc4f0 = 0;
+
 // GLOBAL: LEGO1 0x10104f20
 LegoCharacterData g_characterData[66];
 
@@ -491,14 +494,75 @@ void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 	}
 }
 
-// STUB: LEGO1 0x10085210
-LegoROI* LegoCharacterManager::FUN_10085210(const char*, char*, undefined)
+// FUNCTION: LEGO1 0x10085210
+LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_roiName, MxBool p_createEntity)
 {
-	return NULL;
+	LegoROI* roi = NULL;
+
+	MxMatrix mat;
+	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
+	ViewLODListManager* lodManager = GetViewLODListManager();
+	LegoTextureContainer* textureContainer = TextureContainer();
+	ViewLODList* lodList = lodManager->Lookup(p_roiName);
+
+	if (lodList == NULL || lodList->Size() == 0) {
+		return NULL;
+	}
+
+	roi = new LegoROI(renderer, lodList);
+
+	const char* name;
+	char buf[20];
+
+	if (p_name != NULL) {
+		name = p_name;
+	}
+	else {
+		sprintf(buf, "autoROI_%d", g_unk0x100fc4f0++);
+		name = buf;
+	}
+
+	roi->SetName(name);
+	lodList->Release();
+
+	if (roi != NULL && FUN_10085870(roi) != SUCCESS) {
+		delete roi;
+		roi = NULL;
+	}
+
+	if (roi != NULL) {
+		roi->SetVisibility(FALSE);
+
+		LegoCharacter* character = new LegoCharacter(roi);
+		char* key = new char[strlen(name) + 1];
+
+		if (key != NULL) {
+			strcpy(key, name);
+			(*m_characters)[key] = character;
+			VideoManager()->Get3DManager()->Add(*roi);
+
+			if (p_createEntity && roi->GetEntity() == NULL) {
+				LegoEntity* entity = new LegoEntity();
+
+				entity->SetROI(roi, FALSE, FALSE);
+				entity->FUN_100114e0(4);
+				entity->SetFlag(LegoActor::c_bit2);
+			}
+		}
+	}
+
+	return roi;
+}
+
+// STUB: LEGO1 0x10085870
+MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
+{
+	// TODO
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10085a80
-LegoROI* LegoCharacterManager::FUN_10085a80(char* p_und1, char* p_und2, undefined p_und3)
+LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_roiName, MxBool p_createEntity)
 {
-	return FUN_10085210(p_und1, p_und2, p_und3);
+	return FUN_10085210(p_name, p_roiName, p_createEntity);
 }
