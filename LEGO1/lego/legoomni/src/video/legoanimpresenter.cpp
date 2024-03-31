@@ -171,7 +171,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(src);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085a80(und, src, 1);
+				roi = CharacterManager()->FUN_10085a80(und, src, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
@@ -195,7 +195,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(src);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085210(und, src, 1);
+				roi = CharacterManager()->FUN_10085210(und, src, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
@@ -240,7 +240,7 @@ void LegoAnimPresenter::FUN_100695c0()
 
 					strlwr(dest);
 
-					CharacterManager()->FUN_10085210(str, dest, 0);
+					CharacterManager()->FUN_10085210(str, dest, FALSE);
 					FUN_100698b0(rois, str);
 				}
 			}
