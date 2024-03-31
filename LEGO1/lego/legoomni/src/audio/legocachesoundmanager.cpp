@@ -1,13 +1,13 @@
-#include "legounknown100d6b4c.h"
+#include "legocachesoundmanager.h"
 
 #include "legoworld.h"
 #include "misc.h"
 
-DECOMP_SIZE_ASSERT(Element100d6b4c, 0x08)
-DECOMP_SIZE_ASSERT(LegoUnknown100d6b4c, 0x20)
+DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
+DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
 
 // FUNCTION: LEGO1 0x1003cf20
-LegoUnknown100d6b4c::~LegoUnknown100d6b4c()
+LegoCacheSoundManager::~LegoCacheSoundManager()
 {
 	LegoCacheSound* sound;
 
@@ -28,7 +28,7 @@ LegoUnknown100d6b4c::~LegoUnknown100d6b4c()
 }
 
 // FUNCTION: LEGO1 0x1003d050
-MxResult LegoUnknown100d6b4c::Tickle()
+MxResult LegoCacheSoundManager::Tickle()
 {
 #ifdef COMPAT_MODE
 	Set100d6b4c::iterator setIter;
@@ -61,7 +61,7 @@ MxResult LegoUnknown100d6b4c::Tickle()
 }
 
 // STUB: LEGO1 0x1003d170
-LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d170(const char* p_key)
+LegoCacheSound* LegoCacheSoundManager::FUN_1003d170(const char* p_key)
 {
 	// TODO
 	char* x = new char[strlen(p_key) + 1];
@@ -78,14 +78,14 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d170(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x1003d290
-LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d290(LegoCacheSound* p_sound)
+LegoCacheSound* LegoCacheSoundManager::FUN_1003d290(LegoCacheSound* p_sound)
 {
-	Set100d6b4c::iterator it = m_set.find(Element100d6b4c(p_sound));
+	Set100d6b4c::iterator it = m_set.find(LegoCacheSoundEntry(p_sound));
 	if (it != m_set.end()) {
 		LegoCacheSound* sound = (*it).GetSound();
 
 		if (sound->GetUnk0x58()) {
-			m_list.push_back(Element100d6b4c(p_sound));
+			m_list.push_back(LegoCacheSoundEntry(p_sound));
 			return p_sound;
 		}
 		else {
@@ -94,7 +94,7 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d290(LegoCacheSound* p_sound)
 		}
 	}
 
-	m_set.insert(Element100d6b4c(p_sound));
+	m_set.insert(LegoCacheSoundEntry(p_sound));
 	LegoWorld* world = CurrentWorld();
 	if (world) {
 		world->Add(p_sound);
@@ -104,14 +104,14 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003d290(LegoCacheSound* p_sound)
 }
 
 // FUNCTION: LEGO1 0x1003dae0
-void LegoUnknown100d6b4c::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
+void LegoCacheSoundManager::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
 {
-	// DECOMP: Second parameter is 0xe4 member of LegoPathActor subclass
+	// DECOMP: Second parameter is LegoRoi::m_name (0xe4)
 	FUN_1003db10(FUN_1003d170(p_one), p_two, p_three);
 }
 
 // FUNCTION: LEGO1 0x1003db10
-LegoCacheSound* LegoUnknown100d6b4c::FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three)
+LegoCacheSound* LegoCacheSoundManager::FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three)
 {
 	if (!p_one) {
 		return NULL;
@@ -135,10 +135,10 @@ LegoCacheSound* LegoUnknown100d6b4c::FUN_1003db10(LegoCacheSound* p_one, const c
 }
 
 // FUNCTION: LEGO1 0x1003dc40
-void LegoUnknown100d6b4c::FUN_1003dc40(LegoCacheSound** p_und)
+void LegoCacheSoundManager::FUN_1003dc40(LegoCacheSound** p_und)
 {
 	// Called during LegoWorld::Destroy like this:
-	// SoundManager()->GetUnknown0x40()->FUN_1003dc40(&sound);
+	// SoundManager()->GetCacheSoundManager()->FUN_1003dc40(&sound);
 	// LegoCacheSound*& p_sound?
 
 #ifdef COMPAT_MODE

@@ -1,7 +1,7 @@
 #ifndef LEGOSOUNDMANAGER_H
 #define LEGOSOUNDMANAGER_H
 
-#include "legounknown100d6b4c.h"
+#include "legocachesoundmanager.h"
 #include "mxsoundmanager.h"
 
 // VTABLE: LEGO1 0x100d6b10
@@ -20,14 +20,14 @@ public:
 
 	void FUN_1002a410(const float* p_pos, const float* p_dir, const float* p_up, const float* p_vel);
 
-	inline LegoUnknown100d6b4c* GetUnknown0x40() { return m_unk0x40; }
+	inline LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
 
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
 
-	LPDIRECTSOUND3DLISTENER m_listener; // 0x3c
-	LegoUnknown100d6b4c* m_unk0x40;     // 0x40
+	LPDIRECTSOUND3DLISTENER m_listener;         // 0x3c
+	LegoCacheSoundManager* m_cacheSoundManager; // 0x40
 };
 
 // GLOBAL: LEGO1 0x100db6d0

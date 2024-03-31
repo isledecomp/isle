@@ -126,13 +126,13 @@ void LegoExtraActor::VTable0xa4(MxU8& p_und1, MxS32& p_und2)
 MxResult LegoExtraActor::FUN_1002aae0()
 {
 	LegoPathBoundary* oldEdge = m_boundary;
-	Vector3 dir(m_unk0xec[0]);
-	Vector3 right(m_unk0xec[1]);
-	Vector3 up(m_unk0xec[2]);
-	Vector3 unused(m_unk0xec[3]);
+	Vector3 rightRef(m_unk0xec[0]);
+	Vector3 upRef(m_unk0xec[1]);
+	Vector3 dirRef(m_unk0xec[2]);
+	Vector3 positionRef(m_unk0xec[3]);
 
-	up.Mul(-1.0f);
-	dir.EqualsCross(&right, &up);
+	dirRef.Mul(-1.0f);
+	rightRef.EqualsCross(&upRef, &dirRef);
 
 	if (m_boundary == m_destEdge->m_faceA) {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceB;
@@ -227,7 +227,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				m_roi->FUN_100a58f0(matrix2);
 				m_roi->VTable0x14();
 				FUN_1002ad8a();
-				SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
+				SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 				m_scheduledTime = Timer()->GetTime() + m_disAnim->GetDuration();
 				m_unk0x10 = m_worldSpeed;
 				VTable0xc4();
@@ -239,7 +239,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 
 		if (b) {
 			LegoROI* roi = m_roi;
-			SoundManager()->GetUnknown0x40()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
+			SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 			VTable0xc4();
 			m_state = 0x102;
 			Mx3DPointFloat dir = p_actor->GetWorldDirection();
@@ -249,23 +249,23 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 			roi->FUN_100a58f0(matrix3);
 
 #ifdef COMPAT_MODE
-			float dot, dot2;
+			float dotX, dotZ;
 			{
 				Mx3DPointFloat tmp(1.0f, 0, 0);
-				dot = dir.Dot(&dir, &tmp);
-				Mx3DPointFloat tmp2(1.0f, 0, 0);
-				dot2 = dir.Dot(&dir, &tmp2);
+				dotX = dir.Dot(&dir, &tmp);
+				Mx3DPointFloat tmp2(0, 0, 1.0f);
+				dotZ = dir.Dot(&dir, &tmp2);
 			}
 #else
-			float dot = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
-			float dot2 = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
+			float dotX = dir.Dot(&dir, &Mx3DPointFloat(1.0f, 0, 0));
+			float dotZ = dir.Dot(&dir, &Mx3DPointFloat(0, 0, 1.0f));
 #endif
 
-			if (abs(dot2) < abs(dot)) {
-				m_axis = dot > 0.0 ? e_posz : e_negz;
+			if (abs(dotZ) < abs(dotX)) {
+				m_axis = dotX > 0.0 ? e_posz : e_negz;
 			}
 			else {
-				m_axis = dot2 > 0.0 ? e_posx : e_negx;
+				m_axis = dotZ > 0.0 ? e_posx : e_negx;
 			}
 		}
 	}
