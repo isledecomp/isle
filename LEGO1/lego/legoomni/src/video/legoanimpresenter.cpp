@@ -166,25 +166,25 @@ void LegoAnimPresenter::FUN_100692b0()
 				}
 			}
 			else if (unk0x04 == 4) {
-				LegoChar* src = new LegoChar[strlen(str)];
-				strcpy(src, str + 1);
-				strlwr(src);
+				LegoChar* baseName = new LegoChar[strlen(str)];
+				strcpy(baseName, str + 1);
+				strlwr(baseName);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085a80(und, src, TRUE);
+				roi = CharacterManager()->FUN_10085a80(und, baseName, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
 				}
 
-				delete[] src;
+				delete[] baseName;
 				delete[] und;
 			}
 			else if (unk0x04 == 3) {
-				LegoChar* src = new LegoChar[strlen(str)];
-				strcpy(src, str + 1);
+				LegoChar* lodName = new LegoChar[strlen(str)];
+				strcpy(lodName, str + 1);
 
-				for (LegoChar* i = &src[strlen(src) - 1]; i > src; i--) {
+				for (LegoChar* i = &lodName[strlen(lodName) - 1]; i > lodName; i--) {
 					if ((*i < '0' || *i > '9') && *i != '_') {
 						break;
 					}
@@ -192,16 +192,16 @@ void LegoAnimPresenter::FUN_100692b0()
 					*i = '\0';
 				}
 
-				strlwr(src);
+				strlwr(lodName);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085210(und, src, TRUE);
+				roi = CharacterManager()->FUN_10085210(und, lodName, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
 				}
 
-				delete[] src;
+				delete[] lodName;
 				delete[] und;
 			}
 
@@ -228,20 +228,20 @@ void LegoAnimPresenter::FUN_100695c0()
 				undefined4 unk0x04 = m_anim->GetActorUnknown0x04(i);
 
 				if (unk0x04 == 5 || unk0x04 == 6) {
-					LegoChar dest[256];
-					const LegoChar* str = m_anim->GetActorName(i);
+					LegoChar lodName[256];
+					const LegoChar* actorName = m_anim->GetActorName(i);
 
-					LegoU32 len = strlen(str);
-					strcpy(dest, str);
+					LegoU32 len = strlen(actorName);
+					strcpy(lodName, actorName);
 
-					for (LegoChar* i = &dest[len - 1]; isdigit(*i) || *i == '_'; i--) {
+					for (LegoChar* i = &lodName[len - 1]; isdigit(*i) || *i == '_'; i--) {
 						*i = '\0';
 					}
 
-					strlwr(dest);
+					strlwr(lodName);
 
-					CharacterManager()->FUN_10085210(str, dest, FALSE);
-					FUN_100698b0(rois, str);
+					CharacterManager()->FUN_10085210(actorName, lodName, FALSE);
+					FUN_100698b0(rois, actorName);
 				}
 			}
 		}

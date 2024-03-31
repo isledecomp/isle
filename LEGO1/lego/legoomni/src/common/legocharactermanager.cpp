@@ -495,7 +495,7 @@ void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x10085210
-LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_roiName, MxBool p_createEntity)
+LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	LegoROI* roi = NULL;
 
@@ -503,7 +503,7 @@ LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_ro
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
 	LegoTextureContainer* textureContainer = TextureContainer();
-	ViewLODList* lodList = lodManager->Lookup(p_roiName);
+	ViewLODList* lodList = lodManager->Lookup(p_lodName);
 
 	if (lodList == NULL || lodList->Size() == 0) {
 		return NULL;
@@ -562,7 +562,7 @@ MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10085a80
-LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_roiName, MxBool p_createEntity)
+LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
-	return FUN_10085210(p_name, p_roiName, p_createEntity);
+	return FUN_10085210(p_name, p_lodName, p_createEntity);
 }

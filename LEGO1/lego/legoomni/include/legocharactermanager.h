@@ -58,8 +58,8 @@ public:
 	LegoCharacterData* GetData(LegoROI* p_roi);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
-	LegoROI* FUN_10085210(const char* p_name, const char* p_roiName, MxBool p_createEntity);
-	LegoROI* FUN_10085a80(const char* p_name, const char* p_roiName, MxBool p_createEntity);
+	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
+	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
