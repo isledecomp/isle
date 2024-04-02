@@ -174,6 +174,10 @@ void GasStation::ReadyWorld()
 			break;
 		}
 		comparisonValue = m_state->m_unk0x1a;
+		if (4 < m_state->m_unk0x1a) {
+			m_state->m_unk0x1a++;
+			return;
+		}
 		break;
 	}
 	case 3: {
@@ -195,7 +199,10 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		comparisonValue = m_state->m_unk0x1c;
+		if (4 < m_state->m_unk0x1c) {
+			m_state->m_unk0x1c++;
+			return;
+		}
 		break;
 	}
 	case 4: {
@@ -243,17 +250,19 @@ void GasStation::ReadyWorld()
 		break;
 	}
 	default: {
-		if (comparisonValue < 5) {
-			m_state->m_unk0x20++;
-		}
-		break;
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		return;
 	}
+	}
+
+	if (comparisonValue < 5) {
+		comparisonValue++;
 	}
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
-// OFFSET: LEGO1 0x10005590
+// FUNCTION: LEGO1 0x10005590
 void GasStation::FUN_10005590(undefined4 p_param)
 {
 	// TODO
