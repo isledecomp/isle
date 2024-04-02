@@ -362,7 +362,7 @@ public:
 		unsigned long (*pTextureIndices)[3],
 		ShadingModel shadingModel
 	) override;
-	Result GetBoundingBox(float min[3], float max[3]) override;
+	Result GetBoundingBox(float min[3], float max[3]) const override;
 
 	// vtable+0x10
 	MeshBuilder* Clone() override;

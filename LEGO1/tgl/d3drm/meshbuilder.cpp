@@ -159,7 +159,7 @@ inline Result MeshBuilderImpl::CreateMeshImpl(
 }
 
 // FUNCTION: LEGO1 0x100a3ae0
-Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3])
+Result MeshBuilderImpl::GetBoundingBox(float min[3], float max[3]) const
 {
 	D3DRMBOX box;
 	Result result = ResultVal(m_data->GetBox(&box));
