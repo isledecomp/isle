@@ -1,9 +1,15 @@
 #include "gasstation.h"
 
+#include "garage_actions.h"
+#include "islepathactor.h"
+#include "jukebox.h"
+#include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legoomni.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
@@ -16,10 +22,10 @@ undefined4 g_unk0x100f0160 = 3;
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
-	m_unk0xf8 = 0;
+	m_currentActorId = 0;
 	m_state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
-	m_unk0x108 = 0;
+	m_trackLedBitmap = NULL;
 	m_unk0x104 = 0;
 	m_unk0x114 = 0;
 	m_unk0x106 = 0;
@@ -110,10 +116,158 @@ MxLong GasStation::Notify(MxParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x10004b30
+// FUNCTION: LEGO1 0x10004b30
 void GasStation::ReadyWorld()
 {
+	undefined2 comparisonValue;
+	PlayMusic(JukeboxScript::c_JBMusic2);
+
+	m_trackLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "TrackLed_Bitmap");
+
+	m_currentActorId = CurrentActor()->GetActorId();
+
+	switch (m_currentActorId) {
+	case 1: {
+		switch (m_state->m_unk0x18) {
+		case 0:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs002nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs003nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 2:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs004nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14.m_unk0x00 = 6;
+			PlayAction(GarageScript::c_wgs008nu_RunAnim);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
+		comparisonValue = m_state->m_unk0x18;
+		break;
+	}
+	case 2: {
+		switch (m_state->m_unk0x1a) {
+		case 0:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs006nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs007nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14.m_unk0x00 = 6;
+			PlayAction(GarageScript::c_wgs008nu_RunAnim);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
+		comparisonValue = m_state->m_unk0x1a;
+		break;
+	}
+	case 3: {
+		switch (m_state->m_unk0x1c) {
+		case 0:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs012nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs014nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14.m_unk0x00 = 6;
+			FUN_10005590(0x1fe);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
+		comparisonValue = m_state->m_unk0x1c;
+		break;
+	}
+	case 4: {
+		switch (m_state->m_unk0x1e) {
+		case 0:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs009nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			PlayAction(GarageScript::c_wgs010nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14.m_unk0x00 = 6;
+			PlayAction(GarageScript::c_wgs008nu_RunAnim);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
+		comparisonValue = m_state->m_unk0x1e;
+		break;
+	}
+	case 5: {
+		switch (m_state->m_unk0x20) {
+		case 0:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			FUN_10005590(GarageScript::c_wgs020nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		case 1:
+			m_state->m_unk0x14.m_unk0x00 = 5;
+			FUN_10005590(GarageScript::c_wgs021nu_RunAnim);
+			m_unk0x106 = 1;
+			break;
+		default:
+			m_state->m_unk0x14.m_unk0x00 = 6;
+			FUN_10005590(GarageScript::c_wgs022nu_RunAnim);
+			m_unk0x106 = 1;
+			m_unk0x104 = 1;
+			break;
+		}
+		comparisonValue = m_state->m_unk0x20;
+		break;
+	}
+	default: {
+		if (comparisonValue < 5) {
+			m_state->m_unk0x20++;
+		}
+		break;
+	}
+	}
+
+	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+}
+
+// OFFSET: LEGO1 0x10005590
+void GasStation::FUN_10005590(undefined4 p_param)
+{
 	// TODO
+}
+
+inline void GasStation::PlayAction(MxU32 p_objectId)
+{
+	MxDSAction action;
+	action.SetAtomId(*g_garageScript);
+	action.SetObjectId(p_objectId);
+
+	BackgroundAudioManager()->LowerVolume();
+	Start(&action);
+	m_state->FUN_10006430(p_objectId);
 }
 
 // STUB: LEGO1 0x10005660

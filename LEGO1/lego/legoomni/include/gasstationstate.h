@@ -32,6 +32,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'
 
+	void FUN_10006430(undefined4);
+
 	friend class GasStation;
 
 private:

@@ -5,6 +5,7 @@
 #include "gasstationstate.h"
 #include "legogamestate.h"
 #include "legoworld.h"
+#include "mxstillpresenter.h"
 #include "radio.h"
 
 // VTABLE: LEGO1 0x100d4650
@@ -37,21 +38,24 @@ public:
 	void Enable(MxBool p_enable) override;                        // vtable+0x68
 	virtual MxLong HandleClick(LegoControlManagerEvent& p_param); // vtable+0x6c
 
+	inline void PlayAction(MxU32 p_objectId);
+
 	// SYNTHETIC: LEGO1 0x100048a0
 	// GasStation::`scalar deleting destructor'
 
 private:
+	void FUN_10005590(undefined4);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
 
-	undefined2 m_unk0xf8;               // 0xf8
+	MxS16 m_currentActorId;             // 0xf8
 	undefined2 m_unk0xfa;               // 0xfa
 	LegoGameState::Area m_destLocation; // 0xfc
 	GasStationState* m_state;           // 0x100
 	undefined2 m_unk0x104;              // 0x104
 	undefined2 m_unk0x106;              // 0x106
-	undefined4 m_unk0x108;              // 0x108
+	MxStillPresenter* m_trackLedBitmap; // 0x108
 	undefined4 m_unk0x10c;              // 0x10c
 	undefined4 m_unk0x110;              // 0x110
 	undefined m_unk0x114;               // 0x114
