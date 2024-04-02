@@ -19,7 +19,7 @@ from isledecomp.types import SymbolType
 from pystache import Renderer
 import colorama
 
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def gen_json(json_file: str, orig_file: str, data):

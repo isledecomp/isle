@@ -7,7 +7,7 @@ import colorama
 from isledecomp.dir import walk_source_dir, is_file_cpp
 from isledecomp.parser import DecompLinter
 
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def display_errors(alerts, filename):

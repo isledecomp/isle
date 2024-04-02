@@ -12,7 +12,7 @@ from isledecomp.utils import print_combined_diff
 # Ignore all compare-db messages.
 logging.getLogger("isledecomp.compare").addHandler(logging.NullHandler())
 
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 def parse_args() -> argparse.Namespace:
