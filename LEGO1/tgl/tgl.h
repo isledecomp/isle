@@ -330,7 +330,7 @@ public:
 		unsigned long (*pTextureIndices)[3],
 		ShadingModel shadingModel
 	) = 0;
-	virtual Result GetBoundingBox(float min[3], float max[3]) = 0;
+	virtual Result GetBoundingBox(float min[3], float max[3]) const = 0;
 	virtual MeshBuilder* Clone() = 0;
 
 	// SYNTHETIC: LEGO1 0x100a27b0

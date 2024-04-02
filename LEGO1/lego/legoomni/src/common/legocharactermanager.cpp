@@ -11,6 +11,8 @@
 #include "roi/legolod.h"
 #include "roi/legoroi.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 
@@ -554,11 +556,46 @@ LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_lo
 	return roi;
 }
 
-// STUB: LEGO1 0x10085870
+// FUNCTION: LEGO1 0x10085870
 MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = FAILURE;
+
+	BoundingSphere boundingSphere;
+	BoundingBox boundingBox;
+
+	const Tgl::MeshBuilder* meshBuilder = ((ViewLOD*) p_roi->GetLOD(0))->GetMeshBuilder();
+
+	if (meshBuilder != NULL) {
+		float min[3], max[3];
+
+		FILLVEC3(min, 88888.0);
+		FILLVEC3(max, -88888.0);
+		meshBuilder->GetBoundingBox(min, max);
+
+		float center[3];
+		center[0] = (min[0] + max[0]) / 2.0f;
+		center[1] = (min[1] + max[1]) / 2.0f;
+		center[2] = (min[2] + max[2]) / 2.0f;
+		SET3(boundingSphere.Center(), center);
+
+		float radius[3];
+		VMV3(radius, max, min);
+		boundingSphere.Radius() = sqrt(NORMSQRD3(radius)) / 2.0;
+
+		p_roi->SetBoundingSphere(boundingSphere);
+
+		SET3(boundingBox.Min(), min);
+		SET3(boundingBox.Max(), max);
+
+		p_roi->SetUnknown0x80(boundingBox);
+
+		p_roi->VTable0x14();
+
+		result = SUCCESS;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10085a80
