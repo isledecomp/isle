@@ -46,7 +46,7 @@ public:
 
 	virtual undefined4 VTable0x14();                                                // vtable+14;
 	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
-	virtual void Deserialize(MxU8** p_source, MxS16 p_unk0x24);                     // vtable+1c;
+	virtual void Deserialize(MxU8*& p_source, MxS16 p_unk0x24);                     // vtable+1c;
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
 	inline Type GetType() const { return (Type) this->m_type; }
@@ -79,7 +79,7 @@ private:
 	MxPresenter* m_unk0x28; // 0x28
 };
 
-MxDSObject* DeserializeDSObjectDispatch(MxU8**, MxS16);
+MxDSObject* DeserializeDSObjectDispatch(MxU8*&, MxS16);
 
 // FUNCTION: ISLE 0x401c40
 // MxDSObject::SetAtomId
