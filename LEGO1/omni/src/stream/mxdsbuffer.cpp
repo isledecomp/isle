@@ -322,7 +322,7 @@ MxCore* MxDSBuffer::ReadChunk(MxDSBuffer* p_buffer, MxU32* p_chunkData, MxU16 p_
 
 	switch (*p_chunkData) {
 	case FOURCC('M', 'x', 'O', 'b'):
-		result = DeserializeDSObjectDispatch(&dataStart, p_flags);
+		result = DeserializeDSObjectDispatch(dataStart, p_flags);
 		break;
 	case FOURCC('M', 'x', 'C', 'h'):
 		result = new MxStreamChunk();

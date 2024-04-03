@@ -185,7 +185,7 @@ MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)
 			// Save a copy so we can clean up properly, because
 			// this function will alter the pointer value.
 			MxU8* copy = buf;
-			MxDSObject* obj = DeserializeDSObjectDispatch(&buf, -1);
+			MxDSObject* obj = DeserializeDSObjectDispatch(buf, -1);
 			delete[] copy;
 			return obj;
 		}

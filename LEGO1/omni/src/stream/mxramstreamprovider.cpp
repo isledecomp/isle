@@ -113,7 +113,7 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 				data2 = data;
 				data += 8;
 
-				MxDSObject* obj = DeserializeDSObjectDispatch(&data, -1);
+				MxDSObject* obj = DeserializeDSObjectDispatch(data, -1);
 				id = obj->GetObjectId();
 				delete obj;
 
