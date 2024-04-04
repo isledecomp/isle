@@ -119,7 +119,6 @@ MxLong GasStation::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x10004b30
 void GasStation::ReadyWorld()
 {
-	undefined2 comparisonValue;
 	PlayMusic(JukeboxScript::c_JBMusic2);
 
 	m_trackLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "TrackLed_Bitmap");
@@ -151,7 +150,9 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		comparisonValue = m_state->m_unk0x18;
+		if (m_state->m_unk0x18 < 5) {
+			m_state->m_unk0x18 += 1;
+		}
 		break;
 	}
 	case 2: {
@@ -173,10 +174,8 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		comparisonValue = m_state->m_unk0x1a;
-		if (4 < m_state->m_unk0x1a) {
-			m_state->m_unk0x1a++;
-			return;
+		if (m_state->m_unk0x1a < 5) {
+			m_state->m_unk0x1a += 1;
 		}
 		break;
 	}
@@ -199,9 +198,8 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		if (4 < m_state->m_unk0x1c) {
-			m_state->m_unk0x1c++;
-			return;
+		if (m_state->m_unk0x1c < 5) {
+			m_state->m_unk0x1c += 1;
 		}
 		break;
 	}
@@ -224,7 +222,9 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		comparisonValue = m_state->m_unk0x1e;
+		if (m_state->m_unk0x1e < 5) {
+			m_state->m_unk0x1e += 1;
+		}
 		break;
 	}
 	case 5: {
@@ -246,17 +246,11 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
-		comparisonValue = m_state->m_unk0x20;
+		if (m_state->m_unk0x20 < 5) {
+			m_state->m_unk0x20 += 1;
+		}
 		break;
 	}
-	default: {
-		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-		return;
-	}
-	}
-
-	if (comparisonValue < 5) {
-		comparisonValue++;
 	}
 
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
