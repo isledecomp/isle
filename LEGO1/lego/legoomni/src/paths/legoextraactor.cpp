@@ -29,7 +29,7 @@ LegoExtraActor::LegoExtraActor()
 	m_scheduledTime = 0;
 	m_unk0x0c = 0;
 	m_unk0x0e = 0;
-	m_unk0x14 = 0;
+	m_whichAnim = 0;
 	m_assAnim = NULL;
 	m_disAnim = NULL;
 	m_unk0x15 = 0;
@@ -232,7 +232,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				m_prevWorldSpeed = m_worldSpeed;
 				VTable0xc4();
 				SetWorldSpeed(0);
-				m_unk0x14 = 1;
+				m_whichAnim = 1;
 				m_state = 0x101;
 			}
 		}
@@ -323,16 +323,62 @@ void LegoExtraActor::Restart()
 	}
 }
 
-// STUB: LEGO1 0x1002b440
-void LegoExtraActor::VTable0x70(float)
+// FUNCTION: LEGO1 0x1002b440
+void LegoExtraActor::VTable0x70(float p_time)
 {
-	// TODO
+	LegoAnimActorStruct* laas = NULL;
+	switch (m_whichAnim) {
+	case 0:
+		LegoAnimActor::VTable0x70(p_time);
+		break;
+	case 1:
+		if (m_scheduledTime < p_time) {
+			m_whichAnim = 2;
+			m_state = 0x101;
+			m_scheduledTime = m_assAnim->GetDuration() + p_time;
+			break;
+		}
+		else {
+			laas = m_disAnim;
+			break;
+		}
+	case 2:
+		if (m_scheduledTime < p_time) {
+			m_whichAnim = 0;
+			m_state = 0;
+			SetWorldSpeed(m_prevWorldSpeed);
+			m_roi->FUN_100a58f0(m_unk0x18);
+			m_lastTime = p_time;
+			break;
+		}
+		else {
+			laas = m_assAnim;
+			break;
+		}
+	}
+	if (laas) {
+		float duration2;
+		float duration = laas->GetDuration();
+		duration2 = p_time - (m_scheduledTime - duration);
+		if (duration2 < 0) {
+			duration2 = 0;
+		}
+		else if (duration2 > duration) {
+			duration2 = duration;
+		}
+		MxMatrix matrix(m_roi->GetLocal2World());
+		LegoTreeNode* root = laas->m_AnimTreePtr->GetRoot();
+		MxS32 count = root->GetNumChildren();
+		for (MxS32 i = 0; i < count; i++) {
+			LegoROI::FUN_100a8e80(root->GetChild(i), matrix, duration2, laas->m_roiMap);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1002b5d0
 void LegoExtraActor::VTable0x74(Matrix4& p_transform)
 {
-	if (m_unk0x14 == 0) {
+	if (m_whichAnim == 0) {
 		LegoAnimActor::VTable0x74(p_transform);
 	}
 }
