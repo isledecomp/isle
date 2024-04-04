@@ -278,9 +278,11 @@ MxResult LegoExtraActor::WaitForAnimation()
 {
 	LegoPathBoundary* oldBoundary = m_boundary;
 	MxResult result = LegoPathActor::WaitForAnimation();
+
 	if (m_boundary != oldBoundary) {
 		MxU32 b = FALSE;
 		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+
 		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
 			undefined4 tmp;
 			if ((*it)->VTable0x9c(tmp)) {
@@ -288,12 +290,14 @@ MxResult LegoExtraActor::WaitForAnimation()
 				break;
 			}
 		}
+
 		if (b) {
 			m_unk0x0e = 1;
 			m_prevWorldSpeed = GetWorldSpeed();
 			SetWorldSpeed(0);
 		}
 	}
+
 	return result;
 }
 
@@ -303,6 +307,7 @@ void LegoExtraActor::Restart()
 	if (m_unk0x0e != 0) {
 		MxU32 b = FALSE;
 		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+
 		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
 			undefined4 tmp;
 			if ((*it)->VTable0x9c(tmp)) {
@@ -310,6 +315,7 @@ void LegoExtraActor::Restart()
 				break;
 			}
 		}
+
 		if (!b) {
 			SetWorldSpeed(m_prevWorldSpeed);
 			m_unk0x0e = 0;
