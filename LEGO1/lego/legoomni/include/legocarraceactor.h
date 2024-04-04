@@ -32,7 +32,7 @@ public:
 	MxU32 VTable0x90(float, Matrix4&) override;                          // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
 	void VTable0x98() override;                                          // vtable+0x98
-	void VTable0x9c() override;                                          // vtable+0x9c
+	MxResult WaitForAnimation() override;                                // vtable+0x9c
 
 	virtual void FUN_10080590();
 
