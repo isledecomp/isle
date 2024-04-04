@@ -89,7 +89,8 @@ void LegoRaceCar::VTable0x98()
 }
 
 // STUB: LEGO1 0x10014580
-void LegoRaceCar::VTable0x9c()
+MxResult LegoRaceCar::WaitForAnimation()
 {
 	// TODO
+	return SUCCESS;
 }

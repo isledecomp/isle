@@ -75,9 +75,10 @@ void LegoPathActor::ParseAction(char*)
 }
 
 // STUB: LEGO1 0x1002f1b0
-void LegoPathActor::VTable0x9c()
+MxResult LegoPathActor::WaitForAnimation()
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1002f650

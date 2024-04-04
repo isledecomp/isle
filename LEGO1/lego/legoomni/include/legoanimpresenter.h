@@ -51,7 +51,11 @@ public:
 	virtual void VTable0x98();                                                             // vtable+0x98
 
 	// STUB: LEGO1 0x1000c990
-	virtual void VTable0x9c() {} // vtable+0x9c
+	virtual undefined4* VTable0x9c(undefined4& p_unk0x6c)
+	{
+		p_unk0x6c = m_unk0x6c;
+		return m_unk0x68;
+	} // vtable+0x9c
 
 	virtual void VTable0xa0(); // vtable+0xa0
 

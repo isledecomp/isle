@@ -69,7 +69,8 @@ void LegoJetski::VTable0x98()
 }
 
 // STUB: LEGO1 0x10014200
-void LegoJetski::VTable0x9c()
+MxResult LegoJetski::WaitForAnimation()
 {
 	// TODO
+	return SUCCESS;
 }

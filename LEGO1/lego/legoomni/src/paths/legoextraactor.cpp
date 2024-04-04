@@ -145,7 +145,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 		m_boundary = oldEdge;
 	}
 
-	LegoPathActor::VTable0x9c();
+	LegoPathActor::WaitForAnimation();
 	return SUCCESS;
 }
 
@@ -229,7 +229,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				FUN_1002ad8a();
 				SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 				m_scheduledTime = Timer()->GetTime() + m_disAnim->GetDuration();
-				m_unk0x10 = m_worldSpeed;
+				m_prevWorldSpeed = m_worldSpeed;
 				VTable0xc4();
 				SetWorldSpeed(0);
 				m_unk0x14 = 1;
@@ -273,10 +273,48 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1002b290
-void LegoExtraActor::VTable0x9c()
+// FUNCTION: LEGO1 0x1002b290
+MxResult LegoExtraActor::WaitForAnimation()
 {
-	// TODO
+	LegoPathBoundary* oldBoundary = m_boundary;
+	MxResult result = LegoPathActor::WaitForAnimation();
+	if (m_boundary != oldBoundary) {
+		MxU32 b = FALSE;
+		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+			undefined4 tmp;
+			if ((*it)->VTable0x9c(tmp)) {
+				b = TRUE;
+				break;
+			}
+		}
+		if (b) {
+			m_unk0x0e = 1;
+			m_prevWorldSpeed = GetWorldSpeed();
+			SetWorldSpeed(0);
+		}
+	}
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1002b370
+void LegoExtraActor::Restart()
+{
+	if (m_unk0x0e != 0) {
+		MxU32 b = FALSE;
+		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+			undefined4 tmp;
+			if ((*it)->VTable0x9c(tmp)) {
+				b = TRUE;
+				break;
+			}
+		}
+		if (!b) {
+			SetWorldSpeed(m_prevWorldSpeed);
+			m_unk0x0e = 0;
+		}
+	}
 }
 
 // STUB: LEGO1 0x1002b440
