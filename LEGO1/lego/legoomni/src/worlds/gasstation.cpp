@@ -194,7 +194,7 @@ void GasStation::ReadyWorld()
 			break;
 		default:
 			m_state->m_unk0x14.m_unk0x00 = 6;
-			FUN_10005590(0x1fe);
+			FUN_10005590(GarageScript::c_wgs017nu_RunAnim);
 			m_unk0x106 = 1;
 			m_unk0x104 = 1;
 			break;
