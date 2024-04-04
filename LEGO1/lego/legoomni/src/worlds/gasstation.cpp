@@ -265,7 +265,7 @@ void GasStation::ReadyWorld()
 // FUNCTION: LEGO1 0x10005590
 void GasStation::FUN_10005590(undefined4 p_param)
 {
-	// TODO
+	PlayAction(p_param);
 }
 
 inline void GasStation::PlayAction(MxU32 p_objectId)
