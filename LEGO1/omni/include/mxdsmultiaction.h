@@ -29,7 +29,7 @@ public:
 
 	undefined4 VTable0x14() override;                            // vtable+14;
 	MxU32 GetSizeOnDisk() override;                              // vtable+18;
-	void Deserialize(MxU8** p_source, MxS16 p_unk0x24) override; // vtable+1c;
+	void Deserialize(MxU8*& p_source, MxS16 p_unk0x24) override; // vtable+1c;
 	void SetAtomId(MxAtomId p_atomId) override;                  // vtable+20;
 	MxDSAction* Clone() override;                                // vtable+2c;
 	void MergeFrom(MxDSAction& p_dsAction) override;             // vtable+30;

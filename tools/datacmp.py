@@ -16,7 +16,7 @@ from isledecomp.cvdump.types import (
 from isledecomp.bin import Bin as IsleBin
 import colorama
 
-colorama.init()
+colorama.just_fix_windows_console()
 
 
 # Ignore all compare-db messages.

@@ -29,7 +29,7 @@ LegoExtraActor::LegoExtraActor()
 	m_scheduledTime = 0;
 	m_unk0x0c = 0;
 	m_unk0x0e = 0;
-	m_unk0x14 = 0;
+	m_whichAnim = 0;
 	m_assAnim = NULL;
 	m_disAnim = NULL;
 	m_unk0x15 = 0;
@@ -145,7 +145,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 		m_boundary = oldEdge;
 	}
 
-	LegoPathActor::VTable0x9c();
+	LegoPathActor::WaitForAnimation();
 	return SUCCESS;
 }
 
@@ -229,10 +229,10 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				FUN_1002ad8a();
 				SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
 				m_scheduledTime = Timer()->GetTime() + m_disAnim->GetDuration();
-				m_unk0x10 = m_worldSpeed;
+				m_prevWorldSpeed = m_worldSpeed;
 				VTable0xc4();
 				SetWorldSpeed(0);
-				m_unk0x14 = 1;
+				m_whichAnim = 1;
 				m_state = 0x101;
 			}
 		}
@@ -273,22 +273,117 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1002b290
-void LegoExtraActor::VTable0x9c()
+// FUNCTION: LEGO1 0x1002b290
+MxResult LegoExtraActor::WaitForAnimation()
 {
-	// TODO
+	LegoPathBoundary* oldBoundary = m_boundary;
+	MxResult result = LegoPathActor::WaitForAnimation();
+
+	if (m_boundary != oldBoundary) {
+		MxU32 b = FALSE;
+		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+
+		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+			undefined4 tmp;
+			if ((*it)->VTable0x9c(tmp)) {
+				b = TRUE;
+				break;
+			}
+		}
+
+		if (b) {
+			m_unk0x0e = 1;
+			m_prevWorldSpeed = GetWorldSpeed();
+			SetWorldSpeed(0);
+		}
+	}
+
+	return result;
 }
 
-// STUB: LEGO1 0x1002b440
-void LegoExtraActor::VTable0x70(float)
+// FUNCTION: LEGO1 0x1002b370
+void LegoExtraActor::Restart()
 {
-	// TODO
+	if (m_unk0x0e != 0) {
+		MxU32 b = FALSE;
+		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+
+		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+			undefined4 tmp;
+			if ((*it)->VTable0x9c(tmp)) {
+				b = TRUE;
+				break;
+			}
+		}
+
+		if (!b) {
+			SetWorldSpeed(m_prevWorldSpeed);
+			m_unk0x0e = 0;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x1002b440
+void LegoExtraActor::VTable0x70(float p_time)
+{
+	LegoAnimActorStruct* laas = NULL;
+
+	switch (m_whichAnim) {
+	case 0:
+		LegoAnimActor::VTable0x70(p_time);
+		break;
+	case 1:
+		if (m_scheduledTime < p_time) {
+			m_whichAnim = 2;
+			m_state = 0x101;
+			m_scheduledTime = m_assAnim->GetDuration() + p_time;
+			break;
+		}
+		else {
+			laas = m_disAnim;
+			break;
+		}
+	case 2:
+		if (m_scheduledTime < p_time) {
+			m_whichAnim = 0;
+			m_state = 0;
+			SetWorldSpeed(m_prevWorldSpeed);
+			m_roi->FUN_100a58f0(m_unk0x18);
+			m_lastTime = p_time;
+			break;
+		}
+		else {
+			laas = m_assAnim;
+			break;
+		}
+	}
+
+	if (laas) {
+		float duration2, duration;
+		duration = laas->GetDuration();
+		duration2 = p_time - (m_scheduledTime - duration);
+
+		if (duration2 < 0) {
+			duration2 = 0;
+		}
+		else if (duration2 > duration) {
+			duration2 = duration;
+		}
+
+		MxMatrix matrix(m_roi->GetLocal2World());
+		LegoTreeNode* root = laas->m_AnimTreePtr->GetRoot();
+		MxS32 count = root->GetNumChildren();
+
+		for (MxS32 i = 0; i < count; i++) {
+			LegoROI::FUN_100a8e80(root->GetChild(i), matrix, duration2, laas->m_roiMap);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1002b5d0
 void LegoExtraActor::VTable0x74(Matrix4& p_transform)
 {
-	if (m_unk0x14 == 0) {
+	if (m_whichAnim == 0) {
 		LegoAnimActor::VTable0x74(p_transform);
 	}
 }
@@ -302,9 +397,23 @@ void LegoExtraActor::SetWorldSpeed(MxFloat p_worldSpeed)
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
 }
 
-// STUB: LEGO1 0x1002b630
+// FUNCTION: LEGO1 0x1002b630
 void LegoExtraActor::VTable0xc4()
 {
+	if (m_curAnim != 0) {
+		return;
+	}
+
+	if (m_worldSpeed > -0.001 || m_worldSpeed < 0.001) {
+		MxU16 name = *((MxU16*) m_roi->GetName());
+		MxBool b = name == TWOCC('m', 'a') || name == TWOCC('p', 'a');
+
+		if (b) {
+			float duration = m_animMaps[m_curAnim]->GetDuration();
+			MxMatrix matrix(m_unk0xec);
+			LegoAnimActor::FUN_1001c360(duration, matrix);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1002b6f0

@@ -72,6 +72,7 @@ public:
 
 	inline MxBool GetUnknown0x10IsSet(MxU8 p_flag) { return m_unk0x10 & p_flag; }
 	inline MxU8 GetFlags() { return m_flags; }
+	inline MxFloat GetWorldSpeed() { return m_worldSpeed; }
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetUnknown0x59() { return m_unk0x59; }
 

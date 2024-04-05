@@ -221,7 +221,7 @@ void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
 }
 
 // FUNCTION: LEGO1 0x100adf70
-void MxDSAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
+void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 {
 	MxDSObject::Deserialize(p_source, p_unk0x24);
 
@@ -239,9 +239,11 @@ void MxDSAction::Deserialize(MxU8** p_source, MxS16 p_unk0x24)
 	GetDouble(p_source, this->m_up[1]);
 	GetDouble(p_source, this->m_up[2]);
 
-	MxU16 extraLength = GetScalar((MxU16**) p_source);
+	MxU16 extraLength = *(MxU16*) p_source;
+	p_source += 2;
+
 	if (extraLength) {
-		AppendData(extraLength, (char*) *p_source);
-		*p_source += extraLength;
+		AppendData(extraLength, (char*) p_source);
+		p_source += extraLength;
 	}
 }

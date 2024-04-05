@@ -30,32 +30,32 @@ inline T Max(T p_t1, T p_t2)
 }
 
 template <class T>
-inline void GetScalar(MxU8** p_source, T& p_dest)
+inline void GetScalar(MxU8*& p_source, T& p_dest)
 {
-	p_dest = *(T*) *p_source;
-	*p_source += sizeof(T);
+	p_dest = *(T*) p_source;
+	p_source += sizeof(T);
 }
 
 template <class T>
-inline T GetScalar(T** p_source)
+inline T GetScalar(T*& p_source)
 {
-	T val = **p_source;
-	*p_source += 1;
+	T val = *p_source;
+	p_source += 1;
 	return val;
 }
 
 template <class T>
-inline void GetDouble(MxU8** p_source, T& p_dest)
+inline void GetDouble(MxU8*& p_source, T& p_dest)
 {
-	p_dest = *(double*) *p_source;
-	*p_source += sizeof(double);
+	p_dest = *(double*) p_source;
+	p_source += sizeof(double);
 }
 
 template <class T>
-inline void GetString(MxU8** p_source, char** p_dest, T* p_obj, void (T::*p_setter)(const char*))
+inline void GetString(MxU8*& p_source, char*& p_dest, T* p_obj, void (T::*p_setter)(const char*))
 {
-	(p_obj->*p_setter)((char*) *p_source);
-	*p_source += strlen(*p_dest) + 1;
+	(p_obj->*p_setter)((char*) p_source);
+	p_source += strlen(p_dest) + 1;
 }
 
 MxBool GetRectIntersection(
