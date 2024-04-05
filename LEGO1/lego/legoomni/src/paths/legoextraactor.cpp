@@ -404,9 +404,9 @@ void LegoExtraActor::VTable0xc4()
 		return;
 	}
 
-	if (-0.001 < m_worldSpeed || 0.001 > m_worldSpeed) {
+	if (m_worldSpeed > -0.001 || m_worldSpeed < 0.001) {
 		MxU16 name = *((MxU16*) m_roi->GetName());
-		MxBool b = (name == 0x616d || name == 0x6170) ? TRUE : FALSE; // "ma" or "pa"
+		MxBool b = name == TWOCC('m', 'a') || name == TWOCC('p', 'a');
 
 		if (b) {
 			float duration = m_animMaps[m_curAnim]->GetDuration();
