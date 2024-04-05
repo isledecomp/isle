@@ -58,7 +58,7 @@ private:
 	MxU8 m_axis;                    // 0x0d
 	undefined m_unk0x0e;            // 0x0e
 	MxFloat m_prevWorldSpeed;       // 0x10
-	MxU8 m_unk0x14;                 // 0x14
+	MxU8 m_whichAnim;               // 0x14
 	MxU8 m_unk0x15;                 // 0x15
 	MxMatrix m_unk0x18;             // 0x18
 	LegoAnimActorStruct* m_assAnim; // 0x60
