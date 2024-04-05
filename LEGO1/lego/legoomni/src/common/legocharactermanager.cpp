@@ -25,6 +25,9 @@ MxU32 g_unk0x100fc4d8 = 50;
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_unk0x100fc4dc = 66;
 
+// GLOBAL: LEGO1 0x100fc4ec
+MxU32 g_unk0x100fc4ec = 2;
+
 // GLOBAL: LEGO1 0x100fc4f0
 MxU32 g_unk0x100fc4f0 = 0;
 
@@ -454,11 +457,67 @@ LegoCharacterData* LegoCharacterManager::GetData(LegoROI* p_roi)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10084ec0
-MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+// STUB: LEGO1 0x10084cf0
+LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char*)
 {
 	// TODO
-	return FALSE;
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10084ec0
+MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+{
+	LegoCharacterData* data = GetData(p_roi->GetName());
+
+	if (data == NULL) {
+		return FALSE;
+	}
+
+	LegoCharacterData::Part& part = data->m_parts[1];
+
+	part.m_unk0x08++;
+	MxU8 unk0x00 = part.m_unk0x00[part.m_unk0x08];
+
+	if (unk0x00 == 0xff) {
+		part.m_unk0x08 = 0;
+		unk0x00 = part.m_unk0x00[part.m_unk0x08];
+	}
+
+	LegoROI* childROI = FUN_10084cf0(p_roi, g_characterLODs[1].m_name);
+
+	if (childROI != NULL) {
+		Tgl::Renderer* renderer;
+		ViewLODList *lodList, *dupLodList;
+		LegoFloat red, green, blue, alpha;
+		MxS32 lodSize;
+		char lodName[256];
+
+		lodList = GetViewLODListManager()->Lookup(part.m_unk0x04[unk0x00]);
+		lodSize = lodList->Size();
+		sprintf(lodName, "%s%d", p_roi->GetName(), g_unk0x100fc4ec++);
+		dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+
+		renderer = VideoManager()->GetRenderer();
+		LegoROI::FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
+
+		for (MxS32 j = 0; j < lodSize; j++) {
+			LegoLOD* clone = ((LegoLOD*) (*lodList)[j])->Clone(renderer);
+			clone->FUN_100aacb0(red, green, blue, alpha);
+			dupLodList->PushBack(clone);
+		}
+
+		lodList->Release();
+		lodList = dupLodList;
+
+		if (childROI->GetUnknown0xe0() >= 0) {
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(childROI);
+		}
+
+		childROI->SetLODList(lodList);
+		lodList->Release();
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10085140

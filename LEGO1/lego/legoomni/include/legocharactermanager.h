@@ -56,6 +56,7 @@ public:
 	LegoExtraActor* GetActor(const char* p_key);
 	LegoCharacterData* GetData(const char* p_key);
 	LegoCharacterData* GetData(LegoROI* p_roi);
+	LegoROI* FUN_10084cf0(LegoROI* p_roi, const char*);
 	MxBool FUN_10084ec0(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
