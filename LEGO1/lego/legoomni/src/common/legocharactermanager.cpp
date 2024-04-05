@@ -25,6 +25,9 @@ MxU32 g_unk0x100fc4d8 = 50;
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_unk0x100fc4dc = 66;
 
+// GLOBAL: LEGO1 0x100fc4ec
+MxU32 g_unk0x100fc4ec = 2;
+
 // GLOBAL: LEGO1 0x100fc4f0
 MxU32 g_unk0x100fc4f0 = 0;
 
@@ -254,7 +257,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	BoundingBox boundingBox;
 	MxMatrix mat;
 	CompoundObject* comp;
-	MxS32 i, j;
+	MxS32 i;
 
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
@@ -298,14 +301,10 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	roi->SetComp(comp);
 
 	for (i = 0; i < _countof(g_characterLODs) - 1; i++) {
-		ViewLODList *lodList, *dupLodList;
-		LegoROI* childROI;
-		MxS32 lodSize;
-		const char* parentName;
-		char lodName[64];
-
+		char lodName[256];
 		LegoCharacterData::Part& part = data->m_parts[i];
 
+		const char* parentName;
 		if (i == 0 || i == 1) {
 			parentName = part.m_unk0x04[part.m_unk0x00[part.m_unk0x08]];
 		}
@@ -313,19 +312,21 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 			parentName = g_characterLODs[i + 1].m_parentName;
 		}
 
-		lodList = lodManager->Lookup(parentName);
-		lodSize = lodList->Size();
+		ViewLODList* lodList = lodManager->Lookup(parentName);
+		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_key, i);
-		dupLodList = lodManager->Create(lodName, lodSize);
+		ViewLODList* dupLodList = lodManager->Create(lodName, lodSize);
 
-		for (j = 0; j < lodSize; j++) {
-			dupLodList->PushBack(((LegoLOD*) (*lodList)[j])->Clone(renderer));
+		for (MxS32 j = 0; j < lodSize; j++) {
+			LegoLOD* lod = (LegoLOD*) (*lodList)[j];
+			LegoLOD* clone = lod->Clone(renderer);
+			dupLodList->PushBack(clone);
 		}
 
 		lodList->Release();
 		lodList = dupLodList;
 
-		childROI = new LegoROI(renderer, lodList);
+		LegoROI* childROI = new LegoROI(renderer, lodList);
 		lodList->Release();
 
 		childROI->SetName(g_characterLODs[i + 1].m_name);
@@ -454,11 +455,65 @@ LegoCharacterData* LegoCharacterManager::GetData(LegoROI* p_roi)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10084ec0
-MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+// STUB: LEGO1 0x10084cf0
+LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char*)
 {
 	// TODO
-	return FALSE;
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10084ec0
+MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+{
+	LegoCharacterData* data = GetData(p_roi->GetName());
+
+	if (data == NULL) {
+		return FALSE;
+	}
+
+	LegoCharacterData::Part& part = data->m_parts[1];
+
+	part.m_unk0x08++;
+	MxU8 unk0x00 = part.m_unk0x00[part.m_unk0x08];
+
+	if (unk0x00 == 0xff) {
+		part.m_unk0x08 = 0;
+		unk0x00 = part.m_unk0x00[part.m_unk0x08];
+	}
+
+	LegoROI* childROI = FUN_10084cf0(p_roi, g_characterLODs[1].m_name);
+
+	if (childROI != NULL) {
+		char lodName[256];
+
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_unk0x04[unk0x00]);
+		MxS32 lodSize = lodList->Size();
+		sprintf(lodName, "%s%d", p_roi->GetName(), g_unk0x100fc4ec++);
+		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+
+		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
+		LegoFloat red, green, blue, alpha;
+		LegoROI::FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
+
+		for (MxS32 i = 0; i < lodSize; i++) {
+			LegoLOD* lod = (LegoLOD*) (*lodList)[i];
+			LegoLOD* clone = lod->Clone(renderer);
+			clone->FUN_100aacb0(red, green, blue, alpha);
+			dupLodList->PushBack(clone);
+		}
+
+		lodList->Release();
+		lodList = dupLodList;
+
+		if (childROI->GetUnknown0xe0() >= 0) {
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(childROI);
+		}
+
+		childROI->SetLODList(lodList);
+		lodList->Release();
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10085140
