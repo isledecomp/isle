@@ -301,11 +301,11 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	roi->SetComp(comp);
 
 	for (i = 0; i < _countof(g_characterLODs) - 1; i++) {
+		char lodName[256];
 		ViewLODList *lodList, *dupLodList;
 		LegoROI* childROI;
 		MxS32 lodSize;
 		const char* parentName;
-		char lodName[256];
 
 		LegoCharacterData::Part& part = data->m_parts[i];
 
