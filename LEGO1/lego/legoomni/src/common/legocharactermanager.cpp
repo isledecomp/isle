@@ -305,7 +305,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		LegoROI* childROI;
 		MxS32 lodSize;
 		const char* parentName;
-		char lodName[64];
+		char lodName[256];
 
 		LegoCharacterData::Part& part = data->m_parts[i];
 
@@ -322,7 +322,9 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		dupLodList = lodManager->Create(lodName, lodSize);
 
 		for (j = 0; j < lodSize; j++) {
-			dupLodList->PushBack(((LegoLOD*) (*lodList)[j])->Clone(renderer));
+			LegoLOD* lod = (LegoLOD*) (*lodList)[j];
+			LegoLOD* clone = lod->Clone(renderer);
+			dupLodList->PushBack(clone);
 		}
 
 		lodList->Release();
