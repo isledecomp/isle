@@ -257,7 +257,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	BoundingBox boundingBox;
 	MxMatrix mat;
 	CompoundObject* comp;
-	MxS32 i, j;
+	MxS32 i;
 
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
@@ -302,13 +302,9 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 
 	for (i = 0; i < _countof(g_characterLODs) - 1; i++) {
 		char lodName[256];
-		ViewLODList *lodList, *dupLodList;
-		LegoROI* childROI;
-		MxS32 lodSize;
-		const char* parentName;
-
 		LegoCharacterData::Part& part = data->m_parts[i];
 
+		const char* parentName;
 		if (i == 0 || i == 1) {
 			parentName = part.m_unk0x04[part.m_unk0x00[part.m_unk0x08]];
 		}
@@ -316,12 +312,12 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 			parentName = g_characterLODs[i + 1].m_parentName;
 		}
 
-		lodList = lodManager->Lookup(parentName);
-		lodSize = lodList->Size();
+		ViewLODList* lodList = lodManager->Lookup(parentName);
+		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_key, i);
-		dupLodList = lodManager->Create(lodName, lodSize);
+		ViewLODList* dupLodList = lodManager->Create(lodName, lodSize);
 
-		for (j = 0; j < lodSize; j++) {
+		for (MxS32 j = 0; j < lodSize; j++) {
 			LegoLOD* lod = (LegoLOD*) (*lodList)[j];
 			LegoLOD* clone = lod->Clone(renderer);
 			dupLodList->PushBack(clone);
@@ -330,7 +326,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		lodList->Release();
 		lodList = dupLodList;
 
-		childROI = new LegoROI(renderer, lodList);
+		LegoROI* childROI = new LegoROI(renderer, lodList);
 		lodList->Release();
 
 		childROI->SetName(g_characterLODs[i + 1].m_name);
