@@ -397,9 +397,23 @@ void LegoExtraActor::SetWorldSpeed(MxFloat p_worldSpeed)
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
 }
 
-// STUB: LEGO1 0x1002b630
+// FUNCTION: LEGO1 0x1002b630
 void LegoExtraActor::VTable0xc4()
 {
+	if (m_curAnim != 0) {
+		return;
+	}
+
+	if (m_worldSpeed > -0.001 || m_worldSpeed < 0.001) {
+		MxU16 name = *((MxU16*) m_roi->GetName());
+		MxBool b = name == TWOCC('m', 'a') || name == TWOCC('p', 'a');
+
+		if (b) {
+			float duration = m_animMaps[m_curAnim]->GetDuration();
+			MxMatrix matrix(m_unk0xec);
+			LegoAnimActor::FUN_1001c360(duration, matrix);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1002b6f0
