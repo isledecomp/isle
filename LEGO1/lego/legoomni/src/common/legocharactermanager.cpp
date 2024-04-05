@@ -486,22 +486,20 @@ MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
 	LegoROI* childROI = FUN_10084cf0(p_roi, g_characterLODs[1].m_name);
 
 	if (childROI != NULL) {
-		Tgl::Renderer* renderer;
-		ViewLODList *lodList, *dupLodList;
-		LegoFloat red, green, blue, alpha;
-		MxS32 lodSize;
 		char lodName[256];
 
-		lodList = GetViewLODListManager()->Lookup(part.m_unk0x04[unk0x00]);
-		lodSize = lodList->Size();
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_unk0x04[unk0x00]);
+		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_roi->GetName(), g_unk0x100fc4ec++);
-		dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
 
-		renderer = VideoManager()->GetRenderer();
+		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
+		LegoFloat red, green, blue, alpha;
 		LegoROI::FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
 
-		for (MxS32 j = 0; j < lodSize; j++) {
-			LegoLOD* clone = ((LegoLOD*) (*lodList)[j])->Clone(renderer);
+		for (MxS32 i = 0; i < lodSize; i++) {
+			LegoLOD* lod = (LegoLOD*) (*lodList)[i];
+			LegoLOD* clone = lod->Clone(renderer);
 			clone->FUN_100aacb0(red, green, blue, alpha);
 			dupLodList->PushBack(clone);
 		}
