@@ -327,6 +327,7 @@ void LegoExtraActor::Restart()
 void LegoExtraActor::VTable0x70(float p_time)
 {
 	LegoAnimActorStruct* laas = NULL;
+
 	switch (m_whichAnim) {
 	case 0:
 		LegoAnimActor::VTable0x70(p_time);
@@ -356,19 +357,23 @@ void LegoExtraActor::VTable0x70(float p_time)
 			break;
 		}
 	}
+
 	if (laas) {
-		float duration2;
-		float duration = laas->GetDuration();
+		float duration2, duration;
+		duration = laas->GetDuration();
 		duration2 = p_time - (m_scheduledTime - duration);
+
 		if (duration2 < 0) {
 			duration2 = 0;
 		}
 		else if (duration2 > duration) {
 			duration2 = duration;
 		}
+
 		MxMatrix matrix(m_roi->GetLocal2World());
 		LegoTreeNode* root = laas->m_AnimTreePtr->GetRoot();
 		MxS32 count = root->GetNumChildren();
+
 		for (MxS32 i = 0; i < count; i++) {
 			LegoROI::FUN_100a8e80(root->GetChild(i), matrix, duration2, laas->m_roiMap);
 		}
