@@ -252,38 +252,25 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 		LegoCharacter* character = (*it).second;
 
 		if (character->m_roi == p_roi) {
-			if (character->RemoveRef() != 0) {
-				return;
+			if (character->RemoveRef() == 0) {
+				LegoEntity* entity = character->m_roi->GetEntity();
+
+				if (entity != NULL) {
+					entity->SetROI(NULL, FALSE, FALSE);
+				}
+
+				RemoveROI(character->m_roi);
+
+				delete[] const_cast<char*>((*it).first);
+				delete (*it).second;
+
+				m_characters->erase(it);
+
+				if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
+					entity->ClearFlag(LegoEntity::c_bit2);
+					delete entity;
+				}
 			}
-
-			LegoEntity* entity = character->m_roi->GetEntity();
-
-			if (entity != NULL) {
-				entity->SetROI(NULL, FALSE, FALSE);
-			}
-
-			RemoveROI(character->m_roi);
-
-			delete[] const_cast<char*>((*it).first);
-			delete (*it).second;
-
-			m_characters->erase(it);
-
-			if (entity == NULL) {
-				return;
-			}
-
-			if (!entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-				return;
-			}
-
-			entity->ClearFlag(LegoEntity::c_bit2);
-
-			if (entity == NULL) {
-				return;
-			}
-
-			delete entity;
 
 			return;
 		}
