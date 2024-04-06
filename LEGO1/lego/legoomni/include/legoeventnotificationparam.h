@@ -40,6 +40,7 @@ public:
 	{
 	}
 
+	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetModifier() { return m_modifier; }
 	inline MxU8 GetKey() const { return m_key; }
 

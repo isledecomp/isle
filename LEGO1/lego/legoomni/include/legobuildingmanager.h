@@ -34,6 +34,7 @@ public:
 	MxResult Load(LegoStorage* p_storage);
 	MxBool FUN_1002fdb0(LegoEntity* p_entity);
 	MxU32 FUN_1002ff40(LegoROI*, MxBool);
+	void FUN_10030000(LegoEntity* p_entity);
 	void FUN_10030590();
 
 	// SYNTHETIC: LEGO1 0x1002f940

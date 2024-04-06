@@ -55,13 +55,13 @@ public:
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
-	virtual void VTable0x34(MxBool p_und); // vtable+0x34
-	virtual void VTable0x38();             // vtable+0x38
-	virtual void VTable0x3c();             // vtable+0x3c
-	virtual void VTable0x40();             // vtable+0x40
-	virtual void VTable0x44();             // vtable+0x44
-	virtual void VTable0x48();             // vtable+0x48
-	virtual void VTable0x4c();             // vtable+0x4c
+	virtual void VTable0x34(MxBool p_und);   // vtable+0x34
+	virtual void VTable0x38();               // vtable+0x38
+	virtual void VTable0x3c();               // vtable+0x3c
+	virtual void VTable0x40();               // vtable+0x40
+	virtual void VTable0x44();               // vtable+0x44
+	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48
+	virtual void VTable0x4c();               // vtable+0x4c
 
 	void FUN_10010c30();
 	void FUN_100114e0(MxU8 p_unk0x59);
@@ -97,8 +97,8 @@ protected:
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	Extra::ActionType m_actionType; // 0x5c
-	char* m_actionArgString;        // 0x60
-	MxS32 m_actionArgNumber;        // 0x64
+	char* m_filename;               // 0x60
+	MxS32 m_targetEntityId;         // 0x64
 };
 
 // SYNTHETIC: LEGO1 0x1000c3b0

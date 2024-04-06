@@ -3,6 +3,7 @@
 #include "define.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
+#include "legogamestate.h"
 #include "legoplantmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
@@ -21,11 +22,11 @@ void LegoEntity::Init()
 	m_worldSpeed = 0;
 	m_roi = NULL;
 	m_cameraFlag = FALSE;
-	m_actionArgString = NULL;
+	m_filename = NULL;
 	m_unk0x10 = 0;
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
-	m_actionArgNumber = -1;
+	m_targetEntityId = -1;
 	m_unk0x59 = 4;
 }
 
@@ -96,7 +97,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 		}
 	}
 
-	delete[] m_actionArgString;
+	delete[] m_filename;
 	Init();
 }
 
@@ -229,11 +230,11 @@ void LegoEntity::ParseAction(char* p_extra)
 		if (m_actionType != Extra::ActionType::e_exit) {
 			char* token = strtok(NULL, g_parseExtraTokens);
 
-			m_actionArgString = new char[strlen(token) + 1];
-			strcpy(m_actionArgString, token);
+			m_filename = new char[strlen(token) + 1];
+			strcpy(m_filename, token);
 
 			if (m_actionType != Extra::ActionType::e_run) {
-				m_actionArgNumber = atoi(strtok(NULL, g_parseExtraTokens));
+				m_targetEntityId = atoi(strtok(NULL, g_parseExtraTokens));
 			}
 		}
 	}
@@ -308,7 +309,7 @@ void LegoEntity::VTable0x44()
 }
 
 // STUB: LEGO1 0x10011420
-void LegoEntity::VTable0x48()
+void LegoEntity::VTable0x48(LegoROI* p_roi)
 {
 	// TODO
 }
@@ -325,10 +326,61 @@ void LegoEntity::FUN_100114e0(MxU8 p_unk0x59)
 	m_unk0x59 = p_unk0x59;
 }
 
-// STUB: LEGO1 0x100114f0
+// FUNCTION: LEGO1 0x100114f0
 MxLong LegoEntity::Notify(MxParam& p_param)
 {
-	// TODO
+	LegoEventNotificationParam& param = (LegoEventNotificationParam&) p_param;
 
-	return 0;
+	if (param.GetNotification() != c_notificationType11) {
+		return 0;
+	}
+
+	if (m_actionType != Extra::e_unknown) {
+#ifdef COMPAT_MODE
+		{
+			MxAtomId atom(m_filename, e_lowerCase2);
+			InvokeAction(m_actionType, atom, m_targetEntityId, this);
+		}
+#else
+		InvokeAction(m_actionType, MxAtomId(m_filename, e_lowerCase2), m_targetEntityId, this);
+#endif
+	}
+	else {
+		switch (GameState()->GetActorId()) {
+		case 1:
+			if (GameState()->GetCurrentAct() != LegoGameState::e_act2 &&
+				GameState()->GetCurrentAct() != LegoGameState::e_act3) {
+				VTable0x3c();
+			}
+			break;
+		case 2:
+			VTable0x40();
+			break;
+		case 3:
+			VTable0x44();
+			break;
+		case 4:
+			VTable0x48(param.GetROI());
+			break;
+		case 5:
+			VTable0x4c();
+			break;
+		case 6:
+			switch (m_unk0x59) {
+			case 0:
+			case 1:
+				break;
+			case 2:
+				PlantManager()->FUN_10026c50(this);
+				break;
+			case 3:
+				BuildingManager()->FUN_10030000(this);
+				break;
+			case 4:
+				break;
+			}
+		}
+	}
+
+	return 1;
 }
