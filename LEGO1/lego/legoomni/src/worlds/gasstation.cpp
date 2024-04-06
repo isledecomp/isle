@@ -312,36 +312,41 @@ MxLong GasStation::HandleButtonDown(LegoControlManagerEvent& p_param)
 // FUNCTION: LEGO1 0x10005b20
 MxLong GasStation::HandleClick(LegoControlManagerEvent& p_param)
 {
-	switch (p_param.GetClickedObjectId()) {
-	case GarageScript::c_LeftArrow_Ctl:
-	case GarageScript::c_RightArrow_Ctl:
-		m_state->m_unk0x14.m_unk0x00 = 0;
-		m_destLocation = LegoGameState::Area::e_garadoor;
+	if (p_param.GetUnknown0x28() == 1) {
+		MxDSAction action;
 
-		m_state->FUN_10006490();
-		m_radio.Stop();
-		BackgroundAudioManager()->Stop();
-		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-		break;
-	case GarageScript::c_Info_Ctl:
-		m_state->m_unk0x14.m_unk0x00 = 0;
-		m_destLocation = LegoGameState::Area::e_infomain;
+		switch (p_param.GetClickedObjectId()) {
+		case GarageScript::c_LeftArrow_Ctl:
+		case GarageScript::c_RightArrow_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_garadoor;
 
-		m_state->FUN_10006490();
-		m_radio.Stop();
-		BackgroundAudioManager()->Stop();
-		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-		break;
-	case GarageScript::c_Buggy_Ctl:
-		m_state->m_unk0x14.m_unk0x00 = 0;
-		m_destLocation = LegoGameState::Area::e_dunecarbuild;
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case GarageScript::c_Info_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_infomain;
 
-		m_state->FUN_10006490();
-		m_radio.Stop();
-		BackgroundAudioManager()->Stop();
-		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-		break;
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case GarageScript::c_Buggy_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_dunecarbuild;
+
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		}
 	}
+
 	return 1;
 }
 
