@@ -236,10 +236,49 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 	return 0;
 }
 
-// STUB: LEGO1 0x10083db0
+// FUNCTION: LEGO1 0x10083db0
 void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 {
-	// TODO
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it;
+
+	for (it = m_characters->begin(); it != m_characters->end(); it++) {
+		character = (*it).second;
+
+		if (character->m_roi == p_roi) {
+			if (character->RemoveRef() == 0) {
+				LegoCharacterData* data = GetData(character->m_roi->GetName());
+				LegoEntity* entity = character->m_roi->GetEntity();
+
+				if (entity != NULL) {
+					entity->SetROI(NULL, FALSE, FALSE);
+				}
+
+				RemoveROI(character->m_roi);
+
+				delete[] const_cast<char*>((*it).first);
+				delete (*it).second;
+
+				m_characters->erase(it);
+
+				if (data != NULL) {
+					if (data->m_actor != NULL) {
+						data->m_actor->ClearFlag(LegoEntity::c_bit2);
+						delete data->m_actor;
+					}
+					else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
+						entity->ClearFlag(LegoEntity::c_bit2);
+						delete entity;
+					}
+
+					data->m_roi = NULL;
+					data->m_actor = NULL;
+				}
+			}
+
+			return;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10083f10
