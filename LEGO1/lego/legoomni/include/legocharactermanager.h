@@ -25,8 +25,17 @@ struct LegoCharacter {
 		m_roi = p_roi;
 		m_refCount = 1;
 	}
+	~LegoCharacter() { delete m_roi; }
 
 	inline void AddRef() { m_refCount++; }
+	inline MxU32 RemoveRef()
+	{
+		if (m_refCount != 0) {
+			m_refCount--;
+		}
+
+		return m_refCount;
+	}
 
 	LegoROI* m_roi;   // 0x00
 	MxU32 m_refCount; // 0x04
@@ -65,6 +74,7 @@ public:
 
 private:
 	LegoROI* CreateROI(const char* p_key);
+	void RemoveROI(LegoROI* p_roi);
 	LegoROI* FUN_10084cf0(LegoROI* p_roi, const char* p_name);
 	MxResult FUN_10085870(LegoROI* p_roi);
 

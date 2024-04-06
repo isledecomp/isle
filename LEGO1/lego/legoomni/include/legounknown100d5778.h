@@ -26,7 +26,7 @@ public:
 private:
 	undefined m_unk0x4[4];          // 0x04
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x08
-	LegoROI* m_unk0xc;              // 0x0c
+	LegoROI* m_unk0x0c;             // 0x0c
 	undefined4 m_unk0x10;           // 0x10
 	MxBool m_unk0x14;               // 0x14
 	MxBool m_unk0x15;               // 0x15

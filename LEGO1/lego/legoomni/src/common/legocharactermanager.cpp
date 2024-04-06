@@ -242,10 +242,58 @@ void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 	// TODO
 }
 
-// STUB: LEGO1 0x10083f10
+// FUNCTION: LEGO1 0x10083f10
 void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 {
-	// TODO
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it;
+
+	for (it = m_characters->begin(); it != m_characters->end(); it++) {
+		LegoCharacter* character = (*it).second;
+
+		if (character->m_roi == p_roi) {
+			if (character->RemoveRef() != 0) {
+				return;
+			}
+
+			LegoEntity* entity = character->m_roi->GetEntity();
+
+			if (entity != NULL) {
+				entity->SetROI(NULL, FALSE, FALSE);
+			}
+
+			RemoveROI(character->m_roi);
+
+			delete[] const_cast<char*>((*it).first);
+			delete (*it).second;
+
+			m_characters->erase(it);
+
+			if (entity == NULL) {
+				return;
+			}
+
+			if (!entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
+				return;
+			}
+
+			entity->ClearFlag(LegoEntity::c_bit2);
+
+			if (entity == NULL) {
+				return;
+			}
+
+			delete entity;
+
+			return;
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10084010
+void LegoCharacterManager::RemoveROI(LegoROI* p_roi)
+{
+	VideoManager()->Get3DManager()->Remove(*p_roi);
 }
 
 // FUNCTION: LEGO1 0x10084030
