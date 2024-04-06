@@ -28,12 +28,12 @@ LegoInputManager::LegoInputManager()
 	m_world = NULL;
 	m_camera = NULL;
 	m_eventQueue = NULL;
-	m_unk0x80 = 0;
+	m_unk0x80 = FALSE;
 	m_autoDragTimerID = 0;
-	m_unk0x6c = 0;
-	m_unk0x70 = 0;
+	m_x = 0;
+	m_y = 0;
 	m_controlManager = NULL;
-	m_unk0x81 = 0;
+	m_unk0x81 = FALSE;
 	m_unk0x88 = FALSE;
 	m_directInput = NULL;
 	m_directInputDevice = NULL;
@@ -369,7 +369,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 		if (!Lego()->IsTimerRunning() || p_param.GetKey() == 0x13) {
 			if (p_param.GetKey() == 0x10) {
 				if (m_unk0x195) {
-					m_unk0x80 = 0;
+					m_unk0x80 = FALSE;
 					p_param.SetType(c_notificationDrag);
 
 					if (m_camera) {
@@ -446,8 +446,8 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 					MxBool result = m_controlManager->FUN_10029210(p_param, NULL);
 					StopAutoDragTimer();
 
-					m_unk0x80 = 0;
-					m_unk0x81 = 0;
+					m_unk0x80 = FALSE;
+					m_unk0x81 = FALSE;
 					return result;
 				}
 			}
@@ -479,11 +479,86 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x1005cdf0
+// FUNCTION: LEGO1 0x1005cdf0
 MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 {
-	// TODO
-	return FALSE;
+	MxBool result = FALSE;
+
+	switch (p_param.GetNotification()) {
+	case c_notificationButtonUp:
+		StopAutoDragTimer();
+
+		if (m_unk0x80) {
+			p_param.SetType(c_notificationDrag);
+			result = TRUE;
+		}
+		else if (m_unk0x81) {
+			p_param.SetX(m_x);
+			p_param.SetY(m_y);
+			p_param.SetType(c_notificationType11);
+			result = TRUE;
+		}
+
+		m_unk0x80 = FALSE;
+		m_unk0x81 = FALSE;
+		break;
+	case c_notificationButtonDown:
+		m_x = p_param.GetX();
+		m_y = p_param.GetY();
+		m_unk0x80 = FALSE;
+		m_unk0x81 = TRUE;
+		StartAutoDragTimer();
+		break;
+	case c_notificationMouseMove:
+		if (m_unk0x195) {
+			p_param.SetModifier(1);
+		}
+
+		if ((m_unk0x195 || m_unk0x81) && p_param.GetModifier() & 1) {
+			if (!m_unk0x80) {
+				if (m_unk0x195) {
+					m_x = p_param.GetX();
+					m_y = p_param.GetY();
+				}
+
+				MxS32 diffX = p_param.GetX() - m_x;
+				MxS32 diffY = p_param.GetY() - m_y;
+
+				if (m_unk0x195 || (diffX * diffX) + (diffY * diffY) > m_unk0x74) {
+					StopAutoDragTimer();
+					m_unk0x80 = TRUE;
+					p_param.SetType(c_notificationDragEnd);
+					result = TRUE;
+					p_param.SetX(m_x);
+					p_param.SetY(m_y);
+				}
+			}
+			else {
+				p_param.SetType(c_notificationDragStart);
+				result = TRUE;
+			}
+		}
+		break;
+	case c_notificationTimer:
+		if (p_param.GetModifier() == m_autoDragTimerID) {
+			StopAutoDragTimer();
+
+			if (m_unk0x81) {
+				m_unk0x80 = TRUE;
+				p_param.SetX(m_x);
+				p_param.SetY(m_y);
+				p_param.SetModifier(1);
+				p_param.SetType(c_notificationDragEnd);
+				result = 1;
+			}
+			else {
+				m_unk0x80 = FALSE;
+			}
+		}
+		break;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1005cfb0

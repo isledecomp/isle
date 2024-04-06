@@ -136,13 +136,13 @@ private:
 	LegoCameraController* m_camera;          // 0x60
 	LegoWorld* m_world;                      // 0x64
 	LegoEventQueue* m_eventQueue;            // 0x68
-	undefined4 m_unk0x6c;                    // 0x6c
-	undefined4 m_unk0x70;                    // 0x70
-	undefined4 m_unk0x74;                    // 0x74
+	MxS32 m_x;                               // 0x6c
+	MxS32 m_y;                               // 0x70
+	MxS32 m_unk0x74;                         // 0x74
 	UINT m_autoDragTimerID;                  // 0x78
 	UINT m_autoDragTime;                     // 0x7c
-	undefined m_unk0x80;                     // 0x80
-	undefined m_unk0x81;                     // 0x81
+	MxBool m_unk0x80;                        // 0x80
+	MxBool m_unk0x81;                        // 0x81
 	LegoControlManager* m_controlManager;    // 0x84
 	MxBool m_unk0x88;                        // 0x88
 	IDirectInput* m_directInput;             // 0x8c
