@@ -33,6 +33,7 @@ public:
 	// GasStationState::`scalar deleting destructor'
 
 	void FUN_10006430(undefined4);
+	void FUN_10006490();
 
 	friend class GasStation;
 

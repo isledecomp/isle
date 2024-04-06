@@ -13,11 +13,17 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
+#include "mxtimer.h"
+#include "mxtransitionmanager.h"
+#include "radio.h"
 
 DECOMP_SIZE_ASSERT(GasStation, 0x128)
 
 // GLOBAL: LEGO1 0x100f0160
 undefined4 g_unk0x100f0160 = 3;
+
+// GLOBAL: LEGO1 0x100f0164
+MxBool g_trackLedEnabled = FALSE;
 
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
@@ -27,11 +33,11 @@ GasStation::GasStation()
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
 	m_unk0x104 = 0;
-	m_unk0x114 = 0;
+	m_unk0x114 = FALSE;
 	m_unk0x106 = 0;
 	m_unk0x10c = 0;
-	m_unk0x115 = 0;
-	m_unk0x110 = 0;
+	m_unk0x115 = FALSE;
+	m_trackLedTimer = 0;
 
 	NotificationManager()->Register(this);
 }
@@ -285,10 +291,14 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10005920
+// FUNCTION: LEGO1 0x10005920
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
-	// TODO
+	if (p_key == ' ' && g_unk0x100f0160 == 0 && this->m_unk0x106 != 0) {
+		m_state->FUN_10006490();
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -299,11 +309,45 @@ MxLong GasStation::HandleButtonDown(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10005b20
+// FUNCTION: LEGO1 0x10005b20
 MxLong GasStation::HandleClick(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return 0;
+	if (p_param.GetUnknown0x28() == 1) {
+		MxDSAction action;
+
+		switch (p_param.GetClickedObjectId()) {
+		case GarageScript::c_LeftArrow_Ctl:
+		case GarageScript::c_RightArrow_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_garadoor;
+
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case GarageScript::c_Info_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_infomain;
+
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		case GarageScript::c_Buggy_Ctl:
+			m_state->m_unk0x14.m_unk0x00 = 0;
+			m_destLocation = LegoGameState::Area::e_dunecarbuild;
+
+			m_state->FUN_10006490();
+			m_radio.Stop();
+			BackgroundAudioManager()->Stop();
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+			break;
+		}
+	}
+
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10005c40
@@ -322,17 +366,53 @@ void GasStation::Enable(MxBool p_enable)
 	}
 }
 
-// STUB: LEGO1 0x10005c90
+// FUNCTION: LEGO1 0x10005c90
 MxResult GasStation::Tickle()
 {
-	// TODO
+	if (!m_worldStarted) {
+		LegoWorld::Tickle();
+		return SUCCESS;
+	}
+
+	if (g_unk0x100f0160 != 0) {
+		g_unk0x100f0160--;
+	}
+
+	MxLong time = Timer()->GetTime();
+
+	if (m_unk0x114) {
+		if (time - m_unk0x10c > 15000) {
+			m_unk0x10c = time;
+			if (m_unk0x104 == 1) {
+				m_unk0x104 = 2;
+			}
+			else if (m_unk0x104 != 0) {
+				m_unk0x104 = 0;
+				MxDSAction action;
+				m_state->m_unk0x14.m_unk0x00 = 9;
+				PlayAction(GarageScript::c_wgs031nu_RunAnim);
+				m_unk0x106 = 1;
+			}
+		}
+	}
+
+	if (m_unk0x115) {
+		if (time - m_trackLedTimer > 300) {
+			m_trackLedTimer = time;
+			g_trackLedEnabled = !g_trackLedEnabled;
+			m_trackLedBitmap->Enable(g_trackLedEnabled);
+		}
+	}
 
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10005e70
+// FUNCTION: LEGO1 0x10005e70
 MxBool GasStation::VTable0x64()
 {
-	// TODO
-	return FALSE;
+	m_radio.Stop();
+	m_state->FUN_10006490();
+	m_state->m_unk0x14.m_unk0x00 = 0;
+	m_destLocation = LegoGameState::Area::e_infomain;
+	return TRUE;
 }
