@@ -33,10 +33,10 @@ GasStation::GasStation()
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
 	m_unk0x104 = 0;
-	m_unk0x114 = 0;
+	m_unk0x114 = FALSE;
 	m_unk0x106 = 0;
 	m_unk0x10c = 0;
-	m_unk0x115 = 0;
+	m_unk0x115 = FALSE;
 	m_trackLedTimer = 0;
 
 	NotificationManager()->Register(this);
@@ -379,7 +379,8 @@ MxResult GasStation::Tickle()
 	}
 
 	MxLong time = Timer()->GetTime();
-	if (m_unk0x114 != 0) {
+
+	if (m_unk0x114) {
 		if (time - m_unk0x10c > 15000) {
 			m_unk0x10c = time;
 			if (m_unk0x104 == 1) {
@@ -387,13 +388,15 @@ MxResult GasStation::Tickle()
 			}
 			else if (m_unk0x104 != 0) {
 				m_unk0x104 = 0;
+				MxDSAction action;
 				m_state->m_unk0x14.m_unk0x00 = 9;
 				PlayAction(GarageScript::c_wgs031nu_RunAnim);
 				m_unk0x106 = 1;
 			}
 		}
 	}
-	if (m_unk0x115 != 0) {
+
+	if (m_unk0x115) {
 		if (time - m_trackLedTimer > 300) {
 			m_trackLedTimer = time;
 			g_trackLedEnabled = !g_trackLedEnabled;
