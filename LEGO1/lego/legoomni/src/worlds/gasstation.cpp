@@ -151,7 +151,7 @@ void GasStation::ReadyWorld()
 		}
 
 		if (m_state->m_unk0x18 < 5) {
-			m_state->m_unk0x18 += 1;
+			m_state->m_unk0x18++;
 		}
 		break;
 	}
@@ -176,7 +176,7 @@ void GasStation::ReadyWorld()
 		}
 
 		if (m_state->m_unk0x1a < 5) {
-			m_state->m_unk0x1a += 1;
+			m_state->m_unk0x1a++;
 		}
 		break;
 	}
@@ -201,7 +201,7 @@ void GasStation::ReadyWorld()
 		}
 
 		if (m_state->m_unk0x1c < 5) {
-			m_state->m_unk0x1c += 1;
+			m_state->m_unk0x1c++;
 		}
 		break;
 	}
@@ -226,7 +226,7 @@ void GasStation::ReadyWorld()
 		}
 
 		if (m_state->m_unk0x1e < 5) {
-			m_state->m_unk0x1e += 1;
+			m_state->m_unk0x1e++;
 		}
 		break;
 	}
@@ -251,7 +251,7 @@ void GasStation::ReadyWorld()
 		}
 
 		if (m_state->m_unk0x20 < 5) {
-			m_state->m_unk0x20 += 1;
+			m_state->m_unk0x20++;
 		}
 		break;
 	}
