@@ -249,7 +249,7 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 	LegoCharacterMap::iterator it;
 
 	for (it = m_characters->begin(); it != m_characters->end(); it++) {
-		LegoCharacter* character = (*it).second;
+		character = (*it).second;
 
 		if (character->m_roi == p_roi) {
 			if (character->RemoveRef() == 0) {
