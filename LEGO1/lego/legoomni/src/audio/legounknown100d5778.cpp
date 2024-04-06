@@ -22,7 +22,7 @@ LegoUnknown100d5778::~LegoUnknown100d5778()
 void LegoUnknown100d5778::Init()
 {
 	m_dsBuffer = NULL;
-	m_unk0xc = NULL;
+	m_unk0x0c = NULL;
 	m_unk0x10 = 0;
 	m_unk0x18 = 0;
 	m_unk0x14 = FALSE;
@@ -57,12 +57,12 @@ void LegoUnknown100d5778::Destroy()
 		m_dsBuffer = NULL;
 	}
 
-	if (m_unk0x14 && m_unk0xc && CharacterManager()) {
+	if (m_unk0x14 && m_unk0x0c && CharacterManager()) {
 		if (m_unk0x15) {
-			CharacterManager()->FUN_10083db0(m_unk0xc);
+			CharacterManager()->FUN_10083db0(m_unk0x0c);
 		}
 		else {
-			CharacterManager()->FUN_10083f10(m_unk0xc);
+			CharacterManager()->FUN_10083f10(m_unk0x0c);
 		}
 	}
 
