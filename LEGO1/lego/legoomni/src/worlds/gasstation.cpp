@@ -125,7 +125,7 @@ void GasStation::ReadyWorld()
 	m_currentActorId = CurrentActor()->GetActorId();
 
 	switch (m_currentActorId) {
-	case 1: {
+	case 1:
 		switch (m_state->m_unk0x18) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -153,9 +153,10 @@ void GasStation::ReadyWorld()
 		if (m_state->m_unk0x18 < 5) {
 			m_state->m_unk0x18++;
 		}
+
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	}
-	case 2: {
+	case 2:
 		switch (m_state->m_unk0x1a) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -178,9 +179,10 @@ void GasStation::ReadyWorld()
 		if (m_state->m_unk0x1a < 5) {
 			m_state->m_unk0x1a++;
 		}
+
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	}
-	case 3: {
+	case 3:
 		switch (m_state->m_unk0x1c) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -203,9 +205,10 @@ void GasStation::ReadyWorld()
 		if (m_state->m_unk0x1c < 5) {
 			m_state->m_unk0x1c++;
 		}
+
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	}
-	case 4: {
+	case 4:
 		switch (m_state->m_unk0x1e) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -228,9 +231,10 @@ void GasStation::ReadyWorld()
 		if (m_state->m_unk0x1e < 5) {
 			m_state->m_unk0x1e++;
 		}
+
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	}
-	case 5: {
+	case 5:
 		switch (m_state->m_unk0x20) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -253,11 +257,13 @@ void GasStation::ReadyWorld()
 		if (m_state->m_unk0x20 < 5) {
 			m_state->m_unk0x20++;
 		}
+
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
+		break;
+	default:
+		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
 	}
-	}
-
-	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
 // FUNCTION: LEGO1 0x10005590

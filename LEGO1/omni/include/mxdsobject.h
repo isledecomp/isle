@@ -44,9 +44,12 @@ public:
 		return !strcmp(p_name, MxDSObject::ClassName()) || MxCore::IsA(p_name);
 	} // vtable+10;
 
-	virtual undefined4 VTable0x14();                                                // vtable+14;
-	virtual MxU32 GetSizeOnDisk();                                                  // vtable+18;
-	virtual void Deserialize(MxU8*& p_source, MxS16 p_unk0x24);                     // vtable+1c;
+	virtual undefined4 VTable0x14();                            // vtable+14;
+	virtual MxU32 GetSizeOnDisk();                              // vtable+18;
+	virtual void Deserialize(MxU8*& p_source, MxS16 p_unk0x24); // vtable+1c;
+
+	// FUNCTION: ISLE 0x401c40
+	// FUNCTION: LEGO1 0x10005530
 	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
 
 	inline Type GetType() const { return (Type) this->m_type; }
@@ -80,11 +83,5 @@ private:
 };
 
 MxDSObject* DeserializeDSObjectDispatch(MxU8*&, MxS16);
-
-// FUNCTION: ISLE 0x401c40
-// MxDSObject::SetAtomId
-
-// FUNCTION: LEGO1 0x10005530
-// MxDSObject::SetAtomId
 
 #endif // MXDSOBJECT_H
