@@ -56,7 +56,7 @@ private:
 	undefined2 m_unk0x106;              // 0x106
 	MxStillPresenter* m_trackLedBitmap; // 0x108
 	undefined4 m_unk0x10c;              // 0x10c
-	undefined4 m_unk0x110;              // 0x110
+	undefined4 m_trackLedTimer;         // 0x110
 	undefined m_unk0x114;               // 0x114
 	undefined m_unk0x115;               // 0x115
 	Radio m_radio;                      // 0x118

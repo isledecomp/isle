@@ -29,3 +29,9 @@ void GasStationState::FUN_10006430(undefined4)
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10006490
+void GasStationState::FUN_10006490()
+{
+	// TODO
+}
