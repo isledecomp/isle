@@ -32,16 +32,18 @@ public:
 	// SYNTHETIC: LEGO1 0x10006290
 	// GasStationState::`scalar deleting destructor'
 
+	void FUN_10006430(undefined4);
+
 	friend class GasStation;
 
 private:
 	undefined4 m_unk0x08[3]; // 0x08
 	Unknown0x14 m_unk0x14;   // 0x14
-	undefined2 m_unk0x18;    // 0x18
-	undefined2 m_unk0x1a;    // 0x1a
-	undefined2 m_unk0x1c;    // 0x1c
-	undefined2 m_unk0x1e;    // 0x1e
-	undefined2 m_unk0x20;    // 0x20
+	MxS16 m_unk0x18;         // 0x18
+	MxS16 m_unk0x1a;         // 0x1a
+	MxS16 m_unk0x1c;         // 0x1c
+	MxS16 m_unk0x1e;         // 0x1e
+	MxS16 m_unk0x20;         // 0x20
 };
 
 #endif // GASSTATIONSTATE_H
