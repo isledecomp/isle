@@ -2,16 +2,31 @@
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
-// STUB: LEGO1 0x1002d700
-LegoPathActor::LegoPathActor()
+// FUNCTION: LEGO1 0x1002d700
+LegoPathActor::LegoPathActor() : m_unk0x8c()
 {
-	// TODO
+	m_boundary = NULL;
+	m_actorTime = 0;
+	m_lastTime = 0;
+	m_unk0x7c = 0;
+	m_userNavFlag = FALSE;
+	m_state = 0;
+	m_unk0x134 = NULL;
+	m_controller = NULL;
+	m_unk0xe8 = 0;
+	m_unk0x148 = 0;
+	m_unk0x14c = 0;
+	m_unk0x140 = 0.0099999998f;
+	m_unk0x144 = 0.80000001f;
+	m_unk0x150 = 2.0f;
 }
 
 // STUB: LEGO1 0x1002d820
 LegoPathActor::~LegoPathActor()
 {
-	// TODO
+	if (m_unk0x134) {
+		delete m_unk0x134;
+	}
 }
 
 // STUB: LEGO1 0x1002d8d0
@@ -91,4 +106,17 @@ void LegoPathActor::VTable0xa4(MxU8&, MxS32&)
 void LegoPathActor::VTable0xa8()
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x1009a0f0
+LegoActorStruct::LegoActorStruct()
+{
+	for (int i = 0; i < 4; i++) {
+		m_unk0x00[i].Clear();
+	}
+}
+
+// FUNCTION: LEGO1 0x1009a130
+LegoActorStruct::~LegoActorStruct()
+{
 }

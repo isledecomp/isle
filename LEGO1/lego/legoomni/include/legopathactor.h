@@ -8,6 +8,13 @@
 
 class LegoPathController;
 
+struct LegoActorStruct {
+	LegoActorStruct();
+	~LegoActorStruct();
+
+	Mx3DPointFloat m_unk0x00[4]; // 0x00
+};
+
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
@@ -101,16 +108,15 @@ protected:
 	MxFloat m_actorTime;              // 0x80
 	MxFloat m_lastTime;               // 0x84
 	LegoPathBoundary* m_boundary;     // 0x88
-	undefined m_unk0x8c[0x14];        // 0x8c
-	MxFloat m_unk0xa0;                // 0xa0
-	undefined m_unk0xa4[0x38];        // 0xa4
+	LegoActorStruct m_unk0x8c;        // 0x8c
 	MxU32 m_state;                    // 0xdc
 	Edge* m_destEdge;                 // 0xe0
 	undefined4 m_unk0xe4;             // 0xe4
-	undefined2 m_unk0xe8;             // 0xe8
+	undefined m_unk0xe8;              // 0xe8
+	undefined m_unk0xe9;              // 0xe9
 	MxBool m_userNavFlag;             // 0xea
 	MxMatrix m_unk0xec;               // 0xec
-	undefined4 m_unk0x134;            // 0x134
+	undefined* m_unk0x134;            // 0x134
 	LegoPathController* m_controller; // 0x138
 	MxFloat m_unk0x13c;               // 0x13c
 	MxFloat m_unk0x140;               // 0x140
