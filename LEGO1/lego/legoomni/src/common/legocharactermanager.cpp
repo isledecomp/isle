@@ -455,10 +455,19 @@ LegoCharacterData* LegoCharacterManager::GetData(LegoROI* p_roi)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10084cf0
-LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char*)
+// FUNCTION: LEGO1 0x10084cf0
+LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char* p_name)
 {
-	// TODO
+	const CompoundObject* comp = p_roi->GetComp();
+
+	for (CompoundObject::iterator it = comp->begin(); !(it == comp->end()); it++) {
+		LegoROI* roi = (LegoROI*) *it;
+
+		if (!strcmpi(p_name, roi->GetName())) {
+			return roi;
+		}
+	}
+
 	return NULL;
 }
 
