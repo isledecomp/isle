@@ -44,7 +44,7 @@ public:
 	// GasStation::`scalar deleting destructor'
 
 private:
-	void FUN_10005590(undefined4);
+	void FUN_10005590(MxU32 p_objectId);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);

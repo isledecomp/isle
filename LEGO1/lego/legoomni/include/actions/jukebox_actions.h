@@ -68,7 +68,7 @@ enum Script {
 	c_RaceCarBuild_Movie = 53,
 	c_RaceCarBuild_Music = 54,
 	c_JBMusic1 = 55,
-	c_JBMusic2 = 56, // Loaded on GasStation::ReadyWorld
+	c_JBMusic2 = 56,
 	c_JBMusic3 = 57,
 	c_JBMusic4 = 58,
 	c_JBMusic5 = 59,
