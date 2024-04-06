@@ -3,7 +3,7 @@
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
 // FUNCTION: LEGO1 0x1002d700
-LegoPathActor::LegoPathActor() : m_unk0x8c()
+LegoPathActor::LegoPathActor()
 {
 	m_boundary = NULL;
 	m_actorTime = 0;
@@ -111,7 +111,7 @@ void LegoPathActor::VTable0xa8()
 // FUNCTION: LEGO1 0x1009a0f0
 LegoActorStruct::LegoActorStruct()
 {
-	for (int i = 0; i < 4; i++) {
+	for (MxS32 i = 0; i < _countof(m_unk0x00); i++) {
 		m_unk0x00[i].Clear();
 	}
 }
