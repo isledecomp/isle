@@ -32,7 +32,6 @@ public:
 	// Pizza::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x78;
 	undefined4 m_unk0x7c;
 	undefined4 m_unk0x80;
 	undefined4 m_unk0x84;
