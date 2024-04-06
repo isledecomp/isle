@@ -460,7 +460,11 @@ LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char* p_name)
 {
 	const CompoundObject* comp = p_roi->GetComp();
 
+#ifdef COMPAT_MODE
+	for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
+#else
 	for (CompoundObject::iterator it = comp->begin(); !(it == comp->end()); it++) {
+#endif
 		LegoROI* roi = (LegoROI*) *it;
 
 		if (!strcmpi(p_name, roi->GetName())) {
