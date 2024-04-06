@@ -82,6 +82,12 @@ void LegoPlantManager::SetCustomizeAnimFile(const char* p_value)
 	}
 }
 
+// STUB: LEGO1 0x10026c50
+void LegoPlantManager::FUN_10026c50(LegoEntity* p_entity)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10026e00
 MxResult LegoPlantManager::Tickle()
 {

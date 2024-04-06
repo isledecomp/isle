@@ -89,6 +89,12 @@ void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 	}
 }
 
+// STUB: LEGO1 0x10030000
+void LegoBuildingManager::FUN_10030000(LegoEntity* p_entity)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10030220
 MxResult LegoBuildingManager::Tickle()
 {
