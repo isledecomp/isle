@@ -448,11 +448,55 @@ float ViewManager::ProjectedSize(const BoundingSphere& p_bounding_sphere)
 	return sphere_projected_area / view_area_at_one / square_dist_to_sphere;
 }
 
-// STUB: LEGO1 0x100a6e00
+// FUNCTION: LEGO1 0x100a6e00
 ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 {
-	// TODO
-	return NULL;
+	LPDIRECT3DRMPICKEDARRAY picked = NULL;
+	ViewROI* result = NULL;
+	TglImpl::ViewImpl* view = (TglImpl::ViewImpl*) p_view;
+	IDirect3DRMViewport* d3drm = view->ImplementationData();
+
+	if (d3drm->Pick(x, y, &picked) != D3DRM_OK) {
+		return NULL;
+	}
+
+	if (picked != NULL) {
+		if (picked->GetSize() != 0) {
+			LPDIRECT3DRMVISUAL visual;
+			LPDIRECT3DRMFRAMEARRAY frameArray;
+			D3DRMPICKDESC desc;
+
+			if (picked->GetPick(0, &visual, &frameArray, &desc) == D3DRM_OK) {
+				if (frameArray != NULL) {
+					int size = frameArray->GetSize();
+
+					if (size > 1) {
+						for (int i = 1; i < size; i++) {
+							LPDIRECT3DRMFRAME frame = NULL;
+
+							if (frameArray->GetElement(i, &frame) == D3DRM_OK) {
+								result = (ViewROI*) frame->GetAppData();
+
+								if (result != NULL) {
+									frame->Release();
+									break;
+								}
+
+								frame->Release();
+							}
+						}
+					}
+
+					visual->Release();
+					frameArray->Release();
+				}
+			}
+		}
+
+		picked->Release();
+	}
+
+	return result;
 }
 
 inline void SetAppData(ViewROI* p_roi, DWORD data)
