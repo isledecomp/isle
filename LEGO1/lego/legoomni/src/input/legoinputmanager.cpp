@@ -549,7 +549,7 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 				p_param.SetY(m_y);
 				p_param.SetModifier(LegoEventNotificationParam::c_lButtonState);
 				p_param.SetType(c_notificationDragEnd);
-				result = 1;
+				result = TRUE;
 			}
 			else {
 				m_unk0x80 = FALSE;
