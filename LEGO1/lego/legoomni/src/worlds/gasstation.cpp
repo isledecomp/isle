@@ -122,7 +122,6 @@ void GasStation::ReadyWorld()
 	PlayMusic(JukeboxScript::c_JBMusic2);
 
 	m_trackLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "TrackLed_Bitmap");
-
 	m_currentActorId = CurrentActor()->GetActorId();
 
 	switch (m_currentActorId) {
@@ -150,6 +149,7 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
+
 		if (m_state->m_unk0x18 < 5) {
 			m_state->m_unk0x18 += 1;
 		}
@@ -174,6 +174,7 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
+
 		if (m_state->m_unk0x1a < 5) {
 			m_state->m_unk0x1a += 1;
 		}
@@ -193,11 +194,12 @@ void GasStation::ReadyWorld()
 			break;
 		default:
 			m_state->m_unk0x14.m_unk0x00 = 6;
-			FUN_10005590(GarageScript::c_wgs017nu_RunAnim);
+			PlayAction(GarageScript::c_wgs017nu_RunAnim);
 			m_unk0x106 = 1;
 			m_unk0x104 = 1;
 			break;
 		}
+
 		if (m_state->m_unk0x1c < 5) {
 			m_state->m_unk0x1c += 1;
 		}
@@ -222,6 +224,7 @@ void GasStation::ReadyWorld()
 			m_unk0x104 = 1;
 			break;
 		}
+
 		if (m_state->m_unk0x1e < 5) {
 			m_state->m_unk0x1e += 1;
 		}
@@ -231,21 +234,22 @@ void GasStation::ReadyWorld()
 		switch (m_state->m_unk0x20) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
-			FUN_10005590(GarageScript::c_wgs020nu_RunAnim);
+			PlayAction(GarageScript::c_wgs020nu_RunAnim);
 			m_unk0x106 = 1;
 			break;
 		case 1:
 			m_state->m_unk0x14.m_unk0x00 = 5;
-			FUN_10005590(GarageScript::c_wgs021nu_RunAnim);
+			PlayAction(GarageScript::c_wgs021nu_RunAnim);
 			m_unk0x106 = 1;
 			break;
 		default:
 			m_state->m_unk0x14.m_unk0x00 = 6;
-			FUN_10005590(GarageScript::c_wgs022nu_RunAnim);
+			PlayAction(GarageScript::c_wgs022nu_RunAnim);
 			m_unk0x106 = 1;
 			m_unk0x104 = 1;
 			break;
 		}
+
 		if (m_state->m_unk0x20 < 5) {
 			m_state->m_unk0x20 += 1;
 		}
@@ -257,11 +261,6 @@ void GasStation::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10005590
-void GasStation::FUN_10005590(MxU32 p_objectId)
-{
-	PlayAction(p_objectId);
-}
-
 inline void GasStation::PlayAction(MxU32 p_objectId)
 {
 	MxDSAction action;
