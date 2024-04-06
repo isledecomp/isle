@@ -511,10 +511,10 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 		break;
 	case c_notificationMouseMove:
 		if (m_unk0x195) {
-			p_param.SetModifier(1);
+			p_param.SetModifier(LegoEventNotificationParam::c_lButtonState);
 		}
 
-		if ((m_unk0x195 || m_unk0x81) && p_param.GetModifier() & 1) {
+		if ((m_unk0x195 || m_unk0x81) && p_param.GetModifier() & LegoEventNotificationParam::c_lButtonState) {
 			if (!m_unk0x80) {
 				if (m_unk0x195) {
 					m_x = p_param.GetX();
@@ -547,7 +547,7 @@ MxBool LegoInputManager::FUN_1005cdf0(LegoEventNotificationParam& p_param)
 				m_unk0x80 = TRUE;
 				p_param.SetX(m_x);
 				p_param.SetY(m_y);
-				p_param.SetModifier(1);
+				p_param.SetModifier(LegoEventNotificationParam::c_lButtonState);
 				p_param.SetType(c_notificationDragEnd);
 				result = 1;
 			}
