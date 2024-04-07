@@ -1,5 +1,7 @@
 #include "legopathactor.h"
 
+#include <vec.h>
+
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
 // FUNCTION: LEGO1 0x1002d700
@@ -29,10 +31,25 @@ LegoPathActor::~LegoPathActor()
 	}
 }
 
-// STUB: LEGO1 0x1002d8d0
-void LegoPathActor::VTable0x80()
+// FUNCTION: LEGO1 0x1002d8d0
+MxResult LegoPathActor::VTable0x80(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
 {
-	// TODO
+	Mx3DPointFloat p1, p2, p3;
+
+	p1 = p_point3;
+	((Vector3&) p1).Sub(&p_point1);
+	m_BADuration = p1.LenSquared();
+
+	if (m_BADuration > 0.0f) {
+		m_BADuration = sqrtf(m_BADuration);
+		p2 = p_point2;
+		p3 = p_point4;
+		m_unk0x8c.FUN_1009a140(p_point1, p2, p_point3, p3);
+		m_BADuration /= 0.001;
+		return SUCCESS;
+	}
+
+	return FAILURE;
 }
 
 // STUB: LEGO1 0x1002d9c0
@@ -119,4 +136,16 @@ LegoActorStruct::LegoActorStruct()
 // FUNCTION: LEGO1 0x1009a130
 LegoActorStruct::~LegoActorStruct()
 {
+}
+
+// FUNCTION: LEGO1 0x1009a140
+void LegoActorStruct::FUN_1009a140(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4)
+{
+	m_unk0x00[0] = p_point1;
+	m_unk0x00[1] = p_point2;
+
+	for (MxS32 i = 0; i < 3; i++) {
+		m_unk0x00[2][i] = (p_point3[i] - p_point1[i]) * 3.0f - p_point2[i] * 2.0f - p_point4[i];
+		m_unk0x00[3][i] = (p_point1[i] - p_point3[i]) * 2.0f + p_point4[i] + p_point2[i];
+	}
 }

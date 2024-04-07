@@ -14,8 +14,8 @@ public:
 
 	inline MxMatrix(const Matrix4& p_matrix) : Matrix4(m_elements) { Equals(p_matrix); }
 
-	float* operator[](size_t idx) { return m_data[idx]; }
-	const float* operator[](size_t idx) const { return m_data[idx]; }
+	float* operator[](int idx) { return m_data[idx]; }
+	const float* operator[](int idx) const { return m_data[idx]; }
 
 	// FUNCTION: LEGO1 0x10002850
 	void operator=(const Matrix4& p_matrix) override { Equals(p_matrix); } // vtable+0x28

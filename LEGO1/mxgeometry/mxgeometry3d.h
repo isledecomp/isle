@@ -32,8 +32,8 @@ public:
 	inline float GetY() { return m_data[1]; }
 	inline float GetZ() { return m_data[2]; }
 
-	inline float& operator[](size_t idx) { return m_data[idx]; }
-	inline const float& operator[](size_t idx) const { return m_data[idx]; }
+	inline float& operator[](int idx) { return m_data[idx]; }
+	inline const float& operator[](int idx) const { return m_data[idx]; }
 
 	// SYNTHETIC: LEGO1 0x10010c00
 	// Mx3DPointFloat::operator=
@@ -60,8 +60,8 @@ public:
 	// FUNCTION: LEGO1 0x10003200
 	virtual void operator=(const Vector4& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x98
 
-	inline float& operator[](size_t idx) { return m_data[idx]; }
-	inline const float& operator[](size_t idx) const { return m_data[idx]; }
+	inline float& operator[](int idx) { return m_data[idx]; }
+	inline const float& operator[](int idx) const { return m_data[idx]; }
 
 private:
 	float m_elements[4]; // 0x08

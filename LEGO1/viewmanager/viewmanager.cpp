@@ -2,8 +2,9 @@
 
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/impl.h"
-#include "vec.h"
 #include "viewlod.h"
+
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
@@ -372,8 +373,7 @@ void ViewManager::FUN_100a6b90()
 {
 	flags &= ~c_bit2;
 
-	// TODO: Should be signed, but worsens match
-	unsigned int i, j, k;
+	int i, j, k;
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 3; j++) {
