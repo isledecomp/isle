@@ -144,8 +144,8 @@ public:
 	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
 	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
 
-	float* operator[](size_t idx) { return m_data[idx]; }
-	const float* operator[](size_t idx) const { return m_data[idx]; }
+	float* operator[](int idx) { return m_data[idx]; }
+	const float* operator[](int idx) const { return m_data[idx]; }
 
 protected:
 	float (*m_data)[4];

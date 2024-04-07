@@ -152,8 +152,8 @@ public:
 		Vector2::SetVector(&p_other);
 		return *this;
 	}
-	inline float& operator[](size_t idx) { return m_data[idx]; }
-	inline const float& operator[](size_t idx) const { return m_data[idx]; }
+	inline float& operator[](int idx) { return m_data[idx]; }
+	inline const float& operator[](int idx) const { return m_data[idx]; }
 
 protected:
 	float* m_data; // 0x04
@@ -265,7 +265,7 @@ public:
 	// FUNCTION: LEGO1 0x10003bd0
 	float LenSquared() const override
 	{
-		return m_data[1] * m_data[1] + m_data[0] * m_data[0] + m_data[2] * m_data[2];
+		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
 	} // vtable+0x40
 
 	inline void Fill(float p_value) { EqualsScalar(&p_value); }
