@@ -3,18 +3,11 @@
 
 #include "legoactor.h"
 #include "legopathboundary.h"
+#include "misc/legounknown.h"
 #include "mxtypes.h"
 #include "realtime/matrix.h"
 
 class LegoPathController;
-
-struct LegoActorStruct {
-	LegoActorStruct();
-	~LegoActorStruct();
-	void FUN_1009a140(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, Vector3& p_point4);
-
-	Mx3DPointFloat m_unk0x00[4]; // 0x00
-};
 
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
@@ -114,7 +107,7 @@ protected:
 	MxFloat m_actorTime;              // 0x80
 	MxFloat m_lastTime;               // 0x84
 	LegoPathBoundary* m_boundary;     // 0x88
-	LegoActorStruct m_unk0x8c;        // 0x8c
+	LegoUnknown m_unk0x8c;            // 0x8c
 	MxU32 m_state;                    // 0xdc
 	Edge* m_destEdge;                 // 0xe0
 	undefined4 m_unk0xe4;             // 0xe4
