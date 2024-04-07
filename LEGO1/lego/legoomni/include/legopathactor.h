@@ -11,6 +11,12 @@ class LegoPathController;
 struct LegoActorStruct {
 	LegoActorStruct();
 	~LegoActorStruct();
+	void FUN_1009a140(
+		Mx3DPointFloat& p_point1,
+		Mx3DPointFloat& p_point2,
+		Mx3DPointFloat& p_point3,
+		Mx3DPointFloat& p_point4
+	);
 
 	Mx3DPointFloat m_unk0x00[4]; // 0x00
 };
@@ -47,7 +53,12 @@ public:
 	// FUNCTION: LEGO1 0x10002d30
 	virtual MxU8 GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
-	virtual void VTable0x80(); // vtable+0x80
+	virtual MxResult VTable0x80(
+		Mx3DPointFloat& p_point1,
+		Mx3DPointFloat& p_point2,
+		Mx3DPointFloat& p_point3,
+		Mx3DPointFloat& p_point4
+	);                         // vtable+0x80
 	virtual void VTable0x84(); // vtable+0x84
 	virtual void VTable0x88(); // vtable+0x88
 	virtual void VTable0x8c(); // vtable+0x8c
