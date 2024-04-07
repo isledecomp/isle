@@ -30,8 +30,6 @@
 #include "skateboard.h"
 #include "towtrack.h"
 
-#include <vec.h>
-
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
 // GLOBAL: LEGO1 0x100f1198
@@ -664,14 +662,14 @@ void Isle::Enable(MxBool p_enable)
 				Mx3DPointFloat position(CurrentActor()->GetROI()->GetWorldPosition());
 
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
-				sub.Sub(&position);
-				if (NORMSQRD3(sub) < 1024.0f) {
+				((Vector3&) sub).Sub(&position);
+				if (sub.LenSquared() < 1024.0f) {
 					AnimationManager()->FUN_10064740(FALSE);
 				}
 
 				Mx3DPointFloat sub2(98.874992f, 0.0f, -46.156292f);
-				sub2.Sub(&position);
-				if (NORMSQRD3(sub2) < 1024.0f) {
+				((Vector3&) sub2).Sub(&position);
+				if (sub2.LenSquared() < 1024.0f) {
 					AnimationManager()->FUN_10064670(FALSE);
 				}
 			}
