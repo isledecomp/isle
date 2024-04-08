@@ -54,7 +54,7 @@ public:
 
 	LegoCacheSound* FUN_1003d170(const char* p_key);
 	LegoCacheSound* FUN_1003d290(LegoCacheSound* p_sound);
-	void FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three);
+	LegoCacheSound* FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three);
 	LegoCacheSound* FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three);
 	void FUN_1003dc40(LegoCacheSound** p_und);
 
