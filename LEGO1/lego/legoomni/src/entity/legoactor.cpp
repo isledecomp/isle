@@ -1,5 +1,10 @@
 #include "legoactor.h"
 
+#include "define.h"
+#include "legosoundmanager.h"
+#include "misc.h"
+#include "mxutilities.h"
+
 DECOMP_SIZE_ASSERT(LegoActor, 0x78)
 
 // GLOBAL: LEGO1 0x100f32d0
@@ -23,10 +28,89 @@ LegoActor::~LegoActor()
 	}
 }
 
-// STUB: LEGO1 0x1002d390
-void LegoActor::ParseAction(char*)
+// FUNCTION: LEGO1 0x1002d390
+void LegoActor::ParseAction(char* p_extra)
 {
-	// TODO
+	MxFloat speed = 0.0F;
+	char value[256];
+	value[0] = '\0';
+
+	if (KeyValueStringParse(value, g_strATTACH_CAMERA, p_extra)) {
+		GetROI()->SetVisibility(FALSE);
+
+		if (value[0]) {
+			Mx3DPointFloat location(0.0F, 0.0F, 0.0F);
+			Mx3DPointFloat direction(0.0F, 0.0F, 1.0F);
+			Mx3DPointFloat up(0.0F, 1.0F, 0.0F);
+
+			char* token = strtok(value, g_parseExtraTokens);
+			if (token != NULL) {
+				location[0] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				location[1] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				location[2] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				direction[0] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				direction[1] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				direction[2] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				up[0] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				up[1] = atof(token);
+			}
+
+			token = strtok(NULL, g_parseExtraTokens);
+			if (token != NULL) {
+				up[2] = atof(token);
+			}
+
+			SetWorldTransform(location, direction, up);
+		}
+		else {
+			ResetWorldTransform(TRUE);
+		}
+	}
+
+	if (KeyValueStringParse(value, g_strSPEED, p_extra)) {
+		speed = atof(value);
+		SetWorldSpeed(speed);
+	}
+
+	if (KeyValueStringParse(value, g_strSOUND, p_extra)) {
+		m_sound = SoundManager()->GetCacheSoundManager()->FUN_1003dae0(value, GetROI()->GetName(), TRUE);
+	}
+
+	if (KeyValueStringParse(value, g_strMUTE, p_extra)) {
+		FUN_1002d6e0(TRUE);
+	}
+
+	if (KeyValueStringParse(value, g_strVISIBILITY, p_extra)) {
+		GetROI()->SetVisibility(strcmpi(value, "FALSE") != 0);
+	}
 }
 
 // FUNCTION: LEGO1 0x1002d660
@@ -51,4 +135,10 @@ void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 	}
 
 	LegoEntity::SetROI(p_roi, p_bool1, p_bool2);
+}
+
+// STUB: LEGO1 0x1002d6e0
+void LegoActor::FUN_1002d6e0(MxBool)
+{
+	// TODO
 }

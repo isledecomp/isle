@@ -25,7 +25,7 @@ public:
 		return !strcmp(p_name, LegoActor::ClassName()) || LegoEntity::IsA(p_name);
 	}
 
-	void ParseAction(char*) override;                                     // vtable+0x20
+	void ParseAction(char* p_extra) override;                             // vtable+0x20
 	void SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2) override; // vtable+0x24
 
 	// FUNCTION: LEGO1 0x10002cc0
@@ -49,6 +49,8 @@ public:
 	static const char* GetActorName(MxU8 p_id);
 
 protected:
+	void FUN_1002d6e0(MxBool);
+
 	MxFloat m_unk0x68;       // 0x68
 	LegoCacheSound* m_sound; // 0x6c
 	MxFloat m_unk0x70;       // 0x70

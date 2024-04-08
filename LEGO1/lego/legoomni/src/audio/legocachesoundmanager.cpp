@@ -104,10 +104,10 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003d290(LegoCacheSound* p_sound)
 }
 
 // FUNCTION: LEGO1 0x1003dae0
-void LegoCacheSoundManager::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
+LegoCacheSound* LegoCacheSoundManager::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
 {
 	// DECOMP: Second parameter is LegoRoi::m_name (0xe4)
-	FUN_1003db10(FUN_1003d170(p_one), p_two, p_three);
+	return FUN_1003db10(FUN_1003d170(p_one), p_two, p_three);
 }
 
 // FUNCTION: LEGO1 0x1003db10
