@@ -4,7 +4,7 @@ import difflib
 import struct
 from dataclasses import dataclass
 from typing import Callable, Iterable, List, Optional
-from isledecomp.bin import Bin as IsleBin
+from isledecomp.bin import Bin as IsleBin, InvalidVirtualAddressError
 from isledecomp.cvdump.demangler import demangle_string_const
 from isledecomp.cvdump import Cvdump, CvdumpAnalysis
 from isledecomp.parser import DecompCodebase
@@ -50,20 +50,13 @@ def create_reloc_lookup(bin_file: IsleBin) -> Callable[[int], bool]:
     return lookup
 
 
-def create_float_lookup(bin_file: IsleBin) -> Callable[[int, int], Optional[str]]:
-    """Function generator for floating point lookup"""
+def create_bin_lookup(bin_file: IsleBin) -> Callable[[int, int], Optional[str]]:
+    """Function generator for reading from the bin file"""
 
-    def lookup(addr: int, size: int) -> Optional[str]:
-        data = bin_file.read(addr, size)
-        # If this is a float constant, it should be initialized data.
-        if data is None:
-            return None
-
-        struct_str = "<f" if size == 4 else "<d"
+    def lookup(addr: int, size: int) -> Optional[bytes]:
         try:
-            (float_value,) = struct.unpack(struct_str, data)
-            return str(float_value)
-        except struct.error:
+            return bin_file.read(addr, size)
+        except InvalidVirtualAddressError:
             return None
 
     return lookup
@@ -273,7 +266,36 @@ class Compare:
         # the connection between the thunk functions.
         # We already have the symbol name we need from the PDB.
         for orig, recomp in orig_to_recomp.items():
+            if orig is None or recomp is None:
+                continue
+
+            # Match the __imp__ symbol
             self._db.set_pair(orig, recomp, SymbolType.POINTER)
+
+            # Read the relative address from .idata
+            try:
+                (recomp_rva,) = struct.unpack("<L", self.recomp_bin.read(recomp, 4))
+                (orig_rva,) = struct.unpack("<L", self.orig_bin.read(orig, 4))
+            except ValueError:
+                # Bail out if there's a problem with struct.unpack
+                continue
+
+            # Strictly speaking, this is a hack to support asm sanitize.
+            # When calling an import, we will recognize that the address for the
+            # CALL instruction is a pointer to the actual address, but this is
+            # not only not the address of a function, it is not an address at all.
+            # To make the asm display work correctly (i.e. to match what you see
+            # in ghidra) create a function match on the RVA. This is not a valid
+            # virtual address because it is before the imagebase, but it will
+            # do what we need it to do in the sanitize function.
+
+            (dll_name, func_name) = orig_byaddr[orig]
+            fullname = dll_name + ":" + func_name
+            self._db.set_recomp_symbol(
+                recomp_rva, SymbolType.FUNCTION, fullname, None, 4
+            )
+            self._db.set_pair(orig_rva, recomp_rva, SymbolType.FUNCTION)
+            self._db.skip_compare(orig_rva)
 
     def _match_thunks(self):
         """Thunks are (by nature) matched by indirection. If a thunk from orig
@@ -444,18 +466,18 @@ class Compare:
         orig_should_replace = create_reloc_lookup(self.orig_bin)
         recomp_should_replace = create_reloc_lookup(self.recomp_bin)
 
-        orig_float = create_float_lookup(self.orig_bin)
-        recomp_float = create_float_lookup(self.recomp_bin)
+        orig_bin_lookup = create_bin_lookup(self.orig_bin)
+        recomp_bin_lookup = create_bin_lookup(self.recomp_bin)
 
         orig_parse = ParseAsm(
             relocate_lookup=orig_should_replace,
             name_lookup=orig_lookup,
-            float_lookup=orig_float,
+            bin_lookup=orig_bin_lookup,
         )
         recomp_parse = ParseAsm(
             relocate_lookup=recomp_should_replace,
             name_lookup=recomp_lookup,
-            float_lookup=recomp_float,
+            bin_lookup=recomp_bin_lookup,
         )
 
         orig_combined = orig_parse.parse_asm(orig_raw, match.orig_addr)

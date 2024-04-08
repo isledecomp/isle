@@ -198,13 +198,14 @@ def test_float_replacement():
     The float constants don't appear to be deduplicated (like strings are)
     because there is another 0.5 at 0x100d40b0."""
 
-    def substitute_float(addr: int, _: int) -> str:
-        return "zero-point-five" if addr == 0x1234 else None
+    def bin_lookup(addr: int, _: int) -> Optional[bytes]:
+        return b"\xdb\x0f\x49\x40" if addr == 0x1234 else None
 
-    p = ParseAsm(float_lookup=substitute_float)
+    p = ParseAsm(bin_lookup=bin_lookup)
     inst = DisasmLiteInst(0x1000, 6, "fld", "dword ptr [0x1234]")
     (_, op_str) = p.sanitize(inst)
-    assert op_str == "dword ptr [zero-point-five (FLOAT)]"
+    # Single-precision float. struct.unpack("<f", struct.pack("<f", math.pi))
+    assert op_str == "dword ptr [3.1415927410125732 (FLOAT)]"
 
 
 def test_float_variable():
@@ -214,10 +215,7 @@ def test_float_variable():
     def name_lookup(addr: int) -> Optional[str]:
         return "g_myFloatVariable" if addr == 0x1234 else None
 
-    def substitute_float(_: int, __: int) -> str:
-        return ""
-
-    p = ParseAsm(name_lookup=name_lookup, float_lookup=substitute_float)
+    p = ParseAsm(name_lookup=name_lookup)
     inst = DisasmLiteInst(0x1000, 6, "fld", "dword ptr [0x1234]")
     (_, op_str) = p.sanitize(inst)
     assert op_str == "dword ptr [g_myFloatVariable]"
@@ -256,3 +254,41 @@ def test_pointer_compare():
     # Should replace here
     (_, op_str) = p.sanitize(mock_inst("cmp", "eax, 0x5555"))
     assert op_str == "eax, hello"
+
+
+def test_absolute_indirect():
+    """The instruction `call dword ptr [0x1234]` means we call the function
+    whose address is at 0x1234. (i.e. absolute indirect addressing mode)
+    It is probably more useful to show the name of the function itself if
+    we have it, but there are some circumstances where we want to replace
+    with the pointer's name (i.e. an import function)."""
+
+    def name_lookup(addr: int) -> Optional[str]:
+        return {
+            0x1234: "Hello",
+            0x4321: "xyz",
+            0x5555: "Test",
+        }.get(addr)
+
+    def bin_lookup(addr: int, _: int) -> Optional[bytes]:
+        return (
+            {
+                0x1234: b"\x55\x55\x00\x00",
+                0x4321: b"\x99\x99\x00\x00",
+            }
+        ).get(addr)
+
+    p = ParseAsm(name_lookup=name_lookup, bin_lookup=bin_lookup)
+
+    # If we know the indirect address (0x5555)
+    # Arrow to indicate this is an indirect replacement
+    (_, op_str) = p.sanitize(mock_inst("call", "dword ptr [0x1234]"))
+    assert op_str == "dword ptr [->Test]"
+
+    # If we do not know the indirect address (0x9999)
+    (_, op_str) = p.sanitize(mock_inst("call", "dword ptr [0x4321]"))
+    assert op_str == "dword ptr [xyz]"
+
+    # If we can't read the indirect address
+    (_, op_str) = p.sanitize(mock_inst("call", "dword ptr [0x5555]"))
+    assert op_str == "dword ptr [Test]"

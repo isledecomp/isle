@@ -7,10 +7,10 @@ so that virtual addresses are replaced by symbol name or a generic
 placeholder string."""
 
 import re
+import struct
 from functools import cache
 from typing import Callable, List, Optional, Tuple
 from collections import namedtuple
-from isledecomp.bin import InvalidVirtualAddressError
 from .const import JUMP_MNEMONICS, SINGLE_OPERAND_INSTS
 from .instgen import InstructGen, SectionType
 
@@ -35,16 +35,33 @@ def from_hex(string: str) -> Optional[int]:
     return None
 
 
+def bytes_to_float(b: bytes) -> Optional[float]:
+    if len(b) == 4:
+        return struct.unpack("<f", b)[0]
+
+    if len(b) == 8:
+        return struct.unpack("<d", b)[0]
+
+    return None
+
+
+def bytes_to_dword(b: bytes) -> Optional[int]:
+    if len(b) == 4:
+        return struct.unpack("<L", b)[0]
+
+    return None
+
+
 class ParseAsm:
     def __init__(
         self,
         relocate_lookup: Optional[Callable[[int], bool]] = None,
         name_lookup: Optional[Callable[[int], str]] = None,
-        float_lookup: Optional[Callable[[int, int], Optional[str]]] = None,
+        bin_lookup: Optional[Callable[[int, int], Optional[bytes]]] = None,
     ) -> None:
         self.relocate_lookup = relocate_lookup
         self.name_lookup = name_lookup
-        self.float_lookup = float_lookup
+        self.bin_lookup = bin_lookup
         self.replacements = {}
         self.number_placeholders = True
 
@@ -58,14 +75,14 @@ class ParseAsm:
         return False
 
     def float_replace(self, addr: int, data_size: int) -> Optional[str]:
-        if callable(self.float_lookup):
-            try:
-                float_str = self.float_lookup(addr, data_size)
-            except InvalidVirtualAddressError:
-                # probably caused by reading an invalid instruction
+        if callable(self.bin_lookup):
+            float_bytes = self.bin_lookup(addr, data_size)
+            if float_bytes is None:
                 return None
-            if float_str is not None:
-                return f"{float_str} (FLOAT)"
+
+            float_value = bytes_to_float(float_bytes)
+            if float_value is not None:
+                return f"{float_value} (FLOAT)"
 
         return None
 
@@ -121,6 +138,30 @@ class ParseAsm:
             return match.group(0).replace(match.group(1), placeholder)
 
         return match.group(0)
+
+    def hex_replace_indirect(self, match: re.Match) -> str:
+        """Edge case for hex_replace_always. The context of the instruction
+        tells us that the pointer value is an absolute indirect.
+        So we go to that location in the binary to get the address.
+        If we cannot identify the indirect address, fall back to a lookup
+        on the original pointer value so we might display something useful."""
+        value = int(match.group(1), 16)
+        indirect_value = None
+
+        if callable(self.bin_lookup):
+            indirect_value = self.bin_lookup(value, 4)
+
+        if indirect_value is not None:
+            indirect_addr = bytes_to_dword(indirect_value)
+            if (
+                indirect_addr is not None
+                and self.lookup(indirect_addr, use_cache=False) is not None
+            ):
+                return match.group(0).replace(
+                    match.group(1), "->" + self.replace(indirect_addr)
+                )
+
+        return match.group(0).replace(match.group(1), self.replace(value))
 
     def hex_replace_float(self, match: re.Match) -> str:
         """Special case for replacements on float instructions.
@@ -178,7 +219,10 @@ class ParseAsm:
             jump_displacement = op_str_address - (inst.address + inst.size)
             return (inst.mnemonic, hex(jump_displacement))
 
-        if inst.mnemonic.startswith("f"):
+        if inst.mnemonic == "call":
+            # Special handling for absolute indirect CALL.
+            op_str = ptr_replace_regex.sub(self.hex_replace_indirect, inst.op_str)
+        elif inst.mnemonic.startswith("f"):
             # If floating point instruction
             op_str = ptr_replace_regex.sub(self.hex_replace_float, inst.op_str)
         else:
