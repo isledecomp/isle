@@ -266,6 +266,9 @@ class Compare:
         # the connection between the thunk functions.
         # We already have the symbol name we need from the PDB.
         for orig, recomp in orig_to_recomp.items():
+            if orig is None or recomp is None:
+                continue
+
             # Match the __imp__ symbol
             self._db.set_pair(orig, recomp, SymbolType.POINTER)
 
