@@ -29,7 +29,7 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	void ParseAction(char*) override;                                           // vtable+0x20
+	void ParseAction(char* p_extra) override;                                   // vtable+0x20
 	virtual void VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&); // vtable+0x68
 	virtual void VTable0x6c();                                                  // vtable+0x6c
 	virtual void VTable0x70(float p_float);                                     // vtable+0x70

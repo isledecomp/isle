@@ -101,9 +101,9 @@ void LegoPathActor::VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&
 }
 
 // STUB: LEGO1 0x1002f020
-void LegoPathActor::ParseAction(char*)
+void LegoPathActor::ParseAction(char* p_extra)
 {
-	// TODO
+	LegoActor::ParseAction(p_extra);
 }
 
 // STUB: LEGO1 0x1002f1b0
