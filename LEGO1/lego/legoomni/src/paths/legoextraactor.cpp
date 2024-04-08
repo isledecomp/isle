@@ -131,7 +131,8 @@ MxResult LegoExtraActor::FUN_1002aae0()
 	Vector3 dirRef(m_unk0xec[2]);
 	Vector3 positionRef(m_unk0xec[3]);
 
-	dirRef.Mul(-1.0f);
+	// TODO: Fix call
+	((Vector3&) dirRef).Mul(-1.0f);
 	rightRef.EqualsCross(&upRef, &dirRef);
 
 	if (m_boundary == m_destEdge->m_faceA) {
