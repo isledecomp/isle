@@ -147,6 +147,7 @@ target_link_libraries(roi PRIVATE viewmanager Vec::Vec)
 
 add_library(geom STATIC
   LEGO1/lego/sources/geom/legobox.cpp
+  LEGO1/lego/sources/geom/legoedge.cpp
   LEGO1/lego/sources/geom/legomesh.cpp
   LEGO1/lego/sources/geom/legosphere.cpp
   LEGO1/lego/sources/geom/legovertex.cpp
