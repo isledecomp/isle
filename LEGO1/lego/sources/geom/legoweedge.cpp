@@ -1,6 +1,5 @@
 #include "legoweedge.h"
 
-DECOMP_SIZE_ASSERT(Edge, 0x24)
 DECOMP_SIZE_ASSERT(LegoWEEdge, 0x0c)
 
 // FUNCTION: LEGO1 0x1009a550
@@ -22,8 +21,8 @@ LegoWEEdge::~LegoWEEdge()
 LegoResult LegoWEEdge::VTable0x04()
 {
 	for (LegoS32 i = 0; i < m_numEdges; i++) {
-		Edge* e1 = m_edges[i];
-		Edge* e2 = (m_numEdges - i) == 1 ? m_edges[0] : m_edges[i + 1];
+		LegoEdge* e1 = m_edges[i];
+		LegoEdge* e2 = (m_numEdges - i) == 1 ? m_edges[0] : m_edges[i + 1];
 
 		if (e2->m_pointA == e1->m_pointA) {
 			e1->m_faceA = this;

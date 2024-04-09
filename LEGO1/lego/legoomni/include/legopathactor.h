@@ -109,7 +109,7 @@ protected:
 	LegoPathBoundary* m_boundary;     // 0x88
 	LegoUnknown m_unk0x8c;            // 0x8c
 	MxU32 m_state;                    // 0xdc
-	Edge* m_destEdge;                 // 0xe0
+	LegoEdge* m_destEdge;             // 0xe0
 	undefined4 m_unk0xe4;             // 0xe4
 	undefined m_unk0xe8;              // 0xe8
 	undefined m_unk0xe9;              // 0xe9
