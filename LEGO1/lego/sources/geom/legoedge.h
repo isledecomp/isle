@@ -5,8 +5,8 @@
 
 class LegoWEEdge;
 
-// SIZE 0x24
 // VTABLE: LEGO1 0x100db7b8
+// SIZE 0x24
 struct LegoEdge {
 	LegoEdge();
 	virtual ~LegoEdge(); // vtable+0x00
