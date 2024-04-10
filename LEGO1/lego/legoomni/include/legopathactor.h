@@ -48,7 +48,14 @@ public:
 		Vector3& p_point4
 	);                         // vtable+0x80
 	virtual void VTable0x84(); // vtable+0x84
-	virtual void VTable0x88(); // vtable+0x88
+	virtual MxResult VTable0x88(
+		LegoPathBoundary* p_boundary,
+		float p_time,
+		LegoEdge& p_edge1,
+		float p_scale1,
+		LegoEdge& p_edge2,
+		float p_scale2
+	);                         // vtable+0x88
 	virtual void VTable0x8c(); // vtable+0x8c
 
 	// FUNCTION: LEGO1 0x10002d40
@@ -110,7 +117,7 @@ protected:
 	LegoUnknown m_unk0x8c;            // 0x8c
 	MxU32 m_state;                    // 0xdc
 	LegoEdge* m_destEdge;             // 0xe0
-	undefined4 m_unk0xe4;             // 0xe4
+	MxFloat m_unk0xe4;                // 0xe4
 	undefined m_unk0xe8;              // 0xe8
 	undefined m_unk0xe9;              // 0xe9
 	MxBool m_userNavFlag;             // 0xea

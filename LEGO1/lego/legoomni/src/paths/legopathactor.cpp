@@ -52,10 +52,79 @@ MxResult LegoPathActor::VTable0x80(Vector3& p_point1, Vector3& p_point2, Vector3
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1002d9c0
-void LegoPathActor::VTable0x88()
+// FUNCTION: LEGO1 0x1002d9c0
+MxResult LegoPathActor::VTable0x88(
+	LegoPathBoundary* p_boundary,
+	float p_time,
+	LegoEdge& p_srcEdge,
+	float p_srcScale,
+	LegoEdge& p_dstEdge,
+	float p_dstScale
+)
 {
-	// TODO
+	Vector3* v1 = p_srcEdge.GetOpposingPoint(p_boundary);
+	Vector3* v2 = p_srcEdge.GetPoint(p_boundary);
+	Vector3* v3 = p_dstEdge.GetOpposingPoint(p_boundary);
+	Vector3* v4 = p_dstEdge.GetPoint(p_boundary);
+	Mx3DPointFloat p1, p2, p3, p4, p5;
+	p1 = *v2;
+	((Vector3&) p1).Sub(v1);
+	((Vector3&) p1).Mul(p_srcScale);
+	((Vector3&) p1).Add(v1);
+	p2 = *v4;
+	((Vector3&) p2).Sub(v3);
+	((Vector3&) p2).Mul(p_dstScale);
+	((Vector3&) p2).Add(v3);
+	m_boundary = p_boundary;
+	m_destEdge = &p_dstEdge;
+	m_unk0xe4 = p_dstScale;
+	m_lastTime = p_time;
+	m_actorTime = p_time;
+	m_unk0x7c = 0;
+	p_dstEdge.FUN_1002ddc0(m_boundary, p3);
+	p4 = p2;
+	((Vector3&) p4).Sub(&p1);
+	float len = ((Vector3&) p4).LenSquared();
+	if (len > 0) {
+		len = sqrtf(len);
+		if (len > 0) {
+			p4.Div(len);
+		}
+	}
+	MxMatrix matrix;
+	Vector3 pos(matrix[3]);
+	Vector3 dir(matrix[2]);
+	Vector3 up(matrix[1]);
+	Vector3 right(matrix[0]);
+	matrix.SetIdentity();
+	pos = p1;
+	dir = p4;
+	up = *m_boundary->GetUnknown0x14();
+	if (!m_cameraFlag || !m_userNavFlag) {
+		((Vector3&) dir).Mul(-1.0f);
+	}
+	right.EqualsCross(&up, &dir);
+	m_roi->FUN_100a46b0(matrix);
+	if (m_cameraFlag && m_userNavFlag) {
+		m_boundary->AddActor(this);
+		FUN_10010c30();
+	}
+	else {
+		((Vector3&) p5).EqualsCrossImpl(p_boundary->GetUnknown0x14()->GetData(), p3.GetData());
+		float len2 = ((Vector3&) p5).LenSquared();
+		if (len2 > 0) {
+			len2 = sqrtf(len2);
+			if (len2 > 0) {
+				p5.Div(len2);
+			}
+		}
+		if (VTable0x80(p1, p4, p2, p5) != SUCCESS) {
+			return FAILURE;
+		}
+		m_boundary->AddActor(this);
+	}
+	m_unk0xec = m_roi->GetLocal2World();
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1002de10
