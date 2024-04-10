@@ -58,7 +58,7 @@ MxResult LegoPathActor::VTable0x88(
 	float p_time,
 	LegoEdge& p_srcEdge,
 	float p_srcScale,
-	LegoEdge& p_dstEdge,
+	LegoUnknown100db7f4& p_dstEdge,
 	float p_dstScale
 )
 {

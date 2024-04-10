@@ -1,6 +1,7 @@
 #ifndef LEGOPATHACTOR_H
 #define LEGOPATHACTOR_H
 
+#include "geom/legounkown100db7f4.h"
 #include "legoactor.h"
 #include "legopathboundary.h"
 #include "misc/legounknown.h"
@@ -53,7 +54,7 @@ public:
 		float p_time,
 		LegoEdge& p_edge1,
 		float p_scale1,
-		LegoEdge& p_edge2,
+		LegoUnknown100db7f4& p_edge2,
 		float p_scale2
 	);                         // vtable+0x88
 	virtual void VTable0x8c(); // vtable+0x8c

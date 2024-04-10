@@ -4,14 +4,6 @@
 
 DECOMP_SIZE_ASSERT(LegoEdge, 0x24)
 
-// TODO Based on the offset, this should be in the header, but as a stub it's getting inlined when there...
-// STUB: LEGO1 0x1002ddc0
-LegoResult LegoEdge::FUN_1002ddc0(LegoWEEdge* p_face, Vector3& p_point)
-{
-	// TODO
-	return SUCCESS;
-}
-
 // FUNCTION: LEGO1 0x1009a470
 LegoEdge::LegoEdge()
 {
