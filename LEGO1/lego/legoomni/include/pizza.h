@@ -32,7 +32,7 @@ public:
 	// STUB: LEGO1 0x100383f0
 	undefined4 VTable0x68() override { return 0; } // vtable+0x68
 
-	// STUB: LEGO1 0x1003b10
+	// STUB: LEGO1 0x10038b10
 	undefined4 HandleEndAction(MxEndActionNotificationParam&) override { return 0; } // vtable+0x74
 
 	// STUB: LEGO1 0x100384f0
