@@ -8,3 +8,10 @@ MxResult Pizzeria::Create(MxDSAction& p_dsAction)
 	// TODO
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10017a50
+undefined4 Pizzeria::VTable0x68()
+{
+	// TODO
+	return 0;
+}
