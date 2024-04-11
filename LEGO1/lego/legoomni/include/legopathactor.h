@@ -52,10 +52,10 @@ public:
 	virtual MxResult VTable0x88(
 		LegoPathBoundary* p_boundary,
 		float p_time,
-		LegoEdge& p_edge1,
-		float p_scale1,
-		LegoUnknown100db7f4& p_edge2,
-		float p_scale2
+		LegoEdge& p_srcEdge,
+		float p_srcScale,
+		LegoUnknown100db7f4& p_destEdge,
+		float p_destScale
 	);                         // vtable+0x88
 	virtual void VTable0x8c(); // vtable+0x8c
 
