@@ -26,21 +26,23 @@ public:
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	MxResult Create(MxDSAction& p_dsAction) override;                   // vtable+0x18
+	undefined4 VTable0x68() override;                                   // vtable+0x68
+	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
+	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
 
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x78;
-	undefined4 m_unk0x7c;
-	undefined4 m_unk0x80;
-	undefined4 m_unk0x84;
-	undefined4 m_unk0x88;
-	undefined4 m_unk0x8c;
-	undefined4 m_unk0x90;
-	undefined4 m_unk0x94;
-	undefined m_unk0x98;
+	undefined4 m_unk0x7c; // 0x7c
+	undefined4 m_unk0x80; // 0x80
+	undefined4 m_unk0x84; // 0x84
+	undefined4 m_unk0x88; // 0x88
+	undefined4 m_unk0x8c; // 0x8c
+	undefined4 m_unk0x90; // 0x90
+	undefined4 m_unk0x94; // 0x94
+	undefined m_unk0x98;  // 0x98
 };
 
 #endif // PIZZA_H

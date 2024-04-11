@@ -1,6 +1,7 @@
 #ifndef PIZZERIA_H
 #define PIZZERIA_H
 
+#include "decomp.h"
 #include "isleactor.h"
 
 // VTABLE: LEGO1 0x100d5520
@@ -23,12 +24,12 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	undefined4 VTable0x68() override;                 // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x1000e8d0
 	// Pizzeria::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x78; // 0x78
 	undefined4 m_unk0x7c; // 0x7c
 	undefined4 m_unk0x80; // 0x80
 };
