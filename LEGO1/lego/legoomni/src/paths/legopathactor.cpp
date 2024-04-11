@@ -67,11 +67,7 @@ MxResult LegoPathActor::VTable0x88(
 	Vector3* v3 = p_destEdge.GetOpposingPoint(p_boundary);
 	Vector3* v4 = p_destEdge.GetPoint(p_boundary);
 
-	Mx3DPointFloat p1;
-	Mx3DPointFloat p2;
-	Mx3DPointFloat p3;
-	Mx3DPointFloat p4;
-	Mx3DPointFloat p5;
+	Mx3DPointFloat p1, p2, p3, p4, p5;
 
 	p1 = *v2;
 	((Vector3&) p1).Sub(v1);
