@@ -243,6 +243,12 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
+// STUB: LEGO1 0x1003eda0
+void FUN_1003eda0()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1003ee00
 MxBool RemoveFromCurrentWorld(MxAtomId& p_atomId, MxS32 p_id)
 {

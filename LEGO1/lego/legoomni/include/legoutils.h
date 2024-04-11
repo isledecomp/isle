@@ -20,6 +20,7 @@ Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);
 void SetCameraControllerFromIsle();
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);
+void FUN_1003eda0();
 MxBool RemoveFromCurrentWorld(MxAtomId& p_atomId, MxS32 p_id);
 void FUN_1003ef00(MxBool);
 void SetAppCursor(WPARAM p_wparam);

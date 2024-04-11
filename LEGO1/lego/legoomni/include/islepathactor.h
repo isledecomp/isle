@@ -51,10 +51,10 @@ public:
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void VTable0xe0();                                    // vtable+0xe0
-	virtual void VTable0xe4();                                    // vtable+0xe4
-	virtual void VTable0xe8(LegoGameState::Area, MxBool, MxU8);   // vtable+0xe8
-	virtual void VTable0xec(MxMatrix, LegoPathBoundary*, MxBool); // vtable+0xec
+	virtual void VTable0xe0();                                  // vtable+0xe0
+	virtual void VTable0xe4();                                  // vtable+0xe4
+	virtual void VTable0xe8(LegoGameState::Area, MxBool, MxU8); // vtable+0xe8
+	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset);
 
 	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'
@@ -62,10 +62,12 @@ public:
 	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 	inline LegoWorld* GetWorld() { return m_world; }
 
+	void FUN_1001b660();
+
 protected:
-	LegoWorld* m_world; // 0x154
-	MxFloat m_unk0x158; // 0x158
-	MxFloat m_unk0x15c; // 0x15c
+	LegoWorld* m_world;        // 0x154
+	IslePathActor* m_unk0x158; // 0x158
+	MxFloat m_unk0x15c;        // 0x15c
 };
 
 #endif // ISLEPATHACTOR_H
