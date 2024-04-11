@@ -38,8 +38,6 @@ public:
 	// SYNTHETIC: LEGO1 0x10010c00
 	// Mx3DPointFloat::operator=
 
-	inline void EqualsCross(Mx3DPointFloat& p_a, Mx3DPointFloat& p_b) { EqualsCrossImpl(p_a.m_data, p_b.m_data); }
-
 private:
 	float m_elements[3]; // 0x08
 };

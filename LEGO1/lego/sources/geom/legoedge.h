@@ -1,6 +1,7 @@
 #ifndef __LEGOEDGE_H
 #define __LEGOEDGE_H
 
+#include "misc/legotypes.h"
 #include "realtime/vector.h"
 
 class LegoWEEdge;
@@ -15,6 +16,8 @@ struct LegoEdge {
 	LegoEdge* GetCounterclockwiseEdge(LegoWEEdge* face);
 	Vector3* GetOpposingPoint(LegoWEEdge* face);
 	Vector3* GetPoint(LegoWEEdge* face);
+
+	LegoResult FUN_1002ddc0(LegoWEEdge* p_face, Vector3& p_point);
 
 	// SYNTHETIC: LEGO1 0x1009a4a0
 	// LegoEdge::`scalar deleting destructor'

@@ -150,6 +150,7 @@ add_library(geom STATIC
   LEGO1/lego/sources/geom/legoedge.cpp
   LEGO1/lego/sources/geom/legomesh.cpp
   LEGO1/lego/sources/geom/legosphere.cpp
+  LEGO1/lego/sources/geom/legounkown100db7f4.cpp
   LEGO1/lego/sources/geom/legovertex.cpp
   LEGO1/lego/sources/geom/legoweedge.cpp
   LEGO1/lego/sources/geom/legowegedge.cpp

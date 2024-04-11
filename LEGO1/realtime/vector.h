@@ -101,6 +101,7 @@ public:
 	virtual int Unitize()
 	{
 		float sq = LenSquared();
+
 		if (sq > 0.0f) {
 			float root = sqrt(sq);
 			if (root > 0) {
@@ -108,6 +109,7 @@ public:
 				return 0;
 			}
 		}
+
 		return -1;
 	} // vtable+0x44
 

@@ -217,8 +217,8 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 				lookat.Add(&loc);
 				Mx3DPointFloat v68, v7c, v90(0, 1, 0), va4;
 				v68 = m_world->GetCamera()->GetWorldUp();
-				va4.EqualsCross(v68, dir);
-				v7c.EqualsCross(va4, v90);
+				va4.EqualsCross(&v68, &dir);
+				v7c.EqualsCross(&va4, &v90);
 				if (ret) {
 					if (((Act3*) m_world)->FUN_100727e0(m_controller, loc, dir, v7c)) {
 						break;
