@@ -24,8 +24,7 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-
-	undefined4 VTable0x68() override; // vtable+0x68
+	undefined4 VTable0x68() override;                 // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x1000e8d0
 	// Pizzeria::`scalar deleting destructor'

@@ -15,10 +15,12 @@ MxResult IsleActor::Create(MxDSAction& p_dsAction)
 
 	if (ret == SUCCESS) {
 		m_world = CurrentWorld();
+
 		if (!m_world) {
 			ret = FAILURE;
 		}
 	}
+
 	return ret;
 }
 
@@ -29,25 +31,25 @@ MxLong IsleActor::Notify(MxParam& p_param)
 
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationType0:
-		result = this->VTable0x6c();
+		result = VTable0x6c();
 		break;
 	case c_notificationEndAction:
-		result = this->HandleEndAction((MxEndActionNotificationParam&) p_param);
+		result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 		break;
 	case c_notificationButtonUp:
-		result = this->HandleButtonUp((MxNotificationParam&) p_param);
+		result = HandleButtonUp((MxNotificationParam&) p_param);
 		break;
 	case c_notificationButtonDown:
-		result = this->HandleButtonDown((MxNotificationParam&) p_param);
+		result = HandleButtonDown((MxNotificationParam&) p_param);
 		break;
 	case c_notificationType11:
-		result = this->VTable0x68();
+		result = VTable0x68();
 		break;
 	case c_notificationType18:
-		result = this->VTable0x70();
+		result = VTable0x70();
 		break;
 	case c_notificationType19:
-		result = this->VTable0x80((MxParam&) p_param);
+		result = VTable0x80(p_param);
 		break;
 	}
 

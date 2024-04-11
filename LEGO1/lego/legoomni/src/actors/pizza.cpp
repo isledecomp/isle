@@ -30,9 +30,30 @@ MxResult Pizza::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x100383f0
+undefined4 Pizza::VTable0x68()
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x100384f0
+undefined4 Pizza::VTable0x80(MxParam&)
+{
+	// TODO
+	return 0;
+}
+
 // STUB: LEGO1 0x100388a0
 MxResult Pizza::Tickle()
 {
 	// TODO
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10038b10
+undefined4 Pizza::HandleEndAction(MxEndActionNotificationParam&)
+{
+	// TODO
+	return 0;
 }
