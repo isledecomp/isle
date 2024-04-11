@@ -100,7 +100,7 @@ MxResult LegoPathActor::VTable0x88(
 	matrix.SetIdentity();
 	pos = p1;
 	dir = p4;
-	up = *m_boundary->GetUnknown0x14(); // TODO
+	up = *m_boundary->GetUnknown0x14();
 
 	if (!m_cameraFlag || !m_userNavFlag) {
 		((Vector3&) dir).Mul(-1.0f);
