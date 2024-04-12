@@ -10,6 +10,18 @@ class LegoWorld;
 class LegoAnimClass;
 class LegoAnimActor;
 
+struct LegoAnimStructComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+};
+
+// SIZE 0x08
+struct LegoAnimStruct {
+	LegoROI* m_roi;       // 0x00
+	undefined4 m_unk0x04; // 0x04
+};
+
+typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPresenterMap;
+
 // VTABLE: LEGO1 0x100d90c8
 // SIZE 0xbc
 class LegoAnimPresenter : public MxVideoPresenter {
@@ -74,6 +86,8 @@ protected:
 	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);
 	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
 	void FUN_10069b10();
+	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_root, LegoROI* p_roi);
+	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
 	LegoBool FUN_1006aba0();
 	LegoBool FUN_1006abb0(LegoTreeNode*, undefined4);
 	void FUN_1006ac90();
@@ -102,7 +116,18 @@ protected:
 	Mx3DPointFloat m_unk0xa8;  // 0xa8
 };
 
+// clang-format off
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1006a750
+// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x1006a7a0
+// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Insert
+
+// GLOBAL: LEGO1 0x100f7688
+// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Nil
+// clang-format on
 
 #endif // LEGOANIMPRESENTER_H

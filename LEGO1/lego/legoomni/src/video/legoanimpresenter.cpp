@@ -312,6 +312,40 @@ void LegoAnimPresenter::FUN_10069b10()
 	// TODO
 }
 
+// STUB: LEGO1 0x1006a3c0
+void LegoAnimPresenter::FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_root, LegoROI* p_roi)
+{
+	// TODO
+}
+
+// FUNCTION: LEGO1 0x1006a4f0
+void LegoAnimPresenter::FUN_1006a4f0(
+	LegoAnimPresenterMap& p_map,
+	LegoAnimNodeData* p_data,
+	const LegoChar* p_und,
+	LegoROI* p_roi
+)
+{
+	LegoAnimPresenterMap::iterator it;
+
+	it = p_map.find(p_und);
+	if (it == p_map.end()) {
+		LegoAnimStruct animStruct;
+		animStruct.m_unk0x04 = p_map.size() + 1;
+		animStruct.m_roi = p_roi;
+
+		p_data->SetUnknown0x20(animStruct.m_unk0x04);
+
+		LegoChar* und = new LegoChar[strlen(p_und) + 1];
+		strcpy(und, p_und);
+
+		p_map[und] = animStruct;
+	}
+	else {
+		p_data->SetUnknown0x20((*it).second.m_unk0x04);
+	}
+}
+
 // FUNCTION: LEGO1 0x1006aba0
 LegoBool LegoAnimPresenter::FUN_1006aba0()
 {
@@ -368,46 +402,49 @@ void LegoAnimPresenter::StartingTickle()
 	FUN_100692b0();
 	FUN_100695c0();
 
-	if ((m_unk0x7c & c_bit2) == 0 || FUN_1006aba0()) {
-		FUN_10069b10();
-		FUN_1006c8a0(TRUE);
-
-		if (m_unk0x78 == NULL) {
-			if (fabs(m_action->GetDirection().GetX()) >= 0.00000047683716F ||
-				fabs(m_action->GetDirection().GetY()) >= 0.00000047683716F ||
-				fabs(m_action->GetDirection().GetZ()) >= 0.00000047683716F) {
-				m_unk0x78 = new MxMatrix();
-				CalcLocalTransform(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), *m_unk0x78);
-			}
-			else if (m_unk0x68) {
-				MxU8* und = (MxU8*) m_unk0x68[1];
-
-				if (und) {
-					MxMatrix mat;
-					mat = *(Matrix4*) (und + 0x10);
-					m_unk0x78 = new MxMatrix(mat);
-				}
-			}
-		}
-
-		if ((m_action->GetDuration() == -1 || ((MxDSMediaAction*) m_action)->GetSustainTime() == -1) &&
-			m_compositePresenter) {
-			m_compositePresenter->VTable0x60(this);
-		}
-		else {
-			m_action->SetUnknown90(Timer()->GetTime());
-		}
-
-		ProgressTickleState(e_streaming);
-
-		if (m_compositePresenter && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
-			m_unk0x96 = ((LegoAnimMMPresenter*) m_compositePresenter)->FUN_1004b8b0();
-			m_compositePresenter->VTable0x60(this);
-		}
-
-		VTable0x8c();
+	if (m_unk0x7c & c_bit2 && !FUN_1006aba0()) {
+		goto done;
 	}
 
+	FUN_10069b10();
+	FUN_1006c8a0(TRUE);
+
+	if (m_unk0x78 == NULL) {
+		if (fabs(m_action->GetDirection().GetX()) >= 0.00000047683716F ||
+			fabs(m_action->GetDirection().GetY()) >= 0.00000047683716F ||
+			fabs(m_action->GetDirection().GetZ()) >= 0.00000047683716F) {
+			m_unk0x78 = new MxMatrix();
+			CalcLocalTransform(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), *m_unk0x78);
+		}
+		else if (m_unk0x68) {
+			MxU8* und = (MxU8*) m_unk0x68[1];
+
+			if (und) {
+				MxMatrix mat;
+				mat = *(Matrix4*) (und + 0x10);
+				m_unk0x78 = new MxMatrix(mat);
+			}
+		}
+	}
+
+	if ((m_action->GetDuration() == -1 || ((MxDSMediaAction*) m_action)->GetSustainTime() == -1) &&
+		m_compositePresenter) {
+		m_compositePresenter->VTable0x60(this);
+	}
+	else {
+		m_action->SetUnknown90(Timer()->GetTime());
+	}
+
+	ProgressTickleState(e_streaming);
+
+	if (m_compositePresenter && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
+		m_unk0x96 = ((LegoAnimMMPresenter*) m_compositePresenter)->FUN_1004b8b0();
+		m_compositePresenter->VTable0x60(this);
+	}
+
+	VTable0x8c();
+
+done:
 	if (m_unk0x70 != NULL) {
 		delete m_unk0x70;
 		m_unk0x70 = NULL;

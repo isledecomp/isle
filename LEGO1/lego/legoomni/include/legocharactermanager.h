@@ -13,7 +13,6 @@ class LegoROI;
 
 #pragma warning(disable : 4237)
 
-// TODO: generic string comparator?
 struct LegoCharacterComparator {
 	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmpi(p_a, p_b) < 0; }
 };
@@ -114,6 +113,15 @@ private:
 
 // TEMPLATE: LEGO1 0x10085500
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::insert
+
+// TEMPLATE: LEGO1 0x10085790
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Buynode
+
+// TEMPLATE: LEGO1 0x100857b0
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Lrotate
+
+// TEMPLATE: LEGO1 0x10085810
+// _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Rrotate
 
 // GLOBAL: LEGO1 0x100fc508
 // _Tree<char const *,pair<char const * const,LegoCharacter *>,map<char const *,LegoCharacter *,LegoCharacterComparator,allocator<LegoCharacter *> >::_Kfn,LegoCharacterComparator,allocator<LegoCharacter *> >::_Nil
