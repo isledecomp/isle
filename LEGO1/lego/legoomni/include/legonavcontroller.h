@@ -72,6 +72,12 @@ public:
 	);
 	static MxResult UpdateCameraLocation(MxU32 p_location);
 	static MxResult UpdateCameraLocation(const char* p_location);
+	inline MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
+	inline void ResetLinearVel(MxFloat p_maxLinearVel)
+	{
+		m_maxLinearVel = p_maxLinearVel;
+		m_trackDefault = 0;
+	}
 
 	// SYNTHETIC: LEGO1 0x10054c10
 	// LegoNavController::`scalar deleting destructor'
