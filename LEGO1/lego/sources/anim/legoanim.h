@@ -128,6 +128,7 @@ public:
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
 	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
+	void SetUnknown0x20(undefined2 p_unk0x20) { m_unk0x20 = p_unk0x20; }
 
 	LegoResult CreateLocalTransform(LegoTime p_time, Matrix4& p_matrix)
 	{
