@@ -56,8 +56,7 @@ void LegoAnimPresenter::Init()
 void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
 	// TODO
-	if (!p_fromDestructor)
-		MxVideoPresenter::Destroy(FALSE);
+	MxVideoPresenter::Destroy(p_fromDestructor);
 }
 
 // FUNCTION: LEGO1 0x10068fb0
