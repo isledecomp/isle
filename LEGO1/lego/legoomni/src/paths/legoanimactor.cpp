@@ -104,11 +104,10 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 			}
 		}
 		else {
-			MxU32 i;
 			LegoTreeNode* root = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
 			m_roi->SetVisibility(TRUE);
 
-			for (i = 0; i < numROIs; i++) {
+			for (MxU32 i = 0; i < numROIs; i++) {
 				LegoROI* roi = roiMap[i];
 
 				if (roi != NULL && m_roi != roi) {
@@ -116,8 +115,8 @@ MxResult LegoAnimActor::FUN_1001c360(float p_und, Matrix4& p_transform)
 				}
 			}
 
-			for (i = 0; i < root->GetNumChildren(); i++) {
-				LegoROI::FUN_100a8e80(root->GetChild(i), p_transform, p_und, roiMap);
+			for (MxS32 j = 0; j < root->GetNumChildren(); j++) {
+				LegoROI::FUN_100a8e80(root->GetChild(j), p_transform, p_und, roiMap);
 			}
 
 			if (m_cameraFlag) {

@@ -85,8 +85,9 @@ protected:
 	void FUN_100695c0();
 	LegoChar* FUN_100697c0(const LegoChar* p_und1, const LegoChar* p_und2);
 	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
+	LegoROI* FUN_100699e0(const LegoChar*);
 	void FUN_10069b10();
-	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_root, LegoROI* p_roi);
+	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
 	LegoBool FUN_1006aba0();
 	LegoBool FUN_1006abb0(LegoTreeNode*, undefined4);
