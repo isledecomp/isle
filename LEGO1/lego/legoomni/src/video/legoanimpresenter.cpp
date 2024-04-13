@@ -510,10 +510,57 @@ void LegoAnimPresenter::FUN_1006ac90()
 	// TODO
 }
 
-// STUB: LEGO1 0x1006ad30
+// FUNCTION: LEGO1 0x1006ad30
 void LegoAnimPresenter::PutFrame()
 {
-	// TODO
+	if (m_currentTickleState == e_streaming) {
+		MxLong time;
+
+		if (m_action->GetStartTime() <= m_action->GetElapsedTime()) {
+			time = m_action->GetElapsedTime() - m_action->GetStartTime();
+		}
+		else {
+			time = 0;
+		}
+
+		FUN_1006b9a0(m_anim, time, *m_unk0x78);
+
+		if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
+			for (MxS32 i = 0; i < m_unk0x94; i++) {
+				if (m_unk0x8c[i] != NULL) {
+					MxMatrix mat(m_unk0x8c[i]->GetLocal2World());
+
+					Vector3 pos(mat[0]);
+					Vector3 dir(mat[1]);
+					Vector3 up(mat[2]);
+					Vector3 und(mat[3]);
+
+					float possqr = sqrt(pos.LenSquared());
+					float dirsqr = sqrt(dir.LenSquared());
+					float upsqr = sqrt(up.LenSquared());
+
+					up = und;
+
+#ifdef COMPAT_MODE
+					Mx3DPointFloat location = m_currentWorld->GetCamera()->GetWorldLocation();
+					((Vector3&) up).Sub(&location);
+#else
+					((Vector3&) up).Sub(&m_currentWorld->GetCamera()->GetWorldLocation());
+#endif
+					((Vector3&) dir).Div(dirsqr);
+					pos.EqualsCross(&dir, &up);
+					pos.Unitize();
+					up.EqualsCross(&pos, &dir);
+					((Vector3&) pos).Mul(possqr);
+					((Vector3&) dir).Mul(dirsqr);
+					((Vector3&) up).Mul(upsqr);
+
+					m_unk0x8c[i]->FUN_100a58f0(mat);
+					m_unk0x8c[i]->VTable0x14();
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1006b550
@@ -641,6 +688,11 @@ void LegoAnimPresenter::Destroy()
 const char* LegoAnimPresenter::GetActionObjectName()
 {
 	return m_action->GetObjectName();
+}
+
+// STUB: LEGO1 0x1006b9a0
+void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, MxMatrix& p_matrix)
+{
 }
 
 // STUB: LEGO1 0x1006bac0

@@ -126,7 +126,7 @@ public:
 	virtual void Sub(float* p_other) { SubImpl(p_other); } // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10002200
-	virtual void Sub(Vector2* p_other) { SubImpl(p_other->m_data); } // vtable+0x54
+	virtual void Sub(const Vector2* p_other) { SubImpl((float*) p_other->m_data); } // vtable+0x54
 
 	// FUNCTION: LEGO1 0x10002210
 	virtual void Mul(float* p_other) { MulVectorImpl(p_other); } // vtable+0x64
