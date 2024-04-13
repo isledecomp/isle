@@ -27,6 +27,19 @@ public:
 	// LegoROIList::`scalar deleting destructor'
 };
 
+// VTABLE: LEGO1 0x100d8d68
+// class MxListCursor<LegoROI *>
+
+// VTABLE: LEGO1 0x100d8d38
+// class MxPtrListCursor<LegoROI>
+
+// VTABLE: LEGO1 0x100d8d50
+// SIZE 0x10
+class LegoROIListCursor : public MxPtrListCursor<LegoROI> {
+public:
+	LegoROIListCursor(LegoROIList* p_list) : MxPtrListCursor<LegoROI>(p_list) {}
+};
+
 // TEMPLATE: LEGO1 0x1005f380
 // MxCollection<LegoROI *>::Compare
 
@@ -50,6 +63,24 @@ public:
 
 // SYNTHETIC: LEGO1 0x1005f660
 // MxPtrList<LegoROI>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10063540
+// LegoROIListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100635b0
+// MxPtrListCursor<LegoROI>::~MxPtrListCursor<LegoROI>
+
+// SYNTHETIC: LEGO1 0x10063600
+// MxListCursor<LegoROI *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10063670
+// MxPtrListCursor<LegoROI>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x100636e0
+// MxListCursor<LegoROI *>::~MxListCursor<LegoROI *>
+
+// FUNCTION: LEGO1 0x10063730
+// LegoROIListCursor::~LegoROIListCursor
 
 // TEMPLATE: LEGO1 0x1006ea00
 // MxListEntry<LegoROI *>::MxListEntry<LegoROI *>

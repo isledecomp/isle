@@ -306,10 +306,23 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_rois, const Leg
 	return result;
 }
 
-// STUB: LEGO1 0x100699e0
-LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar*)
+// FUNCTION: LEGO1 0x100699e0
+LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar* p_und)
 {
-	// TODO
+	LegoROIListCursor cursor(m_unk0x70);
+	LegoROI* roi;
+
+	while (cursor.Next(roi)) {
+		LegoChar* und = FUN_100697c0(roi->GetName(), NULL);
+
+		if (und != NULL && !strcmpi(und, p_und)) {
+			delete[] und;
+			return roi;
+		}
+
+		delete[] und;
+	}
+
 	return NULL;
 }
 
