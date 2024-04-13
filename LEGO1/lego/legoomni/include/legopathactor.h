@@ -47,8 +47,15 @@ public:
 		Vector3& p_point2,
 		Vector3& p_point3,
 		Vector3& p_point4
-	);                         // vtable+0x80
-	virtual void VTable0x84(); // vtable+0x84
+	); // vtable+0x80
+	virtual MxResult VTable0x84(
+		LegoPathBoundary* p_boundary,
+		float p_time,
+		Vector3& p_p1,
+		Vector3& p_p4,
+		LegoUnknown100db7f4& p_destEdge,
+		float p_destScale
+	); // vtable+0x84
 	virtual MxResult VTable0x88(
 		LegoPathBoundary* p_boundary,
 		float p_time,

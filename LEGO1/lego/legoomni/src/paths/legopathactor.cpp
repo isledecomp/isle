@@ -129,10 +129,70 @@ MxResult LegoPathActor::VTable0x88(
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1002de10
-void LegoPathActor::VTable0x84()
+// FUNCTION: LEGO1 0x1002de10
+MxResult LegoPathActor::VTable0x84(
+	LegoPathBoundary* p_boundary,
+	float p_time,
+	Vector3& p_p1,
+	Vector3& p_p4,
+	LegoUnknown100db7f4& p_destEdge,
+	float p_destScale
+)
 {
-	// TODO
+	Vector3* v3 = p_destEdge.GetOpposingPoint(p_boundary);
+	Vector3* v4 = p_destEdge.GetPoint(p_boundary);
+
+	Mx3DPointFloat p2, p3, p5;
+
+	p2 = *v4;
+	((Vector3&) p2).Sub(v3);
+	((Vector3&) p2).Mul(p_destScale);
+	((Vector3&) p2).Add(v3);
+
+	m_boundary = p_boundary;
+	m_destEdge = &p_destEdge;
+	m_unk0xe4 = p_destScale;
+	m_unk0x7c = 0;
+	m_lastTime = p_time;
+	m_actorTime = p_time;
+	p_destEdge.FUN_1002ddc0(*p_boundary, p3);
+
+	MxMatrix matrix;
+	Vector3 pos(matrix[3]);
+	Vector3 dir(matrix[2]);
+	Vector3 up(matrix[1]);
+	Vector3 right(matrix[0]);
+
+	matrix.SetIdentity();
+	pos = p_p1;
+	dir = p_p4;
+	up = *m_boundary->GetUnknown0x14();
+
+	if (!m_cameraFlag || !m_userNavFlag) {
+		((Vector3&) dir).Mul(-1.0f);
+	}
+
+	right.EqualsCross(&up, &dir);
+	m_roi->FUN_100a46b0(matrix);
+
+	if (!m_cameraFlag || !m_userNavFlag) {
+		p5.EqualsCross(p_boundary->GetUnknown0x14(), &p3);
+		p5.Unitize();
+
+		if (VTable0x80(p_p1, p_p4, p2, p5) == SUCCESS) {
+			m_boundary->AddActor(this);
+		}
+		else {
+			return FAILURE;
+		}
+	}
+	else {
+		m_boundary->AddActor(this);
+		FUN_10010c30();
+	}
+
+	m_unk0xec = m_roi->GetLocal2World();
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1002e100
