@@ -136,6 +136,13 @@ done:
 	return result;
 }
 
+// STUB: LEGO1 0x1009f490
+undefined4 LegoAnimScene::FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x1009f900
 LegoAnimKey::LegoAnimKey()
 {
