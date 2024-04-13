@@ -92,7 +92,7 @@ protected:
 	LegoBool FUN_1006aba0();
 	LegoBool FUN_1006abb0(LegoTreeNode*, undefined4);
 	void FUN_1006ac90();
-	void FUN_1006c8a0(LegoBool);
+	void FUN_1006c8a0(MxBool p_bool);
 
 	LegoAnim* m_anim;          // 0x64
 	LegoROI** m_unk0x68;       // 0x68

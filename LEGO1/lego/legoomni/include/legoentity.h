@@ -80,6 +80,8 @@ public:
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }
 	inline void ClearFlag(MxU8 p_flag) { m_flags &= ~p_flag; }
+	inline void SetUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 |= p_flag; }
+	inline void ClearUnknown0x10Flag(MxU8 p_flag) { m_unk0x10 &= ~p_flag; }
 
 protected:
 	void Init();
