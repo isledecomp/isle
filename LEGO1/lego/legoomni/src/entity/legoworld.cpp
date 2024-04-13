@@ -287,6 +287,12 @@ void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 	}
 }
 
+// STUB: LEGO1 0x1001fda0
+void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1001ff80
 void LegoWorld::AddPath(LegoPathController* p_controller)
 {

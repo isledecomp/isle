@@ -746,14 +746,37 @@ MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAc
 // STUB: LEGO1 0x1006c640
 void LegoAnimPresenter::EndAction()
 {
-	// TODO
-	MxVideoPresenter::EndAction();
+	if (m_action) {
+		// TODO
+
+		if (m_currentWorld) {
+			m_currentWorld->Remove(this);
+		}
+		FUN_1006c8a0(FALSE);
+		MxVideoPresenter::EndAction();
+	}
 }
 
-// STUB: LEGO1 0x1006c7d0
+// FUNCTION: LEGO1 0x1006c7d0
 void LegoAnimPresenter::VTable0x8c()
 {
-	// TODO
+	if (m_unk0x78) {
+		m_unk0xa8.Add((*m_unk0x78)[3]);
+	}
+	else {
+		m_unk0xa8.Add(&m_action->GetLocation());
+	}
+
+	if (m_currentWorld == NULL) {
+		m_currentWorld = m_unk0x88 != -1 ? FindWorld(m_animAtom, m_unk0x88) : CurrentWorld();
+	}
+
+	if (m_currentWorld) {
+		m_currentWorld->FUN_1001fda0(this);
+		if (!m_compositePresenter || !m_compositePresenter->IsA("LegoAnimMMPresenter")) {
+			m_currentWorld->Add(this);
+		}
+	}
 }
 
 // STUB: LEGO1 0x1006c860
