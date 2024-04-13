@@ -523,7 +523,7 @@ void LegoAnimPresenter::PutFrame()
 			time = 0;
 		}
 
-		FUN_1006b9a0(m_anim, time, *m_unk0x78);
+		FUN_1006b9a0(m_anim, time, m_unk0x78);
 
 		if (m_unk0x8c != NULL && m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
 			for (MxS32 i = 0; i < m_unk0x94; i++) {
@@ -690,9 +690,37 @@ const char* LegoAnimPresenter::GetActionObjectName()
 	return m_action->GetObjectName();
 }
 
-// STUB: LEGO1 0x1006b9a0
-void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, MxMatrix& p_matrix)
+// FUNCTION: LEGO1 0x1006b9a0
+void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix)
 {
+	LegoTreeNode* root = p_anim->GetRoot();
+	MxMatrix mat;
+	LegoAnimNodeData* data = (LegoAnimNodeData*) root->GetData();
+
+	if (p_matrix != NULL) {
+		mat = *p_matrix;
+	}
+	else {
+		LegoROI* roi = m_unk0x68[data->GetUnknown0x20()];
+
+		if (roi != NULL) {
+			mat = roi->GetLocal2World();
+		}
+		else {
+			mat.SetIdentity();
+		}
+	}
+
+	if (p_anim->GetScene() != NULL) {
+		MxMatrix transform(mat);
+		p_anim->GetScene()->FUN_1009f490(p_time, transform);
+
+		if (m_currentWorld != NULL && m_currentWorld->GetCamera() != NULL) {
+			m_currentWorld->GetCamera()->FUN_100123e0(transform, 0);
+		}
+	}
+
+	LegoROI::FUN_100a8e80(root, mat, p_time, m_unk0x68);
 }
 
 // STUB: LEGO1 0x1006bac0
