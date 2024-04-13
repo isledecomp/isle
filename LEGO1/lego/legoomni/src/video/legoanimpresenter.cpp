@@ -453,11 +453,55 @@ LegoBool LegoAnimPresenter::FUN_1006aba0()
 	return FUN_1006abb0(m_anim->GetRoot(), 0);
 }
 
-// STUB: LEGO1 0x1006abb0
-LegoBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode*, undefined4)
+// FUNCTION: LEGO1 0x1006abb0
+MxBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi)
 {
-	// TODO
-	return FALSE;
+	MxBool result = FALSE;
+	LegoROI* roi = p_roi;
+	LegoChar* und = NULL;
+	const LegoChar* name = ((LegoAnimNodeData*) p_node->GetData())->GetName();
+	MxS32 i, count;
+
+	if (name != NULL && *name != '-') {
+		und = FUN_100697c0(name, p_roi != NULL ? p_roi->GetName() : NULL);
+
+		if (p_roi == NULL) {
+			roi = FUN_100699e0(und);
+
+			if (roi == NULL) {
+				goto done;
+			}
+		}
+		else {
+			LegoROI* roi2 = p_roi->FUN_100a8ce0(name, p_roi);
+
+			if (roi2 == NULL) {
+				if (FUN_100699e0(name) != NULL) {
+					if (FUN_1006abb0(p_node, NULL)) {
+						result = TRUE;
+					}
+				}
+
+				goto done;
+			}
+		}
+	}
+
+	count = p_node->GetNumChildren();
+	for (i = 0; i < count; i++) {
+		if (!FUN_1006abb0(p_node->GetChild(i), roi)) {
+			goto done;
+		}
+	}
+
+	result = TRUE;
+
+done:
+	if (und != NULL) {
+		delete[] und;
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x1006ac90
