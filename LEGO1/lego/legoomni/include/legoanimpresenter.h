@@ -16,8 +16,8 @@ struct LegoAnimStructComparator {
 
 // SIZE 0x08
 struct LegoAnimStruct {
-	LegoROI* m_roi;       // 0x00
-	undefined4 m_unk0x04; // 0x04
+	LegoROI* m_roi; // 0x00
+	MxU32 m_index;  // 0x04
 };
 
 typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPresenterMap;
@@ -62,8 +62,8 @@ public:
 	virtual void VTable0x94();                                                             // vtable+0x94
 	virtual void VTable0x98();                                                             // vtable+0x98
 
-	// STUB: LEGO1 0x1000c990
-	virtual undefined4* VTable0x9c(undefined4& p_unk0x6c)
+	// FUNCTION: LEGO1 0x1000c990
+	virtual LegoROI** VTable0x9c(MxU32& p_unk0x6c)
 	{
 		p_unk0x6c = m_unk0x6c;
 		return m_unk0x68;
@@ -95,8 +95,8 @@ protected:
 	void FUN_1006c8a0(LegoBool);
 
 	LegoAnim* m_anim;          // 0x64
-	undefined4* m_unk0x68;     // 0x68
-	undefined4 m_unk0x6c;      // 0x6c
+	LegoROI** m_unk0x68;       // 0x68
+	MxU32 m_unk0x6c;           // 0x6c
 	LegoROIList* m_unk0x70;    // 0x70
 	LegoROIList* m_unk0x74;    // 0x74
 	MxMatrix* m_unk0x78;       // 0x78
@@ -104,9 +104,9 @@ protected:
 	LegoWorld* m_currentWorld; // 0x80
 	MxAtomId m_animAtom;       // 0x84
 	undefined4 m_unk0x88;      // 0x88
-	undefined4 m_unk0x8c;      // 0x8c
-	undefined4 m_unk0x90;      // 0x90
-	undefined m_unk0x94;       // 0x94
+	LegoROI** m_unk0x8c;       // 0x8c
+	const char** m_unk0x90;    // 0x90
+	MxU8 m_unk0x94;            // 0x94
 	undefined m_unk0x95;       // 0x95
 	MxBool m_unk0x96;          // 0x96
 	undefined m_unk0x97;       // 0x97
@@ -120,6 +120,15 @@ protected:
 // clang-format off
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x10069d80
+// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~_Tree<char const *,pair<char const * const,LegoAni
+
+// TEMPLATE: LEGO1 0x1006a320
+// Map<char const *,LegoAnimStruct,LegoAnimStructComparator>::~Map<char const *,LegoAnimStruct,LegoAnimStructComparator>
+
+// TEMPLATE: LEGO1 0x1006a370
+// map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >
 
 // TEMPLATE: LEGO1 0x1006a750
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::iterator::_Dec

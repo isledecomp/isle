@@ -45,8 +45,8 @@ void LegoAnimPresenter::Init()
 	m_unk0x98 = 0;
 	m_animAtom.Clear();
 	m_unk0x9c = 0;
-	m_unk0x8c = 0;
-	m_unk0x90 = 0;
+	m_unk0x8c = NULL;
+	m_unk0x90 = NULL;
 	m_unk0x94 = 0;
 	m_unk0x96 = TRUE;
 	m_unk0xa0 = 0;
@@ -313,10 +313,45 @@ LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar*)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10069b10
+// FUNCTION: LEGO1 0x10069b10
 void LegoAnimPresenter::FUN_10069b10()
 {
-	// TODO
+	LegoAnimPresenterMap map;
+
+	if (m_unk0x8c != NULL) {
+		memset(m_unk0x8c, 0, m_unk0x94 * sizeof(*m_unk0x8c));
+	}
+
+	FUN_1006a3c0(map, m_anim->GetRoot(), NULL);
+
+	if (m_unk0x68 != NULL) {
+		delete[] m_unk0x68;
+		m_unk0x6c = 0;
+	}
+
+	m_unk0x6c = 0;
+	m_unk0x68 = new LegoROI*[map.size() + 1];
+	memset(m_unk0x68, 0, (map.size() + 1) * sizeof(*m_unk0x68));
+
+	for (LegoAnimPresenterMap::iterator it = map.begin(); it != map.end();) {
+		MxU32 index = (*it).second.m_index;
+		m_unk0x68[index] = (*it).second.m_roi;
+
+		if (m_unk0x68[index]->GetName() != NULL) {
+			for (MxS32 i = 0; i < m_unk0x94; i++) {
+				if (m_unk0x8c[i] == NULL && m_unk0x90[i] != NULL) {
+					if (!strcmpi(m_unk0x90[i], m_unk0x68[index]->GetName())) {
+						m_unk0x8c[i] = m_unk0x68[index];
+						break;
+					}
+				}
+			}
+		}
+
+		delete[] const_cast<char*>((*it).first);
+		it++;
+		m_unk0x6c++;
+	}
 }
 
 // FUNCTION: LEGO1 0x1006a3c0
@@ -384,10 +419,10 @@ void LegoAnimPresenter::FUN_1006a4f0(
 	it = p_map.find(p_und);
 	if (it == p_map.end()) {
 		LegoAnimStruct animStruct;
-		animStruct.m_unk0x04 = p_map.size() + 1;
+		animStruct.m_index = p_map.size() + 1;
 		animStruct.m_roi = p_roi;
 
-		p_data->SetUnknown0x20(animStruct.m_unk0x04);
+		p_data->SetUnknown0x20(animStruct.m_index);
 
 		LegoChar* und = new LegoChar[strlen(p_und) + 1];
 		strcpy(und, p_und);
@@ -395,7 +430,7 @@ void LegoAnimPresenter::FUN_1006a4f0(
 		p_map[und] = animStruct;
 	}
 	else {
-		p_data->SetUnknown0x20((*it).second.m_unk0x04);
+		p_data->SetUnknown0x20((*it).second.m_index);
 	}
 }
 
@@ -469,12 +504,12 @@ void LegoAnimPresenter::StartingTickle()
 			m_unk0x78 = new MxMatrix();
 			CalcLocalTransform(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), *m_unk0x78);
 		}
-		else if (m_unk0x68) {
-			MxU8* und = (MxU8*) m_unk0x68[1];
+		else if (m_unk0x68 != NULL) {
+			LegoROI* roi = m_unk0x68[1];
 
-			if (und) {
+			if (roi != NULL) {
 				MxMatrix mat;
-				mat = *(Matrix4*) (und + 0x10);
+				mat = roi->GetLocal2World();
 				m_unk0x78 = new MxMatrix(mat);
 			}
 		}
