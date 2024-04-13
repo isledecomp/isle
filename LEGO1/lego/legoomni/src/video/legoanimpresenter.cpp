@@ -638,10 +638,23 @@ void LegoAnimPresenter::VTable0x90()
 	// TODO
 }
 
-// STUB: LEGO1 0x1006c8a0
-void LegoAnimPresenter::FUN_1006c8a0(LegoBool)
+// FUNCTION: LEGO1 0x1006c8a0
+void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
 {
-	// TODO
+	if (m_unk0x6c != 0 && m_unk0x68 != NULL) {
+		for (MxU32 i = 1; i <= m_unk0x6c; i++) {
+			LegoEntity* entity = m_unk0x68[i]->GetEntity();
+
+			if (entity != NULL) {
+				if (p_bool) {
+					entity->SetUnknown0x10Flag(LegoEntity::c_altBit1);
+				}
+				else {
+					entity->ClearUnknown0x10Flag(LegoEntity::c_altBit1);
+				}
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x1006c8f0
