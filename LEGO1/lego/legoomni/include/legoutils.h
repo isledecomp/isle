@@ -14,7 +14,9 @@ class MxAtomId;
 class LegoEntity;
 class LegoAnimPresenter;
 class LegoNamedTexture;
+class LegoTreeNode;
 
+MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);
