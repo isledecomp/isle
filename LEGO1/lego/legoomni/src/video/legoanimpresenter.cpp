@@ -306,16 +306,69 @@ LegoBool LegoAnimPresenter::FUN_100698b0(const CompoundObject& p_rois, const Leg
 	return result;
 }
 
+// STUB: LEGO1 0x100699e0
+LegoROI* LegoAnimPresenter::FUN_100699e0(const LegoChar*)
+{
+	// TODO
+	return NULL;
+}
+
 // STUB: LEGO1 0x10069b10
 void LegoAnimPresenter::FUN_10069b10()
 {
 	// TODO
 }
 
-// STUB: LEGO1 0x1006a3c0
-void LegoAnimPresenter::FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_root, LegoROI* p_roi)
+// FUNCTION: LEGO1 0x1006a3c0
+void LegoAnimPresenter::FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi)
 {
-	// TODO
+	LegoROI* roi = p_roi;
+	LegoChar* und = NULL;
+	LegoChar* und2 = NULL;
+	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
+	const LegoChar* name = data->GetName();
+
+	if (name != NULL && *name != '-') {
+		if (*name == '*') {
+			name = und2 = FUN_10069150(name);
+		}
+
+		und = FUN_100697c0(name, p_roi != NULL ? p_roi->GetName() : NULL);
+
+		if (p_roi == NULL) {
+			roi = FUN_100699e0(und);
+
+			if (roi != NULL) {
+				FUN_1006a4f0(p_map, data, und, roi);
+			}
+			else {
+				data->SetUnknown0x20(0);
+			}
+		}
+		else {
+			LegoROI* roi2 = p_roi->FUN_100a8ce0(name, p_roi);
+
+			if (roi2 != NULL) {
+				FUN_1006a4f0(p_map, data, und, roi2);
+			}
+			else {
+				if (FUN_100699e0(name) != NULL) {
+					FUN_1006a3c0(p_map, p_node, NULL);
+					delete[] und;
+					delete[] und2;
+					return;
+				}
+			}
+		}
+	}
+
+	delete[] und;
+	delete[] und2;
+
+	MxS32 count = p_node->GetNumChildren();
+	for (MxS32 i = 0; i < count; i++) {
+		FUN_1006a3c0(p_map, p_node->GetChild(i), roi);
+	}
 }
 
 // FUNCTION: LEGO1 0x1006a4f0
