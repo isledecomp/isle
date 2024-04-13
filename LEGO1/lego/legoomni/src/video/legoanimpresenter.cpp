@@ -541,7 +541,12 @@ void LegoAnimPresenter::PutFrame()
 
 					up = und;
 
+#ifdef COMPAT_MODE
+					Mx3DPointFloat location = m_currentWorld->GetCamera()->GetWorldLocation();
+					((Vector3&) up).Sub(&location);
+#else
 					((Vector3&) up).Sub(&m_currentWorld->GetCamera()->GetWorldLocation());
+#endif
 					((Vector3&) dir).Div(dirsqr);
 					pos.EqualsCross(&dir, &up);
 					pos.Unitize();
