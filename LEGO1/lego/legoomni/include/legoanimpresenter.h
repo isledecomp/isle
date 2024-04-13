@@ -90,7 +90,7 @@ protected:
 	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
 	LegoBool FUN_1006aba0();
-	LegoBool FUN_1006abb0(LegoTreeNode*, undefined4);
+	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006ac90();
 	void FUN_1006c8a0(MxBool p_bool);
 
