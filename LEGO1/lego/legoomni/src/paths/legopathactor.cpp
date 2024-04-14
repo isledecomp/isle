@@ -330,12 +330,14 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			m_lastTime = p_time;
 			return 1;
 		}
+		else {
+			m_boundary->FUN_100575b0(pos2, pos1, this);
+			pos2 = pos1;
 
-		m_boundary->FUN_100575b0(pos2, pos1, this);
-		pos2 = pos1;
+			if (m_unk0xe9 != 0) {
+				WaitForAnimation();
+			}
 
-		if (m_unk0xe9 != 0) {
-			WaitForAnimation();
 			return 0;
 		}
 	}
