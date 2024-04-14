@@ -307,14 +307,21 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		}
 		else {
 			f = p_time;
+			m_unk0x7c += (f - m_lastTime) * m_worldSpeed;
 			m_unk0xe9 = 0;
-			m_unk0x7c += (p_time - m_lastTime) * m_worldSpeed;
 		}
 
 		m_actorTime += (f - m_lastTime) * m_worldSpeed;
 		m_lastTime = f;
 		p_transform.SetIdentity();
-		m_unk0x8c.FUN_1009a1e0(m_BADuration / m_unk0x7c, p_transform, *m_boundary->GetUnknown0x14(), !m_userNavFlag);
+
+		if (m_userNavFlag) {
+			m_unk0x8c.FUN_1009a1e0(m_BADuration / m_unk0x7c, p_transform, *m_boundary->GetUnknown0x14(), 0);
+		}
+		else {
+			m_unk0x8c.FUN_1009a1e0(m_BADuration / m_unk0x7c, p_transform, *m_boundary->GetUnknown0x14(), 1);
+		}
+
 		Vector3 pos1(p_transform[3]);
 		Vector3 pos2(m_unk0xec[3]);
 		Mx3DPointFloat p1;
