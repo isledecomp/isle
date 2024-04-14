@@ -3,6 +3,7 @@
 #include "mxgeometry/mxmatrix.h"
 
 #include <limits.h>
+#include <windows.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
 DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
@@ -468,7 +469,7 @@ inline void LegoAnimNodeData::GetTranslation(
 	n = FindKeys(
 		p_time,
 		p_numTranslationKeys & USHRT_MAX,
-		p_translationKeys,
+		(LegoU8*) p_translationKeys,
 		sizeof(*p_translationKeys),
 		i,
 		p_old_index
@@ -528,7 +529,14 @@ inline void LegoAnimNodeData::GetTranslation(
 )
 {
 	LegoU32 i, n;
-	n = FindKeys(p_time, p_numRotationKeys & USHRT_MAX, p_rotationKeys, sizeof(*p_rotationKeys), i, p_old_index);
+	n = FindKeys(
+		p_time,
+		p_numRotationKeys & USHRT_MAX,
+		(LegoU8*) p_rotationKeys,
+		sizeof(*p_rotationKeys),
+		i,
+		p_old_index
+	);
 
 	switch (n) {
 	case 0:
@@ -592,7 +600,7 @@ inline void LegoAnimNodeData::GetScale(
 {
 	LegoU32 i, n;
 	LegoFloat x, y, z;
-	n = FindKeys(p_time, p_numScaleKeys & USHRT_MAX, p_scaleKeys, sizeof(*p_scaleKeys), i, p_old_index);
+	n = FindKeys(p_time, p_numScaleKeys & USHRT_MAX, (LegoU8*) p_scaleKeys, sizeof(*p_scaleKeys), i, p_old_index);
 
 	switch (n) {
 	case 0:
@@ -619,7 +627,7 @@ LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 	LegoU32 index = GetMorphIndex();
 	LegoBool result;
 
-	n = FindKeys(p_time, m_numMorphKeys, m_morphKeys, sizeof(*m_morphKeys), i, index);
+	n = FindKeys(p_time, m_numMorphKeys, (LegoU8*) m_morphKeys, sizeof(*m_morphKeys), i, index);
 	SetMorphIndex(index);
 
 	switch (n) {
@@ -635,18 +643,56 @@ LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 	return result;
 }
 
-// STUB: LEGO1 0x100a0a00
+// FUNCTION: LEGO1 0x100a0a00
 LegoU32 LegoAnimNodeData::FindKeys(
 	LegoFloat p_time,
 	LegoU32 p_numKeys,
-	LegoAnimKey* p_keys,
+	LegoU8* p_keys,
 	LegoU32 p_size,
 	LegoU32& p_new_index,
 	LegoU32& p_old_index
 )
 {
-	// TODO
-	return 0;
+	if (p_numKeys == 0) {
+		return 0;
+	}
+
+	if (((LegoAnimKey*) p_keys)->GetTime() > p_time) {
+		return 0;
+	}
+
+	LegoS32 index = p_numKeys - 1;
+	if (((LegoAnimKey*) (p_keys + (p_size * index)))->GetTime() < p_time) {
+		p_new_index = index;
+		return 1;
+	}
+
+	if (p_time > ((LegoAnimKey*) (p_keys + (p_size * p_old_index)))->GetTime()) {
+		LegoU8* ptr = (LegoU8*) (p_keys + (p_old_index + 1) * p_size);
+		for (p_new_index = index; p_new_index < index; p_new_index++) {
+			if (p_time < ((LegoAnimKey*) ptr)->GetTime()) {
+				break;
+			}
+			ptr = ptr + p_size;
+		}
+	}
+	else {
+		LegoU8* ptr = p_keys;
+		for (p_new_index = 0; p_new_index < index; p_new_index++) {
+			ptr = ptr + p_size;
+			if (p_time < ((LegoAnimKey*) ptr)->GetTime()) {
+				break;
+			}
+		}
+	}
+
+	p_old_index = p_new_index;
+	if (((LegoAnimKey*) (p_keys + (p_new_index * p_size)))->GetTime() == p_time) {
+		return 1;
+	}
+	else {
+		return (p_new_index < index) ? 2 : 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x100a0b00

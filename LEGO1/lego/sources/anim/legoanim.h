@@ -169,7 +169,7 @@ public:
 	static LegoU32 FindKeys(
 		LegoFloat p_time,
 		LegoU32 p_numKeys,
-		LegoAnimKey* p_keys,
+		LegoU8* p_keys,
 		LegoU32 p_size,
 		LegoU32& p_new_index,
 		LegoU32& p_old_index
