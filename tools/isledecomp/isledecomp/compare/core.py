@@ -10,8 +10,8 @@ from isledecomp.cvdump import Cvdump, CvdumpAnalysis
 from isledecomp.parser import DecompCodebase
 from isledecomp.dir import walk_source_dir
 from isledecomp.types import SymbolType
-from isledecomp.compare.asm import ParseAsm, can_resolve_register_differences
-from isledecomp.compare.asm.fixes import patch_cmp_swaps
+from isledecomp.compare.asm import ParseAsm
+from isledecomp.compare.asm.fixes import find_effective_match
 from .db import CompareDb, MatchInfo
 from .diff import combined_diff
 from .lines import LinesDb
@@ -493,9 +493,8 @@ class Compare:
         if ratio != 1.0:
             # Check whether we can resolve register swaps which are actually
             # perfect matches modulo compiler entropy.
-            is_effective_match = patch_cmp_swaps(
-                diff, orig_asm, recomp_asm
-            ) or can_resolve_register_differences(orig_asm, recomp_asm)
+            codes = diff.get_opcodes()
+            is_effective_match = find_effective_match(codes, orig_asm, recomp_asm)
             unified_diff = combined_diff(
                 diff, orig_combined, recomp_combined, context_size=10
             )
