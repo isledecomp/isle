@@ -500,10 +500,16 @@ void LegoVideoManager::UpdateView(MxU32 p_x, MxU32 p_y, MxU32 p_width, MxU32 p_h
 	}
 }
 
-// STUB: LEGO1 0x1007c520
+// FUNCTION: LEGO1 0x1007c520
 void LegoVideoManager::FUN_1007c520()
 {
-	// TODO
+	m_unk0xe5 = TRUE;
+	m_render3d = FALSE;
+	m_videoParam.GetPalette()->SetOverrideSkyColor(FALSE);
+
+	m_displaySurface->ClearScreen();
+	InputManager()->EnableInputProcessing();
+	InputManager()->SetUnknown335(TRUE);
 }
 
 // STUB: LEGO1 0x1007c560
