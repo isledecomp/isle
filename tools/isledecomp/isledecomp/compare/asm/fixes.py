@@ -124,6 +124,10 @@ def effective_match_possible(orig_asm: List[str], recomp_asm: List[str]) -> bool
     return True
 
 
+def find_regs_used(inst: str) -> List[str]:
+    return REG_FIND.findall(inst)
+
+
 def find_regs_changed(a: str, b: str) -> List[Tuple[str, str]]:
     """For instructions a, b, return the pairs of registers that were used.
     This is not a very precise way to compare the instructions, so it depends
@@ -192,14 +196,22 @@ def relocate_instructions(
 
     for j in inserts:
         line = recomp_asm[j]
+        recomp_regs_used = set(find_regs_used(line))
         for i in deletes:
             # Check for exact match.
             # TODO: This will grab the first instruction that matches.
             # We should probably use the nearest index instead, if it matters
             if orig_asm[i] == line:
-                relocated.add(j)
-                deletes.remove(i)
-                break
+                # To account for a move in either direction
+                reloc_start = min(i, j)
+                reloc_end = max(i, j)
+                if all(
+                    recomp_regs_used.isdisjoint(set(find_regs_used(orig_asm[k])))
+                    for k in range(reloc_start + 1, reloc_end)
+                ):
+                    relocated.add(j)
+                    deletes.remove(i)
+                    break
 
     return relocated
 
