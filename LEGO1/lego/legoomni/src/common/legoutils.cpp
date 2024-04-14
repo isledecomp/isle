@@ -62,22 +62,21 @@ void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
 	MxMatrix viewMatrix;
 	LegoTreeNode* rootNode = p_presenter->GetAnimation()->GetRoot();
+	LegoAnimNodeData* camData = NULL;
+	LegoAnimNodeData* targetData = NULL;
 	MxS16 nodesCount = CountTotalTreeNodes(rootNode);
 
 	MxFloat cam;
-	LegoAnimNodeData* camData = NULL;
-	LegoAnimNodeData* targetData = NULL;
 	for (MxS16 i = 0; i < nodesCount; i++) {
-		if (targetData && camData) {
+		if (camData && targetData) {
 			break;
 		}
 
-		LegoTreeNode* node = GetTreeNode(rootNode, i);
-		LegoAnimNodeData* data = (LegoAnimNodeData*) node->GetData();
+		LegoAnimNodeData* data = (LegoAnimNodeData*) GetTreeNode(rootNode, i)->GetData();
 
 		if (!strnicmp(data->GetName(), "CAM", strlen("CAM"))) {
 			camData = data;
-			cam = atof(strlen((data->GetName())) + 1 + data->GetName() - 3);
+			cam = atof(&data->GetName()[strlen(data->GetName()) - 2]);
 		}
 		else if (!strcmpi(data->GetName(), "TARGET")) {
 			targetData = data;
@@ -89,30 +88,23 @@ void FUN_1003e050(LegoAnimPresenter* p_presenter)
 	matrixCam.SetIdentity();
 	matrixTarget.SetIdentity();
 
-	camData->CreateLocalTransform((LegoFloat) 0, matrixCam);
-	targetData->CreateLocalTransform((LegoFloat) 0, matrixTarget);
+	camData->CreateLocalTransform(0.0f, matrixCam);
+	targetData->CreateLocalTransform(0.0f, matrixTarget);
 
 	Mx3DPointFloat dir;
 	dir[0] = matrixTarget[3][0] - matrixCam[3][0];
 	dir[1] = matrixTarget[3][1] - matrixCam[3][1];
 	dir[2] = matrixTarget[3][2] - matrixCam[3][2];
+	dir.Unitize();
 
-	MxFloat lensSquared = dir.LenSquared();
-	if (lensSquared > 0.0f) {
-		float x = sqrt(lensSquared);
-		if (x > 0.0f) {
-			dir.DivScalarImpl(&x);
-		}
-	}
-
-	Vector3 position(matrixCam[3]);
-	Vector3 up(matrixCam[1]);
-	CalcLocalTransform(position, dir, up, viewMatrix);
+	CalcLocalTransform(matrixCam[3], dir, matrixCam[1], viewMatrix);
 
 	LegoVideoManager* video = VideoManager();
-	LegoROI* view = video->GetViewROI();
-	view->WrappedSetLocalTransform(viewMatrix);
-	video->Get3DManager()->GetLego3DView()->Moved(*view);
+	LegoROI* roi = video->GetViewROI();
+	Lego3DView* view = video->Get3DManager()->GetLego3DView();
+
+	roi->WrappedSetLocalTransform(viewMatrix);
+	view->Moved(*roi);
 	FUN_1003eda0();
 	video->Get3DManager()->SetFrustrum(cam, 0.1, 250.0);
 }
