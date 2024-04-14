@@ -174,6 +174,19 @@ def bad_register_swaps(
     return rejects
 
 
+# Instructions that result in a change to the first operand
+MODIFIER_INSTRUCTIONS = ("adc", "add", "lea", "mov", "neg", "sbb", "sub", "pop", "xor")
+
+
+def instruction_alters_regs(inst: str, regs: Set[str]) -> bool:
+    (mnemonic, _, op_str) = inst.partition(" ")
+    (first_operand, _, __) = op_str.partition(", ")
+
+    return (mnemonic in MODIFIER_INSTRUCTIONS and first_operand in regs) or (
+        mnemonic == "call" and "eax" in regs
+    )
+
+
 def relocate_instructions(
     codes: List[DiffOpcode], orig_asm: List[str], recomp_asm: List[str]
 ) -> Set[int]:
@@ -205,9 +218,9 @@ def relocate_instructions(
                 # To account for a move in either direction
                 reloc_start = min(i, j)
                 reloc_end = max(i, j)
-                if all(
-                    recomp_regs_used.isdisjoint(set(find_regs_used(orig_asm[k])))
-                    for k in range(reloc_start + 1, reloc_end)
+                if not any(
+                    instruction_alters_regs(orig_asm[k], recomp_regs_used)
+                    for k in range(reloc_start, reloc_end)
                 ):
                     relocated.add(j)
                     deletes.remove(i)
