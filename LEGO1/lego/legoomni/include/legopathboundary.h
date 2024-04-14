@@ -29,10 +29,12 @@ public:
 	LegoPathBoundary();
 
 	MxResult AddActor(LegoPathActor* p_actor);
+	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
+	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoEdge*& p_edge);
 
 	inline LegoAnimPresenterSet* GetUnknown0x64() { return &m_unk0x64; }
 
-	// STUB: LEGO1 0x10047a80
+	// SYNTHETIC: LEGO1 0x10047a80
 	// LegoPathBoundary::`scalar deleting destructor'
 
 private:

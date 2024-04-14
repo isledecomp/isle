@@ -33,9 +33,8 @@ public:
 		return !strcmp(p_name, LegoExtraActor::ClassName()) || LegoAnimActor::IsA(p_name);
 	}
 
-	void SetWorldSpeed(MxFloat p_worldSpeed) override; // vtable+0x30
-	void VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
-		override;                                                        // vtable+0x68
+	void SetWorldSpeed(MxFloat p_worldSpeed) override;                   // vtable+0x30
+	MxS32 VTable0x68(Vector3&, Vector3&, Vector3&) override;             // vtable+0x68
 	void VTable0x6c() override;                                          // vtable+0x6c
 	void VTable0x70(float) override;                                     // vtable+0x70
 	void VTable0x74(Matrix4& p_transform) override;                      // vtable+0x74

@@ -26,3 +26,9 @@ void LegoUnknown::FUN_1009a140(Vector3& p_point1, Vector3& p_point2, Vector3& p_
 		m_unk0x00[3][i] = (p_point1[i] - p_point3[i]) * 2.0f + p_point4[i] + p_point2[i];
 	}
 }
+
+// STUB: LEGO1 0x1009a1e0
+LegoResult LegoUnknown::FUN_1009a1e0(float, Matrix4&, Vector3&, LegoU32)
+{
+	return FAILURE;
+}

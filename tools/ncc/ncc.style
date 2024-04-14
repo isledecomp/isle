@@ -18,4 +18,4 @@ VariableName:
         Integer: ''
         Bool: ''
         Pointer: ''
-    Pattern: '^(unk0x[a-f0-9]{1,8}$|(?!unk)[a-z][a-zA-Z0-9]*)$'
+    Pattern: '^(unk0x[a-f0-9]{1,8}$|(?!unk)[a-z][a-zA-Z0-9]*|str[a-zA-Z0-9_]*)$'

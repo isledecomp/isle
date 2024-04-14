@@ -418,9 +418,9 @@ void LegoExtraActor::VTable0xc4()
 }
 
 // FUNCTION: LEGO1 0x1002b6f0
-void LegoExtraActor::VTable0x68(Mx3DPointFloat& p_point1, Mx3DPointFloat& p_point2, Mx3DPointFloat& p_point3)
+MxS32 LegoExtraActor::VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& p_point3)
 {
-	LegoPathActor::VTable0x68(p_point1, p_point2, p_point3);
+	return LegoPathActor::VTable0x68(p_point1, p_point2, p_point3);
 }
 
 // STUB: LEGO1 0x1002b980
