@@ -210,8 +210,6 @@ public:
 	LegoResult Read(LegoStorage* p_storage);
 	undefined4 FUN_1009f490(LegoFloat p_time, Matrix4& p_matrix);
 
-	inline LegoTranslationKey* GetUnknown0x04() { return m_unk0x04; }
-
 private:
 	LegoU16 m_unk0x00;             // 0x00
 	LegoTranslationKey* m_unk0x04; // 0x04
