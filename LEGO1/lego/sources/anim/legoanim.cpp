@@ -3,7 +3,6 @@
 #include "mxgeometry/mxmatrix.h"
 
 #include <limits.h>
-#include <windows.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimKey, 0x08)
 DECOMP_SIZE_ASSERT(LegoTranslationKey, 0x14)
