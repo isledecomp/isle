@@ -22,9 +22,10 @@ void LegoRaceActor::SetWorldSpeed(MxFloat p_worldSpeed)
 }
 
 // STUB: LEGO1 0x10014cc0
-void LegoRaceActor::VTable0x68(Mx3DPointFloat&, Mx3DPointFloat&, Mx3DPointFloat&)
+MxS32 LegoRaceActor::VTable0x68(Vector3&, Vector3&, Vector3&)
 {
 	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x10014cd0
