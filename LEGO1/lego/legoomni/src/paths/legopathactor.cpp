@@ -249,8 +249,9 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			m_boundary->FUN_100575b0(p4, p2, this);
 		}
 
+		LegoPathBoundary* oldBoundary = m_boundary;
+
 		if (m_unk0xe9 != 0) {
-			LegoPathBoundary* oldBoundary = m_boundary;
 			WaitForAnimation();
 
 			if (m_boundary == oldBoundary) {
@@ -259,6 +260,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 				if (time - g_unk0x100f3308 > 1000) {
 					g_unk0x100f3308 = time;
 					const char* var = VariableTable()->GetVariable(g_strHIT_WALL_SOUND);
+
 					if (var && var[0] != 0) {
 						SoundManager()->GetCacheSoundManager()->FUN_1003dae0(var, NULL, FALSE);
 					}
@@ -267,28 +269,30 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 				m_worldSpeed *= m_unk0x144;
 				nav->SetLinearVel(m_worldSpeed);
 				Mx3DPointFloat p7(p2);
-				p7.Sub(&p6);
+				((Vector3&) p7).Sub(&p6);
 
-				if (p7.Unitize() == SUCCESS) {
-					float f = sqrtf(p1.LenSquared()) * m_unk0x140;
-					p7.Mul(f);
-					p7.Add(&p1);
+				if (p7.Unitize() == 0) {
+					float f = sqrt(p1.LenSquared()) * m_unk0x140;
+					((Vector3&) p7).Mul(f);
+					((Vector3&) p1).Add(&p7);
 				}
 			}
-
-			p_transform.SetIdentity();
-			Vector3 right(p_transform[0]);
-			Vector3 up(p_transform[1]);
-			Vector3 dir(p_transform[2]);
-			Vector3 pos(p_transform[3]);
-			dir = p1;
-			up = *m_boundary->GetUnknown0x14();
-			right.EqualsCross(&up, &dir);
-			right.Unitize();
-			dir.EqualsCross(&right, &up);
-			pos = p2;
-			return result;
 		}
+
+		p_transform.SetIdentity();
+
+		Vector3 right(p_transform[0]);
+		Vector3 up(p_transform[1]);
+		Vector3 dir(p_transform[2]);
+		Vector3 pos(p_transform[3]);
+
+		dir = p1;
+		up = *m_boundary->GetUnknown0x14();
+		right.EqualsCross(&up, &dir);
+		right.Unitize();
+		dir.EqualsCross(&right, &up);
+		pos = p2;
+		return result;
 	}
 	else {
 		if (p_time >= 0 && m_worldSpeed > 0) {
