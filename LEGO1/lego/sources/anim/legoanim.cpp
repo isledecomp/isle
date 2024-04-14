@@ -657,7 +657,7 @@ LegoU32 LegoAnimNodeData::FindKeys(
 		numKeys = 1;
 	}
 	else {
-		if (!(GetKey(p_old_index, p_keys, p_size).GetTime() > p_time)) {
+		if (GetKey(p_old_index, p_keys, p_size).GetTime() <= p_time) {
 			for (p_new_index = p_old_index;
 				 p_new_index < p_numKeys - 1 && p_time >= GetKey(p_new_index + 1, p_keys, p_size).GetTime();
 				 p_new_index++)
