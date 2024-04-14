@@ -6,6 +6,7 @@
 #include "legoinputmanager.h"
 #include "legonamedtexture.h"
 #include "legoomni.h"
+#include "legosoundmanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "misc.h"
@@ -20,10 +21,92 @@
 #include <string.h>
 #include <vec.h>
 
-// STUB: LEGO1 0x1003e050
+// FUNCTION: LEGO1 0x1003df90
+MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)
+{
+	MxS16 result = 1;
+
+	for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
+		result += CountTotalTreeNodes(p_node->GetChild(i));
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1003dfd0
+LegoTreeNode* GetTreeNode(LegoTreeNode* p_node, MxU32 p_index)
+{
+	LegoTreeNode* result = NULL;
+
+	if (p_index == 0) {
+		result = p_node;
+	}
+	else {
+		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
+			MxS16 count = CountTotalTreeNodes(p_node->GetChild(i));
+			if (p_index > count) {
+				p_index -= count;
+			}
+			else {
+				result = GetTreeNode(p_node->GetChild(i), p_index - 1);
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x1003e050
 void FUN_1003e050(LegoAnimPresenter* p_presenter)
 {
-	// TODO
+	MxMatrix viewMatrix;
+	LegoTreeNode* rootNode = p_presenter->GetAnimation()->GetRoot();
+	LegoAnimNodeData* camData = NULL;
+	LegoAnimNodeData* targetData = NULL;
+	MxS16 nodesCount = CountTotalTreeNodes(rootNode);
+
+	MxFloat cam;
+	for (MxS16 i = 0; i < nodesCount; i++) {
+		if (camData && targetData) {
+			break;
+		}
+
+		LegoAnimNodeData* data = (LegoAnimNodeData*) GetTreeNode(rootNode, i)->GetData();
+
+		if (!strnicmp(data->GetName(), "CAM", strlen("CAM"))) {
+			camData = data;
+			cam = atof(&data->GetName()[strlen(data->GetName()) - 2]);
+		}
+		else if (!strcmpi(data->GetName(), "TARGET")) {
+			targetData = data;
+		}
+	}
+
+	MxMatrix matrixCam;
+	MxMatrix matrixTarget;
+	matrixCam.SetIdentity();
+	matrixTarget.SetIdentity();
+
+	camData->CreateLocalTransform(0.0f, matrixCam);
+	targetData->CreateLocalTransform(0.0f, matrixTarget);
+
+	Mx3DPointFloat dir;
+	dir[0] = matrixTarget[3][0] - matrixCam[3][0];
+	dir[1] = matrixTarget[3][1] - matrixCam[3][1];
+	dir[2] = matrixTarget[3][2] - matrixCam[3][2];
+	dir.Unitize();
+
+	CalcLocalTransform(matrixCam[3], dir, matrixCam[1], viewMatrix);
+
+	LegoVideoManager* video = VideoManager();
+	LegoROI* roi = video->GetViewROI();
+	Lego3DView* view = video->Get3DManager()->GetLego3DView();
+
+	roi->WrappedSetLocalTransform(viewMatrix);
+	view->Moved(*roi);
+	FUN_1003eda0();
+	video->Get3DManager()->SetFrustrum(cam, 0.1, 250.0);
 }
 
 // FUNCTION: LEGO1 0x1003e300
@@ -243,10 +326,22 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
-// STUB: LEGO1 0x1003eda0
+// FUNCTION: LEGO1 0x1003eda0
 void FUN_1003eda0()
 {
-	// TODO
+	Mx3DPointFloat vec;
+	vec.Clear();
+
+	LegoROI* viewROI = VideoManager()->GetViewROI();
+	if (viewROI) {
+		viewROI->FUN_100a5a30(vec);
+		SoundManager()->FUN_1002a410(
+			viewROI->GetWorldPosition(),
+			viewROI->GetWorldDirection(),
+			viewROI->GetWorldUp(),
+			viewROI->GetWorldVelocity()
+		);
+	}
 }
 
 // FUNCTION: LEGO1 0x1003ee00
