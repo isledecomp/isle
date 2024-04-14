@@ -19,7 +19,7 @@ MxResult LegoPathBoundary::AddActor(LegoPathActor* p_actor)
 }
 
 // STUB: LEGO1 0x100575b0
-void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* actor)
+void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor)
 {
 }
 
