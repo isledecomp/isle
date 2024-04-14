@@ -209,13 +209,15 @@ MxResult LegoPathActor::VTable0x84(
 }
 
 // FUNCTION: LEGO1 0x1002e100
-MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
+MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 {
 	if (m_userNavFlag && m_state == 0) {
 		m_lastTime = p_time;
+
 		Mx3DPointFloat p1, p2, p3, p4, p5;
 		p5 = Vector3(m_roi->GetWorldDirection());
 		p4 = Vector3(m_roi->GetWorldPosition());
+
 		LegoNavController* nav = NavController();
 		m_worldSpeed = nav->GetLinearVel();
 
@@ -223,9 +225,12 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
 			return -1;
 		}
 
-		Mx3DPointFloat p6 = p2;
-		m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
+		Mx3DPointFloat p6;
+		p6 = p2;
 
+		MxS32 result = 0;
+
+		m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
 		if (m_unk0xe9 == -1) {
 			return -1;
 		}
@@ -234,7 +239,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
 			p2 = p3;
 		}
 
-		MxS32 result = VTable0x68(p4, p2, p3);
+		result = VTable0x68(p4, p2, p3);
 
 		if (result > 0) {
 			p2 = p4;
@@ -322,6 +327,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, MxMatrix& p_transform)
 			}
 		}
 	}
+
 	return -1;
 }
 
