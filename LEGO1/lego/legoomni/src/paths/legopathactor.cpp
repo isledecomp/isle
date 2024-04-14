@@ -228,8 +228,6 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		Mx3DPointFloat p6;
 		p6 = p2;
 
-		MxS32 result = 0;
-
 		m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
 		if (m_unk0xe9 == -1) {
 			return -1;
@@ -239,11 +237,12 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			p2 = p3;
 		}
 
-		result = VTable0x68(p4, p2, p3);
+		MxS32 result = VTable0x68(p4, p2, p3);
 
 		if (result > 0) {
 			p2 = p4;
 			m_unk0xe9 = 0;
+			result = 0;
 		}
 		else {
 			m_boundary->FUN_100575b0(p4, p2, this);
