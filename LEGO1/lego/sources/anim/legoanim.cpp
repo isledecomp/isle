@@ -635,7 +635,7 @@ LegoBool LegoAnimNodeData::FUN_100a0990(LegoFloat p_time)
 	return result;
 }
 
-// STUB: LEGO1 0x100a0a00
+// FUNCTION: LEGO1 0x100a0a00
 LegoU32 LegoAnimNodeData::FindKeys(
 	LegoFloat p_time,
 	LegoU32 p_numKeys,
@@ -645,8 +645,44 @@ LegoU32 LegoAnimNodeData::FindKeys(
 	LegoU32& p_old_index
 )
 {
-	// TODO
-	return 0;
+	LegoU32 numKeys;
+	if (p_numKeys == 0) {
+		numKeys = 0;
+	}
+	else if (p_time < GetKey(0, p_keys, p_size).GetTime()) {
+		numKeys = 0;
+	}
+	else if (p_time > GetKey(p_numKeys - 1, p_keys, p_size).GetTime()) {
+		p_new_index = p_numKeys - 1;
+		numKeys = 1;
+	}
+	else {
+		if (GetKey(p_old_index, p_keys, p_size).GetTime() <= p_time) {
+			for (p_new_index = p_old_index;
+				 p_new_index < p_numKeys - 1 && p_time >= GetKey(p_new_index + 1, p_keys, p_size).GetTime();
+				 p_new_index++) {
+			}
+		}
+		else {
+			for (p_new_index = 0;
+				 p_new_index < p_numKeys - 1 && p_time >= GetKey(p_new_index + 1, p_keys, p_size).GetTime();
+				 p_new_index++) {
+			}
+		}
+
+		p_old_index = p_new_index;
+		if (p_time == GetKey(p_new_index, p_keys, p_size).GetTime()) {
+			numKeys = 1;
+		}
+		else if (p_new_index < p_numKeys - 1) {
+			numKeys = 2;
+		}
+		else {
+			numKeys = 0;
+		}
+	}
+
+	return numKeys;
 }
 
 // FUNCTION: LEGO1 0x100a0b00
@@ -659,6 +695,11 @@ inline LegoFloat LegoAnimNodeData::Interpolate(
 )
 {
 	return p_value1 + (p_value2 - p_value1) * (p_time - p_key1.GetTime()) / (p_key2.GetTime() - p_key1.GetTime());
+}
+
+inline LegoAnimKey& LegoAnimNodeData::GetKey(LegoU32 p_i, LegoAnimKey* p_keys, LegoU32 p_size)
+{
+	return *((LegoAnimKey*) (((LegoU8*) p_keys) + (p_i * p_size)));
 }
 
 // FUNCTION: LEGO1 0x100a0b30

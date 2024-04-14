@@ -165,6 +165,7 @@ public:
 		LegoAnimKey& p_key2,
 		LegoFloat p_value2
 	);
+	inline static LegoAnimKey& GetKey(LegoU32 p_i, LegoAnimKey* p_keys, LegoU32 p_size);
 
 	static LegoU32 FindKeys(
 		LegoFloat p_time,
