@@ -668,7 +668,7 @@ LegoU32 LegoAnimNodeData::FindKeys(
 
 	if (p_time > ((LegoAnimKey*) (p_keys + (p_size * p_old_index)))->GetTime()) {
 		LegoU8* ptr = (LegoU8*) (p_keys + (p_old_index + 1) * p_size);
-		for (p_new_index = index; p_new_index < index; p_new_index++) {
+		for (p_new_index = p_old_index; p_new_index < index; p_new_index++) {
 			if (p_time < ((LegoAnimKey*) ptr)->GetTime()) {
 				break;
 			}
