@@ -57,7 +57,7 @@ MxBool LegoPlantManager::FUN_100269e0(LegoEntity* p_entity)
 }
 
 // STUB: LEGO1 0x10026ba0
-MxU32 LegoPlantManager::FUN_10026ba0(LegoROI*, MxBool)
+MxU32 LegoPlantManager::FUN_10026ba0(LegoEntity*, MxBool)
 {
 	// TODO
 	return 0;

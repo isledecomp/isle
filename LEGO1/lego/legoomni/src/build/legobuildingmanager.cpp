@@ -64,7 +64,7 @@ MxBool LegoBuildingManager::FUN_1002fdb0(LegoEntity* p_entity)
 }
 
 // STUB: LEGO1 0x1002ff40
-MxU32 LegoBuildingManager::FUN_1002ff40(LegoROI*, MxBool)
+MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity*, MxBool)
 {
 	// TODO
 	return 0;
