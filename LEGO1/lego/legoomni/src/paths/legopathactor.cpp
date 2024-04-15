@@ -236,7 +236,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 
 			MxS32 result = VTable0x68(p4, p2, p3);
 
-			if (result > 0) {
+			if (result < 0) {
 				p2 = p4;
 				m_unk0xe9 = 0;
 				result = 0;
@@ -290,15 +290,8 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			pos = p2;
 			return result;
 		}
-		else {
-			return -1;
-		}
 	}
-	else {
-		if (p_time < 0 || m_worldSpeed <= 0) {
-			return -1;
-		}
-
+	else if (p_time >= 0 && m_worldSpeed > 0) {
 		float f = (m_BADuration - m_unk0x7c) / m_worldSpeed + m_lastTime;
 
 		if (f < p_time) {
@@ -355,6 +348,7 @@ void LegoPathActor::VTable0x74(Matrix4& p_transform)
 	else {
 		m_roi->WrappedSetLocalTransform(p_transform);
 		m_roi->VTable0x14();
+
 		if (m_cameraFlag) {
 			FUN_10010c30();
 		}
