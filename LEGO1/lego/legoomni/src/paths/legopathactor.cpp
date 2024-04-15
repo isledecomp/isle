@@ -236,7 +236,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 
 			MxS32 result = VTable0x68(p4, p2, p3);
 
-			if (result < 0) {
+			if (result > 0) {
 				p2 = p4;
 				m_unk0xe9 = 0;
 				result = 0;
