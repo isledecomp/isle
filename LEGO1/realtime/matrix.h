@@ -195,11 +195,53 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 	*/
 }
 
-// No idea what this function is doing and it will be hard to tell until
-// we have a confirmed usage site.
-// STUB: LEGO1 0x10002710
+// FUNCTION: LEGO1 0x10002710
 inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 {
+	float len = p_vec.LenSquared();
+
+	if (len > 0.0f) {
+		float v7 = 2.0f / len;
+
+		float v9 = p_vec[0] * v7;
+		float v11 = p_vec[1] * v7;
+		float v12 = p_vec[2] * v7;
+
+		float v13 = p_vec[3] * v9;
+		float v14 = p_vec[3] * v11;
+		float v16 = p_vec[3] * v12;
+
+		float v17 = p_vec[0] * v9;
+		float v22 = p_vec[0] * v11;
+		float v23 = p_vec[0] * v12;
+
+		float v18 = p_vec[1] * v11;
+		float v24 = p_vec[1] * v12;
+		float v19 = p_vec[2] * v12;
+
+		m_data[0][0] = 1.0f - (v18 + v19);
+		m_data[1][0] = v22 + v16;
+		m_data[2][0] = v23 - v14;
+
+		m_data[0][1] = v22 - v16;
+		m_data[1][1] = 1.0f - (v17 + v19);
+		m_data[2][1] = v24 + v13;
+
+		m_data[0][2] = v14 + v23;
+		m_data[1][2] = v24 - v13;
+		m_data[2][2] = 1.0f - (v18 + v17);
+
+		m_data[3][0] = 0;
+		m_data[3][1] = 0;
+		m_data[3][2] = 0;
+		m_data[3][3] = 1.0f;
+
+		m_data[0][3] = 0;
+		m_data[1][3] = 0;
+		m_data[2][3] = 0;
+		return 0;
+	}
+
 	return -1;
 }
 
