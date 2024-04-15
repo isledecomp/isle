@@ -6,9 +6,7 @@
 DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
 DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 
-// Bitmap header magic string "BM" (42 4d)
-// Sources: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader, DirectX Complete
-// (1998) GLOBAL: LEGO1 0x10102184
+// GLOBAL: LEGO1 0x10102184
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
 // FUNCTION: LEGO1 0x100bc980

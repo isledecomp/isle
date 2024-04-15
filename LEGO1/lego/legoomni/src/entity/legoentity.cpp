@@ -254,10 +254,10 @@ void LegoEntity::VTable0x34(MxBool p_und)
 		case 1:
 			break;
 		case 2:
-			objectId = PlantManager()->FUN_10026ba0(m_roi, p_und);
+			objectId = PlantManager()->FUN_10026ba0(this, p_und);
 			break;
 		case 3:
-			objectId = BuildingManager()->FUN_1002ff40(m_roi, p_und);
+			objectId = BuildingManager()->FUN_1002ff40(this, p_und);
 			break;
 		}
 

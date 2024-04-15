@@ -30,7 +30,7 @@ public:
 	void Save(LegoStorage* p_storage);
 	MxResult Load(LegoStorage* p_storage);
 	MxBool FUN_100269e0(LegoEntity* p_entity);
-	MxU32 FUN_10026ba0(LegoROI*, MxBool);
+	MxU32 FUN_10026ba0(LegoEntity*, MxBool);
 	void FUN_10026c50(LegoEntity* p_entity);
 	void FUN_10027120();
 

@@ -120,4 +120,9 @@ private:
 // TEMPLATE: LEGO1 0x100afe40
 // Set<MxAtomIdCounter *,MxAtomIdCounterCompare>::~Set<MxAtomIdCounter *,MxAtomIdCounterCompare>
 
+// clang-format off
+// GLOBAL: LEGO1 0x101013f0
+// _Tree<MxAtomIdCounter *,MxAtomIdCounter *,set<MxAtomIdCounter *,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Kfn,MxAtomIdCounterCompare,allocator<MxAtomIdCounter *> >::_Nil
+// clang-format on
+
 #endif // MXATOM_H
