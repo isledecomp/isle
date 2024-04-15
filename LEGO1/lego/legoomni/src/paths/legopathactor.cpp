@@ -355,10 +355,48 @@ void LegoPathActor::VTable0x74(Matrix4& p_transform)
 	}
 }
 
-// STUB: LEGO1 0x1002e790
-void LegoPathActor::VTable0x70(float)
+// FUNCTION: LEGO1 0x1002e790
+void LegoPathActor::VTable0x70(float p_time)
 {
-	// TODO
+	MxMatrix transform;
+	MxU32 b = FALSE;
+
+	while (m_lastTime < p_time) {
+		if (m_state != 0 && !VTable0x90(p_time, transform)) {
+			return;
+		}
+
+		if (VTable0x8c(p_time, transform) != 0) {
+			break;
+		}
+
+		m_unk0xec = transform;
+		b = TRUE;
+
+		if (m_unk0xe9 != 0) {
+			break;
+		}
+	}
+
+	if (m_userNavFlag && m_unk0x148) {
+		LegoNavController* nav = NavController();
+		float vel = (nav->GetLinearVel() > 0)
+						? -(nav->GetRotationalVel() / (nav->GetMaxLinearVel() * m_unk0x150) * nav->GetLinearVel())
+						: 0;
+
+		if (vel != m_unk0x14c) {
+			m_unk0x14c = vel;
+			LegoWorld* world = CurrentWorld();
+
+			if (world) {
+				world->GetCamera()->FUN_10012290(m_unk0x14c * (3.1416 / 180.0));
+			}
+		}
+	}
+
+	if (b) {
+		VTable0x74(transform);
+	}
 }
 
 // STUB: LEGO1 0x1002e8b0

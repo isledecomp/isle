@@ -37,6 +37,7 @@ public:
 	virtual MxResult Create();                                    // vtable+0x44
 
 	void SetWorldTransform(const Vector3& p_at, const Vector3& p_dir, const Vector3& p_up);
+	void FUN_10012290(float);
 	void FUN_10012320(MxFloat);
 	void FUN_100123e0(const Matrix4& p_transform, MxU32 p_und);
 	Mx3DPointFloat GetWorldUp();
