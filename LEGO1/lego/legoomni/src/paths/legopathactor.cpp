@@ -221,77 +221,78 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		LegoNavController* nav = NavController();
 		m_worldSpeed = nav->GetLinearVel();
 
-		if (!nav->CalculateNewPosDir(p4, p5, p2, p1, m_boundary->GetUnknown0x14())) {
-			return -1;
-		}
+		if (nav->CalculateNewPosDir(p4, p5, p2, p1, m_boundary->GetUnknown0x14())) {
+			Mx3DPointFloat p6;
+			p6 = p2;
 
-		Mx3DPointFloat p6;
-		p6 = p2;
+			m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
+			if (m_unk0xe9 == -1) {
+				return -1;
+			}
 
-		m_unk0xe9 = m_boundary->Intersect(m_roi->GetWorldBoundingSphere().Radius(), p4, p2, p3, m_destEdge);
-		if (m_unk0xe9 == -1) {
-			return -1;
-		}
+			if (m_unk0xe9 != 0) {
+				p2 = p3;
+			}
 
-		if (m_unk0xe9 != 0) {
-			p2 = p3;
-		}
+			MxS32 result = VTable0x68(p4, p2, p3);
 
-		MxS32 result = VTable0x68(p4, p2, p3);
+			if (result > 0) {
+				p2 = p4;
+				m_unk0xe9 = 0;
+				result = 0;
+			}
+			else {
+				m_boundary->FUN_100575b0(p4, p2, this);
+			}
 
-		if (result > 0) {
-			p2 = p4;
-			m_unk0xe9 = 0;
-			result = 0;
-		}
-		else {
-			m_boundary->FUN_100575b0(p4, p2, this);
-		}
+			LegoPathBoundary* oldBoundary = m_boundary;
 
-		LegoPathBoundary* oldBoundary = m_boundary;
+			if (m_unk0xe9 != 0) {
+				WaitForAnimation();
 
-		if (m_unk0xe9 != 0) {
-			WaitForAnimation();
+				if (m_boundary == oldBoundary) {
+					MxLong time = Timer()->GetTime();
 
-			if (m_boundary == oldBoundary) {
-				MxLong time = Timer()->GetTime();
+					if (time - g_unk0x100f3308 > 1000) {
+						g_unk0x100f3308 = time;
+						const char* var = VariableTable()->GetVariable(g_strHIT_WALL_SOUND);
 
-				if (time - g_unk0x100f3308 > 1000) {
-					g_unk0x100f3308 = time;
-					const char* var = VariableTable()->GetVariable(g_strHIT_WALL_SOUND);
+						if (var && var[0] != 0) {
+							SoundManager()->GetCacheSoundManager()->FUN_1003dae0(var, NULL, FALSE);
+						}
+					}
 
-					if (var && var[0] != 0) {
-						SoundManager()->GetCacheSoundManager()->FUN_1003dae0(var, NULL, FALSE);
+					m_worldSpeed *= m_unk0x144;
+					nav->SetLinearVel(m_worldSpeed);
+					Mx3DPointFloat p7(p2);
+					((Vector3&) p7).Sub(&p6);
+
+					if (p7.Unitize() == 0) {
+						float f = sqrt(p1.LenSquared()) * m_unk0x140;
+						((Vector3&) p7).Mul(f);
+						((Vector3&) p1).Add(&p7);
 					}
 				}
-
-				m_worldSpeed *= m_unk0x144;
-				nav->SetLinearVel(m_worldSpeed);
-				Mx3DPointFloat p7(p2);
-				((Vector3&) p7).Sub(&p6);
-
-				if (p7.Unitize() == 0) {
-					float f = sqrt(p1.LenSquared()) * m_unk0x140;
-					((Vector3&) p7).Mul(f);
-					((Vector3&) p1).Add(&p7);
-				}
 			}
+
+			p_transform.SetIdentity();
+
+			Vector3 right(p_transform[0]);
+			Vector3 up(p_transform[1]);
+			Vector3 dir(p_transform[2]);
+			Vector3 pos(p_transform[3]);
+
+			dir = p1;
+			up = *m_boundary->GetUnknown0x14();
+			right.EqualsCross(&up, &dir);
+			right.Unitize();
+			dir.EqualsCross(&right, &up);
+			pos = p2;
+			return result;
 		}
-
-		p_transform.SetIdentity();
-
-		Vector3 right(p_transform[0]);
-		Vector3 up(p_transform[1]);
-		Vector3 dir(p_transform[2]);
-		Vector3 pos(p_transform[3]);
-
-		dir = p1;
-		up = *m_boundary->GetUnknown0x14();
-		right.EqualsCross(&up, &dir);
-		right.Unitize();
-		dir.EqualsCross(&right, &up);
-		pos = p2;
-		return result;
+		else {
+			return -1;
+		}
 	}
 	else {
 		if (p_time < 0 || m_worldSpeed <= 0) {
@@ -315,10 +316,10 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 		p_transform.SetIdentity();
 
 		if (m_userNavFlag) {
-			m_unk0x8c.FUN_1009a1e0(m_BADuration / m_unk0x7c, p_transform, *m_boundary->GetUnknown0x14(), 0);
+			m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 0);
 		}
 		else {
-			m_unk0x8c.FUN_1009a1e0(m_BADuration / m_unk0x7c, p_transform, *m_boundary->GetUnknown0x14(), 1);
+			m_unk0x8c.FUN_1009a1e0(m_unk0x7c / m_BADuration, p_transform, *m_boundary->GetUnknown0x14(), 1);
 		}
 
 		Vector3 pos1(p_transform[3]);
@@ -344,10 +345,20 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 	return -1;
 }
 
-// STUB: LEGO1 0x1002e740
+// FUNCTION: LEGO1 0x1002e740
 void LegoPathActor::VTable0x74(Matrix4& p_transform)
 {
-	// TODO
+	if (m_userNavFlag) {
+		m_roi->WrappedSetLocalTransform(p_transform);
+		FUN_10010c30();
+	}
+	else {
+		m_roi->WrappedSetLocalTransform(p_transform);
+		m_roi->VTable0x14();
+		if (m_cameraFlag) {
+			FUN_10010c30();
+		}
+	}
 }
 
 // STUB: LEGO1 0x1002e790
