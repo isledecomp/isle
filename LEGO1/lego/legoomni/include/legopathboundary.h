@@ -32,17 +32,39 @@ public:
 	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
 	MxU32 Intersect(float p_scale, Vector3& p_point1, Vector3& p_point2, Vector3& p_point3, LegoEdge*& p_edge);
 
-	inline LegoAnimPresenterSet* GetUnknown0x64() { return &m_unk0x64; }
+	inline LegoPathActorSet* GetActors() { return &m_actors; }
+	inline LegoAnimPresenterSet* GetPresenters() { return &m_presenters; }
 
 	// SYNTHETIC: LEGO1 0x10047a80
 	// LegoPathBoundary::`scalar deleting destructor'
 
 private:
-	LegoPathActorSet m_unk0x54;     // 0x54
-	LegoAnimPresenterSet m_unk0x64; // 0x64
+	LegoPathActorSet m_actors;         // 0x54
+	LegoAnimPresenterSet m_presenters; // 0x64
 };
 
 // clang-format off
+// TEMPLATE: LEGO1 0x1002bee0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::~_Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,a
+
+// TEMPLATE: LEGO1 0x1002c440
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::find
+
+// TEMPLATE: LEGO1 0x1002c4c0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Copy
+
+// TEMPLATE: LEGO1 0x1002c670
+// set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::~set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >
+
+// TEMPLATE: LEGO1 0x1002c6c0
+// Set<LegoPathActor *,LegoPathActorSetCompare>::~Set<LegoPathActor *,LegoPathActorSetCompare>
+
+// TEMPLATE: LEGO1 0x1002eb10
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Init
+
+// TEMPLATE: LEGO1 0x1002ebc0
+// _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Min
+
 // TEMPLATE: LEGO1 0x10045d80
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::iterator::_Dec
 

@@ -13,7 +13,7 @@ LegoPathBoundary::LegoPathBoundary()
 // FUNCTION: LEGO1 0x100573f0
 MxResult LegoPathBoundary::AddActor(LegoPathActor* p_actor)
 {
-	m_unk0x54.insert(p_actor);
+	m_actors.insert(p_actor);
 	p_actor->SetBoundary(this);
 	return SUCCESS;
 }

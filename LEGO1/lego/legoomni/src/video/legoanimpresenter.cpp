@@ -805,9 +805,10 @@ void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
 }
 
 // STUB: LEGO1 0x1006c8f0
-void LegoAnimPresenter::VTable0x94()
+MxResult LegoAnimPresenter::VTable0x94(Vector3&, Vector3&, float, float, Vector3&)
 {
 	// TODO
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1006ca50

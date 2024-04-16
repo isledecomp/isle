@@ -505,6 +505,12 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*&)
 	return FAILURE;
 }
 
+// STUB: LEGO1 0x100a9410
+LegoU32 LegoROI::FUN_100a9410(Vector3&, Vector3&, float, float, Vector3&, LegoBool)
+{
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100a9a50
 TimeROI::TimeROI(Tgl::Renderer* p_renderer, ViewLODList* p_lodList, LegoTime p_time) : LegoROI(p_renderer, p_lodList)
 {

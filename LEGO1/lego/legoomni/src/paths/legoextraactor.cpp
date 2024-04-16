@@ -282,7 +282,7 @@ MxResult LegoExtraActor::WaitForAnimation()
 
 	if (m_boundary != oldBoundary) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
 
 		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
 			undefined4 tmp;
@@ -307,7 +307,7 @@ void LegoExtraActor::Restart()
 {
 	if (m_unk0x0e != 0) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetUnknown0x64();
+		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
 
 		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
 			undefined4 tmp;
@@ -424,6 +424,14 @@ MxS32 LegoExtraActor::VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& 
 }
 
 // STUB: LEGO1 0x1002b980
-void LegoExtraActor::VTable0x6c()
+MxU32 LegoExtraActor::VTable0x6c(
+	LegoPathBoundary* p_boundary,
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	float p_f2,
+	Vector3& p_v3
+)
 {
+	return 0;
 }

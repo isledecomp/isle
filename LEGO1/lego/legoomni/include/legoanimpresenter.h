@@ -59,7 +59,7 @@ public:
 	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                   // vtable+0x88
 	virtual void VTable0x8c();                                                             // vtable+0x8c
 	virtual void VTable0x90();                                                             // vtable+0x90
-	virtual void VTable0x94();                                                             // vtable+0x94
+	virtual MxResult VTable0x94(Vector3&, Vector3&, float, float, Vector3&);               // vtable+0x94
 	virtual void VTable0x98();                                                             // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
