@@ -74,6 +74,7 @@ public:
 	static MxResult UpdateCameraLocation(const char* p_location);
 	inline void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
 	inline MxFloat GetLinearVel() { return m_linearVel; }
+	inline MxFloat GetRotationalVel() { return m_rotationalVel; }
 	inline MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
 	inline void ResetLinearVel(MxFloat p_maxLinearVel)
 	{

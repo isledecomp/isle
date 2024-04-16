@@ -122,6 +122,11 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 	m_matrix2 = m_matrix1;
 }
 
+// STUB: LEGO1 0x10012290
+void LegoCameraController::FUN_10012290(float)
+{
+}
+
 // STUB: LEGO1 0x10012320
 void LegoCameraController::FUN_10012320(MxFloat)
 {

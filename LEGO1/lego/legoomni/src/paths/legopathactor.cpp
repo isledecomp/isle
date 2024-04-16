@@ -10,6 +10,14 @@
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
+#ifndef M_PI
+#define M_PI 3.1416
+#endif
+#ifdef DTOR
+#undef DTOR
+#endif
+#define DTOR(angle) ((angle) * M_PI / 180.)
+
 // GLOBAL: LEGO1 0x100f3304
 // STRING: LEGO1 0x100f32f4
 const char* g_strHIT_WALL_SOUND = "HIT_WALL_SOUND";
@@ -355,10 +363,48 @@ void LegoPathActor::VTable0x74(Matrix4& p_transform)
 	}
 }
 
-// STUB: LEGO1 0x1002e790
-void LegoPathActor::VTable0x70(float)
+// FUNCTION: LEGO1 0x1002e790
+void LegoPathActor::VTable0x70(float p_time)
 {
-	// TODO
+	MxMatrix transform;
+	MxU32 b = FALSE;
+
+	while (m_lastTime < p_time) {
+		if (m_state != 0 && !VTable0x90(p_time, transform)) {
+			return;
+		}
+
+		if (VTable0x8c(p_time, transform) != 0) {
+			break;
+		}
+
+		m_unk0xec = transform;
+		b = TRUE;
+
+		if (m_unk0xe9 != 0) {
+			break;
+		}
+	}
+
+	if (m_userNavFlag && m_unk0x148) {
+		LegoNavController* nav = NavController();
+		float vel = (nav->GetLinearVel() > 0)
+						? -(nav->GetRotationalVel() / (nav->GetMaxLinearVel() * m_unk0x150) * nav->GetLinearVel())
+						: 0;
+
+		if ((MxS32) vel != m_unk0x14c) {
+			m_unk0x14c = vel;
+			LegoWorld* world = CurrentWorld();
+
+			if (world) {
+				world->GetCamera()->FUN_10012290(DTOR(m_unk0x14c));
+			}
+		}
+	}
+
+	if (b) {
+		VTable0x74(transform);
+	}
 }
 
 // STUB: LEGO1 0x1002e8b0
