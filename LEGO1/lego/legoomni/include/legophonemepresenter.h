@@ -36,7 +36,7 @@ private:
 	undefined4 m_unk0x68;           // 0x68
 	LegoTextureInfo* m_textureInfo; // 0x6c
 	MxBool m_unk0x70;               // 0x70
-	MxString roiName;               // 0x74
+	MxString m_roiName;             // 0x74
 	MxBool m_unk0x84;               // 0x84
 };
 

@@ -39,24 +39,24 @@ void LegoPhonemePresenter::StartingTickle()
 		m_action->GetExtra(extraLength, extraData);
 
 		if (extraData != NULL) {
-			roiName = extraData;
-			roiName.ToUpperCase();
+			m_roiName = extraData;
+			m_roiName.ToUpperCase();
 
 			LegoROI *entityROI, *head;
 
 			if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
-				entityROI = FindROI(roiName.GetData());
+				entityROI = FindROI(m_roiName.GetData());
 				m_unk0x84 = TRUE;
 			}
 			else {
-				entityROI = CharacterManager()->GetROI(roiName.GetData(), TRUE);
+				entityROI = CharacterManager()->GetROI(m_roiName.GetData(), TRUE);
 			}
 
 			head = entityROI->FindChildROI("head", entityROI);
 			head->GetTexture(m_textureInfo);
 
 			LegoPhonemeList* phonemeList = VideoManager()->GetPhonemeList();
-			LegoPhoneme* phoneme = new LegoPhoneme(roiName.GetData(), 1);
+			LegoPhoneme* phoneme = new LegoPhoneme(m_roiName.GetData(), 1);
 
 			LegoPhonemeListCursor cursor(phonemeList);
 
