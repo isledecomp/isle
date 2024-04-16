@@ -61,6 +61,7 @@ public:
 	MxU32 GetRefCount(LegoROI* p_roi);
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
+	MxU32 FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
 	LegoExtraActor* GetActor(const char* p_key);
 	LegoCharacterData* GetData(const char* p_key);
 	LegoCharacterData* GetData(LegoROI* p_roi);

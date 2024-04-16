@@ -469,6 +469,13 @@ done:
 	return roi;
 }
 
+// STUB: LEGO1 0x100849a0
+MxU32 LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x10084c00
 MxBool LegoCharacterManager::Exists(const char* p_key)
 {

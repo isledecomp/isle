@@ -341,7 +341,7 @@ LegoResult LegoROI::FUN_100a8cb0(LegoAnimNodeData* p_data, LegoTime p_time, Matr
 }
 
 // FUNCTION: LEGO1 0x100a8ce0
-LegoROI* LegoROI::FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi)
+LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 {
 	CompoundObject::iterator it;
 	const LegoChar* name = p_roi->GetName();
@@ -362,7 +362,7 @@ LegoROI* LegoROI::FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi)
 		}
 
 		for (it = comp->begin(); it != comp->end(); it++) {
-			LegoROI* roi = FUN_100a8ce0(p_name, (LegoROI*) *it);
+			LegoROI* roi = FindChildROI(p_name, (LegoROI*) *it);
 
 			if (roi != NULL) {
 				return roi;
@@ -379,10 +379,10 @@ LegoResult LegoROI::FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, 
 	MxMatrix mat;
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	const LegoChar* name = data->GetName();
-	LegoROI* roi = FUN_100a8ce0(name, p_roi);
+	LegoROI* roi = FindChildROI(name, p_roi);
 
 	if (roi == NULL) {
-		roi = FUN_100a8ce0(name, this);
+		roi = FindChildROI(name, this);
 	}
 
 	if (roi != NULL) {
@@ -496,6 +496,13 @@ LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
 	}
 
 	return result;
+}
+
+// STUB: LEGO1 0x100a92a0
+LegoResult LegoROI::GetTexture(LegoTextureInfo*&)
+{
+	// TODO
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100a9a50
