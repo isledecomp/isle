@@ -394,7 +394,7 @@ void LegoAnimPresenter::FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* 
 			}
 		}
 		else {
-			LegoROI* roi2 = p_roi->FUN_100a8ce0(name, p_roi);
+			LegoROI* roi2 = p_roi->FindChildROI(name, p_roi);
 
 			if (roi2 != NULL) {
 				FUN_1006a4f0(p_map, data, und, roi2);
@@ -473,7 +473,7 @@ MxBool LegoAnimPresenter::FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi)
 			}
 		}
 		else {
-			LegoROI* roi2 = p_roi->FUN_100a8ce0(name, p_roi);
+			LegoROI* roi2 = p_roi->FindChildROI(name, p_roi);
 
 			if (roi2 == NULL) {
 				if (FUN_100699e0(name) != NULL) {

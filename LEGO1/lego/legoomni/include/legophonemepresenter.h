@@ -6,6 +6,8 @@
 #include "mxstring.h"
 #include "mxtypes.h"
 
+class LegoTextureInfo;
+
 // VTABLE: LEGO1 0x100d8040
 // SIZE 0x88
 class LegoPhonemePresenter : public MxFlcPresenter {
@@ -31,11 +33,14 @@ public:
 private:
 	void Init();
 
-	undefined4 m_unk0x68; // 0x68
-	undefined4 m_unk0x6c; // 0x6c
-	undefined m_unk0x70;  // 0x70
-	MxString m_unk0x74;   // 0x74
-	undefined m_unk0x84;  // 0x84
+	undefined4 m_unk0x68;           // 0x68
+	LegoTextureInfo* m_textureInfo; // 0x6c
+	MxBool m_unk0x70;               // 0x70
+	MxString roiName;               // 0x74
+	MxBool m_unk0x84;               // 0x84
 };
+
+// TEMPLATE: LEGO1 0x1004eb20
+// MxListEntry<LegoPhoneme *>::MxListEntry<LegoPhoneme *>
 
 #endif // LEGOPHONEMEPRESENTER_H

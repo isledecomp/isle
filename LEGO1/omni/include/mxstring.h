@@ -20,6 +20,7 @@ public:
 	MxString& operator+=(const char* p_str);
 
 	inline MxS8 Compare(const MxString& p_str) const { return strcmp(m_data, p_str.m_data); }
+	inline MxBool Equal(const MxString& p_str) const { return strcmp(m_data, p_str.m_data) == 0; }
 	inline const char* GetData() const { return m_data; }
 	inline char* GetDataPtr() const { return m_data; }
 	inline const MxU16 GetLength() const { return m_length; }

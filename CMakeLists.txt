@@ -328,6 +328,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/common/legofullscreenmovie.cpp
   LEGO1/lego/legoomni/src/common/legogamestate.cpp
   LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp
+  LEGO1/lego/legoomni/src/common/legophoneme.cpp
   LEGO1/lego/legoomni/src/common/legoplantmanager.cpp
   LEGO1/lego/legoomni/src/common/legostate.cpp
   LEGO1/lego/legoomni/src/common/legotextureinfo.cpp
@@ -388,7 +389,6 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/race/raceskel.cpp
   LEGO1/lego/legoomni/src/race/racestate.cpp
   LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
-  LEGO1/lego/legoomni/src/unknown/legounknown100d7c88.cpp
   LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp

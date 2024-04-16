@@ -30,12 +30,13 @@ public:
 		LegoTextureContainer* p_textureContainer,
 		LegoStorage* p_storage
 	);
-	LegoROI* FUN_100a8ce0(const LegoChar* p_name, LegoROI* p_roi);
+	LegoROI* FindChildROI(const LegoChar* p_name, LegoROI* p_roi);
 	LegoResult FUN_100a8da0(LegoTreeNode* p_node, const Matrix4& p_matrix, LegoTime p_time, LegoROI* p_roi);
 	static void FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_rois);
 	LegoResult SetFrame(LegoAnim* p_anim, LegoTime p_time);
 	LegoResult FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
+	LegoResult GetTexture(LegoTextureInfo*&);
 	void SetName(const LegoChar* p_name);
 
 	float IntrinsicImportance() const override; // vtable+0x04
