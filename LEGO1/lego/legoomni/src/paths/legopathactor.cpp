@@ -10,6 +10,14 @@
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
 
+#ifndef M_PI
+#define M_PI 3.1416
+#endif
+#ifdef DTOR
+#undef DTOR
+#endif
+#define DTOR(angle) ((angle) * M_PI / 180.)
+
 // GLOBAL: LEGO1 0x100f3304
 // STRING: LEGO1 0x100f32f4
 const char* g_strHIT_WALL_SOUND = "HIT_WALL_SOUND";
@@ -384,12 +392,12 @@ void LegoPathActor::VTable0x70(float p_time)
 						? -(nav->GetRotationalVel() / (nav->GetMaxLinearVel() * m_unk0x150) * nav->GetLinearVel())
 						: 0;
 
-		if (vel != m_unk0x14c) {
+		if ((MxS32) vel != m_unk0x14c) {
 			m_unk0x14c = vel;
 			LegoWorld* world = CurrentWorld();
 
 			if (world) {
-				world->GetCamera()->FUN_10012290(m_unk0x14c * (3.1416 / 180.0));
+				world->GetCamera()->FUN_10012290(DTOR(m_unk0x14c));
 			}
 		}
 	}
