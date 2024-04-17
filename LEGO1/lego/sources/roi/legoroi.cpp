@@ -498,10 +498,29 @@ LegoResult LegoROI::FUN_100a9210(LegoTextureInfo* p_textureInfo)
 	return result;
 }
 
-// STUB: LEGO1 0x100a92a0
-LegoResult LegoROI::GetTexture(LegoTextureInfo*&)
+// FUNCTION: LEGO1 0x100a92a0
+// FUNCTION: BETA10 0x1018b12d
+LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 {
-	// TODO
+	CompoundObject::iterator it;
+
+	int lodCount = GetLODCount();
+	for (LegoU32 i = 0; i < lodCount; i++) {
+		LegoLOD* lod = (LegoLOD*) GetLOD(i);
+
+		if (lod->GetTexture(p_textureInfo) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	if (comp != NULL) {
+		for (it = comp->begin(); it != comp->end(); it++) {
+			if (((LegoROI*) *it)->GetTexture(p_textureInfo) == SUCCESS) {
+				return SUCCESS;
+			}
+		}
+	}
+
 	return FAILURE;
 }
 

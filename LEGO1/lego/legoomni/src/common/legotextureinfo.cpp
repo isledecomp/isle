@@ -160,6 +160,30 @@ BOOL LegoTextureInfo::SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textu
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x10065f90
+BOOL LegoTextureInfo::GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_textureInfo)
+{
+	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
+
+	IDirect3DRMMesh* mesh = data->groupMesh;
+	D3DRMGROUPINDEX id = data->groupIndex;
+	LPDIRECT3DRMTEXTURE returnPtr = NULL;
+	LPDIRECT3DRMTEXTURE2 texture = NULL;
+
+	if (mesh->GetGroupTexture(id, &returnPtr) == D3DRM_OK) {
+		if (returnPtr->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) &texture) == D3DRM_OK) {
+			p_textureInfo = (LegoTextureInfo*) texture->GetAppData();
+
+			texture->Release();
+			returnPtr->Release();
+		}
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 // STUB: LEGO1 0x10066010
 LegoResult LegoTextureInfo::FUN_10066010(LegoU8* p_bits)
 {
