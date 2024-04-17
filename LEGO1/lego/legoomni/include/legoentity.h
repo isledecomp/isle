@@ -76,6 +76,7 @@ public:
 	inline MxFloat GetWorldSpeed() { return m_worldSpeed; }
 	inline LegoROI* GetROI() { return m_roi; }
 	inline MxU8 GetUnknown0x59() { return m_unk0x59; }
+	inline MxBool GetCameraFlag() { return m_cameraFlag; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
 	inline void SetFlag(MxU8 p_flag) { m_flags |= p_flag; }

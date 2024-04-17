@@ -413,10 +413,47 @@ void LegoPathActor::VTable0x98()
 	// TODO
 }
 
-// STUB: LEGO1 0x1002e8d0
-void LegoPathActor::VTable0x6c()
+// FUNCTION: LEGO1 0x1002e8d0
+// FUNCTION: BETA10 0x100b1010
+MxU32 LegoPathActor::VTable0x6c(
+	LegoPathBoundary* p_boundary,
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	float p_f2,
+	Vector3& p_v3
+)
 {
-	// TODO
+	LegoAnimPresenterSet* laps = p_boundary->GetPresenters();
+
+	for (LegoAnimPresenterSet::iterator itap = laps->begin(); itap != laps->end(); itap++) {
+		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+			return 1;
+		}
+	}
+
+	LegoPathActorSet* plpas = p_boundary->GetActors();
+	LegoPathActorSet lpas(*plpas);
+
+	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+		if (plpas->find(*itpa) != plpas->end()) {
+			LegoPathActor* actor = *itpa;
+
+			if (this != actor && !(actor->GetState() & 0x100)) {
+				LegoROI* roi = actor->GetROI();
+
+				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
+					if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_unk0xe8 != 0 && actor->m_unk0xe8 != 0)) {
+						VTable0x94(actor, TRUE);
+						actor->VTable0x94(this, FALSE);
+						return 2;
+					}
+				}
+			}
+		}
+	}
+
+	return 0;
 }
 
 // STUB: LEGO1 0x1002ebe0

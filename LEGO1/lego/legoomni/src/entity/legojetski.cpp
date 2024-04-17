@@ -44,9 +44,17 @@ void LegoJetski::SetWorldSpeed(MxFloat p_worldSpeed)
 }
 
 // STUB: LEGO1 0x10014140
-void LegoJetski::VTable0x6c()
+MxU32 LegoJetski::VTable0x6c(
+	LegoPathBoundary* p_boundary,
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	float p_f2,
+	Vector3& p_v3
+)
 {
 	// TODO
+	return 0;
 }
 
 // STUB: LEGO1 0x10014180

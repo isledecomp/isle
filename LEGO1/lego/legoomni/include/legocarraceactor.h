@@ -27,7 +27,14 @@ public:
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
 	}
 
-	void VTable0x6c() override;                                          // vtable+0x6c
+	MxU32 VTable0x6c(
+		LegoPathBoundary* p_boundary,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		float p_f2,
+		Vector3& p_v3
+	) override;                                                          // vtable+0x6c
 	void VTable0x70(float p_float) override;                             // vtable+0x70
 	MxU32 VTable0x90(float, Matrix4&) override;                          // vtable+0x90
 	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
