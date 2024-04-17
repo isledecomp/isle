@@ -447,7 +447,6 @@ MxU32 LegoPathActor::VTable0x6c(
 		}
 	}
 	return 0;
-	// TODO
 }
 
 // STUB: LEGO1 0x1002ebe0
