@@ -61,7 +61,7 @@ public:
 	MxU32 GetRefCount(LegoROI* p_roi);
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
-	MxU32 FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
+	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
 	LegoExtraActor* GetActor(const char* p_key);
 	LegoCharacterData* GetData(const char* p_key);
 	LegoCharacterData* GetData(LegoROI* p_roi);
@@ -75,7 +75,7 @@ public:
 private:
 	LegoROI* CreateROI(const char* p_key);
 	void RemoveROI(LegoROI* p_roi);
-	LegoROI* FUN_10084cf0(LegoROI* p_roi, const char* p_name);
+	LegoROI* FindChildROI(LegoROI* p_roi, const char* p_name);
 	MxResult FUN_10085870(LegoROI* p_roi);
 
 	static char* g_customizeAnimFile;

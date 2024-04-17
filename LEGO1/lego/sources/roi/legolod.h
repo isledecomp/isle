@@ -31,6 +31,7 @@ public:
 	LegoLOD* Clone(Tgl::Renderer* p_renderer);
 	LegoResult FUN_100aacb0(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult FUN_100aad00(LegoTextureInfo* p_textureInfo);
+	LegoResult FUN_100aad70(LegoTextureInfo* p_textureInfo);
 
 	static LegoBool FUN_100aae20(const LegoChar* p_name);
 

@@ -25,6 +25,9 @@ MxU32 g_unk0x100fc4d8 = 50;
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_unk0x100fc4dc = 66;
 
+// GLOBAL: LEGO1 0x100fc4e8
+MxU32 g_unk0x100fc4e8 = 0;
+
 // GLOBAL: LEGO1 0x100fc4ec
 MxU32 g_unk0x100fc4ec = 2;
 
@@ -469,11 +472,52 @@ done:
 	return roi;
 }
 
-// STUB: LEGO1 0x100849a0
-MxU32 LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
+// FUNCTION: LEGO1 0x100849a0
+// FUNCTION: BETA10 0x10075b51
+MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
 {
-	// TODO
-	return 0;
+	LegoResult result = SUCCESS;
+	LegoROI* head = FindChildROI(p_roi, g_characterLODs[4].m_name);
+
+	if (head != NULL) {
+		char lodName[256];
+
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_characterLODs[4].m_parentName);
+		MxS32 lodSize = lodList->Size();
+		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_unk0x100fc4e8++);
+		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+
+		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
+
+		if (p_textureInfo == NULL) {
+			LegoCharacterData* info = GetData(p_roi->GetName());
+			LegoCharacterData::Part& part = info->m_parts[3];
+			p_textureInfo = TextureContainer()->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
+		}
+
+		for (MxS32 i = 0; i < lodSize; i++) {
+			LegoLOD* lod = (LegoLOD*) (*lodList)[i];
+			LegoLOD* clone = lod->Clone(renderer);
+
+			if (p_textureInfo != NULL) {
+				clone->FUN_100aad70(p_textureInfo);
+			}
+
+			dupLodList->PushBack(clone);
+		}
+
+		lodList->Release();
+		lodList = dupLodList;
+
+		if (head->GetUnknown0xe0() >= 0) {
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(head);
+		}
+
+		head->SetLODList(lodList);
+		lodList->Release();
+	}
+
+	return head != NULL;
 }
 
 // FUNCTION: LEGO1 0x10084c00
@@ -537,7 +581,8 @@ LegoCharacterData* LegoCharacterManager::GetData(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10084cf0
-LegoROI* LegoCharacterManager::FUN_10084cf0(LegoROI* p_roi, const char* p_name)
+// FUNCTION: BETA10 0x10075fe2
+LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 {
 	const CompoundObject* comp = p_roi->GetComp();
 
@@ -575,7 +620,7 @@ MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
 		unk0x00 = part.m_unk0x00[part.m_unk0x08];
 	}
 
-	LegoROI* childROI = FUN_10084cf0(p_roi, g_characterLODs[1].m_name);
+	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[1].m_name);
 
 	if (childROI != NULL) {
 		char lodName[256];
