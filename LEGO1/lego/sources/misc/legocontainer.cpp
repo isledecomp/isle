@@ -54,7 +54,7 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 	LegoTextureInfo* textureInfo = new LegoTextureInfo();
 
 	textureInfo->m_palette = p_textureInfo->m_palette;
-	p_textureInfo->m_palette->Release();
+	textureInfo->m_palette->AddRef();
 
 	memset(&newDesc, 0, sizeof(newDesc));
 	newDesc.dwWidth = desc.dwWidth;
