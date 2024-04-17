@@ -184,9 +184,34 @@ BOOL LegoTextureInfo::GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_text
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10066010
+// FUNCTION: LEGO1 0x10066010
 LegoResult LegoTextureInfo::FUN_10066010(LegoU8* p_bits)
 {
-	// TODO
-	return SUCCESS;
+	if (m_surface != NULL && m_texture != NULL) {
+		DDSURFACEDESC desc;
+		memset(&desc, 0, sizeof(desc));
+		desc.dwSize = sizeof(desc);
+
+		if (m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
+			MxU8* surface = (MxU8*) desc.lpSurface;
+			LegoU8* bits = p_bits;
+
+			if (desc.dwWidth == desc.lPitch) {
+				memcpy(desc.lpSurface, p_bits, desc.dwWidth * desc.dwHeight);
+			}
+			else {
+				for (MxS32 i = 0; i < desc.dwHeight; i++) {
+					memcpy(surface, bits, desc.dwWidth);
+					surface += desc.lPitch;
+					bits += desc.dwWidth;
+				}
+			}
+
+			m_surface->Unlock(desc.lpSurface);
+			m_texture->Changed(TRUE, FALSE);
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
 }
