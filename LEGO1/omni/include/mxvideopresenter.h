@@ -64,13 +64,13 @@ public:
 	virtual LPDIRECTDRAWSURFACE VTable0x78() { return m_unk0x58; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x1000c7c0
-	virtual MxBool VTable0x7c() { return m_bitmap != NULL || m_alpha != NULL; } // vtable+0x7c
+	virtual MxBool VTable0x7c() { return m_frameBitmap != NULL || m_alpha != NULL; } // vtable+0x7c
 
 	// FUNCTION: LEGO1 0x1000c7e0
-	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_bitmap->GetBmiWidth(); } // vtable+0x80
+	virtual MxS32 GetWidth() { return m_alpha ? m_alpha->m_width : m_frameBitmap->GetBmiWidth(); } // vtable+0x80
 
 	// FUNCTION: LEGO1 0x1000c800
-	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_bitmap->GetBmiHeightAbs(); } // vtable+0x84
+	virtual MxS32 GetHeight() { return m_alpha ? m_alpha->m_height : m_frameBitmap->GetBmiHeightAbs(); } // vtable+0x84
 
 	// VTABLE: LEGO1 0x100dc2bc
 	// SIZE 0x0c
@@ -90,7 +90,7 @@ public:
 	};
 
 	inline MxS32 PrepareRects(RECT& p_rectDest, RECT& p_rectSrc);
-	inline MxBitmap* GetBitmap() { return m_bitmap; }
+	inline MxBitmap* GetBitmap() { return m_frameBitmap; }
 	inline AlphaMask* GetAlphaMask() { return m_alpha; }
 
 	inline void SetBit0(BOOL p_e) { m_flags.m_bit0 = p_e; }
@@ -114,7 +114,7 @@ private:
 protected:
 	void Destroy(MxBool p_fromDestructor);
 
-	MxBitmap* m_bitmap;            // 0x50
+	MxBitmap* m_frameBitmap;       // 0x50
 	AlphaMask* m_alpha;            // 0x54
 	LPDIRECTDRAWSURFACE m_unk0x58; // 0x58
 	MxS16 m_unk0x5c;               // 0x5c

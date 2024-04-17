@@ -35,12 +35,12 @@ void MxFlcPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b34d0
 void MxFlcPresenter::CreateBitmap()
 {
-	if (m_bitmap) {
-		delete m_bitmap;
+	if (m_frameBitmap) {
+		delete m_frameBitmap;
 	}
 
-	m_bitmap = new MxBitmap;
-	m_bitmap->SetSize(m_flcHeader->width, m_flcHeader->height, NULL, FALSE);
+	m_frameBitmap = new MxBitmap;
+	m_frameBitmap->SetSize(m_flcHeader->width, m_flcHeader->height, NULL, FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3570
@@ -56,8 +56,8 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 
 	MxBool decodedColorMap;
 	DecodeFLCFrame(
-		&m_bitmap->GetBitmapInfo()->m_bmiHeader,
-		m_bitmap->GetBitmapData(),
+		&m_frameBitmap->GetBitmapInfo()->m_bmiHeader,
+		m_frameBitmap->GetImage(),
 		m_flcHeader,
 		(FLIC_FRAME*) data,
 		&decodedColorMap
@@ -77,7 +77,7 @@ void MxFlcPresenter::LoadFrame(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b3620
 void MxFlcPresenter::RealizePalette()
 {
-	MxPalette* palette = m_bitmap->CreatePalette();
+	MxPalette* palette = m_frameBitmap->CreatePalette();
 	MVideoManager()->RealizePalette(palette);
 	delete palette;
 }

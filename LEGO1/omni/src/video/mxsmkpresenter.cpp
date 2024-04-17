@@ -52,19 +52,19 @@ void MxSmkPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b3960
 void MxSmkPresenter::CreateBitmap()
 {
-	if (m_bitmap) {
-		delete m_bitmap;
+	if (m_frameBitmap) {
+		delete m_frameBitmap;
 	}
 
-	m_bitmap = new MxBitmap;
-	m_bitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
+	m_frameBitmap = new MxBitmap;
+	m_frameBitmap->SetSize(m_mxSmack.m_smackTag.Width, m_mxSmack.m_smackTag.Height, NULL, FALSE);
 }
 
 // FUNCTION: LEGO1 0x100b3a00
 void MxSmkPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	MxBITMAPINFO* bitmapInfo = m_bitmap->GetBitmapInfo();
-	MxU8* bitmapData = m_bitmap->GetBitmapData();
+	MxBITMAPINFO* bitmapInfo = m_frameBitmap->GetBitmapInfo();
+	MxU8* bitmapData = m_frameBitmap->GetImage();
 	MxU8* chunkData = p_chunk->GetData();
 
 	MxBool paletteChanged = m_mxSmack.m_frameTypes[m_currentFrame] & 1;
@@ -110,7 +110,7 @@ void MxSmkPresenter::VTable0x88()
 // FUNCTION: LEGO1 0x100b42c0
 void MxSmkPresenter::RealizePalette()
 {
-	MxPalette* palette = m_bitmap->CreatePalette();
+	MxPalette* palette = m_frameBitmap->CreatePalette();
 	MVideoManager()->RealizePalette(palette);
 	delete palette;
 }

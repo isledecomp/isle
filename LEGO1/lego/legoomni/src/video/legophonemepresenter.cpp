@@ -21,7 +21,7 @@ LegoPhonemePresenter::~LegoPhonemePresenter()
 // FUNCTION: LEGO1 0x1004e3b0
 void LegoPhonemePresenter::Init()
 {
-	m_unk0x68 = 0;
+	m_rectCount = 0;
 	m_textureInfo = NULL;
 	m_unk0x70 = FALSE;
 	m_unk0x84 = FALSE;
@@ -84,16 +84,34 @@ void LegoPhonemePresenter::StartingTickle()
 	}
 }
 
-// STUB: LEGO1 0x1004e800
+// FUNCTION: LEGO1 0x1004e800
 void LegoPhonemePresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	// TODO
+	MxU8* data = p_chunk->GetData();
+
+	m_rectCount = *(MxS32*) data;
+	data += sizeof(MxS32);
+
+	MxRect32* rects = (MxRect32*) data;
+	data += m_rectCount * sizeof(MxRect32);
+
+	MxBool decodedColorMap;
+	DecodeFLCFrame(
+		&m_frameBitmap->GetBitmapInfo()->m_bmiHeader,
+		m_frameBitmap->GetImage(),
+		m_flcHeader,
+		(FLIC_FRAME*) data,
+		&decodedColorMap
+	);
 }
 
-// STUB: LEGO1 0x1004e840
+// FUNCTION: LEGO1 0x1004e840
 void LegoPhonemePresenter::PutFrame()
 {
-	// TODO
+	if (m_textureInfo != NULL && m_rectCount != 0) {
+		m_textureInfo->FUN_10066010(m_frameBitmap->GetImage());
+		m_rectCount = 0;
+	}
 }
 
 // STUB: LEGO1 0x1004e870

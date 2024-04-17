@@ -47,12 +47,12 @@ void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b9d10
 void MxStillPresenter::CreateBitmap()
 {
-	if (m_bitmap) {
-		delete m_bitmap;
+	if (m_frameBitmap) {
+		delete m_frameBitmap;
 	}
 
-	m_bitmap = new MxBitmap;
-	m_bitmap->ImportBitmapInfo(m_bitmapInfo);
+	m_frameBitmap = new MxBitmap;
+	m_frameBitmap->ImportBitmapInfo(m_bitmapInfo);
 
 	delete m_bitmapInfo;
 	m_bitmapInfo = NULL;
@@ -69,7 +69,7 @@ void MxStillPresenter::NextFrame()
 // FUNCTION: LEGO1 0x100b9dd0
 void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
-	memcpy(m_bitmap->GetBitmapData(), p_chunk->GetData(), p_chunk->GetLength());
+	memcpy(m_frameBitmap->GetImage(), p_chunk->GetData(), p_chunk->GetLength());
 
 	// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 	MxS32 height = GetHeight() - 1;
@@ -83,17 +83,17 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 	if (GetBit1()) {
 		undefined4 und = 0;
 		m_unk0x58 = MxOmni::GetInstance()->GetVideoManager()->GetDisplaySurface()->VTable0x44(
-			m_bitmap,
+			m_frameBitmap,
 			&und,
 			GetBit3(),
 			m_action->GetFlags() & MxDSAction::c_bit4
 		);
 
 		delete m_alpha;
-		m_alpha = new AlphaMask(*m_bitmap);
+		m_alpha = new AlphaMask(*m_frameBitmap);
 
-		delete m_bitmap;
-		m_bitmap = NULL;
+		delete m_frameBitmap;
+		m_frameBitmap = NULL;
 
 		if (m_unk0x58 && und) {
 			SetBit2(TRUE);
@@ -107,7 +107,7 @@ void MxStillPresenter::LoadFrame(MxStreamChunk* p_chunk)
 // FUNCTION: LEGO1 0x100b9f30
 void MxStillPresenter::RealizePalette()
 {
-	MxPalette* palette = m_bitmap->CreatePalette();
+	MxPalette* palette = m_frameBitmap->CreatePalette();
 	MVideoManager()->RealizePalette(palette);
 	delete palette;
 }
@@ -177,7 +177,7 @@ void MxStillPresenter::Enable(MxBool p_enable)
 {
 	MxPresenter::Enable(p_enable);
 
-	if (MVideoManager() && (m_alpha || m_bitmap)) {
+	if (MVideoManager() && (m_alpha || m_frameBitmap)) {
 		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
@@ -240,10 +240,10 @@ MxStillPresenter* MxStillPresenter::Clone()
 				presenter->SetBit3(GetBit3());
 				presenter->SetBit4(GetBit4());
 
-				if (m_bitmap) {
-					presenter->m_bitmap = new MxBitmap;
+				if (m_frameBitmap) {
+					presenter->m_frameBitmap = new MxBitmap;
 
-					if (!presenter->m_bitmap || presenter->m_bitmap->ImportBitmap(m_bitmap) != SUCCESS) {
+					if (!presenter->m_frameBitmap || presenter->m_frameBitmap->ImportBitmap(m_frameBitmap) != SUCCESS) {
 						goto done;
 					}
 				}

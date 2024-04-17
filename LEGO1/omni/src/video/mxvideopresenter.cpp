@@ -40,11 +40,11 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 		else {
 			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
 		}
-		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+		bitmapSrcPtr = p_bitmap.GetImage() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
 		break;
 	}
 	case BI_RGB_TOPDOWN:
-		bitmapSrcPtr = p_bitmap.GetBitmapData();
+		bitmapSrcPtr = p_bitmap.GetImage();
 		break;
 	default: {
 		if (p_bitmap.GetBmiHeight() < 0) {
@@ -53,7 +53,7 @@ MxVideoPresenter::AlphaMask::AlphaMask(const MxBitmap& p_bitmap)
 		else {
 			rowsBeforeTop = p_bitmap.GetBmiHeightAbs() - 1;
 		}
-		bitmapSrcPtr = p_bitmap.GetBitmapData() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
+		bitmapSrcPtr = p_bitmap.GetImage() + (p_bitmap.GetBmiStride() * rowsBeforeTop);
 	}
 	}
 
@@ -120,7 +120,7 @@ MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 // FUNCTION: LEGO1 0x100b2760
 void MxVideoPresenter::Init()
 {
-	m_bitmap = NULL;
+	m_frameBitmap = NULL;
 	m_alpha = NULL;
 	m_unk0x5c = 1;
 	m_unk0x58 = NULL;
@@ -151,7 +151,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		SetBit2(FALSE);
 	}
 
-	if (MVideoManager() && (m_alpha || m_bitmap)) {
+	if (MVideoManager() && (m_alpha || m_frameBitmap)) {
 		// MxRect32 rect(m_location, MxSize32(GetWidth(), GetHeight()));
 		MxS32 height = GetHeight();
 		MxS32 width = GetWidth();
@@ -163,7 +163,7 @@ void MxVideoPresenter::Destroy(MxBool p_fromDestructor)
 		MVideoManager()->UpdateView(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight());
 	}
 
-	delete m_bitmap;
+	delete m_frameBitmap;
 	delete m_alpha;
 
 	Init();
@@ -193,21 +193,21 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 {
 	MxDSAction* action = GetAction();
 	if ((action == NULL) || (((action->GetFlags() & MxDSAction::c_bit11) == 0) && !IsEnabled()) ||
-		(!m_bitmap && !m_alpha)) {
+		(!m_frameBitmap && !m_alpha)) {
 		return FALSE;
 	}
 
-	if (!m_bitmap) {
+	if (!m_frameBitmap) {
 		return m_alpha->IsHit(p_x - m_location.GetX(), p_y - m_location.GetY());
 	}
 
-	MxLong heightAbs = m_bitmap->GetBmiHeightAbs();
+	MxLong heightAbs = m_frameBitmap->GetBmiHeightAbs();
 
 	MxLong minX = m_location.GetX();
 	MxLong minY = m_location.GetY();
 
 	MxLong maxY = minY + heightAbs;
-	MxLong maxX = minX + m_bitmap->GetBmiWidth();
+	MxLong maxX = minX + m_frameBitmap->GetBmiWidth();
 
 	if (p_x < minX || p_x >= maxX || p_y < minY || p_y >= maxY) {
 		return FALSE;
@@ -215,8 +215,8 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 
 	MxU8* pixel;
 
-	MxLong biCompression = m_bitmap->GetBmiHeader()->biCompression;
-	MxLong height = m_bitmap->GetBmiHeight();
+	MxLong biCompression = m_frameBitmap->GetBmiHeader()->biCompression;
+	MxLong height = m_frameBitmap->GetBmiHeight();
 	MxLong seekRow;
 
 	// DECOMP: Same basic layout as AlphaMask constructor
@@ -232,15 +232,15 @@ MxBool MxVideoPresenter::IsHit(MxS32 p_x, MxS32 p_y)
 			height = height > 0 ? height : -height;
 			seekRow = height - p_y - 1 + m_location.GetY();
 		}
-		pixel = m_bitmap->GetBmiStride() * seekRow + m_bitmap->GetBitmapData() - m_location.GetX() + p_x;
+		pixel = m_frameBitmap->GetBmiStride() * seekRow + m_frameBitmap->GetImage() - m_location.GetX() + p_x;
 	}
 	else if (biCompression == BI_RGB_TOPDOWN) {
-		pixel = m_bitmap->GetBitmapData();
+		pixel = m_frameBitmap->GetImage();
 	}
 	else {
 		height = height > 0 ? height : -height;
 		height--;
-		pixel = m_bitmap->GetBmiStride() * height + m_bitmap->GetBitmapData();
+		pixel = m_frameBitmap->GetBmiStride() * height + m_frameBitmap->GetImage();
 	}
 
 	if (GetBit4()) {
@@ -323,13 +323,13 @@ void MxVideoPresenter::PutFrame()
 		}
 		else {
 			displaySurface->VTable0x30(
-				m_bitmap,
+				m_frameBitmap,
 				0,
 				0,
 				rect.GetLeft(),
 				rect.GetTop(),
-				m_bitmap->GetBmiWidth(),
-				m_bitmap->GetBmiHeightAbs(),
+				m_frameBitmap->GetBmiWidth(),
+				m_frameBitmap->GetBmiHeightAbs(),
 				TRUE
 			);
 		}
@@ -362,7 +362,7 @@ void MxVideoPresenter::PutFrame()
 					}
 					else {
 						displaySurface->VTable0x30(
-							m_bitmap,
+							m_frameBitmap,
 							regionRect->GetLeft() - GetX(),
 							regionRect->GetTop() - GetY(),
 							regionRect->GetLeft(),
@@ -380,7 +380,7 @@ void MxVideoPresenter::PutFrame()
 				}
 				else {
 					displaySurface->VTable0x28(
-						m_bitmap,
+						m_frameBitmap,
 						regionRect->GetLeft() - GetX(),
 						regionRect->GetTop() - GetY(),
 						regionRect->GetLeft(),
@@ -546,9 +546,9 @@ void MxVideoPresenter::EndAction()
 		MxMediaPresenter::EndAction();
 		AUTOLOCK(m_criticalSection);
 
-		if (m_bitmap) {
-			MxLong height = m_bitmap->GetBmiHeightAbs();
-			MxLong width = m_bitmap->GetBmiWidth();
+		if (m_frameBitmap) {
+			MxLong height = m_frameBitmap->GetBmiHeightAbs();
+			MxLong width = m_frameBitmap->GetBmiWidth();
 			MxS32 x = m_location.GetX();
 			MxS32 y = m_location.GetY();
 

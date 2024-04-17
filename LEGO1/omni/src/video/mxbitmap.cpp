@@ -123,7 +123,7 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 		this->m_data = new MxU8[p_bitmap->GetDataSize()];
 		if (this->m_data) {
 			memcpy(this->m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
-			memcpy(this->m_data, p_bitmap->GetBitmapData(), p_bitmap->GetDataSize());
+			memcpy(this->m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
 
 			this->m_bmiHeader = &this->m_info->m_bmiHeader;
 			this->m_paletteData = this->m_info->m_bmiColors;
