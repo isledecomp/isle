@@ -1,18 +1,20 @@
 #include "mxvariabletable.h"
 
 // FUNCTION: LEGO1 0x100b7330
+// FUNCTION: BETA10 0x1012a470
 MxS8 MxVariableTable::Compare(MxVariable* p_var0, MxVariable* p_var1)
 {
 	return p_var0->GetKey()->Compare(*p_var1->GetKey());
 }
 
 // FUNCTION: LEGO1 0x100b7370
+// FUNCTION: BETA10 0x1012a4a0
 MxU32 MxVariableTable::Hash(MxVariable* p_var)
 {
 	const char* str = p_var->GetKey()->GetData();
 	MxU32 value = 0;
 
-	for (int i = 0; str[i]; i++) {
+	for (MxS32 i = 0; str[i]; i++) {
 		value += str[i];
 	}
 
@@ -20,6 +22,7 @@ MxU32 MxVariableTable::Hash(MxVariable* p_var)
 }
 
 // FUNCTION: LEGO1 0x100b73a0
+// FUNCTION: BETA10 0x1012a507
 void MxVariableTable::SetVariable(const char* p_key, const char* p_value)
 {
 	MxHashTableCursor<MxVariable*> cursor(this);
@@ -36,12 +39,12 @@ void MxVariableTable::SetVariable(const char* p_key, const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x100b7740
+// FUNCTION: BETA10 0x1012a629
 void MxVariableTable::SetVariable(MxVariable* p_var)
 {
 	MxHashTableCursor<MxVariable*> cursor(this);
-	MxBool found = cursor.Find(p_var);
 
-	if (found) {
+	if (cursor.Find(p_var)) {
 		cursor.DeleteMatch();
 	}
 
@@ -49,6 +52,7 @@ void MxVariableTable::SetVariable(MxVariable* p_var)
 }
 
 // FUNCTION: LEGO1 0x100b78f0
+// FUNCTION: BETA10 0x1012a6bd
 const char* MxVariableTable::GetVariable(const char* p_key)
 {
 	// STRING: ISLE 0x41008c

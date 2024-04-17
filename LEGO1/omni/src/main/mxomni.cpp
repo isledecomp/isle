@@ -77,6 +77,7 @@ void MxOmni::SetInstance(MxOmni* p_instance)
 }
 
 // FUNCTION: LEGO1 0x100af0c0
+// FUNCTION: BETA10 0x1012f3ff
 MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
