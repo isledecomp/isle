@@ -33,7 +33,7 @@ public:
 private:
 	void Init();
 
-	undefined4 m_unk0x68;           // 0x68
+	MxS32 m_rectCount;              // 0x68
 	LegoTextureInfo* m_textureInfo; // 0x6c
 	MxBool m_unk0x70;               // 0x70
 	MxString m_roiName;             // 0x74

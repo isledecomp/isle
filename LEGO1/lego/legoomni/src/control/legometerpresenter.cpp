@@ -100,17 +100,17 @@ void LegoMeterPresenter::ParseExtra()
 void LegoMeterPresenter::StreamingTickle()
 {
 	MxStillPresenter::StreamingTickle();
-	m_unk0x6c = new MxU8[m_bitmap->GetBmiStride() * m_bitmap->GetBmiHeightAbs()];
+	m_unk0x6c = new MxU8[m_frameBitmap->GetBmiStride() * m_frameBitmap->GetBmiHeightAbs()];
 	if (m_unk0x6c == NULL) {
 		EndAction();
 	}
 
-	memcpy(m_unk0x6c, m_bitmap->GetBitmapData(), m_bitmap->GetBmiStride() * m_bitmap->GetBmiHeightAbs());
+	memcpy(m_unk0x6c, m_frameBitmap->GetImage(), m_frameBitmap->GetBmiStride() * m_frameBitmap->GetBmiHeightAbs());
 
 	m_unk0x88 = 0;
 	m_unk0x8a = 0;
-	m_unk0x8c = m_bitmap->GetBmiWidth() - 1;
-	m_unk0x8e = m_bitmap->GetBmiHeightAbs() - 1;
+	m_unk0x8c = m_frameBitmap->GetBmiWidth() - 1;
+	m_unk0x8e = m_frameBitmap->GetBmiHeightAbs() - 1;
 }
 
 // FUNCTION: LEGO1 0x10043a30
