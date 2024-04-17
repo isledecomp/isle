@@ -350,6 +350,18 @@ LegoResult LegoLOD::FUN_100aad00(LegoTextureInfo* p_textureInfo)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100aad70
+LegoResult LegoLOD::FUN_100aad70(LegoTextureInfo* p_textureInfo)
+{
+	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
+		if (m_melems[i].m_unk0x04) {
+			LegoTextureInfo::SetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo);
+		}
+	}
+
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x100aae20
 LegoBool LegoLOD::FUN_100aae20(const LegoChar* p_name)
 {
