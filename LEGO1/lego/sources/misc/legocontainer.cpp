@@ -30,16 +30,17 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 	for (LegoTextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 		if ((*it).second == FALSE && (*it).first->m_texture->AddRef() != 0 && (*it).first->m_texture->Release() == 1) {
 			if (!strcmp((*it).first->m_name, p_textureInfo->m_name)) {
+				LPDIRECTDRAWSURFACE surface = (*it).first->m_surface;
 				memset(&newDesc, 0, sizeof(newDesc));
 				newDesc.dwSize = sizeof(newDesc);
 
-				if ((*it).first->m_surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
+				if (surface->Lock(NULL, &newDesc, DDLOCK_SURFACEMEMORYPTR, NULL) == DD_OK) {
 					BOOL und = FALSE;
 					if (newDesc.dwWidth == width && newDesc.dwHeight == height) {
 						und = TRUE;
 					}
 
-					(*it).first->m_surface->Unlock(newDesc.lpSurface);
+					surface->Unlock(newDesc.lpSurface);
 
 					if (und) {
 						(*it).second = TRUE;
@@ -69,8 +70,8 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 	if (VideoManager()->GetDirect3D()->DirectDraw()->CreateSurface(&newDesc, &textureInfo->m_surface, NULL) == DD_OK) {
 		RECT rect;
 		rect.left = 0;
-		rect.top = newDesc.dwWidth - 1;
-		rect.right = 0;
+		rect.right = newDesc.dwWidth - 1;
+		rect.top = 0;
 		rect.bottom = newDesc.dwHeight - 1;
 
 		textureInfo->m_surface->SetPalette(textureInfo->m_palette);
