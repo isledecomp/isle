@@ -1,6 +1,7 @@
 #include "mxomnicreateparam.h"
 
 // FUNCTION: LEGO1 0x100b0b00
+// FUNCTION: BETA10 0x10130b6b
 MxOmniCreateParam::MxOmniCreateParam(
 	const char* p_mediaPath,
 	struct HWND__* p_windowHandle,
