@@ -414,6 +414,7 @@ void LegoPathActor::VTable0x98()
 }
 
 // FUNCTION: LEGO1 0x1002e8d0
+// FUNCTION: BETA10 0x100b1010
 MxU32 LegoPathActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
