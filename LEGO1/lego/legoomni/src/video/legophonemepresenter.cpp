@@ -28,6 +28,7 @@ void LegoPhonemePresenter::Init()
 }
 
 // FUNCTION: LEGO1 0x1004e3d0
+// FUNCTION: BETA10 0x100c3646
 void LegoPhonemePresenter::StartingTickle()
 {
 	MxFlcPresenter::StartingTickle();
@@ -85,6 +86,7 @@ void LegoPhonemePresenter::StartingTickle()
 }
 
 // FUNCTION: LEGO1 0x1004e800
+// FUNCTION: BETA10 0x100c3ac9
 void LegoPhonemePresenter::LoadFrame(MxStreamChunk* p_chunk)
 {
 	MxU8* data = p_chunk->GetData();
@@ -106,6 +108,7 @@ void LegoPhonemePresenter::LoadFrame(MxStreamChunk* p_chunk)
 }
 
 // FUNCTION: LEGO1 0x1004e840
+// FUNCTION: BETA10 0x100c3b5d
 void LegoPhonemePresenter::PutFrame()
 {
 	if (m_textureInfo != NULL && m_rectCount != 0) {
