@@ -435,17 +435,23 @@ MxU32 LegoPathActor::VTable0x6c(
 	LegoPathActorSet lpas(*plpas);
 
 	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
-		LegoPathActor* actor = *itpa;
+		if (plpas->find(*itpa) != plpas->end()) {
+			LegoPathActor* actor = *itpa;
 
-		if (plpas->find(actor) != plpas->end() && this != actor && (actor->m_state & 0x100) && actor->m_roi &&
-			(actor->m_roi->GetVisibility() || actor->m_cameraFlag)) {
-			if (actor->m_roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_unk0xe8 != 0 && actor->m_unk0xe8 != 0)) {
-				VTable0x94(actor, TRUE);
-				VTable0x94(actor, FALSE);
-				return 2;
+			if (this != actor && !(actor->GetState() & 0x100)) {
+				LegoROI* roi = actor->GetROI();
+
+				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
+					if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_unk0xe8 != 0 && actor->m_unk0xe8 != 0)) {
+						VTable0x94(actor, TRUE);
+						actor->VTable0x94(this, FALSE);
+						return 2;
+					}
+				}
 			}
 		}
 	}
+
 	return 0;
 }
 
