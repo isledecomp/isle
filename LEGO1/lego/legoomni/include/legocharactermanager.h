@@ -59,6 +59,7 @@ public:
 
 	void FUN_100832a0();
 	MxU32 GetRefCount(LegoROI* p_roi);
+	void FUN_10083c30(const char* p_name);
 	void FUN_10083db0(LegoROI* p_roi);
 	void FUN_10083f10(LegoROI* p_roi);
 	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);

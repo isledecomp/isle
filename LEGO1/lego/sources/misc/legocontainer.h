@@ -98,8 +98,8 @@ protected:
 // VTABLE: LEGO1 0x100d86d4
 // class LegoContainer<LegoTextureInfo>
 
-typedef pair<LegoTextureInfo*, BOOL> LegoTextureListElement;
-typedef list<LegoTextureListElement> LegoTextureList;
+typedef pair<LegoTextureInfo*, BOOL> LegoCachedTexture;
+typedef list<LegoCachedTexture> LegoCachedTextureList;
 
 // VTABLE: LEGO1 0x100d86fc
 // SIZE 0x24
@@ -108,11 +108,11 @@ public:
 	LegoTextureContainer() { m_ownership = TRUE; }
 	~LegoTextureContainer() override;
 
-	LegoTextureInfo* AddToList(LegoTextureInfo* p_textureInfo);
-	void EraseFromList(LegoTextureInfo* p_textureInfo);
+	LegoTextureInfo* GetCached(LegoTextureInfo* p_textureInfo);
+	void EraseCached(LegoTextureInfo* p_textureInfo);
 
 protected:
-	LegoTextureList m_list; // 0x18
+	LegoCachedTextureList m_cached; // 0x18
 };
 
 // TEMPLATE: LEGO1 0x10059c50
