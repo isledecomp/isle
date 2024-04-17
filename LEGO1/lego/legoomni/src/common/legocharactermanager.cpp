@@ -239,6 +239,13 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 	return 0;
 }
 
+// STUB: LEGO1 0x10083c30
+// FUNCTION: BETA10 0x10074701
+void LegoCharacterManager::FUN_10083c30(const char* p_name)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x10083db0
 void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 {

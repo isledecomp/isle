@@ -14,7 +14,7 @@ LegoTextureContainer::~LegoTextureContainer()
 }
 
 // FUNCTION: LEGO1 0x100998e0
-LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
+LegoTextureInfo* LegoTextureContainer::GetCached(LegoTextureInfo* p_textureInfo)
 {
 	DDSURFACEDESC desc, newDesc;
 	DWORD width, height;
@@ -27,7 +27,7 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 		p_textureInfo->m_surface->Unlock(desc.lpSurface);
 	}
 
-	for (LegoTextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+	for (LegoCachedTextureList::iterator it = m_cached.begin(); it != m_cached.end(); it++) {
 		if ((*it).second == FALSE && (*it).first->m_texture->AddRef() != 0 && (*it).first->m_texture->Release() == 1) {
 			if (!strcmp((*it).first->m_name, p_textureInfo->m_name)) {
 				LPDIRECTDRAWSURFACE surface = (*it).first->m_surface;
@@ -92,7 +92,7 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 			}
 			else {
 				textureInfo->m_texture->SetAppData((DWORD) textureInfo);
-				m_list.push_back(LegoTextureListElement(textureInfo, TRUE));
+				m_cached.push_back(LegoCachedTexture(textureInfo, TRUE));
 
 				textureInfo->m_texture->AddRef();
 
@@ -111,24 +111,24 @@ LegoTextureInfo* LegoTextureContainer::AddToList(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x10099cc0
-void LegoTextureContainer::EraseFromList(LegoTextureInfo* p_textureInfo)
+void LegoTextureContainer::EraseCached(LegoTextureInfo* p_textureInfo)
 {
 	if (p_textureInfo == NULL) {
 		return;
 	}
 
 #ifdef COMPAT_MODE
-	LegoTextureList::iterator it;
-	for (it = m_list.begin(); it != m_list.end(); it++) {
+	LegoCachedTextureList::iterator it;
+	for (it = m_cached.begin(); it != m_cached.end(); it++) {
 #else
-	for (LegoTextureList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+	for (LegoCachedTextureList::iterator it = m_cached.begin(); it != m_cached.end(); it++) {
 #endif
 		if ((*it).first == p_textureInfo) {
 			(*it).second = FALSE;
 
 			if (p_textureInfo->m_texture->Release() == TRUE) {
 				delete p_textureInfo;
-				m_list.erase(it);
+				m_cached.erase(it);
 			}
 
 			return;

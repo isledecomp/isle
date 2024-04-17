@@ -62,7 +62,7 @@ void LegoPhonemePresenter::StartingTickle()
 			LegoPhonemeListCursor cursor(phonemeList);
 
 			if (!cursor.Find(phoneme)) {
-				LegoTextureInfo* textureInfo = TextureContainer()->AddToList(m_textureInfo);
+				LegoTextureInfo* textureInfo = TextureContainer()->GetCached(m_textureInfo);
 
 				CharacterManager()->FUN_100849a0(entityROI, textureInfo);
 
@@ -117,12 +117,53 @@ void LegoPhonemePresenter::PutFrame()
 	}
 }
 
-// STUB: LEGO1 0x1004e870
+// FUNCTION: LEGO1 0x1004e870
+// FUNCTION: BETA10 0x100c3c24
 void LegoPhonemePresenter::EndAction()
 {
-	// TODO
-
 	if (m_action != NULL) {
 		MxFlcPresenter::EndAction();
+
+		LegoPhonemeList* phonemeList = VideoManager()->GetPhonemeList();
+		LegoPhoneme* phoneme = new LegoPhoneme(m_roiName.GetData(), 1);
+
+		LegoPhonemeListCursor cursor(phonemeList);
+
+		if (cursor.Find(phoneme)) {
+			LegoPhoneme* newPhoneme = phoneme;
+			cursor.Current(phoneme);
+			delete newPhoneme;
+
+			if (phoneme->VTable0x00() == 1) {
+				LegoROI* roi;
+
+				if (m_unk0x84) {
+					roi = FindROI(m_roiName.GetData());
+				}
+				else {
+					roi = CharacterManager()->GetROI(m_roiName.GetData(), TRUE);
+				}
+
+				if (roi != NULL) {
+					CharacterManager()->FUN_100849a0(roi, NULL);
+				}
+
+				if (!m_unk0x84) {
+					CharacterManager()->FUN_10083c30(m_roiName.GetData());
+				}
+
+				TextureContainer()->EraseCached(phoneme->VTable0x10());
+				TextureContainer()->EraseCached(phoneme->VTable0x08());
+				cursor.Destroy();
+			}
+			else {
+				phoneme->VTable0x04(phoneme->VTable0x00() - 1);
+				cursor.SetValue(phoneme);
+			}
+
+			if (!m_unk0x84) {
+				CharacterManager()->FUN_10083c30(m_roiName.GetData());
+			}
+		}
 	}
 }
