@@ -17,6 +17,7 @@ public:
 
 	static LegoTextureInfo* Create(const char* p_name, LegoTexture* p_texture);
 	static BOOL SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo);
+	static BOOL GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_textureInfo);
 
 	LegoResult FUN_10066010(LegoU8* p_bits);
 
@@ -26,5 +27,8 @@ public:
 	LPDIRECTDRAWPALETTE m_palette;  // 0x08
 	LPDIRECT3DRMTEXTURE2 m_texture; // 0x0c
 };
+
+// GLOBAL: LEGO1 0x100db6f0
+// IID_IDirect3DRMTexture2
 
 #endif // LEGOTEXTUREINFO_H
