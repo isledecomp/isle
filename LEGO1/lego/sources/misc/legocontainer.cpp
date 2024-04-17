@@ -125,7 +125,7 @@ void LegoTextureContainer::EraseFromList(LegoTextureInfo* p_textureInfo)
 		if ((*it).first == p_textureInfo) {
 			(*it).second = FALSE;
 
-			if (p_textureInfo->m_texture->Release()) {
+			if (p_textureInfo->m_texture->Release() == TRUE) {
 				delete p_textureInfo;
 				m_list.erase(it);
 			}

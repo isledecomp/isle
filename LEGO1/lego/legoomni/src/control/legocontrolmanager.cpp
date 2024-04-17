@@ -66,7 +66,7 @@ MxBool LegoControlManager::FUN_10029210(LegoEventNotificationParam& p_param, MxP
 			m_event.SetKey(p_param.GetKey());
 
 			if (p_param.GetType() == c_notificationButtonUp) {
-				if (m_unk0x10) {
+				if (m_unk0x10 == TRUE) {
 					m_unk0x10 = FALSE;
 					return TRUE;
 				}

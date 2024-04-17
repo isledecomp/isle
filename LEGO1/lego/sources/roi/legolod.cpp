@@ -367,7 +367,7 @@ LegoResult LegoLOD::GetTexture(LegoTextureInfo*& p_textureInfo)
 {
 	for (LegoU32 i = m_unk0x1c; i < m_numMeshes; i++) {
 		if (m_melems[i].m_unk0x04) {
-			if (LegoTextureInfo::GetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo)) {
+			if (LegoTextureInfo::GetGroupTexture(m_melems[i].m_tglMesh, p_textureInfo) == TRUE) {
 				return SUCCESS;
 			}
 		}
