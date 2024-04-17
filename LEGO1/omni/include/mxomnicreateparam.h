@@ -9,6 +9,7 @@
 #include <windows.h>
 
 // VTABLE: LEGO1 0x100dc218
+// VTABLE: BETA10 0x101c1ca8
 class MxOmniCreateParam : public MxParam {
 public:
 	MxOmniCreateParam(
@@ -18,6 +19,7 @@ public:
 		MxOmniCreateFlags p_flags
 	);
 
+	// FUNCTION: BETA10 0x10092cb0
 	MxOmniCreateFlags& CreateFlags() { return this->m_createFlags; }
 	const MxString& GetMediaPath() const { return m_mediaPath; }
 	const HWND GetWindowHandle() const { return m_windowHandle; }
@@ -25,6 +27,7 @@ public:
 	const MxVideoParam& GetVideoParam() const { return m_videoParam; }
 
 	// SYNTHETIC: LEGO1 0x100b0a70
+	// SYNTHETIC: BETA10 0x10132740
 	// MxOmniCreateParam::`scalar deleting destructor'
 
 private:
@@ -35,6 +38,7 @@ private:
 };
 
 // SYNTHETIC: ISLE 0x4014b0
+// SYNTHETIC: BETA10 0x10132780
 // MxOmniCreateParam::~MxOmniCreateParam
 
 #endif // MXOMNICREATEPARAM_H
