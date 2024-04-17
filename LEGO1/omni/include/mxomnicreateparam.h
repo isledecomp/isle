@@ -21,6 +21,7 @@ public:
 
 	// FUNCTION: BETA10 0x10092cb0
 	MxOmniCreateFlags& CreateFlags() { return this->m_createFlags; }
+
 	const MxString& GetMediaPath() const { return m_mediaPath; }
 	const HWND GetWindowHandle() const { return m_windowHandle; }
 	MxVideoParam& GetVideoParam() { return m_videoParam; }
