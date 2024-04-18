@@ -221,25 +221,43 @@ class CompareDb:
         """For lineref match or _entry"""
         return self.set_pair(orig, recomp, SymbolType.FUNCTION)
 
-    def register_thunk(self, orig: int, recomp: int, name: str) -> bool:
-        """orig/recomp are an address pair of a thunk to some other function.
-        We may or may not already have this function tracked in the db.
-        If not, we need to create it, and we will use the name
-        (of the function being thunked, presumably) to mock up a name for
-        this symbol."""
+    def create_orig_thunk(self, addr: int, name: str) -> bool:
+        """Create a thunk function reference using the orig address.
+        We are here because we have a match on the thunked function,
+        but it is not thunked in the recomp build."""
 
-        # Start by assuming the row exists
-        if self.set_function_pair(orig, recomp):
-            return True
+        if self._orig_used(addr):
+            return False
 
         thunk_name = f"Thunk of '{name}'"
 
         # Assuming relative jump instruction for thunks (5 bytes)
         cur = self._db.execute(
             """INSERT INTO `symbols`
-            (orig_addr, recomp_addr, compare_type, name, size)
-            VALUES (?,?,?,?,?)""",
-            (orig, recomp, SymbolType.FUNCTION.value, thunk_name, 5),
+            (orig_addr, compare_type, name, size)
+            VALUES (?,?,?,?)""",
+            (addr, SymbolType.FUNCTION.value, thunk_name, 5),
+        )
+
+        return cur.rowcount > 0
+
+    def create_recomp_thunk(self, addr: int, name: str) -> bool:
+        """Create a thunk function reference using the recomp address.
+        We start from the recomp side for this because we are guaranteed
+        to have full information from the PDB. We can use a regular function
+        match later to pull in the orig address."""
+
+        if self._recomp_used(addr):
+            return False
+
+        thunk_name = f"Thunk of '{name}'"
+
+        # Assuming relative jump instruction for thunks (5 bytes)
+        cur = self._db.execute(
+            """INSERT INTO `symbols`
+            (recomp_addr, compare_type, name, size)
+            VALUES (?,?,?,?)""",
+            (addr, SymbolType.FUNCTION.value, thunk_name, 5),
         )
 
         return cur.rowcount > 0

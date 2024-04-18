@@ -79,8 +79,8 @@ class Compare:
         self._load_markers()
         self._find_original_strings()
         self._match_imports()
-        self._match_thunks()
         self._match_exports()
+        self._match_thunks()
         self._find_vtordisp()
 
     def _load_cvdump(self):
@@ -307,20 +307,27 @@ class Compare:
             func_addr: thunk_addr for (thunk_addr, func_addr) in self.recomp_bin.thunks
         }
 
+        # Mark all recomp thunks first. This allows us to use their name
+        # when we sanitize the asm.
+        for recomp_thunk, recomp_addr in self.recomp_bin.thunks:
+            recomp_func = self._db.get_by_recomp(recomp_addr)
+            if recomp_func is None:
+                continue
+
+            self._db.create_recomp_thunk(recomp_thunk, recomp_func.name)
+
         for orig_thunk, orig_addr in self.orig_bin.thunks:
             orig_func = self._db.get_by_orig(orig_addr)
-            if orig_func is None or orig_func.recomp_addr is None:
+            if orig_func is None:
                 continue
 
             # Check whether the thunk destination is a matched symbol
             recomp_thunk = recomp_thunks.get(orig_func.recomp_addr)
             if recomp_thunk is None:
+                self._db.create_orig_thunk(orig_thunk, orig_func.name)
                 continue
 
-            # The thunk symbol should already exist if it is the thunk of an
-            # imported function. Incremental build thunks have no symbol,
-            # so we need to give it a name for the asm diff output.
-            self._db.register_thunk(orig_thunk, recomp_thunk, orig_func.name)
+            self._db.set_function_pair(orig_thunk, recomp_thunk)
 
             # Don't compare thunk functions for now. The comparison isn't
             # "useful" in the usual sense. We are only looking at the
@@ -336,9 +343,31 @@ class Compare:
 
         for recomp_addr, export_name in self.recomp_bin.exports:
             orig_addr = orig_exports.get(export_name)
-            if orig_addr is not None and self._db.set_pair_tentative(
-                orig_addr, recomp_addr
-            ):
+            if orig_addr is None:
+                continue
+
+            try:
+                # Check whether either of the addresses is actually a thunk.
+                # This is a quirk of the debug builds. Technically the export
+                # *is* the thunk, but it's more helpful to mark the actual function.
+                # It could be the case that only one side is a thunk, but we can
+                # deal with that.
+                (opcode, rel_addr) = struct.unpack(
+                    "<Bl", self.recomp_bin.read(recomp_addr, 5)
+                )
+                if opcode == 0xE9:
+                    recomp_addr += 5 + rel_addr
+
+                (opcode, rel_addr) = struct.unpack(
+                    "<Bl", self.orig_bin.read(orig_addr, 5)
+                )
+                if opcode == 0xE9:
+                    orig_addr += 5 + rel_addr
+            except ValueError:
+                # Bail out if there's a problem with struct.unpack
+                continue
+
+            if self._db.set_pair_tentative(orig_addr, recomp_addr):
                 logger.debug("Matched export %s", repr(export_name))
 
     def _find_vtordisp(self):
