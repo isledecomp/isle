@@ -221,6 +221,26 @@ class CompareDb:
         """For lineref match or _entry"""
         return self.set_pair(orig, recomp, SymbolType.FUNCTION)
 
+    def create_orig_thunk(self, addr: int, name: str) -> bool:
+        """Create a thunk function reference using the orig address.
+        We are here because we have a match on the thunked function,
+        but it is not thunked in the recomp build."""
+
+        if self._orig_used(addr):
+            return False
+
+        thunk_name = f"Thunk of '{name}'"
+
+        # Assuming relative jump instruction for thunks (5 bytes)
+        cur = self._db.execute(
+            """INSERT INTO `symbols`
+            (orig_addr, compare_type, name, size)
+            VALUES (?,?,?,?)""",
+            (addr, SymbolType.FUNCTION.value, thunk_name, 5),
+        )
+
+        return cur.rowcount > 0
+
     def create_recomp_thunk(self, addr: int, name: str) -> bool:
         """Create a thunk function reference using the recomp address.
         We start from the recomp side for this because we are guaranteed

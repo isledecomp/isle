@@ -324,6 +324,7 @@ class Compare:
             # Check whether the thunk destination is a matched symbol
             recomp_thunk = recomp_thunks.get(orig_func.recomp_addr)
             if recomp_thunk is None:
+                self._db.create_orig_thunk(orig_thunk, orig_func.name)
                 continue
 
             self._db.set_function_pair(orig_thunk, recomp_thunk)
