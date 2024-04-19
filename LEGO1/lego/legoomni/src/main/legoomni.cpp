@@ -707,11 +707,23 @@ MxS32 LegoOmni::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 }
 
 // FUNCTION: LEGO1 0x1005b430
-const char* LegoOmni::FindScript(MxU32 p_index)
+const char* LegoOmni::GetScriptName(MxU32 p_index)
 {
 	for (MxS32 i = 0; i < 19; i++) {
 		if (m_scripts[i].m_index == p_index) {
 			return m_scripts[i].m_key;
+		}
+	}
+
+	return NULL;
+}
+
+// FUNCTION: LEGO1 0x1005b460
+MxAtomId* LegoOmni::GetScriptAtom(MxU32 p_index)
+{
+	for (MxS32 i = 0; i < 19; i++) {
+		if (m_scripts[i].m_index == p_index) {
+			return m_scripts[i].m_atomId;
 		}
 	}
 

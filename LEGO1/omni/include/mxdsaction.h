@@ -55,7 +55,7 @@ public:
 	virtual MxLong GetUnknown90();                               // vtable+3c;
 	virtual MxLong GetElapsedTime();                             // vtable+40;
 
-	void AppendData(MxU16 p_extraLength, const char* p_extraData);
+	void AppendExtra(MxU16 p_extraLength, const char* p_extraData);
 
 	inline void GetExtra(MxU16& p_extraLength, char*& p_extraData)
 	{

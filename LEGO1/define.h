@@ -13,5 +13,6 @@ extern const char* g_strVISIBILITY;
 extern const char* g_strSPEED;
 extern const char* g_strATTACH_CAMERA;
 extern const char* g_strMUTE;
+extern const char* g_strANIMMAN_ID;
 
 #endif // DEFINE_H

@@ -265,7 +265,7 @@ void LegoEntity::VTable0x34(MxBool p_und)
 			MxDSAction action;
 			action.SetAtomId(MxAtomId(CharacterManager()->GetCustomizeAnimFile(), e_lowerCase2));
 			action.SetObjectId(objectId);
-			action.AppendData(strlen(roiName) + 1, roiName);
+			action.AppendExtra(strlen(roiName) + 1, roiName);
 			Start(&action);
 		}
 	}

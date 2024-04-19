@@ -71,8 +71,9 @@ public:
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void DeleteAnimations();
-	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	void FUN_10060570(MxBool);
+	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
+	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	undefined4 FUN_10060dc0(
 		IsleScript::Script,
 		undefined4,
@@ -87,6 +88,8 @@ public:
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU32&);
 	MxS8 FUN_10062360(char*);
+	void FUN_10062770();
+	void FUN_100627d0(MxBool);
 	void FUN_100629b0(MxU32, MxBool);
 	void FUN_10064670(MxBool);
 	void FUN_10064740(MxBool);
@@ -99,25 +102,27 @@ public:
 private:
 	void Init();
 
-	undefined4 m_unk0x08;              // 0x08
+	MxU32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
 	MxU16 m_unk0x0e;                   // 0x0e
 	MxU32 m_unk0x10;                   // 0x10
 	AnimInfo* m_anims;                 // 0x14
-	undefined m_unk0x018[8];           // 0x18
+	undefined m_unk0x18[4];            // 0x18
+	MxU32 m_unk0x1c;                   // 0x1c
 	LegoTranInfoList* m_tranInfoList;  // 0x20
 	LegoTranInfoList* m_tranInfoList2; // 0x24
 	undefined4 m_unk0x28[2];           // 0x28
 	undefined4 m_unk0x30[2];           // 0x30
 	undefined m_unk0x38;               // 0x38
-	undefined m_unk0x39;               // 0x39
+	MxBool m_unk0x39;                  // 0x39
 	undefined m_unk0x3a;               // 0x3a
 	Unknown0x3c m_unk0x3c[40];         // 0x3c
 	undefined4 m_unk0x3fc;             // 0x3fc
 	MxU8 m_unk0x400;                   // 0x400
 	undefined m_unk0x401;              // 0x401
 	MxU8 m_unk0x402;                   // 0x402
-	undefined m_unk0x403[0x1d];        // 0x403
+	MxLong m_unk0x404;                 // 0x404
+	undefined m_unk0x408[0x18];        // 0x408
 	AnimState* m_animState;            // 0x420
 	undefined4 m_unk0x424;             // 0x424
 	undefined m_unk0x428;              // 0x428
