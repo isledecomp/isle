@@ -14,7 +14,7 @@ struct LegoTranInfo {
 	{
 		m_index = 0;
 		m_unk0x08 = 0;
-		m_unk0x0c = 0;
+		m_unk0x0c = NULL;
 		m_unk0x10 = FALSE;
 		m_unk0x12 = -1;
 		m_unk0x14 = FALSE;
