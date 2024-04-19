@@ -7,6 +7,12 @@ BumpBouy::BumpBouy()
 {
 }
 
+// STUB: LEGO1 0x10027360
+BumpBouy::~BumpBouy()
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10027400
 MxLong BumpBouy::Notify(MxParam& p_param)
 {
