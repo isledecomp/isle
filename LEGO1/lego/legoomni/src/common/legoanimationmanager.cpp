@@ -1,9 +1,13 @@
 #include "legoanimationmanager.h"
 
+#include "define.h"
 #include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "mxutilities.h"
 #include "roi/legoroi.h"
 
@@ -13,6 +17,7 @@ DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 DECOMP_SIZE_ASSERT(Character, 0x18)
 DECOMP_SIZE_ASSERT(Vehicle, 0x8)
 DECOMP_SIZE_ASSERT(Unknown0x3c, 0x18)
+DECOMP_SIZE_ASSERT(LegoTranInfo, 0x78)
 
 // GLOBAL: LEGO1 0x100f6d20
 Vehicle g_vehicles[] = {
@@ -139,7 +144,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 	MxResult result = FAILURE;
 	MxS32 i, j, k;
 
-	if (m_unk0x08 != p_scriptIndex) {
+	if (m_scriptIndex != p_scriptIndex) {
 		if (m_tranInfoList != NULL) {
 			delete m_tranInfoList;
 			m_tranInfoList = NULL;
@@ -156,7 +161,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 		}
 
 		m_unk0x38 = 0;
-		m_unk0x39 = 0;
+		m_unk0x39 = FALSE;
 		m_unk0x430 = 0;
 		m_unk0x42c = 0;
 
@@ -169,7 +174,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_animState = (AnimState*) GameState()->CreateState("AnimState");
 		}
 
-		if (m_unk0x08 == 0) {
+		if (m_scriptIndex == 0) {
 			m_animState->FUN_10065240(m_animCount, m_anims, m_unk0x3fc);
 		}
 
@@ -184,7 +189,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 		char filename[128];
 		char path[1024];
-		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->FindScript(p_scriptIndex));
+		sprintf(filename, "lego\\data\\%sinf.dta", Lego()->GetScriptName(p_scriptIndex));
 		sprintf(path, "%s", MxOmni::GetHD());
 
 		if (path[strlen(path) - 1] != '\\') {
@@ -263,7 +268,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			}
 		}
 
-		m_unk0x08 = p_scriptIndex;
+		m_scriptIndex = p_scriptIndex;
 		m_tranInfoList = new LegoTranInfoList();
 		m_tranInfoList2 = new LegoTranInfoList();
 
@@ -439,6 +444,58 @@ void LegoAnimationManager::FUN_10060570(MxBool)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x100609f0
+// FUNCTION: BETA10 0x10041a38
+MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2)
+{
+	MxResult result = FAILURE;
+	MxDSAction action;
+
+	FUN_100627d0(FALSE);
+
+	LegoTranInfo* info = new LegoTranInfo();
+	info->m_unk0x00 = 0;
+	info->m_index = ++m_unk0x1c;
+	info->m_unk0x10 = FALSE;
+	info->m_unk0x08 = 0;
+	info->m_unk0x12 = -1;
+	info->m_unk0x14 = 0;
+	info->m_objectId = p_objectId;
+
+	if (p_matrix != NULL) {
+		info->m_unk0x0c = new MxMatrix(*p_matrix);
+	}
+
+	FUN_10062770();
+
+	info->m_unk0x1c = m_unk0x28;
+	info->m_unk0x20 = m_unk0x30;
+	info->m_unk0x28 = p_und1;
+	info->m_unk0x29 = p_und2;
+
+	if (m_tranInfoList != NULL) {
+		m_tranInfoList->Append(info);
+	}
+
+	char buf[256];
+	sprintf(buf, "%s:%d", g_strANIMMAN_ID, info->m_index);
+
+	action.SetAtomId(*Lego()->GetScriptAtom(m_scriptIndex));
+	action.SetObjectId(p_objectId);
+	action.SetUnknown24(-1);
+	action.AppendExtra(strlen(buf) + 1, buf);
+
+	if (StartActionIfUnknown0x13c(action) == SUCCESS) {
+		BackgroundAudioManager()->LowerVolume();
+		info->m_flags |= LegoTranInfo::c_bit2;
+		m_unk0x39 = TRUE;
+		m_unk0x404 = Timer()->GetTime();
+		result = SUCCESS;
+	}
+
+	return result;
+}
+
 // FUNCTION: LEGO1 0x10060d00
 MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity)
 {
@@ -526,6 +583,18 @@ MxS8 LegoAnimationManager::FUN_10062360(char*)
 {
 	// TODO
 	return 0;
+}
+
+// STUB: LEGO1 0x10062770
+void LegoAnimationManager::FUN_10062770()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100627d0
+void LegoAnimationManager::FUN_100627d0(MxBool)
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x100629b0

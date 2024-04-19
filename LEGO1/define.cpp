@@ -36,6 +36,10 @@ const char* g_strVISIBILITY = "VISIBILITY";
 // STRING: LEGO1 0x10101edc
 const char* g_strWORLD = "WORLD";
 
+// GLOBAL: LEGO1 0x101020d4
+// STRING: LEGO1 0x10101ed0
+const char* g_strANIMMAN_ID = "ANIMMAN_ID";
+
 // GLOBAL: LEGO1 0x101020e4
 // STRING: LEGO1 0x10101eac
 const char* g_parseExtraTokens = ":;";

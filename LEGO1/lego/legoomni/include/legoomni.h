@@ -72,10 +72,10 @@ public:
 		ScriptContainer()
 		{
 			m_index = -1;
-			m_script = NULL;
+			m_atomId = NULL;
 		}
 
-		ScriptContainer(MxS32 p_index, const char* p_key, MxAtomId* p_script)
+		ScriptContainer(MxS32 p_index, const char* p_key, MxAtomId* p_atomId)
 		{
 			m_index = p_index;
 
@@ -83,7 +83,7 @@ public:
 				strcpy(m_key, p_key);
 			}
 
-			m_script = p_script;
+			m_atomId = p_atomId;
 		}
 
 		// FUNCTION: LEGO1 0x1005ac50
@@ -91,7 +91,7 @@ public:
 		{
 			m_index = p_container.m_index;
 			strcpy(m_key, p_container.m_key);
-			m_script = p_container.m_script;
+			m_atomId = p_container.m_atomId;
 			return *this;
 		}
 
@@ -100,7 +100,7 @@ public:
 
 		MxS32 m_index;      // 0x00
 		char m_key[20];     // 0x04
-		MxAtomId* m_script; // 0x18
+		MxAtomId* m_atomId; // 0x18
 	};
 
 	// SIZE 0x38
@@ -199,11 +199,12 @@ public:
 	void CreateBackgroundAudio();
 	void RemoveWorld(const MxAtomId& p_atom, MxLong p_objectId);
 	MxResult RegisterScripts();
+	const char* GetScriptName(MxU32 p_index);
+	MxAtomId* GetScriptAtom(MxU32 p_index);
 	MxS32 GetScriptIndex(const char* p_key);
 	void DeleteAction();
 
 	static MxS32 GetCurrPathInfo(LegoPathBoundary**, MxS32&);
-	const char* FindScript(MxU32 p_id);
 	static void CreateInstance();
 	static LegoOmni* GetInstance();
 
@@ -231,10 +232,7 @@ public:
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 	inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
 	{
-		if (m_unk0x13c) {
-			return Start(&p_dsAction);
-		}
-		return SUCCESS;
+		return m_unk0x13c ? Start(&p_dsAction) : SUCCESS;
 	}
 	inline void SetUnknown13c(MxBool p_unk0x13c) { m_unk0x13c = p_unk0x13c; }
 

@@ -79,7 +79,7 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_location = p_dsAction.m_location;
 	this->m_direction = p_dsAction.m_direction;
 	this->m_up = p_dsAction.m_up;
-	AppendData(p_dsAction.m_extraLength, p_dsAction.m_extraData);
+	AppendExtra(p_dsAction.m_extraLength, p_dsAction.m_extraData);
 	this->m_unk0x84 = p_dsAction.m_unk0x84;
 	this->m_unk0x88 = p_dsAction.m_unk0x88;
 	this->m_origin = p_dsAction.m_origin;
@@ -186,13 +186,13 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 		if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
 			delete[] this->m_extraData;
 			this->m_extraLength = 0;
-			AppendData(extraLength, extraData);
+			AppendExtra(extraLength, extraData);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x100ade60
-void MxDSAction::AppendData(MxU16 p_extraLength, const char* p_extraData)
+void MxDSAction::AppendExtra(MxU16 p_extraLength, const char* p_extraData)
 {
 	if (this->m_extraData == p_extraData || !p_extraData) {
 		return;
@@ -243,7 +243,7 @@ void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 	p_source += 2;
 
 	if (extraLength) {
-		AppendData(extraLength, (char*) p_source);
+		AppendExtra(extraLength, (char*) p_source);
 		p_source += extraLength;
 	}
 }
