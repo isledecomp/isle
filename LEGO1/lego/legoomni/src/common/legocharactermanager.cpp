@@ -173,7 +173,7 @@ done:
 LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 {
 	LegoCharacter* character = NULL;
-	LegoCharacterMap::iterator it = m_characters->find(p_key);
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_key));
 
 	if (it != m_characters->end()) {
 		character = (*it).second;
@@ -239,11 +239,46 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 	return 0;
 }
 
-// STUB: LEGO1 0x10083c30
+// FUNCTION: LEGO1 0x10083c30
 // FUNCTION: BETA10 0x10074701
 void LegoCharacterManager::FUN_10083c30(const char* p_name)
 {
-	// TODO
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
+
+	if (it != m_characters->end()) {
+		character = (*it).second;
+
+		if (character->RemoveRef() == 0) {
+			LegoCharacterData* data = GetData(p_name);
+			LegoEntity* entity = character->m_roi->GetEntity();
+
+			if (entity != NULL) {
+				entity->SetROI(NULL, FALSE, FALSE);
+			}
+
+			RemoveROI(character->m_roi);
+
+			delete[] (*it).first;
+			delete (*it).second;
+
+			m_characters->erase(it);
+
+			if (data != NULL) {
+				if (data->m_actor != NULL) {
+					data->m_actor->ClearFlag(LegoEntity::c_bit2);
+					delete data->m_actor;
+				}
+				else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
+					entity->ClearFlag(LegoEntity::c_bit2);
+					delete entity;
+				}
+
+				data->m_roi = NULL;
+				data->m_actor = NULL;
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10083db0
@@ -266,7 +301,7 @@ void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 
 				RemoveROI(character->m_roi);
 
-				delete[] const_cast<char*>((*it).first);
+				delete[] (*it).first;
 				delete (*it).second;
 
 				m_characters->erase(it);
@@ -310,7 +345,7 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 
 				RemoveROI(character->m_roi);
 
-				delete[] const_cast<char*>((*it).first);
+				delete[] (*it).first;
 				delete (*it).second;
 
 				m_characters->erase(it);

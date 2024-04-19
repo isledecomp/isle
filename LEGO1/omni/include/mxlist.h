@@ -208,7 +208,6 @@ inline MxBool MxListCursor<T>::Find(T p_obj)
 {
 	for (m_match = m_list->m_first; m_match && m_list->Compare(m_match->GetValue(), p_obj);
 		 m_match = m_match->GetNext()) {
-		;
 	}
 
 	return m_match != NULL;
