@@ -68,7 +68,7 @@ MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDS
 					presenter->SetTickleState(MxPresenter::e_idle);
 
 					if (presenter->IsA("LegoAnimPresenter") || presenter->IsA("LegoLoopingAnimPresenter")) {
-						m_unk0x4c = presenter;
+						m_unk0x4c = (LegoAnimPresenter*) presenter;
 					}
 					success = TRUE;
 				}
@@ -101,10 +101,27 @@ void LegoAnimMMPresenter::EndAction()
 	// TODO
 }
 
-// STUB: LEGO1 0x1004b140
+// FUNCTION: LEGO1 0x1004b140
+// FUNCTION: BETA10 0x1004c197
 void LegoAnimMMPresenter::ReadyTickle()
 {
-	// TODO
+	ParseExtra();
+
+	if (m_tranInfo != NULL && m_tranInfo->m_unk0x15 && m_tranInfo->m_unk0x1c != NULL &&
+		m_tranInfo->m_unk0x1c[0] != NULL) {
+		m_tranInfo->m_unk0x1c[0]->Enable(FALSE);
+		m_tranInfo->m_unk0x1c[0]->Enable(TRUE);
+	}
+
+	if (m_tranInfo != NULL && m_tranInfo->m_unk0x0c != NULL) {
+		m_unk0x4c->VTable0xa0(m_tranInfo->m_unk0x0c);
+	}
+
+	if (m_unk0x4c != NULL) {
+		m_unk0x4c->SetTickleState(e_ready);
+	}
+
+	ProgressTickleState(e_starting);
 }
 
 // STUB: LEGO1 0x1004b1c0
