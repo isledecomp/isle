@@ -457,7 +457,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	info->m_unk0x00 = 0;
 	info->m_index = ++m_unk0x1c;
 	info->m_unk0x10 = FALSE;
-	info->m_unk0x08 = 0;
+	info->m_unk0x08 = NULL;
 	info->m_unk0x12 = -1;
 	info->m_unk0x14 = 0;
 	info->m_objectId = p_objectId;

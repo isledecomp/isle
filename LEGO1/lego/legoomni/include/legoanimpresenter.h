@@ -71,6 +71,7 @@ public:
 
 	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
 
+	MxResult FUN_1006b140(LegoROI* p_roi);
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
