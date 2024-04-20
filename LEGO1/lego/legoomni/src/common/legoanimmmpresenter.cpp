@@ -325,6 +325,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
 			m_tranInfo->m_unk0x20[0] > p_time) {
 			return FALSE;
 		}
+		break;
 	case 1:
 	case 2:
 	case 3:
@@ -336,12 +337,31 @@ MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b5b0
+// FUNCTION: LEGO1 0x1004b5b0
 // FUNCTION: BETA10 0x1004cb09
 MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	switch (m_unk0x59) {
+	case 0:
+		if (m_roiMap != NULL && m_unk0x68 != NULL) {
+			for (MxU32 i = 0; i < m_roiMapSize; i++) {
+				LegoROI* roi = m_roiMap[i];
+
+				if (roi != NULL) {
+					roi->WrappedSetLocalTransform(m_unk0x68[i]);
+				}
+			}
+		}
+		break;
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+		break;
+	}
+
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004b600
