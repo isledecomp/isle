@@ -3,6 +3,7 @@
 
 #include "mxcompositepresenter.h"
 
+class LegoAnimPresenter;
 class LegoWorld;
 struct LegoTranInfo;
 
@@ -43,17 +44,17 @@ public:
 	MxBool FUN_1004b8b0();
 
 private:
-	MxPresenter* m_unk0x4c;   // 0x4c
-	undefined4 m_unk0x50;     // 0x50
-	undefined4 m_unk0x54;     // 0x54
-	undefined m_unk0x58;      // 0x58
-	MxBool m_unk0x59;         // 0x59
-	MxU32 m_animmanId;        // 0x5c
-	LegoTranInfo* m_tranInfo; // 0x60
-	LegoWorld* m_unk0x64;     // 0x64
-	undefined4 m_unk0x68;     // 0x68
-	undefined4 m_unk0x6c;     // 0x6c
-	undefined4 m_unk0x70;     // 0x70
+	LegoAnimPresenter* m_unk0x4c; // 0x4c
+	undefined4 m_unk0x50;         // 0x50
+	undefined4 m_unk0x54;         // 0x54
+	undefined m_unk0x58;          // 0x58
+	MxBool m_unk0x59;             // 0x59
+	MxU32 m_animmanId;            // 0x5c
+	LegoTranInfo* m_tranInfo;     // 0x60
+	LegoWorld* m_unk0x64;         // 0x64
+	undefined4 m_unk0x68;         // 0x68
+	undefined4 m_unk0x6c;         // 0x6c
+	undefined4 m_unk0x70;         // 0x70
 };
 
 #endif // LEGOANIMMMPRESENTER_H

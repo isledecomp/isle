@@ -730,7 +730,7 @@ void LegoAnimPresenter::ParseExtra()
 }
 
 // STUB: LEGO1 0x1006c570
-void LegoAnimPresenter::VTable0xa0()
+void LegoAnimPresenter::VTable0xa0(Matrix4*)
 {
 	// TODO
 }

@@ -156,8 +156,8 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 		}
 
 		for (i = 0; i < (MxS32) _countof(m_unk0x28); i++) {
-			m_unk0x28[i] = 0;
-			m_unk0x30[i] = 0;
+			m_unk0x28[i] = NULL;
+			m_unk0x30[i] = NULL;
 		}
 
 		m_unk0x38 = 0;

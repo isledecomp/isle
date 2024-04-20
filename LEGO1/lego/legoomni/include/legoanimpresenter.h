@@ -69,7 +69,7 @@ public:
 		return m_unk0x68;
 	} // vtable+0x9c
 
-	virtual void VTable0xa0(); // vtable+0xa0
+	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
 
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 

@@ -39,8 +39,8 @@ struct LegoTranInfo {
 	MxBool m_unk0x14;                 // 0x14
 	MxBool m_unk0x15;                 // 0x15
 	MxU32 m_objectId;                 // 0x18
-	undefined4* m_unk0x1c;            // 0x1c
-	undefined4* m_unk0x20;            // 0x20
+	MxPresenter** m_unk0x1c;          // 0x1c
+	MxPresenter** m_unk0x20;          // 0x20
 	LegoAnimMMPresenter* m_presenter; // 0x24
 	MxBool m_unk0x28;                 // 0x28
 	MxBool m_unk0x29;                 // 0x29
