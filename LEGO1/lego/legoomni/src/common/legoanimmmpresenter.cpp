@@ -13,6 +13,7 @@
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxtimer.h"
+#include "mxtype18notificationparam.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
@@ -96,10 +97,30 @@ MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDS
 	return result;
 }
 
-// STUB: LEGO1 0x1004aec0
+// FUNCTION: LEGO1 0x1004aec0
+// FUNCTION: BETA10 0x1004c01a
 void LegoAnimMMPresenter::EndAction()
 {
-	// TODO
+	if (m_tranInfo != NULL && m_tranInfo->m_unk0x15 && m_tranInfo->m_unk0x1c != NULL &&
+		m_tranInfo->m_unk0x1c[1] != NULL) {
+		m_tranInfo->m_unk0x1c[1]->Enable(FALSE);
+		m_tranInfo->m_unk0x1c[1]->Enable(TRUE);
+	}
+
+	m_tranInfo = NULL;
+
+	MxType18NotificationParam param(c_notificationType18, NULL, m_animmanId);
+	if (m_animmanId != 0) {
+		NotificationManager()->Send(AnimationManager(), &param);
+	}
+
+	if (m_action != NULL) {
+		MxCompositePresenter::EndAction();
+
+		if (m_unk0x64 != NULL) {
+			m_unk0x64->Remove(this);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1004b140
