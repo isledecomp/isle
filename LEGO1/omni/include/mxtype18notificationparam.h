@@ -13,9 +13,18 @@ public:
 	{
 	}
 
+	// FUNCTION: LEGO1 0x1004afd0
+	MxNotificationParam* Clone() override
+	{
+		return new MxType18NotificationParam(m_type, m_sender, m_unk0x0c);
+	} // vtable+0x04
+
 protected:
 	undefined4 m_unk0x0c; // 0x0c
 };
+
+// SYNTHETIC: LEGO1 0x1004b080
+// MxType18NotificationParam::`scalar deleting destructor'
 
 // SYNTHETIC: LEGO1 0x1004b0f0
 // MxType18NotificationParam::~MxType18NotificationParam
