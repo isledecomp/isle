@@ -15,7 +15,7 @@ struct LegoTranInfo {
 	LegoTranInfo()
 	{
 		m_index = 0;
-		m_unk0x08 = 0;
+		m_unk0x08 = NULL;
 		m_unk0x0c = NULL;
 		m_unk0x10 = FALSE;
 		m_unk0x12 = -1;
@@ -32,7 +32,7 @@ struct LegoTranInfo {
 
 	undefined4 m_unk0x00;             // 0x00
 	MxU32 m_index;                    // 0x04
-	undefined4 m_unk0x08;             // 0x08
+	LegoROI* m_unk0x08;               // 0x08
 	MxMatrix* m_unk0x0c;              // 0x0c
 	MxBool m_unk0x10;                 // 0x10
 	MxS16 m_unk0x12;                  // 0x12

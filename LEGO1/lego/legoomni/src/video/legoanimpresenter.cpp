@@ -563,6 +563,14 @@ void LegoAnimPresenter::PutFrame()
 	}
 }
 
+// STUB: LEGO1 0x1006b140
+// FUNCTION: BETA10 0x100507e0
+MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
+{
+	// TODO
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x1006b550
 void LegoAnimPresenter::ReadyTickle()
 {

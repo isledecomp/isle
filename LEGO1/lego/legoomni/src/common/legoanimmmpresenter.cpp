@@ -12,6 +12,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
+#include "mxtimer.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
@@ -124,10 +125,18 @@ void LegoAnimMMPresenter::ReadyTickle()
 	ProgressTickleState(e_starting);
 }
 
-// STUB: LEGO1 0x1004b1c0
+// FUNCTION: LEGO1 0x1004b1c0
+// FUNCTION: BETA10 0x1004c2cc
 void LegoAnimMMPresenter::StartingTickle()
 {
-	// TODO
+	if (m_unk0x4c == NULL || m_unk0x4c->GetCurrentTickleState() == e_idle) {
+		if (m_tranInfo != NULL && m_tranInfo->m_unk0x08 != NULL) {
+			m_unk0x4c->FUN_1006b140(m_tranInfo->m_unk0x08);
+		}
+
+		m_unk0x50 = Timer()->GetTime();
+		ProgressTickleState(e_streaming);
+	}
 }
 
 // STUB: LEGO1 0x1004b220
