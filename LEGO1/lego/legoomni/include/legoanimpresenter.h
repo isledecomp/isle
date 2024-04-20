@@ -63,14 +63,15 @@ public:
 	virtual void VTable0x98();                                                             // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
-	virtual LegoROI** VTable0x9c(MxU32& p_unk0x6c)
+	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
 	{
-		p_unk0x6c = m_unk0x6c;
-		return m_unk0x68;
+		p_roiMapSize = m_roiMapSize;
+		return m_roiMap;
 	} // vtable+0x9c
 
 	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
 
+	MxResult FUN_1006afc0(Matrix4*&, undefined4);
 	MxResult FUN_1006b140(LegoROI* p_roi);
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 
@@ -97,8 +98,8 @@ protected:
 	void FUN_1006c8a0(MxBool p_bool);
 
 	LegoAnim* m_anim;          // 0x64
-	LegoROI** m_unk0x68;       // 0x68
-	MxU32 m_unk0x6c;           // 0x6c
+	LegoROI** m_roiMap;        // 0x68
+	MxU32 m_roiMapSize;        // 0x6c
 	LegoROIList* m_unk0x70;    // 0x70
 	LegoROIList* m_unk0x74;    // 0x74
 	MxMatrix* m_unk0x78;       // 0x78
