@@ -23,7 +23,7 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 {
 	m_presenter = NULL;
 	m_animmanId = 0;
-	m_unk0x59 = FALSE;
+	m_unk0x59 = 0;
 	m_tranInfo = NULL;
 	m_unk0x54 = 0;
 	m_unk0x64 = NULL;
@@ -308,20 +308,32 @@ MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b570
+// FUNCTION: LEGO1 0x1004b570
 // FUNCTION: BETA10 0x1004c9cc
 MxBool LegoAnimMMPresenter::FUN_1004b570(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b580
+// FUNCTION: LEGO1 0x1004b580
 // FUNCTION: BETA10 0x1004ca3f
 MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	switch (m_unk0x59) {
+	case 0:
+		if (m_tranInfo != NULL && m_tranInfo->m_unk0x15 != FALSE && m_tranInfo->m_unk0x20 != NULL &&
+			m_tranInfo->m_unk0x20[0] > p_time) {
+			return FALSE;
+		}
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+		break;
+	}
+
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004b5b0

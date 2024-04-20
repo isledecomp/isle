@@ -157,7 +157,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 		for (i = 0; i < (MxS32) _countof(m_unk0x28); i++) {
 			m_unk0x28[i] = NULL;
-			m_unk0x30[i] = NULL;
+			m_unk0x30[i] = 0;
 		}
 
 		m_unk0x38 = 0;
@@ -456,7 +456,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	LegoTranInfo* info = new LegoTranInfo();
 	info->m_unk0x00 = 0;
 	info->m_index = ++m_unk0x1c;
-	info->m_unk0x10 = FALSE;
+	info->m_unk0x10 = 0;
 	info->m_unk0x08 = NULL;
 	info->m_unk0x12 = -1;
 	info->m_unk0x14 = 0;

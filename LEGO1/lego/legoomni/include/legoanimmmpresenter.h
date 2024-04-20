@@ -70,7 +70,7 @@ private:
 	MxLong m_unk0x50;               // 0x50
 	undefined4 m_unk0x54;           // 0x54
 	MxU8 m_unk0x58;                 // 0x58
-	MxBool m_unk0x59;               // 0x59
+	MxU8 m_unk0x59;                 // 0x59
 	MxU32 m_animmanId;              // 0x5c
 	LegoTranInfo* m_tranInfo;       // 0x60
 	LegoWorld* m_unk0x64;           // 0x64
