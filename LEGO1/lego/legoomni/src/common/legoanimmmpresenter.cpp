@@ -139,29 +139,52 @@ void LegoAnimMMPresenter::StartingTickle()
 	}
 }
 
-// STUB: LEGO1 0x1004b220
+// FUNCTION: LEGO1 0x1004b220
+// FUNCTION: BETA10 0x1004c372
 void LegoAnimMMPresenter::StreamingTickle()
 {
-	// TODO
+	if (FUN_1004b450()) {
+		ProgressTickleState(e_repeating);
+	}
 }
 
-// STUB: LEGO1 0x1004b250
+// FUNCTION: LEGO1 0x1004b250
+// FUNCTION: BETA10 0x1004c3a4
 void LegoAnimMMPresenter::RepeatingTickle()
 {
-	// TODO
+	if (m_unk0x4c == NULL) {
+		ProgressTickleState(e_unk5);
+	}
+	else if (m_list.size() <= 1) {
+		if (m_list.front() == m_unk0x4c) {
+			m_unk0x4c->SetTickleState(e_done);
+			ProgressTickleState(e_unk5);
+		}
+		else {
+			ProgressTickleState(e_unk5);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1004b2c0
+// FUNCTION: BETA10 0x1004c469
 void LegoAnimMMPresenter::DoneTickle()
 {
 	// Empty
 }
 
-// STUB: LEGO1 0x1004b2d0
+// FUNCTION: LEGO1 0x1004b2d0
+// FUNCTION: BETA10 0x1004c47f
 MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 {
-	// TODO
-	return 0;
+	AUTOLOCK(m_criticalSection);
+
+	if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAction &&
+		((MxNotificationParam&) p_param).GetSender() == m_unk0x4c) {
+		m_unk0x4c = NULL;
+	}
+
+	return MxCompositePresenter::Notify(p_param);
 }
 
 // FUNCTION: LEGO1 0x1004b360
@@ -198,6 +221,14 @@ void LegoAnimMMPresenter::ParseExtra()
 			}
 		}
 	}
+}
+
+// STUB: LEGO1 0x1004b450
+// FUNCTION: BETA10 0x1004c71d
+MxBool LegoAnimMMPresenter::FUN_1004b450()
+{
+	// TODO
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004b8b0

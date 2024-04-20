@@ -44,6 +44,8 @@ public:
 	MxBool FUN_1004b8b0();
 
 private:
+	MxBool FUN_1004b450();
+
 	LegoAnimPresenter* m_unk0x4c; // 0x4c
 	undefined4 m_unk0x50;         // 0x50
 	undefined4 m_unk0x54;         // 0x54
