@@ -364,28 +364,45 @@ MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b600
+// FUNCTION: LEGO1 0x1004b600
 // FUNCTION: BETA10 0x1004cbfb
 MxBool LegoAnimMMPresenter::FUN_1004b600(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b610
+// FUNCTION: LEGO1 0x1004b610
 // FUNCTION: BETA10 0x1004cc6e
 MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if ((*it)->IsA("LegoAnimPresenter") || (*it)->IsA("LegoLoopingAnimPresenter")) {
+			(*it)->SetTickleState(e_streaming);
+		}
+		else {
+			(*it)->SetTickleState(e_ready);
+		}
+	}
+
+	m_action->SetUnknown90(Timer()->GetTime());
+
+	if (m_compositePresenter != NULL) {
+		m_compositePresenter->VTable0x60(this);
+	}
+
+	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b6b0
+// FUNCTION: LEGO1 0x1004b6b0
 // FUNCTION: BETA10 0x1004cdc5
 MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	if (m_presenter != NULL && m_presenter->GetCurrentTickleState() != e_idle) {
+		return FALSE;
+	}
+
+	m_unk0x54 = p_time;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004b6d0
