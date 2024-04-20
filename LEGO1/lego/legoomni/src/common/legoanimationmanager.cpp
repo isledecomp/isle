@@ -564,6 +564,24 @@ void LegoAnimationManager::FUN_100617c0(MxS32, MxU16&, MxU32&)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x100618f0
+// FUNCTION: BETA10 0x100425f0
+LegoTranInfo* LegoAnimationManager::GetTranInfo(MxU32 p_index)
+{
+	if (m_tranInfoList != NULL) {
+		LegoTranInfoListCursor cursor(m_tranInfoList);
+		LegoTranInfo* tranInfo;
+
+		while (cursor.Next(tranInfo)) {
+			if (tranInfo->m_index == p_index) {
+				return tranInfo;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 // STUB: LEGO1 0x100619f0
 MxLong LegoAnimationManager::Notify(MxParam& p_param)
 {

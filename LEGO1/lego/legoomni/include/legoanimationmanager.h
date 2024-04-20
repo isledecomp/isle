@@ -87,6 +87,7 @@ public:
 	);
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU32&);
+	LegoTranInfo* GetTranInfo(MxU32 p_index);
 	MxS8 FUN_10062360(char*);
 	void FUN_10062770();
 	void FUN_100627d0(MxBool);
