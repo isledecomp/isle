@@ -274,6 +274,18 @@ undefined4 LegoWorld::FUN_1001fa70(IslePathActor* p_actor)
 	return 0;
 }
 
+// STUB: LEGO1 0x1001fb70
+undefined4 LegoWorld::FUN_1001fb70(
+	IslePathActor* p_actor,
+	LegoAnimPresenter* p_presenter,
+	Vector3& p_position,
+	Vector3& p_direction
+)
+{
+	// TODO
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x1001fc80
 void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 {

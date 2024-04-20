@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "define.h"
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legotraninfo.h"
 #include "legovideomanager.h"
@@ -405,12 +406,49 @@ MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b6d0
+// FUNCTION: LEGO1 0x1004b6d0
 // FUNCTION: BETA10 0x1004ce18
 MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	LegoROI* viewROI = VideoManager()->GetViewROI();
+	IslePathActor* actor = CurrentActor();
+
+	if (m_tranInfo != NULL && m_tranInfo->m_unk0x14 && m_tranInfo->m_unk0x12 != -1 && actor != NULL) {
+		if (m_unk0x64 != NULL) {
+			undefined4 und = 1;
+
+			if (m_presenter != NULL) {
+				m_unk0x64->FUN_1001fc80(actor);
+
+				if (m_tranInfo->m_unk0x29) {
+					Mx3DPointFloat position, direction;
+
+					position = viewROI->GetWorldPosition();
+					direction = viewROI->GetWorldDirection();
+					position[1] -= 1.25;
+
+					und = m_unk0x64->FUN_1001fb70(actor, m_presenter, position, direction);
+				}
+				else {
+					und = 0;
+				}
+			}
+
+			if (und != 0) {
+				viewROI->WrappedSetLocalTransform(m_tranInfo->m_unk0x2c);
+				VideoManager()->Get3DManager()->Moved(*viewROI);
+				m_unk0x64->FUN_1001fa70(actor);
+			}
+
+			if (m_tranInfo->m_unk0x29) {
+				actor->VTable0xa8();
+			}
+		}
+
+		actor->SetState(0);
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x1004b8b0
