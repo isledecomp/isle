@@ -506,7 +506,7 @@ void MxVideoPresenter::RepeatingTickle()
 }
 
 // FUNCTION: LEGO1 0x100b3130
-void MxVideoPresenter::Unk5Tickle()
+void MxVideoPresenter::FreezingTickle()
 {
 	MxLong sustainTime = ((MxDSMediaAction*) m_action)->GetSustainTime();
 
@@ -564,7 +564,7 @@ MxResult MxVideoPresenter::PutData()
 {
 	AUTOLOCK(m_criticalSection);
 
-	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_unk5) {
+	if (IsEnabled() && m_currentTickleState >= e_streaming && m_currentTickleState <= e_freezing) {
 		PutFrame();
 	}
 

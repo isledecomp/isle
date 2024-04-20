@@ -30,7 +30,7 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 	m_unk0x68 = 0;
 	m_unk0x6c = 0;
 	m_unk0x70 = 0;
-	m_unk0x58 = 0;
+	m_unk0x58 = e_unk0;
 }
 
 // FUNCTION: LEGO1 0x1004aaf0
@@ -174,15 +174,15 @@ void LegoAnimMMPresenter::StreamingTickle()
 void LegoAnimMMPresenter::RepeatingTickle()
 {
 	if (m_unk0x4c == NULL) {
-		ProgressTickleState(e_unk5);
+		ProgressTickleState(e_freezing);
 	}
 	else if (m_list.size() <= 1) {
 		if (m_list.front() == m_unk0x4c) {
 			m_unk0x4c->SetTickleState(e_done);
-			ProgressTickleState(e_unk5);
+			ProgressTickleState(e_freezing);
 		}
 		else {
-			ProgressTickleState(e_unk5);
+			ProgressTickleState(e_freezing);
 		}
 	}
 }
@@ -244,12 +244,119 @@ void LegoAnimMMPresenter::ParseExtra()
 	}
 }
 
-// STUB: LEGO1 0x1004b450
+// FUNCTION: LEGO1 0x1004b450
 // FUNCTION: BETA10 0x1004c71d
 MxBool LegoAnimMMPresenter::FUN_1004b450()
 {
+	MxBool result = FALSE;
+	MxLong time = Timer()->GetTime() - m_unk0x50;
+
+	switch (m_unk0x58) {
+	case e_unk0:
+		if (!FUN_1004b530(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk1;
+	case e_unk1:
+		if (!FUN_1004b570(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk2;
+	case e_unk2:
+		if (!FUN_1004b580(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk3;
+	case e_unk3:
+		if (!FUN_1004b5b0(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk4;
+	case e_unk4:
+		if (!FUN_1004b600(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk5;
+	case e_unk5:
+		if (!FUN_1004b610(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk6;
+	case e_unk6:
+		if (!FUN_1004b6b0(time)) {
+			break;
+		}
+		m_unk0x58 = e_unk7;
+	case e_unk7:
+		FUN_1004b6d0(time);
+		result = TRUE;
+	}
+
+	return result;
+}
+
+// STUB: LEGO1 0x1004b530
+// FUNCTION: BETA10 0x1004c8c4
+MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
+{
 	// TODO
-	return TRUE;
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b570
+// FUNCTION: BETA10 0x1004c9cc
+MxBool LegoAnimMMPresenter::FUN_1004b570(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b580
+// FUNCTION: BETA10 0x1004ca3f
+MxBool LegoAnimMMPresenter::FUN_1004b580(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b5b0
+// FUNCTION: BETA10 0x1004cb09
+MxBool LegoAnimMMPresenter::FUN_1004b5b0(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b600
+// FUNCTION: BETA10 0x1004cbfb
+MxBool LegoAnimMMPresenter::FUN_1004b600(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b610
+// FUNCTION: BETA10 0x1004cc6e
+MxBool LegoAnimMMPresenter::FUN_1004b610(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b6b0
+// FUNCTION: BETA10 0x1004cdc5
+MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x1004b6d0
+// FUNCTION: BETA10 0x1004ce18
+MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
+{
+	// TODO
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x1004b8b0

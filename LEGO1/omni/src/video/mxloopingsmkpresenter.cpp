@@ -68,7 +68,7 @@ void MxLoopingSmkPresenter::NextFrame()
 void MxLoopingSmkPresenter::VTable0x8c()
 {
 	if (m_action->GetDuration() < m_elapsedDuration) {
-		ProgressTickleState(e_unk5);
+		ProgressTickleState(e_freezing);
 	}
 	else {
 		MxStreamChunk* chunk;

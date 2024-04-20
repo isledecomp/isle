@@ -143,7 +143,7 @@ void MxStillPresenter::RepeatingTickle()
 {
 	if (m_action->GetDuration() != -1) {
 		if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
-			ProgressTickleState(e_unk5);
+			ProgressTickleState(e_freezing);
 		}
 	}
 }

@@ -152,7 +152,7 @@ MxResult MxCompositeMediaPresenter::Tickle()
 		break;
 	case e_streaming:
 	case e_repeating:
-	case e_unk5:
+	case e_freezing:
 	case e_done: {
 		for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
 			(*it)->Tickle();
