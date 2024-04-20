@@ -28,7 +28,7 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 	m_tranInfo = NULL;
 	m_unk0x54 = 0;
 	m_unk0x64 = NULL;
-	m_unk0x68 = 0;
+	m_unk0x68 = NULL;
 	m_roiMap = NULL;
 	m_roiMapSize = 0;
 	m_unk0x58 = e_unk0;
