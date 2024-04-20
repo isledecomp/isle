@@ -1,6 +1,9 @@
 #include "legoanimmmpresenter.h"
 
 #include "decomp.h"
+#include "define.h"
+#include "legoanimationmanager.h"
+#include "legotraninfo.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -9,6 +12,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
 
@@ -16,9 +20,9 @@ DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
 LegoAnimMMPresenter::LegoAnimMMPresenter()
 {
 	m_unk0x4c = NULL;
-	m_unk0x5c = 0;
-	m_unk0x59 = 0;
-	m_unk0x60 = 0;
+	m_animmanId = 0;
+	m_unk0x59 = FALSE;
+	m_tranInfo = NULL;
 	m_unk0x54 = 0;
 	m_unk0x64 = NULL;
 	m_unk0x68 = 0;
@@ -143,15 +147,36 @@ void LegoAnimMMPresenter::VTable0x60(MxPresenter* p_presenter)
 	}
 }
 
-// STUB: LEGO1 0x1004b390
+// FUNCTION: LEGO1 0x1004b390
+// FUNCTION: BETA10 0x1004c5be
 void LegoAnimMMPresenter::ParseExtra()
 {
-	// TODO
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
+
+	if (extraLength & MAXWORD) {
+		char extraCopy[1024];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		char output[1024];
+		if (KeyValueStringParse(output, g_strANIMMAN_ID, extraCopy)) {
+			char* token = strtok(output, g_parseExtraTokens);
+			m_animmanId = atoi(token);
+			m_tranInfo = AnimationManager()->GetTranInfo(m_animmanId);
+
+			if (m_tranInfo != NULL) {
+				m_unk0x59 = m_tranInfo->m_unk0x10;
+				m_tranInfo->m_presenter = this;
+			}
+		}
+	}
 }
 
-// STUB: LEGO1 0x1004b8b0
+// FUNCTION: LEGO1 0x1004b8b0
+// FUNCTION: BETA10 0x1004d104
 MxBool LegoAnimMMPresenter::FUN_1004b8b0()
 {
-	// TODO
-	return FALSE;
+	return m_tranInfo != NULL ? m_tranInfo->m_unk0x28 : TRUE;
 }
