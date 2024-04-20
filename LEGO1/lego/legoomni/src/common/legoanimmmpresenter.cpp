@@ -21,15 +21,15 @@ DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
 // FUNCTION: LEGO1 0x1004a8d0
 LegoAnimMMPresenter::LegoAnimMMPresenter()
 {
-	m_unk0x4c = NULL;
+	m_presenter = NULL;
 	m_animmanId = 0;
 	m_unk0x59 = FALSE;
 	m_tranInfo = NULL;
 	m_unk0x54 = 0;
 	m_unk0x64 = NULL;
 	m_unk0x68 = 0;
-	m_unk0x6c = 0;
-	m_unk0x70 = 0;
+	m_roiMap = NULL;
+	m_roiMapSize = 0;
 	m_unk0x58 = e_unk0;
 }
 
@@ -70,7 +70,7 @@ MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDS
 					presenter->SetTickleState(MxPresenter::e_idle);
 
 					if (presenter->IsA("LegoAnimPresenter") || presenter->IsA("LegoLoopingAnimPresenter")) {
-						m_unk0x4c = (LegoAnimPresenter*) presenter;
+						m_presenter = (LegoAnimPresenter*) presenter;
 					}
 					success = TRUE;
 				}
@@ -136,11 +136,11 @@ void LegoAnimMMPresenter::ReadyTickle()
 	}
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x0c != NULL) {
-		m_unk0x4c->VTable0xa0(m_tranInfo->m_unk0x0c);
+		m_presenter->VTable0xa0(m_tranInfo->m_unk0x0c);
 	}
 
-	if (m_unk0x4c != NULL) {
-		m_unk0x4c->SetTickleState(e_ready);
+	if (m_presenter != NULL) {
+		m_presenter->SetTickleState(e_ready);
 	}
 
 	ProgressTickleState(e_starting);
@@ -150,9 +150,9 @@ void LegoAnimMMPresenter::ReadyTickle()
 // FUNCTION: BETA10 0x1004c2cc
 void LegoAnimMMPresenter::StartingTickle()
 {
-	if (m_unk0x4c == NULL || m_unk0x4c->GetCurrentTickleState() == e_idle) {
+	if (m_presenter == NULL || m_presenter->GetCurrentTickleState() == e_idle) {
 		if (m_tranInfo != NULL && m_tranInfo->m_unk0x08 != NULL) {
-			m_unk0x4c->FUN_1006b140(m_tranInfo->m_unk0x08);
+			m_presenter->FUN_1006b140(m_tranInfo->m_unk0x08);
 		}
 
 		m_unk0x50 = Timer()->GetTime();
@@ -173,12 +173,12 @@ void LegoAnimMMPresenter::StreamingTickle()
 // FUNCTION: BETA10 0x1004c3a4
 void LegoAnimMMPresenter::RepeatingTickle()
 {
-	if (m_unk0x4c == NULL) {
+	if (m_presenter == NULL) {
 		ProgressTickleState(e_freezing);
 	}
 	else if (m_list.size() <= 1) {
-		if (m_list.front() == m_unk0x4c) {
-			m_unk0x4c->SetTickleState(e_done);
+		if (m_list.front() == m_presenter) {
+			m_presenter->SetTickleState(e_done);
 			ProgressTickleState(e_freezing);
 		}
 		else {
@@ -201,8 +201,8 @@ MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 	AUTOLOCK(m_criticalSection);
 
 	if (((MxNotificationParam&) p_param).GetType() == c_notificationEndAction &&
-		((MxNotificationParam&) p_param).GetSender() == m_unk0x4c) {
-		m_unk0x4c = NULL;
+		((MxNotificationParam&) p_param).GetSender() == m_presenter) {
+		m_presenter = NULL;
 	}
 
 	return MxCompositePresenter::Notify(p_param);
@@ -211,8 +211,8 @@ MxLong LegoAnimMMPresenter::Notify(MxParam& p_param)
 // FUNCTION: LEGO1 0x1004b360
 void LegoAnimMMPresenter::VTable0x60(MxPresenter* p_presenter)
 {
-	if (m_unk0x4c == p_presenter && ((MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_streaming ||
-									 (MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_done)) {
+	if (m_presenter == p_presenter && ((MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_streaming ||
+									   (MxU8) p_presenter->GetCurrentTickleState() == MxPresenter::e_done)) {
 		p_presenter->SetTickleState(MxPresenter::e_idle);
 	}
 }
@@ -295,12 +295,17 @@ MxBool LegoAnimMMPresenter::FUN_1004b450()
 	return result;
 }
 
-// STUB: LEGO1 0x1004b530
+// FUNCTION: LEGO1 0x1004b530
 // FUNCTION: BETA10 0x1004c8c4
 MxBool LegoAnimMMPresenter::FUN_1004b530(MxLong p_time)
 {
-	// TODO
-	return FALSE;
+	if (m_presenter != NULL) {
+		m_presenter->FUN_1006afc0(m_unk0x68, 0);
+		m_roiMap = m_presenter->GetROIMap(m_roiMapSize);
+		m_roiMapSize++;
+	}
+
+	return TRUE;
 }
 
 // STUB: LEGO1 0x1004b570

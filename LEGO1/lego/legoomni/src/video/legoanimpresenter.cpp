@@ -31,8 +31,8 @@ LegoAnimPresenter::~LegoAnimPresenter()
 void LegoAnimPresenter::Init()
 {
 	m_anim = NULL;
-	m_unk0x68 = NULL;
-	m_unk0x6c = 0;
+	m_roiMap = NULL;
+	m_roiMapSize = 0;
 	m_unk0x74 = NULL;
 	m_unk0x70 = NULL;
 	m_unk0x78 = NULL;
@@ -337,24 +337,24 @@ void LegoAnimPresenter::FUN_10069b10()
 
 	FUN_1006a3c0(map, m_anim->GetRoot(), NULL);
 
-	if (m_unk0x68 != NULL) {
-		delete[] m_unk0x68;
-		m_unk0x6c = 0;
+	if (m_roiMap != NULL) {
+		delete[] m_roiMap;
+		m_roiMapSize = 0;
 	}
 
-	m_unk0x6c = 0;
-	m_unk0x68 = new LegoROI*[map.size() + 1];
-	memset(m_unk0x68, 0, (map.size() + 1) * sizeof(*m_unk0x68));
+	m_roiMapSize = 0;
+	m_roiMap = new LegoROI*[map.size() + 1];
+	memset(m_roiMap, 0, (map.size() + 1) * sizeof(*m_roiMap));
 
 	for (LegoAnimPresenterMap::iterator it = map.begin(); it != map.end();) {
 		MxU32 index = (*it).second.m_index;
-		m_unk0x68[index] = (*it).second.m_roi;
+		m_roiMap[index] = (*it).second.m_roi;
 
-		if (m_unk0x68[index]->GetName() != NULL) {
+		if (m_roiMap[index]->GetName() != NULL) {
 			for (MxS32 i = 0; i < m_unk0x94; i++) {
 				if (m_unk0x8c[i] == NULL && m_unk0x90[i] != NULL) {
-					if (!strcmpi(m_unk0x90[i], m_unk0x68[index]->GetName())) {
-						m_unk0x8c[i] = m_unk0x68[index];
+					if (!strcmpi(m_unk0x90[i], m_roiMap[index]->GetName())) {
+						m_unk0x8c[i] = m_roiMap[index];
 						break;
 					}
 				}
@@ -363,7 +363,7 @@ void LegoAnimPresenter::FUN_10069b10()
 
 		delete[] const_cast<char*>((*it).first);
 		it++;
-		m_unk0x6c++;
+		m_roiMapSize++;
 	}
 }
 
@@ -563,6 +563,14 @@ void LegoAnimPresenter::PutFrame()
 	}
 }
 
+// STUB: LEGO1 0x1006afc0
+// FUNCTION: BETA10 0x1005059a
+MxResult LegoAnimPresenter::FUN_1006afc0(Matrix4*&, undefined4)
+{
+	// TODO
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x1006b140
 // FUNCTION: BETA10 0x100507e0
 MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
@@ -616,8 +624,8 @@ void LegoAnimPresenter::StartingTickle()
 			m_unk0x78 = new MxMatrix();
 			CalcLocalTransform(m_action->GetLocation(), m_action->GetDirection(), m_action->GetUp(), *m_unk0x78);
 		}
-		else if (m_unk0x68 != NULL) {
-			LegoROI* roi = m_unk0x68[1];
+		else if (m_roiMap != NULL) {
+			LegoROI* roi = m_roiMap[1];
 
 			if (roi != NULL) {
 				MxMatrix mat;
@@ -709,7 +717,7 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		mat = *p_matrix;
 	}
 	else {
-		LegoROI* roi = m_unk0x68[data->GetUnknown0x20()];
+		LegoROI* roi = m_roiMap[data->GetUnknown0x20()];
 
 		if (roi != NULL) {
 			mat = roi->GetLocal2World();
@@ -728,7 +736,7 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 		}
 	}
 
-	LegoROI::FUN_100a8e80(root, mat, p_time, m_unk0x68);
+	LegoROI::FUN_100a8e80(root, mat, p_time, m_roiMap);
 }
 
 // STUB: LEGO1 0x1006bac0
@@ -796,9 +804,9 @@ void LegoAnimPresenter::VTable0x90()
 // FUNCTION: LEGO1 0x1006c8a0
 void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
 {
-	if (m_unk0x6c != 0 && m_unk0x68 != NULL) {
-		for (MxU32 i = 1; i <= m_unk0x6c; i++) {
-			LegoEntity* entity = m_unk0x68[i]->GetEntity();
+	if (m_roiMapSize != 0 && m_roiMap != NULL) {
+		for (MxU32 i = 1; i <= m_roiMapSize; i++) {
+			LegoEntity* entity = m_roiMap[i]->GetEntity();
 
 			if (entity != NULL) {
 				if (p_bool) {

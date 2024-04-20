@@ -42,7 +42,7 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 		delete m_unk0xc8;
 	}
 
-	m_unk0x68 = NULL;
+	m_roiMap = NULL;
 	Init();
 
 	m_criticalSection.Leave();
