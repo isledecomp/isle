@@ -34,24 +34,6 @@ public:
 	LegoTranInfoListCursor(LegoTranInfoList* p_list) : MxPtrListCursor<LegoTranInfo>(p_list) {}
 };
 
-// SYNTHETIC: LEGO1 0x100612f0
-// LegoTranInfoListCursor::`scalar deleting destructor'
-
-// FUNCTION: LEGO1 0x10061360
-// MxPtrListCursor<LegoTranInfo>::~MxPtrListCursor<LegoTranInfo>
-
-// SYNTHETIC: LEGO1 0x100613b0
-// MxListCursor<LegoTranInfo *>::`scalar deleting destructor'
-
-// SYNTHETIC: LEGO1 0x10061420
-// MxPtrListCursor<LegoTranInfo>::`scalar deleting destructor'
-
-// FUNCTION: LEGO1 0x10061490
-// MxListCursor<LegoTranInfo *>::~MxListCursor<LegoTranInfo *>
-
-// FUNCTION: LEGO1 0x100614e0
-// LegoTranInfoListCursor::~LegoTranInfoListCursor
-
 // TEMPLATE: LEGO1 0x1005fdf0
 // MxCollection<LegoTranInfo *>::Compare
 
@@ -78,5 +60,23 @@ public:
 
 // SYNTHETIC: LEGO1 0x100600d0
 // MxPtrList<LegoTranInfo>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x100612f0
+// LegoTranInfoListCursor::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x10061360
+// MxPtrListCursor<LegoTranInfo>::~MxPtrListCursor<LegoTranInfo>
+
+// SYNTHETIC: LEGO1 0x100613b0
+// MxListCursor<LegoTranInfo *>::`scalar deleting destructor'
+
+// SYNTHETIC: LEGO1 0x10061420
+// MxPtrListCursor<LegoTranInfo>::`scalar deleting destructor'
+
+// FUNCTION: LEGO1 0x10061490
+// MxListCursor<LegoTranInfo *>::~MxListCursor<LegoTranInfo *>
+
+// FUNCTION: LEGO1 0x100614e0
+// LegoTranInfoListCursor::~LegoTranInfoListCursor
 
 #endif // LEGOTRANINFOLIST_H
