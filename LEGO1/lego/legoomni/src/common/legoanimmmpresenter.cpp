@@ -28,10 +28,22 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 	m_tranInfo = NULL;
 	m_unk0x54 = 0;
 	m_unk0x64 = NULL;
-	m_unk0x68 = 0;
+	m_unk0x68 = NULL;
 	m_roiMap = NULL;
 	m_roiMapSize = 0;
 	m_unk0x58 = e_unk0;
+}
+
+// FUNCTION: LEGO1 0x1004aa60
+LegoAnimMMPresenter::~LegoAnimMMPresenter()
+{
+	if (VideoManager() != NULL) {
+		VideoManager()->UnregisterPresenter(*this);
+	}
+
+	delete m_unk0x68;
+
+	NotificationManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x1004aaf0

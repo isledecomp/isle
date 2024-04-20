@@ -25,6 +25,7 @@ public:
 	};
 
 	LegoAnimMMPresenter();
+	~LegoAnimMMPresenter() override;
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
