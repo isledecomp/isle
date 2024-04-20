@@ -11,6 +11,17 @@ struct LegoTranInfo;
 // SIZE 0x74
 class LegoAnimMMPresenter : public MxCompositePresenter {
 public:
+	enum {
+		e_unk0,
+		e_unk1,
+		e_unk2,
+		e_unk3,
+		e_unk4,
+		e_unk5,
+		e_unk6,
+		e_unk7
+	};
+
 	LegoAnimMMPresenter();
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
@@ -45,11 +56,19 @@ public:
 
 private:
 	MxBool FUN_1004b450();
+	MxBool FUN_1004b530(MxLong p_time);
+	MxBool FUN_1004b570(MxLong p_time);
+	MxBool FUN_1004b580(MxLong p_time);
+	MxBool FUN_1004b5b0(MxLong p_time);
+	MxBool FUN_1004b600(MxLong p_time);
+	MxBool FUN_1004b610(MxLong p_time);
+	MxBool FUN_1004b6b0(MxLong p_time);
+	MxBool FUN_1004b6d0(MxLong p_time);
 
 	LegoAnimPresenter* m_unk0x4c; // 0x4c
-	undefined4 m_unk0x50;         // 0x50
+	MxLong m_unk0x50;             // 0x50
 	undefined4 m_unk0x54;         // 0x54
-	undefined m_unk0x58;          // 0x58
+	MxU8 m_unk0x58;               // 0x58
 	MxBool m_unk0x59;             // 0x59
 	MxU32 m_animmanId;            // 0x5c
 	LegoTranInfo* m_tranInfo;     // 0x60

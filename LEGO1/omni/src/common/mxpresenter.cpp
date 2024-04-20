@@ -156,11 +156,11 @@ MxResult MxPresenter::Tickle()
 	case e_repeating:
 		this->RepeatingTickle();
 
-		if (m_currentTickleState != e_unk5) {
+		if (m_currentTickleState != e_freezing) {
 			break;
 		}
-	case e_unk5:
-		this->Unk5Tickle();
+	case e_freezing:
+		this->FreezingTickle();
 
 		if (m_currentTickleState != e_done) {
 			break;

@@ -32,7 +32,7 @@ public:
 	void StartingTickle() override;   // vtable+0x1c
 	void StreamingTickle() override;  // vtable+0x20
 	void RepeatingTickle() override;  // vtable+0x24
-	void Unk5Tickle() override;       // vtable+0x28
+	void FreezingTickle() override;   // vtable+0x28
 	MxResult AddToManager() override; // vtable+0x34
 
 	// FUNCTION: LEGO1 0x1000c7a0

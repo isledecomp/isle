@@ -21,7 +21,7 @@ public:
 		e_starting,
 		e_streaming,
 		e_repeating,
-		e_unk5,
+		e_freezing,
 		e_done,
 	};
 
@@ -62,10 +62,10 @@ public:
 	virtual void StreamingTickle() { ProgressTickleState(e_repeating); } // vtable+0x20
 
 	// FUNCTION: LEGO1 0x1000bea0
-	virtual void RepeatingTickle() { ProgressTickleState(e_unk5); } // vtable+0x24
+	virtual void RepeatingTickle() { ProgressTickleState(e_freezing); } // vtable+0x24
 
 	// FUNCTION: LEGO1 0x1000bec0
-	virtual void Unk5Tickle() { ProgressTickleState(e_done); } // vtable+0x28
+	virtual void FreezingTickle() { ProgressTickleState(e_done); } // vtable+0x28
 
 protected:
 	// FUNCTION: LEGO1 0x1000bee0

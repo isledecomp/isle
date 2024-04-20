@@ -216,12 +216,12 @@ void MxMediaPresenter::RepeatingTickle()
 		if (m_currentChunk) {
 			MxLong time = m_currentChunk->GetTime();
 			if (time <= m_action->GetElapsedTime() % m_action->GetLoopCount()) {
-				ProgressTickleState(e_unk5);
+				ProgressTickleState(e_freezing);
 			}
 		}
 		else {
 			if (m_action->GetElapsedTime() >= m_action->GetStartTime() + m_action->GetDuration()) {
-				ProgressTickleState(e_unk5);
+				ProgressTickleState(e_freezing);
 			}
 		}
 	}
