@@ -67,6 +67,12 @@ public:
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
 	undefined4 FUN_1001fa70(IslePathActor* p_actor);
+	undefined4 FUN_1001fb70(
+		IslePathActor* p_actor,
+		LegoAnimPresenter* p_presenter,
+		Vector3& p_position,
+		Vector3& p_direction
+	);
 	void FUN_1001fc80(IslePathActor* p_actor);
 	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
 	void AddPath(LegoPathController* p_controller);
