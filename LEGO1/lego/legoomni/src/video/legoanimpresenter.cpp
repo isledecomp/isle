@@ -565,7 +565,7 @@ void LegoAnimPresenter::PutFrame()
 
 // STUB: LEGO1 0x1006afc0
 // FUNCTION: BETA10 0x1005059a
-MxResult LegoAnimPresenter::FUN_1006afc0(Matrix4*&, undefined4)
+MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*&, undefined4)
 {
 	// TODO
 	return SUCCESS;

@@ -4,6 +4,7 @@
 #include "anim/legoanim.h"
 #include "legoroilist.h"
 #include "mxgeometry/mxgeometry3d.h"
+#include "mxgeometry/mxmatrix.h"
 #include "mxvideopresenter.h"
 
 class LegoWorld;
@@ -71,7 +72,7 @@ public:
 
 	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
 
-	MxResult FUN_1006afc0(Matrix4*&, undefined4);
+	MxResult FUN_1006afc0(MxMatrix*&, undefined4);
 	MxResult FUN_1006b140(LegoROI* p_roi);
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 

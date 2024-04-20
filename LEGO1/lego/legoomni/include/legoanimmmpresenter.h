@@ -2,6 +2,7 @@
 #define LEGOANIMMMPRESENTER_H
 
 #include "mxcompositepresenter.h"
+#include "mxgeometry/mxmatrix.h"
 
 class LegoAnimPresenter;
 class LegoWorld;
@@ -74,7 +75,7 @@ private:
 	MxU32 m_animmanId;              // 0x5c
 	LegoTranInfo* m_tranInfo;       // 0x60
 	LegoWorld* m_unk0x64;           // 0x64
-	Matrix4* m_unk0x68;             // 0x68
+	MxMatrix* m_unk0x68;            // 0x68
 	LegoROI** m_roiMap;             // 0x6c
 	MxU32 m_roiMapSize;             // 0x70
 };
