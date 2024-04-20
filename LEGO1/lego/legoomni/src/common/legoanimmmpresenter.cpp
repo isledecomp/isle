@@ -34,6 +34,18 @@ LegoAnimMMPresenter::LegoAnimMMPresenter()
 	m_unk0x58 = e_unk0;
 }
 
+// FUNCTION: LEGO1 0x1004aa60
+LegoAnimMMPresenter::~LegoAnimMMPresenter()
+{
+	if (VideoManager() != NULL) {
+		VideoManager()->UnregisterPresenter(*this);
+	}
+
+	delete m_unk0x68;
+
+	NotificationManager()->Unregister(this);
+}
+
 // FUNCTION: LEGO1 0x1004aaf0
 MxResult LegoAnimMMPresenter::StartAction(MxStreamController* p_controller, MxDSAction* p_action)
 {
