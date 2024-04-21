@@ -36,7 +36,7 @@ public:
 	virtual MxResult Serialize(LegoFile* p_legoFile)
 	{
 		if (p_legoFile->IsWriteMode()) {
-			p_legoFile->WriteString(this->ClassName());
+			p_legoFile->WriteString(ClassName());
 		}
 		return SUCCESS;
 	} // vtable+0x1c

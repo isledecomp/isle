@@ -23,9 +23,7 @@ TowTrackMissionState::TowTrackMissionState()
 // FUNCTION: LEGO1 0x1004dde0
 MxResult TowTrackMissionState::Serialize(LegoFile* p_legoFile)
 {
-	if (p_legoFile->IsWriteMode()) {
-		p_legoFile->WriteString(this->ClassName());
-	}
+	LegoState::Serialize(p_legoFile);
 
 	if (p_legoFile->IsReadMode()) {
 		p_legoFile->Read(&m_unk0x12, sizeof(m_unk0x12));

@@ -16,9 +16,7 @@ HospitalState::HospitalState()
 // FUNCTION: LEGO1 0x10076530
 MxResult HospitalState::Serialize(LegoFile* p_legoFile)
 {
-	if (p_legoFile->IsWriteMode()) {
-		p_legoFile->WriteString(ClassName());
-	}
+	LegoState::Serialize(p_legoFile);
 
 	if (p_legoFile->IsWriteMode()) {
 		// A write variable needs to be used here, otherwise
