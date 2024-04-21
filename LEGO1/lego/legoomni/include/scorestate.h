@@ -20,8 +20,8 @@ public:
 		return !strcmp(p_name, ScoreState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool VTable0x14() override; // vtable+0x14
-	MxBool SetFlag() override;    // vtable+0x18
+	MxBool IsSerializable() override; // vtable+0x14
+	MxBool SetFlag() override;        // vtable+0x18
 
 	inline MxBool GetTutorialFlag() { return m_playCubeTutorial; }
 	inline void SetTutorialFlag(MxBool p_playCubeTutorial) { m_playCubeTutorial = p_playCubeTutorial; }

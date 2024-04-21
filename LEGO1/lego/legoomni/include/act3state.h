@@ -22,7 +22,7 @@ public:
 		return !strcmp(p_name, Act3State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool VTable0x14() override;
+	MxBool IsSerializable() override;
 
 	// SYNTHETIC: LEGO1 0x1000e3c0
 	// Act3State::`scalar deleting destructor'

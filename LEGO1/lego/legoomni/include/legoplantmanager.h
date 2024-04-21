@@ -27,8 +27,8 @@ public:
 	void Init();
 	void FUN_10026360(MxS32 p_scriptIndex);
 	void FUN_100263a0(undefined4 p_und);
-	void Save(LegoStorage* p_storage);
-	MxResult Load(LegoStorage* p_storage);
+	void Write(LegoStorage* p_storage);
+	MxResult Read(LegoStorage* p_storage);
 	MxBool FUN_100269e0(LegoEntity* p_entity);
 	MxU32 FUN_10026ba0(LegoEntity*, MxBool);
 	void FUN_10026c50(LegoEntity* p_entity);

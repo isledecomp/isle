@@ -23,7 +23,7 @@ public:
 		return !strcmp(p_name, this->m_className.GetData()) || LegoState::IsA(p_name);
 	}
 
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	// SYNTHETIC: LEGO1 0x100260a0
 	// LegoVehicleBuildState::`scalar deleting destructor'

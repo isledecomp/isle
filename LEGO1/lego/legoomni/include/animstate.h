@@ -50,8 +50,8 @@ public:
 		return !strcmp(p_name, AnimState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool SetFlag() override;                          // vtable+0x18
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxBool SetFlag() override;                         // vtable+0x18
+	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	void FUN_100651d0(MxU32, AnimInfo*, MxU32&);
 	void FUN_10065240(MxU32, AnimInfo*, MxU32);

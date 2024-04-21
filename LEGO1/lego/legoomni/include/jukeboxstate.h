@@ -20,7 +20,7 @@ public:
 		return !strcmp(p_name, JukeBoxState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool VTable0x14() override; // vtable+0x14
+	MxBool IsSerializable() override; // vtable+0x14
 
 	inline MxU32 IsActive() { return m_active; }
 	inline void SetActive(MxU32 p_active) { m_active = p_active; }

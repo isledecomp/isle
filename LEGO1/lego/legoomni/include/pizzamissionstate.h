@@ -30,7 +30,7 @@ public:
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	inline MxU16 GetColor(MxU8 p_id) { return GetState(p_id)->m_color; }
 

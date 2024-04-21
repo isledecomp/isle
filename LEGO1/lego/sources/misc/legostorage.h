@@ -137,7 +137,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10006030
-	LegoStorage* FUN_10006030(MxString p_str)
+	LegoStorage* WriteString(MxString p_str)
 	{
 		const char* data = p_str.GetData();
 		LegoU32 fullLength = strlen(data);

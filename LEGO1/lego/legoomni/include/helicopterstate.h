@@ -22,7 +22,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1000e0b0
-	MxBool VTable0x14() override { return FALSE; } // vtable+0x14
+	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x1000e0c0
 	MxBool SetFlag() override
