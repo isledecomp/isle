@@ -644,7 +644,7 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10084ec0
-MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
+MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 {
 	LegoCharacterData* data = GetData(p_roi->GetName());
 
@@ -662,7 +662,7 @@ MxBool LegoCharacterManager::FUN_10084ec0(LegoROI* p_roi)
 		unk0x00 = part.m_unk0x00[part.m_unk0x08];
 	}
 
-	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[1].m_name);
+	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[2].m_name);
 
 	if (childROI != NULL) {
 		char lodName[256];

@@ -282,7 +282,7 @@ void LegoEntity::VTable0x3c()
 {
 	switch (m_unk0x59) {
 	case 0:
-		CharacterManager()->FUN_10084ec0(m_roi);
+		CharacterManager()->SwitchHat(m_roi);
 		break;
 	case 2:
 		PlantManager()->FUN_100269e0(this);
