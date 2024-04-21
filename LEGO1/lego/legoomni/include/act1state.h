@@ -34,7 +34,7 @@ public:
 		MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsWriteMode()) {
-				p_file->FUN_10006030(m_name);
+				p_file->WriteString(m_name);
 				p_file->WriteVector3(m_point1);
 				p_file->WriteVector3(m_point2);
 				p_file->WriteVector3(m_point3);
@@ -71,8 +71,8 @@ public:
 		return !strcmp(p_name, Act1State::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxBool SetFlag() override;                          // vtable+0x18
-	MxResult VTable0x1c(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxBool SetFlag() override;                         // vtable+0x18
+	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
 	void FUN_10034660();
 	void FUN_100346a0();

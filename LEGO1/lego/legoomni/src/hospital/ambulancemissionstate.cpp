@@ -20,8 +20,8 @@ AmbulanceMissionState::AmbulanceMissionState()
 }
 
 // STUB: LEGO1 0x10037440
-MxResult AmbulanceMissionState::VTable0x1c(LegoFile* p_legoFile)
+MxResult AmbulanceMissionState::Serialize(LegoFile* p_legoFile)
 {
 	// TODO
-	return 0;
+	return LegoState::Serialize(p_legoFile);
 }

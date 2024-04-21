@@ -14,10 +14,10 @@ HospitalState::HospitalState()
 }
 
 // FUNCTION: LEGO1 0x10076530
-MxResult HospitalState::VTable0x1c(LegoFile* p_legoFile)
+MxResult HospitalState::Serialize(LegoFile* p_legoFile)
 {
 	if (p_legoFile->IsWriteMode()) {
-		p_legoFile->FUN_10006030(ClassName());
+		p_legoFile->WriteString(ClassName());
 	}
 
 	if (p_legoFile->IsWriteMode()) {

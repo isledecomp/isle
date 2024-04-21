@@ -45,13 +45,13 @@ void LegoBuildingManager::FUN_1002fb30()
 }
 
 // STUB: LEGO1 0x1002fb80
-MxResult LegoBuildingManager::Save(LegoStorage* p_storage)
+MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 {
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1002fc10
-MxResult LegoBuildingManager::Load(LegoStorage* p_storage)
+MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 {
 	return SUCCESS;
 }

@@ -3,7 +3,7 @@
 DECOMP_SIZE_ASSERT(ScoreState, 0x0c)
 
 // FUNCTION: LEGO1 0x1000de20
-MxBool ScoreState::VTable0x14()
+MxBool ScoreState::IsSerializable()
 {
 	return FALSE;
 }

@@ -259,11 +259,11 @@ MxResult LegoGameState::Save(MxULong p_slot)
 
 	WriteEndOfVariables(&fileStorage);
 	CharacterManager()->Write(&fileStorage);
-	PlantManager()->Save(&fileStorage);
-	result = BuildingManager()->Save(&fileStorage);
+	PlantManager()->Write(&fileStorage);
+	result = BuildingManager()->Write(&fileStorage);
 
 	for (j = 0; j < m_stateCount; j++) {
-		if (m_stateArray[j]->VTable0x14()) {
+		if (m_stateArray[j]->IsSerializable()) {
 			count++;
 		}
 	}
@@ -271,8 +271,8 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	Write(&fileStorage, count);
 
 	for (j = 0; j < m_stateCount; j++) {
-		if (m_stateArray[j]->VTable0x14()) {
-			m_stateArray[j]->VTable0x1c(&fileStorage);
+		if (m_stateArray[j]->IsSerializable()) {
+			m_stateArray[j]->Serialize(&fileStorage);
 		}
 	}
 
@@ -295,7 +295,7 @@ MxResult LegoGameState::DeleteState()
 	m_stateArray = NULL;
 
 	for (MxS32 count = 0; count < stateCount; count++) {
-		if (!stateArray[count]->SetFlag() && stateArray[count]->VTable0x14()) {
+		if (!stateArray[count]->SetFlag() && stateArray[count]->IsSerializable()) {
 			delete stateArray[count];
 		}
 		else {
@@ -360,10 +360,10 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	if (CharacterManager()->Read(&fileStorage) == FAILURE) {
 		goto done;
 	}
-	if (PlantManager()->Load(&fileStorage) == FAILURE) {
+	if (PlantManager()->Read(&fileStorage) == FAILURE) {
 		goto done;
 	}
-	if (BuildingManager()->Load(&fileStorage) == FAILURE) {
+	if (BuildingManager()->Read(&fileStorage) == FAILURE) {
 		goto done;
 	}
 	if (DeleteState() != SUCCESS) {
@@ -389,7 +389,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 				}
 			}
 
-			state->VTable0x1c(&fileStorage);
+			state->Serialize(&fileStorage);
 		}
 	}
 

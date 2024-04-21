@@ -21,10 +21,10 @@ TowTrackMissionState::TowTrackMissionState()
 }
 
 // FUNCTION: LEGO1 0x1004dde0
-MxResult TowTrackMissionState::VTable0x1c(LegoFile* p_legoFile)
+MxResult TowTrackMissionState::Serialize(LegoFile* p_legoFile)
 {
 	if (p_legoFile->IsWriteMode()) {
-		p_legoFile->FUN_10006030(this->ClassName());
+		p_legoFile->WriteString(this->ClassName());
 	}
 
 	if (p_legoFile->IsReadMode()) {

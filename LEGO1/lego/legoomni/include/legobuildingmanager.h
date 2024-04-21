@@ -30,8 +30,8 @@ public:
 	void Init();
 	void FUN_1002fa00();
 	void FUN_1002fb30();
-	MxResult Save(LegoStorage* p_storage);
-	MxResult Load(LegoStorage* p_storage);
+	MxResult Write(LegoStorage* p_storage);
+	MxResult Read(LegoStorage* p_storage);
 	MxBool FUN_1002fdb0(LegoEntity* p_entity);
 	MxU32 FUN_1002ff40(LegoEntity*, MxBool);
 	void FUN_10030000(LegoEntity* p_entity);

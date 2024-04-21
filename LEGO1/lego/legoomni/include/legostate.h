@@ -27,16 +27,16 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10005f90
-	virtual MxBool VTable0x14() { return TRUE; } // vtable+0x14
+	virtual MxBool IsSerializable() { return TRUE; } // vtable+0x14
 
 	// FUNCTION: LEGO1 0x10005fa0
 	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10005fb0
-	virtual MxResult VTable0x1c(LegoFile* p_legoFile)
+	virtual MxResult Serialize(LegoFile* p_legoFile)
 	{
 		if (p_legoFile->IsWriteMode()) {
-			p_legoFile->FUN_10006030(this->ClassName());
+			p_legoFile->WriteString(this->ClassName());
 		}
 		return SUCCESS;
 	} // vtable+0x1c

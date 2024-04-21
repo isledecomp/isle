@@ -541,6 +541,6 @@ void FUN_1003f540(LegoFile* p_file, const char* p_filename)
 // FUNCTION: LEGO1 0x1003f8a0
 void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture)
 {
-	p_file->FUN_10006030(*p_texture->GetName());
+	p_file->WriteString(*p_texture->GetName());
 	p_texture->GetTexture()->Write(p_file);
 }

@@ -46,10 +46,10 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 }
 
 // FUNCTION: LEGO1 0x10033ac0
-MxResult Act1State::VTable0x1c(LegoFile* p_legoFile)
+MxResult Act1State::Serialize(LegoFile* p_legoFile)
 {
 	if (p_legoFile->IsWriteMode()) {
-		p_legoFile->FUN_10006030(ClassName());
+		p_legoFile->WriteString(ClassName());
 	}
 
 	m_unk0x024.Serialize(p_legoFile);

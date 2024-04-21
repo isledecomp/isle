@@ -18,10 +18,10 @@ GasStationState::GasStationState()
 }
 
 // STUB: LEGO1 0x10006300
-MxResult GasStationState::VTable0x1c(LegoFile* p_legoFile)
+MxResult GasStationState::Serialize(LegoFile* p_legoFile)
 {
 	// TODO
-	return SUCCESS;
+	return LegoState::Serialize(p_legoFile);
 }
 
 // STUB: LEGO1 0x10006430
