@@ -137,8 +137,8 @@ BOOL LegoView1::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Rende
 		pRenderer->CreateLight(Tgl::Directional, g_directionalLightRGB, g_directionalLightRGB, g_directionalLightRGB);
 	m_pAmbientLight = pRenderer->CreateLight(Tgl::Ambient, g_ambientLightRGB, g_ambientLightRGB, g_ambientLightRGB);
 
-	Mx3DPointFloat direction(0.0, 0.0, 0.0);
-	Mx3DPointFloat position(0.0, -1.0, 0.0);
+	Mx3DPointFloat position(0.0, 0.0, 0.0);
+	Mx3DPointFloat direction(0.0, -1.0, 0.0);
 	Mx3DPointFloat up(1.0, 0.0, 0.0);
 
 	Tgl::FloatMatrix4 matrix;
@@ -149,7 +149,7 @@ BOOL LegoView1::Create(const TglSurface::CreateStruct& rCreateStruct, Tgl::Rende
 	SETMAT4(in, transform);
 	m_pDirectionalLight->SetTransformation(matrix);
 
-	direction[0] = 0, direction[1] = 150, direction[2] = -150;
+	position[0] = 0, position[1] = 150, position[2] = -150;
 	CalcLocalTransform(position, direction, up, transform);
 	SETMAT4(in, transform);
 	m_pSunLight->SetTransformation(matrix);
