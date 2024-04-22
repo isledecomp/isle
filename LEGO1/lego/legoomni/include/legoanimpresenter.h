@@ -28,6 +28,7 @@ typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPrese
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	enum {
+		c_bit1 = 0x01,
 		c_bit2 = 0x02
 	};
 
@@ -92,6 +93,7 @@ protected:
 	void FUN_10069b10();
 	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
+	void FUN_1006ab70();
 	LegoBool FUN_1006aba0();
 	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006ac90();
@@ -104,7 +106,7 @@ protected:
 	LegoROIList* m_unk0x70;    // 0x70
 	LegoROIList* m_unk0x74;    // 0x74
 	MxMatrix* m_unk0x78;       // 0x78
-	undefined4 m_unk0x7c;      // 0x7c
+	MxU32 m_flags;             // 0x7c
 	LegoWorld* m_currentWorld; // 0x80
 	MxAtomId m_animAtom;       // 0x84
 	undefined4 m_unk0x88;      // 0x88
