@@ -152,7 +152,7 @@ MxBool CheckIfEntityExists(MxBool p_enable, const char* p_filename, MxS32 p_enti
 void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender);
 
 // FUNCTION: LEGO1 0x1003e430
-void InvokeAction(Extra::ActionType p_actionId, MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender)
+void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender)
 {
 	MxDSAction action;
 	action.SetAtomId(p_pAtom);
@@ -338,7 +338,7 @@ void FUN_1003eda0()
 }
 
 // FUNCTION: LEGO1 0x1003ee00
-MxBool RemoveFromCurrentWorld(MxAtomId& p_atomId, MxS32 p_id)
+MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id)
 {
 	LegoWorld* world = CurrentWorld();
 

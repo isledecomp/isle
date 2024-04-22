@@ -336,14 +336,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 	}
 
 	if (m_actionType != Extra::e_unknown) {
-#ifdef COMPAT_MODE
-		{
-			MxAtomId atom(m_filename, e_lowerCase2);
-			InvokeAction(m_actionType, atom, m_targetEntityId, this);
-		}
-#else
 		InvokeAction(m_actionType, MxAtomId(m_filename, e_lowerCase2), m_targetEntityId, this);
-#endif
 	}
 	else {
 		switch (GameState()->GetActorId()) {
