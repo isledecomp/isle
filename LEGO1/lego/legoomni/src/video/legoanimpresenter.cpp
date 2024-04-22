@@ -8,8 +8,10 @@
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
+#include "mxtype18notificationparam.h"
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
 
@@ -36,7 +38,7 @@ void LegoAnimPresenter::Init()
 	m_unk0x74 = NULL;
 	m_unk0x70 = NULL;
 	m_unk0x78 = NULL;
-	m_unk0x7c = 0;
+	m_flags = 0;
 	m_unk0xa8.Clear();
 	m_unk0xa4 = 0;
 	m_currentWorld = NULL;
@@ -447,6 +449,12 @@ void LegoAnimPresenter::FUN_1006a4f0(
 	}
 }
 
+// STUB: LEGO1 0x1006ab70
+void LegoAnimPresenter::FUN_1006ab70()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1006aba0
 LegoBool LegoAnimPresenter::FUN_1006aba0()
 {
@@ -610,7 +618,7 @@ void LegoAnimPresenter::StartingTickle()
 	FUN_100692b0();
 	FUN_100695c0();
 
-	if (m_unk0x7c & c_bit2 && !FUN_1006aba0()) {
+	if (m_flags & c_bit2 && !FUN_1006aba0()) {
 		goto done;
 	}
 
@@ -759,18 +767,44 @@ MxResult LegoAnimPresenter::StartAction(MxStreamController* p_controller, MxDSAc
 	return result;
 }
 
-// STUB: LEGO1 0x1006c640
+// FUNCTION: LEGO1 0x1006c640
+// FUNCTION: BETA10 0x10051b7a
 void LegoAnimPresenter::EndAction()
 {
-	if (m_action) {
-		// TODO
+	undefined4 unused; // required for match
 
-		if (m_currentWorld) {
-			m_currentWorld->Remove(this);
-		}
-		FUN_1006c8a0(FALSE);
-		MxVideoPresenter::EndAction();
+	if (m_action == NULL) {
+		return;
 	}
+
+	LegoWorld* world = CurrentWorld();
+
+	if (world != NULL) {
+		MxType18NotificationParam param(c_notificationType18, NULL, 0);
+		NotificationManager()->Send(world, param);
+	}
+
+	if (m_anim != NULL) {
+		FUN_1006b9a0(m_anim, m_anim->GetDuration(), m_unk0x78);
+	}
+
+	if (m_roiMapSize != 0 && m_roiMap != NULL && m_roiMap[1] != NULL && m_flags & c_bit1) {
+		for (MxS16 i = 1; i <= m_roiMapSize; i++) {
+			if (m_roiMap[i] != NULL) {
+				m_roiMap[i]->SetVisibility(FALSE);
+			}
+		}
+	}
+
+	FUN_1006c8a0(FALSE);
+	FUN_1006ab70();
+	VTable0x90();
+
+	if (m_currentWorld != NULL) {
+		m_currentWorld->Remove(this);
+	}
+
+	MxVideoPresenter::EndAction();
 }
 
 // FUNCTION: LEGO1 0x1006c7d0
