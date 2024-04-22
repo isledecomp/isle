@@ -14,7 +14,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x1004afd0
-	MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() const override
 	{
 		return new MxType18NotificationParam(m_type, m_sender, m_unk0x0c);
 	} // vtable+0x04

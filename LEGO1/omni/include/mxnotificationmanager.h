@@ -9,7 +9,7 @@
 
 class MxNotification {
 public:
-	MxNotification(MxCore* p_target, MxNotificationParam* p_param);
+	MxNotification(MxCore* p_target, const MxNotificationParam& p_param);
 	~MxNotification();
 
 	inline MxCore* GetTarget() { return m_target; }
@@ -43,7 +43,7 @@ public:
 	virtual MxResult Create(MxU32 p_frequencyMS, MxBool p_createThread); // vtable+0x14
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
-	MxResult Send(MxCore* p_listener, MxNotificationParam* p_param);
+	MxResult Send(MxCore* p_listener, const MxNotificationParam& p_param);
 
 	inline MxNotificationPtrList* GetQueue() { return m_queue; }
 	inline void SetActive(MxBool p_active) { m_active = p_active; }

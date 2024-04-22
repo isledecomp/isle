@@ -66,14 +66,7 @@ LegoWorldPresenter::~LegoWorldPresenter()
 	}
 
 	if (m_entity) {
-#ifdef COMPAT_MODE
-		{
-			MxNotificationParam param(c_notificationNewPresenter, NULL);
-			NotificationManager()->Send(m_entity, &param);
-		}
-#else
-		NotificationManager()->Send(m_entity, &MxNotificationParam(c_notificationNewPresenter, NULL));
-#endif
+		NotificationManager()->Send(m_entity, MxNotificationParam(c_notificationNewPresenter, NULL));
 	}
 }
 

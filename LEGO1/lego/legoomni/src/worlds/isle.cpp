@@ -509,16 +509,7 @@ void Isle::Enable(MxBool p_enable)
 		switch (GameState()->m_currentArea) {
 		case LegoGameState::e_elevride:
 			m_destLocation = LegoGameState::e_elevride;
-
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationTransitioned, NULL);
-				NotificationManager()->Send(this, &param);
-			}
-#else
-			NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
-#endif
-
+			NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_jetrace2:
@@ -540,30 +531,12 @@ void Isle::Enable(MxBool p_enable)
 			break;
 		case LegoGameState::e_garadoor:
 			m_destLocation = LegoGameState::e_garadoor;
-
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationTransitioned, NULL);
-				NotificationManager()->Send(this, &param);
-			}
-#else
-			NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
-#endif
-
+			NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_polidoor:
 			m_destLocation = LegoGameState::e_polidoor;
-
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationTransitioned, NULL);
-				NotificationManager()->Send(this, &param);
-			}
-#else
-			NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
-#endif
-
+			NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_bike:
@@ -1012,29 +985,13 @@ void Isle::FUN_10032d30(
 			m_act1state->m_unk0x01f = FALSE;
 		}
 		else {
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationTransitioned, NULL);
-				NotificationManager()->Send(this, &param);
-			}
-#else
-			NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
-#endif
+			NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 		}
 	}
 	else {
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
-
-#ifdef COMPAT_MODE
-		{
-			MxNotificationParam param(c_notificationTransitioned, NULL);
-			NotificationManager()->Send(this, &param);
-		}
-#else
-		NotificationManager()->Send(this, &MxNotificationParam(c_notificationTransitioned, NULL));
-#endif
-
+		NotificationManager()->Send(this, MxNotificationParam(c_notificationTransitioned, NULL));
 		m_act1state->m_unk0x01f = TRUE;
 	}
 }

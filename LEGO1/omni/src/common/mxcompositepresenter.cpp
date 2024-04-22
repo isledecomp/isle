@@ -96,17 +96,10 @@ void MxCompositePresenter::EndAction()
 	MxPresenter::EndAction();
 
 	if (action && action->GetOrigin()) {
-#ifdef COMPAT_MODE
-		{
-			MxEndActionNotificationParam param(c_notificationEndAction, this, action, FALSE);
-			NotificationManager()->Send(action->GetOrigin(), &param);
-		}
-#else
 		NotificationManager()->Send(
 			action->GetOrigin(),
-			&MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
+			MxEndActionNotificationParam(c_notificationEndAction, this, action, FALSE)
 		);
-#endif
 	}
 }
 
@@ -209,7 +202,7 @@ void MxCompositePresenter::VTable0x5c(MxNotificationParam& p_param)
 			}
 		}
 
-		NotificationManager()->Send(this, &p_param);
+		NotificationManager()->Send(this, p_param);
 	}
 }
 

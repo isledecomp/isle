@@ -19,7 +19,7 @@ public:
 	};
 
 	// FUNCTION: LEGO1 0x10028690
-	MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() const override
 	{
 		LegoEventNotificationParam* clone =
 			new LegoEventNotificationParam(m_type, m_sender, m_modifier, m_x, m_y, m_key);
