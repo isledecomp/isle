@@ -775,14 +775,7 @@ inline void LoadIsle()
 	LegoWorld* world = FindWorld(*g_isleScript, 0);
 	if (world != NULL) {
 		if (!world->GetUnknown0xd0().empty()) {
-#ifdef COMPAT_MODE
-			{
-				MxNotificationParam param(c_notificationType20, NULL);
-				NotificationManager()->Send(world, &param);
-			}
-#else
-			NotificationManager()->Send(world, &MxNotificationParam(c_notificationType20, NULL));
-#endif
+			NotificationManager()->Send(world, MxNotificationParam(c_notificationType20, NULL));
 		}
 	}
 	else {

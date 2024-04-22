@@ -239,14 +239,7 @@ void NotifyEntity(const char* p_filename, MxS32 p_entityId, LegoEntity* p_sender
 	}
 
 	if (entity != NULL) {
-#ifdef COMPAT_MODE
-		{
-			MxNotificationParam param(c_notificationType0, p_sender);
-			NotificationManager()->Send(entity, &param);
-		}
-#else
-		NotificationManager()->Send(entity, &MxNotificationParam(c_notificationType0, p_sender));
-#endif
+		NotificationManager()->Send(entity, MxNotificationParam(c_notificationType0, p_sender));
 	}
 }
 

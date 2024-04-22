@@ -47,7 +47,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100510c0
-	MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() const override
 	{
 		return new MxActionNotificationParam(this->m_type, this->m_sender, this->m_action, this->m_realloc);
 	} // vtable+0x04
@@ -73,7 +73,7 @@ public:
 	{
 	}
 
-	MxNotificationParam* Clone() override; // vtable+0x04
+	MxNotificationParam* Clone() const override; // vtable+0x04
 };
 
 // VTABLE: LEGO1 0x100d8358
@@ -91,7 +91,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x10051270
-	MxNotificationParam* Clone() override
+	MxNotificationParam* Clone() const override
 	{
 		return new MxEndActionNotificationParam(
 			c_notificationEndAction,
@@ -112,7 +112,7 @@ public:
 		m_unk0x14 = p_unk0x14;
 	}
 
-	MxNotificationParam* Clone() override; // vtable+0x04
+	MxNotificationParam* Clone() const override; // vtable+0x04
 
 private:
 	MxPresenter* m_unk0x14; // 0x14

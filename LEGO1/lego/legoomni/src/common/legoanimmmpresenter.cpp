@@ -124,7 +124,7 @@ void LegoAnimMMPresenter::EndAction()
 
 	MxType18NotificationParam param(c_notificationType18, NULL, m_animmanId);
 	if (m_animmanId != 0) {
-		NotificationManager()->Send(AnimationManager(), &param);
+		NotificationManager()->Send(AnimationManager(), param);
 	}
 
 	if (m_action != NULL) {

@@ -12,10 +12,10 @@ DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 
 // FUNCTION: LEGO1 0x100ac220
-MxNotification::MxNotification(MxCore* p_target, MxNotificationParam* p_param)
+MxNotification::MxNotification(MxCore* p_target, const MxNotificationParam& p_param)
 {
 	m_target = p_target;
-	m_param = p_param->Clone();
+	m_param = p_param.Clone();
 }
 
 // FUNCTION: LEGO1 0x100ac240
@@ -61,25 +61,23 @@ MxResult MxNotificationManager::Create(MxU32 p_frequencyMS, MxBool p_createThrea
 }
 
 // FUNCTION: LEGO1 0x100ac6c0
-MxResult MxNotificationManager::Send(MxCore* p_listener, MxNotificationParam* p_param)
+MxResult MxNotificationManager::Send(MxCore* p_listener, const MxNotificationParam& p_param)
 {
 	AUTOLOCK(m_lock);
 
-	if (m_active == FALSE) {
+	if (!m_active) {
 		return FAILURE;
 	}
-	else {
-		MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
-		if (it == m_listenerIds.end()) {
-			return FAILURE;
-		}
-		else {
-			MxNotification* notif = new MxNotification(p_listener, p_param);
-			if (notif != NULL) {
-				m_queue->push_back(notif);
-				return SUCCESS;
-			}
-		}
+
+	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
+	if (it == m_listenerIds.end()) {
+		return FAILURE;
+	}
+
+	MxNotification* notif = new MxNotification(p_listener, p_param);
+	if (notif != NULL) {
+		m_queue->push_back(notif);
+		return SUCCESS;
 	}
 
 	return FAILURE;

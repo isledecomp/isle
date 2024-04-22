@@ -678,7 +678,7 @@ MxEntity* LegoOmni::AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* 
 }
 
 // FUNCTION: LEGO1 0x1005b3a0
-void LegoOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
+void LegoOmni::NotifyCurrentEntity(const MxNotificationParam& p_param)
 {
 	if (m_currentWorld) {
 		NotificationManager()->Send(m_currentWorld, p_param);

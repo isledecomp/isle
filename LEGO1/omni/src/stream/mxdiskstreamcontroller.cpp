@@ -334,16 +334,9 @@ MxResult MxDiskStreamController::VTable0x24(MxDSAction* p_action)
 	AUTOLOCK(m_criticalSection);
 	if (m_unk0x54.Find(p_action, FALSE) == NULL) {
 		if (VTable0x30(p_action) == SUCCESS) {
-#ifdef COMPAT_MODE
-			{
-				MxEndActionNotificationParam param(c_notificationEndAction, NULL, p_action, TRUE);
-				MxOmni::GetInstance()->NotifyCurrentEntity(&param);
-			}
-#else
 			MxOmni::GetInstance()->NotifyCurrentEntity(
-				&MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
+				MxEndActionNotificationParam(c_notificationEndAction, NULL, p_action, TRUE)
 			);
-#endif
 		}
 	}
 

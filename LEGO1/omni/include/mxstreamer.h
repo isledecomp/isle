@@ -24,7 +24,7 @@ public:
 		m_controller = p_ctrlr;
 	}
 
-	MxNotificationParam* Clone() override;
+	MxNotificationParam* Clone() const override;
 
 	MxStreamController* GetController() { return m_controller; }
 

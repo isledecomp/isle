@@ -81,14 +81,7 @@ MxLong MxStreamer::Close(const char* p_name)
 				delete c;
 			}
 			else {
-#ifdef COMPAT_MODE
-				{
-					MxStreamerNotification notification(c_notificationStreamer, NULL, c);
-					NotificationManager()->Send(this, &notification);
-				}
-#else
-				NotificationManager()->Send(this, &MxStreamerNotification(c_notificationStreamer, NULL, c));
-#endif
+				NotificationManager()->Send(this, MxStreamerNotification(c_notificationStreamer, NULL, c));
 			}
 
 			return SUCCESS;
@@ -99,7 +92,7 @@ MxLong MxStreamer::Close(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x100b9700
-MxNotificationParam* MxStreamerNotification::Clone()
+MxNotificationParam* MxStreamerNotification::Clone() const
 {
 	return new MxStreamerNotification(m_type, m_sender, m_controller);
 }
@@ -204,14 +197,7 @@ MxLong MxStreamer::Notify(MxParam& p_param)
 			delete c;
 		}
 		else {
-#ifdef COMPAT_MODE
-			{
-				MxStreamerNotification notification(c_notificationStreamer, NULL, c);
-				NotificationManager()->Send(this, &notification);
-			}
-#else
-			NotificationManager()->Send(this, &MxStreamerNotification(c_notificationStreamer, NULL, c));
-#endif
+			NotificationManager()->Send(this, MxStreamerNotification(c_notificationStreamer, NULL, c));
 		}
 	}
 
