@@ -1187,6 +1187,7 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 		if (m_currentCutscene >= e_badEndMovie && m_currentCutscene <= e_goodEndMovie) {
 			Reset();
 		}
+
 		InvokeAction(Extra::ActionType::e_opendisk, *g_introScript, m_currentCutscene, NULL);
 	}
 }
