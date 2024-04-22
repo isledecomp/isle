@@ -42,7 +42,7 @@ MxEntity* MxOmni::AddToWorld(const char*, MxS32, MxPresenter*)
 }
 
 // FUNCTION: LEGO1 0x100aefc0
-void MxOmni::NotifyCurrentEntity(MxNotificationParam* p_param)
+void MxOmni::NotifyCurrentEntity(const MxNotificationParam& p_param)
 {
 }
 

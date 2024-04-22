@@ -58,16 +58,9 @@ void MxPresenter::EndAction()
 	AUTOLOCK(m_criticalSection);
 
 	if (!this->m_compositePresenter) {
-#ifdef COMPAT_MODE
-		{
-			MxEndActionNotificationParam param(c_notificationEndAction, NULL, this->m_action, TRUE);
-			MxOmni::GetInstance()->NotifyCurrentEntity(&param);
-		}
-#else
 		MxOmni::GetInstance()->NotifyCurrentEntity(
-			&MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
+			MxEndActionNotificationParam(c_notificationEndAction, NULL, this->m_action, TRUE)
 		);
-#endif
 	}
 
 	this->m_action = NULL;
