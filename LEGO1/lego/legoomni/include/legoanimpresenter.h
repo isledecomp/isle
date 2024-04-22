@@ -93,6 +93,7 @@ protected:
 	void FUN_10069b10();
 	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
+	void FUN_1006aa60();
 	void FUN_1006ab70();
 	LegoBool FUN_1006aba0();
 	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
@@ -111,14 +112,14 @@ protected:
 	MxAtomId m_animAtom;       // 0x84
 	undefined4 m_unk0x88;      // 0x88
 	LegoROI** m_unk0x8c;       // 0x8c
-	const char** m_unk0x90;    // 0x90
+	char** m_unk0x90;          // 0x90
 	MxU8 m_unk0x94;            // 0x94
 	undefined m_unk0x95;       // 0x95
 	MxBool m_unk0x96;          // 0x96
 	undefined m_unk0x97;       // 0x97
 	undefined4 m_unk0x98;      // 0x98
 	MxS16 m_unk0x9c;           // 0x9c
-	undefined4 m_unk0xa0;      // 0xa0
+	undefined4* m_unk0xa0;     // 0xa0
 	undefined4 m_unk0xa4;      // 0xa4
 	Mx3DPointFloat m_unk0xa8;  // 0xa8
 };

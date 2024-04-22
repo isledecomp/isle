@@ -5,6 +5,7 @@
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
 #include "mxmisc.h"
@@ -51,14 +52,63 @@ void LegoAnimPresenter::Init()
 	m_unk0x90 = NULL;
 	m_unk0x94 = 0;
 	m_unk0x96 = TRUE;
-	m_unk0xa0 = 0;
+	m_unk0xa0 = NULL;
 }
 
-// STUB: LEGO1 0x10068770
+// FUNCTION: LEGO1 0x10068770
+// FUNCTION: BETA10 0x1004e833
 void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 {
-	// TODO
-	MxVideoPresenter::Destroy(p_fromDestructor);
+	{
+		AUTOLOCK(m_criticalSection);
+
+		if (m_anim != NULL) {
+			delete m_anim;
+		}
+
+		if (m_roiMap != NULL) {
+			delete[] m_roiMap;
+		}
+
+		if (m_unk0x70 != NULL) {
+			delete m_unk0x70;
+		}
+
+		if (m_unk0x74 != NULL) {
+			FUN_1006aa60();
+			delete m_unk0x74;
+		}
+
+		if (m_unk0x78 != NULL) {
+			delete m_unk0x78;
+		}
+
+		// m_unk0x98 TODO
+
+		if (m_unk0x90 != NULL) {
+			for (MxS32 i = 0; i < m_unk0x94; i++) {
+				if (m_unk0x90[i] != NULL) {
+					delete[] m_unk0x90[i];
+				}
+			}
+
+			delete[] m_unk0x90;
+		}
+
+		if (m_unk0x8c != NULL) {
+			delete[] m_unk0x8c;
+		}
+
+		if (m_unk0xa0 != NULL) {
+			delete m_unk0xa0; // TODO
+		}
+
+		Init();
+	}
+
+	if (!p_fromDestructor) {
+		MxVideoPresenter::Destroy(p_fromDestructor);
+	}
 }
 
 // FUNCTION: LEGO1 0x10068fb0
@@ -447,6 +497,12 @@ void LegoAnimPresenter::FUN_1006a4f0(
 	else {
 		p_data->SetUnknown0x20((*it).second.m_index);
 	}
+}
+
+// STUB: LEGO1 0x1006aa60
+void LegoAnimPresenter::FUN_1006aa60()
+{
+	// TODO
 }
 
 // STUB: LEGO1 0x1006ab70
