@@ -56,7 +56,7 @@ class ParseAsm:
     def __init__(
         self,
         relocate_lookup: Optional[Callable[[int], bool]] = None,
-        name_lookup: Optional[Callable[[int], str]] = None,
+        name_lookup: Optional[Callable[[int, bool], str]] = None,
         bin_lookup: Optional[Callable[[int, int], Optional[bytes]]] = None,
     ) -> None:
         self.relocate_lookup = relocate_lookup
@@ -86,13 +86,15 @@ class ParseAsm:
 
         return None
 
-    def lookup(self, addr: int, use_cache: bool = True) -> Optional[str]:
+    def lookup(
+        self, addr: int, use_cache: bool = True, exact: bool = False
+    ) -> Optional[str]:
         """Return a replacement name for this address if we find one."""
         if use_cache and (cached := self.replacements.get(addr, None)) is not None:
             return cached
 
         if callable(self.name_lookup):
-            if (name := self.name_lookup(addr)) is not None:
+            if (name := self.name_lookup(addr, exact)) is not None:
                 if use_cache:
                     self.replacements[addr] = name
 
@@ -210,7 +212,7 @@ class ParseAsm:
                 # If we have a name for this address, use it. If not,
                 # do not create a new placeholder. We will instead
                 # fall through to generic jump handling below.
-                potential_name = self.lookup(op_str_address)
+                potential_name = self.lookup(op_str_address, exact=True)
                 if potential_name is not None:
                     return (inst.mnemonic, potential_name)
 

@@ -241,6 +241,9 @@ def main():
 
         isle_compare = IsleCompare(origfile, recompfile, args.pdb, args.decomp_dir)
 
+        if args.loglevel == logging.DEBUG:
+            isle_compare.debug = True
+
         print()
 
         ### Compare one or none.

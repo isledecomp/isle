@@ -2,6 +2,7 @@ import os
 import logging
 import difflib
 import struct
+import uuid
 from dataclasses import dataclass
 from typing import Callable, Iterable, List, Optional
 from isledecomp.bin import Bin as IsleBin, InvalidVirtualAddressError
@@ -71,6 +72,9 @@ class Compare:
         self.recomp_bin = recomp_bin
         self.pdb_file = pdb_file
         self.code_dir = code_dir
+        # Controls whether we dump the asm output to a file
+        self.debug: bool = False
+        self.runid: str = uuid.uuid4().hex[:8]
 
         self._lines_db = LinesDb(code_dir)
         self._db = CompareDb()
@@ -452,6 +456,16 @@ class Compare:
                         )
                     self._db.set_function_pair(orig_addr, recomp_addr)
 
+    def _dump_asm(self, orig_combined, recomp_combined):
+        """Append the provided assembly output to the debug files"""
+        with open(f"orig-{self.runid}.txt", "a", encoding="utf-8") as f:
+            for addr, line in orig_combined:
+                f.write(f"{addr}: {line}\n")
+
+        with open(f"recomp-{self.runid}.txt", "a", encoding="utf-8") as f:
+            for addr, line in recomp_combined:
+                f.write(f"{addr}: {line}\n")
+
     def _compare_function(self, match: MatchInfo) -> DiffReport:
         # Detect when the recomp function size would cause us to read
         # enough bytes from the original function that we cross into
@@ -478,19 +492,33 @@ class Compare:
         except IndexError:
             pass
 
-        def orig_lookup(addr: int) -> Optional[str]:
-            m = self._db.get_by_orig(addr)
+        def orig_lookup(addr: int, exact: bool) -> Optional[str]:
+            m = self._db.get_by_orig(addr, exact)
             if m is None:
                 return None
 
-            return m.match_name()
+            if m.orig_addr == addr:
+                return m.match_name()
 
-        def recomp_lookup(addr: int) -> Optional[str]:
-            m = self._db.get_by_recomp(addr)
+            offset = addr - m.orig_addr
+            if m.compare_type != SymbolType.DATA or offset >= m.size:
+                return None
+
+            return m.offset_name(offset)
+
+        def recomp_lookup(addr: int, exact: bool) -> Optional[str]:
+            m = self._db.get_by_recomp(addr, exact)
             if m is None:
                 return None
 
-            return m.match_name()
+            if m.recomp_addr == addr:
+                return m.match_name()
+
+            offset = addr - m.recomp_addr
+            if m.compare_type != SymbolType.DATA or offset >= m.size:
+                return None
+
+            return m.offset_name(offset)
 
         orig_should_replace = create_reloc_lookup(self.orig_bin)
         recomp_should_replace = create_reloc_lookup(self.recomp_bin)
@@ -511,6 +539,9 @@ class Compare:
 
         orig_combined = orig_parse.parse_asm(orig_raw, match.orig_addr)
         recomp_combined = recomp_parse.parse_asm(recomp_raw, match.recomp_addr)
+
+        if self.debug:
+            self._dump_asm(orig_combined, recomp_combined)
 
         # Detach addresses from asm lines for the text diff.
         orig_asm = [x[1] for x in orig_combined]
