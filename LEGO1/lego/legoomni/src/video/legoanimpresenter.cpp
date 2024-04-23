@@ -1,5 +1,6 @@
 #include "legoanimpresenter.h"
 
+#include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"
 #include "legocharactermanager.h"
 #include "legovideomanager.h"
@@ -449,10 +450,15 @@ void LegoAnimPresenter::FUN_1006a4f0(
 	}
 }
 
-// STUB: LEGO1 0x1006ab70
+// FUNCTION: LEGO1 0x1006ab70
 void LegoAnimPresenter::FUN_1006ab70()
 {
-	// TODO
+	if (m_unk0x96) {
+		AnimationManager()->FUN_10063270(m_unk0x74, this);
+	}
+	else {
+		AnimationManager()->FUN_10063780(m_unk0x74);
+	}
 }
 
 // FUNCTION: LEGO1 0x1006aba0
