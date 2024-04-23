@@ -814,6 +814,7 @@ void LegoAnimPresenter::EndAction()
 }
 
 // FUNCTION: LEGO1 0x1006c7d0
+// FUNCTION: BETA10 0x10051e07
 void LegoAnimPresenter::VTable0x8c()
 {
 	if (m_unk0x78) {
