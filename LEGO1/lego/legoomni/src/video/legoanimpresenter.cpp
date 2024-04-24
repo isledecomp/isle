@@ -577,11 +577,32 @@ void LegoAnimPresenter::PutFrame()
 	}
 }
 
-// STUB: LEGO1 0x1006afc0
+// FUNCTION: LEGO1 0x1006afc0
 // FUNCTION: BETA10 0x1005059a
-MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*&, undefined4)
+MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*& p_matrix, float p_und)
 {
-	// TODO
+	MxU32 length = m_roiMapSize + 1;
+	p_matrix = new MxMatrix[length];
+
+	MxS32 i;
+	for (i = 1; i < length; i++) {
+		if (m_roiMap[i] != NULL) {
+			p_matrix[i] = m_roiMap[i]->GetLocal2World();
+		}
+	}
+
+	FUN_1006b900(m_anim, p_und, m_unk0x78);
+
+	for (i = 1; i < length; i++) {
+		MxMatrix mat;
+
+		if (m_roiMap[i] != NULL) {
+			mat = p_matrix[i];
+			p_matrix[i] = m_roiMap[i]->GetLocal2World();
+			m_roiMap[i]->FUN_100a58f0(mat);
+		}
+	}
+
 	return SUCCESS;
 }
 
@@ -718,6 +739,13 @@ void LegoAnimPresenter::Destroy()
 const char* LegoAnimPresenter::GetActionObjectName()
 {
 	return m_action->GetObjectName();
+}
+
+// STUB: LEGO1 0x1006b900
+// FUNCTION: BETA10 0x100510d8
+void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxS32 p_und, MxMatrix* p_matrix)
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x1006b9a0
