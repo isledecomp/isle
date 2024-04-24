@@ -434,11 +434,31 @@ void LegoROI::FUN_100a8e80(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_t
 	}
 }
 
-// STUB: LEGO1 0x100a8fd0
+// FUNCTION: LEGO1 0x100a8fd0
 // FUNCTION: BETA10 0x1018ac81
 void LegoROI::FUN_100a8fd0(LegoTreeNode* p_node, Matrix4& p_matrix, LegoTime p_time, LegoROI** p_roiMap)
 {
-	// TODO
+	MxMatrix mat;
+
+	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
+	FUN_100a8cb0(data, p_time, mat);
+
+	LegoROI* roi = p_roiMap[data->GetUnknown0x20()];
+	if (roi != NULL) {
+		roi->m_local2world.Product(mat, p_matrix);
+
+		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
+			FUN_100a8fd0(p_node->GetChild(i), roi->m_local2world, p_time, p_roiMap);
+		}
+	}
+	else {
+		MxMatrix local2world;
+		local2world.Product(mat, p_matrix);
+
+		for (LegoU32 i = 0; i < p_node->GetNumChildren(); i++) {
+			FUN_100a8fd0(p_node->GetChild(i), local2world, p_time, p_roiMap);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100a90f0
