@@ -149,7 +149,7 @@ void LegoAnimMMPresenter::ReadyTickle()
 	}
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x0c != NULL) {
-		m_presenter->VTable0xa0(m_tranInfo->m_unk0x0c);
+		m_presenter->VTable0xa0(*m_tranInfo->m_unk0x0c);
 	}
 
 	if (m_presenter != NULL) {

@@ -10,6 +10,7 @@
 class LegoWorld;
 class LegoAnimClass;
 class LegoAnimActor;
+class LegoPathBoundary;
 
 struct LegoAnimStructComparator {
 	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
@@ -62,7 +63,7 @@ public:
 	virtual void VTable0x8c();                                                             // vtable+0x8c
 	virtual void VTable0x90();                                                             // vtable+0x90
 	virtual MxResult VTable0x94(Vector3&, Vector3&, float, float, Vector3&);               // vtable+0x94
-	virtual void VTable0x98();                                                             // vtable+0x98
+	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                             // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
 	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
@@ -71,15 +72,13 @@ public:
 		return m_roiMap;
 	} // vtable+0x9c
 
-	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
+	virtual void VTable0xa0(Matrix4& p_matrix); // vtable+0xa0
 
 	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
 	MxResult FUN_1006b140(LegoROI* p_roi);
-	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+	const char* GetActionObjectName();
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
-
-	const char* GetActionObjectName();
 
 protected:
 	void Init();

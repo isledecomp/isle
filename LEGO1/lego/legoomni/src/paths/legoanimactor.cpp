@@ -1,7 +1,7 @@
 #include "legoanimactor.h"
 
 #include "define.h"
-#include "legoanimpresenter.h"
+#include "legolocomotionanimpresenter.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxutilities.h"
@@ -200,7 +200,8 @@ void LegoAnimActor::ParseAction(char* p_extra)
 			char* token = strtok(value, g_parseExtraTokens);
 
 			while (token) {
-				LegoAnimPresenter* presenter = (LegoAnimPresenter*) world->Find("LegoAnimPresenter", token);
+				LegoLocomotionAnimPresenter* presenter =
+					(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
 
 				if (presenter != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
