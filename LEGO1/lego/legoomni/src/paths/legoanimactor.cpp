@@ -200,13 +200,14 @@ void LegoAnimActor::ParseAction(char* p_extra)
 			char* token = strtok(value, g_parseExtraTokens);
 
 			while (token) {
-				LegoAnimPresenter* presenter = (LegoAnimPresenter*) world->Find("LegoAnimPresenter", token);
+				LegoLocomotionAnimPresenter* presenter =
+					(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", token);
 
 				if (presenter != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
 
 					if (token) {
-						((LegoLocomotionAnimPresenter*) presenter)->FUN_1006d680(this, atof(token));
+						presenter->FUN_1006d680(this, atof(token));
 					}
 				}
 
