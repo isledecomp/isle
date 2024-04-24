@@ -20,8 +20,8 @@ public:
 
 	MxString& operator=(const MxString& p_str);
 	const MxString& operator=(const char* p_str);
-	const MxString operator+(const MxString& p_str);
-	const MxString operator+(const char* p_str);
+	MxString operator+(const MxString& p_str) const;
+	MxString operator+(const char* p_str) const;
 	MxString& operator+=(const char* p_str);
 
 	static void CharSwap(char* p_a, char* p_b);
