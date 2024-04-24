@@ -73,7 +73,7 @@ public:
 
 	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
 
-	MxResult FUN_1006afc0(MxMatrix*&, undefined4);
+	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
 	MxResult FUN_1006b140(LegoROI* p_roi);
 	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
 
@@ -97,6 +97,7 @@ protected:
 	LegoBool FUN_1006aba0();
 	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006ac90();
+	void FUN_1006b900(LegoAnim* p_anim, MxS32 p_und, MxMatrix* p_matrix);
 	void FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void FUN_1006c8a0(MxBool p_bool);
 
