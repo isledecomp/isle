@@ -741,11 +741,29 @@ const char* LegoAnimPresenter::GetActionObjectName()
 	return m_action->GetObjectName();
 }
 
-// STUB: LEGO1 0x1006b900
+// FUNCTION: LEGO1 0x1006b900
 // FUNCTION: BETA10 0x100510d8
-void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxS32 p_und, MxMatrix* p_matrix)
+void LegoAnimPresenter::FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix)
 {
-	// TODO
+	LegoTreeNode* root = p_anim->GetRoot();
+	MxMatrix mat;
+	LegoAnimNodeData* data = (LegoAnimNodeData*) root->GetData();
+
+	if (p_matrix != NULL) {
+		mat = *p_matrix;
+	}
+	else {
+		LegoROI* roi = m_roiMap[data->GetUnknown0x20()];
+
+		if (roi != NULL) {
+			mat = roi->GetLocal2World();
+		}
+		else {
+			mat.SetIdentity();
+		}
+	}
+
+	LegoROI::FUN_100a8fd0(root, mat, p_time, m_roiMap);
 }
 
 // FUNCTION: LEGO1 0x1006b9a0
