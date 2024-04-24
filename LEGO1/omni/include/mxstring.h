@@ -8,19 +8,20 @@
 // SIZE 0x10
 class MxString : public MxCore {
 public:
-	MxString(const MxString& p_str);
-	~MxString() override;
-	const MxString& operator=(const char* p_data);
-
 	MxString();
-	MxString(const char*);
-	MxString(const char*, MxU16);
+	MxString(const MxString& p_str);
+	MxString(const char* p_str);
+	MxString(const char* p_str, MxU16 p_maxlen);
+	~MxString() override;
+
 	void Reverse();
 	void ToUpperCase();
 	void ToLowerCase();
+
 	MxString& operator=(const MxString& p_str);
-	MxString operator+(const MxString& p_str);
-	MxString operator+(const char* p_str);
+	const MxString& operator=(const char* p_str);
+	const MxString operator+(const MxString& p_str);
+	const MxString operator+(const char* p_str);
 	MxString& operator+=(const char* p_str);
 
 	static void CharSwap(char* p_a, char* p_b);

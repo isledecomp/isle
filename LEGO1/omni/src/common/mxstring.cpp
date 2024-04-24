@@ -115,20 +115,20 @@ MxString& MxString::operator=(const MxString& p_str)
 
 // FUNCTION: LEGO1 0x100ae510
 // FUNCTION: BETA10 0x1012c606
-const MxString& MxString::operator=(const char* p_data)
+const MxString& MxString::operator=(const char* p_str)
 {
-	if (this->m_data != p_data) {
+	if (this->m_data != p_str) {
 		delete[] this->m_data;
-		this->m_length = strlen(p_data);
+		this->m_length = strlen(p_str);
 		this->m_data = new char[this->m_length + 1];
-		strcpy(this->m_data, p_data);
+		strcpy(this->m_data, p_str);
 	}
 
 	return *this;
 }
 
 // FUNCTION: BETA10 0x1012c68a
-MxString MxString::operator+(const MxString& p_str)
+const MxString MxString::operator+(const MxString& p_str)
 {
 	MxString tmp;
 	delete[] tmp.m_data;
@@ -146,7 +146,7 @@ MxString MxString::operator+(const MxString& p_str)
 // This forces MSVC to add $ReturnUdt$ to the stack for 100% match.
 // FUNCTION: LEGO1 0x100ae580
 // FUNCTION: BETA10 0x1012c78d
-MxString MxString::operator+(const char* p_str)
+const MxString MxString::operator+(const char* p_str)
 {
 	// MxString constructor allocates 1 byte for m_data, so free that first
 	MxString tmp;
