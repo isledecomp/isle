@@ -68,12 +68,13 @@ const char* g_nick = "Nick";
 const char* g_laura = "Laura";
 
 // FUNCTION: LEGO1 0x10037d00
+// FUNCTION: BETA10 0x100d5620
 void VisibilityVariable::SetValue(const char* p_value)
 {
 	MxVariable::SetValue(p_value);
 
 	if (p_value) {
-		char* instruction = strtok(m_value.GetDataPtr(), g_delimiter2);
+		char* instruction = strtok(m_value.GetData(), g_delimiter2);
 		char* name = strtok(NULL, g_delimiter2);
 		MxBool show;
 

@@ -12,12 +12,14 @@
 // class MxList<LegoPhoneme *>
 
 // VTABLE: LEGO1 0x100d9d00
+// VTABLE: BETA10 0x101bef58
 // SIZE 0x18
 class LegoPhonemeList : public MxList<LegoPhoneme*> {
 public:
 	LegoPhonemeList() { SetDestroy(Destroy); }
 
 	// FUNCTION: LEGO1 0x1007b210
+	// FUNCTION: BETA10 0x100d8340
 	MxS8 Compare(LegoPhoneme* p_a, LegoPhoneme* p_b) override
 	{
 		MxString a(p_a->GetName());
