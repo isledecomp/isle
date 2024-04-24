@@ -942,9 +942,3 @@ MxResult LegoAnimPresenter::VTable0x98(LegoPathBoundary* p_boundary)
 
 	return SUCCESS;
 }
-
-// STUB: LEGO1 0x1006d680
-void LegoAnimPresenter::FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value)
-{
-	// TODO
-}
