@@ -39,6 +39,12 @@ void LegoPathController::FUN_100468f0(LegoAnimPresenter* p_presenter)
 {
 }
 
+// STUB: LEGO1 0x10046930
+// FUNCTION: BETA10 0x100b737b
+void LegoPathController::FUN_10046930(LegoAnimPresenter* p_presenter)
+{
+}
+
 // STUB: LEGO1 0x10046b30
 MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value)
 {

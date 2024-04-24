@@ -805,10 +805,15 @@ void LegoAnimPresenter::ParseExtra()
 	// TODO
 }
 
-// STUB: LEGO1 0x1006c570
-void LegoAnimPresenter::VTable0xa0(Matrix4*)
+// FUNCTION: LEGO1 0x1006c570
+// FUNCTION: BETA10 0x10051ab3
+void LegoAnimPresenter::VTable0xa0(Matrix4& p_matrix)
 {
-	// TODO
+	if (m_unk0x78 != NULL) {
+		delete m_unk0x78;
+	}
+
+	m_unk0x78 = new MxMatrix(p_matrix);
 }
 
 // FUNCTION: LEGO1 0x1006c620
@@ -882,10 +887,19 @@ void LegoAnimPresenter::VTable0x8c()
 	}
 }
 
-// STUB: LEGO1 0x1006c860
+// FUNCTION: LEGO1 0x1006c860
+// FUNCTION: BETA10 0x10051f45
 void LegoAnimPresenter::VTable0x90()
 {
-	// TODO
+	if (m_currentWorld != NULL) {
+		m_currentWorld->FUN_1001fe90(this);
+
+		if (m_compositePresenter != NULL && m_compositePresenter->IsA("LegoAnimMMPresenter")) {
+			return;
+		}
+
+		m_currentWorld->Remove(this);
+	}
 }
 
 // FUNCTION: LEGO1 0x1006c8a0
@@ -914,10 +928,19 @@ MxResult LegoAnimPresenter::VTable0x94(Vector3&, Vector3&, float, float, Vector3
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1006ca50
-void LegoAnimPresenter::VTable0x98()
+// FUNCTION: LEGO1 0x1006ca50
+// FUNCTION: BETA10 0x100521d0
+MxResult LegoAnimPresenter::VTable0x98(LegoPathBoundary* p_boundary)
 {
-	// TODO
+	for (MxU32 i = 1; i <= m_roiMapSize; i++) {
+		LegoEntity* entity = m_roiMap[i]->GetEntity();
+
+		if (entity != NULL) {
+			p_boundary->AddActor((LegoPathActor*) entity);
+		}
+	}
+
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x1006d680
