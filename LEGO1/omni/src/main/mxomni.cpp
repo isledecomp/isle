@@ -66,7 +66,7 @@ void MxOmni::Init()
 	m_eventManager = NULL;
 	m_timer = NULL;
 	m_streamer = NULL;
-	m_atomIdCounterSet = NULL;
+	m_atomSet = NULL;
 	m_timerRunning = FALSE;
 }
 
@@ -82,7 +82,7 @@ MxResult MxOmni::Create(MxOmniCreateParam& p_param)
 {
 	MxResult result = FAILURE;
 
-	if (!(m_atomIdCounterSet = new MxAtomIdCounterSet())) {
+	if (!(m_atomSet = new MxAtomSet())) {
 		goto done;
 	}
 
@@ -177,6 +177,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100afe90
+// FUNCTION: BETA10 0x1012fe5b
 void MxOmni::Destroy()
 {
 	{
@@ -210,15 +211,15 @@ void MxOmni::Destroy()
 	delete m_tickleManager;
 
 	// There could be a tree/iterator function that does this inline
-	if (m_atomIdCounterSet) {
-		while (!m_atomIdCounterSet->empty()) {
+	if (m_atomSet) {
+		while (m_atomSet->size() != 0) {
 			// Pop each node and delete its value
-			MxAtomIdCounterSet::iterator begin = m_atomIdCounterSet->begin();
-			MxAtomIdCounter* value = *begin;
-			m_atomIdCounterSet->erase(begin);
+			MxAtomSet::iterator begin = m_atomSet->begin();
+			MxAtom* value = *begin;
+			m_atomSet->erase(begin);
 			delete value;
 		}
-		delete m_atomIdCounterSet;
+		delete m_atomSet;
 	}
 	Init();
 }

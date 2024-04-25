@@ -2,6 +2,8 @@
 
 #include "mxomni.h"
 
+#include <assert.h>
+
 // FUNCTION: LEGO1 0x100acea0
 MxObjectFactory* ObjectFactory()
 {
@@ -27,9 +29,11 @@ MxTimer* Timer()
 }
 
 // FUNCTION: LEGO1 0x100acee0
-MxAtomIdCounterSet* AtomIdCounterSet()
+// FUNCTION: BETA10 0x10124e4c
+MxAtomSet* AtomSet()
 {
-	return MxOmni::GetInstance()->GetAtomIdCounterSet();
+	assert(MxOmni::GetInstance());
+	return MxOmni::GetInstance()->GetAtomSet();
 }
 
 // FUNCTION: LEGO1 0x100acef0
