@@ -113,3 +113,9 @@ void LegoLocomotionAnimPresenter::EndAction()
 		MxVideoPresenter::EndAction();
 	}
 }
+
+// STUB: LEGO1 0x1006d680
+void LegoLocomotionAnimPresenter::FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value)
+{
+	// TODO
+}

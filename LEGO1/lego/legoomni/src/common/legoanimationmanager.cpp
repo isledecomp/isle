@@ -621,6 +621,18 @@ void LegoAnimationManager::FUN_100629b0(MxU32, MxBool)
 	// TODO
 }
 
+// STUB: LEGO1 0x10063270
+void LegoAnimationManager::FUN_10063270(LegoROIList*, LegoAnimPresenter*)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10063780
+void LegoAnimationManager::FUN_10063780(LegoROIList*)
+{
+	// TODO
+}
+
 // STUB: LEGO1 0x10064670
 void LegoAnimationManager::FUN_10064670(MxBool)
 {

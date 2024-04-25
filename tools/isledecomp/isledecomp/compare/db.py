@@ -53,7 +53,7 @@ class MatchInfo:
         self.name = name
         self.size = size
 
-    def match_name(self) -> str:
+    def match_name(self) -> Optional[str]:
         """Combination of the name and compare type.
         Intended for name substitution in the diff. If there is a diff,
         it will be more obvious what this symbol indicates."""
@@ -63,6 +63,12 @@ class MatchInfo:
         ctype = self.compare_type.name if self.compare_type is not None else "UNK"
         name = repr(self.name) if ctype == "STRING" else self.name
         return f"{name} ({ctype})"
+
+    def offset_name(self, ofs: int) -> Optional[str]:
+        if self.name is None:
+            return None
+
+        return f"{self.name}+{ofs} (OFFSET)"
 
 
 def matchinfo_factory(_, row):
@@ -135,7 +141,32 @@ class CompareDb:
         cur.row_factory = matchinfo_factory
         return cur.fetchone()
 
-    def get_by_orig(self, addr: int) -> Optional[MatchInfo]:
+    def _get_closest_orig(self, addr: int) -> Optional[int]:
+        value = self._db.execute(
+            """SELECT max(orig_addr) FROM `symbols`
+            WHERE ? >= orig_addr
+            LIMIT 1
+            """,
+            (addr,),
+        ).fetchone()
+        return value[0] if value is not None else None
+
+    def _get_closest_recomp(self, addr: int) -> Optional[int]:
+        value = self._db.execute(
+            """SELECT max(recomp_addr) FROM `symbols`
+            WHERE ? >= recomp_addr
+            LIMIT 1
+            """,
+            (addr,),
+        ).fetchone()
+        return value[0] if value is not None else None
+
+    def get_by_orig(self, addr: int, exact: bool = True) -> Optional[MatchInfo]:
+        if not exact and not self._orig_used(addr):
+            addr = self._get_closest_orig(addr)
+            if addr is None:
+                return None
+
         cur = self._db.execute(
             """SELECT * FROM `match_info`
             WHERE orig_addr = ?
@@ -145,7 +176,12 @@ class CompareDb:
         cur.row_factory = matchinfo_factory
         return cur.fetchone()
 
-    def get_by_recomp(self, addr: int) -> Optional[MatchInfo]:
+    def get_by_recomp(self, addr: int, exact: bool = True) -> Optional[MatchInfo]:
+        if not exact and not self._recomp_used(addr):
+            addr = self._get_closest_recomp(addr)
+            if addr is None:
+                return None
+
         cur = self._db.execute(
             """SELECT * FROM `match_info`
             WHERE recomp_addr = ?

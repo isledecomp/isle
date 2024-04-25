@@ -299,10 +299,28 @@ void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
 	}
 }
 
-// STUB: LEGO1 0x1001fda0
+// FUNCTION: LEGO1 0x1001fda0
+// FUNCTION: BETA10 0x100da621
 void LegoWorld::FUN_1001fda0(LegoAnimPresenter* p_presenter)
 {
-	// TODO
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		controller->FUN_100468f0(p_presenter);
+	}
+}
+
+// FUNCTION: LEGO1 0x1001fe90
+// FUNCTION: BETA10 0x100da6b5
+void LegoWorld::FUN_1001fe90(LegoAnimPresenter* p_presenter)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		controller->FUN_10046930(p_presenter);
+	}
 }
 
 // FUNCTION: LEGO1 0x1001ff80

@@ -10,8 +10,13 @@
 class LegoWorld;
 class LegoAnimClass;
 class LegoAnimActor;
+class LegoPathBoundary;
 
 struct LegoAnimStructComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+};
+
+struct LegoAnimSubstComparator {
 	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
@@ -22,14 +27,15 @@ struct LegoAnimStruct {
 };
 
 typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPresenterMap;
+typedef map<const char*, const char*, LegoAnimSubstComparator> LegoAnimSubstMap;
 
 // VTABLE: LEGO1 0x100d90c8
 // SIZE 0xbc
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02
+		c_hideOnStop = 0x01,
+		c_mustSucceed = 0x02
 	};
 
 	LegoAnimPresenter();
@@ -62,7 +68,7 @@ public:
 	virtual void VTable0x8c();                                                             // vtable+0x8c
 	virtual void VTable0x90();                                                             // vtable+0x90
 	virtual MxResult VTable0x94(Vector3&, Vector3&, float, float, Vector3&);               // vtable+0x94
-	virtual void VTable0x98();                                                             // vtable+0x98
+	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                             // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
 	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
@@ -71,15 +77,13 @@ public:
 		return m_roiMap;
 	} // vtable+0x9c
 
-	virtual void VTable0xa0(Matrix4*); // vtable+0xa0
+	virtual void VTable0xa0(Matrix4& p_matrix); // vtable+0xa0
 
-	MxResult FUN_1006afc0(MxMatrix*&, undefined4);
+	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
 	MxResult FUN_1006b140(LegoROI* p_roi);
-	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+	const char* GetActionObjectName();
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
-
-	const char* GetActionObjectName();
 
 protected:
 	void Init();
@@ -98,35 +102,51 @@ protected:
 	LegoBool FUN_1006aba0();
 	MxBool FUN_1006abb0(LegoTreeNode* p_node, LegoROI* p_roi);
 	void FUN_1006ac90();
+	void FUN_1006b900(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void FUN_1006c8a0(MxBool p_bool);
 
-	LegoAnim* m_anim;          // 0x64
-	LegoROI** m_roiMap;        // 0x68
-	MxU32 m_roiMapSize;        // 0x6c
-	LegoROIList* m_unk0x70;    // 0x70
-	LegoROIList* m_unk0x74;    // 0x74
-	MxMatrix* m_unk0x78;       // 0x78
-	MxU32 m_flags;             // 0x7c
-	LegoWorld* m_currentWorld; // 0x80
-	MxAtomId m_animAtom;       // 0x84
-	undefined4 m_unk0x88;      // 0x88
-	LegoROI** m_unk0x8c;       // 0x8c
-	char** m_unk0x90;          // 0x90
-	MxU8 m_unk0x94;            // 0x94
-	undefined m_unk0x95;       // 0x95
-	MxBool m_unk0x96;          // 0x96
-	undefined m_unk0x97;       // 0x97
-	undefined4 m_unk0x98;      // 0x98
-	MxS16 m_unk0x9c;           // 0x9c
-	undefined4* m_unk0xa0;     // 0xa0
-	undefined4 m_unk0xa4;      // 0xa4
-	Mx3DPointFloat m_unk0xa8;  // 0xa8
+	LegoAnim* m_anim;             // 0x64
+	LegoROI** m_roiMap;           // 0x68
+	MxU32 m_roiMapSize;           // 0x6c
+	LegoROIList* m_unk0x70;       // 0x70
+	LegoROIList* m_unk0x74;       // 0x74
+	MxMatrix* m_unk0x78;          // 0x78
+	MxU32 m_flags;                // 0x7c
+	LegoWorld* m_currentWorld;    // 0x80
+	MxAtomId m_worldAtom;         // 0x84
+	MxS32 m_worldId;              // 0x88
+	LegoROI** m_unk0x8c;          // 0x8c
+	char** m_unk0x90;             // 0x90
+	MxU8 m_unk0x94;               // 0x94
+	undefined m_unk0x95;          // 0x95
+	MxBool m_unk0x96;             // 0x96
+	undefined m_unk0x97;          // 0x97
+	LegoAnimSubstMap* m_substMap; // 0x98
+	MxS16 m_unk0x9c;              // 0x9c
+	undefined4* m_unk0xa0;        // 0xa0
+	undefined4 m_unk0xa4;         // 0xa4
+	Mx3DPointFloat m_unk0xa8;     // 0xa8
 };
 
 // clang-format off
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100689c0
+// map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::~map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >
+
+// TEMPLATE: LEGO1 0x10068a10
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::~_Tree<char const *,pair<char const * const,char const *>,map
+
+// TEMPLATE: LEGO1 0x10068ae0
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x10068b20
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::erase
+
+// TEMPLATE: LEGO1 0x10068f70
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Erase
 
 // TEMPLATE: LEGO1 0x10069d80
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~_Tree<char const *,pair<char const * const,LegoAni
@@ -151,6 +171,21 @@ protected:
 
 // TEMPLATE: LEGO1 0x1006a7a0
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Insert
+
+// TEMPLATE: LEGO1 0x1006c1b0
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x1006c200
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Insert
+
+// TEMPLATE: LEGO1 0x1006c4b0
+// list<char *,allocator<char *> >::~list<char *,allocator<char *> >
+
+// TEMPLATE: LEGO1 0x1006c520
+// List<char *>::~List<char *>
+
+// GLOBAL: LEGO1 0x100f7680
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Nil
 
 // GLOBAL: LEGO1 0x100f7688
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Nil

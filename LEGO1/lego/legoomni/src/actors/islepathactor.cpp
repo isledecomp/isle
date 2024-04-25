@@ -2,6 +2,7 @@
 
 #include "legoanimationmanager.h"
 #include "legonavcontroller.h"
+#include "legopathboundary.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxnotificationparam.h"

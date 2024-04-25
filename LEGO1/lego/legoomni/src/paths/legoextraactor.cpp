@@ -1,5 +1,7 @@
 #include "legoextraactor.h"
 
+#include "legolocomotionanimpresenter.h"
+#include "legopathboundary.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxmisc.h"
@@ -11,10 +13,10 @@ DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 LegoWorld* g_unk0x100f31d0 = NULL;
 
 // GLOBAL: LEGO1 0x100f31d4
-LegoAnimPresenter* m_assAnimP = NULL;
+LegoLocomotionAnimPresenter* m_assAnimP = NULL;
 
 // GLOBAL: LEGO1 0x100f31d8
-LegoAnimPresenter* m_disAnimP = NULL;
+LegoLocomotionAnimPresenter* m_disAnimP = NULL;
 
 // GLOBAL: LEGO1 0x100f31dc
 MxS32 g_unk0x100f31dc = 0;
@@ -156,8 +158,8 @@ inline void LegoExtraActor::FUN_1002ad8a()
 
 	if (g_unk0x100f31d0 != w) {
 		g_unk0x100f31d0 = w;
-		m_assAnimP = (LegoAnimPresenter*) w->Find("LegoAnimPresenter", "BNsAss01");
-		m_disAnimP = (LegoAnimPresenter*) w->Find("LegoAnimPresenter", "BNsDis01");
+		m_assAnimP = (LegoLocomotionAnimPresenter*) w->Find("LegoAnimPresenter", "BNsAss01");
+		m_disAnimP = (LegoLocomotionAnimPresenter*) w->Find("LegoAnimPresenter", "BNsDis01");
 	}
 
 	if (!m_assAnim) {

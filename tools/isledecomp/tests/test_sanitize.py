@@ -113,7 +113,7 @@ name_replace_cases = [
 def test_name_replace(start, end):
     """Make sure the name lookup function is called if present"""
 
-    def substitute(_: int) -> str:
+    def substitute(_: int, __: bool) -> str:
         return "_substitute_"
 
     p = ParseAsm(name_lookup=substitute)
@@ -137,7 +137,7 @@ def test_replacement_numbering():
     """If we can use the name lookup for the first address but not the second,
     the second replacement should be <OFFSET2> not <OFFSET1>."""
 
-    def substitute_1234(addr: int) -> Optional[str]:
+    def substitute_1234(addr: int, _: bool) -> Optional[str]:
         return "_substitute_" if addr == 0x1234 else None
 
     p = ParseAsm(name_lookup=substitute_1234)
@@ -171,7 +171,7 @@ def test_jump_to_function():
     assume this is the case for all jumps. Only replace the jump with a name
     if we can find it using our lookup."""
 
-    def substitute_1234(addr: int) -> Optional[str]:
+    def substitute_1234(addr: int, _: bool) -> Optional[str]:
         return "_substitute_" if addr == 0x1234 else None
 
     p = ParseAsm(name_lookup=substitute_1234)
@@ -212,7 +212,7 @@ def test_float_variable():
     """If there is a variable at the address referenced by a float instruction,
     use the name instead of calling into the float replacement handler."""
 
-    def name_lookup(addr: int) -> Optional[str]:
+    def name_lookup(addr: int, _: bool) -> Optional[str]:
         return "g_myFloatVariable" if addr == 0x1234 else None
 
     p = ParseAsm(name_lookup=name_lookup)
@@ -234,7 +234,7 @@ def test_pointer_compare():
         return addr in (0x1234, 0x5555)
 
     # Only 0x5555 is a "known" address
-    def name_lookup(addr: int) -> Optional[str]:
+    def name_lookup(addr: int, _: bool) -> Optional[str]:
         return "hello" if addr == 0x5555 else None
 
     p = ParseAsm(relocate_lookup=relocate_lookup, name_lookup=name_lookup)
@@ -263,7 +263,7 @@ def test_absolute_indirect():
     we have it, but there are some circumstances where we want to replace
     with the pointer's name (i.e. an import function)."""
 
-    def name_lookup(addr: int) -> Optional[str]:
+    def name_lookup(addr: int, _: bool) -> Optional[str]:
         return {
             0x1234: "Hello",
             0x4321: "xyz",

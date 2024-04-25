@@ -4,6 +4,7 @@
 #include "define.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
+#include "legoanimpresenter.h"
 #include "legotraninfo.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -149,7 +150,7 @@ void LegoAnimMMPresenter::ReadyTickle()
 	}
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x0c != NULL) {
-		m_presenter->VTable0xa0(m_tranInfo->m_unk0x0c);
+		m_presenter->VTable0xa0(*m_tranInfo->m_unk0x0c);
 	}
 
 	if (m_presenter != NULL) {

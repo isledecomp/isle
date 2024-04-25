@@ -35,6 +35,8 @@ public:
 	// SYNTHETIC: LEGO1 0x1006cfe0
 	// LegoLocomotionAnimPresenter::`scalar deleting destructor'
 
+	void FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value);
+
 	inline void DecrementUnknown0xd4()
 	{
 		if (m_unk0xd4) {
