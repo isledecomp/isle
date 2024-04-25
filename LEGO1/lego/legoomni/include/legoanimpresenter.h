@@ -54,21 +54,21 @@ public:
 		return !strcmp(p_name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	void ReadyTickle() override;                                                           // vtable+0x18
-	void StartingTickle() override;                                                        // vtable+0x1c
-	void StreamingTickle() override;                                                       // vtable+0x20
-	void DoneTickle() override;                                                            // vtable+0x2c
-	void ParseExtra() override;                                                            // vtable+0x30
-	MxResult AddToManager() override;                                                      // vtable+0x34
-	void Destroy() override;                                                               // vtable+0x38
-	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override; // vtable+0x3c
-	void EndAction() override;                                                             // vtable+0x40
-	void PutFrame() override;                                                              // vtable+0x6c
-	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                   // vtable+0x88
-	virtual void VTable0x8c();                                                             // vtable+0x8c
-	virtual void VTable0x90();                                                             // vtable+0x90
-	virtual MxResult VTable0x94(Vector3&, Vector3&, float, float, Vector3&);               // vtable+0x94
-	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                             // vtable+0x98
+	void ReadyTickle() override;                                                                         // vtable+0x18
+	void StartingTickle() override;                                                                      // vtable+0x1c
+	void StreamingTickle() override;                                                                     // vtable+0x20
+	void DoneTickle() override;                                                                          // vtable+0x2c
+	void ParseExtra() override;                                                                          // vtable+0x30
+	MxResult AddToManager() override;                                                                    // vtable+0x34
+	void Destroy() override;                                                                             // vtable+0x38
+	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override;               // vtable+0x3c
+	void EndAction() override;                                                                           // vtable+0x40
+	void PutFrame() override;                                                                            // vtable+0x6c
+	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                                 // vtable+0x88
+	virtual void VTable0x8c();                                                                           // vtable+0x8c
+	virtual void VTable0x90();                                                                           // vtable+0x90
+	virtual MxU32 VTable0x94(Vector3& p_vec1, Vector3& p_vec2, float p_f1, float p_f2, Vector3& p_vec3); // vtable+0x94
+	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                                           // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
 	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
@@ -125,7 +125,7 @@ protected:
 	LegoAnimSubstMap* m_substMap; // 0x98
 	MxS16 m_unk0x9c;              // 0x9c
 	undefined4* m_unk0xa0;        // 0xa0
-	undefined4 m_unk0xa4;         // 0xa4
+	float m_unk0xa4;              // 0xa4
 	Mx3DPointFloat m_unk0xa8;     // 0xa8
 };
 
