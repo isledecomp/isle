@@ -1,6 +1,7 @@
 #include "legoextraactor.h"
 
 #include "legolocomotionanimpresenter.h"
+#include "legopathboundary.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxmisc.h"

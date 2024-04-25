@@ -4,6 +4,7 @@
 #include "define.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
+#include "legoanimpresenter.h"
 #include "legotraninfo.h"
 #include "legovideomanager.h"
 #include "legoworld.h"

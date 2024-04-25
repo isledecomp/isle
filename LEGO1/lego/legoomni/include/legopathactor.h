@@ -3,11 +3,11 @@
 
 #include "geom/legounkown100db7f4.h"
 #include "legoactor.h"
-#include "legopathboundary.h"
 #include "misc/legounknown.h"
 #include "mxtypes.h"
 #include "realtime/matrix.h"
 
+class LegoPathBoundary;
 class LegoPathController;
 
 // VTABLE: LEGO1 0x100d6e28

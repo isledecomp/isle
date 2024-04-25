@@ -1,6 +1,7 @@
 #include "legopathactor.h"
 
 #include "legonavcontroller.h"
+#include "legopathboundary.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxmisc.h"

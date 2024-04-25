@@ -1,8 +1,10 @@
 #include "legoanimpresenter.h"
 
+#include "define.h"
 #include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"
 #include "legocharactermanager.h"
+#include "legopathboundary.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -13,6 +15,7 @@
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
 #include "mxtype18notificationparam.h"
+#include "mxutilities.h"
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
 
@@ -44,9 +47,9 @@ void LegoAnimPresenter::Init()
 	m_unk0xa4 = 0;
 	m_currentWorld = NULL;
 	m_unk0x95 = 0;
-	m_unk0x88 = -1;
-	m_unk0x98 = 0;
-	m_animAtom.Clear();
+	m_worldId = -1;
+	m_substMap = NULL;
+	m_worldAtom.Clear();
 	m_unk0x9c = 0;
 	m_unk0x8c = NULL;
 	m_unk0x90 = NULL;
@@ -645,7 +648,7 @@ void LegoAnimPresenter::StartingTickle()
 	FUN_100692b0();
 	FUN_100695c0();
 
-	if (m_flags & c_bit2 && !FUN_1006aba0()) {
+	if (m_flags & c_mustSucceed && !FUN_1006aba0()) {
 		goto done;
 	}
 
@@ -799,10 +802,106 @@ void LegoAnimPresenter::FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p
 	LegoROI::FUN_100a8e80(root, mat, p_time, m_roiMap);
 }
 
-// STUB: LEGO1 0x1006bac0
+// FUNCTION: LEGO1 0x1006bac0
+// FUNCTION: BETA10 0x100512e1
 void LegoAnimPresenter::ParseExtra()
 {
-	// TODO
+	MxU16 extraLength;
+	char* extraData;
+	m_action->GetExtra(extraLength, extraData);
+
+	if (extraLength & MAXWORD) {
+		char extraCopy[256];
+		memcpy(extraCopy, extraData, extraLength & MAXWORD);
+		extraCopy[extraLength & MAXWORD] = '\0';
+
+		char output[256];
+		if (KeyValueStringParse(NULL, g_strFROM_PARENT, extraCopy) && m_compositePresenter != NULL) {
+			m_compositePresenter->GetAction()->GetExtra(extraLength, extraData);
+
+			if (extraLength & MAXWORD) {
+				memcpy(extraCopy, extraData, extraLength & MAXWORD);
+				extraCopy[extraLength & MAXWORD] = '\0';
+			}
+		}
+
+		if (KeyValueStringParse(output, g_strHIDE_ON_STOP, extraCopy)) {
+			m_flags |= c_hideOnStop;
+		}
+
+		if (KeyValueStringParse(output, g_strMUST_SUCCEED, extraCopy)) {
+			m_flags |= c_mustSucceed;
+		}
+
+		if (KeyValueStringParse(output, g_strSUBST, extraCopy)) {
+			m_substMap = new LegoAnimSubstMap();
+
+			char* substToken = output;
+			char *key, *value;
+
+			while ((key = strtok(substToken, g_parseExtraTokens))) {
+				substToken = NULL;
+
+				if ((value = strtok(NULL, g_parseExtraTokens))) {
+					char* keyCopy = new char[strlen(key) + 1];
+					strcpy(keyCopy, key);
+					char* valueCopy = new char[strlen(value) + 1];
+					strcpy(valueCopy, value);
+					(*m_substMap)[keyCopy] = valueCopy;
+				}
+			}
+		}
+
+		if (KeyValueStringParse(output, g_strWORLD, extraCopy)) {
+			char* token = strtok(output, g_parseExtraTokens);
+			m_worldAtom = MxAtomId(token, e_lowerCase2);
+
+			token = strtok(NULL, g_parseExtraTokens);
+			m_worldId = atoi(token);
+		}
+
+		if (KeyValueStringParse(output, g_strPTATCAM, extraCopy)) {
+			list<char*> tmp;
+
+			if (m_unk0x90 != NULL) {
+				for (MxS32 i = 0; i < m_unk0x94; i++) {
+					if (m_unk0x90[i] != NULL) {
+						// (modernization) critical bug: wrong free
+						delete[] m_unk0x90;
+					}
+				}
+
+				delete[] m_unk0x90;
+				m_unk0x90 = NULL;
+			}
+
+			if (m_unk0x8c != NULL) {
+				delete[] m_unk0x8c;
+				m_unk0x8c = NULL;
+			}
+
+			char* token = strtok(output, g_parseExtraTokens);
+			while (token != NULL) {
+				char* valueCopy = new char[strlen(token) + 1];
+				strcpy(valueCopy, token);
+				tmp.push_back(valueCopy);
+				token = strtok(NULL, g_parseExtraTokens);
+			}
+
+			m_unk0x94 = tmp.size();
+			if (m_unk0x94 != 0) {
+				m_unk0x8c = new LegoROI*[m_unk0x94];
+				m_unk0x90 = new char*[m_unk0x94];
+				memset(m_unk0x8c, 0, sizeof(*m_unk0x8c) * m_unk0x94);
+				memset(m_unk0x90, 0, sizeof(*m_unk0x90) * m_unk0x94);
+
+				MxS32 i = 0;
+				for (list<char*>::iterator it = tmp.begin(); it != tmp.end(); it++, i++) {
+					m_unk0x90[i] = *it;
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1006c570
@@ -845,7 +944,7 @@ void LegoAnimPresenter::EndAction()
 		FUN_1006b9a0(m_anim, m_anim->GetDuration(), m_unk0x78);
 	}
 
-	if (m_roiMapSize != 0 && m_roiMap != NULL && m_roiMap[1] != NULL && m_flags & c_bit1) {
+	if (m_roiMapSize != 0 && m_roiMap != NULL && m_roiMap[1] != NULL && m_flags & c_hideOnStop) {
 		for (MxS16 i = 1; i <= m_roiMapSize; i++) {
 			if (m_roiMap[i] != NULL) {
 				m_roiMap[i]->SetVisibility(FALSE);
@@ -876,7 +975,7 @@ void LegoAnimPresenter::VTable0x8c()
 	}
 
 	if (m_currentWorld == NULL) {
-		m_currentWorld = m_unk0x88 != -1 ? FindWorld(m_animAtom, m_unk0x88) : CurrentWorld();
+		m_currentWorld = m_worldId != -1 ? FindWorld(m_worldAtom, m_worldId) : CurrentWorld();
 	}
 
 	if (m_currentWorld) {
