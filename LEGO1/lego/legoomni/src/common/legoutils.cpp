@@ -2,6 +2,7 @@
 
 #include "act1state.h"
 #include "islepathactor.h"
+#include "legoanimpresenter.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legonamedtexture.h"

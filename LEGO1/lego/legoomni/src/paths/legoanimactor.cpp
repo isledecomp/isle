@@ -2,6 +2,7 @@
 
 #include "define.h"
 #include "legolocomotionanimpresenter.h"
+#include "legopathboundary.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxutilities.h"

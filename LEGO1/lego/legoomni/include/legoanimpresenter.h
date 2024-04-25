@@ -16,6 +16,10 @@ struct LegoAnimStructComparator {
 	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
+struct LegoAnimSubstComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+};
+
 // SIZE 0x08
 struct LegoAnimStruct {
 	LegoROI* m_roi; // 0x00
@@ -23,14 +27,15 @@ struct LegoAnimStruct {
 };
 
 typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPresenterMap;
+typedef map<const char*, const char*, LegoAnimSubstComparator> LegoAnimSubstMap;
 
 // VTABLE: LEGO1 0x100d90c8
 // SIZE 0xbc
 class LegoAnimPresenter : public MxVideoPresenter {
 public:
 	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02
+		c_hideOnStop = 0x01,
+		c_mustSucceed = 0x02
 	};
 
 	LegoAnimPresenter();
@@ -100,32 +105,47 @@ protected:
 	void FUN_1006b9a0(LegoAnim* p_anim, MxLong p_time, Matrix4* p_matrix);
 	void FUN_1006c8a0(MxBool p_bool);
 
-	LegoAnim* m_anim;          // 0x64
-	LegoROI** m_roiMap;        // 0x68
-	MxU32 m_roiMapSize;        // 0x6c
-	LegoROIList* m_unk0x70;    // 0x70
-	LegoROIList* m_unk0x74;    // 0x74
-	MxMatrix* m_unk0x78;       // 0x78
-	MxU32 m_flags;             // 0x7c
-	LegoWorld* m_currentWorld; // 0x80
-	MxAtomId m_animAtom;       // 0x84
-	undefined4 m_unk0x88;      // 0x88
-	LegoROI** m_unk0x8c;       // 0x8c
-	const char** m_unk0x90;    // 0x90
-	MxU8 m_unk0x94;            // 0x94
-	undefined m_unk0x95;       // 0x95
-	MxBool m_unk0x96;          // 0x96
-	undefined m_unk0x97;       // 0x97
-	undefined4 m_unk0x98;      // 0x98
-	MxS16 m_unk0x9c;           // 0x9c
-	undefined4 m_unk0xa0;      // 0xa0
-	undefined4 m_unk0xa4;      // 0xa4
-	Mx3DPointFloat m_unk0xa8;  // 0xa8
+	LegoAnim* m_anim;             // 0x64
+	LegoROI** m_roiMap;           // 0x68
+	MxU32 m_roiMapSize;           // 0x6c
+	LegoROIList* m_unk0x70;       // 0x70
+	LegoROIList* m_unk0x74;       // 0x74
+	MxMatrix* m_unk0x78;          // 0x78
+	MxU32 m_flags;                // 0x7c
+	LegoWorld* m_currentWorld;    // 0x80
+	MxAtomId m_worldAtom;         // 0x84
+	MxS32 m_worldId;              // 0x88
+	LegoROI** m_unk0x8c;          // 0x8c
+	char** m_unk0x90;             // 0x90
+	MxU8 m_unk0x94;               // 0x94
+	undefined m_unk0x95;          // 0x95
+	MxBool m_unk0x96;             // 0x96
+	undefined m_unk0x97;          // 0x97
+	LegoAnimSubstMap* m_substMap; // 0x98
+	MxS16 m_unk0x9c;              // 0x9c
+	undefined4 m_unk0xa0;         // 0xa0
+	undefined4 m_unk0xa4;         // 0xa4
+	Mx3DPointFloat m_unk0xa8;     // 0xa8
 };
 
 // clang-format off
 // SYNTHETIC: LEGO1 0x10068650
 // LegoAnimPresenter::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x100689c0
+// map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::~map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >
+
+// TEMPLATE: LEGO1 0x10068a10
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::~_Tree<char const *,pair<char const * const,char const *>,map
+
+// TEMPLATE: LEGO1 0x10068ae0
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x10068b20
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::erase
+
+// TEMPLATE: LEGO1 0x10068f70
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Erase
 
 // TEMPLATE: LEGO1 0x10069d80
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~_Tree<char const *,pair<char const * const,LegoAni
@@ -150,6 +170,21 @@ protected:
 
 // TEMPLATE: LEGO1 0x1006a7a0
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Insert
+
+// XTEMPLATE: LEGO1 0x1006be45
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x1006c200
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Insert
+
+// TEMPLATE: LEGO1 0x1006c4b0
+// list<char *,allocator<char *> >::~list<char *,allocator<char *> >
+
+// TEMPLATE: LEGO1 0x1006c520
+// List<char *>::~List<char *>
+
+// GLOBAL: LEGO1 0x100f7680
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Nil
 
 // GLOBAL: LEGO1 0x100f7688
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Nil
