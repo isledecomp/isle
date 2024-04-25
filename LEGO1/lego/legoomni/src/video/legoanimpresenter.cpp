@@ -588,10 +588,17 @@ done:
 	return result;
 }
 
-// STUB: LEGO1 0x1006ac90
-void LegoAnimPresenter::FUN_1006ac90()
+// FUNCTION: LEGO1 0x1006ac90
+// FUNCTION: BETA10 0x1005022e
+void LegoAnimPresenter::SubstituteVariables()
 {
-	// TODO
+	if (m_substMap != NULL) {
+		MxVariableTable* variableTable = VariableTable();
+
+		for (LegoAnimSubstMap::iterator it = m_substMap->begin(); it != m_substMap->end(); it++) {
+			variableTable->SetVariable((*it).first, (*it).second);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1006ad30
@@ -709,9 +716,10 @@ void LegoAnimPresenter::ReadyTickle()
 }
 
 // FUNCTION: LEGO1 0x1006b5e0
+// FUNCTION: BETA10 0x10050b85
 void LegoAnimPresenter::StartingTickle()
 {
-	FUN_1006ac90();
+	SubstituteVariables();
 	FUN_100692b0();
 	FUN_100695c0();
 
