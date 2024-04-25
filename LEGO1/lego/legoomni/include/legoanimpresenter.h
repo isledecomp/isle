@@ -171,7 +171,7 @@ protected:
 // TEMPLATE: LEGO1 0x1006a7a0
 // _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Insert
 
-// XTEMPLATE: LEGO1 0x1006be45
+// TEMPLATE: LEGO1 0x1006c1b0
 // _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Dec
 
 // TEMPLATE: LEGO1 0x1006c200
