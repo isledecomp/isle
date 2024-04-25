@@ -87,7 +87,18 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 			delete m_unk0x78;
 		}
 
-		// m_unk0x98 TODO
+		if (m_substMap != NULL) {
+			MxVariableTable* variableTable = VariableTable();
+
+			for (LegoAnimSubstMap::iterator it = m_substMap->begin(); it != m_substMap->end(); it++) {
+				variableTable->SetVariable((*it).first, "");
+
+				delete[] const_cast<char*>((*it).first);
+				delete[] const_cast<char*>((*it).second);
+			}
+
+			delete m_substMap;
+		}
 
 		if (m_unk0x90 != NULL) {
 			for (MxS32 i = 0; i < m_unk0x94; i++) {
@@ -111,7 +122,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 	}
 
 	if (!p_fromDestructor) {
-		MxVideoPresenter::Destroy(p_fromDestructor);
+		MxVideoPresenter::Destroy(FALSE);
 	}
 }
 
