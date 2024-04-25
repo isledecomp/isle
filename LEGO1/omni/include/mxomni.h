@@ -5,7 +5,7 @@
 #include "mxcriticalsection.h"
 #include "mxstring.h"
 
-class MxAtomIdCounterSet;
+class MxAtomSet;
 class MxDSAction;
 class MxEntity;
 class MxEventManager;
@@ -69,7 +69,7 @@ public:
 	MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
 	MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
 	MxEventManager* GetEventManager() const { return this->m_eventManager; }
-	MxAtomIdCounterSet* GetAtomIdCounterSet() const { return this->m_atomIdCounterSet; }
+	MxAtomSet* GetAtomSet() const { return this->m_atomSet; }
 	MxLong HandleEndAction(MxParam& p_param);
 
 	// SYNTHETIC: LEGO1 0x100aefd0
@@ -90,7 +90,7 @@ protected:
 	MxEventManager* m_eventManager;               // 0x38
 	MxTimer* m_timer;                             // 0x3c
 	MxStreamer* m_streamer;                       // 0x40
-	MxAtomIdCounterSet* m_atomIdCounterSet;       // 0x44
+	MxAtomSet* m_atomSet;                         // 0x44
 	MxCriticalSection m_criticalSection;          // 0x48
 	MxBool m_timerRunning;                        // 0x64
 };

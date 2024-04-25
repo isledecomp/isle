@@ -3,7 +3,7 @@
 
 #include "mxtypes.h"
 
-class MxAtomIdCounterSet;
+class MxAtomSet;
 class MxDSAction;
 class MxEventManager;
 class MxMusicManager;
@@ -26,7 +26,7 @@ MxEventManager* EventManager();
 MxResult Start(MxDSAction*);
 MxNotificationManager* NotificationManager();
 MxVideoManager* MVideoManager();
-MxAtomIdCounterSet* AtomIdCounterSet();
+MxAtomSet* AtomSet();
 MxObjectFactory* ObjectFactory();
 void DeleteObject(MxDSAction& p_dsAction);
 
