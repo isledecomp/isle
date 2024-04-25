@@ -514,10 +514,20 @@ void LegoAnimPresenter::FUN_1006a4f0(
 	}
 }
 
-// STUB: LEGO1 0x1006aa60
+// FUNCTION: LEGO1 0x1006aa60
+// FUNCTION: BETA10 0x1004feee
 void LegoAnimPresenter::FUN_1006aa60()
 {
-	// TODO
+	LegoROIListCursor cursor(m_unk0x74);
+	LegoROI* roi;
+
+	while (cursor.Next(roi)) {
+		const char* name = roi->GetName();
+
+		if (m_unk0x96 || !CharacterManager()->Exists(name)) {
+			CharacterManager()->FUN_10083c30(name);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1006ab70
