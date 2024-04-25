@@ -30,7 +30,6 @@ public:
 
 	// FUNCTION: BETA10 0x101236d0
 	inline MxString& GetKey() { return m_key; }
-	inline MxU16 GetValue() { return m_value; }
 
 	// SYNTHETIC: BETA10 0x10124a50
 	// MxAtom::`scalar deleting destructor'
