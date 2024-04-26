@@ -259,7 +259,9 @@ private:
 	MxDSAction m_action;                         // 0xa0
 	MxBackgroundAudioManager* m_bkgAudioManager; // 0x134
 	MxTransitionManager* m_transitionManager;    // 0x138
-	MxBool m_unk0x13c;                           // 0x13c
+
+public:
+	MxBool m_unk0x13c; // 0x13c
 };
 
 const char* GetNoCD_SourceName();
