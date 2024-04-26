@@ -25,6 +25,7 @@ RaceStateEntry* RaceState::GetState(MxU8 p_id)
 		if (i >= 5) {
 			return NULL;
 		}
+
 		if (m_state[i].m_id == p_id) {
 			return m_state + i;
 		}
