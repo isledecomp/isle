@@ -666,7 +666,7 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, 0, 1, 1, 0, 0, FALSE, TRUE, 0);
+				AnimationManager()->FUN_10060dc0(script, NULL, 1, 1, 0, 0, FALSE, TRUE, 0);
 			}
 
 			m_act1state->m_unk0x018 = 0;
@@ -694,7 +694,7 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, 0, 1, 1, 0, 0, FALSE, TRUE, 0);
+				AnimationManager()->FUN_10060dc0(script, NULL, 1, 1, 0, 0, FALSE, TRUE, 0);
 			}
 
 			m_act1state->m_unk0x018 = 0;
