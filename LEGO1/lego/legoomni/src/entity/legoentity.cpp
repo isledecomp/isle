@@ -27,7 +27,7 @@ void LegoEntity::Init()
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
 	m_targetEntityId = -1;
-	m_unk0x59 = 4;
+	m_type = e_unk4;
 }
 
 // FUNCTION: LEGO1 0x10010650
@@ -247,16 +247,16 @@ void LegoEntity::VTable0x34(MxBool p_und)
 		MxU32 objectId = 0;
 		const LegoChar* roiName = m_roi->GetName();
 
-		switch (m_unk0x59) {
-		case 0:
+		switch (m_type) {
+		case e_character:
 			objectId = CharacterManager()->FUN_10085140(m_roi, p_und);
 			break;
-		case 1:
+		case e_unk1:
 			break;
-		case 2:
+		case e_plant:
 			objectId = PlantManager()->FUN_10026ba0(this, p_und);
 			break;
-		case 3:
+		case e_building:
 			objectId = BuildingManager()->FUN_1002ff40(this, p_und);
 			break;
 		}
@@ -280,14 +280,16 @@ void LegoEntity::VTable0x38()
 // FUNCTION: LEGO1 0x10011300
 void LegoEntity::VTable0x3c()
 {
-	switch (m_unk0x59) {
-	case 0:
+	switch (m_type) {
+	case e_character:
 		CharacterManager()->SwitchHat(m_roi);
 		break;
-	case 2:
+	case e_unk1:
+		break;
+	case e_plant:
 		PlantManager()->FUN_100269e0(this);
 		break;
-	case 3:
+	case e_building:
 		BuildingManager()->FUN_1002fdb0(this);
 		break;
 	}
@@ -321,9 +323,9 @@ void LegoEntity::VTable0x4c()
 }
 
 // FUNCTION: LEGO1 0x100114e0
-void LegoEntity::FUN_100114e0(MxU8 p_unk0x59)
+void LegoEntity::SetType(MxU8 p_type)
 {
-	m_unk0x59 = p_unk0x59;
+	m_type = p_type;
 }
 
 // FUNCTION: LEGO1 0x100114f0
@@ -359,17 +361,17 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			VTable0x4c();
 			break;
 		case 6:
-			switch (m_unk0x59) {
-			case 0:
-			case 1:
+			switch (m_type) {
+			case e_character:
+			case e_unk1:
 				break;
-			case 2:
+			case e_plant:
 				PlantManager()->FUN_10026c50(this);
 				break;
-			case 3:
+			case e_building:
 				BuildingManager()->FUN_10030000(this);
 				break;
-			case 4:
+			case e_unk4:
 				break;
 			}
 		}

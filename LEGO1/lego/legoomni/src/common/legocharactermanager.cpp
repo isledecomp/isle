@@ -211,7 +211,7 @@ done:
 			LegoExtraActor* actor = new LegoExtraActor();
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
-			actor->FUN_100114e0(0);
+			actor->SetType(LegoEntity::e_character);
 			actor->SetFlag(LegoActor::c_bit2);
 			GetData(p_key)->m_actor = actor;
 		}
@@ -783,7 +783,7 @@ LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_lo
 				LegoEntity* entity = new LegoEntity();
 
 				entity->SetROI(roi, FALSE, FALSE);
-				entity->FUN_100114e0(4);
+				entity->SetType(LegoEntity::e_unk4);
 				entity->SetFlag(LegoActor::c_bit2);
 			}
 		}

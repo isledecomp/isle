@@ -165,7 +165,7 @@ public:
 	inline Area GetUnknown0x42c() { return m_unk0x42c; }
 	inline History* GetHistory() { return &m_history; }
 
-	inline void SetDirty(MxBool p_dirty) { m_isDirty = p_dirty; }
+	inline void SetDirty(MxBool p_isDirty) { m_isDirty = p_isDirty; }
 	inline void SetCurrentArea(Area p_currentArea) { m_currentArea = p_currentArea; }
 	inline void SetPreviousArea(Area p_previousArea) { m_previousArea = p_previousArea; }
 	inline void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
