@@ -26,19 +26,19 @@ public:
 
 	inline void SetUnknown0x08(undefined4 p_unk0x08) { m_unk0x08 = p_unk0x08; }
 
-	inline MxU16 GetColor(MxU8 p_id)
+	inline MxU16 GetScore(MxU8 p_id)
 	{
 		switch (p_id) {
 		case 1:
-			return m_color1;
+			return m_score1;
 		case 2:
-			return m_color2;
+			return m_score2;
 		case 3:
-			return m_color3;
+			return m_score3;
 		case 4:
-			return m_color4;
+			return m_score4;
 		case 5:
-			return m_color5;
+			return m_score5;
 		default:
 			return 0;
 		}
@@ -55,11 +55,11 @@ protected:
 	MxU16 m_unk0x14;      // 0x14
 	MxU16 m_unk0x16;      // 0x16
 	MxU16 m_unk0x18;      // 0x18
-	MxU16 m_color1;       // 0x1a
-	MxU16 m_color2;       // 0x1c
-	MxU16 m_color3;       // 0x1e
-	MxU16 m_color4;       // 0x20
-	MxU16 m_color5;       // 0x22
+	MxU16 m_score1;       // 0x1a
+	MxU16 m_score2;       // 0x1c
+	MxU16 m_score3;       // 0x1e
+	MxU16 m_score4;       // 0x20
+	MxU16 m_score5;       // 0x22
 };
 
 #endif // AMBULANCEMISSIONSTATE_H

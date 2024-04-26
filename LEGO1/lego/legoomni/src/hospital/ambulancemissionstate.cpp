@@ -12,11 +12,11 @@ AmbulanceMissionState::AmbulanceMissionState()
 	m_unk0x16 = 0;
 	m_unk0x0c = 0;
 	m_unk0x18 = 0;
-	m_color1 = 0;
-	m_color2 = 0;
-	m_color3 = 0;
-	m_color4 = 0;
-	m_color5 = 0;
+	m_score1 = 0;
+	m_score2 = 0;
+	m_score3 = 0;
+	m_score4 = 0;
+	m_score5 = 0;
 }
 
 // STUB: LEGO1 0x10037440

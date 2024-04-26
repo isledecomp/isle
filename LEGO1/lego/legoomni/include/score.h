@@ -41,7 +41,7 @@ public:
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
 	MxLong FUN_100016d0(LegoControlManagerEvent& p_param);
-	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
+	void FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score);
 
 protected:
 	void DeleteScript();

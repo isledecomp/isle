@@ -262,23 +262,23 @@ void Score::Paint()
 
 			m_surface = (MxU8*) desc.lpSurface;
 
-			for (MxU8 id = 1; id <= 5; id++) {
-				MxU16 color;
+			for (MxU8 actor = 1; actor <= 5; actor++) {
+				MxU16 score;
 
-				color = carRaceState ? carRaceState->GetState(id)->GetColor() : 0;
-				FillArea(0, id - 1, color);
+				score = carRaceState ? carRaceState->GetState(actor)->GetScore() : 0;
+				FillArea(0, actor - 1, score);
 
-				color = jetskiRaceState ? jetskiRaceState->GetState(id)->GetColor() : 0;
-				FillArea(1, id - 1, color);
+				score = jetskiRaceState ? jetskiRaceState->GetState(actor)->GetScore() : 0;
+				FillArea(1, actor - 1, score);
 
-				color = pizzaMissionState ? pizzaMissionState->GetColor(id) : 0;
-				FillArea(2, id - 1, color);
+				score = pizzaMissionState ? pizzaMissionState->GetScore(actor) : 0;
+				FillArea(2, actor - 1, score);
 
-				color = towTrackMissionState ? towTrackMissionState->GetColor(id) : 0;
-				FillArea(3, id - 1, color);
+				score = towTrackMissionState ? towTrackMissionState->GetScore(actor) : 0;
+				FillArea(3, actor - 1, score);
 
-				color = ambulanceMissionState ? ambulanceMissionState->GetColor(id) : 0;
-				FillArea(4, id - 1, color);
+				score = ambulanceMissionState ? ambulanceMissionState->GetScore(actor) : 0;
+				FillArea(4, actor - 1, score);
 			}
 
 			cube->m_surface->Unlock(desc.lpSurface);
@@ -289,39 +289,21 @@ void Score::Paint()
 }
 
 // FUNCTION: LEGO1 0x10001d20
-void Score::FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color)
+// FUNCTION: BETA10 0x100f4a52
+void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
 {
-	MxU32 data[24];
-	data[9] = 0x2b00;
-	data[10] = 0x5700;
-	data[11] = 0x8000;
-	data[19] = 0x2a;
-	data[12] = 0xab00;
-	data[13] = 0xd600;
-	data[20] = 0x27;
-	data[21] = 0x29;
-	data[22] = 0x29;
-	data[23] = 0x2a;
-	data[4] = 0x2f;
-	data[5] = 0x56;
-	data[6] = 0x81;
-	data[15] = 0x29;
-	data[16] = 0x27;
-	data[7] = 0xaa;
-	data[8] = 0xd4;
-	data[14] = 0x25;
-	data[0] = 0x11;
-	data[17] = 0x28;
-	data[18] = 0x28;
-	data[1] = 0x0f;
-	MxU32 size = data[p_x + 14];
-	MxU8* ptr = data[p_x + 4] + data[p_y + 9] + m_surface;
-	MxS32 count = data[p_y + 19];
-	data[2] = 0x08;
-	data[3] = 0x05;
-	MxU32 value = data[p_color];
-	for (; count > 0; count--) {
-		memset(ptr++, value, size);
+	MxS32 local_3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
+	MxS32 local_14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
+	MxS32 local_50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
+	MxS32 local_28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
+	MxS32 local_60[] = {0x11, 0xf, 0x08, 0x05};
+
+	MxU8* ptr = m_surface + local_3c[i_actor] + local_50[i_activity];
+	MxS32 val = local_60[score];
+	MxS32 size = local_28[i_activity];
+
+	for (MxS32 i = 0; i < local_14[i_actor]; i++) {
+		memset(ptr, val, size);
 		ptr += 0x100;
 	}
 }

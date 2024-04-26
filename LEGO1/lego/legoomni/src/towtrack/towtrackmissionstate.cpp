@@ -13,11 +13,11 @@ TowTrackMissionState::TowTrackMissionState()
 	m_unk0x0c = 0;
 	m_unk0x1a = 0;
 	m_unk0x10 = 0;
-	m_color1 = 0;
-	m_color2 = 0;
-	m_color3 = 0;
-	m_color4 = 0;
-	m_color5 = 0;
+	m_score1 = 0;
+	m_score2 = 0;
+	m_score3 = 0;
+	m_score4 = 0;
+	m_score5 = 0;
 }
 
 // FUNCTION: LEGO1 0x1004dde0
@@ -31,11 +31,11 @@ MxResult TowTrackMissionState::Serialize(LegoFile* p_legoFile)
 		p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
 		p_legoFile->Read(&m_unk0x18, sizeof(m_unk0x18));
 		p_legoFile->Read(&m_unk0x1a, sizeof(m_unk0x1a));
-		p_legoFile->Read(&m_color1, sizeof(m_color1));
-		p_legoFile->Read(&m_color2, sizeof(m_color2));
-		p_legoFile->Read(&m_color3, sizeof(m_color3));
-		p_legoFile->Read(&m_color4, sizeof(m_color4));
-		p_legoFile->Read(&m_color5, sizeof(m_color5));
+		p_legoFile->Read(&m_score1, sizeof(m_score1));
+		p_legoFile->Read(&m_score2, sizeof(m_score2));
+		p_legoFile->Read(&m_score3, sizeof(m_score3));
+		p_legoFile->Read(&m_score4, sizeof(m_score4));
+		p_legoFile->Read(&m_score5, sizeof(m_score5));
 	}
 	else if (p_legoFile->IsWriteMode()) {
 		MxU16 write = m_unk0x12;
@@ -53,19 +53,19 @@ MxResult TowTrackMissionState::Serialize(LegoFile* p_legoFile)
 		write = m_unk0x1a;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 
-		write = m_color1;
+		write = m_score1;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 
-		write = m_color2;
+		write = m_score2;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 
-		write = m_color3;
+		write = m_score3;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 
-		write = m_color4;
+		write = m_score4;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 
-		write = m_color5;
+		write = m_score5;
 		p_legoFile->Write(&write, sizeof(m_unk0x12));
 	}
 
