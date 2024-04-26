@@ -292,17 +292,17 @@ void Score::Paint()
 // FUNCTION: BETA10 0x100f4a52
 void Score::FillArea(MxU32 i_activity, MxU32 i_actor, MxS16 score)
 {
-	MxS32 local_3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
-	MxS32 local_14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
-	MxS32 local_50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
-	MxS32 local_28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
-	MxS32 local_60[] = {0x11, 0xf, 0x08, 0x05};
+	MxS32 local3c[] = {0x2b00, 0x5700, 0x8000, 0xab00, 0xd600};
+	MxS32 local14[] = {0x2a, 0x27, 0x29, 0x29, 0x2a};
+	MxS32 local50[] = {0x2f, 0x56, 0x81, 0xaa, 0xd4};
+	MxS32 local28[] = {0x25, 0x29, 0x27, 0x28, 0x28};
+	MxS32 local60[] = {0x11, 0xf, 0x08, 0x05};
 
-	MxU8* ptr = m_surface + local_3c[i_actor] + local_50[i_activity];
-	MxS32 val = local_60[score];
-	MxS32 size = local_28[i_activity];
+	MxU8* ptr = m_surface + local3c[i_actor] + local50[i_activity];
+	MxS32 val = local60[score];
+	MxS32 size = local28[i_activity];
 
-	for (MxS32 i = 0; i < local_14[i_actor]; i++) {
+	for (MxS32 i = 0; i < local14[i_actor]; i++) {
 		memset(ptr, val, size);
 		ptr += 0x100;
 	}
