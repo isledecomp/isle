@@ -45,10 +45,9 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x1007bc00
 	inline T* Get(const char* p_name)
 	{
-		// TODO: Score::Paint matches better with no `value` on the stack,
-		// while LegoModelPresenter::CreateROI only matches with `value`
 		T* value = NULL;
 
 #ifdef COMPAT_MODE

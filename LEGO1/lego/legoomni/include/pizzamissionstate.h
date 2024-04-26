@@ -6,11 +6,11 @@
 // SIZE 0x20
 struct PizzaMissionStateEntry {
 public:
-	undefined2 m_unk0x00;
-	MxU8 m_id;
-	undefined m_unk0x03[0x15];
-	MxU16 m_color;
-	undefined m_unk0x18[6];
+	undefined2 m_unk0x00;      // 0x00
+	MxU8 m_id;                 // 0x02
+	undefined m_unk0x03[0x15]; // 0x03
+	MxU16 m_color;             // 0x18
+	undefined m_unk0x18[6];    // 0x1a
 };
 
 // VTABLE: LEGO1 0x100d7408

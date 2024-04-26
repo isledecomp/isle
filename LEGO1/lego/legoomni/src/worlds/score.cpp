@@ -1,7 +1,9 @@
 #include "score.h"
 
 #include "ambulancemissionstate.h"
+#include "carracestate.h"
 #include "infoscor_actions.h"
+#include "jetskiracestate.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
@@ -234,58 +236,53 @@ void Score::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x100019d0
+// FUNCTION: BETA10 0x100f47d8
 void Score::Paint()
 {
-	LegoTextureInfo* gd = TextureContainer()->Get("bigcube.gif");
+	LegoTextureInfo* cube = TextureContainer()->Get("bigcube.gif");
 
-	if (gd) {
-		RaceState* l78 = (RaceState*) GameState()->GetState("JetskiRaceState");
-		RaceState* l70 = (RaceState*) GameState()->GetState("CarRaceState");
-		TowTrackMissionState* lesi = (TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
-		PizzaMissionState* l74 = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
-		AmbulanceMissionState* lebp = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
+	if (cube != NULL) {
+		JetskiRaceState* jetskiRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+		CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+		TowTrackMissionState* towTrackMissionState =
+			(TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
+		PizzaMissionState* pizzaMissionState = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
+		AmbulanceMissionState* ambulanceMissionState =
+			(AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 
 		DDSURFACEDESC desc;
 		memset(&desc, 0, sizeof(desc));
 		desc.dwSize = sizeof(desc);
-		if (gd->m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
+
+		if (cube->m_surface->Lock(NULL, &desc, 0, NULL) == DD_OK) {
 			if (desc.lPitch != desc.dwWidth) {
-				gd->m_surface->Unlock(desc.lpSurface);
+				cube->m_surface->Unlock(desc.lpSurface);
 				return;
 			}
 
+			m_surface = (MxU8*) desc.lpSurface;
+
 			for (MxU8 id = 1; id <= 5; id++) {
-				m_surface = (MxU8*) desc.lpSurface;
-				MxU16 color = 0;
-				if (l70) {
-					color = l70->GetColor(id);
-				}
-				MxU32 row = id - 1;
-				FillArea(0, row, color);
-				color = 0;
-				if (l78) {
-					color = l78->GetColor(id);
-				}
-				FillArea(1, row, color);
-				color = 0;
-				if (l74) {
-					color = l74->GetColor(id);
-				}
-				FillArea(2, row, color);
-				color = 0;
-				if (lesi) {
-					color = lesi->GetColor(id);
-				}
-				FillArea(3, row, color);
-				color = 0;
-				if (lebp) {
-					color = lebp->GetColor(id);
-				}
-				FillArea(4, row, color);
+				MxU16 color;
+
+				color = carRaceState ? carRaceState->GetState(id)->GetColor() : 0;
+				FillArea(0, id - 1, color);
+
+				color = jetskiRaceState ? jetskiRaceState->GetState(id)->GetColor() : 0;
+				FillArea(1, id - 1, color);
+
+				color = pizzaMissionState ? pizzaMissionState->GetColor(id) : 0;
+				FillArea(2, id - 1, color);
+
+				color = towTrackMissionState ? towTrackMissionState->GetColor(id) : 0;
+				FillArea(3, id - 1, color);
+
+				color = ambulanceMissionState ? ambulanceMissionState->GetColor(id) : 0;
+				FillArea(4, id - 1, color);
 			}
 
-			gd->m_surface->Unlock(desc.lpSurface);
-			gd->m_texture->Changed(TRUE, FALSE);
+			cube->m_surface->Unlock(desc.lpSurface);
+			cube->m_texture->Changed(TRUE, FALSE);
 			m_surface = NULL;
 		}
 	}

@@ -13,7 +13,7 @@
 class Score : public LegoWorld {
 public:
 	Score();
-	~Score() override;                        // vtable+0x00
+	~Score() override;
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x100010c0
@@ -32,11 +32,11 @@ public:
 	// SYNTHETIC: LEGO1 0x100011e0
 	// Score::`scalar deleting destructor'
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+18
-	void ReadyWorld() override;                       // vtable+50
-	MxBool VTable0x5c() override;                     // vtable+5c
-	MxBool VTable0x64() override;                     // vtable+64
-	void Enable(MxBool p_enable) override;            // vtable+68
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+	void ReadyWorld() override;                       // vtable+0x50
+	MxBool VTable0x5c() override;                     // vtable+0x5c
+	MxBool VTable0x64() override;                     // vtable+0x64
+	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	void Paint();
 	MxLong FUN_10001510(MxEndActionNotificationParam& p_param);
@@ -44,12 +44,11 @@ public:
 	void FillArea(MxU32 p_x, MxU32 p_y, MxS16 p_color);
 
 protected:
-	LegoGameState::Area m_destLocation;
-	ScoreState* m_state;
-	MxU8* m_surface;
-
-private:
 	void DeleteScript();
+
+	LegoGameState::Area m_destLocation; // 0xf8
+	ScoreState* m_state;                // 0xfc
+	MxU8* m_surface;                    // 0x100
 };
 
 #endif // SCORE_H

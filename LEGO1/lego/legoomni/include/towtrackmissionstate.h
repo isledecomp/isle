@@ -54,12 +54,11 @@ protected:
 	MxU16 m_unk0x16;      // 0x16
 	MxU16 m_unk0x18;      // 0x18
 	MxU16 m_unk0x1a;      // 0x1a
-	MxU16 m_unk0x1c;      // 0x1c
-	MxU16 m_color1;       // 0x1e
-	MxU16 m_color2;       // 0x20
-	MxU16 m_color3;       // 0x22
-	MxU16 m_color4;       // 0x24
-	MxU16 m_color5;       // 0x26
+	MxU16 m_color1;       // 0x1c
+	MxU16 m_color2;       // 0x1e
+	MxU16 m_color3;       // 0x20
+	MxU16 m_color4;       // 0x22
+	MxU16 m_color5;       // 0x24
 };
 
 #endif // TOWTRACKMISSIONSTATE_H
