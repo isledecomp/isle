@@ -12,6 +12,14 @@
 // SIZE 0x68
 class LegoEntity : public MxEntity {
 public:
+	enum Type {
+		e_character = 0,
+		e_unk1,
+		e_plant,
+		e_building,
+		e_unk4
+	};
+
 	enum {
 		c_bit1 = 0x01,
 		c_bit2 = 0x02
@@ -64,7 +72,7 @@ public:
 	virtual void VTable0x4c();               // vtable+0x4c
 
 	void FUN_10010c30();
-	void FUN_100114e0(MxU8 p_unk0x59);
+	void SetType(MxU8 p_type);
 	void SetLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up, MxBool p_und);
 	Mx3DPointFloat GetWorldDirection();
 	Mx3DPointFloat GetWorldUp();
@@ -75,7 +83,7 @@ public:
 	inline MxU8 GetFlags() { return m_flags; }
 	inline MxFloat GetWorldSpeed() { return m_worldSpeed; }
 	inline LegoROI* GetROI() { return m_roi; }
-	inline MxU8 GetUnknown0x59() { return m_unk0x59; }
+	inline MxU8 GetType() { return m_type; }
 	inline MxBool GetCameraFlag() { return m_cameraFlag; }
 
 	inline void SetFlags(MxU8 p_flags) { m_flags = p_flags; }
@@ -96,7 +104,7 @@ protected:
 	MxFloat m_worldSpeed;            // 0x50
 	LegoROI* m_roi;                  // 0x54
 	MxBool m_cameraFlag;             // 0x58
-	MxU8 m_unk0x59;                  // 0x59
+	MxU8 m_type;                     // 0x59
 	// For tokens from the extra string that look like this:
 	// "Action:openram;\lego\scripts\Race\CarRaceR;0"
 	Extra::ActionType m_actionType; // 0x5c

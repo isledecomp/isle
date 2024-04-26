@@ -502,7 +502,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	MxResult result = FAILURE;
 	LegoROI* roi = p_entity->GetROI();
 
-	if (p_entity->GetUnknown0x59() == 0) {
+	if (p_entity->GetType() == LegoEntity::e_character) {
 		LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 		if (actor) {

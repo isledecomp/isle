@@ -256,7 +256,7 @@ void LegoModelPresenter::ReadyTickle()
 				->SetFlags(
 					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() & ~LegoEntity::c_bit2
 				);
-			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->FUN_100114e0(0);
+			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_character);
 		}
 
 		ParseExtra();
