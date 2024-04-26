@@ -329,7 +329,7 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info)
 	}
 
 	p_info->m_animName[length] = 0;
-	if (p_file->Read(&p_info->m_unk0x04, sizeof(p_info->m_unk0x04)) == FAILURE) {
+	if (p_file->Read(&p_info->m_objectId, sizeof(p_info->m_objectId)) == FAILURE) {
 		goto done;
 	}
 
@@ -444,6 +444,24 @@ void LegoAnimationManager::FUN_10060570(MxBool)
 	// TODO
 }
 
+// STUB: LEGO1 0x100605e0
+// FUNCTION: BETA10 0x1004152b
+MxResult LegoAnimationManager::FUN_100605e0(
+	MxU32 p_index,
+	MxU8 p_unk0x0a,
+	MxMatrix* p_matrix,
+	undefined,
+	undefined4,
+	undefined,
+	MxBool,
+	MxBool,
+	undefined
+)
+{
+	// TODO
+	return FAILURE;
+}
+
 // FUNCTION: LEGO1 0x100609f0
 // FUNCTION: BETA10 0x10041a38
 MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2)
@@ -535,21 +553,54 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	return result;
 }
 
-// STUB: LEGO1 0x10060dc0
-undefined4 LegoAnimationManager::FUN_10060dc0(
-	IsleScript::Script,
-	undefined4,
-	undefined,
-	undefined,
-	undefined4,
-	undefined,
-	undefined,
-	undefined,
-	undefined
+// FUNCTION: LEGO1 0x10060dc0
+// FUNCTION: BETA10 0x10041f2c
+MxResult LegoAnimationManager::FUN_10060dc0(
+	IsleScript::Script p_objectId,
+	MxMatrix* p_matrix,
+	undefined p_param3,
+	undefined p_param4,
+	undefined4 p_param5,
+	undefined p_param6,
+	MxBool p_param7,
+	MxBool p_param8,
+	undefined p_param9
 )
 {
-	// TODO
-	return 0;
+	MxResult result = FAILURE;
+	MxBool found = FALSE;
+
+	if (!Lego()->m_unk0x13c) {
+		return SUCCESS;
+	}
+
+	for (MxS32 i = 0; i < m_animCount; i++) {
+		if (m_anims[i].m_objectId == p_objectId) {
+			found = TRUE;
+			undefined unk0x0a;
+
+			switch (p_param4) {
+			case 0:
+				unk0x0a = m_anims[i].m_unk0x0a;
+				break;
+			case 1:
+				unk0x0a = 1;
+				break;
+			default:
+				unk0x0a = 0;
+				break;
+			}
+
+			result = FUN_100605e0(i, unk0x0a, p_matrix, p_param3, p_param5, p_param6, p_param7, p_param8, p_param9);
+			break;
+		}
+	}
+
+	if (!found && p_param3 != 0) {
+		result = FUN_100609f0(p_objectId, p_matrix, p_param7, p_param8);
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10061010

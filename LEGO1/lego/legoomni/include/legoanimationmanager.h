@@ -75,18 +75,17 @@ public:
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
 	void DeleteAnimations();
 	void FUN_10060570(MxBool);
-	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
-	undefined4 FUN_10060dc0(
-		IsleScript::Script,
-		undefined4,
-		undefined,
-		undefined,
-		undefined4,
-		undefined,
-		undefined,
-		undefined,
-		undefined
+	MxResult FUN_10060dc0(
+		IsleScript::Script p_objectId,
+		MxMatrix* p_matrix,
+		undefined p_param3,
+		undefined p_param4,
+		undefined4 p_param5,
+		undefined p_param6,
+		MxBool p_param7,
+		MxBool p_param8,
+		undefined p_param9
 	);
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU32&);
@@ -107,6 +106,18 @@ public:
 
 private:
 	void Init();
+	MxResult FUN_100605e0(
+		MxU32 p_index,
+		MxU8 p_unk0x0a,
+		MxMatrix* p_matrix,
+		undefined,
+		undefined4,
+		undefined,
+		MxBool,
+		MxBool,
+		undefined
+	);
+	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 
 	MxU32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
