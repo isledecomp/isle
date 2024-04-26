@@ -18,11 +18,13 @@ public:
 	MxU16 Open(const char*, MxULong);
 	MxU16 Close(MxLong);
 	MxLong Read(void*, MxLong);
+	MxLong Write(void*, MxLong);
 	MxLong Seek(MxLong, MxLong);
 	MxU16 SetBuffer(char*, MxLong, MxLong);
 	MxU16 Flush(MxU16);
 	MxU16 Advance(MxU16);
 	MxU16 Descend(MMCKINFO*, const MMCKINFO*, MxU16);
+	MxU16 Ascend(MMCKINFO*, MxU16);
 
 	// NOTE: In MXIOINFO, the `hmmio` member of MMIOINFO is used like
 	// an HFILE (int) instead of an HMMIO (WORD).
