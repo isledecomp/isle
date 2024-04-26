@@ -605,6 +605,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			break;
 		case VK_ESCAPE: {
 			LegoWorld* currentWorld = CurrentWorld();
+
 			if (currentWorld) {
 				InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (infocenterState && infocenterState->GetUnknown0x74() != 8 && currentWorld->VTable0x64()) {

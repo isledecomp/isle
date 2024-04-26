@@ -39,6 +39,7 @@ Score::~Score()
 	if (InputManager()->GetWorld() == this) {
 		InputManager()->ClearWorld();
 	}
+
 	InputManager()->UnRegister(this);
 	ControlManager()->Unregister(this);
 	NotificationManager()->Unregister(this);
@@ -54,9 +55,9 @@ MxResult Score::Create(MxDSAction& p_dsAction)
 		ControlManager()->Register(this);
 		InputManager()->Register(this);
 		SetIsWorldActive(FALSE);
-		LegoGameState* gs = GameState();
-		ScoreState* state = (ScoreState*) gs->GetState("ScoreState");
-		m_state = state ? state : (ScoreState*) gs->CreateState("ScoreState");
+		LegoGameState* gameState = GameState();
+		ScoreState* state = (ScoreState*) gameState->GetState("ScoreState");
+		m_state = state ? state : (ScoreState*) gameState->CreateState("ScoreState");
 		GameState()->SetCurrentArea(LegoGameState::e_infoscor);
 		GameState()->StopArea(LegoGameState::e_previousArea);
 	}
@@ -69,7 +70,7 @@ void Score::DeleteScript()
 {
 	if (m_state->GetTutorialFlag()) {
 		MxDSAction action;
-		action.SetObjectId(0x1f5);
+		action.SetObjectId(InfoscorScript::c_iicc31in_PlayWav);
 		action.SetAtomId(*g_infoscorScript);
 		action.SetUnknown24(-2);
 		DeleteObject(action);
@@ -82,18 +83,19 @@ MxLong Score::Notify(MxParam& p_param)
 {
 	MxLong ret = 0;
 	LegoWorld::Notify(p_param);
+
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationStartAction:
-			ret = 1;
 			Paint();
+			ret = 1;
 			break;
 		case c_notificationEndAction:
 			ret = FUN_10001510((MxEndActionNotificationParam&) p_param);
 			break;
 		case c_notificationKeyPress:
-			if (((LegoEventNotificationParam&) p_param).GetKey() == 0x20) {
-				DeleteScript(); // Shutting down
+			if (((LegoEventNotificationParam&) p_param).GetKey() == VK_SPACE) {
+				DeleteScript();
 			}
 			ret = 1;
 			break;
@@ -101,16 +103,15 @@ MxLong Score::Notify(MxParam& p_param)
 			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
-			DeleteObjects(g_infoscorScript, 7, 9);
+			DeleteObjects(g_infoscorScript, InfoscorScript::c_LegoBox1_Flc, InfoscorScript::c_LegoBox3_Flc);
 			if (m_destLocation) {
 				GameState()->SwitchArea(m_destLocation);
 			}
 			ret = 1;
 			break;
-		default:
-			break;
 		}
 	}
+
 	return ret;
 }
 
@@ -120,15 +121,15 @@ MxLong Score::FUN_10001510(MxEndActionNotificationParam& p_param)
 	MxDSAction* action = p_param.GetAction();
 
 	if (m_atom == action->GetAtomId()) {
-		MxU32 id = action->GetObjectId();
 		switch (action->GetObjectId()) {
-		case 10:
+		case InfoscorScript::c_GoTo_HistBook:
 			m_destLocation = LegoGameState::e_histbook;
-			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
-		case 0x1f5:
+		case InfoscorScript::c_iicc31in_PlayWav:
 			PlayMusic(JukeboxScript::c_InformationCenter_Music);
 			m_state->SetTutorialFlag(FALSE);
+			break;
 		}
 	}
 
@@ -141,14 +142,14 @@ void Score::ReadyWorld()
 	LegoWorld::ReadyWorld();
 
 	MxDSAction action;
-	action.SetObjectId(0x1f4);
+	action.SetObjectId(InfoscorScript::c_nin001pr_RunAnim);
 	action.SetAtomId(m_atom);
 	action.SetUnknown84(this);
 	Start(&action);
 
 	if (m_state->GetTutorialFlag()) {
-		MxDSAction action2;
-		action.SetObjectId(0x1f5);
+		MxDSAction action;
+		action.SetObjectId(InfoscorScript::c_iicc31in_PlayWav);
 		action.SetAtomId(*g_infoscorScript);
 		Start(&action);
 	}
@@ -162,51 +163,49 @@ void Score::ReadyWorld()
 // FUNCTION: LEGO1 0x100016d0
 MxLong Score::FUN_100016d0(LegoControlManagerEvent& p_param)
 {
-	MxS16 l = p_param.GetUnknown0x28();
+	MxS16 unk0x28 = p_param.GetUnknown0x28();
 
-	if (l == 1 || p_param.GetClickedObjectId() == 4) {
+	if (unk0x28 == 1 || p_param.GetClickedObjectId() == InfoscorScript::c_LegoBox_Ctl) {
 		switch (p_param.GetClickedObjectId()) {
 		case InfoscorScript::c_LeftArrow_Ctl:
 			m_destLocation = LegoGameState::e_infomain;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case InfoscorScript::c_RightArrow_Ctl:
 			m_destLocation = LegoGameState::e_infodoor;
 			DeleteScript();
-			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 0x32, 0, 0);
+			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 			break;
 		case InfoscorScript::c_Book_Ctl: {
-			LegoInputManager* im = InputManager();
-			im->SetUnknown88(TRUE);
-			im->SetUnknown336(FALSE);
+			InputManager()->DisableInputProcessing();
 			DeleteScript();
 
 			MxDSAction action;
-			action.SetObjectId(10);
+			action.SetObjectId(InfoscorScript::c_GoTo_HistBook);
 			action.SetAtomId(*g_infoscorScript);
 			Start(&action);
 			break;
 		}
 		case InfoscorScript::c_LegoBox_Ctl: {
-			switch (l) {
+			switch (unk0x28) {
 			case 1: {
 				MxDSAction action;
-				action.SetObjectId(7);
+				action.SetObjectId(InfoscorScript::c_LegoBox1_Flc);
 				action.SetAtomId(*g_infoscorScript);
 				Start(&action);
 				break;
 			}
 			case 2: {
 				MxDSAction action;
-				action.SetObjectId(8);
+				action.SetObjectId(InfoscorScript::c_LegoBox2_Flc);
 				action.SetAtomId(*g_infoscorScript);
 				Start(&action);
 				break;
 			}
 			case 3: {
 				MxDSAction action;
-				action.SetObjectId(9);
+				action.SetObjectId(InfoscorScript::c_LegoBox3_Flc);
 				action.SetAtomId(*g_infoscorScript);
 				Start(&action);
 				break;
