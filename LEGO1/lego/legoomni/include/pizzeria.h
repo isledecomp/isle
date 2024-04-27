@@ -4,11 +4,14 @@
 #include "decomp.h"
 #include "isleactor.h"
 
+class PizzeriaState;
+class PizzaMissionState;
+
 // VTABLE: LEGO1 0x100d5520
 // SIZE 0x84
 class Pizzeria : public IsleActor {
 public:
-	Pizzeria() : m_unk0x7c(0) {}
+	Pizzeria() : m_pizzeriaState(NULL) {}
 
 	// FUNCTION: LEGO1 0x1000e780
 	inline const char* ClassName() const override // vtable+0x0c
@@ -30,8 +33,10 @@ public:
 	// Pizzeria::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x7c; // 0x7c
-	undefined4 m_unk0x80; // 0x80
+	void Init();
+
+	PizzeriaState* m_pizzeriaState;         // 0x7c
+	PizzaMissionState* m_pizzaMissionState; // 0x80
 };
 
 #endif // PIZZERIA_H
