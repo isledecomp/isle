@@ -779,16 +779,33 @@ void LegoAnimationManager::FUN_10063270(LegoROIList*, LegoAnimPresenter*)
 	// TODO
 }
 
-// STUB: LEGO1 0x10063780
-void LegoAnimationManager::FUN_10063780(LegoROIList*)
+// FUNCTION: LEGO1 0x10063780
+void LegoAnimationManager::FUN_10063780(LegoROIList* p_list)
 {
-	// TODO
+	if (p_list != NULL && m_unk0x424 != NULL) {
+		LegoROIListCursor cursor(p_list);
+		LegoROI* roi;
+
+		while (cursor.Next(roi)) {
+			const char* name = roi->GetName();
+
+			if (CharacterManager()->Exists(name)) {
+				m_unk0x424->Append(roi);
+				cursor.Detach();
+			}
+		}
+	}
 }
 
-// STUB: LEGO1 0x10063aa0
+// FUNCTION: LEGO1 0x10063aa0
 void LegoAnimationManager::FUN_10063aa0()
 {
-	// TODO
+	LegoROIListCursor cursor(m_unk0x424);
+	LegoROI* roi;
+
+	while (cursor.Next(roi)) {
+		CharacterManager()->FUN_10083db0(roi);
+	}
 }
 
 // STUB: LEGO1 0x10064670
