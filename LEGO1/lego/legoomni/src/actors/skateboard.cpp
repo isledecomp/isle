@@ -36,6 +36,8 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 void SkateBoard::VTable0xe4()
 {
 	// TODO
+	// Add a stub so the call in VTable0xd4 is not optimized away
+	ControlManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x100100e0
@@ -45,11 +47,17 @@ MxU32 SkateBoard::VTable0xcc()
 	return 0;
 }
 
-// STUB: LEGO1 0x10010230
+// FUNCTION: LEGO1 0x10010230
 MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 {
-	// TODO
-	return 0;
+	MxU32 result = 0;
+	if (p_param.m_unk0x28 == 1 && p_param.m_clickedObjectId == 0xc3) {
+		VTable0xe4();
+		// current area (?) Ghidra says "currentActionId"
+		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
+		result = 1;
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x100104f0
