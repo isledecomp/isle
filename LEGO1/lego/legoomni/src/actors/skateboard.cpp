@@ -25,11 +25,21 @@ SkateBoard::~SkateBoard()
 	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x10010000
+// FUNCTION: LEGO1 0x10010000
 MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = IslePathActor::Create(p_dsAction);
+	if (result == SUCCESS) {
+		this->m_world = CurrentWorld();
+		this->m_world->Add(this);
+		MxCore* findResult = CurrentWorld()->Find(*g_isleScript, 0x49d);
+		if (findResult) {
+			// TODO: There is most likely a typecast here, but I don't know to what.
+			// The only applicable candidate at the moment is MxDSAction
+			((MxU32*)findResult)[0x21] = (MxU32)this;
+		}
+	}
+	return result;
 }
 
 // STUB: LEGO1 0x10010050
