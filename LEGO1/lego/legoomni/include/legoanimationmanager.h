@@ -66,7 +66,7 @@ public:
 		return !strcmp(p_name, ClassName()) || MxCore::IsA(p_name);
 	}
 
-	void FUN_1005ee80(MxBool);
+	void Init(MxBool p_und);
 	void FUN_1005ef10();
 	void FUN_1005f0b0();
 	void FUN_1005f6d0(MxBool);

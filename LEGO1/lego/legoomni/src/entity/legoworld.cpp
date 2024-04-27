@@ -646,7 +646,7 @@ void LegoWorld::Enable(MxBool p_enable)
 			FUN_1001fc80(actor);
 		}
 
-		AnimationManager()->FUN_1005ee80(FALSE);
+		AnimationManager()->Init(FALSE);
 		m_set0xd0.insert(this);
 
 		if (m_scriptIndex != -1) {

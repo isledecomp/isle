@@ -148,10 +148,34 @@ LegoAnimationManager::~LegoAnimationManager()
 	NotificationManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x1005ee80
-void LegoAnimationManager::FUN_1005ee80(MxBool)
+// FUNCTION: LEGO1 0x1005ee80
+// FUNCTION: BETA10 0x1003fbc0
+void LegoAnimationManager::Init(MxBool p_und)
 {
-	// TODO
+	m_unk0x402 = 0;
+
+	if (p_und && m_animState != NULL) {
+		m_animState->SetFlag();
+	}
+
+	undefined unk0x42b = m_unk0x42b;
+	FUN_1005ef10();
+
+	if (m_tranInfoList != NULL) {
+		delete m_tranInfoList;
+	}
+
+	if (m_tranInfoList2 != NULL) {
+		delete m_tranInfoList2;
+	}
+
+	DeleteAnimations();
+	Init();
+
+	m_unk0x42b = unk0x42b;
+	m_unk0x428 = m_unk0x3a;
+	m_unk0x429 = m_unk0x400;
+	m_unk0x42a = m_unk0x402;
 }
 
 // STUB: LEGO1 0x1005ef10

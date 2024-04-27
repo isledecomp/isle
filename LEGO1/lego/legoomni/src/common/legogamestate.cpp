@@ -1072,7 +1072,7 @@ void LegoGameState::Init()
 	PlantManager()->Init();
 	BuildingManager()->Init();
 	CharacterManager()->Init();
-	AnimationManager()->FUN_1005ee80(TRUE);
+	AnimationManager()->Init(TRUE);
 	SetColors();
 	RemoveActor();
 	DeleteState();
