@@ -73,7 +73,6 @@ public:
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
-	void DeleteAnimations();
 	void FUN_10060570(MxBool);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	MxResult FUN_10060dc0(
@@ -118,6 +117,8 @@ private:
 		undefined
 	);
 	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
+	void DeleteAnimations();
+	void FUN_10063aa0();
 
 	MxU32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
@@ -141,14 +142,17 @@ private:
 	MxLong m_unk0x404;                 // 0x404
 	undefined m_unk0x408[0x18];        // 0x408
 	AnimState* m_animState;            // 0x420
-	undefined4 m_unk0x424;             // 0x424
+	LegoROIList* m_unk0x424;           // 0x424
 	undefined m_unk0x428;              // 0x428
 	undefined m_unk0x429;              // 0x429
 	undefined m_unk0x42a;              // 0x42a
 	undefined m_unk0x42b;              // 0x42b
 	undefined4 m_unk0x42c;             // 0x42c
 	undefined m_unk0x430;              // 0x430
-	undefined m_unk0x431[0xcf];        // 0x431
+	undefined4 m_unk0x434[2];          // 0x434
+	MxMatrix m_unk0x43c;               // 0x43c
+	MxMatrix m_unk0x484;               // 0x484
+	UnknownMx4DPointFloat m_unk0x4cc;  // 0x4cc
 };
 
 #endif // LEGOANIMATIONMANAGER_H

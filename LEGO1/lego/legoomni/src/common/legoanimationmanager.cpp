@@ -1,12 +1,15 @@
 #include "legoanimationmanager.h"
 
 #include "define.h"
+#include "islepathactor.h"
 #include "legocharactermanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"
+#include "legoroilist.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
 #include "roi/legoroi.h"
@@ -90,16 +93,59 @@ void LegoAnimationManager::configureLegoAnimationManager(MxS32 p_legoAnimationMa
 	g_legoAnimationManagerConfig = p_legoAnimationManagerConfig;
 }
 
-// STUB: LEGO1 0x1005eb60
+// FUNCTION: LEGO1 0x1005eb60
+// FUNCTION: BETA10 0x1003f940
 LegoAnimationManager::LegoAnimationManager()
 {
-	// TODO
+	m_unk0x1c = 0;
+	m_animState = NULL;
+	m_unk0x424 = NULL;
+
+	Init();
+
+	NotificationManager()->Register(this);
+	TickleManager()->RegisterClient(this, 10);
 }
 
-// STUB: LEGO1 0x1005ed30
+// FUNCTION: LEGO1 0x1005ed30
+// FUNCTION: BETA10 0x1003fa27
 LegoAnimationManager::~LegoAnimationManager()
 {
-	// TODO
+	TickleManager()->UnregisterClient(this);
+
+	FUN_10061010(0);
+
+	for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
+		LegoROI* roi = m_unk0x3c[i].m_roi;
+
+		if (roi != NULL) {
+			LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+
+			if (actor != NULL && actor->GetController() != NULL && CurrentWorld() != NULL) {
+				CurrentWorld()->FUN_1001fc80((IslePathActor*) actor);
+				actor->ClearController();
+			}
+
+			CharacterManager()->FUN_10083db0(roi);
+		}
+	}
+
+	if (m_tranInfoList != NULL) {
+		delete m_tranInfoList;
+	}
+
+	if (m_tranInfoList2 != NULL) {
+		delete m_tranInfoList2;
+	}
+
+	DeleteAnimations();
+
+	if (m_unk0x424 != NULL) {
+		FUN_10063aa0();
+		delete m_unk0x424;
+	}
+
+	NotificationManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x1005ee80
@@ -121,6 +167,7 @@ void LegoAnimationManager::FUN_1005f0b0()
 }
 
 // STUB: LEGO1 0x1005f130
+// FUNCTION: BETA10 0x1003ffb7
 void LegoAnimationManager::Init()
 {
 	// TODO
@@ -680,6 +727,12 @@ void LegoAnimationManager::FUN_10063270(LegoROIList*, LegoAnimPresenter*)
 
 // STUB: LEGO1 0x10063780
 void LegoAnimationManager::FUN_10063780(LegoROIList*)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10063aa0
+void LegoAnimationManager::FUN_10063aa0()
 {
 	// TODO
 }
