@@ -91,7 +91,6 @@ public:
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU16&);
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
-	MxS8 FUN_10062360(char*);
 	void FUN_10062770();
 	void FUN_100627d0(MxBool);
 	void FUN_100629b0(MxU32, MxBool);
@@ -120,6 +119,7 @@ private:
 	);
 	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	void DeleteAnimations();
+	MxS8 GetCharacterIndex(const char* p_name);
 	void FUN_10063aa0();
 
 	MxU32 m_scriptIndex;               // 0x08

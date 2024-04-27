@@ -339,7 +339,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 				goto done;
 			}
 
-			m_anims[j].m_unk0x28 = FUN_10062360(m_anims[j].m_animName + strlen(m_anims[j].m_animName) - 2);
+			m_anims[j].m_unk0x28 = GetCharacterIndex(m_anims[j].m_animName + strlen(m_anims[j].m_animName) - 2);
 			m_anims[j].m_unk0x29 = 0;
 
 			for (k = 0; k < 3; k++) {
@@ -348,7 +348,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 			if (m_anims[j].m_unk0x08 == -1) {
 				for (MxS32 l = 0; l < m_anims[j].m_modelCount; l++) {
-					MxS32 index = FUN_10062360(m_anims[j].m_models[l].m_modelName);
+					MxS32 index = GetCharacterIndex(m_anims[j].m_models[l].m_modelName);
 
 					if (index >= 0) {
 						g_characters[index].m_active = TRUE;
@@ -748,11 +748,19 @@ MxResult LegoAnimationManager::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10062360
-MxS8 LegoAnimationManager::FUN_10062360(char*)
+// FUNCTION: LEGO1 0x10062360
+// FUNCTION: BETA10 0x100432dd
+MxS8 LegoAnimationManager::GetCharacterIndex(const char* p_name)
 {
-	// TODO
-	return 0;
+	MxS8 i;
+
+	for (i = 0; i < _countof(g_characters); i++) {
+		if (!strnicmp(p_name, g_characters[i].m_name, 2)) {
+			return i;
+		}
+	}
+
+	return -1;
 }
 
 // FUNCTION: LEGO1 0x10062770
