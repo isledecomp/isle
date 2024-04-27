@@ -1,6 +1,7 @@
 #include "skateboard.h"
 
 #include "decomp.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 
@@ -15,6 +16,13 @@ SkateBoard::SkateBoard()
 	this->m_unk0x148 = 1;
 
 	NotificationManager()->Register(this);
+}
+
+// FUNCTION: LEGO1 0x1000ff80
+SkateBoard::~SkateBoard()
+{
+	ControlManager()->Unregister(this);
+	NotificationManager()->Unregister(this);
 }
 
 // STUB: LEGO1 0x10010000

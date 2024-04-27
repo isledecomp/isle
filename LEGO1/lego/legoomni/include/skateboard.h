@@ -9,6 +9,7 @@
 class SkateBoard : public IslePathActor {
 public:
 	SkateBoard();
+	~SkateBoard() override;
 
 	// FUNCTION: LEGO1 0x1000fdd0
 	inline const char* ClassName() const override // vtable+0x0c
