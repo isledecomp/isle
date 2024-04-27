@@ -150,7 +150,7 @@ LegoAnimationManager::~LegoAnimationManager()
 
 // FUNCTION: LEGO1 0x1005ee80
 // FUNCTION: BETA10 0x1003fbc0
-void LegoAnimationManager::Init(MxBool p_und)
+void LegoAnimationManager::Reset(MxBool p_und)
 {
 	m_unk0x402 = 0;
 

@@ -1303,7 +1303,7 @@ void Infocenter::Reset()
 
 	PlantManager()->FUN_10027120();
 	BuildingManager()->FUN_10030590();
-	AnimationManager()->Init(FALSE);
+	AnimationManager()->Reset(FALSE);
 	CharacterManager()->FUN_100832a0();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->SetPreviousArea(LegoGameState::e_undefined);
