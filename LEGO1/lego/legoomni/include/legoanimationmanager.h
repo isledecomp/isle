@@ -134,7 +134,7 @@ private:
 	LegoTranInfoList* m_tranInfoList2; // 0x24
 	MxPresenter* m_unk0x28[2];         // 0x28
 	MxLong m_unk0x30[2];               // 0x30
-	undefined m_unk0x38;               // 0x38
+	MxBool m_unk0x38;                  // 0x38
 	MxBool m_unk0x39;                  // 0x39
 	undefined m_unk0x3a;               // 0x3a
 	Unknown0x3c m_unk0x3c[40];         // 0x3c

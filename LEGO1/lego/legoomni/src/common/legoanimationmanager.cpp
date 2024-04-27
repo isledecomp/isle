@@ -193,7 +193,7 @@ void LegoAnimationManager::Init()
 		m_unk0x3c[i].m_unk0x14 = 0;
 	}
 
-	m_unk0x38 = 0;
+	m_unk0x38 = FALSE;
 	m_unk0x39 = FALSE;
 	m_unk0x3a = 1;
 	m_unk0x3fc = 0;
@@ -261,7 +261,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_unk0x30[i] = 0;
 		}
 
-		m_unk0x38 = 0;
+		m_unk0x38 = FALSE;
 		m_unk0x39 = FALSE;
 		m_unk0x430 = 0;
 		m_unk0x42c = 0;
@@ -755,10 +755,21 @@ MxS8 LegoAnimationManager::FUN_10062360(char*)
 	return 0;
 }
 
-// STUB: LEGO1 0x10062770
+// FUNCTION: LEGO1 0x10062770
+// FUNCTION: BETA10 0x1004381a
 void LegoAnimationManager::FUN_10062770()
 {
-	// TODO
+	if (!m_unk0x38) {
+		LegoWorld* world = CurrentWorld();
+
+		if (world != NULL) {
+			m_unk0x28[1] = (MxPresenter*) world->Find("MxSoundPresenter", "TransitionSound1");
+			m_unk0x28[0] = (MxPresenter*) world->Find("MxSoundPresenter", "TransitionSound2");
+			m_unk0x30[1] = 200;
+			m_unk0x30[0] = 750;
+			m_unk0x38 = TRUE;
+		}
+	}
 }
 
 // STUB: LEGO1 0x100627d0
