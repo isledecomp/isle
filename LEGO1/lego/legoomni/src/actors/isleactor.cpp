@@ -11,17 +11,17 @@ DECOMP_SIZE_ASSERT(IsleActor, 0x7c)
 // FUNCTION: LEGO1 0x1002c780
 MxResult IsleActor::Create(MxDSAction& p_dsAction)
 {
-	MxResult ret = LegoEntity::Create(p_dsAction);
+	MxResult result = LegoEntity::Create(p_dsAction);
 
-	if (ret == SUCCESS) {
+	if (result == SUCCESS) {
 		m_world = CurrentWorld();
 
 		if (!m_world) {
-			ret = FAILURE;
+			result = FAILURE;
 		}
 	}
 
-	return ret;
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1002c7b0
