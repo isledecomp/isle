@@ -30,6 +30,17 @@ MxResult Pizza::Create(MxDSAction& p_dsAction)
 	return SUCCESS;
 }
 
+
+// STUB: LEGO1 0x100382b0
+void Pizza::FUN_100382b0() {
+
+}
+
+// STUB: LEGO1 0x10038380
+void Pizza::FUN_10038380() {
+
+}
+
 // STUB: LEGO1 0x100383f0
 undefined4 Pizza::VTable0x68()
 {

@@ -1,9 +1,11 @@
 #include "skateboard.h"
 
 #include "decomp.h"
+#include "legoutils.h"
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "pizza.h"
 
 DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 
@@ -32,21 +34,32 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		this->m_world = CurrentWorld();
 		this->m_world->Add(this);
-		MxCore* findResult = CurrentWorld()->Find(*g_isleScript, 0x49d);
+		// The type `Pizza` is an educated guesss, inferred from VTable0xe4() below
+		Pizza* findResult = (Pizza*)CurrentWorld()->Find(*g_isleScript, 0x49d);
 		if (findResult) {
-			// TODO: There is most likely a typecast here, but I don't know to what.
-			// The only applicable candidate at the moment is MxDSAction
-			((MxU32*)findResult)[0x21] = (MxU32)this;
+			findResult->m_unk0x84 = (undefined*) this;
 		}
 	}
 	return result;
 }
 
-// STUB: LEGO1 0x10010050
+// FUNCTION: LEGO1 0x10010050
 void SkateBoard::VTable0xe4()
 {
-	// TODO
-	// Add a stub so the call in VTable0xd4 is not optimized away
+	// TODO: Work out what kind of structure this points to
+	if (*(int*) (this->m_unk0x164 + 0x18) == 3) {
+		Pizza* pizza = (Pizza*) CurrentWorld()->Find(
+			*g_isleScript,
+			0x49d
+		);
+		pizza->FUN_10038380();
+		pizza->FUN_100382b0();
+		this->m_unk0x160 = 0;
+	}
+	IslePathActor::VTable0xe4();
+	GameState()->m_currentArea = LegoGameState::Area::e_skateboard;
+	RemoveFromCurrentWorld(*g_isleScript, 0xc3);
+	RemoveFromCurrentWorld(*g_isleScript, 0xc2);
 	ControlManager()->Unregister(this);
 }
 
@@ -63,7 +76,6 @@ MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 	MxU32 result = 0;
 	if (p_param.m_unk0x28 == 1 && p_param.m_clickedObjectId == 0xc3) {
 		VTable0xe4();
-		// current area (?) Ghidra says "currentActionId"
 		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
 		result = 1;
 	}

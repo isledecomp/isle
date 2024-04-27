@@ -38,7 +38,10 @@ public:
 private:
 	// TODO: SkateBoard types
 	undefined m_unk0x160;
-	undefined m_unk0x161[0x7];
+	undefined m_unk0x161;
+	undefined m_unk0x162;
+	undefined m_unk0x163;
+	undefined* m_unk0x164;
 };
 
 #endif // SKATEBOARD_H
