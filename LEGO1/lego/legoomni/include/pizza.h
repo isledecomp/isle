@@ -40,8 +40,10 @@ public:
 private:
 	undefined4 m_unk0x7c; // 0x7c
 	undefined4 m_unk0x80; // 0x80
+
 public:
 	undefined* m_unk0x84; // 0x84
+
 private:
 	undefined4 m_unk0x88; // 0x88
 	undefined4 m_unk0x8c; // 0x8c

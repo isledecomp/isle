@@ -35,7 +35,7 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 		this->m_world = CurrentWorld();
 		this->m_world->Add(this);
 		// The type `Pizza` is an educated guesss, inferred from VTable0xe4() below
-		Pizza* findResult = (Pizza*)CurrentWorld()->Find(*g_isleScript, 0x49d);
+		Pizza* findResult = (Pizza*) CurrentWorld()->Find(*g_isleScript, 0x49d);
 		if (findResult) {
 			findResult->m_unk0x84 = (undefined*) this;
 		}
@@ -48,10 +48,7 @@ void SkateBoard::VTable0xe4()
 {
 	// TODO: Work out what kind of structure this points to
 	if (*(int*) (this->m_unk0x164 + 0x18) == 3) {
-		Pizza* pizza = (Pizza*) CurrentWorld()->Find(
-			*g_isleScript,
-			0x49d
-		);
+		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, 0x49d);
 		pizza->FUN_10038380();
 		pizza->FUN_100382b0();
 		this->m_unk0x160 = 0;
