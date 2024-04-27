@@ -38,7 +38,9 @@ struct Vehicle {
 struct Unknown0x3c {
 	LegoROI* m_roi;            // 0x00
 	MxU32 m_id;                // 0x04
-	undefined m_unk0x08[0x10]; // 0x08
+	undefined m_unk0x08[0x08]; // 0x08
+	float m_unk0x10;           // 0x10
+	undefined m_unk0x14;       // 0x14
 };
 
 // VTABLE: LEGO1 0x100d8c18
@@ -87,7 +89,7 @@ public:
 		undefined p_param9
 	);
 	void FUN_10061010(undefined4);
-	void FUN_100617c0(MxS32, MxU16&, MxU32&);
+	void FUN_100617c0(MxS32, MxU16&, MxU16&);
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
 	MxS8 FUN_10062360(char*);
 	void FUN_10062770();
@@ -123,9 +125,10 @@ private:
 	MxU32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
 	MxU16 m_unk0x0e;                   // 0x0e
-	MxU32 m_unk0x10;                   // 0x10
+	MxU16 m_unk0x10;                   // 0x10
 	AnimInfo* m_anims;                 // 0x14
-	undefined m_unk0x18[4];            // 0x18
+	undefined2 m_unk0x18;              // 0x18
+	undefined m_unk0x1a;               // 0x1a
 	MxU32 m_unk0x1c;                   // 0x1c
 	LegoTranInfoList* m_tranInfoList;  // 0x20
 	LegoTranInfoList* m_tranInfoList2; // 0x24
@@ -140,7 +143,12 @@ private:
 	undefined m_unk0x401;              // 0x401
 	MxU8 m_unk0x402;                   // 0x402
 	MxLong m_unk0x404;                 // 0x404
-	undefined m_unk0x408[0x18];        // 0x408
+	MxLong m_unk0x408;                 // 0x408
+	MxLong m_unk0x40c;                 // 0x40c
+	undefined4 m_unk0x410;             // 0x410
+	undefined4 m_unk0x414;             // 0x414
+	undefined4 m_unk0x418;             // 0x418
+	undefined4 m_unk0x41c;             // 0x41c
 	AnimState* m_animState;            // 0x420
 	LegoROIList* m_unk0x424;           // 0x424
 	undefined m_unk0x428;              // 0x428
