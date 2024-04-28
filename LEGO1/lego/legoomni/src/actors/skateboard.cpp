@@ -2,6 +2,8 @@
 
 #include "decomp.h"
 #include "isle_actions.h"
+#include "jukebox_actions.h"
+#include "legoanimationmanager.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxmisc.h"
@@ -91,8 +93,38 @@ MxU32 SkateBoard::VTable0xd0()
 	return 0;
 }
 
-// STUB: LEGO1 0x10010510
+// FUNCTION: LEGO1 0x10010510
 void SkateBoard::FUN_10010510()
 {
-	// TODO
+  char *pcVar1;
+  IslePathActor *pMVar2;
+//   int iVar2;
+//   const float *pMVar3;
+//   Matrix4 *pMVar4;
+//   MxMatrix *pMVar5;
+//   char cVar6;
+//   char cVar7;
+//   int *piVar8;
+//   undefined uVar9;
+//   undefined uVar10;
+//   undefined uVar11;
+//   char cVar12;
+//   MxMatrix local_48;
+//   Matrix4 local_40;
+
+  if (*(int *)(this->m_unk0x164 + 0x18) != 3) {
+    PlayMusic(JukeboxScript::c_BeachBlvd_Music);
+    pcVar1 = (char *)(this->m_unk0x164 + 0x22);
+    if (*pcVar1 == '\0') {
+      *pcVar1 = '\x01';
+      pMVar2 = CurrentActor();
+      Matrix4 x = MxMatrix(pMVar2->GetROI()->GetLocal2World());
+	  float** local_48 = (float**)x.GetData();
+      local_48[3][0] = local_48[2][0] * 2.5 + local_48[3][0];
+      local_48[3][1] = local_48[3][1] + local_48[2][1] + 0.2;
+      local_48[3][2] = local_48[3][2] + local_48[2][2] * 2.5;
+      AnimationManager()->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, (MxMatrix*)&local_48,'\x01','\0',NULL,0,1,1,'\x01');
+    }
+  }
+  return;
 }
