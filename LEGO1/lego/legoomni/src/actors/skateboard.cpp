@@ -97,21 +97,18 @@ MxU32 SkateBoard::VTable0xd0()
 void SkateBoard::FUN_10010510()
 {
   char *pcVar1;
-  IslePathActor *pMVar2;
 
-  if (*(int *)(this->m_unk0x164 + 0x18) != 3) {
+  if (*(int *)(m_unk0x164 + 0x18) != 3) {
     PlayMusic(JukeboxScript::c_BeachBlvd_Music);
-    pcVar1 = (char *)(this->m_unk0x164 + 0x22);
+    pcVar1 = (char *)(m_unk0x164 + 0x22);
     if (*pcVar1 == '\0') {
       *pcVar1 = '\x01';
-      pMVar2 = CurrentActor();
-      MxMatrix x = MxMatrix(pMVar2->GetROI()->GetLocal2World());
-	  float** local_48 = (float**)x.GetData();
-	  float xs = local_48[2][0] * 2.5;
-	  float y = local_48[2][1] + 0.2;
-	  float z = local_48[2][2] * 2.5;
+      MxMatrix x = MxMatrix(CurrentActor()->GetROI()->GetLocal2World());
+	  float xs = x[2][0] * 2.5;
+	  float y = x[2][1] + 0.2;
+	  float z = x[2][2] * 2.5;
 	  x.TranslateBy(&xs, &y, &z);
-      AnimationManager()->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, (MxMatrix*)&local_48,'\x01','\0',NULL,0,1,1,'\x01');
+      AnimationManager()->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &x,'\x01','\0',NULL,0,TRUE,TRUE,'\x01');
     }
   }
   return;
