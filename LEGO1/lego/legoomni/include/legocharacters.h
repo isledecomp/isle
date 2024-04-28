@@ -8,7 +8,7 @@ class LegoExtraActor;
 class LegoROI;
 
 // SIZE 0x108
-struct LegoCharacterData {
+struct LegoCharacterInfo {
 	// SIZE 0x18
 	struct Part {
 		MxU8* m_unk0x00;        // 0x00
@@ -72,7 +72,7 @@ enum LegoCharacterParts {
 	c_legrtPart
 };
 
-extern LegoCharacterData g_characterDataInit[66];
+extern LegoCharacterInfo g_characterInfoInit[66];
 extern LegoCharacterLOD g_characterLODs[11];
 
 #endif // LEGOCHARACTERS_H

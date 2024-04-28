@@ -40,7 +40,7 @@ struct LegoCharacter {
 	MxU32 m_refCount; // 0x04
 };
 
-struct LegoCharacterData;
+struct LegoCharacterInfo;
 
 typedef map<char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
@@ -64,8 +64,8 @@ public:
 	void FUN_10083f10(LegoROI* p_roi);
 	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
 	LegoExtraActor* GetActor(const char* p_key);
-	LegoCharacterData* GetData(const char* p_key);
-	LegoCharacterData* GetData(LegoROI* p_roi);
+	LegoCharacterInfo* GetInfo(const char* p_key);
+	LegoCharacterInfo* GetInfo(LegoROI* p_roi);
 	MxBool SwitchHat(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
