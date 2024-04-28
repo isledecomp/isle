@@ -107,10 +107,10 @@ void SkateBoard::FUN_10010510()
       pMVar2 = CurrentActor();
       MxMatrix x = MxMatrix(pMVar2->GetROI()->GetLocal2World());
 	  float** local_48 = (float**)x.GetData();
-	  float xs = local_48[2][0] * 2.5 + local_48[3][0];
-	  float y = local_48[3][1] + local_48[2][1] + 0.2;
-	  float z = local_48[3][2] + local_48[2][2] * 2.5;
-	  x.SetTranslation(&xs, &y, &z);
+	  float xs = local_48[2][0] * 2.5;
+	  float y = local_48[2][1] + 0.2;
+	  float z = local_48[2][2] * 2.5;
+	  x.TranslateBy(&xs, &y, &z);
       AnimationManager()->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, (MxMatrix*)&local_48,'\x01','\0',NULL,0,1,1,'\x01');
     }
   }
