@@ -35,16 +35,6 @@ def from_hex(string: str) -> Optional[int]:
     return None
 
 
-def bytes_to_float(b: bytes) -> Optional[float]:
-    if len(b) == 4:
-        return struct.unpack("<f", b)[0]
-
-    if len(b) == 8:
-        return struct.unpack("<d", b)[0]
-
-    return None
-
-
 def bytes_to_dword(b: bytes) -> Optional[int]:
     if len(b) == 4:
         return struct.unpack("<L", b)[0]
@@ -73,18 +63,6 @@ class ParseAsm:
             return self.relocate_lookup(addr)
 
         return False
-
-    def float_replace(self, addr: int, data_size: int) -> Optional[str]:
-        if callable(self.bin_lookup):
-            float_bytes = self.bin_lookup(addr, data_size)
-            if float_bytes is None:
-                return None
-
-            float_value = bytes_to_float(float_bytes)
-            if float_value is not None:
-                return f"{float_value} (FLOAT)"
-
-        return None
 
     def lookup(
         self, addr: int, use_cache: bool = True, exact: bool = False
@@ -165,25 +143,6 @@ class ParseAsm:
 
         return match.group(0).replace(match.group(1), self.replace(value))
 
-    def hex_replace_float(self, match: re.Match) -> str:
-        """Special case for replacements on float instructions.
-        If the pointer is a float constant, read it from the binary."""
-        value = int(match.group(1), 16)
-
-        # If we can find a variable name for this pointer, use it.
-        placeholder = self.lookup(value)
-
-        # Read what's under the pointer and show the decimal value.
-        if placeholder is None:
-            float_size = 8 if "qword" in match.string else 4
-            placeholder = self.float_replace(value, float_size)
-
-        # If we can't read the float, use a regular placeholder.
-        if placeholder is None:
-            placeholder = self.replace(value)
-
-        return match.group(0).replace(match.group(1), placeholder)
-
     def sanitize(self, inst: DisasmLiteInst) -> Tuple[str, str]:
         # For jumps or calls, if the entire op_str is a hex number, the value
         # is a relative offset.
@@ -224,9 +183,6 @@ class ParseAsm:
         if inst.mnemonic == "call":
             # Special handling for absolute indirect CALL.
             op_str = ptr_replace_regex.sub(self.hex_replace_indirect, inst.op_str)
-        elif inst.mnemonic.startswith("f"):
-            # If floating point instruction
-            op_str = ptr_replace_regex.sub(self.hex_replace_float, inst.op_str)
         else:
             op_str = ptr_replace_regex.sub(self.hex_replace_always, inst.op_str)
 
