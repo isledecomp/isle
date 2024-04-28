@@ -1,7 +1,7 @@
 #include "legocharacters.h"
 
-DECOMP_SIZE_ASSERT(LegoCharacterData, 0x108)
-DECOMP_SIZE_ASSERT(LegoCharacterData::Part, 0x18)
+DECOMP_SIZE_ASSERT(LegoCharacterInfo, 0x108)
+DECOMP_SIZE_ASSERT(LegoCharacterInfo::Part, 0x18)
 DECOMP_SIZE_ASSERT(LegoCharacterLOD, 0x58)
 
 // Unclear whether g_characterLODs[0] (top) is its own global, see: LegoCharacterManager::CreateROI
@@ -172,7 +172,7 @@ const char* g_unk0x100f80a0[] =
 	{"lego white", "lego black", "lego yellow", "lego red", "lego blue", "lego brown", "lego lt grey", "lego green"};
 
 // GLOBAL: LEGO1 0x100f80c0
-LegoCharacterData g_characterDataInit[] = {
+LegoCharacterInfo g_characterInfoInit[] = {
 	{"pepper",
 	 NULL,
 	 NULL,
