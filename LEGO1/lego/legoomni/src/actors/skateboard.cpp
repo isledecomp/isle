@@ -98,19 +98,6 @@ void SkateBoard::FUN_10010510()
 {
   char *pcVar1;
   IslePathActor *pMVar2;
-//   int iVar2;
-//   const float *pMVar3;
-//   Matrix4 *pMVar4;
-//   MxMatrix *pMVar5;
-//   char cVar6;
-//   char cVar7;
-//   int *piVar8;
-//   undefined uVar9;
-//   undefined uVar10;
-//   undefined uVar11;
-//   char cVar12;
-//   MxMatrix local_48;
-//   Matrix4 local_40;
 
   if (*(int *)(this->m_unk0x164 + 0x18) != 3) {
     PlayMusic(JukeboxScript::c_BeachBlvd_Music);
@@ -118,11 +105,12 @@ void SkateBoard::FUN_10010510()
     if (*pcVar1 == '\0') {
       *pcVar1 = '\x01';
       pMVar2 = CurrentActor();
-      Matrix4 x = MxMatrix(pMVar2->GetROI()->GetLocal2World());
+      MxMatrix x = MxMatrix(pMVar2->GetROI()->GetLocal2World());
 	  float** local_48 = (float**)x.GetData();
-      local_48[3][0] = local_48[2][0] * 2.5 + local_48[3][0];
-      local_48[3][1] = local_48[3][1] + local_48[2][1] + 0.2;
-      local_48[3][2] = local_48[3][2] + local_48[2][2] * 2.5;
+	  float xs = local_48[2][0] * 2.5 + local_48[3][0];
+	  float y = local_48[3][1] + local_48[2][1] + 0.2;
+	  float z = local_48[3][2] + local_48[2][2] * 2.5;
+	  x.SetTranslation(&xs, &y, &z);
       AnimationManager()->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, (MxMatrix*)&local_48,'\x01','\0',NULL,0,1,1,'\x01');
     }
   }
