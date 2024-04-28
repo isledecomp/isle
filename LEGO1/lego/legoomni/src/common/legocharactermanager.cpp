@@ -94,25 +94,34 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[1].m_unk0x08, sizeof(data->m_parts[1].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_infohatPart].m_unk0x08, sizeof(data->m_parts[c_infohatPart].m_unk0x08)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[1].m_unk0x14, sizeof(data->m_parts[1].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_infohatPart].m_unk0x14, sizeof(data->m_parts[c_infohatPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[2].m_unk0x14, sizeof(data->m_parts[2].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(
+				&data->m_parts[c_infogronPart].m_unk0x14,
+				sizeof(data->m_parts[c_infogronPart].m_unk0x14)
+			) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[4].m_unk0x14, sizeof(data->m_parts[4].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_armlftPart].m_unk0x14, sizeof(data->m_parts[c_armlftPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[5].m_unk0x14, sizeof(data->m_parts[5].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_armrtPart].m_unk0x14, sizeof(data->m_parts[c_armrtPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[8].m_unk0x14, sizeof(data->m_parts[8].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_leglftPart].m_unk0x14, sizeof(data->m_parts[c_leglftPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&data->m_parts[9].m_unk0x14, sizeof(data->m_parts[9].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&data->m_parts[c_legrtPart].m_unk0x14, sizeof(data->m_parts[c_legrtPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
 	}
@@ -140,25 +149,34 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&data->m_unk0x14, sizeof(data->m_unk0x14)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[1].m_unk0x08, sizeof(data->m_parts[1].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_infohatPart].m_unk0x08, sizeof(data->m_parts[c_infohatPart].m_unk0x08)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[1].m_unk0x14, sizeof(data->m_parts[1].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_infohatPart].m_unk0x14, sizeof(data->m_parts[c_infohatPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[2].m_unk0x14, sizeof(data->m_parts[2].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(
+				&data->m_parts[c_infogronPart].m_unk0x14,
+				sizeof(data->m_parts[c_infogronPart].m_unk0x14)
+			) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[4].m_unk0x14, sizeof(data->m_parts[4].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_armlftPart].m_unk0x14, sizeof(data->m_parts[c_armlftPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[5].m_unk0x14, sizeof(data->m_parts[5].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_armrtPart].m_unk0x14, sizeof(data->m_parts[c_armrtPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[8].m_unk0x14, sizeof(data->m_parts[8].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_leglftPart].m_unk0x14, sizeof(data->m_parts[c_leglftPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&data->m_parts[9].m_unk0x14, sizeof(data->m_parts[9].m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&data->m_parts[c_legrtPart].m_unk0x14, sizeof(data->m_parts[c_legrtPart].m_unk0x14)) !=
+			SUCCESS) {
 			goto done;
 		}
 	}
@@ -402,18 +420,18 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	roi = new LegoROI(renderer);
 	roi->SetName(p_key);
 
-	boundingSphere.Center()[0] = g_characterLODs[0].m_boundingSphere[0];
-	boundingSphere.Center()[1] = g_characterLODs[0].m_boundingSphere[1];
-	boundingSphere.Center()[2] = g_characterLODs[0].m_boundingSphere[2];
-	boundingSphere.Radius() = g_characterLODs[0].m_boundingSphere[3];
+	boundingSphere.Center()[0] = g_characterLODs[c_topLOD].m_boundingSphere[0];
+	boundingSphere.Center()[1] = g_characterLODs[c_topLOD].m_boundingSphere[1];
+	boundingSphere.Center()[2] = g_characterLODs[c_topLOD].m_boundingSphere[2];
+	boundingSphere.Radius() = g_characterLODs[c_topLOD].m_boundingSphere[3];
 	roi->SetBoundingSphere(boundingSphere);
 
-	boundingBox.Min()[0] = g_characterLODs[0].m_boundingBox[0];
-	boundingBox.Min()[1] = g_characterLODs[0].m_boundingBox[1];
-	boundingBox.Min()[2] = g_characterLODs[0].m_boundingBox[2];
-	boundingBox.Max()[0] = g_characterLODs[0].m_boundingBox[3];
-	boundingBox.Max()[1] = g_characterLODs[0].m_boundingBox[4];
-	boundingBox.Max()[2] = g_characterLODs[0].m_boundingBox[5];
+	boundingBox.Min()[0] = g_characterLODs[c_topLOD].m_boundingBox[0];
+	boundingBox.Min()[1] = g_characterLODs[c_topLOD].m_boundingBox[1];
+	boundingBox.Min()[2] = g_characterLODs[c_topLOD].m_boundingBox[2];
+	boundingBox.Max()[0] = g_characterLODs[c_topLOD].m_boundingBox[3];
+	boundingBox.Max()[1] = g_characterLODs[c_topLOD].m_boundingBox[4];
+	boundingBox.Max()[2] = g_characterLODs[c_topLOD].m_boundingBox[5];
 	roi->SetUnknown0x80(boundingBox);
 
 	comp = new CompoundObject();
@@ -495,9 +513,9 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	}
 
 	CalcLocalTransform(
-		Mx3DPointFloat(g_characterLODs[0].m_position),
-		Mx3DPointFloat(g_characterLODs[0].m_direction),
-		Mx3DPointFloat(g_characterLODs[0].m_up),
+		Mx3DPointFloat(g_characterLODs[c_topLOD].m_position),
+		Mx3DPointFloat(g_characterLODs[c_topLOD].m_direction),
+		Mx3DPointFloat(g_characterLODs[c_topLOD].m_up),
 		mat
 	);
 	roi->WrappedSetLocalTransform(mat);
@@ -519,12 +537,12 @@ done:
 MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
 {
 	LegoResult result = SUCCESS;
-	LegoROI* head = FindChildROI(p_roi, g_characterLODs[4].m_name);
+	LegoROI* head = FindChildROI(p_roi, g_characterLODs[c_headLOD].m_name);
 
 	if (head != NULL) {
 		char lodName[256];
 
-		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_characterLODs[4].m_parentName);
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_characterLODs[c_headLOD].m_parentName);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_unk0x100fc4e8++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
@@ -533,7 +551,7 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 
 		if (p_textureInfo == NULL) {
 			LegoCharacterData* info = GetData(p_roi->GetName());
-			LegoCharacterData::Part& part = info->m_parts[3];
+			LegoCharacterData::Part& part = info->m_parts[c_headPart];
 			p_textureInfo = TextureContainer()->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
 		}
 
@@ -652,7 +670,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 		return FALSE;
 	}
 
-	LegoCharacterData::Part& part = data->m_parts[1];
+	LegoCharacterData::Part& part = data->m_parts[c_infohatPart];
 
 	part.m_unk0x08++;
 	MxU8 unk0x00 = part.m_unk0x00[part.m_unk0x08];
@@ -662,7 +680,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 		unk0x00 = part.m_unk0x00[part.m_unk0x08];
 	}
 
-	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[2].m_name);
+	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[c_infohatLOD].m_name);
 
 	if (childROI != NULL) {
 		char lodName[256];
