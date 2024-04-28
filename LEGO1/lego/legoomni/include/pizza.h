@@ -31,13 +31,18 @@ public:
 	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
 	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
 
+	void FUN_100382b0();
+	void FUN_10038380();
+
+	inline void SetUnknown0x84(undefined* p_unk0x84) { m_unk0x84 = p_unk0x84; }
+
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'
 
 private:
 	undefined4 m_unk0x7c; // 0x7c
 	undefined4 m_unk0x80; // 0x80
-	undefined4 m_unk0x84; // 0x84
+	undefined* m_unk0x84; // 0x84
 	undefined4 m_unk0x88; // 0x88
 	undefined4 m_unk0x8c; // 0x8c
 	undefined4 m_unk0x90; // 0x90

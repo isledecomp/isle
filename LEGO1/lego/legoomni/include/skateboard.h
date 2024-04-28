@@ -9,6 +9,7 @@
 class SkateBoard : public IslePathActor {
 public:
 	SkateBoard();
+	~SkateBoard() override;
 
 	// FUNCTION: LEGO1 0x1000fdd0
 	inline const char* ClassName() const override // vtable+0x0c
@@ -35,9 +36,8 @@ public:
 	// SkateBoard::`scalar deleting destructor'
 
 private:
-	// TODO: SkateBoard types
-	undefined m_unk0x160;
-	undefined m_unk0x161[0x7];
+	undefined m_unk0x160;  // 0x160
+	undefined* m_unk0x164; // 0x164
 };
 
 #endif // SKATEBOARD_H
