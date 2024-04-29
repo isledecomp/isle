@@ -86,7 +86,27 @@ MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x100104f0
+// FUNCTION: LEGO1 0x10010270
+void SkateBoard::FUN_10010270(undefined4 param_1)
+{
+	MxCore* pMVar3;
+
+	m_act1state = (Act1State*) GameState()->GetState("Act1State");
+	if (!m_act1state) {
+		this->m_act1state = (Act1State*) GameState()->CreateState("Act1State");
+	}
+	pMVar3 = this->m_world->Find(*g_isleScript, IsleScript::c_SkatePizza_Bitmap);
+	if (pMVar3) {
+		// I have no idea what this is. Need a call with vtable offset 0x54 and one 4 byte argument
+		((LegoActor*)pMVar3)->VTable0x54(param_1);
+
+	} else {
+		if (this->m_unk0x160 != '\0') {
+			MxNotificationParam local_1c = MxNotificationParam(c_notificationType0, NULL);
+			NotificationManager()->Send(this, local_1c);
+		}
+	}
+}
 MxU32 SkateBoard::VTable0xd0()
 {
 	// TODO
