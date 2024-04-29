@@ -98,7 +98,7 @@ void SkateBoard::FUN_10010270(undefined4 param_1)
 	pMVar3 = this->m_world->Find(*g_isleScript, IsleScript::c_SkatePizza_Bitmap);
 	if (pMVar3) {
 		// I have no idea what this is. Need a call with vtable offset 0x54 and one 4 byte argument
-		((LegoActor*)pMVar3)->VTable0x54(param_1);
+		((LegoWorld*)pMVar3)->VTable0x54();
 
 	} else {
 		if (this->m_unk0x160 != '\0') {
