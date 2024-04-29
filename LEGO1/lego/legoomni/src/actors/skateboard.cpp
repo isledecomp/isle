@@ -65,11 +65,34 @@ void SkateBoard::VTable0xe4()
 	ControlManager()->Unregister(this);
 }
 
-// STUB: LEGO1 0x100100e0
+
+
+// FUNCTION: LEGO1 0x100100e0
 MxU32 SkateBoard::VTable0xcc()
 {
-	// TODO
-	return 0;
+	if ((FUN_1003ef60()) && ((Act1State*)GameState()->GetState("Act1State"))->GetUnknown18() != 3) {
+		return 1;
+	}
+	FUN_10015820(TRUE, 0);
+
+	((Isle*)GetWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
+	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 0x32, FALSE, TRUE);
+	if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+		if (!CurrentActor()->IsA("SkateBoard")) {
+			CurrentActor()->VTable0xe4();
+		}
+	}
+	if (!CurrentActor()->IsA("SkateBoard")) {
+		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 0xc1, NULL);
+		GetCurrentAction().SetObjectId(-1);
+		ControlManager()->Register(this);
+	}
+	FUN_10010270(this->m_unk0x160);
+	// TODO: If this is correct, then the signature of the AnimationManager calls are wrong.
+	MxBool puVar11 = (MxBool) 0xf4;
+	AnimationManager()->FUN_10064670(puVar11);
+	AnimationManager()->FUN_10064670(puVar11);
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x10010230
