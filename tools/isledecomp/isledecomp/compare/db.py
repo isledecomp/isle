@@ -84,6 +84,23 @@ class CompareDb:
         self._db = sqlite3.connect(":memory:")
         self._db.executescript(_SETUP_SQL)
 
+    def set_orig_symbol(
+        self,
+        addr: int,
+        compare_type: Optional[SymbolType],
+        name: Optional[str],
+        size: Optional[int],
+    ):
+        # Ignore collisions here.
+        if self._orig_used(addr):
+            return
+
+        compare_value = compare_type.value if compare_type is not None else None
+        self._db.execute(
+            "INSERT INTO `symbols` (orig_addr, compare_type, name, size) VALUES (?,?,?,?)",
+            (addr, compare_value, name, size),
+        )
+
     def set_recomp_symbol(
         self,
         addr: int,

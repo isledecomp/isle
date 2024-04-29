@@ -10,3 +10,4 @@ class SymbolType(Enum):
     POINTER = 3
     STRING = 4
     VTABLE = 5
+    FLOAT = 6
