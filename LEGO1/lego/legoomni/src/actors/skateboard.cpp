@@ -70,14 +70,15 @@ void SkateBoard::VTable0xe4()
 // FUNCTION: LEGO1 0x100100e0
 MxU32 SkateBoard::VTable0xcc()
 {
-	if ((FUN_1003ef60()) && ((Act1State*)GameState()->GetState("Act1State"))->GetUnknown18() != 3) {
+	Act1State* state = (Act1State*)GameState()->GetState("Act1State");
+	if (FUN_1003ef60() && state->GetUnknown18() != 3) {
 		return 1;
 	}
 	FUN_10015820(TRUE, 0);
 
 	((Isle*)GetWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
 	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 0x32, FALSE, TRUE);
-	if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
 			CurrentActor()->VTable0xe4();
 		}
