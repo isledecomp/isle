@@ -37,10 +37,10 @@ struct Vehicle {
 // SIZE 0x18
 struct Unknown0x3c {
 	LegoROI* m_roi;            // 0x00
-	MxU32 m_id;                // 0x04
+	MxS32 m_characterId;       // 0x04
 	undefined m_unk0x08[0x08]; // 0x08
 	float m_unk0x10;           // 0x10
-	undefined m_unk0x14;       // 0x14
+	MxBool m_unk0x14;          // 0x14
 };
 
 // VTABLE: LEGO1 0x100d8c18
