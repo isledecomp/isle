@@ -24,7 +24,6 @@ struct AnimInfo {
 	MxU8 m_unk0x0d;      // 0x0d
 	MxU32 m_unk0x10[4];  // 0x10
 	MxU8 m_modelCount;   // 0x20
-	undefined m_unk0x21; // 0x21
 	MxS16 m_unk0x22;     // 0x22
 	ModelInfo* m_models; // 0x24
 	MxU8 m_unk0x28;      // 0x28
