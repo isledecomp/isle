@@ -80,13 +80,13 @@ public:
 	MxResult FUN_10060dc0(
 		IsleScript::Script p_objectId,
 		MxMatrix* p_matrix,
-		undefined p_param3,
+		MxBool p_param3,
 		undefined p_param4,
-		undefined4 p_param5,
-		undefined p_param6,
+		LegoROI* p_roi,
+		MxBool p_param6,
 		MxBool p_param7,
 		MxBool p_param8,
-		undefined p_param9
+		MxBool p_param9
 	);
 	void FUN_10061010(undefined4);
 	void FUN_100617c0(MxS32, MxU16&, MxU16&);
@@ -108,21 +108,25 @@ private:
 	void Init();
 	MxResult FUN_100605e0(
 		MxU32 p_index,
-		MxU8 p_unk0x0a,
+		MxBool p_unk0x0a,
 		MxMatrix* p_matrix,
-		undefined,
-		undefined4,
-		undefined,
-		MxBool,
-		MxBool,
-		undefined
+		MxBool p_bool1,
+		LegoROI* p_roi,
+		MxBool p_bool2,
+		MxBool p_bool3,
+		MxBool p_bool4,
+		MxBool p_bool5
 	);
 	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	void DeleteAnimations();
 	MxS8 GetCharacterIndex(const char* p_name);
+	MxBool FUN_100623a0(AnimInfo& p_info);
+	void FUN_10062580(AnimInfo& p_info);
+	MxBool FUN_10062710(AnimInfo& p_info);
 	void FUN_10063aa0();
+	void FUN_100648f0(LegoTranInfo*, MxLong);
 
-	MxU32 m_scriptIndex;               // 0x08
+	MxS32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
 	MxU16 m_unk0x0e;                   // 0x0e
 	MxU16 m_unk0x10;                   // 0x10
