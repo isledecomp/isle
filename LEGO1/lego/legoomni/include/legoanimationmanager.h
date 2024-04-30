@@ -136,7 +136,7 @@ private:
 	MxLong m_unk0x30[2];               // 0x30
 	MxBool m_unk0x38;                  // 0x38
 	MxBool m_unk0x39;                  // 0x39
-	undefined m_unk0x3a;               // 0x3a
+	MxBool m_unk0x3a;                  // 0x3a
 	Unknown0x3c m_unk0x3c[40];         // 0x3c
 	undefined4 m_unk0x3fc;             // 0x3fc
 	MxBool m_unk0x400;                 // 0x400
@@ -151,7 +151,7 @@ private:
 	undefined4 m_unk0x41c;             // 0x41c
 	AnimState* m_animState;            // 0x420
 	LegoROIList* m_unk0x424;           // 0x424
-	undefined m_unk0x428;              // 0x428
+	MxBool m_unk0x428;                 // 0x428
 	MxBool m_unk0x429;                 // 0x429
 	undefined m_unk0x42a;              // 0x42a
 	MxBool m_suspended;                // 0x42b

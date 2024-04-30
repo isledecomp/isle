@@ -236,7 +236,7 @@ void LegoAnimationManager::Suspend()
 
 		m_unk0x18 = 0;
 		m_unk0x1a = 0;
-		m_unk0x3a = 0;
+		m_unk0x3a = FALSE;
 		m_unk0x400 = FALSE;
 		m_unk0x414 = 0;
 		m_unk0x401 = 0;
@@ -290,7 +290,7 @@ void LegoAnimationManager::Init()
 
 	m_unk0x38 = FALSE;
 	m_unk0x39 = FALSE;
-	m_unk0x3a = 1;
+	m_unk0x3a = TRUE;
 	m_unk0x3fc = 0;
 	m_unk0x400 = FALSE;
 	m_unk0x414 = 0;
@@ -493,7 +493,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_unk0x428 = m_unk0x3a;
 			m_unk0x429 = m_unk0x400;
 			m_unk0x42a = 1;
-			m_unk0x3a = 0;
+			m_unk0x3a = FALSE;
 			m_unk0x400 = FALSE;
 			m_unk0x402 = 0;
 		}
