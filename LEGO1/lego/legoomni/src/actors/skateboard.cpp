@@ -147,13 +147,13 @@ void SkateBoard::FUN_10010510()
 		PlayMusic(JukeboxScript::c_BeachBlvd_Music);
 		if (m_act1state->m_unk0x022 == '\0') {
 			m_act1state->m_unk0x022 = 1;
-			MxMatrix x = MxMatrix(CurrentActor()->GetROI()->GetLocal2World());
-			float xs = x[2][0] * 2.5;
-			float y = x[2][1] + 0.2;
-			float z = x[2][2] * 2.5;
-			x.TranslateBy(&xs, &y, &z);
+			MxMatrix matrix = MxMatrix(CurrentActor()->GetROI()->GetLocal2World());
+			float x = 2.5 * matrix[2][0];
+			float z =  2.5 * matrix[2][2];
+			float y = 0.2 + matrix[2][1];
+			matrix.TranslateBy(&x, &y, &z);
 			AnimationManager()
-				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &x, '\x01', '\0', NULL, 0, TRUE, TRUE, '\x01');
+				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &matrix, '\x01', '\0', NULL, 0, TRUE, TRUE, '\x01');
 		}
 	}
 	return;
