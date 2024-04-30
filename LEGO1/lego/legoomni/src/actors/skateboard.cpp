@@ -90,9 +90,11 @@ MxU32 SkateBoard::VTable0xcc()
 		ControlManager()->Register(this);
 	}
 	FUN_10010270(this->m_unk0x160);
+	// this->m_roi->GetLocal2World().GetData()[0]
 	// TODO: If this is correct, then the signature of the AnimationManager calls are wrong.
-	float data[3];
-	Vector3 vec = Vector3(data);
+	// float data[3];
+	Matrix4 stuff = this->m_roi->GetLocal2World();
+	Vector3 vec = Vector3(&stuff[0][0]);
 	// MxBool puVar11 = (MxBool) 0xf4;
 	AnimationManager()->FUN_10064670((int)&vec);
 	AnimationManager()->FUN_10064670((int)&vec);
