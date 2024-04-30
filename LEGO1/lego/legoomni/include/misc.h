@@ -64,10 +64,4 @@ void PlayMusic(JukeboxScript::Script p_script);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
 
-// FUNCTION: LEGO1 0x10015890
-inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
-{
-	return LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction);
-}
-
 #endif // MISC_H
