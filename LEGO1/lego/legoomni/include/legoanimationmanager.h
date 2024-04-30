@@ -69,8 +69,8 @@ public:
 	void Reset(MxBool p_und);
 	void Suspend();
 	void Resume();
-	void FUN_1005f6d0(MxBool);
-	void FUN_1005f700(MxBool);
+	void FUN_1005f6d0(MxBool p_unk0x400);
+	void FUN_1005f700(MxBool p_unk0x3a);
 	MxResult LoadScriptInfo(MxS32 p_scriptIndex);
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
@@ -136,10 +136,10 @@ private:
 	MxLong m_unk0x30[2];               // 0x30
 	MxBool m_unk0x38;                  // 0x38
 	MxBool m_unk0x39;                  // 0x39
-	undefined m_unk0x3a;               // 0x3a
+	MxBool m_unk0x3a;                  // 0x3a
 	Unknown0x3c m_unk0x3c[40];         // 0x3c
 	undefined4 m_unk0x3fc;             // 0x3fc
-	MxU8 m_unk0x400;                   // 0x400
+	MxBool m_unk0x400;                 // 0x400
 	undefined m_unk0x401;              // 0x401
 	MxU8 m_unk0x402;                   // 0x402
 	MxLong m_unk0x404;                 // 0x404
@@ -151,8 +151,8 @@ private:
 	undefined4 m_unk0x41c;             // 0x41c
 	AnimState* m_animState;            // 0x420
 	LegoROIList* m_unk0x424;           // 0x424
-	undefined m_unk0x428;              // 0x428
-	undefined m_unk0x429;              // 0x429
+	MxBool m_unk0x428;                 // 0x428
+	MxBool m_unk0x429;                 // 0x429
 	undefined m_unk0x42a;              // 0x42a
 	MxBool m_suspended;                // 0x42b
 	undefined4 m_unk0x42c;             // 0x42c
