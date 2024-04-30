@@ -158,7 +158,7 @@ void LegoAnimationManager::Reset(MxBool p_und)
 		m_animState->SetFlag();
 	}
 
-	undefined unk0x42b = m_unk0x42b;
+	MxBool unk0x42b = m_unk0x42b;
 	FUN_1005ef10();
 
 	if (m_tranInfoList != NULL) {
@@ -184,10 +184,18 @@ void LegoAnimationManager::FUN_1005ef10()
 	// TODO
 }
 
-// STUB: LEGO1 0x1005f0b0
+// FUNCTION: LEGO1 0x1005f0b0
+// FUNCTION: BETA10 0x1003fefe
 void LegoAnimationManager::FUN_1005f0b0()
 {
-	// TODO
+	if (m_unk0x42b) {
+		m_unk0x408 = m_unk0x40c = m_unk0x404 = Timer()->GetTime();
+		m_unk0x410 = 5000;
+		m_unk0x3a = m_unk0x428;
+		m_unk0x400 = m_unk0x429;
+		m_unk0x402 = m_unk0x42a;
+		m_unk0x42b = FALSE;
+	}
 }
 
 // FUNCTION: LEGO1 0x1005f130
@@ -227,7 +235,7 @@ void LegoAnimationManager::Init()
 	m_unk0x0e = 0;
 	m_unk0x10 = 0;
 	m_unk0x401 = 0;
-	m_unk0x42b = 0;
+	m_unk0x42b = FALSE;
 	m_unk0x430 = 0;
 	m_unk0x42c = 0;
 	m_unk0x408 = m_unk0x40c = m_unk0x404 = Timer()->GetTime();
@@ -541,7 +549,7 @@ done:
 // FUNCTION: LEGO1 0x100603c0
 void LegoAnimationManager::DeleteAnimations()
 {
-	undefined unk0x42b = m_unk0x42b;
+	MxBool unk0x42b = m_unk0x42b;
 
 	if (m_anims != NULL) {
 		for (MxS32 i = 0; i < m_animCount; i++) {

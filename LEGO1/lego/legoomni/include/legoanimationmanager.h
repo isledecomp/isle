@@ -154,7 +154,7 @@ private:
 	undefined m_unk0x428;              // 0x428
 	undefined m_unk0x429;              // 0x429
 	undefined m_unk0x42a;              // 0x42a
-	undefined m_unk0x42b;              // 0x42b
+	MxBool m_unk0x42b;                 // 0x42b
 	undefined4 m_unk0x42c;             // 0x42c
 	undefined m_unk0x430;              // 0x430
 	undefined4 m_unk0x434[2];          // 0x434
