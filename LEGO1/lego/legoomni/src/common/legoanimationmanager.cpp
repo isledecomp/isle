@@ -237,7 +237,7 @@ void LegoAnimationManager::Suspend()
 		m_unk0x18 = 0;
 		m_unk0x1a = 0;
 		m_unk0x3a = 0;
-		m_unk0x400 = 0;
+		m_unk0x400 = FALSE;
 		m_unk0x414 = 0;
 		m_unk0x401 = 0;
 
@@ -292,7 +292,7 @@ void LegoAnimationManager::Init()
 	m_unk0x39 = FALSE;
 	m_unk0x3a = 1;
 	m_unk0x3fc = 0;
-	m_unk0x400 = 0;
+	m_unk0x400 = FALSE;
 	m_unk0x414 = 0;
 	m_unk0x418 = 5;
 	m_unk0x0e = 0;
@@ -322,16 +322,32 @@ void LegoAnimationManager::Init()
 	m_unk0x424 = new LegoROIList();
 }
 
-// STUB: LEGO1 0x1005f6d0
-void LegoAnimationManager::FUN_1005f6d0(MxBool)
+// FUNCTION: LEGO1 0x1005f6d0
+// FUNCTION: BETA10 0x100401e7
+void LegoAnimationManager::FUN_1005f6d0(MxBool p_unk0x400)
 {
-	// TODO
+	if (m_suspended) {
+		m_unk0x429 = p_unk0x400;
+	}
+	else {
+		m_unk0x400 = p_unk0x400;
+
+		if (!p_unk0x400) {
+			FUN_100627d0(TRUE);
+		}
+	}
 }
 
-// STUB: LEGO1 0x1005f700
-void LegoAnimationManager::FUN_1005f700(MxBool)
+// FUNCTION: LEGO1 0x1005f700
+// FUNCTION: BETA10 0x1004024c
+void LegoAnimationManager::FUN_1005f700(MxBool p_unk0x3a)
 {
-	// TODO
+	if (m_suspended) {
+		m_unk0x428 = p_unk0x3a;
+	}
+	else {
+		m_unk0x3a = p_unk0x3a;
+	}
 }
 
 // FUNCTION: LEGO1 0x1005f720
@@ -478,7 +494,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			m_unk0x429 = m_unk0x400;
 			m_unk0x42a = 1;
 			m_unk0x3a = 0;
-			m_unk0x400 = 0;
+			m_unk0x400 = FALSE;
 			m_unk0x402 = 0;
 		}
 
