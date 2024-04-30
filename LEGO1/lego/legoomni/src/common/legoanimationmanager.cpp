@@ -961,7 +961,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 }
 
 // STUB: LEGO1 0x10062580
-// FUNCTION: BETA10 0x10043342
+// FUNCTION: BETA10 0x10043552
 void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 {
 	// TODO
