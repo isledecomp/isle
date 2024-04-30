@@ -791,7 +791,7 @@ void LegoGameState::SwitchArea(Area p_area)
 
 	FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d);
 	BackgroundAudioManager()->Stop();
-	AnimationManager()->FUN_1005ef10();
+	AnimationManager()->Suspend();
 	VideoManager()->SetUnk0x554(FALSE);
 
 	switch (p_area) {
@@ -896,7 +896,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		else {
 			SetCameraControllerFromIsle();
 			CurrentActor()->ResetWorldTransform(TRUE);
-			AnimationManager()->FUN_1005f0b0();
+			AnimationManager()->Resume();
 		}
 
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
@@ -910,7 +910,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		SetCameraControllerFromIsle();
 		CurrentActor()->ResetWorldTransform(TRUE);
-		AnimationManager()->FUN_1005f0b0();
+		AnimationManager()->Resume();
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	case e_police:

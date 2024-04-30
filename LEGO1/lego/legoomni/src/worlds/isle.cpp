@@ -857,7 +857,7 @@ MxLong Isle::HandleTransitionEnd()
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;
 		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
-		AnimationManager()->FUN_1005f0b0();
+		AnimationManager()->Resume();
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(0);
 		SetIsWorldActive(TRUE);
@@ -867,7 +867,7 @@ MxLong Isle::HandleTransitionEnd()
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		m_destLocation = LegoGameState::e_undefined;
 		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
-		AnimationManager()->FUN_1005f0b0();
+		AnimationManager()->Resume();
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(0);
 		SetIsWorldActive(TRUE);
