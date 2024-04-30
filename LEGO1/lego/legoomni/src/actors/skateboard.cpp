@@ -148,10 +148,7 @@ void SkateBoard::FUN_10010510()
 		if (m_act1state->m_unk0x022 == '\0') {
 			m_act1state->m_unk0x022 = 1;
 			MxMatrix matrix = MxMatrix(CurrentActor()->GetROI()->GetLocal2World());
-			float x = 2.5 * matrix[2][0];
-			float z =  2.5 * matrix[2][2];
-			float y = 0.2 + matrix[2][1];
-			matrix.TranslateBy(&x, &y, &z);
+			matrix.TranslateBy(2.5 * matrix[2][0], 0.2 + matrix[2][1], 2.5 * matrix[2][2]);
 			AnimationManager()
 				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &matrix, '\x01', '\0', NULL, 0, TRUE, TRUE, '\x01');
 		}

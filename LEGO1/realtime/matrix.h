@@ -74,11 +74,11 @@ public:
 	} // vtable+0x2c
 
 	// FUNCTION: LEGO1 0x10002460
-	virtual void TranslateBy(const float* p_x, const float* p_y, const float* p_z)
+	virtual void TranslateBy(const float &p_x, const float &p_y, const float &p_z)
 	{
-		m_data[3][0] += *p_x;
-		m_data[3][1] += *p_y;
-		m_data[3][2] += *p_z;
+		m_data[3][0] += p_x;
+		m_data[3][1] += p_y;
+		m_data[3][2] += p_z;
 	} // vtable+0x30
 
 	// FUNCTION: LEGO1 0x100024a0
