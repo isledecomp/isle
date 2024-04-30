@@ -630,7 +630,7 @@ void LegoWorld::Enable(MxBool p_enable)
 				PlantManager()->FUN_10026360(m_scriptIndex);
 				AnimationManager()->LoadScriptInfo(m_scriptIndex);
 				BuildingManager()->FUN_1002fa00();
-				AnimationManager()->FUN_1005f0b0();
+				AnimationManager()->Resume();
 			}
 
 			GameState()->ResetROI();
