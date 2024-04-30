@@ -81,16 +81,19 @@ public:
 
 	inline MxU32 GetUnknown18() { return m_unk0x018; }
 	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
-	inline MxS16 GetUnknown21() { return m_unk0x021; }
+	inline MxU8 GetUnknown21() { return m_unk0x021; }
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
 	inline void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
-	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x021 = p_unk0x21; }
+	inline void SetUnknown21(MxU8 p_unk0x21) { m_unk0x021 = p_unk0x21; }
 
 	// SYNTHETIC: LEGO1 0x10033960
 	// Act1State::`scalar deleting destructor'
 
 	friend class Isle;
+	// I would very much prefer to use getters and setters, but that seems to mess up other code.
+	// Maybe we need to add the right number of getters and setters?
+	friend class SkateBoard;
 
 protected:
 	MxS32* m_unk0x008;            // 0x008 FIXME: count for m_unk0x008

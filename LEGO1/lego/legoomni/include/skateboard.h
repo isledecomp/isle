@@ -1,6 +1,7 @@
 #ifndef SKATEBOARD_H
 #define SKATEBOARD_H
 
+#include "act1state.h"
 #include "decomp.h"
 #include "islepathactor.h"
 
@@ -30,6 +31,8 @@ public:
 	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	// not 100 % sure about the signature
+	void FUN_10010270(undefined4 param_1);
 	void FUN_10010510();
 
 	// SYNTHETIC: LEGO1 0x1000ff60
@@ -37,7 +40,7 @@ public:
 
 private:
 	undefined m_unk0x160;  // 0x160
-	undefined* m_unk0x164; // 0x164
+	Act1State* m_act1state; // 0x164
 };
 
 #endif // SKATEBOARD_H
