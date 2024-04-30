@@ -852,7 +852,7 @@ void LegoAnimationManager::FUN_10063aa0()
 }
 
 // STUB: LEGO1 0x10064670
-void LegoAnimationManager::FUN_10064670(MxBool)
+void LegoAnimationManager::FUN_10064670(undefined4)
 {
 	// TODO
 }

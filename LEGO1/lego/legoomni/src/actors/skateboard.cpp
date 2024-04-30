@@ -68,18 +68,16 @@ void SkateBoard::VTable0xe4()
 	ControlManager()->Unregister(this);
 }
 
-
-
 // FUNCTION: LEGO1 0x100100e0
 MxU32 SkateBoard::VTable0xcc()
 {
-	Act1State* state = (Act1State*)GameState()->GetState("Act1State");
+	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 	if (FUN_1003ef60() && state->GetUnknown18() != 3) {
 		return 1;
 	}
 	FUN_10015820(TRUE, 0);
 
-	((Isle*)GetWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
+	((Isle*) GetWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
 	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 0x32, FALSE, TRUE);
 	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
@@ -93,9 +91,11 @@ MxU32 SkateBoard::VTable0xcc()
 	}
 	FUN_10010270(this->m_unk0x160);
 	// TODO: If this is correct, then the signature of the AnimationManager calls are wrong.
-	MxBool puVar11 = (MxBool) 0xf4;
-	AnimationManager()->FUN_10064670(puVar11);
-	AnimationManager()->FUN_10064670(puVar11);
+	float data[3];
+	Vector3 vec = Vector3(data);
+	// MxBool puVar11 = (MxBool) 0xf4;
+	AnimationManager()->FUN_10064670((int)&vec);
+	AnimationManager()->FUN_10064670((int)&vec);
 	return 1;
 }
 
@@ -124,9 +124,9 @@ void SkateBoard::FUN_10010270(undefined4 param_1)
 	}
 	if (pMVar3 = this->m_world->Find(*g_isleScript, IsleScript::c_SkatePizza_Bitmap)) {
 		// I have no idea what this is. Need a call with vtable offset 0x54 and (likely) no argument.
-		((LegoWorld*)pMVar3)->VTable0x54();
-
-	} else {
+		((LegoWorld*) pMVar3)->VTable0x54();
+	}
+	else {
 		if (this->m_unk0x160 != '\0') {
 			NotificationManager()->Send(this, MxNotificationParam(c_notificationType0, NULL));
 		}

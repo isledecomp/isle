@@ -96,7 +96,7 @@ public:
 	void FUN_100629b0(MxU32, MxBool);
 	void FUN_10063270(LegoROIList*, LegoAnimPresenter*);
 	void FUN_10063780(LegoROIList* p_list);
-	void FUN_10064670(MxBool);
+	void FUN_10064670(undefined4);
 	void FUN_10064740(MxBool);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
