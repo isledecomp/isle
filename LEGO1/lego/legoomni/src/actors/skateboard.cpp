@@ -72,7 +72,7 @@ void SkateBoard::VTable0xe4()
 MxU32 SkateBoard::VTable0xcc()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-	if (FUN_1003ef60() && state->GetUnknown18() != 3) {
+	if (!FUN_1003ef60() && state->GetUnknown18() != 3) {
 		return 1;
 	}
 	FUN_10015820(TRUE, 0);
@@ -85,6 +85,7 @@ MxU32 SkateBoard::VTable0xcc()
 		}
 	}
 	if (!CurrentActor()->IsA("SkateBoard")) {
+		VTable0xe0();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 0xc1, NULL);
 		GetCurrentAction().SetObjectId(-1);
 		ControlManager()->Register(this);
