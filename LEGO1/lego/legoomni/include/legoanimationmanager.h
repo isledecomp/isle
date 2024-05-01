@@ -81,7 +81,7 @@ public:
 		IsleScript::Script p_objectId,
 		MxMatrix* p_matrix,
 		MxBool p_param3,
-		undefined p_param4,
+		MxBool p_param4,
 		LegoROI* p_roi,
 		MxBool p_param6,
 		MxBool p_param7,
@@ -96,8 +96,8 @@ public:
 	void FUN_100629b0(MxU32, MxBool);
 	void FUN_10063270(LegoROIList*, LegoAnimPresenter*);
 	void FUN_10063780(LegoROIList* p_list);
-	void FUN_10064670(MxBool);
-	void FUN_10064740(MxBool);
+	void FUN_10064670(Vector3*);
+	void FUN_10064740(Vector3*);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 

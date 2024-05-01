@@ -115,7 +115,7 @@ MxU32 Helicopter::VTable0xcc()
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::e_act1:
 		m_script = *g_isleScript;
-		AnimationManager()->FUN_10064670(FALSE);
+		AnimationManager()->FUN_10064670(NULL);
 		VTable0xe8(LegoGameState::e_unk41, TRUE, 7);
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);

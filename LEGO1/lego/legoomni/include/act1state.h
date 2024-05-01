@@ -81,16 +81,17 @@ public:
 
 	inline MxU32 GetUnknown18() { return m_unk0x018; }
 	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
-	inline MxS16 GetUnknown21() { return m_unk0x021; }
+	inline MxU8 GetUnknown21() { return m_unk0x021; }
 
 	inline void SetUnknown18(MxU32 p_unk0x18) { m_unk0x018 = p_unk0x18; }
 	inline void SetElevatorFloor(ElevatorFloor p_elevFloor) { m_elevFloor = p_elevFloor; }
-	inline void SetUnknown21(MxS16 p_unk0x21) { m_unk0x021 = p_unk0x21; }
+	inline void SetUnknown21(MxU8 p_unk0x21) { m_unk0x021 = p_unk0x21; }
 
 	// SYNTHETIC: LEGO1 0x10033960
 	// Act1State::`scalar deleting destructor'
 
 	friend class Isle;
+	friend class SkateBoard;
 
 protected:
 	MxS32* m_unk0x008;            // 0x008 FIXME: count for m_unk0x008
@@ -105,7 +106,7 @@ protected:
 	MxBool m_unk0x01f;            // 0x01f
 	MxBool m_planeActive;         // 0x020
 	undefined m_unk0x021;         // 0x021
-	undefined m_unk0x022;         // 0x022
+	MxBool m_unk0x022;            // 0x022
 	undefined m_unk0x023;         // 0x023
 	NamedPlane m_unk0x024;        // 0x024
 	NamedPlane m_unk0x070;        // 0x070

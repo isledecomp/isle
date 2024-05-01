@@ -849,7 +849,7 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 	IsleScript::Script p_objectId,
 	MxMatrix* p_matrix,
 	MxBool p_param3,
-	undefined p_param4,
+	MxBool p_param4,
 	LegoROI* p_roi,
 	MxBool p_param6,
 	MxBool p_param7,
@@ -870,10 +870,10 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 			MxBool unk0x0a;
 
 			switch (p_param4) {
-			case 0:
+			case FALSE:
 				unk0x0a = m_anims[i].m_unk0x0a;
 				break;
-			case 1:
+			case TRUE:
 				unk0x0a = TRUE;
 				break;
 			default:
@@ -1040,13 +1040,13 @@ void LegoAnimationManager::FUN_10063aa0()
 }
 
 // STUB: LEGO1 0x10064670
-void LegoAnimationManager::FUN_10064670(MxBool)
+void LegoAnimationManager::FUN_10064670(Vector3*)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10064740
-void LegoAnimationManager::FUN_10064740(MxBool)
+void LegoAnimationManager::FUN_10064740(Vector3*)
 {
 	// TODO
 }

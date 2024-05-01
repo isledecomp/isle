@@ -25,7 +25,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x01f = FALSE;
 	m_unk0x008 = g_unk0x100f37f0;
 	m_unk0x014 = -1;
-	m_unk0x022 = 0;
+	m_unk0x022 = FALSE;
 	m_unk0x154 = NULL;
 	m_unk0x158 = NULL;
 	m_unk0x15c = NULL;
@@ -122,8 +122,8 @@ MxResult Act1State::Serialize(LegoFile* p_legoFile)
 			}
 		}
 
-		p_legoFile->Write(&m_unk0x010, sizeof(undefined2));
-		p_legoFile->Write(&m_unk0x022, sizeof(undefined));
+		p_legoFile->Write(&m_unk0x010, sizeof(m_unk0x010));
+		p_legoFile->Write(&m_unk0x022, sizeof(m_unk0x022));
 	}
 	else if (p_legoFile->IsReadMode()) {
 		if (m_unk0x108.GetName()->Compare("") != 0) {
@@ -176,8 +176,8 @@ MxResult Act1State::Serialize(LegoFile* p_legoFile)
 			}
 		}
 
-		p_legoFile->Read(&m_unk0x010, sizeof(undefined2));
-		p_legoFile->Read(&m_unk0x022, sizeof(undefined));
+		p_legoFile->Read(&m_unk0x010, sizeof(m_unk0x010));
+		p_legoFile->Read(&m_unk0x022, sizeof(m_unk0x022));
 	}
 
 	// TODO
@@ -205,7 +205,7 @@ MxBool Act1State::SetFlag()
 	m_unk0x024.SetName("");
 	m_unk0x070.SetName("");
 	m_unk0x0bc.SetName("");
-	m_unk0x022 = 0;
+	m_unk0x022 = FALSE;
 	m_unk0x108.SetName("");
 
 	if (m_unk0x154) {

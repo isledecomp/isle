@@ -331,7 +331,6 @@ MxBool MxControlPresenter::HasTickleStatePassed(TickleState p_tickleState)
 {
 	MxCompositePresenterList::iterator it = m_list.begin();
 	for (MxS16 i = m_unk0x4e; i > 0; i--, it++) {
-		;
 	}
 
 	return (*it)->HasTickleStatePassed(p_tickleState);

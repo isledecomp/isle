@@ -515,7 +515,7 @@ inline void LegoAnimNodeData::GetTranslation(
 		break;
 	}
 
-	p_matrix.TranslateBy(&x, &y, &z);
+	p_matrix.TranslateBy(x, y, z);
 }
 
 // FUNCTION: LEGO1 0x100a06f0

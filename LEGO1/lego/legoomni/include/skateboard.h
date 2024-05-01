@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
+class Act1State;
+
 // VTABLE: LEGO1 0x100d55f0
 // SIZE 0x168
 class SkateBoard : public IslePathActor {
@@ -36,8 +38,10 @@ public:
 	// SkateBoard::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x160;  // 0x160
-	undefined* m_unk0x164; // 0x164
+	void FUN_10010270(MxBool p_enable);
+
+	MxBool m_unk0x160;      // 0x160
+	Act1State* m_act1state; // 0x164
 };
 
 #endif // SKATEBOARD_H

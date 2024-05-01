@@ -629,7 +629,7 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_unk0x018 = 0;
 
 			if (GameState()->m_currentArea == LegoGameState::e_pizzeriaExterior) {
-				AnimationManager()->FUN_10064740(FALSE);
+				AnimationManager()->FUN_10064740(NULL);
 			}
 			else if (GameState()->m_currentArea == LegoGameState::e_unk66) {
 				Mx3DPointFloat position(CurrentActor()->GetROI()->GetWorldPosition());
@@ -637,13 +637,13 @@ void Isle::Enable(MxBool p_enable)
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
 				((Vector3&) sub).Sub(&position);
 				if (sub.LenSquared() < 1024.0f) {
-					AnimationManager()->FUN_10064740(FALSE);
+					AnimationManager()->FUN_10064740(NULL);
 				}
 
 				Mx3DPointFloat sub2(98.874992f, 0.0f, -46.156292f);
 				((Vector3&) sub2).Sub(&position);
 				if (sub2.LenSquared() < 1024.0f) {
-					AnimationManager()->FUN_10064670(FALSE);
+					AnimationManager()->FUN_10064670(NULL);
 				}
 			}
 			break;
@@ -666,12 +666,12 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, 1, NULL, FALSE, FALSE, TRUE, 0);
+				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, TRUE, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_unk0x018 = 0;
 			FUN_1003ef00(FALSE);
-			AnimationManager()->FUN_10064670(FALSE);
+			AnimationManager()->FUN_10064670(NULL);
 			break;
 		}
 		case 6: {
@@ -694,7 +694,7 @@ void Isle::Enable(MxBool p_enable)
 					break;
 				}
 
-				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, 1, NULL, FALSE, FALSE, TRUE, 0);
+				AnimationManager()->FUN_10060dc0(script, NULL, TRUE, TRUE, NULL, FALSE, FALSE, TRUE, FALSE);
 			}
 
 			m_act1state->m_unk0x018 = 0;
