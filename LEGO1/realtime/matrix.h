@@ -151,48 +151,45 @@ protected:
 	float (*m_data)[4];
 };
 
-// Not close, Ghidra struggles understinging this method so it will have to
-// be manually worked out. Included since I at least figured out what it was
-// doing with rotateIndex and what overall operation it's trying to do.
-// STUB: LEGO1 0x10002550
+// FUNCTION: LEGO1 0x10002550
 inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 {
-	/*
-	float trace = m_data[0] + m_data[5] + m_data[10];
+	float trace = m_data[0][0] + m_data[1][1] + m_data[2][2];
 	if (trace > 0) {
 		trace = sqrt(trace + 1.0);
-		p_outQuat->GetData()[3] = trace * 0.5f;
-		p_outQuat->GetData()[0] = (m_data[9] - m_data[6]) * trace;
-		p_outQuat->GetData()[1] = (m_data[2] - m_data[8]) * trace;
-		p_outQuat->GetData()[2] = (m_data[4] - m_data[1]) * trace;
+		p_outQuat[3] = trace * 0.5f;
+		trace = 0.5f / trace;
+		p_outQuat[0] = (m_data[2][1] - m_data[1][2]) * trace;
+		p_outQuat[1] = (m_data[0][2] - m_data[2][0]) * trace;
+		p_outQuat[2] = (m_data[1][0] - m_data[0][1]) * trace;
 		return;
 	}
 
-	// ~GLOBAL: LEGO1 0x100d4090
+	// GLOBAL: LEGO1 0x100d4090
 	static int rotateIndex[] = {1, 2, 0};
 
 	// Largest element along the trace
-	int largest = m_data[0] < m_data[5];
-	if (*Element(largest, largest) < m_data[10])
+	int largest = 0;
+	if (m_data[0][0] < m_data[1][1])
+		largest = 1;
+	if (*Element(largest, largest) < m_data[2][2])
 		largest = 2;
 
 	int next = rotateIndex[largest];
 	int nextNext = rotateIndex[next];
-	float valueA = *Element(nextNext, nextNext);
-	float valueB = *Element(next, next);
-	float valueC = *Element(largest, largest);
 
-	// Above is somewhat decomped, below is pure speculation since the automatic
-	// decomp becomes very garbled.
-	float traceValue = sqrt(valueA - valueB - valueC + 1.0);
+	trace = *Element(nextNext, nextNext);
+	trace += *Element(next, next);
+	trace = *Element(largest, largest) - trace;
+	trace += 1.0f;
+	trace = sqrt(trace);
 
-	p_outQuat->GetData()[largest] = traceValue * 0.5f;
-	traceValue = 0.5f / traceValue;
+	p_outQuat[largest] = trace * 0.5f;
+	trace = 0.5f / trace;
 
-	p_outQuat->GetData()[3] = (m_data[next + 4 * nextNext] - m_data[nextNext + 4 * next]) * traceValue;
-	p_outQuat->GetData()[next] = (m_data[next + 4 * largest] + m_data[largest + 4 * next]) * traceValue;
-	p_outQuat->GetData()[nextNext] = (m_data[nextNext + 4 * largest] + m_data[largest + 4 * nextNext]) * traceValue;
-	*/
+	p_outQuat[3] = (*Element(nextNext, next) - *Element(next, nextNext)) * trace;
+	p_outQuat[next] = (*Element(largest, next) + *Element(next, largest)) * trace;
+	p_outQuat[nextNext] = (*Element(largest, nextNext) + *Element(nextNext, largest)) * trace;
 }
 
 // FUNCTION: LEGO1 0x10002710
