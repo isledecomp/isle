@@ -95,7 +95,7 @@ MxU32 SkateBoard::VTable0xcc()
 	// TODO: If this is correct, then the signature of the AnimationManager calls are wrong.
 	// float data[3];
 	Matrix4 stuff = this->m_roi->GetLocal2World();
-	Vector3 vec = Vector3(&stuff[0][0]);
+	Vector3 vec = Vector3(&stuff[3][0]);
 	// MxBool puVar11 = (MxBool) 0xf4;
 	AnimationManager()->FUN_10064670((int)&vec);
 	AnimationManager()->FUN_10064740((int)&vec);
