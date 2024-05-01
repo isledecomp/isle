@@ -235,7 +235,7 @@ void LegoAnimationManager::Suspend()
 		}
 
 		m_unk0x18 = 0;
-		m_unk0x1a = 0;
+		m_unk0x1a = FALSE;
 		m_unk0x3a = FALSE;
 		m_unk0x400 = FALSE;
 		m_unk0x414 = 0;
@@ -270,7 +270,7 @@ void LegoAnimationManager::Init()
 	m_animCount = 0;
 	m_anims = NULL;
 	m_unk0x18 = 0;
-	m_unk0x1a = 0;
+	m_unk0x1a = FALSE;
 	m_tranInfoList = NULL;
 	m_tranInfoList2 = NULL;
 	m_unk0x41c = g_legoAnimationManagerConfig <= 1 ? 10 : 20;
@@ -299,8 +299,8 @@ void LegoAnimationManager::Init()
 	m_unk0x10 = 0;
 	m_unk0x401 = 0;
 	m_suspended = FALSE;
-	m_unk0x430 = 0;
-	m_unk0x42c = 0;
+	m_unk0x430 = FALSE;
+	m_unk0x42c = NULL;
 	m_unk0x408 = m_unk0x40c = m_unk0x404 = Timer()->GetTime();
 	m_unk0x410 = 5000;
 
@@ -374,8 +374,8 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 		m_unk0x38 = FALSE;
 		m_unk0x39 = FALSE;
-		m_unk0x430 = 0;
-		m_unk0x42c = 0;
+		m_unk0x430 = FALSE;
+		m_unk0x42c = NULL;
 
 		for (j = 0; j < (MxS32) _countof(g_characters); j++) {
 			g_characters[j].m_active = FALSE;
@@ -923,10 +923,68 @@ LegoTranInfo* LegoAnimationManager::GetTranInfo(MxU32 p_index)
 	return NULL;
 }
 
-// STUB: LEGO1 0x100619f0
+// FUNCTION: LEGO1 0x100619f0
+// FUNCTION: BETA10 0x100426b1
 MxLong LegoAnimationManager::Notify(MxParam& p_param)
 {
-	// TODO
+	if (((MxNotificationParam&) p_param).GetSender() == this) {
+		if (((MxNotificationParam&) p_param).GetType() == c_notificationType18) {
+			FUN_100605e0(m_unk0x18, TRUE, NULL, TRUE, NULL, FALSE, TRUE, TRUE, TRUE);
+		}
+	}
+	else if (((MxNotificationParam&) p_param).GetType() == c_notificationType18 && m_tranInfoList != NULL) {
+		LegoTranInfoListCursor cursor(m_tranInfoList);
+		LegoTranInfo* tranInfo;
+
+		MxU32 index = ((MxType18NotificationParam&) p_param).GetUnknown0x0c();
+		MxBool found = FALSE;
+
+		while (cursor.Next(tranInfo)) {
+			if (tranInfo->m_index == index) {
+				if (m_unk0x430 && m_unk0x42c == tranInfo) {
+					FUN_10064b50(-1);
+				}
+
+				if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+					BackgroundAudioManager()->RaiseVolume();
+				}
+
+				m_unk0x39 = FALSE;
+				m_unk0x404 = Timer()->GetTime();
+
+				found = TRUE;
+				cursor.Detach();
+				delete tranInfo;
+
+				for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
+					LegoROI* roi = m_unk0x3c[i].m_roi;
+
+					if (roi != NULL) {
+						LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+
+						if (actor != NULL) {
+							actor->Restart();
+						}
+					}
+				}
+
+				break;
+			}
+		}
+
+		if (m_unk0x1a && found) {
+			m_unk0x18++;
+
+			if (m_animCount <= m_unk0x18) {
+				m_unk0x1a = FALSE;
+			}
+			else {
+				MxType18NotificationParam param(c_notificationType18, this, 0);
+				NotificationManager()->Send(this, param);
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -1054,6 +1112,13 @@ void LegoAnimationManager::FUN_10064740(Vector3*)
 // STUB: LEGO1 0x100648f0
 // FUNCTION: BETA10 0x10045daf
 void LegoAnimationManager::FUN_100648f0(LegoTranInfo*, MxLong)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10064b50
+// FUNCTION: BETA10 0x10045f14
+void LegoAnimationManager::FUN_10064b50(undefined4)
 {
 	// TODO
 }

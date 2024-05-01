@@ -19,6 +19,8 @@ public:
 		return new MxType18NotificationParam(m_type, m_sender, m_unk0x0c);
 	} // vtable+0x04
 
+	inline undefined4 GetUnknown0x0c() { return m_unk0x0c; }
+
 protected:
 	undefined4 m_unk0x0c; // 0x0c
 };
