@@ -42,10 +42,10 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		m_world = CurrentWorld();
 		m_world->Add(this);
-		// The type `Pizza` is an educated guesss, inferred from VTable0xe4() below
-		Pizza* findResult = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
-		if (findResult) {
-			findResult->SetUnknown0x84((undefined*) this);
+
+		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
+		if (pizza) {
+			pizza->SetSkateboard(this);
 		}
 	}
 
