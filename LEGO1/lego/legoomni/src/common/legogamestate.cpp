@@ -791,7 +791,7 @@ void LegoGameState::SwitchArea(Area p_area)
 
 	FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d);
 	BackgroundAudioManager()->Stop();
-	AnimationManager()->FUN_1005ef10();
+	AnimationManager()->Suspend();
 	VideoManager()->SetUnk0x554(FALSE);
 
 	switch (p_area) {
@@ -896,7 +896,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		else {
 			SetCameraControllerFromIsle();
 			CurrentActor()->ResetWorldTransform(TRUE);
-			AnimationManager()->FUN_1005f0b0();
+			AnimationManager()->Resume();
 		}
 
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
@@ -910,7 +910,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		SetCameraControllerFromIsle();
 		CurrentActor()->ResetWorldTransform(TRUE);
-		AnimationManager()->FUN_1005f0b0();
+		AnimationManager()->Resume();
 		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
 		break;
 	case e_police:
@@ -1083,28 +1083,28 @@ void LegoGameState::Init()
 	if (m_loadedAct == e_act1) {
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
 
-		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, 1);
+		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, CopterScript::c_Helicopter_Actor);
 		if (copter) {
 			isle->FUN_1001fc80(copter);
 			isle->VTable0x6c(copter);
 			delete copter;
 		}
 
-		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, 2);
+		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, DunecarScript::c_DuneBugy_Actor);
 		if (dunebuggy) {
 			isle->FUN_1001fc80(dunebuggy);
 			isle->VTable0x6c(dunebuggy);
 			delete dunebuggy;
 		}
 
-		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, 3);
+		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, JetskiScript::c_Jetski_Actor);
 		if (jetski) {
 			isle->FUN_1001fc80(jetski);
 			isle->VTable0x6c(jetski);
 			delete jetski;
 		}
 
-		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, 4);
+		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, RacecarScript::c_RaceCar_Actor);
 		if (racecar) {
 			isle->FUN_1001fc80(racecar);
 			isle->VTable0x6c(racecar);

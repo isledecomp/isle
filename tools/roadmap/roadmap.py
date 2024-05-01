@@ -10,6 +10,7 @@ import bisect
 from typing import Iterator, List, Optional, Tuple
 from collections import namedtuple
 from isledecomp import Bin as IsleBin
+from isledecomp.bin import InvalidVirtualAddressError
 from isledecomp.cvdump import Cvdump
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.types import SymbolType
@@ -87,7 +88,7 @@ def print_sections(sections):
     print()
 
 
-ALLOWED_TYPE_ABBREVIATIONS = ["fun", "dat", "poi", "str", "vta"]
+ALLOWED_TYPE_ABBREVIATIONS = ["fun", "dat", "poi", "str", "vta", "flo"]
 
 
 def match_type_abbreviation(mtype: Optional[SymbolType]) -> str:
@@ -456,7 +457,16 @@ def main():
                 module_name,
             )
 
-        results = list(map(to_roadmap_row, engine.get_all()))
+        def roadmap_row_generator(matches):
+            for match in matches:
+                try:
+                    yield to_roadmap_row(match)
+                except InvalidVirtualAddressError:
+                    # This is here to work around the fact that we have RVA
+                    # values (i.e. not real virtual addrs) in our compare db.
+                    pass
+
+        results = list(roadmap_row_generator(engine.get_all()))
 
         if args.order is not None:
             suggest_order(results, module_map, args.order)

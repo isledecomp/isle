@@ -2,7 +2,7 @@ import logging
 import struct
 import bisect
 from functools import cached_property
-from typing import List, Optional, Tuple
+from typing import Iterator, List, Optional, Tuple
 from dataclasses import dataclass
 from collections import namedtuple
 
@@ -77,6 +77,18 @@ class Section:
     def contains_vaddr(self, vaddr: int) -> bool:
         return self.virtual_address <= vaddr < self.virtual_address + self.extent
 
+    def read_virtual(self, vaddr: int, size: int) -> memoryview:
+        ofs = vaddr - self.virtual_address
+
+        # Negative index will read from the end, which we don't want
+        if ofs < 0:
+            raise InvalidVirtualAddressError
+
+        try:
+            return self.view[ofs : ofs + size]
+        except IndexError as ex:
+            raise InvalidVirtualAddressError from ex
+
     def addr_is_uninitialized(self, vaddr: int) -> bool:
         """We cannot rely on the IMAGE_SCN_CNT_UNINITIALIZED_DATA flag (0x80) in
         the characteristics field so instead we determine it this way."""
@@ -109,6 +121,7 @@ class Bin:
         self._section_vaddr: List[int] = []
         self.find_str = find_str
         self._potential_strings = {}
+        self._relocations = set()
         self._relocated_addrs = set()
         self.imports = []
         self.thunks = []
@@ -279,10 +292,48 @@ class Bin:
         # We are now interested in the relocated addresses themselves. Seek to the
         # address where there is a relocation, then read the four bytes into our set.
         reloc_addrs.sort()
+        self._relocations = set(reloc_addrs)
+
         for section_id, offset in map(self.get_relative_addr, reloc_addrs):
             section = self.get_section_by_index(section_id)
             (relocated_addr,) = struct.unpack("<I", section.view[offset : offset + 4])
             self._relocated_addrs.add(relocated_addr)
+
+    def find_float_consts(self) -> Iterator[Tuple[int, int, float]]:
+        """Floating point instructions that refer to a memory address can
+        point to constant values. Search the code sections to find FP
+        instructions and check whether the pointer address refers to
+        read-only data."""
+
+        # TODO: Should check any section that has code, not just .text
+        text = self.get_section_by_name(".text")
+        rdata = self.get_section_by_name(".rdata")
+
+        # These are the addresses where a relocation occurs.
+        # Meaning: it points to an absolute address of something
+        for addr in self._relocations:
+            if not text.contains_vaddr(addr):
+                continue
+
+            # Read the two bytes before the relocated address.
+            # We will check against possible float opcodes
+            raw = text.read_virtual(addr - 2, 6)
+            (opcode, opcode_ext, const_addr) = struct.unpack("<BBL", raw)
+
+            # Skip right away if this is not const data
+            if not rdata.contains_vaddr(const_addr):
+                continue
+
+            if opcode_ext in (0x5, 0xD, 0x15, 0x1D, 0x25, 0x2D, 0x35, 0x3D):
+                if opcode in (0xD8, 0xD9):
+                    # dword ptr -- single precision
+                    (float_value,) = struct.unpack("<f", self.read(const_addr, 4))
+                    yield (const_addr, 4, float_value)
+
+                elif opcode in (0xDC, 0xDD):
+                    # qword ptr -- double precision
+                    (float_value,) = struct.unpack("<d", self.read(const_addr, 8))
+                    yield (const_addr, 8, float_value)
 
     def _populate_imports(self):
         """Parse .idata to find imported DLLs and their functions."""

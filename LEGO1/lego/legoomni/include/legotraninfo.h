@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxgeometry/mxmatrix.h"
 
+struct AnimInfo;
 class LegoAnimMMPresenter;
 
 // SIZE 0x78
@@ -30,7 +31,7 @@ struct LegoTranInfo {
 		m_unk0x2c.SetIdentity();
 	}
 
-	undefined4 m_unk0x00;             // 0x00
+	AnimInfo* m_animInfo;             // 0x00
 	MxU32 m_index;                    // 0x04
 	LegoROI* m_unk0x08;               // 0x08
 	MxMatrix* m_unk0x0c;              // 0x0c

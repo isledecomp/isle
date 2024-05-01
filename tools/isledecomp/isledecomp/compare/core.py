@@ -82,6 +82,7 @@ class Compare:
         self._load_cvdump()
         self._load_markers()
         self._find_original_strings()
+        self._find_float_const()
         self._match_imports()
         self._match_exports()
         self._match_thunks()
@@ -248,6 +249,18 @@ class Compare:
                 continue
 
             self._db.match_string(addr, string)
+
+    def _find_float_const(self):
+        """Add floating point constants in each binary to the database.
+        We are not matching anything right now because these values are not
+        deduped like strings."""
+        for addr, size, float_value in self.orig_bin.find_float_consts():
+            self._db.set_orig_symbol(addr, SymbolType.FLOAT, str(float_value), size)
+
+        for addr, size, float_value in self.recomp_bin.find_float_consts():
+            self._db.set_recomp_symbol(
+                addr, SymbolType.FLOAT, str(float_value), None, size
+            )
 
     def _match_imports(self):
         """We can match imported functions based on the DLL name and
