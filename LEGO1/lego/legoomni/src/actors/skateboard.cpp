@@ -77,7 +77,7 @@ MxU32 SkateBoard::VTable0xcc()
 	}
 	FUN_10015820(TRUE, 0);
 
-	((Isle*) GetWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
+	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
 	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 0x32, FALSE, TRUE);
 	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
@@ -98,7 +98,7 @@ MxU32 SkateBoard::VTable0xcc()
 	Vector3 vec = Vector3(&stuff[0][0]);
 	// MxBool puVar11 = (MxBool) 0xf4;
 	AnimationManager()->FUN_10064670((int)&vec);
-	AnimationManager()->FUN_10064670((int)&vec);
+	AnimationManager()->FUN_10064740((int)&vec);
 	return 1;
 }
 
