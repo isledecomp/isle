@@ -125,6 +125,7 @@ private:
 	MxBool FUN_10062710(AnimInfo& p_info);
 	void FUN_10063aa0();
 	void FUN_100648f0(LegoTranInfo*, MxLong);
+	void FUN_10064b50(undefined4);
 
 	MxS32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
@@ -132,7 +133,7 @@ private:
 	MxU16 m_unk0x10;                   // 0x10
 	AnimInfo* m_anims;                 // 0x14
 	undefined2 m_unk0x18;              // 0x18
-	undefined m_unk0x1a;               // 0x1a
+	MxBool m_unk0x1a;                  // 0x1a
 	MxU32 m_unk0x1c;                   // 0x1c
 	LegoTranInfoList* m_tranInfoList;  // 0x20
 	LegoTranInfoList* m_tranInfoList2; // 0x24
@@ -159,8 +160,8 @@ private:
 	MxBool m_unk0x429;                 // 0x429
 	undefined m_unk0x42a;              // 0x42a
 	MxBool m_suspended;                // 0x42b
-	undefined4 m_unk0x42c;             // 0x42c
-	undefined m_unk0x430;              // 0x430
+	LegoTranInfo* m_unk0x42c;          // 0x42c
+	MxBool m_unk0x430;                 // 0x430
 	undefined4 m_unk0x434[2];          // 0x434
 	MxMatrix m_unk0x43c;               // 0x43c
 	MxMatrix m_unk0x484;               // 0x484

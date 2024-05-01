@@ -47,8 +47,8 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 	case c_notificationClick:
 		ret = VTable0xd4((LegoControlManagerEvent&) p_param);
 		break;
-	case c_notificationType18:
-		ret = VTable0xd8((MxType18NotificationParam&) p_param);
+	case c_notificationEndAnim:
+		ret = VTable0xd8((LegoEndAnimNotificationParam&) p_param);
 		break;
 	case c_notificationType19:
 		ret = VTable0xdc((MxType19NotificationParam&) p_param);

@@ -248,7 +248,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10003c20
-MxU32 Helicopter::VTable0xd8(MxType18NotificationParam& p_param)
+MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
 {
 	MxU32 ret = 0;
 

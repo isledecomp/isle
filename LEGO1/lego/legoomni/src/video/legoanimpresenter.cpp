@@ -4,6 +4,7 @@
 #include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"
 #include "legocharactermanager.h"
+#include "legoendanimnotificationparam.h"
 #include "legopathboundary.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -15,7 +16,6 @@
 #include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
-#include "mxtype18notificationparam.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
@@ -1021,7 +1021,7 @@ void LegoAnimPresenter::EndAction()
 	LegoWorld* world = CurrentWorld();
 
 	if (world != NULL) {
-		MxType18NotificationParam param(c_notificationType18, NULL, 0);
+		LegoEndAnimNotificationParam param(c_notificationEndAnim, NULL, 0);
 		NotificationManager()->Send(world, param);
 	}
 

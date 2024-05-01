@@ -31,6 +31,8 @@ struct LegoTranInfo {
 		m_unk0x2c.SetIdentity();
 	}
 
+	~LegoTranInfo() { delete m_unk0x0c; }
+
 	AnimInfo* m_animInfo;             // 0x00
 	MxU32 m_index;                    // 0x04
 	LegoROI* m_unk0x08;               // 0x08
