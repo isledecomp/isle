@@ -2,10 +2,10 @@
 #define ISLEPATHACTOR_H
 
 #include "legocontrolmanager.h"
+#include "legoendanimnotificationparam.h"
 #include "legogamestate.h"
 #include "legopathactor.h"
 #include "legoworld.h"
-#include "mxtype18notificationparam.h"
 #include "mxtype19notificationparam.h"
 #include "mxtypes.h"
 
@@ -46,7 +46,7 @@ public:
 	virtual MxU32 VTable0xd4(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
 
 	// FUNCTION: LEGO1 0x10002e90
-	virtual MxU32 VTable0xd8(MxType18NotificationParam&) { return 0; } // vtable+0xd8
+	virtual MxU32 VTable0xd8(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
 
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc

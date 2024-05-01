@@ -138,7 +138,7 @@ MxLong Isle::Notify(MxParam& p_param)
 		case c_notificationClick:
 			result = HandleClick((LegoControlManagerEvent&) p_param);
 			break;
-		case c_notificationType18:
+		case c_notificationEndAnim:
 			switch (m_act1state->m_unk0x018) {
 			case 4:
 				result = CurrentActor()->Notify(p_param);
