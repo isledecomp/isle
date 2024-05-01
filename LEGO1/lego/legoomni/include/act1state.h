@@ -91,8 +91,6 @@ public:
 	// Act1State::`scalar deleting destructor'
 
 	friend class Isle;
-	// I would very much prefer to use getters and setters, but that seems to mess up other code.
-	// Maybe we need to add the right number of getters and setters?
 	friend class SkateBoard;
 
 protected:
@@ -108,7 +106,7 @@ protected:
 	MxBool m_unk0x01f;            // 0x01f
 	MxBool m_planeActive;         // 0x020
 	undefined m_unk0x021;         // 0x021
-	undefined m_unk0x022;         // 0x022
+	MxBool m_unk0x022;            // 0x022
 	undefined m_unk0x023;         // 0x023
 	NamedPlane m_unk0x024;        // 0x024
 	NamedPlane m_unk0x070;        // 0x070

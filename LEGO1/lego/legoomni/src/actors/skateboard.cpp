@@ -10,6 +10,7 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
 #include "pizza.h"
 
@@ -18,7 +19,7 @@ DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 // FUNCTION: LEGO1 0x1000fd40
 SkateBoard::SkateBoard()
 {
-	m_unk0x160 = 0;
+	m_unk0x160 = FALSE;
 	m_unk0x13c = 15.0;
 	m_unk0x150 = 3.5;
 	m_unk0x148 = 1;
@@ -54,13 +55,13 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 // FUNCTION: LEGO1 0x10010050
 void SkateBoard::VTable0xe4()
 {
-	// TODO: Work out what kind of structure this points to
-	if (m_act1state->GetUnknown18() == 3) {
+	if (m_act1state->m_unk0x018 == 3) {
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
 		pizza->FUN_10038380();
 		pizza->FUN_100382b0();
-		m_unk0x160 = 0;
+		m_unk0x160 = FALSE;
 	}
+
 	IslePathActor::VTable0xe4();
 	GameState()->m_currentArea = LegoGameState::Area::e_skateboard;
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_SkateArms_Ctl);
@@ -72,33 +73,34 @@ void SkateBoard::VTable0xe4()
 MxU32 SkateBoard::VTable0xcc()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-	if (!FUN_1003ef60() && state->GetUnknown18() != 3) {
+
+	if (!FUN_1003ef60() && state->m_unk0x018 != 3) {
 		return 1;
 	}
+
 	FUN_10015820(TRUE, 0);
 
 	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
-	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 0x32, FALSE, TRUE);
+	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, TRUE);
+
 	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
 			CurrentActor()->VTable0xe4();
 		}
 	}
+
 	if (!CurrentActor()->IsA("SkateBoard")) {
 		VTable0xe0();
-		InvokeAction(Extra::ActionType::e_start, *g_isleScript, 0xc1, NULL);
+		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_SkateDashboard, NULL);
 		GetCurrentAction().SetObjectId(-1);
 		ControlManager()->Register(this);
 	}
-	FUN_10010270(this->m_unk0x160);
-	// this->m_roi->GetLocal2World().GetData()[0]
-	// TODO: If this is correct, then the signature of the AnimationManager calls are wrong.
-	// float data[3];
-	Matrix4 stuff = this->m_roi->GetLocal2World();
-	Vector3 vec = Vector3(&stuff[3][0]);
-	// MxBool puVar11 = (MxBool) 0xf4;
-	AnimationManager()->FUN_10064670((int)&vec);
-	AnimationManager()->FUN_10064740((int)&vec);
+
+	FUN_10010270(m_unk0x160);
+
+	Vector3 position = m_roi->GetWorldPosition();
+	AnimationManager()->FUN_10064670(&position);
+	AnimationManager()->FUN_10064740(&position);
 	return 1;
 }
 
@@ -107,7 +109,7 @@ MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 {
 	MxU32 result = 0;
 
-	if (p_param.GetUnknown0x28() == 1 && p_param.GetClickedObjectId() == 0xc3) {
+	if (p_param.GetUnknown0x28() == 1 && p_param.GetClickedObjectId() == IsleScript::c_SkateArms_Ctl) {
 		VTable0xe4();
 		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
 		result = 1;
@@ -117,44 +119,45 @@ MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10010270
-void SkateBoard::FUN_10010270(undefined4 param_1)
+// FUNCTION: BETA10 0x100f5366
+void SkateBoard::FUN_10010270(MxBool p_enable)
 {
-	MxCore* pMVar3;
-
 	m_act1state = (Act1State*) GameState()->GetState("Act1State");
 	if (!m_act1state) {
-		this->m_act1state = (Act1State*) GameState()->CreateState("Act1State");
+		m_act1state = (Act1State*) GameState()->CreateState("Act1State");
 	}
-	if (pMVar3 = this->m_world->Find(*g_isleScript, IsleScript::c_SkatePizza_Bitmap)) {
-		// I have no idea what this is. Need a call with vtable offset 0x54 and (likely) no argument.
-		((LegoWorld*) pMVar3)->VTable0x54();
+
+	MxStillPresenter* presenter = (MxStillPresenter*) m_world->Find(*g_isleScript, IsleScript::c_SkatePizza_Bitmap);
+	if (presenter) {
+		presenter->Enable(p_enable);
 	}
-	else {
-		if (this->m_unk0x160 != '\0') {
-			NotificationManager()->Send(this, MxNotificationParam(c_notificationType0, NULL));
-		}
+	else if (m_unk0x160) {
+		NotificationManager()->Send(this, MxNotificationParam(c_notificationType0, NULL));
 	}
 }
 
 // FUNCTION: LEGO1 0x100104f0
+// FUNCTION: BETA10 0x100f5472
 MxU32 SkateBoard::VTable0xd0()
 {
-	FUN_10010270(this->m_unk0x160);
+	FUN_10010270(m_unk0x160);
 	return 1;
 }
 
 // FUNCTION: LEGO1 0x10010510
 void SkateBoard::FUN_10010510()
 {
-	if (m_act1state->GetUnknown18() != 3) {
+	if (m_act1state->m_unk0x018 != 3) {
 		PlayMusic(JukeboxScript::c_BeachBlvd_Music);
-		if (m_act1state->m_unk0x022 == '\0') {
-			m_act1state->m_unk0x022 = 1;
-			MxMatrix matrix = MxMatrix(CurrentActor()->GetROI()->GetLocal2World());
-			matrix.TranslateBy(2.5 * matrix[2][0], 0.2 + matrix[2][1], 2.5 * matrix[2][2]);
+
+		if (!m_act1state->m_unk0x022) {
+			m_act1state->m_unk0x022 = TRUE;
+
+			MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
+			mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.2, mat[2][2] * 2.5);
+
 			AnimationManager()
-				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &matrix, '\x01', '\0', NULL, 0, TRUE, TRUE, '\x01');
+				->FUN_10060dc0(IsleScript::c_sns008in_RunAnim, &mat, TRUE, FALSE, NULL, FALSE, TRUE, TRUE, TRUE);
 		}
 	}
-	return;
 }
