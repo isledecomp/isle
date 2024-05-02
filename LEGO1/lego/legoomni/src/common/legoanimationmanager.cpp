@@ -1136,8 +1136,8 @@ MxResult LegoAnimationManager::Tickle()
 // FUNCTION: BETA10 0x10042f41
 MxU16 LegoAnimationManager::FUN_10062110(
 	LegoROI* p_roi,
-	Vector3& direction,
-	Vector3& position,
+	Vector3& p_direction,
+	Vector3& p_position,
 	LegoPathBoundary* p_boundary,
 	float p_speed,
 	MxU8 p_und,
