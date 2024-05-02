@@ -103,65 +103,6 @@ public:
 		MxAtomId* m_atomId; // 0x18
 	};
 
-	// SIZE 0x38
-	struct PathContainer {
-		PathContainer() {}
-
-		// FUNCTION: LEGO1 0x1001b1b0
-		PathContainer(
-			undefined4 p_unk0x00,
-			MxAtomId* p_script,
-			undefined4 p_unk0x04,
-			const char* p_key,
-			undefined2 p_unk0x20,
-			float p_unk0x24,
-			undefined2 p_unk0x28,
-			float p_unk0x2c,
-			undefined4 p_unk0x30,
-			MxS32 p_unk0x34
-		)
-		{
-			m_unk0x00 = p_unk0x00;
-			m_script = p_script;
-			m_unk0x04 = p_unk0x04;
-			strcpy(m_key, p_key);
-			m_unk0x20 = p_unk0x20;
-			m_unk0x24 = p_unk0x24;
-			m_unk0x28 = p_unk0x28;
-			m_unk0x2c = p_unk0x2c;
-			m_unk0x30 = p_unk0x30;
-			m_unk0x34 = p_unk0x34;
-		}
-
-		// FUNCTION: LEGO1 0x1001b230
-		PathContainer& operator=(const PathContainer& p_container)
-		{
-			m_unk0x00 = p_container.m_unk0x00;
-			m_script = p_container.m_script;
-			m_unk0x04 = p_container.m_unk0x04;
-			strcpy(m_key, p_container.m_key);
-			m_unk0x20 = p_container.m_unk0x20;
-			m_unk0x24 = p_container.m_unk0x24;
-			m_unk0x28 = p_container.m_unk0x28;
-			m_unk0x2c = p_container.m_unk0x2c;
-			m_unk0x30 = p_container.m_unk0x30;
-			m_unk0x34 = p_container.m_unk0x34;
-			return *this;
-		}
-
-	private:
-		undefined4 m_unk0x00; // 0x00
-		MxAtomId* m_script;   // 0x04
-		undefined4 m_unk0x04; // 0x08
-		char m_key[20];       // 0x0c
-		undefined2 m_unk0x20; // 0x20
-		float m_unk0x24;      // 0x24
-		undefined2 m_unk0x28; // 0x28
-		float m_unk0x2c;      // 0x2c
-		undefined4 m_unk0x30; // 0x30
-		MxS32 m_unk0x34;      // 0x34
-	};
-
 	LegoOmni();
 	~LegoOmni() override; // vtable+00
 

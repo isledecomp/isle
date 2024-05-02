@@ -1,5 +1,6 @@
 #include "legoomni.h"
 
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
@@ -28,7 +29,6 @@
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoOmni::ScriptContainer, 0x1c)
-DECOMP_SIZE_ASSERT(LegoOmni::PathContainer, 0x38)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)
 
@@ -119,43 +119,6 @@ MxAtomId* g_nocdSourceName = NULL;
 // GLOBAL: LEGO1 0x100f6718
 // STRING: LEGO1 0x100f6710
 const char* g_current = "current";
-
-// GLOBAL: LEGO1 0x10102b28
-LegoOmni::PathContainer g_extraPaths[29];
-
-// FUNCTION: LEGO1 0x1001a700
-void RegisterExtraPaths()
-{
-	g_extraPaths[0] = LegoOmni::PathContainer(0x16, g_isleScript, 0, "int35", 2, 0.6, 4, 0.4, 0x2a, 0x12);
-	g_extraPaths[1] = LegoOmni::PathContainer(0x17, g_isleScript, 0, "edg00_49", 1, 0.43, 2, 0.6, 0x27, 0x12);
-	g_extraPaths[2] = LegoOmni::PathContainer(0x18, g_isleScript, 0, "edg00_191", 2, 0.5, 0, 0.55, 0x26, 0x12);
-	g_extraPaths[3] = LegoOmni::PathContainer(0x04, g_isleScript, 0, "int46", 0, 0.5, 2, 0.5, 0x10, 0x0b);
-	g_extraPaths[4] = LegoOmni::PathContainer(0x10, g_isleScript, 0, "EDG00_46", 0, 0.95, 2, 0.19, 0x17, 0x11);
-	g_extraPaths[5] = LegoOmni::PathContainer(0x11, g_isleScript, 0, "EDG00_46", 3, 0.625, 2, 0.03, 0x18, 0x11);
-	g_extraPaths[6] = LegoOmni::PathContainer(0x0f, g_isleScript, 0, "EDG10_63", 0, 0.26, 1, 0.01, 0, -1);
-	g_extraPaths[7] = LegoOmni::PathContainer(0x13, g_isleScript, 0, "INT15", 5, 0.65, 1, 0.68, 0x33, 0x0e);
-	g_extraPaths[8] = LegoOmni::PathContainer(0x14, g_isleScript, 0, "INT16", 4, 0.1, 2, 0, 0x34, 0x0e);
-	g_extraPaths[9] = LegoOmni::PathContainer(0x15, g_isleScript, 0, "INT62", 2, 0.1, 3, 0.7, 0x36, 0x0e);
-	g_extraPaths[10] = LegoOmni::PathContainer(0x19, g_isleScript, 0, "INT24", 0, 0.55, 2, 0.71, 0x08, 0x0f);
-	g_extraPaths[11] = LegoOmni::PathContainer(0x1c, g_isleScript, 0, "INT24", 2, 0.73, 4, 0.71, 0x0a, 0x0f);
-	g_extraPaths[12] = LegoOmni::PathContainer(0x1d, g_isleScript, 0, "INT19", 0, 0.85, 1, 0.28, 0, 0x0a);
-	g_extraPaths[13] = LegoOmni::PathContainer(0x1f, g_isleScript, 0, "EDG02_28", 3, 0.37, 1, 0.52, 0x0c, 0x0a);
-	g_extraPaths[14] = LegoOmni::PathContainer(0x20, g_isleScript, 0, "INT33", 0, 0.88, 2, 0.74, 0x22, 0x0c);
-	g_extraPaths[15] = LegoOmni::PathContainer(0x21, g_isleScript, 0, "EDG02_64", 2, 0.24, 0, 0.84, 0x23, 0x0c);
-	g_extraPaths[16] = LegoOmni::PathContainer(0x28, g_isleScript, 0, "edg02_51", 2, 0.63, 3, 0.01, 0, -1);
-	g_extraPaths[17] = LegoOmni::PathContainer(0x29, g_isleScript, 0, "edg02_51", 2, 0.63, 0, 0.4, 0, -1);
-	g_extraPaths[18] = LegoOmni::PathContainer(0x2b, g_isleScript, 0, "edg02_35", 2, 0.8, 0, 0.2, 0, -1);
-	g_extraPaths[19] = LegoOmni::PathContainer(0x2c, g_isleScript, 0, "EDG03_01", 2, 0.25, 0, 0.75, 0, -1);
-	g_extraPaths[20] = LegoOmni::PathContainer(0x2d, g_isleScript, 0, "edg10_70", 3, 0.25, 0, 0.7, 0x44, -1);
-	g_extraPaths[21] = LegoOmni::PathContainer(0x2a, g_isleScript, 0, "inv_05", 2, 0.75, 0, 0.19, 0, -1);
-	g_extraPaths[22] = LegoOmni::PathContainer(0x30, g_act3Script, 0, "edg02_51", 2, 0.63, 0, 0.4, 0, -1);
-	g_extraPaths[23] = LegoOmni::PathContainer(0x31, g_act3Script, 0, "inv_05", 2, 0.75, 0, 0.19, 0, -1);
-	g_extraPaths[24] = LegoOmni::PathContainer(0x32, g_act2mainScript, 0, "EDG02_51", 0, 0.64, 1, 0.37, 0, -1);
-	g_extraPaths[25] = LegoOmni::PathContainer(0x33, g_isleScript, 0, "edg02_32", 0, 0.5, 2, 0.5, 0, -1);
-	g_extraPaths[26] = LegoOmni::PathContainer(0x34, g_isleScript, 0, "edg02_19", 2, 0.5, 0, 0.5, 0, -1);
-	g_extraPaths[27] = LegoOmni::PathContainer(0x36, g_isleScript, 0, "int36", 0, 0.2, 4, 0.4, 0, -1);
-	g_extraPaths[28] = LegoOmni::PathContainer(0x37, g_isleScript, 0, "edg02_50", 2, 0.8, 1, 0.3, 0, -1);
-}
 
 // FUNCTION: LEGO1 0x1003dd70
 LegoROI* PickROI(MxLong p_a, MxLong p_b)
@@ -467,7 +430,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_variableTable->SetVariable(variable);
 
 	CreateScripts();
-	RegisterExtraPaths();
+	IslePathActor::RegisterSpawnLocations();
 	result = RegisterScripts();
 
 	if (result != SUCCESS) {
