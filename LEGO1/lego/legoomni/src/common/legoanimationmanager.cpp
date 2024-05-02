@@ -917,22 +917,6 @@ void LegoAnimationManager::FUN_10061530()
 	// TODO
 }
 
-// STUB: LEGO1 0x10062110
-// FUNCTION: BETA10 0x10042f41
-MxU16 LegoAnimationManager::FUN_10062110(
-	LegoROI* p_roi,
-	Vector3& direction,
-	Vector3& position,
-	LegoPathBoundary* p_boundary,
-	float p_speed,
-	MxU8 p_und,
-	MxBool p_unk0x14
-)
-{
-	// TODO
-	return 0;
-}
-
 // STUB: LEGO1 0x100617c0
 void LegoAnimationManager::FUN_100617c0(MxS32, MxU16&, MxU16&)
 {
@@ -1146,6 +1130,22 @@ MxResult LegoAnimationManager::Tickle()
 	}
 
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10062110
+// FUNCTION: BETA10 0x10042f41
+MxU16 LegoAnimationManager::FUN_10062110(
+	LegoROI* p_roi,
+	Vector3& direction,
+	Vector3& position,
+	LegoPathBoundary* p_boundary,
+	float p_speed,
+	MxU8 p_und,
+	MxBool p_unk0x14
+)
+{
+	// TODO
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10062360
