@@ -449,6 +449,7 @@ void IslePathActor::RegisterSpawnLocations()
 }
 
 // STUB: LEGO1 0x1001b2a0
+// FUNCTION: BETA10 0x100369c6
 void IslePathActor::VTable0xe8(LegoGameState::Area, MxBool, MxU8)
 {
 	// TODO
