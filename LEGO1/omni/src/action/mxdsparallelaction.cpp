@@ -5,6 +5,7 @@
 DECOMP_SIZE_ASSERT(MxDSParallelAction, 0x9c)
 
 // FUNCTION: LEGO1 0x100cae80
+// FUNCTION: BETA10 0x1015a14d
 MxDSParallelAction::MxDSParallelAction()
 {
 	this->SetType(e_parallelAction);

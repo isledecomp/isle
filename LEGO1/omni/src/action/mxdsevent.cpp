@@ -3,6 +3,7 @@
 DECOMP_SIZE_ASSERT(MxDSEvent, 0xb8)
 
 // FUNCTION: LEGO1 0x100c95f0
+// FUNCTION: BETA10 0x1015d2e5
 MxDSEvent::MxDSEvent()
 {
 	this->SetType(e_event);
