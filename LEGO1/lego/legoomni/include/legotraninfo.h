@@ -6,6 +6,8 @@
 
 struct AnimInfo;
 class LegoAnimMMPresenter;
+class LegoROI;
+class MxPresenter;
 
 // SIZE 0x78
 struct LegoTranInfo {

@@ -4,12 +4,14 @@
 #include "actionsfwd.h"
 #include "animstate.h"
 #include "decomp.h"
-#include "legoentity.h"
 #include "legotraninfolist.h"
 #include "mxcore.h"
 
 class LegoAnimPresenter;
+class LegoEntity;
+class LegoPathBoundary;
 class LegoROIList;
+class MxDSAction;
 
 // SIZE 0x18
 struct Character {
@@ -36,11 +38,13 @@ struct Vehicle {
 
 // SIZE 0x18
 struct Unknown0x3c {
-	LegoROI* m_roi;            // 0x00
-	MxS32 m_characterId;       // 0x04
-	undefined m_unk0x08[0x08]; // 0x08
-	float m_unk0x10;           // 0x10
-	MxBool m_unk0x14;          // 0x14
+	LegoROI* m_roi;       // 0x00
+	MxS32 m_characterId;  // 0x04
+	undefined4 m_unk0x08; // 0x08
+	undefined m_unk0x0c;  // 0x0c
+	MxBool m_unk0x0d;     // 0x0d
+	float m_unk0x10;      // 0x10
+	MxBool m_unk0x14;     // 0x14
 };
 
 // VTABLE: LEGO1 0x100d8c18
@@ -119,13 +123,24 @@ private:
 	);
 	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	void DeleteAnimations();
+	void FUN_10061530();
+	MxU16 FUN_10062110(
+		LegoROI* p_roi,
+		Vector3& p_direction,
+		Vector3& p_position,
+		LegoPathBoundary* p_boundary,
+		float p_speed,
+		MxU8 p_und,
+		MxBool p_unk0x14
+	);
 	MxS8 GetCharacterIndex(const char* p_name);
 	MxBool FUN_100623a0(AnimInfo& p_info);
 	void FUN_10062580(AnimInfo& p_info);
 	MxBool FUN_10062710(AnimInfo& p_info);
 	void FUN_10063aa0();
+	void FUN_10063d10();
 	void FUN_100648f0(LegoTranInfo*, MxLong);
-	void FUN_10064b50(undefined4);
+	void FUN_10064b50(MxLong p_time);
 
 	MxS32 m_scriptIndex;               // 0x08
 	MxU16 m_animCount;                 // 0x0c
@@ -145,12 +160,12 @@ private:
 	Unknown0x3c m_unk0x3c[40];         // 0x3c
 	undefined4 m_unk0x3fc;             // 0x3fc
 	MxBool m_unk0x400;                 // 0x400
-	undefined m_unk0x401;              // 0x401
-	MxU8 m_unk0x402;                   // 0x402
+	MxBool m_unk0x401;                 // 0x401
+	MxBool m_unk0x402;                 // 0x402
 	MxLong m_unk0x404;                 // 0x404
 	MxLong m_unk0x408;                 // 0x408
 	MxLong m_unk0x40c;                 // 0x40c
-	undefined4 m_unk0x410;             // 0x410
+	MxLong m_unk0x410;                 // 0x410
 	undefined4 m_unk0x414;             // 0x414
 	undefined4 m_unk0x418;             // 0x418
 	undefined4 m_unk0x41c;             // 0x41c
@@ -158,7 +173,7 @@ private:
 	LegoROIList* m_unk0x424;           // 0x424
 	MxBool m_unk0x428;                 // 0x428
 	MxBool m_unk0x429;                 // 0x429
-	undefined m_unk0x42a;              // 0x42a
+	MxBool m_unk0x42a;                 // 0x42a
 	MxBool m_suspended;                // 0x42b
 	LegoTranInfo* m_unk0x42c;          // 0x42c
 	MxBool m_unk0x430;                 // 0x430
