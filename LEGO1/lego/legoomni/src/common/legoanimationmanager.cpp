@@ -3,6 +3,7 @@
 #include "define.h"
 #include "islepathactor.h"
 #include "legocharactermanager.h"
+#include "legoendanimnotificationparam.h"
 #include "legogamestate.h"
 #include "legoomni.h"
 #include "legoroilist.h"
@@ -306,7 +307,7 @@ void LegoAnimationManager::Init()
 	m_unk0x3fc = 0;
 	m_unk0x400 = FALSE;
 	m_unk0x414 = 0;
-	m_unk0x418 = 5;
+	m_numAllowedExtras = 5;
 	m_unk0x0e = 0;
 	m_unk0x10 = 0;
 	m_unk0x401 = FALSE;
@@ -1121,11 +1122,11 @@ MxResult LegoAnimationManager::Tickle()
 	if (elapsedSeconds < 1.0 && elapsedSeconds > 0.01) {
 		g_unk0x100f7500 = (g_unk0x100f7500 * 2.0 + elapsedSeconds) / 3.0;
 
-		if (elapsedSeconds > 0.2 && m_unk0x418 > 2) {
-			m_unk0x418--;
+		if (elapsedSeconds > 0.2 && m_numAllowedExtras > 2) {
+			m_numAllowedExtras--;
 		}
-		else if (g_unk0x100f7500 < 0.16 && m_unk0x418 < m_unk0x41c) {
-			m_unk0x418++;
+		else if (g_unk0x100f7500 < 0.16 && m_numAllowedExtras < m_unk0x41c) {
+			m_numAllowedExtras++;
 		}
 	}
 

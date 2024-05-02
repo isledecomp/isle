@@ -167,7 +167,7 @@ private:
 	MxLong m_unk0x40c;                 // 0x40c
 	MxLong m_unk0x410;                 // 0x410
 	undefined4 m_unk0x414;             // 0x414
-	undefined4 m_unk0x418;             // 0x418
+	MxU32 m_numAllowedExtras;          // 0x418
 	undefined4 m_unk0x41c;             // 0x41c
 	AnimState* m_animState;            // 0x420
 	LegoROIList* m_unk0x424;           // 0x424
