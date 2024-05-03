@@ -57,7 +57,10 @@ public:
 	// FUNCTION: BETA10 0x100152e0
 	inline virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+20;
 
+	// FUNCTION: BETA10 0x1012ef90
 	inline Type GetType() const { return (Type) m_type; }
+
+	// FUNCTION: BETA10 0x1012efb0
 	inline const char* GetSourceName() const { return m_sourceName; }
 	inline const char* GetObjectName() const { return m_objectName; }
 	inline MxU32 GetObjectId() { return m_objectId; }
