@@ -162,16 +162,19 @@ Use `pip` to install the required packages to be able to use the Python tools fo
 pip install -r tools/requirements.txt
 ```
 
-* [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20), to get rid of a bugged warning
-* [`reccmp`](/tools/reccmp): Compares the original EXE or DLL with a recompiled EXE or DLL, provided a PDB file
-* [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
 * [`decomplint`](/tools/decomplint): Checks the decompilation annotations (see above)
+* [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the decompilation annotations (see above)
 * [`ncc`](/tools/ncc): Checks naming conventions based on a set of rules
-* [`isledecomp`](/tools/isledecomp): A library that implements a parser to identify the "decompilation" annotations (see above)
+* [`reccmp`](/tools/reccmp): Compares an original binary with a recompiled binary, provided a PDB file
+* [`roadmap`](/tools/roadmap): Compares symbol locations in an original binary with the same symbol locations of a recompiled binary
+* [`verexp`](/tools/verexp): Verifies exports by comparing the exports of the original DLL and the recompiled DLL
+* [`vtable`](/tools/vtable): Asserts virtual table correctness by comparing a recompiled binary with the original
+* [`datacmp.py`](/tools/datacmp.py): Compares global data found in the original with the recompiled version 
+* [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning
 
 ## Testing
 
-`isledecomp` has a small suite of tests. Install `pylint` and run it, passing in the directory:
+`isledecomp` comes with a suite of tests. Install `pylint` and run it, passing in the directory:
 
 ```
 pip install pytest
