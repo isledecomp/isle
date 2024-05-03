@@ -5,6 +5,7 @@
 DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
 
 // FUNCTION: LEGO1 0x100ca9d0
+// FUNCTION: BETA10 0x10159cf3
 MxDSSerialAction::MxDSSerialAction()
 {
 	this->SetType(e_serialAction);
