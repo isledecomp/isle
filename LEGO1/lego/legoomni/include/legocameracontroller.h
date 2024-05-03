@@ -2,10 +2,10 @@
 #define LEGOCAMERACONTROLLER_H
 
 #include "legopointofviewcontroller.h"
-#include "mxcore.h"
-#include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxpoint32.h"
+
+class Vector3;
 
 // VTABLE: LEGO1 0x100d57b0
 // SIZE 0xc8

@@ -1,5 +1,6 @@
 #include "isle.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act1state.h"
 #include "ambulance.h"
 #include "bike.h"
@@ -22,6 +23,7 @@
 #include "legovideomanager.h"
 #include "misc.h"
 #include "motocycle.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"

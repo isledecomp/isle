@@ -1,5 +1,6 @@
 #include "act1state.h"
 
+#include "legonamedtexture.h"
 #include "legoutils.h"
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)

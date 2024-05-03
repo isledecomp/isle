@@ -3,14 +3,15 @@
 
 #include "decomp.h"
 #include "legoeventnotificationparam.h"
-#include "legoworld.h"
 #include "mxlist.h"
 #include "mxpresenter.h"
 #include "mxqueue.h"
 
 #include <dinput.h>
 
+class LegoCameraController;
 class LegoControlManager;
+class LegoWorld;
 
 extern MxS32 g_unk0x100f31b0;
 extern const char* g_unk0x100f31b4;

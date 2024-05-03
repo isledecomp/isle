@@ -2,7 +2,6 @@
 #define LEGORACECAR_H
 
 #include "legocarraceactor.h"
-#include "legopathactor.h"
 #include "legoracemap.h"
 
 /*

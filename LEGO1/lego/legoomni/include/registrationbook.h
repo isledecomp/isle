@@ -1,14 +1,12 @@
 #ifndef REGISTRATIONBOOK_H
 #define REGISTRATIONBOOK_H
 
-#include "jukebox.h"
-#include "legogamestate.h"
 #include "legoworld.h"
-#include "mxcontrolpresenter.h"
-#include "mxstillpresenter.h"
 
 class InfocenterState;
+class MxControlPresenter;
 class MxEndActionNotificationParam;
+class MxStillPresenter;
 class LegoControlManagerEvent;
 
 // VTABLE: LEGO1 0x100d9928

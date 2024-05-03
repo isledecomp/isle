@@ -1,10 +1,14 @@
 #include "islepathactor.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legonavcontroller.h"
+#include "legoomni.h"
 #include "legopathboundary.h"
 #include "legoutils.h"
+#include "legovideomanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxnotificationparam.h"
 

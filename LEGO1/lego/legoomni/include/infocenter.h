@@ -8,6 +8,7 @@
 #include "radio.h"
 
 class InfocenterState;
+class MxNotificationParam;
 class MxStillPresenter;
 class LegoControlManagerEvent;
 

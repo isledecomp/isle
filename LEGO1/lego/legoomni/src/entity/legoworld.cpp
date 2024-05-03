@@ -5,6 +5,8 @@
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
+#include "legocachesoundmanager.h"
+#include "legocameracontroller.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -22,6 +24,8 @@
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxticklemanager.h"
+#include "mxutilities.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)

@@ -3,12 +3,15 @@
 
 #include "actionsfwd.h"
 #include "decomp.h"
-#include "misc/legostorage.h"
 #include "mxtypes.h"
 
+#include <string.h>
+
 class LegoBackgroundColor;
+class LegoFile;
 class LegoFullScreenMovie;
 class LegoState;
+class LegoStorage;
 class MxVariable;
 class MxVariableTable;
 class MxString;

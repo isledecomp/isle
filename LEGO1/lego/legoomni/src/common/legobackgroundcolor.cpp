@@ -1,5 +1,6 @@
 #include "legobackgroundcolor.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
 #include "legoutils.h"
 #include "legovideomanager.h"

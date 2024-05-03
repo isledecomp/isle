@@ -3,7 +3,8 @@
 
 #include "legotypes.h"
 #include "mxgeometry/mxgeometry3d.h"
-#include "mxgeometry/mxmatrix.h"
+
+class Matrix4;
 
 // SIZE 0x50
 class LegoUnknown {

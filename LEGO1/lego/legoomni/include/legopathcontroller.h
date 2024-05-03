@@ -2,12 +2,15 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
-#include "legopathactor.h"
 #include "mxcore.h"
+#include "mxstl/stlcompat.h"
 
 class LegoAnimPresenter;
+class LegoPathActor;
 class LegoPathBoundary;
 class LegoWorld;
+class MxAtomId;
+class Vector3;
 
 struct LegoPathControllerComparator {
 	MxBool operator()(const undefined*, const undefined*) const { return 0; }

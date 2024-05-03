@@ -1,8 +1,9 @@
 #ifndef LEGOSOUNDMANAGER_H
 #define LEGOSOUNDMANAGER_H
 
-#include "legocachesoundmanager.h"
 #include "mxsoundmanager.h"
+
+class LegoCacheSoundManager;
 
 // VTABLE: LEGO1 0x100d6b10
 // SIZE 0x44

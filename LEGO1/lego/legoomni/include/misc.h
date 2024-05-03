@@ -3,9 +3,6 @@
 
 #include "compat.h"
 #include "decomp.h"
-#include "legoinputmanager.h"
-#include "legoomni.h"
-#include "legovideomanager.h"
 // Long include path due to dependency of misc library on LegoOmni
 #include "lego/legoomni/include/actions/actionsfwd.h"
 #include "mxtypes.h"
@@ -16,6 +13,7 @@ class LegoBuildingManager;
 class LegoCharacterManager;
 class LegoControlManager;
 class LegoGameState;
+class LegoInputManager;
 class LegoNavController;
 class LegoOmni;
 class LegoPlantManager;

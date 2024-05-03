@@ -4,7 +4,6 @@
 #include "decomp.h"
 #include "misc/legostorage.h"
 #include "mxcore.h"
-#include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d46c0
 // SIZE 0x08

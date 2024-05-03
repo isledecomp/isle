@@ -9,6 +9,7 @@
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
+#include "legocameracontroller.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoomni.h"

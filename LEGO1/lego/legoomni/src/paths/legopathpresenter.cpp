@@ -1,6 +1,8 @@
 #include "legopathpresenter.h"
 
+#include "legopathcontroller.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxautolock.h"
 #include "mxutilities.h"

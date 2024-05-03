@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(HistoryBook, 0x3e4)

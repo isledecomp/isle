@@ -3,9 +3,10 @@
 
 #include "decomp.h"
 #include "mxtypes.h"
-#include "roi/legoroi.h"
 
 #include <dsound.h>
+
+class LegoROI;
 
 // VTABLE: LEGO1 0x100d5778
 // SIZE 0x30

@@ -5,6 +5,7 @@
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "misc/legotexture.h"
+#include "mxdirectx/mxdirect3d.h"
 #include "viewmanager/viewlodlist.h"
 
 DECOMP_SIZE_ASSERT(LegoLODList, 0x18)

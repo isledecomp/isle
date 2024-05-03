@@ -13,6 +13,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 
 DECOMP_SIZE_ASSERT(ElevatorBottom, 0xfc)
 

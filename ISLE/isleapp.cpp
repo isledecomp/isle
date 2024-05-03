@@ -1,5 +1,6 @@
 #include "isleapp.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
@@ -12,6 +13,7 @@
 #include "legoworldpresenter.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdirectx/mxdirect3d.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxomnicreateflags.h"
@@ -21,6 +23,7 @@
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "res/resource.h"
+#include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"
 
 #include <dsound.h>

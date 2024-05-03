@@ -2,16 +2,13 @@
 #define LEGOUTILS_H
 
 #include "extra.h"
-#include "misc/legostorage.h"
-#include "misc/legotexture.h"
-#include "mxstring.h"
 #include "mxtypes.h"
-#include "mxutilities.h"
 
 #include <windows.h>
 
 class MxAtomId;
 class LegoEntity;
+class LegoFile;
 class LegoAnimPresenter;
 class LegoNamedTexture;
 class LegoTreeNode;

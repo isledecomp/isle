@@ -2,8 +2,9 @@
 #define LEGOPALETTEPRESENTER_H
 
 #include "decomp.h"
-#include "mxpalette.h"
 #include "mxvideopresenter.h"
+
+class MxPalette;
 
 // VTABLE: LEGO1 0x100d9aa0
 // SIZE 0x68

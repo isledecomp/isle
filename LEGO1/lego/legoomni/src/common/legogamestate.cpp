@@ -1,5 +1,6 @@
 #include "legogamestate.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act1state.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
@@ -42,8 +43,10 @@
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
+#include "mxutilities.h"
 #include "mxvariabletable.h"
 #include "police_actions.h"
 #include "racecar.h"

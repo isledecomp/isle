@@ -1,6 +1,7 @@
 #include "gasstation.h"
 
 #include "garage_actions.h"
+#include "gasstationstate.h"
 #include "islepathactor.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
@@ -12,6 +13,7 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxstillpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"

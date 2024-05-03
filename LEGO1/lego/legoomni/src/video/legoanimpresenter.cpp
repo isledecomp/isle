@@ -1,9 +1,11 @@
 #include "legoanimpresenter.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "anim/legoanim.h"
 #include "define.h"
 #include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"
+#include "legocameracontroller.h"
 #include "legocharactermanager.h"
 #include "legoendanimnotificationparam.h"
 #include "legopathboundary.h"
@@ -20,6 +22,7 @@
 #include "mxutilities.h"
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 

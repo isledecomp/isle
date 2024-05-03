@@ -1,7 +1,11 @@
 #include "legovideomanager.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "legoinputmanager.h"
 #include "legoomni.h"
 #include "misc.h"
+#include "mxdirectx/mxdirect3d.h"
+#include "mxdirectx/mxstopwatch.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"

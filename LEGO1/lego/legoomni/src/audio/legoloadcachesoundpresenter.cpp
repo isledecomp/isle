@@ -1,5 +1,6 @@
 #include "legoloadcachesoundpresenter.h"
 
+#include "legocachesoundmanager.h"
 #include "legocachsound.h"
 #include "legosoundmanager.h"
 #include "misc.h"

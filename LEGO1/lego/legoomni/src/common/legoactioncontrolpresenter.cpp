@@ -9,6 +9,7 @@
 #include "mxmisc.h"
 #include "mxstreamchunk.h"
 #include "mxticklemanager.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoActionControlPresenter, 0x68)
 

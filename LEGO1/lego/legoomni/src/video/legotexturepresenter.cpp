@@ -6,6 +6,7 @@
 #include "misc/legoimage.h"
 #include "misc/legostorage.h"
 #include "mxcompositepresenter.h"
+#include "mxdirectx/mxdirect3d.h"
 
 DECOMP_SIZE_ASSERT(LegoTexturePresenter, 0x54)
 DECOMP_SIZE_ASSERT(LegoNamedTexture, 0x14)

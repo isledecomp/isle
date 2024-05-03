@@ -1,7 +1,12 @@
 #include "misc.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "legoinputmanager.h"
+#include "legoomni.h"
+#include "legovideomanager.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "roi/legoroi.h"
 
 // GLOBAL: LEGO1 0x100f4c58
 MxBool g_isWorldActive = TRUE;
