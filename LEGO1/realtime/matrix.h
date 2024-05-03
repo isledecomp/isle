@@ -162,7 +162,8 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		p_outQuat[0] = (m_data[2][1] - m_data[1][2]) * trace;
 		p_outQuat[1] = (m_data[0][2] - m_data[2][0]) * trace;
 		p_outQuat[2] = (m_data[1][0] - m_data[0][1]) * trace;
-	} else {
+	}
+	else {
 
 		// GLOBAL: LEGO1 0x100d4090
 		static int rotateIndex[] = {1, 2, 0};
