@@ -55,24 +55,25 @@ public:
 	// FUNCTION: ISLE 0x401c40
 	// FUNCTION: LEGO1 0x10005530
 	// FUNCTION: BETA10 0x100152e0
-	inline virtual void SetAtomId(MxAtomId p_atomId) { this->m_atomId = p_atomId; } // vtable+20;
+	inline virtual void SetAtomId(MxAtomId p_atomId) { m_atomId = p_atomId; } // vtable+20;
 
-	inline Type GetType() const { return (Type) this->m_type; }
-	inline const char* GetSourceName() const { return this->m_sourceName; }
-	inline const char* GetObjectName() const { return this->m_objectName; }
-	inline MxU32 GetObjectId() { return this->m_objectId; }
-	inline const MxAtomId& GetAtomId() { return this->m_atomId; }
-	inline MxS16 GetUnknown24() { return this->m_unk0x24; }
-	inline MxPresenter* GetUnknown28() { return this->m_unk0x28; }
+	inline Type GetType() const { return (Type) m_type; }
+	inline const char* GetSourceName() const { return m_sourceName; }
+	inline const char* GetObjectName() const { return m_objectName; }
+	inline MxU32 GetObjectId() { return m_objectId; }
+	inline const MxAtomId& GetAtomId() { return m_atomId; }
+	inline MxS16 GetUnknown24() { return m_unk0x24; }
+	inline MxPresenter* GetUnknown28() { return m_unk0x28; }
 
-	inline void SetType(Type p_type) { this->m_type = p_type; }
+	inline void SetType(Type p_type) { m_type = p_type; }
 
 	// FUNCTION: BETA10 0x100152b0
-	inline void SetObjectId(MxU32 p_objectId) { this->m_objectId = p_objectId; }
+	inline void SetObjectId(MxU32 p_objectId) { m_objectId = p_objectId; }
 
 	// FUNCTION: BETA10 0x10039570
-	inline void SetUnknown24(MxS16 p_unk0x24) { this->m_unk0x24 = p_unk0x24; }
-	inline void SetUnknown28(MxPresenter* p_unk0x28) { this->m_unk0x28 = p_unk0x28; }
+	inline void SetUnknown24(MxS16 p_unk0x24) { m_unk0x24 = p_unk0x24; }
+
+	inline void SetUnknown28(MxPresenter* p_unk0x28) { m_unk0x28 = p_unk0x28; }
 
 	inline void ClearAtom() { m_atomId.Clear(); }
 

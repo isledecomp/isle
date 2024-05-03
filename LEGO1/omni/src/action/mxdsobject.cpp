@@ -22,13 +22,13 @@ DECOMP_SIZE_ASSERT(MxDSObject, 0x2c);
 // FUNCTION: BETA10 0x101478c0
 MxDSObject::MxDSObject()
 {
-	this->m_type = e_object;
-	this->m_sourceName = NULL;
-	this->m_unk0x14 = 0;
-	this->m_objectName = NULL;
-	this->m_objectId = -1;
-	this->m_unk0x24 = -1;
-	this->m_unk0x28 = 0;
+	m_type = e_object;
+	m_sourceName = NULL;
+	m_unk0x14 = 0;
+	m_objectName = NULL;
+	m_objectId = -1;
+	m_unk0x24 = -1;
+	m_unk0x28 = NULL;
 }
 
 // FUNCTION: LEGO1 0x100bf7e0
@@ -43,19 +43,19 @@ MxDSObject::~MxDSObject()
 // FUNCTION: BETA10 0x10147a45
 void MxDSObject::CopyFrom(MxDSObject& p_dsObject)
 {
-	this->SetSourceName(p_dsObject.m_sourceName);
-	this->m_unk0x14 = p_dsObject.m_unk0x14;
-	this->SetObjectName(p_dsObject.m_objectName);
-	this->m_objectId = p_dsObject.m_objectId;
-	this->m_unk0x24 = p_dsObject.m_unk0x24;
-	this->m_atomId = p_dsObject.m_atomId;
-	this->m_unk0x28 = p_dsObject.m_unk0x28;
+	SetSourceName(p_dsObject.m_sourceName);
+	m_unk0x14 = p_dsObject.m_unk0x14;
+	SetObjectName(p_dsObject.m_objectName);
+	m_objectId = p_dsObject.m_objectId;
+	m_unk0x24 = p_dsObject.m_unk0x24;
+	m_atomId = p_dsObject.m_atomId;
+	m_unk0x28 = p_dsObject.m_unk0x28;
 }
 
 // FUNCTION: BETA10 0x10147abf
 MxDSObject::MxDSObject(MxDSObject& p_dsObject)
 {
-	this->CopyFrom(p_dsObject);
+	CopyFrom(p_dsObject);
 }
 
 // FUNCTION: LEGO1 0x100bf8c0
@@ -66,7 +66,7 @@ MxDSObject& MxDSObject::operator=(MxDSObject& p_dsObject)
 		return *this;
 	}
 
-	this->CopyFrom(p_dsObject);
+	CopyFrom(p_dsObject);
 	return *this;
 }
 
@@ -74,21 +74,21 @@ MxDSObject& MxDSObject::operator=(MxDSObject& p_dsObject)
 // FUNCTION: BETA10 0x10147b92
 void MxDSObject::SetObjectName(const char* p_objectName)
 {
-	if (p_objectName == this->m_objectName) {
+	if (p_objectName == m_objectName) {
 		return;
 	}
 
-	delete[] this->m_objectName;
+	delete[] m_objectName;
 
 	if (p_objectName) {
-		this->m_objectName = new char[strlen(p_objectName) + 1];
+		m_objectName = new char[strlen(p_objectName) + 1];
 
-		if (this->m_objectName) {
-			strcpy(this->m_objectName, p_objectName);
+		if (m_objectName) {
+			strcpy(m_objectName, p_objectName);
 		}
 	}
 	else {
-		this->m_objectName = NULL;
+		m_objectName = NULL;
 	}
 }
 
@@ -96,21 +96,21 @@ void MxDSObject::SetObjectName(const char* p_objectName)
 // FUNCTION: BETA10 0x10147c2e
 void MxDSObject::SetSourceName(const char* p_sourceName)
 {
-	if (p_sourceName == this->m_sourceName) {
+	if (p_sourceName == m_sourceName) {
 		return;
 	}
 
-	delete[] this->m_sourceName;
+	delete[] m_sourceName;
 
 	if (p_sourceName) {
-		this->m_sourceName = new char[strlen(p_sourceName) + 1];
+		m_sourceName = new char[strlen(p_sourceName) + 1];
 
-		if (this->m_sourceName) {
-			strcpy(this->m_sourceName, p_sourceName);
+		if (m_sourceName) {
+			strcpy(m_sourceName, p_sourceName);
 		}
 	}
 	else {
-		this->m_sourceName = NULL;
+		m_sourceName = NULL;
 	}
 }
 
@@ -130,25 +130,25 @@ MxU32 MxDSObject::GetSizeOnDisk()
 
 	sizeOnDisk += 2;
 
-	if (this->m_sourceName) {
-		sizeOnDisk += strlen(this->m_sourceName) + 1;
+	if (m_sourceName) {
+		sizeOnDisk += strlen(m_sourceName) + 1;
 	}
 	else {
 		sizeOnDisk++;
 	}
 
-	sizeOnDisk += sizeof(this->m_unk0x14);
+	sizeOnDisk += sizeof(m_unk0x14);
 
-	if (this->m_objectName) {
-		sizeOnDisk += strlen(this->m_objectName) + 1;
+	if (m_objectName) {
+		sizeOnDisk += strlen(m_objectName) + 1;
 	}
 	else {
 		sizeOnDisk++;
 	}
 
-	sizeOnDisk += sizeof(this->m_objectId);
+	sizeOnDisk += sizeof(m_objectId);
 
-	this->m_sizeOnDisk = sizeOnDisk;
+	m_sizeOnDisk = sizeOnDisk;
 	return sizeOnDisk;
 }
 
@@ -156,19 +156,19 @@ MxU32 MxDSObject::GetSizeOnDisk()
 // FUNCTION: BETA10 0x10147d73
 void MxDSObject::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 {
-	this->SetSourceName((char*) p_source);
-	p_source += strlen(this->m_sourceName) + 1;
+	SetSourceName((char*) p_source);
+	p_source += strlen(m_sourceName) + 1;
 
-	this->m_unk0x14 = *(MxU32*) p_source;
-	p_source += sizeof(this->m_unk0x14);
+	m_unk0x14 = *(undefined4*) p_source;
+	p_source += sizeof(m_unk0x14);
 
-	this->SetObjectName((char*) p_source);
-	p_source += strlen(this->m_objectName) + 1;
+	SetObjectName((char*) p_source);
+	p_source += strlen(m_objectName) + 1;
 
-	this->m_objectId = *(MxU32*) p_source;
-	p_source += sizeof(this->m_objectId);
+	m_objectId = *(MxU32*) p_source;
+	p_source += sizeof(m_objectId);
 
-	this->m_unk0x24 = p_unk0x24;
+	m_unk0x24 = p_unk0x24;
 }
 
 // FUNCTION: LEGO1 0x100bfb30
