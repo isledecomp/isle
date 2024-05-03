@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxgeometry/mxmatrix.h"
+#include "mxtypes.h"
 
 struct AnimInfo;
 class LegoAnimMMPresenter;

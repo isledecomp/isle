@@ -3,11 +3,13 @@
 
 #include "actionsfwd.h"
 #include "decomp.h"
-#include "hospitalstate.h"
 #include "legogamestate.h"
 #include "legoworld.h"
-#include "mxstillpresenter.h"
-#include "radio.h"
+
+class HospitalState;
+class LegoControlManagerEvent;
+class MxEndActionNotificationParam;
+class MxStillPresenter;
 
 // VTABLE: LEGO1 0x100d9730
 // SIZE 0x12c

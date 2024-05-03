@@ -6,6 +6,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"

@@ -3,7 +3,9 @@
 
 #include "decomp.h"
 #include "legoview1.h"
-#include "viewmanager/viewmanager.h"
+
+class ViewManager;
+class ViewROI;
 
 /////////////////////////////////////////////////////////////////////////////
 // Lego3DView

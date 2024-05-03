@@ -4,6 +4,7 @@
 #include "decomp.h"
 #include "mxautolock.h"
 #include "mxmisc.h"
+#include "mxnotificationparam.h"
 #include "mxparam.h"
 #include "mxticklemanager.h"
 #include "mxtypes.h"

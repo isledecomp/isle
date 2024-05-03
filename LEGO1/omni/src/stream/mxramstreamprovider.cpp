@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "mxdsbuffer.h"
+#include "mxdsfile.h"
 #include "mxomni.h"
 #include "mxstreamcontroller.h"
 

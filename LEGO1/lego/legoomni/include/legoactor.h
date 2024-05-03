@@ -2,8 +2,9 @@
 #define LEGOACTOR_H
 
 #include "decomp.h"
-#include "legocachsound.h"
 #include "legoentity.h"
+
+class LegoCacheSound;
 
 // VTABLE: LEGO1 0x100d6d68
 // SIZE 0x78

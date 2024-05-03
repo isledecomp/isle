@@ -3,12 +3,13 @@
 
 #include "decomp.h"
 #include "mxdsbuffer.h"
-#include "mxdsstreamingaction.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
 #include <string.h>
+
+class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dccb8
 // SIZE 0xc8

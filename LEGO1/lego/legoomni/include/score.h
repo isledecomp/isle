@@ -1,12 +1,12 @@
 #ifndef SCORE_H
 #define SCORE_H
 
-#include "legocontrolmanager.h"
-#include "legoeventnotificationparam.h"
 #include "legogamestate.h"
 #include "legoworld.h"
-#include "mxactionnotificationparam.h"
-#include "scorestate.h"
+
+class LegoControlManagerEvent;
+class MxEndActionNotificationParam;
+class ScoreState;
 
 // VTABLE: LEGO1 0x100d4018
 // SIZE 0x104

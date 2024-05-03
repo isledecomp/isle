@@ -1,9 +1,9 @@
 #ifndef ACT1STATE_H
 #define ACT1STATE_H
 
-#include "legonamedtexture.h"
 #include "legostate.h"
-#include "roi/legoroi.h"
+
+class LegoNamedTexture;
 
 // VTABLE: LEGO1 0x100d7028
 // SIZE 0x26c

@@ -4,7 +4,8 @@
 #include "decomp.h"
 #include "misc/legostorage.h"
 #include "misc/legotree.h"
-#include "realtime/matrix.h"
+
+class Matrix4;
 
 // SIZE 0x08
 class LegoAnimKey {

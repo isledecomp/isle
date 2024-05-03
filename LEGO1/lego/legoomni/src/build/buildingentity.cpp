@@ -2,6 +2,7 @@
 
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxnotificationparam.h"
 
 DECOMP_SIZE_ASSERT(BuildingEntity, 0x68)
 

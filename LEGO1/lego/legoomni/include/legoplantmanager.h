@@ -2,11 +2,11 @@
 #define LEGOPLANTMANAGER_H
 
 #include "decomp.h"
-#include "misc/legostorage.h"
 #include "mxcore.h"
 
 class LegoEntity;
 class LegoROI;
+class LegoStorage;
 
 // VTABLE: LEGO1 0x100d6758
 // SIZE 0x2c

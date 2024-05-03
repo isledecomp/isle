@@ -1,9 +1,13 @@
 #include "mxvideomanager.h"
 
 #include "mxautolock.h"
+#include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxomni.h"
+#include "mxpalette.h"
 #include "mxpresenter.h"
+#include "mxregion.h"
+#include "mxthread.h"
 #include "mxticklemanager.h"
 
 DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)

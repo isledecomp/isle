@@ -1,9 +1,11 @@
 #include "legoactor.h"
 
 #include "define.h"
+#include "legocachesoundmanager.h"
 #include "legosoundmanager.h"
 #include "misc.h"
 #include "mxutilities.h"
+#include "roi/legoroi.h"
 
 DECOMP_SIZE_ASSERT(LegoActor, 0x78)
 

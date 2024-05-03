@@ -2,8 +2,9 @@
 #define MXRAMSTREAMCONTROLLER_H
 
 #include "mxdsbuffer.h"
-#include "mxdsstreamingaction.h"
 #include "mxstreamcontroller.h"
+
+class MxDSStreamingAction;
 
 // VTABLE: LEGO1 0x100dc728
 // SIZE 0x98

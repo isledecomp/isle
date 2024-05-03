@@ -2,15 +2,14 @@
 #define LEGOWORLD_H
 
 #include "legocachesoundlist.h"
-#include "legocachsound.h"
-#include "legocameracontroller.h"
 #include "legoentity.h"
 #include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
-#include "mxpresenter.h"
 #include "mxpresenterlist.h"
+#include "roi/legoroi.h"
 
 class IslePathActor;
+class LegoCameraController;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
 

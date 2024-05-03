@@ -1,19 +1,23 @@
 #include "legoanimationmanager.h"
 
+#include "animstate.h"
 #include "define.h"
 #include "islepathactor.h"
 #include "legocharactermanager.h"
 #include "legoendanimnotificationparam.h"
+#include "legoextraactor.h"
 #include "legogamestate.h"
 #include "legoomni.h"
 #include "legoroilist.h"
+#include "legovideomanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
-#include "roi/legoroi.h"
 
 #include <io.h>
 

@@ -1,10 +1,11 @@
 #ifndef RADIO_H
 #define RADIO_H
 
-#include "legocontrolmanager.h"
-#include "mxactionnotificationparam.h"
 #include "mxcore.h"
-#include "radiostate.h"
+
+class LegoControlManagerEvent;
+class MxEndActionNotificationParam;
+class RadioState;
 
 // VTABLE: LEGO1 0x100d6d10
 // SIZE 0x10

@@ -1,6 +1,8 @@
 #include "legoutils.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act1state.h"
+#include "anim/legoanim.h"
 #include "islepathactor.h"
 #include "legoanimpresenter.h"
 #include "legogamestate.h"
@@ -8,14 +10,18 @@
 #include "legonamedtexture.h"
 #include "legoomni.h"
 #include "legosoundmanager.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "misc.h"
+#include "misc/legotree.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamer.h"
 #include "mxtypes.h"
+#include "mxutilities.h"
+#include "mxvariabletable.h"
 #include "realtime/realtime.h"
 
 #include <process.h>

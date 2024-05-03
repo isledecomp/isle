@@ -1,5 +1,9 @@
 #include "mxomnicreateflags.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxOmniCreateFlags, 0x02)
+
 // FUNCTION: LEGO1 0x100b0a30
 // FUNCTION: BETA10 0x10130a1c
 MxOmniCreateFlags::MxOmniCreateFlags()

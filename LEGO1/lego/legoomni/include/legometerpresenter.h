@@ -2,6 +2,7 @@
 #define LEGOMETERPRESENTER_H
 
 #include "mxstillpresenter.h"
+#include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d7ac8
 // SIZE 0x94

@@ -1,11 +1,16 @@
 #include "legopathactor.h"
 
+#include "geom/legounkown100db7f4.h"
+#include "legocachesoundmanager.h"
+#include "legocameracontroller.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
 #include "legosoundmanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
+#include "mxvariabletable.h"
 
 #include <vec.h>
 

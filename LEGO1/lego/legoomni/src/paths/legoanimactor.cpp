@@ -1,5 +1,6 @@
 #include "legoanimactor.h"
 
+#include "anim/legoanim.h"
 #include "define.h"
 #include "legolocomotionanimpresenter.h"
 #include "legopathboundary.h"

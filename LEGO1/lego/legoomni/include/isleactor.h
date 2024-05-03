@@ -2,8 +2,10 @@
 #define ISLEACTOR_H
 
 #include "legoactor.h"
-#include "legoworld.h"
-#include "mxactionnotificationparam.h"
+
+class LegoWorld;
+class MxEndActionNotificationParam;
+class MxNotificationParam;
 
 // VTABLE: LEGO1 0x100d5178
 // SIZE 0x7c

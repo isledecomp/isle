@@ -32,10 +32,10 @@ public:
 	// MxOmniCreateParam::`scalar deleting destructor'
 
 private:
-	MxString m_mediaPath;
-	HWND m_windowHandle;
-	MxVideoParam m_videoParam;
-	MxOmniCreateFlags m_createFlags;
+	MxString m_mediaPath;            // 0x04
+	HWND m_windowHandle;             // 0x14
+	MxVideoParam m_videoParam;       // 0x18
+	MxOmniCreateFlags m_createFlags; // 0x3c
 };
 
 // SYNTHETIC: ISLE 0x4014b0

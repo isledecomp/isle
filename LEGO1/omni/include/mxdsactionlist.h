@@ -2,9 +2,8 @@
 #define MXDSACTIONLIST_H
 
 #include "decomp.h"
+#include "mxdsaction.h"
 #include "mxlist.h"
-
-class MxDSAction;
 
 // VTABLE: LEGO1 0x100dcea8
 // class MxCollection<MxDSAction *>
@@ -31,7 +30,7 @@ public:
 	// MxDSActionList::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x18;
+	undefined m_unk0x18; // 0x18
 };
 
 // VTABLE: LEGO1 0x100d7e68

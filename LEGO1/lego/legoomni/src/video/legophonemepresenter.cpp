@@ -1,9 +1,11 @@
 #include "legophonemepresenter.h"
 
 #include "legocharactermanager.h"
+#include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
 #include "mxcompositepresenter.h"
+#include "mxdsaction.h"
 
 DECOMP_SIZE_ASSERT(LegoPhonemePresenter, 0x88)
 

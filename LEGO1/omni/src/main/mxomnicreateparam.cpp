@@ -1,5 +1,9 @@
 #include "mxomnicreateparam.h"
 
+#include "decomp.h"
+
+DECOMP_SIZE_ASSERT(MxOmniCreateParam, 0x40)
+
 // FUNCTION: LEGO1 0x100b0b00
 // FUNCTION: BETA10 0x10130b6b
 MxOmniCreateParam::MxOmniCreateParam(

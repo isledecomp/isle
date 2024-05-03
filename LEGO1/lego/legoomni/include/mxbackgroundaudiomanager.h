@@ -1,12 +1,11 @@
 #ifndef MXBACKGROUNDAUDIOMANAGER_H
 #define MXBACKGROUNDAUDIOMANAGER_H
 
-#include "mxaudiopresenter.h"
 #include "mxcore.h"
 #include "mxdsaction.h"
-#include "mxnotificationmanager.h"
-#include "mxpresenter.h"
 #include "mxtypes.h"
+
+class MxAudioPresenter;
 
 // VTABLE: LEGO1 0x100d9fe8
 // SIZE 0x150

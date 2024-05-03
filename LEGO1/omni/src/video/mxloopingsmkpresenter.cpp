@@ -2,6 +2,7 @@
 
 #include "mxautolock.h"
 #include "mxdsmediaaction.h"
+#include "mxdssubscriber.h"
 
 DECOMP_SIZE_ASSERT(MxLoopingSmkPresenter, 0x724);
 

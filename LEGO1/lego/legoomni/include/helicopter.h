@@ -1,9 +1,10 @@
 #ifndef HELICOPTER_H
 #define HELICOPTER_H
 
-#include "helicopterstate.h"
 #include "islepathactor.h"
 #include "realtime/matrix.h"
+
+class HelicopterState;
 
 // VTABLE: LEGO1 0x100d40f8
 // SIZE 0x230

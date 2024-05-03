@@ -1,5 +1,6 @@
 #include "legosoundmanager.h"
 
+#include "legocachesoundmanager.h"
 #include "mxautolock.h"
 #include "mxomni.h"
 

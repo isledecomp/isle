@@ -2,9 +2,9 @@
 #define __LEGOEDGE_H
 
 #include "misc/legotypes.h"
-#include "realtime/vector.h"
 
 class LegoWEEdge;
+class Vector3;
 
 // VTABLE: LEGO1 0x100db7b8
 // SIZE 0x24

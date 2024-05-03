@@ -2,6 +2,7 @@
 
 #include "infocenter.h"
 #include "infomain_actions.h"
+#include "mxstillpresenter.h"
 
 DECOMP_SIZE_ASSERT(InfocenterState, 0x94)
 

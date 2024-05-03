@@ -4,6 +4,7 @@
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxcontrolpresenter.h"
+#include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxpresenter.h"
 #include "mxticklemanager.h"

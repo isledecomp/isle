@@ -1,5 +1,6 @@
 #include "legovariables.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
 #include "legogamestate.h"

@@ -2,13 +2,13 @@
 #define MXVIDEOPARAM_H
 
 #include "compat.h"
-#include "mxpalette.h"
 #include "mxrect32.h"
 #include "mxtypes.h"
-#include "mxvariabletable.h"
 #include "mxvideoparamflags.h"
 
 #include <ddraw.h>
+
+class MxPalette;
 
 // SIZE 0x24
 class MxVideoParam {

@@ -3,7 +3,6 @@
 
 #include "decomp.h"
 #include "mxdsaction.h"
-#include "mxpoint32.h"
 
 // VTABLE: LEGO1 0x100dcd40
 // SIZE 0xb8

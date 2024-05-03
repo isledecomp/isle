@@ -2,7 +2,8 @@
 #define MXMIDIPRESENTER_H
 
 #include "mxmusicpresenter.h"
-#include "mxstreamchunk.h"
+
+class MxStreamChunk;
 
 // VTABLE: LEGO1 0x100dca20
 // SIZE 0x58
@@ -41,7 +42,7 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 protected:
-	MxStreamChunk* m_chunk;
+	MxStreamChunk* m_chunk; // 0x54
 };
 
 #endif // MXMIDIPRESENTER_H

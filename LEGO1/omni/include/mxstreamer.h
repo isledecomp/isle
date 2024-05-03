@@ -3,19 +3,21 @@
 
 #include "decomp.h"
 #include "mxcore.h"
-#include "mxdsobject.h"
 #include "mxmemorypool.h"
 #include "mxnotificationparam.h"
+#include "mxstl/stlcompat.h"
 #include "mxstreamcontroller.h"
 #include "mxtypes.h"
 
 #include <assert.h>
-#include <list>
+
+class MxDSObject;
 
 typedef MxMemoryPool<64, 22> MxMemoryPool64;
 typedef MxMemoryPool<128, 2> MxMemoryPool128;
 
 // VTABLE: LEGO1 0x100dc760
+// SIZE 0x10
 class MxStreamerNotification : public MxNotificationParam {
 public:
 	inline MxStreamerNotification(NotificationId p_type, MxCore* p_sender, MxStreamController* p_ctrlr)
@@ -29,7 +31,7 @@ public:
 	MxStreamController* GetController() { return m_controller; }
 
 private:
-	MxStreamController* m_controller;
+	MxStreamController* m_controller; // 0x0c
 };
 
 // VTABLE: LEGO1 0x100dc710

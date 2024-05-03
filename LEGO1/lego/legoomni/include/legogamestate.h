@@ -3,14 +3,17 @@
 
 #include "actionsfwd.h"
 #include "decomp.h"
-#include "legobackgroundcolor.h"
-#include "legofullscreenmovie.h"
-#include "misc/legostorage.h"
 #include "mxtypes.h"
-#include "mxvariabletable.h"
 
+#include <string.h>
+
+class LegoBackgroundColor;
+class LegoFile;
+class LegoFullScreenMovie;
 class LegoState;
+class LegoStorage;
 class MxVariable;
+class MxVariableTable;
 class MxString;
 
 // SIZE 0x08

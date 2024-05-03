@@ -2,15 +2,18 @@
 #define LEGOANIMATIONMANAGER_H
 
 #include "actionsfwd.h"
-#include "animstate.h"
 #include "decomp.h"
 #include "legotraninfolist.h"
 #include "mxcore.h"
+#include "mxgeometry/mxgeometry3d.h"
 
+class AnimState;
 class LegoAnimPresenter;
 class LegoEntity;
+class LegoFile;
 class LegoPathBoundary;
 class LegoROIList;
+struct ModelInfo;
 class MxDSAction;
 
 // SIZE 0x18

@@ -2,7 +2,6 @@
 #define LEGOCAMERACONTROLLER_H
 
 #include "legopointofviewcontroller.h"
-#include "mxcore.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxpoint32.h"

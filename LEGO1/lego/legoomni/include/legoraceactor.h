@@ -2,7 +2,8 @@
 #define LEGORACEACTOR_H
 
 #include "legoanimactor.h"
-#include "realtime/matrix.h"
+
+class Matrix4;
 
 /*
 	VTABLE: LEGO1 0x100d5b78 LegoAnimActor

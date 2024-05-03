@@ -2,10 +2,11 @@
 #define JUKEBOX_H
 
 #include "decomp.h"
-#include "jukeboxstate.h"
-#include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
+
+class LegoControlManagerEvent;
+class JukeBoxState;
 
 // VTABLE: LEGO1 0x100d8958
 // SIZE 0x104

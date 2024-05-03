@@ -1,8 +1,11 @@
 #include "legoentity.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "define.h"
 #include "legobuildingmanager.h"
+#include "legocameracontroller.h"
 #include "legocharactermanager.h"
+#include "legoeventnotificationparam.h"
 #include "legogamestate.h"
 #include "legoplantmanager.h"
 #include "legoutils.h"
@@ -10,6 +13,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxmisc.h"
+#include "mxutilities.h"
 #include "realtime/realtime.h"
 
 DECOMP_SIZE_ASSERT(LegoEntity, 0x68)

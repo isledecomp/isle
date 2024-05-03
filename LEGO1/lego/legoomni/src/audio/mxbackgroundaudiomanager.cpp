@@ -2,9 +2,11 @@
 
 #include "legoomni.h"
 #include "misc.h"
+#include "mxaudiopresenter.h"
 #include "mxcompositepresenter.h"
 #include "mxdssound.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxpresenter.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"

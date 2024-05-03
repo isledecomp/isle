@@ -1,14 +1,15 @@
 #ifndef LEGOPATHACTOR_H
 #define LEGOPATHACTOR_H
 
-#include "geom/legounkown100db7f4.h"
 #include "legoactor.h"
 #include "misc/legounknown.h"
+#include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
-#include "realtime/matrix.h"
 
+struct LegoEdge;
 class LegoPathBoundary;
 class LegoPathController;
+class LegoUnknown100db7f4;
 
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154

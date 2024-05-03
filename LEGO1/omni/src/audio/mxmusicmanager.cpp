@@ -1,6 +1,7 @@
 #include "mxmusicmanager.h"
 
 #include "mxmisc.h"
+#include "mxthread.h"
 #include "mxticklemanager.h"
 
 #include <windows.h>

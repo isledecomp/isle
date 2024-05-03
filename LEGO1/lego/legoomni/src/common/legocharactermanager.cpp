@@ -1,15 +1,20 @@
 #include "legocharactermanager.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "legoanimactor.h"
 #include "legocharacters.h"
+#include "legoextraactor.h"
 #include "legogamestate.h"
+#include "legovariables.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
+#include "misc/legostorage.h"
 #include "mxmisc.h"
+#include "mxvariabletable.h"
 #include "realtime/realtime.h"
 #include "roi/legolod.h"
-#include "roi/legoroi.h"
+#include "viewmanager/viewmanager.h"
 
 #include <vec.h>
 

@@ -12,12 +12,14 @@
 #include "legoomni.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
+#include "mxactionnotificationparam.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
 #include "pizzamissionstate.h"
 #include "racestate.h"
+#include "scorestate.h"
 #include "towtrackmissionstate.h"
 
 DECOMP_SIZE_ASSERT(Score, 0x104)

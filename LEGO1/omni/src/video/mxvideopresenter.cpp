@@ -1,7 +1,9 @@
 #include "mxvideopresenter.h"
 
 #include "mxautolock.h"
+#include "mxdisplaysurface.h"
 #include "mxdsmediaaction.h"
+#include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxregioncursor.h"
 #include "mxvideomanager.h"

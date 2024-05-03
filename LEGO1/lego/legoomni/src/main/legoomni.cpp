@@ -1,5 +1,6 @@
 #include "legoomni.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
@@ -19,15 +20,19 @@
 #include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
 #include "mxdsfile.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 #include "viewmanager/viewmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::ScriptContainer, 0x1c)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)

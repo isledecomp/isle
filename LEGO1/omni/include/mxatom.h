@@ -35,8 +35,8 @@ public:
 	// MxAtom::`scalar deleting destructor'
 
 private:
-	MxString m_key;
-	MxU16 m_value;
+	MxString m_key; // 0x00
+	MxU16 m_value;  // 0x10
 };
 
 struct MxAtomCompare {

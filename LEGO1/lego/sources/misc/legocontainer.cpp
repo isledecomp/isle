@@ -2,6 +2,7 @@
 
 #include "lego/legoomni/include/legovideomanager.h"
 #include "lego/legoomni/include/misc.h"
+#include "mxdirectx/mxdirect3d.h"
 #include "tgl/d3drm/impl.h"
 
 DECOMP_SIZE_ASSERT(LegoContainerInfo<LegoTexture>, 0x10);

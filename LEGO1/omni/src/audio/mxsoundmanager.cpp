@@ -1,9 +1,11 @@
 #include "mxsoundmanager.h"
 
 #include "mxautolock.h"
+#include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
+#include "mxthread.h"
 #include "mxticklemanager.h"
 #include "mxwavepresenter.h"
 
