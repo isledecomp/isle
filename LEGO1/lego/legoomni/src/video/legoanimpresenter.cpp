@@ -1,5 +1,6 @@
 #include "legoanimpresenter.h"
 
+#include "anim/legoanim.h"
 #include "define.h"
 #include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"

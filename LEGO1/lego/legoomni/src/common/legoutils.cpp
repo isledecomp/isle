@@ -1,6 +1,7 @@
 #include "legoutils.h"
 
 #include "act1state.h"
+#include "anim/legoanim.h"
 #include "islepathactor.h"
 #include "legoanimpresenter.h"
 #include "legogamestate.h"
@@ -11,6 +12,7 @@
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "misc.h"
+#include "misc/legotree.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"

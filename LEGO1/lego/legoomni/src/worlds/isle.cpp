@@ -13,6 +13,7 @@
 #include "jukebox_actions.h"
 #include "jukeboxentity.h"
 #include "legoanimationmanager.h"
+#include "legobackgroundcolor.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
 #include "legoomni.h"

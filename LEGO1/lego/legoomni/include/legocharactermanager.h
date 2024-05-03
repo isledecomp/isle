@@ -2,13 +2,14 @@
 #define LEGOCHARACTERMANAGER_H
 
 #include "decomp.h"
-#include "legoextraactor.h"
-#include "legovariables.h"
-#include "misc/legostorage.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
+#include "roi/legoroi.h"
 
+class CustomizeAnimFileVariable;
 class LegoActor;
+class LegoExtraActor;
+class LegoStorage;
 class LegoROI;
 
 #pragma warning(disable : 4237)

@@ -1,16 +1,15 @@
 #ifndef LEGOANIMPRESENTER_H
 #define LEGOANIMPRESENTER_H
 
-#include "anim/legoanim.h"
 #include "legoroilist.h"
-#include "mxgeometry/mxgeometry3d.h"
-#include "mxgeometry/mxmatrix.h"
 #include "mxvideopresenter.h"
 
+class LegoAnim;
 class LegoWorld;
-class LegoAnimClass;
 class LegoAnimActor;
 class LegoPathBoundary;
+class MxMatrix;
+class Vector3;
 
 struct LegoAnimStructComparator {
 	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }

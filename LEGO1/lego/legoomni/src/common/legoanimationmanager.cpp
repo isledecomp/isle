@@ -4,6 +4,7 @@
 #include "islepathactor.h"
 #include "legocharactermanager.h"
 #include "legoendanimnotificationparam.h"
+#include "legoextraactor.h"
 #include "legogamestate.h"
 #include "legoomni.h"
 #include "legoroilist.h"
@@ -13,7 +14,6 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
-#include "roi/legoroi.h"
 
 #include <io.h>
 

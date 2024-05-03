@@ -1,5 +1,6 @@
 #include "legopathactor.h"
 
+#include "geom/legounkown100db7f4.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
 #include "legosoundmanager.h"

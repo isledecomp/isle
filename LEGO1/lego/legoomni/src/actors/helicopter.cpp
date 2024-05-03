@@ -3,6 +3,7 @@
 #include "act1state.h"
 #include "act3.h"
 #include "act3_actions.h"
+#include "helicopterstate.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "jukebox.h"

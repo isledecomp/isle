@@ -2,12 +2,12 @@
 #define LEGOANIMMMPRESENTER_H
 
 #include "mxcompositepresenter.h"
-#include "mxgeometry/mxmatrix.h"
 
 class LegoAnimPresenter;
 class LegoWorld;
 class LegoROI;
 struct LegoTranInfo;
+class MxMatrix;
 
 // VTABLE: LEGO1 0x100d7de8
 // SIZE 0x74

@@ -1,6 +1,7 @@
 #ifndef LEGOCARBUILDANIMPRESENTER_H
 #define LEGOCARBUILDANIMPRESENTER_H
 
+#include "anim/legoanim.h"
 #include "legoanimpresenter.h"
 
 // VTABLE: LEGO1 0x100d99e0
