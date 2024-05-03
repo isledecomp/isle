@@ -162,36 +162,32 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 		p_outQuat[0] = (m_data[2][1] - m_data[1][2]) * trace;
 		p_outQuat[1] = (m_data[0][2] - m_data[2][0]) * trace;
 		p_outQuat[2] = (m_data[1][0] - m_data[0][1]) * trace;
-		return;
+	} else {
+
+		// GLOBAL: LEGO1 0x100d4090
+		static int rotateIndex[] = {1, 2, 0};
+
+		// Largest element along the trace
+		int largest = 0;
+		if (m_data[0][0] < m_data[1][1]) {
+			largest = 1;
+		}
+		if (*Element(largest, largest) < m_data[2][2]) {
+			largest = 2;
+		}
+
+		int next = rotateIndex[largest];
+		int nextNext = rotateIndex[next];
+
+		float trace = sqrt(*Element(largest, largest) - (*Element(nextNext, nextNext) + *Element(next, next)) + 1.0);
+
+		p_outQuat[largest] = trace * 0.5f;
+		trace = 0.5f / trace;
+
+		p_outQuat[3] = (*Element(nextNext, next) - *Element(next, nextNext)) * trace;
+		p_outQuat[next] = (*Element(largest, next) + *Element(next, largest)) * trace;
+		p_outQuat[nextNext] = (*Element(largest, nextNext) + *Element(nextNext, largest)) * trace;
 	}
-
-	// GLOBAL: LEGO1 0x100d4090
-	static int rotateIndex[] = {1, 2, 0};
-
-	// Largest element along the trace
-	int largest = 0;
-	if (m_data[0][0] < m_data[1][1]) {
-		largest = 1;
-	}
-	if (*Element(largest, largest) < m_data[2][2]) {
-		largest = 2;
-	}
-
-	int next = rotateIndex[largest];
-	int nextNext = rotateIndex[next];
-
-	trace = *Element(nextNext, nextNext);
-	trace += *Element(next, next);
-	trace = *Element(largest, largest) - trace;
-	trace += 1.0f;
-	trace = sqrt(trace);
-
-	p_outQuat[largest] = trace * 0.5f;
-	trace = 0.5f / trace;
-
-	p_outQuat[3] = (*Element(nextNext, next) - *Element(next, nextNext)) * trace;
-	p_outQuat[next] = (*Element(largest, next) + *Element(next, largest)) * trace;
-	p_outQuat[nextNext] = (*Element(largest, nextNext) + *Element(nextNext, largest)) * trace;
 }
 
 // FUNCTION: LEGO1 0x10002710
