@@ -112,6 +112,12 @@ void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 	this->m_unk0x90 = p_dsAction.m_unk0x90;
 }
 
+// FUNCTION: BETA10 0x1012b2b3
+MxDSAction::MxDSAction(MxDSAction& p_dsAction) : MxDSObject(p_dsAction)
+{
+	this->CopyFrom(p_dsAction);
+}
+
 // FUNCTION: LEGO1 0x100adbd0
 // FUNCTION: BETA10 0x1012b355
 undefined4 MxDSAction::VTable0x14()

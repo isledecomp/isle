@@ -28,6 +28,7 @@ public:
 	MxDSAction();
 	~MxDSAction() override;
 
+	MxDSAction(MxDSAction& p_dsAction);
 	void CopyFrom(MxDSAction& p_dsAction);
 	MxDSAction& operator=(MxDSAction& p_dsAction);
 
