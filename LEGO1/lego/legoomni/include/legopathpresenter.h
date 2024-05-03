@@ -1,6 +1,7 @@
 #ifndef LEGOPATHPRESENTER_H
 #define LEGOPATHPRESENTER_H
 
+#include "mxatom.h"
 #include "mxmediapresenter.h"
 
 // VTABLE: LEGO1 0x100d7c10

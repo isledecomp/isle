@@ -11,6 +11,7 @@
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "mxmisc.h"
+#include "mxvariabletable.h"
 #include "realtime/realtime.h"
 #include "roi/legolod.h"
 #include "viewmanager/viewmanager.h"

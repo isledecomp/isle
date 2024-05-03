@@ -1,13 +1,14 @@
 #ifndef MXVIDEOMANAGER_H
 #define MXVIDEOMANAGER_H
 
-#include "mxdisplaysurface.h"
 #include "mxmediamanager.h"
-#include "mxrect32.h"
-#include "mxregion.h"
 #include "mxvideoparam.h"
 
 #include <d3d.h>
+
+class MxDisplaySurface;
+class MxRect32;
+class MxRegion;
 
 // VTABLE: LEGO1 0x100dc810
 // SIZE 0x64

@@ -3,6 +3,9 @@
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legostorage.h"
+#include "mxdsaction.h"
+#include "mxdssubscriber.h"
+#include "mxpalette.h"
 #include "mxstreamchunk.h"
 
 DECOMP_SIZE_ASSERT(LegoPalettePresenter, 0x68)

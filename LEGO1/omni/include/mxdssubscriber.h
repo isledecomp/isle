@@ -3,8 +3,6 @@
 
 #include "decomp.h"
 #include "mxcore.h"
-#include "mxdschunk.h"
-#include "mxstreamchunk.h"
 #include "mxstreamchunklist.h"
 
 class MxStreamController;

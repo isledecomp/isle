@@ -1,9 +1,11 @@
 #ifndef MXCOMPOSITEPRESENTER_H
 #define MXCOMPOSITEPRESENTER_H
 
-#include "mxactionnotificationparam.h"
 #include "mxpresenter.h"
 #include "mxstl/stlcompat.h"
+
+class MxEndActionNotificationParam;
+class MxNotificationParam;
 
 class MxCompositePresenterList : public list<MxPresenter*> {};
 

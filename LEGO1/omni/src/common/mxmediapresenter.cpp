@@ -3,6 +3,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
+#include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"

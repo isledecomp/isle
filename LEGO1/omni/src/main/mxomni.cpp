@@ -15,6 +15,7 @@
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
+#include "mxvariabletable.h"
 #include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x101015b8

@@ -2,6 +2,7 @@
 #define LEGOANIMPRESENTER_H
 
 #include "legoroilist.h"
+#include "mxatom.h"
 #include "mxvideopresenter.h"
 
 class LegoAnim;

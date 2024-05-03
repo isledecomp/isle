@@ -5,6 +5,7 @@
 #include "legoomni.h"
 #include "legoutils.h"
 #include "mxcompositepresenter.h"
+#include "mxdssubscriber.h"
 #include "mxmediapresenter.h"
 #include "mxmisc.h"
 #include "mxstreamchunk.h"

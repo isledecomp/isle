@@ -22,6 +22,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
+#include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"

@@ -4,6 +4,7 @@
 #include "legocachsound.h"
 #include "legosoundmanager.h"
 #include "misc.h"
+#include "mxdssubscriber.h"
 #include "mxstreamchunk.h"
 #include "mxwavepresenter.h"
 

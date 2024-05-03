@@ -29,6 +29,7 @@
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 #include "pizza.h"
 #include "skateboard.h"
 #include "towtrack.h"

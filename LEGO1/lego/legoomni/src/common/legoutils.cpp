@@ -21,6 +21,7 @@
 #include "mxstreamer.h"
 #include "mxtypes.h"
 #include "mxutilities.h"
+#include "mxvariabletable.h"
 #include "realtime/realtime.h"
 
 #include <process.h>

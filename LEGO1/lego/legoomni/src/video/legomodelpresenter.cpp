@@ -14,6 +14,7 @@
 #include "misc/version.h"
 #include "mxcompositepresenter.h"
 #include "mxdirectx/mxdirect3d.h"
+#include "mxdssubscriber.h"
 #include "mxutilities.h"
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"

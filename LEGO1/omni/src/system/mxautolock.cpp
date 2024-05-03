@@ -1,5 +1,7 @@
 #include "mxautolock.h"
 
+#include "mxcriticalsection.h"
+
 // FUNCTION: LEGO1 0x100b8ed0
 MxAutoLock::MxAutoLock(MxCriticalSection* p_criticalSection)
 {

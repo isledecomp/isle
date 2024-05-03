@@ -5,6 +5,7 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxautolock.h"
+#include "mxdssubscriber.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54)

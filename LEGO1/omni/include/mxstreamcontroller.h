@@ -5,14 +5,12 @@
 #include "mxatom.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
-#include "mxdsaction.h"
-#include "mxdsobject.h"
 #include "mxdssubscriber.h"
 #include "mxstl/stlcompat.h"
 #include "mxstreamlist.h"
-#include "mxstreamprovider.h"
 
 class MxDSStreamingAction;
+class MxStreamProvider;
 
 // VTABLE: LEGO1 0x100dc968
 // SIZE 0x64

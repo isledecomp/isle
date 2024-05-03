@@ -20,6 +20,7 @@
 #include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
 #include "mxdsfile.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
@@ -28,6 +29,7 @@
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoOmni, 0x140)

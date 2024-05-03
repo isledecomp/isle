@@ -3,6 +3,7 @@
 #include "mxautolock.h"
 #include "mxdiskstreamcontroller.h"
 #include "mxdsbuffer.h"
+#include "mxdsfile.h"
 #include "mxdsstreamingaction.h"
 #include "mxomni.h"
 #include "mxramstreamprovider.h"

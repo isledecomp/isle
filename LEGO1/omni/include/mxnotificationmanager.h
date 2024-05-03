@@ -3,9 +3,10 @@
 
 #include "mxcore.h"
 #include "mxcriticalsection.h"
-#include "mxnotificationparam.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
+
+class MxNotificationParam;
 
 class MxNotification {
 public:

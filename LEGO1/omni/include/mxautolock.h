@@ -1,7 +1,7 @@
 #ifndef MXAUTOLOCK_H
 #define MXAUTOLOCK_H
 
-#include "mxcriticalsection.h"
+class MxCriticalSection;
 
 #define AUTOLOCK(CS) MxAutoLock lock(&CS)
 

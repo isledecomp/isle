@@ -22,6 +22,7 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
 #include "res/resource.h"
 #include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"

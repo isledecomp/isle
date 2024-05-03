@@ -12,6 +12,7 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
 
 DECOMP_SIZE_ASSERT(JukeBoxEntity, 0x6c)

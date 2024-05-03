@@ -3,10 +3,10 @@
 
 #include "decomp.h"
 #include "mxcore.h"
-#include "mxdsfile.h"
 
 class MxStreamController;
 class MxDSAction;
+class MxDSFile;
 
 // VTABLE: LEGO1 0x100dd100
 // SIZE 0x10

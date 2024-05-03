@@ -2,12 +2,13 @@
 #define MXDISPLAYSURFACE_H
 
 #include "decomp.h"
-#include "mxbitmap.h"
 #include "mxcore.h"
-#include "mxpalette.h"
 #include "mxvideoparam.h"
 
 #include <ddraw.h>
+
+class MxBitmap;
+class MxPalette;
 
 // VTABLE: LEGO1 0x100dc768
 // SIZE 0xac

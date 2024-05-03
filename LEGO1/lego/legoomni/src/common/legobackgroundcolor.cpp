@@ -6,6 +6,8 @@
 #include "legovideomanager.h"
 #include "misc.h"
 
+#include <stdio.h>
+
 DECOMP_SIZE_ASSERT(LegoBackgroundColor, 0x30)
 
 // GLOBAL: LEGO1 0x100f3fb0

@@ -6,6 +6,7 @@
 #include "legoomni.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"
