@@ -170,10 +170,12 @@ inline void Matrix4::ToQuaternion(Vector4& p_outQuat)
 
 	// Largest element along the trace
 	int largest = 0;
-	if (m_data[0][0] < m_data[1][1])
+	if (m_data[0][0] < m_data[1][1]) {
 		largest = 1;
-	if (*Element(largest, largest) < m_data[2][2])
+	}
+	if (*Element(largest, largest) < m_data[2][2]) {
 		largest = 2;
+	}
 
 	int next = rotateIndex[largest];
 	int nextNext = rotateIndex[next];
