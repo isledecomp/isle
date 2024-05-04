@@ -27,6 +27,20 @@ MxResult LegoPathController::Tickle()
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10045c20
+// FUNCTION: BETA10 0x100b6d80
+MxResult LegoPathController::FUN_10045c20(
+	LegoPathActor* p_actor,
+	const char* p_path,
+	MxS32 p_src,
+	float p_srcScale,
+	MxS32 p_dest,
+	float p_destScale
+)
+{
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x10046770
 undefined4 LegoPathController::FUN_10046770(LegoPathActor* p_actor)
 {

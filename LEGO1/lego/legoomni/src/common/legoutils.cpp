@@ -340,7 +340,15 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
+// STUB: LEGO1 0x1003ecc0
+// FUNCTION: BETA10 0x100d4b38
+void FUN_1003ecc0(IslePathActor* p_actor, undefined4, undefined4, MxBool)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1003eda0
+// FUNCTION: BETA10 0x100d4bf4
 void FUN_1003eda0()
 {
 	Mx3DPointFloat vec;

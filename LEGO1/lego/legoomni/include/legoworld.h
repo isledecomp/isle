@@ -65,6 +65,14 @@ public:
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
+	MxResult FUN_1001f720(
+		IslePathActor* p_actor,
+		const char* p_path,
+		MxS32 p_src,
+		float p_srcScale,
+		MxS32 p_dest,
+		float p_destScale
+	);
 	undefined4 FUN_1001fa70(IslePathActor* p_actor);
 	undefined4 FUN_1001fb70(
 		IslePathActor* p_actor,
