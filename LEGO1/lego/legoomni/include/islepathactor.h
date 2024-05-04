@@ -55,18 +55,18 @@ public:
 		}
 
 		// FUNCTION: LEGO1 0x1001b230
-		SpawnLocation& operator=(const SpawnLocation& p_container)
+		SpawnLocation& operator=(const SpawnLocation& p_location)
 		{
-			m_area = p_container.m_area;
-			m_script = p_container.m_script;
-			m_entityId = p_container.m_entityId;
-			strcpy(m_path, p_container.m_path);
-			m_src = p_container.m_src;
-			m_srcScale = p_container.m_srcScale;
-			m_dest = p_container.m_dest;
-			m_destScale = p_container.m_destScale;
-			m_unk0x30 = p_container.m_unk0x30;
-			m_music = p_container.m_music;
+			m_area = p_location.m_area;
+			m_script = p_location.m_script;
+			m_entityId = p_location.m_entityId;
+			strcpy(m_path, p_location.m_path);
+			m_src = p_location.m_src;
+			m_srcScale = p_location.m_srcScale;
+			m_dest = p_location.m_dest;
+			m_destScale = p_location.m_destScale;
+			m_unk0x30 = p_location.m_unk0x30;
+			m_music = p_location.m_music;
 			return *this;
 		}
 
