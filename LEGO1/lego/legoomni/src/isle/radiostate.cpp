@@ -2,9 +2,9 @@
 
 #include "jukebox.h"
 #include "jukebox_actions.h"
-#include "legoomni.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(RadioState, 0x30)
 

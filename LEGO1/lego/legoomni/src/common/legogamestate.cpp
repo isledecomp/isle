@@ -33,8 +33,8 @@
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
 #include "legofullscreenmovie.h"
+#include "legomain.h"
 #include "legonavcontroller.h"
-#include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legostate.h"
 #include "legoutils.h"
@@ -54,6 +54,7 @@
 #include "racecar_actions.h"
 #include "regbook_actions.h"
 #include "roi/legoroi.h"
+#include "scripts.h"
 #include "sndanim_actions.h"
 
 #include <stdio.h>

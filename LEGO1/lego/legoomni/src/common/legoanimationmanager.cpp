@@ -7,7 +7,7 @@
 #include "legoendanimnotificationparam.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoroilist.h"
 #include "legovideomanager.h"
 #include "legoworld.h"

@@ -12,11 +12,11 @@
 #include "legoact2state.h"
 #include "legoanimationmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
 

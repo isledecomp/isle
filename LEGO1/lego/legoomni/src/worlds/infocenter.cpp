@@ -14,7 +14,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoplantmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
@@ -30,6 +30,7 @@
 #include "mxtransitionmanager.h"
 #include "mxutilities.h"
 #include "radiostate.h"
+#include "scripts.h"
 #include "sndanim_actions.h"
 #include "viewmanager/viewmanager.h"
 

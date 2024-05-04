@@ -17,7 +17,7 @@
 #include "legobackgroundcolor.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoutils.h"
 #include "legovariables.h"
 #include "legovideomanager.h"
@@ -31,6 +31,7 @@
 #include "mxtransitionmanager.h"
 #include "mxvariabletable.h"
 #include "pizza.h"
+#include "scripts.h"
 #include "skateboard.h"
 #include "towtrack.h"
 

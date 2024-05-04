@@ -5,7 +5,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"

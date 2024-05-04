@@ -4,13 +4,13 @@
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legonavcontroller.h"
-#include "legoomni.h"
 #include "legopathboundary.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxnotificationparam.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
 DECOMP_SIZE_ASSERT(IslePathActor::SpawnLocation, 0x38)

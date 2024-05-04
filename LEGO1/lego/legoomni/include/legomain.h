@@ -1,5 +1,5 @@
-#ifndef LEGOOMNI_H
-#define LEGOOMNI_H
+#ifndef LEGOMAIN_H
+#define LEGOMAIN_H
 
 #include "compat.h"
 #include "mxdsaction.h"
@@ -26,35 +26,6 @@ class MxAtomId;
 class MxBackgroundAudioManager;
 class MxTransitionManager;
 class ViewLODListManager;
-
-extern MxAtomId* g_copterScript;
-extern MxAtomId* g_dunecarScript;
-extern MxAtomId* g_jetskiScript;
-extern MxAtomId* g_racecarScript;
-extern MxAtomId* g_carraceScript;
-extern MxAtomId* g_carracerScript;
-extern MxAtomId* g_jetraceScript;
-extern MxAtomId* g_jetracerScript;
-extern MxAtomId* g_isleScript;
-extern MxAtomId* g_elevbottScript;
-extern MxAtomId* g_infodoorScript;
-extern MxAtomId* g_infomainScript;
-extern MxAtomId* g_infoscorScript;
-extern MxAtomId* g_regbookScript;
-extern MxAtomId* g_histbookScript;
-extern MxAtomId* g_hospitalScript;
-extern MxAtomId* g_policeScript;
-extern MxAtomId* g_garageScript;
-extern MxAtomId* g_act2mainScript;
-extern MxAtomId* g_act3Script;
-extern MxAtomId* g_jukeboxScript;
-extern MxAtomId* g_pz5Script;
-extern MxAtomId* g_introScript;
-extern MxAtomId* g_testScript;
-extern MxAtomId* g_jukeboxwScript;
-extern MxAtomId* g_sndAnimScript;
-extern MxAtomId* g_creditsScript;
-extern MxAtomId* g_nocdSourceName;
 
 // VTABLE: LEGO1 0x100d8638
 // SIZE 0x140
@@ -205,12 +176,4 @@ public:
 	MxBool m_unk0x13c; // 0x13c
 };
 
-const char* GetNoCD_SourceName();
-
-LegoEntity* PickEntity(MxLong, MxLong);
-LegoROI* PickROI(MxLong, MxLong);
-
-void CreateScripts();
-void DestroyScripts();
-
-#endif // LEGOOMNI_H
+#endif // LEGOMAIN_H

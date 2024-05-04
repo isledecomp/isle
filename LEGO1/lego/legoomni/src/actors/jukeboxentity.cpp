@@ -6,7 +6,6 @@
 #include "jukebox_actions.h"
 #include "jukeboxstate.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
@@ -14,6 +13,7 @@
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(JukeBoxEntity, 0x6c)
 

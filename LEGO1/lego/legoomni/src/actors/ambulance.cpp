@@ -4,7 +4,6 @@
 #include "decomp.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -12,6 +11,7 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxvariabletable.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 

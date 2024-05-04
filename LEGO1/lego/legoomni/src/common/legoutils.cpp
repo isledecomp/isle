@@ -7,8 +7,8 @@
 #include "legoanimpresenter.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legomain.h"
 #include "legonamedtexture.h"
-#include "legoomni.h"
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -23,10 +23,24 @@
 #include "mxutilities.h"
 #include "mxvariabletable.h"
 #include "realtime/realtime.h"
+#include "scripts.h"
 
 #include <process.h>
 #include <string.h>
 #include <vec.h>
+
+// FUNCTION: LEGO1 0x1003dd70
+LegoROI* PickROI(MxLong p_a, MxLong p_b)
+{
+	return (LegoROI*) VideoManager()->Get3DManager()->GetLego3DView()->Pick(p_a, p_b);
+}
+
+// STUB: LEGO1 0x1003ddc0
+LegoEntity* PickEntity(MxLong, MxLong)
+{
+	// TODO
+	return NULL;
+}
 
 // FUNCTION: LEGO1 0x1003df90
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)

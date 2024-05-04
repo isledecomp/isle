@@ -12,11 +12,11 @@
 #include "legocameracontroller.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
 DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)

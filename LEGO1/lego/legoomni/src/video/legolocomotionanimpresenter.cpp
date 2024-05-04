@@ -1,6 +1,6 @@
 #include "legolocomotionanimpresenter.h"
 
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoworld.h"
 #include "misc.h"
 

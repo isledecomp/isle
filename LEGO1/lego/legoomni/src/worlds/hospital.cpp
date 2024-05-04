@@ -8,7 +8,7 @@
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
@@ -19,6 +19,7 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 
