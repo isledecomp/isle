@@ -504,7 +504,11 @@ void Isle::Enable(MxBool p_enable)
 
 		if (CurrentActor() != NULL && CurrentActor()->IsA("Jetski")) {
 			IslePathActor* actor = CurrentActor();
-			actor->VTable0xe8(LegoGameState::e_unk45, FALSE, 7);
+			actor->SpawnPlayer(
+				LegoGameState::e_unk45,
+				FALSE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 			actor->SetState(0);
 		}
 		else {
@@ -653,7 +657,11 @@ void Isle::Enable(MxBool p_enable)
 			}
 			break;
 		case 5: {
-			CurrentActor()->VTable0xe8(LegoGameState::e_jetrace2, FALSE, 7);
+			CurrentActor()->SpawnPlayer(
+				LegoGameState::e_jetrace2,
+				FALSE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -681,7 +689,11 @@ void Isle::Enable(MxBool p_enable)
 		}
 		case 6: {
 			GameState()->m_currentArea = LegoGameState::e_carraceExterior;
-			CurrentActor()->VTable0xe8(LegoGameState::e_unk21, FALSE, 7);
+			CurrentActor()->SpawnPlayer(
+				LegoGameState::e_unk21,
+				FALSE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -726,7 +738,11 @@ void Isle::Enable(MxBool p_enable)
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
-			CurrentActor()->VTable0xe8(LegoGameState::e_unk54, TRUE, 7);
+			CurrentActor()->SpawnPlayer(
+				LegoGameState::e_unk54,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 			GameState()->m_currentArea = LegoGameState::e_unk66;
 			FUN_1003ef00(TRUE);
 			m_jukebox->StartAction();
@@ -786,7 +802,11 @@ void Isle::FUN_10032620()
 	case LegoGameState::e_hospitalExterior:
 	case LegoGameState::e_unk31:
 	case LegoGameState::e_policeExterior:
-		CurrentActor()->VTable0xe8(GameState()->m_currentArea, TRUE, 7);
+		CurrentActor()->SpawnPlayer(
+			GameState()->m_currentArea,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		GameState()->m_currentArea = LegoGameState::e_unk66;
 		break;
 	}

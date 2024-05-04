@@ -14,6 +14,16 @@ class MxType19NotificationParam;
 // SIZE 0x160
 class IslePathActor : public LegoPathActor {
 public:
+	enum {
+		c_LOCATIONS_NUM = 29
+	};
+
+	enum {
+		c_spawnBit1 = 0x01,
+		c_playMusic = 0x02,
+		c_spawnBit3 = 0x04
+	};
+
 	// SIZE 0x38
 	struct SpawnLocation {
 		SpawnLocation() {}
@@ -23,11 +33,11 @@ public:
 			LegoGameState::Area p_area,
 			MxAtomId* p_script,
 			MxS32 p_entityId,
-			const char* p_key,
-			undefined2 p_unk0x20,
-			float p_unk0x24,
-			undefined2 p_unk0x28,
-			float p_unk0x2c,
+			const char* p_path,
+			MxS16 p_src,
+			float p_srcScale,
+			MxS16 p_dest,
+			float p_destScale,
 			undefined4 p_unk0x30,
 			JukeboxScript::Script p_music
 		)
@@ -35,40 +45,39 @@ public:
 			m_area = p_area;
 			m_script = p_script;
 			m_entityId = p_entityId;
-			strcpy(m_key, p_key);
-			m_unk0x20 = p_unk0x20;
-			m_unk0x24 = p_unk0x24;
-			m_unk0x28 = p_unk0x28;
-			m_unk0x2c = p_unk0x2c;
+			strcpy(m_path, p_path);
+			m_src = p_src;
+			m_srcScale = p_srcScale;
+			m_dest = p_dest;
+			m_destScale = p_destScale;
 			m_unk0x30 = p_unk0x30;
 			m_music = p_music;
 		}
 
 		// FUNCTION: LEGO1 0x1001b230
-		SpawnLocation& operator=(const SpawnLocation& p_container)
+		SpawnLocation& operator=(const SpawnLocation& p_location)
 		{
-			m_area = p_container.m_area;
-			m_script = p_container.m_script;
-			m_entityId = p_container.m_entityId;
-			strcpy(m_key, p_container.m_key);
-			m_unk0x20 = p_container.m_unk0x20;
-			m_unk0x24 = p_container.m_unk0x24;
-			m_unk0x28 = p_container.m_unk0x28;
-			m_unk0x2c = p_container.m_unk0x2c;
-			m_unk0x30 = p_container.m_unk0x30;
-			m_music = p_container.m_music;
+			m_area = p_location.m_area;
+			m_script = p_location.m_script;
+			m_entityId = p_location.m_entityId;
+			strcpy(m_path, p_location.m_path);
+			m_src = p_location.m_src;
+			m_srcScale = p_location.m_srcScale;
+			m_dest = p_location.m_dest;
+			m_destScale = p_location.m_destScale;
+			m_unk0x30 = p_location.m_unk0x30;
+			m_music = p_location.m_music;
 			return *this;
 		}
 
-	private:
 		LegoGameState::Area m_area;    // 0x00
 		MxAtomId* m_script;            // 0x04
 		MxS32 m_entityId;              // 0x08
-		char m_key[20];                // 0x0c
-		undefined2 m_unk0x20;          // 0x20
-		float m_unk0x24;               // 0x24
-		undefined2 m_unk0x28;          // 0x28
-		float m_unk0x2c;               // 0x2c
+		char m_path[20];               // 0x0c
+		MxS16 m_src;                   // 0x20
+		float m_srcScale;              // 0x24
+		MxS16 m_dest;                  // 0x28
+		float m_destScale;             // 0x2c
 		undefined4 m_unk0x30;          // 0x30
 		JukeboxScript::Script m_music; // 0x34
 	};
@@ -111,10 +120,10 @@ public:
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void VTable0xe0();                                  // vtable+0xe0
-	virtual void VTable0xe4();                                  // vtable+0xe4
-	virtual void VTable0xe8(LegoGameState::Area, MxBool, MxU8); // vtable+0xe8
-	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset);
+	virtual void VTable0xe0();                                                                   // vtable+0xe0
+	virtual void VTable0xe4();                                                                   // vtable+0xe4
+	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags);            // vtable+0xe8
+	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
 
 	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'

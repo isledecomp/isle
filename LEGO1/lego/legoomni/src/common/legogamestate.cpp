@@ -906,7 +906,11 @@ void LegoGameState::SwitchArea(Area p_area)
 			AnimationManager()->Resume();
 		}
 
-		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
+		CurrentActor()->SpawnPlayer(
+			p_area,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		break;
 	}
 	case e_hospital:
@@ -918,7 +922,11 @@ void LegoGameState::SwitchArea(Area p_area)
 		SetCameraControllerFromIsle();
 		CurrentActor()->ResetWorldTransform(TRUE);
 		AnimationManager()->Resume();
-		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
+		CurrentActor()->SpawnPlayer(
+			p_area,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		break;
 	case e_police:
 		VideoManager()->SetUnk0x554(TRUE);

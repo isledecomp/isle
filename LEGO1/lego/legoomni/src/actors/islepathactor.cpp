@@ -1,14 +1,17 @@
 #include "islepathactor.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "isle_actions.h"
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
 #include "legoutils.h"
+#include "legovehiclebuildstate.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxnotificationparam.h"
 #include "scripts.h"
 
@@ -16,7 +19,7 @@ DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
 DECOMP_SIZE_ASSERT(IslePathActor::SpawnLocation, 0x38)
 
 // GLOBAL: LEGO1 0x10102b28
-IslePathActor::SpawnLocation g_spawnLocations[29];
+IslePathActor::SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
 
 // FUNCTION: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
@@ -452,11 +455,101 @@ void IslePathActor::RegisterSpawnLocations()
 	);
 }
 
-// STUB: LEGO1 0x1001b2a0
+// FUNCTION: LEGO1 0x1001b2a0
 // FUNCTION: BETA10 0x100369c6
-void IslePathActor::VTable0xe8(LegoGameState::Area, MxBool, MxU8)
+void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags)
 {
-	// TODO
+	MxS16 i;
+
+	for (i = 0; i < c_LOCATIONS_NUM && g_spawnLocations[i].m_area != p_area; i++) {
+	}
+
+	assert(i != c_LOCATIONS_NUM);
+
+	if (i != c_LOCATIONS_NUM) {
+		LegoWorld* world = FindWorld(*g_spawnLocations[i].m_script, g_spawnLocations[i].m_entityId);
+		assert(world);
+
+		if (m_world != NULL) {
+			m_world->FUN_1001fc80(this);
+			m_world->Remove(this);
+			VideoManager()->Get3DManager()->Remove(*m_roi);
+		}
+
+		m_world = world;
+
+		if (p_und) {
+			VTable0xe0();
+		}
+
+		m_world->FUN_1001f720(
+			this,
+			g_spawnLocations[i].m_path,
+			g_spawnLocations[i].m_src,
+			g_spawnLocations[i].m_srcScale,
+			g_spawnLocations[i].m_dest,
+			g_spawnLocations[i].m_destScale
+		);
+
+		if (GameState()->GetActorId() != m_actorId) {
+			m_world->Add(this);
+		}
+
+		LegoVehicleBuildState* state = NULL;
+
+		if (p_flags & c_spawnBit1) {
+			MxBool und = FALSE;
+			IsleScript::Script anim;
+
+			switch (g_spawnLocations[i].m_unk0x30) {
+			case 0x00:
+			case 0x44:
+				break;
+			case 0x0a:
+				state = (LegoVehicleBuildState*) GameState()->GetState("LegoDuneCarBuildState");
+				anim = IsleScript::c_igs008na_RunAnim;
+				break;
+			case 0x18:
+				state = (LegoVehicleBuildState*) GameState()->GetState("LegoJetskiBuildState");
+				anim = IsleScript::c_ijs006sn_RunAnim;
+				break;
+			case 0x23:
+				state = (LegoVehicleBuildState*) GameState()->GetState("LegoCopterBuildState");
+				anim = IsleScript::c_ips002ro_RunAnim;
+				break;
+			case 0x34:
+				state = (LegoVehicleBuildState*) GameState()->GetState("LegoRaceCarBuildState");
+				anim = IsleScript::c_irt007in_RunAnim;
+				break;
+			default:
+				und = TRUE;
+				break;
+			}
+
+			if (state != NULL && state->m_unk0x4d && !state->m_unk0x4e) {
+				if (AnimationManager()->FUN_10060dc0(anim, NULL, TRUE, FALSE, NULL, FALSE, TRUE, TRUE, TRUE) ==
+					SUCCESS) {
+					state->m_unk0x4e = TRUE;
+					und = FALSE;
+				}
+			}
+
+			if (und) {
+				FUN_1003ecc0(this, 0, g_spawnLocations[i].m_unk0x30, TRUE);
+			}
+		}
+
+		if (m_cameraFlag) {
+			FUN_1003eda0();
+		}
+
+		if (p_flags & c_playMusic && g_spawnLocations[i].m_music != JukeboxScript::c_noneJukebox) {
+			MxDSAction action;
+			action.SetAtomId(*g_jukeboxScript);
+			action.SetObjectId(g_spawnLocations[i].m_music);
+			BackgroundAudioManager()->PlayMusic(action, 5, 4);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x1001b5b0

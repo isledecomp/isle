@@ -66,17 +66,23 @@ void Helicopter::GetState()
 void Helicopter::VTable0xe4()
 {
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
-		VTable0xe8(LegoGameState::e_unk40, TRUE, 7);
+		SpawnPlayer(
+			LegoGameState::e_unk40,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 	}
 
 	IslePathActor::VTable0xe4();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
-		if (CurrentActor()) {
-			if (CurrentActor()->IsA("IslePathActor")) {
-				((IslePathActor*) CurrentActor())->VTable0xe8(LegoGameState::e_unk55, TRUE, 7);
-			}
+		if (CurrentActor() && CurrentActor()->IsA("IslePathActor")) {
+			CurrentActor()->SpawnPlayer(
+				LegoGameState::e_unk55,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 	}
 
@@ -118,7 +124,11 @@ MxU32 Helicopter::VTable0xcc()
 	case LegoGameState::e_act1:
 		m_script = *g_isleScript;
 		AnimationManager()->FUN_10064670(NULL);
-		VTable0xe8(LegoGameState::e_unk41, TRUE, 7);
+		SpawnPlayer(
+			LegoGameState::e_unk41,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_copter);
 		FUN_10015820(TRUE, 0);
 		TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, TRUE);
@@ -258,10 +268,18 @@ MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
 	case 1: {
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(4);
-			VTable0xe8(LegoGameState::e_unk42, TRUE, 7);
+			SpawnPlayer(
+				LegoGameState::e_unk42,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 		else {
-			VTable0xe8(LegoGameState::e_unk49, TRUE, 7);
+			SpawnPlayer(
+				LegoGameState::e_unk49,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 
 		m_state->SetUnknown8(2);
@@ -295,10 +313,18 @@ MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
 
 		if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 			((Act1State*) GameState()->GetState("Act1State"))->SetUnknown18(0);
-			VTable0xe8(LegoGameState::e_unk41, TRUE, 7);
+			SpawnPlayer(
+				LegoGameState::e_unk41,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 		else {
-			VTable0xe8(LegoGameState::e_unk48, TRUE, 7);
+			SpawnPlayer(
+				LegoGameState::e_unk48,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 
 		m_state->SetUnknown8(0);

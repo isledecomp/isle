@@ -9,8 +9,8 @@ LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
 {
 	this->m_className = p_classType;
 	this->m_unk0x4c = 0;
-	this->m_unk0x4d = 0;
-	this->m_unk0x4e = 0;
+	this->m_unk0x4d = FALSE;
+	this->m_unk0x4e = FALSE;
 	this->m_placedPartCount = 0;
 }
 

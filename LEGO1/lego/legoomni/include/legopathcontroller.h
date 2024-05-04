@@ -44,6 +44,14 @@ public:
 	virtual void VTable0x14(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger); // vtable+0x14
 	virtual void Destroy();                                                          // vtable+0x18
 
+	MxResult FUN_10045c20(
+		LegoPathActor* p_actor,
+		const char* p_path,
+		MxS32 p_src,
+		float p_srcScale,
+		MxS32 p_dest,
+		float p_destScale
+	);
 	undefined4 FUN_10046770(LegoPathActor* p_actor);
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
 	void FUN_10046930(LegoAnimPresenter* p_presenter);
