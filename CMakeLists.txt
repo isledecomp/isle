@@ -367,7 +367,8 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
   LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
   LEGO1/lego/legoomni/src/isle/radiostate.cpp
-  LEGO1/lego/legoomni/src/main/legoomni.cpp
+  LEGO1/lego/legoomni/src/main/legomain.cpp
+  LEGO1/lego/legoomni/src/main/scripts.cpp
   LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
   LEGO1/lego/legoomni/src/paths/legoanimactor.cpp
   LEGO1/lego/legoomni/src/paths/legoextraactor.cpp

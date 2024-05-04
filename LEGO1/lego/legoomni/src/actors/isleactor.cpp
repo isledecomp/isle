@@ -1,10 +1,10 @@
 #include "isleactor.h"
 
 #include "legoentity.h"
-#include "legoomni.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxnotificationparam.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(IsleActor, 0x7c)
 

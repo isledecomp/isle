@@ -7,7 +7,7 @@
 #include "legocameralocations.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"

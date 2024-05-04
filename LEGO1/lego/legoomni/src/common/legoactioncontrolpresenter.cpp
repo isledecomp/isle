@@ -2,7 +2,7 @@
 
 #include "define.h"
 #include "extra.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoutils.h"
 #include "mxcompositepresenter.h"
 #include "mxdssubscriber.h"

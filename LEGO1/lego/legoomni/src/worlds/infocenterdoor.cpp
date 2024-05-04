@@ -7,13 +7,14 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
 

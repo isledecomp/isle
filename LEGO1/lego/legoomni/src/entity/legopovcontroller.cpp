@@ -1,7 +1,7 @@
 #include "3dmanager/lego3dview.h"
 #include "legoentity.h"
+#include "legomain.h"
 #include "legonavcontroller.h"
-#include "legoomni.h"
 #include "legopointofviewcontroller.h"
 #include "legosoundmanager.h"
 #include "misc.h"

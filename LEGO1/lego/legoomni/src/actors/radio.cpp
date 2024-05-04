@@ -3,7 +3,6 @@
 #include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
@@ -12,6 +11,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "radiostate.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Radio, 0x10)
 

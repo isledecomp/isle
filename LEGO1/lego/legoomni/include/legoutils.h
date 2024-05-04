@@ -11,8 +11,11 @@ class LegoEntity;
 class LegoFile;
 class LegoAnimPresenter;
 class LegoNamedTexture;
+class LegoROI;
 class LegoTreeNode;
 
+LegoEntity* PickEntity(MxLong, MxLong);
+LegoROI* PickROI(MxLong, MxLong);
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);

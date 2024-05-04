@@ -7,7 +7,6 @@
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
-#include "legoomni.h"
 #include "legoutils.h"
 #include "misc.h"
 #include "mxmisc.h"
@@ -15,6 +14,7 @@
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
 #include "pizza.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 

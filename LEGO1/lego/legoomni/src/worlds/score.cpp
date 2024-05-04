@@ -9,7 +9,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
 #include "mxactionnotificationparam.h"
@@ -20,6 +20,7 @@
 #include "pizzamissionstate.h"
 #include "racestate.h"
 #include "scorestate.h"
+#include "scripts.h"
 #include "towtrackmissionstate.h"
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
