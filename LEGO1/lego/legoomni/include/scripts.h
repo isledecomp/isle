@@ -36,4 +36,4 @@ void CreateScripts();
 void DestroyScripts();
 const char* GetNoCD_SourceName();
 
-#endif // LEGOMAIN_H
+#endif // SCRIPTS_H
