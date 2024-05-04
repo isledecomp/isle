@@ -77,14 +77,12 @@ void Helicopter::VTable0xe4()
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
-		if (CurrentActor()) {
-			if (CurrentActor()->IsA("IslePathActor")) {
-				CurrentActor()->SpawnPlayer(
-					LegoGameState::e_unk55,
-					TRUE,
-					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-				);
-			}
+		if (CurrentActor() && CurrentActor()->IsA("IslePathActor")) {
+			CurrentActor()->SpawnPlayer(
+				LegoGameState::e_unk55,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		}
 	}
 
