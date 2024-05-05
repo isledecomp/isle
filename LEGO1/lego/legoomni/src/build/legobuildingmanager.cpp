@@ -12,15 +12,15 @@ DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
 struct LegoBuildingData {
 	LegoEntity* m_pEntity;
 	const char* m_hausName;
-	MxU32 m_int1;
-	MxU32 m_int2;
-	MxU8 m_byte1;
-	MxS8 m_byte2;
-	MxS8 m_initialByte2;
+	MxU32 m_cycle1;
+	MxU32 m_cycle2;
+	MxU8 m_cycle3;
+	MxS8 m_unk0x11;
+	MxS8 m_initialUnk0x11; // = initial value loaded to m_unk0x11
 	MxU8 m_flags;
 	float m_float;
-	char m_unk[16];
-	undefined4 m_something;
+	char m_unk0x18[16];
+	undefined4 m_unk0x28;
 };
 
 DECOMP_SIZE_ASSERT(LegoBuildingData, 0x2c);
@@ -96,10 +96,10 @@ void LegoBuildingManager::Init()
 	}
 
 	m_nextVariant = 0;
-	m_unk1 = 0;
-	m_unk6 = 0;
-	m_unk7 = 0;
-	m_unk8 = 0;
+	m_unk0x09 = 0;
+	m_unk0x20 = 0;
+	m_unk0x24 = 0;
+	m_unk0x28 = 0;
 }
 
 // FUNCTION: LEGO1 0x1002fa00
@@ -114,7 +114,7 @@ void LegoBuildingManager::FUN_1002fa00()
 		LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingDataHausName[0]);
 		if (entity) {
 			entity->GetROI()->SetVisibility(TRUE);
-			m_unk1 = 0;
+			m_unk0x09 = 0;
 			return;
 		}
 	}
@@ -125,7 +125,7 @@ void LegoBuildingManager::FUN_1002fa00()
 				entity->GetROI()->SetVisibility(m_nextVariant == i);
 		}
 	}
-	m_unk1 = 0;
+	m_unk0x09 = 0;
 }
 
 // FUNCTION: LEGO1 0x1002fa90
@@ -156,13 +156,13 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 	MxResult result = FAILURE;
 	for (MxS32 i = 0; i < _countof(g_buildingData); i++) {
 		LegoBuildingData* data = &g_buildingData[i];
-		if (p_storage->Write(&data->m_int1, 4) != SUCCESS)
+		if (p_storage->Write(&data->m_cycle1, 4) != SUCCESS)
 			goto done;
-		if (p_storage->Write(&data->m_int2, 4) != SUCCESS)
+		if (p_storage->Write(&data->m_cycle2, 4) != SUCCESS)
 			goto done;
-		if (p_storage->Write(&data->m_byte1, 1) != SUCCESS)
+		if (p_storage->Write(&data->m_cycle3, 1) != SUCCESS)
 			goto done;
-		if (p_storage->Write(&data->m_initialByte2, 1) != SUCCESS)
+		if (p_storage->Write(&data->m_initialUnk0x11, 1) != SUCCESS)
 			goto done;
 	}
 	if (p_storage->Write(&m_nextVariant, 1) != SUCCESS)
@@ -180,15 +180,15 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < _countof(g_buildingData); i++) {
 		LegoBuildingData* data = &g_buildingData[i];
 
-		if (p_storage->Read(&data->m_int1, 4) != SUCCESS)
+		if (p_storage->Read(&data->m_cycle1, 4) != SUCCESS)
 			goto done;
-		if (p_storage->Read(&data->m_int2, 4) != SUCCESS)
+		if (p_storage->Read(&data->m_cycle2, 4) != SUCCESS)
 			goto done;
-		if (p_storage->Read(&data->m_byte1, 1) != SUCCESS)
+		if (p_storage->Read(&data->m_cycle3, 1) != SUCCESS)
 			goto done;
-		if (p_storage->Read(&data->m_byte2, 1) != SUCCESS)
+		if (p_storage->Read(&data->m_unk0x11, 1) != SUCCESS)
 			goto done;
-		data->m_initialByte2 = data->m_byte2;
+		data->m_initialUnk0x11 = data->m_unk0x11;
 		AdjustHeight(i);
 	}
 
@@ -210,7 +210,7 @@ void LegoBuildingManager::AdjustHeight(int p_i)
 	// Does not use any member variables but we can be sure that
 	// this is a THISCALL method because LegoBuildingManager::Read
 	// goes to the trouble of restoring ECX before calling it.
-	MxS8 value = g_buildingData[p_i].m_byte2;
+	MxS8 value = g_buildingData[p_i].m_unk0x11;
 	if (value > 0) {
 		g_buildingData[p_i].m_float = g_buildingDataTemplate[p_i].m_float -
 									  (g_buildingDataDownshift[p_i] - value) * g_buildingDataDownshiftScale[p_i];
@@ -249,7 +249,7 @@ MxBool LegoBuildingManager::IncrementVariant(LegoEntity* p_entity)
 		return TRUE;
 
 	LegoBuildingData* data = GetData(p_entity);
-	if (data != NULL && (data->m_flags & 1) && data->m_byte2 == -1) {
+	if (data != NULL && (data->m_flags & 1) && data->m_unk0x11 == -1) {
 		LegoROI* roi = p_entity->GetROI();
 		if (++m_nextVariant >= _countof(g_buildingDataHausName))
 			m_nextVariant = 0;
@@ -270,9 +270,9 @@ MxBool LegoBuildingManager::FUN_1002fe40(LegoEntity* p_entity)
 	MxBool result = FALSE;
 	LegoBuildingData* data = GetData(p_entity);
 	if (data != NULL && (data->m_flags & 2)) {
-		data->m_int1++;
-		if (data->m_int1 >= g_buildingCycle1Length) {
-			data->m_int1 = 0;
+		data->m_cycle1++;
+		if (data->m_cycle1 >= g_buildingCycle1Length) {
+			data->m_cycle1 = 0;
 		}
 		result = TRUE;
 	}
@@ -285,9 +285,9 @@ MxBool LegoBuildingManager::FUN_1002fe80(LegoEntity* p_entity)
 	MxBool result = FALSE;
 	LegoBuildingData* data = GetData(p_entity);
 	if (data != NULL && (data->m_flags & 4)) {
-		data->m_int2++;
-		if (data->m_int2 >= g_buildingCycle2Length[data - g_buildingData]) {
-			data->m_int2 = 0;
+		data->m_cycle2++;
+		if (data->m_cycle2 >= g_buildingCycle2Length[data - g_buildingData]) {
+			data->m_cycle2 = 0;
 		}
 		result = TRUE;
 	}
@@ -300,9 +300,9 @@ MxBool LegoBuildingManager::FUN_1002fed0(LegoEntity* p_entity)
 	MxBool result = FALSE;
 	LegoBuildingData* data = GetData(p_entity);
 	if (data != NULL && (data->m_flags & 8)) {
-		data->m_byte1++;
-		if (data->m_byte1 > 3) {
-			data->m_byte1 = 0;
+		data->m_cycle3++;
+		if (data->m_cycle3 > 3) {
+			data->m_cycle3 = 0;
 		}
 		result = TRUE;
 	}

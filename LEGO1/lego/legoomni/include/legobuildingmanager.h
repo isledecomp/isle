@@ -54,16 +54,16 @@ private:
 	static char* g_customizeAnimFile;
 
 	MxU8 m_nextVariant; // 0x08
-	MxU8 m_unk1;
+	MxU8 m_unk0x09;
 	void* m_pSomething;
-	undefined4 m_unk2; // 0x10
-	undefined4 m_unk3;
-	undefined4 m_unk4;
-	undefined4 m_unk5;
-	MxU8 m_unk6;       // 0x20
-	undefined4 m_unk7; // 0x24
-	MxU8 m_unk8;
-	undefined4 m_unk9; // 0x2c
+	undefined4 m_unk0x10; // 0x10
+	undefined4 m_unk0x14;
+	undefined4 m_unk0x18;
+	undefined4 m_unk0x1c;
+	MxU8 m_unk0x20;       // 0x20
+	undefined4 m_unk0x24;
+	MxU8 m_unk0x28;       // 0x28
+	undefined4 m_unk0x2c; // 0x2c
 };
 
 #endif // LEGOBUILDINGMANAGER_H
