@@ -269,8 +269,9 @@ void LegoBuildingManager::FUN_1002fa00()
 	else {
 		for (i = 0; i < _countof(g_buildingDataHausName); i++) {
 			LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingDataHausName[i]);
-			if (entity)
+			if (entity) {
 				entity->GetROI()->SetVisibility(m_nextVariant == i);
+			}
 		}
 	}
 	m_unk0x09 = 0;
@@ -304,17 +305,22 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 	MxResult result = FAILURE;
 	for (MxS32 i = 0; i < _countof(g_buildingData); i++) {
 		LegoBuildingData* data = &g_buildingData[i];
-		if (p_storage->Write(&data->m_cycle1, 4) != SUCCESS)
+		if (p_storage->Write(&data->m_cycle1, 4) != SUCCESS) {
 			goto done;
-		if (p_storage->Write(&data->m_cycle2, 4) != SUCCESS)
+		}
+		if (p_storage->Write(&data->m_cycle2, 4) != SUCCESS) {
 			goto done;
-		if (p_storage->Write(&data->m_cycle3, 1) != SUCCESS)
+		}
+		if (p_storage->Write(&data->m_cycle3, 1) != SUCCESS) {
 			goto done;
-		if (p_storage->Write(&data->m_initialUnk0x11, 1) != SUCCESS)
+		}
+		if (p_storage->Write(&data->m_initialUnk0x11, 1) != SUCCESS) {
 			goto done;
+		}
 	}
-	if (p_storage->Write(&m_nextVariant, 1) != SUCCESS)
+	if (p_storage->Write(&m_nextVariant, 1) != SUCCESS) {
 		goto done;
+	}
 
 	result = SUCCESS;
 done:
@@ -328,23 +334,29 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < _countof(g_buildingData); i++) {
 		LegoBuildingData* data = &g_buildingData[i];
 
-		if (p_storage->Read(&data->m_cycle1, 4) != SUCCESS)
+		if (p_storage->Read(&data->m_cycle1, 4) != SUCCESS) {
 			goto done;
-		if (p_storage->Read(&data->m_cycle2, 4) != SUCCESS)
+		}
+		if (p_storage->Read(&data->m_cycle2, 4) != SUCCESS) {
 			goto done;
-		if (p_storage->Read(&data->m_cycle3, 1) != SUCCESS)
+		}
+		if (p_storage->Read(&data->m_cycle3, 1) != SUCCESS) {
 			goto done;
-		if (p_storage->Read(&data->m_unk0x11, 1) != SUCCESS)
+		}
+		if (p_storage->Read(&data->m_unk0x11, 1) != SUCCESS) {
 			goto done;
+		}
 		data->m_initialUnk0x11 = data->m_unk0x11;
 		AdjustHeight(i);
 	}
 
-	if (p_storage->Read(&m_nextVariant, 1) != SUCCESS)
+	if (p_storage->Read(&m_nextVariant, 1) != SUCCESS) {
 		goto done;
+	}
 
-	if (g_buildingManagerConfig <= 1)
+	if (g_buildingManagerConfig <= 1) {
 		m_nextVariant = 0;
+	}
 
 	result = SUCCESS;
 done:
@@ -368,8 +380,9 @@ void LegoBuildingManager::AdjustHeight(int p_i)
 			g_buildingDataTemplate[p_i].m_float - g_buildingDataDownshift[p_i] * g_buildingDataDownshiftScale[p_i];
 		if (g_buildingData[p_i].m_pEntity != NULL) {
 			LegoROI* roi = g_buildingData[p_i].m_pEntity->GetROI();
-			if (roi != NULL)
+			if (roi != NULL) {
 				roi->SetVisibility(FALSE);
+			}
 		}
 	}
 	else {
@@ -382,31 +395,36 @@ LegoBuildingData* LegoBuildingManager::GetData(LegoEntity* p_entity)
 {
 	MxS32 i;
 	for (i = 0; i < _countof(g_buildingData); i++) {
-		if (g_buildingData[i].m_pEntity == p_entity)
+		if (g_buildingData[i].m_pEntity == p_entity) {
 			break;
+		}
 	}
-	if (i < _countof(g_buildingData))
+	if (i < _countof(g_buildingData)) {
 		return &g_buildingData[i];
+	}
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1002fdb0
 MxBool LegoBuildingManager::IncrementVariant(LegoEntity* p_entity)
 {
-	if (g_buildingManagerConfig <= 1)
+	if (g_buildingManagerConfig <= 1) {
 		return TRUE;
+	}
 
 	LegoBuildingData* data = GetData(p_entity);
 	if (data != NULL && (data->m_flags & 1) && data->m_unk0x11 == -1) {
 		LegoROI* roi = p_entity->GetROI();
-		if (++m_nextVariant >= _countof(g_buildingDataHausName))
+		if (++m_nextVariant >= _countof(g_buildingDataHausName)) {
 			m_nextVariant = 0;
+		}
 
 		roi->SetVisibility(FALSE);
 		data->m_hausName = g_buildingDataHausName[m_nextVariant];
 		UpdatePosition(12, CurrentWorld());
-		if (data->m_pEntity != NULL)
+		if (data->m_pEntity != NULL) {
 			data->m_pEntity->GetROI()->SetVisibility(TRUE);
+		}
 		return TRUE;
 	}
 	return FALSE;
@@ -487,8 +505,9 @@ void LegoBuildingManager::SetCustomizeAnimFile(const char* p_value)
 MxBool LegoBuildingManager::FUN_10030000(LegoEntity* p_entity)
 {
 	LegoBuildingData* data = GetData(p_entity);
-	if (data == NULL)
+	if (data == NULL) {
 		return FALSE;
+	}
 
 	return FUN_10030030(data - g_buildingData);
 }
