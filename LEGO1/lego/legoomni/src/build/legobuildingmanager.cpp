@@ -19,8 +19,11 @@ struct LegoBuildingData {
 	MxS8 m_initialUnk0x11; // = initial value loaded to m_unk0x11
 	MxU8 m_flags;
 	float m_float;
-	char m_unk0x18[16];
-	undefined4 m_unk0x28;
+	const char* m_unk0x18;
+	float m_x;
+	float m_y;
+	float m_z;
+	void* m_unk0x28;
 };
 
 DECOMP_SIZE_ASSERT(LegoBuildingData, 0x2c);
@@ -50,10 +53,155 @@ MxU8 g_buildingDataDownshift[16] = {
 	3, 5, 5, 5,
 	5, 5, 5, 5,
 };
-// clang-format on
 
 // GLOBAL: LEGO1 0x100f3478
-LegoBuildingData g_buildingDataTemplate[16];
+LegoBuildingData g_buildingDataTemplate[16] = {
+	{
+		NULL, "infocen",
+		4, 0, 1,
+		-1, -1, 0x0,
+		8.99999f,
+		"edg02_74",
+		84.79617f, 9.0f, -10.2189f,
+		NULL,
+	},
+	{
+		NULL, "policsta",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.999992f,
+		"int33",
+		84.79617f, 9.0f, -10.2189f,
+		NULL,
+	},
+	{
+		NULL, "Jail",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"edg02_50",
+		93.245659f, 0.0f, -48.7773f,
+		NULL,
+	},
+	{
+		NULL, "races",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"int14",
+		-21.7321f, 0.0f, 11.23354f,
+		NULL,
+	},
+	{
+		NULL, "medcntr",
+		4, 0, 1,
+		-1, -1, 0x10,
+		3.99071f,
+		"edg02_27",
+		86.020737f, 4.0f, 31.35498f,
+		NULL,
+	},
+	{
+		NULL, "gas",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"int24",
+		26.32025f, 0.0f, -2.28938f,
+		NULL,
+	},
+	{
+		NULL, "beach",
+		4, 0, 1,
+		-1, -1, 0x10,
+		-1.8125f,
+		"edg00_46",
+		14.375f, -1.3125f, -56.75f,
+		NULL,
+	},
+	{
+		NULL, "racef",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"edg03_03",
+		-4.15951f, 0.0f, 5.2003198f,
+		NULL,
+	},
+	{
+		NULL, "racej",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"edge03_03",
+		-4.15951f, 0.0f, 5.2003198f,
+		NULL,
+	},
+	{
+		NULL, "Store",
+		4, 0, 1,
+		-1, -1, 0x3E,
+		2.0f,
+		"edg02_60",
+		-49.4744f, 2.0f, -56.6276f,
+		NULL,
+	},
+	{
+		NULL, "Bank",
+		4, 0, 1,
+		-1, -1, 0x3E,
+		0.0f,
+		"edg02_36",
+		18.53531f, 0.0f, -16.6053f,
+		NULL,
+	},
+	{
+		NULL, "Post",
+		4, 0, 1,
+		-1, -1, 0x3E,
+		0.0f,
+		"edg02_58",
+		-33.5413f, 0.0f, -55.1791f,
+		NULL,
+	},
+	{
+		NULL, "haus1",
+		4, 0, 1,
+		-1, -1, 0x3F,
+		7.0625f,
+		"int11",
+		-62.7827f, 7.0f, -45.2215f,
+		NULL,
+	},
+	{
+		NULL, "haus2",
+		4, 0, 1,
+		-1, -1, 0x3E,
+		8.0f,
+		"int07",
+		-69.2376f, 8.0f, -6.8008099f,
+		NULL,
+	},
+	{
+		NULL, "haus3",
+		4, 0, 1,
+		-1, -1, 0x3E,
+		7.0f,
+		"edg01_24",
+		-69.0596f, 7.0f, -24.4928f,
+		NULL,
+	},
+	{
+		NULL, "Pizza",
+		4, 0, 1,
+		-1, -1, 0x10,
+		0.0f,
+		"int37",
+		-17.9438f, 0.0f, -46.827999f,
+		NULL,
+	},
+};
+// clang-format on
 
 // GLOBAL: LEGO1 0x100f3738
 MxU32 g_buildingCycle1Length = 6;
