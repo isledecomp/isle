@@ -60,7 +60,7 @@ private:
 	undefined4 m_unk0x14;
 	undefined4 m_unk0x18;
 	undefined4 m_unk0x1c;
-	MxU8 m_unk0x20;       // 0x20
+	MxU8 m_unk0x20; // 0x20
 	undefined4 m_unk0x24;
 	MxU8 m_unk0x28;       // 0x28
 	undefined4 m_unk0x2c; // 0x2c
