@@ -290,7 +290,7 @@ void LegoEntity::VTable0x3c()
 		PlantManager()->FUN_100269e0(this);
 		break;
 	case e_building:
-		BuildingManager()->FUN_1002fdb0(this);
+		BuildingManager()->IncrementVariant(this);
 		break;
 	}
 

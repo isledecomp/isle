@@ -7,6 +7,8 @@
 
 class LegoEntity;
 class LegoROI;
+class LegoWorld;
+struct LegoBuildingData;
 
 // VTABLE: LEGO1 0x100d6f50
 // SIZE 0x30
@@ -29,13 +31,21 @@ public:
 
 	void Init();
 	void FUN_1002fa00();
+	void UpdatePosition(int p_index, LegoWorld* p_world);
 	void FUN_1002fb30();
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
-	MxBool FUN_1002fdb0(LegoEntity* p_entity);
+	LegoBuildingData* GetData(LegoEntity* p_entity);
+	MxBool IncrementVariant(LegoEntity* p_entity);
+	MxBool FUN_1002fe40(LegoEntity* p_entity);
+	MxBool FUN_1002fe80(LegoEntity* p_entity);
+	MxBool FUN_1002fed0(LegoEntity* p_entity);
 	MxU32 FUN_1002ff40(LegoEntity*, MxBool);
-	void FUN_10030000(LegoEntity* p_entity);
+	MxBool FUN_10030000(LegoEntity* p_entity);
+	MxBool FUN_10030030(int p_index);
+	MxBool FUN_10030110(LegoBuildingData* p_data);
 	void FUN_10030590();
+	void AdjustHeight(int p_index);
 
 	// SYNTHETIC: LEGO1 0x1002f940
 	// LegoBuildingManager::`scalar deleting destructor'
@@ -43,7 +53,17 @@ public:
 private:
 	static char* g_customizeAnimFile;
 
-	undefined m_unk0x08[0x28]; // 0x08
+	MxU8 m_nextVariant;       // 0x08
+	MxU8 m_unk1;
+	void* m_pSomething;
+	undefined4 m_unk2;        // 0x10
+	undefined4 m_unk3;
+	undefined4 m_unk4;
+	undefined4 m_unk5;
+	MxU8 m_unk6;              // 0x20
+	undefined4 m_unk7;        // 0x24
+	MxU8 m_unk8;
+	undefined4 m_unk9;        // 0x2c
 };
 
 #endif // LEGOBUILDINGMANAGER_H
