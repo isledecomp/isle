@@ -1,7 +1,6 @@
 #include "legobuildingmanager.h"
 
 #include "legoentity.h"
-
 #include "legoworld.h"
 #include "misc.h"
 
@@ -32,6 +31,7 @@ const char* g_buildingDataHausName[5] = {
 	"haus7",
 };
 
+// clang-format off
 // GLOBAL: LEGO1 0x100f3428
 float g_buildingDataDownshiftScale[16] = {
 	0.0f, 1.0f, 1.0f, 1.0f,
@@ -47,6 +47,7 @@ MxU8 g_buildingDataDownshift[16] = {
 	3, 5, 5, 5,
 	5, 5, 5, 5,
 };
+// clang-format on
 
 // GLOBAL: LEGO1 0x100f3478
 LegoBuildingData g_buildingDataTemplate[16];
@@ -107,15 +108,16 @@ void LegoBuildingManager::FUN_1002fa00()
 		UpdatePosition(i, world);
 	}
 	if (g_buildingManagerConfig <= 1) {
-		LegoEntity* entity = (LegoEntity*)world->Find("MxEntity", g_buildingDataHausName[0]);
+		LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingDataHausName[0]);
 		if (entity) {
 			entity->GetROI()->SetVisibility(TRUE);
 			m_unk1 = 0;
 			return;
 		}
-	} else {
+	}
+	else {
 		for (i = 0; i < _countof(g_buildingDataHausName); i++) {
-			LegoEntity* entity = (LegoEntity*)world->Find("MxEntity", g_buildingDataHausName[i]);
+			LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingDataHausName[i]);
 			if (entity)
 				entity->GetROI()->SetVisibility(m_nextVariant == i);
 		}
@@ -126,8 +128,7 @@ void LegoBuildingManager::FUN_1002fa00()
 // FUNCTION: LEGO1 0x1002fa90
 void LegoBuildingManager::UpdatePosition(int p_index, LegoWorld* p_world)
 {
-	LegoEntity* entity = (LegoEntity*)p_world->Find(
-		"MxEntity", g_buildingData[p_index].m_hausName);
+	LegoEntity* entity = (LegoEntity*) p_world->Find("MxEntity", g_buildingData[p_index].m_hausName);
 	if (entity) {
 		entity->SetType(3);
 		g_buildingData[p_index].m_pEntity = entity;
@@ -209,17 +210,18 @@ void LegoBuildingManager::AdjustHeight(int p_i)
 	MxS8 value = g_buildingData[p_i].m_byte2;
 	if (value > 0) {
 		g_buildingData[p_i].m_float = g_buildingDataTemplate[p_i].m_float -
-			(g_buildingDataDownshift[p_i] - value) * g_buildingDataDownshiftScale[p_i];
-	} else if (value == 0) {
-		g_buildingData[p_i].m_float = g_buildingDataTemplate[p_i].m_float -
-			g_buildingDataDownshift[p_i] * g_buildingDataDownshiftScale[p_i];
-		if (g_buildingData[p_i].m_pEntity != NULL)
-		{
+									  (g_buildingDataDownshift[p_i] - value) * g_buildingDataDownshiftScale[p_i];
+	}
+	else if (value == 0) {
+		g_buildingData[p_i].m_float =
+			g_buildingDataTemplate[p_i].m_float - g_buildingDataDownshift[p_i] * g_buildingDataDownshiftScale[p_i];
+		if (g_buildingData[p_i].m_pEntity != NULL) {
 			LegoROI* roi = g_buildingData[p_i].m_pEntity->GetROI();
 			if (roi != NULL)
 				roi->SetVisibility(FALSE);
 		}
-	} else {
+	}
+	else {
 		g_buildingData[p_i].m_float = g_buildingDataTemplate[p_i].m_float;
 	}
 }
