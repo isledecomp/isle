@@ -2,6 +2,9 @@
 
 #include "legoentity.h"
 #include "legoworld.h"
+#include "legovideomanager.h"
+#include "3dmanager/lego3dmanager.h"
+#include "misc/legostorage.h"
 #include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
