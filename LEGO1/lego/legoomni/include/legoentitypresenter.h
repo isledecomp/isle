@@ -4,6 +4,7 @@
 #include "mxcompositepresenter.h"
 
 class LegoEntity;
+class Vector3;
 
 // VTABLE: LEGO1 0x100d8398
 // SIZE 0x50

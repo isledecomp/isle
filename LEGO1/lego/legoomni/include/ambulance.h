@@ -1,8 +1,9 @@
 #ifndef AMBULANCE_H
 #define AMBULANCE_H
 
-#include "ambulancemissionstate.h"
 #include "islepathactor.h"
+
+class AmbulanceMissionState;
 
 // VTABLE: LEGO1 0x100d71a8
 // SIZE 0x184

@@ -2,14 +2,15 @@
 #define LEGOACTIONCONTROLPRESENTER_H
 
 #include "decomp.h"
-#include "legoutils.h"
+#include "extra.h"
 #include "mxmediapresenter.h"
+#include "mxstring.h"
 
 // VTABLE: LEGO1 0x100d5118
 // SIZE 0x68
 class LegoActionControlPresenter : public MxMediaPresenter {
 public:
-	inline LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
+	LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
 	~LegoActionControlPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: LEGO1 0x1000d0e0

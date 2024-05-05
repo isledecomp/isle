@@ -6,6 +6,8 @@
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
 
+#pragma warning(disable : 4237)
+
 // SIZE 0x08
 struct LegoCacheSoundEntry {
 	LegoCacheSoundEntry() : m_sound(NULL), m_name(NULL) {}

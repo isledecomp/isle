@@ -1,10 +1,12 @@
 #include "legoanimmmpresenter.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
 #include "define.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
+#include "legoendanimnotificationparam.h"
 #include "legotraninfo.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -15,7 +17,6 @@
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxtimer.h"
-#include "mxtype18notificationparam.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimMMPresenter, 0x74)
@@ -123,7 +124,7 @@ void LegoAnimMMPresenter::EndAction()
 
 	m_tranInfo = NULL;
 
-	MxType18NotificationParam param(c_notificationType18, NULL, m_animmanId);
+	LegoEndAnimNotificationParam param(c_notificationEndAnim, NULL, m_animmanId);
 	if (m_animmanId != 0) {
 		NotificationManager()->Send(AnimationManager(), param);
 	}

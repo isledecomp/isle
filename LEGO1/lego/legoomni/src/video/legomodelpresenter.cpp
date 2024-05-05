@@ -1,5 +1,6 @@
 #include "legomodelpresenter.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "anim/legoanim.h"
 #include "define.h"
 #include "legocharactermanager.h"
@@ -12,6 +13,8 @@
 #include "misc/legotexture.h"
 #include "misc/version.h"
 #include "mxcompositepresenter.h"
+#include "mxdirectx/mxdirect3d.h"
+#include "mxdssubscriber.h"
 #include "mxutilities.h"
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"

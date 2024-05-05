@@ -1,16 +1,21 @@
 #ifndef LEGOVIDEOMANAGER_H
 #define LEGOVIDEOMANAGER_H
 
-#include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
 #include "legophonemelist.h"
-#include "mxdirectx/mxdirect3d.h"
-#include "mxdirectx/mxstopwatch.h"
 #include "mxvideomanager.h"
 
 #include <ddraw.h>
 
+class Lego3DManager;
 class LegoROI;
+class MxDirect3D;
+class MxStopWatch;
+
+namespace Tgl
+{
+class Renderer;
+}
 
 // VTABLE: LEGO1 0x100d9c88
 // SIZE 0x590
@@ -47,6 +52,8 @@ public:
 	inline LegoROI* GetViewROI() { return this->m_viewROI; }
 	inline MxDirect3D* GetDirect3D() { return this->m_direct3d; }
 	inline MxBool GetRender3D() { return this->m_render3d; }
+	inline double GetElapsedSeconds() { return this->m_elapsedSeconds; }
+
 	inline void SetRender3D(MxBool p_render3d) { this->m_render3d = p_render3d; }
 	inline void SetUnk0x554(MxBool p_unk0x554) { this->m_unk0x554 = p_unk0x554; }
 

@@ -1,5 +1,7 @@
-#include "legoomni.h"
+#include "legomain.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
@@ -18,259 +20,27 @@
 #include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxdisplaysurface.h"
 #include "mxdsfile.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
 #include "mxomnicreateflags.h"
 #include "mxomnicreateparam.h"
 #include "mxstreamer.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxvariabletable.h"
+#include "scripts.h"
 #include "viewmanager/viewmanager.h"
 
+DECOMP_SIZE_ASSERT(LegoOmni, 0x140)
 DECOMP_SIZE_ASSERT(LegoOmni::ScriptContainer, 0x1c)
-DECOMP_SIZE_ASSERT(LegoOmni::PathContainer, 0x38)
 DECOMP_SIZE_ASSERT(LegoWorldList, 0x18)
 DECOMP_SIZE_ASSERT(LegoWorldListCursor, 0x10)
-
-// GLOBAL: LEGO1 0x100f451c
-MxAtomId* g_copterScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4520
-MxAtomId* g_dunecarScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4524
-MxAtomId* g_jetskiScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4528
-MxAtomId* g_racecarScript = NULL;
-
-// GLOBAL: LEGO1 0x100f452c
-MxAtomId* g_carraceScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4530
-MxAtomId* g_carracerScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4534
-MxAtomId* g_jetraceScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4538
-MxAtomId* g_jetracerScript = NULL;
-
-// GLOBAL: LEGO1 0x100f453c
-MxAtomId* g_isleScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4540
-MxAtomId* g_elevbottScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4544
-MxAtomId* g_infodoorScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4548
-MxAtomId* g_infomainScript = NULL;
-
-// GLOBAL: LEGO1 0x100f454c
-MxAtomId* g_infoscorScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4550
-MxAtomId* g_regbookScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4554
-MxAtomId* g_histbookScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4558
-MxAtomId* g_hospitalScript = NULL;
-
-// GLOBAL: LEGO1 0x100f455c
-MxAtomId* g_policeScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4560
-MxAtomId* g_garageScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4564
-MxAtomId* g_act2mainScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4568
-MxAtomId* g_act3Script = NULL;
-
-// GLOBAL: LEGO1 0x100f456c
-MxAtomId* g_jukeboxScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4570
-MxAtomId* g_pz5Script = NULL;
-
-// GLOBAL: LEGO1 0x100f4574
-MxAtomId* g_introScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4578
-MxAtomId* g_testScript = NULL;
-
-// GLOBAL: LEGO1 0x100f457c
-MxAtomId* g_jukeboxwScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4580
-MxAtomId* g_sndAnimScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4584
-MxAtomId* g_creditsScript = NULL;
-
-// GLOBAL: LEGO1 0x100f4588
-MxAtomId* g_nocdSourceName = NULL;
 
 // GLOBAL: LEGO1 0x100f6718
 // STRING: LEGO1 0x100f6710
 const char* g_current = "current";
-
-// GLOBAL: LEGO1 0x10102b28
-LegoOmni::PathContainer g_extraPaths[29];
-
-// FUNCTION: LEGO1 0x1001a700
-void RegisterExtraPaths()
-{
-	g_extraPaths[0] = LegoOmni::PathContainer(0x16, g_isleScript, 0, "int35", 2, 0.6, 4, 0.4, 0x2a, 0x12);
-	g_extraPaths[1] = LegoOmni::PathContainer(0x17, g_isleScript, 0, "edg00_49", 1, 0.43, 2, 0.6, 0x27, 0x12);
-	g_extraPaths[2] = LegoOmni::PathContainer(0x18, g_isleScript, 0, "edg00_191", 2, 0.5, 0, 0.55, 0x26, 0x12);
-	g_extraPaths[3] = LegoOmni::PathContainer(0x04, g_isleScript, 0, "int46", 0, 0.5, 2, 0.5, 0x10, 0x0b);
-	g_extraPaths[4] = LegoOmni::PathContainer(0x10, g_isleScript, 0, "EDG00_46", 0, 0.95, 2, 0.19, 0x17, 0x11);
-	g_extraPaths[5] = LegoOmni::PathContainer(0x11, g_isleScript, 0, "EDG00_46", 3, 0.625, 2, 0.03, 0x18, 0x11);
-	g_extraPaths[6] = LegoOmni::PathContainer(0x0f, g_isleScript, 0, "EDG10_63", 0, 0.26, 1, 0.01, 0, -1);
-	g_extraPaths[7] = LegoOmni::PathContainer(0x13, g_isleScript, 0, "INT15", 5, 0.65, 1, 0.68, 0x33, 0x0e);
-	g_extraPaths[8] = LegoOmni::PathContainer(0x14, g_isleScript, 0, "INT16", 4, 0.1, 2, 0, 0x34, 0x0e);
-	g_extraPaths[9] = LegoOmni::PathContainer(0x15, g_isleScript, 0, "INT62", 2, 0.1, 3, 0.7, 0x36, 0x0e);
-	g_extraPaths[10] = LegoOmni::PathContainer(0x19, g_isleScript, 0, "INT24", 0, 0.55, 2, 0.71, 0x08, 0x0f);
-	g_extraPaths[11] = LegoOmni::PathContainer(0x1c, g_isleScript, 0, "INT24", 2, 0.73, 4, 0.71, 0x0a, 0x0f);
-	g_extraPaths[12] = LegoOmni::PathContainer(0x1d, g_isleScript, 0, "INT19", 0, 0.85, 1, 0.28, 0, 0x0a);
-	g_extraPaths[13] = LegoOmni::PathContainer(0x1f, g_isleScript, 0, "EDG02_28", 3, 0.37, 1, 0.52, 0x0c, 0x0a);
-	g_extraPaths[14] = LegoOmni::PathContainer(0x20, g_isleScript, 0, "INT33", 0, 0.88, 2, 0.74, 0x22, 0x0c);
-	g_extraPaths[15] = LegoOmni::PathContainer(0x21, g_isleScript, 0, "EDG02_64", 2, 0.24, 0, 0.84, 0x23, 0x0c);
-	g_extraPaths[16] = LegoOmni::PathContainer(0x28, g_isleScript, 0, "edg02_51", 2, 0.63, 3, 0.01, 0, -1);
-	g_extraPaths[17] = LegoOmni::PathContainer(0x29, g_isleScript, 0, "edg02_51", 2, 0.63, 0, 0.4, 0, -1);
-	g_extraPaths[18] = LegoOmni::PathContainer(0x2b, g_isleScript, 0, "edg02_35", 2, 0.8, 0, 0.2, 0, -1);
-	g_extraPaths[19] = LegoOmni::PathContainer(0x2c, g_isleScript, 0, "EDG03_01", 2, 0.25, 0, 0.75, 0, -1);
-	g_extraPaths[20] = LegoOmni::PathContainer(0x2d, g_isleScript, 0, "edg10_70", 3, 0.25, 0, 0.7, 0x44, -1);
-	g_extraPaths[21] = LegoOmni::PathContainer(0x2a, g_isleScript, 0, "inv_05", 2, 0.75, 0, 0.19, 0, -1);
-	g_extraPaths[22] = LegoOmni::PathContainer(0x30, g_act3Script, 0, "edg02_51", 2, 0.63, 0, 0.4, 0, -1);
-	g_extraPaths[23] = LegoOmni::PathContainer(0x31, g_act3Script, 0, "inv_05", 2, 0.75, 0, 0.19, 0, -1);
-	g_extraPaths[24] = LegoOmni::PathContainer(0x32, g_act2mainScript, 0, "EDG02_51", 0, 0.64, 1, 0.37, 0, -1);
-	g_extraPaths[25] = LegoOmni::PathContainer(0x33, g_isleScript, 0, "edg02_32", 0, 0.5, 2, 0.5, 0, -1);
-	g_extraPaths[26] = LegoOmni::PathContainer(0x34, g_isleScript, 0, "edg02_19", 2, 0.5, 0, 0.5, 0, -1);
-	g_extraPaths[27] = LegoOmni::PathContainer(0x36, g_isleScript, 0, "int36", 0, 0.2, 4, 0.4, 0, -1);
-	g_extraPaths[28] = LegoOmni::PathContainer(0x37, g_isleScript, 0, "edg02_50", 2, 0.8, 1, 0.3, 0, -1);
-}
-
-// FUNCTION: LEGO1 0x1003dd70
-LegoROI* PickROI(MxLong p_a, MxLong p_b)
-{
-	return (LegoROI*) VideoManager()->Get3DManager()->GetLego3DView()->Pick(p_a, p_b);
-}
-
-// STUB: LEGO1 0x1003ddc0
-LegoEntity* PickEntity(MxLong, MxLong)
-{
-	// TODO
-	return NULL;
-}
-
-// FUNCTION: LEGO1 0x100528e0
-void CreateScripts()
-{
-	g_copterScript = new MxAtomId("\\lego\\scripts\\build\\copter", e_lowerCase2);
-	g_dunecarScript = new MxAtomId("\\lego\\scripts\\build\\dunecar", e_lowerCase2);
-	g_jetskiScript = new MxAtomId("\\lego\\scripts\\build\\jetski", e_lowerCase2);
-	g_racecarScript = new MxAtomId("\\lego\\scripts\\build\\racecar", e_lowerCase2);
-	g_carraceScript = new MxAtomId("\\lego\\scripts\\race\\carrace", e_lowerCase2);
-	g_carracerScript = new MxAtomId("\\lego\\scripts\\race\\carracer", e_lowerCase2);
-	g_jetraceScript = new MxAtomId("\\lego\\scripts\\race\\jetrace", e_lowerCase2);
-	g_jetracerScript = new MxAtomId("\\lego\\scripts\\race\\jetracer", e_lowerCase2);
-	g_isleScript = new MxAtomId("\\lego\\scripts\\isle\\isle", e_lowerCase2);
-	g_elevbottScript = new MxAtomId("\\lego\\scripts\\infocntr\\elevbott", e_lowerCase2);
-	g_infodoorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infodoor", e_lowerCase2);
-	g_infomainScript = new MxAtomId("\\lego\\scripts\\infocntr\\infomain", e_lowerCase2);
-	g_infoscorScript = new MxAtomId("\\lego\\scripts\\infocntr\\infoscor", e_lowerCase2);
-	g_regbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\regbook", e_lowerCase2);
-	g_histbookScript = new MxAtomId("\\lego\\scripts\\infocntr\\histbook", e_lowerCase2);
-	g_hospitalScript = new MxAtomId("\\lego\\scripts\\hospital\\hospital", e_lowerCase2);
-	g_policeScript = new MxAtomId("\\lego\\scripts\\police\\police", e_lowerCase2);
-	g_garageScript = new MxAtomId("\\lego\\scripts\\garage\\garage", e_lowerCase2);
-	g_act2mainScript = new MxAtomId("\\lego\\scripts\\act2\\act2main", e_lowerCase2);
-	g_act3Script = new MxAtomId("\\lego\\scripts\\act3\\act3", e_lowerCase2);
-	g_jukeboxScript = new MxAtomId("\\lego\\scripts\\isle\\jukebox", e_lowerCase2);
-	g_pz5Script = new MxAtomId("\\lego\\scripts\\isle\\pz5", e_lowerCase2);
-	g_introScript = new MxAtomId("\\lego\\scripts\\intro", e_lowerCase2);
-	g_testScript = new MxAtomId("\\lego\\scripts\\test\\test", e_lowerCase2);
-	g_jukeboxwScript = new MxAtomId("\\lego\\scripts\\isle\\jukeboxw", e_lowerCase2);
-	g_sndAnimScript = new MxAtomId("\\lego\\scripts\\sndanim", e_lowerCase2);
-	g_creditsScript = new MxAtomId("\\lego\\scripts\\credits", e_lowerCase2);
-	g_nocdSourceName = new MxAtomId("\\lego\\scripts\\nocd", e_lowerCase2);
-}
-
-// FUNCTION: LEGO1 0x100530c0
-void DestroyScripts()
-{
-	delete g_copterScript;
-	delete g_dunecarScript;
-	delete g_jetskiScript;
-	delete g_racecarScript;
-	delete g_carraceScript;
-	delete g_carracerScript;
-	delete g_jetraceScript;
-	delete g_jetracerScript;
-	delete g_isleScript;
-	delete g_elevbottScript;
-	delete g_infodoorScript;
-	delete g_infomainScript;
-	delete g_infoscorScript;
-	delete g_regbookScript;
-	delete g_histbookScript;
-	delete g_hospitalScript;
-	delete g_policeScript;
-	delete g_garageScript;
-	delete g_act2mainScript;
-	delete g_act3Script;
-	delete g_jukeboxScript;
-	delete g_pz5Script;
-	delete g_introScript;
-	delete g_testScript;
-	delete g_jukeboxwScript;
-	delete g_sndAnimScript;
-	delete g_creditsScript;
-	delete g_nocdSourceName;
-
-	g_copterScript = NULL;
-	g_dunecarScript = NULL;
-	g_jetskiScript = NULL;
-	g_racecarScript = NULL;
-	g_carraceScript = NULL;
-	g_carracerScript = NULL;
-	g_jetraceScript = NULL;
-	g_jetracerScript = NULL;
-	g_isleScript = NULL;
-	g_elevbottScript = NULL;
-	g_infodoorScript = NULL;
-	g_infomainScript = NULL;
-	g_infoscorScript = NULL;
-	g_regbookScript = NULL;
-	g_histbookScript = NULL;
-	g_hospitalScript = NULL;
-	g_policeScript = NULL;
-	g_garageScript = NULL;
-	g_act2mainScript = NULL;
-	g_act3Script = NULL;
-	g_jukeboxScript = NULL;
-	g_pz5Script = NULL;
-	g_introScript = NULL;
-	g_testScript = NULL;
-	g_testScript = NULL;
-	g_jukeboxwScript = NULL;
-	g_sndAnimScript = NULL;
-	g_creditsScript = NULL;
-	g_nocdSourceName = NULL;
-}
-
-// FUNCTION: LEGO1 0x10053430
-const char* GetNoCD_SourceName()
-{
-	return g_nocdSourceName->GetInternal();
-}
 
 // FUNCTION: LEGO1 0x10058a00
 LegoOmni::LegoOmni()
@@ -467,7 +237,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_variableTable->SetVariable(variable);
 
 	CreateScripts();
-	RegisterExtraPaths();
+	IslePathActor::RegisterSpawnLocations();
 	result = RegisterScripts();
 
 	if (result != SUCCESS) {

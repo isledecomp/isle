@@ -3,9 +3,6 @@
 
 #include "compat.h"
 #include "decomp.h"
-#include "legoinputmanager.h"
-#include "legoomni.h"
-#include "legovideomanager.h"
 // Long include path due to dependency of misc library on LegoOmni
 #include "lego/legoomni/include/actions/actionsfwd.h"
 #include "mxtypes.h"
@@ -16,6 +13,7 @@ class LegoBuildingManager;
 class LegoCharacterManager;
 class LegoControlManager;
 class LegoGameState;
+class LegoInputManager;
 class LegoNavController;
 class LegoOmni;
 class LegoPlantManager;
@@ -63,11 +61,5 @@ MxTransitionManager* TransitionManager();
 void PlayMusic(JukeboxScript::Script p_script);
 void SetIsWorldActive(MxBool p_isWorldActive);
 void DeleteObjects(MxAtomId* p_id, MxS32 p_first, MxS32 p_last);
-
-// FUNCTION: LEGO1 0x10015890
-inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
-{
-	return LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction);
-}
 
 #endif // MISC_H

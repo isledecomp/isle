@@ -6,6 +6,8 @@
 #include "mxmediapresenter.h"
 #include "mxrect32.h"
 
+#include <ddraw.h>
+
 // VTABLE: LEGO1 0x100d4be8
 // SIZE 0x64
 class MxVideoPresenter : public MxMediaPresenter {

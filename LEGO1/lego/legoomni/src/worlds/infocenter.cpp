@@ -14,7 +14,7 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoplantmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
@@ -22,12 +22,17 @@
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
+#include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
+#include "mxutilities.h"
+#include "radiostate.h"
+#include "scripts.h"
 #include "sndanim_actions.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterMapEntry, 0x18)

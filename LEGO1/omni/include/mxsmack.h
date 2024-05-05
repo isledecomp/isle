@@ -2,11 +2,12 @@
 #define MXSMACK_H
 
 #include "decomp.h"
-#include "mxbitmap.h"
 #include "mxrectlist.h"
 #include "mxtypes.h"
 
 #include <smack.h>
+
+struct MxBITMAPINFO;
 
 // These functions are not part of the public interface,
 // but present in SMACK.LIB and used directly by Mindscape.

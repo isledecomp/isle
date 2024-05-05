@@ -3,8 +3,7 @@
 
 #include "decomp.h"
 #include "mxlist.h"
-
-class MxStreamChunk;
+#include "mxstreamchunk.h"
 
 // VTABLE: LEGO1 0x100dc5d0
 // class MxCollection<MxStreamChunk *>

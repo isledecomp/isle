@@ -3,9 +3,12 @@
 #include "decomp.h"
 #include "define.h"
 #include "mxcompositepresenter.h"
+#include "mxdisplaysurface.h"
 #include "mxdsmediaaction.h"
+#include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxomni.h"
+#include "mxpalette.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"
 

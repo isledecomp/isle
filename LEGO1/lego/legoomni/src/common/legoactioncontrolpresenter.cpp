@@ -2,13 +2,15 @@
 
 #include "define.h"
 #include "extra.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legoutils.h"
 #include "mxcompositepresenter.h"
+#include "mxdssubscriber.h"
 #include "mxmediapresenter.h"
 #include "mxmisc.h"
 #include "mxstreamchunk.h"
 #include "mxticklemanager.h"
+#include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoActionControlPresenter, 0x68)
 

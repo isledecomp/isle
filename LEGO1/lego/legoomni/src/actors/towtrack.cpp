@@ -37,7 +37,7 @@ MxLong TowTrack::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1004cd30
-MxU32 TowTrack::VTable0xd8(MxType18NotificationParam& p_param)
+MxU32 TowTrack::VTable0xd8(LegoEndAnimNotificationParam& p_param)
 {
 	// TODO
 	return 0;

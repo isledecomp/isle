@@ -2,8 +2,6 @@
 #define LEGOACT2_H
 
 #include "act2brick.h"
-#include "legocarraceactor.h"
-#include "legopathactor.h"
 #include "legoworld.h"
 
 // VTABLE: LEGO1 0x100d82e0

@@ -2,13 +2,13 @@
 #define LEGOBUILDINGMANAGER_H
 
 #include "decomp.h"
-#include "misc/legostorage.h"
 #include "mxcore.h"
 
 class LegoEntity;
 class LegoROI;
 class LegoWorld;
 struct LegoBuildingData;
+class LegoStorage;
 
 // VTABLE: LEGO1 0x100d6f50
 // SIZE 0x30

@@ -1,15 +1,18 @@
 #include "legoworld.h"
 
+#include "anim/legoanim.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
+#include "legocachesoundmanager.h"
+#include "legocameracontroller.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocomotionanimpresenter.h"
+#include "legomain.h"
 #include "legonavcontroller.h"
-#include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
@@ -21,6 +24,8 @@
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxticklemanager.h"
+#include "mxutilities.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoWorld, 0xf8)
 DECOMP_SIZE_ASSERT(LegoEntityList, 0x18)
@@ -265,6 +270,29 @@ done:
 	}
 
 	return m_cameraController;
+}
+
+// FUNCTION: LEGO1 0x1001f720
+// FUNCTION: BETA10 0x100da24b
+MxResult LegoWorld::FUN_1001f720(
+	IslePathActor* p_actor,
+	const char* p_path,
+	MxS32 p_src,
+	float p_srcScale,
+	MxS32 p_dest,
+	float p_destScale
+)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->FUN_10045c20(p_actor, p_path, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
 }
 
 // STUB: LEGO1 0x1001fa70
@@ -630,7 +658,7 @@ void LegoWorld::Enable(MxBool p_enable)
 				PlantManager()->FUN_10026360(m_scriptIndex);
 				AnimationManager()->LoadScriptInfo(m_scriptIndex);
 				BuildingManager()->FUN_1002fa00();
-				AnimationManager()->FUN_1005f0b0();
+				AnimationManager()->Resume();
 			}
 
 			GameState()->ResetROI();

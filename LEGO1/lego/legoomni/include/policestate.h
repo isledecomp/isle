@@ -4,7 +4,6 @@
 #include "actionsfwd.h"
 #include "decomp.h"
 #include "legostate.h"
-#include "police.h"
 
 // VTABLE: LEGO1 0x100d8af0
 // SIZE 0x10

@@ -8,6 +8,7 @@
 class MxOmni;
 
 // VTABLE: LEGO1 0x100dc098
+// VTABLE: BETA10 0x101c1b68
 // SIZE 0x94
 class MxDSAction : public MxDSObject {
 public:
@@ -27,10 +28,12 @@ public:
 	MxDSAction();
 	~MxDSAction() override;
 
+	MxDSAction(MxDSAction& p_dsAction);
 	void CopyFrom(MxDSAction& p_dsAction);
 	MxDSAction& operator=(MxDSAction& p_dsAction);
 
 	// FUNCTION: LEGO1 0x100ad980
+	// FUNCTION: BETA10 0x1012bcf0
 	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x101013f4
@@ -38,6 +41,7 @@ public:
 	}
 
 	// FUNCTION: LEGO1 0x100ad990
+	// FUNCTION: BETA10 0x1012bd10
 	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, MxDSAction::ClassName()) || MxDSObject::IsA(p_name);
@@ -57,22 +61,39 @@ public:
 
 	void AppendExtra(MxU16 p_extraLength, const char* p_extraData);
 
+	// FUNCTION: BETA10 0x1003a560
 	inline void GetExtra(MxU16& p_extraLength, char*& p_extraData)
 	{
 		p_extraLength = m_extraLength;
 		p_extraData = m_extraData;
 	}
 
+	// FUNCTION: BETA10 0x1003cf70
 	inline MxU32 GetFlags() { return m_flags; }
+
+	// FUNCTION: BETA10 0x1004daa0
 	inline void SetFlags(MxU32 p_flags) { m_flags = p_flags; }
+
 	inline char* GetExtraData() { return m_extraData; }
 	inline MxU16 GetExtraLength() const { return m_extraLength; }
+
+	// FUNCTION: BETA10 0x1005a560
 	inline MxLong GetStartTime() const { return m_startTime; }
+
+	// FUNCTION: BETA10 0x1012be80
 	inline MxS32 GetLoopCount() { return m_loopCount; }
+
 	inline void SetLoopCount(MxS32 p_loopCount) { m_loopCount = p_loopCount; }
+
+	// FUNCTION: BETA10 0x1003db50
 	inline Mx3DPointFloat& GetLocation() { return m_location; }
+
+	// FUNCTION: BETA10 0x1003db80
 	inline Mx3DPointFloat& GetDirection() { return m_direction; }
+
+	// FUNCTION: BETA10 0x1003dbb0
 	inline Mx3DPointFloat& GetUp() { return m_up; }
+
 	inline void SetLocation(const Vector3& p_location) { m_location = p_location; }
 	inline void SetDirection(const Vector3& p_direction) { m_direction = p_direction; }
 	inline void SetUp(const Vector3& p_up) { m_up = p_up; }
@@ -85,6 +106,7 @@ public:
 	inline MxBool IsBit3() const { return m_flags & c_bit3; }
 
 	// SYNTHETIC: LEGO1 0x100ada60
+	// SYNTHETIC: BETA10 0x1012be40
 	// MxDSAction::`scalar deleting destructor'
 
 protected:

@@ -1,7 +1,13 @@
 #include "misc.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "legoinputmanager.h"
+#include "legomain.h"
+#include "legovideomanager.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "roi/legoroi.h"
+#include "scripts.h"
 
 // GLOBAL: LEGO1 0x100f4c58
 MxBool g_isWorldActive = TRUE;
@@ -134,6 +140,13 @@ void SetROIVisible(const char* p_name, MxBool p_visible)
 void SetCurrentActor(IslePathActor* p_currentActor)
 {
 	LegoOmni::GetInstance()->SetCurrentActor(p_currentActor);
+}
+
+// FUNCTION: LEGO1 0x10015890
+// FUNCTION: BETA10 0x100e4d80
+MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
+{
+	return LegoOmni::GetInstance()->StartActionIfUnknown0x13c(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100158b0

@@ -7,6 +7,7 @@
 
 class MxCore;
 
+// Several of those should be defined in LegoOmni
 enum NotificationId {
 	c_notificationType0 = 0,
 	c_notificationStartAction = 1, // 100dc210:100d8350
@@ -24,8 +25,8 @@ enum NotificationId {
 	c_notificationDrag = 14,
 	c_notificationTimer = 15, // 100d6aa0
 	c_notificationClick = 17,
-	c_notificationType18 = 18, // 100d7e80
-	c_notificationType19 = 19, // 100d6230
+	c_notificationEndAnim = 18, // 100d7e80
+	c_notificationType19 = 19,  // 100d6230
 	c_notificationType20 = 20,
 	c_notificationNewPresenter = 21,
 	c_notificationType22 = 22,

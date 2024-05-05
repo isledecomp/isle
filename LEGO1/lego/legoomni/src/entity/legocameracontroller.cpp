@@ -1,5 +1,6 @@
 #include "legocameracontroller.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "legoinputmanager.h"
 #include "legonotify.h"
 #include "legosoundmanager.h"
@@ -8,6 +9,7 @@
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "realtime/realtime.h"
+#include "roi/legoroi.h"
 
 #include <vec.h>
 

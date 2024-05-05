@@ -1,26 +1,46 @@
 #include "legoutils.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act1state.h"
+#include "anim/legoanim.h"
 #include "islepathactor.h"
 #include "legoanimpresenter.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legomain.h"
 #include "legonamedtexture.h"
-#include "legoomni.h"
 #include "legosoundmanager.h"
+#include "legovideomanager.h"
 #include "legoworld.h"
 #include "legoworldlist.h"
 #include "misc.h"
+#include "misc/legotree.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamer.h"
 #include "mxtypes.h"
+#include "mxutilities.h"
+#include "mxvariabletable.h"
 #include "realtime/realtime.h"
+#include "scripts.h"
 
 #include <process.h>
 #include <string.h>
 #include <vec.h>
+
+// FUNCTION: LEGO1 0x1003dd70
+LegoROI* PickROI(MxLong p_a, MxLong p_b)
+{
+	return (LegoROI*) VideoManager()->Get3DManager()->GetLego3DView()->Pick(p_a, p_b);
+}
+
+// STUB: LEGO1 0x1003ddc0
+LegoEntity* PickEntity(MxLong, MxLong)
+{
+	// TODO
+	return NULL;
+}
 
 // FUNCTION: LEGO1 0x1003df90
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node)
@@ -320,7 +340,15 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
+// STUB: LEGO1 0x1003ecc0
+// FUNCTION: BETA10 0x100d4b38
+void FUN_1003ecc0(IslePathActor* p_actor, undefined4, undefined4, MxBool)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1003eda0
+// FUNCTION: BETA10 0x100d4bf4
 void FUN_1003eda0()
 {
 	Mx3DPointFloat vec;

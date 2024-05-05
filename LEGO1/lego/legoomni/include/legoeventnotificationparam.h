@@ -3,9 +3,10 @@
 
 #include "mxnotificationparam.h"
 #include "mxtypes.h"
-#include "roi/legoroi.h"
 
 #include <stdlib.h>
+
+class LegoROI;
 
 // VTABLE: LEGO1 0x100d6aa0
 // SIZE 0x20

@@ -2,6 +2,8 @@
 
 #include "decomp.h"
 #include "mxautolock.h"
+#include "mxdsaction.h"
+#include "mxdssubscriber.h"
 #include "mxeventmanager.h"
 #include "mxmisc.h"
 #include "mxvariabletable.h"

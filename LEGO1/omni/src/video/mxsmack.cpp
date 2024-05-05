@@ -1,5 +1,7 @@
 #include "mxsmack.h"
 
+#include "mxbitmap.h"
+
 #include <string.h>
 
 DECOMP_SIZE_ASSERT(SmackTag, 0x390);

@@ -2,7 +2,6 @@
 #define MXSTREAMCHUNK_H
 
 #include "mxdschunk.h"
-#include "mxdsobject.h"
 
 class MxDSBuffer;
 class MxStreamListMxDSSubscriber;

@@ -28,7 +28,7 @@ public:
 	// SYNTHETIC: LEGO1 0x100260a0
 	// LegoVehicleBuildState::`scalar deleting destructor'
 
-private:
+	// private:
 	Playlist m_unk0x08[4]; // 0x08
 
 	// This can be one of the following:
@@ -44,8 +44,8 @@ private:
 	// * 6 == exit(ing) build screen
 	MxU32 m_animationState; // 0x48
 	undefined m_unk0x4c;    // 0x4c
-	undefined m_unk0x4d;    // 0x4d
-	undefined m_unk0x4e;    // 0x4e
+	MxBool m_unk0x4d;       // 0x4d
+	MxBool m_unk0x4e;       // 0x4e
 	MxU8 m_placedPartCount; // 0x4f
 };
 

@@ -2,11 +2,12 @@
 #define GASSTATION_H
 
 #include "decomp.h"
-#include "gasstationstate.h"
 #include "legogamestate.h"
 #include "legoworld.h"
-#include "mxstillpresenter.h"
 #include "radio.h"
+
+class GasStationState;
+class MxStillPresenter;
 
 // VTABLE: LEGO1 0x100d4650
 // SIZE 0x128

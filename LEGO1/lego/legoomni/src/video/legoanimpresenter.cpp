@@ -1,9 +1,13 @@
 #include "legoanimpresenter.h"
 
+#include "3dmanager/lego3dmanager.h"
+#include "anim/legoanim.h"
 #include "define.h"
 #include "legoanimationmanager.h"
 #include "legoanimmmpresenter.h"
+#include "legocameracontroller.h"
 #include "legocharactermanager.h"
+#include "legoendanimnotificationparam.h"
 #include "legopathboundary.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -11,14 +15,16 @@
 #include "mxautolock.h"
 #include "mxcompositepresenter.h"
 #include "mxdsanim.h"
+#include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
-#include "mxtype18notificationparam.h"
 #include "mxutilities.h"
+#include "mxvariabletable.h"
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 
@@ -1021,7 +1027,7 @@ void LegoAnimPresenter::EndAction()
 	LegoWorld* world = CurrentWorld();
 
 	if (world != NULL) {
-		MxType18NotificationParam param(c_notificationType18, NULL, 0);
+		LegoEndAnimNotificationParam param(c_notificationEndAnim, NULL, 0);
 		NotificationManager()->Send(world, param);
 	}
 

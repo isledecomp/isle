@@ -3,12 +3,15 @@
 #include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
-#include "legoomni.h"
+#include "legoworld.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxcontrolpresenter.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "radiostate.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Radio, 0x10)
 
@@ -80,7 +83,7 @@ void Radio::Stop()
 	if (m_state->IsActive()) {
 		LegoWorld* world = CurrentWorld();
 
-		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtom(), 18);
+		MxControlPresenter* presenter = (MxControlPresenter*) world->Find(world->GetAtom(), IsleScript::c_Radio_Ctl);
 
 		if (presenter) {
 			presenter->VTable0x6c(0);

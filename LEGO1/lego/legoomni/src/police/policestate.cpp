@@ -1,12 +1,12 @@
 #include "policestate.h"
 
 #include "islepathactor.h"
-#include "legoomni.h"
 #include "misc.h"
 #include "mxdsaction.h"
 #include "mxmisc.h"
 #include "police.h"
 #include "police_actions.h"
+#include "scripts.h"
 
 #include <stdlib.h>
 

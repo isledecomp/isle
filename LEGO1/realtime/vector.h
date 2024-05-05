@@ -195,11 +195,11 @@ public:
 	virtual void EqualsCross(float* p_a, Vector3* p_b) { EqualsCrossImpl(p_a, p_b->m_data); } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x10003bf0
-	virtual void EqualsScalar(float* p_value)
+	virtual void Fill(const float& p_value)
 	{
-		m_data[0] = *p_value;
-		m_data[1] = *p_value;
-		m_data[2] = *p_value;
+		m_data[0] = p_value;
+		m_data[1] = p_value;
+		m_data[2] = p_value;
 	} // vtable+0x84
 
 	// Vector2 overrides
@@ -269,8 +269,6 @@ public:
 	{
 		return m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2];
 	} // vtable+0x40
-
-	inline void Fill(float p_value) { EqualsScalar(&p_value); }
 
 	friend class Mx3DPointFloat;
 };
@@ -374,12 +372,12 @@ public:
 	} // vtable+0x40
 
 	// FUNCTION: LEGO1 0x10002b40
-	void EqualsScalar(float* p_value) override
+	void Fill(const float& p_value) override
 	{
-		m_data[0] = *p_value;
-		m_data[1] = *p_value;
-		m_data[2] = *p_value;
-		m_data[3] = *p_value;
+		m_data[0] = p_value;
+		m_data[1] = p_value;
+		m_data[2] = p_value;
+		m_data[3] = p_value;
 	} // vtable+0x84
 
 	friend class Mx4DPointFloat;

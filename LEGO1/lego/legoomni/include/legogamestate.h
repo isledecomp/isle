@@ -3,14 +3,17 @@
 
 #include "actionsfwd.h"
 #include "decomp.h"
-#include "legobackgroundcolor.h"
-#include "legofullscreenmovie.h"
-#include "misc/legostorage.h"
 #include "mxtypes.h"
-#include "mxvariabletable.h"
 
+#include <string.h>
+
+class LegoBackgroundColor;
+class LegoFile;
+class LegoFullScreenMovie;
 class LegoState;
+class LegoStorage;
 class MxVariable;
+class MxVariableTable;
 class MxString;
 
 // SIZE 0x08
@@ -54,8 +57,9 @@ public:
 		e_unk20,
 		e_unk21,
 		e_pizzeriaExterior,
-
-		e_garageExterior = 25,
+		e_unk23,
+		e_unk24,
+		e_garageExterior,
 		e_garage,
 		e_garadoor,
 		e_unk28,
@@ -73,14 +77,17 @@ public:
 		e_unk40,
 		e_unk41,
 		e_unk42,
-
-		e_unk45 = 45,
+		e_unk43,
+		e_unk44,
+		e_unk45,
 		e_act2main,
 		e_act3script,
 		e_unk48,
 		e_unk49,
-
-		e_jukeboxw = 53,
+		e_unk50,
+		e_unk51,
+		e_unk52,
+		e_jukeboxw,
 		e_unk54,
 		e_unk55,
 		e_histbook,

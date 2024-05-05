@@ -2,7 +2,8 @@
 #define RADIOSTATE_H
 
 #include "legostate.h"
-#include "mxdsaction.h"
+
+class MxAtomId;
 
 // VTABLE: LEGO1 0x100d6d28
 // SIZE 0x30

@@ -2,9 +2,10 @@
 #define MXMEDIAPRESENTER_H
 
 #include "decomp.h"
-#include "mxdssubscriber.h"
 #include "mxpresenter.h"
 #include "mxstreamchunklist.h"
+
+class MxDSSubscriber;
 
 // VTABLE: LEGO1 0x100d4cd8
 // SIZE 0x50

@@ -2,10 +2,12 @@
 #define MXBITMAP_H
 
 #include "mxcore.h"
-#include "mxpalette.h"
 #include "mxtypes.h"
 
+#include <ddraw.h>
 #include <stdlib.h>
+
+class MxPalette;
 
 // The stock BITMAPINFO struct from wingdi.h only makes room for one color
 // in the palette. It seems like the expectation (if you use the struct)

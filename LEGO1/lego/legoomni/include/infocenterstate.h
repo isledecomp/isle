@@ -4,7 +4,8 @@
 #include "decomp.h"
 #include "legogamestate.h"
 #include "legostate.h"
-#include "mxstillpresenter.h"
+
+class MxStillPresenter;
 
 // VTABLE: LEGO1 0x100d93a8
 // SIZE 0x94

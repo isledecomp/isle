@@ -1,20 +1,25 @@
 #include "legonavcontroller.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "infocenterstate.h"
 #include "legoanimationmanager.h"
+#include "legocameracontroller.h"
 #include "legocameralocations.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
+#include "legomain.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
+#include "mxutilities.h"
 #include "realtime/realtime.h"
+#include "realtime/realtimeview.h"
 
 #include <vec.h>
 

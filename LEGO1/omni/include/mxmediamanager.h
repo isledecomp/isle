@@ -4,8 +4,9 @@
 #include "mxcore.h"
 #include "mxcriticalsection.h"
 #include "mxpresenterlist.h"
-#include "mxthread.h"
 #include "mxtypes.h"
+
+class MxThread;
 
 // VTABLE: LEGO1 0x100dc6b0
 // SIZE 0x2c

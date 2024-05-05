@@ -2,12 +2,13 @@
 #define POLICE_H
 
 #include "decomp.h"
-#include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoworld.h"
-#include "mxdsaction.h"
 #include "radio.h"
 
+class LegoControlManagerEvent;
+class LegoEventNotificationParam;
+class MxDSAction;
 class PoliceState;
 
 // VTABLE: LEGO1 0x100d8a80

@@ -1,7 +1,9 @@
 #include "mxdisplaysurface.h"
 
+#include "mxbitmap.h"
 #include "mxmisc.h"
 #include "mxomni.h"
+#include "mxpalette.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"
 

@@ -3,6 +3,7 @@
 
 #include "mxtypes.h"
 
+// SIZE 0x02
 class MxOmniCreateFlags {
 public:
 	MxOmniCreateFlags();

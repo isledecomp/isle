@@ -1,9 +1,10 @@
 #ifndef LEGOANIMACTOR_H
 #define LEGOANIMACTOR_H
 
-#include "anim/legoanim.h"
 #include "decomp.h"
 #include "legopathactor.h"
+
+class LegoAnim;
 
 // SIZE 0x20
 struct LegoAnimActorStruct {

@@ -1,5 +1,6 @@
 #include "legogamestate.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "act1state.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
@@ -28,10 +29,12 @@
 #include "jukebox_actions.h"
 #include "jukeboxw_actions.h"
 #include "legoanimationmanager.h"
+#include "legobackgroundcolor.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
+#include "legofullscreenmovie.h"
+#include "legomain.h"
 #include "legonavcontroller.h"
-#include "legoomni.h"
 #include "legoplantmanager.h"
 #include "legostate.h"
 #include "legoutils.h"
@@ -40,14 +43,18 @@
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxnotificationparam.h"
 #include "mxobjectfactory.h"
 #include "mxstring.h"
+#include "mxutilities.h"
 #include "mxvariabletable.h"
 #include "police_actions.h"
 #include "racecar.h"
 #include "racecar_actions.h"
 #include "regbook_actions.h"
 #include "roi/legoroi.h"
+#include "scripts.h"
 #include "sndanim_actions.h"
 
 #include <stdio.h>
@@ -791,7 +798,7 @@ void LegoGameState::SwitchArea(Area p_area)
 
 	FUN_10015820(TRUE, LegoOmni::c_disableInput | LegoOmni::c_disable3d);
 	BackgroundAudioManager()->Stop();
-	AnimationManager()->FUN_1005ef10();
+	AnimationManager()->Suspend();
 	VideoManager()->SetUnk0x554(FALSE);
 
 	switch (p_area) {
@@ -896,10 +903,14 @@ void LegoGameState::SwitchArea(Area p_area)
 		else {
 			SetCameraControllerFromIsle();
 			CurrentActor()->ResetWorldTransform(TRUE);
-			AnimationManager()->FUN_1005f0b0();
+			AnimationManager()->Resume();
 		}
 
-		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
+		CurrentActor()->SpawnPlayer(
+			p_area,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		break;
 	}
 	case e_hospital:
@@ -910,8 +921,12 @@ void LegoGameState::SwitchArea(Area p_area)
 		LoadIsle();
 		SetCameraControllerFromIsle();
 		CurrentActor()->ResetWorldTransform(TRUE);
-		AnimationManager()->FUN_1005f0b0();
-		CurrentActor()->VTable0xe8(p_area, TRUE, 7);
+		AnimationManager()->Resume();
+		CurrentActor()->SpawnPlayer(
+			p_area,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		break;
 	case e_police:
 		VideoManager()->SetUnk0x554(TRUE);
@@ -1083,28 +1098,28 @@ void LegoGameState::Init()
 	if (m_loadedAct == e_act1) {
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, 0);
 
-		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, 1);
+		Helicopter* copter = (Helicopter*) isle->Find(*g_copterScript, CopterScript::c_Helicopter_Actor);
 		if (copter) {
 			isle->FUN_1001fc80(copter);
 			isle->VTable0x6c(copter);
 			delete copter;
 		}
 
-		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, 2);
+		DuneBuggy* dunebuggy = (DuneBuggy*) isle->Find(*g_dunecarScript, DunecarScript::c_DuneBugy_Actor);
 		if (dunebuggy) {
 			isle->FUN_1001fc80(dunebuggy);
 			isle->VTable0x6c(dunebuggy);
 			delete dunebuggy;
 		}
 
-		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, 3);
+		Jetski* jetski = (Jetski*) isle->Find(*g_jetskiScript, JetskiScript::c_Jetski_Actor);
 		if (jetski) {
 			isle->FUN_1001fc80(jetski);
 			isle->VTable0x6c(jetski);
 			delete jetski;
 		}
 
-		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, 4);
+		RaceCar* racecar = (RaceCar*) isle->Find(*g_racecarScript, RacecarScript::c_RaceCar_Actor);
 		if (racecar) {
 			isle->FUN_1001fc80(racecar);
 			isle->VTable0x6c(racecar);

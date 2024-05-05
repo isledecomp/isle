@@ -4,106 +4,132 @@
 #include "mxtimer.h"
 #include "mxutilities.h"
 
+#include <assert.h>
 #include <float.h>
 #include <limits.h>
 
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 
 // GLOBAL: LEGO1 0x10101410
+// GLOBAL: BETA10 0x10201f5c
 MxU16 g_sep = TWOCC(',', ' ');
 
 // FUNCTION: LEGO1 0x100ad810
+// FUNCTION: BETA10 0x1012afd0
 MxDSAction::MxDSAction()
 {
-	this->m_flags = MxDSAction::c_enabled;
-	this->m_startTime = INT_MIN;
-	this->m_extraData = NULL;
-	this->m_extraLength = 0;
-	this->m_duration = INT_MIN;
-	this->m_loopCount = -1;
-
-	this->SetType(e_action);
-	this->m_location.Fill(FLT_MAX);
-	this->m_direction.Fill(FLT_MAX);
-	this->m_up.Fill(FLT_MAX);
-	this->m_unk0x84 = NULL;
-	this->m_unk0x88 = 0;
-	this->m_origin = NULL;
-	this->m_unk0x90 = INT_MIN;
+	m_type = e_action;
+	m_flags = MxDSAction::c_enabled;
+	m_extraLength = 0;
+	m_extraData = NULL;
+	m_startTime = INT_MIN;
+	m_duration = INT_MIN;
+	m_loopCount = -1;
+	m_location.Fill(FLT_MAX);
+	m_direction.Fill(FLT_MAX);
+	m_up.Fill(FLT_MAX);
+	m_unk0x84 = NULL;
+	m_unk0x88 = 0;
+	m_origin = NULL;
+	m_unk0x90 = INT_MIN;
 }
 
 // FUNCTION: LEGO1 0x100ad940
+// FUNCTION: BETA10 0x1012bc50
 MxLong MxDSAction::GetDuration()
 {
-	return this->m_duration;
+	return m_duration;
 }
 
 // FUNCTION: LEGO1 0x100ad950
+// FUNCTION: BETA10 0x1012bc90
 void MxDSAction::SetDuration(MxLong p_duration)
 {
-	this->m_duration = p_duration;
+	m_duration = p_duration;
 }
 
 // FUNCTION: LEGO1 0x100ad960
+// FUNCTION: BETA10 0x1012bcc0
 MxBool MxDSAction::HasId(MxU32 p_objectId)
 {
-	return this->GetObjectId() == p_objectId;
+	return m_objectId == p_objectId;
 }
 
 // FUNCTION: LEGO1 0x100ada40
+// FUNCTION: BETA10 0x1012bdf0
 void MxDSAction::SetUnknown90(MxLong p_unk0x90)
 {
-	this->m_unk0x90 = p_unk0x90;
+	m_unk0x90 = p_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100ada50
+// FUNCTION: BETA10 0x1012be20
 MxLong MxDSAction::GetUnknown90()
 {
-	return this->m_unk0x90;
+	return m_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100ada80
+// FUNCTION: BETA10 0x1012b144
 MxDSAction::~MxDSAction()
 {
-	delete[] this->m_extraData;
+	delete[] m_extraData;
 }
 
 // FUNCTION: LEGO1 0x100adaf0
+// FUNCTION: BETA10 0x1012b1c7
 void MxDSAction::CopyFrom(MxDSAction& p_dsAction)
 {
-	this->SetObjectId(p_dsAction.GetObjectId());
-	this->m_flags = p_dsAction.m_flags;
-	this->m_startTime = p_dsAction.m_startTime;
-	this->m_duration = p_dsAction.m_duration;
-	this->m_loopCount = p_dsAction.m_loopCount;
-	this->m_location = p_dsAction.m_location;
-	this->m_direction = p_dsAction.m_direction;
-	this->m_up = p_dsAction.m_up;
+	m_objectId = p_dsAction.m_objectId;
+	m_flags = p_dsAction.m_flags;
+	m_startTime = p_dsAction.m_startTime;
+	m_duration = p_dsAction.m_duration;
+	m_loopCount = p_dsAction.m_loopCount;
+	m_location = p_dsAction.m_location;
+	m_direction = p_dsAction.m_direction;
+	m_up = p_dsAction.m_up;
 	AppendExtra(p_dsAction.m_extraLength, p_dsAction.m_extraData);
-	this->m_unk0x84 = p_dsAction.m_unk0x84;
-	this->m_unk0x88 = p_dsAction.m_unk0x88;
-	this->m_origin = p_dsAction.m_origin;
-	this->m_unk0x90 = p_dsAction.m_unk0x90;
+	m_unk0x84 = p_dsAction.m_unk0x84;
+	m_unk0x88 = p_dsAction.m_unk0x88;
+	m_origin = p_dsAction.m_origin;
+	m_unk0x90 = p_dsAction.m_unk0x90;
+}
+
+// FUNCTION: BETA10 0x1012b2b3
+MxDSAction::MxDSAction(MxDSAction& p_dsAction) : MxDSObject(p_dsAction)
+{
+	CopyFrom(p_dsAction);
 }
 
 // FUNCTION: LEGO1 0x100adbd0
+// FUNCTION: BETA10 0x1012b355
 undefined4 MxDSAction::VTable0x14()
 {
 	return MxDSObject::VTable0x14();
 }
 
 // FUNCTION: LEGO1 0x100adbe0
+// FUNCTION: BETA10 0x1012b373
 MxU32 MxDSAction::GetSizeOnDisk()
 {
-	MxU32 totalSizeOnDisk;
+	MxU32 size = MxDSObject::GetSizeOnDisk();
+	size += sizeof(m_flags);
+	size += sizeof(m_startTime);
+	size += sizeof(m_duration);
+	size += sizeof(m_loopCount);
+	size += sizeof(double) * 3; // m_location
+	size += sizeof(double) * 3; // m_direction
+	size += sizeof(double) * 3; // m_up
+	size += sizeof(m_extraLength);
+	size += m_extraLength;
 
-	totalSizeOnDisk = MxDSObject::GetSizeOnDisk() + 90 + this->m_extraLength;
-	this->m_sizeOnDisk = totalSizeOnDisk - MxDSObject::GetSizeOnDisk();
+	m_sizeOnDisk = size - MxDSObject::GetSizeOnDisk();
 
-	return totalSizeOnDisk;
+	return size;
 }
 
 // FUNCTION: LEGO1 0x100adc10
+// FUNCTION: BETA10 0x1012b3d9
 MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
 {
 	if (this == &p_dsAction) {
@@ -111,11 +137,12 @@ MxDSAction& MxDSAction::operator=(MxDSAction& p_dsAction)
 	}
 
 	MxDSObject::operator=(p_dsAction);
-	this->CopyFrom(p_dsAction);
+	CopyFrom(p_dsAction);
 	return *this;
 }
 
 // FUNCTION: LEGO1 0x100adc40
+// FUNCTION: BETA10 0x1012b420
 MxDSAction* MxDSAction::Clone()
 {
 	MxDSAction* clone = new MxDSAction();
@@ -128,54 +155,56 @@ MxDSAction* MxDSAction::Clone()
 }
 
 // FUNCTION: LEGO1 0x100adcd0
+// FUNCTION: BETA10 0x1012b4ca
 MxLong MxDSAction::GetElapsedTime()
 {
-	return Timer()->GetTime() - this->m_unk0x90;
+	return Timer()->GetTime() - m_unk0x90;
 }
 
 // FUNCTION: LEGO1 0x100add00
+// FUNCTION: BETA10 0x1012b4f5
 void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 {
-	if (p_dsAction.m_startTime != INT_MIN) {
-		this->m_startTime = p_dsAction.m_startTime;
+	if (p_dsAction.GetStartTime() != INT_MIN) {
+		m_startTime = p_dsAction.GetStartTime();
 	}
 
 	if (p_dsAction.GetDuration() != INT_MIN) {
-		this->m_duration = p_dsAction.GetDuration();
+		m_duration = p_dsAction.GetDuration();
 	}
 
-	if (p_dsAction.m_loopCount != -1) {
-		this->m_loopCount = p_dsAction.m_loopCount;
+	if (p_dsAction.GetLoopCount() != -1) {
+		m_loopCount = p_dsAction.GetLoopCount();
 	}
 
-	if (p_dsAction.m_location[0] != FLT_MAX) {
-		this->m_location[0] = p_dsAction.m_location[0];
+	if (p_dsAction.GetLocation()[0] != FLT_MAX) {
+		m_location[0] = p_dsAction.GetLocation()[0];
 	}
-	if (p_dsAction.m_location[1] != FLT_MAX) {
-		this->m_location[1] = p_dsAction.m_location[1];
+	if (p_dsAction.GetLocation()[1] != FLT_MAX) {
+		m_location[1] = p_dsAction.GetLocation()[1];
 	}
-	if (p_dsAction.m_location[2] != FLT_MAX) {
-		this->m_location[2] = p_dsAction.m_location[2];
-	}
-
-	if (p_dsAction.m_direction[0] != FLT_MAX) {
-		this->m_direction[0] = p_dsAction.m_direction[0];
-	}
-	if (p_dsAction.m_direction[1] != FLT_MAX) {
-		this->m_direction[1] = p_dsAction.m_direction[1];
-	}
-	if (p_dsAction.m_direction[2] != FLT_MAX) {
-		this->m_direction[2] = p_dsAction.m_up[2]; // This is correct
+	if (p_dsAction.GetLocation()[2] != FLT_MAX) {
+		m_location[2] = p_dsAction.GetLocation()[2];
 	}
 
-	if (p_dsAction.m_up[0] != FLT_MAX) {
-		this->m_up[0] = p_dsAction.m_up[0];
+	if (p_dsAction.GetDirection()[0] != FLT_MAX) {
+		m_direction[0] = p_dsAction.GetDirection()[0];
 	}
-	if (p_dsAction.m_up[1] != FLT_MAX) {
-		this->m_up[1] = p_dsAction.m_up[1];
+	if (p_dsAction.GetDirection()[1] != FLT_MAX) {
+		m_direction[1] = p_dsAction.GetDirection()[1];
 	}
-	if (p_dsAction.m_up[2] != FLT_MAX) {
-		this->m_up[2] = p_dsAction.m_up[2];
+	if (p_dsAction.GetDirection()[2] != FLT_MAX) {
+		m_direction[2] = p_dsAction.GetUp()[2]; // This is correct
+	}
+
+	if (p_dsAction.GetUp()[0] != FLT_MAX) {
+		m_up[0] = p_dsAction.GetUp()[0];
+	}
+	if (p_dsAction.GetUp()[1] != FLT_MAX) {
+		m_up[1] = p_dsAction.GetUp()[1];
+	}
+	if (p_dsAction.GetUp()[2] != FLT_MAX) {
+		m_up[2] = p_dsAction.GetUp()[2];
 	}
 
 	MxU16 extraLength;
@@ -183,64 +212,71 @@ void MxDSAction::MergeFrom(MxDSAction& p_dsAction)
 	p_dsAction.GetExtra(extraLength, extraData);
 
 	if (extraLength && extraData) {
-		if (!this->m_extraData || !strncmp("XXX", this->m_extraData, 3)) {
-			delete[] this->m_extraData;
-			this->m_extraLength = 0;
+		if (!m_extraData || !strncmp("XXX", m_extraData, 3)) {
+			delete[] m_extraData;
+			m_extraLength = 0;
 			AppendExtra(extraLength, extraData);
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x100ade60
+// FUNCTION: BETA10 0x1012b8a9
 void MxDSAction::AppendExtra(MxU16 p_extraLength, const char* p_extraData)
 {
-	if (this->m_extraData == p_extraData || !p_extraData) {
+	if (m_extraData == p_extraData) {
 		return;
 	}
 
-	if (this->m_extraLength) {
-		char* concat = new char[p_extraLength + this->m_extraLength + sizeof(g_sep)];
-		memcpy(concat, this->m_extraData, this->m_extraLength);
+	if (p_extraData) {
+		if (m_extraLength) {
+			char* newExtra = new char[p_extraLength + m_extraLength + sizeof(g_sep)];
+			assert(newExtra);
+			memcpy(newExtra, m_extraData, m_extraLength);
+			memcpy(&newExtra[m_extraLength], &g_sep, sizeof(g_sep));
+			memcpy(&newExtra[m_extraLength + sizeof(g_sep)], p_extraData, p_extraLength);
 
-		*(MxU16*) &concat[this->m_extraLength] = g_sep;
-		memcpy(&concat[this->m_extraLength + sizeof(g_sep)], p_extraData, p_extraLength);
+			m_extraLength += p_extraLength + sizeof(g_sep);
+			delete[] m_extraData;
+			m_extraData = newExtra;
+		}
+		else {
+			m_extraData = new char[p_extraLength];
 
-		this->m_extraLength += p_extraLength + sizeof(g_sep);
-		delete[] this->m_extraData;
-		this->m_extraData = concat;
-	}
-	else {
-		char* copy = new char[p_extraLength];
-		this->m_extraData = copy;
-
-		if (copy) {
-			this->m_extraLength = p_extraLength;
-			memcpy(copy, p_extraData, p_extraLength);
+			if (m_extraData) {
+				m_extraLength = p_extraLength;
+				memcpy(m_extraData, p_extraData, p_extraLength);
+			}
+			else {
+				assert(0);
+			}
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x100adf70
+// FUNCTION: BETA10 0x1012ba6a
 void MxDSAction::Deserialize(MxU8*& p_source, MxS16 p_unk0x24)
 {
 	MxDSObject::Deserialize(p_source, p_unk0x24);
 
-	GetScalar(p_source, this->m_flags);
-	GetScalar(p_source, this->m_startTime);
-	GetScalar(p_source, this->m_duration);
-	GetScalar(p_source, this->m_loopCount);
-	GetDouble(p_source, this->m_location[0]);
-	GetDouble(p_source, this->m_location[1]);
-	GetDouble(p_source, this->m_location[2]);
-	GetDouble(p_source, this->m_direction[0]);
-	GetDouble(p_source, this->m_direction[1]);
-	GetDouble(p_source, this->m_direction[2]);
-	GetDouble(p_source, this->m_up[0]);
-	GetDouble(p_source, this->m_up[1]);
-	GetDouble(p_source, this->m_up[2]);
+	// clang-format off
+	m_flags           = *( MxU32*) p_source;  p_source += sizeof(m_flags);
+	m_startTime       = *(MxLong*) p_source;  p_source += sizeof(m_startTime);
+	m_duration        = *(MxLong*) p_source;  p_source += sizeof(m_duration);
+	m_loopCount       = *( MxS32*) p_source;  p_source += sizeof(m_loopCount);
+	m_location[0]     = *(double*) p_source;  p_source += sizeof(double);
+	m_location[1]     = *(double*) p_source;  p_source += sizeof(double);
+	m_location[2]     = *(double*) p_source;  p_source += sizeof(double);
+	m_direction[0]    = *(double*) p_source;  p_source += sizeof(double);
+	m_direction[1]    = *(double*) p_source;  p_source += sizeof(double);
+	m_direction[2]    = *(double*) p_source;  p_source += sizeof(double);
+	m_up[0]           = *(double*) p_source;  p_source += sizeof(double);
+	m_up[1]           = *(double*) p_source;  p_source += sizeof(double);
+	m_up[2]           = *(double*) p_source;  p_source += sizeof(double);
 
-	MxU16 extraLength = *(MxU16*) p_source;
-	p_source += 2;
+	MxU16 extraLength = *( MxU16*) p_source;  p_source += sizeof(extraLength);
+	// clang-format on
 
 	if (extraLength) {
 		AppendExtra(extraLength, (char*) p_source);

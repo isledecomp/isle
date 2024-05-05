@@ -4,10 +4,11 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxcriticalsection.h"
-#include "mxdsaction.h"
 #include "mxpoint32.h"
 
 class MxCompositePresenter;
+class MxDSAction;
+class MxOmni;
 class MxStreamController;
 class MxEntity;
 
@@ -107,7 +108,7 @@ public:
 	virtual void Enable(MxBool p_enable); // vtable+0x54
 
 	MxEntity* CreateEntity(const char* p_defaultName);
-	void SendToCompositePresenter(MxOmni*);
+	void SendToCompositePresenter(MxOmni* p_omni);
 	MxBool IsEnabled();
 
 	inline MxS32 GetCurrentTickleState() const { return this->m_currentTickleState; }

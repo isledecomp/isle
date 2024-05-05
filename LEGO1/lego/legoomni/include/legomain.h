@@ -1,5 +1,5 @@
-#ifndef LEGOOMNI_H
-#define LEGOOMNI_H
+#ifndef LEGOMAIN_H
+#define LEGOMAIN_H
 
 #include "compat.h"
 #include "mxdsaction.h"
@@ -26,35 +26,6 @@ class MxAtomId;
 class MxBackgroundAudioManager;
 class MxTransitionManager;
 class ViewLODListManager;
-
-extern MxAtomId* g_copterScript;
-extern MxAtomId* g_dunecarScript;
-extern MxAtomId* g_jetskiScript;
-extern MxAtomId* g_racecarScript;
-extern MxAtomId* g_carraceScript;
-extern MxAtomId* g_carracerScript;
-extern MxAtomId* g_jetraceScript;
-extern MxAtomId* g_jetracerScript;
-extern MxAtomId* g_isleScript;
-extern MxAtomId* g_elevbottScript;
-extern MxAtomId* g_infodoorScript;
-extern MxAtomId* g_infomainScript;
-extern MxAtomId* g_infoscorScript;
-extern MxAtomId* g_regbookScript;
-extern MxAtomId* g_histbookScript;
-extern MxAtomId* g_hospitalScript;
-extern MxAtomId* g_policeScript;
-extern MxAtomId* g_garageScript;
-extern MxAtomId* g_act2mainScript;
-extern MxAtomId* g_act3Script;
-extern MxAtomId* g_jukeboxScript;
-extern MxAtomId* g_pz5Script;
-extern MxAtomId* g_introScript;
-extern MxAtomId* g_testScript;
-extern MxAtomId* g_jukeboxwScript;
-extern MxAtomId* g_sndAnimScript;
-extern MxAtomId* g_creditsScript;
-extern MxAtomId* g_nocdSourceName;
 
 // VTABLE: LEGO1 0x100d8638
 // SIZE 0x140
@@ -101,65 +72,6 @@ public:
 		MxS32 m_index;      // 0x00
 		char m_key[20];     // 0x04
 		MxAtomId* m_atomId; // 0x18
-	};
-
-	// SIZE 0x38
-	struct PathContainer {
-		PathContainer() {}
-
-		// FUNCTION: LEGO1 0x1001b1b0
-		PathContainer(
-			undefined4 p_unk0x00,
-			MxAtomId* p_script,
-			undefined4 p_unk0x04,
-			const char* p_key,
-			undefined2 p_unk0x20,
-			float p_unk0x24,
-			undefined2 p_unk0x28,
-			float p_unk0x2c,
-			undefined4 p_unk0x30,
-			MxS32 p_unk0x34
-		)
-		{
-			m_unk0x00 = p_unk0x00;
-			m_script = p_script;
-			m_unk0x04 = p_unk0x04;
-			strcpy(m_key, p_key);
-			m_unk0x20 = p_unk0x20;
-			m_unk0x24 = p_unk0x24;
-			m_unk0x28 = p_unk0x28;
-			m_unk0x2c = p_unk0x2c;
-			m_unk0x30 = p_unk0x30;
-			m_unk0x34 = p_unk0x34;
-		}
-
-		// FUNCTION: LEGO1 0x1001b230
-		PathContainer& operator=(const PathContainer& p_container)
-		{
-			m_unk0x00 = p_container.m_unk0x00;
-			m_script = p_container.m_script;
-			m_unk0x04 = p_container.m_unk0x04;
-			strcpy(m_key, p_container.m_key);
-			m_unk0x20 = p_container.m_unk0x20;
-			m_unk0x24 = p_container.m_unk0x24;
-			m_unk0x28 = p_container.m_unk0x28;
-			m_unk0x2c = p_container.m_unk0x2c;
-			m_unk0x30 = p_container.m_unk0x30;
-			m_unk0x34 = p_container.m_unk0x34;
-			return *this;
-		}
-
-	private:
-		undefined4 m_unk0x00; // 0x00
-		MxAtomId* m_script;   // 0x04
-		undefined4 m_unk0x04; // 0x08
-		char m_key[20];       // 0x0c
-		undefined2 m_unk0x20; // 0x20
-		float m_unk0x24;      // 0x24
-		undefined2 m_unk0x28; // 0x28
-		float m_unk0x2c;      // 0x2c
-		undefined4 m_unk0x30; // 0x30
-		MxS32 m_unk0x34;      // 0x34
 	};
 
 	LegoOmni();
@@ -264,12 +176,4 @@ public:
 	MxBool m_unk0x13c; // 0x13c
 };
 
-const char* GetNoCD_SourceName();
-
-LegoEntity* PickEntity(MxLong, MxLong);
-LegoROI* PickROI(MxLong, MxLong);
-
-void CreateScripts();
-void DestroyScripts();
-
-#endif // LEGOOMNI_H
+#endif // LEGOMAIN_H

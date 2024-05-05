@@ -3,7 +3,8 @@
 
 #include "decomp.h"
 #include "islepathactor.h"
-#include "legocontrolmanager.h"
+
+class LegoControlManagerEvent;
 
 // VTABLE: LEGO1 0x100d9ec8
 // SIZE 0x164

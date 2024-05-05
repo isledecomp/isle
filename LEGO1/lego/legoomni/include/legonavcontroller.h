@@ -4,7 +4,8 @@
 #include "decomp.h"
 #include "mxcore.h"
 #include "mxtypes.h"
-#include "realtime/vector.h"
+
+class Vector3;
 
 //////////////////////////////////////////////////////////////////////////////
 //

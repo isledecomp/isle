@@ -5,16 +5,18 @@
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
-#include "legoomni.h"
 #include "misc.h"
 #include "mxactionnotificationparam.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxcontrolpresenter.h"
 #include "mxdisplaysurface.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
+#include "mxstillpresenter.h"
 #include "mxtimer.h"
 #include "mxtransitionmanager.h"
 #include "regbook_actions.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 

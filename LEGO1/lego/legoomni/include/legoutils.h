@@ -1,27 +1,30 @@
 #ifndef LEGOUTILS_H
 #define LEGOUTILS_H
 
+#include "decomp.h"
 #include "extra.h"
-#include "misc/legostorage.h"
-#include "misc/legotexture.h"
-#include "mxstring.h"
 #include "mxtypes.h"
-#include "mxutilities.h"
 
 #include <windows.h>
 
+class IslePathActor;
 class MxAtomId;
 class LegoEntity;
+class LegoFile;
 class LegoAnimPresenter;
 class LegoNamedTexture;
+class LegoROI;
 class LegoTreeNode;
 
+LegoEntity* PickEntity(MxLong, MxLong);
+LegoROI* PickROI(MxLong, MxLong);
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);
 void SetCameraControllerFromIsle();
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);
+void FUN_1003ecc0(IslePathActor* p_actor, undefined4, undefined4, MxBool);
 void FUN_1003eda0();
 MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id);
 void FUN_1003ef00(MxBool);

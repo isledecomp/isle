@@ -3,10 +3,9 @@
 
 #include "geom/legowegedge.h"
 #include "legoanimpresenter.h"
+#include "legopathactor.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"
-
-class LegoPathActor;
 
 struct LegoPathActorSetCompare {
 	MxU32 operator()(const LegoPathActor* p_lhs, const LegoPathActor* p_rhs) const

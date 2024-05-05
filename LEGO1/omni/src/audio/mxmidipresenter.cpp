@@ -3,6 +3,7 @@
 #include "decomp.h"
 #include "mxautolock.h"
 #include "mxdssound.h"
+#include "mxdssubscriber.h"
 #include "mxmisc.h"
 #include "mxmusicmanager.h"
 

@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "isleactor.h"
 
+class SkateBoard;
+
 // VTABLE: LEGO1 0x100d7380
 // SIZE 0x9c
 class Pizza : public IsleActor {
@@ -31,18 +33,23 @@ public:
 	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
 	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
 
+	void FUN_100382b0();
+	void FUN_10038380();
+
+	inline void SetSkateboard(SkateBoard* p_skateboard) { m_skateboard = p_skateboard; }
+
 	// SYNTHETIC: LEGO1 0x100380e0
 	// Pizza::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x7c; // 0x7c
-	undefined4 m_unk0x80; // 0x80
-	undefined4 m_unk0x84; // 0x84
-	undefined4 m_unk0x88; // 0x88
-	undefined4 m_unk0x8c; // 0x8c
-	undefined4 m_unk0x90; // 0x90
-	undefined4 m_unk0x94; // 0x94
-	undefined m_unk0x98;  // 0x98
+	undefined4 m_unk0x7c;     // 0x7c
+	undefined4 m_unk0x80;     // 0x80
+	SkateBoard* m_skateboard; // 0x84
+	undefined4 m_unk0x88;     // 0x88
+	undefined4 m_unk0x8c;     // 0x8c
+	undefined4 m_unk0x90;     // 0x90
+	undefined4 m_unk0x94;     // 0x94
+	undefined m_unk0x98;      // 0x98
 };
 
 #endif // PIZZA_H

@@ -1,6 +1,7 @@
 #include "mxcompositepresenter.h"
 
 #include "decomp.h"
+#include "mxactionnotificationparam.h"
 #include "mxautolock.h"
 #include "mxdsmultiaction.h"
 #include "mxmisc.h"

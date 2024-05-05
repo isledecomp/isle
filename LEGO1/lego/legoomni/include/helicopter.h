@@ -1,9 +1,10 @@
 #ifndef HELICOPTER_H
 #define HELICOPTER_H
 
-#include "helicopterstate.h"
 #include "islepathactor.h"
 #include "realtime/matrix.h"
+
+class HelicopterState;
 
 // VTABLE: LEGO1 0x100d40f8
 // SIZE 0x230
@@ -25,13 +26,13 @@ public:
 		return !strcmp(p_name, Helicopter::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;              // vtable+0x18
-	void VTable0x70(float p_float) override;                       // vtable+0x70
-	void VTable0x74(Matrix4& p_transform) override;                // vtable+0x74
-	MxU32 VTable0xcc() override;                                   // vtable+0xcc
-	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
-	MxU32 VTable0xd8(MxType18NotificationParam& p_param) override; // vtable+0xd8
-	void VTable0xe4() override;                                    // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;                 // vtable+0x18
+	void VTable0x70(float p_float) override;                          // vtable+0x70
+	void VTable0x74(Matrix4& p_transform) override;                   // vtable+0x74
+	MxU32 VTable0xcc() override;                                      // vtable+0xcc
+	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override;      // vtable+0xd4
+	MxU32 VTable0xd8(LegoEndAnimNotificationParam& p_param) override; // vtable+0xd8
+	void VTable0xe4() override;                                       // vtable+0xe4
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
