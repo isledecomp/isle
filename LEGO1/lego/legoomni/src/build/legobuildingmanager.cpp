@@ -71,7 +71,7 @@ LegoBuildingData g_buildingDataTemplate[16] = {
 		-1, -1, 0x10,
 		0.999992f,
 		"int33",
-		84.79617f, 9.0f, -10.2189f,
+		67.28488, 1.0f, -85.3917,
 		NULL,
 	},
 	{
@@ -133,7 +133,7 @@ LegoBuildingData g_buildingDataTemplate[16] = {
 		4, 0, 1,
 		-1, -1, 0x10,
 		0.0f,
-		"edge03_03",
+		"edg03_03",
 		-4.15951f, 0.0f, 5.2003198f,
 		NULL,
 	},
