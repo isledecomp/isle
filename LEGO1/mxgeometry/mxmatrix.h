@@ -18,10 +18,6 @@ public:
 	float* operator[](int idx) { return m_data[idx]; }
 	const float* operator[](int idx) const { return m_data[idx]; }
 
-	inline void SetX(float p_x) { m_data[3][0] = p_x; }
-	inline void SetY(float p_y) { m_data[3][1] = p_y; }
-	inline void SetZ(float p_z) { m_data[3][2] = p_z; }
-
 	// FUNCTION: LEGO1 0x10002850
 	void operator=(const Matrix4& p_matrix) override { Equals(p_matrix); } // vtable+0x28
 
