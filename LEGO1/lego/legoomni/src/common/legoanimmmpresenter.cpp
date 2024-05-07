@@ -465,9 +465,21 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 	return TRUE;
 }
 
+// STUB: LEGO1 0x1004b840
+void LegoAnimMMPresenter::FUN_1004b840()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1004b8b0
 // FUNCTION: BETA10 0x1004d104
 MxBool LegoAnimMMPresenter::FUN_1004b8b0()
 {
 	return m_tranInfo != NULL ? m_tranInfo->m_unk0x28 : TRUE;
+}
+
+// STUB: LEGO1 0x1004b8c0
+void LegoAnimMMPresenter::FUN_1004b8c0()
+{
+	// TODO
 }

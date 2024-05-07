@@ -618,7 +618,7 @@ void LegoWorld::Enable(MxBool p_enable)
 	if (p_enable && !m_set0xd0.empty()) {
 		if (CurrentWorld() != this) {
 			if (CurrentWorld()) {
-				AnimationManager()->FUN_10061010(0);
+				AnimationManager()->FUN_10061010(FALSE);
 				CurrentWorld()->Enable(FALSE);
 
 				LegoEntityListCursor cursor(m_entityList);
