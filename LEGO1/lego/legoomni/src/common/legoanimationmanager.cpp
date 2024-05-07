@@ -667,10 +667,26 @@ void LegoAnimationManager::DeleteAnimations()
 	m_suspended = suspended;
 }
 
-// STUB: LEGO1 0x10060570
-void LegoAnimationManager::FUN_10060570(MxBool)
+// FUNCTION: LEGO1 0x10060570
+// FUNCTION: BETA10 0x10041463
+void LegoAnimationManager::FUN_10060570(MxBool p_unk0x1a)
 {
-	// TODO
+	m_unk0x39 = FALSE;
+	m_unk0x430 = FALSE;
+	m_unk0x42c = NULL;
+
+	if (m_unk0x1a != p_unk0x1a && (m_unk0x1a = p_unk0x1a)) {
+		do {
+			if (FUN_100605e0(m_unk0x18, TRUE, NULL, TRUE, NULL, FALSE, TRUE, TRUE, TRUE) != FAILURE) {
+				return;
+			}
+
+			m_unk0x18++;
+		} while (m_unk0x18 < m_animCount);
+
+		m_unk0x1a = FALSE;
+		m_unk0x18 = 0;
+	}
 }
 
 // FUNCTION: LEGO1 0x100605e0

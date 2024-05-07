@@ -82,7 +82,7 @@ public:
 	MxBool FindVehicle(const char* p_name, MxU32& p_index);
 	MxResult ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info);
 	MxResult ReadModelInfo(LegoFile* p_file, ModelInfo* p_info);
-	void FUN_10060570(MxBool);
+	void FUN_10060570(MxBool p_unk0x1a);
 	MxResult StartEntityAction(MxDSAction& p_dsAction, LegoEntity* p_entity);
 	MxResult FUN_10060dc0(
 		IsleScript::Script p_objectId,
