@@ -59,17 +59,40 @@ public:
 	static MxBool ActionSourceEquals(MxDSAction* p_action, const char* p_name);
 
 	HWND GetWindowHandle() const { return this->m_windowHandle; }
+
+	// FUNCTION: BETA10 0x10125100
 	MxObjectFactory* GetObjectFactory() const { return this->m_objectFactory; }
+
+	// FUNCTION: BETA10 0x10125120
 	MxNotificationManager* GetNotificationManager() const { return this->m_notificationManager; }
+
+	// FUNCTION: BETA10 0x10125140
 	MxTickleManager* GetTickleManager() const { return this->m_tickleManager; }
+
+	// FUNCTION: BETA10 0x10125160
 	MxTimer* GetTimer() const { return this->m_timer; }
+
+	// FUNCTION: BETA10 0x101251a0
 	MxStreamer* GetStreamer() const { return this->m_streamer; }
+
+	// FUNCTION: BETA10 0x100e5250
 	MxSoundManager* GetSoundManager() const { return this->m_soundManager; }
+
+	// FUNCTION: BETA10 0x1009e860
 	MxVideoManager* GetVideoManager() const { return this->m_videoManager; }
+
+	// FUNCTION: BETA10 0x101251c0
 	MxVariableTable* GetVariableTable() const { return this->m_variableTable; }
+
+	// FUNCTION: BETA10 0x101251e0
 	MxMusicManager* GetMusicManager() const { return this->m_musicManager; }
+
+	// FUNCTION: BETA10 0x10125200
 	MxEventManager* GetEventManager() const { return this->m_eventManager; }
+
+	// FUNCTION: BETA10 0x10125180
 	MxAtomSet* GetAtomSet() const { return this->m_atomSet; }
+
 	MxLong HandleEndAction(MxParam& p_param);
 
 	// SYNTHETIC: LEGO1 0x100aefd0

@@ -26,6 +26,7 @@ MxNotification::~MxNotification()
 }
 
 // FUNCTION: LEGO1 0x100ac250
+// FUNCTION: BETA10 0x10125805
 MxNotificationManager::MxNotificationManager() : MxCore(), m_lock(), m_listenerIds()
 {
 	m_unk0x2c = 0;

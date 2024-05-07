@@ -118,9 +118,10 @@ private:
 // _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::_Insert
 // clang-format on
 
+// clang-format off
 // TEMPLATE: BETA10 0x101237a0
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *>
-// >::const_iterator::operator*
+// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::const_iterator::operator*
+// clang-format on
 
 // clang-format off
 // TEMPLATE: LEGO1 0x100af6d0
