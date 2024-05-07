@@ -1,8 +1,11 @@
 #include "legoanimationmanager.h"
 
+#include "anim/legoanim.h"
 #include "animstate.h"
 #include "define.h"
 #include "islepathactor.h"
+#include "legoanimmmpresenter.h"
+#include "legoanimpresenter.h"
 #include "legocharactermanager.h"
 #include "legoendanimnotificationparam.h"
 #include "legoextraactor.h"
@@ -130,7 +133,7 @@ LegoAnimationManager::~LegoAnimationManager()
 {
 	TickleManager()->UnregisterClient(this);
 
-	FUN_10061010(0);
+	FUN_10061010(FALSE);
 
 	for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
 		LegoROI* roi = m_unk0x3c[i].m_roi;
@@ -215,7 +218,7 @@ void LegoAnimationManager::Suspend()
 		m_unk0x42a = m_unk0x402;
 		m_unk0x402 = FALSE;
 
-		FUN_10061010(0);
+		FUN_10061010(FALSE);
 
 		MxS32 i;
 		for (i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
@@ -919,17 +922,75 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 		}
 	}
 
-	if (!found && p_param3 != 0) {
+	if (!found && p_param3 != FALSE) {
 		result = FUN_100609f0(p_objectId, p_matrix, p_param7, p_param8);
 	}
 
 	return result;
 }
 
-// STUB: LEGO1 0x10061010
-void LegoAnimationManager::FUN_10061010(undefined4)
+// FUNCTION: LEGO1 0x10061010
+// FUNCTION: BETA10 0x100422cc
+void LegoAnimationManager::FUN_10061010(MxBool p_und)
 {
-	// TODO
+	MxBool unk0x39 = FALSE;
+
+	FUN_10064b50(-1);
+
+	if (m_tranInfoList != NULL) {
+		LegoTranInfoListCursor cursor(m_tranInfoList);
+		LegoTranInfo* tranInfo;
+
+		while (cursor.Next(tranInfo)) {
+			if (tranInfo->m_presenter != NULL) {
+				// TODO: Match
+				MxU32 flags = tranInfo->m_flags;
+
+				if (tranInfo->m_unk0x14 && tranInfo->m_unk0x12 != -1 && p_und) {
+					LegoAnim* anim;
+
+					if (tranInfo->m_presenter->GetPresenter() != NULL &&
+						(anim = tranInfo->m_presenter->GetPresenter()->GetAnimation()) != NULL &&
+						anim->GetScene() != NULL) {
+						if (flags & LegoTranInfo::c_bit2) {
+							BackgroundAudioManager()->RaiseVolume();
+							tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+						}
+
+						tranInfo->m_presenter->FUN_1004b840();
+						tranInfo->m_unk0x14 = FALSE;
+					}
+					else {
+						tranInfo->m_presenter->FUN_1004b8c0();
+						tranInfo->m_unk0x14 = FALSE;
+						unk0x39 = TRUE;
+					}
+				}
+				else {
+					if (flags & LegoTranInfo::c_bit2) {
+						BackgroundAudioManager()->RaiseVolume();
+						tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+					}
+
+					tranInfo->m_presenter->FUN_1004b840();
+				}
+			}
+			else {
+				if (m_tranInfoList2 != NULL) {
+					LegoTranInfoListCursor cursor(m_tranInfoList2);
+
+					if (!cursor.Find(tranInfo)) {
+						m_tranInfoList2->Append(tranInfo);
+					}
+				}
+
+				unk0x39 = TRUE;
+			}
+		}
+	}
+
+	m_unk0x39 = unk0x39;
+	m_unk0x404 = Timer()->GetTime();
 }
 
 // STUB: LEGO1 0x10061530

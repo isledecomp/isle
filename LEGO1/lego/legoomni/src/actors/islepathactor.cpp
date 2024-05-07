@@ -83,7 +83,7 @@ void IslePathActor::VTable0xe0()
 		}
 	}
 
-	AnimationManager()->FUN_10061010(0);
+	AnimationManager()->FUN_10061010(FALSE);
 	if (!m_cameraFlag) {
 		ResetWorldTransform(TRUE);
 		SetUserNavFlag(TRUE);

@@ -55,7 +55,11 @@ public:
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'
 
+	void FUN_1004b840();
 	MxBool FUN_1004b8b0();
+	void FUN_1004b8c0();
+
+	inline LegoAnimPresenter* GetPresenter() { return m_presenter; }
 
 private:
 	MxBool FUN_1004b450();

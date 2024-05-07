@@ -622,7 +622,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 			break;
 		}
 		case VK_SPACE:
-			AnimationManager()->FUN_10061010(1);
+			AnimationManager()->FUN_10061010(TRUE);
 			break;
 		case 'Z':
 			// TODO

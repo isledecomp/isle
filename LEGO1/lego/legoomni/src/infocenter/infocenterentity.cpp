@@ -53,7 +53,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 		break;
 	}
 
-	AnimationManager()->FUN_10061010(0);
+	AnimationManager()->FUN_10061010(FALSE);
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
 	return 1;
