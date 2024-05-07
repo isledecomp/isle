@@ -47,7 +47,12 @@ public:
 	MxResult Send(MxCore* p_listener, const MxNotificationParam& p_param);
 
 	inline MxNotificationPtrList* GetQueue() { return m_queue; }
+
+	// FUNCTION: BETA10 0x10132270
 	inline void SetActive(MxBool p_active) { m_active = p_active; }
+
+	// FUNCTION: BETA10 0x10132230
+	inline MxBool IsEmpty() const { return m_queue ? m_queue->empty() : TRUE; }
 
 	// SYNTHETIC: LEGO1 0x100ac390
 	// MxNotificationManager::`scalar deleting destructor'
@@ -85,5 +90,8 @@ private:
 
 // SYNTHETIC: LEGO1 0x100accd0
 // MxNotificationPtrList::~MxNotificationPtrList
+
+// TEMPLATE: BETA10 0x10129670
+// list<MxNotification *,allocator<MxNotification *> >::empty
 
 #endif // MXNOTIFICATIONMANAGER_H
