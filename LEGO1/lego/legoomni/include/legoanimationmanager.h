@@ -186,4 +186,7 @@ private:
 	UnknownMx4DPointFloat m_unk0x4cc;  // 0x4cc
 };
 
+// TEMPLATE: LEGO1 0x10061750
+// MxListCursor<LegoTranInfo *>::MxListCursor<LegoTranInfo *>
+
 #endif // LEGOANIMATIONMANAGER_H
