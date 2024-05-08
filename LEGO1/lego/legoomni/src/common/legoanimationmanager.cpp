@@ -993,10 +993,32 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 	m_unk0x404 = Timer()->GetTime();
 }
 
-// STUB: LEGO1 0x10061530
+// FUNCTION: LEGO1 0x10061530
 void LegoAnimationManager::FUN_10061530()
 {
-	// TODO
+	if (m_tranInfoList2 != NULL) {
+		LegoTranInfoListCursor cursor(m_tranInfoList2);
+		LegoTranInfo* tranInfo;
+
+		while (cursor.Next(tranInfo)) {
+			LegoTranInfoListCursor cursor2(m_tranInfoList);
+
+			if (cursor2.Find(tranInfo)) {
+				if (tranInfo->m_presenter != NULL) {
+					if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+						BackgroundAudioManager()->RaiseVolume();
+						tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+					}
+
+					tranInfo->m_presenter->FUN_1004b840();
+					cursor.Detach();
+				}
+			}
+			else {
+				cursor.Detach();
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x100617c0
