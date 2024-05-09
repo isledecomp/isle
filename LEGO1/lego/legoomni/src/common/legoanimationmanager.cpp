@@ -1492,11 +1492,25 @@ MxBool LegoAnimationManager::FUN_10062650(Vector3& p_position, float p_und, Lego
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10062710
+// FUNCTION: LEGO1 0x10062710
 // FUNCTION: BETA10 0x10043787
 MxBool LegoAnimationManager::FUN_10062710(AnimInfo& p_info)
 {
-	// TODO
+	MxU8 und = 0;
+	MxU8 actorId = GameState()->GetActorId();
+
+	if (actorId <= 5) {
+		und = g_unk0x100d8b28[actorId];
+	}
+
+	if (!(und & p_info.m_unk0x0c)) {
+		return TRUE;
+	}
+
+	if (ModelExists(p_info, GameState()->GetActorName())) {
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
