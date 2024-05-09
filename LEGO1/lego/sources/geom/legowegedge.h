@@ -17,6 +17,7 @@ public:
 	inline LegoU32 GetFlag0x10() { return m_unk0x0c & 0x10 ? FALSE : TRUE; }
 	inline Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
 	inline Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
+	inline LegoChar* GetName() { return m_name; }
 
 	// SYNTHETIC: LEGO1 0x1009a7e0
 	// LegoWEGEdge::`scalar deleting destructor'

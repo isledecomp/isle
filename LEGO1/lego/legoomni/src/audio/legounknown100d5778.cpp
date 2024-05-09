@@ -81,3 +81,10 @@ void LegoUnknown100d5778::FUN_10011ca0()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x10011cf0
+MxS32 LegoUnknown100d5778::FUN_10011cf0(undefined4, undefined4)
+{
+	// TODO
+	return 0;
+}

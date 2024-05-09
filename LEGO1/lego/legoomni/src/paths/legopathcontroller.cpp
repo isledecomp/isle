@@ -1,5 +1,7 @@
 #include "legopathcontroller.h"
 
+#include "legopathboundary.h"
+
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
 
 // STUB: LEGO1 0x10044f40
@@ -63,6 +65,19 @@ void LegoPathController::FUN_10046930(LegoAnimPresenter* p_presenter)
 MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value)
 {
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10046b50
+// FUNCTION: BETA10 0x100b7531
+LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
+{
+	for (MxS32 i = 0; i < m_numL; i++) {
+		if (strcmpi(m_unk0x08[i].GetName(), p_name) == 0) {
+			return &m_unk0x08[i];
+		}
+	}
+
+	return NULL;
 }
 
 // STUB: LEGO1 0x10046bb0
