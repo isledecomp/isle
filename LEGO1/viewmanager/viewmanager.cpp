@@ -59,7 +59,7 @@ ViewManager::~ViewManager()
 // FUNCTION: BETA10 0x10172164
 undefined4 ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
 {
-	return 0;
+	return 1;
 }
 
 // FUNCTION: LEGO1 0x100a6410
