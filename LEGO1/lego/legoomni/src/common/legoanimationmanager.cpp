@@ -1455,9 +1455,7 @@ MxBool LegoAnimationManager::FUN_10062650(Vector3& p_position, float p_und, Lego
 		}
 
 		len = sqrt(len);
-		float radius = p_roi->GetWorldBoundingSphere().Radius();
-
-		if (radius + p_und >= len) {
+		if (p_roi->GetWorldBoundingSphere().Radius() + p_und >= len) {
 			return TRUE;
 		}
 	}
