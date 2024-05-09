@@ -56,6 +56,7 @@ public:
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
 	void FUN_10046930(LegoAnimPresenter* p_presenter);
 	MxResult FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value);
+	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
 	void FUN_10046bb0(LegoWorld* p_world);
 
@@ -64,10 +65,10 @@ private:
 	undefined4 m_unk0x0c;                                                // 0x0c
 	undefined4 m_unk0x10;                                                // 0x10
 	undefined4 m_unk0x14;                                                // 0x14
-	MxS16 m_numL;                                                        // 0x18
-	MxS16 m_numE;                                                        // 0x1a
-	MxS16 m_numN;                                                        // 0x1c
-	MxS16 m_numT;                                                        // 0x1e
+	MxU16 m_numL;                                                        // 0x18
+	MxU16 m_numE;                                                        // 0x1a
+	MxU16 m_numN;                                                        // 0x1c
+	MxU16 m_numT;                                                        // 0x1e
 	map<undefined*, undefined*, LegoPathControllerComparator> m_pfsE;    // 0x20
 	map<undefined*, undefined*, LegoPathControllerComparator> m_unk0x30; // 0x30
 };

@@ -153,3 +153,9 @@ void LegoCacheSound::FUN_10006be0()
 void LegoCacheSound::FUN_10006cd0(undefined4, undefined4)
 {
 }
+
+// FUNCTION: LEGO1 0x10006cb0
+void LegoCacheSound::FUN_10006cb0(undefined4 p_unk1, undefined4 p_unk2)
+{
+	m_unk0x10.FUN_10011cf0(p_unk1, p_unk2);
+}

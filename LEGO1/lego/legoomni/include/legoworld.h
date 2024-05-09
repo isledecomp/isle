@@ -83,6 +83,7 @@ public:
 	void FUN_1001fc80(IslePathActor* p_actor);
 	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
 	void FUN_1001fe90(LegoAnimPresenter* p_presenter);
+	LegoPathBoundary* FindPathBoundary(const char* p_name);
 	void AddPath(LegoPathController* p_controller);
 	MxResult GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
 	MxCore* Find(const char* p_class, const char* p_name);

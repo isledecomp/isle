@@ -20,6 +20,7 @@ public:
 	void Destroy();
 	undefined4 FUN_100118e0(LPDIRECTSOUNDBUFFER p_dsBuffer);
 	void FUN_10011ca0();
+	MxS32 FUN_10011cf0(undefined4, undefined4);
 
 	// SYNTHETIC: LEGO1 0x10011650
 	// LegoUnknown100d5778::`scalar deleting destructor'

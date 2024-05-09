@@ -358,6 +358,23 @@ void LegoWorld::AddPath(LegoPathController* p_controller)
 	m_list0x68.Append(p_controller);
 }
 
+// FUNCTION: LEGO1 0x10020020
+LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		LegoPathBoundary* boundary = controller->GetPathBoundary(p_name);
+
+		if (boundary) {
+			return boundary;
+		}
+	}
+
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x10020120
 MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 {
