@@ -1431,11 +1431,40 @@ MxBool LegoAnimationManager::ModelExists(AnimInfo& p_info, const char* p_name)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10062580
+// FUNCTION: LEGO1 0x10062580
 // FUNCTION: BETA10 0x10043552
 void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 {
-	// TODO
+	ModelInfo* models = p_info.m_models;
+	MxU8 modelCount = p_info.m_modelCount;
+
+	if (models != NULL && modelCount) {
+		for (MxU8 i = 0; i < modelCount; i++) {
+			LegoPathActor* actor = CharacterManager()->GetActor(models[i].m_name);
+
+			if (actor) {
+				LegoPathController* controller = actor->GetController();
+
+				if (controller) {
+					controller->FUN_10046770(actor);
+					actor->ClearController();
+
+					for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
+						if (m_unk0x3c[i].m_roi == actor->GetROI()) {
+							MxS32 characterId = m_unk0x3c[i].m_characterId;
+							g_characters[characterId].m_unk0x07 = TRUE;
+							MxS32 vehicleId = g_characters[characterId].m_vehicleId;
+
+							if (vehicleId >= 0) {
+								g_vehicles[vehicleId].m_unk0x05 = FALSE;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x10062650
