@@ -1401,7 +1401,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 					LegoROI* roi = entity->GetROI();
 
 					if (roi->GetVisibility() && FUN_10062650(vec, und, roi)) {
-						if (!FUN_10062520(p_info, roi->GetName())) {
+						if (!ModelExists(p_info, roi->GetName())) {
 							return TRUE;
 						}
 					}
@@ -1415,7 +1415,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 
 // FUNCTION: LEGO1 0x10062520
 // FUNCTION: BETA10 0x100434bf
-MxBool LegoAnimationManager::FUN_10062520(AnimInfo& p_info, const char* p_name)
+MxBool LegoAnimationManager::ModelExists(AnimInfo& p_info, const char* p_name)
 {
 	ModelInfo* models = p_info.m_models;
 	MxU8 modelCount = p_info.m_modelCount;
