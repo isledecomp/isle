@@ -1309,6 +1309,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 			if (direction.Dot(&direction, &p_direction) > 0.707) {
 				Mx3DPointFloat position(p_roi->GetWorldPosition());
 
+				// TODO: Fix call
 				((Vector3&) position).Sub(&p_position);
 				float len = position.LenSquared();
 				float min, max;
@@ -1389,7 +1390,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 		LegoEntityList* entityList = world->GetEntityList();
 
 		if (entityList != NULL) {
-			Mx3DPointFloat vec(p_info.m_unk0x10[0], p_info.m_unk0x10[1], p_info.m_unk0x10[2]);
+			Mx3DPointFloat position(p_info.m_unk0x10[0], p_info.m_unk0x10[1], p_info.m_unk0x10[2]);
 			float und = p_info.m_unk0x10[3];
 
 			LegoEntityListCursor cursor(entityList);
@@ -1400,7 +1401,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 				if (entity != actor && entity->IsA("LegoPathActor")) {
 					LegoROI* roi = entity->GetROI();
 
-					if (roi->GetVisibility() && FUN_10062650(vec, und, roi)) {
+					if (roi->GetVisibility() && FUN_10062650(position, und, roi)) {
 						if (!ModelExists(p_info, roi->GetName())) {
 							return TRUE;
 						}
@@ -1467,11 +1468,28 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 	}
 }
 
-// STUB: LEGO1 0x10062650
+// FUNCTION: LEGO1 0x10062650
 // FUNCTION: BETA10 0x100436e2
-MxBool LegoAnimationManager::FUN_10062650(Vector3&, float, LegoROI*)
+MxBool LegoAnimationManager::FUN_10062650(Vector3& p_position, float p_und, LegoROI* p_roi)
 {
-	return TRUE;
+	if (p_roi != NULL) {
+		Mx3DPointFloat position(p_position);
+
+		// TODO: Fix call
+		((Vector3&) position).Sub(p_roi->GetWorldPosition());
+
+		float len = position.LenSquared();
+		if (len <= 0.0f) {
+			return TRUE;
+		}
+
+		len = sqrt(len);
+		if (p_roi->GetWorldBoundingSphere().Radius() + p_und >= len) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 // STUB: LEGO1 0x10062710
