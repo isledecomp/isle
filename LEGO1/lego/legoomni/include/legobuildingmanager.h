@@ -2,8 +2,8 @@
 #define LEGOBUILDINGMANAGER_H
 
 #include "decomp.h"
-#include "mxcore.h"
 #include "misc/legotypes.h"
+#include "mxcore.h"
 
 class LegoEntity;
 class LegoROI;
@@ -94,13 +94,13 @@ public:
 private:
 	static char* g_customizeAnimFile;
 
-	MxU8 m_nextVariant; // 0x08
-	MxU8 m_unk0x09;     // 0x09
+	MxU8 m_nextVariant;      // 0x08
+	MxU8 m_unk0x09;          // 0x09
 	AnimEntry* m_entries[5]; // 0x0c
-	MxS8 m_numEntries; // 0x20
+	MxS8 m_numEntries;       // 0x20
 	LegoCacheSound* m_sound; // 0x24
-	MxBool m_unk0x28;       // 0x28
-	LegoWorld* m_world; // 0x2c
+	MxBool m_unk0x28;        // 0x28
+	LegoWorld* m_world;      // 0x2c
 };
 
 #endif // LEGOBUILDINGMANAGER_H
