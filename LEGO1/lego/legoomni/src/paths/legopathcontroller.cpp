@@ -68,6 +68,7 @@ MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_va
 }
 
 // FUNCTION: LEGO1 0x10046b50
+// FUNCTION: BETA10 0x100b7531
 LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
@@ -75,6 +76,7 @@ LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 			return &m_unk0x08[i];
 		}
 	}
+
 	return NULL;
 }
 

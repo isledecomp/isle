@@ -37,7 +37,7 @@ public:
 	MxResult FUN_10006a30(const char* p_str, MxBool);
 	void FUN_10006b80();
 	void FUN_10006be0();
-	void FUN_10006cb0(undefined4, undefined4);
+	void FUN_10006cb0(undefined4 p_und1, undefined4 p_und2);
 
 	// SYNTHETIC: LEGO1 0x10006610
 	// LegoCacheSound::`scalar deleting destructor'
