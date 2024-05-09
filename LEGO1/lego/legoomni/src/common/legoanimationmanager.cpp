@@ -21,6 +21,7 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
+#include "viewmanager/viewmanager.h"
 
 #include <io.h>
 
@@ -96,10 +97,14 @@ Character g_characters[47] = {
 };
 
 // GLOBAL: LEGO1 0x100f74b0
-float g_unk0x100f74b0 = 10.0f;
-
-// GLOBAL: LEGO1 0x100f74ec
-float g_unk0x100f74ec = -1.0f;
+float g_unk0x100f74b0[6][3] = {
+	{10.0f, -1.0f, 1.0f},
+	{7.0f, 144.0f, 100.0f},
+	{5.0f, 100.0f, 36.0f},
+	{3.0f, 36.0f, 25.0f},
+	{1.0f, 25.0f, 16.0f},
+	{-1.0f, 16.0f, 2.0f}
+};
 
 // GLOBAL: LEGO1 0x100f74f8
 MxS32 g_legoAnimationManagerConfig = 1;
@@ -1219,24 +1224,24 @@ MxResult LegoAnimationManager::Tickle()
 
 	FUN_10064b50(time);
 
-	if (!m_unk0x39 && time - m_unk0x404 > 10000 && speed < g_unk0x100f74b0 && speed > g_unk0x100f74ec) {
+	if (!m_unk0x39 && time - m_unk0x404 > 10000 && speed < g_unk0x100f74b0[0][0] && speed > g_unk0x100f74b0[5][0]) {
 		LegoPathBoundary* boundary = actor->GetBoundary();
 
 		Mx3DPointFloat position(roi->GetWorldPosition());
 		Mx3DPointFloat direction(roi->GetWorldDirection());
 
-		MxU8 und = 0;
+		MxU8 unk0x0c = 0;
 		MxU8 actorId = GameState()->GetActorId();
 
 		if (actorId <= 5) {
-			und = g_unk0x100d8b28[actorId];
+			unk0x0c = g_unk0x100d8b28[actorId];
 		}
 
 		for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
 			LegoROI* roi = m_unk0x3c[i].m_roi;
 
 			if (roi != NULL) {
-				MxU16 result = FUN_10062110(roi, direction, position, boundary, speed, und, m_unk0x3c[i].m_unk0x14);
+				MxU16 result = FUN_10062110(roi, direction, position, boundary, speed, unk0x0c, m_unk0x3c[i].m_unk0x14);
 
 				if (result) {
 					MxMatrix mat;
@@ -1283,7 +1288,7 @@ MxResult LegoAnimationManager::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10062110
+// FUNCTION: LEGO1 0x10062110
 // FUNCTION: BETA10 0x10042f41
 MxU16 LegoAnimationManager::FUN_10062110(
 	LegoROI* p_roi,
@@ -1291,11 +1296,71 @@ MxU16 LegoAnimationManager::FUN_10062110(
 	Vector3& p_position,
 	LegoPathBoundary* p_boundary,
 	float p_speed,
-	MxU8 p_und,
+	MxU8 p_unk0x0c,
 	MxBool p_unk0x14
 )
 {
-	// TODO
+	LegoPathActor* actor = (LegoPathActor*) p_roi->GetEntity();
+
+	if (actor != NULL && actor->GetBoundary() == p_boundary && actor->GetState() == 0) {
+		if (GetViewManager()->FUN_100a6150(p_roi->GetWorldBoundingBox())) {
+			Mx3DPointFloat direction(p_roi->GetWorldDirection());
+
+			if (direction.Dot(&direction, &p_direction) > 0.707) {
+				Mx3DPointFloat position(p_roi->GetWorldPosition());
+
+				((Vector3&) position).Sub(&p_position);
+				float len = position.LenSquared();
+				float min, max;
+
+				for (MxU32 i = 0; i < _countof(g_unk0x100f74b0); i++) {
+					if (g_unk0x100f74b0[i][0] < p_speed) {
+						max = g_unk0x100f74b0[i][1];
+						min = g_unk0x100f74b0[i][2];
+						break;
+					}
+				}
+
+				if (len < max && len > min) {
+					MxS8 index = GetCharacterIndex(p_roi->GetName());
+
+					for (MxU16 i = m_unk0x0e; i <= m_unk0x10; i++) {
+						if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c && m_anims[i].m_unk0x29) {
+							MxS32 vehicleId = g_characters[index].m_vehicleId;
+							if (vehicleId >= 0) {
+								MxBool found = FALSE;
+
+								for (MxS32 j = 0; j < (MxS32) _countof(m_anims[i].m_unk0x2a); j++) {
+									if (m_anims[i].m_unk0x2a[j] == vehicleId) {
+										found = TRUE;
+										break;
+									}
+								}
+
+								if (p_unk0x14 != found) {
+									continue;
+								}
+							}
+
+							MxU16 result = i;
+							MxU16 unk0x22 = m_anims[i].m_unk0x22;
+
+							for (i = i + 1; i <= m_unk0x10; i++) {
+								if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c &&
+									m_anims[i].m_unk0x29 && m_anims[i].m_unk0x22 < unk0x22) {
+									result = i;
+									unk0x22 = m_anims[i].m_unk0x22;
+								}
+							}
+
+							return result;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return 0;
 }
 

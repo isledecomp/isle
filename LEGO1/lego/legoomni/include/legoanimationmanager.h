@@ -133,7 +133,7 @@ private:
 		Vector3& p_position,
 		LegoPathBoundary* p_boundary,
 		float p_speed,
-		MxU8 p_und,
+		MxU8 p_unk0x0c,
 		MxBool p_unk0x14
 	);
 	MxS8 GetCharacterIndex(const char* p_name);
