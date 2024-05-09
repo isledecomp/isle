@@ -1296,7 +1296,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 	Vector3& p_position,
 	LegoPathBoundary* p_boundary,
 	float p_speed,
-	MxU8 unk0x0c,
+	MxU8 p_unk0x0c,
 	MxBool p_unk0x14
 )
 {
@@ -1325,7 +1325,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 					MxS8 index = GetCharacterIndex(p_roi->GetName());
 
 					for (MxU16 i = m_unk0x0e; i <= m_unk0x10; i++) {
-						if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & unk0x0c && m_anims[i].m_unk0x29) {
+						if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c && m_anims[i].m_unk0x29) {
 							MxS32 vehicleId = g_characters[index].m_vehicleId;
 							if (vehicleId >= 0) {
 								MxBool found = FALSE;
@@ -1346,7 +1346,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 							MxU16 unk0x22 = m_anims[i].m_unk0x22;
 
 							for (i = i + 1; i <= m_unk0x10; i++) {
-								if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & unk0x0c &&
+								if (m_anims[i].m_unk0x28 == index && m_anims[i].m_unk0x0c & p_unk0x0c &&
 									m_anims[i].m_unk0x29 && m_anims[i].m_unk0x22 < unk0x22) {
 									result = i;
 									unk0x22 = m_anims[i].m_unk0x22;
