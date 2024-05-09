@@ -680,7 +680,7 @@ void LegoBuildingManager::FUN_10030590()
 	}
 }
 
-// FUNCTION: LEGO1 0x10030630
+// STUB: LEGO1 0x10030630
 MxResult LegoBuildingManager::FUN_10030630()
 {
 	return SUCCESS;
