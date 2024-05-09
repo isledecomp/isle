@@ -5,7 +5,7 @@
 
 // SIZE 0x30
 struct ModelInfo {
-	char* m_modelName;    // 0x00
+	char* m_name;         // 0x00
 	MxU8 m_unk0x04;       // 0x04
 	float m_location[3];  // 0x08
 	float m_direction[3]; // 0x14
@@ -15,7 +15,7 @@ struct ModelInfo {
 
 // SIZE 0x30
 struct AnimInfo {
-	char* m_animName;    // 0x00
+	char* m_name;        // 0x00
 	MxU32 m_objectId;    // 0x04
 	MxS16 m_unk0x08;     // 0x08
 	MxBool m_unk0x0a;    // 0x0a

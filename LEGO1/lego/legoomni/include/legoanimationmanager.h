@@ -138,7 +138,7 @@ private:
 	);
 	MxS8 GetCharacterIndex(const char* p_name);
 	MxBool FUN_100623a0(AnimInfo& p_info);
-	MxBool FUN_10062520(AnimInfo& p_info, const char*);
+	MxBool ModelExists(AnimInfo& p_info, const char* p_name);
 	void FUN_10062580(AnimInfo& p_info);
 	MxBool FUN_10062650(Vector3&, float, LegoROI*);
 	MxBool FUN_10062710(AnimInfo& p_info);
