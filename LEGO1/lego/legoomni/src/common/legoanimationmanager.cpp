@@ -1379,12 +1379,45 @@ MxS8 LegoAnimationManager::GetCharacterIndex(const char* p_name)
 	return -1;
 }
 
-// STUB: LEGO1 0x100623a0
+// FUNCTION: LEGO1 0x100623a0
 // FUNCTION: BETA10 0x10043342
 MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 {
-	// TODO
+	LegoWorld* world = CurrentWorld();
+
+	if (world != NULL) {
+		LegoEntityList* entityList = world->GetEntityList();
+
+		if (entityList != NULL) {
+			Mx3DPointFloat vec(p_info.m_unk0x10[0], p_info.m_unk0x10[1], p_info.m_unk0x10[2]);
+			float und = p_info.m_unk0x10[3];
+
+			LegoEntityListCursor cursor(entityList);
+			LegoEntity* entity;
+			IslePathActor* actor = CurrentActor();
+
+			while (cursor.Next(entity)) {
+				if (entity != actor && entity->IsA("LegoPathActor")) {
+					LegoROI* roi = entity->GetROI();
+
+					if (roi->GetVisibility() && FUN_10062650(vec, und, roi)) {
+						if (!FUN_10062520(p_info, roi->GetName())) {
+							return TRUE;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return FALSE;
+}
+
+// STUB: LEGO1 0x10062520
+// FUNCTION: BETA10 0x100434bf
+MxBool LegoAnimationManager::FUN_10062520(AnimInfo& p_info, const char*)
+{
+	return TRUE;
 }
 
 // STUB: LEGO1 0x10062580
@@ -1392,6 +1425,13 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10062650
+// FUNCTION: BETA10 0x100436e2
+MxBool LegoAnimationManager::FUN_10062650(Vector3&, float, LegoROI*)
+{
+	return TRUE;
 }
 
 // STUB: LEGO1 0x10062710

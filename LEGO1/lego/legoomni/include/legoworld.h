@@ -90,6 +90,7 @@ public:
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
+	inline LegoEntityList* GetEntityList() { return m_entityList; }
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
