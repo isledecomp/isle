@@ -475,7 +475,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 				goto done;
 			}
 
-			m_anims[j].m_unk0x28 = GetCharacterIndex(m_anims[j].m_animName + strlen(m_anims[j].m_animName) - 2);
+			m_anims[j].m_unk0x28 = GetCharacterIndex(m_anims[j].m_name + strlen(m_anims[j].m_name) - 2);
 			m_anims[j].m_unk0x29 = FALSE;
 
 			for (k = 0; k < 3; k++) {
@@ -484,7 +484,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 
 			if (m_anims[j].m_unk0x08 == -1) {
 				for (MxS32 l = 0; l < m_anims[j].m_modelCount; l++) {
-					MxS32 index = GetCharacterIndex(m_anims[j].m_models[l].m_modelName);
+					MxS32 index = GetCharacterIndex(m_anims[j].m_models[l].m_name);
 
 					if (index >= 0) {
 						g_characters[index].m_active = TRUE;
@@ -496,7 +496,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 			for (MxS32 m = 0; m < m_anims[j].m_modelCount; m++) {
 				MxU32 n;
 
-				if (FindVehicle(m_anims[j].m_models[m].m_modelName, n) && m_anims[j].m_models[m].m_unk0x2c) {
+				if (FindVehicle(m_anims[j].m_models[m].m_name, n) && m_anims[j].m_models[m].m_unk0x2c) {
 					m_anims[j].m_unk0x2a[count++] = n;
 					if (count > 3) {
 						break;
@@ -560,12 +560,12 @@ MxResult LegoAnimationManager::ReadAnimInfo(LegoFile* p_file, AnimInfo* p_info)
 		goto done;
 	}
 
-	p_info->m_animName = new char[length + 1];
-	if (p_file->Read(p_info->m_animName, length) == FAILURE) {
+	p_info->m_name = new char[length + 1];
+	if (p_file->Read(p_info->m_name, length) == FAILURE) {
 		goto done;
 	}
 
-	p_info->m_animName[length] = 0;
+	p_info->m_name[length] = 0;
 	if (p_file->Read(&p_info->m_objectId, sizeof(p_info->m_objectId)) == FAILURE) {
 		goto done;
 	}
@@ -621,12 +621,12 @@ MxResult LegoAnimationManager::ReadModelInfo(LegoFile* p_file, ModelInfo* p_info
 		goto done;
 	}
 
-	p_info->m_modelName = new char[length + 1];
-	if (p_file->Read(p_info->m_modelName, length) == FAILURE) {
+	p_info->m_name = new char[length + 1];
+	if (p_file->Read(p_info->m_name, length) == FAILURE) {
 		goto done;
 	}
 
-	p_info->m_modelName[length] = 0;
+	p_info->m_name[length] = 0;
 	if (p_file->Read(&p_info->m_unk0x04, sizeof(p_info->m_unk0x04)) == FAILURE) {
 		goto done;
 	}
@@ -657,11 +657,11 @@ void LegoAnimationManager::DeleteAnimations()
 
 	if (m_anims != NULL) {
 		for (MxS32 i = 0; i < m_animCount; i++) {
-			delete m_anims[i].m_animName;
+			delete m_anims[i].m_name;
 
 			if (m_anims[i].m_models != NULL) {
 				for (MxS32 j = 0; j < m_anims[i].m_modelCount; j++) {
-					delete m_anims[i].m_models[j].m_modelName;
+					delete m_anims[i].m_models[j].m_name;
 				}
 
 				delete m_anims[i].m_models;
@@ -1413,11 +1413,22 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 	return FALSE;
 }
 
-// STUB: LEGO1 0x10062520
+// FUNCTION: LEGO1 0x10062520
 // FUNCTION: BETA10 0x100434bf
-MxBool LegoAnimationManager::FUN_10062520(AnimInfo& p_info, const char*)
+MxBool LegoAnimationManager::FUN_10062520(AnimInfo& p_info, const char* p_name)
 {
-	return TRUE;
+	ModelInfo* models = p_info.m_models;
+	MxU8 modelCount = p_info.m_modelCount;
+
+	if (models != NULL && modelCount) {
+		for (MxU8 i = 0; i < modelCount; i++) {
+			if (!strcmpi(models[i].m_name, p_name)) {
+				return TRUE;
+			}
+		}
+	}
+
+	return FALSE;
 }
 
 // STUB: LEGO1 0x10062580
