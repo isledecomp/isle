@@ -96,7 +96,6 @@ public:
 		MxBool p_param9
 	);
 	void FUN_10061010(MxBool p_und);
-	void FUN_100617c0(MxS32, MxU16&, MxU16&);
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
 	void FUN_10062770();
 	void FUN_100627d0(MxBool);
@@ -127,6 +126,7 @@ private:
 	MxResult FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix, MxBool p_und1, MxBool p_und2);
 	void DeleteAnimations();
 	void FUN_10061530();
+	MxResult FUN_100617c0(MxS32 p_unk0x08, MxU16& p_unk0x0e, MxU16& p_unk0x10);
 	MxU16 FUN_10062110(
 		LegoROI* p_roi,
 		Vector3& p_direction,

@@ -1021,10 +1021,57 @@ void LegoAnimationManager::FUN_10061530()
 	}
 }
 
-// STUB: LEGO1 0x100617c0
-void LegoAnimationManager::FUN_100617c0(MxS32, MxU16&, MxU16&)
+// FUNCTION: LEGO1 0x100617c0
+// FUNCTION: BETA10 0x1004240b
+MxResult LegoAnimationManager::FUN_100617c0(MxS32 p_unk0x08, MxU16& p_unk0x0e, MxU16& p_unk0x10)
 {
-	// TODO
+	MxResult result = FAILURE;
+	MxU16 unk0x0e = 0;
+	MxU16 unk0x10 = 0;
+	MxBool success = FALSE;
+
+	if (p_unk0x08 == -1) {
+		MxS32 i;
+
+		for (i = 0; i < m_animCount; i++) {
+			if (m_anims[i].m_unk0x08 == p_unk0x08) {
+				unk0x0e = i;
+				success = TRUE;
+				break;
+			}
+		}
+
+		if (success) {
+			for (; i < m_animCount && m_anims[i].m_unk0x08 == p_unk0x08; i++) {
+				unk0x10 = i;
+			}
+		}
+	}
+	else {
+		MxS32 i;
+
+		for (i = 0; m_animCount > i && m_anims[i].m_unk0x08 != -1; i++) {
+			if (m_anims[i].m_unk0x08 == p_unk0x08) {
+				unk0x0e = i;
+				success = TRUE;
+				break;
+			}
+		}
+
+		if (success) {
+			for (; i < m_animCount && m_anims[i].m_unk0x08 == p_unk0x08; i++) {
+				unk0x10 = i;
+			}
+		}
+	}
+
+	if (success) {
+		p_unk0x0e = unk0x0e;
+		p_unk0x10 = unk0x10;
+		result = SUCCESS;
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100618f0
