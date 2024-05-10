@@ -1,6 +1,7 @@
 #include "legocameralocations.h"
 
 DECOMP_SIZE_ASSERT(LegoCameraLocation, 0x60)
+DECOMP_SIZE_ASSERT(LegoCameraLocation::Path, 0x18)
 
 // GLOBAL: LEGO1 0x100f4c60
 LegoCameraLocation g_cameraLocations[] = {
