@@ -1531,10 +1531,59 @@ void LegoAnimationManager::FUN_10062770()
 	}
 }
 
-// STUB: LEGO1 0x100627d0
-void LegoAnimationManager::FUN_100627d0(MxBool)
+// FUNCTION: LEGO1 0x100627d0
+// FUNCTION: BETA10 0x1004389d
+void LegoAnimationManager::FUN_100627d0(MxBool p_und)
 {
-	// TODO
+	ViewManager* viewManager = GetViewManager();
+
+	if (p_und || viewManager != NULL) {
+		MxLong time = Timer()->GetTime();
+
+		for (MxS32 i = 0; i < (MxS32) _countof(m_unk0x3c); i++) {
+			LegoROI* roi = m_unk0x3c[i].m_roi;
+
+			if (roi != NULL) {
+				MxU16 prefix = *(MxU16*) roi->GetName();
+				MxLong und = ((m_numAllowedExtras - 2) * 280000 / 18) + 20000;
+				MxBool maOrPa = prefix == TWOCC('m', 'a') || prefix == TWOCC('p', 'a');
+
+				if ((p_und && !maOrPa) ||
+					(g_characters[m_unk0x3c[i].m_characterId].m_unk0x10 >= 0 && time - m_unk0x3c[i].m_unk0x08 > und &&
+					 CharacterManager()->GetRefCount(roi) == 1 &&
+					 !viewManager->FUN_100a6150(roi->GetWorldBoundingBox()))) {
+					m_unk0x414--;
+
+					LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+					if (actor != NULL && actor->GetController() != NULL) {
+						actor->GetController()->FUN_10046770(actor);
+						actor->ClearController();
+					}
+
+					CharacterManager()->FUN_10083db0(roi);
+
+					if (m_unk0x3c[i].m_unk0x14) {
+						m_unk0x3c[i].m_unk0x14 = FALSE;
+
+						MxS32 vehicleId = g_characters[m_unk0x3c[i].m_characterId].m_vehicleId;
+						if (vehicleId >= 0) {
+							g_vehicles[vehicleId].m_unk0x05 = FALSE;
+
+							LegoROI* roi = Lego()->FindROI(g_vehicles[vehicleId].m_name);
+							if (roi != NULL) {
+								roi->SetVisibility(FALSE);
+							}
+						}
+					}
+
+					m_unk0x3c[i].m_roi = NULL;
+					g_characters[m_unk0x3c[i].m_characterId].m_unk0x04 = FALSE;
+					g_characters[m_unk0x3c[i].m_characterId].m_unk0x07 = FALSE;
+					m_unk0x3c[i].m_characterId = -1;
+				}
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x100629b0
