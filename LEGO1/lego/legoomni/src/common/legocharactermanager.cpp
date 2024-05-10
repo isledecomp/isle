@@ -245,6 +245,14 @@ done:
 	return NULL;
 }
 
+// STUB: LEGO1 0x10083b20
+// FUNCTION: BETA10 0x10074608
+MxBool LegoCharacterManager::FUN_10083b20(const char* p_name)
+{
+	// TODO
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x10083bc0
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 {
@@ -733,6 +741,14 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 		return info->m_unk0x0c + g_unk0x100fc4d8;
 	}
 
+	return 0;
+}
+
+// STUB: LEGO1 0x10085180
+// FUNCTION: BETA10 0x100768c5
+MxU8 LegoCharacterManager::FUN_10085180(LegoROI* p_roi)
+{
+	// TODO
 	return 0;
 }
 

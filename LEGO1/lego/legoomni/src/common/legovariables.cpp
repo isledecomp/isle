@@ -105,7 +105,7 @@ void CameraLocationVariable::SetValue(const char* p_value)
 	strcpy(buffer, p_value);
 
 	char* location = strtok(buffer, ",");
-	NavController()->UpdateCameraLocation(location);
+	NavController()->UpdateLocation(location);
 
 	location = strtok(NULL, ",");
 	if (location) {

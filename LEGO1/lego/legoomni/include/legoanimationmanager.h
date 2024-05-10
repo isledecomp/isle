@@ -3,6 +3,7 @@
 
 #include "actionsfwd.h"
 #include "decomp.h"
+#include "legolocations.h"
 #include "legotraninfolist.h"
 #include "mxcore.h"
 #include "mxgeometry/mxgeometry3d.h"
@@ -10,9 +11,11 @@
 class AnimState;
 class LegoAnimPresenter;
 class LegoEntity;
+class LegoExtraActor;
 class LegoFile;
 class LegoPathBoundary;
 class LegoROIList;
+class LegoWorld;
 struct ModelInfo;
 class MxDSAction;
 
@@ -38,9 +41,9 @@ public:
 
 	// SIZE 0x08
 	struct Vehicle {
-		char* m_name;        // 0x00
-		undefined m_unk0x04; // 0x04
-		MxBool m_unk0x05;    // 0x05
+		char* m_name;     // 0x00
+		MxBool m_unk0x04; // 0x04
+		MxBool m_unk0x05; // 0x05
 	};
 
 	// SIZE 0x18
@@ -99,7 +102,7 @@ public:
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
 	void FUN_10062770();
 	void PurgeExtra(MxBool p_und);
-	void AddExtra(MxU32 p_cameraLocation, MxBool p_und);
+	void AddExtra(MxS32 p_location, MxBool p_und);
 	void FUN_10063270(LegoROIList*, LegoAnimPresenter*);
 	void FUN_10063780(LegoROIList* p_list);
 	void FUN_10064670(Vector3*);
@@ -143,7 +146,10 @@ private:
 	MxBool FUN_10062650(Vector3& p_position, float p_und, LegoROI* p_roi);
 	MxBool FUN_10062710(AnimInfo& p_info);
 	void FUN_10063aa0();
+	MxBool FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_unk0x14, MxU32 p_characterId);
 	void FUN_10063d10();
+	MxBool FUN_10063fb0(LegoLocation::Boundary* p_path, LegoWorld* p_world);
+	MxBool FUN_10064120(LegoLocation::Boundary* p_path, MxBool, MxBool);
 	void FUN_100648f0(LegoTranInfo*, MxLong);
 	void FUN_10064b50(MxLong p_time);
 
@@ -163,7 +169,7 @@ private:
 	MxBool m_unk0x39;                  // 0x39
 	MxBool m_unk0x3a;                  // 0x3a
 	Extra m_extras[40];                // 0x3c
-	undefined4 m_unk0x3fc;             // 0x3fc
+	MxU32 m_nextExtraCharacterId;      // 0x3fc
 	MxBool m_unk0x400;                 // 0x400
 	MxBool m_unk0x401;                 // 0x401
 	MxBool m_unk0x402;                 // 0x402
@@ -171,7 +177,7 @@ private:
 	MxLong m_unk0x408;                 // 0x408
 	MxLong m_unk0x40c;                 // 0x40c
 	MxLong m_unk0x410;                 // 0x410
-	MxLong m_unk0x414;                 // 0x414
+	MxU32 m_unk0x414;                  // 0x414
 	MxU32 m_numAllowedExtras;          // 0x418
 	undefined4 m_unk0x41c;             // 0x41c
 	AnimState* m_animState;            // 0x420

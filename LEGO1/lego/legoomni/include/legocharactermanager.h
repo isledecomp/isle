@@ -59,6 +59,7 @@ public:
 	static MxBool Exists(const char* p_key);
 
 	void FUN_100832a0();
+	MxBool FUN_10083b20(const char* p_name);
 	MxU32 GetRefCount(LegoROI* p_roi);
 	void FUN_10083c30(const char* p_name);
 	void FUN_10083db0(LegoROI* p_roi);
@@ -69,6 +70,7 @@ public:
 	LegoCharacterInfo* GetInfo(LegoROI* p_roi);
 	MxBool SwitchHat(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
+	MxU8 FUN_10085180(LegoROI* p_roi);
 	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 

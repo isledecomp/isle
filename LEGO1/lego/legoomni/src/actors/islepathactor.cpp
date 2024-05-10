@@ -482,7 +482,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 			VTable0xe0();
 		}
 
-		m_world->FUN_1001f720(
+		m_world->PlaceActor(
 			this,
 			g_spawnLocations[i].m_path,
 			g_spawnLocations[i].m_src,

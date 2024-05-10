@@ -65,9 +65,9 @@ public:
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
-	MxResult FUN_1001f720(
-		IslePathActor* p_actor,
-		const char* p_path,
+	MxResult PlaceActor(
+		LegoPathActor* p_actor,
+		const char* p_name,
 		MxS32 p_src,
 		float p_srcScale,
 		MxS32 p_dest,

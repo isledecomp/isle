@@ -4,9 +4,9 @@
 #include "infocenterstate.h"
 #include "legoanimationmanager.h"
 #include "legocameracontroller.h"
-#include "legocameralocations.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
+#include "legolocations.h"
 #include "legomain.h"
 #include "legosoundmanager.h"
 #include "legoutils.h"
@@ -403,21 +403,16 @@ MxBool LegoNavController::CalculateNewPosDir(
 }
 
 // FUNCTION: LEGO1 0x10055500
-MxResult LegoNavController::UpdateCameraLocation(const char* p_location)
+MxResult LegoNavController::UpdateLocation(const char* p_location)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < (MxS32) _countof(g_cameraLocations); i++) {
-		if (!strcmpi(p_location, g_cameraLocations[i].m_name)) {
+	for (MxS32 i = 0; i < (MxS32) _countof(g_locations); i++) {
+		if (!strcmpi(p_location, g_locations[i].m_name)) {
 			MxMatrix mat;
 			LegoROI* viewROI = VideoManager()->GetViewROI();
 
-			CalcLocalTransform(
-				g_cameraLocations[i].m_position,
-				g_cameraLocations[i].m_direction,
-				g_cameraLocations[i].m_up,
-				mat
-			);
+			CalcLocalTransform(g_locations[i].m_position, g_locations[i].m_direction, g_locations[i].m_up, mat);
 
 			Mx3DPointFloat vec;
 			vec.Clear();
@@ -441,18 +436,18 @@ MxResult LegoNavController::UpdateCameraLocation(const char* p_location)
 }
 
 // FUNCTION: LEGO1 0x10055620
-MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
+MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 {
 	MxResult result = FAILURE;
 
-	if (p_location < _countof(g_cameraLocations)) {
+	if (p_location < _countof(g_locations)) {
 		MxMatrix mat;
 		LegoROI* viewROI = VideoManager()->GetViewROI();
 
 		CalcLocalTransform(
-			g_cameraLocations[p_location].m_position,
-			g_cameraLocations[p_location].m_direction,
-			g_cameraLocations[p_location].m_up,
+			g_locations[p_location].m_position,
+			g_locations[p_location].m_direction,
+			g_locations[p_location].m_up,
 			mat
 		);
 
@@ -478,10 +473,10 @@ MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
 
 // FUNCTION: LEGO1 0x10055720
 // FUNCTION: BETA10 0x1009c259
-LegoCameraLocation* LegoNavController::GetCameraLocation(MxU32 p_location)
+LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 {
-	if (p_location < _countof(g_cameraLocations)) {
-		return &g_cameraLocations[p_location];
+	if (p_location < _countof(g_locations)) {
+		return &g_locations[p_location];
 	}
 
 	return NULL;
