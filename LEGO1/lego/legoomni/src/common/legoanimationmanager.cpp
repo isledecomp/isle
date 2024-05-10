@@ -1832,7 +1832,7 @@ void LegoAnimationManager::FUN_10063d10()
 
 // STUB: LEGO1 0x10063fb0
 // FUNCTION: BETA10 0x100452a7
-MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_path, LegoWorld* p_world)
+MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world)
 {
 	// TODO
 	return TRUE;
@@ -1840,7 +1840,7 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_path, LegoWo
 
 // STUB: LEGO1 0x10064120
 // FUNCTION: BETA10 0x100454f5
-MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_path, MxBool, MxBool)
+MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool, MxBool)
 {
 	// TODO
 	return TRUE;

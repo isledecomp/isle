@@ -148,8 +148,8 @@ private:
 	void FUN_10063aa0();
 	MxBool FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_unk0x14, MxU32 p_characterId);
 	void FUN_10063d10();
-	MxBool FUN_10063fb0(LegoLocation::Boundary* p_path, LegoWorld* p_world);
-	MxBool FUN_10064120(LegoLocation::Boundary* p_path, MxBool, MxBool);
+	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
+	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool, MxBool);
 	void FUN_100648f0(LegoTranInfo*, MxLong);
 	void FUN_10064b50(MxLong p_time);
 
