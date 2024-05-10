@@ -274,9 +274,9 @@ done:
 
 // FUNCTION: LEGO1 0x1001f720
 // FUNCTION: BETA10 0x100da24b
-MxResult LegoWorld::FUN_1001f720(
-	IslePathActor* p_actor,
-	const char* p_path,
+MxResult LegoWorld::PlaceActor(
+	LegoPathActor* p_actor,
+	const char* p_name,
 	MxS32 p_src,
 	float p_srcScale,
 	MxS32 p_dest,
@@ -287,7 +287,7 @@ MxResult LegoWorld::FUN_1001f720(
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (controller->FUN_10045c20(p_actor, p_path, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
+		if (controller->FUN_10045c20(p_actor, p_name, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
