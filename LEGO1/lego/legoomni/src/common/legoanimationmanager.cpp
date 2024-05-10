@@ -1674,7 +1674,6 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 									g_characters[m_lastExtraCharacterId].m_unk0x08 &&
 									!g_characters[m_lastExtraCharacterId].m_unk0x04 &&
 									g_characters[m_lastExtraCharacterId].m_active == active) {
-
 									if (!CharacterManager()->FUN_10083b20(g_characters[m_lastExtraCharacterId].m_name
 										)) {
 										m_extras[i].m_roi = CharacterManager()->GetROI(
