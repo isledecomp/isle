@@ -5,6 +5,7 @@
 #include "mxcore.h"
 #include "mxtypes.h"
 
+struct LegoCameraLocation;
 class Vector3;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -73,6 +74,8 @@ public:
 	);
 	static MxResult UpdateCameraLocation(MxU32 p_location);
 	static MxResult UpdateCameraLocation(const char* p_location);
+	static LegoCameraLocation* GetCameraLocation(MxU32 p_location);
+
 	inline void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
 	inline MxFloat GetLinearVel() { return m_linearVel; }
 	inline MxFloat GetRotationalVel() { return m_rotationalVel; }

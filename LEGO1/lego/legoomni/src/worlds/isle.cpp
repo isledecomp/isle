@@ -487,15 +487,15 @@ void Isle::Enable(MxBool p_enable)
 		FUN_1003ef00(TRUE);
 
 		if (m_act1state->m_unk0x018 == 0) {
-			MxU32 und[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+			MxU32 cameraLocations[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
 			for (MxU32 i = 0; i < 5; i++) {
-				MxS32 und2 = rand() % 5;
+				MxS32 r = rand() % 5;
 
-				for (MxU32 j = 0; j < _countof(und); j++) {
-					if (und[j] != 0 && und2-- == 0) {
-						AnimationManager()->FUN_100629b0(und[j], TRUE);
-						und[j] = 0;
+				for (MxU32 j = 0; j < _countof(cameraLocations); j++) {
+					if (cameraLocations[j] != 0 && r-- == 0) {
+						AnimationManager()->AddExtra(cameraLocations[j], TRUE);
+						cameraLocations[j] = 0;
 						break;
 					}
 				}
