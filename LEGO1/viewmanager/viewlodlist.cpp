@@ -125,7 +125,7 @@ ViewLODList* ViewLODListManager::Lookup(const ROIName& p_roiName) const
 
 // FUNCTION: LEGO1 0x100a7680
 // FUNCTION: BETA10 0x1017886b
-char ViewLODListManager::Destroy(ViewLODList* lodList)
+unsigned char ViewLODListManager::Destroy(ViewLODList* lodList)
 {
 	ViewLODListMap::iterator iterator;
 	char deleted = FALSE;

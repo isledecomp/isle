@@ -92,7 +92,7 @@ public:
 	// returned LODList's refCount is increased, i.e. caller must call Release()
 	// when it no longer holds on to the list
 	ViewLODList* Lookup(const ROIName&) const;
-	char Destroy(ViewLODList* lodList);
+	unsigned char Destroy(ViewLODList* lodList);
 
 #ifdef _DEBUG
 	void Dump(void (*pTracer)(const char*, ...)) const;
