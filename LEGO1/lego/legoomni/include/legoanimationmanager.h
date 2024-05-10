@@ -169,7 +169,7 @@ private:
 	MxBool m_unk0x39;                  // 0x39
 	MxBool m_unk0x3a;                  // 0x3a
 	Extra m_extras[40];                // 0x3c
-	MxU32 m_nextExtraCharacterId;      // 0x3fc
+	MxU32 m_lastExtraCharacterId;      // 0x3fc
 	MxBool m_unk0x400;                 // 0x400
 	MxBool m_unk0x401;                 // 0x401
 	MxBool m_unk0x402;                 // 0x402

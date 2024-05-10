@@ -217,7 +217,7 @@ void LegoAnimationManager::Suspend()
 	}
 
 	if (m_scriptIndex == 0) {
-		m_animState->FUN_10065240(m_animCount, m_anims, m_nextExtraCharacterId);
+		m_animState->FUN_10065240(m_animCount, m_anims, m_lastExtraCharacterId);
 	}
 
 	if (!m_suspended) {
@@ -320,7 +320,7 @@ void LegoAnimationManager::Init()
 	m_unk0x38 = FALSE;
 	m_unk0x39 = FALSE;
 	m_unk0x3a = TRUE;
-	m_nextExtraCharacterId = 0;
+	m_lastExtraCharacterId = 0;
 	m_unk0x400 = FALSE;
 	m_unk0x414 = 0;
 	m_numAllowedExtras = 5;
@@ -416,7 +416,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 		}
 
 		if (m_scriptIndex == 0) {
-			m_animState->FUN_10065240(m_animCount, m_anims, m_nextExtraCharacterId);
+			m_animState->FUN_10065240(m_animCount, m_anims, m_lastExtraCharacterId);
 		}
 
 		DeleteAnimations();
@@ -528,7 +528,7 @@ MxResult LegoAnimationManager::LoadScriptInfo(MxS32 p_scriptIndex)
 		}
 
 		if (p_scriptIndex == 0) {
-			m_animState->FUN_100651d0(m_animCount, m_anims, m_nextExtraCharacterId);
+			m_animState->FUN_100651d0(m_animCount, m_anims, m_lastExtraCharacterId);
 		}
 	}
 
@@ -1653,13 +1653,13 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 					if (boundary != NULL) {
 						for (i = 0; i < m_numAllowedExtras; i++) {
 							if (m_extras[i].m_roi == NULL) {
-								m_nextExtraCharacterId++;
+								m_lastExtraCharacterId++;
 
-								if (m_nextExtraCharacterId >= _countof(g_characters)) {
-									m_nextExtraCharacterId = 0;
+								if (m_lastExtraCharacterId >= _countof(g_characters)) {
+									m_lastExtraCharacterId = 0;
 								}
 
-								MxU32 characterIdStart = m_nextExtraCharacterId;
+								MxU32 characterIdStart = m_lastExtraCharacterId;
 
 								MxBool active;
 								if (bool1) {
@@ -1670,20 +1670,20 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 								}
 
 							nextCharacter:
-								if (g_characters[m_nextExtraCharacterId].m_unk0x09 &&
-									g_characters[m_nextExtraCharacterId].m_unk0x08 &&
-									!g_characters[m_nextExtraCharacterId].m_unk0x04 &&
-									g_characters[m_nextExtraCharacterId].m_active == active) {
+								if (g_characters[m_lastExtraCharacterId].m_unk0x09 &&
+									g_characters[m_lastExtraCharacterId].m_unk0x08 &&
+									!g_characters[m_lastExtraCharacterId].m_unk0x04 &&
+									g_characters[m_lastExtraCharacterId].m_active == active) {
 
-									if (!CharacterManager()->FUN_10083b20(g_characters[m_nextExtraCharacterId].m_name
+									if (!CharacterManager()->FUN_10083b20(g_characters[m_lastExtraCharacterId].m_name
 										)) {
 										m_extras[i].m_roi = CharacterManager()->GetROI(
-											g_characters[m_nextExtraCharacterId].m_name,
+											g_characters[m_lastExtraCharacterId].m_name,
 											TRUE
 										);
 
 										LegoExtraActor* actor =
-											CharacterManager()->GetActor(g_characters[m_nextExtraCharacterId].m_name);
+											CharacterManager()->GetActor(g_characters[m_lastExtraCharacterId].m_name);
 
 										switch (g_unk0x100f7504++ % 4) {
 										case 0:
@@ -1710,17 +1710,17 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 												boundary->m_destScale
 											) == SUCCESS) {
 
-											MxS32 vehicleId = g_characters[m_nextExtraCharacterId].m_vehicleId;
+											MxS32 vehicleId = g_characters[m_lastExtraCharacterId].m_vehicleId;
 											if (vehicleId >= 0) {
 												g_vehicles[vehicleId].m_unk0x04 =
-													rand() % 100 < g_characters[m_nextExtraCharacterId].m_unk0x15;
+													rand() % 100 < g_characters[m_lastExtraCharacterId].m_unk0x15;
 											}
 
 											if (FUN_10063b90(
 													world,
 													actor,
 													CharacterManager()->FUN_10085180(m_extras[i].m_roi),
-													m_nextExtraCharacterId
+													m_lastExtraCharacterId
 												)) {
 												m_extras[i].m_unk0x14 = TRUE;
 												g_vehicles[vehicleId].m_unk0x05 = TRUE;
@@ -1739,8 +1739,8 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 
 											actor->SetWorldSpeed(speed);
 
-											m_extras[i].m_characterId = m_nextExtraCharacterId;
-											g_characters[m_nextExtraCharacterId].m_unk0x04 = TRUE;
+											m_extras[i].m_characterId = m_lastExtraCharacterId;
+											g_characters[m_lastExtraCharacterId].m_unk0x04 = TRUE;
 											m_extras[i].m_unk0x08 = Timer()->GetTime();
 											m_extras[i].m_unk0x10 = -1;
 											m_extras[i].m_unk0x0d = FALSE;
@@ -1755,13 +1755,13 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 									}
 								}
 
-								m_nextExtraCharacterId++;
+								m_lastExtraCharacterId++;
 
-								if (m_nextExtraCharacterId >= _countof(g_characters)) {
-									m_nextExtraCharacterId = 0;
+								if (m_lastExtraCharacterId >= _countof(g_characters)) {
+									m_lastExtraCharacterId = 0;
 								}
 
-								if (m_nextExtraCharacterId == characterIdStart) {
+								if (m_lastExtraCharacterId == characterIdStart) {
 									return;
 								}
 
