@@ -476,6 +476,17 @@ MxResult LegoNavController::UpdateCameraLocation(MxU32 p_location)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x10055720
+// FUNCTION: BETA10 0x1009c259
+LegoCameraLocation* LegoNavController::GetCameraLocation(MxU32 p_location)
+{
+	if (p_location < _countof(g_cameraLocations)) {
+		return &g_cameraLocations[p_location];
+	}
+
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x10055750
 MxResult LegoNavController::ProcessJoystickInput(MxBool& p_und)
 {
