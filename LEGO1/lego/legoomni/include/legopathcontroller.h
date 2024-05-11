@@ -9,7 +9,7 @@
 #include "mxstl/stlcompat.h"
 
 class LegoAnimPresenter;
-class LegoPathStruct;
+struct LegoPathStruct;
 class LegoWorld;
 class MxAtomId;
 class Vector3;
@@ -75,8 +75,9 @@ private:
 	MxResult Read(LegoStorage* p_storage);
 	MxResult ReadStructs(LegoStorage* p_storage);
 	MxResult ReadEdges(LegoStorage* p_storage);
-	MxResult FUN_10047e90(LegoStorage* p_storage);
-	static MxResult ReadVector(LegoStorage* p_storage, Mx3DPointFloat&);
+	MxResult ReadBoundaries(LegoStorage* p_storage);
+	static MxResult ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec);
+	static MxResult ReadVector(LegoStorage* p_storage, Mx4DPointFloat& p_vec);
 
 	LegoPathBoundary* m_unk0x08; // 0x08
 	LegoPathCtrlEdge* m_unk0x0c; // 0x0c
