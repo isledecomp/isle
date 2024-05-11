@@ -160,7 +160,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 
 	if (m_numN > 0) {
 		for (MxS32 i = 0; i < m_numN; i++) {
-			if (FUN_100482b0(p_storage, m_unk0x10[i]) != SUCCESS) {
+			if (ReadVector(p_storage, m_unk0x10[i]) != SUCCESS) {
 				return FAILURE;
 			}
 		}
@@ -266,7 +266,7 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 			edge.m_cwB = &m_unk0x0c[s];
 		}
 
-		if (FUN_100482b0(p_storage, edge.m_unk0x28) != SUCCESS) {
+		if (ReadVector(p_storage, edge.m_unk0x28) != SUCCESS) {
 			return FAILURE;
 		}
 
@@ -288,7 +288,7 @@ MxResult LegoPathController::FUN_10047e90(LegoStorage* p_storage)
 
 // FUNCTION: LEGO1 0x100482b0
 // FUNCTION: BETA10 0x100b8864
-MxResult LegoPathController::FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat& p_vec)
+MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec)
 {
 	if (p_storage->Read(p_vec.GetData(), sizeof(float) * 3) != SUCCESS) {
 		return FAILURE;

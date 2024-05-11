@@ -76,7 +76,7 @@ private:
 	MxResult ReadStructs(LegoStorage* p_storage);
 	MxResult ReadEdges(LegoStorage* p_storage);
 	MxResult FUN_10047e90(LegoStorage* p_storage);
-	static MxResult FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat&);
+	static MxResult ReadVector(LegoStorage* p_storage, Mx3DPointFloat&);
 
 	LegoPathBoundary* m_unk0x08; // 0x08
 	LegoPathCtrlEdge* m_unk0x0c; // 0x0c
