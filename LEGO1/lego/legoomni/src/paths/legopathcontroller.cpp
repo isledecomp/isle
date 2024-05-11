@@ -1,18 +1,21 @@
 #include "legopathcontroller.h"
 
+#include "legopathstruct.h"
+#include "misc/legostorage.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
+DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)
 
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
 LegoPathController::LegoPathController()
 {
 	m_unk0x08 = NULL;
-	m_unk0x0c = 0;
-	m_unk0x10 = 0;
-	m_unk0x14 = 0;
+	m_unk0x0c = NULL;
+	m_unk0x10 = NULL;
+	m_unk0x14 = NULL;
 	m_numL = 0;
 	m_numE = 0;
 	m_numN = 0;
@@ -20,7 +23,7 @@ LegoPathController::LegoPathController()
 }
 
 // STUB: LEGO1 0x10045880
-void LegoPathController::VTable0x14(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger)
+void LegoPathController::Create(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger)
 {
 	// TODO
 }
@@ -117,4 +120,95 @@ void LegoPathController::FUN_10046bb0(LegoWorld* p_world)
 void LegoPathController::Enable(MxBool p_enable)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10046e50
+// FUNCTION: BETA10 0x100b781f
+MxResult LegoPathController::Read(LegoStorage* p_storage)
+{
+	if (p_storage->Read(&m_numT, sizeof(m_numT)) != SUCCESS) {
+		return FAILURE;
+	}
+	if (m_numT > 0) {
+		m_unk0x14 = new LegoPathStruct[m_numT];
+	}
+
+	if (p_storage->Read(&m_numN, sizeof(m_numN)) != SUCCESS) {
+		return FAILURE;
+	}
+	if (m_numN > 0) {
+		m_unk0x10 = new Mx3DPointFloat[m_numN];
+	}
+
+	if (p_storage->Read(&m_numE, sizeof(m_numE)) != SUCCESS) {
+		return FAILURE;
+	}
+	if (m_numE > 0) {
+		m_unk0x0c = new LegoPathCtrlEdge[m_numE];
+	}
+
+	if (p_storage->Read(&m_numL, sizeof(m_numL)) != SUCCESS) {
+		return FAILURE;
+	}
+	if (m_numL > 0) {
+		m_unk0x08 = new LegoPathBoundary[m_numL];
+	}
+
+	if (m_numT > 0 && FUN_10047b30(p_storage) != SUCCESS) {
+		return FAILURE;
+	}
+
+	if (m_numN > 0) {
+		for (MxS32 i = 0; i < m_numN; i++) {
+			if (FUN_100482b0(p_storage, m_unk0x10[i]) != SUCCESS) {
+				return FAILURE;
+			}
+		}
+	}
+
+	if (m_numE > 0 && FUN_10047c10(p_storage) != SUCCESS) {
+		return FAILURE;
+	}
+
+	if (m_numL > 0 && FUN_10047e90(p_storage) != SUCCESS) {
+		return FAILURE;
+	}
+
+	for (MxS32 j = 0; j < m_numE; j++) {
+		m_pfsE.insert(&m_unk0x0c[j]);
+	}
+
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10047b30
+// FUNCTION: BETA10 0x100b7cd6
+MxResult LegoPathController::FUN_10047b30(LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10047c10
+// FUNCTION: BETA10 0x1100b7df3
+MxResult LegoPathController::FUN_10047c10(LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10047e90
+// FUNCTION: BETA10 0x100b8293
+MxResult LegoPathController::FUN_10047e90(LegoStorage* p_storage)
+{
+	// TODO
+	return SUCCESS;
+}
+
+// STUB: LEGO1 0x100482b0
+// FUNCTION: BETA10 0x100b8864
+MxResult LegoPathController::FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat&)
+{
+	// TODO
+	return SUCCESS;
 }

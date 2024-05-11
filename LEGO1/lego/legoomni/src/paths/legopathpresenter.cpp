@@ -70,9 +70,9 @@ void LegoPathPresenter::Destroy()
 // FUNCTION: LEGO1 0x10044c20
 void LegoPathPresenter::ReadyTickle()
 {
-	LegoWorld* currentWorld = CurrentWorld();
+	LegoWorld* world = CurrentWorld();
 
-	if (currentWorld) {
+	if (world) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
 
 		if (chunk) {
@@ -84,8 +84,8 @@ void LegoPathPresenter::ReadyTickle()
 			else {
 				ParseExtra();
 
-				controller->VTable0x14(chunk->GetData(), m_action->GetLocation(), m_trigger);
-				currentWorld->AddPath(controller);
+				controller->Create(chunk->GetData(), m_action->GetLocation(), m_trigger);
+				world->AddPath(controller);
 
 				m_subscriber->FreeDataChunk(chunk);
 				ProgressTickleState(MxPresenter::e_starting);
