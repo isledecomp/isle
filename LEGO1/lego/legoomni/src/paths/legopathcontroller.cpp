@@ -154,7 +154,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		m_unk0x08 = new LegoPathBoundary[m_numL];
 	}
 
-	if (m_numT > 0 && ReadStruct(p_storage) != SUCCESS) {
+	if (m_numT > 0 && ReadStructs(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
@@ -166,7 +166,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if (m_numE > 0 && ReadEdge(p_storage) != SUCCESS) {
+	if (m_numE > 0 && ReadEdges(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
@@ -183,7 +183,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 
 // FUNCTION: LEGO1 0x10047b30
 // FUNCTION: BETA10 0x100b7cd6
-MxResult LegoPathController::ReadStruct(LegoStorage* p_storage)
+MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numT; i++) {
 		MxU8 length = 0;
@@ -212,7 +212,7 @@ MxResult LegoPathController::ReadStruct(LegoStorage* p_storage)
 
 // FUNCTION: LEGO1 0x10047c10
 // FUNCTION: BETA10 0x100b7df3
-MxResult LegoPathController::ReadEdge(LegoStorage* p_storage)
+MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numE; i++) {
 		LegoPathCtrlEdge& edge = m_unk0x0c[i];

@@ -73,8 +73,8 @@ public:
 
 private:
 	MxResult Read(LegoStorage* p_storage);
-	MxResult ReadStruct(LegoStorage* p_storage);
-	MxResult ReadEdge(LegoStorage* p_storage);
+	MxResult ReadStructs(LegoStorage* p_storage);
+	MxResult ReadEdges(LegoStorage* p_storage);
 	MxResult FUN_10047e90(LegoStorage* p_storage);
 	static MxResult FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat&);
 
