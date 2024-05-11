@@ -17,7 +17,7 @@ public:
 	virtual ~LegoPathStructBase()
 	{
 		if (m_name != NULL) {
-			delete m_name;
+			delete[] m_name;
 		}
 	}
 
