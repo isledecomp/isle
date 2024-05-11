@@ -484,7 +484,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 
 		m_world->PlaceActor(
 			this,
-			g_spawnLocations[i].m_path,
+			g_spawnLocations[i].m_name,
 			g_spawnLocations[i].m_src,
 			g_spawnLocations[i].m_srcScale,
 			g_spawnLocations[i].m_dest,

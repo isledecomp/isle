@@ -152,7 +152,7 @@ LegoAnimationManager::~LegoAnimationManager()
 
 			if (actor != NULL && actor->GetController() != NULL && CurrentWorld() != NULL) {
 				CurrentWorld()->FUN_1001fc80((IslePathActor*) actor);
-				actor->ClearController();
+				actor->SetController(NULL);
 			}
 
 			CharacterManager()->FUN_10083db0(roi);
@@ -238,7 +238,7 @@ void LegoAnimationManager::Suspend()
 
 				if (actor != NULL && actor->GetController() != NULL) {
 					actor->GetController()->FUN_10046770(actor);
-					actor->ClearController();
+					actor->SetController(NULL);
 				}
 
 				CharacterManager()->FUN_10083db0(roi);
@@ -863,7 +863,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 
 			if (controller) {
 				controller->FUN_10046770(actor);
-				actor->ClearController();
+				actor->SetController(NULL);
 
 				for (MxS32 i = 0; i < (MxS32) _countof(m_extras); i++) {
 					if (m_extras[i].m_roi == roi) {
@@ -1192,7 +1192,7 @@ MxResult LegoAnimationManager::Tickle()
 
 				if (actor != NULL && actor->GetController() != NULL) {
 					actor->GetController()->FUN_10046770(actor);
-					actor->ClearController();
+					actor->SetController(NULL);
 				}
 
 				CharacterManager()->FUN_10083db0(roi);
@@ -1452,7 +1452,7 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 
 				if (controller) {
 					controller->FUN_10046770(actor);
-					actor->ClearController();
+					actor->SetController(NULL);
 
 					for (MxS32 i = 0; i < (MxS32) _countof(m_extras); i++) {
 						if (m_extras[i].m_roi == actor->GetROI()) {
@@ -1561,7 +1561,7 @@ void LegoAnimationManager::PurgeExtra(MxBool p_und)
 					LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 					if (actor != NULL && actor->GetController() != NULL) {
 						actor->GetController()->FUN_10046770(actor);
-						actor->ClearController();
+						actor->SetController(NULL);
 					}
 
 					CharacterManager()->FUN_10083db0(roi);

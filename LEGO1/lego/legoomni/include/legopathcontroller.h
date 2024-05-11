@@ -2,12 +2,12 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
+#include "legopathactor.h"
+#include "legopathboundary.h"
 #include "mxcore.h"
 #include "mxstl/stlcompat.h"
 
 class LegoAnimPresenter;
-class LegoPathActor;
-class LegoPathBoundary;
 class LegoWorld;
 class MxAtomId;
 class Vector3;
@@ -61,16 +61,30 @@ public:
 	void FUN_10046bb0(LegoWorld* p_world);
 
 private:
-	LegoPathBoundary* m_unk0x08;                                         // 0x08
-	undefined4 m_unk0x0c;                                                // 0x0c
-	undefined4 m_unk0x10;                                                // 0x10
-	undefined4 m_unk0x14;                                                // 0x14
-	MxU16 m_numL;                                                        // 0x18
-	MxU16 m_numE;                                                        // 0x1a
-	MxU16 m_numN;                                                        // 0x1c
-	MxU16 m_numT;                                                        // 0x1e
-	map<undefined*, undefined*, LegoPathControllerComparator> m_pfsE;    // 0x20
-	map<undefined*, undefined*, LegoPathControllerComparator> m_unk0x30; // 0x30
+	LegoPathBoundary* m_unk0x08;                          // 0x08
+	undefined4 m_unk0x0c;                                 // 0x0c
+	undefined4 m_unk0x10;                                 // 0x10
+	undefined4 m_unk0x14;                                 // 0x14
+	MxU16 m_numL;                                         // 0x18
+	MxU16 m_numE;                                         // 0x1a
+	MxU16 m_numN;                                         // 0x1c
+	MxU16 m_numT;                                         // 0x1e
+	set<undefined*, LegoPathControllerComparator> m_pfsE; // 0x20
+	LegoPathActorSet m_actors;                            // 0x30
 };
+
+// clang-format off
+// TEMPLATE: LEGO1 0x100451a0
+// _Tree<unsigned char *,unsigned char *,set<unsigned char *,LegoPathControllerComparator,allocator<unsigned char *> >::_Kfn,LegoPathControllerComparator,allocator<unsigned char *> >::~_Tree<unsigned char *,unsigned char *,set<unsigned char *,LegoPathControl
+
+// TEMPLATE: LEGO1 0x100457e0
+// Set<unsigned char *,LegoPathControllerComparator>::~Set<unsigned char *,LegoPathControllerComparator>
+
+// TEMPLATE: LEGO1 0x10045830
+// set<unsigned char *,LegoPathControllerComparator,allocator<unsigned char *> >::~set<unsigned char *,LegoPathControllerComparator,allocator<unsigned char *> >
+
+// GLOBAL: LEGO1 0x100f4360
+// _Tree<unsigned char *,unsigned char *,set<unsigned char *,LegoPathControllerComparator,allocator<unsigned char *> >::_Kfn,LegoPathControllerComparator,allocator<unsigned char *> >::_Nil
+// clang-format on
 
 #endif // LEGOPATHCONTROLLER_H

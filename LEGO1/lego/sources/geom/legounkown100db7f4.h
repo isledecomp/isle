@@ -10,6 +10,7 @@
 class LegoUnknown100db7f4 : public LegoEdge {
 public:
 	// FUNCTION: LEGO1 0x1002ddc0
+	// FUNCTION: BETA10 0x100372a0
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_f, Vector3& p_point)
 	{
 		if (p_f.IsEqual(*m_faceA)) {

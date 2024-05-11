@@ -80,6 +80,7 @@ MxResult LegoPathActor::VTable0x80(Vector3& p_point1, Vector3& p_point2, Vector3
 }
 
 // FUNCTION: LEGO1 0x1002d9c0
+// FUNCTION: BETA10 0x100ae9da
 MxResult LegoPathActor::VTable0x88(
 	LegoPathBoundary* p_boundary,
 	float p_time,
