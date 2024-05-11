@@ -286,10 +286,13 @@ MxResult LegoPathController::FUN_10047e90(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x100482b0
+// FUNCTION: LEGO1 0x100482b0
 // FUNCTION: BETA10 0x100b8864
-MxResult LegoPathController::FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat&)
+MxResult LegoPathController::FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat& p_vec)
 {
-	// TODO
+	if (p_storage->Read(p_vec.GetData(), sizeof(float) * 3) != SUCCESS) {
+		return FAILURE;
+	}
+
 	return SUCCESS;
 }
