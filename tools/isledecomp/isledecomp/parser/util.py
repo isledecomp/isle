@@ -69,32 +69,39 @@ def is_blank_or_comment(line: str) -> bool:
     )
 
 
-template_class_decl_regex = re.compile(
-    r"\s*(?:\/\/)?\s*(?:class|struct) (\w+)<([\w]+)\s*(\*+)?\s*>"
+template_regex = re.compile(r"<(?P<type>[\w]+)\s*(?P<asterisks>\*+)?\s*>")
+
+
+class_decl_regex = re.compile(
+    r"\s*(?:\/\/)?\s*(?:class|struct) ((?:\w+(?:<.+>)?(?:::)?)+)"
 )
 
 
-class_decl_regex = re.compile(r"\s*(?:\/\/)?\s*(?:class|struct) (\w+)")
+def template_replace(match: re.Match) -> str:
+    (type_name, asterisks) = match.groups()
+    if asterisks is None:
+        return f"<{type_name}>"
+
+    return f"<{type_name} {asterisks}>"
+
+
+def fix_template_type(class_name: str) -> str:
+    """For template classes, we should reformat the class name so it matches
+    the output from cvdump: one space between the template type and any asterisks
+    if it is a pointer type."""
+    if "<" not in class_name:
+        return class_name
+
+    return template_regex.sub(template_replace, class_name)
 
 
 def get_class_name(line: str) -> Optional[str]:
     """For VTABLE markers, extract the class name from the code line or comment
     where it appears."""
 
-    match = template_class_decl_regex.match(line)
-    if match is not None:
-        # For template classes, we should reformat the class name so it matches
-        # the output from cvdump: one space between the template type and any asterisks
-        # if it is a pointer type.
-        (class_name, template_type, asterisks) = match.groups()
-        if asterisks is not None:
-            return f"{class_name}<{template_type} {asterisks}>"
-
-        return f"{class_name}<{template_type}>"
-
     match = class_decl_regex.match(line)
     if match is not None:
-        return match.group(1)
+        return fix_template_type(match.group(1))
 
     return None
 
