@@ -5,10 +5,29 @@
 #include "legoweedge.h"
 #include "mxgeometry/mxgeometry3d.h"
 
+struct LegoPathStruct;
+
+// might be a struct with public members
 // VTABLE: LEGO1 0x100db7f8
 // SIZE 0x54
 class LegoWEGEdge : public LegoWEEdge {
 public:
+	// SIZE 0x0c
+	struct Path {
+		// FUNCTION: LEGO1 0x10048280
+		// FUNCTION: BETA10 0x100bd450
+		Path()
+		{
+			m_unk0x00 = NULL;
+			m_unk0x04 = 0;
+			m_unk0x08 = 0;
+		}
+
+		LegoPathStruct* m_unk0x00; // 0x00
+		undefined4 m_unk0x04;      // 0x04
+		undefined4 m_unk0x08;      // 0x08
+	};
+
 	LegoWEGEdge();
 	~LegoWEGEdge() override;
 
@@ -22,6 +41,8 @@ public:
 	// SYNTHETIC: LEGO1 0x1009a7e0
 	// LegoWEGEdge::`scalar deleting destructor'
 
+	friend class LegoPathController;
+
 private:
 	LegoU8 m_unk0x0c;              // 0x0c
 	LegoU8 m_unk0x0d;              // 0x0d
@@ -31,8 +52,8 @@ private:
 	Mx3DPointFloat m_unk0x30;      // 0x30
 	LegoU32 m_unk0x44;             // 0x44
 	LegoU8 m_unk0x48;              // 0x48
-	undefined* m_unk0x4c;          // 0x4c
-	undefined* m_unk0x50;          // 0x50
+	Path* m_unk0x4c;               // 0x4c
+	Mx3DPointFloat* m_unk0x50;     // 0x50
 };
 
 #endif // __LEGOWEGEDGE_H

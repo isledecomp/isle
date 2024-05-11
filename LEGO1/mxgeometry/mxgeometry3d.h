@@ -46,7 +46,9 @@ private:
 // SIZE 0x18
 class Mx4DPointFloat : public Vector4 {
 public:
+	// FUNCTION: LEGO1 0x10048290
 	inline Mx4DPointFloat() : Vector4(m_elements) {}
+
 	inline Mx4DPointFloat(float p_x, float p_y, float p_z, float p_a) : Vector4(m_elements)
 	{
 		m_elements[0] = p_x;

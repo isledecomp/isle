@@ -5,11 +5,9 @@
 #include "mxatom.h"
 #include "mxtypes.h"
 
-class LegoPathController;
-
 // VTABLE: LEGO1 0x100d7d9c
 // SIZE 0x0c
-class LegoPathStructBase {
+struct LegoPathStructBase {
 public:
 	LegoPathStructBase() : m_name(NULL), m_unk0x08(0) {}
 
@@ -21,16 +19,13 @@ public:
 		}
 	}
 
-	friend class LegoPathController;
-
-private:
 	char* m_name;         // 0x04
 	undefined4 m_unk0x08; // 0x08
 };
 
 // VTABLE: LEGO1 0x100d7da0
 // SIZE 0x14
-class LegoPathStruct : public LegoPathStructBase {
+struct LegoPathStruct : public LegoPathStructBase {
 public:
 	// FUNCTION: LEGO1 0x100473a0
 	LegoPathStruct() : m_unk0x0c(0) {}
@@ -40,7 +35,6 @@ public:
 
 	void VTable0x04(undefined4, undefined4, undefined4); // vtable+0x04
 
-private:
 	undefined4 m_unk0x0c; // 0x0c
 	MxAtomId m_atomId;    // 0x10
 };
