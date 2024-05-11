@@ -216,7 +216,7 @@ MxResult LegoPathController::ReadEdge(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numE; i++) {
 		LegoPathCtrlEdge& edge = m_unk0x0c[i];
-		MxS16 s;
+		MxU16 s;
 
 		if (p_storage->Read(&edge.m_flags, sizeof(edge.m_flags)) != SUCCESS) {
 			return FAILURE;
@@ -225,45 +225,45 @@ MxResult LegoPathController::ReadEdge(LegoStorage* p_storage)
 		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointA = &m_unk0x10[s & USHRT_MAX];
+		edge.m_pointA = &m_unk0x10[s];
 
 		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 			return FAILURE;
 		}
-		edge.m_pointB = &m_unk0x10[s & USHRT_MAX];
+		edge.m_pointB = &m_unk0x10[s];
 
 		if (edge.m_flags & LegoUnknown100db7f4::c_bit3) {
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_faceA = &m_unk0x08[s & USHRT_MAX];
+			edge.m_faceA = &m_unk0x08[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_ccwA = &m_unk0x0c[s & USHRT_MAX];
+			edge.m_ccwA = &m_unk0x0c[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_cwA = &m_unk0x0c[s & USHRT_MAX];
+			edge.m_cwA = &m_unk0x0c[s];
 		}
 
 		if (edge.m_flags & LegoUnknown100db7f4::c_bit4) {
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_faceB = &m_unk0x08[s & USHRT_MAX];
+			edge.m_faceB = &m_unk0x08[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_ccwB = &m_unk0x0c[s & USHRT_MAX];
+			edge.m_ccwB = &m_unk0x0c[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_cwB = &m_unk0x0c[s & USHRT_MAX];
+			edge.m_cwB = &m_unk0x0c[s];
 		}
 
 		if (FUN_100482b0(p_storage, edge.m_unk0x28) != SUCCESS) {
