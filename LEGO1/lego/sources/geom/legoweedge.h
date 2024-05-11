@@ -15,6 +15,7 @@ public:
 	virtual LegoResult VTable0x04(); // vtable+0x04
 
 	inline LegoU8 GetNumEdges() { return m_numEdges; }
+	inline LegoEdge** GetEdges() { return m_edges; }
 	inline LegoU32 IsEqual(LegoWEEdge& p_other) { return this == &p_other; }
 
 	// SYNTHETIC: LEGO1 0x1009a570

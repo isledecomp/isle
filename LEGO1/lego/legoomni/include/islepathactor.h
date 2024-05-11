@@ -33,7 +33,7 @@ public:
 			LegoGameState::Area p_area,
 			MxAtomId* p_script,
 			MxS32 p_entityId,
-			const char* p_path,
+			const char* p_name,
 			MxS16 p_src,
 			float p_srcScale,
 			MxS16 p_dest,
@@ -45,7 +45,7 @@ public:
 			m_area = p_area;
 			m_script = p_script;
 			m_entityId = p_entityId;
-			strcpy(m_path, p_path);
+			strcpy(m_name, p_name);
 			m_src = p_src;
 			m_srcScale = p_srcScale;
 			m_dest = p_dest;
@@ -60,7 +60,7 @@ public:
 			m_area = p_location.m_area;
 			m_script = p_location.m_script;
 			m_entityId = p_location.m_entityId;
-			strcpy(m_path, p_location.m_path);
+			strcpy(m_name, p_location.m_name);
 			m_src = p_location.m_src;
 			m_srcScale = p_location.m_srcScale;
 			m_dest = p_location.m_dest;
@@ -73,7 +73,7 @@ public:
 		LegoGameState::Area m_area;    // 0x00
 		MxAtomId* m_script;            // 0x04
 		MxS32 m_entityId;              // 0x08
-		char m_path[20];               // 0x0c
+		char m_name[20];               // 0x0c
 		MxS16 m_src;                   // 0x20
 		float m_srcScale;              // 0x24
 		MxS16 m_dest;                  // 0x28

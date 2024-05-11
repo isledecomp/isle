@@ -119,7 +119,7 @@ public:
 
 	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 	inline void SetState(MxU32 p_state) { m_state = p_state; }
-	inline void ClearController() { m_controller = NULL; }
+	inline void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'
