@@ -16,10 +16,6 @@ struct LegoPathControllerComparator {
 	MxBool operator()(const undefined*, const undefined*) const { return 0; }
 };
 
-struct LegoPathActorComparator {
-	MxBool operator()(const LegoPathActor* p_a, const LegoPathActor* p_b) const { return p_a < p_b; }
-};
-
 // VTABLE: LEGO1 0x100d7d60
 // SIZE 0x40
 class LegoPathController : public MxCore {
