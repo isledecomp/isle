@@ -8,6 +8,13 @@ DECOMP_SIZE_ASSERT(LegoPathBoundary, 0x74)
 // STUB: LEGO1 0x10056a70
 LegoPathBoundary::LegoPathBoundary()
 {
+	// TODO
+}
+
+// STUB: LEGO1 0x10057260
+LegoPathBoundary::~LegoPathBoundary()
+{
+	// TODO
 }
 
 // FUNCTION: LEGO1 0x100573f0

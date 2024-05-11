@@ -376,6 +376,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
+  LEGO1/lego/legoomni/src/paths/legopathstruct.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
   LEGO1/lego/legoomni/src/police/policeentity.cpp

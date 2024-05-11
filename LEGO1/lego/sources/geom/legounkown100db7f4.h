@@ -9,6 +9,8 @@
 // SIZE 0x40
 class LegoUnknown100db7f4 : public LegoEdge {
 public:
+	LegoUnknown100db7f4();
+
 	// FUNCTION: LEGO1 0x1002ddc0
 	// FUNCTION: BETA10 0x100372a0
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_f, Vector3& p_point)
@@ -24,6 +26,9 @@ public:
 
 		return SUCCESS;
 	}
+
+	// SYNTHETIC: LEGO1 0x1009a6c0
+	// LegoUnknown100db7f4::`scalar deleting destructor'
 
 private:
 	LegoU16 m_unk0x24;        // 0x24

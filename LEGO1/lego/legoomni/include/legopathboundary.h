@@ -26,6 +26,7 @@ typedef set<LegoAnimPresenter*, LegoAnimPresenterSetCompare> LegoAnimPresenterSe
 class LegoPathBoundary : public LegoWEGEdge {
 public:
 	LegoPathBoundary();
+	~LegoPathBoundary() override;
 
 	MxResult AddActor(LegoPathActor* p_actor);
 	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
@@ -35,7 +36,7 @@ public:
 	inline LegoAnimPresenterSet* GetPresenters() { return &m_presenters; }
 
 	// SYNTHETIC: LEGO1 0x10047a80
-	// LegoPathBoundary::`scalar deleting destructor'
+	// LegoPathBoundary::`vector deleting destructor'
 
 private:
 	LegoPathActorSet m_actors;         // 0x54
