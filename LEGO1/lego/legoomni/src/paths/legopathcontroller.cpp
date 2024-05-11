@@ -26,6 +26,9 @@ LegoPathController::LegoPathController()
 void LegoPathController::Create(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger)
 {
 	// TODO
+
+	LegoMemory storage(p_data);
+	Read(&storage);
 }
 
 // STUB: LEGO1 0x10045b20
