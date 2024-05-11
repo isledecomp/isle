@@ -19,3 +19,4 @@ LEGO1.DLL
 LEGO1PROGRESS.*
 ISLEPROGRESS.*
 *.pyc
+*$py.class
