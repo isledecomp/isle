@@ -15,6 +15,7 @@ class Light;
 // LegoView
 
 // VTABLE: LEGO1 0x100dc000
+// VTABLE: BETA10 0x101c3578
 // SIZE 0x78
 class LegoView : public TglSurface {
 public:
@@ -49,12 +50,14 @@ inline Tgl::Camera* LegoView::GetCamera() const
 }
 
 // SYNTHETIC: LEGO1 0x100ab580
+// SYNTHETIC: BETA10 0x1017cb80
 // LegoView::`scalar deleting destructor'
 
 /////////////////////////////////////////////////////////////////////////////
 // LegoView1
 
 // VTABLE: LEGO1 0x100dc018
+// VTABLE: BETA10 0x101c3590
 // SIZE 0x88
 class LegoView1 : public LegoView {
 public:
@@ -78,6 +81,7 @@ private:
 };
 
 // SYNTHETIC: LEGO1 0x100ab7a0
+// SYNTHETIC: BETA10 0x1017cc00
 // LegoView1::`scalar deleting destructor'
 
 #endif /* _LegoView1_h */

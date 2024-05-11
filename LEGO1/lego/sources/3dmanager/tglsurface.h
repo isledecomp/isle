@@ -16,6 +16,7 @@ class Group;
 // TglSurface
 
 // VTABLE: LEGO1 0x100dc060
+// VTABLE: BETA10 0x101c3648
 // SIZE 0x70
 class TglSurface {
 public:
@@ -43,10 +44,15 @@ public:
 
 	Tgl::Renderer* GetRenderer() const { return m_pRenderer; }
 	Tgl::Device* GetDevice() const { return m_pDevice; }
+
+	// FUNCTION: BETA10 0x100d5570
 	Tgl::View* GetView() const { return m_pView; }
 	Tgl::Group* GetScene() const { return m_pScene; }
 
+	// FUNCTION: BETA10 0x1017cbc0
 	unsigned long GetWidth() const { return m_width; }
+
+	// FUNCTION: BETA10 0x1017cbe0
 	unsigned long GetHeight() const { return m_height; }
 
 	double GetRenderingRate() const { return m_renderingRateMeter.Frequency(); }
@@ -85,6 +91,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 
 // SYNTHETIC: LEGO1 0x100abcf0
+// SYNTHETIC: BETA10 0x1017de00
 // TglSurface::`scalar deleting destructor'
 
 #endif /* _TglSurface_h */
