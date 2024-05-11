@@ -245,11 +245,17 @@ done:
 	return NULL;
 }
 
-// STUB: LEGO1 0x10083b20
+// FUNCTION: LEGO1 0x10083b20
 // FUNCTION: BETA10 0x10074608
-MxBool LegoCharacterManager::FUN_10083b20(const char* p_name)
+MxBool LegoCharacterManager::FUN_10083b20(const char* p_key)
 {
-	// TODO
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_key));
+
+	if (it != m_characters->end()) {
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
@@ -744,11 +750,16 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 	return 0;
 }
 
-// STUB: LEGO1 0x10085180
+// FUNCTION: LEGO1 0x10085180
 // FUNCTION: BETA10 0x100768c5
 MxU8 LegoCharacterManager::FUN_10085180(LegoROI* p_roi)
 {
-	// TODO
+	LegoCharacterInfo* info = GetInfo(p_roi);
+
+	if (info != NULL) {
+		return info->m_unk0x14;
+	}
+
 	return 0;
 }
 

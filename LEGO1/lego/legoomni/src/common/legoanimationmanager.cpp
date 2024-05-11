@@ -1669,7 +1669,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 									active = rand() % 100 < 50;
 								}
 
-							nextCharacter:
+							tryNextCharacter:
 								if (g_characters[m_lastExtraCharacterId].m_unk0x09 &&
 									g_characters[m_lastExtraCharacterId].m_unk0x08 &&
 									!g_characters[m_lastExtraCharacterId].m_unk0x04 &&
@@ -1708,7 +1708,6 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 												boundary->m_dest,
 												boundary->m_destScale
 											) == SUCCESS) {
-
 											MxS32 vehicleId = g_characters[m_lastExtraCharacterId].m_vehicleId;
 											if (vehicleId >= 0) {
 												g_vehicles[vehicleId].m_unk0x04 =
@@ -1764,7 +1763,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 									return;
 								}
 
-								goto nextCharacter;
+								goto tryNextCharacter;
 							}
 						}
 					}
