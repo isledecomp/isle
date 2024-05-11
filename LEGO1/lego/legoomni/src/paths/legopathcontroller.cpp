@@ -6,6 +6,7 @@
 #include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
+DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)
 
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
