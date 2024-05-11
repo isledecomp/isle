@@ -154,7 +154,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		m_unk0x08 = new LegoPathBoundary[m_numL];
 	}
 
-	if (m_numT > 0 && FUN_10047b30(p_storage) != SUCCESS) {
+	if (m_numT > 0 && ReadStruct(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
@@ -166,7 +166,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		}
 	}
 
-	if (m_numE > 0 && FUN_10047c10(p_storage) != SUCCESS) {
+	if (m_numE > 0 && ReadEdge(p_storage) != SUCCESS) {
 		return FAILURE;
 	}
 
@@ -183,7 +183,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 
 // FUNCTION: LEGO1 0x10047b30
 // FUNCTION: BETA10 0x100b7cd6
-MxResult LegoPathController::FUN_10047b30(LegoStorage* p_storage)
+MxResult LegoPathController::ReadStruct(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numT; i++) {
 		MxU8 length = 0;
@@ -210,11 +210,71 @@ MxResult LegoPathController::FUN_10047b30(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10047c10
+// FUNCTION: LEGO1 0x10047c10
 // FUNCTION: BETA10 0x100b7df3
-MxResult LegoPathController::FUN_10047c10(LegoStorage* p_storage)
+MxResult LegoPathController::ReadEdge(LegoStorage* p_storage)
 {
-	// TODO
+	for (MxS32 i = 0; i < m_numE; i++) {
+		LegoPathCtrlEdge& edge = m_unk0x0c[i];
+		MxS16 s;
+
+		if (p_storage->Read(&edge.m_flags, sizeof(edge.m_flags)) != SUCCESS) {
+			return FAILURE;
+		}
+
+		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+			return FAILURE;
+		}
+		edge.m_pointA = &m_unk0x10[s & USHRT_MAX];
+
+		if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+			return FAILURE;
+		}
+		edge.m_pointB = &m_unk0x10[s & USHRT_MAX];
+
+		if (edge.m_flags & LegoUnknown100db7f4::c_bit3) {
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_faceA = &m_unk0x08[s & USHRT_MAX];
+
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_ccwA = &m_unk0x0c[s & USHRT_MAX];
+
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_cwA = &m_unk0x0c[s & USHRT_MAX];
+		}
+
+		if (edge.m_flags & LegoUnknown100db7f4::c_bit4) {
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_faceB = &m_unk0x08[s & USHRT_MAX];
+
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_ccwB = &m_unk0x0c[s & USHRT_MAX];
+
+			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
+				return FAILURE;
+			}
+			edge.m_cwB = &m_unk0x0c[s & USHRT_MAX];
+		}
+
+		if (FUN_100482b0(p_storage, edge.m_unk0x28) != SUCCESS) {
+			return FAILURE;
+		}
+
+		if (p_storage->Read(&edge.m_unk0x3c, sizeof(edge.m_unk0x3c)) != SUCCESS) {
+			return FAILURE;
+		}
+	}
+
 	return SUCCESS;
 }
 

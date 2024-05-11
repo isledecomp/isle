@@ -9,7 +9,7 @@
 struct LegoEdge;
 class LegoPathBoundary;
 class LegoPathController;
-class LegoUnknown100db7f4;
+struct LegoUnknown100db7f4;
 
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154

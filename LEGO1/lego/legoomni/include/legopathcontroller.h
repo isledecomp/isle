@@ -16,7 +16,7 @@ class Vector3;
 
 // VTABLE: LEGO1 0x100d7da8
 // SIZE 0x40
-class LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
+struct LegoPathCtrlEdge : public LegoUnknown100db7f4 {};
 
 struct LegoPathCtrlEdgeCompare {
 	MxU32 operator()(const LegoPathCtrlEdge* p_lhs, const LegoPathCtrlEdge* p_rhs) const
@@ -73,8 +73,8 @@ public:
 
 private:
 	MxResult Read(LegoStorage* p_storage);
-	MxResult FUN_10047b30(LegoStorage* p_storage);
-	MxResult FUN_10047c10(LegoStorage* p_storage);
+	MxResult ReadStruct(LegoStorage* p_storage);
+	MxResult ReadEdge(LegoStorage* p_storage);
 	MxResult FUN_10047e90(LegoStorage* p_storage);
 	static MxResult FUN_100482b0(LegoStorage* p_storage, Mx3DPointFloat&);
 
