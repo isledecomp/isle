@@ -5,22 +5,26 @@
 #include "mxatom.h"
 #include "mxtypes.h"
 
+class LegoPathController;
+
 // VTABLE: LEGO1 0x100d7d9c
 // SIZE 0x0c
 class LegoPathStructBase {
 public:
-	LegoPathStructBase() : m_unk0x04(NULL), m_unk0x08(0) {}
+	LegoPathStructBase() : m_name(NULL), m_unk0x08(0) {}
 
 	// FUNCTION: LEGO1 0x10047420
 	virtual ~LegoPathStructBase()
 	{
-		if (m_unk0x04 != NULL) {
-			delete m_unk0x04;
+		if (m_name != NULL) {
+			delete m_name;
 		}
 	}
 
+	friend class LegoPathController;
+
 private:
-	undefined* m_unk0x04; // 0x04
+	char* m_name;         // 0x04
 	undefined4 m_unk0x08; // 0x08
 };
 

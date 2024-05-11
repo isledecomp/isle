@@ -181,16 +181,37 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10047b30
+// FUNCTION: LEGO1 0x10047b30
 // FUNCTION: BETA10 0x100b7cd6
 MxResult LegoPathController::FUN_10047b30(LegoStorage* p_storage)
 {
-	// TODO
+	for (MxS32 i = 0; i < m_numT; i++) {
+		MxU8 length = 0;
+
+		if (p_storage->Read(&length, sizeof(length)) != SUCCESS) {
+			return FAILURE;
+		}
+
+		if (length > 0) {
+			m_unk0x14[i].m_name = new char[length + 1];
+
+			if (p_storage->Read(m_unk0x14[i].m_name, length) != SUCCESS) {
+				return FAILURE;
+			}
+
+			m_unk0x14[i].m_name[length] = '\0';
+		}
+
+		if (p_storage->Read(&m_unk0x14[i].m_unk0x08, sizeof(m_unk0x14[i].m_unk0x08)) != SUCCESS) {
+			return FAILURE;
+		}
+	}
+
 	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10047c10
-// FUNCTION: BETA10 0x1100b7df3
+// FUNCTION: BETA10 0x100b7df3
 MxResult LegoPathController::FUN_10047c10(LegoStorage* p_storage)
 {
 	// TODO
