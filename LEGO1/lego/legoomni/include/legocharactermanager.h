@@ -59,7 +59,7 @@ public:
 	static MxBool Exists(const char* p_key);
 
 	void FUN_100832a0();
-	MxBool FUN_10083b20(const char* p_name);
+	MxBool FUN_10083b20(const char* p_key);
 	MxU32 GetRefCount(LegoROI* p_roi);
 	void FUN_10083c30(const char* p_name);
 	void FUN_10083db0(LegoROI* p_roi);
