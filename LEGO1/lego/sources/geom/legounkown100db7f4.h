@@ -7,8 +7,13 @@
 
 // VTABLE: LEGO1 0x100db7f4
 // SIZE 0x40
-class LegoUnknown100db7f4 : public LegoEdge {
+struct LegoUnknown100db7f4 : public LegoEdge {
 public:
+	enum {
+		c_bit3 = 0x04,
+		c_bit4 = 0x08
+	};
+
 	LegoUnknown100db7f4();
 
 	// FUNCTION: LEGO1 0x1002ddc0
@@ -30,8 +35,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1009a6c0
 	// LegoUnknown100db7f4::`scalar deleting destructor'
 
-private:
-	LegoU16 m_unk0x24;        // 0x24
+	LegoU16 m_flags;          // 0x24
 	Mx3DPointFloat m_unk0x28; // 0x28
 	LegoU32 m_unk0x3c;        // 0x3c
 };
