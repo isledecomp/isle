@@ -35,6 +35,8 @@ public:
 
 	void VTable0x04(undefined4, undefined4, undefined4); // vtable+0x04
 
+	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
+
 	undefined4 m_unk0x0c; // 0x0c
 	MxAtomId m_atomId;    // 0x10
 };
