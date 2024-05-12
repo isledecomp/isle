@@ -131,10 +131,60 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 	return result;
 }
 
-// STUB: LEGO1 0x10045b20
+// FUNCTION: LEGO1 0x10045b20
+// FUNCTION: BETA10 0x100b6b8a
 void LegoPathController::Destroy()
 {
-	// TODO
+	TickleManager()->UnregisterClient(this);
+
+	if (m_boundaries != NULL) {
+		delete[] m_boundaries;
+	}
+	m_boundaries = NULL;
+	m_numL = 0;
+
+	if (m_unk0x10 != NULL) {
+		delete[] m_unk0x10;
+	}
+	m_unk0x10 = NULL;
+	m_numN = 0;
+
+	if (m_structs != NULL) {
+		delete[] m_structs;
+	}
+	m_structs = NULL;
+	m_numT = 0;
+
+	if (m_edges != NULL) {
+		delete[] m_edges;
+	}
+	m_edges = NULL;
+	m_numE = 0;
+
+	MxS32 j;
+	for (j = 0; j < _countof(g_unk0x100f42f0); j++) {
+		if (g_ctrlBoundariesA[j].m_controller == this) {
+			g_ctrlBoundariesA[j].m_controller = NULL;
+			g_ctrlBoundariesA[j].m_boundary = NULL;
+		}
+
+		if (g_ctrlEdgesA[j].m_controller == this) {
+			g_ctrlEdgesA[j].m_controller = NULL;
+			g_ctrlEdgesA[j].m_edge = NULL;
+		}
+	}
+
+	for (j = 0; j < _countof(g_unk0x100f4330); j++) {
+		if (g_ctrlBoundariesB[j].m_controller == this) {
+			g_ctrlBoundariesB[j].m_controller = NULL;
+			g_ctrlBoundariesB[j].m_boundary = NULL;
+		}
+
+		if (g_ctrlEdgesB[j].m_controller == this) {
+			g_ctrlEdgesB[j].m_controller = NULL;
+			g_ctrlEdgesB[j].m_edge = NULL;
+		}
+	}
 }
 
 // STUB: LEGO1 0x10045c10
