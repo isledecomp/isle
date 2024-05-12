@@ -272,9 +272,11 @@ void LegoPathController::FUN_10046970()
 	}
 }
 
-// STUB: LEGO1 0x10046b30
-MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_value)
+// FUNCTION: LEGO1 0x10046b30
+MxResult LegoPathController::FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32& p_numL)
 {
+	p_boundaries = m_boundaries;
+	p_numL = m_numL;
 	return SUCCESS;
 }
 
