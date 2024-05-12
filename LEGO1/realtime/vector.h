@@ -120,7 +120,7 @@ public:
 	virtual void Add(float* p_other) { AddImpl(p_other); } // vtable+0x4c
 
 	// FUNCTION: LEGO1 0x100021e0
-	virtual void Add(Vector2* p_other) { AddImpl(p_other->m_data); } // vtable+0x48
+	virtual void Add(const Vector2* p_other) { AddImpl((float*) p_other->m_data); } // vtable+0x48
 
 	// FUNCTION: LEGO1 0x100021f0
 	virtual void Sub(const float* p_other) { SubImpl((float*) p_other); } // vtable+0x58

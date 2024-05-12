@@ -3,32 +3,132 @@
 #include "legopathstruct.h"
 #include "misc/legostorage.h"
 #include "mxmisc.h"
+#include "mxticklemanager.h"
 #include "mxtimer.h"
 
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)
+DECOMP_SIZE_ASSERT(LegoPathController::CtrlBoundary, 0x08)
+DECOMP_SIZE_ASSERT(LegoPathController::CtrlEdge, 0x08)
+
+// GLOBAL: LEGO1 0x100d7cc8
+MxU32 g_unk0x100d7cc8[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
+
+// GLOBAL: LEGO1 0x100d7d08
+MxU32 g_unk0x100d7d08[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+// GLOBAL: LEGO1 0x100f42e8
+LegoPathController::CtrlBoundary* g_ctrlBoundariesA = NULL;
+
+// GLOBAL: LEGO1 0x100f42ec
+LegoPathController::CtrlEdge* g_ctrlEdgesA = NULL;
+
+// GLOBAL: LEGO1 0x100f42f0
+const char* g_unk0x100f42f0[] = {
+	"edg03_21",
+	"edg03_23",
+	"edg03_30",
+	"edg03_31",
+	"edg03_39",
+	"edg03_40",
+	"edg03_91",
+	"edg03_92",
+	"edg03_99",
+	"edg03_100",
+	"edg03_112",
+	"edg03_113",
+	"edg10_61",
+	"edg10_62",
+	"edg10_55",
+	"edg10_58"
+};
+
+// GLOBAL: LEGO1 0x100f4330
+const char* g_unk0x100f4330[] = {
+	"edg03_06",
+	"edg03_21",
+	"edg03_30",
+	"edg03_148",
+	"edg03_39",
+	"edg03_91",
+	"edg03_99",
+	"edg03_112",
+	"edg03_800",
+	"edg03_135"
+};
+
+// GLOBAL: LEGO1 0x100f4358
+LegoPathController::CtrlBoundary* g_ctrlBoundariesB = NULL;
+
+// GLOBAL: LEGO1 0x100f435c
+LegoPathController::CtrlEdge* g_ctrlEdgesB = NULL;
 
 // FUNCTION: LEGO1 0x10044f40
 // FUNCTION: BETA10 0x100b6860
 LegoPathController::LegoPathController()
 {
-	m_unk0x08 = NULL;
-	m_unk0x0c = NULL;
+	m_boundaries = NULL;
+	m_edges = NULL;
 	m_unk0x10 = NULL;
-	m_unk0x14 = NULL;
+	m_structs = NULL;
 	m_numL = 0;
 	m_numE = 0;
 	m_numN = 0;
 	m_numT = 0;
 }
 
-// STUB: LEGO1 0x10045880
-void LegoPathController::Create(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger)
+// FUNCTION: LEGO1 0x10045880
+// FUNCTION: BETA10 0x100b6959
+MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, const MxAtomId& p_trigger)
 {
-	// TODO
-
+	MxResult result = FAILURE;
 	LegoMemory storage(p_data);
-	Read(&storage);
+
+	if ((result = Read(&storage)) == SUCCESS) {
+		MxS32 i;
+
+		for (i = 0; i < m_numT; i++) {
+			m_structs[i].SetAtomId(p_trigger);
+		}
+
+		for (i = 0; i < m_numN; i++) {
+			// TODO: Fix call
+			((Vector3&) m_unk0x10[i]).Add(&p_location);
+		}
+
+		for (i = 0; i < m_numL; i++) {
+			LegoPathBoundary& boundary = m_boundaries[i];
+			MxS32 j;
+
+			for (j = 0; j < _countof(g_unk0x100f42f0); j++) {
+				if (!strcmpi(g_unk0x100f42f0[j], boundary.GetName())) {
+					g_ctrlBoundariesA[j].m_controller = this;
+					g_ctrlBoundariesA[j].m_boundary = &boundary;
+
+					MxU32 edge = g_unk0x100d7cc8[j];
+					g_ctrlEdgesA[j].m_controller = this;
+					g_ctrlEdgesA[j].m_edge = boundary.GetEdges()[edge];
+				}
+			}
+
+			for (j = 0; j < _countof(g_unk0x100f4330); j++) {
+				if (!strcmpi(g_unk0x100f4330[j], boundary.GetName())) {
+					g_ctrlBoundariesB[j].m_controller = this;
+					g_ctrlBoundariesB[j].m_boundary = &boundary;
+					g_ctrlEdgesB[j].m_controller = this;
+					g_ctrlEdgesB[j].m_edge = boundary.GetEdges()[g_unk0x100d7d08[j]];
+				}
+			}
+		}
+
+		TickleManager()->RegisterClient(this, 10);
+	}
+
+	if (result != SUCCESS) {
+		Destroy();
+	}
+
+	return result;
 }
 
 // STUB: LEGO1 0x10045b20
@@ -105,8 +205,8 @@ MxResult LegoPathController::FUN_10046b30(LegoPathBoundary** p_path, MxS32& p_va
 LegoPathBoundary* LegoPathController::GetPathBoundary(const char* p_name)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
-		if (!strcmpi(m_unk0x08[i].GetName(), p_name)) {
-			return &m_unk0x08[i];
+		if (!strcmpi(m_boundaries[i].GetName(), p_name)) {
+			return &m_boundaries[i];
 		}
 	}
 
@@ -125,6 +225,21 @@ void LegoPathController::Enable(MxBool p_enable)
 	// TODO
 }
 
+// FUNCTION: LEGO1 0x10046c10
+// FUNCTION: BETA10 0x100b767a
+MxResult LegoPathController::Init()
+{
+	if (g_ctrlBoundariesA != NULL || g_ctrlEdgesA != NULL || g_ctrlBoundariesB != NULL || g_ctrlEdgesB != NULL) {
+		return FAILURE;
+	}
+
+	g_ctrlBoundariesA = new CtrlBoundary[_countof(g_unk0x100f42f0)];
+	g_ctrlEdgesA = new CtrlEdge[_countof(g_unk0x100f42f0)];
+	g_ctrlBoundariesB = new CtrlBoundary[_countof(g_unk0x100f4330)];
+	g_ctrlEdgesB = new CtrlEdge[_countof(g_unk0x100f4330)];
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x10046e50
 // FUNCTION: BETA10 0x100b781f
 MxResult LegoPathController::Read(LegoStorage* p_storage)
@@ -133,7 +248,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		return FAILURE;
 	}
 	if (m_numT > 0) {
-		m_unk0x14 = new LegoPathStruct[m_numT];
+		m_structs = new LegoPathStruct[m_numT];
 	}
 
 	if (p_storage->Read(&m_numN, sizeof(m_numN)) != SUCCESS) {
@@ -147,14 +262,14 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 		return FAILURE;
 	}
 	if (m_numE > 0) {
-		m_unk0x0c = new LegoPathCtrlEdge[m_numE];
+		m_edges = new LegoPathCtrlEdge[m_numE];
 	}
 
 	if (p_storage->Read(&m_numL, sizeof(m_numL)) != SUCCESS) {
 		return FAILURE;
 	}
 	if (m_numL > 0) {
-		m_unk0x08 = new LegoPathBoundary[m_numL];
+		m_boundaries = new LegoPathBoundary[m_numL];
 	}
 
 	if (m_numT > 0 && ReadStructs(p_storage) != SUCCESS) {
@@ -178,7 +293,7 @@ MxResult LegoPathController::Read(LegoStorage* p_storage)
 	}
 
 	for (MxS32 j = 0; j < m_numE; j++) {
-		m_pfsE.insert(&m_unk0x0c[j]);
+		m_pfsE.insert(&m_edges[j]);
 	}
 
 	return SUCCESS;
@@ -196,16 +311,16 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 		}
 
 		if (length > 0) {
-			m_unk0x14[i].m_name = new char[length + 1];
+			m_structs[i].m_name = new char[length + 1];
 
-			if (p_storage->Read(m_unk0x14[i].m_name, length) != SUCCESS) {
+			if (p_storage->Read(m_structs[i].m_name, length) != SUCCESS) {
 				return FAILURE;
 			}
 
-			m_unk0x14[i].m_name[length] = '\0';
+			m_structs[i].m_name[length] = '\0';
 		}
 
-		if (p_storage->Read(&m_unk0x14[i].m_unk0x08, sizeof(m_unk0x14[i].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Read(&m_structs[i].m_unk0x08, sizeof(m_structs[i].m_unk0x08)) != SUCCESS) {
 			return FAILURE;
 		}
 	}
@@ -218,7 +333,7 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numE; i++) {
-		LegoPathCtrlEdge& edge = m_unk0x0c[i];
+		LegoPathCtrlEdge& edge = m_edges[i];
 		MxU16 s;
 
 		if (p_storage->Read(&edge.m_flags, sizeof(edge.m_flags)) != SUCCESS) {
@@ -239,34 +354,34 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_faceA = &m_unk0x08[s];
+			edge.m_faceA = &m_boundaries[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_ccwA = &m_unk0x0c[s];
+			edge.m_ccwA = &m_edges[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_cwA = &m_unk0x0c[s];
+			edge.m_cwA = &m_edges[s];
 		}
 
 		if (edge.m_flags & LegoUnknown100db7f4::c_bit4) {
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_faceB = &m_unk0x08[s];
+			edge.m_faceB = &m_boundaries[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_ccwB = &m_unk0x0c[s];
+			edge.m_ccwB = &m_edges[s];
 
 			if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 				return FAILURE;
 			}
-			edge.m_cwB = &m_unk0x0c[s];
+			edge.m_cwB = &m_edges[s];
 		}
 
 		if (ReadVector(p_storage, edge.m_unk0x28) != SUCCESS) {
@@ -286,7 +401,7 @@ MxResult LegoPathController::ReadEdges(LegoStorage* p_storage)
 MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 {
 	for (MxS32 i = 0; i < m_numL; i++) {
-		LegoPathBoundary& boundary = m_unk0x08[i];
+		LegoPathBoundary& boundary = m_boundaries[i];
 		MxU8 numE;
 		MxU16 s;
 		MxU8 j;
@@ -305,7 +420,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 				return FAILURE;
 			}
 
-			edges[j] = &m_unk0x0c[s];
+			edges[j] = &m_edges[s];
 		}
 
 		if (p_storage->Read(&boundary.m_unk0x0c, sizeof(boundary.m_unk0x0c)) != SUCCESS) {
@@ -362,7 +477,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 					return FAILURE;
 				}
 
-				boundary.m_unk0x4c[j].m_unk0x00 = &m_unk0x14[s];
+				boundary.m_unk0x4c[j].m_unk0x00 = &m_structs[s];
 
 				if (p_storage->Read(&boundary.m_unk0x4c[j].m_unk0x04, sizeof(boundary.m_unk0x4c[j].m_unk0x04)) !=
 					SUCCESS) {

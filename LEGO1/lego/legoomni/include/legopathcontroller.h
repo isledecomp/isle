@@ -31,6 +31,32 @@ typedef set<LegoPathCtrlEdge*, LegoPathCtrlEdgeCompare> LegoPathCtrlEdgeSet;
 // SIZE 0x40
 class LegoPathController : public MxCore {
 public:
+	// SIZE 0x08
+	struct CtrlBoundary {
+		// FUNCTION: LEGO1 0x10046dc0
+		CtrlBoundary()
+		{
+			m_controller = NULL;
+			m_boundary = NULL;
+		}
+
+		LegoPathController* m_controller; // 0x00
+		LegoPathBoundary* m_boundary;     // 0x04
+	};
+
+	// SIZE 0x08
+	struct CtrlEdge {
+		// FUNCTION: LEGO1 0x10046dd0
+		CtrlEdge()
+		{
+			m_controller = NULL;
+			m_edge = NULL;
+		}
+
+		LegoPathController* m_controller; // 0x00
+		LegoEdge* m_edge;                 // 0x04
+	};
+
 	LegoPathController();
 	~LegoPathController() override { Destroy(); }
 
@@ -52,8 +78,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10045740
 	// LegoPathController::`scalar deleting destructor'
 
-	virtual void Create(MxU8* p_data, Vector3& p_location, MxAtomId& p_trigger); // vtable+0x14
-	virtual void Destroy();                                                      // vtable+0x18
+	virtual MxResult Create(MxU8* p_data, const Vector3& p_location, const MxAtomId& p_trigger); // vtable+0x14
+	virtual void Destroy();                                                                      // vtable+0x18
 
 	MxResult FUN_10045c20(
 		LegoPathActor* p_actor,
@@ -70,6 +96,7 @@ public:
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
 	void FUN_10046bb0(LegoWorld* p_world);
+	static MxResult Init();
 
 private:
 	MxResult Read(LegoStorage* p_storage);
@@ -79,16 +106,16 @@ private:
 	static MxResult ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec);
 	static MxResult ReadVector(LegoStorage* p_storage, Mx4DPointFloat& p_vec);
 
-	LegoPathBoundary* m_unk0x08; // 0x08
-	LegoPathCtrlEdge* m_unk0x0c; // 0x0c
-	Mx3DPointFloat* m_unk0x10;   // 0x10
-	LegoPathStruct* m_unk0x14;   // 0x14
-	MxU16 m_numL;                // 0x18
-	MxU16 m_numE;                // 0x1a
-	MxU16 m_numN;                // 0x1c
-	MxU16 m_numT;                // 0x1e
-	LegoPathCtrlEdgeSet m_pfsE;  // 0x20
-	LegoPathActorSet m_actors;   // 0x30
+	LegoPathBoundary* m_boundaries; // 0x08
+	LegoPathCtrlEdge* m_edges;      // 0x0c
+	Mx3DPointFloat* m_unk0x10;      // 0x10
+	LegoPathStruct* m_structs;      // 0x14
+	MxU16 m_numL;                   // 0x18
+	MxU16 m_numE;                   // 0x1a
+	MxU16 m_numN;                   // 0x1c
+	MxU16 m_numT;                   // 0x1e
+	LegoPathCtrlEdgeSet m_pfsE;     // 0x20
+	LegoPathActorSet m_actors;      // 0x30
 };
 
 // clang-format off

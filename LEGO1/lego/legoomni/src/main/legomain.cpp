@@ -200,7 +200,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	m_viewLODListManager = new ViewLODListManager();
 	m_textureContainer = new LegoTextureContainer();
 	m_textureContainer->SetOwnership(FALSE);
-	// FUN_10046c10
+	LegoPathController::Init();
 
 	m_characterManager = new LegoCharacterManager();
 	m_plantManager = new LegoPlantManager();
