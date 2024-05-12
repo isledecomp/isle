@@ -12,6 +12,11 @@ struct LegoPathStruct;
 // SIZE 0x54
 class LegoWEGEdge : public LegoWEEdge {
 public:
+	enum {
+		c_bit3 = 0x04,
+		c_bit5 = 0x10
+	};
+
 	// SIZE 0x0c
 	struct Path {
 		// FUNCTION: LEGO1 0x10048280
@@ -33,7 +38,7 @@ public:
 
 	LegoResult VTable0x04() override; // vtable+0x04
 
-	inline LegoU32 GetFlag0x10() { return m_unk0x0c & 0x10 ? FALSE : TRUE; }
+	inline LegoU32 GetFlag0x10() { return m_flags & c_bit5 ? FALSE : TRUE; }
 	inline Mx4DPointFloat* GetUnknown0x14() { return &m_unk0x14; }
 	inline Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
 	inline LegoChar* GetName() { return m_name; }
@@ -44,7 +49,7 @@ public:
 	friend class LegoPathController;
 
 private:
-	LegoU8 m_unk0x0c;              // 0x0c
+	LegoU8 m_flags;                // 0x0c
 	LegoU8 m_unk0x0d;              // 0x0d
 	LegoChar* m_name;              // 0x10
 	Mx4DPointFloat m_unk0x14;      // 0x14
