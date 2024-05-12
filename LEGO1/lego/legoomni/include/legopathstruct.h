@@ -5,6 +5,8 @@
 #include "mxatom.h"
 #include "mxtypes.h"
 
+class LegoWorld;
+
 // VTABLE: LEGO1 0x100d7d9c
 // SIZE 0x0c
 struct LegoPathStructBase {
@@ -28,17 +30,18 @@ public:
 struct LegoPathStruct : public LegoPathStructBase {
 public:
 	// FUNCTION: LEGO1 0x100473a0
-	LegoPathStruct() : m_unk0x0c(0) {}
+	LegoPathStruct() : m_world(NULL) {}
 
 	// FUNCTION: LEGO1 0x10047470
 	~LegoPathStruct() override {}
 
 	void VTable0x04(undefined4, undefined4, undefined4); // vtable+0x04
 
+	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
 
-	undefined4 m_unk0x0c; // 0x0c
-	MxAtomId m_atomId;    // 0x10
+	LegoWorld* m_world; // 0x0c
+	MxAtomId m_atomId;  // 0x10
 };
 
 // SYNTHETIC: LEGO1 0x10047440

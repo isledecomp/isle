@@ -376,7 +376,7 @@ LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10020120
-MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
+MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
@@ -387,7 +387,7 @@ MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 		return FAILURE;
 	}
 
-	return controller->FUN_10046b30(p_path, p_value);
+	return controller->FUN_10046b30(*p_boundaries, p_numL);
 }
 
 // FUNCTION: LEGO1 0x10020220

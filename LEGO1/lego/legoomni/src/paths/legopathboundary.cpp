@@ -41,3 +41,19 @@ MxU32 LegoPathBoundary::Intersect(
 {
 	return 0;
 }
+
+// STUB: LEGO1 0x10057fe0
+// FUNCTION: BETA10 0x100b2220
+MxU32 LegoPathBoundary::FUN_10057fe0(LegoAnimPresenter* p_presenter)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x100586e0
+// FUNCTION: BETA10 0x100b22d1
+MxU32 LegoPathBoundary::FUN_100586e0(LegoAnimPresenter* p_presenter)
+{
+	// TODO
+	return 0;
+}

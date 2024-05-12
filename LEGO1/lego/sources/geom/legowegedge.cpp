@@ -10,7 +10,7 @@ LegoWEGEdge::LegoWEGEdge()
 	m_name = NULL;
 	m_unk0x14.Clear();
 	m_edgeNormals = NULL;
-	m_unk0x0c = 0;
+	m_flags = 0;
 	m_unk0x48 = 0;
 	m_unk0x4c = NULL;
 	m_unk0x50 = NULL;
