@@ -15,6 +15,10 @@ struct LegoUnknown100db7f4;
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
 public:
+	enum {
+		c_bit3 = 0x04
+	};
+
 	LegoPathActor();
 	~LegoPathActor() override;
 

@@ -99,6 +99,7 @@ public:
 	static MxResult Init();
 
 private:
+	void FUN_10046970();
 	MxResult Read(LegoStorage* p_storage);
 	MxResult ReadStructs(LegoStorage* p_storage);
 	MxResult ReadEdges(LegoStorage* p_storage);
@@ -119,6 +120,9 @@ private:
 };
 
 // clang-format off
+// TEMPLATE: LEGO1 0x1002c4a0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Buynode
+
 // TEMPLATE: LEGO1 0x100451a0
 // _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::~_Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathControl
 
