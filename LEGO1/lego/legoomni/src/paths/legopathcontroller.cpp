@@ -187,10 +187,11 @@ void LegoPathController::Destroy()
 	}
 }
 
-// STUB: LEGO1 0x10045c10
+// FUNCTION: LEGO1 0x10045c10
+// FUNCTION: BETA10 0x100b6d60
 MxResult LegoPathController::Tickle()
 {
-	// TODO
+	FUN_10046970();
 	return SUCCESS;
 }
 
@@ -242,6 +243,25 @@ void LegoPathController::FUN_100468f0(LegoAnimPresenter* p_presenter)
 // FUNCTION: BETA10 0x100b737b
 void LegoPathController::FUN_10046930(LegoAnimPresenter* p_presenter)
 {
+}
+
+// FUNCTION: LEGO1 0x10046970
+// FUNCTION: BETA10 0x100b73d8
+void LegoPathController::FUN_10046970()
+{
+	float time = Timer()->GetTime();
+
+	LegoPathActorSet lpas(m_actors);
+
+	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+		LegoPathActor* actor = *itpa;
+
+		if (m_actors.find(actor) != m_actors.end()) {
+			if (!((MxU8) actor->GetState() & LegoPathActor::c_bit3)) {
+				actor->VTable0x70(time);
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x10046b30
