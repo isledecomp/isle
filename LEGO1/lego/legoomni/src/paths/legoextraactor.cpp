@@ -287,9 +287,9 @@ MxResult LegoExtraActor::WaitForAnimation()
 
 	if (m_boundary != oldBoundary) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
+		LegoAnimPresenterSet& set = m_boundary->GetPresenters();
 
-		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+		for (LegoAnimPresenterSet::iterator it = set.begin(); it != set.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
 				b = TRUE;
@@ -312,9 +312,9 @@ void LegoExtraActor::Restart()
 {
 	if (m_unk0x0e != 0) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
+		LegoAnimPresenterSet& set = m_boundary->GetPresenters();
 
-		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+		for (LegoAnimPresenterSet::iterator it = set.begin(); it != set.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
 				b = TRUE;

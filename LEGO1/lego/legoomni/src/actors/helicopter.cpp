@@ -190,7 +190,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			if (m_state->GetUnkown8() == 0) {
 				state->SetUnknown18(4);
 				m_state->SetUnknown8(1);
-				m_world->FUN_1001fc80(this);
+				m_world->RemovePathActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, 0x20, NULL);
 				SetState(0);
 			}
@@ -203,7 +203,7 @@ MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
 			}
 			if (m_state->GetUnkown8() == 2) {
 				m_state->SetUnknown8(3);
-				m_world->FUN_1001fc80(this);
+				m_world->RemovePathActor(this);
 				InvokeAction(Extra::ActionType::e_start, script, 0x21, NULL);
 				SetState(4);
 			}

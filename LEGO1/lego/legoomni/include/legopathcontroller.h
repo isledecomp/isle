@@ -89,7 +89,14 @@ public:
 		MxS32 p_dest,
 		float p_destScale
 	);
-	undefined4 FUN_10046770(LegoPathActor* p_actor);
+	MxResult FUN_10046050(
+		LegoPathActor* p_actor,
+		LegoAnimPresenter* p_presenter,
+		Vector3& p_position,
+		Vector3& p_direction
+	);
+	MxResult AddActor(LegoPathActor* p_actor);
+	MxResult RemoveActor(LegoPathActor* p_actor);
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
 	void FUN_10046930(LegoAnimPresenter* p_presenter);
 	MxResult FUN_10046b30(LegoPathBoundary*& p_boundaries, MxS32& p_numL);
@@ -120,6 +127,9 @@ private:
 };
 
 // clang-format off
+// TEMPLATE: LEGO1 0x1001fd70
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Lbound
+
 // TEMPLATE: LEGO1 0x1002c4a0
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Buynode
 
@@ -131,6 +141,9 @@ private:
 
 // TEMPLATE: LEGO1 0x10045830
 // set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::~set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >
+
+// TEMPLATE: LEGO1 0x100468c0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Ubound
 
 // TEMPLATE: LEGO1 0x10047550
 // _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Insert

@@ -25,6 +25,14 @@ MxResult LegoPathBoundary::AddActor(LegoPathActor* p_actor)
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x100574a0
+// FUNCTION: BETA10 0x100b156f
+MxResult LegoPathBoundary::RemoveActor(LegoPathActor* p_actor)
+{
+	m_actors.erase(p_actor);
+	return SUCCESS;
+}
+
 // STUB: LEGO1 0x100575b0
 void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor)
 {

@@ -471,7 +471,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 		assert(world);
 
 		if (m_world != NULL) {
-			m_world->FUN_1001fc80(this);
+			m_world->RemovePathActor(this);
 			m_world->Remove(this);
 			VideoManager()->Get3DManager()->Remove(*m_roi);
 		}
@@ -556,7 +556,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset)
 {
 	if (m_world) {
-		m_world->FUN_1001fc80(this);
+		m_world->RemovePathActor(this);
 		m_world->Remove(this);
 		VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
 	}
@@ -566,7 +566,7 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 		VTable0xe0();
 	}
 
-	m_world->FUN_1001fa70(this);
+	m_world->AddPathActor(this);
 	p_boundary->AddActor(this);
 	if (m_actorId != GameState()->GetActorId()) {
 		m_world->Add(this);
