@@ -295,33 +295,49 @@ MxResult LegoWorld::PlaceActor(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1001fa70
-undefined4 LegoWorld::FUN_1001fa70(IslePathActor* p_actor)
-{
-	// TODO
-	return 0;
-}
-
-// STUB: LEGO1 0x1001fb70
-undefined4 LegoWorld::FUN_1001fb70(
-	IslePathActor* p_actor,
-	LegoAnimPresenter* p_presenter,
-	Vector3& p_position,
-	Vector3& p_direction
-)
-{
-	// TODO
-	return 0;
-}
-
-// FUNCTION: LEGO1 0x1001fc80
-void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
+// FUNCTION: LEGO1 0x1001fa70
+MxResult LegoWorld::AddPathActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (!controller->FUN_10046770(p_actor)) {
+		if (controller->AddActor(p_actor) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x1001fb70
+MxResult LegoWorld::FUN_1001fb70(
+	LegoPathActor* p_actor,
+	LegoAnimPresenter* p_presenter,
+	Vector3& p_position,
+	Vector3& p_direction
+)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->FUN_10046050(p_actor, p_presenter, p_position, p_direction) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x1001fc80
+void LegoWorld::RemovePathActor(LegoPathActor* p_actor)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->RemoveActor(p_actor) == SUCCESS) {
 			break;
 		}
 	}
@@ -487,7 +503,7 @@ void LegoWorld::Remove(MxCore* p_object)
 		}
 		else if (p_object->IsA("MxEntity")) {
 			if (p_object->IsA("LegoPathActor")) {
-				FUN_1001fc80((IslePathActor*) p_object);
+				RemovePathActor((LegoPathActor*) p_object);
 			}
 
 			if (m_entityList) {
@@ -688,7 +704,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		IslePathActor* actor = CurrentActor();
 
 		if (actor) {
-			FUN_1001fc80(actor);
+			RemovePathActor(actor);
 		}
 
 		AnimationManager()->Reset(FALSE);

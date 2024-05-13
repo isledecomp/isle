@@ -526,7 +526,7 @@ void Isle::Enable(MxBool p_enable)
 				m_act1state->m_unk0x018 = 5;
 			}
 
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -549,7 +549,7 @@ void Isle::Enable(MxBool p_enable)
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_bike:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -562,7 +562,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_dunecar:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -575,7 +575,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_motocycle:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -588,7 +588,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_copter:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -601,7 +601,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_skateboard:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -614,7 +614,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_jetski:
-			FUN_1001fa70(CurrentActor());
+			AddPathActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE

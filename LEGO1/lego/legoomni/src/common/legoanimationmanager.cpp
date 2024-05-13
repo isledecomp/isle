@@ -151,7 +151,7 @@ LegoAnimationManager::~LegoAnimationManager()
 			LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 			if (actor != NULL && actor->GetController() != NULL && CurrentWorld() != NULL) {
-				CurrentWorld()->FUN_1001fc80((IslePathActor*) actor);
+				CurrentWorld()->RemovePathActor(actor);
 				actor->SetController(NULL);
 			}
 
@@ -237,7 +237,7 @@ void LegoAnimationManager::Suspend()
 				LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 				if (actor != NULL && actor->GetController() != NULL) {
-					actor->GetController()->FUN_10046770(actor);
+					actor->GetController()->RemoveActor(actor);
 					actor->SetController(NULL);
 				}
 
@@ -862,7 +862,7 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 			LegoPathController* controller = actor->GetController();
 
 			if (controller) {
-				controller->FUN_10046770(actor);
+				controller->RemoveActor(actor);
 				actor->SetController(NULL);
 
 				for (MxS32 i = 0; i < (MxS32) _countof(m_extras); i++) {
@@ -1191,7 +1191,7 @@ MxResult LegoAnimationManager::Tickle()
 				LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 				if (actor != NULL && actor->GetController() != NULL) {
-					actor->GetController()->FUN_10046770(actor);
+					actor->GetController()->RemoveActor(actor);
 					actor->SetController(NULL);
 				}
 
@@ -1451,7 +1451,7 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 				LegoPathController* controller = actor->GetController();
 
 				if (controller) {
-					controller->FUN_10046770(actor);
+					controller->RemoveActor(actor);
 					actor->SetController(NULL);
 
 					for (MxS32 i = 0; i < (MxS32) _countof(m_extras); i++) {
@@ -1560,7 +1560,7 @@ void LegoAnimationManager::PurgeExtra(MxBool p_und)
 
 					LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 					if (actor != NULL && actor->GetController() != NULL) {
-						actor->GetController()->FUN_10046770(actor);
+						actor->GetController()->RemoveActor(actor);
 						actor->SetController(NULL);
 					}
 

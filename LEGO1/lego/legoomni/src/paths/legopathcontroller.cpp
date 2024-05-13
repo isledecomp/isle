@@ -207,7 +207,7 @@ MxResult LegoPathController::FUN_10045c20(
 )
 {
 	if (p_actor->GetController() != NULL) {
-		p_actor->GetController()->FUN_10046770(p_actor);
+		p_actor->GetController()->RemoveActor(p_actor);
 		p_actor->SetController(NULL);
 	}
 
@@ -226,11 +226,49 @@ MxResult LegoPathController::FUN_10045c20(
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10046770
-// FUNCTION: BETA10 0x100b7264
-undefined4 LegoPathController::FUN_10046770(LegoPathActor* p_actor)
+// STUB: LEGO1 0x10046050
+// FUNCTION: BETA10 0x100b6f35
+MxResult LegoPathController::FUN_10046050(
+	LegoPathActor* p_actor,
+	LegoAnimPresenter* p_presenter,
+	Vector3& p_position,
+	Vector3& p_direction
+)
 {
-	return 0;
+	// TODO
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100466a0
+// FUNCTION: BETA10 0x100b71fe
+MxResult LegoPathController::AddActor(LegoPathActor* p_actor)
+{
+	if (p_actor->GetController() != NULL) {
+		p_actor->GetController()->RemoveActor(p_actor);
+		p_actor->SetController(NULL);
+	}
+
+	m_actors.insert(p_actor);
+	p_actor->SetController(this);
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x10046770
+// FUNCTION: BETA10 0x100b7264
+MxResult LegoPathController::RemoveActor(LegoPathActor* p_actor)
+{
+	MxResult result = FAILURE;
+
+	p_actor->VTable0xc4();
+	m_actors.erase(p_actor);
+
+	for (MxS32 i = 0; i < m_numL; i++) {
+		if (m_boundaries[i].RemoveActor(p_actor) == SUCCESS) {
+			result = SUCCESS;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100468f0
