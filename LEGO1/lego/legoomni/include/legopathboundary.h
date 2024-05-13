@@ -15,7 +15,10 @@ struct LegoPathActorSetCompare {
 };
 
 struct LegoAnimPresenterSetCompare {
-	MxBool operator()(const LegoAnimPresenter* p_lhs, const LegoAnimPresenter* p_rhs) const { return 0; }
+	MxBool operator()(const LegoAnimPresenter* p_lhs, const LegoAnimPresenter* p_rhs) const
+	{
+		return (MxS32) p_lhs < (MxS32) p_rhs;
+	}
 };
 
 typedef set<LegoPathActor*, LegoPathActorSetCompare> LegoPathActorSet;
@@ -82,6 +85,18 @@ private:
 
 // TEMPLATE: LEGO1 0x10045dd0
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Insert
+
+// TEMPLATE: LEGO1 0x10046310
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::insert
+
+// TEMPLATE: LEGO1 0x10046580
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Lrotate
+
+// TEMPLATE: LEGO1 0x100465e0
+// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Rrotate
+
+// TEMPLATE: LEGO1 0x1004a7a0
+// _Construct
 
 // GLOBAL: LEGO1 0x100f11a4
 // _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Nil

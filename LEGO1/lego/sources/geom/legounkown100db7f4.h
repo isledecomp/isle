@@ -10,6 +10,8 @@
 struct LegoUnknown100db7f4 : public LegoEdge {
 public:
 	enum {
+		c_bit1 = 0x01,
+		c_bit2 = 0x02,
 		c_bit3 = 0x04,
 		c_bit4 = 0x08
 	};
@@ -31,6 +33,8 @@ public:
 
 		return SUCCESS;
 	}
+
+	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
 	// SYNTHETIC: LEGO1 0x1009a6c0
 	// LegoUnknown100db7f4::`scalar deleting destructor'
