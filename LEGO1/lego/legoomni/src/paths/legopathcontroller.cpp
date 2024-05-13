@@ -226,7 +226,7 @@ MxResult LegoPathController::FUN_10045c20(
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10046050
+// FUNCTION: LEGO1 0x10046050
 // FUNCTION: BETA10 0x100b6f35
 MxResult LegoPathController::FUN_10046050(
 	LegoPathActor* p_actor,
@@ -235,8 +235,69 @@ MxResult LegoPathController::FUN_10046050(
 	Vector3& p_direction
 )
 {
-	// TODO
-	return SUCCESS;
+	LegoPathBoundary* boundary = NULL;
+	float time = Timer()->GetTime();
+
+	if (p_actor->GetController() != NULL) {
+		p_actor->GetController()->RemoveActor(p_actor);
+		p_actor->SetController(NULL);
+	}
+
+	for (MxS32 i = 0; i < m_numL; i++) {
+		LegoPathBoundary& b = m_boundaries[i];
+		LegoAnimPresenterSet& presenters = b.GetPresenters();
+		LegoAnimPresenter* presenter = p_presenter;
+
+		if (presenters.find(presenter) != presenters.end()) {
+			MxS32 j;
+
+			for (j = 0; j < b.GetNumEdges(); j++) {
+				Mx4DPointFloat normal(*b.GetEdgeNormal(j));
+
+				if (p_position.Dot(&p_position, &normal) + normal[3] < 0.0f) {
+					break;
+				}
+			}
+
+			if (b.GetNumEdges() == j) {
+				if (boundary != NULL) {
+					return FAILURE;
+				}
+
+				boundary = &b;
+			}
+		}
+	}
+
+	if (boundary == NULL) {
+		return FAILURE;
+	}
+
+	for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
+		LegoUnknown100db7f4* edge = (LegoUnknown100db7f4*) boundary->GetEdges()[j];
+
+		if (edge->GetMask0x03()) {
+			Mx3DPointFloat vec;
+
+			if (((LegoUnknown100db7f4*) edge->GetClockwiseEdge(boundary))->FUN_1002ddc0(*boundary, vec) == SUCCESS &&
+				vec.Dot(&vec, &p_direction) < 0.0f) {
+				edge =
+					(LegoUnknown100db7f4*) edge->GetCounterclockwiseEdge(boundary)->GetCounterclockwiseEdge(boundary);
+			}
+
+			if (!edge->GetMask0x03()) {
+				return FAILURE;
+			}
+
+			if (p_actor->VTable0x84(boundary, time, p_position, p_direction, *edge, 0.5f) == SUCCESS) {
+				p_actor->SetController(this);
+				m_actors.insert(p_actor);
+				return SUCCESS;
+			}
+		}
+	}
+
+	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100466a0

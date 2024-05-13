@@ -57,6 +57,8 @@ public:
 		m_elements[3] = p_a;
 	}
 
+	inline Mx4DPointFloat(const Mx4DPointFloat& p_other) : Vector4(m_elements) { EqualsImpl(p_other.m_data); }
+
 	// FUNCTION: LEGO1 0x10003200
 	virtual void operator=(const Vector4& p_impl) { EqualsImpl(p_impl.m_data); } // vtable+0x98
 
