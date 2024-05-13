@@ -296,7 +296,7 @@ MxResult LegoWorld::PlaceActor(
 }
 
 // FUNCTION: LEGO1 0x1001fa70
-MxResult LegoWorld::AddPathActor(IslePathActor* p_actor)
+MxResult LegoWorld::AddPathActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
@@ -312,7 +312,7 @@ MxResult LegoWorld::AddPathActor(IslePathActor* p_actor)
 
 // FUNCTION: LEGO1 0x1001fb70
 MxResult LegoWorld::FUN_1001fb70(
-	IslePathActor* p_actor,
+	LegoPathActor* p_actor,
 	LegoAnimPresenter* p_presenter,
 	Vector3& p_position,
 	Vector3& p_direction
@@ -331,7 +331,7 @@ MxResult LegoWorld::FUN_1001fb70(
 }
 
 // FUNCTION: LEGO1 0x1001fc80
-void LegoWorld::RemovePathActor(IslePathActor* p_actor)
+void LegoWorld::RemovePathActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
@@ -503,7 +503,7 @@ void LegoWorld::Remove(MxCore* p_object)
 		}
 		else if (p_object->IsA("MxEntity")) {
 			if (p_object->IsA("LegoPathActor")) {
-				RemovePathActor((IslePathActor*) p_object);
+				RemovePathActor((LegoPathActor*) p_object);
 			}
 
 			if (m_entityList) {

@@ -151,7 +151,7 @@ LegoAnimationManager::~LegoAnimationManager()
 			LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
 
 			if (actor != NULL && actor->GetController() != NULL && CurrentWorld() != NULL) {
-				CurrentWorld()->RemovePathActor((IslePathActor*) actor);
+				CurrentWorld()->RemovePathActor(actor);
 				actor->SetController(NULL);
 			}
 
