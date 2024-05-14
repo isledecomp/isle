@@ -81,6 +81,7 @@ def process_files(files, module=None):
 def main():
     args = parse_args()
 
+    files_to_check = []
     if os.path.isdir(args.target):
         files_to_check = list(walk_source_dir(args.target))
     elif os.path.isfile(args.target) and is_file_cpp(args.target):

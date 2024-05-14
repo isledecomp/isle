@@ -45,6 +45,18 @@ public:
 		}
 	}
 
+	void Clear()
+	{
+#ifdef COMPAT_MODE
+		for (typename LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+#else
+		for (LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+#endif
+		{
+			delete (*it).second;
+		}
+	}
+
 	// FUNCTION: BETA10 0x1007bc00
 	inline T* Get(const char* p_name)
 	{

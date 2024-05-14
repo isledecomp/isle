@@ -114,6 +114,7 @@ void LegoOmni::Destroy()
 	}
 
 	if (m_textureContainer) {
+		m_textureContainer->Clear();
 		delete m_textureContainer;
 		m_textureContainer = NULL;
 	}
@@ -128,16 +129,10 @@ void LegoOmni::Destroy()
 		m_inputManager = NULL;
 	}
 
-	if (m_inputManager) {
-		delete m_inputManager;
-		m_inputManager = NULL;
-	}
-
-	// todo FUN_10046de0
+	LegoPathController::Reset();
 
 	if (m_bkgAudioManager) {
 		m_bkgAudioManager->Stop();
-
 		delete m_bkgAudioManager;
 		m_bkgAudioManager = NULL;
 	}
@@ -150,7 +145,9 @@ void LegoOmni::Destroy()
 	m_action.ClearAtom();
 	DestroyScripts();
 
-	delete[] m_scripts;
+	if (m_scripts) {
+		delete[] m_scripts;
+	}
 
 	MxOmni::Destroy();
 }

@@ -49,6 +49,7 @@ typedef map<char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 class LegoCharacterManager {
 public:
 	LegoCharacterManager();
+	~LegoCharacterManager();
 
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);

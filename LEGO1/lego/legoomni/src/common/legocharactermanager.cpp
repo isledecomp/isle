@@ -52,6 +52,26 @@ LegoCharacterManager::LegoCharacterManager()
 	VariableTable()->SetVariable(m_customizeAnimFile);
 }
 
+// FUNCTION: LEGO1 0x10083180
+// FUNCTION: BETA10 0x10073dad
+LegoCharacterManager::~LegoCharacterManager()
+{
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it;
+
+	for (it = m_characters->begin(); it != m_characters->end(); it++) {
+		character = (*it).second;
+
+		RemoveROI(character->m_roi);
+
+		delete[] (*it).first;
+		delete (*it).second;
+	}
+
+	delete m_characters;
+	delete[] g_customizeAnimFile;
+}
+
 // FUNCTION: LEGO1 0x10083270
 void LegoCharacterManager::Init()
 {
