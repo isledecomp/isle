@@ -124,13 +124,15 @@ public:
 	LegoU32 GetRotationIndex() { return m_rotationIndex; }
 	LegoU32 GetScaleIndex() { return m_scaleIndex; }
 	LegoU32 GetMorphIndex() { return m_morphIndex; }
-	undefined2 GetUnknown0x20() { return m_unk0x20; }
+	LegoU16 GetUnknown0x20() { return m_unk0x20; }
+	LegoU16 GetUnknown0x22() { return m_unk0x22; }
 
 	void SetTranslationIndex(LegoU32 p_translationIndex) { m_translationIndex = p_translationIndex; }
 	void SetRotationIndex(LegoU32 p_rotationIndex) { m_rotationIndex = p_rotationIndex; }
 	void SetScaleIndex(LegoU32 p_scaleIndex) { m_scaleIndex = p_scaleIndex; }
 	void SetMorphIndex(LegoU32 p_morphIndex) { m_morphIndex = p_morphIndex; }
-	void SetUnknown0x20(undefined2 p_unk0x20) { m_unk0x20 = p_unk0x20; }
+	void SetUnknown0x20(LegoU16 p_unk0x20) { m_unk0x20 = p_unk0x20; }
+	void SetUnknown0x22(LegoU16 p_unk0x22) { m_unk0x22 = p_unk0x22; }
 
 	LegoResult CreateLocalTransform(LegoTime p_time, Matrix4& p_matrix)
 	{
@@ -190,8 +192,8 @@ protected:
 	LegoRotationKey* m_rotationKeys;       // 0x14
 	LegoScaleKey* m_scaleKeys;             // 0x18
 	LegoMorphKey* m_morphKeys;             // 0x1c
-	undefined2 m_unk0x20;                  // 0x20
-	undefined2 m_unk0x22;                  // 0x22
+	LegoU16 m_unk0x20;                     // 0x20
+	LegoU16 m_unk0x22;                     // 0x22
 	LegoU32 m_translationIndex;            // 0x24
 	LegoU32 m_rotationIndex;               // 0x28
 	LegoU32 m_scaleIndex;                  // 0x2c

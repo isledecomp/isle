@@ -43,6 +43,16 @@ public:
 	inline Mx4DPointFloat* GetEdgeNormal(int index) { return &m_edgeNormals[index]; }
 	inline LegoChar* GetName() { return m_name; }
 
+	inline void SetFlag0x10(LegoU32 p_disable)
+	{
+		if (p_disable) {
+			m_flags &= ~c_bit5;
+		}
+		else {
+			m_flags |= c_bit5;
+		}
+	}
+
 	// SYNTHETIC: LEGO1 0x1009a7e0
 	// LegoWEGEdge::`scalar deleting destructor'
 
