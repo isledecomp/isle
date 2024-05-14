@@ -23,6 +23,7 @@ LegoPathBoundary::~LegoPathBoundary()
 }
 
 // FUNCTION: LEGO1 0x100573f0
+// FUNCTION: BETA10 0x100b1536
 MxResult LegoPathBoundary::AddActor(LegoPathActor* p_actor)
 {
 	m_actors.insert(p_actor);
