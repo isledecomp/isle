@@ -147,7 +147,7 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 {
 	int reservedLowEntryCount = 10;
 	int reservedHighEntryCount = 10;
-	int arraySize = _countof(m_paletteEntries);
+	int arraySize = sizeOfArray(m_paletteEntries);
 	HDC hdc;
 	int i;
 
@@ -184,7 +184,7 @@ BOOL MxDirectDraw::SetPaletteEntries(const PALETTEENTRY* pPaletteEntries, int pa
 	if (m_pPalette) {
 		HRESULT result;
 
-		result = m_pPalette->SetEntries(0, 0, _countof(m_paletteEntries), m_paletteEntries);
+		result = m_pPalette->SetEntries(0, 0, sizeOfArray(m_paletteEntries), m_paletteEntries);
 		if (result != DD_OK) {
 			Error("SetEntries failed", result);
 			return FALSE;

@@ -244,7 +244,7 @@ LegoBuildingManager::~LegoBuildingManager()
 // FUNCTION: LEGO1 0x1002f9d0
 void LegoBuildingManager::Init()
 {
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i] = g_buildingInfoInit[i];
 	}
 
@@ -262,7 +262,7 @@ void LegoBuildingManager::FUN_1002fa00()
 	MxS32 i;
 	LegoWorld* world = CurrentWorld();
 
-	for (i = 0; i < _countof(g_buildingInfo); i++) {
+	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		UpdatePosition(i, world);
 	}
 
@@ -274,7 +274,7 @@ void LegoBuildingManager::FUN_1002fa00()
 		}
 	}
 	else {
-		for (i = 0; i < _countof(g_buildingInfoHausName); i++) {
+		for (i = 0; i < sizeOfArray(g_buildingInfoHausName); i++) {
 			LegoEntity* entity = (LegoEntity*) world->Find("MxEntity", g_buildingInfoHausName[i]);
 			if (entity) {
 				entity->GetROI()->SetVisibility(m_nextVariant == i);
@@ -308,7 +308,7 @@ void LegoBuildingManager::FUN_1002fb30()
 {
 	MxU32 i;
 
-	for (i = 0; i < _countof(g_buildingInfo); i++) {
+	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i].m_entity = NULL;
 	}
 
@@ -327,7 +327,7 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
 		if (p_storage->Write(&info->m_cycle1, sizeof(info->m_cycle1)) != SUCCESS) {
@@ -360,7 +360,7 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
 		if (p_storage->Read(&info->m_cycle1, sizeof(info->m_cycle1)) != SUCCESS) {
@@ -426,13 +426,13 @@ LegoBuildingInfo* LegoBuildingManager::GetInfo(LegoEntity* p_entity)
 {
 	MxS32 i;
 
-	for (i = 0; i < _countof(g_buildingInfo); i++) {
+	for (i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		if (g_buildingInfo[i].m_entity == p_entity) {
 			break;
 		}
 	}
 
-	if (i < _countof(g_buildingInfo)) {
+	if (i < sizeOfArray(g_buildingInfo)) {
 		return &g_buildingInfo[i];
 	}
 
@@ -451,7 +451,7 @@ MxBool LegoBuildingManager::IncrementVariant(LegoEntity* p_entity)
 
 	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit1 && info->m_unk0x11 == -1) {
 		LegoROI* roi = p_entity->GetROI();
-		if (++m_nextVariant >= _countof(g_buildingInfoHausName)) {
+		if (++m_nextVariant >= sizeOfArray(g_buildingInfoHausName)) {
 			m_nextVariant = 0;
 		}
 
@@ -603,7 +603,7 @@ MxBool LegoBuildingManager::FUN_10030030(MxS32 p_index)
 // FUNCTION: LEGO1 0x10030110
 MxBool LegoBuildingManager::FUN_10030110(LegoBuildingInfo* p_data)
 {
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		if (&g_buildingInfo[i] == p_data) {
 			return FUN_10030030(i);
 		}
@@ -665,7 +665,7 @@ MxResult LegoBuildingManager::Tickle()
 // FUNCTION: BETA10 0x1006474c
 void LegoBuildingManager::FUN_10030590()
 {
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i].m_unk0x11 = -1;
 		g_buildingInfo[i].m_initialUnk0x11 = -1;
 		AdjustHeight(i);
@@ -693,7 +693,7 @@ LegoBuildingInfo* LegoBuildingManager::GetInfoArray(MxS32& p_length)
 		FUN_10030630();
 	}
 
-	p_length = _countof(g_buildingInfo);
+	p_length = sizeOfArray(g_buildingInfo);
 	return g_buildingInfo;
 }
 
@@ -719,7 +719,7 @@ void LegoBuildingManager::FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust)
 // FUNCTION: LEGO1 0x10030800
 void LegoBuildingManager::FUN_10030800()
 {
-	for (MxS32 i = 0; i < _countof(g_buildingInfo); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		g_buildingInfo[i].m_initialUnk0x11 = g_buildingInfo[i].m_unk0x11;
 	}
 }

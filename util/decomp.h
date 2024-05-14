@@ -13,8 +13,8 @@
 #define DECOMP_SIZE_ASSERT(T, S)
 #endif
 
-#ifndef _countof
-#define _countof(arr) (sizeof(arr) / sizeof(arr[0]))
+#ifndef sizeOfArray
+#define sizeOfArray(arr) (sizeof(arr) / sizeof(arr[0]))
 #endif
 
 typedef unsigned char undefined;

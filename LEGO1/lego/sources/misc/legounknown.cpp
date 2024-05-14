@@ -5,7 +5,7 @@ DECOMP_SIZE_ASSERT(LegoUnknown, 0x50)
 // FUNCTION: LEGO1 0x1009a0f0
 LegoUnknown::LegoUnknown()
 {
-	for (LegoS32 i = 0; i < _countof(m_unk0x00); i++) {
+	for (LegoS32 i = 0; i < sizeOfArray(m_unk0x00); i++) {
 		m_unk0x00[i].Clear();
 	}
 }

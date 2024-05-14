@@ -34,7 +34,7 @@ Act1State::Act1State() : m_unk0x00c(0), m_unk0x00e(0), m_unk0x008(NULL), m_unk0x
 	m_unk0x1b0 = NULL;
 	m_unk0x021 = 1;
 	m_elevFloor = Act1State::c_floor1;
-	m_unk0x00c = _countof(g_unk0x100f37f0);
+	m_unk0x00c = sizeOfArray(g_unk0x100f37f0);
 	m_unk0x1b4 = NULL;
 	m_unk0x1b8 = NULL;
 	m_unk0x208 = NULL;

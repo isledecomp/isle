@@ -30,7 +30,7 @@ public:
 	// FUNCTION: LEGO1 0x10071830
 	MxBool IsSerializable() override { return FALSE; } // vtable+0x14
 
-	inline MxS16 GetMaxNameLength() { return _countof(m_letters); }
+	inline MxS16 GetMaxNameLength() { return sizeOfArray(m_letters); }
 	inline MxStillPresenter* GetNameLetter(MxS32 p_index) { return m_letters[p_index]; }
 	inline void SetNameLetter(MxS32 p_index, MxStillPresenter* p_letter) { m_letters[p_index] = p_letter; }
 	inline MxBool HasRegistered() { return m_letters[0] != NULL; }

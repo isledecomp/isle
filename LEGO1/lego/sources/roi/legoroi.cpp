@@ -609,7 +609,7 @@ LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_g
 // FUNCTION: LEGO1 0x100a9c50
 LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
-	for (MxU32 i = 0; i < _countof(g_roiColorAliases); i++) {
+	for (MxU32 i = 0; i < sizeOfArray(g_roiColorAliases); i++) {
 		if (strcmpi(g_roiColorAliases[i].m_name, p_param) == 0) {
 			p_red = g_roiColorAliases[i].m_red / 255.0;
 			p_green = g_roiColorAliases[i].m_green / 255.0;
