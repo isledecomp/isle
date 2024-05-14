@@ -203,7 +203,7 @@ void LegoHideAnimPresenter::FUN_1006e470(
 
 		p_data->SetUnknown0x22(animStruct.m_index);
 
-		char* name = new LegoChar[strlen(p_name) + 1];
+		char* name = new char[strlen(p_name) + 1];
 		strcpy(name, p_name);
 
 		p_map[name] = animStruct;
