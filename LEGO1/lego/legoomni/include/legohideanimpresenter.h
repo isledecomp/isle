@@ -4,6 +4,20 @@
 #include "decomp.h"
 #include "legoloopinganimpresenter.h"
 
+class LegoPathBoundary;
+
+struct LegoHideAnimStructComparator {
+	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+};
+
+// SIZE 0x08
+struct LegoHideAnimStruct {
+	LegoPathBoundary* m_boundary; // 0x00
+	MxU32 m_index;                // 0x04
+};
+
+typedef map<const char*, LegoHideAnimStruct, LegoHideAnimStructComparator> LegoHideAnimStructMap;
+
 // VTABLE: LEGO1 0x100d9278
 // SIZE 0xc4
 class LegoHideAnimPresenter : public LegoLoopingAnimPresenter {
@@ -36,13 +50,50 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	void FUN_1006db40(undefined4);
+	void FUN_1006db40(MxLong p_time);
+	void FUN_1006db60(LegoTreeNode* p_node, MxLong p_time);
 	void FUN_1006dc10();
+	void FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
+	void FUN_1006e470(
+		LegoHideAnimStructMap& p_map,
+		LegoAnimNodeData* p_data,
+		const char* p_name,
+		LegoPathBoundary* p_boundary
+	);
 
-	undefined4* m_unk0xc0; // 0xc0
+	LegoPathBoundary** m_boundaryMap; // 0xc0
 };
 
+// clang-format off
 // SYNTHETIC: LEGO1 0x1006d9d0
 // LegoHideAnimPresenter::`scalar deleting destructor'
+
+// TEMPLATE: LEGO1 0x1006ddb0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~_Tree<char const *,pair<ch
+
+// TEMPLATE: LEGO1 0x1006de80
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Inc
+
+// TEMPLATE: LEGO1 0x1006dec0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::erase
+
+// TEMPLATE: LEGO1 0x1006e310
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Erase
+
+// TEMPLATE: LEGO1 0x1006e350
+// Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>::~Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>
+
+// TEMPLATE: LEGO1 0x1006e3a0
+// map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >
+
+// TEMPLATE: LEGO1 0x1006e6d0
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Dec
+
+// TEMPLATE: LEGO1 0x1006e720
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Insert
+
+// GLOBAL: LEGO1 0x100f768c
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Nil
+// clang-format on
 
 #endif // LEGOHIDEANIMPRESENTER_H
