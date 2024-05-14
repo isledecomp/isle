@@ -50,8 +50,8 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	void FUN_1006db40(MxLong p_time);
-	void FUN_1006db60(LegoTreeNode* p_node, MxLong p_time);
+	void FUN_1006db40(LegoTime p_time);
+	void FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time);
 	void FUN_1006dc10();
 	void FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);
 	void FUN_1006e470(

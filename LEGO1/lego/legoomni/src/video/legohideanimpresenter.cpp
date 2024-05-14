@@ -100,14 +100,14 @@ void LegoHideAnimPresenter::StartingTickle()
 
 // FUNCTION: LEGO1 0x1006db40
 // FUNCTION: BETA10 0x100531ab
-void LegoHideAnimPresenter::FUN_1006db40(MxLong p_time)
+void LegoHideAnimPresenter::FUN_1006db40(LegoTime p_time)
 {
 	FUN_1006db60(m_anim->GetRoot(), p_time);
 }
 
 // FUNCTION: LEGO1 0x1006db60
 // FUNCTION: BETA10 0x100531de
-void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, MxLong p_time)
+void LegoHideAnimPresenter::FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time)
 {
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
 	MxBool newB = FALSE;
