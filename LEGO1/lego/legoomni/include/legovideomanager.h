@@ -88,7 +88,7 @@ private:
 	MxS32 m_cursorY;                     // 0x510
 	LPDIRECTDRAWSURFACE m_cursorSurface; // 0x514
 	RECT m_cursorRect;                   // 0x518
-	undefined4 m_unk0x528;               // 0x528
+	LPDIRECTDRAWSURFACE m_unk0x528;      // 0x528
 	MxBool m_drawFPS;                    // 0x52c
 	RECT m_fpsRect;                      // 0x530
 	HFONT m_arialFont;                   // 0x540
