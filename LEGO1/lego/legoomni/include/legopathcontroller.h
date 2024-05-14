@@ -103,7 +103,9 @@ public:
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
 	void FUN_10046bb0(LegoWorld* p_world);
+
 	static MxResult Init();
+	static MxResult Reset();
 
 private:
 	void FUN_10046970();

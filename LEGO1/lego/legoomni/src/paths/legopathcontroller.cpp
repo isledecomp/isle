@@ -428,6 +428,25 @@ MxResult LegoPathController::Init()
 	return SUCCESS;
 }
 
+// FUNCTION: LEGO1 0x10046de0
+// FUNCTION: BETA10 0x100b779e
+MxResult LegoPathController::Reset()
+{
+	if (g_ctrlBoundariesA == NULL || g_ctrlEdgesA == NULL) {
+		return FAILURE;
+	}
+
+	delete[] g_ctrlBoundariesA;
+	delete[] g_ctrlEdgesA;
+	delete[] g_ctrlBoundariesB;
+	delete[] g_ctrlEdgesB;
+	g_ctrlBoundariesA = NULL;
+	g_ctrlEdgesA = NULL;
+	g_ctrlBoundariesB = NULL;
+	g_ctrlEdgesB = NULL;
+	return SUCCESS;
+}
+
 // FUNCTION: LEGO1 0x10046e50
 // FUNCTION: BETA10 0x100b781f
 MxResult LegoPathController::Read(LegoStorage* p_storage)
