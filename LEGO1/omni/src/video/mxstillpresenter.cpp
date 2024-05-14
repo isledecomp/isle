@@ -14,10 +14,6 @@
 
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
-// GLOBAL: LEGO1 0x101020e0
-// STRING: LEGO1 0x10101eb0
-const char* g_strBmpIsmap = "BMP_ISMAP";
-
 // FUNCTION: LEGO1 0x100b9c70
 void MxStillPresenter::Destroy(MxBool p_fromDestructor)
 {
@@ -218,7 +214,7 @@ void MxStillPresenter::ParseExtra()
 			}
 		}
 
-		if (KeyValueStringParse(output, g_strBmpIsmap, extraCopy)) {
+		if (KeyValueStringParse(output, g_strBMP_ISMAP, extraCopy)) {
 			SetBit4(TRUE);
 			SetBit1(FALSE);
 			SetBit2(FALSE);

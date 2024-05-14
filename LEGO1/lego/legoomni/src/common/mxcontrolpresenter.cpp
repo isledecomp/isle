@@ -11,22 +11,6 @@
 
 DECOMP_SIZE_ASSERT(MxControlPresenter, 0x5c)
 
-// GLOBAL: LEGO1 0x10102064
-// STRING: LEGO1 0x10101fec
-const char* g_style = "STYLE";
-
-// GLOBAL: LEGO1 0x10102068
-// STRING: LEGO1 0x10101fe4
-const char* g_grid = "GRID";
-
-// GLOBAL: LEGO1 0x1010206c
-// STRING: LEGO1 0x10101fe0
-const char* g_map = "MAP";
-
-// GLOBAL: LEGO1 0x10102074
-// STRING: LEGO1 0x10101fd0
-const char* g_toggle = "TOGGLE";
-
 // FUNCTION: LEGO1 0x10043f50
 MxControlPresenter::MxControlPresenter()
 {
@@ -266,18 +250,18 @@ void MxControlPresenter::ParseExtra()
 		extraCopy[extraLength & MAXWORD] = '\0';
 
 		char output[256];
-		if (KeyValueStringParse(output, g_style, extraCopy)) {
+		if (KeyValueStringParse(output, g_strSTYLE, extraCopy)) {
 			char* str = strtok(output, g_parseExtraTokens);
 
-			if (!strcmpi(str, g_toggle)) {
+			if (!strcmpi(str, g_strTOGGLE)) {
 				m_unk0x4c = 1;
 			}
-			else if (!strcmpi(str, g_grid)) {
+			else if (!strcmpi(str, g_strGRID)) {
 				m_unk0x4c = 2;
 				m_unk0x52 = atoi(strtok(NULL, g_parseExtraTokens));
 				m_unk0x54 = atoi(strtok(NULL, g_parseExtraTokens));
 			}
-			else if (!strcmpi(str, g_map)) {
+			else if (!strcmpi(str, g_strMAP)) {
 				m_unk0x4c = 3;
 				str = strtok(NULL, g_parseExtraTokens);
 

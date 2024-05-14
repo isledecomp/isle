@@ -1,5 +1,6 @@
 #include "legopathpresenter.h"
 
+#include "define.h"
 #include "legopathcontroller.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -9,10 +10,6 @@
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54)
-
-// STRING: LEGO1 0x10101ef0
-// GLOBAL: LEGO1 0x101020c4
-const char* g_triggersSource = "TRIGGERS_SOURCE";
 
 // FUNCTION: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()
@@ -132,7 +129,7 @@ void LegoPathPresenter::ParseExtra()
 
 		strupr(extraCopy);
 
-		if (KeyValueStringParse(output, g_triggersSource, extraCopy) != FALSE) {
+		if (KeyValueStringParse(output, g_strTRIGGERS_SOURCE, extraCopy) != FALSE) {
 			m_trigger = MxAtomId(output, e_lowerCase2);
 		}
 	}

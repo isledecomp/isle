@@ -1,39 +1,12 @@
 #include "legometerpresenter.h"
 
 #include "decomp.h"
+#include "define.h"
 #include "mxbitmap.h"
 #include "mxdsaction.h"
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
-
-// GLOBAL: LEGO1 0x1010207c
-// STRING: LEGO1 0x10101fb4
-const char* g_filterIndex = "FILLER_INDEX";
-
-// GLOBAL: LEGO1 0x10102094
-// STRING: LEGO1 0x10101f70
-const char* g_type = "TYPE";
-
-// GLOBAL: LEGO1 0x10102088
-// STRING: LEGO1 0x10101f94
-const char* g_leftToRight = "LEFT_TO_RIGHT";
-
-// GLOBAL: LEGO1 0x101020ac
-// STRING: LEGO1 0x10101f28
-const char* g_rightToLeft = "RIGHT_TO_LEFT";
-
-// GLOBAL: LEGO1 0x1010205c
-// STRING: LEGO1 0x10102000
-const char* g_bottomToTop = "BOTTOM_TO_TOP";
-
-// GLOBAL: LEGO1 0x101020c0
-// STRING: LEGO1 0x10101f00
-const char* g_topToBottom = "TOP_TO_BOTTOM";
-
-// GLOBAL: LEGO1 0x101020c8
-// STRING: LEGO1 0x10101ee4
-const char* g_variable = "VARIABLE";
 
 // FUNCTION: LEGO1 0x10043430
 LegoMeterPresenter::LegoMeterPresenter()
@@ -66,26 +39,26 @@ void LegoMeterPresenter::ParseExtra()
 		extraCopy[extraLength & MAXWORD] = '\0';
 
 		char output[256];
-		if (KeyValueStringParse(extraCopy, g_type, output)) {
-			if (!strcmpi(output, g_leftToRight)) {
+		if (KeyValueStringParse(extraCopy, g_strTYPE, output)) {
+			if (!strcmpi(output, g_strLEFT_TO_RIGHT)) {
 				m_layout = 0;
 			}
-			else if (!strcmpi(output, g_rightToLeft)) {
+			else if (!strcmpi(output, g_strRIGHT_TO_LEFT)) {
 				m_layout = 1;
 			}
-			else if (!strcmpi(output, g_bottomToTop)) {
+			else if (!strcmpi(output, g_strBOTTOM_TO_TOP)) {
 				m_layout = 2;
 			}
-			else if (!strcmpi(output, g_topToBottom)) {
+			else if (!strcmpi(output, g_strTOP_TO_BOTTOM)) {
 				m_layout = 3;
 			}
 		}
 
-		if (KeyValueStringParse(extraCopy, g_filterIndex, output)) {
+		if (KeyValueStringParse(extraCopy, g_strFILLER_INDEX, output)) {
 			m_type = atoi(output);
 		}
 
-		if (KeyValueStringParse(extraCopy, g_variable, output)) {
+		if (KeyValueStringParse(extraCopy, g_strVARIABLE, output)) {
 			m_variable = output;
 		}
 		else {
