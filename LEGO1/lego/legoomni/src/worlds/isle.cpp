@@ -492,7 +492,7 @@ void Isle::Enable(MxBool p_enable)
 			for (MxU32 i = 0; i < 5; i++) {
 				MxS32 r = rand() % 5;
 
-				for (MxU32 j = 0; j < _countof(locations); j++) {
+				for (MxU32 j = 0; j < sizeOfArray(locations); j++) {
 					if (locations[j] != 0 && r-- == 0) {
 						AnimationManager()->AddExtra(locations[j], TRUE);
 						locations[j] = 0;

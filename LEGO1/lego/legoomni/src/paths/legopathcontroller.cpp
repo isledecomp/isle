@@ -100,7 +100,7 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 			LegoPathBoundary& boundary = m_boundaries[i];
 			MxS32 j;
 
-			for (j = 0; j < _countof(g_unk0x100f42f0); j++) {
+			for (j = 0; j < sizeOfArray(g_unk0x100f42f0); j++) {
 				if (!strcmpi(g_unk0x100f42f0[j], boundary.GetName())) {
 					g_ctrlBoundariesA[j].m_controller = this;
 					g_ctrlBoundariesA[j].m_boundary = &boundary;
@@ -111,7 +111,7 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 				}
 			}
 
-			for (j = 0; j < _countof(g_unk0x100f4330); j++) {
+			for (j = 0; j < sizeOfArray(g_unk0x100f4330); j++) {
 				if (!strcmpi(g_unk0x100f4330[j], boundary.GetName())) {
 					g_ctrlBoundariesB[j].m_controller = this;
 					g_ctrlBoundariesB[j].m_boundary = &boundary;
@@ -162,7 +162,7 @@ void LegoPathController::Destroy()
 	m_numE = 0;
 
 	MxS32 j;
-	for (j = 0; j < _countof(g_unk0x100f42f0); j++) {
+	for (j = 0; j < sizeOfArray(g_unk0x100f42f0); j++) {
 		if (g_ctrlBoundariesA[j].m_controller == this) {
 			g_ctrlBoundariesA[j].m_controller = NULL;
 			g_ctrlBoundariesA[j].m_boundary = NULL;
@@ -174,7 +174,7 @@ void LegoPathController::Destroy()
 		}
 	}
 
-	for (j = 0; j < _countof(g_unk0x100f4330); j++) {
+	for (j = 0; j < sizeOfArray(g_unk0x100f4330); j++) {
 		if (g_ctrlBoundariesB[j].m_controller == this) {
 			g_ctrlBoundariesB[j].m_controller = NULL;
 			g_ctrlBoundariesB[j].m_boundary = NULL;
@@ -421,10 +421,10 @@ MxResult LegoPathController::Init()
 		return FAILURE;
 	}
 
-	g_ctrlBoundariesA = new CtrlBoundary[_countof(g_unk0x100f42f0)];
-	g_ctrlEdgesA = new CtrlEdge[_countof(g_unk0x100f42f0)];
-	g_ctrlBoundariesB = new CtrlBoundary[_countof(g_unk0x100f4330)];
-	g_ctrlEdgesB = new CtrlEdge[_countof(g_unk0x100f4330)];
+	g_ctrlBoundariesA = new CtrlBoundary[sizeOfArray(g_unk0x100f42f0)];
+	g_ctrlEdgesA = new CtrlEdge[sizeOfArray(g_unk0x100f42f0)];
+	g_ctrlBoundariesB = new CtrlBoundary[sizeOfArray(g_unk0x100f4330)];
+	g_ctrlEdgesB = new CtrlEdge[sizeOfArray(g_unk0x100f4330)];
 	return SUCCESS;
 }
 

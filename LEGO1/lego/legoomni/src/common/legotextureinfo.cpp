@@ -104,7 +104,7 @@ LegoTextureInfo* LegoTextureInfo::Create(const char* p_name, LegoTexture* p_text
 	PALETTEENTRY entries[256];
 	memset(entries, 0, sizeof(entries));
 
-	for (i = 0; i < _countof(entries); i++) {
+	for (i = 0; i < sizeOfArray(entries); i++) {
 		if (i < image->GetCount()) {
 			entries[i].peFlags = 0;
 			entries[i].peRed = image->GetPaletteEntry(i).GetRed();

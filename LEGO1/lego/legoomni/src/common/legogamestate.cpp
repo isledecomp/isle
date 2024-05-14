@@ -251,7 +251,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	Write(&fileStorage, (MxU16) m_currentAct);
 	Write(&fileStorage, m_actorId);
 
-	for (i = 0; i < _countof(g_colorSaveData); i++) {
+	for (i = 0; i < sizeOfArray(g_colorSaveData); i++) {
 		if (WriteVariable(&fileStorage, variableTable, g_colorSaveData[i].m_targetName) == FAILURE) {
 			goto done;
 		}
@@ -997,7 +997,7 @@ void LegoGameState::SetColors()
 {
 	MxVariableTable* variableTable = VariableTable();
 
-	for (MxS32 i = 0; i < _countof(g_colorSaveData); i++) {
+	for (MxS32 i = 0; i < sizeOfArray(g_colorSaveData); i++) {
 		variableTable->SetVariable(g_colorSaveData[i].m_targetName, g_colorSaveData[i].m_colorName);
 	}
 }

@@ -147,11 +147,11 @@ void LegoInputManager::FUN_1005c0f0()
 	m_unk0x94 = FALSE;
 
 	if (m_directInputDevice) {
-		HRESULT hr = m_directInputDevice->GetDeviceState(_countof(m_unk0x95), &m_unk0x95);
+		HRESULT hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_unk0x95), &m_unk0x95);
 
 		if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED) {
 			if (m_directInputDevice->Acquire() == S_OK) {
-				hr = m_directInputDevice->GetDeviceState(_countof(m_unk0x95), &m_unk0x95);
+				hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_unk0x95), &m_unk0x95);
 			}
 		}
 

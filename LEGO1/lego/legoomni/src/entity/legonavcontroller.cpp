@@ -407,7 +407,7 @@ MxResult LegoNavController::UpdateLocation(const char* p_location)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < (MxS32) _countof(g_locations); i++) {
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(g_locations); i++) {
 		if (!strcmpi(p_location, g_locations[i].m_name)) {
 			MxMatrix mat;
 			LegoROI* viewROI = VideoManager()->GetViewROI();
@@ -440,7 +440,7 @@ MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 {
 	MxResult result = FAILURE;
 
-	if (p_location < _countof(g_locations)) {
+	if (p_location < sizeOfArray(g_locations)) {
 		MxMatrix mat;
 		LegoROI* viewROI = VideoManager()->GetViewROI();
 
@@ -475,7 +475,7 @@ MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 // FUNCTION: BETA10 0x1009c259
 LegoLocation* LegoNavController::GetLocation(MxU32 p_location)
 {
-	if (p_location < _countof(g_locations)) {
+	if (p_location < sizeOfArray(g_locations)) {
 		return &g_locations[p_location];
 	}
 

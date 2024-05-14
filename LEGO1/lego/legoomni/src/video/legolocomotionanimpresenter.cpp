@@ -80,7 +80,7 @@ void LegoLocomotionAnimPresenter::PutFrame()
 // FUNCTION: LEGO1 0x1006d5d0
 void LegoLocomotionAnimPresenter::ReadyTickle()
 {
-	LegoAnimPresenter::ReadyTickle();
+	LegoLoopingAnimPresenter::ReadyTickle();
 
 	if (m_currentWorld != NULL && m_currentTickleState == e_starting) {
 		m_currentWorld->Add(this);
