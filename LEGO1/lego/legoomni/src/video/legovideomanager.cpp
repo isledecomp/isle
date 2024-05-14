@@ -43,7 +43,7 @@ LegoVideoManager::LegoVideoManager()
 	m_cursorSurface = NULL;
 	m_fullScreenMovie = FALSE;
 	m_drawFPS = FALSE;
-	m_unk0x528 = 0;
+	m_unk0x528 = NULL;
 	m_arialFont = NULL;
 	m_unk0xe5 = FALSE;
 	m_unk0x554 = FALSE;
@@ -220,17 +220,34 @@ done:
 // FUNCTION: LEGO1 0x1007b5e0
 void LegoVideoManager::Destroy()
 {
-	// todo: delete m_unk0x512
-	// todo: delete m_unk0x258
+	if (m_cursorSurface != NULL) {
+		m_cursorSurface->Release();
+		m_cursorSurface = NULL;
+	}
+
+	if (m_unk0x528 != NULL) {
+		m_unk0x528->Release();
+		m_unk0x528 = NULL;
+	}
+
 	if (m_arialFont != NULL) {
 		DeleteObject(m_arialFont);
 		m_arialFont = NULL;
 	}
 
-	// delete m_unk0x64; //TODO: delete d3drm
+	delete m_renderer;
+
+	if (m_viewROI != NULL) {
+		if (m_3dManager != NULL) {
+			m_3dManager->Remove(*m_viewROI);
+		}
+
+		delete m_viewROI;
+	}
 
 	delete m_3dManager;
 	MxVideoManager::Destroy();
+	delete m_phonemeRefList;
 	delete m_stopWatch;
 }
 
