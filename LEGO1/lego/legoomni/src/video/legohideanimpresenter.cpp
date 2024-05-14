@@ -161,7 +161,7 @@ void LegoHideAnimPresenter::FUN_1006dc10()
 }
 
 // FUNCTION: LEGO1 0x1006e3f0
-// FNUCTION: BETA10 0x1005345e
+// FUNCTION: BETA10 0x1005345e
 void LegoHideAnimPresenter::FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node)
 {
 	LegoAnimNodeData* data = (LegoAnimNodeData*) p_node->GetData();
