@@ -5,16 +5,21 @@
 
 DECOMP_SIZE_ASSERT(LegoPathBoundary, 0x74)
 
-// STUB: LEGO1 0x10056a70
+// FUNCTION: LEGO1 0x10056a70
+// FUNCTION: BETA10 0x100b1360
 LegoPathBoundary::LegoPathBoundary()
 {
-	// TODO
 }
 
-// STUB: LEGO1 0x10057260
+// FUNCTION: LEGO1 0x10057260
+// FUNCTION: BETA10 0x100b140d
 LegoPathBoundary::~LegoPathBoundary()
 {
-	// TODO
+	for (LegoPathActorSet::iterator it = m_actors.begin(); !(it == m_actors.end()); it++) {
+		(*it)->SetBoundary(NULL);
+	}
+
+	m_actors.erase(m_actors.begin(), m_actors.end());
 }
 
 // FUNCTION: LEGO1 0x100573f0
