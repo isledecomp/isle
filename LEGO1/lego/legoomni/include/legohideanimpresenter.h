@@ -36,6 +36,8 @@ public:
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
+	void FUN_1006db40(undefined4);
+	void FUN_1006dc10();
 
 	undefined4* m_unk0xc0; // 0xc0
 };
