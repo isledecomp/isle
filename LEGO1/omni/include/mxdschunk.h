@@ -5,18 +5,16 @@
 #include "mxcore.h"
 #include "mxtypes.h"
 
+#define DS_CHUNK_BIT1 0x01
+#define DS_CHUNK_END_OF_STREAM 0x02
+#define DS_CHUNK_BIT3 0x04
+#define DS_CHUNK_SPLIT 0x10
+#define DS_CHUNK_BIT16 0x8000
+
 // VTABLE: LEGO1 0x100dc7f8
 // SIZE 0x1c
 class MxDSChunk : public MxCore {
 public:
-	enum {
-		c_bit1 = 0x01,
-		c_end = 0x02,
-		c_bit3 = 0x04,
-		c_split = 0x10,
-		c_bit16 = 0x8000
-	};
-
 	MxDSChunk();
 	~MxDSChunk() override;
 
@@ -39,13 +37,13 @@ public:
 	inline static MxU32 Size(MxU32 p_dataSize) { return (p_dataSize & 1) + p_dataSize + 8; }
 	inline static MxU8* End(MxU8* p_buffer) { return p_buffer + Size(*IntoLength(p_buffer)); }
 
-	inline void SetFlags(MxU16 p_flags) { m_flags = p_flags; }
+	inline void SetChunkFlags(MxU16 p_flags) { m_flags = p_flags; }
 	inline void SetObjectId(undefined4 p_objectid) { m_objectId = p_objectid; }
 	inline void SetTime(MxLong p_time) { m_time = p_time; }
 	inline void SetLength(MxU32 p_length) { m_length = p_length; }
 	inline void SetData(MxU8* p_data) { m_data = p_data; }
 
-	inline MxU16 GetFlags() { return m_flags; }
+	inline MxU16 GetChunkFlags() { return m_flags; }
 	inline undefined4 GetObjectId() { return m_objectId; }
 	inline MxLong GetTime() { return m_time; }
 	inline MxU32 GetLength() { return m_length; }

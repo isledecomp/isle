@@ -192,8 +192,9 @@ void MxWavePresenter::StreamingTickle()
 		if (!(m_action->GetFlags() & MxDSAction::c_looping)) {
 			MxStreamChunk* chunk = CurrentChunk();
 
-			if (chunk && chunk->GetFlags() & MxDSChunk::c_end && !(chunk->GetFlags() & MxDSChunk::c_bit16)) {
-				chunk->SetFlags(chunk->GetFlags() | MxDSChunk::c_bit16);
+			if (chunk && chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM &&
+				!(chunk->GetChunkFlags() & DS_CHUNK_BIT16)) {
+				chunk->SetChunkFlags(chunk->GetChunkFlags() | DS_CHUNK_BIT16);
 
 				m_currentChunk = new MxStreamChunk;
 				MxU8* data = new MxU8[m_chunkLength];
@@ -203,7 +204,7 @@ void MxWavePresenter::StreamingTickle()
 				m_currentChunk->SetLength(m_chunkLength);
 				m_currentChunk->SetData(data);
 				m_currentChunk->SetTime(chunk->GetTime() + 1000);
-				m_currentChunk->SetFlags(MxDSChunk::c_bit1);
+				m_currentChunk->SetChunkFlags(DS_CHUNK_BIT1);
 			}
 		}
 

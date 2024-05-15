@@ -119,7 +119,7 @@ protected:
 	LegoROI** m_unk0x8c;          // 0x8c
 	char** m_unk0x90;             // 0x90
 	MxU8 m_unk0x94;               // 0x94
-	undefined m_unk0x95;          // 0x95
+	MxBool m_unk0x95;             // 0x95
 	MxBool m_unk0x96;             // 0x96
 	undefined m_unk0x97;          // 0x97
 	LegoAnimSubstMap* m_substMap; // 0x98

@@ -15,7 +15,7 @@ MxDSChunk::MxDSChunk()
 // FUNCTION: LEGO1 0x100be170
 MxDSChunk::~MxDSChunk()
 {
-	if (m_flags & c_bit1) {
+	if (m_flags & DS_CHUNK_BIT1) {
 		delete[] m_data;
 	}
 }

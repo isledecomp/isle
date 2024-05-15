@@ -284,7 +284,7 @@ MxResult MxStreamController::FUN_100c1f00(MxDSAction* p_action)
 		return FAILURE;
 	}
 
-	chunk->SetFlags(MxDSChunk::c_bit3);
+	chunk->SetChunkFlags(DS_CHUNK_BIT3);
 	chunk->SetObjectId(objectId);
 
 	if (chunk->SendChunk(m_subscriberList, FALSE, p_action->GetUnknown24()) != SUCCESS) {

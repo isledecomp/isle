@@ -130,7 +130,7 @@ void MxDSSubscriber::FreeDataChunk(MxStreamChunk* p_chunk)
 				delete p_chunk;
 			}
 		}
-		else if (p_chunk->GetFlags() & MxDSChunk::c_bit1 && p_chunk) {
+		else if (p_chunk->GetChunkFlags() & DS_CHUNK_BIT1 && p_chunk) {
 			delete p_chunk;
 		}
 	}
