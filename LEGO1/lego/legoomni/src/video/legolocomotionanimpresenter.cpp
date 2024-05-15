@@ -1,8 +1,14 @@
 #include "legolocomotionanimpresenter.h"
 
+#include "anim/legoanim.h"
+#include "legoanimactor.h"
 #include "legomain.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxautolock.h"
+#include "mxdssubscriber.h"
+#include "mxmisc.h"
+#include "mxvariabletable.h"
 
 DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)
 
@@ -22,10 +28,10 @@ LegoLocomotionAnimPresenter::~LegoLocomotionAnimPresenter()
 void LegoLocomotionAnimPresenter::Init()
 {
 	m_unk0xc0 = 0;
-	m_unk0xc4 = 0;
+	m_unk0xc4 = NULL;
 	m_unk0xcc = -1;
 	m_unk0xd0 = -1;
-	m_unk0xc8 = 0;
+	m_roiMapList = NULL;
 	m_unk0xd4 = 0;
 }
 
@@ -38,8 +44,8 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 		delete[] m_unk0xc4;
 	}
 
-	if (m_unk0xc8) {
-		delete m_unk0xc8;
+	if (m_roiMapList) {
+		delete m_roiMapList;
 	}
 
 	m_roiMap = NULL;
@@ -48,7 +54,7 @@ void LegoLocomotionAnimPresenter::Destroy(MxBool p_fromDestructor)
 	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {
-		LegoAnimPresenter::Destroy();
+		LegoLoopingAnimPresenter::Destroy();
 	}
 }
 
@@ -59,10 +65,17 @@ MxResult LegoLocomotionAnimPresenter::CreateAnim(MxStreamChunk* p_chunk)
 	return result == SUCCESS ? SUCCESS : result;
 }
 
-// STUB: LEGO1 0x1006d160
+// FUNCTION: LEGO1 0x1006d160
+// FUNCTION: BETA10 0x100528c7
 MxResult LegoLocomotionAnimPresenter::AddToManager()
 {
-	return MxVideoPresenter::AddToManager();
+	m_roiMapList = new LegoROIMapList();
+
+	if (m_roiMapList == NULL) {
+		return FAILURE;
+	}
+
+	return LegoAnimPresenter::AddToManager();
 }
 
 // FUNCTION: LEGO1 0x1006d5b0
@@ -92,10 +105,18 @@ void LegoLocomotionAnimPresenter::ReadyTickle()
 	}
 }
 
-// STUB: LEGO1 0x1006d610
+// FUNCTION: LEGO1 0x1006d610
+// FUNCTION: BETA10 0x10052a34
 void LegoLocomotionAnimPresenter::StartingTickle()
 {
-	// TODO
+	if (m_subscriber->PeekData()) {
+		MxStreamChunk* chunk = m_subscriber->PopData();
+		m_subscriber->FreeDataChunk(chunk);
+	}
+
+	if (m_roiMapList->GetCount() != 0) {
+		ProgressTickleState(e_streaming);
+	}
 }
 
 // FUNCTION: LEGO1 0x1006d660
@@ -114,8 +135,30 @@ void LegoLocomotionAnimPresenter::EndAction()
 	}
 }
 
-// STUB: LEGO1 0x1006d680
+// FUNCTION: LEGO1 0x1006d680
+// FUNCTION: BETA10 0x10052b3d
 void LegoLocomotionAnimPresenter::FUN_1006d680(LegoAnimActor* p_actor, MxFloat p_value)
 {
-	// TODO
+	AUTOLOCK(m_criticalSection);
+
+	MxVariableTable* variableTable = VariableTable();
+
+	const char* key = ((LegoAnimNodeData*) m_anim->GetRoot()->GetData())->GetName();
+	variableTable->SetVariable(key, p_actor->GetROI()->GetName());
+
+	FUN_100695c0();
+	FUN_10069b10();
+
+	if (m_roiMap != NULL) {
+		m_roiMapList->Append(m_roiMap);
+		p_actor->FUN_1001c450(m_anim, p_value, m_roiMap, m_roiMapSize);
+		m_roiMap = NULL;
+	}
+
+	variableTable->SetVariable(key, "");
+
+	if (m_unk0x70 != NULL) {
+		delete m_unk0x70;
+		m_unk0x70 = NULL;
+	}
 }
