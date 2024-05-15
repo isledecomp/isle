@@ -67,7 +67,7 @@ MxStreamChunk* MxMediaPresenter::CurrentChunk()
 	if (m_subscriber) {
 		chunk = m_subscriber->PeekData();
 
-		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
+		if (chunk && chunk->GetChunkFlags() & DS_CHUNK_BIT3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
 			m_subscriber->PopData();
 			m_subscriber->FreeDataChunk(chunk);
@@ -87,7 +87,7 @@ MxStreamChunk* MxMediaPresenter::NextChunk()
 	if (m_subscriber) {
 		chunk = m_subscriber->PopData();
 
-		if (chunk && chunk->GetFlags() & MxDSChunk::c_bit3) {
+		if (chunk && chunk->GetChunkFlags() & DS_CHUNK_BIT3) {
 			m_action->SetFlags(m_action->GetFlags() | MxDSAction::c_bit7);
 			m_subscriber->FreeDataChunk(chunk);
 			chunk = NULL;
@@ -180,7 +180,7 @@ void MxMediaPresenter::StreamingTickle()
 		m_currentChunk = NextChunk();
 
 		if (m_currentChunk) {
-			if (m_currentChunk->GetFlags() & MxDSChunk::c_end) {
+			if (m_currentChunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
 				m_subscriber->FreeDataChunk(m_currentChunk);
 				m_currentChunk = NULL;
 				ProgressTickleState(e_repeating);

@@ -53,7 +53,7 @@ void LegoAnimPresenter::Init()
 	m_unk0xa8.Clear();
 	m_unk0xa4 = 0;
 	m_currentWorld = NULL;
-	m_unk0x95 = 0;
+	m_unk0x95 = FALSE;
 	m_worldId = -1;
 	m_substMap = NULL;
 	m_worldAtom.Clear();
@@ -806,7 +806,7 @@ void LegoAnimPresenter::StreamingTickle()
 	}
 	else {
 		if (m_action->GetElapsedTime() > m_anim->GetDuration() + m_action->GetStartTime()) {
-			m_unk0x95 = 1;
+			m_unk0x95 = TRUE;
 		}
 	}
 }
