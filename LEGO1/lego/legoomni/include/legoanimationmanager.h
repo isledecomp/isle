@@ -36,7 +36,7 @@ public:
 		MxS32 m_unk0x10;     // 0x10
 		MxBool m_active;     // 0x14
 		MxU8 m_unk0x15;      // 0x15
-		MxU8 m_unk0x16;      // 0x16
+		MxS8 m_unk0x16;      // 0x16
 	};
 
 	// SIZE 0x08
@@ -53,7 +53,7 @@ public:
 		MxLong m_unk0x08;    // 0x08
 		MxBool m_unk0x0c;    // 0x0c
 		MxBool m_unk0x0d;    // 0x0d
-		float m_unk0x10;     // 0x10
+		float m_speed;       // 0x10
 		MxBool m_unk0x14;    // 0x14
 	};
 
@@ -150,6 +150,19 @@ private:
 	void FUN_10063d10();
 	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
 	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool, MxBool);
+	MxResult FUN_10064380(
+		const char* p_name,
+		const char* p_boundaryName,
+		MxS32 p_src,
+		float p_srcScale,
+		MxS32 p_dest,
+		float p_destScale,
+		MxU32 p_unkIdx1,
+		MxS32 p_unk0x0c,
+		MxU32 p_unkIdx2,
+		MxS32 p_unk0x10,
+		float p_speed
+	);
 	void FUN_100648f0(LegoTranInfo*, MxLong);
 	void FUN_10064b50(MxLong p_time);
 

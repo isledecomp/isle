@@ -128,7 +128,7 @@ void LegoExtraActor::VTable0xa4(MxU8& p_und1, MxS32& p_und2)
 }
 
 // FUNCTION: LEGO1 0x1002aae0
-MxResult LegoExtraActor::VTable0xc8()
+MxResult LegoExtraActor::FUN_1002aae0()
 {
 	LegoPathBoundary* oldEdge = m_boundary;
 	Vector3 rightRef(m_unk0xec[0]);
@@ -203,7 +203,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 		}
 
 		m_unk0x15 = 100;
-		VTable0xc8();
+		FUN_1002aae0();
 	}
 	else {
 		MxU32 b = FALSE;
