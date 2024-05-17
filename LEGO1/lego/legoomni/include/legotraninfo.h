@@ -13,6 +13,7 @@ class MxPresenter;
 // SIZE 0x78
 struct LegoTranInfo {
 	enum {
+		c_bit1 = 0x01,
 		c_bit2 = 0x02
 	};
 
