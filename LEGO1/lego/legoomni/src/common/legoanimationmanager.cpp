@@ -2084,9 +2084,9 @@ MxResult LegoAnimationManager::FUN_10064380(
 	float p_srcScale,
 	MxS32 p_dest,
 	float p_destScale,
-	MxU32 p_unkIdx1,
+	MxU32 p_undIdx1,
 	MxS32 p_unk0x0c,
-	MxU32 p_unkIdx2,
+	MxU32 p_undIdx2,
 	MxS32 p_unk0x10,
 	float p_speed
 )
@@ -2154,12 +2154,12 @@ MxResult LegoAnimationManager::FUN_10064380(
 		const char** unk0x100f6d58 = g_unk0x100f6d58[g_characters[characterId].m_unk0x16];
 
 		LegoLocomotionAnimPresenter* presenter =
-			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_unkIdx1]);
+			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx1]);
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(actor, 0.0f);
 		}
 
-		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_unkIdx2]);
+		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx2]);
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(actor, 4.0f);
 		}
@@ -2183,10 +2183,9 @@ void LegoAnimationManager::FUN_10064670(Vector3*)
 	// TODO
 }
 
-// STUB: LEGO1 0x10064740
-void LegoAnimationManager::FUN_10064740(Vector3*)
+// FUNCTION: LEGO1 0x10064740
+void LegoAnimationManager::FUN_10064740(Vector3* p_vec)
 {
-	// TODO
 }
 
 // STUB: LEGO1 0x100648f0

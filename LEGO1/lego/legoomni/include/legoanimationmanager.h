@@ -157,9 +157,9 @@ private:
 		float p_srcScale,
 		MxS32 p_dest,
 		float p_destScale,
-		MxU32 p_unkIdx1,
+		MxU32 p_undIdx1,
 		MxS32 p_unk0x0c,
-		MxU32 p_unkIdx2,
+		MxU32 p_undIdx2,
 		MxS32 p_unk0x10,
 		float p_speed
 	);
