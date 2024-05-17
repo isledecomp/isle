@@ -298,7 +298,7 @@ void LegoBuildingManager::UpdatePosition(MxS32 p_index, LegoWorld* p_world)
 		AdjustHeight(p_index);
 		MxMatrix mat = roi->GetLocal2World();
 		mat[3][1] = g_buildingInfo[p_index].m_unk0x014;
-		roi->FUN_100a46b0(mat);
+		roi->UpdateTransformationRelativeToParent(mat);
 		VideoManager()->Get3DManager()->Moved(*roi);
 	}
 }
@@ -618,7 +618,7 @@ void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxU32 p_length
 	m_world = CurrentWorld();
 
 	if (p_haveSound) {
-		m_sound = SoundManager()->GetCacheSoundManager()->FUN_1003d170("bcrash");
+		m_sound = SoundManager()->GetCacheSoundManager()->FindSoundByKey("bcrash");
 		m_sound->FUN_10006cb0(35, 60);
 	}
 
@@ -674,7 +674,7 @@ void LegoBuildingManager::FUN_10030590()
 			LegoROI* roi = g_buildingInfo[i].m_entity->GetROI();
 			MxMatrix mat = roi->GetLocal2World();
 			mat[3][1] = g_buildingInfo[i].m_unk0x014;
-			roi->FUN_100a46b0(mat);
+			roi->UpdateTransformationRelativeToParent(mat);
 			VideoManager()->Get3DManager()->Moved(*roi);
 		}
 	}

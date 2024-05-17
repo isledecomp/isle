@@ -130,7 +130,7 @@ void LegoEntity::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 				mat
 			);
 
-			m_roi->FUN_100a46b0(mat);
+			m_roi->UpdateTransformationRelativeToParent(mat);
 		}
 
 		m_roi->SetEntity(this);
@@ -170,7 +170,7 @@ void LegoEntity::SetLocation(const Vector3& p_location, const Vector3& p_directi
 			mat
 		);
 
-		m_roi->FUN_100a46b0(mat);
+		m_roi->UpdateTransformationRelativeToParent(mat);
 		VideoManager()->Get3DManager()->GetLego3DView()->Moved(*m_roi);
 
 		if (p_und) {

@@ -24,17 +24,17 @@ public:
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
 	undefined4 FUN_100a6150(const BoundingBox& p_bounding_box);
-	void FUN_100a65b0(ViewROI* p_roi, int p_und);
-	void FUN_100a66a0(ViewROI* p_roi);
+	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und);
+	void RemoveROIDetailFromScene(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
 	float ProjectedSize(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	inline void FUN_100a66f0(ViewROI* p_roi, int p_und);
+	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und);
 	void Update(float p_previousRenderTime, float);
 	inline int Unknown();
-	void FUN_100a6b90();
+	void UpdateViewTransformations();
 
 	inline static int Unknown2(float p_und1, float p_und2, ViewROI* p_roi);
 	inline static int Unknown3(ViewROI* p_roi);

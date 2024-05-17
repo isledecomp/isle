@@ -34,7 +34,7 @@ MxRect32* MxRegionCursor::VTable0x18()
 
 	MxRegionTopBottom* topBottom;
 	if (m_topBottomCursor->Current(topBottom)) {
-		FUN_100c46c0(*topBottom->m_leftRightList);
+		ResetAndInitializeCursor(*topBottom->m_leftRightList);
 
 		MxRegionLeftRight* leftRight;
 		m_leftRightCursor->First(leftRight);
@@ -55,7 +55,7 @@ MxRect32* MxRegionCursor::VTable0x20()
 
 	MxRegionTopBottom* topBottom;
 	if (m_topBottomCursor->Current(topBottom)) {
-		FUN_100c46c0(*topBottom->m_leftRightList);
+		ResetAndInitializeCursor(*topBottom->m_leftRightList);
 
 		MxRegionLeftRight* leftRight;
 		m_leftRightCursor->Last(leftRight);
@@ -83,7 +83,7 @@ MxRect32* MxRegionCursor::VTable0x28()
 	}
 
 	if (m_topBottomCursor->Next(topBottom)) {
-		FUN_100c46c0(*topBottom->m_leftRightList);
+		ResetAndInitializeCursor(*topBottom->m_leftRightList);
 		m_leftRightCursor->First(leftRight);
 
 		UpdateRect(leftRight->GetLeft(), topBottom->GetTop(), leftRight->GetRight(), topBottom->GetBottom());
@@ -108,7 +108,7 @@ MxRect32* MxRegionCursor::VTable0x30()
 	}
 
 	if (m_topBottomCursor->Prev(topBottom)) {
-		FUN_100c46c0(*topBottom->m_leftRightList);
+		ResetAndInitializeCursor(*topBottom->m_leftRightList);
 		m_leftRightCursor->Last(leftRight);
 
 		UpdateRect(leftRight->GetLeft(), topBottom->GetTop(), leftRight->GetRight(), topBottom->GetBottom());
@@ -123,7 +123,7 @@ MxRect32* MxRegionCursor::VTable0x30()
 MxRect32* MxRegionCursor::VTable0x14(MxRect32& p_rect)
 {
 	m_topBottomCursor->Reset();
-	FUN_100c4a20(p_rect);
+	ProcessRectOverlapAscending(p_rect);
 	return m_rect;
 }
 
@@ -131,7 +131,7 @@ MxRect32* MxRegionCursor::VTable0x14(MxRect32& p_rect)
 MxRect32* MxRegionCursor::VTable0x1c(MxRect32& p_rect)
 {
 	m_topBottomCursor->Reset();
-	FUN_100c4b50(p_rect);
+	ProcessOverlapWithRect(p_rect);
 	return m_rect;
 }
 
@@ -150,11 +150,11 @@ MxRect32* MxRegionCursor::VTable0x24(MxRect32& p_rect)
 			m_rect->Intersect(p_rect);
 		}
 		else {
-			FUN_100c4a20(p_rect);
+			ProcessRectOverlapAscending(p_rect);
 		}
 	}
 	else {
-		FUN_100c4a20(p_rect);
+		ProcessRectOverlapAscending(p_rect);
 	}
 
 	return m_rect;
@@ -175,11 +175,11 @@ MxRect32* MxRegionCursor::VTable0x2c(MxRect32& p_rect)
 			m_rect->Intersect(p_rect);
 		}
 		else {
-			FUN_100c4b50(p_rect);
+			ProcessOverlapWithRect(p_rect);
 		}
 	}
 	else {
-		FUN_100c4b50(p_rect);
+		ProcessOverlapWithRect(p_rect);
 	}
 
 	return m_rect;
@@ -202,7 +202,7 @@ void MxRegionCursor::Reset()
 }
 
 // FUNCTION: LEGO1 0x100c46c0
-void MxRegionCursor::FUN_100c46c0(MxRegionLeftRightList& p_leftRightList)
+void MxRegionCursor::ResetAndInitializeCursor(MxRegionLeftRightList& p_leftRightList)
 {
 	if (m_leftRightCursor) {
 		delete m_leftRightCursor;
@@ -225,7 +225,7 @@ void MxRegionCursor::UpdateRect(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 
 }
 
 // FUNCTION: LEGO1 0x100c4a20
-void MxRegionCursor::FUN_100c4a20(MxRect32& p_rect)
+void MxRegionCursor::ProcessRectOverlapAscending(MxRect32& p_rect)
 {
 	MxRegionTopBottom* topBottom;
 	while (m_topBottomCursor->Next(topBottom)) {
@@ -235,7 +235,7 @@ void MxRegionCursor::FUN_100c4a20(MxRect32& p_rect)
 		}
 
 		if (p_rect.GetTop() < topBottom->GetBottom()) {
-			FUN_100c46c0(*topBottom->m_leftRightList);
+			ResetAndInitializeCursor(*topBottom->m_leftRightList);
 
 			MxRegionLeftRight* leftRight;
 			while (m_leftRightCursor->Next(leftRight)) {
@@ -261,7 +261,7 @@ void MxRegionCursor::FUN_100c4a20(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4b50
-void MxRegionCursor::FUN_100c4b50(MxRect32& p_rect)
+void MxRegionCursor::ProcessOverlapWithRect(MxRect32& p_rect)
 {
 	MxRegionTopBottom* topBottom;
 	while (m_topBottomCursor->Prev(topBottom)) {
@@ -271,7 +271,7 @@ void MxRegionCursor::FUN_100c4b50(MxRect32& p_rect)
 		}
 
 		if (topBottom->GetTop() < p_rect.GetBottom()) {
-			FUN_100c46c0(*topBottom->m_leftRightList);
+			ResetAndInitializeCursor(*topBottom->m_leftRightList);
 
 			MxRegionLeftRight* leftRight;
 			while (m_leftRightCursor->Prev(leftRight)) {

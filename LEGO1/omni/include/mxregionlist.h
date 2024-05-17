@@ -64,8 +64,8 @@ struct MxRegionTopBottom {
 	~MxRegionTopBottom() { delete m_leftRightList; }
 
 	MxRegionTopBottom* Clone();
-	void FUN_100c5280(MxS32 p_left, MxS32 p_right);
-	MxBool FUN_100c57b0(MxRect32& p_rect);
+	void MergeOrExpandRegions(MxS32 p_left, MxS32 p_right);
+	MxBool CheckHorizontalOverlap(MxRect32& p_rect);
 
 	inline MxS32 GetTop() { return m_top; }
 	inline MxS32 GetBottom() { return m_bottom; }

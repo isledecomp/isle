@@ -609,7 +609,7 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 		lodList = dupLodList;
 
 		if (head->GetUnknown0xe0() >= 0) {
-			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(head);
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(head);
 		}
 
 		head->SetLODList(lodList);
@@ -744,7 +744,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 		lodList = dupLodList;
 
 		if (childROI->GetUnknown0xe0() >= 0) {
-			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(childROI);
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(childROI);
 		}
 
 		childROI->SetLODList(lodList);

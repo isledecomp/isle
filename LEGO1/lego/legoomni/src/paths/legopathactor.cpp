@@ -135,7 +135,7 @@ MxResult LegoPathActor::VTable0x88(
 	}
 
 	right.EqualsCross(&up, &dir);
-	m_roi->FUN_100a46b0(matrix);
+	m_roi->UpdateTransformationRelativeToParent(matrix);
 
 	if (!m_cameraFlag || !m_userNavFlag) {
 		p5.EqualsCross(p_boundary->GetUnknown0x14(), &p3);
@@ -201,7 +201,7 @@ MxResult LegoPathActor::VTable0x84(
 	}
 
 	right.EqualsCross(&up, &dir);
-	m_roi->FUN_100a46b0(matrix);
+	m_roi->UpdateTransformationRelativeToParent(matrix);
 
 	if (!m_cameraFlag || !m_userNavFlag) {
 		p5.EqualsCross(p_boundary->GetUnknown0x14(), &p3);

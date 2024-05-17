@@ -34,14 +34,14 @@ public:
 	BOOL ReadReg(LPCSTR p_key, LPCSTR p_value, DWORD p_size) const;
 	BOOL ReadRegBool(LPCSTR p_key, BOOL* p_bool) const;
 	BOOL ReadRegInt(LPCSTR p_key, int* p_value) const;
-	BOOL FUN_004033d0() const;
+	BOOL IsDeviceInBasicRGBMode() const;
 	D3DCOLORMODEL GetHardwareDeviceColorModel() const;
 	BOOL IsPrimaryDriver() const;
 	BOOL ReadRegisterSettings();
 	BOOL ValidateSettings();
-	DWORD FUN_004037a0() const;
-	DWORD FUN_004037e0() const;
-	BOOL FUN_00403810();
+	DWORD GetConditionalDeviceRenderBitDepth() const;
+	DWORD GetDeviceRenderBitStatus() const;
+	BOOL AdjustDisplayBitDepthBasedOnRenderStatus();
 	void CConfigApp::WriteRegisterSettings() const;
 
 	//{{AFX_MSG(CConfigApp)

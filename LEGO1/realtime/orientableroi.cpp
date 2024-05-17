@@ -28,7 +28,7 @@ void OrientableROI::WrappedSetLocalTransform(const Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x100a46b0
-void OrientableROI::FUN_100a46b0(const Matrix4& p_transform)
+void OrientableROI::UpdateTransformationRelativeToParent(const Matrix4& p_transform)
 {
 	MxMatrix mat;
 
