@@ -2183,8 +2183,8 @@ void LegoAnimationManager::FUN_10064670(Vector3*)
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10064740
-void LegoAnimationManager::FUN_10064740(Vector3* p_vec)
+// STUB: LEGO1 0x10064740
+void LegoAnimationManager::FUN_10064740(Vector3*)
 {
 }
 
