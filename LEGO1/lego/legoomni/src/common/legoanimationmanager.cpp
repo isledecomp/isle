@@ -11,6 +11,7 @@
 #include "legoendanimnotificationparam.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
+#include "legolocomotionanimpresenter.h"
 #include "legomain.h"
 #include "legonavcontroller.h"
 #include "legoroilist.h"
@@ -47,6 +48,197 @@ LegoAnimationManager::Vehicle g_vehicles[] = {
 	{"motoni", 0, FALSE},
 	{"motola", 0, FALSE},
 	{"board", 0, FALSE}
+};
+
+// GLOBAL: LEGO1 0x100f6d58
+const char* g_unk0x100f6d58[11][17] = {
+	{"CNs001xx",
+	 "CNs002xx",
+	 "CNs003xx",
+	 "CNs004xx",
+	 "CNs005xx",
+	 "CNs007xx",
+	 "CNs006xx",
+	 "CNs008xx",
+	 "CNs009xx",
+	 "CNs010xx",
+	 "CNs011xx",
+	 "CNs012xx",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001Pe",
+	 "CNs002Pe",
+	 "CNs003Pe",
+	 "CNs004Pe",
+	 "CNs005Pe",
+	 "CNs007Pe",
+	 "CNs006Pe",
+	 "CNs008Pe",
+	 "CNs009Pe",
+	 "CNs010Pe",
+	 "CNs001sk",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001Ma",
+	 "CNs002Ma",
+	 "CNs003Ma",
+	 "CNs004Ma",
+	 "CNs005Ma",
+	 "CNs007Ma",
+	 "CNs006Ma",
+	 "CNs008Ma",
+	 "CNs009Ma",
+	 "CNs010Ma",
+	 "CNs0x4Ma",
+	 NULL,
+	 NULL,
+	 "CNs011Ma",
+	 "CNs012Ma",
+	 "CNs013Ma",
+	 NULL},
+	{"CNs001Pa",
+	 "CNs002Pa",
+	 "CNs003Pa",
+	 "CNs004Pa",
+	 "CNs005Pa",
+	 "CNs007Pa",
+	 "CNs006Pa",
+	 "CNs008Pa",
+	 "CNs009Pa",
+	 "CNs010Pa",
+	 "CNs0x4Pa",
+	 NULL,
+	 NULL,
+	 "CNs011Pa",
+	 "CNs012Pa",
+	 "CNs013Pa",
+	 NULL},
+	{"CNs001Ni",
+	 "CNs002Ni",
+	 "CNs003Ni",
+	 "CNs004Ni",
+	 "CNs005Ni",
+	 "CNs007Ni",
+	 "CNs006Ni",
+	 "CNs008Ni",
+	 "CNs009Ni",
+	 "CNs010Ni",
+	 "CNs011Ni",
+	 "CNsx11Ni",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001La",
+	 "CNs002La",
+	 "CNs003La",
+	 "CNs004La",
+	 "CNs005La",
+	 "CNs007La",
+	 "CNs006La",
+	 "CNs008La",
+	 "CNs009La",
+	 "CNs010La",
+	 "CNs011La",
+	 "CNsx11La",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001Br",
+	 "CNs002Br",
+	 "CNs003Br",
+	 "CNs004Br",
+	 "CNs005Br",
+	 "CNs007Br",
+	 "CNs006Br",
+	 "CNs008Br",
+	 "CNs009Br",
+	 "CNs010Br",
+	 "CNs011Br",
+	 "CNs900Br",
+	 "CNs901Br",
+	 "CNs011Br",
+	 "CNs012Br",
+	 "CNs013Br",
+	 "CNs014Br"},
+	{"CNs001xx",
+	 "CNs002xx",
+	 "CNs003xx",
+	 "CNs004xx",
+	 "CNs005xx",
+	 "CNs007xx",
+	 "CNs006xx",
+	 "CNs008xx",
+	 "CNs009xx",
+	 "CNs010xx",
+	 "CNs001Bd",
+	 "CNs012xx",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001xx",
+	 "CNs002xx",
+	 "CNs003xx",
+	 "CNs004xx",
+	 "CNs005xx",
+	 "CNs007xx",
+	 "CNs006xx",
+	 "CNs008xx",
+	 "CNs009xx",
+	 "CNs010xx",
+	 "CNs001Pg",
+	 "CNs012xx",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001xx",
+	 "CNs002xx",
+	 "CNs003xx",
+	 "CNs004xx",
+	 "CNs005xx",
+	 "CNs007xx",
+	 "CNs006xx",
+	 "CNs008xx",
+	 "CNs009xx",
+	 "CNs010xx",
+	 "CNs001Rd",
+	 "CNs012xx",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL},
+	{"CNs001xx",
+	 "CNs002xx",
+	 "CNs003xx",
+	 "CNs004xx",
+	 "CNs005xx",
+	 "CNs007xx",
+	 "CNs006xx",
+	 "CNs008xx",
+	 "CNs009xx",
+	 "CNs010xx",
+	 "CNs001Sy",
+	 "CNs012xx",
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL,
+	 NULL}
 };
 
 // GLOBAL: LEGO1 0x100f7048
@@ -263,7 +455,7 @@ void LegoAnimationManager::Suspend()
 
 			m_extras[i].m_roi = NULL;
 			m_extras[i].m_characterId = -1;
-			m_extras[i].m_unk0x10 = -1.0f;
+			m_extras[i].m_speed = -1.0f;
 		}
 
 		m_unk0x18 = 0;
@@ -316,7 +508,7 @@ void LegoAnimationManager::Init()
 	for (i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
 		m_extras[i].m_roi = NULL;
 		m_extras[i].m_characterId = -1;
-		m_extras[i].m_unk0x10 = -1.0f;
+		m_extras[i].m_speed = -1.0f;
 		m_extras[i].m_unk0x14 = FALSE;
 	}
 
@@ -1743,7 +1935,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 											m_extras[i].m_characterId = m_lastExtraCharacterId;
 											g_characters[m_lastExtraCharacterId].m_unk0x04 = TRUE;
 											m_extras[i].m_unk0x08 = Timer()->GetTime();
-											m_extras[i].m_unk0x10 = -1;
+											m_extras[i].m_speed = -1;
 											m_extras[i].m_unk0x0d = FALSE;
 											m_unk0x414++;
 											return;
@@ -1842,7 +2034,7 @@ void LegoAnimationManager::FUN_10063d10()
 
 					LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
 					if (actor != NULL) {
-						float speed = m_extras[i].m_unk0x10;
+						float speed = m_extras[i].m_speed;
 
 						if (speed < 0.0f) {
 							if (m_extras[i].m_unk0x14) {
@@ -1883,6 +2075,108 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x10064380
+// FUNCTION: BETA10 0x1004583a
+MxResult LegoAnimationManager::FUN_10064380(
+	const char* p_name,
+	const char* p_boundaryName,
+	MxS32 p_src,
+	float p_srcScale,
+	MxS32 p_dest,
+	float p_destScale,
+	MxU32 p_undIdx1,
+	MxS32 p_unk0x0c,
+	MxU32 p_undIdx2,
+	MxS32 p_unk0x10,
+	float p_speed
+)
+{
+	LegoWorld* world = CurrentWorld();
+	MxS32 extraIndex = -1;
+	LegoExtraActor* actor = NULL;
+	MxS32 i;
+
+	for (i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
+		LegoROI* roi = m_extras[i].m_roi;
+
+		if (roi == NULL && extraIndex == -1) {
+			extraIndex = i;
+		}
+
+		if (roi != NULL && !strcmpi(roi->GetName(), p_name)) {
+			actor = CharacterManager()->GetActor(p_name);
+
+			if (actor != NULL && actor->GetController() != NULL) {
+				actor->GetController()->RemoveActor(actor);
+				actor->SetController(NULL);
+				actor->ClearMaps();
+			}
+
+			break;
+		}
+	}
+
+	if (actor == NULL && extraIndex != -1) {
+		i = extraIndex;
+
+		MxS32 characterId;
+		for (characterId = 0; characterId < (MxS32) sizeOfArray(g_characters); characterId++) {
+			if (!strcmpi(g_characters[characterId].m_name, p_name)) {
+				break;
+			}
+		}
+
+		if (characterId > sizeOfArray(g_characters)) {
+			return FAILURE;
+		}
+
+		m_extras[extraIndex].m_roi = CharacterManager()->GetROI(p_name, TRUE);
+		m_extras[extraIndex].m_characterId = characterId;
+		m_extras[extraIndex].m_speed = p_speed;
+
+		actor = CharacterManager()->GetActor(p_name);
+		m_unk0x414++;
+	}
+
+	if (actor != NULL) {
+		MxU8 unk0x0c = rand() % 2 != 0 ? 1 : 2;
+		actor->SetUnknown0x0c(unk0x0c);
+		actor->SetWorldSpeed(0.0f);
+
+		if (world->PlaceActor(actor, p_boundaryName, p_src, p_srcScale, p_dest, p_destScale) != SUCCESS) {
+			CharacterManager()->FUN_10083db0(m_extras[i].m_roi);
+			m_extras[i].m_roi = NULL;
+			m_unk0x414--;
+			return FAILURE;
+		}
+
+		MxS32 characterId = m_extras[i].m_characterId;
+		const char** unk0x100f6d58 = g_unk0x100f6d58[g_characters[characterId].m_unk0x16];
+
+		LegoLocomotionAnimPresenter* presenter =
+			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx1]);
+		if (presenter != NULL) {
+			presenter->FUN_1006d680(actor, 0.0f);
+		}
+
+		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx2]);
+		if (presenter != NULL) {
+			presenter->FUN_1006d680(actor, 4.0f);
+		}
+
+		m_extras[i].m_unk0x08 = Timer()->GetTime();
+		m_extras[i].m_unk0x0c = TRUE;
+		m_extras[i].m_speed = p_speed;
+
+		g_characters[characterId].m_unk0x0c = p_unk0x0c;
+		g_characters[characterId].m_unk0x10 = p_unk0x10;
+		g_characters[characterId].m_unk0x04 = TRUE;
+		return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
 // STUB: LEGO1 0x10064670
 void LegoAnimationManager::FUN_10064670(Vector3*)
 {
@@ -1892,7 +2186,6 @@ void LegoAnimationManager::FUN_10064670(Vector3*)
 // STUB: LEGO1 0x10064740
 void LegoAnimationManager::FUN_10064740(Vector3*)
 {
-	// TODO
 }
 
 // STUB: LEGO1 0x100648f0
