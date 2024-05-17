@@ -1,5 +1,6 @@
 #include "legoanimationmanager.h"
 
+#include "3dmanager/lego3dmanager.h"
 #include "anim/legoanim.h"
 #include "animstate.h"
 #include "define.h"
@@ -13,6 +14,7 @@
 #include "legomain.h"
 #include "legonavcontroller.h"
 #include "legoroilist.h"
+#include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -25,6 +27,7 @@
 #include "viewmanager/viewmanager.h"
 
 #include <io.h>
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Character, 0x18)
@@ -1863,9 +1866,42 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo*, MxLong)
 	// TODO
 }
 
-// STUB: LEGO1 0x10064b50
+// FUNCTION: LEGO1 0x10064b50
 // FUNCTION: BETA10 0x10045f14
 void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 {
-	// TODO
+	if (m_unk0x430 && m_unk0x42c != NULL) {
+		MxMatrix mat;
+
+		if (p_time < 0 || p_time <= m_unk0x438) {
+			m_unk0x430 = FALSE;
+			m_unk0x42c->m_flags &= ~LegoTranInfo::c_bit1;
+			m_unk0x42c = NULL;
+			mat = m_unk0x484;
+		}
+		else {
+			float und = (float) (p_time - m_unk0x434) / (float) (m_unk0x438 - m_unk0x434);
+
+			float sub[3];
+			sub[0] = (m_unk0x484[3][0] - m_unk0x43c[3][0]) * und;
+			sub[1] = (m_unk0x484[3][1] - m_unk0x43c[3][1]) * und;
+			sub[2] = (m_unk0x484[3][2] - m_unk0x43c[3][2]) * und;
+
+			m_unk0x4cc.Unknown_100040a0(mat, (float) (p_time - m_unk0x434) / 1000.0f);
+
+			VPV3(mat[3], m_unk0x43c[3], sub);
+			mat[3][4] = 1.0f;
+		}
+
+		LegoROI* viewROI = VideoManager()->GetViewROI();
+
+		viewROI->WrappedSetLocalTransform(mat);
+		VideoManager()->Get3DManager()->Moved(*viewROI);
+		SoundManager()->FUN_1002a410(
+			viewROI->GetWorldPosition(),
+			viewROI->GetWorldDirection(),
+			viewROI->GetWorldUp(),
+			viewROI->GetWorldVelocity()
+		);
+	}
 }

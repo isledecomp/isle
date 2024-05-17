@@ -21,8 +21,6 @@ public:
 	// FUNCTION: LEGO1 0x10002850
 	void operator=(const Matrix4& p_matrix) override { Equals(p_matrix); } // vtable+0x28
 
-	// No idea why there's another equals. Maybe to some other type like the
-	// DirectX Retained Mode Matrix type which is also a float* alias?
 	// FUNCTION: LEGO1 0x10002860
 	virtual void operator=(const MxMatrix& p_matrix) { Equals(p_matrix); } // vtable+0x48
 

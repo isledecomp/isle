@@ -188,7 +188,8 @@ private:
 	MxBool m_suspended;                // 0x42b
 	LegoTranInfo* m_unk0x42c;          // 0x42c
 	MxBool m_unk0x430;                 // 0x430
-	undefined4 m_unk0x434[2];          // 0x434
+	MxLong m_unk0x434;                 // 0x434
+	MxLong m_unk0x438;                 // 0x438
 	MxMatrix m_unk0x43c;               // 0x43c
 	MxMatrix m_unk0x484;               // 0x484
 	UnknownMx4DPointFloat m_unk0x4cc;  // 0x4cc

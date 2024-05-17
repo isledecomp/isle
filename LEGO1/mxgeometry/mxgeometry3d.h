@@ -100,6 +100,7 @@ private:
 	undefined4 m_unk0x30;     // 0x30
 };
 
+// FUNCTION: BETA10 0x1004aaa0
 int UnknownMx4DPointFloat::Unknown_100040a0(Matrix4& p_matrix, float p_f)
 {
 	float data[4];
@@ -114,6 +115,7 @@ int UnknownMx4DPointFloat::Unknown_100040a0(Matrix4& p_matrix, float p_f)
 }
 
 // FUNCTION: LEGO1 0x100040a0
+// FUNCTION: BETA10 0x1004ab10
 inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 {
 	undefined4 state = m_unk0x30;
@@ -136,7 +138,7 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 			if (1.0 - d1 > 0.00001) {
 				double d = acos(d1);
 				sin(d);
-				d1 = sin((1 - p_f) * d) / sin(d);
+				d1 = sin((1.0 - p_f) * d) / sin(d);
 				d2 = sin(p_f * d) / sin(d);
 			}
 			else {
@@ -150,7 +152,7 @@ inline int UnknownMx4DPointFloat::FUN_100040a0(Vector4& p_v, float p_f)
 		}
 		else {
 			p_v[0] = -m_unk0x00[1];
-			p_v[1] = m_unk0x00[1];
+			p_v[1] = m_unk0x00[0];
 			p_v[2] = -m_unk0x00[3];
 			p_v[3] = m_unk0x00[2];
 			d1 = sin((1.0 - p_f) * 1.570796326794895);
