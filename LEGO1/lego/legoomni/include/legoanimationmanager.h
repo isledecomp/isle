@@ -105,8 +105,8 @@ public:
 	void AddExtra(MxS32 p_location, MxBool p_und);
 	void FUN_10063270(LegoROIList*, LegoAnimPresenter*);
 	void FUN_10063780(LegoROIList* p_list);
-	void FUN_10064670(Vector3*);
-	void FUN_10064740(Vector3*);
+	MxResult FUN_10064670(Vector3* p_position);
+	MxResult FUN_10064740(Vector3* p_position);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 
