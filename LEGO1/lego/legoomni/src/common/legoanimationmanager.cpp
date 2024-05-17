@@ -1824,11 +1824,47 @@ MxBool LegoAnimationManager::FUN_10063b90(
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10063d10
+// FUNCTION: LEGO1 0x10063d10
 // FUNCTION: BETA10 0x10045034
 void LegoAnimationManager::FUN_10063d10()
 {
-	// TODO
+	if (CurrentWorld() != NULL) {
+		MxLong time = Timer()->GetTime();
+
+		for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
+			LegoROI* roi = m_extras[i].m_roi;
+
+			if (roi != NULL) {
+				if (m_extras[i].m_unk0x0c && g_characters[m_extras[i].m_characterId].m_unk0x0c >= 0 &&
+					g_characters[m_extras[i].m_characterId].m_unk0x0c < time - m_extras[i].m_unk0x08) {
+
+					m_extras[i].m_unk0x0c = FALSE;
+
+					LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+					if (actor != NULL) {
+						float speed = m_extras[i].m_unk0x10;
+
+						if (speed < 0.0f) {
+							if (m_extras[i].m_unk0x14) {
+								speed = ((float) (rand() * 1.5) / 32767.0f) + 0.9;
+							}
+							else {
+								speed = ((float) (rand() * 1.4) / 32767.0f) + 0.6;
+							}
+						}
+
+						actor->SetWorldSpeed(speed);
+					}
+				}
+				else {
+					LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+					if (actor != NULL) {
+						actor->Restart();
+					}
+				}
+			}
+		}
+	}
 }
 
 // STUB: LEGO1 0x10063fb0
