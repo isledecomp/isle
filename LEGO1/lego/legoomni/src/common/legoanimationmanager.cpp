@@ -2177,15 +2177,60 @@ MxResult LegoAnimationManager::FUN_10064380(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x10064670
-void LegoAnimationManager::FUN_10064670(Vector3*)
+// FUNCTION: LEGO1 0x10064670
+MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
 {
-	// TODO
+	MxBool success = FALSE;
+
+	if (p_position != NULL) {
+		Mx3DPointFloat vec(98.875f, 0.0f, -46.1564f);
+		((Vector3&) vec).Sub(p_position);
+
+		if (vec.LenSquared() < 800.0f) {
+			success = TRUE;
+		}
+	}
+	else {
+		success = TRUE;
+	}
+
+	if (success) {
+		return FUN_10064380("brickstr", "EDG02_95", 1, 0.5f, 3, 0.5f, rand() % 3 + 14, -1, rand() % 3, -1, 0.5f);
+	}
+
+	return FAILURE;
 }
 
-// STUB: LEGO1 0x10064740
-void LegoAnimationManager::FUN_10064740(Vector3*)
+// FUNCTION: LEGO1 0x10064740
+MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
 {
+	MxBool success = FALSE;
+
+	if (p_position != NULL) {
+		Mx3DPointFloat vec(-21.375f, 0.0f, -41.75f);
+		((Vector3&) vec).Sub(p_position);
+
+		if (vec.LenSquared() < 1000.0f) {
+			success = TRUE;
+		}
+	}
+	else {
+		success = TRUE;
+	}
+
+	if (success) {
+		if (GameState()->GetActorId() != 2) {
+			FUN_10064380("mama", "USR00_47", 1, 0.43f, 3, 0.84f, rand() % 3 + 13, -1, rand() % 3, -1, 0.7f);
+		}
+
+		if (GameState()->GetActorId() != 3) {
+			FUN_10064380("papa", "USR00_193", 3, 0.55f, 1, 0.4f, rand() % 3 + 13, -1, rand() % 3, -1, 0.9f);
+		}
+
+		return SUCCESS;
+	}
+
+	return FAILURE;
 }
 
 // STUB: LEGO1 0x100648f0
