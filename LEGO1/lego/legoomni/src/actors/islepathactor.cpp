@@ -498,10 +498,10 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 		LegoVehicleBuildState* state = NULL;
 
 		if (p_flags & c_spawnBit1) {
-			MxBool und = FALSE;
+			MxBool camAnim = FALSE;
 			IsleScript::Script anim;
 
-			switch (g_spawnLocations[i].m_unk0x30) {
+			switch (g_spawnLocations[i].m_location) {
 			case 0x00:
 			case 0x44:
 				break;
@@ -522,7 +522,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 				anim = IsleScript::c_irt007in_RunAnim;
 				break;
 			default:
-				und = TRUE;
+				camAnim = TRUE;
 				break;
 			}
 
@@ -530,12 +530,12 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 				if (AnimationManager()->FUN_10060dc0(anim, NULL, TRUE, FALSE, NULL, FALSE, TRUE, TRUE, TRUE) ==
 					SUCCESS) {
 					state->m_unk0x4e = TRUE;
-					und = FALSE;
+					camAnim = FALSE;
 				}
 			}
 
-			if (und) {
-				FUN_1003ecc0(this, 0, g_spawnLocations[i].m_unk0x30, TRUE);
+			if (camAnim) {
+				PlayCamAnim(this, 0, g_spawnLocations[i].m_location, TRUE);
 			}
 		}
 

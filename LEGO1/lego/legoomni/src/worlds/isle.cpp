@@ -722,7 +722,7 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_unk0x018 = 8;
 
 			AnimationManager()->FUN_1005f6d0(FALSE);
-			AnimationManager()->FUN_1005f700(FALSE);
+			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_unk0x100f1198 &= ~c_bit7;
 			m_towtrack->FUN_1004dab0();
@@ -731,7 +731,7 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_unk0x018 = 10;
 
 			AnimationManager()->FUN_1005f6d0(FALSE);
-			AnimationManager()->FUN_1005f700(FALSE);
+			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_unk0x100f1198 &= ~c_bit7;
 			m_ambulance->FUN_10036e60();

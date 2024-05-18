@@ -20,6 +20,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxstreamer.h"
+#include "mxtype19notificationparam.h"
 #include "mxtypes.h"
 #include "mxutilities.h"
 #include "mxvariabletable.h"
@@ -341,11 +342,21 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 	}
 }
 
-// STUB: LEGO1 0x1003ecc0
+// FUNCTION: LEGO1 0x1003ecc0
 // FUNCTION: BETA10 0x100d4b38
-void FUN_1003ecc0(IslePathActor* p_actor, undefined4, undefined4, MxBool)
+void PlayCamAnim(IslePathActor* p_actor, undefined4 p_unused, MxU32 p_location, MxBool p_bool)
 {
-	// TODO
+	LegoWorld* world = CurrentWorld();
+	MxLong result = 0;
+
+	if (world != NULL) {
+		MxType19NotificationParam param(c_notificationType19, p_actor, 0x43, p_location);
+		result = world->Notify(param);
+	}
+
+	if (result == 0) {
+		AnimationManager()->CameraTriggerFire(p_actor, p_unused, p_location, p_bool);
+	}
 }
 
 // FUNCTION: LEGO1 0x1003eda0

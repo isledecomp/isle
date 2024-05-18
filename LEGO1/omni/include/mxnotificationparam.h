@@ -38,6 +38,7 @@ enum NotificationId {
 // SIZE 0x0c
 class MxNotificationParam : public MxParam {
 public:
+	inline MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
 	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
 	{
 	}

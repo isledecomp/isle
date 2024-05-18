@@ -17,7 +17,7 @@ struct ModelInfo {
 struct AnimInfo {
 	char* m_name;        // 0x00
 	MxU32 m_objectId;    // 0x04
-	MxS16 m_unk0x08;     // 0x08
+	MxS16 m_location;    // 0x08
 	MxBool m_unk0x0a;    // 0x0a
 	MxU8 m_unk0x0b;      // 0x0b
 	MxU8 m_unk0x0c;      // 0x0c
