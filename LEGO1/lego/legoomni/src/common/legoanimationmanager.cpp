@@ -958,7 +958,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 		tranInfo->m_index = ++m_unk0x1c;
 		tranInfo->m_unk0x10 = 0;
 		tranInfo->m_unk0x08 = p_roi;
-		tranInfo->m_unk0x12 = m_anims[p_index].m_location;
+		tranInfo->m_location = m_anims[p_index].m_location;
 		tranInfo->m_unk0x14 = p_unk0x0a;
 		tranInfo->m_objectId = animInfo.m_objectId;
 		tranInfo->m_unk0x15 = p_bool2;
@@ -1024,7 +1024,7 @@ MxResult LegoAnimationManager::FUN_100609f0(MxU32 p_objectId, MxMatrix* p_matrix
 	info->m_index = ++m_unk0x1c;
 	info->m_unk0x10 = 0;
 	info->m_unk0x08 = NULL;
-	info->m_unk0x12 = -1;
+	info->m_location = -1;
 	info->m_unk0x14 = FALSE;
 	info->m_objectId = p_objectId;
 
@@ -1211,7 +1211,7 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 				// TODO: Match
 				MxU32 flags = tranInfo->m_flags;
 
-				if (tranInfo->m_unk0x14 && tranInfo->m_unk0x12 != -1 && p_und) {
+				if (tranInfo->m_unk0x14 && tranInfo->m_location != -1 && p_und) {
 					LegoAnim* anim;
 
 					if (tranInfo->m_presenter->GetPresenter() != NULL &&
