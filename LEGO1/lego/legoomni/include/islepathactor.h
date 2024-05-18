@@ -78,7 +78,7 @@ public:
 		float m_srcScale;              // 0x24
 		MxS16 m_dest;                  // 0x28
 		float m_destScale;             // 0x2c
-		undefined4 m_location;         // 0x30
+		MxU32 m_location;              // 0x30
 		JukeboxScript::Script m_music; // 0x34
 	};
 
