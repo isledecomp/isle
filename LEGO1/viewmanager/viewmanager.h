@@ -23,7 +23,7 @@ public:
 
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
-	undefined4 FUN_100a6150(const BoundingBox& p_bounding_box);
+	unsigned int FUN_100a6150(const BoundingBox& p_bounding_box);
 	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und);
 	void RemoveROIDetailFromScene(ViewROI* p_roi);
 	void SetPOVSource(const OrientableROI* point_of_view);
