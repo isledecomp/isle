@@ -2120,12 +2120,18 @@ void LegoAnimationManager::FUN_10063d10()
 	}
 }
 
-// STUB: LEGO1 0x10063fb0
+// FUNCTION: LEGO1 0x10063fb0
 // FUNCTION: BETA10 0x100452a7
 MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world)
 {
-	// TODO
-	return TRUE;
+	if (p_boundary->m_name != NULL) {
+		Mx3DPointFloat vec;
+		LegoPathBoundary* boundary = p_world->FindPathBoundary(p_boundary->m_name);
+		LegoUnknown100db7f4* pSrcE = (LegoUnknown100db7f4*) boundary->GetEdges()[p_boundary->m_src];
+		return FUN_10064010(boundary, pSrcE, p_boundary->m_srcScale);
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064010
