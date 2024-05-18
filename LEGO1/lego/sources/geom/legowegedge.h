@@ -13,6 +13,8 @@ struct LegoPathStruct;
 class LegoWEGEdge : public LegoWEEdge {
 public:
 	enum {
+		c_bit1 = 0x01,
+		c_bit2 = 0x02,
 		c_bit3 = 0x04,
 		c_bit5 = 0x10
 	};
@@ -52,6 +54,8 @@ public:
 			m_flags |= c_bit5;
 		}
 	}
+
+	inline LegoU8 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }
 
 	// SYNTHETIC: LEGO1 0x1009a7e0
 	// LegoWEGEdge::`scalar deleting destructor'

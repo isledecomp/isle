@@ -2085,12 +2085,108 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, Le
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10064120
-// FUNCTION: BETA10 0x100454f5
-MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool, MxBool)
+// STUB: LEGO1 0x10064010
+// FUNCTION: BETA10 0x100453a5
+MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary*, LegoUnknown100db7f4*, float)
 {
 	// TODO
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x10064120
+// FUNCTION: BETA10 0x100454f5
+MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2)
+{
+	MxU32 local2c = 12;
+	float destScale = ((rand() * 0.5) / 32767.0) + 0.25;
+	IslePathActor* actor = CurrentActor();
+
+	if (actor == NULL) {
+		return FALSE;
+	}
+
+	LegoPathBoundary* boundary = actor->GetBoundary();
+
+	if (boundary == NULL) {
+		return FALSE;
+	}
+
+	Mx3DPointFloat direction = actor->GetWorldDirection();
+	float local4c = 0.0f;
+	LegoUnknown100db7f4* local50 = NULL;
+	LegoS32 numEdges = boundary->GetNumEdges();
+	Mx3DPointFloat vec;
+	LegoUnknown100db7f4* e;
+	MxS32 i;
+
+	for (i = 0; i < numEdges; i++) {
+		e = (LegoUnknown100db7f4*) boundary->GetEdges()[i];
+		e->FUN_1002ddc0(*boundary, vec);
+		float dot = vec.Dot(&direction, &vec);
+
+		if (dot > local4c) {
+			local50 = e;
+			local4c = dot;
+		}
+	}
+
+	e = local50;
+	do {
+		e = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(boundary);
+		if (e->GetMask0x03()) {
+			break;
+		}
+	} while (e != local50);
+
+	if (e == local50) {
+		return FALSE;
+	}
+
+	LegoUnknown100db7f4* local34 = e;
+	LegoUnknown100db7f4* local8 = local50;
+
+	while (local2c--) {
+		if (local34 != NULL) {
+			if (local34->Unknown(*boundary, LegoWEGEdge::c_bit1) && FUN_10064010(boundary, local34, destScale) &&
+				(!p_bool2 || FUN_10064010(boundary, local8, destScale))) {
+				p_boundary->m_srcScale = p_boundary->m_destScale = destScale;
+				p_boundary->m_name = boundary->GetName();
+				numEdges = boundary->GetNumEdges();
+
+				for (i = 0; i < numEdges; i++) {
+					LegoUnknown100db7f4* e = (LegoUnknown100db7f4*) boundary->GetEdges()[i];
+
+					if (local34 == e) {
+						p_boundary->m_src = i;
+					}
+					else if (local8 == e) {
+						p_boundary->m_dest = i;
+					}
+				}
+
+				return TRUE;
+			}
+
+			local8 = local34;
+			boundary = (LegoPathBoundary*) local34->OtherFace(boundary);
+			local50 = local34;
+
+			do {
+				if (p_bool1) {
+					local34 = (LegoUnknown100db7f4*) local34->GetCounterclockwiseEdge(boundary);
+				}
+				else {
+					local34 = (LegoUnknown100db7f4*) local34->GetClockwiseEdge(boundary);
+				}
+			} while (!local34->GetMask0x03() && local34 != local50);
+
+			if (local34 == local50) {
+				return FALSE;
+			}
+		}
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064380
