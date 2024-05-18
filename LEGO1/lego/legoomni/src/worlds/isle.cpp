@@ -940,7 +940,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_skateboard->FUN_10010510();
+			m_skateboard->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_ambulance:

@@ -33,7 +33,7 @@ public:
 	virtual void UpdateWorldVelocity();                         // vtable+0x2c
 
 	void WrappedSetLocalTransform(const Matrix4& p_transform);
-	void FUN_100a46b0(const Matrix4& p_transform);
+	void UpdateTransformationRelativeToParent(const Matrix4& p_transform);
 	void WrappedVTable0x24(const Matrix4& p_transform);
 	void GetLocalTransform(Matrix4& p_transform);
 	void FUN_100a58f0(const Matrix4& p_transform);

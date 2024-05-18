@@ -61,7 +61,7 @@ MxResult LegoCacheSoundManager::Tickle()
 }
 
 // STUB: LEGO1 0x1003d170
-LegoCacheSound* LegoCacheSoundManager::FUN_1003d170(const char* p_key)
+LegoCacheSound* LegoCacheSoundManager::FindSoundByKey(const char* p_key)
 {
 	// TODO
 	char* x = new char[strlen(p_key) + 1];
@@ -78,7 +78,7 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003d170(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x1003d290
-LegoCacheSound* LegoCacheSoundManager::FUN_1003d290(LegoCacheSound* p_sound)
+LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 {
 	Set100d6b4c::iterator it = m_set.find(LegoCacheSoundEntry(p_sound));
 	if (it != m_set.end()) {
@@ -107,7 +107,7 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003d290(LegoCacheSound* p_sound)
 LegoCacheSound* LegoCacheSoundManager::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
 {
 	// DECOMP: Second parameter is LegoRoi::m_name (0xe4)
-	return FUN_1003db10(FUN_1003d170(p_one), p_two, p_three);
+	return FUN_1003db10(FindSoundByKey(p_one), p_two, p_three);
 }
 
 // FUNCTION: LEGO1 0x1003db10
@@ -121,7 +121,7 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003db10(LegoCacheSound* p_one, const
 		LegoCacheSound* result = p_one->FUN_10006960();
 
 		if (result) {
-			LegoCacheSound* t = FUN_1003d290(result);
+			LegoCacheSound* t = ManageSoundEntry(result);
 			t->FUN_10006a30(p_two, p_three);
 			return t;
 		}

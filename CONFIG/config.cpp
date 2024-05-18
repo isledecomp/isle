@@ -198,7 +198,7 @@ BOOL CConfigApp::ReadRegInt(LPCSTR p_key, int* p_value) const
 }
 
 // FUNCTION: CONFIG 0x004033d0
-BOOL CConfigApp::FUN_004033d0() const
+BOOL CConfigApp::IsDeviceInBasicRGBMode() const
 {
 	/*
 	 * BUG: should be:
@@ -286,7 +286,7 @@ BOOL CConfigApp::ValidateSettings()
 		m_full_screen = TRUE;
 		is_modified = TRUE;
 	}
-	if (FUN_004033d0()) {
+	if (IsDeviceInBasicRGBMode()) {
 		if (m_3d_video_ram) {
 			m_3d_video_ram = FALSE;
 			is_modified = TRUE;
@@ -340,9 +340,9 @@ BOOL CConfigApp::ValidateSettings()
 }
 
 // FUNCTION: CONFIG 0x004037a0
-DWORD CConfigApp::FUN_004037a0() const
+DWORD CConfigApp::GetConditionalDeviceRenderBitDepth() const
 {
-	if (FUN_004033d0()) {
+	if (IsDeviceInBasicRGBMode()) {
 		return 0;
 	}
 	if (GetHardwareDeviceColorModel()) {
@@ -352,7 +352,7 @@ DWORD CConfigApp::FUN_004037a0() const
 }
 
 // FUNCTION: CONFIG 0x004037e0
-DWORD CConfigApp::FUN_004037e0() const
+DWORD CConfigApp::GetDeviceRenderBitStatus() const
 {
 	if (GetHardwareDeviceColorModel()) {
 		return m_device->m_HWDesc.dwDeviceRenderBitDepth & 0x400;
@@ -363,23 +363,23 @@ DWORD CConfigApp::FUN_004037e0() const
 }
 
 // FUNCTION: CONFIG 0x00403810
-BOOL CConfigApp::FUN_00403810()
+BOOL CConfigApp::AdjustDisplayBitDepthBasedOnRenderStatus()
 {
 	if (m_display_bit_depth == 8) {
-		if (FUN_004037a0()) {
+		if (GetConditionalDeviceRenderBitDepth()) {
 			return FALSE;
 		}
 	}
 	if (m_display_bit_depth == 16) {
-		if (FUN_004037e0()) {
+		if (GetDeviceRenderBitStatus()) {
 			return FALSE;
 		}
 	}
-	if (FUN_004037a0()) {
+	if (GetConditionalDeviceRenderBitDepth()) {
 		m_display_bit_depth = 8;
 		return TRUE;
 	}
-	if (FUN_004037e0()) {
+	if (GetDeviceRenderBitStatus()) {
 		m_display_bit_depth = 16;
 		return TRUE;
 	}

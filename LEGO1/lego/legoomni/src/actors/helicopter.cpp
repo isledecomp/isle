@@ -340,7 +340,7 @@ MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
 void Helicopter::VTable0x74(Matrix4& p_transform)
 {
 	if (m_userNavFlag) {
-		m_roi->FUN_100a46b0(p_transform);
+		m_roi->UpdateTransformationRelativeToParent(p_transform);
 		FUN_10010c30();
 	}
 	else {

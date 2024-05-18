@@ -32,13 +32,13 @@ public:
 	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	void VTable0xe4() override;                                  // vtable+0xe4
 
-	void FUN_10010510();
+	void ActivateSceneActions();
 
 	// SYNTHETIC: LEGO1 0x1000ff60
 	// SkateBoard::`scalar deleting destructor'
 
 private:
-	void FUN_10010270(MxBool p_enable);
+	void EnableScenePresentation(MxBool p_enable);
 
 	MxBool m_unk0x160;      // 0x160
 	Act1State* m_act1state; // 0x164

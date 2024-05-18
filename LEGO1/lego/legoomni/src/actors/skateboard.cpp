@@ -98,7 +98,7 @@ MxU32 SkateBoard::VTable0xcc()
 		ControlManager()->Register(this);
 	}
 
-	FUN_10010270(m_unk0x160);
+	EnableScenePresentation(m_unk0x160);
 
 	Vector3 position = m_roi->GetWorldPosition();
 	AnimationManager()->FUN_10064670(&position);
@@ -122,7 +122,7 @@ MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
 
 // FUNCTION: LEGO1 0x10010270
 // FUNCTION: BETA10 0x100f5366
-void SkateBoard::FUN_10010270(MxBool p_enable)
+void SkateBoard::EnableScenePresentation(MxBool p_enable)
 {
 	m_act1state = (Act1State*) GameState()->GetState("Act1State");
 	if (!m_act1state) {
@@ -142,12 +142,12 @@ void SkateBoard::FUN_10010270(MxBool p_enable)
 // FUNCTION: BETA10 0x100f5472
 MxU32 SkateBoard::VTable0xd0()
 {
-	FUN_10010270(m_unk0x160);
+	EnableScenePresentation(m_unk0x160);
 	return 1;
 }
 
 // FUNCTION: LEGO1 0x10010510
-void SkateBoard::FUN_10010510()
+void SkateBoard::ActivateSceneActions()
 {
 	if (m_act1state->m_unk0x018 != 3) {
 		PlayMusic(JukeboxScript::c_BeachBlvd_Music);

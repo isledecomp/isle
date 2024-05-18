@@ -180,7 +180,7 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 		Mx3DPointFloat(m_action->GetUp().GetX(), m_action->GetUp().GetY(), m_action->GetUp().GetZ()),
 		mat
 	);
-	m_roi->FUN_100a46b0(mat);
+	m_roi->UpdateTransformationRelativeToParent(mat);
 
 	result = SUCCESS;
 

@@ -177,7 +177,7 @@ void CMainDialog::UpdateInterface()
 	CheckDlgButton(IDC_CHK_FLIP_VIDEO_MEM_PAGES, currentConfigApp->m_flip_surfaces);
 	CheckDlgButton(IDC_CHK_3D_VIDEO_MEMORY, currentConfigApp->m_3d_video_ram);
 	BOOL full_screen = currentConfigApp->m_full_screen;
-	currentConfigApp->FUN_00403810();
+	currentConfigApp->AdjustDisplayBitDepthBasedOnRenderStatus();
 	if (currentConfigApp->GetHardwareDeviceColorModel()) {
 		CheckDlgButton(IDC_CHK_DRAW_CURSOR, TRUE);
 	}
@@ -198,8 +198,9 @@ void CMainDialog::UpdateInterface()
 		CheckDlgButton(IDC_RAD_PALETTE_16BIT, 0);
 		currentConfigApp->m_display_bit_depth = 0;
 	}
-	GetDlgItem(IDC_RAD_PALETTE_256)->EnableWindow(full_screen && currentConfigApp->FUN_004037a0());
-	GetDlgItem(IDC_RAD_PALETTE_16BIT)->EnableWindow(full_screen && currentConfigApp->FUN_004037e0());
+	GetDlgItem(IDC_RAD_PALETTE_256)
+		->EnableWindow(full_screen && currentConfigApp->GetConditionalDeviceRenderBitDepth());
+	GetDlgItem(IDC_RAD_PALETTE_16BIT)->EnableWindow(full_screen && currentConfigApp->GetDeviceRenderBitStatus());
 	CheckDlgButton(IDC_CHK_3DSOUND, currentConfigApp->m_3d_sound);
 	CheckDlgButton(IDC_CHK_DRAW_CURSOR, currentConfigApp->m_draw_cursor);
 	switch (currentConfigApp->m_model_quality) {

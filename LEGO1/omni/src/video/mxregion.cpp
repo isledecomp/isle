@@ -67,12 +67,12 @@ void MxRegion::VTable0x18(MxRect32& p_rect)
 				MxRegionTopBottom* newTopBottom = topBottom->Clone();
 				newTopBottom->SetBottom(rect.GetBottom());
 				topBottom->SetTop(rect.GetBottom());
-				newTopBottom->FUN_100c5280(rect.GetLeft(), rect.GetRight());
+				newTopBottom->MergeOrExpandRegions(rect.GetLeft(), rect.GetRight());
 				cursor.Prepend(newTopBottom);
 				rect.SetTop(rect.GetBottom());
 			}
 			else {
-				topBottom->FUN_100c5280(rect.GetLeft(), rect.GetRight());
+				topBottom->MergeOrExpandRegions(rect.GetLeft(), rect.GetRight());
 				rect.SetTop(topBottom->GetBottom());
 			}
 		}
@@ -100,7 +100,7 @@ MxBool MxRegion::VTable0x1c(MxRect32& p_rect)
 		if (topBottom->GetTop() >= p_rect.GetBottom()) {
 			return FALSE;
 		}
-		if (topBottom->GetBottom() > p_rect.GetTop() && topBottom->FUN_100c57b0(p_rect)) {
+		if (topBottom->GetBottom() > p_rect.GetTop() && topBottom->CheckHorizontalOverlap(p_rect)) {
 			return TRUE;
 		}
 	}
@@ -128,7 +128,7 @@ MxRegionTopBottom::MxRegionTopBottom(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c5280
-void MxRegionTopBottom::FUN_100c5280(MxS32 p_left, MxS32 p_right)
+void MxRegionTopBottom::MergeOrExpandRegions(MxS32 p_left, MxS32 p_right)
 {
 	MxRegionLeftRightListCursor a(m_leftRightList);
 	MxRegionLeftRightListCursor b(m_leftRightList);
@@ -190,7 +190,7 @@ MxRegionTopBottom* MxRegionTopBottom::Clone()
 }
 
 // FUNCTION: LEGO1 0x100c57b0
-MxBool MxRegionTopBottom::FUN_100c57b0(MxRect32& p_rect)
+MxBool MxRegionTopBottom::CheckHorizontalOverlap(MxRect32& p_rect)
 {
 	MxRegionLeftRightListCursor cursor(m_leftRightList);
 	MxRegionLeftRight* leftRight;
