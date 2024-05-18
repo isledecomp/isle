@@ -23,7 +23,8 @@ struct LegoLocation {
 	float m_up[3];        // 0x20
 	Boundary m_boundaryA; // 0x2c
 	Boundary m_boundaryB; // 0x44
-	undefined4 m_unk0x5c; // 0x5c
+	MxBool m_unk0x5c;     // 0x5c
+	MxU8 m_frequency;     // 0x5d
 };
 
 extern LegoLocation g_locations[70];

@@ -38,7 +38,7 @@ public:
 			float p_srcScale,
 			MxS16 p_dest,
 			float p_destScale,
-			undefined4 p_unk0x30,
+			MxU32 p_location,
 			JukeboxScript::Script p_music
 		)
 		{
@@ -50,7 +50,7 @@ public:
 			m_srcScale = p_srcScale;
 			m_dest = p_dest;
 			m_destScale = p_destScale;
-			m_unk0x30 = p_unk0x30;
+			m_location = p_location;
 			m_music = p_music;
 		}
 
@@ -65,7 +65,7 @@ public:
 			m_srcScale = p_location.m_srcScale;
 			m_dest = p_location.m_dest;
 			m_destScale = p_location.m_destScale;
-			m_unk0x30 = p_location.m_unk0x30;
+			m_location = p_location.m_location;
 			m_music = p_location.m_music;
 			return *this;
 		}
@@ -78,7 +78,7 @@ public:
 		float m_srcScale;              // 0x24
 		MxS16 m_dest;                  // 0x28
 		float m_destScale;             // 0x2c
-		undefined4 m_unk0x30;          // 0x30
+		undefined4 m_location;         // 0x30
 		JukeboxScript::Script m_music; // 0x34
 	};
 
