@@ -2,7 +2,7 @@
 #define __LEGOUNKNOWN100DB7F4_H
 
 #include "legoedge.h"
-#include "legoweedge.h"
+#include "legowegedge.h"
 #include "mxgeometry/mxgeometry3d.h"
 
 // VTABLE: LEGO1 0x100db7f4
@@ -32,6 +32,24 @@ public:
 		}
 
 		return SUCCESS;
+	}
+
+	// FUNCTION: BETA10 0x1004a830
+	LegoU32 Unknown(LegoWEGEdge& p_face, LegoU8 p_mask)
+	{
+		return (p_face.IsEqual(*m_faceB) && m_flags & c_bit1 && p_face.GetMask0x03() & p_mask == p_mask) ||
+			   (p_face.IsEqual(*m_faceA) && m_flags & c_bit2 && p_face.GetMask0x03() & p_mask == p_mask);
+	}
+
+	// FUNCTION: BETA10 0x1001cbe0
+	LegoWEEdge* OtherFace(LegoWEEdge* p_other)
+	{
+		if (m_faceA == p_other) {
+			return m_faceB;
+		}
+		else {
+			return m_faceA;
+		}
 	}
 
 	LegoU32 GetMask0x03() { return m_flags & (c_bit1 | c_bit2); }

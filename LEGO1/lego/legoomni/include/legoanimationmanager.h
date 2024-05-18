@@ -15,6 +15,7 @@ class LegoExtraActor;
 class LegoFile;
 class LegoPathBoundary;
 class LegoROIList;
+struct LegoUnknown100db7f4;
 class LegoWorld;
 struct ModelInfo;
 class MxDSAction;
@@ -151,7 +152,8 @@ private:
 	MxBool FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_unk0x14, MxU32 p_characterId);
 	void FUN_10063d10();
 	MxBool FUN_10063fb0(LegoLocation::Boundary* p_boundary, LegoWorld* p_world);
-	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool, MxBool);
+	MxBool FUN_10064010(LegoPathBoundary*, LegoUnknown100db7f4*, float);
+	MxBool FUN_10064120(LegoLocation::Boundary* p_boundary, MxBool p_bool1, MxBool p_bool2);
 	MxResult FUN_10064380(
 		const char* p_name,
 		const char* p_boundaryName,
