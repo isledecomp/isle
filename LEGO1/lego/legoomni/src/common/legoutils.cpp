@@ -4,6 +4,7 @@
 #include "act1state.h"
 #include "anim/legoanim.h"
 #include "islepathactor.h"
+#include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
@@ -424,10 +425,16 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 	return FALSE;
 }
 
-// STUB: LEGO1 0x1003ef00
-void FUN_1003ef00(MxBool)
+// FUNCTION: LEGO1 0x1003ef00
+void FUN_1003ef00(MxBool p_enable)
 {
-	// TODO (something related to animation manager)
+	if (p_enable) {
+		AnimationManager()->Resume();
+	}
+
+	AnimationManager()->FUN_1005f6d0(p_enable);
+	AnimationManager()->FUN_10060540(p_enable);
+	AnimationManager()->FUN_100604d0(p_enable);
 }
 
 // FUNCTION: LEGO1 0x1003ef40

@@ -874,6 +874,24 @@ void LegoAnimationManager::DeleteAnimations()
 	m_suspended = suspended;
 }
 
+// FUNCTION: LEGO1 0x100604d0
+// FUNCTION: BETA10 0x10041335
+void LegoAnimationManager::FUN_100604d0(MxBool p_unk0x08)
+{
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(g_characters); i++) {
+		g_characters[i].m_unk0x08 = p_unk0x08;
+	}
+}
+
+// FUNCTION: LEGO1 0x10060540
+// FUNCTION: BETA10 0x1004140f
+void LegoAnimationManager::FUN_10060540(MxBool p_unk0x29)
+{
+	for (MxS32 i = 0; i < m_animCount; i++) {
+		m_anims[i].m_unk0x29 = p_unk0x29;
+	}
+}
+
 // FUNCTION: LEGO1 0x10060570
 // FUNCTION: BETA10 0x10041463
 void LegoAnimationManager::FUN_10060570(MxBool p_unk0x1a)
