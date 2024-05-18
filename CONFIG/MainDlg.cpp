@@ -198,7 +198,8 @@ void CMainDialog::UpdateInterface()
 		CheckDlgButton(IDC_RAD_PALETTE_16BIT, 0);
 		currentConfigApp->m_display_bit_depth = 0;
 	}
-	GetDlgItem(IDC_RAD_PALETTE_256)->EnableWindow(full_screen && currentConfigApp->GetConditionalDeviceRenderBitDepth());
+	GetDlgItem(IDC_RAD_PALETTE_256)
+		->EnableWindow(full_screen && currentConfigApp->GetConditionalDeviceRenderBitDepth());
 	GetDlgItem(IDC_RAD_PALETTE_16BIT)->EnableWindow(full_screen && currentConfigApp->GetDeviceRenderBitStatus());
 	CheckDlgButton(IDC_CHK_3DSOUND, currentConfigApp->m_3d_sound);
 	CheckDlgButton(IDC_CHK_DRAW_CURSOR, currentConfigApp->m_draw_cursor);
