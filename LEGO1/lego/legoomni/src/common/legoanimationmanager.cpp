@@ -2085,12 +2085,27 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, Le
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10064010
+// FUNCTION: LEGO1 0x10064010
 // FUNCTION: BETA10 0x100453a5
-MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary*, LegoUnknown100db7f4*, float)
+MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnknown100db7f4* p_edge, float p_destScale)
 {
-	// TODO
-	return TRUE;
+	Mx3DPointFloat p1;
+	Vector3* v1 = p_edge->GetOpposingPoint(p_boundary);
+	Vector3* v2 = p_edge->GetPoint(p_boundary);
+
+	p1 = *v2;
+	((Vector3&) p1).Sub(v1);
+	((Vector3&) p1).Mul(p_destScale);
+	((Vector3&) p1).Add(v1);
+
+	BoundingBox boundingBox;
+	Mx3DPointFloat vec(1.0f, 1.0f, 1.0f);
+
+	boundingBox.Min() = p1;
+	boundingBox.Min().Sub(&vec);
+	boundingBox.Max() = p1;
+	boundingBox.Max().Add(&vec);
+	return GetViewManager()->FUN_100a6150(boundingBox) == FALSE;
 }
 
 // FUNCTION: LEGO1 0x10064120
