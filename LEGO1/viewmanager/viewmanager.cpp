@@ -8,6 +8,9 @@
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
+// GLOBAL: LEGO1 0x100dbc78
+int g_unk0x100dbc78[8][3] = {{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
+
 // GLOBAL: LEGO1 0x100dbcd8
 int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
@@ -55,11 +58,35 @@ ViewManager::~ViewManager()
 	SetPOVSource(NULL);
 }
 
-// STUB: LEGO1 0x100a6150
+// FUNCTION: LEGO1 0x100a6150
 // FUNCTION: BETA10 0x10172164
-undefined4 ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
+unsigned int ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
 {
-	return 1;
+	const Vector3* box[] = {&p_bounding_box.Min(), &p_bounding_box.Max()};
+
+	float und[8][3];
+	int i, j, k;
+
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 3; j++) {
+			und[i][j] = box[g_unk0x100dbc78[i][j]]->operator[](j);
+		}
+	}
+
+	for (i = 0; i < 6; i++) {
+		for (k = 0; k < 8; k++) {
+			if (unk0x150[i][0] * und[k][0] + unk0x150[i][2] * und[k][2] + unk0x150[i][1] * und[k][1] + unk0x150[i][3] >=
+				0.0f) {
+				break;
+			}
+		}
+
+		if (k == 8) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x100a6410
