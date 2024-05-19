@@ -104,7 +104,7 @@ public:
 
 		if (sq > 0.0f) {
 			float root = sqrt(sq);
-			if (root > 0) {
+			if (root > 0.0f) {
 				DivScalarImpl(&root);
 				return 0;
 			}
