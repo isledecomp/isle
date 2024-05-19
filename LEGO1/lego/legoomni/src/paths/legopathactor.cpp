@@ -495,7 +495,7 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 	float p_f1,
 	float p_f2,
 	Vector3& p_v3,
-	MxS32 p_unk
+	MxS32 p_und
 )
 {
 	MxU32 result = VTable0x6c(p_boundary, p_v1, p_v2, p_f1, p_f2, p_v3);
@@ -503,7 +503,7 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 	if (result == 0) {
 		p_boundaries.push_back(p_boundary);
 
-		if (p_unk >= 2) {
+		if (p_und >= 2) {
 			return 0;
 		}
 
@@ -522,7 +522,7 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 				}
 
 				if (it == p_boundaries.end()) {
-					result = FUN_1002edd0(p_boundaries, boundary, p_v1, p_v2, p_f1, p_f2, p_v3, p_unk + 1);
+					result = FUN_1002edd0(p_boundaries, boundary, p_v1, p_v2, p_f1, p_f2, p_v3, p_und + 1);
 
 					if (result != 0) {
 						return result;

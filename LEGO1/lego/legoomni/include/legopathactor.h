@@ -138,7 +138,7 @@ protected:
 		float p_f1,
 		float p_f2,
 		Vector3& p_v3,
-		MxS32 p_unk
+		MxS32 p_und
 	);
 
 	MxFloat m_BADuration;             // 0x78
