@@ -10,6 +10,7 @@ struct LegoEdge;
 class LegoPathBoundary;
 class LegoPathController;
 struct LegoUnknown100db7f4;
+class LegoWEEdge;
 
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
@@ -35,8 +36,8 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	void ParseAction(char* p_extra) override;               // vtable+0x20
-	virtual MxS32 VTable0x68(Vector3&, Vector3&, Vector3&); // vtable+0x68
+	void ParseAction(char* p_extra) override;                              // vtable+0x20
+	virtual MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3); // vtable+0x68
 	virtual MxU32 VTable0x6c(
 		LegoPathBoundary* p_boundary,
 		Vector3& p_v1,
@@ -129,6 +130,17 @@ public:
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
+	inline MxU32 FUN_1002edd0(
+		list<LegoPathBoundary*>& p_boundaries,
+		LegoPathBoundary* p_boundary,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		float p_f2,
+		Vector3& p_v3,
+		MxS32 p_unk
+	);
+
 	MxFloat m_BADuration;             // 0x78
 	MxFloat m_unk0x7c;                // 0x7c
 	MxFloat m_actorTime;              // 0x80
@@ -151,5 +163,14 @@ protected:
 	MxS32 m_unk0x14c;                 // 0x14c
 	MxFloat m_unk0x150;               // 0x150
 };
+
+// TEMPLATE: LEGO1 0x1002ef10
+// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::~list<LegoPathBoundary *,allocator<LegoPathBoundary *> >
+
+// TEMPLATE: LEGO1 0x1002ef80
+// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::insert
+
+// TEMPLATE: LEGO1 0x1002efd0
+// List<LegoPathBoundary *>::~List<LegoPathBoundary *>
 
 #endif // LEGOPATHACTOR_H
