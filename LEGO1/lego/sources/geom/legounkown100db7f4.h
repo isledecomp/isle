@@ -59,7 +59,7 @@ public:
 
 	LegoU16 m_flags;          // 0x24
 	Mx3DPointFloat m_unk0x28; // 0x28
-	LegoU32 m_unk0x3c;        // 0x3c
+	float m_unk0x3c;          // 0x3c
 };
 
 #endif // __LEGOUNKNOWN100DB7F4_H
