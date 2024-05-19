@@ -27,12 +27,12 @@ public:
 		{
 			m_unk0x00 = NULL;
 			m_unk0x04 = 0;
-			m_unk0x08 = 0;
+			m_unk0x08 = 0.0f;
 		}
 
 		LegoPathStruct* m_unk0x00; // 0x00
 		undefined4 m_unk0x04;      // 0x04
-		undefined4 m_unk0x08;      // 0x08
+		float m_unk0x08;           // 0x08
 	};
 
 	LegoWEGEdge();

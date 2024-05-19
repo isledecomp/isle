@@ -5,6 +5,7 @@
 #include "mxatom.h"
 #include "mxtypes.h"
 
+class LegoPathActor;
 class LegoWorld;
 
 // VTABLE: LEGO1 0x100d7d9c
@@ -35,7 +36,7 @@ public:
 	// FUNCTION: LEGO1 0x10047470
 	~LegoPathStruct() override {}
 
-	void VTable0x04(undefined4, undefined4, undefined4); // vtable+0x04
+	virtual void VTable0x04(LegoPathActor*, undefined4, undefined4); // vtable+0x04
 
 	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }

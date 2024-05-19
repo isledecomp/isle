@@ -279,10 +279,10 @@ MxResult LegoPathController::FUN_10046050(
 		if (edge->GetMask0x03()) {
 			Mx3DPointFloat vec;
 
-			if (((LegoUnknown100db7f4*) edge->GetClockwiseEdge(boundary))->FUN_1002ddc0(*boundary, vec) == SUCCESS &&
+			if (((LegoUnknown100db7f4*) edge->GetClockwiseEdge(*boundary))->FUN_1002ddc0(*boundary, vec) == SUCCESS &&
 				vec.Dot(&vec, &p_direction) < 0.0f) {
 				edge =
-					(LegoUnknown100db7f4*) edge->GetCounterclockwiseEdge(boundary)->GetCounterclockwiseEdge(boundary);
+					(LegoUnknown100db7f4*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
 			}
 
 			if (!edge->GetMask0x03()) {

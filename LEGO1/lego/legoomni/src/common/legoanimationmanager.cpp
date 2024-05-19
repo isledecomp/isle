@@ -2139,8 +2139,8 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, Le
 MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnknown100db7f4* p_edge, float p_destScale)
 {
 	Mx3DPointFloat p1;
-	Vector3* v1 = p_edge->GetOpposingPoint(p_boundary);
-	Vector3* v2 = p_edge->GetPoint(p_boundary);
+	Vector3* v1 = p_edge->GetOpposingPoint(*p_boundary);
+	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
 	p1 = *v2;
 	((Vector3&) p1).Sub(v1);
@@ -2196,7 +2196,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 
 	e = local50;
 	do {
-		e = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(boundary);
+		e = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(*boundary);
 		if (e->GetMask0x03()) {
 			break;
 		}
@@ -2237,10 +2237,10 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 
 			do {
 				if (p_bool1) {
-					local34 = (LegoUnknown100db7f4*) local34->GetCounterclockwiseEdge(boundary);
+					local34 = (LegoUnknown100db7f4*) local34->GetCounterclockwiseEdge(*boundary);
 				}
 				else {
-					local34 = (LegoUnknown100db7f4*) local34->GetClockwiseEdge(boundary);
+					local34 = (LegoUnknown100db7f4*) local34->GetClockwiseEdge(*boundary);
 				}
 			} while (!local34->GetMask0x03() && local34 != local50);
 
