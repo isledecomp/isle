@@ -62,7 +62,7 @@ public:
 
 	friend class LegoPathController;
 
-private:
+protected:
 	LegoU8 m_flags;                // 0x0c
 	LegoU8 m_unk0x0d;              // 0x0d
 	LegoChar* m_name;              // 0x10
