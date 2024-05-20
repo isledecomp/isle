@@ -109,19 +109,19 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002aa90
-void LegoExtraActor::VTable0xa4(MxU8& p_und1, MxS32& p_und2)
+void LegoExtraActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 {
 	switch (m_unk0x0c) {
 	case 1:
-		p_und1 = 1;
+		p_und1 = TRUE;
 		p_und2 = 1;
 		break;
 	case 2:
-		p_und1 = 0;
+		p_und1 = FALSE;
 		p_und2 = 1;
 		break;
 	default:
-		p_und1 = 1;
+		p_und1 = TRUE;
 		p_und2 = rand() % p_und2 + 1;
 		break;
 	}
