@@ -418,6 +418,7 @@ void LegoPathActor::VTable0x70(float p_time)
 }
 
 // STUB: LEGO1 0x1002e8b0
+// FUNCTION: BETA10 0x100af2f7
 void LegoPathActor::VTable0x98(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
