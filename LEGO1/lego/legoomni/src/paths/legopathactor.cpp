@@ -5,6 +5,7 @@
 #include "legocameracontroller.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
+#include "legopathedgecontainer.h"
 #include "legosoundmanager.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -15,6 +16,7 @@
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(LegoPathActor, 0x154)
+DECOMP_SIZE_ASSERT(LegoPathEdgeContainer, 0x3c)
 
 #ifndef M_PI
 #define M_PI 3.1416
@@ -40,21 +42,21 @@ LegoPathActor::LegoPathActor()
 	m_unk0x7c = 0;
 	m_userNavFlag = FALSE;
 	m_state = 0;
-	m_unk0x134 = NULL;
+	m_grec = NULL;
 	m_controller = NULL;
 	m_unk0xe8 = 0;
 	m_unk0x148 = 0;
 	m_unk0x14c = 0;
-	m_unk0x140 = 0.0099999998f;
-	m_unk0x144 = 0.80000001f;
+	m_unk0x140 = 0.0099999999f;
+	m_unk0x144 = 0.8f;
 	m_unk0x150 = 2.0f;
 }
 
-// STUB: LEGO1 0x1002d820
+// FUNCTION: LEGO1 0x1002d820
 LegoPathActor::~LegoPathActor()
 {
-	if (m_unk0x134) {
-		delete m_unk0x134;
+	if (m_grec) {
+		delete m_grec;
 	}
 }
 
@@ -264,7 +266,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			LegoPathBoundary* oldBoundary = m_boundary;
 
 			if (m_unk0xe9 != 0) {
-				WaitForAnimation();
+				VTable0x9c();
 
 				if (m_boundary == oldBoundary) {
 					MxLong time = Timer()->GetTime();
@@ -344,7 +346,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 			pos2 = pos1;
 
 			if (m_unk0xe9 != 0) {
-				WaitForAnimation();
+				VTable0x9c();
 			}
 
 			return 0;
@@ -544,7 +546,8 @@ void LegoPathActor::ParseAction(char* p_extra)
 }
 
 // STUB: LEGO1 0x1002f1b0
-MxResult LegoPathActor::WaitForAnimation()
+// FUNCTION: BETA10 0x100af899
+MxResult LegoPathActor::VTable0x9c()
 {
 	// TODO
 	return SUCCESS;

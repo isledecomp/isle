@@ -1,5 +1,6 @@
 #include "legopathcontroller.h"
 
+#include "legopathedgecontainer.h"
 #include "legopathstruct.h"
 #include "misc/legostorage.h"
 #include "mxmisc.h"
@@ -726,4 +727,37 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 	}
 
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x1004a240
+// FUNCTION: BETA10 0x100b9160
+MxU32 LegoPathController::FUN_1004a240(
+	LegoPathEdgeContainer& p_grec,
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	LegoUnknown100db7f4*& p_edge,
+	LegoPathBoundary*& p_boundary
+)
+{
+	if (p_grec.size() == 0) {
+		p_v1 = p_grec.m_unk0x0c;
+		p_v2 = p_grec.m_unk0x20;
+		p_boundary = p_grec.m_boundary;
+		p_grec.SetBit1(FALSE);
+		return 1;
+	}
+
+	p_edge = p_grec.front().m_edge;
+	p_boundary = p_grec.front().m_boundary;
+	p_grec.pop_front();
+
+	Mx3DPointFloat vec;
+	p_v1 = *p_edge->CCWVertex(*p_boundary);
+	p_v1.Sub(p_edge->GetOpposingPoint(*p_boundary));
+	p_v1.Mul(p_f1);
+	p_v1.Add(p_edge->GetOpposingPoint(*p_boundary));
+	p_edge->FUN_1002ddc0(*p_boundary, vec);
+	p_v2.EqualsCross(p_boundary->GetUnknown0x14(), &vec);
+	return 0;
 }

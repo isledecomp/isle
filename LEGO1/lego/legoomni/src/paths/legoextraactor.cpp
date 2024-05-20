@@ -151,7 +151,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 		m_boundary = oldEdge;
 	}
 
-	LegoPathActor::WaitForAnimation();
+	LegoPathActor::VTable0x9c();
 	return SUCCESS;
 }
 
@@ -280,10 +280,10 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // FUNCTION: LEGO1 0x1002b290
-MxResult LegoExtraActor::WaitForAnimation()
+MxResult LegoExtraActor::VTable0x9c()
 {
 	LegoPathBoundary* oldBoundary = m_boundary;
-	MxResult result = LegoPathActor::WaitForAnimation();
+	MxResult result = LegoPathActor::VTable0x9c();
 
 	if (m_boundary != oldBoundary) {
 		MxU32 b = FALSE;
