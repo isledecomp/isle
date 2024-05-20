@@ -86,7 +86,11 @@ public:
 	// FUNCTION: LEGO1 0x10002d50
 	virtual MxResult VTable0x94(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
-	virtual void VTable0x98();     // vtable+0x98
+	virtual void VTable0x98(
+		LegoPathBoundary*& p_boundary,
+		LegoUnknown100db7f4*& p_edge,
+		float& p_unk0xe4
+	);                             // vtable+0x98
 	virtual MxResult VTable0x9c(); // vtable+0x9c
 
 	// FUNCTION: LEGO1 0x10002d60

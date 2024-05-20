@@ -103,7 +103,7 @@ public:
 	LegoPathBoundary* GetPathBoundary(const char* p_name);
 	void Enable(MxBool p_enable);
 	void FUN_10046bb0(LegoWorld* p_world);
-	MxU32 FUN_1004a240(
+	MxS32 FUN_1004a240(
 		LegoPathEdgeContainer& p_grec,
 		Vector3& p_v1,
 		Vector3& p_v2,

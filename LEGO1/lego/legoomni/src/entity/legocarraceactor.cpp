@@ -72,7 +72,7 @@ void LegoCarRaceActor::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x10081d20
-void LegoCarRaceActor::VTable0x98()
+void LegoCarRaceActor::VTable0x98(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
 }

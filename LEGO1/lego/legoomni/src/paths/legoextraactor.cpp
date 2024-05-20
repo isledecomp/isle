@@ -400,6 +400,7 @@ void LegoExtraActor::SetWorldSpeed(MxFloat p_worldSpeed)
 	if (m_curAnim == 0 && p_worldSpeed > 0) {
 		VTable0xc4();
 	}
+
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
 }
 

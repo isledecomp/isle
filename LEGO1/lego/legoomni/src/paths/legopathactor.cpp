@@ -418,7 +418,8 @@ void LegoPathActor::VTable0x70(float p_time)
 }
 
 // STUB: LEGO1 0x1002e8b0
-void LegoPathActor::VTable0x98()
+// FUNCTION: BETA10 0x100af2f7
+void LegoPathActor::VTable0x98(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
 }
@@ -545,11 +546,85 @@ void LegoPathActor::ParseAction(char* p_extra)
 	LegoActor::ParseAction(p_extra);
 }
 
-// STUB: LEGO1 0x1002f1b0
+// FUNCTION: LEGO1 0x1002f1b0
 // FUNCTION: BETA10 0x100af899
 MxResult LegoPathActor::VTable0x9c()
 {
-	// TODO
+	Mx3DPointFloat local34;
+	Mx3DPointFloat local48;
+	MxU32 local1c = 1;
+	MxU32 local20 = 1;
+
+	if (m_grec != NULL) {
+		if (m_grec->GetBit1()) {
+			local1c = 0;
+			local20 = 0;
+
+			Mx3DPointFloat vec;
+			switch (m_controller->FUN_1004a240(*m_grec, local34, local48, m_unk0xe4, m_destEdge, m_boundary)) {
+			case 0:
+			case 1:
+				break;
+			default:
+				return FAILURE;
+			}
+		}
+		else {
+			delete m_grec;
+			m_grec = NULL;
+		}
+	}
+
+	if (local1c != 0) {
+		VTable0x98(m_boundary, m_destEdge, m_unk0xe4);
+	}
+
+	if (local20 != 0) {
+		Mx3DPointFloat local78;
+
+		Vector3& v1 = *m_destEdge->GetOpposingPoint(*m_boundary);
+		Vector3& v2 = *m_destEdge->CCWVertex(*m_boundary);
+
+		LERP3(local34, v1, v2, m_unk0xe4);
+
+		m_destEdge->FUN_1002ddc0(*m_boundary, local78);
+		local48.EqualsCross(m_boundary->GetUnknown0x14(), &local78);
+		local48.Unitize();
+	}
+
+	Vector3 rightRef(m_unk0xec[0]);
+	Vector3 upRef(m_unk0xec[1]);
+	Vector3 dirRef(m_unk0xec[2]);
+
+	upRef = *m_boundary->GetUnknown0x14();
+
+	rightRef.EqualsCross(&upRef, &dirRef);
+	rightRef.Unitize();
+
+	dirRef.EqualsCross(&rightRef, &upRef);
+	dirRef.Unitize();
+
+	Mx3DPointFloat localc0(m_unk0xec[3]);
+	Mx3DPointFloat local84(m_unk0xec[2]);
+	Mx3DPointFloat local70(local34);
+
+	((Vector3&) local70).Sub(&localc0);
+	float len = local70.LenSquared();
+	if (len >= 0.0f) {
+		len = sqrt(len);
+		((Vector3&) local84).Mul(len);
+		((Vector3&) local48).Mul(len);
+	}
+
+	if (!m_userNavFlag) {
+		((Vector3&) local84).Mul(-1.0f);
+	}
+
+	if (VTable0x80(localc0, local84, local34, local48) != SUCCESS) {
+		return FAILURE;
+	}
+
+	m_unk0x7c = 0.0f;
 	return SUCCESS;
 }
 
