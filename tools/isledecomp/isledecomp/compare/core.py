@@ -90,7 +90,7 @@ class Compare:
 
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
-        cv = (
+        self.cv = (
             Cvdump(self.pdb_file)
             .lines()
             .globals()
@@ -100,9 +100,9 @@ class Compare:
             .types()
             .run()
         )
-        res = CvdumpAnalysis(cv)
+        self.cvdump_analysis = CvdumpAnalysis(self.cv)
 
-        for sym in res.nodes:
+        for sym in self.cvdump_analysis.nodes:
             # The PDB might contain sections that do not line up with the
             # actual binary. The symbol "__except_list" is one example.
             # In these cases, just skip this symbol and move on because
@@ -111,6 +111,7 @@ class Compare:
                 continue
 
             addr = self.recomp_bin.get_abs_addr(sym.section, sym.offset)
+            sym.addr = addr
 
             # If this symbol is the final one in its section, we were not able to
             # estimate its size because we didn't have the total size of that section.
@@ -160,7 +161,7 @@ class Compare:
                 addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
             )
 
-        for (section, offset), (filename, line_no) in res.verified_lines.items():
+        for (section, offset), (filename, line_no) in self.cvdump_analysis.verified_lines.items():
             addr = self.recomp_bin.get_abs_addr(section, offset)
             self._lines_db.add_line(filename, line_no, addr)
 

@@ -2,7 +2,7 @@
 addresses/symbols that we want to compare between the original and recompiled binaries."""
 import sqlite3
 import logging
-from typing import List, Optional
+from typing import Any, List, Optional
 from isledecomp.types import SymbolType
 from isledecomp.cvdump.demangler import get_vtordisp_name
 
@@ -335,7 +335,7 @@ class CompareDb:
     def skip_compare(self, orig: int):
         self._set_opt_bool(orig, "skip")
 
-    def get_match_options(self, addr: int) -> Optional[dict]:
+    def get_match_options(self, addr: int) -> Optional[dict[str, Any]]:
         cur = self._db.execute(
             """SELECT name, value FROM `match_options` WHERE addr = ?""", (addr,)
         )
