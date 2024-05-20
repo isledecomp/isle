@@ -92,16 +92,16 @@ void LegoPathBoundary::SwitchBoundary(
 	LegoUnknown100db7f4* e = p_edge;
 
 	if (p_edge->Unknown2(*p_boundary)) {
-		LegoPathBoundary* local18 = (LegoPathBoundary*) p_edge->OtherFace(p_boundary);
+		LegoPathBoundary* newBoundary = (LegoPathBoundary*) p_edge->OtherFace(p_boundary);
 
-		if (local18 == NULL) {
-			local18 = p_boundary;
+		if (newBoundary == NULL) {
+			newBoundary = p_boundary;
 		}
 
 		MxS32 local10 = 0;
 		MxU8 userNavFlag;
 
-		if (e->Unknown(*local18, 1)) {
+		if (e->Unknown(*newBoundary, 1)) {
 			userNavFlag = p_actor->GetUserNavFlag();
 		}
 		else {
@@ -109,8 +109,8 @@ void LegoPathBoundary::SwitchBoundary(
 		}
 
 		do {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*local18);
-			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(local18);
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
 			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
 				local10++;
@@ -132,13 +132,13 @@ void LegoPathBoundary::SwitchBoundary(
 
 		while (local8 > 0) {
 			if (localc) {
-				p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*local18);
+				p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 			}
 			else {
-				p_edge = (LegoUnknown100db7f4*) p_edge->GetClockwiseEdge(*local18);
+				p_edge = (LegoUnknown100db7f4*) p_edge->GetClockwiseEdge(*newBoundary);
 			}
 
-			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(local18);
+			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
 
 			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
 				local8--;
@@ -146,13 +146,13 @@ void LegoPathBoundary::SwitchBoundary(
 		}
 
 		if (p_edge == e) {
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*local18);
-			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*local18);
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
 		}
 
-		if (p_boundary != local18) {
+		if (p_boundary != newBoundary) {
 			p_boundary->RemoveActor(p_actor);
-			p_boundary = local18;
+			p_boundary = newBoundary;
 			p_boundary->AddActor(p_actor);
 		}
 		else {
