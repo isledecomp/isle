@@ -417,11 +417,11 @@ void LegoPathActor::VTable0x70(float p_time)
 	}
 }
 
-// STUB: LEGO1 0x1002e8b0
+// FUNCTION: LEGO1 0x1002e8b0
 // FUNCTION: BETA10 0x100af2f7
-void LegoPathActor::VTable0x98(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+void LegoPathActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
-	// TODO
+	m_boundary->SwitchBoundary(this, p_boundary, p_edge, p_unk0xe4);
 }
 
 // FUNCTION: LEGO1 0x1002e8d0
@@ -576,7 +576,7 @@ MxResult LegoPathActor::VTable0x9c()
 	}
 
 	if (local1c != 0) {
-		VTable0x98(m_boundary, m_destEdge, m_unk0xe4);
+		SwitchBoundary(m_boundary, m_destEdge, m_unk0xe4);
 	}
 
 	if (local20 != 0) {
@@ -629,7 +629,7 @@ MxResult LegoPathActor::VTable0x9c()
 }
 
 // STUB: LEGO1 0x1002f650
-void LegoPathActor::VTable0xa4(MxU8&, MxS32&)
+void LegoPathActor::VTable0xa4(MxBool&, MxS32&)
 {
 	// TODO
 }

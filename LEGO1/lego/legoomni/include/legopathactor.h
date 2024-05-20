@@ -54,7 +54,7 @@ public:
 	virtual void SetUserNavFlag(MxBool p_userNavFlag) { m_userNavFlag = p_userNavFlag; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x10002d30
-	virtual MxU8 GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
+	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual MxResult VTable0x80(
 		Vector3& p_point1,
@@ -86,7 +86,7 @@ public:
 	// FUNCTION: LEGO1 0x10002d50
 	virtual MxResult VTable0x94(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
-	virtual void VTable0x98(
+	virtual void SwitchBoundary(
 		LegoPathBoundary*& p_boundary,
 		LegoUnknown100db7f4*& p_edge,
 		float& p_unk0xe4
@@ -96,8 +96,8 @@ public:
 	// FUNCTION: LEGO1 0x10002d60
 	virtual MxS32 VTable0xa0() { return 0; } // vtable+0xa0
 
-	virtual void VTable0xa4(MxU8&, MxS32&); // vtable+0xa4
-	virtual void VTable0xa8();              // vtable+0xa8
+	virtual void VTable0xa4(MxBool&, MxS32&); // vtable+0xa4
+	virtual void VTable0xa8();                // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
 	virtual void VTable0xac(MxFloat p_unk0x13c) { m_unk0x13c = p_unk0x13c; } // vtable+0xac

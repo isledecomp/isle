@@ -41,6 +41,12 @@ public:
 			   (p_face.IsEqual(*m_faceA) && (m_flags & c_bit2) && (p_face.GetMask0x03() & p_mask) == p_mask);
 	}
 
+	// FUNCTION: BETA10 0x100b53b0
+	LegoU32 Unknown2(LegoWEGEdge& p_face)
+	{
+		return (p_face.IsEqual(*m_faceA) && (m_flags & c_bit1)) || (p_face.IsEqual(*m_faceB) && (m_flags & c_bit2));
+	}
+
 	// FUNCTION: BETA10 0x1001cbe0
 	LegoWEEdge* OtherFace(LegoWEEdge* p_other)
 	{

@@ -80,6 +80,103 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 	}
 }
 
+// FUNCTION: LEGO1 0x10057720
+// FUNCTION: BETA10 0x100b17ef
+void LegoPathBoundary::SwitchBoundary(
+	LegoPathActor* p_actor,
+	LegoPathBoundary*& p_boundary,
+	LegoUnknown100db7f4*& p_edge,
+	float& p_unk0xe4
+)
+{
+	LegoUnknown100db7f4* e = p_edge;
+
+	if (p_edge->Unknown2(*p_boundary)) {
+		LegoPathBoundary* newBoundary = (LegoPathBoundary*) p_edge->OtherFace(p_boundary);
+
+		if (newBoundary == NULL) {
+			newBoundary = p_boundary;
+		}
+
+		MxS32 local10 = 0;
+		MxU8 userNavFlag;
+
+		if (e->Unknown(*newBoundary, 1)) {
+			userNavFlag = p_actor->GetUserNavFlag();
+		}
+		else {
+			userNavFlag = TRUE;
+		}
+
+		do {
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
+
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
+				local10++;
+			}
+		} while (p_edge != e);
+
+		MxBool localc = TRUE;
+		MxS32 local8 = local10 - 1;
+
+		if (local10 <= 1) {
+			local8 = 0;
+		}
+		else if (local10 == 2) {
+			local8 = 1;
+		}
+		else {
+			p_actor->VTable0xa4(localc, local8);
+		}
+
+		while (local8 > 0) {
+			if (localc) {
+				p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			}
+			else {
+				p_edge = (LegoUnknown100db7f4*) p_edge->GetClockwiseEdge(*newBoundary);
+			}
+
+			LegoPathBoundary* local20 = (LegoPathBoundary*) p_edge->OtherFace(newBoundary);
+
+			if (p_edge->GetMask0x03() && (userNavFlag || p_edge->Unknown(*local20, 1))) {
+				local8--;
+			}
+		}
+
+		if (p_edge == e) {
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*newBoundary);
+		}
+
+		if (p_boundary != newBoundary) {
+			p_boundary->RemoveActor(p_actor);
+			p_boundary = newBoundary;
+			p_boundary->AddActor(p_actor);
+		}
+		else {
+			p_unk0xe4 = 1.0 - p_unk0xe4;
+		}
+	}
+	else {
+		do {
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+
+			if (p_edge->GetMask0x03()) {
+				break;
+			}
+		} while (p_edge != e);
+
+		if (p_edge == e) {
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+			p_edge = (LegoUnknown100db7f4*) p_edge->GetCounterclockwiseEdge(*p_boundary);
+		}
+
+		p_unk0xe4 = 1.0 - p_unk0xe4;
+	}
+}
+
 // FUNCTION: LEGO1 0x10057950
 // FUNCTION: BETA10 0x100b1adc
 MxU32 LegoPathBoundary::Intersect(

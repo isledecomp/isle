@@ -71,7 +71,7 @@ MxResult LegoJetski::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // STUB: LEGO1 0x100141c0
-void LegoJetski::VTable0x98(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
+void LegoJetski::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
 }

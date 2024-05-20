@@ -34,6 +34,12 @@ public:
 	MxResult AddActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
 	void FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPathActor* p_actor);
+	void SwitchBoundary(
+		LegoPathActor* p_actor,
+		LegoPathBoundary*& p_boundary,
+		LegoUnknown100db7f4*& p_edge,
+		float& p_unk0xe4
+	);
 	MxU32 Intersect(
 		float p_scale,
 		Vector3& p_point1,
