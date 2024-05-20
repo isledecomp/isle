@@ -87,7 +87,7 @@ MxU32 LegoPathBoundary::Intersect(
 	Vector3& p_point1,
 	Vector3& p_point2,
 	Vector3& p_point3,
-	LegoEdge*& p_edge
+	LegoUnknown100db7f4*& p_edge
 )
 {
 	LegoUnknown100db7f4* e = NULL;
@@ -207,7 +207,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 		if (local58 <= 0.0f) {
 			if (!e->GetMask0x03()) {
-				p_edge = e->GetClockwiseEdge(*this);
+				p_edge = (LegoUnknown100db7f4*) e->GetClockwiseEdge(*this);
 			}
 			else {
 				p_edge = e;
@@ -227,7 +227,7 @@ MxU32 LegoPathBoundary::Intersect(
 			p_point3 = *e->CCWVertex(*this);
 
 			if (!e->GetMask0x03()) {
-				p_edge = e->GetCounterclockwiseEdge(*this);
+				p_edge = (LegoUnknown100db7f4*) e->GetCounterclockwiseEdge(*this);
 			}
 			else {
 				p_edge = e;

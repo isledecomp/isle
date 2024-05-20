@@ -44,7 +44,7 @@ void LegoJetskiRaceActor::VTable0x98()
 }
 
 // STUB: LEGO1 0x100822e0
-MxResult LegoJetskiRaceActor::WaitForAnimation()
+MxResult LegoJetskiRaceActor::VTable0x9c()
 {
 	// TODO
 	return SUCCESS;

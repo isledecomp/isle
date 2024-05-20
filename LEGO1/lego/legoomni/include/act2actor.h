@@ -15,7 +15,7 @@ public:
 	MxS32 VTable0x68(Vector3&, Vector3&, Vector3&) override;              // vtable+0x68
 	void VTable0x70(float p_und) override;                                // vtable+0x70
 	MxResult VTable0x94(LegoPathActor*, MxBool) override;                 // vtable+0x94
-	MxResult WaitForAnimation() override;                                 // vtable+0x9c
+	MxResult VTable0x9c() override;                                       // vtable+0x9c
 	MxS32 VTable0xa0() override;                                          // vtable+0xa0
 
 	// SYNTHETIC: LEGO1 0x1001a0a0
