@@ -731,7 +731,7 @@ MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx4DPointFloat& 
 
 // FUNCTION: LEGO1 0x1004a240
 // FUNCTION: BETA10 0x100b9160
-MxU32 LegoPathController::FUN_1004a240(
+MxS32 LegoPathController::FUN_1004a240(
 	LegoPathEdgeContainer& p_grec,
 	Vector3& p_v1,
 	Vector3& p_v2,

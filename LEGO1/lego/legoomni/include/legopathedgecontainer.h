@@ -40,6 +40,8 @@ struct LegoPathEdgeContainer : public list<LegoBoundaryEdge> {
 		}
 	}
 
+	MxU32 GetBit1() { return m_flags & c_bit1; }
+
 	Mx3DPointFloat m_unk0x0c;     // 0x0c
 	Mx3DPointFloat m_unk0x20;     // 0x20
 	LegoPathBoundary* m_boundary; // 0x34
