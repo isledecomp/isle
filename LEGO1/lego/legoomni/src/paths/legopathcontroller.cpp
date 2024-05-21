@@ -687,7 +687,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 
 				boundary.m_unk0x4c[j].m_pathStruct = &m_structs[s];
 
-				if (p_storage->Read(&boundary.m_unk0x4c[j].m_value, sizeof(boundary.m_unk0x4c[j].m_value)) != SUCCESS) {
+				if (p_storage->Read(&boundary.m_unk0x4c[j].m_data, sizeof(boundary.m_unk0x4c[j].m_data)) != SUCCESS) {
 					return FAILURE;
 				}
 

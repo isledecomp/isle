@@ -26,12 +26,12 @@ public:
 		PathWithTrigger()
 		{
 			m_pathStruct = NULL;
-			m_value = 0;
+			m_data = 0;
 			m_unk0x08 = 0.0f;
 		}
 
 		LegoPathStruct* m_pathStruct; // 0x00
-		unsigned int m_value;         // 0x04
+		unsigned int m_data;          // 0x04
 		float m_unk0x08;              // 0x08
 	};
 

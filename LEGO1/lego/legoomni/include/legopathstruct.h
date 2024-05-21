@@ -57,13 +57,13 @@ public:
 	// FUNCTION: LEGO1 0x10047470
 	~LegoPathStruct() override {}
 
-	virtual void VTable0x04(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_value); // vtable+0x04
+	virtual void VTable0x04(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_data); // vtable+0x04
 
 	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
 
 private:
-	MxBool FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_value, MxBool p_bool2);
+	MxBool FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_data, MxBool p_bool2);
 	void FUN_1001bc40(const char* p_name, MxU32 p_objectId, MxBool p_bool);
 	void FUN_1001bd10(MxBool p_direction, MxU32 p_data);
 
