@@ -44,7 +44,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 		triggered = TRUE;
 
 		switch (m_name[2]) {
-		case c_C:
+		case c_camAnim:
 			if (g_unk0x100f1198 & Isle::c_bit6) {
 				PlayCamAnim(p_actor, bool3, p_value, TRUE);
 			}
@@ -74,7 +74,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 			}
 			break;
 		}
-		case c_M:
+		case c_music:
 			if (g_unk0x100f1198 & Isle::c_bit7) {
 				FUN_1001bd10(p_bool1, p_value);
 			}

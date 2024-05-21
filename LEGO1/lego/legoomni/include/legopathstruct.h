@@ -41,12 +41,12 @@ public:
 class LegoPathStruct : public LegoPathStructBase {
 public:
 	enum Trigger {
-		c_C = 'C',
+		c_camAnim = 'C',
 		c_D = 'D',
 		c_E = 'E',
 		c_G = 'G',
 		c_H = 'H',
-		c_M = 'M',
+		c_music = 'M',
 		c_S = 'S',
 		c_W = 'W'
 	};
