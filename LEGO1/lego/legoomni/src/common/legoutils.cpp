@@ -344,7 +344,7 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 
 // FUNCTION: LEGO1 0x1003ecc0
 // FUNCTION: BETA10 0x100d4b38
-void PlayCamAnim(IslePathActor* p_actor, undefined4 p_unused, MxU32 p_location, MxBool p_bool)
+void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBool p_bool)
 {
 	LegoWorld* world = CurrentWorld();
 	MxLong result = 0;

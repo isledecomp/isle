@@ -94,6 +94,7 @@ public:
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
+	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
 	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 

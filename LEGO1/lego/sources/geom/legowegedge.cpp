@@ -1,7 +1,7 @@
 #include "legowegedge.h"
 
 DECOMP_SIZE_ASSERT(LegoWEGEdge, 0x54)
-DECOMP_SIZE_ASSERT(LegoWEGEdge::Path, 0x0c)
+DECOMP_SIZE_ASSERT(LegoWEGEdge::PathWithTrigger, 0x0c)
 
 // FUNCTION: LEGO1 0x1009a730
 LegoWEGEdge::LegoWEGEdge()

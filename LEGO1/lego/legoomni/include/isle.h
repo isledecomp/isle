@@ -26,6 +26,7 @@ class Isle : public LegoWorld {
 public:
 	// For g_unk0x100f1198
 	enum {
+		c_bit6 = 0x20,
 		c_bit7 = 0x40
 	};
 
