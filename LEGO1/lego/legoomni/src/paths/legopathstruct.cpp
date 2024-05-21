@@ -23,19 +23,19 @@ extern MxU32 g_unk0x100f1198;
 MxBool g_unk0x100f119c = FALSE;
 
 // FUNCTION: LEGO1 0x1001b700
-void LegoPathStruct::VTable0x04(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_data)
+void LegoPathStruct::TriggerPathStruct(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data)
 {
-	if (!FUN_1001b740(p_actor, p_bool1, p_data, FALSE) && g_unk0x100f119c) {
-		FUN_1001b740(p_actor, p_bool1, p_data, TRUE);
+	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_unk0x100f119c) {
+		HandleTrigger(p_actor, p_direction, p_data, TRUE);
 	}
 }
 
 // FUNCTION: LEGO1 0x1001b740
 // FUNCTION: BETA10 0x100c26c5
-MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_data, MxBool p_bool2)
+MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool2)
 {
 	MxBool triggered = FALSE;
-	MxBool bool3 = p_bool2 ? !p_bool1 : p_bool1;
+	MxBool bool3 = p_bool2 ? !p_direction : p_direction;
 
 	MxU32 flags = bool3 ? c_bit5 : c_bit6;
 	flags |= p_actor->GetCameraFlag() ? c_bit1 : (c_bit2 | c_bit3 | c_bit4);
@@ -76,7 +76,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 		}
 		case c_music:
 			if (g_unk0x100f1198 & Isle::c_bit7) {
-				FUN_1001bd10(p_bool1, p_data);
+				PlayMusic(p_direction, p_data);
 			}
 			break;
 		case c_s: {
@@ -126,7 +126,7 @@ void LegoPathStruct::FUN_1001bc40(const char* p_name, MxU32 p_data, MxBool p_boo
 
 // FUNCTION: LEGO1 0x1001bd10
 // FUNCTION: BETA10 0x100c2b4a
-void LegoPathStruct::FUN_1001bd10(MxBool p_direction, MxU32 p_data)
+void LegoPathStruct::PlayMusic(MxBool p_direction, MxU32 p_data)
 {
 	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
 	if (state != NULL && state->m_active) {

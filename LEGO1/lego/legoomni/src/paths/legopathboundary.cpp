@@ -64,7 +64,7 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
 
 				if (m_unk0x4c[i].m_unk0x08 >= dot1 && m_unk0x4c[i].m_unk0x08 < dot2) {
-					s->VTable0x04(p_actor, 1, m_unk0x4c[i].m_data);
+					s->TriggerPathStruct(p_actor, TRUE, m_unk0x4c[i].m_data);
 				}
 			}
 		}
@@ -73,7 +73,7 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
 
 				if (m_unk0x4c[i].m_unk0x08 >= dot2 && m_unk0x4c[i].m_unk0x08 < dot1) {
-					s->VTable0x04(p_actor, 0, m_unk0x4c[i].m_data);
+					s->TriggerPathStruct(p_actor, FALSE, m_unk0x4c[i].m_data);
 				}
 			}
 		}
