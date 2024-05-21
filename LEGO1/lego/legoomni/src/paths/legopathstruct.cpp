@@ -49,7 +49,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 				PlayCamAnim(p_actor, bool3, p_data, TRUE);
 			}
 			break;
-		case c_D: {
+		case c_d: {
 			p_actor->VTable0x58(p_data);
 
 			MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);
@@ -61,12 +61,12 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 			}
 			break;
 		}
-		case c_E:
+		case c_e:
 			FUN_1001bc40(m_name, p_data, !(p_bool2 == FALSE));
 			break;
-		case c_G:
+		case c_g:
 			break;
-		case c_H: {
+		case c_h: {
 			LegoHideAnimPresenter* presenter = m_world->GetHideAnimPresenter();
 
 			if (presenter != NULL) {
@@ -79,7 +79,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 				FUN_1001bd10(p_bool1, p_data);
 			}
 			break;
-		case c_S: {
+		case c_s: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
 				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);
@@ -92,7 +92,7 @@ MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU3
 			FUN_1001bc40(m_name, p_data, p_bool2 == FALSE);
 			break;
 		}
-		case c_W: {
+		case c_w: {
 			LegoWorld* world = CurrentWorld();
 			if (world != NULL) {
 				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_data);

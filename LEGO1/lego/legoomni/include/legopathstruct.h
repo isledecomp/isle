@@ -42,13 +42,13 @@ class LegoPathStruct : public LegoPathStructBase {
 public:
 	enum Trigger {
 		c_camAnim = 'C',
-		c_D = 'D',
-		c_E = 'E',
-		c_G = 'G',
-		c_H = 'H',
+		c_d = 'D',
+		c_e = 'E',
+		c_g = 'G',
+		c_h = 'H',
 		c_music = 'M',
-		c_S = 'S',
-		c_W = 'W'
+		c_s = 'S',
+		c_w = 'W'
 	};
 
 	// FUNCTION: LEGO1 0x100473a0
