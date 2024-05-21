@@ -535,7 +535,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 			}
 
 			if (camAnim) {
-				PlayCamAnim(this, 0, g_spawnLocations[i].m_location, TRUE);
+				PlayCamAnim(this, FALSE, g_spawnLocations[i].m_location, TRUE);
 			}
 		}
 

@@ -5,7 +5,7 @@
 #include "legoweedge.h"
 #include "mxgeometry/mxgeometry3d.h"
 
-struct LegoPathStruct;
+class LegoPathStruct;
 
 // might be a struct with public members
 // VTABLE: LEGO1 0x100db7f8
@@ -20,19 +20,19 @@ public:
 	};
 
 	// SIZE 0x0c
-	struct Path {
+	struct PathWithTrigger {
 		// FUNCTION: LEGO1 0x10048280
 		// FUNCTION: BETA10 0x100bd450
-		Path()
+		PathWithTrigger()
 		{
-			m_unk0x00 = NULL;
-			m_unk0x04 = 0;
+			m_pathStruct = NULL;
+			m_value = 0;
 			m_unk0x08 = 0.0f;
 		}
 
-		LegoPathStruct* m_unk0x00; // 0x00
-		undefined4 m_unk0x04;      // 0x04
-		float m_unk0x08;           // 0x08
+		LegoPathStruct* m_pathStruct; // 0x00
+		unsigned int m_value;         // 0x04
+		float m_unk0x08;              // 0x08
 	};
 
 	LegoWEGEdge();
@@ -71,7 +71,7 @@ protected:
 	Mx3DPointFloat m_unk0x30;      // 0x30
 	LegoU32 m_unk0x44;             // 0x44
 	LegoU8 m_unk0x48;              // 0x48
-	Path* m_unk0x4c;               // 0x4c
+	PathWithTrigger* m_unk0x4c;    // 0x4c
 	Mx3DPointFloat* m_unk0x50;     // 0x50
 };
 

@@ -47,10 +47,11 @@ public:
 	void VTable0x8c() override;       // vtable+0x8c
 	void VTable0x90() override;       // vtable+0x90
 
+	void FUN_1006db40(LegoTime p_time);
+
 private:
 	void Init();
 	void Destroy(MxBool p_fromDestructor);
-	void FUN_1006db40(LegoTime p_time);
 	void FUN_1006db60(LegoTreeNode* p_node, LegoTime p_time);
 	void FUN_1006dc10();
 	void FUN_1006e3f0(LegoHideAnimStructMap& p_map, LegoTreeNode* p_node);

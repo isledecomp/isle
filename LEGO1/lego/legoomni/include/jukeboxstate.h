@@ -30,7 +30,7 @@ public:
 	// SYNTHETIC: LEGO1 0x1000f3d0
 	// JukeBoxState::`scalar deleting destructor'
 
-protected:
+	// protected:
 	MxU32 m_state;  // 0x08
 	MxU32 m_active; // 0x0c
 };

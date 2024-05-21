@@ -528,7 +528,7 @@ MxResult LegoPathController::ReadStructs(LegoStorage* p_storage)
 			m_structs[i].m_name[length] = '\0';
 		}
 
-		if (p_storage->Read(&m_structs[i].m_unk0x08, sizeof(m_structs[i].m_unk0x08)) != SUCCESS) {
+		if (p_storage->Read(&m_structs[i].m_flags, sizeof(m_structs[i].m_flags)) != SUCCESS) {
 			return FAILURE;
 		}
 	}
@@ -678,17 +678,16 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 
 		if (boundary.m_unk0x48 > 0) {
 			boundary.m_unk0x50 = new Mx3DPointFloat;
-			boundary.m_unk0x4c = new LegoWEGEdge::Path[boundary.m_unk0x48];
+			boundary.m_unk0x4c = new LegoWEGEdge::PathWithTrigger[boundary.m_unk0x48];
 
 			for (j = 0; j < boundary.m_unk0x48; j++) {
 				if (p_storage->Read(&s, sizeof(s)) != SUCCESS) {
 					return FAILURE;
 				}
 
-				boundary.m_unk0x4c[j].m_unk0x00 = &m_structs[s];
+				boundary.m_unk0x4c[j].m_pathStruct = &m_structs[s];
 
-				if (p_storage->Read(&boundary.m_unk0x4c[j].m_unk0x04, sizeof(boundary.m_unk0x4c[j].m_unk0x04)) !=
-					SUCCESS) {
+				if (p_storage->Read(&boundary.m_unk0x4c[j].m_value, sizeof(boundary.m_unk0x4c[j].m_value)) != SUCCESS) {
 					return FAILURE;
 				}
 

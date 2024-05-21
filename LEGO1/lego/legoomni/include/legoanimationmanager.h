@@ -9,11 +9,11 @@
 #include "mxgeometry/mxgeometry3d.h"
 
 class AnimState;
-class IslePathActor;
 class LegoAnimPresenter;
 class LegoEntity;
 class LegoExtraActor;
 class LegoFile;
+class LegoPathActor;
 class LegoPathBoundary;
 class LegoROIList;
 struct LegoUnknown100db7f4;
@@ -102,7 +102,7 @@ public:
 		MxBool p_param8,
 		MxBool p_param9
 	);
-	void CameraTriggerFire(IslePathActor* p_actor, undefined4, MxU32 p_location, MxBool p_bool);
+	void CameraTriggerFire(LegoPathActor* p_actor, undefined4, MxU32 p_location, MxBool p_bool);
 	void FUN_10061010(MxBool p_und);
 	LegoTranInfo* GetTranInfo(MxU32 p_index);
 	void FUN_10062770();

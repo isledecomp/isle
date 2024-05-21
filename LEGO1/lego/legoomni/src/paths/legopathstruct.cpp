@@ -1,11 +1,168 @@
 #include "legopathstruct.h"
 
+#include "isle.h"
+#include "jukebox_actions.h"
+#include "jukeboxstate.h"
+#include "legohideanimpresenter.h"
+#include "legopathactor.h"
+#include "legoutils.h"
+#include "misc.h"
+#include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxtype19notificationparam.h"
+#include "scripts.h"
+
 DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 
-// STUB: LEGO1 0x1001b700
-// FUNCTION: BETA10 0x100c26c5
-void LegoPathStruct::VTable0x04(LegoPathActor*, undefined4, undefined4)
+// Flags used in isle.cpp
+extern MxU32 g_unk0x100f1198;
+
+// GLOBAL: LEGO1 0x100f119c
+MxBool g_unk0x100f119c = FALSE;
+
+// FUNCTION: LEGO1 0x1001b700
+void LegoPathStruct::VTable0x04(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_value)
 {
-	// TODO
+	if (!FUN_1001b740(p_actor, p_bool1, p_value, FALSE) && g_unk0x100f119c) {
+		FUN_1001b740(p_actor, p_bool1, p_value, TRUE);
+	}
+}
+
+// FUNCTION: LEGO1 0x1001b740
+// FUNCTION: BETA10 0x100c26c5
+MxBool LegoPathStruct::FUN_1001b740(LegoPathActor* p_actor, MxBool p_bool1, MxU32 p_value, MxBool p_bool2)
+{
+	MxBool triggered = FALSE;
+	MxBool bool3 = p_bool2 ? !p_bool1 : p_bool1;
+
+	MxU32 flags = bool3 ? c_bit5 : c_bit6;
+	flags |= p_actor->GetCameraFlag() ? c_bit1 : (c_bit2 | c_bit3 | c_bit4);
+
+	if ((m_flags & flags & (c_bit5 | c_bit6 | c_bit7)) && (m_flags & flags & (c_bit1 | c_bit2 | c_bit3 | c_bit4))) {
+		triggered = TRUE;
+
+		switch (m_name[2]) {
+		case c_C:
+			if (g_unk0x100f1198 & Isle::c_bit6) {
+				PlayCamAnim(p_actor, bool3, p_value, TRUE);
+			}
+			break;
+		case c_D: {
+			p_actor->VTable0x58(p_value);
+
+			MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_value);
+			p_actor->Notify(param);
+
+			LegoWorld* world = CurrentWorld();
+			if (world != NULL) {
+				NotificationManager()->Send(world, param);
+			}
+			break;
+		}
+		case c_E:
+			FUN_1001bc40(m_name, p_value, !(p_bool2 == FALSE));
+			break;
+		case c_G:
+			break;
+		case c_H: {
+			LegoHideAnimPresenter* presenter = m_world->GetHideAnimPresenter();
+
+			if (presenter != NULL) {
+				presenter->FUN_1006db40(p_value * 100);
+			}
+			break;
+		}
+		case c_M:
+			if (g_unk0x100f1198 & Isle::c_bit7) {
+				FUN_1001bd10(p_bool1, p_value);
+			}
+			break;
+		case c_S: {
+			LegoWorld* world = CurrentWorld();
+			if (world != NULL) {
+				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_value);
+
+				if (world->Notify(param) != 0) {
+					break;
+				}
+			}
+
+			FUN_1001bc40(m_name, p_value, p_bool2 == FALSE);
+			break;
+		}
+		case c_W: {
+			LegoWorld* world = CurrentWorld();
+			if (world != NULL) {
+				MxType19NotificationParam param(c_notificationType19, p_actor, m_name[2], p_value);
+				NotificationManager()->Send(world, param);
+			}
+			break;
+		}
+		}
+	}
+
+	return triggered;
+}
+
+// FUNCTION: LEGO1 0x1001bc40
+// FUNCTION: BETA10 0x100c2a6c
+void LegoPathStruct::FUN_1001bc40(const char* p_name, MxU32 p_objectId, MxBool p_bool)
+{
+	MxDSAction action;
+	action.SetObjectId(p_objectId);
+	action.SetAtomId(m_atomId);
+
+	if (p_bool) {
+		action.SetUnknown24(-1);
+		Start(&action);
+	}
+	else {
+		action.SetUnknown24(-2);
+		DeleteObject(action);
+	}
+}
+
+// FUNCTION: LEGO1 0x1001bd10
+// FUNCTION: BETA10 0x100c2b4a
+void LegoPathStruct::FUN_1001bd10(MxBool p_direction, MxU32 p_data)
+{
+	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
+	if (state != NULL && state->m_active) {
+		return;
+	}
+
+	JukeboxScript::Script music[] = {
+		JukeboxScript::c_ResidentalArea_Music,
+		JukeboxScript::c_BeachBlvd_Music,
+		JukeboxScript::c_Cave_Music,
+		JukeboxScript::c_CentralRoads_Music,
+		JukeboxScript::c_Jail_Music,
+		JukeboxScript::c_Hospital_Music,
+		JukeboxScript::c_InformationCenter_Music,
+		JukeboxScript::c_PoliceStation_Music,
+		JukeboxScript::c_Park_Music,
+		JukeboxScript::c_CentralNorthRoad_Music,
+		JukeboxScript::c_GarageArea_Music,
+		JukeboxScript::c_RaceTrackRoad_Music,
+		JukeboxScript::c_Beach_Music,
+		JukeboxScript::c_Quiet_Audio
+	};
+
+	MxS16 triggersReff[24][2] = {{11, 10}, {6, 10}, {3, 1},  {4, 1},   {1, 4},   {1, 4},   {13, 2}, {13, 2},
+								 {13, 2},  {4, 10}, {11, 9}, {9, 7},   {8, 7},   {8, 5},   {5, 2},  {2, 4},
+								 {4, 2},   {4, 5},  {11, 4}, {12, 10}, {10, 12}, {10, 12}, {14, 2}, {14, 2}};
+
+	MxDSAction action;
+	action.SetAtomId(*g_jukeboxScript);
+	action.SetUnknown24(-1);
+
+	if (p_data <= sizeOfArray(triggersReff)) {
+		action.SetObjectId(music[triggersReff[p_data - 1][p_direction == FALSE] - 1]);
+	}
+
+	if (action.GetObjectId() != -1) {
+		BackgroundAudioManager()->PlayMusic(action, 5, 4);
+	}
 }

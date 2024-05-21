@@ -61,19 +61,19 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 
 		if (dot2 > dot1) {
 			for (MxS32 i = 0; i < m_unk0x48; i++) {
-				LegoPathStruct* s = m_unk0x4c[i].m_unk0x00;
+				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
 
 				if (m_unk0x4c[i].m_unk0x08 >= dot1 && m_unk0x4c[i].m_unk0x08 < dot2) {
-					s->VTable0x04(p_actor, 1, m_unk0x4c[i].m_unk0x04);
+					s->VTable0x04(p_actor, 1, m_unk0x4c[i].m_value);
 				}
 			}
 		}
 		else if (dot2 < dot1) {
 			for (MxS32 i = 0; i < m_unk0x48; i++) {
-				LegoPathStruct* s = m_unk0x4c[i].m_unk0x00;
+				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
 
 				if (m_unk0x4c[i].m_unk0x08 >= dot2 && m_unk0x4c[i].m_unk0x08 < dot1) {
-					s->VTable0x04(p_actor, 0, m_unk0x4c[i].m_unk0x04);
+					s->VTable0x04(p_actor, 0, m_unk0x4c[i].m_value);
 				}
 			}
 		}

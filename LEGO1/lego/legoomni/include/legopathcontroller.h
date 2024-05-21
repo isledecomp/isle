@@ -9,7 +9,7 @@
 #include "mxstl/stlcompat.h"
 
 class LegoAnimPresenter;
-struct LegoPathStruct;
+class LegoPathStruct;
 class LegoWorld;
 class MxAtomId;
 class Vector3;
