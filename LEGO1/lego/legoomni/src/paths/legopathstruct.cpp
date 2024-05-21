@@ -32,12 +32,12 @@ void LegoPathStruct::TriggerPathStruct(LegoPathActor* p_actor, MxBool p_directio
 
 // FUNCTION: LEGO1 0x1001b740
 // FUNCTION: BETA10 0x100c26c5
-MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool2)
+MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data, MxBool p_bool)
 {
 	MxBool triggered = FALSE;
-	MxBool bool3 = p_bool2 ? !p_direction : p_direction;
+	MxBool bool2 = p_bool ? !p_direction : p_direction;
 
-	MxU32 flags = bool3 ? c_bit5 : c_bit6;
+	MxU32 flags = bool2 ? c_bit5 : c_bit6;
 	flags |= p_actor->GetCameraFlag() ? c_bit1 : (c_bit2 | c_bit3 | c_bit4);
 
 	if ((m_flags & flags & (c_bit5 | c_bit6 | c_bit7)) && (m_flags & flags & (c_bit1 | c_bit2 | c_bit3 | c_bit4))) {
@@ -46,7 +46,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 		switch (m_name[2]) {
 		case c_camAnim:
 			if (g_unk0x100f1198 & Isle::c_bit6) {
-				PlayCamAnim(p_actor, bool3, p_data, TRUE);
+				PlayCamAnim(p_actor, bool2, p_data, TRUE);
 			}
 			break;
 		case c_d: {
@@ -62,7 +62,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			break;
 		}
 		case c_e:
-			FUN_1001bc40(m_name, p_data, !(p_bool2 == FALSE));
+			FUN_1001bc40(m_name, p_data, !(p_bool == FALSE));
 			break;
 		case c_g:
 			break;
@@ -89,7 +89,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				}
 			}
 
-			FUN_1001bc40(m_name, p_data, p_bool2 == FALSE);
+			FUN_1001bc40(m_name, p_data, p_bool == FALSE);
 			break;
 		}
 		case c_w: {
