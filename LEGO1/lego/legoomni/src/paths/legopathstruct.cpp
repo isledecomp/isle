@@ -23,7 +23,7 @@ extern MxU32 g_unk0x100f1198;
 MxBool g_unk0x100f119c = FALSE;
 
 // FUNCTION: LEGO1 0x1001b700
-void LegoPathStruct::TriggerPathStruct(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data)
+void LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data)
 {
 	if (!HandleTrigger(p_actor, p_direction, p_data, FALSE) && g_unk0x100f119c) {
 		HandleTrigger(p_actor, p_direction, p_data, TRUE);

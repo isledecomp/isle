@@ -57,7 +57,7 @@ public:
 	// FUNCTION: LEGO1 0x10047470
 	~LegoPathStruct() override {}
 
-	virtual void TriggerPathStruct(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data); // vtable+0x04
+	virtual void HandleTrigger(LegoPathActor* p_actor, MxBool p_direction, MxU32 p_data); // vtable+0x04
 
 	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
 	inline void SetAtomId(const MxAtomId& p_atomId) { m_atomId = p_atomId; }
