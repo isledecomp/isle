@@ -45,7 +45,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 
 		switch (m_name[2]) {
 		case c_camAnim:
-			if (g_isleFlags & Isle::c_bit6) {
+			if (g_isleFlags & Isle::c_playCamAnims) {
 				PlayCamAnim(p_actor, bool2, p_data, TRUE);
 			}
 			break;
@@ -75,7 +75,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			break;
 		}
 		case c_music:
-			if (g_isleFlags & Isle::c_bit7) {
+			if (g_isleFlags & Isle::c_playMusic) {
 				PlayMusic(p_direction, p_data);
 			}
 			break;

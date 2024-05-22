@@ -724,7 +724,7 @@ void Isle::Enable(MxBool p_enable)
 			AnimationManager()->FUN_1005f6d0(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
-			g_isleFlags &= ~c_bit7;
+			g_isleFlags &= ~c_playMusic;
 			m_towtrack->FUN_1004dab0();
 			break;
 		case 9:
@@ -733,7 +733,7 @@ void Isle::Enable(MxBool p_enable)
 			AnimationManager()->FUN_1005f6d0(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
-			g_isleFlags &= ~c_bit7;
+			g_isleFlags &= ~c_playMusic;
 			m_ambulance->FUN_10036e60();
 			break;
 		case 11:
