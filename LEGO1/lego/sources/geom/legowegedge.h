@@ -63,16 +63,16 @@ public:
 	friend class LegoPathController;
 
 protected:
-	LegoU8 m_flags;                // 0x0c
-	LegoU8 m_unk0x0d;              // 0x0d
-	LegoChar* m_name;              // 0x10
-	Mx4DPointFloat m_unk0x14;      // 0x14
-	Mx4DPointFloat* m_edgeNormals; // 0x2c
-	Mx3DPointFloat m_unk0x30;      // 0x30
-	LegoU32 m_unk0x44;             // 0x44
-	LegoU8 m_unk0x48;              // 0x48
-	PathWithTrigger* m_unk0x4c;    // 0x4c
-	Mx3DPointFloat* m_unk0x50;     // 0x50
+	LegoU8 m_flags;                 // 0x0c
+	LegoU8 m_unk0x0d;               // 0x0d
+	LegoChar* m_name;               // 0x10
+	Mx4DPointFloat m_unk0x14;       // 0x14
+	Mx4DPointFloat* m_edgeNormals;  // 0x2c
+	Mx3DPointFloat m_unk0x30;       // 0x30
+	LegoU32 m_unk0x44;              // 0x44
+	LegoU8 m_unk0x48;               // 0x48
+	PathWithTrigger* m_pathTrigger; // 0x4c
+	Mx3DPointFloat* m_unk0x50;      // 0x50
 };
 
 #endif // __LEGOWEGEDGE_H

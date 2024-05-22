@@ -24,10 +24,9 @@ class Act1State;
 // SIZE 0x140
 class Isle : public LegoWorld {
 public:
-	// For g_unk0x100f1198
 	enum {
-		c_bit6 = 0x20,
-		c_bit7 = 0x40
+		c_playCamAnims = 0x20,
+		c_playMusic = 0x40
 	};
 
 	Isle();

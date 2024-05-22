@@ -61,19 +61,19 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 
 		if (dot2 > dot1) {
 			for (MxS32 i = 0; i < m_unk0x48; i++) {
-				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
+				LegoPathStruct* s = m_pathTrigger[i].m_pathStruct;
 
-				if (m_unk0x4c[i].m_unk0x08 >= dot1 && m_unk0x4c[i].m_unk0x08 < dot2) {
-					s->HandleTrigger(p_actor, TRUE, m_unk0x4c[i].m_data);
+				if (m_pathTrigger[i].m_unk0x08 >= dot1 && m_pathTrigger[i].m_unk0x08 < dot2) {
+					s->HandleTrigger(p_actor, TRUE, m_pathTrigger[i].m_data);
 				}
 			}
 		}
 		else if (dot2 < dot1) {
 			for (MxS32 i = 0; i < m_unk0x48; i++) {
-				LegoPathStruct* s = m_unk0x4c[i].m_pathStruct;
+				LegoPathStruct* s = m_pathTrigger[i].m_pathStruct;
 
-				if (m_unk0x4c[i].m_unk0x08 >= dot2 && m_unk0x4c[i].m_unk0x08 < dot1) {
-					s->HandleTrigger(p_actor, FALSE, m_unk0x4c[i].m_data);
+				if (m_pathTrigger[i].m_unk0x08 >= dot2 && m_pathTrigger[i].m_unk0x08 < dot1) {
+					s->HandleTrigger(p_actor, FALSE, m_pathTrigger[i].m_data);
 				}
 			}
 		}
