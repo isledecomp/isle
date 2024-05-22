@@ -628,10 +628,37 @@ MxResult LegoPathActor::VTable0x9c()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1002f650
-void LegoPathActor::VTable0xa4(MxBool&, MxS32&)
+// FUNCTION: LEGO1 0x1002f650
+// FUNCTION: BETA10 0x100afd67
+void LegoPathActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 {
-	// TODO
+	switch (GetActorId()) {
+	case 1:
+		p_und1 = TRUE;
+		p_und2 = 2;
+		break;
+	case 2:
+		p_und1 = FALSE;
+		p_und2 = 1;
+		break;
+	case 3:
+		p_und1 = TRUE;
+		p_und2 = 1;
+		break;
+	case 4:
+	case 6:
+		p_und1 = TRUE;
+		p_und2 = rand() % p_und2 + 1;
+		break;
+	case 5:
+		p_und1 = FALSE;
+		p_und2 = 2;
+		break;
+	default:
+		p_und1 = TRUE;
+		p_und2 = 1;
+		break;
+	}
 }
 
 // STUB: LEGO1 0x1002f700

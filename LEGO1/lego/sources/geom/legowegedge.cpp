@@ -12,7 +12,7 @@ LegoWEGEdge::LegoWEGEdge()
 	m_edgeNormals = NULL;
 	m_flags = 0;
 	m_unk0x48 = 0;
-	m_unk0x4c = NULL;
+	m_pathTrigger = NULL;
 	m_unk0x50 = NULL;
 }
 
@@ -29,8 +29,8 @@ LegoWEGEdge::~LegoWEGEdge()
 	if (m_edgeNormals) {
 		delete[] m_edgeNormals;
 	}
-	if (m_unk0x4c) {
-		delete m_unk0x4c;
+	if (m_pathTrigger) {
+		delete m_pathTrigger;
 	}
 	if (m_unk0x50) {
 		delete m_unk0x50;

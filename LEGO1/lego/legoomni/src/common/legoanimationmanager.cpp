@@ -1153,7 +1153,7 @@ MxResult LegoAnimationManager::FUN_10060dc0(
 
 // FUNCTION: LEGO1 0x10060eb0
 // FUNCTION: BETA10 0x1004206c
-void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, undefined4, MxU32 p_location, MxBool p_bool)
+void LegoAnimationManager::CameraTriggerFire(LegoPathActor* p_actor, MxBool, MxU32 p_location, MxBool p_bool)
 {
 	if (Lego()->m_unk0x13c && m_enableCamAnims && !m_animRunning) {
 		LegoLocation* location = LegoNavController::GetLocation(p_location);

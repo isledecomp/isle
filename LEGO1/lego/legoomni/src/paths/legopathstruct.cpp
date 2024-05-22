@@ -17,7 +17,7 @@ DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 
 // Flags used in isle.cpp
-extern MxU32 g_unk0x100f1198;
+extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f119c
 MxBool g_unk0x100f119c = FALSE;
@@ -45,7 +45,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 
 		switch (m_name[2]) {
 		case c_camAnim:
-			if (g_unk0x100f1198 & Isle::c_bit6) {
+			if (g_isleFlags & Isle::c_bit6) {
 				PlayCamAnim(p_actor, bool2, p_data, TRUE);
 			}
 			break;
@@ -75,7 +75,7 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 			break;
 		}
 		case c_music:
-			if (g_unk0x100f1198 & Isle::c_bit7) {
+			if (g_isleFlags & Isle::c_bit7) {
 				PlayMusic(p_direction, p_data);
 			}
 			break;
