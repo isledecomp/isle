@@ -661,8 +661,16 @@ void LegoPathActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 	}
 }
 
-// STUB: LEGO1 0x1002f700
+// FUNCTION: LEGO1 0x1002f700
+// FUNCTION: BETA10 0x100afe4c
 void LegoPathActor::VTable0xa8()
 {
-	// TODO
+	m_lastTime = Timer()->GetTime();
+	m_roi->FUN_100a58f0(m_unk0xec);
+	m_roi->VTable0x14();
+
+	if (m_userNavFlag) {
+		m_roi->WrappedSetLocalTransform(m_unk0xec);
+		FUN_10010c30();
+	}
 }
