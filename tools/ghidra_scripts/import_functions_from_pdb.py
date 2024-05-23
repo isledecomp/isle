@@ -109,11 +109,9 @@ def add_python_path(path: str):
     sys.path.insert(1, str(venv_path))
 
 
-
+# We need to quote the types here because they might not exist when running without Ghidra
 def migrate_function_to_ghidra(
-    api: "FlatProgramAPI",
-    match_info: "MatchInfo",
-    signature: "FunctionSignature"
+    api: "FlatProgramAPI", match_info: "MatchInfo", signature: "FunctionSignature"
 ):
     hex_original_address = f"{match_info.orig_addr:x}"
 
@@ -157,7 +155,11 @@ def migrate_function_to_ghidra(
             logger.critical("User quit, terminating")
             raise SystemExit(1)
 
-    logger.debug("Modifying function %s at 0x%s", typed_pdb_function.get_full_name(), hex_original_address)
+    logger.debug(
+        "Modifying function %s at 0x%s",
+        typed_pdb_function.get_full_name(),
+        hex_original_address,
+    )
 
     typed_pdb_function.overwrite_ghidra_function(ghidra_function)
 
@@ -243,15 +245,19 @@ try:
     add_python_path("tools/isledecomp")
 
     import setuptools  # pylint: disable=unused-import # required to fix a distutils issue in Python 3.12
+
     reload_module("isledecomp")
     from isledecomp import Bin
+
     reload_module("isledecomp.compare")
     from isledecomp.compare import Compare as IsleCompare
+
     reload_module("isledecomp.compare.db")
     from isledecomp.compare.db import MatchInfo
 
     reload_module("lego_util.exceptions")
     from lego_util.exceptions import Lego1Exception
+
     reload_module("lego_util.pdb_extraction")
     from lego_util.pdb_extraction import (
         PdbExtractionForGhidraMigration,
@@ -261,7 +267,6 @@ try:
     if GLOBALS.running_from_ghidra:
         reload_module("lego_util.pdb_to_ghidra")
         from lego_util.pdb_to_ghidra import PdbFunctionWithGhidraObjects
-
 
     if __name__ == "__main__":
         main()

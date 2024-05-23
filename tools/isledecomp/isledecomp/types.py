@@ -1,4 +1,5 @@
 """Types shared by other modules"""
+
 from enum import Enum
 
 

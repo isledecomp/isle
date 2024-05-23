@@ -25,7 +25,6 @@ from lego_util.ghidra_helper import (
 from lego_util.exceptions import StackOffsetMismatchError
 
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -220,7 +219,9 @@ class PdbFunctionWithGhidraObjects:
             None,
         )
 
-    def get_matching_register_symbol(self, register: str) -> Optional[CppRegisterSymbol]:
+    def get_matching_register_symbol(
+        self, register: str
+    ) -> Optional[CppRegisterSymbol]:
         return next(
             (
                 symbol

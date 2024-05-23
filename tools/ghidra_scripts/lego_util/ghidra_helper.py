@@ -54,7 +54,9 @@ def add_pointer_type(api: FlatProgramAPI, pointee: DataType):
     return data_type
 
 
-def get_ghidra_namespace(api: FlatProgramAPI, namespace_hierachy: list[str]) -> Namespace:
+def get_ghidra_namespace(
+    api: FlatProgramAPI, namespace_hierachy: list[str]
+) -> Namespace:
     namespace = api.getCurrentProgram().getGlobalNamespace()
     for part in namespace_hierachy:
         namespace = api.getNamespace(namespace, part)
