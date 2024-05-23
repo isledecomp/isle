@@ -89,7 +89,7 @@ class PdbExtractionForGhidraMigration:
 
         deref_type = dereferenced["type"]
         if deref_type == "LF_POINTER":
-            return f"{self.type_to_cpp_type_name(dereferenced["element_type"])} *"
+            return f"{self.type_to_cpp_type_name(dereferenced['element_type'])} *"
         if deref_type in ["LF_CLASS", "LF_STRUCTURE"]:
             class_name = dereferenced.get("name")
             if class_name is not None:
@@ -98,7 +98,7 @@ class PdbExtractionForGhidraMigration:
             return "<<parsing error>>"
         if deref_type == "LF_ARRAY":
             # We treat arrays like pointers because we don't distinguish them in Ghidra
-            return f"{self.type_to_cpp_type_name(dereferenced["array_type"])} *"
+            return f"{self.type_to_cpp_type_name(dereferenced['array_type'])} *"
         if deref_type == "LF_ENUM":
             return dereferenced["name"]
         if deref_type == "LF_MODIFIER":
