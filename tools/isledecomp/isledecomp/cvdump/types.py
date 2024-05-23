@@ -46,7 +46,7 @@ class ScalarType(NamedTuple):
 
 class TypeInfo(NamedTuple):
     key: str
-    size: int
+    size: Optional[int]
     name: Optional[str] = None
     members: Optional[List[FieldListItem]] = None
 
@@ -298,6 +298,7 @@ class CvdumpTypesParser:
             raise CvdumpIntegrityError("No array element type")
 
         array_element_size = self.get(array_type).size
+        assert array_element_size is not None, "Encountered an array whose type has no size"
 
         n_elements = type_obj["size"] // array_element_size
 
@@ -356,7 +357,7 @@ class CvdumpTypesParser:
 
         return TypeInfo(
             key=type_key,
-            size=obj["size"],
+            size=obj.get("size"),
             name=obj.get("name"),
             members=members,
         )
@@ -398,6 +399,7 @@ class CvdumpTypesParser:
 
         obj = self.get(type_key)
         total_size = obj.size
+        assert total_size is not None, "Called get_scalar_gapless() on a type without size"
 
         scalars = self.get_scalars(type_key)
 

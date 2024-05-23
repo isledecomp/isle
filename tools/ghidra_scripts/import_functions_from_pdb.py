@@ -11,7 +11,7 @@
 
 
 # pylint: disable=wrong-import-position,ungrouped-imports
-# pylint: disable=undefined-variable # need to disable this one globally because pylint does not understand e.g. askYesNo()
+# pylint: disable=undefined-variable # need to disable this one globally because pylint does not understand e.g. `askYesNo()``
 
 import importlib
 from dataclasses import dataclass, field
@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import ghidra
-    from lego_util.headers import *  # pylint: disable=wildcard-import
+    from lego_util.headers import *  # pylint: disable=wildcard-import # these are just for headers
 
 
 def reload_module(module: str):
