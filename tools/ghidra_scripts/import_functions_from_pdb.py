@@ -188,7 +188,9 @@ def process_functions(isle_compare: "IsleCompare"):
             cause = e.args[0]
             if CancelledException is not None and isinstance(cause, CancelledException):
                 # let Ghidra's CancelledException pass through
-                raise
+                logging.critical("Import aborted by the user.")
+                return
+
             log_and_track_failure(cause, unexpected=True)
         except Exception as e:  # pylint: disable=broad-exception-caught
             log_and_track_failure(e, unexpected=True)

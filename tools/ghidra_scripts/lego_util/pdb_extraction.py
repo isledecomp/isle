@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import re
-from typing import Any
+from typing import Any, Optional
 import logging
 
 from isledecomp.cvdump.symbols import SymbolsEntry
@@ -38,7 +38,7 @@ class FunctionSignature:
     call_type: str
     arglist: list[str]
     return_type: str
-    class_type: dict[str, Any] | None
+    class_type: Optional[dict[str, Any]]
     stack_symbols: list[CppStackOrRegisterSymbol]
 
 
@@ -67,7 +67,7 @@ class PdbExtractionForGhidraMigration:
             return f"{self.scalar_type_to_cpp(scalar_type[3:])} *"
         return self._scalar_type_map.get(scalar_type, scalar_type)
 
-    def lookup_type(self, type_name: str | None) -> dict[str, Any] | None:
+    def lookup_type(self, type_name: Optional[str]) -> Optional[dict[str, Any]]:
         return (
             None
             if type_name is None
@@ -114,7 +114,7 @@ class PdbExtractionForGhidraMigration:
         logger.error("Unknown type: %s", dereferenced)
         return "<<parsing error>>"
 
-    def get_func_signature(self, fn: "SymbolsEntry") -> FunctionSignature | None:
+    def get_func_signature(self, fn: SymbolsEntry) -> Optional[FunctionSignature]:
         function_type_str = fn.func_type
         if function_type_str == "T_NOTYPE(0000)":
             logger.debug(
@@ -181,7 +181,7 @@ class PdbExtractionForGhidraMigration:
 
     def handle_matched_function(
         self, match_info: MatchInfo
-    ) -> tuple[MatchInfo, FunctionSignature] | None:
+    ) -> Optional[tuple[MatchInfo, FunctionSignature]]:
         assert match_info.orig_addr is not None
         match_options = self.compare._db.get_match_options(match_info.orig_addr)
         assert match_options is not None

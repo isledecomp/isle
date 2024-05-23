@@ -4,6 +4,7 @@
 # pyright: reportMissingModuleSource=false
 
 import logging
+from typing import Optional
 
 from ghidra.program.model.listing import Function, Parameter
 from ghidra.program.flatapi import FlatProgramAPI
@@ -33,9 +34,9 @@ class PdbFunctionWithGhidraObjects:
 
     def __init__(
         self,
-        fpapi: "FlatProgramAPI",
-        match_info: "MatchInfo",
-        signature: "FunctionSignature",
+        fpapi: FlatProgramAPI,
+        match_info: MatchInfo,
+        signature: FunctionSignature,
     ):
         self.api = fpapi
         self.match_info = match_info
@@ -74,7 +75,7 @@ class PdbFunctionWithGhidraObjects:
             + f"({', '.join(self.signature.arglist)})"
         )
 
-    def matches_ghidra_function(self, ghidra_function):  # type: (Function) -> bool
+    def matches_ghidra_function(self, ghidra_function: Function) -> bool:
         """Checks whether this function declaration already matches the description in Ghidra"""
         name_match = self.name == ghidra_function.getName(False)
         namespace_match = self.namespace == ghidra_function.getParentNamespace()
@@ -109,12 +110,10 @@ class PdbFunctionWithGhidraObjects:
             and args_match
         )
 
-    def _matches_non_thiscall_parameters(
-        self, ghidra_function
-    ):  # type: (Function) -> bool
+    def _matches_non_thiscall_parameters(self, ghidra_function: Function) -> bool:
         return self._parameter_lists_match(ghidra_function.getParameters())
 
-    def _matches_thiscall_parameters(self, ghidra_function: "Function") -> bool:
+    def _matches_thiscall_parameters(self, ghidra_function: Function) -> bool:
         ghidra_params = list(ghidra_function.getParameters())
 
         # remove the `this` argument which we don't generate ourselves
@@ -151,7 +150,7 @@ class PdbFunctionWithGhidraObjects:
                 return False
         return True
 
-    def overwrite_ghidra_function(self, ghidra_function):  # type: (Function) -> None
+    def overwrite_ghidra_function(self, ghidra_function: Function):
         """Replace the function declaration in Ghidra by the one derived from C++."""
         ghidra_function.setName(self.name, SourceType.USER_DEFINED)
         ghidra_function.setParentNamespace(self.namespace)
@@ -168,7 +167,7 @@ class PdbFunctionWithGhidraObjects:
         # When we set the parameters, Ghidra will generate the layout.
         # Now we read them again and match them against the stack layout in the PDB,
         # both to verify and to set the parameter names.
-        ghidra_parameters: "list[ghidra.program.model.listing.Parameter]" = ghidra_function.getParameters()  # type: ignore
+        ghidra_parameters: list[Parameter] = ghidra_function.getParameters()
 
         # Try to add Ghidra function names
         for param in ghidra_parameters:
@@ -195,7 +194,7 @@ class PdbFunctionWithGhidraObjects:
                 #     )
                 #     continue
 
-    def _rename_stack_parameter(self, param: "Parameter"):
+    def _rename_stack_parameter(self, param: Parameter):
         match = self.get_matching_stack_symbol(param.getStackOffset())
         if match is None:
             raise StackOffsetMismatchError(
@@ -210,7 +209,7 @@ class PdbFunctionWithGhidraObjects:
 
         param.setName(match.name, SourceType.USER_DEFINED)
 
-    def get_matching_stack_symbol(self, stack_offset: int) -> "CppStackSymbol | None":
+    def get_matching_stack_symbol(self, stack_offset: int) -> Optional[CppStackSymbol]:
         return next(
             (
                 symbol
@@ -221,7 +220,7 @@ class PdbFunctionWithGhidraObjects:
             None,
         )
 
-    def get_matching_register_symbol(self, register: str) -> "CppRegisterSymbol | None":
+    def get_matching_register_symbol(self, register: str) -> Optional[CppRegisterSymbol]:
         return next(
             (
                 symbol

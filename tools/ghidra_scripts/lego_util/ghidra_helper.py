@@ -17,7 +17,7 @@ from ghidra.program.model.data import DataType
 from ghidra.program.model.symbol import Namespace
 
 
-def get_ghidra_type(api, type_name):  # type: (FlatProgramAPI, str) -> DataType
+def get_ghidra_type(api: FlatProgramAPI, type_name: str):
     """
     Searches for the type named `typeName` in Ghidra.
 
@@ -44,7 +44,7 @@ def get_ghidra_type(api, type_name):  # type: (FlatProgramAPI, str) -> DataType
     raise MultipleTypesFoundInGhidraError(type_name, result)
 
 
-def add_pointer_type(api, pointee):  # type: (FlatProgramAPI, DataType) -> DataType
+def add_pointer_type(api: FlatProgramAPI, pointee: DataType):
     data_type = PointerDataType(pointee)
     data_type.setCategoryPath(pointee.getCategoryPath())
     api.getCurrentProgram().getDataTypeManager().addDataType(
@@ -54,9 +54,7 @@ def add_pointer_type(api, pointee):  # type: (FlatProgramAPI, DataType) -> DataT
     return data_type
 
 
-def get_ghidra_namespace(
-    api, namespace_hierachy
-):  # type: (FlatProgramAPI, list[str]) -> Namespace
+def get_ghidra_namespace(api: FlatProgramAPI, namespace_hierachy: list[str]) -> Namespace:
     namespace = api.getCurrentProgram().getGlobalNamespace()
     for part in namespace_hierachy:
         namespace = api.getNamespace(namespace, part)

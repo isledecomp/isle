@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class SymbolsEntry(NamedTuple):
     func_type: str
     name: str
     stack_symbols: list[StackOrRegisterSymbol]
-    addr: int | None  # absolute address, to be set later
+    addr: Optional[int]  # absolute address, to be set later
 
 
 class CvdumpSymbolsParser:
@@ -81,7 +81,7 @@ class CvdumpSymbolsParser:
             return
 
         symbol_type: str = match.group("symbol_type")
-        second_part: str | None = match.group("second_part")
+        second_part: Optional[str] = match.group("second_part")
 
         if symbol_type == "S_GPROC32":
             assert second_part is not None

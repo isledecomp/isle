@@ -8,10 +8,10 @@ class TypeNotFoundInGhidraError(Lego1Exception):
 
 
 class ClassOrNamespaceNotFoundInGhidraError(Lego1Exception):
-    def __init__(self, namespaceHierachy):  # type: (list[str]) -> None
+    def __init__(self, namespaceHierachy: list[str]):
         super().__init__(namespaceHierachy)
 
-    def get_namespace_str(self):  # type: () -> str
+    def get_namespace_str(self) -> str:
         return "::".join(self.args[0])
 
     def __str__(self):

@@ -33,8 +33,8 @@ class CvdumpNode:
     # Size as reported by SECTION CONTRIBUTIONS section. Not guaranteed to be
     # accurate.
     section_contribution: Optional[int] = None
-    addr: int | None = None
-    symbol_entry: SymbolsEntry | None = None
+    addr: Optional[int] = None
+    symbol_entry: Optional[SymbolsEntry] = None
 
     def __init__(self, section: int, offset: int) -> None:
         self.section = section
