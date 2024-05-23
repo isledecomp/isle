@@ -17,4 +17,6 @@ Since these scripts and its dependencies are written in Python 3, [Ghidrathon](h
 ## Development
 - Type hints for Ghira (optional): Download a recent release from https://github.com/VDOO-Connected-Trust/ghidra-pyi-generator,
   unpack it somewhere, and `pip install` that directory in this virtual environment. This provides types and headers for Python.
-- Note that as of 2024-05-20 there is a [bug](https://github.com/mandiant/Ghidrathon/issues/103) in Ghidrathon v4.0.0: Changes in dependent scripts are not detected. If you modify a file that is imported by the script, you must restart Ghidra for the change to have any effect.
+  Be aware that some of these files contain errors - in particular, `from typing import overload` seems to be missing everywhere, leading to spurious type errors.
+- Note that the imported modules persist across multiple runs of the script (see [here](https://github.com/mandiant/Ghidrathon/issues/103)).
+  If you indend to modify an imported library, you have to use `import importlib; importlib.reload(${library})` or restart Ghidra for your changes to have any effect.
