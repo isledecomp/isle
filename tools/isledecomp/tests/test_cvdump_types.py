@@ -374,7 +374,7 @@ def test_2d_array(parser):
 def test_enum(parser):
     """LF_ENUM should equal 4-byte int"""
     assert parser.get("0x3cc2").size == 4
-    assert parser.get_scalars("0x3cc2") == [(0, None, "T_INT4")]
+    assert parser.get_scalars("0x3cc2") == [(0, None, "T_INT4(0074)")]
 
     # Now look at an array of enum, 24 bytes
     enum_array = parser.get_scalars("0x4262")
