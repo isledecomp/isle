@@ -34,5 +34,8 @@ extern const char* g_strVARIABLE;
 extern const char* g_strBMP_ISMAP;
 extern const char* g_strAUTO_CREATE;
 extern const char* g_strDB_CREATE;
+extern const char* g_strPERMIT_NAVIGATE;
+extern const char* g_strPATH;
+extern const char* g_strCOLLIDEBOX;
 
 #endif // DEFINE_H

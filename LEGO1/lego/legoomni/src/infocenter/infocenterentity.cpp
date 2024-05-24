@@ -26,7 +26,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1: {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			CurrentActor()->VTable0xe4();
+			((IslePathActor*) CurrentActor())->VTable0xe4();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);

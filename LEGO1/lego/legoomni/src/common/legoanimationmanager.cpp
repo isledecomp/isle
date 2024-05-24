@@ -994,7 +994,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 				FUN_100648f0(tranInfo, m_unk0x404);
 			}
 			else if (p_unk0x0a) {
-				IslePathActor* actor = CurrentActor();
+				LegoPathActor* actor = CurrentActor();
 
 				if (actor != NULL) {
 					actor->SetState(4);
@@ -1432,7 +1432,7 @@ MxResult LegoAnimationManager::Tickle()
 		return SUCCESS;
 	}
 
-	IslePathActor* actor = CurrentActor();
+	LegoPathActor* actor = CurrentActor();
 	LegoROI* roi;
 
 	if (actor == NULL || (roi = actor->GetROI()) == NULL) {
@@ -1655,7 +1655,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 
 			LegoEntityListCursor cursor(entityList);
 			LegoEntity* entity;
-			IslePathActor* actor = CurrentActor();
+			LegoPathActor* actor = CurrentActor();
 
 			while (cursor.Next(entity)) {
 				if (entity != actor && entity->IsA("LegoPathActor")) {
@@ -1858,7 +1858,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 		if (world != NULL) {
 			PurgeExtra(FALSE);
 
-			IslePathActor* actor = CurrentActor();
+			LegoPathActor* actor = CurrentActor();
 			if (actor == NULL || actor->GetWorldSpeed() <= 20.0f) {
 				MxU32 i;
 				for (i = 0; i < m_numAllowedExtras && m_extras[i].m_roi != NULL; i++) {
@@ -2163,7 +2163,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 {
 	MxU32 local2c = 12;
 	float destScale = ((rand() * 0.5) / 32767.0) + 0.25;
-	IslePathActor* actor = CurrentActor();
+	LegoPathActor* actor = CurrentActor();
 
 	if (actor == NULL) {
 		return FALSE;

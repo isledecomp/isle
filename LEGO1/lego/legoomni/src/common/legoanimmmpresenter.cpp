@@ -425,7 +425,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 {
 	LegoROI* viewROI = VideoManager()->GetViewROI();
-	IslePathActor* actor = CurrentActor();
+	LegoPathActor* actor = CurrentActor();
 
 	if (m_tranInfo != NULL && m_tranInfo->m_unk0x14 && m_tranInfo->m_location != -1 && actor != NULL) {
 		if (m_unk0x64 != NULL) {

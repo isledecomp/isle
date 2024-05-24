@@ -8,7 +8,6 @@
 #include "mxpresenterlist.h"
 #include "roi/legoroi.h"
 
-class IslePathActor;
 class LegoCameraController;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;

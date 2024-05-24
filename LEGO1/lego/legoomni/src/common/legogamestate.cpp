@@ -172,7 +172,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 		m_actorId = p_actorId;
 	}
 
-	IslePathActor* oldActor = CurrentActor();
+	LegoPathActor* oldActor = CurrentActor();
 	SetCurrentActor(NULL);
 
 	IslePathActor* newActor = new IslePathActor();
@@ -199,7 +199,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 // FUNCTION: LEGO1 0x10039910
 void LegoGameState::RemoveActor()
 {
-	IslePathActor* actor = CurrentActor();
+	LegoPathActor* actor = CurrentActor();
 	SetCurrentActor(NULL);
 	delete actor;
 	m_actorId = 0;
@@ -209,7 +209,7 @@ void LegoGameState::RemoveActor()
 void LegoGameState::ResetROI()
 {
 	if (m_actorId) {
-		IslePathActor* actor = CurrentActor();
+		LegoPathActor* actor = CurrentActor();
 
 		if (actor) {
 			LegoROI* roi = actor->GetROI();
@@ -906,11 +906,12 @@ void LegoGameState::SwitchArea(Area p_area)
 			AnimationManager()->Resume();
 		}
 
-		CurrentActor()->SpawnPlayer(
-			p_area,
-			TRUE,
-			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-		);
+		((IslePathActor*) CurrentActor())
+			->SpawnPlayer(
+				p_area,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		break;
 	}
 	case e_hospital:
@@ -922,11 +923,12 @@ void LegoGameState::SwitchArea(Area p_area)
 		SetCameraControllerFromIsle();
 		CurrentActor()->ResetWorldTransform(TRUE);
 		AnimationManager()->Resume();
-		CurrentActor()->SpawnPlayer(
-			p_area,
-			TRUE,
-			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-		);
+		((IslePathActor*) CurrentActor())
+			->SpawnPlayer(
+				p_area,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		break;
 	case e_police:
 		VideoManager()->SetUnk0x554(TRUE);

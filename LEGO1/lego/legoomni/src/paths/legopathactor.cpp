@@ -1,5 +1,6 @@
 #include "legopathactor.h"
 
+#include "define.h"
 #include "geom/legounkown100db7f4.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
@@ -11,6 +12,7 @@
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxtimer.h"
+#include "mxutilities.h"
 #include "mxvariabletable.h"
 
 #include <vec.h>
@@ -44,7 +46,7 @@ LegoPathActor::LegoPathActor()
 	m_state = 0;
 	m_grec = NULL;
 	m_controller = NULL;
-	m_unk0xe8 = 0;
+	m_collideBox = FALSE;
 	m_unk0x148 = 0;
 	m_unk0x14c = 0;
 	m_unk0x140 = 0.0099999999f;
@@ -454,7 +456,7 @@ MxU32 LegoPathActor::VTable0x6c(
 				LegoROI* roi = actor->GetROI();
 
 				if (roi != NULL && (roi->GetVisibility() || actor->GetCameraFlag())) {
-					if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_unk0xe8 != 0 && actor->m_unk0xe8 != 0)) {
+					if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->m_collideBox)) {
 						VTable0x94(actor, TRUE);
 						actor->VTable0x94(this, FALSE);
 						return 2;
@@ -540,10 +542,51 @@ inline MxU32 LegoPathActor::FUN_1002edd0(
 	return result;
 }
 
-// STUB: LEGO1 0x1002f020
+// FUNCTION: LEGO1 0x1002f020
+// FUNCTION: BETA10 0x100af54a
 void LegoPathActor::ParseAction(char* p_extra)
 {
 	LegoActor::ParseAction(p_extra);
+
+	char value[256];
+	value[0] = '\0';
+
+	if (KeyValueStringParse(value, g_strPERMIT_NAVIGATE, p_extra)) {
+		SetUserNavFlag(TRUE);
+		NavController()->ResetLinearVel(m_worldSpeed);
+		SetCurrentActor(this);
+	}
+
+	char* token;
+	if (KeyValueStringParse(value, g_strPATH, p_extra)) {
+		char name[12];
+
+		token = strtok(value, g_parseExtraTokens);
+		strcpy(name, token);
+
+		token = strtok(NULL, g_parseExtraTokens);
+		MxS32 p_src = atoi(token);
+
+		token = strtok(NULL, g_parseExtraTokens);
+		float p_srcScale = atof(token);
+
+		token = strtok(NULL, g_parseExtraTokens);
+		MxS32 p_dest = atoi(token);
+
+		token = strtok(NULL, g_parseExtraTokens);
+		float p_destScale = atof(token);
+
+		LegoWorld* world = CurrentWorld();
+
+		if (world != NULL) {
+			world->PlaceActor(this, name, p_src, p_srcScale, p_dest, p_destScale);
+		}
+	}
+
+	if (KeyValueStringParse(value, g_strCOLLIDEBOX, p_extra)) {
+		token = strtok(value, g_parseExtraTokens);
+		m_collideBox = atoi(token);
+	}
 }
 
 // FUNCTION: LEGO1 0x1002f1b0

@@ -38,7 +38,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 		}
 
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			CurrentActor()->VTable0xe4();
+			((IslePathActor*) CurrentActor())->VTable0xe4();
 		}
 
 		((Isle*) FindWorld(*g_isleScript, 0))->SetDestLocation(LegoGameState::e_jukeboxw);

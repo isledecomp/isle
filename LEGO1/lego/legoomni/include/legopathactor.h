@@ -155,7 +155,7 @@ protected:
 	MxU32 m_state;                    // 0xdc
 	LegoUnknown100db7f4* m_destEdge;  // 0xe0
 	MxFloat m_unk0xe4;                // 0xe4
-	undefined m_unk0xe8;              // 0xe8
+	MxBool m_collideBox;              // 0xe8
 	undefined m_unk0xe9;              // 0xe9
 	MxBool m_userNavFlag;             // 0xea
 	MxMatrix m_unk0xec;               // 0xec
