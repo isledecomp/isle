@@ -66,7 +66,7 @@ public:
 	MxLong HandleType19Notification(MxParam& p_param);
 	MxLong HandleTransitionEnd();
 	void HandleElevatorEndAction();
-	void FUN_10031590();
+	void UpdateGlobe();
 	void FUN_10032620();
 	void FUN_100330e0();
 	void FUN_10033350();
