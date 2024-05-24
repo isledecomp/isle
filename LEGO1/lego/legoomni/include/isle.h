@@ -76,7 +76,7 @@ protected:
 	void HandleElevatorEndAction();
 	void UpdateGlobe();
 	void FUN_10032620();
-	void FUN_100330e0();
+	void CreateState();
 	void FUN_10032d30(
 		IsleScript::Script p_script,
 		JukeboxScript::Script p_music,

@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "islepathactor.h"
 
+class TowTrackMissionState;
+
 // VTABLE: LEGO1 0x100d7ee0
 // SIZE 0x180
 class TowTrack : public IslePathActor {
@@ -32,6 +34,7 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override;    // vtable+0xdc
 	void VTable0xe4() override;                                       // vtable+0xe4
 
+	void CreateState();
 	void FUN_1004dab0();
 	void FUN_1004dad0();
 
@@ -39,17 +42,16 @@ public:
 	// TowTrack::`scalar deleting destructor'
 
 private:
-	// TODO: TowTrack field types
-	undefined m_unk0x154[4];
-	MxS32 m_unk0x164;
-	MxS16 m_unk0x168;
-	MxS16 m_unk0x16a;
-	MxS16 m_unk0x16c;
-	MxS16 m_unk0x16e;
-	MxS32 m_unk0x170;
-	MxS32 m_unk0x174;
-	MxFloat m_unk0x178;
-	undefined4 m_unk0x17c;
+	undefined4 m_unk0x160;         // 0x160
+	TowTrackMissionState* m_state; // 0x164
+	MxS16 m_unk0x168;              // 0x168
+	MxS16 m_unk0x16a;              // 0x16a
+	MxS16 m_unk0x16c;              // 0x16c
+	MxS16 m_unk0x16e;              // 0x16e
+	MxS32 m_unk0x170;              // 0x170
+	MxS32 m_unk0x174;              // 0x174
+	MxFloat m_unk0x178;            // 0x178
+	undefined4 m_unk0x17c;         // 0x17c
 };
 
 #endif // TOWTRACK_H

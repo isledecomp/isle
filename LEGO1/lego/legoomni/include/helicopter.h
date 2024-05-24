@@ -37,6 +37,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'
 
+	void CreateState();
+
 protected:
 	MxMatrix m_unk0x160;              // 0x160
 	MxMatrix m_unk0x1a8;              // 0x1a8
@@ -44,9 +46,6 @@ protected:
 	UnknownMx4DPointFloat m_unk0x1f4; // 0x1f4
 	HelicopterState* m_state;         // 0x228
 	MxAtomId m_script;                // 0x22c
-
-private:
-	void GetState();
 };
 
 #endif // HELICOPTER_H

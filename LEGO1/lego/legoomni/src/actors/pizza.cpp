@@ -1,17 +1,21 @@
 #include "pizza.h"
 
+#include "act1state.h"
+#include "legogamestate.h"
+#include "misc.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
+#include "pizzamissionstate.h"
 
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
 
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
 {
-	m_unk0x7c = 0;
+	m_state = NULL;
 	m_unk0x80 = 0;
 	m_skateboard = NULL;
-	m_unk0x88 = 0;
+	m_act1state = NULL;
 	m_unk0x8c = -1;
 	m_unk0x98 = 0;
 	m_unk0x90 = 0x80000000;
@@ -28,6 +32,20 @@ MxResult Pizza::Create(MxDSAction& p_dsAction)
 {
 	// TODO
 	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x100381b0
+void Pizza::CreateState()
+{
+	m_state = (PizzaMissionState*) GameState()->GetState("PizzaMissionState");
+	if (m_state == NULL) {
+		m_state = (PizzaMissionState*) GameState()->CreateState("PizzaMissionState");
+	}
+
+	m_act1state = (Act1State*) GameState()->GetState("Act1State");
+	if (m_act1state == NULL) {
+		m_act1state = (Act1State*) GameState()->CreateState("Act1State");
+	}
 }
 
 // STUB: LEGO1 0x100382b0

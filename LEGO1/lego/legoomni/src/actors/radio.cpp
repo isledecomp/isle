@@ -22,7 +22,7 @@ Radio::Radio()
 	ControlManager()->Register(this);
 
 	m_unk0x0c = TRUE;
-	CreateRadioState();
+	CreateState();
 }
 
 // FUNCTION: LEGO1 0x1002c990
@@ -147,12 +147,12 @@ void Radio::Initialize(MxBool p_und)
 {
 	if (m_unk0x0c != p_und) {
 		m_unk0x0c = p_und;
-		CreateRadioState();
+		CreateState();
 	}
 }
 
 // FUNCTION: LEGO1 0x1002cde0
-void Radio::CreateRadioState()
+void Radio::CreateState()
 {
 	LegoGameState* gameState = GameState();
 	RadioState* state = (RadioState*) gameState->GetState("RadioState");
