@@ -51,7 +51,7 @@ private:
 	MxS32 m_unk0x170;              // 0x170
 	MxS32 m_unk0x174;              // 0x174
 	MxFloat m_unk0x178;            // 0x178
-	undefined4 m_unk0x17c;         // 0x17c
+	MxFloat m_time;                // 0x17c
 };
 
 #endif // TOWTRACK_H

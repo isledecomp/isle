@@ -24,8 +24,6 @@ public:
 
 	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
 
-	inline void SetUnknown0x08(undefined4 p_unk0x08) { m_unk0x08 = p_unk0x08; }
-
 	inline MxU16 GetScore(MxU8 p_id)
 	{
 		switch (p_id) {
@@ -47,7 +45,6 @@ public:
 	// SYNTHETIC: LEGO1 0x100376c0
 	// AmbulanceMissionState::`scalar deleting destructor'
 
-protected:
 	undefined4 m_unk0x08; // 0x08
 	undefined4 m_unk0x0c; // 0x0c
 	MxU16 m_unk0x10;      // 0x10

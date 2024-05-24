@@ -40,15 +40,16 @@ Helicopter::~Helicopter()
 MxResult Helicopter::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = IslePathActor::Create(p_dsAction);
-	LegoWorld* world = CurrentWorld();
-	SetWorld(world);
-	if (world->IsA("Act3")) {
-		((Act3*) GetWorld())->SetUnknown420c(this);
+
+	m_world = CurrentWorld();
+	if (m_world->IsA("Act3")) {
+		((Act3*) m_world)->SetUnknown420c(this);
 	}
-	world = GetWorld();
-	if (world) {
-		world->Add(this);
+
+	if (m_world != NULL) {
+		m_world->Add(this);
 	}
+
 	CreateState();
 	return result;
 }

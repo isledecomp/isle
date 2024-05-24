@@ -58,7 +58,7 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 		m_state = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 		if (!m_state) {
 			m_state = new AmbulanceMissionState();
-			m_state->SetUnknown0x08(0);
+			m_state->m_unk0x08 = 0;
 			GameState()->RegisterState(m_state);
 		}
 	}

@@ -49,7 +49,7 @@ public:
 	// FUNCTION: LEGO1 0x1000e650
 	virtual undefined4 VTable0x80(MxParam&) { return 0; } // vtable+0x80
 
-private:
+protected:
 	LegoWorld* m_world; // 0x78
 };
 
