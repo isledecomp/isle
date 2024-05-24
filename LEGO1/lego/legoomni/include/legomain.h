@@ -6,7 +6,6 @@
 #include "mxomni.h"
 
 class Isle;
-class IslePathActor;
 class LegoAnimationManager;
 class LegoBuildingManager;
 class LegoCharacterManager;
@@ -14,6 +13,7 @@ class LegoEntity;
 class LegoGameState;
 class LegoInputManager;
 class LegoNavController;
+class LegoPathActor;
 class LegoPathBoundary;
 class LegoPlantManager;
 class LegoROI;
@@ -127,7 +127,7 @@ public:
 	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
-	IslePathActor* GetCurrentActor() { return m_currentActor; }
+	LegoPathActor* GetCurrentActor() { return m_currentActor; }
 	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 	LegoBuildingManager* GetLegoBuildingManager() { return m_buildingManager; }
@@ -139,7 +139,7 @@ public:
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-	inline void SetCurrentActor(IslePathActor* p_currentActor) { m_currentActor = p_currentActor; }
+	inline void SetCurrentActor(LegoPathActor* p_currentActor) { m_currentActor = p_currentActor; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 	inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
@@ -162,7 +162,7 @@ private:
 	LegoWorld* m_currentWorld;                   // 0x7c
 	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
-	IslePathActor* m_currentActor;               // 0x88
+	LegoPathActor* m_currentActor;               // 0x88
 	LegoCharacterManager* m_characterManager;    // 0x8c
 	LegoPlantManager* m_plantManager;            // 0x90
 	LegoAnimationManager* m_animationManager;    // 0x94

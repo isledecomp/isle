@@ -87,7 +87,7 @@ MxU32 SkateBoard::VTable0xcc()
 
 	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
-			CurrentActor()->VTable0xe4();
+			((IslePathActor*) CurrentActor())->VTable0xe4();
 		}
 	}
 

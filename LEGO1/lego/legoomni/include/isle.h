@@ -59,7 +59,7 @@ public:
 
 	MxBool VTable0x64() override;                    // vtable+64
 	void Enable(MxBool p_enable) override;           // vtable+68
-	virtual void VTable0x6c(IslePathActor* p_actor); // vtable+6c
+	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+6c
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);

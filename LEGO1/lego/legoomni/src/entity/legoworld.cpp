@@ -1,7 +1,6 @@
 #include "legoworld.h"
 
 #include "anim/legoanim.h"
-#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
@@ -701,7 +700,7 @@ void LegoWorld::Enable(MxBool p_enable)
 	else if (!p_enable && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
-		IslePathActor* actor = CurrentActor();
+		LegoPathActor* actor = CurrentActor();
 
 		if (actor) {
 			RemovePathActor(actor);

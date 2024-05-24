@@ -137,7 +137,7 @@ public:
 
 protected:
 	LegoWorld* m_world;        // 0x154
-	IslePathActor* m_unk0x158; // 0x158
+	LegoPathActor* m_unk0x158; // 0x158
 	MxFloat m_unk0x15c;        // 0x15c
 };
 

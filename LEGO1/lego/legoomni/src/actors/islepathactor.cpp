@@ -27,7 +27,7 @@ IslePathActor::IslePathActor()
 	m_world = NULL;
 	m_unk0x13c = 6.0;
 	m_unk0x15c = 1.0;
-	m_unk0x158 = 0;
+	m_unk0x158 = NULL;
 }
 
 // FUNCTION: LEGO1 0x1001a280
