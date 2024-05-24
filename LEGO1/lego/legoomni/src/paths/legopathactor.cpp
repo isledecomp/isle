@@ -577,7 +577,6 @@ void LegoPathActor::ParseAction(char* p_extra)
 		float destScale = atof(token);
 
 		LegoWorld* world = CurrentWorld();
-
 		if (world != NULL) {
 			world->PlaceActor(this, name, src, srcScale, dest, destScale);
 		}
