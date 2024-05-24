@@ -61,6 +61,14 @@ public:
 	void Enable(MxBool p_enable) override;           // vtable+68
 	virtual void VTable0x6c(LegoPathActor* p_actor); // vtable+6c
 
+	inline void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
+
+	void FUN_10033350();
+
+	// SYNTHETIC: LEGO1 0x10030a30
+	// Isle::`scalar deleting destructor'
+
+protected:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
 	MxLong HandleType19Notification(MxParam& p_param);
@@ -69,7 +77,6 @@ public:
 	void UpdateGlobe();
 	void FUN_10032620();
 	void FUN_100330e0();
-	void FUN_10033350();
 	void FUN_10032d30(
 		IsleScript::Script p_script,
 		JukeboxScript::Script p_music,
@@ -77,12 +84,6 @@ public:
 		MxBool p_und
 	);
 
-	inline void SetDestLocation(LegoGameState::Area p_destLocation) { m_destLocation = p_destLocation; }
-
-	// SYNTHETIC: LEGO1 0x10030a30
-	// Isle::`scalar deleting destructor'
-
-protected:
 	Act1State* m_act1state;             // 0xf8
 	Pizza* m_pizza;                     // 0xfc
 	Pizzeria* m_pizzeria;               // 0x100
