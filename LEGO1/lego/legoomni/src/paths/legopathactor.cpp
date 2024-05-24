@@ -565,21 +565,21 @@ void LegoPathActor::ParseAction(char* p_extra)
 		strcpy(name, token);
 
 		token = strtok(NULL, g_parseExtraTokens);
-		MxS32 p_src = atoi(token);
+		MxS32 src = atoi(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
-		float p_srcScale = atof(token);
+		float srcScale = atof(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
-		MxS32 p_dest = atoi(token);
+		MxS32 dest = atoi(token);
 
 		token = strtok(NULL, g_parseExtraTokens);
-		float p_destScale = atof(token);
+		float destScale = atof(token);
 
 		LegoWorld* world = CurrentWorld();
 
 		if (world != NULL) {
-			world->PlaceActor(this, name, p_src, p_srcScale, p_dest, p_destScale);
+			world->PlaceActor(this, name, src, srcScale, dest, destScale);
 		}
 	}
 
