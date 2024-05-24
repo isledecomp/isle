@@ -399,15 +399,15 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 			Start(&action);
 			break;
 		case IsleScript::c_Observe_RCab_Ctl:
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_GlobeLArrow_Ctl:
 			UpdateLightPosition(-1);
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_GlobeRArrow_Ctl:
 			UpdateLightPosition(1);
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_Draw1_Ctl:
 		case IsleScript::c_Observe_Draw2_Ctl:
@@ -443,10 +443,18 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10031590
-void Isle::FUN_10031590()
+// FUNCTION: LEGO1 0x10031590
+void Isle::UpdateGlobe()
 {
-	// TODO
+	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
+
+	for (MxS32 i = 0; i < 6; i++) {
+		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+
+		if (presenter != NULL) {
+			presenter->Enable(i == lightPosition);
+		}
+	}
 }
 
 // STUB: LEGO1 0x100315f0
