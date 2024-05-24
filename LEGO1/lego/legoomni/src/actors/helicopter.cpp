@@ -49,12 +49,12 @@ MxResult Helicopter::Create(MxDSAction& p_dsAction)
 	if (world) {
 		world->Add(this);
 	}
-	GetState();
+	CreateState();
 	return result;
 }
 
 // FUNCTION: LEGO1 0x10003320
-void Helicopter::GetState()
+void Helicopter::CreateState()
 {
 	m_state = (HelicopterState*) GameState()->GetState("HelicopterState");
 	if (!m_state) {

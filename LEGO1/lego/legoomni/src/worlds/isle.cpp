@@ -31,6 +31,7 @@
 #include "mxtransitionmanager.h"
 #include "mxvariabletable.h"
 #include "pizza.h"
+#include "pizzeria.h"
 #include "scripts.h"
 #include "skateboard.h"
 #include "towtrack.h"
@@ -474,7 +475,7 @@ void Isle::Enable(MxBool p_enable)
 	m_radio.Initialize(p_enable);
 
 	if (p_enable) {
-		FUN_100330e0();
+		CreateState();
 
 		VideoManager()->ResetPalette(FALSE);
 		m_act1state->FUN_10034d00();
@@ -1095,10 +1096,24 @@ void Isle::VTable0x6c(LegoPathActor* p_actor)
 	}
 }
 
-// STUB: LEGO1 0x100330e0
-void Isle::FUN_100330e0()
+// FUNCTION: LEGO1 0x100330e0
+void Isle::CreateState()
 {
-	// TODO
+	m_act1state = (Act1State*) GameState()->GetState("Act1State");
+	if (!m_act1state) {
+		m_act1state = (Act1State*) GameState()->CreateState("Act1State");
+		m_act1state->m_unk0x018 = 0;
+	}
+
+	m_radio.CreateState();
+	m_pizzeria->CreateState();
+	m_pizza->CreateState();
+	m_towtrack->CreateState();
+	m_ambulance->CreateState();
+
+	if (m_helicopter != NULL) {
+		m_helicopter->CreateState();
+	}
 }
 
 // STUB: LEGO1 0x10033180

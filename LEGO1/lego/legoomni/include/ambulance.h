@@ -36,6 +36,7 @@ public:
 	MxU32 VTable0xdc(MxType19NotificationParam&) override;       // vtable+0xdc
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	void CreateState();
 	void FUN_10036e60();
 	void FUN_10037060();
 

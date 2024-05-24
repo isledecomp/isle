@@ -30,6 +30,7 @@ public:
 	}
 
 	void Initialize(MxBool p_und);
+	void CreateState();
 	void Play();
 	void Stop();
 
@@ -39,8 +40,6 @@ public:
 	// Radio::`scalar deleting destructor'
 
 private:
-	void CreateRadioState();
-
 	RadioState* m_state;   // 0x08
 	MxBool m_unk0x0c;      // 0x0c
 	MxBool m_audioEnabled; // 0x0d

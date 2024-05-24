@@ -11,14 +11,14 @@ MxResult Pizzeria::Create(MxDSAction& p_dsAction)
 	MxResult result = IsleActor::Create(p_dsAction);
 
 	if (result == SUCCESS) {
-		Init();
+		CreateState();
 	}
 
 	return result;
 }
 
 // FUNCTION: LEGO1 0x100179f0
-void Pizzeria::Init()
+void Pizzeria::CreateState()
 {
 	LegoGameState* gameState = GameState();
 	PizzeriaState* pizzeriaState = (PizzeriaState*) gameState->GetState("PizzeriaState");
