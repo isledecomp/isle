@@ -1,7 +1,9 @@
 #include "pizza.h"
 
 #include "act1state.h"
+#include "isle_actions.h"
 #include "legogamestate.h"
+#include "legoworld.h"
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
@@ -27,11 +29,17 @@ Pizza::~Pizza()
 	TickleManager()->UnregisterClient(this);
 }
 
-// STUB: LEGO1 0x10038170
+// FUNCTION: LEGO1 0x10038170
 MxResult Pizza::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = IsleActor::Create(p_dsAction);
+
+	if (result == SUCCESS) {
+		CreateState();
+		m_skateboard = (SkateBoard*) m_world->Find(m_atom, IsleScript::c_SkateBoard_Actor);
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x100381b0

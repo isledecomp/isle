@@ -1,7 +1,12 @@
 #include "towtrack.h"
 
 #include "legogamestate.h"
+#include "legovariables.h"
+#include "legoworld.h"
 #include "misc.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
+#include "mxvariabletable.h"
 #include "towtrackmissionstate.h"
 
 DECOMP_SIZE_ASSERT(TowTrack, 0x180)
@@ -20,11 +25,31 @@ TowTrack::TowTrack()
 	m_unk0x178 = 1.0;
 }
 
-// STUB: LEGO1 0x1004c9e0
+// FUNCTION: LEGO1 0x1004c9e0
+// FUNCTION: BETA10 0x100f6bf1
 MxResult TowTrack::Create(MxDSAction& p_dsAction)
 {
-	// TODO
-	return SUCCESS;
+	MxResult result = IslePathActor::Create(p_dsAction);
+
+	if (result == SUCCESS) {
+		m_world = CurrentWorld();
+
+		if (m_world) {
+			m_world->Add(this);
+		}
+
+		m_state = (TowTrackMissionState*) GameState()->GetState("TowTrackMissionState");
+		if (!m_state) {
+			m_state = new TowTrackMissionState();
+			m_state->m_unk0x08 = 0;
+			GameState()->RegisterState(m_state);
+		}
+	}
+
+	VariableTable()->SetVariable(g_varTOWFUEL, "1.0");
+	m_unk0x178 = 1.0;
+	m_time = Timer()->GetTime();
+	return result;
 }
 
 // STUB: LEGO1 0x1004cb10

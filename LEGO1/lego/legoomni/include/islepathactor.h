@@ -128,9 +128,6 @@ public:
 	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'
 
-	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
-	inline LegoWorld* GetWorld() { return m_world; }
-
 	void FUN_1001b660();
 
 	static void RegisterSpawnLocations();
