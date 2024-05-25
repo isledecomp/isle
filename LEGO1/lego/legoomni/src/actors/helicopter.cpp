@@ -378,11 +378,7 @@ void Helicopter::VTable0x70(float p_float)
 			Vector3 v2(m_unk0x1a8[3]);
 			float* loc = m_unk0x1a8[3];
 			mat.SetIdentity();
-			float fa[4];
-			Vector4 v3(fa);
-			if (m_unk0x1f4.FUN_100040a0(v3, f2) == SUCCESS) {
-				mat.FromQuaternion(v3);
-			}
+			m_unk0x1f4.Unknown6(mat, f2);
 			v2.SetVector(loc);
 			v2.Sub(&v);
 			v2.Mul(f2);

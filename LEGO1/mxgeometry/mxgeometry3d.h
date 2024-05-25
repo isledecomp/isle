@@ -65,6 +65,9 @@ public:
 	inline float& operator[](int idx) { return m_data[idx]; }
 	inline const float& operator[](int idx) const { return m_data[idx]; }
 
+	// SYNTHETIC: LEGO1 0x10064b20
+	// Mx4DPointFloat::operator=
+
 private:
 	float m_elements[4]; // 0x08
 };
@@ -79,29 +82,54 @@ public:
 
 	UnknownMx4DPointFloat() : m_unk0x30(0) {}
 
-	inline void Unknown1(Vector4& p_v)
+	// FUNCTION: BETA10 0x1004a9b0
+	inline void Unknown1(Matrix4& p_m1, Matrix4& p_m2)
+	{
+		Unknown2(p_m1);
+		Unknown3(p_m2);
+	}
+
+	// FUNCTION: BETA10 0x1004a9f0
+	inline void Unknown2(Matrix4& p_m)
+	{
+		p_m.ToQuaternion(m_unk0x00);
+		m_unk0x30 |= c_bit1;
+	}
+
+	// FUNCTION: BETA10 0x1004aa30
+	inline void Unknown3(Matrix4& p_m)
+	{
+		p_m.ToQuaternion(m_unk0x18);
+		m_unk0x30 |= c_bit2;
+	}
+
+	// FUNCTION: BETA10 0x10180b80
+	inline void Unknown4(Vector4& p_v)
 	{
 		m_unk0x00 = p_v;
 		m_unk0x30 |= c_bit1;
 	}
 
-	inline void Unknown2(Vector4& p_v)
+	// FUNCTION: BETA10 0x10180bc0
+	inline void Unknown5(Vector4& p_v)
 	{
 		m_unk0x18 = p_v;
 		m_unk0x30 |= c_bit2;
 	}
 
-	inline int Unknown_100040a0(Matrix4& p_matrix, float p_f);
-	inline int FUN_100040a0(Vector4& p_v, float p_f);
+	inline int Unknown6(Matrix4& p_matrix, float p_f);
+	inline void Unknown7();
 
 private:
+	inline int FUN_100040a0(Vector4& p_v, float p_f);
+
 	Mx4DPointFloat m_unk0x00; // 0x00
 	Mx4DPointFloat m_unk0x18; // 0x18
 	undefined4 m_unk0x30;     // 0x30
 };
 
 // FUNCTION: BETA10 0x1004aaa0
-int UnknownMx4DPointFloat::Unknown_100040a0(Matrix4& p_matrix, float p_f)
+int UnknownMx4DPointFloat::Unknown6(Matrix4& p_matrix, float p_f)
 {
 	float data[4];
 	Vector4 v(data);
@@ -111,6 +139,24 @@ int UnknownMx4DPointFloat::Unknown_100040a0(Matrix4& p_matrix, float p_f)
 	}
 	else {
 		return -1;
+	}
+}
+
+inline void UnknownMx4DPointFloat::Unknown7()
+{
+	if (m_unk0x30) {
+		Mx4DPointFloat v1;
+		Mx4DPointFloat v2;
+
+		v1 = m_unk0x00;
+		((Vector4&) v1).Add(&m_unk0x18);
+
+		v2 = m_unk0x00;
+		((Vector4&) v2).Sub(&m_unk0x18);
+
+		if (v1.Dot(&v1, &v1) < v2.Dot(&v2, &v2)) {
+			((Vector4&) m_unk0x18).Mul(-1.0f);
+		}
 	}
 }
 

@@ -25,6 +25,7 @@
 #include "mxticklemanager.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
+#include "realtime/realtime.h"
 #include "viewmanager/viewmanager.h"
 
 #include <io.h>
@@ -2480,11 +2481,42 @@ MxResult LegoAnimationManager::FUN_10064880(const char* p_name, MxS32 p_unk0x0c,
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100648f0
+// FUNCTION: LEGO1 0x100648f0
 // FUNCTION: BETA10 0x10045daf
-void LegoAnimationManager::FUN_100648f0(LegoTranInfo*, MxLong)
+void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x404)
 {
-	// TODO
+	if (m_unk0x402 && p_tranInfo->m_unk0x14) {
+		p_tranInfo->m_flags |= LegoTranInfo::c_bit1;
+		m_unk0x430 = TRUE;
+		m_unk0x42c = p_tranInfo;
+		m_unk0x434 = p_unk0x404;
+		m_unk0x438 = p_unk0x404 + 1000;
+
+		ViewROI* viewROI = VideoManager()->GetViewROI();
+		m_unk0x43c = viewROI->GetLocal2World();
+		p_tranInfo->m_unk0x2c = m_unk0x43c;
+
+		LegoPathActor* actor = CurrentActor();
+		if (actor != NULL) {
+			actor->SetState(4);
+			actor->SetWorldSpeed(0.0f);
+		}
+
+		LegoLocation* location = NavController()->GetLocation(p_tranInfo->m_location);
+		if (location != NULL) {
+			CalcLocalTransform(location->m_position, location->m_direction, location->m_up, m_unk0x484);
+			m_unk0x4cc.Unknown1(m_unk0x43c, m_unk0x484);
+			m_unk0x4cc.Unknown7();
+		}
+		else {
+			p_tranInfo->m_flags &= ~LegoTranInfo::c_bit1;
+			m_unk0x430 = FALSE;
+		}
+
+		Mx3DPointFloat vec;
+		vec.Clear();
+		viewROI->FUN_100a5a30(vec);
+	}
 }
 
 // FUNCTION: LEGO1 0x10064b50
@@ -2508,7 +2540,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			sub[1] = (m_unk0x484[3][1] - m_unk0x43c[3][1]) * und;
 			sub[2] = (m_unk0x484[3][2] - m_unk0x43c[3][2]) * und;
 
-			m_unk0x4cc.Unknown_100040a0(mat, (float) (p_time - m_unk0x434) / 1000.0f);
+			m_unk0x4cc.Unknown6(mat, (float) (p_time - m_unk0x434) / 1000.0f);
 
 			VPV3(mat[3], m_unk0x43c[3], sub);
 			mat[3][4] = 1.0f;
