@@ -119,3 +119,15 @@ void TowTrack::FUN_1004dad0()
 {
 	// TODO
 }
+
+// STUB: LEGO1 0x1004db10
+void TowTrack::FUN_1004db10()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1004dbe0
+void TowTrack::FUN_1004dbe0()
+{
+	// TODO
+}

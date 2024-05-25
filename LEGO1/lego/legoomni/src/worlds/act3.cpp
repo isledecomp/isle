@@ -88,7 +88,7 @@ void Act3::VTable0x60()
 }
 
 // STUB: LEGO1 0x10073e50
-MxBool Act3::VTable0x64()
+MxBool Act3::Escape()
 {
 	// TODO
 	return FALSE;

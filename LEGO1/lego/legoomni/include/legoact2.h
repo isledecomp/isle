@@ -14,7 +14,7 @@ public:
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x5c() override;                     // vtable+0x5c
 	void VTable0x60() override;                       // vtable+0x60
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	inline void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }

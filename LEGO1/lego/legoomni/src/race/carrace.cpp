@@ -51,7 +51,7 @@ undefined4 CarRace::VTable0x78(undefined4)
 }
 
 // STUB: LEGO1 0x10017900
-MxBool CarRace::VTable0x64()
+MxBool CarRace::Escape()
 {
 	// TODO
 	return FALSE;

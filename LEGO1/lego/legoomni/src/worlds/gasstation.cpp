@@ -411,7 +411,7 @@ MxResult GasStation::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10005e70
-MxBool GasStation::VTable0x64()
+MxBool GasStation::Escape()
 {
 	m_radio.Stop();
 	m_state->FUN_10006490();

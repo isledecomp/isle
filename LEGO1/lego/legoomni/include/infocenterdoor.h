@@ -34,7 +34,7 @@ public:
 	// FUNCTION: LEGO1 0x100377a0
 	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
-	MxBool VTable0x64() override;          // vtable+0x64
+	MxBool Escape() override;              // vtable+0x64
 	void Enable(MxBool p_enable) override; // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x100378d0

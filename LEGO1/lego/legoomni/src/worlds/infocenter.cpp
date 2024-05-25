@@ -1327,7 +1327,7 @@ void Infocenter::Reset()
 }
 
 // FUNCTION: LEGO1 0x10070f60
-MxBool Infocenter::VTable0x64()
+MxBool Infocenter::Escape()
 {
 	if (m_infocenterState != NULL) {
 		MxU32 val = m_infocenterState->GetUnknown0x74();

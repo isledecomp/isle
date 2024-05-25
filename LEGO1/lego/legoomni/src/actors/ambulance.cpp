@@ -140,3 +140,15 @@ MxResult Ambulance::Tickle()
 	// TODO
 	return SUCCESS;
 }
+
+// STUB: LEGO1 0x10037240
+void Ambulance::FUN_10037240()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10037250
+void Ambulance::FUN_10037250()
+{
+	// TODO
+}
