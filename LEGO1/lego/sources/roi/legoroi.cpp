@@ -641,8 +641,6 @@ LegoU32 LegoROI::FUN_100a9410(
 				}
 			}
 		}
-
-		return 0;
 	}
 	else {
 		Mx3DPointFloat v1(p_v1);
@@ -653,48 +651,45 @@ LegoU32 LegoROI::FUN_100a9410(
 		float localc = p_v2.Dot(&p_v2, &v1) * 2.0f;
 		float local14 = v1.Dot(&v1, &v1) - (local10 * local10);
 
-		if (local8 < 0.001 && local8 > -0.001) {
-			return 0;
-		}
+		if (local8 >= 0.001 || local8 <= -0.001) {
+			float local1c = -1.0f;
+			float local18 = (localc * localc) - (local14 * local8 * 4.0f);
 
-		float local1c = -1.0f;
-		float local18 = (localc * localc) - (local14 * local8 * 4.0f);
+			if (local18 >= -0.001) {
 
-		if (local18 < -0.001) {
-			return 0;
-		}
+				local8 *= 2.0f;
+				localc = -localc;
 
-		local8 *= 2.0f;
-		localc = -localc;
+				if (local18 > 0.0f) {
+					local18 = sqrt(local18);
+					float local184 = (localc + local18) / local8;
+					float local188 = (localc - local18) / local8;
 
-		if (local18 > 0.0f) {
-			local18 = sqrt(local18);
-			float local184 = (localc + local18) / local8;
-			float local188 = (localc - local18) / local8;
+					if (local184 > 0.0f && local188 > local184) {
+						local1c = local184;
+					}
+					else if (local188 > 0.0f) {
+						local1c = local188;
+					}
+					else {
+						return 0;
+					}
+				}
+				else {
+					local1c = localc / local8;
+				}
 
-			if (local184 > 0.0f && local188 > local184) {
-				local1c = local184;
+				if (local1c >= 0.0f && p_f1 <= local1c) {
+					p_v3 = p_v2;
+					p_v3.Mul(local1c);
+					p_v3.Add(&p_v1);
+					return 1;
+				}
 			}
-			else if (local188 > 0.0f) {
-				local1c = local188;
-			}
-			else {
-				return 0;
-			}
 		}
-		else {
-			local1c = localc / local8;
-		}
-
-		if (local1c < 0.0f || p_f1 < local1c) {
-			return 0;
-		}
-
-		p_v3 = p_v2;
-		p_v3.Mul(local1c);
-		p_v3.Add(&p_v1);
-		return 1;
 	}
+
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x100a9a50
