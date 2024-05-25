@@ -126,6 +126,7 @@ public:
 	inline LegoPathBoundary* GetBoundary() { return m_boundary; }
 	inline MxU32 GetState() { return m_state; }
 	inline LegoPathController* GetController() { return m_controller; }
+	inline MxBool GetCollideBox() { return m_collideBox; }
 
 	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 	inline void SetState(MxU32 p_state) { m_state = p_state; }
