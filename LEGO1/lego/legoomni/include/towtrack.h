@@ -37,6 +37,8 @@ public:
 	void CreateState();
 	void FUN_1004dab0();
 	void FUN_1004dad0();
+	void FUN_1004db10();
+	void FUN_1004dbe0();
 
 	// SYNTHETIC: LEGO1 0x1004c950
 	// TowTrack::`scalar deleting destructor'

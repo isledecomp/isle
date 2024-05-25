@@ -48,7 +48,7 @@ void LegoAct2::VTable0x60()
 }
 
 // STUB: LEGO1 0x100519d0
-MxBool LegoAct2::VTable0x64()
+MxBool LegoAct2::Escape()
 {
 	// TODO
 	return FALSE;

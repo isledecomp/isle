@@ -53,7 +53,7 @@ MxBool LegoWorld::VTable0x5c()
 }
 
 // FUNCTION: LEGO1 0x1001d680
-MxBool LegoWorld::VTable0x64()
+MxBool LegoWorld::Escape()
 {
 	return FALSE;
 }

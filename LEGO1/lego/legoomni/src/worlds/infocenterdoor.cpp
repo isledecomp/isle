@@ -165,7 +165,7 @@ void InfocenterDoor::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x10037cd0
-MxBool InfocenterDoor::VTable0x64()
+MxBool InfocenterDoor::Escape()
 {
 	DeleteObjects(&m_atom, 500, 510);
 	m_destLocation = LegoGameState::e_infomain;

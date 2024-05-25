@@ -619,7 +619,7 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 
 			if (currentWorld) {
 				InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
-				if (infocenterState && infocenterState->GetUnknown0x74() != 8 && currentWorld->VTable0x64()) {
+				if (infocenterState && infocenterState->GetUnknown0x74() != 8 && currentWorld->Escape()) {
 					BackgroundAudioManager()->Stop();
 					TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 					infocenterState->SetUnknown0x74(8);

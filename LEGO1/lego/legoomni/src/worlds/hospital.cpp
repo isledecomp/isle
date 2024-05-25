@@ -662,7 +662,7 @@ MxResult Hospital::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10076330
-MxBool Hospital::VTable0x64()
+MxBool Hospital::Escape()
 {
 	DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, 999);
 	m_hospitalState->m_unk0x08.m_unk0x00 = 0;

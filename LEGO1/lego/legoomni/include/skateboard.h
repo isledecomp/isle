@@ -32,6 +32,8 @@ public:
 	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	void VTable0xe4() override;                                  // vtable+0xe4
 
+	inline void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
+
 	void ActivateSceneActions();
 
 	// SYNTHETIC: LEGO1 0x1000ff60

@@ -493,7 +493,7 @@ MxBool RegistrationBook::CreateSurface()
 }
 
 // FUNCTION: LEGO1 0x100783e0
-MxBool RegistrationBook::VTable0x64()
+MxBool RegistrationBook::Escape()
 {
 	DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 	return TRUE;

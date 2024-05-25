@@ -39,6 +39,8 @@ public:
 	void CreateState();
 	void FUN_10036e60();
 	void FUN_10037060();
+	void FUN_10037240();
+	void FUN_10037250();
 
 	// SYNTHETIC: LEGO1 0x10036130
 	// Ambulance::`scalar deleting destructor'

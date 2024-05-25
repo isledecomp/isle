@@ -255,7 +255,7 @@ MxResult JukeBox::Tickle()
 }
 
 // FUNCTION: LEGO1 0x1005de70
-MxBool JukeBox::VTable0x64()
+MxBool JukeBox::Escape()
 {
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;

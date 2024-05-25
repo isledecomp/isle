@@ -149,7 +149,7 @@ void HistoryBook::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10082a10
-MxBool HistoryBook::VTable0x64()
+MxBool HistoryBook::Escape()
 {
 	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;

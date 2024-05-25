@@ -57,7 +57,7 @@ undefined4 LegoRace::VTable0x74(undefined4)
 }
 
 // FUNCTION: LEGO1 0x10015b90
-MxBool LegoRace::VTable0x64()
+MxBool LegoRace::Escape()
 {
 	return FALSE;
 }

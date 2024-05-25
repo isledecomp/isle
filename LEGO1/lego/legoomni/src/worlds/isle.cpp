@@ -1116,11 +1116,61 @@ void Isle::CreateState()
 	}
 }
 
-// STUB: LEGO1 0x10033180
-MxBool Isle::VTable0x64()
+// FUNCTION: LEGO1 0x10033180
+MxBool Isle::Escape()
 {
-	// TODO
-	return FALSE;
+	m_radio.Stop();
+	BackgroundAudioManager()->Stop();
+
+	switch (m_act1state->m_unk0x018) {
+	case 3:
+		if (CurrentActor() != NULL) {
+			m_pizza->FUN_10038380();
+			m_pizza->FUN_100382b0();
+		}
+		break;
+	case 8:
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+			m_towtrack->FUN_1004db10();
+			m_towtrack->FUN_1004dbe0();
+		}
+		break;
+	case 10:
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+			m_ambulance->FUN_10037240();
+			m_ambulance->FUN_10037250();
+		}
+		break;
+	}
+
+	if (m_act1state->m_unk0x01e == TRUE) {
+		InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_Floor2, NULL);
+		m_act1state->m_unk0x01e = FALSE;
+	}
+
+	m_act1state->m_elevFloor = Act1State::c_floor1;
+
+	AnimationManager()->FUN_10061010(FALSE);
+	DeleteObjects(&m_atom, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
+
+	if (CurrentActor()) {
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) CurrentActor())->VTable0xe4();
+			m_skateboard->SetUnknown0x160(FALSE);
+		}
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_polidoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_garadoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
+	}
+
+	m_act1state->m_unk0x018 = 0;
+	m_destLocation = LegoGameState::e_infomain;
+	return TRUE;
 }
 
 // STUB: LEGO1 0x10033350
