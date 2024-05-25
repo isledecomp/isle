@@ -6,19 +6,20 @@
 #include "legoworld.h"
 #include "radio.h"
 
-class Pizza;
-class Pizzeria;
-class TowTrack;
+class Act1State;
 class Ambulance;
-class JukeBoxEntity;
-class Helicopter;
 class Bike;
 class DuneBuggy;
-class Motocycle;
-class SkateBoard;
-class RaceCar;
+class Helicopter;
 class Jetski;
-class Act1State;
+class JukeBoxEntity;
+class Motocycle;
+class MxType19NotificationParam;
+class Pizza;
+class Pizzeria;
+class RaceCar;
+class SkateBoard;
+class TowTrack;
 
 // VTABLE: LEGO1 0x100d6fb8
 // SIZE 0x140
@@ -71,7 +72,7 @@ public:
 protected:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleClick(LegoControlManagerEvent& p_param);
-	MxLong HandleType19Notification(MxParam& p_param);
+	MxLong HandleType19Notification(MxType19NotificationParam& p_param);
 	MxLong HandleTransitionEnd();
 	void HandleElevatorEndAction();
 	void UpdateGlobe();

@@ -112,6 +112,7 @@ public:
 	void FUN_10063780(LegoROIList* p_list);
 	MxResult FUN_10064670(Vector3* p_position);
 	MxResult FUN_10064740(Vector3* p_position);
+	MxResult FUN_10064880(const char* p_name, MxS32 p_unk0x0c, MxS32 p_unk0x10);
 
 	static void configureLegoAnimationManager(MxS32 p_legoAnimationManagerConfig);
 

@@ -8,7 +8,7 @@
 // SIZE 0x10
 class MxType19NotificationParam : public MxNotificationParam {
 public:
-	MxType19NotificationParam(NotificationId p_type, MxCore* p_sender, MxU8 p_unk0x0e, MxU16 p_unk0x0c)
+	MxType19NotificationParam(NotificationId p_type, MxCore* p_sender, MxU8 p_unk0x0e, MxS16 p_unk0x0c)
 		: MxNotificationParam()
 	{
 		m_type = p_type;
@@ -23,8 +23,10 @@ public:
 		return new MxType19NotificationParam(m_type, m_sender, m_unk0x0e, m_unk0x0c);
 	} // vtable+0x04
 
+	inline MxS16 GetUnknown0x0c() { return m_unk0x0c; }
+
 protected:
-	MxU16 m_unk0x0c; // 0x0c
+	MxS16 m_unk0x0c; // 0x0c
 	MxU8 m_unk0x0e;  // 0x0e
 };
 

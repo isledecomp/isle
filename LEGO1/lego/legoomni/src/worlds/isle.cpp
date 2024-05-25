@@ -4,6 +4,7 @@
 #include "act1state.h"
 #include "ambulance.h"
 #include "bike.h"
+#include "bumpbouy.h"
 #include "carracestate.h"
 #include "dunebuggy.h"
 #include "helicopter.h"
@@ -29,6 +30,7 @@
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
+#include "mxtype19notificationparam.h"
 #include "mxvariabletable.h"
 #include "pizza.h"
 #include "pizzeria.h"
@@ -158,7 +160,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationType19:
-			result = HandleType19Notification(p_param);
+			result = HandleType19Notification((MxType19NotificationParam&) p_param);
 			break;
 		case c_notificationType20:
 			Enable(TRUE);
@@ -458,10 +460,64 @@ void Isle::UpdateGlobe()
 	}
 }
 
-// STUB: LEGO1 0x100315f0
-MxLong Isle::HandleType19Notification(MxParam& p_param)
+// FUNCTION: LEGO1 0x100315f0
+MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
 {
-	return 0;
+	MxLong result = 0;
+
+	if (CurrentActor() != NULL) {
+		if (CurrentActor() == m_dunebuggy) {
+			result = m_dunebuggy->Notify(p_param);
+		}
+		else if (CurrentActor() == m_motocycle) {
+			result = m_motocycle->Notify(p_param);
+		}
+	}
+
+	switch (m_act1state->m_unk0x018) {
+	case 3:
+		result = m_pizza->Notify(p_param);
+		break;
+	case 8:
+		result = m_towtrack->Notify(p_param);
+		break;
+	case 10:
+		result = m_ambulance->Notify(p_param);
+		break;
+	}
+
+	if (result == 0) {
+		switch (p_param.GetUnknown0x0c()) {
+		case 0x12c:
+			AnimationManager()->FUN_10064670(NULL);
+			result = 1;
+			break;
+		case 0x12d:
+			AnimationManager()->FUN_10064880("brickstr", 0, 20000);
+			result = 1;
+			break;
+		case 0x131:
+			if (m_act1state->m_unk0x018 != 10) {
+				AnimationManager()->FUN_10064740(FALSE);
+			}
+			result = 1;
+			break;
+		case 0x132:
+			AnimationManager()->FUN_10064880("mama", 0, 20000);
+			AnimationManager()->FUN_10064880("papa", 0, 20000);
+			result = 1;
+			break;
+		case 0x136:
+			LegoEntity* bouy = (LegoEntity*) Find("MxEntity", "bouybump");
+			if (bouy != NULL) {
+				NotificationManager()->Send(bouy, LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			}
+			result = 1;
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10031820

@@ -2411,6 +2411,25 @@ MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
 	return FAILURE;
 }
 
+// FUNCTION: LEGO1 0x10064880
+// FUNCTION: BETA10 0x10045d02
+MxResult LegoAnimationManager::FUN_10064880(const char* p_name, MxS32 p_unk0x0c, MxS32 p_unk0x10)
+{
+	for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
+		LegoROI* roi = m_extras[i].m_roi;
+
+		if (roi != NULL) {
+			if (!strcmpi(roi->GetName(), p_name)) {
+				g_characters[m_extras[i].m_characterId].m_unk0x0c = p_unk0x0c;
+				g_characters[m_extras[i].m_characterId].m_unk0x10 = p_unk0x10;
+				return SUCCESS;
+			}
+		}
+	}
+
+	return FAILURE;
+}
+
 // STUB: LEGO1 0x100648f0
 // FUNCTION: BETA10 0x10045daf
 void LegoAnimationManager::FUN_100648f0(LegoTranInfo*, MxLong)
