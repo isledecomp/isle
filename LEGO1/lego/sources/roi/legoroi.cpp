@@ -656,7 +656,6 @@ LegoU32 LegoROI::FUN_100a9410(
 			float local18 = (localc * localc) - (local14 * local8 * 4.0f);
 
 			if (local18 >= -0.001) {
-
 				local8 *= 2.0f;
 				localc = -localc;
 
