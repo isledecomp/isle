@@ -1173,8 +1173,46 @@ MxBool Isle::Escape()
 	return TRUE;
 }
 
-// STUB: LEGO1 0x10033350
+// FUNCTION: LEGO1 0x10033350
 void Isle::FUN_10033350()
 {
-	// TODO
+	if (m_act1state->m_unk0x018 == 10) {
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+			m_ambulance->FUN_10037240();
+			m_ambulance->FUN_10037250();
+		}
+	}
+
+	if (m_act1state->m_unk0x018 == 8) {
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+			m_towtrack->FUN_1004db10();
+			m_towtrack->FUN_1004dbe0();
+		}
+	}
+
+	if (m_act1state->m_unk0x018 == 3) {
+		if (CurrentActor() != NULL) {
+			m_pizza->FUN_10038380();
+			m_pizza->FUN_100382b0();
+		}
+	}
+
+	AnimationManager()->FUN_10061010(FALSE);
+
+	if (CurrentActor()) {
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) CurrentActor())->VTable0xe4();
+			m_skateboard->SetUnknown0x160(FALSE);
+		}
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_polidoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_garadoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
+	}
+
+	m_destLocation = LegoGameState::e_infomain;
 }
