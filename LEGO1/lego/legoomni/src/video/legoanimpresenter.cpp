@@ -1113,13 +1113,13 @@ void LegoAnimPresenter::FUN_1006c8a0(MxBool p_bool)
 
 // FUNCTION: LEGO1 0x1006c8f0
 // FUNCTION: BETA10 0x1005206c
-MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_vec1, Vector3& p_vec2, float p_f1, float p_f2, Vector3& p_vec3)
+MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3)
 {
 	Mx3DPointFloat a, b;
 
-	b = p_vec2;
+	b = p_v2;
 	((Vector3&) b).Mul(p_f1);
-	((Vector3&) b).Add(&p_vec1);
+	((Vector3&) b).Add(&p_v1);
 
 	a = b;
 	((Vector3&) a).Sub(&m_unk0xa8);
@@ -1132,8 +1132,7 @@ MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_vec1, Vector3& p_vec2, float p_f1
 	len = sqrt(len);
 	if (len <= m_unk0xa4 + p_f2 && m_roiMapSize != 0 && m_roiMap != NULL) {
 		for (MxU32 i = 1; i <= m_roiMapSize; i++) {
-			if (m_roiMap[i]->GetLODCount() != 0 &&
-				m_roiMap[i]->FUN_100a9410(p_vec1, p_vec2, p_f1, p_f2, p_vec3, FALSE)) {
+			if (m_roiMap[i]->GetLODCount() != 0 && m_roiMap[i]->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, FALSE)) {
 				return TRUE;
 			}
 		}
