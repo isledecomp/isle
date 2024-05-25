@@ -170,7 +170,7 @@ private:
 		MxS32 p_unk0x10,
 		float p_speed
 	);
-	void FUN_100648f0(LegoTranInfo*, MxLong);
+	void FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x404);
 	void FUN_10064b50(MxLong p_time);
 
 	MxS32 m_scriptIndex;               // 0x08
