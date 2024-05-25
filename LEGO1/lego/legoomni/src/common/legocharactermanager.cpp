@@ -116,7 +116,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_unk0x14, sizeof(info->m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(info->m_parts[c_infohatPart].m_unk0x08)) !=
@@ -171,7 +171,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_unk0x14, sizeof(info->m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(info->m_parts[c_infohatPart].m_unk0x08)) !=
@@ -449,7 +449,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 
 		info->m_unk0x0c = pepper->m_unk0x0c;
 		info->m_unk0x10 = pepper->m_unk0x10;
-		info->m_unk0x14 = pepper->m_unk0x14;
+		info->m_mood = pepper->m_mood;
 
 		for (i = 0; i < sizeOfArray(info->m_parts); i++) {
 			info->m_parts[i] = pepper->m_parts[i];
@@ -760,7 +760,7 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 	LegoCharacterInfo* info = GetInfo(p_roi);
 
 	if (p_und) {
-		return info->m_unk0x14 + g_unk0x100fc4dc;
+		return info->m_mood + g_unk0x100fc4dc;
 	}
 
 	if (info != NULL) {
@@ -772,12 +772,12 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 
 // FUNCTION: LEGO1 0x10085180
 // FUNCTION: BETA10 0x100768c5
-MxU8 LegoCharacterManager::FUN_10085180(LegoROI* p_roi)
+MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
 {
 	LegoCharacterInfo* info = GetInfo(p_roi);
 
 	if (info != NULL) {
-		return info->m_unk0x14;
+		return info->m_mood;
 	}
 
 	return 0;

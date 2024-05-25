@@ -24,7 +24,7 @@ struct LegoCharacterInfo {
 	LegoExtraActor* m_actor; // 0x08
 	MxS32 m_unk0x0c;         // 0x0c
 	MxS32 m_unk0x10;         // 0x10
-	MxU8 m_unk0x14;          // 0x14
+	MxU8 m_mood;             // 0x14
 	Part m_parts[10];        // 0x18
 };
 

@@ -51,7 +51,7 @@ LegoAnimationManager::Vehicle g_vehicles[] = {
 };
 
 // GLOBAL: LEGO1 0x100f6d58
-const char* g_unk0x100f6d58[11][17] = {
+const char* g_cycles[11][17] = {
 	{"CNs001xx",
 	 "CNs002xx",
 	 "CNs003xx",
@@ -1973,7 +1973,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 											if (FUN_10063b90(
 													world,
 													actor,
-													CharacterManager()->FUN_10085180(m_extras[i].m_roi),
+													CharacterManager()->GetMood(m_extras[i].m_roi),
 													m_lastExtraCharacterId
 												)) {
 												m_extras[i].m_unk0x14 = TRUE;
@@ -2064,17 +2064,67 @@ void LegoAnimationManager::FUN_10063aa0()
 	}
 }
 
-// STUB: LEGO1 0x10063b90
+// FUNCTION: LEGO1 0x10063b90
 // FUNCTION: BETA10 0x10044d46
-MxBool LegoAnimationManager::FUN_10063b90(
-	LegoWorld* p_world,
-	LegoExtraActor* p_actor,
-	MxU8 p_unk0x14,
-	MxU32 p_characterId
-)
+MxBool LegoAnimationManager::FUN_10063b90(LegoWorld* p_world, LegoExtraActor* p_actor, MxU8 p_mood, MxU32 p_characterId)
 {
-	// TODO
-	return TRUE;
+	const char** cycles = g_cycles[g_characters[p_characterId].m_unk0x16];
+	const char* vehicleWC;
+
+	if (g_characters[p_characterId].m_vehicleId >= 0 && g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x04 &&
+		(vehicleWC = cycles[10]) != NULL) {
+		LegoLocomotionAnimPresenter* presenter =
+			(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+
+		if (presenter != NULL) {
+			presenter->FUN_1006d680(p_actor, 1.7f);
+		}
+
+		g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x04 = FALSE;
+		g_vehicles[g_characters[p_characterId].m_vehicleId].m_unk0x05 = TRUE;
+		return TRUE;
+	}
+	else {
+		vehicleWC = cycles[p_mood];
+		if (vehicleWC != NULL) {
+			LegoLocomotionAnimPresenter* presenter =
+				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+
+			if (presenter != NULL) {
+				presenter->FUN_1006d680(p_actor, 0.7f);
+			}
+		}
+
+		if (p_mood >= 2) {
+			p_mood--;
+		}
+
+		vehicleWC = cycles[p_mood + 4];
+		if (vehicleWC != NULL) {
+			LegoLocomotionAnimPresenter* presenter =
+				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+
+			if (presenter != NULL) {
+				presenter->FUN_1006d680(p_actor, 4.0f);
+			}
+		}
+
+		if (p_mood >= 1) {
+			p_mood--;
+		}
+
+		vehicleWC = cycles[p_mood + 7];
+		if (vehicleWC != NULL) {
+			LegoLocomotionAnimPresenter* presenter =
+				(LegoLocomotionAnimPresenter*) p_world->Find("LegoAnimPresenter", vehicleWC);
+
+			if (presenter != NULL) {
+				presenter->FUN_1006d680(p_actor, 0.0f);
+			}
+		}
+
+		return FALSE;
+	}
 }
 
 // FUNCTION: LEGO1 0x10063d10
@@ -2329,15 +2379,15 @@ MxResult LegoAnimationManager::FUN_10064380(
 		}
 
 		MxS32 characterId = m_extras[i].m_characterId;
-		const char** unk0x100f6d58 = g_unk0x100f6d58[g_characters[characterId].m_unk0x16];
+		const char** cycles = g_cycles[g_characters[characterId].m_unk0x16];
 
 		LegoLocomotionAnimPresenter* presenter =
-			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx1]);
+			(LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", cycles[p_undIdx1]);
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(actor, 0.0f);
 		}
 
-		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", unk0x100f6d58[p_undIdx2]);
+		presenter = (LegoLocomotionAnimPresenter*) world->Find("LegoAnimPresenter", cycles[p_undIdx2]);
 		if (presenter != NULL) {
 			presenter->FUN_1006d680(actor, 4.0f);
 		}
