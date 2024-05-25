@@ -551,9 +551,143 @@ LegoResult LegoROI::GetTexture(LegoTextureInfo*& p_textureInfo)
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x100a9410
-LegoU32 LegoROI::FUN_100a9410(Vector3&, Vector3&, float, float, Vector3&, LegoBool)
+// FUNCTION: LEGO1 0x100a9410
+// FUNCTION: BETA10 0x1018b324
+LegoU32 LegoROI::FUN_100a9410(
+	Vector3& p_v1,
+	Vector3& p_v2,
+	float p_f1,
+	float p_f2,
+	Vector3& p_v3,
+	LegoBool p_collideBox
+)
 {
+	if (p_collideBox) {
+		Mx3DPointFloat v2(p_v1);
+		((Vector3&) v2).Mul(p_f1);
+		((Vector3&) v2).Add(&p_v1);
+
+		Mx4DPointFloat localc0;
+		Mx4DPointFloat local9c;
+		Mx4DPointFloat local168;
+		Mx4DPointFloat local70;
+		Mx4DPointFloat local150[6];
+
+		Vector3 local58(&localc0[0]);
+		Vector3 locala8(&local9c[0]);
+		Vector3 local38(&local168[0]);
+
+		Mx3DPointFloat local4c(p_v1);
+
+		local58 = m_unk0x80.Min();
+		locala8 = m_unk0x80.Max();
+
+		localc0[3] = local9c[3] = local168[3] = 1.0f;
+
+		local38 = local58;
+		((Vector3&) local38).Add(&locala8);
+		((Vector3&) local38).Mul(0.5f);
+
+		local70 = localc0;
+		localc0.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+
+		local70 = local9c;
+		local9c.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+
+		local70 = local168;
+		local168.SetMatrixProduct(&local70, (float*) m_local2world.GetData());
+
+		p_v3 = m_local2world[3];
+
+		LegoS32 i;
+		for (i = 0; i < 6; i++) {
+			local150[i] = m_local2world[i % 3];
+
+			if (i > 2) {
+				local150[i][3] = -local58.Dot(&local58, &local150[i]);
+			}
+			else {
+				local150[i][3] = -locala8.Dot(&locala8, &local150[i]);
+			}
+
+			if (local150[i][3] + local38.Dot(&local38, &local150[i]) < 0.0f) {
+				((Vector4&) local150[i]).Mul(-1.0f);
+			}
+		}
+
+		for (i = 0; i < 6; i++) {
+			float local50 = p_v2.Dot(&p_v2, &local150[i]);
+
+			if (local50 >= 0.01 || local50 < -0.01) {
+				local50 = -((local150[i][3] + local4c.Dot(&local4c, &local150[i])) / local50);
+
+				if (local50 >= 0.0f && local50 <= p_f1) {
+					Mx3DPointFloat local17c(p_v2);
+					((Vector3&) local17c).Mul(local50);
+					((Vector3&) local17c).Add(&local4c);
+
+					LegoS32 j;
+					for (j = 0; j < 6; j++) {
+						if (i != j && i - j != 3 && j - i != 3) {
+							if (local150[j][3] + local17c.Dot(&local17c, &local150[j]) < 0.0f) {
+								break;
+							}
+						}
+					}
+
+					if (j == 6) {
+						return 1;
+					}
+				}
+			}
+		}
+	}
+	else {
+		Mx3DPointFloat v1(p_v1);
+		((Vector3&) v1).Sub(&GetWorldBoundingSphere().Center());
+
+		float local10 = GetWorldBoundingSphere().Radius();
+		float local8 = p_v2.Dot(&p_v2, &p_v2);
+		float localc = p_v2.Dot(&p_v2, &v1) * 2.0f;
+		float local14 = v1.Dot(&v1, &v1) - (local10 * local10);
+
+		if (local8 >= 0.001 || local8 <= -0.001) {
+			float local1c = -1.0f;
+			float local18 = (localc * localc) - (local14 * local8 * 4.0f);
+
+			if (local18 >= -0.001) {
+				local8 *= 2.0f;
+				localc = -localc;
+
+				if (local18 > 0.0f) {
+					local18 = sqrt(local18);
+					float local184 = (localc + local18) / local8;
+					float local188 = (localc - local18) / local8;
+
+					if (local184 > 0.0f && local188 > local184) {
+						local1c = local184;
+					}
+					else if (local188 > 0.0f) {
+						local1c = local188;
+					}
+					else {
+						return 0;
+					}
+				}
+				else {
+					local1c = localc / local8;
+				}
+
+				if (local1c >= 0.0f && p_f1 <= local1c) {
+					p_v3 = p_v2;
+					p_v3.Mul(local1c);
+					p_v3.Add(&p_v1);
+					return 1;
+				}
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -609,7 +743,7 @@ LegoBool LegoROI::FUN_100a9bf0(const LegoChar* p_param, float& p_red, float& p_g
 // FUNCTION: LEGO1 0x100a9c50
 LegoBool LegoROI::ColorAliasLookup(const LegoChar* p_param, float& p_red, float& p_green, float& p_blue, float& p_alpha)
 {
-	for (MxU32 i = 0; i < sizeOfArray(g_roiColorAliases); i++) {
+	for (LegoU32 i = 0; i < sizeOfArray(g_roiColorAliases); i++) {
 		if (strcmpi(g_roiColorAliases[i].m_name, p_param) == 0) {
 			p_red = g_roiColorAliases[i].m_red / 255.0;
 			p_green = g_roiColorAliases[i].m_green / 255.0;

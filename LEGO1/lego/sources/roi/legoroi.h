@@ -38,7 +38,7 @@ public:
 	LegoResult FUN_100a9170(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha);
 	LegoResult FUN_100a9210(LegoTextureInfo* p_textureInfo);
 	LegoResult GetTexture(LegoTextureInfo*& p_textureInfo);
-	LegoU32 FUN_100a9410(Vector3&, Vector3&, float, float, Vector3&, LegoBool);
+	LegoU32 FUN_100a9410(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3, LegoBool p_collideBox);
 	void SetName(const LegoChar* p_name);
 
 	float IntrinsicImportance() const override; // vtable+0x04
