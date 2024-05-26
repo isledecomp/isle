@@ -563,7 +563,7 @@ LegoU32 LegoROI::FUN_100a9410(
 )
 {
 	if (p_collideBox) {
-		Mx3DPointFloat v2(p_v1);
+		Mx3DPointFloat v2(p_v2);
 		((Vector3&) v2).Mul(p_f1);
 		((Vector3&) v2).Add(&p_v1);
 
@@ -678,7 +678,7 @@ LegoU32 LegoROI::FUN_100a9410(
 					local1c = localc / local8;
 				}
 
-				if (local1c >= 0.0f && p_f1 <= local1c) {
+				if (local1c >= 0.0f && p_f1 >= local1c) {
 					p_v3 = p_v2;
 					p_v3.Mul(local1c);
 					p_v3.Add(&p_v1);
