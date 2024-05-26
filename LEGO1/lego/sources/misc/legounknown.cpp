@@ -42,9 +42,9 @@ LegoResult LegoUnknown::FUN_1009a1e0(float p_f1, Matrix4& p_mat, Vector3& p_v, L
 	}
 	else if (p_f1 >= 0.999) {
 		v1 = m_unk0x00[0];
-		((Vector3&) v2).Add(&m_unk0x00[1]);
-		((Vector3&) v3).Add(&m_unk0x00[2]);
-		((Vector3&) v4).Add(&m_unk0x00[3]);
+		((Vector3&) v1).Add(&m_unk0x00[1]);
+		((Vector3&) v1).Add(&m_unk0x00[2]);
+		((Vector3&) v1).Add(&m_unk0x00[3]);
 
 		for (LegoS32 i = 0; i < 3; i++) {
 			v4[i] = m_unk0x00[1][i] + m_unk0x00[2][i] * 2.0f + m_unk0x00[3][i] * 3.0f;
