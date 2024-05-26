@@ -1,10 +1,23 @@
 class Lego1Exception(Exception):
-    pass
+    """
+    Our own base class for exceptions.
+    Makes it easier to distinguish expected and unexpected errors.
+    """
+
+
+class TypeNotFoundError(Lego1Exception):
+    def __str__(self):
+        return f"Type not found in PDB: {self.args[0]}"
 
 
 class TypeNotFoundInGhidraError(Lego1Exception):
     def __str__(self):
         return f"Type not found in Ghidra: {self.args[0]}"
+
+
+class TypeNotImplementedError(Lego1Exception):
+    def __str__(self):
+        return f"Import not implemented for type: {self.args[0]}"
 
 
 class ClassOrNamespaceNotFoundInGhidraError(Lego1Exception):

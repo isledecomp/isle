@@ -15,6 +15,7 @@
 
 import importlib
 from dataclasses import dataclass, field
+import logging.handlers
 import sys
 import logging
 from pathlib import Path
@@ -44,18 +45,25 @@ logger = logging.getLogger(__name__)
 
 
 def setup_logging():
-    logging.basicConfig(
-        format="%(levelname)-8s %(message)s",
-        stream=sys.stdout,
-        level=logging.INFO,
-        force=True,
+    logging.root.handlers.clear()
+    formatter = logging.Formatter("%(levelname)-8s %(message)s")
+    # formatter = logging.Formatter("%(name)s %(levelname)-8s %(message)s") # use this to identify loggers
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(formatter)
+    file_handler = logging.FileHandler(
+        Path(__file__).absolute().parent.joinpath("import.log"), mode="w"
     )
+    file_handler.setFormatter(formatter)
+    logging.root.setLevel(GLOBALS.loglevel)
+    logging.root.addHandler(stdout_handler)
+    logging.root.addHandler(file_handler)
     logger.info("Starting...")
 
 
 @dataclass
 class Globals:
     verbose: bool
+    loglevel: int
     running_from_ghidra: bool = False
     make_changes: bool = False
     prompt_before_changes: bool = True
@@ -64,7 +72,11 @@ class Globals:
 
 
 # hard-coded settings that we don't want to prompt in Ghidra every time
-GLOBALS = Globals(verbose=False)
+GLOBALS = Globals(
+    verbose=False,
+    # loglevel=logging.INFO,
+    loglevel=logging.DEBUG,
+)
 
 
 # Disable spurious warnings in vscode / pylance
@@ -111,14 +123,19 @@ def add_python_path(path: str):
 
 # We need to quote the types here because they might not exist when running without Ghidra
 def migrate_function_to_ghidra(
-    api: "FlatProgramAPI", match_info: "MatchInfo", signature: "FunctionSignature"
+    api: "FlatProgramAPI",
+    match_info: "MatchInfo",
+    signature: "FunctionSignature",
+    type_importer: "PdbTypeImporter",
 ):
     hex_original_address = f"{match_info.orig_addr:x}"
 
     # Find the Ghidra function at that address
     ghidra_address = getAddressFactory().getAddress(hex_original_address)
 
-    typed_pdb_function = PdbFunctionWithGhidraObjects(api, match_info, signature)
+    typed_pdb_function = PdbFunctionWithGhidraObjects(
+        api, match_info, signature, type_importer
+    )
 
     if not GLOBALS.make_changes:
         return
@@ -170,19 +187,20 @@ def migrate_function_to_ghidra(
         askChoice("Continue", "Click 'OK' to continue", ["OK"], "OK")
 
 
-def process_functions(isle_compare: "IsleCompare"):
-    # try to acquire matched functions
-    migration = PdbExtractionForGhidraMigration(isle_compare)
-    func_signatures = migration.get_function_list()
+def process_functions(extraction: "PdbExtractionForGhidraMigration"):
+    func_signatures = extraction.get_function_list()
 
     if not GLOBALS.running_from_ghidra:
         logger.info("Completed the dry run outside Ghidra.")
         return
 
-    fpapi = FlatProgramAPI(currentProgram())
+    api = FlatProgramAPI(currentProgram())
+    # TODO: Implement a "no changes" mode
+    type_importer = PdbTypeImporter(api, extraction)
+
     for match_info, signature in func_signatures:
         try:
-            migrate_function_to_ghidra(fpapi, match_info, signature)
+            migrate_function_to_ghidra(api, match_info, signature, type_importer)
             GLOBALS.statistics.successes += 1
         except Lego1Exception as e:
             log_and_track_failure(e)
@@ -216,8 +234,11 @@ def main():
     pdb_path = build_path.joinpath("LEGO1.pdb")
 
     if not GLOBALS.verbose:
-        logging.getLogger("isledecomp.compare.db").setLevel(logging.CRITICAL)
-        logging.getLogger("isledecomp.compare.lines").setLevel(logging.CRITICAL)
+        logging.getLogger("isledecomp.bin").setLevel(logging.WARNING)
+        logging.getLogger("isledecomp.compare.core").setLevel(logging.WARNING)
+        logging.getLogger("isledecomp.compare.db").setLevel(logging.WARNING)
+        logging.getLogger("isledecomp.compare.lines").setLevel(logging.WARNING)
+        logging.getLogger("isledecomp.cvdump.symbols").setLevel(logging.WARNING)
 
     logger.info("Starting comparison")
     with Bin(str(origfile_path), find_str=True) as origfile, Bin(
@@ -227,8 +248,10 @@ def main():
 
     logger.info("Comparison complete.")
 
+    # try to acquire matched functions
+    migration = PdbExtractionForGhidraMigration(isle_compare)
     try:
-        process_functions(isle_compare)
+        process_functions(migration)
     finally:
         if GLOBALS.running_from_ghidra:
             GLOBALS.statistics.log()
@@ -265,8 +288,13 @@ try:
     )
 
     if GLOBALS.running_from_ghidra:
-        reload_module("lego_util.pdb_to_ghidra")
-        from lego_util.pdb_to_ghidra import PdbFunctionWithGhidraObjects
+        reload_module("lego_util.ghidra_helper")
+
+        reload_module("lego_util.function_importer")
+        from lego_util.function_importer import PdbFunctionWithGhidraObjects
+
+        reload_module("lego_util.type_importer")
+        from lego_util.type_importer import PdbTypeImporter
 
     if __name__ == "__main__":
         main()

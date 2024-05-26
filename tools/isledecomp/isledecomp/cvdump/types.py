@@ -216,6 +216,9 @@ class CvdumpTypesParser:
         re.compile(r"^\s*enum name = (?P<name>.+)$"),
         re.compile(r"^\s*UDT\((?P<udt>0x\w+)\)$"),
     ]
+    LF_UNION_LINE = re.compile(
+        r".*field list type (?P<field_type>0x\w+),.*Size = (?P<size>\d+)\s*,class name = (?P<name>(?:[^,]|,\S)+),\s.*UDT\((?P<udt>0x\w+)\)"
+    )
 
     MODES_OF_INTEREST = {
         "LF_ARRAY",
@@ -228,6 +231,7 @@ class CvdumpTypesParser:
         "LF_ARGLIST",
         "LF_MFUNCTION",
         "LF_PROCEDURE",
+        "LF_UNION",
     }
 
     def __init__(self) -> None:
@@ -298,7 +302,9 @@ class CvdumpTypesParser:
             raise CvdumpIntegrityError("No array element type")
 
         array_element_size = self.get(array_type).size
-        assert array_element_size is not None, "Encountered an array whose type has no size"
+        assert (
+            array_element_size is not None
+        ), "Encountered an array whose type has no size"
 
         n_elements = type_obj["size"] // array_element_size
 
@@ -399,7 +405,9 @@ class CvdumpTypesParser:
 
         obj = self.get(type_key)
         total_size = obj.size
-        assert total_size is not None, "Called get_scalar_gapless() on a type without size"
+        assert (
+            total_size is not None
+        ), "Called get_scalar_gapless() on a type without size"
 
         scalars = self.get_scalars(type_key)
 
@@ -506,6 +514,9 @@ class CvdumpTypesParser:
         elif self.mode == "LF_ENUM":
             self.read_enum_line(line)
 
+        elif self.mode == "LF_UNION":
+            self.read_union_line(line)
+
         else:
             # Check for exhaustiveness
             logger.error("Unhandled data in mode: %s", self.mode)
@@ -610,3 +621,14 @@ class CvdumpTypesParser:
             return {"is_forward_ref": True}
         logger.error("Unknown attribute in enum: %s", attribute)
         return {}
+
+    def read_union_line(self, line: str):
+        """This is a rather barebones handler, only parsing the size"""
+        if (match := self.LF_UNION_LINE.match(line)) is None:
+            raise AssertionError(f"Unhandled in union: {line}")
+        self._set("name", match.group("name"))
+        if match.group("field_type") == "0x0000":
+            self._set("is_forward_ref", True)
+
+        self._set("size", int(match.group("size")))
+        self._set("udt", normalize_type_id(match.group("udt")))

@@ -16,6 +16,8 @@ from ghidra.program.flatapi import FlatProgramAPI
 from ghidra.program.model.data import DataType
 from ghidra.program.model.symbol import Namespace
 
+logger = logging.getLogger(__name__)
+
 
 def get_ghidra_type(api: FlatProgramAPI, type_name: str):
     """
@@ -44,14 +46,21 @@ def get_ghidra_type(api: FlatProgramAPI, type_name: str):
     raise MultipleTypesFoundInGhidraError(type_name, result)
 
 
-def add_pointer_type(api: FlatProgramAPI, pointee: DataType):
-    data_type = PointerDataType(pointee)
-    data_type.setCategoryPath(pointee.getCategoryPath())
-    api.getCurrentProgram().getDataTypeManager().addDataType(
-        data_type, DataTypeConflictHandler.KEEP_HANDLER
+def add_pointer_type(api: FlatProgramAPI, pointee: DataType) -> DataType:
+    new_data_type = PointerDataType(pointee)
+    new_data_type.setCategoryPath(pointee.getCategoryPath())
+    result_data_type = (
+        api.getCurrentProgram()
+        .getDataTypeManager()
+        .addDataType(new_data_type, DataTypeConflictHandler.KEEP_HANDLER)
     )
-    logging.info("Created new pointer type %s", data_type)
-    return data_type
+    if result_data_type is not new_data_type:
+        logger.debug(
+            "New pointer replaced by existing one. Fresh pointer: %s (class: %s)",
+            result_data_type,
+            result_data_type.__class__,
+        )
+    return result_data_type
 
 
 def get_ghidra_namespace(
@@ -63,3 +72,38 @@ def get_ghidra_namespace(
         if namespace is None:
             raise ClassOrNamespaceNotFoundInGhidraError(namespace_hierachy)
     return namespace
+
+
+def create_ghidra_namespace(
+    api: FlatProgramAPI, namespace_hierachy: list[str]
+) -> Namespace:
+    namespace = api.getCurrentProgram().getGlobalNamespace()
+    for part in namespace_hierachy:
+        namespace = api.getNamespace(namespace, part)
+        if namespace is None:
+            namespace = api.createNamespace(namespace, part)
+    return namespace
+
+
+def sanitize_class_name(name: str) -> str:
+    """
+    Takes a full class or function name and replaces characters not accepted by Ghidra.
+    Applies mostly to templates.
+    """
+    if "<" in name:
+        new_class_name = (
+            "_template_" +
+            name
+                .replace("<", "[")
+                .replace(">", "]")
+                .replace("*", "#")
+                .replace(" ", "")
+        )
+        logger.warning(
+            "Changing possible template class name from '%s' to '%s'",
+            name,
+            new_class_name,
+        )
+        return new_class_name
+
+    return name

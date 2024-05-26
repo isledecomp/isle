@@ -20,9 +20,11 @@ from lego_util.pdb_extraction import (
 )
 from lego_util.ghidra_helper import (
     get_ghidra_namespace,
-    get_ghidra_type,
+    sanitize_class_name,
 )
+
 from lego_util.exceptions import StackOffsetMismatchError
+from lego_util.type_importer import PdbTypeImporter
 
 
 logger = logging.getLogger(__name__)
@@ -33,26 +35,36 @@ class PdbFunctionWithGhidraObjects:
 
     def __init__(
         self,
-        fpapi: FlatProgramAPI,
+        api: FlatProgramAPI,
         match_info: MatchInfo,
         signature: FunctionSignature,
+        type_importer: "PdbTypeImporter",
     ):
-        self.api = fpapi
+        self.api = api
         self.match_info = match_info
         self.signature = signature
+        self.type_importer = type_importer
+
+        if signature.class_type is not None:
+            # Import the base class so the namespace exists
+            self.type_importer.pdb_to_ghidra_type(signature.class_type)
 
         assert match_info.name is not None
-        colon_split = match_info.name.split("::")
+
+        colon_split = sanitize_class_name(match_info.name).split("::")
         self.name = colon_split.pop()
         namespace_hierachy = colon_split
-        self.namespace = get_ghidra_namespace(fpapi, namespace_hierachy)
+        self.namespace = get_ghidra_namespace(api, namespace_hierachy)
 
-        self.return_type = get_ghidra_type(fpapi, signature.return_type)
+        self.return_type = type_importer.pdb_to_ghidra_type(
+            signature.return_type
+        )
         self.arguments = [
             ParameterImpl(
                 f"param{index}",
-                get_ghidra_type(fpapi, type_name),
-                fpapi.getCurrentProgram(),
+                # get_ghidra_type(api, type_name),
+                type_importer.pdb_to_ghidra_type(type_name),
+                api.getCurrentProgram(),
             )
             for (index, type_name) in enumerate(signature.arglist)
         ]
@@ -200,7 +212,13 @@ class PdbFunctionWithGhidraObjects:
                 f"Could not find a matching symbol at offset {param.getStackOffset()} in {self.get_full_name()}"
             )
 
-        if param.getDataType() != get_ghidra_type(self.api, match.data_type):
+        if match.data_type == "T_NOTYPE(0000)":
+            logger.warning("Skipping stack parameter of type NOTYPE")
+            return
+
+        if param.getDataType() != self.type_importer.pdb_to_ghidra_type(
+            match.data_type
+        ):
             logger.error(
                 "Type mismatch for parameter: %s in Ghidra, %s in PDB", param, match
             )

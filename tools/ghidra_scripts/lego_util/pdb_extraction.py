@@ -8,11 +8,9 @@ from isledecomp.types import SymbolType
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.compare.db import MatchInfo
 
+from lego_util.exceptions import TypeNotFoundError
+
 logger = logging.getLogger(__file__)
-
-
-class TypeNotFoundError(Exception):
-    pass
 
 
 @dataclass
@@ -38,7 +36,7 @@ class FunctionSignature:
     call_type: str
     arglist: list[str]
     return_type: str
-    class_type: Optional[dict[str, Any]]
+    class_type: Optional[str]
     stack_symbols: list[CppStackOrRegisterSymbol]
 
 
@@ -46,7 +44,7 @@ class PdbExtractionForGhidraMigration:
     def __init__(self, compare: IsleCompare):
         self.compare = compare
 
-    _scalar_type_regex = re.compile(r"t_(?P<typename>\w+)(?:\((?P<type_id>\d+)\))?")
+    scalar_type_regex = re.compile(r"t_(?P<typename>\w+)(?:\((?P<type_id>\d+)\))?")
 
     _scalar_type_map = {
         "rchar": "char",
@@ -62,10 +60,11 @@ class PdbExtractionForGhidraMigration:
         "STD Near": "__stdcall",
     }
 
-    def scalar_type_to_cpp(self, scalar_type: str) -> str:
+    @classmethod
+    def scalar_type_to_cpp(cls, scalar_type: str) -> str:
         if scalar_type.startswith("32p"):
-            return f"{self.scalar_type_to_cpp(scalar_type[3:])} *"
-        return self._scalar_type_map.get(scalar_type, scalar_type)
+            return f"{cls.scalar_type_to_cpp(scalar_type[3:])} *"
+        return cls._scalar_type_map.get(scalar_type, scalar_type)
 
     def lookup_type(self, type_name: Optional[str]) -> Optional[dict[str, Any]]:
         return (
@@ -74,11 +73,12 @@ class PdbExtractionForGhidraMigration:
             else self.compare.cv.types.keys.get(type_name.lower())
         )
 
+    # TODO: This is mostly legacy code now, we may be able to remove it
     def type_to_cpp_type_name(self, type_name: str) -> str:
         # pylint: disable=too-many-return-statements
         type_lower = type_name.lower()
         if type_lower.startswith("t_"):
-            if (match := self._scalar_type_regex.match(type_lower)) is None:
+            if (match := self.scalar_type_regex.match(type_lower)) is None:
                 raise TypeNotFoundError(f"Type has unexpected format: {type_name}")
 
             return self.scalar_type_to_cpp(match.group("typename"))
@@ -131,16 +131,12 @@ class PdbExtractionForGhidraMigration:
             )
             return None
 
-        return_type = self.type_to_cpp_type_name(function_type["return_type"])
-        class_type = self.lookup_type(function_type.get("class_type"))
+        class_type = function_type.get("class_type")
 
         arg_list_type = self.lookup_type(function_type.get("arg_list_type"))
         assert arg_list_type is not None
         arg_list_pdb_types = arg_list_type.get("args", [])
         assert arg_list_type["argcount"] == len(arg_list_pdb_types)
-        arglist = [
-            self.type_to_cpp_type_name(argtype) for argtype in arg_list_pdb_types
-        ]
 
         stack_symbols: list[CppStackOrRegisterSymbol] = []
         for symbol in fn.stack_symbols:
@@ -157,7 +153,7 @@ class PdbExtractionForGhidraMigration:
                 stack_symbols.append(
                     CppStackSymbol(
                         symbol.name,
-                        self.type_to_cpp_type_name(symbol.data_type),
+                        symbol.data_type,
                         stack_offset,
                     )
                 )
@@ -166,8 +162,8 @@ class PdbExtractionForGhidraMigration:
 
         return FunctionSignature(
             call_type=call_type,
-            arglist=arglist,
-            return_type=return_type,
+            arglist=arg_list_pdb_types,
+            return_type=function_type["return_type"],
             class_type=class_type,
             stack_symbols=stack_symbols,
         )
@@ -175,7 +171,7 @@ class PdbExtractionForGhidraMigration:
     def get_function_list(self) -> list[tuple[MatchInfo, FunctionSignature]]:
         handled = (
             self.handle_matched_function(match)
-            for match in self.compare._db.get_matches_by_type(SymbolType.FUNCTION)
+            for match in self.compare.db.get_matches_by_type(SymbolType.FUNCTION)
         )
         return [signature for signature in handled if signature is not None]
 
@@ -183,7 +179,7 @@ class PdbExtractionForGhidraMigration:
         self, match_info: MatchInfo
     ) -> Optional[tuple[MatchInfo, FunctionSignature]]:
         assert match_info.orig_addr is not None
-        match_options = self.compare._db.get_match_options(match_info.orig_addr)
+        match_options = self.compare.db.get_match_options(match_info.orig_addr)
         assert match_options is not None
         if match_options.get("skip", False) or match_options.get("stub", False):
             return None

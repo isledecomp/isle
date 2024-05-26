@@ -88,6 +88,11 @@ class Compare:
         self._match_thunks()
         self._find_vtordisp()
 
+    @property
+    def db(self):
+        """Newer code needs to access this field, legacy code uses _db"""
+        return self._db
+
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
         self.cv = (
@@ -161,7 +166,10 @@ class Compare:
                 addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
             )
 
-        for (section, offset), (filename, line_no) in self.cvdump_analysis.verified_lines.items():
+        for (section, offset), (
+            filename,
+            line_no,
+        ) in self.cvdump_analysis.verified_lines.items():
             addr = self.recomp_bin.get_abs_addr(section, offset)
             self._lines_db.add_line(filename, line_no, addr)
 
