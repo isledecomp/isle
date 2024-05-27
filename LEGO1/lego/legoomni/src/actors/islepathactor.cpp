@@ -579,8 +579,17 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 	}
 }
 
-// STUB: LEGO1 0x1001b660
+// FUNCTION: LEGO1 0x1001b660
+// FUNCTION: BETA10 0x10036ea2
 void IslePathActor::FUN_1001b660()
 {
-	// TODO
+	MxMatrix transform(m_roi->GetLocal2World());
+	Vector3 position(transform[0]);
+	Vector3 direction(transform[1]);
+	Vector3 up(transform[2]);
+
+	((Vector3&) up).Mul(-1.0f);
+	position.EqualsCross(&direction, &up);
+	m_roi->FUN_100a58f0(transform);
+	m_roi->VTable0x14();
 }
