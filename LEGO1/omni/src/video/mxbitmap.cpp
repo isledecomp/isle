@@ -194,7 +194,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 						m_bmiHeader = &m_info->m_bmiHeader;
 						m_paletteData = m_info->m_bmiColors;
 						if (m_info->m_bmiHeader.biSizeImage == 0) {
-							MxLong height = AbsFlipped(m_info->m_bmiHeader.biHeight);
+							MxLong height = HeightAbs(m_info->m_bmiHeader.biHeight);
 							m_info->m_bmiHeader.biSizeImage = AlignToFourByte(m_info->m_bmiHeader.biWidth) * height;
 						}
 						result = SUCCESS;
@@ -433,8 +433,8 @@ MxResult MxBitmap::StretchBits(
 )
 {
 	// Compression fix?
-	if ((m_bmiHeader->biCompression != BI_RGB_TOPDOWN) && (0 < m_bmiHeader->biHeight)) {
-		p_ySrc = (m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
+	if (IsBottomUp()) {
+		p_ySrc = GetBmiHeightAbs() - p_ySrc - p_destHeight;
 	}
 
 	return StretchDIBits(

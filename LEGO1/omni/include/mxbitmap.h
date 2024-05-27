@@ -87,11 +87,12 @@ public:
 	// FUNCTION: BETA10 0x1002c510
 	inline MxLong AlignToFourByte(MxLong p_value) const { return (p_value + 3) & -4; }
 
-	// Same as the one from legoutils.h, but flipped the other way
-	// TODO: While it's not outside the realm of possibility that they
-	// reimplemented Abs for only this file, that seems odd, right?
+	// DECOMP: This could be a free function. It is static here because it has no
+	// reference to "this". In the beta it is called in two places:
+	// 1. GetBmiHeightAbs
+	// 2. at 0x101523b9, in reference to BITMAPINFOHEADER.biHeight
 	// FUNCTION: BETA10 0x1002c690
-	inline MxLong AbsFlipped(MxLong p_value) const { return p_value > 0 ? p_value : -p_value; }
+	static MxLong HeightAbs(MxLong p_value) { return p_value > 0 ? p_value : -p_value; }
 
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
 
@@ -101,7 +102,7 @@ public:
 	inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
 
 	// FUNCTION: BETA10 0x1002c470
-	inline MxLong GetBmiHeightAbs() const { return AbsFlipped(m_bmiHeader->biHeight); }
+	inline MxLong GetBmiHeightAbs() const { return HeightAbs(m_bmiHeader->biHeight); }
 
 	// FUNCTION: BETA10 0x10083900
 	inline MxU8* GetImage() const { return m_data; }
@@ -156,6 +157,17 @@ public:
 	// MxBitmap::`scalar deleting destructor'
 
 private:
+	// FUNCTION: BETA10 0x1013dd30
+	inline MxBool IsBottomUp()
+	{
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
+			return FALSE;
+		}
+		else {
+			return m_bmiHeader->biHeight > 0;
+		}
+	}
+
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
 
 	MxBITMAPINFO* m_info;          // 0x08
