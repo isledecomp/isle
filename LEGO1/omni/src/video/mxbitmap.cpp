@@ -13,24 +13,24 @@ MxU16 g_bitmapSignature = TWOCC('B', 'M');
 // FUNCTION: LEGO1 0x100bc980
 MxBitmap::MxBitmap()
 {
-	this->m_info = NULL;
-	this->m_bmiHeader = NULL;
-	this->m_paletteData = NULL;
-	this->m_data = NULL;
-	this->m_isHighColor = FALSE;
-	this->m_palette = NULL;
+	m_info = NULL;
+	m_bmiHeader = NULL;
+	m_paletteData = NULL;
+	m_data = NULL;
+	m_isHighColor = FALSE;
+	m_palette = NULL;
 }
 
 // FUNCTION: LEGO1 0x100bca10
 MxBitmap::~MxBitmap()
 {
-	if (this->m_info) {
+	if (m_info) {
 		delete m_info;
 	}
-	if (this->m_data) {
+	if (m_data) {
 		delete m_data;
 	}
-	if (this->m_palette) {
+	if (m_palette) {
 		delete m_palette;
 	}
 }
@@ -88,26 +88,26 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 	MxLong height = p_info->m_bmiHeader.biHeight;
 	MxLong size = AlignToFourByte(width) * height;
 
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		this->m_data = new MxU8[size];
-		if (this->m_data) {
-			memcpy(this->m_info, p_info, sizeof(*this->m_info));
-			this->m_bmiHeader = &this->m_info->m_bmiHeader;
-			this->m_paletteData = this->m_info->m_bmiColors;
+	m_info = new MxBITMAPINFO;
+	if (m_info) {
+		m_data = new MxU8[size];
+		if (m_data) {
+			memcpy(m_info, p_info, sizeof(*m_info));
+			m_bmiHeader = &m_info->m_bmiHeader;
+			m_paletteData = m_info->m_bmiColors;
 			result = SUCCESS;
 		}
 	}
 
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete[] this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete[] m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -119,28 +119,28 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 {
 	MxResult result = FAILURE;
 
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		this->m_data = new MxU8[p_bitmap->GetDataSize()];
-		if (this->m_data) {
-			memcpy(this->m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
-			memcpy(this->m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
+	m_info = new MxBITMAPINFO;
+	if (m_info) {
+		m_data = new MxU8[p_bitmap->GetDataSize()];
+		if (m_data) {
+			memcpy(m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
+			memcpy(m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
 
-			this->m_bmiHeader = &this->m_info->m_bmiHeader;
-			this->m_paletteData = this->m_info->m_bmiColors;
+			m_bmiHeader = &m_info->m_bmiHeader;
+			m_paletteData = m_info->m_bmiColors;
 			result = SUCCESS;
 		}
 	}
 
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -174,21 +174,20 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 
 	BOOL ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
 	if (ret && (hdr.bfType == g_bitmapSignature)) {
-		this->m_info = new MxBITMAPINFO;
-		if (this->m_info) {
-			ret = ReadFile(p_handle, this->m_info, sizeof(*this->m_info), &bytesRead, NULL);
-			if (ret && (this->m_info->m_bmiHeader.biBitCount == 8)) {
+		m_info = new MxBITMAPINFO;
+		if (m_info) {
+			ret = ReadFile(p_handle, m_info, sizeof(*m_info), &bytesRead, NULL);
+			if (ret && (m_info->m_bmiHeader.biBitCount == 8)) {
 				MxLong size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
-				this->m_data = new MxU8[size];
-				if (this->m_data) {
-					ret = ReadFile(p_handle, this->m_data, size, &bytesRead, NULL);
+				m_data = new MxU8[size];
+				if (m_data) {
+					ret = ReadFile(p_handle, m_data, size, &bytesRead, NULL);
 					if (ret) {
-						this->m_bmiHeader = &this->m_info->m_bmiHeader;
-						this->m_paletteData = this->m_info->m_bmiColors;
-						if (this->m_info->m_bmiHeader.biSizeImage == 0) {
-							MxLong height = AbsFlipped(this->m_info->m_bmiHeader.biHeight);
-							this->m_info->m_bmiHeader.biSizeImage =
-								AlignToFourByte(this->m_info->m_bmiHeader.biWidth) * height;
+						m_bmiHeader = &m_info->m_bmiHeader;
+						m_paletteData = m_info->m_bmiColors;
+						if (m_info->m_bmiHeader.biSizeImage == 0) {
+							MxLong height = AbsFlipped(m_info->m_bmiHeader.biHeight);
+							m_info->m_bmiHeader.biSizeImage = AlignToFourByte(m_info->m_bmiHeader.biWidth) * height;
 						}
 						result = SUCCESS;
 					}
@@ -198,14 +197,14 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 	}
 
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -303,9 +302,9 @@ MxPalette* MxBitmap::CreatePalette()
 	MxBool success = FALSE;
 	MxPalette* palette = NULL;
 
-	switch (this->m_isHighColor) {
+	switch (m_isHighColor) {
 	case FALSE:
-		palette = new MxPalette(this->m_paletteData);
+		palette = new MxPalette(m_paletteData);
 
 		if (!palette) {
 			goto done;
@@ -313,7 +312,7 @@ MxPalette* MxBitmap::CreatePalette()
 
 		break;
 	case TRUE:
-		palette = this->m_palette->Clone();
+		palette = m_palette->Clone();
 
 		if (!palette) {
 			goto done;
@@ -339,16 +338,16 @@ done:
 void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
 	// Odd to use a switch on a boolean, but it matches.
-	switch (this->m_isHighColor) {
+	switch (m_isHighColor) {
 	case FALSE:
-		ImportColorsToPalette(this->m_paletteData, p_palette);
+		ImportColorsToPalette(m_paletteData, p_palette);
 		break;
 
 	case TRUE:
-		if (this->m_palette) {
-			delete this->m_palette;
+		if (m_palette) {
+			delete m_palette;
 		}
-		this->m_palette = p_palette->Clone();
+		m_palette = p_palette->Clone();
 		break;
 	}
 }
@@ -420,8 +419,8 @@ MxResult MxBitmap::StretchBits(
 )
 {
 	// Compression fix?
-	if ((this->m_bmiHeader->biCompression != BI_RGB_TOPDOWN) && (0 < this->m_bmiHeader->biHeight)) {
-		p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
+	if ((m_bmiHeader->biCompression != BI_RGB_TOPDOWN) && (0 < m_bmiHeader->biHeight)) {
+		p_ySrc = (m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
 	}
 
 	return StretchDIBits(
@@ -434,9 +433,9 @@ MxResult MxBitmap::StretchBits(
 		p_ySrc,
 		p_destWidth,
 		p_destHeight,
-		this->m_data,
-		(BITMAPINFO*) this->m_info,
-		this->m_isHighColor,
+		m_data,
+		(BITMAPINFO*) m_info,
+		m_isHighColor,
 		SRCCOPY
 	);
 }
