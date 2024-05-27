@@ -34,6 +34,7 @@ struct MxBITMAPINFO {
 
 // SIZE 0x20
 // VTABLE: LEGO1 0x100dc7b0
+// VTABLE: BETA10 0x101c21f8
 class MxBitmap : public MxCore {
 public:
 	MxBitmap();
@@ -46,6 +47,7 @@ public:
 	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
+	// FUNCTION: BETA10 0x10060fc0
 	virtual int VTable0x28(int) { return -1; } // vtable+28
 
 	virtual void BitBlt(
@@ -82,20 +84,32 @@ public:
 	// Bit mask trick to round up to the nearest multiple of four.
 	// Pixel data may be stored with padding.
 	// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
+	// FUNCTION: BETA10 0x1002c510
 	inline MxLong AlignToFourByte(MxLong p_value) const { return (p_value + 3) & -4; }
 
 	// Same as the one from legoutils.h, but flipped the other way
 	// TODO: While it's not outside the realm of possibility that they
 	// reimplemented Abs for only this file, that seems odd, right?
+	// FUNCTION: BETA10 0x1002c690
 	inline MxLong AbsFlipped(MxLong p_value) const { return p_value > 0 ? p_value : -p_value; }
 
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
+
+	// FUNCTION: BETA10 0x1002c440
 	inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
 	inline MxLong GetBmiStride() const { return ((m_bmiHeader->biWidth + 3) & -4); }
 	inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
+
+	// FUNCTION: BETA10 0x1002c470
 	inline MxLong GetBmiHeightAbs() const { return AbsFlipped(m_bmiHeader->biHeight); }
+
+	// FUNCTION: BETA10 0x10083900
 	inline MxU8* GetImage() const { return m_data; }
+
+	// FUNCTION: BETA10 0x100838d0
 	inline MxBITMAPINFO* GetBitmapInfo() const { return m_info; }
+
+	// FUNCTION: BETA10 0x100982b0
 	inline MxLong GetDataSize() const
 	{
 		MxLong absHeight = GetBmiHeightAbs();
@@ -138,6 +152,7 @@ public:
 	}
 
 	// SYNTHETIC: LEGO1 0x100bc9f0
+	// SYNTHETIC: BETA10 0x1013dcd0
 	// MxBitmap::`scalar deleting destructor'
 
 private:
