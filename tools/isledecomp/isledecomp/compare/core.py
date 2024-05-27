@@ -103,6 +103,11 @@ class Compare:
         res = CvdumpAnalysis(cv)
 
         for sym in res.nodes:
+            # Skip nodes where we have almost no information.
+            # These probably came from SECTION CONTRIBUTIONS.
+            if sym.name() is None and sym.node_type is None:
+                continue
+
             # The PDB might contain sections that do not line up with the
             # actual binary. The symbol "__except_list" is one example.
             # In these cases, just skip this symbol and move on because
