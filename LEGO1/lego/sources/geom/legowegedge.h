@@ -69,7 +69,7 @@ protected:
 	Mx4DPointFloat m_unk0x14;       // 0x14
 	Mx4DPointFloat* m_edgeNormals;  // 0x2c
 	Mx3DPointFloat m_unk0x30;       // 0x30
-	LegoU32 m_unk0x44;              // 0x44
+	float m_unk0x44;                // 0x44
 	LegoU8 m_unk0x48;               // 0x48
 	PathWithTrigger* m_pathTrigger; // 0x4c
 	Mx3DPointFloat* m_unk0x50;      // 0x50

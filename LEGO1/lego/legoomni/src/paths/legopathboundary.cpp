@@ -2,6 +2,7 @@
 
 #include "decomp.h"
 #include "geom/legounkown100db7f4.h"
+#include "legolocomotionanimpresenter.h"
 #include "legopathactor.h"
 #include "legopathstruct.h"
 
@@ -337,18 +338,47 @@ MxU32 LegoPathBoundary::Intersect(
 	return 0;
 }
 
-// STUB: LEGO1 0x10057fe0
+// FUNCTION: LEGO1 0x10057fe0
 // FUNCTION: BETA10 0x100b2220
 MxU32 LegoPathBoundary::FUN_10057fe0(LegoAnimPresenter* p_presenter)
 {
-	// TODO
-	return 0;
+	Mx3DPointFloat unk0x30;
+
+	unk0x30 = m_unk0x30;
+	((Vector3&) unk0x30).Sub(&p_presenter->m_unk0xa8);
+
+	float len = unk0x30.LenSquared();
+	float local20 = p_presenter->m_unk0xa4 + m_unk0x44;
+
+	if (len > 0.001 && len > local20 * local20) {
+		return 0;
+	}
+
+	// TODO: This only seems to match if the type is not the same as the type of the
+	// key value of the set. Figure out which type the set (or parameter) actually uses.
+	// Also see call to .find in LegoPathController::FUN_10046050
+	m_presenters.insert(static_cast<LegoLocomotionAnimPresenter*>(p_presenter));
+	return 1;
 }
 
-// STUB: LEGO1 0x100586e0
+// FUNCTION: LEGO1 0x100586e0
 // FUNCTION: BETA10 0x100b22d1
 MxU32 LegoPathBoundary::FUN_100586e0(LegoAnimPresenter* p_presenter)
 {
-	// TODO
+	if (p_presenter != NULL) {
+		// TODO: This only seems to match if the type is not the same as the type of the
+		// key value of the set. Figure out which type the set (or parameter) actually uses.
+		// Also see call to .find in LegoPathController::FUN_10046050
+		if (m_presenters.find(static_cast<LegoLocomotionAnimPresenter*>(p_presenter)) != m_presenters.end()) {
+			m_presenters.erase(static_cast<LegoLocomotionAnimPresenter*>(p_presenter));
+			return 1;
+		}
+	}
+	else {
+		for (LegoAnimPresenterSet::iterator it = m_presenters.begin(); it != m_presenters.end(); it++) {
+			(*it)->SetCurrentWorld(NULL);
+		}
+	}
+
 	return 0;
 }
