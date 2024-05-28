@@ -8,66 +8,79 @@ DECOMP_SIZE_ASSERT(MxBitmap, 0x20);
 DECOMP_SIZE_ASSERT(MxBITMAPINFO, 0x428);
 
 // GLOBAL: LEGO1 0x10102184
+// GLOBAL: BETA10 0x10203030
 MxU16 g_bitmapSignature = TWOCC('B', 'M');
 
 // FUNCTION: LEGO1 0x100bc980
+// FUNCTION: BETA10 0x1013cab0
 MxBitmap::MxBitmap()
 {
-	this->m_info = NULL;
-	this->m_bmiHeader = NULL;
-	this->m_paletteData = NULL;
-	this->m_data = NULL;
-	this->m_isHighColor = FALSE;
-	this->m_palette = NULL;
+	m_info = NULL;
+	m_bmiHeader = NULL;
+	m_paletteData = NULL;
+	m_data = NULL;
+	m_isHighColor = FALSE;
+	m_palette = NULL;
 }
 
 // FUNCTION: LEGO1 0x100bca10
+// FUNCTION: BETA10 0x1013cb58
 MxBitmap::~MxBitmap()
 {
-	if (this->m_info) {
+	if (m_info) {
 		delete m_info;
 	}
-	if (this->m_data) {
+	if (m_data) {
 		delete m_data;
 	}
-	if (this->m_palette) {
+	if (m_palette) {
 		delete m_palette;
 	}
 }
 
 // FUNCTION: LEGO1 0x100bcaa0
+// FUNCTION: BETA10 0x1013cc47
 MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, MxBool p_isHighColor)
 {
 	MxResult ret = FAILURE;
 	MxLong size = AlignToFourByte(p_width) * p_height;
 
-	m_info = new MxBITMAPINFO;
-	if (m_info) {
-		m_data = new MxU8[size];
-		if (m_data) {
-			m_bmiHeader = &m_info->m_bmiHeader;
-			m_paletteData = m_info->m_bmiColors;
-			memset(&m_info->m_bmiHeader, 0, sizeof(m_info->m_bmiHeader));
-
-			m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
-			m_bmiHeader->biWidth = p_width;
-			m_bmiHeader->biHeight = p_height;
-			m_bmiHeader->biPlanes = 1;
-			m_bmiHeader->biBitCount = 8;
-			m_bmiHeader->biCompression = 0;
-			m_bmiHeader->biSizeImage = size;
-
-			if (!ImportColorsToPalette(m_paletteData, p_palette)) {
-				if (!SetBitDepth(p_isHighColor)) {
-					ret = SUCCESS;
-				}
-			}
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	memset(m_bmiHeader, 0, sizeof(m_info->m_bmiHeader));
+
+	m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
+	m_bmiHeader->biWidth = p_width;
+	m_bmiHeader->biHeight = p_height;
+	m_bmiHeader->biPlanes = 1;
+	m_bmiHeader->biBitCount = 8;
+	m_bmiHeader->biCompression = 0;
+	m_bmiHeader->biSizeImage = size;
+
+	if (ImportColorsToPalette(m_paletteData, p_palette)) {
+		goto done;
+	}
+
+	if (SetBitDepth(p_isHighColor)) {
+		goto done;
+	}
+
+	ret = SUCCESS;
+
+done:
 	if (ret) {
 		if (m_info) {
-			delete m_info;
+			delete[] m_info;
 			m_info = NULL;
 		}
 
@@ -81,33 +94,37 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 }
 
 // FUNCTION: LEGO1 0x100bcba0
+// FUNCTION: BETA10 0x1013ce25
 MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 {
 	MxResult result = FAILURE;
-	MxLong width = p_info->m_bmiHeader.biWidth;
-	MxLong height = p_info->m_bmiHeader.biHeight;
-	MxLong size = AlignToFourByte(width) * height;
+	MxLong size = AlignToFourByte(p_info->m_bmiHeader.biWidth) * p_info->m_bmiHeader.biHeight;
 
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		this->m_data = new MxU8[size];
-		if (this->m_data) {
-			memcpy(this->m_info, p_info, sizeof(*this->m_info));
-			this->m_bmiHeader = &this->m_info->m_bmiHeader;
-			this->m_paletteData = this->m_info->m_bmiColors;
-			result = SUCCESS;
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	memcpy(m_info, p_info, MxBitmapInfoSize());
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete[] m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete[] this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete[] m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -115,32 +132,38 @@ MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 }
 
 // FUNCTION: LEGO1 0x100bcc40
+// FUNCTION: BETA10 0x1013cf6d
 MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 {
 	MxResult result = FAILURE;
 
-	this->m_info = new MxBITMAPINFO;
-	if (this->m_info) {
-		this->m_data = new MxU8[p_bitmap->GetDataSize()];
-		if (this->m_data) {
-			memcpy(this->m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
-			memcpy(this->m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
-
-			this->m_bmiHeader = &this->m_info->m_bmiHeader;
-			this->m_paletteData = this->m_info->m_bmiColors;
-			result = SUCCESS;
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[p_bitmap->MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[p_bitmap->GetDataSize()];
+	if (!m_data) {
+		goto done;
+	}
+
+	memcpy(m_info, p_bitmap->GetBitmapInfo(), p_bitmap->MxBitmapInfoSize());
+	memcpy(m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete[] m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete[] m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -148,16 +171,25 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 }
 
 // FUNCTION: LEGO1 0x100bcd10
+// FUNCTION: BETA10 0x1013d0c7
 MxLong MxBitmap::Read(const char* p_filename)
 {
 	MxResult result = FAILURE;
-	HANDLE handle =
-		CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE handle = 0;
 
-	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle)) {
-		result = SUCCESS;
+	handle = CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (handle == INVALID_HANDLE_VALUE) {
+		goto done;
 	}
 
+	if (LoadFile(handle)) {
+		goto done;
+	}
+
+	result = SUCCESS;
+
+done:
 	if (handle) {
 		CloseHandle(handle);
 	}
@@ -166,46 +198,64 @@ MxLong MxBitmap::Read(const char* p_filename)
 }
 
 // FUNCTION: LEGO1 0x100bcd60
+// FUNCTION: BETA10 0x1013d169
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
 	MxResult result = FAILURE;
+	MxLong unused = 0;
+
+	MxLong size;
 	DWORD bytesRead;
 	BITMAPFILEHEADER hdr;
-
-	BOOL ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
-	if (ret && (hdr.bfType == g_bitmapSignature)) {
-		this->m_info = new MxBITMAPINFO;
-		if (this->m_info) {
-			ret = ReadFile(p_handle, this->m_info, sizeof(*this->m_info), &bytesRead, NULL);
-			if (ret && (this->m_info->m_bmiHeader.biBitCount == 8)) {
-				MxLong size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
-				this->m_data = new MxU8[size];
-				if (this->m_data) {
-					ret = ReadFile(p_handle, this->m_data, size, &bytesRead, NULL);
-					if (ret) {
-						this->m_bmiHeader = &this->m_info->m_bmiHeader;
-						this->m_paletteData = this->m_info->m_bmiColors;
-						if (this->m_info->m_bmiHeader.biSizeImage == 0) {
-							MxLong height = AbsFlipped(this->m_info->m_bmiHeader.biHeight);
-							this->m_info->m_bmiHeader.biSizeImage =
-								AlignToFourByte(this->m_info->m_bmiHeader.biWidth) * height;
-						}
-						result = SUCCESS;
-					}
-				}
-			}
-		}
+	if (!ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL)) {
+		goto done;
 	}
 
+	if (hdr.bfType != g_bitmapSignature) {
+		goto done;
+	}
+
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
+	}
+
+	if (!ReadFile(p_handle, m_info, MxBitmapInfoSize(), &bytesRead, NULL)) {
+		goto done;
+	}
+
+	if (m_info->m_bmiHeader.biBitCount != 8) {
+		goto done;
+	}
+
+	size = hdr.bfSize - sizeof(BITMAPFILEHEADER) - MxBitmapInfoSize();
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	if (!ReadFile(p_handle, m_data, size, &bytesRead, NULL)) {
+		goto done;
+	}
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	if (m_info->m_bmiHeader.biSizeImage == 0) {
+		m_info->m_bmiHeader.biSizeImage = GetDataSize();
+	}
+
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
-		if (this->m_info) {
-			delete this->m_info;
-			this->m_info = NULL;
+		if (m_info) {
+			delete[] m_info;
+			m_info = NULL;
 		}
 
-		if (this->m_data) {
-			delete this->m_data;
-			this->m_data = NULL;
+		if (m_data) {
+			delete[] m_data;
+			m_data = NULL;
 		}
 	}
 
@@ -213,6 +263,7 @@ MxResult MxBitmap::LoadFile(HANDLE p_handle)
 }
 
 // FUNCTION: LEGO1 0x100bce70
+// FUNCTION: BETA10 0x1013d399
 void MxBitmap::BitBlt(
 	MxBitmap* p_src,
 	MxS32 p_srcLeft,
@@ -252,6 +303,7 @@ void MxBitmap::BitBlt(
 }
 
 // FUNCTION: LEGO1 0x100bd020
+// FUNCTION: BETA10 0x1013d4ea
 void MxBitmap::BitBltTransparent(
 	MxBitmap* p_src,
 	MxS32 p_srcLeft,
@@ -298,24 +350,21 @@ void MxBitmap::BitBltTransparent(
 }
 
 // FUNCTION: LEGO1 0x100bd1c0
+// FUNCTION: BETA10 0x1013d684
 MxPalette* MxBitmap::CreatePalette()
 {
 	MxBool success = FALSE;
 	MxPalette* palette = NULL;
 
-	switch (this->m_isHighColor) {
+	switch (m_isHighColor) {
 	case FALSE:
-		palette = new MxPalette(this->m_paletteData);
-
-		if (!palette) {
+		if (!(palette = new MxPalette(m_paletteData))) {
 			goto done;
 		}
 
 		break;
 	case TRUE:
-		palette = this->m_palette->Clone();
-
-		if (!palette) {
+		if (!(palette = m_palette->Clone())) {
 			goto done;
 		}
 
@@ -336,24 +385,24 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100bd280
+// FUNCTION: BETA10 0x1013d80e
 void MxBitmap::ImportPalette(MxPalette* p_palette)
 {
 	// Odd to use a switch on a boolean, but it matches.
-	switch (this->m_isHighColor) {
+	switch (m_isHighColor) {
 	case FALSE:
-		ImportColorsToPalette(this->m_paletteData, p_palette);
+		ImportColorsToPalette(m_paletteData, p_palette);
 		break;
 
 	case TRUE:
-		if (this->m_palette) {
-			delete this->m_palette;
-		}
-		this->m_palette = p_palette->Clone();
+		delete m_palette;
+		m_palette = p_palette->Clone();
 		break;
 	}
 }
 
 // FUNCTION: LEGO1 0x100bd2d0
+// FUNCTION: BETA10 0x1013d8a9
 MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 {
 	MxResult ret = FAILURE;
@@ -368,17 +417,11 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 	switch (p_isHighColor) {
 	case FALSE:
 		ImportColorsToPalette(m_paletteData, m_palette);
-		if (m_palette) {
-			delete m_palette;
-		}
-
+		delete m_palette;
 		m_palette = NULL;
 		break;
 	case TRUE: {
-		pal = NULL;
-		pal = new MxPalette(m_paletteData);
-
-		if (!pal) {
+		if (!(pal = new MxPalette(m_paletteData))) {
 			goto done;
 		}
 
@@ -409,6 +452,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100bd3e0
+// FUNCTION: BETA10 0x1013dad2
 MxResult MxBitmap::StretchBits(
 	HDC p_hdc,
 	MxS32 p_xSrc,
@@ -420,8 +464,8 @@ MxResult MxBitmap::StretchBits(
 )
 {
 	// Compression fix?
-	if ((this->m_bmiHeader->biCompression != BI_RGB_TOPDOWN) && (0 < this->m_bmiHeader->biHeight)) {
-		p_ySrc = (this->m_bmiHeader->biHeight - p_destHeight) - p_ySrc;
+	if (IsBottomUp()) {
+		p_ySrc = GetBmiHeightAbs() - p_ySrc - p_destHeight;
 	}
 
 	return StretchDIBits(
@@ -434,14 +478,15 @@ MxResult MxBitmap::StretchBits(
 		p_ySrc,
 		p_destWidth,
 		p_destHeight,
-		this->m_data,
-		(BITMAPINFO*) this->m_info,
-		this->m_isHighColor,
+		m_data,
+		(BITMAPINFO*) m_info,
+		m_isHighColor,
 		SRCCOPY
 	);
 }
 
 // FUNCTION: LEGO1 0x100bd450
+// FUNCTION: BETA10 0x1013db55
 MxResult MxBitmap::ImportColorsToPalette(RGBQUAD* p_rgbquad, MxPalette* p_palette)
 {
 	MxResult ret = FAILURE;
