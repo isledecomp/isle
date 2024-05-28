@@ -83,7 +83,11 @@ public:
 	MxResult FUN_1006b140(LegoROI* p_roi);
 	const char* GetActionObjectName();
 
+	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+
 	inline LegoAnim* GetAnimation() { return m_anim; }
+
+	friend class LegoPathBoundary;
 
 protected:
 	void Init();
