@@ -45,33 +45,42 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 	MxResult ret = FAILURE;
 	MxLong size = AlignToFourByte(p_width) * p_height;
 
-	m_info = new MxBITMAPINFO;
-	if (m_info) {
-		m_data = new MxU8[size];
-		if (m_data) {
-			m_bmiHeader = &m_info->m_bmiHeader;
-			m_paletteData = m_info->m_bmiColors;
-			memset(&m_info->m_bmiHeader, 0, sizeof(m_info->m_bmiHeader));
-
-			m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
-			m_bmiHeader->biWidth = p_width;
-			m_bmiHeader->biHeight = p_height;
-			m_bmiHeader->biPlanes = 1;
-			m_bmiHeader->biBitCount = 8;
-			m_bmiHeader->biCompression = 0;
-			m_bmiHeader->biSizeImage = size;
-
-			if (!ImportColorsToPalette(m_paletteData, p_palette)) {
-				if (!SetBitDepth(p_isHighColor)) {
-					ret = SUCCESS;
-				}
-			}
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	memset(m_bmiHeader, 0, sizeof(m_info->m_bmiHeader));
+
+	m_bmiHeader->biSize = sizeof(*m_bmiHeader); // should be 40 bytes
+	m_bmiHeader->biWidth = p_width;
+	m_bmiHeader->biHeight = p_height;
+	m_bmiHeader->biPlanes = 1;
+	m_bmiHeader->biBitCount = 8;
+	m_bmiHeader->biCompression = 0;
+	m_bmiHeader->biSizeImage = size;
+
+	if (ImportColorsToPalette(m_paletteData, p_palette)) {
+		goto done;
+	}
+
+	if (SetBitDepth(p_isHighColor)) {
+		goto done;
+	}
+
+	ret = SUCCESS;
+
+done:
 	if (ret) {
 		if (m_info) {
-			delete m_info;
+			delete[] m_info;
 			m_info = NULL;
 		}
 
@@ -89,24 +98,27 @@ MxResult MxBitmap::SetSize(MxS32 p_width, MxS32 p_height, MxPalette* p_palette, 
 MxResult MxBitmap::ImportBitmapInfo(MxBITMAPINFO* p_info)
 {
 	MxResult result = FAILURE;
-	MxLong width = p_info->m_bmiHeader.biWidth;
-	MxLong height = p_info->m_bmiHeader.biHeight;
-	MxLong size = AlignToFourByte(width) * height;
+	MxLong size = AlignToFourByte(p_info->m_bmiHeader.biWidth) * p_info->m_bmiHeader.biHeight;
 
-	m_info = new MxBITMAPINFO;
-	if (m_info) {
-		m_data = new MxU8[size];
-		if (m_data) {
-			memcpy(m_info, p_info, sizeof(*m_info));
-			m_bmiHeader = &m_info->m_bmiHeader;
-			m_paletteData = m_info->m_bmiColors;
-			result = SUCCESS;
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	memcpy(m_info, p_info, MxBitmapInfoSize());
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete m_info;
+			delete[] m_info;
 			m_info = NULL;
 		}
 
@@ -125,27 +137,32 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 {
 	MxResult result = FAILURE;
 
-	m_info = new MxBITMAPINFO;
-	if (m_info) {
-		m_data = new MxU8[p_bitmap->GetDataSize()];
-		if (m_data) {
-			memcpy(m_info, p_bitmap->GetBitmapInfo(), MxBITMAPINFO::Size());
-			memcpy(m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
-
-			m_bmiHeader = &m_info->m_bmiHeader;
-			m_paletteData = m_info->m_bmiColors;
-			result = SUCCESS;
-		}
+	m_info = (MxBITMAPINFO*) new MxU8[p_bitmap->MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
 	}
 
+	m_data = new MxU8[p_bitmap->GetDataSize()];
+	if (!m_data) {
+		goto done;
+	}
+
+	memcpy(m_info, p_bitmap->GetBitmapInfo(), p_bitmap->MxBitmapInfoSize());
+	memcpy(m_data, p_bitmap->GetImage(), p_bitmap->GetDataSize());
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete m_info;
+			delete[] m_info;
 			m_info = NULL;
 		}
 
 		if (m_data) {
-			delete m_data;
+			delete[] m_data;
 			m_data = NULL;
 		}
 	}
@@ -158,13 +175,21 @@ MxResult MxBitmap::ImportBitmap(MxBitmap* p_bitmap)
 MxLong MxBitmap::Read(const char* p_filename)
 {
 	MxResult result = FAILURE;
-	HANDLE handle =
-		CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE handle = 0;
 
-	if (handle != INVALID_HANDLE_VALUE && !LoadFile(handle)) {
-		result = SUCCESS;
+	handle = CreateFileA(p_filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (handle == INVALID_HANDLE_VALUE) {
+		goto done;
 	}
 
+	if (LoadFile(handle)) {
+		goto done;
+	}
+
+	result = SUCCESS;
+
+done:
 	if (handle) {
 		CloseHandle(handle);
 	}
@@ -177,41 +202,59 @@ MxLong MxBitmap::Read(const char* p_filename)
 MxResult MxBitmap::LoadFile(HANDLE p_handle)
 {
 	MxResult result = FAILURE;
+	MxLong unused = 0;
+
+	MxLong size;
 	DWORD bytesRead;
 	BITMAPFILEHEADER hdr;
-
-	BOOL ret = ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL);
-	if (ret && (hdr.bfType == g_bitmapSignature)) {
-		m_info = new MxBITMAPINFO;
-		if (m_info) {
-			ret = ReadFile(p_handle, m_info, sizeof(*m_info), &bytesRead, NULL);
-			if (ret && (m_info->m_bmiHeader.biBitCount == 8)) {
-				MxLong size = hdr.bfSize - (sizeof(MxBITMAPINFO) + sizeof(BITMAPFILEHEADER));
-				m_data = new MxU8[size];
-				if (m_data) {
-					ret = ReadFile(p_handle, m_data, size, &bytesRead, NULL);
-					if (ret) {
-						m_bmiHeader = &m_info->m_bmiHeader;
-						m_paletteData = m_info->m_bmiColors;
-						if (m_info->m_bmiHeader.biSizeImage == 0) {
-							MxLong height = HeightAbs(m_info->m_bmiHeader.biHeight);
-							m_info->m_bmiHeader.biSizeImage = AlignToFourByte(m_info->m_bmiHeader.biWidth) * height;
-						}
-						result = SUCCESS;
-					}
-				}
-			}
-		}
+	if (!ReadFile(p_handle, &hdr, sizeof(hdr), &bytesRead, NULL)) {
+		goto done;
 	}
 
+	if (hdr.bfType != g_bitmapSignature) {
+		goto done;
+	}
+
+	m_info = (MxBITMAPINFO*) new MxU8[MxBitmapInfoSize()];
+	if (!m_info) {
+		goto done;
+	}
+
+	if (!ReadFile(p_handle, m_info, MxBitmapInfoSize(), &bytesRead, NULL)) {
+		goto done;
+	}
+
+	if (m_info->m_bmiHeader.biBitCount != 8) {
+		goto done;
+	}
+
+	size = hdr.bfSize - sizeof(BITMAPFILEHEADER) - MxBitmapInfoSize();
+	m_data = new MxU8[size];
+	if (!m_data) {
+		goto done;
+	}
+
+	if (!ReadFile(p_handle, m_data, size, &bytesRead, NULL)) {
+		goto done;
+	}
+
+	m_bmiHeader = &m_info->m_bmiHeader;
+	m_paletteData = m_info->m_bmiColors;
+	if (m_info->m_bmiHeader.biSizeImage == 0) {
+		m_info->m_bmiHeader.biSizeImage = GetDataSize();
+	}
+
+	result = SUCCESS;
+
+done:
 	if (result != SUCCESS) {
 		if (m_info) {
-			delete m_info;
+			delete[] m_info;
 			m_info = NULL;
 		}
 
 		if (m_data) {
-			delete m_data;
+			delete[] m_data;
 			m_data = NULL;
 		}
 	}
@@ -315,17 +358,13 @@ MxPalette* MxBitmap::CreatePalette()
 
 	switch (m_isHighColor) {
 	case FALSE:
-		palette = new MxPalette(m_paletteData);
-
-		if (!palette) {
+		if (!(palette = new MxPalette(m_paletteData))) {
 			goto done;
 		}
 
 		break;
 	case TRUE:
-		palette = m_palette->Clone();
-
-		if (!palette) {
+		if (!(palette = m_palette->Clone())) {
 			goto done;
 		}
 
@@ -356,9 +395,7 @@ void MxBitmap::ImportPalette(MxPalette* p_palette)
 		break;
 
 	case TRUE:
-		if (m_palette) {
-			delete m_palette;
-		}
+		delete m_palette;
 		m_palette = p_palette->Clone();
 		break;
 	}
@@ -380,17 +417,11 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 	switch (p_isHighColor) {
 	case FALSE:
 		ImportColorsToPalette(m_paletteData, m_palette);
-		if (m_palette) {
-			delete m_palette;
-		}
-
+		delete m_palette;
 		m_palette = NULL;
 		break;
 	case TRUE: {
-		pal = NULL;
-		pal = new MxPalette(m_paletteData);
-
-		if (!pal) {
+		if (!(pal = new MxPalette(m_paletteData))) {
 			goto done;
 		}
 

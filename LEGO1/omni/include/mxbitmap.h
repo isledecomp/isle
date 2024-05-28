@@ -111,12 +111,8 @@ public:
 	inline MxBITMAPINFO* GetBitmapInfo() const { return m_info; }
 
 	// FUNCTION: BETA10 0x100982b0
-	inline MxLong GetDataSize() const
-	{
-		MxLong absHeight = GetBmiHeightAbs();
-		MxLong alignedWidth = AlignToFourByte(m_bmiHeader->biWidth);
-		return alignedWidth * absHeight;
-	}
+	inline MxLong GetDataSize() const { return AlignToFourByte(m_bmiHeader->biWidth) * GetBmiHeightAbs(); }
+
 	inline MxLong GetAdjustedStride()
 	{
 		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
@@ -157,6 +153,9 @@ public:
 	// MxBitmap::`scalar deleting destructor'
 
 private:
+	// FUNCTION: BETA10 0x1013dd10
+	inline MxLong MxBitmapInfoSize() const { return sizeof(MxBITMAPINFO); }
+
 	// FUNCTION: BETA10 0x1013dd30
 	inline MxBool IsBottomUp()
 	{
