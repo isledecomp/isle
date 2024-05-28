@@ -121,7 +121,7 @@ void LegoAnimPresenter::Destroy(MxBool p_fromDestructor)
 		}
 
 		if (m_unk0xa0 != NULL) {
-			delete m_unk0xa0; // TODO
+			delete m_unk0xa0;
 		}
 
 		Init();
@@ -699,11 +699,57 @@ MxResult LegoAnimPresenter::FUN_1006afc0(MxMatrix*& p_matrix, float p_und)
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1006b140
+// FUNCTION: LEGO1 0x1006b140
 // FUNCTION: BETA10 0x100507e0
 MxResult LegoAnimPresenter::FUN_1006b140(LegoROI* p_roi)
 {
-	// TODO
+	if (p_roi == NULL) {
+		return FAILURE;
+	}
+
+	MxMatrix* mn = new MxMatrix();
+	MxMatrix local58;
+	const Matrix4& local2world = p_roi->GetLocal2World();
+	MxMatrix* local5c;
+	MxU32 i;
+
+	if (FUN_1006afc0(local5c, 0.0f) != SUCCESS) {
+		goto done;
+	}
+
+	for (i = 1; i <= m_roiMapSize; i++) {
+		if (m_roiMap[i] == p_roi) {
+			if (local5c[i].Unknown(local58) != SUCCESS) {
+				goto done;
+			}
+
+			break;
+		}
+	}
+
+	{
+		((Matrix4*) mn)->Product(local58, local2world);
+		SetUnknown0xa0(mn);
+		delete[] local5c;
+		SetUnknown0x0cTo1();
+
+		MxMatrix local140(*m_unk0x78);
+		MxMatrix localf8;
+
+		localf8.Product(local140, *m_unk0xa0);
+		((Matrix4&) *m_unk0x78) = localf8;
+		return SUCCESS;
+	}
+
+done:
+	if (mn != NULL) {
+		delete mn;
+	}
+
+	if (local5c != NULL) {
+		delete[] local5c;
+	}
+
 	return FAILURE;
 }
 

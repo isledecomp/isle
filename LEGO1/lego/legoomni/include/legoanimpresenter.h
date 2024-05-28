@@ -84,10 +84,10 @@ public:
 	const char* GetActionObjectName();
 
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+	inline void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
+	inline void SetUnknown0xa0(MxMatrix* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
-
-	friend class LegoPathBoundary;
 
 protected:
 	void Init();
@@ -128,9 +128,11 @@ protected:
 	undefined m_unk0x97;          // 0x97
 	LegoAnimSubstMap* m_substMap; // 0x98
 	MxS16 m_unk0x9c;              // 0x9c
-	undefined4* m_unk0xa0;        // 0xa0
-	float m_unk0xa4;              // 0xa4
-	Mx3DPointFloat m_unk0xa8;     // 0xa8
+	MxMatrix* m_unk0xa0;          // 0xa0
+
+public:
+	float m_unk0xa4;          // 0xa4
+	Mx3DPointFloat m_unk0xa8; // 0xa8
 };
 
 // clang-format off
