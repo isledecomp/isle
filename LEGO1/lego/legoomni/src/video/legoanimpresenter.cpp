@@ -1100,6 +1100,17 @@ void LegoAnimPresenter::EndAction()
 	MxVideoPresenter::EndAction();
 }
 
+// FUNCTION: LEGO1 0x1006c7a0
+// FUNCTION: BETA10 0x10051da6
+void LegoAnimPresenter::FUN_1006c7a0()
+{
+	if (m_anim != NULL) {
+		FUN_1006b9a0(m_anim, m_anim->GetDuration(), m_unk0x78);
+	}
+
+	m_unk0x95 = TRUE;
+}
+
 // FUNCTION: LEGO1 0x1006c7d0
 // FUNCTION: BETA10 0x10051e07
 void LegoAnimPresenter::VTable0x8c()

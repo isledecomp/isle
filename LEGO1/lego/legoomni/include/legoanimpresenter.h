@@ -81,6 +81,7 @@ public:
 
 	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
 	MxResult FUN_1006b140(LegoROI* p_roi);
+	void FUN_1006c7a0();
 	const char* GetActionObjectName();
 
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }

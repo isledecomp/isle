@@ -16,6 +16,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
+#include "mxstreamer.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
 
@@ -465,10 +466,28 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 	return TRUE;
 }
 
-// STUB: LEGO1 0x1004b840
+// FUNCTION: LEGO1 0x1004b840
+// FUNCTION: BETA10 0x1004d033
 void LegoAnimMMPresenter::FUN_1004b840()
 {
-	// TODO
+	MxDSAction* action = m_action;
+
+	if (m_presenter != NULL) {
+		m_presenter->FUN_1006c7a0();
+	}
+
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if (*it != m_presenter) {
+			(*it)->EndAction();
+		}
+	}
+
+	FUN_1004b6d0(0);
+	EndAction();
+
+	if (action != NULL) {
+		Streamer()->FUN_100b98f0(action);
+	}
 }
 
 // FUNCTION: LEGO1 0x1004b8b0
@@ -478,8 +497,9 @@ MxBool LegoAnimMMPresenter::FUN_1004b8b0()
 	return m_tranInfo != NULL ? m_tranInfo->m_unk0x28 : TRUE;
 }
 
-// STUB: LEGO1 0x1004b8c0
+// FUNCTION: LEGO1 0x1004b8c0
+// FUNCTION: BETA10 0x1004d13d
 void LegoAnimMMPresenter::FUN_1004b8c0()
 {
-	// TODO
+	FUN_1004b6d0(0);
 }
