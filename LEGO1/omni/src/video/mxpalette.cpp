@@ -114,7 +114,8 @@ MxPalette::~MxPalette()
 LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
 {
 	if (m_palette == NULL) {
-		for (MxS32 i = 0; i < 10; i++) {
+		MxS32 i;
+		for (i = 0; i < 10; i++) {
 			m_entries[i].peFlags = D3DPAL_RESERVED;
 		}
 
@@ -179,7 +180,8 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 	MxResult status = SUCCESS;
 
 	if (m_palette) {
-		for (MxS32 i = 0; i < 10; i++) {
+		MxS32 i;
+		for (i = 0; i < 10; i++) {
 			m_entries[i].peFlags = D3DPAL_RESERVED;
 		}
 
