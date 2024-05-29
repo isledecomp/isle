@@ -1,52 +1,14 @@
 #ifndef LEGOMETERPRESENTER_H
 #define LEGOMETERPRESENTER_H
 
+#include "mxrect16.h"
 #include "mxstillpresenter.h"
 #include "mxstring.h"
 
-struct Rect16 {
-	// FUNCTION: BETA10 0x10097ee0
-	Rect16(){};
-
-	// FUNCTION: BETA10 0x100981f0
-	inline void SetLeft(MxS16 p_value) { m_left = p_value; }
-
-	// FUNCTION: BETA10 0x10098220
-	inline void SetTop(MxS16 p_value) { m_top = p_value; }
-
-	// FUNCTION: BETA10 0x10098250
-	inline void SetRight(MxS16 p_value) { m_right = p_value; }
-
-	// FUNCTION: BETA10 0x10098280
-	inline void SetBottom(MxS16 p_value) { m_bottom = p_value; }
-
-	// FUNCTION: BETA10 0x10098300
-	inline MxS16 GetLeft() const { return m_left; }
-
-	// FUNCTION: BETA10 0x10098330
-	inline MxS16 GetTop() const { return m_top; }
-
-	// There is no GetRight()
-
-	// FUNCTION: BETA10 0x10098360
-	inline MxS16 GetBottom() const { return m_bottom; }
-
-	// FUNCTION: BETA10 0x10098390
-	inline MxS16 GetWidth() const { return m_right - m_left + 1; }
-
-	// FUNCTION: BETA10 0x100983c0
-	inline MxS16 GetHeight() const { return m_bottom - m_top + 1; }
-
-private:
-	MxS16 m_left;
-	MxS16 m_top;
-	MxS16 m_right;
-	MxS16 m_bottom;
-};
-
-struct MeterRect : public Rect16 {
+// SIZE 0x08
+struct MeterRect : public MxRect16 {
 	// FUNCTION: BETA10 0x10097eb0
-	MeterRect(){};
+	MeterRect() {}
 };
 
 // VTABLE: LEGO1 0x100d7ac8
