@@ -198,7 +198,7 @@ MxResult LegoPathController::Tickle()
 
 // FUNCTION: LEGO1 0x10045c20
 // FUNCTION: BETA10 0x100b6d80
-MxResult LegoPathController::FUN_10045c20(
+MxResult LegoPathController::PlaceActor(
 	LegoPathActor* p_actor,
 	const char* p_name,
 	MxS32 p_src,
@@ -229,7 +229,7 @@ MxResult LegoPathController::FUN_10045c20(
 
 // FUNCTION: LEGO1 0x10046050
 // FUNCTION: BETA10 0x100b6f35
-MxResult LegoPathController::FUN_10046050(
+MxResult LegoPathController::PlaceActor(
 	LegoPathActor* p_actor,
 	LegoAnimPresenter* p_presenter,
 	Vector3& p_position,
@@ -303,7 +303,7 @@ MxResult LegoPathController::FUN_10046050(
 
 // FUNCTION: LEGO1 0x100466a0
 // FUNCTION: BETA10 0x100b71fe
-MxResult LegoPathController::AddActor(LegoPathActor* p_actor)
+MxResult LegoPathController::PlaceActor(LegoPathActor* p_actor)
 {
 	if (p_actor->GetController() != NULL) {
 		p_actor->GetController()->RemoveActor(p_actor);

@@ -286,7 +286,7 @@ MxResult LegoWorld::PlaceActor(
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (controller->FUN_10045c20(p_actor, p_name, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
+		if (controller->PlaceActor(p_actor, p_name, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
@@ -295,13 +295,13 @@ MxResult LegoWorld::PlaceActor(
 }
 
 // FUNCTION: LEGO1 0x1001fa70
-MxResult LegoWorld::AddPathActor(LegoPathActor* p_actor)
+MxResult LegoWorld::PlaceActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (controller->AddActor(p_actor) == SUCCESS) {
+		if (controller->PlaceActor(p_actor) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
@@ -310,7 +310,7 @@ MxResult LegoWorld::AddPathActor(LegoPathActor* p_actor)
 }
 
 // FUNCTION: LEGO1 0x1001fb70
-MxResult LegoWorld::FUN_1001fb70(
+MxResult LegoWorld::PlaceActor(
 	LegoPathActor* p_actor,
 	LegoAnimPresenter* p_presenter,
 	Vector3& p_position,
@@ -321,7 +321,7 @@ MxResult LegoWorld::FUN_1001fb70(
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (controller->FUN_10046050(p_actor, p_presenter, p_position, p_direction) == SUCCESS) {
+		if (controller->PlaceActor(p_actor, p_presenter, p_position, p_direction) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
@@ -330,7 +330,7 @@ MxResult LegoWorld::FUN_1001fb70(
 }
 
 // FUNCTION: LEGO1 0x1001fc80
-void LegoWorld::RemovePathActor(LegoPathActor* p_actor)
+void LegoWorld::RemoveActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
@@ -502,7 +502,7 @@ void LegoWorld::Remove(MxCore* p_object)
 		}
 		else if (p_object->IsA("MxEntity")) {
 			if (p_object->IsA("LegoPathActor")) {
-				RemovePathActor((LegoPathActor*) p_object);
+				RemoveActor((LegoPathActor*) p_object);
 			}
 
 			if (m_entityList) {
@@ -703,7 +703,7 @@ void LegoWorld::Enable(MxBool p_enable)
 		LegoPathActor* actor = CurrentActor();
 
 		if (actor) {
-			RemovePathActor(actor);
+			RemoveActor(actor);
 		}
 
 		AnimationManager()->Reset(FALSE);

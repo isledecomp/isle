@@ -72,14 +72,14 @@ public:
 		MxS32 p_dest,
 		float p_destScale
 	);
-	MxResult AddPathActor(LegoPathActor* p_actor);
-	MxResult FUN_1001fb70(
+	MxResult PlaceActor(LegoPathActor* p_actor);
+	MxResult PlaceActor(
 		LegoPathActor* p_actor,
 		LegoAnimPresenter* p_presenter,
 		Vector3& p_position,
 		Vector3& p_direction
 	);
-	void RemovePathActor(LegoPathActor* p_actor);
+	void RemoveActor(LegoPathActor* p_actor);
 	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
 	void FUN_1001fe90(LegoAnimPresenter* p_presenter);
 	LegoPathBoundary* FindPathBoundary(const char* p_name);
