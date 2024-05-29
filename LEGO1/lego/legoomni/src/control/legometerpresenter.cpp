@@ -4,27 +4,34 @@
 #include "define.h"
 #include "mxbitmap.h"
 #include "mxdsaction.h"
+#include "mxmisc.h"
 #include "mxutilities.h"
+#include "mxvariabletable.h"
+
+#include <assert.h>
 
 DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
 
 // FUNCTION: LEGO1 0x10043430
+// FUNCTION: BETA10 0x10097570
 LegoMeterPresenter::LegoMeterPresenter()
 {
-	m_layout = 0;
-	m_unk0x6c = 0;
-	m_unk0x84 = 0;
-	m_type = 1;
-	SetBit1(FALSE);
+	m_meterPixels = NULL;
+	m_fillColor = 1;
+	m_curPercent = 0;
+	m_layout = e_leftToRight;
+	m_flags.m_bit1 = FALSE;
 }
 
 // FUNCTION: LEGO1 0x10043780
+// FUNCTION: BETA10 0x1009764a
 LegoMeterPresenter::~LegoMeterPresenter()
 {
-	delete m_unk0x6c;
+	delete m_meterPixels;
 }
 
 // FUNCTION: LEGO1 0x10043800
+// FUNCTION: BETA10 0x100976ec
 void LegoMeterPresenter::ParseExtra()
 {
 	MxStillPresenter::ParseExtra();
@@ -41,27 +48,28 @@ void LegoMeterPresenter::ParseExtra()
 		char output[256];
 		if (KeyValueStringParse(extraCopy, g_strTYPE, output)) {
 			if (!strcmpi(output, g_strLEFT_TO_RIGHT)) {
-				m_layout = 0;
+				m_layout = e_leftToRight;
 			}
 			else if (!strcmpi(output, g_strRIGHT_TO_LEFT)) {
-				m_layout = 1;
+				m_layout = e_rightToLeft;
 			}
 			else if (!strcmpi(output, g_strBOTTOM_TO_TOP)) {
-				m_layout = 2;
+				m_layout = e_bottomToTop;
 			}
 			else if (!strcmpi(output, g_strTOP_TO_BOTTOM)) {
-				m_layout = 3;
+				m_layout = e_topToBottom;
 			}
 		}
 
 		if (KeyValueStringParse(extraCopy, g_strFILLER_INDEX, output)) {
-			m_type = atoi(output);
+			m_fillColor = atoi(output);
 		}
 
 		if (KeyValueStringParse(extraCopy, g_strVARIABLE, output)) {
 			m_variable = output;
 		}
 		else {
+			assert(0);
 			EndAction();
 		}
 	}
@@ -71,30 +79,84 @@ void LegoMeterPresenter::ParseExtra()
 }
 
 // FUNCTION: LEGO1 0x10043990
+// FUNCTION: BETA10 0x10097917
 void LegoMeterPresenter::StreamingTickle()
 {
 	MxStillPresenter::StreamingTickle();
-	m_unk0x6c = new MxU8[m_frameBitmap->GetBmiStride() * m_frameBitmap->GetBmiHeightAbs()];
-	if (m_unk0x6c == NULL) {
+	m_meterPixels = new MxU8[m_frameBitmap->GetDataSize()];
+	if (m_meterPixels == NULL) {
+		assert(0);
 		EndAction();
 	}
 
-	memcpy(m_unk0x6c, m_frameBitmap->GetImage(), m_frameBitmap->GetBmiStride() * m_frameBitmap->GetBmiHeightAbs());
+	memcpy(m_meterPixels, m_frameBitmap->GetImage(), m_frameBitmap->GetDataSize());
 
-	m_unk0x88 = 0;
-	m_unk0x8a = 0;
-	m_unk0x8c = m_frameBitmap->GetBmiWidth() - 1;
-	m_unk0x8e = m_frameBitmap->GetBmiHeightAbs() - 1;
+	m_meterRect.SetLeft(0);
+	m_meterRect.SetTop(0);
+	m_meterRect.SetRight(m_frameBitmap->GetBmiWidth() - 1);
+	m_meterRect.SetBottom(m_frameBitmap->GetBmiHeightAbs() - 1);
 }
 
 // FUNCTION: LEGO1 0x10043a30
+// FUNCTION: BETA10 0x10097a1a
 void LegoMeterPresenter::RepeatingTickle()
 {
-	FUN_10043a50();
+	DrawMeter();
 	MxStillPresenter::RepeatingTickle();
 }
 
-// STUB: LEGO1 0x10043a50
-void LegoMeterPresenter::FUN_10043a50()
+// FUNCTION: LEGO1 0x10043a50
+// FUNCTION: BETA10 0x10097a40
+void LegoMeterPresenter::DrawMeter()
 {
+	const char* strval = VariableTable()->GetVariable(m_variable.GetData());
+	MxFloat percent = atof(strval);
+	MxS16 row, leftRightCol, bottomTopCol, leftRightEnd, bottomTopEnd;
+
+	if (strval != NULL && m_curPercent != percent) {
+		m_curPercent = percent;
+
+		// DECOMP: This clamp is retail only
+		if (percent > 0.99) {
+			m_curPercent = 0.99f;
+		}
+		else if (percent < 0.0) {
+			m_curPercent = 0.0f;
+		}
+
+		// Copy the previously drawn meter back into the bitmap
+		memcpy(m_frameBitmap->GetImage(), m_meterPixels, m_frameBitmap->GetDataSize());
+
+		switch (m_layout) {
+		case e_leftToRight:
+			leftRightEnd = m_meterRect.GetWidth() * m_curPercent;
+
+			for (row = m_meterRect.GetTop(); row < m_meterRect.GetBottom(); row++) {
+				MxU8* line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), row);
+
+				for (leftRightCol = 0; leftRightCol < leftRightEnd; leftRightCol++, line++) {
+					if (*line) {
+						*line = m_fillColor;
+					}
+				}
+			}
+			break;
+		case e_bottomToTop:
+			bottomTopEnd = m_meterRect.GetBottom() - (MxS16) (m_meterRect.GetHeight() * m_curPercent);
+
+			for (row = m_meterRect.GetBottom(); row < bottomTopEnd; row--) {
+				MxU8* line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), row);
+
+				for (bottomTopCol = 0; bottomTopCol < m_meterRect.GetWidth(); bottomTopCol++, line++) {
+					if (*line) {
+						*line = m_fillColor;
+					}
+				}
+			}
+			// break;
+		default:
+			// The other two fill options are not implemented.
+			break;
+		}
+	}
 }
