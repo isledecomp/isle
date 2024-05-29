@@ -433,7 +433,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			undefined4 und = 1;
 
 			if (m_presenter != NULL) {
-				m_unk0x64->RemovePathActor(actor);
+				m_unk0x64->RemoveActor(actor);
 
 				if (m_tranInfo->m_unk0x29) {
 					Mx3DPointFloat position, direction;
@@ -442,7 +442,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 					direction = viewROI->GetWorldDirection();
 					position[1] -= 1.25;
 
-					und = m_unk0x64->FUN_1001fb70(actor, m_presenter, position, direction);
+					und = m_unk0x64->PlaceActor(actor, m_presenter, position, direction);
 				}
 				else {
 					und = 0;
@@ -452,7 +452,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			if (und != 0) {
 				viewROI->WrappedSetLocalTransform(m_tranInfo->m_unk0x2c);
 				VideoManager()->Get3DManager()->Moved(*viewROI);
-				m_unk0x64->AddPathActor(actor);
+				m_unk0x64->PlaceActor(actor);
 			}
 
 			if (m_tranInfo->m_unk0x29) {

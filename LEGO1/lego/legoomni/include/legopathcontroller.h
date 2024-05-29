@@ -81,7 +81,7 @@ public:
 	virtual MxResult Create(MxU8* p_data, const Vector3& p_location, const MxAtomId& p_trigger); // vtable+0x14
 	virtual void Destroy();                                                                      // vtable+0x18
 
-	MxResult FUN_10045c20(
+	MxResult PlaceActor(
 		LegoPathActor* p_actor,
 		const char* p_name,
 		MxS32 p_src,
@@ -89,13 +89,13 @@ public:
 		MxS32 p_dest,
 		float p_destScale
 	);
-	MxResult FUN_10046050(
+	MxResult PlaceActor(
 		LegoPathActor* p_actor,
 		LegoAnimPresenter* p_presenter,
 		Vector3& p_position,
 		Vector3& p_direction
 	);
-	MxResult AddActor(LegoPathActor* p_actor);
+	MxResult PlaceActor(LegoPathActor* p_actor);
 	MxResult RemoveActor(LegoPathActor* p_actor);
 	void FUN_100468f0(LegoAnimPresenter* p_presenter);
 	void FUN_10046930(LegoAnimPresenter* p_presenter);
