@@ -113,6 +113,17 @@ public:
 	// FUNCTION: BETA10 0x100982b0
 	inline MxLong GetDataSize() const { return AlignToFourByte(m_bmiHeader->biWidth) * GetBmiHeightAbs(); }
 
+	// FUNCTION: BETA10 0x1002c4b0
+	inline MxBool IsTopDown()
+	{
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
+			return TRUE;
+		}
+		else {
+			return m_bmiHeader->biHeight < 0;
+		}
+	}
+
 	inline MxLong GetAdjustedStride()
 	{
 		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
@@ -123,28 +134,18 @@ public:
 		}
 	}
 
-	inline MxLong GetLine(MxS32 p_top)
-	{
-		MxS32 height;
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
-			height = p_top;
-		}
-		else {
-			height = GetBmiHeightAbs() - p_top - 1;
-		}
-		return GetBmiStride() * height;
-	}
-
+	// FUNCTION: BETA10 0x1002c320
 	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
 	{
 		if (m_bmiHeader->biCompression == BI_RGB) {
-			return GetLine(p_top) + m_data + p_left;
+			return m_data + p_left +
+				   AlignToFourByte(GetBmiWidth()) * (IsTopDown() ? p_top : (GetBmiHeightAbs() - 1) - p_top);
 		}
 		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
 			return m_data;
 		}
 		else {
-			return GetLine(0) + m_data;
+			return m_data + AlignToFourByte(GetBmiWidth()) * (IsTopDown() ? 0 : (GetBmiHeightAbs() - 1));
 		}
 	}
 
