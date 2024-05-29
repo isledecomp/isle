@@ -4,6 +4,7 @@
 #include "mxvideomanager.h"
 
 // GLOBAL: LEGO1 0x10102188
+// GLOBAL: BETA10 0x10203558
 PALETTEENTRY g_defaultPaletteEntries[256] = {
 	{0u, 0u, 0u, 0u},       {128u, 0u, 0u, 0u},     {0u, 128u, 0u, 0u},     {128u, 128u, 0u, 0u},
 	{0u, 0u, 128u, 0u},     {128u, 0u, 128u, 0u},   {0u, 128u, 128u, 0u},   {128u, 128u, 128u, 0u},
@@ -72,32 +73,35 @@ PALETTEENTRY g_defaultPaletteEntries[256] = {
 };
 
 // FUNCTION: LEGO1 0x100bee30
+// FUNCTION: BETA10 0x10143b50
 MxPalette::MxPalette()
 {
-	this->m_overrideSkyColor = FALSE;
-	this->m_palette = NULL;
-	GetDefaultPalette(this->m_entries);
-	this->m_skyColor = this->m_entries[141];
+	m_overrideSkyColor = FALSE;
+	m_palette = NULL;
+	GetDefaultPalette(m_entries);
+	m_skyColor = m_entries[141];
 }
 
 // FUNCTION: LEGO1 0x100beed0
+// FUNCTION: BETA10 0x10143bf4
 MxPalette::MxPalette(const RGBQUAD* p_colors)
 {
-	this->m_overrideSkyColor = FALSE;
-	this->m_palette = NULL;
-	ApplySystemEntriesToPalette(this->m_entries);
+	m_overrideSkyColor = FALSE;
+	m_palette = NULL;
+	ApplySystemEntriesToPalette(m_entries);
 
 	for (MxS32 i = 10; i < 246; i++) {
-		this->m_entries[i].peRed = p_colors[i].rgbRed;
-		this->m_entries[i].peGreen = p_colors[i].rgbGreen;
-		this->m_entries[i].peBlue = p_colors[i].rgbBlue;
-		this->m_entries[i].peFlags = 0;
+		m_entries[i].peRed = p_colors[i].rgbRed;
+		m_entries[i].peGreen = p_colors[i].rgbGreen;
+		m_entries[i].peBlue = p_colors[i].rgbBlue;
+		m_entries[i].peFlags = 0;
 	}
 
-	this->m_skyColor = this->m_entries[141];
+	m_skyColor = m_entries[141];
 }
 
 // FUNCTION: LEGO1 0x100bef90
+// FUNCTION: BETA10 0x10143d01
 MxPalette::~MxPalette()
 {
 	if (m_palette) {
@@ -106,97 +110,121 @@ MxPalette::~MxPalette()
 }
 
 // FUNCTION: LEGO1 0x100bf000
+// FUNCTION: BETA10 0x10143d88
 LPDIRECTDRAWPALETTE MxPalette::CreateNativePalette()
 {
-	MxS32 i;
-	if (this->m_palette == NULL) {
-		for (i = 0; i < 10; i++) {
-			this->m_entries[i].peFlags = 0x80;
-		}
-		for (i = 10; i < 136; i++) {
-			this->m_entries[i].peFlags = 0x44;
-		}
-		for (i = 136; i < 140; i++) {
-			this->m_entries[i].peFlags = 0x84;
-		}
-		this->m_entries[140].peFlags = 0x84;
-		this->m_entries[141].peFlags = 0x44;
-		for (i = 142; i < 246; i++) {
-			this->m_entries[i].peFlags = 0x84;
-		}
-		for (i = 246; i < 256; i++) {
-			this->m_entries[i].peFlags = 0x80;
+	if (m_palette == NULL) {
+		for (MxS32 i = 0; i < 10; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED;
 		}
 
-		if (MVideoManager() && MVideoManager()->GetDirectDraw()) {
-			MVideoManager()->GetDirectDraw()->CreatePalette(DDPCAPS_8BIT, this->m_entries, &this->m_palette, NULL);
+		for (; i < 136; i++) {
+			m_entries[i].peFlags = D3DPAL_READONLY | PC_NOCOLLAPSE;
+		}
+
+		for (; i < 140; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+		}
+
+		m_entries[i++].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+		m_entries[i++].peFlags = D3DPAL_READONLY | PC_NOCOLLAPSE;
+
+		for (; i < 246; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+		}
+
+		for (; i < 256; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED;
+		}
+
+		if (!MVideoManager()) {
+			goto done;
+		}
+
+		if (!MVideoManager()->GetDirectDraw()) {
+			goto done;
+		}
+
+		if (MVideoManager()->GetDirectDraw()->CreatePalette(DDPCAPS_8BIT, m_entries, &m_palette, NULL)) {
+			goto done;
 		}
 	}
 
-	return this->m_palette;
+done:
+	return m_palette;
 }
 
 // FUNCTION: LEGO1 0x100bf0b0
+// FUNCTION: BETA10 0x10143f13
 MxPalette* MxPalette::Clone()
 {
 	MxPalette* result = new MxPalette;
-	this->GetEntries(result->m_entries);
-	result->m_overrideSkyColor = this->m_overrideSkyColor;
+	GetEntries(result->m_entries);
+	result->SetOverrideSkyColor(m_overrideSkyColor);
 	return result;
 }
 
 // FUNCTION: LEGO1 0x100bf150
+// FUNCTION: BETA10 0x10143fc8
 MxResult MxPalette::GetEntries(LPPALETTEENTRY p_entries)
 {
-	memcpy(p_entries, this->m_entries, sizeof(this->m_entries));
+	memcpy(p_entries, m_entries, sizeof(m_entries));
 	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x100bf170
+// FUNCTION: BETA10 0x10143ffa
 MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 {
-	MxS32 i;
 	MxResult status = SUCCESS;
 
-	if (this->m_palette) {
-		for (i = 0; i < 10; i++) {
-			this->m_entries[i].peFlags = 0x80;
-		}
-		for (i = 10; i < 136; i++) {
-			this->m_entries[i].peFlags = 68;
-			this->m_entries[i].peRed = p_entries[i].peRed;
-			this->m_entries[i].peGreen = p_entries[i].peGreen;
-			this->m_entries[i].peBlue = p_entries[i].peBlue;
-		}
-		for (i = 136; i < 140; i++) {
-			this->m_entries[i].peFlags = 132;
-			this->m_entries[i].peRed = p_entries[i].peRed;
-			this->m_entries[i].peGreen = p_entries[i].peGreen;
-			this->m_entries[i].peBlue = p_entries[i].peBlue;
-		}
-		if (!this->m_overrideSkyColor) {
-			this->m_entries[140].peFlags = 0x44;
-			this->m_entries[140].peRed = p_entries[140].peRed;
-			this->m_entries[140].peGreen = p_entries[140].peGreen;
-			this->m_entries[140].peBlue = p_entries[140].peBlue;
-			this->m_entries[141].peFlags = 0x84;
-			this->m_entries[141].peRed = p_entries[141].peRed;
-			this->m_entries[141].peGreen = p_entries[141].peGreen;
-			this->m_entries[141].peBlue = p_entries[141].peBlue;
+	if (m_palette) {
+		for (MxS32 i = 0; i < 10; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED;
 		}
 
-		for (i = 142; i < 246; i++) {
-			this->m_entries[i].peFlags = 132;
-			this->m_entries[i].peRed = p_entries[i].peRed;
-			this->m_entries[i].peGreen = p_entries[i].peGreen;
-			this->m_entries[i].peBlue = p_entries[i].peBlue;
+		for (; i < 136; i++) {
+			m_entries[i].peFlags = D3DPAL_READONLY | PC_NOCOLLAPSE;
+			m_entries[i].peRed = p_entries[i].peRed;
+			m_entries[i].peGreen = p_entries[i].peGreen;
+			m_entries[i].peBlue = p_entries[i].peBlue;
 		}
 
-		for (i = 246; i < 256; i++) {
-			this->m_entries[i].peFlags = 0x80;
+		for (; i < 140; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+			m_entries[i].peRed = p_entries[i].peRed;
+			m_entries[i].peGreen = p_entries[i].peGreen;
+			m_entries[i].peBlue = p_entries[i].peBlue;
 		}
 
-		if (this->m_palette->SetEntries(0, 0, 256, this->m_entries)) {
+		if (!m_overrideSkyColor) {
+			m_entries[i].peFlags = D3DPAL_READONLY | PC_NOCOLLAPSE;
+			m_entries[i].peRed = p_entries[i].peRed;
+			m_entries[i].peGreen = p_entries[i].peGreen;
+			m_entries[i].peBlue = p_entries[i].peBlue;
+			i++;
+			m_entries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+			m_entries[i].peRed = p_entries[i].peRed;
+			m_entries[i].peGreen = p_entries[i].peGreen;
+			m_entries[i].peBlue = p_entries[i].peBlue;
+			i++;
+		}
+		else {
+			i = 142;
+		}
+
+		for (; i < 246; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED | PC_NOCOLLAPSE;
+			m_entries[i].peRed = p_entries[i].peRed;
+			m_entries[i].peGreen = p_entries[i].peGreen;
+			m_entries[i].peBlue = p_entries[i].peBlue;
+		}
+
+		for (; i < 256; i++) {
+			m_entries[i].peFlags = D3DPAL_RESERVED;
+		}
+
+		if (m_palette->SetEntries(0, 0, 256, m_entries)) {
 			status = FAILURE;
 		}
 	}
@@ -205,38 +233,53 @@ MxResult MxPalette::SetEntries(LPPALETTEENTRY p_entries)
 }
 
 // FUNCTION: LEGO1 0x100bf2d0
+// FUNCTION: BETA10 0x101442aa
 MxResult MxPalette::SetSkyColor(LPPALETTEENTRY p_skyColor)
 {
 	MxResult status = 0;
-	if (this->m_palette != NULL) {
-		this->m_entries[141].peRed = p_skyColor->peRed;
-		this->m_entries[141].peGreen = p_skyColor->peGreen;
-		this->m_entries[141].peBlue = p_skyColor->peBlue;
-		this->m_skyColor = this->m_entries[141];
-		if (this->m_palette->SetEntries(0, 141, 1, &this->m_skyColor)) {
+	if (m_palette != NULL) {
+		m_entries[141].peRed = p_skyColor->peRed;
+		m_entries[141].peGreen = p_skyColor->peGreen;
+		m_entries[141].peBlue = p_skyColor->peBlue;
+		m_skyColor = m_entries[141];
+		if (m_palette->SetEntries(0, 141, 1, &m_skyColor)) {
 			status = -1;
 		}
 	}
 	return status;
 }
 
+// FUNCTION: BETA10 0x1014434a
+void MxPalette::SetPalette(LPDIRECTDRAWPALETTE p_palette)
+{
+	if (m_palette) {
+		m_palette->Release();
+	}
+
+	m_palette = p_palette;
+}
+
 // FUNCTION: LEGO1 0x100bf330
+// FUNCTION: BETA10 0x1014438a
 void MxPalette::Detach()
 {
-	this->m_palette = NULL;
+	m_palette = NULL;
 }
 
 // FUNCTION: LEGO1 0x100bf340
+// FUNCTION: BETA10 0x101443aa
 MxBool MxPalette::operator==(MxPalette& p_other)
 {
 	for (MxS32 i = 0; i < 256; i++) {
-		if (this->m_entries[i].peRed != p_other.m_entries[i].peRed) {
+		if (m_entries[i].peRed != p_other.m_entries[i].peRed) {
 			return FALSE;
 		}
-		if (this->m_entries[i].peGreen != p_other.m_entries[i].peGreen) {
+
+		if (m_entries[i].peGreen != p_other.m_entries[i].peGreen) {
 			return FALSE;
 		}
-		if (this->m_entries[i].peBlue != p_other.m_entries[i].peBlue) {
+
+		if (m_entries[i].peBlue != p_other.m_entries[i].peBlue) {
 			return FALSE;
 		}
 	}
@@ -244,6 +287,7 @@ MxBool MxPalette::operator==(MxPalette& p_other)
 }
 
 // FUNCTION: LEGO1 0x100bf390
+// FUNCTION: BETA10 0x1014445a
 void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
 {
 	HDC hdc;
@@ -261,6 +305,7 @@ void MxPalette::ApplySystemEntriesToPalette(LPPALETTEENTRY p_entries)
 }
 
 // FUNCTION: LEGO1 0x100bf420
+// FUNCTION: BETA10 0x10144517
 void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 {
 	HDC hdc;
@@ -278,14 +323,16 @@ void MxPalette::GetDefaultPalette(LPPALETTEENTRY p_entries)
 }
 
 // FUNCTION: LEGO1 0x100bf490
+// FUNCTION: BETA10 0x101445bf
 void MxPalette::Reset(MxBool p_ignoreSkyColor)
 {
-	if (this->m_palette != NULL) {
-		GetDefaultPalette(this->m_entries);
+	if (m_palette != NULL) {
+		GetDefaultPalette(m_entries);
 		if (!p_ignoreSkyColor) {
-			this->m_entries[140] = this->m_entries[141] = this->m_skyColor;
+			m_entries[140] = m_entries[141] = m_skyColor;
 		}
-		SetEntries(this->m_entries);
-		this->m_palette->SetEntries(0, 0, 256, this->m_entries);
+
+		SetEntries(m_entries);
+		m_palette->SetEntries(0, 0, 256, m_entries);
 	}
 }

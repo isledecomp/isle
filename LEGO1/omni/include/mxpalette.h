@@ -7,6 +7,7 @@
 #include <ddraw.h>
 
 // VTABLE: LEGO1 0x100dc848
+// VTABLE: BETA10 0x101c2300
 // SIZE 0x414
 class MxPalette : public MxCore {
 public:
@@ -26,9 +27,13 @@ public:
 	void Reset(MxBool p_ignoreSkyColor);
 	LPDIRECTDRAWPALETTE CreateNativePalette();
 
-	inline void SetOverrideSkyColor(MxBool p_value) { this->m_overrideSkyColor = p_value; }
+	void SetPalette(LPDIRECTDRAWPALETTE p_palette);
+
+	// FUNCTION: BETA10 0x100d92c0
+	inline void SetOverrideSkyColor(MxBool p_value) { m_overrideSkyColor = p_value; }
 
 	// SYNTHETIC: LEGO1 0x100beeb0
+	// SYNTHETIC: BETA10 0x10144640
 	// MxPalette::`scalar deleting destructor'
 
 private:
