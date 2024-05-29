@@ -1396,7 +1396,6 @@ MxLong LegoAnimationManager::Notify(MxParam& p_param)
 
 					if (roi != NULL) {
 						LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
-
 						if (actor != NULL) {
 							actor->Restart();
 						}
@@ -2030,10 +2029,92 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 	}
 }
 
-// STUB: LEGO1 0x10063270
-void LegoAnimationManager::FUN_10063270(LegoROIList*, LegoAnimPresenter*)
+// STUB: LEGO1 0x10062e20
+// FUNCTION: BETA10 0x100444cb
+MxBool LegoAnimationManager::FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_presenter)
 {
-	// TODO
+	return FALSE;
+}
+
+// FUNCTION: LEGO1 0x10063270
+// FUNCTION: BETA10 0x10044b9a
+void LegoAnimationManager::FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* p_presenter)
+{
+	if (p_list != NULL) {
+		LegoWorld* world = CurrentWorld();
+		LegoROI* roi;
+		MxU32 i;
+
+		for (i = 0; i < sizeOfArray(g_vehicles); i++) {
+			roi = Lego()->FindROI(g_vehicles[i].m_name);
+
+			if (roi != NULL) {
+				if (!g_vehicles[i].m_unk0x05 && roi->GetVisibility()) {
+					g_vehicles[i].m_unk0x04 = TRUE;
+				}
+				else {
+					g_vehicles[i].m_unk0x04 = FALSE;
+				}
+			}
+		}
+
+		LegoROIListCursor cursor(p_list);
+
+		while (cursor.Next(roi)) {
+			if (roi->GetVisibility() && FUN_10062e20(roi, p_presenter)) {
+				cursor.Detach();
+				FUN_10063950(roi);
+			}
+			else {
+				LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+
+				if (actor != NULL) {
+					for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
+						if (m_extras[i].m_roi == roi) {
+							if (actor->GetController() != NULL) {
+								actor->GetController()->RemoveActor(actor);
+								actor->SetController(NULL);
+							}
+
+							if (m_extras[i].m_unk0x14) {
+								m_extras[i].m_unk0x14 = FALSE;
+
+								MxS32 vehicleId = g_characters[m_extras[i].m_characterId].m_vehicleId;
+								if (vehicleId >= 0) {
+									g_vehicles[vehicleId].m_unk0x05 = FALSE;
+
+									LegoROI* roi = Lego()->FindROI(g_vehicles[vehicleId].m_name);
+									if (roi != NULL) {
+										roi->SetVisibility(FALSE);
+									}
+								}
+							}
+
+							m_extras[i].m_roi = NULL;
+							g_characters[m_extras[i].m_characterId].m_unk0x04 = FALSE;
+							g_characters[m_extras[i].m_characterId].m_unk0x07 = FALSE;
+							m_extras[i].m_characterId = -1;
+							m_extras[i].m_unk0x0d = FALSE;
+							m_unk0x414--;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		FUN_10063e40(p_presenter);
+
+		for (i = 0; i < sizeOfArray(g_vehicles); i++) {
+			if (!g_vehicles[i].m_unk0x05) {
+				roi = Lego()->FindROI(g_vehicles[i].m_name);
+
+				if (roi != NULL) {
+					roi->SetVisibility(FALSE);
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10063780
@@ -2050,6 +2131,19 @@ void LegoAnimationManager::FUN_10063780(LegoROIList* p_list)
 				m_unk0x424->Append(roi);
 				cursor.Detach();
 			}
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10063950
+void LegoAnimationManager::FUN_10063950(LegoROI* p_roi)
+{
+	if (m_unk0x424 != NULL) {
+		LegoROIListCursor cursor(m_unk0x424);
+
+		if (cursor.Find(p_roi)) {
+			CharacterManager()->FUN_10083db0(p_roi);
+			cursor.Detach();
 		}
 	}
 }
@@ -2167,6 +2261,23 @@ void LegoAnimationManager::FUN_10063d10()
 					}
 				}
 			}
+		}
+	}
+}
+
+// FUNCTION: LEGO1 0x10063e40
+void LegoAnimationManager::FUN_10063e40(LegoAnimPresenter* p_presenter)
+{
+	if (m_unk0x424 != NULL) {
+		LegoROIListCursor cursor(m_unk0x424);
+		LegoROI* roi;
+
+		while (cursor.Next(roi)) {
+			if (!FUN_10062e20(roi, p_presenter)) {
+				CharacterManager()->FUN_10083db0(roi);
+			}
+
+			cursor.Detach();
 		}
 	}
 }
