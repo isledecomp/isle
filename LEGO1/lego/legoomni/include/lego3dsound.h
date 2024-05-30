@@ -23,7 +23,7 @@ public:
 	MxS32 FUN_10011cf0(undefined4, undefined4);
 
 	// SYNTHETIC: LEGO1 0x10011650
-	// lego3dsound::`scalar deleting destructor'
+	// Lego3DSound::`scalar deleting destructor'
 
 private:
 	undefined m_unk0x04[4];         // 0x04
