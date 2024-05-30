@@ -2,7 +2,7 @@
 #define LEGOCACHSOUND_H
 
 #include "decomp.h"
-#include "legounknown100d5778.h"
+#include "lego3dsound.h"
 #include "mxcore.h"
 #include "mxstring.h"
 
@@ -47,7 +47,7 @@ private:
 
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x08
 	undefined m_unk0xc[4];          // 0x0c
-	LegoUnknown100d5778 m_unk0x10;  // 0x10
+	Lego3DSound m_unk0x10;          // 0x10
 	undefined* m_unk0x40;           // 0x40
 	undefined4 m_unk0x44;           // 0x44
 	MxString m_string0x48;          // 0x48

@@ -1,25 +1,25 @@
-#include "legounknown100d5778.h"
+#include "lego3dsound.h"
 
 #include "legocharactermanager.h"
 #include "misc.h"
 #include "mxomni.h"
 
-DECOMP_SIZE_ASSERT(LegoUnknown100d5778, 0x30)
+DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
 
 // FUNCTION: LEGO1 0x10011630
-LegoUnknown100d5778::LegoUnknown100d5778()
+Lego3DSound::Lego3DSound()
 {
 	Init();
 }
 
 // FUNCTION: LEGO1 0x10011670
-LegoUnknown100d5778::~LegoUnknown100d5778()
+Lego3DSound::~Lego3DSound()
 {
 	Destroy();
 }
 
 // FUNCTION: LEGO1 0x10011680
-void LegoUnknown100d5778::Init()
+void Lego3DSound::Init()
 {
 	m_dsBuffer = NULL;
 	m_unk0x0c = NULL;
@@ -27,16 +27,17 @@ void LegoUnknown100d5778::Init()
 	m_unk0x18 = 0;
 	m_unk0x14 = FALSE;
 	m_unk0x15 = FALSE;
-	m_unk0x2c = 79;
+	m_volume = 79;
 }
 
 // STUB: LEGO1 0x100116a0
-MxResult LegoUnknown100d5778::FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4, undefined4 p_unk0x2c)
+// FUNCTION: BETA10 0x10039647
+MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char*, MxS32 p_volume)
 {
-	m_unk0x2c = p_unk0x2c;
+	m_volume = p_volume;
 
 	if (MxOmni::IsSound3D()) {
-		p_dsound->QueryInterface(IID_IDirectSoundBuffer, (LPVOID*) &m_dsBuffer);
+		p_directSoundBuffer->QueryInterface(IID_IDirectSoundBuffer, (LPVOID*) &m_dsBuffer);
 		if (m_dsBuffer == NULL) {
 			return FAILURE;
 		}
@@ -50,7 +51,7 @@ MxResult LegoUnknown100d5778::FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4, u
 }
 
 // FUNCTION: LEGO1 0x10011880
-void LegoUnknown100d5778::Destroy()
+void Lego3DSound::Destroy()
 {
 	if (m_dsBuffer) {
 		m_dsBuffer->Release();
@@ -70,20 +71,21 @@ void LegoUnknown100d5778::Destroy()
 }
 
 // STUB: LEGO1 0x100118e0
-undefined4 LegoUnknown100d5778::FUN_100118e0(LPDIRECTSOUNDBUFFER p_dsBuffer)
+// FUNCTION: BETA10 0x10039a2a
+undefined4 Lego3DSound::FUN_100118e0(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10011ca0
-void LegoUnknown100d5778::FUN_10011ca0()
+void Lego3DSound::FUN_10011ca0()
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10011cf0
-MxS32 LegoUnknown100d5778::FUN_10011cf0(undefined4, undefined4)
+MxS32 Lego3DSound::FUN_10011cf0(undefined4, undefined4)
 {
 	// TODO
 	return 0;

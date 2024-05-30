@@ -2,7 +2,7 @@
 #define LEGO3DWAVEPRESENTER_H
 
 #include "decomp.h"
-#include "legounknown100d5778.h"
+#include "lego3dsound.h"
 #include "mxwavepresenter.h"
 
 // VTABLE: LEGO1 0x100d52b0
@@ -31,8 +31,8 @@ public:
 	// Lego3DWavePresenter::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x6c[4];        // 0x6c
-	LegoUnknown100d5778 m_unk0x70; // 0x70
+	undefined m_unk0x6c[4]; // 0x6c
+	Lego3DSound m_sound;    // 0x70
 };
 
 #endif // LEGO3DWAVEPRESENTER_H

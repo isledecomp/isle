@@ -30,7 +30,7 @@ public:
 	virtual void SetVolume(MxS32 p_volume) { m_volume = p_volume; } // vtable+0x60
 
 protected:
-	MxS32 m_volume;
+	MxS32 m_volume; // 0x50
 };
 
 // SYNTHETIC: LEGO1 0x1000d370
