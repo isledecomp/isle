@@ -32,7 +32,7 @@ public:
 
 private:
 	undefined m_unk0x6c[4]; // 0x6c
-	Lego3DSound m_3dsound;  // 0x70
+	Lego3DSound m_sound;    // 0x70
 };
 
 #endif // LEGO3DWAVEPRESENTER_H

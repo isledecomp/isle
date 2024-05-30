@@ -49,7 +49,7 @@ void Lego3DWavePresenter::StartingTickle()
 			m_compositePresenter->GetAction()->GetExtra(extraLength, buff);
 		}
 
-		if (m_3dsound.Create(m_dsBuffer, buff, m_volume) != SUCCESS) {
+		if (m_sound.Create(m_dsBuffer, buff, m_volume) != SUCCESS) {
 			m_dsBuffer->Release();
 			m_dsBuffer = NULL;
 			EndAction();
@@ -62,5 +62,5 @@ void Lego3DWavePresenter::StartingTickle()
 void Lego3DWavePresenter::StreamingTickle()
 {
 	MxWavePresenter::StreamingTickle();
-	m_3dsound.FUN_100118e0(m_dsBuffer);
+	m_sound.FUN_100118e0(m_dsBuffer);
 }
