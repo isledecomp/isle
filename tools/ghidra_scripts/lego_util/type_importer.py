@@ -153,7 +153,7 @@ class PdbTypeImporter:
             union_type = get_ghidra_type(self.api, type_pdb["name"])
             assert (
                 union_type.getLength() == type_pdb["size"]
-            ), f"Wrong size of existing union type '{type_pdb['name']}': expected {type_pdb["size"]}, got {union_type.getLength()}"
+            ), f"Wrong size of existing union type '{type_pdb['name']}': expected {type_pdb['size']}, got {union_type.getLength()}"
             return union_type
         except TypeNotFoundInGhidraError as e:
             # We have so few instances, it is not worth implementing this
