@@ -36,6 +36,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10017ce0
 	// PizzeriaState::`scalar deleting destructor'
 
+	MxU32 FUN_10017d70();
+
 private:
 	Playlist m_unk0x08[5];         // 0x08
 	PizzeriaStateStruct m_unk0x44; // 0x44

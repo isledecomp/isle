@@ -56,6 +56,11 @@ void Pizza::CreateState()
 	}
 }
 
+// STUB: LEGO1 0x10038220
+void Pizza::FUN_10038220(MxU32 p_objectId)
+{
+}
+
 // STUB: LEGO1 0x100382b0
 void Pizza::FUN_100382b0()
 {
@@ -67,7 +72,7 @@ void Pizza::FUN_10038380()
 }
 
 // STUB: LEGO1 0x100383f0
-undefined4 Pizza::VTable0x68()
+undefined4 Pizza::HandleClick()
 {
 	// TODO
 	return 0;

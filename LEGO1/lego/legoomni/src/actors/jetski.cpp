@@ -30,14 +30,14 @@ void Jetski::VTable0xe4()
 }
 
 // STUB: LEGO1 0x1007e750
-MxU32 Jetski::VTable0xcc()
+MxU32 Jetski::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x1007e8e0
-MxU32 Jetski::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Jetski::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

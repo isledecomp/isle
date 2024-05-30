@@ -43,7 +43,7 @@ public:
 private:
 	LegoGameState::Area m_destLocation; // 0xf8
 
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 };
 
 #endif // INFOCENTERDOOR_H

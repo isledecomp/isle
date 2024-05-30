@@ -72,7 +72,7 @@ void SkateBoard::VTable0xe4()
 }
 
 // FUNCTION: LEGO1 0x100100e0
-MxU32 SkateBoard::VTable0xcc()
+MxU32 SkateBoard::HandleClick()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 
@@ -107,7 +107,7 @@ MxU32 SkateBoard::VTable0xcc()
 }
 
 // FUNCTION: LEGO1 0x10010230
-MxU32 SkateBoard::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 SkateBoard::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxU32 result = 0;
 

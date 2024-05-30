@@ -104,7 +104,7 @@ void Helicopter::VTable0xe4()
 }
 
 // FUNCTION: LEGO1 0x10003480
-MxU32 Helicopter::VTable0xcc()
+MxU32 Helicopter::HandleClick()
 {
 	if (!FUN_1003ef60()) {
 		return 1;
@@ -153,7 +153,7 @@ MxU32 Helicopter::VTable0xcc()
 }
 
 // FUNCTION: LEGO1 0x100035e0
-MxU32 Helicopter::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;

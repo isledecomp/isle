@@ -45,7 +45,7 @@ private:
 	MxBool m_audioEnabled; // 0x0d
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 };
 
 #endif // RADIO_H

@@ -37,10 +37,8 @@ public:
 	// SYNTHETIC: LEGO1 0x10039350
 	// PizzaMissionState::`scalar deleting destructor'
 
-private:
 	PizzaMissionStateEntry* GetState(MxU8 p_id);
 
-protected:
 	undefined4 m_unk0x08;              // 0x08
 	undefined4 m_unk0x0c;              // 0x0c
 	PizzaMissionStateEntry m_state[5]; // 0x10

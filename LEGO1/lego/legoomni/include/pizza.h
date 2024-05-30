@@ -31,11 +31,12 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                   // vtable+0x18
-	undefined4 VTable0x68() override;                                   // vtable+0x68
+	undefined4 HandleClick() override;                                  // vtable+0x68
 	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
 	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
 
 	void CreateState();
+	void FUN_10038220(MxU32 p_objectId);
 	void FUN_100382b0();
 	void FUN_10038380();
 
