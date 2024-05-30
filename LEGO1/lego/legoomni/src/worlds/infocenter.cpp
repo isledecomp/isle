@@ -246,7 +246,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	}
 
 	if (action->GetObjectId() == InfomainScript::c_iicx26in_RunAnim) {
-		ControlManager()->FUN_100293c0(0x10, action->GetAtomId().GetInternal(), 0);
+		ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, action->GetAtomId().GetInternal(), 0);
 		m_unk0x1d6 = 0;
 	}
 
@@ -1159,16 +1159,16 @@ MxResult Infocenter::Tickle()
 		m_unk0x1d6 += 100;
 
 		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
 		}
 		else if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 4400) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
 			m_unk0x1d6 = 0;
 		}
 	}

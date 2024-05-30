@@ -63,7 +63,7 @@ public:
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
 	MxBool FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
-	void FUN_100293c0(undefined4, const char*, undefined2);
+	void FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS16 p_unk0x4e);
 	MxControlPresenter* FUN_100294e0(MxS32 p_x, MxS32 p_y);
 	MxBool FUN_10029630();
 	MxBool FUN_10029750();

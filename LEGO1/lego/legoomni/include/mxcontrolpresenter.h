@@ -37,10 +37,12 @@ public:
 	void Enable(MxBool p_enable) override;                           // vtable+0x54
 	MxBool VTable0x64(undefined4 p_undefined) override;              // vtable+0x64
 	virtual void VTable0x68(MxBool p_unk0x50);                       // vtable+0x68
-	virtual void VTable0x6c(MxS16);                                  // vtable+0x6c
+	virtual void VTable0x6c(MxS16 p_unk0x4e);                        // vtable+0x6c
 
 	MxBool FUN_10044480(LegoControlManagerEvent* p_event, MxPresenter* p_presenter);
 	MxBool FUN_10044270(MxS32 p_x, MxS32 p_y, MxVideoPresenter* p_presenter);
+
+	inline MxS16 GetUnknown0x4e() { return m_unk0x4e; }
 
 private:
 	undefined2 m_unk0x4c; // 0x4c
