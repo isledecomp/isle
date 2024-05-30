@@ -18,11 +18,18 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
-	// FUNCTION: LEGO1 0x100b6210
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1004da30
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0774
 		return "MxCompositePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100b6210
+	// FUNCTION: BETA10 0x1004da00
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100b6220

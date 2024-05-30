@@ -34,7 +34,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	inline void PlayAction(MxU32 p_objectId);
@@ -64,7 +64,7 @@ private:
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxU8 p_key);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 	MxLong HandleNotification19(MxParam& p_param);
 	void FUN_100775c0(MxS16 p_playerIndex);
 	void WriteInfocenterLetters(MxS16);

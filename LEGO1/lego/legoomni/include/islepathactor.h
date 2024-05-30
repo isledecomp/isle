@@ -33,24 +33,24 @@ public:
 			LegoGameState::Area p_area,
 			MxAtomId* p_script,
 			MxS32 p_entityId,
-			const char* p_path,
+			const char* p_name,
 			MxS16 p_src,
 			float p_srcScale,
 			MxS16 p_dest,
 			float p_destScale,
-			undefined4 p_unk0x30,
+			MxU32 p_location,
 			JukeboxScript::Script p_music
 		)
 		{
 			m_area = p_area;
 			m_script = p_script;
 			m_entityId = p_entityId;
-			strcpy(m_path, p_path);
+			strcpy(m_name, p_name);
 			m_src = p_src;
 			m_srcScale = p_srcScale;
 			m_dest = p_dest;
 			m_destScale = p_destScale;
-			m_unk0x30 = p_unk0x30;
+			m_location = p_location;
 			m_music = p_music;
 		}
 
@@ -60,12 +60,12 @@ public:
 			m_area = p_location.m_area;
 			m_script = p_location.m_script;
 			m_entityId = p_location.m_entityId;
-			strcpy(m_path, p_location.m_path);
+			strcpy(m_name, p_location.m_name);
 			m_src = p_location.m_src;
 			m_srcScale = p_location.m_srcScale;
 			m_dest = p_location.m_dest;
 			m_destScale = p_location.m_destScale;
-			m_unk0x30 = p_location.m_unk0x30;
+			m_location = p_location.m_location;
 			m_music = p_location.m_music;
 			return *this;
 		}
@@ -73,12 +73,12 @@ public:
 		LegoGameState::Area m_area;    // 0x00
 		MxAtomId* m_script;            // 0x04
 		MxS32 m_entityId;              // 0x08
-		char m_path[20];               // 0x0c
+		char m_name[20];               // 0x0c
 		MxS16 m_src;                   // 0x20
 		float m_srcScale;              // 0x24
 		MxS16 m_dest;                  // 0x28
 		float m_destScale;             // 0x2c
-		undefined4 m_unk0x30;          // 0x30
+		MxU32 m_location;              // 0x30
 		JukeboxScript::Script m_music; // 0x34
 	};
 
@@ -106,13 +106,13 @@ public:
 	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x10002e70
-	virtual MxU32 VTable0xcc() { return 0; } // vtable+0xcc
+	virtual MxU32 HandleClick() { return 0; } // vtable+0xcc
 
 	// FUNCTION: LEGO1 0x10002df0
 	virtual MxU32 VTable0xd0() { return 0; } // vtable+0xd0
 
 	// FUNCTION: LEGO1 0x10002e80
-	virtual MxU32 VTable0xd4(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
+	virtual MxU32 HandleControl(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
 
 	// FUNCTION: LEGO1 0x10002e90
 	virtual MxU32 VTable0xd8(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
@@ -128,16 +128,13 @@ public:
 	// SYNTHETIC: LEGO1 0x10002ff0
 	// IslePathActor::`scalar deleting destructor'
 
-	inline void SetWorld(LegoWorld* p_world) { m_world = p_world; }
-	inline LegoWorld* GetWorld() { return m_world; }
-
 	void FUN_1001b660();
 
 	static void RegisterSpawnLocations();
 
 protected:
 	LegoWorld* m_world;        // 0x154
-	IslePathActor* m_unk0x158; // 0x158
+	LegoPathActor* m_unk0x158; // 0x158
 	MxFloat m_unk0x15c;        // 0x15c
 };
 

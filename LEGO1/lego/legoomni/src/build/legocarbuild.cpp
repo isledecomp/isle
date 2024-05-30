@@ -56,7 +56,7 @@ void LegoCarBuild::Enable(MxBool p_enable)
 }
 
 // STUB: LEGO1 0x10025e70
-MxBool LegoCarBuild::VTable0x64()
+MxBool LegoCarBuild::Escape()
 {
 	// TODO
 	return FALSE;

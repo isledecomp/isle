@@ -9,12 +9,18 @@
 struct LegoEdge;
 class LegoPathBoundary;
 class LegoPathController;
-class LegoUnknown100db7f4;
+struct LegoPathEdgeContainer;
+struct LegoUnknown100db7f4;
+class LegoWEEdge;
 
 // VTABLE: LEGO1 0x100d6e28
 // SIZE 0x154
 class LegoPathActor : public LegoActor {
 public:
+	enum {
+		c_bit3 = 0x04
+	};
+
 	LegoPathActor();
 	~LegoPathActor() override;
 
@@ -31,8 +37,8 @@ public:
 		return !strcmp(p_name, LegoPathActor::ClassName()) || LegoActor::IsA(p_name);
 	}
 
-	void ParseAction(char* p_extra) override;               // vtable+0x20
-	virtual MxS32 VTable0x68(Vector3&, Vector3&, Vector3&); // vtable+0x68
+	void ParseAction(char* p_extra) override;                              // vtable+0x20
+	virtual MxS32 VTable0x68(Vector3& p_v1, Vector3& p_v2, Vector3& p_v3); // vtable+0x68
 	virtual MxU32 VTable0x6c(
 		LegoPathBoundary* p_boundary,
 		Vector3& p_v1,
@@ -48,7 +54,7 @@ public:
 	virtual void SetUserNavFlag(MxBool p_userNavFlag) { m_userNavFlag = p_userNavFlag; } // vtable+0x78
 
 	// FUNCTION: LEGO1 0x10002d30
-	virtual MxU8 GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
+	virtual MxBool GetUserNavFlag() { return m_userNavFlag; } // vtable+0x7c
 
 	virtual MxResult VTable0x80(
 		Vector3& p_point1,
@@ -80,14 +86,18 @@ public:
 	// FUNCTION: LEGO1 0x10002d50
 	virtual MxResult VTable0x94(LegoPathActor*, MxBool) { return 0; } // vtable+0x94
 
-	virtual void VTable0x98();           // vtable+0x98
-	virtual MxResult WaitForAnimation(); // vtable+0x9c
+	virtual void SwitchBoundary(
+		LegoPathBoundary*& p_boundary,
+		LegoUnknown100db7f4*& p_edge,
+		float& p_unk0xe4
+	);                             // vtable+0x98
+	virtual MxResult VTable0x9c(); // vtable+0x9c
 
 	// FUNCTION: LEGO1 0x10002d60
 	virtual MxS32 VTable0xa0() { return 0; } // vtable+0xa0
 
-	virtual void VTable0xa4(MxU8&, MxS32&); // vtable+0xa4
-	virtual void VTable0xa8();              // vtable+0xa8
+	virtual void VTable0xa4(MxBool& p_und1, MxS32& p_und2); // vtable+0xa4
+	virtual void VTable0xa8();                              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
 	virtual void VTable0xac(MxFloat p_unk0x13c) { m_unk0x13c = p_unk0x13c; } // vtable+0xac
@@ -116,15 +126,27 @@ public:
 	inline LegoPathBoundary* GetBoundary() { return m_boundary; }
 	inline MxU32 GetState() { return m_state; }
 	inline LegoPathController* GetController() { return m_controller; }
+	inline MxBool GetCollideBox() { return m_collideBox; }
 
 	inline void SetBoundary(LegoPathBoundary* p_boundary) { m_boundary = p_boundary; }
 	inline void SetState(MxU32 p_state) { m_state = p_state; }
-	inline void ClearController() { m_controller = NULL; }
+	inline void SetController(LegoPathController* p_controller) { m_controller = p_controller; }
 
 	// SYNTHETIC: LEGO1 0x1002d800
 	// LegoPathActor::`scalar deleting destructor'
 
 protected:
+	inline MxU32 FUN_1002edd0(
+		list<LegoPathBoundary*>& p_boundaries,
+		LegoPathBoundary* p_boundary,
+		Vector3& p_v1,
+		Vector3& p_v2,
+		float p_f1,
+		float p_f2,
+		Vector3& p_v3,
+		MxS32 p_und
+	);
+
 	MxFloat m_BADuration;             // 0x78
 	MxFloat m_unk0x7c;                // 0x7c
 	MxFloat m_actorTime;              // 0x80
@@ -132,13 +154,13 @@ protected:
 	LegoPathBoundary* m_boundary;     // 0x88
 	LegoUnknown m_unk0x8c;            // 0x8c
 	MxU32 m_state;                    // 0xdc
-	LegoEdge* m_destEdge;             // 0xe0
+	LegoUnknown100db7f4* m_destEdge;  // 0xe0
 	MxFloat m_unk0xe4;                // 0xe4
-	undefined m_unk0xe8;              // 0xe8
+	MxBool m_collideBox;              // 0xe8
 	undefined m_unk0xe9;              // 0xe9
 	MxBool m_userNavFlag;             // 0xea
 	MxMatrix m_unk0xec;               // 0xec
-	undefined* m_unk0x134;            // 0x134
+	LegoPathEdgeContainer* m_grec;    // 0x134
 	LegoPathController* m_controller; // 0x138
 	MxFloat m_unk0x13c;               // 0x13c
 	MxFloat m_unk0x140;               // 0x140
@@ -147,5 +169,20 @@ protected:
 	MxS32 m_unk0x14c;                 // 0x14c
 	MxFloat m_unk0x150;               // 0x150
 };
+
+// TEMPLATE: LEGO1 0x10018b70
+// List<LegoBoundaryEdge>::~List<LegoBoundaryEdge>
+
+// TEMPLATE: LEGO1 0x10018bc0
+// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::~list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >
+
+// TEMPLATE: LEGO1 0x1002ef10
+// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::~list<LegoPathBoundary *,allocator<LegoPathBoundary *> >
+
+// TEMPLATE: LEGO1 0x1002ef80
+// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::insert
+
+// TEMPLATE: LEGO1 0x1002efd0
+// List<LegoPathBoundary *>::~List<LegoPathBoundary *>
 
 #endif // LEGOPATHACTOR_H

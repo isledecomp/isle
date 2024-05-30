@@ -29,7 +29,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 
 	// FUNCTION: LEGO1 0x1000e5f0
-	virtual undefined4 VTable0x68() { return 0; } // vtable+0x68
+	virtual undefined4 HandleClick() { return 0; } // vtable+0x68
 
 	// FUNCTION: LEGO1 0x1000e600
 	virtual undefined4 VTable0x6c() { return 0; } // vtable+0x6c
@@ -49,7 +49,7 @@ public:
 	// FUNCTION: LEGO1 0x1000e650
 	virtual undefined4 VTable0x80(MxParam&) { return 0; } // vtable+0x80
 
-private:
+protected:
 	LegoWorld* m_world; // 0x78
 };
 

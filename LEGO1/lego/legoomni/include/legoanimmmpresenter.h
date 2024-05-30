@@ -29,11 +29,18 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
-	// FUNCTION: LEGO1 0x1004a950
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1004d840
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f046c
 		return "LegoAnimMMPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1004a950
+	// FUNCTION: BETA10 0x1004d810
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1004a960
@@ -55,7 +62,11 @@ public:
 	// SYNTHETIC: LEGO1 0x1004aa40
 	// LegoAnimMMPresenter::`scalar deleting destructor'
 
+	void FUN_1004b840();
 	MxBool FUN_1004b8b0();
+	void FUN_1004b8c0();
+
+	inline LegoAnimPresenter* GetPresenter() { return m_presenter; }
 
 private:
 	MxBool FUN_1004b450();

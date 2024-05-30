@@ -7,11 +7,18 @@
 // SIZE 0x144
 class JetskiRace : public LegoRace {
 public:
-	// FUNCTION: LEGO1 0x1000daf0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a8840
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0530
 		return "JetskiRace";
+	}
+
+	// FUNCTION: LEGO1 0x1000daf0
+	// FUNCTION: BETA10 0x100a8810
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000db00
@@ -22,7 +29,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	undefined4 VTable0x6c(undefined4) override;       // vtable+0x6c
 	undefined4 VTable0x70(undefined4) override;       // vtable+0x70
 	undefined4 VTable0x74(undefined4) override;       // vtable+0x74

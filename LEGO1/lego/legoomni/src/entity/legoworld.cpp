@@ -1,7 +1,6 @@
 #include "legoworld.h"
 
 #include "anim/legoanim.h"
-#include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
@@ -54,7 +53,7 @@ MxBool LegoWorld::VTable0x5c()
 }
 
 // FUNCTION: LEGO1 0x1001d680
-MxBool LegoWorld::VTable0x64()
+MxBool LegoWorld::Escape()
 {
 	return FALSE;
 }
@@ -274,9 +273,9 @@ done:
 
 // FUNCTION: LEGO1 0x1001f720
 // FUNCTION: BETA10 0x100da24b
-MxResult LegoWorld::FUN_1001f720(
-	IslePathActor* p_actor,
-	const char* p_path,
+MxResult LegoWorld::PlaceActor(
+	LegoPathActor* p_actor,
+	const char* p_name,
 	MxS32 p_src,
 	float p_srcScale,
 	MxS32 p_dest,
@@ -287,7 +286,7 @@ MxResult LegoWorld::FUN_1001f720(
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (controller->FUN_10045c20(p_actor, p_path, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
+		if (controller->PlaceActor(p_actor, p_name, p_src, p_srcScale, p_dest, p_destScale) == SUCCESS) {
 			return SUCCESS;
 		}
 	}
@@ -295,33 +294,49 @@ MxResult LegoWorld::FUN_1001f720(
 	return FAILURE;
 }
 
-// STUB: LEGO1 0x1001fa70
-undefined4 LegoWorld::FUN_1001fa70(IslePathActor* p_actor)
-{
-	// TODO
-	return 0;
-}
-
-// STUB: LEGO1 0x1001fb70
-undefined4 LegoWorld::FUN_1001fb70(
-	IslePathActor* p_actor,
-	LegoAnimPresenter* p_presenter,
-	Vector3& p_position,
-	Vector3& p_direction
-)
-{
-	// TODO
-	return 0;
-}
-
-// FUNCTION: LEGO1 0x1001fc80
-void LegoWorld::FUN_1001fc80(IslePathActor* p_actor)
+// FUNCTION: LEGO1 0x1001fa70
+MxResult LegoWorld::PlaceActor(LegoPathActor* p_actor)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
 
 	while (cursor.Next(controller)) {
-		if (!controller->FUN_10046770(p_actor)) {
+		if (controller->PlaceActor(p_actor) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x1001fb70
+MxResult LegoWorld::PlaceActor(
+	LegoPathActor* p_actor,
+	LegoAnimPresenter* p_presenter,
+	Vector3& p_position,
+	Vector3& p_direction
+)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->PlaceActor(p_actor, p_presenter, p_position, p_direction) == SUCCESS) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
+// FUNCTION: LEGO1 0x1001fc80
+void LegoWorld::RemoveActor(LegoPathActor* p_actor)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		if (controller->RemoveActor(p_actor) == SUCCESS) {
 			break;
 		}
 	}
@@ -358,8 +373,25 @@ void LegoWorld::AddPath(LegoPathController* p_controller)
 	m_list0x68.Append(p_controller);
 }
 
+// FUNCTION: LEGO1 0x10020020
+LegoPathBoundary* LegoWorld::FindPathBoundary(const char* p_name)
+{
+	LegoPathControllerListCursor cursor(&m_list0x68);
+	LegoPathController* controller;
+
+	while (cursor.Next(controller)) {
+		LegoPathBoundary* boundary = controller->GetPathBoundary(p_name);
+
+		if (boundary) {
+			return boundary;
+		}
+	}
+
+	return NULL;
+}
+
 // FUNCTION: LEGO1 0x10020120
-MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
+MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL)
 {
 	LegoPathControllerListCursor cursor(&m_list0x68);
 	LegoPathController* controller;
@@ -370,7 +402,7 @@ MxResult LegoWorld::GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value)
 		return FAILURE;
 	}
 
-	return controller->FUN_10046b30(p_path, p_value);
+	return controller->FUN_10046b30(*p_boundaries, p_numL);
 }
 
 // FUNCTION: LEGO1 0x10020220
@@ -470,7 +502,7 @@ void LegoWorld::Remove(MxCore* p_object)
 		}
 		else if (p_object->IsA("MxEntity")) {
 			if (p_object->IsA("LegoPathActor")) {
-				FUN_1001fc80((IslePathActor*) p_object);
+				RemoveActor((LegoPathActor*) p_object);
 			}
 
 			if (m_entityList) {
@@ -618,7 +650,7 @@ void LegoWorld::Enable(MxBool p_enable)
 	if (p_enable && !m_set0xd0.empty()) {
 		if (CurrentWorld() != this) {
 			if (CurrentWorld()) {
-				AnimationManager()->FUN_10061010(0);
+				AnimationManager()->FUN_10061010(FALSE);
 				CurrentWorld()->Enable(FALSE);
 
 				LegoEntityListCursor cursor(m_entityList);
@@ -668,10 +700,10 @@ void LegoWorld::Enable(MxBool p_enable)
 	else if (!p_enable && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
-		IslePathActor* actor = CurrentActor();
+		LegoPathActor* actor = CurrentActor();
 
 		if (actor) {
-			FUN_1001fc80(actor);
+			RemoveActor(actor);
 		}
 
 		AnimationManager()->Reset(FALSE);

@@ -13,6 +13,7 @@ class MxPresenter;
 // SIZE 0x78
 struct LegoTranInfo {
 	enum {
+		c_bit1 = 0x01,
 		c_bit2 = 0x02
 	};
 
@@ -22,7 +23,7 @@ struct LegoTranInfo {
 		m_unk0x08 = NULL;
 		m_unk0x0c = NULL;
 		m_unk0x10 = 0;
-		m_unk0x12 = -1;
+		m_location = -1;
 		m_unk0x14 = FALSE;
 		m_unk0x1c = NULL;
 		m_unk0x20 = NULL;
@@ -41,7 +42,7 @@ struct LegoTranInfo {
 	LegoROI* m_unk0x08;               // 0x08
 	MxMatrix* m_unk0x0c;              // 0x0c
 	MxU8 m_unk0x10;                   // 0x10
-	MxS16 m_unk0x12;                  // 0x12
+	MxS16 m_location;                 // 0x12
 	MxBool m_unk0x14;                 // 0x14
 	MxBool m_unk0x15;                 // 0x15
 	MxU32 m_objectId;                 // 0x18

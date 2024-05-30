@@ -24,14 +24,6 @@ DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
 // GLOBAL: LEGO1 0x100f7ae0
 MxS32 g_modelPresenterConfig = 1;
 
-// GLOBAL: LEGO1 0x10102054
-// STRING: LEGO1 0x10102018
-char* g_autoCreate = "AUTO_CREATE";
-
-// GLOBAL: LEGO1 0x10102078
-// STRING: LEGO1 0x10101fc4
-char* g_dbCreate = "DB_CREATE";
-
 // FUNCTION: LEGO1 0x1000cca0
 void LegoModelPresenter::Destroy()
 {
@@ -188,7 +180,7 @@ MxResult LegoModelPresenter::CreateROI(MxDSChunk* p_chunk)
 		Mx3DPointFloat(m_action->GetUp().GetX(), m_action->GetUp().GetY(), m_action->GetUp().GetZ()),
 		mat
 	);
-	m_roi->FUN_100a46b0(mat);
+	m_roi->UpdateTransformationRelativeToParent(mat);
 
 	result = SUCCESS;
 
@@ -310,7 +302,7 @@ void LegoModelPresenter::ParseExtra()
 		memcpy(extraCopy, extraData, extraLength & MAXWORD);
 		extraCopy[extraLength & MAXWORD] = '\0';
 
-		if (KeyValueStringParse(output, g_autoCreate, extraCopy) != 0) {
+		if (KeyValueStringParse(output, g_strAUTO_CREATE, extraCopy) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
@@ -318,7 +310,7 @@ void LegoModelPresenter::ParseExtra()
 				m_addedToView = FALSE;
 			}
 		}
-		else if (KeyValueStringParse(output, g_dbCreate, extraCopy) != 0 && m_roi == NULL) {
+		else if (KeyValueStringParse(output, g_strDB_CREATE, extraCopy) != 0 && m_roi == NULL) {
 			LegoWorld* currentWorld = CurrentWorld();
 			list<LegoROI*>& roiList = currentWorld->GetROIList();
 

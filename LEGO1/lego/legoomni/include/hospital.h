@@ -37,7 +37,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	inline void PlayAction(MxU32 p_objectId);
@@ -49,7 +49,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleButtonDown(LegoControlManagerEvent& p_param);
-	MxBool HandleClick(LegoControlManagerEvent& p_param);
+	MxBool HandleControl(LegoControlManagerEvent& p_param);
 
 	MxS16 m_currentActorId;                 // 0xf8
 	LegoGameState::Area m_destLocation;     // 0xfc

@@ -8,7 +8,6 @@
 #include "mxpresenterlist.h"
 #include "roi/legoroi.h"
 
-class IslePathActor;
 class LegoCameraController;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
@@ -60,38 +59,41 @@ public:
 	// FUNCTION: LEGO1 0x100010a0
 	virtual void VTable0x60() {} // vtable+0x60
 
-	virtual MxBool VTable0x64();          // vtable+0x64
+	virtual MxBool Escape();              // vtable+0x64
 	virtual void Enable(MxBool p_enable); // vtable+0x68
 
 	MxBool PresentersPending();
 	void Remove(MxCore* p_object);
-	MxResult FUN_1001f720(
-		IslePathActor* p_actor,
-		const char* p_path,
+	MxResult PlaceActor(
+		LegoPathActor* p_actor,
+		const char* p_name,
 		MxS32 p_src,
 		float p_srcScale,
 		MxS32 p_dest,
 		float p_destScale
 	);
-	undefined4 FUN_1001fa70(IslePathActor* p_actor);
-	undefined4 FUN_1001fb70(
-		IslePathActor* p_actor,
+	MxResult PlaceActor(LegoPathActor* p_actor);
+	MxResult PlaceActor(
+		LegoPathActor* p_actor,
 		LegoAnimPresenter* p_presenter,
 		Vector3& p_position,
 		Vector3& p_direction
 	);
-	void FUN_1001fc80(IslePathActor* p_actor);
+	void RemoveActor(LegoPathActor* p_actor);
 	void FUN_1001fda0(LegoAnimPresenter* p_presenter);
 	void FUN_1001fe90(LegoAnimPresenter* p_presenter);
+	LegoPathBoundary* FindPathBoundary(const char* p_name);
 	void AddPath(LegoPathController* p_controller);
-	MxResult GetCurrPathInfo(LegoPathBoundary** p_path, MxS32& p_value);
+	MxResult GetCurrPathInfo(LegoPathBoundary** p_boundaries, MxS32& p_numL);
 	MxCore* Find(const char* p_class, const char* p_name);
 	MxCore* Find(const MxAtomId& p_atom, MxS32 p_entityId);
 
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
+	inline LegoEntityList* GetEntityList() { return m_entityList; }
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
 	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
+	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
 	inline void SetScriptIndex(MxS32 p_scriptIndex) { m_scriptIndex = p_scriptIndex; }
 

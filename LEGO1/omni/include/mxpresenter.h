@@ -33,11 +33,18 @@ public:
 
 	MxResult Tickle() override; // vtable+0x08
 
-	// FUNCTION: LEGO1 0x1000bfe0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1004d9e0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0740
 		return "MxPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000bfe0
+	// FUNCTION: BETA10 0x1004d9b0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000bff0

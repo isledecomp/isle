@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "isleactor.h"
 
+class Act1State;
+class PizzaMissionState;
 class SkateBoard;
 
 // VTABLE: LEGO1 0x100d7380
@@ -29,10 +31,12 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override;                   // vtable+0x18
-	undefined4 VTable0x68() override;                                   // vtable+0x68
+	undefined4 HandleClick() override;                                  // vtable+0x68
 	undefined4 HandleEndAction(MxEndActionNotificationParam&) override; // vtable+0x74
 	undefined4 VTable0x80(MxParam&) override;                           // vtable+0x80
 
+	void CreateState();
+	void FUN_10038220(MxU32 p_objectId);
 	void FUN_100382b0();
 	void FUN_10038380();
 
@@ -42,14 +46,14 @@ public:
 	// Pizza::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0x7c;     // 0x7c
-	undefined4 m_unk0x80;     // 0x80
-	SkateBoard* m_skateboard; // 0x84
-	undefined4 m_unk0x88;     // 0x88
-	undefined4 m_unk0x8c;     // 0x8c
-	undefined4 m_unk0x90;     // 0x90
-	undefined4 m_unk0x94;     // 0x94
-	undefined m_unk0x98;      // 0x98
+	PizzaMissionState* m_state; // 0x7c
+	undefined4 m_unk0x80;       // 0x80
+	SkateBoard* m_skateboard;   // 0x84
+	Act1State* m_act1state;     // 0x88
+	undefined4 m_unk0x8c;       // 0x8c
+	undefined4 m_unk0x90;       // 0x90
+	undefined4 m_unk0x94;       // 0x94
+	undefined m_unk0x98;        // 0x98
 };
 
 #endif // PIZZA_H

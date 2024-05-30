@@ -2,18 +2,25 @@
 #define LEGO3DWAVEPRESENTER_H
 
 #include "decomp.h"
-#include "legounknown100d5778.h"
+#include "lego3dsound.h"
 #include "mxwavepresenter.h"
 
 // VTABLE: LEGO1 0x100d52b0
 // SIZE 0xa0
 class Lego3DWavePresenter : public MxWavePresenter {
 public:
-	// FUNCTION: LEGO1 0x1000d890
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a8670
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f058c
 		return "Lego3DWavePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000d890
+	// FUNCTION: BETA10 0x100a8640
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d8a0
@@ -31,8 +38,8 @@ public:
 	// Lego3DWavePresenter::`scalar deleting destructor'
 
 private:
-	undefined m_unk0x6c[4];        // 0x6c
-	LegoUnknown100d5778 m_unk0x70; // 0x70
+	undefined m_unk0x6c[4]; // 0x6c
+	Lego3DSound m_sound;    // 0x70
 };
 
 #endif // LEGO3DWAVEPRESENTER_H

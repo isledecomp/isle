@@ -104,7 +104,7 @@ public:
 
 		if (sq > 0.0f) {
 			float root = sqrt(sq);
-			if (root > 0) {
+			if (root > 0.0f) {
 				DivScalarImpl(&root);
 				return 0;
 			}
@@ -120,10 +120,10 @@ public:
 	virtual void Add(float* p_other) { AddImpl(p_other); } // vtable+0x4c
 
 	// FUNCTION: LEGO1 0x100021e0
-	virtual void Add(Vector2* p_other) { AddImpl(p_other->m_data); } // vtable+0x48
+	virtual void Add(const Vector2* p_other) { AddImpl((float*) p_other->m_data); } // vtable+0x48
 
 	// FUNCTION: LEGO1 0x100021f0
-	virtual void Sub(float* p_other) { SubImpl(p_other); } // vtable+0x58
+	virtual void Sub(const float* p_other) { SubImpl((float*) p_other); } // vtable+0x58
 
 	// FUNCTION: LEGO1 0x10002200
 	virtual void Sub(const Vector2* p_other) { SubImpl((float*) p_other->m_data); } // vtable+0x54

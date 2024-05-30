@@ -113,8 +113,8 @@ MxLong GasStation::Notify(MxParam& p_param)
 		case c_notificationButtonDown:
 			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -313,7 +313,7 @@ MxLong GasStation::HandleButtonDown(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10005b20
-MxLong GasStation::HandleClick(LegoControlManagerEvent& p_param)
+MxLong GasStation::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		MxDSAction action;
@@ -411,7 +411,7 @@ MxResult GasStation::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10005e70
-MxBool GasStation::VTable0x64()
+MxBool GasStation::Escape()
 {
 	m_radio.Stop();
 	m_state->FUN_10006490();

@@ -53,7 +53,7 @@ void MxLoopingSmkPresenter::NextFrame()
 {
 	MxStreamChunk* chunk = NextChunk();
 
-	if (chunk->GetFlags() & MxDSChunk::c_end) {
+	if (chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
 		ProgressTickleState(e_repeating);
 	}
 	else {

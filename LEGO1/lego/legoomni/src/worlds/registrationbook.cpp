@@ -114,8 +114,8 @@ MxLong RegistrationBook::Notify(MxParam& p_param)
 		case c_notificationButtonDown:
 			m_registerDialogueTimer = Timer()->GetTime();
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationType19:
 			result = HandleNotification19(p_param);
@@ -210,7 +210,7 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 }
 
 // FUNCTION: LEGO1 0x100774a0
-MxLong RegistrationBook::HandleClick(LegoControlManagerEvent& p_param)
+MxLong RegistrationBook::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxS16 unk0x28 = p_param.GetUnknown0x28();
 
@@ -493,7 +493,7 @@ MxBool RegistrationBook::CreateSurface()
 }
 
 // FUNCTION: LEGO1 0x100783e0
-MxBool RegistrationBook::VTable0x64()
+MxBool RegistrationBook::Escape()
 {
 	DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 	return TRUE;

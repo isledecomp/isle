@@ -126,6 +126,7 @@ class_name_match_cases = [
     ("// class MxList<LegoPathController* >", "MxList<LegoPathController *>"),
     # I don't know if this would ever come up, but sure, why not?
     ("// class MxList<LegoPathController**>", "MxList<LegoPathController **>"),
+    ("// class Many::Name::Spaces", "Many::Name::Spaces"),
 ]
 
 

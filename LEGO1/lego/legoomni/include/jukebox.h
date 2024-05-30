@@ -34,14 +34,14 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x1005d810
 	// JukeBox::`scalar deleting destructor'
 
 private:
-	MxBool HandleClick(LegoControlManagerEvent& p_param);
+	MxBool HandleControl(LegoControlManagerEvent& p_param);
 
 	LegoGameState::Area m_destLocation; // 0xf8
 	JukeBoxState* m_state;              // 0xfc

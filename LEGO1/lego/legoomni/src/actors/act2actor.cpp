@@ -22,7 +22,7 @@ MxResult Act2Actor::VTable0x94(LegoPathActor*, MxBool)
 }
 
 // STUB: LEGO1 0x10018a20
-MxResult Act2Actor::WaitForAnimation()
+MxResult Act2Actor::VTable0x9c()
 {
 	// TODO
 	return SUCCESS;

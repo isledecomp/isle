@@ -40,7 +40,7 @@ MxU32 g_unk0x100fc4ec = 2;
 MxU32 g_unk0x100fc4f0 = 0;
 
 // GLOBAL: LEGO1 0x10104f20
-LegoCharacterInfo g_chracterInfo[66];
+LegoCharacterInfo g_characterInfo[66];
 
 // FUNCTION: LEGO1 0x10082a20
 LegoCharacterManager::LegoCharacterManager()
@@ -52,25 +52,45 @@ LegoCharacterManager::LegoCharacterManager()
 	VariableTable()->SetVariable(m_customizeAnimFile);
 }
 
+// FUNCTION: LEGO1 0x10083180
+// FUNCTION: BETA10 0x10073dad
+LegoCharacterManager::~LegoCharacterManager()
+{
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it;
+
+	for (it = m_characters->begin(); it != m_characters->end(); it++) {
+		character = (*it).second;
+
+		RemoveROI(character->m_roi);
+
+		delete[] (*it).first;
+		delete (*it).second;
+	}
+
+	delete m_characters;
+	delete[] g_customizeAnimFile;
+}
+
 // FUNCTION: LEGO1 0x10083270
 void LegoCharacterManager::Init()
 {
-	for (MxS32 i = 0; i < _countof(g_chracterInfo); i++) {
-		g_chracterInfo[i] = g_characterInfoInit[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		g_characterInfo[i] = g_characterInfoInit[i];
 	}
 }
 
 // FUNCTION: LEGO1 0x100832a0
 void LegoCharacterManager::FUN_100832a0()
 {
-	for (MxS32 i = 0; i < _countof(g_chracterInfo); i++) {
-		LegoCharacterInfo* info = GetInfo(g_chracterInfo[i].m_name);
+	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		LegoCharacterInfo* info = GetInfo(g_characterInfo[i].m_name);
 
 		if (info != NULL) {
 			LegoExtraActor* actor = info->m_actor;
 
 			if (actor != NULL && actor->IsA("LegoExtraActor")) {
-				LegoROI* roi = g_chracterInfo[i].m_roi;
+				LegoROI* roi = g_characterInfo[i].m_roi;
 				MxU32 refCount = GetRefCount(roi);
 
 				while (refCount != 0) {
@@ -87,8 +107,8 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_chracterInfo); i++) {
-		LegoCharacterInfo* info = &g_chracterInfo[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		LegoCharacterInfo* info = &g_characterInfo[i];
 
 		if (p_storage->Write(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
 			goto done;
@@ -96,7 +116,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_unk0x14, sizeof(info->m_unk0x14)) != SUCCESS) {
+		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(info->m_parts[c_infohatPart].m_unk0x08)) !=
@@ -142,8 +162,8 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < _countof(g_chracterInfo); i++) {
-		LegoCharacterInfo* info = &g_chracterInfo[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		LegoCharacterInfo* info = &g_characterInfo[i];
 
 		if (p_storage->Read(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
 			goto done;
@@ -151,7 +171,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_unk0x14, sizeof(info->m_unk0x14)) != SUCCESS) {
+		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_parts[c_infohatPart].m_unk0x08, sizeof(info->m_parts[c_infohatPart].m_unk0x08)) !=
@@ -243,6 +263,20 @@ done:
 	}
 
 	return NULL;
+}
+
+// FUNCTION: LEGO1 0x10083b20
+// FUNCTION: BETA10 0x10074608
+MxBool LegoCharacterManager::FUN_10083b20(const char* p_key)
+{
+	LegoCharacter* character = NULL;
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_key));
+
+	if (it != m_characters->end()) {
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 // FUNCTION: LEGO1 0x10083bc0
@@ -415,9 +449,9 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 
 		info->m_unk0x0c = pepper->m_unk0x0c;
 		info->m_unk0x10 = pepper->m_unk0x10;
-		info->m_unk0x14 = pepper->m_unk0x14;
+		info->m_mood = pepper->m_mood;
 
-		for (i = 0; i < _countof(info->m_parts); i++) {
+		for (i = 0; i < sizeOfArray(info->m_parts); i++) {
 			info->m_parts[i] = pepper->m_parts[i];
 		}
 	}
@@ -442,7 +476,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	comp = new CompoundObject();
 	roi->SetComp(comp);
 
-	for (i = 0; i < _countof(g_characterLODs) - 1; i++) {
+	for (i = 0; i < sizeOfArray(g_characterLODs) - 1; i++) {
 		char lodName[256];
 		LegoCharacterInfo::Part& part = info->m_parts[i];
 
@@ -575,7 +609,7 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 		lodList = dupLodList;
 
 		if (head->GetUnknown0xe0() >= 0) {
-			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(head);
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(head);
 		}
 
 		head->SetLODList(lodList);
@@ -588,8 +622,8 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 // FUNCTION: LEGO1 0x10084c00
 MxBool LegoCharacterManager::Exists(const char* p_key)
 {
-	for (MxU32 i = 0; i < _countof(g_chracterInfo); i++) {
-		if (!strcmpi(g_chracterInfo[i].m_name, p_key)) {
+	for (MxU32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		if (!strcmpi(g_characterInfo[i].m_name, p_key)) {
 			return TRUE;
 		}
 	}
@@ -614,14 +648,14 @@ LegoCharacterInfo* LegoCharacterManager::GetInfo(const char* p_key)
 {
 	MxU32 i;
 
-	for (i = 0; i < _countof(g_chracterInfo); i++) {
-		if (!strcmpi(g_chracterInfo[i].m_name, p_key)) {
+	for (i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		if (!strcmpi(g_characterInfo[i].m_name, p_key)) {
 			break;
 		}
 	}
 
-	if (i < _countof(g_chracterInfo)) {
-		return &g_chracterInfo[i];
+	if (i < sizeOfArray(g_characterInfo)) {
+		return &g_characterInfo[i];
 	}
 
 	return NULL;
@@ -632,14 +666,14 @@ LegoCharacterInfo* LegoCharacterManager::GetInfo(LegoROI* p_roi)
 {
 	MxU32 i;
 
-	for (i = 0; i < _countof(g_chracterInfo); i++) {
-		if (g_chracterInfo[i].m_roi == p_roi) {
+	for (i = 0; i < sizeOfArray(g_characterInfo); i++) {
+		if (g_characterInfo[i].m_roi == p_roi) {
 			break;
 		}
 	}
 
-	if (i < _countof(g_chracterInfo)) {
-		return &g_chracterInfo[i];
+	if (i < sizeOfArray(g_characterInfo)) {
+		return &g_characterInfo[i];
 	}
 
 	return NULL;
@@ -710,7 +744,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 		lodList = dupLodList;
 
 		if (childROI->GetUnknown0xe0() >= 0) {
-			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->FUN_100a66a0(childROI);
+			VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveROIDetailFromScene(childROI);
 		}
 
 		childROI->SetLODList(lodList);
@@ -726,11 +760,24 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 	LegoCharacterInfo* info = GetInfo(p_roi);
 
 	if (p_und) {
-		return info->m_unk0x14 + g_unk0x100fc4dc;
+		return info->m_mood + g_unk0x100fc4dc;
 	}
 
 	if (info != NULL) {
 		return info->m_unk0x0c + g_unk0x100fc4d8;
+	}
+
+	return 0;
+}
+
+// FUNCTION: LEGO1 0x10085180
+// FUNCTION: BETA10 0x100768c5
+MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
+{
+	LegoCharacterInfo* info = GetInfo(p_roi);
+
+	if (info != NULL) {
+		return info->m_mood;
 	}
 
 	return 0;

@@ -26,7 +26,7 @@ struct LegoAnimStruct {
 	MxU32 m_index;  // 0x04
 };
 
-typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimPresenterMap;
+typedef map<const char*, LegoAnimStruct, LegoAnimStructComparator> LegoAnimStructMap;
 typedef map<const char*, const char*, LegoAnimSubstComparator> LegoAnimSubstMap;
 
 // VTABLE: LEGO1 0x100d90c8
@@ -41,11 +41,18 @@ public:
 	LegoAnimPresenter();
 	~LegoAnimPresenter() override;
 
-	// FUNCTION: LEGO1 0x10068530
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x10055300
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f071c
 		return "LegoAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x10068530
+	// FUNCTION: BETA10 0x100552d0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10068540
@@ -54,21 +61,21 @@ public:
 		return !strcmp(p_name, LegoAnimPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	void ReadyTickle() override;                                                                         // vtable+0x18
-	void StartingTickle() override;                                                                      // vtable+0x1c
-	void StreamingTickle() override;                                                                     // vtable+0x20
-	void DoneTickle() override;                                                                          // vtable+0x2c
-	void ParseExtra() override;                                                                          // vtable+0x30
-	MxResult AddToManager() override;                                                                    // vtable+0x34
-	void Destroy() override;                                                                             // vtable+0x38
-	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override;               // vtable+0x3c
-	void EndAction() override;                                                                           // vtable+0x40
-	void PutFrame() override;                                                                            // vtable+0x6c
-	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                                 // vtable+0x88
-	virtual void VTable0x8c();                                                                           // vtable+0x8c
-	virtual void VTable0x90();                                                                           // vtable+0x90
-	virtual MxU32 VTable0x94(Vector3& p_vec1, Vector3& p_vec2, float p_f1, float p_f2, Vector3& p_vec3); // vtable+0x94
-	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                                           // vtable+0x98
+	void ReadyTickle() override;                                                                   // vtable+0x18
+	void StartingTickle() override;                                                                // vtable+0x1c
+	void StreamingTickle() override;                                                               // vtable+0x20
+	void DoneTickle() override;                                                                    // vtable+0x2c
+	void ParseExtra() override;                                                                    // vtable+0x30
+	MxResult AddToManager() override;                                                              // vtable+0x34
+	void Destroy() override;                                                                       // vtable+0x38
+	MxResult StartAction(MxStreamController* p_controller, MxDSAction* p_action) override;         // vtable+0x3c
+	void EndAction() override;                                                                     // vtable+0x40
+	void PutFrame() override;                                                                      // vtable+0x6c
+	virtual MxResult CreateAnim(MxStreamChunk* p_chunk);                                           // vtable+0x88
+	virtual void VTable0x8c();                                                                     // vtable+0x8c
+	virtual void VTable0x90();                                                                     // vtable+0x90
+	virtual MxU32 VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, float p_f2, Vector3& p_v3); // vtable+0x94
+	virtual MxResult VTable0x98(LegoPathBoundary* p_boundary);                                     // vtable+0x98
 
 	// FUNCTION: LEGO1 0x1000c990
 	virtual LegoROI** GetROIMap(MxU32& p_roiMapSize)
@@ -81,7 +88,12 @@ public:
 
 	MxResult FUN_1006afc0(MxMatrix*& p_matrix, float p_und);
 	MxResult FUN_1006b140(LegoROI* p_roi);
+	void FUN_1006c7a0();
 	const char* GetActionObjectName();
+
+	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
+	inline void SetUnknown0x0cTo1() { m_unk0x9c = 1; }
+	inline void SetUnknown0xa0(MxMatrix* p_unk0xa0) { m_unk0xa0 = p_unk0xa0; }
 
 	inline LegoAnim* GetAnimation() { return m_anim; }
 
@@ -95,8 +107,8 @@ protected:
 	LegoBool FUN_100698b0(const CompoundObject& p_rois, const LegoChar* p_und2);
 	LegoROI* FUN_100699e0(const LegoChar* p_und);
 	void FUN_10069b10();
-	void FUN_1006a3c0(LegoAnimPresenterMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
-	void FUN_1006a4f0(LegoAnimPresenterMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
+	void FUN_1006a3c0(LegoAnimStructMap& p_map, LegoTreeNode* p_node, LegoROI* p_roi);
+	void FUN_1006a4f0(LegoAnimStructMap& p_map, LegoAnimNodeData* p_data, const LegoChar* p_und, LegoROI* p_roi);
 	void FUN_1006aa60();
 	void FUN_1006ab70();
 	LegoBool FUN_1006aba0();
@@ -119,14 +131,16 @@ protected:
 	LegoROI** m_unk0x8c;          // 0x8c
 	char** m_unk0x90;             // 0x90
 	MxU8 m_unk0x94;               // 0x94
-	undefined m_unk0x95;          // 0x95
+	MxBool m_unk0x95;             // 0x95
 	MxBool m_unk0x96;             // 0x96
 	undefined m_unk0x97;          // 0x97
 	LegoAnimSubstMap* m_substMap; // 0x98
 	MxS16 m_unk0x9c;              // 0x9c
-	undefined4* m_unk0xa0;        // 0xa0
-	float m_unk0xa4;              // 0xa4
-	Mx3DPointFloat m_unk0xa8;     // 0xa8
+	MxMatrix* m_unk0xa0;          // 0xa0
+
+public:
+	float m_unk0xa4;          // 0xa4
+	Mx3DPointFloat m_unk0xa8; // 0xa8
 };
 
 // clang-format off

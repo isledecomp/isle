@@ -8,6 +8,9 @@
 
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
+// GLOBAL: LEGO1 0x100dbc78
+int g_unk0x100dbc78[8][3] = {{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
+
 // GLOBAL: LEGO1 0x100dbcd8
 int g_unk0x100dbcd8[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
@@ -55,6 +58,37 @@ ViewManager::~ViewManager()
 	SetPOVSource(NULL);
 }
 
+// FUNCTION: LEGO1 0x100a6150
+// FUNCTION: BETA10 0x10172164
+unsigned int ViewManager::FUN_100a6150(const BoundingBox& p_bounding_box)
+{
+	const Vector3* box[] = {&p_bounding_box.Min(), &p_bounding_box.Max()};
+
+	float und[8][3];
+	int i, j, k;
+
+	for (i = 0; i < 8; i++) {
+		for (j = 0; j < 3; j++) {
+			und[i][j] = box[g_unk0x100dbc78[i][j]]->operator[](j);
+		}
+	}
+
+	for (i = 0; i < 6; i++) {
+		for (k = 0; k < 8; k++) {
+			if (unk0x150[i][0] * und[k][0] + unk0x150[i][2] * und[k][2] + unk0x150[i][1] * und[k][1] + unk0x150[i][3] >=
+				0.0f) {
+				break;
+			}
+		}
+
+		if (k == 8) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 // FUNCTION: LEGO1 0x100a6410
 void ViewManager::Remove(ViewROI* p_roi)
 {
@@ -63,7 +97,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 			rois.erase(it);
 
 			if (p_roi->GetUnknown0xe0() >= 0) {
-				FUN_100a66a0(p_roi);
+				RemoveROIDetailFromScene(p_roi);
 			}
 
 			const CompoundObject* comp = p_roi->GetComp();
@@ -71,7 +105,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 			if (comp != NULL) {
 				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
 					if (((ViewROI*) *it)->GetUnknown0xe0() >= 0) {
-						FUN_100a66a0((ViewROI*) *it);
+						RemoveROIDetailFromScene((ViewROI*) *it);
 					}
 				}
 			}
@@ -93,7 +127,7 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 	}
 	else {
 		if (p_roi->GetUnknown0xe0() >= 0) {
-			FUN_100a66a0(p_roi);
+			RemoveROIDetailFromScene(p_roi);
 		}
 
 		p_roi->SetUnknown0xe0(-1);
@@ -110,7 +144,7 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a65b0
-void ViewManager::FUN_100a65b0(ViewROI* p_roi, int p_und)
+void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_und)
 {
 	if (p_roi->GetLODCount() <= p_und) {
 		p_und = p_roi->GetLODCount() - 1;
@@ -163,7 +197,7 @@ void ViewManager::FUN_100a65b0(ViewROI* p_roi, int p_und)
 }
 
 // FUNCTION: LEGO1 0x100a66a0
-void ViewManager::FUN_100a66a0(ViewROI* p_roi)
+void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
 {
 	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetUnknown0xe0());
 
@@ -184,10 +218,10 @@ void ViewManager::FUN_100a66a0(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a66f0
-inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
+inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_roi, int p_und)
 {
 	if (!p_roi->GetVisibility() && p_und != -2) {
-		FUN_100a66f0(p_roi, -2);
+		ManageVisibilityAndDetailRecursively(p_roi, -2);
 	}
 	else {
 		const CompoundObject* comp = p_roi->GetComp();
@@ -201,7 +235,7 @@ inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 						return;
 					}
 
-					FUN_100a66f0(p_roi, -2);
+					ManageVisibilityAndDetailRecursively(p_roi, -2);
 					return;
 				}
 
@@ -211,19 +245,19 @@ inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 
 		if (p_und == -2) {
 			if (p_roi->GetUnknown0xe0() >= 0) {
-				FUN_100a66a0(p_roi);
+				RemoveROIDetailFromScene(p_roi);
 				p_roi->SetUnknown0xe0(-2);
 			}
 
 			if (comp != NULL) {
 				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-					FUN_100a66f0((ViewROI*) *it, p_und);
+					ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
 				}
 			}
 		}
 		else if (comp == NULL) {
 			if (p_roi->GetLODs() != NULL && p_roi->GetLODCount() > 0) {
-				FUN_100a65b0(p_roi, p_und);
+				UpdateROIDetailBasedOnLOD(p_roi, p_und);
 				return;
 			}
 		}
@@ -231,7 +265,7 @@ inline void ViewManager::FUN_100a66f0(ViewROI* p_roi, int p_und)
 			p_roi->SetUnknown0xe0(-1);
 
 			for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-				FUN_100a66f0((ViewROI*) *it, p_und);
+				ManageVisibilityAndDetailRecursively((ViewROI*) *it, p_und);
 			}
 		}
 	}
@@ -250,11 +284,11 @@ void ViewManager::Update(float p_previousRenderTime, float)
 		Unknown();
 	}
 	else if (flags & c_bit2) {
-		FUN_100a6b90();
+		UpdateViewTransformations();
 	}
 
 	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
-		FUN_100a66f0((ViewROI*) *it, -1);
+		ManageVisibilityAndDetailRecursively((ViewROI*) *it, -1);
 	}
 
 	stopWatch.Stop();
@@ -309,7 +343,7 @@ inline int ViewManager::Unknown()
 		*unk0x90 = fVar3;
 		// clang-format on
 
-		FUN_100a6b90();
+		UpdateViewTransformations();
 		return 0;
 	}
 }
@@ -369,7 +403,7 @@ inline int ViewManager::Unknown3(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a6b90
-void ViewManager::FUN_100a6b90()
+void ViewManager::UpdateViewTransformations()
 {
 	flags &= ~c_bit2;
 

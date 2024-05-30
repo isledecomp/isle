@@ -20,6 +20,10 @@ DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
 // STRING: LEGO1 0x100f39a0
 const char* g_varAMBULFUEL = "ambulFUEL";
 
+// GLOBAL: LEGO1 0x100f43b4
+// STRING: LEGO1 0x100f439c
+const char* g_varTOWFUEL = "towFUEL";
+
 // GLOBAL: LEGO1 0x100f3a40
 // STRING: LEGO1 0x100f3808
 const char* g_varVISIBILITY = "VISIBILITY";
@@ -105,7 +109,7 @@ void CameraLocationVariable::SetValue(const char* p_value)
 	strcpy(buffer, p_value);
 
 	char* location = strtok(buffer, ",");
-	NavController()->UpdateCameraLocation(location);
+	NavController()->UpdateLocation(location);
 
 	location = strtok(NULL, ",");
 	if (location) {

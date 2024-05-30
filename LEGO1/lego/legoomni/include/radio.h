@@ -30,6 +30,7 @@ public:
 	}
 
 	void Initialize(MxBool p_und);
+	void CreateState();
 	void Play();
 	void Stop();
 
@@ -39,14 +40,12 @@ public:
 	// Radio::`scalar deleting destructor'
 
 private:
-	void CreateRadioState();
-
 	RadioState* m_state;   // 0x08
 	MxBool m_unk0x0c;      // 0x0c
 	MxBool m_audioEnabled; // 0x0d
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 };
 
 #endif // RADIO_H

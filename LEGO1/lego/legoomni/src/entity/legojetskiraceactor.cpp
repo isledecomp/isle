@@ -38,13 +38,13 @@ void LegoJetskiRaceActor::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x100822d0
-void LegoJetskiRaceActor::VTable0x98()
+void LegoJetskiRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x100822e0
-MxResult LegoJetskiRaceActor::WaitForAnimation()
+MxResult LegoJetskiRaceActor::VTable0x9c()
 {
 	// TODO
 	return SUCCESS;

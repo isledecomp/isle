@@ -81,8 +81,8 @@ MxLong Police::Notify(MxParam& p_param)
 		case c_notificationKeyPress:
 			result = HandleKeyPress(((LegoEventNotificationParam&) p_param));
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -102,7 +102,7 @@ void Police::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x1005e550
-MxLong Police::HandleClick(LegoControlManagerEvent& p_param)
+MxLong Police::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
@@ -190,7 +190,7 @@ void Police::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x1005e790
-MxBool Police::VTable0x64()
+MxBool Police::Escape()
 {
 	DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, 510);
 	m_destLocation = LegoGameState::e_infomain;

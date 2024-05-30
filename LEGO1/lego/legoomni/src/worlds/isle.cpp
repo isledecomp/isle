@@ -29,8 +29,10 @@
 #include "mxnotificationmanager.h"
 #include "mxstillpresenter.h"
 #include "mxtransitionmanager.h"
+#include "mxtype19notificationparam.h"
 #include "mxvariabletable.h"
 #include "pizza.h"
+#include "pizzeria.h"
 #include "scripts.h"
 #include "skateboard.h"
 #include "towtrack.h"
@@ -38,7 +40,7 @@
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
 // GLOBAL: LEGO1 0x100f1198
-undefined4 g_unk0x100f1198 = 0x7f;
+MxU32 g_isleFlags = 0x7f;
 
 // FUNCTION: LEGO1 0x10030820
 Isle::Isle()
@@ -140,8 +142,8 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationEndAnim:
 			switch (m_act1state->m_unk0x018) {
@@ -157,7 +159,7 @@ MxLong Isle::Notify(MxParam& p_param)
 			}
 			break;
 		case c_notificationType19:
-			result = HandleType19Notification(p_param);
+			result = HandleType19Notification((MxType19NotificationParam&) p_param);
 			break;
 		case c_notificationType20:
 			Enable(TRUE);
@@ -276,7 +278,7 @@ void Isle::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10031030
-MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
+MxLong Isle::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		MxDSAction action;
@@ -399,15 +401,15 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 			Start(&action);
 			break;
 		case IsleScript::c_Observe_RCab_Ctl:
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_GlobeLArrow_Ctl:
 			UpdateLightPosition(-1);
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_GlobeRArrow_Ctl:
 			UpdateLightPosition(1);
-			FUN_10031590();
+			UpdateGlobe();
 			break;
 		case IsleScript::c_Observe_Draw1_Ctl:
 		case IsleScript::c_Observe_Draw2_Ctl:
@@ -443,16 +445,78 @@ MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10031590
-void Isle::FUN_10031590()
+// FUNCTION: LEGO1 0x10031590
+void Isle::UpdateGlobe()
 {
-	// TODO
+	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
+
+	for (MxS32 i = 0; i < 6; i++) {
+		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+
+		if (presenter != NULL) {
+			presenter->Enable(i == lightPosition);
+		}
+	}
 }
 
-// STUB: LEGO1 0x100315f0
-MxLong Isle::HandleType19Notification(MxParam& p_param)
+// FUNCTION: LEGO1 0x100315f0
+MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
 {
-	return 0;
+	MxLong result = 0;
+
+	if (CurrentActor() != NULL) {
+		if (CurrentActor() == m_dunebuggy) {
+			result = m_dunebuggy->Notify(p_param);
+		}
+		else if (CurrentActor() == m_motocycle) {
+			result = m_motocycle->Notify(p_param);
+		}
+	}
+
+	switch (m_act1state->m_unk0x018) {
+	case 3:
+		result = m_pizza->Notify(p_param);
+		break;
+	case 8:
+		result = m_towtrack->Notify(p_param);
+		break;
+	case 10:
+		result = m_ambulance->Notify(p_param);
+		break;
+	}
+
+	if (result == 0) {
+		switch (p_param.GetUnknown0x0c()) {
+		case 0x12c:
+			AnimationManager()->FUN_10064670(NULL);
+			result = 1;
+			break;
+		case 0x12d:
+			AnimationManager()->FUN_10064880("brickstr", 0, 20000);
+			result = 1;
+			break;
+		case 0x131:
+			if (m_act1state->m_unk0x018 != 10) {
+				AnimationManager()->FUN_10064740(FALSE);
+			}
+			result = 1;
+			break;
+		case 0x132:
+			AnimationManager()->FUN_10064880("mama", 0, 20000);
+			AnimationManager()->FUN_10064880("papa", 0, 20000);
+			result = 1;
+			break;
+		case 0x136:
+			LegoEntity* bouy = (LegoEntity*) Find("MxEntity", "bouybump");
+			if (bouy != NULL) {
+				NotificationManager()->Send(bouy, LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
+			}
+			result = 1;
+			break;
+		}
+	}
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x10031820
@@ -466,7 +530,7 @@ void Isle::Enable(MxBool p_enable)
 	m_radio.Initialize(p_enable);
 
 	if (p_enable) {
-		FUN_100330e0();
+		CreateState();
 
 		VideoManager()->ResetPalette(FALSE);
 		m_act1state->FUN_10034d00();
@@ -487,15 +551,15 @@ void Isle::Enable(MxBool p_enable)
 		FUN_1003ef00(TRUE);
 
 		if (m_act1state->m_unk0x018 == 0) {
-			MxU32 und[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+			MxS32 locations[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
 			for (MxU32 i = 0; i < 5; i++) {
-				MxS32 und2 = rand() % 5;
+				MxS32 r = rand() % 5;
 
-				for (MxU32 j = 0; j < _countof(und); j++) {
-					if (und[j] != 0 && und2-- == 0) {
-						AnimationManager()->FUN_100629b0(und[j], TRUE);
-						und[j] = 0;
+				for (MxU32 j = 0; j < sizeOfArray(locations); j++) {
+					if (locations[j] != 0 && r-- == 0) {
+						AnimationManager()->AddExtra(locations[j], TRUE);
+						locations[j] = 0;
 						break;
 					}
 				}
@@ -503,7 +567,7 @@ void Isle::Enable(MxBool p_enable)
 		}
 
 		if (CurrentActor() != NULL && CurrentActor()->IsA("Jetski")) {
-			IslePathActor* actor = CurrentActor();
+			IslePathActor* actor = (IslePathActor*) CurrentActor();
 			actor->SpawnPlayer(
 				LegoGameState::e_unk45,
 				FALSE,
@@ -526,16 +590,16 @@ void Isle::Enable(MxBool p_enable)
 				m_act1state->m_unk0x018 = 5;
 			}
 
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_jetski->Notify(param);
 			}
 #else
-			m_jetski->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_jetski->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_garadoor:
@@ -549,81 +613,81 @@ void Isle::Enable(MxBool p_enable)
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_bike:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_bike->Notify(param);
 			}
 #else
-			m_bike->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_bike->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_dunecar:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_dunebuggy->Notify(param);
 			}
 #else
-			m_dunebuggy->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_dunebuggy->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_motocycle:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_motocycle->Notify(param);
 			}
 #else
-			m_motocycle->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_motocycle->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_copter:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_helicopter->Notify(param);
 			}
 #else
-			m_helicopter->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_helicopter->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_skateboard:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_skateboard->Notify(param);
 			}
 #else
-			m_skateboard->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_skateboard->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_jetski:
-			FUN_1001fa70(CurrentActor());
+			PlaceActor(CurrentActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_jetski->Notify(param);
 			}
 #else
-			m_jetski->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_jetski->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		default:
@@ -657,11 +721,12 @@ void Isle::Enable(MxBool p_enable)
 			}
 			break;
 		case 5: {
-			CurrentActor()->SpawnPlayer(
-				LegoGameState::e_jetrace2,
-				FALSE,
-				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-			);
+			((IslePathActor*) CurrentActor())
+				->SpawnPlayer(
+					LegoGameState::e_jetrace2,
+					FALSE,
+					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+				);
 			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -689,11 +754,12 @@ void Isle::Enable(MxBool p_enable)
 		}
 		case 6: {
 			GameState()->m_currentArea = LegoGameState::e_carraceExterior;
-			CurrentActor()->SpawnPlayer(
-				LegoGameState::e_unk21,
-				FALSE,
-				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-			);
+			((IslePathActor*) CurrentActor())
+				->SpawnPlayer(
+					LegoGameState::e_unk21,
+					FALSE,
+					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+				);
 			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
 
 			if (raceState->GetUnknown0x28() == 2) {
@@ -722,27 +788,28 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_unk0x018 = 8;
 
 			AnimationManager()->FUN_1005f6d0(FALSE);
-			AnimationManager()->FUN_1005f700(FALSE);
+			AnimationManager()->EnableCamAnims(FALSE);
 
-			g_unk0x100f1198 &= ~c_bit7;
+			g_isleFlags &= ~c_playMusic;
 			m_towtrack->FUN_1004dab0();
 			break;
 		case 9:
 			m_act1state->m_unk0x018 = 10;
 
 			AnimationManager()->FUN_1005f6d0(FALSE);
-			AnimationManager()->FUN_1005f700(FALSE);
+			AnimationManager()->EnableCamAnims(FALSE);
 
-			g_unk0x100f1198 &= ~c_bit7;
+			g_isleFlags &= ~c_playMusic;
 			m_ambulance->FUN_10036e60();
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
-			CurrentActor()->SpawnPlayer(
-				LegoGameState::e_unk54,
-				TRUE,
-				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-			);
+			((IslePathActor*) CurrentActor())
+				->SpawnPlayer(
+					LegoGameState::e_unk54,
+					TRUE,
+					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+				);
 			GameState()->m_currentArea = LegoGameState::e_unk66;
 			FUN_1003ef00(TRUE);
 			m_jukebox->StartAction();
@@ -789,7 +856,7 @@ void Isle::FUN_10032620()
 	case LegoGameState::e_unk66: {
 		MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
 		LegoPathBoundary* boundary = CurrentActor()->GetBoundary();
-		CurrentActor()->VTable0xec(mat, boundary, TRUE);
+		((IslePathActor*) CurrentActor())->VTable0xec(mat, boundary, TRUE);
 		break;
 	}
 	case LegoGameState::e_unk4:
@@ -802,11 +869,12 @@ void Isle::FUN_10032620()
 	case LegoGameState::e_hospitalExterior:
 	case LegoGameState::e_unk31:
 	case LegoGameState::e_policeExterior:
-		CurrentActor()->SpawnPlayer(
-			GameState()->m_currentArea,
-			TRUE,
-			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-		);
+		((IslePathActor*) CurrentActor())
+			->SpawnPlayer(
+				GameState()->m_currentArea,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 		GameState()->m_currentArea = LegoGameState::e_unk66;
 		break;
 	}
@@ -940,7 +1008,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_SkatePizza_Bitmap, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_skateboard->FUN_10010510();
+			m_skateboard->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_ambulance:
@@ -1065,7 +1133,7 @@ void Isle::Add(MxCore* p_object)
 }
 
 // FUNCTION: LEGO1 0x10033050
-void Isle::VTable0x6c(IslePathActor* p_actor)
+void Isle::VTable0x6c(LegoPathActor* p_actor)
 {
 	LegoWorld::Remove(p_actor);
 
@@ -1083,21 +1151,123 @@ void Isle::VTable0x6c(IslePathActor* p_actor)
 	}
 }
 
-// STUB: LEGO1 0x100330e0
-void Isle::FUN_100330e0()
+// FUNCTION: LEGO1 0x100330e0
+void Isle::CreateState()
 {
-	// TODO
+	m_act1state = (Act1State*) GameState()->GetState("Act1State");
+	if (!m_act1state) {
+		m_act1state = (Act1State*) GameState()->CreateState("Act1State");
+		m_act1state->m_unk0x018 = 0;
+	}
+
+	m_radio.CreateState();
+	m_pizzeria->CreateState();
+	m_pizza->CreateState();
+	m_towtrack->CreateState();
+	m_ambulance->CreateState();
+
+	if (m_helicopter != NULL) {
+		m_helicopter->CreateState();
+	}
 }
 
-// STUB: LEGO1 0x10033180
-MxBool Isle::VTable0x64()
+// FUNCTION: LEGO1 0x10033180
+MxBool Isle::Escape()
 {
-	// TODO
-	return FALSE;
+	m_radio.Stop();
+	BackgroundAudioManager()->Stop();
+
+	switch (m_act1state->m_unk0x018) {
+	case 3:
+		if (CurrentActor() != NULL) {
+			m_pizza->FUN_10038380();
+			m_pizza->FUN_100382b0();
+		}
+		break;
+	case 8:
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+			m_towtrack->FUN_1004db10();
+			m_towtrack->FUN_1004dbe0();
+		}
+		break;
+	case 10:
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+			m_ambulance->FUN_10037240();
+			m_ambulance->FUN_10037250();
+		}
+		break;
+	}
+
+	if (m_act1state->m_unk0x01e == TRUE) {
+		InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_Floor2, NULL);
+		m_act1state->m_unk0x01e = FALSE;
+	}
+
+	m_act1state->m_elevFloor = Act1State::c_floor1;
+
+	AnimationManager()->FUN_10061010(FALSE);
+	DeleteObjects(&m_atom, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
+
+	if (CurrentActor()) {
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) CurrentActor())->VTable0xe4();
+			m_skateboard->SetUnknown0x160(FALSE);
+		}
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_polidoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_garadoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
+	}
+
+	m_act1state->m_unk0x018 = 0;
+	m_destLocation = LegoGameState::e_infomain;
+	return TRUE;
 }
 
-// STUB: LEGO1 0x10033350
+// FUNCTION: LEGO1 0x10033350
 void Isle::FUN_10033350()
 {
-	// TODO
+	if (m_act1state->m_unk0x018 == 10) {
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+			m_ambulance->FUN_10037240();
+			m_ambulance->FUN_10037250();
+		}
+	}
+
+	if (m_act1state->m_unk0x018 == 8) {
+		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+			m_towtrack->FUN_1004db10();
+			m_towtrack->FUN_1004dbe0();
+		}
+	}
+
+	if (m_act1state->m_unk0x018 == 3) {
+		if (CurrentActor() != NULL) {
+			m_pizza->FUN_10038380();
+			m_pizza->FUN_100382b0();
+		}
+	}
+
+	AnimationManager()->FUN_10061010(FALSE);
+
+	if (CurrentActor()) {
+		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) CurrentActor())->VTable0xe4();
+			m_skateboard->SetUnknown0x160(FALSE);
+		}
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_polidoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
+	}
+
+	if (GameState()->m_currentArea == LegoGameState::e_garadoor) {
+		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
+	}
+
+	m_destLocation = LegoGameState::e_infomain;
 }

@@ -32,7 +32,7 @@ undefined4 JetskiRace::VTable0x70(undefined4)
 }
 
 // STUB: LEGO1 0x10016a10
-MxBool JetskiRace::VTable0x64()
+MxBool JetskiRace::Escape()
 {
 	return TRUE;
 }

@@ -31,14 +31,14 @@ void Motocycle::VTable0xe4()
 }
 
 // STUB: LEGO1 0x10035c50
-MxU32 Motocycle::VTable0xcc()
+MxU32 Motocycle::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10035d70
-MxU32 Motocycle::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Motocycle::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

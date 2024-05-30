@@ -108,21 +108,21 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	}
 
 	if (numVerts > 0) {
-		vertices = new float[numVerts][_countof(*vertices)];
+		vertices = new float[numVerts][sizeOfArray(*vertices)];
 		if (p_storage->Read(vertices, numVerts * sizeof(*vertices)) != SUCCESS) {
 			goto done;
 		}
 	}
 
 	if (numNormals > 0) {
-		normals = new float[numNormals][_countof(*normals)];
+		normals = new float[numNormals][sizeOfArray(*normals)];
 		if (p_storage->Read(normals, numNormals * sizeof(*normals)) != SUCCESS) {
 			goto done;
 		}
 	}
 
 	if (numTextureVertices > 0) {
-		textureVertices = new float[numTextureVertices][_countof(*textureVertices)];
+		textureVertices = new float[numTextureVertices][sizeOfArray(*textureVertices)];
 		if (p_storage->Read(textureVertices, numTextureVertices * sizeof(*textureVertices)) != SUCCESS) {
 			goto done;
 		}
@@ -143,7 +143,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			goto done;
 		}
 
-		polyIndices = new LegoU32[numPolys & MAXWORD][_countof(*polyIndices)];
+		polyIndices = new LegoU32[numPolys & MAXWORD][sizeOfArray(*polyIndices)];
 		if (p_storage->Read(polyIndices, (numPolys & MAXWORD) * sizeof(*polyIndices)) != SUCCESS) {
 			goto done;
 		}
@@ -153,7 +153,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		if (numTextureIndices > 0) {
-			textureIndices = new LegoU32[numPolys & MAXWORD][_countof(*textureIndices)];
+			textureIndices = new LegoU32[numPolys & MAXWORD][sizeOfArray(*textureIndices)];
 			if (p_storage->Read(textureIndices, (numPolys & MAXWORD) * sizeof(*textureIndices)) != SUCCESS) {
 				goto done;
 			}
@@ -212,7 +212,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 
 		if (textureName != NULL) {
 			if (mesh->GetUnknown0x21()) {
-				LegoROI::FUN_100a9cf0(textureName, paletteEntries, _countof(paletteEntries));
+				LegoROI::FUN_100a9cf0(textureName, paletteEntries, sizeOfArray(paletteEntries));
 			}
 
 			textureInfo = p_textureContainer->Get(mesh->GetTextureName());

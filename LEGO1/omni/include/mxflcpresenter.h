@@ -19,11 +19,18 @@ public:
 		return !strcmp(p_name, MxFlcPresenter::ClassName()) || MxVideoPresenter::IsA(p_name);
 	}
 
-	// FUNCTION: LEGO1 0x100b33f0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x10083790
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f43c8
 		return "MxFlcPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100b33f0
+	// FUNCTION: BETA10 0x10083760
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	void LoadHeader(MxStreamChunk* p_chunk) override; // vtable+0x5c

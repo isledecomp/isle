@@ -23,12 +23,12 @@ LegoEdge::~LegoEdge()
 }
 
 // FUNCTION: LEGO1 0x1009a4d0
-LegoEdge* LegoEdge::GetClockwiseEdge(LegoWEEdge* p_face)
+LegoEdge* LegoEdge::GetClockwiseEdge(LegoWEEdge& p_face)
 {
-	if (p_face == m_faceA) {
+	if (&p_face == m_faceA) {
 		return m_cwA;
 	}
-	else if (p_face == m_faceB) {
+	else if (&p_face == m_faceB) {
 		return m_cwB;
 	}
 	else {
@@ -37,12 +37,12 @@ LegoEdge* LegoEdge::GetClockwiseEdge(LegoWEEdge* p_face)
 }
 
 // FUNCTION: LEGO1 0x1009a4f0
-LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge* p_face)
+LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge& p_face)
 {
-	if (p_face == m_faceA) {
+	if (&p_face == m_faceA) {
 		return m_ccwA;
 	}
-	else if (p_face == m_faceB) {
+	else if (&p_face == m_faceB) {
 		return m_ccwB;
 	}
 	else {
@@ -51,13 +51,13 @@ LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge* p_face)
 }
 
 // FUNCTION: LEGO1 0x1009a510
-Vector3* LegoEdge::GetOpposingPoint(LegoWEEdge* p_face)
+Vector3* LegoEdge::GetOpposingPoint(LegoWEEdge& p_face)
 {
-	return p_face == m_faceA ? m_pointB : m_pointA;
+	return &p_face == m_faceA ? m_pointB : m_pointA;
 }
 
 // FUNCTION: LEGO1 0x1009a530
-Vector3* LegoEdge::GetPoint(LegoWEEdge* p_face)
+Vector3* LegoEdge::CCWVertex(LegoWEEdge& p_face)
 {
-	return p_face == m_faceB ? m_pointB : m_pointA;
+	return &p_face == m_faceB ? m_pointB : m_pointA;
 }

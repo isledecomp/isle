@@ -756,3 +756,18 @@ def test_virtual_inheritance(parser):
     assert parser.vtables[1].base_class == "Greetings"
     assert parser.vtables[2].base_class == "Howdy"
     assert all(v.name == "HiThere" for v in parser.vtables)
+
+
+def test_namespace_in_comment(parser):
+    parser.read_lines(
+        [
+            "// VTABLE: HELLO 0x1234",
+            "// class Tgl::Object",
+            "// VTABLE: HELLO 0x5555",
+            "// class TglImpl::RendererImpl<D3DRMImpl::D3DRM>",
+        ]
+    )
+
+    assert len(parser.vtables) == 2
+    assert parser.vtables[0].name == "Tgl::Object"
+    assert parser.vtables[1].name == "TglImpl::RendererImpl<D3DRMImpl::D3DRM>"

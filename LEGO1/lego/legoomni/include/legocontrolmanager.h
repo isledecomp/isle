@@ -46,11 +46,18 @@ public:
 
 	MxResult Tickle() override; // vtable+0x08
 
-	// FUNCTION: LEGO1 0x10028cb0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1008af70
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f31b8
 		return "LegoControlManager";
+	}
+
+	// FUNCTION: LEGO1 0x10028cb0
+	// FUNCTION: BETA10 0x1008af40
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10028cc0
@@ -63,7 +70,7 @@ public:
 	void Register(MxCore* p_listener);
 	void Unregister(MxCore* p_listener);
 	MxBool FUN_10029210(LegoEventNotificationParam& p_param, MxPresenter* p_presenter);
-	void FUN_100293c0(undefined4, const char*, undefined2);
+	void FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS16 p_unk0x4e);
 	MxControlPresenter* FUN_100294e0(MxS32 p_x, MxS32 p_y);
 	MxBool FUN_10029630();
 	MxBool FUN_10029750();

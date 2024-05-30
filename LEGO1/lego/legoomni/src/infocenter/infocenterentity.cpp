@@ -26,7 +26,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1: {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			CurrentActor()->VTable0xe4();
+			((IslePathActor*) CurrentActor())->VTable0xe4();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -53,7 +53,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 		break;
 	}
 
-	AnimationManager()->FUN_10061010(0);
+	AnimationManager()->FUN_10061010(FALSE);
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
 	return 1;

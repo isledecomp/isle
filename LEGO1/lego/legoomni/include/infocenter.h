@@ -67,7 +67,7 @@ public:
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	void ReadyWorld() override;                       // vtable+0x50
 	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x1006ec60
@@ -79,7 +79,7 @@ private:
 	MxLong HandleKeyPress(MxS8 p_key);
 	MxU8 HandleMouseMove(MxS32 p_x, MxS32 p_y);
 	MxU8 HandleButtonUp(MxS32 p_x, MxS32 p_y);
-	MxU8 HandleClick(LegoControlManagerEvent& p_param);
+	MxU8 HandleControl(LegoControlManagerEvent& p_param);
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleNotification0(MxNotificationParam& p_param);
 

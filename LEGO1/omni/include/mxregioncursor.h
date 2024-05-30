@@ -28,10 +28,10 @@ public:
 	virtual void Reset(); // vtable+0x3c
 
 private:
-	void FUN_100c46c0(MxRegionLeftRightList& p_leftRightList);
+	void ResetAndInitializeCursor(MxRegionLeftRightList& p_leftRightList);
 	void UpdateRect(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom);
-	void FUN_100c4a20(MxRect32& p_rect);
-	void FUN_100c4b50(MxRect32& p_rect);
+	void ProcessRectOverlapAscending(MxRect32& p_rect);
+	void ProcessOverlapWithRect(MxRect32& p_rect);
 
 	MxRegion* m_region;                             // 0x08
 	MxRect32* m_rect;                               // 0x0c

@@ -34,7 +34,7 @@ public:
 	// FUNCTION: LEGO1 0x100377a0
 	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
 
-	MxBool VTable0x64() override;          // vtable+0x64
+	MxBool Escape() override;              // vtable+0x64
 	void Enable(MxBool p_enable) override; // vtable+0x68
 
 	// SYNTHETIC: LEGO1 0x100378d0
@@ -43,7 +43,7 @@ public:
 private:
 	LegoGameState::Area m_destLocation; // 0xf8
 
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 };
 
 #endif // INFOCENTERDOOR_H

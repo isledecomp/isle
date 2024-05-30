@@ -16,6 +16,7 @@
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
+#include "mxstreamer.h"
 #include "mxtimer.h"
 #include "mxutilities.h"
 
@@ -425,14 +426,14 @@ MxBool LegoAnimMMPresenter::FUN_1004b6b0(MxLong p_time)
 MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 {
 	LegoROI* viewROI = VideoManager()->GetViewROI();
-	IslePathActor* actor = CurrentActor();
+	LegoPathActor* actor = CurrentActor();
 
-	if (m_tranInfo != NULL && m_tranInfo->m_unk0x14 && m_tranInfo->m_unk0x12 != -1 && actor != NULL) {
+	if (m_tranInfo != NULL && m_tranInfo->m_unk0x14 && m_tranInfo->m_location != -1 && actor != NULL) {
 		if (m_unk0x64 != NULL) {
 			undefined4 und = 1;
 
 			if (m_presenter != NULL) {
-				m_unk0x64->FUN_1001fc80(actor);
+				m_unk0x64->RemoveActor(actor);
 
 				if (m_tranInfo->m_unk0x29) {
 					Mx3DPointFloat position, direction;
@@ -441,7 +442,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 					direction = viewROI->GetWorldDirection();
 					position[1] -= 1.25;
 
-					und = m_unk0x64->FUN_1001fb70(actor, m_presenter, position, direction);
+					und = m_unk0x64->PlaceActor(actor, m_presenter, position, direction);
 				}
 				else {
 					und = 0;
@@ -451,7 +452,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 			if (und != 0) {
 				viewROI->WrappedSetLocalTransform(m_tranInfo->m_unk0x2c);
 				VideoManager()->Get3DManager()->Moved(*viewROI);
-				m_unk0x64->FUN_1001fa70(actor);
+				m_unk0x64->PlaceActor(actor);
 			}
 
 			if (m_tranInfo->m_unk0x29) {
@@ -465,9 +466,40 @@ MxBool LegoAnimMMPresenter::FUN_1004b6d0(MxLong p_time)
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x1004b840
+// FUNCTION: BETA10 0x1004d033
+void LegoAnimMMPresenter::FUN_1004b840()
+{
+	MxDSAction* action = m_action;
+
+	if (m_presenter != NULL) {
+		m_presenter->FUN_1006c7a0();
+	}
+
+	for (MxCompositePresenterList::iterator it = m_list.begin(); it != m_list.end(); it++) {
+		if (*it != m_presenter) {
+			(*it)->EndAction();
+		}
+	}
+
+	FUN_1004b6d0(0);
+	EndAction();
+
+	if (action != NULL) {
+		Streamer()->FUN_100b98f0(action);
+	}
+}
+
 // FUNCTION: LEGO1 0x1004b8b0
 // FUNCTION: BETA10 0x1004d104
 MxBool LegoAnimMMPresenter::FUN_1004b8b0()
 {
 	return m_tranInfo != NULL ? m_tranInfo->m_unk0x28 : TRUE;
+}
+
+// FUNCTION: LEGO1 0x1004b8c0
+// FUNCTION: BETA10 0x1004d13d
+void LegoAnimMMPresenter::FUN_1004b8c0()
+{
+	FUN_1004b6d0(0);
 }

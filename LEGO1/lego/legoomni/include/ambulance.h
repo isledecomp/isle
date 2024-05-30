@@ -28,16 +28,19 @@ public:
 		return !strcmp(p_name, Ambulance::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;            // vtable+0x18
-	void Destroy(MxBool p_fromDestructor) override;              // vtable+0x1c
-	void VTable0x70(float p_float) override;                     // vtable+0x70
-	MxU32 VTable0xcc() override;                                 // vtable+0xcc
-	MxU32 VTable0xd4(LegoControlManagerEvent& p_param) override; // vtable+0xd4
-	MxU32 VTable0xdc(MxType19NotificationParam&) override;       // vtable+0xdc
-	void VTable0xe4() override;                                  // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;               // vtable+0x18
+	void Destroy(MxBool p_fromDestructor) override;                 // vtable+0x1c
+	void VTable0x70(float p_float) override;                        // vtable+0x70
+	MxU32 HandleClick() override;                                   // vtable+0xcc
+	MxU32 HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
+	MxU32 VTable0xdc(MxType19NotificationParam&) override;          // vtable+0xdc
+	void VTable0xe4() override;                                     // vtable+0xe4
 
+	void CreateState();
 	void FUN_10036e60();
 	void FUN_10037060();
+	void FUN_10037240();
+	void FUN_10037250();
 
 	// SYNTHETIC: LEGO1 0x10036130
 	// Ambulance::`scalar deleting destructor'

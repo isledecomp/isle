@@ -7,11 +7,18 @@
 // SIZE 0xc0
 class LegoLoopingAnimPresenter : public LegoAnimPresenter {
 public:
-	// FUNCTION: LEGO1 0x1000c9a0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1005c6f0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0700
 		return "LegoLoopingAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000c9a0
+	// FUNCTION: BETA10 0x1005c6c0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000c9b0

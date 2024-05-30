@@ -24,13 +24,13 @@ MxLong HospitalEntity::VTable0x50(MxParam& p_param)
 			act1State->SetUnknown18(0);
 
 			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				CurrentActor()->VTable0xe4();
+				((IslePathActor*) CurrentActor())->VTable0xe4();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
 			isle->SetDestLocation(LegoGameState::Area::e_hospital);
 
-			AnimationManager()->FUN_10061010(0);
+			AnimationManager()->FUN_10061010(FALSE);
 			TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 		}
 	}

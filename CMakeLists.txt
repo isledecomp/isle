@@ -306,12 +306,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/actors/radio.cpp
   LEGO1/lego/legoomni/src/actors/skateboard.cpp
   LEGO1/lego/legoomni/src/actors/towtrack.cpp
+  LEGO1/lego/legoomni/src/audio/lego3dsound.cpp
   LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp
   LEGO1/lego/legoomni/src/audio/legocachsound.cpp
   LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp
   LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
-  LEGO1/lego/legoomni/src/audio/legounknown100d5778.cpp
   LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/lego/legoomni/src/build/buildingentity.cpp
   LEGO1/lego/legoomni/src/build/helicopterstate.cpp
@@ -345,12 +345,12 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legoactor.cpp
   LEGO1/lego/legoomni/src/entity/legoactorpresenter.cpp
   LEGO1/lego/legoomni/src/entity/legocameracontroller.cpp
-  LEGO1/lego/legoomni/src/entity/legocameralocations.cpp
   LEGO1/lego/legoomni/src/entity/legocarraceactor.cpp
   LEGO1/lego/legoomni/src/entity/legoentity.cpp
   LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp
   LEGO1/lego/legoomni/src/entity/legojetski.cpp
   LEGO1/lego/legoomni/src/entity/legojetskiraceactor.cpp
+  LEGO1/lego/legoomni/src/entity/legolocations.cpp
   LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
@@ -376,6 +376,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/paths/legopathboundary.cpp
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
+  LEGO1/lego/legoomni/src/paths/legopathstruct.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
   LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
   LEGO1/lego/legoomni/src/police/policeentity.cpp

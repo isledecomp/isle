@@ -15,11 +15,18 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
-	// FUNCTION: LEGO1 0x10015ba0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a8970
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f07c4
 		return "LegoRace";
+	}
+
+	// FUNCTION: LEGO1 0x10015ba0
+	// FUNCTION: BETA10 0x100a8940
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10015bb0
@@ -30,7 +37,7 @@ public:
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
 	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool VTable0x64() override;                     // vtable+0x64
+	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 	virtual undefined4 VTable0x6c(undefined4) = 0;    // vtable+0x6c
 	virtual undefined4 VTable0x70(undefined4);        // vtable+0x70

@@ -19,12 +19,12 @@ enum NotificationId {
 	c_notificationButtonUp = 8,   // 100d6aa0
 	c_notificationButtonDown = 9, // 100d6aa0
 	c_notificationMouseMove = 10, // 100d6aa0
-	c_notificationType11 = 11,    // 100d6aa0
+	c_notificationClick = 11,     // 100d6aa0
 	c_notificationDragEnd = 12,
 	c_notificationDragStart = 13,
 	c_notificationDrag = 14,
 	c_notificationTimer = 15, // 100d6aa0
-	c_notificationClick = 17,
+	c_notificationControl = 17,
 	c_notificationEndAnim = 18, // 100d7e80
 	c_notificationType19 = 19,  // 100d6230
 	c_notificationType20 = 20,
@@ -38,6 +38,7 @@ enum NotificationId {
 // SIZE 0x0c
 class MxNotificationParam : public MxParam {
 public:
+	inline MxNotificationParam() : m_type(c_notificationType0), m_sender(NULL) {}
 	inline MxNotificationParam(NotificationId p_type, MxCore* p_sender) : MxParam(), m_type(p_type), m_sender(p_sender)
 	{
 	}

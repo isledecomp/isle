@@ -170,8 +170,8 @@ MxLong Infocenter::Notify(MxParam& p_param)
 				((LegoEventNotificationParam&) p_param).GetY()
 			);
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			StopBookAnimation();
@@ -246,7 +246,7 @@ MxLong Infocenter::HandleEndAction(MxEndActionNotificationParam& p_param)
 	}
 
 	if (action->GetObjectId() == InfomainScript::c_iicx26in_RunAnim) {
-		ControlManager()->FUN_100293c0(0x10, action->GetAtomId().GetInternal(), 0);
+		ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, action->GetAtomId().GetInternal(), 0);
 		m_unk0x1d6 = 0;
 	}
 
@@ -870,7 +870,7 @@ MxU8 Infocenter::HandleButtonUp(MxS32 p_x, MxS32 p_y)
 }
 
 // FUNCTION: LEGO1 0x10070370
-MxU8 Infocenter::HandleClick(LegoControlManagerEvent& p_param)
+MxU8 Infocenter::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		m_infoManDialogueTimer = 0;
@@ -1159,16 +1159,16 @@ MxResult Infocenter::Tickle()
 		m_unk0x1d6 += 100;
 
 		if (m_unk0x1d6 > 3400 && m_unk0x1d6 < 3650) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 3650 && m_unk0x1d6 < 3900) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
 		}
 		else if (m_unk0x1d6 > 3900 && m_unk0x1d6 < 4150) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 1);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 1);
 		}
 		else if (m_unk0x1d6 > 4400) {
-			ControlManager()->FUN_100293c0(0x10, m_atom.GetInternal(), 0);
+			ControlManager()->FUN_100293c0(InfomainScript::c_BigInfo_Ctl, m_atom.GetInternal(), 0);
 			m_unk0x1d6 = 0;
 		}
 	}
@@ -1327,7 +1327,7 @@ void Infocenter::Reset()
 }
 
 // FUNCTION: LEGO1 0x10070f60
-MxBool Infocenter::VTable0x64()
+MxBool Infocenter::Escape()
 {
 	if (m_infocenterState != NULL) {
 		MxU32 val = m_infocenterState->GetUnknown0x74();

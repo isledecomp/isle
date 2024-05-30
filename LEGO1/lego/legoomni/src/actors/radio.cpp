@@ -22,7 +22,7 @@ Radio::Radio()
 	ControlManager()->Register(this);
 
 	m_unk0x0c = TRUE;
-	CreateRadioState();
+	CreateState();
 }
 
 // FUNCTION: LEGO1 0x1002c990
@@ -47,8 +47,8 @@ MxLong Radio::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		}
 	}
@@ -96,7 +96,7 @@ void Radio::Stop()
 }
 
 // FUNCTION: LEGO1 0x1002cbc0
-MxLong Radio::HandleClick(LegoControlManagerEvent& p_param)
+MxLong Radio::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxDSAction action; // Unused
 	MxS32 objectId = p_param.GetClickedObjectId();
@@ -147,12 +147,12 @@ void Radio::Initialize(MxBool p_und)
 {
 	if (m_unk0x0c != p_und) {
 		m_unk0x0c = p_und;
-		CreateRadioState();
+		CreateState();
 	}
 }
 
 // FUNCTION: LEGO1 0x1002cde0
-void Radio::CreateRadioState()
+void Radio::CreateState()
 {
 	LegoGameState* gameState = GameState();
 	RadioState* state = (RadioState*) gameState->GetState("RadioState");

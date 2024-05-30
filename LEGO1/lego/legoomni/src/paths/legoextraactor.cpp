@@ -109,19 +109,19 @@ MxU32 LegoExtraActor::VTable0x90(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002aa90
-void LegoExtraActor::VTable0xa4(MxU8& p_und1, MxS32& p_und2)
+void LegoExtraActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 {
 	switch (m_unk0x0c) {
 	case 1:
-		p_und1 = 1;
+		p_und1 = TRUE;
 		p_und2 = 1;
 		break;
 	case 2:
-		p_und1 = 0;
+		p_und1 = FALSE;
 		p_und2 = 1;
 		break;
 	default:
-		p_und1 = 1;
+		p_und1 = TRUE;
 		p_und2 = rand() % p_und2 + 1;
 		break;
 	}
@@ -151,7 +151,7 @@ MxResult LegoExtraActor::FUN_1002aae0()
 		m_boundary = oldEdge;
 	}
 
-	LegoPathActor::WaitForAnimation();
+	LegoPathActor::VTable0x9c();
 	return SUCCESS;
 }
 
@@ -280,16 +280,16 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // FUNCTION: LEGO1 0x1002b290
-MxResult LegoExtraActor::WaitForAnimation()
+MxResult LegoExtraActor::VTable0x9c()
 {
 	LegoPathBoundary* oldBoundary = m_boundary;
-	MxResult result = LegoPathActor::WaitForAnimation();
+	MxResult result = LegoPathActor::VTable0x9c();
 
 	if (m_boundary != oldBoundary) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
+		LegoAnimPresenterSet& presenters = m_boundary->GetPresenters();
 
-		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+		for (LegoAnimPresenterSet::iterator it = presenters.begin(); it != presenters.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
 				b = TRUE;
@@ -312,9 +312,9 @@ void LegoExtraActor::Restart()
 {
 	if (m_unk0x0e != 0) {
 		MxU32 b = FALSE;
-		LegoAnimPresenterSet* set = m_boundary->GetPresenters();
+		LegoAnimPresenterSet& presenters = m_boundary->GetPresenters();
 
-		for (LegoAnimPresenterSet::iterator it = set->begin(); it != set->end(); it++) {
+		for (LegoAnimPresenterSet::iterator it = presenters.begin(); it != presenters.end(); it++) {
 			MxU32 roiMapSize;
 			if ((*it)->GetROIMap(roiMapSize)) {
 				b = TRUE;
@@ -400,6 +400,7 @@ void LegoExtraActor::SetWorldSpeed(MxFloat p_worldSpeed)
 	if (m_curAnim == 0 && p_worldSpeed > 0) {
 		VTable0xc4();
 	}
+
 	LegoAnimActor::SetWorldSpeed(p_worldSpeed);
 }
 
@@ -428,7 +429,7 @@ MxS32 LegoExtraActor::VTable0x68(Vector3& p_point1, Vector3& p_point2, Vector3& 
 	return LegoPathActor::VTable0x68(p_point1, p_point2, p_point3);
 }
 
-// STUB: LEGO1 0x1002b980
+// FUNCTION: LEGO1 0x1002b980
 MxU32 LegoExtraActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
@@ -438,5 +439,94 @@ MxU32 LegoExtraActor::VTable0x6c(
 	Vector3& p_v3
 )
 {
+	LegoAnimPresenterSet& presenters = p_boundary->GetPresenters();
+
+	for (LegoAnimPresenterSet::iterator itap = presenters.begin(); itap != presenters.end(); itap++) {
+		if ((*itap)->VTable0x94(p_v1, p_v2, p_f1, p_f2, p_v3)) {
+			return 1;
+		}
+	}
+
+	LegoPathActorSet& plpas = p_boundary->GetActors();
+	LegoPathActorSet lpas(plpas);
+
+	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
+		if (plpas.find(*itpa) != plpas.end()) {
+			LegoPathActor* actor = *itpa;
+
+			if (this != actor && !(actor->GetState() & 0x100)) {
+				LegoROI* roi = actor->GetROI();
+
+				if ((roi != NULL && roi->GetVisibility()) || actor->GetCameraFlag()) {
+					if (actor->GetUserNavFlag()) {
+						MxMatrix local2world = roi->GetLocal2World();
+						Vector3 local60(local2world[3]);
+						Mx3DPointFloat local54(p_v1);
+
+						((Vector3&) local54).Sub(&local60);
+						float local1c = p_v2.Dot(&p_v2, &p_v2);
+						float local24 = p_v2.Dot(&p_v2, &local54) * 2.0f;
+						float local20 = local54.Dot(&local54, &local54);
+
+						if (m_unk0x15 != 0 && local20 < 10.0f) {
+							return 0;
+						}
+
+						local20 -= 1.0f;
+
+						if (local1c >= 0.001 || local1c <= -0.001) {
+							float local40 = (local24 * local24) + (local20 * local1c * -4.0f);
+
+							if (local40 >= -0.001) {
+								local1c *= 2.0f;
+								local24 = -local24;
+
+								if (local40 < 0.0f) {
+									local40 = 0.0f;
+								}
+
+								local40 = sqrt(local40);
+								float local20X = (local24 + local40) / local1c;
+								float local1cX = (local24 - local40) / local1c;
+
+								if (local1cX < local20X) {
+									local40 = local20X;
+									local20X = local1cX;
+									local1cX = local40;
+								}
+
+								if ((local20X >= 0.0f && local20X <= p_f1) || (local1cX >= 0.0f && local1cX <= p_f1) ||
+									(local20X <= -0.01 && p_f1 + 0.01 <= local1cX)) {
+									p_v3 = p_v1;
+
+									if (VTable0x94(actor, TRUE) < 0) {
+										return 0;
+									}
+
+									actor->VTable0x94(this, FALSE);
+									return 2;
+								}
+							}
+						}
+					}
+					else {
+						if (roi->FUN_100a9410(p_v1, p_v2, p_f1, p_f2, p_v3, m_collideBox && actor->GetCollideBox())) {
+							if (VTable0x94(actor, TRUE) < 0) {
+								return 0;
+							}
+
+							actor->VTable0x94(this, FALSE);
+							return 2;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (m_unk0x15 != 0) {
+		m_unk0x15--;
+	}
+
 	return 0;
 }

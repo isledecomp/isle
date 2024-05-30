@@ -127,7 +127,7 @@ void HistoryBook::ReadyWorld()
 		(*scorebox)->SetTickleState(MxPresenter::e_repeating);
 		(*scorebox)->SetPosition(scoreX + 0xa1, scoreY);
 
-		for (MxS16 letterIndex = 0; letterIndex < (MxS16) _countof(m_names[0]);) {
+		for (MxS16 letterIndex = 0; letterIndex < (MxS16) sizeOfArray(m_names[0]);) {
 			MxS16 letter = score->m_name.m_letters[letterIndex];
 
 			if (letter == -1) {
@@ -149,7 +149,7 @@ void HistoryBook::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10082a10
-MxBool HistoryBook::VTable0x64()
+MxBool HistoryBook::Escape()
 {
 	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;

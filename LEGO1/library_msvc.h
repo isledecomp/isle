@@ -18,6 +18,15 @@
 // LIBRARY: LEGO1 0x1008b020
 // ___CxxFrameHandler
 
+// LIBRARY: LEGO1 0x1008b24c
+// __global_unwind2
+
+// LIBRARY: LEGO1 0x1008b28e
+// __local_unwind2
+
+// LIBRARY: LEGO1 0x1008b322
+// __NLG_Notify
+
 // LIBRARY: LEGO1 0x1008b3dc
 // __CIacos
 
@@ -81,6 +90,15 @@
 // LIBRARY: LEGO1 0x1008c200
 // _sscanf
 
+// LIBRARY: LEGO1 0x1008c250
+// ??_L@YGXPAXIHP6EX0@Z1@Z
+
+// LIBRARY: LEGO1 0x1008c2e0
+// ??_M@YGXPAXIHP6EX0@Z@Z
+
+// LIBRARY: LEGO1 0x1008c370
+// ?__ArrayUnwind@@YGXPAXIHP6EX0@Z@Z
+
 // LIBRARY: LEGO1 0x1008c410
 // _strlwr
 
@@ -92,6 +110,9 @@
 
 // LIBRARY: LEGO1 0x1008c6a0
 // _isdigit
+
+// LIBRARY: LEGO1 0x1008c980
+// __except_handler3
 
 // LIBRARY: LEGO1 0x1008ca60
 // _abort
@@ -119,5 +140,8 @@
 
 // LIBRARY: LEGO1 0x100d2270
 // __beginthreadex
+
+// LIBRARY: LEGO1 0x100fc8bc
+// __NLG_Destination
 
 #endif

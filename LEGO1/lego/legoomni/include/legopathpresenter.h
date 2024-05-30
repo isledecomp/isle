@@ -11,11 +11,18 @@ public:
 	LegoPathPresenter();
 	~LegoPathPresenter() override;
 
-	// FUNCTION: LEGO1 0x100449a0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100c24d0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0690
 		return "LegoPathPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100449a0
+	// FUNCTION: BETA10 0x100c24a0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100449b0

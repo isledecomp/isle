@@ -10,11 +10,18 @@ public:
 	MxMusicPresenter();
 	~MxMusicPresenter() override;
 
-	// FUNCTION: LEGO1 0x100c23a0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x10143a70
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x10101e48
 		return "MxMusicPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100c23a0
+	// FUNCTION: BETA10 0x10143a50
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100c23b0

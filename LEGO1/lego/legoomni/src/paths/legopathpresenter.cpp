@@ -1,5 +1,6 @@
 #include "legopathpresenter.h"
 
+#include "define.h"
 #include "legopathcontroller.h"
 #include "legovideomanager.h"
 #include "legoworld.h"
@@ -9,10 +10,6 @@
 #include "mxutilities.h"
 
 DECOMP_SIZE_ASSERT(LegoPathPresenter, 0x54)
-
-// STRING: LEGO1 0x10101ef0
-// GLOBAL: LEGO1 0x101020c4
-const char* g_triggersSource = "TRIGGERS_SOURCE";
 
 // FUNCTION: LEGO1 0x100448d0
 LegoPathPresenter::LegoPathPresenter()
@@ -70,9 +67,9 @@ void LegoPathPresenter::Destroy()
 // FUNCTION: LEGO1 0x10044c20
 void LegoPathPresenter::ReadyTickle()
 {
-	LegoWorld* currentWorld = CurrentWorld();
+	LegoWorld* world = CurrentWorld();
 
-	if (currentWorld) {
+	if (world) {
 		MxStreamChunk* chunk = m_subscriber->PopData();
 
 		if (chunk) {
@@ -84,8 +81,8 @@ void LegoPathPresenter::ReadyTickle()
 			else {
 				ParseExtra();
 
-				controller->VTable0x14(chunk->GetData(), m_action->GetLocation(), m_trigger);
-				currentWorld->AddPath(controller);
+				controller->Create(chunk->GetData(), m_action->GetLocation(), m_trigger);
+				world->AddPath(controller);
 
 				m_subscriber->FreeDataChunk(chunk);
 				ProgressTickleState(MxPresenter::e_starting);
@@ -100,7 +97,7 @@ void LegoPathPresenter::StreamingTickle()
 	MxStreamChunk* chunk = m_subscriber->PopData();
 
 	if (chunk) {
-		if (chunk->GetFlags() & MxStreamChunk::c_end) {
+		if (chunk->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
 			ProgressTickleState(e_repeating);
 		}
 
@@ -132,7 +129,7 @@ void LegoPathPresenter::ParseExtra()
 
 		strupr(extraCopy);
 
-		if (KeyValueStringParse(output, g_triggersSource, extraCopy) != FALSE) {
+		if (KeyValueStringParse(output, g_strTRIGGERS_SOURCE, extraCopy) != FALSE) {
 			m_trigger = MxAtomId(output, e_lowerCase2);
 		}
 	}

@@ -10,11 +10,18 @@ class MxAudioPresenter : public MxMediaPresenter {
 public:
 	MxAudioPresenter() { m_volume = 100; }
 
-	// FUNCTION: LEGO1 0x1000d280
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1008cba0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f078c
 		return "MxAudioPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000d280
+	// FUNCTION: BETA10 0x1008cb70
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d290
@@ -30,7 +37,7 @@ public:
 	virtual void SetVolume(MxS32 p_volume) { m_volume = p_volume; } // vtable+0x60
 
 protected:
-	MxS32 m_volume;
+	MxS32 m_volume; // 0x50
 };
 
 // SYNTHETIC: LEGO1 0x1000d370

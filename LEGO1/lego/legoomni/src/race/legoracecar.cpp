@@ -91,13 +91,13 @@ MxResult LegoRaceCar::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 }
 
 // STUB: LEGO1 0x10014550
-void LegoRaceCar::VTable0x98()
+void LegoRaceCar::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 {
 	// TODO
 }
 
 // STUB: LEGO1 0x10014580
-MxResult LegoRaceCar::WaitForAnimation()
+MxResult LegoRaceCar::VTable0x9c()
 {
 	// TODO
 	return SUCCESS;

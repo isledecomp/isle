@@ -188,12 +188,8 @@ void MxOmni::Destroy()
 		DeleteObject(action);
 	}
 
-	// TODO: private members
 	if (m_notificationManager) {
-		while (m_notificationManager->GetQueue()) {
-			if (m_notificationManager->GetQueue()->size() == 0) {
-				break;
-			}
+		while (!m_notificationManager->IsEmpty()) {
 			m_notificationManager->Tickle();
 		}
 
@@ -211,7 +207,6 @@ void MxOmni::Destroy()
 	delete m_notificationManager;
 	delete m_tickleManager;
 
-	// There could be a tree/iterator function that does this inline
 	if (m_atomSet) {
 		while (m_atomSet->size() != 0) {
 			// Pop each node and delete its value
@@ -220,8 +215,10 @@ void MxOmni::Destroy()
 			m_atomSet->erase(begin);
 			delete value;
 		}
+
 		delete m_atomSet;
 	}
+
 	Init();
 }
 

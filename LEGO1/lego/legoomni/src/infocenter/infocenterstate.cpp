@@ -93,28 +93,28 @@ InfomainScript::Script g_bricksterDialogue[2] = {
 // FUNCTION: LEGO1 0x10071600
 InfocenterState::InfocenterState()
 {
-	m_exitDialogueAct1 = LegoState::Playlist((MxU32*) g_exitDialogueAct1, _countof(g_exitDialogueAct1));
-	m_exitDialogueAct23 = LegoState::Playlist((MxU32*) g_exitDialogueAct23, _countof(g_exitDialogueAct23) - 1);
+	m_exitDialogueAct1 = LegoState::Playlist((MxU32*) g_exitDialogueAct1, sizeOfArray(g_exitDialogueAct1));
+	m_exitDialogueAct23 = LegoState::Playlist((MxU32*) g_exitDialogueAct23, sizeOfArray(g_exitDialogueAct23) - 1);
 
 	m_returnDialogue[LegoGameState::e_act1] =
-		LegoState::Playlist((MxU32*) g_returnDialogueAct1, _countof(g_returnDialogueAct1) - 1);
+		LegoState::Playlist((MxU32*) g_returnDialogueAct1, sizeOfArray(g_returnDialogueAct1) - 1);
 
 	m_returnDialogue[LegoGameState::e_act2] =
-		LegoState::Playlist((MxU32*) g_returnDialogueAct2, _countof(g_returnDialogueAct2) - 1);
+		LegoState::Playlist((MxU32*) g_returnDialogueAct2, sizeOfArray(g_returnDialogueAct2) - 1);
 
 	m_returnDialogue[LegoGameState::e_act3] =
-		LegoState::Playlist((MxU32*) g_returnDialogueAct3, _countof(g_returnDialogueAct3));
+		LegoState::Playlist((MxU32*) g_returnDialogueAct3, sizeOfArray(g_returnDialogueAct3));
 
 	m_leaveDialogue[LegoGameState::e_act1] =
-		LegoState::Playlist((MxU32*) g_leaveDialogueAct1, _countof(g_leaveDialogueAct1));
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct1, sizeOfArray(g_leaveDialogueAct1));
 
 	m_leaveDialogue[LegoGameState::e_act2] =
-		LegoState::Playlist((MxU32*) g_leaveDialogueAct2, _countof(g_leaveDialogueAct2));
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct2, sizeOfArray(g_leaveDialogueAct2));
 
 	m_leaveDialogue[LegoGameState::e_act3] =
-		LegoState::Playlist((MxU32*) g_leaveDialogueAct3, _countof(g_leaveDialogueAct3) - 1);
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct3, sizeOfArray(g_leaveDialogueAct3) - 1);
 
-	m_bricksterDialogue = LegoState::Playlist((MxU32*) g_bricksterDialogue, _countof(g_bricksterDialogue));
+	m_bricksterDialogue = LegoState::Playlist((MxU32*) g_bricksterDialogue, sizeOfArray(g_bricksterDialogue));
 
 	memset(m_letters, 0, sizeof(m_letters));
 }

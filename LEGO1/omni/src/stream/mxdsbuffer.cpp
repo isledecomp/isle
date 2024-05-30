@@ -242,7 +242,7 @@ MxResult MxDSBuffer::ParseChunk(
 
 	p_header->SetTime(p_header->GetTime() + m_unk0x30->GetUnknowna8());
 
-	if (p_header->GetFlags() & MxDSChunk::c_split) {
+	if (p_header->GetChunkFlags() & DS_CHUNK_SPLIT) {
 		MxU32 length = p_header->GetLength() + MxDSChunk::GetHeaderSize() + 8;
 		MxDSBuffer* buffer = new MxDSBuffer();
 
@@ -252,7 +252,7 @@ MxResult MxDSBuffer::ParseChunk(
 
 			if (*p_streamingAction) {
 				MxU16* flags = MxStreamChunk::IntoFlags(buffer->GetBuffer());
-				*flags = p_header->GetFlags() & ~MxDSChunk::c_split;
+				*flags = p_header->GetChunkFlags() & ~DS_CHUNK_SPLIT;
 
 				delete p_header;
 				(*p_streamingAction)->SetUnknowna0(buffer);
@@ -268,7 +268,7 @@ MxResult MxDSBuffer::ParseChunk(
 		return FAILURE;
 	}
 	else {
-		if (p_header->GetFlags() & MxDSChunk::c_end) {
+		if (p_header->GetChunkFlags() & DS_CHUNK_END_OF_STREAM) {
 			if (m_unk0x30->HasId(p_header->GetObjectId())) {
 				if (m_unk0x30->GetFlags() & MxDSAction::c_bit3 &&
 					(m_unk0x30->GetLoopCount() > 1 || m_unk0x30->GetDuration() == -1)) {

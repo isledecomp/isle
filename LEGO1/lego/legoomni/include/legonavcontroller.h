@@ -5,6 +5,7 @@
 #include "mxcore.h"
 #include "mxtypes.h"
 
+struct LegoLocation;
 class Vector3;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -71,8 +72,10 @@ public:
 		float p_rs,
 		MxBool p_urs
 	);
-	static MxResult UpdateCameraLocation(MxU32 p_location);
-	static MxResult UpdateCameraLocation(const char* p_location);
+	static MxResult UpdateLocation(MxU32 p_location);
+	static MxResult UpdateLocation(const char* p_location);
+	static LegoLocation* GetLocation(MxU32 p_location);
+
 	inline void SetLinearVel(MxFloat p_linearVel) { m_linearVel = p_linearVel; }
 	inline MxFloat GetLinearVel() { return m_linearVel; }
 	inline MxFloat GetRotationalVel() { return m_rotationalVel; }

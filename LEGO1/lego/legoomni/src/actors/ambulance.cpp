@@ -18,17 +18,17 @@ DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 // FUNCTION: LEGO1 0x10035ee0
 Ambulance::Ambulance()
 {
-	this->m_unk0x168 = 0;
-	this->m_unk0x16a = -1;
-	this->m_state = NULL;
-	this->m_unk0x16c = 0;
-	this->m_unk0x174 = -1;
-	this->m_unk0x16e = 0;
-	this->m_unk0x178 = -1;
-	this->m_unk0x170 = 0;
-	this->m_unk0x172 = 0;
-	this->m_unk0x13c = 40.0;
-	this->m_unk0x17c = 1.0;
+	m_unk0x168 = 0;
+	m_unk0x16a = -1;
+	m_state = NULL;
+	m_unk0x16c = 0;
+	m_unk0x174 = -1;
+	m_unk0x16e = 0;
+	m_unk0x178 = -1;
+	m_unk0x170 = 0;
+	m_unk0x172 = 0;
+	m_unk0x13c = 40.0;
+	m_unk0x17c = 1.0;
 }
 
 // FUNCTION: LEGO1 0x10035f90
@@ -58,7 +58,7 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 		m_state = (AmbulanceMissionState*) GameState()->GetState("AmbulanceMissionState");
 		if (!m_state) {
 			m_state = new AmbulanceMissionState();
-			m_state->SetUnknown0x08(0);
+			m_state->m_unk0x08 = 0;
 			GameState()->RegisterState(m_state);
 		}
 	}
@@ -66,7 +66,6 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 	VariableTable()->SetVariable(g_varAMBULFUEL, "1.0");
 	m_unk0x17c = 1.0;
 	m_time = Timer()->GetTime();
-
 	return result;
 }
 
@@ -74,6 +73,19 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 void Ambulance::VTable0x70(float p_float)
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x100363f0
+void Ambulance::CreateState()
+{
+	LegoGameState* gameState = GameState();
+	AmbulanceMissionState* state = (AmbulanceMissionState*) gameState->GetState("AmbulanceMissionState");
+
+	if (state == NULL) {
+		state = (AmbulanceMissionState*) gameState->CreateState("AmbulanceMissionState");
+	}
+
+	m_state = state;
 }
 
 // STUB: LEGO1 0x10036420
@@ -91,7 +103,7 @@ MxU32 Ambulance::VTable0xdc(MxType19NotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x10036ce0
-MxU32 Ambulance::VTable0xcc()
+MxU32 Ambulance::HandleClick()
 {
 	// TODO
 	return 0;
@@ -110,7 +122,7 @@ void Ambulance::VTable0xe4()
 }
 
 // STUB: LEGO1 0x10036f90
-MxU32 Ambulance::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Ambulance::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;
@@ -127,4 +139,16 @@ MxResult Ambulance::Tickle()
 {
 	// TODO
 	return SUCCESS;
+}
+
+// STUB: LEGO1 0x10037240
+void Ambulance::FUN_10037240()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10037250
+void Ambulance::FUN_10037250()
+{
+	// TODO
 }

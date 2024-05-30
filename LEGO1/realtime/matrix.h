@@ -16,6 +16,7 @@ struct UnknownMatrixType {
 // SIZE 0x08
 class Matrix4 {
 public:
+	// FUNCTION: LEGO1 0x10004500
 	inline Matrix4(float (*p_data)[4]) { SetData(p_data); }
 
 	// Note: virtual function overloads appear in the virtual table
@@ -107,6 +108,9 @@ public:
 	// FUNCTION: LEGO1 0x10002530
 	virtual void Product(const Matrix4& p_a, const Matrix4& p_b) { Product(p_a.m_data, p_b.m_data); } // vtable+0x38
 
+	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
+	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
+
 	// FUNCTION: LEGO1 0x100a0ff0
 	inline void Scale(const float& p_x, const float& p_y, const float& p_z)
 	{
@@ -129,6 +133,20 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x1001fd60
+	inline void RotateY(const float& p_angle)
+	{
+		float s = sin(p_angle);
+		float c = cos(p_angle);
+		float matrix[4][4];
+		memcpy(matrix, m_data, sizeof(float) * 16);
+		for (int i = 0; i < 4; i++) {
+			m_data[i][0] = matrix[i][0] * c + matrix[i][2] * s;
+			m_data[i][2] = matrix[i][2] * c - matrix[i][0] * s;
+		}
+	}
+
+	// FUNCTION: BETA10 0x1006ab10
 	inline void RotateZ(const float& p_angle)
 	{
 		float s = sin(p_angle);
@@ -141,8 +159,17 @@ public:
 		}
 	}
 
-	inline virtual void ToQuaternion(Vector4& p_resultQuat); // vtable+0x40
-	inline virtual int FromQuaternion(const Vector4& p_vec); // vtable+0x44
+	inline int Unknown(Matrix4& p_mat);
+
+	// FUNCTION: LEGO1 0x1006b500
+	inline void Swap(int p_d1, int p_d2)
+	{
+		for (int i = 0; i < 4; i++) {
+			float e = m_data[p_d1][i];
+			m_data[p_d1][i] = m_data[p_d2][i];
+			m_data[p_d2][i] = e;
+		}
+	}
 
 	float* operator[](int idx) { return m_data[idx]; }
 	const float* operator[](int idx) const { return m_data[idx]; }
@@ -239,6 +266,71 @@ inline int Matrix4::FromQuaternion(const Vector4& p_vec)
 	}
 
 	return -1;
+}
+
+// FUNCTION: BETA10 0x1005a590
+inline int Matrix4::Unknown(Matrix4& p_mat)
+{
+	float local5c[4][4];
+	Matrix4 localc(local5c);
+
+	((Matrix4&) localc) = *this;
+	p_mat.SetIdentity();
+
+	for (int i = 0; i < 4; i++) {
+		int local1c = i;
+		int local10;
+
+		for (local10 = i + 1; local10 < 4; local10++) {
+			if (fabs(localc[local1c][i]) < fabs(localc[local10][i])) {
+				local1c = local10;
+			}
+		}
+
+		if (local1c != i) {
+			localc.Swap(local1c, i);
+			p_mat.Swap(local1c, i);
+		}
+
+		if (localc[i][i] < 0.001f && localc[i][i] > -0.001f) {
+			return -1;
+		}
+
+		float local60 = localc[i][i];
+		int local18;
+
+		for (local18 = 0; local18 < 4; local18++) {
+			p_mat[i][local18] /= local60;
+		}
+
+		for (local18 = 0; local18 < 4; local18++) {
+			localc[i][local18] /= local60;
+		}
+
+		for (local10 = 0; local10 < 4; local10++) {
+			if (i != local10) {
+				float afStack70[4];
+
+				for (local18 = 0; local18 < 4; local18++) {
+					afStack70[local18] = p_mat[i][local18] * localc[local10][i];
+				}
+
+				for (local18 = 0; local18 < 4; local18++) {
+					p_mat[local10][local18] -= afStack70[local18];
+				}
+
+				for (local18 = 0; local18 < 4; local18++) {
+					afStack70[local18] = localc[i][local18] * localc[local10][i];
+				}
+
+				for (local18 = 0; local18 < 4; local18++) {
+					localc[local10][local18] -= afStack70[local18];
+				}
+			}
+		}
+	}
+
+	return 0;
 }
 
 #endif // MATRIX_H

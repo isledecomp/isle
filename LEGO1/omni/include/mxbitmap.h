@@ -34,6 +34,7 @@ struct MxBITMAPINFO {
 
 // SIZE 0x20
 // VTABLE: LEGO1 0x100dc7b0
+// VTABLE: BETA10 0x101c21f8
 class MxBitmap : public MxCore {
 public:
 	MxBitmap();
@@ -46,6 +47,7 @@ public:
 	virtual MxLong Read(const char* p_filename);                                           // vtable+24
 
 	// FUNCTION: LEGO1 0x1004e0d0
+	// FUNCTION: BETA10 0x10060fc0
 	virtual int VTable0x28(int) { return -1; } // vtable+28
 
 	virtual void BitBlt(
@@ -82,26 +84,46 @@ public:
 	// Bit mask trick to round up to the nearest multiple of four.
 	// Pixel data may be stored with padding.
 	// https://learn.microsoft.com/en-us/windows/win32/medfound/image-stride
+	// FUNCTION: BETA10 0x1002c510
 	inline MxLong AlignToFourByte(MxLong p_value) const { return (p_value + 3) & -4; }
 
-	// Same as the one from legoutils.h, but flipped the other way
-	// TODO: While it's not outside the realm of possibility that they
-	// reimplemented Abs for only this file, that seems odd, right?
-	inline MxLong AbsFlipped(MxLong p_value) const { return p_value > 0 ? p_value : -p_value; }
+	// DECOMP: This could be a free function. It is static here because it has no
+	// reference to "this". In the beta it is called in two places:
+	// 1. GetBmiHeightAbs
+	// 2. at 0x101523b9, in reference to BITMAPINFOHEADER.biHeight
+	// FUNCTION: BETA10 0x1002c690
+	static MxLong HeightAbs(MxLong p_value) { return p_value > 0 ? p_value : -p_value; }
 
 	inline BITMAPINFOHEADER* GetBmiHeader() const { return m_bmiHeader; }
+
+	// FUNCTION: BETA10 0x1002c440
 	inline MxLong GetBmiWidth() const { return m_bmiHeader->biWidth; }
 	inline MxLong GetBmiStride() const { return ((m_bmiHeader->biWidth + 3) & -4); }
 	inline MxLong GetBmiHeight() const { return m_bmiHeader->biHeight; }
-	inline MxLong GetBmiHeightAbs() const { return AbsFlipped(m_bmiHeader->biHeight); }
+
+	// FUNCTION: BETA10 0x1002c470
+	inline MxLong GetBmiHeightAbs() const { return HeightAbs(m_bmiHeader->biHeight); }
+
+	// FUNCTION: BETA10 0x10083900
 	inline MxU8* GetImage() const { return m_data; }
+
+	// FUNCTION: BETA10 0x100838d0
 	inline MxBITMAPINFO* GetBitmapInfo() const { return m_info; }
-	inline MxLong GetDataSize() const
+
+	// FUNCTION: BETA10 0x100982b0
+	inline MxLong GetDataSize() const { return AlignToFourByte(m_bmiHeader->biWidth) * GetBmiHeightAbs(); }
+
+	// FUNCTION: BETA10 0x1002c4b0
+	inline MxBool IsTopDown()
 	{
-		MxLong absHeight = GetBmiHeightAbs();
-		MxLong alignedWidth = AlignToFourByte(m_bmiHeader->biWidth);
-		return alignedWidth * absHeight;
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
+			return TRUE;
+		}
+		else {
+			return m_bmiHeader->biHeight < 0;
+		}
 	}
+
 	inline MxLong GetAdjustedStride()
 	{
 		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
@@ -112,35 +134,40 @@ public:
 		}
 	}
 
-	inline MxLong GetLine(MxS32 p_top)
-	{
-		MxS32 height;
-		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN || m_bmiHeader->biHeight < 0) {
-			height = p_top;
-		}
-		else {
-			height = GetBmiHeightAbs() - p_top - 1;
-		}
-		return GetBmiStride() * height;
-	}
-
+	// FUNCTION: BETA10 0x1002c320
 	inline MxU8* GetStart(MxS32 p_left, MxS32 p_top)
 	{
 		if (m_bmiHeader->biCompression == BI_RGB) {
-			return GetLine(p_top) + m_data + p_left;
+			return m_data + p_left +
+				   AlignToFourByte(GetBmiWidth()) * (IsTopDown() ? p_top : (GetBmiHeightAbs() - 1) - p_top);
 		}
 		else if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
 			return m_data;
 		}
 		else {
-			return GetLine(0) + m_data;
+			return m_data + AlignToFourByte(GetBmiWidth()) * (IsTopDown() ? 0 : (GetBmiHeightAbs() - 1));
 		}
 	}
 
 	// SYNTHETIC: LEGO1 0x100bc9f0
+	// SYNTHETIC: BETA10 0x1013dcd0
 	// MxBitmap::`scalar deleting destructor'
 
 private:
+	// FUNCTION: BETA10 0x1013dd10
+	inline MxLong MxBitmapInfoSize() const { return sizeof(MxBITMAPINFO); }
+
+	// FUNCTION: BETA10 0x1013dd30
+	inline MxBool IsBottomUp()
+	{
+		if (m_bmiHeader->biCompression == BI_RGB_TOPDOWN) {
+			return FALSE;
+		}
+		else {
+			return m_bmiHeader->biHeight > 0;
+		}
+	}
+
 	MxResult ImportColorsToPalette(RGBQUAD*, MxPalette*);
 
 	MxBITMAPINFO* m_info;          // 0x08

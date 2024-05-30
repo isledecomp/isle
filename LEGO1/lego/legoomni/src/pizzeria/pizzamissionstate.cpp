@@ -18,5 +18,6 @@ PizzaMissionStateEntry* PizzaMissionState::GetState(MxU8 p_id)
 			return m_state + i;
 		}
 	}
+
 	return NULL;
 }

@@ -16,6 +16,8 @@ class MxVariable;
 class MxVariableTable;
 class MxString;
 
+extern const char* g_actorNames[7];
+
 // SIZE 0x08
 struct ColorStringStruct {
 	const char* m_targetName; // 0x00
@@ -164,6 +166,10 @@ public:
 	void Init();
 
 	inline MxU8 GetActorId() { return m_actorId; }
+
+	// FUNCTION: BETA10 0x1004a2d0
+	inline const char* GetActorName() { return g_actorNames[GetActorId()]; }
+
 	inline Act GetCurrentAct() { return m_currentAct; }
 	inline Act GetLoadedAct() { return m_loadedAct; }
 	inline Area GetCurrentArea() { return m_currentArea; }

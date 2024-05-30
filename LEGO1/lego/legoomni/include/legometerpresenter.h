@@ -1,10 +1,18 @@
 #ifndef LEGOMETERPRESENTER_H
 #define LEGOMETERPRESENTER_H
 
+#include "mxrect16.h"
 #include "mxstillpresenter.h"
 #include "mxstring.h"
 
+// SIZE 0x08
+struct MeterRect : public MxRect16 {
+	// FUNCTION: BETA10 0x10097eb0
+	MeterRect() {}
+};
+
 // VTABLE: LEGO1 0x100d7ac8
+// VTABLE: BETA10 0x101bca68
 // SIZE 0x94
 class LegoMeterPresenter : public MxStillPresenter {
 public:
@@ -18,17 +26,21 @@ public:
 	void ParseExtra() override;      // vtable+0x30
 
 private:
-	void FUN_10043a50();
+	enum MeterLayout {
+		e_leftToRight = 0,
+		e_rightToLeft,
+		e_bottomToTop,
+		e_topToBottom
+	};
 
-	MxU8* m_unk0x6c;     // 0x6c
-	MxU16 m_type;        // 0x70
-	MxString m_variable; // 0x74
-	MxFloat m_unk0x84;   // 0x84
-	MxU16 m_unk0x88;     // 0x88
-	MxU16 m_unk0x8a;     // 0x8a
-	MxU16 m_unk0x8c;     // 0x8c
-	MxU16 m_unk0x8e;     // 0x8e
-	MxU16 m_layout;      // 0x90
+	void DrawMeter();
+
+	MxU8* m_meterPixels;   // 0x6c
+	MxU16 m_fillColor;     // 0x70
+	MxString m_variable;   // 0x74
+	MxFloat m_curPercent;  // 0x84
+	MeterRect m_meterRect; // 0x88
+	MxS16 m_layout;        // 0x90
 };
 
 // SYNTHETIC: LEGO1 0x10043760

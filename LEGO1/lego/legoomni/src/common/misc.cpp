@@ -67,7 +67,7 @@ LegoNavController* NavController()
 }
 
 // FUNCTION: LEGO1 0x10015790
-IslePathActor* CurrentActor()
+LegoPathActor* CurrentActor()
 {
 	return LegoOmni::GetInstance()->GetCurrentActor();
 }
@@ -137,7 +137,7 @@ void SetROIVisible(const char* p_name, MxBool p_visible)
 }
 
 // FUNCTION: LEGO1 0x10015880
-void SetCurrentActor(IslePathActor* p_currentActor)
+void SetCurrentActor(LegoPathActor* p_currentActor)
 {
 	LegoOmni::GetInstance()->SetCurrentActor(p_currentActor);
 }

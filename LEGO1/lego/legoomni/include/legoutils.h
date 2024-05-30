@@ -7,12 +7,12 @@
 
 #include <windows.h>
 
-class IslePathActor;
 class MxAtomId;
 class LegoEntity;
 class LegoFile;
 class LegoAnimPresenter;
 class LegoNamedTexture;
+class LegoPathActor;
 class LegoROI;
 class LegoTreeNode;
 
@@ -24,10 +24,10 @@ Extra::ActionType MatchActionString(const char*);
 void InvokeAction(Extra::ActionType p_actionId, const MxAtomId& p_pAtom, MxS32 p_targetEntityId, LegoEntity* p_sender);
 void SetCameraControllerFromIsle();
 void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bOut, float* p_gOut);
-void FUN_1003ecc0(IslePathActor* p_actor, undefined4, undefined4, MxBool);
+void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBool p_bool);
 void FUN_1003eda0();
 MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id);
-void FUN_1003ef00(MxBool);
+void FUN_1003ef00(MxBool p_enable);
 void SetAppCursor(WPARAM p_wparam);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);

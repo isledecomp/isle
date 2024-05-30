@@ -15,11 +15,18 @@ public:
 	LegoPhonemePresenter();
 	~LegoPhonemePresenter() override; // vtable+0x00
 
-	// FUNCTION: LEGO1 0x1004e310
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100c4220
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f064c
 		return "LegoPhonemePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1004e310
+	// FUNCTION: BETA10 0x100c41f0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	void StartingTickle() override;                  // vtable+0x1c

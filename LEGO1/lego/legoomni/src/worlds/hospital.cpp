@@ -122,8 +122,8 @@ MxLong Hospital::Notify(MxParam& p_param)
 		case c_notificationButtonDown:
 			result = HandleButtonDown(((LegoControlManagerEvent&) p_param));
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			if (m_destLocation != LegoGameState::e_undefined) {
@@ -552,7 +552,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10075f90
-MxBool Hospital::HandleClick(LegoControlManagerEvent& p_param)
+MxBool Hospital::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		switch (p_param.GetClickedObjectId()) {
@@ -662,7 +662,7 @@ MxResult Hospital::Tickle()
 }
 
 // FUNCTION: LEGO1 0x10076330
-MxBool Hospital::VTable0x64()
+MxBool Hospital::Escape()
 {
 	DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, 999);
 	m_hospitalState->m_unk0x08.m_unk0x00 = 0;
