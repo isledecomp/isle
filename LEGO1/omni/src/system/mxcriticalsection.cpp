@@ -29,10 +29,10 @@ MxCriticalSection::~MxCriticalSection()
 {
 	if (m_mutex != NULL) {
 		CloseHandle(m_mutex);
-		return;
 	}
-
-	DeleteCriticalSection(&m_criticalSection);
+	else {
+		DeleteCriticalSection(&m_criticalSection);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b6d80
