@@ -124,15 +124,20 @@ void LegoCameraController::SetWorldTransform(const Vector3& p_at, const Vector3&
 	m_matrix2 = m_matrix1;
 }
 
-// STUB: LEGO1 0x10012290
-void LegoCameraController::FUN_10012290(float)
+// FUNCTION: LEGO1 0x10012290
+// FUNCTION: BETA10 0x10068c34
+void LegoCameraController::FUN_10012290(float p_angle)
 {
+	m_matrix1 = m_matrix2;
+	m_matrix1.RotateZ(p_angle);
 }
 
-// STUB: LEGO1 0x10012320
-void LegoCameraController::FUN_10012320(MxFloat)
+// FUNCTION: LEGO1 0x10012320
+// FUNCTION: BETA10 0x10068c73
+void LegoCameraController::FUN_10012320(float p_angle)
 {
-	// TODO
+	m_matrix1 = m_matrix2;
+	m_matrix1.RotateY(p_angle);
 }
 
 // FUNCTION: LEGO1 0x100123e0
