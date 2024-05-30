@@ -1,6 +1,8 @@
-# Experiments for PDB imports.
+# Imports types and function signatures from debug symbols (PDB file) of the recompilation.
 #
-# Note that the virtual environment must be set up beforehand, and all packages must be installed.
+# This script uses Python 3 and therefore requires Ghidrathon to be installed in Ghidra (see https://github.com/mandiant/Ghidrathon).
+# Furthermore, the virtual environment must be set up beforehand under $REPOSITORY_ROOT/.venv, and all required packages must be installed
+# (see $REPOSITORY_ROOT/tools/README.md).
 # Also, the Python version of the virtual environment must probably match the Python version used for Ghidrathon.
 
 # @author J. Schulz
@@ -10,8 +12,14 @@
 # @toolbar
 
 
+# In order to make this code run both within and outside of Ghidra, the import order is rather unorthodox in this file.
+# That is why some of the lints below are disabled.
+
 # pylint: disable=wrong-import-position,ungrouped-imports
 # pylint: disable=undefined-variable # need to disable this one globally because pylint does not understand e.g. `askYesNo()``
+
+# Disable spurious warnings in vscode / pylance
+# pyright: reportMissingModuleSource=false
 
 import importlib
 from dataclasses import dataclass, field
@@ -20,7 +28,7 @@ import sys
 import logging
 from pathlib import Path
 import traceback
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 
 if TYPE_CHECKING:
@@ -28,11 +36,17 @@ if TYPE_CHECKING:
     from lego_util.headers import *  # pylint: disable=wildcard-import # these are just for headers
 
 
+logger = logging.getLogger(__name__)
+
+
 def reload_module(module: str):
     """
     Due to a a quirk in Jep (used by Ghidrathon), imported modules persist for the lifetime of the Ghidra process
     and are not reloaded when relaunching the script. Therefore, in order to facilitate development
-    we force reload all our own modules at startup.
+    we force reload all our own modules at startup. See also https://github.com/mandiant/Ghidrathon/issues/103.
+
+    Note that as of 2024-05-30, this remedy does not work perfectly (yet): Some changes in isledecomp are
+    still not detected correctly and require a Ghidra restart to be applied.
     """
     importlib.reload(importlib.import_module(module))
 
@@ -41,7 +55,21 @@ reload_module("lego_util.statistics")
 from lego_util.statistics import Statistics
 
 
-logger = logging.getLogger(__name__)
+@dataclass
+class Globals:
+    verbose: bool
+    loglevel: int
+    running_from_ghidra: bool = False
+    # statistics
+    statistics: Statistics = field(default_factory=Statistics)
+
+
+# hard-coded settings that we don't want to prompt in Ghidra every time
+GLOBALS = Globals(
+    verbose=False,
+    # loglevel=logging.INFO,
+    loglevel=logging.DEBUG,
+)
 
 
 def setup_logging():
@@ -57,46 +85,15 @@ def setup_logging():
     logging.root.setLevel(GLOBALS.loglevel)
     logging.root.addHandler(stdout_handler)
     logging.root.addHandler(file_handler)
-    logger.info("Starting...")
+    logger.info("Starting import...")
 
-
-@dataclass
-class Globals:
-    verbose: bool
-    loglevel: int
-    running_from_ghidra: bool = False
-    make_changes: bool = False
-    prompt_before_changes: bool = True
-    # statistics
-    statistics: Statistics = field(default_factory=Statistics)
-
-
-# hard-coded settings that we don't want to prompt in Ghidra every time
-GLOBALS = Globals(
-    verbose=False,
-    # loglevel=logging.INFO,
-    loglevel=logging.DEBUG,
-)
-
-
-# Disable spurious warnings in vscode / pylance
-# pyright: reportMissingModuleSource=false
 
 # This script can be run both from Ghidra and as a standalone.
-# In the latter case, only the C++ parser can be used.
+# In the latter case, only the PDB parser will be used.
 setup_logging()
 try:
     from ghidra.program.flatapi import FlatProgramAPI
     from ghidra.util.exception import CancelledException
-
-    GLOBALS.make_changes = askYesNo(
-        "Make changes?", "Select 'Yes' to apply changes, select 'No' to do a dry run."
-    )
-
-    if GLOBALS.make_changes:
-        GLOBALS.prompt_before_changes = askYesNo(
-            "Prompt before changes?", "Should each change be confirmed by a prompt?"
-        )
 
     GLOBALS.running_from_ghidra = True
 except ImportError as importError:
@@ -115,6 +112,10 @@ def get_repository_root():
 
 
 def add_python_path(path: str):
+    """
+    Scripts in Ghidra are executed from the tools/ghidra_scripts directory. We need to add
+    a few more paths to the Python path so we can import the other libraries.
+    """
     venv_path = get_repository_root().joinpath(path)
     logger.info("Adding %s to Python Path", venv_path)
     assert venv_path.exists()
@@ -122,7 +123,7 @@ def add_python_path(path: str):
 
 
 # We need to quote the types here because they might not exist when running without Ghidra
-def migrate_function_to_ghidra(
+def import_function_into_ghidra(
     api: "FlatProgramAPI",
     match_info: "MatchInfo",
     signature: "FunctionSignature",
@@ -133,12 +134,7 @@ def migrate_function_to_ghidra(
     # Find the Ghidra function at that address
     ghidra_address = getAddressFactory().getAddress(hex_original_address)
 
-    typed_pdb_function = PdbFunctionWithGhidraObjects(
-        api, match_info, signature, type_importer
-    )
-
-    if not GLOBALS.make_changes:
-        return
+    function_importer = PdbFunctionImporter(api, match_info, signature, type_importer)
 
     ghidra_function = getFunctionAt(ghidra_address)
     if ghidra_function is None:
@@ -148,46 +144,27 @@ def migrate_function_to_ghidra(
         ), f"Failed to create function at {ghidra_address}"
         logger.info("Created new function at %s", ghidra_address)
 
-    if typed_pdb_function.matches_ghidra_function(ghidra_function):
+    logger.debug("Start handling function '%s'", function_importer.get_full_name())
+
+    if function_importer.matches_ghidra_function(ghidra_function):
         logger.info(
             "Skipping function '%s', matches already",
-            typed_pdb_function.get_full_name(),
+            function_importer.get_full_name(),
         )
         return
 
-    # Navigate Ghidra to the current function
-    state().setCurrentAddress(ghidra_address)
-
-    if GLOBALS.prompt_before_changes:
-        choice = askChoice(
-            "Change function?",
-            f"Change to: {typed_pdb_function.format_proposed_change()}",
-            # "Change to %s" % cpp_function,
-            ["Yes", "No", "Abort"],
-            "Yes",
-        )
-        if choice == "No":
-            return
-        if choice != "Yes":
-            logger.critical("User quit, terminating")
-            raise SystemExit(1)
-
     logger.debug(
         "Modifying function %s at 0x%s",
-        typed_pdb_function.get_full_name(),
+        function_importer.get_full_name(),
         hex_original_address,
     )
 
-    typed_pdb_function.overwrite_ghidra_function(ghidra_function)
+    function_importer.overwrite_ghidra_function(ghidra_function)
 
     GLOBALS.statistics.functions_changed += 1
 
-    if GLOBALS.prompt_before_changes:
-        # Add a prompt so we can verify the result immediately
-        askChoice("Continue", "Click 'OK' to continue", ["OK"], "OK")
 
-
-def process_functions(extraction: "PdbExtractionForGhidraMigration"):
+def process_functions(extraction: "PdbFunctionExtractor"):
     func_signatures = extraction.get_function_list()
 
     if not GLOBALS.running_from_ghidra:
@@ -195,15 +172,14 @@ def process_functions(extraction: "PdbExtractionForGhidraMigration"):
         return
 
     api = FlatProgramAPI(currentProgram())
-    # TODO: Implement a "no changes" mode
     type_importer = PdbTypeImporter(api, extraction)
 
     for match_info, signature in func_signatures:
         try:
-            migrate_function_to_ghidra(api, match_info, signature, type_importer)
+            import_function_into_ghidra(api, match_info, signature, type_importer)
             GLOBALS.statistics.successes += 1
         except Lego1Exception as e:
-            log_and_track_failure(e)
+            log_and_track_failure(match_info.name, e)
         except RuntimeError as e:
             cause = e.args[0]
             if CancelledException is not None and isinstance(cause, CancelledException):
@@ -211,16 +187,20 @@ def process_functions(extraction: "PdbExtractionForGhidraMigration"):
                 logging.critical("Import aborted by the user.")
                 return
 
-            log_and_track_failure(cause, unexpected=True)
+            log_and_track_failure(match_info.name, cause, unexpected=True)
+            logger.error(traceback.format_exc())
         except Exception as e:  # pylint: disable=broad-exception-caught
-            log_and_track_failure(e, unexpected=True)
+            log_and_track_failure(match_info.name, e, unexpected=True)
             logger.error(traceback.format_exc())
 
 
-def log_and_track_failure(error: Exception, unexpected: bool = False):
+def log_and_track_failure(
+    function_name: Optional[str], error: Exception, unexpected: bool = False
+):
     if GLOBALS.statistics.track_failure_and_tell_if_new(error):
         logger.error(
-            "%s%s",
+            "%s(): %s%s",
+            function_name,
             "Unexpected error: " if unexpected else "",
             error,
         )
@@ -249,7 +229,7 @@ def main():
     logger.info("Comparison complete.")
 
     # try to acquire matched functions
-    migration = PdbExtractionForGhidraMigration(isle_compare)
+    migration = PdbFunctionExtractor(isle_compare)
     try:
         process_functions(migration)
     finally:
@@ -283,7 +263,7 @@ try:
 
     reload_module("lego_util.pdb_extraction")
     from lego_util.pdb_extraction import (
-        PdbExtractionForGhidraMigration,
+        PdbFunctionExtractor,
         FunctionSignature,
     )
 
@@ -291,7 +271,7 @@ try:
         reload_module("lego_util.ghidra_helper")
 
         reload_module("lego_util.function_importer")
-        from lego_util.function_importer import PdbFunctionWithGhidraObjects
+        from lego_util.function_importer import PdbFunctionImporter
 
         reload_module("lego_util.type_importer")
         from lego_util.type_importer import PdbTypeImporter

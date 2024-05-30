@@ -20,7 +20,7 @@ from lego_util.pdb_extraction import (
 )
 from lego_util.ghidra_helper import (
     get_ghidra_namespace,
-    sanitize_class_name,
+    sanitize_name,
 )
 
 from lego_util.exceptions import StackOffsetMismatchError
@@ -30,7 +30,8 @@ from lego_util.type_importer import PdbTypeImporter
 logger = logging.getLogger(__name__)
 
 
-class PdbFunctionWithGhidraObjects:
+# pylint: disable=too-many-instance-attributes
+class PdbFunctionImporter:
     """A representation of a function from the PDB with each type replaced by a Ghidra type instance."""
 
     def __init__(
@@ -47,23 +48,22 @@ class PdbFunctionWithGhidraObjects:
 
         if signature.class_type is not None:
             # Import the base class so the namespace exists
-            self.type_importer.pdb_to_ghidra_type(signature.class_type)
+            self.type_importer.import_pdb_type_into_ghidra(signature.class_type)
 
         assert match_info.name is not None
 
-        colon_split = sanitize_class_name(match_info.name).split("::")
+        colon_split = sanitize_name(match_info.name).split("::")
         self.name = colon_split.pop()
         namespace_hierachy = colon_split
         self.namespace = get_ghidra_namespace(api, namespace_hierachy)
 
-        self.return_type = type_importer.pdb_to_ghidra_type(
+        self.return_type = type_importer.import_pdb_type_into_ghidra(
             signature.return_type
         )
         self.arguments = [
             ParameterImpl(
                 f"param{index}",
-                # get_ghidra_type(api, type_name),
-                type_importer.pdb_to_ghidra_type(type_name),
+                type_importer.import_pdb_type_into_ghidra(type_name),
                 api.getCurrentProgram(),
             )
             for (index, type_name) in enumerate(signature.arglist)
@@ -79,12 +79,6 @@ class PdbFunctionWithGhidraObjects:
 
     def get_full_name(self) -> str:
         return f"{self.namespace.getName()}::{self.name}"
-
-    def format_proposed_change(self) -> str:
-        return (
-            f"{self.return_type} {self.call_type} {self.get_full_name()}"
-            + f"({', '.join(self.signature.arglist)})"
-        )
 
     def matches_ghidra_function(self, ghidra_function: Function) -> bool:
         """Checks whether this function declaration already matches the description in Ghidra"""
@@ -152,7 +146,10 @@ class PdbFunctionWithGhidraObjects:
                 logger.debug("Not found on stack: %s", ghidra_arg)
                 return False
             # "__formal" is the placeholder for arguments without a name
-            if stack_match.name not in ["__formal", ghidra_arg.getName()]:
+            if (
+                stack_match.name != ghidra_arg.getName()
+                and not stack_match.name.startswith("__formal")
+            ):
                 logger.debug(
                     "Argument name mismatch: expected %s, found %s",
                     stack_match.name,
@@ -181,31 +178,20 @@ class PdbFunctionWithGhidraObjects:
         ghidra_parameters: list[Parameter] = ghidra_function.getParameters()
 
         # Try to add Ghidra function names
-        for param in ghidra_parameters:
+        for index, param in enumerate(ghidra_parameters):
             if param.isStackVariable():
-                self._rename_stack_parameter(param)
+                self._rename_stack_parameter(index, param)
             else:
                 if param.getName() == "this":
                     # 'this' parameters are auto-generated and cannot be changed
                     continue
 
-                # TODO: Does this ever happen?
+                # Appears to never happen - could in theory be relevant to __fastcall__ functions,
+                # which we haven't seen yet
                 logger.warning("Unhandled register variable in %s", self.get_full_name)
                 continue
 
-                # Old code for reference:
-                #
-                # register = param.getRegister().getName().lower()
-                # match = self.get_matching_register_symbol(register)
-                # if match is None:
-                #     logger.error(
-                #         "Could not match register parameter %s to known symbols %s",
-                #         param,
-                #         self.stack_symbols,
-                #     )
-                #     continue
-
-    def _rename_stack_parameter(self, param: Parameter):
+    def _rename_stack_parameter(self, index: int, param: Parameter):
         match = self.get_matching_stack_symbol(param.getStackOffset())
         if match is None:
             raise StackOffsetMismatchError(
@@ -216,7 +202,7 @@ class PdbFunctionWithGhidraObjects:
             logger.warning("Skipping stack parameter of type NOTYPE")
             return
 
-        if param.getDataType() != self.type_importer.pdb_to_ghidra_type(
+        if param.getDataType() != self.type_importer.import_pdb_type_into_ghidra(
             match.data_type
         ):
             logger.error(
@@ -224,7 +210,12 @@ class PdbFunctionWithGhidraObjects:
             )
             return
 
-        param.setName(match.name, SourceType.USER_DEFINED)
+        name = match.name
+        if name == "__formal":
+            # these can cause name collisions if multiple ones are present
+            name = f"__formal_{index}"
+
+        param.setName(name, SourceType.USER_DEFINED)
 
     def get_matching_stack_symbol(self, stack_offset: int) -> Optional[CppStackSymbol]:
         return next(

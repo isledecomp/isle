@@ -1,5 +1,6 @@
+"""A collection of helper functions for the interaction with Ghidra."""
+
 import logging
-import re
 
 from lego_util.exceptions import (
     ClassOrNamespaceNotFoundInGhidraError,
@@ -24,21 +25,11 @@ def get_ghidra_type(api: FlatProgramAPI, type_name: str):
     Searches for the type named `typeName` in Ghidra.
 
     Raises:
-        NotFoundInGhidraError:
+    - NotFoundInGhidraError
+    - MultipleTypesFoundInGhidraError
     """
-
-    # references to pointers
-    type_name = type_name.replace("&", " *")
-    # handle reference spacing (void* -> void *)
-    type_name = re.sub(r"(?<!\s)\*", " *", type_name)
-
     result = api.getDataTypes(type_name)
     if len(result) == 0:
-        if type_name.endswith("*"):
-            # Create a new pointer type if the dereferenced type exists
-            dereferenced_type = get_ghidra_type(api, type_name[0:-2])
-            return add_pointer_type(api, dereferenced_type)
-
         raise TypeNotFoundInGhidraError(type_name)
     if len(result) == 1:
         return result[0]
@@ -85,25 +76,25 @@ def create_ghidra_namespace(
     return namespace
 
 
-def sanitize_class_name(name: str) -> str:
+def sanitize_name(name: str) -> str:
     """
     Takes a full class or function name and replaces characters not accepted by Ghidra.
-    Applies mostly to templates.
+    Applies mostly to templates and names like `vbase destructor`.
     """
+    new_class_name = (
+        name.replace("<", "[")
+        .replace(">", "]")
+        .replace("*", "#")
+        .replace(" ", "_")
+        .replace("`", "'")
+    )
     if "<" in name:
-        new_class_name = (
-            "_template_" +
-            name
-                .replace("<", "[")
-                .replace(">", "]")
-                .replace("*", "#")
-                .replace(" ", "")
-        )
+        new_class_name = "_template_" + new_class_name
+
+    if new_class_name != name:
         logger.warning(
-            "Changing possible template class name from '%s' to '%s'",
+            "Class or function name contains characters forbidden by Ghidra, changing from '%s' to '%s'",
             name,
             new_class_name,
         )
-        return new_class_name
-
-    return name
+    return new_class_name

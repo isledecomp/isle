@@ -160,6 +160,10 @@ class CvdumpTypesParser:
     # LF_FIELDLIST member name (2/2)
     MEMBER_RE = re.compile(r"^\s+member name = '(?P<name>.*)'$")
 
+    LF_FIELDLIST_ENUMERATE = re.compile(
+        r"^\s+list\[\d+\] = LF_ENUMERATE,.*value = (?P<value>\d+), name = '(?P<name>[^']+)'$"
+    )
+
     # LF_ARRAY element type
     ARRAY_ELEMENT_RE = re.compile(r"^\s+Element type = (?P<type>.*)")
 
@@ -214,8 +218,8 @@ class CvdumpTypesParser:
             r"^\s*type = (?P<underlying_type>\S+) field list type (?P<field_type>0x\w{4})$"
         ),
         re.compile(r"^\s*enum name = (?P<name>.+)$"),
-        re.compile(r"^\s*UDT\((?P<udt>0x\w+)\)$"),
     ]
+    LF_ENUM_UDT = re.compile(r"^\s*UDT\((?P<udt>0x\w+)\)$")
     LF_UNION_LINE = re.compile(
         r".*field list type (?P<field_type>0x\w+),.*Size = (?P<size>\d+)\s*,class name = (?P<name>(?:[^,]|,\S)+),\s.*UDT\((?P<udt>0x\w+)\)"
     )
@@ -259,6 +263,13 @@ class CvdumpTypesParser:
         """Set name for most recently added member."""
         obj = self.keys[self.last_key]
         obj["members"][-1]["name"] = name
+
+    def _add_variant(self, name: str, value: int):
+        obj = self.keys[self.last_key]
+        if "variants" not in obj:
+            obj["variants"] = []
+        variants: list[dict[str, Any]] = obj["variants"]
+        variants.append({"name": name, "value": value})
 
     def _get_field_list(self, type_obj: Dict[str, Any]) -> List[FieldListItem]:
         """Return the field list for the given LF_CLASS/LF_STRUCTURE reference"""
@@ -479,25 +490,7 @@ class CvdumpTypesParser:
                 self._set("size", int(match.group("length")))
 
         elif self.mode == "LF_FIELDLIST":
-            # If this class has a vtable, create a mock member at offset 0
-            if (match := self.VTABLE_RE.match(line)) is not None:
-                # For our purposes, any pointer type will do
-                self._add_member(0, "T_32PVOID")
-                self._set_member_name("vftable")
-
-            # Superclass is set here in the fieldlist rather than in LF_CLASS
-            elif (match := self.SUPERCLASS_RE.match(line)) is not None:
-                self._set("super", normalize_type_id(match.group("type")))
-
-            # Member offset and type given on the first of two lines.
-            elif (match := self.LIST_RE.match(line)) is not None:
-                self._add_member(
-                    int(match.group("offset")), normalize_type_id(match.group("type"))
-                )
-
-            # Name of the member read on the second of two lines.
-            elif (match := self.MEMBER_RE.match(line)) is not None:
-                self._set_member_name(match.group("name"))
+            self.read_fieldlist_line(line)
 
         elif self.mode == "LF_ARGLIST":
             self.read_arglist_line(line)
@@ -520,6 +513,30 @@ class CvdumpTypesParser:
         else:
             # Check for exhaustiveness
             logger.error("Unhandled data in mode: %s", self.mode)
+
+    def read_fieldlist_line(self, line: str):
+        # If this class has a vtable, create a mock member at offset 0
+        if (match := self.VTABLE_RE.match(line)) is not None:
+            # For our purposes, any pointer type will do
+            self._add_member(0, "T_32PVOID")
+            self._set_member_name("vftable")
+
+        # Superclass is set here in the fieldlist rather than in LF_CLASS
+        elif (match := self.SUPERCLASS_RE.match(line)) is not None:
+            self._set("super", normalize_type_id(match.group("type")))
+
+        # Member offset and type given on the first of two lines.
+        elif (match := self.LIST_RE.match(line)) is not None:
+            self._add_member(
+                int(match.group("offset")), normalize_type_id(match.group("type"))
+            )
+
+        # Name of the member read on the second of two lines.
+        elif (match := self.MEMBER_RE.match(line)) is not None:
+            self._set_member_name(match.group("name"))
+
+        elif (match := self.LF_FIELDLIST_ENUMERATE.match(line)) is not None:
+            self._add_variant(match.group("name"), int(match.group("value")))
 
     def read_class_or_struct_line(self, line: str):
         # Match the reference to the associated LF_FIELDLIST
@@ -619,6 +636,10 @@ class CvdumpTypesParser:
             return {"is_nested": True}
         if attribute == "FORWARD REF":
             return {"is_forward_ref": True}
+        if attribute.startswith("UDT"):
+            match = self.LF_ENUM_UDT.match(attribute)
+            assert match is not None
+            return {"udt": normalize_type_id(match.group("udt"))}
         logger.error("Unknown attribute in enum: %s", attribute)
         return {}
 

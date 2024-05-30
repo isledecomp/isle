@@ -19,4 +19,4 @@ LEGO1.DLL
 LEGO1PROGRESS.*
 ISLEPROGRESS.*
 *.pyc
-*$py.class
+tools/ghidra_scripts/import.log

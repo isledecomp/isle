@@ -31,11 +31,6 @@ class ClassOrNamespaceNotFoundInGhidraError(Lego1Exception):
         return f"Class or namespace not found in Ghidra: {self.get_namespace_str()}"
 
 
-class FunctionNotFoundInGhidraError(Lego1Exception):
-    def __str__(self):
-        return f"Function not found in Ghidra at {self.args[0]}"
-
-
 class MultipleTypesFoundInGhidraError(Lego1Exception):
     def __str__(self):
         return (
@@ -47,11 +42,6 @@ class StackOffsetMismatchError(Lego1Exception):
     pass
 
 
-class UnsupportedCppSyntaxError(Lego1Exception):
+class StructModificationError(Lego1Exception):
     def __str__(self):
-        return f"C++ syntax currently not supported in the parser: {self.args[0]}"
-
-
-class CppUnknownClassOrNamespaceError(Lego1Exception):
-    def __str__(self):
-        return f"'{self.args[0]}' is neither a known class nor namespace"
+        return f"Failed to modify struct in Ghidra: '{self.args[0]}'\nDetailed error: {self.__cause__}"

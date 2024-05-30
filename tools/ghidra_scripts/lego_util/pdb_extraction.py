@@ -8,8 +8,6 @@ from isledecomp.types import SymbolType
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.compare.db import MatchInfo
 
-from lego_util.exceptions import TypeNotFoundError
-
 logger = logging.getLogger(__file__)
 
 
@@ -40,85 +38,35 @@ class FunctionSignature:
     stack_symbols: list[CppStackOrRegisterSymbol]
 
 
-class PdbExtractionForGhidraMigration:
+class PdbFunctionExtractor:
+    """
+    Extracts all information on a given function from the parsed PDB
+    and prepares the data for the import in Ghidra.
+    """
+
     def __init__(self, compare: IsleCompare):
         self.compare = compare
 
     scalar_type_regex = re.compile(r"t_(?P<typename>\w+)(?:\((?P<type_id>\d+)\))?")
 
-    _scalar_type_map = {
-        "rchar": "char",
-        "int4": "int",
-        "uint4": "uint",
-        "real32": "float",
-        "real64": "double",
-    }
-
     _call_type_map = {
         "ThisCall": "__thiscall",
-        "C Near": "__thiscall",  # TODO: Not actually sure about this one, needs verification
+        "C Near": "__thiscall",
         "STD Near": "__stdcall",
     }
 
-    @classmethod
-    def scalar_type_to_cpp(cls, scalar_type: str) -> str:
-        if scalar_type.startswith("32p"):
-            return f"{cls.scalar_type_to_cpp(scalar_type[3:])} *"
-        return cls._scalar_type_map.get(scalar_type, scalar_type)
-
-    def lookup_type(self, type_name: Optional[str]) -> Optional[dict[str, Any]]:
+    def _get_cvdump_type(self, type_name: Optional[str]) -> Optional[dict[str, Any]]:
         return (
             None
             if type_name is None
             else self.compare.cv.types.keys.get(type_name.lower())
         )
 
-    # TODO: This is mostly legacy code now, we may be able to remove it
-    def type_to_cpp_type_name(self, type_name: str) -> str:
-        # pylint: disable=too-many-return-statements
-        type_lower = type_name.lower()
-        if type_lower.startswith("t_"):
-            if (match := self.scalar_type_regex.match(type_lower)) is None:
-                raise TypeNotFoundError(f"Type has unexpected format: {type_name}")
-
-            return self.scalar_type_to_cpp(match.group("typename"))
-
-        dereferenced = self.lookup_type(type_lower)
-        if dereferenced is None:
-            raise TypeNotFoundError(f"Failed to find referenced type {type_name}")
-
-        deref_type = dereferenced["type"]
-        if deref_type == "LF_POINTER":
-            return f"{self.type_to_cpp_type_name(dereferenced['element_type'])} *"
-        if deref_type in ["LF_CLASS", "LF_STRUCTURE"]:
-            class_name = dereferenced.get("name")
-            if class_name is not None:
-                return class_name
-            logger.error("Parsing error in class")
-            return "<<parsing error>>"
-        if deref_type == "LF_ARRAY":
-            # We treat arrays like pointers because we don't distinguish them in Ghidra
-            return f"{self.type_to_cpp_type_name(dereferenced['array_type'])} *"
-        if deref_type == "LF_ENUM":
-            return dereferenced["name"]
-        if deref_type == "LF_MODIFIER":
-            # not sure what this actually is
-            return self.type_to_cpp_type_name(dereferenced["modifies"])
-        if deref_type == "LF_PROCEDURE":
-            logger.info(
-                "Function-valued argument or return type will be replaced by void pointer: %s",
-                dereferenced,
-            )
-            return "void"
-
-        logger.error("Unknown type: %s", dereferenced)
-        return "<<parsing error>>"
-
     def get_func_signature(self, fn: SymbolsEntry) -> Optional[FunctionSignature]:
         function_type_str = fn.func_type
         if function_type_str == "T_NOTYPE(0000)":
             logger.debug(
-                "Got a NOTYPE (synthetic or template + synthetic): %s", fn.name
+                "Skipping a NOTYPE (synthetic or template + synthetic): %s", fn.name
             )
             return None
 
@@ -133,7 +81,7 @@ class PdbExtractionForGhidraMigration:
 
         class_type = function_type.get("class_type")
 
-        arg_list_type = self.lookup_type(function_type.get("arg_list_type"))
+        arg_list_type = self._get_cvdump_type(function_type.get("arg_list_type"))
         assert arg_list_type is not None
         arg_list_pdb_types = arg_list_type.get("args", [])
         assert arg_list_type["argcount"] == len(arg_list_pdb_types)
@@ -144,7 +92,7 @@ class PdbExtractionForGhidraMigration:
                 stack_symbols.append(
                     CppRegisterSymbol(
                         symbol.name,
-                        self.type_to_cpp_type_name(symbol.data_type),
+                        symbol.data_type,
                         symbol.location,
                     )
                 )
