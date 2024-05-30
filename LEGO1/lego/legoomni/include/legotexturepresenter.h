@@ -11,11 +11,18 @@ public:
 	LegoTexturePresenter() : m_textures(NULL) {}
 	~LegoTexturePresenter() override;
 
-	// FUNCTION: LEGO1 0x1000ce50
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a73c0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0664
 		return "LegoTexturePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000ce50
+	// FUNCTION: BETA10 0x100a7390
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000ce60

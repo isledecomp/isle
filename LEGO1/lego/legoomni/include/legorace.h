@@ -15,11 +15,18 @@ public:
 
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
-	// FUNCTION: LEGO1 0x10015ba0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a8970
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f07c4
 		return "LegoRace";
+	}
+
+	// FUNCTION: LEGO1 0x10015ba0
+	// FUNCTION: BETA10 0x100a8940
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10015bb0

@@ -11,11 +11,18 @@ public:
 	MxLoopingFlcPresenter();
 	~MxLoopingFlcPresenter() override;
 
-	// FUNCTION: LEGO1 0x100b4380
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1012f050
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x10101e20
 		return "MxLoopingFlcPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100b4380
+	// FUNCTION: BETA10 0x1013c300
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	void RepeatingTickle() override;  // vtable+0x24

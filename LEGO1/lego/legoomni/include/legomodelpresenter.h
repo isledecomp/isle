@@ -19,11 +19,18 @@ public:
 
 	static void configureLegoModelPresenter(MxS32 p_modelPresenterConfig);
 
-	// FUNCTION: LEGO1 0x1000ccb0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a7180
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f067c
 		return "LegoModelPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000ccb0
+	// FUNCTION: BETA10 0x100a7150
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000ccc0
