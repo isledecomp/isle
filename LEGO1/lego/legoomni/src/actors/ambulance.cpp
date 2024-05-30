@@ -103,7 +103,7 @@ MxU32 Ambulance::VTable0xdc(MxType19NotificationParam& p_param)
 }
 
 // STUB: LEGO1 0x10036ce0
-MxU32 Ambulance::VTable0xcc()
+MxU32 Ambulance::HandleClick()
 {
 	// TODO
 	return 0;
@@ -122,7 +122,7 @@ void Ambulance::VTable0xe4()
 }
 
 // STUB: LEGO1 0x10036f90
-MxU32 Ambulance::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Ambulance::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

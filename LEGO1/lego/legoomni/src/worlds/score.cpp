@@ -104,7 +104,7 @@ MxLong Score::Notify(MxParam& p_param)
 			}
 			ret = 1;
 			break;
-		case c_notificationClick:
+		case c_notificationControl:
 			ret = FUN_100016d0((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:

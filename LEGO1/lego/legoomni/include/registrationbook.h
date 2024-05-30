@@ -64,7 +64,7 @@ private:
 
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
 	MxLong HandleKeyPress(MxU8 p_key);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 	MxLong HandleNotification19(MxParam& p_param);
 	void FUN_100775c0(MxS16 p_playerIndex);
 	void WriteInfocenterLetters(MxS16);

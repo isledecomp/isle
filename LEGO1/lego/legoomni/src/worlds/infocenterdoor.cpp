@@ -68,8 +68,8 @@ MxLong InfocenterDoor::Notify(MxParam& p_param)
 				result = 1;
 			}
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationTransitioned:
 			GameState()->SwitchArea(m_destLocation);
@@ -90,7 +90,7 @@ void InfocenterDoor::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10037a90
-MxLong InfocenterDoor::HandleClick(LegoControlManagerEvent& p_param)
+MxLong InfocenterDoor::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxLong result = 0;
 

@@ -41,7 +41,7 @@ public:
 	// JukeBox::`scalar deleting destructor'
 
 private:
-	MxBool HandleClick(LegoControlManagerEvent& p_param);
+	MxBool HandleControl(LegoControlManagerEvent& p_param);
 
 	LegoGameState::Area m_destLocation; // 0xf8
 	JukeBoxState* m_state;              // 0xfc

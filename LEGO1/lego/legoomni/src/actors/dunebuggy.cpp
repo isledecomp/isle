@@ -31,14 +31,14 @@ void DuneBuggy::VTable0xe4()
 }
 
 // STUB: LEGO1 0x10068060
-MxU32 DuneBuggy::VTable0xcc()
+MxU32 DuneBuggy::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x100681b0
-MxU32 DuneBuggy::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 DuneBuggy::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

@@ -45,14 +45,14 @@ void Bike::VTable0xe4()
 }
 
 // STUB: LEGO1 0x100769a0
-MxU32 Bike::VTable0xcc()
+MxU32 Bike::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10076aa0
-MxU32 Bike::VTable0xd4(LegoControlManagerEvent& p_param)
+MxU32 Bike::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

@@ -337,7 +337,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 {
 	LegoEventNotificationParam& param = (LegoEventNotificationParam&) p_param;
 
-	if (param.GetNotification() != c_notificationType11) {
+	if (param.GetNotification() != c_notificationClick) {
 		return 0;
 	}
 

@@ -142,8 +142,8 @@ MxLong Isle::Notify(MxParam& p_param)
 				break;
 			}
 			break;
-		case c_notificationClick:
-			result = HandleClick((LegoControlManagerEvent&) p_param);
+		case c_notificationControl:
+			result = HandleControl((LegoControlManagerEvent&) p_param);
 			break;
 		case c_notificationEndAnim:
 			switch (m_act1state->m_unk0x018) {
@@ -278,7 +278,7 @@ void Isle::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x10031030
-MxLong Isle::HandleClick(LegoControlManagerEvent& p_param)
+MxLong Isle::HandleControl(LegoControlManagerEvent& p_param)
 {
 	if (p_param.GetUnknown0x28() == 1) {
 		MxDSAction action;
@@ -509,7 +509,7 @@ MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
 		case 0x136:
 			LegoEntity* bouy = (LegoEntity*) Find("MxEntity", "bouybump");
 			if (bouy != NULL) {
-				NotificationManager()->Send(bouy, LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+				NotificationManager()->Send(bouy, LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 			}
 			result = 1;
 			break;
@@ -595,11 +595,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_jetski->Notify(param);
 			}
 #else
-			m_jetski->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_jetski->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_garadoor:
@@ -618,11 +618,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_bike->Notify(param);
 			}
 #else
-			m_bike->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_bike->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_dunecar:
@@ -631,11 +631,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_dunebuggy->Notify(param);
 			}
 #else
-			m_dunebuggy->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_dunebuggy->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_motocycle:
@@ -644,11 +644,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_motocycle->Notify(param);
 			}
 #else
-			m_motocycle->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_motocycle->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_copter:
@@ -657,11 +657,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_helicopter->Notify(param);
 			}
 #else
-			m_helicopter->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_helicopter->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_skateboard:
@@ -670,11 +670,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_skateboard->Notify(param);
 			}
 #else
-			m_skateboard->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_skateboard->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		case LegoGameState::e_jetski:
@@ -683,11 +683,11 @@ void Isle::Enable(MxBool p_enable)
 
 #ifdef COMPAT_MODE
 			{
-				LegoEventNotificationParam param(c_notificationType11, NULL, 0, 0, 0, 0);
+				LegoEventNotificationParam param(c_notificationClick, NULL, 0, 0, 0, 0);
 				m_jetski->Notify(param);
 			}
 #else
-			m_jetski->Notify(LegoEventNotificationParam(c_notificationType11, NULL, 0, 0, 0, 0));
+			m_jetski->Notify(LegoEventNotificationParam(c_notificationClick, NULL, 0, 0, 0, 0));
 #endif
 			break;
 		default:

@@ -42,8 +42,8 @@ MxLong IsleActor::Notify(MxParam& p_param)
 	case c_notificationButtonDown:
 		result = HandleButtonDown((MxNotificationParam&) p_param);
 		break;
-	case c_notificationType11:
-		result = VTable0x68();
+	case c_notificationClick:
+		result = HandleClick();
 		break;
 	case c_notificationEndAnim:
 		result = VTable0x70();

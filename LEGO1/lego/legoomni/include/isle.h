@@ -71,7 +71,7 @@ public:
 
 protected:
 	MxLong HandleEndAction(MxEndActionNotificationParam& p_param);
-	MxLong HandleClick(LegoControlManagerEvent& p_param);
+	MxLong HandleControl(LegoControlManagerEvent& p_param);
 	MxLong HandleType19Notification(MxType19NotificationParam& p_param);
 	MxLong HandleTransitionEnd();
 	void HandleElevatorEndAction();
