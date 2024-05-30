@@ -2451,7 +2451,7 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, Le
 MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnknown100db7f4* p_edge, float p_destScale)
 {
 	Mx3DPointFloat p1;
-	Vector3* v1 = p_edge->GetOpposingPoint(*p_boundary);
+	Vector3* v1 = p_edge->CWVertex(*p_boundary);
 	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
 	p1 = *v2;
