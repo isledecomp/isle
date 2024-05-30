@@ -8,13 +8,22 @@
 #include "mxdsanim.h"
 #include "mxdssound.h"
 #include "mxentity.h"
+#include "mxeventpresenter.h"
+#include "mxflcpresenter.h"
+#include "mxloopingflcpresenter.h"
+#include "mxloopingmidipresenter.h"
+#include "mxloopingsmkpresenter.h"
+#include "mxmidipresenter.h"
 #include "mxmisc.h"
 #include "mxnotificationmanager.h"
 #include "mxobjectfactory.h"
 #include "mxomni.h"
 #include "mxparam.h"
+#include "mxsmkpresenter.h"
+#include "mxstillpresenter.h"
 #include "mxstreamer.h"
 #include "mxutilities.h"
+#include "mxwavepresenter.h"
 
 #include <string.h>
 
@@ -175,6 +184,7 @@ void MxPresenter::Enable(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x100b5310
+// FUNCTION: BETA10 0x1012e8bd
 const char* PresenterNameDispatch(const MxDSAction& p_action)
 {
 	const char* name = p_action.GetSourceName();
@@ -186,10 +196,12 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 			format = ((MxDSAnim&) p_action).GetMediaFormat();
 			switch (format) {
 			case FOURCC(' ', 'F', 'L', 'C'):
-				name = !p_action.IsLooping() ? "MxFlcPresenter" : "MxLoopingFlcPresenter";
+				name = !p_action.IsLooping() ? MxFlcPresenter::HandlerClassName()
+											 : MxLoopingFlcPresenter::HandlerClassName();
 				break;
 			case FOURCC(' ', 'S', 'M', 'K'):
-				name = !p_action.IsLooping() ? "MxSmkPresenter" : "MxLoopingSmkPresenter";
+				name = !p_action.IsLooping() ? MxSmkPresenter::HandlerClassName()
+											 : MxLoopingSmkPresenter::HandlerClassName();
 				break;
 			}
 			break;
@@ -198,10 +210,11 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 			format = ((MxDSSound&) p_action).GetMediaFormat();
 			switch (format) {
 			case FOURCC(' ', 'M', 'I', 'D'):
-				name = !p_action.IsLooping() ? "MxMIDIPresenter" : "MxLoopingMIDIPresenter";
+				name = !p_action.IsLooping() ? MxMIDIPresenter::HandlerClassName()
+											 : MxLoopingMIDIPresenter::HandlerClassName();
 				break;
 			case FOURCC(' ', 'W', 'A', 'V'):
-				name = "MxWavePresenter";
+				name = MxWavePresenter::HandlerClassName();
 				break;
 			}
 			break;
@@ -209,15 +222,15 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 		case MxDSObject::e_serialAction:
 		case MxDSObject::e_parallelAction:
 		case MxDSObject::e_selectAction:
-			name = "MxCompositePresenter";
+			name = MxCompositePresenter::HandlerClassName();
 			break;
 
 		case MxDSObject::e_event:
-			name = "MxEventPresenter";
+			name = MxEventPresenter::HandlerClassName();
 			break;
 
 		case MxDSObject::e_still:
-			name = "MxStillPresenter";
+			name = MxStillPresenter::HandlerClassName();
 			break;
 		}
 	}
