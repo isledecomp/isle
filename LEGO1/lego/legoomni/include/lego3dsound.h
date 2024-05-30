@@ -1,5 +1,5 @@
-#ifndef LEGOUNKNOWN100D5778_H
-#define LEGOUNKNOWN100D5778_H
+#ifndef LEGO3DSOUND_H
+#define LEGO3DSOUND_H
 
 #include "decomp.h"
 #include "mxtypes.h"
@@ -10,20 +10,20 @@ class LegoROI;
 
 // VTABLE: LEGO1 0x100d5778
 // SIZE 0x30
-class LegoUnknown100d5778 {
+class Lego3DSound {
 public:
-	LegoUnknown100d5778();
-	virtual ~LegoUnknown100d5778();
+	Lego3DSound();
+	virtual ~Lego3DSound();
 
 	void Init();
-	MxResult FUN_100116a0(LPDIRECTSOUND p_dsound, undefined4, undefined4 p_unk0x2c);
+	MxResult Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char*, MxS32 p_volume);
 	void Destroy();
 	undefined4 FUN_100118e0(LPDIRECTSOUNDBUFFER p_dsBuffer);
 	void FUN_10011ca0();
 	MxS32 FUN_10011cf0(undefined4, undefined4);
 
 	// SYNTHETIC: LEGO1 0x10011650
-	// LegoUnknown100d5778::`scalar deleting destructor'
+	// lego3dsound::`scalar deleting destructor'
 
 private:
 	undefined m_unk0x04[4];         // 0x04
@@ -34,7 +34,7 @@ private:
 	MxBool m_unk0x15;               // 0x15
 	undefined4 m_unk0x18;           // 0x18
 	undefined m_unk0x1c[0x10];      // 0x1c
-	undefined4 m_unk0x2c;           // 0x2c
+	MxS32 m_volume;                 // 0x2c
 };
 
-#endif // LEGOUNKNOWN100D5778_H
+#endif // LEGO3DSOUND_H

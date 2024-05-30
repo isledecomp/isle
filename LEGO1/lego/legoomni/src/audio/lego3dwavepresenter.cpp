@@ -1,5 +1,7 @@
 #include "lego3dwavepresenter.h"
 
+#include "mxcompositepresenter.h"
+#include "mxdsaction.h"
 #include "mxomni.h"
 
 DECOMP_SIZE_ASSERT(Lego3DWavePresenter, 0xa0)
@@ -28,7 +30,8 @@ void Lego3DWavePresenter::Destroy()
 	}
 }
 
-// STUB: LEGO1 0x1004a810
+// FUNCTION: LEGO1 0x1004a810
+// FUNCTION: BETA10 0x1003a3b0
 void Lego3DWavePresenter::StartingTickle()
 {
 	if (MxOmni::IsSound3D()) {
@@ -37,7 +40,21 @@ void Lego3DWavePresenter::StartingTickle()
 
 	MxWavePresenter::StartingTickle();
 
-	// TODO
+	if (m_dsBuffer != NULL) {
+		MxU16 extraLength;
+		char* buff;
+		m_action->GetExtra(extraLength, buff);
+
+		if (!strcmp(buff, "FROM_PARENT") && m_compositePresenter != NULL) {
+			m_compositePresenter->GetAction()->GetExtra(extraLength, buff);
+		}
+
+		if (m_3dsound.Create(m_dsBuffer, buff, m_volume) != SUCCESS) {
+			m_dsBuffer->Release();
+			m_dsBuffer = NULL;
+			EndAction();
+		}
+	}
 }
 
 // STUB: LEGO1 0x1004a8b0
