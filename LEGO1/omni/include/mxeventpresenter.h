@@ -11,11 +11,18 @@ public:
 	MxEventPresenter();
 	~MxEventPresenter() override;
 
-	// FUNCTION: LEGO1 0x100c2c30
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1012f0d0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x10101dcc
 		return "MxEventPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100c2c30
+	// FUNCTION: BETA10 0x10152f10
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100c2c40

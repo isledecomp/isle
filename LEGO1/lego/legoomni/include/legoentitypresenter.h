@@ -13,11 +13,18 @@ public:
 	LegoEntityPresenter();
 	~LegoEntityPresenter() override; // vtable+0x00
 
-	// FUNCTION: LEGO1 0x100534b0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x10080780
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f06b8
 		return "LegoEntityPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x100534b0
+	// FUNCTION: BETA10 0x10080750
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x100534c0

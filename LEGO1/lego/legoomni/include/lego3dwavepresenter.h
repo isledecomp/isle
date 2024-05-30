@@ -9,11 +9,18 @@
 // SIZE 0xa0
 class Lego3DWavePresenter : public MxWavePresenter {
 public:
-	// FUNCTION: LEGO1 0x1000d890
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a8670
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f058c
 		return "Lego3DWavePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000d890
+	// FUNCTION: BETA10 0x100a8640
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d8a0

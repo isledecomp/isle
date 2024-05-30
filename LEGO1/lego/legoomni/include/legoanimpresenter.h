@@ -41,11 +41,18 @@ public:
 	LegoAnimPresenter();
 	~LegoAnimPresenter() override;
 
-	// FUNCTION: LEGO1 0x10068530
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x10055300
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f071c
 		return "LegoAnimPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x10068530
+	// FUNCTION: BETA10 0x100552d0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x10068540

@@ -15,11 +15,18 @@ public:
 	// FUNCTION: LEGO1 0x1000d640
 	~MxWavePresenter() override { Destroy(TRUE); } // vtable+0x00
 
-	// FUNCTION: LEGO1 0x1000d6c0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1008cd00
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f07b4
 		return "MxWavePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000d6c0
+	// FUNCTION: BETA10 0x1008ccd0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d6d0

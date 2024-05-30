@@ -13,11 +13,18 @@ public:
 	LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
 	~LegoActionControlPresenter() override { Destroy(TRUE); } // vtable+0x00
 
-	// FUNCTION: LEGO1 0x1000d0e0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100a7840
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f05bc
 		return "LegoActionControlPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1000d0e0
+	// FUNCTION: BETA10 0x100a7810
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	// FUNCTION: LEGO1 0x1000d0f0

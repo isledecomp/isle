@@ -13,11 +13,18 @@ public:
 	LegoLoadCacheSoundPresenter();
 	~LegoLoadCacheSoundPresenter() override;
 
-	// FUNCTION: LEGO1 0x10018450
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x1008cf90
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f05a0
 		return "LegoLoadCacheSoundPresenter";
+	}
+
+	// FUNCTION: LEGO1 0x10018450
+	// FUNCTION: BETA10 0x1008cf60
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	void ReadyTickle() override;     // vtable+0x18

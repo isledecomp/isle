@@ -10,11 +10,18 @@ class LegoFlcTexturePresenter : public MxFlcPresenter {
 public:
 	LegoFlcTexturePresenter();
 
-	// FUNCTION: LEGO1 0x1005def0
-	inline const char* ClassName() const override // vtable+0x0c
+	// FUNCTION: BETA10 0x100837e0
+	static const char* HandlerClassName()
 	{
 		// STRING: LEGO1 0x100f0634
 		return "LegoFlcTexturePresenter";
+	}
+
+	// FUNCTION: LEGO1 0x1005def0
+	// FUNCTION: BETA10 0x100837b0
+	inline const char* ClassName() const override // vtable+0x0c
+	{
+		return HandlerClassName();
 	}
 
 	void StartingTickle() override;                  // vtable+0x1c
