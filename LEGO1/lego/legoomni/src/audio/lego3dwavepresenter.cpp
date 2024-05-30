@@ -57,9 +57,10 @@ void Lego3DWavePresenter::StartingTickle()
 	}
 }
 
-// STUB: LEGO1 0x1004a8b0
+// FUNCTION: LEGO1 0x1004a8b0
+// FUNCTION: BETA10 0x1003a4cc
 void Lego3DWavePresenter::StreamingTickle()
 {
 	MxWavePresenter::StreamingTickle();
-	// TODO
+	m_3dsound.FUN_100118e0(m_dsBuffer);
 }

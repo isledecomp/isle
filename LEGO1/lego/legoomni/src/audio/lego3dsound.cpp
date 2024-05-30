@@ -71,7 +71,8 @@ void Lego3DSound::Destroy()
 }
 
 // STUB: LEGO1 0x100118e0
-undefined4 Lego3DSound::FUN_100118e0(LPDIRECTSOUNDBUFFER p_dsBuffer)
+// FUNCTION: BETA10 0x10039a2a
+undefined4 Lego3DSound::FUN_100118e0(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 {
 	// TODO
 	return 0;
