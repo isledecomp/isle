@@ -94,9 +94,9 @@ MxResult LegoPathActor::VTable0x88(
 	float p_destScale
 )
 {
-	Vector3* v1 = p_srcEdge.GetOpposingPoint(*p_boundary);
+	Vector3* v1 = p_srcEdge.CWVertex(*p_boundary);
 	Vector3* v2 = p_srcEdge.CCWVertex(*p_boundary);
-	Vector3* v3 = p_destEdge.GetOpposingPoint(*p_boundary);
+	Vector3* v3 = p_destEdge.CWVertex(*p_boundary);
 	Vector3* v4 = p_destEdge.CCWVertex(*p_boundary);
 
 	Mx3DPointFloat p1, p2, p3, p4, p5;
@@ -171,7 +171,7 @@ MxResult LegoPathActor::VTable0x84(
 	float p_destScale
 )
 {
-	Vector3* v3 = p_destEdge.GetOpposingPoint(*p_boundary);
+	Vector3* v3 = p_destEdge.CWVertex(*p_boundary);
 	Vector3* v4 = p_destEdge.CCWVertex(*p_boundary);
 
 	Mx3DPointFloat p2, p3, p5;
@@ -624,7 +624,7 @@ MxResult LegoPathActor::VTable0x9c()
 	if (local20 != 0) {
 		Mx3DPointFloat local78;
 
-		Vector3& v1 = *m_destEdge->GetOpposingPoint(*m_boundary);
+		Vector3& v1 = *m_destEdge->CWVertex(*m_boundary);
 		Vector3& v2 = *m_destEdge->CCWVertex(*m_boundary);
 
 		LERP3(local34, v1, v2, m_unk0xe4);

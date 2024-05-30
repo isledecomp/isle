@@ -14,7 +14,7 @@ struct LegoEdge {
 
 	LegoEdge* GetClockwiseEdge(LegoWEEdge& p_face);
 	LegoEdge* GetCounterclockwiseEdge(LegoWEEdge& p_face);
-	Vector3* GetOpposingPoint(LegoWEEdge& p_face);
+	Vector3* CWVertex(LegoWEEdge& p_face);
 	Vector3* CCWVertex(LegoWEEdge& p_face);
 
 	LegoResult FUN_1002ddc0(LegoWEEdge& p_face, Vector3& p_point);
