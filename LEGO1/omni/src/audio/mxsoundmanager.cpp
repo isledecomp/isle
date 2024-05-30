@@ -5,8 +5,8 @@
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 #include "mxwavepresenter.h"
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);

@@ -2,8 +2,8 @@
 
 #include "mxcriticalsection.h"
 #include "mxmisc.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 
 // FUNCTION: LEGO1 0x100c0360
 MxEventManager::MxEventManager()

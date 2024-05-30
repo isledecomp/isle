@@ -6,6 +6,7 @@
 class MxScheduler {
 public:
 	static MxScheduler* GetInstance();
+
 	void StartMultiTasking(MxULong);
 };
 

@@ -7,8 +7,8 @@
 #include "mxpalette.h"
 #include "mxpresenter.h"
 #include "mxregion.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 
 DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)
 

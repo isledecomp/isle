@@ -258,6 +258,7 @@ add_library(omni STATIC
   LEGO1/omni/src/system/mxcriticalsection.cpp
   LEGO1/omni/src/system/mxscheduler.cpp
   LEGO1/omni/src/system/mxsemaphore.cpp
+  LEGO1/omni/src/system/mxticklethread.cpp
   LEGO1/omni/src/system/mxthread.cpp
   LEGO1/omni/src/video/flic.cpp
   LEGO1/omni/src/video/mxbitmap.cpp

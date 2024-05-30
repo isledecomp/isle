@@ -4,35 +4,35 @@
 
 #include <stdio.h>
 
-DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c);
+DECOMP_SIZE_ASSERT(MxCriticalSection, 0x1c)
 
 // GLOBAL: LEGO1 0x10101e78
-int g_useMutex = 0;
+BOOL g_useMutex = FALSE;
 
 // FUNCTION: LEGO1 0x100b6d20
 MxCriticalSection::MxCriticalSection()
 {
 	HANDLE mutex;
 
-	if (g_useMutex != 0) {
+	if (g_useMutex) {
 		mutex = CreateMutexA(NULL, FALSE, NULL);
-		this->m_mutex = mutex;
-		return;
+		m_mutex = mutex;
 	}
-
-	InitializeCriticalSection(&this->m_criticalSection);
-	this->m_mutex = NULL;
+	else {
+		InitializeCriticalSection(&m_criticalSection);
+		m_mutex = NULL;
+	}
 }
 
 // FUNCTION: LEGO1 0x100b6d60
 MxCriticalSection::~MxCriticalSection()
 {
-	if (this->m_mutex != NULL) {
-		CloseHandle(this->m_mutex);
+	if (m_mutex != NULL) {
+		CloseHandle(m_mutex);
 		return;
 	}
 
-	DeleteCriticalSection(&this->m_criticalSection);
+	DeleteCriticalSection(&m_criticalSection);
 }
 
 // FUNCTION: LEGO1 0x100b6d80
@@ -41,8 +41,8 @@ void MxCriticalSection::Enter()
 	DWORD result;
 	FILE* file;
 
-	if (this->m_mutex != NULL) {
-		result = WaitForSingleObject(this->m_mutex, 5000);
+	if (m_mutex != NULL) {
+		result = WaitForSingleObject(m_mutex, 5000);
 		if (result == WAIT_FAILED) {
 			file = fopen("C:\\DEADLOCK.TXT", "a");
 			if (file != NULL) {
@@ -54,23 +54,23 @@ void MxCriticalSection::Enter()
 		}
 	}
 	else {
-		EnterCriticalSection(&this->m_criticalSection);
+		EnterCriticalSection(&m_criticalSection);
 	}
 }
 
 // FUNCTION: LEGO1 0x100b6de0
 void MxCriticalSection::Leave()
 {
-	if (this->m_mutex != NULL) {
-		ReleaseMutex(this->m_mutex);
-		return;
+	if (m_mutex != NULL) {
+		ReleaseMutex(m_mutex);
 	}
-
-	LeaveCriticalSection(&this->m_criticalSection);
+	else {
+		LeaveCriticalSection(&m_criticalSection);
+	}
 }
 
 // FUNCTION: LEGO1 0x100b6e00
 void MxCriticalSection::SetDoMutex()
 {
-	g_useMutex = 1;
+	g_useMutex = TRUE;
 }
