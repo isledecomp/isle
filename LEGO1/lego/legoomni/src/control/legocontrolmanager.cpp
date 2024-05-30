@@ -116,9 +116,27 @@ void LegoControlManager::FUN_100292e0()
 	}
 }
 
-// STUB: LEGO1 0x100293c0
-void LegoControlManager::FUN_100293c0(undefined4, const char*, undefined2)
+// FUNCTION: LEGO1 0x100293c0
+void LegoControlManager::FUN_100293c0(MxU32 p_objectId, const char* p_atom, MxS16 p_unk0x4e)
 {
+	if (m_presenterList) {
+		MxPresenterListCursor cursor(m_presenterList);
+		MxPresenter* control;
+
+		while (cursor.Next(control)) {
+			MxDSAction* action = control->GetAction();
+
+			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == p_atom) {
+				((MxControlPresenter*) control)->VTable0x6c(p_unk0x4e);
+
+				if (((MxControlPresenter*) control)->GetUnknown0x4e() == 0) {
+					g_unk0x100f31b0 = -1;
+					g_unk0x100f31b4 = NULL;
+					break;
+				}
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x100294e0

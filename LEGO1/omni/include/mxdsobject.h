@@ -62,6 +62,7 @@ public:
 
 	// FUNCTION: BETA10 0x1012efb0
 	inline const char* GetSourceName() const { return m_sourceName; }
+
 	inline const char* GetObjectName() const { return m_objectName; }
 	inline MxU32 GetObjectId() { return m_objectId; }
 	inline const MxAtomId& GetAtomId() { return m_atomId; }
