@@ -8,7 +8,9 @@ class MxCriticalSection {
 public:
 	MxCriticalSection();
 	~MxCriticalSection();
+
 	static void SetDoMutex();
+
 	void Enter();
 	void Leave();
 
