@@ -202,10 +202,10 @@ void MxStillPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[512];
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char output[512];
 		if (KeyValueStringParse(output, g_strVISIBILITY, extraCopy)) {

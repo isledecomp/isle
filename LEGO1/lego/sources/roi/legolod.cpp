@@ -137,14 +137,14 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			goto done;
 		}
 
-		m_numPolys += numPolys & MAXWORD;
+		m_numPolys += numPolys & USHRT_MAX;
 
 		if (p_storage->Read(&numVertices, 2) != SUCCESS) {
 			goto done;
 		}
 
-		polyIndices = new LegoU32[numPolys & MAXWORD][sizeOfArray(*polyIndices)];
-		if (p_storage->Read(polyIndices, (numPolys & MAXWORD) * sizeof(*polyIndices)) != SUCCESS) {
+		polyIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*polyIndices)];
+		if (p_storage->Read(polyIndices, (numPolys & USHRT_MAX) * sizeof(*polyIndices)) != SUCCESS) {
 			goto done;
 		}
 
@@ -153,8 +153,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		if (numTextureIndices > 0) {
-			textureIndices = new LegoU32[numPolys & MAXWORD][sizeOfArray(*textureIndices)];
-			if (p_storage->Read(textureIndices, (numPolys & MAXWORD) * sizeof(*textureIndices)) != SUCCESS) {
+			textureIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*textureIndices)];
+			if (p_storage->Read(textureIndices, (numPolys & USHRT_MAX) * sizeof(*textureIndices)) != SUCCESS) {
 				goto done;
 			}
 		}
@@ -179,7 +179,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			shadingModel = Tgl::Gouraud;
 		}
 
-		m_numVertices += numVertices & MAXWORD;
+		m_numVertices += numVertices & USHRT_MAX;
 
 		textureName = mesh->GetTextureName();
 		materialName = mesh->GetMaterialName();
@@ -194,8 +194,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		m_melems[meshIndex].m_tglMesh = m_meshBuilder->CreateMesh(
-			numPolys & MAXWORD,
-			numVertices & MAXWORD,
+			numPolys & USHRT_MAX,
+			numVertices & USHRT_MAX,
 			vertices,
 			normals,
 			textureVertices,

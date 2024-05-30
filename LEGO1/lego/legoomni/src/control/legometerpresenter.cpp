@@ -40,10 +40,10 @@ void LegoMeterPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[256];
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char output[256];
 		if (KeyValueStringParse(extraCopy, g_strTYPE, output)) {

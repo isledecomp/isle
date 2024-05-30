@@ -947,18 +947,18 @@ void LegoAnimPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[256];
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char output[256];
 		if (KeyValueStringParse(NULL, g_strFROM_PARENT, extraCopy) && m_compositePresenter != NULL) {
 			m_compositePresenter->GetAction()->GetExtra(extraLength, extraData);
 
-			if (extraLength & MAXWORD) {
-				memcpy(extraCopy, extraData, extraLength & MAXWORD);
-				extraCopy[extraLength & MAXWORD] = '\0';
+			if (extraLength & USHRT_MAX) {
+				memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+				extraCopy[extraLength & USHRT_MAX] = '\0';
 			}
 		}
 
