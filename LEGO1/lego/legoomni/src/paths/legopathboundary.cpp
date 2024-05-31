@@ -231,7 +231,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 		Mx3DPointFloat local50;
 		Mx3DPointFloat local70;
-		Vector3* local5c = e->GetOpposingPoint(*this);
+		Vector3* local5c = e->CWVertex(*this);
 
 		p_point3 = vec;
 		p_point3.Mul(localc);
@@ -256,7 +256,7 @@ MxU32 LegoPathBoundary::Intersect(
 					break;
 				}
 
-				Vector3* local90 = local88->GetOpposingPoint(*this);
+				Vector3* local90 = local88->CWVertex(*this);
 				Mx3DPointFloat locala4(p_point3);
 				((Vector3&) locala4).Sub(local90);
 
@@ -283,7 +283,7 @@ MxU32 LegoPathBoundary::Intersect(
 						break;
 					}
 
-					Vector3* localc4 = locala8->GetOpposingPoint(*this);
+					Vector3* localc4 = locala8->CWVertex(*this);
 					Mx3DPointFloat locald8(p_point3);
 					((Vector3&) locald8).Sub(localc4);
 
