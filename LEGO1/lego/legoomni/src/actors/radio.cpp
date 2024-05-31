@@ -111,7 +111,7 @@ MxLong Radio::HandleControl(LegoControlManagerEvent& p_param)
 
 		if (CurrentWorld()) {
 #ifdef COMPAT_MODE
-			MxNotificationParam param(c_notificationEndAction, this);
+			MxNotificationParam param(c_notificationType0, this);
 			CurrentWorld()->Notify(param);
 #else
 			CurrentWorld()->Notify(MxNotificationParam(c_notificationType0, this));
