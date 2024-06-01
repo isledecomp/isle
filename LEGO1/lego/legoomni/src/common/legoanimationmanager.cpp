@@ -2812,7 +2812,7 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 
 		viewROI->WrappedSetLocalTransform(mat);
 		VideoManager()->Get3DManager()->Moved(*viewROI);
-		SoundManager()->FUN_1002a410(
+		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),
 			viewROI->GetWorldUp(),

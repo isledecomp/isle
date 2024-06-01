@@ -159,7 +159,7 @@ void LegoCameraController::FUN_100123e0(const Matrix4& p_transform, MxU32 p_und)
 			pov->WrappedSetLocalTransform(mat);
 			m_lego3DView->Moved(*pov);
 
-			SoundManager()->FUN_1002a410(
+			SoundManager()->UpdateListener(
 				pov->GetWorldPosition(),
 				pov->GetWorldDirection(),
 				pov->GetWorldUp(),
