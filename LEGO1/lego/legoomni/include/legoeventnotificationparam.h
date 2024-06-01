@@ -13,10 +13,10 @@ class LegoROI;
 class LegoEventNotificationParam : public MxNotificationParam {
 public:
 	enum {
-		c_lButtonState = 0x01,
-		c_rButtonState = 0x02,
-		c_modKey1 = 0x04,
-		c_modKey2 = 0x08,
+		c_lButtonState = 1,
+		c_rButtonState = 2,
+		c_modKey1 = 4,
+		c_modKey2 = 8,
 	};
 
 	// FUNCTION: LEGO1 0x10028690
