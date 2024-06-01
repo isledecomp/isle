@@ -19,7 +19,7 @@ public:
 	void Init();
 	MxResult Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name, MxS32 p_volume);
 	void Destroy();
-	undefined4 FUN_100118e0(LPDIRECTSOUNDBUFFER p_directSoundBuffer);
+	MxU32 UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer);
 	void FUN_10011ca0();
 	MxS32 FUN_10011cf0(undefined4, undefined4);
 

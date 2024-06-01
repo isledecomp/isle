@@ -2,8 +2,12 @@
 
 #include "legoactor.h"
 #include "legocharactermanager.h"
+#include "legosoundmanager.h"
+#include "legovideomanager.h"
 #include "misc.h"
 #include "mxomni.h"
+
+#include <vec.h>
 
 DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
 
@@ -123,12 +127,61 @@ void Lego3DSound::Destroy()
 	Init();
 }
 
-// STUB: LEGO1 0x100118e0
+// FUNCTION: LEGO1 0x100118e0
 // FUNCTION: BETA10 0x10039a2a
-undefined4 Lego3DSound::FUN_100118e0(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
+MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 {
-	// TODO
-	return 0;
+	MxU32 updated = FALSE;
+
+	if (m_positionROI != NULL) {
+		const float* position = m_positionROI->GetWorldPosition();
+
+		ViewROI* pov = VideoManager()->GetViewROI();
+		assert(pov);
+
+		const float* povPosition = pov->GetWorldPosition();
+		float distance = DISTSQRD3(povPosition, position);
+
+		if (distance > 10000.0f) {
+			return FALSE;
+		}
+
+		if (m_ds3dBuffer != NULL) {
+			m_ds3dBuffer->SetPosition(position[0], position[1], position[2], 0);
+		}
+		else {
+			MxS32 newVolume = m_volume;
+
+			if (distance < 100.0f) {
+				newVolume = m_volume;
+			}
+			else if (distance < 400.0f) {
+				newVolume *= 0.4;
+			}
+			else if (distance < 3600.0f) {
+				newVolume *= 0.1;
+			}
+			else if (distance < 10000.0f) {
+				newVolume = 0;
+			}
+
+			newVolume = newVolume * SoundManager()->GetVolume() / 100;
+			newVolume = SoundManager()->GetAttenuation(newVolume);
+			p_directSoundBuffer->SetVolume(newVolume);
+		}
+
+		updated = TRUE;
+	}
+
+	if (m_actor != NULL) {
+		if (abs(m_frequencyFactor - m_actor->GetSoundFrequencyFactor()) > 0.0001) {
+			m_frequencyFactor = m_actor->GetSoundFrequencyFactor();
+			p_directSoundBuffer->SetFrequency(m_frequencyFactor * m_dwFrequency);
+			updated = TRUE;
+		}
+	}
+
+	return updated;
 }
 
 // STUB: LEGO1 0x10011ca0
