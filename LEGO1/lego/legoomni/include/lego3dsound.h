@@ -33,7 +33,7 @@ private:
 	MxBool m_unk0x14;                   // 0x14
 	MxBool m_isCharacter;               // 0x15
 	LegoActor* m_actor;                 // 0x18
-	double m_unk0x20;                   // 0x20
+	double m_frequencyFactor;           // 0x20
 	DWORD m_dwFrequency;                // 0x28
 	MxS32 m_volume;                     // 0x2c
 };

@@ -86,17 +86,17 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 	}
 
 	LegoEntity* entity = m_roi->GetEntity();
-	if (entity != NULL && entity->IsA("LegoActor") && ((LegoActor*) entity)->VTable0x50() != 0.0f) {
+	if (entity != NULL && entity->IsA("LegoActor") && ((LegoActor*) entity)->GetSoundFrequencyFactor() != 0.0f) {
 		m_actor = ((LegoActor*) entity);
 	}
 
 	p_directSoundBuffer->GetFrequency(&m_dwFrequency);
 
 	if (m_actor != NULL) {
-		m_unk0x20 = m_actor->VTable0x50();
+		m_frequencyFactor = m_actor->GetSoundFrequencyFactor();
 
-		if (m_unk0x20 != 0.0) {
-			p_directSoundBuffer->SetFrequency(m_unk0x20 * m_dwFrequency);
+		if (m_frequencyFactor != 0.0) {
+			p_directSoundBuffer->SetFrequency(m_frequencyFactor * m_dwFrequency);
 		}
 	}
 
