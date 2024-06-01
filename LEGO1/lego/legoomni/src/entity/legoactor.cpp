@@ -15,7 +15,7 @@ const char* g_actorNames[] = {"none", "pepper", "mama", "papa", "nick", "laura",
 // FUNCTION: LEGO1 0x1002d110
 LegoActor::LegoActor()
 {
-	m_unk0x68 = 0.0f;
+	m_frequencyFactor = 0.0f;
 	m_sound = NULL;
 	m_unk0x70 = 0.0f;
 	m_unk0x10 = 0;
