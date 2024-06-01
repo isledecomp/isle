@@ -134,7 +134,7 @@ void LegoCacheSound::FUN_10006be0()
 	}
 
 	if (m_string0x74.GetLength() != 0 && !m_unk0x84) {
-		if (!m_unk0x10.FUN_100118e0(m_dsBuffer)) {
+		if (!m_unk0x10.UpdatePosition(m_dsBuffer)) {
 			if (m_unk0x6a) {
 				return;
 			}
