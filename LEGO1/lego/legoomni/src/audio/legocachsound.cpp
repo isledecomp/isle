@@ -222,8 +222,9 @@ MxString LegoCacheSound::FUN_10006d80(const MxString& p_str)
 		local14 = pVar1;
 		pVar1 = local14 + -1;
 
-		if (str == local14)
+		if (str == local14) {
 			break;
+		}
 
 		if (*pVar1 == '.') {
 			local28 = pVar1;
