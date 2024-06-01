@@ -299,8 +299,8 @@ void MxWavePresenter::SetVolume(MxS32 p_volume)
 	m_volume = p_volume;
 	if (m_dsBuffer != NULL) {
 		MxS32 volume = p_volume * MxOmni::GetInstance()->GetSoundManager()->GetVolume() / 100;
-		MxS32 otherVolume = MxOmni::GetInstance()->GetSoundManager()->GetAttenuation(volume);
-		m_dsBuffer->SetVolume(otherVolume);
+		MxS32 attenuation = MxOmni::GetInstance()->GetSoundManager()->GetAttenuation(volume);
+		m_dsBuffer->SetVolume(attenuation);
 	}
 
 	m_criticalSection.Leave();

@@ -12,7 +12,7 @@
 struct LegoCacheSoundEntry {
 	LegoCacheSoundEntry() : m_sound(NULL), m_name(NULL) {}
 	LegoCacheSoundEntry(LegoCacheSound* p_sound, const char* p_name) : m_sound(p_sound), m_name(p_name) {}
-	LegoCacheSoundEntry(LegoCacheSound* p_sound) : m_sound(p_sound), m_name(p_sound->GetString0x48().GetData()) {}
+	LegoCacheSoundEntry(LegoCacheSound* p_sound) : m_sound(p_sound), m_name(p_sound->GetUnknown0x48().GetData()) {}
 
 	// FUNCTION: LEGO1 0x1003d030
 	~LegoCacheSoundEntry()
