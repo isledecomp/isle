@@ -19,7 +19,7 @@ public:
 	// SYNTHETIC: LEGO1 0x10029920
 	// LegoSoundManager::`scalar deleting destructor'
 
-	void FUN_1002a410(const float* p_pos, const float* p_dir, const float* p_up, const float* p_vel);
+	void UpdateListener(const float* p_position, const float* p_direction, const float* p_up, const float* p_velocity);
 
 	inline LegoCacheSoundManager* GetCacheSoundManager() { return m_cacheSoundManager; }
 

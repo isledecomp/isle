@@ -421,7 +421,7 @@ MxResult LegoNavController::UpdateLocation(const char* p_location)
 			viewROI->WrappedSetLocalTransform(mat);
 			VideoManager()->Get3DManager()->Moved(*viewROI);
 
-			SoundManager()->FUN_1002a410(
+			SoundManager()->UpdateListener(
 				viewROI->GetWorldPosition(),
 				viewROI->GetWorldDirection(),
 				viewROI->GetWorldUp(),
@@ -458,7 +458,7 @@ MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 		viewROI->WrappedSetLocalTransform(mat);
 		VideoManager()->Get3DManager()->Moved(*viewROI);
 
-		SoundManager()->FUN_1002a410(
+		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),
 			viewROI->GetWorldUp(),

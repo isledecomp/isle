@@ -369,7 +369,7 @@ void FUN_1003eda0()
 	LegoROI* viewROI = VideoManager()->GetViewROI();
 	if (viewROI) {
 		viewROI->FUN_100a5a30(vec);
-		SoundManager()->FUN_1002a410(
+		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),
 			viewROI->GetWorldUp(),

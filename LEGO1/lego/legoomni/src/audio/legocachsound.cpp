@@ -34,6 +34,7 @@ void LegoCacheSound::Init()
 }
 
 // STUB: LEGO1 0x10006710
+// FUNCTION: BETA10 0x10066505
 MxResult LegoCacheSound::FUN_10006710()
 {
 	// TODO

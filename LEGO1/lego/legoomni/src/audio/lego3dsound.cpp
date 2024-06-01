@@ -47,10 +47,10 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 			return FAILURE;
 		}
 
-		m_ds3dBuffer->SetMinDistance(15.0f, 0);
-		m_ds3dBuffer->SetMaxDistance(100.0f, 0);
-		m_ds3dBuffer->SetPosition(0.0f, 0.0f, -40.0f, 0);
-		m_ds3dBuffer->SetConeOutsideVolume(-10000, 0);
+		m_ds3dBuffer->SetMinDistance(15.0f, DS3D_IMMEDIATE);
+		m_ds3dBuffer->SetMaxDistance(100.0f, DS3D_IMMEDIATE);
+		m_ds3dBuffer->SetPosition(0.0f, 0.0f, -40.0f, DS3D_IMMEDIATE);
+		m_ds3dBuffer->SetConeOutsideVolume(-10000, DS3D_IMMEDIATE);
 	}
 
 	if (m_ds3dBuffer == NULL || p_name == NULL) {
@@ -86,7 +86,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 
 	if (MxOmni::IsSound3D()) {
 		const float* position = m_positionROI->GetWorldPosition();
-		m_ds3dBuffer->SetPosition(position[0], position[1], position[2], 0);
+		m_ds3dBuffer->SetPosition(position[0], position[1], position[2], DS3D_IMMEDIATE);
 	}
 
 	LegoEntity* entity = m_roi->GetEntity();
@@ -147,7 +147,7 @@ MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 		}
 
 		if (m_ds3dBuffer != NULL) {
-			m_ds3dBuffer->SetPosition(position[0], position[1], position[2], 0);
+			m_ds3dBuffer->SetPosition(position[0], position[1], position[2], DS3D_IMMEDIATE);
 		}
 		else {
 			MxS32 newVolume = m_volume;
@@ -209,8 +209,8 @@ MxS32 Lego3DSound::SetDistance(MxS32 p_min, MxS32 p_max)
 			return -1;
 		}
 
-		m_ds3dBuffer->SetMinDistance(p_min, 0);
-		m_ds3dBuffer->SetMaxDistance(p_max, 0);
+		m_ds3dBuffer->SetMinDistance(p_min, DS3D_IMMEDIATE);
+		m_ds3dBuffer->SetMaxDistance(p_max, DS3D_IMMEDIATE);
 		return 0;
 	}
 
