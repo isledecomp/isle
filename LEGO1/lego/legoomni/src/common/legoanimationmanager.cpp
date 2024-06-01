@@ -344,14 +344,14 @@ LegoAnimationManager::~LegoAnimationManager()
 		LegoROI* roi = m_extras[i].m_roi;
 
 		if (roi != NULL) {
-			LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+			LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 
 			if (actor != NULL && actor->GetController() != NULL && CurrentWorld() != NULL) {
 				CurrentWorld()->RemoveActor(actor);
 				actor->SetController(NULL);
 			}
 
-			CharacterManager()->FUN_10083db0(roi);
+			CharacterManager()->ReleaseActor(roi);
 		}
 	}
 
@@ -430,14 +430,14 @@ void LegoAnimationManager::Suspend()
 			LegoROI* roi = m_extras[i].m_roi;
 
 			if (roi != NULL) {
-				LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+				LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 
 				if (actor != NULL && actor->GetController() != NULL) {
 					actor->GetController()->RemoveActor(actor);
 					actor->SetController(NULL);
 				}
 
-				CharacterManager()->FUN_10083db0(roi);
+				CharacterManager()->ReleaseActor(roi);
 			}
 
 			if (m_extras[i].m_unk0x14) {
@@ -1069,8 +1069,8 @@ MxResult LegoAnimationManager::StartEntityAction(MxDSAction& p_dsAction, LegoEnt
 	MxResult result = FAILURE;
 	LegoROI* roi = p_entity->GetROI();
 
-	if (p_entity->GetType() == LegoEntity::e_character) {
-		LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+	if (p_entity->GetType() == LegoEntity::e_actor) {
+		LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 
 		if (actor) {
 			LegoPathController* controller = actor->GetController();
@@ -1395,7 +1395,7 @@ MxLong LegoAnimationManager::Notify(MxParam& p_param)
 					LegoROI* roi = m_extras[i].m_roi;
 
 					if (roi != NULL) {
-						LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+						LegoExtraActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 						if (actor != NULL) {
 							actor->Restart();
 						}
@@ -1444,14 +1444,14 @@ MxResult LegoAnimationManager::Tickle()
 			LegoROI* roi = m_extras[i].m_roi;
 
 			if (roi != NULL && m_extras[i].m_unk0x0d) {
-				LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+				LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 
 				if (actor != NULL && actor->GetController() != NULL) {
 					actor->GetController()->RemoveActor(actor);
 					actor->SetController(NULL);
 				}
 
-				CharacterManager()->FUN_10083db0(roi);
+				CharacterManager()->ReleaseActor(roi);
 
 				if (m_extras[i].m_unk0x14) {
 					m_extras[i].m_unk0x14 = FALSE;
@@ -1701,7 +1701,7 @@ void LegoAnimationManager::FUN_10062580(AnimInfo& p_info)
 
 	if (models != NULL && modelCount) {
 		for (MxU8 i = 0; i < modelCount; i++) {
-			LegoPathActor* actor = CharacterManager()->GetActor(models[i].m_name);
+			LegoPathActor* actor = CharacterManager()->GetExtraActor(models[i].m_name);
 
 			if (actor) {
 				LegoPathController* controller = actor->GetController();
@@ -1814,13 +1814,13 @@ void LegoAnimationManager::PurgeExtra(MxBool p_und)
 					 !viewManager->FUN_100a6150(roi->GetWorldBoundingBox()))) {
 					m_unk0x414--;
 
-					LegoPathActor* actor = CharacterManager()->GetActor(roi->GetName());
+					LegoPathActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 					if (actor != NULL && actor->GetController() != NULL) {
 						actor->GetController()->RemoveActor(actor);
 						actor->SetController(NULL);
 					}
 
-					CharacterManager()->FUN_10083db0(roi);
+					CharacterManager()->ReleaseActor(roi);
 
 					if (m_extras[i].m_unk0x14) {
 						m_extras[i].m_unk0x14 = FALSE;
@@ -1930,15 +1930,15 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 									g_characters[m_lastExtraCharacterId].m_unk0x08 &&
 									!g_characters[m_lastExtraCharacterId].m_inExtras &&
 									g_characters[m_lastExtraCharacterId].m_active == active) {
-									if (!CharacterManager()->FUN_10083b20(g_characters[m_lastExtraCharacterId].m_name
-										)) {
-										m_extras[i].m_roi = CharacterManager()->GetROI(
+									if (!CharacterManager()->Exists(g_characters[m_lastExtraCharacterId].m_name)) {
+										m_extras[i].m_roi = CharacterManager()->GetActorROI(
 											g_characters[m_lastExtraCharacterId].m_name,
 											TRUE
 										);
 
-										LegoExtraActor* actor =
-											CharacterManager()->GetActor(g_characters[m_lastExtraCharacterId].m_name);
+										LegoExtraActor* actor = CharacterManager()->GetExtraActor(
+											g_characters[m_lastExtraCharacterId].m_name
+										);
 
 										switch (g_unk0x100f7504++ % 4) {
 										case 0:
@@ -2002,7 +2002,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 											return;
 										}
 										else {
-											CharacterManager()->FUN_10083db0(m_extras[i].m_roi);
+											CharacterManager()->ReleaseActor(m_extras[i].m_roi);
 											m_extras[i].m_roi = NULL;
 											continue;
 										}
@@ -2042,7 +2042,7 @@ MxBool LegoAnimationManager::FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_p
 	MxBool inExtras = FALSE;
 	const char* name = p_roi->GetName();
 
-	LegoExtraActor* actor = CharacterManager()->GetActor(name);
+	LegoExtraActor* actor = CharacterManager()->GetExtraActor(name);
 	if (actor != NULL) {
 		MxS32 characterId = -1;
 		MxS32 i;
@@ -2104,7 +2104,7 @@ MxBool LegoAnimationManager::FUN_10062e20(LegoROI* p_roi, LegoAnimPresenter* p_p
 				return FALSE;
 			}
 
-			CharacterManager()->FUN_10083db0(p_roi);
+			CharacterManager()->ReleaseActor(p_roi);
 		}
 		else {
 			if (inExtras) {
@@ -2216,7 +2216,7 @@ void LegoAnimationManager::FUN_10063270(LegoROIList* p_list, LegoAnimPresenter* 
 				FUN_10063950(roi);
 			}
 			else {
-				LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+				LegoExtraActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 
 				if (actor != NULL) {
 					for (MxS32 i = 0; i < (MxS32) sizeOfArray(m_extras); i++) {
@@ -2277,7 +2277,7 @@ void LegoAnimationManager::FUN_10063780(LegoROIList* p_list)
 		while (cursor.Next(roi)) {
 			const char* name = roi->GetName();
 
-			if (CharacterManager()->Exists(name)) {
+			if (CharacterManager()->IsActor(name)) {
 				m_unk0x424->Append(roi);
 				cursor.Detach();
 			}
@@ -2292,7 +2292,7 @@ void LegoAnimationManager::FUN_10063950(LegoROI* p_roi)
 		LegoROIListCursor cursor(m_unk0x424);
 
 		if (cursor.Find(p_roi)) {
-			CharacterManager()->FUN_10083db0(p_roi);
+			CharacterManager()->ReleaseActor(p_roi);
 			cursor.Detach();
 		}
 	}
@@ -2305,7 +2305,7 @@ void LegoAnimationManager::FUN_10063aa0()
 	LegoROI* roi;
 
 	while (cursor.Next(roi)) {
-		CharacterManager()->FUN_10083db0(roi);
+		CharacterManager()->ReleaseActor(roi);
 	}
 }
 
@@ -2388,7 +2388,7 @@ void LegoAnimationManager::FUN_10063d10()
 
 					m_extras[i].m_unk0x0c = FALSE;
 
-					LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+					LegoExtraActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 					if (actor != NULL) {
 						float speed = m_extras[i].m_speed;
 
@@ -2405,7 +2405,7 @@ void LegoAnimationManager::FUN_10063d10()
 					}
 				}
 				else {
-					LegoExtraActor* actor = CharacterManager()->GetActor(roi->GetName());
+					LegoExtraActor* actor = CharacterManager()->GetExtraActor(roi->GetName());
 					if (actor != NULL) {
 						actor->Restart();
 					}
@@ -2424,7 +2424,7 @@ void LegoAnimationManager::FUN_10063e40(LegoAnimPresenter* p_presenter)
 
 		while (cursor.Next(roi)) {
 			if (!FUN_10062e20(roi, p_presenter)) {
-				CharacterManager()->FUN_10083db0(roi);
+				CharacterManager()->ReleaseActor(roi);
 			}
 
 			cursor.Detach();
@@ -2594,7 +2594,7 @@ MxResult LegoAnimationManager::FUN_10064380(
 		}
 
 		if (roi != NULL && !strcmpi(roi->GetName(), p_name)) {
-			actor = CharacterManager()->GetActor(p_name);
+			actor = CharacterManager()->GetExtraActor(p_name);
 
 			if (actor != NULL && actor->GetController() != NULL) {
 				actor->GetController()->RemoveActor(actor);
@@ -2620,11 +2620,11 @@ MxResult LegoAnimationManager::FUN_10064380(
 			return FAILURE;
 		}
 
-		m_extras[extraIndex].m_roi = CharacterManager()->GetROI(p_name, TRUE);
+		m_extras[extraIndex].m_roi = CharacterManager()->GetActorROI(p_name, TRUE);
 		m_extras[extraIndex].m_characterId = characterId;
 		m_extras[extraIndex].m_speed = p_speed;
 
-		actor = CharacterManager()->GetActor(p_name);
+		actor = CharacterManager()->GetExtraActor(p_name);
 		m_unk0x414++;
 	}
 
@@ -2634,7 +2634,7 @@ MxResult LegoAnimationManager::FUN_10064380(
 		actor->SetWorldSpeed(0.0f);
 
 		if (world->PlaceActor(actor, p_boundaryName, p_src, p_srcScale, p_dest, p_destScale) != SUCCESS) {
-			CharacterManager()->FUN_10083db0(m_extras[i].m_roi);
+			CharacterManager()->ReleaseActor(m_extras[i].m_roi);
 			m_extras[i].m_roi = NULL;
 			m_unk0x414--;
 			return FAILURE;

@@ -188,7 +188,7 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 {
 	LegoChar* str;
 
-	if (LegoCharacterManager::Exists(p_und1 + 1)) {
+	if (LegoCharacterManager::IsActor(p_und1 + 1)) {
 		str = new LegoChar[strlen(p_und1)];
 
 		if (str != NULL) {
@@ -232,7 +232,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					src = str;
 				}
 
-				roi = CharacterManager()->GetROI(src, TRUE);
+				roi = CharacterManager()->GetActorROI(src, TRUE);
 
 				if (roi != NULL && str[0] == '*') {
 					roi->SetVisibility(FALSE);
@@ -268,7 +268,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(lodName);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085210(und, lodName, TRUE);
+				roi = CharacterManager()->CreateAutoROI(und, lodName, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
@@ -313,7 +313,7 @@ void LegoAnimPresenter::FUN_100695c0()
 
 					strlwr(lodName);
 
-					CharacterManager()->FUN_10085210(actorName, lodName, FALSE);
+					CharacterManager()->CreateAutoROI(actorName, lodName, FALSE);
 					FUN_100698b0(rois, actorName);
 				}
 			}
@@ -530,8 +530,8 @@ void LegoAnimPresenter::FUN_1006aa60()
 	while (cursor.Next(roi)) {
 		const char* name = roi->GetName();
 
-		if (m_unk0x96 || !CharacterManager()->Exists(name)) {
-			CharacterManager()->FUN_10083c30(name);
+		if (m_unk0x96 || !CharacterManager()->IsActor(name)) {
+			CharacterManager()->ReleaseActor(name);
 		}
 	}
 }

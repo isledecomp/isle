@@ -187,7 +187,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		while (cursor.First(entity)) {
 			cursor.Detach();
 
-			if (!(entity->GetFlags() & LegoEntity::c_bit2)) {
+			if (!(entity->GetFlags() & LegoEntity::c_managerOwned)) {
 				delete entity;
 			}
 		}

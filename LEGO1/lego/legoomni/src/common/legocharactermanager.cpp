@@ -1,8 +1,8 @@
 #include "legocharactermanager.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "legoactors.h"
 #include "legoanimactor.h"
-#include "legocharacters.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
 #include "legovariables.h"
@@ -40,7 +40,7 @@ MxU32 g_unk0x100fc4ec = 2;
 MxU32 g_unk0x100fc4f0 = 0;
 
 // GLOBAL: LEGO1 0x10104f20
-LegoCharacterInfo g_characterInfo[66];
+LegoActorInfo g_actorInfo[66];
 
 // FUNCTION: LEGO1 0x10082a20
 LegoCharacterManager::LegoCharacterManager()
@@ -75,26 +75,26 @@ LegoCharacterManager::~LegoCharacterManager()
 // FUNCTION: LEGO1 0x10083270
 void LegoCharacterManager::Init()
 {
-	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		g_characterInfo[i] = g_characterInfoInit[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		g_actorInfo[i] = g_actorInfoInit[i];
 	}
 }
 
 // FUNCTION: LEGO1 0x100832a0
-void LegoCharacterManager::FUN_100832a0()
+void LegoCharacterManager::ReleaseAllActors()
 {
-	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		LegoCharacterInfo* info = GetInfo(g_characterInfo[i].m_name);
+	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		LegoActorInfo* info = GetActorInfo(g_actorInfo[i].m_name);
 
 		if (info != NULL) {
 			LegoExtraActor* actor = info->m_actor;
 
 			if (actor != NULL && actor->IsA("LegoExtraActor")) {
-				LegoROI* roi = g_characterInfo[i].m_roi;
+				LegoROI* roi = g_actorInfo[i].m_roi;
 				MxU32 refCount = GetRefCount(roi);
 
 				while (refCount != 0) {
-					FUN_10083db0(roi);
+					ReleaseActor(roi);
 					refCount = GetRefCount(roi);
 				}
 			}
@@ -107,8 +107,8 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		LegoCharacterInfo* info = &g_characterInfo[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		LegoActorInfo* info = &g_actorInfo[i];
 
 		if (p_storage->Write(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
 			goto done;
@@ -162,8 +162,8 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 {
 	MxResult result = FAILURE;
 
-	for (MxS32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		LegoCharacterInfo* info = &g_characterInfo[i];
+	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		LegoActorInfo* info = &g_actorInfo[i];
 
 		if (p_storage->Read(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
 			goto done;
@@ -213,10 +213,10 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10083500
-LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
+LegoROI* LegoCharacterManager::GetActorROI(const char* p_name, MxBool p_createEntity)
 {
 	LegoCharacter* character = NULL;
-	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_key));
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
 
 	if (it != m_characters->end()) {
 		character = (*it).second;
@@ -224,7 +224,7 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 	}
 
 	if (character == NULL) {
-		LegoROI* roi = CreateROI(p_key);
+		LegoROI* roi = CreateActorROI(p_name);
 
 		if (roi == NULL) {
 			goto done;
@@ -234,11 +234,11 @@ LegoROI* LegoCharacterManager::GetROI(const char* p_key, MxBool p_createEntity)
 
 		if (roi != NULL) {
 			character = new LegoCharacter(roi);
-			char* key = new char[strlen(p_key) + 1];
+			char* name = new char[strlen(p_name) + 1];
 
-			if (key != NULL) {
-				strcpy(key, p_key);
-				(*m_characters)[key] = character;
+			if (name != NULL) {
+				strcpy(name, p_name);
+				(*m_characters)[name] = character;
 				VideoManager()->Get3DManager()->Add(*roi);
 			}
 		}
@@ -254,9 +254,9 @@ done:
 			LegoExtraActor* actor = new LegoExtraActor();
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
-			actor->SetType(LegoEntity::e_character);
-			actor->SetFlag(LegoActor::c_bit2);
-			GetInfo(p_key)->m_actor = actor;
+			actor->SetType(LegoEntity::e_actor);
+			actor->SetFlag(LegoEntity::c_managerOwned);
+			GetActorInfo(p_name)->m_actor = actor;
 		}
 
 		return character->m_roi;
@@ -267,10 +267,10 @@ done:
 
 // FUNCTION: LEGO1 0x10083b20
 // FUNCTION: BETA10 0x10074608
-MxBool LegoCharacterManager::FUN_10083b20(const char* p_key)
+MxBool LegoCharacterManager::Exists(const char* p_name)
 {
 	LegoCharacter* character = NULL;
-	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_key));
+	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
 
 	if (it != m_characters->end()) {
 		return TRUE;
@@ -298,7 +298,7 @@ MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 
 // FUNCTION: LEGO1 0x10083c30
 // FUNCTION: BETA10 0x10074701
-void LegoCharacterManager::FUN_10083c30(const char* p_name)
+void LegoCharacterManager::ReleaseActor(const char* p_name)
 {
 	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it = m_characters->find(const_cast<char*>(p_name));
@@ -307,7 +307,7 @@ void LegoCharacterManager::FUN_10083c30(const char* p_name)
 		character = (*it).second;
 
 		if (character->RemoveRef() == 0) {
-			LegoCharacterInfo* info = GetInfo(p_name);
+			LegoActorInfo* info = GetActorInfo(p_name);
 			LegoEntity* entity = character->m_roi->GetEntity();
 
 			if (entity != NULL) {
@@ -323,11 +323,11 @@ void LegoCharacterManager::FUN_10083c30(const char* p_name)
 
 			if (info != NULL) {
 				if (info->m_actor != NULL) {
-					info->m_actor->ClearFlag(LegoEntity::c_bit2);
+					info->m_actor->ClearFlag(LegoEntity::c_managerOwned);
 					delete info->m_actor;
 				}
-				else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-					entity->ClearFlag(LegoEntity::c_bit2);
+				else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+					entity->ClearFlag(LegoEntity::c_managerOwned);
 					delete entity;
 				}
 
@@ -339,7 +339,7 @@ void LegoCharacterManager::FUN_10083c30(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10083db0
-void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
+void LegoCharacterManager::ReleaseActor(LegoROI* p_roi)
 {
 	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it;
@@ -349,7 +349,7 @@ void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 
 		if (character->m_roi == p_roi) {
 			if (character->RemoveRef() == 0) {
-				LegoCharacterInfo* info = GetInfo(character->m_roi->GetName());
+				LegoActorInfo* info = GetActorInfo(character->m_roi->GetName());
 				LegoEntity* entity = character->m_roi->GetEntity();
 
 				if (entity != NULL) {
@@ -365,11 +365,11 @@ void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 
 				if (info != NULL) {
 					if (info->m_actor != NULL) {
-						info->m_actor->ClearFlag(LegoEntity::c_bit2);
+						info->m_actor->ClearFlag(LegoEntity::c_managerOwned);
 						delete info->m_actor;
 					}
-					else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-						entity->ClearFlag(LegoEntity::c_bit2);
+					else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+						entity->ClearFlag(LegoEntity::c_managerOwned);
 						delete entity;
 					}
 
@@ -384,7 +384,7 @@ void LegoCharacterManager::FUN_10083db0(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10083f10
-void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
+void LegoCharacterManager::ReleaseAutoROI(LegoROI* p_roi)
 {
 	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it;
@@ -407,8 +407,8 @@ void LegoCharacterManager::FUN_10083f10(LegoROI* p_roi)
 
 				m_characters->erase(it);
 
-				if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-					entity->ClearFlag(LegoEntity::c_bit2);
+				if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+					entity->ClearFlag(LegoEntity::c_managerOwned);
 					delete entity;
 				}
 			}
@@ -425,7 +425,7 @@ void LegoCharacterManager::RemoveROI(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10084030
-LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
+LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 {
 	MxBool success = FALSE;
 	LegoROI* roi = NULL;
@@ -438,14 +438,14 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 	ViewLODListManager* lodManager = GetViewLODListManager();
 	LegoTextureContainer* textureContainer = TextureContainer();
-	LegoCharacterInfo* info = GetInfo(p_key);
+	LegoActorInfo* info = GetActorInfo(p_key);
 
 	if (info == NULL) {
 		goto done;
 	}
 
 	if (!strcmpi(p_key, "pep")) {
-		LegoCharacterInfo* pepper = GetInfo("pepper");
+		LegoActorInfo* pepper = GetActorInfo("pepper");
 
 		info->m_unk0x0c = pepper->m_unk0x0c;
 		info->m_unk0x10 = pepper->m_unk0x10;
@@ -459,33 +459,33 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	roi = new LegoROI(renderer);
 	roi->SetName(p_key);
 
-	boundingSphere.Center()[0] = g_characterLODs[c_topLOD].m_boundingSphere[0];
-	boundingSphere.Center()[1] = g_characterLODs[c_topLOD].m_boundingSphere[1];
-	boundingSphere.Center()[2] = g_characterLODs[c_topLOD].m_boundingSphere[2];
-	boundingSphere.Radius() = g_characterLODs[c_topLOD].m_boundingSphere[3];
+	boundingSphere.Center()[0] = g_actorLODs[c_topLOD].m_boundingSphere[0];
+	boundingSphere.Center()[1] = g_actorLODs[c_topLOD].m_boundingSphere[1];
+	boundingSphere.Center()[2] = g_actorLODs[c_topLOD].m_boundingSphere[2];
+	boundingSphere.Radius() = g_actorLODs[c_topLOD].m_boundingSphere[3];
 	roi->SetBoundingSphere(boundingSphere);
 
-	boundingBox.Min()[0] = g_characterLODs[c_topLOD].m_boundingBox[0];
-	boundingBox.Min()[1] = g_characterLODs[c_topLOD].m_boundingBox[1];
-	boundingBox.Min()[2] = g_characterLODs[c_topLOD].m_boundingBox[2];
-	boundingBox.Max()[0] = g_characterLODs[c_topLOD].m_boundingBox[3];
-	boundingBox.Max()[1] = g_characterLODs[c_topLOD].m_boundingBox[4];
-	boundingBox.Max()[2] = g_characterLODs[c_topLOD].m_boundingBox[5];
+	boundingBox.Min()[0] = g_actorLODs[c_topLOD].m_boundingBox[0];
+	boundingBox.Min()[1] = g_actorLODs[c_topLOD].m_boundingBox[1];
+	boundingBox.Min()[2] = g_actorLODs[c_topLOD].m_boundingBox[2];
+	boundingBox.Max()[0] = g_actorLODs[c_topLOD].m_boundingBox[3];
+	boundingBox.Max()[1] = g_actorLODs[c_topLOD].m_boundingBox[4];
+	boundingBox.Max()[2] = g_actorLODs[c_topLOD].m_boundingBox[5];
 	roi->SetUnknown0x80(boundingBox);
 
 	comp = new CompoundObject();
 	roi->SetComp(comp);
 
-	for (i = 0; i < sizeOfArray(g_characterLODs) - 1; i++) {
+	for (i = 0; i < sizeOfArray(g_actorLODs) - 1; i++) {
 		char lodName[256];
-		LegoCharacterInfo::Part& part = info->m_parts[i];
+		LegoActorInfo::Part& part = info->m_parts[i];
 
 		const char* parentName;
 		if (i == 0 || i == 1) {
 			parentName = part.m_unk0x04[part.m_unk0x00[part.m_unk0x08]];
 		}
 		else {
-			parentName = g_characterLODs[i + 1].m_parentName;
+			parentName = g_actorLODs[i + 1].m_parentName;
 		}
 
 		ViewLODList* lodList = lodManager->Lookup(parentName);
@@ -505,35 +505,34 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 		LegoROI* childROI = new LegoROI(renderer, lodList);
 		lodList->Release();
 
-		childROI->SetName(g_characterLODs[i + 1].m_name);
+		childROI->SetName(g_actorLODs[i + 1].m_name);
 		childROI->SetParentROI(roi);
 
 		BoundingSphere childBoundingSphere;
-		childBoundingSphere.Center()[0] = g_characterLODs[i + 1].m_boundingSphere[0];
-		childBoundingSphere.Center()[1] = g_characterLODs[i + 1].m_boundingSphere[1];
-		childBoundingSphere.Center()[2] = g_characterLODs[i + 1].m_boundingSphere[2];
-		childBoundingSphere.Radius() = g_characterLODs[i + 1].m_boundingSphere[3];
+		childBoundingSphere.Center()[0] = g_actorLODs[i + 1].m_boundingSphere[0];
+		childBoundingSphere.Center()[1] = g_actorLODs[i + 1].m_boundingSphere[1];
+		childBoundingSphere.Center()[2] = g_actorLODs[i + 1].m_boundingSphere[2];
+		childBoundingSphere.Radius() = g_actorLODs[i + 1].m_boundingSphere[3];
 		childROI->SetBoundingSphere(childBoundingSphere);
 
 		BoundingBox childBoundingBox;
-		childBoundingBox.Min()[0] = g_characterLODs[i + 1].m_boundingBox[0];
-		childBoundingBox.Min()[1] = g_characterLODs[i + 1].m_boundingBox[1];
-		childBoundingBox.Min()[2] = g_characterLODs[i + 1].m_boundingBox[2];
-		childBoundingBox.Max()[0] = g_characterLODs[i + 1].m_boundingBox[3];
-		childBoundingBox.Max()[1] = g_characterLODs[i + 1].m_boundingBox[4];
-		childBoundingBox.Max()[2] = g_characterLODs[i + 1].m_boundingBox[5];
+		childBoundingBox.Min()[0] = g_actorLODs[i + 1].m_boundingBox[0];
+		childBoundingBox.Min()[1] = g_actorLODs[i + 1].m_boundingBox[1];
+		childBoundingBox.Min()[2] = g_actorLODs[i + 1].m_boundingBox[2];
+		childBoundingBox.Max()[0] = g_actorLODs[i + 1].m_boundingBox[3];
+		childBoundingBox.Max()[1] = g_actorLODs[i + 1].m_boundingBox[4];
+		childBoundingBox.Max()[2] = g_actorLODs[i + 1].m_boundingBox[5];
 		childROI->SetUnknown0x80(childBoundingBox);
 
 		CalcLocalTransform(
-			Mx3DPointFloat(g_characterLODs[i + 1].m_position),
-			Mx3DPointFloat(g_characterLODs[i + 1].m_direction),
-			Mx3DPointFloat(g_characterLODs[i + 1].m_up),
+			Mx3DPointFloat(g_actorLODs[i + 1].m_position),
+			Mx3DPointFloat(g_actorLODs[i + 1].m_direction),
+			Mx3DPointFloat(g_actorLODs[i + 1].m_up),
 			mat
 		);
 		childROI->WrappedSetLocalTransform(mat);
 
-		if (g_characterLODs[i + 1].m_flags & LegoCharacterLOD::c_flag1 &&
-			(i != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
+		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_flag1 && (i != 0 || part.m_unk0x00[part.m_unk0x08] != 0)) {
 
 			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
 
@@ -542,7 +541,7 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 				childROI->FUN_100a9170(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
-		else if (g_characterLODs[i + 1].m_flags & LegoCharacterLOD::c_flag2 || (i == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
+		else if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_flag2 || (i == 0 && part.m_unk0x00[part.m_unk0x08] == 0)) {
 			LegoFloat red, green, blue, alpha;
 			childROI->FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
 			childROI->FUN_100a9170(red, green, blue, alpha);
@@ -552,9 +551,9 @@ LegoROI* LegoCharacterManager::CreateROI(const char* p_key)
 	}
 
 	CalcLocalTransform(
-		Mx3DPointFloat(g_characterLODs[c_topLOD].m_position),
-		Mx3DPointFloat(g_characterLODs[c_topLOD].m_direction),
-		Mx3DPointFloat(g_characterLODs[c_topLOD].m_up),
+		Mx3DPointFloat(g_actorLODs[c_topLOD].m_position),
+		Mx3DPointFloat(g_actorLODs[c_topLOD].m_direction),
+		Mx3DPointFloat(g_actorLODs[c_topLOD].m_up),
 		mat
 	);
 	roi->WrappedSetLocalTransform(mat);
@@ -576,12 +575,12 @@ done:
 MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo)
 {
 	LegoResult result = SUCCESS;
-	LegoROI* head = FindChildROI(p_roi, g_characterLODs[c_headLOD].m_name);
+	LegoROI* head = FindChildROI(p_roi, g_actorLODs[c_headLOD].m_name);
 
 	if (head != NULL) {
 		char lodName[256];
 
-		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_characterLODs[c_headLOD].m_parentName);
+		ViewLODList* lodList = GetViewLODListManager()->Lookup(g_actorLODs[c_headLOD].m_parentName);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%s%d", p_roi->GetName(), "head", g_unk0x100fc4e8++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
@@ -589,8 +588,8 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 
 		if (p_textureInfo == NULL) {
-			LegoCharacterInfo* info = GetInfo(p_roi->GetName());
-			LegoCharacterInfo::Part& part = info->m_parts[c_headPart];
+			LegoActorInfo* info = GetActorInfo(p_roi->GetName());
+			LegoActorInfo::Part& part = info->m_parts[c_headPart];
 			p_textureInfo = TextureContainer()->Get(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]]);
 		}
 
@@ -620,10 +619,10 @@ MxBool LegoCharacterManager::FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_tex
 }
 
 // FUNCTION: LEGO1 0x10084c00
-MxBool LegoCharacterManager::Exists(const char* p_key)
+MxBool LegoCharacterManager::IsActor(const char* p_name)
 {
-	for (MxU32 i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		if (!strcmpi(g_characterInfo[i].m_name, p_key)) {
+	for (MxU32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
 			return TRUE;
 		}
 	}
@@ -632,9 +631,9 @@ MxBool LegoCharacterManager::Exists(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x10084c40
-LegoExtraActor* LegoCharacterManager::GetActor(const char* p_key)
+LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 {
-	LegoCharacterInfo* info = GetInfo(p_key);
+	LegoActorInfo* info = GetActorInfo(p_name);
 
 	if (info != NULL) {
 		return info->m_actor;
@@ -644,36 +643,36 @@ LegoExtraActor* LegoCharacterManager::GetActor(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x10084c60
-LegoCharacterInfo* LegoCharacterManager::GetInfo(const char* p_key)
+LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
 {
 	MxU32 i;
 
-	for (i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		if (!strcmpi(g_characterInfo[i].m_name, p_key)) {
+	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
 			break;
 		}
 	}
 
-	if (i < sizeOfArray(g_characterInfo)) {
-		return &g_characterInfo[i];
+	if (i < sizeOfArray(g_actorInfo)) {
+		return &g_actorInfo[i];
 	}
 
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x10084cb0
-LegoCharacterInfo* LegoCharacterManager::GetInfo(LegoROI* p_roi)
+LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 {
 	MxU32 i;
 
-	for (i = 0; i < sizeOfArray(g_characterInfo); i++) {
-		if (g_characterInfo[i].m_roi == p_roi) {
+	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
+		if (g_actorInfo[i].m_roi == p_roi) {
 			break;
 		}
 	}
 
-	if (i < sizeOfArray(g_characterInfo)) {
-		return &g_characterInfo[i];
+	if (i < sizeOfArray(g_actorInfo)) {
+		return &g_actorInfo[i];
 	}
 
 	return NULL;
@@ -703,13 +702,13 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 // FUNCTION: LEGO1 0x10084ec0
 MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 {
-	LegoCharacterInfo* info = GetInfo(p_roi->GetName());
+	LegoActorInfo* info = GetActorInfo(p_roi->GetName());
 
 	if (info == NULL) {
 		return FALSE;
 	}
 
-	LegoCharacterInfo::Part& part = info->m_parts[c_infohatPart];
+	LegoActorInfo::Part& part = info->m_parts[c_infohatPart];
 
 	part.m_unk0x08++;
 	MxU8 unk0x00 = part.m_unk0x00[part.m_unk0x08];
@@ -719,7 +718,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 		unk0x00 = part.m_unk0x00[part.m_unk0x08];
 	}
 
-	LegoROI* childROI = FindChildROI(p_roi, g_characterLODs[c_infohatLOD].m_name);
+	LegoROI* childROI = FindChildROI(p_roi, g_actorLODs[c_infohatLOD].m_name);
 
 	if (childROI != NULL) {
 		char lodName[256];
@@ -757,7 +756,7 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 // FUNCTION: LEGO1 0x10085140
 MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 {
-	LegoCharacterInfo* info = GetInfo(p_roi);
+	LegoActorInfo* info = GetActorInfo(p_roi);
 
 	if (p_und) {
 		return info->m_mood + g_unk0x100fc4dc;
@@ -774,7 +773,7 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 // FUNCTION: BETA10 0x100768c5
 MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
 {
-	LegoCharacterInfo* info = GetInfo(p_roi);
+	LegoActorInfo* info = GetActorInfo(p_roi);
 
 	if (info != NULL) {
 		return info->m_mood;
@@ -803,7 +802,7 @@ void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 }
 
 // FUNCTION: LEGO1 0x10085210
-LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity)
+LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	LegoROI* roi = NULL;
 
@@ -853,8 +852,8 @@ LegoROI* LegoCharacterManager::FUN_10085210(const char* p_name, const char* p_lo
 				LegoEntity* entity = new LegoEntity();
 
 				entity->SetROI(roi, FALSE, FALSE);
-				entity->SetType(LegoEntity::e_unk4);
-				entity->SetFlag(LegoActor::c_bit2);
+				entity->SetType(LegoEntity::e_autoROI);
+				entity->SetFlag(LegoEntity::c_managerOwned);
 			}
 		}
 	}
@@ -907,5 +906,5 @@ MxResult LegoCharacterManager::FUN_10085870(LegoROI* p_roi)
 // FUNCTION: LEGO1 0x10085a80
 LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
-	return FUN_10085210(p_name, p_lodName, p_createEntity);
+	return CreateAutoROI(p_name, p_lodName, p_createEntity);
 }

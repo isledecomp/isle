@@ -52,7 +52,7 @@ void LegoPhonemePresenter::StartingTickle()
 				m_unk0x84 = TRUE;
 			}
 			else {
-				entityROI = CharacterManager()->GetROI(m_roiName.GetData(), TRUE);
+				entityROI = CharacterManager()->GetActorROI(m_roiName.GetData(), TRUE);
 			}
 
 			head = entityROI->FindChildROI("head", entityROI);
@@ -143,7 +143,7 @@ void LegoPhonemePresenter::EndAction()
 					roi = FindROI(m_roiName.GetData());
 				}
 				else {
-					roi = CharacterManager()->GetROI(m_roiName.GetData(), TRUE);
+					roi = CharacterManager()->GetActorROI(m_roiName.GetData(), TRUE);
 				}
 
 				if (roi != NULL) {
@@ -151,7 +151,7 @@ void LegoPhonemePresenter::EndAction()
 				}
 
 				if (!m_unk0x84) {
-					CharacterManager()->FUN_10083c30(m_roiName.GetData());
+					CharacterManager()->ReleaseActor(m_roiName.GetData());
 				}
 
 				TextureContainer()->EraseCached(phoneme->VTable0x10());
@@ -164,7 +164,7 @@ void LegoPhonemePresenter::EndAction()
 			}
 
 			if (!m_unk0x84) {
-				CharacterManager()->FUN_10083c30(m_roiName.GetData());
+				CharacterManager()->ReleaseActor(m_roiName.GetData());
 			}
 		}
 	}

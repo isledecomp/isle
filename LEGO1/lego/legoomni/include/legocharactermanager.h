@@ -41,7 +41,7 @@ struct LegoCharacter {
 	MxU32 m_refCount; // 0x04
 };
 
-struct LegoCharacterInfo;
+struct LegoActorInfo;
 
 typedef map<char*, LegoCharacter*, LegoCharacterComparator> LegoCharacterMap;
 
@@ -53,32 +53,32 @@ public:
 
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
-	LegoROI* GetROI(const char* p_key, MxBool p_createEntity);
+	LegoROI* GetActorROI(const char* p_name, MxBool p_createEntity);
 
 	void Init();
 	static void SetCustomizeAnimFile(const char* p_value);
-	static MxBool Exists(const char* p_key);
+	static MxBool IsActor(const char* p_name);
 
-	void FUN_100832a0();
-	MxBool FUN_10083b20(const char* p_key);
+	void ReleaseAllActors();
+	MxBool Exists(const char* p_name);
 	MxU32 GetRefCount(LegoROI* p_roi);
-	void FUN_10083c30(const char* p_name);
-	void FUN_10083db0(LegoROI* p_roi);
-	void FUN_10083f10(LegoROI* p_roi);
+	void ReleaseActor(const char* p_name);
+	void ReleaseActor(LegoROI* p_roi);
+	void ReleaseAutoROI(LegoROI* p_roi);
 	MxBool FUN_100849a0(LegoROI* p_roi, LegoTextureInfo* p_textureInfo);
-	LegoExtraActor* GetActor(const char* p_key);
-	LegoCharacterInfo* GetInfo(const char* p_key);
-	LegoCharacterInfo* GetInfo(LegoROI* p_roi);
+	LegoExtraActor* GetExtraActor(const char* p_name);
+	LegoActorInfo* GetActorInfo(const char* p_name);
+	LegoActorInfo* GetActorInfo(LegoROI* p_roi);
 	MxBool SwitchHat(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	MxU8 GetMood(LegoROI* p_roi);
-	LegoROI* FUN_10085210(const char* p_name, const char* p_lodName, MxBool p_createEntity);
+	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 	LegoROI* FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity);
 
 	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 private:
-	LegoROI* CreateROI(const char* p_key);
+	LegoROI* CreateActorROI(const char* p_key);
 	void RemoveROI(LegoROI* p_roi);
 	LegoROI* FindChildROI(LegoROI* p_roi, const char* p_name);
 	MxResult FUN_10085870(LegoROI* p_roi);

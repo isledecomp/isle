@@ -1,16 +1,16 @@
-#include "legocharacters.h"
+#include "legoactors.h"
 
-DECOMP_SIZE_ASSERT(LegoCharacterInfo, 0x108)
-DECOMP_SIZE_ASSERT(LegoCharacterInfo::Part, 0x18)
-DECOMP_SIZE_ASSERT(LegoCharacterLOD, 0x58)
+DECOMP_SIZE_ASSERT(LegoActorInfo, 0x108)
+DECOMP_SIZE_ASSERT(LegoActorInfo::Part, 0x18)
+DECOMP_SIZE_ASSERT(LegoActorLOD, 0x58)
 
-// Unclear whether g_characterLODs[0] (top) is its own global, see: LegoCharacterManager::CreateROI
+// Unclear whether g_actorLODs[0] (top) is its own global, see: LegoCharacterManager::CreateActorROI
 
 // GLOBAL: LEGO1 0x100da3b0
-LegoCharacterLOD g_characterLODs[] = {
+LegoActorLOD g_actorLODs[] = {
 	{"top",   "top",    0, 0.000267, 0.780808, -0.01906, 0.951612, -0.461166, -0.002794, -0.299442, 0.4617,
 	 1.56441, 0.261321, 0, 0,        0,        0,        0,        1,         0,         1,         0},
-	{"body",     "body",    LegoCharacterLOD::c_flag1,
+	{"body",     "body",    LegoActorLOD::c_flag1,
 	 0.00158332, 0.401828,  -0.00048697,
 	 0.408071,   -0.287507, 0.150419,
 	 -0.147452,  0.289219,  0.649774,
@@ -18,7 +18,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.007277,   0,         0,
 	 1,          0,         1,
 	 0},
-	{"infohat", "infohat", LegoCharacterLOD::c_flag2,
+	{"infohat", "infohat", LegoActorLOD::c_flag2,
 	 0,         -0.00938,  -0.01955,
 	 0.35,      -0.231822, -0.140237,
 	 -0.320954, 0.234149,  0.076968,
@@ -26,7 +26,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.001767,  0,         0,
 	 1,         0,         1,
 	 0},
-	{"infogron", "infogron", LegoCharacterLOD::c_flag2,
+	{"infogron", "infogron", LegoActorLOD::c_flag2,
 	 0,          0.11477,    0.00042,
 	 0.26,       -0.285558,  -0.134391,
 	 -0.142231,  0.285507,   0.152986,
@@ -34,7 +34,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.007277,   0,          0,
 	 1,          0,          1,
 	 0},
-	{"head",    "head",    LegoCharacterLOD::c_flag1,
+	{"head",    "head",    LegoActorLOD::c_flag1,
 	 0,         -0.03006,  0,
 	 0.3,       -0.189506, -0.209665,
 	 -0.189824, 0.189532,  0.228822,
@@ -42,7 +42,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.001781,  0,         0,
 	 1,         0,         1,
 	 0},
-	{"arm-lft", "arm-lft",  LegoCharacterLOD::c_flag2,
+	{"arm-lft", "arm-lft",  LegoActorLOD::c_flag2,
 	 -0.06815,  -0.0973747, 0.0154655,
 	 0.237,     -0.137931,  -0.282775,
 	 -0.105316, 0.000989,   0.100221,
@@ -50,7 +50,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.023286,  -0.003031,  -0.017187,
 	 0.999848,  0.173622,   0.984658,
 	 0.017453},
-	{"arm-rt",  "arm-rt",  LegoCharacterLOD::c_flag2,
+	{"arm-rt",  "arm-rt",  LegoActorLOD::c_flag2,
 	 0.0680946, -0.097152, 0.0152722,
 	 0.237,     0.00141,   -0.289604,
 	 -0.100831, 0.138786,  0.09291,
@@ -58,7 +58,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.018302,  0,         0,
 	 1,         -0.173648, 0.984808,
 	 0},
-	{"claw-lft",  "claw-lft", LegoCharacterLOD::c_flag2,
+	{"claw-lft",  "claw-lft", LegoActorLOD::c_flag2,
 	 0.000773381, -0.101422,  -0.0237761,
 	 0.15,        -0.089838,  -0.246208,
 	 -0.117735,   0.091275,   0.000263,
@@ -66,7 +66,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.092779,    0.000001,   0.000003,
 	 1,           0.190812,   0.981627,
 	 -0.000003},
-	{"claw-rt",   "claw-lft", LegoCharacterLOD::c_flag2,
+	{"claw-rt",   "claw-lft", LegoActorLOD::c_flag2,
 	 0.000773381, -0.101422,  -0.0237761,
 	 0.15,        -0.095016,  -0.245349,
 	 -0.117979,   0.086528,   0.00067,
@@ -74,7 +74,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.096123,    0.00606,    -0.034369,
 	 0.999391,    -0.190704,  0.981027,
 	 0.034894},
-	{"leg-lft",  "leg",     LegoCharacterLOD::c_flag2,
+	{"leg-lft",  "leg",     LegoActorLOD::c_flag2,
 	 0.00433584, -0.177404, -0.0313928,
 	 0.33,       -0.129782, -0.440428,
 	 -0.184207,  0.13817,   0.118415,
@@ -82,7 +82,7 @@ LegoCharacterLOD g_characterLODs[] = {
 	 0.006822,   0,         0,
 	 1,          0,         1,
 	 0},
-	{"leg-rt",   "leg",     LegoCharacterLOD::c_flag2,
+	{"leg-rt",   "leg",     LegoActorLOD::c_flag2,
 	 0.00433584, -0.177404, -0.0313928,
 	 0.33,       -0.132864, -0.437138,
 	 -0.183944,  0.134614,  0.12043,
@@ -172,7 +172,7 @@ const char* g_unk0x100f80a0[] =
 	{"lego white", "lego black", "lego yellow", "lego red", "lego blue", "lego brown", "lego lt grey", "lego green"};
 
 // GLOBAL: LEGO1 0x100f80c0
-LegoCharacterInfo g_characterInfoInit[] = {
+LegoActorInfo g_actorInfoInit[] = {
 	{"pepper",
 	 NULL,
 	 NULL,

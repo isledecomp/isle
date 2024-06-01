@@ -129,7 +129,7 @@ void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 
 		for (MxU32 i = 1; i <= sizeOfArray(g_actorNames) - 1; i++) {
 			if (!strcmpi(name, g_actorNames[i])) {
-				m_type = e_character;
+				m_type = e_actor;
 				m_actorId = i;
 				break;
 			}

@@ -31,7 +31,7 @@ void LegoEntity::Init()
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
 	m_targetEntityId = -1;
-	m_type = e_unk4;
+	m_type = e_autoROI;
 }
 
 // FUNCTION: LEGO1 0x10010650
@@ -93,7 +93,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 				m_roi->SetEntity(NULL);
 			}
 
-			CharacterManager()->FUN_10083db0(m_roi);
+			CharacterManager()->ReleaseActor(m_roi);
 		}
 		else {
 			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
@@ -252,7 +252,7 @@ void LegoEntity::VTable0x34(MxBool p_und)
 		const LegoChar* roiName = m_roi->GetName();
 
 		switch (m_type) {
-		case e_character:
+		case e_actor:
 			objectId = CharacterManager()->FUN_10085140(m_roi, p_und);
 			break;
 		case e_unk1:
@@ -285,7 +285,7 @@ void LegoEntity::VTable0x38()
 void LegoEntity::VTable0x3c()
 {
 	switch (m_type) {
-	case e_character:
+	case e_actor:
 		CharacterManager()->SwitchHat(m_roi);
 		break;
 	case e_unk1:
@@ -366,7 +366,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			break;
 		case 6:
 			switch (m_type) {
-			case e_character:
+			case e_actor:
 			case e_unk1:
 				break;
 			case e_plant:
@@ -375,7 +375,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			case e_building:
 				BuildingManager()->FUN_10030000(this);
 				break;
-			case e_unk4:
+			case e_autoROI:
 				break;
 			}
 		}
