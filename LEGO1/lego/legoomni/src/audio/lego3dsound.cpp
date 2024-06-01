@@ -26,8 +26,8 @@ void Lego3DSound::Init()
 	m_roi = NULL;
 	m_positionROI = NULL;
 	m_actor = NULL;
-	m_unk0x14 = FALSE;
-	m_isCharacter = FALSE;
+	m_enabled = FALSE;
+	m_isActor = FALSE;
 	m_volume = 79;
 }
 
@@ -55,7 +55,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 
 	if (CharacterManager()->Exists(p_name)) {
 		m_roi = CharacterManager()->GetROI(p_name, TRUE);
-		m_unk0x14 = m_isCharacter = TRUE;
+		m_enabled = m_isActor = TRUE;
 	}
 	else {
 		m_roi = FindROI(p_name);
@@ -65,7 +65,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 		m_roi = CharacterManager()->FUN_10085210(NULL, p_name, TRUE);
 
 		if (m_roi != NULL) {
-			m_unk0x14 = TRUE;
+			m_enabled = TRUE;
 		}
 	}
 
@@ -73,7 +73,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 		return SUCCESS;
 	}
 
-	if (m_isCharacter) {
+	if (m_isActor) {
 		m_positionROI = m_roi->FindChildROI("head", m_roi);
 	}
 	else {
@@ -111,8 +111,8 @@ void Lego3DSound::Destroy()
 		m_ds3dBuffer = NULL;
 	}
 
-	if (m_unk0x14 && m_roi && CharacterManager()) {
-		if (m_isCharacter) {
+	if (m_enabled && m_roi && CharacterManager()) {
+		if (m_isActor) {
 			CharacterManager()->FUN_10083db0(m_roi);
 		}
 		else {

@@ -30,8 +30,8 @@ private:
 	LPDIRECTSOUND3DBUFFER m_ds3dBuffer; // 0x08
 	LegoROI* m_roi;                     // 0x0c
 	LegoROI* m_positionROI;             // 0x10
-	MxBool m_unk0x14;                   // 0x14
-	MxBool m_isCharacter;               // 0x15
+	MxBool m_enabled;                   // 0x14
+	MxBool m_isActor;                   // 0x15
 	LegoActor* m_actor;                 // 0x18
 	double m_frequencyFactor;           // 0x20
 	DWORD m_dwFrequency;                // 0x28
