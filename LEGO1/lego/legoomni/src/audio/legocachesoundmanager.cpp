@@ -37,7 +37,7 @@ MxResult LegoCacheSoundManager::Tickle()
 	for (Set100d6b4c::iterator setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
 #endif
 		LegoCacheSound* sound = (*setIter).GetSound();
-		if (sound->GetUnk0x58()) {
+		if (sound->GetUnknown0x58()) {
 			sound->FUN_10006be0();
 		}
 	}
@@ -46,7 +46,7 @@ MxResult LegoCacheSoundManager::Tickle()
 	while (listIter != m_list.end()) {
 		LegoCacheSound* sound = (*listIter).GetSound();
 
-		if (sound->GetUnk0x58()) {
+		if (sound->GetUnknown0x58()) {
 			sound->FUN_10006be0();
 			listIter++;
 		}
@@ -84,7 +84,7 @@ LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 	if (it != m_set.end()) {
 		LegoCacheSound* sound = (*it).GetSound();
 
-		if (sound->GetUnk0x58()) {
+		if (sound->GetUnknown0x58()) {
 			m_list.push_back(LegoCacheSoundEntry(p_sound));
 			return p_sound;
 		}
@@ -117,7 +117,7 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003db10(LegoCacheSound* p_one, const
 		return NULL;
 	}
 
-	if (p_one->GetUnk0x58()) {
+	if (p_one->GetUnknown0x58()) {
 		LegoCacheSound* result = p_one->FUN_10006960();
 
 		if (result) {

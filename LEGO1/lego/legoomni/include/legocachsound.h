@@ -36,8 +36,8 @@ public:
 	virtual void Destroy();                            // vtable+0x18
 	virtual void FUN_10006cd0(undefined4, undefined4); // vtable+0x1c
 
-	inline const MxString& GetString0x48() const { return m_unk0x48; }
-	inline const undefined GetUnk0x58() const { return m_unk0x58; }
+	inline const MxString& GetUnknown0x48() const { return m_unk0x48; }
+	inline const undefined GetUnknown0x58() const { return m_unk0x58; }
 
 	LegoCacheSound* FUN_10006960();
 	MxResult FUN_10006a30(const char* p_str, MxBool);
