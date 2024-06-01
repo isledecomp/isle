@@ -612,7 +612,6 @@ MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 			VideoManager()->SortPresenterList();
 			m_unk0x11c->Enable(TRUE);
 			m_unk0x11c->SetPosition(p_x, p_y);
-
 			m_unk0x11c->SetDisplayZ(oldDisplayZ);
 		}
 		else {
@@ -631,7 +630,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 {
 	MxLong result = 0;
 
-	if (p_key == ' ' && m_worldStarted) {
+	if (p_key == VK_SPACE && m_worldStarted) {
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 0:
 			StopCutscene();

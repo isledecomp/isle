@@ -40,7 +40,7 @@ LegoInputManager::LegoInputManager()
 	m_unk0x88 = FALSE;
 	m_directInput = NULL;
 	m_directInputDevice = NULL;
-	m_unk0x94 = FALSE;
+	m_kbStateSuccess = FALSE;
 	m_unk0x195 = 0;
 	m_joyid = -1;
 	m_joystickIndex = -1;
@@ -142,63 +142,63 @@ void LegoInputManager::ReleaseDX()
 }
 
 // FUNCTION: LEGO1 0x1005c0f0
-void LegoInputManager::FUN_1005c0f0()
+void LegoInputManager::GetKeyboardState()
 {
-	m_unk0x94 = FALSE;
+	m_kbStateSuccess = FALSE;
 
 	if (m_directInputDevice) {
-		HRESULT hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_unk0x95), &m_unk0x95);
+		HRESULT hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_keyboardState), &m_keyboardState);
 
 		if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED) {
 			if (m_directInputDevice->Acquire() == S_OK) {
-				hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_unk0x95), &m_unk0x95);
+				hr = m_directInputDevice->GetDeviceState(sizeOfArray(m_keyboardState), &m_keyboardState);
 			}
 		}
 
 		if (hr == S_OK) {
-			m_unk0x94 = TRUE;
+			m_kbStateSuccess = TRUE;
 		}
 	}
 }
 
 // FUNCTION: LEGO1 0x1005c160
-MxResult LegoInputManager::FUN_1005c160(MxU32& p_keyFlags)
+MxResult LegoInputManager::GetNavigationKeyStates(MxU32& p_keyFlags)
 {
-	FUN_1005c0f0();
+	GetKeyboardState();
 
-	if (!m_unk0x94) {
+	if (!m_kbStateSuccess) {
 		return FAILURE;
 	}
 
 	if (g_unk0x100f67b8) {
-		if (m_unk0x95[DIK_LEFT] & 0x80 && GetAsyncKeyState(VK_LEFT) == 0) {
-			m_unk0x95[DIK_LEFT] = 0;
+		if (m_keyboardState[DIK_LEFT] & 0x80 && GetAsyncKeyState(VK_LEFT) == 0) {
+			m_keyboardState[DIK_LEFT] = 0;
 		}
 
-		if (m_unk0x95[DIK_RIGHT] & 0x80 && GetAsyncKeyState(VK_RIGHT) == 0) {
-			m_unk0x95[DIK_RIGHT] = 0;
+		if (m_keyboardState[DIK_RIGHT] & 0x80 && GetAsyncKeyState(VK_RIGHT) == 0) {
+			m_keyboardState[DIK_RIGHT] = 0;
 		}
 	}
 
 	MxU32 keyFlags = 0;
 
-	if ((m_unk0x95[DIK_NUMPAD8] | m_unk0x95[DIK_UP]) & 0x80) {
+	if ((m_keyboardState[DIK_NUMPAD8] | m_keyboardState[DIK_UP]) & 0x80) {
 		keyFlags |= c_up;
 	}
 
-	if ((m_unk0x95[DIK_NUMPAD2] | m_unk0x95[DIK_DOWN]) & 0x80) {
+	if ((m_keyboardState[DIK_NUMPAD2] | m_keyboardState[DIK_DOWN]) & 0x80) {
 		keyFlags |= c_down;
 	}
 
-	if ((m_unk0x95[DIK_NUMPAD4] | m_unk0x95[DIK_LEFT]) & 0x80) {
+	if ((m_keyboardState[DIK_NUMPAD4] | m_keyboardState[DIK_LEFT]) & 0x80) {
 		keyFlags |= c_left;
 	}
 
-	if ((m_unk0x95[DIK_NUMPAD6] | m_unk0x95[DIK_RIGHT]) & 0x80) {
+	if ((m_keyboardState[DIK_NUMPAD6] | m_keyboardState[DIK_RIGHT]) & 0x80) {
 		keyFlags |= c_right;
 	}
 
-	if ((m_unk0x95[DIK_LCONTROL] | m_unk0x95[DIK_RCONTROL]) & 0x80) {
+	if ((m_keyboardState[DIK_LCONTROL] | m_keyboardState[DIK_RCONTROL]) & 0x80) {
 		keyFlags |= c_bit5;
 	}
 
@@ -290,6 +290,7 @@ MxResult LegoInputManager::GetJoystickState(
 			}
 		}
 	}
+
 	return FAILURE;
 }
 
@@ -345,7 +346,7 @@ void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p
 	LegoEventNotificationParam param = LegoEventNotificationParam(p_id, NULL, p_modifier, p_x, p_y, p_key);
 
 	if (((!m_unk0x88) || ((m_unk0x335 && (param.GetType() == c_notificationButtonDown)))) ||
-		((m_unk0x336 && (p_key == ' ')))) {
+		((m_unk0x336 && (p_key == VK_SPACE)))) {
 		ProcessOneEvent(param);
 	}
 }
@@ -369,8 +370,8 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 	MxBool processRoi;
 
 	if (p_param.GetType() == c_notificationKeyPress) {
-		if (!Lego()->IsTimerRunning() || p_param.GetKey() == 0x13) {
-			if (p_param.GetKey() == 0x10) {
+		if (!Lego()->IsTimerRunning() || p_param.GetKey() == VK_PAUSE) {
+			if (p_param.GetKey() == VK_SHIFT) {
 				if (m_unk0x195) {
 					m_unk0x80 = FALSE;
 					p_param.SetType(c_notificationDrag);

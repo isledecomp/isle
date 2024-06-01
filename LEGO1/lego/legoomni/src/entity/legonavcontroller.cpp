@@ -537,7 +537,7 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	LegoInputManager* inputManager = LegoOmni::GetInstance()->GetInputManager();
 	MxU32 keyFlags;
 
-	if (inputManager == NULL || inputManager->FUN_1005c160(keyFlags) == FAILURE) {
+	if (inputManager == NULL || inputManager->GetNavigationKeyStates(keyFlags) == FAILURE) {
 		return FAILURE;
 	}
 

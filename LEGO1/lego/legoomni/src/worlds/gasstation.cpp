@@ -297,7 +297,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10005920
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
-	if (p_key == ' ' && g_unk0x100f0160 == 0 && this->m_unk0x106 != 0) {
+	if (p_key == VK_SPACE && g_unk0x100f0160 == 0 && m_unk0x106 != 0) {
 		m_state->FUN_10006490();
 		return 1;
 	}
