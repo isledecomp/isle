@@ -153,7 +153,7 @@ void IsleApp::Close()
 	if (Lego()) {
 		GameState()->Save(0);
 		if (InputManager()) {
-			InputManager()->QueueEvent(c_notificationKeyPress, 0, 0, 0, 0x20);
+			InputManager()->QueueEvent(c_notificationKeyPress, 0, 0, 0, VK_SPACE);
 		}
 
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);

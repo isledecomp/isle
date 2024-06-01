@@ -164,7 +164,7 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (p_param.GetKey() == ' ' && m_policeState->GetUnknown0x0c() == 1) {
+	if (p_param.GetKey() == VK_SPACE && m_policeState->GetUnknown0x0c() == 1) {
 		DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 		m_policeState->SetUnknown0x0c(0);
 		return 1;
