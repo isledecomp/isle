@@ -401,7 +401,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 
 			if (m_unk0x335 != 0) {
 				if (p_param.GetType() == c_notificationButtonDown) {
-					LegoEventNotificationParam notification(c_notificationKeyPress, NULL, 0, 0, 0, ' ');
+					LegoEventNotificationParam notification(c_notificationKeyPress, NULL, 0, 0, 0, VK_SPACE);
 					LegoNotifyListCursor cursor(m_keyboardNotifyList);
 					MxCore* target;
 

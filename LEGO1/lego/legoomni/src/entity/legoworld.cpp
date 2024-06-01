@@ -766,7 +766,7 @@ MxResult LegoWorld::Tickle()
 		switch (m_startupTicks) {
 		case e_start:
 			m_worldStarted = TRUE;
-			SetAppCursor(0);
+			SetAppCursor(e_cursorArrow);
 			ReadyWorld();
 			return TRUE;
 		case e_two:
