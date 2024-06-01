@@ -9,6 +9,7 @@
 #include "legoanimpresenter.h"
 #include "legocharactermanager.h"
 #include "legoendanimnotificationparam.h"
+#include "legoentitylist.h"
 #include "legoextraactor.h"
 #include "legogamestate.h"
 #include "legolocomotionanimpresenter.h"

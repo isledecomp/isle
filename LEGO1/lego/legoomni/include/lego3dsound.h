@@ -20,8 +20,8 @@ public:
 	MxResult Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name, MxS32 p_volume);
 	void Destroy();
 	MxU32 UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer);
-	void FUN_10011ca0();
-	MxS32 FUN_10011cf0(undefined4, undefined4);
+	void Reset();
+	MxS32 SetDistance(MxS32 p_min, MxS32 p_max);
 
 	// SYNTHETIC: LEGO1 0x10011650
 	// Lego3DSound::`scalar deleting destructor'

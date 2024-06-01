@@ -37,7 +37,7 @@ public:
 	MxResult FUN_10006a30(const char* p_str, MxBool);
 	void FUN_10006b80();
 	void FUN_10006be0();
-	void FUN_10006cb0(undefined4 p_und1, undefined4 p_und2);
+	void SetDistance(MxS32 p_min, MxS32 p_max);
 
 	// SYNTHETIC: LEGO1 0x10006610
 	// LegoCacheSound::`scalar deleting destructor'
@@ -47,7 +47,7 @@ private:
 
 	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x08
 	undefined m_unk0xc[4];          // 0x0c
-	Lego3DSound m_unk0x10;          // 0x10
+	Lego3DSound m_sound;            // 0x10
 	undefined* m_unk0x40;           // 0x40
 	undefined4 m_unk0x44;           // 0x44
 	MxString m_string0x48;          // 0x48

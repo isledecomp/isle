@@ -619,7 +619,7 @@ void LegoBuildingManager::ScheduleAnimation(LegoEntity* p_entity, MxU32 p_length
 
 	if (p_haveSound) {
 		m_sound = SoundManager()->GetCacheSoundManager()->FindSoundByKey("bcrash");
-		m_sound->FUN_10006cb0(35, 60);
+		m_sound->SetDistance(35, 60);
 	}
 
 	if (m_numEntries == 0) {

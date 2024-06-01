@@ -100,7 +100,7 @@ void LegoCacheSound::FUN_10006b80()
 	m_unk0x58 = 0;
 	m_unk0x6a = FALSE;
 
-	m_unk0x10.FUN_10011ca0();
+	m_sound.Reset();
 	if (m_string0x74.GetLength() != 0) {
 		m_string0x74 = "";
 	}
@@ -123,7 +123,7 @@ void LegoCacheSound::FUN_10006be0()
 
 		if (dwStatus == 0) {
 			m_dsBuffer->Stop();
-			m_unk0x10.FUN_10011ca0();
+			m_sound.Reset();
 			if (m_string0x74.GetLength() != 0) {
 				m_string0x74 = "";
 			}
@@ -134,7 +134,7 @@ void LegoCacheSound::FUN_10006be0()
 	}
 
 	if (m_string0x74.GetLength() != 0 && !m_unk0x84) {
-		if (!m_unk0x10.UpdatePosition(m_dsBuffer)) {
+		if (!m_sound.UpdatePosition(m_dsBuffer)) {
 			if (m_unk0x6a) {
 				return;
 			}
@@ -150,9 +150,9 @@ void LegoCacheSound::FUN_10006be0()
 }
 
 // FUNCTION: LEGO1 0x10006cb0
-void LegoCacheSound::FUN_10006cb0(undefined4 p_und1, undefined4 p_und2)
+void LegoCacheSound::SetDistance(MxS32 p_min, MxS32 p_max)
 {
-	m_unk0x10.FUN_10011cf0(p_und1, p_und2);
+	m_sound.SetDistance(p_min, p_max);
 }
 
 // FUNCTION: LEGO1 0x10006cd0
