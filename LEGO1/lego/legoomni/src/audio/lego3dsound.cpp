@@ -184,15 +184,35 @@ MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 	return updated;
 }
 
-// STUB: LEGO1 0x10011ca0
-void Lego3DSound::FUN_10011ca0()
+// FUNCTION: LEGO1 0x10011ca0
+void Lego3DSound::Reset()
 {
-	// TODO
+	if (m_enabled && m_roi && CharacterManager()) {
+		if (m_isActor) {
+			CharacterManager()->ReleaseActor(m_roi);
+		}
+		else {
+			CharacterManager()->ReleaseAutoROI(m_roi);
+		}
+	}
+
+	m_roi = NULL;
+	m_positionROI = NULL;
+	m_actor = NULL;
 }
 
-// STUB: LEGO1 0x10011cf0
-MxS32 Lego3DSound::FUN_10011cf0(undefined4, undefined4)
+// FUNCTION: LEGO1 0x10011cf0
+MxS32 Lego3DSound::SetDistance(MxS32 p_min, MxS32 p_max)
 {
-	// TODO
-	return 0;
+	if (MxOmni::IsSound3D()) {
+		if (m_ds3dBuffer == NULL) {
+			return -1;
+		}
+
+		m_ds3dBuffer->SetMinDistance(p_min, 0);
+		m_ds3dBuffer->SetMaxDistance(p_max, 0);
+		return 0;
+	}
+
+	return 1;
 }
