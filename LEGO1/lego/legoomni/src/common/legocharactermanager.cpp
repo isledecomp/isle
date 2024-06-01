@@ -255,7 +255,7 @@ done:
 
 			actor->SetROI(character->m_roi, FALSE, FALSE);
 			actor->SetType(LegoEntity::e_actor);
-			actor->SetFlag(LegoEntity::c_bit2);
+			actor->SetFlag(LegoEntity::c_managerOwned);
 			GetActorInfo(p_name)->m_actor = actor;
 		}
 
@@ -323,11 +323,11 @@ void LegoCharacterManager::ReleaseActor(const char* p_name)
 
 			if (info != NULL) {
 				if (info->m_actor != NULL) {
-					info->m_actor->ClearFlag(LegoEntity::c_bit2);
+					info->m_actor->ClearFlag(LegoEntity::c_managerOwned);
 					delete info->m_actor;
 				}
-				else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-					entity->ClearFlag(LegoEntity::c_bit2);
+				else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+					entity->ClearFlag(LegoEntity::c_managerOwned);
 					delete entity;
 				}
 
@@ -365,11 +365,11 @@ void LegoCharacterManager::ReleaseActor(LegoROI* p_roi)
 
 				if (info != NULL) {
 					if (info->m_actor != NULL) {
-						info->m_actor->ClearFlag(LegoEntity::c_bit2);
+						info->m_actor->ClearFlag(LegoEntity::c_managerOwned);
 						delete info->m_actor;
 					}
-					else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-						entity->ClearFlag(LegoEntity::c_bit2);
+					else if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+						entity->ClearFlag(LegoEntity::c_managerOwned);
 						delete entity;
 					}
 
@@ -407,8 +407,8 @@ void LegoCharacterManager::ReleaseAutoROI(LegoROI* p_roi)
 
 				m_characters->erase(it);
 
-				if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_bit2)) {
-					entity->ClearFlag(LegoEntity::c_bit2);
+				if (entity != NULL && entity->GetFlagsIsSet(LegoEntity::c_managerOwned)) {
+					entity->ClearFlag(LegoEntity::c_managerOwned);
 					delete entity;
 				}
 			}
@@ -853,7 +853,7 @@ LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_l
 
 				entity->SetROI(roi, FALSE, FALSE);
 				entity->SetType(LegoEntity::e_autoROI);
-				entity->SetFlag(LegoEntity::c_bit2);
+				entity->SetFlag(LegoEntity::c_managerOwned);
 			}
 		}
 	}

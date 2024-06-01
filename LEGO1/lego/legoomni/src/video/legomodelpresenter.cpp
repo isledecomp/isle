@@ -224,7 +224,7 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 
 	if (p_entity != NULL) {
 		p_entity->SetROI(m_roi, TRUE, TRUE);
-		p_entity->ClearFlag(LegoEntity::c_bit2);
+		p_entity->ClearFlag(LegoEntity::c_managerOwned);
 	}
 	else {
 		p_world->GetROIList().push_back(m_roi);
@@ -249,7 +249,8 @@ void LegoModelPresenter::ReadyTickle()
 			((LegoEntityPresenter*) m_compositePresenter)
 				->GetInternalEntity()
 				->SetFlags(
-					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() & ~LegoEntity::c_bit2
+					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() &
+					~LegoEntity::c_managerOwned
 				);
 			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_actor);
 		}
@@ -276,7 +277,7 @@ void LegoModelPresenter::ReadyTickle()
 						->GetInternalEntity()
 						->SetFlags(
 							((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() &
-							~LegoEntity::c_bit2
+							~LegoEntity::c_managerOwned
 						);
 				}
 

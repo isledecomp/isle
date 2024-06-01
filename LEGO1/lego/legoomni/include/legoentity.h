@@ -23,7 +23,7 @@ public:
 
 	enum {
 		c_bit1 = 0x01,
-		c_bit2 = 0x02
+		c_managerOwned = 0x02
 	};
 
 	enum {
