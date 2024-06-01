@@ -232,8 +232,8 @@ MxString LegoCacheSound::FUN_10006d80(const MxString& p_str)
 
 	local14 = pVar1;
 
-	MxString local_24;
+	MxString local24;
 	local14++;
 	*local28 = '\0';
-	return local_24 = local14;
+	return local24 = local14;
 }
