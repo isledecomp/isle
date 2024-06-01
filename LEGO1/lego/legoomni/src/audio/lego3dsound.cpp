@@ -52,6 +52,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 	if (m_ds3dBuffer == NULL || p_name == NULL) {
 		return SUCCESS;
 	}
+
 	if (CharacterManager()->Exists(p_name)) {
 		m_roi = CharacterManager()->GetROI(p_name, TRUE);
 		m_unk0x14 = m_isCharacter = TRUE;
