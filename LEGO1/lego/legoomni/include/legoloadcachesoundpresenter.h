@@ -37,10 +37,10 @@ private:
 	void Destroy(MxBool p_fromDestructor);
 
 	LegoCacheSound* m_cacheSound;  // 0x6c
-	undefined* m_unk0x70;          // 0x70
-	undefined* m_unk0x74;          // 0x74
-	undefined4 m_unk0x78;          // 0x78
-	undefined m_unk0x7c;           // 0x7c
+	MxU8* m_data;                  // 0x70
+	MxU8* m_pData;                 // 0x74
+	MxU32 m_dataSize;              // 0x78
+	MxBool m_unk0x7c;              // 0x7c
 	PCMWAVEFORMAT m_pcmWaveFormat; // 0x7d
 };
 

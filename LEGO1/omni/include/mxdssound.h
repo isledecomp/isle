@@ -36,8 +36,8 @@ public:
 	// MxDSSound::`scalar deleting destructor'
 
 private:
-	MxU32 m_sizeOnDisk;
-	MxS32 m_volume; // 0xbc
+	MxU32 m_sizeOnDisk; // 0xb8
+	MxS32 m_volume;     // 0xbc
 };
 
 #endif // MXDSSOUND_H
