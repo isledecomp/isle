@@ -2,7 +2,6 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "legoinputmanager.h"
-#include "legonotify.h"
 #include "legosoundmanager.h"
 #include "legovideomanager.h"
 #include "misc.h"
@@ -109,10 +108,10 @@ void LegoCameraController::OnRButtonUp(MxPoint32 p_point)
 // FUNCTION: LEGO1 0x10012230
 void LegoCameraController::OnMouseMove(MxU8 p_modifier, MxPoint32 p_point)
 {
-	if (p_modifier & c_lButtonState) {
+	if (p_modifier & LegoEventNotificationParam::c_lButtonState) {
 		LeftDrag(p_point.GetX(), p_point.GetY());
 	}
-	else if (p_modifier & c_rButtonState) {
+	else if (p_modifier & LegoEventNotificationParam::c_rButtonState) {
 		RightDrag(p_point.GetX(), p_point.GetY());
 	}
 }

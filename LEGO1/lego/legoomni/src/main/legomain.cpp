@@ -254,7 +254,7 @@ MxResult LegoOmni::Create(MxOmniCreateParam& p_param)
 	}
 
 	m_notificationManager->Register(this);
-	SetAppCursor(1);
+	SetAppCursor(e_cursorBusy);
 	m_gameState->SetCurrentAct(LegoGameState::e_act1);
 
 	result = SUCCESS;
@@ -582,12 +582,12 @@ MxLong LegoOmni::Notify(MxParam& p_param)
 void LegoOmni::StartTimer()
 {
 	MxOmni::StartTimer();
-	SetAppCursor(2);
+	SetAppCursor(e_cursorNo);
 }
 
 // FUNCTION: LEGO1 0x1005b650
 void LegoOmni::StopTimer()
 {
 	MxOmni::StopTimer();
-	SetAppCursor(0);
+	SetAppCursor(e_cursorArrow);
 }

@@ -57,7 +57,7 @@ Infocenter::Infocenter()
 	memset(&m_mapAreas, 0, sizeof(m_mapAreas));
 
 	m_unk0x1c8 = -1;
-	SetAppCursor(1);
+	SetAppCursor(e_cursorBusy);
 	NotificationManager()->Register(this);
 
 	m_infoManDialogueTimer = 0;
@@ -1183,7 +1183,7 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 	VideoManager()->EnableFullScreenMovie(TRUE, p_scale);
 	InputManager()->SetUnknown336(TRUE);
 	InputManager()->SetUnknown335(TRUE);
-	SetAppCursor(0xb); // Hide cursor
+	SetAppCursor(e_cursorNone);
 	VideoManager()->GetDisplaySurface()->ClearScreen();
 
 	if (m_currentCutscene != e_noIntro) {
@@ -1205,7 +1205,7 @@ void Infocenter::StopCutscene()
 
 	VideoManager()->EnableFullScreenMovie(FALSE);
 	InputManager()->SetUnknown335(FALSE);
-	SetAppCursor(0); // Restore cursor to arrow
+	SetAppCursor(e_cursorArrow);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
@@ -1405,7 +1405,7 @@ void Infocenter::StartCredits()
 	GetViewManager()->RemoveAll(NULL);
 
 	InvokeAction(Extra::e_opendisk, *g_creditsScript, CreditsScript::c_LegoCredits, NULL);
-	SetAppCursor(0);
+	SetAppCursor(e_cursorArrow);
 }
 
 // FUNCTION: LEGO1 0x10071250

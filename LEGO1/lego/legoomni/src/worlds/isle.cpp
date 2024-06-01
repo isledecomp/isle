@@ -816,7 +816,7 @@ void Isle::Enable(MxBool p_enable)
 			break;
 		}
 
-		SetAppCursor(0);
+		SetAppCursor(e_cursorArrow);
 
 		if (m_act1state->m_unk0x018 != 8 &&
 			(m_act1state->m_unk0x018 != 0 || GameState()->m_currentArea != LegoGameState::e_elevride) &&
@@ -952,7 +952,7 @@ MxLong Isle::HandleTransitionEnd()
 		VariableTable()->SetVariable("VISIBILITY", "Show Gas");
 		AnimationManager()->Resume();
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-		SetAppCursor(0);
+		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
 	case LegoGameState::e_unk33:
@@ -962,7 +962,7 @@ MxLong Isle::HandleTransitionEnd()
 		VariableTable()->SetVariable("VISIBILITY", "Show Policsta");
 		AnimationManager()->Resume();
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-		SetAppCursor(0);
+		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
 		break;
 	case LegoGameState::e_polidoor:
@@ -1073,7 +1073,7 @@ void Isle::FUN_10032d30(
 			}
 
 			FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
-			SetAppCursor(0);
+			SetAppCursor(e_cursorArrow);
 			m_destLocation = LegoGameState::e_undefined;
 			m_act1state->m_unk0x01f = FALSE;
 		}

@@ -124,7 +124,7 @@ MxResult MxTransitionManager::StartTransition(
 		LegoVideoManager* videoManager = VideoManager();
 		videoManager->SetRender3D(FALSE);
 
-		SetAppCursor(1);
+		SetAppCursor(e_cursorBusy);
 		return SUCCESS;
 	}
 	return FAILURE;
