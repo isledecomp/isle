@@ -251,7 +251,7 @@ void LegoModelPresenter::ReadyTickle()
 				->SetFlags(
 					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() & ~LegoEntity::c_bit2
 				);
-			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_character);
+			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_actor);
 		}
 
 		ParseExtra();
@@ -306,7 +306,7 @@ void LegoModelPresenter::ParseExtra()
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
-				m_roi = CharacterManager()->GetROI(token, FALSE);
+				m_roi = CharacterManager()->GetActorROI(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}

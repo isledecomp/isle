@@ -53,8 +53,8 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 		return SUCCESS;
 	}
 
-	if (CharacterManager()->Exists(p_name)) {
-		m_roi = CharacterManager()->GetROI(p_name, TRUE);
+	if (CharacterManager()->IsActor(p_name)) {
+		m_roi = CharacterManager()->GetActorROI(p_name, TRUE);
 		m_enabled = m_isActor = TRUE;
 	}
 	else {
@@ -62,7 +62,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 	}
 
 	if (m_roi == NULL) {
-		m_roi = CharacterManager()->FUN_10085210(NULL, p_name, TRUE);
+		m_roi = CharacterManager()->CreateAutoROI(NULL, p_name, TRUE);
 
 		if (m_roi != NULL) {
 			m_enabled = TRUE;
@@ -113,10 +113,10 @@ void Lego3DSound::Destroy()
 
 	if (m_enabled && m_roi && CharacterManager()) {
 		if (m_isActor) {
-			CharacterManager()->FUN_10083db0(m_roi);
+			CharacterManager()->ReleaseActor(m_roi);
 		}
 		else {
-			CharacterManager()->FUN_10083f10(m_roi);
+			CharacterManager()->ReleaseAutoROI(m_roi);
 		}
 	}
 

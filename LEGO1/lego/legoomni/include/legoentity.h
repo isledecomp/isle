@@ -14,11 +14,11 @@ class Vector3;
 class LegoEntity : public MxEntity {
 public:
 	enum Type {
-		e_character = 0,
+		e_actor = 0,
 		e_unk1,
 		e_plant,
 		e_building,
-		e_unk4
+		e_autoROI
 	};
 
 	enum {
