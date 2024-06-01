@@ -45,7 +45,7 @@ void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBo
 void FUN_1003eda0();
 MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id);
 void FUN_1003ef00(MxBool p_enable);
-void SetAppCursor(Cursor p_wparam);
+void SetAppCursor(Cursor p_cursor);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);
 MxS32 UpdateLightPosition(MxS32 p_increase);
