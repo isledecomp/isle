@@ -204,7 +204,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 		while (cursor.First(sound)) {
 			cursor.Detach();
-			SoundManager()->GetCacheSoundManager()->FUN_1003dc40(&sound);
+			SoundManager()->GetCacheSoundManager()->Destroy(sound);
 		}
 
 		delete m_cacheSoundList;

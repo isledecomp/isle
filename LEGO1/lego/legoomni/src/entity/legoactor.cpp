@@ -103,7 +103,7 @@ void LegoActor::ParseAction(char* p_extra)
 	}
 
 	if (KeyValueStringParse(value, g_strSOUND, p_extra)) {
-		m_sound = SoundManager()->GetCacheSoundManager()->FUN_1003dae0(value, GetROI()->GetName(), TRUE);
+		m_sound = SoundManager()->GetCacheSoundManager()->Play(value, GetROI()->GetName(), TRUE);
 	}
 
 	if (KeyValueStringParse(value, g_strMUTE, p_extra)) {

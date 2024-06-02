@@ -278,7 +278,7 @@ MxS32 LegoPathActor::VTable0x8c(float p_time, Matrix4& p_transform)
 						const char* var = VariableTable()->GetVariable(g_strHIT_WALL_SOUND);
 
 						if (var && var[0] != 0) {
-							SoundManager()->GetCacheSoundManager()->FUN_1003dae0(var, NULL, FALSE);
+							SoundManager()->GetCacheSoundManager()->Play(var, NULL, FALSE);
 						}
 					}
 

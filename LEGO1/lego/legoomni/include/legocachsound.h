@@ -37,7 +37,7 @@ public:
 	virtual void FUN_10006cd0(undefined4, undefined4); // vtable+0x1c
 
 	inline const MxString& GetUnknown0x48() const { return m_unk0x48; }
-	inline const undefined GetUnknown0x58() const { return m_unk0x58; }
+	inline const MxBool GetUnknown0x58() const { return m_unk0x58; }
 
 	LegoCacheSound* Clone();
 	MxResult Play(const char* p_name, MxBool p_looping);
