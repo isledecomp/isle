@@ -106,7 +106,6 @@ LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 // FUNCTION: LEGO1 0x1003dae0
 LegoCacheSound* LegoCacheSoundManager::Play(const char* p_key, const char* p_name, MxBool p_looping)
 {
-	// DECOMP: Second parameter is LegoRoi::m_name (0xe4)
 	return Play(FindSoundByKey(p_key), p_name, p_looping);
 }
 
