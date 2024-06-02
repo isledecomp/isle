@@ -118,16 +118,16 @@ LegoCacheSound* LegoCacheSoundManager::FUN_1003db10(LegoCacheSound* p_one, const
 	}
 
 	if (p_one->GetUnknown0x58()) {
-		LegoCacheSound* result = p_one->FUN_10006960();
+		LegoCacheSound* result = p_one->Clone();
 
 		if (result) {
 			LegoCacheSound* t = ManageSoundEntry(result);
-			t->FUN_10006a30(p_two, p_three);
+			t->Play(p_two, p_three);
 			return t;
 		}
 	}
 	else {
-		p_one->FUN_10006a30(p_two, p_three);
+		p_one->Play(p_two, p_three);
 		return p_one;
 	}
 

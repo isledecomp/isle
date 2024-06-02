@@ -20,6 +20,7 @@ public:
 	MxResult Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name, MxS32 p_volume);
 	void Destroy();
 	MxU32 UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer);
+	void FUN_10011a60(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name);
 	void Reset();
 	MxS32 SetDistance(MxS32 p_min, MxS32 p_max);
 

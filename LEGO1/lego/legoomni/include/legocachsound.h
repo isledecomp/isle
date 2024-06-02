@@ -39,8 +39,8 @@ public:
 	inline const MxString& GetUnknown0x48() const { return m_unk0x48; }
 	inline const undefined GetUnknown0x58() const { return m_unk0x58; }
 
-	LegoCacheSound* FUN_10006960();
-	MxResult FUN_10006a30(const char* p_str, MxBool);
+	LegoCacheSound* Clone();
+	MxResult Play(const char* p_name, MxBool p_looping);
 	void FUN_10006b80();
 	void FUN_10006be0();
 	void SetDistance(MxS32 p_min, MxS32 p_max);
@@ -59,12 +59,12 @@ private:
 	MxU8* m_data;                   // 0x40
 	MxU32 m_dataSize;               // 0x44
 	MxString m_unk0x48;             // 0x48
-	undefined m_unk0x58;            // 0x58
+	MxBool m_unk0x58;               // 0x58
 	PCMWAVEFORMAT m_wfx;            // 0x59
-	MxBool m_isLooping;             // 0x69
+	MxBool m_looping;               // 0x69
 	MxBool m_unk0x6a;               // 0x6a
 	MxS32 m_volume;                 // 0x6c
-	undefined m_unk0x70;            // 0x70
+	MxBool m_unk0x70;               // 0x70
 	MxString m_unk0x74;             // 0x74
 	undefined m_unk0x84;            // 0x84
 };

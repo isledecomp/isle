@@ -151,7 +151,6 @@ MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 		}
 		else {
 			MxS32 newVolume = m_volume;
-
 			if (distance < 100.0f) {
 				newVolume = m_volume;
 			}
@@ -182,6 +181,101 @@ MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 	}
 
 	return updated;
+}
+
+// FUNCTION: LEGO1 0x10011a60
+// FUNCTION: BETA10 0x10039d04
+void Lego3DSound::FUN_10011a60(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char* p_name)
+{
+	assert(p_directSoundBuffer);
+
+	if (p_name == NULL) {
+		if (m_ds3dBuffer != NULL) {
+			m_ds3dBuffer->SetMode(DS3DMODE_DISABLE, DS3D_IMMEDIATE);
+		}
+	}
+	else {
+		if (CharacterManager()->IsActor(p_name)) {
+			m_roi = CharacterManager()->GetActorROI(p_name, TRUE);
+			m_enabled = m_isActor = TRUE;
+		}
+		else {
+			m_roi = FindROI(p_name);
+		}
+
+		if (m_roi == NULL) {
+			m_roi = CharacterManager()->CreateAutoROI(NULL, p_name, TRUE);
+
+			if (m_roi != NULL) {
+				m_enabled = TRUE;
+			}
+		}
+
+		if (m_roi == NULL) {
+			return;
+		}
+
+		if (m_isActor) {
+			m_positionROI = m_roi->FindChildROI("head", m_roi);
+		}
+		else {
+			m_positionROI = m_roi;
+		}
+
+		if (m_ds3dBuffer != NULL) {
+			DWORD dwMode;
+			m_ds3dBuffer->GetMode(&dwMode);
+
+			if (dwMode & DS3DMODE_DISABLE) {
+				m_ds3dBuffer->SetMode(DS3DMODE_NORMAL, DS3D_IMMEDIATE);
+			}
+
+			const float* position = m_positionROI->GetWorldPosition();
+			m_ds3dBuffer->SetPosition(position[0], position[1], position[2], DS3D_IMMEDIATE);
+		}
+		else {
+			const float* position = m_positionROI->GetWorldPosition();
+			ViewROI* pov = VideoManager()->GetViewROI();
+
+			if (pov != NULL) {
+				const float* povPosition = pov->GetWorldPosition();
+				float distance = DISTSQRD3(povPosition, position);
+
+				MxS32 newVolume;
+				if (distance < 100.0f) {
+					newVolume = m_volume;
+				}
+				else if (distance < 400.0f) {
+					newVolume = m_volume * 0.4;
+				}
+				else if (distance < 3600.0f) {
+					newVolume = m_volume * 0.1;
+				}
+				else {
+					newVolume = 0;
+				}
+
+				newVolume = newVolume * SoundManager()->GetVolume() / 100;
+				newVolume = SoundManager()->GetAttenuation(newVolume);
+				p_directSoundBuffer->SetVolume(newVolume);
+			}
+		}
+
+		LegoEntity* entity = m_roi->GetEntity();
+		if (entity != NULL && entity->IsA("LegoActor") && ((LegoActor*) entity)->GetSoundFrequencyFactor() != 0.0f) {
+			m_actor = ((LegoActor*) entity);
+		}
+
+		p_directSoundBuffer->GetFrequency(&m_dwFrequency);
+
+		if (m_actor != NULL) {
+			m_frequencyFactor = m_actor->GetSoundFrequencyFactor();
+
+			if (m_frequencyFactor != 0.0) {
+				p_directSoundBuffer->SetFrequency(m_frequencyFactor * m_dwFrequency);
+			}
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10011ca0
