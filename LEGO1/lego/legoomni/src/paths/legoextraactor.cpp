@@ -233,7 +233,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 				m_roi->FUN_100a58f0(matrix2);
 				m_roi->VTable0x14();
 				FUN_1002ad8a();
-				SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
+				SoundManager()->GetCacheSoundManager()->Play("crash5", m_roi->GetName(), FALSE);
 				m_scheduledTime = Timer()->GetTime() + m_disAnim->GetDuration();
 				m_prevWorldSpeed = m_worldSpeed;
 				VTable0xc4();
@@ -245,7 +245,7 @@ MxResult LegoExtraActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
 
 		if (b) {
 			LegoROI* roi = m_roi;
-			SoundManager()->GetCacheSoundManager()->FUN_1003dae0("crash5", m_roi->GetName(), FALSE);
+			SoundManager()->GetCacheSoundManager()->Play("crash5", m_roi->GetName(), FALSE);
 			VTable0xc4();
 			m_state = 0x102;
 			Mx3DPointFloat dir = p_actor->GetWorldDirection();

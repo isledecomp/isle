@@ -56,11 +56,12 @@ public:
 
 	LegoCacheSound* FindSoundByKey(const char* p_key);
 	LegoCacheSound* ManageSoundEntry(LegoCacheSound* p_sound);
-	LegoCacheSound* FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three);
-	LegoCacheSound* FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three);
-	void FUN_1003dc40(LegoCacheSound** p_und);
+	LegoCacheSound* Play(const char* p_key, const char* p_name, MxBool p_looping);
+	void Destroy(LegoCacheSound*& p_sound);
 
 private:
+	LegoCacheSound* Play(LegoCacheSound* p_sound, const char* p_name, MxBool p_looping);
+
 	Set100d6b4c m_set;   // 0x04
 	List100d6b4c m_list; // 0x14
 };

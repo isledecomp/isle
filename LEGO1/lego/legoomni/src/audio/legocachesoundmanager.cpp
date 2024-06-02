@@ -104,53 +104,48 @@ LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 }
 
 // FUNCTION: LEGO1 0x1003dae0
-LegoCacheSound* LegoCacheSoundManager::FUN_1003dae0(const char* p_one, const char* p_two, MxBool p_three)
+LegoCacheSound* LegoCacheSoundManager::Play(const char* p_key, const char* p_name, MxBool p_looping)
 {
-	// DECOMP: Second parameter is LegoRoi::m_name (0xe4)
-	return FUN_1003db10(FindSoundByKey(p_one), p_two, p_three);
+	return Play(FindSoundByKey(p_key), p_name, p_looping);
 }
 
 // FUNCTION: LEGO1 0x1003db10
-LegoCacheSound* LegoCacheSoundManager::FUN_1003db10(LegoCacheSound* p_one, const char* p_two, MxBool p_three)
+LegoCacheSound* LegoCacheSoundManager::Play(LegoCacheSound* p_sound, const char* p_name, MxBool p_looping)
 {
-	if (!p_one) {
+	if (!p_sound) {
 		return NULL;
 	}
 
-	if (p_one->GetUnknown0x58()) {
-		LegoCacheSound* result = p_one->FUN_10006960();
+	if (p_sound->GetUnknown0x58()) {
+		LegoCacheSound* clone = p_sound->Clone();
 
-		if (result) {
-			LegoCacheSound* t = ManageSoundEntry(result);
-			t->FUN_10006a30(p_two, p_three);
-			return t;
+		if (clone) {
+			LegoCacheSound* sound = ManageSoundEntry(clone);
+			sound->Play(p_name, p_looping);
+			return sound;
 		}
 	}
 	else {
-		p_one->FUN_10006a30(p_two, p_three);
-		return p_one;
+		p_sound->Play(p_name, p_looping);
+		return p_sound;
 	}
 
 	return NULL;
 }
 
 // FUNCTION: LEGO1 0x1003dc40
-void LegoCacheSoundManager::FUN_1003dc40(LegoCacheSound** p_und)
+void LegoCacheSoundManager::Destroy(LegoCacheSound*& p_sound)
 {
-	// Called during LegoWorld::Destroy like this:
-	// SoundManager()->GetCacheSoundManager()->FUN_1003dc40(&sound);
-	// LegoCacheSound*& p_sound?
-
 #ifdef COMPAT_MODE
 	Set100d6b4c::iterator setIter;
 	for (setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
 #else
 	for (Set100d6b4c::iterator setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
 #endif
-		if ((*setIter).GetSound() == *p_und) {
-			(*p_und)->FUN_10006b80();
+		if ((*setIter).GetSound() == p_sound) {
+			p_sound->FUN_10006b80();
 
-			delete *p_und;
+			delete p_sound;
 			m_set.erase(setIter);
 			return;
 		}
@@ -167,8 +162,8 @@ void LegoCacheSoundManager::FUN_1003dc40(LegoCacheSound** p_und)
 		}
 
 		LegoCacheSound* sound = (*listIter).GetSound();
-		if (sound == *p_und) {
-			(*p_und)->FUN_10006b80();
+		if (sound == p_sound) {
+			p_sound->FUN_10006b80();
 
 			delete sound;
 			m_list.erase(listIter);
