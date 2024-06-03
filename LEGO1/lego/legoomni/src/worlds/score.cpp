@@ -1,9 +1,10 @@
 #include "score.h"
 
-#include "ambulancemissionstate.h"
-#include "carracestate.h"
+#include "ambulance.h"
+#include "carrace.h"
 #include "infoscor_actions.h"
-#include "jetskiracestate.h"
+#include "jetski.h"
+#include "jetskirace.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
@@ -17,13 +18,12 @@
 #include "mxnotificationmanager.h"
 #include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
-#include "pizzamissionstate.h"
-#include "racestate.h"
-#include "scorestate.h"
+#include "pizza.h"
 #include "scripts.h"
-#include "towtrackmissionstate.h"
+#include "towtrack.h"
 
 DECOMP_SIZE_ASSERT(Score, 0x104)
+DECOMP_SIZE_ASSERT(ScoreState, 0x0c)
 
 // FUNCTION: LEGO1 0x10001000
 Score::Score()

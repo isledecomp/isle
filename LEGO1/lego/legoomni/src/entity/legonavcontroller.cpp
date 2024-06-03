@@ -1,7 +1,7 @@
 #include "legonavcontroller.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "legoanimationmanager.h"
 #include "legocameracontroller.h"
 #include "legogamestate.h"

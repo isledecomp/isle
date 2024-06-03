@@ -1,6 +1,7 @@
 #include "legocarbuild.h"
 
 DECOMP_SIZE_ASSERT(LegoCarBuild, 0x34c)
+DECOMP_SIZE_ASSERT(LegoVehicleBuildState, 0x50)
 
 // STUB: LEGO1 0x100226d0
 LegoCarBuild::LegoCarBuild()
@@ -60,4 +61,21 @@ MxBool LegoCarBuild::Escape()
 {
 	// TODO
 	return FALSE;
+}
+
+// FUNCTION: LEGO1 0x10025f30
+LegoVehicleBuildState::LegoVehicleBuildState(char* p_classType)
+{
+	m_className = p_classType;
+	m_unk0x4c = 0;
+	m_unk0x4d = FALSE;
+	m_unk0x4e = FALSE;
+	m_placedPartCount = 0;
+}
+
+// STUB: LEGO1 0x10026120
+MxResult LegoVehicleBuildState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
 }

@@ -1,7 +1,6 @@
 #include "legogamestate.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "act1state.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
 #include "carrace_actions.h"
@@ -15,7 +14,7 @@
 #include "helicopter.h"
 #include "histbook_actions.h"
 #include "hospital_actions.h"
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "infodoor_actions.h"
 #include "infomain_actions.h"
 #include "infoscor_actions.h"

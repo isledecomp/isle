@@ -1,8 +1,8 @@
 #include "legoutils.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "act1state.h"
 #include "anim/legoanim.h"
+#include "isle.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"

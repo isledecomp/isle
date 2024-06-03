@@ -4,6 +4,9 @@
 #include "mxnotificationmanager.h"
 
 DECOMP_SIZE_ASSERT(LegoRace, 0x144)
+DECOMP_SIZE_ASSERT(RaceState::Entry, 0x06)
+// TODO: Must be 0x2c but current structure is incorrect
+// DECOMP_SIZE_ASSERT(RaceState, 0x2c)
 
 // FUNCTION: LEGO1 0x1000dab0
 undefined4 LegoRace::VTable0x78(undefined4)
@@ -86,4 +89,31 @@ MxLong LegoRace::Notify(MxParam& p_param)
 void LegoRace::Enable(MxBool p_enable)
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x10015f30
+RaceState::RaceState()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10016140
+MxResult RaceState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
+}
+
+// FUNCTION: LEGO1 0x10016280
+RaceState::Entry* RaceState::GetState(MxU8 p_id)
+{
+	for (MxS16 i = 0;; i++) {
+		if (i >= 5) {
+			return NULL;
+		}
+
+		if (m_state[i].m_id == p_id) {
+			return m_state + i;
+		}
+	}
 }

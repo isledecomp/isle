@@ -1,5 +1,5 @@
-#ifndef LEGOCARBUILDANIMPRESENTER_H
-#define LEGOCARBUILDANIMPRESENTER_H
+#ifndef LEGOCARBUILDPRESENTER_H
+#define LEGOCARBUILDPRESENTER_H
 
 #include "anim/legoanim.h"
 #include "legoanimpresenter.h"
@@ -59,4 +59,4 @@ private:
 	undefined4 m_unk0x14c; // 0x14c
 };
 
-#endif // LEGOCARBUILDANIMPRESENTER_H
+#endif // LEGOCARBUILDPRESENTER_H

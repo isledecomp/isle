@@ -1,7 +1,7 @@
 #include "elevatorbottom.h"
 
-#include "act1state.h"
 #include "elevbott_actions.h"
+#include "isle.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
