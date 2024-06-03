@@ -79,6 +79,8 @@ public:
 	void FUN_10034b60();
 	void FUN_10034d00();
 
+	// TODO: Most likely getters/setters are not used according to BETA.
+
 	inline MxU32 GetUnknown18() { return m_unk0x018; }
 	inline ElevatorFloor GetElevatorFloor() { return (ElevatorFloor) m_elevFloor; }
 	inline MxU8 GetUnknown21() { return m_unk0x021; }
@@ -90,10 +92,6 @@ public:
 	// SYNTHETIC: LEGO1 0x10033960
 	// Act1State::`scalar deleting destructor'
 
-	friend class Isle;
-	friend class SkateBoard;
-
-protected:
 	MxS32* m_unk0x008;            // 0x008 FIXME: count for m_unk0x008
 	MxS16 m_unk0x00c;             // 0x00c
 	undefined2 m_unk0x00e;        // 0x00e

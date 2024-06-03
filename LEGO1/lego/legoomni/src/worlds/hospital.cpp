@@ -100,7 +100,7 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	InputManager()->Register(this);
-	FUN_1003ef00(FALSE);
+	EnableAnimations(FALSE);
 
 	return result;
 }
