@@ -122,6 +122,7 @@ void JukeBox::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x1005da70
+// FUNCTION: BETA10 0x1005da70
 MxBool JukeBox::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxStillPresenter* presenter;
