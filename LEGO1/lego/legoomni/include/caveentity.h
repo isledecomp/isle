@@ -1,7 +1,7 @@
 #ifndef CAVEENTITY_H
 #define CAVEENTITY_H
 
-#include "racestandsentity.h"
+#include "buildings.h"
 
 // No overrides, uses vtable from RaceStandsEntity
 // SIZE 0x68

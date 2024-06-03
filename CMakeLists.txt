@@ -284,14 +284,12 @@ target_link_libraries(omni PRIVATE dsound winmm Smacker::Smacker)
 
 add_library(lego1 SHARED
   LEGO1/define.cpp
-  LEGO1/lego/legoomni/src/act1/act1state.cpp
-  LEGO1/lego/legoomni/src/act2/legoact2state.cpp
-  LEGO1/lego/legoomni/src/act3/act3shark.cpp
-  LEGO1/lego/legoomni/src/act3/act3state.cpp
   LEGO1/lego/legoomni/src/actors/act2actor.cpp
   LEGO1/lego/legoomni/src/actors/act3actor.cpp
+  LEGO1/lego/legoomni/src/actors/act3shark.cpp
   LEGO1/lego/legoomni/src/actors/ambulance.cpp
   LEGO1/lego/legoomni/src/actors/bike.cpp
+  LEGO1/lego/legoomni/src/actors/buildings.cpp
   LEGO1/lego/legoomni/src/actors/bumpbouy.cpp
   LEGO1/lego/legoomni/src/actors/doors.cpp
   LEGO1/lego/legoomni/src/actors/dunebuggy.cpp
@@ -315,11 +313,9 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp
   LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp
   LEGO1/lego/legoomni/src/build/buildingentity.cpp
-  LEGO1/lego/legoomni/src/build/helicopterstate.cpp
   LEGO1/lego/legoomni/src/build/legobuildingmanager.cpp
   LEGO1/lego/legoomni/src/build/legocarbuild.cpp
-  LEGO1/lego/legoomni/src/build/legovehiclebuildstate.cpp
-  LEGO1/lego/legoomni/src/common/animstate.cpp
+  LEGO1/lego/legoomni/src/build/legocarbuildpresenter.cpp
   LEGO1/lego/legoomni/src/common/legoactioncontrolpresenter.cpp
   LEGO1/lego/legoomni/src/common/legoactors.cpp
   LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp
@@ -356,18 +352,7 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/entity/legopovcontroller.cpp
   LEGO1/lego/legoomni/src/entity/legoworld.cpp
   LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstationentity.cpp
-  LEGO1/lego/legoomni/src/gasstation/gasstationstate.cpp
-  LEGO1/lego/legoomni/src/hospital/ambulancemissionstate.cpp
-  LEGO1/lego/legoomni/src/hospital/hospitalentity.cpp
-  LEGO1/lego/legoomni/src/hospital/hospitalstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterentity.cpp
-  LEGO1/lego/legoomni/src/infocenter/infocenterstate.cpp
-  LEGO1/lego/legoomni/src/infocenter/scorestate.cpp
   LEGO1/lego/legoomni/src/input/legoinputmanager.cpp
-  LEGO1/lego/legoomni/src/isle/beachhouseentity.cpp
-  LEGO1/lego/legoomni/src/isle/jukeboxstate.cpp
-  LEGO1/lego/legoomni/src/isle/radiostate.cpp
   LEGO1/lego/legoomni/src/main/legomain.cpp
   LEGO1/lego/legoomni/src/main/scripts.cpp
   LEGO1/lego/legoomni/src/notify/legoeventnotificationparam.cpp
@@ -378,22 +363,14 @@ add_library(lego1 SHARED
   LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp
   LEGO1/lego/legoomni/src/paths/legopathpresenter.cpp
   LEGO1/lego/legoomni/src/paths/legopathstruct.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzamissionstate.cpp
-  LEGO1/lego/legoomni/src/pizzeria/pizzeriastate.cpp
-  LEGO1/lego/legoomni/src/police/policeentity.cpp
-  LEGO1/lego/legoomni/src/police/policestate.cpp
   LEGO1/lego/legoomni/src/race/carrace.cpp
   LEGO1/lego/legoomni/src/race/jetskirace.cpp
   LEGO1/lego/legoomni/src/race/legorace.cpp
   LEGO1/lego/legoomni/src/race/legoraceactor.cpp
   LEGO1/lego/legoomni/src/race/legoracecar.cpp
   LEGO1/lego/legoomni/src/race/legoracemap.cpp
-  LEGO1/lego/legoomni/src/race/racestandsentity.cpp
   LEGO1/lego/legoomni/src/race/raceskel.cpp
-  LEGO1/lego/legoomni/src/race/racestate.cpp
-  LEGO1/lego/legoomni/src/towtrack/towtrackmissionstate.cpp
   LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp
-  LEGO1/lego/legoomni/src/video/legocarbuildanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legoflctexturepresenter.cpp
   LEGO1/lego/legoomni/src/video/legohideanimpresenter.cpp
   LEGO1/lego/legoomni/src/video/legolocomotionanimpresenter.cpp

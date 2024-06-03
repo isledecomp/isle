@@ -1,6 +1,6 @@
 #include "registrationbook.h"
 
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"

@@ -1,6 +1,6 @@
 #include "infocenterdoor.h"
 
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "infodoor_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"

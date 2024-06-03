@@ -1,9 +1,7 @@
 #include "helicopter.h"
 
-#include "act1state.h"
 #include "act3.h"
 #include "act3_actions.h"
-#include "helicopterstate.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "jukebox.h"
@@ -19,6 +17,7 @@
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
+DECOMP_SIZE_ASSERT(HelicopterState, 0x0c)
 DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)
 DECOMP_SIZE_ASSERT(Mx4DPointFloat, 0x18)
 DECOMP_SIZE_ASSERT(MxMatrix, 0x48)

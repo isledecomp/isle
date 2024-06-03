@@ -1,6 +1,5 @@
 #include "skateboard.h"
 
-#include "act1state.h"
 #include "decomp.h"
 #include "isle.h"
 #include "isle_actions.h"

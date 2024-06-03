@@ -2,7 +2,6 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "anim/legoanim.h"
-#include "animstate.h"
 #include "define.h"
 #include "islepathactor.h"
 #include "legoanimmmpresenter.h"
@@ -37,6 +36,9 @@ DECOMP_SIZE_ASSERT(LegoAnimationManager::Character, 0x18)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Vehicle, 0x08)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Extra, 0x18)
 DECOMP_SIZE_ASSERT(LegoTranInfo, 0x78)
+DECOMP_SIZE_ASSERT(AnimState, 0x1c)
+DECOMP_SIZE_ASSERT(AnimInfo, 0x30)
+DECOMP_SIZE_ASSERT(ModelInfo, 0x30)
 
 // GLOBAL: LEGO1 0x100d8b28
 MxU8 g_unk0x100d8b28[] = {0, 1, 2, 4, 8, 16};
@@ -2819,4 +2821,45 @@ void LegoAnimationManager::FUN_10064b50(MxLong p_time)
 			viewROI->GetWorldVelocity()
 		);
 	}
+}
+
+// FUNCTION: LEGO1 0x10064ff0
+AnimState::AnimState()
+{
+	m_unk0x0c = 0;
+	m_unk0x10 = NULL;
+	m_unk0x14 = 0;
+	m_unk0x18 = NULL;
+}
+
+// STUB: LEGO1 0x10065150
+AnimState::~AnimState()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100651d0
+void AnimState::FUN_100651d0(MxU32, AnimInfo*, MxU32&)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10065240
+void AnimState::FUN_10065240(MxU32, AnimInfo*, MxU32)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x100652d0
+MxResult AnimState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
+}
+
+// STUB: LEGO1 0x100654f0
+MxBool AnimState::SetFlag()
+{
+	// TODO
+	return FALSE;
 }
