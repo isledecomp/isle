@@ -197,29 +197,29 @@ private:
 	void SetColors();
 	void SetROIHandlerFunction();
 
-	char* m_savePath;         // 0x00
-	MxS16 m_stateCount;       // 0x04
-	LegoState** m_stateArray; // 0x08
-	MxU8 m_actorId;           // 0x0c
-
-	// TODO: Most likely getters/setters are not used according to BETA for the following members:
-
-public:
+	char* m_savePath;                           // 0x00
+	MxS16 m_stateCount;                         // 0x04
+	LegoState** m_stateArray;                   // 0x08
+	MxU8 m_actorId;                             // 0x0c
 	Act m_currentAct;                           // 0x10
 	Act m_loadedAct;                            // 0x14
 	LegoBackgroundColor* m_backgroundColor;     // 0x18
 	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
 	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
 	MxU16 m_unk0x24;                            // 0x24
-	MxS16 m_playerCount;                        // 0x26
-	Username m_players[9];                      // 0x28
-	History m_history;                          // 0xa6
-	undefined2 m_unk0x41a;                      // 0x41a
-	JukeboxScript::Script m_jukeboxMusic;       // 0x41c
-	MxBool m_isDirty;                           // 0x420
-	Area m_currentArea;                         // 0x424
-	Area m_previousArea;                        // 0x428
-	Area m_unk0x42c;                            // 0x42c
+
+	// TODO: Most likely getters/setters are not used according to BETA for the following members:
+
+public:
+	MxS16 m_playerCount;                  // 0x26
+	Username m_players[9];                // 0x28
+	History m_history;                    // 0xa6
+	undefined2 m_unk0x41a;                // 0x41a
+	JukeboxScript::Script m_jukeboxMusic; // 0x41c
+	MxBool m_isDirty;                     // 0x420
+	Area m_currentArea;                   // 0x424
+	Area m_previousArea;                  // 0x428
+	Area m_unk0x42c;                      // 0x42c
 };
 
 MxBool ROIHandlerFunction(const char* p_input, char* p_output, MxU32 p_copyLen);
