@@ -89,7 +89,7 @@ MxLong JukeBox::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1005d9f0
-// FUNCTION: BETA10 0x10037f6d
+// FUNCTION: BETA10 0x10037e39
 void JukeBox::ReadyWorld()
 {
 	MxStillPresenter* presenter = NULL;
@@ -122,7 +122,7 @@ void JukeBox::ReadyWorld()
 }
 
 // FUNCTION: LEGO1 0x1005da70
-// FUNCTION: BETA10 0x1005da70
+// FUNCTION: BETA10 0x10037f6d
 MxBool JukeBox::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxStillPresenter* presenter;
