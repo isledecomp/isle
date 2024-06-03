@@ -430,7 +430,7 @@ void IslePathActor::RegisterSpawnLocations()
 		JukeboxScript::c_noneJukebox
 	);
 	g_spawnLocations[27] = SpawnLocation(
-		LegoGameState::e_unk54,
+		LegoGameState::e_jukeboxExterior,
 		g_isleScript,
 		0,
 		"int36",

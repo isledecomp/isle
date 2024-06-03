@@ -113,7 +113,7 @@ MxResult Isle::Create(MxDSAction& p_dsAction)
 		}
 		m_act1state = act1state;
 
-		FUN_1003ef00(TRUE);
+		EnableAnimations(TRUE);
 		GameState()->SetDirty(TRUE);
 	}
 
@@ -270,7 +270,7 @@ void Isle::ReadyWorld()
 		m_act1state->SetUnknown21(0);
 	}
 	else if (GameState()->GetLoadedAct() != LegoGameState::e_act1) {
-		FUN_1003ef00(TRUE);
+		EnableAnimations(TRUE);
 		FUN_10032620();
 		m_act1state->FUN_10034d00();
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
@@ -548,7 +548,7 @@ void Isle::Enable(MxBool p_enable)
 		GameState()->StopArea(LegoGameState::e_previousArea);
 		GameState()->m_previousArea = GameState()->m_currentArea;
 
-		FUN_1003ef00(TRUE);
+		EnableAnimations(TRUE);
 
 		if (m_act1state->m_unk0x018 == 0) {
 			MxS32 locations[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -748,7 +748,7 @@ void Isle::Enable(MxBool p_enable)
 			}
 
 			m_act1state->m_unk0x018 = 0;
-			FUN_1003ef00(FALSE);
+			EnableAnimations(FALSE);
 			AnimationManager()->FUN_10064670(NULL);
 			break;
 		}
@@ -781,7 +781,7 @@ void Isle::Enable(MxBool p_enable)
 			}
 
 			m_act1state->m_unk0x018 = 0;
-			FUN_1003ef00(TRUE);
+			EnableAnimations(TRUE);
 			break;
 		}
 		case 7:
@@ -806,12 +806,12 @@ void Isle::Enable(MxBool p_enable)
 			m_act1state->m_unk0x018 = 0;
 			((IslePathActor*) CurrentActor())
 				->SpawnPlayer(
-					LegoGameState::e_unk54,
+					LegoGameState::e_jukeboxExterior,
 					TRUE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
 			GameState()->m_currentArea = LegoGameState::e_unk66;
-			FUN_1003ef00(TRUE);
+			EnableAnimations(TRUE);
 			m_jukebox->StartAction();
 			break;
 		}

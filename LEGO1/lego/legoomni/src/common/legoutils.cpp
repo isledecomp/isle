@@ -437,7 +437,7 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 }
 
 // FUNCTION: LEGO1 0x1003ef00
-void FUN_1003ef00(MxBool p_enable)
+void EnableAnimations(MxBool p_enable)
 {
 	if (p_enable) {
 		AnimationManager()->Resume();

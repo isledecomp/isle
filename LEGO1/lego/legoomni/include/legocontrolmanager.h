@@ -18,6 +18,8 @@ public:
 		m_clickedAtom = NULL;
 	}
 
+	// TODO: Most likely getters/setters are not used according to BETA.
+
 	inline MxS32 GetClickedObjectId() const { return m_clickedObjectId; }
 	inline const char* GetClickedAtom() const { return m_clickedAtom; }
 	inline MxS16 GetUnknown0x28() const { return m_unk0x28; }
@@ -26,7 +28,6 @@ public:
 	inline void SetClickedAtom(const char* p_clickedAtom) { m_clickedAtom = p_clickedAtom; }
 	inline void SetUnknown0x28(MxS16 p_unk0x28) { m_unk0x28 = p_unk0x28; }
 
-private:
 	MxS32 m_clickedObjectId;   // 0x20
 	const char* m_clickedAtom; // 0x24
 	MxS16 m_unk0x28;           // 0x28
