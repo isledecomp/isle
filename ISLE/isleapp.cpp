@@ -164,16 +164,10 @@ void IsleApp::Close()
 		TransitionManager()->SetWaitIndicator(NULL);
 		Lego()->StopTimer();
 
-		MxLong lVar8;
-		do {
-			lVar8 = Streamer()->Close(NULL);
-		} while (lVar8 == 0);
+		while (Streamer()->Close(NULL) == SUCCESS) {
+		}
 
-		while (Lego()) {
-			if (Lego()->DoesEntityExist(ds)) {
-				break;
-			}
-
+		while (Lego() && !Lego()->DoesEntityExist(ds)) {
 			Timer()->GetRealTime();
 			TickleManager()->Tickle();
 		}
@@ -404,9 +398,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_CLOSE:
 		if (!g_closed && g_isle) {
-			if (g_isle) {
-				delete g_isle;
-			}
+			delete g_isle;
 			g_isle = NULL;
 			g_closed = TRUE;
 			return 0;
@@ -646,8 +638,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	}
 
 	GameState()->SetSavePath(m_savePath);
-	GameState()->SerializePlayersInfo(1);
-	GameState()->SerializeScoreHistory(1);
+	GameState()->SerializePlayersInfo(LegoStorage::c_read);
+	GameState()->SerializeScoreHistory(LegoStorage::c_read);
 
 	int iVar10;
 	switch (m_islandQuality) {
