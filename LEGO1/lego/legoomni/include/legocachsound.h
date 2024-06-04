@@ -44,6 +44,7 @@ public:
 	void FUN_10006b80();
 	void FUN_10006be0();
 	void SetDistance(MxS32 p_min, MxS32 p_max);
+	void Mute(MxBool p_mute);
 
 	// SYNTHETIC: LEGO1 0x10006610
 	// LegoCacheSound::`scalar deleting destructor'
@@ -66,7 +67,7 @@ private:
 	MxS32 m_volume;                 // 0x6c
 	MxBool m_unk0x70;               // 0x70
 	MxString m_unk0x74;             // 0x74
-	undefined m_unk0x84;            // 0x84
+	MxBool m_muted;                 // 0x84
 };
 
 #endif // LEGOCACHSOUND_H
