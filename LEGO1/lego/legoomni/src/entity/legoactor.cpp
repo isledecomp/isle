@@ -107,7 +107,7 @@ void LegoActor::ParseAction(char* p_extra)
 	}
 
 	if (KeyValueStringParse(value, g_strMUTE, p_extra)) {
-		FUN_1002d6e0(TRUE);
+		Mute(TRUE);
 	}
 
 	if (KeyValueStringParse(value, g_strVISIBILITY, p_extra)) {
@@ -139,8 +139,10 @@ void LegoActor::SetROI(LegoROI* p_roi, MxBool p_bool1, MxBool p_bool2)
 	LegoEntity::SetROI(p_roi, p_bool1, p_bool2);
 }
 
-// STUB: LEGO1 0x1002d6e0
-void LegoActor::FUN_1002d6e0(MxBool)
+// FUNCTION: LEGO1 0x1002d6e0
+void LegoActor::Mute(MxBool p_muted)
 {
-	// TODO
+	if (m_sound != NULL) {
+		m_sound->Mute(p_muted);
+	}
 }

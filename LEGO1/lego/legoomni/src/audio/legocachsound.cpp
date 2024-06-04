@@ -29,7 +29,7 @@ void LegoCacheSound::Init()
 	m_unk0x70 = FALSE;
 	m_looping = TRUE;
 	m_volume = 79;
-	m_unk0x84 = 0;
+	m_muted = FALSE;
 }
 
 // FUNCTION: LEGO1 0x10006710
@@ -226,7 +226,7 @@ void LegoCacheSound::FUN_10006be0()
 		}
 	}
 
-	if (m_unk0x74.GetLength() != 0 && !m_unk0x84) {
+	if (m_unk0x74.GetLength() != 0 && !m_muted) {
 		if (!m_sound.UpdatePosition(m_dsBuffer)) {
 			if (m_unk0x6a) {
 				return;
@@ -251,6 +251,22 @@ void LegoCacheSound::SetDistance(MxS32 p_min, MxS32 p_max)
 // FUNCTION: LEGO1 0x10006cd0
 void LegoCacheSound::FUN_10006cd0(undefined4, undefined4)
 {
+}
+
+// FUNCTION: LEGO1 0x10006d40
+// FUNCTION: BETA10 0x10066ec8
+void LegoCacheSound::Mute(MxBool p_muted)
+{
+	if (m_muted != p_muted) {
+		m_muted = p_muted;
+
+		if (m_muted) {
+			m_dsBuffer->Stop();
+		}
+		else {
+			m_dsBuffer->Play(0, 0, m_looping);
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10006d80

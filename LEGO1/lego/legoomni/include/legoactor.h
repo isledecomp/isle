@@ -53,7 +53,7 @@ public:
 	static const char* GetActorName(MxU8 p_id);
 
 protected:
-	void FUN_1002d6e0(MxBool);
+	void Mute(MxBool p_muted);
 
 	MxFloat m_frequencyFactor; // 0x68
 	LegoCacheSound* m_sound;   // 0x6c
