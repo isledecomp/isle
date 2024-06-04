@@ -321,9 +321,6 @@
 // GLOBAL: ISLE 0x410d98
 // ___small_block_heap
 
-// GLOBAL: ISLE 0x410d9c
-// ___small_block_heap
-
 // GLOBAL: ISLE 0x411850
 // __cflush
 
