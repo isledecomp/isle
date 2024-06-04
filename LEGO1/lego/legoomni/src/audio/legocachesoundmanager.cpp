@@ -60,18 +60,15 @@ MxResult LegoCacheSoundManager::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x1003d170
+// FUNCTION: LEGO1 0x1003d170
 LegoCacheSound* LegoCacheSoundManager::FindSoundByKey(const char* p_key)
 {
-	// TODO
-	char* x = new char[strlen(p_key) + 1];
-	strcpy(x, p_key);
+	char* key = new char[strlen(p_key) + 1];
+	strcpy(key, p_key);
 
-	Set100d6b4c::iterator setIter;
-	for (setIter = m_set.begin(); setIter != m_set.end(); setIter++) {
-		if (!strcmpi((*setIter).GetName(), x)) {
-			return (*setIter).GetSound();
-		}
+	Set100d6b4c::iterator it = m_set.find(LegoCacheSoundEntry(NULL, key));
+	if (it != m_set.end()) {
+		return (*it).GetSound();
 	}
 
 	return NULL;
@@ -104,12 +101,14 @@ LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 }
 
 // FUNCTION: LEGO1 0x1003dae0
+// FUNCTION: BETA10 0x10065502
 LegoCacheSound* LegoCacheSoundManager::Play(const char* p_key, const char* p_name, MxBool p_looping)
 {
 	return Play(FindSoundByKey(p_key), p_name, p_looping);
 }
 
 // FUNCTION: LEGO1 0x1003db10
+// FUNCTION: BETA10 0x10065537
 LegoCacheSound* LegoCacheSoundManager::Play(LegoCacheSound* p_sound, const char* p_name, MxBool p_looping)
 {
 	if (!p_sound) {
