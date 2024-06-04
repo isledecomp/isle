@@ -67,7 +67,6 @@ LegoCacheSound* LegoCacheSoundManager::FindSoundByKey(const char* p_key)
 	strcpy(key, p_key);
 
 	Set100d6b4c::iterator it = m_set.find(LegoCacheSoundEntry(NULL, key));
-
 	if (it != m_set.end()) {
 		return (*it).GetSound();
 	}
