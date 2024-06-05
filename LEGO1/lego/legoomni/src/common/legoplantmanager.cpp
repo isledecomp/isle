@@ -49,8 +49,36 @@ MxResult LegoPlantManager::Read(LegoStorage* p_storage)
 	return SUCCESS;
 }
 
+// STUB: LEGO1 0x10026920
+MxBool LegoPlantManager::SwitchColor(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x100269e0
-MxBool LegoPlantManager::FUN_100269e0(LegoEntity* p_entity)
+MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10026ad0
+MxBool LegoPlantManager::SwitchSound(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10026b00
+MxBool LegoPlantManager::SwitchMove(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
+// STUB: LEGO1 0x10026b40
+MxBool LegoPlantManager::SwitchMood(LegoEntity* p_entity)
 {
 	// TODO
 	return FALSE;

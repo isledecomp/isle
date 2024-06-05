@@ -325,15 +325,17 @@ void LegoEntity::SwitchVariant()
 {
 	switch (m_type) {
 	case e_actor:
-		CharacterManager()->SwitchHat(m_roi);
+		CharacterManager()->SwitchVariant(m_roi);
 		break;
 	case e_unk1:
 		break;
 	case e_plant:
-		PlantManager()->FUN_100269e0(this);
+		PlantManager()->SwitchVariant(this);
 		break;
 	case e_building:
 		BuildingManager()->SwitchVariant(this);
+		break;
+	case e_autoROI:
 		break;
 	}
 
@@ -341,32 +343,100 @@ void LegoEntity::SwitchVariant()
 	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011360
+// FUNCTION: LEGO1 0x10011360
 // FUNCTION: BETA10 0x1007f411
-void LegoEntity::VTable0x40()
+void LegoEntity::SwitchSound()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchSound(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchSound(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchSound(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x100113c0
+// FUNCTION: LEGO1 0x100113c0
 // FUNCTION: BETA10 0x1007f4c8
-void LegoEntity::VTable0x44()
+void LegoEntity::SwitchMove()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchMove(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchMove(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchMove(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011420
+// FUNCTION: LEGO1 0x10011420
 // FUNCTION: BETA10 0x1007f57f
-void LegoEntity::VTable0x48(LegoROI* p_roi)
+void LegoEntity::SwitchColor(LegoROI* p_roi)
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchColor(m_roi, p_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchColor(this);
+		break;
+	case e_building:
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011470
+// FUNCTION: LEGO1 0x10011470
 // FUNCTION: BETA10 0x1007f62c
-void LegoEntity::VTable0x4c()
+void LegoEntity::SwitchMood()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchMood(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchMood(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchMood(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(TRUE);
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
 // FUNCTION: LEGO1 0x100114e0
@@ -398,16 +468,16 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			}
 			break;
 		case LegoActor::c_mama:
-			VTable0x40();
+			SwitchSound();
 			break;
 		case LegoActor::c_papa:
-			VTable0x44();
+			SwitchMove();
 			break;
 		case LegoActor::c_nick:
-			VTable0x48(param.GetROI());
+			SwitchColor(param.GetROI());
 			break;
 		case LegoActor::c_laura:
-			VTable0x4c();
+			SwitchMood();
 			break;
 		case LegoActor::c_brickster:
 			switch (m_type) {

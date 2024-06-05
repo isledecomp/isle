@@ -69,7 +69,11 @@ public:
 	LegoExtraActor* GetExtraActor(const char* p_name);
 	LegoActorInfo* GetActorInfo(const char* p_name);
 	LegoActorInfo* GetActorInfo(LegoROI* p_roi);
-	MxBool SwitchHat(LegoROI* p_roi);
+	MxBool SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI);
+	MxBool SwitchVariant(LegoROI* p_roi);
+	MxBool SwitchSound(LegoROI* p_roi);
+	MxBool SwitchMove(LegoROI* p_roi);
+	MxBool SwitchMood(LegoROI* p_roi);
 	MxU32 FUN_10085120(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	MxU8 GetMood(LegoROI* p_roi);
@@ -85,6 +89,8 @@ private:
 	MxResult FUN_10085870(LegoROI* p_roi);
 
 	static char* g_customizeAnimFile;
+	static MxU32 g_maxMove;
+	static MxU32 g_maxSound;
 
 	LegoCharacterMap* m_characters;                 // 0x00
 	CustomizeAnimFileVariable* m_customizeAnimFile; // 0x04

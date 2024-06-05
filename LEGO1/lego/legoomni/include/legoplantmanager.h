@@ -29,7 +29,11 @@ public:
 	void FUN_100263a0(undefined4 p_und);
 	void Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
-	MxBool FUN_100269e0(LegoEntity* p_entity);
+	MxBool SwitchColor(LegoEntity* p_entity);
+	MxBool SwitchVariant(LegoEntity* p_entity);
+	MxBool SwitchSound(LegoEntity* p_entity);
+	MxBool SwitchMove(LegoEntity* p_entity);
+	MxBool SwitchMood(LegoEntity* p_entity);
 	MxU32 FUN_10026b70(LegoEntity* p_entity);
 	MxU32 FUN_10026ba0(LegoEntity* p_entity, MxBool);
 	void FUN_10026c50(LegoEntity* p_entity);
