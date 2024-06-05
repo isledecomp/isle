@@ -67,7 +67,7 @@ public:
 	virtual void ClickSound(MxBool p_und);   // vtable+0x34
 	virtual void ClickAnimation();           // vtable+0x38
 	virtual void SwitchVariant();            // vtable+0x3c
-	virtual void VTable0x40();               // vtable+0x40
+	virtual void SwitchSound();              // vtable+0x40
 	virtual void VTable0x44();               // vtable+0x44
 	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48
 	virtual void VTable0x4c();               // vtable+0x4c

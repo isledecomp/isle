@@ -73,7 +73,7 @@ public:
 	MxResult Read(LegoStorage* p_storage);
 	LegoBuildingInfo* GetInfo(LegoEntity* p_entity);
 	MxBool SwitchVariant(LegoEntity* p_entity);
-	MxBool FUN_1002fe40(LegoEntity* p_entity);
+	MxBool SwitchSound(LegoEntity* p_entity);
 	MxBool FUN_1002fe80(LegoEntity* p_entity);
 	MxBool FUN_1002fed0(LegoEntity* p_entity);
 	MxU32 GetBuildingEntityId(LegoEntity* p_entity);

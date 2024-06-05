@@ -471,7 +471,7 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002fe40
 // FUNCTION: BETA10 0x100641d3
-MxBool LegoBuildingManager::FUN_1002fe40(LegoEntity* p_entity)
+MxBool LegoBuildingManager::SwitchSound(LegoEntity* p_entity)
 {
 	MxBool result = FALSE;
 	LegoBuildingInfo* info = GetInfo(p_entity);

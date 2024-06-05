@@ -325,7 +325,7 @@ void LegoEntity::SwitchVariant()
 {
 	switch (m_type) {
 	case e_actor:
-		CharacterManager()->SwitchHat(m_roi);
+		CharacterManager()->SwitchVariant(m_roi);
 		break;
 	case e_unk1:
 		break;
@@ -341,11 +341,26 @@ void LegoEntity::SwitchVariant()
 	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011360
+// FUNCTION: LEGO1 0x10011360
 // FUNCTION: BETA10 0x1007f411
-void LegoEntity::VTable0x40()
+void LegoEntity::SwitchSound()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchSound(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchSound(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchSound(this);
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
 // STUB: LEGO1 0x100113c0
@@ -398,7 +413,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			}
 			break;
 		case LegoActor::c_mama:
-			VTable0x40();
+			SwitchSound();
 			break;
 		case LegoActor::c_papa:
 			VTable0x44();

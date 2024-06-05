@@ -69,7 +69,8 @@ public:
 	LegoExtraActor* GetExtraActor(const char* p_name);
 	LegoActorInfo* GetActorInfo(const char* p_name);
 	LegoActorInfo* GetActorInfo(LegoROI* p_roi);
-	MxBool SwitchHat(LegoROI* p_roi);
+	MxBool SwitchVariant(LegoROI* p_roi);
+	MxBool SwitchSound(LegoROI* p_roi);
 	MxU32 FUN_10085120(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	MxU8 GetMood(LegoROI* p_roi);

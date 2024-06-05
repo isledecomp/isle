@@ -21,6 +21,9 @@
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 
+// GLOBAL: LEGO1 0x100fc4d4
+MxU32 g_maxSound = 9;
+
 // GLOBAL: LEGO1 0x100fc4e0
 MxU32 g_unk0x100fc4e0 = 10;
 
@@ -113,7 +116,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
 		LegoActorInfo* info = &g_actorInfo[i];
 
-		if (p_storage->Write(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
+		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
@@ -168,7 +171,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
 		LegoActorInfo* info = &g_actorInfo[i];
 
-		if (p_storage->Read(&info->m_unk0x0c, sizeof(info->m_unk0x0c)) != SUCCESS) {
+		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
@@ -450,7 +453,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 	if (!strcmpi(p_key, "pep")) {
 		LegoActorInfo* pepper = GetActorInfo("pepper");
 
-		info->m_unk0x0c = pepper->m_unk0x0c;
+		info->m_sound = pepper->m_sound;
 		info->m_unk0x10 = pepper->m_unk0x10;
 		info->m_mood = pepper->m_mood;
 
@@ -703,7 +706,7 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10084ec0
-MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
+MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi->GetName());
 
@@ -756,6 +759,26 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x10085090
+// FUNCTION: BETA10 0x100766f6
+MxBool LegoCharacterManager::SwitchSound(LegoROI* p_roi)
+{
+	MxBool result = FALSE;
+	LegoActorInfo* info = GetActorInfo(p_roi);
+
+	if (info != NULL) {
+		info->m_sound++;
+
+		if (info->m_sound >= g_maxSound) {
+			info->m_sound = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
+}
+
 // FUNCTION: LEGO1 0x10085120
 // FUNCTION: BETA10 0x1007680c
 MxU32 LegoCharacterManager::FUN_10085120(LegoROI* p_roi)
@@ -779,7 +802,7 @@ MxU32 LegoCharacterManager::FUN_10085140(LegoROI* p_roi, MxBool p_und)
 	}
 
 	if (info != NULL) {
-		return info->m_unk0x0c + g_unk0x100fc4d8;
+		return info->m_sound + g_unk0x100fc4d8;
 	}
 
 	return 0;
