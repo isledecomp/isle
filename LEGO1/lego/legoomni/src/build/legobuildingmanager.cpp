@@ -336,7 +336,7 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_cycle3, sizeof(info->m_cycle3)) != SUCCESS) {
+		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_initialUnk0x11, sizeof(info->m_initialUnk0x11)) != SUCCESS) {
@@ -369,7 +369,7 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_cycle3, sizeof(info->m_cycle3)) != SUCCESS) {
+		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_unk0x11, sizeof(info->m_unk0x11)) != SUCCESS) {
@@ -511,16 +511,16 @@ MxBool LegoBuildingManager::SwitchMove(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002fed0
 // FUNCTION: BETA10 0x100642c2
-MxBool LegoBuildingManager::FUN_1002fed0(LegoEntity* p_entity)
+MxBool LegoBuildingManager::SwitchMood(LegoEntity* p_entity)
 {
 	MxBool result = FALSE;
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit4) {
-		info->m_cycle3++;
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasMoods) {
+		info->m_mood++;
 
-		if (info->m_cycle3 > 3) {
-			info->m_cycle3 = 0;
+		if (info->m_mood > 3) {
+			info->m_mood = 0;
 		}
 
 		result = TRUE;
@@ -553,7 +553,7 @@ MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
 	}
 
 	if (p_state) {
-		return info->m_cycle3 + g_cycleLengthOffset3;
+		return info->m_mood + g_cycleLengthOffset3;
 	}
 
 	if (info != NULL) {

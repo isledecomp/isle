@@ -708,6 +708,14 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 	return NULL;
 }
 
+// STUB: LEGO1 0x10084d50
+// FUNCTION: BETA10 0x10076223
+MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
+{
+	// TODO
+	return FALSE;
+}
+
 // FUNCTION: LEGO1 0x10084ec0
 MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 {
@@ -794,6 +802,26 @@ MxBool LegoCharacterManager::SwitchMove(LegoROI* p_roi)
 
 		if (info->m_move >= g_maxMove) {
 			info->m_move = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
+}
+
+// FUNCTION: LEGO1 0x100850f0
+// FUNCTION: BETA10 0x100767b2
+MxBool LegoCharacterManager::SwitchMood(LegoROI* p_roi)
+{
+	MxBool result = FALSE;
+	LegoActorInfo* info = GetActorInfo(p_roi);
+
+	if (info != NULL) {
+		info->m_mood++;
+
+		if (info->m_mood > 3) {
+			info->m_mood = 0;
 		}
 
 		result = TRUE;
