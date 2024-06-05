@@ -31,7 +31,7 @@ MxBool g_trackLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
-	m_currentActorId = 0;
+	m_currentActorId = LegoActor::c_none;
 	m_state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
@@ -134,7 +134,7 @@ void GasStation::ReadyWorld()
 	m_currentActorId = CurrentActor()->GetActorId();
 
 	switch (m_currentActorId) {
-	case 1:
+	case LegoActor::c_pepper:
 		switch (m_state->m_unk0x18) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -165,7 +165,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 2:
+	case LegoActor::c_mama:
 		switch (m_state->m_unk0x1a) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -191,7 +191,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 3:
+	case LegoActor::c_papa:
 		switch (m_state->m_unk0x1c) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -217,7 +217,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 4:
+	case LegoActor::c_nick:
 		switch (m_state->m_unk0x1e) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -243,7 +243,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 5:
+	case LegoActor::c_laura:
 		switch (m_state->m_unk0x20) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;

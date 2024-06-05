@@ -544,7 +544,7 @@ void Isle::Enable(MxBool p_enable)
 		VideoManager()->ResetPalette(FALSE);
 		m_act1state->FUN_10034d00();
 
-		if (CurrentActor() != NULL && CurrentActor()->GetActorId() != 0) {
+		if (CurrentActor() != NULL && CurrentActor()->GetActorId() != LegoActor::c_none) {
 			// TODO: Match, most likely an inline function
 			MxS32 targetEntityId = (CurrentActor()->GetActorId() == 1) + 250;
 

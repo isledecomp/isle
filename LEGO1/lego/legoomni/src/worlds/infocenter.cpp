@@ -1047,7 +1047,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerEvent& p_param)
 					InputManager()->SetUnknown336(TRUE);
 					break;
 				case LegoGameState::e_unk4:
-					if (state->GetActorId()) {
+					if (state->GetActorId() != LegoActor::c_none) {
 						if (m_infocenterState->HasRegistered()) {
 							m_infocenterState->SetUnknown0x74(5);
 							m_destLocation = state->GetPreviousArea();
@@ -1336,23 +1336,23 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 		MxS32 x, y;
 
 		switch (GameState()->GetActorId()) {
-		case 1:
+		case LegoActor::c_pepper:
 			x = 302;
 			y = 81;
 			break;
-		case 2:
+		case LegoActor::c_mama:
 			x = 204;
 			y = 81;
 			break;
-		case 3:
+		case LegoActor::c_papa:
 			x = 253;
 			y = 81;
 			break;
-		case 4:
+		case LegoActor::c_nick:
 			x = 353;
 			y = 81;
 			break;
-		case 5:
+		case LegoActor::c_laura:
 			x = 399;
 			y = 81;
 			break;

@@ -10,6 +10,16 @@ class LegoCacheSound;
 // SIZE 0x78
 class LegoActor : public LegoEntity {
 public:
+	enum {
+		c_none = 0,
+		c_pepper,
+		c_mama,
+		c_papa,
+		c_nick,
+		c_laura,
+		c_brickster
+	};
+
 	LegoActor();
 	~LegoActor() override;
 

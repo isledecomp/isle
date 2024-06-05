@@ -1496,7 +1496,7 @@ MxResult LegoAnimationManager::Tickle()
 		MxU8 unk0x0c = 0;
 		MxU8 actorId = GameState()->GetActorId();
 
-		if (actorId <= 5) {
+		if (actorId <= LegoActor::c_laura) {
 			unk0x0c = g_unk0x100d8b28[actorId];
 		}
 
@@ -1762,7 +1762,7 @@ MxBool LegoAnimationManager::FUN_10062710(AnimInfo& p_info)
 	MxU8 und = 0;
 	MxU8 actorId = GameState()->GetActorId();
 
-	if (actorId <= 5) {
+	if (actorId <= LegoActor::c_laura) {
 		und = g_unk0x100d8b28[actorId];
 	}
 
@@ -2712,11 +2712,11 @@ MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
 	}
 
 	if (success) {
-		if (GameState()->GetActorId() != 2) {
+		if (GameState()->GetActorId() != LegoActor::c_mama) {
 			FUN_10064380("mama", "USR00_47", 1, 0.43f, 3, 0.84f, rand() % 3 + 13, -1, rand() % 3, -1, 0.7f);
 		}
 
-		if (GameState()->GetActorId() != 3) {
+		if (GameState()->GetActorId() != LegoActor::c_papa) {
 			FUN_10064380("papa", "USR00_193", 3, 0.55f, 1, 0.4f, rand() % 3 + 13, -1, rand() % 3, -1, 0.9f);
 		}
 
