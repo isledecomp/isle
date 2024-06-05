@@ -231,11 +231,11 @@ void PoliceState::FUN_1005ea40()
 	}
 
 	switch (CurrentActor()->GetActorId()) {
-	case 4:
+	case LegoActor::c_nick:
 		policeScript = PoliceScript::c_nps002la_RunAnim;
 		m_policeScript = policeScript;
 		break;
-	case 5:
+	case LegoActor::c_laura:
 		policeScript = PoliceScript::c_nps001ni_RunAnim;
 		m_policeScript = policeScript;
 		break;

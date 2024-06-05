@@ -675,24 +675,24 @@ MxResult LegoPathActor::VTable0x9c()
 void LegoPathActor::VTable0xa4(MxBool& p_und1, MxS32& p_und2)
 {
 	switch (GetActorId()) {
-	case 1:
+	case c_pepper:
 		p_und1 = TRUE;
 		p_und2 = 2;
 		break;
-	case 2:
+	case c_mama:
 		p_und1 = FALSE;
 		p_und2 = 1;
 		break;
-	case 3:
+	case c_papa:
 		p_und1 = TRUE;
 		p_und2 = 1;
 		break;
-	case 4:
-	case 6:
+	case c_nick:
+	case c_brickster:
 		p_und1 = TRUE;
 		p_und2 = rand() % p_und2 + 1;
 		break;
-	case 5:
+	case c_laura:
 		p_und1 = FALSE;
 		p_und2 = 2;
 		break;

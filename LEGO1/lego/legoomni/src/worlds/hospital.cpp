@@ -35,7 +35,7 @@ MxBool g_pizzaLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
 {
-	m_currentActorId = 0;
+	m_currentActorId = LegoActor::c_none;
 	m_unk0x100 = 0;
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
@@ -145,14 +145,14 @@ void Hospital::ReadyWorld()
 	m_pizzaLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "PizzaLed_Bitmap");
 
 	if (CurrentActor() == NULL) {
-		m_currentActorId = 5;
+		m_currentActorId = LegoActor::c_laura;
 	}
 	else {
 		m_currentActorId = CurrentActor()->GetActorId();
 	}
 
 	switch (m_currentActorId) {
-	case 1:
+	case LegoActor::c_pepper:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x0e;
 
 		if (m_hospitalState->m_unk0x0e < 5) {
@@ -160,7 +160,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 2:
+	case LegoActor::c_mama:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x10;
 
 		if (m_hospitalState->m_unk0x10 < 5) {
@@ -168,7 +168,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 3:
+	case LegoActor::c_papa:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x12;
 
 		if (m_hospitalState->m_unk0x12 < 5) {
@@ -176,7 +176,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 4:
+	case LegoActor::c_nick:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x14;
 
 		if (m_hospitalState->m_unk0x14 < 5) {
@@ -184,7 +184,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 5:
+	case LegoActor::c_laura:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x16;
 
 		if (m_hospitalState->m_unk0x16 < 5) {
@@ -269,7 +269,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 11:
 		switch (m_currentActorId) {
-		case 1:
+		case LegoActor::c_pepper:
 			switch (m_hospitalState->m_unk0x0e) {
 			case 0:
 			case 1:
@@ -288,7 +288,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 2:
+		case LegoActor::c_mama:
 			switch (m_hospitalState->m_unk0x10) {
 			case 0:
 			case 1:
@@ -307,7 +307,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 3:
+		case LegoActor::c_papa:
 			switch (m_hospitalState->m_unk0x12) {
 			case 0:
 			case 1:
@@ -326,7 +326,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 4:
+		case LegoActor::c_nick:
 			switch (m_hospitalState->m_unk0x14) {
 			case 0:
 			case 1:
@@ -345,7 +345,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 5:
+		case LegoActor::c_laura:
 			switch (m_hospitalState->m_unk0x16) {
 			case 0:
 			case 1:
@@ -438,7 +438,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 					}
 					else {
 						switch (m_currentActorId) {
-						case 1:
+						case LegoActor::c_pepper:
 							switch (m_hospitalState->m_unk0x0e) {
 							case 0:
 							case 1:
@@ -457,7 +457,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 2:
+						case LegoActor::c_mama:
 							switch (m_hospitalState->m_unk0x10) {
 							case 0:
 							case 1:
@@ -476,7 +476,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 3:
+						case LegoActor::c_papa:
 							switch (m_hospitalState->m_unk0x12) {
 							case 0:
 							case 1:
@@ -495,7 +495,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 4:
+						case LegoActor::c_nick:
 							switch (m_hospitalState->m_unk0x14) {
 							case 0:
 							case 1:
@@ -514,7 +514,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 5:
+						case LegoActor::c_laura:
 							switch (m_hospitalState->m_unk0x16) {
 							case 0:
 							case 1:

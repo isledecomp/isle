@@ -346,25 +346,25 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 	}
 	else {
 		switch (GameState()->GetActorId()) {
-		case 1:
+		case LegoActor::c_pepper:
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act2 &&
 				GameState()->GetCurrentAct() != LegoGameState::e_act3) {
 				VTable0x3c();
 			}
 			break;
-		case 2:
+		case LegoActor::c_mama:
 			VTable0x40();
 			break;
-		case 3:
+		case LegoActor::c_papa:
 			VTable0x44();
 			break;
-		case 4:
+		case LegoActor::c_nick:
 			VTable0x48(param.GetROI());
 			break;
-		case 5:
+		case LegoActor::c_laura:
 			VTable0x4c();
 			break;
-		case 6:
+		case LegoActor::c_brickster:
 			switch (m_type) {
 			case e_actor:
 			case e_unk1:
