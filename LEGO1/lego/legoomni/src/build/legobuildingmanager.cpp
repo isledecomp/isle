@@ -193,7 +193,7 @@ LegoBuildingInfo g_buildingInfoInit[16] = {
 // clang-format on
 
 // GLOBAL: LEGO1 0x100f3738
-MxU32 g_buildingCycle1Length = 6;
+MxU32 g_maxSound = 6;
 
 // GLOBAL: LEGO1 0x100f373c
 MxU32 g_cycleLengthOffset1 = 0x3c;
@@ -330,7 +330,7 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
-		if (p_storage->Write(&info->m_cycle1, sizeof(info->m_cycle1)) != SUCCESS) {
+		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_cycle2, sizeof(info->m_cycle2)) != SUCCESS) {
@@ -363,7 +363,7 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 	for (MxS32 i = 0; i < sizeOfArray(g_buildingInfo); i++) {
 		LegoBuildingInfo* info = &g_buildingInfo[i];
 
-		if (p_storage->Read(&info->m_cycle1, sizeof(info->m_cycle1)) != SUCCESS) {
+		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_cycle2, sizeof(info->m_cycle2)) != SUCCESS) {
@@ -449,7 +449,7 @@ MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit1 && info->m_unk0x11 == -1) {
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasVariants && info->m_unk0x11 == -1) {
 		LegoROI* roi = p_entity->GetROI();
 		if (++m_nextVariant >= sizeOfArray(g_buildingInfoHausName)) {
 			m_nextVariant = 0;
@@ -476,11 +476,11 @@ MxBool LegoBuildingManager::SwitchSound(LegoEntity* p_entity)
 	MxBool result = FALSE;
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit2) {
-		info->m_cycle1++;
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_playSound) {
+		info->m_sound++;
 
-		if (info->m_cycle1 >= g_buildingCycle1Length) {
-			info->m_cycle1 = 0;
+		if (info->m_sound >= g_maxSound) {
+			info->m_sound = 0;
 		}
 
 		result = TRUE;
@@ -548,7 +548,7 @@ MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info == NULL || !(info->m_flags & LegoBuildingInfo::c_bit2)) {
+	if (info == NULL || !(info->m_flags & LegoBuildingInfo::c_playSound)) {
 		return 0;
 	}
 
@@ -557,7 +557,7 @@ MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
 	}
 
 	if (info != NULL) {
-		return info->m_cycle1 + g_cycleLengthOffset1;
+		return info->m_sound + g_cycleLengthOffset1;
 	}
 
 	return 0;

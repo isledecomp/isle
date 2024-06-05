@@ -15,15 +15,15 @@ class LegoPathBoundary;
 // SIZE 0x2c
 struct LegoBuildingInfo {
 	enum {
-		c_bit1 = 0x01,
-		c_bit2 = 0x02,
+		c_hasVariants = 0x01,
+		c_playSound = 0x02,
 		c_bit3 = 0x04,
 		c_bit4 = 0x08
 	};
 
 	LegoEntity* m_entity;         // 0x00
 	const char* m_hausName;       // 0x04
-	MxU32 m_cycle1;               // 0x08
+	MxU32 m_sound;                // 0x08
 	MxU32 m_cycle2;               // 0x0c
 	MxU8 m_cycle3;                // 0x10
 	MxS8 m_unk0x11;               // 0x11
