@@ -93,13 +93,13 @@ ViewManager* GetViewManager()
 // FUNCTION: LEGO1 0x100157e0
 LegoPlantManager* PlantManager()
 {
-	return LegoOmni::GetInstance()->GetLegoPlantManager();
+	return LegoOmni::GetInstance()->GetPlantManager();
 }
 
 // FUNCTION: LEGO1 0x100157f0
 LegoBuildingManager* BuildingManager()
 {
-	return LegoOmni::GetInstance()->GetLegoBuildingManager();
+	return LegoOmni::GetInstance()->GetBuildingManager();
 }
 
 // FUNCTION: LEGO1 0x10015800

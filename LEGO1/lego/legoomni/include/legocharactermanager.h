@@ -70,6 +70,7 @@ public:
 	LegoActorInfo* GetActorInfo(const char* p_name);
 	LegoActorInfo* GetActorInfo(LegoROI* p_roi);
 	MxBool SwitchHat(LegoROI* p_roi);
+	MxU32 FUN_10085120(LegoROI* p_roi);
 	MxU32 FUN_10085140(LegoROI* p_roi, MxBool p_und);
 	MxU8 GetMood(LegoROI* p_roi);
 	LegoROI* CreateAutoROI(const char* p_name, const char* p_lodName, MxBool p_createEntity);

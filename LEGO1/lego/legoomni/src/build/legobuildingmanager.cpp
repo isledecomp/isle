@@ -441,7 +441,7 @@ LegoBuildingInfo* LegoBuildingManager::GetInfo(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002fdb0
 // FUNCTION: BETA10 0x10064101
-MxBool LegoBuildingManager::IncrementVariant(LegoEntity* p_entity)
+MxBool LegoBuildingManager::SwitchVariant(LegoEntity* p_entity)
 {
 	if (g_buildingManagerConfig <= 1) {
 		return TRUE;

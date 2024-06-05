@@ -64,9 +64,9 @@ public:
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
-	virtual void VTable0x34(MxBool p_und);   // vtable+0x34
-	virtual void VTable0x38();               // vtable+0x38
-	virtual void VTable0x3c();               // vtable+0x3c
+	virtual void ClickSound(MxBool p_und);   // vtable+0x34
+	virtual void ClickAnimation();           // vtable+0x38
+	virtual void SwitchVariant();            // vtable+0x3c
 	virtual void VTable0x40();               // vtable+0x40
 	virtual void VTable0x44();               // vtable+0x44
 	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48
