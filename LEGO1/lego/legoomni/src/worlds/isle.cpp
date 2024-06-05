@@ -44,7 +44,7 @@ DECOMP_SIZE_ASSERT(Isle, 0x140)
 // GLOBAL: LEGO1 0x100f1198
 MxU32 g_isleFlags = 0x7f;
 
-// GLOBAL: ISLE 0x100f37f0
+// GLOBAL: LEGO1 0x100f37f0
 MxS32 g_unk0x100f37f0[] = {
 	Act1State::e_unk953,
 	Act1State::e_unk954,
