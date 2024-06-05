@@ -72,12 +72,12 @@ public:
 	MxResult Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	LegoBuildingInfo* GetInfo(LegoEntity* p_entity);
-	MxBool IncrementVariant(LegoEntity* p_entity);
+	MxBool SwitchVariant(LegoEntity* p_entity);
 	MxBool FUN_1002fe40(LegoEntity* p_entity);
 	MxBool FUN_1002fe80(LegoEntity* p_entity);
 	MxBool FUN_1002fed0(LegoEntity* p_entity);
 	MxU32 GetBuildingEntityId(LegoEntity* p_entity);
-	MxU32 FUN_1002ff40(LegoEntity*, MxBool);
+	MxU32 FUN_1002ff40(LegoEntity* p_entity, MxBool);
 	MxBool FUN_10030000(LegoEntity* p_entity);
 	MxBool FUN_10030030(MxS32 p_index);
 	MxBool FUN_10030110(LegoBuildingInfo* p_data);
@@ -89,6 +89,7 @@ public:
 	void FUN_100307b0(LegoEntity* p_entity, MxS32 p_adjust);
 
 	static void FUN_10030800();
+	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 	// SYNTHETIC: LEGO1 0x1002f940
 	// LegoBuildingManager::`scalar deleting destructor'

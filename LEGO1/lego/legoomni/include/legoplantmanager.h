@@ -30,11 +30,13 @@ public:
 	void Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
 	MxBool FUN_100269e0(LegoEntity* p_entity);
-	MxU32 FUN_10026ba0(LegoEntity*, MxBool);
+	MxU32 FUN_10026b70(LegoEntity* p_entity);
+	MxU32 FUN_10026ba0(LegoEntity* p_entity, MxBool);
 	void FUN_10026c50(LegoEntity* p_entity);
 	void FUN_10027120();
 
 	static void SetCustomizeAnimFile(const char* p_value);
+	static const char* GetCustomizeAnimFile() { return g_customizeAnimFile; }
 
 	// SYNTHETIC: LEGO1 0x100262a0
 	// LegoPlantManager::`scalar deleting destructor'

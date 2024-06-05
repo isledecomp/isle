@@ -66,7 +66,7 @@ public:
 
 	virtual void VTable0x34(MxBool p_und);   // vtable+0x34
 	virtual void VTable0x38();               // vtable+0x38
-	virtual void VTable0x3c();               // vtable+0x3c
+	virtual void SwitchVariant();            // vtable+0x3c
 	virtual void VTable0x40();               // vtable+0x40
 	virtual void VTable0x44();               // vtable+0x44
 	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48

@@ -21,6 +21,9 @@
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 
+// GLOBAL: LEGO1 0x100fc4e0
+MxU32 g_unk0x100fc4e0 = 10;
+
 // GLOBAL: LEGO1 0x100fc4e4
 char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
@@ -751,6 +754,19 @@ MxBool LegoCharacterManager::SwitchHat(LegoROI* p_roi)
 	}
 
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x10085120
+// FUNCTION: BETA10 0x1007680c
+MxU32 LegoCharacterManager::FUN_10085120(LegoROI* p_roi)
+{
+	LegoActorInfo* info = GetActorInfo(p_roi);
+
+	if (info != NULL) {
+		return info->m_unk0x10 + g_unk0x100fc4e0;
+	}
+
+	return 0;
 }
 
 // FUNCTION: LEGO1 0x10085140
