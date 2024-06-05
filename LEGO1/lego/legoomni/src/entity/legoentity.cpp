@@ -248,7 +248,7 @@ void LegoEntity::ParseAction(char* p_extra)
 
 // FUNCTION: LEGO1 0x10010f10
 // FUNCTION: BETA10 0x1007ee87
-void LegoEntity::VTable0x34(MxBool p_und)
+void LegoEntity::ClickSound(MxBool p_und)
 {
 	if (!GetUnknown0x10IsSet(c_altBit1)) {
 		MxU32 objectId = 0;
@@ -280,7 +280,7 @@ void LegoEntity::VTable0x34(MxBool p_und)
 
 // FUNCTION: LEGO1 0x10011070
 // FUNCTION: BETA10 0x1007f062
-void LegoEntity::VTable0x38()
+void LegoEntity::ClickAnimation()
 {
 	if (!GetUnknown0x10IsSet(c_altBit1)) {
 		MxU32 objectId = 0;
@@ -337,8 +337,8 @@ void LegoEntity::SwitchVariant()
 		break;
 	}
 
-	VTable0x34(FALSE);
-	VTable0x38();
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
 // STUB: LEGO1 0x10011360
