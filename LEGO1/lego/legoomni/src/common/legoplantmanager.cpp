@@ -63,6 +63,13 @@ MxBool LegoPlantManager::SwitchSound(LegoEntity* p_entity)
 	return FALSE;
 }
 
+// STUB: LEGO1 0x10026b00
+MxBool LegoPlantManager::SwitchMove(LegoEntity* p_entity)
+{
+	// TODO
+	return FALSE;
+}
+
 // STUB: LEGO1 0x10026b70
 MxU32 LegoPlantManager::FUN_10026b70(LegoEntity* p_entity)
 {

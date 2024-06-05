@@ -21,8 +21,11 @@
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 
+// GLOBAL: LEGO1 0x100fc4d0
+MxU32 LegoCharacterManager::g_maxMove = 4;
+
 // GLOBAL: LEGO1 0x100fc4d4
-MxU32 g_maxSound = 9;
+MxU32 LegoCharacterManager::g_maxSound = 9;
 
 // GLOBAL: LEGO1 0x100fc4e0
 MxU32 g_unk0x100fc4e0 = 10;
@@ -119,7 +122,7 @@ MxResult LegoCharacterManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
+		if (p_storage->Write(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
@@ -174,7 +177,7 @@ MxResult LegoCharacterManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_unk0x10, sizeof(info->m_unk0x10)) != SUCCESS) {
+		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_mood, sizeof(info->m_mood)) != SUCCESS) {
@@ -454,7 +457,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		LegoActorInfo* pepper = GetActorInfo("pepper");
 
 		info->m_sound = pepper->m_sound;
-		info->m_unk0x10 = pepper->m_unk0x10;
+		info->m_move = pepper->m_move;
 		info->m_mood = pepper->m_mood;
 
 		for (i = 0; i < sizeOfArray(info->m_parts); i++) {
@@ -779,6 +782,26 @@ MxBool LegoCharacterManager::SwitchSound(LegoROI* p_roi)
 	return result;
 }
 
+// FUNCTION: LEGO1 0x100850c0
+// FUNCTION: BETA10 0x10076754
+MxBool LegoCharacterManager::SwitchMove(LegoROI* p_roi)
+{
+	MxBool result = FALSE;
+	LegoActorInfo* info = GetActorInfo(p_roi);
+
+	if (info != NULL) {
+		info->m_move++;
+
+		if (info->m_move >= g_maxMove) {
+			info->m_move = 0;
+		}
+
+		result = TRUE;
+	}
+
+	return result;
+}
+
 // FUNCTION: LEGO1 0x10085120
 // FUNCTION: BETA10 0x1007680c
 MxU32 LegoCharacterManager::FUN_10085120(LegoROI* p_roi)
@@ -786,7 +809,7 @@ MxU32 LegoCharacterManager::FUN_10085120(LegoROI* p_roi)
 	LegoActorInfo* info = GetActorInfo(p_roi);
 
 	if (info != NULL) {
-		return info->m_unk0x10 + g_unk0x100fc4e0;
+		return info->m_move + g_unk0x100fc4e0;
 	}
 
 	return 0;

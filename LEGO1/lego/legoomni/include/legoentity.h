@@ -68,7 +68,7 @@ public:
 	virtual void ClickAnimation();           // vtable+0x38
 	virtual void SwitchVariant();            // vtable+0x3c
 	virtual void SwitchSound();              // vtable+0x40
-	virtual void VTable0x44();               // vtable+0x44
+	virtual void SwitchMove();               // vtable+0x44
 	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48
 	virtual void VTable0x4c();               // vtable+0x4c
 

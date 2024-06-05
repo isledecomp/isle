@@ -193,7 +193,7 @@ LegoBuildingInfo g_buildingInfoInit[16] = {
 // clang-format on
 
 // GLOBAL: LEGO1 0x100f3738
-MxU32 g_maxSound = 6;
+MxU32 LegoBuildingManager::g_maxSound = 6;
 
 // GLOBAL: LEGO1 0x100f373c
 MxU32 g_cycleLengthOffset1 = 0x3c;
@@ -221,7 +221,7 @@ MxS32 g_buildingManagerConfig = 1;
 LegoBuildingInfo g_buildingInfo[16];
 
 // GLOBAL: LEGO1 0x100f3748
-MxS32 g_buildingCycle2Length[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};
+MxS32 LegoBuildingManager::g_maxMove[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0};
 
 // FUNCTION: LEGO1 0x1002f8b0
 void LegoBuildingManager::configureLegoBuildingManager(MxS32 p_buildingManagerConfig)
@@ -333,7 +333,7 @@ MxResult LegoBuildingManager::Write(LegoStorage* p_storage)
 		if (p_storage->Write(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Write(&info->m_cycle2, sizeof(info->m_cycle2)) != SUCCESS) {
+		if (p_storage->Write(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Write(&info->m_cycle3, sizeof(info->m_cycle3)) != SUCCESS) {
@@ -366,7 +366,7 @@ MxResult LegoBuildingManager::Read(LegoStorage* p_storage)
 		if (p_storage->Read(&info->m_sound, sizeof(info->m_sound)) != SUCCESS) {
 			goto done;
 		}
-		if (p_storage->Read(&info->m_cycle2, sizeof(info->m_cycle2)) != SUCCESS) {
+		if (p_storage->Read(&info->m_move, sizeof(info->m_move)) != SUCCESS) {
 			goto done;
 		}
 		if (p_storage->Read(&info->m_cycle3, sizeof(info->m_cycle3)) != SUCCESS) {
@@ -476,7 +476,7 @@ MxBool LegoBuildingManager::SwitchSound(LegoEntity* p_entity)
 	MxBool result = FALSE;
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_playSound) {
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasSounds) {
 		info->m_sound++;
 
 		if (info->m_sound >= g_maxSound) {
@@ -491,16 +491,16 @@ MxBool LegoBuildingManager::SwitchSound(LegoEntity* p_entity)
 
 // FUNCTION: LEGO1 0x1002fe80
 // FUNCTION: BETA10 0x10064242
-MxBool LegoBuildingManager::FUN_1002fe80(LegoEntity* p_entity)
+MxBool LegoBuildingManager::SwitchMove(LegoEntity* p_entity)
 {
 	MxBool result = FALSE;
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit3) {
-		info->m_cycle2++;
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasMoves) {
+		info->m_move++;
 
-		if (info->m_cycle2 >= g_buildingCycle2Length[info - g_buildingInfo]) {
-			info->m_cycle2 = 0;
+		if (info->m_move >= g_maxMove[info - g_buildingInfo]) {
+			info->m_move = 0;
 		}
 
 		result = TRUE;
@@ -535,8 +535,8 @@ MxU32 LegoBuildingManager::GetBuildingEntityId(LegoEntity* p_entity)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info != NULL && info->m_flags & LegoBuildingInfo::c_bit3) {
-		return g_buildingEntityId[info - g_buildingInfo] + info->m_cycle2;
+	if (info != NULL && info->m_flags & LegoBuildingInfo::c_hasMoves) {
+		return g_buildingEntityId[info - g_buildingInfo] + info->m_move;
 	}
 
 	return 0;
@@ -548,7 +548,7 @@ MxU32 LegoBuildingManager::FUN_1002ff40(LegoEntity* p_entity, MxBool p_state)
 {
 	LegoBuildingInfo* info = GetInfo(p_entity);
 
-	if (info == NULL || !(info->m_flags & LegoBuildingInfo::c_playSound)) {
+	if (info == NULL || !(info->m_flags & LegoBuildingInfo::c_hasSounds)) {
 		return 0;
 	}
 

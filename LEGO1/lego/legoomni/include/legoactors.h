@@ -23,7 +23,7 @@ struct LegoActorInfo {
 	LegoROI* m_roi;          // 0x04
 	LegoExtraActor* m_actor; // 0x08
 	MxS32 m_sound;           // 0x0c
-	MxS32 m_unk0x10;         // 0x10
+	MxS32 m_move;            // 0x10
 	MxU8 m_mood;             // 0x14
 	Part m_parts[10];        // 0x18
 };

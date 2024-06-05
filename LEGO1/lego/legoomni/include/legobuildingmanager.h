@@ -16,15 +16,15 @@ class LegoPathBoundary;
 struct LegoBuildingInfo {
 	enum {
 		c_hasVariants = 0x01,
-		c_playSound = 0x02,
-		c_bit3 = 0x04,
+		c_hasSounds = 0x02,
+		c_hasMoves = 0x04,
 		c_bit4 = 0x08
 	};
 
 	LegoEntity* m_entity;         // 0x00
 	const char* m_hausName;       // 0x04
 	MxU32 m_sound;                // 0x08
-	MxU32 m_cycle2;               // 0x0c
+	MxU32 m_move;                 // 0x0c
 	MxU8 m_cycle3;                // 0x10
 	MxS8 m_unk0x11;               // 0x11
 	MxS8 m_initialUnk0x11;        // 0x12 = initial value loaded to m_unk0x11
@@ -74,7 +74,7 @@ public:
 	LegoBuildingInfo* GetInfo(LegoEntity* p_entity);
 	MxBool SwitchVariant(LegoEntity* p_entity);
 	MxBool SwitchSound(LegoEntity* p_entity);
-	MxBool FUN_1002fe80(LegoEntity* p_entity);
+	MxBool SwitchMove(LegoEntity* p_entity);
 	MxBool FUN_1002fed0(LegoEntity* p_entity);
 	MxU32 GetBuildingEntityId(LegoEntity* p_entity);
 	MxU32 FUN_1002ff40(LegoEntity* p_entity, MxBool);
@@ -96,6 +96,8 @@ public:
 
 private:
 	static char* g_customizeAnimFile;
+	static MxS32 g_maxMove[16];
+	static MxU32 g_maxSound;
 
 	MxU8 m_nextVariant;      // 0x08
 	MxU8 m_unk0x09;          // 0x09

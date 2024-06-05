@@ -363,11 +363,26 @@ void LegoEntity::SwitchSound()
 	ClickAnimation();
 }
 
-// STUB: LEGO1 0x100113c0
+// FUNCTION: LEGO1 0x100113c0
 // FUNCTION: BETA10 0x1007f4c8
-void LegoEntity::VTable0x44()
+void LegoEntity::SwitchMove()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchMove(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchMove(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchMove(this);
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
 // STUB: LEGO1 0x10011420
@@ -416,7 +431,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			SwitchSound();
 			break;
 		case LegoActor::c_papa:
-			VTable0x44();
+			SwitchMove();
 			break;
 		case LegoActor::c_nick:
 			VTable0x48(param.GetROI());

@@ -31,6 +31,7 @@ public:
 	MxResult Read(LegoStorage* p_storage);
 	MxBool SwitchVariant(LegoEntity* p_entity);
 	MxBool SwitchSound(LegoEntity* p_entity);
+	MxBool SwitchMove(LegoEntity* p_entity);
 	MxU32 FUN_10026b70(LegoEntity* p_entity);
 	MxU32 FUN_10026ba0(LegoEntity* p_entity, MxBool);
 	void FUN_10026c50(LegoEntity* p_entity);
