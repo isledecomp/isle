@@ -50,7 +50,7 @@ MxResult LegoPlantManager::Read(LegoStorage* p_storage)
 }
 
 // STUB: LEGO1 0x100269e0
-MxBool LegoPlantManager::FUN_100269e0(LegoEntity* p_entity)
+MxBool LegoPlantManager::SwitchVariant(LegoEntity* p_entity)
 {
 	// TODO
 	return FALSE;

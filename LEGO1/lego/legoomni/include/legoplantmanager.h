@@ -29,7 +29,7 @@ public:
 	void FUN_100263a0(undefined4 p_und);
 	void Write(LegoStorage* p_storage);
 	MxResult Read(LegoStorage* p_storage);
-	MxBool FUN_100269e0(LegoEntity* p_entity);
+	MxBool SwitchVariant(LegoEntity* p_entity);
 	MxBool SwitchSound(LegoEntity* p_entity);
 	MxU32 FUN_10026b70(LegoEntity* p_entity);
 	MxU32 FUN_10026ba0(LegoEntity* p_entity, MxBool);

@@ -330,7 +330,7 @@ void LegoEntity::SwitchVariant()
 	case e_unk1:
 		break;
 	case e_plant:
-		PlantManager()->FUN_100269e0(this);
+		PlantManager()->SwitchVariant(this);
 		break;
 	case e_building:
 		BuildingManager()->SwitchVariant(this);
