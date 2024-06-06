@@ -708,12 +708,64 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 	return NULL;
 }
 
-// STUB: LEGO1 0x10084d50
+// FUNCTION: LEGO1 0x10084d50
 // FUNCTION: BETA10 0x10076223
 MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 {
-	// TODO
-	return FALSE;
+	MxS32 numParts = 10;
+	const char* targetName = p_targetROI->GetName();
+
+	MxS32 partIndex;
+	for (partIndex = 0; partIndex < numParts; partIndex++) {
+		if (!strcmp(targetName, g_actorLODs[partIndex + 1].m_name)) {
+			break;
+		}
+	}
+
+	assert(partIndex < numParts);
+
+	MxBool findChild = TRUE;
+	if (partIndex == 6) {
+		partIndex = 4;
+	}
+	else if (partIndex == 7) {
+		partIndex = 5;
+	}
+	else if (partIndex == 3) {
+		partIndex = 1;
+	}
+	else if (partIndex == 0) {
+		partIndex = 2;
+	}
+	else {
+		findChild = FALSE;
+	}
+
+	if (!(g_actorLODs[partIndex + 1].m_flags & LegoActorLOD::c_flag2)) {
+		return FALSE;
+	}
+
+	LegoActorInfo* info = GetActorInfo(p_roi->GetName());
+
+	if (info == NULL) {
+		return FALSE;
+	}
+
+	if (findChild) {
+		p_targetROI = FindChildROI(p_roi, g_actorLODs[partIndex + 1].m_name);
+	}
+
+	LegoActorInfo::Part& part = info->m_parts[partIndex];
+
+	part.m_unk0x14++;
+	if (part.m_unk0x0c[part.m_unk0x14] == 0xff) {
+		part.m_unk0x14 = 0;
+	}
+
+	LegoFloat red, green, blue, alpha;
+	LegoROI::FUN_100a9bf0(part.m_unk0x10[part.m_unk0x0c[part.m_unk0x14]], red, green, blue, alpha);
+	p_targetROI->FUN_100a9170(red, green, blue, alpha);
+	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10084ec0
