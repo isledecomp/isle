@@ -25,7 +25,7 @@ void DuneBuggy::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x10067fa0
-void DuneBuggy::VTable0xe4()
+void DuneBuggy::Exit()
 {
 	// TODO
 }

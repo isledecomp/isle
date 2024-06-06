@@ -69,7 +69,7 @@ public:
 	MxU32 HandleClick() override;                                     // vtable+0xcc
 	MxU32 HandleControl(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
 	MxU32 VTable0xd8(LegoEndAnimNotificationParam& p_param) override; // vtable+0xd8
-	void VTable0xe4() override;                                       // vtable+0xe4
+	void Exit() override;                                             // vtable+0xe4
 
 	// SYNTHETIC: LEGO1 0x10003210
 	// Helicopter::`scalar deleting destructor'

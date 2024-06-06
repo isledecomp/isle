@@ -29,7 +29,7 @@ public:
 	void VTable0x70(float p_float) override;                // vtable+0x70
 	MxU32 HandleClick() override;                           // vtable+0xcc
 	MxU32 HandleControl(LegoControlManagerEvent&) override; // vtable+0xd4
-	void VTable0xe4() override;                             // vtable+0xe4
+	void Exit() override;                                   // vtable+0xe4
 
 	void FUN_1007e990();
 

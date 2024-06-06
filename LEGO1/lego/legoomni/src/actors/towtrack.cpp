@@ -96,7 +96,7 @@ MxU32 TowTrack::HandleClick()
 }
 
 // STUB: LEGO1 0x1004d8f0
-void TowTrack::VTable0xe4()
+void TowTrack::Exit()
 {
 	// TODO
 }

@@ -63,7 +63,7 @@ void Helicopter::CreateState()
 }
 
 // FUNCTION: LEGO1 0x10003360
-void Helicopter::VTable0xe4()
+void Helicopter::Exit()
 {
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		SpawnPlayer(
@@ -73,7 +73,7 @@ void Helicopter::VTable0xe4()
 		);
 	}
 
-	IslePathActor::VTable0xe4();
+	IslePathActor::Exit();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
@@ -117,7 +117,7 @@ MxU32 Helicopter::HandleClick()
 
 	if (CurrentActor()) {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 	}
 
@@ -144,7 +144,7 @@ MxU32 Helicopter::HandleClick()
 		break;
 	}
 
-	VTable0xe0();
+	Enter();
 	InvokeAction(Extra::ActionType::e_start, m_script, IsleScript::c_HelicopterDashboard, NULL);
 	GetCurrentAction().SetObjectId(-1);
 	ControlManager()->Register(this);
@@ -179,7 +179,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 			else if (m_state->GetUnkown8() != 0) {
 				break;
 			}
-			VTable0xe4();
+			Exit();
 			GameState()->SetCurrentArea(LegoGameState::e_unk66);
 			ret = 1;
 			break;
@@ -248,7 +248,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-				VTable0xe4();
+				Exit();
 			}
 			ret = 1;
 			break;

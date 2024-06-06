@@ -14,6 +14,7 @@
 #include "mxbackgroundaudiomanager.h"
 #include "mxnotificationparam.h"
 #include "scripts.h"
+#include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
 DECOMP_SIZE_ASSERT(IslePathActor::SpawnLocation, 0x38)
@@ -26,8 +27,8 @@ IslePathActor::IslePathActor()
 {
 	m_world = NULL;
 	m_unk0x13c = 6.0;
-	m_unk0x15c = 1.0;
-	m_unk0x158 = NULL;
+	m_previousVel = 1.0;
+	m_previousActor = NULL;
 }
 
 // FUNCTION: LEGO1 0x1001a280
@@ -71,15 +72,15 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1001a350
-void IslePathActor::VTable0xe0()
+void IslePathActor::Enter()
 {
 	m_roi->SetVisibility(FALSE);
 	if (CurrentActor() != this) {
-		m_unk0x15c = NavController()->GetMaxLinearVel();
-		m_unk0x158 = CurrentActor();
-		if (m_unk0x158) {
-			m_unk0x158->ResetWorldTransform(FALSE);
-			m_unk0x158->SetUserNavFlag(FALSE);
+		m_previousVel = NavController()->GetMaxLinearVel();
+		m_previousActor = CurrentActor();
+		if (m_previousActor) {
+			m_previousActor->ResetWorldTransform(FALSE);
+			m_previousActor->SetUserNavFlag(FALSE);
 		}
 	}
 
@@ -96,10 +97,62 @@ void IslePathActor::VTable0xe0()
 	}
 }
 
-// STUB: LEGO1 0x1001a3f0
-void IslePathActor::VTable0xe4()
+// FUNCTION: LEGO1 0x1001a3f0
+// FUNCTION: BETA10 0x1003669f
+void IslePathActor::Exit()
 {
-	// TODO
+	Reset();
+
+	GetViewManager()->Remove(m_roi);
+	GetViewManager()->Add(m_roi);
+
+	ResetWorldTransform(FALSE);
+	SetUserNavFlag(FALSE);
+
+	if (m_previousActor != NULL) {
+		SetCurrentActor(m_previousActor);
+		NavController()->ResetLinearVel(m_previousVel);
+		m_previousActor->ResetWorldTransform(TRUE);
+		m_previousActor->SetUserNavFlag(TRUE);
+		m_previousActor->SetBoundary(m_boundary);
+
+		MxS32 i;
+		for (i = 0; i < m_boundary->GetNumEdges(); i++) {
+			LegoUnknown100db7f4* e = (LegoUnknown100db7f4*) m_boundary->GetEdges()[i];
+			assert(e);
+
+			Mx3DPointFloat local20;
+			e->FUN_1002ddc0(*m_boundary, local20);
+
+			((Vector3&) local20).Mul(m_roi->GetWorldBoundingSphere().Radius());
+			((Vector3&) local20).Add(&GetWorldPosition());
+
+			MxS32 j;
+			for (j = 0; j < m_boundary->GetNumEdges(); j++) {
+				Mx4DPointFloat& normal = *m_boundary->GetEdgeNormal(j);
+
+				if (local20.Dot(&normal, &local20) + normal[3] < -0.001) {
+					break;
+				}
+			}
+
+			if (m_boundary->GetNumEdges() == j) {
+				m_previousActor->SetLocation(local20, GetWorldDirection(), GetWorldUp(), TRUE);
+				break;
+			}
+		}
+
+		if (m_boundary->GetNumEdges() == i) {
+			m_previousActor->SetLocation(GetWorldPosition(), GetWorldDirection(), GetWorldUp(), TRUE);
+		}
+
+		m_previousActor->SetState(0);
+		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
+	}
+
+	FUN_1001b660();
+	FUN_10010c30();
+	FUN_1003eda0();
 }
 
 // FUNCTION: LEGO1 0x1001a700
@@ -479,7 +532,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 		m_world = world;
 
 		if (p_und) {
-			VTable0xe0();
+			Enter();
 		}
 
 		m_world->PlaceActor(
@@ -563,7 +616,7 @@ void IslePathActor::VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundar
 
 	m_world = CurrentWorld();
 	if (p_reset) {
-		VTable0xe0();
+		Enter();
 	}
 
 	m_world->PlaceActor(this);

@@ -116,7 +116,7 @@ void Ambulance::FUN_10036e60()
 }
 
 // STUB: LEGO1 0x10036e90
-void Ambulance::VTable0xe4()
+void Ambulance::Exit()
 {
 	// TODO
 }

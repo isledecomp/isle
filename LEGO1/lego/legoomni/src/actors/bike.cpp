@@ -32,9 +32,9 @@ MxResult Bike::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10076920
-void Bike::VTable0xe4()
+void Bike::Exit()
 {
-	IslePathActor::VTable0xe4();
+	IslePathActor::Exit();
 	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeDashboard_Bitmap);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeArms_Ctl);

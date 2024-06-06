@@ -30,7 +30,7 @@ public:
 	MxU32 HandleClick() override;                                   // vtable+0xcc
 	MxU32 VTable0xd0() override;                                    // vtable+0xd0
 	MxU32 HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
-	void VTable0xe4() override;                                     // vtable+0xe4
+	void Exit() override;                                           // vtable+0xe4
 
 	inline void SetUnknown0x160(MxBool p_unk0x160) { m_unk0x160 = p_unk0x160; }
 

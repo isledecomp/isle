@@ -24,7 +24,7 @@ void Jetski::VTable0x70(float p_float)
 }
 
 // STUB: LEGO1 0x1007e6f0
-void Jetski::VTable0xe4()
+void Jetski::Exit()
 {
 	// TODO
 }

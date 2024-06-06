@@ -15,7 +15,7 @@ RaceCar::RaceCar()
 RaceCar::~RaceCar()
 {
 	ControlManager()->Unregister(this);
-	VTable0xe4();
+	Exit();
 }
 
 // STUB: LEGO1 0x10028490

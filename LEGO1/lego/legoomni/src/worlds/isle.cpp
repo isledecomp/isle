@@ -1219,7 +1219,7 @@ MxBool Isle::Escape()
 
 	if (CurrentActor()) {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 			m_skateboard->SetUnknown0x160(FALSE);
 		}
 	}
@@ -1265,7 +1265,7 @@ void Isle::FUN_10033350()
 
 	if (CurrentActor()) {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 			m_skateboard->SetUnknown0x160(FALSE);
 		}
 	}

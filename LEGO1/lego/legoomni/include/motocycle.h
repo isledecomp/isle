@@ -28,7 +28,7 @@ public:
 	MxU32 HandleClick() override;                                   // vtable+0xcc
 	MxU32 HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
 	MxU32 VTable0xdc(MxType19NotificationParam&) override;          // vtable+0xdc
-	void VTable0xe4() override;                                     // vtable+0xe4
+	void Exit() override;                                           // vtable+0xe4
 
 	void FUN_10035e10();
 

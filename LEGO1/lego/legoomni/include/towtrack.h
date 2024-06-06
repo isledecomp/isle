@@ -88,7 +88,7 @@ public:
 	MxU32 HandleControl(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
 	MxU32 VTable0xd8(LegoEndAnimNotificationParam& p_param) override; // vtable+0xd8
 	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override;    // vtable+0xdc
-	void VTable0xe4() override;                                       // vtable+0xe4
+	void Exit() override;                                             // vtable+0xe4
 
 	void CreateState();
 	void FUN_1004dab0();
