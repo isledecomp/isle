@@ -102,14 +102,14 @@ MxResult LegoPathActor::VTable0x88(
 	Mx3DPointFloat p1, p2, p3, p4, p5;
 
 	p1 = *v2;
-	((Vector3&) p1).Sub(v1);
+	((Vector3&) p1).Sub(*v1);
 	((Vector3&) p1).Mul(p_srcScale);
-	((Vector3&) p1).Add(v1);
+	((Vector3&) p1).Add(*v1);
 
 	p2 = *v4;
-	((Vector3&) p2).Sub(v3);
+	((Vector3&) p2).Sub(*v3);
 	((Vector3&) p2).Mul(p_destScale);
-	((Vector3&) p2).Add(v3);
+	((Vector3&) p2).Add(*v3);
 
 	m_boundary = p_boundary;
 	m_destEdge = &p_destEdge;
@@ -177,9 +177,9 @@ MxResult LegoPathActor::VTable0x84(
 	Mx3DPointFloat p2, p3, p5;
 
 	p2 = *v4;
-	((Vector3&) p2).Sub(v3);
+	((Vector3&) p2).Sub(*v3);
 	((Vector3&) p2).Mul(p_destScale);
-	((Vector3&) p2).Add(v3);
+	((Vector3&) p2).Add(*v3);
 
 	m_boundary = p_boundary;
 	m_destEdge = &p_destEdge;

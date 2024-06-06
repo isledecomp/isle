@@ -2458,9 +2458,9 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	Vector3* v2 = p_edge->CCWVertex(*p_boundary);
 
 	p1 = *v2;
-	((Vector3&) p1).Sub(v1);
+	((Vector3&) p1).Sub(*v1);
 	((Vector3&) p1).Mul(p_destScale);
-	((Vector3&) p1).Add(v1);
+	((Vector3&) p1).Add(*v1);
 
 	BoundingBox boundingBox;
 	Mx3DPointFloat vec(1.0f, 1.0f, 1.0f);
@@ -2677,7 +2677,7 @@ MxResult LegoAnimationManager::FUN_10064670(Vector3* p_position)
 
 	if (p_position != NULL) {
 		Mx3DPointFloat vec(98.875f, 0.0f, -46.1564f);
-		((Vector3&) vec).Sub(p_position);
+		((Vector3&) vec).Sub(*p_position);
 
 		if (vec.LenSquared() < 800.0f) {
 			success = TRUE;
@@ -2701,7 +2701,7 @@ MxResult LegoAnimationManager::FUN_10064740(Vector3* p_position)
 
 	if (p_position != NULL) {
 		Mx3DPointFloat vec(-21.375f, 0.0f, -41.75f);
-		((Vector3&) vec).Sub(p_position);
+		((Vector3&) vec).Sub(*p_position);
 
 		if (vec.LenSquared() < 1000.0f) {
 			success = TRUE;

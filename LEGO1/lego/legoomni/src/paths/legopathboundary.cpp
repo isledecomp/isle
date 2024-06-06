@@ -53,11 +53,11 @@ void LegoPathBoundary::FUN_100575b0(Vector3& p_point1, Vector3& p_point2, LegoPa
 		Mx3DPointFloat v;
 
 		v = p_point1;
-		((Vector3&) v).Sub(ccwV);
+		((Vector3&) v).Sub(*ccwV);
 		float dot1 = v.Dot(&v, m_unk0x50);
 
 		v = p_point2;
-		((Vector3&) v).Sub(ccwV);
+		((Vector3&) v).Sub(*ccwV);
 		float dot2 = v.Dot(&v, m_unk0x50);
 
 		if (dot2 > dot1) {
@@ -238,7 +238,7 @@ MxU32 LegoPathBoundary::Intersect(
 		p_point3.Add(p_point1);
 
 		local50 = p_point2;
-		((Vector3&) local50).Sub(local5c);
+		((Vector3&) local50).Sub(*local5c);
 
 		e->FUN_1002ddc0(*this, local70);
 
@@ -258,7 +258,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 				Vector3* local90 = local88->CWVertex(*this);
 				Mx3DPointFloat locala4(p_point3);
-				((Vector3&) locala4).Sub(local90);
+				((Vector3&) locala4).Sub(*local90);
 
 				float local8c = locala4.Dot(&locala4, &local84);
 
@@ -285,7 +285,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 					Vector3* localc4 = locala8->CWVertex(*this);
 					Mx3DPointFloat locald8(p_point3);
-					((Vector3&) locald8).Sub(localc4);
+					((Vector3&) locald8).Sub(*localc4);
 
 					float localc0 = locald8.Dot(&locald8, &localbc);
 
@@ -317,7 +317,7 @@ MxU32 LegoPathBoundary::Intersect(
 		else if (local58 > 0.0f && e->m_unk0x3c > local58) {
 			p_point3 = local70;
 			p_point3.Mul(local58);
-			p_point3.Add(local5c);
+			p_point3.Add(*local5c);
 			p_edge = e;
 			return 1;
 		}
