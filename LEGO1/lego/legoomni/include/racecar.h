@@ -25,7 +25,7 @@ public:
 	}
 
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	MxU32 HandleClick() override;                     // vtable+0xcc
+	MxLong HandleClick() override;                    // vtable+0xcc
 
 	// SYNTHETIC: LEGO1 0x10028400
 	// RaceCar::`scalar deleting destructor'

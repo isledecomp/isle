@@ -45,14 +45,14 @@ void Bike::Exit()
 }
 
 // STUB: LEGO1 0x100769a0
-MxU32 Bike::HandleClick()
+MxLong Bike::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10076aa0
-MxU32 Bike::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Bike::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

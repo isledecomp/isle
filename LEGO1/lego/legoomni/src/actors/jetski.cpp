@@ -30,14 +30,14 @@ void Jetski::Exit()
 }
 
 // STUB: LEGO1 0x1007e750
-MxU32 Jetski::HandleClick()
+MxLong Jetski::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x1007e8e0
-MxU32 Jetski::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Jetski::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

@@ -75,21 +75,21 @@ MxLong TowTrack::Notify(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x1004cd30
-MxU32 TowTrack::VTable0xd8(LegoEndAnimNotificationParam& p_param)
+MxLong TowTrack::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x1004d330
-MxU32 TowTrack::VTable0xdc(MxType19NotificationParam& p_param)
+MxLong TowTrack::HandleNotification19(MxType19NotificationParam& p_param)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x1004d690
-MxU32 TowTrack::HandleClick()
+MxLong TowTrack::HandleClick()
 {
 	// TODO
 	return 0;
@@ -102,7 +102,7 @@ void TowTrack::Exit()
 }
 
 // STUB: LEGO1 0x1004d9e0
-MxU32 TowTrack::HandleControl(LegoControlManagerEvent& p_param)
+MxLong TowTrack::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

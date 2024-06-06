@@ -103,7 +103,7 @@ void Helicopter::Exit()
 }
 
 // FUNCTION: LEGO1 0x10003480
-MxU32 Helicopter::HandleClick()
+MxLong Helicopter::HandleClick()
 {
 	if (!FUN_1003ef60()) {
 		return 1;
@@ -152,7 +152,7 @@ MxU32 Helicopter::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x100035e0
-MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;
@@ -261,7 +261,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10003c20
-MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
+MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	MxU32 ret = 0;
 

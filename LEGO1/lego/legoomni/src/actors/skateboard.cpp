@@ -71,7 +71,7 @@ void SkateBoard::Exit()
 }
 
 // FUNCTION: LEGO1 0x100100e0
-MxU32 SkateBoard::HandleClick()
+MxLong SkateBoard::HandleClick()
 {
 	Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 
@@ -106,7 +106,7 @@ MxU32 SkateBoard::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x10010230
-MxU32 SkateBoard::HandleControl(LegoControlManagerEvent& p_param)
+MxLong SkateBoard::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxU32 result = 0;
 
@@ -139,7 +139,7 @@ void SkateBoard::EnableScenePresentation(MxBool p_enable)
 
 // FUNCTION: LEGO1 0x100104f0
 // FUNCTION: BETA10 0x100f5472
-MxU32 SkateBoard::VTable0xd0()
+MxLong SkateBoard::HandleNotification0()
 {
 	EnableScenePresentation(m_unk0x160);
 	return 1;

@@ -31,21 +31,21 @@ void Motocycle::Exit()
 }
 
 // STUB: LEGO1 0x10035c50
-MxU32 Motocycle::HandleClick()
+MxLong Motocycle::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10035d70
-MxU32 Motocycle::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Motocycle::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10035df0
-MxU32 Motocycle::VTable0xdc(MxType19NotificationParam& p_param)
+MxLong Motocycle::HandleNotification19(MxType19NotificationParam& p_param)
 {
 	// TODO
 	return 0;
