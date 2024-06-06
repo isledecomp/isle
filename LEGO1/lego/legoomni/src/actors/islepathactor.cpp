@@ -125,7 +125,7 @@ void IslePathActor::Exit()
 			e->FUN_1002ddc0(*m_boundary, local20);
 
 			((Vector3&) local20).Mul(m_roi->GetWorldBoundingSphere().Radius());
-			((Vector3&) local20).Add(GetWorldPosition());
+			((Vector3&) local20).Add(&GetWorldPosition());
 
 			MxS32 j;
 			for (j = 0; j < m_boundary->GetNumEdges(); j++) {

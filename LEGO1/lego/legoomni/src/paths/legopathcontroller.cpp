@@ -94,7 +94,7 @@ MxResult LegoPathController::Create(MxU8* p_data, const Vector3& p_location, con
 
 		for (i = 0; i < m_numN; i++) {
 			// TODO: Fix call
-			((Vector3&) m_unk0x10[i]).Add(p_location);
+			((Vector3&) m_unk0x10[i]).Add(&p_location);
 		}
 
 		for (i = 0; i < m_numL; i++) {

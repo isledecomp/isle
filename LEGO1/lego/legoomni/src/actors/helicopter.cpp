@@ -227,7 +227,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 				lookat = dir;
 				float scale = 3;
 				lookat.Mul(scale);
-				lookat.Add(loc);
+				lookat.Add(&loc);
 				Mx3DPointFloat v68, v7c, v90(0, 1, 0), va4;
 				v68 = m_world->GetCamera()->GetWorldUp();
 				va4.EqualsCross(&v68, &dir);
@@ -379,9 +379,9 @@ void Helicopter::VTable0x70(float p_float)
 			mat.SetIdentity();
 			m_unk0x1f4.Unknown6(mat, f2);
 			v2.SetVector(loc);
-			v2.Sub(v);
+			v2.Sub(&v);
 			v2.Mul(f2);
-			v2.Add(v);
+			v2.Add(&v);
 			m_world->GetCamera()->FUN_100123e0(mat, 0);
 		}
 		else {

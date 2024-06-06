@@ -1573,7 +1573,7 @@ MxU16 LegoAnimationManager::FUN_10062110(
 				Mx3DPointFloat position(p_roi->GetWorldPosition());
 
 				// TODO: Fix call
-				((Vector3&) position).Sub(p_position);
+				((Vector3&) position).Sub(&p_position);
 				float len = position.LenSquared();
 				float min, max;
 
@@ -2466,9 +2466,9 @@ MxBool LegoAnimationManager::FUN_10064010(LegoPathBoundary* p_boundary, LegoUnkn
 	Mx3DPointFloat vec(1.0f, 1.0f, 1.0f);
 
 	boundingBox.Min() = p1;
-	boundingBox.Min().Sub(vec);
+	boundingBox.Min().Sub(&vec);
 	boundingBox.Max() = p1;
-	boundingBox.Max().Add(vec);
+	boundingBox.Max().Add(&vec);
 	return GetViewManager()->FUN_100a6150(boundingBox) == FALSE;
 }
 

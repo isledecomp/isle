@@ -201,7 +201,7 @@ MxU32 LegoPathBoundary::Intersect(
 			if (local10 == 0) {
 				local10 = 1;
 				vec = p_point2;
-				((Vector3&) vec).Sub(p_point1);
+				((Vector3&) vec).Sub(&p_point1);
 
 				len = vec.LenSquared();
 				if (len <= 0.0f) {
@@ -235,7 +235,7 @@ MxU32 LegoPathBoundary::Intersect(
 
 		p_point3 = vec;
 		p_point3.Mul(localc);
-		p_point3.Add(p_point1);
+		p_point3.Add(&p_point1);
 
 		local50 = p_point2;
 		((Vector3&) local50).Sub(local5c);
@@ -345,7 +345,7 @@ MxU32 LegoPathBoundary::FUN_10057fe0(LegoAnimPresenter* p_presenter)
 	Mx3DPointFloat unk0x30;
 
 	unk0x30 = m_unk0x30;
-	((Vector3&) unk0x30).Sub(p_presenter->m_unk0xa8);
+	((Vector3&) unk0x30).Sub(&p_presenter->m_unk0xa8);
 
 	float len = unk0x30.LenSquared();
 	float local20 = p_presenter->m_unk0xa4 + m_unk0x44;
