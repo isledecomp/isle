@@ -26,7 +26,7 @@ MxResult RaceCar::Create(MxDSAction& p_dsAction)
 }
 
 // STUB: LEGO1 0x100284d0
-MxU32 RaceCar::HandleClick()
+MxLong RaceCar::HandleClick()
 {
 	// TODO
 	return 0;

@@ -81,14 +81,14 @@ public:
 		return !strcmp(p_name, TowTrack::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxLong Notify(MxParam& p_param) override;                         // vtable+0x04
-	MxResult Create(MxDSAction& p_dsAction) override;                 // vtable+0x18
-	void VTable0x70(float p_float) override;                          // vtable+0x70
-	MxU32 HandleClick() override;                                     // vtable+0xcc
-	MxU32 HandleControl(LegoControlManagerEvent& p_param) override;   // vtable+0xd4
-	MxU32 VTable0xd8(LegoEndAnimNotificationParam& p_param) override; // vtable+0xd8
-	MxU32 VTable0xdc(MxType19NotificationParam& p_param) override;    // vtable+0xdc
-	void Exit() override;                                             // vtable+0xe4
+	MxLong Notify(MxParam& p_param) override;                                 // vtable+0x04
+	MxResult Create(MxDSAction& p_dsAction) override;                         // vtable+0x18
+	void VTable0x70(float p_float) override;                                  // vtable+0x70
+	MxLong HandleClick() override;                                            // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerEvent& p_param) override;          // vtable+0xd4
+	MxLong HandleEndAnim(LegoEndAnimNotificationParam& p_param) override;     // vtable+0xd8
+	MxLong HandleNotification19(MxType19NotificationParam& p_param) override; // vtable+0xdc
+	void Exit() override;                                                     // vtable+0xe4
 
 	void CreateState();
 	void FUN_1004dab0();

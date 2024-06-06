@@ -52,7 +52,7 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 
 	switch (((MxNotificationParam&) p_param).GetType()) {
 	case c_notificationType0:
-		ret = VTable0xd0();
+		ret = HandleNotification0();
 		break;
 	case c_notificationClick:
 		ret = HandleClick();
@@ -61,10 +61,10 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 		ret = HandleControl((LegoControlManagerEvent&) p_param);
 		break;
 	case c_notificationEndAnim:
-		ret = VTable0xd8((LegoEndAnimNotificationParam&) p_param);
+		ret = HandleEndAnim((LegoEndAnimNotificationParam&) p_param);
 		break;
 	case c_notificationType19:
-		ret = VTable0xdc((MxType19NotificationParam&) p_param);
+		ret = HandleNotification19((MxType19NotificationParam&) p_param);
 		break;
 	}
 
