@@ -14,22 +14,33 @@ class MxPalette;
 class MxVideoParam {
 public:
 	MxVideoParam();
-	MxVideoParam(MxVideoParam& p_videoParam);
 	__declspec(dllexport)
 		MxVideoParam(MxRect32& p_rect, MxPalette* p_palette, MxULong p_backBuffers, MxVideoParamFlags& p_flags);
-	MxVideoParam& operator=(const MxVideoParam& p_videoParam);
+	MxVideoParam(MxVideoParam& p_videoParam);
 	~MxVideoParam();
 	void SetDeviceName(char* p_deviceId);
+	MxVideoParam& operator=(const MxVideoParam& p_videoParam);
 
+	// FUNCTION: BETA10 0x100886e0
 	inline MxVideoParamFlags& Flags() { return m_flags; }
 
-	inline void SetPalette(MxPalette* p_palette) { this->m_palette = p_palette; }
-	inline void SetBackBuffers(MxU32 p_backBuffers) { this->m_backBuffers = p_backBuffers; }
+	// FUNCTION: BETA10 0x100d81f0
+	inline MxRect32& GetRect() { return m_rect; }
 
-	inline MxRect32& GetRect() { return this->m_rect; }
-	inline MxPalette* GetPalette() { return this->m_palette; }
-	inline MxU32 GetBackBuffers() { return this->m_backBuffers; }
-	inline char* GetDeviceName() { return this->m_deviceId; }
+	// FUNCTION: BETA10 0x100d8210
+	inline MxPalette* GetPalette() { return m_palette; }
+
+	// FUNCTION: BETA10 0x100d8240
+	inline void SetPalette(MxPalette* p_palette) { m_palette = p_palette; }
+
+	// FUNCTION: BETA10 0x100d8270
+	inline char* GetDeviceName() { return m_deviceId; }
+
+	// FUNCTION: BETA10 0x10141f60
+	inline MxU32 GetBackBuffers() { return m_backBuffers; }
+
+	// FUNCTION: BETA10 0x10141fe0
+	inline void SetBackBuffers(MxU32 p_backBuffers) { m_backBuffers = p_backBuffers; }
 
 private:
 	MxRect32 m_rect;           // 0x00
