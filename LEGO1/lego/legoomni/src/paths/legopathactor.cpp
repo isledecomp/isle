@@ -553,7 +553,7 @@ void LegoPathActor::ParseAction(char* p_extra)
 
 	if (KeyValueStringParse(value, g_strPERMIT_NAVIGATE, p_extra)) {
 		SetUserNavFlag(TRUE);
-		NavController()->ResetLinearVel(m_worldSpeed);
+		NavController()->ResetMaxLinearVel(m_worldSpeed);
 		SetCurrentActor(this);
 	}
 

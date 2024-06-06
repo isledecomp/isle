@@ -21,7 +21,7 @@ TowTrack::TowTrack()
 	m_unk0x170 = -1;
 	m_unk0x16e = 0;
 	m_unk0x174 = -1;
-	m_unk0x13c = 40.0;
+	m_maxLinearVel = 40.0;
 	m_unk0x178 = 1.0;
 }
 

@@ -27,7 +27,7 @@ Ambulance::Ambulance()
 	m_unk0x178 = -1;
 	m_unk0x170 = 0;
 	m_unk0x172 = 0;
-	m_unk0x13c = 40.0;
+	m_maxLinearVel = 40.0;
 	m_unk0x17c = 1.0;
 }
 

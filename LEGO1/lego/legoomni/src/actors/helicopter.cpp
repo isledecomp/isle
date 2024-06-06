@@ -25,7 +25,7 @@ DECOMP_SIZE_ASSERT(MxMatrix, 0x48)
 // FUNCTION: LEGO1 0x10001e60
 Helicopter::Helicopter()
 {
-	m_unk0x13c = 60;
+	m_maxLinearVel = 60;
 }
 
 // FUNCTION: LEGO1 0x10003230

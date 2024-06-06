@@ -26,7 +26,7 @@ IslePathActor::SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
 IslePathActor::IslePathActor()
 {
 	m_world = NULL;
-	m_unk0x13c = 6.0;
+	m_maxLinearVel = 6.0;
 	m_previousVel = 1.0;
 	m_previousActor = NULL;
 }
@@ -89,7 +89,7 @@ void IslePathActor::Enter()
 		ResetWorldTransform(TRUE);
 		SetUserNavFlag(TRUE);
 
-		NavController()->ResetLinearVel(m_unk0x13c);
+		NavController()->ResetMaxLinearVel(m_maxLinearVel);
 
 		SetCurrentActor(this);
 		FUN_1001b660();
@@ -111,7 +111,7 @@ void IslePathActor::Exit()
 
 	if (m_previousActor != NULL) {
 		SetCurrentActor(m_previousActor);
-		NavController()->ResetLinearVel(m_previousVel);
+		NavController()->ResetMaxLinearVel(m_previousVel);
 		m_previousActor->ResetWorldTransform(TRUE);
 		m_previousActor->SetUserNavFlag(TRUE);
 		m_previousActor->SetBoundary(m_boundary);

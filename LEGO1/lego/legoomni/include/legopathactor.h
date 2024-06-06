@@ -100,10 +100,10 @@ public:
 	virtual void VTable0xa8();                              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
-	virtual void VTable0xac(MxFloat p_unk0x13c) { m_unk0x13c = p_unk0x13c; } // vtable+0xac
+	virtual void VTable0xac(MxFloat p_unk0x13c) { m_maxLinearVel = p_unk0x13c; } // vtable+0xac
 
 	// FUNCTION: LEGO1 0x10002d80
-	virtual MxFloat VTable0xb0() { return m_unk0x13c; } // vtable+0xb0
+	virtual MxFloat VTable0xb0() { return m_maxLinearVel; } // vtable+0xb0
 
 	// FUNCTION: LEGO1 0x10002d90
 	virtual MxFloat VTable0xb4() { return m_unk0x140; } // vtable+0xb4
@@ -162,7 +162,7 @@ protected:
 	MxMatrix m_unk0xec;               // 0xec
 	LegoPathEdgeContainer* m_grec;    // 0x134
 	LegoPathController* m_controller; // 0x138
-	MxFloat m_unk0x13c;               // 0x13c
+	MxFloat m_maxLinearVel;           // 0x13c
 	MxFloat m_unk0x140;               // 0x140
 	MxFloat m_unk0x144;               // 0x144
 	MxU8 m_unk0x148;                  // 0x148

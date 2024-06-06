@@ -21,7 +21,7 @@ DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 SkateBoard::SkateBoard()
 {
 	m_unk0x160 = FALSE;
-	m_unk0x13c = 15.0;
+	m_maxLinearVel = 15.0;
 	m_unk0x150 = 3.5;
 	m_unk0x148 = 1;
 
