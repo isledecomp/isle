@@ -100,10 +100,10 @@ public:
 	virtual void VTable0xa8();                              // vtable+0xa8
 
 	// FUNCTION: LEGO1 0x10002d70
-	virtual void VTable0xac(MxFloat p_unk0x13c) { m_maxLinearVel = p_unk0x13c; } // vtable+0xac
+	virtual void SetMaxLinearVel(MxFloat p_maxLinearVel) { m_maxLinearVel = p_maxLinearVel; } // vtable+0xac
 
 	// FUNCTION: LEGO1 0x10002d80
-	virtual MxFloat VTable0xb0() { return m_maxLinearVel; } // vtable+0xb0
+	virtual MxFloat GetMaxLinearVel() { return m_maxLinearVel; } // vtable+0xb0
 
 	// FUNCTION: LEGO1 0x10002d90
 	virtual MxFloat VTable0xb4() { return m_unk0x140; } // vtable+0xb4
