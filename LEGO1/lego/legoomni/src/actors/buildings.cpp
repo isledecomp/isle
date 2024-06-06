@@ -29,7 +29,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1: {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -71,7 +71,7 @@ MxLong GasStationEntity::VTable0x50(MxParam& p_param)
 			state->SetUnknown18(0);
 
 			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->VTable0xe4();
+				((IslePathActor*) CurrentActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -95,7 +95,7 @@ MxLong HospitalEntity::VTable0x50(MxParam& p_param)
 			act1State->SetUnknown18(0);
 
 			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->VTable0xe4();
+				((IslePathActor*) CurrentActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -119,7 +119,7 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 			state->SetUnknown18(0);
 
 			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->VTable0xe4();
+				((IslePathActor*) CurrentActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -141,7 +141,7 @@ MxLong BeachHouseEntity::VTable0x50(MxParam& p_param)
 		state->SetUnknown18(0);
 
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -162,7 +162,7 @@ MxLong RaceStandsEntity::VTable0x50(MxParam& p_param)
 		state->SetUnknown18(0);
 
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);

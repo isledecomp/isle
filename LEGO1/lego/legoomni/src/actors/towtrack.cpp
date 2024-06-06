@@ -21,7 +21,7 @@ TowTrack::TowTrack()
 	m_unk0x170 = -1;
 	m_unk0x16e = 0;
 	m_unk0x174 = -1;
-	m_unk0x13c = 40.0;
+	m_maxLinearVel = 40.0;
 	m_unk0x178 = 1.0;
 }
 
@@ -96,7 +96,7 @@ MxU32 TowTrack::HandleClick()
 }
 
 // STUB: LEGO1 0x1004d8f0
-void TowTrack::VTable0xe4()
+void TowTrack::Exit()
 {
 	// TODO
 }

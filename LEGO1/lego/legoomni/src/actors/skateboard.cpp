@@ -21,7 +21,7 @@ DECOMP_SIZE_ASSERT(SkateBoard, 0x168)
 SkateBoard::SkateBoard()
 {
 	m_unk0x160 = FALSE;
-	m_unk0x13c = 15.0;
+	m_maxLinearVel = 15.0;
 	m_unk0x150 = 3.5;
 	m_unk0x148 = 1;
 
@@ -54,7 +54,7 @@ MxResult SkateBoard::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10010050
-void SkateBoard::VTable0xe4()
+void SkateBoard::Exit()
 {
 	if (m_act1state->m_unk0x018 == 3) {
 		Pizza* pizza = (Pizza*) CurrentWorld()->Find(*g_isleScript, IsleScript::c_Pizza_Actor);
@@ -63,7 +63,7 @@ void SkateBoard::VTable0xe4()
 		m_unk0x160 = FALSE;
 	}
 
-	IslePathActor::VTable0xe4();
+	IslePathActor::Exit();
 	GameState()->m_currentArea = LegoGameState::Area::e_skateboard;
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_SkateArms_Ctl);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_SkatePizza_Bitmap);
@@ -86,12 +86,12 @@ MxU32 SkateBoard::HandleClick()
 
 	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
 		if (!CurrentActor()->IsA("SkateBoard")) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 	}
 
 	if (!CurrentActor()->IsA("SkateBoard")) {
-		VTable0xe0();
+		Enter();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_SkateDashboard, NULL);
 		GetCurrentAction().SetObjectId(-1);
 		ControlManager()->Register(this);
@@ -111,7 +111,7 @@ MxU32 SkateBoard::HandleControl(LegoControlManagerEvent& p_param)
 	MxU32 result = 0;
 
 	if (p_param.GetUnknown0x28() == 1 && p_param.GetClickedObjectId() == IsleScript::c_SkateArms_Ctl) {
-		VTable0xe4();
+		Exit();
 		GameState()->m_currentArea = LegoGameState::Area::e_unk66;
 		result = 1;
 	}

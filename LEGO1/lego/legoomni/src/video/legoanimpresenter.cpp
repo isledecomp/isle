@@ -648,12 +648,7 @@ void LegoAnimPresenter::PutFrame()
 
 					up = und;
 
-#ifdef COMPAT_MODE
-					Mx3DPointFloat location = m_currentWorld->GetCamera()->GetWorldLocation();
-					((Vector3&) up).Sub(&location);
-#else
-					((Vector3&) up).Sub(&m_currentWorld->GetCamera()->GetWorldLocation());
-#endif
+					((Vector3&) up).Sub(m_currentWorld->GetCamera()->GetWorldLocation());
 					((Vector3&) dir).Div(dirsqr);
 					pos.EqualsCross(&dir, &up);
 					pos.Unitize();
@@ -1119,7 +1114,7 @@ void LegoAnimPresenter::VTable0x8c()
 		m_unk0xa8.Add((*m_unk0x78)[3]);
 	}
 	else {
-		m_unk0xa8.Add(&m_action->GetLocation());
+		m_unk0xa8.Add(m_action->GetLocation());
 	}
 
 	if (m_currentWorld == NULL) {
@@ -1176,10 +1171,10 @@ MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, fl
 
 	b = p_v2;
 	((Vector3&) b).Mul(p_f1);
-	((Vector3&) b).Add(&p_v1);
+	((Vector3&) b).Add(p_v1);
 
 	a = b;
-	((Vector3&) a).Sub(&m_unk0xa8);
+	((Vector3&) a).Sub(m_unk0xa8);
 
 	float len = a.LenSquared();
 	if (len <= 0.0f) {

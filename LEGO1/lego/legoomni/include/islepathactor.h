@@ -4,6 +4,7 @@
 #include "legogamestate.h"
 #include "legopathactor.h"
 #include "mxtypes.h"
+#include "roi/legoroi.h"
 
 class LegoControlManagerEvent;
 class LegoEndAnimNotificationParam;
@@ -120,8 +121,8 @@ public:
 	// FUNCTION: LEGO1 0x10002e00
 	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void VTable0xe0();                                                                   // vtable+0xe0
-	virtual void VTable0xe4();                                                                   // vtable+0xe4
+	virtual void Enter();                                                                        // vtable+0xe0
+	virtual void Exit();                                                                         // vtable+0xe4
 	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags);            // vtable+0xe8
 	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
 
@@ -130,12 +131,18 @@ public:
 
 	void FUN_1001b660();
 
+	void Reset()
+	{
+		m_roi->SetVisibility(TRUE);
+		SetState(0);
+	}
+
 	static void RegisterSpawnLocations();
 
 protected:
-	LegoWorld* m_world;        // 0x154
-	LegoPathActor* m_unk0x158; // 0x158
-	MxFloat m_unk0x15c;        // 0x15c
+	LegoWorld* m_world;             // 0x154
+	LegoPathActor* m_previousActor; // 0x158
+	MxFloat m_previousVel;          // 0x15c
 };
 
 #endif // ISLEPATHACTOR_H

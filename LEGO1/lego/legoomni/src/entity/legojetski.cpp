@@ -10,11 +10,11 @@ void LegoJetski::FUN_100136f0(float p_worldSpeed)
 {
 	if (p_worldSpeed < 0) {
 		LegoCarRaceActor::m_unk0x0c = 2;
-		m_unk0x13c = 0;
+		m_maxLinearVel = 0;
 		SetWorldSpeed(0);
 	}
 	else {
-		m_unk0x13c = p_worldSpeed;
+		m_maxLinearVel = p_worldSpeed;
 	}
 }
 
