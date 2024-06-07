@@ -16,7 +16,7 @@ public:
 	~MxMediaManager() override;
 
 	MxResult Tickle() override;                                 // vtable+08
-	virtual MxResult InitPresenters();                          // vtable+14
+	virtual MxResult Create();                                  // vtable+14
 	virtual void Destroy();                                     // vtable+18
 	virtual void RegisterPresenter(MxPresenter& p_presenter);   // vtable+1c
 	virtual void UnregisterPresenter(MxPresenter& p_presenter); // vtable+20

@@ -144,7 +144,7 @@ MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult status = FAILURE;
 	MxBool locked = FALSE;
 
-	if (MxAudioManager::InitPresenters() == SUCCESS) {
+	if (MxAudioManager::Create() == SUCCESS) {
 		if (p_createThread) {
 			m_criticalSection.Enter();
 			locked = TRUE;

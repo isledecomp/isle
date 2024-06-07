@@ -11,11 +11,11 @@ public:
 	MxAudioManager();
 	~MxAudioManager() override;
 
-	MxResult InitPresenters() override; // vtable+14
-	void Destroy() override;            // vtable+18
+	MxResult Create() override; // vtable+14
+	void Destroy() override;    // vtable+18
 
 	// FUNCTION: LEGO1 0x10029910
-	virtual MxS32 GetVolume() { return this->m_volume; } // vtable+28
+	virtual MxS32 GetVolume() { return m_volume; } // vtable+28
 
 	virtual void SetVolume(MxS32 p_volume); // vtable+2c
 
