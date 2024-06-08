@@ -5,12 +5,13 @@ import bisect
 import struct
 from enum import Enum, auto
 from collections import namedtuple
-from typing import List, NamedTuple, Optional, Tuple, Union
+from typing import Iterable, List, NamedTuple, Optional, Tuple, Union
 from capstone import Cs, CS_ARCH_X86, CS_MODE_32
 from .const import JUMP_MNEMONICS
 
 disassembler = Cs(CS_ARCH_X86, CS_MODE_32)
 
+DisasmLiteTuple = Tuple[int, int, str, str]
 DisasmLiteInst = namedtuple("DisasmLiteInst", "address, size, mnemonic, op_str")
 
 displacement_regex = re.compile(r".*\+ (0x[0-9a-f]+)\]")
@@ -25,6 +26,19 @@ class SectionType(Enum):
 class FuncSection(NamedTuple):
     type: SectionType
     contents: List[Union[DisasmLiteInst, Tuple[str, int]]]
+
+
+def stop_at_int3(
+    disasm_lite_gen: Iterable[DisasmLiteTuple],
+) -> Iterable[DisasmLiteTuple]:
+    """Wrapper for capstone disasm_lite generator. We want to stop reading
+    instructions if we hit the int3 instruction."""
+    for inst in disasm_lite_gen:
+        # inst[2] is the mnemonic
+        if inst[2] == "int3":
+            break
+
+        yield inst
 
 
 class InstructGen:
@@ -128,7 +142,7 @@ class InstructGen:
         blob_cropped = self.blob[addr - self.start :]
         instructions = [
             DisasmLiteInst(*inst)
-            for inst in disassembler.disasm_lite(blob_cropped, addr)
+            for inst in stop_at_int3(disassembler.disasm_lite(blob_cropped, addr))
         ]
         self.code_tracks.append(instructions)
         return instructions
