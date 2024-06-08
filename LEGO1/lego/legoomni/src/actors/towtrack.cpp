@@ -1,5 +1,6 @@
 #include "towtrack.h"
 
+#include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legovariables.h"
 #include "legoworld.h"
@@ -23,6 +24,12 @@ TowTrack::TowTrack()
 	m_unk0x174 = -1;
 	m_maxLinearVel = 40.0;
 	m_unk0x178 = 1.0;
+}
+
+// FUNCTION: LEGO1 0x1004c970
+TowTrack::~TowTrack()
+{
+	ControlManager()->Unregister(this);
 }
 
 // FUNCTION: LEGO1 0x1004c9e0

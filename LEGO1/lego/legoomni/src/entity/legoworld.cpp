@@ -477,6 +477,7 @@ void LegoWorld::Add(MxCore* p_object)
 }
 
 // FUNCTION: LEGO1 0x10020f10
+// FUNCTION: BETA10 0x100dad2a
 void LegoWorld::Remove(MxCore* p_object)
 {
 	if (p_object) {

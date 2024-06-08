@@ -43,6 +43,8 @@ public:
 // SIZE 0x1154
 class LegoAct2 : public LegoWorld {
 public:
+	~LegoAct2();
+
 	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
 	MxResult Tickle() override;                       // vtable+0x08
 	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
@@ -58,6 +60,8 @@ public:
 	// LegoAct2::`scalar deleting destructor'
 
 private:
+	void FUN_10051900();
+
 	Act2Brick m_bricks[10];      // 0x00f8
 	undefined m_unk0x10c0;       // 0x10c0
 	undefined m_unk0x10c1;       // 0x10c1
