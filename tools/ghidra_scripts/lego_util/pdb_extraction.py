@@ -4,7 +4,6 @@ from typing import Any, Optional
 import logging
 
 from isledecomp.cvdump.symbols import SymbolsEntry
-from isledecomp.types import SymbolType
 from isledecomp.compare import Compare as IsleCompare
 from isledecomp.compare.db import MatchInfo
 

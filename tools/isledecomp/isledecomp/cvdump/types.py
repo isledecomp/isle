@@ -216,10 +216,12 @@ class CvdumpTypesParser:
         re.compile(r"^\s*# members = (?P<num_members>\d+)$"),
         re.compile(r"^\s*enum name = (?P<name>.+)$"),
     ]
-    LF_ENUM_TYPES = re.compile(r"^\s*type = (?P<underlying_type>\S+) field list type (?P<field_type>0x\w{4})$")
+    LF_ENUM_TYPES = re.compile(
+        r"^\s*type = (?P<underlying_type>\S+) field list type (?P<field_type>0x\w{4})$"
+    )
     LF_ENUM_UDT = re.compile(r"^\s*UDT\((?P<udt>0x\w+)\)$")
     LF_UNION_LINE = re.compile(
-        r".*field list type (?P<field_type>0x\w+),.*Size = (?P<size>\d+)\s*,class name = (?P<name>(?:[^,]|,\S)+),\s.*UDT\((?P<udt>0x\w+)\)"
+        r"^.*field list type (?P<field_type>0x\w+),.*Size = (?P<size>\d+)\s*,class name = (?P<name>(?:[^,]|,\S)+),\s.*UDT\((?P<udt>0x\w+)\)$"
     )
 
     MODES_OF_INTEREST = {
@@ -452,6 +454,9 @@ class CvdumpTypesParser:
     def read_line(self, line: str):
         if line.endswith("\n"):
             line = line[:-1]
+        if len(line) == 0:
+            return
+
         if (match := self.INDEX_RE.match(line)) is not None:
             type_ = match.group(2)
             if type_ not in self.MODES_OF_INTEREST:
@@ -625,7 +630,6 @@ class CvdumpTypesParser:
             if pair.isspace():
                 continue
             obj |= self.parse_enum_attribute(pair)
-
 
     def parse_enum_attribute(self, attribute: str) -> dict[str, Any]:
         for attribute_regex in self.LF_ENUM_ATTRIBUTES:

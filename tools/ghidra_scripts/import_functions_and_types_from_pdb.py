@@ -133,7 +133,7 @@ def import_function_into_ghidra(
 
     # Find the Ghidra function at that address
     ghidra_address = getAddressFactory().getAddress(hex_original_address)
-
+    # pylint: disable=possibly-used-before-assignment
     function_importer = PdbFunctionImporter(api, match_info, signature, type_importer)
 
     ghidra_function = getFunctionAt(ghidra_address)
@@ -172,6 +172,7 @@ def process_functions(extraction: "PdbFunctionExtractor"):
         return
 
     api = FlatProgramAPI(currentProgram())
+    # pylint: disable=possibly-used-before-assignment
     type_importer = PdbTypeImporter(api, extraction)
 
     for match_info, signature in func_signatures:
