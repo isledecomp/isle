@@ -20,16 +20,16 @@ MxAudioManager::~MxAudioManager()
 // FUNCTION: LEGO1 0x100b8df0
 void MxAudioManager::Init()
 {
-	this->m_volume = 100;
+	m_volume = 100;
 }
 
 // FUNCTION: LEGO1 0x100b8e00
 void MxAudioManager::Destroy(MxBool p_fromDestructor)
 {
-	this->m_criticalSection.Enter();
+	m_criticalSection.Enter();
 	g_count--;
 	Init();
-	this->m_criticalSection.Leave();
+	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {
 		MxMediaManager::Destroy();
@@ -37,13 +37,13 @@ void MxAudioManager::Destroy(MxBool p_fromDestructor)
 }
 
 // FUNCTION: LEGO1 0x100b8e40
-MxResult MxAudioManager::InitPresenters()
+MxResult MxAudioManager::Create()
 {
 	MxResult result = FAILURE;
 	MxBool success = FALSE;
 
-	if (MxMediaManager::InitPresenters() == SUCCESS) {
-		this->m_criticalSection.Enter();
+	if (MxMediaManager::Create() == SUCCESS) {
+		m_criticalSection.Enter();
 		success = TRUE;
 		result = SUCCESS;
 		g_count++;
@@ -54,7 +54,7 @@ MxResult MxAudioManager::InitPresenters()
 	}
 
 	if (success) {
-		this->m_criticalSection.Leave();
+		m_criticalSection.Leave();
 	}
 
 	return result;
@@ -69,7 +69,7 @@ void MxAudioManager::Destroy()
 // FUNCTION: LEGO1 0x100b8ea0
 void MxAudioManager::SetVolume(MxS32 p_volume)
 {
-	this->m_criticalSection.Enter();
-	this->m_volume = p_volume;
-	this->m_criticalSection.Leave();
+	m_criticalSection.Enter();
+	m_volume = p_volume;
+	m_criticalSection.Leave();
 }

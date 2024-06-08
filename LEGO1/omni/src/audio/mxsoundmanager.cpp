@@ -5,8 +5,8 @@
 #include "mxmisc.h"
 #include "mxomni.h"
 #include "mxpresenter.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 #include "mxwavepresenter.h"
 
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
@@ -44,22 +44,22 @@ void MxSoundManager::Init()
 // FUNCTION: LEGO1 0x100ae840
 void MxSoundManager::Destroy(MxBool p_fromDestructor)
 {
-	if (this->m_thread) {
-		this->m_thread->Terminate();
-		delete this->m_thread;
+	if (m_thread) {
+		m_thread->Terminate();
+		delete m_thread;
 	}
 	else {
 		TickleManager()->UnregisterClient(this);
 	}
 
-	this->m_criticalSection.Enter();
+	m_criticalSection.Enter();
 
-	if (this->m_dsBuffer) {
-		this->m_dsBuffer->Release();
+	if (m_dsBuffer) {
+		m_dsBuffer->Release();
 	}
 
 	Init();
-	this->m_criticalSection.Leave();
+	m_criticalSection.Leave();
 
 	if (!p_fromDestructor) {
 		MxAudioManager::Destroy();
@@ -72,7 +72,7 @@ MxResult MxSoundManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult status = FAILURE;
 	MxBool locked = FALSE;
 
-	if (MxAudioManager::InitPresenters() != SUCCESS) {
+	if (MxAudioManager::Create() != SUCCESS) {
 		goto done;
 	}
 

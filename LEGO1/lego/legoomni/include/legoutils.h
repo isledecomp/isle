@@ -7,6 +7,23 @@
 
 #include <windows.h>
 
+#define WM_ISLE_SETCURSOR 0x5400
+
+enum Cursor {
+	e_cursorArrow = 0,
+	e_cursorBusy,
+	e_cursorNo,
+	e_cursorUnused3,
+	e_cursorUnused4,
+	e_cursorUnused5,
+	e_cursorUnused6,
+	e_cursorUnused7,
+	e_cursorUnused8,
+	e_cursorUnused9,
+	e_cursorUnused10,
+	e_cursorNone
+};
+
 class MxAtomId;
 class LegoEntity;
 class LegoFile;
@@ -27,8 +44,8 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_bO
 void PlayCamAnim(LegoPathActor* p_actor, MxBool p_unused, MxU32 p_location, MxBool p_bool);
 void FUN_1003eda0();
 MxBool RemoveFromCurrentWorld(const MxAtomId& p_atomId, MxS32 p_id);
-void FUN_1003ef00(MxBool p_enable);
-void SetAppCursor(WPARAM p_wparam);
+void EnableAnimations(MxBool p_enable);
+void SetAppCursor(Cursor p_cursor);
 MxBool FUN_1003ef60();
 MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_worldAtom, MxS32 p_worldEntityId);
 MxS32 UpdateLightPosition(MxS32 p_increase);

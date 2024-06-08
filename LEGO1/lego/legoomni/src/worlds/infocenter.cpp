@@ -1,13 +1,12 @@
 #include "infocenter.h"
 
-#include "act3state.h"
+#include "act3.h"
 #include "credits_actions.h"
-#include "helicopterstate.h"
-#include "infocenterstate.h"
+#include "helicopter.h"
 #include "infomain_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
-#include "legoact2state.h"
+#include "legoact2.h"
 #include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocharactermanager.h"
@@ -29,19 +28,103 @@
 #include "mxticklemanager.h"
 #include "mxtransitionmanager.h"
 #include "mxutilities.h"
-#include "radiostate.h"
 #include "scripts.h"
 #include "sndanim_actions.h"
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(Infocenter, 0x1d8)
 DECOMP_SIZE_ASSERT(InfocenterMapEntry, 0x18)
+DECOMP_SIZE_ASSERT(InfocenterState, 0x94)
 
 // GLOBAL: LEGO1 0x100f76a0
 const char* g_object2x4red = "2x4red";
 
 // GLOBAL: LEGO1 0x100f76a4
 const char* g_object2x4grn = "2x4grn";
+
+// GLOBAL: LEGO1 0x100f76a8
+InfomainScript::Script g_exitDialogueAct1[14] = {
+	InfomainScript::c_iic019in_RunAnim,
+	InfomainScript::c_iic020in_RunAnim,
+	InfomainScript::c_iic021in_RunAnim,
+	InfomainScript::c_iic022in_RunAnim,
+	InfomainScript::c_iic023in_RunAnim,
+	InfomainScript::c_iic024in_RunAnim,
+	InfomainScript::c_iic025in_RunAnim,
+	InfomainScript::c_iic026in_RunAnim,
+	InfomainScript::c_iic027in_RunAnim,
+	InfomainScript::c_iica28in_RunAnim,
+	InfomainScript::c_iicb28in_RunAnim,
+	InfomainScript::c_iicc28in_RunAnim,
+	InfomainScript::c_iic029in_RunAnim,
+	InfomainScript::c_iic032in_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f76e0
+InfomainScript::Script g_exitDialogueAct23[6] = {
+	InfomainScript::c_iic027in_RunAnim,
+	InfomainScript::c_iic029in_RunAnim,
+	InfomainScript::c_iic048in_RunAnim,
+	InfomainScript::c_iic056in_RunAnim,
+	InfomainScript::c_iicx23in_RunAnim
+	// Zero-terminated
+};
+
+// GLOBAL: LEGO1 0x100f76f8
+InfomainScript::Script g_returnDialogueAct1[6] = {
+	InfomainScript::c_iicx26in_RunAnim,
+	InfomainScript::c_iic033in_RunAnim,
+	InfomainScript::c_iic034in_RunAnim,
+	InfomainScript::c_iic035in_RunAnim,
+	InfomainScript::c_iic036in_RunAnim
+	// Zero-terminated
+};
+
+// GLOBAL: LEGO1 0x100f7710
+InfomainScript::Script g_returnDialogueAct2[4] = {
+	InfomainScript::c_iic048in_RunAnim,
+	InfomainScript::c_iic049in_RunAnim,
+	InfomainScript::c_iic050in_RunAnim,
+	// Zero-terminated
+};
+
+// GLOBAL: LEGO1 0x100f7720
+InfomainScript::Script g_returnDialogueAct3[4] = {
+	InfomainScript::c_iic055in_RunAnim,
+	InfomainScript::c_iic056in_RunAnim,
+	InfomainScript::c_iic057in_RunAnim,
+	InfomainScript::c_iic058in_RunAnim
+};
+
+// GLOBAL: LEGO1 0x100f7730
+InfomainScript::Script g_leaveDialogueAct1[4] = {
+	InfomainScript::c_iic039in_PlayWav,
+	InfomainScript::c_iic040in_PlayWav,
+	InfomainScript::c_iic041in_PlayWav,
+	InfomainScript::c_iic042in_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100f7740
+InfomainScript::Script g_leaveDialogueAct2[4] = {
+	InfomainScript::c_iic051in_PlayWav,
+	InfomainScript::c_iic052in_PlayWav,
+	InfomainScript::c_iic053in_PlayWav,
+	InfomainScript::c_iic054in_PlayWav
+};
+
+// GLOBAL: LEGO1 0x100f7750
+InfomainScript::Script g_leaveDialogueAct3[4] = {
+	InfomainScript::c_iic059in_PlayWav,
+	InfomainScript::c_iic060in_PlayWav,
+	InfomainScript::c_iic061in_PlayWav,
+	// Zero-terminated
+};
+
+// GLOBAL: LEGO1 0x100f7760
+InfomainScript::Script g_bricksterDialogue[2] = {
+	InfomainScript::c_sbleh2br_PlayWav,
+	InfomainScript::c_snshahbr_PlayWav
+};
 
 // FUNCTION: LEGO1 0x1006ea20
 Infocenter::Infocenter()
@@ -57,7 +140,7 @@ Infocenter::Infocenter()
 	memset(&m_mapAreas, 0, sizeof(m_mapAreas));
 
 	m_unk0x1c8 = -1;
-	SetAppCursor(1);
+	SetAppCursor(e_cursorBusy);
 	NotificationManager()->Register(this);
 
 	m_infoManDialogueTimer = 0;
@@ -612,7 +695,6 @@ MxU8 Infocenter::HandleMouseMove(MxS32 p_x, MxS32 p_y)
 			VideoManager()->SortPresenterList();
 			m_unk0x11c->Enable(TRUE);
 			m_unk0x11c->SetPosition(p_x, p_y);
-
 			m_unk0x11c->SetDisplayZ(oldDisplayZ);
 		}
 		else {
@@ -631,7 +713,7 @@ MxLong Infocenter::HandleKeyPress(MxS8 p_key)
 {
 	MxLong result = 0;
 
-	if (p_key == ' ' && m_worldStarted) {
+	if (p_key == VK_SPACE && m_worldStarted) {
 		switch (m_infocenterState->GetUnknown0x74()) {
 		case 0:
 			StopCutscene();
@@ -965,7 +1047,7 @@ MxU8 Infocenter::HandleControl(LegoControlManagerEvent& p_param)
 					InputManager()->SetUnknown336(TRUE);
 					break;
 				case LegoGameState::e_unk4:
-					if (state->GetActorId()) {
+					if (state->GetActorId() != LegoActor::c_none) {
 						if (m_infocenterState->HasRegistered()) {
 							m_infocenterState->SetUnknown0x74(5);
 							m_destLocation = state->GetPreviousArea();
@@ -1184,7 +1266,7 @@ void Infocenter::PlayCutscene(Cutscene p_entityId, MxBool p_scale)
 	VideoManager()->EnableFullScreenMovie(TRUE, p_scale);
 	InputManager()->SetUnknown336(TRUE);
 	InputManager()->SetUnknown335(TRUE);
-	SetAppCursor(0xb); // Hide cursor
+	SetAppCursor(e_cursorNone);
 	VideoManager()->GetDisplaySurface()->ClearScreen();
 
 	if (m_currentCutscene != e_noIntro) {
@@ -1206,7 +1288,7 @@ void Infocenter::StopCutscene()
 
 	VideoManager()->EnableFullScreenMovie(FALSE);
 	InputManager()->SetUnknown335(FALSE);
-	SetAppCursor(0); // Restore cursor to arrow
+	SetAppCursor(e_cursorArrow);
 	FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 }
 
@@ -1254,23 +1336,23 @@ void Infocenter::UpdateFrameHot(MxBool p_display)
 		MxS32 x, y;
 
 		switch (GameState()->GetActorId()) {
-		case 1:
+		case LegoActor::c_pepper:
 			x = 302;
 			y = 81;
 			break;
-		case 2:
+		case LegoActor::c_mama:
 			x = 204;
 			y = 81;
 			break;
-		case 3:
+		case LegoActor::c_papa:
 			x = 253;
 			y = 81;
 			break;
-		case 4:
+		case LegoActor::c_nick:
 			x = 353;
 			y = 81;
 			break;
-		case 5:
+		case LegoActor::c_laura:
 			x = 399;
 			y = 81;
 			break;
@@ -1309,7 +1391,7 @@ void Infocenter::Reset()
 	PlantManager()->FUN_10027120();
 	BuildingManager()->FUN_10030590();
 	AnimationManager()->Reset(FALSE);
-	CharacterManager()->FUN_100832a0();
+	CharacterManager()->ReleaseAllActors();
 	GameState()->SetCurrentAct(LegoGameState::e_act1);
 	GameState()->SetPreviousArea(LegoGameState::e_undefined);
 	GameState()->SetUnknown0x42c(LegoGameState::e_undefined);
@@ -1406,7 +1488,7 @@ void Infocenter::StartCredits()
 	GetViewManager()->RemoveAll(NULL);
 
 	InvokeAction(Extra::e_opendisk, *g_creditsScript, CreditsScript::c_LegoCredits, NULL);
-	SetAppCursor(0);
+	SetAppCursor(e_cursorArrow);
 }
 
 // FUNCTION: LEGO1 0x10071250
@@ -1462,4 +1544,46 @@ void Infocenter::StopBookAnimation()
 	action.SetAtomId(*g_sndAnimScript);
 	action.SetUnknown24(-2);
 	DeleteObject(action);
+}
+
+// FUNCTION: LEGO1 0x10071600
+InfocenterState::InfocenterState()
+{
+	m_exitDialogueAct1 = LegoState::Playlist((MxU32*) g_exitDialogueAct1, sizeOfArray(g_exitDialogueAct1));
+	m_exitDialogueAct23 = LegoState::Playlist((MxU32*) g_exitDialogueAct23, sizeOfArray(g_exitDialogueAct23) - 1);
+
+	m_returnDialogue[LegoGameState::e_act1] =
+		LegoState::Playlist((MxU32*) g_returnDialogueAct1, sizeOfArray(g_returnDialogueAct1) - 1);
+
+	m_returnDialogue[LegoGameState::e_act2] =
+		LegoState::Playlist((MxU32*) g_returnDialogueAct2, sizeOfArray(g_returnDialogueAct2) - 1);
+
+	m_returnDialogue[LegoGameState::e_act3] =
+		LegoState::Playlist((MxU32*) g_returnDialogueAct3, sizeOfArray(g_returnDialogueAct3));
+
+	m_leaveDialogue[LegoGameState::e_act1] =
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct1, sizeOfArray(g_leaveDialogueAct1));
+
+	m_leaveDialogue[LegoGameState::e_act2] =
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct2, sizeOfArray(g_leaveDialogueAct2));
+
+	m_leaveDialogue[LegoGameState::e_act3] =
+		LegoState::Playlist((MxU32*) g_leaveDialogueAct3, sizeOfArray(g_leaveDialogueAct3) - 1);
+
+	m_bricksterDialogue = LegoState::Playlist((MxU32*) g_bricksterDialogue, sizeOfArray(g_bricksterDialogue));
+
+	memset(m_letters, 0, sizeof(m_letters));
+}
+
+// FUNCTION: LEGO1 0x10071920
+InfocenterState::~InfocenterState()
+{
+	MxS16 i = 0;
+	do {
+		if (GetNameLetter(i) != NULL) {
+			delete GetNameLetter(i)->GetAction();
+			delete GetNameLetter(i);
+		}
+		i++;
+	} while (i < GetMaxNameLength());
 }

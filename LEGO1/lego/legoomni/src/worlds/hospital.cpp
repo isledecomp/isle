@@ -1,8 +1,7 @@
 #include "hospital.h"
 
-#include "act1state.h"
 #include "hospital_actions.h"
-#include "hospitalstate.h"
+#include "isle.h"
 #include "islepathactor.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
@@ -22,6 +21,7 @@
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
+DECOMP_SIZE_ASSERT(HospitalState, 0x18)
 
 // GLOBAL: LEGO1 0x100f7918
 undefined4 g_unk0x100f7918 = 3;
@@ -35,7 +35,7 @@ MxBool g_pizzaLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100745e0
 Hospital::Hospital()
 {
-	m_currentActorId = 0;
+	m_currentActorId = LegoActor::c_none;
 	m_unk0x100 = 0;
 	m_hospitalState = NULL;
 	m_unk0x108 = 0;
@@ -100,7 +100,7 @@ MxResult Hospital::Create(MxDSAction& p_dsAction)
 	GameState()->StopArea(LegoGameState::e_previousArea);
 
 	InputManager()->Register(this);
-	FUN_1003ef00(FALSE);
+	EnableAnimations(FALSE);
 
 	return result;
 }
@@ -145,14 +145,14 @@ void Hospital::ReadyWorld()
 	m_pizzaLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "PizzaLed_Bitmap");
 
 	if (CurrentActor() == NULL) {
-		m_currentActorId = 5;
+		m_currentActorId = LegoActor::c_laura;
 	}
 	else {
 		m_currentActorId = CurrentActor()->GetActorId();
 	}
 
 	switch (m_currentActorId) {
-	case 1:
+	case LegoActor::c_pepper:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x0e;
 
 		if (m_hospitalState->m_unk0x0e < 5) {
@@ -160,7 +160,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 2:
+	case LegoActor::c_mama:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x10;
 
 		if (m_hospitalState->m_unk0x10 < 5) {
@@ -168,7 +168,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 3:
+	case LegoActor::c_papa:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x12;
 
 		if (m_hospitalState->m_unk0x12 < 5) {
@@ -176,7 +176,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 4:
+	case LegoActor::c_nick:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x14;
 
 		if (m_hospitalState->m_unk0x14 < 5) {
@@ -184,7 +184,7 @@ void Hospital::ReadyWorld()
 		}
 
 		break;
-	case 5:
+	case LegoActor::c_laura:
 		m_hospitalState->m_unk0x0c = m_hospitalState->m_unk0x16;
 
 		if (m_hospitalState->m_unk0x16 < 5) {
@@ -226,7 +226,7 @@ MxLong Hospital::HandleKeyPress(MxS8 p_key)
 {
 	MxLong result = 0;
 
-	if (p_key == ' ' && g_unk0x100f7918 == 0) {
+	if (p_key == VK_SPACE && g_unk0x100f7918 == 0) {
 		DeleteObjects(&m_atom, HospitalScript::c_hho002cl_RunAnim, HospitalScript::c_hho006cl_RunAnim);
 		result = 1;
 	}
@@ -269,7 +269,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 		break;
 	case 11:
 		switch (m_currentActorId) {
-		case 1:
+		case LegoActor::c_pepper:
 			switch (m_hospitalState->m_unk0x0e) {
 			case 0:
 			case 1:
@@ -288,7 +288,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 2:
+		case LegoActor::c_mama:
 			switch (m_hospitalState->m_unk0x10) {
 			case 0:
 			case 1:
@@ -307,7 +307,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 3:
+		case LegoActor::c_papa:
 			switch (m_hospitalState->m_unk0x12) {
 			case 0:
 			case 1:
@@ -326,7 +326,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 4:
+		case LegoActor::c_nick:
 			switch (m_hospitalState->m_unk0x14) {
 			case 0:
 			case 1:
@@ -345,7 +345,7 @@ MxLong Hospital::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			}
 			break;
-		case 5:
+		case LegoActor::c_laura:
 			switch (m_hospitalState->m_unk0x16) {
 			case 0:
 			case 1:
@@ -438,7 +438,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 					}
 					else {
 						switch (m_currentActorId) {
-						case 1:
+						case LegoActor::c_pepper:
 							switch (m_hospitalState->m_unk0x0e) {
 							case 0:
 							case 1:
@@ -457,7 +457,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 2:
+						case LegoActor::c_mama:
 							switch (m_hospitalState->m_unk0x10) {
 							case 0:
 							case 1:
@@ -476,7 +476,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 3:
+						case LegoActor::c_papa:
 							switch (m_hospitalState->m_unk0x12) {
 							case 0:
 							case 1:
@@ -495,7 +495,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 4:
+						case LegoActor::c_nick:
 							switch (m_hospitalState->m_unk0x14) {
 							case 0:
 							case 1:
@@ -514,7 +514,7 @@ MxLong Hospital::HandleButtonDown(LegoControlManagerEvent& p_param)
 								break;
 							}
 							break;
-						case 5:
+						case LegoActor::c_laura:
 							switch (m_hospitalState->m_unk0x16) {
 							case 0:
 							case 1:
@@ -670,4 +670,50 @@ MxBool Hospital::Escape()
 	m_destLocation = LegoGameState::e_infomain;
 
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x10076370
+HospitalState::HospitalState()
+{
+	m_unk0x0c = 0;
+	m_unk0x0e = 0;
+	m_unk0x10 = 0;
+	m_unk0x12 = 0;
+	m_unk0x14 = 0;
+	m_unk0x16 = 0;
+}
+
+// FUNCTION: LEGO1 0x10076530
+MxResult HospitalState::Serialize(LegoFile* p_legoFile)
+{
+	LegoState::Serialize(p_legoFile);
+
+	if (p_legoFile->IsWriteMode()) {
+		// A write variable needs to be used here, otherwise
+		// the compiler aggresively optimizes the function
+		MxS16 write;
+
+		write = m_unk0x0c;
+		p_legoFile->Write(&write, sizeof(m_unk0x0c));
+		write = m_unk0x0e;
+		p_legoFile->Write(&write, sizeof(m_unk0x0e));
+		write = m_unk0x10;
+		p_legoFile->Write(&write, sizeof(m_unk0x10));
+		write = m_unk0x12;
+		p_legoFile->Write(&write, sizeof(m_unk0x12));
+		write = m_unk0x14;
+		p_legoFile->Write(&write, sizeof(m_unk0x14));
+		write = m_unk0x16;
+		p_legoFile->Write(&write, sizeof(m_unk0x16));
+	}
+	else if (p_legoFile->IsReadMode()) {
+		p_legoFile->Read(&m_unk0x0c, sizeof(m_unk0x0c));
+		p_legoFile->Read(&m_unk0x0e, sizeof(m_unk0x0e));
+		p_legoFile->Read(&m_unk0x10, sizeof(m_unk0x10));
+		p_legoFile->Read(&m_unk0x12, sizeof(m_unk0x12));
+		p_legoFile->Read(&m_unk0x14, sizeof(m_unk0x14));
+		p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
+	}
+
+	return SUCCESS;
 }

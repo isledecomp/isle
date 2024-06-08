@@ -7,8 +7,8 @@
 #include "mxpalette.h"
 #include "mxpresenter.h"
 #include "mxregion.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 
 DECOMP_SIZE_ASSERT(MxVideoManager, 0x64)
 
@@ -146,7 +146,7 @@ MxResult MxVideoManager::VTable0x28(
 
 	m_unk0x60 = FALSE;
 
-	if (MxMediaManager::InitPresenters() != SUCCESS) {
+	if (MxMediaManager::Create() != SUCCESS) {
 		goto done;
 	}
 
@@ -219,7 +219,7 @@ MxResult MxVideoManager::Create(MxVideoParam& p_videoParam, MxU32 p_frequencyMS,
 
 	m_unk0x60 = TRUE;
 
-	if (MxMediaManager::InitPresenters() != SUCCESS) {
+	if (MxMediaManager::Create() != SUCCESS) {
 		goto done;
 	}
 

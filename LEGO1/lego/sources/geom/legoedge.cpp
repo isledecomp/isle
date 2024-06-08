@@ -51,7 +51,7 @@ LegoEdge* LegoEdge::GetCounterclockwiseEdge(LegoWEEdge& p_face)
 }
 
 // FUNCTION: LEGO1 0x1009a510
-Vector3* LegoEdge::GetOpposingPoint(LegoWEEdge& p_face)
+Vector3* LegoEdge::CWVertex(LegoWEEdge& p_face)
 {
 	return &p_face == m_faceA ? m_pointB : m_pointA;
 }

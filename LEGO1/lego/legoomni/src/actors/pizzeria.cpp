@@ -9,11 +9,11 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "pizza.h"
-#include "pizzamissionstate.h"
-#include "pizzeriastate.h"
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Pizzeria, 0x84)
+DECOMP_SIZE_ASSERT(PizzeriaState, 0x58)
+DECOMP_SIZE_ASSERT(PizzeriaState::StateStruct, 0x14)
 
 // FUNCTION: LEGO1 0x100179c0
 MxResult Pizzeria::Create(MxDSAction& p_dsAction)
@@ -51,7 +51,7 @@ undefined4 Pizzeria::HandleClick()
 	if (FUN_1003ef60() && m_pizzaMissionState->m_unk0x0c == 0) {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
 			if (!CurrentActor()->IsA("SkateBoard")) {
-				((IslePathActor*) CurrentActor())->VTable0xe4();
+				((IslePathActor*) CurrentActor())->Exit();
 			}
 		}
 
@@ -62,4 +62,23 @@ undefined4 Pizzeria::HandleClick()
 	}
 
 	return 1;
+}
+
+// STUB: LEGO1 0x10017af0
+PizzeriaState::PizzeriaState()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10017d70
+MxU32 PizzeriaState::FUN_10017d70()
+{
+	return 0;
+}
+
+// STUB: LEGO1 0x10017da0
+MxResult PizzeriaState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
 }

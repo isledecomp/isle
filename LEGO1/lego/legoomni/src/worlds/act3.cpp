@@ -1,6 +1,7 @@
 #include "act3.h"
 
 DECOMP_SIZE_ASSERT(Act3, 0x4274)
+DECOMP_SIZE_ASSERT(Act3State, 0x0c)
 
 // STUB: LEGO1 0x10072270
 Act3::Act3()

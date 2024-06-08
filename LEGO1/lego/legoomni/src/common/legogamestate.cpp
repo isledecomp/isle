@@ -1,7 +1,6 @@
 #include "legogamestate.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "act1state.h"
 #include "act2main_actions.h"
 #include "act3_actions.h"
 #include "carrace_actions.h"
@@ -15,7 +14,7 @@
 #include "helicopter.h"
 #include "histbook_actions.h"
 #include "hospital_actions.h"
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "infodoor_actions.h"
 #include "infomain_actions.h"
 #include "infoscor_actions.h"
@@ -124,7 +123,7 @@ LegoGameState::LegoGameState()
 	m_actorId = 0;
 	m_savePath = NULL;
 	m_stateArray = NULL;
-	m_unk0x41c = JukeboxScript::c_noneJukebox;
+	m_jukeboxMusic = JukeboxScript::c_noneJukebox;
 	m_currentArea = e_undefined;
 	m_previousArea = e_undefined;
 	m_unk0x42c = e_undefined;
@@ -177,7 +176,7 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 
 	IslePathActor* newActor = new IslePathActor();
 	const char* actorName = LegoActor::GetActorName(m_actorId);
-	LegoROI* roi = CharacterManager()->GetROI(actorName, FALSE);
+	LegoROI* roi = CharacterManager()->GetActorROI(actorName, FALSE);
 	MxDSAction action;
 
 	action.SetAtomId(*g_isleScript);
@@ -982,7 +981,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		VideoManager()->SetUnk0x554(TRUE);
 		InvokeAction(Extra::ActionType::e_opendisk, *g_jukeboxwScript, JukeboxwScript::c__StartUp, NULL);
 		break;
-	case e_unk54:
+	case e_jukeboxExterior:
 		LoadIsle();
 		break;
 	case e_histbook:

@@ -80,7 +80,7 @@ public:
 	inline MxFloat GetLinearVel() { return m_linearVel; }
 	inline MxFloat GetRotationalVel() { return m_rotationalVel; }
 	inline MxFloat GetMaxLinearVel() { return m_maxLinearVel; }
-	inline void ResetLinearVel(MxFloat p_maxLinearVel)
+	inline void ResetMaxLinearVel(MxFloat p_maxLinearVel)
 	{
 		m_maxLinearVel = p_maxLinearVel;
 		m_trackDefault = 0;

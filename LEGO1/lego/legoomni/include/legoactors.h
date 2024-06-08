@@ -1,5 +1,5 @@
-#ifndef LEGOCHARACTERS_H
-#define LEGOCHARACTERS_H
+#ifndef LEGOACTORS_H
+#define LEGOACTORS_H
 
 #include "decomp.h"
 #include "mxtypes.h"
@@ -8,7 +8,7 @@ class LegoExtraActor;
 class LegoROI;
 
 // SIZE 0x108
-struct LegoCharacterInfo {
+struct LegoActorInfo {
 	// SIZE 0x18
 	struct Part {
 		MxU8* m_unk0x00;        // 0x00
@@ -22,14 +22,14 @@ struct LegoCharacterInfo {
 	const char* m_name;      // 0x00
 	LegoROI* m_roi;          // 0x04
 	LegoExtraActor* m_actor; // 0x08
-	MxS32 m_unk0x0c;         // 0x0c
-	MxS32 m_unk0x10;         // 0x10
+	MxS32 m_sound;           // 0x0c
+	MxS32 m_move;            // 0x10
 	MxU8 m_mood;             // 0x14
 	Part m_parts[10];        // 0x18
 };
 
 // SIZE 0x58
-struct LegoCharacterLOD {
+struct LegoActorLOD {
 	enum {
 		c_flag1 = 0x01,
 		c_flag2 = 0x02
@@ -45,7 +45,7 @@ struct LegoCharacterLOD {
 	float m_up[3];             // 0x4c
 };
 
-enum LegoCharacterLODs {
+enum LegoActorLODs {
 	c_topLOD,
 	c_bodyLOD,
 	c_infohatLOD,
@@ -59,7 +59,7 @@ enum LegoCharacterLODs {
 	c_legrtLOD
 };
 
-enum LegoCharacterParts {
+enum LegoActorParts {
 	c_bodyPart,
 	c_infohatPart,
 	c_infogronPart,
@@ -72,7 +72,7 @@ enum LegoCharacterParts {
 	c_legrtPart
 };
 
-extern LegoCharacterInfo g_characterInfoInit[66];
-extern LegoCharacterLOD g_characterLODs[11];
+extern LegoActorInfo g_actorInfoInit[66];
+extern LegoActorLOD g_actorLODs[11];
 
-#endif // LEGOCHARACTERS_H
+#endif // LEGOACTORS_H

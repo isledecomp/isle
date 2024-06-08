@@ -4,6 +4,7 @@
 #include "legogamestate.h"
 #include "legopathactor.h"
 #include "mxtypes.h"
+#include "roi/legoroi.h"
 
 class LegoControlManagerEvent;
 class LegoEndAnimNotificationParam;
@@ -106,22 +107,22 @@ public:
 	void Destroy(MxBool p_fromDestructor) override;   // vtable+0x1c
 
 	// FUNCTION: LEGO1 0x10002e70
-	virtual MxU32 HandleClick() { return 0; } // vtable+0xcc
+	virtual MxLong HandleClick() { return 0; } // vtable+0xcc
 
 	// FUNCTION: LEGO1 0x10002df0
-	virtual MxU32 VTable0xd0() { return 0; } // vtable+0xd0
+	virtual MxLong HandleNotification0() { return 0; } // vtable+0xd0
 
 	// FUNCTION: LEGO1 0x10002e80
-	virtual MxU32 HandleControl(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
+	virtual MxLong HandleControl(LegoControlManagerEvent&) { return 0; } // vtable+0xd4
 
 	// FUNCTION: LEGO1 0x10002e90
-	virtual MxU32 VTable0xd8(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
+	virtual MxLong HandleEndAnim(LegoEndAnimNotificationParam&) { return 0; } // vtable+0xd8
 
 	// FUNCTION: LEGO1 0x10002e00
-	virtual MxU32 VTable0xdc(MxType19NotificationParam&) { return 0; } // vtable+0xdc
+	virtual MxLong HandleNotification19(MxType19NotificationParam&) { return 0; } // vtable+0xdc
 
-	virtual void VTable0xe0();                                                                   // vtable+0xe0
-	virtual void VTable0xe4();                                                                   // vtable+0xe4
+	virtual void Enter();                                                                        // vtable+0xe0
+	virtual void Exit();                                                                         // vtable+0xe4
 	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags);            // vtable+0xe8
 	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
 
@@ -130,12 +131,18 @@ public:
 
 	void FUN_1001b660();
 
+	void Reset()
+	{
+		m_roi->SetVisibility(TRUE);
+		SetState(0);
+	}
+
 	static void RegisterSpawnLocations();
 
 protected:
-	LegoWorld* m_world;        // 0x154
-	LegoPathActor* m_unk0x158; // 0x158
-	MxFloat m_unk0x15c;        // 0x15c
+	LegoWorld* m_world;             // 0x154
+	LegoPathActor* m_previousActor; // 0x158
+	MxFloat m_previousVel;          // 0x15c
 };
 
 #endif // ISLEPATHACTOR_H

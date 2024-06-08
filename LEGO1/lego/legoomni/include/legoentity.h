@@ -14,16 +14,16 @@ class Vector3;
 class LegoEntity : public MxEntity {
 public:
 	enum Type {
-		e_character = 0,
+		e_actor = 0,
 		e_unk1,
 		e_plant,
 		e_building,
-		e_unk4
+		e_autoROI
 	};
 
 	enum {
 		c_bit1 = 0x01,
-		c_bit2 = 0x02
+		c_managerOwned = 0x02
 	};
 
 	enum {
@@ -64,13 +64,13 @@ public:
 	// FUNCTION: LEGO1 0x10001090
 	virtual void SetWorldSpeed(MxFloat p_worldSpeed) { m_worldSpeed = p_worldSpeed; } // vtable+0x30
 
-	virtual void VTable0x34(MxBool p_und);   // vtable+0x34
-	virtual void VTable0x38();               // vtable+0x38
-	virtual void VTable0x3c();               // vtable+0x3c
-	virtual void VTable0x40();               // vtable+0x40
-	virtual void VTable0x44();               // vtable+0x44
-	virtual void VTable0x48(LegoROI* p_roi); // vtable+0x48
-	virtual void VTable0x4c();               // vtable+0x4c
+	virtual void ClickSound(MxBool p_und);    // vtable+0x34
+	virtual void ClickAnimation();            // vtable+0x38
+	virtual void SwitchVariant();             // vtable+0x3c
+	virtual void SwitchSound();               // vtable+0x40
+	virtual void SwitchMove();                // vtable+0x44
+	virtual void SwitchColor(LegoROI* p_roi); // vtable+0x48
+	virtual void SwitchMood();                // vtable+0x4c
 
 	void FUN_10010c30();
 	void SetType(MxU8 p_type);

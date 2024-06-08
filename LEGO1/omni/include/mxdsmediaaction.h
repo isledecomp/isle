@@ -42,6 +42,9 @@ public:
 
 	void CopyMediaSrcPath(const char* p_mediaSrcPath);
 
+	// FUNCTION: LEGO1 0x100186e0
+	inline const char* GetMediaSrcPath() { return m_mediaSrcPath; }
+
 	// FUNCTION: BETA10 0x1013c2e0
 	inline MxS32 GetFramesPerSecond() const { return m_framesPerSecond; }
 

@@ -156,7 +156,7 @@ MxResult LegoPointOfViewController::Tickle()
 			pov->WrappedSetLocalTransform(mat);
 			m_lego3DView->Moved(*pov);
 
-			SoundManager()->FUN_1002a410(
+			SoundManager()->UpdateListener(
 				pov->GetWorldPosition(),
 				pov->GetWorldDirection(),
 				pov->GetWorldUp(),
@@ -172,7 +172,7 @@ MxResult LegoPointOfViewController::Tickle()
 				vel.Clear();
 				pov->FUN_100a5a30(vel);
 
-				SoundManager()->FUN_1002a410(
+				SoundManager()->UpdateListener(
 					pov->GetWorldPosition(),
 					pov->GetWorldDirection(),
 					pov->GetWorldUp(),

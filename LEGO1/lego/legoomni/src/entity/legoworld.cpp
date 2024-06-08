@@ -4,9 +4,11 @@
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
 #include "legobuildingmanager.h"
+#include "legocachesoundlist.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legocontrolmanager.h"
+#include "legoentitylist.h"
 #include "legogamestate.h"
 #include "legoinputmanager.h"
 #include "legolocomotionanimpresenter.h"
@@ -187,7 +189,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 		while (cursor.First(entity)) {
 			cursor.Detach();
 
-			if (!(entity->GetFlags() & LegoEntity::c_bit2)) {
+			if (!(entity->GetFlags() & LegoEntity::c_managerOwned)) {
 				delete entity;
 			}
 		}
@@ -202,7 +204,7 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 
 		while (cursor.First(sound)) {
 			cursor.Detach();
-			SoundManager()->GetCacheSoundManager()->FUN_1003dc40(&sound);
+			SoundManager()->GetCacheSoundManager()->Destroy(sound);
 		}
 
 		delete m_cacheSoundList;
@@ -766,7 +768,7 @@ MxResult LegoWorld::Tickle()
 		switch (m_startupTicks) {
 		case e_start:
 			m_worldStarted = TRUE;
-			SetAppCursor(0);
+			SetAppCursor(e_cursorArrow);
 			ReadyWorld();
 			return TRUE;
 		case e_two:

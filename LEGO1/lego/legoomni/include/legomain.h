@@ -128,9 +128,9 @@ public:
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
 	LegoPathActor* GetCurrentActor() { return m_currentActor; }
-	LegoPlantManager* GetLegoPlantManager() { return m_plantManager; }
+	LegoPlantManager* GetPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
-	LegoBuildingManager* GetLegoBuildingManager() { return m_buildingManager; }
+	LegoBuildingManager* GetBuildingManager() { return m_buildingManager; }
 	LegoGameState* GetGameState() { return m_gameState; }
 	MxBackgroundAudioManager* GetBackgroundAudioManager() { return m_bkgAudioManager; }
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }

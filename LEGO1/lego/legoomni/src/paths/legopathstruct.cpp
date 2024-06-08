@@ -1,8 +1,8 @@
 #include "legopathstruct.h"
 
 #include "isle.h"
+#include "jukebox.h"
 #include "jukebox_actions.h"
-#include "jukeboxstate.h"
 #include "legohideanimpresenter.h"
 #include "legopathactor.h"
 #include "legoutils.h"

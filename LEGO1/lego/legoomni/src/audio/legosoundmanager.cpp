@@ -97,8 +97,38 @@ MxResult LegoSoundManager::Tickle()
 	return m_cacheSoundManager->Tickle();
 }
 
-// STUB: LEGO1 0x1002a410
-void LegoSoundManager::FUN_1002a410(const float* p_pos, const float* p_dir, const float* p_up, const float* p_vel)
+// FUNCTION: LEGO1 0x1002a410
+// FUNCTION: BETA10 0x100d03a5
+void LegoSoundManager::UpdateListener(
+	const float* p_position,
+	const float* p_direction,
+	const float* p_up,
+	const float* p_velocity
+)
 {
-	// TODO
+	if (m_listener != NULL) {
+		if (p_position != NULL) {
+			m_listener->SetPosition(p_position[0], p_position[1], p_position[2], DS3D_DEFERRED);
+		}
+
+		if (p_direction != NULL && p_up != NULL) {
+			m_listener->SetOrientation(
+				p_direction[0],
+				p_direction[1],
+				p_direction[2],
+				p_up[0],
+				p_up[1],
+				p_up[2],
+				DS3D_DEFERRED
+			);
+		}
+
+		if (p_velocity != NULL) {
+			m_listener->SetVelocity(p_velocity[0], p_velocity[1], p_velocity[2], DS3D_DEFERRED);
+		}
+
+		if (p_position != NULL || (p_direction != NULL && p_up != NULL) || p_velocity != NULL) {
+			m_listener->CommitDeferredSettings();
+		}
+	}
 }

@@ -1,6 +1,6 @@
 #include "registrationbook.h"
 
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "jukebox_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -166,13 +166,13 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 		key = p_key;
 	}
 
-	if ((key < 'A' || key > 'Z') && key != '\b') {
-		if (key == ' ') {
+	if ((key < 'A' || key > 'Z') && key != VK_BACK) {
+		if (key == VK_SPACE) {
 			DeleteObjects(&m_atom, RegbookScript::c_iic006in_RunAnim, RegbookScript::c_iic008in_PlayWav);
 			BackgroundAudioManager()->RaiseVolume();
 		}
 	}
-	else if (key != '\b' && m_unk0x280.m_cursorPos < 7) {
+	else if (key != VK_BACK && m_unk0x280.m_cursorPos < 7) {
 		m_name[0][m_unk0x280.m_cursorPos] = m_alphabet[key - 'A']->Clone();
 
 		if (m_name[0][m_unk0x280.m_cursorPos] != NULL) {
@@ -190,7 +190,7 @@ MxLong RegistrationBook::HandleKeyPress(MxU8 p_key)
 		}
 	}
 	else {
-		if (key == '\b' && m_unk0x280.m_cursorPos > 0) {
+		if (key == VK_BACK && m_unk0x280.m_cursorPos > 0) {
 			m_unk0x280.m_cursorPos--;
 
 			m_name[0][m_unk0x280.m_cursorPos]->Enable(FALSE);

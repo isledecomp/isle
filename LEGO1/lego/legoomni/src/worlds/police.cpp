@@ -13,9 +13,10 @@
 #include "mxnotificationmanager.h"
 #include "mxtransitionmanager.h"
 #include "police_actions.h"
-#include "policestate.h"
+#include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Police, 0x110)
+DECOMP_SIZE_ASSERT(PoliceState, 0x10)
 
 // FUNCTION: LEGO1 0x1005e130
 Police::Police()
@@ -164,7 +165,7 @@ MxLong Police::HandleKeyPress(LegoEventNotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (p_param.GetKey() == ' ' && m_policeState->GetUnknown0x0c() == 1) {
+	if (p_param.GetKey() == VK_SPACE && m_policeState->GetUnknown0x0c() == 1) {
 		DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, PoliceScript::c_nps002la_RunAnim);
 		m_policeState->SetUnknown0x0c(0);
 		return 1;
@@ -195,4 +196,61 @@ MxBool Police::Escape()
 	DeleteObjects(&m_atom, PoliceScript::c_nps001ni_RunAnim, 510);
 	m_destLocation = LegoGameState::e_infomain;
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x1005e7c0
+PoliceState::PoliceState()
+{
+	m_unk0x0c = 0;
+	m_policeScript = (rand() % 2 == 0) ? PoliceScript::c_nps002la_RunAnim : PoliceScript::c_nps001ni_RunAnim;
+}
+
+// FUNCTION: LEGO1 0x1005e990
+MxResult PoliceState::Serialize(LegoFile* p_legoFile)
+{
+	LegoState::Serialize(p_legoFile);
+
+	if (p_legoFile->IsReadMode()) {
+		p_legoFile->Read(&m_policeScript, sizeof(m_policeScript));
+	}
+	else {
+		PoliceScript::Script policeScript = m_policeScript;
+		p_legoFile->Write(&policeScript, sizeof(m_policeScript));
+	}
+
+	return SUCCESS;
+}
+
+// FUNCTION: LEGO1 0x1005ea40
+void PoliceState::FUN_1005ea40()
+{
+	PoliceScript::Script policeScript;
+
+	if (m_unk0x0c == 1) {
+		return;
+	}
+
+	switch (CurrentActor()->GetActorId()) {
+	case LegoActor::c_nick:
+		policeScript = PoliceScript::c_nps002la_RunAnim;
+		m_policeScript = policeScript;
+		break;
+	case LegoActor::c_laura:
+		policeScript = PoliceScript::c_nps001ni_RunAnim;
+		m_policeScript = policeScript;
+		break;
+	default:
+		policeScript = m_policeScript;
+		m_policeScript = policeScript == PoliceScript::c_nps002la_RunAnim ? PoliceScript::c_nps001ni_RunAnim
+																		  : PoliceScript::c_nps002la_RunAnim;
+	}
+
+	{
+		MxDSAction action;
+		action.SetObjectId(policeScript);
+		action.SetAtomId(*g_policeScript);
+		Start(&action);
+	}
+
+	m_unk0x0c = 1;
 }

@@ -3,8 +3,8 @@
 #include "isle.h"
 #include "isle_actions.h"
 #include "islepathactor.h"
+#include "jukebox.h"
 #include "jukebox_actions.h"
-#include "jukeboxstate.h"
 #include "legogamestate.h"
 #include "legoutils.h"
 #include "misc.h"
@@ -38,7 +38,7 @@ MxLong JukeBoxEntity::Notify(MxParam& p_param)
 		}
 
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 
 		((Isle*) FindWorld(*g_isleScript, 0))->SetDestLocation(LegoGameState::e_jukeboxw);
@@ -55,37 +55,37 @@ void JukeBoxEntity::StartAction()
 	MxDSAction action;
 	BackgroundAudioManager()->Stop();
 	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
-	state->SetActive(TRUE);
+	state->m_active = TRUE;
 
-	switch (state->GetState()) {
-	case 0:
+	switch (state->m_music) {
+	case JukeBoxState::e_pasquell:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz001bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic1);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic1;
 		break;
-	case 1:
+	case JukeBoxState::e_right:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz006bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic2);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic2;
 		break;
-	case 2:
+	case JukeBoxState::e_decal:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz003bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic3);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic3;
 		break;
-	case 3:
+	case JukeBoxState::e_wallis:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz002bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic4);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic4;
 		break;
-	case 4:
+	case JukeBoxState::e_nelson:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz007bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic5);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic5;
 		break;
-	case 5:
+	case JukeBoxState::e_torpedos:
 		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_npz004bd_RunAnim, NULL);
-		GameState()->SetUnknown0x41c(JukeboxScript::c_JBMusic6);
+		GameState()->m_jukeboxMusic = JukeboxScript::c_JBMusic6;
 		break;
 	}
 
 	action.SetAtomId(*g_jukeboxScript);
-	action.SetObjectId(GameState()->GetUnknown0x41c());
+	action.SetObjectId(GameState()->m_jukeboxMusic);
 
 	m_audioEnabled = BackgroundAudioManager()->GetEnabled();
 	if (!m_audioEnabled) {
@@ -100,30 +100,30 @@ void JukeBoxEntity::StopAction(JukeboxScript::Script p_script)
 {
 	JukeBoxState* state = (JukeBoxState*) GameState()->GetState("JukeBoxState");
 
-	if (state && state->IsActive()) {
+	if (state && state->m_active) {
 		switch (p_script) {
 		case JukeboxScript::c_JBMusic1:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz001bd_RunAnim, NULL);
 			break;
 		case JukeboxScript::c_JBMusic2:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz006bd_RunAnim, NULL);
 			break;
 		case JukeboxScript::c_JBMusic3:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz003bd_RunAnim, NULL);
 			break;
 		case JukeboxScript::c_JBMusic4:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz002bd_RunAnim, NULL);
 			break;
 		case JukeboxScript::c_JBMusic5:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz007bd_RunAnim, NULL);
 			break;
 		case JukeboxScript::c_JBMusic6:
-			state->SetActive(FALSE);
+			state->m_active = FALSE;
 			InvokeAction(Extra::e_stop, *g_isleScript, IsleScript::c_npz004bd_RunAnim, NULL);
 			break;
 		}

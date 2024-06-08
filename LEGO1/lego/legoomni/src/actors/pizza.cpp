@@ -1,15 +1,15 @@
 #include "pizza.h"
 
-#include "act1state.h"
 #include "isle_actions.h"
 #include "legogamestate.h"
 #include "legoworld.h"
 #include "misc.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
-#include "pizzamissionstate.h"
 
 DECOMP_SIZE_ASSERT(Pizza, 0x9c)
+DECOMP_SIZE_ASSERT(PizzaMissionState, 0xb0)
+DECOMP_SIZE_ASSERT(PizzaMissionState::Entry, 0x20)
 
 // FUNCTION: LEGO1 0x10037ef0
 Pizza::Pizza()
@@ -97,4 +97,23 @@ undefined4 Pizza::HandleEndAction(MxEndActionNotificationParam&)
 {
 	// TODO
 	return 0;
+}
+
+// STUB: LEGO1 0x100393c0
+MxResult PizzaMissionState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
+}
+
+// FUNCTION: LEGO1 0x10039510
+PizzaMissionState::Entry* PizzaMissionState::GetState(MxU8 p_id)
+{
+	for (MxS16 i = 0; i < 5; i++) {
+		if (m_state[i].m_id == p_id) {
+			return m_state + i;
+		}
+	}
+
+	return NULL;
 }

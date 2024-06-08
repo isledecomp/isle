@@ -1,7 +1,6 @@
 #include "gasstation.h"
 
 #include "garage_actions.h"
-#include "gasstationstate.h"
 #include "islepathactor.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
@@ -21,6 +20,7 @@
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(GasStation, 0x128)
+DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
 // GLOBAL: LEGO1 0x100f0160
 undefined4 g_unk0x100f0160 = 3;
@@ -31,7 +31,7 @@ MxBool g_trackLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
-	m_currentActorId = 0;
+	m_currentActorId = LegoActor::c_none;
 	m_state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
@@ -134,7 +134,7 @@ void GasStation::ReadyWorld()
 	m_currentActorId = CurrentActor()->GetActorId();
 
 	switch (m_currentActorId) {
-	case 1:
+	case LegoActor::c_pepper:
 		switch (m_state->m_unk0x18) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -165,7 +165,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 2:
+	case LegoActor::c_mama:
 		switch (m_state->m_unk0x1a) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -191,7 +191,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 3:
+	case LegoActor::c_papa:
 		switch (m_state->m_unk0x1c) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -217,7 +217,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 4:
+	case LegoActor::c_nick:
 		switch (m_state->m_unk0x1e) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -243,7 +243,7 @@ void GasStation::ReadyWorld()
 
 		FUN_10015820(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		break;
-	case 5:
+	case LegoActor::c_laura:
 		switch (m_state->m_unk0x20) {
 		case 0:
 			m_state->m_unk0x14.m_unk0x00 = 5;
@@ -297,7 +297,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 // FUNCTION: LEGO1 0x10005920
 MxLong GasStation::HandleKeyPress(MxS8 p_key)
 {
-	if (p_key == ' ' && g_unk0x100f0160 == 0 && this->m_unk0x106 != 0) {
+	if (p_key == VK_SPACE && g_unk0x100f0160 == 0 && m_unk0x106 != 0) {
 		m_state->FUN_10006490();
 		return 1;
 	}
@@ -418,4 +418,38 @@ MxBool GasStation::Escape()
 	m_state->m_unk0x14.m_unk0x00 = 0;
 	m_destLocation = LegoGameState::Area::e_infomain;
 	return TRUE;
+}
+
+// FUNCTION: LEGO1 0x10005eb0
+GasStationState::GasStationState()
+{
+	m_unk0x18 = 0;
+	m_unk0x1a = 0;
+	m_unk0x1c = 0;
+	m_unk0x1e = 0;
+	m_unk0x20 = 0;
+
+	undefined4* unk0x08 = m_unk0x08;
+	unk0x08[0] = -1;
+	unk0x08[1] = -1;
+	unk0x08[2] = -1;
+}
+
+// STUB: LEGO1 0x10006300
+MxResult GasStationState::Serialize(LegoFile* p_legoFile)
+{
+	// TODO
+	return LegoState::Serialize(p_legoFile);
+}
+
+// STUB: LEGO1 0x10006430
+void GasStationState::FUN_10006430(undefined4)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10006490
+void GasStationState::FUN_10006490()
+{
+	// TODO
 }

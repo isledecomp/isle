@@ -1,8 +1,8 @@
 #include "mxmusicmanager.h"
 
 #include "mxmisc.h"
-#include "mxthread.h"
 #include "mxticklemanager.h"
+#include "mxticklethread.h"
 
 #include <windows.h>
 
@@ -144,7 +144,7 @@ MxResult MxMusicManager::Create(MxU32 p_frequencyMS, MxBool p_createThread)
 	MxResult status = FAILURE;
 	MxBool locked = FALSE;
 
-	if (MxAudioManager::InitPresenters() == SUCCESS) {
+	if (MxAudioManager::Create() == SUCCESS) {
 		if (p_createThread) {
 			m_criticalSection.Enter();
 			locked = TRUE;

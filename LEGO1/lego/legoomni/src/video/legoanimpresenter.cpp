@@ -188,7 +188,7 @@ LegoChar* LegoAnimPresenter::FUN_10069150(const LegoChar* p_und1)
 {
 	LegoChar* str;
 
-	if (LegoCharacterManager::Exists(p_und1 + 1)) {
+	if (LegoCharacterManager::IsActor(p_und1 + 1)) {
 		str = new LegoChar[strlen(p_und1)];
 
 		if (str != NULL) {
@@ -232,7 +232,7 @@ void LegoAnimPresenter::FUN_100692b0()
 					src = str;
 				}
 
-				roi = CharacterManager()->GetROI(src, TRUE);
+				roi = CharacterManager()->GetActorROI(src, TRUE);
 
 				if (roi != NULL && str[0] == '*') {
 					roi->SetVisibility(FALSE);
@@ -268,7 +268,7 @@ void LegoAnimPresenter::FUN_100692b0()
 				strlwr(lodName);
 
 				LegoChar* und = FUN_10069150(str);
-				roi = CharacterManager()->FUN_10085210(und, lodName, TRUE);
+				roi = CharacterManager()->CreateAutoROI(und, lodName, TRUE);
 
 				if (roi != NULL) {
 					roi->SetVisibility(FALSE);
@@ -313,7 +313,7 @@ void LegoAnimPresenter::FUN_100695c0()
 
 					strlwr(lodName);
 
-					CharacterManager()->FUN_10085210(actorName, lodName, FALSE);
+					CharacterManager()->CreateAutoROI(actorName, lodName, FALSE);
 					FUN_100698b0(rois, actorName);
 				}
 			}
@@ -530,8 +530,8 @@ void LegoAnimPresenter::FUN_1006aa60()
 	while (cursor.Next(roi)) {
 		const char* name = roi->GetName();
 
-		if (m_unk0x96 || !CharacterManager()->Exists(name)) {
-			CharacterManager()->FUN_10083c30(name);
+		if (m_unk0x96 || !CharacterManager()->IsActor(name)) {
+			CharacterManager()->ReleaseActor(name);
 		}
 	}
 }
@@ -648,12 +648,7 @@ void LegoAnimPresenter::PutFrame()
 
 					up = und;
 
-#ifdef COMPAT_MODE
-					Mx3DPointFloat location = m_currentWorld->GetCamera()->GetWorldLocation();
-					((Vector3&) up).Sub(&location);
-#else
-					((Vector3&) up).Sub(&m_currentWorld->GetCamera()->GetWorldLocation());
-#endif
+					((Vector3&) up).Sub(m_currentWorld->GetCamera()->GetWorldLocation());
 					((Vector3&) dir).Div(dirsqr);
 					pos.EqualsCross(&dir, &up);
 					pos.Unitize();
@@ -947,18 +942,18 @@ void LegoAnimPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[256];
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char output[256];
 		if (KeyValueStringParse(NULL, g_strFROM_PARENT, extraCopy) && m_compositePresenter != NULL) {
 			m_compositePresenter->GetAction()->GetExtra(extraLength, extraData);
 
-			if (extraLength & MAXWORD) {
-				memcpy(extraCopy, extraData, extraLength & MAXWORD);
-				extraCopy[extraLength & MAXWORD] = '\0';
+			if (extraLength & USHRT_MAX) {
+				memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+				extraCopy[extraLength & USHRT_MAX] = '\0';
 			}
 		}
 
@@ -1119,7 +1114,7 @@ void LegoAnimPresenter::VTable0x8c()
 		m_unk0xa8.Add((*m_unk0x78)[3]);
 	}
 	else {
-		m_unk0xa8.Add(&m_action->GetLocation());
+		m_unk0xa8.Add(m_action->GetLocation());
 	}
 
 	if (m_currentWorld == NULL) {
@@ -1176,10 +1171,10 @@ MxU32 LegoAnimPresenter::VTable0x94(Vector3& p_v1, Vector3& p_v2, float p_f1, fl
 
 	b = p_v2;
 	((Vector3&) b).Mul(p_f1);
-	((Vector3&) b).Add(&p_v1);
+	((Vector3&) b).Add(p_v1);
 
 	a = b;
-	((Vector3&) a).Sub(&m_unk0xa8);
+	((Vector3&) a).Sub(m_unk0xa8);
 
 	float len = a.LenSquared();
 	if (len <= 0.0f) {

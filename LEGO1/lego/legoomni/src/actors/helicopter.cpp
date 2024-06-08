@@ -1,9 +1,7 @@
 #include "helicopter.h"
 
-#include "act1state.h"
 #include "act3.h"
 #include "act3_actions.h"
-#include "helicopterstate.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "jukebox.h"
@@ -19,6 +17,7 @@
 #include "scripts.h"
 
 DECOMP_SIZE_ASSERT(Helicopter, 0x230)
+DECOMP_SIZE_ASSERT(HelicopterState, 0x0c)
 DECOMP_SIZE_ASSERT(Mx3DPointFloat, 0x14)
 DECOMP_SIZE_ASSERT(Mx4DPointFloat, 0x18)
 DECOMP_SIZE_ASSERT(MxMatrix, 0x48)
@@ -26,7 +25,7 @@ DECOMP_SIZE_ASSERT(MxMatrix, 0x48)
 // FUNCTION: LEGO1 0x10001e60
 Helicopter::Helicopter()
 {
-	m_unk0x13c = 60;
+	m_maxLinearVel = 60;
 }
 
 // FUNCTION: LEGO1 0x10003230
@@ -64,7 +63,7 @@ void Helicopter::CreateState()
 }
 
 // FUNCTION: LEGO1 0x10003360
-void Helicopter::VTable0xe4()
+void Helicopter::Exit()
 {
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		SpawnPlayer(
@@ -74,7 +73,7 @@ void Helicopter::VTable0xe4()
 		);
 	}
 
-	IslePathActor::VTable0xe4();
+	IslePathActor::Exit();
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
@@ -104,7 +103,7 @@ void Helicopter::VTable0xe4()
 }
 
 // FUNCTION: LEGO1 0x10003480
-MxU32 Helicopter::HandleClick()
+MxLong Helicopter::HandleClick()
 {
 	if (!FUN_1003ef60()) {
 		return 1;
@@ -118,7 +117,7 @@ MxU32 Helicopter::HandleClick()
 
 	if (CurrentActor()) {
 		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->VTable0xe4();
+			((IslePathActor*) CurrentActor())->Exit();
 		}
 	}
 
@@ -145,7 +144,7 @@ MxU32 Helicopter::HandleClick()
 		break;
 	}
 
-	VTable0xe0();
+	Enter();
 	InvokeAction(Extra::ActionType::e_start, m_script, IsleScript::c_HelicopterDashboard, NULL);
 	GetCurrentAction().SetObjectId(-1);
 	ControlManager()->Register(this);
@@ -153,7 +152,7 @@ MxU32 Helicopter::HandleClick()
 }
 
 // FUNCTION: LEGO1 0x100035e0
-MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 {
 	MxU32 ret = 0;
 	MxAtomId script;
@@ -180,7 +179,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 			else if (m_state->GetUnkown8() != 0) {
 				break;
 			}
-			VTable0xe4();
+			Exit();
 			GameState()->SetCurrentArea(LegoGameState::e_unk66);
 			ret = 1;
 			break;
@@ -228,7 +227,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 				lookat = dir;
 				float scale = 3;
 				lookat.Mul(scale);
-				lookat.Add(&loc);
+				lookat.Add(loc);
 				Mx3DPointFloat v68, v7c, v90(0, 1, 0), va4;
 				v68 = m_world->GetCamera()->GetWorldUp();
 				va4.EqualsCross(&v68, &dir);
@@ -249,7 +248,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 			if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 				((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_infomain);
 				TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
-				VTable0xe4();
+				Exit();
 			}
 			ret = 1;
 			break;
@@ -262,7 +261,7 @@ MxU32 Helicopter::HandleControl(LegoControlManagerEvent& p_param)
 }
 
 // FUNCTION: LEGO1 0x10003c20
-MxU32 Helicopter::VTable0xd8(LegoEndAnimNotificationParam& p_param)
+MxLong Helicopter::HandleEndAnim(LegoEndAnimNotificationParam& p_param)
 {
 	MxU32 ret = 0;
 
@@ -380,9 +379,9 @@ void Helicopter::VTable0x70(float p_float)
 			mat.SetIdentity();
 			m_unk0x1f4.Unknown6(mat, f2);
 			v2.SetVector(loc);
-			v2.Sub(&v);
+			v2.Sub(v);
 			v2.Mul(f2);
-			v2.Add(&v);
+			v2.Add(v);
 			m_world->GetCamera()->FUN_100123e0(mat, 0);
 		}
 		else {

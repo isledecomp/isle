@@ -23,10 +23,10 @@ public:
 		return !strcmp(p_name, Bike::ClassName()) || IslePathActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;               // vtable+0x18
-	MxU32 HandleClick() override;                                   // vtable+0xcc
-	MxU32 HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
-	void VTable0xe4() override;                                     // vtable+0xe4
+	MxResult Create(MxDSAction& p_dsAction) override;                // vtable+0x18
+	MxLong HandleClick() override;                                   // vtable+0xcc
+	MxLong HandleControl(LegoControlManagerEvent& p_param) override; // vtable+0xd4
+	void Exit() override;                                            // vtable+0xe4
 
 	void FUN_10076b60();
 

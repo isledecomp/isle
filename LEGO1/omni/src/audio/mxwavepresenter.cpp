@@ -299,8 +299,8 @@ void MxWavePresenter::SetVolume(MxS32 p_volume)
 	m_volume = p_volume;
 	if (m_dsBuffer != NULL) {
 		MxS32 volume = p_volume * MxOmni::GetInstance()->GetSoundManager()->GetVolume() / 100;
-		MxS32 otherVolume = MxOmni::GetInstance()->GetSoundManager()->GetAttenuation(volume);
-		m_dsBuffer->SetVolume(otherVolume);
+		MxS32 attenuation = MxOmni::GetInstance()->GetSoundManager()->GetAttenuation(volume);
+		m_dsBuffer->SetVolume(attenuation);
 	}
 
 	m_criticalSection.Leave();
@@ -331,10 +331,10 @@ void MxWavePresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[512];
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char soundValue[512];
 		if (KeyValueStringParse(soundValue, g_strSOUND, extraCopy)) {

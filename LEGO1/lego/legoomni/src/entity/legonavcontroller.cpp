@@ -1,7 +1,7 @@
 #include "legonavcontroller.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "legoanimationmanager.h"
 #include "legocameracontroller.h"
 #include "legogamestate.h"
@@ -421,7 +421,7 @@ MxResult LegoNavController::UpdateLocation(const char* p_location)
 			viewROI->WrappedSetLocalTransform(mat);
 			VideoManager()->Get3DManager()->Moved(*viewROI);
 
-			SoundManager()->FUN_1002a410(
+			SoundManager()->UpdateListener(
 				viewROI->GetWorldPosition(),
 				viewROI->GetWorldDirection(),
 				viewROI->GetWorldUp(),
@@ -458,7 +458,7 @@ MxResult LegoNavController::UpdateLocation(MxU32 p_location)
 		viewROI->WrappedSetLocalTransform(mat);
 		VideoManager()->Get3DManager()->Moved(*viewROI);
 
-		SoundManager()->FUN_1002a410(
+		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),
 			viewROI->GetWorldUp(),
@@ -537,7 +537,7 @@ MxResult LegoNavController::ProcessKeyboardInput()
 	LegoInputManager* inputManager = LegoOmni::GetInstance()->GetInputManager();
 	MxU32 keyFlags;
 
-	if (inputManager == NULL || inputManager->FUN_1005c160(keyFlags) == FAILURE) {
+	if (inputManager == NULL || inputManager->GetNavigationKeyStates(keyFlags) == FAILURE) {
 		return FAILURE;
 	}
 

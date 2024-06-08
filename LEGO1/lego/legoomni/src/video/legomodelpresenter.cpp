@@ -224,7 +224,7 @@ MxResult LegoModelPresenter::FUN_1007ff70(
 
 	if (p_entity != NULL) {
 		p_entity->SetROI(m_roi, TRUE, TRUE);
-		p_entity->ClearFlag(LegoEntity::c_bit2);
+		p_entity->ClearFlag(LegoEntity::c_managerOwned);
 	}
 	else {
 		p_world->GetROIList().push_back(m_roi);
@@ -249,9 +249,10 @@ void LegoModelPresenter::ReadyTickle()
 			((LegoEntityPresenter*) m_compositePresenter)
 				->GetInternalEntity()
 				->SetFlags(
-					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() & ~LegoEntity::c_bit2
+					((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() &
+					~LegoEntity::c_managerOwned
 				);
-			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_character);
+			((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->SetType(LegoEntity::e_actor);
 		}
 
 		ParseExtra();
@@ -276,7 +277,7 @@ void LegoModelPresenter::ReadyTickle()
 						->GetInternalEntity()
 						->SetFlags(
 							((LegoEntityPresenter*) m_compositePresenter)->GetInternalEntity()->GetFlags() &
-							~LegoEntity::c_bit2
+							~LegoEntity::c_managerOwned
 						);
 				}
 
@@ -296,17 +297,17 @@ void LegoModelPresenter::ParseExtra()
 	char* extraData;
 	m_action->GetExtra(extraLength, extraData);
 
-	if (extraLength & MAXWORD) {
+	if (extraLength & USHRT_MAX) {
 		char extraCopy[1024], output[1024];
 		output[0] = '\0';
-		memcpy(extraCopy, extraData, extraLength & MAXWORD);
-		extraCopy[extraLength & MAXWORD] = '\0';
+		memcpy(extraCopy, extraData, extraLength & USHRT_MAX);
+		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		if (KeyValueStringParse(output, g_strAUTO_CREATE, extraCopy) != 0) {
 			char* token = strtok(output, g_parseExtraTokens);
 
 			if (m_roi == NULL) {
-				m_roi = CharacterManager()->GetROI(token, FALSE);
+				m_roi = CharacterManager()->GetActorROI(token, FALSE);
 				m_addedToView = FALSE;
 			}
 		}

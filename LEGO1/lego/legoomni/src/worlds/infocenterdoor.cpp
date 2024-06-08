@@ -1,6 +1,6 @@
 #include "infocenterdoor.h"
 
-#include "infocenterstate.h"
+#include "infocenter.h"
 #include "infodoor_actions.h"
 #include "jukebox.h"
 #include "jukebox_actions.h"
@@ -114,7 +114,7 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerEvent& p_param)
 			result = 1;
 			break;
 		case InfodoorScript::c_Door_Ctl:
-			if (GameState()->GetActorId()) {
+			if (GameState()->GetActorId() != LegoActor::c_none) {
 				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
 				if (state->HasRegistered()) {
 					m_destLocation = LegoGameState::e_unk4;

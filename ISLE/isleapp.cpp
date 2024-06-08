@@ -9,6 +9,7 @@
 #include "legomain.h"
 #include "legomodelpresenter.h"
 #include "legopartpresenter.h"
+#include "legoutils.h"
 #include "legovideomanager.h"
 #include "legoworldpresenter.h"
 #include "misc.h"
@@ -153,7 +154,7 @@ void IsleApp::Close()
 	if (Lego()) {
 		GameState()->Save(0);
 		if (InputManager()) {
-			InputManager()->QueueEvent(c_notificationKeyPress, 0, 0, 0, 0x20);
+			InputManager()->QueueEvent(c_notificationKeyPress, 0, 0, 0, VK_SPACE);
 		}
 
 		VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager()->RemoveAll(NULL);
@@ -163,16 +164,10 @@ void IsleApp::Close()
 		TransitionManager()->SetWaitIndicator(NULL);
 		Lego()->StopTimer();
 
-		MxLong lVar8;
-		do {
-			lVar8 = Streamer()->Close(NULL);
-		} while (lVar8 == 0);
+		while (Streamer()->Close(NULL) == SUCCESS) {
+		}
 
-		while (Lego()) {
-			if (Lego()->DoesEntityExist(ds)) {
-				break;
-			}
-
+		while (Lego() && !Lego()->DoesEntityExist(ds)) {
 			Timer()->GetRealTime();
 			TickleManager()->Tickle();
 		}
@@ -403,9 +398,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
 	case WM_CLOSE:
 		if (!g_closed && g_isle) {
-			if (g_isle) {
-				delete g_isle;
-			}
+			delete g_isle;
 			g_isle = NULL;
 			g_closed = TRUE;
 			return 0;
@@ -506,7 +499,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		g_mousedown = 0;
 		type = c_notificationButtonUp;
 		break;
-	case 0x5400:
+	case WM_ISLE_SETCURSOR:
 		if (g_isle) {
 			g_isle->SetupCursor(wParam);
 			return 0;
@@ -645,8 +638,8 @@ MxResult IsleApp::SetupWindow(HINSTANCE hInstance, LPSTR lpCmdLine)
 	}
 
 	GameState()->SetSavePath(m_savePath);
-	GameState()->SerializePlayersInfo(1);
-	GameState()->SerializeScoreHistory(1);
+	GameState()->SerializePlayersInfo(LegoStorage::c_read);
+	GameState()->SerializeScoreHistory(LegoStorage::c_read);
 
 	int iVar10;
 	switch (m_islandQuality) {
@@ -893,25 +886,25 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 void IsleApp::SetupCursor(WPARAM wParam)
 {
 	switch (wParam) {
-	case 0:
+	case e_cursorArrow:
 		m_cursorCurrent = m_cursorArrow;
 		break;
-	case 1:
+	case e_cursorBusy:
 		m_cursorCurrent = m_cursorBusy;
 		break;
-	case 2:
+	case e_cursorNo:
 		m_cursorCurrent = m_cursorNo;
 		break;
-	case 0xB:
+	case e_cursorNone:
 		m_cursorCurrent = NULL;
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-	case 8:
-	case 9:
-	case 0xA:
+	case e_cursorUnused3:
+	case e_cursorUnused4:
+	case e_cursorUnused5:
+	case e_cursorUnused6:
+	case e_cursorUnused7:
+	case e_cursorUnused8:
+	case e_cursorUnused9:
+	case e_cursorUnused10:
 		break;
 	}
 

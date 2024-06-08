@@ -1,14 +1,14 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
-#include "legocachesoundlist.h"
 #include "legoentity.h"
-#include "legoentitylist.h"
 #include "legopathcontrollerlist.h"
 #include "mxpresenterlist.h"
 #include "roi/legoroi.h"
 
+class LegoCacheSoundList;
 class LegoCameraController;
+class LegoEntityList;
 class LegoPathBoundary;
 class LegoHideAnimPresenter;
 

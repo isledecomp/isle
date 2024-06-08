@@ -1,8 +1,8 @@
 #include "legoutils.h"
 
 #include "3dmanager/lego3dmanager.h"
-#include "act1state.h"
 #include "anim/legoanim.h"
+#include "isle.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
@@ -369,7 +369,7 @@ void FUN_1003eda0()
 	LegoROI* viewROI = VideoManager()->GetViewROI();
 	if (viewROI) {
 		viewROI->FUN_100a5a30(vec);
-		SoundManager()->FUN_1002a410(
+		SoundManager()->UpdateListener(
 			viewROI->GetWorldPosition(),
 			viewROI->GetWorldDirection(),
 			viewROI->GetWorldUp(),
@@ -437,7 +437,7 @@ MxBool RemoveFromWorld(MxAtomId& p_entityAtom, MxS32 p_entityId, MxAtomId& p_wor
 }
 
 // FUNCTION: LEGO1 0x1003ef00
-void FUN_1003ef00(MxBool p_enable)
+void EnableAnimations(MxBool p_enable)
 {
 	if (p_enable) {
 		AnimationManager()->Resume();
@@ -449,9 +449,9 @@ void FUN_1003ef00(MxBool p_enable)
 }
 
 // FUNCTION: LEGO1 0x1003ef40
-void SetAppCursor(WPARAM p_wparam)
+void SetAppCursor(Cursor p_cursor)
 {
-	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), 0x5400, p_wparam, 0);
+	PostMessageA(MxOmni::GetInstance()->GetWindowHandle(), WM_ISLE_SETCURSOR, p_cursor, 0);
 }
 
 // FUNCTION: LEGO1 0x1003ef60
@@ -467,7 +467,6 @@ MxBool FUN_1003ef60()
 		GameState()->m_currentArea != LegoGameState::e_elevdown &&
 		GameState()->m_currentArea != LegoGameState::e_garadoor &&
 		GameState()->m_currentArea != LegoGameState::e_polidoor) {
-
 		if (CurrentActor() == NULL || !CurrentActor()->IsA("TowTrack")) {
 			if (CurrentActor() == NULL || !CurrentActor()->IsA("Ambulance")) {
 				MxU32 unk0x18 = act1State->GetUnknown18();

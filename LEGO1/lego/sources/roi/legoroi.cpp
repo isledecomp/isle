@@ -565,7 +565,7 @@ LegoU32 LegoROI::FUN_100a9410(
 	if (p_collideBox) {
 		Mx3DPointFloat v2(p_v2);
 		((Vector3&) v2).Mul(p_f1);
-		((Vector3&) v2).Add(&p_v1);
+		((Vector3&) v2).Add(p_v1);
 
 		Mx4DPointFloat localc0;
 		Mx4DPointFloat local9c;
@@ -585,7 +585,7 @@ LegoU32 LegoROI::FUN_100a9410(
 		localc0[3] = local9c[3] = local168[3] = 1.0f;
 
 		local38 = local58;
-		((Vector3&) local38).Add(&locala8);
+		((Vector3&) local38).Add(locala8);
 		((Vector3&) local38).Mul(0.5f);
 
 		local70 = localc0;
@@ -624,7 +624,7 @@ LegoU32 LegoROI::FUN_100a9410(
 				if (local50 >= 0.0f && local50 <= p_f1) {
 					Mx3DPointFloat local17c(p_v2);
 					((Vector3&) local17c).Mul(local50);
-					((Vector3&) local17c).Add(&local4c);
+					((Vector3&) local17c).Add(local4c);
 
 					LegoS32 j;
 					for (j = 0; j < 6; j++) {
@@ -644,7 +644,7 @@ LegoU32 LegoROI::FUN_100a9410(
 	}
 	else {
 		Mx3DPointFloat v1(p_v1);
-		((Vector3&) v1).Sub(&GetWorldBoundingSphere().Center());
+		((Vector3&) v1).Sub(GetWorldBoundingSphere().Center());
 
 		float local10 = GetWorldBoundingSphere().Radius();
 		float local8 = p_v2.Dot(&p_v2, &p_v2);
@@ -681,7 +681,7 @@ LegoU32 LegoROI::FUN_100a9410(
 				if (local1c >= 0.0f && p_f1 >= local1c) {
 					p_v3 = p_v2;
 					p_v3.Mul(local1c);
-					p_v3.Add(&p_v1);
+					p_v3.Add(p_v1);
 					return 1;
 				}
 			}
@@ -708,13 +708,7 @@ void TimeROI::FUN_100a9b40(Matrix4& p_matrix, LegoTime p_time)
 		Mx3DPointFloat targetPosition(p_matrix[3]);
 
 		// TODO: Figure out how to get type right for the call
-		// TODO: Fix constness of vector/matrix functions
-#ifdef COMPAT_MODE
-		Vector3 worldPosition(m_local2world[3]);
-		((Vector3&) targetPosition).Sub(&worldPosition);
-#else
-		((Vector3&) targetPosition).Sub(&Vector3(m_local2world[3]));
-#endif
+		((Vector3&) targetPosition).Sub(Vector3(m_local2world[3]));
 
 		float division = time * 0.001;
 		((Vector3&) targetPosition).Div(division);

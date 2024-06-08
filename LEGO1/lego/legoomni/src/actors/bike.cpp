@@ -13,7 +13,7 @@ DECOMP_SIZE_ASSERT(Bike, 0x164)
 // FUNCTION: LEGO1 0x10076670
 Bike::Bike()
 {
-	this->m_unk0x13c = 20.0;
+	this->m_maxLinearVel = 20.0;
 	this->m_unk0x150 = 3.0;
 	this->m_unk0x148 = 1;
 }
@@ -32,9 +32,9 @@ MxResult Bike::Create(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x10076920
-void Bike::VTable0xe4()
+void Bike::Exit()
 {
-	IslePathActor::VTable0xe4();
+	IslePathActor::Exit();
 	GameState()->SetCurrentArea(LegoGameState::Area::e_bike);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeDashboard_Bitmap);
 	RemoveFromCurrentWorld(*g_isleScript, IsleScript::c_BikeArms_Ctl);
@@ -45,14 +45,14 @@ void Bike::VTable0xe4()
 }
 
 // STUB: LEGO1 0x100769a0
-MxU32 Bike::HandleClick()
+MxLong Bike::HandleClick()
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10076aa0
-MxU32 Bike::HandleControl(LegoControlManagerEvent& p_param)
+MxLong Bike::HandleControl(LegoControlManagerEvent& p_param)
 {
 	// TODO
 	return 0;

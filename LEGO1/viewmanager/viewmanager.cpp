@@ -428,10 +428,10 @@ void ViewManager::UpdateViewTransformations()
 		Vector3 u(unk0x150[i]);
 
 		x = c;
-		((Vector3&) x).Sub(&b); // TODO: Fix call
+		((Vector3&) x).Sub(b); // TODO: Fix call
 
 		y = a;
-		((Vector3&) y).Sub(&b); // TODO: Fix call
+		((Vector3&) y).Sub(b); // TODO: Fix call
 
 		u.EqualsCross(&x, &y);
 		u.Unitize();

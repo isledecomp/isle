@@ -31,7 +31,7 @@ MxResult MxMediaManager::Init()
 }
 
 // FUNCTION: LEGO1 0x100b85e0
-MxResult MxMediaManager::InitPresenters()
+MxResult MxMediaManager::Create()
 {
 	AUTOLOCK(m_criticalSection);
 

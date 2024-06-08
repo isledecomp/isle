@@ -62,5 +62,5 @@ void Lego3DWavePresenter::StartingTickle()
 void Lego3DWavePresenter::StreamingTickle()
 {
 	MxWavePresenter::StreamingTickle();
-	m_sound.FUN_100118e0(m_dsBuffer);
+	m_sound.UpdatePosition(m_dsBuffer);
 }

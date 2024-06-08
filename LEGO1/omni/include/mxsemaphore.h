@@ -1,5 +1,5 @@
-#ifndef MX_SEMAPHORE_H
-#define MX_SEMAPHORE_H
+#ifndef MXSEMAPHORE_H
+#define MXSEMAPHORE_H
 
 #include "mxtypes.h"
 
@@ -23,4 +23,4 @@ private:
 	HANDLE m_hSemaphore; // 0x04
 };
 
-#endif // MX_SEMAPHORE_H
+#endif // MXSEMAPHORE_H

@@ -29,8 +29,8 @@ LegoCarRaceActor::LegoCarRaceActor()
 	m_unk0x08 = 1.0f;
 	m_unk0x70 = 0.0f;
 	m_unk0x0c = 0;
-	m_unk0x13c = 0.0f;
-	m_unk0x68 = 1.0f;
+	m_maxLinearVel = 0.0f;
+	m_frequencyFactor = 1.0f;
 	m_unk0x1c = 0;
 	m_unk0x10 = 0.65f;
 	m_unk0x14 = 0.03f;

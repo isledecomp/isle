@@ -2,11 +2,13 @@
 
 #include "3dmanager/lego3dmanager.h"
 #include "define.h"
+#include "legoanimationmanager.h"
 #include "legobuildingmanager.h"
 #include "legocameracontroller.h"
 #include "legocharactermanager.h"
 #include "legoeventnotificationparam.h"
 #include "legogamestate.h"
+#include "legomain.h"
 #include "legoplantmanager.h"
 #include "legoutils.h"
 #include "legovideomanager.h"
@@ -31,7 +33,7 @@ void LegoEntity::Init()
 	m_flags = 0;
 	m_actionType = Extra::ActionType::e_unknown;
 	m_targetEntityId = -1;
-	m_type = e_unk4;
+	m_type = e_autoROI;
 }
 
 // FUNCTION: LEGO1 0x10010650
@@ -93,7 +95,7 @@ void LegoEntity::Destroy(MxBool p_fromDestructor)
 				m_roi->SetEntity(NULL);
 			}
 
-			CharacterManager()->FUN_10083db0(m_roi);
+			CharacterManager()->ReleaseActor(m_roi);
 		}
 		else {
 			VideoManager()->Get3DManager()->GetLego3DView()->Remove(*m_roi);
@@ -245,14 +247,15 @@ void LegoEntity::ParseAction(char* p_extra)
 }
 
 // FUNCTION: LEGO1 0x10010f10
-void LegoEntity::VTable0x34(MxBool p_und)
+// FUNCTION: BETA10 0x1007ee87
+void LegoEntity::ClickSound(MxBool p_und)
 {
 	if (!GetUnknown0x10IsSet(c_altBit1)) {
 		MxU32 objectId = 0;
-		const LegoChar* roiName = m_roi->GetName();
+		const char* name = m_roi->GetName();
 
 		switch (m_type) {
-		case e_character:
+		case e_actor:
 			objectId = CharacterManager()->FUN_10085140(m_roi, p_und);
 			break;
 		case e_unk1:
@@ -269,70 +272,182 @@ void LegoEntity::VTable0x34(MxBool p_und)
 			MxDSAction action;
 			action.SetAtomId(MxAtomId(CharacterManager()->GetCustomizeAnimFile(), e_lowerCase2));
 			action.SetObjectId(objectId);
-			action.AppendExtra(strlen(roiName) + 1, roiName);
+			action.AppendExtra(strlen(name) + 1, name);
 			Start(&action);
 		}
 	}
 }
 
-// STUB: LEGO1 0x10011070
-void LegoEntity::VTable0x38()
+// FUNCTION: LEGO1 0x10011070
+// FUNCTION: BETA10 0x1007f062
+void LegoEntity::ClickAnimation()
 {
-	// TODO
+	if (!GetUnknown0x10IsSet(c_altBit1)) {
+		MxU32 objectId = 0;
+		MxDSAction action;
+		const char* name = m_roi->GetName();
+		char extra[1024];
+
+		switch (m_type) {
+		case e_actor:
+			objectId = LegoOmni::GetInstance()->GetCharacterManager()->FUN_10085120(m_roi);
+			action.SetAtomId(MxAtomId(LegoCharacterManager::GetCustomizeAnimFile(), e_lowerCase2));
+			sprintf(extra, "SUBST:actor_01:%s", name);
+			break;
+		case e_unk1:
+			break;
+		case e_plant:
+			objectId = LegoOmni::GetInstance()->GetPlantManager()->FUN_10026b70(this);
+			action.SetAtomId(MxAtomId(LegoPlantManager::GetCustomizeAnimFile(), e_lowerCase2));
+			sprintf(extra, "SUBST:bush:%s:tree:%s:flwrred:%s:palm:%s", name, name, name, name);
+			break;
+		case e_building:
+			objectId = LegoOmni::GetInstance()->GetBuildingManager()->GetBuildingEntityId(this);
+			action.SetAtomId(MxAtomId(BuildingManager()->GetCustomizeAnimFile(), e_lowerCase2));
+			sprintf(extra, "SUBST:haus1:%s", name);
+			break;
+		case e_autoROI:
+			break;
+		}
+
+		if (objectId) {
+			action.SetObjectId(objectId);
+			action.AppendExtra(strlen(extra) + 1, extra);
+			LegoOmni::GetInstance()->GetAnimationManager()->StartEntityAction(action, this);
+			m_unk0x10 |= c_altBit1;
+		}
+	}
 }
 
 // FUNCTION: LEGO1 0x10011300
-void LegoEntity::VTable0x3c()
+// FUNCTION: BETA10 0x1007f35a
+void LegoEntity::SwitchVariant()
 {
 	switch (m_type) {
-	case e_character:
-		CharacterManager()->SwitchHat(m_roi);
+	case e_actor:
+		CharacterManager()->SwitchVariant(m_roi);
 		break;
 	case e_unk1:
 		break;
 	case e_plant:
-		PlantManager()->FUN_100269e0(this);
+		PlantManager()->SwitchVariant(this);
 		break;
 	case e_building:
-		BuildingManager()->IncrementVariant(this);
+		BuildingManager()->SwitchVariant(this);
+		break;
+	case e_autoROI:
 		break;
 	}
 
-	VTable0x34(FALSE);
-	VTable0x38();
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011360
-void LegoEntity::VTable0x40()
+// FUNCTION: LEGO1 0x10011360
+// FUNCTION: BETA10 0x1007f411
+void LegoEntity::SwitchSound()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchSound(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchSound(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchSound(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x100113c0
-void LegoEntity::VTable0x44()
+// FUNCTION: LEGO1 0x100113c0
+// FUNCTION: BETA10 0x1007f4c8
+void LegoEntity::SwitchMove()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchMove(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchMove(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchMove(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011420
-void LegoEntity::VTable0x48(LegoROI* p_roi)
+// FUNCTION: LEGO1 0x10011420
+// FUNCTION: BETA10 0x1007f57f
+void LegoEntity::SwitchColor(LegoROI* p_roi)
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchColor(m_roi, p_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchColor(this);
+		break;
+	case e_building:
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
-// STUB: LEGO1 0x10011470
-void LegoEntity::VTable0x4c()
+// FUNCTION: LEGO1 0x10011470
+// FUNCTION: BETA10 0x1007f62c
+void LegoEntity::SwitchMood()
 {
-	// TODO
+	switch (m_type) {
+	case e_actor:
+		CharacterManager()->SwitchMood(m_roi);
+		break;
+	case e_unk1:
+		break;
+	case e_plant:
+		PlantManager()->SwitchMood(this);
+		break;
+	case e_building:
+		BuildingManager()->SwitchMood(this);
+		break;
+	case e_autoROI:
+		break;
+	}
+
+	ClickSound(TRUE);
+	ClickSound(FALSE);
+	ClickAnimation();
 }
 
 // FUNCTION: LEGO1 0x100114e0
+// FUNCTION: BETA10 0x1007f6f0
 void LegoEntity::SetType(MxU8 p_type)
 {
 	m_type = p_type;
 }
 
 // FUNCTION: LEGO1 0x100114f0
+// FUNCTION: BETA10 0x1007f711
 MxLong LegoEntity::Notify(MxParam& p_param)
 {
 	LegoEventNotificationParam& param = (LegoEventNotificationParam&) p_param;
@@ -346,27 +461,27 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 	}
 	else {
 		switch (GameState()->GetActorId()) {
-		case 1:
+		case LegoActor::c_pepper:
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act2 &&
 				GameState()->GetCurrentAct() != LegoGameState::e_act3) {
-				VTable0x3c();
+				SwitchVariant();
 			}
 			break;
-		case 2:
-			VTable0x40();
+		case LegoActor::c_mama:
+			SwitchSound();
 			break;
-		case 3:
-			VTable0x44();
+		case LegoActor::c_papa:
+			SwitchMove();
 			break;
-		case 4:
-			VTable0x48(param.GetROI());
+		case LegoActor::c_nick:
+			SwitchColor(param.GetROI());
 			break;
-		case 5:
-			VTable0x4c();
+		case LegoActor::c_laura:
+			SwitchMood();
 			break;
-		case 6:
+		case LegoActor::c_brickster:
 			switch (m_type) {
-			case e_character:
+			case e_actor:
 			case e_unk1:
 				break;
 			case e_plant:
@@ -375,7 +490,7 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 			case e_building:
 				BuildingManager()->FUN_10030000(this);
 				break;
-			case e_unk4:
+			case e_autoROI:
 				break;
 			}
 		}
