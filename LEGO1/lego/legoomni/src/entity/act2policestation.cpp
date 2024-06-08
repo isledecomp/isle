@@ -12,9 +12,10 @@ DECOMP_SIZE_ASSERT(Act2PoliceStation, 0x68)
 MxLong Act2PoliceStation::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetType() == c_notificationClick) {
-		NotificationManager()->Send(CurrentWorld(), MxNotificationParam(c_notificationType23, NULL));
+		MxNotificationParam param(c_notificationType23, NULL);
+		NotificationManager()->Send(CurrentWorld(), param);
 		return 1;
 	}
 
-	return -1;
+	return 0;
 }
