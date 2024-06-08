@@ -1,8 +1,10 @@
 #include "ambulance.h"
 
 #include "decomp.h"
+#include "isle_actions.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
+#include "legoutils.h"
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
@@ -182,16 +184,24 @@ MxResult Ambulance::Tickle()
 	return SUCCESS;
 }
 
-// STUB: LEGO1 0x10037240
-void Ambulance::FUN_10037240()
+// FUNCTION: LEGO1 0x10037240
+void Ambulance::StopScriptOnAmbulance()
 {
-	// TODO
+	StopScriptOnEntity(IsleScript::c_pns018rd_RunAnim);
 }
 
 // STUB: LEGO1 0x10037250
 void Ambulance::FUN_10037250()
 {
 	// TODO
+}
+
+// FUNCTION: LEGO1 0x10037340
+void Ambulance::StopScriptOnEntity(MxS32 p_entityId)
+{
+	if (p_entityId != -1) {
+		InvokeAction(Extra::e_stop, *g_isleScript, p_entityId, NULL);
+	}
 }
 
 // FUNCTION: LEGO1 0x100373a0

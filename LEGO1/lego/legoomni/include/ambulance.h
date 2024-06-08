@@ -98,13 +98,15 @@ public:
 	void CreateState();
 	void FUN_10036e60();
 	void FUN_10037060();
-	void FUN_10037240();
+	void StopScriptOnAmbulance();
 	void FUN_10037250();
 
 	// SYNTHETIC: LEGO1 0x10036130
 	// Ambulance::`scalar deleting destructor'
 
 private:
+	void StopScriptOnEntity(MxS32 p_entityId);
+
 	undefined m_unk0x160[4];        // 0x160
 	AmbulanceMissionState* m_state; // 0x164
 	MxS16 m_unk0x168;               // 0x168
