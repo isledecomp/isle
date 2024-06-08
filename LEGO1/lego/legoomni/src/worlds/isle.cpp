@@ -1201,7 +1201,7 @@ MxBool Isle::Escape()
 		break;
 	case 10:
 		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
-			m_ambulance->FUN_10037240();
+			m_ambulance->StopActions();
 			m_ambulance->FUN_10037250();
 		}
 		break;
@@ -1242,7 +1242,7 @@ void Isle::FUN_10033350()
 {
 	if (m_act1state->m_unk0x018 == 10) {
 		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
-			m_ambulance->FUN_10037240();
+			m_ambulance->StopActions();
 			m_ambulance->FUN_10037250();
 		}
 	}
