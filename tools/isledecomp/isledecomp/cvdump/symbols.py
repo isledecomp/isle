@@ -1,5 +1,7 @@
+from dataclasses import dataclass, field
 import logging
 import re
+from re import Match
 from typing import NamedTuple, Optional
 
 
@@ -15,15 +17,18 @@ class StackOrRegisterSymbol(NamedTuple):
 
 
 # S_GPROC32 = functions
-class SymbolsEntry(NamedTuple):
+@dataclass
+class SymbolsEntry:
+    # pylint: disable=too-many-instance-attributes
     type: str
     section: int
     offset: int
     size: int
     func_type: str
     name: str
-    stack_symbols: list[StackOrRegisterSymbol]
-    addr: Optional[int]  # absolute address, to be set later
+    stack_symbols: list[StackOrRegisterSymbol] = field(default_factory=list)
+    frame_pointer_present: bool = False
+    addr: Optional[int] = None  # Absolute address. Will be set later, if at all
 
 
 class CvdumpSymbolsParser:
@@ -55,6 +60,16 @@ class CvdumpSymbolsParser:
     `esi, Type:             0x1E14, this`
     """
 
+    _debug_start_end_regex = re.compile(
+        r"^\s*Debug start: (?P<debug_start>\w+), Debug end: (?P<debug_end>\w+)$"
+    )
+
+    _parent_end_next_regex = re.compile(
+        r"\s*Parent: (?P<parent_addr>\w+), End: (?P<end_addr>\w+), Next: (?P<next_addr>\w+)$"
+    )
+
+    _flags_frame_pointer_regex = re.compile(r"\s*Flags: Frame Ptr Present$")
+
     _register_stack_symbols = ["S_BPREL32", "S_REGISTER"]
 
     # List the unhandled types so we can check exhaustiveness
@@ -72,16 +87,27 @@ class CvdumpSymbolsParser:
 
     def __init__(self):
         self.symbols: list[SymbolsEntry] = []
-        self.current_function = None
+        self.current_function: Optional[SymbolsEntry] = None
 
     def read_line(self, line: str):
-        if (match := self._symbol_line_generic_regex.match(line)) is None:
+        if (match := self._symbol_line_generic_regex.match(line)) is not None:
+            self._parse_generic_case(line, match)
+        elif (match := self._parent_end_next_regex.match(line)) is not None:
+            # We do not need this info at the moment, might be useful in the future
+            pass
+        elif (match := self._debug_start_end_regex.match(line)) is not None:
+            # We do not need this info at the moment, might be useful in the future
+            pass
+        elif (match := self._flags_frame_pointer_regex.match(line)) is not None:
+            assert self.current_function is not None
+            self.current_function.frame_pointer_present = True
+        else:
             # Most of these are either `** Module: [...]` or data we do not care about
             logger.debug("Unhandled line: %s", line[:-1])
-            return
 
-        symbol_type: str = match.group("symbol_type")
-        second_part: Optional[str] = match.group("second_part")
+    def _parse_generic_case(self, line, line_match: Match[str]):
+        symbol_type: str = line_match.group("symbol_type")
+        second_part: Optional[str] = line_match.group("second_part")
 
         if symbol_type == "S_GPROC32":
             assert second_part is not None
@@ -95,8 +121,6 @@ class CvdumpSymbolsParser:
                 size=int(match.group("size"), 16),
                 func_type=match.group("func_type"),
                 name=match.group("name"),
-                stack_symbols=[],
-                addr=None,  # will be set later, if at all
             )
             self.symbols.append(self.current_function)
 

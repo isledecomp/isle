@@ -30,6 +30,7 @@ class CppRegisterSymbol(CppStackOrRegisterSymbol):
 
 @dataclass
 class FunctionSignature:
+    original_function_symbol: SymbolsEntry
     call_type: str
     arglist: list[str]
     return_type: str
@@ -86,6 +87,10 @@ class PdbFunctionExtractor:
         assert arg_list_type["argcount"] == len(arg_list_pdb_types)
 
         stack_symbols: list[CppStackOrRegisterSymbol] = []
+
+        # for some unexplained reason, the reported stack is offset by 4 when this flag is set
+        stack_offset_delta = -4 if fn.frame_pointer_present else 0
+
         for symbol in fn.stack_symbols:
             if symbol.symbol_type == "S_REGISTER":
                 stack_symbols.append(
@@ -101,13 +106,14 @@ class PdbFunctionExtractor:
                     CppStackSymbol(
                         symbol.name,
                         symbol.data_type,
-                        stack_offset,
+                        stack_offset + stack_offset_delta,
                     )
                 )
 
         call_type = self._call_type_map[function_type["call_type"]]
 
         return FunctionSignature(
+            original_function_symbol=fn,
             call_type=call_type,
             arglist=arg_list_pdb_types,
             return_type=function_type["return_type"],
