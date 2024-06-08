@@ -565,7 +565,7 @@ class Compare:
         orig_asm = [x[1] for x in orig_combined]
         recomp_asm = [x[1] for x in recomp_combined]
 
-        diff = difflib.SequenceMatcher(None, orig_asm, recomp_asm)
+        diff = difflib.SequenceMatcher(None, orig_asm, recomp_asm, autojunk=False)
         ratio = diff.ratio()
 
         if ratio != 1.0:
