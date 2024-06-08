@@ -4,7 +4,7 @@ import difflib
 import struct
 import uuid
 from dataclasses import dataclass
-from typing import Callable, Iterable, List, Optional
+from typing import Any, Callable, Iterable, List, Optional
 from isledecomp.bin import Bin as IsleBin, InvalidVirtualAddressError
 from isledecomp.cvdump.demangler import demangle_string_const
 from isledecomp.cvdump import Cvdump, CvdumpAnalysis
@@ -87,11 +87,6 @@ class Compare:
         self._match_exports()
         self._match_thunks()
         self._find_vtordisp()
-
-    @property
-    def db(self):
-        """Newer code needs to access this field, legacy code uses _db"""
-        return self._db
 
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
@@ -744,6 +739,9 @@ class Compare:
 
     def get_variables(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.DATA)
+
+    def get_match_options(self, addr: int) -> Optional[dict[str, Any]]:
+        return self._db.get_match_options(addr)
 
     def compare_address(self, addr: int) -> Optional[DiffReport]:
         match = self._db.get_one_match(addr)

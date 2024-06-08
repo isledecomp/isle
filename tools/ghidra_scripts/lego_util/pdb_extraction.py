@@ -126,7 +126,7 @@ class PdbFunctionExtractor:
         self, match_info: MatchInfo
     ) -> Optional[tuple[MatchInfo, FunctionSignature]]:
         assert match_info.orig_addr is not None
-        match_options = self.compare.db.get_match_options(match_info.orig_addr)
+        match_options = self.compare.get_match_options(match_info.orig_addr)
         assert match_options is not None
         if match_options.get("skip", False) or match_options.get("stub", False):
             return None
