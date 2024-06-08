@@ -99,7 +99,11 @@ class CvdumpSymbolsParser:
             # We do not need this info at the moment, might be useful in the future
             pass
         elif (match := self._flags_frame_pointer_regex.match(line)) is not None:
-            assert self.current_function is not None
+            if self.current_function is None:
+                logger.error(
+                    "Found a `Flags: Frame Ptr Present` but self.current_function is None"
+                )
+                return
             self.current_function.frame_pointer_present = True
         else:
             # Most of these are either `** Module: [...]` or data we do not care about
