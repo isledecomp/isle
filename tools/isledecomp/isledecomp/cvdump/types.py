@@ -214,11 +214,9 @@ class CvdumpTypesParser:
 
     LF_ENUM_ATTRIBUTES = [
         re.compile(r"^\s*# members = (?P<num_members>\d+)$"),
-        re.compile(
-            r"^\s*type = (?P<underlying_type>\S+) field list type (?P<field_type>0x\w{4})$"
-        ),
         re.compile(r"^\s*enum name = (?P<name>.+)$"),
     ]
+    LF_ENUM_TYPES = re.compile(r"^\s*type = (?P<underlying_type>\S+) field list type (?P<field_type>0x\w{4})$")
     LF_ENUM_UDT = re.compile(r"^\s*UDT\((?P<udt>0x\w+)\)$")
     LF_UNION_LINE = re.compile(
         r".*field list type (?P<field_type>0x\w+),.*Size = (?P<size>\d+)\s*,class name = (?P<name>(?:[^,]|,\S)+),\s.*UDT\((?P<udt>0x\w+)\)"
@@ -628,6 +626,7 @@ class CvdumpTypesParser:
                 continue
             obj |= self.parse_enum_attribute(pair)
 
+
     def parse_enum_attribute(self, attribute: str) -> dict[str, Any]:
         for attribute_regex in self.LF_ENUM_ATTRIBUTES:
             if (match := attribute_regex.match(attribute)) is not None:
@@ -640,6 +639,10 @@ class CvdumpTypesParser:
             match = self.LF_ENUM_UDT.match(attribute)
             assert match is not None
             return {"udt": normalize_type_id(match.group("udt"))}
+        if (match := self.LF_ENUM_TYPES.match(attribute)) is not None:
+            result = match.groupdict()
+            result["underlying_type"] = normalize_type_id(result["underlying_type"])
+            return result
         logger.error("Unknown attribute in enum: %s", attribute)
         return {}
 

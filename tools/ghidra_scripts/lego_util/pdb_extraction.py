@@ -119,7 +119,7 @@ class PdbFunctionExtractor:
     def get_function_list(self) -> list[tuple[MatchInfo, FunctionSignature]]:
         handled = (
             self.handle_matched_function(match)
-            for match in self.compare.db.get_matches_by_type(SymbolType.FUNCTION)
+            for match in self.compare.get_functions()
         )
         return [signature for signature in handled if signature is not None]
 

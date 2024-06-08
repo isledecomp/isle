@@ -47,16 +47,16 @@ TEST_LINES = """
     Element type = T_UCHAR(0020)
     Index type = T_SHORT(0011)
     length = 8
-    Name = 
+    Name =
 
 0x10ea : Length = 14, Leaf = 0x1503 LF_ARRAY
     Element type = 0x1028
     Index type = T_SHORT(0011)
     length = 12
-    Name = 
+    Name =
 
 0x11f0 : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 0,  field list type 0x0000, FORWARD REF, 
+    # members = 0,  field list type 0x0000, FORWARD REF,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 0, class name = MxRect32, UDT(0x00001214)
 
@@ -98,22 +98,22 @@ TEST_LINES = """
         member name = 'm_bottom'
 
 0x1214 : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 34,  field list type 0x1213, CONSTRUCTOR, OVERLOAD, 
+    # members = 34,  field list type 0x1213, CONSTRUCTOR, OVERLOAD,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 16, class name = MxRect32, UDT(0x00001214)
 
 0x1220 : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 0,  field list type 0x0000, FORWARD REF, 
+    # members = 0,  field list type 0x0000, FORWARD REF,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 0, class name = MxCore, UDT(0x00004060)
 
 0x14db : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 0,  field list type 0x0000, FORWARD REF, 
+    # members = 0,  field list type 0x0000, FORWARD REF,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 0, class name = MxString, UDT(0x00004db6)
 
 0x19b0 : Length = 34, Leaf = 0x1505 LF_STRUCTURE
-    # members = 0,  field list type 0x0000, FORWARD REF, 
+    # members = 0,  field list type 0x0000, FORWARD REF,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 0, class name = ROIColorAlias, UDT(0x00002a76)
 
@@ -136,18 +136,18 @@ TEST_LINES = """
         member name = 'm_unk0x10'
 
 0x2a76 : Length = 34, Leaf = 0x1505 LF_STRUCTURE
-    # members = 5,  field list type 0x2a75, 
+    # members = 5,  field list type 0x2a75,
     Derivation list type 0x0000, VT shape type 0x0000
     Size = 20, class name = ROIColorAlias, UDT(0x00002a76)
 
 0x22d4 : Length = 154, Leaf = 0x1203 LF_FIELDLIST
     list[0] = LF_VFUNCTAB, type = 0x20FC
     list[1] = LF_METHOD, count = 3, list = 0x22D0, name = 'MxVariable'
-    list[2] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F0F, 
+    list[2] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F0F,
         vfptr offset = 0, name = 'GetValue'
-    list[3] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F10, 
+    list[3] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F10,
         vfptr offset = 4, name = 'SetValue'
-    list[4] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F11, 
+    list[4] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x1F11,
         vfptr offset = 8, name = '~MxVariable'
     list[5] = LF_ONEMETHOD, public, VANILLA, index = 0x22D3, name = 'GetKey'
     list[6] = LF_MEMBER, protected, type = 0x14DB, offset = 4
@@ -156,7 +156,7 @@ TEST_LINES = """
         member name = 'm_value'
 
 0x22d5 : Length = 34, Leaf = 0x1504 LF_CLASS
-    # members = 10,  field list type 0x22d4, CONSTRUCTOR, 
+    # members = 10,  field list type 0x22d4, CONSTRUCTOR,
     Derivation list type 0x0000, VT shape type 0x20fb
     Size = 36, class name = MxVariable, UDT(0x00004041)
 
@@ -171,22 +171,22 @@ NESTED,     enum name = JukeBox::JukeBoxScript, UDT(0x00003cc2)
 0x405f : Length = 158, Leaf = 0x1203 LF_FIELDLIST
     list[0] = LF_VFUNCTAB, type = 0x2090
     list[1] = LF_ONEMETHOD, public, VANILLA, index = 0x176A, name = 'MxCore'
-    list[2] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x176A, 
+    list[2] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x176A,
         vfptr offset = 0, name = '~MxCore'
-    list[3] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x176B, 
+    list[3] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x176B,
         vfptr offset = 4, name = 'Notify'
-    list[4] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x2087, 
+    list[4] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x2087,
         vfptr offset = 8, name = 'Tickle'
-    list[5] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x202F, 
+    list[5] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x202F,
         vfptr offset = 12, name = 'ClassName'
-    list[6] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x2030, 
+    list[6] = LF_ONEMETHOD, public, INTRODUCING VIRTUAL, index = 0x2030,
         vfptr offset = 16, name = 'IsA'
     list[7] = LF_ONEMETHOD, public, VANILLA, index = 0x2091, name = 'GetId'
     list[8] = LF_MEMBER, private, type = T_UINT4(0075), offset = 4
         member name = 'm_id'
 
 0x4060 : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 9,  field list type 0x405f, CONSTRUCTOR, 
+    # members = 9,  field list type 0x405f, CONSTRUCTOR,
     Derivation list type 0x0000, VT shape type 0x1266
     Size = 8, class name = MxCore, UDT(0x00004060)
 
@@ -194,7 +194,7 @@ NESTED,     enum name = JukeBox::JukeBoxScript, UDT(0x00003cc2)
     Element type = 0x3CC2
     Index type = T_SHORT(0011)
     length = 24
-    Name = 
+    Name =
 
 0x432f : Length = 14, Leaf = 0x1503 LF_ARRAY
     Element type = T_INT4(0074)
@@ -220,7 +220,7 @@ NESTED,     enum name = JukeBox::JukeBoxScript, UDT(0x00003cc2)
         member name = 'm_length'
 
 0x4db6 : Length = 30, Leaf = 0x1504 LF_CLASS
-    # members = 16,  field list type 0x4db5, CONSTRUCTOR, OVERLOAD, 
+    # members = 16,  field list type 0x4db5, CONSTRUCTOR, OVERLOAD,
     Derivation list type 0x0000, VT shape type 0x1266
     Size = 16, class name = MxString, UDT(0x00004db6)
 """
@@ -374,7 +374,7 @@ def test_2d_array(parser):
 def test_enum(parser):
     """LF_ENUM should equal 4-byte int"""
     assert parser.get("0x3cc2").size == 4
-    assert parser.get_scalars("0x3cc2") == [(0, None, "T_INT4(0074)")]
+    assert parser.get_scalars("0x3cc2") == [(0, None, "T_INT4")]
 
     # Now look at an array of enum, 24 bytes
     enum_array = parser.get_scalars("0x4262")

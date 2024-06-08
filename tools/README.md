@@ -189,7 +189,7 @@ In order to keep the code clean and consistent, we use `pylint` and `black`:
 
 ### Run pylint (ignores build and virtualenv)
 
-`pylint tools/`
+`pylint tools/ --ignore=ncc`
 
 ### Check code formatting without rewriting files
 
