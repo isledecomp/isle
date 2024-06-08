@@ -43,7 +43,7 @@ public:
 // SIZE 0x1154
 class LegoAct2 : public LegoWorld {
 public:
-	~LegoAct2();
+	~LegoAct2() override;
 
 	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
 	MxResult Tickle() override;                       // vtable+0x08

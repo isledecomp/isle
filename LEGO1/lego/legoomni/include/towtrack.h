@@ -67,7 +67,7 @@ public:
 class TowTrack : public IslePathActor {
 public:
 	TowTrack();
-	~TowTrack();
+	~TowTrack() override;
 
 	// FUNCTION: LEGO1 0x1004c7c0
 	inline const char* ClassName() const override // vtable+0x0c
