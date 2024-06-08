@@ -65,7 +65,7 @@ public:
 // TEMPLATE: LEGO1 0x10059900
 // MxCollection<LegoWorld *>::~MxCollection<LegoWorld *>
 
-// TEMPLATE: LEGO1 0x10059947
+// TEMPLATE: LEGO1 0x10059950
 // MxCollection<LegoWorld *>::Destroy
 
 // TEMPLATE: LEGO1 0x10059960
