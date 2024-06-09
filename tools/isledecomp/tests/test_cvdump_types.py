@@ -551,3 +551,26 @@ def test_fieldlist_enumerate(parser: CvdumpTypesParser):
             {"name": "c_text", "value": 4},
         ],
     }
+
+
+UNNAMED_UNION_DATA = """
+0x369d : Length = 34, Leaf = 0x1203 LF_FIELDLIST
+    list[0] = LF_MEMBER, public, type = T_32PRCHAR(0470), offset = 0
+        member name = 'sz'
+    list[1] = LF_MEMBER, public, type = T_32PUSHORT(0421), offset = 0
+        member name = 'wz'
+
+0x369e : Length = 22, Leaf = 0x1506 LF_UNION
+    # members = 2,  field list type 0x369d, NESTED, Size = 4    ,class name = __unnamed
+"""
+
+
+def test_unnamed_union():
+    """Make sure we can parse anonymous union types without a UDT"""
+    parser = CvdumpTypesParser()
+    for line in UNNAMED_UNION_DATA.split("\n"):
+        parser.read_line(line)
+
+    # Make sure we can parse the members line
+    union = parser.keys["0x369e"]
+    assert union["size"] == 4
