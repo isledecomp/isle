@@ -579,15 +579,15 @@ MxLong LegoOmni::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1005b640
-void LegoOmni::StartTimer()
+void LegoOmni::Pause()
 {
-	MxOmni::StartTimer();
+	MxOmni::Pause();
 	SetAppCursor(e_cursorNo);
 }
 
 // FUNCTION: LEGO1 0x1005b650
-void LegoOmni::StopTimer()
+void LegoOmni::Resume()
 {
-	MxOmni::StopTimer();
+	MxOmni::Resume();
 	SetAppCursor(e_cursorArrow);
 }

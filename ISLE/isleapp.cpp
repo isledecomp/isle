@@ -162,7 +162,7 @@ void IsleApp::Close()
 		Lego()->RemoveWorld(ds.GetAtomId(), ds.GetObjectId());
 		Lego()->DeleteObject(ds);
 		TransitionManager()->SetWaitIndicator(NULL);
-		Lego()->StopTimer();
+		Lego()->Resume();
 
 		while (Streamer()->Close(NULL) == SUCCESS) {
 		}
@@ -318,7 +318,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				g_reqEnableRMDevice = FALSE;
 				VideoManager()->EnableRMDevice();
 				g_rmDisabled = FALSE;
-				Lego()->StopTimer();
+				Lego()->Resume();
 			}
 
 			if (g_closed) {
@@ -468,7 +468,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					}
 					else if (!valid) {
 						g_rmDisabled = TRUE;
-						Lego()->StartTimer();
+						Lego()->Pause();
 						VideoManager()->DisableRMDevice();
 					}
 				}
@@ -832,7 +832,7 @@ inline void IsleApp::Tick(BOOL sleepIfNotNextFrame)
 	}
 
 	if (m_frameDelta + g_lastFrameTime < currentTime) {
-		if (!Lego()->IsTimerRunning()) {
+		if (!Lego()->IsPaused()) {
 			TickleManager()->Tickle();
 		}
 		g_lastFrameTime = currentTime;

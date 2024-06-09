@@ -75,33 +75,33 @@ public:
 	};
 
 	LegoOmni();
-	~LegoOmni() override; // vtable+00
+	~LegoOmni() override;
 
-	MxLong Notify(MxParam& p_param) override; // vtable+04
+	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
 	// FUNCTION: LEGO1 0x10058aa0
-	inline const char* ClassName() const override // vtable+0c
+	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f671c
 		return "LegoOmni";
 	}
 
 	// FUNCTION: LEGO1 0x10058ab0
-	inline MxBool IsA(const char* p_name) const override // vtable+10
+	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoOmni::ClassName()) || MxOmni::IsA(p_name);
 	}
 
-	void Init() override;                                                                        // vtable+14
-	MxResult Create(MxOmniCreateParam& p_param) override;                                        // vtable+18
-	void Destroy() override;                                                                     // vtable+1c
-	MxResult Start(MxDSAction* p_dsAction) override;                                             // vtable+20
-	void DeleteObject(MxDSAction& p_dsAction) override;                                          // vtable+24
-	MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                     // vtable+28
-	MxEntity* AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
-	void NotifyCurrentEntity(const MxNotificationParam& p_param) override;                       // vtable+34
-	void StartTimer() override;                                                                  // vtable+38
-	void StopTimer() override;                                                                   // vtable+3c
+	void Init() override;                                                                        // vtable+0x14
+	MxResult Create(MxOmniCreateParam& p_param) override;                                        // vtable+0x18
+	void Destroy() override;                                                                     // vtable+0x1c
+	MxResult Start(MxDSAction* p_dsAction) override;                                             // vtable+0x20
+	void DeleteObject(MxDSAction& p_dsAction) override;                                          // vtable+0x24
+	MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                     // vtable+0x28
+	MxEntity* AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+0x30
+	void NotifyCurrentEntity(const MxNotificationParam& p_param) override;                       // vtable+0x34
+	void Pause() override;                                                                       // vtable+0x38
+	void Resume() override;                                                                      // vtable+0x3c
 
 	LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 	LegoROI* FindROI(const char* p_name);
