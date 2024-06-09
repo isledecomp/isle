@@ -1,5 +1,7 @@
 """For collating the results from parsing cvdump.exe into a more directly useful format."""
+
 from typing import Dict, List, Tuple, Optional
+from isledecomp.cvdump import SymbolsEntry
 from isledecomp.types import SymbolType
 from .parser import CvdumpParser
 from .demangler import demangle_string_const, demangle_vtable
@@ -31,6 +33,8 @@ class CvdumpNode:
     # Size as reported by SECTION CONTRIBUTIONS section. Not guaranteed to be
     # accurate.
     section_contribution: Optional[int] = None
+    addr: Optional[int] = None
+    symbol_entry: Optional[SymbolsEntry] = None
 
     def __init__(self, section: int, offset: int) -> None:
         self.section = section
@@ -87,13 +91,12 @@ class CvdumpAnalysis:
     """Collects the results from CvdumpParser into a list of nodes (i.e. symbols).
     These can then be analyzed by a downstream tool."""
 
-    nodes = List[CvdumpNode]
-    verified_lines = Dict[Tuple[str, str], Tuple[str, str]]
+    verified_lines: Dict[Tuple[str, str], Tuple[str, str]]
 
     def __init__(self, parser: CvdumpParser):
         """Read in as much information as we have from the parser.
         The more sections we have, the better our information will be."""
-        node_dict = {}
+        node_dict: Dict[Tuple[int, int], CvdumpNode] = {}
 
         # PUBLICS is our roadmap for everything that follows.
         for pub in parser.publics:
@@ -158,8 +161,11 @@ class CvdumpAnalysis:
                 node_dict[key].friendly_name = sym.name
                 node_dict[key].confirmed_size = sym.size
                 node_dict[key].node_type = SymbolType.FUNCTION
+                node_dict[key].symbol_entry = sym
 
-        self.nodes = [v for _, v in dict(sorted(node_dict.items())).items()]
+        self.nodes: List[CvdumpNode] = [
+            v for _, v in dict(sorted(node_dict.items())).items()
+        ]
         self._estimate_size()
 
     def _estimate_size(self):

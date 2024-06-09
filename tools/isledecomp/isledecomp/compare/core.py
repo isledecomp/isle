@@ -4,7 +4,7 @@ import difflib
 import struct
 import uuid
 from dataclasses import dataclass
-from typing import Callable, Iterable, List, Optional
+from typing import Any, Callable, Iterable, List, Optional
 from isledecomp.bin import Bin as IsleBin, InvalidVirtualAddressError
 from isledecomp.cvdump.demangler import demangle_string_const
 from isledecomp.cvdump import Cvdump, CvdumpAnalysis
@@ -90,7 +90,7 @@ class Compare:
 
     def _load_cvdump(self):
         logger.info("Parsing %s ...", self.pdb_file)
-        cv = (
+        self.cv = (
             Cvdump(self.pdb_file)
             .lines()
             .globals()
@@ -100,9 +100,9 @@ class Compare:
             .types()
             .run()
         )
-        res = CvdumpAnalysis(cv)
+        self.cvdump_analysis = CvdumpAnalysis(self.cv)
 
-        for sym in res.nodes:
+        for sym in self.cvdump_analysis.nodes:
             # Skip nodes where we have almost no information.
             # These probably came from SECTION CONTRIBUTIONS.
             if sym.name() is None and sym.node_type is None:
@@ -116,6 +116,7 @@ class Compare:
                 continue
 
             addr = self.recomp_bin.get_abs_addr(sym.section, sym.offset)
+            sym.addr = addr
 
             # If this symbol is the final one in its section, we were not able to
             # estimate its size because we didn't have the total size of that section.
@@ -165,7 +166,10 @@ class Compare:
                 addr, sym.node_type, sym.name(), sym.decorated_name, sym.size()
             )
 
-        for (section, offset), (filename, line_no) in res.verified_lines.items():
+        for (section, offset), (
+            filename,
+            line_no,
+        ) in self.cvdump_analysis.verified_lines.items():
             addr = self.recomp_bin.get_abs_addr(section, offset)
             self._lines_db.add_line(filename, line_no, addr)
 
@@ -735,6 +739,9 @@ class Compare:
 
     def get_variables(self) -> List[MatchInfo]:
         return self._db.get_matches_by_type(SymbolType.DATA)
+
+    def get_match_options(self, addr: int) -> Optional[dict[str, Any]]:
+        return self._db.get_match_options(addr)
 
     def compare_address(self, addr: int) -> Optional[DiffReport]:
         match = self._db.get_one_match(addr)

@@ -2,6 +2,7 @@ import re
 from typing import Iterable, Tuple
 from collections import namedtuple
 from .types import CvdumpTypesParser
+from .symbols import CvdumpSymbolsParser
 
 # e.g. `*** PUBLICS`
 _section_change_regex = re.compile(r"\*\*\* (?P<section>[A-Z/ ]{2,})")
@@ -18,11 +19,6 @@ _lines_subsection_header = re.compile(
 # e.g. `S_PUB32: [0001:0003FF60], Flags: 00000000, __read`
 _publics_line_regex = re.compile(
     r"^(?P<type>\w+): \[(?P<section>\w{4}):(?P<offset>\w{8})], Flags: (?P<flags>\w{8}), (?P<name>\S+)"
-)
-
-# e.g. `(00008C) S_GPROC32: [0001:00034E90], Cb: 00000007, Type:             0x1024, ViewROI::IntrinsicImportance`
-_symbol_line_regex = re.compile(
-    r"\(\w+\) (?P<type>\S+): \[(?P<section>\w{4}):(?P<offset>\w{8})\], Cb: (?P<size>\w+), Type:\s+\S+, (?P<name>.+)"
 )
 
 # e.g. `         Debug start: 00000008, Debug end: 0000016E`
@@ -52,9 +48,6 @@ LinesEntry = namedtuple("LinesEntry", "filename line_no section offset")
 # only place you can find the C symbols (library functions, smacker, etc)
 PublicsEntry = namedtuple("PublicsEntry", "type section offset flags name")
 
-# S_GPROC32 = functions
-SymbolsEntry = namedtuple("SymbolsEntry", "type section offset size name")
-
 # (Estimated) size of any symbol
 SizeRefEntry = namedtuple("SizeRefEntry", "module section offset size")
 
@@ -72,12 +65,16 @@ class CvdumpParser:
 
         self.lines = {}
         self.publics = []
-        self.symbols = []
         self.sizerefs = []
         self.globals = []
         self.modules = []
 
         self.types = CvdumpTypesParser()
+        self.symbols_parser = CvdumpSymbolsParser()
+
+    @property
+    def symbols(self):
+        return self.symbols_parser.symbols
 
     def _lines_section(self, line: str):
         """Parsing entries from the LINES section. We only care about the pairs of
@@ -127,20 +124,6 @@ class CvdumpParser:
                 )
             )
 
-    def _symbols_section(self, line: str):
-        """We are interested in S_GPROC32 symbols only."""
-        if (match := _symbol_line_regex.match(line)) is not None:
-            if match.group("type") == "S_GPROC32":
-                self.symbols.append(
-                    SymbolsEntry(
-                        type=match.group("type"),
-                        section=int(match.group("section"), 16),
-                        offset=int(match.group("offset"), 16),
-                        size=int(match.group("size"), 16),
-                        name=match.group("name"),
-                    )
-                )
-
     def _section_contributions(self, line: str):
         """Gives the size of elements across all sections of the binary.
         This is the easiest way to get the data size for .data and .rdata
@@ -177,7 +160,7 @@ class CvdumpParser:
             self.types.read_line(line)
 
         elif self._section == "SYMBOLS":
-            self._symbols_section(line)
+            self.symbols_parser.read_line(line)
 
         elif self._section == "LINES":
             self._lines_section(line)

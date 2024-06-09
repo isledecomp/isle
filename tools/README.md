@@ -174,7 +174,7 @@ pip install -r tools/requirements.txt
 
 ## Testing
 
-`isledecomp` comes with a suite of tests. Install `pylint` and run it, passing in the directory:
+`isledecomp` comes with a suite of tests. Install `pytest` and run it, passing in the directory:
 
 ```
 pip install pytest
@@ -189,7 +189,7 @@ In order to keep the code clean and consistent, we use `pylint` and `black`:
 
 ### Run pylint (ignores build and virtualenv)
 
-`pylint tools/ --ignore=build,bin,lib`
+`pylint tools/ --ignore=build,ncc`
 
 ### Check code formatting without rewriting files
 
