@@ -88,6 +88,10 @@ class CvdumpSymbolsParser:
     def __init__(self):
         self.symbols: list[SymbolsEntry] = []
         self.current_function: Optional[SymbolsEntry] = None
+        # If we read an S_BLOCK32 node, increment this level.
+        # This is so we do not end the proc early by reading an S_END
+        # that indicates the end of the block.
+        self.block_level: int = 0
 
     def read_line(self, line: str):
         if (match := self._symbol_line_generic_regex.match(line)) is not None:
@@ -145,8 +149,14 @@ class CvdumpSymbolsParser:
             )
             self.current_function.stack_symbols.append(new_symbol)
 
+        elif symbol_type == "S_BLOCK32":
+            self.block_level += 1
         elif symbol_type == "S_END":
-            self.current_function = None
+            if self.block_level > 0:
+                self.block_level -= 1
+                assert self.block_level >= 0
+            else:
+                self.current_function = None
         elif symbol_type in self._unhandled_symbols:
             return
         else:
