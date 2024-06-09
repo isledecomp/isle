@@ -370,7 +370,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 	MxBool processRoi;
 
 	if (p_param.GetType() == c_notificationKeyPress) {
-		if (!Lego()->IsTimerRunning() || p_param.GetKey() == VK_PAUSE) {
+		if (!Lego()->IsPaused() || p_param.GetKey() == VK_PAUSE) {
 			if (p_param.GetKey() == VK_SHIFT) {
 				if (m_unk0x195) {
 					m_unk0x80 = FALSE;
@@ -396,7 +396,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 		}
 	}
 	else {
-		if (!Lego()->IsTimerRunning()) {
+		if (!Lego()->IsPaused()) {
 			processRoi = TRUE;
 
 			if (m_unk0x335 != 0) {

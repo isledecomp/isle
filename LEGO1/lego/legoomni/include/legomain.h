@@ -100,8 +100,8 @@ public:
 	MxBool DoesEntityExist(MxDSAction& p_dsAction) override;                                     // vtable+28
 	MxEntity* AddToWorld(const char* p_id, MxS32 p_entityId, MxPresenter* p_presenter) override; // vtable+30
 	void NotifyCurrentEntity(const MxNotificationParam& p_param) override;                       // vtable+34
-	void StartTimer() override;                                                                  // vtable+38
-	void StopTimer() override;                                                                   // vtable+3c
+	void Pause() override;                                                                       // vtable+38
+	void Resume() override;                                                                      // vtable+3c
 
 	LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid);
 	LegoROI* FindROI(const char* p_name);

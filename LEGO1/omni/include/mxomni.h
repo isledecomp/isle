@@ -39,21 +39,21 @@ public:
 	MxOmni();
 	~MxOmni() override;
 
-	MxLong Notify(MxParam& p_param) override;                                                 // vtable+04
-	virtual void Init();                                                                      // vtable+14
-	virtual MxResult Create(MxOmniCreateParam& p_param);                                      // vtable+18
-	virtual void Destroy();                                                                   // vtable+1c
-	virtual MxResult Start(MxDSAction* p_dsAction);                                           // vtable+20
-	virtual void DeleteObject(MxDSAction& p_dsAction);                                        // vtable+24
-	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);                                   // vtable+28
-	virtual MxResult CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action); // vtable+2c
-	virtual MxEntity* AddToWorld(const char*, MxS32, MxPresenter*);                           // vtable+30
-	virtual void NotifyCurrentEntity(const MxNotificationParam& p_param);                     // vtable+34
-	virtual void StartTimer();                                                                // vtable+38
-	virtual void StopTimer();                                                                 // vtable+3c
+	MxLong Notify(MxParam& p_param) override;                                                 // vtable+0x04
+	virtual void Init();                                                                      // vtable+0x14
+	virtual MxResult Create(MxOmniCreateParam& p_param);                                      // vtable+0x18
+	virtual void Destroy();                                                                   // vtable+0x1c
+	virtual MxResult Start(MxDSAction* p_dsAction);                                           // vtable+0x20
+	virtual void DeleteObject(MxDSAction& p_dsAction);                                        // vtable+0x24
+	virtual MxBool DoesEntityExist(MxDSAction& p_dsAction);                                   // vtable+0x28
+	virtual MxResult CreatePresenter(MxStreamController* p_controller, MxDSAction& p_action); // vtable+0x2c
+	virtual MxEntity* AddToWorld(const char*, MxS32, MxPresenter*);                           // vtable+0x30
+	virtual void NotifyCurrentEntity(const MxNotificationParam& p_param);                     // vtable+0x34
+	virtual void Pause();                                                                     // vtable+0x38
+	virtual void Resume();                                                                    // vtable+0x3c
 
 	// FUNCTION: LEGO1 0x10058a90
-	virtual MxBool IsTimerRunning() { return m_timerRunning; } // vtable+40
+	virtual MxBool IsPaused() { return m_paused; } // vtable+0x40
 
 	static void SetInstance(MxOmni* p_instance);
 	static MxBool ActionSourceEquals(MxDSAction* p_action, const char* p_name);
@@ -115,7 +115,7 @@ protected:
 	MxStreamer* m_streamer;                       // 0x40
 	MxAtomSet* m_atomSet;                         // 0x44
 	MxCriticalSection m_criticalSection;          // 0x48
-	MxBool m_timerRunning;                        // 0x64
+	MxBool m_paused;                              // 0x64
 };
 
 #endif // MXOMNI_H

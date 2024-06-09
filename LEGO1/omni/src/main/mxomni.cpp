@@ -68,7 +68,7 @@ void MxOmni::Init()
 	m_timer = NULL;
 	m_streamer = NULL;
 	m_atomSet = NULL;
-	m_timerRunning = FALSE;
+	m_paused = FALSE;
 }
 
 // FUNCTION: LEGO1 0x100af0b0
@@ -409,21 +409,21 @@ MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100b09d0
-void MxOmni::StartTimer()
+void MxOmni::Pause()
 {
-	if (m_timerRunning == FALSE && m_timer != NULL && m_soundManager != NULL) {
+	if (m_paused == FALSE && m_timer != NULL && m_soundManager != NULL) {
 		m_timer->Start();
 		m_soundManager->Pause();
-		m_timerRunning = TRUE;
+		m_paused = TRUE;
 	}
 }
 
 // FUNCTION: LEGO1 0x100b0a00
-void MxOmni::StopTimer()
+void MxOmni::Resume()
 {
-	if (m_timerRunning != FALSE && m_timer != NULL && m_soundManager != NULL) {
+	if (m_paused != FALSE && m_timer != NULL && m_soundManager != NULL) {
 		m_timer->Stop();
 		m_soundManager->Resume();
-		m_timerRunning = FALSE;
+		m_paused = FALSE;
 	}
 }

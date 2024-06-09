@@ -607,11 +607,11 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 
 		switch (((LegoEventNotificationParam&) p_param).GetKey()) {
 		case VK_PAUSE:
-			if (Lego()->IsTimerRunning()) {
-				Lego()->StopTimer();
+			if (Lego()->IsPaused()) {
+				Lego()->Resume();
 			}
 			else {
-				Lego()->StartTimer();
+				Lego()->Pause();
 			}
 			break;
 		case VK_ESCAPE: {
