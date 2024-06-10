@@ -14,8 +14,27 @@ LegoRaceMap::LegoRaceMap()
 	ControlManager()->Register(this);
 }
 
+// STUB: LEGO1 0x1005d2b0
+LegoRaceMap::~LegoRaceMap()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x1005d310
+void LegoRaceMap::ParseAction(char* p_extra)
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1005d4b0
 void LegoRaceMap::FUN_1005d4b0()
 {
 	// TODO
+}
+
+// STUB: LEGO1 0x1005d550
+MxLong LegoRaceMap::Notify(MxParam& p_param)
+{
+	// TODO
+	return 0;
 }

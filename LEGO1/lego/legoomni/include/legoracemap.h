@@ -3,20 +3,25 @@
 
 #include "legoraceactor.h"
 
-/*
-	VTABLE: LEGO1 0x100d8858 LegoRaceActor
-	VTABLE: LEGO1 0x100d8860 LegoAnimActor
-	VTABLE: LEGO1 0x100d8870 LegoPathActor
-	VTABLE: LEGO1 0x100d893c LegoRaceMap
-*/
+// VTABLE: LEGO1 0x100d8858 LegoRaceActor
+// VTABLE: LEGO1 0x100d8860 LegoAnimActor
+// VTABLE: LEGO1 0x100d8870 LegoPathActor
+// VTABLE: LEGO1 0x100d893c LegoRaceMap
 // SIZE 0x1b4
 class LegoRaceMap : public virtual LegoRaceActor {
 public:
 	LegoRaceMap();
+	~LegoRaceMap() override;
 
-	virtual void FUN_1005d4b0();
+	// LegoPathActor vtable
+	MxLong Notify(MxParam& p_param) override;  // vtable+0x04
+	void ParseAction(char* p_extra) override;  // vtable+0x20
+	void VTable0x70(float p_und) override = 0; // vtable+0x70
 
-	// SYNTHETIC: LEGO1 0x1005d5c0
+	// LegoRaceMap vtable
+	virtual void FUN_1005d4b0(); // vtable+0x00
+
+	// SYNTHETIC: LEGO1 0x1005d5d0
 	// LegoRaceMap::`scalar deleting destructor'
 
 private:

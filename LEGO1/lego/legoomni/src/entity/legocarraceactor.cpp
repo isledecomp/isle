@@ -9,20 +9,6 @@ DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
 // STRING: LEGO1 0x100f7ae4
 const char* g_fuel = "FUEL";
 
-// STUB: LEGO1 0x100141a0
-MxU32 LegoCarRaceActor::VTable0x90(float, Matrix4&)
-{
-	// TODO
-	return 0;
-}
-
-// STUB: LEGO1 0x1005d650
-MxResult LegoCarRaceActor::VTable0x94(LegoPathActor* p_actor, MxBool p_bool)
-{
-	// TODO
-	return 0;
-}
-
 // FUNCTION: LEGO1 0x10080350
 LegoCarRaceActor::LegoCarRaceActor()
 {
