@@ -1,5 +1,7 @@
 #include "carrace.h"
 
+#include "mxactionnotificationparam.h"
+
 DECOMP_SIZE_ASSERT(CarRace, 0x154)
 
 // FUNCTION: LEGO1 0x10016a90
@@ -23,28 +25,28 @@ void CarRace::ReadyWorld()
 }
 
 // STUB: LEGO1 0x10016f60
-undefined4 CarRace::VTable0x74(undefined4)
+MxLong CarRace::HandleEndAction(MxEndActionNotificationParam&)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x100170e0
-undefined4 CarRace::VTable0x70(undefined4)
+MxLong CarRace::HandleType19Notification(MxType19NotificationParam&)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10017650
-undefined4 CarRace::VTable0x6c(undefined4)
+MxLong CarRace::HandleClick(LegoEventNotificationParam&)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x100177e0
-undefined4 CarRace::VTable0x78(undefined4)
+MxLong CarRace::HandleType0Notification(MxNotificationParam&)
 {
 	// TODO
 	return 0;

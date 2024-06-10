@@ -91,7 +91,7 @@ public:
 	inline LegoCameraController* GetCamera() { return m_cameraController; }
 	inline LegoEntityList* GetEntityList() { return m_entityList; }
 	inline MxS32 GetScriptIndex() { return m_scriptIndex; }
-	inline MxCoreSet& GetUnknown0xd0() { return m_set0xd0; }
+	inline MxBool GetUnknown0xd0Empty() { return m_set0xd0.empty(); }
 	inline list<LegoROI*>& GetROIList() { return m_roiList; }
 	inline LegoHideAnimPresenter* GetHideAnimPresenter() { return m_hideAnimPresenter; }
 
