@@ -233,7 +233,7 @@ class CompareDb:
         self, orig: int, recomp: int, compare_type: Optional[SymbolType] = None
     ) -> bool:
         if self._orig_used(orig):
-            logger.error("Original address %s not unique!", hex(orig))
+            logger.debug("Original address %s not unique!", hex(orig))
             return False
 
         compare_value = compare_type.value if compare_type is not None else None
