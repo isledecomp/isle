@@ -225,19 +225,21 @@ void LegoWorld::Destroy(MxBool p_fromDestructor)
 // FUNCTION: LEGO1 0x1001f5e0
 MxLong LegoWorld::Notify(MxParam& p_param)
 {
-	MxLong ret = 0;
+	MxLong result = 0;
+
 	switch (((MxNotificationParam&) p_param).GetNotification()) {
 	case c_notificationEndAction: {
 		MxPresenter* presenter = (MxPresenter*) ((MxEndActionNotificationParam&) p_param).GetSender();
 		Remove(presenter);
-		ret = 1;
+		result = 1;
 		break;
 	}
 	case c_notificationNewPresenter:
 		TickleManager()->RegisterClient(this, 100);
 		break;
 	}
-	return ret;
+
+	return result;
 }
 
 // FUNCTION: LEGO1 0x1001f630

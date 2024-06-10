@@ -2,7 +2,6 @@
 #define LEGORACE_H
 
 #include "decomp.h"
-#include "legoeventnotificationparam.h"
 #include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
@@ -10,8 +9,10 @@
 #include "mxtypes.h"
 
 class Act1State;
+class LegoEventNotificationParam;
 class LegoPathActor;
 class MxEndActionNotificationParam;
+class MxNotificationParam;
 class MxType19NotificationParam;
 
 // VTABLE: LEGO1 0x100d5e30
@@ -92,20 +93,27 @@ public:
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;                    // vtable+0x18
-	MxBool VTable0x5c() override;                                        // vtable+0x5c
+	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
+
+	// FUNCTION: LEGO1 0x1000dae0
+	MxBool VTable0x5c() override { return TRUE; } // vtable+0x5c
+
 	MxBool Escape() override;                                            // vtable+0x64
 	void Enable(MxBool p_enable) override;                               // vtable+0x68
 	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;         // vtable+0x6c
 	virtual MxLong HandleType19Notification(MxType19NotificationParam&); // vtable+0x70
 	virtual MxLong HandleEndAction(MxEndActionNotificationParam&);       // vtable+0x74
-	virtual MxLong HandleType0Notification(MxNotificationParam&);        // vtable+0x78
-	virtual void VTable0x7c(undefined4, undefined4);                     // vtable+0x7c
+
+	// FUNCTION: LEGO1 0x1000dab0
+	virtual MxLong HandleType0Notification(MxNotificationParam&) { return 0; } // vtable+0x78
+
+	// STUB: LEGO1 0x1000dac0
+	virtual void VTable0x7c(undefined4, undefined4) {} // vtable+0x7c
 
 	// SYNTHETIC: LEGO1 0x10015cc0
 	// LegoRace::`scalar deleting destructor'
 
-private:
+protected:
 	undefined4 m_unk0xf8;               // 0xf8
 	undefined4 m_unk0xfc;               // 0xfc
 	undefined4 m_unk0x100;              // 0x100
@@ -120,12 +128,8 @@ private:
 	Act1State* m_act1State;             // 0x124
 	undefined4 m_unk0x128;              // 0x128
 	undefined4 m_unk0x12c;              // 0x12c
-
-protected:
-	MxRect32 m_unk0x130; // 0x130
-
-private:
-	undefined4 m_unk0x140; // 0x140
+	MxRect32 m_unk0x130;                // 0x130
+	undefined4 m_unk0x140;              // 0x140
 };
 
 #endif // LEGORACE_H

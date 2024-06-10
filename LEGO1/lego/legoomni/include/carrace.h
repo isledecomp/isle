@@ -2,10 +2,7 @@
 #define CARRACE_H
 
 #include "decomp.h"
-#include "legoeventnotificationparam.h"
 #include "legorace.h"
-
-class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d4b70
 // SIZE 0x2c

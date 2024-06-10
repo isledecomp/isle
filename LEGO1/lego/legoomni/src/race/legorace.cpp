@@ -14,42 +14,24 @@ DECOMP_SIZE_ASSERT(RaceState, 0x2c)
 // Defined in legopathstruct.cpp
 extern MxBool g_unk0x100f119c;
 
-// FUNCTION: LEGO1 0x1000dab0
-MxLong LegoRace::HandleType0Notification(MxNotificationParam&)
-{
-	return 0;
-}
-
-// STUB: LEGO1 0x1000dac0
-void LegoRace::VTable0x7c(undefined4, undefined4)
-{
-	// TODO
-}
-
-// FUNCTION: LEGO1 0x1000dae0
-MxBool LegoRace::VTable0x5c()
-{
-	return TRUE;
-}
-
 // FUNCTION: LEGO1 0x10015aa0
 LegoRace::LegoRace()
 {
-	this->m_unk0xf8 = 0;
-	this->m_unk0xfc = 0;
-	this->m_unk0x100 = 0;
-	this->m_unk0x104 = 0;
-	this->m_unk0x108 = 0;
-	this->m_unk0x10c = 0;
-	this->m_unk0x140 = 0;
-	this->m_unk0x110 = 0;
-	this->m_unk0x114 = 0;
-	this->m_unk0x118 = 0;
-	this->m_unk0x128 = 0;
-	this->m_unk0x12c = 0;
-	this->m_pathActor = 0;
-	this->m_act1State = NULL;
-	this->m_destLocation = LegoGameState::e_undefined;
+	m_unk0xf8 = 0;
+	m_unk0xfc = 0;
+	m_unk0x100 = 0;
+	m_unk0x104 = 0;
+	m_unk0x108 = 0;
+	m_unk0x10c = 0;
+	m_unk0x140 = 0;
+	m_unk0x110 = 0;
+	m_unk0x114 = 0;
+	m_unk0x118 = 0;
+	m_unk0x128 = 0;
+	m_unk0x12c = 0;
+	m_pathActor = 0;
+	m_act1State = NULL;
+	m_destLocation = LegoGameState::e_undefined;
 	NotificationManager()->Register(this);
 }
 
@@ -75,6 +57,7 @@ MxBool LegoRace::Escape()
 MxResult LegoRace::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
+
 	if (result == SUCCESS) {
 		m_act1State = (Act1State*) GameState()->GetState("Act1State");
 		ControlManager()->Register(this);
@@ -82,6 +65,7 @@ MxResult LegoRace::Create(MxDSAction& p_dsAction)
 		m_pathActor->SetWorldSpeed(0);
 		SetCurrentActor(NULL);
 	}
+
 	return result;
 }
 
@@ -100,15 +84,16 @@ LegoRace::~LegoRace()
 }
 
 // FUNCTION: LEGO1 0x10015e00
+// FUNCTION: BETA10 0x100c7b3d
 MxLong LegoRace::Notify(MxParam& p_param)
 {
-	MxLong result = 0;
-
 	LegoWorld::Notify(p_param);
+
+	MxLong result = 0;
 	if (m_worldStarted) {
 		switch (((MxNotificationParam&) p_param).GetNotification()) {
 		case c_notificationType0:
-			result = HandleType0Notification((MxNotificationParam&) p_param);
+			HandleType0Notification((MxNotificationParam&) p_param);
 			break;
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
@@ -129,9 +114,10 @@ MxLong LegoRace::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015ed0
+// FUNCTION: BETA10 0x100c7c3f
 void LegoRace::Enable(MxBool p_enable)
 {
-	if (GetUnknown0xd0().size() == 1 && !p_enable) {
+	if (GetUnknown0xd0Empty() != p_enable && !p_enable) {
 		Remove(CurrentActor());
 
 		MxU8 oldActorId = GameState()->GetActorId();

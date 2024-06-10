@@ -1,7 +1,6 @@
 #ifndef JETSKIRACE_H
 #define JETSKIRACE_H
 
-#include "legoeventnotificationparam.h"
 #include "legorace.h"
 
 // VTABLE: LEGO1 0x100d4fa8
