@@ -3,25 +3,23 @@
 
 #include "legoraceactor.h"
 
-/*
-	VTABLE: LEGO1 0x100da0c0 LegoRaceActor
-	VTABLE: LEGO1 0x100da0c8 LegoAnimActor
-	VTABLE: LEGO1 0x100da0d8 LegoPathActor
-	VTABLE: LEGO1 0x100da1a8 LegoCarRaceActor
-*/
+// VTABLE: LEGO1 0x100da0c0 LegoRaceActor
+// VTABLE: LEGO1 0x100da0c8 LegoAnimActor
+// VTABLE: LEGO1 0x100da0d8 LegoPathActor
+// VTABLE: LEGO1 0x100da1a8 LegoCarRaceActor
 // SIZE 0x1a0
 class LegoCarRaceActor : public virtual LegoRaceActor {
 public:
 	LegoCarRaceActor();
 
-	// FUNCTION: LEGO1 0x10081650
+	// FUNCTION: LEGO1 0x10081660
 	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0568
 		return "LegoCarRaceActor";
 	}
 
-	// FUNCTION: LEGO1 0x10081670
+	// FUNCTION: LEGO1 0x10081680
 	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
@@ -62,7 +60,7 @@ public:
 
 	virtual void VTable0x1c(); // vtable+0x1c
 
-	// SYNTHETIC: LEGO1 0x10081610
+	// SYNTHETIC: LEGO1 0x10081620
 	// LegoCarRaceActor::`scalar deleting destructor'
 
 protected:
