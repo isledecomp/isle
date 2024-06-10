@@ -4,6 +4,8 @@
 #include "decomp.h"
 #include "mxflcpresenter.h"
 
+class LegoTextureInfo;
+
 // VTABLE: LEGO1 0x100d89e0
 // SIZE 0x70
 class LegoFlcTexturePresenter : public MxFlcPresenter {
@@ -34,8 +36,8 @@ public:
 private:
 	void Init();
 
-	undefined4 m_unk0x68; // 0x68
-	undefined4 m_unk0x6c; // 0x6c
+	MxS32 m_rectCount;          // 0x68
+	LegoTextureInfo* m_texture; // 0x6c
 };
 
 #endif // LEGOFLCTEXTUREPRESENTER_H
