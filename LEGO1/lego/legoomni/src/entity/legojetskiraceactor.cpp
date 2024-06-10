@@ -2,12 +2,6 @@
 
 DECOMP_SIZE_ASSERT(LegoJetskiRaceActor, 0x1a8)
 
-// STUB: LEGO1 0x10014220
-void LegoJetskiRaceActor::VTable0x1c()
-{
-	// TODO
-}
-
 // FUNCTION: LEGO1 0x10080ef0
 LegoJetskiRaceActor::LegoJetskiRaceActor()
 {
@@ -17,7 +11,19 @@ LegoJetskiRaceActor::LegoJetskiRaceActor()
 	m_unk0x150 = 1.5f;
 }
 
-// STUB: LEGO1 0x10081fc0
+// STUB: LEGO1 0x10081120
+void LegoJetskiRaceActor::VTable0x1c()
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10081550
+void LegoJetskiRaceActor::VTable0x70(float p_float)
+{
+	// TODO
+}
+
+// STUB: LEGO1 0x10081fd0
 MxU32 LegoJetskiRaceActor::VTable0x6c(
 	LegoPathBoundary* p_boundary,
 	Vector3& p_v1,
@@ -29,23 +35,4 @@ MxU32 LegoJetskiRaceActor::VTable0x6c(
 {
 	// TODO
 	return 0;
-}
-
-// STUB: LEGO1 0x100822c0
-void LegoJetskiRaceActor::VTable0x70(float p_float)
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x100822d0
-void LegoJetskiRaceActor::SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
-{
-	// TODO
-}
-
-// STUB: LEGO1 0x100822e0
-MxResult LegoJetskiRaceActor::VTable0x9c()
-{
-	// TODO
-	return SUCCESS;
 }

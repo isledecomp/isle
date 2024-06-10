@@ -3,25 +3,23 @@
 
 #include "legoraceactor.h"
 
-/*
-	VTABLE: LEGO1 0x100da0c0 LegoRaceActor
-	VTABLE: LEGO1 0x100da0c8 LegoAnimActor
-	VTABLE: LEGO1 0x100da0d8 LegoPathActor
-	VTABLE: LEGO1 0x100da1a8 LegoCarRaceActor
-*/
+// VTABLE: LEGO1 0x100da0c0 LegoRaceActor
+// VTABLE: LEGO1 0x100da0c8 LegoAnimActor
+// VTABLE: LEGO1 0x100da0d8 LegoPathActor
+// VTABLE: LEGO1 0x100da1a8 LegoCarRaceActor
 // SIZE 0x1a0
 class LegoCarRaceActor : public virtual LegoRaceActor {
 public:
 	LegoCarRaceActor();
 
-	// FUNCTION: LEGO1 0x10081650
+	// FUNCTION: LEGO1 0x10081660
 	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0568
 		return "LegoCarRaceActor";
 	}
 
-	// FUNCTION: LEGO1 0x10081670
+	// FUNCTION: LEGO1 0x10081680
 	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
 		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoRaceActor::IsA(p_name);
@@ -34,10 +32,8 @@ public:
 		float p_f1,
 		float p_f2,
 		Vector3& p_v3
-	) override;                                                          // vtable+0x6c
-	void VTable0x70(float p_float) override;                             // vtable+0x70
-	MxU32 VTable0x90(float, Matrix4&) override;                          // vtable+0x90
-	MxResult VTable0x94(LegoPathActor* p_actor, MxBool p_bool) override; // vtable+0x94
+	) override;                              // vtable+0x6c
+	void VTable0x70(float p_float) override; // vtable+0x70
 	void SwitchBoundary(LegoPathBoundary*& p_boundary, LegoUnknown100db7f4*& p_edge, float& p_unk0xe4)
 		override;                   // vtable+0x98
 	MxResult VTable0x9c() override; // vtable+0x9c
@@ -64,7 +60,7 @@ public:
 
 	virtual void VTable0x1c(); // vtable+0x1c
 
-	// SYNTHETIC: LEGO1 0x10081610
+	// SYNTHETIC: LEGO1 0x10081620
 	// LegoCarRaceActor::`scalar deleting destructor'
 
 protected:

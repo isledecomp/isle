@@ -4,30 +4,30 @@
 #include "legocarraceactor.h"
 #include "legoracemap.h"
 
-/*
-	VTABLE: LEGO1 0x100d58a0 LegoRaceActor
-	VTABLE: LEGO1 0x100d58a8 LegoAnimActor
-	VTABLE: LEGO1 0x100d58b8 LegoPathActor
-	VTABLE: LEGO1 0x100d5894 LegoRaceMap
-	VTABLE: LEGO1 0x100d5898 LegoCarRaceActor
-*/
+// VTABLE: LEGO1 0x100d58a0 LegoRaceActor
+// VTABLE: LEGO1 0x100d58a8 LegoAnimActor
+// VTABLE: LEGO1 0x100d58b8 LegoPathActor
+// VTABLE: LEGO1 0x100d5984 LegoRaceMap
+// VTABLE: LEGO1 0x100d5988 LegoCarRaceActor
 // SIZE 0x200
 class LegoRaceCar : public LegoCarRaceActor, public LegoRaceMap {
 public:
 	LegoRaceCar();
+	~LegoRaceCar() override;
+
 	MxLong Notify(MxParam& p_param) override; // vtable+0x04
 
-	// FUNCTION: LEGO1 0x10014290
+	// FUNCTION: LEGO1 0x100142a0
 	inline const char* ClassName() const override // vtable+0x0c
 	{
 		// STRING: LEGO1 0x100f0548
 		return "LegoRaceCar";
 	}
 
-	// FUNCTION: LEGO1 0x100142b0
+	// FUNCTION: LEGO1 0x100142c0
 	inline MxBool IsA(const char* p_name) const override // vtable+0x10
 	{
-		return !strcmp(p_name, LegoCarRaceActor::ClassName()) || LegoCarRaceActor::IsA(p_name);
+		return !strcmp(p_name, LegoRaceCar::ClassName()) || LegoCarRaceActor::IsA(p_name);
 	}
 
 	void ParseAction(char*) override;                  // vtable+0x20
@@ -50,7 +50,7 @@ public:
 	virtual void FUN_10012ff0(float);
 	virtual MxBool FUN_10013130(float);
 
-	// SYNTHETIC: LEGO1 0x10014230
+	// SYNTHETIC: LEGO1 0x10014240
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
