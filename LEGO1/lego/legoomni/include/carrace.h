@@ -2,7 +2,10 @@
 #define CARRACE_H
 
 #include "decomp.h"
+#include "legoeventnotificationparam.h"
 #include "legorace.h"
+
+class MxEndActionNotificationParam;
 
 // VTABLE: LEGO1 0x100d4b70
 // SIZE 0x2c
@@ -44,13 +47,13 @@ public:
 		return !strcmp(p_name, CarRace::ClassName()) || LegoRace::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void ReadyWorld() override;                       // vtable+0x50
-	MxBool Escape() override;                         // vtable+0x64
-	undefined4 VTable0x6c(undefined4) override;       // vtable+0x6c
-	undefined4 VTable0x70(undefined4) override;       // vtable+0x70
-	undefined4 VTable0x74(undefined4) override;       // vtable+0x74
-	undefined4 VTable0x78(undefined4) override;       // vtable+0x78
+	MxResult Create(MxDSAction& p_dsAction) override;                     // vtable+0x18
+	void ReadyWorld() override;                                           // vtable+0x50
+	MxBool Escape() override;                                             // vtable+0x64
+	MxLong HandleClick(LegoEventNotificationParam&) override;             // vtable+0x6c
+	MxLong HandleType19Notification(MxType19NotificationParam&) override; // vtable+0x70
+	MxLong HandleEndAction(MxEndActionNotificationParam&) override;       // vtable+0x74
+	MxLong HandleType0Notification(MxNotificationParam&) override;        // vtable+0x78
 
 	// SYNTHETIC: LEGO1 0x10016c70
 	// CarRace::`scalar deleting destructor'

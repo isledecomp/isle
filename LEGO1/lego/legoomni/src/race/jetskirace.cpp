@@ -14,19 +14,19 @@ void JetskiRace::ReadyWorld()
 }
 
 // STUB: LEGO1 0x10016520
-undefined4 JetskiRace::VTable0x74(undefined4)
+MxLong JetskiRace::HandleEndAction(MxEndActionNotificationParam&)
 {
 	return 0;
 }
 
 // STUB: LEGO1 0x100165a0
-undefined4 JetskiRace::VTable0x6c(undefined4)
+MxLong JetskiRace::HandleClick(LegoEventNotificationParam&)
 {
 	return 0;
 }
 
 // STUB: LEGO1 0x100166a0
-undefined4 JetskiRace::VTable0x70(undefined4)
+MxLong JetskiRace::HandleType19Notification(MxType19NotificationParam&)
 {
 	return 0;
 }

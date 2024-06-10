@@ -2,10 +2,17 @@
 #define LEGORACE_H
 
 #include "decomp.h"
+#include "legoeventnotificationparam.h"
+#include "legogamestate.h"
 #include "legostate.h"
 #include "legoworld.h"
 #include "mxrect32.h"
 #include "mxtypes.h"
+
+class Act1State;
+class LegoPathActor;
+class MxEndActionNotificationParam;
+class MxType19NotificationParam;
 
 // VTABLE: LEGO1 0x100d5e30
 // SIZE 0x2c
@@ -85,34 +92,34 @@ public:
 		return !strcmp(p_name, LegoRace::ClassName()) || LegoWorld::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	MxBool VTable0x5c() override;                     // vtable+0x5c
-	MxBool Escape() override;                         // vtable+0x64
-	void Enable(MxBool p_enable) override;            // vtable+0x68
-	virtual undefined4 VTable0x6c(undefined4) = 0;    // vtable+0x6c
-	virtual undefined4 VTable0x70(undefined4);        // vtable+0x70
-	virtual undefined4 VTable0x74(undefined4);        // vtable+0x74
-	virtual undefined4 VTable0x78(undefined4);        // vtable+0x78
-	virtual void VTable0x7c(undefined4, undefined4);  // vtable+0x7c
+	MxResult Create(MxDSAction& p_dsAction) override;                    // vtable+0x18
+	MxBool VTable0x5c() override;                                        // vtable+0x5c
+	MxBool Escape() override;                                            // vtable+0x64
+	void Enable(MxBool p_enable) override;                               // vtable+0x68
+	virtual MxLong HandleClick(LegoEventNotificationParam&) = 0;         // vtable+0x6c
+	virtual MxLong HandleType19Notification(MxType19NotificationParam&); // vtable+0x70
+	virtual MxLong HandleEndAction(MxEndActionNotificationParam&);       // vtable+0x74
+	virtual MxLong HandleType0Notification(MxNotificationParam&);        // vtable+0x78
+	virtual void VTable0x7c(undefined4, undefined4);                     // vtable+0x7c
 
 	// SYNTHETIC: LEGO1 0x10015cc0
 	// LegoRace::`scalar deleting destructor'
 
 private:
-	undefined4 m_unk0xf8;  // 0xf8
-	undefined4 m_unk0xfc;  // 0xfc
-	undefined4 m_unk0x100; // 0x100
-	undefined4 m_unk0x104; // 0x104
-	undefined4 m_unk0x108; // 0x108
-	undefined4 m_unk0x10c; // 0x10c
-	undefined4 m_unk0x110; // 0x110
-	undefined4 m_unk0x114; // 0x114
-	undefined4 m_unk0x118; // 0x118
-	undefined4 m_unk0x11c; // 0x11c
-	undefined4 m_unk0x120; // 0x120
-	undefined4 m_unk0x124; // 0x124
-	undefined4 m_unk0x128; // 0x128
-	undefined4 m_unk0x12c; // 0x12c
+	undefined4 m_unk0xf8;               // 0xf8
+	undefined4 m_unk0xfc;               // 0xfc
+	undefined4 m_unk0x100;              // 0x100
+	undefined4 m_unk0x104;              // 0x104
+	undefined4 m_unk0x108;              // 0x108
+	undefined4 m_unk0x10c;              // 0x10c
+	undefined4 m_unk0x110;              // 0x110
+	undefined4 m_unk0x114;              // 0x114
+	undefined4 m_unk0x118;              // 0x118
+	LegoGameState::Area m_destLocation; // 0x11c
+	LegoPathActor* m_pathActor;         // 0x120
+	Act1State* m_act1State;             // 0x124
+	undefined4 m_unk0x128;              // 0x128
+	undefined4 m_unk0x12c;              // 0x12c
 
 protected:
 	MxRect32 m_unk0x130; // 0x130

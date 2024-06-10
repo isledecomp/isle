@@ -1,6 +1,7 @@
 #ifndef JETSKIRACE_H
 #define JETSKIRACE_H
 
+#include "legoeventnotificationparam.h"
 #include "legorace.h"
 
 // VTABLE: LEGO1 0x100d4fa8
@@ -48,12 +49,12 @@ public:
 		return !strcmp(p_name, JetskiRace::ClassName()) || LegoRace::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override; // vtable+0x18
-	void ReadyWorld() override;                       // vtable+0x50
-	MxBool Escape() override;                         // vtable+0x64
-	undefined4 VTable0x6c(undefined4) override;       // vtable+0x6c
-	undefined4 VTable0x70(undefined4) override;       // vtable+0x70
-	undefined4 VTable0x74(undefined4) override;       // vtable+0x74
+	MxResult Create(MxDSAction& p_dsAction) override;                     // vtable+0x18
+	void ReadyWorld() override;                                           // vtable+0x50
+	MxBool Escape() override;                                             // vtable+0x64
+	MxLong HandleClick(LegoEventNotificationParam&) override;             // vtable+0x6c
+	MxLong HandleType19Notification(MxType19NotificationParam&) override; // vtable+0x70
+	MxLong HandleEndAction(MxEndActionNotificationParam&) override;       // vtable+0x74
 };
 
 // SYNTHETIC: LEGO1 0x1000f530
