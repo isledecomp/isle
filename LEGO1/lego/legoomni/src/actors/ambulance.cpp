@@ -1,6 +1,7 @@
 #include "ambulance.h"
 
 #include "decomp.h"
+#include "isle.h"
 #include "isle_actions.h"
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
@@ -14,6 +15,7 @@
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
+#include "mxtransitionmanager.h"
 #include "mxvariabletable.h"
 #include "scripts.h"
 
@@ -227,17 +229,50 @@ MxLong Ambulance::HandleNotification19(MxType19NotificationParam& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10036ce0
+// FUNCTION: LEGO1 0x10036ce0
+// FUNCTION: BETA10 0x10023506
 MxLong Ambulance::HandleClick()
 {
-	// TODO
-	return 0;
+	if (((Act1State*) GameState()->GetState("Act1State"))->m_unk0x018 != 10) {
+		return 1;
+	}
+
+	if (m_state->m_unk0x08 == 2) {
+		return 1;
+	}
+
+	FUN_10015820(TRUE, 0);
+	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_ambulance);
+	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
+
+	if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
+		((IslePathActor*) CurrentActor())->Exit();
+	}
+
+	m_time = Timer()->GetTime();
+	m_unk0x16a = CurrentActor()->GetActorId();
+
+	Enter();
+	InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_AmbulanceDashboard, NULL);
+	ControlManager()->Register(this);
+
+	if (m_state->m_unk0x08 == 1) {
+		SpawnPlayer(LegoGameState::e_unk31, TRUE, 0);
+		m_state->m_unk0x0c = Timer()->GetTime();
+		InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_pns018rd_RunAnim, NULL);
+	}
+
+	return 1;
 }
 
-// STUB: LEGO1 0x10036e60
+// FUNCTION: LEGO1 0x10036e60
+// FUNCTION: BETA10 0x100236bb
 void Ambulance::FUN_10036e60()
 {
-	// TODO
+	m_state->m_unk0x08 = 2;
+	PlayAnimation(IsleScript::c_hho027en_RunAnim);
+	m_lastAction = IsleScript::c_noneIsle;
+	m_lastAnimation = IsleScript::c_noneIsle;
 }
 
 // STUB: LEGO1 0x10036e90
