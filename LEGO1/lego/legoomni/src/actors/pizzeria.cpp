@@ -86,8 +86,6 @@ MxResult PizzeriaState::Serialize(LegoFile* p_legoFile)
 		}
 	}
 	else {
-		// A write variable needs to be used here, otherwise
-		// the compiler aggresively optimizes the function
 		for (MxS16 i = 0; i < 5; i++) {
 			m_unk0x08[i].WriteToFile(p_legoFile);
 		}

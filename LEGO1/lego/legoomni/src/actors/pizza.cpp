@@ -120,6 +120,7 @@ MxResult PizzaMissionState::Serialize(LegoFile* p_legoFile)
 			m_state[i].WriteToFile(p_legoFile);
 		}
 	}
+
 	return SUCCESS;
 }
 

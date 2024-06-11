@@ -646,42 +646,42 @@ AmbulanceMissionState::AmbulanceMissionState()
 MxResult AmbulanceMissionState::Serialize(LegoFile* p_legoFile)
 {
 	LegoState::Serialize(p_legoFile);
+
 	if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_unk0x10, 2);
-		p_legoFile->Read(&m_unk0x12, 2);
-		p_legoFile->Read(&m_unk0x14, 2);
-		p_legoFile->Read(&m_unk0x16, 2);
-		p_legoFile->Read(&m_unk0x18, 2);
-		p_legoFile->Read(&m_score1, 2);
-		p_legoFile->Read(&m_score2, 2);
-		p_legoFile->Read(&m_score3, 2);
-		p_legoFile->Read(&m_score4, 2);
-		p_legoFile->Read(&m_score5, 2);
+		p_legoFile->Read(&m_unk0x10, sizeof(m_unk0x10));
+		p_legoFile->Read(&m_unk0x12, sizeof(m_unk0x12));
+		p_legoFile->Read(&m_unk0x14, sizeof(m_unk0x14));
+		p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
+		p_legoFile->Read(&m_unk0x18, sizeof(m_unk0x18));
+		p_legoFile->Read(&m_score1, sizeof(m_score1));
+		p_legoFile->Read(&m_score2, sizeof(m_score2));
+		p_legoFile->Read(&m_score3, sizeof(m_score3));
+		p_legoFile->Read(&m_score4, sizeof(m_score4));
+		p_legoFile->Read(&m_score5, sizeof(m_score5));
 	}
 	else if (p_legoFile->IsWriteMode()) {
-		// A write variable needs to be used here, otherwise
-		// the compiler aggresively optimizes the function
 		MxS16 write;
 		write = m_unk0x10;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_unk0x12;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_unk0x14;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_unk0x16;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_unk0x18;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_score1;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_score2;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_score3;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_score4;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 		write = m_score5;
-		p_legoFile->Write(&write, 2);
+		p_legoFile->Write(&write, sizeof(write));
 	}
+
 	return SUCCESS;
 }

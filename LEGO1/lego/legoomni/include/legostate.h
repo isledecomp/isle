@@ -60,16 +60,14 @@ public:
 
 		inline MxResult ReadFromFile(LegoFile* p_legoFile)
 		{
-			p_legoFile->Read(&m_nextIndex, 2);
+			p_legoFile->Read(&m_nextIndex, sizeof(m_nextIndex));
 			return SUCCESS;
 		}
 
 		inline MxResult WriteToFile(LegoFile* p_legoFile)
 		{
-			// A write variable needs to be used here, otherwise
-			// the compiler aggresively optimizes the function
 			MxS16 write = m_nextIndex;
-			p_legoFile->Write(&write, 2);
+			p_legoFile->Write(&write, sizeof(write));
 			return SUCCESS;
 		}
 

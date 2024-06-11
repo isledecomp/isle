@@ -689,8 +689,6 @@ MxResult HospitalState::Serialize(LegoFile* p_legoFile)
 	LegoState::Serialize(p_legoFile);
 
 	if (p_legoFile->IsWriteMode()) {
-		// A write variable needs to be used here, otherwise
-		// the compiler aggresively optimizes the function
 		MxS16 write;
 
 		write = m_unk0x0c;

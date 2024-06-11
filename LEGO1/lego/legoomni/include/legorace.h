@@ -28,20 +28,19 @@ public:
 		inline MxResult Serialize(LegoFile* p_legoFile)
 		{
 			if (p_legoFile->IsReadMode()) {
-				p_legoFile->Read(&m_id, 1);
-				p_legoFile->Read(&m_unk0x02, 2);
-				p_legoFile->Read(&m_score, 2);
+				p_legoFile->Read(&m_id, sizeof(m_id));
+				p_legoFile->Read(&m_unk0x02, sizeof(m_unk0x02));
+				p_legoFile->Read(&m_score, sizeof(m_score));
 			}
 			else if (p_legoFile->IsWriteMode()) {
-				// A write variable needs to be used here, otherwise
-				// the compiler aggresively optimizes the function
 				MxS8 id = m_id;
-				p_legoFile->Write(&id, 1);
+				p_legoFile->Write(&id, sizeof(id));
 				MxS16 unk0x02 = m_unk0x02;
-				p_legoFile->Write(&unk0x02, 2);
+				p_legoFile->Write(&unk0x02, sizeof(unk0x02));
 				MxS16 score = m_score;
-				p_legoFile->Write(&score, 2);
+				p_legoFile->Write(&score, sizeof(score));
 			}
+
 			return SUCCESS;
 		}
 
