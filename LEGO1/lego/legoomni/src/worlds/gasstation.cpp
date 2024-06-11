@@ -441,24 +441,18 @@ MxResult GasStationState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsWriteMode()) {
-		MxS16 write;
-		write = m_unk0x18;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x1a;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x1c;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x1e;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x20;
-		p_file->Write(&write, sizeof(write));
+		WriteToStorage(p_file, m_unk0x18);
+		WriteToStorage(p_file, m_unk0x1a);
+		WriteToStorage(p_file, m_unk0x1c);
+		WriteToStorage(p_file, m_unk0x1e);
+		WriteToStorage(p_file, m_unk0x20);
 	}
 	else if (p_file->IsReadMode()) {
-		p_file->Read(&m_unk0x18, sizeof(m_unk0x18));
-		p_file->Read(&m_unk0x1a, sizeof(m_unk0x1a));
-		p_file->Read(&m_unk0x1c, sizeof(m_unk0x1c));
-		p_file->Read(&m_unk0x1e, sizeof(m_unk0x1e));
-		p_file->Read(&m_unk0x20, sizeof(m_unk0x20));
+		ReadFromStorage(p_file, &m_unk0x18);
+		ReadFromStorage(p_file, &m_unk0x1a);
+		ReadFromStorage(p_file, &m_unk0x1c);
+		ReadFromStorage(p_file, &m_unk0x1e);
+		ReadFromStorage(p_file, &m_unk0x20);
 	}
 
 	return SUCCESS;

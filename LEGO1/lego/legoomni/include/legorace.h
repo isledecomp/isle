@@ -28,17 +28,14 @@ public:
 		inline MxResult Serialize(LegoFile* p_file)
 		{
 			if (p_file->IsReadMode()) {
-				p_file->Read(&m_id, sizeof(m_id));
-				p_file->Read(&m_unk0x02, sizeof(m_unk0x02));
-				p_file->Read(&m_score, sizeof(m_score));
+				ReadFromStorage(p_file, &m_id);
+				ReadFromStorage(p_file, &m_unk0x02);
+				ReadFromStorage(p_file, &m_score);
 			}
 			else if (p_file->IsWriteMode()) {
-				MxS8 id = m_id;
-				p_file->Write(&id, sizeof(id));
-				MxS16 unk0x02 = m_unk0x02;
-				p_file->Write(&unk0x02, sizeof(unk0x02));
-				MxS16 score = m_score;
-				p_file->Write(&score, sizeof(score));
+				WriteToStorage(p_file, m_id);
+				WriteToStorage(p_file, m_unk0x02);
+				WriteToStorage(p_file, m_score);
 			}
 
 			return SUCCESS;

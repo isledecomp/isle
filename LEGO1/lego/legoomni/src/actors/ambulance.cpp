@@ -648,39 +648,29 @@ MxResult AmbulanceMissionState::Serialize(LegoFile* p_file)
 	LegoState::Serialize(p_file);
 
 	if (p_file->IsReadMode()) {
-		p_file->Read(&m_unk0x10, sizeof(m_unk0x10));
-		p_file->Read(&m_unk0x12, sizeof(m_unk0x12));
-		p_file->Read(&m_unk0x14, sizeof(m_unk0x14));
-		p_file->Read(&m_unk0x16, sizeof(m_unk0x16));
-		p_file->Read(&m_unk0x18, sizeof(m_unk0x18));
-		p_file->Read(&m_score1, sizeof(m_score1));
-		p_file->Read(&m_score2, sizeof(m_score2));
-		p_file->Read(&m_score3, sizeof(m_score3));
-		p_file->Read(&m_score4, sizeof(m_score4));
-		p_file->Read(&m_score5, sizeof(m_score5));
+		ReadFromStorage(p_file, &m_unk0x10);
+		ReadFromStorage(p_file, &m_unk0x12);
+		ReadFromStorage(p_file, &m_unk0x14);
+		ReadFromStorage(p_file, &m_unk0x16);
+		ReadFromStorage(p_file, &m_unk0x18);
+		ReadFromStorage(p_file, &m_score1);
+		ReadFromStorage(p_file, &m_score2);
+		ReadFromStorage(p_file, &m_score3);
+		ReadFromStorage(p_file, &m_score4);
+		ReadFromStorage(p_file, &m_score5);
 	}
 	else if (p_file->IsWriteMode()) {
 		MxS16 write;
-		write = m_unk0x10;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x12;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x14;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x16;
-		p_file->Write(&write, sizeof(write));
-		write = m_unk0x18;
-		p_file->Write(&write, sizeof(write));
-		write = m_score1;
-		p_file->Write(&write, sizeof(write));
-		write = m_score2;
-		p_file->Write(&write, sizeof(write));
-		write = m_score3;
-		p_file->Write(&write, sizeof(write));
-		write = m_score4;
-		p_file->Write(&write, sizeof(write));
-		write = m_score5;
-		p_file->Write(&write, sizeof(write));
+		WriteToStorage(p_file, m_unk0x10);
+		WriteToStorage(p_file, m_unk0x12);
+		WriteToStorage(p_file, m_unk0x14);
+		WriteToStorage(p_file, m_unk0x16);
+		WriteToStorage(p_file, m_unk0x18);
+		WriteToStorage(p_file, m_score1);
+		WriteToStorage(p_file, m_score2);
+		WriteToStorage(p_file, m_score3);
+		WriteToStorage(p_file, m_score4);
+		WriteToStorage(p_file, m_score5);
 	}
 
 	return SUCCESS;

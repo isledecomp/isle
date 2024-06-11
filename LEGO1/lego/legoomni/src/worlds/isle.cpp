@@ -1390,8 +1390,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		p_file->Write(&m_unk0x010, sizeof(m_unk0x010));
-		p_file->Write(&m_unk0x022, sizeof(m_unk0x022));
+		WriteToStorage(p_file, m_unk0x010);
+		WriteToStorage(p_file, m_unk0x022);
 	}
 	else if (p_file->IsReadMode()) {
 		if (m_unk0x108.GetName()->Compare("") != 0) {
@@ -1444,8 +1444,8 @@ MxResult Act1State::Serialize(LegoFile* p_file)
 			}
 		}
 
-		p_file->Read(&m_unk0x010, sizeof(m_unk0x010));
-		p_file->Read(&m_unk0x022, sizeof(m_unk0x022));
+		ReadFromStorage(p_file, &m_unk0x010);
+		ReadFromStorage(p_file, &m_unk0x022);
 	}
 
 	// TODO

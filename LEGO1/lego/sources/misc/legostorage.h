@@ -156,4 +156,16 @@ protected:
 	FILE* m_file; // 0x08
 };
 
+template <class T>
+inline void ReadFromStorage(LegoStorage* p_storage, T* p_variable, LegoU32 p_size = sizeof(T))
+{
+	p_storage->Read(p_variable, p_size);
+}
+
+template <class T>
+inline void WriteToStorage(LegoStorage* p_storage, T p_variable)
+{
+	p_storage->Write(&p_variable, sizeof(T));
+}
+
 #endif // __LEGOSTORAGE_H
