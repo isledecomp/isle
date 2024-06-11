@@ -2,12 +2,15 @@
 
 #include "decomp.h"
 #include "isle_actions.h"
+#include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
 #include "legoutils.h"
 #include "legovariables.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxactionnotificationparam.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
@@ -28,9 +31,9 @@ Ambulance::Ambulance()
 	m_unk0x16c = 0;
 	m_unk0x16e = 0;
 	m_unk0x170 = 0;
-	m_unk0x174 = -1;
+	m_lastAction = IsleScript::c_noneIsle;
 	m_unk0x172 = 0;
-	m_unk0x178 = -1;
+	m_lastAnimation = IsleScript::c_noneIsle;
 	m_unk0x17c = 1.0;
 }
 
@@ -124,12 +127,90 @@ MxLong Ambulance::Notify(MxParam& p_param)
 	return result;
 }
 
-// STUB: LEGO1 0x100364d0
+// FUNCTION: LEGO1 0x100364d0
 // FUNCTION: BETA10 0x10022cc2
 MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
-	// TODO
-	return 0;
+	if (p_param.GetAction() != NULL) {
+		IsleScript::Script objectId = (IsleScript::Script) p_param.GetAction()->GetObjectId();
+
+		if (m_lastAnimation == objectId) {
+			m_lastAnimation = IsleScript::c_noneIsle;
+		}
+
+		if (m_lastAction == objectId) {
+			if (m_lastAnimation == IsleScript::c_noneIsle) {
+				BackgroundAudioManager()->RaiseVolume();
+			}
+
+			m_lastAction = IsleScript::c_noneIsle;
+		}
+		else if (objectId == IsleScript::c_hho027en_RunAnim) {
+			m_state->m_unk0x08 = 1;
+			CurrentWorld()->PlaceActor(CurrentActor());
+			HandleClick();
+			m_unk0x172 = 0;
+			TickleManager()->RegisterClient(this, 40000);
+		}
+		else if (objectId == IsleScript::c_hpz047pe_RunAnim || objectId == IsleScript::c_hpz048pe_RunAnim || objectId == IsleScript::c_hpz049bd_RunAnim || objectId == IsleScript::c_hpz053pa_RunAnim) {
+			if (m_unk0x170 == 3) {
+				PlayAnimation(IsleScript::c_hpz055pa_RunAnim);
+				m_unk0x170 = 0;
+			}
+			else {
+				PlayAnimation(IsleScript::c_hpz053pa_RunAnim);
+			}
+		}
+		else if (objectId == IsleScript::c_hpz050bd_RunAnim || objectId == IsleScript::c_hpz052ma_RunAnim) {
+			if (m_unk0x170 == 3) {
+				PlayAnimation(IsleScript::c_hpz057ma_RunAnim);
+				m_unk0x170 = 0;
+			}
+			else {
+				PlayAnimation(IsleScript::c_hpz052ma_RunAnim);
+			}
+		}
+		else if (objectId == IsleScript::c_hpz055pa_RunAnim || objectId == IsleScript::c_hpz057ma_RunAnim) {
+			CurrentWorld()->PlaceActor(CurrentActor());
+			HandleClick();
+			SpawnPlayer(LegoGameState::e_pizzeriaExterior, TRUE, 0);
+			m_unk0x172 = 0;
+			TickleManager()->RegisterClient(this, 40000);
+
+			if (m_unk0x16c != 0) {
+				StopActions();
+			}
+		}
+		else if (objectId == IsleScript::c_hps116bd_RunAnim || objectId == IsleScript::c_hps118re_RunAnim) {
+			if (objectId == IsleScript::c_hps116bd_RunAnim && m_unk0x170 != 3) {
+				PlayAction(IsleScript::c_Avo923In_PlayWav);
+			}
+
+			if (m_unk0x170 == 3) {
+				PlayAnimation(IsleScript::c_hps117bd_RunAnim);
+				m_unk0x170 = 0;
+			}
+			else {
+				PlayAnimation(IsleScript::c_hps118re_RunAnim);
+			}
+		}
+		else if (objectId == IsleScript::c_hps117bd_RunAnim) {
+			CurrentWorld()->PlaceActor(CurrentActor());
+			HandleClick();
+			SpawnPlayer(LegoGameState::e_unk33, TRUE, 0);
+			m_unk0x172 = 0;
+			TickleManager()->RegisterClient(this, 40000);
+
+			if (m_unk0x16e != 0) {
+				StopActions();
+			}
+		}
+		else if (objectId == IsleScript::c_hho142cl_RunAnim || objectId == IsleScript::c_hho143cl_RunAnim || objectId == IsleScript::c_hho144cl_RunAnim) {
+			FUN_10037250();
+		}
+	}
+
+	return 1;
 }
 
 // STUB: LEGO1 0x100367c0
@@ -197,12 +278,31 @@ void Ambulance::FUN_10037250()
 	// TODO
 }
 
-// FUNCTION: LEGO1 0x10037340
-void Ambulance::StopAction(MxS32 p_entityId)
+// FUNCTION: LEGO1 0x100372e0
+// FUNCTION: BETA10 0x100241a0
+void Ambulance::PlayAnimation(IsleScript::Script p_objectId)
 {
-	if (p_entityId != -1) {
-		InvokeAction(Extra::e_stop, *g_isleScript, p_entityId, NULL);
+	AnimationManager()->FUN_10060dc0(p_objectId, NULL, TRUE, FALSE, NULL, FALSE, FALSE, FALSE, TRUE);
+	m_lastAnimation = p_objectId;
+}
+
+// FUNCTION: LEGO1 0x10037340
+void Ambulance::StopAction(IsleScript::Script p_objectId)
+{
+	if (p_objectId != -1) {
+		InvokeAction(Extra::e_stop, *g_isleScript, p_objectId, NULL);
 	}
+}
+
+// FUNCTION: LEGO1 0x10037360
+void Ambulance::PlayAction(IsleScript::Script p_objectId)
+{
+	if (p_objectId != -1) {
+		InvokeAction(Extra::e_start, *g_isleScript, p_objectId, NULL);
+	}
+
+	m_lastAction = p_objectId;
+	BackgroundAudioManager()->LowerVolume();
 }
 
 // FUNCTION: LEGO1 0x100373a0

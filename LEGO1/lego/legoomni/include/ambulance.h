@@ -105,20 +105,22 @@ public:
 	// Ambulance::`scalar deleting destructor'
 
 private:
-	void StopAction(MxS32 p_entityId);
+	void PlayAnimation(IsleScript::Script p_objectId);
+	void StopAction(IsleScript::Script p_objectId);
+	void PlayAction(IsleScript::Script p_objectId);
 
-	undefined m_unk0x160[4];        // 0x160
-	AmbulanceMissionState* m_state; // 0x164
-	MxS16 m_unk0x168;               // 0x168
-	MxS16 m_unk0x16a;               // 0x16a
-	MxS16 m_unk0x16c;               // 0x16c
-	MxS16 m_unk0x16e;               // 0x16e
-	MxS16 m_unk0x170;               // 0x170
-	MxS16 m_unk0x172;               // 0x172
-	MxS32 m_unk0x174;               // 0x174
-	MxS32 m_unk0x178;               // 0x178
-	MxFloat m_unk0x17c;             // 0x17c
-	MxFloat m_time;                 // 0x180
+	undefined m_unk0x160[4];            // 0x160
+	AmbulanceMissionState* m_state;     // 0x164
+	MxS16 m_unk0x168;                   // 0x168
+	MxS16 m_unk0x16a;                   // 0x16a
+	MxS16 m_unk0x16c;                   // 0x16c
+	MxS16 m_unk0x16e;                   // 0x16e
+	MxS16 m_unk0x170;                   // 0x170
+	MxS16 m_unk0x172;                   // 0x172
+	IsleScript::Script m_lastAction;    // 0x174
+	IsleScript::Script m_lastAnimation; // 0x178
+	MxFloat m_unk0x17c;                 // 0x17c
+	MxFloat m_time;                     // 0x180
 };
 
 #endif // AMBULANCE_H

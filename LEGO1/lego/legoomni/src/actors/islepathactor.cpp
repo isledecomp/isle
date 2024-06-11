@@ -510,7 +510,7 @@ void IslePathActor::RegisterSpawnLocations()
 
 // FUNCTION: LEGO1 0x1001b2a0
 // FUNCTION: BETA10 0x100369c6
-void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags)
+void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags)
 {
 	MxS16 i;
 
@@ -531,7 +531,7 @@ void IslePathActor::SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p
 
 		m_world = world;
 
-		if (p_und) {
+		if (p_enter) {
 			Enter();
 		}
 

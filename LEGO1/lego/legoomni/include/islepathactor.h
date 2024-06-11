@@ -123,7 +123,7 @@ public:
 
 	virtual void Enter();                                                                        // vtable+0xe0
 	virtual void Exit();                                                                         // vtable+0xe4
-	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_und, MxU8 p_flags);            // vtable+0xe8
+	virtual void SpawnPlayer(LegoGameState::Area p_area, MxBool p_enter, MxU8 p_flags);          // vtable+0xe8
 	virtual void VTable0xec(MxMatrix p_transform, LegoPathBoundary* p_boundary, MxBool p_reset); // vtable+0xec
 
 	// SYNTHETIC: LEGO1 0x10002ff0
