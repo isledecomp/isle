@@ -15,25 +15,25 @@ public:
 	// SIZE 0x20
 	struct Entry {
 	public:
-		inline MxResult WriteToFile(LegoFile* p_legoFile)
+		inline MxResult WriteToFile(LegoFile* p_file)
 		{
 			MxS16 unk0x06 = m_unk0x06;
-			p_legoFile->Write(&unk0x06, sizeof(unk0x06));
+			p_file->Write(&unk0x06, sizeof(unk0x06));
 			MxS16 unk0x14 = m_unk0x14;
-			p_legoFile->Write(&unk0x14, sizeof(unk0x14));
+			p_file->Write(&unk0x14, sizeof(unk0x14));
 			MxS16 unk0x16 = m_unk0x16;
-			p_legoFile->Write(&unk0x16, sizeof(unk0x16));
+			p_file->Write(&unk0x16, sizeof(unk0x16));
 			MxS16 score = m_score;
-			p_legoFile->Write(&score, sizeof(score));
+			p_file->Write(&score, sizeof(score));
 			return SUCCESS;
 		}
 
-		inline MxResult ReadFromFile(LegoFile* p_legoFile)
+		inline MxResult ReadFromFile(LegoFile* p_file)
 		{
-			p_legoFile->Read(&m_unk0x06, sizeof(m_unk0x06));
-			p_legoFile->Read(&m_unk0x14, sizeof(m_unk0x14));
-			p_legoFile->Read(&m_unk0x16, sizeof(m_unk0x16));
-			p_legoFile->Read(&m_score, sizeof(m_score));
+			p_file->Read(&m_unk0x06, sizeof(m_unk0x06));
+			p_file->Read(&m_unk0x14, sizeof(m_unk0x14));
+			p_file->Read(&m_unk0x16, sizeof(m_unk0x16));
+			p_file->Read(&m_score, sizeof(m_score));
 			return SUCCESS;
 		}
 
@@ -65,7 +65,7 @@ public:
 		return !strcmp(p_name, PizzaMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	inline MxS16 GetHighScore(MxU8 p_id) { return GetState(p_id)->m_score; }
 

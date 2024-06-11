@@ -25,7 +25,7 @@ public:
 		return !strcmp(p_name, AmbulanceMissionState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	inline MxS16 GetHighScore(MxU8 p_actorId)
 	{

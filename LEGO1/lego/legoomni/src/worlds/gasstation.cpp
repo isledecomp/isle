@@ -436,29 +436,29 @@ GasStationState::GasStationState()
 }
 
 // FUNCTION: LEGO1 0x10006300
-MxResult GasStationState::Serialize(LegoFile* p_legoFile)
+MxResult GasStationState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	if (p_legoFile->IsWriteMode()) {
+	if (p_file->IsWriteMode()) {
 		MxS16 write;
 		write = m_unk0x18;
-		p_legoFile->Write(&write, sizeof(write));
+		p_file->Write(&write, sizeof(write));
 		write = m_unk0x1a;
-		p_legoFile->Write(&write, sizeof(write));
+		p_file->Write(&write, sizeof(write));
 		write = m_unk0x1c;
-		p_legoFile->Write(&write, sizeof(write));
+		p_file->Write(&write, sizeof(write));
 		write = m_unk0x1e;
-		p_legoFile->Write(&write, sizeof(write));
+		p_file->Write(&write, sizeof(write));
 		write = m_unk0x20;
-		p_legoFile->Write(&write, sizeof(write));
+		p_file->Write(&write, sizeof(write));
 	}
-	else if (p_legoFile->IsReadMode()) {
-		p_legoFile->Read(&m_unk0x18, sizeof(m_unk0x18));
-		p_legoFile->Read(&m_unk0x1a, sizeof(m_unk0x1a));
-		p_legoFile->Read(&m_unk0x1c, sizeof(m_unk0x1c));
-		p_legoFile->Read(&m_unk0x1e, sizeof(m_unk0x1e));
-		p_legoFile->Read(&m_unk0x20, sizeof(m_unk0x20));
+	else if (p_file->IsReadMode()) {
+		p_file->Read(&m_unk0x18, sizeof(m_unk0x18));
+		p_file->Read(&m_unk0x1a, sizeof(m_unk0x1a));
+		p_file->Read(&m_unk0x1c, sizeof(m_unk0x1c));
+		p_file->Read(&m_unk0x1e, sizeof(m_unk0x1e));
+		p_file->Read(&m_unk0x20, sizeof(m_unk0x20));
 	}
 
 	return SUCCESS;

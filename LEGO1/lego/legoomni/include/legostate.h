@@ -58,16 +58,16 @@ public:
 
 		inline void SetUnknown0x08(MxS16 p_unk0x08) { m_nextIndex = p_unk0x08; }
 
-		inline MxResult ReadFromFile(LegoFile* p_legoFile)
+		inline MxResult ReadFromFile(LegoFile* p_file)
 		{
-			p_legoFile->Read(&m_nextIndex, sizeof(m_nextIndex));
+			p_file->Read(&m_nextIndex, sizeof(m_nextIndex));
 			return SUCCESS;
 		}
 
-		inline MxResult WriteToFile(LegoFile* p_legoFile)
+		inline MxResult WriteToFile(LegoFile* p_file)
 		{
 			MxS16 write = m_nextIndex;
-			p_legoFile->Write(&write, sizeof(write));
+			p_file->Write(&write, sizeof(write));
 			return SUCCESS;
 		}
 
@@ -101,10 +101,10 @@ public:
 	virtual MxBool SetFlag() { return FALSE; } // vtable+0x18
 
 	// FUNCTION: LEGO1 0x10005fb0
-	virtual MxResult Serialize(LegoFile* p_legoFile)
+	virtual MxResult Serialize(LegoFile* p_file)
 	{
-		if (p_legoFile->IsWriteMode()) {
-			p_legoFile->WriteString(ClassName());
+		if (p_file->IsWriteMode()) {
+			p_file->WriteString(ClassName());
 		}
 		return SUCCESS;
 	} // vtable+0x1c

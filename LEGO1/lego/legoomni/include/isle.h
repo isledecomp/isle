@@ -89,7 +89,7 @@ public:
 	}
 
 	MxBool SetFlag() override;                         // vtable+0x18
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	void FUN_10034660();
 	void FUN_100346a0();

@@ -77,17 +77,17 @@ MxU32 PizzeriaState::FUN_10017d70()
 }
 
 // FUNCTION: LEGO1 0x10017da0
-MxResult PizzeriaState::Serialize(LegoFile* p_legoFile)
+MxResult PizzeriaState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
-	if (p_legoFile->IsReadMode()) {
+	LegoState::Serialize(p_file);
+	if (p_file->IsReadMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_unk0x08[i].ReadFromFile(p_legoFile);
+			m_unk0x08[i].ReadFromFile(p_file);
 		}
 	}
 	else {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_unk0x08[i].WriteToFile(p_legoFile);
+			m_unk0x08[i].WriteToFile(p_file);
 		}
 	}
 

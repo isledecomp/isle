@@ -74,8 +74,8 @@ LegoVehicleBuildState::LegoVehicleBuildState(const char* p_classType)
 }
 
 // STUB: LEGO1 0x10026120
-MxResult LegoVehicleBuildState::Serialize(LegoFile* p_legoFile)
+MxResult LegoVehicleBuildState::Serialize(LegoFile* p_file)
 {
 	// TODO
-	return LegoState::Serialize(p_legoFile);
+	return LegoState::Serialize(p_file);
 }

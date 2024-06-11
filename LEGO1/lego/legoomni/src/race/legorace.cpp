@@ -135,12 +135,12 @@ RaceState::RaceState()
 }
 
 // FUNCTION: LEGO1 0x10016140
-MxResult RaceState::Serialize(LegoFile* p_legoFile)
+MxResult RaceState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
 	for (MxS16 i = 0; i < 5; i++) {
-		m_state[i].Serialize(p_legoFile);
+		m_state[i].Serialize(p_file);
 	}
 
 	return SUCCESS;

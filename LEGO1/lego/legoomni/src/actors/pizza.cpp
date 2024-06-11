@@ -106,18 +106,18 @@ PizzaMissionState::PizzaMissionState()
 }
 
 // FUNCTION: LEGO1 0x100393c0
-MxResult PizzaMissionState::Serialize(LegoFile* p_legoFile)
+MxResult PizzaMissionState::Serialize(LegoFile* p_file)
 {
-	LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_file);
 
-	if (p_legoFile->IsReadMode()) {
+	if (p_file->IsReadMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_state[i].ReadFromFile(p_legoFile);
+			m_state[i].ReadFromFile(p_file);
 		}
 	}
-	else if (p_legoFile->IsWriteMode()) {
+	else if (p_file->IsWriteMode()) {
 		for (MxS16 i = 0; i < 5; i++) {
-			m_state[i].WriteToFile(p_legoFile);
+			m_state[i].WriteToFile(p_file);
 		}
 	}
 

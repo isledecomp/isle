@@ -2851,10 +2851,10 @@ void AnimState::FUN_10065240(MxU32, AnimInfo*, MxU32)
 }
 
 // STUB: LEGO1 0x100652d0
-MxResult AnimState::Serialize(LegoFile* p_legoFile)
+MxResult AnimState::Serialize(LegoFile* p_file)
 {
 	// TODO
-	return LegoState::Serialize(p_legoFile);
+	return LegoState::Serialize(p_file);
 }
 
 // STUB: LEGO1 0x100654f0

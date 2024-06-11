@@ -25,20 +25,20 @@ public:
 		inline MxS16 GetUnknown0x02() { return m_unk0x02; }
 		inline MxS16 GetHighScore() { return m_score; }
 
-		inline MxResult Serialize(LegoFile* p_legoFile)
+		inline MxResult Serialize(LegoFile* p_file)
 		{
-			if (p_legoFile->IsReadMode()) {
-				p_legoFile->Read(&m_id, sizeof(m_id));
-				p_legoFile->Read(&m_unk0x02, sizeof(m_unk0x02));
-				p_legoFile->Read(&m_score, sizeof(m_score));
+			if (p_file->IsReadMode()) {
+				p_file->Read(&m_id, sizeof(m_id));
+				p_file->Read(&m_unk0x02, sizeof(m_unk0x02));
+				p_file->Read(&m_score, sizeof(m_score));
 			}
-			else if (p_legoFile->IsWriteMode()) {
+			else if (p_file->IsWriteMode()) {
 				MxS8 id = m_id;
-				p_legoFile->Write(&id, sizeof(id));
+				p_file->Write(&id, sizeof(id));
 				MxS16 unk0x02 = m_unk0x02;
-				p_legoFile->Write(&unk0x02, sizeof(unk0x02));
+				p_file->Write(&unk0x02, sizeof(unk0x02));
 				MxS16 score = m_score;
-				p_legoFile->Write(&score, sizeof(score));
+				p_file->Write(&score, sizeof(score));
 			}
 
 			return SUCCESS;
@@ -65,7 +65,7 @@ public:
 		return !strcmp(p_name, RaceState::ClassName()) || LegoState::IsA(p_name);
 	}
 
-	MxResult Serialize(LegoFile* p_legoFile) override; // vtable+0x1c
+	MxResult Serialize(LegoFile* p_file) override; // vtable+0x1c
 
 	Entry* GetState(MxU8 p_id);
 
