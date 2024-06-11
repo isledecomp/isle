@@ -105,10 +105,6 @@ MxLong Ambulance::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
 
-	char asd[123];
-	sprintf(asd, "%d\n", ((MxNotificationParam&) p_param).GetType());
-	OutputDebugString(asd);
-
 	switch (((MxNotificationParam&) p_param).GetType()) {
 	case c_notificationType0:
 		result = HandleNotification0();
