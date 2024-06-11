@@ -25,6 +25,26 @@ public:
 		inline MxS16 GetUnknown0x02() { return m_unk0x02; }
 		inline MxS16 GetHighScore() { return m_score; }
 
+		inline MxResult Serialize(LegoFile* p_legoFile)
+		{
+			if (p_legoFile->IsReadMode()) {
+				p_legoFile->Read(&m_id, 1);
+				p_legoFile->Read(&m_unk0x02, 2);
+				p_legoFile->Read(&m_score, 2);
+			}
+			else if (p_legoFile->IsWriteMode()) {
+				// A write variable needs to be used here, otherwise
+				// the compiler aggresively optimizes the function
+				MxS8 id = m_id;
+				p_legoFile->Write(&id, 1);
+				MxS16 unk0x02 = m_unk0x02;
+				p_legoFile->Write(&unk0x02, 2);
+				MxS16 score = m_score;
+				p_legoFile->Write(&score, 2);
+			}
+			return SUCCESS;
+		}
+
 		// TODO: Possibly private
 		MxU8 m_id;       // 0x00
 		MxS16 m_unk0x02; // 0x02

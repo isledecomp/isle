@@ -642,9 +642,46 @@ AmbulanceMissionState::AmbulanceMissionState()
 	m_laHighScore = 0;
 }
 
-// STUB: LEGO1 0x10037440
+// FUNCTION: LEGO1 0x10037440
 MxResult AmbulanceMissionState::Serialize(LegoFile* p_legoFile)
 {
-	// TODO
-	return LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_legoFile);
+	if (p_legoFile->IsReadMode()) {
+		p_legoFile->Read(&m_unk0x10, 2);
+		p_legoFile->Read(&m_unk0x12, 2);
+		p_legoFile->Read(&m_unk0x14, 2);
+		p_legoFile->Read(&m_unk0x16, 2);
+		p_legoFile->Read(&m_unk0x18, 2);
+		p_legoFile->Read(&m_score1, 2);
+		p_legoFile->Read(&m_score2, 2);
+		p_legoFile->Read(&m_score3, 2);
+		p_legoFile->Read(&m_score4, 2);
+		p_legoFile->Read(&m_score5, 2);
+	}
+	else if (p_legoFile->IsWriteMode()) {
+		// A write variable needs to be used here, otherwise
+		// the compiler aggresively optimizes the function
+		MxS16 write;
+		write = m_unk0x10;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x12;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x14;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x16;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x18;
+		p_legoFile->Write(&write, 2);
+		write = m_score1;
+		p_legoFile->Write(&write, 2);
+		write = m_score2;
+		p_legoFile->Write(&write, 2);
+		write = m_score3;
+		p_legoFile->Write(&write, 2);
+		write = m_score4;
+		p_legoFile->Write(&write, 2);
+		write = m_score5;
+		p_legoFile->Write(&write, 2);
+	}
+	return SUCCESS;
 }

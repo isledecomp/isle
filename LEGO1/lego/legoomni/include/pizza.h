@@ -15,11 +15,41 @@ public:
 	// SIZE 0x20
 	struct Entry {
 	public:
-		undefined2 m_unk0x00;      // 0x00
-		MxU8 m_id;                 // 0x02
-		undefined m_unk0x03[0x15]; // 0x03
-		MxS16 m_score;             // 0x18
-		undefined m_unk0x18[6];    // 0x1a
+		undefined2 m_unk0x00;   // 0x00
+		MxU8 m_id;              // 0x02
+		undefined m_unk0x03[3]; // 0x03
+		MxS16 m_unk0x06;        // 0x06
+		undefined m_unk0x08[8]; // 0x08
+		MxS16 m_unk0x10;        // 0x10
+		MxS16 m_unk0x12;        // 0x12
+		MxS16 m_unk0x14;        // 0x14
+		MxS16 m_unk0x16;        // 0x16
+		MxS16 m_score;          // 0x18
+		undefined m_unk0x1a[6]; // 0x1a
+
+		inline MxResult WriteToFile(LegoFile* p_legoFile)
+		{
+			// A write variable needs to be used here, otherwise
+			// the compiler aggresively optimizes the function
+			MxS16 unk0x06 = m_unk0x06;
+			p_legoFile->Write(&unk0x06, 2);
+			MxS16 unk0x14 = m_unk0x14;
+			p_legoFile->Write(&unk0x14, 2);
+			MxS16 unk0x16 = m_unk0x16;
+			p_legoFile->Write(&unk0x16, 2);
+			MxS16 score = m_score;
+			p_legoFile->Write(&score, 2);
+			return SUCCESS;
+		}
+
+		inline MxResult ReadFromFile(LegoFile* p_legoFile)
+		{
+			p_legoFile->Read(&m_unk0x06, 2);
+			p_legoFile->Read(&m_unk0x14, 2);
+			p_legoFile->Read(&m_unk0x16, 2);
+			p_legoFile->Read(&m_score, 2);
+			return SUCCESS;
+		}
 	};
 
 	PizzaMissionState();

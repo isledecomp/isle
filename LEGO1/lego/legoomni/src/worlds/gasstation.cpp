@@ -435,11 +435,33 @@ GasStationState::GasStationState()
 	unk0x08[2] = -1;
 }
 
-// STUB: LEGO1 0x10006300
+// FUNCTION: LEGO1 0x10006300
 MxResult GasStationState::Serialize(LegoFile* p_legoFile)
 {
-	// TODO
-	return LegoState::Serialize(p_legoFile);
+	LegoState::Serialize(p_legoFile);
+	if (p_legoFile->IsWriteMode()) {
+		// A write variable needs to be used here, otherwise
+		// the compiler aggresively optimizes the function
+		MxS16 write;
+		write = m_unk0x18;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x1a;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x1c;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x1e;
+		p_legoFile->Write(&write, 2);
+		write = m_unk0x20;
+		p_legoFile->Write(&write, 2);
+	}
+	else if (p_legoFile->IsReadMode()) {
+		p_legoFile->Read(&m_unk0x18, 2);
+		p_legoFile->Read(&m_unk0x1a, 2);
+		p_legoFile->Read(&m_unk0x1c, 2);
+		p_legoFile->Read(&m_unk0x1e, 2);
+		p_legoFile->Read(&m_unk0x20, 2);
+	}
+	return SUCCESS;
 }
 
 // STUB: LEGO1 0x10006430

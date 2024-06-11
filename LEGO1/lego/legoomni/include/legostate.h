@@ -58,6 +58,21 @@ public:
 
 		inline void SetUnknown0x08(MxS16 p_unk0x08) { m_nextIndex = p_unk0x08; }
 
+		inline MxResult ReadFromFile(LegoFile* p_legoFile)
+		{
+			p_legoFile->Read(&m_nextIndex, 2);
+			return SUCCESS;
+		}
+
+		inline MxResult WriteToFile(LegoFile* p_legoFile)
+		{
+			// A write variable needs to be used here, otherwise
+			// the compiler aggresively optimizes the function
+			MxS16 write = m_nextIndex;
+			p_legoFile->Write(&write, 2);
+			return SUCCESS;
+		}
+
 	private:
 		MxU32* m_objectIds; // 0x00
 		MxS16 m_length;     // 0x04
