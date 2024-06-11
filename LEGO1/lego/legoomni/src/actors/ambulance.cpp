@@ -265,10 +265,14 @@ MxLong Ambulance::HandleClick()
 	return 1;
 }
 
-// STUB: LEGO1 0x10036e60
+// FUNCTION: LEGO1 0x10036e60
+// FUNCTION: BETA10 0x100236bb
 void Ambulance::FUN_10036e60()
 {
-	// TODO
+	m_state->m_unk0x08 = 2;
+	PlayAnimation(IsleScript::c_hho027en_RunAnim);
+	m_lastAction = IsleScript::c_noneIsle;
+	m_lastAnimation = IsleScript::c_noneIsle;
 }
 
 // STUB: LEGO1 0x10036e90
