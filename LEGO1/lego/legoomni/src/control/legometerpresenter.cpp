@@ -46,7 +46,7 @@ void LegoMeterPresenter::ParseExtra()
 		extraCopy[extraLength & USHRT_MAX] = '\0';
 
 		char output[256];
-		if (KeyValueStringParse(extraCopy, g_strTYPE, output)) {
+		if (KeyValueStringParse(output, g_strTYPE, extraCopy)) {
 			if (!strcmpi(output, g_strLEFT_TO_RIGHT)) {
 				m_layout = e_leftToRight;
 			}
@@ -61,11 +61,11 @@ void LegoMeterPresenter::ParseExtra()
 			}
 		}
 
-		if (KeyValueStringParse(extraCopy, g_strFILLER_INDEX, output)) {
+		if (KeyValueStringParse(output, g_strFILLER_INDEX, extraCopy)) {
 			m_fillColor = atoi(output);
 		}
 
-		if (KeyValueStringParse(extraCopy, g_strVARIABLE, output)) {
+		if (KeyValueStringParse(output, g_strVARIABLE, extraCopy)) {
 			m_variable = output;
 		}
 		else {
@@ -83,6 +83,7 @@ void LegoMeterPresenter::ParseExtra()
 void LegoMeterPresenter::StreamingTickle()
 {
 	MxStillPresenter::StreamingTickle();
+
 	m_meterPixels = new MxU8[m_frameBitmap->GetDataSize()];
 	if (m_meterPixels == NULL) {
 		assert(0);
