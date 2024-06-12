@@ -67,7 +67,6 @@
 #include "act3shark.h"
 #include "buildings.h"
 #include "bumpbouy.h"
-#include "caveentity.h"
 #include "jukebox.h"
 #include "jukeboxentity.h"
 #include "legometerpresenter.h"

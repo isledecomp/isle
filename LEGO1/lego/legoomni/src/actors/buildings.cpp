@@ -174,3 +174,17 @@ MxLong RaceStandsEntity::VTable0x50(MxParam& p_param)
 
 	return 1;
 }
+
+// STUB: LEGO1 0x100154f0
+MxLong JailEntity::VTable0x50(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
+
+// STUB: LEGO1 0x10015520
+MxLong CaveEntity::VTable0x50(MxParam& p_param)
+{
+	// TODO
+	return 0;
+}
