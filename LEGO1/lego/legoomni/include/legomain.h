@@ -127,7 +127,7 @@ public:
 	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 	LegoNavController* GetNavController() { return m_navController; }
-	LegoPathActor* GetCurrentActor() { return m_currentActor; }
+	LegoPathActor* GetUserActor() { return m_userActor; }
 	LegoPlantManager* GetPlantManager() { return m_plantManager; }
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 	LegoBuildingManager* GetBuildingManager() { return m_buildingManager; }
@@ -139,7 +139,7 @@ public:
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	inline void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
-	inline void SetCurrentActor(LegoPathActor* p_currentActor) { m_currentActor = p_currentActor; }
+	inline void SetUserActor(LegoPathActor* p_userActor) { m_userActor = p_userActor; }
 	inline void SetCurrentWorld(LegoWorld* p_currentWorld) { m_currentWorld = p_currentWorld; }
 	inline void SetExit(MxBool p_exit) { m_exit = p_exit; }
 	inline MxResult StartActionIfUnknown0x13c(MxDSAction& p_dsAction)
@@ -162,7 +162,7 @@ private:
 	LegoWorld* m_currentWorld;                   // 0x7c
 	MxBool m_exit;                               // 0x80
 	LegoNavController* m_navController;          // 0x84
-	LegoPathActor* m_currentActor;               // 0x88
+	LegoPathActor* m_userActor;                  // 0x88
 	LegoCharacterManager* m_characterManager;    // 0x8c
 	LegoPlantManager* m_plantManager;            // 0x90
 	LegoAnimationManager* m_animationManager;    // 0x94

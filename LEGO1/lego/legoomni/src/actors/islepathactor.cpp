@@ -75,9 +75,9 @@ MxLong IslePathActor::Notify(MxParam& p_param)
 void IslePathActor::Enter()
 {
 	m_roi->SetVisibility(FALSE);
-	if (CurrentActor() != this) {
+	if (UserActor() != this) {
 		m_previousVel = NavController()->GetMaxLinearVel();
-		m_previousActor = CurrentActor();
+		m_previousActor = UserActor();
 		if (m_previousActor) {
 			m_previousActor->ResetWorldTransform(FALSE);
 			m_previousActor->SetUserNavFlag(FALSE);
@@ -91,7 +91,7 @@ void IslePathActor::Enter()
 
 		NavController()->ResetMaxLinearVel(m_maxLinearVel);
 
-		SetCurrentActor(this);
+		SetUserActor(this);
 		FUN_1001b660();
 		FUN_10010c30();
 	}
@@ -110,7 +110,7 @@ void IslePathActor::Exit()
 	SetUserNavFlag(FALSE);
 
 	if (m_previousActor != NULL) {
-		SetCurrentActor(m_previousActor);
+		SetUserActor(m_previousActor);
 		NavController()->ResetMaxLinearVel(m_previousVel);
 		m_previousActor->ResetWorldTransform(TRUE);
 		m_previousActor->SetUserNavFlag(TRUE);

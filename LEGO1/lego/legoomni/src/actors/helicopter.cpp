@@ -77,8 +77,8 @@ void Helicopter::Exit()
 
 	if (GameState()->GetCurrentAct() == LegoGameState::e_act1) {
 		GameState()->SetCurrentArea(LegoGameState::e_copter);
-		if (CurrentActor() && CurrentActor()->IsA("IslePathActor")) {
-			((IslePathActor*) CurrentActor())
+		if (UserActor() && UserActor()->IsA("IslePathActor")) {
+			((IslePathActor*) UserActor())
 				->SpawnPlayer(
 					LegoGameState::e_unk55,
 					TRUE,
@@ -115,9 +115,9 @@ MxLong Helicopter::HandleClick()
 
 	AnimationManager()->FUN_1005f6d0(FALSE);
 
-	if (CurrentActor()) {
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+	if (UserActor()) {
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 		}
 	}
 

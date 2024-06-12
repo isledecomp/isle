@@ -705,7 +705,7 @@ void LegoWorld::Enable(MxBool p_enable)
 	else if (!p_enable && m_set0xd0.empty()) {
 		MxPresenter* presenter;
 		LegoPathController* controller;
-		LegoPathActor* actor = CurrentActor();
+		LegoPathActor* actor = UserActor();
 
 		if (actor) {
 			RemoveActor(actor);

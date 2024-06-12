@@ -28,8 +28,8 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 {
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1: {
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -70,8 +70,8 @@ MxLong GasStationEntity::VTable0x50(MxParam& p_param)
 		if (state->GetUnknown18() != 8) {
 			state->SetUnknown18(0);
 
-			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->Exit();
+			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -94,8 +94,8 @@ MxLong HospitalEntity::VTable0x50(MxParam& p_param)
 		if (act1State->GetUnknown18() != 10) {
 			act1State->SetUnknown18(0);
 
-			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->Exit();
+			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -118,8 +118,8 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 		if (state->GetUnknown18() != 10) {
 			state->SetUnknown18(0);
 
-			if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-				((IslePathActor*) CurrentActor())->Exit();
+			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -140,8 +140,8 @@ MxLong BeachHouseEntity::VTable0x50(MxParam& p_param)
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		state->SetUnknown18(0);
 
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
@@ -161,8 +161,8 @@ MxLong RaceStandsEntity::VTable0x50(MxParam& p_param)
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
 		state->SetUnknown18(0);
 
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);

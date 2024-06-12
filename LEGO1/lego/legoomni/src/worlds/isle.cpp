@@ -82,8 +82,8 @@ Isle::~Isle()
 		InputManager()->ClearWorld();
 	}
 
-	if (CurrentActor() != NULL) {
-		VTable0x6c(CurrentActor());
+	if (UserActor() != NULL) {
+		VTable0x6c(UserActor());
 	}
 
 	NotificationManager()->Unregister(this);
@@ -157,7 +157,7 @@ MxLong Isle::Notify(MxParam& p_param)
 		case c_notificationEndAnim:
 			switch (m_act1state->m_unk0x018) {
 			case 4:
-				result = CurrentActor()->Notify(p_param);
+				result = UserActor()->Notify(p_param);
 				break;
 			case 8:
 				result = m_towtrack->Notify(p_param);
@@ -473,11 +473,11 @@ MxLong Isle::HandleType19Notification(MxType19NotificationParam& p_param)
 {
 	MxLong result = 0;
 
-	if (CurrentActor() != NULL) {
-		if (CurrentActor() == m_dunebuggy) {
+	if (UserActor() != NULL) {
+		if (UserActor() == m_dunebuggy) {
 			result = m_dunebuggy->Notify(p_param);
 		}
-		else if (CurrentActor() == m_motocycle) {
+		else if (UserActor() == m_motocycle) {
 			result = m_motocycle->Notify(p_param);
 		}
 	}
@@ -544,9 +544,9 @@ void Isle::Enable(MxBool p_enable)
 		VideoManager()->ResetPalette(FALSE);
 		m_act1state->FUN_10034d00();
 
-		if (CurrentActor() != NULL && CurrentActor()->GetActorId() != LegoActor::c_none) {
+		if (UserActor() != NULL && UserActor()->GetActorId() != LegoActor::c_none) {
 			// TODO: Match, most likely an inline function
-			MxS32 targetEntityId = (CurrentActor()->GetActorId() == 1) + 250;
+			MxS32 targetEntityId = (UserActor()->GetActorId() == 1) + 250;
 
 			if (targetEntityId != -1) {
 				InvokeAction(Extra::e_start, *g_isleScript, targetEntityId, NULL);
@@ -575,8 +575,8 @@ void Isle::Enable(MxBool p_enable)
 			}
 		}
 
-		if (CurrentActor() != NULL && CurrentActor()->IsA("Jetski")) {
-			IslePathActor* actor = (IslePathActor*) CurrentActor();
+		if (UserActor() != NULL && UserActor()->IsA("Jetski")) {
+			IslePathActor* actor = (IslePathActor*) UserActor();
 			actor->SpawnPlayer(
 				LegoGameState::e_unk45,
 				FALSE,
@@ -599,7 +599,7 @@ void Isle::Enable(MxBool p_enable)
 				m_act1state->m_unk0x018 = 5;
 			}
 
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -622,7 +622,7 @@ void Isle::Enable(MxBool p_enable)
 			SetIsWorldActive(FALSE);
 			break;
 		case LegoGameState::e_bike:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -635,7 +635,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_dunecar:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -648,7 +648,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_motocycle:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -661,7 +661,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_copter:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -674,7 +674,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_skateboard:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -687,7 +687,7 @@ void Isle::Enable(MxBool p_enable)
 #endif
 			break;
 		case LegoGameState::e_jetski:
-			PlaceActor(CurrentActor());
+			PlaceActor(UserActor());
 			SetIsWorldActive(TRUE);
 
 #ifdef COMPAT_MODE
@@ -714,7 +714,7 @@ void Isle::Enable(MxBool p_enable)
 				AnimationManager()->FUN_10064740(NULL);
 			}
 			else if (GameState()->m_currentArea == LegoGameState::e_unk66) {
-				Mx3DPointFloat position(CurrentActor()->GetROI()->GetWorldPosition());
+				Mx3DPointFloat position(UserActor()->GetROI()->GetWorldPosition());
 
 				Mx3DPointFloat sub(-21.375f, 0.0f, -41.75f);
 				((Vector3&) sub).Sub(position);
@@ -730,7 +730,7 @@ void Isle::Enable(MxBool p_enable)
 			}
 			break;
 		case 5: {
-			((IslePathActor*) CurrentActor())
+			((IslePathActor*) UserActor())
 				->SpawnPlayer(
 					LegoGameState::e_jetrace2,
 					FALSE,
@@ -763,7 +763,7 @@ void Isle::Enable(MxBool p_enable)
 		}
 		case 6: {
 			GameState()->m_currentArea = LegoGameState::e_carraceExterior;
-			((IslePathActor*) CurrentActor())
+			((IslePathActor*) UserActor())
 				->SpawnPlayer(
 					LegoGameState::e_unk21,
 					FALSE,
@@ -813,7 +813,7 @@ void Isle::Enable(MxBool p_enable)
 			break;
 		case 11:
 			m_act1state->m_unk0x018 = 0;
-			((IslePathActor*) CurrentActor())
+			((IslePathActor*) UserActor())
 				->SpawnPlayer(
 					LegoGameState::e_jukeboxExterior,
 					TRUE,
@@ -863,9 +863,9 @@ void Isle::FUN_10032620()
 
 	switch (GameState()->m_currentArea) {
 	case LegoGameState::e_unk66: {
-		MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
-		LegoPathBoundary* boundary = CurrentActor()->GetBoundary();
-		((IslePathActor*) CurrentActor())->VTable0xec(mat, boundary, TRUE);
+		MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
+		LegoPathBoundary* boundary = UserActor()->GetBoundary();
+		((IslePathActor*) UserActor())->VTable0xec(mat, boundary, TRUE);
 		break;
 	}
 	case LegoGameState::e_unk4:
@@ -878,7 +878,7 @@ void Isle::FUN_10032620()
 	case LegoGameState::e_hospitalExterior:
 	case LegoGameState::e_unk31:
 	case LegoGameState::e_policeExterior:
-		((IslePathActor*) CurrentActor())
+		((IslePathActor*) UserActor())
 			->SpawnPlayer(
 				GameState()->m_currentArea,
 				TRUE,
@@ -1188,19 +1188,19 @@ MxBool Isle::Escape()
 
 	switch (m_act1state->m_unk0x018) {
 	case 3:
-		if (CurrentActor() != NULL) {
+		if (UserActor() != NULL) {
 			m_pizza->FUN_10038380();
 			m_pizza->FUN_100382b0();
 		}
 		break;
 	case 8:
-		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
 			m_towtrack->FUN_1004db10();
 			m_towtrack->FUN_1004dbe0();
 		}
 		break;
 	case 10:
-		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
 			m_ambulance->FUN_10037250();
 		}
@@ -1217,9 +1217,9 @@ MxBool Isle::Escape()
 	AnimationManager()->FUN_10061010(FALSE);
 	DeleteObjects(&m_atom, IsleScript::c_sba001bu_RunAnim, IsleScript::c_FNS018EN_Wav_518);
 
-	if (CurrentActor()) {
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+	if (UserActor()) {
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 			m_skateboard->SetUnknown0x160(FALSE);
 		}
 	}
@@ -1241,21 +1241,21 @@ MxBool Isle::Escape()
 void Isle::FUN_10033350()
 {
 	if (m_act1state->m_unk0x018 == 10) {
-		if (CurrentActor() != NULL && !CurrentActor()->IsA("Ambulance")) {
+		if (UserActor() != NULL && !UserActor()->IsA("Ambulance")) {
 			m_ambulance->StopActions();
 			m_ambulance->FUN_10037250();
 		}
 	}
 
 	if (m_act1state->m_unk0x018 == 8) {
-		if (CurrentActor() != NULL && !CurrentActor()->IsA("TowTrack")) {
+		if (UserActor() != NULL && !UserActor()->IsA("TowTrack")) {
 			m_towtrack->FUN_1004db10();
 			m_towtrack->FUN_1004dbe0();
 		}
 	}
 
 	if (m_act1state->m_unk0x018 == 3) {
-		if (CurrentActor() != NULL) {
+		if (UserActor() != NULL) {
 			m_pizza->FUN_10038380();
 			m_pizza->FUN_100382b0();
 		}
@@ -1263,9 +1263,9 @@ void Isle::FUN_10033350()
 
 	AnimationManager()->FUN_10061010(FALSE);
 
-	if (CurrentActor()) {
-		if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-			((IslePathActor*) CurrentActor())->Exit();
+	if (UserActor()) {
+		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+			((IslePathActor*) UserActor())->Exit();
 			m_skateboard->SetUnknown0x160(FALSE);
 		}
 	}

@@ -144,11 +144,11 @@ void Hospital::ReadyWorld()
 	m_copLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "CopLed_Bitmap");
 	m_pizzaLedBitmap = (MxStillPresenter*) Find("MxStillPresenter", "PizzaLed_Bitmap");
 
-	if (CurrentActor() == NULL) {
+	if (UserActor() == NULL) {
 		m_currentActorId = LegoActor::c_laura;
 	}
 	else {
-		m_currentActorId = CurrentActor()->GetActorId();
+		m_currentActorId = UserActor()->GetActorId();
 	}
 
 	switch (m_currentActorId) {

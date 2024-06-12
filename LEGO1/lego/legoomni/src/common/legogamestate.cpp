@@ -171,8 +171,8 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 		m_actorId = p_actorId;
 	}
 
-	LegoPathActor* oldActor = CurrentActor();
-	SetCurrentActor(NULL);
+	LegoPathActor* oldActor = UserActor();
+	SetUserActor(NULL);
 
 	IslePathActor* newActor = new IslePathActor();
 	const char* actorName = LegoActor::GetActorName(m_actorId);
@@ -192,14 +192,14 @@ void LegoGameState::SetActor(MxU8 p_actorId)
 	}
 
 	newActor->ClearFlag(0x02);
-	SetCurrentActor(newActor);
+	SetUserActor(newActor);
 }
 
 // FUNCTION: LEGO1 0x10039910
 void LegoGameState::RemoveActor()
 {
-	LegoPathActor* actor = CurrentActor();
-	SetCurrentActor(NULL);
+	LegoPathActor* actor = UserActor();
+	SetUserActor(NULL);
 	delete actor;
 	m_actorId = 0;
 }
@@ -208,7 +208,7 @@ void LegoGameState::RemoveActor()
 void LegoGameState::ResetROI()
 {
 	if (m_actorId) {
-		LegoPathActor* actor = CurrentActor();
+		LegoPathActor* actor = UserActor();
 
 		if (actor) {
 			LegoROI* roi = actor->GetROI();
@@ -887,7 +887,7 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_garadoor:
 		LoadIsle();
 		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
-		CurrentActor()->ResetWorldTransform(FALSE);
+		UserActor()->ResetWorldTransform(FALSE);
 		NavController()->UpdateLocation(59); // LCAMZG1 in g_cameraLocations
 		VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_GaraDoor, NULL);
@@ -901,11 +901,11 @@ void LegoGameState::SwitchArea(Area p_area)
 		}
 		else {
 			SetCameraControllerFromIsle();
-			CurrentActor()->ResetWorldTransform(TRUE);
+			UserActor()->ResetWorldTransform(TRUE);
 			AnimationManager()->Resume();
 		}
 
-		((IslePathActor*) CurrentActor())
+		((IslePathActor*) UserActor())
 			->SpawnPlayer(
 				p_area,
 				TRUE,
@@ -920,9 +920,9 @@ void LegoGameState::SwitchArea(Area p_area)
 	case e_unk33:
 		LoadIsle();
 		SetCameraControllerFromIsle();
-		CurrentActor()->ResetWorldTransform(TRUE);
+		UserActor()->ResetWorldTransform(TRUE);
 		AnimationManager()->Resume();
-		((IslePathActor*) CurrentActor())
+		((IslePathActor*) UserActor())
 			->SpawnPlayer(
 				p_area,
 				TRUE,

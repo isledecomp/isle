@@ -149,7 +149,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 		}
 		else if (objectId == IsleScript::c_hho027en_RunAnim) {
 			m_state->m_unk0x08 = 1;
-			CurrentWorld()->PlaceActor(CurrentActor());
+			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
 			m_unk0x172 = 0;
 			TickleManager()->RegisterClient(this, 40000);
@@ -173,7 +173,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 		}
 		else if (objectId == IsleScript::c_hpz055pa_RunAnim || objectId == IsleScript::c_hpz057ma_RunAnim) {
-			CurrentWorld()->PlaceActor(CurrentActor());
+			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
 			SpawnPlayer(LegoGameState::e_pizzeriaExterior, TRUE, 0);
 			m_unk0x172 = 0;
@@ -197,7 +197,7 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 			}
 		}
 		else if (objectId == IsleScript::c_hps117bd_RunAnim) {
-			CurrentWorld()->PlaceActor(CurrentActor());
+			CurrentWorld()->PlaceActor(UserActor());
 			HandleClick();
 			SpawnPlayer(LegoGameState::e_unk33, TRUE, 0);
 			m_unk0x172 = 0;
@@ -245,12 +245,12 @@ MxLong Ambulance::HandleClick()
 	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::e_ambulance);
 	TransitionManager()->StartTransition(MxTransitionManager::e_mosaic, 50, FALSE, FALSE);
 
-	if (CurrentActor()->GetActorId() != GameState()->GetActorId()) {
-		((IslePathActor*) CurrentActor())->Exit();
+	if (UserActor()->GetActorId() != GameState()->GetActorId()) {
+		((IslePathActor*) UserActor())->Exit();
 	}
 
 	m_time = Timer()->GetTime();
-	m_unk0x16a = CurrentActor()->GetActorId();
+	m_unk0x16a = UserActor()->GetActorId();
 
 	Enter();
 	InvokeAction(Extra::e_start, *g_isleScript, IsleScript::c_AmbulanceDashboard, NULL);
@@ -294,10 +294,58 @@ void Ambulance::FUN_10037060()
 	// TODO
 }
 
-// STUB: LEGO1 0x10037160
+// FUNCTION: LEGO1 0x10037160
+// FUNCTION: BETA10 0x100237df
 MxResult Ambulance::Tickle()
 {
-	// TODO
+	if (m_unk0x172 == 0) {
+		m_unk0x172 = 1;
+	}
+	else if (m_lastAction == IsleScript::c_noneIsle) {
+		IsleScript::Script objectId;
+
+		switch ((rand() % 12) + 1) {
+		case 1:
+			objectId = IsleScript::c_ham034ra_PlayWav;
+			break;
+		case 2:
+			objectId = IsleScript::c_ham035ra_PlayWav;
+			break;
+		case 3:
+			objectId = IsleScript::c_ham036ra_PlayWav;
+			break;
+		case 4:
+			objectId = IsleScript::c_hpz037ma_PlayWav;
+			break;
+		case 5:
+			objectId = IsleScript::c_sns078pa_PlayWav;
+			break;
+		case 6:
+			objectId = IsleScript::c_ham039ra_PlayWav;
+			break;
+		case 7:
+			objectId = IsleScript::c_ham040cl_PlayWav;
+			break;
+		case 8:
+			objectId = IsleScript::c_ham041cl_PlayWav;
+			break;
+		case 9:
+			objectId = IsleScript::c_ham042cl_PlayWav;
+			break;
+		case 10:
+			objectId = IsleScript::c_ham043cl_PlayWav;
+			break;
+		case 11:
+			objectId = IsleScript::c_ham044cl_PlayWav;
+			break;
+		case 12:
+			objectId = IsleScript::c_ham045cl_PlayWav;
+			break;
+		}
+
+		PlayAction(objectId);
+	}
+
 	return SUCCESS;
 }
 
