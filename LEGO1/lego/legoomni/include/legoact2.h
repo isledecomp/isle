@@ -5,10 +5,17 @@
 #include "legostate.h"
 #include "legoworld.h"
 
+class Act2Actor;
+
 // VTABLE: LEGO1 0x100d4a70
 // SIZE 0x10
 class LegoAct2State : public LegoState {
 public:
+	LegoAct2State()
+	{
+		m_unk0x08 = 0;
+		m_unk0x0c = 0;
+	}
 	~LegoAct2State() override {}
 
 	// FUNCTION: LEGO1 0x1000df80
@@ -43,6 +50,7 @@ public:
 // SIZE 0x1154
 class LegoAct2 : public LegoWorld {
 public:
+	LegoAct2();
 	~LegoAct2() override;
 
 	MxLong Notify(MxParam& p_param) override;         // vtable+0x04
@@ -54,6 +62,7 @@ public:
 	MxBool Escape() override;                         // vtable+0x64
 	void Enable(MxBool p_enable) override;            // vtable+0x68
 
+	inline void SetUnknown0x1138(Act2Actor* p_unk0x1138) { m_unk0x1138 = p_unk0x1138; }
 	inline void SetUnknown0x1150(undefined4 p_unk0x1150) { m_unk0x1150 = p_unk0x1150; }
 
 	// SYNTHETIC: LEGO1 0x1004fe20
@@ -78,7 +87,7 @@ private:
 	undefined4 m_unk0x112c;      // 0x112c
 	undefined4 m_unk0x1130;      // 0x1130
 	undefined4 m_unk0x1134;      // 0x1134
-	undefined4 m_unk0x1138;      // 0x1138
+	Act2Actor* m_unk0x1138;      // 0x1138
 	undefined m_unk0x113c;       // 0x113c
 	undefined4 m_unk0x1140;      // 0x1140
 	undefined4 m_unk0x1144;      // 0x1144

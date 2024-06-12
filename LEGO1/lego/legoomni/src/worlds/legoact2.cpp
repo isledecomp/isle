@@ -10,6 +10,12 @@
 DECOMP_SIZE_ASSERT(LegoAct2, 0x1154)
 DECOMP_SIZE_ASSERT(LegoAct2State, 0x10)
 
+// STUB: LEGO1 0x1004fce0
+LegoAct2::LegoAct2()
+{
+	// TODO
+}
+
 // FUNCTION: LEGO1 0x1004fe10
 MxBool LegoAct2::VTable0x5c()
 {

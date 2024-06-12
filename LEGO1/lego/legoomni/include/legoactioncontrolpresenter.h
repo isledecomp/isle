@@ -10,7 +10,7 @@
 // SIZE 0x68
 class LegoActionControlPresenter : public MxMediaPresenter {
 public:
-	LegoActionControlPresenter() { m_unk0x50 = Extra::ActionType::e_none; }
+	LegoActionControlPresenter() : m_unk0x50(Extra::ActionType::e_none) {}
 	~LegoActionControlPresenter() override { Destroy(TRUE); } // vtable+0x00
 
 	// FUNCTION: BETA10 0x100a7840

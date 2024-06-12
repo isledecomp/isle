@@ -19,7 +19,7 @@ DECOMP_SIZE_ASSERT(MxObjectFactory, 0x38); // 100af1db
 // FUNCTION: LEGO1 0x100b0d80
 MxObjectFactory::MxObjectFactory()
 {
-#define X(V) this->m_id##V = MxAtomId(#V, e_exact);
+#define X(V) m_id##V = MxAtomId(#V, e_exact);
 	FOR_MXOBJECTFACTORY_OBJECTS(X)
 #undef X
 }
@@ -33,7 +33,7 @@ MxCore* MxObjectFactory::Create(const char* p_name)
 	if (0) {
 	}
 #define X(V)                                                                                                           \
-	else if (this->m_id##V == atom)                                                                                    \
+	else if (m_id##V == atom)                                                                                          \
 	{                                                                                                                  \
 		object = new V;                                                                                                \
 	}

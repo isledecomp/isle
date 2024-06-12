@@ -12,6 +12,8 @@ class MxEndActionNotificationParam;
 // SIZE 0x0c
 class ScoreState : public LegoState {
 public:
+	ScoreState() : m_playCubeTutorial(TRUE) {}
+
 	// FUNCTION: LEGO1 0x1000de40
 	inline const char* ClassName() const override // vtable+0x0c
 	{

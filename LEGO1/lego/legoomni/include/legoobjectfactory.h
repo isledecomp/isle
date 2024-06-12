@@ -8,13 +8,13 @@
 	X(LegoActorPresenter)                                                                                              \
 	X(LegoWorldPresenter)                                                                                              \
 	X(LegoWorld)                                                                                                       \
-	X(LegoAnimPresenter)                                                                                               \
 	X(LegoModelPresenter)                                                                                              \
 	X(LegoTexturePresenter)                                                                                            \
 	X(LegoPhonemePresenter)                                                                                            \
 	X(LegoFlcTexturePresenter)                                                                                         \
 	X(LegoPalettePresenter)                                                                                            \
 	X(LegoPathPresenter)                                                                                               \
+	X(LegoAnimPresenter)                                                                                               \
 	X(LegoLoopingAnimPresenter)                                                                                        \
 	X(LegoLocomotionAnimPresenter)                                                                                     \
 	X(LegoHideAnimPresenter)                                                                                           \
@@ -49,6 +49,10 @@
 	X(LegoAct2)                                                                                                        \
 	X(LegoAct2State)                                                                                                   \
 	X(CarRace)                                                                                                         \
+	X(LegoRaceCarBuildState)                                                                                           \
+	X(LegoCopterBuildState)                                                                                            \
+	X(LegoDuneCarBuildState)                                                                                           \
+	X(LegoJetskiBuildState)                                                                                            \
 	X(HospitalState)                                                                                                   \
 	X(InfocenterState)                                                                                                 \
 	X(PoliceState)                                                                                                     \
