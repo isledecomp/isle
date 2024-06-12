@@ -1,6 +1,7 @@
 #ifndef LEGOUTILS_H
 #define LEGOUTILS_H
 
+#include "actionsfwd.h"
 #include "decomp.h"
 #include "extra.h"
 #include "mxtypes.h"
@@ -33,6 +34,8 @@ class LegoPathActor;
 class LegoROI;
 class LegoTreeNode;
 
+extern MxAtomId* g_isleScript;
+
 LegoEntity* PickEntity(MxLong, MxLong);
 LegoROI* PickROI(MxLong, MxLong);
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
@@ -53,6 +56,14 @@ void SetLightPosition(MxS32 p_index);
 LegoNamedTexture* ReadNamedTexture(LegoFile* p_file);
 void FUN_1003f540(LegoFile* p_file, const char* p_filename);
 void WriteNamedTexture(LegoFile* p_file, LegoNamedTexture* p_texture);
+
+// FUNCTION: BETA10 0x100260a0
+inline void StartIsleAction(IsleScript::Script p_objectId)
+{
+	if (p_objectId != (IsleScript::Script) -1) {
+		InvokeAction(Extra::e_start, *g_isleScript, p_objectId, NULL);
+	}
+}
 
 // SYNTHETIC: LEGO1 0x10034b40
 // LegoTexture::`scalar deleting destructor'
