@@ -1026,7 +1026,7 @@ MxLong Isle::HandleTransitionEnd()
 		FUN_10032d30(IsleScript::c_AmbulanceFuelMeter, JukeboxScript::c_MusicTheme1, NULL, TRUE);
 
 		if (!m_act1state->m_unk0x01f) {
-			m_ambulance->FUN_10037060();
+			m_ambulance->ActivateSceneActions();
 		}
 		break;
 	case LegoGameState::e_towtrack:

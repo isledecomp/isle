@@ -3,6 +3,7 @@
 #include "decomp.h"
 #include "isle.h"
 #include "isle_actions.h"
+#include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legocontrolmanager.h"
 #include "legogamestate.h"
@@ -289,10 +290,51 @@ MxLong Ambulance::HandleControl(LegoControlManagerEvent& p_param)
 	return 0;
 }
 
-// STUB: LEGO1 0x10037060
-void Ambulance::FUN_10037060()
+// FUNCTION: LEGO1 0x10037060
+void Ambulance::ActivateSceneActions()
 {
-	// TODO
+	PlayMusic(JukeboxScript::c_Hospital_Music);
+
+	if (m_state->m_unk0x08 == 1) {
+		m_state->m_unk0x08 = 0;
+		PlayAction(IsleScript::c_ham033cl_PlayWav);
+	}
+	else if (m_unk0x16c != 0 && m_unk0x16e != 0) {
+		IsleScript::Script objectId;
+
+		switch (rand() % 2) {
+		case 0:
+			objectId = IsleScript::c_ham076cl_PlayWav;
+			break;
+		case 1:
+			objectId = IsleScript::c_ham088cl_PlayWav;
+			break;
+		}
+
+		if (m_lastAction != IsleScript::c_noneIsle) {
+			InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
+		}
+
+		PlayAction(objectId);
+	}
+	else {
+		IsleScript::Script objectId;
+
+		switch (rand() % 2) {
+		case 0:
+			objectId = IsleScript::c_ham075cl_PlayWav;
+			break;
+		case 1:
+			objectId = IsleScript::c_ham113cl_PlayWav;
+			break;
+		}
+
+		if (m_lastAction != IsleScript::c_noneIsle) {
+			InvokeAction(Extra::e_stop, *g_isleScript, m_lastAction, NULL);
+		}
+
+		PlayAction(objectId);
+	}
 }
 
 // FUNCTION: LEGO1 0x10037160
