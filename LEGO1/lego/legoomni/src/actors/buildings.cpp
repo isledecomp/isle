@@ -24,7 +24,7 @@ DECOMP_SIZE_ASSERT(PoliceEntity, 0x68)
 DECOMP_SIZE_ASSERT(RaceStandsEntity, 0x68)
 
 // FUNCTION: LEGO1 0x100150c0
-MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
+MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	switch (GameState()->GetCurrentAct()) {
 	case LegoGameState::Act::e_act1: {
@@ -62,7 +62,7 @@ MxLong InfoCenterEntity::VTable0x50(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100151d0
-MxLong GasStationEntity::VTable0x50(MxParam& p_param)
+MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
@@ -86,7 +86,7 @@ MxLong GasStationEntity::VTable0x50(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015270
-MxLong HospitalEntity::VTable0x50(MxParam& p_param)
+MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
@@ -110,7 +110,7 @@ MxLong HospitalEntity::VTable0x50(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015310
-MxLong PoliceEntity::VTable0x50(MxParam& p_param)
+MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
@@ -134,7 +134,7 @@ MxLong PoliceEntity::VTable0x50(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100153b0
-MxLong BeachHouseEntity::VTable0x50(MxParam& p_param)
+MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
@@ -155,7 +155,7 @@ MxLong BeachHouseEntity::VTable0x50(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015450
-MxLong RaceStandsEntity::VTable0x50(MxParam& p_param)
+MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (FUN_1003ef60()) {
 		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
@@ -176,14 +176,14 @@ MxLong RaceStandsEntity::VTable0x50(MxParam& p_param)
 }
 
 // STUB: LEGO1 0x100154f0
-MxLong JailEntity::VTable0x50(MxParam& p_param)
+MxLong JailEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return 0;
 }
 
 // STUB: LEGO1 0x10015520
-MxLong CaveEntity::VTable0x50(MxParam& p_param)
+MxLong CaveEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	// TODO
 	return 0;
