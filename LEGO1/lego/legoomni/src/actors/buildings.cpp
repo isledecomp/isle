@@ -8,10 +8,12 @@
 #include "islepathactor.h"
 #include "legoact2.h"
 #include "legoanimationmanager.h"
+#include "legoeventnotificationparam.h"
 #include "legogamestate.h"
 #include "legoutils.h"
 #include "legoworld.h"
 #include "misc.h"
+#include "mxbackgroundaudiomanager.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
@@ -22,6 +24,20 @@ DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
 DECOMP_SIZE_ASSERT(JailEntity, 0x68)
 DECOMP_SIZE_ASSERT(PoliceEntity, 0x68)
 DECOMP_SIZE_ASSERT(RaceStandsEntity, 0x68)
+
+// GLOBAL: LEGO1 0x100f0c2c
+// STRING: LEGO1 0x100f0c24
+const char* g_chest = "chest";
+
+// GLOBAL: LEGO1 0x100f0c30
+// GLOBAL: LEGO1 0x100f0c18
+const char* g_cavedoor = "cavedoor";
+
+// GLOBAL: LEGO1 0x100f0c34
+IsleScript::Script g_nextChestAction = IsleScript::c_nca001ca_RunAnim;
+
+// GLOBAL: LEGO1 0x100f0c38
+IsleScript::Script g_nextCavedoorAction = IsleScript::c_Avo900Ps_PlayWav;
 
 // FUNCTION: LEGO1 0x100150c0
 MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
@@ -175,16 +191,62 @@ MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 	return 1;
 }
 
-// STUB: LEGO1 0x100154f0
+// FUNCTION: LEGO1 0x100154f0
+// FUNCTION: BETA10 0x100256e8
 MxLong JailEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
-	// TODO
-	return 0;
+	if (FUN_1003ef60()) {
+		PlayCamAnim(UserActor(), FALSE, 18, TRUE);
+	}
+
+	return 1;
 }
 
-// STUB: LEGO1 0x10015520
+// FUNCTION: LEGO1 0x10015520
+// FUNCTION: BETA10 0x10025719
 MxLong CaveEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
-	// TODO
-	return 0;
+	LegoROI* roi = p_param.GetROI();
+
+	if (!strncmp(roi->GetName(), g_chest, strlen(g_chest))) {
+		DeleteObjects(g_isleScript, IsleScript::c_nca001ca_RunAnim, IsleScript::c_nca003gh_RunAnim);
+		StartIsleAction(g_nextChestAction);
+
+		switch (g_nextChestAction) {
+		case IsleScript::c_nca001ca_RunAnim:
+			g_nextChestAction = IsleScript::c_nca002sk_RunAnim;
+			break;
+		case IsleScript::c_nca002sk_RunAnim:
+			g_nextChestAction = IsleScript::c_nca003gh_RunAnim;
+			break;
+		case IsleScript::c_nca003gh_RunAnim:
+			g_nextChestAction = IsleScript::c_nca001ca_RunAnim;
+			break;
+		}
+	}
+	else if (!strcmp(roi->GetName(), g_cavedoor)) {
+		DeleteObjects(g_isleScript, IsleScript::c_Avo900Ps_PlayWav, IsleScript::c_Avo904Ps_PlayWav);
+		StartIsleAction(g_nextCavedoorAction);
+		BackgroundAudioManager()->LowerVolume();
+
+		switch (g_nextCavedoorAction) {
+		case IsleScript::c_Avo900Ps_PlayWav:
+			g_nextCavedoorAction = IsleScript::c_Avo901Ps_PlayWav;
+			break;
+		case IsleScript::c_Avo901Ps_PlayWav:
+			g_nextCavedoorAction = IsleScript::c_Avo902Ps_PlayWav;
+			break;
+		case IsleScript::c_Avo902Ps_PlayWav:
+			g_nextCavedoorAction = IsleScript::c_Avo903Ps_PlayWav;
+			break;
+		case IsleScript::c_Avo903Ps_PlayWav:
+			g_nextCavedoorAction = IsleScript::c_Avo904Ps_PlayWav;
+			break;
+		case IsleScript::c_Avo904Ps_PlayWav:
+			g_nextCavedoorAction = IsleScript::c_Avo900Ps_PlayWav;
+			break;
+		}
+	}
+
+	return 1;
 }
