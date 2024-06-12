@@ -9,7 +9,7 @@
 class Act3Brickster : public Act3Actor {
 public:
 	Act3Brickster();
-	~Act3Brickster();
+	~Act3Brickster() override;
 
 	void ParseAction(char* p_extra) override;             // vtable+0x20
 	void VTable0x70(float p_und) override;                // vtable+0x70
