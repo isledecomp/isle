@@ -30,7 +30,7 @@ DECOMP_SIZE_ASSERT(RaceStandsEntity, 0x68)
 const char* g_chest = "chest";
 
 // GLOBAL: LEGO1 0x100f0c30
-// GLOBAL: LEGO1 0x100f0c18
+// STRING: LEGO1 0x100f0c18
 const char* g_cavedoor = "cavedoor";
 
 // GLOBAL: LEGO1 0x100f0c34
