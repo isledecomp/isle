@@ -22,7 +22,7 @@ BuildingEntity::~BuildingEntity()
 MxLong BuildingEntity::Notify(MxParam& p_param)
 {
 	if (((MxNotificationParam&) p_param).GetType() == c_notificationClick) {
-		return VTable0x50(p_param);
+		return HandleClick((LegoEventNotificationParam&) p_param);
 	}
 
 	return 0;
