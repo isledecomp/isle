@@ -26,8 +26,8 @@ LegoAct2::~LegoAct2()
 
 	FUN_10051900();
 	InputManager()->UnRegister(this);
-	if (CurrentActor()) {
-		Remove(CurrentActor());
+	if (UserActor()) {
+		Remove(UserActor());
 	}
 
 	NotificationManager()->Unregister(this);

@@ -61,9 +61,9 @@ MxResult LegoRace::Create(MxDSAction& p_dsAction)
 	if (result == SUCCESS) {
 		m_act1State = (Act1State*) GameState()->GetState("Act1State");
 		ControlManager()->Register(this);
-		m_pathActor = CurrentActor();
+		m_pathActor = UserActor();
 		m_pathActor->SetWorldSpeed(0);
-		SetCurrentActor(NULL);
+		SetUserActor(NULL);
 	}
 
 	return result;
@@ -74,7 +74,7 @@ LegoRace::~LegoRace()
 {
 	g_unk0x100f119c = FALSE;
 	if (m_pathActor) {
-		SetCurrentActor(m_pathActor);
+		SetUserActor(m_pathActor);
 		NavController()->ResetMaxLinearVel(m_pathActor->GetMaxLinearVel());
 		m_pathActor = NULL;
 	}
@@ -118,7 +118,7 @@ MxLong LegoRace::Notify(MxParam& p_param)
 void LegoRace::Enable(MxBool p_enable)
 {
 	if (GetUnknown0xd0Empty() != p_enable && !p_enable) {
-		Remove(CurrentActor());
+		Remove(UserActor());
 
 		MxU8 oldActorId = GameState()->GetActorId();
 		GameState()->RemoveActor();

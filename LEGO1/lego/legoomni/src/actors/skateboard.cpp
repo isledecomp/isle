@@ -84,13 +84,13 @@ MxLong SkateBoard::HandleClick()
 	((Isle*) CurrentWorld())->SetDestLocation(LegoGameState::Area::e_skateboard);
 	TransitionManager()->StartTransition(MxTransitionManager::TransitionType::e_mosaic, 50, FALSE, TRUE);
 
-	if (GameState()->GetActorId() != CurrentActor()->GetActorId()) {
-		if (!CurrentActor()->IsA("SkateBoard")) {
-			((IslePathActor*) CurrentActor())->Exit();
+	if (GameState()->GetActorId() != UserActor()->GetActorId()) {
+		if (!UserActor()->IsA("SkateBoard")) {
+			((IslePathActor*) UserActor())->Exit();
 		}
 	}
 
-	if (!CurrentActor()->IsA("SkateBoard")) {
+	if (!UserActor()->IsA("SkateBoard")) {
 		Enter();
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_SkateDashboard, NULL);
 		GetCurrentAction().SetObjectId(-1);
@@ -154,7 +154,7 @@ void SkateBoard::ActivateSceneActions()
 		if (!m_act1state->m_unk0x022) {
 			m_act1state->m_unk0x022 = TRUE;
 
-			MxMatrix mat(CurrentActor()->GetROI()->GetLocal2World());
+			MxMatrix mat(UserActor()->GetROI()->GetLocal2World());
 			mat.TranslateBy(mat[2][0] * 2.5, mat[2][1] + 0.2, mat[2][2] * 2.5);
 
 			AnimationManager()

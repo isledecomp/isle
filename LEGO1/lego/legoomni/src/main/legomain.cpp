@@ -65,7 +65,7 @@ void LegoOmni::Init()
 	m_worldList = NULL;
 	m_currentWorld = NULL;
 	m_exit = FALSE;
-	m_currentActor = NULL;
+	m_userActor = NULL;
 	m_characterManager = NULL;
 	m_plantManager = NULL;
 	m_gameState = NULL;

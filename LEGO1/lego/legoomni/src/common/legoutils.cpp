@@ -467,8 +467,8 @@ MxBool FUN_1003ef60()
 		GameState()->m_currentArea != LegoGameState::e_elevdown &&
 		GameState()->m_currentArea != LegoGameState::e_garadoor &&
 		GameState()->m_currentArea != LegoGameState::e_polidoor) {
-		if (CurrentActor() == NULL || !CurrentActor()->IsA("TowTrack")) {
-			if (CurrentActor() == NULL || !CurrentActor()->IsA("Ambulance")) {
+		if (UserActor() == NULL || !UserActor()->IsA("TowTrack")) {
+			if (UserActor() == NULL || !UserActor()->IsA("Ambulance")) {
 				MxU32 unk0x18 = act1State->GetUnknown18();
 
 				if (unk0x18 != 10 && unk0x18 != 8 && unk0x18 != 3) {

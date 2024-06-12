@@ -230,7 +230,7 @@ void PoliceState::FUN_1005ea40()
 		return;
 	}
 
-	switch (CurrentActor()->GetActorId()) {
+	switch (UserActor()->GetActorId()) {
 	case LegoActor::c_nick:
 		policeScript = PoliceScript::c_nps002la_RunAnim;
 		m_policeScript = policeScript;

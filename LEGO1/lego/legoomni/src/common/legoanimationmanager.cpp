@@ -998,7 +998,7 @@ MxResult LegoAnimationManager::FUN_100605e0(
 				FUN_100648f0(tranInfo, m_unk0x404);
 			}
 			else if (p_unk0x0a) {
-				LegoPathActor* actor = CurrentActor();
+				LegoPathActor* actor = UserActor();
 
 				if (actor != NULL) {
 					actor->SetState(4);
@@ -1435,7 +1435,7 @@ MxResult LegoAnimationManager::Tickle()
 		return SUCCESS;
 	}
 
-	LegoPathActor* actor = CurrentActor();
+	LegoPathActor* actor = UserActor();
 	LegoROI* roi;
 
 	if (actor == NULL || (roi = actor->GetROI()) == NULL) {
@@ -1658,7 +1658,7 @@ MxBool LegoAnimationManager::FUN_100623a0(AnimInfo& p_info)
 
 			LegoEntityListCursor cursor(entityList);
 			LegoEntity* entity;
-			LegoPathActor* actor = CurrentActor();
+			LegoPathActor* actor = UserActor();
 
 			while (cursor.Next(entity)) {
 				if (entity != actor && entity->IsA("LegoPathActor")) {
@@ -1861,7 +1861,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 		if (world != NULL) {
 			PurgeExtra(FALSE);
 
-			LegoPathActor* actor = CurrentActor();
+			LegoPathActor* actor = UserActor();
 			if (actor == NULL || actor->GetWorldSpeed() <= 20.0f) {
 				MxU32 i;
 				for (i = 0; i < m_numAllowedExtras && m_extras[i].m_roi != NULL; i++) {
@@ -2478,7 +2478,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 {
 	MxU32 local2c = 12;
 	float destScale = ((rand() * 0.5) / 32767.0) + 0.25;
-	LegoPathActor* actor = CurrentActor();
+	LegoPathActor* actor = UserActor();
 
 	if (actor == NULL) {
 		return FALSE;
@@ -2760,7 +2760,7 @@ void LegoAnimationManager::FUN_100648f0(LegoTranInfo* p_tranInfo, MxLong p_unk0x
 		m_unk0x43c = viewROI->GetLocal2World();
 		p_tranInfo->m_unk0x2c = m_unk0x43c;
 
-		LegoPathActor* actor = CurrentActor();
+		LegoPathActor* actor = UserActor();
 		if (actor != NULL) {
 			actor->SetState(4);
 			actor->SetWorldSpeed(0.0f);
