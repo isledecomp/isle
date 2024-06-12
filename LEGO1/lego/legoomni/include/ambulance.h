@@ -97,7 +97,7 @@ public:
 
 	void CreateState();
 	void FUN_10036e60();
-	void FUN_10037060();
+	void ActivateSceneActions();
 	void StopActions();
 	void FUN_10037250();
 
