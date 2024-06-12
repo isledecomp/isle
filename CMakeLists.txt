@@ -285,7 +285,10 @@ target_link_libraries(omni PRIVATE dsound winmm Smacker::Smacker)
 add_library(lego1 SHARED
   LEGO1/define.cpp
   LEGO1/lego/legoomni/src/actors/act2actor.cpp
+  LEGO1/lego/legoomni/src/actors/act2genactor.cpp
   LEGO1/lego/legoomni/src/actors/act3actor.cpp
+  LEGO1/lego/legoomni/src/actors/act3brickster.cpp
+  LEGO1/lego/legoomni/src/actors/act3cop.cpp
   LEGO1/lego/legoomni/src/actors/act3shark.cpp
   LEGO1/lego/legoomni/src/actors/ambulance.cpp
   LEGO1/lego/legoomni/src/actors/bike.cpp
