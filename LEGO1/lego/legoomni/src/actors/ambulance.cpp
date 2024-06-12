@@ -83,6 +83,7 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 void Ambulance::VTable0x70(float p_float)
 {
 	// TODO
+	IslePathActor::VTable0x70(p_float);
 }
 
 // FUNCTION: LEGO1 0x100363f0

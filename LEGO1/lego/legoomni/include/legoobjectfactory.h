@@ -21,7 +21,7 @@
 	X(LegoPartPresenter)                                                                                               \
 	X(LegoCarBuildAnimPresenter)                                                                                       \
 	X(LegoActionControlPresenter)                                                                                      \
-	X(MxVideoPresenter)                                                                                                \
+	X(LegoMeterPresenter)                                                                                              \
 	X(LegoLoadCacheSoundPresenter)                                                                                     \
 	X(Lego3DWavePresenter)                                                                                             \
 	X(LegoActor)                                                                                                       \
