@@ -82,6 +82,7 @@ MxResult Ambulance::Create(MxDSAction& p_dsAction)
 // STUB: LEGO1 0x10036300
 void Ambulance::VTable0x70(float p_float)
 {
+	// TODO
 	IslePathActor::VTable0x70(p_float);
 }
 
