@@ -75,7 +75,7 @@
 #include "skateboard.h"
 #include "towtrack.h"
 
-DECOMP_SIZE_ASSERT(LegoObjectFactory, 0x1c8);
+DECOMP_SIZE_ASSERT(LegoObjectFactory, 0x1c8)
 
 // FUNCTION: LEGO1 0x10006e40
 LegoObjectFactory::LegoObjectFactory()
