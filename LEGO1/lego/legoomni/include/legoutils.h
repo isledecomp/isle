@@ -38,6 +38,7 @@ extern MxAtomId* g_isleScript;
 
 LegoEntity* PickEntity(MxLong, MxLong);
 LegoROI* PickROI(MxLong, MxLong);
+LegoROI* PickParentROI(MxLong p_a, MxLong p_b);
 MxS16 CountTotalTreeNodes(LegoTreeNode* p_node);
 void FUN_1003e050(LegoAnimPresenter* p_presenter);
 Extra::ActionType MatchActionString(const char*);
