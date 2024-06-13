@@ -146,7 +146,7 @@ private:
 	void PlayFinalAnimation(IsleScript::Script p_objectId);
 	void StopAction(IsleScript::Script p_objectId);
 	void PlayAction(IsleScript::Script p_objectId);
-	void FUN_10036ec0();
+	void Leave();
 
 	undefined m_unk0x160[4];            // 0x160
 	AmbulanceMissionState* m_state;     // 0x164
