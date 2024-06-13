@@ -34,7 +34,24 @@
 // FUNCTION: LEGO1 0x1003dd70
 LegoROI* PickROI(MxLong p_a, MxLong p_b)
 {
-	return (LegoROI*) VideoManager()->Get3DManager()->GetLego3DView()->Pick(p_a, p_b);
+	LegoVideoManager* videoManager = VideoManager();
+	Lego3DView* view = videoManager->Get3DManager()->GetLego3DView();
+	return (LegoROI*) view->Pick(p_a, p_b);
+}
+
+// FUNCTION: LEGO1 0x1003dd90
+// FUNCTION: BETA10 0x100d3449
+LegoROI* PickParentROI(MxLong p_a, MxLong p_b)
+{
+	LegoVideoManager* videoManager = VideoManager();
+	Lego3DView* view = videoManager->Get3DManager()->GetLego3DView();
+	LegoROI* roi = (LegoROI*) view->Pick(p_a, p_b);
+
+	while (roi != NULL && roi->GetParentROI() != NULL) {
+		roi = (LegoROI*) roi->GetParentROI();
+	}
+
+	return roi;
 }
 
 // STUB: LEGO1 0x1003ddc0

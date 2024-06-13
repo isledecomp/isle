@@ -236,10 +236,26 @@ MxLong Ambulance::HandleEndAction(MxEndActionNotificationParam& p_param)
 	return 1;
 }
 
-// STUB: LEGO1 0x100367c0
+// FUNCTION: LEGO1 0x100367c0
+// FUNCTION: BETA10 0x100230bf
 MxLong Ambulance::HandleButtonDown(LegoControlManagerEvent& p_param)
 {
-	// TODO
+	if (m_unk0x170 == 1) {
+		LegoROI* roi = PickROI(p_param.GetX(), p_param.GetY());
+
+		if (roi != NULL && !strcmpi(roi->GetName(), "ps-gate")) {
+			m_unk0x170 = 3;
+			return 1;
+		}
+
+		roi = PickParentROI(p_param.GetX(), p_param.GetY());
+
+		if (roi != NULL && !strcmpi(roi->GetName(), "gd")) {
+			m_unk0x170 = 3;
+			return 1;
+		}
+	}
+
 	return 0;
 }
 
