@@ -45,6 +45,7 @@ public:
 		}
 	}
 
+	// FUNCTION: BETA10 0x100242d0
 	inline void UpdateScore(ScoreColor p_score, MxS16 p_actorId)
 	{
 		switch (p_actorId) {
